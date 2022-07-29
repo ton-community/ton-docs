@@ -1,0 +1,77 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #00476b;
+  --ifm-color-primary-dark: #004060;
+  --ifm-color-primary-darker: #003c5b;
+  --ifm-color-primary-darkest: #00324b;
+  --ifm-color-primary-light: #004e76;
+  --ifm-color-primary-lighter: #00527b;
+  --ifm-color-primary-lightest: #005c8b;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #0088cc;
+  --ifm-color-primary-dark: #007ab8;
+  --ifm-color-primary-darker: #0074ad;
+  --ifm-color-primary-darkest: #005f8f;
+  --ifm-color-primary-light: #0096e0;
+  --ifm-color-primary-lighter: #009ceb;
+  --ifm-color-primary-lightest: #0aadff;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme='dark'] {
+  --ifm-background-color: #262629;
+  --ifm-background-surface-color: #262629;
+}
+
+.navbar .navbar__items[data-theme='light'] {
+  flex: auto;
+  background: rgba(35,35,40,.9);
+}
+
+.dropdown__link {
+  font-size: inherit;
+}
+
+/* Remove shadow on the left */
+:root {
+  --ifm-global-shadow-md: 0px;
+}
+
+@media screen and (max-width: 996px) {
+  :root {
+    --ifm-font-size-base: 18px;
+  }
+  article header h1 {
+    font-size: 1.5rem !important;
+  }
+  .hero .hero__title {
+    font-size: 2.5rem;
+  }
+}
+
+@media screen and (min-width: 997px) {
+  :root {
+    --ifm-font-size-base: 17px;
+  }
+  article header h1 {
+    font-size: 2rem !important;
+  }
+}
+
+article {
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}

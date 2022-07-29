@@ -1,0 +1,26 @@
+;; Simple wallet smart contract
+
+() recv_internal(slice in_msg) impure {
+  ;; do nothing for internal messages
+}
+
+() recv_external(slice in_msg) impure {
+  var signature = in_msg~load_bits(512);
+  var cs = in_msg;
+  int msg_seqno = cs~load_uint(32);
+
+  var data = begin_parse(get_data());
+  var stored_seqno = data~load_uint(32);
+  var public_key = data~load_uint(256);
+
+  throw_unless(33, msg_seqno == stored_seqno);
+  throw_unless(34, check_signature(slice_hash(in_msg), signature, public_key));
+  throw_if(34, check_signature(slice_hash(data), signature, public_key));
+  accept_message();
+
+  if (cs.slice_refs()) {
+    send_raw_message(cs~load_ref(), 3);
+  }
+  
+  set_data(begin_cell().store_uint(public_key, 32).store_uint(stored_seqno + 1, 256).end_cell());
+}
