@@ -12,10 +12,10 @@ const config = {
   staticDirectories: ['public', 'static'],
   baseUrl: '/',
   themes: ["@saucelabs/theme-github-codeblock"],
-  // onBrokenLinks: "log", for PRODUCTION
-  // onBrokenMarkdownLinks: "log", for PRODUCTION
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: "log", // for PRODUCTION
+  onBrokenMarkdownLinks: "log", //for PRODUCTION
+  // onBrokenLinks: 'throw',
+  // onBrokenMarkdownLinks: 'warn',
   favicon: 'https://ton.org/_next/static/media/favicon-32x32.0a8b0716.png',
 
   // GitHub pages deployment config.
