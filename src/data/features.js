@@ -2,7 +2,7 @@ export const firstRow = [
   {
     title: "What is TON?",
     status: "Beginner",
-    linkUrl: "docs/home/new-to-polygon/",
+    linkUrl: "docs/learn/new-to-ton",
     imageUrl: "img/logo.svg",
     description: "Learn about the basics of blockchain and TON and how to get started."
   },
@@ -16,7 +16,7 @@ export const firstRow = [
   {
     title: "Validator",
     status: "Intermediate",
-    linkUrl: "docs/maintain/validate/validator-index/",
+    linkUrl: "docs/validate",
     imageUrl: "img/logo.svg",
     description: "Secure the network by staking and operating a node to validate on TON."
   },

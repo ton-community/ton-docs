@@ -37,8 +37,11 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          showLastUpdateAuthor: true,
+          showLastUpdateTime: true,
+          breadcrumbs: false,
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
+          // Please change this to your repo
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
@@ -70,27 +73,33 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'getting-started',
+            docId: 'learn/new-to-ton',
             position: 'left',
             label: 'Learn',
           },
           {
             type: 'doc',
-            docId: 'smart-contracts/README',
+            docId: 'develop/getting-started',
             position: 'left',
             label: 'Build',
           },
           {
             type: 'doc',
-            docId: 'docs',
+            docId: 'tools/README',
             position: 'left',
             label: 'Tools',
           },
           {
             type: 'doc',
-            docId: 'intro',
+            docId: 'validate/README',
             position: 'left',
             label: 'Validate',
+          },
+          {
+            type: 'doc',
+            docId: 'integrate/README',
+            position: 'left',
+            label: 'Integrate',
           },
           // {
           //   type: 'doc',
@@ -100,7 +109,7 @@ const config = {
           // },
 
           {
-            to: 'docs/intro',
+            to: 'docs/contribute',
             label: 'Contribute to Docs',
             position: 'right',
           },
@@ -178,7 +187,8 @@ const config = {
         }
       },
       colorMode: {
-        defaultMode: 'dark',
+        defaultMode: 'light',
+        disableSwitch: true,
       }
     }),
 };

@@ -1,5 +1,9 @@
 # Testnet
 
+```
+// TODO rewrite more user-friendly
+```
+
 Use TON test network for development and testing.
 
 > Coins in test network have no value, the test network can be reset.
