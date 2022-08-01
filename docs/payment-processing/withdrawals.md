@@ -1,3 +1,5 @@
 # Withdrawal processing
 
-[Code Listing](https://raw.githubusercontent.com/toncenter/examples/main/withdrawals.js ':include :type=code')
+```js reference
+https://github.com/toncenter/examples/blob/main/withdrawals.js 
+```

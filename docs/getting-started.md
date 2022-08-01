@@ -3,7 +3,8 @@
 
 ## How TON works
 
-TON is blockchain of blockchains with a masterchain to rule them all. TON is blockchain of blockchains with a masterchain to rule them all.TON is blockchain of blockchains with a masterchain to rule them all.TON is blockchain of blockchains with a masterchain to rule them all.
+TON is a fully decentralized layer-1 blockchain designed by Telegram to onboard billions of users. It boasts ultra-fast transactions, tiny fees, easy-to-use apps, and is environmentally friendly.
+
 
 You can learn more about general architecture in [Basic Concepts](/overviews/TON_blockchain_overview.md) section.
 

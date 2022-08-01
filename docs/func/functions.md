@@ -150,7 +150,7 @@ int inc_then_negate'(int x) asm "INC NEGATE";
 ```
 `INC NEGATE` will be considered by FunC as one assembler command, but it is OK, because Fift assembler knows that it is 2 separate commands.
 
-The list of assembler commands can be found here: [TVM instructions](/smart-contracts/tvm-instructions/instructions.md).
+[//]: # (The list of assembler commands can be found here: [TVM instructions]&#40;/docs/smart-contracts/tvm-instructions/instructions.md&#41;.)
 
 ### Rearranging stack entries
 In some cases we want to pass arguments to assembler function is not exactly the same order as assembler command requires or/and take the result in different stack entries order than the command returns. We could manually rearrange the stack by adding corresponding stack primitives, but FunC can do it automatically.

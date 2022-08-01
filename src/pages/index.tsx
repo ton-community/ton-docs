@@ -3,39 +3,61 @@ import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
+
+import { firstRow } from "../data/features";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 import styles from './index.module.css';
+import useBaseUrl from "@docusaurus/useBaseUrl";
 
-function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
-  return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className="container">
-        <h1 className="hero__title">{siteConfig.title}</h1>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/docs/intro">
-            Docusaurus Tutorial - 5min ⏱️
-          </Link>
+
+function FirstRow({ title, status, description, linkUrl, imageUrl }) {
+    // const imgUrl = useBaseUrl(imageUrl);
+    return (
+
+        <div className="col-md-4 p-8">
+            <Link to={useBaseUrl(linkUrl)} activeClassName="active">
+                <div className="show-card">
+                    <div className="icon-wrapper">
+                        <img src={useBaseUrl(imageUrl)} alt={title} className="icon" />
+                    </div>
+                    <div className="status">{status}</div>
+                    <div className="title">{title}</div>
+                    <div className="descriptions">{description}</div>
+                </div>
+            </Link>
         </div>
-      </div>
-    </header>
-  );
+
+    );
 }
 
 export default function Home(): JSX.Element {
   const {siteConfig} = useDocusaurusContext();
   return (
-    <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
-      <HomepageHeader />
-      <main>
-        <HomepageFeatures />
-      </main>
-    </Layout>
+
+      <Layout>
+          <div
+              className="bootstrap-wrapper"
+          >
+              <br/>
+              <h1 style={{ fontWeight: '650', textAlign:'center' }}>Welcome to the TON Blockchain docs</h1>
+              <p style={{ textAlign:'center', fontWeight: '400', fontSize:'18px' }}>Choose your path to start journey 🚀</p>
+
+              <div className="container">
+
+                          <div id="Get Started" className="row">
+                              {firstRow &&
+                                  firstRow.length &&
+                                  firstRow.map((props, idx) => (
+                                      <FirstRow key={idx} {...props} />
+                                  ))}{" "}
+                          </div>
+
+                  <br/>
+                  <br/>
+              </div>
+          </div>
+      </Layout>
   );
 }

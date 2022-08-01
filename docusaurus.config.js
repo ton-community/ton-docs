@@ -6,10 +6,14 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
-  url: 'https://your-docusaurus-test-site.com',
+  title: 'The Open Network',
+  tagline: 'Mass adoption. Massive distribution',
+  url: 'https://tonspace.co',
+  staticDirectories: ['public', 'static'],
   baseUrl: '/',
+  themes: ["@saucelabs/theme-github-codeblock"],
+  // onBrokenLinks: "log", for PRODUCTION
+  // onBrokenMarkdownLinks: "log", for PRODUCTION
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'https://ton.org/_next/static/media/favicon-32x32.0a8b0716.png',
@@ -56,6 +60,7 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+
       navbar: {
         title: 'The Open Network',
         logo: {
@@ -70,16 +75,16 @@ const config = {
             label: 'Learn',
           },
           {
-            // type: 'default',
-            to: 'smart-contracts/README',
+            type: 'doc',
+            docId: 'smart-contracts/README',
             position: 'left',
             label: 'Build',
           },
           {
-            // type: 'doc',
-            to: 'smart-contracts/README',
+            type: 'doc',
+            docId: 'docs',
             position: 'left',
-            label: 'API',
+            label: 'Tools',
           },
           {
             type: 'doc',
@@ -87,13 +92,18 @@ const config = {
             position: 'left',
             label: 'Validate',
           },
-          {
-            type: 'doc',
-            docId: 'intro',
-            position: 'left',
-            label: 'Integrate',
-          },
+          // {
+          //   type: 'doc',
+          //   docId: 'intro',
+          //   position: 'left',
+          //   label: 'Integrate',
+          // },
 
+          {
+            to: 'docs/intro',
+            label: 'Contribute to Docs',
+            position: 'right',
+          },
           {
             href: 'https://t.me/TonDev_eng',
             label: 'Chat',
@@ -101,9 +111,10 @@ const config = {
           },
           {
             href: 'https://github.com/facebook/docusaurus',
-            label: 'GitHub',
             position: 'right',
-          },
+            className: 'header-github-link',
+            'aria-label': 'GitHub repository',
+          }
         ],
       },
       footer: {
@@ -152,8 +163,14 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} TON Foundation.`,
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
+        // theme: darkCodeTheme,
+        // darkTheme: darkCodeTheme,
+        additionalLanguages: [
+          "java",
+          "python",
+          "go",
+          "typescript",
+        ],
       },
       docs: {
         sidebar: {

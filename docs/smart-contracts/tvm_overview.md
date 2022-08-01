@@ -61,7 +61,8 @@ For ordinary transactions caused by message the initial state is as follows:
  * Library context is initialized as result of merging this smart contract library collection, masterchain global library collection and incoming (if any) message library collection
 
 ## TVM instructions
-The list of TVM instructions can be found here: [TVM instructions](/smart-contracts/tvm-instructions/instructions.md).
+
+[//]: # (The list of TVM instructions can be found here: [TVM instructions]&#40;/smart-contracts/tvm-instructions/instructions.md&#41;.)
 
 ## Result of TVM execution
 Besides of exit_code and consumed gas data, TVM indirectly outputs the following data:
