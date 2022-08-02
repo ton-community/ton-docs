@@ -5,12 +5,10 @@
 
 Current members of the TON Docs team are listed in alphabetical order below.
 
-### Roman Krutovyi
+### SwiftAdviser
 
 * Telegram: [@SwiftAdviser](https://t.me/SwiftAdviser)
 * GitHub: [SwiftAdviser](https://github.com/SwiftAdviser)
-
-
 
 
 ## Acknowledgements
