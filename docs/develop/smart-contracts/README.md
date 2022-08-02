@@ -1,6 +1,6 @@
-# TON smart contracts overview
+# Introduction
 
-## TVM
+## TON Virtual Machine (TVM)
 
 TON smart contracts are executed on their own TON Virtual Machine (TVM).
 

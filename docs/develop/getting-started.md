@@ -13,8 +13,7 @@
 
 ## How TON works
 
-TON is a fully decentralized layer-1 blockchain designed by Telegram to onboard billions of users. It boasts ultra-fast transactions, tiny fees, easy-to-use apps, and is environmentally friendly.
-
+TON is a blockchain of blockchains created to serve millions of users in everyday life.
 
 You can learn more about general architecture in [Basic Concepts](learn/overviews/TON_blockchain_overview.md) section.
 

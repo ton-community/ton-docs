@@ -1,8 +1,13 @@
 # Governance contracts
 
+```
+// TODO maybe this should be in LEARN?
+```
+
 In TON, consensus parameters of node operation related to TVM, catchain, fees and chain topology — as well as how those parameters are stored and updated — are controlled by a set of special smart contracts (in contrast to old-fashioned and inflexible ways of hardcoding of those parameters adopted by blockchains of previous generations). That way, TON implements comprehensive and transparent on-chain governance. The set of special contracts itself is governed by parameters and currently includes Elector, Config and DNS contract and, in the future, will be extended by extra-currency Minter and others.
 
 ## Elector
+
 The Elector smart contract controls the way how rounds of validation change each other, who gets the duty to validate the blockchain, and how rewards for validation would be distributed. If you are looking for a practical way to becoming a validator and interacting with Elector, check [validator instrucitons](/nodes/run-node.md).
 
 Elector stores data of Toncoin that is not withdrawn in `credits` hashmap, new applications in `elect` hashmap, and information about previous elections in _past\_elections_ hashmap (the latter is stored inside _complaints_ about validator misbehaving and _frozen_ - stakes of validator for already finished rounds, which are withheld for `stake_held_for`(ConfigParam 15)).The Elector contract has 3 purposes:

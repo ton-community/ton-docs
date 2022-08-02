@@ -8,6 +8,7 @@ External messages are processed as following: `gas_limit` is set to `gas_credit`
 Note, that if after `accept_message` some error will be thrown (both in ComputePhase or ActionPhase) transaction will be written to blockchain and fees will be deducted from contract balance, but storage will not be updated and actions will not be applied as in any transaction with error exit code. That way, if contract accepted external message and then throw an exception due to some error in message data or due to sending wrongly serialized message, it will pay for processing but has not opporunity to prevent message replay. The same message will be accepted by contract over and over until it consumes the whole balance.
 
 ## Internal message
+
 By default when contract gets internal message gas limit is set to `message_balance/gas_price`, in other words, message pays for it's processing. By using `accept_message`/`set_gas_limit` contract may change gas limit during execution. Note, that manual setting of gas limit does not interfere with bouncing behavior: message will be bounced if sent in bouncable mode and contain enough money to pay for it's processing and creation of bounce message.
 
 For instance if you send bouncable message with 0.1 TON in basechain, which was accepted by contract with 1 TON balance, computation costs 0.005 TON and message fee is 0.001 TON, then bounce message will contain `0.1 - 0.005 - 0.001 ` = `0.094` TON.

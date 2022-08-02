@@ -1,3 +1,5 @@
+# Messages in TON
+
 Composition, parsing and sending messages lie on the intersection of [TL-B schemas](/overviews/TL-B.md), [transaction phases and TVM](/smart-contracts/tvm_overview.md).
 
 Indeed, funC expose [send_raw_message](/func/stdlib?id=send_raw_message) function which expects serialized message as argument.

@@ -62,22 +62,29 @@ const sidebars = {
   ],
   develop: [
     'develop/getting-started',
-
     {
       "type": "html",
       "value": "<hr/>"
     },
     {
       "type": "html",
-      "value": "<span class='menu__link'><b><small> Essentials </small></b></span>"
+      "value": "<span class='menu__link'><b><small> Deep Dive </small></b></span>"
     },
     {
       type: 'category',
       label: 'Smart Contracts',
       items: [
         'develop/smart-contracts/README',
+        'develop/smart-contracts/getting-started',
         'develop/smart-contracts/fees',
-        'develop/smart-contracts/governance',
+        'develop/smart-contracts/tips',
+        {
+          type: 'category',
+          label: 'Examples',
+          items: [
+            'develop/smart-contracts/governance',
+          ]
+        }
       ],
     },
     {
@@ -88,13 +95,13 @@ const sidebars = {
           type: 'doc',
           id: 'develop/func-task/README',
         },
+        {
+          type: 'link',
+          label: 'FunC Cheat Sheet',
+          href: 'https://mybinder.org/v2/gh/atomex-me/xeus-fift/binder?filepath=func_cheat_sheet.ipynb'
+        }
       ],
-    },
-    {
-      type: 'link',
-      label: 'Learn more',
-      href: 'https://example.com',
-    },
+    }
   ],
   tools: [
     'tools/README',
@@ -106,7 +113,14 @@ const sidebars = {
   integrate: [
   ],
   contribute: [
-    'contribute/README',
+    {
+      "type": "category",
+      "label": "Become a Contributor",
+      "items": [
+        'contribute/README',
+        'contribute/maintainers',
+      ]
+    }
   ],
 
 };
