@@ -29,17 +29,34 @@ const sidebars = {
     'learn/overviews/TON_blockchain_overview',
     {
       type: 'category',
-      label: 'Owerview',
+      label: 'Whitepapers',
       items: [
-        'learn/docs.md',
         {
           type: 'doc',
-          id: 'develop/func-task/README',
+          label: 'Overview',
+          id: 'learn/docs',
         },
-        (TextTest1)['https://ton-blockchain.github.io/docs/ton.pdf'],
-        'https://ton-blockchain.github.io/docs/tvm.pdf',
-        'https://ton-blockchain.github.io/docs/tblkch.pdf',
-        'https://ton-blockchain.github.io/docs/catchain.pdf',
+        {
+          type: 'link',
+          label: 'TON',
+          href: 'https://ton-blockchain.github.io/docs/ton.pdf',
+        },
+        {
+          type: 'link',
+          label: 'TON Virtual Machine',
+          href: 'https://ton-blockchain.github.io/docs/tvm.pdf',
+        },
+        {
+          type: 'link',
+          label: 'TON Blockchain',
+          href: 'https://ton-blockchain.github.io/docs/tblkch.pdf',
+        },
+        {
+          type: 'link',
+          label: 'Catchain Consensus Protocol',
+          href: 'https://ton-blockchain.github.io/docs/catchain.pdf',
+        },
+
       ],
     },
   ],
