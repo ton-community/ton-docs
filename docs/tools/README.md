@@ -25,3 +25,4 @@
 ### Telegram Bots and Faucets
 
 * [Testgiver TON bot](https://t.me/testgiver_ton_bot) - free test TONs for testnet development
+* [TON Notify bot](https://t.me/TONNotifyBot) — receive notifications about transactions in your wallet

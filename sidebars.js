@@ -107,6 +107,53 @@ const sidebars = {
     'tools/README',
     'tools/testnet/README',
     'tools/apis/README',
+    {
+      type: 'category',
+      label: 'Wallets',
+      items: [
+        {
+          type: 'link',
+          label: 'TONkeeper',
+          href: 'example.com'
+        },
+        {
+          type: 'link',
+          label: '@wallet',
+          href: 'example.com'
+        },
+        {
+          type: 'link',
+          label: 'Tonhub',
+          href: 'example.com'
+        },
+        {
+          type: 'link',
+          label: 'Chrome plugin',
+          href: 'example.com'
+        }
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Explorers',
+      items: [
+        {
+          type: 'link',
+          label: '[testnet] tonscan',
+          href: 'https://testnet.tonscan.org/'
+        },
+        {
+          type: 'link',
+          label: '[testnet] ton.sh',
+          href: 'https://testnet.ton.sh/'
+        },
+        {
+          type: 'link',
+          label: 'Whales Explorer',
+          href: 'https://tonwhales.com/explorer/'
+        }
+      ]
+    }
   ],
   validate: [
   ],
