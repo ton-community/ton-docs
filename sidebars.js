@@ -27,6 +27,21 @@ const sidebars = {
     'learn/overviews/Cells',
     'learn/overviews/TL-B',
     'learn/overviews/TON_blockchain_overview',
+    {
+      type: 'category',
+      label: 'Owerview',
+      items: [
+        'learn/docs.md',
+        {
+          type: 'doc',
+          id: 'develop/func-task/README',
+        },
+        (TextTest1)['https://ton-blockchain.github.io/docs/ton.pdf'],
+        'https://ton-blockchain.github.io/docs/tvm.pdf',
+        'https://ton-blockchain.github.io/docs/tblkch.pdf',
+        'https://ton-blockchain.github.io/docs/catchain.pdf',
+      ],
+    },
   ],
   develop: [
     'develop/getting-started',
