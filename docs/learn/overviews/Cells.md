@@ -20,7 +20,9 @@ Exotic types are the following:
 * Merkle proof cell
 * Merkle update cell
 
-More on exotic cells: [TVM Whitepaper, section 3](https://ton.org/tvm.pdf).
+:::tip
+More on exotic cells: [**TVM Whitepaper, section 3**](https://ton.org/tvm.pdf).
+:::
 
 ## Cell flavors
 

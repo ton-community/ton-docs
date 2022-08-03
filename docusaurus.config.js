@@ -73,7 +73,7 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'learn/new-to-ton',
+            docId: 'learn/overviews/TON_blockchain_overview',
             position: 'left',
             label: 'Learn',
           },

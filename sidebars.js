@@ -27,7 +27,11 @@ const sidebars = {
     },
     'learn/overviews/Cells',
     'learn/overviews/TL-B',
-    'develop/smart-contracts/tvm_overview',
+    {
+      'type': 'doc',
+      'id': 'develop/smart-contracts/tvm_overview',
+      'label': 'TON Virtual Machine',
+    },
     {
       type: 'category',
       label: 'Whitepapers',
