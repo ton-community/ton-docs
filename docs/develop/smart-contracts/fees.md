@@ -7,7 +7,11 @@ As was described in [TVM overview](/smart-contracts/tvm_overview.md) transaction
 
 Generally:
 ```
-transaction_fee = storage_fees + in_fwd_fees + computation_fees + action_fees + out_fwd_fees
+transaction_fee = storage_fees
+                + in_fwd_fees
+                + computation_fees 
+                + action_fees 
+                + out_fwd_fees
 ```
 where:
    * `storage_fees` - fees corresponding to occupation of some space in chain state by contract
@@ -16,9 +20,9 @@ where:
    * `action_fees` - fees related to processing of action list (sending messages, setting libraries etc)
    * `out_fwd_fees` - fees related to importing to blockchain of outcoming message
 
-# Computation fees
+## Computation fees
 
-## Gas
+### Gas
 All computation costs are nominated in gas units. Price of gas units is determined by this chain config (Config 20 for masterchain and Config 21 for basechain) and may be changed only by consensus of validator. Note, unlike in other systems, user can not set his own gas price and there is no fee market.
 
 Current settings in basechain are as follows: 1 gas unit costs 1000 of nanoTONs.
