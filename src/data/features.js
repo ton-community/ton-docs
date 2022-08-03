@@ -2,7 +2,7 @@ export const firstRow = [
   {
     title: "What is TON?",
     status: "Beginner",
-    linkUrl: "docs/learn/new-to-ton",
+    linkUrl: "docs/learn/overviews/TON_blockchain_overview",
     imageUrl: "img/logo.svg",
     description: "Learn about the basics of blockchain and TON and how to get started."
   },

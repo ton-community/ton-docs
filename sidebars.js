@@ -15,7 +15,8 @@
 const sidebars = {
 
   learn: [
-    'learn/new-to-ton',
+    'learn/overviews/TON_blockchain_overview',
+    // 'learn/new-to-ton',
     {
       'type': 'html',
       'value': '<hr/>',
@@ -24,7 +25,6 @@ const sidebars = {
       'type': 'html',
       'value': '<span class=\'menu__link\'><b><small> Essentials </small></b></span>',
     },
-    'learn/overviews/TON_blockchain_overview',
     'learn/overviews/Cells',
     'learn/overviews/TL-B',
     'develop/smart-contracts/tvm_overview',
