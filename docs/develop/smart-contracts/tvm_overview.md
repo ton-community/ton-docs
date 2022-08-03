@@ -1,6 +1,14 @@
-This document provides bird's-eye overview of how TVM execute transactions. There is also the [detailed specification](https://ton-blockchain.github.io/docs/tvm.pdf).
+# TVM Overview
 
-# Transactions and phases
+This document provides bird's-eye overview of how TVM execute transactions.
+
+:::tip
+
+There is also the detailed specification — [**read whitepaper**](https://ton-blockchain.github.io/docs/tvm.pdf).
+
+:::
+
+## Transactions and phases
 When some event happens on the account in one of TON chains it causes a **transaction**.  Most common event is "arrival of some message", but generally speaking there could be `tick-tock`, `merge`, `split` and other events.
 
 Each transaction consists of up to 5 phases.
@@ -10,10 +18,10 @@ Each transaction consists of up to 5 phases.
 4. Action phase - if compute phase was successful, in that phase `actions` from compute phase are processed. In particular actions may include sending of messages, update of smart contract code, update of libraries etc. Note that some actions may fail during processing (for instance we try to send message with more TONs than contract has), in that case the whole transaction may revert or this action may be scipped (it depends on the mode of the actions, in other words contract may send message in regime `send-or-revert` or in regime `try-send-if-no-ignore`).
 5. Bounce phase - if compute phase failed (it returned `exit_code >= 2`), in that phase _bounce message_ is formed for transactions initiated by incoming message.
 
-# Compute phase
+## Compute phase
 In that phase execution of TVM happens.
 
-## TVM state
+### TVM state
 In any moment TVM state is fully determined by 6 state properties:
 * Stack (see below)
 * Control registers - (see below) speaking in simple terms up to 16 variables which may be directly set and read during execution
@@ -22,7 +30,7 @@ In any moment TVM state is fully determined by 6 state properties:
 * Gas limits - the set of 4 integer values the current gas limit g<sub>l</sub>, the maximal gas limit g<sub>m</sub>, the remaining gas g<sub>r</sub>, and the gas credit g<sub>c</sub>
 * Library context - the hashmap of libraries which can be called by TVM 
 
-## TVM is stack machine
+### TVM is stack machine
 TVM is last-input-first-output stack machine. There are 7 types of variables which may be stored in stack:
 * Integer - Signed 257-bit integers
 * Tuple - ordered collection of up to 255 elements having arbitrary value types, possibly distinct.
@@ -34,16 +42,16 @@ And four distinct flavours of cells:
 * Builder - special object which allows to create new cells
 * Continuation - special object which allows to use cell as source of TVM instructions
 
-## Control registers
-* c0 — Contains the next continuation or return continuation (similar to the subroutine return address in conventional designs). This value must be a Continuation.
-* c1 — Contains the alternative (return) continuation; this value must be a Continuation. 
-* c2 — Contains the exception handler. This value is a Continuation, invoked whenever an exception is triggered.
-* c3 — Supporting register, contains the current dictionary, essentially a hashmap containing the code of all functions used in the program. This value must be a Continuation. 
-* c4 — Contains the root of persistent data, or simply the `data` section of the contract. This value is a Cell.
-* c5 — Contains the output actions. This value is a Cell.
-* c7 — Contains the root of temporary data. It is a Tuple.
+### Control registers
+* `c0` — Contains the next continuation or return continuation (similar to the subroutine return address in conventional designs). This value must be a Continuation.
+* `c1` — Contains the alternative (return) continuation; this value must be a Continuation. 
+* `c2` — Contains the exception handler. This value is a Continuation, invoked whenever an exception is triggered.
+* `c3` — Supporting register, contains the current dictionary, essentially a hashmap containing the code of all functions used in the program. This value must be a Continuation. 
+* `c4` — Contains the root of persistent data, or simply the `data` section of the contract. This value is a Cell.
+* `c5` — Contains the output actions. This value is a Cell.
+* `c7` — Contains the root of temporary data. It is a Tuple.
 
-## Initialization of TVM
+### Initialization of TVM
 So when transaction execution gets to Computation phase, TVM initialises and then executes commands (op-codes) from _Current continuation_ until there is no more commands to execute (and no continuation for return jumps).
 
 Detailed description of initialization can be find in [Ton-blockchain 4.4](https://ton-blockchain.github.io/docs/tblkch.pdf).
@@ -62,9 +70,9 @@ For ordinary transactions caused by message the initial state is as follows:
 
 ## TVM instructions
 
-[//]: # (The list of TVM instructions can be found here: [TVM instructions]&#40;/smart-contracts/tvm-instructions/instructions.md&#41;.)
+The list of TVM instructions can be found here: [TVM instructions](/smart-contracts/tvm-instructions/instructions.md).
 
-## Result of TVM execution
+### Result of TVM execution
 Besides of exit_code and consumed gas data, TVM indirectly outputs the following data:
 * c4 register - the cell which will be stored as new `data` of the smart-contract (if execution will not be reverted on this or later phases)
 * c5 register - (list of output actions) the cell with last action in the list and reference to the cell with prev action (recursively)

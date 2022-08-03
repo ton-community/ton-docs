@@ -109,8 +109,9 @@ Then you can use the LiteClient to send external message from file `mined.boc` t
 
 You can wait for several seconds and check the state of your wallet:
 
-> Please note here and further that the code, comments and/or documentation may contain parameters, methods and definitions “gram”, “nanogram”, etc. That is a legacy of the original TON code, developed by Telegram. Gram cryptocurrency was never issued. The currency of TON is TON Coin and the currency of TON testnet is Test TON Coin.
-
+:::info
+Please note here and further that the code, comments and/or documentation may contain parameters, methods and definitions “gram”, “nanogram”, etc. That is a legacy of the original TON code, developed by the Telegram. Gram cryptocurrency was never issued. The currency of TON is Toncoin and the currency of TON testnet is Test Toncoin.
+:::
 ```
 > last
 > getaccount kQBWkNKqzCAwA9vjMwRmg7aY75Rf8lByPA9zKXoqGkHi8SM7

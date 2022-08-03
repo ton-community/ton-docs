@@ -1,4 +1,4 @@
-# Fees in TON
+# Transaction Fees
 
 This document provides general idea of transaction fees in TON and particularly computation fees for funC code. There is also the [detailed specification](https://ton-blockchain.github.io/docs/tvm.pdf).
 

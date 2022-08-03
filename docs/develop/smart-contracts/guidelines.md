@@ -1,4 +1,9 @@
 # Smart contract guidelines
+
+```
+// TODO split into separate files + add category
+```
+
 This page collects some recommendations and best practices that could be followed when developing new smart contracts for TON Blockchain.
 
 ## Internal messages

@@ -1,6 +1,7 @@
-# Cell
+# Cells
 
 Everything in TON is stored in cells. Cell is a data structure containing:
+
 - up to **1023 bits**  of data (not bytes!)
 - up to **4 references** to other cells
 

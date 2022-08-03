@@ -1,4 +1,4 @@
-# Messages in TON
+# Sending messages
 
 Composition, parsing and sending messages lie on the intersection of [TL-B schemas](/overviews/TL-B.md), [transaction phases and TVM](/smart-contracts/tvm_overview.md).
 

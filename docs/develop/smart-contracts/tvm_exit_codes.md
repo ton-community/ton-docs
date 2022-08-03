@@ -1,6 +1,8 @@
+# TVM Exit codes
+
 TVM may exit with arbitrary 16-bit unsigned integer `exit_code`. `exit_code` higher than 1 are considered as _error codes_, thus exit with such code may cause transaction revert/bounce.
 
-# Standard exit codes
+## Standard exit codes
 * `0` - standard successful execution exit code
 * `1` - alternative successful execution exit code
 * `2` - stack underflow. Last op-code consume more elements than there are on stacks. <sup>1</sup>

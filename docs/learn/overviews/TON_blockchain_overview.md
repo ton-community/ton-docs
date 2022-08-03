@@ -1,8 +1,15 @@
-# Actors chains
-## Single actor
-*Terms 'smart contract', 'account' and 'actor' are used interchangeably in this document to define a blockchain entity.*
+# What is TON?
 
-Let's consider one smart contract. In TON it is a _thing_, with properties like `address`, `code`, `data`, `balance` and others. In other words, it is an object which has some _storage_ and _behavior_.
+
+:::tip
+Terms '**smart contract**', '**account**' and '**actor**' are used interchangeably in this document to define a blockchain entity.
+:::
+
+## Single actor
+
+Let's consider one smart contract.
+
+In TON it is a _thing_, with properties like `address`, `code`, `data`, `balance` and others. In other words, it is an object which has some _storage_ and _behavior_.
 That behavior has the following pattern:
 * something happens (the most common situation is that a contract gets a message)
 * contract handles that event according to its own properties by executing its `code` in TON Virtual Machine.

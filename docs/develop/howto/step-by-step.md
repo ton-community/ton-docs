@@ -66,8 +66,9 @@ or
 
 You will see something like this:
 
-> Please note here and further that the code, comments and/or documentation may contain parameters, methods and definitions “gram”, “nanogram”, etc. That is a legacy of the original TON code, developed by the Telegram. Gram cryptocurrency was never issued. The currency of TON is TON Coin and the currency of TON testnet is Test TON Coin.
-
+:::info
+Please note here and further that the code, comments and/or documentation may contain parameters, methods and definitions “gram”, “nanogram”, etc. That is a legacy of the original TON code, developed by the Telegram. Gram cryptocurrency was never issued. The currency of TON is Toncoin and the currency of TON testnet is Test Toncoin.
+:::
 ```
 got account state for -1 : FCB91A3A3816D0F7B8C2C76108B8A9BC5A6B7A55BD79F8AB101C52DB29232260 with respect to blocks (-1,8000000000000000,2075):BFE876CE2085274FEDAF1BD80F3ACE50F42B5A027DF230AD66DCED1F09FB39A7:522C027A721FABCB32574E3A809ABFBEE6A71DE929C1FA2B1CD0DDECF3056505
 account state is (account

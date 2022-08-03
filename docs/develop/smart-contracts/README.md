@@ -1,5 +1,9 @@
 # Introduction
 
+```
+// TODO combine 'getting-started' & 'introduction'
+```
+
 ## TON Virtual Machine (TVM)
 
 TON smart contracts are executed on their own TON Virtual Machine (TVM).
