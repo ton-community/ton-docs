@@ -10,7 +10,7 @@ TON smart contracts are executed on their own TON Virtual Machine (TVM).
 
 TVM is built on the stack principle, which makes it efficient and easy to implement.
 
-[Bird's-eye overview](/smart-contracts/tvm_overview.md)
+[Bird's-eye overview](/develop/smart-contracts/tvm_overview.md)
 
 [TVM specification](https://ton-blockchain.github.io/docs/tvm.pdf)
 
@@ -24,7 +24,7 @@ High-level language FunC is used to program smart contracts on TON.
 
 **FunC compiler binaries** for Windows, MacOS (Intel), Ubuntu can be downloaded from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Amaster+is%3Acompleted).
 
-[FunC compiler source code](https://github.com/ton-blockchain/ton/tree/master/crypto/func) (read [how to compile](/compile.md#FunC) FunC compiler from sources).
+[FunC compiler source code](https://github.com/ton-blockchain/ton/tree/master/crypto/func) (read [how to compile](/develop/smart-contracts/compile.md#FunC) FunC compiler from sources).
 
 **Toolkit**
 - Development and Testing
@@ -61,7 +61,7 @@ Since Fift is close to TVM opcodes, it also helps to know the limits of your bra
 
 **Fift compiler binaries** for Windows, MacOS (Intel), Ubuntu can be downloaded from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Amaster+is%3Acompleted).
 
-[Fift compiler source code](https://github.com/ton-blockchain/ton/tree/master/crypto/fift) (read [how to compile](/compile.md#Fift) Fift compiler from sources).
+[Fift compiler source code](https://github.com/ton-blockchain/ton/tree/master/crypto/fift) (read [how to compile](/develop/smart-contracts/compile.md#Fift) Fift compiler from sources).
 
 [Fift scripts for standard smart contracts](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
 

@@ -8,7 +8,7 @@ Some functions are commented out in the file. It means that they have already be
 Note that some less common commands are not presented in the stdlib. Someday they will also be added.
 
 ## Tuple manipulation primitives
-The names and the types are mostly self-explaining. See [polymorhism with forall](/func/functions?id=polymorphism-with-forall) for more info on the polymorphic functions.
+The names and the types are mostly self-explaining. See [polymorhism with forall](/develop/func/functions?id=polymorphism-with-forall) for more info on the polymorphic functions.
 
 Note that currently values of atomic type `tuple` can't be cast to composite tuple type (e.g. `[int, cell]`) and vise versa.
 
@@ -28,7 +28,7 @@ Extracts the head and the tail of lisp-style list.
 ```
 forall X -> (tuple, X) list_next(tuple list) asm( -> 1 0) "UNCONS";
 ```
-Extracts the tail and the head of lisp-style list. Can be used as [(non-)modifying method](/func/statements?id=methods-calls).
+Extracts the tail and the head of lisp-style list. Can be used as [(non-)modifying method](/develop/func/statements?id=methods-calls).
 ```
 () foo(tuple xs) {
     int x = xs.list_next(); ;; get the first element
@@ -277,14 +277,14 @@ Transforms a `slice s` into a simple ordinary continuation `c`, with `c.code = s
 ```
 Sets current gas limit `gl` to its maximal allowed value `gm`, and resets the gas credit `gc` to zero, decreasing the value of `gr` by `gc` in the process. In other words, the current smart contract agrees to buy some gas to finish the current transaction. This action is required to process external messages, which bring no value (hence no gas) with themselves.
 
-For more details check [accept_message effects](/smart-contracts/accept)
+For more details check [accept_message effects](/develop/smart-contracts/accept)
 #### set_gas_limit
 ```
 () set_gas_limit(int limit) impure asm "SETGASLIMIT";
 ```
 Sets current gas limit `gl` to the minimum of `limit` and `gm`, and resets the gas credit `gc` to zero. If the gas consumed so far (including the present instruction) exceeds the resulting value of `gl`, an (unhandled) out of gas exception is thrown before setting new gas limits. Notice that `set_gas_limit` with an argument `limit ≥ 2^63 − 1` is equivalent to `accept_message`.
 
-For more details check [accept_message effects](/smart-contracts/accept)
+For more details check [accept_message effects](/develop/smart-contracts/accept)
 #### commit
 ```
 () commit() impure asm "COMMIT";
@@ -318,7 +318,7 @@ Sends a raw message contained in `msg`, which should contain a correctly seriali
 ```
 () set_code(cell new_code) impure asm "SETCODE";
 ```
-Creates an output action that would change this smart contract code to that given by cell `new_code`. Notice that this change will take effect only after the successful termination of the current run of the smart contract (cf. [set_c3](/func/stdlib?id=set_c3)).
+Creates an output action that would change this smart contract code to that given by cell `new_code`. Notice that this change will take effect only after the successful termination of the current run of the smart contract (cf. [set_c3](/develop/func/stdlib?id=set_c3)).
 
 ### Random number generator primitives
 The pseudo-random number generator uses the random seed, an unsigned 256-bit Integer, and (sometimes) other data kept in c7. The initial value of the random seed before a smart contract is executed in TON Blockchain is a hash of the smart contract address and the global block random seed. If there are several runs of the same smart contract inside a block, then all of these runs will have the same random seed. This can be fixed, for example, by running `randomize_lt` before using the pseudo-random number generator for the first time.
@@ -418,9 +418,9 @@ Currently only one function is available.
 Dumps the stack (at most the top 255 values) and shows the total stack depth.
 
 ## Slice primitives
-It is said that a primitive *loads* some data, if it returns the data and the remainder of the slice (so it can also be used as [modifying method](/func/statements?id=modifying-methods)).
+It is said that a primitive *loads* some data, if it returns the data and the remainder of the slice (so it can also be used as [modifying method](/develop/func/statements?id=modifying-methods)).
 
-It is said that a primitive *preloads* some data, if it returns only the data (it can be used as [non-modifying method](/func/statements?id=non-modifying-methods)).
+It is said that a primitive *preloads* some data, if it returns only the data (it can be used as [non-modifying method](/develop/func/statements?id=non-modifying-methods)).
 
 Unless otherwise stated, loading and preloading primitives read the data from a prefix of the slice.
 #### begin_parse
@@ -558,7 +558,7 @@ int slice_depth(slice s) asm "SDEPTH";
 Returns the depth of slice `s`. If `s` has no references, then returns `0`; otherwise the returned value is one plus the maximum of depths of cells referred to from `s`.
 
 ## Builder primitives
-It is said that a primitive *stores* a value `x` into a builder `b` if it returns a modified version of the builder `b'` with the value `x` stored at the end of it. It can be used as [non-modifying method](/func/statements?id=non-modifying-methods).
+It is said that a primitive *stores* a value `x` into a builder `b` if it returns a modified version of the builder `b'` with the value `x` stored at the end of it. It can be used as [non-modifying method](/develop/func/statements?id=non-modifying-methods).
 
 All the primitives below first check whether there is enough space in the `builder`, and only then check the range of the value being serialized.
 #### begin_cell
@@ -637,13 +637,13 @@ Returns the depth of cell `c`. If `c` has no references, then return `0`; otherw
 ```
 int cell_null?(cell c) asm "ISNULL";
 ```
-Checks whether `c` is a `null`. Usually a `null`-cell represents an empty dictionary. FunC also has polymorphic `null?` built-in, see [built-ins](/func/builtins?id=other-primitives).
+Checks whether `c` is a `null`. Usually a `null`-cell represents an empty dictionary. FunC also has polymorphic `null?` built-in, see [built-ins](/develop/func/builtins?id=other-primitives).
 
 ## Dictionaries primitives
 As said in [TVM.pdf](https://ton-blockchain.github.io/docs/tvm.pdf):
 > Dictionaries admit two different representations as TVM stack values:
 > * A slice `s` with a serialization of a TL-B value of type `HashmapE(n, X)`. In other words, `s` consists either of one bit equal to zero (if the dictionary is empty), or of one bit equal to one and a reference to a cell containing the root of the binary tree, i.e., a serialized value of type `Hashmap(n, X)`.
-> * A “Maybe cell” `c^?`, i.e., a value that is either a cell (containing a serialized value of type `Hashmap(n, X)` as before) or a `null` (corresponding to an empty dictionary, cf. [null values](/func/types?id=null-values)). When a “Maybe cell” `c^?` is used to represent a dictionary, we usually denote it by `D`.  
+> * A “Maybe cell” `c^?`, i.e., a value that is either a cell (containing a serialized value of type `Hashmap(n, X)` as before) or a `null` (corresponding to an empty dictionary, cf. [null values](/develop/func/types?id=null-values)). When a “Maybe cell” `c^?` is used to represent a dictionary, we usually denote it by `D`.  
 >
 > Most of the dictionary primitives listed below accept and return dictionaries in the second form, which is more convenient for stack manipulation. However, serialized dictionaries inside larger TL-B objects use the first representation.
 
@@ -656,7 +656,7 @@ For example, `udict_set` is a set-by-key function for dictionaries with unsigned
 
 In the titles empty prefix is used.
 
-Also some of the primitives have their counterpart prefixed with `~`. It makes it possible to use them as [modifying methods](/func/statements?id=modifying-methods).
+Also some of the primitives have their counterpart prefixed with `~`. It makes it possible to use them as [modifying methods](/develop/func/statements?id=modifying-methods).
 
 ### Dictionary's values
 A value in a dictionary may be stored either directly as subslice of an inner dictionary cell, or as a reference to a separate cell. In the first case it is not guaranteed that if the value fits into a cell, it fits to the dictionary (because a part of the inner cell may already be occupied by a part of the corresponding key). On the other hand, the second storing way is less gas-efficient. The second way is equivalent to storing in the first way a slice with empty data bits and exactly one reference to the value.
@@ -866,7 +866,7 @@ By the TVM type `Null` FunC represents absence of a value of some atomic type. S
 ```
 forall X -> (X, ()) ~impure_touch(X x) impure asm "NOP";
 ```
-Mark a variable as used, such that the code which produced it won't be deleted even it is not impure. (c.f. [impure specifier](/func/functions?id=impure-specifier))
+Mark a variable as used, such that the code which produced it won't be deleted even it is not impure. (c.f. [impure specifier](/develop/func/functions?id=impure-specifier))
 
 
 ## Other primitives

@@ -1,8 +1,8 @@
 # Sending messages
 
-Composition, parsing and sending messages lie on the intersection of [TL-B schemas](/overviews/TL-B.md), [transaction phases and TVM](/smart-contracts/tvm_overview.md).
+Composition, parsing and sending messages lie on the intersection of [TL-B schemas](/develop/smart-contracts/overviews/TL-B), [transaction phases and TVM](/develop/smart-contracts/tvm_overview.md).
 
-Indeed, funC expose [send_raw_message](/func/stdlib?id=send_raw_message) function which expects serialized message as argument.
+Indeed, funC expose [send_raw_message](/develop/func/stdlib?id=send_raw_message) function which expects serialized message as argument.
 
 Since TON is a comprehensive system with wide functionality, messages which need to be able to support all of this functionality may look quite complicated. Still, most of that functionality is not used in common scenarios and message serialization in most cases may be reduced to 
 ```

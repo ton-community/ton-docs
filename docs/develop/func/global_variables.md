@@ -60,4 +60,4 @@ int main() {
   return C;
 }
 ```
-but here `int C = 3;` is equivalent to `C = 3;`, i.e. that is an assignment to global variable `C`, not a declaration of local variable `C` (you can find some explanation of this effect in [statements](/func/statements.md?id=variable-declaration)).
+but here `int C = 3;` is equivalent to `C = 3;`, i.e. that is an assignment to global variable `C`, not a declaration of local variable `C` (you can find some explanation of this effect in [statements](/develop/func/statements.md?id=variable-declaration)).

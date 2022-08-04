@@ -73,7 +73,7 @@ For ordinary transactions caused by message the initial state is as follows:
 
 ## TVM instructions
 
-The list of TVM instructions can be found here: [TVM instructions](/smart-contracts/tvm-instructions/instructions.md).
+The list of TVM instructions can be found here: [TVM instructions](/develop/smart-contracts/tvm-instructions/instructions.md).
 
 ### Result of TVM execution
 Besides of exit_code and consumed gas data, TVM indirectly outputs the following data:

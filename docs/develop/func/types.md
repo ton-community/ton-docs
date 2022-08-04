@@ -57,7 +57,7 @@ is a polymorphic function which takes a (single stack entry) value and returns t
 
 In this example `X` is a type variable.
 
-See more info on this topic in the [functions](/func/functions.md?id=polymorphism-with-forall) section.
+See more info on this topic in the [functions](/develop/func/functions.md?id=polymorphism-with-forall) section.
 
 ## User-defined types
 Currently FunC has no support for defining types except for type constructions described above.

@@ -33,12 +33,12 @@ As said before, any function declaration or definition starts with a common patt
 where `[ ... ]` correspond to an optional entry.
 
 ### Function name
-Function name can be any [identifier](/func/literals_identifiers?id=identifiers) and also it can start with `.` or `~` symbols. The meaning of those symbols is [explained](func/statements?id=methods-calls) in statements section.
+Function name can be any [identifier](/develop/func/literals_identifiers?id=identifiers) and also it can start with `.` or `~` symbols. The meaning of those symbols is [explained](func/statements?id=methods-calls) in statements section.
 
-For example, `udict_add_builder?`, `dict_set` and `~dict_set` are valid and different function names (they are defined in [stdlib.fc](/func/stdlib.md)).
+For example, `udict_add_builder?`, `dict_set` and `~dict_set` are valid and different function names (they are defined in [stdlib.fc](/develop/func/stdlib.md)).
 
 #### Special function names
-FunC (actually Fift assembler) has several reserved function names with predefined [ids](/func/functions.md?id=method_id).
+FunC (actually Fift assembler) has several reserved function names with predefined [ids](/develop/func/functions.md?id=method_id).
 - `main` and `recv_internal` have id = 0
 - `recv_external` has id = -1
 - `run_ticktock` has id = -2
@@ -49,7 +49,7 @@ Every program must have a function with id 0, that is `main` or `recv_internal` 
 
 
 ### Return type
-Return type can be any atomic or composite type, as [types](/func/types.md) section describes. For example,
+Return type can be any atomic or composite type, as [types](/develop/func/types.md) section describes. For example,
 ```
 int foo();
 (int, int) foo'();
@@ -85,7 +85,7 @@ Function arguments are separated by commas. Valid declarations of an argument ar
   ```
   is a valid function definition of type `int -> int`. The `int` type of `x` is inferred by type-checker.
 
-Note that although a function may look like a function of several arguments, it's actually a function of one [tensor-type](/func/types?id=tensor-types) argument. To see the difference, please refer to [function application](/func/statements?id=function-application). Nevertheless, the components of the argument tensor are conventionally called function arguments.
+Note that although a function may look like a function of several arguments, it's actually a function of one [tensor-type](/develop/func/types?id=tensor-types) argument. To see the difference, please refer to [function application](/develop/func/statements?id=function-application). Nevertheless, the components of the argument tensor are conventionally called function arguments.
 
 ### Specifiers
 There are three types of specifiers: `impure`, `inline`/`inline_ref` and `method_id`. One, several or none of them can be put in function declaration, but currently they must be presented in the right order: for example, it is not allowed to put `impure` after `inline`.
@@ -94,7 +94,7 @@ There are three types of specifiers: `impure`, `inline`/`inline_ref` and `method
 
 If `impure` is not specified and the result of the function call is not used, then FunC compiler may and will delete this function call.
 
-For example, in [stdlib.fc](/func/stdlib.md) function
+For example, in [stdlib.fc](/develop/func/stdlib.md) function
 ```
 int random() impure asm "RANDU256";
 ```
@@ -121,7 +121,7 @@ Before any function declaration or definition there can be `forall` type variabl
 ```
 forall <comma_separated_type_variables_names> ->
 ```
-where type variable name can be any [identifier](/func/literals_identifiers?id=identifiers). Usually they are named by capital letters though.
+where type variable name can be any [identifier](/develop/func/literals_identifiers?id=identifiers). Usually they are named by capital letters though.
 
 For example,
 ```
@@ -134,7 +134,7 @@ is a function that takes a tuple of length exactly 2, but with values of any (si
 
 `pair_swap([2, 3])` will produce `[3, 2]` and `pair_swap([1, [2, 3, 4]])` will produce `[[2, 3, 4], 1]`.
 
-In this example `X` and `Y` are [type variables](/func/types?id=polymorphism-with-type-variables). When the function is called, type variables are substituted with actual types and the code of the function is executed. Note that although the function is polymorphic, the actual assembler code for it is the same for every type substitution. It is achieved essentially by polymorphism of stack manipulation primitives. Currently other forms of polymorphism (like ad-hoc polymorphism with type classes) are not supported.
+In this example `X` and `Y` are [type variables](/develop/func/types?id=polymorphism-with-type-variables). When the function is called, type variables are substituted with actual types and the code of the function is executed. Note that although the function is polymorphic, the actual assembler code for it is the same for every type substitution. It is achieved essentially by polymorphism of stack manipulation primitives. Currently other forms of polymorphism (like ad-hoc polymorphism with type classes) are not supported.
 
 Also it is worth noticing that the type width of `X` and `Y` is supposed to be equal to 1, that is, the values of `X` or `Y` must occupy single stack entry. So you actually can't call the function `pair_swap` on a tuple of type `[(int, int), int]`, because type `(int, int)` has width 2, i.e. it occupies 2 stack entries.
 

@@ -7,7 +7,7 @@ The most common type of statements is expression statement. It's an expression f
 ### Variable declaration
 It is not possible to declare a local variable without defining its initial value. Here are some examples of variables declarations:
 - `int x = 2;`
-- `var x = 2;` – this example was already considered in [types](/func/types.md?id=hole-type) section.
+- `var x = 2;` – this example was already considered in [types](/develop/func/types.md?id=hole-type) section.
 - `(int, int) p = (1, 2);`
 - `(int, var) p = (1, 2);`
 - `(int, int, int) (x, y, z) = (1, 2, 3);`
@@ -37,7 +37,7 @@ while (i < 10) {
 }
 ;; here x is a (different) variable of type int
 ```
-But as mentioned in global variables [section](/func/global_variables.md), global variable can't be redeclared.
+But as mentioned in global variables [section](/develop/func/global_variables.md), global variable can't be redeclared.
 
 Note that variable declaration **is** an expression statement, so actually constructions like `int x = 2` are full-fledged expressions. For example, this is a correct code:
 ```
@@ -145,7 +145,7 @@ The first call will modify x, the second and the third won't.
 In summary, when a function with name `foo` is called as non-modifying or modifying method (i.e. with `.foo` or `~foo` syntax), FunC compiler use the definition of `.foo` or `~foo` correspondingly if such definition is presented, and if not, it uses the definition of `foo`.
 
 ### Operators
-Note that currently all of unary and binary operators are integer operators. Logical operators are represented as bitwise integer operators  (cf. [absene of boolean type](/func/types?id=absence-of-boolean-type)).
+Note that currently all of unary and binary operators are integer operators. Logical operators are represented as bitwise integer operators  (cf. [absene of boolean type](/develop/func/types?id=absence-of-boolean-type)).
 #### Unary operators
 There are two unary operators:
 - `~` is bitwise not (priority 75).
@@ -243,7 +243,7 @@ while (x < 100) {
 }
 ;; x = 256
 ```
-Note that the truth value of condition `x < 100` is of type `int` (cf. [absene of boolean type](/func/types?id=absence-of-boolean-type)).
+Note that the truth value of condition `x < 100` is of type `int` (cf. [absene of boolean type](/develop/func/types?id=absence-of-boolean-type)).
 
 ### Until loop
 Has the following syntax:
