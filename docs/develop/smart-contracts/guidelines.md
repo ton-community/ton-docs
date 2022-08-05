@@ -1,4 +1,4 @@
-# Smart contract guidelines
+# Contract Guidelines
 
 ```
 // TODO split into separate files + add category

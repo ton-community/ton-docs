@@ -66,40 +66,69 @@ const sidebars = {
     },
   ],
   develop: [
+
     'develop/getting-started',
+    {
+      type: 'link',
+      label: 'Installation',
+      href: 'https://github.com/ton-defi-org/ton-binaries',
+    },
+    {
+      type: 'link',
+      label: 'TON Hello World',
+      href: 'https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func',
+    },
+    {
+      type: 'link',
+      label: 'TON Learn Guides',
+      href: 'https://github.com/romanovichim/TonFunClessons_Eng',
+    },
     {
       'type': 'html',
       'value': '<hr/>',
     },
     {
       'type': 'html',
-      'value': '<span class=\'menu__link\'><b><small> Deep Dive </small></b></span>',
+      'value': '<span class=\'menu__link\'><b><small> Essentials </small></b></span>',
     },
     {
       type: 'category',
       label: 'Smart Contracts',
       items: [
         'develop/smart-contracts/README',
-        'develop/smart-contracts/getting-started',
-        'develop/smart-contracts/simple-task/README',
+        // 'develop/smart-contracts/simple-task/README',
 
         'develop/smart-contracts/messages',
         'develop/smart-contracts/fees',
+        // 'develop/smart-contracts/governance',
+        {
+          type: 'link',
+          label: 'Standard Contracts',
+          href: 'https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont',
+        },
+        'develop/smart-contracts/guidelines',
+        {
+          type: 'category',
+          label: 'Deploying Contracts',
+          items: [
+            {
+              type: 'link',
+              label: 'Using toncli',
+              href: 'https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont',
+            },
+            {
+              type: 'link',
+              label: 'Using tonstarter-contracts',
+              href: 'https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont',
+            },
+            {
+              type: 'link',
+              label: 'Using Online IDE',
+              href: 'https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont',
+            },
+          ],
+        },
         'develop/smart-contracts/tips',
-        {
-          type: 'category',
-          label: 'Guidelines',
-          items: [
-            'develop/smart-contracts/guidelines',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Examples',
-          items: [
-            'develop/smart-contracts/governance',
-          ],
-        },
       ],
     },
     {
@@ -266,8 +295,8 @@ const sidebars = {
           label: 'Testnet config',
           href: 'https://ton-blockchain.github.io/testnet-global.config.json',
         },
-      ]
-    }
+      ],
+    },
   ],
   validate: [
     'validate/README',
