@@ -15,17 +15,11 @@ const config = {
   stylesheets: [
     'https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'
   ],
-  customFields: {
-    // disableHeaderTitle: true,
-    fonts: {
-      myFont: ["Mulish", "sans-serif"],
-    },
-  },
   onBrokenLinks: "warn", // for PRODUCTION
   onBrokenMarkdownLinks: "warn", //for PRODUCTION
   // onBrokenLinks: 'throw',
   // onBrokenMarkdownLinks: 'warn',
-  favicon: 'https://ton.org/_next/static/media/favicon-32x32.0a8b0716.png',
+  favicon: 'img/favicon.ico',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -74,10 +68,11 @@ const config = {
     ({
 
       navbar: {
-        title: 'The Open Network',
+        title: '',
         logo: {
-          alt: 'The Open Network',
-          src: 'https://ton.org/_next/static/media/favicon-32x32.0a8b0716.png',
+          alt: 'TON',
+          src: 'img/ton_logo_light_background.svg',
+          srcDark: 'img/ton_logo_dark_background.svg'
         },
         items: [
           {
@@ -132,7 +127,11 @@ const config = {
             position: 'right',
             className: 'header-github-link',
             'aria-label': 'GitHub repository',
-          }
+          },
+          {
+            type: 'search',
+            position: 'right',
+          },
         ],
       },
       footer: {
@@ -197,7 +196,7 @@ const config = {
       },
       colorMode: {
         defaultMode: 'light',
-        disableSwitch: true,
+        // disableSwitch: true,
       }
     }),
 };

@@ -19,7 +19,7 @@
   --ifm-heading-font-family: 'Mulish', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont,
   'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
   'Segoe UI Emoji', 'Segoe UI Symbol';
-  --ifm-font-family-base:  'Mulish', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont,
+  --ifm-font-family-base:  system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont,
   'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
   'Segoe UI Emoji', 'Segoe UI Symbol';
   --ifm-font-family-monospace: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas,
@@ -30,19 +30,19 @@
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #0088cc;
-  --ifm-color-primary-dark: #007ab8;
-  --ifm-color-primary-darker: #0074ad;
-  --ifm-color-primary-darkest: #005f8f;
-  --ifm-color-primary-light: #0096e0;
-  --ifm-color-primary-lighter: #009ceb;
-  --ifm-color-primary-lightest: #0aadff;
+  --ifm-color-primary: #07a0ec;
+  --ifm-color-primary-dark: #0690d4;
+  --ifm-color-primary-darker: #0688c9;
+  --ifm-color-primary-darkest: #0570a5;
+  --ifm-color-primary-light: #13acf8;
+  --ifm-color-primary-lighter: #1fb0f8;
+  --ifm-color-primary-lightest: #42bdf9;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
 html[data-theme='dark'] {
-  --ifm-background-color: #262629;
-  --ifm-background-surface-color: #262629;
+  --ifm-background-color: #232328;
+  --ifm-background-surface-color: #232328;
 }
 
 
@@ -954,4 +954,8 @@ strong {
 
 .table-of-contents__link {
   /*font-weight: 400 !important;*/
+}
+
+.menu__list-item {
+  font-family: 'Mulish', sans-serif;
 }
