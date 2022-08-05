@@ -6,6 +6,7 @@
 
 /* You can override the default Infima variables here. */
 :root {
+  /*--ifm-background-color: #F7F9FB;*/
   --ifm-color-primary: #0088cc;
   --ifm-color-primary-dark: #007ab8;
   --ifm-color-primary-darker: #0074ad;
@@ -14,6 +15,15 @@
   --ifm-color-primary-lighter: #009ceb;
   --ifm-color-primary-lightest: #0aadff;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  --ifm-heading-font-family: 'Mulish', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont,
+  'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+  'Segoe UI Emoji', 'Segoe UI Symbol';
+  --ifm-font-family-base:  'Mulish', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont,
+  'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+  'Segoe UI Emoji', 'Segoe UI Symbol';
+  --ifm-font-family-monospace: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas,
+  'Liberation Mono', 'Courier New', monospace;
 }
 
 
@@ -34,6 +44,8 @@ html[data-theme='dark'] {
   --ifm-background-color: #262629;
   --ifm-background-surface-color: #262629;
 }
+
+
 
 .navbar .navbar__items[data-theme='light'] {
   flex: auto;
@@ -894,7 +906,7 @@ header > h1 {
 }
 
 strong {
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .btn {
@@ -934,4 +946,12 @@ strong {
 
 .tabs {
   justify-content: center;
+}
+
+.markdown a {
+  font-weight: 600;
+}
+
+.table-of-contents__link {
+  /*font-weight: 400 !important;*/
 }
