@@ -23,7 +23,7 @@ High-level language FunC is used to program smart contracts on TON.
 
 **FunC compiler binaries** for Windows, MacOS (Intel), Ubuntu can be downloaded from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Amaster+is%3Acompleted).
 
-[FunC compiler source code](https://github.com/ton-blockchain/ton/tree/master/crypto/func) (read [how to compile](/develop/smart-contracts/compile.md#FunC) FunC compiler from sources).
+[FunC compiler source code](https://github.com/ton-blockchain/ton/tree/master/crypto/func) (read [how to compile](/develop/smart-contracts/compile#FunC) FunC compiler from sources).
 
 ## Standard Smart Contracts
 
@@ -49,7 +49,7 @@ Since Fift is close to TVM opcodes, it also helps to know the limits of your bra
 
 **Fift compiler binaries** for Windows, MacOS (Intel), Ubuntu can be downloaded from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Amaster+is%3Acompleted).
 
-[Fift compiler source code](https://github.com/ton-blockchain/ton/tree/master/crypto/fift) (read [how to compile](/develop/smart-contracts/compile.md#Fift) Fift compiler from sources).
+[Fift compiler source code](https://github.com/ton-blockchain/ton/tree/master/crypto/fift) (read [how to compile](/docs/develop/smart-contracts/compile#Fift) Fift compiler from sources).
 
 [Fift scripts for standard smart contracts](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
 

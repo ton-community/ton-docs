@@ -1,5 +1,5 @@
 # Built-ins
-This section describes some language constructions which are less fundamental that ones described in previous sections. They could be defined in [stdlib.fc](docs/develop/func/stdlib.md), but it would leave less room for FunC optimizer.
+This section describes some language constructions which are less fundamental that ones described in previous sections. They could be defined in [stdlib.fc](/docs/develop/func/stdlib.md), but it would leave less room for FunC optimizer.
 
 ## Throwing exceptions
 Exceptions can be thrown by conditional primitives `throw_if` and `throw_unless` and by unconditional `throw`. The first argument is the error code, the second is the condition (`throw` has only one argument).

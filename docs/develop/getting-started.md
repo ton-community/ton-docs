@@ -11,4 +11,4 @@ You can learn more about general architecture in [Basic Concepts](learn/overview
 
 Learn more on how to build with TON.
 
-[Smart contracts entrypoint](develop/smart-contracts/).
+[Smart contracts entrypoint](/develop/smart-contracts/).
