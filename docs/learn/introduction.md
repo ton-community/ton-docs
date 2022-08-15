@@ -2,10 +2,11 @@
 
 
 :::info
-If you're completely new to the blockchain technology and want to understand the ideas and why it's so important — it's easier to start with these 2 articles:
+If you're completely new to the blockchain technology and want to understand the ideas and why it's so important — it's easier to start with these materials:
 
 * [How a Blockchain Can Help You on a Deserted Island](https://talkol.medium.com/why-decentralized-consensus-blockchain-is-good-for-business-5ff263468210)
 * [How to Run a Blockchain on a Deserted Island with Pen and Paper](https://talkol.medium.com/how-to-run-a-blockchain-on-a-deserted-island-with-pen-and-paper-899949ec555b)
+* [\[YouTube\] Crypto Networks and Why They Matter](https://youtu.be/2wxtiNgXBaU)
 :::
 
 ---
