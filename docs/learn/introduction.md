@@ -52,3 +52,4 @@ You always can read more when these services are implemented in [TON Roadmap](ht
 Especially for Ethereum developers, our community made a small introduction article that could help you understand more about TON:
 
 * [SIX unique aspects of TON Blockchain that will surprise Solidity developers](https://society.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers)
+* [It’s time to try something new: Asynchronous smart contracts](https://telegra.ph/Its-time-to-try-something-new-Asynchronous-smart-contracts-03-25)

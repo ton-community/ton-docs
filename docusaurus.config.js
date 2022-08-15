@@ -112,19 +112,13 @@ const config = {
           },
           {
             type: 'doc',
-            docId: 'tools/README',
-            position: 'left',
-            label: 'Tools',
-          },
-          {
-            type: 'doc',
-            docId: 'validate/README',
+            docId: 'develop/nodes/run-node',
             position: 'left',
             label: 'Validate',
           },
           {
             type: 'doc',
-            docId: 'integrate/README',
+            docId: 'develop/nodes/node-types',
             position: 'left',
             label: 'Integrate',
           },

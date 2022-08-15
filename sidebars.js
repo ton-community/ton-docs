@@ -69,6 +69,7 @@ const sidebars = {
 
     'develop/getting-started',
     'develop/installation',
+    'develop/tutorials',
     {
       'type': 'html',
       'value': '<hr/>',
@@ -82,17 +83,12 @@ const sidebars = {
       label: 'Smart Contracts',
       items: [
         'develop/smart-contracts/README',
+        'develop/smart-contracts/guidelines',
         // 'develop/smart-contracts/simple-task/README',
 
         'develop/smart-contracts/messages',
         'develop/smart-contracts/fees',
         // 'develop/smart-contracts/governance',
-        {
-          type: 'link',
-          label: 'Standard Contracts',
-          href: 'https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont',
-        },
-        'develop/smart-contracts/guidelines',
         {
           type: 'category',
           label: 'Deploying Contracts',
@@ -115,6 +111,32 @@ const sidebars = {
           ],
         },
         'develop/smart-contracts/tips',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Tools',
+      items: [
+        'develop/tools/README',
+        'develop/tools/ide-plugins',
+        'develop/tools/testnet/README',
+        'develop/tools/apis/README',
+        {
+          type: 'category',
+          label: 'Network Configs',
+          items: [
+            {
+              type: 'link',
+              label: 'Mainnet config',
+              href: 'https://ton.org/global-config.json',
+            },
+            {
+              type: 'link',
+              label: 'Testnet config',
+              href: 'https://ton-blockchain.github.io/testnet-global.config.json',
+            },
+          ],
+        },
       ],
     },
     {
@@ -159,22 +181,23 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Payment Processing',
+      items: [
+        'develop/howto/payment-processing',
+        'develop/payment-processing/common',
+        'develop/payment-processing/deposits-single-wallet',
+        'develop/payment-processing/deposits-multi-wallet',
+        'develop/payment-processing/withdrawals',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Low Level',
       items: [
         'develop/howto/step-by-step',
         'develop/howto/ton-sites',
         'develop/howto/config-params',
         'develop/howto/pow-givers',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Nodes',
-      items: [
-        'develop/nodes/node-types',
-        'develop/nodes/run-node',
-        'develop/nodes/node-maintenance-and-security',
-        'develop/nodes/local-ton',
       ],
     },
     {
@@ -196,99 +219,27 @@ const sidebars = {
         },
       ],
     },
-    {
-      type: 'category',
-      label: 'Payment Processing',
-      items: [
-        'develop/howto/payment-processing',
-        'develop/payment-processing/common',
-        'develop/payment-processing/deposits-single-wallet',
-        'develop/payment-processing/deposits-multi-wallet',
-        'develop/payment-processing/withdrawals',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Support',
-      items: [
-        'develop/howto/wallets',
-      ],
-    },
-    'develop/compile',
-  ],
-  tools: [
-    'tools/README',
-    'tools/testnet/README',
-    'tools/apis/README',
-    {
-      type: 'category',
-      label: 'Wallets',
-      items: [
-        {
-          type: 'link',
-          label: 'TONkeeper',
-          href: 'example.com',
-        },
-        {
-          type: 'link',
-          label: '@wallet',
-          href: 'example.com',
-        },
-        {
-          type: 'link',
-          label: 'Tonhub',
-          href: 'example.com',
-        },
-        {
-          type: 'link',
-          label: 'Chrome plugin',
-          href: 'example.com',
-        },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Explorers',
-      items: [
-        {
-          type: 'link',
-          label: '[testnet] tonscan',
-          href: 'https://testnet.tonscan.org/',
-        },
-        {
-          type: 'link',
-          label: '[testnet] ton.sh',
-          href: 'https://testnet.ton.sh/',
-        },
-        {
-          type: 'link',
-          label: 'Whales Explorer',
-          href: 'https://tonwhales.com/explorer/',
-        },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Network Configs',
-      items: [
-        {
-          type: 'link',
-          label: 'Mainnet config',
-          href: 'https://ton.org/global-config.json',
-        },
-        {
-          type: 'link',
-          label: 'Testnet config',
-          href: 'https://ton-blockchain.github.io/testnet-global.config.json',
-        },
-      ],
-    },
+    // {
+    //   type: 'category',
+    //   label: 'Support',
+    //   items: [
+    //     'develop/howto/wallets',
+    //   ],
+    // },
+    // 'develop/compile',
   ],
   validate: [
-    'validate/README',
-    'develop/nodes/run-node',
+    {
+      type: 'category',
+      label: 'Nodes',
+      items: [
+        'develop/nodes/node-types',
+        'develop/nodes/run-node',
+        'develop/nodes/node-maintenance-and-security',
+        'develop/nodes/local-ton',
+      ],
+    },
   ],
-  integrate: [],
   contribute: [
     {
       'type': 'category',

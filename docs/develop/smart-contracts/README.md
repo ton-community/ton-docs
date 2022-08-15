@@ -24,7 +24,7 @@ TVM is built on the stack principle, which makes it efficient and easy to implem
 You can read more about how TVM works in bird's-eye overview [**here**](/develop/smart-contracts/tvm_overview.md).
 :::
 
-## FunC
+## FunC language
 
 High-level language FunC is used to program smart contracts on TON.
 
@@ -32,15 +32,11 @@ High-level language FunC is used to program smart contracts on TON.
 Feel free to read more about FunC in [documentation](/docs/develop/func/overview.md).
 :::
 
-## Standard Smart Contracts
-
-Standard basic smart contracts like wallets, elector (manages validation on TON), multi-signature wallet, etc. can be a reference when studying.
-
-[Standard smart contracts](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
-
 ## Smart Contract Guidelines
 
-TON allows you to do anything, but product smart contracts must be followed [smart contract guidelines](/docs/develop/smart-contracts/guidelines). 
+TON allows you to do anything, but on production smart contracts must be followed _smart contract guidelines_ if you want to discover the full power of the TON blockchain:
+
+* [Smart Contract Guidelines](/docs/develop/smart-contracts/guidelines)
 
 ## Fift
 

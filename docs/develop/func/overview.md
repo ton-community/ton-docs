@@ -6,6 +6,11 @@ FunC programs are compiled into Fift assembler code, which generates correspondi
 
 Further this bytecode (actually a tree of cells, like any other data in TON Blockchain) can be used for creating a smart contract in the blockchain or can be run on a local instance of TVM.
 
+## Local development
+
+Developing smart contracts on FunC could be more comfortable using resources from Community:
+- IDE plugins
+
 ## Tutorials
 
 The best points to start developing using FunC are:
