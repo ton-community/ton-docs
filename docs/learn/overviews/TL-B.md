@@ -1,7 +1,12 @@
 # Typed Language - Binary
 
+:::caution
+This information could be hard to understand for newcomers.  
+So feel free to read about it later.  
+:::
+
 ```
-// TODO use this docs:
+TODO use this docs?
 
 https://github.com/tonstack/ton-docs/tree/main/TL-B ?
 ```

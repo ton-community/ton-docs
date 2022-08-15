@@ -1,4 +1,4 @@
-# What is TON?
+# Blockchain of Blockchains
 
 
 :::tip

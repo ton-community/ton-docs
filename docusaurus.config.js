@@ -100,7 +100,7 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'learn/overviews/TON_blockchain_overview',
+            docId: 'learn/introduction',
             position: 'left',
             label: 'Learn',
           },
@@ -215,7 +215,7 @@ const config = {
       },
       colorMode: {
         defaultMode: 'light',
-        respectPrefersColorScheme: true,
+        // respectPrefersColorScheme: true,
         // disableSwitch: true,
       }
     }),
