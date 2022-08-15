@@ -1,6 +1,19 @@
 # Introduction
 
 
+:::tip start tip
+If you feel stacked and don't know where to start just choose one of the links below.
+
+Later you will discover documentation by doing.
+:::
+
+## Quick Start
+
+Right now there is 2 great approaches how to start developing TON smart contracts:
+* [TON Hello World: Step by step guide for writing your first smart contract in FunC](https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func)
+* [TON Learn Guides: 10 zero-to-hero lessons](https://github.com/romanovichim/TonFunClessons_Eng)
+
+
 ## TON Virtual Machine (TVM)
 
 TON smart contracts are executed on their own TON Virtual Machine (TVM).
@@ -15,15 +28,9 @@ You can read more about how TVM works in bird's-eye overview [**here**](/develop
 
 High-level language FunC is used to program smart contracts on TON.
 
-```
-// TODO move it to Installation 
-```
-
-[FunC documentation](https://ton.org/docs/#/func/overview.md)
-
-**FunC compiler binaries** for Windows, MacOS (Intel), Ubuntu can be downloaded from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Amaster+is%3Acompleted).
-
-[FunC compiler source code](https://github.com/ton-blockchain/ton/tree/master/crypto/func) (read [how to compile](/develop/smart-contracts/compile#FunC) FunC compiler from sources).
+:::info documentation
+Feel free to read more about FunC in [documentation](/docs/develop/func/overview.md).
+:::
 
 ## Standard Smart Contracts
 
@@ -33,23 +40,19 @@ Standard basic smart contracts like wallets, elector (manages validation on TON)
 
 ## Smart Contract Guidelines
 
-TON allows you to do anything, but product smart contracts must be followed [smart contract guidelines](https://ton.org/docs/#/howto/smart-contract-guidelines). 
+TON allows you to do anything, but product smart contracts must be followed [smart contract guidelines](/docs/develop/smart-contracts/guidelines). 
 
 ## Fift
 
-```
-// TODO move it to low level?
-```
+:::caution
+This part of TON is very low-level and could be very hard to understand for newcomer. Feel free to omit it right now, you always can return later.
+:::
 
-Messages to smart contracts are binary data. To construct such messages, you can use one of the [SDKs](https://ton.org/docs/#/apis/) **or** the special programming language Fift.
+Messages to smart contracts are binary data. To construct such messages, you can use one of the [SDKs](/docs/develop/apis/) **or** the special programming language Fift.
 
 Since Fift is close to TVM opcodes, it also helps to know the limits of your brain.
 
 [Fift documentation](https://ton-blockchain.github.io/docs/fiftbase.pdf)
-
-**Fift compiler binaries** for Windows, MacOS (Intel), Ubuntu can be downloaded from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Amaster+is%3Acompleted).
-
-[Fift compiler source code](https://github.com/ton-blockchain/ton/tree/master/crypto/fift) (read [how to compile](/docs/develop/smart-contracts/compile#Fift) Fift compiler from sources).
 
 [Fift scripts for standard smart contracts](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
 

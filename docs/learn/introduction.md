@@ -1,7 +1,7 @@
 # Introduction
 
 
-:::info
+:::info new to blockchain?
 If you're completely new to blockchain technology and want to understand the ideas and why it's so important — it's easier to start with these materials:
 
 * [How a Blockchain Can Help You on a Deserted Island](https://talkol.medium.com/why-decentralized-consensus-blockchain-is-good-for-business-5ff263468210)
@@ -44,3 +44,11 @@ The idea of TON consists of many services around decentralized consensus:
 :::note
 You always can read more when these services are implemented in [TON Roadmap](https://ton.org/roadmap).
 :::
+
+
+## Ethereum to TON
+
+
+Especially for Ethereum developers, our community made a small introduction article that could help you understand more about TON:
+
+* [SIX unique aspects of TON Blockchain that will surprise Solidity developers](https://society.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers)

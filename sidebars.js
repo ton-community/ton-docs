@@ -68,21 +68,7 @@ const sidebars = {
   develop: [
 
     'develop/getting-started',
-    {
-      type: 'link',
-      label: 'Installation',
-      href: 'https://github.com/ton-defi-org/ton-binaries',
-    },
-    {
-      type: 'link',
-      label: 'TON Hello World',
-      href: 'https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func',
-    },
-    {
-      type: 'link',
-      label: 'TON Learn Guides',
-      href: 'https://github.com/romanovichim/TonFunClessons_Eng',
-    },
+    'develop/installation',
     {
       'type': 'html',
       'value': '<hr/>',
