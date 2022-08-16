@@ -121,18 +121,18 @@ const sidebars = {
           items: [
             {
               type: 'link',
-              label: 'Using toncli',
-              href: 'https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont',
-            },
-            {
-              type: 'link',
               label: 'Using tonstarter-contracts',
-              href: 'https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont',
+              href: 'https://github.com/ton-defi-org/tonstarter-contracts',
             },
             {
               type: 'link',
               label: 'Using Online IDE',
-              href: 'https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont',
+              href: 'https://glitch.com/edit/#!/remix/clone-from-repo?&REPO_URL=https%3A%2F%2Fgithub.com%2Fton-defi-org%2Ftonstarter-contracts.git',
+            },
+            {
+              type: 'link',
+              label: 'Using toncli',
+              href: 'https://github.com/disintar/toncli',
             },
           ],
         },

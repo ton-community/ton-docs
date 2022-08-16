@@ -8,7 +8,9 @@ In order to achieve this goal, the following recommended internal message layout
 
 1. The body of the message can be embedded into the message itself, or be stored in a separate cell referred to from the message, as indicated by the TL-B scheme fragment:
 
-`message$_ {X:Type} ... body:(Either X ^X) = Message X;`
+```cpp
+message$_ {X:Type} ... body:(Either X ^X) = Message X;
+```
 
 The receiving smart contract should accept at least internal messages with embedded message bodies (whenever they fit into the cell containing the message). If it accepts message bodies in separate cells (using the `right` constructor of `(Either X ^X)`), the processing of the inbound message should not depend on the specific embedding option chosen for the message body. On the other hand, it is perfectly valid not to support message bodies in separate cells at all for simpler queries and responses.
 
