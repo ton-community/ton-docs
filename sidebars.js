@@ -22,16 +22,28 @@ const sidebars = {
     },
     {
       'type': 'html',
-      'value': '<span class=\'menu__link\'><b><small> Essentials </small></b></span>',
+      'value': '<span class=\'menu__link\'><b><small> Basic concepts </small></b></span>',
     },
     'learn/overviews/TON_blockchain_overview',
     'learn/overviews/Cells',
-    'learn/overviews/TL-B',
     {
-      'type': 'doc',
-      'id': 'develop/smart-contracts/tvm_overview',
-      'label': 'TON Virtual Machine',
+      type: 'category',
+      label: 'TON Virtual Machine (TVM)',
+      items: [
+        'learn/tvm-instructions/tvm_overview',
+        'learn/tvm-instructions/tvm_exit_codes',
+        'learn/tvm-instructions/instructions',
+      ],
     },
+    {
+      type: 'category',
+      label: 'Typed Language - Binary',
+      items: [
+        'learn/overviews/TL-B',
+        'learn/overviews/TL-B_language',
+      ],
+    },
+    'learn/overviews/ADNL',
     {
       type: 'category',
       label: 'Whitepapers',
@@ -83,12 +95,26 @@ const sidebars = {
       label: 'Smart Contracts',
       items: [
         'develop/smart-contracts/README',
-        'develop/smart-contracts/guidelines',
-        // 'develop/smart-contracts/simple-task/README',
-
         'develop/smart-contracts/messages',
         'develop/smart-contracts/fees',
         // 'develop/smart-contracts/governance',
+        {
+          type: 'category',
+          label: 'Best Practices',
+          items: [
+            'develop/smart-contracts/guidelines',
+            'develop/smart-contracts/guidelines/internal-messages',
+            'develop/smart-contracts/guidelines/external-messages',
+            'develop/smart-contracts/guidelines/non-bouncable-messages',
+            'develop/smart-contracts/guidelines/get-methods',
+            'develop/smart-contracts/guidelines/processing',
+            {
+              type: 'link',
+              label: 'How to shard your TON smart contract and why',
+              href: 'https://gist.github.com/talkol/e9e1cd2368a4bbe498c49693af31179e',
+            },
+          ],
+        },
         {
           type: 'category',
           label: 'Deploying Contracts',
@@ -115,12 +141,38 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Tools',
+      label: 'Tools & SDK',
       items: [
         'develop/tools/README',
         'develop/tools/ide-plugins',
-        'develop/tools/testnet/README',
         'develop/tools/apis/README',
+        // {
+        //   type: 'category',
+        //   label: 'TON SDK',
+        //   items: [
+        //     {
+        //       type: 'link',
+        //       label: 'tonweb',
+        //       href: 'https://github.com/toncenter/tonweb',
+        //     },
+        //     {
+        //       type: 'link',
+        //       label: 'ton-js',
+        //       href: 'https://github.com/tonwhales/ton',
+        //     },
+        //     {
+        //       type: 'link',
+        //       label: 'TON kotlin',
+        //       href: 'https://github.com/andreypfau/ton-kotlin',
+        //     },
+        //     {
+        //       type: 'link',
+        //       label: 'tonutils-go',
+        //       href: 'https://github.com/xssnick/tonutils-go',
+        //     },
+        //   ],
+        // },
+        'develop/tools/testnet/README',
         {
           type: 'category',
           label: 'Network Configs',
@@ -137,15 +189,6 @@ const sidebars = {
             },
           ],
         },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'TON Virtual Machine (TVM)',
-      items: [
-        'develop/smart-contracts/tvm_overview',
-        'develop/smart-contracts/tvm_exit_codes',
-        'develop/smart-contracts/tvm-instructions/instructions',
       ],
     },
     {
@@ -219,6 +262,7 @@ const sidebars = {
         },
       ],
     },
+
     // {
     //   type: 'category',
     //   label: 'Support',

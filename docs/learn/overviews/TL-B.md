@@ -1,15 +1,9 @@
-# Typed Language - Binary
+# TL-B Overview
 
-:::caution
-This information could be hard to understand for newcomers.  
-So feel free to read about it later.  
+:::caution low level
+This information is **very low level** and could be hard to understand for newcomers.  
+So feel free to read about it later.
 :::
-
-```
-TODO use this docs?
-
-https://github.com/tonstack/ton-docs/tree/main/TL-B ?
-```
 
 TL-B stands for "Typed Language - Binary". It is used to describe scheme of (de)serialization of objects to [Cells](/learn/overviews/Cells.md). There are detailed and complete TL-B schemes for all objects in TON: https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb.
 
@@ -18,7 +12,7 @@ TL-B stands for "Typed Language - Binary". It is used to describe scheme of (de)
 Each TL-B scheme consists of declarations. Each declaration describes _constructor_ for some _type_. For instance _type_ Bool may have two _constructors_ for `true` and `false` values.
 
 Typical TL-B declarations are shown below:
-```
+```cpp
 bool_false$0 = Bool;
 bool_true$1 = Bool;
 
@@ -39,7 +33,7 @@ Each TL-B declaration consist of:
 * (optionally parametrized) _Type name_
 
 Example: two constructors (with different binary prefixes) for `Bool` type.
-```
+```cpp
 bool_false$0 = Bool;
 bool_true$1 = Bool;
 ```
@@ -85,7 +79,7 @@ _type-expr_ usually consist of (optionally parametrized) _Type_ only like: `last
 #### Implicit
 Some fields may be implicit. Their definitions are surrounded by curly braces, which indicate that the field is not actually present in the serialization, but that its value must be deduced from other data (usually the parameters of the type being serialized).
 For instance 
-```
+```cpp
 nothing$0 {X:Type} = Maybe X;
 just$1 {X:Type} value:X = Maybe X;
 ```
@@ -100,7 +94,7 @@ It can be parametrized by one or more parameters.
 Some occurrences of “variables” are prefixed by a tilde(`~`). That means that prior to deserialization the exact value of that variable is not known, but instead will be computed during deserialization.
 
 Lets consider
-```
+```cpp
 unary_zero$0 = Unary ~0;
 unary_succ$1 {n:#} x:(Unary ~n) = Unary ~(n + 1);
 ```
@@ -113,7 +107,7 @@ So after deserialization of `Unary ~N` from Slice(`0b1111111100101`) we get `Una
 Some implicit fields may contain constraints, for instance `{n <= m}`. It means that previously defined variables n and m should satisfy corresponding the inequality. This inequality is inherent property of the constructor. It should be checked during serialization, besides objects with variables which not satisfy constraints are invalid.
 
 Example of constructors with constraints:
-```
+```cpp
 hml_short$0 {m:#} {n:#} len:(Unary ~n) {n <= m} s:(n * Bit) = HmLabel ~n m;
 hml_long$10 {m:#} n:(#<= m) s:(n * Bit) = HmLabel ~n m;
 hml_same$11 {m:#} v:Bit n:(#<= m) = HmLabel ~n m;
@@ -121,7 +115,7 @@ hml_same$11 {m:#} v:Bit n:(#<= m) = HmLabel ~n m;
 
 ## Comments
 TL-B schemas support C-like comments:
-```
+```cpp
 /* 
 This is a
 multiline
@@ -138,7 +132,9 @@ In particular, when we deserialize object we need to start with determination of
 During serialization we going the other way, by finding and writing to the builder `tag` which corresponds to given object of the type and then continue from left to write with each variable.
 
 For parsers, It is recommended to read scheme once and generate serializator and deserializator for each type, instead of referring to the scheme on the fly.
+
 ## BNF Grammar
+
 **Backus–Naur form** can be found in [TlbParser.bnf](https://github.com/andreypfau/intellij-ton/blob/main/src/main/grammars/TlbParser.bnf), thanks to [@andreypfau](https://github.com/andreypfau).
 
 TL-B is also supported by [intellij-ton plugin](https://github.com/andreypfau/intellij-ton).

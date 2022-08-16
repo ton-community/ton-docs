@@ -6,7 +6,7 @@ This document provides general idea of transaction fees in TON and particularly 
 As was described in [TVM overview](/develop/smart-contracts/tvm_overview.md) transaction execution consist of a few phases. During those phases corresponding fees may be deducted.
 
 Generally:
-```
+```cpp
 transaction_fee = storage_fees
                 + in_fwd_fees
                 + computation_fees 
@@ -54,7 +54,7 @@ So, if you try to optimize your code start with architecture optimization, the d
 Just example of how proper cell work may substantially decrease gas costs.
 
 Lets imagine that you want to write some encoded payload to the outgoing message. Straightforward implementation will be as follows:
-```
+```cpp
 slice payload_encoding(int a, int b, int c) {
   return
     begin_cell().store_uint(a,8)
@@ -80,7 +80,7 @@ slice payload_encoding(int a, int b, int c) {
 
 What is the problem with this code? `payload_encoding` to generate slice bit-string first create cell via `end_cell()` (+500 gas units) and then additionally parse it `begin_parse()` (+100 gas units). The same code can be written without those unnecessary operations by changing some used types:
 
-```
+```cpp
 ;; we add asm for function which stores one builder to the another, which is absent from stdlib
 builder store_builder(builder to, builder what) asm(what to) "STB";
 
@@ -118,7 +118,7 @@ Dictionaries in the TON are introduced as trees (DAGs to be precise) of cells. T
 
 ### Stack operations
 Note that funC manipulate stack entries under the hood. That means that code
-```
+```cpp
 (int a, int b, int c) = some_f();
 return (c, b, a);
 ```

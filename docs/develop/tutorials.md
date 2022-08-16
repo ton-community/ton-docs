@@ -21,8 +21,9 @@ In case you are web or bot developer, you could find useful this practical guide
 
 ## Standard smart contracts
 
-:::caution Experienced developers only
-If you are a new smart contracts developer, you can skip this section.
+:::caution low level
+This information is **very low level** and could be hard to understand for newcomers.  
+So feel free to read about it later.
 :::
 
 If you're already familiar with smart contracts, you could try to read the following examples:

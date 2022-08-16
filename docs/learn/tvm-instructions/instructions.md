@@ -1,5 +1,10 @@
 # TVM Instructions
 
+:::caution low level
+This information is **very low level** and could be hard to understand for newcomers.  
+So feel free to read about it later.
+:::
+
 ## 1 Introduction
 This document provides a list of TVM instrucions, their opcodes and mnemonics.
 

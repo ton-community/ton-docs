@@ -5,7 +5,7 @@ Composition, parsing and sending messages lie on the intersection of [TL-B schem
 Indeed, funC expose [send_raw_message](/develop/func/stdlib?id=send_raw_message) function which expects serialized message as argument.
 
 Since TON is a comprehensive system with wide functionality, messages which need to be able to support all of this functionality may look quite complicated. Still, most of that functionality is not used in common scenarios and message serialization in most cases may be reduced to 
-```
+```cpp
   var msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)
@@ -30,7 +30,7 @@ There are three types of messages:
 We will start with internal messages layout
 
 TL-B scheme which describes message which can be sent by smart-contract is as follows:
-```
+```cpp
 message$_ {X:Type} info:CommonMsgInfoRelaxed 
   init:(Maybe (Either StateInit ^StateInit))
   body:(Either X ^X) = MessageRelaxed X;
@@ -45,11 +45,12 @@ Lets put it into words. Serialization of any message consist of three fields: in
 
 `CommonMsgInfoRelaxed` layout is as follows: 
 
-```
+```cpp
 int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
   src:MsgAddress dest:MsgAddressInt 
   value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
   created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
+
 ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
   created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
 ```
@@ -61,7 +62,7 @@ If message is sent from the smart-contract, some of those fields will be rewritt
 
 
 Straight-forward serialization of the message would be as follows:
-```
+```cpp
   var msg = begin_cell()
     .store_uint(0, 1) ;; tag
     .store_uint(1, 1) ;; ihr_disabled
@@ -83,7 +84,7 @@ Straight-forward serialization of the message would be as follows:
 ```
 
 However, instead of step by step serialization of all fields, usually developers use short-cuts. Thus lets consider how message can be sent from the smart-contract on example from [elector-code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/elector-code.fc#L153)
-```
+```cpp
 () send_message_back(addr, ans_tag, query_id, body, grams, mode) impure inline_ref {
   ;; int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool src:MsgAddress -> 011000
   var msg = begin_cell()
@@ -112,10 +113,12 @@ Thus `.store_uint(0x18, 6)` is the optimized way of serializing tag and first 4 
 Next line serializes destination address.
 
 Then we should serialize value. Generally message value is a `CurrencyCollection` object with the following scheme:
-```
+```cpp
 nanograms$_ amount:(VarUInteger 16) = Grams;
+
 extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32)) 
                  = ExtraCurrencyCollection;
+
 currencies$_ grams:Grams other:ExtraCurrencyCollection 
            = CurrencyCollection;
 ```

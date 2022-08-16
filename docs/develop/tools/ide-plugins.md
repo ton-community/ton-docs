@@ -7,7 +7,7 @@ Visual Studio Code is a free and popular IDE for developers.
 - [Marketplace link](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode)
 - [GitHub repository](https://github.com/ton-foundation/vscode-func)
 
-## IDEA plugin 
+## IntelliJ IDEs Plugin 
 
 :::info
 Could be used for any of JetBrains products.
@@ -20,4 +20,8 @@ You can install plugin by these ways:
 
 ## FunC Sublime Text plugin
 
-- [Github repository](https://github.com/savva425/func_plugin_sublimetext3)
+- [GitHub repository](https://github.com/savva425/func_plugin_sublimetext3)
+
+## neovim plugin
+
+- [GitHub repository](https://github.com/cryshado/neovim-ton-dev)

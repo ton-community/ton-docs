@@ -23,9 +23,29 @@ Start developing smart contracts easily with these resources:
 
 ## SDK
 
-* [TonWeb](https://github.com/toncenter/tonweb) — JavaScript API for TON blockchain.
+Here is a list of modern SDKs that continuously supported and improved:
+
+* [tonweb](https://github.com/toncenter/tonweb) — JavaScript API for TON blockchain.
 * [ton-js](https://github.com/tonwhales/ton) — Cross-platform client for TON blockchain.
-* [tonutils-go](https://github.com/xssnick/tonutils-go) — Go SDK for TON blockchain.
+* [tonutils-go](https://github.com/xssnick/tonutils-go) — Go utils for TON blockchain.
+* [ton-kotlin](https://github.com/andreypfau/ton-kotlin) — Kotlin SDK for TON blockchain.
+
+### TonLib
+
+TonLib was a one of the first libraries for working with TON blockchain.
+
+
+* [C++ TonLib](https://github.com/ton-blockchain/ton/tree/master/example/cpp)
+* [Python TonLib wrapper](https://github.com/toncenter/pytonlib)
+* [Golang TonLib wrapper](https://github.com/ton-blockchain/tonlib-go)
+* [Java TonLib wrapper (JNI)](https://github.com/ton-blockchain/tonlib-java)
+
+#### Usage examples
+
+* [Desktop standard wallet (C++ and Qt)](https://github.com/newton-blockchain/wallet-desktop)
+* [Android standard wallet (Java)](https://github.com/trm-dev/wallet-android)
+* [iOS standard wallet (Swift)](https://github.com/trm-dev/wallet-ios)
+* [TonLib CLI (C++)](https://github.com/ton-blockchain/ton/blob/master/tonlib/tonlib/tonlib-cli.cpp)
 
 ## APIs
 

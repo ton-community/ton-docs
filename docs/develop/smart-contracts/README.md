@@ -3,8 +3,6 @@
 
 :::tip start tip
 If you feel stacked and don't know where to start just choose one of the links below.
-
-Later you will discover documentation by doing.
 :::
 
 ## Quick Start
@@ -40,17 +38,17 @@ TON allows you to do anything, but on production smart contracts must be followe
 
 ## Fift
 
-:::caution
-This part of TON is very low-level and could be very hard to understand for newcomer. Feel free to omit it right now, you always can return later.
+:::caution low level
+This information is **very low level** and could be hard to understand for newcomers.  
+So feel free to read about it later.
 :::
 
-Messages to smart contracts are binary data. To construct such messages, you can use one of the [SDKs](/docs/develop/apis/) **or** the special programming language Fift.
+Messages to smart contracts are binary data. To construct such messages, you can use one of the [SDKs](/docs/develop/tools#sdk) **or** the special programming language Fift.
 
 Since Fift is close to TVM opcodes, it also helps to know the limits of your brain.
 
-[Fift documentation](https://ton-blockchain.github.io/docs/fiftbase.pdf)
-
-[Fift scripts for standard smart contracts](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
+- [Fift documentation](https://ton-blockchain.github.io/docs/fiftbase.pdf)
+- [Fift scripts for standard smart contracts](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
 
 
 ## FAQ

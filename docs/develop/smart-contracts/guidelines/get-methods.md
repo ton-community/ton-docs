@@ -1,0 +1,3 @@
+# Get Methods
+
+Some smart contracts are expected to implement certain well-defined get-methods. For instance, any subdomain resolver smart contract for TON DNS is expected to implement the get-method `dnsresolve`. Custom smart contracts may define their specific get-methods. Our only general recommendation at this point is to implement the get-method `seqno` (without parameters) that returns the current `seqno` of a smart contract that uses sequence numbers to prevent replay attacks related to inbound external methods, whenever such a method makes sense.
