@@ -69,18 +69,18 @@ const config = {
     ({
       algolia: {
         // The application ID provided by Algolia
-        appId: 'YOUR_APP_ID',
+        appId: 'EQK8VZ6CS7',
 
         // Public API key: it is safe to commit it
-        apiKey: 'YOUR_SEARCH_API_KEY',
+        apiKey: '7b6c50af331e4e34d47f8b930a986ca1',
 
-        indexName: 'YOUR_INDEX_NAME',
+        indexName: 'ton_docs',
 
         // Optional: see doc section below
         contextualSearch: true,
 
         // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
-        externalUrlRegex: 'external\\.com|domain\\.com',
+        // externalUrlRegex: 'external\\.com|domain\\.com',
 
         // Optional: Algolia search parameters
         searchParameters: {},
