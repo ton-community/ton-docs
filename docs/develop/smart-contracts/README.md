@@ -2,7 +2,7 @@
 
 
 :::tip start tip
-If you feel stacked and don't know where to start just choose one of the links below.
+If you're first time here, just [set up the environment](/develop/getting-started) and start the one of the tutorials.
 :::
 
 ## Quick Start
@@ -38,7 +38,7 @@ TON allows you to do anything, but on production smart contracts must be followe
 
 ## Fift
 
-:::caution low level
+:::caution advanced level
 This information is **very low level** and could be hard to understand for newcomers.  
 So feel free to read about it later.
 :::

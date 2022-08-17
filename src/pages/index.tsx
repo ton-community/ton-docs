@@ -1,8 +1,10 @@
 import React from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
+
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
+import ThemedImage from '@theme/ThemedImage';
 
 import { firstRow } from "../data/features";
 import Tabs from '@theme/Tabs';
@@ -20,7 +22,10 @@ function FirstRow({ title, status, description, linkUrl, imageUrl }) {
             <Link to={useBaseUrl(linkUrl)} activeClassName="active">
                 <div className="show-card">
                     <div className="icon-wrapper">
-                        <img src={useBaseUrl(imageUrl)} alt={title} className="icon" />
+                        <ThemedImage alt={title} className="icon"  sources={{
+                            light: useBaseUrl(imageUrl.replace('.svg', '-light.svg')),
+                            dark: useBaseUrl(imageUrl.replace('.svg', '-dark.svg'))
+                        }}/>
                     </div>
                     <div className="status">{status}</div>
                     <div className="title">{title}</div>

@@ -29,6 +29,8 @@ Here is a list of modern SDKs that continuously supported and improved:
 * [ton-js](https://github.com/tonwhales/ton) — Cross-platform client for TON blockchain.
 * [tonutils-go](https://github.com/xssnick/tonutils-go) — Go utils for TON blockchain.
 * [ton-kotlin](https://github.com/andreypfau/ton-kotlin) — Kotlin SDK for TON blockchain.
+* [psylopunk/pytonlib](https://github.com/psylopunk/pytonlib) — Python SDK.
+* [toncenter/pytonlib](https://github.com/toncenter/pytonlib) — Python SDK.
 
 ### TonLib
 

@@ -113,15 +113,14 @@ const config = {
           },
           {
             type: 'doc',
-            docId: 'develop/nodes/run-node',
-            position: 'left',
-            label: 'Validate',
-          },
-          {
-            type: 'doc',
             docId: 'develop/nodes/node-types',
             position: 'left',
             label: 'Integrate',
+          },
+          {
+            href: 'https://ton.org/validator',
+            position: 'left',
+            label: 'Validate',
           },
           // {
           //   type: 'doc',

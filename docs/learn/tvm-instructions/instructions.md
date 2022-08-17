@@ -1,6 +1,6 @@
 # TVM Instructions
 
-:::caution low level
+:::caution advanced level
 This information is **very low level** and could be hard to understand for newcomers.  
 So feel free to read about it later.
 :::

@@ -2,21 +2,21 @@ export const firstRow = [
   {
     title: "What is TON?",
     status: "Beginner",
-    linkUrl: "/develop/tutorials",
+    linkUrl: "/develop/getting-started",
     imageUrl: "img/ton_symbol_old.svg",
     description: "Learn about the basics of blockchain and TON and how to get started."
   },
   {
     title: "Developer",
     status: "Intermediate",
-    linkUrl: "/develop/getting-started",
+    linkUrl: "/develop/smart-contracts/",
     imageUrl: "img/ton_symbol_old.svg",
     description: "Build an application and deploy on TON Blockchain."
   },
   {
     title: "Validator",
     status: "Intermediate",
-    linkUrl: "/validate",
+    linkUrl: "https://ton.org/validator",
     imageUrl: "img/ton_symbol_old.svg",
     description: "Secure the network by staking and operating a node to validate on TON."
   },

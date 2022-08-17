@@ -1,5 +1,10 @@
 # Overview
 
+:::caution advanced level
+This information could be hard to understand for newcomers.  
+So feel free to read about it later.
+:::
+
 This page collects some recommendations and best practices that could be followed when developing new smart contracts for TON Blockchain.
 
 * [Internal Messages](/develop/smart-contracts/guidelines/internal-messages)
