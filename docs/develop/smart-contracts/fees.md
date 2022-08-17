@@ -1,6 +1,6 @@
 # Transaction Fees
 
-This document provides general idea of transaction fees in TON and particularly computation fees for funC code. There is also the [detailed specification](https://ton-blockchain.github.io/docs/tvm.pdf).
+This document provides general idea of transaction fees in TON and particularly computation fees for funC code. There is also the [detailed specification](https://ton-blockchain.github.io/tvm.pdf).
 
 # Transactions and phases
 As was described in [TVM overview](/develop/smart-contracts/tvm_overview.md) transaction execution consist of a few phases. During those phases corresponding fees may be deducted.

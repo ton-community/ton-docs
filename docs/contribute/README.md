@@ -4,11 +4,11 @@
 
 There are several ways to identify an area where you can contribute to the Wiki:
 
-- The easiest is to reach out to one of the [Docs maintainers](/docs/contribute/maintainers)
+- The easiest is to reach out to one of the [Docs maintainers](/contribute/maintainers)
   saying "I want to help contribute to the TON Docs". They’ll work with you to find
   an area for you to contribute.
 - If you have a specific contribution in mind but are unsure about it, confirm whether
-  the contribution is appropriate by contacting one of the [Docs maintainers](/docs/contribute/maintainers) directly.
+  the contribution is appropriate by contacting one of the [Docs maintainers](/contribute/maintainers) directly.
 - See questions that often asked in TON Developers Chats.
 - Feel free to read the issues in the GitHub repository.
 

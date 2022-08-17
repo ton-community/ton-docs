@@ -840,13 +840,11 @@ html[data-theme='dark'] .header-github-link:before {
   padding: 40px;
 }
 
-[data-theme='dark'] .show-card {
-  background: #f3f7ff;
-}
-
 .show-card:hover {
   box-shadow: 0px 1px 4px rgb(209, 227, 255);
 }
+
+
 
 .show-card .icon-wrapper {
   width: 100%;
@@ -880,6 +878,27 @@ html[data-theme='dark'] .header-github-link:before {
   /* Dark_Gray_500 */
   color: #3b465c;
 }
+
+[data-theme='dark'] .show-card {
+  background: #2a2c30;
+  border: 3px solid #242425;
+}
+[data-theme='dark'] .show-card:hover {
+  box-shadow: 0px 1px 4px rgb(59, 59, 59);
+}
+
+[data-theme='dark'] .show-card .status {
+  color: #727887;
+}
+
+[data-theme='dark'] .show-card .title,[data-theme='dark'] .show-card .descriptions {
+  color: #fff;
+}
+
+[data-theme='dark'] .show-card .icon {
+  filter: brightness(150%);
+}
+
 
 .pt-40 {
   padding-top: 40px !important;

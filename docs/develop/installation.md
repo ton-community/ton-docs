@@ -50,7 +50,7 @@ Remember to set the **environment variable** `FIFTPATH` to point to this directo
 
 ## Build from source
 
-If you don't want to rely on pre-compiled binaries and prefer to compile the binaries by yourself, you can follow the [official instructions](https://ton.org/docs/#/compile). The gist instructions provided below:
+If you don't want to rely on pre-compiled binaries and prefer to compile the binaries by yourself, you can follow the [official instructions](https://ton.org/#/compile). The gist instructions provided below:
 
 ### Linux (Ubuntu / Debian)
 
@@ -69,4 +69,4 @@ Click on the link above, choose the workflow on the left relevant to your operat
 
 ## Next steps
 
-Feel free to start one of the tutorials below on the [next page](/docs/develop/tutorials).
+Feel free to start one of the tutorials below on the [next page](/develop/tutorials).

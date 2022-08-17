@@ -40,6 +40,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          routeBasePath: '/',
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
           breadcrumbs: false,

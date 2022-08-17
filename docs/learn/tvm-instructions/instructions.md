@@ -9,7 +9,7 @@ So feel free to read about it later.
 This document provides a list of TVM instrucions, their opcodes and mnemonics.
 
 :::tip
-[**Here**](https://ton-blockchain.github.io/docs/tvm.pdf) is a full description of TON Virtual Machine.
+[**Here**](https://ton-blockchain.github.io/tvm.pdf) is a full description of TON Virtual Machine.
 :::
 
 Fift is a stack-based programming language designed to manage TON smart contracts. The Fift assembler is a Fift library that converts mnemonics of TVM instructions to their binary representation.
@@ -32,7 +32,7 @@ The gas price of each instruction is specified in this document. The basic gas p
 6. _Moving stack elements between continuations_: **1 gas unit** per element, however first 32 elements moving is free.
 
 ### 1.2 CSV table
-Machine-readable list of TVM instructions is available [here](https://github.com/ton-blockchain/docs/blob/master/docs/smart-contracts/tvm-instructions/instructions.csv).
+Machine-readable list of TVM instructions is available [here](https://github.com/ton-blockchain/blob/master/smart-contracts/tvm-instructions/instructions.csv).
 
 ## 2 Stack manipulation primitives
 Here `0 <= i,j,k <= 15` if not stated otherwise.

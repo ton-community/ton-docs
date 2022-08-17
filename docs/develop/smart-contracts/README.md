@@ -27,14 +27,14 @@ You can read more about how TVM works in bird's-eye overview [**here**](/develop
 High-level language FunC is used to program smart contracts on TON.
 
 :::info documentation
-Feel free to read more about FunC in [documentation](/docs/develop/func/overview.md).
+Feel free to read more about FunC in [documentation](/develop/func/overview.md).
 :::
 
 ## Smart Contract Guidelines
 
 TON allows you to do anything, but on production smart contracts must be followed _smart contract guidelines_ if you want to discover the full power of the TON blockchain:
 
-* [Smart Contract Guidelines](/docs/develop/smart-contracts/guidelines)
+* [Smart Contract Guidelines](/develop/smart-contracts/guidelines)
 
 ## Fift
 
@@ -43,11 +43,11 @@ This information is **very low level** and could be hard to understand for newco
 So feel free to read about it later.
 :::
 
-Messages to smart contracts are binary data. To construct such messages, you can use one of the [SDKs](/docs/develop/tools#sdk) **or** the special programming language Fift.
+Messages to smart contracts are binary data. To construct such messages, you can use one of the [SDKs](/develop/tools#sdk) **or** the special programming language Fift.
 
 Since Fift is close to TVM opcodes, it also helps to know the limits of your brain.
 
-- [Fift documentation](https://ton-blockchain.github.io/docs/fiftbase.pdf)
+- [Fift documentation](https://ton-blockchain.github.io/fiftbase.pdf)
 - [Fift scripts for standard smart contracts](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
 
 

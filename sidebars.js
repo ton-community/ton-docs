@@ -56,22 +56,22 @@ const sidebars = {
         {
           type: 'link',
           label: 'TON',
-          href: 'https://ton-blockchain.github.io/docs/ton.pdf',
+          href: 'https://ton-blockchain.github.io/ton.pdf',
         },
         {
           type: 'link',
           label: 'TON Virtual Machine',
-          href: 'https://ton-blockchain.github.io/docs/tvm.pdf',
+          href: 'https://ton-blockchain.github.io/tvm.pdf',
         },
         {
           type: 'link',
           label: 'TON Blockchain',
-          href: 'https://ton-blockchain.github.io/docs/tblkch.pdf',
+          href: 'https://ton-blockchain.github.io/tblkch.pdf',
         },
         {
           type: 'link',
           label: 'Catchain Consensus Protocol',
-          href: 'https://ton-blockchain.github.io/docs/catchain.pdf',
+          href: 'https://ton-blockchain.github.io/catchain.pdf',
         },
 
       ],

@@ -15,11 +15,11 @@ Smart-contract can store data, move funds to other smart-contracts, compute some
 
 ## How to start using or developing smart-contracts?
 
-To begin with, you must pay attention to two existing programming languages related to developing smart contracts in TON: [FunC](https://ton.org/docs/#/func) and [Fift](https://ton-blockchain.github.io/docs/fiftbase.pdf). FunC is used to write the logic of contracts, it is compiled to fift-asm code, which can then be translated to bytecode for TVM. The functionality of Fift is very wide. To begin with, fift-asm is an [Asm.fif](https://github.com/newton-blockchain/ton/blob/master/crypto/fift/lib/Asm.fif) program that allows you to translate asm-like(fift-asm) code into byte code for TVM. We also use Fift to automatically test and write queries to smart contracts.
+To begin with, you must pay attention to two existing programming languages related to developing smart contracts in TON: [FunC](https://ton.org/#/func) and [Fift](https://ton-blockchain.github.io/fiftbase.pdf). FunC is used to write the logic of contracts, it is compiled to fift-asm code, which can then be translated to bytecode for TVM. The functionality of Fift is very wide. To begin with, fift-asm is an [Asm.fif](https://github.com/newton-blockchain/ton/blob/master/crypto/fift/lib/Asm.fif) program that allows you to translate asm-like(fift-asm) code into byte code for TVM. We also use Fift to automatically test and write queries to smart contracts.
 
 You can get the binaries of the FunC compiler and the Fift interpreter by building code from [newton-blockchain/ton](https://github.com/newton-blockchain/ton) repo.
 
-You can use [toncli](https://github.com/disintar/toncli) to easily and conveniently develop smart contracts using FunC and Fift, especially useful if you are a beginner. The [tonweb](https://github.com/toncenter/tonweb) library is available for writing web interfaces. The official [documentation](https://ton.org/docs/#/docs) can also help you a lot.
+You can use [toncli](https://github.com/disintar/toncli) to easily and conveniently develop smart contracts using FunC and Fift, especially useful if you are a beginner. The [tonweb](https://github.com/toncenter/tonweb) library is available for writing web interfaces. The official [documentation](https://ton.org/#/docs) can also help you a lot.
 
 ## Chats with other developers
 * 🇺🇸 [TonDev Chat](https://t.me/tondev_eng) - TON Developers chat
@@ -29,8 +29,8 @@ You can use [toncli](https://github.com/disintar/toncli) to easily and convenien
 * 🇷🇺 [TonDevRu Chat](https://t.me/tondev) - TON Developers chat
 
 ## About fift and func which are used to develop smart contracts:
-1. [Fift official docs](https://ton-blockchain.github.io/docs/fiftbase.pdf)
-2. [FunC official docs](https://ton.org/docs/#/func)
+1. [Fift official docs](https://ton-blockchain.github.io/fiftbase.pdf)
+2. [FunC official docs](https://ton.org/#/func)
 3. [Fift instructions in C++](https://github.com/newton-blockchain/ton/blob/9875f02ef4ceba5b065d5e63c920f91aec73224e/crypto/fift/words.cpp#L2723-L3110)
 
 ## About TL-B
@@ -38,7 +38,7 @@ You can use [toncli](https://github.com/disintar/toncli) to easily and convenien
 TL-B (Type Language - Binary) serves to describe the type system, constructors, and existing functions. For example we can use TL-B schemes to build binary structures associated with the TON blockchain. Special TL-B parsers can read schemes to deserialize binary data into different objects. (definition from the [documentation](https://github.com/tonuniverse/TL-B-docs))
 
 1. [Documentation with examples](https://github.com/tonuniverse/TL-B-docs)
-2. [Some about TL-B are described in tvm.pdf](https://newton-blockchain.github.io/docs/tvm.pdf)
+2. [Some about TL-B are described in tvm.pdf](https://newton-blockchain.github.io/tvm.pdf)
 
 ### Smart contracts examples:
 1. [Official smart contracts (wallets, givers, etc.)](https://github.com/newton-blockchain/ton/tree/master/crypto/smartcont)
@@ -59,7 +59,7 @@ TL-B (Type Language - Binary) serves to describe the type system, constructors, 
 12. [Slotmachine game smart contract](https://gregory-wimbelson.gitbook.io/ton-cookbook/)
 
 ### Articles about smartcontracts:
-1. Official guidelines - https://ton.org/docs/#/howto/smart-contract-guidelines
+1. Official guidelines - https://ton.org/#/howto/smart-contract-guidelines
 2. Develop, deploy and use lottery smart contract - https://habr.com/ru/post/494528/
 3. Extend wallet smart contract and deploy it - https://telegra.ph/Hello-World-TON-smart-contract-for-15-minutes-11-20
 
@@ -67,7 +67,7 @@ TL-B (Type Language - Binary) serves to describe the type system, constructors, 
 1. [Smart contract deployer](https://deployer.tonsc.org/) by t.me/ProjectManageRR
 2. [TON CLI](https://github.com/disintar/toncli) by t.me/disintar
 3. [Documented generate.fif](https://gist.github.com/tvorogme/fdb174ac0740b6a52d1dbdf85f4ddc63) by t.me/disintar
-4. [Lite-client installation guide](https://ton.org/docs/#/howto/getting-started). Via lite-client you can send .boc file to deploy smart contract to blockchain
+4. [Lite-client installation guide](https://ton.org/#/howto/getting-started). Via lite-client you can send .boc file to deploy smart contract to blockchain
 5. [Compilation and deploy of the gambling smart contract](https://gregory-wimbelson.gitbook.io/ton-cookbook/compilation-and-deploy-of-the-ton-smart-contract)
 
 ### IDE plugins and syntax highlighting

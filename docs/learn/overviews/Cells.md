@@ -34,7 +34,7 @@ In particular, it deduplicates data: if there are several eqivalent sub-cells re
 
 Another special cell flavor is used in TVM:
 
-* _Continuation_  for cells containing op-codes (instructions) for Ton Virtual Machine, see [TVM Bird's-eye overview](/develop/smart-contracts/tvm_overview.md).
+* _Continuation_  for cells containing op-codes (instructions) for Ton Virtual Machine, see [TVM Bird's-eye overview](/develop/smart-contracts/tvm_overview).
 
 ## Serialization of data to cells
 
@@ -42,4 +42,4 @@ Any object in TON (message, message queue, block, whole blockchain state, contra
 
 The process of serialization is described by TL-B scheme: a formal description of how this object can be serialized to Builder or how to parse object of given type from the Slice.
 TL-B for cells is the same as TL or ProtoBuf for byte-streams.
-Navigate [here](/develop/smart-contracts/overviews/TL-B.md) for more info in TL-B.
+Navigate [here](/develop/smart-contracts/overviews/TL-B) for more info in TL-B.

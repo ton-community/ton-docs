@@ -36,12 +36,12 @@ export default function Home(): JSX.Element {
   const {siteConfig} = useDocusaurusContext();
   return (
 
-      <Layout>
+      <Layout title={"Start"} description={"Learn about the basics of blockchain and TON and how to get started. TON is blockchain of blockchains with a masterchain to rule them all. You can learn more about general architecture in Basic Concepts section."}>
           <div
               className="bootstrap-wrapper"
           >
               <br/>
-              <h1 style={{ fontWeight: '650', textAlign:'center' }}>Welcome to the TON Blockchain docs</h1>
+              <h1 style={{ fontWeight: '650', textAlign:'center' }}>Welcome to the TON Blockchain documentation</h1>
               <p style={{ textAlign:'center', fontWeight: '400', fontSize:'18px' }}>Choose your path to start journey 🚀</p>
 
               <div className="container">

@@ -47,7 +47,7 @@ You can connect to public [toncenter.com](https://toncenter.com) or run your own
 
    Since it checks Merkle proofs, you can even use untrusted lite servers.
 
-   Read more about Merkle proofs at [TON Whitepaper](https://ton-blockchain.github.io/docs/ton.pdf) 2.3.10, 2.3.11.
+   Read more about Merkle proofs at [TON Whitepaper](https://ton-blockchain.github.io/ton.pdf) 2.3.10, 2.3.11.
 
    👍 - Ultra secure API with Merkle proofs. 
 

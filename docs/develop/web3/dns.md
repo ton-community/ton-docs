@@ -8,7 +8,7 @@ TON DNS is a service for translating human-readable domain names (such as `test.
 
 ## SDK
 
-Working with TON DNS is implemented in JavaScript SDK [TonWeb](https://github.com/toncenter/tonweb) and [TonLib](https://ton.org/docs/#/apis/?id=_2-ton-api).
+Working with TON DNS is implemented in JavaScript SDK [TonWeb](https://github.com/toncenter/tonweb) and [TonLib](https://ton.org/#/apis/?id=_2-ton-api).
 
 ```js
 const address: Address = await tonweb.dns.getWalletAddress('test.ton');
@@ -26,7 +26,7 @@ Currently, only domains ending in `.ton` are recognized as valid TON DNS domains
 
 Root DNS smart contract source code - https://github.com/ton-blockchain/dns-contract/blob/main/func/root-dns.fc.
 
-This could change in the future. Adding a new first-level domain will require new root smart contract and general vote to change the [network config #4](https://ton.org/docs/#/smart-contracts/governance?id=config).
+This could change in the future. Adding a new first-level domain will require new root smart contract and general vote to change the [network config #4](https://ton.org/#/smart-contracts/governance?id=config).
 
 ## *.ton domains
 

@@ -6,7 +6,7 @@ The majority of TON nodes use reliable and tested **mytonctrl**.
 
 ## Installation
 
-[Setup Node/Validator video instruction](https://github.com/ton-blockchain/docs/raw/master/docs/nodes/setup_validator.mp4 ':include controls :type=video width=100% height=400px')
+[Setup Node/Validator video instruction](https://github.com/ton-blockchain/raw/master/nodes/setup_validator.mp4 ':include controls :type=video width=100% height=400px')
 
 Download and run the installation script.
 
@@ -24,7 +24,7 @@ su root -c 'bash install.sh -m full'
 
 Check the **mycontrol** installation procedure at:
 
-https://github.com/ton-blockchain/mytonctrl/blob/master/docs/en/manual-ubuntu.md
+https://github.com/ton-blockchain/mytonctrl/blob/master/en/manual-ubuntu.md
 
 
 ## Become a validator
@@ -37,4 +37,4 @@ To become a validator, send Toncoins to your wallet.
 
 Check the manual here:
 
-https://github.com/ton-blockchain/mytonctrl/blob/master/docs/en/manual-ubuntu.md
+https://github.com/ton-blockchain/mytonctrl/blob/master/en/manual-ubuntu.md
