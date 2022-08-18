@@ -10,35 +10,5 @@ For instance, any subdomain resolver smart contract for TON DNS is expected to i
 Our only general recommendation at this point is to implement the get-method `seqno` (without parameters) that returns the current `seqno` of a smart contract that uses sequence numbers to prevent replay attacks related to inbound external methods, whenever such a method makes sense.
 :::
 
-[//]: # (<details>)
-
-[//]: # (  <summary>Toggle me!</summary>)
-
-[//]: # (  <div>)
-
-[//]: # (    <div>This is the detailed content</div>)
-
-[//]: # (    <br/>)
-
-[//]: # (    <details>)
-
-[//]: # (      <summary>)
-
-[//]: # (        Nested toggle! Some surprise inside...)
-
-[//]: # (      </summary>)
-
-[//]: # (      <div>)
-
-[//]: # (        😲😲😲😲😲)
-
-[//]: # (      </div>)
-
-[//]: # (    </details>)
-
-[//]: # (  </div>)
-
-[//]: # (</details> )
-
 
 
