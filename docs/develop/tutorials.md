@@ -10,7 +10,7 @@ These materials are the best for newcomers to the TON development.
 
 Right now there is 2 great approaches how to start developing TON contracts:
 * [TON Hello World: Step by step guide for writing your first smart contract in FunC](https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func)
-* [TON Learn Guides: 10 zero-to-hero lessons](https://github.com/romanovichim/TonFunClessons_Eng)
+* [TON Learn Guides: 10 zero-to-hero lessons](https://github.com/romanovichim/TonFunClessons_Eng) ([Ru version](https://github.com/romanovichim/TonFunClessons_ru))
 
 ## Web and dApps development
 
