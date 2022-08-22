@@ -4,7 +4,7 @@ By community efforts there are already several tutorials available for new TON d
 
 ## Smart Contracts development
 
-:::tip start tip
+:::tip starter tip
 These materials are the best for newcomers to the TON development.
 :::
 
@@ -49,7 +49,8 @@ So feel free to read about it later.
 
 If you're already familiar with smart contracts, you could try to read the following examples:
 - [Fungible (Jettons), Non-Fungible (NFT), Semi-Fungible Tokens Smart Contracts](https://github.com/ton-blockchain/token-contract/tree/main)
-- [Standard Smart Contracts](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
+- [Standard Smart Contracts Examples](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
+- [Wallet V4 Smart Contract Example](https://github.com/ton-blockchain/wallet-contract)
 
 :::info little tip
 Feel free to focus on smart contracts written using _FunC_  (***.fc**) instead of low-level *Fift* (***.fif**) language. It would be easier experience.

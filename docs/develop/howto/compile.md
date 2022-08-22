@@ -60,8 +60,7 @@ Basic help info can be obtained by typing `help` into the Lite Client. Type `qui
 
 ## Func
 
-To build FunC compiler from source code do [common part](/develop
-/compile.md#Common) described above and then: 
+To build FunC compiler from source code do [common part](/develop/howto/compile.md#Common) described above and then: 
 
 ```
 cmake --build . --target func
@@ -75,7 +74,7 @@ func -o output.fif -SPA source0.fc source1.fc ...
 
 ## Fift
 
-To build Fift compiler from source code do [common part](/develop/compile.md#Common) described above and then:
+To build Fift compiler from source code do [common part](/develop/howto/compile.md#Common) described above and then:
 
 ```
 cmake --build . --target fift

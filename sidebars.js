@@ -97,6 +97,14 @@ const sidebars = {
         'develop/smart-contracts/README',
         'develop/smart-contracts/messages',
         'develop/smart-contracts/fees',
+        {
+          type: 'category',
+          label: 'Testing & Debugging',
+          items: [
+            'develop/smart-contracts/testing/tonstarter',
+            'develop/smart-contracts/testing/toncli',
+          ],
+        },
         // 'develop/smart-contracts/governance',
         {
           type: 'category',
@@ -108,10 +116,11 @@ const sidebars = {
             'develop/smart-contracts/guidelines/non-bouncable-messages',
             'develop/smart-contracts/guidelines/get-methods',
             'develop/smart-contracts/guidelines/processing',
+            'develop/smart-contracts/guidelines/tips',
             {
               type: 'link',
               label: 'How to shard your TON smart contract and why',
-              href: 'https://gist.github.com/talkol/e9e1cd2368a4bbe498c49693af31179e',
+              href: 'https://society.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-theanatomy-of-tons-jettons',
             },
           ],
         },
@@ -136,7 +145,6 @@ const sidebars = {
             },
           ],
         },
-        'develop/smart-contracts/tips',
       ],
     },
     {

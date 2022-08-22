@@ -17,8 +17,9 @@ Start developing smart contracts easily with these resources:
   * [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) - All-in-one templates to build, deploy and test FunC contracts
     * Uses npm and TypeScript
     * Similar to hardhat experience for EVM devs
-  * [toncli](https://github.com/disintar/toncli) - Comfy CLI to build, deploy and test FunC contracts
-  * [MyLocalTON](/nodes/local-ton.md) - Run your private TON blockchain
+  * [toncli](https://github.com/disintar/toncli)
+    * Comfy CLI to build, deploy and test FunC contracts
+  * [MyLocalTON](/develop/nodes/local-ton.md) - Run your private TON blockchain
   * [ton-contract-executor](https://github.com/Naltox/ton-contract-executor) - Library for running contracts locally
 
 ## SDK

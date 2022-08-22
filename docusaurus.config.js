@@ -48,14 +48,14 @@ const config = {
           // Please change this to your repo
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/swiftadviser/ton-docs/tree/main/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/swiftadviser/ton-docs/tree/main/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -111,12 +111,12 @@ const config = {
             position: 'left',
             label: 'Build',
           },
-          {
-            type: 'doc',
-            docId: 'develop/nodes/node-types',
-            position: 'left',
-            label: 'Integrate',
-          },
+          // {
+          //   type: 'doc',
+          //   docId: 'develop/nodes/node-types',
+          //   position: 'left',
+          //   label: 'Integrate',
+          // },
           {
             href: 'https://ton.org/validator',
             position: 'left',
@@ -140,7 +140,7 @@ const config = {
             position: 'right',
           },
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/swiftadviser/ton-docs',
             position: 'right',
             className: 'header-github-link',
             'aria-label': 'GitHub repository',

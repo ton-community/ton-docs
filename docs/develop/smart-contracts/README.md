@@ -1,7 +1,7 @@
 # Introduction
 
 
-:::tip start tip
+:::tip starter tip
 If you're first time here, just [set up the environment](/develop/getting-started) and start the one of the tutorials.
 :::
 
@@ -12,23 +12,24 @@ Right now there is 2 great approaches how to start developing TON smart contract
 * [TON Learn Guides: 10 zero-to-hero lessons](https://github.com/romanovichim/TonFunClessons_Eng) ([Ru version](https://github.com/romanovichim/TonFunClessons_ru))
 
 
-## TON Virtual Machine (TVM)
+## TON Virtual Machine
 
-TON smart contracts are executed on their own TON Virtual Machine (TVM).
+TON smart contracts are executed on their own TON Virtual Machine (TVM).  
+TVM is built on the stack principle, which makes it efficient and easy to implement.  
 
-TVM is built on the stack principle, which makes it efficient and easy to implement.
-
-:::info
-You can read more about how TVM works in bird's-eye overview [**here**](/develop/smart-contracts/tvm_overview.md).
-:::
+You can read more about how TVM works in [TVM bird's-eye overview](/learn/tvm-instructions/tvm_overview).
 
 ## FunC language
 
 High-level language FunC is used to program smart contracts on TON.
 
-:::info documentation
-Feel free to read more about FunC in [documentation](/develop/func/overview.md).
-:::
+Feel free to read more about FunC in [DOCUMENTATION](/develop/func/overview.md) section.
+
+## Testing and Debugging
+
+Right now there are 2 ways how to test and debug smart contracts in TON:
+* [tonstarter-contracts](/develop/smart-contracts/testing/tonstarter) — TypeScript, Mocha testing framework, TON Contract Executor.
+* [toncli](/develop/smart-contracts/testing/toncli) — FunC test framework
 
 ## Smart Contract Guidelines
 
@@ -36,7 +37,7 @@ TON allows you to do anything, but on production smart contracts must be followe
 
 * [Smart Contract Guidelines](/develop/smart-contracts/guidelines)
 
-## Fift
+## Fift language
 
 :::caution advanced level
 This information is **very low level** and could be hard to understand for newcomers.  

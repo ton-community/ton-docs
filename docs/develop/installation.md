@@ -69,4 +69,8 @@ Click on the link above, choose the workflow on the left relevant to your operat
 
 ## Next steps
 
-Feel free to start one of the tutorials below on the [next page](/develop/tutorials).
+Feel free to start one of the tutorials below on the [TUTORIALS](/develop/tutorials) section.
+
+Also, you could find it useful:
+* [List of Tools & SDK](/develop/tools)
+* [IDE plugins](/develop/tools/ide-plugins)

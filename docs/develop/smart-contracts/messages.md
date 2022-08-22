@@ -1,6 +1,6 @@
 # Sending messages
 
-Composition, parsing and sending messages lie on the intersection of [TL-B schemas](/develop/smart-contracts/overviews/TL-B), [transaction phases and TVM](/develop/smart-contracts/tvm_overview.md).
+Composition, parsing and sending messages lie on the intersection of [TL-B schemas](/learn/overviews/TL-B), [transaction phases and TVM](/learn/tvm-instructions/tvm_overview.md).
 
 Indeed, funC expose [send_raw_message](/develop/func/stdlib?id=send_raw_message) function which expects serialized message as argument.
 
@@ -140,9 +140,12 @@ That way instead of individual serialization of 14 parameters, we execute 4 seri
 Full scheme of messages layout as well as layout of all constituting fields (as well as scheme of ALL objects in TON) is presented in [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb).
 
 ## Message size
-Note that any Cell may contain up to 1023 bits. If you need to store more data you should split it into chunks and store in reference cells.
 
-That means that if, for instance, your message body size is 900 bits long you can not to store it in the same cell with the message header.
+:::info cell size
+Note that any [Cell](/learn/overviews/Cells) may contain up to `1023` bits. If you need to store more data you should split it into chunks and store in reference cells.
+:::
+
+If, for instance, your message body size is 900 bits long you can not to store it in the same cell with the message header.
 Indeed, in addition to message header fields, total size of the cell will be more than 1023 bits and during serialization there will be `cell overflow` exception. In this case, instead of `0` that stands for "inplace message body flag (Either)" there should be `1` and message body should be stored in reference cell.
 
 Those things should be handled carefully due to the fact that some fields have variable size.

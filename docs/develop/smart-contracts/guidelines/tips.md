@@ -1,10 +1,13 @@
 # Tips & Tricks
 
-###  [About bounce TONs back](https://t.me/tondev/44958)
+##  About bounce TONs back
 
 If you have the `throw_if` function (with code != 0) in recv_internal triggered and the bounce flag set([tblkch.pdf 4.2.5](https://newton-blockchain.github.io/tblkch.pdf)), all coins will be sent back
 
-### [About charging gas fees](https://t.me/tondev/45882)
+Read more in the [original discussion](https://t.me/tondev/44958).
+
+
+## About charging gas fees
 
 This information is based on this [discussion](https://github.com/DKeysil/awesome-ton-smart-contracts/issues/1)
 
@@ -21,9 +24,22 @@ FunC docs:
 - [`set_gas_limit`](https://ton.org/#/func/stdlib?id=set_gas_limit)
 - [`raw_reserve`](https://ton.org/#/func/stdlib?id=raw_reserve)
 
-### [Spend less gas in huge smart contracts](https://t.me/tondev/45956)
+
+Read more in the [original discussion](https://t.me/tondev/45882).
+
+
+## Spend less gas in huge smart contracts
 
 `touch()` is tip to the compiler how best to organize the stack. The command puts a variable at top of the stack ([func docs](https://ton.org/#/func/stdlib?id=impure_touch))
 
-example:
-In this [code](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc#L90) `cs~touch();` will place `cs` on top of the stack and then the interaction with the variable will be cheaper
+### Example
+
+In this code:
+
+```js reference
+https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc#L71-L92
+```
+
+`cs~touch();` will place `cs` on top of the stack and then the interaction with the variable will be cheaper.
+
+Read more in the [original discussion](https://t.me/tondev/45956).
