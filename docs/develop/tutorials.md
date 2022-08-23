@@ -4,12 +4,12 @@ By community efforts there are already several tutorials available for new TON d
 
 ## Smart Contracts development
 
-:::tip starter tip
+:::info starter tip
 These materials are the best for newcomers to the TON development.
 :::
 
-Right now there is 2 great approaches how to start developing TON contracts:
-* [TON Hello World: Step by step guide for writing your first smart contract in FunC](https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func)
+Right now there is 2 great approaches how to start developing TON smart contracts:
+* [TON Hello World: Step-by-step guide for writing your first smart contract in FunC](https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func)
 * [TON Learn Guides: 10 zero-to-hero lessons](https://github.com/romanovichim/TonFunClessons_Eng) ([Ru version](https://github.com/romanovichim/TonFunClessons_ru))
 
 ## Web and dApps development
@@ -39,6 +39,13 @@ In case you are web or bot developer, you could find useful these repositories:
 * [TON Diamonds NFT deployer](https://github.com/tondiamonds/ton-nft-deployer) (TypeScript, no comments)
 * [NFT Minter Example](https://github.com/ton-foundation/token-contract/tree/main/nft/web-example) (JavaScript, with comments)
 * [NFT Minter using React](https://github.com/tonbuilders/tonbuilders-minter) (React, no comments)
+
+#### Jetton Deployer
+
+Create your own token on TON blockchain using Jetton Deployer example.
+
+* [Jetton Deployer — Contracts](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)
+* [Jetton Deployer — WebClient](https://github.com/ton-defi-org/jetton-deployer-webclient) (React, TypeScript)
 
 ## Standard smart contracts
 

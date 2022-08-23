@@ -11,6 +11,11 @@ A _tonstarter-contracts_ based on TypeScript and [mocha](https://mochajs.org/) u
 * [GitHub repository](https://github.com/ton-defi-org/tonstarter-contracts)
 * [Online IDE using Glitch](https://github.com/ton-defi-org/tonstarter-contracts)
 
+```bash
+git clone https://github.com/ton-defi-org/tonstarter-contracts
+cd tonstarter-contracts
+```
+
 ## TON Contract Executor
 
 This library allows you to run Ton Virtual Machine locally and execute contract. That allows you to write & debug & fully test your contracts before launching them to the network.
@@ -54,7 +59,7 @@ Feel free to check repository code to find how _counter smart contract_ testing 
 To start and experiment just copy repository from GitHub:
 ```bash
 git clone https://github.com/ton-defi-org/tonstarter-contracts
-cd ./tonstarter-contracts
+cd tonstarter-contracts
 ```
 
 After that to see how tests work just write in tonstarter-contracts dir:
