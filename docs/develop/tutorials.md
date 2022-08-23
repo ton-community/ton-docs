@@ -42,10 +42,15 @@ In case you are web or bot developer, you could find useful these repositories:
 
 #### Jetton Deployer
 
-Create your own token on TON blockchain using Jetton Deployer example.
+Jettons are custom fungible tokens on TON blockchain. You can create your own token on TON blockchain using Jetton Deployer example below:
 
+* **[Jetton.Live](https://jetton.live/)** — open-source Jetton Deployer dApp
 * [Jetton Deployer — Contracts](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)
 * [Jetton Deployer — WebClient](https://github.com/ton-defi-org/jetton-deployer-webclient) (React, TypeScript)
+
+##### Tools to work with Jettons
+
+* [Scaleton](http://scaleton.io) — see your custom token balances.
 
 ## Standard smart contracts
 
