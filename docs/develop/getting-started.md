@@ -1,4 +1,4 @@
-# Tutorials
+# Quick Start
 
 By community efforts there are already several tutorials available for new TON developers. Feel free to focus on the approach that suits the best for you.
 
@@ -12,18 +12,13 @@ Right now there is 2 great approaches how to start developing TON smart contract
 * [TON Hello World: Step-by-step guide for writing your first smart contract in FunC](https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func)
 * [TON Learn Guides: 10 zero-to-hero lessons](https://github.com/romanovichim/TonFunClessons_Eng) ([Ru version](https://github.com/romanovichim/TonFunClessons_ru))
 
-## Web and dApps development
 
-### Quick Start
+## Web and dApps development
 
 For web developer the best approach is to start from this article:  
 * [How TON wallets work and how to access them from JavaScript](https://society.ton.org/how-ton-wallets-work-and-how-to-access-them-from-javascript)
 
 ### Learning by Examples
-
-:::info
-It's okay to interact with blockchain even if you are not familiar with FunC.
-:::
 
 In case you are web or bot developer, you could find useful these repositories:
 

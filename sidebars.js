@@ -81,7 +81,6 @@ const sidebars = {
 
     'develop/getting-started',
     'develop/installation',
-    'develop/tutorials',
     {
       'type': 'html',
       'value': '<hr/>',

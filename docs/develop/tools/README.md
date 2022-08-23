@@ -52,17 +52,14 @@ TonLib was a one of the first libraries for working with TON blockchain.
 
 ## APIs
 
-* [TonCenter](https://toncenter.com/) - Fast and reliable HTTP API for The Open Network
-* [TonApi.io](https://tonapi.io/) - API that allows to work with indexed blockchain information.
-  * NFTs, transactions, etc
+* [TonCenter](https://toncenter.com/) — Fast and reliable HTTP API for The Open Network
+* [TonApi.io](https://tonapi.io/) — API that allows to work with indexed blockchain information.
+
+### End-points  
+
+* [GetBlock Nodes](https://getblock.io/nodes/ton/) — connect and test your dApp to TON using GetBlocks Nodes.
 
 ## Telegram Bots and Faucets
 
-* [Testgiver TON bot](https://t.me/testgiver_ton_bot) - free test TONs for testnet development
-* [TON Notify bot](https://t.me/TONNotifyBot) — receive notifications about transactions in your wallet
-
-## Other
-
-### DevOps tools
-
-* [Full Node in Docker](https://github.com/akme/ton-node) - Dockerfile for Telegram Open Network Node
+* [TestGiver TON bot](https://t.me/testgiver_ton_bot) — free test TONs for testnet development
+* [TON Notify bot](https://t.me/TONNotifyBot) — receive notifications about transactions in your wallet.

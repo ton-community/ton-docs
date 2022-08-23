@@ -1,16 +1,29 @@
 # Introduction
 
 
-:::tip starter tip
-If you're first time here, just [set up the environment](/develop/getting-started) and start the one of the tutorials.
-:::
-
-## Quick Start
-
 Right now there is 2 great approaches how to start developing TON smart contracts:
 * [TON Hello World: Step by step guide for writing your first smart contract in FunC](https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func)
 * [TON Learn Guides: 10 zero-to-hero lessons](https://github.com/romanovichim/TonFunClessons_Eng) ([Ru version](https://github.com/romanovichim/TonFunClessons_ru))
 
+## Environment
+
+### Online
+
+You can try to deploy TON smart contracts online using [Glitch Workspace](https://glitch.com/edit/#!/remix/clone-from-repo?&REPO_URL=https%3A%2F%2Fgithub.com%2Fton-defi-org%2Ftonstarter-contracts.git).
+
+Glitch runs the [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) environment directly in the browser, so it is almost identical to the local setup but doesn't require installing anything on your machine.
+
+[![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button-v2.svg)](https://glitch.com/edit/#!/remix/clone-from-repo?&REPO_URL=https%3A%2F%2Fgithub.com%2Fton-defi-org%2Ftonstarter-contracts.git)
+
+:::info
+Online IDE is perfect for hackathons, contests, or just to try TON development.
+:::
+
+### Local
+
+A local environment allows you to develop contracts _faster_, with more comfort, and use bonuses like [IDE plugins](/develop/tools/ide-plugins) with syntax highlight for smart contracts development.
+
+Continue in the [INSTALLATION](/develop/installation) guide.
 
 ## TON Virtual Machine
 

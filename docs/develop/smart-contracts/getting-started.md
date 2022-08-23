@@ -1,8 +1,5 @@
 # Getting Started
 
-```
-// TODO adapt to docs style this from awesome-ton-smart-constracts
-```
 
 It's a list of links to articles and tools which can help you to start developing smart-contracts for [TON](https://ton.org) blockchain
 
