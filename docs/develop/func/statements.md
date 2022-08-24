@@ -150,7 +150,7 @@ The first call will modify x, the second and the third won't.
 In summary, when a function with name `foo` is called as non-modifying or modifying method (i.e. with `.foo` or `~foo` syntax), FunC compiler use the definition of `.foo` or `~foo` correspondingly if such definition is presented, and if not, it uses the definition of `foo`.
 
 ### Operators
-Note that currently all of unary and binary operators are integer operators. Logical operators are represented as bitwise integer operators  (cf. [absene of boolean type](/develop/func/types?id=absence-of-boolean-type)).
+Note that currently all of unary and binary operators are integer operators. Logical operators are represented as bitwise integer operators  (cf. [absene of boolean type](/develop/func/types#absence-of-boolean-type)).
 #### Unary operators
 There are two unary operators:
 - `~` is bitwise not (priority 75).
@@ -248,7 +248,7 @@ while (x < 100) {
 }
 ;; x = 256
 ```
-Note that the truth value of condition `x < 100` is of type `int` (cf. [absene of boolean type](/develop/func/types?id=absence-of-boolean-type)).
+Note that the truth value of condition `x < 100` is of type `int` (cf. [absene of boolean type](/develop/func/types#absence-of-boolean-type)).
 
 ### Until loop
 Has the following syntax:

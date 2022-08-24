@@ -20,9 +20,9 @@ In the case of internal messages the initial gas limit is set equal to the amoun
 Using `set_gas_limit` in internal messages does not limit the possibility of spending more TON than came with the message when sending other messages that carry value. You can use `raw_reserve` in addition to gas limit to limit spendable amount of coins.
 
 FunC docs:
-- [`accept_message`](https://ton.org/#/func/stdlib?id=accept_message)
-- [`set_gas_limit`](https://ton.org/#/func/stdlib?id=set_gas_limit)
-- [`raw_reserve`](https://ton.org/#/func/stdlib?id=raw_reserve)
+- [`accept_message`](/develop/func/stdlib#accept_message)
+- [`set_gas_limit`](/develop/func/stdlib#set_gas_limit)
+- [`raw_reserve`](/develop/func/stdlib#raw_reserve)
 
 
 Read more in the [original discussion](https://t.me/tondev/45882).
@@ -30,7 +30,7 @@ Read more in the [original discussion](https://t.me/tondev/45882).
 
 ## Spend less gas in huge smart contracts
 
-`touch()` is tip to the compiler how best to organize the stack. The command puts a variable at top of the stack ([func docs](https://ton.org/#/func/stdlib?id=impure_touch))
+`touch()` is tip to the compiler how best to organize the stack. The command puts a variable at top of the stack ([func docs](/develop/func/stdlib#impure_touch))
 
 ### Example
 

@@ -114,6 +114,7 @@ const sidebars = {
             'develop/smart-contracts/guidelines/external-messages',
             'develop/smart-contracts/guidelines/non-bouncable-messages',
             'develop/smart-contracts/guidelines/get-methods',
+            'develop/smart-contracts/guidelines/accept',
             'develop/smart-contracts/guidelines/processing',
             'develop/smart-contracts/guidelines/tips',
             {
@@ -206,11 +207,11 @@ const sidebars = {
           type: 'doc',
           id: 'develop/func/overview',
         },
-        {
-          type: 'link',
-          label: 'FunC Cheat Sheet',
-          href: 'https://mybinder.org/v2/gh/atomex-me/xeus-fift/binder?filepath=func_cheat_sheet.ipynb',
-        },
+        // {
+        //   type: 'link',
+        //   label: 'FunC Cheat Sheet',
+        //   href: 'https://mybinder.org/v2/gh/atomex-me/xeus-fift/binder?filepath=func_cheat_sheet.ipynb',
+        // },
         {
           type: 'category',
           label: 'Documentation',
@@ -224,7 +225,7 @@ const sidebars = {
             'develop/func/statements',
             'develop/func/builtins',
             'develop/func/stdlib',
-            'develop/func/FAQ',
+            // 'develop/func/FAQ',
           ],
         },
       ],

@@ -17,6 +17,6 @@ Variable can be dumped to debug log by `~dump` function.
 - `muldiv` is multiple-then-divide operation. Intermediate result is stored in 513-bit integer, so it won't overflow if the actual result fits into 257-bit integer.
 
 ## Other primitives
-- `null?` checks whether the argument is `null`. By the value `null` of TVM type `Null` FunC represents absence of a value of some atomic type, see [null values](/develop/func/types?id=null-values).
+- `null?` checks whether the argument is `null`. By the value `null` of TVM type `Null` FunC represents absence of a value of some atomic type, see [null values](/develop/func/types#null-values).
 - `touch` and `~touch` move a variable to the top of the stack
 - `at` gets the value of component of a tuple on specified position

@@ -48,7 +48,7 @@ Types of the form `[A, B, ...]` represent TVM tuples with concrete length and ty
 
 ## Polymorphism with type variables
 FunC has Miller-Rabin type system with support for polymorphic functions. For example, function
-```
+```cpp
 forall X -> (X, X) duplicate(X value) {
   return (value, value);
 }
@@ -57,7 +57,7 @@ is a polymorphic function which takes a (single stack entry) value and returns t
 
 In this example `X` is a type variable.
 
-See more info on this topic in the [functions](/develop/func/functions.md?id=polymorphism-with-forall) section.
+See more info on this topic in the [functions](/develop/func/functions#polymorphism-with-forall) section.
 
 ## User-defined types
 Currently FunC has no support for defining types except for type constructions described above.

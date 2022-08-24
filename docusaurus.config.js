@@ -130,7 +130,7 @@ const config = {
           // },
 
           {
-            to: 'docs/contribute',
+            to: 'contribute',
             label: 'Contribute to Docs',
             position: 'right',
           },
