@@ -4,7 +4,7 @@ By community efforts there are already several tutorials available for new TON d
 
 ## Smart Contracts development
 
-:::info starter tip
+:::tip starter tip
 These materials are the best for newcomers to the TON development.
 :::
 
@@ -15,7 +15,7 @@ Right now there is 2 great approaches how to start developing TON smart contract
 
 ## Web and dApps development
 
-For web developer the best approach is to start from this article:  
+For web developers the best approach is to start from this article:  
 * [How TON wallets work and how to access them from JavaScript](https://society.ton.org/how-ton-wallets-work-and-how-to-access-them-from-javascript)
 
 ### Learning by Examples

@@ -12,17 +12,16 @@ Here you can links to the most important resources for you to get started with T
 
 ## Development and Testing
 
+### Smart Contracts development
+
 Start developing smart contracts easily with these resources:
 
   * [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) - All-in-one templates to build, deploy and test FunC contracts
-    * Uses npm and TypeScript
-    * Similar to hardhat experience for EVM devs
-  * [toncli](https://github.com/disintar/toncli)
-    * Comfy CLI to build, deploy and test FunC contracts
+  * [toncli](https://github.com/disintar/toncli) — Comfy CLI to build, deploy and test FunC contracts.
   * [MyLocalTON](/develop/nodes/local-ton.md) - Run your private TON blockchain
   * [ton-contract-executor](https://github.com/Naltox/ton-contract-executor) - Library for running contracts locally
 
-## SDK
+### SDK
 
 Here is a list of modern SDKs that continuously supported and improved:
 
@@ -32,6 +31,14 @@ Here is a list of modern SDKs that continuously supported and improved:
 * [ton-kotlin](https://github.com/andreypfau/ton-kotlin) — Kotlin SDK for TON blockchain.
 * [psylopunk/pytonlib](https://github.com/psylopunk/pytonlib) — Python SDK.
 * [toncenter/pytonlib](https://github.com/toncenter/pytonlib) — Python SDK.
+
+### Authentication
+
+In case you want to add login to your website using wallet exists these approaches:
+
+* [TON Connect](https://github.com/tonkeeper/ton-connect/blob/main/TonConnectSpecification.md) by Tonkeeper
+* [Tonhub Extensions](https://developers.tonhub.com/docs/apps) by Tonhub
+
 
 ### TonLib
 
@@ -49,6 +56,8 @@ TonLib was a one of the first libraries for working with TON blockchain.
 * [Android standard wallet (Java)](https://github.com/trm-dev/wallet-android)
 * [iOS standard wallet (Swift)](https://github.com/trm-dev/wallet-ios)
 * [TonLib CLI (C++)](https://github.com/ton-blockchain/ton/blob/master/tonlib/tonlib/tonlib-cli.cpp)
+
+
 
 ## APIs
 
