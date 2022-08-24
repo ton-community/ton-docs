@@ -22,7 +22,7 @@ One might think about TON as a huge distributed supercomputer,
 or rather a huge "_superserver_", intended to host and provide a variety of
 services.
 
-Next concept to read: [Blockchain of Blockchains](/learn/overviews/TON_blockchain_overivew).
+Next concept to read: [Blockchain of Blockchains](/learn/overviews/TON_blockchain_overview).
 
 ## Ethereum to TON
 
