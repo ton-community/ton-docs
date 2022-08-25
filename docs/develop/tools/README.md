@@ -6,8 +6,8 @@ Here you can links to the most important resources for you to get started with T
 
 - [Wallets](https://ton.org/wallets) — a list of popular wallets for TON.
 - [Explorers](https://ton.app/explorers) — to read transactions in the blockchain.
-- [IDE plugins](/tools/ide-plugins) — for comfort development.
-- [Testnet](/tools/testnet/) — testnet and how to use it.
+- [IDE plugins](/develop/tools/ide-plugins) — for comfort development.
+- [Testnet](/develop/tools/testnet/) — testnet and how to use it.
 
 ### SDK
 
