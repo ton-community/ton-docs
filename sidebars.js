@@ -22,7 +22,7 @@ const sidebars = {
     },
     {
       'type': 'html',
-      'value': '<span class=\'menu__link\'><b><small> Basic concepts </small></b></span>',
+      'value': '<span class=\'menu__link\'><b><small> TON Concepts </small></b></span>',
     },
     'learn/overviews/TON_blockchain_overview',
     'learn/overviews/Cells',
@@ -44,58 +44,33 @@ const sidebars = {
       ],
     },
     'learn/overviews/ADNL',
-    {
-      type: 'category',
-      label: 'Whitepapers',
-      items: [
-        {
-          type: 'doc',
-          label: 'Overview',
-          id: 'learn/docs',
-        },
-        {
-          type: 'link',
-          label: 'TON',
-          href: 'https://ton-blockchain.github.io/ton.pdf',
-        },
-        {
-          type: 'link',
-          label: 'TON Virtual Machine',
-          href: 'https://ton-blockchain.github.io/tvm.pdf',
-        },
-        {
-          type: 'link',
-          label: 'TON Blockchain',
-          href: 'https://ton-blockchain.github.io/tblkch.pdf',
-        },
-        {
-          type: 'link',
-          label: 'Catchain Consensus Protocol',
-          href: 'https://ton-blockchain.github.io/catchain.pdf',
-        },
 
-      ],
-    },
   ],
   develop: [
 
     'develop/getting-started',
-    'develop/installation',
     {
       'type': 'html',
       'value': '<hr/>',
     },
     {
       'type': 'html',
-      'value': '<span class=\'menu__link\'><b><small> Essentials </small></b></span>',
+      'value': '<span class=\'menu__link\'><b><small> Development </small></b></span>',
     },
     {
       type: 'category',
-      label: 'Smart Contracts',
+      label: 'Develop Smart Contracts',
       items: [
         'develop/smart-contracts/README',
-        'develop/smart-contracts/messages',
-        'develop/smart-contracts/fees',
+        {
+          type: 'category',
+          label: 'Environment',
+          items: [
+            'develop/installation',
+            'develop/tools/ide-plugins',
+            'develop/tools/testnet/README',
+          ]
+        },
         {
           type: 'category',
           label: 'Testing & Debugging',
@@ -104,29 +79,9 @@ const sidebars = {
             'develop/smart-contracts/testing/toncli',
           ],
         },
-        // 'develop/smart-contracts/governance',
         {
           type: 'category',
-          label: 'Best Practices',
-          items: [
-            'develop/smart-contracts/guidelines',
-            'develop/smart-contracts/guidelines/internal-messages',
-            'develop/smart-contracts/guidelines/external-messages',
-            'develop/smart-contracts/guidelines/non-bouncable-messages',
-            'develop/smart-contracts/guidelines/get-methods',
-            'develop/smart-contracts/guidelines/accept',
-            'develop/smart-contracts/guidelines/processing',
-            'develop/smart-contracts/guidelines/tips',
-            {
-              type: 'link',
-              label: 'How to shard your TON smart contract and why',
-              href: 'https://society.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-theanatomy-of-tons-jettons',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Deploying Contracts',
+          label: 'Deploying Contract',
           items: [
             {
               type: 'link',
@@ -145,59 +100,67 @@ const sidebars = {
             },
           ],
         },
+        {
+          type: 'category',
+          label: 'Best Practices',
+          items: [
+            'develop/smart-contracts/guidelines',
+            'develop/smart-contracts/fees',
+            'develop/smart-contracts/messages',
+            'develop/smart-contracts/guidelines/internal-messages',
+            'develop/smart-contracts/guidelines/external-messages',
+            'develop/smart-contracts/guidelines/non-bouncable-messages',
+            'develop/smart-contracts/guidelines/get-methods',
+            'develop/smart-contracts/guidelines/accept',
+            'develop/smart-contracts/guidelines/processing',
+            'develop/smart-contracts/governance',
+            'develop/smart-contracts/guidelines/tips',
+            {
+              type: 'link',
+              label: 'How to shard your TON smart contract and why',
+              href: 'https://society.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-theanatomy-of-tons-jettons',
+            },
+          ],
+        },
+        {
+          type: 'link',
+          label: 'Coming from ETH and Solidity',
+          href: '/learn/introduction#ethereum-to-ton',
+        }
       ],
     },
     {
       type: 'category',
-      label: 'Tools & SDK',
+      label: 'Develop Web Apps & Bots',
       items: [
         'develop/tools/README',
-        'develop/tools/ide-plugins',
         'develop/tools/apis/README',
-        // {
-        //   type: 'category',
-        //   label: 'TON SDK',
-        //   items: [
-        //     {
-        //       type: 'link',
-        //       label: 'tonweb',
-        //       href: 'https://github.com/toncenter/tonweb',
-        //     },
-        //     {
-        //       type: 'link',
-        //       label: 'ton-js',
-        //       href: 'https://github.com/tonwhales/ton',
-        //     },
-        //     {
-        //       type: 'link',
-        //       label: 'TON kotlin',
-        //       href: 'https://github.com/andreypfau/ton-kotlin',
-        //     },
-        //     {
-        //       type: 'link',
-        //       label: 'tonutils-go',
-        //       href: 'https://github.com/xssnick/tonutils-go',
-        //     },
-        //   ],
-        // },
-        'develop/tools/testnet/README',
         {
           type: 'category',
-          label: 'Network Configs',
+          label: 'Best Practices',
           items: [
             {
-              type: 'link',
-              label: 'Mainnet config',
-              href: 'https://ton.org/global-config.json',
+              type: 'category',
+              label: 'Payment Processing',
+              items: [
+                'develop/howto/payment-processing',
+                'develop/payment-processing/common',
+                'develop/payment-processing/deposits-single-wallet',
+                'develop/payment-processing/deposits-multi-wallet',
+                'develop/payment-processing/withdrawals',
+              ],
             },
-            {
-              type: 'link',
-              label: 'Testnet config',
-              href: 'https://ton-blockchain.github.io/testnet-global.config.json',
-            },
-          ],
-        },
+          ]
+        }
       ],
+    },
+    {
+      'type': 'html',
+      'value': '<hr/>',
+    },
+    {
+      'type': 'html',
+      'value': '<span class=\'menu__link\'><b><small> References & Documentation </small></b></span>',
     },
     {
       type: 'category',
@@ -231,29 +194,45 @@ const sidebars = {
       ],
     },
     {
+      type:'link',
+      label: 'TON Concepts',
+      href: '/learn/introduction',
+    },
+    {
       type: 'category',
-      label: 'Payment Processing',
+      label: 'TON Whitepapers',
       items: [
-        'develop/howto/payment-processing',
-        'develop/payment-processing/common',
-        'develop/payment-processing/deposits-single-wallet',
-        'develop/payment-processing/deposits-multi-wallet',
-        'develop/payment-processing/withdrawals',
+        {
+          type: 'doc',
+          label: 'Overview',
+          id: 'learn/docs',
+        },
+        {
+          type: 'link',
+          label: 'TON',
+          href: 'https://ton-blockchain.github.io/ton.pdf',
+        },
+        {
+          type: 'link',
+          label: 'TON Virtual Machine',
+          href: 'https://ton-blockchain.github.io/tvm.pdf',
+        },
+        {
+          type: 'link',
+          label: 'TON Blockchain',
+          href: 'https://ton-blockchain.github.io/tblkch.pdf',
+        },
+        {
+          type: 'link',
+          label: 'Catchain Consensus Protocol',
+          href: 'https://ton-blockchain.github.io/catchain.pdf',
+        },
+
       ],
     },
     {
       type: 'category',
-      label: 'Low Level',
-      items: [
-        'develop/howto/step-by-step',
-        'develop/howto/ton-sites',
-        'develop/howto/config-params',
-        'develop/howto/pow-givers',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Web3',
+      label: 'TON Services',
       items: [
         'develop/web3/dns',
         {
@@ -268,6 +247,33 @@ const sidebars = {
           'type': 'html',
           'value': '<span class=\'menu__link\'>TON Storage [2022 Q4]</span>',
         },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Network Configs',
+      items: [
+        {
+          type: 'link',
+          label: 'Mainnet config',
+          href: 'https://ton.org/global-config.json',
+        },
+        {
+          type: 'link',
+          label: 'Testnet config',
+          href: 'https://ton-blockchain.github.io/testnet-global.config.json',
+        },
+      ],
+    },
+
+    {
+      type: 'category',
+      label: 'Low Level Internals',
+      items: [
+        'develop/howto/step-by-step',
+        'develop/howto/ton-sites',
+        'develop/howto/config-params',
+        'develop/howto/pow-givers',
       ],
     },
 
