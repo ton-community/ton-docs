@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Installation
 
 ## Prerequisites
@@ -8,7 +11,7 @@ You can download and setup them below.
 
 ## Precompiled binaries
 
-### Download
+### 1. Download
  
 Download the binaries from the table below - make sure to select the correct version according to the operating system you're using and install the additional dependencies:
 
@@ -21,31 +24,76 @@ Download the binaries from the table below - make sure to select the correct ver
 | Ubuntu 16              | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-16/fift) | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-16/func)      | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-16/lite-client) | `sudo apt install libssl-dev` |
 | Debian 10 | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/debian-10/fift) | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/debian-10/func)      | [lite-client](https://github.com/ton-defi-org/ton-binaries/releases/download/debian-10/lite-client) | `sudo apt install libssl-dev` |
 
-### Setup your binaries
+### 2. Setup your binaries
 
-#### Linux / MacOS
+export const Highlight = ({children, color}) => (
+<span
+style={{
+backgroundColor: color,
+borderRadius: '2px',
+color: '#fff',
+padding: '0.2rem',
+}}>
+{children}
+</span>
+);
 
-1. After download, make sure the downloaded binaries are executable by changing their permissions:
+<Tabs groupId="operating-systems">
+  <TabItem value="win" label="Windows">
+
+  1. After download the files, you need to `create` a new folder, for example `/usr/local/bin` and move the installed files there.
+
+  2. To open the Windows environment variables press the <Highlight color="#1877F2">Win + R</Highlight> keys on the keyboard, type `sysdm.cpl` and press Enter.
+
+  3. On the "Advanced" tab, click the <Highlight color="#1877F2">"Environment Variables..."</Highlight> button.
+
+  4. In the `"User variables for"` section, select the `Path` variable and click <Highlight color="#1877F2">"Edit"</Highlight> (this is usually required).
+
+[//]: # (  ![screen]&#40;/img/docs/EnvVarMenu.png&#41;)
+
+  5. To add a new value `(path)` to the system variable in the next window, click the  button <Highlight color="#1877F2">"New"</Highlight>.
+  In the new field, you need to specify the path to the folder where the previously installed files are stored:
+
+  ```
+  C:\Users\usr\local\bin\
+  ```
+
+  6. To check that everything was installed correctly, run in terminal
+
+  ```bash
+  fift -V -and func -V -and lite-client -V
+  ```
+
+  7. If you plan to `use fift`, also download [fiftlib.zip](https://github.com/ton-defi-org/ton-binaries/releases/download/fiftlib/fiftlib.zip), open the zip in some directory on your machine (like `/usr/local/lib/fiftlib`) and create new (click button `"New"`) environment variable `FIFTPATH` in `"User variables for"` section.
+  
+  In the `Variable value` field, specify the path to the files: `/usr/local/lib/fiftlib` and click <Highlight color="#1877F2">OK</Highlight>. Done.
+
+
+  </TabItem>
+  <TabItem value="mac" label="Linux / MacOS">
+
+  1. After download, make sure the downloaded binaries are executable by changing their permissions:
    ```bash
    chmod +x func
    chmod +x fift
    chmod +x lite-client
    ```
-   
-2. It's also useful to place these binaries in your path (or copy them to `/usr/local/bin`) to make sure you can access them from anywhere.
+
+  2. It's also useful to place these binaries in your path (or copy them to `/usr/local/bin`) to make sure you can access them from anywhere.
    ```bash
    cp ./func /usr/local/bin/func
    cp ./fift /usr/local/bin/fift
    cp ./lite-client /usr/local/bin/lite-client
    ```
 
-3. To check that everything was installed correctly, run in terminal
+  3. To check that everything was installed correctly, run in terminal
    ```bash
    fift -V && func -V && lite-client -V
    ```
 
-4. If you plan to use `fift`, also download [fiftlib.zip](https://github.com/ton-defi-org/ton-binaries/releases/download/fiftlib/fiftlib.zip), open the zip in some directory on your machine (like `/usr/local/lib/fiftlib`) and set the environment variable `FIFTPATH` to point to this directory.
-   ```bash
+  4. If you plan to `use fift`, also download [fiftlib.zip](https://github.com/ton-defi-org/ton-binaries/releases/download/fiftlib/fiftlib.zip), open the zip in some directory on your machine (like `/usr/local/lib/fiftlib`) and set the environment variable `FIFTPATH` to point to this directory.
+   
+   ```
    unzip fiftlib.zip
    mkdir -p /usr/local/lib/fiftlib
    cp fiftlib/* /usr/local/lib/fiftlib
@@ -54,6 +102,12 @@ Download the binaries from the table below - make sure to select the correct ver
 :::info Hey, you're almost finished :)
 Remember to set the **environment variable** `FIFTPATH` to point to this directory.
 :::
+
+  </TabItem>
+</Tabs>
+
+
+
 
 ## Build from source
 
