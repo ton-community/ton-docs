@@ -25,6 +25,16 @@ A local environment allows you to develop contracts _faster_, with more comfort,
 
 Continue in the [INSTALLATION](/develop/installation) guide.
 
+## Development Toolkit
+
+Start developing, testing and debugging smart contracts easily with these resources:
+
+* [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) - All-in-one templates to build, deploy and test FunC contracts
+* [toncli](https://github.com/disintar/toncli) — Comfy CLI to build, deploy and test FunC contracts.
+* [MyLocalTON](/develop/nodes/local-ton.md) - Run your private TON blockchain
+* [ton-contract-executor](https://github.com/Naltox/ton-contract-executor) - Library for running contracts locally
+
+
 ## TON Virtual Machine
 
 TON smart contracts are executed on their own TON Virtual Machine (TVM).  
@@ -37,12 +47,6 @@ You can read more about how TVM works in [TVM bird's-eye overview](/learn/tvm-in
 High-level language FunC is used to program smart contracts on TON.
 
 Feel free to read more about FunC in [DOCUMENTATION](/develop/func/overview.md) section.
-
-## Testing and Debugging
-
-Right now there are 2 ways how to test and debug smart contracts in TON:
-* [tonstarter-contracts](/develop/smart-contracts/testing/tonstarter) — TypeScript, Mocha testing framework, TON Contract Executor.
-* [toncli](/develop/smart-contracts/testing/toncli) — FunC test framework
 
 ## Smart Contract Guidelines
 
@@ -57,7 +61,7 @@ This information is **very low level** and could be hard to understand for newco
 So feel free to read about it later.
 :::
 
-Messages to smart contracts are binary data. To construct such messages, you can use one of the [SDKs](/develop/tools#sdk) **or** the special programming language Fift.
+Messages to smart contracts are binary data. To construct such messages, you can use one of the SDKs **or** the special programming language Fift.
 
 Since Fift is close to TVM opcodes, it also helps to know the limits of your brain.
 

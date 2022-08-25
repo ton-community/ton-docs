@@ -8,7 +8,9 @@ You can download and setup them below.
 
 ## Precompiled binaries
 
-1. Download the binaries from the table below - make sure to select the correct version according to the operating system you're using and install the additional dependencies:
+### Download
+ 
+Download the binaries from the table below - make sure to select the correct version according to the operating system you're using and install the additional dependencies:
 
 | OS                     | fift | func                                                                                           | lite-client | Additional dependencies |
 |------------------------|------|------------------------------------------------------------------------------------------------|-------------|-------|
@@ -19,26 +21,30 @@ You can download and setup them below.
 | Ubuntu 16              | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-16/fift) | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-16/func)      | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-16/lite-client) | `sudo apt install libssl-dev` |
 | Debian 10 | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/debian-10/fift) | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/debian-10/func)      | [lite-client](https://github.com/ton-defi-org/ton-binaries/releases/download/debian-10/lite-client) | `sudo apt install libssl-dev` |
 
-2. After download, make sure the downloaded binaries are executable by changing their permissions:
+### Setup your binaries
+
+#### Linux / MacOS
+
+1. After download, make sure the downloaded binaries are executable by changing their permissions:
    ```bash
    chmod +x func
    chmod +x fift
    chmod +x lite-client
    ```
    
-3. It's also useful to place these binaries in your path (or copy them to `/usr/local/bin`) to make sure you can access them from anywhere.
+2. It's also useful to place these binaries in your path (or copy them to `/usr/local/bin`) to make sure you can access them from anywhere.
    ```bash
    cp ./func /usr/local/bin/func
    cp ./fift /usr/local/bin/fift
    cp ./lite-client /usr/local/bin/lite-client
    ```
 
-4. To check that everything was installed correctly, run in terminal
+3. To check that everything was installed correctly, run in terminal
    ```bash
    fift -V && func -V && lite-client -V
    ```
 
-5. If you plan to use `fift`, also download [fiftlib.zip](https://github.com/ton-defi-org/ton-binaries/releases/download/fiftlib/fiftlib.zip), open the zip in some directory on your machine (like `/usr/local/lib/fiftlib`) and set the environment variable `FIFTPATH` to point to this directory.
+4. If you plan to use `fift`, also download [fiftlib.zip](https://github.com/ton-defi-org/ton-binaries/releases/download/fiftlib/fiftlib.zip), open the zip in some directory on your machine (like `/usr/local/lib/fiftlib`) and set the environment variable `FIFTPATH` to point to this directory.
    ```bash
    unzip fiftlib.zip
    mkdir -p /usr/local/lib/fiftlib

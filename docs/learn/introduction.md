@@ -10,8 +10,6 @@ If you're completely new to blockchain technology and want to understand the ide
 :::
 
 
-[//]: # (![TON blockchain]&#40;https://changelly.com/blog/wp-content/uploads/2020/01/ton.png&#41;)
-
 ## What is TON?
 
 The _The Open Network (TON)_ is a fast, secure and scalable blockchain and

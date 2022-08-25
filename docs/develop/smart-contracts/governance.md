@@ -1,9 +1,5 @@
 # Governance contracts
 
-```
-// TODO maybe this should be in LEARN?
-```
-
 In TON, consensus parameters of node operation related to TVM, catchain, fees and chain topology — as well as how those parameters are stored and updated — are controlled by a set of special smart contracts (in contrast to old-fashioned and inflexible ways of hardcoding of those parameters adopted by blockchains of previous generations). That way, TON implements comprehensive and transparent on-chain governance. The set of special contracts itself is governed by parameters and currently includes Elector, Config and DNS contract and, in the future, will be extended by extra-currency Minter and others.
 
 ## Elector
