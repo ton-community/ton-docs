@@ -1,10 +1,12 @@
 # Using toncli
 
-[toncli](https://github.com/disintar/toncli) — The Open Network cross-platform smart contract command line interface.
+_toncli — The Open Network cross-platform smart contract command line interface._
 
 Easy to deploy and interact with TON smart contracts.
 
 Good solution for **Python** stack developers.
+
+* [GitHub repository](https://github.com/disintar/toncli)
 
 ## Quick Start
 
