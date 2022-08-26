@@ -1,5 +1,6 @@
-# Local TON
-![MyLocalTon](https://github.com/ton-blockchain/raw/master/nodes/mylocalton.jpeg)
+# My Local TON
+
+![MyLocalTon](/img/docs/mylocalton.jpeg)
 
 Using **MyLocalTon** you can run your own TON blockchain even on your laptop.
 

@@ -69,7 +69,7 @@ const sidebars = {
             'develop/installation',
             'develop/tools/ide-plugins',
             'develop/tools/testnet/README',
-          ]
+          ],
         },
         {
           type: 'category',
@@ -126,7 +126,7 @@ const sidebars = {
           type: 'link',
           label: 'Coming from ETH and Solidity',
           href: '/learn/introduction#ethereum-to-ton',
-        }
+        },
       ],
     },
     {
@@ -150,8 +150,8 @@ const sidebars = {
                 'develop/payment-processing/withdrawals',
               ],
             },
-          ]
-        }
+          ],
+        },
       ],
     },
     {
@@ -194,7 +194,7 @@ const sidebars = {
       ],
     },
     {
-      type:'link',
+      type: 'link',
       label: 'TON Concepts',
       href: '/learn/introduction',
     },
@@ -286,16 +286,45 @@ const sidebars = {
     // },
     // 'develop/compile',
   ],
-  validate: [
+  participate: [
+    'participate/README',
+    {
+      'type': 'html',
+      'value': '<hr/>',
+    },
+    'participate/explorers',
     {
       type: 'category',
-      label: 'Nodes',
+      label: 'Setup Your Wallet',
       items: [
-        'develop/nodes/node-types',
-        'develop/nodes/run-node',
-        'develop/nodes/node-maintenance-and-security',
-        'develop/nodes/local-ton',
+        'participate/wallets/apps',
+        'participate/wallets/contracts',
+        {
+          type: 'link',
+          label: 'Wallet Contract Versions',
+          href: 'https://github.com/toncenter/tonweb/blob/master/src/contract/wallet/WalletSources.md',
+        },
       ],
+    },
+    {
+      type: 'category',
+      label: 'Run a Node',
+      items: [
+        'participate/nodes/node-types',
+        'participate/nodes/run-node',
+        'participate/nodes/node-maintenance-and-security',
+        'participate/nodes/local-ton',
+      ],
+    },
+    {
+      type: 'link',
+      label: 'Join in a Nominator Pool',
+      href: 'https://tonvalidators.org/',
+    },
+    {
+      type: 'link',
+      label: 'Run a Validator Node',
+      href: 'https://ton.org/validator',
     },
   ],
   contribute: [

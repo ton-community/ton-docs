@@ -1,4 +1,4 @@
-# Glossary
+# Block explorers
 
 
 :::caution draft   

@@ -1,15 +1,4 @@
-## TON Validator node maintenance and security
-### Table of contents
-1. [Introduction](#introduction)
-2. [Maintenance](#maintenance)
-    * [Database grooming](#database-grooming)
-    * [Backups](#backups)
-    * [Disaster recovery](#disaster-recovery)
-3. [Security](#security)
-    * [Host level security](#host-security)
-    * [Network level security](#network-security)
-    * [IP Switch](#ip-switch)
-
+# TON Validator node maintenance and security
 
 ## <a id="introduction"></a>Introduction
 This guide provides some basic information on maintaining and securing TON Validator nodes. 

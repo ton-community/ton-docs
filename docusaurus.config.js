@@ -118,9 +118,10 @@ const config = {
           //   label: 'Integrate',
           // },
           {
-            href: 'https://ton.org/validator',
+            type: 'doc',
+            docId: 'participate/README',
             position: 'left',
-            label: 'Validate',
+            label: 'Participate',
           },
           // {
           //   type: 'doc',
