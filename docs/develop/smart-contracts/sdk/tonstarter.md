@@ -1,9 +1,5 @@
 # Using tonstarter-contracts
 
-:::caution draft   
-This is a concept article. We're still looking for someone experienced to write it.
-:::
-
 ## Overview
 
 A _tonstarter-contracts_ based on TypeScript, TON Contract Executor and mochajs. 
