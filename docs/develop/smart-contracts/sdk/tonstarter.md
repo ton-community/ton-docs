@@ -17,6 +17,7 @@ To start developing on your local machine just clone repository:
 git clone https://github.com/ton-defi-org/tonstarter-contracts
 cd tonstarter-contracts
 ```
+or use pre-defined Online IDE provided before.
 
 After that feel free to go:
 * [TON Hello World: Step by step guide for writing your first smart contract in FunC](https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func)
