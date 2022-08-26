@@ -41,7 +41,7 @@ padding: '0.2rem',
 <Tabs groupId="operating-systems">
   <TabItem value="win" label="Windows">
 
-  1. After download the files, you need to `create` a new folder, for example `/usr/local/bin` and move the installed files there.
+  1. After download the files, you need to `create` a new folder, for example `C:/Users/%USERNAME%/ton/bin` and move the installed files there.
 
   2. To open the Windows environment variables press the <Highlight color="#1877F2">Win + R</Highlight> keys on the keyboard, type `sysdm.cpl` and press Enter.
 
@@ -55,7 +55,7 @@ padding: '0.2rem',
   In the new field, you need to specify the path to the folder where the previously installed files are stored:
 
   ```
-  C:\Users\usr\local\bin\
+  C:\Users\%USERNAME%\ton\bin\
   ```
 
   6. To check that everything was installed correctly, run in terminal
@@ -64,10 +64,13 @@ padding: '0.2rem',
   fift -V -and func -V -and lite-client -V
   ```
 
-  7. If you plan to `use fift`, also download [fiftlib.zip](https://github.com/ton-defi-org/ton-binaries/releases/download/fiftlib/fiftlib.zip), open the zip in some directory on your machine (like `/usr/local/lib/fiftlib`) and create new (click button `"New"`) environment variable `FIFTPATH` in `"User variables for"` section.
+  7. If you plan to `use fift`, also download [fiftlib.zip](https://github.com/ton-defi-org/ton-binaries/releases/download/fiftlib/fiftlib.zip), open the zip in some directory on your machine (like `/%USERNAME%/ton/lib/fiftlib`) and create new (click button `"New"`) environment variable `FIFTPATH` in `"User variables for"` section.
   
-  In the `Variable value` field, specify the path to the files: `/usr/local/lib/fiftlib` and click <Highlight color="#1877F2">OK</Highlight>. Done.
+  In the `Variable value` field, specify the path to the files: `/%USERNAME%/ton/lib/fiftlib` and click <Highlight color="#1877F2">OK</Highlight>. Done.
 
+:::danger
+In place of the `%USERNAME%` keyword, you must insert the `computer username`. Don't happen about it!
+:::
 
   </TabItem>
   <TabItem value="mac" label="Linux / MacOS">
