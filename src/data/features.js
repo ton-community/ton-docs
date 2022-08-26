@@ -16,7 +16,7 @@ export const firstRow = [
   {
     title: "Participate",
     status: "Beginner",
-    linkUrl: "https://ton.org/validator",
+    linkUrl: "/participate/",
     imageUrl: "img/ton_symbol_old.svg",
     description: "Take part in TON by staking, running node or even become a Validator!"
   },

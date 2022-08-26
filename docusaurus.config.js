@@ -90,6 +90,7 @@ const config = {
 
         //... other Algolia params
       },
+      // image: 'img/docusaurus.png',
 
       navbar: {
         title: '',
