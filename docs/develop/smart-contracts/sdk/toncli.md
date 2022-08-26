@@ -1,14 +1,16 @@
 # Using toncli
 
-:::tip starter tip
-If you didn't use toncli before, try [QUICK START GUIDE](https://github.com/disintar/toncli/blob/master/docs/quick_start_guide.md).
-:::
-
 [toncli](https://github.com/disintar/toncli) — The Open Network cross-platform smart contract command line interface.
 
 Easy to deploy and interact with TON smart contracts.
 
 Good solution for **Python** stack developers.
+
+## Quick Start
+
+Here are tutorials written using toncli library:
+* [Quick Start Guide](https://github.com/disintar/toncli/blob/master/docs/quick_start_guide.md) — simple steps how-to deploy example smart contract to TON.
+* [TON Learn Guides: 10 zero-to-hero lessons](https://github.com/romanovichim/TonFunClessons_Eng) ([Ru version](https://github.com/romanovichim/TonFunClessons_ru))
 
 ## Installation
 

@@ -9,10 +9,19 @@ Good solution for **JavaScript** stack developers.
 * [GitHub repository](https://github.com/ton-defi-org/tonstarter-contracts)
 * [Online IDE using Glitch](https://github.com/ton-defi-org/tonstarter-contracts)
 
+## Quick Start
+
+To start developing on your local machine just clone repository:
+
 ```bash
 git clone https://github.com/ton-defi-org/tonstarter-contracts
 cd tonstarter-contracts
 ```
+
+After that feel free to go:
+* [TON Hello World: Step by step guide for writing your first smart contract in FunC](https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func)
+* ... or continue to [Testing & Debugging](/develop/smart-contracts/testing/tonstarter) section to test example smart contract.
+
 
 ## What does SDK contain?
 
