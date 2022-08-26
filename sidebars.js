@@ -73,6 +73,14 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Choose Your SDK',
+          items: [
+            'develop/smart-contracts/sdk/tonstarter',
+            'develop/smart-contracts/sdk/toncli',
+          ],
+        },
+        {
+          type: 'category',
           label: 'Testing & Debugging',
           items: [
             'develop/smart-contracts/testing/tonstarter',

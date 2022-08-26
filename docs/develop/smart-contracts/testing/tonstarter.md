@@ -4,19 +4,9 @@
 This is a concept article. We're still looking for someone experienced to write it.
 :::
 
-## Overview
+A tonstarter-contracts project rely on _TON Contract Executor_ library. Tests are running inside Node.js by running TVM in web-assembly using _ton-contract-executor_.
 
-A _tonstarter-contracts_ based on TypeScript and [mocha](https://mochajs.org/) unit tests framework. Tests are running inside Node.js by running TVM in web-assembly using _ton-contract-executor_.
-
-* [GitHub repository](https://github.com/ton-defi-org/tonstarter-contracts)
-* [Online IDE using Glitch](https://github.com/ton-defi-org/tonstarter-contracts)
-
-```bash
-git clone https://github.com/ton-defi-org/tonstarter-contracts
-cd tonstarter-contracts
-```
-
-## TON Contract Executor
+## Testing using TON Contract Executor
 
 This library allows you to run Ton Virtual Machine locally and execute contract. That allows you to write & debug & fully test your contracts before launching them to the network.
 
