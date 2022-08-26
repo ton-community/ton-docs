@@ -965,7 +965,7 @@ strong {
 }
 
 .tabs {
-  justify-content: center;
+  /*justify-content: center;*/
 }
 
 .markdown a {

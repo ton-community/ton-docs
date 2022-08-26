@@ -7,18 +7,18 @@ export const firstRow = [
     description: "Learn about the basics of blockchain and TON and how to get started."
   },
   {
-    title: "Developer",
+    title: "Develop",
     status: "Intermediate",
     linkUrl: "/develop/smart-contracts/",
     imageUrl: "img/ton_symbol_old.svg",
-    description: "Build an application and deploy on TON Blockchain."
+    description: "Build smart contracts, web applications or bots using TON."
   },
   {
-    title: "Validator",
-    status: "Intermediate",
+    title: "Participate",
+    status: "Beginner",
     linkUrl: "https://ton.org/validator",
     imageUrl: "img/ton_symbol_old.svg",
-    description: "Secure the network by staking and operating a node to validate on TON."
+    description: "Take part in TON by staking, running node or even become a Validator!"
   },
   // {
   //   title: "Integrator",

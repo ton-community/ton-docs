@@ -41,16 +41,14 @@ padding: '0.2rem',
 <Tabs groupId="operating-systems">
   <TabItem value="win" label="Windows">
 
-  1. After download the files, you need to `create` a new folder, for example `C:/Users/%USERNAME%/ton/bin` and move the installed files there.
+  1. After download, you need to `create` a new folder, for example **`C:/Users/%USERNAME%/ton/bin`** and move the installed files there.
 
   2. To open the Windows environment variables press the <Highlight color="#1877F2">Win + R</Highlight> keys on the keyboard, type `sysdm.cpl` and press Enter.
 
-  3. On the "Advanced" tab, click the <Highlight color="#1877F2">"Environment Variables..."</Highlight> button.
+  3. On the "_Advanced_" tab, click the <Highlight color="#1877F2">"Environment Variables..."</Highlight> button.
 
-  4. In the `"User variables for"` section, select the `Path` variable and click <Highlight color="#1877F2">"Edit"</Highlight> (this is usually required).
-
-[//]: # (  ![screen]&#40;/img/docs/EnvVarMenu.png&#41;)
-
+  4. In the _"User variables"_ section, select the "_Path_" variable and click <Highlight color="#1877F2">"Edit"</Highlight> (this is usually required).
+  
   5. To add a new value `(path)` to the system variable in the next window, click the  button <Highlight color="#1877F2">"New"</Highlight>.
   In the new field, you need to specify the path to the folder where the previously installed files are stored:
 
@@ -58,22 +56,26 @@ padding: '0.2rem',
   C:\Users\%USERNAME%\ton\bin\
   ```
 
-  6. To check that everything was installed correctly, run in terminal
+  6. To check that everything was installed correctly, run in terminal (_cmd.exe_):
 
   ```bash
   fift -V -and func -V -and lite-client -V
   ```
 
-  7. If you plan to `use fift`, also download [fiftlib.zip](https://github.com/ton-defi-org/ton-binaries/releases/download/fiftlib/fiftlib.zip), open the zip in some directory on your machine (like `/%USERNAME%/ton/lib/fiftlib`) and create new (click button `"New"`) environment variable `FIFTPATH` in `"User variables for"` section.
-  
-  In the `Variable value` field, specify the path to the files: `/%USERNAME%/ton/lib/fiftlib` and click <Highlight color="#1877F2">OK</Highlight>. Done.
+  7. If you plan to use fift you need `FIFTPATH` environment variable with necessary imports:
 
-:::danger
-In place of the `%USERNAME%` keyword, you must insert the `computer username`. Don't happen about it!
-:::
+     1. Download [fiftlib.zip](https://github.com/ton-defi-org/ton-binaries/releases/download/fiftlib/fiftlib.zip)
+     2. Open the zip in some directory on your machine (like **`C:/Users/%USERNAME%/ton/lib/fiftlib`**)
+     3. Create new (click button <Highlight color="#1877F2">"New"</Highlight>) environment variable `FIFTPATH` in "_User variables_" section. 
+     4. In the "_Variable value_" field, specify the path to the files: **`/%USERNAME%/ton/lib/fiftlib`** and click <Highlight color="#1877F2">OK</Highlight>. Done.
 
-  </TabItem>
-  <TabItem value="mac" label="Linux / MacOS">
+
+:::caution important
+Instead of the `%USERNAME%` keyword, you must insert your own `username`.  
+:::  
+
+</TabItem>
+<TabItem value="mac" label="Linux / MacOS">
 
   1. After download, make sure the downloaded binaries are executable by changing their permissions:
    ```bash
