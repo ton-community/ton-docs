@@ -17,7 +17,7 @@ There are several ways to identify an area where you can contribute to the Wiki:
 - If you need to add or change anything in TON Docs  raise a PR
   against the `main` branch.
 - The documentation team will review the PR or reach out accordingly.
-- Repository: https://github.com/ton-blockchain/docs
+- Repository: https://github.com/SwiftAdviser/ton-docs
 
 ## Development
 
