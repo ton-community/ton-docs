@@ -2,7 +2,7 @@
 
 🥰 User-friendly documentation for newcomers to the TON blockchain.
 
-![Вар5](https://user-images.githubusercontent.com/5148967/187194063-9be205bb-07e0-4b1f-ad56-048b1d841555.png)
+![preview](https://user-images.githubusercontent.com/5148967/187221315-fb8aa098-d573-4042-992e-b91170521334.jpg)
 
 
 # Website
