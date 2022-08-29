@@ -1,3 +1,10 @@
+# TON Documentation for humans
+
+🥰 User-friendly documentation for newcomers to the TON blockchain.
+
+![Вар5](https://user-images.githubusercontent.com/5148967/187194063-9be205bb-07e0-4b1f-ad56-048b1d841555.png)
+
+
 # Website
 
 This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
