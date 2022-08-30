@@ -1,10 +1,10 @@
 # Using tonstarter-contracts
 
+A tonstarter-contracts project rely on _TON Contract Executor_ library. Tests are running inside Node.js by running TVM in web-assembly using _ton-contract-executor_.
+
 :::caution draft   
 This is a concept article. We're still looking for someone experienced to write it.
 :::
-
-A tonstarter-contracts project rely on _TON Contract Executor_ library. Tests are running inside Node.js by running TVM in web-assembly using _ton-contract-executor_.
 
 ## Testing using TON Contract Executor
 
