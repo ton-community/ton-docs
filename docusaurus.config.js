@@ -1,8 +1,8 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const lightCodeTheme = require('prism-react-renderer/themes/github')
+const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -11,12 +11,28 @@ const config = {
   url: 'https://tonspace.co',
   staticDirectories: ['public', 'static'],
   baseUrl: '/',
-  themes: ["@saucelabs/theme-github-codeblock"],
-  stylesheets: [
-    'https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap'
+  themes: [
+    '@saucelabs/theme-github-codeblock',
+    [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      {
+        // ... Your options.
+        // `hashed` is recommended as long-term-cache of index file is possible.
+        hashed: true,
+        indexPages: true,
+        indexBlog: false,
+        // For Docs using Chinese, The `language` is recommended to set to:
+        // ```
+        // language: ["en", "zh"],
+        // ```
+      },
+    ],
   ],
-  onBrokenLinks: "warn", // for PRODUCTION
-  onBrokenMarkdownLinks: "warn", //for PRODUCTION
+  stylesheets: [
+    'https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap',
+  ],
+  onBrokenLinks: 'warn', // for PRODUCTION
+  onBrokenMarkdownLinks: 'warn', //for PRODUCTION
   // onBrokenLinks: 'throw',
   // onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon32x32.png',
@@ -65,38 +81,39 @@ const config = {
   ],
 
   themeConfig:
-    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+  /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      algolia: {
-        // The application ID provided by Algolia
-        appId: 'EQK8VZ6CS7',
+      // algolia: {
+      //   // The application ID provided by Algolia
+      //   appId: 'EQK8VZ6CS7',
+      //
+      //   // Public API key: it is safe to commit it
+      //   apiKey: '7b6c50af331e4e34d47f8b930a986ca1',
+      //
+      //   indexName: 'ton_docs',
+      //
+      //   // Optional: see doc section below
+      //   contextualSearch: true,
+      //
+      //   // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
+      //   // externalUrlRegex: 'external\\.com|domain\\.com',
+      //
+      //   // Optional: Algolia search parameters
+      //   searchParameters: {},
+      //
+      //   // Optional: path for search page that enabled by default (`false` to disable it)
+      //   searchPagePath: 'search',
+      //
+      //   //... other Algolia params
+      // },
 
-        // Public API key: it is safe to commit it
-        apiKey: '7b6c50af331e4e34d47f8b930a986ca1',
-
-        indexName: 'ton_docs',
-
-        // Optional: see doc section below
-        contextualSearch: true,
-
-        // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
-        // externalUrlRegex: 'external\\.com|domain\\.com',
-
-        // Optional: Algolia search parameters
-        searchParameters: {},
-
-        // Optional: path for search page that enabled by default (`false` to disable it)
-        searchPagePath: 'search',
-
-        //... other Algolia params
-      },
       image: 'img/preview.jpg',
       navbar: {
         title: '',
         logo: {
           alt: 'TON',
           src: 'img/ton_logo_light_background.svg',
-          srcDark: 'img/ton_logo_dark_background.svg'
+          srcDark: 'img/ton_logo_dark_background.svg',
         },
         items: [
           {
@@ -244,26 +261,26 @@ const config = {
         // theme: darkCodeTheme,
         // darkTheme: darkCodeTheme,
         additionalLanguages: [
-          "java",
-          "python",
-          "kotlin",
-          "go",
-          "typescript",
-          "cpp",
-          "c"
+          'java',
+          'python',
+          'kotlin',
+          'go',
+          'typescript',
+          'cpp',
+          'c',
         ],
       },
       docs: {
         sidebar: {
           hideable: true,
-        }
+        },
       },
       colorMode: {
         defaultMode: 'light',
         // respectPrefersColorScheme: true,
         // disableSwitch: true,
-      }
+      },
     }),
-};
+}
 
-module.exports = config;
+module.exports = config
