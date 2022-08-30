@@ -31,7 +31,7 @@ Start developing, testing and debugging smart contracts easily with these resour
 
 * [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) - All-in-one templates to build, deploy and test FunC contracts
 * [toncli](https://github.com/disintar/toncli) — Comfy CLI to build, deploy and test FunC contracts.
-* [MyLocalTON](/develop/nodes/local-ton.md) - Run your private TON blockchain
+* [MyLocalTON](/participate/nodes/local-ton.md) - Run your private TON blockchain
 * [ton-contract-executor](https://github.com/Naltox/ton-contract-executor) - Library for running contracts locally
 
 

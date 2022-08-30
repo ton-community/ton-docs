@@ -81,6 +81,7 @@ int y = foo (1) (2) (3); ;; ok
 ```
 ### Lambda expressions
 Lambda expressions are not supported yet.
+
 ### Methods calls
 
 #### Non-modifying methods

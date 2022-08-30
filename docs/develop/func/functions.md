@@ -33,7 +33,7 @@ As said before, any function declaration or definition starts with a common patt
 where `[ ... ]` correspond to an optional entry.
 
 ### Function name
-Function name can be any [identifier](/develop/func/literals_identifiers#identifiers) and also it can start with `.` or `~` symbols. The meaning of those symbols is [explained](func/statements?id=methods-calls) in statements section.
+Function name can be any [identifier](/develop/func/literals_identifiers#identifiers) and also it can start with `.` or `~` symbols. The meaning of those symbols is [explained](/develop/func/statements#methods-calls) in statements section.
 
 For example, `udict_add_builder?`, `dict_set` and `~dict_set` are valid and different function names (they are defined in [stdlib.fc](/develop/func/stdlib.md)).
 
@@ -85,7 +85,7 @@ Function arguments are separated by commas. Valid declarations of an argument ar
   ```
   is a valid function definition of type `int -> int`. The `int` type of `x` is inferred by type-checker.
 
-Note that although a function may look like a function of several arguments, it's actually a function of one [tensor-type](/develop/func/types#tensor-types) argument. To see the difference, please refer to [function application](/develop/func/statements?id=function-application). Nevertheless, the components of the argument tensor are conventionally called function arguments.
+Note that although a function may look like a function of several arguments, it's actually a function of one [tensor-type](/develop/func/types#tensor-types) argument. To see the difference, please refer to [function application](/develop/func/statements#function-application). Nevertheless, the components of the argument tensor are conventionally called function arguments.
 
 ### Specifiers
 There are three types of specifiers: `impure`, `inline`/`inline_ref` and `method_id`. One, several or none of them can be put in function declaration, but currently they must be presented in the right order: for example, it is not allowed to put `impure` after `inline`.
