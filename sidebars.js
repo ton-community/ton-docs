@@ -344,6 +344,15 @@ const sidebars = {
         'contribute/maintainers',
       ],
     },
+    {
+      'type': 'category',
+      'label': 'Hacktoberfest 2022',
+      'items': [
+        'contribute/hacktoberfest/README',
+        'contribute/hacktoberfest/getting-started',
+        'contribute/hacktoberfest/repositories',
+      ],
+    },
   ],
 
 }

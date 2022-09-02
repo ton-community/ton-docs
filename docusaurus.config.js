@@ -65,6 +65,19 @@ const config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/swiftadviser/ton-docs/tree/main/',
+          lastVersion: '1.0.0',
+          versions: {
+            current: {
+              path: 'next',
+              banner: 'none',
+              badge: false,
+            },
+            '1.0.0': {
+              path: '/',
+              banner: 'none',
+              badge: false,
+            }
+          }
         },
         blog: {
           showReadingTime: true,
@@ -105,6 +118,15 @@ const config = {
       //   searchPagePath: 'search',
       //
       //   //... other Algolia params
+      // },
+
+      // announcementBar: {
+      //   id: 'contribute/hacktoberfest',
+      //   content:
+      //     '🎃 <b>Hacktoberfest starts soon! <a target="_blank" rel="noopener noreferrer" href="/next/contribute/hacktoberfest">Read more</a> about prizes and prepare 🎃</b>',
+      //   backgroundColor: '#f4f0e1',
+      //   textColor: 'rgba(181,58,37,1)',
+      //   isCloseable: false,
       // },
 
       image: 'img/preview.jpg',
@@ -149,7 +171,7 @@ const config = {
 
           {
             to: 'contribute',
-            label: 'Contribute to Docs',
+            label: 'Contribute',
             position: 'right',
           },
           {
