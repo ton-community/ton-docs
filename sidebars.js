@@ -67,8 +67,8 @@ const sidebars = {
           label: 'Environment',
           items: [
             'develop/installation',
-            'develop/tools/ide-plugins',
-            'develop/tools/testnet/README',
+            'develop/smart-contracts/environment/ide-plugins',
+            'develop/smart-contracts/environment/testnet',
           ],
         },
         {
@@ -154,7 +154,15 @@ const sidebars = {
       label: 'Develop Web Apps & Bots',
       items: [
         'develop/tools/README',
-        'develop/tools/apis/README',
+        {
+          type: 'category',
+          label: 'API Types',
+          items: [
+            'develop/tools/apis/README',
+            'develop/tools/apis/toncenter',
+            'develop/tools/apis/adnl',
+          ]
+        },
         {
           type: 'category',
           label: 'Best Practices',
