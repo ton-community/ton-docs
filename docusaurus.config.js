@@ -65,19 +65,19 @@ const config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/swiftadviser/ton-docs/tree/main/',
-          lastVersion: '1.0.0',
-          versions: {
-            current: {
-              path: 'next',
-              banner: 'none',
-              badge: false,
-            },
-            '1.0.0': {
-              path: '/',
-              banner: 'none',
-              badge: false,
-            }
-          }
+          // lastVersion: '1.0.0',
+          // versions: {
+          //   current: {
+          //     path: 'next',
+          //     banner: 'none',
+          //     badge: false,
+          //   },
+          //   '1.0.0': {
+          //     path: '/',
+          //     banner: 'none',
+          //     badge: false,
+          //   }
+          // }
         },
         blog: {
           showReadingTime: true,

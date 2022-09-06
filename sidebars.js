@@ -278,6 +278,7 @@ const sidebars = {
       type: 'category',
       label: 'Low Level Internals',
       items: [
+        'develop/howto/fees_low_level',
         'develop/howto/step-by-step',
         'develop/howto/ton-sites',
         'develop/howto/config-params',
