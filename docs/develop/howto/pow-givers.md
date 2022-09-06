@@ -1,3 +1,9 @@
+# POW Givers
+
+:::caution deprecated
+This information could be deprecated and not useful anymore. Feel free to omit it.
+:::
+
 The aim of this text is to describe how to interact with Proof-of-Work Giver smart contracts to obtain TON Coins. We assume familiarity with the TON Blockchain LiteClient as explained in the `Getting Started`, and with the procedure required to compile the LiteClient and other software. For obtaining larger amount of TON Coins required for running a validator, we also assume acquaintance with the `Full Node` and `Validator` pages. You will also need a dedicated server powerful enough for running a Full Node in order to obtain the larger amount of TON Coins. Obtaining small amounts of TON Coins does not require a dedicated server and may be done in several minutes on a home computer.
 
 > Note that at the moment, due to a large number of miners, large resources are required for any mining

@@ -29,13 +29,13 @@ In case you are web or bot developer, you could find useful these repositories:
 * [TON Bridge front-end](https://github.com/ton-blockchain/bridge) (Vue.js, no comments)
 * [Web Wallet source code](https://github.com/toncenter/ton-wallet) (JavaScript, no comments)
 
-#### NFT minters examples
+#### NFT minters / Non-Fungible Tokens
 
 * [TON Diamonds NFT deployer](https://github.com/tondiamonds/ton-nft-deployer) (TypeScript, no comments)
 * [NFT Minter Example](https://github.com/ton-foundation/token-contract/tree/main/nft/web-example) (JavaScript, with comments)
 * [NFT Minter using React](https://github.com/tonbuilders/tonbuilders-minter) (React, no comments)
 
-#### Jetton Deployer
+#### Jetton Deployer / Fungible Tokens
 
 Jettons are custom fungible tokens on TON blockchain. You can create your own token on TON blockchain using Jetton Deployer example below:
 

@@ -1,3 +1,5 @@
+# Step-by-Step Deep Dive
+
 The aim of this document is to provide step-by-step instructions for compiling and creating a simple smart contract (a simple wallet) in the TON Blockchain Test Network using the TON Blockchain Lite Client and associated software.
 
 We assume here that the Lite Client is already properly downloaded, compiled and installed.
@@ -52,11 +54,11 @@ The resulting 36-byte sequence is converted into a 48-character base64 or base64
 
 `Pubjns2gp7DGCnEH7EOWeCnb6Lw1akm538YYaz6sdLVHfRB2`
 
-## Inspecting the state of a smart contract
+## 2. Inspecting the state of a smart contract
 
 Inspecting the state of smart contracts with the aid of the TON Lite Client is easy. For the sample smart contract described above, you would run the Lite Client and enter the following commands:
 
-```
+```cpp
 > last
 ...
 > getaccount -1:fcb91a3a3816d0f7b8c2c76108b8a9bc5a6b7a55bd79f8ab101c52db29232260
@@ -69,7 +71,7 @@ You will see something like this:
 :::info
 Please note here and further that the code, comments and/or documentation may contain parameters, methods and definitions “gram”, “nanogram”, etc. That is a legacy of the original TON code, developed by the Telegram. Gram cryptocurrency was never issued. The currency of TON is Toncoin and the currency of TON testnet is Test Toncoin.
 :::
-```
+```cpp
 got account state for -1 : FCB91A3A3816D0F7B8C2C76108B8A9BC5A6B7A55BD79F8AB101C52DB29232260 with respect to blocks (-1,8000000000000000,2075):BFE876CE2085274FEDAF1BD80F3ACE50F42B5A027DF230AD66DCED1F09FB39A7:522C027A721FABCB32574E3A809ABFBEE6A71DE929C1FA2B1CD0DDECF3056505
 account state is (account
   addr:(addr_std
@@ -129,7 +131,7 @@ One such tool is the Fift interpreter, which is included in this distribution an
 
 Consider the file `new-wallet.fif` (usually located as `crypto/smartcont/new-wallet.fif` with respect to the source directory) containing the source of a simple wallet smart contract:
 
-```
+```cpp
 #!/usr/bin/env fift -s
 "TonUtil.fif" include
 "Asm.fif" include
@@ -198,7 +200,7 @@ file-base +"-query.boc" tuck B>file
 
 Now, provided that you have compiled Fift binary (usually located as `crypto/fift` with respect to the build directory), you can run
 
-```
+```bash
 $ crypto/fift -I<source-directory>/crypto/fift/lib -s <source-directory>/crypto/smartcont/new-wallet.fif 0 my_wallet_name
 ```
 
@@ -206,7 +208,7 @@ where 0 is the workchain to contain the new wallet (0 = basechain, -1 = masterch
 
 You may opt to set the `FIFTPATH` environment variable to `<source-directory>/crypto/fift/lib:<source-directory>/crypto/smartcont`, the directories containing `Fift.fif` and `Asm.fif` library files, and the sample smart-contract sources, respectively; then you can omit the `-I` argument to the Fift interpreter. If you install the Fift binary `crypto/fift` to a directory included in your `PATH` (e.g., `/usr/bin/fift`), you can simply invoke
 
-```
+```bash
 $ fift -s new-wallet.fif 0 my_wallet_name
 ```
 
@@ -214,7 +216,7 @@ instead of indicating the complete search paths in the command line.
 
 If everything worked, you'll see something like the following
 
-```
+```cpp
 Creating new wallet in workchain 0 
 Saved new private key to file my_wallet_name.pk
 StateInit: x{34_}
@@ -281,7 +283,7 @@ as explained above in Section 2. The only number you need from the output is the
 
 producing the correct value 39445 = 0x9A15:
 
-```
+```cpp
 got account state for -1 : FCB91A3A3816D0F7B8C2C76108B8A9BC5A6B7A55BD79F8AB101C52DB29232260 with respect to blocks (-1,8000000000000000,2240):18E6DA7707191E76C71EABBC5277650666B7E2CFA2AEF2CE607EAFE8657A3820:4EFA2540C5D1E4A1BA2B529EE0B65415DF46BFFBD27A8EB74C4C0E17770D03B1
 creating VM
 starting VM to run method `seqno` (85143) of smart contract -1:FCB91A3A3816D0F7B8C2C76108B8A9BC5A6B7A55BD79F8AB101C52DB29232260
@@ -292,7 +294,7 @@ result:  [ 39445 ]
 
 Next, you create an external message to the test giver asking it to send another message to your (uninitialized) smart contract carrying a specified amount of test TON Coins. There is a special Fift script for generating this external message located at `crypto/smartcont/testgiver.fif`:
 
-```
+```cpp
 #!/usr/bin/env fift -s
 "TonUtil.fif" include
 
@@ -332,19 +334,19 @@ savefile +".boc" tuck B>file
 
 You can pass the required parameters as command-line arguments to this script
 
-```
+```bash
 $ crypto/fift -I<include-path> -s <path-to-testgiver-fif> <dest-addr> <testgiver-seqno> <coins-amount> [<savefile>]
 ```
 
 For instance,
 
-```
+```bash
 $ crypto/fift -I<source-directory>/crypto/fift/lib:<source-directory>/crypto/smartcont -s testgiver.fif 0QAu6bT9Twd8myIygMNXY9-e2rC0GsINNvQAlnfflcOv4uVb 0x9A15 6.666 wallet-query
 ```
 
 or simply
 
-```
+```bash
 $ fift -s testgiver.fif 0QAu6bT9Twd8myIygMNXY9-e2rC0GsINNvQAlnfflcOv4uVb 0x9A15 6.666 wallet-query
 ```
 
@@ -356,7 +358,7 @@ This Fift code creates an internal message from the test giver smart contract to
 
 The external message is serialized and saved into the file `wallet-query.boc`. Some output is generated in the process:
 
-```
+```cpp
 Test giver address = -1:fcb91a3a3816d0f7b8c2c76108b8a9bc5a6b7a55bd79f8ab101c52db29232260 
 kf_8uRo6OBbQ97jCx2EIuKm8Wmt6Vb15-KsQHFLbKSMiYIny
 Requesting GR$6.666 to account 0QAu6bT9Twd8myIygMNXY9-e2rC0GsINNvQAlnfflcOv4uVb = 0:2ee9b4fd4f077c9b223280c35763df9edab0b41ac20d36f4009677df95c3afe2 seqno=0x9a15 bounce=0 
@@ -374,26 +376,26 @@ B5EE9C7241040201000000006600014F89FF02ACEEB6F264BCBAC5CE85B372D8616CA2B4B9A5E3EC
 
 Now we can invoke the Lite Client, check the state of the test giver (if the sequence number has changed, our external message will fail), and then type
 
-```
+```bash
 > sendfile wallet-query.boc
 ```
 
 We will see some output:
 
-```
+```bash
 ... external message status is 1
 ```
 
 which means that the external message has been delivered to the collator pool. Afterward one of the collators might choose to include this external message in a block, creating a transaction for the test giver smart contract to process this external message. We can check whether the state of the test giver has changed:
 
-```
+```bash
 > last
 > getaccount kf_8uRo6OBbQ97jCx2EIuKm8Wmt6Vb15-KsQHFLbKSMiYIny
 ```
 
 (If you forget to type `last`, you are likely to see the unchanged state of the test giver smart contract.) The resulting output would be:
 
-```
+```cpp
 got account state for -1 : FCB91A3A3816D0F7B8C2C76108B8A9BC5A6B7A55BD79F8AB101C52DB29232260 with respect to blocks (-1,8000000000000000,2240):18E6DA7707191E76C71EABBC5277650666B7E2CFA2AEF2CE607EAFE8657A3820:4EFA2540C5D1E4A1BA2B529EE0B65415DF46BFFBD27A8EB74C4C0E17770D03B1
 account state is (account
   addr:(addr_std
@@ -434,7 +436,7 @@ You may notice that the sequence number stored in the persistent data has change
 
 Now we can inspect the state of our new smart contract:
 
-```
+```cpp
 > getaccount 0QAu6bT9Twd8myIygMNXY9-e2rC0GsINNvQAlnfflcOv4uVb
 or
 > getaccount 0:2ee9b4fd4f077c9b223280c35763df9edab0b41ac20d36f4009677df95c3afe2
@@ -442,7 +444,7 @@ or
 
 Now we see
 
-```
+```cpp
 got account state for 0:2EE9B4FD4F077C9B223280C35763DF9EDAB0B41AC20D36F4009677DF95C3AFE2 with respect to blocks (-1,8000000000000000,16481):890F4D549428B2929F5D5E0C5719FBCDA60B308BA4B907797C9E846E644ADF26:22387176928F7BCEF654411CA820D858D57A10BBF1A0E153E1F77DE2EFB2A3FB and (-1,8000000000000000,16481):890F4D549428B2929F5D5E0C5719FBCDA60B308BA4B907797C9E846E644ADF26:22387176928F7BCEF654411CA820D858D57A10BBF1A0E153E1F77DE2EFB2A3FB
 account state is (account
   addr:(addr_std
@@ -469,7 +471,7 @@ Our new smart contract has some positive balance (of 6.666 test TON Coins), but 
 
 Now you can finally upload the external message with the `StateInit` of the new smart contract, containing its code and data:
 
-```
+```cpp
 > sendfile my_wallet_name-query.boc
 ... external message status is 1
 > last
@@ -520,7 +522,7 @@ Actually, the simple wallet smart contract used in this example can be used to t
 
 An example of how you might use this smart contract is provided in sample file `crypto/smartcont/wallet.fif` :
 
-```
+```cpp
 #!/usr/bin/env fift -s
 "TonUtil.fif" include
 
@@ -570,13 +572,13 @@ savefile +".boc" tuck B>file
 
 You can invoke this script as follows:
 
-```
+```bash
 $ fift -I<source-directory>/crypto/fift/lib:<source-directory>/crypto/smartcont -s wallet.fif <your-wallet-id> <destination-addr> <your-wallet-seqno> <coins-amount>
 ```
 
 or simply
 
-```
+```bash
 $ fift -s wallet.fif <your-wallet-id> <destination-addr> <your-wallet-seqno> <coins-amount>
 ```
 
@@ -584,7 +586,7 @@ if you have correctly set up `PATH` and `FIFTPATH`.
 
 For example,
 
-```
+```bash
 $ fift -s wallet.fif my_wallet_name kf8Ty2EqAKfAksff0upF1gOptUWRukyI9x5wfgCbh58Pss9j 1 .666
 ```
 

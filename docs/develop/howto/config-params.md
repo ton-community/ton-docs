@@ -1,6 +1,8 @@
+# Config Params
+
 The aim of this document is to provide basic explanation of configuration parameters of TON Blockchain, and to give step-by-step instructions for changing these parameters by a consensus of a majority of validators. We assume that the reader is already familiar with Fift and the Lite Client as explained in [LiteClient-HOWTO](https://toncoin.org/#/howto/step-by-step), and with [FullNode-HOWTO](https://toncoin.org/#/howto/full-node) and [Validator-HOWTO](https://toncoin.org/#/howto/validator) in the sections where validators' voting for the configuration proposals is described.
 
-#### 1. Configuration parameters
+## 1. Configuration parameters
 The **configuration parameters** are certain values that affect the behavior of validators and/or fundamental smart contracts of TON Blockchain. The current values of all configuration parameters are stored as a special part of the masterchain state, and are extracted from the current masterchain state when needed. Therefore, it makes sense to speak of the values of the configuration parameters with respect to a certain masterchain block. Each shardchain block contains a reference to the latest known masterchain block; the values from the corresponding masterchain state are assumed to be active for this shardchain block, and are used during its generation and validation. For masterchain blocks, the state of the previous masterchain block is used to extract the active configuration parameters. Therefore, even if one tries to change some configuration parameters inside a masterchain block, the changes will become active only for the next masterchain block.
 
 Each configuration parameter is identified by a signed 32-bit integer index, called **configuration parameter index** or simply **index**. The value of a configuration parameter always is a Cell. Some configuration parameters may be missing; then it is sometimes assumed that the value of this parameter is `Null`. There also is a list of **mandatory** configuration parameters that must be always present; this list is stored in configuration parameter `#10`.
@@ -28,7 +30,7 @@ We see that configuration parameter `#8` contains a Cell with no references and 
 
 In contrast with configuration parameters with non-negative indices, configuration parameters with negative indices can contain arbitrary values. At least, no restrictions on their values are enforced by the validators. Therefore, they can be used to store important information (such as the Unix time when certain smart contracts must start operating) that is not crucial for the block generation, but is used by some of the fundamental smart contracts.
 
-#### 2. Changing configuration parameters
+## 2. Changing configuration parameters
 
 We have already explained that the current values of configuration parameters are stored in a special portion of the masterchain state. How do they ever get changed?
 
@@ -41,7 +43,7 @@ In this way, all changes in configuration parameters are performed by the config
 
 We would like to describe the second way of changing configuration parameters in more detail.
 
-#### 3. Creating configuration proposals
+## 3. Creating configuration proposals
 
 A new **configuration proposal** contains the following data:
 - the index of the configuration parameter to be changed
@@ -241,7 +243,7 @@ result:  [ [1586779536 0 [8 C{FDCD887EAF7ACB51DA592348E322BBC0BD3F40F9A801CB6792
 ```
 We obtain essentially the same result as before, but for only one configuration proposal, and without the identifier of the configuration proposal at the beginning.
 
-#### 4. Voting for configuration proposals
+## 4. Voting for configuration proposals
 
 Once a configuration proposal is created, it is supposed to collect votes from more than 3/4 of all current validators (by weight, i.e., by stake) in the current and maybe in several subsequent rounds (elected validator sets). In this way the decision to change a configuration parameters must be approved by a significant majority not only of the current set of validators, but also of several subsequent sets of validators.
 
@@ -278,7 +280,7 @@ result:  [ [1586779536 0 [8 C{FDCD887EAF7ACB51DA592348E322BBC0BD3F40F9A801CB6792
 ```
 This time the list of indices of validators that voted for this configuration proposal should be non-empty, and it should contain the index of your validator. In this example, this list is (`0`), meaning that only the validator with index `0` in configuration parameter `#34` has voted. If the list becomes large enough, the last-but-one integer (the first zero in `3 0 0`) in the proposal status will increase by one, indicating a new win by this proposal. If the number of wins becomes greater than or equal to the value indicated in configuration parameter `#11`, then the configuration proposal is automatically accepted and the proposed changes become effective immediately. On the other hand, when the validator set changes, then the list of validators that have already voted becomes empty, the value of `rounds_remaining` (three in `3 0 0`) is decreased by one, and if it becomes negative, the configuration proposal is destroyed. If it is not destroyed, and if it did not win in this round, then the number of losses (the second zero in `3 0 0`) is increased. If it becomes larger than a value specified in configuration parameter `#11`, then the configuration proposal is discarded. In this way all validators that have abstained from voting in a round have implicitly voted against.
 
-#### 5. An automated way for voting for configuration proposals
+## 5. An automated way for voting for configuration proposals
 
 Similarly to the automation provided by command `createelectionbid` of `validator-engine-console` for participating in validator elections, `validator-engine` and `validator-engine-console` offer an automated way of performing most of the steps explained in the previous section, producing a `vote-msg-body.boc` ready to be used with the controlling wallet. In order to use this method, you must install Fift scripts `config-proposal-vote-req.fif` and `config-proposal-vote-signed.fif` into the same directory that the validator-engine uses to look up `validator-elect-req.fif` and `validator-elect-signed.fif` as explained in Section 5 of [Validator-HOWTO](https://toncoin.org/#/howto/validator). After that, you simply run
 ```
@@ -286,7 +288,7 @@ Similarly to the automation provided by command `createelectionbid` of `validato
 ```
 in validator-engine-console to create `vote-msg-body.boc` with the body of the internal message to be sent to the configuration smart contract.
 
-#### 6. Upgrading the code of configuration smart contract and the elector smart contract
+## 6. Upgrading the code of configuration smart contract and the elector smart contract
 
 It may happen that the code of the configuration smart contract itself or the code of the elector smart contract has to be upgraded. To this end, the same mechanism as described above is used. The new code is to be stored into the only reference of a value cell, and this value cell has to be proposed as the new value of configuration parameter `-1000` (for upgrading the configuration smart contract) or `-1001` (for upgrading the elector smart contract). These parameters pretend to be critical, so a lot of validator votes are needed to change the configuration smart contract (this is akin to adopting a new constitution). We expect that such changes will involve first testing them in a test network, and discussing the proposed changes in public forums before each validator operator decides to vote for or against proposed changes.
 
