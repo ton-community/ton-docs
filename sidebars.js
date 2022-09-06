@@ -66,7 +66,7 @@ const sidebars = {
           type: 'category',
           label: 'Environment',
           items: [
-            'develop/installation',
+            'develop/smart-contracts/environment/installation',
             'develop/smart-contracts/environment/ide-plugins',
             'develop/smart-contracts/environment/testnet',
           ],

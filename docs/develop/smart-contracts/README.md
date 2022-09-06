@@ -23,7 +23,7 @@ Online IDE is perfect for hackathons, contests, or just to try TON development.
 
 A local environment allows you to develop contracts _faster_, with more comfort, and use bonuses like [IDE plugins](/develop/tools/ide-plugins) with syntax highlight for smart contracts development.
 
-Continue in the [INSTALLATION](/develop/installation) guide.
+Continue in the [INSTALLATION](/develop/smart-contracts/environment/installation) guide.
 
 ## Development Toolkit
 
