@@ -2,9 +2,9 @@
 
 A tonstarter-contracts project rely on _TON Contract Executor_ library. Tests are running inside Node.js by running TVM in web-assembly using _ton-contract-executor_.
 
-:::caution draft   
-This is a concept article. We're still looking for someone experienced to write it.
-:::
+To quick dive into testing you can read this article:
+
+* [TON Hello World: Step-by-step guide for writing your first smart contract in FunC (part 2) — Testing and Debugging](https://society.ton.org/ton-hello-world-guide-for-writing-first-smart-contract-in-func-part-2)
 
 ## Testing using TON Contract Executor
 
