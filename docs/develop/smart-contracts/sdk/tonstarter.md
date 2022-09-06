@@ -7,7 +7,7 @@ A _tonstarter-contracts_ based on TypeScript, TON Contract Executor and mochajs.
 Good solution for **JavaScript** stack developers.
 
 * [GitHub repository](https://github.com/ton-defi-org/tonstarter-contracts)
-* [Online IDE using Glitch](https://github.com/ton-defi-org/tonstarter-contracts)
+* [Online IDE using Glitch](https://glitch.com/edit/#!/remix/clone-from-repo?&REPO_URL=https%3A%2F%2Fgithub.com%2Fton-defi-org%2Ftonstarter-contracts.git)
 
 ## Quick Start
 
