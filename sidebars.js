@@ -106,6 +106,18 @@ const sidebars = {
               label: 'Using toncli',
               href: 'https://github.com/disintar/toncli',
             },
+            {
+              type: 'link',
+              label: 'Using NFT Minter',
+              href: '/develop/getting-started#nft-minters--non-fungible-tokens',
+            },
+            {
+              type: 'link',
+              label: 'Using Jetton Deployer',
+              href: '/develop/getting-started#jetton-deployer--fungible-tokens',
+            },
+
+
           ],
         },
         {
