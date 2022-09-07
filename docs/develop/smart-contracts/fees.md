@@ -62,3 +62,5 @@ The current gas amount is written in [the config file](https://explorer.toncoin.
 :::info DEEP DIVE
 You can read more about the formulas for calculating commissions and their sizes [in the "Low Level Fees Overview" article](/develop/howto/fees_low_level#fees-calculation-formulas).
 :::
+
+*Based on [article from @thedailyton](https://telegra.ph/Commissions-on-TON-07-22), originally written by [menschee](https://github.com/menschee)*
