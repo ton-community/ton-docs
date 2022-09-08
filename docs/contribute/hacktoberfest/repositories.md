@@ -1,31 +1,21 @@
 # How to Participate?
 
-:::tip starter tip
-Choose a repository you are interested to read more about issues it has to improve.
-:::
+Here is a list of the most active repositories who actively look for contributors:
 
-## SDKs
+For the most of the repositories you could find support in [TON Dev Chat](https://t.me/TonDev_eng) from maintainers.
 
-* [tonweb](http://localhost:3000/next/contribute/hacktoberfest) — JS SDK library
-* [tonweb](http://localhost:3000/next/contribute/hacktoberfest) — JS SDK library
-* [tonweb](http://localhost:3000/next/contribute/hacktoberfest) — JS SDK library
+### SDK for dApps
 
-## Swift
+| Repository                                         | Issues                                               | Maintainer | Stack needed | Notes |
+|----------------------------------------------------|------------------------------------------------------|------------|--------------|-------|
+| [tonweb](https://github.com/toncenter/tonweb)      | [Issues](https://github.com/toncenter/tonweb/issues) | ?          | JavaScript   | -     |
+| [tonutils-go](https://github.com/xssnick/tonutils-go) | [Issues](https://github.com/xssnick/tonutils-go/issues) | ?          | Go           | -     |
+| [psylopunk/pytonlib](https://github.com/psylopunk/pytonlib)      | [Issues](https://github.com/psylopunk/pytonlib/issues) | ?          | Python       | -     |
 
-* [tonweb](http://localhost:3000/next/contribute/hacktoberfest) — JS SDK library
-* [tonweb](http://localhost:3000/next/contribute/hacktoberfest) — JS SDK library
-* [tonweb](http://localhost:3000/next/contribute/hacktoberfest) — JS SDK library
-* [tonweb](http://localhost:3000/next/contribute/hacktoberfest) — JS SDK library
-* [tonweb](http://localhost:3000/next/contribute/hacktoberfest) — JS SDK library
+### SDK for smart-contracts
 
-## Explorers
-
-* [tonweb](http://localhost:3000/next/contribute/hacktoberfest) — JS SDK library
-* [tonweb](http://localhost:3000/next/contribute/hacktoberfest) — JS SDK library
-* [tonweb](http://localhost:3000/next/contribute/hacktoberfest) — JS SDK library
-
-## Wallets
-
-* [tonweb](http://localhost:3000/next/contribute/hacktoberfest) — JS SDK library
-* [tonweb](http://localhost:3000/next/contribute/hacktoberfest) — JS SDK library
-* [tonweb](http://localhost:3000/next/contribute/hacktoberfest) — JS SDK library
+| Repository                                                     | Issues                                               | Maintainer | Stack needed | Notes |
+|----------------------------------------------------------------|------------------------------------------------------|------------|--------------|-------|
+| [toncli](https://github.com/disintar/toncli)                  | [Issues](https://github.com/disintar/toncli/issues) | ?          | Python       | -     |
+| [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) | [Issues](https://github.com/ton-defi-org/tonstarter-contracts/issues) | ?          | TypeScript   | -     |
+| [ton-contract-executor](https://github.com/Naltox/ton-contract-executor)           | [Issues](https://github.com/Naltox/ton-contract-executor/issues) | ?          | TypeScript   | -     |
