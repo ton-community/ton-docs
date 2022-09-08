@@ -17,6 +17,6 @@ TON Docs was originally created by [tolya-yanot](https://github.com/tolya-yanot)
 
 We’d like to recognize a few people who have made significant contributions to TON Docs in the past and have helped maintain and develop them:
 
-- [tolya-yanot](https://example.com)
-- [EmelyanenkoK](https://example.com)
-- [Tal Kol](https://example.com)
+- [tolya-yanot](https://github.com/tolya-yanot)
+- [EmelyanenkoK](https://github.com/EmelyanenkoK)
+- [Tal Kol](https://github.com/search?q=Tal+Kol&type=users)
