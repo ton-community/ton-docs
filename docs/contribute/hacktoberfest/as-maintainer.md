@@ -1,4 +1,8 @@
-# Participating as a Maintainer
+# Participate as Maintainer
+
+Hacktoberfest event is the best time of year to receive support from the community!
+
+If your repository is related to the TON ecosystem, you will have attention from many contributors. Let's help them dive properly into your project!
 
 ## Prepare to party
 

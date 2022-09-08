@@ -1,8 +1,10 @@
-# How to Participate?
+# Participate as Contributor
 
 Here is a list of the most active repositories who actively look for contributors:
 
 For the most of the repositories you could find support in [TON Dev Chat](https://t.me/TonDev_eng) from maintainers.
+
+To receive an NFT reward after the event don't forget to [activate your account](/contribute/hacktoberfest/getting-started).
 
 ### SDK for dApps
 

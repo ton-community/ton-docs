@@ -371,8 +371,8 @@ const sidebars = {
       'items': [
         'contribute/hacktoberfest/README',
         'contribute/hacktoberfest/getting-started',
-        'contribute/hacktoberfest/repositories',
-        'contribute/hacktoberfest/tips-for-maintainers',
+        'contribute/hacktoberfest/as-contributor',
+        'contribute/hacktoberfest/as-maintainer',
       ],
     },
   ],
