@@ -1,23 +1,31 @@
 # Participate as Contributor
 
-Here is a list of the most active repositories who actively look for contributors:
+To become a contributor who receives a limited *Hack-TON-berfest NFT*, please set up your own [TON wallet](https://ton.org/wallets) and verify your GitHub account.
 
-For the most of the repositories you could find support in [TON Dev Chat](https://t.me/TonDev_eng) from maintainers.
+## Start your Journey
 
-To receive an NFT reward after the event don't forget to [activate your account](/contribute/hacktoberfest/getting-started).
+1. Setup any wallet from [ton.org/wallets](https://ton.org/wallets) page.
+2. Please, provide your wallet to the [@contestsbot](#) in Telegram.
+3. Validate your GitHub account in the same bot.
 
-### Repositories
+After this steps you're ready to contribute to TON. Welcome to the club, we're only starting!
 
-| Repository                                         | Issues                                               | Maintainer | Stack needed | Notes |
-|----------------------------------------------------|------------------------------------------------------|------------|--------------|-------|
-| [tonweb](https://github.com/toncenter/tonweb)      | [Issues](https://github.com/toncenter/tonweb/issues) | ?          | JavaScript   | -     |
-| [tonutils-go](https://github.com/xssnick/tonutils-go) | [Issues](https://github.com/xssnick/tonutils-go/issues) | ?          | Go           | -     |
-| [psylopunk/pytonlib](https://github.com/psylopunk/pytonlib)      | [Issues](https://github.com/psylopunk/pytonlib/issues) | ?          | Python       | -     |
+## New to contributing in open source?
 
-### SDK for smart-contracts
+Hacktoberfest can be an especially welcoming time to dip your toes into open source contributions for the first time. There’s plenty of streams, posts, guides, and conversations around getting started. You’re joining many folks also starting their journey this month!
 
-| Repository                                                     | Issues                                               | Maintainer | Stack needed | Notes |
-|----------------------------------------------------------------|------------------------------------------------------|------------|--------------|-------|
-| [toncli](https://github.com/disintar/toncli)                  | [Issues](https://github.com/disintar/toncli/issues) | ?          | Python       | -     |
-| [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) | [Issues](https://github.com/ton-defi-org/tonstarter-contracts/issues) | ?          | TypeScript   | -     |
-| [ton-contract-executor](https://github.com/Naltox/ton-contract-executor)           | [Issues](https://github.com/Naltox/ton-contract-executor/issues) | ?          | TypeScript   | -     |
+* [Hacktoberfest’s website has some great resource for beginners](https://hacktoberfest.digitalocean.com/resources/beginners)
+* [Guide to Making your First Contribution](https://dev.to/codesandboxio/how-to-make-your-first-open-source-contribution-2oim) by Ceora Ford
+* [Practice the workflow for making your first contribution](https://github.com/firstcontributions/first-contributions)
+* [Overcoming impostor syndrome of contributing to open source](https://blackgirlbytes.dev/conquering-the-fear-of-contributing-to-open-source)
+
+## Where could I contribute to TON?
+
+TON Ecosystem have a bunch of organizations and repositories:
+
+<span className="DocsMarkdown--button-group-content">
+  <a href="/hacktonberfest"
+     className="Button Button-is-docs-primary">
+    List of projects looking for contributors
+  </a>
+</span>

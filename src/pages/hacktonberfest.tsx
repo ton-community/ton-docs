@@ -17,7 +17,7 @@ const content = [
     {
         title: "Contribute to TON",
         status: "Open-source Developer",
-        linkUrl: "/contribute/hacktoberfest/getting-started",
+        linkUrl: "/contribute/hacktoberfest/as-contributor",
         imageUrl: "img/ton_symbol_old.svg",
         description: "Participate in open-source and receive cool rewards from TON."
     },
