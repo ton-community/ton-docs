@@ -32,7 +32,9 @@ Here is a simple data loaded written on FunC:
 
 ## Tutorials
 
-If you want to learn how to use FunC you can read the [SMART CONTRACTS](/develop/smart-contracts/) section.
+* If you want to learn how to use FunC you can read the [SMART CONTRACTS](/develop/smart-contracts/) section.
+* Quick one-page FunC cheatsheet on [learnxinyminutes.com](https://learnxinyminutes.com/docs/func/)
+
 
 ## Tools
 
