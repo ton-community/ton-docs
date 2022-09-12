@@ -57,7 +57,7 @@ export default function Home(): JSX.Element {
                     <br/>
                     <br/>
 
-                    <h1 style={{ fontWeight: '650', textAlign:'center', padding: '0 10px' }}>List of repositories to Participate</h1>
+                    <h1 style={{ fontWeight: '650', textAlign:'center', padding: '0 10px' }}>List of repositories to Contribute 🛠</h1>
                     <p style={{ textAlign:'center', fontWeight: '400', fontSize:'18px' }}>Here is a list of repositories in TON Ecosystem who awaits of contributors right now:</p>
 
                     <iframe className="airtable-embed"
@@ -68,13 +68,13 @@ export default function Home(): JSX.Element {
                     <br/>
                     <br/>
 
-                    <h1 style={{ fontWeight: '650', textAlign:'center', padding: '0 10px' }}>Want to join to this list?</h1>
-                    <p style={{ textAlign:'center', fontWeight: '400', fontSize:'18px' }}>Please, read the page for maintainers and fill the form — <a href={"/contribute/hacktoberfest/as-maintainer"}>join as maintainer now</a>!</p>
+                    <h1 style={{ fontWeight: '650', textAlign:'center', padding: '0 10px' }}>Want to join to this list and get help? 🚀</h1>
+                    <p style={{ textAlign:'center', fontWeight: '400', fontSize:'18px' }}>Please, read the page for maintainers and fill the form — <a href={"/contribute/hacktoberfest/as-maintainer"}>join as maintainer</a>. It's easy now!</p>
 
 
                     <br/>
 
-                    <h1 style={{ fontWeight: '650', textAlign:'center', padding: '0 10px' }}>FAQ</h1>
+                    <h1 style={{ fontWeight: '650', textAlign:'center', padding: '0 10px' }}>FAQ for Contributors</h1>
 
                     <p style={{ textAlign:'center', fontWeight: '400', fontSize:'18px' }}>Before asking any question in the chats, please read answers here first.</p>
                     <iframe className="airtable-embed"
