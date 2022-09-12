@@ -62,7 +62,7 @@ export default function Home(): JSX.Element {
 
                     <iframe className="airtable-embed"
                             src="https://airtable.com/embed/shrVIgLZqTdFtXFaZ?backgroundColor=blue&viewControls=on"
-                            frameBorder="0" onmousewheel="" width="100%" height="533"
+                            frameBorder="0" width="100%" height="533"
                             style={{background: 'transparent', border: '1px solid #ccc'}}></iframe>
 
                     <br/>
@@ -79,7 +79,7 @@ export default function Home(): JSX.Element {
                     <p style={{ textAlign:'center', fontWeight: '400', fontSize:'18px' }}>Before asking any question in the chats, please read answers here first.</p>
                     <iframe className="airtable-embed"
                             src="https://airtable.com/embed/shrmS5ccK1Ez8Zc7q/tbldsJlX5kJoVXV48?backgroundColor=blue&viewControls=on"
-                            frameBorder="0" onmousewheel="" width="100%" height="533"
+                            frameBorder="0" width="100%" height="533"
                             style={{background: 'transparent', border: '1px solid #ccc'}}></iframe>
 
                     <br/>
