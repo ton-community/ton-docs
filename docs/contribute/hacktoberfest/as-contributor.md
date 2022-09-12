@@ -6,7 +6,7 @@ For the most of the repositories you could find support in [TON Dev Chat](https:
 
 To receive an NFT reward after the event don't forget to [activate your account](/contribute/hacktoberfest/getting-started).
 
-### SDK for dApps
+### Repositories
 
 | Repository                                         | Issues                                               | Maintainer | Stack needed | Notes |
 |----------------------------------------------------|------------------------------------------------------|------------|--------------|-------|

@@ -14,9 +14,14 @@ After that feel free to add your repository to list.
 
 ## How to be listed and participate?
 
-Help future contributors know more about your repository:
-   1. Which category are the best suits for you?
-   2. Who is a maintainer to communicate?
-   3. Do you have an issues with reward in TON?
+To participate in Hack-TON-berfest use this link:
 
-After that write directly to [one of maintainers](/contribute/maintainers) of the documentation.
+
+
+
+<span className="DocsMarkdown--button-group-content">
+  <a href="https://airtable.com/shrgXIgZdBKKX64NL"
+     className="Button Button-is-docs-primary">
+    Add repository to the List
+  </a>
+</span>

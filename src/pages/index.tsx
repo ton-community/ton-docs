@@ -1,41 +1,11 @@
 import React from 'react';
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
 
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import ThemedImage from '@theme/ThemedImage';
 
-import { firstRow } from "../data/features";
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
-import styles from './index.module.css';
-import useBaseUrl from "@docusaurus/useBaseUrl";
-
-
-function FirstRow({ title, status, description, linkUrl, imageUrl }) {
-    // const imgUrl = useBaseUrl(imageUrl);
-    return (
-
-        <div className="col-md-4 p-8">
-            <Link to={useBaseUrl(linkUrl)} activeClassName="active">
-                <div className="show-card">
-                    <div className="icon-wrapper">
-                        <ThemedImage alt={title} className="icon"  sources={{
-                            light: useBaseUrl(imageUrl.replace('.svg', '-light.svg')),
-                            dark: useBaseUrl(imageUrl.replace('.svg', '-dark.svg'))
-                        }}/>
-                    </div>
-                    <div className="status">{status}</div>
-                    <div className="title">{title}</div>
-                    <div className="descriptions">{description}</div>
-                </div>
-            </Link>
-        </div>
-
-    );
-}
+import {firstRow} from "../data/features";
+import ContentBlock from "@site/src/components/contentBlock";
+import './index.module.css'
 
 export default function Home(): JSX.Element {
   const {siteConfig} = useDocusaurusContext();
@@ -55,7 +25,7 @@ export default function Home(): JSX.Element {
                               {firstRow &&
                                   firstRow.length &&
                                   firstRow.map((props, idx) => (
-                                      <FirstRow key={idx} {...props} />
+                                      <ContentBlock key={idx} {...props} />
                                   ))}{" "}
                           </div>
 

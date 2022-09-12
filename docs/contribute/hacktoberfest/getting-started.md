@@ -19,14 +19,11 @@ Hacktoberfest can be an especially welcoming time to dip your toes into open sou
 * [Practice the workflow for making your first contribution](https://github.com/firstcontributions/first-contributions)
 * [Overcoming impostor syndrome of contributing to open source](https://blackgirlbytes.dev/conquering-the-fear-of-contributing-to-open-source)
 
-## Where to start contributing to TON?
+## Where could I contribute to TON?
 
 TON Ecosystem have a bunch of organizations and repositories!
 
-* [List of projects looking for contributors](/contribute/hacktoberfest/repositories)
-* [List of apps in the TON Ecosystem](https://ton.app/categories) by Ton.App
-* [TON Footsteps issues with rewards in TON](https://github.com/ton-society/ton-footsteps) by TON Footsteps
-
+* [List of projects looking for contributors](/contribute/hacktoberfest/as-contributor)
 ## FAQ
 
 TODO: https://airtable.com/shrmS5ccK1Ez8Zc7q/tbldsJlX5kJoVXV48?backgroundColor=gray&viewControls=on
