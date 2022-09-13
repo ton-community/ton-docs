@@ -5,7 +5,7 @@ This information is **very low level** and could be hard to understand for newco
 So feel free to read about it later.
 :::
 
-This document provides general idea of transaction fees in TON and particularly computation fees for funC code. There is also the [detailed specification in TVM whitepaper](https://ton-blockchain.github.io/tvm.pdf).
+This document provides general idea of transaction fees in TON and particularly computation fees for funC code. There is also the [detailed specification in TVM whitepaper](https://ton.org/tvm.pdf).
 
 # Transactions and phases
 

@@ -12,7 +12,7 @@ Smart-contract can store data, move funds to other smart-contracts, compute some
 
 ## How to start using or developing smart-contracts?
 
-To begin with, you must pay attention to two existing programming languages related to developing smart contracts in TON: [FunC](https://ton.org/#/func) and [Fift](https://ton-blockchain.github.io/fiftbase.pdf). FunC is used to write the logic of contracts, it is compiled to fift-asm code, which can then be translated to bytecode for TVM. The functionality of Fift is very wide. To begin with, fift-asm is an [Asm.fif](https://github.com/newton-blockchain/ton/blob/master/crypto/fift/lib/Asm.fif) program that allows you to translate asm-like(fift-asm) code into byte code for TVM. We also use Fift to automatically test and write queries to smart contracts.
+To begin with, you must pay attention to two existing programming languages related to developing smart contracts in TON: [FunC](https://ton.org/#/func) and [Fift](https://ton.org/fiftbase.pdf). FunC is used to write the logic of contracts, it is compiled to fift-asm code, which can then be translated to bytecode for TVM. The functionality of Fift is very wide. To begin with, fift-asm is an [Asm.fif](https://github.com/newton-blockchain/ton/blob/master/crypto/fift/lib/Asm.fif) program that allows you to translate asm-like(fift-asm) code into byte code for TVM. We also use Fift to automatically test and write queries to smart contracts.
 
 You can get the binaries of the FunC compiler and the Fift interpreter by building code from [newton-blockchain/ton](https://github.com/newton-blockchain/ton) repo.
 
@@ -26,7 +26,7 @@ You can use [toncli](https://github.com/disintar/toncli) to easily and convenien
 * 🇷🇺 [TonDevRu Chat](https://t.me/tondev) - TON Developers chat
 
 ## About fift and func which are used to develop smart contracts:
-1. [Fift official docs](https://ton-blockchain.github.io/fiftbase.pdf)
+1. [Fift official docs](https://ton.org/fiftbase.pdf)
 2. [FunC official docs](https://ton.org/#/func)
 3. [Fift instructions in C++](https://github.com/newton-blockchain/ton/blob/9875f02ef4ceba5b065d5e63c920f91aec73224e/crypto/fift/words.cpp#L2723-L3110)
 

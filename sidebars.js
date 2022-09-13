@@ -238,22 +238,22 @@ const sidebars = {
         {
           type: 'link',
           label: 'TON',
-          href: 'https://ton-blockchain.github.io/ton.pdf',
+          href: 'https://ton.org/ton.pdf',
         },
         {
           type: 'link',
           label: 'TON Virtual Machine',
-          href: 'https://ton-blockchain.github.io/tvm.pdf',
+          href: 'https://ton.org/tvm.pdf',
         },
         {
           type: 'link',
           label: 'TON Blockchain',
-          href: 'https://ton-blockchain.github.io/tblkch.pdf',
+          href: 'https://ton.org/tblkch.pdf',
         },
         {
           type: 'link',
           label: 'Catchain Consensus Protocol',
-          href: 'https://ton-blockchain.github.io/catchain.pdf',
+          href: 'https://ton.org/catchain.pdf',
         },
 
       ],
@@ -289,7 +289,7 @@ const sidebars = {
         {
           type: 'link',
           label: 'Testnet config',
-          href: 'https://ton-blockchain.github.io/testnet-global.config.json',
+          href: 'https://ton.org/testnet-global.config.json',
         },
       ],
     },

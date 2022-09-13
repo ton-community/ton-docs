@@ -87,7 +87,7 @@ It is not obvious why `nonce` field in datagram is present, because even without
 TBD
 
 ## References
-- [The Open Network, p. 80](https://ton-blockchain.github.io/ton.pdf)
+- [The Open Network, p. 80](https://ton.org/ton.pdf)
 - [ADNL implementation in TON](https://github.com/ton-blockchain/ton/tree/master/adnl)
 
 _Thanks to the [hacker-volodya](https://github.com/hacker-volodya) for contributing to the community!_  

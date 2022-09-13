@@ -4,7 +4,7 @@ The aim of this document is to provide step-by-step instructions for compiling a
 
 We assume here that the Lite Client is already properly downloaded, compiled and installed.
 
-> Note that this tutorial is for a testnet, so you must use the config https://ton-blockchain.github.io/testnet-global.config.json
+> Note that this tutorial is for a testnet, so you must use the config https://ton.org/testnet-global.config.json
 
 ## 1. Smart-contract addresses
 

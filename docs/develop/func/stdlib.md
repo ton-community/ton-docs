@@ -4,7 +4,7 @@
 This section discus the [stdlib.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) library with standard functions used in FunC.
 :::
 
-Currently, the library is just a wrapper for most common assembler TVM commands, which aren't built-ins. Description of every TVM command used in the library can be found in [TVM documentation](https://ton-blockchain.github.io/tvm.pdf) (Appendix A). Some descriptions were borrowed into this document.
+Currently, the library is just a wrapper for most common assembler TVM commands, which aren't built-ins. Description of every TVM command used in the library can be found in [TVM documentation](https://ton.org/tvm.pdf) (Appendix A). Some descriptions were borrowed into this document.
 
 Some functions are commented out in the file. It means that they have already become built-ins for optimization purposes. However, the type signature and semantics remain the same.
 
@@ -436,7 +436,7 @@ Unless otherwise stated, loading and preloading primitives read the data from a 
 slice begin_parse(cell c) asm "CTOS";
 ```
 
-Converts a `cell` into a `slice`. Notice that `c` must be either an ordinary cell, or an exotic cell (see [TVM.pdf](https://ton-blockchain.github.io/tvm.pdf), 3.1.2) which is automatically loaded to yield an ordinary cell `c'`, converted into a `slice` afterwards.
+Converts a `cell` into a `slice`. Notice that `c` must be either an ordinary cell, or an exotic cell (see [TVM.pdf](https://ton.org/tvm.pdf), 3.1.2) which is automatically loaded to yield an ordinary cell `c'`, converted into a `slice` afterwards.
 
 #### end_parse
 ```cpp
@@ -648,7 +648,7 @@ int cell_null?(cell c) asm "ISNULL";
 Checks whether `c` is a `null`. Usually a `null`-cell represents an empty dictionary. FunC also has polymorphic `null?` built-in, see [built-ins](/develop/func/builtins#other-primitives).
 
 ## Dictionaries primitives
-As said in [TVM.pdf](https://ton-blockchain.github.io/tvm.pdf):
+As said in [TVM.pdf](https://ton.org/tvm.pdf):
 > Dictionaries admit two different representations as TVM stack values:
 > * A slice `s` with a serialization of a TL-B value of type `HashmapE(n, X)`. In other words, `s` consists either of one bit equal to zero (if the dictionary is empty), or of one bit equal to one and a reference to a cell containing the root of the binary tree, i.e., a serialized value of type `Hashmap(n, X)`.
 > * A “Maybe cell” `c^?`, i.e., a value that is either a cell (containing a serialized value of type `Hashmap(n, X)` as before) or a `null` (corresponding to an empty dictionary, cf. [null values](/develop/func/types#null-values)). When a “Maybe cell” `c^?` is used to represent a dictionary, we usually denote it by `D`.  
@@ -845,7 +845,7 @@ int dict_empty?(cell c) asm "DICTEMPTY";
 Checks whether a dictionary is empty. Equivalent to `cell_null?`.
 
 ## Prefix dictionaries primitives
-TVM also support dictionaries with non-fixed length keys which form a prefix code (i.e. there is no key that is a prefix of another key). Learn more about them in [TVM.pdf](https://ton-blockchain.github.io/tvm.pdf).
+TVM also support dictionaries with non-fixed length keys which form a prefix code (i.e. there is no key that is a prefix of another key). Learn more about them in [TVM.pdf](https://ton.org/tvm.pdf).
 
 #### pfxdict_get?
 ```cpp

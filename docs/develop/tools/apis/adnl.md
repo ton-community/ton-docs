@@ -8,11 +8,11 @@ Read operations (like get-method calls) are made by launching a local TVM with a
 
 There is no need to download the full state of blockchain, the client only downloads what is needed for the operation. Calling local TVM is also lightweight.
 
-You can connect to public lite servers from the global config ([mainnet](https://ton.org/global-config.json) or [testnet](https://ton-blockchain.github.io/testnet-global.config.json)) or run your own lite server.
+You can connect to public lite servers from the global config ([mainnet](https://ton.org/global-config.json) or [testnet](https://ton.org/testnet-global.config.json)) or run your own lite server.
 
 Since it checks Merkle proofs, you can even use untrusted lite servers.
 
-Read more about Merkle proofs at [ADNL Protocol article](/learn/overviews/ADNL) or [TON Whitepaper](https://ton-blockchain.github.io/ton.pdf) 2.3.10, 2.3.11.
+Read more about Merkle proofs at [ADNL Protocol article](/learn/overviews/ADNL) or [TON Whitepaper](https://ton.org/ton.pdf) 2.3.10, 2.3.11.
 
 ## Pros & Cons
 

@@ -30,7 +30,7 @@ Directory structure looks like:
 
 * `contracts/*.fc` - Smart contracts for TON blockchain written in [FunC](https://ton.org/docs/#/func) language
 * `test/*.spec.ts` - Test suite for the contracts in TypeScript ([MochaJS](https://mochajs.org/) test runner)
-* `build/_build.ts` - Build script to compile the FunC code to [Fift](https://ton-blockchain.github.io/docs/fiftbase.pdf) and [TVM](https://ton-blockchain.github.io/docs/tvm.pdf) opcodes
+* `build/_build.ts` - Build script to compile the FunC code to [Fift](https://ton.org/docs/fiftbase.pdf) and [TVM](https://ton.org/docs/tvm.pdf) opcodes
 * `build/_deploy.ts` - Deploy script to deploy the compiled code to TON
 * `build/_setup.ts` - Setup script to install build dependencies
 

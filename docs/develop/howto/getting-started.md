@@ -30,16 +30,16 @@ BASIC COMPILATION AND INSTALLATION INSTRUCTIONS
     cmake --build . --target func
     ```
 
-4) Download the newest configuration file from https://ton-blockchain.github.io/global.config.json for mainnet:
+4) Download the newest configuration file from https://ton.org/global.config.json for mainnet:
 
     ```
-    wget https://ton-blockchain.github.io/global.config.json
+    wget https://ton.org/global.config.json
     ```
     
-    or from https://ton-blockchain.github.io/testnet-global.config.json for testnet
+    or from https://ton.org/testnet-global.config.json for testnet
 
     ```
-    wget https://ton-blockchain.github.io/testnet-global.config.json
+    wget https://ton.org/testnet-global.config.json
     ```
 
 5) Run the Lite Client with config:

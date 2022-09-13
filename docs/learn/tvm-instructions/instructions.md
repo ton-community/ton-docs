@@ -9,7 +9,7 @@ So feel free to read about it later.
 This document provides a list of TVM instrucions, their opcodes and mnemonics.
 
 :::tip
-[**Here**](https://ton-blockchain.github.io/tvm.pdf) is a full description of TON Virtual Machine.
+[**Here**](https://ton.org/tvm.pdf) is a full description of TON Virtual Machine.
 :::
 
 Fift is a stack-based programming language designed to manage TON smart contracts. The Fift assembler is a Fift library that converts mnemonics of TVM instructions to their binary representation.

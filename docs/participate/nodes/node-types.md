@@ -26,7 +26,7 @@ There are different types of nodes in The Open Network:
 
      Using this node, your product can interact with the TON blockchain.
 
-     The TON Foundation supports a number of **public lite servers** that you can find in the global config ([mainnet](https://ton.org/global-config.json) and [testnet](https://ton-blockchain.github.io/testnet-global.config.json)).
+     The TON Foundation supports a number of **public lite servers** that you can find in the global config ([mainnet](https://ton.org/global-config.json) and [testnet](https://ton.org/testnet-global.config.json)).
 
      These are endpoints available to everyone, for example, standard wallets connect to them.
 
