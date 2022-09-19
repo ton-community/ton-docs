@@ -1,4 +1,4 @@
-# Sample Tutorial Structure
+# Sample Tutorial Structure 
 
 ## Introduction
 
@@ -41,7 +41,7 @@ Any technology that needs to be installed **prior** to starting the tutorial and
 - Please do not use "Body of the Tutorial" as a heading, use your own heading that is relevant to the material. "Getting started" is acceptable if you can't think of anything else 😉
 - Add any text content necessary to guide readers through your tutorial, and ***remember to proofread your content*** for spelling and grammar before you submit your tutorial. [Grammarly](http://grammarly.com) is a good free program that can help you to avoid spelling and grammar problems.
 
-Points to remember:
+### Points to remember
 
 - Do not use "Body of the Tutorial" as a heading!
 - **Keep all sub-headings at H3,** don't go into H4 or lower**:**
@@ -70,13 +70,13 @@ Points to remember:
 
 - Take an error-driven approach when writing your tutorial: Add common errors and steps to troubleshoot the errors, *for example:*
 
-> **Not able to connect to the Testnet, getting an error on executing `node deploy:testnet`**
-
-Let's check for some common causes:
-
-Make sure you have enough balance on your generated testnet wallet in `.env`. If not, please add some testnet coins from the faucet giver.
-
-If you're still experiencing the same issue, reach out to us on [Telegram](https://t.me/SwiftAdviser) or on the [Dev Chat](https://t.me/TonDev_eng/) for help.
+> **Not able to connect to the Testnet, getting an error on executing  
+> `node deploy:testnet` command.** 
+>
+> Let's check for some common causes:
+>  
+* Make sure you have enough balance on your generated testnet wallet in `.env`. If not, please add some testnet coins from the faucet giver. 
+* If you're still experiencing the same issue, reach out devs on the [Dev Chat](https://t.me/TonDev_eng/) for help.
 >
 
 ## Conclusion
@@ -86,7 +86,8 @@ The Conclusion heading **must** be H2: `## Conclusion`
 This section should summarize what was learned in the tutorial, reinforce key points and also congratulate the learner for completing the tutorial. Use a maximum of 5-6 lines.
 *For example*:
 
-> Congratulations! We have deployed the modified NFT smart contract in AssemblyScript with the Marketplace functionality on the NEAR Testnet. You can now keep experimenting by calling other functions like `delete_from_market` . You can also connect this contract with the javascript sdk `near-api-js` and create the frontend application for your marketplace.
+> We created a simple new FunC contract with the counter functionality. We then built and deployed it on-chain and finally interacted with it by calling a getter and sending a message.
+
 
 Please remember that this code is not intended for production: there are still a few other things to consider if you wanted to deploy this to mainnet, such as disabling the transfer method if the token is listed on the market and so on.
 >
