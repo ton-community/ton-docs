@@ -29,7 +29,7 @@ To summarize, the workflow is:
 
 ## General tips
 
-- **Do not copy and paste existing content**. Plagiarism is a serious issue and will not be tolerated. If the tutorial is inspired by some existing content (for example forking an Ethereum tutorial to convert it for use on Avalanche), reference it and link to it. When you link to other tutorials/resources, do it with TON Docs resources as much as possible.
+- **Do not copy and paste existing content**. Plagiarism is a serious issue and will not be tolerated. If the tutorial is inspired by some existing content, reference it and link to it. When you link to other tutorials/resources, do it with TON Docs resources as much as possible.
 - **Include any walkthrough videos or video content** in the PR by uploading it to Google Drive.
 - **Funding of accounts from faucets needs to be explained clearly** as to which account is being funded, from where and why. Do not assume learners can accomplish this on their own!
 - **Display sample outputs** to help learners know what to expect, in the form of Terminal snippets or screenshots. Trim long outputs.
@@ -39,14 +39,19 @@ To summarize, the workflow is:
 - **Before making the PR, run the code by yourself first** to avoid any obvious errors and to make sure it works as expected.
 - **Avoid including external/cross-links** to different sources in between the tutorials. If your tutorial is longer, we can discuss how to turn it into a longer course or Pathway.
 - **Provide** **pictures or screenshots** to illustrate complicated processes where needed.
-- Upload your images to the `assets` directory of the learn-tutorials repository - **DO NOT** use hotlinks to external sites, as this can lead to broken images.
-- **Image links must** **be in markdown format** and you must **ONLY** use the raw GitHub URL of the assets directory in the repository: `![name of your image](https://raw.githubusercontent.com/SwiftAdviser/ton-docs/main/static/img/tutorials/<your image filename>.png?raw=true)`
+- Upload your images to the `static` directory of the learn-tutorials repository - **DO NOT** use hotlinks to external sites, as this can lead to broken images.
+- **Image links must** **be in markdown format** and you must **ONLY** use the raw GitHub URL of the static directory in the repository: `![name of your image](https://raw.githubusercontent.com/SwiftAdviser/ton-docs/main/static/img/tutorials/<your image filename>.png?raw=true)`
     - Remember to add `?raw=true` to the end of the URL
 
 ## How to structure your tutorial
 
-- The **Title** should be direct and clear, summarizing the tutorial's goal. Do not add the tutorial title as a heading inside the document, use the markdown document filename. *For example*:
-  If your tutorial was titled "Query Ethereum data with The Graph", the filename should be `query-ethereum-data-with-the-graph.md`
+:::info Sample tutorial structure
+Feel free to check [sample tutorial structure](/contribute/sample-tutorial) to see it in your eyes.
+:::
+
+- The **Title** should be direct and clear, summarizing the tutorial's goal. Do not add the tutorial title as a heading inside the document, use the markdown document filename.
+  - *For example*: If your tutorial was titled "_Step by step guide for writing your first smart contract in FunC_", the filename should be:  
+  `step-by-step-guide-for-writing-your-first-smart-contract-in-func.md`
 - Include an **Introduction** section explaining *why* this tutorial matters and what the context of the tutorial is. Don't assume that it is obvious.
 - Include a **Prerequisites** section explaining any *prior knowledge* required or any existing tutorials that need to be completed first, any tokens that are needed, etc.
 - Include a **Requirements** section explaining any *technology that needs to be installed* **prior** to starting the tutorial and that the tutorial will not cover such as TON Wallet Extension, Node.js, etc. Do not list packages that will be installed during the tutorial.
@@ -59,8 +64,11 @@ To summarize, the workflow is:
 
 ## Style Guide
 
-- **Writing Tone -** Learn Tutorials are written by community contributors for their peers.
-  As such, we recommend creating a tone of inclusion and interaction throughout the tutorial. Use words such as “we”, “us”, “our”, for example “We have successfully deployed our contract”. When providing direct instructions feel free to use “you”, “your”, etc. For example,*“*Your file should look like this:*”*.
+- **Writing Tone -** Tutorials are written by community contributors for their peers. 
+  - As such, we recommend creating a tone of inclusion and interaction throughout the tutorial. Use words such as “we”, “us”, “our”
+    - _For example_ “We have successfully deployed our contract”.
+  - When providing direct instructions feel free to use “you”, “your”, etc.
+    - _For example_ *“*Your file should look like this:*”*.
 - **Use Markdown properly** throughout your tutorial. Refer to [GitHub's markdown guide](https://guides.github.com/features/mastering-markdown/) as well as the [sample tutorial structure](/contribute/sample-tutorial).
 - **Do not use pre-formatted text for emphasis**, *for example* :
     - ❌ "TON counter `smart contract` named `counter.fc`" is incorrect.
