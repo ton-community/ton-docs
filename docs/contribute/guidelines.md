@@ -49,7 +49,7 @@ To summarize, the workflow is:
   If your tutorial was titled "Query Ethereum data with The Graph", the filename should be `query-ethereum-data-with-the-graph.md`
 - Include an **Introduction** section explaining *why* this tutorial matters and what the context of the tutorial is. Don't assume that it is obvious.
 - Include a **Prerequisites** section explaining any *prior knowledge* required or any existing tutorials that need to be completed first, any tokens that are needed, etc.
-- Include a **Requirements** section explaining any *technology that needs to be installed* **prior** to starting the tutorial and that the tutorial will not cover such as Metamask, Node.js, Truffle, HardHat, etc. Do not list packages that will be installed during the tutorial.
+- Include a **Requirements** section explaining any *technology that needs to be installed* **prior** to starting the tutorial and that the tutorial will not cover such as TON Wallet Extension, Node.js, etc. Do not list packages that will be installed during the tutorial.
 - Use **subheadings** (H2: ##) to break down your explanations within the body of the tutorial. Keep the Table of Contents in mind when using subheadings, and try to keep them on point.
     - If the content below a subheading is short (for example, only a single paragraph and a code block), consider using bold text instead of a subheading.
 - Include a **Conclusion** section that summarizes what was learned, reinforces key points and also congratulates the learner for completing the tutorial.

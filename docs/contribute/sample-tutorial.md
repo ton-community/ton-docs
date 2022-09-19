@@ -29,11 +29,11 @@ The Requirements heading **must** be H2: `## Requirements`
 
 **OPTIONAL :** Embed any video content in this section, if your tutorial has any.
 
-Any technology that needs to be installed **prior** to starting the tutorial and that the tutorial will not cover (`Metamask`, `node`, `truffle`, etc). Do not list packages that will be installed during the tutorial.
+Any technology that needs to be installed **prior** to starting the tutorial and that the tutorial will not cover (`TON Wallet Extension`, `node`, etc). Do not list packages that will be installed during the tutorial.
 
 *For example:*
 
-- We'll need Metamask in this tutorial, install it from [HERE](https://metamask.io/).
+- We'll need TON Wallet Extension in this tutorial, install it from [HERE](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd).
 - Make sure to have NodeJS 12.0.1+ version installed.
 
 ## Body of the Tutorial
