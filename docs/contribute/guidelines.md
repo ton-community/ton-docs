@@ -1,6 +1,8 @@
 # Tutorial Styling Guidelines
 
-So you've decided to write a tutorial for TON Documentation? We're excited to have you among our contributors! Please review the guidelines below to make sure your tutorial follows the style and quality of the existing content on TON Docs.
+So you've decided to write a tutorial for TON Documentation?
+
+We're excited to have you among our contributors! Please review the guidelines below to make sure your tutorial follows the style and quality of the existing content on TON Docs.
 
 It is important that you take some time to become familiar with the tutorial structure and how headings should be used. Please read through some of our existing tutorials and also have a look at [past Pull Requests](https://github.com/SwiftAdviser/ton-docs/pulls?q=is%3Apr+is%3Aclosed) before submitting your own.
 
