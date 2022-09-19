@@ -11,7 +11,7 @@ This section is for you to explain the context for this tutorial and why it matt
 
 *For example:*
 
-A smart contract is a computer program running on TON blockchain - or more exactly its [TVM](/learn/tvm-instructions/tvm_overview) (_TON Virtual Machine_). The contract is made of code (_compiled TVM instructions_) and data (_persistent state_) that are stored in some address on the TON blockchain.
+>A smart contract is simply a computer program running on TON blockchain - or more exactly its [TVM](/learn/tvm-instructions/tvm_overview) (_TON Virtual Machine_). The contract is made of code (_compiled TVM instructions_) and data (_persistent state_) that are stored in some address on TON.
 
 ## Prerequisites
 
@@ -21,7 +21,7 @@ This section is for you to explain any prior knowledge needed or any existing tu
 
 *For example:*
 
-- In this tutorial, we're going to mint a jetton on testnet, so before we proceed further make sure to prepare your [testnet](/develop/smart-contracts/environment/testnet) wallet first with enough balance.
+>In this tutorial, we're going to mint a jetton on testnet, so before we proceed further make sure to prepare your [testnet](/develop/smart-contracts/environment/testnet) wallet first with enough balance.
 
 ## Requirements
 
@@ -38,10 +38,12 @@ Any technology that needs to be installed **prior** to starting the tutorial and
 
 ## Body of the Tutorial
 
-- Please do not use "Body of the Tutorial" as a heading, use your own heading that is relevant to the material. "Getting started" is acceptable if you can't think of anything else 😉
-- Add any text content necessary to guide readers through your tutorial, and ***remember to proofread your content*** for spelling and grammar before you submit your tutorial. [Grammarly](http://grammarly.com) is a good free program that can help you to avoid spelling and grammar problems.
+- Please do not use "Body of the Tutorial" as a heading, use your own heading that is relevant to the material.
+  - "Getting started" is acceptable if you can't think of anything else 😉
+- Add any text content necessary to guide readers through your tutorial, and ***remember to proofread your content*** for spelling and grammar before you submit your tutorial.
+  - [Grammarly](http://grammarly.com) is a good free program that help you to avoid grammar problems.
 
-### Points to remember
+### Key points
 
 - Do not use "Body of the Tutorial" as a heading!
 - **Keep all sub-headings at H3,** don't go into H4 or lower**:**
