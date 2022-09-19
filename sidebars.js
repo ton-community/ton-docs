@@ -363,6 +363,8 @@ const sidebars = {
       'items': [
         'contribute/README',
         'contribute/maintainers',
+        'contribute/guidelines',
+        'contribute/sample-tutorial',
       ],
     },
     {
