@@ -52,7 +52,7 @@ const sidebars = {
     },
     {
       type: 'link',
-      label: 'Decentralization and Open Source',
+      label: 'Open-Source and Decentralization in TON',
       href: 'https://defi.org/ton/'
     },
 
