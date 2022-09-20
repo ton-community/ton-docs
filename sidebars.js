@@ -44,6 +44,12 @@ const sidebars = {
       ],
     },
     'learn/overviews/ADNL',
+
+    {
+      type: 'link',
+      label: 'TON Compared to Other L1s',
+      href: 'https://ton.org/analysis'
+    },
     {
       type: 'link',
       label: 'Decentralization and Open Source',
