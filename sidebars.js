@@ -44,6 +44,11 @@ const sidebars = {
       ],
     },
     'learn/overviews/ADNL',
+    {
+      type: 'link',
+      label: 'Decentralization and Open Source',
+      href: 'https://defi.org/ton/'
+    },
 
   ],
   develop: [
