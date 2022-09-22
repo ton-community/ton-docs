@@ -2,10 +2,20 @@
 
 ##  About bounce TONs back
 
-If you have the `throw_if` function (with code != 0) in recv_internal triggered and the bounce flag set([tblkch.pdf 4.2.5](https://newton-blockchain.github.io/tblkch.pdf)), all coins will be sent back
+If you have the `throw_if` function (with code != 0) in recv_internal triggered and the bounce flag set([tblkch.pdf 4.2.5](https://newton-blockchain.github.io/tblkch.pdf)), all coins will be sent back.
 
 Read more in the [original discussion](https://t.me/tondev/44958).
 
+## Payload size in bounced messages
+
+A bounced message has only 224 bits in the body, everything else (even references) is lost.
+
+:::info Example
+1. You send `msg_body: uint112 + ^[uint112]` to smart-contract to bounce
+2. SC returns bounced message with a `msg_body: 0xFFFFFFFF + uint112` **without** `^ref` payload, even though there is enough space for it.
+:::
+
+More info about this discussion is [here](https://t.me/tondev_eng/11201).
 
 ## About charging gas fees
 
