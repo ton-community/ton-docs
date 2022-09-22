@@ -8,9 +8,10 @@ By community efforts there are already several tutorials available for new TON d
 These materials are the best for newcomers to the TON development.
 :::
 
-Right now there is 2 great approaches how to start developing TON smart contracts:
+Right now there is 3 great approaches how to start developing TON smart contracts:
 * [TON Hello World: Step-by-step guide for writing your first smart contract in FunC](https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func)
 * [TON Learn Guides: 10 zero-to-hero lessons](https://github.com/romanovichim/TonFunClessons_Eng) ([Ru version](https://github.com/romanovichim/TonFunClessons_ru))
+* [Introduction in FunC: how to start developing in TON?](https://dev.to/dvlkv/introduction-in-func-how-to-start-developing-in-ton-50hp)
 
 
 ## Web and dApps development
