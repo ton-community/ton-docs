@@ -36,6 +36,10 @@ In case you are web or bot developer, you could find useful these repositories:
 * [NFT Minter Example](https://github.com/ton-foundation/token-contract/tree/main/nft/web-example) (JavaScript, with comments)
 * [NFT Minter using React](https://github.com/tonbuilders/tonbuilders-minter) (React, no comments)
 
+##### Tools to work with NFTs
+
+* [LiberMall/tnt](https://github.com/LiberMall/tnt) — TNT is an all-in-one command line tool to query, edit, and mint new Non-Fungible Tokens on The Open Network.
+
 #### Jetton Deployer / Fungible Tokens
 
 Jettons are custom fungible tokens on TON blockchain. You can create your own token on TON blockchain using Jetton Deployer example below:
@@ -47,6 +51,7 @@ Jettons are custom fungible tokens on TON blockchain. You can create your own to
 ##### Tools to work with Jettons
 
 * [Scaleton](http://scaleton.io) — see your custom token balances.
+* [@tegro/ton3-client](https://github.com/TegroTON/ton3-client#jettons-example) — SDK to query information about Jettons.
 
 ## Standard smart contracts
 
