@@ -274,6 +274,7 @@ const sidebars = {
       type: 'category',
       label: 'TON Services',
       items: [
+        'develop/web3/payments',
         'develop/web3/dns',
         {
           'type': 'html',
