@@ -18,6 +18,16 @@ Here are tutorials written using toncli library:
 
 Here is an [INSTALLATION](https://github.com/disintar/toncli/blob/master/INSTALLATION.md) tutorial in main repository.
 
+## Examples
+
+Contributors have prepared sample projects very well covered by the new tests. For example, now 2 commands can be used to deploy NFT collection or Jetton.
+
+```bash
+toncli start nft_colletion/jetton_minter/nft_item/jetton_wallet
+```
+
+All of these projects have a lot of interesting examples in terms of toncli and blockchain interaction, as well as very good tests that will help in developing custom smart contracts.
+
 ## Useful articles
 
 Other useful articles about using toncli in development:

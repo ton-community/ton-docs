@@ -6,7 +6,7 @@ If you didn't use toncli before, try [QUICK START GUIDE](https://github.com/disi
 
 ## Testing using toncli
 
-toncli uses FunC to test smart contracts.
+`toncli` uses FunC to test smart contracts. Also, the latest version supports Docker for quick environment setup.
 
 Right now the best tutorial describing testing using toncli is:
 * [How FunC test works?](https://github.com/disintar/toncli/blob/master/docs/advanced/func_tests_new.md)
@@ -16,6 +16,7 @@ Right now the best tutorial describing testing using toncli is:
 
 Here are repository with examples of FunC files used for test in one of the TON Contests:
 * [ton-blockchain/func-contest2-solutions](https://github.com/ton-blockchain/func-contest2-solutions)
+* [New examples by contributors](/develop/smart-contracts/sdk/toncli#examples)
 
 ## Testing using Docker
 
