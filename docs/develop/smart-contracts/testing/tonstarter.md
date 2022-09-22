@@ -2,7 +2,7 @@
 
 A tonstarter-contracts project rely on _TON Contract Executor_ library. Tests are running inside Node.js by running TVM in web-assembly using _ton-contract-executor_.
 
-To quick dive into testing you can read this article:
+Read this article first to understand all approaches to test in TON:
 
 * [TON Hello World: Step-by-step guide for writing your first smart contract in FunC (part 2) — Testing and Debugging](https://society.ton.org/ton-hello-world-guide-for-writing-first-smart-contract-in-func-part-2)
 
@@ -34,7 +34,24 @@ Basically you can **develop**, **debug**, and **fully cover your contract with u
 * [GitHub repository](https://github.com/Naltox/ton-contract-executor)
 * [npm.js](https://www.npmjs.com/package/ton-contract-executor)
 
-## Example
+## Examples
+
+### Testing from JavaScript
+
+With ton-contract-executor you can emulate TVM in JavaScript.
+
+To summarize:
+- you don't need to compile smart-contract from terminal
+- you don't need to deploy contract to the blockchain
+- TVM runs from JavaScript on your local machine
+
+Code example:
+
+```js reference
+https://github.com/Naltox/ton-contract-executor/blob/8b352d0cf96553e9ded19a102a890e17c973d017/src/smartContract/SmartContract.spec.ts#L92-L125
+```
+
+### Simple counter project
 
 :::tip
 You can see examples even using [Online IDE](https://glitch.com/edit/#!/remix/clone-from-repo?&REPO_URL=https%3A%2F%2Fgithub.com%2Fton-defi-org%2Ftonstarter-contracts.git) with a pre-defined repository.
@@ -44,7 +61,6 @@ Feel free to check repository code to find how _counter smart contract_ testing 
 * [main.fc](https://github.com/ton-defi-org/tonstarter-contracts/blob/main/contracts/main.fc) — original smart contract code example.
 * [counter.spec.ts](https://github.com/ton-defi-org/tonstarter-contracts/blob/main/test/counter.spec.ts) — test that cover counter methods.
 
-### Simple counter
 
 To start and experiment just copy repository from GitHub:
 ```bash
