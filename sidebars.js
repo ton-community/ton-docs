@@ -98,6 +98,7 @@ const sidebars = {
             'develop/smart-contracts/testing/toncli',
           ],
         },
+        'develop/smart-contracts/compile/README',
         {
           type: 'category',
           label: 'Deploying Contract',
