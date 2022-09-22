@@ -66,6 +66,7 @@ Messages to smart contracts are binary data. To construct such messages, you can
 
 Since Fift is close to TVM opcodes, it also helps to know the limits of your brain.
 
+- [Introduction to Fift](http://society.ton.org/introduction-to-fift) by TON Society
 - [Fift documentation](https://ton.org/fiftbase.pdf)
 - [Fift scripts for standard smart contracts](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
 

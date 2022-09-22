@@ -33,4 +33,5 @@ Here is a simple method to send money written on FunC:
 
 ## Tools
 
-Find IDE plugins, SDK for FunC in the [Tools & SDK](/develop/tools) section.
+* [IDE plugins](/develop/smart-contracts/environment/ide-plugins) to highlight code and simplify development
+* [Math.func](https://github.com/TonoxDeFi/math.func) — ready to use library made by community
