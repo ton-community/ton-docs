@@ -9,32 +9,27 @@ Further this bytecode (actually a [tree of cells](/learn/overviews/Cells), like 
 
 You can find more information about FunC in [DOCUMENTATION](/develop/func/types) section.
 
-## Example
-
-Here is a simple data loaded written on FunC:
-
-```cpp
-(slice, int) load_data() inline {
-  var ds = get_data().begin_parse();
-  return (
-    ds~load_msg_addr(), ;; owner_address
-    ds~load_uint(64)    ;; counter
-  );
-}
-
-() save_data(slice owner_address, int counter) impure inline {
-  set_data(begin_cell()
-    .store_slice(owner_address)
-    .store_uint(counter, 64)
-    .end_cell());
-}
-```
-
 ## Tutorials
 
 * If you want to learn how to use FunC you can read the [SMART CONTRACTS](/develop/smart-contracts/) section.
 * Quick one-page FunC cheatsheet on [learnxinyminutes.com](https://learnxinyminutes.com/docs/func/)
 
+
+## Example
+
+Here is a simple method to send money written on FunC:
+
+```cpp
+() send_money(slice address, int amount) impure inline {
+    var msg = begin_cell()
+        .store_uint(0x10, 6) ;; nobounce
+        .store_slice(address)
+        .store_grams(amount)
+        .end_cell();
+
+    send_raw_message(msg, 64);
+}
+```
 
 ## Tools
 
