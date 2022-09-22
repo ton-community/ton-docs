@@ -274,8 +274,13 @@ const sidebars = {
       type: 'category',
       label: 'TON Services',
       items: [
-        'develop/web3/payments',
         'develop/web3/dns',
+        {
+          'type':'link',
+          'label': 'TON Nominators',
+          'href': 'https://tonvalidators.org/',
+        },
+        'develop/web3/payments',
         {
           'type': 'html',
           'value': '<span class=\'menu__link\'>TON Proxy [2022 Q3]</span>',
@@ -288,6 +293,11 @@ const sidebars = {
           'type': 'html',
           'value': '<span class=\'menu__link\'>TON Storage [2022 Q4]</span>',
         },
+        {
+          'type': 'html',
+          'value': '<span class=\'menu__link\'>Bitcoin & EVM Crosschain</span>',
+        },
+
       ],
     },
     {
