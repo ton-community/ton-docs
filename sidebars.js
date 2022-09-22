@@ -274,13 +274,13 @@ const sidebars = {
       type: 'category',
       label: 'TON Services',
       items: [
-        'develop/web3/dns',
+        'develop/services/dns',
         {
           'type':'link',
           'label': 'TON Nominators',
           'href': 'https://tonvalidators.org/',
         },
-        'develop/web3/payments',
+        'develop/services/payments',
         {
           'type': 'html',
           'value': '<span class=\'menu__link\'>TON Proxy [2022 Q3]</span>',

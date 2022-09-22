@@ -32,14 +32,15 @@ Nevertheless, the smart contract guarantees proper operations. In the event one 
 
 ## Tools
 
-A technical description of payments channels can be found in the white paper in chapter 5: https://ton.org/docs/ton.pdf.
-
+* A technical description of payments channels can be found in the white paper in chapter 5: https://ton.org/docs/ton.pdf.
 * You can find ready-made smart contracts here: https://github.com/ton-blockchain/payment-channels.
 
-To use payments channels, you don’t need deep knowledge of cryptography. You can use prepared SDKs:
+To use payments channels, you don’t need deep knowledge of cryptography.  
+
+You can use prepared SDKs:
 
 * JavaScript SDK: https://github.com/toncenter/tonweb.
-* An example of how to use a payments channel: https://github.com/toncenter/payment-channels-example.
+* [An example of how to use a payments channel](https://github.com/toncenter/payment-channels-example)
 
 ## Networks of payments channels
 
