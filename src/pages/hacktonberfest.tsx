@@ -68,7 +68,7 @@ export default function Home(): JSX.Element {
                     <br/>
                     <br/>
 
-                    <h1 style={{ fontWeight: '650', textAlign:'center', padding: '0 10px' }}>Want to join to this list? 🚀</h1>
+                    <h2 style={{ fontWeight: '650', textAlign:'center', padding: '0 10px' }}>Want to join to this list? 🚀</h2>
                     <p style={{ textAlign:'center', fontWeight: '400', fontSize:'18px' }}>Please, read the page for maintainers and fill the form — <a href={"/contribute/hacktoberfest/as-maintainer"}>join as maintainer</a>. It's easy now!</p>
 
                     <br/>
