@@ -72,6 +72,17 @@ export default function Home(): JSX.Element {
                     <p style={{ textAlign:'center', fontWeight: '400', fontSize:'18px' }}>Please, read the page for maintainers and fill the form — <a href={"/contribute/hacktoberfest/as-maintainer"}>join as maintainer</a>. It's easy now!</p>
 
 
+                    <h1 style={{ fontWeight: '650', textAlign:'center', padding: '0 10px' }}>Rewards for every participant guaranteed! 💎</h1>
+                    <p style={{ textAlign:'center', fontWeight: '400', fontSize:'18px' }}>Every participant (maintainer and contributor) to any of TON Ecosystem projects will receive <b>Limited Hack-TON-berfest NFT</b>:</p>
+
+                    <div style={{textAlign:'center', margin: '0 auto'}}>
+                        <video width="500" style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
+                            <source src="/HackTonB.mp4" type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+
+
                     <br/>
 
                     <h1 style={{ fontWeight: '650', textAlign:'center', padding: '0 10px' }}>FAQ for Contributors</h1>
