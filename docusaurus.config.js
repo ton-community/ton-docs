@@ -127,7 +127,7 @@ const config = {
       announcementBar: {
         id: 'contribute/hacktoberfest',
         content:
-          '🎃 <b>HACKTOBERFEST starts soon! <a rel="noopener noreferrer" href="/hacktonberfest">Read more</a> about the event and rewards! 🎃</b>',
+          '🎃 <b>The HACKTOBERFEST event has already started! <a rel="noopener noreferrer" href="/hacktonberfest">Read more</a> about the event and rewards! 🎃</b>',
         backgroundColor: '#f4f0e1',
         textColor: 'rgba(181,58,37,1)',
         isCloseable: false,
