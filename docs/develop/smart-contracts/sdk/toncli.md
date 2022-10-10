@@ -12,7 +12,8 @@ Good solution for **Python** stack developers.
 
 Here are tutorials written using toncli library:
 * [Quick Start Guide](https://github.com/disintar/toncli/blob/master/docs/quick_start_guide.md) — simple steps how-to deploy example smart contract to TON.
-* [TON Learn Guides: 10 zero-to-hero lessons](https://github.com/romanovichim/TonFunClessons_Eng) ([Ru version](https://github.com/romanovichim/TonFunClessons_ru))
+* [TON Learn: FunC Journey Overview](https://society.ton.org/func-journey-part-1)
+* [TON Learn: 10 zero-to-hero lessons](https://github.com/romanovichim/TonFunClessons_Eng) ([Ru version](https://github.com/romanovichim/TonFunClessons_ru))
 
 ## Installation
 
