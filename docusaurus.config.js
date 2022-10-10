@@ -179,8 +179,13 @@ const config = {
             position: 'right',
           },
           {
-            href: 'https://t.me/TonDev_eng',
-            label: 'Chat',
+            to: 'https://answers.ton.org/',
+            label: 'Q&A',
+            position: 'right',
+          },
+          {
+            to: 'https://t.me/TonDev_eng',
+            label: 'Dev Chat',
             position: 'right',
           },
           {
@@ -199,27 +204,27 @@ const config = {
             items: [
               {
                 label: 'Wallets',
-                href: 'https://ton.org/wallets',
+                to: 'https://ton.org/wallets',
               },
               {
                 label: 'Toncoin',
-                href: 'https://ton.org/toncoin',
+                to: 'https://ton.org/toncoin',
               },
               {
                 label: 'Stake',
-                href: 'https://tonvalidators.org/',
+                to: 'https://tonvalidators.org/',
               },
               {
                 label: 'Apps & Services',
-                href: 'https://ton.app/',
+                to: 'https://ton.app/',
               },
               {
                 label: 'Bridge',
-                href: 'https://ton.org/bridge/',
+                to: 'https://ton.org/bridge/',
               },
               {
                 label: 'Domains',
-                href: 'https://dns.ton.org/',
+                to: 'https://dns.ton.org/',
               },
             ],
           },
@@ -228,27 +233,27 @@ const config = {
             items: [
               {
                 label: 'Documentation',
-                href: 'https://ton.org/docs',
+                to: 'https://ton.org/docs',
               },
               {
                 label: 'Explorers',
-                href: 'https://ton.app/explorers',
+                to: 'https://ton.app/explorers',
               },
               {
                 label: 'Bug Bounty',
-                href: 'https://github.com/ton-blockchain/bug-bounty',
+                to: 'https://github.com/ton-blockchain/bug-bounty',
               },
               {
                 label: 'Blockchain Analysis',
-                href: 'https://ton.org/analysis',
+                to: 'https://ton.org/analysis',
               },
               {
                 label: 'Validators',
-                href: 'https://ton.org/validator',
+                to: 'https://ton.org/validator',
               },
               {
                 label: 'Roadmap',
-                href: 'https://ton.org/roadmap',
+                to: 'https://ton.org/roadmap',
               },
             ],
           },
@@ -256,28 +261,28 @@ const config = {
             title: 'Community',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/ton?tab=Newest',
+                label: 'TON Overflow',
+                to: 'https://answers.ton.org/',
               },
               {
-                label: 'Dev Community',
-                href: 'https://t.me/tondev_eng',
+                label: 'Dev Community Hub',
+                to: 'https://t.me/tondev_eng',
               },
               {
                 label: 'Events & Contests',
-                href: 'https://ton.org/events',
+                to: 'https://ton.org/events',
               },
               {
                 label: 'Sponsorships',
-                href: 'https://ton.org/sponsorships',
+                to: 'https://ton.org/sponsorships',
               },
               {
                 label: 'Grants',
-                href: 'https://ton.org/grants',
+                to: 'https://ton.org/grants',
               },
               {
                 label: 'Careers',
-                href: 'https://jobs.ton.org/',
+                to: 'https://jobs.ton.org/',
               },
             ],
           },

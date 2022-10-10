@@ -81,6 +81,9 @@ html[data-theme='dark'] {
   article header h1 {
     font-size: 2rem !important;
   }
+  code {
+    font-size: 15px !important;
+  }
 }
 
 article {

@@ -378,6 +378,12 @@ const sidebars = {
       label: 'Run a Validator Node',
       href: 'https://ton.org/validator',
     },
+    {
+      type: 'link',
+      label: 'Ask a Question about TON',
+      href: 'https://answers.ton.org/',
+      className: 'noIcons'
+    },
   ],
   contribute: [
     {
