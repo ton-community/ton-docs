@@ -7,7 +7,10 @@ import TabItem from '@theme/TabItem';
 
 For local development of TON smart contracts you always need to prepare binaries of `func`, `fift` and `lite-client` on your machine.
 
-You can download and setup them below.
+You can download and setup them below, or read article from TON Society:
+* [Setting up a TON Development Environment](https://society.ton.org/setting-up-a-ton-development-environment)
+
+
 
 ## Precompiled binaries
 
@@ -21,10 +24,10 @@ Download the binaries from the table below - make sure to select the correct ver
 | MacOS Intel | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/macos-intel/fift)    | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/macos-intel/func)    | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/macos-intel/lite-client) | `brew install openssl`<br/>`brew reinstall readline`                                 |
 | Windows 64  | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/windows-64/fift.exe) | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/windows-64/func.exe) | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/windows-64/lite-client.exe) | Install [OpenSSL 1.1.1](https://slproweb.com/download/Win64OpenSSL_Light-1_1_1q.msi) |
 | Ubuntu 22   | [download](/ton-binaries/ubuntu-22-04/fift)                                 | [download](/ton-binaries/ubuntu-22-04/func)      | [download](/ton-binaries/ubuntu-22-04/lite-client) | `sudo apt install libatomic1 libssl-dev`                                             |
-| Ubuntu 20   | [download](/ton-binaries/ubuntu-20-04/fift)                                                    | [download](/ton-binaries/ubuntu-20-04/func)      | [download](/ton-binaries/ubuntu-20-04/lite-client) | `sudo apt install libssl-dev`                                                        |
-| Ubuntu 18   | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-18/fift)      | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-18/func)      | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-18/lite-client) | `sudo apt install libssl-dev`                                                        |
-| Ubuntu 16   | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-16/fift)      | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-16/func)      | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-16/lite-client) | `sudo apt install libssl-dev`                                                        |
-| Debian 10   | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/debian-10/fift)      | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/debian-10/func)      | [lite-client](https://github.com/ton-defi-org/ton-binaries/releases/download/debian-10/lite-client) | `sudo apt install libssl-dev`                                                        |
+| Ubuntu 20   | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-18/fift)                                                    | [download](/ton-binaries/ubuntu-20-04/func)      | [download](/ton-binaries/ubuntu-20-04/lite-client) | `sudo apt install libssl-dev`                                                        |
+| Ubuntu 18   | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-18/fift)      | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-18/func)      | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-18/lite-client) | `sudo apt install libssl-dev libreadline-dev`                                        |
+| Ubuntu 16   | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-16/fift)      | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-16/func)      | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/ubuntu-16/lite-client) | `sudo apt install libssl-dev libreadline-dev`                                        |
+| Debian 10   | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/debian-10/fift)      | [download](https://github.com/ton-defi-org/ton-binaries/releases/download/debian-10/func)      | [lite-client](https://github.com/ton-defi-org/ton-binaries/releases/download/debian-10/lite-client) | `sudo apt install libssl-dev libreadline-dev`                                                       |
 
 ### 2. Setup your binaries
 
