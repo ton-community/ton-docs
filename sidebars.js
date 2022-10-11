@@ -92,7 +92,12 @@ const sidebars = {
       label: 'TON Services',
       items: [
         'learn/services/payments',
-        'learn/services/dns',
+        {
+          type: 'doc',
+          label: 'TON DNS',
+          id: 'learn/services/dns',
+        },
+
         {
           'type': 'html',
           'value': '<span class=\'menu__link\'>TON Proxy [2022 Q3]</span>',
@@ -333,7 +338,7 @@ const sidebars = {
     {
       type: 'link',
       label: 'TON Services',
-      href: '/learn/services/dns',
+      href: '/learn/services/payments',
     },
     {
       type: 'link',
