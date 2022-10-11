@@ -34,16 +34,16 @@ const config = {
       {
         redirects: [
           {
-            to: '/docs/learn/services/dns',
-            from: '/docs/develop/services/dns',
+            to: '/learn/services/dns',
+            from: '/develop/services/dns',
           },
           {
-            to: '/docs/learn/services/payments',
-            from: '/docs/develop/services/payments',
+            to: '/learn/services/payments',
+            from: '/develop/services/payments',
           },
           {
-            to: '/docs/learn/networking/low-level-adnl',
-            from: '/docs/learn/overviews/adnl',
+            to: '/learn/networking/low-level-adnl',
+            from: '/learn/overviews/adnl',
           },
         ]
       }

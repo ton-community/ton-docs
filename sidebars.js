@@ -283,7 +283,7 @@ const sidebars = {
               type: 'category',
               label: 'Payment Processing',
               items: [
-                'develop/howto/payment-processing',
+                'develop/payment-processing/overview',
                 'develop/payment-processing/common',
                 'develop/payment-processing/deposits-single-wallet',
                 'develop/payment-processing/deposits-multi-wallet',

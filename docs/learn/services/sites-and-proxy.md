@@ -1,6 +1,6 @@
 The aim of this document is to provide a gentle introduction into TON Sites, which are Web sites accessed through the TON Network. TON Sites may be used as a convenient entry point for other TON Services. In particular, HTML pages downloaded from TON Sites may contain links to `ton://...` URIs representing payments that can be performed by the user by clicking to the link, provided a TON Wallet is installed on the user's device.
 
-From the technical perspective, TON Sites are very much like the usual Web sites, but they are accessed through the [TON Network](/networking/index.md) (which is an overlay network inside the Internet) instead of the Internet. More specifically, they have an [ADNL](/networking/index.md#ADNL) address (instead of a more customary IPv4 or IPv6 address), and they accept HTTP queries via [RLDP](/networking/index.md#RLDP) protocol (which is a higher-level RPC protocol built upon ADNL, the main protocol of TON Network) instead of the usual TCP/IP. All encryption is handled by ADNL, so there is no need to use HTTPS (i.e., TLS) in case the entry proxy is hosted locally on the user's device.
+From the technical perspective, TON Sites are very much like the usual Web sites, but they are accessed through the [TON Network](/learn/networking/overview) (which is an overlay network inside the Internet) instead of the Internet. More specifically, they have an [ADNL](/learn/networking/adnl) address (instead of a more customary IPv4 or IPv6 address), and they accept HTTP queries via [RLDP](/learn/networking/rldp) protocol (which is a higher-level RPC protocol built upon ADNL, the main protocol of TON Network) instead of the usual TCP/IP. All encryption is handled by ADNL, so there is no need to use HTTPS (i.e., TLS) in case the entry proxy is hosted locally on the user's device.
 
 In order to access existing and create new TON Sites one needs special gateways between the "ordinary" internet and the TON Network. Essentially, TON Sites are accessed with the aid of a HTTP->RLDP proxy running locally on the client's machine, and they are created by means of a reverse RLDP->HTTP proxy running on a remote web server.
 
@@ -22,9 +22,9 @@ In order to access existing TON Sites, you need a running instance of RLDP-HTTP 
 
 1. Download **rldp-http-proxy** from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Amaster+is%3Acompleted) (`rldp-http-proxy` folder). Binaries available for Windows, MacOS (Intel), Ubuntu.
 
-   Or you can compile the **rldp-http-proxy** yourself by this [instruction](/compile?id=rldp-http-proxy).
+   Or you can compile the **rldp-http-proxy** yourself by this [instruction](/develop/howto/compile#rldp-http-proxy).
 
-2. [Download](/compile?id=download-global-config) TON global config.
+2. [Download](/develop/howto/compile#download-global-config) TON global config.
 
 3. Run **rldp-http-proxy**:
 
@@ -42,13 +42,13 @@ In order to access existing TON Sites, you need a running instance of RLDP-HTTP 
 
 1. Download **rldp-http-proxy** from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Amaster+is%3Acompleted) (`rldp-http-proxy` folder). Binaries available for Windows, MacOS (Intel), Ubuntu.
 
-   Or you can compile the **rldp-http-proxy** yourself by this [instruction](/compile?id=rldp-http-proxy).
+   Or you can compile the **rldp-http-proxy** yourself by this [instruction](/develop/howto/compile#rldp-http-proxy).
 
-2. [Download](/compile?id=download-global-config) TON global config.
+2. [Download](/develop/howto/compile#download-global-config) TON global config.
 
 3. Download **generate-random-id** from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Amaster+is%3Acompleted) (`generate-random-id` folder). Binaries available for Windows, MacOS (Intel), Ubuntu.
 
-   Or you can compile the **generate-random-id** yourself by this [instruction](/compile?id=generate-random-id).
+   Or you can compile the **generate-random-id** yourself by this [instruction](/develop/howto/compile#generate-random-id).
 
 4. Generate a persistent ANDL address for your entry proxy
 
@@ -131,13 +131,13 @@ We suppose that you know already how to set up an ordinary website, and that you
 
 1. Download **rldp-http-proxy** from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Amaster+is%3Acompleted) (`rldp-http-proxy` folder). Binaries available for Windows, MacOS (Intel), Ubuntu.
 
-   Or you can compile the **rldp-http-proxy** yourself by this [instruction](/compile?id=rldp-http-proxy).
+   Or you can compile the **rldp-http-proxy** yourself by this [instruction](/develop/howto/compile#rldp-http-proxy).
 
-2. [Download](/compile?id=download-global-config) TON global config.
+2. [Download](/develop/howto/compile#download-global-config) TON global config.
 
 3. Download **generate-random-id** from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Amaster+is%3Acompleted) (`generate-random-id` folder). Binaries available for Windows, MacOS (Intel), Ubuntu.
 
-   Or you can compile the **generate-random-id** yourself by this [instruction](/compile?id=generate-random-id).
+   Or you can compile the **generate-random-id** yourself by this [instruction](/develop/howto/compile#generate-random-id).
 
 4. Generate a persistent ANDL address for your server
 
@@ -182,7 +182,7 @@ We suppose that you know already how to set up an ordinary website, and that you
 
    You can visit TON Site `http://<your-adnl-address>.adnl` (`http://vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3.adnl` in this example) from a browser running on a client machine as explained in Section "Accessing TON Sites" and check whether your TON Site is actually available to the public.
 
-   If you want to, you can [register](/web3/site-domain-management.md#How-to-link-a-TON-site-to-a-domain) a TON DNS domain, such as 'example.ton', and create a `site` record for this domain pointing to the persistent ADNL address of your TON Site. Then the RLDP-HTTP proxies running in client mode would resolve http://example.ton as pointing to your ADNL address and will access your TON Site.
+   If you want to, you can [register](/participate/web3/site-management) a TON DNS domain, such as 'example.ton', and create a `site` record for this domain pointing to the persistent ADNL address of your TON Site. Then the RLDP-HTTP proxies running in client mode would resolve http://example.ton as pointing to your ADNL address and will access your TON Site.
 
    You can also run a reverse proxy on a separate server and set your webserver as a remote address. In this case use `-R '*'@<YOUR_WEB_SERVER_HTTP_IP>:<YOUR_WEB_SERVER_HTTP_PORT>` instead of `-L '*'`.
 

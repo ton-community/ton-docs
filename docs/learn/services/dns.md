@@ -22,7 +22,7 @@ const address: Address = await tonweb.dns.getWalletAddress('test.ton');
 const address: Address = await tonweb.dns.resolve('test.ton', TonWeb.dns.DNS_CATEGORY_WALLET);
 ```
 
-Also [lite-client](/compile#lite-client) and [tonlib-cli](/compile#tonlib-cli) is supported DNS queries from revision `35d1724`.
+Also [lite-client](/develop/howto/compile#lite-client) and [tonlib-cli](/develop/howto/compile#tonlib-cli) is supported DNS queries from revision `35d1724`.
 
 **lite-client:**
 

@@ -6,7 +6,7 @@ Transaction fees, gas payments (i.e., smart-contract message processing fees) an
 
 Toncoin is used to make deposits required to become a blockchain validator.
 
-How to process payments in Toncoins is described in the [corresponding section](/payment-processing/overview.md).
+How to process payments in Toncoins is described in the [corresponding section](/develop/payment-processing/overview).
 
 You can find out where to buy or exchange Toncoins on the [website](https://ton.org/coin).
 
@@ -24,6 +24,6 @@ Note that if there are a large number of extra currencies created, the accounts 
 
 Thus, extra currencies are best used for well-known decentralized currencies (for example, wrapped Bitcoin or Ether) and the creation of such an extra currency should be quite expensive.
 
-[Jettons](/defi/tokens.md#Jettons) are suitable for other tasks.
+[Jettons](/learn/defi/tokens#jettons) are suitable for other tasks.
 
 At the moment, no extra currency has been created in the TON blockchain - TON blockchain has full support for extra currencies by accounts and messages, but the minter system contract for their creation has not been made yet.
