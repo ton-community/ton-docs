@@ -1,4 +1,4 @@
-# Toncoin
+# Native Token: Toncoin
 
 Native cryptocurrency of the TON Blockchain is **Toncoin**.
 

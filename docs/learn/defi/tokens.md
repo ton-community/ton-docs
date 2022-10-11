@@ -1,4 +1,4 @@
-# Tokens in TON
+# Tokens (FT, NFT)
 
 [Distributed TON tokens overview](https://telegra.ph/Scalable-DeFi-in-TON-03-30)
 

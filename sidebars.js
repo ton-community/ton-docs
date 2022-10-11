@@ -143,20 +143,6 @@ const sidebars = {
 
       ],
     },
-    {
-      'type': 'html',
-      'value': '<hr/>',
-    },
-    {
-      'type': 'html',
-      'value': '<span class=\'menu__link\'><b><small> Decentralized Finance (DeFi) </small></b></span>',
-    },
-    'learn/defi/coins',
-    'learn/defi/subscriptions',
-    'learn/defi/tokens',
-    'learn/defi/ton-payments',
-
-
   ],
   develop: [
 
@@ -263,7 +249,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Develop Web Apps & Bots',
+      label: 'Develop dApps & Bots',
       items: [
         'develop/tools/README',
         {
@@ -277,21 +263,27 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Best Practices',
+          label: 'DeFi Development',
           items: [
-            {
-              type: 'category',
-              label: 'Payment Processing',
-              items: [
-                'develop/payment-processing/overview',
-                'develop/payment-processing/common',
-                'develop/payment-processing/deposits-single-wallet',
-                'develop/payment-processing/deposits-multi-wallet',
-                'develop/payment-processing/withdrawals',
-              ],
-            },
+            'learn/defi/coins',
+            'learn/defi/tokens',
+            'learn/defi/ton-payments',
+            'learn/defi/subscriptions',
           ],
         },
+
+        {
+          type: 'category',
+          label: 'Payment Processing',
+          items: [
+            'develop/payment-processing/overview',
+            'develop/payment-processing/common',
+            'develop/payment-processing/deposits-single-wallet',
+            'develop/payment-processing/deposits-multi-wallet',
+            'develop/payment-processing/withdrawals',
+          ],
+        },
+
       ],
     },
     {

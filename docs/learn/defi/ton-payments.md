@@ -7,9 +7,11 @@ containing the transactions in question is confirmed.
 
 The overall overhead of such instant payments is so small that one can use them for micropayments.
 
-[Overview](https://telegra.ph/TON-Payments-07-01)
+* [TON Payments Overview article](/learn/services/payments)
 
+:::info 
 The theory of TON Payments is well described in [TON whitepaper](https://ton.org/docs/ton.pdf), chapter 5.
+:::
 
 ## Payment Channels
 
