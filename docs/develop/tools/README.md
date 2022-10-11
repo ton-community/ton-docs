@@ -63,9 +63,9 @@ TonLib was a one of the first libraries for working with TON blockchain.
 
 #### Usage examples
 
-* [Desktop standard wallet (C++ and Qt)](https://github.com/newton-blockchain/wallet-desktop)
-* [Android standard wallet (Java)](https://github.com/trm-dev/wallet-android)
-* [iOS standard wallet (Swift)](https://github.com/trm-dev/wallet-ios)
+* [Desktop standard wallet (C++ and Qt)](https://github.com/ton-blockchain/wallet-desktop)
+* [Android standard wallet (Java)](https://github.com/ton-blockchain/wallet-android)
+* [iOS standard wallet (Swift)](https://github.com/ton-blockchain/wallet-ios)
 * [TonLib CLI (C++)](https://github.com/ton-blockchain/ton/blob/master/tonlib/tonlib/tonlib-cli.cpp)
 
 

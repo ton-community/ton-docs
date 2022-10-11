@@ -8,6 +8,12 @@ Right now there is 3 great approaches how to start developing TON smart contract
 
 ## Environment
 
+### Local
+
+A local environment allows you to develop contracts _faster_, with more comfort, and use bonuses like [IDE plugins](/develop/smart-contracts/environment/ide-plugins) with syntax highlight for smart contracts development.
+
+Continue in the [INSTALLATION](/develop/smart-contracts/environment/installation) guide.
+
 ### Online
 
 You can try to deploy TON smart contracts online using [Glitch Workspace](https://glitch.com/edit/#!/remix/clone-from-repo?&REPO_URL=https%3A%2F%2Fgithub.com%2Fton-defi-org%2Ftonstarter-contracts.git).
@@ -16,24 +22,16 @@ Glitch runs the [tonstarter-contracts](https://github.com/ton-defi-org/tonstarte
 
 [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button-v2.svg)](https://glitch.com/edit/#!/remix/clone-from-repo?&REPO_URL=https%3A%2F%2Fgithub.com%2Fton-defi-org%2Ftonstarter-contracts.git)
 
-:::info
-Online IDE is perfect for hackathons, contests, or just to try TON development.
-:::
-
-### Local
-
-A local environment allows you to develop contracts _faster_, with more comfort, and use bonuses like [IDE plugins](/develop/smart-contracts/environment/ide-plugins) with syntax highlight for smart contracts development.
-
-Continue in the [INSTALLATION](/develop/smart-contracts/environment/installation) guide.
 
 ## Development Toolkit
 
 Start developing, testing and debugging smart contracts easily with these resources:
 
-* [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) - All-in-one templates to build, deploy and test FunC contracts
-* [toncli](https://github.com/disintar/toncli) — Comfy CLI to build, deploy and test FunC contracts.
-* [MyLocalTON](/participate/nodes/local-ton.md) - Run your private TON blockchain
-* [ton-contract-executor](https://github.com/Naltox/ton-contract-executor) - Library for running contracts locally
+* [toncli](/develop/smart-contracts/sdk/toncli) - Comfy CLI to build, deploy and test FunC contracts (Python)
+* [tonstarter-contracts](/develop/smart-contracts/sdk/tonstarter) - SDK to build, deploy and test FunC contracts (by ton.js)
+* [ton-compiler](https://github.com/ton-community/ton-compiler) - Cross-platform bindings for TON FunC compiler (JS)
+* [ton-contract-executor](https://github.com/Naltox/ton-contract-executor) - Library for running contracts locally (JS)
+* [MyLocalTON](/participate/nodes/local-ton) - Run your private TON blockchain
 
 
 ## TON Virtual Machine
@@ -48,6 +46,13 @@ You can read more about how TVM works in [TVM bird's-eye overview](/learn/tvm-in
 High-level language FunC is used to program smart contracts on TON.
 
 Feel free to read more about FunC in [DOCUMENTATION](/develop/func/overview.md) section.
+
+## Smart Contracts Examples
+
+Standard basic smart contracts like wallets, elector (manages validation on TON), multi-signature wallet, etc. can be a reference when studying.
+
+* [List of the first smart contracts in ton-blockchain](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
+* [Math.func library](https://github.com/TonoxDeFi/math.func) — ready to use library made by community
 
 ## Smart Contract Guidelines
 

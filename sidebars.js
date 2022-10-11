@@ -24,37 +24,138 @@ const sidebars = {
       'type': 'html',
       'value': '<span class=\'menu__link\'><b><small> TON Concepts </small></b></span>',
     },
-    'learn/overviews/TON_blockchain_overview',
-    'learn/overviews/Cells',
     {
       type: 'category',
-      label: 'TON Virtual Machine (TVM)',
+      label: 'TON Blockchain',
       items: [
-        'learn/tvm-instructions/tvm_overview',
-        'learn/tvm-instructions/tvm_exit_codes',
-        'learn/tvm-instructions/instructions',
+        'learn/overviews/TON_blockchain_overview',
+        'learn/overviews/Cells',
+        {
+          type: 'category',
+          label: 'TON Virtual Machine (TVM)',
+          items: [
+            'learn/tvm-instructions/tvm_overview',
+            'learn/tvm-instructions/tvm_exit_codes',
+            'learn/tvm-instructions/instructions',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'TL-B Language',
+          items: [
+            'learn/overviews/TL-B',
+            'learn/overviews/TL-B_language',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'TON Networking',
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'learn/networking/overview',
+            },
+            {
+              type: 'category',
+              label: 'ADNL Protocol',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'Overview',
+                  id: 'learn/networking/adnl',
+                },
+                'learn/networking/low-level-adnl',
+              ],
+            },
+            'learn/networking/overlay-subnetworks',
+            'learn/networking/rldp',
+            'learn/networking/ton-dht',
+          ],
+        },
+
+        {
+          type: 'link',
+          label: 'TON Compared to Other L1s',
+          href: 'https://ton.org/analysis',
+        },
+        {
+          type: 'link',
+          label: 'Open-Source and Decentralization in TON',
+          href: 'https://defi.org/ton/',
+        },
       ],
     },
-    {
-      type: 'category',
-      label: 'Typed Language - Binary',
-      items: [
-        'learn/overviews/TL-B',
-        'learn/overviews/TL-B_language',
-      ],
-    },
-    'learn/overviews/ADNL',
 
     {
-      type: 'link',
-      label: 'TON Compared to Other L1s',
-      href: 'https://ton.org/analysis'
+      type: 'category',
+      label: 'TON Services',
+      items: [
+        'learn/services/payments',
+        'learn/services/dns',
+        {
+          'type': 'html',
+          'value': '<span class=\'menu__link\'>TON Proxy [2022 Q3]</span>',
+        },
+        {
+          'type': 'html',
+          'value': '<span class=\'menu__link\'>TON Sites [2022 Q3]</span>',
+        },
+        {
+          'type': 'html',
+          'value': '<span class=\'menu__link\'>TON Storage [2022 Q4]</span>',
+        },
+        {
+          'type': 'html',
+          'value': '<span class=\'menu__link\'>Bitcoin & EVM Crosschain</span>',
+        },
+      ],
     },
     {
-      type: 'link',
-      label: 'Open-Source and Decentralization in TON',
-      href: 'https://defi.org/ton/'
+      type: 'category',
+      label: 'TON Whitepapers',
+      items: [
+        {
+          type: 'doc',
+          label: 'Overview',
+          id: 'learn/docs',
+        },
+        {
+          type: 'link',
+          label: 'TON',
+          href: 'https://ton.org/ton.pdf',
+        },
+        {
+          type: 'link',
+          label: 'TON Virtual Machine',
+          href: 'https://ton.org/tvm.pdf',
+        },
+        {
+          type: 'link',
+          label: 'TON Blockchain',
+          href: 'https://ton.org/tblkch.pdf',
+        },
+        {
+          type: 'link',
+          label: 'Catchain Consensus Protocol',
+          href: 'https://ton.org/catchain.pdf',
+        },
+
+      ],
     },
+    {
+      'type': 'html',
+      'value': '<hr/>',
+    },
+    {
+      'type': 'html',
+      'value': '<span class=\'menu__link\'><b><small> Decentralized Finance (DeFi) </small></b></span>',
+    },
+    'learn/defi/coins',
+    'learn/defi/subscriptions',
+    'learn/defi/tokens',
+    'learn/defi/ton-payments',
+
 
   ],
   develop: [
@@ -129,7 +230,6 @@ const sidebars = {
               href: '/develop/getting-started#jetton-deployer--fungible-tokens',
             },
 
-
           ],
         },
         {
@@ -173,7 +273,7 @@ const sidebars = {
             'develop/tools/apis/README',
             'develop/tools/apis/toncenter',
             'develop/tools/apis/adnl',
-          ]
+          ],
         },
         {
           type: 'category',
@@ -239,66 +339,14 @@ const sidebars = {
       href: '/learn/introduction',
     },
     {
-      type: 'category',
-      label: 'TON Whitepapers',
-      items: [
-        {
-          type: 'doc',
-          label: 'Overview',
-          id: 'learn/docs',
-        },
-        {
-          type: 'link',
-          label: 'TON',
-          href: 'https://ton.org/ton.pdf',
-        },
-        {
-          type: 'link',
-          label: 'TON Virtual Machine',
-          href: 'https://ton.org/tvm.pdf',
-        },
-        {
-          type: 'link',
-          label: 'TON Blockchain',
-          href: 'https://ton.org/tblkch.pdf',
-        },
-        {
-          type: 'link',
-          label: 'Catchain Consensus Protocol',
-          href: 'https://ton.org/catchain.pdf',
-        },
-
-      ],
+      type: 'link',
+      label: 'TON Services',
+      href: '/learn/services/dns',
     },
     {
-      type: 'category',
-      label: 'TON Services',
-      items: [
-        'develop/services/dns',
-        {
-          'type':'link',
-          'label': 'TON Nominators',
-          'href': 'https://tonvalidators.org/',
-        },
-        'develop/services/payments',
-        {
-          'type': 'html',
-          'value': '<span class=\'menu__link\'>TON Proxy [2022 Q3]</span>',
-        },
-        {
-          'type': 'html',
-          'value': '<span class=\'menu__link\'>TON Sites [2022 Q3]</span>',
-        },
-        {
-          'type': 'html',
-          'value': '<span class=\'menu__link\'>TON Storage [2022 Q4]</span>',
-        },
-        {
-          'type': 'html',
-          'value': '<span class=\'menu__link\'>Bitcoin & EVM Crosschain</span>',
-        },
-
-      ],
+      type: 'link',
+      label: 'TON Whitepapers',
+      href: '/learn/docs',
     },
     {
       type: 'category',
@@ -328,6 +376,23 @@ const sidebars = {
         'develop/howto/pow-givers',
       ],
     },
+    {
+      type: 'category',
+      label: 'Compile from Sources',
+      items: [
+
+        {
+          type: 'doc',
+          label: 'Compilation Instructions',
+          id: 'develop/howto/compile',
+        },
+        {
+          type: 'doc',
+          label: 'Instructions for low-memory machines',
+          id: 'develop/howto/compile-swap',
+        },
+      ],
+    },
 
     // {
     //   type: 'category',
@@ -344,6 +409,10 @@ const sidebars = {
       'type': 'html',
       'value': '<hr/>',
     },
+    {
+      'type': 'html',
+      'value': '<span class=\'menu__link\'><b><small> Participate in TON Ecosystem </small></b></span>',
+    },
     'participate/explorers',
     {
       type: 'category',
@@ -359,31 +428,53 @@ const sidebars = {
       ],
     },
     {
+      type: 'doc',
+      label: 'Use Cross-chain Bridges',
+      id: 'participate/crosschain-bridges',
+    },
+    {
+      type: 'doc',
+      label: 'Stake with Nominator Pools',
+      id: 'participate/nominators',
+    },
+    {
       type: 'category',
       label: 'Run a Node',
       items: [
         'participate/nodes/node-types',
-        'participate/nodes/run-node',
-        'participate/nodes/node-maintenance-and-security',
         'participate/nodes/local-ton',
+        'participate/nodes/node-maintenance-and-security',
+        'participate/nodes/run-node',
+        {
+          type: 'link',
+          label: 'Run a Validator Node',
+          href: 'https://ton.org/validator',
+        },
       ],
     },
     {
       type: 'link',
-      label: 'Join in a Nominator Pool',
-      href: 'https://tonvalidators.org/',
-    },
-    {
-      type: 'link',
-      label: 'Run a Validator Node',
-      href: 'https://ton.org/validator',
+      label: 'Standards Discussion (TEPs)',
+      href: 'https://github.com/ton-blockchain/TEPs',
     },
     {
       type: 'link',
       label: 'Ask a Question about TON',
       href: 'https://answers.ton.org/',
-      className: 'noIcons'
+      className: 'noIcons',
     },
+    {
+      'type': 'html',
+      'value': '<hr/>',
+    },
+    {
+      'type': 'html',
+      'value': '<span class=\'menu__link\'><b><small> Participate in Web3 </small></b></span>',
+    },
+    'participate/web3/overview',
+    'participate/web3/dns',
+    'participate/web3/setting-proxy',
+    'participate/web3/site-management',
   ],
   contribute: [
     {

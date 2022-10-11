@@ -121,7 +121,9 @@ Remember to set the **environment variable** `FIFTPATH` to point to this directo
 
 ## Build from source
 
-If you don't want to rely on pre-compiled binaries and prefer to compile the binaries by yourself, you can follow the [official instructions](https://ton.org/#/compile). The gist instructions provided below:
+If you don't want to rely on pre-compiled binaries and prefer to compile the binaries by yourself, you can follow the [official instructions](/develop/howto/compile).
+
+The ready-to-use gist instructions provided below:
 
 ### Linux (Ubuntu / Debian)
 

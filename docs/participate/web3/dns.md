@@ -1,6 +1,4 @@
-# TON DNS
-
-## Overview
+# What is TON DNS?
 
 **Launch date:** Q2 2022
 
@@ -28,7 +26,7 @@ ENS is also limited in mass adoption potential due to inherent limitations of th
 
 ## More info
 
-* [TON DNS in Docs](/develop/howto/dns)
+* [TON DNS in Docs](/learn/services/dns)
 * [TON DNS Standard](https://github.com/ton-blockchain/TIPs/issues/81)
 * [TON DNS in TON Whitepaper - section 4.3](https://ton-blockchain.github.io/docs/ton.pdf)
 * [TON DNS Auction Client](https://dns.ton.org/)

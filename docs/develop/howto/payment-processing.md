@@ -1,10 +1,9 @@
 # Asset processing on TON
-
 This document contains overview and specific details which explain how to process (send and accept) digital assets on TON network.
 
 
 ## Global overview
-Embodying fully asynchronous approach TON blockchain involves a few concepts which are uncommon to traditional blockchains. In particular each interaction of any actor with blockchain consist of graph of asynchronously transferred messages between smart-contracts and/or external world. Common path of any interaction start from external message sent to `wallet` smart-contract which authenticate message sender using public-key cryptography, take duty of fee payment and sending inner blockchain messages. That way transactions on TON network is not synonym of interaction of user with blockchain, but merely node of the message graph: result of accepting and processing of message by smart-contract which may or may not lead to arising of new messages. Interaction may consist of arbitrary number of messages and transactions and span across prolonged period of time. Technically transactions with queues of messages are aggregated to blocks processed by validators. Asynchronous nature of **TON blockchain does not allow to predict hash and lt (logical time) of transaction** on the stage of sending message. Transactions accepted to block are final and will not be tampered. 
+Embodying fully asynchronous approach TON blockchain involves a few concepts which are uncommon to traditional blockchains. In particular each interaction of any actor with blockchain consist of graph of asynchronously transferred messages between smart-contracts and/or external world. Common path of any interaction start from external message sent to `wallet` smart-contract which authenticate message sender using public-key cryptography, take duty of fee payment and sending inner blockchain messages. That way transactions on TON network is not synonym of interaction of user with blockchain, but merely node of the message graph: result of accepting and processing of message by smart-contract which may or may not lead to arising of new messages. Interaction may consist of arbitrary number of messages and transactions and span across prolonged period of time. Technically transactions with queues of messages are aggregated to blocks processed by validators. Asynchronous nature of **TON blockchain does not allow to predict hash and lt (logical time) of transaction** on the stage of sending message. Transactions accepted to block are final and will not be tampered.
 
 **Each inner blockchain message, that is message from one smart-contract to another, bear some amount of digital assets as well as arbitrary portion of data.**
 
@@ -20,7 +19,7 @@ TON has three types of digital assets. First is TON Coin, main token of the netw
 To send TON coins user need to send request via external message, that is message from outer world to the blockchain, to special `wallet` smart-contract (see below). Upon receiving this request `wallet` will send inner message with desired amount of assets and optional data payload, for instance text comment.
 
 ## Wallet smart-contract
-Wallet smart-contracts are contracts on TON-network which serve task to allow actor outside blockchain to interact with blockchain entities. Generally it solves three challenges: 
+Wallet smart-contracts are contracts on TON-network which serve task to allow actor outside blockchain to interact with blockchain entities. Generally it solves three challenges:
 * authenticate owner: reject to process and pay fees for non-owners requests
 * replay protection: prohibit repetitive execution of one request, for instance sending assets to some other smart-contract
 * initiate arbitrary interaction with other smart-contracts
@@ -62,7 +61,7 @@ Transaction for contract can be obtained by [getTransactions](https://github.com
 ## Accepting payments
 There are a few approaches to accept payments that differs in method of distinguishing users.
 ### Invoice based approach
-To accept payments basing on attached comments, service should 
+To accept payments basing on attached comments, service should
 1. Deploy `wallet` contract
 2. Generate unique `invoice` for each user. String representation of uuid32 will be enough.
 3. Users should be instructed to send TON coins to service's `wallet` contract with attached `invoice` as comment.
@@ -73,7 +72,7 @@ To accept payments basing on attached comments, service should
 
 1. Service should deploy `wallet` and keep it funded to prevent contract destruction due to storage fees. Note storage fees are generally less than 1 TON Coin per year.
 2. Service should get from user `destination_address` and optional `comment`. Note, for now we recommend either prohibit unfinished outgoing payments with the same (`destination_address`, `value`, `comment`) set or proper scheduling of those payments in that way that next payment is initiated only after previous one is confirmed.
-3. Form [msg.dataText](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L98) with `comment` as text. 
+3. Form [msg.dataText](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L98) with `comment` as text.
 4. Form [msg.message](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L108) which contains `destination_address`, empty `public_key`, `amount` and `msg.dataText`.
 5. Form [Action](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L149) which contains set of outgoing messages.
 6. Use create [createQuery](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L255) and send [sendQuery](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L260) query to send outgoing payment.

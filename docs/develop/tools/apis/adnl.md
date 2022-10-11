@@ -34,7 +34,7 @@ Requests and responses to the server are described by a TL schema that allows yo
 
 ### Usage example:
 
-- [Desktop standard wallet](https://github.com/newton-blockchain/wallet-desktop) (C++ and Qt)
-- [Android standard wallet](https://github.com/trm-dev/wallet-android) (Java)
-- [iOS standard wallet](https://github.com/trm-dev/wallet-ios) (Swift)
+- [Desktop standard wallet](https://github.com/ton-blockchain/wallet-desktop) (C++ and Qt)
+- [Android standard wallet](https://github.com/ton-blockchain/wallet-android) (Java)
+- [iOS standard wallet](https://github.com/ton-blockchain/wallet-ios) (Swift)
 - [TonLib CLI](https://github.com/ton-blockchain/ton/blob/master/tonlib/tonlib/tonlib-cli.cpp) (C++)

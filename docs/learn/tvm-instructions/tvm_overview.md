@@ -59,7 +59,7 @@ And four distinct flavours of cells:
 ### Initialization of TVM
 So when transaction execution gets to Computation phase, TVM initialises and then executes commands (op-codes) from _Current continuation_ until there is no more commands to execute (and no continuation for return jumps).
 
-Detailed description of initialization can be find in [Ton-blockchain 4.4](https://ton.org/tblkch.pdf).
+Detailed description of initialization can be found in [Ton-blockchain 4.4](https://ton.org/tblkch.pdf).
 For ordinary transactions caused by message the initial state is as follows:
 * stack: 5 elements are put to the stack
     * The balance of the smart contract (after crediting the value of the inbound message) is passed as an Integer amount of nanoTONs.
