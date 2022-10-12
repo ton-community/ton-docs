@@ -252,14 +252,14 @@ const sidebars = {
       type: 'category',
       label: 'Develop dApps & Bots',
       items: [
-        'develop/tools/README',
+        'develop/dapps/README',
         {
           type: 'category',
           label: 'API Types',
           items: [
-            'develop/tools/apis/README',
-            'develop/tools/apis/toncenter',
-            'develop/tools/apis/adnl',
+            'develop/dapps/apis/README',
+            'develop/dapps/apis/toncenter',
+            'develop/dapps/apis/adnl',
           ],
         },
         {
@@ -277,11 +277,11 @@ const sidebars = {
           type: 'category',
           label: 'Payment Processing',
           items: [
-            'develop/payment-processing/overview',
-            'develop/payment-processing/common',
-            'develop/payment-processing/deposits-single-wallet',
-            'develop/payment-processing/deposits-multi-wallet',
-            'develop/payment-processing/withdrawals',
+            'develop/dapps/payment-processing/overview',
+            'develop/dapps/payment-processing/common',
+            'develop/dapps/payment-processing/deposits-single-wallet',
+            'develop/dapps/payment-processing/deposits-multi-wallet',
+            'develop/dapps/payment-processing/withdrawals',
           ],
         },
 

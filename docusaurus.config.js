@@ -167,13 +167,13 @@ const config = {
             type: 'doc',
             docId: 'learn/introduction',
             position: 'left',
-            label: 'Learn',
+            label: '📚 Learn',
           },
           {
             type: 'doc',
             docId: 'develop/getting-started',
             position: 'left',
-            label: 'Build',
+            label: '🛠 Develop',
           },
           // {
           //   type: 'doc',
@@ -185,7 +185,7 @@ const config = {
             type: 'doc',
             docId: 'participate/README',
             position: 'left',
-            label: 'Participate',
+            label: '🚀 Participate',
           },
           // {
           //   type: 'doc',

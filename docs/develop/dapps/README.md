@@ -9,34 +9,44 @@ Here you can links to the most important resources for you to get started with T
 - [Explorers](https://ton.app/explorers) — to read transactions in the blockchain.
 - [Testnet](/develop/smart-contracts/environment/testnet) — testnet and how to use it.
 
+## Learning by Examples
 
-### SDK to interact with TON
+In case you are web or bot developer, you could find useful these repositories:
+
+### Examples
+
+* [TonCenter API Examples](https://github.com/toncenter/examples) (JavaScript, with comments)
+* [Payment Channels Example](https://github.com/toncenter/payment-channels-example) (JavaScript, with comments)
+* [TON Bridge front-end](https://github.com/ton-blockchain/bridge) (Vue.js, no comments)
+* [Web Wallet source code](https://github.com/toncenter/ton-wallet) (JavaScript, no comments)
+
+## SDK to interact with TON
 
 Here is a list of modern SDKs that continuously supported and improved:
 
-#### JavaScript SDK
+### JavaScript SDK
 
 * [tonweb](https://github.com/toncenter/tonweb) — JavaScript API for TON blockchain.
 * [ton-js](https://github.com/tonwhales/ton) — Cross-platform client for TON blockchain.
 * [@tegro/ton3-client](https://github.com/TegroTON/ton3-client) — ton3 client
 
-#### Python SDK
+### Python SDK
 
 * [psylopunk/pytonlib](https://github.com/psylopunk/pytonlib) — Python SDK.
 * [toncenter/pytonlib](https://github.com/toncenter/pytonlib) — Python SDK.
 * [tonfactory/tonsdk](https://github.com/tonfactory/tonsdk) — Analogue of the tonweb js library.
 
-#### Other SDK
+### Other SDK
 
 * [tonutils-go](https://github.com/xssnick/tonutils-go) — Go utils for TON blockchain.
 * [ton-kotlin](https://github.com/andreypfau/ton-kotlin) — Kotlin SDK for TON blockchain.
 
-### Telegram Web Apps
+## Telegram Web Apps (TWA)
 
 One of the first repositories made by community:
 * [ton-defi-org/tonstarter-twa](https://github.com/ton-defi-org/tonstarter-twa)
 
-### Authorization
+## Authorization & TON Connect
 
 In case you want to add login to your website using wallet exists these approaches:
 
@@ -45,7 +55,7 @@ In case you want to add login to your website using wallet exists these approach
 * [Tonhub Extensions](https://developers.tonhub.com/docs/apps) by Tonhub
 
 
-### TonLib SDK
+## TonLib SDK
 
 :::caution deprecated
 These technologies contains outdated, very low-level stack, so please use it if any other SDK are not working for you. It will save your time a lot.

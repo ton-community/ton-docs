@@ -47,12 +47,21 @@ High-level language FunC is used to program smart contracts on TON.
 
 Feel free to read more about FunC in [DOCUMENTATION](/develop/func/overview.md) section.
 
-## Smart Contracts Examples
+
+## Smart Contract Examples
+
+:::info little tip
+Feel free to focus on smart contracts written using _FunC_  (***.fc**) instead of low-level *Fift* (***.fif**) language. It would be easier experience.
+:::
 
 Standard basic smart contracts like wallets, elector (manages validation on TON), multi-signature wallet, etc. can be a reference when studying.
 
-* [List of the first smart contracts in ton-blockchain](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
-* [Math.func library](https://github.com/TonoxDeFi/math.func) — ready to use library made by community
+If you're already familiar with smart contracts, you could try to read the following examples:
+
+- [Fungible (Jettons), Non-Fungible (NFT), Semi-Fungible Tokens Smart Contracts](https://github.com/ton-blockchain/token-contract/tree/main)
+- [Standard Smart Contracts Examples](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
+- [Wallet V4 Smart Contract Example](https://github.com/ton-blockchain/wallet-contract)
+- [Math.func library](https://github.com/TonoxDeFi/math.func) — ready to use library made by community
 
 ## Smart Contract Guidelines
 

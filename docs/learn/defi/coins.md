@@ -6,7 +6,7 @@ Transaction fees, gas payments (i.e., smart-contract message processing fees) an
 
 Toncoin is used to make deposits required to become a blockchain validator.
 
-How to process payments in Toncoins is described in the [corresponding section](/develop/payment-processing/overview).
+How to process payments in Toncoins is described in the [corresponding section](/develop/dapps/payment-processing/overview).
 
 You can find out where to buy or exchange Toncoins on the [website](https://ton.org/coin).
 
