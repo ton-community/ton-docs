@@ -266,10 +266,10 @@ const sidebars = {
           type: 'category',
           label: 'DeFi Development',
           items: [
-            'learn/defi/coins',
-            'learn/defi/tokens',
-            'learn/defi/ton-payments',
-            'learn/defi/subscriptions',
+            'develop/dapps/defi/coins',
+            'develop/dapps/defi/tokens',
+            'develop/dapps/defi/ton-payments',
+            'develop/dapps/defi/subscriptions',
           ],
         },
 

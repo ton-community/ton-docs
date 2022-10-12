@@ -9,18 +9,28 @@ Here you can links to the most important resources for you to get started with T
 - [Explorers](https://ton.app/explorers) — to read transactions in the blockchain.
 - [Testnet](/develop/smart-contracts/environment/testnet) — testnet and how to use it.
 
-## Learning by Examples
+## Examples
 
 In case you are web or bot developer, you could find useful these repositories:
 
-### Examples
+### Javascript
 
-* [TonCenter API Examples](https://github.com/toncenter/examples) (JavaScript, with comments)
-* [Payment Channels Example](https://github.com/toncenter/payment-channels-example) (JavaScript, with comments)
+* [TonCenter API Examples](https://github.com/toncenter/examples) (tonweb, with comments)
+* [Payment Channels Example](https://github.com/toncenter/payment-channels-example) (tonweb, with comments)
 * [TON Bridge front-end](https://github.com/ton-blockchain/bridge) (Vue.js, no comments)
-* [Web Wallet source code](https://github.com/toncenter/ton-wallet) (JavaScript, no comments)
+* [Web Wallet source code](https://github.com/toncenter/ton-wallet) (tonweb, no comments)
 
-## SDK to interact with TON
+### Python
+
+* [psylopank/pytonlib examples](https://github.com/psylopunk/pytonlib/tree/main/examples)
+* [Transfer NFT & Jettons by creating a transfer message from an owner wallet](https://github.com/tonfactory/tonsdk#transfer-nft--jettons-by-creating-a-transfer-message-from-an-owner-wallet)
+* [Create mnemonic, init wallet class, create external message to deploy the wallet](https://github.com/tonfactory/tonsdk#create-mnemonic-init-wallet-class-create-external-message-to-deploy-the-wallet)
+
+### Go
+
+* [10+ examples from xssnick/tonutils-go](https://github.com/xssnick/tonutils-go/tree/master/example)
+
+## SDK
 
 Here is a list of modern SDKs that continuously supported and improved:
 
@@ -36,29 +46,41 @@ Here is a list of modern SDKs that continuously supported and improved:
 * [toncenter/pytonlib](https://github.com/toncenter/pytonlib) — Python SDK.
 * [tonfactory/tonsdk](https://github.com/tonfactory/tonsdk) — Analogue of the tonweb js library.
 
-### Other SDK
+### Go SDK
 
 * [tonutils-go](https://github.com/xssnick/tonutils-go) — Go utils for TON blockchain.
+
+### Kotlin / Java SDK
+
 * [ton-kotlin](https://github.com/andreypfau/ton-kotlin) — Kotlin SDK for TON blockchain.
 
-## Telegram Web Apps (TWA)
+## Telegram WebApps (TWA)
 
-One of the first repositories made by community:
-* [ton-defi-org/tonstarter-twa](https://github.com/ton-defi-org/tonstarter-twa)
+* [Telegram WebApps Documentation](https://core.telegram.org/bots/webapps) — full description on Telegram website.
 
-## Authorization & TON Connect
+### SDK
 
-In case you want to add login to your website using wallet exists these approaches:
+* [ton-defi-org/tonstarter-twa](https://github.com/ton-defi-org/tonstarter-twa) — template for a new TWA interacting with the TON. 
+* [twa-dev/boilerplate](https://github.com/twa-dev/Boilerplate) — another boilerplate for a new TWA.
+* [twa-dev/sdk](https://github.com/twa-dev/sdk) — npm package for TWA SDK.
+* [twa-dev/Mark42](https://github.com/twa-dev/Mark42) — Mark42 is a simple lightweight tree-shakable UI library for TWA.
 
-* [TON Connect](https://github.com/tonkeeper/ton-connect/blob/main/TonConnectSpecification.md) by Tonkeeper
-  * [Authorization](https://tonapi.io/docs#authorization) by tonapi.io (using TON Connect)
-* [Tonhub Extensions](https://developers.tonhub.com/docs/apps) by Tonhub
+:::info Community
+Join a special Telegram [Community Chat](https://t.me/+1mQMqTopB1FkNjIy) for TWA developers if you're interested.
+:::
 
+## Authorization SDK
+
+To add login button to your website or WebApp use these approaches:
+
+* [ton-connect/sdk](https://github.com/ton-connect/sdk) — unified standard for TON Ecosystem.
+* [tonkeeper/ton-connect](https://github.com/tonkeeper/ton-connect/blob/main/TonConnectSpecification.md) — SDK by Tonkeeper.
+* [tonhub/tonhub-connect](https://developers.tonhub.com/docs/apps) — SDK by Tonhub.
 
 ## TonLib SDK
 
-:::caution deprecated
-These technologies contains outdated, very low-level stack, so please use it if any other SDK are not working for you. It will save your time a lot.
+:::caution low-level
+These technologies contains very low-level stack, so please use it if any other SDK are not working for you. It will save your time a lot.
 :::
 
 TonLib was a one of the first libraries for working with TON blockchain.
@@ -71,13 +93,12 @@ TonLib was a one of the first libraries for working with TON blockchain.
 * [labraburn/SwiftyTON](https://github.com/labraburn/SwiftyTON) - native Swift wrapper for tonlib with async/await
 * [labraburn/node-tonlib](https://github.com/labraburn/node-tonlib) - C++ addon for NodeJS to work with tonlibjson
 
-#### Usage examples
+### Usage examples
 
 * [Desktop standard wallet (C++ and Qt)](https://github.com/ton-blockchain/wallet-desktop)
 * [Android standard wallet (Java)](https://github.com/ton-blockchain/wallet-android)
 * [iOS standard wallet (Swift)](https://github.com/ton-blockchain/wallet-ios)
 * [TonLib CLI (C++)](https://github.com/ton-blockchain/ton/blob/master/tonlib/tonlib/tonlib-cli.cpp)
-
 
 
 ## APIs

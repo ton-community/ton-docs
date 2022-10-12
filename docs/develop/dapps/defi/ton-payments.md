@@ -15,8 +15,6 @@ The theory of TON Payments is well described in [TON whitepaper](https://ton.org
 
 ## Payment Channels
 
-The theory of payment channels is well described in [TON whitepaper](https://ton.org/docs/ton.pdf), chapter 5.1.
-
 You can find ready-made smart contracts [here](https://github.com/ton-blockchain/payment-channels).
 
 To use payments channels, you don’t need deep knowledge of cryptography. You can use prepared SDKs:
@@ -27,10 +25,16 @@ To use payments channels, you don’t need deep knowledge of cryptography. You c
 
 You can find examples of using payment channels in the [Hack-a-TON #1](https://ton.org/hack-a-ton-1).
 
+:::info
+The theory of payment channels is well described in [TON whitepaper](https://ton.org/docs/ton.pdf), chapter 5.1.
+:::
+
 ## Payment Channel Network
 
 As the technology improves, payments channels will have the capacity to join together in a network off-chain where more than two parties will be able to participate.
 
 Current smart contracts are already designed to support the functionality of uniting into a single off-chain network.
 
-The theory of payment channel network is well described in [TON whitepaper](https://ton.org/docs/ton.pdf), chapter 5.2.
+:::info
+The theory of payment channel network is described in [TON whitepaper](https://ton.org/docs/ton.pdf), chapter 5.2.
+:::
