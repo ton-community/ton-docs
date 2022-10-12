@@ -97,14 +97,10 @@ const sidebars = {
           label: 'TON DNS',
           id: 'learn/services/dns',
         },
-
         {
-          'type': 'html',
-          'value': '<span class=\'menu__link\'>TON Proxy [2022 Q3]</span>',
-        },
-        {
-          'type': 'html',
-          'value': '<span class=\'menu__link\'>TON Sites [2022 Q3]</span>',
+          type: 'doc',
+          label: 'TON Sites, WWW, and Proxy',
+          id: 'learn/services/sites-www-proxy',
         },
         {
           'type': 'html',
@@ -368,7 +364,6 @@ const sidebars = {
       items: [
         'develop/howto/fees_low_level',
         'develop/howto/step-by-step',
-        'develop/howto/ton-sites',
         'develop/howto/config-params',
         'develop/howto/pow-givers',
       ],
@@ -470,7 +465,14 @@ const sidebars = {
     },
     'participate/web3/overview',
     'participate/web3/dns',
-    'participate/web3/setting-proxy',
+    {
+      'type': 'category',
+      'label': 'Use TON Proxy',
+      'items': [
+        'participate/web3/setting-proxy',
+        'participate/web3/sites-and-proxy',
+      ],
+    },
     'participate/web3/site-management',
   ],
   contribute: [
