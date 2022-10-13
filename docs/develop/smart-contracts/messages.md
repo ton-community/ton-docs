@@ -2,7 +2,7 @@
 
 Composition, parsing and sending messages lie on the intersection of [TL-B schemas](/learn/overviews/TL-B), [transaction phases and TVM](/learn/tvm-instructions/tvm_overview.md).
 
-Indeed, funC expose [send_raw_message](/develop/func/stdlib#send_raw_message) function which expects serialized message as argument.
+Indeed, FunC expose [send_raw_message](/develop/func/stdlib#send_raw_message) function which expects serialized message as argument.
 
 Since TON is a comprehensive system with wide functionality, messages which need to be able to support all of this functionality may look quite complicated. Still, most of that functionality is not used in common scenarios and message serialization in most cases may be reduced to 
 ```cpp
