@@ -17,7 +17,8 @@ For convenience, almost the entire infrastructure of the mainnet (wallets, API, 
 * Explorer: https://testnet.tonscan.org
 * Web Wallet: https://wallet.ton.org?testnet=true
 * Browser Extension: use [mainnet browser extension](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) and [do this](https://github.com/toncenter/ton-wallet#switch-between-mainnettestnet-in-extension).
-* Testnet HTTP API: https://testnet.toncenter.com
+* Testnet TonCenter API: https://testnet.toncenter.com
+* Testnet HTTP API: https://testnet.tonapi.io/
 * Testnet bridge: https://ton.org/bridge?testnet=true
 
 
