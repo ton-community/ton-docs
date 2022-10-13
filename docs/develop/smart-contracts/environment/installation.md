@@ -110,7 +110,7 @@ Instead of the `%USERNAME%` keyword, you must insert your own `username`.
    ```
 
 :::info Hey, you're almost finished :)
-Remember to set the **environment variable** `FIFTPATH` to point to this directory.
+Remember to set the [environment variable](https://stackoverflow.com/questions/14637979/how-to-permanently-set-path-on-linux-unix) `FIFTPATH` to point to this directory.
 :::
 
   </TabItem>
