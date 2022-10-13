@@ -13,7 +13,7 @@ Here you can links to the most important resources for you to get started with T
 
 In case you are web or bot developer, you could find useful these repositories:
 
-### Javascript
+### JavaScript
 
 * [TonCenter API Examples](https://github.com/toncenter/examples) (tonweb, with comments)
 * [Payment Channels Example](https://github.com/toncenter/payment-channels-example) (tonweb, with comments)
