@@ -149,6 +149,11 @@ const sidebars = {
 
     'develop/getting-started',
     {
+      type: 'link',
+      label: 'TON Hello World',
+      href: 'https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func',
+    },
+    {
       'type': 'html',
       'value': '<hr/>',
     },
