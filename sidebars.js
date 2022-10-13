@@ -231,6 +231,11 @@ const sidebars = {
             'develop/smart-contracts/guidelines',
             'develop/smart-contracts/fees',
             'develop/smart-contracts/messages',
+            {
+              type: 'link',
+              label: 'Coming from Solidity',
+              href: '/learn/introduction#ethereum-to-ton',
+            },
             'develop/smart-contracts/guidelines/internal-messages',
             'develop/smart-contracts/guidelines/external-messages',
             'develop/smart-contracts/guidelines/non-bouncable-messages',
@@ -245,11 +250,6 @@ const sidebars = {
               href: 'https://society.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-theanatomy-of-tons-jettons',
             },
           ],
-        },
-        {
-          type: 'link',
-          label: 'Coming from ETH and Solidity',
-          href: '/learn/introduction#ethereum-to-ton',
         },
       ],
     },
