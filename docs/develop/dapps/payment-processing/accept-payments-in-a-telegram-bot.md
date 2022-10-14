@@ -112,6 +112,8 @@ I won't go any deeper. For details and examples, I suggest looking into the [Aio
 
 ### All code of `main.py`.
 
+Imports:
+
 ```python
 import logging
 from aiogram import Bot, Dispatcher, executor, types
@@ -123,7 +125,11 @@ import json
 
 import db
 import api
+```
 
+Tokens and wallets:
+
+```python
 with open('config.json', 'r') as f:
     config_json = json.load(f)
     BOT_TOKEN = config_json['BOT_TOKEN']
@@ -135,7 +141,11 @@ if WORK_MODE == "mainnet":
     WALLET = MAINNET_WALLET
 else:
     WALLET = TESTNET_WALLET
+```
 
+Bot setup:
+
+```python
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=BOT_TOKEN, parse_mode=types.ParseMode.HTML)
@@ -147,7 +157,11 @@ class DataInput (StatesGroup):
     secondState = State()
     WalletState = State()
     PayState = State()
+```
 
+Message handlers:
+
+```python
 # /start command handler
 @dp.message_handler(commands=['start'], state='*')
 async def cmd_start(message: types.Message):
@@ -164,12 +178,14 @@ async def cmd_start(message: types.Message):
         await message.answer(f"to buy more air send /buy")
     await DataInput.firstState.set()
 
+# /cancel command handler
 @dp.message_handler(commands=['cancel'], state="*")
 async def cmd_cancel(message: types.Message):
     await message.answer("Canceled")
     await message.answer("/start to restart")
     await DataInput.firstState.set()
 
+# /buy command handler
 @dp.message_handler(commands=['buy'], state=DataInput.firstState)
 async def cmd_buy(message: types.Message):
     # reply keyboard with air types
@@ -182,6 +198,7 @@ async def cmd_buy(message: types.Message):
     await message.answer(f"Choose your air: (or /cancel)", reply_markup=keyboard)
     await DataInput.secondState.set()
 
+# /me command handler
 @dp.message_handler(commands=['me'], state="*")
 async def cmd_me(message: types.Message):
     await message.answer(f"Your transactions")
@@ -216,7 +233,6 @@ async def air_type(message: types.Message, state: FSMContext):
     await message.answer(f"Send your wallet address")
 
 # handle wallet address
-
 @dp.message_handler(state=DataInput.WalletState)
 async def user_wallet(message: types.Message, state: FSMContext):
     if len(message.text) == 48:
@@ -248,7 +264,11 @@ async def user_wallet(message: types.Message, state: FSMContext):
     else:
         await message.answer("Wrong wallet address")
         await DataInput.WalletState.set()
+```
 
+Callback handlers:
+
+```python
 @dp.callback_query_handler(lambda call: call.data == "check", state=DataInput.PayState)
 async def check_transaction(call: types.CallbackQuery, state: FSMContext):
     # send notification
