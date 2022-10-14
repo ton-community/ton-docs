@@ -1,4 +1,4 @@
-# Accepting payments in TON using a telegram bot
+# Accepting payments in a telegram bot
 
 ### ton footstep 8
 
