@@ -287,6 +287,7 @@ const sidebars = {
             'develop/dapps/payment-processing/deposits-single-wallet',
             'develop/dapps/payment-processing/deposits-multi-wallet',
             'develop/dapps/payment-processing/withdrawals',
+            'develop/dapps/payment-processing/accept-payments-in-a-telegram-bot',
           ],
         },
 

@@ -24,7 +24,7 @@ In case you are web or bot developer, you could find useful these repositories:
 - [psylopank/pytonlib examples](https://github.com/psylopunk/pytonlib/tree/main/examples)
 - [Transfer NFT & Jettons by creating a transfer message from an owner wallet](https://github.com/tonfactory/tonsdk#transfer-nft--jettons-by-creating-a-transfer-message-from-an-owner-wallet)
 - [Create mnemonic, init wallet class, create external message to deploy the wallet](https://github.com/tonfactory/tonsdk#create-mnemonic-init-wallet-class-create-external-message-to-deploy-the-wallet)
-- [An example of accepting payments in a telegram bot](./apis/Accept-payments-in-a-telegram-bot.md) (Python with Aiogram)
+- [An example of accepting payments in a telegram bot](../dapps/payment-processing/accept-payments-in-a-telegram-bot.md) (Python with Aiogram)
 
 ### Go
 

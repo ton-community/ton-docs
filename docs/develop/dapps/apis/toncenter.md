@@ -26,4 +26,4 @@ You can connect to public [toncenter.com](https://toncenter.com) or run your own
 
 - [Standard web wallet](https://github.com/toncenter/ton-wallet) (Plain JS)
 - [Bridge frontend](https://github.com/ton-blockchain/bridge) (Vue.js)
-- [An example of accepting payments in a telegram bot](./Accept-payments-in-a-telegram-bot.md) (Python with Aiogram)
+- [An example of accepting payments in a telegram bot](../payment-processing/accept-payments-in-a-telegram-bot.md) (Python with Aiogram)
