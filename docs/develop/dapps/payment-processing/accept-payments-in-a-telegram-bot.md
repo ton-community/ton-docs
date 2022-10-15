@@ -1,18 +1,35 @@
 # Accepting payments in a telegram bot
 
-### ton footstep 8
+## 👋 Welcome, dev!
 
-by [@Revuza](https://t.me/revuza)
+It's great to have you here. In this article, we'll guide you through the process of accepting payments in a Telegram bot.
 
-## Beginning
+## 📖 What you'll learn
 
-We have the ability to interact with the blockchain using third-party APIs provided by some network members. With these services, developers can skip the step of running their own node and customizing their API.
+In this article, you'll learn how to:
 
-This article will describe the process of creating a telegram bot capable of verifying payments in the TON network using a third-party api provided by the TON Center.
+- create a Telegram bot using Python + Aigram
+- work with public TON api
+- work with SQlite database
 
-We will create a bot using the aiogram Python library. Sqlite will be used as a test database. In addition to the article, I will show you how to set up postgres heroku. The bot will be deployed from the repository to the heroku platform.
+...and finnaly: how to accept payments in a Telegram bot using knowledge from previous steps.
 
-I'm using VS code.
+## 📚 Before we begin
+
+Make sure that you have installed latest version of Python, and have installed the following packages:
+
+- aiogram
+- requests
+- sqlite3
+
+## 🚀 Let's get started!
+
+We'll folowing the order above:
+
+1. Create a Telegram bot using Python + Aigram
+2. Work with public TON api
+3. Work with SQlite database
+4. Profit!
 
 ## Telegram bot
 
@@ -20,33 +37,50 @@ First, let's create the basis for the bot.
 
 Let's create three files:
 
-`main.py`
+- `main.py`
 
-`api.py`
+- `api.py`
 
-`db.py`
+- `db.py`
 
-Content of `main.py`
+## Content of `main.py`
+
+### Imports
+
+In this part, we will import the necessary libraries.
+
+From `aiogram` we need `Bot`, `Dispatcher`, `types` and `executor`.
 
 ```python
-# Import modules from aiogram necessary for our bot
-import logging
 from aiogram import Bot, Dispatcher, executor, types
-# MemoryStorage is needed for temporary storage of information
+```
+
+`MemoryStorage` is needed for temporary storage of information.
+
+`FSMContext`, `State` and `StatesGroup` are needed for working with the state machine.
+
+```python
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-# FSM to break down the payment process into separate steps
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
+```
 
+`json` is needed to work with json files.
+
+```python
 import json
+```
 
-# As well as our modules in which there will be code
-# to interact with API and database
+`api` and `db` are our own files, which we will fill later.
+
+```python
 import db
 import api
 ```
 
-For convenience, I suggest storing data such as `BOT_TOKEN` or your wallet for receiving payments in the separate file `config.json`:
+### Config
+
+For convenience, I suggest storing data such as `BOT_TOKEN` and your wallets for receiving payments in the separate file `config.json`:
 
 ```json
 {
@@ -59,19 +93,24 @@ For convenience, I suggest storing data such as `BOT_TOKEN` or your wallet for r
 }
 ```
 
+`BOT_TOKEN` - your Telegram bot token from [@BotFather](https://t.me/BotFather)
+
 In the `WORK_MODE` key, we will define the bot's mode of operation - in the test or main network: `testnet` or `mainnet`, respectively.
 
 Api tokens for `*_API_TOKEN` can be obtained in the [toncenter](https://toncenter.com/) bots:
 
-for mainnet - [@tonapibot](https://t.me/tonapibot)
+- for mainnet - [@tonapibot](https://t.me/tonapibot)
 
-for testnet - [@tontestnetapibot](https://t.me/tontestnetapibot)
+- for testnet - [@tontestnetapibot](https://t.me/tontestnetapibot)
 
-Next, to get the token for the bot to work, we read it from the file:
+Next, we finish setting up the bot:
+
+Get the token for the bot to work, from the `config.json` :
 
 ```python
 with open('config.json', 'r') as f:
     config_json = json.load(f)
+    # highlight-next-line
     BOT_TOKEN = config_json['BOT_TOKEN']
 		# put wallets here to receive payments
     MAINNET_WALLET = config_json['MAINNET_WALLET']
@@ -85,81 +124,29 @@ else:
     WALLET = TESTNET_WALLET
 ```
 
-Next, we finish setting up the bot:
+### Logging and bot setup
 
 ```python
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=BOT_TOKEN, parse_mode=types.ParseMode.HTML)
 dp = Dispatcher(bot, storage=MemoryStorage())
+```
 
+### States
+
+```python
 class DataInput (StatesGroup):
     firstState = State()
     secondState = State()
     WalletState = State()
     PayState = State()
 ```
-
-At the end, don't forget:
-
-```python
-if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True)
-```
-
-This code block is located at the very end of the file, after all handlers.
 
 I won't go any deeper. For details and examples, I suggest looking into the [Aiogram documentation](https://docs.aiogram.dev/en/latest/).
 
-### All code of `main.py`.
+### Message handlers:
 
-Imports:
-
-```python
-import logging
-from aiogram import Bot, Dispatcher, executor, types
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters.state import State, StatesGroup
-
-import json
-
-import db
-import api
-```
-
-Tokens and wallets:
-
-```python
-with open('config.json', 'r') as f:
-    config_json = json.load(f)
-    BOT_TOKEN = config_json['BOT_TOKEN']
-    MAINNET_WALLET = config_json['MAINNET_WALLET']
-    TESTNET_WALLET = config_json['TESTNET_WALLET']
-    WORK_MODE = config_json['WORK_MODE']
-
-if WORK_MODE == "mainnet":
-    WALLET = MAINNET_WALLET
-else:
-    WALLET = TESTNET_WALLET
-```
-
-Bot setup:
-
-```python
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-bot = Bot(token=BOT_TOKEN, parse_mode=types.ParseMode.HTML)
-# storage=MemoryStorage() needed for FSM
-dp = Dispatcher(bot, storage=MemoryStorage())
-
-class DataInput (StatesGroup):
-    firstState = State()
-    secondState = State()
-    WalletState = State()
-    PayState = State()
-```
-
-Message handlers:
+Command /start handler:
 
 ```python
 # /start command handler
@@ -177,14 +164,22 @@ async def cmd_start(message: types.Message):
         await message.answer(f"Welcome once again, {message.from_user.first_name}!")
         await message.answer(f"to buy more air send /buy")
     await DataInput.firstState.set()
+```
 
+Command /cancel handler:
+
+```python
 # /cancel command handler
 @dp.message_handler(commands=['cancel'], state="*")
 async def cmd_cancel(message: types.Message):
     await message.answer("Canceled")
     await message.answer("/start to restart")
     await DataInput.firstState.set()
+```
 
+Command /buy handler:
+
+```python
 # /buy command handler
 @dp.message_handler(commands=['buy'], state=DataInput.firstState)
 async def cmd_buy(message: types.Message):
@@ -197,7 +192,11 @@ async def cmd_buy(message: types.Message):
     keyboard.add(types.KeyboardButton('Fresh asphalt 🛣'))
     await message.answer(f"Choose your air: (or /cancel)", reply_markup=keyboard)
     await DataInput.secondState.set()
+```
 
+Command /me handler:
+
+```python
 # /me command handler
 @dp.message_handler(commands=['me'], state="*")
 async def cmd_me(message: types.Message):
@@ -210,7 +209,11 @@ async def cmd_me(message: types.Message):
         for transaction in transactions:
             # we need to remember that blockchain stores value in nanotons. 1 toncoin = 1000000000 in blockchain
             await message.answer(f"{int(transaction['value'])/1000000000} - {transaction['comment']}")
+```
 
+This habdler will work only when `secondState` is set, and will be waiting for a message from the user, with air type:
+
+```python
 # handle air type
 @dp.message_handler(state=DataInput.secondState)
 async def air_type(message: types.Message, state: FSMContext):
@@ -231,7 +234,11 @@ async def air_type(message: types.Message, state: FSMContext):
         await DataInput.secondState.set()
         return
     await message.answer(f"Send your wallet address")
+```
 
+This handler will work only when `WalletState` is set, and will be waiting for a message from the user, with wallet address:
+
+```python
 # handle wallet address
 @dp.message_handler(state=DataInput.WalletState)
 async def user_wallet(message: types.Message, state: FSMContext):
@@ -266,7 +273,9 @@ async def user_wallet(message: types.Message, state: FSMContext):
         await DataInput.WalletState.set()
 ```
 
-Callback handlers:
+### Callback handlers:
+
+Callback handler for button "check transaction":
 
 ```python
 @dp.callback_query_handler(lambda call: call.data == "check", state=DataInput.PayState)
@@ -284,18 +293,44 @@ async def check_transaction(call: types.CallbackQuery, state: FSMContext):
         await call.message.edit_text("Transaction is confirmed \n/start to restart")
         await state.finish()
         await DataInput.firstState.set()
+```
 
+### Last part of `main.py`:
+
+At the end, don't forget:
+
+```python
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
 ```
 
+This part is needed to start the bot.
+In `skip_updates=True` we specify that we do not want to process old messages. But if you want to process all messages, you can set it to `False`.
+
+:::info
+
+All code of `main.py` can be found [here](https://github.com/LevZed/ton-payments-in-telegram-bot/blob/main/bot/main.py).
+
+:::
+
 ## API
 
-### Required Requests
+_We have the ability to interact with the blockchain using third-party APIs provided by some network members. With these services, developers can skip the step of running their own node and customizing their API._
 
-In fact, what do we need to confirm that the user has transferred the required amount to us? We just need to look at the latest incoming transfers to our wallet and among them find a transaction from the right address, with the right amount (and possibly a unique comment). For all this, toncenter has a getTransactions method.
+## Required Requests
 
-Applying it, by default, we will get the last 10 transactions. However, we can also indicate that we need more. However, the more you request, the longer the response will take. And, most likely, you do not need so much. If you want more, then each transaction has `lt` and `hash` . You can look at, for example, 30 transactions and if the right one was not found among them, then take `lt` and `hash` from the last one and add them to the request - getting the next 30 transactions and so on.
+In fact, what do we need to confirm that the user has transferred the required amount to us?
+
+We just need to look at the latest incoming transfers to our wallet and among them find a transaction from the right address, with the right amount (and possibly a unique comment).
+For all this, toncenter has a `getTransactions` method.
+
+### getTransactions
+
+Applying it, by default, we will get the last 10 transactions. However, we can also indicate that we need more, but this will slightly increase the time of a response. And, most likely, you do not need so much.
+
+If you want more, then each transaction has `lt` and `hash` . You can look at, for example, 30 transactions and if the right one was not found among them, then take `lt` and `hash` from the last one and add them to the request.
+
+So you get the next 30 transactions and so on.
 
 For example, there is a wallet in the test network `EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5`, it has only 4 transactions:
 
@@ -702,3 +737,12 @@ def get_user_payments(user_id):
 
             return False
 ```
+
+## References
+
+Made for TON as part of [ton-footsteps/8](https://github.com/ton-society/ton-footsteps/issues/8)
+
+By Lev:
+
+- tg: [@Revuza](https://t.me/revuza)
+- github: https://github.com/LevZed
