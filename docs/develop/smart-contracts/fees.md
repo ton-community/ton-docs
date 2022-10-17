@@ -133,8 +133,9 @@ function calculateStorageFee() {
 
   let pricePerSec = size * bit_price_ps + Math.round(bit_price_ps / 1023) * cell_price_ps
 
-  return 'storage price:', pricePerSec * duration / 2^16 * (10^-9), 'TON'
+  console.log('storage price:', pricePerSec * duration / 2^16 * (10^-9), 'TON')
 }
+
 
 ```
 
