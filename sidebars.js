@@ -16,6 +16,7 @@ const sidebars = {
 
   learn: [
     'learn/introduction',
+    'learn/glossary',
     {
       'type': 'html',
       'value': '<hr/>',
@@ -141,7 +142,6 @@ const sidebars = {
           label: 'Catchain Consensus Protocol',
           href: 'https://ton.org/catchain.pdf',
         },
-
       ],
     },
   ],
