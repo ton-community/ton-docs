@@ -35,7 +35,7 @@ where `[ ... ]` correspond to an optional entry.
 ### Function name
 Function name can be any [identifier](/develop/func/literals_identifiers#identifiers) and also it can start with `.` or `~` symbols. The meaning of those symbols is [explained](/develop/func/statements#methods-calls) in statements section.
 
-For example, `udict_add_builder?`, `dict_set` and `~dict_set` are valid and different function names (they are defined in [stdlib.fc](/develop/func/stdlib.md)).
+For example, `udict_add_builder?`, `dict_set` and `~dict_set` are valid and different function names (they are defined in [stdlib.fc](/develop/func/stdlib)).
 
 #### Special function names
 FunC (actually Fift assembler) has several reserved function names with predefined [ids](/develop/func/functions#method_id).
@@ -94,7 +94,7 @@ There are three types of specifiers: `impure`, `inline`/`inline_ref` and `method
 
 If `impure` is not specified and the result of the function call is not used, then FunC compiler may and will delete this function call.
 
-For example, in [stdlib.fc](/develop/func/stdlib.md) function
+For example, in [stdlib.fc](/develop/func/stdlib) function
 ```cpp
 int random() impure asm "RANDU256";
 ```

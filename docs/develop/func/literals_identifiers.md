@@ -44,7 +44,7 @@ For example, those are valid identifier:
 
 `'` at the end of the name of a variable is conventionally used when some modified version of the old value is introduced. For example, almost all modifying built-in primitives for hashmap manipulation (except ones with prefix `~`) take a hashmap and return a new version of the hashmap along with some other data, if necessary. It is convenient to name those values with the same name suffixed by `'`.
 
-Suffix `?` is usually used for boolean variables (TVM hasn't built-in type bool; bools are represented by integers: 0 is false and -1 is true) or for functions that returns some flag, usually indicating success of the operation (like `udict_get?` from [stdlib.fc](/develop/func/stdlib.md)).
+Suffix `?` is usually used for boolean variables (TVM hasn't built-in type bool; bools are represented by integers: 0 is false and -1 is true) or for functions that returns some flag, usually indicating success of the operation (like `udict_get?` from [stdlib.fc](/develop/func/stdlib)).
 
 Those are not valid identifiers:
 - `take(first)Entry`

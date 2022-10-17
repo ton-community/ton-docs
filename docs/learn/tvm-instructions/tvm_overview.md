@@ -17,11 +17,11 @@ This document provides bird's-eye overview of how TVM execute transactions.
 When some event happens on the account in one of TON chains it causes a **transaction**.  Most common event is "arrival of some message", but generally speaking there could be `tick-tock`, `merge`, `split` and other events.
 
 Each transaction consists of up to 5 phases.
-1. Storage phase - in that phase storage fees accrued by contract due to occupation of some space in chain state are calculated
-2. Credit phase - in that phase balance of contract with respect to (possible) incoming message value and collected storage fee are calculated
-3. Compute phase - in that phase TVM is executed (see below), result of TVM execution is aggregation of `exit_code`, `actions` (serialized list of actions), `gas_details`, `new_storage` and some others.
-4. Action phase - if compute phase was successful, in that phase `actions` from compute phase are processed. In particular actions may include sending of messages, update of smart contract code, update of libraries etc. Note that some actions may fail during processing (for instance we try to send message with more TONs than contract has), in that case the whole transaction may revert or this action may be scipped (it depends on the mode of the actions, in other words contract may send message in regime `send-or-revert` or in regime `try-send-if-no-ignore`).
-5. Bounce phase - if compute phase failed (it returned `exit_code >= 2`), in that phase _bounce message_ is formed for transactions initiated by incoming message.
+1. **Storage phase** - in that phase storage fees accrued by contract due to occupation of some space in chain state are calculated. Read more in [Storage Fees](/develop/smart-contracts/fees#storage-fee).
+2. **Credit phase** - in that phase balance of contract with respect to (possible) incoming message value and collected storage fee are calculated
+3. **Compute phase** - in that phase TVM is executed (see below), result of TVM execution is aggregation of `exit_code`, `actions` (serialized list of actions), `gas_details`, `new_storage` and some others.
+4. **Action phase** - if compute phase was successful, in that phase `actions` from compute phase are processed. In particular actions may include sending of messages, update of smart contract code, update of libraries etc. Note that some actions may fail during processing (for instance we try to send message with more TONs than contract has), in that case the whole transaction may revert or this action may be scipped (it depends on the mode of the actions, in other words contract may send message in regime `send-or-revert` or in regime `try-send-if-no-ignore`).
+5. **Bounce phase** - if compute phase failed (it returned `exit_code >= 2`), in that phase _bounce message_ is formed for transactions initiated by incoming message.
 
 ## Compute phase
 In that phase execution of TVM happens.
