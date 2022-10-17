@@ -38,7 +38,7 @@ Validators receive a small fee for processing transactions, and making higher co
 
 ### How to calculate fees?
 
-Fees on TON are difficult to calculate in advance, as their amount depends on transaction run time, account status, message content and size, blockchain's network setting – and also on many variables that cannot be calculated until the transaction is sent.
+Fees on TON are difficult to calculate in advance, as their amount depends on transaction run time, account status, message content and size, blockchain's network setting – and also on many variables that cannot be calculated until the transaction is sent. Read about [computation fees](https://www.tonspace.co/develop/howto/fees_low_level#computation-fees) in low-level article overview.
 
 That is why even NFT marketplaces usually take an extra amount of TON (_~1 TON_) and return (_`1 - transaction_fee`_) later.
 
