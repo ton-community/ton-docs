@@ -137,11 +137,11 @@ function storageFeeCalculator() {
   const pricePerSec = size * bit_price_ps +
   + Math.round(bit_price_ps / 1023) * cell_price_ps
 
-  let feeStr = (pricePerSec * duration / 2**16 * 10**-9)
-  let mbStr = (size / 1024 / 1024 / 8).toFixed(2)
-  let daysStr = Math.floor(duration / (3600 * 24))
+  let fee = (pricePerSec * duration / 2**16 * 10**-9)
+  let mb = (size / 1024 / 1024 / 8).toFixed(2)
+  let days = Math.floor(duration / (3600 * 24))
   
-  let str = `Storage Fee: ${feeStr} TON (${mbStr} MB for ${daysStr} days)`
+  let str = `Storage Fee: ${fee} TON (${mb} MB for ${days} days)`
   
   return str
 }
