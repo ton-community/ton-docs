@@ -1,14 +1,10 @@
-# Introduction
+# What is TON?
 
+## Bird's eye overview
 
-:::info new to blockchain?
-If you're completely new to blockchain technology and want to understand the ideas and why it's so important — it's easier to start with these materials:
+To understand clearly what the decentralized internet backed by TON is you can watch video with bird's eye overview in essential concepts:
 
-* [How a Blockchain Can Help You on a Deserted Island](https://talkol.medium.com/why-decentralized-consensus-blockchain-is-good-for-business-5ff263468210)
-* [How to Run a Blockchain on a Deserted Island with Pen and Paper](https://talkol.medium.com/how-to-run-a-blockchain-on-a-deserted-island-with-pen-and-paper-899949ec555b)
-* [\[YouTube\] Crypto Networks and Why They Matter](https://youtu.be/2wxtiNgXBaU)
-:::
-
+<iframe width="672" height="391" src="https://www.youtube.com/embed/XgzHmV_nnpY" title="TON - The Open Network" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## What is TON?
 
@@ -20,10 +16,22 @@ One might think about TON as a huge distributed supercomputer,
 or rather a huge "_superserver_", intended to host and provide a variety of
 services.
 
-Next concept to read: [Blockchain of Blockchains](/learn/overviews/TON_blockchain_overview).
+Read more in concepts: [Blockchain of Blockchains](/learn/overviews/TON_blockchain_overview).
+
+:::tip starter tip
+It's easier to discover TON on practice with [Use-cases Overview](/participate/web3/overview#use-cases) or [TON Hello World](/develop/getting-started).
+:::
+
+## New to blockchains?
+
+If you're completely new to blockchain technology and want to understand the ideas and why it's so important — it's easier to start with these materials:
+
+* [How a Blockchain Can Help You on a Deserted Island](https://talkol.medium.com/why-decentralized-consensus-blockchain-is-good-for-business-5ff263468210)
+* [How to Run a Blockchain on a Deserted Island with Pen and Paper](https://talkol.medium.com/how-to-run-a-blockchain-on-a-deserted-island-with-pen-and-paper-899949ec555b)
+* [\[YouTube\] Crypto Networks and Why They Matter](https://youtu.be/2wxtiNgXBaU)
+
 
 ## Ethereum to TON
-
 
 Especially for Ethereum developers, our community made a small introduction article that could help you understand more about TON:
 
