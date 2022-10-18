@@ -44,7 +44,7 @@ Here is a list of modern SDKs that continuously supported and improved:
 
 * [ton-community/ton-js](https://github.com/ton-community/ton) — Cross-platform client for TON blockchain, by ton-community
 * [toncenter/tonweb](https://github.com/toncenter/tonweb) — Cross-platform client for TON blockchain, by TonCenter
-* [@tegro/ton3-client](https://github.com/TegroTON/ton3-client) — ton3 client
+* [@tegro/ton3-client](https://github.com/TegroTON/ton3-client) — JS ton3-client for tonhold API, by TonHold
 * [nns2009/ton-payment-tracker](https://github.com/nns2009/ton-payment-tracker) — Ton Payment Tracker
 
 ### Python SDK
