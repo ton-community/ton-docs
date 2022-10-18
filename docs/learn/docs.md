@@ -30,5 +30,5 @@ Please note here and further that the code, comments and/or documentation may co
 
 ## Translations
 
-* [korolyow/TON_docs_ru](https://github.com/Korolyow/TON_docs_ru) — TON Documentation in Russian
+* [korolyow/ton_docs_ru](https://github.com/Korolyow/TON_docs_ru) — TON Whitepapers in Russian
 
