@@ -13,7 +13,6 @@ const config = {
   baseUrl: '/',
   themes: [
     '@docusaurus/theme-live-codeblock',
-    '@saucelabs/theme-github-codeblock',
     [
       require.resolve('@easyops-cn/docusaurus-search-local'),
       {

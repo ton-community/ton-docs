@@ -121,19 +121,28 @@ Current values are:
 
 You can use this JS script to calculate storage price for 1MB in workchain for 1 year
 
-```javascript live
+```js live
 
-function calculateStorageFee() {
+// Welcome to LIVE editor!
+// feel free to change any variables
+  
+function storageFeeCalculator() {
+  
+  const size = 1024 * 1024 * 8		    // 1MB in bits  
+  const duration = 60 * 60 * 24 * 365	// 1 Year in secs
 
-  let size = 1024 * 1024 * 8				    // 1MB in bits  
-  let duration = 60 * 60 * 24 * 365	// 1 Year in secs
+  const bit_price_ps = 1
+  const cell_price_ps = 500
 
-  let bit_price_ps = 1
-  let cell_price_ps = 500
+  const pricePerSec = size * bit_price_ps +
+  + Math.round(bit_price_ps / 1023) * cell_price_ps
 
-  let pricePerSec = size * bit_price_ps + Math.round(bit_price_ps / 1023) * cell_price_ps
-
-  console.log('storage price:', pricePerSec * duration / 2^16 * (10^-9), 'TON')
+  let feeStr = (pricePerSec * duration / 2**16 * 10**-9)
+  let mbStr = (size / 1024 / 1024 / 8).toFixed(2)
+  let daysStr = Math.floor(duration / (3600 * 24))
+  let str = `Storage Fee: ${feeStr} TON (${mbStr} MB for ${daysStr} days)`
+  
+  return str
 }
 
 

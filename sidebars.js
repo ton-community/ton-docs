@@ -267,6 +267,15 @@ const sidebars = {
             'develop/dapps/apis/adnl',
           ],
         },
+
+        // {
+        //   type: 'category',
+        //   label: 'Choose Your SDK',
+        //   items: [
+        //     ''
+        //   ]
+        // },
+
         {
           type: 'category',
           label: 'DeFi Development',
@@ -278,17 +287,12 @@ const sidebars = {
           ],
         },
 
-        {
-          type: 'category',
-          label: 'Payment Processing',
-          items: [
-            'develop/dapps/payment-processing/overview',
-            'develop/dapps/payment-processing/common',
-            'develop/dapps/payment-processing/deposits-single-wallet',
-            'develop/dapps/payment-processing/deposits-multi-wallet',
-            'develop/dapps/payment-processing/withdrawals',
-          ],
-        },
+        // {
+        //   type: 'category',
+        //   label: 'Best Practices',
+        //   items: [
+        //   ],
+        // },
 
       ],
     },
@@ -367,6 +371,7 @@ const sidebars = {
       type: 'category',
       label: 'Low Level Internals',
       items: [
+        'develop/dapps/payment-processing/overview',
         'develop/howto/fees_low_level',
         'develop/howto/step-by-step',
         'develop/howto/config-params',

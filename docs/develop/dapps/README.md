@@ -3,7 +3,7 @@
 
 ## Prerequisites
 
-Here you can links to the most important resources for you to get started with TON:
+Here you can see links to the most important resources for you to get started with TON:
 
 - [Wallets](https://ton.org/wallets) — a list of popular wallets for TON.
 - [Explorers](https://ton.app/explorers) — to read transactions in the blockchain.
@@ -15,10 +15,16 @@ In case you are web or bot developer, you could find useful these repositories:
 
 ### JavaScript
 
-* [TonCenter API Examples](https://github.com/toncenter/examples) (tonweb, with comments)
-* [Payment Channels Example](https://github.com/toncenter/payment-channels-example) (tonweb, with comments)
+* Payment processing using JavaScript:
+  * [Create a key pair and a wallet](https://github.com/toncenter/examples/blob/main/common.js) (tonweb)
+  * [Accepting deposits to a single wallet](https://github.com/toncenter/examples/blob/main/deposits-single-wallet.js) (tonweb)
+  * [Accepting deposits to multiple wallets](https://github.com/toncenter/examples/blob/main/deposits-multi-wallet.js) (tonweb)
+  * [Withdrawal processing](https://github.com/toncenter/examples/blob/main/withdrawals.js) (tonweb)
+  * [Payment Channels Example](https://github.com/toncenter/payment-channels-example/blob/main/index.js) (tonweb)
 * [TON Bridge front-end](https://github.com/ton-blockchain/bridge) (Vue.js, no comments)
 * [Web Wallet source code](https://github.com/toncenter/ton-wallet) (tonweb, no comments)
+
+
 
 ### Python
 
@@ -36,8 +42,8 @@ Here is a list of modern SDKs that continuously supported and improved:
 
 ### JavaScript SDK
 
-* [tonweb](https://github.com/toncenter/tonweb) — JavaScript API for TON blockchain.
-* [ton-js](https://github.com/tonwhales/ton) — Cross-platform client for TON blockchain.
+* [ton-community/ton-js](https://github.com/ton-community/ton) — Cross-platform client for TON blockchain, by ton-community.
+* [toncenter/tonweb](https://github.com/toncenter/tonweb) — Cross-platform client for TON blockchain, by TonCenter.
 * [@tegro/ton3-client](https://github.com/TegroTON/ton3-client) — ton3 client
 
 ### Python SDK
