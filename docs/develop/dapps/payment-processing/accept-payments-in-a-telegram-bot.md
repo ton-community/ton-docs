@@ -31,10 +31,6 @@ We'll folowing the order above:
 3. Work with SQlite database
 4. Profit!
 
-## Telegram bot
-
-First, let's create the basis for the bot.
-
 Let's create three files:
 
 - `main.py`
@@ -42,6 +38,454 @@ Let's create three files:
 - `api.py`
 
 - `db.py`
+
+## Database
+
+### Create a database
+
+This example uses a local Sqlite database.
+
+Create `db.py`.
+
+To start working with the database, we need to import the sqlite3 module,
+and some modules for working with time:
+
+```python
+import sqlite3
+import datetime
+import pytz
+```
+
+- `sqlite3` - module for working with sqlite database
+- `datetime` - module for working with time
+- `pytz` - module for working with timezones
+
+Next, we need to create a connection to the database and a cursor for working with it:
+
+```python
+locCon = sqlite3.connect('bot/local.db', check_same_thread=False)
+cur = locCon.cursor()
+```
+
+If the database does not exist, it will be created automatically.
+
+Now we can create a tables.
+
+We have 2 tables:
+
+**Transactions:**
+
+```sql
+CREATE TABLE transactions (
+    source  VARCHAR (48) NOT NULL,
+    hash    VARCHAR (50) UNIQUE
+                         NOT NULL,
+    value   INTEGER      NOT NULL,
+    comment VARCHAR (50)
+);
+```
+
+- `source` - payer's wallet address
+- `hash` - transaction hash
+- `value` - transaction value
+- `comment` - transaction comment
+
+**Users:**
+
+```sql
+CREATE TABLE users (
+    id         INTEGER       UNIQUE
+                             NOT NULL,
+    username   VARCHAR (33),
+    first_name VARCHAR (300),
+    wallet     VARCHAR (50)  DEFAULT none
+);
+```
+
+- `id` - telegram user id
+- `username` - telegram username
+- `first_name` - telegram user first name
+- `wallet` - user wallet address
+
+In the `users` table we store users :). Their telegram id, @username,
+first name and wallet. The wallet is added to the database on the first
+successful payment.
+
+The `transactions` table stores verified transactions.
+To verify a transaction, we need hash, source, value and comment.
+
+To create these tables, we need to run the following code:
+
+```python
+cur.execute('''CREATE TABLE IF NOT EXISTS transactions (
+    source  VARCHAR (48) NOT NULL,
+    hash    VARCHAR (50) UNIQUE
+                         NOT NULL,
+    value   INTEGER      NOT NULL,
+    comment VARCHAR (50)
+)''')
+locCon.commit()
+
+cur.execute('''CREATE TABLE IF NOT EXISTS users (
+    id         INTEGER       UNIQUE
+                             NOT NULL,
+    username   VARCHAR (33),
+    first_name VARCHAR (300),
+    wallet     VARCHAR (50)  DEFAULT none
+)''')
+locCon.commit()
+```
+
+This code, needs to be run only once, when the database is created.
+
+### Working with DB
+
+Let's analyze the situation:
+The user made a transaction. How to verify it? How to make sure that the same transaction is not confirmed twice?
+
+There is a body_hash in transactions, with the help of which we can easily understand whether there is a transaction in the database or not.
+
+We add transactions to the database in which we are “sure”. And the `check_transaction` function checks whether the found transaction is in the database or not.
+
+`add_v_transaction` - add transaction to transactions table.
+
+```python
+def add_v_transaction(source, hash, value, comment):
+    cur.execute("INSERT INTO transactions (source, hash, value, comment) VALUES (?, ?, ?, ?)",
+                (source, hash, value, comment))
+    locCon.commit()
+```
+
+```python
+def check_transaction(hash):
+    cur.execute(f"SELECT hash FROM transactions WHERE hash = '{hash}'")
+    result = cur.fetchone()
+    if result:
+        return True
+    return False
+```
+
+`check_user` checks if the user is in the database and if not, adds it
+
+```python
+def check_user(user_id, username, first_name):
+    cur.execute(f"SELECT id FROM users WHERE id = '{user_id}'")
+    result = cur.fetchone()
+
+    if not result:
+        cur.execute("INSERT INTO users (id, username, first_name) VALUES (?, ?, ?)",
+                    (user_id, username, first_name))
+        locCon.commit()
+        return False
+    return True
+```
+
+The user can store a wallet in the table. It is added with the first successful purchase. The `v_wallet` function checks if the user has an associated wallet. If there is, then returns it. If not, then add.
+
+```python
+def v_wallet(user_id, wallet):
+    cur.execute(f"SELECT wallet FROM users WHERE id = '{user_id}'")
+    result = cur.fetchone()
+    if result[0] == "none":
+        cur.execute(
+            f"UPDATE users SET wallet = '{wallet}' WHERE id = '{user_id}'")
+        locCon.commit()
+        return True
+    else:
+        return result[0]
+```
+
+`get_user_wallet` simply returns the user's wallet.
+
+```python
+def get_user_wallet(user_id):
+    cur.execute(f"SELECT wallet FROM users WHERE id = '{user_id}'")
+    result = cur.fetchone()
+    return result[0]
+```
+
+`get_user_payments` returns the user's payments list.
+This function cheks if the user has a wallet. If has, then returns payments list.
+
+```python
+def get_user_payments(user_id):
+    wallet = get_user_wallet(user_id)
+
+    if wallet == "none":
+        return "You have no wallet"
+    else:
+        cur.execute(f"SELECT * FROM transactions WHERE source = '{wallet}'")
+        result = cur.fetchall()
+        tdict = {}
+        tlist = []
+        try:
+            for transaction in result:
+                tdict = {
+                    "value": transaction[2],
+                    "comment": transaction[3],
+                }
+                tlist.append(tdict)
+            return tlist
+
+        except:
+            return False
+```
+
+## API
+
+_We have the ability to interact with the blockchain using third-party APIs provided by some network members. With these services, developers can skip the step of running their own node and customizing their API._
+
+### Required Requests
+
+In fact, what do we need to confirm that the user has transferred the required amount to us?
+
+We just need to look at the latest incoming transfers to our wallet and among them find a transaction from the right address, with the right amount (and possibly a unique comment).
+For all this, toncenter has a `getTransactions` method.
+
+### getTransactions
+
+Applying it, by default, we will get the last 10 transactions. However, we can also indicate that we need more, but this will slightly increase the time of a response. And, most likely, you do not need so much.
+
+If you want more, then each transaction has `lt` and `hash` . You can look at, for example, 30 transactions and if the right one was not found among them, then take `lt` and `hash` from the last one and add them to the request.
+
+So you get the next 30 transactions and so on.
+
+For example, there is a wallet in the test network `EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5`, it has only 4 transactions:
+
+Using a [query](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5&limit=2&to_lt=0&archival=true) we will get the following response:
+
+```json
+{
+  "ok": true,
+  "result": [
+    {
+      "transaction_id": {
+        // highlight-next-line
+        "lt": "1944556000003",
+        // highlight-next-line
+        "hash": "swpaG6pTBXwYI2024NAisIFp59Fw3k1DRQ5fa5SuKAE="
+      },
+      "in_msg": {
+        "source": "EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R",
+        "destination": "EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5",
+        "value": "1000000000",
+        "body_hash": "kBfGYBTkBaooeZ+NTVR0EiVGSybxQdb/ifXCRX5O7e0=",
+        "message": "Sea breeze 🌊"
+      },
+      "out_msgs": []
+    },
+    {
+      "transaction_id": {
+        // highlight-next-line
+        "lt": "1943166000003",
+        // highlight-next-line
+        "hash": "hxIQqn7lYD/c/fNS7W/iVsg2kx0p/kNIGF6Ld0QEIxk="
+      },
+      "in_msg": {
+        "source": "EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R",
+        "destination": "EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5",
+        "value": "1000000000",
+        "body_hash": "7iirXn1RtliLnBUGC5umIQ6KTw1qmPk+wwJ5ibh9Pf0=",
+        "message": "Spring forest 🌲"
+      },
+      "out_msgs": []
+    }
+  ]
+}
+```
+
+We have received the last two transactions of this address. When adding `lt` and `hash`: to the query, we will again receive two transactions, however, the second one will become the next one in a row. That is - we will get the second and third transactions of this address:
+
+```json
+{
+  "ok": true,
+  "result": [
+    {
+      "transaction_id": {
+        "lt": "1943166000003",
+        "hash": "hxIQqn7lYD/c/fNS7W/iVsg2kx0p/kNIGF6Ld0QEIxk="
+      },
+      "in_msg": {
+        "source": "EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R",
+        "destination": "EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5",
+        "value": "1000000000",
+        "body_hash": "7iirXn1RtliLnBUGC5umIQ6KTw1qmPk+wwJ5ibh9Pf0=",
+        "message": "Spring forest 🌲"
+      },
+      "out_msgs": []
+    },
+    {
+      "transaction_id": {
+        "lt": "1845458000003",
+        "hash": "k5U9AwIRNGhC10hHJ3MBOPT//bxAgW5d9flFiwr1Sao="
+      },
+      "in_msg": {
+        "source": "EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R",
+        "destination": "EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5",
+        "value": "1000000000",
+        "body_hash": "XpTXquHXP64qN6ihHe7Tokkpy88tiL+5DeqIrvrNCyo=",
+        "message": "Second"
+      },
+      "out_msgs": []
+    }
+  ]
+}
+```
+
+The request will look like this - [link](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5&limit=2&lt=1943166000003&hash=hxIQqn7lYD%2Fc%2FfNS7W%2FiVsg2kx0p%2FkNIGF6Ld0QEIxk%3D&to_lt=0&archival=true)
+
+We will also need a method `detectAddress`.
+
+Not sure about mainnet, but on testnet, my tonkeeper wallet address is:
+`kQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aCTb`, and when I look at the transaction in the explorer, instead of my address there
+`EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R`.
+This method returns us the “right” address:
+
+```json
+{
+  "ok": true,
+  "result": {
+    "raw_form": "0:b3409241010f85ac415cbf13b9b0dc6157d09a39d2bd0827eadb20819f067868",
+    "bounceable": {
+      "b64": "EQCzQJJBAQ+FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R",
+      // highlight-next-line
+      "b64url": "EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R"
+    },
+    "non_bounceable": {
+      "b64": "UQCzQJJBAQ+FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aMKU",
+      "b64url": "UQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aMKU"
+    }
+  }
+}
+```
+
+We need `b64url`.
+
+Also, this method helps us to check the correctness of the address sent by the user.
+
+For the most part, that's all we need.
+
+### API requests and what to do with them
+
+Let's go back to the IDE. Create file `api.py`.
+
+Import the necessary libraries:
+
+```python
+import requests
+import json
+# We import our db module, as it will be convenient to add from here
+# transactions to the database
+import db
+```
+
+- `requests` - to make requests to the API
+- `json` - to work with json
+- `db` - to work with our sqlite database
+
+Let's create two variables for storing start of the requests:
+
+```python
+# This is the beginning of our requests
+MAINNET_API_BASE = "https://toncenter.com/api/v2/"
+TESTNET_API_BASE = "https://testnet.toncenter.com/api/v2/"
+```
+
+Get all api tokens and wallets from the config.json file:
+
+```python
+# Find out which network we are working on
+with open('config.json', 'r') as f:
+    config_json = json.load(f)
+    MAINNET_API_TOKEN = config_json['MAINNET_API_TOKEN']
+    TESTNET_API_TOKEN = config_json['TESTNET_API_TOKEN']
+    MAINNET_WALLET = config_json['MAINNET_WALLET']
+    TESTNET_WALLET = config_json['TESTNET_WALLET']
+    WORK_MODE = config_json['WORK_MODE']
+```
+
+Depending on the network, we take the necessary data:
+
+```python
+if WORK_MODE == "mainnet":
+    API_BASE = MAINNET_API_BASE
+    API_TOKEN = MAINNET_API_TOKEN
+    WALLET = MAINNET_WALLET
+else:
+    API_BASE = TESTNET_API_BASE
+    API_TOKEN = TESTNET_API_TOKEN
+    WALLET = TESTNET_WALLET
+```
+
+Our first request function `detectAddress`:
+
+```python
+def detect_address(address):
+    url = f"{API_BASE}detectAddress?address={address}&api_key={API_TOKEN}"
+    r = requests.get(url)
+    response = json.loads(r.text)
+    try:
+        return response['result']['bounceable']['b64url']
+    except:
+        return False
+```
+
+At the input, we have the estimated address, and at the output, either the “correct” address necessary for us for further work, or False.
+
+You may notice that an API key has appeared at the end of the request. It is needed to remove the limit on the number of requests to the API. Without it, we are limited to one request per second.
+
+Next function for `getTransactions`:
+
+```python
+def get_address_transactions():
+    url = f"{API_BASE}getTransactions?address={WALLET}&limit=30&archival=true&api_key={API_TOKEN}"
+    r = requests.get(url)
+    response = json.loads(r.text)
+    return response['result']
+```
+
+This function returns the last 30 transactions for our `WALLET`.
+
+Here you can see `archival=true`, it is needed so that we take transactions only from a node with a complete history of the blockchain.
+
+At the output, we get a list of transactions - [{0},{1},{…},{29}]. List of dictionaries in short.
+
+And finally the last function:
+
+```python
+def find_transaction(user_wallet, value, comment):
+		# Get the last 30 transactions
+    transactions = get_address_transactions()
+    for transaction in transactions:
+				# Select the incoming "message" - transaction
+        msg = transaction['in_msg']
+        if msg['source'] == user_wallet and msg['value'] == value and msg['message'] == comment:
+						# If all the data match, we check that this transaction
+						# we have not verified before
+            t = db.check_transaction(msg['body_hash'])
+            if t == False:
+								# If not, we write in the table to the verified
+								# and return True
+                db.add_v_transaction(
+                    msg['source'], msg['body_hash'], msg['value'], msg['message'])
+                print("find transaction")
+                print(
+                    f"transaction from: {msg['source']} \nValue: {msg['value']} \nComment: {msg['message']}")
+                return True
+						# If this transaction is already verified, we check the rest, we can find the right one
+            else:
+                pass
+		# If the last 30 transactions do not contain the required one, return False
+		# Here you can add code to see the next 29 transactions
+		# However, within the scope of the Example, this would be redundant.
+    return False
+```
+
+At the input is the “correct” wallet address, amount and comment. The output is True if the desired incoming transaction is found and False if not.
+
+## Telegram bot
+
+First, let's create the basis for the bot.
 
 ## Content of `main.py`
 
@@ -134,6 +578,8 @@ dp = Dispatcher(bot, storage=MemoryStorage())
 
 ### States
 
+We need "States" to split the bot workflow into stages. We can specialize each stage for a specific task.
+
 ```python
 class DataInput (StatesGroup):
     firstState = State()
@@ -146,10 +592,22 @@ I won't go any deeper. For details and examples, I suggest looking into the [Aio
 
 ### Message handlers:
 
-Command /start handler:
+So, we have finally come to the part where we will write the bot interaction logic.
+
+We'll be using two types of handlers:
+
+- `message_handler` is used to handle messages from the user.
+- `callback_query_handler` is used to handle callbacks from inline keyboards.
+
+So if we want to handle a message from the user, we will use `message_handler` by placing the `@dp.message_handler` decorator above the function. In this case, the function will be called when the user sends a message to the bot.
+
+In the decorator, we can specify the conditions under which the function will be called. For example, if we want the function to be called only when the user sends a message with the text `/start`, then we will write `@dp.message_handler(commands=['start'])`.
+
+Handlers need to be assigned to a async function. In this case, we will use the `async def` syntax. The `async def` syntax is used to define a function that will be called asynchronously.
+
+So, let's start with the `/start` command handler:
 
 ```python
-# /start command handler
 @dp.message_handler(commands=['start'], state='*')
 async def cmd_start(message: types.Message):
     await message.answer(f"WORKMODE: {WORK_MODE}")
@@ -312,431 +770,6 @@ In `skip_updates=True` we specify that we do not want to process old messages. B
 All code of `main.py` can be found [here](https://github.com/LevZed/ton-payments-in-telegram-bot/blob/main/bot/main.py).
 
 :::
-
-## API
-
-_We have the ability to interact with the blockchain using third-party APIs provided by some network members. With these services, developers can skip the step of running their own node and customizing their API._
-
-## Required Requests
-
-In fact, what do we need to confirm that the user has transferred the required amount to us?
-
-We just need to look at the latest incoming transfers to our wallet and among them find a transaction from the right address, with the right amount (and possibly a unique comment).
-For all this, toncenter has a `getTransactions` method.
-
-### getTransactions
-
-Applying it, by default, we will get the last 10 transactions. However, we can also indicate that we need more, but this will slightly increase the time of a response. And, most likely, you do not need so much.
-
-If you want more, then each transaction has `lt` and `hash` . You can look at, for example, 30 transactions and if the right one was not found among them, then take `lt` and `hash` from the last one and add them to the request.
-
-So you get the next 30 transactions and so on.
-
-For example, there is a wallet in the test network `EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5`, it has only 4 transactions:
-
-Using a query `https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5&limit=2&to_lt=0&archival=true` we will get the following response:
-
-```json
-{
-  "ok": true,
-  "result": [
-    {
-      "@type": "raw.transaction",
-      "utime": 1658130319,
-      "data": "te6cckECBQEAAR4AA7FxUozOq2u80HZKRwE406KNp2oVnWAx2ObOHVjccHWn/NAAABxMCR0wOHEhCqfuVgP9z981Ltb+JWyDaTHSn+Q0gYXot3RAQjGQAAAcRtuBuDYtUPjwAAAkKAECAwEBoAQAgnL4IEWB5LE/vWXLudaYwd8il06Rzrek5pd9TCOm8FDCRlEx0oZZ4VOvcucIihMYSiqChFZPUftTeQSXkXfpjbrGABEMSEkO5rKAASAA10gBZoEkggIfC1iCuX4nc2G4wq+hNHOlehBP1bZBAz4M8NEABUozOq2u80HZKRwE406KNp2oVnWAx2ObOHVjccHWn/NQ7msoAAYUWGAAAAOJgSOmBMWqHx4AAAAAKbKwkDE5MrK9MpB4T8ZFQBMtbAk=",
-      "transaction_id": {
-        "@type": "internal.transactionId",
-        "lt": "1944556000003",
-        "hash": "swpaG6pTBXwYI2024NAisIFp59Fw3k1DRQ5fa5SuKAE="
-      },
-      "fee": "33",
-      "storage_fee": "33",
-      "other_fee": "0",
-      "in_msg": {
-        "@type": "raw.message",
-        "source": "EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R",
-        "destination": "EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5",
-        "value": "1000000000",
-        "fwd_fee": "666672",
-        "ihr_fee": "0",
-        "created_lt": "1944556000002",
-        "body_hash": "kBfGYBTkBaooeZ+NTVR0EiVGSybxQdb/ifXCRX5O7e0=",
-        "msg_data": {
-          "@type": "msg.dataText",
-          "text": "U2VhIGJyZWV6ZSDwn4yK"
-        },
-        "message": "Sea breeze 🌊"
-      },
-      "out_msgs": []
-    },
-    {
-      "@type": "raw.transaction",
-      "utime": 1658126823,
-      "data": "te6cckECBQEAASMAA7NxUozOq2u80HZKRwE406KNp2oVnWAx2ObOHVjccHWn/NAAABxG24G4OTlT0DAhE0aELXSEcncwE49P/9vECBbl31+UWLCvVJqgAAAa2t3liDYtUB5wAABBI2gBAgMBAaAEAIJyKqjqNU0guBAa3/ENp+bnQLlnXhkASZW2OWeFM5DakO/4IEWB5LE/vWXLudaYwd8il06Rzrek5pd9TCOm8FDCRgATDIJGyQ7msoABIADdSAFmgSSCAh8LWIK5fidzYbjCr6E0c6V6EE/VtkEDPgzw0QAFSjM6ra7zQdkpHATjToo2nahWdYDHY5s4dWNxwdaf81DuaygABhRYYAAAA4jbcDcExaoDzgAAAAApuDk0tzOQMze5Mrm6EHhPxllAGLZ+6g==",
-      "transaction_id": {
-        "@type": "internal.transactionId",
-        "lt": "1943166000003",
-        "hash": "hxIQqn7lYD/c/fNS7W/iVsg2kx0p/kNIGF6Ld0QEIxk="
-      },
-      "fee": "2331",
-      "storage_fee": "2331",
-      "other_fee": "0",
-      "in_msg": {
-        "@type": "raw.message",
-        "source": "EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R",
-        "destination": "EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5",
-        "value": "1000000000",
-        "fwd_fee": "666672",
-        "ihr_fee": "0",
-        "created_lt": "1943166000002",
-        "body_hash": "7iirXn1RtliLnBUGC5umIQ6KTw1qmPk+wwJ5ibh9Pf0=",
-        "msg_data": {
-          "@type": "msg.dataText",
-          "text": "U3ByaW5nIGZvcmVzdCDwn4yy"
-        },
-        "message": "Spring forest 🌲"
-      },
-      "out_msgs": []
-    }
-  ]
-}
-```
-
-We have received the last two transactions of this address. When adding `lt` and `hash`: to the query, we will again receive two transactions, however, the second one will become the next one in a row. That is - we will get the second and third transactions of this address:
-
-```json
-{
-  "ok": true,
-  "result": [
-    {
-      "@type": "raw.transaction",
-      "utime": 1658126823,
-      "data": "te6cckECBQEAASMAA7NxUozOq2u80HZKRwE406KNp2oVnWAx2ObOHVjccHWn/NAAABxG24G4OTlT0DAhE0aELXSEcncwE49P/9vECBbl31+UWLCvVJqgAAAa2t3liDYtUB5wAABBI2gBAgMBAaAEAIJyKqjqNU0guBAa3/ENp+bnQLlnXhkASZW2OWeFM5DakO/4IEWB5LE/vWXLudaYwd8il06Rzrek5pd9TCOm8FDCRgATDIJGyQ7msoABIADdSAFmgSSCAh8LWIK5fidzYbjCr6E0c6V6EE/VtkEDPgzw0QAFSjM6ra7zQdkpHATjToo2nahWdYDHY5s4dWNxwdaf81DuaygABhRYYAAAA4jbcDcExaoDzgAAAAApuDk0tzOQMze5Mrm6EHhPxllAGLZ+6g==",
-      "transaction_id": {
-        "@type": "internal.transactionId",
-        "lt": "1943166000003",
-        "hash": "hxIQqn7lYD/c/fNS7W/iVsg2kx0p/kNIGF6Ld0QEIxk="
-      },
-      "fee": "2331",
-      "storage_fee": "2331",
-      "other_fee": "0",
-      "in_msg": {
-        "@type": "raw.message",
-        "source": "EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R",
-        "destination": "EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5",
-        "value": "1000000000",
-        "fwd_fee": "666672",
-        "ihr_fee": "0",
-        "created_lt": "1943166000002",
-        "body_hash": "7iirXn1RtliLnBUGC5umIQ6KTw1qmPk+wwJ5ibh9Pf0=",
-        "msg_data": {
-          "@type": "msg.dataText",
-          "text": "U3ByaW5nIGZvcmVzdCDwn4yy"
-        },
-        "message": "Spring forest 🌲"
-      },
-      "out_msgs": []
-    },
-    {
-      "@type": "raw.transaction",
-      "utime": 1657873517,
-      "data": "te6cckECBQEAARUAA7FxUozOq2u80HZKRwE406KNp2oVnWAx2ObOHVjccHWn/NAAABra3eWINHKamCzNyhJYhx3LFjT1LoOSb8t8/BKZD64tdlEozSkwAAAa2sQlvDYtEkbQAAAgKAECAwEBoAQAgnIWNBaoz9t25kiF2dzOj2M7gKcODZM65K9V66Bee1OTpSqo6jVNILgQGt/xDafm50C5Z14ZAEmVtjlnhTOQ2pDvABEMQEkO5rKAASAAxUgBZoEkggIfC1iCuX4nc2G4wq+hNHOlehBP1bZBAz4M8NEABUozOq2u80HZKRwE406KNp2oVnWAx2ObOHVjccHWn/NQ7msoAAYUWGAAAANbW7yxBMWiSNoAAAAAKbKxt7cyQB5Hn/Q=",
-      "transaction_id": {
-        "@type": "internal.transactionId",
-        "lt": "1845458000003",
-        "hash": "k5U9AwIRNGhC10hHJ3MBOPT//bxAgW5d9flFiwr1Sao="
-      },
-      "fee": "1",
-      "storage_fee": "1",
-      "other_fee": "0",
-      "in_msg": {
-        "@type": "raw.message",
-        "source": "EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R",
-        "destination": "EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5",
-        "value": "1000000000",
-        "fwd_fee": "666672",
-        "ihr_fee": "0",
-        "created_lt": "1845458000002",
-        "body_hash": "XpTXquHXP64qN6ihHe7Tokkpy88tiL+5DeqIrvrNCyo=",
-        "msg_data": {
-          "@type": "msg.dataText",
-          "text": "U2Vjb25k"
-        },
-        "message": "Second"
-      },
-      "out_msgs": []
-    }
-  ]
-}
-```
-
-The request will look like this - `https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5&limit=2&lt=1943166000003&hash=hxIQqn7lYD%2Fc%2FfNS7W%2FiVsg2kx0p%2FkNIGF6Ld0QEIxk%3D&to_lt=0&archival=true`
-
-We will also need a method `detectAddress`.
-
-Not sure about mainnet, but on testnet, my tonkeeper wallet address is:
-`kQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aCTb`, and when I look at the transaction in the explorer, instead of my address there
-`EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R`.
-This method returns us the “right” address:
-
-```json
-{
-  "ok": true,
-  "result": {
-    "raw_form": "0:b3409241010f85ac415cbf13b9b0dc6157d09a39d2bd0827eadb20819f067868",
-    "bounceable": {
-      "b64": "EQCzQJJBAQ+FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R",
-      "b64url": "EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R"
-    },
-    "non_bounceable": {
-      "b64": "UQCzQJJBAQ+FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aMKU",
-      "b64url": "UQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aMKU"
-    },
-    "given_type": "friendly_bounceable",
-    "test_only": true
-  }
-}
-```
-
-We need `b64url`.
-
-Also, this method helps us to check the correctness of the address sent by the user.
-
-For the most part, that's all we need.
-
-### API requests and what to do with them
-
-Let's go back to the IDE. open file `api.py`.
-
-```python
-import requests
-import json
-# We import our db module, as it will be convenient to add from here
-# transactions to the database
-import db
-
-# This is the beginning of our requests
-MAINNET_API_BASE = "https://toncenter.com/api/v2/"
-TESTNET_API_BASE = "https://testnet.toncenter.com/api/v2/"
-
-# Find out which network we are working on
-with open('config.json', 'r') as f:
-    config_json = json.load(f)
-    MAINNET_API_TOKEN = config_json['MAINNET_API_TOKEN']
-    TESTNET_API_TOKEN = config_json['TESTNET_API_TOKEN']
-    MAINNET_WALLET = config_json['MAINNET_WALLET']
-    TESTNET_WALLET = config_json['TESTNET_WALLET']
-    WORK_MODE = config_json['WORK_MODE']
-
-if WORK_MODE == "mainnet":
-    API_BASE = MAINNET_API_BASE
-    API_TOKEN = MAINNET_API_TOKEN
-    WALLET = MAINNET_WALLET
-else:
-    API_BASE = TESTNET_API_BASE
-    API_TOKEN = TESTNET_API_TOKEN
-    WALLET = TESTNET_WALLET
-```
-
-Our first request function `detectAddress`:
-
-```python
-def detect_address(address):
-    url = f"{API_BASE}detectAddress?address={address}&api_key={API_TOKEN}"
-    r = requests.get(url)
-    response = json.loads(r.text)
-    try:
-        return response['result']['bounceable']['b64url']
-    except:
-        return False
-```
-
-At the input, we have the estimated address, and at the output, either the “correct” address necessary for us for further work, or False.
-
-You may notice that an API key has appeared at the end of the request. It is needed to remove the limit on the number of requests to the API. Without it, we are limited to one request per second.
-
-Next function for `getTransactions`:
-
-```python
-def get_address_transactions():
-    url = f"{API_BASE}getTransactions?address={WALLET}&limit=30&archival=true&api_key={API_TOKEN}"
-    r = requests.get(url)
-    response = json.loads(r.text)
-    return response['result']
-```
-
-This function returns the last 30 transactions for our `WALLET`.
-
-Here you can see `archival=true`, it is needed so that we take transactions only from a node with a complete history of the blockchain.
-
-At the output, we get a list of transactions - [{0},{1},{…},{29}]. List of dictionaries in short.
-
-And finally the last function:
-
-```python
-def find_transaction(user_wallet, value, comment):
-		# Get the last 30 transactions
-    transactions = get_address_transactions()
-    for transaction in transactions:
-				# Select the incoming "message" - transaction
-        msg = transaction['in_msg']
-        if msg['source'] == user_wallet and msg['value'] == value and msg['message'] == comment:
-						# If all the data match, we check that this transaction
-						# we have not verified before
-            t = db.check_transaction(msg['body_hash'])
-            if t == False:
-								# If not, we write in the table to the verified
-								# and return True
-                db.add_v_transaction(
-                    msg['source'], msg['body_hash'], msg['value'], msg['message'])
-                print("find transaction")
-                print(
-                    f"transaction from: {msg['source']} \nValue: {msg['value']} \nComment: {msg['message']}")
-                return True
-						# If this transaction is already verified, we check the rest, we can find the right one
-            else:
-                pass
-		# If the last 30 transactions do not contain the required one, return False
-		# Here you can add code to see the next 29 transactions
-		# However, within the scope of the Example, this would be redundant.
-    return False
-```
-
-At the input is the “correct” wallet address, amount and comment. The output is True if the desired incoming transaction is found and False if not.
-
-## Database
-
-### Create a database
-
-This example uses a local Sqlite database.
-
-We have 2 tables:
-
-transactions
-
-```sql
-CREATE TABLE transactions (
-    source  VARCHAR (48) NOT NULL,
-    hash    VARCHAR (50) UNIQUE
-                         NOT NULL,
-    value   INTEGER      NOT NULL,
-    comment VARCHAR (50)
-);
-```
-
-users
-
-```sql
-CREATE TABLE users (
-    id         INTEGER       UNIQUE
-                             NOT NULL,
-    username   VARCHAR (33),
-    first_name VARCHAR (300),
-    wallet     VARCHAR (50)  DEFAULT none
-);
-```
-
-In the `users` table we store ... users. Their telegram id, @username,
-first name and wallet. The wallet is added to the database on the first
-successful payment.
-
-The `transactions` table stores verified transactions.
-
-### Working with DB
-
-Open `db.py`.
-
-The user made a transaction and clicked on the button to verify it. How to make sure that the same transaction is not confirmed twice?
-
-There is a body_hash in transactions, with the help of which we can easily understand whether there is a transaction in the database or not.
-
-We add transactions to the database in which we are “sure”. And the `check_transaction` function checks whether the found transaction is in the database or not.
-
-`add_v_transaction` - add transaction to transactions table.
-
-```python
-def add_v_transaction(source, hash, value, comment):
-    cur.execute("INSERT INTO transactions (source, hash, value, comment) VALUES (?, ?, ?, ?)",
-                (source, hash, value, comment))
-    locCon.commit()
-```
-
-```python
-def check_transaction(hash):
-    cur.execute(f"SELECT hash FROM transactions WHERE hash = '{hash}'")
-    result = cur.fetchone()
-    if result:
-        return True
-    return False
-```
-
-`check_user` checks if the user is in the database and if not, adds it
-
-```python
-def check_user(user_id, username, first_name):
-    cur.execute(f"SELECT id FROM users WHERE id = '{user_id}'")
-    result = cur.fetchone()
-
-    if not result:
-        cur.execute("INSERT INTO users (id, username, first_name) VALUES (?, ?, ?)",
-                    (user_id, username, first_name))
-        locCon.commit()
-        return False
-    return True
-```
-
-The user can store a wallet in the table. It is added with the first successful purchase. The `v_wallet` function checks if the user has an associated wallet. If there is, then returns it. If not, then add.
-
-```python
-def v_wallet(user_id, wallet):
-    cur.execute(f"SELECT wallet FROM users WHERE id = '{user_id}'")
-    result = cur.fetchone()
-
-    if result[0] == "none":
-        cur.execute(
-            f"UPDATE users SET wallet = '{wallet}' WHERE id = '{user_id}'")
-        locCon.commit()
-        return True
-    else:
-        return result[0]
-```
-
-`get_user_wallet` simply returns the user's wallet.
-
-```python
-def get_user_wallet(user_id):
-    cur.execute(f"SELECT wallet FROM users WHERE id = '{user_id}'")
-    result = cur.fetchone()
-    return result[0]
-```
-
-`get_user_payments` returns the user's payments list.
-
-```python
-def get_user_payments(user_id):
-    wallet = get_user_wallet(user_id)
-
-    if wallet == "none":
-        return "You have no wallet"
-    else:
-
-        cur.execute(f"SELECT * FROM transactions WHERE source = '{wallet}'")
-        result = cur.fetchall()
-        tdict = {}
-        tlist = []
-        try:
-            for transaction in result:
-                tdict = {
-                    "value": transaction[2],
-                    "comment": transaction[3],
-                }
-                tlist.append(tdict)
-            return tlist
-
-        except:
-
-            return False
-```
 
 ## References
 
