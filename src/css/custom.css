@@ -25,13 +25,21 @@
   'Segoe UI Emoji', 'Segoe UI Symbol';
   --ifm-font-family-monospace: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas,
   'Liberation Mono', 'Courier New', monospace;
+
+  --ifm-hr-height: .5px;
+  --ifm-hr-background-color: #DFE5E8;
+
+  --ifm-toc-border-color: #DFE5E8;
+  --ifm-toc-border-size: 0.5px;
+
+  --ifm-global-border-width: 0.5px;
 }
 
 
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #07a0ec;
+  --ifm-color-primary: #019BE9;
   --ifm-color-primary-dark: #0690d4;
   --ifm-color-primary-darker: #0688c9;
   --ifm-color-primary-darkest: #0570a5;
@@ -971,6 +979,10 @@ strong {
   /*justify-content: center;*/
 }
 
+.markdown img {
+  /*border-radius: 24px;*/
+}
+
 .markdown a {
   font-weight: 500;
 }
@@ -987,6 +999,11 @@ strong {
 }
 .footer, .footer__title {
   font-family: 'Mulish', sans-serif;
+  font-size: 15px;
+}
+
+.footer {
+  /*margin-top: 120px;*/
 }
 
 
@@ -1409,27 +1426,10 @@ html {
 
 
 
-.markdown a {
-  background: rgb(248, 250, 255);
-  border-bottom: 1px solid var(--ifm-color-primary-lightest);
+.table-of-contents__left-border {
+  border-left: 0.5px solid var(--ifm-toc-border-color) !important;
 }
 
-.markdown a:hover {
-  background: rgba(235, 242, 252, 1);
-}
-.markdown a:active {
-  background: rgb(214, 226, 243);
-}
-
-[data-theme='dark'] .markdown a {
-  background: rgba(25, 26, 26, 0.3);
-  border-bottom: 1px solid var(--ifm-color-primary-darkest);
-}
-
-[data-theme='dark'] .markdown a:hover {
-  background: rgb(40, 40, 40);
-}
-
-[data-theme='dark'] .markdown a:active {
-  background: rgba(25, 26, 26, 0.7);
+.theme-doc-sidebar-container {
+  border-right: 0.5px solid var(--ifm-toc-border-color) !important;
 }

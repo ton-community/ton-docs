@@ -17,7 +17,7 @@ There are several ways to identify an area where you can contribute to the Wiki:
 - If you need to add or change anything in TON Docs  raise a PR
   against the `main` branch.
 - The documentation team will review the PR or reach out accordingly.
-- Repository: https://github.com/SwiftAdviser/ton-docs
+- Repository: https://github.com/ton-community/ton-docs
 
 ## Development
 
@@ -30,7 +30,7 @@ You can use Gitpod (a free, online, VS Code-like IDE) for contributing. With a s
 * run `yarn start`
 * So that you can start contributing straight away.
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/SwiftAdviser/ton-docs)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ton-community/ton-docs)
 
 :::tip
 

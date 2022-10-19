@@ -21,6 +21,7 @@ const config = {
         hashed: true,
         indexPages: true,
         indexBlog: false,
+        searchBarShortcutHint: false,
         // For Docs using Chinese, The `language` is recommended to set to:
         // ```
         // language: ["en", "zh"],
@@ -116,7 +117,7 @@ const config = {
           // Please change this to your repo
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/swiftadviser/ton-docs/tree/main/',
+            'https://github.com/ton-community/ton-docs/tree/main/',
           // lastVersion: '1.0.0',
           // versions: {
           //   current: {
@@ -136,7 +137,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/swiftadviser/ton-docs/tree/main/',
+            'https://github.com/ton-community/ton-docs/tree/main/',
         },
         theme:
           {
@@ -195,13 +196,13 @@ const config = {
             type: 'doc',
             docId: 'learn/introduction',
             position: 'left',
-            label: '📚 Learn',
+            label: 'Learn',
           },
           {
             type: 'doc',
             docId: 'develop/getting-started',
             position: 'left',
-            label: '🛠 Develop',
+            label: 'Develop',
           },
           // {
           //   type: 'doc',
@@ -213,7 +214,26 @@ const config = {
             type: 'doc',
             docId: 'participate/README',
             position: 'left',
-            label: '🚀 Participate',
+            label: 'Participate',
+          },
+          {
+            type: 'dropdown',
+            label: 'Community',
+            position: 'left',
+            items: [
+              {
+                to: 'contribute',
+                label: 'Contribute to Docs',
+              },
+              {
+                to: 'https://answers.ton.org/',
+                label: 'Q&A',
+              },
+              {
+                to: 'https://t.me/TonDev_eng',
+                label: 'TON Dev Chat',
+              },
+            ],
           },
           // {
           //   type: 'doc',
@@ -221,24 +241,8 @@ const config = {
           //   position: 'left',
           //   label: 'Integrate',
           // },
-
           {
-            to: 'contribute',
-            label: 'Contribute',
-            position: 'right',
-          },
-          {
-            to: 'https://answers.ton.org/',
-            label: 'Q&A',
-            position: 'right',
-          },
-          {
-            to: 'https://t.me/TonDev_eng',
-            label: 'Dev Chat',
-            position: 'right',
-          },
-          {
-            href: 'https://github.com/swiftadviser/ton-docs',
+            href: 'https://github.com/ton-community/ton-docs',
             position: 'right',
             className: 'header-github-link',
             'aria-label': 'GitHub repository',
@@ -246,7 +250,7 @@ const config = {
         ],
       },
       footer: {
-        style: 'dark',
+        // style: 'dark',
         links: [
           {
             title: 'Use TON',
@@ -336,6 +340,7 @@ const config = {
             ],
           },
         ],
+        // copyright: `Copyright © ${new Date().getFullYear()} TON Foundation`,
       },
       prism: {
         // theme: darkCodeTheme,
@@ -352,7 +357,7 @@ const config = {
       },
       docs: {
         sidebar: {
-          hideable: true,
+          hideable: false,
         },
       },
       colorMode: {
