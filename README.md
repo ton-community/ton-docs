@@ -1,6 +1,6 @@
 # TON Documentation for humans
 
-🥰 User-friendly documentation for newcomers to the TON blockchain.
+User-friendly documentation for newcomers to the TON blockchain.
 
 ![preview](https://user-images.githubusercontent.com/5148967/187221315-fb8aa098-d573-4042-992e-b91170521334.jpg)
 
