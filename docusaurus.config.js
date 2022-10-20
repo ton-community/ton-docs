@@ -49,28 +49,8 @@ const config = {
 
           // payment processing
           {
-            to: '/develop/dapps/payment-processing/common',
-            from: '/develop/payment-processing/common',
-          },
-          {
             to: '/develop/dapps/payment-processing/overview',
             from: '/develop/payment-processing/overview',
-          },
-          {
-            to: '/develop/dapps/payment-processing/withdrawals',
-            from: '/develop/payment-processing/withdrawals',
-          },
-          {
-            to: '/develop/dapps/payment-processing/withdrawals',
-            from: '/develop/payment-processing/withdrawals',
-          },
-          {
-            to: '/develop/dapps/payment-processing/deposits-single-wallet',
-            from: '/develop/payment-processing/deposits-single-wallet',
-          },
-          {
-            to: '/develop/dapps/payment-processing/deposits-multi-wallet',
-            from: '/develop/payment-processing/deposits-multi-wallet',
           },
         ],
       },
