@@ -138,7 +138,7 @@ locCon.commit()
 
 This code, needs to be run only once, when the database is created.
 
-### Working with DB
+### Work with database
 
 Let's analyze the situation:
 The user made a transaction. How to verify it? How to make sure that the same transaction is not confirmed twice?
@@ -250,9 +250,9 @@ If you want more, then each transaction has `lt` and `hash` . You can look at, f
 
 So you get the next 30 transactions and so on.
 
-For example, there is a wallet in the test network `EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5`, it has only 4 transactions:
+For example, there is a wallet in the test network `EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5`, it has some transactions:
 
-Using a [query](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5&limit=2&to_lt=0&archival=true) we will get the following response:
+Using a [query](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5&limit=2&to_lt=0&archival=true) we will get the response, that contains 2 transactions (some of the information that is not needed now has been hidden, you can see the full answer at the link above):
 
 ```json
 {
@@ -487,8 +487,6 @@ At the input is the “correct” wallet address, amount and comment. The output
 
 First, let's create the basis for the bot.
 
-## Content of `main.py`
-
 ### Imports
 
 In this part, we will import the necessary libraries.
@@ -601,7 +599,11 @@ We'll be using two types of handlers:
 
 So if we want to handle a message from the user, we will use `message_handler` by placing the `@dp.message_handler` decorator above the function. In this case, the function will be called when the user sends a message to the bot.
 
-In the decorator, we can specify the conditions under which the function will be called. For example, if we want the function to be called only when the user sends a message with the text `/start`, then we will write `@dp.message_handler(commands=['start'])`.
+In the decorator, we can specify the conditions under which the function will be called. For example, if we want the function to be called only when the user sends a message with the text `/start`, then we will write:
+
+```
+@dp.message_handler(commands=['start'])
+```
 
 Handlers need to be assigned to a async function. In this case, we will use the `async def` syntax. The `async def` syntax is used to define a function that will be called asynchronously.
 
@@ -624,10 +626,13 @@ async def cmd_start(message: types.Message):
     await DataInput.firstState.set()
 ```
 
-Command /cancel handler:
+in decorator of this handler we see `state='*'`. This means that this handler will be called regardless of the state of the bot. If we want the handler to be called only when the bot is in a specific state, we will write `state=DataInput.firstState`. In this case, the handler will be called only when the bot is in the `firstState` state.
+
+After user sends `/start` command, the bot will check if the user is in the database, using `db.check_user` function. If not, it will add him. Also, this function will return bool value and we can use it to address the user differently. After that the bot will set the state to `firstState`.
+
+Next is the /cancel command handler. It needed to return to the `firstState` state.
 
 ```python
-# /cancel command handler
 @dp.message_handler(commands=['cancel'], state="*")
 async def cmd_cancel(message: types.Message):
     await message.answer("Canceled")
@@ -635,7 +640,7 @@ async def cmd_cancel(message: types.Message):
     await DataInput.firstState.set()
 ```
 
-Command /buy handler:
+And, of course, the `/buy` command handler. In this example we will sell air of different types. So, we will use reply keyboard to choose the type of air.
 
 ```python
 # /buy command handler
@@ -652,24 +657,11 @@ async def cmd_buy(message: types.Message):
     await DataInput.secondState.set()
 ```
 
-Command /me handler:
+So when user sends `/buy` command, the bot will send him a reply keyboard with air types. After user chooses the type of air, the bot will set the state to `secondState`.
 
-```python
-# /me command handler
-@dp.message_handler(commands=['me'], state="*")
-async def cmd_me(message: types.Message):
-    await message.answer(f"Your transactions")
-    # db.get_user_payments returns list of transactions for user
-    transactions = db.get_user_payments(message.from_user.id)
-    if transactions == False:
-        await message.answer(f"You have no transactions")
-    else:
-        for transaction in transactions:
-            # we need to remember that blockchain stores value in nanotons. 1 toncoin = 1000000000 in blockchain
-            await message.answer(f"{int(transaction['value'])/1000000000} - {transaction['comment']}")
-```
+This habdler will work only when `secondState` is set, and will be waiting for a message from the user, with air type. In this case, we need to store air type, that user chose, so we pass FSMContext as an argument to the function.
 
-This habdler will work only when `secondState` is set, and will be waiting for a message from the user, with air type:
+FSMContext is used to store data in the bot's memory. We can store any data in it, but this memory is not persistent, so if the bot is restarted, the data will be lost. But it's good to store temporary data in it.
 
 ```python
 # handle air type
@@ -677,27 +669,47 @@ This habdler will work only when `secondState` is set, and will be waiting for a
 async def air_type(message: types.Message, state: FSMContext):
     if message.text == "Just pure 🌫":
         await state.update_data(air_type="Just pure 🌫")
-        await DataInput.WalletState.set()
     elif message.text == "Fresh asphalt 🛣":
         await state.update_data(air_type="Fresh asphalt 🛣")
-        await DataInput.WalletState.set()
     elif message.text == "Spring forest 🌲":
         await state.update_data(air_type="Spring forest 🌲")
-        await DataInput.WalletState.set()
     elif message.text == "Sea breeze 🌊":
         await state.update_data(air_type="Sea breeze 🌊")
-        await DataInput.WalletState.set()
     else:
         await message.answer("Wrong air type")
         await DataInput.secondState.set()
         return
+    await DataInput.WalletState.set()
     await message.answer(f"Send your wallet address")
 ```
 
-This handler will work only when `WalletState` is set, and will be waiting for a message from the user, with wallet address:
+We use...
 
 ```python
-# handle wallet address
+await state.update_data(air_type="Just pure 🌫")
+```
+
+...to store air type in FSMContext. After that we set the state to `WalletState` and ask the user to send his wallet address.
+
+This handler will work only when `WalletState` is set, and will be waiting for a message from the user, with wallet address.
+
+So, next handler seems to be very complicated, but it's not. Firstly we check if the message is a valid wallet address using `len(message.text) == 48` because wallet address is 48 characters long. After that we use `api.detect_address` function to check if the address is valid. As you remember from API part, this fucntion also returns "Correct" address, that will be stored in the database.
+
+After that, we get air type from FSMContext using `await state.get_data()` and store it in `user_data` variable.
+
+So, we have all the data required for the payment process. We just need to generate a payment link and send it to the user. So, let's use inline keyboard.
+
+I will create 3 buttons for payment:
+
+- for official Ton Wallet
+- for TonHub
+- for TonKeeper
+
+You may use any you want.
+
+And we need button, that user will press after transaction, so we can chek if the payment was successful.
+
+```python
 @dp.message_handler(state=DataInput.WalletState)
 async def user_wallet(message: types.Message, state: FSMContext):
     if len(message.text) == 48:
@@ -731,9 +743,28 @@ async def user_wallet(message: types.Message, state: FSMContext):
         await DataInput.WalletState.set()
 ```
 
+One last message handler, that we need is for `/me` command. It will show user his payments.
+
+```python
+# /me command handler
+@dp.message_handler(commands=['me'], state="*")
+async def cmd_me(message: types.Message):
+    await message.answer(f"Your transactions")
+    # db.get_user_payments returns list of transactions for user
+    transactions = db.get_user_payments(message.from_user.id)
+    if transactions == False:
+        await message.answer(f"You have no transactions")
+    else:
+        for transaction in transactions:
+            # we need to remember that blockchain stores value in nanotons. 1 toncoin = 1000000000 in blockchain
+            await message.answer(f"{int(transaction['value'])/1000000000} - {transaction['comment']}")
+```
+
 ### Callback handlers:
 
-Callback handler for button "check transaction":
+In buttons we can set callback data, that will be sent to the bot when user presses the button. We set callback data to "check" in the button, that user will press after transaction. So, we need to handle this callback.
+
+Callback handlers are very similar to message handlers, but they have `types.CallbackQuery` as an argument instead of `message`. Function decorator is also different.
 
 ```python
 @dp.callback_query_handler(lambda call: call.data == "check", state=DataInput.PayState)
@@ -745,7 +776,7 @@ async def check_transaction(call: types.CallbackQuery, state: FSMContext):
     comment = user_data['air_type']
     result = api.find_transaction(source, value, comment)
     if result == False:
-        await call.answer("Wait a bit, try again in 10 seconds. You can also check the status of the transaction through the explorer (ton.sh/)", show_alert=True)
+        await call.answer("Wait a bit, try again in 10 seconds. You can also check the status of the transaction through the explorer (tonscan.org/)", show_alert=True)
     else:
         db.v_wallet(call.from_user.id, source)
         await call.message.edit_text("Transaction is confirmed \n/start to restart")
@@ -753,7 +784,9 @@ async def check_transaction(call: types.CallbackQuery, state: FSMContext):
         await DataInput.firstState.set()
 ```
 
-### Last part of `main.py`:
+In this handler we get user data from FSMContext, and use `api.find_transaction` function to check if the transaction was successful. If it was, we store wallet address in the database, and send notification to the user. After that, user can find his transactions using `/me` command.
+
+### Last part of `main.py`
 
 At the end, don't forget:
 
