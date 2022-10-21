@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-Here you can links to the most important resources for you to get started with TON:
+Here you can see links to the most important resources for you to get started with TON:
 
 - [Wallets](https://ton.org/wallets) — a list of popular wallets for TON.
 - [Explorers](https://ton.app/explorers) — to read transactions in the blockchain.
@@ -14,17 +14,23 @@ In case you are web or bot developer, you could find useful these repositories:
 
 ### JavaScript
 
-- [TonCenter API Examples](https://github.com/toncenter/examples) (tonweb, with comments)
-- [Payment Channels Example](https://github.com/toncenter/payment-channels-example) (tonweb, with comments)
-- [TON Bridge front-end](https://github.com/ton-blockchain/bridge) (Vue.js, no comments)
-- [Web Wallet source code](https://github.com/toncenter/ton-wallet) (tonweb, no comments)
+* Payment processing using JavaScript:
+  * [Create a key pair and a wallet](https://github.com/toncenter/examples/blob/main/common.js) (tonweb)
+  * [Accepting deposits to a single wallet](https://github.com/toncenter/examples/blob/main/deposits-single-wallet.js) (tonweb)
+  * [Accepting deposits to multiple wallets](https://github.com/toncenter/examples/blob/main/deposits-multi-wallet.js) (tonweb)
+  * [Withdrawal processing](https://github.com/toncenter/examples/blob/main/withdrawals.js) (tonweb)
+  * [Payment Channels Example](https://github.com/toncenter/payment-channels-example/blob/main/index.js) (tonweb)
+* [TON Bridge front-end](https://github.com/ton-blockchain/bridge) (Vue.js, no comments)
+* [Web Wallet source code](https://github.com/toncenter/ton-wallet) (tonweb, no comments)
+
+
 
 ### Python
 
 - [psylopank/pytonlib examples](https://github.com/psylopunk/pytonlib/tree/main/examples)
 - [Transfer NFT & Jettons by creating a transfer message from an owner wallet](https://github.com/tonfactory/tonsdk#transfer-nft--jettons-by-creating-a-transfer-message-from-an-owner-wallet)
 - [Create mnemonic, init wallet class, create external message to deploy the wallet](https://github.com/tonfactory/tonsdk#create-mnemonic-init-wallet-class-create-external-message-to-deploy-the-wallet)
-- [An example of accepting payments in a telegram bot](../dapps/payment-processing/accept-payments-in-a-telegram-bot.md) (Python with Aiogram)
+- [Accept payments using Telegram bot](../dapps/payment-processing/accept-payments-in-a-telegram-bot.md) (Python with Aiogram)
 
 ### Go
 
@@ -36,9 +42,10 @@ Here is a list of modern SDKs that continuously supported and improved:
 
 ### JavaScript SDK
 
-- [tonweb](https://github.com/toncenter/tonweb) — JavaScript API for TON blockchain.
-- [ton-js](https://github.com/tonwhales/ton) — Cross-platform client for TON blockchain.
-- [@tegro/ton3-client](https://github.com/TegroTON/ton3-client) — ton3 client
+* [ton-community/ton-js](https://github.com/ton-community/ton) — Cross-platform client for TON blockchain, by ton-community
+* [toncenter/tonweb](https://github.com/toncenter/tonweb) — Cross-platform client for TON blockchain, by TonCenter
+* [@tegro/ton3-client](https://github.com/TegroTON/ton3-client) — JS ton3-client for tonhold API, by TonHold
+* [nns2009/ton-payment-tracker](https://github.com/nns2009/ton-payment-tracker) — Ton Payment Tracker
 
 ### Python SDK
 

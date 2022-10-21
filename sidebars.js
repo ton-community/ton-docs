@@ -16,6 +16,7 @@ const sidebars = {
 
   learn: [
     'learn/introduction',
+    'learn/glossary',
     {
       'type': 'html',
       'value': '<hr/>',
@@ -141,7 +142,6 @@ const sidebars = {
           label: 'Catchain Consensus Protocol',
           href: 'https://ton.org/catchain.pdf',
         },
-
       ],
     },
   ],
@@ -267,6 +267,15 @@ const sidebars = {
             'develop/dapps/apis/adnl',
           ],
         },
+
+        // {
+        //   type: 'category',
+        //   label: 'Choose Your SDK',
+        //   items: [
+        //     ''
+        //   ]
+        // },
+
         {
           type: 'category',
           label: 'DeFi Development',
@@ -278,18 +287,13 @@ const sidebars = {
           ],
         },
 
-        {
-          type: 'category',
-          label: 'Payment Processing',
-          items: [
-            'develop/dapps/payment-processing/overview',
-            'develop/dapps/payment-processing/common',
-            'develop/dapps/payment-processing/deposits-single-wallet',
-            'develop/dapps/payment-processing/deposits-multi-wallet',
-            'develop/dapps/payment-processing/withdrawals',
-            'develop/dapps/payment-processing/accept-payments-in-a-telegram-bot',
-          ],
-        },
+         {
+           type: 'category',
+           label: 'Best Practices',
+           items: [
+             'develop/dapps/payment-processing/accept-payments-in-a-telegram-bot',
+           ],
+         },
 
       ],
     },
@@ -368,6 +372,7 @@ const sidebars = {
       type: 'category',
       label: 'Low Level Internals',
       items: [
+        'develop/dapps/payment-processing/overview',
         'develop/howto/fees_low_level',
         'develop/howto/step-by-step',
         'develop/howto/config-params',
