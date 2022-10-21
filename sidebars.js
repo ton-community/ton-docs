@@ -287,12 +287,13 @@ const sidebars = {
           ],
         },
 
-        // {
-        //   type: 'category',
-        //   label: 'Best Practices',
-        //   items: [
-        //   ],
-        // },
+         {
+           type: 'category',
+           label: 'Best Practices',
+           items: [
+             'develop/dapps/payment-processing/accept-payments-in-a-telegram-bot',
+           ],
+         },
 
       ],
     },
