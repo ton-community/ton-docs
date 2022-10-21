@@ -31,13 +31,32 @@ We'll folowing the order above:
 3. Work with SQlite database
 4. Profit!
 
-Let's create three files:
+Let's create four files:
 
 - `main.py`
 
 - `api.py`
 
 - `db.py`
+
+- `config.json`
+
+## Config
+
+In `config.json` we'll store our bot token and our public TON api key:
+
+```json
+{
+  "BOT_TOKEN": "Your bot token",
+  "MAINNET_API_TOKEN": "Your mainnet api token",
+  "TESTNET_API_TOKEN": "Your testnet api token",
+  "MAINNET_WALLET": "Your mainnet wallet",
+  "TESTNET_WALLET": "Your testnet wallet",
+  "WORK_MODE": "testnet"
+}
+```
+
+Also, in `config.json` we decide which network we'll use: `testnet` or `mainnet`.
 
 ## Database
 
@@ -63,7 +82,7 @@ import pytz
 Next, we need to create a connection to the database and a cursor for working with it:
 
 ```python
-locCon = sqlite3.connect('bot/local.db', check_same_thread=False)
+locCon = sqlite3.connect('local.db', check_same_thread=False)
 cur = locCon.cursor()
 ```
 
@@ -507,10 +526,11 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 ```
 
-`json` is needed to work with json files.
+`json` is needed to work with json files. `logging` is needed to log errors.
 
 ```python
 import json
+import logging
 ```
 
 `api` and `db` are our own files, which we will fill later.
@@ -803,6 +823,18 @@ In `skip_updates=True` we specify that we do not want to process old messages. B
 All code of `main.py` can be found [here](https://github.com/LevZed/ton-payments-in-telegram-bot/blob/main/bot/main.py).
 
 :::
+
+## Bot in action
+
+We finally did it! You should now have a working bot. You can test it!
+
+All files must be in the same folder. To start the bot, you need to run `main.py` file. You can do it in your IDE, or in terminal like this:
+
+```
+python main.py
+```
+
+If you have any errors, you can check them in the terminal. Maybe you missed something in the code.
 
 ## References
 
