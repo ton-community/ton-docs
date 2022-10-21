@@ -1,22 +1,24 @@
-# Accepting payments in a telegram bot
+# Tutorial: Accept payments using a Telegram bot 
 
 ## 👋 Welcome, dev!
 
-It's great to have you here. In this article, we'll guide you through the process of accepting payments in a Telegram bot.
+It's great to have you here.
+
+In this article, we'll guide you through the process of accepting payments in a Telegram bot.
 
 ## 📖 What you'll learn
 
 In this article, you'll learn how to:
 
 - create a Telegram bot using Python + Aigram
-- work with public TON api
+- work with public TON api (toncenter)
 - work with SQlite database
 
-...and finnaly: how to accept payments in a Telegram bot using knowledge from previous steps.
+And finally: how to accept payments in a Telegram bot with knowledge from previous steps.
 
 ## 📚 Before we begin
 
-Make sure that you have installed latest version of Python, and have installed the following packages:
+Make sure you have installed the latest version of Python, and have installed the following packages:
 
 - aiogram
 - requests
@@ -27,19 +29,18 @@ Make sure that you have installed latest version of Python, and have installed t
 We'll folowing the order above:
 
 1. Create a Telegram bot using Python + Aigram
-2. Work with public TON api
+2. Work with public TON api (toncenter)
 3. Work with SQlite database
 4. Profit!
 
-Let's create four files:
-
-- `main.py`
-
-- `api.py`
-
-- `db.py`
-
-- `config.json`
+Let's create four files in our project directory:
+```
+telegram-bot
+├── config.json
+├── main.py
+├── api.py
+└── db.py
+```
 
 ## Config
 
@@ -92,7 +93,7 @@ Now we can create a tables.
 
 We have 2 tables:
 
-**Transactions:**
+#### Transactions:
 
 ```sql
 CREATE TABLE transactions (
@@ -109,7 +110,7 @@ CREATE TABLE transactions (
 - `value` - transaction value
 - `comment` - transaction comment
 
-**Users:**
+#### Users:
 
 ```sql
 CREATE TABLE users (
@@ -540,7 +541,7 @@ import db
 import api
 ```
 
-### Config
+### Config setup
 
 For convenience, I suggest storing data such as `BOT_TOKEN` and your wallets for receiving payments in the separate file `config.json`:
 
@@ -555,15 +556,22 @@ For convenience, I suggest storing data such as `BOT_TOKEN` and your wallets for
 }
 ```
 
+#### Bot token
+
 `BOT_TOKEN` - your Telegram bot token from [@BotFather](https://t.me/BotFather)
+
+#### Working mode
 
 In the `WORK_MODE` key, we will define the bot's mode of operation - in the test or main network: `testnet` or `mainnet`, respectively.
 
+#### API tokens
+
 Api tokens for `*_API_TOKEN` can be obtained in the [toncenter](https://toncenter.com/) bots:
 
-- for mainnet - [@tonapibot](https://t.me/tonapibot)
+- for mainnet — [@tonapibot](https://t.me/tonapibot)
+- for testnet — [@tontestnetapibot](https://t.me/tontestnetapibot)
 
-- for testnet - [@tontestnetapibot](https://t.me/tontestnetapibot)
+#### Connect config to our bot
 
 Next, we finish setting up the bot:
 
@@ -606,9 +614,11 @@ class DataInput (StatesGroup):
     PayState = State()
 ```
 
-I won't go any deeper. For details and examples, I suggest looking into the [Aiogram documentation](https://docs.aiogram.dev/en/latest/).
+I won't go deeper here.
 
-### Message handlers:
+For details and examples, I suggest looking into the [Aiogram documentation](https://docs.aiogram.dev/en/latest/).
+
+### Message handlers
 
 So, we have finally come to the part where we will write the bot interaction logic.
 
@@ -626,6 +636,8 @@ In the decorator, we can specify the conditions under which the function will be
 ```
 
 Handlers need to be assigned to a async function. In this case, we will use the `async def` syntax. The `async def` syntax is used to define a function that will be called asynchronously.
+
+#### /start
 
 So, let's start with the `/start` command handler:
 
@@ -650,6 +662,8 @@ in decorator of this handler we see `state='*'`. This means that this handler wi
 
 After user sends `/start` command, the bot will check if the user is in the database, using `db.check_user` function. If not, it will add him. Also, this function will return bool value and we can use it to address the user differently. After that the bot will set the state to `firstState`.
 
+#### /cancel
+
 Next is the /cancel command handler. It needed to return to the `firstState` state.
 
 ```python
@@ -659,6 +673,8 @@ async def cmd_cancel(message: types.Message):
     await message.answer("/start to restart")
     await DataInput.firstState.set()
 ```
+
+#### /buy
 
 And, of course, the `/buy` command handler. In this example we will sell air of different types. So, we will use reply keyboard to choose the type of air.
 
@@ -679,7 +695,7 @@ async def cmd_buy(message: types.Message):
 
 So when user sends `/buy` command, the bot will send him a reply keyboard with air types. After user chooses the type of air, the bot will set the state to `secondState`.
 
-This habdler will work only when `secondState` is set, and will be waiting for a message from the user, with air type. In this case, we need to store air type, that user chose, so we pass FSMContext as an argument to the function.
+This handler will work only when `secondState` is set, and will be waiting for a message from the user, with air type. In this case, we need to store air type, that user chose, so we pass FSMContext as an argument to the function.
 
 FSMContext is used to store data in the bot's memory. We can store any data in it, but this memory is not persistent, so if the bot is restarted, the data will be lost. But it's good to store temporary data in it.
 
@@ -763,6 +779,8 @@ async def user_wallet(message: types.Message, state: FSMContext):
         await DataInput.WalletState.set()
 ```
 
+#### /me
+
 One last message handler, that we need is for `/me` command. It will show user his payments.
 
 ```python
@@ -780,9 +798,9 @@ async def cmd_me(message: types.Message):
             await message.answer(f"{int(transaction['value'])/1000000000} - {transaction['comment']}")
 ```
 
-### Callback handlers:
+### Callback handlers
 
-In buttons we can set callback data, that will be sent to the bot when user presses the button. We set callback data to "check" in the button, that user will press after transaction. So, we need to handle this callback.
+In buttons, we can set callback data, that will be sent to the bot when user presses the button. We set callback data to "check" in the button, that user will press after transaction. So, we need to handle this callback.
 
 Callback handlers are very similar to message handlers, but they have `types.CallbackQuery` as an argument instead of `message`. Function decorator is also different.
 
@@ -806,7 +824,7 @@ async def check_transaction(call: types.CallbackQuery, state: FSMContext):
 
 In this handler we get user data from FSMContext, and use `api.find_transaction` function to check if the transaction was successful. If it was, we store wallet address in the database, and send notification to the user. After that, user can find his transactions using `/me` command.
 
-### Last part of `main.py`
+### Last part of main.py
 
 At the end, don't forget:
 
@@ -838,9 +856,5 @@ If you have any errors, you can check them in the terminal. Maybe you missed som
 
 ## References
 
-Made for TON as part of [ton-footsteps/8](https://github.com/ton-society/ton-footsteps/issues/8)
-
-By Lev:
-
-- tg: [@Revuza](https://t.me/revuza)
-- github: https://github.com/LevZed
+* Made for TON as part of [ton-footsteps/8](https://github.com/ton-society/ton-footsteps/issues/8)
+* By Lev ([Telegram @Revuza](https://t.me/revuza), [LevZed on GitHub](https://github.com/LevZed))
