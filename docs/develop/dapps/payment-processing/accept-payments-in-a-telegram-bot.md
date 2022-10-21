@@ -828,6 +828,12 @@ All code of `main.py` can be found [here](https://github.com/LevZed/ton-payments
 
 We finally did it! You should now have a working bot. You can test it!
 
+Final steps to run the bot:
+
+1. Fill in the `config.py` file
+2. create database using `db.py`
+3. run `main.py`
+
 All files must be in the same folder. To start the bot, you need to run `main.py` file. You can do it in your IDE, or in terminal like this:
 
 ```
@@ -835,6 +841,8 @@ python main.py
 ```
 
 If you have any errors, you can check them in the terminal. Maybe you missed something in the code.
+
+Example of a working bot [@AirDealerBot](https://t.me/AirDealerBot)
 
 ## References
 
