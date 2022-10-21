@@ -47,8 +47,38 @@ To summarize:
 
 Code example:
 
-```js reference
-https://github.com/Naltox/ton-contract-executor/blob/8b352d0cf96553e9ded19a102a890e17c973d017/src/smartContract/SmartContract.spec.ts#L92-L125
+```js
+
+it('should update contract state between calls', async () => {
+  const source = `
+            () main() {
+                ;; noop
+            }
+            int test() method_id {
+                ;; Load seq from data
+                slice ds = get_data().begin_parse();
+                var seq = ds~load_uint(32);
+                ds.end_parse();
+                ;; Store new seq
+                set_data(begin_cell().store_uint(seq + 1, 32).end_cell());
+                return seq;
+            }
+        `
+  let dataCell = new Cell()
+  dataCell.bits.writeUint(0, 32)
+
+  let contract = await SmartContract.fromFuncSource(source, dataCell, {getMethodsMutate: true})
+
+  let res = await contract.invokeGetMethod('test', [])
+  expect(res.result[0]).toEqual(new BN(0))
+
+  let res2 = await contract.invokeGetMethod('test', [])
+  expect(res2.result[0]).toEqual(new BN(1))
+
+  let res3 = await contract.invokeGetMethod('test', [])
+  expect(res3.result[0]).toEqual(new BN(2))
+})
+
 ```
 
 ### Simple counter project
