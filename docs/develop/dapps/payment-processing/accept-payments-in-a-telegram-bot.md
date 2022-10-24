@@ -1,4 +1,4 @@
-# Tutorial: Accept payments using a Telegram bot 
+# Tutorial: Accept payments using a Telegram bot
 
 ## 👋 Welcome, dev!
 
@@ -10,7 +10,7 @@ In this article, we'll guide you through the process of accepting payments in a 
 
 In this article, you'll learn how to:
 
-- create a Telegram bot using Python + Aigram
+- create a Telegram bot using Python + Aiogram
 - work with public TON api (toncenter)
 - work with SQlite database
 
@@ -26,14 +26,15 @@ Make sure you have installed the latest version of Python, and have installed th
 
 ## 🚀 Let's get started!
 
-We'll folowing the order above:
+We'll folowing the order below:
 
-1. Create a Telegram bot using Python + Aigram
+1. Work with SQlite database
 2. Work with public TON api (toncenter)
-3. Work with SQlite database
+3. Create a Telegram bot using Python + Aiogram
 4. Profit!
 
 Let's create four files in our project directory:
+
 ```
 telegram-bot
 ├── config.json
@@ -134,26 +135,27 @@ successful payment.
 The `transactions` table stores verified transactions.
 To verify a transaction, we need hash, source, value and comment.
 
-To create these tables, we need to run the following code:
+To create these tables, we need to run the following function:
 
 ```python
-cur.execute('''CREATE TABLE IF NOT EXISTS transactions (
-    source  VARCHAR (48) NOT NULL,
-    hash    VARCHAR (50) UNIQUE
-                         NOT NULL,
-    value   INTEGER      NOT NULL,
-    comment VARCHAR (50)
-)''')
-locCon.commit()
+def create_tables():
+    cur.execute('''CREATE TABLE IF NOT EXISTS transactions (
+        source  VARCHAR (48) NOT NULL,
+        hash    VARCHAR (50) UNIQUE
+                            NOT NULL,
+        value   INTEGER      NOT NULL,
+        comment VARCHAR (50)
+    )''')
+    locCon.commit()
 
-cur.execute('''CREATE TABLE IF NOT EXISTS users (
-    id         INTEGER       UNIQUE
-                             NOT NULL,
-    username   VARCHAR (33),
-    first_name VARCHAR (300),
-    wallet     VARCHAR (50)  DEFAULT none
-)''')
-locCon.commit()
+    cur.execute('''CREATE TABLE IF NOT EXISTS users (
+        id         INTEGER       UNIQUE
+                                NOT NULL,
+        username   VARCHAR (33),
+        first_name VARCHAR (300),
+        wallet     VARCHAR (50)  DEFAULT none
+    )''')
+    locCon.commit()
 ```
 
 This code, needs to be run only once, when the database is created.
@@ -741,6 +743,8 @@ I will create 3 buttons for payment:
 - for TonHub
 - for TonKeeper
 
+The advantage of special buttons for wallets is that if the user does not yet have a wallet, then the site will prompt him to install it
+
 You may use any you want.
 
 And we need button, that user will press after transaction, so we can chek if the payment was successful.
@@ -769,7 +773,7 @@ async def user_wallet(message: types.Message, state: FSMContext):
             keyboard1.add(types.InlineKeyboardButton(
                 text="Tonhub", url=f"https://tonhub.com/transfer/{WALLET}?amount=1000000000&text={air_type}"))
             await message.answer(f"You choose {air_type}")
-            await message.answer(f"Send <code>1</code> toncoin to address \n<code>{WALLET}</code> \nwith comment \n<code>{air_type}</code> \nfrom your wallet ({message.text}) \nton://transfer/{WALLET}?amount=1000000000&text={air_type}", reply_markup=keyboard1)
+            await message.answer(f"Send <code>1</code> toncoin to address \n<code>{WALLET}</code> \nwith comment \n<code>{air_type}</code> \nfrom your wallet ({message.text})", reply_markup=keyboard1)
             await message.answer(f"Click the button after payment", reply_markup=keyboard2)
             await DataInput.PayState.set()
             await state.update_data(wallet=res)
@@ -846,6 +850,12 @@ All code of `main.py` can be found [here](https://github.com/LevZed/ton-payments
 
 We finally did it! You should now have a working bot. You can test it!
 
+Steps to run the bot:
+
+1. Fill in the `config.json` file
+2. Create database using `create_tables()` function in `db.py` once
+3. Run `main.py`
+
 All files must be in the same folder. To start the bot, you need to run `main.py` file. You can do it in your IDE, or in terminal like this:
 
 ```
@@ -854,7 +864,11 @@ python main.py
 
 If you have any errors, you can check them in the terminal. Maybe you missed something in the code.
 
+Example of a working bot [@AirDealerBot](https://t.me/AirDealerBot)
+
+![bot](/img/tutorials/apiatb-bot.png)
+
 ## References
 
-* Made for TON as part of [ton-footsteps/8](https://github.com/ton-society/ton-footsteps/issues/8)
-* By Lev ([Telegram @Revuza](https://t.me/revuza), [LevZed on GitHub](https://github.com/LevZed))
+- Made for TON as part of [ton-footsteps/8](https://github.com/ton-society/ton-footsteps/issues/8)
+- By Lev ([Telegram @Revuza](https://t.me/revuza), [LevZed on GitHub](https://github.com/LevZed))
