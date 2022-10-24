@@ -138,27 +138,26 @@ To verify a transaction, we need hash, source, value and comment.
 To create these tables, we need to run the following function:
 
 ```python
-def create_tables():
-    cur.execute('''CREATE TABLE IF NOT EXISTS transactions (
-        source  VARCHAR (48) NOT NULL,
-        hash    VARCHAR (50) UNIQUE
-                            NOT NULL,
-        value   INTEGER      NOT NULL,
-        comment VARCHAR (50)
-    )''')
-    locCon.commit()
+cur.execute('''CREATE TABLE IF NOT EXISTS transactions (
+    source  VARCHAR (48) NOT NULL,
+    hash    VARCHAR (50) UNIQUE
+                        NOT NULL,
+    value   INTEGER      NOT NULL,
+    comment VARCHAR (50)
+)''')
+locCon.commit()
 
-    cur.execute('''CREATE TABLE IF NOT EXISTS users (
-        id         INTEGER       UNIQUE
-                                NOT NULL,
-        username   VARCHAR (33),
-        first_name VARCHAR (300),
-        wallet     VARCHAR (50)  DEFAULT none
-    )''')
-    locCon.commit()
+cur.execute('''CREATE TABLE IF NOT EXISTS users (
+    id         INTEGER       UNIQUE
+                            NOT NULL,
+    username   VARCHAR (33),
+    first_name VARCHAR (300),
+    wallet     VARCHAR (50)  DEFAULT none
+)''')
+locCon.commit()
 ```
 
-This code, needs to be run only once, when the database is created.
+This code will create the tables if they are not already created.
 
 ### Work with database
 
@@ -853,8 +852,7 @@ We finally did it! You should now have a working bot. You can test it!
 Steps to run the bot:
 
 1. Fill in the `config.json` file
-2. Create database using `create_tables()` function in `db.py` once
-3. Run `main.py`
+2. Run `main.py`
 
 All files must be in the same folder. To start the bot, you need to run `main.py` file. You can do it in your IDE, or in terminal like this:
 
