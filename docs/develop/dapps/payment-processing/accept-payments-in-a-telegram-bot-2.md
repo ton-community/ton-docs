@@ -479,7 +479,7 @@ What do we do here is also easy to understand.
 
 Remember when in `ton.py` file we were determining which user made a deposit by comment with their UID? Now here in the bot we need to ask user to send transaction with a comment containing their UID.
 
-#### Bot start
+### Bot start
 
 The only thing we have to do now in `bot.py` is to launch the bot itself and also run the `start` function from `ton.py`.
 
