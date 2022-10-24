@@ -136,6 +136,75 @@ Now we can use these 4 functions in our other components of bot to work with dat
 ## Toncenter API
 In `ton.py` file we'll declare a function that will process all new deposits, increase user balances and notify them.
 
+### getTransactions method
+
+We'll use the Toncenter API, their docs are available here:
+https://toncenter.com/api/v2/
+
+We need the [getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get) method to get information about latest transactions of a given account.
+
+Let's have a look at what does this method take as input parameters and what does it return.
+
+There is only one mandatory input field `address`, but we also need the `limit` field to specify how many transactions do we want to get in return.
+
+Now let's try to run this method on [Toncenter website](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get) with any existing wallet address to understand what should we get from the output.
+
+```json
+{
+  "ok": true,
+  "result": [
+    {
+      ...
+    },
+    {
+      ...
+    }
+  ]
+}
+```
+
+Okay, so `ok` field is set to `true` when everything is good, and we have an array `result` with list of `limit` latest transactions. Now let's look at one single transaction:
+
+```json
+{
+    "@type": "raw.transaction",
+    "utime": 1666648337,
+    "data": "...",
+    "transaction_id": {
+        "@type": "internal.transactionId",
+        "lt": "32294193000003",
+        "hash": "ez3LKZq4KCNNLRU/G4YbUweM74D9xg/tWK0NyfuNcxA="
+    },
+    "fee": "105608",
+    "storage_fee": "5608",
+    "other_fee": "100000",
+    "in_msg": {
+        "@type": "raw.message",
+        "source": "EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL",
+        "destination": "EQBKgXCNLPexWhs2L79kiARR1phGH1LwXxRbNsCFF9doc2lN",
+        "value": "100000000",
+        "fwd_fee": "666672",
+        "ihr_fee": "0",
+        "created_lt": "32294193000002",
+        "body_hash": "tDJM2A4YFee5edKRfQWLML5XIJtb5FLq0jFvDXpv0xI=",
+        "msg_data": {
+            "@type": "msg.dataText",
+            "text": "SGVsbG8sIHdvcmxkIQ=="
+        },
+        "message": "Hello, world!"
+    },
+    "out_msgs": []
+}
+```
+
+We can see that information that can help us identify the exact transaction is stored in `transaction_id` field. We'll need the `lt` field from it to understand which transaction happened earilier and which later.
+
+And information about coins transfer is in `in_msg` field. We'll need `value` and `message` from it.
+
+Now we're ready to create a payment handler.
+
+### Sending API requests from code
+
 Let's begin with importing required libraries and our two previous files `config.py` and `db.py`:
 ```python
 import requests
@@ -289,6 +358,9 @@ And that's all for the `ton.py` file!
 Our bot is now 3/4 done, we only need to create a user interface with a few buttons in bot itself.
 
 ## Telegram Bot
+
+### Initialization
+
 Open the `bot.py` file and import all the modules that we need:
 ```python
 # Logging module
@@ -322,6 +394,10 @@ Here we use `BOT_TOKEN` from our config that we made in the beginning of tutoria
 
 We initialized the bot, but it's still empty. We must add some fucntions for interaction with user.
 
+### Message handlers
+
+#### /start Command
+
 Let's begin with `/start` and `/help` commands handler. This function will be called when user does launch the bot for the first time, restarting it or using the `/help` command.
 
 ```python
@@ -350,6 +426,8 @@ async def welcome_handler(message: types.Message):
 
 Welcome message can be anything you want. Keyboard buttons can also be any text you want, but I've named them in the most obvious way for our bot: `Deposit` and `Balance`.
 
+#### Balance button
+
 Okay, now user can start the bot and see the keyboard with two buttons. But after calling one of these, user won't get any response because we didn't create any function for these.
 
 So let's add a function to request a balance.
@@ -370,6 +448,8 @@ async def balance_handler(message: types.Message):
 ```
 
 It's pretty simple. We just get the balance from database and send the message to user.
+
+#### Deposit button
 
 And what about second button - `Deposit`? Here is the function for it:
 
@@ -399,6 +479,8 @@ What do we do here is also easy to understand.
 
 Remember when in `ton.py` file we were determining which user made a deposit by comment with their UID? Now here in the bot we need to ask user to send transaction with a comment containing their UID.
 
+#### Bot start
+
 The only thing we have to do now in `bot.py` is to launch the bot itself and also run the `start` function from `ton.py`.
 
 ```python
@@ -416,3 +498,8 @@ if __name__ == '__main__':
 At this moment we have wrote all required code for our bot. If you did everything correctly it must work when you run it with `python my-bot/bot.py` command in terminal.
 
 If your bot doesn't work correctly, compare your code with code [from this repository](https://github.com/Gusarich/ton-bot-example).
+
+## References
+
+ - Made for TON as part of [ton-footsteps/8](https://github.com/ton-society/ton-footsteps/issues/8)
+ - By Gusarich ([Telegram @dani_goose](https://t.me/dani_goose), [Gusarich on GitHub](https://github.com/Gusarich))
