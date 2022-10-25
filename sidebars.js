@@ -291,7 +291,14 @@ const sidebars = {
            type: 'category',
            label: 'Best Practices',
            items: [
-             'develop/dapps/payment-processing/accept-payments-in-a-telegram-bot',
+            {
+              type: 'category',
+              label: 'Telegram bots',
+              items: [
+                'develop/dapps/payment-processing/accept-payments-in-a-telegram-bot',
+                'develop/dapps/payment-processing/accept-payments-in-a-telegram-bot-2',
+              ],
+            }
            ],
          },
 

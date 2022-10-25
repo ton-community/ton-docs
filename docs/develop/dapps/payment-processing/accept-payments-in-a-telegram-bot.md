@@ -1,4 +1,4 @@
-# Tutorial: Accept payments using a Telegram bot
+# Tutorial: Simple sales bot
 
 ## 👋 Welcome, dev!
 

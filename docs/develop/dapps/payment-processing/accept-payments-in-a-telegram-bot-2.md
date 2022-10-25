@@ -1,11 +1,11 @@
-# Tutorial: Accept payments using a Telegram bot
+# Tutorial: Simple bot with balance
 
 ## 👋 Hi there!
 In this article, we'll create a simple Telegram bot for accepting payments in TON coins.
 
 The bot will look like this:
 
-<img src="img/tutorials/bot1.png" alt="drawing" width="400"/>
+<img src="/img/tutorials/bot1.png" alt="drawing"/>
 
 Sources are available on Github:
 https://github.com/Gusarich/ton-bot-example
