@@ -5,7 +5,7 @@ In this article, we'll create a simple Telegram bot for accepting payments in TO
 
 The bot will look like this:
 
-<img src="bot1.png" alt="drawing" width="400"/>
+<img src="img/tutorials/bot1.png" alt="drawing" width="400"/>
 
 Sources are available on Github:
 https://github.com/Gusarich/ton-bot-example
