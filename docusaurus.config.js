@@ -33,47 +33,47 @@ const config = {
     [
       '@docusaurus/plugin-client-redirects',
       {
-        redirects: [
-          // services
-          {
-            to: '/learn/services/dns',
-            from: '/develop/services/dns',
-          },
-          {
-            to: '/learn/services/payments',
-            from: '/develop/services/payments',
-          },
-          {
-            to: '/learn/networking/low-level-adnl',
-            from: '/learn/overviews/adnl',
-          },
-
-          // payment processing
-          {
-            to: '/develop/dapps/payment-processing/common',
-            from: '/develop/payment-processing/common',
-          },
-          {
-            to: '/develop/dapps/payment-processing/overview',
-            from: '/develop/payment-processing/overview',
-          },
-          {
-            to: '/develop/dapps/payment-processing/withdrawals',
-            from: '/develop/payment-processing/withdrawals',
-          },
-          {
-            to: '/develop/dapps/payment-processing/withdrawals',
-            from: '/develop/payment-processing/withdrawals',
-          },
-          {
-            to: '/develop/dapps/payment-processing/deposits-single-wallet',
-            from: '/develop/payment-processing/deposits-single-wallet',
-          },
-          {
-            to: '/develop/dapps/payment-processing/deposits-multi-wallet',
-            from: '/develop/payment-processing/deposits-multi-wallet',
-          },
-        ],
+        // redirects: [
+        //   // services
+        //   {
+        //     to: '/learn/services/dns',
+        //     from: '/develop/services/dns',
+        //   },
+        //   {
+        //     to: '/learn/services/payments',
+        //     from: '/develop/services/payments',
+        //   },
+        //   {
+        //     to: '/learn/networking/low-level-adnl',
+        //     from: '/learn/overviews/adnl',
+        //   },
+        //
+        //   // payment processing
+        //   {
+        //     to: '/develop/dapps/payment-processing/common',
+        //     from: '/develop/payment-processing/common',
+        //   },
+        //   {
+        //     to: '/develop/dapps/payment-processing/overview',
+        //     from: '/develop/payment-processing/overview',
+        //   },
+        //   {
+        //     to: '/develop/dapps/payment-processing/withdrawals',
+        //     from: '/develop/payment-processing/withdrawals',
+        //   },
+        //   {
+        //     to: '/develop/dapps/payment-processing/withdrawals',
+        //     from: '/develop/payment-processing/withdrawals',
+        //   },
+        //   {
+        //     to: '/develop/dapps/payment-processing/deposits-single-wallet',
+        //     from: '/develop/payment-processing/deposits-single-wallet',
+        //   },
+        //   {
+        //     to: '/develop/dapps/payment-processing/deposits-multi-wallet',
+        //     from: '/develop/payment-processing/deposits-multi-wallet',
+        //   },
+        // ],
       },
     ],
   ],
