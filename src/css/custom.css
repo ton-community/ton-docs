@@ -14,6 +14,10 @@
   --ifm-color-primary-light: #0096e0;
   --ifm-color-primary-lighter: #009ceb;
   --ifm-color-primary-lightest: #0aadff;
+  --ifm-color-success-dark: #47C58A;
+  --ifm-color-info-dark: #0088cc;
+  --ifm-color-success-contrast-background: rgba(50, 213, 131, 0.1);
+  --ifm-color-info-contrast-background: rgba(0, 153, 229, 0.1);
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 
   --ifm-heading-font-family: 'Mulish', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont,
@@ -33,6 +37,8 @@
   --ifm-toc-border-size: 0.5px;
 
   --ifm-global-border-width: 0.5px;
+
+  --ifm-heading-margin-top: 120px;
 }
 
 
@@ -843,16 +849,18 @@ html[data-theme='dark'] .header-github-link:before {
 }
 
 .show-card {
-  background: #f9fbff;
-  border: 3px solid #e7e9ee;
+  background: white;
+  border: 0.5px solid #DDE3E6;
   border-radius: 25px;
   width: 100%;
   height: 100%;
   padding: 40px;
+  transition: all 0.3s;
+  position: relative;
 }
 
 .show-card:hover {
-  box-shadow: 0px 1px 4px rgb(209, 227, 255);
+  box-shadow: 0px 2px 24px rgba(114, 138, 150, 0.12);
 }
 
 
@@ -964,9 +972,12 @@ strong {
 .show-card .status {
   font-size: 0.8rem;
   position: absolute;
-  top: 130px;
+  top: 20px;
   color: #3b465c;
-
+  border: 0.5px solid #DDE3E6;
+  right: 20px;
+  padding: 5px 10px;
+  border-radius: 10px;
   -webkit-transition: color 2s;
   transition: color 2s;
 }
@@ -1003,10 +1014,51 @@ strong {
 }
 
 .footer {
-  /*margin-top: 120px;*/
+  padding: 0;
+  margin: 0;
+}
+.footer .container-fluid{
+  padding: 0;
+  margin: 0;
+  max-width: 100%;
+}
+.footer__links.row{
+  padding: 0;
+  margin: 0;
+}
+.footer__col.col{
+  margin: 0;
+  padding: 0;
+}
+.footer #__next{
+  min-height: 100%;
+  min-width: 100%
+}
+li.footer__item{
+  display: flex;
+}
+footer.footer {
+  margin-top: 100px;
 }
 
-
+@media (max-width: 1279px) {
+  footer.footer{
+    margin-top: 78px;
+  }
+}
+@media (max-width: 833px) {
+  footer.footer{
+    margin-top: 52px;
+  }
+}
+@media (max-width: 733px) {
+  .Footer__links .Footer__col{
+    margin-right: auto;
+  }
+}
+.Footer--with-offset{
+ margin-top: 0 !important;
+}
 
 
 .DocsMarkdown--button-group-content {
@@ -1424,6 +1476,10 @@ html {
   color: inherit !important;
 }
 
+a:hover{
+  opacity: 0.7;
+}
+
 
 
 .table-of-contents__left-border {
@@ -1433,3 +1489,71 @@ html {
 .theme-doc-sidebar-container {
   border-right: 0.5px solid var(--ifm-toc-border-color) !important;
 }
+button, a{
+  transition: all 0.3s !important;
+}
+
+.navbar a:hover{
+  color: var(--ifm-color-primary-light);
+  background: unset;
+}
+
+.navbar .clean-btn:hover, .navbar .header-github-link:hover{
+  opacity: 0.3;
+  background: unset;
+}
+
+
+.navbar__search-input{
+  transition: all 0.3s;
+  outline-color: #0088CC;
+}
+
+.bootstrap-wrapper h1:first-of-type, .markdown h1:first-of-type{
+  font-weight: 700 !important;
+  font-size: 56px !important;
+  line-height: 64px !important;
+}
+.bootstrap-wrapper p:first-of-type{
+  color: #728A96;
+}
+
+.menu__link--sublist-caret:after{
+  background: url("/static/img/arrow.svg");
+  background-position: center center;
+  transform: rotate(270deg);
+}
+
+li::marker{
+  color: #0088CC;
+}
+
+img{
+  border-radius: 24px;
+}
+button img, a img{
+  border-radius: 0;
+}
+
+.theme-doc-sidebar-item-link b{
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 30px;
+  color: #0099E5;
+}
+.menu__list-item-collapsible a{
+  color: #111111;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.table-of-contents > li > .table-of-contents__link{
+  font-size: 16px;
+  line-height: 24px;
+  color: #0099E5;
+}
+.table-of-contents__link{
+  color: #111111;
+}
+

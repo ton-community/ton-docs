@@ -17,7 +17,7 @@ export default function Home(): JSX.Element {
           >
               <br/>
               <h1 style={{ fontWeight: '650', textAlign:'center', padding: '0 10px' }}>Welcome to the TON Blockchain documentation</h1>
-              <p style={{ textAlign:'center', fontWeight: '400', fontSize:'18px' }}>Choose your path to start journey 🚀</p>
+              <p style={{ textAlign:'center', fontWeight: '400', fontSize:'18px' }}>Choose your path to start journey</p>
 
               <div className="container">
 
