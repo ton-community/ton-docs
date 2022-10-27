@@ -899,11 +899,15 @@ html[data-theme='dark'] .header-github-link:before {
 }
 
 [data-theme='dark'] .show-card {
-  background: #2a2c30;
+  background: #2D2D32;
   border: 3px solid #242425;
 }
 [data-theme='dark'] .show-card:hover {
-  box-shadow: 0px 1px 4px rgb(59, 59, 59);
+  box-shadow: 0px 1px 4px #36363C;
+}
+
+[data-theme='dark'] .navbar__search-input::placeholder {
+  color: #36363C;
 }
 
 [data-theme='dark'] .show-card .status {
@@ -1506,7 +1510,23 @@ button, a{
 
 .navbar__search-input{
   transition: all 0.3s;
-  outline-color: #0088CC;
+  border: none;
+  box-shadow: none;
+  outline: 1px solid transparent !important;
+}
+
+[class*="focused_node_modules"] input{
+  border: none;
+  box-shadow: none;
+  outline-color: #0088CC !important;
+}
+
+[data-theme='dark'] [class*="focused_node_modules"] input{
+  outline-color: #01A4F5 !important;
+}
+
+[data-theme='dark'] .navbar__search-input{
+  outline-color: #01A4F5;
 }
 
 .bootstrap-wrapper h1:first-of-type, .markdown h1:first-of-type{
@@ -1541,11 +1561,15 @@ button img, a img{
   line-height: 30px;
   color: #0099E5;
 }
+
 .menu__list-item-collapsible a{
-  color: #111111;
   font-weight: 400;
   font-size: 18px;
   line-height: 28px;
+}
+
+[data-theme='ligth'] .menu__list-item-collapsible a{
+  color: #111111;
 }
 
 .table-of-contents > li > .table-of-contents__link{
@@ -1553,7 +1577,7 @@ button img, a img{
   line-height: 24px;
   color: #0099E5;
 }
-.table-of-contents__link{
+[data-theme='ligth'] .table-of-contents__link{
   color: #111111;
 }
 
