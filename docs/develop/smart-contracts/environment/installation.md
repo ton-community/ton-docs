@@ -3,16 +3,23 @@ import TabItem from '@theme/TabItem';
 
 # Installation
 
-## Prerequisites
+## Javascript SDK
 
-For local development of TON smart contracts you always need to prepare binaries of `func`, `fift` and `lite-client` on your machine.
+You don't need to install any binaries with your hands anymore.
 
-You can download and setup them below, or read article from TON Society:
-* [Setting up a TON Development Environment](https://society.ton.org/setting-up-a-ton-development-environment)
+All binaries for development and testing are provided with packages:
 
+* [Choose Your Javascript SDK](/develop/smart-contracts/sdk/javascript)
 
 
 ## Precompiled binaries
+
+### Prerequisites
+
+For local development of TON smart contracts _without Javascript_ you need to prepare binaries of `func`, `fift` and `lite-client` on your machine.
+
+You can download and setup them below, or read article from TON Society:
+* [Setting up a TON Development Environment](https://society.ton.org/setting-up-a-ton-development-environment)
 
 ### 1. Download
  

@@ -24,7 +24,6 @@ In case you are web or bot developer, you could find useful these repositories:
 * [Web Wallet source code](https://github.com/toncenter/ton-wallet) (tonweb, no comments)
 
 
-
 ### Python
 
 - [psylopank/pytonlib examples](https://github.com/psylopunk/pytonlib/tree/main/examples)

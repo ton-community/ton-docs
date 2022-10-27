@@ -179,7 +179,7 @@ const sidebars = {
           type: 'category',
           label: 'Choose Your SDK',
           items: [
-            'develop/smart-contracts/sdk/tonstarter',
+            'develop/smart-contracts/sdk/javascript',
             'develop/smart-contracts/sdk/toncli',
           ],
         },

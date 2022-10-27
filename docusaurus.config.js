@@ -110,6 +110,9 @@ const config = {
           //     badge: false,
           //   }
           // }
+          remarkPlugins: [
+            [require('@docusaurus/remark-plugin-npm2yarn'), {sync: true}],
+          ],
         },
         blog: {
           showReadingTime: true,
