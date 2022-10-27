@@ -10,20 +10,18 @@ Packaged FunC compiler for TON smart contracts.
 * GitHub: [ton-community/ton-compiler](https://github.com/ton-community/ton-compiler)
 * NPM: [ton-compiler](https://www.npmjs.com/package/ton-compiler)
 
+### Installation
+
+```bash npm2yarn
+npm install ton-compiler
+```
+
 ### Features
 
 * Multiple func compiler versions
 * Doesn't need to install and compile TON
 * Programmatic and CLI interfaces
 * Ready to use in unit-testing (with tonstarter-contracts)
-
-### Installation
-
-Install environment to compile smart contracts in one line of code:
-
-```bash npm2yarn
-npm install ton-compiler
-```
 
 ### How to use
 
@@ -76,6 +74,12 @@ It's more low-level than ton-compiler, so use it only if ton-compiler not workin
 * GitHub: [ton-community/func-js](https://github.com/ton-community/func-js)
 * NPM: [@ton-community/func-js](https://www.npmjs.com/package/@ton-community/func-js)
 
+### Installation
+
+```bash npm2yarn
+npm install @ton-community/func-js
+```
+
 ### Features
 
 * No need to compile of download FunC binaries
@@ -84,13 +88,6 @@ It's more low-level than ton-compiler, so use it only if ton-compiler not workin
 * Assembly is returned fot debugging purposes
 * Does not depend on file-system
 
-### Installation
-
-Install environment to compile smart contracts in one line of code:
-
-```bash npm2yarn
-npm install @ton-community/func-js
-```
 
 ### How to use
 
