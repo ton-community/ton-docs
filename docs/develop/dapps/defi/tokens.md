@@ -34,9 +34,10 @@ Jettons are custom fungible tokens on TON blockchain. You can create your own to
 
 ### NFT minters
 
-* [NFT deployer](https://github.com/tondiamonds/ton-nft-deployer) by TON Diamonds (TypeScript, no comments)
+* [NFT Deployer](https://github.com/tondiamonds/ton-nft-deployer) by TON Diamonds (TypeScript, no comments)
 * [NFT Minter Example](https://github.com/ton-foundation/token-contract/tree/main/nft/web-example) (JavaScript, with comments)
 * [NFT Minter using React](https://github.com/tonbuilders/tonbuilders-minter) (React, no comments)
+* [NFT Deployer](https://github.com/anomaly-guard/nft-deployer) (Python, with comments)
 
 ### Tools to work with NFTs
 
