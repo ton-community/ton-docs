@@ -27,12 +27,16 @@ Glitch runs the [tonstarter-contracts](https://github.com/ton-defi-org/tonstarte
 
 Start developing, testing and debugging smart contracts easily with these resources:
 
-* [toncli](/develop/smart-contracts/sdk/toncli) - Comfy CLI to build, deploy and test FunC contracts (Python)
-* [tonstarter-contracts](/develop/smart-contracts/sdk/tonstarter) - SDK to build, deploy and test FunC contracts (by ton.js)
-* [ton-compiler](https://github.com/ton-community/ton-compiler) - Cross-platform bindings for TON FunC compiler (JS)
-* [ton-contract-executor](https://github.com/Naltox/ton-contract-executor) - Library for running contracts locally (JS)
-* [MyLocalTON](/participate/nodes/local-ton) - Run your private TON blockchain
+### Javascript SDK
 
+* [Choose Your Javascript SDK](/develop/smart-contracts/sdk/javascript)
+
+### Other Tools
+
+* [disintar/toncli](/develop/smart-contracts/sdk/toncli) - Comfy CLI to build, deploy and test FunC contracts.
+* [MyLocalTON](/participate/nodes/local-ton) - Run your private TON blockchain.
+* [tonwhales.com/tools/boc](https://tonwhales.com/tools/boc) — BOC parser.
+* [tonwhales.com/tools/introspection-id](https://tonwhales.com/tools/introspection-id) — crc32 generator.
 
 ## TON Virtual Machine
 

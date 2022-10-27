@@ -5,9 +5,9 @@ import TabItem from '@theme/TabItem';
 
 ## Javascript SDK
 
-You don't need to install any binaries with your hands anymore.
+You no longer need to install binaries by hand.
 
-All binaries for development and testing are provided with packages:
+All binaries for development and testing are provided with the packages:
 
 * [Choose Your Javascript SDK](/develop/smart-contracts/sdk/javascript)
 
