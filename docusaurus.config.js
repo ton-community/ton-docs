@@ -89,7 +89,7 @@ const config = {
         },
         docs: {
           routeBasePath: '/',
-          showLastUpdateAuthor: true,
+          showLastUpdateAuthor: false,
           showLastUpdateTime: true,
           breadcrumbs: false,
           sidebarPath: require.resolve('./sidebars.js'),
