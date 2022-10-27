@@ -1,5 +1,7 @@
 # TON Payments
 
+<img src="/img/docs/ton-payments.jpeg" style={{margin: "20px 0"}} alt="TON Payments overview"/>
+
 On the TON blockchain, block time is about 5 seconds. Even with an increase in network load, that time won’t increase either. In other words, in those 5 seconds, millions of transactions can be processed.
 
 Moreover, the TON blockchain has exceptionally low network fees for transactions.
@@ -30,23 +32,30 @@ A network fee must be paid only twice: upon opening and closing the payments cha
 
 Nevertheless, the smart contract guarantees proper operations. In the event one of the parties starts to cheat or completely disappears, the other channel’s party will be able to independently close the payments channel and collect the deposited funds by showing mathematical proof.
 
-## Tools
+:::caution HELP NEEDED
+We need a help of contributor here! We want to migrate article from [payment-channels repository](https://github.com/ton-blockchain/payment-channels) to this section. Read more [how to contribute](/contribute).
+:::
 
-* A technical description of payments channels can be found in the white paper in chapter 5: https://ton.org/docs/ton.pdf.
-* You can find ready-made smart contracts here: https://github.com/ton-blockchain/payment-channels.
+:::info
+The theory of payment channels is well described in [TON whitepaper](https://ton.org/docs/ton.pdf), chapter 5.1.
+:::
+
+
+### Tools
 
 To use payments channels, you don’t need deep knowledge of cryptography.  
 
-You can use prepared SDKs:
+* [TON Payments SDK, smart contracts, and examples](/develop/dapps/defi/ton-payments)
 
-* JavaScript SDK: https://github.com/toncenter/tonweb.
-* [An example of how to use a payments channel](https://github.com/toncenter/payment-channels-example)
-
-## Networks of payments channels
+## Payment Channels Network
 
 As the technology improves, payments channels will have the capacity to join together in a network off-chain where more than two parties will be able to participate in a channel.
 
 Current smart contracts are already designed to support the functionality of uniting into a single off-chain network.
+
+:::info
+The theory of payment channel network is described in [TON whitepaper](https://ton.org/docs/ton.pdf), chapter 5.2.
+:::
 
 ## Conclusion
 
