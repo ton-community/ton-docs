@@ -4,7 +4,7 @@ So you've decided to write a tutorial for TON Documentation?
 
 We're excited to have you among our contributors! Please review the guidelines below to make sure your tutorial follows the style and quality of the existing content on TON Docs.
 
-It is important that you take some time to become familiar with the tutorial structure and how headings should be used. Please read through some of our existing tutorials and also have a look at [past Pull Requests](https://github.com/SwiftAdviser/ton-docs/pulls?q=is%3Apr+is%3Aclosed) before submitting your own.
+It is important that you take some time to become familiar with the tutorial structure and how headings should be used. Please read through some of our existing tutorials and also have a look at [past Pull Requests](https://github.com/ton-community/ton-docs/pulls?q=is%3Apr+is%3Aclosed) before submitting your own.
 
 ## Process
 
@@ -14,7 +14,7 @@ Before you start writing, *read the guidelines below*! They will help you to ens
 Also, be sure to refer to the [**sample tutorial structure**](/contribute/sample-tutorial) we have provided.
 :::
 
-1. To begin, fork and then clone the [ton-docs](https://github.com/SwiftAdviser/ton-docs/) repository on GitHub and create a new branch in your local repository.
+1. To begin, fork and then clone the [ton-docs](https://github.com/ton-community/ton-docs/) repository on GitHub and create a new branch in your local repository.
 2. Write your tutorial, keeping quality and readability in mind! Have a look at existing tutorials to see what you should aim for.
 3. When you're ready to submit it for review, [open a Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) from your branch. We'll be notified and will start the review process:
     1. **Please make every effort to submit only the final draft of your tutorial**. Some typos and grammar fixes are acceptable, but if there are significant changes to be made before we can publish the tutorial it will take much longer to review and have you make the appropriate changes.
@@ -42,7 +42,7 @@ To summarize, the workflow is:
 - **Avoid including external/cross-links** to different sources in between the tutorials. If your tutorial is longer, we can discuss how to turn it into a longer course or Pathway.
 - **Provide** **pictures or screenshots** to illustrate complicated processes where needed.
 - Upload your images to the `static` directory of the learn-tutorials repository - **DO NOT** use hotlinks to external sites, as this can lead to broken images.
-- **Image links must** **be in markdown format** and you must **ONLY** use the raw GitHub URL of the static directory in the repository: `![name of your image](https://raw.githubusercontent.com/SwiftAdviser/ton-docs/main/static/img/tutorials/<your image filename>.png?raw=true)`
+- **Image links must** **be in markdown format** and you must **ONLY** use the raw GitHub URL of the static directory in the repository: `![name of your image](https://raw.githubusercontent.com/ton-community/ton-docs/main/static/img/tutorials/<your image filename>.png?raw=true)`
     - Remember to add `?raw=true` to the end of the URL
 
 ## How to structure your tutorial

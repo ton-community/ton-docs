@@ -96,7 +96,7 @@ const config = {
           // Please change this to your repo
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/swiftadviser/ton-docs/tree/main/',
+            'https://github.com/ton-community/ton-docs/tree/main/',
           // lastVersion: '1.0.0',
           // versions: {
           //   current: {
@@ -116,7 +116,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/swiftadviser/ton-docs/tree/main/',
+            'https://github.com/ton-community/ton-docs/tree/main/',
         },
         theme:
           {
@@ -218,7 +218,7 @@ const config = {
             position: 'right',
           },
           {
-            href: 'https://github.com/swiftadviser/ton-docs',
+            href: 'https://github.com/ton-community/ton-docs',
             position: 'right',
             className: 'header-github-link',
             'aria-label': 'GitHub repository',
