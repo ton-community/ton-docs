@@ -22,13 +22,13 @@ The division into categories is largely conditional, and one explorer can belong
 
 Let's start with the general functionality that is present in all explorers.
 
-Almost all explorers have the ability to find information about the balance, transaction history, and information about the smart contract, if any, deployed on this address by the address in the TON network.
+Almost all explorers have the ability to find information about the balance, transaction history, and information about the smart contract, if any deployed on the address.
 
 Next, we will consider several explorers that can be attributed to each of the categories.
 
 ## TonScan Explorer
 
-Good explorer for everyday use.
+Good explorer for everyday use. It has a convenient interface, a lot of information, and search. The search is performed by the public [address book](https://github.com/catchain/tonscan/blob/master/src/addrbook.json) (TON Foundation, OKX and etc.)
 
 ### Features
 
@@ -38,9 +38,9 @@ Good explorer for everyday use.
 - Сontract types
 - Contract disassembler
 
-| base address info                  | transaction                       |
-| ---------------------------------- | --------------------------------- |
-| ![tonscan](./eit-tonscan-info.png) | ![tonscan](./eit-tonscan-txn.png) |
+| base address info                                      | transaction                                           |
+| ------------------------------------------------------ | ----------------------------------------------------- |
+| ![tonscan](/img/explorers-in-ton/eit-tonscan-info.png) | ![tonscan](/img/explorers-in-ton/eit-tonscan-txn.png) |
 
 ### Links
 
@@ -60,9 +60,9 @@ Also, the TonWhales team supports its own network `sandbox`. This is both a plus
 - Сontract types
 - Contract disassembler
 
-| base address info                      | transaction                           |
-| -------------------------------------- | ------------------------------------- |
-| ![tonwhales](./eit-tonwhales-info.png) | ![tonwhales](./eit-tonwhales-txn.png) |
+| base address info                                          | transaction                                               |
+| ---------------------------------------------------------- | --------------------------------------------------------- |
+| ![tonwhales](/img/explorers-in-ton/eit-tonwhales-info.png) | ![tonwhales](/img/explorers-in-ton/eit-tonwhales-txn.png) |
 
 ### Links
 
@@ -84,9 +84,9 @@ Transaction information is not as detailed as, for example, tonwhales.
 - **Trace**
 - TON DNS support
 
-| base address info                | transaction                     |
-| -------------------------------- | ------------------------------- |
-| ![tonapi](./eit-tonapi-info.png) | ![tonapi](./eit-tonapi-txn.png) |
+| base address info                                    | transaction                                         |
+| ---------------------------------------------------- | --------------------------------------------------- |
+| ![tonapi](/img/explorers-in-ton/eit-tonapi-info.png) | ![tonapi](/img/explorers-in-ton/eit-tonapi-txn.png) |
 
 ### Links
 
@@ -95,7 +95,7 @@ Transaction information is not as detailed as, for example, tonwhales.
 
 ## TON NFT EXPLORER
 
-This explorer is specialized in NFT, but it can also be used as a regular explorer.
+This explorer specializes in NFT, but it can also be used as a regular explorer.
 
 When viewing the wallet address, you can find out which NFT it stores, and when viewing the NFT, you can find out the metadata, collection address, owner, and transaction history.
 
@@ -105,9 +105,9 @@ When viewing the wallet address, you can find out which NFT it stores, and when 
 - Сontract types
 - **Specialized in NFT**
 
-| nft address info                         | nft data                                    |
-| ---------------------------------------- | ------------------------------------------- |
-| ![tonnft](./eit-tonnftexplorer-info.png) | ![tonnft](./eit-tonnftexplorer-nftdata.png) |
+| nft address info                                             | nft data                                                        |
+| ------------------------------------------------------------ | --------------------------------------------------------------- |
+| ![tonnft](/img/explorers-in-ton/eit-tonnftexplorer-info.png) | ![tonnft](/img/explorers-in-ton/eit-tonnftexplorer-nftdata.png) |
 
 ### Links
 
