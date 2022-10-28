@@ -2,7 +2,7 @@
 
 Original comment with these principles by [talkol](https://github.com/talkol):
 
-https://github.com/ton-society/ton-footsteps/issues/7#issuecomment-1187581181
+ - [Original comment on TON Footstep #7](https://github.com/ton-society/ton-footsteps/issues/7#issuecomment-1187581181)
 
 I've just summarized these points specifically for new contributors here.
 
