@@ -1,15 +1,9 @@
-# TON Documentation for humans
-
-User-friendly documentation for newcomers to the TON blockchain.
 
 ![preview](https://user-images.githubusercontent.com/5148967/187221315-fb8aa098-d573-4042-992e-b91170521334.jpg)
 
+User-friendly documentation for newcomers to the TON blockchain.
 
-# Website
-
-This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
-
-### Installation
+### Quick Start
 
 1. Download repository from GitHub
 2. Install [NodeJS](https://nodejs.org/en/download/) to run local build
@@ -27,8 +21,11 @@ This website is built using [Docusaurus 2](https://docusaurus.io/), a modern sta
 
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
-### Contribute
+## Contributing
 
-Please, make a fork to make changes in the documentation.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-After that, open Pull Request and wait for the response.
+Please make sure to update tests as appropriate.
+
+## License
+[GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/)
