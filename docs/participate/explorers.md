@@ -1,73 +1,118 @@
 # Explorers in TON
 
-In this article explorers described mostly from development perspective, with pros and cons for developer in TON.
+In this article, we will consider TON explorers, their capabilities and features from the point of view of the developer.
 
-:::caution draft   
-This is a concept article. We're still looking for someone experienced to improve it.
-:::
+## What is an explorer?
 
-## TonAPI Explorer
+If you are new to the blockchain technology, here is some basic information:
 
-The most innovative explorer in TON Blockchain.
+Explorer is a website that allows you to view information in the blockchain, such as account balance, transaction history, blocks, etc.
 
-* URL: https://tonapi.io/
-* Testnet URL: https://testnet.tonapi.io/
+## What explorers exist?
 
-### Pros
+Among the TON explorers, you can distinguish several categories:
 
-* Supports NFTs
-* Supports Jettons
-* Supports Detailed transaction history
-* Supports Wallet Names
+- For everyday use
+- With extended information for developers
+- Specialized
 
-### Cons
+The division into categories is largely conditional, and one explorer can belong to several categories at the same time. So let's not pay too much attention to this.
 
-* not working with Sandbox testnet
+## General functionality
+
+Let's start with the general functionality that is present in all explorers.
+
+Almost all explorers have the ability to find information about the balance, transaction history, and information about the smart contract, if any, deployed on this address by the address in the TON network.
+
+Next, we will consider several explorers that can be attributed to each of the categories.
 
 ## TonScan Explorer
 
-One of the first explorers in TON Blockchain.
+Good explorer for everyday use.
 
-* URL: https://tonscan.org/
-* Testnet URL: https://testnet.tonscan.org/
+### Features
 
-### Pros
+- **Convenient for everyday use**
+- Convenient for developers
+- TON DNS support
+- Сontract types
+- Contract disassembler
 
-* Easy to use
-* Supports NFTs & NFT Collections
+| base address info                  | transaction                       |
+| ---------------------------------- | --------------------------------- |
+| ![tonscan](./eit-tonscan-info.png) | ![tonscan](./eit-tonscan-txn.png) |
 
-### Cons
+### Links
 
-* Not detailed enough for developers
+- URL: https://tonscan.org/
+- Testnet URL: https://testnet.tonscan.org/
 
 ## TonWhales Explorer
 
-Developed by TonWhales developers for developers.
+This explorer is more oriented towards developers than ordinary users.
 
-* URL: https://tonwhales.com/explorer
-* Testnet URL: https://tonsandbox.com/explorer
+Also, the TonWhales team supports its own network `sandbox`. This is both a plus and a minus. The plus is that you can test your smart contracts in this network, the minus is that all information about transactions in this network is not displayed in other explorers.
 
-### Pros
+### Features
 
-* Detailed information for developers
+- **Convenient for developers**
+- Support for its own network `sandbox`
+- Сontract types
+- Contract disassembler
 
-### Cons
+| base address info                      | transaction                           |
+| -------------------------------------- | ------------------------------------- |
+| ![tonwhales](./eit-tonwhales-info.png) | ![tonwhales](./eit-tonwhales-txn.png) |
 
-* Doesn't support original testnet network
+### Links
 
-## Explorer for NFTs
+- URL: https://tonwhales.com/explorer
+- Testnet URL: https://tonsandbox.com/explorer
 
-One of the first NFT explorers in TON Blockchain
+## TonAPI Explorer
 
-* URL: https://explorer.tonnft.tools/
+This explorer is the newest of the presented and has its own pleasant features.
+For example, Trace. This feature allows you to see the entire sequence of transactions between smart contracts, even if subsequent transactions do not contain your address.
 
-### Pros
+Transaction information is not as detailed as, for example, tonwhales.
 
-* Made to check NFTs and NFT Collections information
+### Features
 
-### Cons
+- Convenient for developers
+- Convenient for everyday use
+- Jetton transaction history
+- **Trace**
+- TON DNS support
 
-* Not working testnet URL
+| base address info                | transaction                     |
+| -------------------------------- | ------------------------------- |
+| ![tonapi](./eit-tonapi-info.png) | ![tonapi](./eit-tonapi-txn.png) |
+
+### Links
+
+- URL: https://tonapi.io/
+- Testnet URL: https://testnet.tonapi.io/
+
+## TON NFT EXPLORER
+
+This explorer is specialized in NFT, but it can also be used as a regular explorer.
+
+When viewing the wallet address, you can find out which NFT it stores, and when viewing the NFT, you can find out the metadata, collection address, owner, and transaction history.
+
+### Features
+
+- Convenient for developers
+- Сontract types
+- **Specialized in NFT**
+
+| nft address info                         | nft data                                    |
+| ---------------------------------------- | ------------------------------------------- |
+| ![tonnft](./eit-tonnftexplorer-info.png) | ![tonnft](./eit-tonnftexplorer-nftdata.png) |
+
+### Links
+
+- URL: https://explorer.tonnft.tools/
+- Testnet URL: https://testnet.explorer.tonnft.tools/
 
 ## Want to be in this list?
 
@@ -76,4 +121,5 @@ Please, write to one of the [maintainers](/contribute/maintainers).
 ## References
 
 Right now you could find most of the explorers in the Ton.App directory:
-* [https://ton.app/explorers](https://ton.app/explorers)
+
+- [https://ton.app/explorers](https://ton.app/explorers)
