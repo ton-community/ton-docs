@@ -1,4 +1,4 @@
-# Participate as Contributor
+# Participate as a Contributor
 
 To become a contributor who receives a limited *Hack-TON-berfest NFT*, please set up your own [TON wallet](https://ton.org/wallets) and verify your GitHub account.
 
