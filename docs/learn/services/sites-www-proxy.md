@@ -10,7 +10,7 @@ The TON network is interesting itself, even apart from the TON blockchain, it’
 
 TON network is deeply integrated with TON blockchain, the project’s native Toncoin cryptocurrency and TON services — it creates a synergy, elevating the network’s technology to a whole new level.
 
-## The TON network
+## TON network
 
 * **Decentralized**: A peer-to-peer network that has no centralized servers.
 * **Stable**: Nodes that go offline have no effect on the network’s functionality.
@@ -21,14 +21,15 @@ TON network is deeply integrated with TON blockchain, the project’s native Ton
 
 You can find a more technical explanation of the protocols on the TON network in The Open Network’s __[white paper](https://www.tonspace.co/learn/docs)__, in Chapter 3. 
 
-## __The TON blockchain uses the TON network__
+### TON blockchain relies on TON network
 
 For the last three years since the project’s inception, the TON blockchain’s nodes (validators, server, etc.) have been communicating with one another with the help of the TON network, the combination of which has proved to be stable and effective in practice.
 
 As operations on the blockchain become more complex, more powerful network solutions will eventually be required. The TON network fully satisfies the needs of latest generation blockchain; for example, when the TON blockchain divides into sub-blockchains due to high throughput, each sub-blockchain use its own individual sub-network.
 
 ## TON Sites
-![image](/img/docs/ton_sites.png "")
+
+![image](/img/docs/ton_sites.png)
 
 The TON blockchain is not the only thing that uses the TON network.
 
@@ -36,7 +37,8 @@ Starting today, you can launch a web server with your website and make it availa
 
 Read the guide __[here](https://www.tonspace.co/learn/services/sites-www-proxy)__.
 
-## Mandatory encryption and verifying the authenticity of data
+### Mandatory encryption and verifying the authenticity of data
+
 In the early days of the current version of the internet, all data between users and websites — e.g., conversations on chats — was always exposed where it could be read by someone else on the internet. There was also no way to confirm whether data was altered in transit.
 
 In time, HTTPS appeared, which encrypted and authenticated data.
@@ -47,7 +49,7 @@ Nevertheless, there is always the possibility of users’ data being sent throug
 
 In light of this, the TON network has its own __mandatory__ encryption and automatically verifies the authenticity of all data traffic.
 
-## No more need for certification authorities
+### No more need for certification authorities
 
 To receive encryption and verify the authenticity of data, regular websites need to have a special certificate. Technically, you can create this certificate yourself, but in the internet it will have a lower level of trust. Usually, certificates can be obtained at certification authorities — some cost money, and others are free.
 
@@ -57,7 +59,8 @@ In short, these certification authorities don’t do anything.
 
 TON Sites provides encryption and authenticity verification of data via built-in cryptography. Your site will be immediately secure without having to go to a certification authorities.
 
-## No more need domain names registries
+### No more need domain names registries
+
 ![image](/img/docs/foundation_ton.png)
 
 For regular websites, you rent the domain name from a commercial entity — i.e., a centralized domain name registry.
@@ -72,7 +75,8 @@ Incumbent domain registries require owners to make non-trivial payments, which g
 
 __[How to link a TON site to a domain](https://www.tonspace.co/participate/web3/site-management#how-to-link-a-ton-site-to-a-domain)__
 
-## Sub-domains
+### Sub-domains
+
 ![image](/img/docs/Sub-domains_ton.png)
 
 
@@ -91,7 +95,9 @@ Say the social network place.ton allows Alice to register independently alice.pl
 You can go one step further and have a full-blown auction for NFT sub-domain — the same way the first “.ton” domains are __[distributed](https://dns.ton.org)__.
 
 ## TON WWW
-## __You can assign a wallet to your domain name__
+
+### Domain names
+
 <div style={{textAlign:'center', margin: '0 auto'}}>
   <video width="300" style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
     <source src="/img/docs/ton_www.mp4" type="video/mp4" />
@@ -106,7 +112,7 @@ The same is true for sub-domains. Let’s say you go to Alice’s personal page 
 
 Send 10 TON as a gift to Alice by entering alice.place.ton as the recipient’s address, and Alice will receive the TON in her crypto wallet, which she assigned to her account when she created it.
 
-## Authorization
+### Authorization
 
 <div style={{textAlign:'center', margin: '0 auto'}}>
   <video width="300" style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
@@ -120,7 +126,7 @@ On top of passwords, log-ins require an email address or phone number that will 
 
 On TON, there’s no need to register. On a site or in an app, you can sign in with your TON-based crypto wallet — you won’t need to reveal your email address or create a different password for every new service.
 
-## Hyperlinks
+### Hyperlinks
 
 <div style={{textAlign:'center', margin: '0 auto'}}>
   <video width="300" style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
@@ -149,6 +155,7 @@ Web page developers can also use scripts that interact with your TON wallet or T
 Everything mentioned above is what creates TON WWW: the collection of web pages and services on TON, which link to one another and are accessible in a TON crypto wallet and web browser.
 
 ## TON Proxy
+
 To gain access to the TON network, first, users must connect to a special entry point. In technical terms, this is called an “entry proxy.”
 
 Currently, you can use __[public entry points](https://www.tonspace.co/participate/web3/setting-proxy#public-entry-ton-proxies)__ launched by the TON Foundation.
@@ -157,7 +164,7 @@ __|__ _Use public entry points along with HTTP for trial purposes only, as in th
 
 Tech-savvy users can already __[launch entry proxies](https://www.tonspace.co/participate/web3/sites-and-proxy#running-entry-proxy-on-remote-computer)__ directly on their devices — in the near future, this will become available to all users in the form of a simple application.
 
-## In a browser
+### In a browser
 ![image](/img/docs/in_a_browser.jpg)
 
 Because TON Proxy is compatible with HTTP Proxy, you can simply open the settings in your browser or system settings and enter the address of a public TON entry proxy as a proxy server.
@@ -166,10 +173,10 @@ You’ll then be able to open “.ton” sites directly in your browser, just li
 
 Here’s a __[guide](https://www.tonspace.co/participate/web3/setting-proxy)__ on setting up TON Proxy for various browsers.
 
-## Wallets
+### Wallets
 
 <div style={{textAlign:'center', margin: '0 auto'}}>
-  <video width="300" style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
+  <video width="600" style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
     <source src="/img/docs/wallets.mp4" type="video/mp4" />
   </video>
 </div>
@@ -184,6 +191,7 @@ This functionality will soon be available in the standard TON Chrome Extenstion,
 We’re awaiting two monumental updates dedicated to privacy and decentralized finance.
 
 ### TON Proxy 2.0 — Privacy
+
 In our opinion, the main red flag of the internet is that a user’s IP address and the site’s IP address are both open and visible to everyone.
 
 In the TON Proxy 2.0 update, a new functionality will allow people to launch intermediary proxy nodes on the TON network; meanwhile, data between users and sites or services will travel through a swarm of intermediary nodes via __[garlic routing](https://en.wikipedia.org/wiki/Garlic_routing)__.
@@ -206,8 +214,12 @@ A user’s IP address is exposed by default. Not only can this be a vector throu
 
 With TON Proxy, internet traffic will be rerouted through one of many intermediary proxies so that the end site or service will never know your real IP address.
 
-__|__ _Starting with the TON Proxy 2.0 version, full anonymity will be available in the TON network_
-## TON Proxy 3.0 — Decentralized finance
+:::info
+Starting with the TON Proxy 2.0 version, full anonymity will be available in the TON network.
+:::
+
+### TON Proxy 3.0 — Decentralized finance
+
 For the third stage, decentralized Toncoin economy will launch for the use of intermediary TON Proxies, which provide privacy to users and security to sites.
 
 The payment will occur through the Payment Network technology, a network of payment channels __[developed](https://www.tonspace.co/learn/services/payments)__ in Q2 2022. An intermediary proxy node is going to receive micropayments for internet traffic packages — e.g., for 128 KiB — that run through it. These micropayments will be charged and deducted from users’ crypto wallets.
