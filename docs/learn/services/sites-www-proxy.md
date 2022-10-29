@@ -1,5 +1,6 @@
 # TON Sites, TON WWW, and TON Proxy
-![image](https://github.com/maxuver/ton-docs/blob/6cbe58cb490b78708d917f1e6b3c96449e315f27/static/img/docs/main_pic.png)
+
+![image](/img/docs/main_pic.png)
 
 The TON project is more than just a blockchain — it also has a unique network technology.
 
@@ -27,9 +28,7 @@ For the last three years since the project’s inception, the TON blockchain’s
 As operations on the blockchain become more complex, more powerful network solutions will eventually be required. The TON network fully satisfies the needs of latest generation blockchain; for example, when the TON blockchain divides into sub-blockchains due to high throughput, each sub-blockchain use its own individual sub-network.
 
 ## TON Sites
-
-![image](https://github.com/maxuver/ton-docs/blob/6cbe58cb490b78708d917f1e6b3c96449e315f27/static/img/docs/ton_sites.png)
-
+![image](/img/docs/ton_sites.png "")
 
 The TON blockchain is not the only thing that uses the TON network.
 
@@ -59,7 +58,7 @@ In short, these certification authorities don’t do anything.
 TON Sites provides encryption and authenticity verification of data via built-in cryptography. Your site will be immediately secure without having to go to a certification authorities.
 
 ## No more need domain names registries
-![image](https://github.com/maxuver/ton-docs/blob/6cbe58cb490b78708d917f1e6b3c96449e315f27/static/img/docs/foundation_ton.png)
+![image](/img/docs/foundation_ton.png)
 
 For regular websites, you rent the domain name from a commercial entity — i.e., a centralized domain name registry.
 
@@ -74,7 +73,7 @@ Incumbent domain registries require owners to make non-trivial payments, which g
 __[How to link a TON site to a domain](https://www.tonspace.co/participate/web3/site-management#how-to-link-a-ton-site-to-a-domain)__
 
 ## Sub-domains
-![image](https://user-images.githubusercontent.com/78837452/198694741-daa58ee0-5e18-4450-b9b5-01cdbf58df40.png)
+![image](/img/docs/Sub-domains_ton.png)
 
 
 Like regular sites, you can have a sub-domain for your TON Sites with the help of TON DNS.
@@ -93,7 +92,11 @@ You can go one step further and have a full-blown auction for NFT sub-domain —
 
 ## TON WWW
 ## __You can assign a wallet to your domain name__
-https://user-images.githubusercontent.com/78837452/198827261-4c458cd9-4db3-4a32-b8e0-4ab972cefafc.mp4
+<div style={{textAlign:'center', margin: '0 auto'}}>
+  <video width="300" style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
+    <source src="/img/docs/ton_www.mp4" type="video/mp4" />
+  </video>
+</div>
 
 Let’s say you go to the http://foundation.ton site and want to donate 10 TON toward the network’s development. How would you do that?
 
@@ -147,7 +150,7 @@ __|__ _Use public entry points along with HTTP for trial purposes only, as in th
 Tech-savvy users can already __[launch entry proxies](https://www.tonspace.co/participate/web3/sites-and-proxy#running-entry-proxy-on-remote-computer)__ directly on their devices — in the near future, this will become available to all users in the form of a simple application.
 
 ## In a browser
-![image](https://github.com/maxuver/ton-docs/blob/6cbe58cb490b78708d917f1e6b3c96449e315f27/static/img/docs/in_a_browser.jpg)
+![image](/img/docs/in_a_browser.jpg)
 
 
 
