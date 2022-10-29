@@ -1,0 +1,22 @@
+"review needed :eyes:":
+  - docs/**/*
+  - static/**/*
+  - sidebars.js
+  - docusaurus.config.js
+
+"translation :earth_africa:":
+  - i18n/**/*
+
+"documentation :book:":
+  - README.md
+
+"tooling :wrench:":
+  - .github/**/*
+  - .gitignore
+
+"dependencies :package:":
+  - package.json
+  - package-lock.json
+
+"content :fountain_pen:":
+  - src/**/*

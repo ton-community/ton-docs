@@ -490,6 +490,7 @@ const sidebars = {
         'contribute/README',
         'contribute/maintainers',
         'contribute/guidelines',
+        'contribute/principles-of-a-good-tutorial',
         'contribute/sample-tutorial',
       ],
     },
