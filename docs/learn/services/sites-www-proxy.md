@@ -108,7 +108,11 @@ Send 10 TON as a gift to Alice by entering alice.place.ton as the recipient’s 
 
 ## Authorization
 
-https://user-images.githubusercontent.com/78837452/198827377-8ddf1c0b-8819-482b-8d36-b8eae6167ded.mp4
+<div style={{textAlign:'center', margin: '0 auto'}}>
+  <video width="300" style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
+    <source src="/img/docs/autorization.mp4" type="video/mp4" />
+  </video>
+</div>
 
 On the internet, you have to register and create a new and different password for every website. This quickly becomes annoying and inconvenient even if you factor in password manager apps. Inexperienced users defer to using one and the same password for all websites with which they interact, which is dangerous.
 
@@ -118,7 +122,11 @@ On TON, there’s no need to register. On a site or in an app, you can sign in w
 
 ## Hyperlinks
 
-https://user-images.githubusercontent.com/78837452/198699980-7e1b559e-dc26-4034-9658-37f8fc0eab93.mp4
+<div style={{textAlign:'center', margin: '0 auto'}}>
+  <video width="300" style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
+    <source src="/img/docs/hyperlinks.mp4" type="video/mp4" />
+  </video>
+</div>
 
 The World Wide Web comprises internet sites of web pages, whose text can contain __hyperlinks__, which allows users to go from one resource to another seamlessly or to initiate some kind of action (e.g. open an email client).
 
@@ -152,8 +160,6 @@ Tech-savvy users can already __[launch entry proxies](https://www.tonspace.co/pa
 ## In a browser
 ![image](/img/docs/in_a_browser.jpg)
 
-
-
 Because TON Proxy is compatible with HTTP Proxy, you can simply open the settings in your browser or system settings and enter the address of a public TON entry proxy as a proxy server.
 
 You’ll then be able to open “.ton” sites directly in your browser, just like regular websites.
@@ -162,7 +168,11 @@ Here’s a __[guide](https://www.tonspace.co/participate/web3/setting-proxy)__ o
 
 ## Wallets
 
-https://user-images.githubusercontent.com/78837452/198827404-fad26020-cc22-4e89-a481-c3bd16e38e16.mp4
+<div style={{textAlign:'center', margin: '0 auto'}}>
+  <video width="300" style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
+    <source src="/img/docs/wallets.mp4" type="video/mp4" />
+  </video>
+</div>
 
 Things can always be simpler. Various TON wallets have said that they wish to implement TON Proxy directly in the wallet’s app to avoid downloading extra apps.
 
