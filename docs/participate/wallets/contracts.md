@@ -73,17 +73,12 @@ This wallet's function is to act like a regular wallet, but restrict transfers t
 
 ## Conclusion
 
-As you see, there are a lot of different versions of wallets in TON. But in most cases, you only need V3R2 or V4R2. You can also use one of the special wallets if you want to have some additional functionality like periodic unlocks of funds.
+As you see, there are a lot of different versions of wallets in TON. But in most cases, you only need `V3R2` or `V4R2`. You can also use one of the special wallets if you want to have some additional functionality like periodic unlocks of funds.
 
 ## References
 
- - Sources of basic wallets:
-   * https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont
- - More technical description of versions:
-   * https://github.com/toncenter/tonweb/blob/master/src/contract/wallet/WalletSources.md
- - Wallet V4 sources and detailed description:
-   * https://github.com/ton-blockchain/wallet-contract
- - Lockup wallet sources and detailed description:
-   * https://github.com/ton-blockchain/lockup-wallet-contract
- - Restricted wallet sources:
-   * https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet
+ - [Sources of basic wallets](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
+ - [More technical description of versions](https://github.com/toncenter/tonweb/blob/master/src/contract/wallet/WalletSources.md)
+ - [Wallet V4 sources and detailed description](https://github.com/ton-blockchain/wallet-contract)
+ - [Lockup wallet sources and detailed description](https://github.com/ton-blockchain/lockup-wallet-contract)
+ - [Restricted wallet sources](https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet)
