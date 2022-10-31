@@ -35,11 +35,11 @@ If you want to find a wallet to install open the [ton.org/wallets](https://ton.o
 
 
 #### Pros-cons
-- ✅ Original wallet developed TON Foundation means, that wallet works how it must from the sight of TON Blockchain core developers.
-- ✅ Multiplatform architecture support. You can research how it works in Linux, Windows, MacOS, iOS, Android, and Chrome.
+- ✅ Original wallet developed TON Foundation means. TONcoin wallet works how it must from the sight of TON Blockchain core developers.
+- ✅ Multiplatform architecture support. You can research how it works in Linux, Windows, MacOS, iOS, Android, and convenient for development Chrome version.
 - ✅ Rare updates. Huge potential for contribution by newcomers, because the current project is simple enough.
-- ❌ Rare updates. This wallet has no all up-to-date features(TON DNS address, wallet-v4 contract not supported).
-- ❌ Current UI needs significant improvement, as it has not enough user-friendly(from thoughts that goal to deliver mass adoption). A lot of complaints from users in the Play store and App store.
+- ❌ Rare updates. This wallet has no all up-to-date features (TON DNS address, wallet-v4 contract not supported).
+- ❌ The current UI is outdated and loses to alternative wallets.
 
 
 ### Tonkeeper
