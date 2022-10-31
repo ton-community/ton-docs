@@ -2,48 +2,48 @@
 
 So you've decided to write a tutorial for TON Documentation?
 
-We're excited to have you among our contributors! Please review the guidelines below to make sure your tutorial follows the style and quality of the existing content on TON Docs.
+We're excited to have you among our contributors! Please review the guidelines below to make sure your tutorial follows the style and quality of the pre-existing content on TON Docs.
 
-It is important that you take some time to become familiar with the tutorial structure and how headings should be used. Please read through some of our existing tutorials and also have a look at [past Pull Requests](https://github.com/ton-community/ton-docs/pulls?q=is%3Apr+is%3Aclosed) before submitting your own.
+It is important that you take some time to become familiar with the tutorial structure and how headings should be used. Please read through some of our existing tutorials and also have a look at [previous Pull Requests](https://github.com/ton-community/ton-docs/pulls?q=is%3Apr+is%3Aclosed) before submitting your own.
 
 ## Process
 
 :::info IMPORTANT
-Before you start writing, *read the guidelines below*! They will help you to ensure a level of standardization and quality which will make the review process much faster.
+Before you start writing, *read the guidelines below*! They will help you to ensure a level of standardization and quality that will make the review process much faster.
 
 Also, be sure to refer to the [**sample tutorial structure**](/contribute/sample-tutorial) we have provided.
-:::
+
 
 1. To begin, fork and then clone the [ton-docs](https://github.com/ton-community/ton-docs/) repository on GitHub and create a new branch in your local repository.
-2. Write your tutorial, keeping quality and readability in mind! Have a look at existing tutorials to see what you should aim for.
-3. When you're ready to submit it for review, [open a Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) from your branch. We'll be notified and will start the review process:
-    1. **Please make every effort to submit only the final draft of your tutorial**. Some typos and grammar fixes are acceptable, but if there are significant changes to be made before we can publish the tutorial it will take much longer to review and have you make the appropriate changes.
-4. Once we've reviewed your submission and you've made any necessary changes, we'll merge the Pull Request and the tutorial will be published on TON Documentation. We'll be in touch shortly after this to arrange your payment!
-5. Once it is published, remember to **promote** your tutorial on social media! [Documentation maintainers](/contribute/maintainers) can help to amplify this promotion, as long as you coordinate with us.
+2. Write your tutorial keeping quality and readability in mind! Have a look at the existing tutorials to see what you should aim for.
+3. When you're ready to submit it for review, [open a Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) from your branch. We will be notified, and the review process will begin:
+    1. **Please make every effort to submit only the final draft of your tutorial**. Some typos and grammar fixes are acceptable, but if there are significant changes to be made before we can publish the tutorial, it will take much longer to review and have you make the necessary changes.
+4. Once we've reviewed your submission and you've made all necessary changes, we'll merge the Pull Request and publish the tutorial on TON Documentation. We'll contact you shortly after this to arrange your payment!
+5. Once it is published, remember to **promote** your tutorial on social media! The [documentation maintainers](/contribute/maintainers) can help to amplify this promotion as long as you cooperate with us.
 
-To summarize, the workflow is:  
-1. ***Fork and Clone*** the **`ton-docs` **repository
+To summarize, the workflow is as follows:  
+1. ***Fork and Clone*** the **`ton-docs`** repository
 2. ***Write and polish*** your tutorial
 3. ***Submit a Pull Request*** for review
-4. *Make any necessary changes* 
-5. The tutorial is ***merged and published* 
+4. ***Make any necessary changes***
+5. The tutorial is ***merged and published***
 6. ***Promote your tutorial*** on social media!
 
 ## General tips
 
-- **Do not copy and paste existing content**. Plagiarism is a serious issue and will not be tolerated. If the tutorial is inspired by some existing content, reference it and link to it. When you link to other tutorials/resources, do it with TON Docs resources as much as possible.
+- **Do not copy and paste pre-existing content**. Plagiarism is a serious issue and will not be tolerated. If the tutorial is inspired by some existing content, reference it and link to it. When linking to other tutorials/resources, use TON Docs resources if possible.
 - **Include any walkthrough videos or video content** in the PR by uploading it to Google Drive.
-- **Funding of accounts from faucets needs to be explained clearly** as to which account is being funded, from where and why. Do not assume learners can accomplish this on their own!
-- **Display sample outputs** to help learners know what to expect, in the form of Terminal snippets or screenshots. Trim long outputs.
+- **Account funding from faucets must be clearly explained**, including which account is being funded, from where and why. Do not assume learners can accomplish this task on their own!
+- **Display sample outputs** in the form of Terminal snippets or screenshots to help learners understand what to expect. Trim long outputs.
 - **Take an error-driven approach** where you bump into errors on purpose to teach learners how to debug them. For example, if you need to fund an account to be able to deploy a contract, first try and deploy without funding, observe the error that is returned, then fix the error (by funding the account) and try again.
-- **Add potential errors and troubleshooting.** Of course, the tutorial shouldn't list all possible errors but make an effort to catch the important or most common ones.
+- **Add potential errors and troubleshooting.** Of course, the tutorial shouldn't list every possible error, but make an effort to catch the important or most common ones.
 - **Use React or Vue** for the client-side.
 - **Before making the PR, run the code by yourself first** to avoid any obvious errors and to make sure it works as expected.
-- **Avoid including external/cross-links** to different sources in between the tutorials. If your tutorial is longer, we can discuss how to turn it into a longer course or Pathway.
-- **Provide** **pictures or screenshots** to illustrate complicated processes where needed.
-- Upload your images to the `static` directory of the learn-tutorials repository - **DO NOT** use hotlinks to external sites, as this can lead to broken images.
+- **Avoid including external/cross-links** to different sources between tutorials. If your tutorial is longer, we can discuss how to turn it into a longer course or Pathway.
+- **Provide** **pictures or screenshots** to illustrate the complicated processes where needed.
+- Upload your images to the `static` directory of the learn-tutorials repository — **DO NOT** use hotlinks to external sites, as this can result in broken images.
 - **Image links must** **be in markdown format** and you must **ONLY** use the raw GitHub URL of the static directory in the repository: `![name of your image](https://raw.githubusercontent.com/ton-community/ton-docs/main/static/img/tutorials/<your image filename>.png?raw=true)`
-    - Remember to add `?raw=true` to the end of the URL
+    - Remember to add `?raw=true` at the end of the URL.
 
 ## How to structure your tutorial
 
