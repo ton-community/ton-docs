@@ -48,39 +48,39 @@ To summarize, the workflow is as follows:
 ## How to structure your tutorial
 
 :::info Sample tutorial structure
-Feel free to check [sample tutorial structure](/contribute/sample-tutorial) to see it in your eyes.
+Feel free to check [sample tutorial structure](/contribute/sample-tutorial) to see it with your eyes.
 :::
 
-- The **Title** should be direct and clear, summarizing the tutorial's goal. Do not add the tutorial title as a heading inside the document, use the markdown document filename.
-  - *For example*: If your tutorial was titled "_Step by step guide for writing your first smart contract in FunC_", the filename should be:  
+- The **Title** should be direct and clear, summarizing the tutorial's goal. Do not add the tutorial title as a heading inside the document; use instead the markdown document filename. 
+  - *For example*: If your tutorial was titled "_Step by step guide for writing your first smart contract in FunC_," the filename should be:  
   `step-by-step-guide-for-writing-your-first-smart-contract-in-func.md`
 - Include an **Introduction** section explaining *why* this tutorial matters and what the context of the tutorial is. Don't assume that it is obvious.
 - Include a **Prerequisites** section explaining any *prior knowledge* required or any existing tutorials that need to be completed first, any tokens that are needed, etc.
-- Include a **Requirements** section explaining any *technology that needs to be installed* **prior** to starting the tutorial and that the tutorial will not cover such as TON Wallet Extension, Node.js, etc. Do not list packages that will be installed during the tutorial.
+- Include a **Requirements** section explaining any *technologies that must be installed* **prior** to starting the tutorial and that the tutorial will not cover, such as TON Wallet Extension, Node.js, etc. Do not list packages that will be installed during the tutorial.
 - Use **subheadings** (H2: ##) to break down your explanations within the body of the tutorial. Keep the Table of Contents in mind when using subheadings, and try to keep them on point.
     - If the content below a subheading is short (for example, only a single paragraph and a code block), consider using bold text instead of a subheading.
-- Include a **Conclusion** section that summarizes what was learned, reinforces key points and also congratulates the learner for completing the tutorial.
-- (***Optional***) Include a **What's Next** section pointing to good follow-up tutorials or other resources (projects, articles, etc.)
-- (***Optional***) Include an **About The** **Author** section at the end. Your bio should include your GitHub profile (which will have your name, website, etc) and a link to your Telegram profile (so users can contact/tag you for help and questions).
-- A **References** section **must** be present if you have taken any help in writing this tutorial from other documents, GitHub repos and other tutorials. Credit sources by adding their name and a link to the document when possible (if it is not a digital document, include an ISBN or other means of reference).
+- Include a **Conclusion** section that summarizes what was learned, reinforces key points, and also congratulates the learner for completing the tutorial.
+- (***Optional***) Include a **What's Next** section pointing to good follow-up tutorials or other resources (projects, articles, etc.).
+- (***Optional***) Include an **About The** **Author** section at the end. Your bio should include your GitHub profile (which will have your name, website, etc.) and a link to your Telegram profile (so that users can contact/tag you for help and questions).
+- A **References** section **must** be present if you have taken any help in writing this tutorial from other documents, GitHub repos, or other tutorials. Credit sources by adding their name and a link to the document when possible (if it is not a digital document, include an ISBN or other means of reference).
 
 ## Style Guide
 
 - **Writing Tone -** Tutorials are written by community contributors for their peers. 
-  - As such, we recommend creating a tone of inclusion and interaction throughout the tutorial. Use words such as “we”, “us”, “our”
-    - _For example_ “We have successfully deployed our contract”.
+  - Given this, we recommend creating a tone of inclusion and interaction throughout the tutorial. Use words such as “we”, “us”, “our”.
+    - _For example_: "We have successfully deployed our contract."
   - When providing direct instructions feel free to use “you”, “your”, etc.
-    - _For example_ *“*Your file should look like this:*”*.
+    - _For example_: *“*Your file should look like this:*”.
 - **Use Markdown properly** throughout your tutorial. Refer to [GitHub's markdown guide](https://guides.github.com/features/mastering-markdown/) as well as the [sample tutorial structure](/contribute/sample-tutorial).
-- **Do not use pre-formatted text for emphasis**, *for example* :
+- **Do not use pre-formatted text for emphasis**, *for example*:
     - ❌ "TON counter `smart contract` named `counter.fc`" is incorrect.
     - ✅ "TON counter **smart contract** named `counter.fc`" is correct.
-- **Do not use any markdown formatting in a section heading**, *for example* :
+- **Do not use any markdown formatting in a section heading**, *for example*:
     - ❌ # **Introduction** is incorrect.
     - ✅ # Introduction is correct.
 - **Explain your code!** Don't just ask learners to blindly copy and paste.
     - Function names, variables and constants **must** be consistent across the entire document.
-    - Use a comment at the beginning of a code block to show the path and filename where that code exists. *For example* :
+    - Use a comment at the beginning of a code block to show the path and filename where the code exists. *For example*:
 
         ```jsx
         // test-application/src/filename.jsx
@@ -91,11 +91,11 @@ Feel free to check [sample tutorial structure](/contribute/sample-tutorial) to s
         ```
 
 - **Select the appropriate language** for code block syntax highlighting!
-    - All code blocks *must* have syntax highlighting, use **```text** if you are not sure which kind of syntax highlighting applies.
+    - All code blocks *must* have syntax highlighting. Use **```text** if you are not sure which kind of syntax highlighting to apply.
 - **Do not use code block syntax for pre-formatted text,** *for example*:
     - ❌ \```filename.jsx\``` is incorrect.
     - ✅ \`filename.jsx\` is correct.
-- **Your code blocks should be well commented**. Comments should be short (usually just two or three lines at a time) and effective. If you need more space to explain a piece of code, do it outside of the code block.
+- **Your code blocks should be well commented**. Comments should be short (usually two or three lines at a time) and effective. If you need more space to explain a piece of code, do it outside of the code block.
 - **Remember to leave a blank line** before and after all code blocks.  
   *For example*:
 
@@ -108,13 +108,13 @@ import { useEffect, useState } from 'react';
 ```  
 
   
-- **Use a linter & prettifier** before pasting your code into code blocks. We recommend `eslint` for JavaScript/React. Use `prettier` for code formatting.
-- **Avoid over-use of bullet points**, numbered lists, or complicated text formatting. Using **bold** or *italic* emphasis is allowed, but should be kept to a minimum.
+- **Use a linter & prettifier** before pasting your code into the code blocks. We recommend `eslint` for JavaScript/React. Use `prettier` for code formatting.
+- **Avoid over-use of bullet points**, numbered lists, or complicated text formatting. The use of **bold** or *italic* emphasis is allowed but should be kept to a minimum.
 
 # **App setup**
 
 - Web3 projects will typically include several existing code libraries. Be sure to account for this when writing your tutorial. Where possible, provide a GitHub repository as a starting point to make it easier for learners to get started.
 - If you are *not* using a GitHub repo to contain the code used in your tutorial, remember to explain to readers how to create a folder to keep the code organized. 
-*For example* : `mkdir example && cd example`
+*For example*: `mkdir example && cd example`
 - If you use `npm init` to initialize a project directory, explain the prompts or use the `-y` flag.
 - If you use `npm install` use the `-save` flag.
