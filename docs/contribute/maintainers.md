@@ -3,7 +3,7 @@
 
 ## Active Team
 
-Current members of the TON Docs team are listed in alphabetical order below.
+Current members of the TON Docs team are listed alphabetically below.
 
 ### SwiftAdviser
 
@@ -15,7 +15,7 @@ Current members of the TON Docs team are listed in alphabetical order below.
 
 TON Docs was originally created by [tolya-yanot](https://github.com/tolya-yanot) and [EmelyanenkoK](https://github.com/EmelyanenkoK).
 
-We’d like to recognize a few people who have made significant contributions to TON Docs in the past and have helped maintain and develop them:
+We’d like to recognize a few people who have made significant contributions to TON Docs in the past and helped maintain and develop them:
 
 - [tolya-yanot](https://github.com/tolya-yanot)
 - [EmelyanenkoK](https://github.com/EmelyanenkoK)
