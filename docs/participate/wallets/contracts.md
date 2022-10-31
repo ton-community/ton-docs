@@ -26,7 +26,7 @@ The first issue is fixed in `V1R2` and `V1R3`. That `R` letter means `revision`.
 But this version still has the second issue, which is fixed in the next version.
 
 Wallet source code:
- * https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-code.fc 
+ * [ton/crypto/smartcont/wallet-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-code.fc) 
 
 ### Wallet V2
 
@@ -35,7 +35,7 @@ This version introduces `valid_until` parameter which is used to set the time li
 It can be used in most cases, but it misses one cool improvement, which is done in `V3`.
 
 Wallet source code:
- * https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-wallet-v2.fif
+ * [ton/crypto/smartcont/new-wallet-v2.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-wallet-v2.fif)
 
 ### Wallet V3
 
@@ -46,7 +46,7 @@ Basically, `subwallet_id` is just a number which is added to the contract state 
 This version is the most used right now. It covers most of the use-cases, and it still remains clean and simple.
 
 Wallet source code:
- * https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-v3-code.fif
+ * [ton/crypto/smartcont/wallet-v3-code.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-v3-code.fif)
 
 ### Wallet V4
 
@@ -57,7 +57,7 @@ This feature allows developers to implement complex logic that will work with us
 This is a very customizable feature which is unique to TON blockchain.
 
 Wallet source code:
- * https://github.com/ton-blockchain/wallet-contract
+ * [ton-blockchain/wallet-contract](https://github.com/ton-blockchain/wallet-contract)
 
 ## Special wallets
 
@@ -72,7 +72,7 @@ This wallet is made for those who need to send hundreds of transactions in a sho
 It allows you to send up to `254` transactions at one smart contract call. It also uses a little different approach to solve replay attacks instead of seqno, so you can call this wallet several times at once to send even thousands of transactions in a second.
 
 Wallet source code:
- * https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc
+ * [ton/crypto/smartcont/highload-wallet-v2-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc)
 
 ### Lockup wallet
 
@@ -83,14 +83,14 @@ It allows you to set the time, until which you won't be able to withdraw anythin
 For example: you can create a wallet which will hold 1 million coins with total vesting time of 10 years. Set the cliff duration to one year, so funds will be locked for the first year after the wallet is created. And set the unlock period to one month, so `1'000'000 TON / 120 months = ~8333 TON` will unlock every month.
 
 Wallet source code:
- * https://github.com/ton-blockchain/lockup-wallet-contract
+ * [ton-blockchain/lockup-wallet-contract](https://github.com/ton-blockchain/lockup-wallet-contract)
 
 ### Restricted wallet
 
 This wallet's function is to act like a regular wallet, but restrict transfers to only one pre-defined destination address. You can set the destination when you create this wallet, and then you'll be only able to transfer funds from it to that address. But note that you can still transfer funds to validation contracts, so you can run a validator with this wallet.
 
 Wallet source code:
- * https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet
+ * [EmelyanenkoK/nomination-contract/restricted-wallet](https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet)
 
 ## Conclusion
 
