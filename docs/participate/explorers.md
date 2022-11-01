@@ -26,7 +26,7 @@ Almost all explorers have the ability to find information about the balance, tra
 
 Next, we will consider several explorers that can be attributed to each of the categories.
 
-## TonScan Explorer
+## TonScan
 
 Good explorer for everyday use. It has a convenient interface, a lot of information, and search. The search is performed by the public [address book](https://github.com/catchain/tonscan/blob/master/src/addrbook.json) (TON Foundation, OKX and etc.)
 
@@ -114,7 +114,7 @@ When viewing the wallet address, you can find out which NFT it stores, and when 
 - URL: https://explorer.tonnft.tools/
 - Testnet URL: https://testnet.explorer.tonnft.tools/
 
-## DTON explorer
+## DTON
 
 DTON is another explorer for developers. It provides a lot of information about transactions in a convenient form.
 
