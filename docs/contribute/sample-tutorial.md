@@ -70,7 +70,7 @@ Any technology that needs to be installed **prior** to starting the tutorial and
 - Do not use `pre-formatted text` for emphasis; use only **bold** or *italic* text for emphasis.
 - Add Images or code blocks to reflect the expected terminal output.
 
-- Take an error-driven approach when writing your tutorial. Add common errors and troubleshooting steps, *for example:*
+- Take an error-driven approach when writing your tutorial. Add common errors and troubleshooting steps. *For example:*
 
 > **Not able to connect to the Testnet, getting an error on executing  
 > `node deploy:testnet` command.** 
