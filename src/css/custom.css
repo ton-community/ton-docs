@@ -1706,21 +1706,21 @@ button img, a img{
   }
 }
 
-.announcementBar_node_modules-\@docusaurus-theme-classic-lib-theme-AnnouncementBar-styles-module{
+[role="banner"]{
   background: linear-gradient(90deg, #9997F3 -0.76%, #69AEFF 93.89%);
   font-weight: 600;
   font-size: 14px;
   line-height: 24px;
 }
-.content_node_modules-\@docusaurus-theme-classic-lib-theme-AnnouncementBar-Content-styles-module a{
+[role="banner"] a{
   text-decoration: none !important;
 
 }
 
-.content_node_modules-\@docusaurus-theme-classic-lib-theme-AnnouncementBar-Content-styles-module a span{
+[role="banner"] a span{
   position: relative;
 }
-.content_node_modules-\@docusaurus-theme-classic-lib-theme-AnnouncementBar-Content-styles-module a span::after{
+[role="banner"] a span::after{
   content: '';
   position: absolute;
   top: -2px;
