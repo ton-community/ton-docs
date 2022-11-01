@@ -38,7 +38,7 @@ Good explorer for everyday use. It has a convenient interface, a lot of informat
 - Сontract types
 - Contract disassembler
 
-| base address info                                      | transaction                                           |
+| basic address info                                     | transaction                                           |
 | ------------------------------------------------------ | ----------------------------------------------------- |
 | ![tonscan](/img/explorers-in-ton/eit-tonscan-info.png) | ![tonscan](/img/explorers-in-ton/eit-tonscan-txn.png) |
 
@@ -60,7 +60,7 @@ Also, the TonWhales team supports its own network `sandbox`. This is both a plus
 - Сontract types
 - Contract disassembler
 
-| base address info                                          | transaction                                               |
+| basic address info                                         | transaction                                               |
 | ---------------------------------------------------------- | --------------------------------------------------------- |
 | ![tonwhales](/img/explorers-in-ton/eit-tonwhales-info.png) | ![tonwhales](/img/explorers-in-ton/eit-tonwhales-txn.png) |
 
@@ -84,7 +84,7 @@ Transaction information is not as detailed as, for example, tonwhales.
 - **Trace**
 - TON DNS support
 
-| base address info                                    | transaction                                         |
+| basic address info                                   | transaction                                         |
 | ---------------------------------------------------- | --------------------------------------------------- |
 | ![tonapi](/img/explorers-in-ton/eit-tonapi-info.png) | ![tonapi](/img/explorers-in-ton/eit-tonapi-txn.png) |
 
@@ -127,7 +127,7 @@ Also, it has a feature that allows you to see the computation phase of the trans
 - Сontract types
 - Contract disassembler
 
-| base address info                                | transaction                                     |
+| basic address info                               | transaction                                     |
 | ------------------------------------------------ | ----------------------------------------------- |
 | ![dton](/img/explorers-in-ton/eit-dton-info.png) | ![dton](/img/explorers-in-ton/eit-dton-txn.png) |
 
