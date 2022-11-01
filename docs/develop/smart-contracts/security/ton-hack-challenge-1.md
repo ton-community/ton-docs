@@ -161,5 +161,5 @@ I hope this article would shed light on the non-obvious rules for FunC developer
 
 Originally written by Dan Volkov
 
-- [Github](https://github.com/dvlkv)
+- [dvlkv on Github](https://github.com/dvlkv)
 - [Original article](https://dev.to/dvlkv/drawing-conclusions-from-ton-hack-challenge-1aep)
