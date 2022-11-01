@@ -1,7 +1,5 @@
 # Drawing conclusions from TON Hack Challenge
 
-<!-- Author: Dan Volkov https://dev.to/dvlkv/drawing-conclusions-from-ton-hack-challenge-1aep -->
-
 The TON Hack Challenge was held on October 23.
 There were several smartcontracts deployed in TON mainnet with synthetic security breaches. Every contract had 3000 or 5000 TON on balance, so the participant can hack it and get rewards immediately.
 
