@@ -215,6 +215,14 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Security Rules',
+          items: [
+            'develop/smart-contracts/security/README',
+            'develop/smart-contracts/security/ton-hack-challenge-1',
+          ],
+        },
+        {
+          type: 'category',
           label: 'Best Practices',
           items: [
             'develop/smart-contracts/guidelines',
