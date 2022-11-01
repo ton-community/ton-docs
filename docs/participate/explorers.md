@@ -26,7 +26,7 @@ Almost all explorers have the ability to find information about the balance, tra
 
 Next, we will consider several explorers that can be attributed to each of the categories.
 
-## TonScan Explorer
+## TonScan
 
 Good explorer for everyday use. It has a convenient interface, a lot of information, and search. The search is performed by the public [address book](https://github.com/catchain/tonscan/blob/master/src/addrbook.json) (TON Foundation, OKX and etc.)
 
@@ -38,7 +38,7 @@ Good explorer for everyday use. It has a convenient interface, a lot of informat
 - Сontract types
 - Contract disassembler
 
-| base address info                                      | transaction                                           |
+| basic address info                                     | transaction                                           |
 | ------------------------------------------------------ | ----------------------------------------------------- |
 | ![tonscan](/img/explorers-in-ton/eit-tonscan-info.png) | ![tonscan](/img/explorers-in-ton/eit-tonscan-txn.png) |
 
@@ -60,7 +60,7 @@ Also, the TonWhales team supports its own network `sandbox`. This is both a plus
 - Сontract types
 - Contract disassembler
 
-| base address info                                          | transaction                                               |
+| basic address info                                         | transaction                                               |
 | ---------------------------------------------------------- | --------------------------------------------------------- |
 | ![tonwhales](/img/explorers-in-ton/eit-tonwhales-info.png) | ![tonwhales](/img/explorers-in-ton/eit-tonwhales-txn.png) |
 
@@ -84,7 +84,7 @@ Transaction information is not as detailed as, for example, tonwhales.
 - **Trace**
 - TON DNS support
 
-| base address info                                    | transaction                                         |
+| basic address info                                   | transaction                                         |
 | ---------------------------------------------------- | --------------------------------------------------- |
 | ![tonapi](/img/explorers-in-ton/eit-tonapi-info.png) | ![tonapi](/img/explorers-in-ton/eit-tonapi-txn.png) |
 
@@ -114,12 +114,32 @@ When viewing the wallet address, you can find out which NFT it stores, and when 
 - URL: https://explorer.tonnft.tools/
 - Testnet URL: https://testnet.explorer.tonnft.tools/
 
+## DTON
+
+DTON is another explorer for developers. It provides a lot of information about transactions in a convenient form.
+
+Also, it has a feature that allows you to see the computation phase of the transaction step by step.
+
+### Features
+
+- Convenient for developers
+- Extended information about the computation phase
+- Сontract types
+- Contract disassembler
+
+| basic address info                               | transaction                                     |
+| ------------------------------------------------ | ----------------------------------------------- |
+| ![dton](/img/explorers-in-ton/eit-dton-info.png) | ![dton](/img/explorers-in-ton/eit-dton-txn.png) |
+
+### Links
+
+- URL: https://dton.io/
+
 ## Want to be in this list?
 
 Please, write to one of the [maintainers](/contribute/maintainers).
 
 ## References
 
-Right now you could find most of the explorers in the Ton.App directory:
-
-- [https://ton.app/explorers](https://ton.app/explorers)
+- [ton.app/explorers](https://ton.app/explorers)
+- [Awesome TON repository](https://github.com/ton-community/awesome-ton)
