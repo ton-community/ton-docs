@@ -907,8 +907,11 @@ html[data-theme='dark'] .header-github-link:before {
   background: #2D2D32;
 }
 
+.navbar__search-input::placeholder {
+  color: #728A96;
+}
 [data-theme='dark'] .navbar__search-input::placeholder {
-  color: #36363C;
+  color: #ACACAF;
 }
 
 [data-theme='dark'] .show-card .status {
@@ -1494,10 +1497,15 @@ button, a{
   transition: all 0.3s !important;
 }
 
+.NetworkIcon--large{
+ display: block !important;
+}
 .navbar a:hover{
   color: #0099E5;
   background: unset;
+  opacity: unset !important;
 }
+
 
 [data-theme='dark'] .navbar a:hover{
   color: #04A2F0;
@@ -1544,6 +1552,13 @@ button, a{
   color: white;
 }
 
+.Footer__network:nth-child(1) path,
+.Footer__network:nth-child(2) path,
+.Footer__network:nth-child(3) path,
+.Footer__network:nth-child(4) path{
+  fill: #FFFFFF;
+}
+
 .Footer__network:nth-child(1) rect,
 .Footer__network:nth-child(2) rect,
 .Footer__network:nth-child(3) rect,
@@ -1551,6 +1566,7 @@ button, a{
   transition: all 0.3s;
   fill: #98B2BF;
 }
+
 .Footer__network:nth-child(1):hover rect,
 .Footer__network:nth-child(2):hover rect,
 .Footer__network:nth-child(3):hover rect,
@@ -1574,7 +1590,7 @@ button, a{
 [data-theme='dark'] .Footer__network:nth-child(2) path,
 [data-theme='dark'] .Footer__network:nth-child(3) path,
 [data-theme='dark'] .Footer__network:nth-child(4) path{
-  fill: black;
+  fill: #232328;
 }
 [id='Get Started'] a:hover{
   opacity: unset;
@@ -1608,7 +1624,31 @@ button, a{
   font-size: 56px !important;
   line-height: 64px !important;
 }
+.bootstrap-wrapper h1:first-of-type span:first-of-type{
+  display: none;
+}
 
+@media (max-width: 577px) {
+  body {
+    --ifm-heading-margin-bottom: 0px;
+    --ifm-paragraph-margin-bottom: 40px;
+  }
+
+  .bootstrap-wrapper h1:first-of-type{
+    line-height: 54px !important;
+  }
+}
+@media (max-width: 577px) {
+  .bootstrap-wrapper h1:first-of-type{
+    line-height: 54px !important;
+  }
+}
+
+@media (min-width: 577px) {
+  .bootstrap-wrapper h1:first-of-type span:first-of-type{
+    display: inline;
+  }
+}
 
 @media (max-width: 576px) {
   .bootstrap-wrapper h1:first-of-type, .markdown h1:first-of-type{
@@ -1707,11 +1747,34 @@ button img, a img{
 }
 
 [role="banner"]{
-  background: linear-gradient(90deg, #9997F3 -0.76%, #69AEFF 93.89%);
+  background-image: url("/static/img/banner-bg.svg"), linear-gradient(90deg, #9997F3 -0.76%, #69AEFF 93.89%) !important;
+  background-repeat: no-repeat;
+  background-position: center center;
   font-weight: 600;
   font-size: 14px;
   line-height: 24px;
+  min-height: 44px;
 }
+.mobile-view{
+  display: none;
+}
+[role="banner"] span:first-of-type{
+  display: none;
+}
+@media (min-width: 577px) {
+  [role="banner"] span:first-of-type{
+    display: inline;
+  }
+}
+@media (max-width: 576px) {
+  .mobile-view{
+    display: inline;
+  }
+}
+[role="banner"] > div{
+  padding: 0;
+}
+
 [role="banner"] a{
   text-decoration: none !important;
 
