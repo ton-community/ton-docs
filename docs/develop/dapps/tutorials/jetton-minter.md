@@ -27,13 +27,13 @@ Advice to point 2: Have more than 0.5 TONCOIN is definitely enough.
 
 Use your web browser to open the service [jetton.live](https://www.jetton.live).
 
-<img src="/img/docs/Jetton/jetton-main-page.png" alt="drawing"/>
+<img src="/img/tutorials/Jetton/jetton-main-page.png" alt="drawing"/>
 
 # Deploy a Jetton using your browser.
 
 Click the `Connect Wallet` button to connect your wallet [TonHub](https://ton.app/wallets/tonhub-wallet) or [Chrome Extension](https://ton.app/wallets/chrome-plugin).
 
-<img src="/img/docs/Jetton/jetton-connect-wallet.png" alt="drawing"/>
+<img src="/img/tutorials/Jetton/jetton-connect-wallet.png" alt="drawing"/>
 
 **Scan the QR-code** if the [TonHub](https://ton.app/wallets/tonhub-wallet) or **sign in** the wallet if it's a browser [Chrome Extension](https://ton.app/wallets/chrome-plugin).
 
@@ -60,11 +60,11 @@ Click the `Connect Wallet` button to connect your wallet [TonHub](https://ton.ap
  ## 💸 Send and receive tokens (jettons).
  On the right side of the screen, you see a connected wallet that can **receive tokens.**
 
- <img src="/img/docs/Jetton/jetton-receive-tokens.png" alt="drawing"/>
+ <img src="/img/tutorials/Jetton/jetton-receive-tokens.png" alt="drawing"/>
 
  Just below you can **send tokens** to multi-currency wallets like a [Tonkeeper](https://tonkeeper.com/) or [TonHub](https://ton.app/wallets/tonhub-wallet) and another.
 
- <img src="/img/docs/Jetton/jetton-send-tokens.png" alt="drawing"/>
+ <img src="/img/tutorials/Jetton/jetton-send-tokens.png" alt="drawing"/>
 
  >  You can also `burn` them to reduce their number.
 
@@ -74,7 +74,7 @@ Click the `Connect Wallet` button to connect your wallet [TonHub](https://ton.ap
 
 Then select the **your token**, the your **amount** to send, and the **recipient's address.**
 
-<img src="/img/docs/Jetton/jetton-send-tutorial.png" alt="drawing"/>
+<img src="/img/tutorials/Jetton/jetton-send-tutorial.png" alt="drawing"/>
 
  ## ✏️ Token (jetton) customization.
 
