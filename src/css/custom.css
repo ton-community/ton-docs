@@ -1755,6 +1755,11 @@ button img, a img{
   line-height: 24px;
   min-height: 44px;
 }
+@media (max-width: 577px) {
+  [role="banner"]{
+    min-height: 34px;
+  }
+}
 .mobile-view{
   display: none;
 }
