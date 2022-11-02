@@ -149,6 +149,12 @@ To make any changes, start from here:
  npm run deploy
  ```
 
+
+## What's next?
+
+If you want to go deeper, feel free to read article from Tal Kol:  
+* [How to shard your smart-contract and why — studying the anatomy of TON's Jettons](https://society.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-theanatomy-of-tons-jettons)
+
 ## References
 
  - Project: https://github.com/ton-blockchain/minter-contract
