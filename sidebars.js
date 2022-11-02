@@ -278,7 +278,7 @@ const sidebars = {
 
          {
            type: 'category',
-           label: 'Best Practices',
+           label: 'Tutorials & Examples',
              items: [
                  'develop/dapps/tutorials/jetton-minter',
             {
