@@ -286,8 +286,9 @@ const sidebars = {
 
          {
            type: 'category',
-           label: 'Best Practices',
-           items: [
+           label: 'Tutorials & Examples',
+             items: [
+                 'develop/dapps/tutorials/jetton-minter',
             {
               type: 'category',
               label: 'Telegram bots',

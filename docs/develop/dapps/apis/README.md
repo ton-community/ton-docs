@@ -1,7 +1,7 @@
 # Overview
 
 
-At the moment, three API options are available to interact with TON:
+At the moment, there are three API options for interacting with TON:
 
 * [TonCenter HTTP API](/develop/dapps/apis/toncenter)
 * [TonAPI HTTP API](https://tonapi.io/)

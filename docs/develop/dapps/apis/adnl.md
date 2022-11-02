@@ -6,7 +6,7 @@ The client downloads keyblocks, the current state of the account and their **Mer
 
 Read operations (like get-method calls) are made by launching a local TVM with a downloaded and verified state.
 
-There is no need to download the full state of blockchain, the client only downloads what is needed for the operation. Calling local TVM is also lightweight.
+There is no need to download the full state of blockchain, the client downloads only what is needed for the operation. Calling local TVM is also ineffective.
 
 You can connect to public lite servers from the global config ([mainnet](https://ton.org/global-config.json) or [testnet](https://ton.org/testnet-global.config.json)) or run your own lite server.
 
@@ -17,11 +17,11 @@ Read more about Merkle proofs at [ADNL Protocol article](/learn/overviews/ADNL) 
 ## Pros & Cons
 
 👍 - Ultra secure API with Merkle proofs.  
-👎 - Need more time to figure it out. Not compatible with web frontends (non-HTTP protocol).
+👎 - More time is required to figure things out. Not compatible with web frontends (non-HTTP protocol).
 
 ## API reference
 
-Requests and responses to the server are described by a TL schema that allows you to generate a typed interface for a specific programming language.
+Requests and responses to the server are described by a TL schema that allows you to generate a typed interface for a certain programming language.
 
 [TonLib TL Schema](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl)
 
@@ -32,7 +32,7 @@ Requests and responses to the server are described by a TL schema that allows yo
 - [Golang TonLib wrapper](https://github.com/ton-blockchain/tonlib-go)
 - [Java TonLib wrapper (JNI)](https://github.com/ton-blockchain/tonlib-java)
 
-### Usage example:
+### Usage examples:
 
 - [Desktop standard wallet](https://github.com/ton-blockchain/wallet-desktop) (C++ and Qt)
 - [Android standard wallet](https://github.com/ton-blockchain/wallet-android) (Java)

@@ -9,10 +9,10 @@ You can connect to public [toncenter.com](https://toncenter.com) or run your own
 ## Pros & Cons
 
 👍 — Habitual. Suitable for a quick start.  
-👍 — Perfect to interact with blockchain transactions, smart-contracts, etc.
+👍 — Perfect to interact with blockchain transactions, smart contracts, etc.
 
-👎 — It's not possible to receive information where you need indexed blockchain API.  
-👎 — Like in most blockchains, you cannot fully trust server responses, because its responses do not contain proofs.
+👎 — It's not possible to receive information where you need an indexed blockchain API.  
+👎 — Like in most blockchains, you cannot fully trust server responses, because they do not contain proofs.
 
 ## API reference
 
@@ -24,6 +24,6 @@ You can connect to public [toncenter.com](https://toncenter.com) or run your own
 
 ### Usage examples:
 
-- [Standard web wallet](https://github.com/toncenter/ton-wallet) (Plain JS)
+- [A standard web wallet](https://github.com/toncenter/ton-wallet) (Plain JS)
 - [Bridge frontend](https://github.com/ton-blockchain/bridge) (Vue.js)
-- [An example of accepting payments in a telegram bot](../payment-processing/accept-payments-in-a-telegram-bot.md) (Python with Aiogram)
+- [Accepting payments in a Telegram bot](../payment-processing/accept-payments-in-a-telegram-bot.md) (Python with Aiogram)
