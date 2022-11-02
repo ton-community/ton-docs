@@ -11,7 +11,7 @@
 
 ### Jetton Deployer
 
-Jettons are custom fungible tokens on TON blockchain. You can create your own token on TON blockchain using Jetton Deployer example below:
+Jettons are custom fungible tokens on the TON blockchain. You can create your own token on the TON blockchain using Jetton Deployer example below:
 
 * **[Jetton.Live](https://jetton.live/)** — open-source Jetton Deployer dApp
 * [Jetton Deployer — Contracts](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)
@@ -19,8 +19,8 @@ Jettons are custom fungible tokens on TON blockchain. You can create your own to
 
 ### Tools to work with Jettons
 
-* [Scaleton](http://scaleton.io) — see your custom token balances.
-* [@tegro/ton3-client](https://github.com/TegroTON/ton3-client#jettons-example) — SDK to query information about Jettons.
+* [Scaleton](http://scaleton.io) — see your custom token balance
+* [@tegro/ton3-client](https://github.com/TegroTON/ton3-client#jettons-example) — SDK to query information about Jettons
 
 
 ## NFT
@@ -30,12 +30,12 @@ Jettons are custom fungible tokens on TON blockchain. You can create your own to
 * [NFT Standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
 * [NFTRoyalty Standard Extension](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md)
 * [Smart Contracts Implementation (FunC)](https://github.com/ton-blockchain/token-contract/)
-* [GetGems NFT, Sale, Auctions smart contracts (FunC)](https://github.com/getgems-io/nft-contracts)
+* [Getgems NFT, sale, auctions smart contracts (FunC)](https://github.com/getgems-io/nft-contracts)
 
 ### NFT minters
 
 * [NFT Deployer](https://github.com/tondiamonds/ton-nft-deployer) by TON Diamonds (TypeScript, no comments)
-* [NFT Minter Example](https://github.com/ton-foundation/token-contract/tree/main/nft/web-example) (JavaScript, with comments)
+* [NFT Minter example](https://github.com/ton-foundation/token-contract/tree/main/nft/web-example) (JavaScript, with comments)
 * [NFT Minter using React](https://github.com/tonbuilders/tonbuilders-minter) (React, no comments)
 * [NFT Deployer](https://github.com/anomaly-guard/nft-deployer) (Python, with comments)
 
