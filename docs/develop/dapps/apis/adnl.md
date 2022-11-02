@@ -17,7 +17,7 @@ Read more about Merkle proofs at [ADNL Protocol article](/learn/overviews/ADNL) 
 ## Pros & Cons
 
 👍 - Ultra secure API with Merkle proofs.  
-👎 - Needs more time to figure it out. Not compatible with web frontends (non-HTTP protocol).
+👎 - More time is required to figure things out. Not compatible with web frontends (non-HTTP protocol).
 
 ## API reference
 
