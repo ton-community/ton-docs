@@ -1653,7 +1653,7 @@ button, a{
 @media (max-width: 576px) {
   .bootstrap-wrapper h1:first-of-type, .markdown h1:first-of-type{
     font-size: 32px !important;
-    line-height: 48px !important;
+    line-height: 40px !important;
   }
 }
 .bootstrap-wrapper p:first-of-type{
@@ -1751,7 +1751,7 @@ button img, a img{
   background-repeat: no-repeat;
   background-position: center center;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 24px;
   min-height: 44px;
 }
