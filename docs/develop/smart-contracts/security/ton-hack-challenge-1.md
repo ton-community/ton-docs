@@ -5,14 +5,14 @@ There were several smartcontracts deployed in TON mainnet with synthetic securit
 
 As for me we hacked 6th task of this contest, but in this article I don't want to share my story, I want to tell you some thoughts about breaches in tasks.
 
-Source code and contest rules were hosted on Github here.
+Source code and contest rules were hosted on Github [here](https://github.com/ton-blockchain/hack-challenge-1).
 
 ## Contracts
 
 ### 1. Mutual fund
 
-:::note
-Always check functions for `impure` modifier.
+:::note SECURITY RULE
+Always check functions for [`impure`](/develop/func/functions#impure-specifier) modifier.
 :::
 
 The first task was very simple. The attacker can find that `authorize` function was not `impure`. Absence of this modifier allows compiler to skip calls to that function if it returns nothing or return value is unused.
@@ -25,8 +25,8 @@ The first task was very simple. The attacker can find that `authorize` function 
 
 ### 2. Bank
 
-:::note
-Always check for modifying/non-modifying methods.
+:::note SECURITY RULE
+Always check for [modifying/non-modifying](/develop/func/statements#methods-calls) methods.
 :::
 
 `udict_delete_get?` was called with `.` instead `~`, so the real dict was untouched.
@@ -37,7 +37,7 @@ Always check for modifying/non-modifying methods.
 
 ### 3. DAO
 
-:::note
+:::note SECURITY RULE
 Use signed integers if you really need it.
 :::
 
@@ -62,8 +62,8 @@ Voting power was stored in message as an integer. So attacker can send negative 
 
 ### 4. Lottery
 
-:::note
-Always randomize seed before doing `rand()`
+:::note SECURITY RULE
+Always randomize seed before doing [`rand()`](/develop/func/stdlib#rand)
 :::
 
 Seed was brought from logical time of the transaction and hacker can bruteforce logical time in the current block to win (cause LT is sequential in the borders of one block).
@@ -86,7 +86,7 @@ if(rand(10000) == 7777) { ...send reward... }
 
 ### 5. Wallet
 
-:::note
+:::note SECURITY RULE
 Remember that everything is stored in blockchain.
 :::
 
@@ -94,9 +94,9 @@ The wallet was protected with password, it's hash was stored in contract data. B
 
 ### 6. Vault
 
-:::note
-Always check for bounced messages.
-Don't forget about errors caused by standard functions.
+:::note SECURITY RULE
+Always check for [bounced](/develop/smart-contracts/guidelines/non-bouncable-messages) messages.
+Don't forget about errors caused by [standard](/develop/func/stdlib/) functions.
 Make your conditions as strict as possible.
 :::
 
@@ -113,13 +113,13 @@ if (op == op_not_winner) {
 }
 ```
 
-Vault does not have bounce handler and proxy message to database if user sends “check”. In database we can set `msg_addr_none` as an award address cause `load_msg_address` allows it. We are requesting check from vault, database tries to parse `msg_addr_none` using `parse_std_addr` and fails. Message bounces to the vault from database and the op is not `op_not_winner`.
+Vault does not have bounce handler and proxy message to database if user sends “check”. In database we can set `msg_addr_none` as an award address cause `load_msg_address` allows it. We are requesting check from vault, database tries to parse `msg_addr_none` using [`parse_std_addr`](/develop/func/stdlib#parse_std_addr) and fails. Message bounces to the vault from database and the op is not `op_not_winner`.
 
 ### 7. Better bank
 
-:::note
+:::note SECURITY RULE
 Never destroy account for fun.
-Make `raw_reserve` instead of sending money to yourself.
+Make [`raw_reserve`](/develop/func/stdlib#raw_reserve) instead of sending money to yourself.
 Think about possible race conditions.
 Be careful with hashmap gas consumption.
 :::
@@ -128,7 +128,7 @@ There were race condition in the contract: you can deposit money, then try to wi
 
 ### 8. Dehasher
 
-:::note
+:::note SECURITY RULE
 Avoid executing third-party code in your contract.
 :::
 
@@ -149,7 +149,7 @@ slice safe_execute(int image, (int -> slice) dehasher) inline {
 }
 ```
 
-There is no way to safe execute third-party code in the contract, cause `out of gas` exception cannot be handled by `CATCH`. Attacker simply can `COMMIT` any state of contract and raise `out of gas`.
+There is no way to safe execute third-party code in the contract, cause [`out of gas`](/learn/tvm-instructions/tvm_exit_codes#standard-exit-codes) exception cannot be handled by `CATCH`. Attacker simply can [`COMMIT`](/learn/tvm-instructions/instructions#11-application-specific-primitives) any state of contract and raise `out of gas`.
 
 ## Conclusion
 
