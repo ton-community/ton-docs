@@ -1,8 +1,4 @@
-# Tutorial: Simple sales bot
-
-## 👋 Welcome, dev!
-
-It's great to have you here.
+# Storefront bot with payments in TON
 
 In this article, we'll guide you through the process of accepting payments in a Telegram bot.
 

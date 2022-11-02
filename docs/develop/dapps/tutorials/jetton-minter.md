@@ -1,8 +1,8 @@
 # Mint your first Jetton
 
-## 👋 Welcome, dev!
+Welcome, dev! It's great to have you here. 👋
 
-In this article, we'll tell you about creating your first token (jetton contract) to TON blockchain.
+In this article, we'll tell you about creating your first fungible token (jetton) to TON.
 
 Mint will take place using the [jetton.live](https://www.jetton.live) browser service.
 
