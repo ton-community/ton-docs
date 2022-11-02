@@ -1737,9 +1737,14 @@ button img, a img{
 }
 
 .navbar-sidebar{
-  margin-top: 36px;
+  margin-top: 44px;
 }
 
+@media (max-width: 577px) {
+  .navbar-sidebar{
+    margin-top: 34px;
+  }
+}
 
 [role="banner"]{
   background-image: url("/static/img/banner-bg.svg"), linear-gradient(90deg, #9997F3 -0.76%, #69AEFF 93.89%) !important;
