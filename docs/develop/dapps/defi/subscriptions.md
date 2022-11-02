@@ -20,7 +20,7 @@ The current standard method:
 
 - The service's backend initiates payments on a regular basis by sending an external message to subscription smart contracts.
 
-## Smart Contracts examples
+## Smart contracts examples
 
 * [Wallet v4 smart contract source code](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc)
 * [Subscription smart contract source code](https://github.com/ton-blockchain/wallet-contract/blob/main/func/simple-subscription-plugin.fc)
