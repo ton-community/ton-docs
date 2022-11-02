@@ -69,8 +69,6 @@ html[data-theme='dark'] {
   --ifm-background-surface-color: #232328;
 }
 
-
-
 .navbar .navbar__items[data-theme='light'] {
   flex: auto;
   background: rgba(35,35,40,.9);
@@ -131,8 +129,8 @@ html {
 *,
 ::after,
 ::before {
-  -webkit-box-sizing: inherit;
-  box-sizing: inherit;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 a,
@@ -184,8 +182,10 @@ a:after {
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  margin-right: -8px;
-  margin-left: -8px;
+  margin: 0;
+}
+.row{
+  margin: 0;
 }
 .bootstrap-wrapper .no-gutters {
   margin-right: 0;
@@ -1740,11 +1740,6 @@ button img, a img{
   margin-top: 36px;
 }
 
-@media (max-width: 576px) {
-  .navbar-sidebar{
-    margin-top: 85px;
-  }
-}
 
 [role="banner"]{
   background-image: url("/static/img/banner-bg.svg"), linear-gradient(90deg, #9997F3 -0.76%, #69AEFF 93.89%) !important;
