@@ -67,39 +67,39 @@ Any technology that needs to be installed **prior** to starting the tutorial and
     - Use \```graphql when highlighting GraphQL syntax.
     - Use \```json when highlighting valid JSON. (For invalid JSON examples use \```text instead.)
     - \```bash should *only* be used in code blocks where you need to have # style comments. This must be done carefully because in many situations the # character will render as a markdown heading. Typically, the Table of Contents will be affected if this occurs.
-- Do not use `pre-formatted text` for emphasis; use only **bold** or *italic* text for emphasis.
+- Do not use `pre-formatted text` for emphasis; instead, use only **bold** or *italic* text.
 - Add Images or code blocks to reflect the expected terminal output.
 
 - Take an error-driven approach when writing your tutorial. Add common errors and troubleshooting steps. *For example:*
 
-> **Not able to connect to the Testnet, getting an error on executing  
+> **Unable to connect to Testnet due to an error when executing the
 > `node deploy:testnet` command.** 
 >
-> Let's check for some common causes:
+> Let's look at some common causes:
 >  
-* Make sure you have enough balance on your generated testnet wallet in `.env`. If not, please add some testnet coins from the faucet giver. 
-* If you're still experiencing the same issue, reach out devs on the [Dev Chat](https://t.me/TonDev_eng/) for help.
+* Make sure you have enough funds in your generated testnet wallet in `.env`. If not, please add some testnet coins from the faucet giver. 
+* If you're still experiencing the same issue, reach out to the devs in the [Dev Chat](https://t.me/TonDev_eng/) for help.
 >
 
 ## Conclusion
 
 The Conclusion heading **must** be H2: `## Conclusion`
 
-This section should summarize what was learned in the tutorial, reinforce key points and also congratulate the learner for completing the tutorial. Use a maximum of 5-6 lines.
+This section should summarize what was learned in the tutorial, reinforce key points, and congratulate the learner on completing the tutorial. Use a maximum of 5-6 lines.
 *For example*:
 
-> We created a simple new FunC contract with the counter functionality. We then built and deployed it on-chain and finally interacted with it by calling a getter and sending a message.
+> We created a simple new FunC contract with counter functionality. We then built and deployed it on-chain and finally interacted with it by calling a getter and sending a message.
 
 
-Please remember that this code is not intended for production: there are still a few other things to consider if you wanted to deploy this to mainnet, such as disabling the transfer method if the token is listed on the market and so on.
+Please remember that this code is not meant for production: there are still a few other things to consider if you wanted to deploy this to mainnet, such as disabling the transfer method if the token is listed on the market, and so on.
 >
 
 ## Next Steps *(Optional)*
 
 The Next Steps heading **must** be H2: `## Next Steps`
 
-Use this section to explain what can be done next after this tutorial for continued learning.
-Feel free to add recommended projects and articles here which are related to this tutorial.
+Use this section to explain what can be done next after this tutorial to continue learning.
+Feel free to add recommended projects and articles relating to this tutorial.
 If you're working on any other advanced tutorials, you can briefly mention them here.
 
 ## About the Author
@@ -112,7 +112,7 @@ Keep it short. One or two lines at most. You can include a link to your GitHub p
 
 The References heading **must** be H2: `## References`
 
-This section ***must*** be present if you have taken any help in writing this tutorial from other documents, GitHub repos and existing tutorials.
+This section ***must*** be present if you have taken any help in writing this tutorial from other documents, GitHub repos and pre-existing tutorials.
 
 Credit sources by adding their name and a link to the document when possible.
 
