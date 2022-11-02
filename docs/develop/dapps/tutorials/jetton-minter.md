@@ -48,7 +48,7 @@ Click the `Connect Wallet` button to connect your wallet [TonHub](https://ton.ap
 
 
 
-### **Token logo URL**   
+### Token logo URL 
  - For example: https://bitcoincash-example.github.io/website/logo.png
  1. Link of 256x256 pixel PNG image of the token logo with transparent background. 
     (A good solution is `GitHub Pages`)
@@ -92,7 +92,7 @@ Then select the **your token**, the your **amount** to send, and the **recipient
  >
  >https://github.com/ton-blockchain/minter-contract
 
- ### **Guide**
+ ### Guide
  1. Check you have all "Dependencies and Requirements" as described in [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) repo.
  2. Clone [git](https://github.com/ton-blockchain/minter-contract) and remane project. 
  3. To install you need to open a terminal at the root and run.
