@@ -143,12 +143,48 @@ To make any changes, start from here:
 };
  ```
 
- 8. To deploy a token use command:
+ 8.1 To deploy a token use command:
 
  ```bash npm2yarn
  npm run deploy
  ```
 
+ 8.2 Result of step 8:
+
+ ```bash npm2yarn
+    PS C:\Users\NameUser\minter-contract-main> npm run deploy
+    > @ton-defi.org/jetton-deployer-contracts@0.0.2 deploy
+    > ts-node ./build/_deploy.ts
+    =================================================================
+    Deploy script running, let's find some contracts to deploy..
+    * We are working with 'mainnet'
+    * Config file '.env' found and will be used for deployment!
+     - Wallet address used to deploy from is: YOUR-ADDRESS-WALLET
+     - Wallet balance is YOUR-QUANTITY-TON, which will be used for gas
+    * Found root contract 'build/jetton-minter.deploy.ts - let's deploy it':
+    Require stack:
+    - C:\Users\NameUser\minter-contract-main\build\jetton-minter.deploy.ts
+    - C:\Users\NameUser\minter-contract-main\build\_deploy.ts
+        at Function.Module._resolveFilename (node:internal/modules/cjs/loader:995:15)
+        at Function.Module._resolveFilename.sharedData.moduleResolveFilenameHook.installedValue [as _resolveFilename] (C:\Users\slavi\Desktop\minter-contract-main\node_modules\@cspotcode\source-map-support\source-map-support.js:811:30)
+        at Function.Module._load (node:internal/modules/cjs/loader:841:27)
+        at Module.require (node:internal/modules/cjs/loader:1061:19)
+        at require (node:internal/modules/cjs/helpers:103:18)
+        at Object.<anonymous> (C:\Users\NameUser\minter-contract-main\build\jetton-minter.deploy.ts:3:54)
+        at Module._compile (node:internal/modules/cjs/loader:1159:14)
+        at Module.m._compile (C:\Users\NameUser\minter-contract-main\node_modules\ts-node\src\index.ts:1597:23)
+        at Module._extensions..js (node:internal/modules/cjs/loader:1213:10)
+      requireStack: [
+        'C:\\Users\\NameUser\\minter-contract-main\\build\\jetton-minter.deploy.ts',
+        'C:\\Users\\NameUser\\minter-contract-main\\build\\_deploy.ts'
+      ]
+    }
+ ```
+
+:::info
+Don't forget that you need to have more than 0.25 TON + blockchain commission.
+:::
+ 
 ## References
 
  - Project: https://github.com/ton-blockchain/minter-contract
