@@ -8,10 +8,10 @@
 :root {
   /*--ifm-background-color: #F7F9FB;*/
   --ifm-color-primary: #0088cc;
-  --ifm-color-primary-dark: #007ab8;
+  --ifm-color-primary-dark: #0088CC;
   --ifm-color-primary-darker: #0074ad;
   --ifm-color-primary-darkest: #005f8f;
-  --ifm-color-primary-light: #0096e0;
+  --ifm-color-primary-light: #0088CC;
   --ifm-color-primary-lighter: #009ceb;
   --ifm-color-primary-lightest: #0aadff;
   --ifm-color-success-dark: #47C58A;
@@ -1001,6 +1001,12 @@ strong {
 .markdown a {
   font-weight: 500;
 }
+a:hover{
+  color: #0099E5;
+}
+[data-theme='dark'] a:hover{
+  color: #04A2F0;
+}
 
 .table-of-contents__link {
   /*font-weight: 400 !important;*/
@@ -1479,11 +1485,6 @@ html {
   background: rgba(var(--gray-7-rgb), 0.7) !important;
   color: inherit !important;
 }
-
-a:hover{
-  opacity: 0.7;
-}
-
 
 
 .table-of-contents__left-border {
