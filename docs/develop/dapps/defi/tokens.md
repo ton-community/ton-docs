@@ -11,7 +11,7 @@
 
 ### Jetton Deployer
 
-Jettons are custom fungible tokens on the TON blockchain. You can create your own token on the TON blockchain using Jetton Deployer example below:
+Jettons are custom fungible tokens on the TON blockchain. You can create your own token on the TON blockchain using the Jetton Deployer example below:
 
 * **[Jetton.Live](https://jetton.live/)** — open-source Jetton Deployer dApp
 * [Jetton Deployer — Contracts](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)
@@ -41,4 +41,4 @@ Jettons are custom fungible tokens on the TON blockchain. You can create your ow
 
 ### Tools to work with NFTs
 
-* [LiberMall/tnt](https://github.com/LiberMall/tnt) — TNT is an all-in-one command line tool to query, edit, and mint new Non-Fungible Tokens on The Open Network.
+* [LiberMall/tnt](https://github.com/LiberMall/tnt) — TNT is an all-in-one command-line tool to query, edit, and mint new Non-Fungible Tokens on The Open Network.

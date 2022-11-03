@@ -2,7 +2,7 @@
 
 TON Payments is the platform for micropayment channels. 
 
-It allows instant payments, without the need to commit all transactions to the blockchain, pay the associated transaction fees (e.g. for the gas consumed), and wait five seconds until the block
+It allows instant payments without the need to commit all transactions to the blockchain, pay the associated transaction fees (e.g. for the gas consumed), and wait five seconds until the block
 containing the transactions in question is confirmed.
 
 Because the overall expense of such instant payments is so minimal, they can be used for micropayments in games, APIs, and off-chain apps. [See examples](/develop/dapps/defi/ton-payments#examples).
@@ -17,7 +17,7 @@ Because the overall expense of such instant payments is so minimal, they can be 
 
 ### SDK
 
-To use payments channels, you don’t need deep knowledge of cryptography.
+To use payment channels, you don’t need deep knowledge of cryptography.
 
 You can use prepared SDKs:
 

@@ -1,6 +1,6 @@
-# Subscriptions in TON
+# Subscriptions on TON
 
-Due to the fact that transactions in the TON Blockchain are fast and the network fees are low, you can process recurring payments onchain via smart contracts.
+Due to the fact that transactions in the TON Blockchain are fast and the network fees are low, you can process recurring payments on-chain via smart contracts.
 
 For example, users can subscribe to digital content (or anything else) and be charged a monthly fee of 1 TON.
 
@@ -16,11 +16,11 @@ The current standard method:
 
 - An intermediate subscription smart contract is used between each user and service as a wallet plugin.
 
-   This smart contract guarantees that a specified amount of Toncoins will be debited to a user's wallet no more than once a specified period.
+   This smart contract guarantees that a specified amount of Toncoins will be debited from a user's wallet no more than once within a specified period.
 
 - The service's backend initiates payments on a regular basis by sending an external message to subscription smart contracts.
 
-## Smart contracts examples
+## Smart contract examples
 
 * [Wallet v4 smart contract source code](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc)
 * [Subscription smart contract source code](https://github.com/ton-blockchain/wallet-contract/blob/main/func/simple-subscription-plugin.fc)
