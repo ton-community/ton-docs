@@ -330,19 +330,19 @@ while True:
 
 Let's have a look at it and understand what it does.
 
-All the information about coins transfer is in `tx['in_msg']`. We just need 'value' and 'message' fields from it.
+All the information about the coins transfer is in `tx['in_msg']`. We just need to 'value' and 'message' fields from it.
 
-First of all, we check if value is greater than zero and only continue if it is.
+First of all, we check if the value is greater than zero and only continue if it is.
 
-Then we except the transfer to have comment ( `tx['in_msg']['message']` ) to be a user ID from our bot, so we check if it is a valid number and if that UID exists in our database.
+Then we expect the transfer to have a comment ( `tx['in_msg']['message']` ), to have a user ID from our bot, so we verify if it is a valid number and if that UID exists in our database.
 
-After these simple checks, we have a variable `value` with deposit amount, and variable `uid` with id of user that made this deposit. So we can just add balance to their account and send a notification message.
+After these simple checks, we have a variable `value` with the deposit amount, and a variable `uid` with ID of the user that made this deposit. So we can just add funds to their account and send a notification message.
 
-Also note that value in in nanoTONs by default, so we need to divide it by 1 billion. We do that in line with notification:
+Also note that value is in nanoTONs by default, so we need to divide it by 1 billion. We do that in line with notification:
 `{value / 1e9:.2f}`
-Here we divide the value by `1e9` (1 billion) and leave only 2 digits after the decimal point to show it to user in friendly format.
+Here we divide the value by `1e9` (1 billion) and leave only 2 digits after the decimal point to show it to the user in a friendly format.
 
-Great! The program is now can process new transactions and notify users about deposits. But we should not forget about storing last_lt that we are used before. We must update the last_lt because newer transaction was processed.
+Great! The program can now process new transactions and notify users about deposits. But we should not forget about storing `lt` that we have used before. We must update the last `lt` because a newer transaction was processed.
 
 It's simple:
 ```python
@@ -359,13 +359,13 @@ while True:
 ```
 
 And that's all for the `ton.py` file!
-Our bot is now 3/4 done, we only need to create a user interface with a few buttons in bot itself.
+Our bot is now 3/4 done; we only need to create a user interface with a few buttons in the bot itself.
 
-## Telegram Bot
+## Telegram bot
 
 ### Initialization
 
-Open the `bot.py` file and import all the modules that we need:
+Open the `bot.py` file and import all the modules we need.
 ```python
 # Logging module
 import logging
@@ -383,26 +383,26 @@ import ton
 import db
 ```
 
-Let's set up logging for our program so that we can see what happens later for debug:
+Let's set up logging for our program so that we can see what happens later for debugging.
 ```python
 logging.basicConfig(level=logging.INFO)
 ```
 
-Now we need to initialize the bot object and it's dispatcher with Aiogram:
+Now we need to initialize the bot object and its dispatcher with Aiogram.
 ```python
 bot = Bot(token=config.BOT_TOKEN)
 dp = Dispatcher(bot)
 ```
 
-Here we use `BOT_TOKEN` from our config that we made in the beginning of tutorial.
+Here we use `BOT_TOKEN` from our config that we made in the beginning of the tutorial.
 
-We initialized the bot, but it's still empty. We must add some fucntions for interaction with user.
+We initialized the bot but it's still empty. We must add some functions for interaction with the user.
 
 ### Message handlers
 
 #### /start Command
 
-Let's begin with `/start` and `/help` commands handler. This function will be called when user does launch the bot for the first time, restarting it or using the `/help` command.
+Let's begin with the `/start` and `/help` commands handler. This function will be called when the user launches the bot for the first time, restarts it, or uses  the `/help` command.
 
 ```python
 @dp.message_handler(commands=['start', 'help'])
@@ -428,11 +428,11 @@ async def welcome_handler(message: types.Message):
                          parse_mode=ParseMode.MARKDOWN)
 ```
 
-Welcome message can be anything you want. Keyboard buttons can also be any text you want, but I've named them in the most obvious way for our bot: `Deposit` and `Balance`.
+The welcome message can be anything you want. Keyboard buttons can be any text, but in this example they are labeled in the most clear way for our bot: `Deposit` and `Balance`.
 
 #### Balance button
 
-Okay, now user can start the bot and see the keyboard with two buttons. But after calling one of these, user won't get any response because we didn't create any function for these.
+Now the user can start the bot and see the keyboard with two buttons. But after calling one of these, the user won't get any response because we didn't create any function for them.
 
 So let's add a function to request a balance.
 
@@ -451,11 +451,11 @@ async def balance_handler(message: types.Message):
                          parse_mode=ParseMode.MARKDOWN)
 ```
 
-It's pretty simple. We just get the balance from database and send the message to user.
+It's pretty simple. We just get the balance from the database and send the message to the user.
 
 #### Deposit button
 
-And what about second button - `Deposit`? Here is the function for it:
+And what about the second `Deposit` button? Here is the function for it:
 
 ```python
 @dp.message_handler(commands='deposit')
@@ -479,9 +479,9 @@ async def deposit_handler(message: types.Message):
                          parse_mode=ParseMode.MARKDOWN)
 ```
 
-What do we do here is also easy to understand.
+What we do here is also easy to understand.
 
-Remember when in `ton.py` file we were determining which user made a deposit by comment with their UID? Now here in the bot we need to ask user to send transaction with a comment containing their UID.
+Remember when in the `ton.py` file we were determining which user made a deposit by commenting with their UID? Now here in the bot we need to ask the user to send a transaction with a comment containing their UID.
 
 ### Bot start
 
@@ -499,7 +499,7 @@ if __name__ == '__main__':
     ex.start_polling()
 ```
 
-At this moment we have wrote all required code for our bot. If you did everything correctly it must work when you run it with `python my-bot/bot.py` command in terminal.
+At this moment, we have written all the required code for our bot. If you did everything correctly, it must work when you run it with `python my-bot/bot.py` command in the terminal.
 
 If your bot doesn't work correctly, compare your code with code [from this repository](https://github.com/Gusarich/ton-bot-example).
 
