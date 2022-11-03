@@ -27,7 +27,7 @@ Also you need these PyPi libraries:
  - aiogram
  - requests
 
-You can install them with one command in terminal:
+You can install them with one command in the terminal.
 ```bash
 pip install aiogram==2.21 requests
 ```
@@ -48,12 +48,12 @@ my_bot
 └── ton.py
 ```
 
-Now let's begin writing a code!
+Now let's begin writing code!
 
 ## Config
-Let's start with the `config.py` because it is the smallest one. We just need to set a few parameters in it.
+Let's start with `config.py` because it is the smallest one. We just need to set a few parameters in it.
 
-**config.py:**
+**config.py**
 ```python
 BOT_TOKEN = 'YOUR BOT TOKEN'
 DEPOSIT_ADDRESS = 'YOUR DEPOSIT ADDRESS'
@@ -71,7 +71,7 @@ Here you need to fill in the values in the first three lines:
  - `DEPOSIT_ADDRESS` is your project's wallet address which will accept all payments. You can just create a new TON wallet and copy its address.
  - `API_KEY` is your API key from TON Center which you can get in [this bot](https://t.me/tonapibot).
 
-You can also choose whether your bot will run on the testnet or the mainnet (4th line)
+You can also choose whether your bot will run on the testnet or the mainnet (4th line).
 
 That's all for the Config file, so we can move forward!
 
@@ -83,13 +83,13 @@ Import the sqlite3 library.
 import sqlite3
 ```
 
-Initialize database connection and cursor (you can choose any filename instead of `db.sqlite`).
+Initialize the database connection and cursor (you can choose any filename instead of `db.sqlite`).
 ```python
 con = sqlite3.connect('db.sqlite')
 cur = con.cursor()
 ```
 
-To store information about users (their balances in our case), create a table "Users" with User ID and balance rows.
+To store information about users (their balances in our case), create a table called "Users" with User ID and balance rows.
 ```python
 cur.execute('''CREATE TABLE IF NOT EXISTS Users (
                 uid INTEGER,
@@ -103,7 +103,7 @@ Now we need to declare a few functions to work with the database.
 `add_user` function will be used to insert new users into the database.
 ```python
 def add_user(uid):
-    # new user always have balance = 0
+    # new user always has balance = 0
     cur.execute(f'INSERT INTO Users VALUES ({uid}, 0)')
     con.commit()
 ```
@@ -125,7 +125,7 @@ def add_balance(uid, amount):
     con.commit()
 ```
 
-`get_balance` function will be used to retreive the user's balance.
+`get_balance` function will be used to retrieve the user's balance.
 ```python
 def get_balance(uid):
     cur.execute(f'SELECT balance FROM Users WHERE uid = {uid}')
@@ -138,7 +138,7 @@ And that's all for the `db.py` file!
 Now we can use these four functions in other components of the bot to work with the database.
 
 ## TON Center API
-In `ton.py` file we'll declare a function that will process all new deposits, increase user balances, and notify them.
+In the `ton.py` file we'll declare a function that will process all new deposits, increase user balances, and notify users.
 
 ### getTransactions method
 
@@ -149,7 +149,7 @@ We need the [getTransactions](https://toncenter.com/api/v2/#/accounts/get_transa
 
 Let's have a look at what this method takes as input parameters and what it returns.
 
-There is only one mandatory input field `address`, but we also need the `limit` field to specify how many transactions do we want to get in return.
+There is only one mandatory input field `address`, but we also need the `limit` field to specify how many transactions we want to get in return.
 
 Now let's try to run this method on the [TON Center website](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get) with any existing wallet address to understand what we should get from the output.
 
@@ -167,7 +167,7 @@ Now let's try to run this method on the [TON Center website](https://toncenter.c
 }
 ```
 
-Okay, so `ok` field is set to `true` when everything is good, and we have an array `result` with the list of `limit` latest transactions. Now let's look at one single transaction:
+Well, so the `ok` field is set to `true` when everything is good, and we have an array `result` with the list of `limit` latest transactions. Now let's look at one single transaction:
 
 ```json
 {
@@ -203,7 +203,7 @@ Okay, so `ok` field is set to `true` when everything is good, and we have an arr
 
 We can see that information that can help us identify the exact transaction is stored in `transaction_id` field. We need the `lt` field from it to understand which transaction happened earlier and which happened later.
 
-The information about the coins transfer is in the `in_msg` field. We'll need `value` and `message` from it.
+The information about the coin transfer is in the `in_msg` field. We'll need `value` and `message` from it.
 
 Now we're ready to create a payment handler.
 
@@ -271,7 +271,7 @@ while True:
     ...
 ```
 
-After the call with `requests.get`, we have a variable `resp` that contains the response from the API. `resp` is an object and `resp['result']` is a list with last 100 transactions for our address.
+After the call with `requests.get`, we have a variable `resp` that contains the response from the API. `resp` is an object and `resp['result']` is a list with the last 100 transactions for our address.
 
 Now let's just iterate over these transactions and find the new ones.
 
@@ -290,7 +290,7 @@ while True:
         if lt <= last_lt:
             continue
         
-        # at this moment, `tx` is some new transaction that we didn't process yet
+        # at this moment, `tx` is some new transaction that we haven't processed yet
         ...
 ```
 
@@ -307,7 +307,7 @@ while True:
 
     for tx in resp['result']:
         ...
-        # at this moment, `tx` is some new transaction that we didn't process yet
+        # at this moment, `tx` is some new transaction that we haven't processed yet
 
         value = int(tx['in_msg']['value'])
         if value > 0:
@@ -330,17 +330,17 @@ while True:
 
 Let's have a look at it and understand what it does.
 
-All the information about the coins transfer is in `tx['in_msg']`. We just need to 'value' and 'message' fields from it.
+All the information about the coin transfer is in `tx['in_msg']`. We just need the 'value' and 'message' fields from it.
 
 First of all, we check if the value is greater than zero and only continue if it is.
 
 Then we expect the transfer to have a comment ( `tx['in_msg']['message']` ), to have a user ID from our bot, so we verify if it is a valid number and if that UID exists in our database.
 
-After these simple checks, we have a variable `value` with the deposit amount, and a variable `uid` with ID of the user that made this deposit. So we can just add funds to their account and send a notification message.
+After these simple checks, we have a variable `value` with the deposit amount, and a variable `uid` with the ID of the user that made this deposit. So we can just add funds to their account and send a notification message.
 
 Also note that value is in nanoTONs by default, so we need to divide it by 1 billion. We do that in line with notification:
 `{value / 1e9:.2f}`
-Here we divide the value by `1e9` (1 billion) and leave only 2 digits after the decimal point to show it to the user in a friendly format.
+Here we divide the value by `1e9` (1 billion) and leave only two digits after the decimal point to show it to the user in a friendly format.
 
 Great! The program can now process new transactions and notify users about deposits. But we should not forget about storing `lt` that we have used before. We must update the last `lt` because a newer transaction was processed.
 
@@ -352,7 +352,7 @@ while True:
         ...
         # we have processed this tx
 
-        # lt variable here contain LT of last processed transaction
+        # lt variable here contains LT of the last processed transaction
         last_lt = lt
         with open('last_lt.txt', 'w') as f:
             f.write(str(last_lt))
@@ -377,13 +377,13 @@ from aiogram.types import ParseMode, ReplyKeyboardMarkup, KeyboardButton, \
                           InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils import executor
 
-# Local modules to work with Database and Ton network
+# Local modules to work with the Database and TON network
 import config
 import ton
 import db
 ```
 
-Let's set up logging for our program so that we can see what happens later for debugging.
+Let's set up logging to our program so that we can see what happens later for debugging.
 ```python
 logging.basicConfig(level=logging.INFO)
 ```
@@ -394,7 +394,7 @@ bot = Bot(token=config.BOT_TOKEN)
 dp = Dispatcher(bot)
 ```
 
-Here we use `BOT_TOKEN` from our config that we made in the beginning of the tutorial.
+Here we use `BOT_TOKEN` from our config that we made at the beginning of the tutorial.
 
 We initialized the bot but it's still empty. We must add some functions for interaction with the user.
 
@@ -402,7 +402,7 @@ We initialized the bot but it's still empty. We must add some functions for inte
 
 #### /start Command
 
-Let's begin with the `/start` and `/help` commands handler. This function will be called when the user launches the bot for the first time, restarts it, or uses  the `/help` command.
+Let's begin with the `/start` and `/help` commands handler. This function will be called when the user launches the bot for the first time, restarts it, or uses the `/help` command.
 
 ```python
 @dp.message_handler(commands=['start', 'help'])
