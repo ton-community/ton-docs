@@ -46,7 +46,7 @@ Any technology that needs to be installed **prior** to starting the tutorial and
 ### Key points
 
 - Do not use "Body of the Tutorial" as a heading!
-- **Keep all subheadings at H3,** don't go for H4 or any lower**:**
+- **Keep all subheadings at H3,** don't go for H4 or any lower.
     - In Markdown syntax, two hashmarks are used for H2 headings: ##
     - Three hashmarks are used for H3 headings: ###
 - Add only necessary comments in code blocks. ***Do not*** add # style comments to terminal input code blocks.

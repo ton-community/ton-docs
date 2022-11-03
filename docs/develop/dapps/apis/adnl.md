@@ -2,11 +2,11 @@
 
 Clients connect directly to lite servers (nodes) using a binary protocol.
 
-The client downloads keyblocks, the current state of the account and their **Merkle proofs**, which guarantees validity of the received data.
+The client downloads keyblocks, the current state of the account, and their **Merkle proofs**, which guarantees the validity of the received data.
 
 Read operations (like get-method calls) are made by launching a local TVM with a downloaded and verified state.
 
-There is no need to download the full state of blockchain, the client downloads only what is needed for the operation. Calling local TVM is also ineffective.
+There is no need to download the full state of the blockchain, the client downloads only what is needed for the operation. Calling the local TVM is also ineffective.
 
 You can connect to public lite servers from the global config ([mainnet](https://ton.org/global-config.json) or [testnet](https://ton.org/testnet-global.config.json)) or run your own lite server.
 
