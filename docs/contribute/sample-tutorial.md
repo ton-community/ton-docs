@@ -1,4 +1,4 @@
-# Sample Tutorial Structure 
+# Sample tutorial structure 
 
 ## Introduction
 
@@ -7,11 +7,11 @@ The Introduction heading **must** be H2: `## Introduction`
 This section is for you to explain the context of this tutorial and why it is important, what we're going to build and learn in this tutorial.
 
 - Explain this section like you're explaining it to a 5-year-old (**[ELI5](https://www.dictionary.com/e/slang/eli5/)**)
-- Explain everything in 5-6 lines maximum.
+- Explain everything in 5–6 lines maximum.
 
 *For example:*
 
->A smart contract is just a computer program that runs on the TON blockchain, or more specifically its [TVM](/learn/tvm-instructions/tvm_overview) (_TON Virtual Machine_). The contract is made of code (_compiled TVM instructions_) and data (_persistent state_) that are stored at some address on TON.
+>A smart contract is just a computer program that runs on the TON blockchain, or more specifically on its [TVM](/learn/tvm-instructions/tvm_overview) (_TON Virtual Machine_). The contract is made of code (_compiled TVM instructions_) and data (_persistent state_) that are stored at some address on TON.
 
 ## Prerequisites
 
@@ -41,7 +41,7 @@ Any technology that needs to be installed **prior** to starting the tutorial and
 - Please do not use "Body of the Tutorial" as a heading, use your own heading that is relevant to the material.
   - "Getting started" is acceptable if you can't think of anything else 😉
 - Add any text content necessary to guide readers through your tutorial, and ***remember to proofread your content*** for spelling and grammar before you submit your tutorial.
-  - [Grammarly](http://grammarly.com) is a good free program that can help you to avoid grammar mistakes.
+  - [Grammarly](http://grammarly.com) is a good free program that can help you avoid grammar mistakes.
 
 ### Key points
 
@@ -51,15 +51,15 @@ Any technology that needs to be installed **prior** to starting the tutorial and
     - Three hashmarks are used for H3 headings: ###
 - Add only necessary comments in code blocks. ***Do not*** add # style comments to terminal input code blocks.
 - Add all relevant code blocks:
-    - Markdown syntax for code blocks consists of three backticks at the beginning and the end of the code block.  Also, make sure that there is a newline before and after the backticks in all code blocks. *For example*:
+    - Markdown syntax for code blocks consists of three backticks at the beginning and end of the code block.  Also, make sure that there is a newline before and after the backticks in all code blocks. *For example*:
         - 
         \```js  
         const testVariable = 'some string';  
         someFunctionCall();  
         \```  
         
-    - ALL code blocks ***must*** have a syntax highlighting type. Use ```text if you are not sure.
-    - \```text must be used for terminal output, terminal commands and plaintext.
+    - ALL code blocks ***must*** have a syntax highlight type. Use ```text if you are not sure.
+    - \```text must be used for terminal output, terminal commands, and plaintext.
     - \```javascript *or* ```js can be used for any JavaScript code.
     - \```typescript or ```ts can be used for any TypeScript code.
     - \```jsx is for ReactJS code.
@@ -68,7 +68,7 @@ Any technology that needs to be installed **prior** to starting the tutorial and
     - Use \```json when highlighting valid JSON. (For invalid JSON examples use \```text instead.)
     - \```bash should *only* be used in code blocks where you need to have # style comments. This must be done carefully because in many situations the # character will render as a markdown heading. Typically, the Table of Contents will be affected if this occurs.
 - Do not use `pre-formatted text` for emphasis; instead, use only **bold** or *italic* text.
-- Add Images or code blocks to reflect the expected terminal output.
+- Add images or code blocks to reflect the expected terminal output.
 
 - Take an error-driven approach when writing your tutorial. Add common errors and troubleshooting steps. *For example:*
 
@@ -85,13 +85,13 @@ Any technology that needs to be installed **prior** to starting the tutorial and
 
 The Conclusion heading **must** be H2: `## Conclusion`
 
-This section should summarize what was learned in the tutorial, reinforce key points, and congratulate the learner on completing the tutorial. Use a maximum of 5-6 lines.
+This section should summarize what was learned in the tutorial, reinforce key points, and congratulate the learner on completing the tutorial. Use a maximum of 5–6 lines.
 *For example*:
 
-> We created a simple new FunC contract with counter functionality. We then built and deployed it on-chain and finally interacted with it by calling a getter and sending a message.
+> We created a simple new FunC contract with counter functionality. We then built and deployed it on-chain, and finally interacted with it by calling a getter and sending a message.
 
 
-Please remember that this code is not meant for production: there are still a few other things to consider if you wanted to deploy this to mainnet, such as disabling the transfer method if the token is listed on the market, and so on.
+Please remember that this code is not meant for production; there are still a few other things to consider if you wanted to deploy this to mainnet, such as disabling the transfer method if the token is listed on the market, and so on.
 >
 
 ## Next Steps *(Optional)*
@@ -106,13 +106,13 @@ If you're working on any other advanced tutorials, you can briefly mention them 
 
 The About the Author heading **must** be H2: `## About the Author`
 
-Keep it short. One or two lines at most. You can include a link to your GitHub profile + Telegram profile, however please refrain from adding your LinkedIn or Twitter here.
+Keep it short. One or two lines at most. You can include a link to your GitHub profile + Telegram profile. Please refrain from adding your LinkedIn or Twitter here.
 
 ## References
 
 The References heading **must** be H2: `## References`
 
-This section ***must*** be present if you have taken any help in writing this tutorial from other documents, GitHub repos and pre-existing tutorials.
+This section ***must*** be present if you have taken any help in writing this tutorial from other documents, GitHub repos or pre-existing tutorials.
 
 Credit sources by adding their name and a link to the document when possible.
 

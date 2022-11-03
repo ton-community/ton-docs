@@ -1,4 +1,4 @@
-# Principles of a Good Tutorial
+# Principles of a good tutorial
 
 Original comment with these principles by [talkol](https://github.com/talkol):
 
