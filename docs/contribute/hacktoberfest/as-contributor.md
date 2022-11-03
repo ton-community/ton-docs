@@ -2,9 +2,9 @@
 
 To become a contributor who receives a limited *Hack-TON-berfest NFT*, please set up your own [TON wallet](https://ton.org/wallets) and verify your GitHub account.
 
-## Start your Journey
+## Start your journey
 
-1. Set up any wallet from the [ton.org/wallets](https://ton.org/wallets) page ([TON Wallet extension](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd), for example).
+1. Set up any wallet from the [ton.org/wallets](https://ton.org/wallets) page. ([TON Wallet extension](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd), for example.)
 2. Please provide your wallet address to the [@toncontests_bot](https://t.me/toncontests_bot) in Telegram.
 3. Validate your GitHub account in the same bot.
 

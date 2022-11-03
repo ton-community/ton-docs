@@ -1,15 +1,15 @@
-# Tutorial Styling Guidelines
+# Tutorial styling guidelines
 
 So you've decided to write a tutorial for TON Documentation?
 
 We're excited to have you among our contributors! Please review the guidelines below to make sure your tutorial follows the style and quality of the pre-existing content on TON Docs.
 
-It is important that you take some time to become familiar with the tutorial structure and how headings should be used. Please read through some of our existing tutorials and also have a look at [previous Pull Requests](https://github.com/ton-community/ton-docs/pulls?q=is%3Apr+is%3Aclosed) before submitting your own.
+It is important that you take some time to become familiar with the tutorial structure and how headings should be used. Please read through some of our pre-existing tutorials and also have a look at [previous Pull Requests](https://github.com/ton-community/ton-docs/pulls?q=is%3Apr+is%3Aclosed) before submitting your own.
 
 ## Process
 
 :::info IMPORTANT
-Before you start writing, *read the guidelines below*! They will help you to ensure a level of standardization and quality that will make the review process much faster.
+Before you start writing, *read the guidelines below*! They will help you ensure the level of standardization and quality that will make the review process much faster.
 
 Also, be sure to refer to the [**sample tutorial structure**](/contribute/sample-tutorial) we have provided.
 
@@ -36,9 +36,9 @@ To summarize, the workflow is as follows:
 - **Account funding from faucets must be clearly explained**, including which account is being funded, from where and why. Do not assume learners can accomplish this task on their own!
 - **Display sample outputs** in the form of Terminal snippets or screenshots to help learners understand what to expect. Trim long outputs.
 - **Take an error-driven approach** where you bump into errors on purpose to teach learners how to debug them. For example, if you need to fund an account to be able to deploy a contract, first try and deploy without funding, observe the error that is returned, then fix the error (by funding the account) and try again.
-- **Add potential errors and troubleshooting.** Of course, the tutorial shouldn't list every possible error, but make an effort to catch the important or most common ones.
+- **Add potential errors and troubleshooting.** Of course, the tutorial shouldn't list every possible error, but it should make an effort to catch the important or most common ones.
 - **Use React or Vue** for the client-side.
-- **Before making the PR, run the code by yourself first** to avoid any obvious errors and to make sure it works as expected.
+- **Before making the PR, run the code by yourself first** to avoid any obvious errors and make sure it works as expected.
 - **Avoid including external/cross-links** to different sources between tutorials. If your tutorial is longer, we can discuss how to turn it into a longer course or Pathway.
 - **Provide** **pictures or screenshots** to illustrate the complicated processes where needed.
 - Upload your images to the `static` directory of the learn-tutorials repository — **DO NOT** use hotlinks to external sites, as this can result in broken images.
@@ -48,29 +48,29 @@ To summarize, the workflow is as follows:
 ## How to structure your tutorial
 
 :::info Sample tutorial structure
-Feel free to check [sample tutorial structure](/contribute/sample-tutorial) to see it with your eyes.
+Feel free to check out the [sample tutorial structure](/contribute/sample-tutorial) to see it with your own eyes.
 :::
 
-- The **Title** should be direct and clear, summarizing the tutorial's goal. Do not add the tutorial title as a heading inside the document; use instead the markdown document filename. 
+- The **Title** should be direct and clear, summarizing the tutorial's goal. Do not add the tutorial title as a heading inside the document; instead, use the markdown document filename. 
   - *For example*: If your tutorial was titled "_Step by step guide for writing your first smart contract in FunC_," the filename should be:  
   `step-by-step-guide-for-writing-your-first-smart-contract-in-func.md`
 - Include an **Introduction** section explaining *why* this tutorial matters and what the context of the tutorial is. Don't assume that it is obvious.
 - Include a **Prerequisites** section explaining any *prior knowledge* required or any existing tutorials that need to be completed first, any tokens that are needed, etc.
-- Include a **Requirements** section explaining any *technologies that must be installed* **prior** to starting the tutorial and that the tutorial will not cover, such as TON Wallet Extension, Node.js, etc. Do not list packages that will be installed during the tutorial.
+- Include a **Requirements** section explaining any *technologies that must be installed* **prior** to starting the tutorial and that the tutorial will not cover, such as the TON Wallet extension, Node.js, etc. Do not list packages that will be installed during the tutorial.
 - Use **subheadings** (H2: ##) to break down your explanations within the body of the tutorial. Keep the Table of Contents in mind when using subheadings, and try to keep them on point.
     - If the content below a subheading is short (for example, only a single paragraph and a code block), consider using bold text instead of a subheading.
 - Include a **Conclusion** section that summarizes what was learned, reinforces key points, and also congratulates the learner for completing the tutorial.
 - (***Optional***) Include a **What's Next** section pointing to good follow-up tutorials or other resources (projects, articles, etc.).
-- (***Optional***) Include an **About The** **Author** section at the end. Your bio should include your GitHub profile (which will have your name, website, etc.) and a link to your Telegram profile (so that users can contact/tag you for help and questions).
+- (***Optional***) Include an **About The** **Author** section at the end. Your bio should include a link to your GitHub profile (which will have your name, website, etc.) and a link to your Telegram profile (so that users can contact/tag you for help and questions).
 - A **References** section **must** be present if you have taken any help in writing this tutorial from other documents, GitHub repos, or other tutorials. Credit sources by adding their name and a link to the document when possible (if it is not a digital document, include an ISBN or other means of reference).
 
 ## Style Guide
 
 - **Writing Tone -** Tutorials are written by community contributors for their peers. 
-  - Given this, we recommend creating a tone of inclusion and interaction throughout the tutorial. Use words such as “we”, “us”, “our”.
+  - Given this, we recommend creating a tone of inclusion and interaction throughout the tutorial. Use words such as “we,” “us,” “our.”
     - _For example_: "We have successfully deployed our contract."
-  - When providing direct instructions feel free to use “you”, “your”, etc.
-    - _For example_: *“*Your file should look like this:*”.
+  - When providing direct instructions feel free to use “you,” “your,” etc.
+    - _For example_: “*Your file should look like this:*”.
 - **Use Markdown properly** throughout your tutorial. Refer to [GitHub's markdown guide](https://guides.github.com/features/mastering-markdown/) as well as the [sample tutorial structure](/contribute/sample-tutorial).
 - **Do not use pre-formatted text for emphasis**, *for example*:
     - ❌ "TON counter `smart contract` named `counter.fc`" is incorrect.
@@ -79,7 +79,7 @@ Feel free to check [sample tutorial structure](/contribute/sample-tutorial) to s
     - ❌ # **Introduction** is incorrect.
     - ✅ # Introduction is correct.
 - **Explain your code!** Don't just ask learners to blindly copy and paste.
-    - Function names, variables and constants **must** be consistent across the entire document.
+    - Function names, variables, and constants **must** be consistent across the entire document.
     - Use a comment at the beginning of a code block to show the path and filename where the code exists. *For example*:
 
         ```jsx
@@ -91,7 +91,7 @@ Feel free to check [sample tutorial structure](/contribute/sample-tutorial) to s
         ```
 
 - **Select the appropriate language** for code block syntax highlighting!
-    - All code blocks *must* have syntax highlighting. Use **```text** if you are not sure which kind of syntax highlighting to apply.
+    - All code blocks *must* have syntax highlighting. Use **```text** if you are not sure what kind of syntax highlighting to apply.
 - **Do not use code block syntax for pre-formatted text,** *for example*:
     - ❌ \```filename.jsx\``` is incorrect.
     - ✅ \`filename.jsx\` is correct.
