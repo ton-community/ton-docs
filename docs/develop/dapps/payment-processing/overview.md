@@ -5,20 +5,20 @@ This document contains an overview and specific details that explain how to proc
 ## Global overview
 Embodying a fully asynchronous approach, the TON blockchain involves a few concepts which are uncommon to the traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred messages between smart contracts and/or the external world. The common path of any interaction starts with an external message sent to a `wallet` smart contract which authenticates the message sender using public-key cryptography, takes charge of fee payment, and sends inner blockchain messages. TThat way, transactions on the TON network are not synonymous with user interaction with blockchain but merely nodes of the message graph: the result of accepting and processing a message by a smart contract, which may or may not lead to the emergence of new messages. The interaction may consist of an arbitrary number of messages and transactions and span a prolonged period of time. Technically, transactions with queues of messages are aggregated into blocks processed by validators. The asynchronous  nature of the **TON blockchain does not allow to predict the hash and lt (logical time) of a transaction** at the stage of sending a message. Transaction accepted to the block is final and will not be modified.
 
-**Each inner blockchain message, that is message from one smart-contract to another, bear some amount of digital assets as well as arbitrary portion of data.**
+**Each inner blockchain message, that is, a message from one smart contract to another, bears some amount of digital assets as well as an arbitrary portion of data.**
 
-Smart-contract guidelines recommend to treat data payload starting with 32 binary zeroes as human-readable text message. Most software like wallets and libraries support this specification and allows to send text comment along with TON coins as well as display comments in other messages.
+Smart contract guidelines recommend treating the data payload, which begins with 32 binary zeros, as a human-readable text message. Most software such as wallets and libraries support this specification and allow to send text comments along with TON coins as well as display comments in other messages.
 
-Smart-contracts **pay fees for transactions** (usually from balance of incoming message) as well as **storage fee for contract's stored code and data**. Fees depend on workchain configs with maximal fees on `masterchain` and substantially lower fees on `basechain`.
+Smart contracts **pay fees for transactions** (usually from the balance of an incoming message) as well as **a storage fee for the contract's stored code and data**. Fees depend on workchain configs with maximal fees on `masterchain` and substantially lower fees on `basechain`.
 
 
 ## Digital assets on TON
-TON has three types of digital assets. First is TON Coin, main token of the network. It is used for all basic operations on blockchain like paying gas fees or staking for validation. The second type is native tokens which are special kinds of assets which can be attached to any message in the network. This assets are currently not in use since functionality of issuing new native tokens is closed. Finally, the third type is contract assets: analogous to ERC20, assets which are managed by arbitrary contracts (there are a few proposed specifications) and thus can require custom rules for processing.
+TON has three types of digital assets. The first is Toncoin, the main token of the network. It is used for all basic operations on the blockchain like paying gas fees or staking for validation. The second type is native tokens, which are special kinds of assets that can be attached to any message in the network. These assets are currently not in use since the functionality of issuing new native tokens is closed. Finally, the third type is contract assets, which are analogous to ERC20 standard and are managed by arbitrary contracts (there are a few proposed specifications) and thus can require custom rules for processing.
 
-### Simple TON coin transfer
-To send TON coins user need to send request via external message, that is message from outer world to the blockchain, to special `wallet` smart-contract (see below). Upon receiving this request `wallet` will send inner message with desired amount of assets and optional data payload, for instance text comment.
+### Simple Toncoin transfer
+To send Toncoin user needs to send a request via an external message, that is, a message from the outer world to the blockchain, to a special `wallet` smart contract (see below). Upon receiving this request, `wallet` will send an inner message with the desired amount of assets and optional data payload, for instance a text comment.
 
-## Wallet smart-contract
+## Wallet smart contract
 Wallet smart-contracts are contracts on TON-network which serve task to allow actor outside blockchain to interact with blockchain entities. Generally it solves three challenges:
 * authenticate owner: reject to process and pay fees for non-owners requests
 * replay protection: prohibit repetitive execution of one request, for instance sending assets to some other smart-contract
