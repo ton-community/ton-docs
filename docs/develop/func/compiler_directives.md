@@ -1,5 +1,5 @@
 # Compiler directives
-Those are keywords that start with `#` and instruct compiler to do some actions, checks or adjust parameters.
+Those are keywords that start with `#` and instruct the compiler to do some actions, checks or adjust parameters.
 
 Those directives can be used only at the outermost level (not inside any function definition).
 
