@@ -1764,6 +1764,10 @@ button img, a img{
 .mobile-view{
   display: none;
 }
+[role="banner"] a:hover{
+  opacity: 0.7;
+  color: unset;
+}
 [role="banner"] span:first-of-type{
   display: none;
 }
