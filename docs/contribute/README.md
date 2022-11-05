@@ -16,7 +16,7 @@ There are several ways to identify the area where you can contribute to TON Docs
 - If you need to add or edit something in TON Docs, raise a PR 
   against the `main` branch.
 - The documentation team will review the PR or reach out as needed.
-- Repository: https://github.com/ton-/ton-docs
+- Repository: https://github.com/ton-community/ton-docs
 
 ## Development
 
