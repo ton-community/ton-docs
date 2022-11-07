@@ -1,5 +1,5 @@
 # Functions
-FunC program is essentially a list of function declarations/definitions and global variable declarations. This section covers the first topic.
+FunC program is essentially a list of function declarations/definitions and global variable declarations. This section covers the first topic .
 
 Any function declaration or definition starts with a common pattern, and then one of the three things follows:
 - single `;`, which means that the function is declared, but not defined yet. It may be defined later in the same file, or in some other file, which is passed before the current one to the FunC compiler.
