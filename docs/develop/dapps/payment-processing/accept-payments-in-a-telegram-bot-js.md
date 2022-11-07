@@ -17,7 +17,7 @@ Sources are available on GitHub:
 ## 📖 What you'll learn
 You'll learn how to:
  - Create a Telegram bot in NodeJS using Grammy
- - Work with public TON API
+ - Work with public toncenter api
 
 > Why do we use Grammy?
 Grammy is a modern, young, high-level framework for comfortable and fast development of telegram bots on JS/TS/Deno. On top of this Grammy also has just great [documentation](https://grammy.dev) and an active community that can always help you.
