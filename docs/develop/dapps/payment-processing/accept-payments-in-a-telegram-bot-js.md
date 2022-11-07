@@ -77,65 +77,61 @@ That's all for the config file, so we can move forward!
 ## TON Center API
 In the `src/services/ton.py` file we'll declare a functions to verify the existence of a transaction and generate links for a quick transition to the wallet application for payment
 
-### getTransactions method
+### Getting the latest wallet transactions
 
-We'll use the TON Center API. Their docs are available here:
-https://toncenter.com/api/v2/
+Our task is to check the availability of the transaction we need from a certain wallet. 
 
-We need the [getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get) method to get information about latest transactions of a given account.
+We will solve it like this:
+1. We will receive the last transactions that were received to our wallet. Why ours? In this case, we do not have to worry about what the user's wallet address is, we do not have to confirm that it is his wallet, we do not have to store this wallet anywhere.
+2. Sort and leave only incoming transactions 
+3. Let's go through all the transactions, and each time we will check whether the comment and the amount are equal to the data that we have  
+4. celebrating the solution of our problem🎉
 
-Let's have a look at what this method takes as input parameters and what it returns.
+#### Getting the latest transactions
 
-There is only one mandatory input field `address`, but we also need the `limit` field to specify how many transactions we want to get in return.
+If we use the toncenter api, then we can refer to their [documentation](https://toncenter.com/api/v2/) and find a method that ideally solves our problem - [getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get)
 
-Now let's try to run this method on the [TON Center website](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get) with any existing wallet address to understand what we should get from the output.
+One parameter is enough for us to get transactions - the wallet address for accepting payments, but we will also use the limit parameter in order to limit the issuance of transactions to 100 pieces.
 
-```json
-{
-  "ok": true,
-  "result": [
-    {
-      ...
-    },
-    {
-      ...
-    }
-  ]
-}
+Let's try to call a test request for the `EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N` address (by the way, this is the Ton Foundation address)
+```bash
+curl -X 'GET' \
+  'https://toncenter.com/api/v2/getTransactions?address=EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N&limit=100' \
+  -H 'accept: application/json'
 ```
+Great, now we have a list of transactions on hand in ["result"], now let's take a closer look at 1 transaction
 
-Well, so the `ok` field is set to `true` when everything is good, and we have an array `result` with the list of `limit` latest transactions. Now let's look at one single transaction:
 
 ```json
 {
-    "@type": "raw.transaction",
-    "utime": 1666648337,
-    "data": "...",
-    "transaction_id": {
+      "@type": "raw.transaction",
+      "utime": 1667148685,
+      "data": "*data here*",
+      "transaction_id": {
         "@type": "internal.transactionId",
-        "lt": "32294193000003",
-        "hash": "ez3LKZq4KCNNLRU/G4YbUweM74D9xg/tWK0NyfuNcxA="
-    },
-    "fee": "105608",
-    "storage_fee": "5608",
-    "other_fee": "100000",
-    "in_msg": {
+        "lt": "32450206000003",
+        "hash": "rBHOq/T3SoqWta8IXL8THxYqTi2tOkBB8+9NK0uKWok="
+      },
+      "fee": "106508",
+      "storage_fee": "6508",
+      "other_fee": "100000",
+      "in_msg": {
         "@type": "raw.message",
-        "source": "EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL",
-        "destination": "EQBKgXCNLPexWhs2L79kiARR1phGH1LwXxRbNsCFF9doc2lN",
-        "value": "100000000",
+        "source": "EQA0i8-CdGnF_DhUHHf92R1ONH6sIA9vLZ_WLcCIhfBBXwtG",
+        "destination": "EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N",
+        "value": "1000000",
         "fwd_fee": "666672",
         "ihr_fee": "0",
-        "created_lt": "32294193000002",
-        "body_hash": "tDJM2A4YFee5edKRfQWLML5XIJtb5FLq0jFvDXpv0xI=",
+        "created_lt": "32450206000002",
+        "body_hash": "Fl+2CzHNgilBE4RKhfysLU8VL8ZxYWciCRDva2E19QQ=",
         "msg_data": {
-            "@type": "msg.dataText",
-            "text": "SGVsbG8sIHdvcmxkIQ=="
+          "@type": "msg.dataText",
+          "text": "aGVsbG8g8J+Riw=="
         },
-        "message": "Hello, world!"
-    },
-    "out_msgs": []
-}
+        "message": "hello 👋"
+      },
+      "out_msgs": []
+    }
 ```
 
 From this json file, we can understand some information that can be usefull for us:
@@ -176,7 +172,6 @@ So, now we can get the last 100 transactions from the owner's wallet
 ```js
 const transactions = await httpClient.getTransactions(toWallet, {
     limit: 100,
-    archival: true,
   });
 ```
 
