@@ -32,8 +32,8 @@ Also you need these libraries:
  - dotenv
 
 You can install them with one command in the terminal.
-```bash
-npm install
+```bash npm2yarn
+npm install ton dotenv grammy @grammyjs/conversations
 ```
 
 ## 🚀 Let's get started!
