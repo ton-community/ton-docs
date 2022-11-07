@@ -5,7 +5,7 @@ Implementation:
 
 ## Overview
 
-The cornerstone in the TON networking is the Abstract Datagram Network Layer (ADNL).
+The cornerstone in the TON networking is the Abstract Datagram Network Layer (ADNL) . 
 
 This is an overlay, peer-to-peer, unreliable (small-size) datagram protocol running on top of **UDP** in **IPv4** (in future IPv6), with an optional **TCP fallback** if UDP is not available.
 
