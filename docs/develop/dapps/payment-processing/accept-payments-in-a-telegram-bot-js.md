@@ -434,7 +434,11 @@ All we are doing here is just checking for a transaction, and provided that it e
 
 ### Bot start
 
-At this moment, we have written all the required code for our bot. If you did everything correctly, it must work when you run it with `npm run app` command in the terminal.
+To start use this command:
+
+```bash npm2yarn
+npm run app
+```
 
 If your bot doesn't work correctly, compare your code with code [from this repository](https://github.com/coalus/DumplingShopBot). If it didn't help, feel free to write me in telegram. You can find my telegram account below
 
