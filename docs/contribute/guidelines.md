@@ -33,7 +33,7 @@ To summarize, the workflow is as follows:
 
 - **Do not copy and paste pre-existing content**. Plagiarism is a serious issue and will not be tolerated. If the tutorial is inspired by some existing content, reference it and link to it. When linking to other tutorials/resources, use TON Docs resources if possible.
 - **Include any walkthrough videos or video content** in the PR by uploading it to Google Drive.
-- **Account funding from faucets must be clearly explained**, including which account is being funded, from where and why. Do not assume learners can accomplish this task on their own!
+- **Account funding from faucets must be clearly explained**, including which account is being funded, from where, and why. Do not assume learners can accomplish this task on their own!
 - **Display sample outputs** in the form of Terminal snippets or screenshots to help learners understand what to expect. Trim long outputs.
 - **Take an error-driven approach** where you bump into errors on purpose to teach learners how to debug them. For example, if you need to fund an account to be able to deploy a contract, first try and deploy without funding, observe the error that is returned, then fix the error (by funding the account) and try again.
 - **Add potential errors and troubleshooting.** Of course, the tutorial shouldn't list every possible error, but it should make an effort to catch the important or most common ones.
@@ -67,9 +67,9 @@ Feel free to check out the [sample tutorial structure](/contribute/sample-tutori
 ## Style Guide
 
 - **Writing Tone -** Tutorials are written by community contributors for their peers. 
-  - Given this, we recommend creating a tone of inclusion and interaction throughout the tutorial. Use words such as “we,” “us,” “our.”
+  - Given this, we recommend creating a tone of inclusion and interaction throughout the tutorial. Use words such as “we”, “us”, “our”.
     - _For example_: "We have successfully deployed our contract."
-  - When providing direct instructions feel free to use “you,” “your,” etc.
+  - When providing direct instructions, feel free to use “you”, “your”, etc.
     - _For example_: “*Your file should look like this:*”.
 - **Use Markdown properly** throughout your tutorial. Refer to [GitHub's markdown guide](https://guides.github.com/features/mastering-markdown/) as well as the [sample tutorial structure](/contribute/sample-tutorial).
 - **Do not use pre-formatted text for emphasis**, *for example*:
@@ -109,7 +109,7 @@ import { useEffect, useState } from 'react';
 
   
 - **Use a linter & prettifier** before pasting your code into the code blocks. We recommend `eslint` for JavaScript/React. Use `prettier` for code formatting.
-- **Avoid over-use of bullet points**, numbered lists, or complicated text formatting. The use of **bold** or *italic* emphasis is allowed but should be kept to a minimum.
+- **Avoid the overuse of bullet points**, numbered lists, or complicated text formatting. The use of **bold** or *italic* emphasis is allowed but should be kept to a minimum.
 
 # **App setup**
 

@@ -24,7 +24,7 @@ Make sure you have installed the latest version of Python and have installed the
 
 We'll follow the order below:
 
-1. Work with the SQlite database
+1. Work with SQlite database
 2. Work with the public TON API (TON Center)
 3. Create a Telegram bot using Python + Aiogram
 4. Profit!
@@ -153,10 +153,10 @@ locCon.commit()
 
 This code will create the tables if they are not already created.
 
-### Work with the database
+### Work with  database
 
 Let's analyze the situation:
-The user made a transaction. How to verify it? How to make sure that the same transaction is not confirmed twice?
+User made a transaction. How to verify it? How to make sure that the same transaction is not confirmed twice?
 
 There is a body_hash in transactions, with the help of which we can easily understand whether there is a transaction in the database or not.
 
@@ -351,10 +351,9 @@ The request will look like [this.](https://testnet.toncenter.com/api/v2/getTrans
 
 We will also need a method `detectAddress`.
 
-Not sure about mainnet, but on testnet, my tonkeeper wallet address is:
-`kQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aCTb`, and when I look at the transaction in the explorer, instead of my address there
-`EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R`.
-This method returns us the “right” address:
+Here is an example of a Tonkeeper wallet address on testnet: `kQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aCTb`. If we look for the transaction in the explorer, instead of the above address, there is: `EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R`.
+
+This method returns us the “right” address.
 
 ```json
 {
@@ -445,11 +444,11 @@ def detect_address(address):
         return False
 ```
 
-At the input, we have the estimated address, and at the output, we have either the "correct" address necessary for us for further work or False.
+At the input, we have the estimated address, and at the output, we have either the "correct" address necessary for us to do further work or False.
 
 You may notice that an API key has appeared at the end of the request. It is needed to remove the limit on the number of requests to the API. Without it, we are limited to one request per second.
 
-Heree is the next function for `getTransactions`:
+Here is next function for `getTransactions`:
 
 ```python
 def get_address_transactions():
@@ -561,7 +560,7 @@ In the `WORK_MODE` key, we will define the bot's mode of operation—in the test
 
 #### API tokens
 
-Api tokens for `*_API_TOKEN` can be obtained in the [TON Center](https://toncenter.com/) bots:
+API tokens for `*_API_TOKEN` can be obtained in the [TON Center](https://toncenter.com/) bots:
 
 - for mainnet — [@tonapibot](https://t.me/tonapibot)
 - for testnet — [@tontestnetapibot](https://t.me/tontestnetapibot)
@@ -617,10 +616,10 @@ This is the part where we will write the bot interaction logic.
 
 We'll be using two types of handlers:
 
-- `message_handler` is used to handle messages from the user.
+- `message_handler` is used to handle messages from user.
 - `callback_query_handler` is used to handle callbacks from inline keyboards.
 
-If we want to handle a message from the user, we will use `message_handler` by placing the `@dp.message_handler` decorator above the function. In this case, the function will be called when the user sends a message to the bot.
+If we want to handle a message from the user, we will use `message_handler` by placing `@dp.message_handler` decorator above the function. In this case, the function will be called when the user sends a message to the bot.
 
 In the decorator, we can specify the conditions under which the function will be called. For example, if we want the function to be called only when the user sends a message with the text `/start`, then we will write the following:
 
@@ -628,11 +627,11 @@ In the decorator, we can specify the conditions under which the function will be
 @dp.message_handler(commands=['start'])
 ```
 
-Handlers need to be assigned to an async function. In this case, we will use the `async def` syntax. The `async def` syntax is used to define the function that will be called asynchronously.
+Handlers need to be assigned to an async function. In this case, we will use  `async def` syntax. The `async def` syntax is used to define the function that will be called asynchronously.
 
 #### /start
 
-Let's start with the `/start` command handler.
+Let's start with `/start` command handler.
 
 ```python
 @dp.message_handler(commands=['start'], state='*')
@@ -651,9 +650,9 @@ async def cmd_start(message: types.Message):
     await DataInput.firstState.set()
 ```
 
-In the decorator of this handler we see `state='*'`. This means that this handler will be called regardless of the state of the bot. If we want the handler to be called only when the bot is in a specific state, we will write `state=DataInput.firstState`. In this case, the handler will be called only when the bot is in the `firstState` state.
+In the decorator of this handler we see `state='*'`. This means that this handler will be called regardless of the state of bot. If we want the handler to be called only when the bot is in a specific state, we will write `state=DataInput.firstState`. In this case, the handler will be called only when the bot is in the `firstState` state.
 
-After user sends the `/start` command, the bot will check if the user is in the database using the `db.check_user` function. If not, it will add him. This function will also return the bool value and we can use it to address the user differently. After that, the bot will set the state to `firstState`.
+After the user sends `/start` command, the bot will check if the user is in database using `db.check_user` function. If not, it will add him. This function will also return the bool value and we can use it to address the user differently. After that, the bot will set the state to `firstState`.
 
 #### /cancel
 
@@ -669,7 +668,7 @@ async def cmd_cancel(message: types.Message):
 
 #### /buy
 
-And, of course, the `/buy` command handler. In this example we will sell different types of air. We will use the reply keyboard to choose the type of air.
+And, of course, `/buy` command handler. In this example we will sell different types of air. We will use the reply keyboard to choose the type of air.
 
 ```python
 # /buy command handler
@@ -686,7 +685,7 @@ async def cmd_buy(message: types.Message):
     await DataInput.secondState.set()
 ```
 
-So, when a user sends the `/buy` command, the bot sends him a reply keyboard with air types. After the user chooses the type of air, the bot will set the state to `secondState`.
+So, when a user sends `/buy` command, the bot sends him a reply keyboard with air types. After the user chooses the type of air, the bot will set the state to `secondState`.
 
 This handler will work only when `secondState` is set and will be waiting for a message from the user with the air type.  In this case, we need to store the air type that the user choses, so we pass FSMContext as an argument to the function.
 
@@ -720,17 +719,17 @@ await state.update_data(air_type="Just pure 🌫")
 
 ...to store the air type in FSMContext. After that, we set the state to `WalletState` and ask the user to send his wallet address.
 
-This handler will work only when `WalletState` is set and will be waiting for a message from the user with the wallet address.
+This handler will work only when `WalletState` is set and will be waiting for a message from user with the wallet address.
 
-The next handler seems to be very complicated but it's not. First, we check if the message is a valid wallet address using `len(message.text) == 48` because wallet address is 48 characters long. After that, we use the `api.detect_address` function to check if the address is valid. As you remember from the API part, this function also returns "Correct" address which will be stored in the database.
+The next handler seems to be very complicated but it's not. First, we check if the message is a valid wallet address using `len(message.text) == 48` because wallet address is 48 characters long. After that, we use `api.detect_address` function to check if the address is valid. As you remember from the API part, this function also returns "Correct" address which will be stored in the database.
 
-After that, we get the air type from FSMContext using `await state.get_data()` and store it in the `user_data` variable.
+After that, we get the air type from FSMContext using `await state.get_data()` and store it in  `user_data` variable.
 
 Now we have all the data required for the payment process. We just need to generate a payment link and send it to the user. Let's use the inline keyboard.
 
 Three buttons will be created for payment in this example:
 
-- for the official TON Wallet
+- for official TON Wallet
 - for Tonhub
 - for Tonkeeper
 
@@ -776,7 +775,7 @@ async def user_wallet(message: types.Message, state: FSMContext):
 
 #### /me
 
-One last message handler that we need is for the `/me` command. It shows the user's payments.
+One last message handler that we need is for `/me` command. It shows the user's payments.
 
 ```python
 # /me command handler
@@ -817,7 +816,7 @@ async def check_transaction(call: types.CallbackQuery, state: FSMContext):
         await DataInput.firstState.set()
 ```
 
-In this handler we get user data from FSMContext and use the `api.find_transaction` function to check if the transaction was successful. If it was, we store the wallet address in the database and send a notification to the user. After that, the user can find his transactions using the `/me` command.
+In this handler we get user data from FSMContext and use `api.find_transaction` function to check if the transaction was successful. If it was, we store the wallet address in the database and send a notification to the user. After that, the user can find his transactions using `/me` command.
 
 ### Last part of main.py
 
@@ -846,7 +845,7 @@ Steps to run the bot:
 1. Fill in the `config.json` file.
 2. Run `main.py`.
 
-All files must be in the same folder. To start the bot, you need to run the `main.py` file. You can do it in your IDE or in the terminal like this:
+All files must be in the same folder. To start the bot, you need to run `main.py` file. You can do it in your IDE or in the terminal like this:
 
 ```
 python main.py

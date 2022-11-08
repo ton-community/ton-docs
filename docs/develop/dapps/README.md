@@ -41,8 +41,8 @@ Here is a list of modern SDKs that are constantly supported and improved:
 
 ### JavaScript SDK
 
-* [ton-community/ton-js](https://github.com/ton-community/ton) — Cross-platform client for the TON blockchain by the TON community
-* [toncenter/tonweb](https://github.com/toncenter/tonweb) — Cross-platform client for TON blockchain by TON Center
+* [ton-community/ton-js](https://github.com/ton-community/ton) — Cross-platform client for the TON Blockchain by the TON Community
+* [toncenter/tonweb](https://github.com/toncenter/tonweb) — Cross-platform client for TON Blockchain by TON Center
 * [@tegro/ton3-client](https://github.com/TegroTON/ton3-client) — JS ton3-client for tonhold API by TonHold
 * [nns2009/ton-payment-tracker](https://github.com/nns2009/ton-payment-tracker) — TON payment tracker
 
@@ -54,11 +54,11 @@ Here is a list of modern SDKs that are constantly supported and improved:
 
 ### Go SDK
 
-- [tonutils-go](https://github.com/xssnick/tonutils-go) — Go utils for the TON blockchain
+- [tonutils-go](https://github.com/xssnick/tonutils-go) — Go utils for the TON Blockchain
 
 ### Kotlin / Java SDK
 
-- [ton-kotlin](https://github.com/andreypfau/ton-kotlin) — Kotlin SDK for the TON blockchain
+- [ton-kotlin](https://github.com/andreypfau/ton-kotlin) — Kotlin SDK for the TON Blockchain
 
 ## Telegram WebApps (TWA)
 
@@ -89,7 +89,7 @@ To add login button to your website or web app use the following:
 These technologies contains very low-level stack, so please use it if any other SDKs don't work for you. It will save a lot of your time.
 :::
 
-TonLib was one of the first libraries for working with the TON blockchain.
+TonLib was one of the first libraries for working with the TON Blockchain.
 
 - [C++ TonLib](https://github.com/ton-blockchain/ton/tree/master/example/cpp)
 - [Python TonLib wrapper](https://github.com/toncenter/pytonlib)

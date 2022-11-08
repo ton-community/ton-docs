@@ -10,7 +10,7 @@ There is no specific standard for this.
 
 The current standard method:
 
-- Users use a v4 wallet. (V4R2 is the TON blockchain's default wallet smart contract.) It allows additional smart contracts, known as plugins, to extend its functionality.
+- Users use a v4 wallet. (V4R2 is the TON Blockchain's default wallet smart contract.) It allows additional smart contracts, known as plugins, to extend its functionality.
 
    After ensuring their functionality, the user can approve the addresses of trusted smart contracts (plugins) for his wallet. Following that, the trusted smart contracts can withdraw Toncoins from the wallet. This is similar to "Infinite Approval" in some other blockchains.
 

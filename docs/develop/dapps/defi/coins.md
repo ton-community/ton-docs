@@ -1,6 +1,6 @@
 # Native token: Toncoin
 
-The native cryptocurrency of the TON blockchain is **Toncoin**.
+The native cryptocurrency of the TON Blockchain is **Toncoin**.
 
 Transaction fees, gas payments (i.e., smart contract message processing fees), and persistent storage payments are collected in Toncoins.
 
@@ -12,7 +12,7 @@ You can find out where to buy or exchange Toncoins on the [website](https://ton.
 
 ## Extra currencies
 
-The TON blockchain supports up to 2^32 built-in extra currencies. 
+The TON Blockchain supports up to 2^32 built-in extra currencies. 
 
 Extra currency balances can be stored on each blockchain account and transferred to other accounts natively (in an internal message from one smart contract to another, you can specify a hashmap of the extra currency amounts in addition to the Toncoin amount).
 
@@ -26,4 +26,4 @@ Thus, extra currencies are best used for well-known decentralized currencies (fo
 
 [Jettons](/develop/dapps/defi/tokens#jettons) are suitable for other tasks.
 
-At the moment, no extra currency has been created on the TON blockchain. The TON blockchain has full support for extra currencies by accounts and messages, but the minter system contract for their creation has not yet been created. 
+At the moment, no extra currency has been created on the TON blockchain. The TON Blockchain has full support for extra currencies by accounts and messages, but the minter system contract for their creation has not yet been created. 

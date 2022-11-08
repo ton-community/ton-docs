@@ -1,6 +1,6 @@
 # TON Center API
 
-Standard HTTP JSON RPC similar to many blockchains.
+Standard HTTP JSON RPC is similar to many blockchains.
 
 Clients connect to the [ton-http-api](https://github.com/toncenter/ton-http-api) server that proxies requests to the lite server (node) using TonLib.
 

@@ -1,6 +1,6 @@
 # How to Contribute
 
-## Identify the area for your contribution
+## Identify area for contribution
 
 There are several ways to identify the area where you can contribute to TON Docs:
 
@@ -13,9 +13,9 @@ There are several ways to identify the area where you can contribute to TON Docs
 
 ## TL;DR
 
-- If you need to add or edit something in TON Docs, raise a PR 
+- If you need to add or edit something in TON Docs, create a pull request 
   against the `main` branch.
-- The documentation team will review the PR or reach out as needed.
+- The documentation team will review the pull request or reach out as needed.
 - Repository: https://github.com/ton-community/ton-docs
 
 ## Development
@@ -48,11 +48,11 @@ Don't worry too much about styles in general; the maintainers will help you fix 
 
 ### Pull Requests
 
-So you have decided to contribute code back to upstream by opening a pull request. You've put in a lot of effort, and we appreciate it. We will do our best to work with you and get the PR reviewed. 
+So you have decided to contribute code back to upstream by opening a pull request. You've put in a lot of effort, and we appreciate it. We will do our best to work with you and get the pull request reviewed. 
 
 When submitting a pull request, please ensure the following:
 
-1. **Keep your PR small**. Smaller pull requests (~300 lines of diff) are easier to review and more likely to get merged. Make sure the PR does only one thing, otherwise please split it.
+1. **Keep your pull request small**. Smaller pull requests (~300 lines of diff) are easier to review and more likely to get merged. Make sure the pull request does only one thing, otherwise please split it.
 2. **Use descriptive titles**. It is recommended to follow the commit message style.
 3. **Test your changes**. Describe your test plan in your pull request description.
 

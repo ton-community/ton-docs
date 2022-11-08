@@ -9,7 +9,7 @@ The `#include` directive allows to include another FunC source code file that wi
 Syntax is `#include "filename.fc";`. Files are automatically checked for re-inclusion, and attempts to include
 a file more than once will be ignored by default, with a warning if the verbosity level is no lower than 2.
 
-If an error happens during the parsing of an included file additionally, a stack of inclusions is printed with the locations
+If an error happens during the parsing of an included file, additionally, a stack of inclusions is printed with the locations
 of each included file in the chain.
 
 ## #pragma

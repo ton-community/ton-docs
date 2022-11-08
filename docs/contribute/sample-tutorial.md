@@ -11,7 +11,7 @@ This section is for you to explain the context of this tutorial and why it is im
 
 *For example:*
 
->A smart contract is just a computer program that runs on the TON blockchain, or more specifically on its [TVM](/learn/tvm-instructions/tvm_overview) (_TON Virtual Machine_). The contract is made of code (_compiled TVM instructions_) and data (_persistent state_) that are stored at some address on TON.
+>A smart contract is just a computer program that runs on the TON Blockchain, or more specifically on its [TVM](/learn/tvm-instructions/tvm_overview) (_TON Virtual Machine_). The contract is made of code (_compiled TVM instructions_) and data (_persistent state_) that are stored at some address on TON.
 
 ## Prerequisites
 
@@ -21,20 +21,20 @@ This section is for you to explain any prior knowledge needed or any existing tu
 
 *For example:*
 
->In this tutorial, we're going to mint a jetton on testnet. Before we continue, make sure that your [testnet](/develop/smart-contracts/environment/testnet) wallet has sufficient balance. 
+>In this tutorial, we're going to mint Jetton on testnet. Before we continue, make sure that your [testnet](/develop/smart-contracts/environment/testnet) wallet has sufficient balance. 
 
 ## Requirements
 
 The Requirements heading **must** be H2: `## Requirements`
 
-**OPTIONAL :** Embed any video content in this section, if your tutorial has any.
+**OPTIONAL :** Embed any video content in this section if your tutorial has any.
 
 Any technology that needs to be installed **prior** to starting the tutorial and that the tutorial will not cover (`TON Wallet Extension`, `node`, etc.). Do not list packages that will be installed during the tutorial.
 
 *For example:*
 
-- We'll need the TON Wallet extension in this tutorial, install it from [HERE](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd).
-- Make sure to have NodeJS 12.0.1+ version installed.
+- We'll need the TON Wallet extension in this tutorial; install it from [HERE](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd).
+- Make sure to have NodeJS 12.0.1+ installed.
 
 ## Body of the Tutorial
 
@@ -49,7 +49,7 @@ Any technology that needs to be installed **prior** to starting the tutorial and
 - **Keep all subheadings at H3,** don't go for H4 or any lower.
     - In Markdown syntax, two hashmarks are used for H2 headings: ##
     - Three hashmarks are used for H3 headings: ###
-- Add only necessary comments in code blocks. ***Do not*** add # style comments to terminal input code blocks.
+- Add only necessary comments to code blocks. ***Do not*** add # style comments to terminal input code blocks.
 - Add all relevant code blocks:
     - Markdown syntax for code blocks consists of three backticks at the beginning and end of the code block.  Also, make sure that there is a newline before and after the backticks in all code blocks. *For example*:
         - 

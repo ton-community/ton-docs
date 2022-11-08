@@ -1,6 +1,6 @@
 # Participate as a Contributor
 
-To become a contributor who receives a limited *Hack-TON-berfest NFT*, please set up your own [TON wallet](https://ton.org/wallets) and verify your GitHub account.
+To become a contributor who receives a limited *Hack-TON-berfest NFT*, please set up your own [TON Wallet](https://ton.org/wallets) and verify your GitHub account.
 
 ## Start your journey
 
@@ -23,7 +23,7 @@ Hacktoberfest is a great place to start dipping your toes into open source contr
 
 ## How can I contribute to TON?
 
-The TON ecosystem has several organizations and repositories:
+The TON Ecosystem has several organizations and repositories:
 
 <span className="DocsMarkdown--button-group-content">
   <a href="/hacktonberfest"
