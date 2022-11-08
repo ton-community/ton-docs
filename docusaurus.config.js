@@ -182,7 +182,7 @@ const config = {
         isCloseable: false,
       },
 
-      image: 'img/preview.jpg',
+      image: 'img/snippet.jpg',
       navbar: {
         title: '',
         logo: {
