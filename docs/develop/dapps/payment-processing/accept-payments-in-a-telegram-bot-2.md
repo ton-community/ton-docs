@@ -1,7 +1,7 @@
 # Bot with Own Balance
 
 
-In this article, we'll create a simple Telegram bot for accepting payments in TON coins.
+In this article, we'll create a simple Telegram bot for accepting payments in Toncoins.
 
 ## 🦄 What it looks like
 
