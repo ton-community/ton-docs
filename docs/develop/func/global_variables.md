@@ -1,7 +1,7 @@
 # Global variables
 The FunC program is essentially a list of function declarations/definitions and global variable declarations. This section covers the second topic.
 
-A global variable can be declared with a `global` keyword followed by the variable type and the variable name. For example,
+A global variable can be declared with the `global` keyword followed by the variable type and the variable name. For example,
 ```cpp
 global ((int, int) -> int) op;
 
@@ -32,7 +32,7 @@ int main() {
 }
 ```
 
-It is possible to declare several variables after the same `global` keyword. The following codes are equivalents:
+It is possible to declare several variables after the same `global` keyword. The following codes are equivalent:
 ```cpp
 global int A;
 global cell B;
@@ -42,7 +42,7 @@ global C;
 global int A, cell B, C;
 ```
 
-It is not allowed to declare a local variable with the same name as an already declared global variable. For example, this code wouldn't compile:
+It is not allowed to declare a local variable with the same name as an already-declared global variable. For example, this code wouldn't compile:
 ```cpp
 global cell C;
 
@@ -51,7 +51,7 @@ int main() {
   return C;
 }
 ```
-Note that the following code is correct,
+Note that the following code is correct:
 ```cpp
 global int C;
 

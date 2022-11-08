@@ -12,9 +12,9 @@ The following string types are supported:
 * without type—used for asm function definitions and to define a slice const by ASCII string
 * `s`—defines a raw slice const by its contents (hex-encoded and optionally bit-padded)
 * `a`—creates a slice const containing `MsgAddressInt` structure from a specified address
-* `u`—creates an int const that corresponds to hex values of the provided ASCII string
-* `h`—creates an int const that is first 32 bits of SHA256 hash of the string
-* `H`—creates an int const that is all 256 bits of SHA256 hash of the string
+* `u`—creates an int const that corresponds to the hex values of the provided ASCII string
+* `h`—creates an int const that is the first 32 bits of the SHA256 hash of the string
+* `H`—creates an int const that is all 256 bits of the SHA256 hash of the string
 * `c`—creates an int const that is crc32 value of the string
 
 For example, the following values result in the corresponding consts:
@@ -44,7 +44,7 @@ For example, those are valid identifiers:
 
 `'` at the end of the name of a variable is conventionally used when some modified version of the old value is introduced. For example, almost all modifying built-in primitives for hashmap manipulation (except ones with the prefix `~`) take a hashmap and return a new version of the hashmap along with some other data, if necessary. It is convenient to name those values with the same name suffixed by `'`.
 
-Suffix `?` is usually used for boolean variables (TVM doesn't have a built-in type bool; bools are represented by integers: 0 is false and -1 is true) or for functions that return some flag, usually indicating success of the operation (like `udict_get?` from [stdlib.fc](/develop/func/stdlib)).
+The suffix `?` is usually used for boolean variables (TVM doesn't have a built-in type bool; bools are represented by integers: 0 is false and -1 is true) or for functions that return some flag, usually indicating success of the operation (like `udict_get?` from [stdlib.fc](/develop/func/stdlib)).
 
 These are invalid identifiers:
 - `take(first)Entry`
@@ -61,7 +61,7 @@ Some more uncommon examples of valid identifiers:
 - `{hehehe}`
 - ``pa{--}in"`aaa`"``
 
-These also are invalid identifiers:
+These are also invalid identifiers:
 - ``pa;;in"`aaa`"`` (because `;` is prohibited)
 - `{-aaa-}`
 - `aa(bb`
@@ -83,11 +83,10 @@ As of now, `int` and `slice` types are supported.
 
 `value-or-expression` can be a literal or a pre-computable expression of literals and constants.
 
-For example, constants can be defined as following:
-* `const int101 = 101;` defines `int101` constant that is equivalent to numeric literal `101`
+For example, constants can be defined as follows:
+* `const int101 = 101;` defines `int101` constant that is equivalent to the numeric literal `101`
 * `const str1 = "const1", str2 = "aabbcc"s;` defines two constants that are equal to their corresponding strings
-* `const int int240 = ((int1 + int2) * 10) << 3;` defines `int240` constant that equals to the result of calculation
+* `const int int240 = ((int1 + int2) * 10) << 3;` defines `int240` constant that equals the result of calculation
 * `const slice str2r = str2;` defines `str2r` constant that is equal to the value of `str2` constant
 
-Since numeric constants are substituted during compilation all optimization and pre-computations performed during
-compilation are successfully performed (unlike the old method of defining constants via inline asm `PUSHINT`s).
+Since numeric constants are substituted during compilation, all optimization and pre-computations performed during the compilation are successfully performed (unlike the old method of defining constants via inline asm `PUSHINT`s).
