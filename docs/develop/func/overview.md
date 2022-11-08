@@ -52,7 +52,7 @@ Other materials gracefully provided by the experts from the community:
 * [TON Hello World: part 1](https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func): Step by step guide for writing your first smart contract in FunC by **TON Society** using **ton.js**
 * [TON Hello World: part 2](https://society.ton.org/ton-hello-world-guide-for-writing-first-smart-contract-in-func-part-2): The second part of the guide by **TON Society** about testing and debugging
 * [FunC Quiz](https://t.me/toncontests/60) by **Vadim**—Good for selfcheck. It will take 10–15 minutes. The questions are mainly about FunС with a few general questions about TON
-* [FunC test](https://t.me/toncontests/58?comment=14888) by **Vadim**—FunC Quiz in Russian
+* [FunC Quiz](https://t.me/toncontests/58?comment=14888) by **Vadim**—FunC Quiz in Russian
 
 ## Contests
 
@@ -71,7 +71,7 @@ You can also study previous competitions for learning purposes:
   [Solutions](https://github.com/ton-blockchain/func-contest1-solutions),
   [Tests](https://github.com/ton-blockchain/func-contest1-tests).
 
-## Smart Contracts Examples
+## Smart contract examples
 
 Standard basic smart contracts like wallets, electors (manages validation on TON), multi-signature wallets, etc. can be a reference when studying.
 
