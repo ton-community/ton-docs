@@ -10,7 +10,7 @@ This section discusses the [stdlib.fc](https://github.com/ton-blockchain/ton/blo
 :::
 
 
-Currently, the library is just a wrapper for the most common assembler of the TVM commands which aren't built-ins. Each TVM command description used in the library can be found in the [TVM documentation](https://ton.org/tvm.pdf) (appendix A). Some descriptions were borrowed for this document.
+Currently, the library is just a wrapper for the most common assembler of the TVM commands which are not built-in. Each TVM command description used in the library can be found in the [TVM documentation](https://ton.org/tvm.pdf) (appendix A). Some descriptions were borrowed for this document.
 
 Some functions are commented out in the file. It means that they have already become built-ins for optimization purposes. However, the type signature and semantics remain the same.
 
@@ -19,15 +19,15 @@ Note that some less common commands are not presented in the stdlib. Someday the
 ## Tuple manipulation primitives
 The names and the types are mostly self-explaining. See [polymorhism with forall](/develop/func/functions#polymorphism-with-forall) for more info on the polymorphic functions.
 
-Note that currently values of atomic type `tuple` can't be cast to composite tuple type (e.g. `[int, cell]`) and vise versa.
+Note that currently values of atomic type `tuple` cannot be cast into composite tuple types (e.g. `[int, cell]`) and vise versa.
 
 ### Lisp-style lists
-Lists can be represented as nested 2-elements tuples. Empty list is conventionally represented as TVM `null` value (it can be obtained by calling `null()`). For example, tuple `(1, (2, (3, null)))` represents list `[1, 2, 3]`. Elements of a list can be of different types.
+Lists can be represented as nested 2-element tuples. Empty list is conventionally represented as TVM `null` value (it can be obtained by calling `null()`). For example, the tuple `(1, (2, (3, null)))` represents the list `[1, 2, 3]`. Elements of a list can be of different types.
 #### cons
 ```cpp
 forall X -> tuple cons(X head, tuple tail) asm "CONS";
 ```
-Adds an element to the beginning of lisp-style list.
+Adds an element to the beginning of a lisp-style list.
 #### uncons
 ```cpp
 forall X -> (X, tuple) uncons(tuple list) asm "UNCONS";
@@ -37,7 +37,7 @@ Extracts the head and the tail of lisp-style list.
 ```cpp
 forall X -> (tuple, X) list_next(tuple list) asm( -> 1 0) "UNCONS";
 ```
-Extracts the tail and the head of lisp-style list. Can be used as [(non-)modifying method](/develop/func/statements#methods-calls).
+Extracts the head and tail of a lisp-style list. Can be used as a [(non-)modifying method](/develop/func/statements#methods-calls).
 ```cpp
 () foo(tuple xs) {
     int x = xs.list_next(); ;; get the first element
@@ -49,12 +49,12 @@ Extracts the tail and the head of lisp-style list. Can be used as [(non-)modifyi
 ```cpp
 forall X -> X car(tuple list) asm "CAR";
 ```
-Returns the head of lisp-style list.
+Returns the head of a lisp-style list.
 #### cdr
 ```cpp
 tuple cdr(tuple list) asm "CDR";
 ```
-Returns the tail of lisp-style list.
+Returns the tail of a lisp-style list.
 ### Other tuple primitives
 #### empty_tuple
 ```cpp
@@ -66,7 +66,7 @@ Creates 0-element tuple.
 forall X -> tuple tpush(tuple t, X value) asm "TPUSH";
 forall X -> (tuple, ()) ~tpush(tuple t, X value) asm "TPUSH";
 ```
-Appends a value `x` to a `Tuple t = (x1, ..., xn)`, but only if the resulting `Tuple t' = (x1, ..., xn, x)` is of length at most 255. Otherwise throws a type check exception.
+Appends the value `x` to the `Tuple t = (x1, ..., xn)` but only if the resulting `Tuple t' = (x1, ..., xn, x)` is no longer than 255 characters. Otherwise, a type check exception is thrown.
 #### single
 ```cpp
 forall X -> [X] single(X x) asm "SINGLE";
@@ -109,7 +109,7 @@ Creates 4-element tuple.
 ```cpp
 forall X, Y, Z, W -> (X, Y, Z, W) untuple4([X, Y, Z, W] t) asm "4 UNTUPLE";
 ```
-Unpack 4-element tuple.
+Unpacks 4-element tuple.
 
 #### first
 ```cpp
@@ -167,7 +167,7 @@ Returns the third element of a triple.
 
 ## Domain specific primitives
 ### Extracting info from c7
-Some useful information regarding smartcontract invocation can be found in [c7 special register](/learn/tvm-instructions/tvm_overview#control-registers). Those primitives serve for convenient data extraction.
+Some useful information regarding smart contract invocation can be found in the [c7 special register](/learn/tvm-instructions/tvm_overview#control-registers). These primitives serve for convenient data extraction.
 #### now
 ```cpp
 int now() asm "NOW";
@@ -177,12 +177,12 @@ Returns the current Unix time as an Integer
 ```cpp
 slice my_address() asm "MYADDR";
 ```
-Returns the internal address of the current smart contract as a Slice with a `MsgAddressInt`. If necessary, it can be parsed further using primitives such as `parse_std_addr`.
+Returns the internal address of the current smart contract as a Slice with `MsgAddressInt`. If necessary, it can be parsed further using primitives such as `parse_std_addr`.
 #### get_balance
 ```cpp
 [int, cell] get_balance() asm "BALANCE";
 ```
-Returns the remaining balance of the smart contract as a `tuple` consisting of an `int` (the remaining balance in nanotoncoins) and a `cell` (a dictionary with 32-bit keys representing the balance of “extra currencies”). Note that RAW primitives such as `send_raw_message` do not update this field.
+Returns the remaining balance of the smart contract as `tuple` consisting of `int` (the remaining balance in nanotoncoins) and `cell` (a dictionary with 32-bit keys representing the balance of “extra currencies”). Note that RAW primitives such as `send_raw_message` do not update this field.
 #### cur_lt
 ```cpp
 int cur_lt() asm "LTIME";
@@ -198,18 +198,18 @@ block.
 ```cpp
 cell config_param(int x) asm "CONFIGOPTPARAM";
 ```
-Returns the value of the global configuration parameter with integer index `i` as a `cell` or `null` value.
+Returns the value of the global configuration parameter with integer index `i` as `cell` or `null` value.
 ### Hashes
 #### cell_hash
 ```cpp
 int cell_hash(cell c) asm "HASHCU";
 ```
-Computes the representation hash of a `cell c` and returns it as a 256-bit unsigned integer `x`. Useful for signing and checking signatures of arbitrary entities represented by a tree of cells.
+Computes the representation hash of `cell c` and returns it as a 256-bit unsigned integer `x`. Useful for signing and checking signatures of arbitrary entities represented by a tree of cells.
 #### slice_hash
 ```cpp
 int slice_hash(slice s) asm "HASHSU";
 ```
-Computes the hash of a `slice s` and returns it as a 256-bit unsigned integer `x`. The result is the same as if an ordinary cell containing only data and references from `s` had been created and its hash computed by `cell_hash`.
+Computes the hash of `slice s` and returns it as a 256-bit unsigned integer `x`. The result is the same as if an ordinary cell containing only data and references from `s` had been created and its hash computed by `cell_hash`.
 #### string_hash
 ```cpp
 int string_hash(slice s) asm "SHA256U";
