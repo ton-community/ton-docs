@@ -4,15 +4,10 @@
 In this article, we'll create a simple Telegram bot for accepting payments in TON coins.
 
 ## 🦄 What it looks like
-
+At the end of the tutorial, you yourself will write a beautiful bot that will be able to accept payments for your product directly in tones.
 The bot will look like this:
 
 ![bot preview](/img/tutorials/js-bot-preview.jpg)
-
-### Source code
-
-Sources are available on GitHub:
-* https://github.com/coalus/DumplingShopBot
 
 ## 📖 What you'll learn
 You'll learn how to:
@@ -20,7 +15,7 @@ You'll learn how to:
  - Work with public toncenter api
 
 > Why do we use Grammy?
-Grammy is a modern, young, high-level framework for comfortable and fast development of telegram bots on JS/TS/Deno. On top of this Grammy also has just great [documentation](https://grammy.dev) and an active community that can always help you.
+Because Grammy is a modern, young, high-level framework for comfortable & fast development of telegram bots on JS/TS/Deno, in addition to this Grammy has great [documentation](https://grammy.dev) and an active community that can always help you.
 
 
 ## ✍️ What you need to get started
@@ -441,3 +436,4 @@ If your bot doesn't work correctly, compare your code with code [from this repos
 
  - Made for TON as part of [ton-footsteps/58](https://github.com/ton-society/ton-footsteps/issues/58)
  - By Coalus ([Telegram @coalus](https://t.me/coalus), [Coalus on GitHub](https://github.com/coalus))
+ - [Bot Sources](https://github.com/coalus/DumplingShopBot)
