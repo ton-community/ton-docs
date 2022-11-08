@@ -1,10 +1,15 @@
-# Bot for the sale of dumplings
+---
+description: At the end of the tutorial, you will write a beautiful bot that will be able to accept payments for your product directly in TON.
+---
 
+# Bot for sales of dumplings
 
 In this article, we'll create a simple Telegram bot for accepting payments in TON coins.
 
 ## 🦄 What it looks like
-At the end of the tutorial, you yourself will write a beautiful bot that will be able to accept payments for your product directly in tones.
+
+At the end of the tutorial, you will write a beautiful bot that will be able to accept payments for your product directly in TON.
+
 The bot will look like this:
 
 ![bot preview](/img/tutorials/js-bot-preview.jpg)

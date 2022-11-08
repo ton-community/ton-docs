@@ -24,22 +24,11 @@ There are several ways to identify the area where you can contribute to TON Docs
 
 You can use Gitpod (a free, online, VS code-like IDE) for contributing. It will launch a workspace with a single click and will automatically:
 
-* clone the docusaurus repo
-* install the dependencies
-* run `yarn start`
-
-So that you can start contributing right away.
-
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ton-community/ton-docs)
-
-:::tip
-
-If you're uploading a new document, it's best to keep it simple with a summary/intro and a link to your GitHub or documentation for more details.
 
 ### Code Conventions
 
 - **Most important**: look around. Match the overall style of the project. This includes formatting, naming files, naming objects in code, naming things in documentation, and so on.
-- "Attractive"
 - **For documentation**: When editing documentation, do not wrap lines at 80 characters; instead, configure your editor to soft-wrap.
 
 Don't worry too much about styles in general; the maintainers will help you fix them as they review your code.

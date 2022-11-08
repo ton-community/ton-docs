@@ -1,3 +1,7 @@
+---
+description: In this article, we'll guide you through the process of accepting payments in a Telegram bot.
+---
+
 # Storefront bot with payments in TON
 
 In this article, we'll guide you through the process of accepting payments in a Telegram bot.

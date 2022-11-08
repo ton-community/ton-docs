@@ -288,13 +288,15 @@ const sidebars = {
            type: 'category',
            label: 'Tutorials & Examples',
              items: [
+                'develop/dapps/tutorials/overview',
                  'develop/dapps/tutorials/jetton-minter',
             {
               type: 'category',
               label: 'Telegram bots',
               items: [
-                'develop/dapps/payment-processing/accept-payments-in-a-telegram-bot',
-                'develop/dapps/payment-processing/accept-payments-in-a-telegram-bot-2',
+                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
+                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
+                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js',
               ],
             }
            ],
@@ -377,7 +379,7 @@ const sidebars = {
       type: 'category',
       label: 'Low Level Internals',
       items: [
-        'develop/dapps/payment-processing/overview',
+        'develop/howto/overview',
         'develop/howto/fees_low_level',
         'develop/howto/step-by-step',
         'develop/howto/config-params',

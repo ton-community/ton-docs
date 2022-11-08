@@ -49,8 +49,16 @@ const config = {
 
           // payment processing
           {
-            to: '/develop/dapps/payment-processing/overview',
+            to: '/develop/howto/overview',
             from: '/develop/payment-processing/overview',
+          },
+          {
+            to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
+            from: '/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot',
+          },
+          {
+            to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
+            from: '/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot-2',
           },
         ],
       },
