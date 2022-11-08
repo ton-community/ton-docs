@@ -1,4 +1,4 @@
-# TonCenter API
+# TON Center API
 
 Standard HTTP JSON RPC similar to many blockchains.
 

@@ -7,14 +7,14 @@ In this article, we'll guide you through the process of accepting payments in a 
 In this article, you'll learn how to:
 
 - create a Telegram bot using Python + Aiogram
-- work with public TON api (toncenter)
+- work with the public TON API (TON Center)
 - work with SQlite database
 
-And finally: how to accept payments in a Telegram bot with knowledge from previous steps.
+And finally: how to accept payments in a Telegram bot with the knowledge from previous steps.
 
 ## 📚 Before we begin
 
-Make sure you have installed the latest version of Python, and have installed the following packages:
+Make sure you have installed the latest version of Python and have installed the following packages:
 
 - aiogram
 - requests
@@ -22,14 +22,14 @@ Make sure you have installed the latest version of Python, and have installed th
 
 ## 🚀 Let's get started!
 
-We'll folowing the order below:
+We'll follow the order below:
 
-1. Work with SQlite database
-2. Work with public TON api (toncenter)
+1. Work with the SQlite database
+2. Work with the public TON API (TON Center)
 3. Create a Telegram bot using Python + Aiogram
 4. Profit!
 
-Let's create four files in our project directory:
+Let's create the following four files in our project directory:
 
 ```
 telegram-bot
@@ -41,7 +41,7 @@ telegram-bot
 
 ## Config
 
-In `config.json` we'll store our bot token and our public TON api key:
+In `config.json` we'll store our bot token and our public TON API key.
 
 ```json
 {
@@ -54,7 +54,7 @@ In `config.json` we'll store our bot token and our public TON api key:
 }
 ```
 
-Also, in `config.json` we decide which network we'll use: `testnet` or `mainnet`.
+In `config.json` we decide which network we'll use: `testnet` or `mainnet`.
 
 ## Database
 
@@ -64,8 +64,8 @@ This example uses a local Sqlite database.
 
 Create `db.py`.
 
-To start working with the database, we need to import the sqlite3 module,
-and some modules for working with time:
+To start working with the database, we need to import the sqlite3 module 
+and some modules for working with time.
 
 ```python
 import sqlite3
@@ -73,11 +73,11 @@ import datetime
 import pytz
 ```
 
-- `sqlite3` - module for working with sqlite database
-- `datetime` - module for working with time
-- `pytz` - module for working with timezones
+- `sqlite3`—module for working with sqlite database
+- `datetime`—module for working with time
+- `pytz`—module for working with timezones
 
-Next, we need to create a connection to the database and a cursor for working with it:
+Next, we need to create a connection to the database and a cursor to work with it:
 
 ```python
 locCon = sqlite3.connect('local.db', check_same_thread=False)
@@ -86,9 +86,7 @@ cur = locCon.cursor()
 
 If the database does not exist, it will be created automatically.
 
-Now we can create a tables.
-
-We have 2 tables:
+Now we can create tables. We have two of them.
 
 #### Transactions:
 
@@ -102,10 +100,10 @@ CREATE TABLE transactions (
 );
 ```
 
-- `source` - payer's wallet address
-- `hash` - transaction hash
-- `value` - transaction value
-- `comment` - transaction comment
+- `source`—payer's wallet address
+- `hash`—transaction hash
+- `value`—transaction value
+- `comment`—transaction comment
 
 #### Users:
 
@@ -119,17 +117,17 @@ CREATE TABLE users (
 );
 ```
 
-- `id` - telegram user id
-- `username` - telegram username
-- `first_name` - telegram user first name
-- `wallet` - user wallet address
+- `id`—Telegram user ID
+- `username`—Telegram username
+- `first_name`—Telegram user's first name
+- `wallet`—user wallet address
 
-In the `users` table we store users :). Their telegram id, @username,
-first name and wallet. The wallet is added to the database on the first
+In the `users` table we store users :) Their Telegram ID, @username,
+first name, and wallet. The wallet is added to the database on the first
 successful payment.
 
 The `transactions` table stores verified transactions.
-To verify a transaction, we need hash, source, value and comment.
+To verify a transaction, we need the hash, source, value and comment.
 
 To create these tables, we need to run the following function:
 
@@ -155,16 +153,16 @@ locCon.commit()
 
 This code will create the tables if they are not already created.
 
-### Work with database
+### Work with the database
 
 Let's analyze the situation:
 The user made a transaction. How to verify it? How to make sure that the same transaction is not confirmed twice?
 
 There is a body_hash in transactions, with the help of which we can easily understand whether there is a transaction in the database or not.
 
-We add transactions to the database in which we are “sure”. And the `check_transaction` function checks whether the found transaction is in the database or not.
+We add transactions to the database in which we are sure. The `check_transaction` function checks whether the found transaction is in the database or not.
 
-`add_v_transaction` - add transaction to transactions table.
+`add_v_transaction` adds transaction to the transactions table.
 
 ```python
 def add_v_transaction(source, hash, value, comment):
@@ -182,7 +180,7 @@ def check_transaction(hash):
     return False
 ```
 
-`check_user` checks if the user is in the database and if not, adds it
+`check_user` checks if the user is in the database and adds him if not.
 
 ```python
 def check_user(user_id, username, first_name):
@@ -197,7 +195,7 @@ def check_user(user_id, username, first_name):
     return True
 ```
 
-The user can store a wallet in the table. It is added with the first successful purchase. The `v_wallet` function checks if the user has an associated wallet. If there is, then returns it. If not, then add.
+The user can store a wallet in the table. It is added with the first successful purchase. The `v_wallet` function checks if the user has an associated wallet. If there is, then returns it. If not, then adds.
 
 ```python
 def v_wallet(user_id, wallet):
@@ -222,7 +220,7 @@ def get_user_wallet(user_id):
 ```
 
 `get_user_payments` returns the user's payments list.
-This function cheks if the user has a wallet. If has, then returns payments list.
+This function checks if the user has a wallet. If he has, then it returns the payment list.
 
 ```python
 def get_user_payments(user_id):
@@ -256,20 +254,20 @@ _We have the ability to interact with the blockchain using third-party APIs prov
 
 In fact, what do we need to confirm that the user has transferred the required amount to us?
 
-We just need to look at the latest incoming transfers to our wallet and among them find a transaction from the right address, with the right amount (and possibly a unique comment).
-For all this, toncenter has a `getTransactions` method.
+We just need to look at the latest incoming transfers to our wallet and find among them a transaction from the right address with the right amount (and possibly a unique comment).
+For all of this, TON Center has a `getTransactions` method.
 
 ### getTransactions
 
-Applying it, by default, we will get the last 10 transactions. However, we can also indicate that we need more, but this will slightly increase the time of a response. And, most likely, you do not need so much.
+By default, if we apply it, we will get the last 10 transactions. However, we can also indicate that we need more, but this will slightly increase the time of a response. And, most likely, you do not need so much.
 
-If you want more, then each transaction has `lt` and `hash` . You can look at, for example, 30 transactions and if the right one was not found among them, then take `lt` and `hash` from the last one and add them to the request.
+If you want more, then each transaction has `lt` and `hash`. You can look at, for example, 30 transactions and if the right one was not found among them, then take `lt` and `hash` from the last one and add them to the request.
 
 So you get the next 30 transactions and so on.
 
 For example, there is a wallet in the test network `EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5`, it has some transactions:
 
-Using a [query](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5&limit=2&to_lt=0&archival=true) we will get the response, that contains 2 transactions (some of the information that is not needed now has been hidden, you can see the full answer at the link above):
+Using a [query](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5&limit=2&to_lt=0&archival=true) we will get the response that contains two transactions (some of the information that is not needed now has been hidden, you can see the full answer at the link above).
 
 ```json
 {
@@ -311,7 +309,7 @@ Using a [query](https://testnet.toncenter.com/api/v2/getTransactions?address=EQA
 }
 ```
 
-We have received the last two transactions of this address. When adding `lt` and `hash`: to the query, we will again receive two transactions, however, the second one will become the next one in a row. That is - we will get the second and third transactions of this address:
+We have received the last two transactions from this address. When adding `lt` and `hash` to the query, we will again receive two transactions. However, the second one will become the next one in a row. That is, we will get the second and third transactions for this address.
 
 ```json
 {
@@ -349,7 +347,7 @@ We have received the last two transactions of this address. When adding `lt` and
 }
 ```
 
-The request will look like this - [link](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5&limit=2&lt=1943166000003&hash=hxIQqn7lYD%2Fc%2FfNS7W%2FiVsg2kx0p%2FkNIGF6Ld0QEIxk%3D&to_lt=0&archival=true)
+The request will look like [this.](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5&limit=2&lt=1943166000003&hash=hxIQqn7lYD%2Fc%2FfNS7W%2FiVsg2kx0p%2FkNIGF6Ld0QEIxk%3D&to_lt=0&archival=true)
 
 We will also need a method `detectAddress`.
 
@@ -378,15 +376,15 @@ This method returns us the “right” address:
 
 We need `b64url`.
 
-Also, this method helps us to check the correctness of the address sent by the user.
+This method allows us to validate the user's address.
 
 For the most part, that's all we need.
 
 ### API requests and what to do with them
 
-Let's go back to the IDE. Create file `api.py`.
+Let's go back to the IDE. Create the file `api.py`.
 
-Import the necessary libraries:
+Import the necessary libraries.
 
 ```python
 import requests
@@ -396,11 +394,11 @@ import json
 import db
 ```
 
-- `requests` - to make requests to the API
-- `json` - to work with json
-- `db` - to work with our sqlite database
+- `requests`—to make requests to the API
+- `json`—to work with json
+- `db`—to work with our sqlite database
 
-Let's create two variables for storing start of the requests:
+Let's create two variables for storing the start of the requests.
 
 ```python
 # This is the beginning of our requests
@@ -408,7 +406,7 @@ MAINNET_API_BASE = "https://toncenter.com/api/v2/"
 TESTNET_API_BASE = "https://testnet.toncenter.com/api/v2/"
 ```
 
-Get all api tokens and wallets from the config.json file:
+Get all API tokens and wallets from the config.json file.
 
 ```python
 # Find out which network we are working on
@@ -421,7 +419,7 @@ with open('config.json', 'r') as f:
     WORK_MODE = config_json['WORK_MODE']
 ```
 
-Depending on the network, we take the necessary data:
+Depending on the network, we take the necessary data.
 
 ```python
 if WORK_MODE == "mainnet":
@@ -434,7 +432,7 @@ else:
     WALLET = TESTNET_WALLET
 ```
 
-Our first request function `detectAddress`:
+Our first request function `detectAddress`.
 
 ```python
 def detect_address(address):
@@ -447,11 +445,11 @@ def detect_address(address):
         return False
 ```
 
-At the input, we have the estimated address, and at the output, either the “correct” address necessary for us for further work, or False.
+At the input, we have the estimated address, and at the output, we have either the "correct" address necessary for us for further work or False.
 
 You may notice that an API key has appeared at the end of the request. It is needed to remove the limit on the number of requests to the API. Without it, we are limited to one request per second.
 
-Next function for `getTransactions`:
+Heree is the next function for `getTransactions`:
 
 ```python
 def get_address_transactions():
@@ -461,11 +459,11 @@ def get_address_transactions():
     return response['result']
 ```
 
-This function returns the last 30 transactions for our `WALLET`.
+This function returns the last 30 transactions to our `WALLET`.
 
-Here you can see `archival=true`, it is needed so that we take transactions only from a node with a complete history of the blockchain.
+Here you can see `archival=true`. It is needed so that we only take transactions from a node with a complete history of the blockchain.
 
-At the output, we get a list of transactions - [{0},{1},{…},{29}]. List of dictionaries in short.
+At the output, we get a list of transactions—[{0},{1},{…},{29}]. List of dictionaries in short.
 
 And finally the last function:
 
@@ -498,11 +496,11 @@ def find_transaction(user_wallet, value, comment):
     return False
 ```
 
-At the input is the “correct” wallet address, amount and comment. The output is True if the desired incoming transaction is found and False if not.
+At the input are the “correct” wallet address, amount and comment. If the intended incoming transaction is found, the output is True; otherwise, it is False.
 
 ## Telegram bot
 
-First, let's create the basis for the bot.
+First, let's create the basis for a bot.
 
 ### Imports
 
@@ -514,9 +512,9 @@ From `aiogram` we need `Bot`, `Dispatcher`, `types` and `executor`.
 from aiogram import Bot, Dispatcher, executor, types
 ```
 
-`MemoryStorage` is needed for temporary storage of information.
+`MemoryStorage` is needed for the temporary storage of information.
 
-`FSMContext`, `State` and `StatesGroup` are needed for working with the state machine.
+`FSMContext`, `State`, and `StatesGroup` are needed for working with the state machine.
 
 ```python
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
@@ -531,7 +529,7 @@ import json
 import logging
 ```
 
-`api` and `db` are our own files, which we will fill later.
+`api` and `db` are our own files which we will fill in later.
 
 ```python
 import db
@@ -540,7 +538,7 @@ import api
 
 ### Config setup
 
-For convenience, I suggest storing data such as `BOT_TOKEN` and your wallets for receiving payments in the separate file `config.json`:
+It is recommended that you store data such as `BOT_TOKEN` and your wallets for receiving payments in a separate file called `config.json` for convenience.
 
 ```json
 {
@@ -555,24 +553,24 @@ For convenience, I suggest storing data such as `BOT_TOKEN` and your wallets for
 
 #### Bot token
 
-`BOT_TOKEN` - your Telegram bot token from [@BotFather](https://t.me/BotFather)
+`BOT_TOKEN` is your Telegram bot token from [@BotFather](https://t.me/BotFather)
 
 #### Working mode
 
-In the `WORK_MODE` key, we will define the bot's mode of operation - in the test or main network: `testnet` or `mainnet`, respectively.
+In the `WORK_MODE` key, we will define the bot's mode of operation—in the test or main network; `testnet` or `mainnet` respectively.
 
 #### API tokens
 
-Api tokens for `*_API_TOKEN` can be obtained in the [toncenter](https://toncenter.com/) bots:
+Api tokens for `*_API_TOKEN` can be obtained in the [TON Center](https://toncenter.com/) bots:
 
 - for mainnet — [@tonapibot](https://t.me/tonapibot)
 - for testnet — [@tontestnetapibot](https://t.me/tontestnetapibot)
 
 #### Connect config to our bot
 
-Next, we finish setting up the bot:
+Next, we finish setting up the bot.
 
-Get the token for the bot to work, from the `config.json` :
+Get the token for the bot to work from `config.json` :
 
 ```python
 with open('config.json', 'r') as f:
@@ -601,7 +599,7 @@ dp = Dispatcher(bot, storage=MemoryStorage())
 
 ### States
 
-We need "States" to split the bot workflow into stages. We can specialize each stage for a specific task.
+We need States to split the bot workflow into stages. We can specialize each stage for a specific task.
 
 ```python
 class DataInput (StatesGroup):
@@ -611,32 +609,30 @@ class DataInput (StatesGroup):
     PayState = State()
 ```
 
-I won't go deeper here.
-
-For details and examples, I suggest looking into the [Aiogram documentation](https://docs.aiogram.dev/en/latest/).
+For details and examples see the [Aiogram documentation](https://docs.aiogram.dev/en/latest/).
 
 ### Message handlers
 
-So, we have finally come to the part where we will write the bot interaction logic.
+This is the part where we will write the bot interaction logic.
 
 We'll be using two types of handlers:
 
 - `message_handler` is used to handle messages from the user.
 - `callback_query_handler` is used to handle callbacks from inline keyboards.
 
-So if we want to handle a message from the user, we will use `message_handler` by placing the `@dp.message_handler` decorator above the function. In this case, the function will be called when the user sends a message to the bot.
+If we want to handle a message from the user, we will use `message_handler` by placing the `@dp.message_handler` decorator above the function. In this case, the function will be called when the user sends a message to the bot.
 
-In the decorator, we can specify the conditions under which the function will be called. For example, if we want the function to be called only when the user sends a message with the text `/start`, then we will write:
+In the decorator, we can specify the conditions under which the function will be called. For example, if we want the function to be called only when the user sends a message with the text `/start`, then we will write the following:
 
 ```
 @dp.message_handler(commands=['start'])
 ```
 
-Handlers need to be assigned to a async function. In this case, we will use the `async def` syntax. The `async def` syntax is used to define a function that will be called asynchronously.
+Handlers need to be assigned to an async function. In this case, we will use the `async def` syntax. The `async def` syntax is used to define the function that will be called asynchronously.
 
 #### /start
 
-So, let's start with the `/start` command handler:
+Let's start with the `/start` command handler.
 
 ```python
 @dp.message_handler(commands=['start'], state='*')
@@ -655,13 +651,13 @@ async def cmd_start(message: types.Message):
     await DataInput.firstState.set()
 ```
 
-in decorator of this handler we see `state='*'`. This means that this handler will be called regardless of the state of the bot. If we want the handler to be called only when the bot is in a specific state, we will write `state=DataInput.firstState`. In this case, the handler will be called only when the bot is in the `firstState` state.
+In the decorator of this handler we see `state='*'`. This means that this handler will be called regardless of the state of the bot. If we want the handler to be called only when the bot is in a specific state, we will write `state=DataInput.firstState`. In this case, the handler will be called only when the bot is in the `firstState` state.
 
-After user sends `/start` command, the bot will check if the user is in the database, using `db.check_user` function. If not, it will add him. Also, this function will return bool value and we can use it to address the user differently. After that the bot will set the state to `firstState`.
+After user sends the `/start` command, the bot will check if the user is in the database using the `db.check_user` function. If not, it will add him. This function will also return the bool value and we can use it to address the user differently. After that, the bot will set the state to `firstState`.
 
 #### /cancel
 
-Next is the /cancel command handler. It needed to return to the `firstState` state.
+Next is the /cancel command handler. It is needed to return to the `firstState` state.
 
 ```python
 @dp.message_handler(commands=['cancel'], state="*")
@@ -673,7 +669,7 @@ async def cmd_cancel(message: types.Message):
 
 #### /buy
 
-And, of course, the `/buy` command handler. In this example we will sell air of different types. So, we will use reply keyboard to choose the type of air.
+And, of course, the `/buy` command handler. In this example we will sell different types of air. We will use the reply keyboard to choose the type of air.
 
 ```python
 # /buy command handler
@@ -690,11 +686,11 @@ async def cmd_buy(message: types.Message):
     await DataInput.secondState.set()
 ```
 
-So when user sends `/buy` command, the bot will send him a reply keyboard with air types. After user chooses the type of air, the bot will set the state to `secondState`.
+So, when a user sends the `/buy` command, the bot sends him a reply keyboard with air types. After the user chooses the type of air, the bot will set the state to `secondState`.
 
-This handler will work only when `secondState` is set, and will be waiting for a message from the user, with air type. In this case, we need to store air type, that user chose, so we pass FSMContext as an argument to the function.
+This handler will work only when `secondState` is set and will be waiting for a message from the user with the air type.  In this case, we need to store the air type that the user choses, so we pass FSMContext as an argument to the function.
 
-FSMContext is used to store data in the bot's memory. We can store any data in it, but this memory is not persistent, so if the bot is restarted, the data will be lost. But it's good to store temporary data in it.
+FSMContext is used to store data in the bot's memory. We can store any data in it but this memory is not persistent, so if the bot is restarted, the data will be lost. But it's good to store temporary data in it.
 
 ```python
 # handle air type
@@ -716,33 +712,33 @@ async def air_type(message: types.Message, state: FSMContext):
     await message.answer(f"Send your wallet address")
 ```
 
-We use...
+Use...
 
 ```python
 await state.update_data(air_type="Just pure 🌫")
 ```
 
-...to store air type in FSMContext. After that we set the state to `WalletState` and ask the user to send his wallet address.
+...to store the air type in FSMContext. After that, we set the state to `WalletState` and ask the user to send his wallet address.
 
-This handler will work only when `WalletState` is set, and will be waiting for a message from the user, with wallet address.
+This handler will work only when `WalletState` is set and will be waiting for a message from the user with the wallet address.
 
-So, next handler seems to be very complicated, but it's not. Firstly we check if the message is a valid wallet address using `len(message.text) == 48` because wallet address is 48 characters long. After that we use `api.detect_address` function to check if the address is valid. As you remember from API part, this fucntion also returns "Correct" address, that will be stored in the database.
+The next handler seems to be very complicated but it's not. First, we check if the message is a valid wallet address using `len(message.text) == 48` because wallet address is 48 characters long. After that, we use the `api.detect_address` function to check if the address is valid. As you remember from the API part, this function also returns "Correct" address which will be stored in the database.
 
-After that, we get air type from FSMContext using `await state.get_data()` and store it in `user_data` variable.
+After that, we get the air type from FSMContext using `await state.get_data()` and store it in the `user_data` variable.
 
-So, we have all the data required for the payment process. We just need to generate a payment link and send it to the user. So, let's use inline keyboard.
+Now we have all the data required for the payment process. We just need to generate a payment link and send it to the user. Let's use the inline keyboard.
 
-I will create 3 buttons for payment:
+Three buttons will be created for payment in this example:
 
-- for official Ton Wallet
-- for TonHub
-- for TonKeeper
+- for the official TON Wallet
+- for Tonhub
+- for Tonkeeper
 
-The advantage of special buttons for wallets is that if the user does not yet have a wallet, then the site will prompt him to install it
+The advantage of special buttons for wallets is that if the user does not yet have a wallet, then the site will prompt him to install one.
 
-You may use any you want.
+You are free to use whatever you want.
 
-And we need button, that user will press after transaction, so we can chek if the payment was successful.
+And we need a button that the user will press after transaction so we can check if the payment was successful.
 
 ```python
 @dp.message_handler(state=DataInput.WalletState)
@@ -780,7 +776,7 @@ async def user_wallet(message: types.Message, state: FSMContext):
 
 #### /me
 
-One last message handler, that we need is for `/me` command. It will show user his payments.
+One last message handler that we need is for the `/me` command. It shows the user's payments.
 
 ```python
 # /me command handler
@@ -799,9 +795,9 @@ async def cmd_me(message: types.Message):
 
 ### Callback handlers
 
-In buttons, we can set callback data, that will be sent to the bot when user presses the button. We set callback data to "check" in the button, that user will press after transaction. So, we need to handle this callback.
+We can set callback data in buttons which will be sent to the bot when the user presses the button. In the button that the user will press after the transaction, we set callback data to "check." As a result, we need to handle this callback.
 
-Callback handlers are very similar to message handlers, but they have `types.CallbackQuery` as an argument instead of `message`. Function decorator is also different.
+Callback handlers are very similar to message handlers but they have `types.CallbackQuery` as an argument instead of `message`. Function decorator is also different.
 
 ```python
 @dp.callback_query_handler(lambda call: call.data == "check", state=DataInput.PayState)
@@ -821,7 +817,7 @@ async def check_transaction(call: types.CallbackQuery, state: FSMContext):
         await DataInput.firstState.set()
 ```
 
-In this handler we get user data from FSMContext, and use `api.find_transaction` function to check if the transaction was successful. If it was, we store wallet address in the database, and send notification to the user. After that, user can find his transactions using `/me` command.
+In this handler we get user data from FSMContext and use the `api.find_transaction` function to check if the transaction was successful. If it was, we store the wallet address in the database and send a notification to the user. After that, the user can find his transactions using the `/me` command.
 
 ### Last part of main.py
 
@@ -847,10 +843,10 @@ We finally did it! You should now have a working bot. You can test it!
 
 Steps to run the bot:
 
-1. Fill in the `config.json` file
-2. Run `main.py`
+1. Fill in the `config.json` file.
+2. Run `main.py`.
 
-All files must be in the same folder. To start the bot, you need to run `main.py` file. You can do it in your IDE, or in terminal like this:
+All files must be in the same folder. To start the bot, you need to run the `main.py` file. You can do it in your IDE or in the terminal like this:
 
 ```
 python main.py

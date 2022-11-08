@@ -1,10 +1,10 @@
-# Native Token: Toncoin
+# Native token: Toncoin
 
 The native cryptocurrency of the TON blockchain is **Toncoin**.
 
-Transaction fees, gas payments (i.e., smart contract message processing fees) and persistent storage payments are collected in Toncoins.
+Transaction fees, gas payments (i.e., smart contract message processing fees), and persistent storage payments are collected in Toncoins.
 
-Toncoin is used to make deposits required to become a blockchain validator.
+Toncoin is used to make the deposits required to become a blockchain validator.
 
 The process of making Toncoin payments is described in the [corresponding section](/develop/dapps/payment-processing/overview).
 
@@ -26,4 +26,4 @@ Thus, extra currencies are best used for well-known decentralized currencies (fo
 
 [Jettons](/develop/dapps/defi/tokens#jettons) are suitable for other tasks.
 
-At the moment, no extra currency has been created in the TON blockchain. The TON blockchain has full support for extra currencies by accounts and messages, but the minter system contract for their creation has not yet been created. 
+At the moment, no extra currency has been created on the TON blockchain. The TON blockchain has full support for extra currencies by accounts and messages, but the minter system contract for their creation has not yet been created. 

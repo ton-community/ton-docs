@@ -1,0 +1,5 @@
+{
+    "workbench.editor.preferHistoryBasedLanguageDetection": true,
+    "workbench.editor.languageDetection": true,
+    "workbench.editor.historyBasedLanguageDetection": true
+}

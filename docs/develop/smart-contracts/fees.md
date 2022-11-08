@@ -153,21 +153,21 @@ function storageFeeCalculator() {
 
 Here are the most common question of every user who come to TON:
 
-### Fees for sending 1-1000 TON?
+### Fees for sending TON?
 
-TBD.
+Average fee for sending any amount of TON is 0.0055 TON
 
-### Fees for sending 1-1000 Jettons?
+### Fees for sending Jettons?
 
-TBD.
+Average fee for sending any amount of custom Jettons is 0.037 TON
 
-### Cost of minting 1-1000 NFTs?
+### Cost of minting NFTs?
 
-TBD.
+Average fee for minting 1 NFT is 0.07 TON
 
 ### Cost of saving data in TON?
 
-TBD.
+Saving 1MB of data for one year on TON will cost you 4.03 TON. Note that you don't usually need to store big amounts of data on-chain. If you need decentralized storage, have a look at TON Storage.
 
 ### How to calculate fees in FunC?
 
