@@ -12,10 +12,10 @@ Let's consider one smart contract.
 In TON, it is a _thing_ with properties like `address`, `code`, `data`, `balance` and others. In other words, it is an object which has some _storage_ and _behavior_.
 That behavior has the following pattern:
 * something happens (the most common situation is that a contract gets a message)
-* the contract handles that event according to its own properties by executing its `code` in TON Virtual Machine.
-* the contract modifies its own properties (`code`, `data` and others)
-* the contract optionally generates outgoing messages
-* the contract goes into standby mode until the next event occurs
+* contract handles that event according to its own properties by executing its `code` in TON Virtual Machine.
+* contract modifies its own properties (`code`, `data` and others)
+* contract optionally generates outgoing messages
+* contract goes into standby mode until the next event occurs
 
 A combination of these steps is called a **transaction**. It is important that events are handled one by one, thus _transactions_ are strictly ordered and cannot interrupt each other.
 
