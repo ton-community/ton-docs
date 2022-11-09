@@ -139,7 +139,7 @@ The **Backus–Naur form** can be found at [TlbParser.bnf](https://github.com/an
 
 TL-B is also supported by [intellij-ton plugin](https://github.com/andreypfau/intellij-ton).
 
-Docs on TL-B can be found in the [TVM whitepaper](https://ton.org/tvm.pdf) and in a concise (they have been collected in one place) format [here](https://github.com/tonstack/TL-B-docs).
+Docs on TL-B can be found in the [TVM Whitepaper](https://ton.org/tvm.pdf) and in a concise (they have been collected in one place) format [here](https://github.com/tonstack/TL-B-docs).
 ## Generator of serializators and deserializators
 An example of a generator used by a TON node can be found in the [Ton node sources](https://github.com/ton-blockchain/ton/blob/master/crypto/tl/tlbc.cpp).
 

@@ -15,13 +15,13 @@ such byte strings is determined by the preimage of the corresponding key; it
 is usually known both by the node that looks up the key and by the node
 that stores the key.
 
-In the simplest case, the key represents an ADNL address of some node and the value can be its IP address and port.
+In the simplest case, the key represents an ADNL Address of some node and the value can be its IP address and port.
 
 The key-value mapping of the TON DHT is kept on the DHT nodes.
 
 ## DHT nodes
 
-Each DHT node has a 256-bit DHT address. Unlike an ADNL address, a DHT address should not change too often, otherwise other nodes would be unable to locate the keys they are looking for.
+Each DHT Node has a 256-bit DHT address. Unlike an ADNL Address, a DHT Address should not change too often, otherwise other nodes would be unable to locate the keys they are looking for.
 
 It is expected that the value of key `K` will be stored on `S` Kademlia-nearest nodes to `K`.
 
@@ -40,7 +40,7 @@ bucket will contain information about some known nodes (a fixed number
 of the “best” nodes and maybe some extra candidates) that lie at a Kademlia
 distance from `2^i` to `2^(i+1) − 1` from the node’s address `a`.
 
-This information includes their DHT addresses, IP addresses and UDP ports and
+This information includes their DHT Addresses, IP Addresses and UDP Ports and
 some availability information such as the time and the delay of the last ping.
 
 When a Kademlia node learns about any other Kademlia node as a result
@@ -61,7 +61,7 @@ In other cases, the old value somehow affects the new value. For example, it
 can contain a sequence number and the old value is overwritten only if the
 new sequence number is larger (to prevent replay attacks).
 
-TON DHT is not only used to store the IP addresses of ADNL nodes, but is also used for other purposes - it can store a list of addresses of the nodes which are storing a specific torrent of TON Storage, a list of addresses of nodes included in an overlay subnetwork, ADNL addresses of TON services or ADNL addresses of accounts of TON blockchain and so on.
+TON DHT is not only used to store the IP Addresses of ADNL Nodes, but is also used for other purposes - it can store a list of addresses of the nodes which are storing a specific torrent of TON Storage, a list of addresses of nodes included in an overlay subnetwork, ADNL Addresses of TON services or ADNL Addresses of accounts of TON Blockchain and so on.
 
 :::info
 Read more about TON DHT in Chapter 3.2. of the [TON Whitepaper](https://ton.org/docs/ton.pdf).
