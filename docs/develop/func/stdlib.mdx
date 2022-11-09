@@ -214,33 +214,32 @@ Computes the hash of `slice s` and returns it as a 256-bit unsigned integer `x`.
 ```cpp
 int string_hash(slice s) asm "SHA256U";
 ```
-Computes sha256 of the data bits of `slice s`. If the bit length of `s` is not divisible by eight, throws a cell underflow exception. The hash value is returned as a 256-bit unsigned integer `x`.
+Computes sha256 of the data bits of `slice s`. If the bit length of `s` is not divisible by eight, it throws a cell underflow exception. The hash value is returned as a 256-bit unsigned integer `x`.
 
 ### Signature checks
 #### check_signature
 ```cpp
 int check_signature(int hash, slice signature, int public_key) asm "CHKSIGNU";
 ```
-Checks the Ed25519-`signature` of a `hash` (a 256-bit unsigned integer, usually computed as the hash of some data) using `public_key` (also represented by a 256-bit unsigned integer). The signature must contain at least 512 data bits; only the first 512 bits are used. The result is −1 if the signature
-is valid, 0 otherwise. Note that `CHKSIGNU` creates a 256-bit slice with the hash and calls `CHKSIGNS`. That is, if `hash` is computed as the hash of some data, these data are hashed _twice_, the second hashing occurring inside `CHKSIGNS`.
+Checks the Ed25519 `signature` of `hash` (a 256-bit unsigned integer, usually computed as the hash of some data) using `public_key` (also represented by a 256-bit unsigned integer). The signature must contain at least 512 data bits; only the first 512 bits are used. If the signature is valid, the result is 1; otherwise, it is 0. Note that `CHKSIGNU` creates a 256-bit slice with the hash and calls `CHKSIGNS`. That is, if `hash` is computed as the hash of some data, this data is hashed _twice_, the second hashing occurring inside `CHKSIGNS`.
 #### check_data_signature
 ```cpp
 int check_data_signature(slice data, slice signature, int public_key) asm "CHKSIGNS";
 ```
-Checks whether `signature` is a valid Ed25519-signature of the data portion of `slice data` using `public_key`, similarly to `check_signature`. If the bit length of `data` is not divisible by eight, throws a cell underflow exception. The verification of Ed25519 signatures is the standard one, with sha256 used to reduce `data` to the 256-bit number that is actually signed.
+Checks whether `signature` is a valid Ed25519 signature of the data portion of `slice data` using `public_key`, similarly to `check_signature`. If the bit length of `data` is not divisible by eight, it throws a cell underflow exception. The verification of Ed25519 signatures is a standard one, with sha256 used to reduce `data` to the 256-bit number that is actually signed.
 
 ### Computation of boc size
-The primitives below may be useful for computing storage fees of user-provided data.
+The primitives below may be useful for computing storage fees for user-provided data.
 #### compute_data_size?
 ```cpp
 (int, int, int, int) compute_data_size?(cell c, int max_cells) asm "CDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT";
 ```
-Returns `(x, y, z, -1)` or `(null, null, null, 0)`. Recursively computes the count of distinct cells `x`, data bits `y`, and cell references `z` in the DAG rooted at `cell c`, effectively returning the total storage used by this DAG taking into account the identification of equal cells. The values of `x`, `y`, and `z` are computed by a depth-first traversal of this DAG, with a hash table of visited cell hashes used to prevent visits of already-visited cells. The total count of visited cells `x` cannot exceed non-negative `max_cells`; otherwise the computation is aborted before visiting the `(max_cells + 1)`-st cell and a zero flag is returned to indicate failure. If `c` is `null`, returns `x = y = z = 0`.
+Returns `(x, y, z, -1)` or `(null, null, null, 0)`. Recursively computes the count of distinct cells `x`, data bits `y`, and cell references `z` in the DAG rooted at `cell c`, effectively returning the total storage used by this DAG taking into account the identification of equal cells. The values of `x`, `y`, and `z` are computed by a depth-first traversal of this DAG with a hash table of visited cell hashes used to prevent visits of already-visited cells. The total count of visited cells `x` cannot exceed non-negative `max_cells`; otherwise, the computation is aborted before visiting the `(max_cells + 1)`-st cell and a zero flag is returned to indicate failure. If `c` is `null`, it returns `x = y = z = 0`.
 #### slice_compute_data_size?
 ```cpp
 (int, int, int, int) slice_compute_data_size?(slice s, int max_cells) asm "SDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT";
 ```
-Similar to `compute_data_size?`, but accepting a `slice s` instead of a `cell`. The returned value of `x` does not take into account the cell that contains the slice `s` itself; however, the data bits and the cell references of `s` are accounted for in `y` and `z`.
+Similar to `compute_data_size?` but accepting `slice s` instead of `cell`. The returned value of `x` does not take into account the cell that contains the slice `s` itself; however, the data bits and the cell references of `s` are accounted for in `y` and `z`.
 #### compute_data_size
 ```cpp
 (int, int, int) compute_data_size(cell c, int max_cells) impure asm "CDATASIZE";
@@ -261,7 +260,7 @@ Returns the persistent contract storage cell. It can be parsed or modified with 
 ```cpp
 () set_data(cell c) impure asm "c4 POP";
 ```
-Sets cell `c` as persistent contract data. You can update persistent contract storage with this primitive.
+Sets cell `c` as persistent contract data. You can update the persistent contract storage with this primitive.
 ### Continuation primitives
 #### get_c3
 ```cpp
@@ -272,26 +271,26 @@ Usually `c3` has a continuation initialized by the whole code of the contract. I
 ```cpp
 () set_c3(cont c) impure asm "c3 POP";
 ```
-Updates the current value of `c3`. Usually, it is used for updating smart contract code in run-time. Note that after execution of this primitive the current code (and the stack of recursive function calls) won't change, but any other function call will use a function from the new code.
+Updates the current value of `c3`. Usually, it is used for updating smart contract code in runtime. Note that after execution of this primitive, the current code (and the stack of recursive function calls) won't change, but any other function call will use a function from the new code.
 #### bless
 ```cpp
 cont bless(slice s) impure asm "BLESS";
 ```
-Transforms a `slice s` into a simple ordinary continuation `c`, with `c.code = s` and an empty stack and savelist.
+Transforms `slice s` into a simple ordinary continuation `c` with `c.code = s`, and an empty stack, and savelist.
 
 ### Gas related primitives
 #### accept_message
 ```cpp
 () accept_message() impure asm "ACCEPT";
 ```
-Sets current gas limit `gl` to its maximal allowed value `gm`, and resets the gas credit `gc` to zero, decreasing the value of `gr` by `gc` in the process. In other words, the current smart contract agrees to buy some gas to finish the current transaction. This action is required to process external messages, which bring no value (hence no gas) with themselves.
+Sets the current gas limit `gl` to its maximum allowed value `gm` and resets the gas credit `gc` to zero, decreasing the value of `gr` by `gc` in the process. In other words, the current smart contract agrees to buy some gas to finish the current transaction. This action is required to process external messages that carry no value (hence no gas).
 
 For more details check [accept_message effects](/develop/smart-contracts/guidelines/accept)
 #### set_gas_limit
 ```cpp
 () set_gas_limit(int limit) impure asm "SETGASLIMIT";
 ```
-Sets current gas limit `gl` to the minimum of `limit` and `gm`, and resets the gas credit `gc` to zero. If the gas consumed so far (including the present instruction) exceeds the resulting value of `gl`, an (unhandled) out of gas exception is thrown before setting new gas limits. Notice that `set_gas_limit` with an argument `limit ≥ 2^63 − 1` is equivalent to `accept_message`.
+Sets the current gas limit `gl` to the minimum of `limit` and `gm`, and resets the gas credit `gc` to zero. At that point, if the amount of consumed gas (including the present instruction) exceeds the resulting value of `gl`, an (unhandled) out of gas exception is thrown before setting new gas limits. Notice that `set_gas_limit` with an argument `limit ≥ 2^63 − 1` is equivalent to `accept_message`.
 
 For more details check [accept_message effects](/develop/smart-contracts/guidelines/accept)
 #### commit
