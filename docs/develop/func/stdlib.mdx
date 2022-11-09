@@ -302,31 +302,31 @@ Commits the current state of registers `c4` (“persistent data”) and `c5` (�
 ```cpp
 () buy_gas(int gram) impure asm "BUYGAS";
 ```
-Computes the amount of gas that can be bought for `gram` nanotoncoins, and sets `gl` accordingly in the same way as `set_gas_limit`.
+Computes the amount of gas that can be bought for `gram` nanotoncoins and sets `gl` accordingly in the same way as `set_gas_limit`.
 
 ### Actions primitives
 #### raw_reserve
 ```cpp
 () raw_reserve(int amount, int mode) impure asm "RAWRESERVE";
 ```
-Creates an output action which would reserve exactly `amount` nanotoncoins (if `mode = 0`), at most `amount` nanotoncoins (if `mode = 2`), or all but `amount` nanotoncoins (if `mode = 1` or `mode = 3`), from the remaining balance of the account. It is roughly equivalent to creating an outbound message carrying `amount` nanotoncoins (or `b − amount` nanotoncoins, where `b` is the remaining balance) to oneself, so that the subsequent output actions would not be able to spend more money than the remainder. Bit +2 in `mode` means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved. Bit +8 in `mode` means `amount <- -amount` before performing any further actions. Bit +4 in `mode` means that `amount` is increased by the original balance of the current account (before the compute phase), including all extra currencies, before performing any other checks and actions. Currently, `amount` must be a non-negative integer, and `mode` must be in the range `0..15`.
+Creates an output action which would reserve exactly `amount` nanotoncoins (if `mode = 0`), at most `amount` nanotoncoins (if `mode = 2`), or all but `amount` nanotoncoins (if `mode = 1` or `mode = 3`) from the remaining balance of the account. It is roughly equivalent to creating an outbound message carrying `amount` nanotoncoins (or `b − amount` nanotoncoins, where `b` is the remaining balance) to oneself, so that the subsequent output actions would not be able to spend more money than the remainder. Bit +2 in `mode` means that the external action does not fail if the specified amount cannot be reserved; instead, all the remaining balance is reserved. Bit +8 in `mode` means `amount <- -amount` before performing any further actions. Bit +4 in `mode` means that `amount` is increased by the original balance of the current account (before the compute phase), including all extra currencies before performing any other checks and actions. Currently, `amount` must be a non-negative integer, and `mode` must be in the range `0..15`.
 #### raw_reserve_extra
 ```cpp
 () raw_reserve_extra(int amount, cell extra_amount, int mode) impure asm "RAWRESERVEX";
 ```
-Similar to `raw_reserve`, but also accepts a dictionary `extra_amount` (represented by a `cell` or `null`) with extra currencies. In this way currencies other than TonCoin can be reserved.
+Similar to `raw_reserve` but also accepts a dictionary `extra_amount` (represented by `cell` or `null`) with extra currencies. In this way, currencies other than TonCoin can be reserved.
 #### send_raw_message
 ```cpp
 () send_raw_message(cell msg, int mode) impure asm "SENDRAWMSG";
 ```
-Sends a raw message contained in `msg`, which should contain a correctly serialized object Message X, with the only exception that the source address is allowed to have dummy value `addr_none` (to be automatically replaced with the current smart contract address), and `ihr_fee`, `fwd_fee`, `created_lt` and `created_at` fields can have arbitrary values (to be rewritten with correct values during the action phase of the current transaction). Integer parameter `mode` contains the flags. Currently `mode = 0` is used for ordinary messages;
+Sends a raw message contained in `msg`, which should contain a correctly serialized object Message X, with the only exception that the source address is allowed to have a dummy value `addr_none` (to be automatically replaced with the current smart contract address), and `ihr_fee`, `fwd_fee`, `created_lt` and `created_at` fields can have arbitrary values (to be rewritten with correct values during the action phase of the current transaction). The integer parameter `mode` contains the flags. Currently, `mode = 0` is used for ordinary messages;
 `mode = 128` is used for messages that are to carry all the remaining balance of the current smart contract (instead of the value originally indicated in the message); `mode = 64` is used for messages that carry all the remaining value of the inbound message in addition to the value initially indicated in the new message (if bit 0 is not set, the gas fees are deducted from this amount); `mode' = mode + 1` means that the sender wants to pay transfer fees separately; `mode' = mode + 2` means that any errors arising while processing this message during the action phase should be ignored. Finally, `mode' = mode + 32` means that the current account must be destroyed if its resulting balance is zero. This flag is usually employed together with +128.
 
 #### set_code
 ```cpp
 () set_code(cell new_code) impure asm "SETCODE";
 ```
-Creates an output action that would change this smart contract code to that given by cell `new_code`. Notice that this change will take effect only after the successful termination of the current run of the smart contract (cf. [set_c3](/develop/func/stdlib#set_c3)).
+Creates an output action that would change this smart contract code to that given by cell `new_code`. Notice that this change will take effect only after the successful termination of the current run of the smart contract. (Cf. [set_c3](/develop/func/stdlib#set_c3.))
 
 ### Random number generator primitives
 The pseudo-random number generator uses the random seed, an unsigned 256-bit Integer, and (sometimes) other data kept in [c7](/learn/tvm-instructions/tvm_overview#control-registers). The initial value of the random seed before a smart contract is executed in TON Blockchain is a hash of the smart contract address and the global block random seed. If there are several runs of the same smart contract inside a block, then all of these runs will have the same random seed. This can be fixed, for example, by running `randomize_lt` before using the pseudo-random number generator for the first time.
@@ -334,24 +334,24 @@ The pseudo-random number generator uses the random seed, an unsigned 256-bit Int
 ```cpp
 int random() impure asm "RANDU256";
 ```
-Generates a new pseudo-random unsigned 256-bit integer `x`. The algorithm is as follows: if `r` is the old value of the random seed, considered as a 32-byte array (by constructing the big-endian representation of an unsigned 256-bit integer), then its `sha512(r)` is computed; the first 32 bytes of this hash are stored as the new value `r'` of the random seed, and the remaining 32 bytes are returned as the next random value `x`.
+Generates a new pseudo-random unsigned 256-bit integer `x`. The algorithm is as follows: if `r` is the old value of the random seed considered a 32-byte array (by constructing the big-endian representation of an unsigned 256-bit integer), then its `sha512(r)` is computed; the first 32 bytes of this hash are stored as the new value `r'` of the random seed, and the remaining 32 bytes are returned as the next random value `x`.
 #### rand
 ```cpp
 int rand(int range) impure asm "RAND";
 ```
-Generates a new pseudo-random integer `z` in the range `0..range−1` (or `range..−1`, if `range < 0`). More precisely, an unsigned random value `x` is generated as in `random`; then `z := x * range / 2^256` is
+Generates a new pseudo-random integer `z` in the range `0..range−1` (or `range..−1` if `range < 0`). More precisely, an unsigned random value `x` is generated as in `random`; then `z := x * range / 2^256` is
 computed.
 
 #### get_seed
 ```cpp
 int get_seed() impure asm "RANDSEED";
 ```
-Returns the current random seed as an unsigned 256-bit Integer.
+Returns the current random seed as an unsigned 256-bit integer.
 #### set_seed
 ```cpp
 int set_seed(int seed) impure asm "SETRAND";
 ```
-Sets the random seed to unsigned 256-bit `seed`.
+Sets a random seed to an unsigned 256-bit `seed`.
 
 #### randomize
 ```cpp
