@@ -71,7 +71,7 @@ Appends the value `x` to the `Tuple t = (x1, ..., xn)` but only if the resulting
 ```cpp
 forall X -> [X] single(X x) asm "SINGLE";
 ```
-Creates a singleton, i.e. a tuple of length one.
+Creates a singleton, i.e., a tuple of length one.
 #### unsingle
 ```cpp
 forall X -> X unsingle([X] t) asm "UNSINGLE";
@@ -357,7 +357,7 @@ Sets a random seed to an unsigned 256-bit `seed`.
 ```cpp
 () randomize(int x) impure asm "ADDRAND";
 ```
-Mixes unsigned 256-bit integer `x` into the random seed `r` by setting the random seed to sha256 of the concatenation of two 32-byte strings: the first with the big-endian representation of the old seed `r`, and the second with the big-endian representation of `x`.
+Mixes an unsigned 256-bit integer `x` into a random seed `r` by setting the random seed to sha256 of the concatenation of two 32-byte strings: the first with a big-endian representation of the old seed `r`, and the second with a big-endian representation of `x`.
 
 #### randomize_lt
 ```cpp
@@ -366,7 +366,7 @@ Mixes unsigned 256-bit integer `x` into the random seed `r` by setting the rando
 Equivalent to `randomize(cur_lt());`.
 
 ### Address manipulation primitives
-The address manipulation primitives listed below serialize and deserialize values according to the following TL-B scheme:
+The address manipulation primitives listed below serialize and deserialize values according to the following TL-B scheme.
 ```cpp
 addr_none$00 = MsgAddressExt;
 
@@ -392,38 +392,38 @@ int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
 ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
   created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
 ```
-A deserialized `MsgAddress` is represented by a tuple `t` as follows:
+A deserialized `MsgAddress` is represented by the tuple `t` as follows:
 * `addr_none` is represented by `t = (0)`, i.e., a tuple containing exactly
-one integer equal to zero.
+one integer that equals zero
 * `addr_extern` is represented by `t = (1, s)`, where slice `s` contains the
-field `external_address`. In other words, `t` is a pair (a tuple consisting of two entries), containing an integer equal to one and slice `s`.
-* `addr_std` is represented by `t = (2, u, x, s)`, where `u` is either a `null` (if `anycast` is absent) or a slice `s'` containing `rewrite_pfx` (if `anycast` is present). Next, integer `x` is the `workchain_id`, and slice `s` contains the address.
-* `addr_var` is represented by `t = (3, u, x, s)`, where `u`, `x`, and `s` have the same meaning as for `addr_std`.
+field `external_address`. In other words, `t` is a pair (a tuple consisting of two entries), containing an integer equal to one and slice `s`
+* `addr_std` is represented by `t = (2, u, x, s)`, where `u` is either `null` (if `anycast` is absent) or a slice `s'` containing `rewrite_pfx` (if `anycast` is present). Next, integer `x` is the `workchain_id`, and slice `s` contains the address
+* `addr_var` is represented by `t = (3, u, x, s)`, where `u`, `x`, and `s` have the same meaning as for `addr_std`
 
 #### load_msg_addr
 ```cpp
 (slice, slice) load_msg_addr(slice s) asm( -> 1 0) "LDMSGADDR";
 ```
-Loads from `slice s` the only prefix that is a valid `MsgAddress`, and returns both this prefix `s'` and the remainder `s''` of `s` as slices.
+Loads from `slice s` the only prefix that is a valid `MsgAddress` and returns both this prefix `s'` and the remainder `s''` of `s` as slices.
 #### parse_addr
 ```cpp
 tuple parse_addr(slice s) asm "PARSEMSGADDR";
 ```
-Decomposes `slice s` containing a valid `MsgAddress` into a `tuple t` with separate fields of this `MsgAddress`. If `s` is not a valid `MsgAddress`, a cell deserialization exception is thrown.
+Decomposes `slice s` containing a valid `MsgAddress` into `tuple t` with separate fields of this `MsgAddress`. If `s` is not a valid `MsgAddress`, a cell deserialization exception is thrown.
 
 #### parse_std_addr
 ```cpp
 (int, int) parse_std_addr(slice s) asm "REWRITESTDADDR";
 ```
-Parses slice `s` containing a valid `MsgAddressInt` (usually a `msg_addr_std`), applies rewriting from the `anycast` (if present) to the same-length prefix of the address, and returns both the workchain and the 256-bit address as integers. If the address is not 256-bit, or if `s` is not a valid serialization of `MsgAddressInt`, throws a cell `deserialization` exception.
+Parses slice `s` containing a valid `MsgAddressInt` (usually `msg_addr_std`), applies rewriting from the `anycast` (if present) to the same-length prefix of the address, and returns both the workchain and the 256-bit address as integers. If the address is not 256-bit or if `s` is not a valid serialization of `MsgAddressInt`, throws a cell `deserialization` exception.
 #### parse_var_addr
 ```cpp
 (int, slice) parse_var_addr(slice s) asm "REWRITEVARADDR";
 ```
-A variant of `parse_std_addr` that returns the (rewritten) address as a slice `s`, even if it is not exactly 256 bit long (represented by a `msg_addr_var`).
+A variant of `parse_std_addr` that returns the (rewritten) address as a slice `s`, even if it is not exactly 256 bit long (represented by `msg_addr_var`).
 
 ## Debug primitives
-Currently only one function is available.
+Currently, only one function is available.
 #### dump_stack
 ```cpp
 () dump_stack() impure asm "DUMPSTK";
@@ -431,17 +431,17 @@ Currently only one function is available.
 Dumps the stack (at most the top 255 values) and shows the total stack depth.
 
 ## Slice primitives
-It is said that a primitive *loads* some data, if it returns the data and the remainder of the slice (so it can also be used as [modifying method](/develop/func/statements#modifying-methods)).
+It is said that a primitive *loads* some data if it returns the data and the remainder of the slice (so it can also be used as a [modifying method](/develop/func/statements#modifying-methods)).
 
-It is said that a primitive *preloads* some data, if it returns only the data (it can be used as [non-modifying method](/develop/func/statements#non-modifying-methods)).
+It is said that a primitive *preloads* some data if it returns only the data (it can be used as a [non-modifying method](/develop/func/statements#non-modifying-methods)).
 
-Unless otherwise stated, loading and preloading primitives read the data from a prefix of the slice.
+Unless otherwise stated, loading and preloading primitives read data from a prefix of the slice.
 #### begin_parse
 ```cpp
 slice begin_parse(cell c) asm "CTOS";
 ```
 
-Converts a `cell` into a `slice`. Notice that `c` must be either an ordinary cell, or an exotic cell (see [TVM.pdf](https://ton.org/tvm.pdf), 3.1.2) which is automatically loaded to yield an ordinary cell `c'`, converted into a `slice` afterwards.
+Converts `cell` into `slice`. Notice that `c` must be either an ordinary cell or an exotic cell (see [TVM.pdf](https://ton.org/tvm.pdf), 3.1.2) which is automatically loaded to yield an ordinary cell `c'`converted into `slice` afterwards.
 
 #### end_parse
 ```cpp
@@ -452,12 +452,12 @@ Checks if `s` is empty. If not, throws an exception.
 ```cpp
 (slice, cell) load_ref(slice s) asm( -> 1 0) "LDREF";
 ```
-Loads the first reference from the slice.
+Loads the first reference from a slice.
 #### preload_ref
 ```cpp
 cell preload_ref(slice s) asm "PLDREF";
 ```
-Preloads the first reference from the slice.
+Preloads the first reference from a slice.
 #### load_int
 ```cpp
 ;; (slice, int) ~load_int(slice s, int len) asm(s len -> 1 0) "LDIX";
@@ -494,7 +494,7 @@ Preloads the first `0 ≤ len ≤ 1023` bits from slice `s` into a separate slic
 ```cpp
 (slice, int) load_grams(slice s) asm( -> 1 0) "LDGRAMS";
 ```
-Loads serialized amount of TonCoins (any unsigned integer up to `2^128 - 1`).
+Loads a serialized amount of Toncoins (any unsigned integer up to `2^128 - 1`).
 
 #### skip_bits
 ```cpp
@@ -532,7 +532,7 @@ Preloads a dictionary `D` from slice `s`.
 ```cpp
 slice skip_dict(slice s) asm "SKIPDICT";
 ```
-Loads a dictionary as `load_dict`, but returns only the remainder of the slice.
+Loads a dictionary as `load_dict` but returns only the remainder of the slice.
 ### Slice size primitives
 #### slice_refs
 ```cpp
@@ -553,7 +553,7 @@ Returns both the number of data bits and the number of references in `s`.
 ```cpp
 int slice_empty?(slice s) asm "SEMPTY";
 ```
-Checks whether a slice `s` is empty (i.e., contains no bits of data and no cell references).
+Checks whether slice `s` is empty (i.e., contains no bits of data and no cell references).
 #### slice_data_empty?
 ```cpp
 int slice_data_empty?(slice s) asm "SDEMPTY";
@@ -568,12 +568,12 @@ Checks whether slice `s` has no references.
 ```cpp
 int slice_depth(slice s) asm "SDEPTH";
 ```
-Returns the depth of slice `s`. If `s` has no references, then returns `0`; otherwise the returned value is one plus the maximum of depths of cells referred to from `s`.
+Returns the depth of slice `s`. If `s` has no references, then returns `0`; otherwise, the returned value is one plus the maximum of depths of cells referred to from `s`.
 
 ## Builder primitives
-It is said that a primitive *stores* a value `x` into a builder `b` if it returns a modified version of the builder `b'` with the value `x` stored at the end of it. It can be used as [non-modifying method](/develop/func/statements#non-modifying-methods).
+It is said that a primitive *stores* a value `x` into a builder `b` if it returns a modified version of the builder `b'` with the value `x` stored at the end of it. It can be used as a [non-modifying method](/develop/func/statements#non-modifying-methods).
 
-All the primitives below first check whether there is enough space in the `builder`, and only then check the range of the value being serialized.
+All of the primitives listed below verify whether there is enough space in the `builder`first, and then the range of the value being serialized.
 #### begin_cell
 ```cpp
 builder begin_cell() asm "NEWC";
@@ -583,7 +583,7 @@ Creates a new empty `builder`.
 ```cpp
 cell end_cell(builder b) asm "ENDC";
 ```
-Converts a `builder` into an ordinary `cell`.
+Converts `builder` into an ordinary `cell`.
 #### store_ref
 ```cpp
 builder store_ref(builder b, cell c) asm(c b) "STREF";
@@ -610,13 +610,13 @@ builder store_grams(builder b, int x) asm "STGRAMS";
 ```
 Stores (serializes) an integer `x` in the range `0..2^128 − 1` into builder `b`. The serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, which is the smallest integer `l ≥ 0`, such that `x < 2^8l`, followed by an `8l`-bit unsigned big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.
 
-It is the usual way to store amounts of TonCoins.
+It is the most common way of storing Toncoins.
 
 #### store_dict
 ```cpp
 builder store_dict(builder b, cell c) asm(c b) "STDICT";
 ```
-Stores dictionary `D` represented by cell `c` or `null` into builder `b`. In other words, stores a `1`-bit and a reference to `c` if `c` is not `null` and `0`-bit otherwise.
+Stores dictionary `D` represented by cell `c` or `null` into builder `b`. In other words, stores `1`-bit and a reference to `c` if `c` is not `null` and `0`-bit otherwise.
 #### store_maybe_ref
 ```cpp
 builder store_maybe_ref(builder b, cell c) asm(c b) "STOPTREF";
@@ -638,41 +638,41 @@ Returns the number of data bits already stored in builder `b`.
 ```cpp
 int builder_depth(builder b) asm "BDEPTH";
 ```
-Returns the depth of builder `b`. If no cell references are stored in `b`, then returns `0`; otherwise the returned value is one plus the maximum of depths of cells referred to from `b`.
+Returns the depth of builder `b`. If no cell references are stored in `b`, then returns `0`; otherwise, the returned value is one plus the maximum of depths of cells referred to from `b`.
 
 ## Cell primitives
 #### cell_depth
 ```cpp
 int cell_depth(cell c) asm "CDEPTH";
 ```
-Returns the depth of cell `c`. If `c` has no references, then return `0`; otherwise the returned value is one plus the maximum of depths of cells referred to from `c`. If `c` is a `null` instead of a cell, returns zero.
+Returns the depth of cell `c`. If `c` has no references, then return `0`; otherwise, the returned value is one plus the maximum of depths of cells referred to from `c`. If `c` is a `null` instead of a cell, it returns zero.
 #### cell_null?
 ```cpp
 int cell_null?(cell c) asm "ISNULL";
 ```
-Checks whether `c` is a `null`. Usually a `null`-cell represents an empty dictionary. FunC also has polymorphic `null?` built-in, see [built-ins](/develop/func/builtins#other-primitives).
+Checks whether `c` is a `null`. Usually a `null`-cell represents an empty dictionary. FunC also has polymorphic `null?` built-in. (See [built-ins](/develop/func/builtins#other-primitives).)
 
 ## Dictionaries primitives
 As said in [TVM.pdf](https://ton.org/tvm.pdf):
 > Dictionaries admit two different representations as TVM stack values:
-> * A slice `s` with a serialization of a TL-B value of type `HashmapE(n, X)`. In other words, `s` consists either of one bit equal to zero (if the dictionary is empty), or of one bit equal to one and a reference to a cell containing the root of the binary tree, i.e., a serialized value of type `Hashmap(n, X)`.
+> * A slice `s` with a serialization of a TL-B value of type `HashmapE(n, X)`. In other words, `s` consists either of one bit equal to zero (if the dictionary is empty) or of one bit equal to one and a reference to a cell containing the root of the binary tree, i.e., a serialized value of type `Hashmap(n, X)`.
 > * A “Maybe cell” `c^?`, i.e., a value that is either a cell (containing a serialized value of type `Hashmap(n, X)` as before) or a `null` (corresponding to an empty dictionary, cf. [null values](/develop/func/types#null-values)). When a “Maybe cell” `c^?` is used to represent a dictionary, we usually denote it by `D`.  
 >
 > Most of the dictionary primitives listed below accept and return dictionaries in the second form, which is more convenient for stack manipulation. However, serialized dictionaries inside larger TL-B objects use the first representation.
 
-In FunC dictionaries are also represented by the `cell` type with an implicit assumption that it may be a `null` value. There is no separate types for dictionaries with different key lengths or values types (after all, it's FunC, not FunC++).
+In FunC dictionaries are also represented by the `cell` type with the implicit assumption that it may be a `null` value. There are no separate types for dictionaries with different key lengths or value types (after all, it's FunC, not FunC++).
 
 ### Taxonomy note
-A dictionary primitive may interpret the keys of the dictionary either as unsigned `l`-bit integers, as signed `l`-bit integers or as `l`-bit slices. The primitives listed below differ by the prefix before the word `dict` in their names. `i` stands for signed integer keys, `u` stands for unsigned integer keys and empty prefix stands for slice keys.
+A dictionary primitive may interpret the keys of the dictionary either as unsigned `l`-bit integers, as signed `l`-bit integers, or as `l`-bit slices. The primitives listed below differ by the prefix before the word `dict` in their names. `i` stands for signed integer keys, `u` stands for unsigned integer keys, and an empty prefix stands for slice keys.
 
-For example, `udict_set` is a set-by-key function for dictionaries with unsigned integer keys, `idict_set` is the corresponding function for dictionaries with signed integer keys and `dict_set` is the function for dictionaries with slice keys.
+For example, `udict_set` is a set-by-key function for dictionaries with unsigned integer keys; `idict_set` is the corresponding function for dictionaries with signed integer keys; `dict_set` is the function for dictionaries with slice keys.
 
-In the titles empty prefix is used.
+An empty prefix is used in the titles.
 
-Also some of the primitives have their counterpart prefixed with `~`. It makes it possible to use them as [modifying methods](/develop/func/statements#modifying-methods).
+Also, some of the primitives have their counterparts prefixed with `~`. It makes it possible to use them as [modifying methods](/develop/func/statements#modifying-methods).
 
 ### Dictionary's values
-A value in a dictionary may be stored either directly as subslice of an inner dictionary cell, or as a reference to a separate cell. In the first case it is not guaranteed that if the value fits into a cell, it fits to the dictionary (because a part of the inner cell may already be occupied by a part of the corresponding key). On the other hand, the second storing way is less gas-efficient. The second way is equivalent to storing in the first way a slice with empty data bits and exactly one reference to the value.
+A value in a dictionary may be stored either directly as a subslice of an inner dictionary cell or as a reference to a separate cell. In the first case, it is not guaranteed that if the value fits into a cell, it fits into the dictionary (because a part of the inner cell may already be occupied by a part of the corresponding key). On the other hand, the second storing way is less gas-efficient. The second way is equivalent to storing in the first way a slice with empty data bits and exactly one reference to the value.
 
 #### dict_set
 ```cpp
@@ -683,7 +683,7 @@ cell dict_set(cell dict, int key_len, slice index, slice value) asm(value index 
 (cell, ()) ~idict_set(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTISET";
 (cell, ()) ~dict_set(cell dict, int key_len, slice index, slice value) asm(value index dict key_len) "DICTSET";
 ```
-Sets the value associated with `key_len`-bit key `index` in dictionary `dict` to `value` (a slice), and returns the resulting dictionary.
+Sets the value associated with `key_len`-bit key `index` in dictionary `dict` to `value` (a slice) and returns the resulting dictionary.
 #### dict_set_ref
 ```cpp
 cell idict_set_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTISETREF";
@@ -691,37 +691,37 @@ cell udict_set_ref(cell dict, int key_len, int index, cell value) asm(value inde
 (cell, ()) ~idict_set_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTISETREF";
 (cell, ()) ~udict_set_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTUSETREF";
 ```
-Similar to `dict_set`, but with the value set to a reference to cell `value`.
+Similar to `dict_set` but with the value set to a reference to cell `value`.
 #### dict_get?
 ```cpp
 (slice, int) idict_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIGET" "NULLSWAPIFNOT";
 (slice, int) udict_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUGET" "NULLSWAPIFNOT";
 ```
-Looks up key `index` in dictionary `dict` with `ket_len`-bit keys. On success, returns the value found as a slice along with a `-1` flag indicating success. On failure, returns `(null, 0)`.
+Looks up key `index` in dictionary `dict` with `ket_len`-bit keys. On success, returns the value found as a slice along with a `-1` flag indicating success. If fails, it returns `(null, 0)`.
 #### dict_get_ref?
 ```cpp
 (cell, int) idict_get_ref?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIGETREF";
 (cell, int) udict_get_ref?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUGETREF";
 ```
-Similar to `dict_get?`, but returns the first reference of the found value.
+Similar to `dict_get?` but returns the first reference of the found value.
 #### dict_get_ref
 ```cpp
 cell idict_get_ref(cell dict, int key_len, int index) asm(index dict key_len) "DICTIGETOPTREF";
 ```
-A variant of `dict_get_ref?` that returns `null` instead of the value if the key `index` is absent from dictionary `dict`.
+A variant of `dict_get_ref?` that returns `null` instead of the value if the key `index` is absent from the dictionary `dict`.
 
 #### dict_set_get_ref
 ```cpp
 (cell, cell) idict_set_get_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTISETGETOPTREF";
 (cell, cell) udict_set_get_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTUSETGETOPTREF";
 ```
-Sets the value associated with `index` to `value` (if `value` is `null`, then the key is deleted instead) and returns the old value (or `null`, if the value was absent).
+Sets the value associated with `index` to `value` (if `value` is `null`, then the key is deleted instead) and returns the old value (or `null` if the value was absent).
 #### dict_delete?
 ```cpp
 (cell, int) idict_delete?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIDEL";
 (cell, int) udict_delete?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUDEL";
 ```
-Deletes `key_len`-bit key `index` from dictionary `dict`. If the key is present, returns the modified dictionary `dict'` and the success flag `−1`. Otherwise, returns the original dictionary `dict` and `0`.
+Deletes `key_len`-bit key `index` from the dictionary `dict`. If the key is present, returns the modified dictionary `dict'` and the success flag `−1`. Otherwise, returns the original dictionary `dict` and `0`.
 #### dict_delete_get?
 ```cpp
 (cell, slice, int) idict_delete_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIDELGET" "NULLSWAPIFNOT";
@@ -735,13 +735,13 @@ Deletes `ket_len`-bit key `index` from dictionary `dict`. If the key is present,
 (cell, int) udict_add?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTUADD";
 (cell, int) idict_add?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTIADD";
 ```
-An `add` counterpart of `dict_set`: sets the value associated with key `index` in dictionary `dict` to `value`, but only if it is not already present in `D`. Returns either modified version of the dictionary and `-1` flag or `(dict, 0)`.
+An `add` counterpart of `dict_set` sets the value associated with key `index` in dictionary `dict` to `value` but only if it is not already present in `D`. Returns either modified version of the dictionary and `-1` flag or `(dict, 0)`.
 #### dict_replace?
 ```cpp
 (cell, int) udict_replace?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTUREPLACE";
 (cell, int) idict_replace?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTIREPLACE";
 ```
-A `replace` operation, which is similar to `dict_set`, but sets the value of key `index` in dictionary `dict` to `value` only if the key was already present in `dict`. Returns either modified version of the dictionary and `-1` flag or `(dict, 0)`.
+A `replace` operation similar to `dict_set but which sets the value of key `index` in dictionary `dict` to `value` only if the key was already present in `dict`. Returns either modified version of the dictionary and `-1` flag or `(dict, 0)`.
 ### Builder counterparts
 The following primitives accept the new value as a builder instead of a slice, which often is more convenient if the value needs to be serialized from several components computed in the stack. The net effect is roughly equivalent to converting b into a slice and executing the corresponding primitive listed above.
 #### dict_set_builder
@@ -753,19 +753,19 @@ cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(va
 (cell, ()) ~udict_set_builder(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTUSETB";
 (cell, ()) ~dict_set_builder(cell dict, int key_len, slice index, builder value) asm(value index dict key_len) "DICTSETB";
 ```
-Similar to `dict_set` but accept a builder.
+Similar to `dict_set` but accepts a builder.
 #### dict_add_builder?
 ```cpp
 (cell, int) udict_add_builder?(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTUADDB";
 (cell, int) idict_add_builder?(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTIADDB";
 ```
-Similar to `dict_add?`, but accept a builder.
+Similar to `dict_add?` but accepts a builder.
 #### dict_replace_builder?
 ```cpp
 (cell, int) udict_replace_builder?(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTUREPLACEB";
 (cell, int) idict_replace_builder?(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTIREPLACEB";
 ```
-Similar to `dict_replace?`, but accept a builder.
+Similar to `dict_replace?` but accepts a builder.
 #### dict_delete_get_min
 ```cpp
 (cell, int, slice, int) udict_delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTUREMMIN" "NULLSWAPIFNOT2";
@@ -775,7 +775,7 @@ Similar to `dict_replace?`, but accept a builder.
 (cell, (int, slice, int)) ~udict::delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTUREMMIN" "NULLSWAPIFNOT2";
 (cell, (slice, slice, int)) ~dict::delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTREMMIN" "NULLSWAPIFNOT2";
 ```
-Computes the minimal key `k` in the dictionary `dict`, removes it and returns `(dict', x, k, -1)`, where `dict'` is the modified version of `dict` and `x` is the value associated with `k`. If the dict is empty, returns `(dict, null, null, 0)`.
+Computes the minimum key `k` in dictionary `dict`, removes it, and returns `(dict', x, k, -1)`, where `dict'` is the modified version of `dict` and `x` is the value associated with `k`. If the dict is empty, returns `(dict, null, null, 0)`.
 
 Note that the key returned by `idict_delete_get_min` may differ from the key returned by `dict_delete_get_min` and `udict_delete_get_min`.
 
@@ -788,56 +788,56 @@ Note that the key returned by `idict_delete_get_min` may differ from the key ret
 (cell, (int, slice, int)) ~idict::delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTIREMMAX" "NULLSWAPIFNOT2";
 (cell, (slice, slice, int)) ~dict::delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTREMMAX" "NULLSWAPIFNOT2";
 ```
-Computes the maximal key `k` in the dictionary `dict`, removes it and returns `(dict', x, k, -1)`, where `dict'` is the modified version of `dict` and `x` is the value associated with `k`. If the dict is empty, returns `(dict, null, null, 0)`.
+Computes the maximum key `k` in dictionary `dict`, removes it, and returns `(dict', x, k, -1)`, where `dict'` is the modified version of `dict` and `x` is the value associated with `k`. If the dict is empty, returns `(dict, null, null, 0)`.
 
 #### dict_get_min?
 ```cpp
 (int, slice, int) udict_get_min?(cell dict, int key_len) asm (-> 1 0 2) "DICTUMIN" "NULLSWAPIFNOT2";
 (int, slice, int) idict_get_min?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMIN" "NULLSWAPIFNOT2";
 ```
-Computes the minimal key `k` in dictionary `dict`, the associated value `x` and returns `(k, x, -1)`. If the dictionary is empty, returns `(null, null, 0)`.
+Computes the minimum key `k` in dictionary `dict`, the associated value `x`, and returns `(k, x, -1)`. If the dictionary is empty, returns `(null, null, 0)`.
 #### dict_get_max?
 ```cpp
 (int, slice, int) udict_get_max?(cell dict, int key_len) asm (-> 1 0 2) "DICTUMAX" "NULLSWAPIFNOT2";
 (int, slice, int) idict_get_max?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMAX" "NULLSWAPIFNOT2";
 ```
-Computes the maximal key `k` in dictionary `dict`, the associated value `x` and returns `(k, x, -1)`. If the dictionary is empty, returns `(null, null, 0)`.
+Computes the maximum key `k` in dictionary `dict`, the associated value `x`, and returns `(k, x, -1)`. If the dictionary is empty, returns `(null, null, 0)`.
 #### dict_get_min_ref?
 ```cpp
 (int, cell, int) udict_get_min_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTUMINREF" "NULLSWAPIFNOT2";
 (int, cell, int) idict_get_min_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMINREF" "NULLSWAPIFNOT2";
 ```
-Similar to `dict_get_min?`, but returns the only reference in the value as a reference.
+Similar to `dict_get_min?` but returns the only reference in the value as a reference.
 #### dict_get_max_ref?
 ```cpp
 (int, cell, int) udict_get_max_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTUMAXREF" "NULLSWAPIFNOT2";
 (int, cell, int) idict_get_max_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMAXREF" "NULLSWAPIFNOT2";
 ```
-Similar to `dict_get_max?`, but returns the only reference in the value as a reference.
+Similar to `dict_get_max?` but returns the only reference in the value as a reference.
 #### dict_get_next?
 ```cpp
 (int, slice, int) udict_get_next?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTUGETNEXT" "NULLSWAPIFNOT2";
 (int, slice, int) idict_get_next?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETNEXT" "NULLSWAPIFNOT2";
 ```
-Computes the minimal key `k` in dictionary `dict` that is greater than `pivot`, and returns `k`, associated value and a flag indicating success. If the dictionary is empty, returns `(null, null, 0)`.
+Computes the minimum key `k` in dictionary `dict` that is greater than `pivot`; returns `k`, associated value, and a flag indicating success. If the dictionary is empty, returns `(null, null, 0)`.
 #### dict_get_nexteq?
 ```cpp
 (int, slice, int) udict_get_nexteq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTUGETNEXTEQ" "NULLSWAPIFNOT2";
 (int, slice, int) idict_get_nexteq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETNEXTEQ" "NULLSWAPIFNOT2";
 ```
-Similar to `dict_get_next?`, but computes the minimal key `k` that is greater than or equal to `pivot`.
+Similar to `dict_get_next?` but computes the minimum key `k` that is greater than or equal to `pivot`.
 #### dict_get_prev?
 ```cpp
 (int, slice, int) udict_get_prev?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTUGETPREV" "NULLSWAPIFNOT2";
 (int, slice, int) idict_get_prev?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETPREV" "NULLSWAPIFNOT2";
 ```
-Similar to `dict_get_next?`, but computes the maximal key `k` smaller than `pivot`.
+Similar to `dict_get_next?` but computes the maximum key `k` smaller than `pivot`.
 #### dict_get_preveq?
 ```cpp
 (int, slice, int) udict_get_preveq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTUGETPREVEQ" "NULLSWAPIFNOT2";
 (int, slice, int) idict_get_preveq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETPREVEQ" "NULLSWAPIFNOT2";
 ```
-Similar to `dict_get_prev?`, but computes the maximal key `k` smaller than or equal to `pivot`.
+Similar to `dict_get_prev?` but computes the maximum key `k` smaller than or equal to `pivot`.
 #### new_dict
 ```cpp
 cell new_dict() asm "NEWDICT";
@@ -850,19 +850,19 @@ int dict_empty?(cell c) asm "DICTEMPTY";
 Checks whether a dictionary is empty. Equivalent to `cell_null?`.
 
 ## Prefix dictionaries primitives
-TVM also support dictionaries with non-fixed length keys which form a prefix code (i.e. there is no key that is a prefix of another key). Learn more about them in [TVM.pdf](https://ton.org/tvm.pdf).
+TVM also supports dictionaries with non-fixed length keys which form a prefix code (i.e., there is no key that is a prefix to another key). Learn more about them in [TVM.pdf](https://ton.org/tvm.pdf).
 
 #### pfxdict_get?
 ```cpp
 (slice, slice, slice, int) pfxdict_get?(cell dict, int key_len, slice key) asm(key dict key_len) "PFXDICTGETQ" "NULLSWAPIFNOT2";
 ```
 Returns `(s', x, s'', -1)` or `(null, null, s, 0)`.
-Looks up the unique prefix of slice `key` present in the prefix code dictionary `dict`. If found, the prefix of `s` is returned as `s'`, and the corresponding value (also a slice) as `x`. The remainder of `s` is returned as a slice `s''`. If no prefix of `s` is a key in prefix code dictionary `dict`, returns the unchanged `s` and a zero flag to indicate failure.
+Looks up the unique prefix of slice `key` present in the prefix code dictionary `dict`. If found, the prefix of `s` is returned as `s'` and the corresponding value (also a slice) as `x`. The remainder of `s` is returned as slice `s''`. If no prefix of `s` is key in prefix code dictionary `dict`, it returns the unchanged `s` and a zero flag to indicate failure.
 #### pfxdict_set?
 ```cpp
 (cell, int) pfxdict_set?(cell dict, int key_len, slice key, slice value) asm(value key dict key_len) "PFXDICTSET";
 ```
-Similar to `dict_set`, but may fail if the key is a prefix of another key presented in the dictionary. Returns flag, indicating success.
+Similar to `dict_set` but may fail if the key is a prefix of another key presented in the dictionary. Indicating success, returns a flag.
 #### pfxdict_delete?
 ```cpp
 (cell, int) pfxdict_delete?(cell dict, int key_len, slice key) asm(key dict key_len) "PFXDICTDEL";
@@ -874,12 +874,12 @@ Similar to `dict_delete?`.
 ```cpp
 forall X -> X null() asm "PUSHNULL";
 ```
-By the TVM type `Null` FunC represents absence of a value of some atomic type. So `null` can actually have any atomic type.
+By the TVM type `Null`, FunC represents the absence of a value of some atomic type. So `null` can actually have any atomic type.
 #### ~impure_touch
 ```cpp
 forall X -> (X, ()) ~impure_touch(X x) impure asm "NOP";
 ```
-Mark a variable as used, such that the code which produced it won't be deleted even it is not impure. (c.f. [impure specifier](/develop/func/functions#impure-specifier))
+Mark a variable as used, such that the code which produced it won't be deleted even if it is not impure. (c.f. [impure specifier](/develop/func/functions#impure-specifier))
 
 
 ## Other primitives
@@ -902,4 +902,4 @@ Sorts two integers.
 ```cpp
 int abs(int x) asm "ABS";
 ```
-Computes the absolute value of an integer `x`.
+Computes the absolute value of the integer `x`.
