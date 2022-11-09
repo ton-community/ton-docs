@@ -1212,11 +1212,15 @@ a:hover {
   color: #0099E5
 }
 article a{
-  display: inline-flex;
-  max-width: max-content;
   background-color: rgba(0,136,204,.05);
   border-bottom: 0.75px rgb(0 136 204 / 60%) solid;
 }
+
+.theme-edit-this-page{
+  display: inline-flex;
+  max-width: max-content;
+}
+
 [data-theme=dark] article a {
   background-color: rgba(0,136,204, 0.15);
 }
