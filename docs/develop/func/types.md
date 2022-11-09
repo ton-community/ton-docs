@@ -1,5 +1,5 @@
 # Types
-FunC has the following built-in types:
+FunC has the following built-in types.
 
 ## Atomic types
 - `int` is the type of 257-bit signed integers. By default, overflow checks are enabled and lead to integer overflow exceptions.
@@ -20,13 +20,13 @@ By the value `null` of TVM type `Null`, FunC represents the absence of a value o
 In such a way, the atomic type `A` may be implicitly transformed into type `A^?` a.k.a. `Maybe A` (the type checker is agnostic to such a transformation).
 
 ## Hole type
-FunC has support for type inference. Types `_` and `var` represent type "holes" which can later be filled with some actual type during type checking. For example, `var x = 2;` is a definition of variable `x` equal to `2`. Type checker can infer that `x` has type `int`, because `2` has type `int`, and the left and right sides of the assignment must have equal types.
+FunC has support for type inference. Types `_` and `var` represent type "holes" which can later be filled with some actual type during type checking. For example, `var x = 2;` is a definition of variable `x` equal to `2`. The type checker can infer that `x` has type `int`, because `2` has type `int`, and the left and right sides of the assignment must have equal types.
 
 ## Composite types
 Types can be composed into more complex ones.
 
 ### Functional type
-Types of the form `A -> B` represent functions with specified domain and codomain. For example, `int -> cell` is the type of functions that takes one integer argument and returns a TVM cell.
+Types of the form `A -> B` represent functions with specified domain and codomain. For example, `int -> cell` is the type of function that takes one integer argument and returns a TVM cell.
 
 Internally, values of such types are represented as continuations.
 
@@ -37,14 +37,14 @@ For example, if a function `foo` has type `int -> (int, int)`, it means that the
 
 A call of this function may look like `(int a, int b) = foo(42);`. Internally, the function consumes one stack entry and leaves two of them.
 
-Note that from a low-level perspective value `(2, (3, 9))` of type `(int, (int, int))` and value `(2, 3, 9)` of type `(int, int, int)` are represented in the same way as three stack entries `2`, `3` and `9`. For the FunC type checker they are values of **different** types. For example, code `(int a, int b, int c) = (2, (3, 9));` wouldn't be compiled.
+Note that from a low-level perspective, value `(2, (3, 9))` of type `(int, (int, int))` and value `(2, 3, 9)` of type `(int, int, int)`, are represented in the same way as three stack entries `2`, `3` and `9`. For the FunC type checker they are values of **different** types. For example, code `(int a, int b, int c) = (2, (3, 9));` wouldn't be compiled.
 
 A special case of the tensor type is the **unit type** `()`. It is usually used to represent the fact that a function doesn't return any value or has no arguments. For example, a function `print_int` would have type `int -> ()` and the function `random` has type `() -> int`. It has a unique inhabitant `()` which occupies 0 stack entries.
 
 Type of form `(A)` is considered by type checker as the same type as `A`.
 
 ### Tuples types
-Types of the form `[A, B, ...]` represent TVM tuples with specific lengths and types of components known in compile time. For example, `[int, cell]` is the type of TVM tuples which length is exactly 2, and where the first component is an integer and the second is a cell. `[]` is the type of empty tuples (having the unique inhabitant—the empty tuple). Note that in contrast to the unit type `()`, the value of `[]` occupies one stack entry.
+Types of the form `[A, B, ...]` represent TVM tuples with specific lengths and types of components known in compile time. For example, `[int, cell]` is the type of TVM tuple which length is exactly 2, and where the first component is an integer and the second is a cell. `[]` is the type of empty tuples (having the unique inhabitant—the empty tuple). Note that in contrast to the unit type `()`, the value of `[]` occupies one stack entry.
 
 ## Polymorphism with type variables
 FunC has Miller-Rabin type system with support for polymorphic functions. For example, the following function:
