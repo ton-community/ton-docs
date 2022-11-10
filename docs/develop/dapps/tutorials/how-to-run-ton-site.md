@@ -2,13 +2,46 @@
 
 ## 👋 Introduction
 
-TON Sites work almost like regular sites except for their installation. A number of additional actions are required to launch them. In this tutorial I will show you how to do it.
+[TON Sites](/learn/services/sites-www-proxy) work almost like regular sites except for their installation. A number of additional actions are required to launch them. In this tutorial I will show you how to do it.
 
 ## 🖥 Running TON Site
 
-There are two ways to do this. The first is to install everything from the sources manually. But this method is longer and may not work on all devices.
+There are two ways to do this. The first is to use a docker. This method is easier because docker will do all the complex actions for you.
 
-The second way is to use a Docker container. It is easier and will fit all devices that support Docker.
+The second method is Installing from sources manually. This method is longer and may cause difficulties for not experienced users.
+
+### 📦 Running with Docker
+
+There is an easy-to-use docker container for [TON Proxy](/participate/web3/sites-and-proxy) with which you can run TON Site:
+https://github.com/kdimentionaltree/ton-proxy-docker
+
+Before you start, make sure that you already have a regular website running on port 80. We will consider installing on a Linux machine, but the same steps can be performed on other operating systems.
+
+1.  Download Docker container:
+```bash
+git clone https://github.com/kdimentionaltree/ton-proxy-docker.git
+```
+
+2.  Build TON Proxy with docker:
+```bash
+cd ton-proxy-docker
+docker-compose build
+```
+
+3.  Generate a persistent [ADNL](/learn/networking/adnl) address for your server:
+```bash
+./init.sh
+```
+You see something like
+```
+45061C1D4EC44A937D0318589E13C73D151D1CEF5D3C0E53AFBCF56A6C2FE2BD vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3
+```
+This is your newly-generated persistent ADNL address, in hexadecimal and user-friendly form.
+
+4.  Run proxy in reverse mode:
+```bash
+docker-compose up -d
+```
 
 ### ⚙️ Installing from sources
 
@@ -42,6 +75,9 @@ wget https://ton-blockchain.github.io/global.config.json
 ```
 
 6.  Compile `RLDP-HTTP-Proxy` and `generate-random-id`:
+
+You can read more about RLDP [here](/learn/networking/rldp)
+
 ```bash
 cmake --build . --target rldp-http-proxy
 cmake --build . --target generate-random-id
@@ -71,39 +107,6 @@ Example:
 rldp-http-proxy/rldp-http-proxy -a 10.132.46.154:3333 -L '*' -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3 -d -l tonsite.log
 ```
 
-### 📦 Running with Docker
-
-There is an easy-to-use docker container for TON Proxy with which you can run TON Site:
-https://github.com/kdimentionaltree/ton-proxy-docker
-
-Before you start, make sure that you already have a regular website running on port 80. We will consider installing on a Linux machine, but the same steps can be performed on other operating systems.
-
-1.  Download Docker container:
-```bash
-git clone https://github.com/kdimentionaltree/ton-proxy-docker.git
-```
-
-2.  Build TON Proxy with docker:
-```bash
-cd ton-proxy-docker
-docker-compose build
-```
-
-3.  Generate a persistent ANDL address for your server:
-```bash
-./init.sh
-```
-You see something like
-```
-45061C1D4EC44A937D0318589E13C73D151D1CEF5D3C0E53AFBCF56A6C2FE2BD vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3
-```
-This is your newly-generated persistent ADNL address, in hexadecimal and user-friendly form.
-
-4.  Run proxy in reverse mode:
-```bash
-docker-compose up -d
-```
-
 ### 👀 Further steps
 
 #### Сhecking availability of the site
@@ -114,7 +117,7 @@ You can check the availability of the site by opening this address with the doma
 
 #### Linking TON DNS domain
 
-To link a TON DNS domain to your site, follow these steps:
+To link a [TON DNS domain](/participate/web3/dns) domain to your site, follow these steps:
 
 1.  Open the domain page on [dns.ton.org](https://dns.ton.org)
 
@@ -122,4 +125,6 @@ To link a TON DNS domain to your site, follow these steps:
 
 3.  Enter your site's ADNL address in `TON site` field and click `set`
 
-In a few minutes you will be able to access your website using the chosen domain.
+In a few minutes you will be able to access your website using the chosen domain if you have TON Proxy enabled.
+
+You can read more about linking TON DNS here: [Site & Domain Management](/participate/web3/site-management)
