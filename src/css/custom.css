@@ -1531,28 +1531,56 @@ a,button {
   color: #fff
 }
 
-.Footer__network:nth-child(1) path,.Footer__network:nth-child(2) path,.Footer__network:nth-child(3) path,.Footer__network:nth-child(4) path {
+.Footer__network:nth-child(1) svg {
+  width: 32px;
+  height: 32px;
+  margin-top: -4px;
+  margin-right: -4px;
+  fill: #606069
+
+}
+.Footer__network:nth-child(1) path {
+  fill: #98b2bf
+}
+
+[data-theme=dark] .Footer__network:nth-child(1) path {
+  fill: #606069
+}
+
+.Footer__network:nth-child(1):hover path {
+  fill: #0099e5
+}
+
+[data-theme=dark] .Footer__network:nth-child(1):hover path {
+  fill: #04a2f0
+}
+
+.Footer__network path {
+  fill: #fff
+}
+.Footer__network rect, .Footer__network path, .Footer__network circle {
+  transition: all .3s;
   fill: #fff
 }
 
-.Footer__network:nth-child(1) rect,.Footer__network:nth-child(2) rect,.Footer__network:nth-child(3) rect,.Footer__network:nth-child(4) circle {
+.Footer__network rect, .Footer__network:nth-child(5) circle {
   transition: all .3s;
   fill: #98b2bf
 }
 
-.Footer__network:nth-child(1):hover rect,.Footer__network:nth-child(2):hover rect,.Footer__network:nth-child(3):hover rect,.Footer__network:nth-child(4):hover circle {
+.Footer__network:hover rect, .Footer__network:nth-child(5):hover circle {
   fill: #0099e5
 }
 
-[data-theme=dark] .Footer__network:nth-child(1) rect,[data-theme=dark] .Footer__network:nth-child(2) rect,[data-theme=dark] .Footer__network:nth-child(3) rect,[data-theme=dark] .Footer__network:nth-child(4) circle {
+[data-theme=dark] .Footer__network rect, [data-theme=dark] .Footer__network:nth-child(5) circle {
   fill: #606069
 }
 
-[data-theme=dark] .Footer__network:nth-child(1):hover rect,[data-theme=dark] .Footer__network:nth-child(2):hover rect,[data-theme=dark] .Footer__network:nth-child(3):hover rect,[data-theme=dark] .Footer__network:nth-child(4):hover circle {
+[data-theme=dark] .Footer__network:hover rect, [data-theme=dark] .Footer__network:nth-child(5):hover circle {
   fill: #04a2f0
 }
 
-[data-theme=dark] .Footer__network:nth-child(1) path,[data-theme=dark] .Footer__network:nth-child(2) path,[data-theme=dark] .Footer__network:nth-child(3) path,[data-theme=dark] .Footer__network:nth-child(4) path {
+[data-theme=dark] .Footer__network path {
   fill: #232328
 }
 
