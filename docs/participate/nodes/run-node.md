@@ -31,7 +31,7 @@ https://github.com/ton-blockchain/mytonctrl/blob/master/en/manual-ubuntu.md
 
 To use your full node as an endpoint, skip everything about the validator function. There is no need to send coins to your wallet.
 
-To become a validator, send Toncoins to your wallet. 
+To become a validator, send Toncoin to your wallet. 
 
 **mytonctrl** automatically joins validation from the next election round.
 

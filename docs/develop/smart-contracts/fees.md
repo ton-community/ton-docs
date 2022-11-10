@@ -9,14 +9,14 @@ All fees are calculated in Gas. It's a special currency for fees in TON.
 All fees are nominated and fixed in a certain gas amount, but the gas price itself is not fixed. Today the price for gas is:
 
 ```cpp
-1 gas = 1000 nanotoncoin = 0,000 001 TON
+1 gas = 1000 nanotons = 0,000 001 TON
 ```
 
 ### Average transaction cost
 
 > **TLDR:** Today, every transaction costs around **~0.005 TON**
 
-Even if TON’s price increases 100 times, transactions will remain ultra-cheap; less than $0.01. Moreover, validators may lower this value if they see commissions have become expensive [read why they're interested](#gas-changing-voting-process).
+Even if TON price increases 100 times, transactions will remain ultra-cheap; less than $0.01. Moreover, validators may lower this value if they see commissions have become expensive [read why they're interested](#gas-changing-voting-process).
 
 :::info
 The current gas amount is written in the Network Config [param 20](https://explorer.toncoin.org/config?workchain=-1&shard=8000000000000000&seqno=22185244&roothash=165D55B3CFFC4043BFC43F81C1A3F2C41B69B33D6615D46FBFD2036256756382&filehash=69C43394D872B02C334B75F59464B2848CD4E23031C03CA7F3B1F98E8A13EE05#configparam20).

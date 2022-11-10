@@ -74,7 +74,7 @@ Also, the Ton Whales team supports its own network `sandbox`. This is both a plu
 This explorer is the newest and has its own unique features.
 For example, Trace. This feature allows you to see the entire sequence of transactions between smart contracts, even if subsequent transactions do not contain your address.
 
-Transaction information is not as detailed as, for example, on Ton Whales.
+Transaction information is not as detailed as, for example, on TON Whales.
 
 ### Features
 

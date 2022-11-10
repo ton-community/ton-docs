@@ -1,14 +1,14 @@
 # Connect with TON Proxy
 
-## Public entry TON proxies
+## Public entry TON Proxies
 
-You can use one of the public entry TON proxies:
+You can use one of the public entry TON Proxies:
 
 * `in1.ton.org` port `8080`
 * `in2.ton.org` port `8080`
 * `in3.ton.org` port `8080`
 
-A TON proxy is compatible with a regular HTTP proxy, so you can use it directly in your browser or operating system settings.
+TON Proxy is compatible with a regular HTTP proxy, so you can use it directly in your browser or operating system settings.
 
 ## Google Chrome
 

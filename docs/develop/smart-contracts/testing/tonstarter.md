@@ -8,7 +8,7 @@ Read this article first to understand all approaches to testing on TON:
 
 ## Testing using TON Contract Executor
 
-This library allows you to run Ton Virtual Machine locally and execute a contract. That allows you to write, debug, and fully test your contracts before launching them on the network.
+This library allows you to run TON Virtual Machine locally and execute a contract. That allows you to write, debug, and fully test your contracts before launching them on the network.
 
 TON Contract executor allows you to:
 

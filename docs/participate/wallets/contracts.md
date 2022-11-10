@@ -1,4 +1,4 @@
-# Types of Wallet Contracts
+# Types of Wallet Contracts ton
 
 You have probably heard somewhere about different versions of wallets in TON Blockchain. But what do these versions really mean and how do they differ?
 

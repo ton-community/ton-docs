@@ -5,7 +5,7 @@ Implementation:
 
 ## Overview
 
-In a multi-blockchain system like TON, even full nodes would usually be interested in obtaining updates (i.e. new blocks) only around
+In a multi-blockchain system like TON, even full nodes would usually be interested in obtaining updates (i.e., new blocks) only around
 a few shardchains. To this end, a special overlay subnetwork has been built
 inside the TON Network, on top of the ADNL Protocol,
 for each shardchain.

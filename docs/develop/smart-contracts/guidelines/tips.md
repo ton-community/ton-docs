@@ -1,6 +1,6 @@
 # Tips & Tricks
 
-## About bounce TONs back
+## About bounce TON back
 
 If you have the `throw_if` function (with code != 0) in recv_internal triggered and the bounce flag
 set([tblkch.pdf 4.2.5](https://newton-blockchain.github.io/tblkch.pdf)), all coins will be sent back.

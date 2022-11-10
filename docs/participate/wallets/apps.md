@@ -14,7 +14,7 @@ If you want to find a wallet to install, open [ton.org/wallets](https://ton.org/
 
 * [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) — one of the first wallets in the TON ecosystem developed by TON Foundation.
 * [Tonkeeper](https://tonkeeper.com/) - is an alternative wallet, that is a favourite among users today. 
-* [Tonhub](https://tonhub.com/) - is another rapidly developing wallet with new advanced features (Extension, Ton Whales Staking UI). 
+* [Tonhub](https://tonhub.com/) - is another rapidly developing wallet with new advanced features (Extension, TON Whales Staking UI). 
 
 ### Basics features
 | Wallet     | Source repositories                                     | Jetton    | NFT transfers | Authorization                                               | Wallet contract                                                                                              | Test environment                                      |

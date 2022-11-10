@@ -18,7 +18,7 @@ Or just go to the [INTRODUCTION](/develop/smart-contracts) section of smart cont
 ## Web and dApps development
 
 For web developers the best approach is to start from this article:  
-* [How TON wallets work and how to access them from JavaScript](https://society.ton.org/how-ton-wallets-work-and-how-to-access-them-from-javascript)
+* [How TON Wallets work and how to access them from JavaScript](https://society.ton.org/how-ton-wallets-work-and-how-to-access-them-from-javascript)
 
 ### Examples & SDK
 

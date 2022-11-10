@@ -106,7 +106,7 @@ ___________
 
 ### Decentralization
 
-**Decentralization** — one of the main tenets behind TON and other blockchains. Without decentralization, Web3 would be impossible to achieve; therefore, every element of the TON ecosystem revolves around maximizing decentralization.
+**Decentralization** — one of the main tenets behind TON and other blockchains. Without decentralization, Web3 would be impossible to achieve; therefore, every element of the TON Ecosystem revolves around maximizing decentralization.
 
 ### DeFi
 
@@ -250,7 +250,7 @@ ___________
 
 ### Launchpad
 
-**Launchpad** — a platform for crypto startups that brings investors and projects together. The main launchpad in the TON ecosystem is Tonstarter.
+**Launchpad** — a platform for crypto startups that brings investors and projects together. The main launchpad in the TON Ecosystem is Tonstarter.
 
 ### Liquidity pool
 
@@ -294,7 +294,7 @@ __________
 
 ### Nominator
 
-**Nominator** — those who provide financial resources to validators so the latter can confirm blocks on TON Blockchain.
+**Nominator** — those who provide financial resources to validators so the latter can confirm blocks on the TON Blockchain.
 
 ### Non-custodial
 
@@ -427,7 +427,7 @@ ________
 
 ### Toncoin
 
-**Toncoin** — the native cryptocurrency of the TON ecosystem, which is used to develop services and pay for fees and services. It can be bought, sold, and traded.
+**Toncoin** — the native cryptocurrency of the TON Ecosystem, which is used to develop services and pay for fees and services. It can be bought, sold, and traded.
 
 ### Trading
 

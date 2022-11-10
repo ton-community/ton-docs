@@ -181,7 +181,7 @@ After that, feel free to go:
 
 Directory structure looks like:
 
-* `contracts/*.fc`—smart contracts for TON blockchain written in [FunC](https://ton.org/docs/#/func) language
+* `contracts/*.fc`—smart contracts for TON Blockchain written in [FunC](https://ton.org/docs/#/func) language
 * `test/*.spec.ts`—test suite for the contracts in TypeScript ([MochaJS](https://mochajs.org/) test runner)
 * `build/_build.ts`—build script to compile the FunC code to [Fift](https://ton.org/docs/fiftbase.pdf) and [TVM](https://ton.org/docs/tvm.pdf) opcodes
 * `build/_deploy.ts` —deploy script to deploy the compiled code to TON

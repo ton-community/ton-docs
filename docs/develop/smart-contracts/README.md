@@ -34,7 +34,7 @@ Start developing, testing, and debugging smart contracts easily with these resou
 ### Other Tools
 
 * [disintar/toncli](/develop/smart-contracts/sdk/toncli)—Comfy CLI to build, deploy, and test FunC contracts
-* [MyLocalTON](/participate/nodes/local-ton)—Run your private TON blockchain
+* [MyLocalTON](/participate/nodes/local-ton)—Run your private TON Blockchain
 * [tonwhales.com/tools/boc](https://tonwhales.com/tools/boc)—BOC parser
 * [tonwhales.com/tools/introspection-id](https://tonwhales.com/tools/introspection-id)—crc32 generator
 

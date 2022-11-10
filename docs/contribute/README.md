@@ -8,7 +8,7 @@ There are several ways to identify the area where you can contribute to TON Docs
   saying, "I'd like to contribute to TON Docs." They’ll work with you to find an area where you can contribute.
 - If you have a specific contribution in mind but are unsure about it, confirm whether
   the contribution is appropriate by contacting one of the [Docs maintainers](/contribute/maintainers) directly.
-- Get familiar with the most frequently asked questions in TON Developers Chats.
+- Get familiar with the most frequently asked questions in the TON Developers chats.
 - Please read over the issues in the GitHub repository.
 
 ## TL;DR
