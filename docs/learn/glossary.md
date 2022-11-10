@@ -182,7 +182,7 @@ ___________
 
 ### Full Node
 
-**Full Node** — a computer on the TON blockchain that synchronizes and copies the entire TON blockchain.
+**Full Node** — a computer on TON Blockchain that synchronizes and copies the entire TON Blockchain.
 
 ### FunC
 
@@ -294,7 +294,7 @@ __________
 
 ### Nominator
 
-**Nominator** — those who provide financial resources to validators so the latter can confirm blocks on the TON blockchain.
+**Nominator** — those who provide financial resources to validators so the latter can confirm blocks on TON Blockchain.
 
 ### Non-custodial
 
@@ -371,7 +371,7 @@ _________
 
 ### Shard
 
-**Shard** — a mechanism that helps a blockchain network to scale by breaking into smaller blockchains to relieve network congestion — something which the TON blockchain does.
+**Shard** — a mechanism that helps a blockchain network to scale by breaking into smaller blockchains to relieve network congestion — something which TON Blockchain does.
 
 ### Smart contract
 
@@ -439,7 +439,7 @@ ___________
 
 ### Validator
 
-**Validator** — those who verify new blocks on the TON blockchain.
+**Validator** — those who verify new blocks on TON Blockchain.
 
 ___________
 

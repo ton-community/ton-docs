@@ -4,7 +4,7 @@
 
 The TON Project is more than just a blockchain — it also has a unique network technology.
 
-First of all, network protocols were created specifically for the TON Blockchain so that nodes could communicate with one another and exchange data. Currently, the network hosts solutions which are so powerful and universal that, together, they are equivalent to a next generation internet.
+First of all, network protocols were created specifically for TON Blockchain so that nodes could communicate with one another and exchange data. Currently, the network hosts solutions which are so powerful and universal that, together, they are equivalent to a next generation internet.
 
 The TON Network is interesting itself, not even considering TON Blockchain, because it is a fully decentralized, secure and private computer network akin to __[TOR](https://en.wikipedia.org/wiki/Tor_(network))__ or the __[I2P (Invisible Internet Project)](https://en.wikipedia.org/wiki/I2P)__.
 
@@ -23,7 +23,7 @@ You can find a more technical explanation of the protocols on the TON Network in
 
 ### TON Blockchain relies on TON Network
 
-For the last three years since the project’s inception, the TON Blockchain’s nodes (validators, server, etc.) have been communicating with one another with the help of the TON Network, the combination of which has proved to be stable and effective in practice.
+For the last three years since the project’s inception, TON Blockchain’s nodes (validators, server, etc.) have been communicating with one another with the help of the TON Network, the combination of which has proved to be stable and effective in practice.
 
 As operations on the blockchain become more complex, more powerful network solutions will eventually be required. The TON Network fully meets the needs of a latest generation blockchain; for example, when TON Blockchain divides into sub-blockchains due to high throughput, each sub-blockchain use its own individual sub-network.
 

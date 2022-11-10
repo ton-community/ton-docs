@@ -24,7 +24,7 @@ There are different types of nodes in The Open Network:
 
      If you enable an endpoint in a full node, then it starts to perform the functions of a lite server - it can receive and respond to requests from lite clients.
 
-     Using this node, your product can interact with the TON Blockchain.
+     Using this node, your product can interact with TON Blockchain.
 
      The TON Foundation supports a number of **public lite servers** that you can find in the global config ([mainnet](https://ton.org/global-config.json) and [testnet](https://ton.org/testnet-global.config.json)).
 

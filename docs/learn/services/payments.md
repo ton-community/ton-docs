@@ -2,9 +2,9 @@
 
 <img src="/img/docs/ton-payments.jpeg" style={{margin: "20px 0"}} alt="TON Payments overview"/>
 
-On the TON Blockchain, block time is about 5 seconds. Even with an increase in network load, that time won’t increase. In other words, in those 5 seconds, millions of transactions can be processed.
+On TON Blockchain, block time is about 5 seconds. Even with an increase in network load, that time won’t increase. In other words, in those 5 seconds, millions of transactions can be processed.
 
-Moreover, the TON Blockchain has exceptionally low network fees for transactions.
+Moreover, TON Blockchain has exceptionally low network fees for transactions.
 
 This is enough to solve almost all possible tasks.
 
