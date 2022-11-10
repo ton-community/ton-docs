@@ -2,7 +2,7 @@
 
 To install and manage your own node, use the **[mytonctrl](https://github.com/ton-blockchain/mytonctrl)** open source tool developed by TON Foundation.
 
-The majority of TON Nodes use reliable and tested by **mytonctrl**.
+The majority of TON Nodes are reliable and tested by **mytonctrl**.
 
 ## Installation
 
