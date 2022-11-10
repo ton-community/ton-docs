@@ -50,7 +50,7 @@ Apart from those basic fees, the following fees appear:
 
 ## FunC constructions gas fees
 
-Almost all functions used in funC are defined in [stdlib.func](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) which maps funC functions to Fift assembler instructions. In turn, Fift assembler instructions are mapped to bit-sequence instructions in [asm.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/fift/lib/Asm.fif). So if you want to understand how much exactly the instruction call will cost you, you need to find `asm` representation in `stdlib.func`, then find bit-sequence in `asm.fif` and calculate instruction length in bits.
+Almost all functions used in FunC are defined in [stdlib.func](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) which maps FunC functions to Fift assembler instructions. In turn, Fift assembler instructions are mapped to bit-sequence instructions in [asm.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/fift/lib/Asm.fif). So if you want to understand how much exactly the instruction call will cost you, you need to find `asm` representation in `stdlib.func`, then find bit-sequence in `asm.fif` and calculate instruction length in bits.
 
 However, generally, fees related to bit-lengths are minor in comparison with fees related to cell parsing and creation, as well as jumps and just number of executed instructions.
 

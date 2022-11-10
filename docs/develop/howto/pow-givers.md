@@ -4,15 +4,15 @@
 This information may be out of date and no longer useful. Feel free to omit it.
 :::
 
-The aim of this text is to describe how to interact with Proof-of-Work Giver smart contracts to obtain Toncoins. We assume familiarity with the TON Blockchain Lite Client as explained in `Getting Started`, and with the procedure required to compile the Lite Client and other software. For obtaining the larger amount of Toncoins required for running a validator, we also assume acquaintance with the `Full Node` and `Validator` pages. You will also need a dedicated server powerful enough for running a Full Node in order to obtain the larger amount of Toncoins. Obtaining small amounts of Toncoins does not require a dedicated server and may be done in several minutes on a home computer.
+The aim of this text is to describe how to interact with Proof-of-Work Giver smart contracts to obtain Toncoin. We assume familiarity with the TON Blockchain Lite Client as explained in `Getting Started`, and with the procedure required to compile the Lite Client and other software. For obtaining the larger amount of Toncoin required for running a validator, we also assume acquaintance with the `Full Node` and `Validator` pages. You will also need a dedicated server powerful enough for running a Full Node in order to obtain the larger amount of Toncoin. Obtaining small amounts of Toncoin does not require a dedicated server and may be done in several minutes on a home computer.
 
 > Note that, at the moment, large resources are required for any mining due to the large number of miners.
 
 ## 1. Proof-of-Work Giver smart contracts
 
-In order to prevent a small number of malicious parties from collecting all Toncoins, a special kind of "Proof-of-Work Giver" smart contract has been deployed in the masterchain of the network. The addresses of these smart contacts are:
+In order to prevent a small number of malicious parties from collecting all Toncoin, a special kind of "Proof-of-Work Giver" smart contract has been deployed in the masterchain of the network. The addresses of these smart contacts are:
 
-Small givers (deliver from 10 to 100 Toncoins every several minutes):
+Small givers (deliver from 10 to 100 Toncoin every several minutes):
 
 * kf-kkdY_B7p-77TLn2hUhM6QidWrrsl8FYWCIvBMpZKprBtN
 * kf8SYc83pm5JkGt0p3TQRkuiM58O9Cr3waUtR9OoFq716lN-
@@ -25,7 +25,7 @@ Small givers (deliver from 10 to 100 Toncoins every several minutes):
 * kf9iWhwk9GwAXjtwKG-vN7rmXT3hLIT23RBY6KhVaynRrIK7
 * kf8JfFUEJhhpRW80_jqD7zzQteH6EBHOzxiOhygRhBdt4z2N
 
-Large givers (deliver 10,000 Toncoins at least once a day):
+Large givers (deliver 10,000 Toncoin at least once a day):
 
 * kf8guqdIbY6kpMykR8WFeVGbZcP2iuBagXfnQuq0rGrxgE04
 * kf9CxReRyaGj0vpSH0gRZkOAitm_yDHvgiMGtmvG-ZTirrMC
@@ -40,11 +40,11 @@ Large givers (deliver 10,000 Toncoins at least once a day):
 
 > Note that at the current moment all large givers are depleted.
 
-The first ten smart contracts enable a user willing to obtain a small amount of Toncoins to obtain some without spending too much computing power (typically, several minutes of work on a home computer should suffice). The remaining smart contracts are for obtaining larger amounts of Toncoins required for running a validator in the network; typically, a day of work on a dedicated server powerful enough to run a validator should suffice to obtain the necessary amount.
+The first ten smart contracts enable a user willing to obtain a small amount of Toncoin to obtain some without spending too much computing power (typically, several minutes of work on a home computer should suffice). The remaining smart contracts are for obtaining larger amounts of Toncoin required for running a validator in the network; typically, a day of work on a dedicated server powerful enough to run a validator should suffice to obtain the necessary amount.
 
 > Note that at the moment, due to a large number of miners, large resources are required for mining small givers.
 
-You should randomly choose one of these "proof-of-work giver" smart contracts (from one of these two lists depending on your purpose) and obtain Toncoins from this smart contract by a procedure similar to mining. Essentially, you have to present an external message containing the proof of work and the address of your wallet to the chosen "proof-of-work giver" smart contract, and then the necessary amount will be sent to you.
+You should randomly choose one of these "proof-of-work giver" smart contracts (from one of these two lists depending on your purpose) and obtain Toncoin from this smart contract by a procedure similar to mining. Essentially, you have to present an external message containing the proof of work and the address of your wallet to the chosen "proof-of-work giver" smart contract, and then the necessary amount will be sent to you.
 
 ## 2. The mining process
 
@@ -190,8 +190,8 @@ last transaction lt = 7720945000001 hash = 73353151859661AB0202EA5D92FF409747F20
 account balance is 99995640998ng
 ```
 
-Now you are a happy owner of 100 Toncoins. Congratulations!
+Now you are a happy owner of 100 Toncoin. Congratulations!
 
 ## 3. Automating the mining process in the case of failure
 
-If you fail to obtain your Toncoins for a long time, this may happen because too many other users are simultaneously mining from the same proof-of-work giver smart contract. Maybe you should choose another proof-of-work giver smart contract from one of the lists given above. Alternatively, you can write a simple script to automatically run `pow-miner` with the correct parameters again and again until success (detected by checking the exit code of `pow-miner`) and invoke the Lite Client with the parameter `-c 'sendfile mined.boc'` to send the external message immediately after it is found.
+If you fail to obtain your Toncoin for a long time, this may happen because too many other users are simultaneously mining from the same proof-of-work giver smart contract. Maybe you should choose another proof-of-work giver smart contract from one of the lists given above. Alternatively, you can write a simple script to automatically run `pow-miner` with the correct parameters again and again until success (detected by checking the exit code of `pow-miner`) and invoke the Lite Client with the parameter `-c 'sendfile mined.boc'` to send the external message immediately after it is found.

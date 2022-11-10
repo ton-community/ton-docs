@@ -14,7 +14,7 @@
     * [Software](#faq-software)
 
 ## <a id="introduction"></a>Introduction
-This document provides an introduction to the process of mining Toncoins using PoW givers. Please visit [ton.org/mining](https://ton.org/mining) for up-to-date status of TON mining.
+This document provides an introduction to the process of mining Toncoin using PoW givers. Please visit [ton.org/mining](https://ton.org/mining) for up-to-date status of TON mining.
 
 ## <a id="quick-start"></a>Quick start
 To start mining right away:
@@ -31,7 +31,7 @@ To start mining right away:
 10. Wait to get lucky; the output of step 4 should have told you approximately what your chances are to mine a block.
 
 ## <a id="basics"></a>Basics
-Toncoins are distributed by so-called `PoW Givers` which are smart contracts with certain amounts of TONs assigned to them. Currently, there are 10 active PoW givers on the TON network. Givers hand out coins in blocks of 100 TON each. In order to receive such a block, your computer needs to solve a complex mathematical challenge issued by a giver and do that as fast as possible; you will compete against other miners for the reward of 100 TON. If someone manages to solve the problem before you, all the work your machine has done is in vain, and a new round/race begins.
+Toncoin are distributed by so-called `PoW Givers` which are smart contracts with certain amounts of TONs assigned to them. Currently, there are 10 active PoW givers on the TON Network. Givers hand out coins in blocks of 100 TON each. In order to receive such a block, your computer needs to solve a complex mathematical challenge issued by a giver and do that as fast as possible; you will compete against other miners for the reward of 100 TON. If someone manages to solve the problem before you, all the work your machine has done is in vain, and a new round/race begins.
 
 It is important to understand that profits from mining do not "trickle in" as your machine does the works, they come in batches of 100 TON for every successful solution of giver challenge. This means that if your machine has a 10% chance to calculate a block within 24 hours (see step 4 of [Quick start](#quickStart)) then you will probably need to wait for ~10 days before you will get a 100 TON reward.
 
@@ -108,10 +108,10 @@ Yes, there is a third-party app—[TON Miner Bot](https://t.me/TonMinerBot).
 [ton.org/mining](https://ton.org/mining)
 #### <a id="faq-general-howmany"></a>How many miners are out there?
 We cannot say this. All we know is the total hashrate of all miners on the network. However, there are graphs on [ton.org/mining](https://ton.org/mining) that attempt to estimate quantity of machines of certan type needed to provide aproximate total hashrate.
-#### <a id="faq-general-noincome"></a>Do I need Toncoins to start mining?
+#### <a id="faq-general-noincome"></a>Do I need Toncoin to start mining?
 No, you do not. Anyone can start mining without owning a single Toncoin.
 #### <a id="faq-mining-noincome"></a>I mine for hours, why my wallet total does not increase, not even by 1 TON?
-TONs are mined in blocks of 100, you either guess a block and receive 100 TON or receive nothing. Please see [basics](#basics).
+TON are mined in blocks of 100, you either guess a block and receive 100 TON or receive nothing. Please see [basics](#basics).
 #### <a id="faq-mining-noblocks"></a>I've been mining for days and I see no results, why?
 Did you check your current [Income estimates](#hardware-estimates)? If field `Est. 24h chance to mine a block` is less than 100%, then you need to be patient. Also, please note that a 50% chance to mine a block within 24 hours does not automatically mean that you will mine one within 2 days; 50% applies to each day separately.
 #### <a id="faq-mining-pools"></a>Are there mining pools?

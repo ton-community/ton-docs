@@ -33,11 +33,11 @@
 
 * **POW Givers**
 
-  Step-by-step instructions to mine Proof-of-work giver smart contracts.
+  Step-by-step instructions to mine proof-of-work giver smart contracts.
 
 * **Smart Contract Guidelines**
 
-  Guidelines and best practices related to the implementation of TON Blockchain smart contracts.
+  Guidelines and best practices related to the implementation of the TON Blockchain smart contracts.
 
 * **Payment Processing**
 

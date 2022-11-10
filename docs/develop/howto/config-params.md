@@ -152,7 +152,7 @@ B5EE9C7241010301002C0001216E5650525E838CB0000000085E9455904001010BF300000008A002
 (Saved to file config-msg-body.boc)
 ```
 
-We have obtained the body of an internal message to be sent to the configuration smart contract with a suitable amount of Toncoins from any (wallet) smart contract residing in the masterchain. The address of the configuration smart contract may be obtained by typing `getconfig 0` in the lite client:
+We have obtained the body of an internal message to be sent to the configuration smart contract with a suitable amount of Toncoin from any (wallet) smart contract residing in the masterchain. The address of the configuration smart contract may be obtained by typing `getconfig 0` in the lite client:
 ```
 > getconfig 0
 ConfigParam(0) = ( config_addr:x5555555555555555555555555555555555555555555555555555555555555555)
@@ -170,7 +170,7 @@ remote result (not to be trusted):  [ 2340800000 ]
 
 The parameters to get-method `proposal_storage_price` are the critical flag (0 in this case), the time interval during which this proposal will be active (1.1 Megaseconds), the total amount of bits (104) and cell references (0) in the data. The latter two quantities can be seen in the output of `create-config-proposal.fif`.
 
-We see that one has to pay 2.3408 Toncoins to create this proposal. It is better to add at least 1.5 Tonoins to the message to pay for the processing fees, so we are going to send 4 Toncoins along with the request (all excess Toncoins will be returned back). Now we use `wallet.fif` (or the corresponding Fift script for the wallet we are using) to create a transfer from our wallet to the configuration smart contract carrying 4 Toncoins and the body from `config-msg-body.boc`. This usually looks like:
+We see that one has to pay 2.3408 Toncoin to create this proposal. It is better to add at least 1.5 Tonoin to the message to pay for the processing fees, so we are going to send 4 Toncoin along with the request (all excess Toncoin will be returned back). Now we use `wallet.fif` (or the corresponding Fift script for the wallet we are using) to create a transfer from our wallet to the configuration smart contract carrying 4 Toncoin and the body from `config-msg-body.boc`. This usually looks like:
 
 ```
 $ fift -s wallet.fif my-wallet -1:5555555555555555555555555555555555555555555555555555555555555555 31 4. -B config-msg-body.boc
@@ -261,7 +261,7 @@ Voting for a configuration proposal is possible only for current validators, lis
 - After that, the vote request has to be signed by the current validator's private key, using `sign <validator-key-id> 566F744...28A1` in `validator-engine-console` connected to the validator. This process is similar to that described in [Validator-HOWTO](https://toncoin.org/#/howto/validator) for participating in validator elections, but this time the currently active key has to be used.
 - Next, another script `config-proposal-signed.fif` has to be invoked. It has similar arguments to `config-proposal-req.fif`, but it expects two extra arguments: the base64 representation of the public key used to sign the vote request, and the base64 representation of the signature itself. Again, this is quite similar to the process described in [Validator-HOWTO](https://toncoin.org/#/howto/validator).
 - In this way, the file `vote-msg-body.boc` containing the body of an internal message carrying a signed vote for this configuration proposal is created.
-- After that, `vote-msg-body.boc` has to be carried in an internal message from any smart contract residing in the masterchain (typically, the controlling smart contract of the validator will be used) along with a small amount of TON Coins for processing (typically, 1.5 Toncoins should suffice). This is again completely similar to the procedure employed during validator elections. This is typically achieved by means of running:
+- After that, `vote-msg-body.boc` has to be carried in an internal message from any smart contract residing in the masterchain (typically, the controlling smart contract of the validator will be used) along with a small amount of Toncoin for processing (typically, 1.5 Toncoin should suffice). This is again completely similar to the procedure employed during validator elections. This is typically achieved by means of running:
 ```
 $ fift -s wallet.fif my_wallet_id -1:5555555555555555555555555555555555555555555555555555555555555555 1 1.5 -B vote-msg-body.boc
 ```
