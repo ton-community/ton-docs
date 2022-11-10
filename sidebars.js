@@ -179,7 +179,7 @@ const sidebars = {
           type: 'category',
           label: 'Choose Your SDK',
           items: [
-            'develop/smart-contracts/sdk/tonstarter',
+            'develop/smart-contracts/sdk/javascript',
             'develop/smart-contracts/sdk/toncli',
           ],
         },
@@ -211,17 +211,14 @@ const sidebars = {
               label: 'Using toncli',
               href: 'https://github.com/disintar/toncli',
             },
-            {
-              type: 'link',
-              label: 'Using NFT Minter',
-              href: '/develop/getting-started#nft-minters--non-fungible-tokens',
-            },
-            {
-              type: 'link',
-              label: 'Using Jetton Deployer',
-              href: '/develop/getting-started#jetton-deployer--fungible-tokens',
-            },
-
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Security Rules',
+          items: [
+            'develop/smart-contracts/security/README',
+            'develop/smart-contracts/security/ton-hack-challenge-1',
           ],
         },
         {
@@ -287,12 +284,23 @@ const sidebars = {
           ],
         },
 
-        // {
-        //   type: 'category',
-        //   label: 'Best Practices',
-        //   items: [
-        //   ],
-        // },
+         {
+           type: 'category',
+           label: 'Tutorials & Examples',
+             items: [
+                'develop/dapps/tutorials/overview',
+                 'develop/dapps/tutorials/jetton-minter',
+            {
+              type: 'category',
+              label: 'Telegram bots',
+              items: [
+                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
+                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
+                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js',
+              ],
+            }
+           ],
+         },
 
       ],
     },
@@ -371,7 +379,7 @@ const sidebars = {
       type: 'category',
       label: 'Low Level Internals',
       items: [
-        'develop/dapps/payment-processing/overview',
+        'develop/howto/overview',
         'develop/howto/fees_low_level',
         'develop/howto/step-by-step',
         'develop/howto/config-params',
@@ -493,6 +501,7 @@ const sidebars = {
         'contribute/README',
         'contribute/maintainers',
         'contribute/guidelines',
+        'contribute/principles-of-a-good-tutorial',
         'contribute/sample-tutorial',
       ],
     },

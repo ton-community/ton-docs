@@ -4,7 +4,7 @@
 
 The software is likely to compile and work properly on most Linux systems. It should work on macOS and even Windows.
 
-1) Download the newest version of the TON blockchain sources, available at GitHub repository https://github.com/ton-blockchain/ton/ :
+1) Download the newest version of the TON Blockchain sources available at the GitHub repository https://github.com/ton-blockchain/ton/ :
 
 ```bash
 git clone --recurse-submodules https://github.com/ton-blockchain/ton.git
@@ -30,7 +30,7 @@ apt install cmake g++ zlib1g-dev libssl-dev
 mkdir ton-build
 ```
 
-   Then run the following in a terminal on a Linux system:
+   Then run the following in a terminal of Linux:
 
 ```bash
 cd ton-build
@@ -38,12 +38,12 @@ cmake ../ton
 ```
 
 :::tip
-If you are compiling on a computer with low memory (e.g. 1 Gb) don't forget to [create a swap partitions](/develop/howto/compile-swap).
+If you are compiling on a computer with low memory (e.g., 1 Gb), don't forget to [create a swap partitions](/develop/howto/compile-swap).
 :::
 
 ## Download Global Config
 
-For tools like lite-client you need to download the global network config.
+For tools like lite client you need to download the global network config.
 
 Download the newest configuration file from https://ton-blockchain.github.io/global.config.json for mainnet:
 
@@ -59,7 +59,7 @@ wget https://ton-blockchain.github.io/testnet-global.config.json
 
 ## Lite Client
 
-To build lite-client, do [common part](/develop/howto/compile#common), [download the config](/develop/howto/compile#download-global-config) and then do:
+To build a lite client, do [common part](/develop/howto/compile#common), [download the config](/develop/howto/compile#download-global-config), and then do:
 
 ```bash
 cmake --build . --target lite-client
@@ -83,7 +83,7 @@ Basic help info can be obtained by typing `help` into the Lite Client. Type `qui
 
 ## FunC
 
-To build FunC compiler from source code do [common part](/develop/howto/compile#common) described above and then:
+To build FunC compiler from source code, do [common part](/develop/howto/compile#common) described above and then:
 
 ```bash
 cmake --build . --target func
@@ -97,7 +97,7 @@ func -o output.fif -SPA source0.fc source1.fc ...
 
 ## Fift
 
-To build Fift compiler from source code do [common part](/develop/howto/compile#common) described above and then:
+To build Fift compiler from source code, do [common part](/develop/howto/compile#common) described above and then:
 
 ```bash
 cmake --build . --target fift

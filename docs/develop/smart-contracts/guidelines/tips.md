@@ -13,7 +13,7 @@ A bounced message has only 224 bits in the body, everything else (even reference
 
 :::info Example
 
-1. You send `msg_body: uint112 + ^[uint112]` to smart-contract to bounce
+1. You send `msg_body: uint112 + ^[uint112]` to a smart contract to bounce
 2. SC returns bounced message with a `msg_body: 0xFFFFFFFF + uint112` **without** `^ref` payload, even though there is
    enough space for it.
 :::
@@ -24,21 +24,21 @@ More info about this discussion is [here](https://t.me/tondev_eng/11201).
 
 This information is based on this [discussion](https://github.com/DKeysil/awesome-ton-smart-contracts/issues/1)
 
-`accept_message` simply sets the gas limit to the maximal possible value (the gas that can be bought by both original
-contract balance and message value, or, more commonly, the maximal gas amount allowed to use in single transaction) and
-also sets gas credit to zero.
+`accept_message` simply sets the gas limit to the maximum possible value (the gas that can be bought by both original
+contract balance and message value, or, more commonly, the maximum gas amount allowed to be used in a single transaction) and
+also sets the gas credit to zero.
 
-In the case of external messages you need to accept the message in order to make transaction appear in the block (or,
-more precisely speaking, you need to somehow set gas credit to zero). You can accept message at any time during the TVM
+In the case of external messages, you need to accept the message in order to make the transaction appear in the block (or,
+to be more specific, you must somehow reduce your gas credit to zero). You can accept messages at any time during the TVM
 execution, even after calling `send_raw_message` primitive. The only way the fees may be charged from the account is to
 put a transaction into the blockchain, so it's the reason why "transactions" with no `accept_message` are "free".
 
-In the case of internal messages the initial gas limit is set equal to the amount of gas that can be bought by message
+In the case of internal messages, the initial gas limit is set equal to the amount of gas that can be bought by the message
 value. `accept_message` raises that limit. Even without `accept_message` you can spend more coins than the message value
-by sending some other messages which carry value.
+by sending some other messages that carry value.
 
 Using `set_gas_limit` in internal messages does not limit the possibility of spending more TON than came with the
-message when sending other messages that carry value. You can use `raw_reserve` in addition to gas limit to limit
+message when sending other messages that carry value. You can use `raw_reserve` in addition to gas limit to limit a
 spendable amount of coins.
 
 FunC docs:
@@ -49,9 +49,9 @@ FunC docs:
 
 Read more in the [original discussion](https://t.me/tondev/45882).
 
-## Spend less gas in huge smart contracts
+## Spend less gas on large smart contracts
 
-`touch()` is tip to the compiler how best to organize the stack. The command puts a variable at top of the
+`touch()` is a tip to the compiler how to best organize the stack. The command puts a variable at top of the
 stack ([func docs](/develop/func/stdlib#impure_touch))
 
 ### Example
@@ -83,6 +83,6 @@ In this code:
      int op = cs~load_uint(8);
 ```
 
-`cs~touch();` will place `cs` on top of the stack and then the interaction with the variable will be cheaper.
+`cs~touch();` will place `cs` on top of the stack, and then the interaction with the variable will be cheaper.
 
 Read more in the [original discussion](https://t.me/tondev/45956).

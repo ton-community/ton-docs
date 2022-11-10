@@ -13,8 +13,8 @@ Visual Studio Code is a free and popular IDE for developers.
 Could be used for any of JetBrains products.
 :::
 
-You can install plugin by these ways:
-- Find plugin directly in IDE plugins section with "**TON Development**" keywords
+There are several ways to install a plugin:
+- Find plugin directly in the IDE plugins section with "**TON Development**" keywords
 - [Marketplace link](https://plugins.jetbrains.com/plugin/18541-ton-development)
 - [GitHub repository](https://github.com/ton-blockchain/intellij-ton)
 

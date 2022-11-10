@@ -1,40 +1,34 @@
 # TON Payments
 
-TON Payments - the platform for (micro)payment channels and "lightning network" value transfers. 
+TON Payments is the platform for micropayment channels. 
 
-It allows "instant" payments, without the need to commit all transactions into the blockchain, pay the associated transaction fees (e.g., for the gas consumed), and wait five seconds until the block
+It allows instant payments without the need to commit all transactions to the blockchain, pay the associated transaction fees (e.g. for the gas consumed), and wait five seconds until the block
 containing the transactions in question is confirmed.
 
-The overall overhead of such instant payments is so small that one can use them for micropayments.
+Because the overall expense of such instant payments is so minimal, they can be used for micropayments in games, APIs, and off-chain apps. [See examples](/develop/dapps/defi/ton-payments#examples).
 
-* [TON Payments Overview article](/learn/services/payments)
+* [TON Payments overview article](/learn/services/payments)
 
-:::info 
-The theory of TON Payments is well described in [TON whitepaper](https://ton.org/docs/ton.pdf), chapter 5.
-:::
+## Payment channels
 
-## Payment Channels
+### Smart contracts
 
-You can find ready-made smart contracts [here](https://github.com/ton-blockchain/payment-channels).
+* [ton-blockchain/payment-channels](https://github.com/ton-blockchain/payment-channels)
 
-To use payments channels, you don’t need deep knowledge of cryptography. You can use prepared SDKs:
+### SDK
 
-[TonWeb JavaScript SDK](https://github.com/toncenter/tonweb).
+To use payment channels, you don’t need deep knowledge of cryptography.
 
-[Code example](https://github.com/toncenter/payment-channels-example) of how to use a payments channel.
+You can use prepared SDKs:
 
-You can find examples of using payment channels in the [Hack-a-TON #1](https://ton.org/hack-a-ton-1).
+* [toncenter/tonweb](https://github.com/toncenter/tonweb) —  JavaScript SDK
+* [toncenter/payment-channels-example](https://github.com/toncenter/payment-channels-example) — how to use a payments channel with tonweb.
 
-:::info
-The theory of payment channels is well described in [TON whitepaper](https://ton.org/docs/ton.pdf), chapter 5.1.
-:::
+### Examples
 
-## Payment Channel Network
+Find examples of using payment channels in the [Hack-a-TON #1](https://ton.org/hack-a-ton-1) winners:
 
-As the technology improves, payments channels will have the capacity to join together in a network off-chain where more than two parties will be able to participate.
-
-Current smart contracts are already designed to support the functionality of uniting into a single off-chain network.
-
-:::info
-The theory of payment channel network is described in [TON whitepaper](https://ton.org/docs/ton.pdf), chapter 5.2.
-:::
+* [grejwood/Hack-a-TON](https://github.com/Grejwood/Hack-a-TON) — OnlyTONs payments project ([website](https://main.d3puvu1kvbh8ti.amplifyapp.com/), [video](https://www.youtube.com/watch?v=38JpX1vRNTk))
+* [nns2009/Hack-a-TON-1_Tonario](https://github.com/nns2009/Hack-a-TON-1_Tonario) — OnlyGrams payments project ([website](https://onlygrams.io/), [video](https://www.youtube.com/watch?v=gm5-FPWn1XM))
+* [sevenzing/hack-a-ton](https://github.com/sevenzing/hack-a-ton) — Pay-per-Request API usage in TON ([video](https://www.youtube.com/watch?v=7lAnbyJdpOA&feature=youtu.be))
+* [illright/diamonds](https://github.com/illright/diamonds) — Pay-per-Minute learning platform ([website](https://diamonds-ton.vercel.app/), [video](https://www.youtube.com/watch?v=g9wmdOjAv1s))

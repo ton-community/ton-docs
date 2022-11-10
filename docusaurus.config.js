@@ -33,47 +33,35 @@ const config = {
     [
       '@docusaurus/plugin-client-redirects',
       {
-        // redirects: [
-        //   // services
-        //   {
-        //     to: '/learn/services/dns',
-        //     from: '/develop/services/dns',
-        //   },
-        //   {
-        //     to: '/learn/services/payments',
-        //     from: '/develop/services/payments',
-        //   },
-        //   {
-        //     to: '/learn/networking/low-level-adnl',
-        //     from: '/learn/overviews/adnl',
-        //   },
-        //
-        //   // payment processing
-        //   {
-        //     to: '/develop/dapps/payment-processing/common',
-        //     from: '/develop/payment-processing/common',
-        //   },
-        //   {
-        //     to: '/develop/dapps/payment-processing/overview',
-        //     from: '/develop/payment-processing/overview',
-        //   },
-        //   {
-        //     to: '/develop/dapps/payment-processing/withdrawals',
-        //     from: '/develop/payment-processing/withdrawals',
-        //   },
-        //   {
-        //     to: '/develop/dapps/payment-processing/withdrawals',
-        //     from: '/develop/payment-processing/withdrawals',
-        //   },
-        //   {
-        //     to: '/develop/dapps/payment-processing/deposits-single-wallet',
-        //     from: '/develop/payment-processing/deposits-single-wallet',
-        //   },
-        //   {
-        //     to: '/develop/dapps/payment-processing/deposits-multi-wallet',
-        //     from: '/develop/payment-processing/deposits-multi-wallet',
-        //   },
-        // ],
+        redirects: [
+          // services
+          {
+            to: '/learn/services/dns',
+            from: '/develop/services/dns',
+          },
+          {
+            to: '/learn/services/payments',
+            from: '/develop/services/payments',
+          },
+          {
+            to: '/learn/networking/low-level-adnl',
+            from: '/learn/overviews/adnl',
+          },
+
+          // payment processing
+          {
+            to: '/develop/howto/overview',
+            from: '/develop/payment-processing/overview',
+          },
+          {
+            to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
+            from: '/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot',
+          },
+          {
+            to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
+            from: '/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot-2',
+          },
+        ],
       },
     ],
   ],
@@ -96,7 +84,7 @@ const config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en', 'ko'],
   },
 
   presets: [
@@ -110,7 +98,7 @@ const config = {
         },
         docs: {
           routeBasePath: '/',
-          showLastUpdateAuthor: true,
+          showLastUpdateAuthor: false,
           showLastUpdateTime: true,
           breadcrumbs: false,
           sidebarPath: require.resolve('./sidebars.js'),
@@ -131,6 +119,9 @@ const config = {
           //     badge: false,
           //   }
           // }
+          remarkPlugins: [
+            [require('@docusaurus/remark-plugin-npm2yarn'), {sync: true}],
+          ],
         },
         blog: {
           showReadingTime: true,
@@ -174,13 +165,13 @@ const config = {
       //   //... other Algolia params
       // },
 
-      announcementBar: {
-        id: 'contribute/hacktoberfest',
-        content:
-          '<a rel="noopener noreferrer" href="/hacktonberfest"><span>The HACKTOBERFEST event has already started!  Read more about the event and rewards! </span> <span class="mobile-view">Read more about The HACKTOBERFEST</span></a>',
-        textColor: '#F3F3F7',
-        isCloseable: false,
-      },
+      // announcementBar: {
+      //   id: 'contribute/hacktoberfest',
+      //   content:
+      //     '<a rel="noopener noreferrer" href="/hacktonberfest"><span>The HACKTOBERFEST event has already started!  Read more about the event and rewards! </span> <span class="mobile-view">Read more about The HACKTOBERFEST</span></a>',
+      //   textColor: '#F3F3F7',
+      //   isCloseable: false,
+      // },
 
       image: 'img/snippet.jpg',
       navbar: {
@@ -240,12 +231,33 @@ const config = {
           //   position: 'left',
           //   label: 'Integrate',
           // },
+
+          {
+            to: 'contribute',
+            label: 'Contribute',
+            position: 'right',
+          },
+          {
+            to: 'https://answers.ton.org/',
+            label: 'Q&A',
+            position: 'right',
+          },
+          {
+            to: 'https://t.me/TonDev_eng',
+            label: 'Dev Chat',
+            position: 'right',
+          },
           {
             href: 'https://github.com/ton-community/ton-docs',
             position: 'right',
             className: 'header-github-link',
             'aria-label': 'GitHub repository',
           },
+          // {
+          //   type: 'localeDropdown',
+          //   position: 'right',
+          // },
+          //
         ],
       },
       footer: {

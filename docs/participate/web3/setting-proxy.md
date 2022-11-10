@@ -8,7 +8,7 @@ You can use one of the public entry TON proxies:
 * `in2.ton.org` port `8080`
 * `in3.ton.org` port `8080`
 
-TON proxy are compatible with regular HTTP proxy, so you can set it directly in your browser or operating system settings.
+A TON proxy is compatible with a regular HTTP proxy, so you can use it directly in your browser or operating system settings.
 
 ## Google Chrome
 
@@ -20,7 +20,7 @@ Settings -> General -> Network Settings -> Configure -> Manual proxy settings ->
 
 In the "HTTP proxy" field, enter the address of one of the public entry proxies, in the "Port" field, enter "8080" without quotes.
 
-Click OK.
+Click "OK".
 
 ## Safari
 
@@ -32,7 +32,7 @@ Settings -> WiFi -> Click on currently connected network -> Proxy setting -> Man
 
 In the "Server" field, enter the address of one of the public entry proxies, in the "Port" field, enter "8080" without quotes.
 
-Click Save.
+Click "Save".
 
 ## Android
 
@@ -40,21 +40,21 @@ Settings -> WiFi -> Tap and hold the Wi-Fi Network Name -> Modify Network -> Adv
 
 In the "Server" field, enter the address of one of the public entry proxies, in the "Port" field, enter "8080" without quotes.
 
-Click Save.
+Click "Save".
 
 ## Windows
 
-Start button, then select Settings  > Network & internet  > Proxy.
+"Start" button, then select Settings  > Network & internet  > Proxy.
 
-Under Manual proxy setup, next to Use a proxy server, select Set up.
+Under "Manual proxy setup", next to "Use a proxy server", select "Set up".
 
-In the Edit proxy server dialog box, do the following:
+In the "Edit proxy server dialog" box, do the following:
 
-Turn on Use a proxy server.
+Turn on "Use a proxy server".
 
 Enter the address of one of the public entry proxies, in the "Port" field, enter "8080" without quotes.
 
-Click Save.
+Click "Save".
 
 ## macOS
 
@@ -62,7 +62,7 @@ Settings -> Network -> Advanced -> Proxy -> Web proxy (HTTP).
 
 In the "Web proxy server" field, enter the address of one of the public entry proxies, after the colon, enter "8080" without quotes.
 
-Click OK.
+Click "OK".
 
 ## Ubuntu
 

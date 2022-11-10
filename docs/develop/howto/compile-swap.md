@@ -1,10 +1,10 @@
 # Compile TON on a low-memory machines
 
-Creating a swap partitions to compile TON on a computer with low memory (less 1GB).
+Creating a swap partitions to compile TON on a computer with low memory (less than 1GB).
 
 ## Prerequisites
 
-During C++ compilation in Linux system, the following errors occur, resulting in compilation abort:
+During C++ compilation in the Linux system the following errors occur, resulting in a compilation abort:
 
 ```
 C++: fatal error: Killed signal terminated program cc1plus compilation terminated.
@@ -12,7 +12,7 @@ C++: fatal error: Killed signal terminated program cc1plus compilation terminate
 
 ## Solution
 
-This occurs due to lack of memory and is solved by creating a swap partitions:
+This occurs due to a lack of memory and is solved by creating a swap partitions.
 
 ```bash
 # Create the partition path

@@ -1,24 +1,24 @@
 # TVM Instructions
 
 :::caution advanced level
-This information is **very low level** and could be hard to understand for newcomers.  
+This information is **very low-level** and could be hard to understand for newcomers.  
 So feel free to read about it later.
 :::
 
 ## 1 Introduction
-This document provides a list of TVM instrucions, their opcodes and mnemonics.
+This document provides a list of TVM instructions along with their opcodes and mnemonics.
 
 :::tip
 [**Here**](https://ton.org/tvm.pdf) is a full description of TON Virtual Machine.
 :::
 
-Fift is a stack-based programming language designed to manage TON smart contracts. The Fift assembler is a Fift library that converts mnemonics of TVM instructions to their binary representation.
+Fift is a stack-based programming language designed to manage TON Smart Contracts. The Fift assembler is a Fift library that converts mnemonics of TVM instructions into their binary representation.
 
-A description of Fift, including the introduction to the Fift assembler, can be found [here](https://github.com/Piterden/TON-docs/blob/master/Fift.%20A%20Brief%20Introduction.md).
+A description of Fift, including an introduction to the Fift assembler, can be found [here](https://github.com/Piterden/TON-docs/blob/master/Fift.%20A%20Brief%20Introduction.md).
 
 This document specifies the corresponding mnemonic for each instruction. Note the following:
 
-1. Fift is a stack-based language, therefore all arguments of an instruction are written before it (e.g. [`5 PUSHINT`](#instr-pushint-4), [`s0 s4 XCHG`](#instr-xchg-ij)).
+1. Fift is a stack-based language, therefore all the arguments of any instruction are written before it (e.g. [`5 PUSHINT`](#instr-pushint-4), [`s0 s4 XCHG`](#instr-xchg-ij)).
 2. Stack registers are denoted by `s0, s1, ..., s15`. Other stack registers (up to 255) are denoted by `i s()` (e.g. `100 s()`).
 3. Control registers are denoted by `c0, c1, ..., c15`.
 
@@ -29,10 +29,10 @@ The gas price of each instruction is specified in this document. The basic gas p
 3. _Throwing exceptions_: **50 gas units**. In this document the exception fee is only specified for an instruction if its primary purpose is to throw (e.g. [`THROWIF`](#instr-throwif-short), [`FITS`](#instr-fits)). If the instruction only throws in some cases, two gas prices are specified (e.g. [`FITS`](#instr-fits): `26/76`).
 4. _Tuple creation_: **1 gas unit** for every tuple element.
 5. _Implicit jumps_: **10 gas units** for an implicit jump, **5 gas units** for an implicit back jump. This fee is not a part of any instruction.
-6. _Moving stack elements between continuations_: **1 gas unit** per element, however first 32 elements moving is free.
+6. _Moving stack elements between continuations_: **1 gas unit** per element, however moving the first 32 elements is free.
 
 ### 1.2 CSV table
-Machine-readable list of TVM instructions is available [here](https://github.com/ton-blockchain/blob/master/smart-contracts/tvm-instructions/instructions.csv).
+A machine-readable list of TVM instructions is available [here](https://github.com/ton-blockchain/blob/master/smart-contracts/tvm-instructions/instructions.csv).
 
 ## 2 Stack manipulation primitives
 Here `0 <= i,j,k <= 15` if not stated otherwise.
@@ -159,7 +159,7 @@ Here `0 <= i,j,k <= 15` if not stated otherwise.
 | **`6FD4`** | `CADDR` | _`t - x`_ | Recovers `x=t_2_2_1`. | `26` |
 | **`6FD5`** | `CDDDR` | _`t - x`_ | Recovers `x=t_2_2_2`. | `26` |
 
-## 4 Constant, or literal primitives
+## 4 Constant or literal primitives
 ### 4.1 Integer and boolean constants
 | xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
@@ -260,8 +260,8 @@ Here `0 <= i,j,k <= 15` if not stated otherwise.
 | **`B60A`** | `MINMAX`<br/>`INTSORT2` | _`x y - x y or y x`_ | Sorts two integers. Quiet version of this operation returns two `NaN`s if any of the arguments are `NaN`s. | `26` |
 | **`B60B`** | `ABS` | _`x - \|x\|`_ | Computes the absolute value of an integer `x`. | `26` |
 ### 5.4 Quiet arithmetic primitives
-Quiet operations return `NaN` instead of throwing exceptions if one of their arguments is a `NaN`, or in case of integer overflow.
-Quiet operations has a prefix `Q` as shown below. Another way to make an operation quiet is to add `QUIET` before it (i.e. one can write [`QUIET ADD`](#instr-add) instead of [`QADD`](#instr-qadd)).
+Quiet operations return `NaN` instead of throwing exceptions if one of their arguments is a `NaN` or in the case of an integer overflow.
+Quiet operations have a prefix `Q` as shown below. Another way to make an operation quiet is to add `QUIET` before it (i.e. one can write [`QUIET ADD`](#instr-add) instead of [`QADD`](#instr-qadd)).
 Quiet versions of integer comparison primitives are also available ([`QUIET SGN`](#instr-sgn), [`QUIET LESS`](#instr-less) etc).
 
 | xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
@@ -662,7 +662,7 @@ Here `s"` is the [fee for moving stack elements between continuations](#11-gas-p
 | **`F3pr`** | `[p] [r] TRYARGS` | _`c c' - `_ | Similar to [`TRY`](#instr-try), but with [`[p] [r] CALLXARGS`](#instr-callxargs) internally used instead of [`EXECUTE`](#instr-execute).<br/>In this way, all but the top `0 <= p <= 15` stack elements will be saved into current continuation's stack, and then restored upon return from either `c` or `c'`, with the top `0 <= r <= 15` values of the resulting stack of `c` or `c'` copied as return values. | `26` |
 
 ## 10 Dictionary manipulation primitives
-Gas consumption of most of the dictionary operations is not fixed, it depends on the contents of the given dictionary.
+The gas consumption of most dictionary operations is not fixed, it depends on the contents of the given dictionary.
 ### 10.1 Dictionary creation
 | xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
@@ -826,7 +826,7 @@ These primitives are completely similar to their non-prefix code counterparts ([
 | **`F49D`** | `DICTIREMMAXREF` | _`D n - D' c i -1 or D 0`_ | Similar to [`DICTIREMMAX`](#instr-dictiremmax), but returns the only reference in the value. |  |
 | **`F49E`** | `DICTUREMMAX` | _`D n - D' x i -1 or D 0`_ | Similar to [`DICTREMMAX`](#instr-dictremmax), but returns the key as an unsigned `n`-bit _Integer_ `i`. |  |
 | **`F49F`** | `DICTUREMMAXREF` | _`D n - D' c i -1 or D 0`_ | Similar to [`DICTUREMMAX`](#instr-dicturemmax), but returns the only reference in the value. |  |
-### 10.11 Special Get dictionary and prefix code dictionary operations, and constant dictionaries
+### 10.11 Special Get dictionary and prefix code dictionary operations and constant dictionaries
 | xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F4A0`** | `DICTIGETJMP` | _`i D n - `_ | Similar to [`DICTIGET`](#instr-dictiget), but with `x` [`BLESS`](#instr-bless)ed into a continuation with a subsequent [`JMPX`](#instr-jmpx) to it on success. On failure, does nothing. This is useful for implementing `switch`/`case` constructions. |  |
@@ -932,9 +932,9 @@ These primitives are completely similar to their non-prefix code counterparts ([
 | **`FB07`** | `CHANGELIB` | _`h x - `_ | Creates an output action similarly to [`SETLIBCODE`](#instr-setlibcode), but instead of the library code accepts its hash as an unsigned 256-bit integer `h`. If `x!=0` and the library with hash `h` is absent from the library collection of this smart contract, this output action will fail. | `526` |
 
 ## 12 Debug primitives
-Opcodes beginning with `FE` are reserved for the debug primitives. These primitives have known fixed operation length, and behave as (multibyte) [`NOP`](#instr-nop) operations.
+Opcodes beginning with `FE` are reserved for the debug primitives. These primitives have known fixed operation length and behave as (multibyte) [`NOP`](#instr-nop) operations.
 
-However, when invoked in a TVM instance with debug mode enabled, these primitives can produce specific output into the text debug log of the TVM instance, never affecting the TVM state.
+However, when invoked in a TVM instance with debug mode enabled, these primitives can produce a specific output into the text debug log of the TVM instance, never affecting the TVM state.
 
 [`DEBUG`](#instr-debug) and [`DEBUGSTR`](#instr-debugstr) are the two debug primitives, they cover all opcodes that start with `FE`.
 Other primitives listed here have opcodes from the same set. When debug is enabled, they have their specified effects. When debug is disabled, they behave as [`NOP`](#instr-nop).

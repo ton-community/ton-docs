@@ -1,8 +1,8 @@
 # Statements
-This sections briefly discusses FunC statements, constituting the code of ordinary functions bodies.
+This section briefly discusses FunC statements, constituting the code of ordinary function bodies.
 
 ## Expression statements
-The most common type of statements is expression statement. It's an expression followed by `;`. Expressions description would be quite complicated, so only a sketch is presented here.
+The most common type of a statement is the expression statement. It's an expression followed by `;`. Expression's description would be quite complicated, so only a sketch is presented here.
 
 ### Variable declaration
 It is not possible to declare a local variable without defining its initial value.
@@ -28,9 +28,9 @@ int x = 2;
 int y = x + 1;
 int x = 3;
 ```
-Actually the second occurrence of `int x` is not a declaration, but just a compile-time insurance that `x` has type `int`. So the third line is essentially equivalent to simple assignment `x = 3;`.
+In fact, the second occurrence of `int x` is not a declaration, but just a compile-time insurance that `x` has type `int`. So the third line is essentially equivalent to a simple assignment `x = 3;`.
 
-And in nested scopes a variable can be truly redeclared just like in C language. For example, consider the code:
+In nested scopes, a variable can be truly redeclared just like in the C language. For example, consider the code:
 ```cpp
 int x = 0;
 int i = 0;
@@ -41,20 +41,20 @@ while (i < 10) {
 }
 ;; here x is a (different) variable of type int
 ```
-But as mentioned in global variables [section](/develop/func/global_variables.md), global variable can't be redeclared.
+But as mentioned in the global variables [section](/develop/func/global_variables.md), a global variable cannot be redeclared.
 
-Note that variable declaration **is** an expression statement, so actually constructions like `int x = 2` are full-fledged expressions. For example, this is a correct code:
+Note that a variable declaration **is** an expression statement, so actually constructions like `int x = 2` are full-fledged expressions. For example, this is a correct code:
 ```cpp
 int y = (int x = 3) + 1;
 ```
-It is a declaration of two variables `x` and `y`, equal to `3` and `4` correspondingly.
+It is a declaration of two variables `x` and `y` equal to `3` and `4` correspondingly.
 #### Underscore
 Underscore `_` is used when a value is not needed. For example, suppose a function `foo` has type `int -> (int, int, int)`. We can get the first returned value and ignore the second and third like this:
 ```cpp
 (int fst, _, _) = foo(42);
 ```
 ### Function application
-A call of a function looks like as such in a conventional language: arguments of the function call are listed after the function name, separated by commas.
+A call of a function looks like as such in a conventional language. The arguments of the function call are listed after the function name, separated by commas.
 ```cpp
 ;; suppose foo has type (int, int, int) -> int
 int x = foo(1, 2, 3);
@@ -64,7 +64,7 @@ But notice that `foo` is actually a function of **one** argument of type `(int, 
 ```cpp
 int x = foo(bar(42));
 ```
-instead of equivalent, but more lengthy form:
+instead of the similar but longer form:
 ```cpp
 (int a, int b, int c) = bar(42);
 int x = foo(a, b, c);
@@ -85,7 +85,7 @@ Lambda expressions are not supported yet.
 ### Methods calls
 
 #### Non-modifying methods
-If a function has at least one argument, it can be called as a non-modifying method. For example, `store_uint` has type `(builder, int, int) -> builder` (the second argument is value to store, and the third is the bit length). `begin_cell` is a function that creates a new builder. The following codes are equivalent:
+If a function has at least one argument, it can be called as a non-modifying method. For example, `store_uint` has type `(builder, int, int) -> builder` (the second argument is the value to store, and the third is the bit length). `begin_cell` is a function that creates a new builder. The following codes are equivalent:
 ```cpp
 builder b = begin_cell();
 b = store_uint(b, 239, 8);
@@ -105,7 +105,7 @@ builder b = begin_cell().store_uint(239, 8)
                         .store_uint(0xff, 10);
 ```
 #### Modifying methods
-If the first argument of a function has type `A` and return value of the function has the shape of `(A, B)` where `B` is some arbitrary type, then the function can be called as modifying method. Modifying methods calls may take some arguments and return some values, but they modify their first argument, that is, assign the first component of returned value to the variable from the first argument. For example, suppose `cs` is a cell slice and `load_uint` has type `(slice, int) -> (slice, int)`: it takes a cell slice and number of bits to load and returns the remainder of slice and the loaded value. The following codes are equivalent:
+If the first argument of a function has type `A` and the return value of the function has the shape of `(A, B)` where `B` is some arbitrary type, then the function can be called as a modifying method. Modifying method calls may take some arguments and return some values, but they modify their first argument, that is, assign the first component of the returned value to the variable from the first argument. For example, suppose `cs` is a cell slice and `load_uint` has type `(slice, int) -> (slice, int)`: it takes a cell slice and number of bits to load and returns the remainder of the slice and the loaded value. The following codes are equivalent:
 ```cpp
 (cs, int x) = load_uint(cs, 8);
 ```
@@ -115,23 +115,23 @@ If the first argument of a function has type `A` and return value of the functio
 ```cpp
 int x = cs~load_uint(8);
 ```
-In some cases we want to use a function as modifying method that doesn't return any value – only modifies the first argument. It can be done using unit type as following: suppose we want to define function `inc` of type `int -> int`, which increment an integer, and use it as modifying method. Then we should define `inc` as a function of type `int -> (int, ())`:
+In some cases we want to use a function as a modifying method that doesn't return any value and only modifies the first argument. It can be done using unit types as follows: Suppose we want to define function `inc` of type `int -> int`, which increments an integer, and use it as a modifying method. Then we should define `inc` as a function of type `int -> (int, ())`:
 ```cpp
 (int, ()) inc(int x) {
   return (x + 1, ());
 }
 ```
-When defined like that, it can be used as modifying method:
+When defined like that, it can be used as a modifying method. The following will increment `x`.
 ```cpp
 x~inc();
 ```
-will increment `x`.
+
 #### `.` and `~` in function names
-Suppose we want to use `inc` as non-modifying method too. We can write something like that:
+Suppose we want to use `inc` as a non-modifying method too. We can write something like that:
 ```cpp
 (int y, _) = inc(x);
 ```
-But it is possible to override the definition of `inc` as modifying method:
+But it is possible to override the definition of `inc` as a modifying method.
 ```cpp
 int inc(int x) {
   return x + 1;
@@ -140,26 +140,26 @@ int inc(int x) {
   return (x + 1, ());
 }
 ```
-and then call it like that:
+And then call it like that:
 ```cpp
 x~inc();
 int y = inc(x);
 int z = x.inc();
 ```
-The first call will modify x, the second and the third won't.
+The first call will modify x; the second and third won't.
 
-In summary, when a function with name `foo` is called as non-modifying or modifying method (i.e. with `.foo` or `~foo` syntax), FunC compiler use the definition of `.foo` or `~foo` correspondingly if such definition is presented, and if not, it uses the definition of `foo`.
+In summary, when a function with the name `foo` is called as a non-modifying or modifying method (i.e. with `.foo` or `~foo` syntax), the FunC compiler uses the definition of `.foo` or `~foo` correspondingly if such a definition is presented, and if not, it uses the definition of `foo`.
 
 ### Operators
-Note that currently all of unary and binary operators are integer operators. Logical operators are represented as bitwise integer operators  (cf. [absene of boolean type](/develop/func/types#absence-of-boolean-type)).
+Note that currently all of the unary and binary operators are integer operators. Logical operators are represented as bitwise integer operators  (cf. [absene of boolean type](/develop/func/types#absence-of-boolean-type)).
 #### Unary operators
 There are two unary operators:
-- `~` is bitwise not (priority 75).
-- `-` is integer negation (priority 20).
+- `~` is bitwise not (priority 75)
+- `-` is integer negation (priority 20)
 
-They should be separated from the argument.
+They should be separated from the argument:
 - `- x` is ok.
-- `-x` is not ok (it's a single identifier).
+- `-x` is not ok (it's a single identifier)
 
 #### Binary operators
 With priority 30 (left-associative):
@@ -195,15 +195,15 @@ With priority 15 (left-associative):
 - `<=>` is integer comparison (returns -1, 0 or 1)
 
 They also should be separated from the argument:
-- `x + y` is ok.
-- `x+y` is not ok (it's a single identifier).
+- `x + y` is ok
+- `x+y` is not ok (it's a single identifier)
 
 #### Conditional operator
-Has the usual syntax:
+It has the usual syntax.
 ```cpp
 <condition> ? <consequence> : <alternative>
 ```
-For example,
+For example:
 ```cpp
 x > 0 ? x * fac(x - 1) : 1;
 ```
@@ -212,12 +212,12 @@ It has priority 13.
 #### Assignments
 Priority 10.
 
-Simple assignment `=` and counterparts of binary operations: `+=`, `-=`, `*=`, `/=`, `~/=`, `^/=`, `%=`, `~%=`, `^%=`, `<<=`, `>>=`, `~>>=`, `^>>=`, `&=`, `|=`, `^=`.
+Simple assignment `=` and counterparts of the binary operations: `+=`, `-=`, `*=`, `/=`, `~/=`, `^/=`, `%=`, `~%=`, `^%=`, `<<=`, `>>=`, `~>>=`, `^>>=`, `&=`, `|=`, `^=`.
 
 ## Loops
-FunC supports `repeat`, `while` and `do { ... } until` loops. `for` loop is not supported.
+FunC supports `repeat`, `while`, and `do { ... } until` loops. The `for` loop is not supported.
 ### Repeat loop
-The syntax is a `repeat` keyword followed by an expression of type `int`. Repeats the code for specified number of times. Examples:
+The syntax is a `repeat` keyword followed by an expression of type `int`. Repeats the code for the specified number of times. Examples:
 ```cpp
 int x = 1;
 repeat(10) {

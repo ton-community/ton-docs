@@ -1,48 +1,32 @@
-# TON Documentation for humans
-
-User-friendly documentation for newcomers to the TON blockchain.
 
 ![preview](https://user-images.githubusercontent.com/5148967/187221315-fb8aa098-d573-4042-992e-b91170521334.jpg)
 
+User-friendly documentation for newcomers to the TON blockchain.
 
-# Website
+## Quick Start
 
-This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
+1. Download repository from GitHub
+2. Install [NodeJS](https://nodejs.org/en/download/) to run local build
+3. Open Terminal in project directory
+4. Install dependencies with command:
 
-### Installation
+    ```
+    npm install
+    ```
+5. Run project with command:
 
-```
-$ yarn
-```
-
-### Local Development
-
-```
-$ yarn start
-```
+    ```
+    npm run start
+    ```
 
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
-### Build
+## Contributing
 
-```
-$ yarn build
-```
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+Please make sure to update tests as appropriate.
 
-### Deployment
+## License
 
-Using SSH:
-
-```
-$ USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```
-$ GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+[GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/)
