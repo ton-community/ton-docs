@@ -26,7 +26,7 @@ These are convenient, tested, and secure wallets.
 
 * Make sure your wallet is downloaded from https://ton.org/wallets.
 
-* In the wallet settings in the config URL enter https://ton.org/global-config-archive.json and **mainnet** in the blockchain ID. Apply settings.
+* In the wallet settings, in the config URL, enter https://ton.org/global-config-archive.json and **mainnet** in the blockchain ID. Apply settings.
 
-* After successfully synchronizing the wallet, enter the settings in the configuration https://ton.org/global-config-wallet.json once again.
+* After successfully synchronizing the wallet, enter the settings in the configuration at https://ton.org/global-config-wallet.json once again.
 
