@@ -158,7 +158,7 @@ Everything mentioned above is what creates TON WWW: the collection of web pages 
 
 To gain access to the TON Network, first, users must connect to a special entry point. In technical terms, this is called an "entry proxy".
 
-Currently, you can use __[public entry points](https://www.tonspace.co/participate/web3/setting-proxy#public-entry-ton-proxies)__ launched by the TON Foundation.
+Currently, you can use __[public entry points](https://www.tonspace.co/participate/web3/setting-proxy#public-entry-ton-proxies)__ launched by TON Foundation.
 
 __|__ _Use public entry points along with HTTP for trial purposes only, as in this case, traffic outside the TON Network is not encrypted_
 
