@@ -1,11 +1,11 @@
 # Getting Started
 
-By community efforts there are already several tutorials available for new TON developers. Feel free to focus on the approach that suits the best for you.
+Thanks to community efforts, there are already several tutorials available for new TON developers. Feel free to focus on the approach that suits the best for you.
 
 ## Smart Contracts development
 
 :::tip starter tip
-These materials are the best for newcomers to the TON development.
+These materials are best for newcomers to the TON development.
 :::
 
 Right now, there are three great approaches to start developing TON smart contracts:

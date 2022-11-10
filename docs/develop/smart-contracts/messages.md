@@ -1,10 +1,10 @@
 # Sending messages
 
-Composition, parsing and sending messages lie on the intersection of [TL-B schemas](/learn/overviews/TL-B), [transaction phases and TVM](/learn/tvm-instructions/tvm_overview.md).
+Composition, parsing, and sending messages lie at the intersection of [TL-B schemas](/learn/overviews/TL-B), [transaction phases and TVM](/learn/tvm-instructions/tvm_overview.md).
 
-Indeed, FunC expose [send_raw_message](/develop/func/stdlib#send_raw_message) function which expects serialized message as argument.
+Indeed, FunC exposes [send_raw_message](/develop/func/stdlib#send_raw_message) function which expects a serialized message as an argument.
 
-Since TON is a comprehensive system with wide functionality, messages which need to be able to support all of this functionality may look quite complicated. Still, most of that functionality is not used in common scenarios and message serialization in most cases may be reduced to 
+Since TON is a comprehensive system with wide functionality, messages which need to be able to support all of this functionality may look quite complicated. Still, most of that functionality is not used in common scenarios, and message serialization in most cases may be reduced to:
 ```cpp
   var msg = begin_cell()
     .store_uint(0x18, 6)
@@ -21,27 +21,27 @@ Let's dive in!
 
 ## Types of messages
 There are three types of messages:
- * external - messages which are sent from outside of blockchain to some smart-contract inside. Such messages should be explicitly accepted by smart-contract during so called `credit_gas`. If message is not accepted, node should not accept it into block or relay it to other nodes.
- * internal - messages which are sent from one blockchain entity to another. Such messages (in contrast to external) may carry some TONs and pay for themselves. Thus smart-contract which receive such message may not accept it: in this case gas will be deducted from message value.
- * logs - messages which are sent from blockchain entity to outer world. Generally speaking there is no mechanism of sending such messages out of blockchain: indeed, while all nodes in the network have consensus on whether message was created or not, there are no rules on how process them. Logs may be directly sent to `/dev/null`, logged to disk, saved to indexed database or even sent by non-blockchain means (email/telegram/sms), all of this is in the sole discretion of the given node.
+ * external—messages that are sent from outside of the blockchain to a smart contract inside the blockchain. Such messages should be explicitly accepted by smart contracts during so called `credit_gas`. If the message is not accepted, the node should not accept it into a block or relay it to other nodes.
+ * internal—messages that are sent from one blockchain entity to another. Such messages (in contrast to external) may carry some TONs and pay for themselves. Thus, smart contracts that receive such messages may not accept it. In this case, gas will be deducted from the message value.
+ * logs—messages that are sent from a blockchain entity to the outer world. Generally speaking, there is no mechanism for sending such messages out of the blockchain. In fact, while all nodes in the network have consensus on whether a message was created or not, there are no rules on how to process them. Logs may be directly sent to `/dev/null`, logged to disk, saved an indexed database, or even sent by non-blockchain means (email/telegram/sms), all of these are at the sole discretion of the given node.
 
 ## Message layout
 
-We will start with internal messages layout
+We will start with the internal message layout.
 
-TL-B scheme which describes message which can be sent by smart-contract is as follows:
+TL-B scheme, which describes messages that can be sent by smart contracts,is as follows:
 ```cpp
 message$_ {X:Type} info:CommonMsgInfoRelaxed 
   init:(Maybe (Either StateInit ^StateInit))
   body:(Either X ^X) = MessageRelaxed X;
 ```
 
-Lets put it into words. Serialization of any message consist of three fields: info (header of some sort, which describe source, destination and other metadata), init (field which is only required for initialisation of messages) and body (message payload).
+Let's put it into words. Serialization of any message consists of three fields: info (header of some sort which describes the source, destination, and other metadata), init (field which is only required for initialization of messages), and body (message payload).
 
-`Maybe` and `Either` and other type expressions mean as following: 
-* when we have field `info:CommonMsgInfoRelaxed` it means that serialization of `CommonMsgInfoRelaxed` is injected directly to the serialization cell
-* when we have field `body:(Either X ^X)` it means that when we (de)serialize some type `X` we first put one `either` bit which is `0` if `X` is serialized to the same cell or `1` if it is serialized to the separate cell.
-* when we have field `init:(Maybe (Either StateInit ^StateInit))` it means that we first put `0` or `1` depending on whether this field empty or not; and if it is not empty we serialize `Either StateInit ^StateInit` (again put one `either` bit which is `0` if `StateInit` is serialized to the same cell or `1` if it is serialized to the separate cell).
+`Maybe` and `Either` and other types of expressions mean the following: 
+* when we have the field `info:CommonMsgInfoRelaxed`, it means that the serialization of `CommonMsgInfoRelaxed` is injected directly to the serialization cell.
+* when we have the field `body:(Either X ^X)`, it means that when we (de)serialize some type `X`, we first put one `either` bit, which is `0` if `X` is serialized to the same cell, or `1` if it is serialized to the separate cell.
+* when we have the field `init:(Maybe (Either StateInit ^StateInit))`, it means that we first put `0` or `1` depending on whether this field is empty or not; and if it is not empty, we serialize `Either StateInit ^StateInit` (again, put one `either` bit which is `0` if `StateInit` is serialized to the same cell or `1` if it is serialized to a separate cell).
 
 `CommonMsgInfoRelaxed` layout is as follows: 
 
@@ -56,9 +56,9 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
 ```
 
 Let's focus on `int_msg_info` for now.
-It starts with 1bit prefix `0`, then there are three 1-bit flags, namely whether Instant Hypercube Routing disabled (currently always true), whether message should be bounced if there are errors during it's processing, whether message itself is result of bounce. Then source and destination address is serialized, then value of the message and four integers related to message forwarding fees and time.
+It starts with 1bit prefix `0`, then there are three 1-bit flags, namely whether Instant Hypercube Routing disabled (currently always true), whether message should be bounced if there are errors during it's processing, whether message itself is result of bounce. Then source and destination addresss are serialized, followed by the value of the message and four integers related to message forwarding fees and time.
 
-If message is sent from the smart-contract, some of those fields will be rewritten to correct values. In particular, validator will rewrite `bounced`, `src`, `ihr_fee`, `fwd_fee`, `created_lt` and `created_at`. That means two things: first, another smart-contract during handling message may trust those fields (sender may not forge source address, `bounced` flag, etc); and second, that during serialization we may put to those fields any valid values (anyway those values will be overwritten).
+If a message is sent from the smart contract, some of those fields will be rewritten to the correct values. In particular, validator will rewrite `bounced`, `src`, `ihr_fee`, `fwd_fee`, `created_lt` and `created_at`. That means two things: first, another smart-contract during handling message may trust those fields (sender may not forge source address, `bounced` flag, etc); and second, that during serialization we may put to those fields any valid values (anyway those values will be overwritten).
 
 
 Straight-forward serialization of the message would be as follows:
@@ -83,7 +83,7 @@ Straight-forward serialization of the message would be as follows:
   .end_cell();
 ```
 
-However, instead of step by step serialization of all fields, usually developers use short-cuts. Thus lets consider how message can be sent from the smart-contract on example from [elector-code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/elector-code.fc#L153)
+However, instead of step-by-step serialization of all fields, usually developers use shortcuts. Thus, let's consider how messages can be sent from the smart contract using an example from [elector-code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/elector-code.fc#L153).
 ```cpp
 () send_message_back(addr, ans_tag, query_id, body, grams, mode) impure inline_ref {
   ;; int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool src:MsgAddress -> 011000
@@ -101,18 +101,18 @@ However, instead of step by step serialization of all fields, usually developers
 }
 ```
 
-First it put `0x18` value into 6 bits, that is put `0b011000`. What is it? 
+First, it put `0x18` value into 6 bits that is put `0b011000`. What is it? 
 
-* First bit is `0` -  1bit prefix which indicates that it is `int_msg_info`. 
+* First bit is `0`—1bit prefix which indicates that it is `int_msg_info`. 
 
-* Then there are 3 bits `1`, `1` and `0`, meaning Instant Hypercube Routing is disabled, message can be bounced and that message is not result of bouncing itself. 
-* Then there should be sender address, however since it anyway will be rewritten with the same effect any valid address may be stored there. The shortest valid address serialization is serialization of `addr_none` and it serializes as two-bit string `00`.
+* Then there are 3 bits `1`, `1` and `0`, meaning Instant Hypercube Routing is disabled, messages can be bounced, and that message is not the result of bouncing itself. 
+* Then there should be sender address, however since it anyway will be rewritten with the same effect any valid address may be stored there. The shortest valid address serialization is that of `addr_none` and it serializes as a two-bit string `00`.
 
-Thus `.store_uint(0x18, 6)` is the optimized way of serializing tag and first 4 fields.
+Thus, `.store_uint(0x18, 6)` is the optimized way of serializing the tag and the first 4 fields.
 
-Next line serializes destination address.
+Next line serializes the destination address.
 
-Then we should serialize value. Generally message value is a `CurrencyCollection` object with the following scheme:
+Then we should serialize values. Generally, the message value is a `CurrencyCollection` object with the following scheme:
 ```cpp
 nanograms$_ amount:(VarUInteger 16) = Grams;
 
@@ -123,31 +123,31 @@ currencies$_ grams:Grams other:ExtraCurrencyCollection
            = CurrencyCollection;
 ```
 
-This scheme means that in addtion to TON value, message may carry the dictionary of additional _extra-currencies_. However currently we may neglect it and just assume that message value is serialized as "number of nanotons as variable integer" and "`0` - empty dictionary bit".
+This scheme means that in addition to the TON value, message may carry the dictionary of additional _extra-currencies_. However, currently we may neglect it and just assume that the message value is serialized as "number of nanotons as variable integer" and "`0` - empty dictionary bit".
 
-Indeed, in elector code above we serialize coins amount via `.store_coins(grams)` but then just put string of zeroes with length equal to `1 + 4 + 4 + 64 + 32 + 1 + 1`. What is it? 
+Indeed, in the elector code above we serialize coins' amounts via `.store_coins(grams)` but then just put a string of zeros with length equal to `1 + 4 + 4 + 64 + 32 + 1 + 1`. What is it? 
 * First bit stands for empty extra-currencies dictionary.
-* Then we have two 4bit long fields. They encode 0 as `VarUInteger 16`. Indeed since `ihr_fee` and `fwd_fee` will be overwritten  we may as well put there zeroes.
-* Then we put zero to `created_lt` and `created_at` fields. Those fields will be overwritten as well, however in contrast to fees, these fields have fixed length and thus are encoded as 64 and 32 bit long strings.
-* _(at that moment we alredy serialized message header and pass to init/body)_
-* next zero-bit means that there is no `init` field
-* and last zero-bit means that msg_body will be serialized in-place
-* after that message body (with arbitrary layout) is encoded.
+* Then we have two 4-bit long fields. They encode 0 as `VarUInteger 16`. In fact, since `ihr_fee` and `fwd_fee` will be overwritten, we may as well put there zeroes.
+* Then we put zero to `created_lt` and `created_at` fields. Those fields will be overwritten as well; however, in contrast to fees, these fields have a fixed length and are thus encoded as 64- and 32-bit long strings.
+* _(we had alredy serialized the message header and passed to init/body at that moment)_
+* Next zero-bit means that there is no `init` field.
+* The last zero-bit means that msg_body will be serialized in-place.
+* After that, message body (with arbitrary layout) is encoded.
 
-That way instead of individual serialization of 14 parameters, we execute 4 serialization primitives.
+That way, instead of individual serialization of 14 parameters, we execute 4 serialization primitives.
 
 ## Full scheme
-Full scheme of messages layout as well as layout of all constituting fields (as well as scheme of ALL objects in TON) is presented in [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb).
+Full scheme of message layout and the layout of all constituting fields (as well as scheme of ALL objects in TON) are presented in [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb).
 
 ## Message size
 
 :::info cell size
-Note that any [Cell](/learn/overviews/Cells) may contain up to `1023` bits. If you need to store more data you should split it into chunks and store in reference cells.
+Note that any [Cell](/learn/overviews/Cells) may contain up to `1023` bits. If you need to store more data, you should split it into chunks and store in reference cells.
 :::
 
-If, for instance, your message body size is 900 bits long you can not to store it in the same cell with the message header.
-Indeed, in addition to message header fields, total size of the cell will be more than 1023 bits and during serialization there will be `cell overflow` exception. In this case, instead of `0` that stands for "inplace message body flag (Either)" there should be `1` and message body should be stored in reference cell.
+If, for instance, your message body size is 900 bits long, you can not store it in the same cell as the message header.
+Indeed, in addition to message header fields, the total size of the cell will be more than 1023 bits, and during serialization there will be `cell overflow` exception. In this case, instead of `0` that stands for "inplace message body flag (Either)" there should be `1` and the message body should be stored in the reference cell.
 
-Those things should be handled carefully due to the fact that some fields have variable size.
+Those things should be handled carefully due to the fact that some fields have variable sizes.
 
-For instance `MsgAddress` may be represented by 4 constructors `addr_none`, `addr_std`, `addr_extern`, `addr_var` with length from 2 bits ( for `addr_none`) to 586 bits (for `addr_var` in the largest form). The same stands for nanoTON amounts which is serialized as `VarUInteger 16`, that means 4 bits indicating the byte-length of the integer and then indicated earlier bytes for integer itself: that way 0 nanoTONs will be serialized as `0b0000` (4 bits which encode zero-length byte string and then zero bytes), while 100.000.000 TON (or 100000000000000000 nanoTONs) will be serialized as `0b10000000000101100011010001010111100001011101100010100000000000000000` (`0b1000` stands for 8 bytes and then 8 bytes themselves).
+For instance, `MsgAddress` may be represented by four constructors: `addr_none`, `addr_std`, `addr_extern`, `addr_var` with length from 2 bits ( for `addr_none`) to 586 bits (for `addr_var` in the largest form). The same stands for nanotons' amounts which is serialized as `VarUInteger 16`. That means, 4 bits indicating the byte length of the integer and then indicated earlier bytes for integer itself. That way, 0 nanotons will be serialized as `0b0000` (4 bits which encode a zero-length byte string and then zero bytes), while 100.000.000 TON (or 100000000000000000 nanoTONs) will be serialized as `0b10000000000101100011010001010111100001011101100010100000000000000000` (`0b1000` stands for 8 bytes and then 8 bytes themselves).
