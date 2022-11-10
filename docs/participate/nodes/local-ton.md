@@ -2,9 +2,9 @@
 
 ![MyLocalTon](/img/docs/mylocalton.jpeg)
 
-Using **MyLocalTon** you can run your own TON blockchain even on your laptop.
+Using **MyLocalTon** you can run your own TON Blockchain even on your laptop.
 
-MyLocalTon has convenient UI and is cross-platform.
+MyLocalTon has a convenient UI and is cross-platform compatible.
 
 [MyLocalTon binaries](https://github.com/neodiX42/MyLocalTon/releases)
 

@@ -1,11 +1,11 @@
 # Whitepapers
 
-This section presents the original documentation written by Dr. Nikolai Durov, which describes in full all the parts of the TON.
+This section presents the original documentation written by Dr. Nikolai Durov, which fully describes all parts of TON.
 
 ## Original documentation
 
 :::info
-Please note here and further that the code, comments and/or documentation may contain parameters, methods and definitions “gram”, “nanogram”, etc. That is a legacy of the original TON code, developed by the Telegram. Gram cryptocurrency was never issued. The currency of TON is Toncoin and the currency of TON testnet is Test Toncoin.
+Please note that here and later the code, comments and/or documentation may contain parameters, methods and definitions of “gram”, “nanogram”, etc, that are a legacy of the original TON code, developed by Telegram. Gram cryptocurrency was never issued. The currency of TON is Toncoin and the currency of TON testnet is Test Toncoin.
 :::
 
 * [TON](https://ton.org/ton.pdf)
@@ -22,7 +22,7 @@ Please note here and further that the code, comments and/or documentation may co
 
 * [Catchain Consensus Protocol](https://ton.org/catchain.pdf)
 
-  Description of Byzantine Fault Tolerant (BFT) Consensus protocol employed by TON Blockchain while creating new blocks.
+  Description of the Byzantine Fault Tolerant (BFT) Consensus protocol employed by TON Blockchain while creating new blocks.
   
 * [Fift Documentation](https://ton.org/fiftbase.pdf)
 
