@@ -298,7 +298,8 @@ const sidebars = {
                 'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
                 'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js',
               ],
-            }
+            },
+              'develop/dapps/tutorials/how-to-run-ton-site'
            ],
          },
 
