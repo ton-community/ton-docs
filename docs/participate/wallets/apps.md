@@ -17,15 +17,15 @@ If you want to find a wallet to install, open [ton.org/wallets](https://ton.org/
 * [Tonhub](https://tonhub.com/) - is another rapidly developing wallet with new advanced features (Extension, TON Whales Staking UI). 
 
 ### Basics features
-| Wallet     | Source repositories                                     | Jetton    | NFT transfers | Authorization                                               | Wallet contract                                                                                              | Test environment                                      |
-|------------|---------------------------------------------------------|-----------|---------------|-------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
-| TON Wallet | [Github*](https://github.com/ton-blockchain/wallet-ios) | No        | No            | No                                                          | [wallet v3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)              | Testnet                                               |
-| Tonkeeper  | [Github](https://github.com/tonkeeper/wallet)           | Supported | Supported     | [ton-connect](https://github.com/tonkeeper/ton-connect)     | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f) | Testnet                                               |
-| Tonhub     | [Github](https://github.com/tonwhales/wallet)           | Supported | Supported**   | [tonhub connector](https://developers.tonhub.com/docs/apps) | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f) | [Sandbox](https://developers.tonhub.com/docs/sandbox) |
+| Wallet     | Jetton          | NFT transfers   | Authorization                                               | Wallet contract                                                                                              |
+|------------|-----------------|-----------------|-------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| TON Wallet | Not implemented | Not implemented | Not implemented                                             | [wallet v3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)              |
+| Tonkeeper  | Supported       | Supported       | [ton-connect](https://github.com/tonkeeper/ton-connect)     | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f) |
+| Tonhub     | Supported       | Supported*      | [tonhub connector](https://developers.tonhub.com/docs/apps) | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f) |
 
-  > *TON Wallet clients for every supported OS placed in nearby repositories.
 
-  > **Tonhub extension opens a built-in browser which allows for NFT market placements.
+
+  > *Tonhub extension opens a built-in browser which allows for NFT market placements.
 
 ### TON Wallet
 
@@ -40,7 +40,11 @@ If you want to find a wallet to install, open [ton.org/wallets](https://ton.org/
 - ✅ Updates are rare. There is huge potential for contributions to be made by newcomers because the current project is relatively simple.
 - ❌ Rare updates. This wallet does not have not all up-to-date features (TON DNS address, wallet-v4 contract not supported).
 - ❌ The current UI is outdated and is worse than alternative wallets.
+ 
+#### Links
+- [Github*](https://github.com/ton-blockchain/wallet-ios)
 
+  > *TON Wallet clients for every supported OS placed in nearby repositories.
 
 ### Tonkeeper
 
@@ -58,27 +62,32 @@ If you want to find a wallet to install, open [ton.org/wallets](https://ton.org/
 #### Tonkeeper test environment
 To switch Tonkeeper application between Mainnet and Testnet; move to settings, at the bottom of the settings screen tap several times on the Tonkeeper icon and switch net in the dev menu.
 
+#### Links 
+- [Github](https://github.com/tonkeeper/wallet)
+
+
+
 
 ### Tonhub
 
 |                                                                                                                                                                                                                |                                                                                                                                                                                   |
 |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![Tonhub](/img/docs/Tonhub.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | [Tonhub](https://tonhub.com/) - is another fully-fledged TON wallet, that has basic up-to-date features support. Ton Whales are rapidly increasing the capabilities of the wallet.
-
-
-
+| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![Tonhub](/img/docs/Tonhub.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | [Tonhub](https://tonhub.com/) - is another fully-fledged TON wallet, that has basic up-to-date features support. Ton Whales are rapidly increasing the capabilities of the wallet.|
 
 #### Pros and Cons
 
  - ✅ Advanced extension feature that accomodates open 3rd party services from the built-in Tonhub browser.
- - ✅ Independent Testnet and application Sandbox for development.
  - ✅ Supports MacOS.
- - ❌ The Testnet environment has no support .
+ - ❌ Have no support for desktop platforms.
  - ❌ To contribute requires requires advanced skills.
 
 #### Tonhub test environment
+For use in testnet necessary separate the application Sandbox.
 
-Instead of Testnet, use the Sandbox environment [here](https://developers.tonhub.com/docs/sandbox).
+#### Links
+- [Github](https://github.com/tonwhales/wallet)
+- [Sandbox iOS](https://apps.apple.com/app/ton-development-wallet/id1607857373)
+- [Sandbox Android](https://play.google.com/store/apps/details?id=com.tonhub.wallet.testnet)
 
 
 
