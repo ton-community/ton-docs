@@ -488,6 +488,7 @@ const sidebars = {
       'type': 'category',
       'label': 'Use TON Proxy',
       'items': [
+        'participate/web3/how-to-open-any-ton-site',
         'participate/web3/setting-proxy',
         'participate/web3/sites-and-proxy',
       ],
