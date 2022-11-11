@@ -40,13 +40,18 @@ where `b` is the instruction length in bits and `r` is the
 number of cell references included in the instruction.
 
 Apart from those basic fees, the following fees appear:
-   * Price of "parsing" cells (i.e., transforming cells into slices). Equal to 100 gas units for cells which are loading for the first time and 25 for subsequent loads during the same tx.
-   * Price of cells "creation" (i.e., transforming builders to cells). Equal to 500 gas units.
-   * Price of throwing exception—50 gas units
-   * Price of tuple operations—1 gas unit for every tuple element
-   * Price for implicit jumps—10 gas units. It is paid when all instructions in the current continuation cell are executed. However, there are references in that continuation cell, and the execution flow jumps to the first reference.
-   * Price for implicit back jumps—5 gas units. It is paid when all instructions in the current continuation are executed and execution flow jumps back to the continuation from which the just finished continuation was called.
-   * Price for moving stack elements between continuations. 1 gas unit per element. However, the first 32 elements moving is free.
+
+| Instruction             | GAS  price   | Description                                                                                                                                                                                   | 
+|-------------------------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Creation of cell        | **500**      | Operation of transforming builder to cell.                                                                                                                                                    |
+| Parsing cell firstly    | **100**      | Operation of transforming cells into slices first time during current transaction.                                                                                                            | 
+| Parsing cell repeatedly | **25**       | Operation of transforming cells into slices, which already has parsed during same transaction.                                                                                                |
+| Throwing exception      | **50**       |                                                                                                                                                                                               | 
+| Operation with tuple    | **1**        | This price will multiply by the quantity of tuple's elements.                                                                                                                                 | 
+| Implicit Jump           | **10**       | It is paid when all instructions in the current continuation cell are executed. However, there are references in that continuation cell, and the execution flow jumps to the first reference. | 
+| Implicit Back Jump      | **5**        | It is paid when all instructions in the current continuation are executed and execution flow jumps back to the continuation from which the just finished continuation was called.             |                                                                                      
+| Moving stack elements   | **1**        | Price for moving stack elements between continuations. It will charge correspond gas price for every element. However, the first 32 elements moving is free.                                  |                                                                                       
+
 
 ## FunC constructions gas fees
 
