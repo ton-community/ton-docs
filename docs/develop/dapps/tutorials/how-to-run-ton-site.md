@@ -107,15 +107,15 @@ Example:
 rldp-http-proxy/rldp-http-proxy -a 10.132.46.154:3333 -L '*' -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3 -d -l tonsite.log
 ```
 
-### 👀 Further steps
+## 👀 Further steps
 
-#### Сhecking availability of the site
+### 🔍 Сhecking availability of the site
 
 After completing all the steps of the method you selected, the TON Proxy should have started. If everything was successful, your site will be available at the ADNL address received at the corresponding step. 
 
 You can check the availability of the site by opening this address with the domain `.adnl`. Also note that in order for the site to open, you must have a TON Proxy running in your browser, for example through an extension [MyTonWallet](https://mytonwallet.io/).
 
-#### Linking TON DNS domain
+### 📎 Linking TON DNS domain
 
 To link a [TON DNS domain](/participate/web3/dns) domain to your site, follow these steps:
 
@@ -127,4 +127,10 @@ To link a [TON DNS domain](/participate/web3/dns) domain to your site, follow th
 
 In a few minutes you will be able to access your website using the chosen domain if you have TON Proxy enabled.
 
-You can read more about linking TON DNS here: [Site & Domain Management](/participate/web3/site-management)
+## 📌 References
+
+ * [TON Sites, TON WWW and TON Proxy](/learn/services/sites-www-proxy/)
+ * [TON DNS](/learn/services/dns/)
+ * [TON Web3 Overview](/participate/web3/overview/)
+ * [Site & Domain Management](/participate/web3/site-management)
+ * Author: [Andrew Burnosov](https://github.com/AndreyBur) (TG: [@AndrewBurnosov](https://t.me/AndreyBurnosov))
