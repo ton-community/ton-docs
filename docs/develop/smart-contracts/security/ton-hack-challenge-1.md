@@ -1,9 +1,7 @@
 # Drawing conclusions from TON Hack Challenge
 
 The TON Hack Challenge was held on October 23.
-There were several smartcontracts deployed in TON mainnet with synthetic security breaches. Every contract had 3000 or 5000 TON on balance, so the participant can hack it and get rewards immediately.
-
-As for me we hacked 6th task of this contest, but in this article I don't want to share my story, I want to tell you some thoughts about breaches in tasks.
+There were several smart contracts deployed to the TON mainnet with synthetic security breaches. Every contract had a balance of 3000 or 5000 TON, allowing participant to hack it and get rewards immediately.
 
 Source code and contest rules were hosted on Github [here](https://github.com/ton-blockchain/hack-challenge-1).
 
@@ -15,7 +13,7 @@ Source code and contest rules were hosted on Github [here](https://github.com/to
 Always check functions for [`impure`](/develop/func/functions#impure-specifier) modifier.
 :::
 
-The first task was very simple. The attacker can find that `authorize` function was not `impure`. Absence of this modifier allows compiler to skip calls to that function if it returns nothing or return value is unused.
+The first task was very simple. The attacker could find that `authorize` function was not `impure`. The absence of this modifier allows a compiler to skip calls to that function if it returns nothing or the return value is unused.
 
 ```cpp
 () authorize (sender) inline {
@@ -41,7 +39,7 @@ Always check for [modifying/non-modifying](/develop/func/statements#methods-call
 Use signed integers if you really need it.
 :::
 
-Voting power was stored in message as an integer. So attacker can send negative value during power transfer and get infinite voting power.
+Voting power was stored in message as an integer. So the attacker could send a negative value during power transfer and get infinite voting power.
 
 ```cpp
 (cell,()) transfer_voting_power (cell votes, slice from, slice to, int amount) impure {
@@ -66,7 +64,7 @@ Voting power was stored in message as an integer. So attacker can send negative 
 Always randomize seed before doing [`rand()`](/develop/func/stdlib#rand)
 :::
 
-Seed was brought from logical time of the transaction and hacker can bruteforce logical time in the current block to win (cause LT is sequential in the borders of one block).
+Seed was brought from logical time of the transaction, and a hacker can win by bruteforcing the logical time in the current block (cause lt is sequential in the borders of one block).
 
 ```cpp
 int seed = cur_lt();
@@ -87,10 +85,10 @@ if(rand(10000) == 7777) { ...send reward... }
 ### 5. Wallet
 
 :::note SECURITY RULE
-Remember that everything is stored in blockchain.
+Remember that everything is stored in the blockchain.
 :::
 
-The wallet was protected with password, it's hash was stored in contract data. But blockchain remembers everything - the password was in the transaction history.
+The wallet was protected with password, it's hash was stored in contract data. However, the blockchain remembers everything—the password was in the transaction history.
 
 ### 6. Vault
 
@@ -100,7 +98,7 @@ Don't forget about errors caused by [standard](/develop/func/stdlib/) functions.
 Make your conditions as strict as possible.
 :::
 
-The vault has following code in the database message handler:
+The vault has the following code in the database message handler:
 
 ```cpp
 int mode = null();
@@ -113,7 +111,7 @@ if (op == op_not_winner) {
 }
 ```
 
-Vault does not have bounce handler and proxy message to database if user sends “check”. In database we can set `msg_addr_none` as an award address cause `load_msg_address` allows it. We are requesting check from vault, database tries to parse `msg_addr_none` using [`parse_std_addr`](/develop/func/stdlib#parse_std_addr) and fails. Message bounces to the vault from database and the op is not `op_not_winner`.
+Vault does not have a bounce handler or proxy message to the database if the user sends “check”. In the database we can set `msg_addr_none` as an award address because `load_msg_address` allows it. We are requesting a check from the vault, database tries to parse `msg_addr_none` using [`parse_std_addr`](/develop/func/stdlib#parse_std_addr), and fails. Message bounces to the vault from the database and op is not `op_not_winner`.
 
 ### 7. Better bank
 
@@ -124,7 +122,7 @@ Think about possible race conditions.
 Be careful with hashmap gas consumption.
 :::
 
-There were race condition in the contract: you can deposit money, then try to withdraw two times in concurrent messages. There is no guarantee that message with reserved money will be processed, so bank can shutdown after second withdrawal. After that the contract could be redeployed and then anybody can withdraw unowned money.
+There were race conditions in the contract: you could deposit money, then try to withdraw it twice in concurrent messages. There is no guarantee that a message with reserved money will be processed, so the bank can shut down after a second withdrawal. After that, the contract could be redeployed and anybody could withdraw unclaimed money.
 
 ### 8. Dehasher
 
@@ -149,11 +147,11 @@ slice safe_execute(int image, (int -> slice) dehasher) inline {
 }
 ```
 
-There is no way to safe execute third-party code in the contract, cause [`out of gas`](/learn/tvm-instructions/tvm_exit_codes#standard-exit-codes) exception cannot be handled by `CATCH`. Attacker simply can [`COMMIT`](/learn/tvm-instructions/instructions#11-application-specific-primitives) any state of contract and raise `out of gas`.
+There is no way to safe execute a third-party code in the contract, because [`out of gas`](/learn/tvm-instructions/tvm_exit_codes#standard-exit-codes) exception cannot be handled by `CATCH`. The attacker simply can [`COMMIT`](/learn/tvm-instructions/instructions#11-application-specific-primitives) any state of contract and raise `out of gas`.
 
 ## Conclusion
 
-I hope this article would shed light on the non-obvious rules for FunC developers.
+Hope this article has shed some light on the non-obvious rules for FunC developers.
 
 ## References
 

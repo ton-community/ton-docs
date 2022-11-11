@@ -10,6 +10,7 @@ It is important that you take some time to become familiar with the tutorial str
 
 :::info IMPORTANT
 Before you start writing, *read the guidelines below*! They will help you ensure the level of standardization and quality that will make the review process much faster.
+:::
 
 Also, be sure to refer to the [**sample tutorial structure**](/contribute/sample-tutorial) we have provided.
 

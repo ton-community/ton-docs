@@ -133,7 +133,7 @@ is a function that takes a tuple of length exactly 2, but with values of any (si
 
 In this example `X` and `Y` are [type variables](/develop/func/types#polymorphism-with-type-variables). When the function is called, type variables are substituted with actual types, and the code of the function is executed. Note that although the function is polymorphic, the actual assembler code for it is the same for every type substitution. It is achieved essentially by the polymorphism of stack manipulation primitives. Currently, other forms of polymorphism (like ad-hoc polymorphism with type classes) are not supported.
 
-Also it is worth noticing that the type width of `X` and `Y` is supposed to be equal to 1; that is, the values of `X` or `Y` must occupy a single stack entry. So you actually can't call the function `pair_swap` on a tuple of type `[(int, int), int]`, because type `(int, int)` has width 2, i.e. it occupies 2 stack entries.
+Also, it is worth noticing that the type width of `X` and `Y` is supposed to be equal to 1; that is, the values of `X` or `Y` must occupy a single stack entry. So you actually can't call the function `pair_swap` on a tuple of type `[(int, int), int]`, because type `(int, int)` has width 2, i.e., it occupies 2 stack entries.
 
 ## Assembler function body definition
 As mentioned above, a function can be defined by the assembler code. The syntax is an `asm` keyword followed by one or several assembler commands, represented as strings.

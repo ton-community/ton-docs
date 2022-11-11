@@ -1,10 +1,15 @@
-# Bot for the sale of dumplings
+---
+description: At the end of the tutorial, you will write a beautiful bot that will be able to accept payments for your product directly in TON.
+---
 
+# Bot for sales of dumplings
 
-In this article, we'll create a simple Telegram bot for accepting payments in TON coins.
+In this article, we'll create a simple Telegram bot for accepting payments in TON.
 
 ## 🦄 What it looks like
-At the end of the tutorial, you yourself will write a beautiful bot that will be able to accept payments for your product directly in tones.
+
+At the end of the tutorial, you will write a beautiful bot that will be able to accept payments for your product directly in TON.
+
 The bot will look like this:
 
 ![bot preview](/img/tutorials/js-bot-preview.jpg)
@@ -12,7 +17,7 @@ The bot will look like this:
 ## 📖 What you'll learn
 You'll learn how to:
  - Create a Telegram bot in NodeJS using Grammy
- - Work with public toncenter api
+ - Work with public TON Center API
 
 > Why do we use Grammy?
 Because Grammy is a modern, young, high-level framework for comfortable & fast development of telegram bots on JS/TS/Deno, in addition to this Grammy has great [documentation](https://grammy.dev) and an active community that can always help you.
@@ -44,7 +49,7 @@ src
 .env
 ```
 * `bot/start.js` & `bot/payment.js` - files with handlers for telegram bot
-* `src/ton.js` - file with business logic related to the ton
+* `src/ton.js` - file with business logic related to TON
 * `app.js` - file for initializing and launching the bot
 
 
@@ -84,11 +89,11 @@ We will solve it like this:
 
 #### Getting the latest transactions
 
-If we use the toncenter api, then we can refer to their [documentation](https://toncenter.com/api/v2/) and find a method that ideally solves our problem - [getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get)
+If we use the TON Center API, then we can refer to their [documentation](https://toncenter.com/api/v2/) and find a method that ideally solves our problem - [getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get)
 
 One parameter is enough for us to get transactions - the wallet address for accepting payments, but we will also use the limit parameter in order to limit the issuance of transactions to 100 pieces.
 
-Let's try to call a test request for the `EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N` address (by the way, this is the Ton Foundation address)
+Let's try to call a test request for the `EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N` address (by the way, this is the TON Foundation address)
 ```bash
 curl -X 'GET' \
   'https://toncenter.com/api/v2/getTransactions?address=EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N&limit=100' \
@@ -138,7 +143,7 @@ Now we're ready to create a transaction checker
 
 ### Work with TON
 
-Let's start by importing the necessary library ton
+Let's start by importing the necessary library TON
 ```js
 import { HttpApi, fromNano, toNano } from "ton";
 ```
@@ -198,7 +203,7 @@ Now we just have to go through all the transactions, and provided that the comme
 
   return false;
 ```
-Note that value is in nanoTONs by default, so we need to divide it by 1 billion or we can just use `fromNano` method from ton library.
+Note that value is in nanotons by default, so we need to divide it by 1 billion or we can just use `fromNano` method from the TON library.
 And that's all for the `verifyTransactionExistance` function!
 
 Now we can create function to generate link for a quick transition to the wallet application for payment
@@ -373,7 +378,7 @@ const tonhubPaymentLink = generatePaymentLink(
   const menu = new InlineKeyboard()
     .url("Click to pay in TonHub", tonhubPaymentLink)
     .row()
-    .url("Click to pay in TonKeeper", tonkeeperPaymentLink)
+    .url("Click to pay in Tonkeeper", tonkeeperPaymentLink)
     .row()
     .text(`I sent ${amount} TON`, "check_transaction");
 ```

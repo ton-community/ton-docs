@@ -6,7 +6,7 @@ FunC is a domain-specific, C-like, statically typed language.
 
 FunC programs are compiled into Fift assembler code, which generates corresponding bytecode for the [TON Virtual Machine](/learn/tvm-instructions/tvm_overview).
 
-Further this bytecode (actually a [tree of cells](/learn/overviews/Cells), like any other data in the TON blockchain) can be used for creating smart contracts in the blockchain or can be run on a local instance of TVM.
+Further this bytecode (actually a [tree of cells](/learn/overviews/Cells), like any other data in the TON Blockchain) can be used for creating smart contracts in the blockchain or can be run on a local instance of TVM.
 
 You can find more information about FunC in the [DOCUMENTATION](/develop/func/types) section.
 

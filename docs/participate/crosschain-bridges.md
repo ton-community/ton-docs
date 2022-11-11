@@ -1,14 +1,14 @@
 # Cross-chain bridges
 
-Decentralized cross-chain bridges operate on the TON Blockchain, allowing you to transfer assets from the TON Blockchain to other blockchains and vice versa.
+Decentralized cross-chain bridges operate on TON Blockchain, allowing you to transfer assets from TON Blockchain to other blockchains and vice versa.
 
 ## Toncoin Bridge
 
-The Toncoin bridge allows you to transfer Toncoins between TON Blockchain and the Ethereum blockchain, as well as between the TON Blockchain and the BNB Smart Chain.
+The Toncoin bridge allows you to transfer Toncoin between TON Blockchain and the Ethereum blockchain, as well as between TON Blockchain and the BNB Smart Chain.
 
 The bridge is managed by decentralized oracles.
 
-### How to use?
+### How to use it?
 
 Bridge frontend is hosted on https://ton.org/bridge.
 
@@ -30,7 +30,7 @@ Bridge frontend is hosted on https://ton.org/bridge.
 
 ### Network Configs
 
-Actual bridge smart contracts addresses and oracles addresses you can get by inspecting the corresponding network config:
+You can get the actual bridge smart contract addresses and oracle addresses by inspecting the corresponding network config:
 
 TON-Ethereum: [#71](https://github.com/ton-blockchain/ton/blob/35d17249e6b54d67a5781ebf26e4ee98e56c1e50/crypto/block/block.tlb#L738).
 
@@ -53,6 +53,6 @@ TON-BSC: [#72](https://github.com/ton-blockchain/ton/blob/35d17249e6b54d67a5781e
 This is a concept article. We're still looking for someone experienced to write it.
 :::
 
-You can find front-end here: https://tonana.org/
+You can find the front-end here: https://tonana.org/
 
-Source code is here: https://github.com/tonanadao
+The source code is here: https://github.com/tonanadao

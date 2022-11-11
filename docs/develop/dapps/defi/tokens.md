@@ -6,30 +6,30 @@
 
 ### Smart contracts
 
-* [Jettons Standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)
-* [Smart Contracts Implementation (FunC)](https://github.com/ton-blockchain/token-contract/)
+* [Jettons standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)
+* [Smart contracts implementation (FunC)](https://github.com/ton-blockchain/token-contract/)
 
 ### Jetton Deployer
 
 Jettons are custom fungible tokens on the TON Blockchain. You can create your own token on the TON Blockchain using the Jetton Deployer example below:
 
 * **[Jetton.Live](https://jetton.live/)** — open-source Jetton Deployer dApp
-* [Jetton Deployer — Contracts](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)
+* [Jetton Deployer — contracts](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)
 * [Jetton Deployer — WebClient](https://github.com/ton-defi-org/jetton-deployer-webclient) (React, TypeScript)
 
 ### Tools to work with Jettons
 
-* [Scaleton](http://scaleton.io) — see your custom token balance
-* [@tegro/ton3-client](https://github.com/TegroTON/ton3-client#jettons-example) — SDK to query information about Jettons
+* [Scaleton](http://scaleton.io)—see your custom token balance
+* [@tegro/ton3-client](https://github.com/TegroTON/ton3-client#jettons-example)—SDK to query information about Jettons
 
 
 ## NFT
 
 ### Smart Contracts
 
-* [NFT Standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
-* [NFTRoyalty Standard Extension](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md)
-* [Smart Contracts Implementation (FunC)](https://github.com/ton-blockchain/token-contract/)
+* [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
+* [NFTRoyalty standard extension](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md)
+* [Smart contracts implementation (FunC)](https://github.com/ton-blockchain/token-contract/)
 * [Getgems NFT, sale, auctions smart contracts (FunC)](https://github.com/getgems-io/nft-contracts)
 
 ### NFT minters
@@ -41,4 +41,4 @@ Jettons are custom fungible tokens on the TON Blockchain. You can create your ow
 
 ### Tools to work with NFTs
 
-* [LiberMall/tnt](https://github.com/LiberMall/tnt) — TNT is an all-in-one command-line tool to query, edit, and mint new Non-Fungible Tokens on The Open Network.
+* [LiberMall/tnt](https://github.com/LiberMall/tnt)—TNT is an all-in-one command-line tool to query, edit, and mint new Non-Fungible Tokens on The Open Network.

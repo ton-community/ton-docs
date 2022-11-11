@@ -1,7 +1,11 @@
-# Bot with Own Balance
+---
+description: In this article, we'll create a simple Telegram bot for accepting payments in TON.
+---
+
+# Bot with own balance
 
 
-In this article, we'll create a simple Telegram bot for accepting payments in Toncoins.
+In this article, we'll create a simple Telegram bot for accepting payments in TON.
 
 ## 🦄 What it looks like
 
@@ -68,7 +72,7 @@ else:
 
 Here you need to fill in the values in the first three lines:
  - `BOT_TOKEN` is your Telegram Bot token which you can get after [creating a bot](https://t.me/BotFather).
- - `DEPOSIT_ADDRESS` is your project's wallet address which will accept all payments. You can just create a new TON wallet and copy its address.
+ - `DEPOSIT_ADDRESS` is your project's wallet address which will accept all payments. You can just create a new TON Wallet and copy its address.
  - `API_KEY` is your API key from TON Center which you can get in [this bot](https://t.me/tonapibot).
 
 You can also choose whether your bot will run on the testnet or the mainnet (4th line).
@@ -259,7 +263,7 @@ while True:
     # 2 Seconds delay between checks
     await asyncio.sleep(2)
 
-    # API call to Toncenter that returns last 100 transactions of our wallet
+    # API call to TON Center that returns last 100 transactions of our wallet
     resp = requests.get(f'{config.API_BASE_URL}/api/v2/getTransactions?'
                         f'address={config.DEPOSIT_ADDRESS}&limit=100&'
                         f'archival=true&api_key={config.API_KEY}').json()
@@ -338,7 +342,7 @@ Then we expect the transfer to have a comment ( `tx['in_msg']['message']` ), to 
 
 After these simple checks, we have a variable `value` with the deposit amount, and a variable `uid` with the ID of the user that made this deposit. So we can just add funds to their account and send a notification message.
 
-Also note that value is in nanoTONs by default, so we need to divide it by 1 billion. We do that in line with notification:
+Also note that value is in nanotons by default, so we need to divide it by 1 billion. We do that in line with notification:
 `{value / 1e9:.2f}`
 Here we divide the value by `1e9` (1 billion) and leave only two digits after the decimal point to show it to the user in a friendly format.
 
@@ -377,7 +381,7 @@ from aiogram.types import ParseMode, ReplyKeyboardMarkup, KeyboardButton, \
                           InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils import executor
 
-# Local modules to work with the Database and TON network
+# Local modules to work with the Database and TON Network
 import config
 import ton
 import db
@@ -422,7 +426,7 @@ async def welcome_handler(message: types.Message):
     await message.answer('Hi!\nI am example bot '
                          'made for [this article](https://www.tonspace.co/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot-2).\n'
                          'My goal is to show how simple it is to receive '
-                         'payments in TonCoin with Python.\n\n'
+                         'payments in Toncoin with Python.\n\n'
                          'Use keyboard to test my functionality.',
                          reply_markup=keyboard,
                          parse_mode=ParseMode.MARKDOWN)
@@ -443,7 +447,7 @@ async def balance_handler(message: types.Message):
     uid = message.from_user.id
 
     # Get user balance from database
-    # Also don't forget that 1 TON = 1e9 (billion) NanoTON
+    # Also don't forget that 1 TON = 1e9 (billion) Nanoton
     user_balance = db.get_balance(uid) / 1e9
 
     # Format balance and send to user

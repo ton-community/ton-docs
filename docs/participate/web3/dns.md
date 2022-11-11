@@ -1,9 +1,9 @@
 # TON DNS & Domains
 
-TON DNS is a service for translating human-readable domain names (such as `test.ton` or `mysite.temp.ton`) into TON smart contract addresses, ADNL addresses employed by services running in the TON Network (such as TON Sites), and so on.
+TON DNS is a service for translating human-readable domain names (such as `test.ton` or `mysite.temp.ton`) into TON Smart Contract Addresses, ADNL Addresses employed by services running on the TON Network (such as TON Sites) and so on.
 
 :::tip Starter tip
-To understand more about how it works, please read [What is TON DNS?](/learn/services/dns) article.
+To understand more about how it works, please read the '[What is TON DNS?](/learn/services/dns)' article.
 :::
 
 ## Standard
@@ -22,7 +22,7 @@ const address: Address = await tonweb.dns.getWalletAddress('test.ton');
 const address: Address = await tonweb.dns.resolve('test.ton', TonWeb.dns.DNS_CATEGORY_WALLET);
 ```
 
-Also `lite-client` and `tonlib-cli` is supported DNS queries.
+Also `lite-client` and `tonlib-cli` is supported by DNS queries.
 
 ## First-level domain
 
@@ -34,13 +34,13 @@ This could change in the future. Adding a new first-level domain will require ne
 
 ## *.ton domains
 
-*.ton domains implemented in the form of NFT. Since they implement the NFT standard, they are compatible with regular NFT services (e.g. NFT marketplaces) and wallets that can display NFT.
+*.ton domains are implemented in the form of an NFT. Since they implement the NFT standard, they are compatible with regular NFT services (e.g. NFT marketplaces) and wallets that can display NFT.
 
 *.ton domains source code - https://github.com/ton-blockchain/dns-contract.
 
-.ton domains resolver implements NFT collection interface and .ton domain implements NFT item interface.
+.ton domains resolver implements an NFT collection interface and .ton domain implements an NFT item interface.
 
-Primary sale of *.ton domains is available at a decentralized open auction https://dns.ton.org. Source code - https://github.com/ton-blockchain/dns.
+The primary sale of *.ton domains happens via a decentralized open auction at https://dns.ton.org. Source code - https://github.com/ton-blockchain/dns.
 
 ## Subdomains
 

@@ -4,31 +4,31 @@ In this article, we will consider TON explorers, their capabilities and features
 
 ## What is an explorer?
 
-If you are new to the blockchain technology, here is some basic information:
+If you are new to blockchain technology, here is some basic information:
 
-Explorer is a website that allows you to view information in the blockchain, such as account balance, transaction history, blocks, etc.
+An explorer is a website that allows you to view information in a blockchain, such as the account balance, transaction history, blocks, etc.
 
-## What explorers exist?
+## Which explorers exist?
 
-Among the TON explorers, you can distinguish several categories:
+Among TON explorers, you can distinguish several categories:
 
 - For everyday use
 - With extended information for developers
 - Specialized
 
-The division into categories is largely conditional, and one explorer can belong to several categories at the same time. So let's not pay too much attention to this.
+This division into categories is largely conditional and one explorer can belong to several categories at the same time. So let's not pay too much attention to this.
 
 ## General functionality
 
 Let's start with the general functionality that is present in all explorers.
 
-Almost all explorers have the ability to find information about the balance, transaction history, and information about the smart contract, if any deployed on the address.
+Almost all explorers have the ability to find out information about balances, transaction history and information about the smart contract, if deployed on the address.
 
-Next, we will consider several explorers that can be attributed to each of the categories.
+Next, we will consider several explorers that can be attributed to each of these categories.
 
-## TonScan
+## TON Scan
 
-Good explorer for everyday use. It has a convenient interface, a lot of information, and search. The search is performed by the public [address book](https://github.com/catchain/tonscan/blob/master/src/addrbook.json) (TON Foundation, OKX and etc.)
+Good explorer for everyday use. It has a convenient interface, a lot of information and a search function. Any search is performed by the public [address book](https://github.com/catchain/tonscan/blob/master/src/addrbook.json) (TON Foundation, OKX and etc.)
 
 ### Features
 
@@ -47,11 +47,11 @@ Good explorer for everyday use. It has a convenient interface, a lot of informat
 - URL: https://tonscan.org/
 - Testnet URL: https://testnet.tonscan.org/
 
-## TonWhales Explorer
+## Ton Whales Explorer
 
 This explorer is more oriented towards developers than ordinary users.
 
-Also, the TonWhales team supports its own network `sandbox`. This is both a plus and a minus. The plus is that you can test your smart contracts in this network, the minus is that all information about transactions in this network is not displayed in other explorers.
+Also, the Ton Whales team supports its own network `sandbox`. This is both a plus and a minus. The plus is that you can test your smart contracts in this network, the minus is that information about transactions in this network is not displayed in other explorers.
 
 ### Features
 
@@ -69,12 +69,12 @@ Also, the TonWhales team supports its own network `sandbox`. This is both a plus
 - URL: https://tonwhales.com/explorer
 - Testnet URL: https://tonsandbox.com/explorer
 
-## TonAPI Explorer
+## TON API Explorer
 
-This explorer is the newest of the presented and has its own pleasant features.
+This explorer is the newest and has its own unique features.
 For example, Trace. This feature allows you to see the entire sequence of transactions between smart contracts, even if subsequent transactions do not contain your address.
 
-Transaction information is not as detailed as, for example, tonwhales.
+Transaction information is not as detailed as, for example, on TON Whales.
 
 ### Features
 
@@ -95,9 +95,9 @@ Transaction information is not as detailed as, for example, tonwhales.
 
 ## TON NFT EXPLORER
 
-This explorer specializes in NFT, but it can also be used as a regular explorer.
+This explorer specializes in NFTs, but it can also be used as a regular explorer.
 
-When viewing the wallet address, you can find out which NFT it stores, and when viewing the NFT, you can find out the metadata, collection address, owner, and transaction history.
+When viewing the wallet address, you can find out which NFT it stores and, when viewing the NFT, you can find out the metadata, collection address, owner and transaction history.
 
 ### Features
 

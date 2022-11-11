@@ -10,9 +10,9 @@
 
 > Recovery Phrases
 >
-> The recovery phrases is the 24 words you wrote down when you created your wallet.
+> Your recovery phrase is the 24 words you wrote down when you created your wallet.
 >
-> If you lost your phrases, you can restore it using any TON wallet.
+> If you lost your phrase, you can restore it using any TON Wallet.
 > In Tonkeeper: Settings > Wallet protection > Your private key.
 >
 > Be sure to write down these 24 words and keep them in a safe place. In case of emergency, you will be able to restore access to the wallet only by recovery phrases.
@@ -30,17 +30,17 @@ You can link a wallet to a domain, in which case users will be able to send coin
 
 3. Confirm sending the transaction in the extension.
 
-## How to link a TON site to a domain
+## How to link a TON Site to a domain
 
 1. Open the domain for editing as described above.
 
-2. Copy the ADNL address of your TON site in HEX format into the "Site" field and click "Save".
+2. Copy the ADNL Address of your TON Site in HEX format into the "Site" field and click "Save".
 
 3. Confirm sending the transaction in the extension.
 
 ## How to set up subdomains
 
-1. Create a smart contract on the network that will manage the subdomains of your website or service. You can use ready-made [manual-dns](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/dns-manual-code.fc) or [auto-dns](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/dns-auto-code.fc) smart contracts, or any other smart contract that implements the TON DNS interface.
+1. Create a smart contract on the network that will manage the subdomains of your website or service. You can use ready-made [manual-dns](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/dns-manual-code.fc) or [auto-dns](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/dns-auto-code.fc) smart contracts or any other smart contract that implements the TON DNS interface.
 
 2. Open the domain for editing as described above.
 

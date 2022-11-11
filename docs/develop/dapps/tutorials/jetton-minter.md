@@ -22,7 +22,7 @@ In this article, you'll learn how to:
 2. You must have on your balance more than 0.25 Toncoin + funds to cover the blockchain commission. 
 
 :::tip Starter tip
- ~0.5 TONCOIN is definitely enough for this tutorial.
+ ~0.5 TON is definitely enough for this tutorial.
 :::
  
 ## 🚀 Let's get started!

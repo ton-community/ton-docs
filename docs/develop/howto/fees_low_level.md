@@ -5,11 +5,11 @@ This information is **very low level** and could be hard to understand for newco
 So feel free to read about it later.
 :::
 
-This document provides general idea of transaction fees in TON and particularly computation fees for funC code. There is also the [detailed specification in TVM whitepaper](https://ton.org/tvm.pdf).
+This document provides a general idea of transaction fees on TON and particularly computation fees for the FunC code. There is also a [detailed specification in the TVM whitepaper](https://ton.org/tvm.pdf).
 
 # Transactions and phases
 
-As was described in [TVM overview](/learn/tvm-instructions/tvm_overview) transaction execution consist of a few phases. During those phases corresponding fees may be deducted.
+As was described in the [TVM overview](/learn/tvm-instructions/tvm_overview), transaction execution consists of a few phases. During those phases, the corresponding fees may be deducted.
 
 Generally:
 ```cpp
@@ -20,46 +20,51 @@ transaction_fee = storage_fees
                 + out_fwd_fees
 ```
 where:
-   * `storage_fees` - fees corresponding to occupation of some space in chain state by contract
-   * `in_fwd_fees` - fees for importing to blockchain incoming message (it is only relevant for messages which were not previously onchain, that is `external` messages. For ordinary messages from contract to contract this fee is not applicable).
-   * `computation_fees` - fees corresponding to execution of TVM instructions
-   * `action_fees` - fees related to processing of action list (sending messages, setting libraries etc)
-   * `out_fwd_fees` - fees related to importing to blockchain of outcoming message
+   * `storage_fees`—fees corresponding to occupation of some space in chain state by contract
+   * `in_fwd_fees`—fees for importing to blockchain incoming message (it is only relevant for messages which were not previously on-chain, that is, `external` messages. For ordinary messages from contract to contract this fee is not applicable)
+   * `computation_fees`—fees corresponding to execution of TVM instructions
+   * `action_fees`—fees related to processing of action list (sending messages, setting libraries etc.)
+   * `out_fwd_fees`—fees related to importing to blockchain of outcoming message
 
 ## Computation fees
 
 ### Gas
-All computation costs are nominated in gas units. Price of gas units is determined by this chain config (Config 20 for masterchain and Config 21 for basechain) and may be changed only by consensus of validator. Note, unlike in other systems, user can not set his own gas price and there is no fee market.
+All computation costs are nominated in gas units. The price of gas units is determined by this chain config (Config 20 for masterchain and Config 21 for basechain) and may be changed only by consensus of the validator. Note that unlike in other systems, the user cannot set his own gas price, and there is no fee market.
 
-Current settings in basechain are as follows: 1 gas unit costs 1000 of nanoTONs.
+Current settings in basechain are as follows: 1 unit of gas costs 1000 nanotons.
 
 ## TVM instructions cost
-On the lowest-level (TVM instruction execution) the gas price for most primitives
+On the lowest level (TVM instruction execution) the gas price for most primitives
 equals the _basic gas price_, computed as `P_b := 10 + b + 5r`,
 where `b` is the instruction length in bits and `r` is the
 number of cell references included in the instruction.
 
-Apart from that basic fees, the following fees appear:
-   * Price of "parsing" cells (i.e., transforming cells into slices). Equal to 100 gas units for cells which is loading for the first time and 25 for subsequent loads during the same tx.
-   * Price of cells "creation" (i.e. transforming builders to cells). Equal to 500 gas units.
-   * Price of throwing exception - 50 gas units
-   * Price of tuple operations - 1 gas unit for every tuple element
-   * Price for implicit jumps - 10 gas units. It is price paid when all instructions in current continuation-cell are executed however there are references in that continuation cell and execution flow jumps to the first reference.
-   * Price for implicit back jumps - 5 gas units. It is price paid when all instructions in current continuation are executed and execution flow jumps back to the continuation from which just finished continuation was called.
-   * Price for moving stack elements between continuations. 1 gas unit per element, however first 32 elements moving is free.
+Apart from those basic fees, the following fees appear:
+
+| Instruction             | GAS  price   | Description                                                                                                                                                                                   | 
+|-------------------------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Creation of cell        | **500**      | Operation of transforming builder to cell.                                                                                                                                                    |
+| Parsing cell firstly    | **100**      | Operation of transforming cells into slices first time during current transaction.                                                                                                            | 
+| Parsing cell repeatedly | **25**       | Operation of transforming cells into slices, which already has parsed during same transaction.                                                                                                |
+| Throwing exception      | **50**       |                                                                                                                                                                                               | 
+| Operation with tuple    | **1**        | This price will multiply by the quantity of tuple's elements.                                                                                                                                 | 
+| Implicit Jump           | **10**       | It is paid when all instructions in the current continuation cell are executed. However, there are references in that continuation cell, and the execution flow jumps to the first reference. | 
+| Implicit Back Jump      | **5**        | It is paid when all instructions in the current continuation are executed and execution flow jumps back to the continuation from which the just finished continuation was called.             |                                                                                      
+| Moving stack elements   | **1**        | Price for moving stack elements between continuations. It will charge correspond gas price for every element. However, the first 32 elements moving is free.                                  |                                                                                       
+
 
 ## FunC constructions gas fees
 
-Almost all functions used in funC are defined in [stdlib.func](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) which maps funC functions to Fift assembler instructions. In turn Fift assembler instructions are mapped to bit-sequence instructions in [asm.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/fift/lib/Asm.fif). So if you want to understand how much exactly instruction call will cost you, you need to find `asm` representation in `stdlib.func`, then find bit-sequence in `asm.fif` and calculate instruction length in bits.
+Almost all functions used in FunC are defined in [stdlib.func](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) which maps FunC functions to Fift assembler instructions. In turn, Fift assembler instructions are mapped to bit-sequence instructions in [asm.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/fift/lib/Asm.fif). So if you want to understand how much exactly the instruction call will cost you, you need to find `asm` representation in `stdlib.func`, then find bit-sequence in `asm.fif` and calculate instruction length in bits.
 
-However, generally fees related to bit-lengths are minor in comparisson with fees related to cell parsing and creation, as well as jumps and just number of executed instructions.
+However, generally, fees related to bit-lengths are minor in comparison with fees related to cell parsing and creation, as well as jumps and just number of executed instructions.
 
-So, if you try to optimize your code start with architecture optimization, the decreasing number of cell parsing/creation operations, then with decreasing number of jumps.
+So, if you try to optimize your code start with architecture optimization, the decreasing number of cell parsing/creation operations, and then with the decreasing number of jumps.
 
 ### Operations with cells
-Just example of how proper cell work may substantially decrease gas costs.
+Just an example of how proper cell work may substantially decrease gas costs.
 
-Lets imagine that you want to write some encoded payload to the outgoing message. Straightforward implementation will be as follows:
+Let''s imagine that you want to add some encoded payload to the outgoing message. Straightforward implementation will be as follows:
 ```cpp
 slice payload_encoding(int a, int b, int c) {
   return
@@ -84,7 +89,7 @@ slice payload_encoding(int a, int b, int c) {
 }
 ```
 
-What is the problem with this code? `payload_encoding` to generate slice bit-string first create cell via `end_cell()` (+500 gas units) and then additionally parse it `begin_parse()` (+100 gas units). The same code can be written without those unnecessary operations by changing some used types:
+What is the problem with this code? `payload_encoding` to generate a slice bit-string, first create a cell via `end_cell()` (+500 gas units). Then parse it `begin_parse()` (+100 gas units). The same code can be written without those unnecessary operations by changing some commonly used types:
 
 ```cpp
 ;; we add asm for function which stores one builder to the another, which is absent from stdlib
@@ -114,23 +119,23 @@ builder payload_encoding(int a, int b, int c) {
 By passing bit-string in the another form (builder instead of slice) we substantially decrease computation cost by very slight change in code.
 
 ### Inline and inline_refs
-By default, when you have funC function, it gets it's own `id`, stored in separate leaf of id->function dictionary and when you call it somewhere in program, searching of function in dictionary and subsequent jump occur. Such behavior is justified if your function is used from many places in the code and thus jumps allows to decrease size of the code (by storing function body one time). However if function is only used one or two times it is often much cheaper to declare this function as `inline` or `inline_ref`. `inline` modificator place body of the function right into the code of the parent function, while `inline_ref` place function code into the reference (still jump to the reference is much cheaper than searching and jumping to dictionary entry).
+By default, when you have a FunC function, it gets its own `id`, stored in a separate leaf of id->function dictionary, and when you call it somewhere in the program, a search of the function in dictionary and subsequent jump occur. Such behavior is justified if your function is called from many places in the code and thus jumps allow to decrease the code size (by storing a function body once). However, if the function is only used once or twice, it is often much cheaper to declare this function as `inline` or `inline_ref`. `inline` modificator places the body of the function right into the code of the parent function, while `inline_ref` places the function code into the reference (jumping to the reference is still much cheaper than searching and jumping to the dictionary entry).
 
 ### Dictionaries
-Dictionaries in the TON are introduced as trees (DAGs to be precise) of cells. That means that if you search, read or write to dictionary, you need to parse all cells of according branch of the tree. That means that
-   * a) dicts operations are not fixed in gas costs (since size and number of nodes in the branch depends on given dictionary and given key)
+Dictionaries on TON are introduced as trees (DAGs to be precise) of cells. That means that if you search, read, or write to the dictionary, you need to parse all cells of the corresponding branch of the tree. That means that
+   * a) dicts operations are not fixed in gas costs (since the size and number of nodes in the branch depend on the given dictionary and key)
    * b) it is expedient to optimize dict usage by using special instructions like `replace` instead of `delete` and `add`
-   * c) developer should be aware of iteration operations (like next and prev) as well `min_key`/`max_key` operations to avoid unneccessary iteration through whole dict
+   * c) developer should be aware of iteration operations (like next and prev) as well `min_key`/`max_key` operations to avoid unnecessary iteration through the whole dict
 
 ### Stack operations
-Note that funC manipulate stack entries under the hood. That means that code
+Note that FunC manipulates stack entries under the hood. That means that the code:
 ```cpp
 (int a, int b, int c) = some_f();
 return (c, b, a);
 ```
-will be translated to a few instructions which change the order of elements on the stack.
+will be translated into a few instructions which changes the order of elements on the stack.
 
-When number of stack entries are substantial (10+) and their are actively used in different order stack operations fees may become non-negligible.
+When the number of stack entries is substantial (10+), and they are actively used in different orders, stack operations fees may become non-negligible.
 
 ## Fee's calculation Formulas
 
@@ -160,7 +165,7 @@ action_fees = sum(out_ext_msg_fwd_fee) + sum(int_msg_mine_fee)
 
 ### Config file
 
-All fees are nominated in a certain gas amount and may be changed: The config file represents the current fee's cost.
+All fees are nominated for a certain gas amount and may be changed. The config file represents the current fee cost.
 
 * storage_fees = [p18](https://explorer.toncoin.org/config?workchain=-1&shard=8000000000000000&seqno=22185244&roothash=165D55B3CFFC4043BFC43F81C1A3F2C41B69B33D6615D46FBFD2036256756382&filehash=69C43394D872B02C334B75F59464B2848CD4E23031C03CA7F3B1F98E8A13EE05#configparam18)
 * in_fwd_fees = [p24](https://explorer.toncoin.org/config?workchain=-1&shard=8000000000000000&seqno=22185244&roothash=165D55B3CFFC4043BFC43F81C1A3F2C41B69B33D6615D46FBFD2036256756382&filehash=69C43394D872B02C334B75F59464B2848CD4E23031C03CA7F3B1F98E8A13EE05#configparam24), [p25](https://explorer.toncoin.org/config?workchain=-1&shard=8000000000000000&seqno=22185244&roothash=165D55B3CFFC4043BFC43F81C1A3F2C41B69B33D6615D46FBFD2036256756382&filehash=69C43394D872B02C334B75F59464B2848CD4E23031C03CA7F3B1F98E8A13EE05#configparam25)

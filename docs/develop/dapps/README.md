@@ -108,8 +108,8 @@ TonLib was one of the first libraries for working with the TON Blockchain.
 
 ## APIs
 
-- [TeN Cnter](https://toncenter.com/) — fast and reliable HTTP API for The Open Network
-- [TonApi.io](https://tonapi.io/) — API that allows to work with the indexed blockchain information.
+- [TON Center](https://toncenter.com/) — fast and reliable HTTP API for The Open Network
+- [TON API.io](https://tonapi.io/) — API that allows to work with the indexed blockchain information.
 
 ### End-points
 

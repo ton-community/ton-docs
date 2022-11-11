@@ -22,7 +22,7 @@ ____________
 
 ### API
 
-**API** — Application Programming Interface, a mechanism that allows two programs two interact with each other through a series of protocols.
+**API** — Application Programming Interface, a mechanism that allows two programs to interact with each other through a series of protocols.
 
 ### APY
 
@@ -46,7 +46,7 @@ ____________
 
 ### Blockchain
 
-**Blockchain** — a distributed ledger of data in the form of a chain of blocks recording transaction information of every event on the network.
+**Blockchain** — a distributed ledger of data in the form of a chain of blocks recording transaction information for every event on the network.
 
 ### Bloodbath
 
@@ -58,7 +58,7 @@ ____________
 
 ### Bridge
 
-**Bridge** — a program connecting various blockchains to transfer tokens and other data from one network to another. TON Bridge is available by this link.
+**Bridge** — a program connecting various blockchains to transfer tokens and data from one network to another. TON Bridge is available by this [link](https://ton.org/bridge/).
 
 ### Bullish
 
@@ -106,7 +106,7 @@ ___________
 
 ### Decentralization
 
-**Decentralization** — one of the main tenets behind TON and other blockchains. Without decentralization, Web3 would be impossible to achieve; therefore, every element of the TON ecosystem revolves around having the most decentralization.
+**Decentralization** — one of the main tenets behind TON and other blockchains. Without decentralization, Web3 would be impossible to achieve; therefore, every element of the TON Ecosystem revolves around maximizing decentralization.
 
 ### DeFi
 
@@ -138,11 +138,11 @@ ___________
 
 ### Durov
 
-**Durov** — Pavel Durov, a Russian entrepreneur who’s famous for having founded the VK social network and the Telegram messenger. Nikolai Durov is Pavel's brother who participated in developing VK, Telegram, and also TON.
+**Durov** — Pavel Durov, a Russian entrepreneur who is famous for having founded the VK social network and Telegram messenger. Nikolai Durov is Pavel's brother who participated in developing VK, Telegram and also TON.
 
 ### DYOR
 
-**DYOR** — _Do Your Own Research_, the process by which you do research on a project, company, or cryptocurrency before deciding to invest.
+**DYOR** — _Do Your Own Research_, the process by which you do research on a project, company or cryptocurrency before deciding to invest.
 
 ___________
 
@@ -170,7 +170,7 @@ ___________
 
 ### FOMO
 
-**FOMO** — “fear of missing out,” a psychological state that consumes some investors when the idea of losing potential gains from an opportunity is present. It usually appears during a bull market and when traders don’t do their due diligence in analyzing a particular project.
+**FOMO** — “fear of missing out,” a psychological state that consumes some investors when the idea of losing potential gains from an opportunity is present. It usually appears during a bull market and when traders don’t do their due diligence analyzing a particular project.
 
 ### Fungible tokens
 
@@ -182,7 +182,7 @@ ___________
 
 ### Full Node
 
-**Full Node** — a computer on the TON blockchain that synchronizes and copies the entire TON blockchain.
+**Full Node** — a computer on TON Blockchain that synchronizes and copies the entire TON Blockchain.
 
 ### FunC
 
@@ -250,7 +250,7 @@ ___________
 
 ### Launchpad
 
-**Launchpad** — a platform for crypto startups that brings investors and projects together. The main launchpad in the TON ecosystem is Tonstarter.
+**Launchpad** — a platform for crypto startups that brings investors and projects together. The main launchpad in the TON Ecosystem is Tonstarter.
 
 ### Liquidity pool
 
@@ -294,7 +294,7 @@ __________
 
 ### Nominator
 
-**Nominator** — those who provide financial resources to validators so the latter can confirm blocks on the TON blockchain.
+**Nominator** — those who provide financial resources to validators so the latter can confirm blocks on the TON Blockchain.
 
 ### Non-custodial
 
@@ -328,7 +328,7 @@ __________
 
 ### Proof-of-work
 
-**Proof-of-work** — a consensus algorithm where one party proves to another that a specific amount of computational work was spent. By spending little energy, a party can verify this.
+**Proof-of-work** — a consensus algorithm where one party proves to another that a specific amount of computational work was spent. By expending a little energy, a party can verify this.
 
 ### Proxy
 
@@ -371,7 +371,7 @@ _________
 
 ### Shard
 
-**Shard** — a mechanism that helps a blockchain network to scale by breaking into smaller blockchains to relieve network congestion — something which the TON blockchain does.
+**Shard** — a mechanism that helps a blockchain network to scale by breaking into smaller blockchains to relieve network congestion — something which TON Blockchain does.
 
 ### Smart contract
 
@@ -391,7 +391,7 @@ _________
 
 ### Swap
 
-**Swap** — the exchange of two financial assets — e.g., Toncoin for USDT.
+**Swap** — the exchange of two financial assets — e.g. Toncoin for USDT.
 
 ________
 
@@ -399,7 +399,7 @@ ________
 
 ### TEP
 
-**TEP** — [TON Enhancement Proposals](https://github.com/ton-blockchain/TEPs), a standard of ways to interact with various parts of the TON ecosystem.
+**TEP** — [TON Enhancement Proposals](https://github.com/ton-blockchain/TEPs), a standard set of ways to interact with various parts of the TON ecosystem.
 
 ### Testnet
 
@@ -407,7 +407,7 @@ ________
 
 ### Ticker
 
-**Ticker** — the short form of a cryptocurrency, asset, or token on exchanges, trading services, or other DeFi solutions — e.g., TON for Toncoin.
+**Ticker** — the short form of a cryptocurrency, asset, or token on exchanges, trading services, or other DeFi solutions — e.g. TON for Toncoin.
 
 ### The Merge
 
@@ -427,7 +427,7 @@ ________
 
 ### Toncoin
 
-**Toncoin** — the native cryptocurrency of the TON ecosystem, which is used to develop services and pay for fees and services. It can be bought, sold, and traded.
+**Toncoin** — the native cryptocurrency of the TON Ecosystem, which is used to develop services and pay for fees and services. It can be bought, sold, and traded.
 
 ### Trading
 
@@ -439,7 +439,7 @@ ___________
 
 ### Validator
 
-**Validator** — those who verify new blocks on the TON blockchain.
+**Validator** — those who verify new blocks on TON Blockchain.
 
 ___________
 

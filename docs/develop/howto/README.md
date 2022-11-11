@@ -1,15 +1,15 @@
 # HOWTO
 
-> This section describes instructions and manuals for interacting with the TON at a low level.
+> This section describes instructions and manuals for interacting with TON at a low level.
 
 
 * **Getting Started**
 
-  General information, compilation and installation instructions for the Lite Client.
+  General information, compilation, and installation instructions for the Lite Client.
 
 * **Step-by-Step**
 
-  Step-by-step instructions for creating a new smart contract with the aid of the Lite Client.
+  Step-by-step instructions for creating a new smart contract with the help of the Lite Client.
 
 * **Full Node**
 
@@ -21,11 +21,11 @@
 
 * **TON Sites**
 
-  Step-by-step instructions to set up a proxy for accessing TON Sites or to creating new ones.
+  Step-by-step instructions to set up a proxy for accessing TON Sites or creating new ones.
 
 * **TON DNS**
 
-  Step-by-step instructions to register your own TON DNS domain, for example for your TON Site.
+  Step-by-step instructions to register your own TON DNS domain, for example, for your TON Site.
 
 * **Config Params**
 
@@ -33,12 +33,12 @@
 
 * **POW Givers**
 
-  Step-by-step instructions to mine Proof-of-work giver smart contracts.
+  Step-by-step instructions to mine proof-of-work giver smart contracts.
 
 * **Smart Contract Guidelines**
 
-  Guidelines and best practices related to implementation of TON Blockchain smart contracts.
+  Guidelines and best practices related to the implementation of the TON Blockchain smart contracts.
 
 * **Payment Processing**
 
-  Overview and specific details which explain how to process (send and accept) digital assets on TON network. Useful for exchanges, exchangers, etc.
+  Overview and specific details that explain how to process (send and accept) digital assets on the TON Network. Useful for exchanges, exchangers, etc.
