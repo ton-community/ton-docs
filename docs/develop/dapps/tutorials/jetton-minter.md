@@ -193,11 +193,6 @@ If you want to go deeper, read this article by Tal Kol:
 * [How and why to shard your smart contract—studying the anatomy of TON Jettons](https://society.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-theanatomy-of-tons-jettons)
 
 
-## What's next?
-
-If you want to go deeper, read this article by Tal Kol:  
-* [How and why to shard your smart contract—studying the anatomy of TON Jettons](https://society.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-theanatomy-of-tons-jettons)
-
 ## References
 
  - Project: https://github.com/ton-blockchain/minter-contract
