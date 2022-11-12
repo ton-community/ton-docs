@@ -120,7 +120,13 @@ To make any changes, begin here:
  ```bash npm2yarn
  npm run build
  ```
-
+ The build result will be describes the process of creating the necessary files, as well as the search for smart contracts. 
+ 
+ 
+ :::info
+ Read the console, there are a lot of tips!
+ :::
+    
  6. You can test your changes by using:
 
  ```bash npm2yarn
@@ -148,6 +154,43 @@ To make any changes, begin here:
  ```bash npm2yarn
  npm run deploy
  ```
+ The result of running your project:
+
+    ```js
+    > @ton-defi.org/jetton-deployer-contracts@0.0.2 deploy
+    > ts-node ./build/_deploy.ts
+
+    =================================================================
+    Deploy script running, let's find some contracts to deploy..
+
+    * We are working with 'mainnet'
+
+    * Config file '.env' found and will be used for deployment!
+     - Wallet address used to deploy from is: YOUR-ADDRESS
+     - Wallet balance is YOUR-BALANCE TON, which will be used for gas
+
+    * Found root contract 'build/jetton-minter.deploy.ts - let's deploy it':
+     - Based on your init code+data, your new contract address is: YOUR-ADDRESS
+     - Let's deploy the contract on-chain..
+     - Deploy transaction sent successfully
+     - Block explorer link: https://tonwhales.com/explorer/address/YOUR-ADDRESS
+     - Waiting up to 20 seconds to check if the contract was actually deployed..
+     - SUCCESS! Contract deployed successfully to address: YOUR-ADDRESS
+     - New contract balance is now YOUR-BALANCE TON, make sure it has enough to pay rent
+     - Running a post deployment test:
+    {
+      name: 'MyJetton',
+      description: 'My jetton',
+      image: 'https://www.linkpicture.com/q/download_183.png',
+      symbol: 'JET1'
+    }
+    ```
+
+
+## What's next?
+
+If you want to go deeper, read this article by Tal Kol:  
+* [How and why to shard your smart contract—studying the anatomy of TON Jettons](https://society.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-theanatomy-of-tons-jettons)
 
 
 ## What's next?
@@ -158,4 +201,4 @@ If you want to go deeper, read this article by Tal Kol:
 ## References
 
  - Project: https://github.com/ton-blockchain/minter-contract
- - By delovoyhomie ([Telegram @delovoyslava](https://t.me/delovoyslava), [delovoyhomie on GitHub](https://github.com/delovoyhomie))
+ - By Slava ([Telegram @delovoyslava](https://t.me/delovoyslava), [delovoyhomie on GitHub](https://github.com/delovoyhomie))
