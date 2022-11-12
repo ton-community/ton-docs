@@ -2,9 +2,9 @@
 
 Welcome, dev! It's great to have you here. 👋
 
-In this article, we'll tell you about creating your first fungible token (jetton) to TON.
+In this article, we'll tell you about creating your first fungible token (Jetton) on TON.
 
-Mint will take place using the [jetton.live](https://www.jetton.live) browser service.
+To mint Jettons we will be using the [jetton.live](https://www.jetton.live) browser service.
 
 ## 📖 What you'll learn
 
@@ -13,16 +13,16 @@ In this article, you'll learn how to:
 - deploy a Jetton using your browser
 - customize your token
 - manage and use your token
-- editing token parameters
+- edit the token parameters
 
 
 ## 📌 Prepare before you start
 
-1. Need to have a wallet [TonHub](https://ton.app/wallets/tonhub-wallet) or [Chrome Extension](https://ton.app/wallets/chrome-plugin).
-2. Have on your balance more than 0.25 TONCOIN + blockchain commission. 
+1. First you need to have the [Tonhub](https://ton.app/wallets/tonhub-wallet) wallet or [Chrome extension](https://ton.app/wallets/chrome-plugin).
+2. You must have on your balance more than 0.25 Toncoin + funds to cover the blockchain commission. 
 
 :::tip Starter tip
- ~0.5 TONCOIN is definitely enough for this tutorial.
+ ~0.5 TON is definitely enough for this tutorial.
 :::
  
 ## 🚀 Let's get started!
@@ -35,20 +35,20 @@ Use your web browser to open the service [jetton.live](https://www.jetton.live).
 
 #### Connect Wallet
 
-Click the `Connect Wallet` button to connect your wallet [TonHub](https://ton.app/wallets/tonhub-wallet) or [Chrome Extension](https://ton.app/wallets/chrome-plugin).
+Click the `Connect Wallet` button to connect your [Tonhub](https://ton.app/wallets/tonhub-wallet) wallet or a [Chrome extension](https://ton.app/wallets/chrome-plugin).
 
 <img src="/img/tutorials/Jetton/jetton-connect-wallet.png" alt="drawing"/>
 
-**Scan the QR-code** if the [TonHub](https://ton.app/wallets/tonhub-wallet) or **sign in** the wallet if it's a browser [Chrome Extension](https://ton.app/wallets/chrome-plugin).
+**Scan the QR-code** in [Tonhub](https://ton.app/wallets/tonhub-wallet) or **sign in** to the wallet via the [Chrome extension](https://ton.app/wallets/chrome-plugin).
 
-#### Fill in the information in the fields
+#### Fill in the blanks with relevant information
 
 1. Name (usually 1-3 words).
 2. Symbol (usually 3-5 uppercase characters).
-3. Amount (for example: 1,000,000).
+3. Amount (for example, 1,000,000).
 4. Description of the token (optional).
 5. Token logo URL (optional).
-6. Deploy your token (jetton) and complete the transaction on the wallet.
+6. Deploy your token (Jetton) and complete a transaction in the wallet.
 
 
 #### Token logo URL
@@ -59,13 +59,13 @@ If you want to have an attractive Jetton token, you need a beautiful logo hosted
 
 #### How to create your logo URL?
 
- 1. Prepare **256x256** PNG image of the token logo with transparent background.
- 2. Get link to your logo. A good solution is [GitHub Pages](https://pages.github.com/). Let's use them.
+ 1. Prepare a **256x256** PNG image of the token logo with a transparent background.
+ 2. Get a link to your logo. A good solution is [GitHub Pages](https://pages.github.com/). Let's use them.
  3. [Create a new public repository](https://docs.github.com/en/get-started/quickstart/create-a-repo) with the name `website`.
  4. Upload your prepared image to git and enable `GitHub Pages`.
-    1. [Add GitHub Pages to your repository](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site)
-    2. [Upload your image and get link](https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository)
- 5. If you have your own domain then it would be good to use `.org` instead `github.io`.
+    1. [Add GitHub Pages to your repository](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site).
+    2. [Upload your image and get a link](https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository).
+ 5. If you have your own domain, then it would be good to use `.org` instead of `github.io`.
  
 
  ## 💸 Send and receive Jettons
@@ -73,26 +73,26 @@ If you want to have an attractive Jetton token, you need a beautiful logo hosted
 
  <img src="/img/tutorials/Jetton/jetton-receive-tokens.png" alt="drawing"/>
 
- Just below you can **send tokens** to multi-currency wallets like a [Tonkeeper](https://tonkeeper.com/) or [TonHub](https://ton.app/wallets/tonhub-wallet) and another.
+ Just below you can **send tokens** to multi-currency wallets like [Tonkeeper](https://tonkeeper.com/) or [Tonhub](https://ton.app/wallets/tonhub-wallet).
 
  <img src="/img/tutorials/Jetton/jetton-send-tokens.png" alt="drawing"/>
 
 
 :::info
- You always also **burn** your Jettons to reduce their number.
+ You always also **burn** your Jettons to reduce their amount.
 :::
 
 
- ### 📱 Send tokens from phone using a Tonkeeper
+ ### 📱 Send tokens from phone using Tonkeeper
 
 Prerequisites:
 
-1. You must already have a token on your balance to send it
-2. At least 0.1 TONCOIN to pay the sending fees
+1. You must already have tokens on your balance to send them.
+2. There must be at least 0.1 Toncoin to pay transaction fees.
 
-#### Step-by-step Guide
+#### Step-by-step guide
 
-Then select the **your token**, the your **amount** to send, and the **recipient's address.**
+Then go to **your token**, set the **amount** to send, and enter the **recipient address.**
 
 <img src="/img/tutorials/Jetton/jetton-send-tutorial.png" alt="drawing"/>
 
@@ -100,34 +100,40 @@ Then select the **your token**, the your **amount** to send, and the **recipient
 
 With [FunC](https://www.tonspace.co/develop/func/overview) language you can change the behavior of the token in your favor.
 
-To make any changes, start from here:
+To make any changes, begin here:
 
 * https://github.com/ton-blockchain/minter-contract
 
-### Step-by-Step Guide
- 1. Check you have all "Dependencies and Requirements" from [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) repo.
- 2. Clone [minter-contract repository](https://github.com/ton-blockchain/minter-contract) and rename project. 
- 3. To install you need to open a terminal at the root and run.
+### Step-by-step guide
+ 1. Make sure you have all "Dependencies and Requirements" from the [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) repo.
+ 2. Clone the [minter-contract repository](https://github.com/ton-blockchain/minter-contract) and rename the project. 
+ 3. To install you need to open a terminal at the root and run:
 
  ```bash npm2yarn
  npm install
  ```
 
- 4. Edit the original smart contract files in this way in root terminal. All contract files are in `contracts/*.fc`
+ 4. Edit the original smart contract files same way in the root terminal. All contract files are in `contracts/*.fc`
 
  5. Build a project by using: 
 
  ```bash npm2yarn
  npm run build
  ```
-
+ The build result will be describes the process of creating the necessary files, as well as the search for smart contracts. 
+ 
+ 
+ :::info
+ Read the console, there are a lot of tips!
+ :::
+    
  6. You can test your changes by using:
 
  ```bash npm2yarn
  npm run test
  ```
 
- 7. Edit the **name** and other metadata of the token in `build/jetton-minter.deploy.ts` by changing JettonParams object:
+ 7. Edit the **name** and other metadata of the token in `build/jetton-minter.deploy.ts` by changing JettonParams object.
 
  ```js
 // This is example data - Modify these params for your own jetton!
@@ -143,49 +149,50 @@ To make any changes, start from here:
 };
  ```
 
- 8.1 To deploy a token use command:
+ 8. To deploy a token use the following command:
 
  ```bash npm2yarn
  npm run deploy
  ```
+ The result of running your project:
 
- 8.2 Result of step 8:
-
- ```bash npm2yarn
-    PS C:\Users\NameUser\minter-contract-main> npm run deploy
+    ```js
     > @ton-defi.org/jetton-deployer-contracts@0.0.2 deploy
     > ts-node ./build/_deploy.ts
+
     =================================================================
     Deploy script running, let's find some contracts to deploy..
-    * We are working with 'mainnet'
-    * Config file '.env' found and will be used for deployment!
-     - Wallet address used to deploy from is: YOUR-ADDRESS-WALLET
-     - Wallet balance is YOUR-QUANTITY-TON, which will be used for gas
-    * Found root contract 'build/jetton-minter.deploy.ts - let's deploy it':
-    Require stack:
-    - C:\Users\NameUser\minter-contract-main\build\jetton-minter.deploy.ts
-    - C:\Users\NameUser\minter-contract-main\build\_deploy.ts
-        at Function.Module._resolveFilename (node:internal/modules/cjs/loader:995:15)
-        at Function.Module._resolveFilename.sharedData.moduleResolveFilenameHook.installedValue [as _resolveFilename] (C:\Users\slavi\Desktop\minter-contract-main\node_modules\@cspotcode\source-map-support\source-map-support.js:811:30)
-        at Function.Module._load (node:internal/modules/cjs/loader:841:27)
-        at Module.require (node:internal/modules/cjs/loader:1061:19)
-        at require (node:internal/modules/cjs/helpers:103:18)
-        at Object.<anonymous> (C:\Users\NameUser\minter-contract-main\build\jetton-minter.deploy.ts:3:54)
-        at Module._compile (node:internal/modules/cjs/loader:1159:14)
-        at Module.m._compile (C:\Users\NameUser\minter-contract-main\node_modules\ts-node\src\index.ts:1597:23)
-        at Module._extensions..js (node:internal/modules/cjs/loader:1213:10)
-      requireStack: [
-        'C:\\Users\\NameUser\\minter-contract-main\\build\\jetton-minter.deploy.ts',
-        'C:\\Users\\NameUser\\minter-contract-main\\build\\_deploy.ts'
-      ]
-    }
- ```
 
-:::info
-Don't forget that you need to have more than 0.25 TON + blockchain commission.
-:::
- 
+    * We are working with 'mainnet'
+
+    * Config file '.env' found and will be used for deployment!
+     - Wallet address used to deploy from is: YOUR-ADDRESS
+     - Wallet balance is YOUR-BALANCE TON, which will be used for gas
+
+    * Found root contract 'build/jetton-minter.deploy.ts - let's deploy it':
+     - Based on your init code+data, your new contract address is: YOUR-ADDRESS
+     - Let's deploy the contract on-chain..
+     - Deploy transaction sent successfully
+     - Block explorer link: https://tonwhales.com/explorer/address/YOUR-ADDRESS
+     - Waiting up to 20 seconds to check if the contract was actually deployed..
+     - SUCCESS! Contract deployed successfully to address: YOUR-ADDRESS
+     - New contract balance is now YOUR-BALANCE TON, make sure it has enough to pay rent
+     - Running a post deployment test:
+    {
+      name: 'MyJetton',
+      description: 'My jetton',
+      image: 'https://www.linkpicture.com/q/download_183.png',
+      symbol: 'JET1'
+    }
+    ```
+
+
+## What's next?
+
+If you want to go deeper, read this article by Tal Kol:  
+* [How and why to shard your smart contract—studying the anatomy of TON Jettons](https://society.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-theanatomy-of-tons-jettons)
+
 ## References
 
  - Project: https://github.com/ton-blockchain/minter-contract
- - By delovoyhomie ([Telegram @delovoyslava](https://t.me/delovoyslava), [delovoyhomie on GitHub](https://github.com/delovoyhomie))
+ - By Slava ([Telegram @delovoyslava](https://t.me/delovoyslava), [delovoyhomie on GitHub](https://github.com/delovoyhomie))
