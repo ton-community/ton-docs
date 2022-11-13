@@ -27,9 +27,9 @@ Glitch runs the [tonstarter-contracts](https://github.com/ton-defi-org/tonstarte
 
 Start developing, testing, and debugging smart contracts easily with these resources:
 
-### Javascript SDK
+### JavaScript SDK
 
-* [Choose your Javascript SDK](/develop/smart-contracts/sdk/javascript)
+* [Choose your JavaScript SDK](/develop/smart-contracts/sdk/javascript)
 
 ### Other Tools
 
