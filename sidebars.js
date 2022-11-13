@@ -189,6 +189,11 @@ const sidebars = {
           items: [
             'develop/smart-contracts/testing/tonstarter',
             'develop/smart-contracts/testing/toncli',
+            {
+              type: 'link',
+              label: 'PyTVM',
+              href: 'https://github.com/disintar/PyTVM',
+            }
           ],
         },
         'develop/smart-contracts/compile/README',
