@@ -21,21 +21,6 @@ For convenience, almost the entire infrastructure of the mainnet (wallets, API, 
 * Testnet HTTP API: https://testnet.tonapi.io/
 * Testnet bridge: https://ton.org/bridge?testnet=true
 
-
-## Testnet vs Sandbox
-
-Testnet is a test network backed by the validators and initiatives of the TON Foundation. Sandbox, on the other hand, is a test network backed by the [TON Whales](https://tonwhales.com/) community.
-
-* Explorer: https://tonsandbox.com/explorer
-* Test Faucet: [@sandbox_faucet_bot](https://t.me/sandbox_faucet_bot)
-* Classic API: https://sandbox.tonhubapi.com
-* HTTP v4 API: https://sandbox-v4.tonhubapi.com
-* Network config: https://storage.googleapis.com/tonhub-configs/config-sandbox.json
-
-:::info
-Read more about the Sandbox test network in [Tonhub Developers](https://developers.tonhub.com/docs/sandbox).
-:::
-
 ## Some third parties
 
 * To switch to [Tonkeeper's testnet](https://tonkeeper.com/), tap the version 5 times in the settings.

@@ -51,12 +51,9 @@ Good explorer for everyday use. It has a convenient interface, a lot of informat
 
 This explorer is more oriented towards developers than ordinary users.
 
-Also, the Ton Whales team supports its own network `sandbox`. This is both a plus and a minus. The plus is that you can test your smart contracts in this network, the minus is that information about transactions in this network is not displayed in other explorers.
-
 ### Features
 
 - **Convenient for developers**
-- Support for its own network `sandbox`
 - Сontract types
 - Contract disassembler
 
@@ -67,7 +64,6 @@ Also, the Ton Whales team supports its own network `sandbox`. This is both a plu
 ### Links
 
 - URL: https://tonwhales.com/explorer
-- Testnet URL: https://tonsandbox.com/explorer
 
 ## TON API Explorer
 
