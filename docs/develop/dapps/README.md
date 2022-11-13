@@ -83,6 +83,7 @@ To add login button to your website or web app use the following:
 - [ton-connect/sdk](https://github.com/ton-connect/sdk) — unified standard for the TON ecosystem
 - [tonkeeper/ton-connect](https://github.com/tonkeeper/ton-connect/blob/main/TonConnectSpecification.md) — SDK by Tonkeeper
 - [tonhub/tonhub-connect](https://developers.tonhub.com/docs/apps) — SDK by Tonhub
+- [delab-team/connect](https://github.com/delab-team/connect) — Modal package with different TON wallets for React JS
 
 ## TonLib SDK
 
