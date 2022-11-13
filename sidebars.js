@@ -221,6 +221,7 @@ const sidebars = {
             'develop/smart-contracts/security/ton-hack-challenge-1',
           ],
         },
+        'develop/smart-contracts/libraries',
         {
           type: 'category',
           label: 'Best Practices',
