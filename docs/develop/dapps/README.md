@@ -51,6 +51,7 @@ Here is a list of modern SDKs that are constantly supported and improved:
 - [psylopunk/pytonlib](https://github.com/psylopunk/pytonlib) — Python SDK
 - [toncenter/pytonlib](https://github.com/toncenter/pytonlib) — Python SDK
 - [tonfactory/tonsdk](https://github.com/tonfactory/tonsdk) — Analogue of the tonweb js library
+- [tons](https://pypi.org/project/tons/) — Easy-to-use CLI to work with TON wallets
 
 ### Go SDK
 
