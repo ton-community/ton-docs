@@ -232,6 +232,11 @@ const sidebars = {
           label: 'Best Practices',
           items: [
             'develop/smart-contracts/guidelines',
+            {
+              type: 'link',
+              label: 'getgems.io NFT Contracts',
+              href: 'https://github.com/getgems-io/nft-contracts',
+            },
             'develop/smart-contracts/fees',
             'develop/smart-contracts/messages',
             {
