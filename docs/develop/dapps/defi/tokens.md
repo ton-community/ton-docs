@@ -4,6 +4,10 @@
 
 ## Jettons
 
+### Guides & Tutorials
+
+* [Mint your first Jetton](/develop/dapps/tutorials/jetton-minter/) — Learn how to deploy and customize your first Jetton
+
 ### Smart contracts
 
 * [Jettons standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)
