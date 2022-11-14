@@ -43,7 +43,7 @@ Requests and responses to the server are described by a TL schema that allows yo
 - [psylopunk/pytonlib](https://github.com/psylopunk/pytonlib) — Newbie-friendly Python SDK (ADNL API)
 - [toncenter/pytonlib](https://github.com/toncenter/pytonlib) — Python SDK (ADNL API)
 
-### LTS TonLib SDK
+### Legacy TonLib SDK
 
 These SDKs are _long-term support_ stage, so feel free to use these SDK too.
 
@@ -63,7 +63,7 @@ These SDKs are _long-term support_ stage, so feel free to use these SDK too.
 
 - [10+ examples from xssnick/tonutils-go](https://github.com/xssnick/tonutils-go/tree/master/example)
 
-### LTS TonLib SDK
+### Legacy TonLib SDK
 
 - [Desktop standard wallet](https://github.com/ton-blockchain/wallet-desktop) (C++ and Qt)
 - [Android standard wallet](https://github.com/ton-blockchain/wallet-android) (Java)

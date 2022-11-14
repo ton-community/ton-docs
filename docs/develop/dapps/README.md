@@ -35,16 +35,16 @@ If you are a web or bot developer, you may find the following repositories usefu
 
 - [10+ examples from xssnick/tonutils-go](https://github.com/xssnick/tonutils-go/tree/master/example)
 
-## API & SDK
+## Most popular SDK
 
 Here is a list of modern SDKs that are constantly supported and improved:
 
 ### JavaScript SDK
 
-* [ton-community/ton-js](https://github.com/ton-community/ton) — Cross-platform client for the TON Blockchain by the TON Community
-* [toncenter/tonweb](https://github.com/toncenter/tonweb) — Cross-platform client for TON Blockchain by TON Center
+* [ton-community/ton-js](https://github.com/ton-community/ton) — _Modern_ cross-platform client for TON by the TON Community
+* [toncenter/tonweb](https://github.com/toncenter/tonweb) — Legacy cross-platform client for TON Blockchain by TON Center
 * [@tegro/ton3-client](https://github.com/TegroTON/ton3-client) — JS ton3-client for tonhold API by TonHold
-* [nns2009/ton-payment-tracker](https://github.com/nns2009/ton-payment-tracker) — TON payment tracker
+* [nns2009/ton-payment-tracker](https://github.com/nns2009/ton-payment-tracker) — TON payment tracker.
 
 ### Python SDK
 
