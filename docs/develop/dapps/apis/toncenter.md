@@ -29,8 +29,19 @@ You can connect to public [toncenter.com](https://toncenter.com) or run your own
 * [@tegro/ton3-client](https://github.com/TegroTON/ton3-client) — JS ton3-client by TonHold
 * [nns2009/ton-payment-tracker](https://github.com/nns2009/ton-payment-tracker) — TON payment tracker based on TON Center API
 
+### Python SDK
+
+- [tonfactory/tonsdk](https://github.com/tonfactory/tonsdk) — Analogue of the tonweb js library (TON Center HTTP API)
+
 ## Usage examples
+
+### JavaScript
 
 - [A standard web wallet](https://github.com/toncenter/ton-wallet) (Plain JS)
 - [Bridge frontend](https://github.com/ton-blockchain/bridge) (Vue.js)
 - [Accepting payments in a Telegram bot](../payment-processing/accept-payments-in-a-telegram-bot.md) (Python with Aiogram)
+
+### Python
+
+- [Transfer NFT & Jettons by creating a transfer message from the owner wallet](https://github.com/tonfactory/tonsdk#transfer-nft--jettons-by-creating-a-transfer-message-from-an-owner-wallet)
+- [Create mnemonic, init wallet class, create an external message to deploy the wallet](https://github.com/tonfactory/tonsdk#create-mnemonic-init-wallet-class-create-external-message-to-deploy-the-wallet)

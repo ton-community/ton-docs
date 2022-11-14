@@ -27,12 +27,23 @@ Requests and responses to the server are described by a TL schema that allows yo
 
 [TonLib TL Schema](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl)
 
-### SDK
+## SDK
+
+### Golang SDK
 
 - [xssnick/tonutils-go](https://github.com/xssnick/tonutils-go) — _Modern_ Golang SDK for the TON Blockchain.
 - [startfellows/tongo](https://github.com/startfellows/tongo) — Golang SDK with native ADNL support, cells manipulations and CGO for TVM and tx emulations.
 
-#### LTS TonLib SDK
+### Kotlin & Java SDK
+
+- [ton-kotlin](https://github.com/andreypfau/ton-kotlin) — Kotlin SDK for the TON Blockchain.
+
+### Python SDK
+
+- [psylopunk/pytonlib](https://github.com/psylopunk/pytonlib) — Newbie-friendly Python SDK (ADNL API)
+- [toncenter/pytonlib](https://github.com/toncenter/pytonlib) — Python SDK (ADNL API)
+
+### LTS TonLib SDK
 
 These SDKs are _long-term support_ stage, so feel free to use these SDK too.
 
@@ -43,6 +54,16 @@ These SDKs are _long-term support_ stage, so feel free to use these SDK too.
 
 
 ## Usage examples
+
+### Python
+
+- [psylopank/pytonlib examples](https://github.com/psylopunk/pytonlib/tree/main/examples)
+
+### Go
+
+- [10+ examples from xssnick/tonutils-go](https://github.com/xssnick/tonutils-go/tree/master/example)
+
+### LTS TonLib SDK
 
 - [Desktop standard wallet](https://github.com/ton-blockchain/wallet-desktop) (C++ and Qt)
 - [Android standard wallet](https://github.com/ton-blockchain/wallet-android) (Java)

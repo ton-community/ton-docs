@@ -35,7 +35,7 @@ If you are a web or bot developer, you may find the following repositories usefu
 
 - [10+ examples from xssnick/tonutils-go](https://github.com/xssnick/tonutils-go/tree/master/example)
 
-## SDK
+## API & SDK
 
 Here is a list of modern SDKs that are constantly supported and improved:
 
@@ -48,10 +48,10 @@ Here is a list of modern SDKs that are constantly supported and improved:
 
 ### Python SDK
 
-- [psylopunk/pytonlib](https://github.com/psylopunk/pytonlib) — Python SDK
-- [toncenter/pytonlib](https://github.com/toncenter/pytonlib) — Python SDK
-- [tonfactory/tonsdk](https://github.com/tonfactory/tonsdk) — Analogue of the tonweb js library
-- [tons](https://pypi.org/project/tons/) — Easy-to-use CLI to work with TON wallets
+- [psylopunk/pytonlib](https://github.com/psylopunk/pytonlib) — Python SDK (ADNL API)
+- [toncenter/pytonlib](https://github.com/toncenter/pytonlib) — Python SDK (ADNL API)
+- [tonfactory/tonsdk](https://github.com/tonfactory/tonsdk) — Analogue of the tonweb js library (TON Center HTTP API)
+- [tons](https://pypi.org/project/tons/) — Easy-to-use CLI to work with TON wallets.
 
 ### Go SDK
 
