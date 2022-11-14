@@ -3,6 +3,7 @@
 
 At the moment, three API options are available to interact with TON:
 
-* [TonCenter HTTP API](/develop/dapps/apis/toncenter)
-* [TonAPI HTTP API](https://tonapi.io/)
-* [Decentralized ADNL API](/develop/dapps/apis/adnl)
+- [TON Center API](/develop/dapps/apis/adnl) — fast and reliable HTTP API for The Open Network
+- [TON HTTP API](https://tonapi.io/) — API that allows to work with the indexed blockchain information.
+- [TON ADNL API](/develop/dapps/apis/adnl) — secure API to communicate with TON Blockchain, based on ADNL protocol.
+

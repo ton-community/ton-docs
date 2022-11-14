@@ -55,7 +55,9 @@ Here is a list of modern SDKs that are constantly supported and improved:
 
 ### Go SDK
 
-- [tonutils-go](https://github.com/xssnick/tonutils-go) — Go utils for the TON Blockchain
+- [xssnick/tonutils-go](https://github.com/xssnick/tonutils-go) — Golang SDK for the TON Blockchain. 
+- [startfellows/tongo](https://github.com/startfellows/tongo) — Golang SDK with native ADNL support, cells manipulations and CGO for TVM and tx emulations.
+
 
 ### Kotlin / Java SDK
 
@@ -110,9 +112,4 @@ TonLib was one of the first libraries for working with the TON Blockchain.
 
 ## APIs
 
-- [TON Center](https://toncenter.com/) — fast and reliable HTTP API for The Open Network
-- [TON API.io](https://tonapi.io/) — API that allows to work with the indexed blockchain information.
-
-### End-points
-
-- [GetBlock Nodes](https://getblock.io/nodes/ton/) — connect and test your dApp to TON using GetBlocks Nodes
+- Go to [API](/develop/dapps/apis) section to read more about APIs in TON

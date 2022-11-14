@@ -1,4 +1,4 @@
-# Decentralized ADNL API
+# TON ADNL API
 
 Clients connect directly to lite servers (nodes) using a binary protocol.
 
@@ -10,14 +10,16 @@ There is no need to download the full state of the blockchain, the client downlo
 
 You can connect to public lite servers from the global config ([mainnet](https://ton.org/global-config.json) or [testnet](https://ton.org/testnet-global.config.json)) or run your own lite server.
 
-Since it checks Merkle proofs, you can even use untrusted lite servers.
-
-Read more about Merkle proofs at [ADNL Protocol article](/learn/overviews/ADNL) or [TON Whitepaper](https://ton.org/ton.pdf) 2.3.10, 2.3.11.
+Read more about Merkle proofs at [TON Whitepaper](https://ton.org/ton.pdf) 2.3.10, 2.3.11.
 
 ## Pros & Cons
 
-👍 - Ultra secure API with Merkle proofs.  
-👎 - More time is required to figure things out. Not compatible with web frontends (non-HTTP protocol).
+👍 — Reliable. Uses API with Merkle proof hashes to verify incoming binary data.  
+👍 — Secure. Since it checks Merkle proofs, you can even use untrusted lite servers.  
+👍 — Fast. Instead of HTTP-middleware directly connects to TON Blockchain nodes. 
+
+👎 — Complicated. More time is required to figure things out.  
+👎 — Back-end first. Not compatible with web frontends (built for non-HTTP protocol).
 
 ## API reference
 
@@ -25,14 +27,22 @@ Requests and responses to the server are described by a TL schema that allows yo
 
 [TonLib TL Schema](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl)
 
-### SDK:
+### SDK
+
+- [xssnick/tonutils-go](https://github.com/xssnick/tonutils-go) — _Modern_ Golang SDK for the TON Blockchain.
+- [startfellows/tongo](https://github.com/startfellows/tongo) — Golang SDK with native ADNL support, cells manipulations and CGO for TVM and tx emulations.
+
+#### LTS TonLib SDK
+
+These SDKs are _long-term support_ stage, so feel free to use these SDK too.
 
 - [C++ TonLib](https://github.com/ton-blockchain/ton/tree/master/example/cpp)
 - [Python TonLib wrapper](https://github.com/toncenter/pytonlib)
 - [Golang TonLib wrapper](https://github.com/ton-blockchain/tonlib-go)
 - [Java TonLib wrapper (JNI)](https://github.com/ton-blockchain/tonlib-java)
 
-### Usage examples:
+
+## Usage examples
 
 - [Desktop standard wallet](https://github.com/ton-blockchain/wallet-desktop) (C++ and Qt)
 - [Android standard wallet](https://github.com/ton-blockchain/wallet-android) (Java)
