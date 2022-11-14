@@ -402,7 +402,14 @@ const sidebars = {
         'develop/howto/fees_low_level',
         'develop/howto/step-by-step',
         'develop/howto/config-params',
-        'develop/howto/pow-givers',
+        {
+          type: 'category',
+          label: 'Archived',
+          items: [
+            'develop/archive/pow-givers',
+            'develop/archive/mining',
+          ]
+        },
       ],
     },
     {

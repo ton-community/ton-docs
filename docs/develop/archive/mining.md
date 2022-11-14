@@ -1,17 +1,5 @@
-## TON mining guide
-### Table of contents
-1. [Introduction](#introduction)
-2. [Quick start](#quick-start)
-3. [Basics](#basics)
-4. [Advanced](#advanced)
-5. [Miner hardware](#hardware)
-    * [General](#hardware)
-    * [Cloud instances](#hardware-cloud)
-    * [Income estimates](#hardware-estimates)
-6. [FAQ](#faq)
-    * [General](#faq-general)
-    * [Hardware](#faq-hw)
-    * [Software](#faq-software)
+# TON mining guide
+
 
 ## <a id="introduction"></a>Introduction
 This document provides an introduction to the process of mining Toncoin using PoW givers. Please visit [ton.org/mining](https://ton.org/mining) for up-to-date status of TON mining.
