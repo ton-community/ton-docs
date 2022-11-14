@@ -275,7 +275,7 @@ const sidebars = {
         'develop/dapps/README',
         {
           type: 'category',
-          label: 'API Types',
+          label: 'API & SDK',
           items: [
             'develop/dapps/apis/README',
             'develop/dapps/apis/toncenter',
