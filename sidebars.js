@@ -259,6 +259,13 @@ const sidebars = {
             },
           ],
         },
+        {
+          type: 'category',
+          label: 'Tutorials & Examples',
+          items: [
+            'develop/smart-contracts/tutorials/multisig'
+          ]
+        }
       ],
     },
     {
