@@ -175,3 +175,16 @@ Combining this techniques is also possible.
 ```cpp
 (int, builder) store_uint_quite(builder b, int x, int len) asm(x b len -> 1 0) "STUXQ";
 ```
+
+### Multiline asms
+Multiline assembler command or even Fift-code snippets can be defined via multiline strings which starts and ends with `"""`.
+
+```cpp
+slice hello_world() asm """
+  "Hello"
+  " "
+  "World"
+  $+ $+ $>s
+  PUSHSLICE
+""";
+```

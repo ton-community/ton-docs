@@ -1,0 +1,77 @@
+# Bridges Addresses
+
+:::caution
+To accurately get the current addresses of bridge smart contracts, see them directly in the [network config](/crosschain/overview?id=network-configs). It's the most secure way.
+:::
+
+## Mainnet
+
+### Mainnet TON-Ethereum Toncoin Bridge
+
+Wrapped TONCOIN Address - [0x582d872a1b094fc48f5de31d3b73f2d9be47def1](https://etherscan.io/token/0x582d872a1b094fc48f5de31d3b73f2d9be47def1)
+
+Bridge Address - [Ef_dJMSh8riPi3BTUTtcxsWjG8RLKnLctNjAM4rw8NN-xWdr](https://tonscan.org/address/Ef_dJMSh8riPi3BTUTtcxsWjG8RLKnLctNjAM4rw8NN-xWdr)
+
+Collector Address - [EQCuzvIOXLjH2tv35gY4tzhIvXCqZWDuK9kUhFGXKLImgxT5](https://tonscan.org/address/EQCuzvIOXLjH2tv35gY4tzhIvXCqZWDuK9kUhFGXKLImgxT5)
+
+Governance Address - [Ef87m7_QrVM4uXAPCDM4DuF9Rj5Rwa5nHubwiQG96JmyAjQY](https://tonscan.org/address/Ef87m7_QrVM4uXAPCDM4DuF9Rj5Rwa5nHubwiQG96JmyAjQY)
+
+### Mainnet TON-BSC Toncoin Bridge
+
+Wrapped TONCOIN Address - [0x76A797A59Ba2C17726896976B7B3747BfD1d220f](https://bscscan.com/token/0x76A797A59Ba2C17726896976B7B3747BfD1d220f)
+
+Bridge Address - [Ef9NXAIQs12t2qIZ-sRZ26D977H65Ol6DQeXc5_gUNaUys5r](https://tonscan.org/address/Ef9NXAIQs12t2qIZ-sRZ26D977H65Ol6DQeXc5_gUNaUys5r)
+
+Collector Address - [EQAHI1vGuw7d4WG-CtfDrWqEPNtmUuKjKFEFeJmZaqqfWTvW](https://tonscan.org/address/EQAHI1vGuw7d4WG-CtfDrWqEPNtmUuKjKFEFeJmZaqqfWTvW)
+
+Governance Address - [Ef8OvX_5ynDgbp4iqJIvWudSEanWo0qAlOjhWHtga9u2YjVp](https://tonscan.org/address/Ef8OvX_5ynDgbp4iqJIvWudSEanWo0qAlOjhWHtga9u2YjVp)
+
+### Mainnet Toncoin Oracles
+
+Oracle 0 - [Ef_P2CJw784O1qVd8Qbn8RCQc4EgxAs8Ra-M3bDhZn3OfzRb](https://tonscan.org/address/Ef_P2CJw784O1qVd8Qbn8RCQc4EgxAs8Ra-M3bDhZn3OfzRb)
+
+Oracle 1 - [Ef8DfObDUrNqz66pr_7xMbUYckUFbIIvRh1FSNeVSLWrvo1M](https://tonscan.org/address/Ef8DfObDUrNqz66pr_7xMbUYckUFbIIvRh1FSNeVSLWrvo1M)
+
+Oracle 2 - [Ef8JKqx4I-XECLuVhTqeY1WMgbgTp8Ld3mzN-JUogBF4ZEW-](https://tonscan.org/address/Ef8JKqx4I-XECLuVhTqeY1WMgbgTp8Ld3mzN-JUogBF4ZEW-)
+
+Oracle 3 - [Ef8voAFh-ByCeKD3SZhjMNzioqCmDOK6S6IaeefTwYmRhgsn](https://tonscan.org/address/Ef8voAFh-ByCeKD3SZhjMNzioqCmDOK6S6IaeefTwYmRhgsn)
+
+Oracle 4 - [Ef_uJVTTToU8b3o7-Jr5pcUqenxWzDNYpyklvhl73KSIA17M](https://tonscan.org/address/Ef_uJVTTToU8b3o7-Jr5pcUqenxWzDNYpyklvhl73KSIA17M)
+
+Oracle 5 - [Ef93olLWqh1OuBSTOnJKWZ4NwxNq_ELK55_h_laNPVwxcEro](https://tonscan.org/address/Ef93olLWqh1OuBSTOnJKWZ4NwxNq_ELK55_h_laNPVwxcEro)
+
+Oracle 6 - [Ef_iUPZdKLOCrqcNpDuFGNEmiuBwMB18TBXNjDimewpDExgn](https://tonscan.org/address/Ef_iUPZdKLOCrqcNpDuFGNEmiuBwMB18TBXNjDimewpDExgn)
+
+Oracle 7 - [Ef_tTGGToGmONePskH_Y6ZG-QLV9Kcg5DIXeKwBvCX4YifKa](https://tonscan.org/address/Ef_tTGGToGmONePskH_Y6ZG-QLV9Kcg5DIXeKwBvCX4YifKa)
+
+Oracle 8 - [Ef94L53akPw-4gOk2uQOenUyDYLOaif2g2uRoiu1nv0cWYMC](https://tonscan.org/address/Ef94L53akPw-4gOk2uQOenUyDYLOaif2g2uRoiu1nv0cWYMC)
+
+## Testnet
+
+### Testnet TON-Ethereum Toncoin Bridge
+
+Wrapped TONCOIN Address - [0xDB15ffaf2c88F2d89Db9365a5160D5b8c9448Ea6](https://goerli.etherscan.io/token/0xDB15ffaf2c88F2d89Db9365a5160D5b8c9448Ea6)
+
+Bridge Address - [Ef-56ZiqKUbtp_Ax2Qg4Vwh7yXXJCO8cNJAb229J6XXe4-aC](https://testnet.tonscan.org/address/Ef-56ZiqKUbtp_Ax2Qg4Vwh7yXXJCO8cNJAb229J6XXe4-aC)
+
+Collector Address - [EQCA1W_I267-luVo9CzV7iCcrA1OO5vVeXD0QHACvBn1jIVU](https://testnet.tonscan.org/address/EQCA1W_I267-luVo9CzV7iCcrA1OO5vVeXD0QHACvBn1jIVU)
+
+Governance Address - [kf-OV1dpgFVEzEmyvAETT8gnhqZ1IqHn8RzT6dmEmvnze-9n](https://testnet.tonscan.org/address/kf-OV1dpgFVEzEmyvAETT8gnhqZ1IqHn8RzT6dmEmvnze-9n)
+
+### Testnet TON-BSC Toncoin Bridge
+
+Wrapped TONCOIN Address - [0xdb15ffaf2c88f2d89db9365a5160d5b8c9448ea6](https://testnet.bscscan.com/token/0xdb15ffaf2c88f2d89db9365a5160d5b8c9448ea6)
+
+Bridge Address - [Ef_GmJntTDokxfhLGF1jRvMGC8Jav2V5keoNj4El2jzhHsID](https://testnet.tonscan.org/address/Ef_GmJntTDokxfhLGF1jRvMGC8Jav2V5keoNj4El2jzhHsID)
+
+Collector Address - [EQDBNfV4DQzSyzNMw6BCTSZSoUi-CzWcYNsfhKxoDqfrwFtS](https://testnet.tonscan.org/address/EQDBNfV4DQzSyzNMw6BCTSZSoUi-CzWcYNsfhKxoDqfrwFtS)
+
+Governance Address - [kf83VnnXuaqQV1Ts2qvUr6agacM0ydOux5NNa1mcU-cEO693](https://testnet.tonscan.org/address/kf83VnnXuaqQV1Ts2qvUr6agacM0ydOux5NNa1mcU-cEO693)
+
+### Testnet Toncoin Oracles
+
+Oracle 0 - [Ef9fwskZLEuGDfYTRAtvt9k-mEdkaIskkUOsEwPw1wzXk7zR](https://testnet.tonscan.org/address/Ef9fwskZLEuGDfYTRAtvt9k-mEdkaIskkUOsEwPw1wzXk7zR)
+
+Oracle 1 - [Ef8jPzrhTYloKgTCsGgEFNx7OdH-sJ98etJnwrIVSsFxH9mu](https://testnet.tonscan.org/address/Ef8jPzrhTYloKgTCsGgEFNx7OdH-sJ98etJnwrIVSsFxH9mu)
+
+Oracle 2 - [Ef-fxGCPuPKNR6T4GcFxNQuLU5TykLKEAtkxWEfA1wBWy6JE](https://testnet.tonscan.org/address/Ef-fxGCPuPKNR6T4GcFxNQuLU5TykLKEAtkxWEfA1wBWy6JE)

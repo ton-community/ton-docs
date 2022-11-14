@@ -6,7 +6,7 @@ Decentralized cross-chain bridges operate on TON Blockchain, allowing you to tra
 
 The Toncoin bridge allows you to transfer Toncoin between TON Blockchain and the Ethereum blockchain, as well as between TON Blockchain and the BNB Smart Chain.
 
-The bridge is managed by decentralized oracles.
+The bridge is managed by [decentralized oracles](/participate/crosschain/bridge-addresses).
 
 ### How to use it?
 

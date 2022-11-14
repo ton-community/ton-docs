@@ -6,7 +6,7 @@ From the technical perspective, TON Sites are very much like standard websites, 
 
 In order to access existing sites and create new TON, Sites one needs special gateways between the "ordinary" internet and the TON Network. Essentially, TON Sites are accessed with the aid of a HTTP->RLDP proxy running locally on the client's machine and they are created by means of a reverse RLDP->HTTP proxy running on a remote web server.
 
-[Overview](https://telegra.ph/TON-Sites-TON-WWW-and-TON-Proxy-09-29-2)
+[Read more about TON Sites, WWW, and Proxy](/learn/services/sites-www-proxy)
 
 ## Running an entry proxy
 
@@ -118,6 +118,10 @@ Alternatively, you can set up `localhost:8080` as a HTTP proxy in your browser. 
 Once you have set up `localhost:8080` as the HTTP proxy to be used in your browser, you can simply type the required URI, such as `http://just-for-test.ton` or `http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h72gllt.adnl/`, in the navigation bar of your browser, and interact with the TON Site in the same way as with the usual Web Sites.
 
 ## Running TON Site
+
+:::tip tutorial found!
+Hey! Don't want to start from beginner-friendly tutorial [How to run TON Site?](/develop/dapps/tutorials/how-to-run-ton-site)
+:::
 
 Most people will need just to access existing TON Sites, not to create new ones. However, if you want to create one, you'll need to run RLDP-HTTP Proxy on your server, along with the usual web server software such as Apache or Nginx.
 

@@ -452,21 +452,27 @@ const sidebars = {
     'participate/explorers',
     {
       type: 'category',
-      label: 'Setup Your Wallet',
+      label: 'Wallets in TON',
       items: [
         'participate/wallets/apps',
         'participate/wallets/contracts',
-        {
-          type: 'link',
-          label: 'Wallet Contract Versions',
-          href: 'https://github.com/toncenter/tonweb/blob/master/src/contract/wallet/WalletSources.md',
-        },
       ],
     },
     {
-      type: 'doc',
-      label: 'Use Cross-chain Bridges',
-      id: 'participate/crosschain-bridges',
+      type: 'category',
+      label: 'Cross-chain Bridges',
+      items: [
+        {
+          type: 'doc',
+          label: 'Overview',
+          id: 'participate/crosschain/overview',
+        },
+        {
+          type: 'doc',
+          label: 'Bridges Addresses',
+          id: 'participate/crosschain/bridge-addresses',
+        },
+      ]
     },
     {
       type: 'doc',
@@ -481,6 +487,7 @@ const sidebars = {
         'participate/nodes/local-ton',
         'participate/nodes/node-maintenance-and-security',
         'participate/nodes/run-node',
+        'participate/nodes/collators',
         {
           type: 'link',
           label: 'Run a Validator Node',

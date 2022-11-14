@@ -40,7 +40,8 @@ You can link a wallet to a domain, in which case users will be able to send coin
 
 ## How to set up subdomains
 
-1. Create a smart contract on the network that will manage the subdomains of your website or service. You can use ready-made [manual-dns](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/dns-manual-code.fc) or [auto-dns](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/dns-auto-code.fc) smart contracts or any other smart contract that implements the TON DNS interface.
+
+1. Create a smart contract on the network that will manage the subdomains of your website or service. You can use ready-made [manual-dns](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/dns-manual-code.fc) or [auto-dns](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/dns-auto-code.fc) smart contracts, or any other smart contract that implements the TON DNS interface.
 
 2. Open the domain for editing as described above.
 
