@@ -62,7 +62,7 @@ ____________
 
 ### Bullish
 
-**Bullish** — the term “bullish” is used to describe an asset whose value is appreciating. (“Bullish” is the opposite of “bearish” — i.e., when the market’s overall value is increasing.)
+**Bullish** — the term “bullish” is used to describe an asset whose value is appreciating. (“Bullish” is the opposite of “bearish” — i.e. when the market’s overall value is increasing.)
 
 ### Burning
 
@@ -218,7 +218,7 @@ ___________
 
 ### Hold
 
-**Hold** — saving — i.e., not selling — an asset or assets from your portfolio.
+**Hold** — saving — i.e. not selling — an asset or assets from your portfolio.
 
 ___________
 
@@ -278,7 +278,7 @@ __________
 
 ### Moon
 
-**Moon** — a crypto term that describes a crypto asset’s vertical trajectory on a price chart — i.e., it quickly gains value.
+**Moon** — a crypto term that describes a crypto asset’s vertical trajectory on a price chart — i.e. it quickly gains value.
 
 __________
 
