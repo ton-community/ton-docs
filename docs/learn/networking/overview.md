@@ -11,7 +11,7 @@ The TON Project uses its own peer-to-peer network protocols.
   subscribe to updates of only some shardchains, not necessarily all of them).
 
 
-- **TON Ecosystem services (e.g TON Proxy, TON Sites, TON Storage) run on these protocols.**
+- **TON Ecosystem services (e.g. TON Proxy, TON Sites, TON Storage) run on these protocols.**
 
   Once the more sophisticated network protocols needed
   to support TON Blockchain are in place, it turns out that they can easily
