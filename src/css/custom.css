@@ -55,6 +55,12 @@ html[data-theme=dark] {
   --ifm-background-surface-color: #232328
 }
 
+@media (max-width: 1200px){
+  .navbar__item {
+    display: none;
+  }
+}
+
 .navbar .navbar__items[data-theme=light] {
   flex: auto;
   background: rgba(35,35,40,.9)
@@ -1717,13 +1723,7 @@ a img,button img {
 }
 
 .navbar-sidebar {
-  margin-top: 44px
-}
-
-@media (max-width:577px) {
-  .navbar-sidebar {
-    margin-top: 34px
-  }
+  margin-top: 0
 }
 
 [role=banner] {
