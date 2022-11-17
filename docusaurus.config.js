@@ -8,9 +8,9 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 const config = {
   title: 'The Open Network',
   tagline: 'Mass adoption. Massive distribution',
-  url: 'https://ton.org/docs',
+  url: 'https://ton.org',
   staticDirectories: ['public', 'static'],
-  baseUrl: '/',
+  baseUrl: '/docs/',
   themes: [
     '@docusaurus/theme-live-codeblock',
     [
