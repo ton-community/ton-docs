@@ -10,7 +10,7 @@ RUN npm run build
 
 FROM nginx:1.23.2
 
-RUN rm -rf /etc/nginx/default.conf
+RUN rm -rf /etc/nginx/conf.d/default.conf
 COPY deployment/Docker/nginx.conf /etc/nginx/conf.d/
 
 COPY --from=builder /app/build/ /app
