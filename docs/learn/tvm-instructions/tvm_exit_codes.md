@@ -24,4 +24,6 @@ allowed by this version of TVM.
 
 <sup>1</sup> If you encounter such exception in a _func_ contract it probably means a type error in `asm` declarations.
 
+---
 
+There is one negative `-14` exit vm code created so that it [cannot be faked](https://github.com/ton-blockchain/ton/blob/20758d6bdd0c1327091287e8a620f660d1a9f4da/crypto/vm/vm.cpp#L492).  It means `out of gas error`, same as `13`.
