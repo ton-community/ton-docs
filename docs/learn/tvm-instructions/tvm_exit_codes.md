@@ -21,7 +21,6 @@ allowed by this version of TVM.
 * `34` - Action is invalid or not supported. Set during action phase if current action cannot be applied.
 * `37` - Not enough TON. Message sends too much TON (or there is not enough TON after deducting fees).
 * `38` - Not enough extra-currencies.
+* `-14` - It means out of gas error, same as `13`. Negative, because it [cannot be faked](https://github.com/ton-blockchain/ton/blob/20758d6bdd0c1327091287e8a620f660d1a9f4da/crypto/vm/vm.cpp#L492)
 
 <sup>1</sup> If you encounter such exception in a _func_ contract it probably means a type error in `asm` declarations.
-
-
