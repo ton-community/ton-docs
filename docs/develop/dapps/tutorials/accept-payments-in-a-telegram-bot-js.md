@@ -12,7 +12,7 @@ At the end of the tutorial, you will write a beautiful bot that will be able to 
 
 The bot will look like this:
 
-![bot preview](/img/tutorials/js-bot-preview.jpg)
+![bot preview](/static/img/tutorials/js-bot-preview.jpg)
 
 ## 📖 What you'll learn
 You'll learn how to:
