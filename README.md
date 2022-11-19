@@ -5,28 +5,32 @@ User-friendly documentation for newcomers to the TON blockchain.
 
 ---
 
+<img align="right" width="300px" src="static\img\readme\about.png">
+
 ## About 🐥
 
-<img align="right" width="200
-px" src="static\img\readme\about.png">
-
-This is official reposotory for TON documentation. 
+This is official reposotory for The Open Network documentation.
 
 Check it right here 👉 [ton.org/docs](https://ton.org/docs)
 
-We are collecting all avaiable information, that can help developers and users of TON. You can became one of us.
+We are collecting all avaiable information and knowledge, that can help developers and users of TON.
+You can help or even became part of documentation team by conributing. Any help is accepted 🤗
 
 ---
 
-<img align="left" width="190px" src="static\img\readme\contribute.png">
+<img align="left" width="300px" src="static\img\readme\contribute.png">
 
 ##  Contribute 🐣
 
-TON is an actively growing ecosystem and every day many people contribute to its development. You can also participate in this by helping organize knowledge and creating tutorials to help other developers.
+TON is an actively growing ecosystem and every day many people contribute to its development. 
+
+You can also participate in this by helping organize knowledge and creating tutorials to help other developers.
+
+Feedback, lectures, technical articles, tutorials and examples. All this can help the community grow even faster!
 
 ---
 
-<img align="right" width="190px" src="static\img\readme\check.png">
+<img align="right" width="300px" src="static\img\readme\check.png">
 
 ## Check before submit 🔎
 
