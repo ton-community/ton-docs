@@ -6,3 +6,4 @@
  - [open-contracts/math](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/math) — Math library that extends FunC arithmetic operations
  - [open-contracts/tuples](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/tuples) — Collection of tuple-releated functions for FunC
  - [open-contracts/crypto](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/crypto) — Provides operations on curve secp256k1
+ - [toncli/test-libs](https://github.com/disintar/toncli/tree/master/src/toncli/lib/test-libs) - Operations on TLB, generation and parsing of typical messages and types
