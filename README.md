@@ -20,7 +20,7 @@ You can help or even became part of documentation team by conributing. Any help 
 
 <img align="left" width="300px" src="static\img\readme\contribute.png">
 
-##  Contribute 🐣
+##  Contribute 🌱
 
 TON is an actively growing ecosystem and every day many people contribute to its development. 
 
