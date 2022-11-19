@@ -28,6 +28,8 @@ You can also participate in this by helping organize knowledge and creating tuto
 
 Feedback, lectures, technical articles, tutorials and examples. All this can help the community grow even faster!
 
+Read more about contibuting here 👉 [docs/contribute](https://ton.org/docs/contribute)
+
 ---
 
 <img align="right" width="300px" src="static\img\readme\check.png">
@@ -35,7 +37,15 @@ Feedback, lectures, technical articles, tutorials and examples. All this can hel
 ## Check before submit 🔎
 
 
-If you are changing sidebar or adding media-files, please check that your submission will not break production 😱. You can do this by running a local instance of documentation:
+If you are changing sidebar or adding media-files, please check that your submission will not break production 😱. You can do this in two ways:
+
+### Cloud ☁️
+
+You can use Gitpod (a free, online, VS code-like IDE) for contributing. It will launch a workspace with a single click:
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ton-community/ton-docs)
+
+### Local 💻
 
 1. Download repository from GitHub
 2. Install [NodeJS](https://nodejs.org/en/download/) to run local build
