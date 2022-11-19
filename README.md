@@ -14,7 +14,9 @@ This is official reposotory for The Open Network documentation.
 Check it right here 👉 [ton.org/docs](https://ton.org/docs)
 
 We are collecting all avaiable information and knowledge, that can help developers and users of TON.
-You can help or even became part of documentation team by conributing. Any help is accepted 🤗
+You can help or even became part of documentation team by conributing. 
+
+Any help is accepted 🤗
 
 ---
 
@@ -33,7 +35,7 @@ Feedback, lectures, technical articles, tutorials and examples. All this can hel
 
 <img align="left" width="300px" src="static\img\readme\how.png">
 
-## How to contibute 🎓
+## How to contribute 🎓
 
 As said before, it's up to you.
 
