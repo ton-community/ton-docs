@@ -247,6 +247,7 @@ const sidebars = {
             'develop/smart-contracts/guidelines/internal-messages',
             'develop/smart-contracts/guidelines/external-messages',
             'develop/smart-contracts/guidelines/non-bouncable-messages',
+            'develop/smart-contracts/guidelines/message-delivery-guarantees',
             'develop/smart-contracts/guidelines/get-methods',
             'develop/smart-contracts/guidelines/accept',
             'develop/smart-contracts/guidelines/processing',
