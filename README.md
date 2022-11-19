@@ -43,7 +43,7 @@ If you are a developer and faced some difficulties successfully overcoming them 
 Found an error? Leave feedback and we will fix it.
 Have a fresh idea? Submit an issue [using one of the templates](https://github.com/ton-community/ton-docs/issues/new/choose).
 
-Read more about contibuting here 👉 [docs/contribute](https://ton.org/docs/contribute)
+Read more about contributing here 👉 [docs/contribute](https://ton.org/docs/contribute)
 
 
 
