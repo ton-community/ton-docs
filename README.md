@@ -3,7 +3,35 @@
 
 User-friendly documentation for newcomers to the TON blockchain.
 
-## Quick Start
+---
+
+## About 🐥
+
+<img align="right" width="200
+px" src="static\img\readme\about.png">
+
+This is official reposotory for TON documentation. 
+
+Check it right here 👉 [ton.org/docs](https://ton.org/docs)
+
+We are collecting all avaiable information, that can help developers and users of TON. You can became one of us.
+
+---
+
+<img align="left" width="190px" src="static\img\readme\contribute.png">
+
+##  Contribute 🐣
+
+TON is an actively growing ecosystem and every day many people contribute to its development. You can also participate in this by helping organize knowledge and creating tutorials to help other developers.
+
+---
+
+<img align="right" width="190px" src="static\img\readme\check.png">
+
+## Check before submit 🔎
+
+
+If you are changing sidebar or adding media-files, please check that your submission will not break production 😱. You can do this by running a local instance of documentation:
 
 1. Download repository from GitHub
 2. Install [NodeJS](https://nodejs.org/en/download/) to run local build
@@ -20,12 +48,6 @@ User-friendly documentation for newcomers to the TON blockchain.
     ```
 
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
 
 ## License
 
