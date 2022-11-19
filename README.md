@@ -1,5 +1,5 @@
 
-![preview](https://user-images.githubusercontent.com/5148967/187221315-fb8aa098-d573-4042-992e-b91170521334.jpg)
+![preview](/static/img/snippet.png)
 
 User-friendly documentation for newcomers to the TON blockchain.
 
@@ -37,7 +37,7 @@ Read more about contibuting here 👉 [docs/contribute](https://ton.org/docs/con
 ## Check before submit 🔎
 
 
-If you are changing sidebar or adding media-files, please check that your submission will not break production 😱. You can do this in two ways:
+If you are changing sidebar or adding mediafiles, please check that your submission will not break production 😱. You can do this in two ways:
 
 ### Cloud ☁️
 
