@@ -11,7 +11,7 @@ In this article, we'll create a simple Telegram bot for accepting payments in TO
 
 The bot will look like this:
 
-<img src="/static/img/tutorials/bot1.png" alt="drawing"/>
+![bot](/static/img/tutorials/bot1.png)
 
 ### Source code
 
