@@ -5,7 +5,7 @@ User-friendly documentation for newcomers to the TON blockchain.
 
 ---
 
-<img align="right" width="300px" src="static\img\readme\about.png">
+<img align="left" width="300px" src="static\img\readme\about.png">
 
 ## About 🐥
 
@@ -18,7 +18,7 @@ You can help or even became part of documentation team by conributing. Any help 
 
 ---
 
-<img align="left" width="300px" src="static\img\readme\contribute.png">
+<img align="right" width="300px" src="static\img\readme\contribute.png">
 
 ##  Contribute 🌱
 
@@ -28,7 +28,24 @@ You can also participate in this by helping organize knowledge and creating tuto
 
 Feedback, lectures, technical articles, tutorials and examples. All this can help the community grow even faster!
 
+
+---
+
+<img align="left" width="300px" src="static\img\readme\how.png">
+
+## How to contibute 🎓
+
+As said before, it's up to you.
+
+If you are a developer and faced some difficulties successfully overcoming them - share this knowledge.
+
+Found an error? Leave feedback and we will fix it.
+
+Have a fresh idea? Submit an issue using one of the templates
+
 Read more about contibuting here 👉 [docs/contribute](https://ton.org/docs/contribute)
+
+
 
 ---
 
