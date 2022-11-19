@@ -9,12 +9,12 @@ User-friendly documentation for newcomers to the TON blockchain.
 
 ## About 🐥
 
-This is official reposotory for The Open Network documentation.
+This is the official repository for The Open Network documentation.
 
 Check it right here 👉 [ton.org/docs](https://ton.org/docs)
 
-We are collecting all avaiable information and knowledge, that can help developers and users of TON.
-You can help or even became part of documentation team by conributing. 
+We are collecting all available information and knowledge, that can help developers and users of TON.
+You can help or even became part of the documentation team by contributing. 
 
 Any help is accepted 🤗
 
@@ -24,12 +24,11 @@ Any help is accepted 🤗
 
 ##  Contribute 🌱
 
-TON is an actively growing ecosystem and every day many people contribute to its development. 
+TON is an actively growing ecosystem, and every day many people contribute to its development. 
 
 You can also participate in this by helping organize knowledge and creating tutorials to help other developers.
 
 Feedback, lectures, technical articles, tutorials and examples. All this can help the community grow even faster!
-
 
 ---
 
@@ -39,13 +38,11 @@ Feedback, lectures, technical articles, tutorials and examples. All this can hel
 
 As said before, it's up to you.
 
-If you are a developer and faced some difficulties successfully overcoming them - share this knowledge.
+If you are a developer and faced some difficulties, successfully overcoming them - share this knowledge.
 Found an error? Leave feedback and we will fix it.
 Have a fresh idea? Submit an issue [using one of the templates](https://github.com/ton-community/ton-docs/issues/new/choose).
 
 Read more about contributing here 👉 [docs/contribute](https://ton.org/docs/contribute)
-
-
 
 ---
 
@@ -54,7 +51,7 @@ Read more about contributing here 👉 [docs/contribute](https://ton.org/docs/co
 ## Check before submit 🔎
 
 
-If you are changing sidebar or adding mediafiles, please check that your submission will not break production 😱. You can do this in two ways:
+If you are changing sidebar or adding media files, please check that your submission will not break production 😱. You can do this in two ways:
 
 ### Cloud ☁️
 
@@ -83,3 +80,5 @@ This command starts a local development server and opens up a browser window. Mo
 ## License
 
 [GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/)
+
+
