@@ -1,65 +1,57 @@
 
-![preview](/static/img/snippet.png)
-
-User-friendly documentation for newcomers to the TON blockchain.
-
----
-
 <img align="left" width="300px" src="static\img\readme\about.png">
 
-## About 🐥
+## TON Blockchain Documentation 💎
 
 This is the official repository for The Open Network documentation.
 
-Check it right here 👉 [ton.org/docs](https://ton.org/docs)
+Check latest documentation release: [ton.org/docs](https://ton.org/docs)
 
-We are collecting all available information and knowledge, that can help developers and users of TON.
-You can help or even became part of the documentation team by contributing. 
+The mission of this documentation is to collect all available information and knowledge that can help TON developers.
 
-Any help is accepted 🤗
+You can improve the documentation by following steps below.
 
 ---
 
 <img align="right" width="300px" src="static\img\readme\contribute.png">
 
-##  Contribute 🌱
+## Contribution to TON Documentation 🌱
 
 TON is an actively growing ecosystem, and every day many people contribute to its development. 
 
 You can also participate in this by helping organize knowledge and creating tutorials to help other developers.
 
-Feedback, lectures, technical articles, tutorials and examples. All this can help the community grow even faster!
+Feedback, lectures, technical articles, tutorials, and examples. All this can help the developers community grow even faster!
 
 ---
 
 <img align="left" width="300px" src="static\img\readme\how.png">
 
-## How to contribute 🎓
+## How to Contribute? 🎓
 
 As said before, it's up to you.
 
-If you are a developer and faced some difficulties, successfully overcoming them - share this knowledge.
-Found an error? Leave feedback and we will fix it.
-Have a fresh idea? Submit an issue [using one of the templates](https://github.com/ton-community/ton-docs/issues/new/choose).
+If you are a developer and faced some difficulties, successfully overcoming them - share this knowledge with future developers!
 
-Read more about contributing here 👉 [docs/contribute](https://ton.org/docs/contribute)
+* Have an idea? [Submit an issue](https://github.com/ton-community/ton-docs/issues/new/choose).
+* Want to participate? Comment on the issue so that the docs team could assign it to you.
+* Setup environment (online or offline)
+
+Read more about contributing:  [docs/contribute](https://ton.org/docs/contribute)
 
 ---
 
-<img align="right" width="300px" src="static\img\readme\check.png">
+## Set up your Environment ☁️
 
-## Check before submit 🔎
+You can do this in two ways:
 
+### Cloud
 
-If you are changing sidebar or adding media files, please check that your submission will not break production 😱. You can do this in two ways:
-
-### Cloud ☁️
-
-You can use Gitpod (a free, online, VS code-like IDE) for contributing. It will launch a workspace with a single click:
+Use Gitpod (a free, online VS code-like IDE) for contributing. It will launch a workspace with a single click:
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ton-community/ton-docs)
 
-### Local 💻
+### Local
 
 1. Download repository from GitHub
 2. Install [NodeJS](https://nodejs.org/en/download/) to run local build
