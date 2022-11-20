@@ -33,11 +33,10 @@ As said before, it's up to you.
 
 If you are a developer and faced some difficulties, successfully overcoming them - share this knowledge with future developers!
 
-* Have an idea? [Submit an issue](https://github.com/ton-community/ton-docs/issues/new/choose).
-* Want to participate? Comment on the issue so that the docs team could assign it to you.
-* Setup environment (online or offline)
+— Have an idea? [Submit an issue](https://github.com/ton-community/ton-docs/issues/new/choose).
+— [Setup your environment](https://github.com/ton-community/ton-docs#set-up-your-environment-%EF%B8%8F)
 
-Read more about contributing:  [docs/contribute](https://ton.org/docs/contribute)
+Read more about contributing guidelines:  [docs/contribute](https://ton.org/docs/contribute)
 
 ---
 
