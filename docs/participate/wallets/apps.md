@@ -97,9 +97,9 @@ For use in testnet necessary separate the application Sandbox.
 
 #### Pros and Cons
 - ✅ Convenient for developers environment to learn and create dApps via desktop without mobile devices.
-- ✅ Unique functions(multiple wallets) with detailed descriptions and examples in its documentation.
-- ❌ Almost has no integration with other dApps at the moment.
-- ❌ Supports only Browser extension platform.
+- ✅ Unique functions such as multiple wallets, with detailed descriptions and examples in its documentation.
+- ❌ Has almost no integration with dApps at the moment.
+- ❌ Supports only browser extension platform.
 
 #### OpenMask test environment
 To switch OpenMask between Mainnet and Testnet: you need to click on "mainnet/testnet" button on the top of the OpenMask's main screen and chose network you need.
