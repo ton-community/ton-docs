@@ -42,17 +42,17 @@ Contributing best practices:  [docs/contribute](https://ton.org/docs/contribute)
 
 ## Set up your Environment ☁️
 
-If you are changing the sidebar or adding media-files, please check that your submission will not break production. 😱
+If you are changing the sidebar or adding media-files, please check that your submission will not break production.
 
 You can do this in two ways:
 
-### Cloud
+### Cloud (quick way)
 
 Use Gitpod (a free, online VS code-like IDE) for contributing. It will launch a workspace with a single click:
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ton-community/ton-docs)
 
-### Local
+### Local (default way)
 
 1. Download repository from GitHub
 2. Install [NodeJS](https://nodejs.org/en/download/) to run local build
