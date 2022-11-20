@@ -34,13 +34,15 @@ As said before, it's up to you.
 If you are a developer and faced some difficulties, successfully overcoming them - share this knowledge with future developers!
 
 — Have an idea? [Submit an issue](https://github.com/ton-community/ton-docs/issues/new/choose).  
-— [Setup your environment](https://github.com/ton-community/ton-docs#set-up-your-environment-%EF%B8%8F)
+— Want to validate changes? [Setup your environment](https://github.com/ton-community/ton-docs#set-up-your-environment-%EF%B8%8F).
 
-Read more about contributing guidelines:  [docs/contribute](https://ton.org/docs/contribute)
+Contributing best practices:  [docs/contribute](https://ton.org/docs/contribute)
 
 ---
 
 ## Set up your Environment ☁️
+
+If you are changing the sidebar or adding media-files, please check that your submission will not break production. 😱
 
 You can do this in two ways:
 
