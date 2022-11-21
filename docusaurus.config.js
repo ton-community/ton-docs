@@ -50,11 +50,11 @@ const config = {
 
           // payment processing
           {
-            to: '/develop/dapps/asset-processing/overview',
+            to: '/develop/dapps/asset-processing/',
             from: '/develop/payment-processing/overview',
           },
           {
-            to: '/develop/dapps/asset-processing/overview',
+            to: '/develop/dapps/asset-processing/',
             from: '/develop/howto/overview',
           },
           {
