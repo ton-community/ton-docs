@@ -38,7 +38,7 @@ Validators receive a small fee for processing transactions, and making higher co
 
 ### How to calculate fees?
 
-Fees on TON are difficult to calculate in advance, as their amount depends on transaction run time, account status, message content and size, blockchain's network setting – and also on many variables that cannot be calculated until the transaction is sent. Read about [computation fees](https://www.tonspace.co/develop/howto/fees_low_level#computation-fees) in low-level article overview.
+Fees on TON are difficult to calculate in advance, as their amount depends on transaction run time, account status, message content and size, blockchain's network setting – and also on many variables that cannot be calculated until the transaction is sent. Read about [computation fees](https://www.tonspace.co/develop/howto/fees-low-level#computation-fees) in low-level article overview.
 
 That is why even NFT marketplaces usually take an extra amount of TON (_~1 TON_) and return (_`1 - transaction_fee`_) later.
 
@@ -46,7 +46,7 @@ But let's read more how fees conceptually work in TON.
 
 ## Basic Fees Formula
 
-According to the [low level fees overview](/develop/howto/fees_low_level), fees on TON are calculated by this formula:
+According to the [low level fees overview](/develop/howto/fees-low-level), fees on TON are calculated by this formula:
 
 ```cpp
 transaction_fee = storage_fees
@@ -175,5 +175,5 @@ TBD.
 
 ## References
 
-* ["Low Level Fees Overview"](/develop/howto/fees_low_level#fees-calculation-formulas) — read about the formulas for calculating commissions.
+* ["Low Level Fees Overview"](/develop/howto/fees-low-level#fees-calculation-formulas) — read about the formulas for calculating commissions.
 * *Based on [article from @thedailyton](https://telegra.ph/Commissions-on-TON-07-22), originally written by [menschee](https://github.com/menschee)*

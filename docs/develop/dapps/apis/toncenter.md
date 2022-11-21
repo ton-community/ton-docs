@@ -39,7 +39,7 @@ You can connect to public [toncenter.com](https://toncenter.com) or run your own
 
 - [A standard web wallet](https://github.com/toncenter/ton-wallet) (Plain JS)
 - [Bridge frontend](https://github.com/ton-blockchain/bridge) (Vue.js)
-- [Accepting payments in a Telegram bot](../payment-processing/accept-payments-in-a-telegram-bot.md) (Python with Aiogram)
+- [Accepting payments in a Telegram bot](../tutorials/accept-payments-in-a-telegram-bot.md) (Python with Aiogram)
 
 ### Python
 
