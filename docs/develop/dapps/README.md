@@ -6,7 +6,7 @@ Here you can see links to the most important resources for you to get started wi
 
 - [Wallets](https://ton.org/wallets)—a list of popular wallets for TON.
 - [Explorers](https://ton.app/explorers)—to track transactions in the blockchain.
-- [Testnet](/develop/smart-contracts/environment/testnet)—info about the testnet and how to use it.
+- [Testnet](/develop/smart-contracts/environment/testnet.md)—info about the testnet and how to use it.
 
 ## Examples
 

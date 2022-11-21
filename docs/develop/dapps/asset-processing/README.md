@@ -1,5 +1,5 @@
 # Asset processing on TON
-This document contains an overview and specific details that explain how to process (send and accept) digital assets on the TON network.
+This page contains an overview and specific details that explain how to process (send and accept) digital assets on the TON network.
 
 
 ## Global overview
@@ -61,6 +61,7 @@ A contract's transactions can be obtained using [getTransactions](https://github
 
 ## Accepting payments
 There are a few approaches to accepting payments that differ in their method of distinguishing users.
+
 ### Invoice-based approach
 To accept payments based on attached comments, the service should
 1. Deploy the `wallet` contract.

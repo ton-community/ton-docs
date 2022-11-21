@@ -282,15 +282,6 @@ const sidebars = {
             'develop/dapps/apis/adnl',
           ],
         },
-
-        // {
-        //   type: 'category',
-        //   label: 'Choose Your SDK',
-        //   items: [
-        //     ''
-        //   ]
-        // },
-
         {
           type: 'category',
           label: 'DeFi Development',
@@ -301,13 +292,40 @@ const sidebars = {
             'develop/dapps/defi/subscriptions',
           ],
         },
+        {
+          type: 'category',
+          label: 'Payment Processing',
+          items: [
+            'develop/dapps/asset-processing/README',
+            {
+              type: 'link',
+              label: 'Create a key pair and a wallet',
+              href: 'https://github.com/toncenter/examples/blob/main/common.js',
+            },
+            {
+              type: 'link',
+              label: 'Accepting deposits to a single wallet',
+              href: 'https://github.com/toncenter/examples/blob/main/deposits-single-wallet.js',
+            },
+            {
+              type: 'link',
+              label: 'Accepting deposits to multiple wallets',
+              href: 'https://github.com/toncenter/examples/blob/main/deposits-multi-wallet.js',
+            },
+            {
+              type: 'link',
+              label: 'Withdrawal processing',
+              href: 'https://github.com/toncenter/examples/blob/main/withdrawals.js',
+            }
+          ],
+        },
 
-         {
-           type: 'category',
-           label: 'Tutorials & Examples',
-             items: [
-                'develop/dapps/tutorials/overview',
-                 'develop/dapps/tutorials/jetton-minter',
+        {
+          type: 'category',
+          label: 'Tutorials & Examples',
+          items: [
+            'develop/dapps/tutorials/overview',
+            'develop/dapps/tutorials/jetton-minter',
             {
               type: 'category',
               label: 'Telegram bots',
@@ -317,9 +335,9 @@ const sidebars = {
                 'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js',
               ],
             },
-              'develop/dapps/tutorials/how-to-run-ton-site'
-           ],
-         },
+            'develop/dapps/tutorials/how-to-run-ton-site'
+          ],
+        },
 
       ],
     },
@@ -339,11 +357,6 @@ const sidebars = {
           type: 'doc',
           id: 'develop/func/overview',
         },
-        // {
-        //   type: 'link',
-        //   label: 'FunC Cheat Sheet',
-        //   href: 'https://mybinder.org/v2/gh/atomex-me/xeus-fift/binder?filepath=func_cheat_sheet.ipynb',
-        // },
         {
           type: 'category',
           label: 'Documentation',
@@ -357,7 +370,6 @@ const sidebars = {
             'develop/func/statements',
             'develop/func/builtins',
             'develop/func/stdlib',
-            // 'develop/func/FAQ',
           ],
         },
       ],
@@ -398,7 +410,6 @@ const sidebars = {
       type: 'category',
       label: 'Low Level Internals',
       items: [
-        'develop/howto/asset-processing',
         'develop/howto/fees-low-level',
         'develop/howto/step-by-step',
         'develop/howto/config-params',
@@ -429,15 +440,6 @@ const sidebars = {
         },
       ],
     },
-
-    // {
-    //   type: 'category',
-    //   label: 'Support',
-    //   items: [
-    //     'develop/howto/wallets',
-    //   ],
-    // },
-    // 'develop/compile',
   ],
   participate: [
     'participate/README',
