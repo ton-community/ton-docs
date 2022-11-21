@@ -1,6 +1,6 @@
 <!--- Provide a general summary of your changes in the Title above -->
 
-## Why it is important?
+## Why is it important?
 
 <!--- Describe your changes in detail -->
 
