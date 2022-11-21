@@ -57,6 +57,14 @@ If you want to have an attractive Jetton token, you need a beautiful logo hosted
 
 * https://bitcoincash-example.github.io/website/logo.png
 
+:::info
+ You can easily find out about about url placement of the logo in the [repository](https://github.com/ton-blockchain/minter-contract#jetton-metadata-field-best-practices) in paragraph "Where is this metadata stored".
+
+ * On-chain.
+ * Off-chain IPFS.
+ * Off-chain website.
+:::
+
 #### How to create your logo URL?
 
  1. Prepare a **256x256** PNG image of the token logo with a transparent background.
