@@ -398,8 +398,8 @@ const sidebars = {
       type: 'category',
       label: 'Low Level Internals',
       items: [
-        'develop/howto/overview',
-        'develop/howto/fees_low_level',
+        'develop/howto/asset-processing',
+        'develop/howto/fees-low-level',
         'develop/howto/step-by-step',
         'develop/howto/config-params',
         {

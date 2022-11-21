@@ -50,8 +50,16 @@ const config = {
 
           // payment processing
           {
-            to: '/develop/howto/overview',
+            to: '/develop/howto/asset-processing',
             from: '/develop/payment-processing/overview',
+          },
+          {
+            to: '/develop/howto/asset-processing',
+            from: '/develop/howto/overview',
+          },
+          {
+            to: '/develop/howto/fees-low-level',
+            from: '/develop/howto/fees_low_level',
           },
           {
             to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
