@@ -22,9 +22,9 @@ wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/i
 su root -c 'bash install.sh -m full'
 ```
 
-Check the **mycontrol** installation procedure at:
+Check the **mytonctrl** installation procedure at:
 
-https://github.com/ton-blockchain/mytonctrl/blob/master/en/manual-ubuntu.md
+* [How to become a validator with mytonctrl (v0.2, OS Ubuntu)](https://github.com/ton-blockchain/mytonctrl/blob/master/docs/en/manual-ubuntu.md)
 
 
 ## Become a validator
@@ -37,4 +37,4 @@ To become a validator, send Toncoin to your wallet.
 
 Check the manual here:
 
-https://github.com/ton-blockchain/mytonctrl/blob/master/en/manual-ubuntu.md
+* [How to become a validator with mytonctrl (v0.2, OS Ubuntu)](https://github.com/ton-blockchain/mytonctrl/blob/master/docs/en/manual-ubuntu.md)
