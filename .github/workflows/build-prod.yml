@@ -46,3 +46,6 @@ jobs:
           cache-to: type=gha,mode=max
           tags: ${{ secrets.REGISTRY_URL }}/nwt/ton_docs:latest
           push: true
+
+      - name: Trigger deploy
+        run: curl -s "${{ secrets.CD_URL }}"
