@@ -49,7 +49,7 @@ Here `0 <= i,j,k <= 15` if not stated otherwise.
 | **`2i`** | `s[i] PUSH` |  | Pushes a copy of the old `s[i]` into the stack. | `18` |
 | **`20`** | `DUP` | _`x - x x`_ | Same as [`s0 PUSH`](#instr-push). | `18` |
 | **`21`** | `OVER` | _`x y - x y x`_ | Same as [`s1 PUSH`](#instr-push). | `18` |
-| **`3i`** | `s[i] POP` |  | Pops the old `s0` value into the old `s[i]`. | `18` |
+| **`3i`** | `s[i] POP` |  | Pops the old `s0` value into the old `s[i]`. Equivalent to [`s[i] XCHG0`](#instr-xchg-0i) [`DROP`](#instr-drop) | `18` |
 | **`30`** | `DROP` | _`x -`_ | Same as [`s0 POP`](#instr-pop), discards the top-of-stack value. | `18` |
 | **`31`** | `NIP` | _`x y - y`_ | Same as [`s1 POP`](#instr-pop). | `18` |
 ### 2.2 Complex stack manipulation primitives
