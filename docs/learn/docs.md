@@ -30,5 +30,4 @@ Please note that here and later the code, comments and/or documentation may cont
 
 ## Translations
 
-* [korolyow/ton_docs_ru](https://github.com/Korolyow/TON_docs_ru) — TON Whitepapers in Russian
-
+* [korolyow/ton_docs_ru](https://github.com/Korolyow/TON_docs_ru) — TON Whitepapers in Russian. (_this version made by community, TON Foundation can't guarantee quality of translation_)
