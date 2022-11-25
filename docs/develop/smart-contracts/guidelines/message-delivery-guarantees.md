@@ -29,7 +29,7 @@ It looks like _lt_ solves the issue about message delivery order, because we kno
 
 Suppose that there are two contracts - _A_ and _B_. Then _A_ receives an external message which triggers it to send two internal messages to _B_, let's call these messages _1_ and _2_. In that simple case we can be 100% sure that _1_ will be processed by _B_ before _2_ because it has lower _lt_.
 
-_image_
+![Image 1](https://user-images.githubusercontent.com/42098239/203975434-605b9ce5-9001-4284-b16c-31d92f475b9a.png)
 
 It is just a simple case when we have only two contracts. What if our system works with more of them?
 
@@ -37,27 +37,27 @@ It is just a simple case when we have only two contracts. What if our system wor
 
 Suppose that we have three contracts - _A_, _B_ and _C_. In some transaction, _A_ sends two internal messages _1_ and _2_: one to _B_ and another one to _C_. Even though they were created in some exact order (_1_, then _2_), we can't be sure that _1_ will be processed before _2_. That happens because routes from _A_ to _B_ and from _A_ to _C_ can differ in length and validator sets. If these contracts are in different shardchains, one of the messages may require several blocks to reach the destination contract.
 
-_image_
+![Image 2](https://user-images.githubusercontent.com/42098239/203975515-de92bb66-d6b6-4fc3-a75f-5a65b41e96a7.png)
 
 The same thing happens in a reverse situation, when two contracts _B_ and _C_ send a message to one contract _A_. Even if message _B->A_ was sent before _C->A_, we can't know which of them will be deliveried first. _B->A_ route may require more shardchain hops.
 
-_image_
+![Image 3](https://user-images.githubusercontent.com/42098239/203975545-501684e5-f931-4fae-a1c9-cc723a3f53fe.png)
 
 ### Chains of messages
 
 Even more interesting things can happend when we have chains of messages. Let's have a look at a few examples.
 
-~~Suppose that we have contracts A, B and C. In some transcation, A sends two internal messages 1 and 2: one to B and one to C. And after receiving 1, contract B also sends a message 3 to C. It seems like the message 2 should be delivieried before 3, because it's path is shorter. But the thing is that on a way from A to C something unexpected can happen, maybe shardchain will be overloaded. So we can't be sure which message, 2 or 3 will be deliveried first.~~
+Suppose that we have contracts A, B and C. In some transcation, A sends two internal messages 1 and 2: one to B and one to C. And after receiving 1, contract B also sends a message 3 to C. In this case we can be 100% sure that message 2 will be deliveried before message 3, because the path _A->C_ is shorter than _A->B->C_.
 
-_image_
+![Image 4](https://user-images.githubusercontent.com/42098239/203975645-8c2b4409-b88f-4702-aee5-f0fff8267cbc.png)
 
 Next example is similar to what was described in [Several smart contracts](#several-smart-contracts). Let's say that we have contracts A, B, C and D. In some transaction, A sends an internal message 1 to B and an internal message 2 to C. Both B and C will send a message (3 and 4) to D after receiving a message from A. In this case, we also can't be sure which message, 3 or 4 will be deliveried first.
 
-_image_
+![Image 5](https://user-images.githubusercontent.com/42098239/203975613-cb6a0cdf-de8f-4623-8c4c-5e49c21e065e.png)
 
-~~And the most absurd example is shown on the image below. Even in this case we can't say which message will be deliveried to B first. Yes, the chances of message 2 being faster than 6 are obviously higher, but still not 100%.~~
+And the most absurd example is shown on the image below. In this case we also can't say which message will be deliveried to B first. Yes, the chances of message 2 being faster than 6 are obviously higher, but still not 100%.
 
-_image_
+![Image 6](https://user-images.githubusercontent.com/42098239/203975591-36a78e76-1de9-4ba8-8c23-00ef43f49a9b.png)
 
 ## Conclusion
 
