@@ -6,7 +6,7 @@ The majority of TON Nodes are reliable and tested by **mytonctrl**.
 
 ## Installation
 
-[Node/Validator setup video](https://github.com/ton-blockchain/raw/master/nodes/setup_validator.mp4 ':include controls :type=video width=100% height=400px')
+[Node/Validator setup video](https://raw.githubusercontent.com/ton-blockchain/docs/master/docs/nodes/setup_validator.mp4 ':include controls :type=video width=100% height=400px')
 
 Download and run the installation script.
 
