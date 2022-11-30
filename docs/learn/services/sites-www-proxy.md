@@ -100,7 +100,7 @@ You can go one step further and have a full-blown auction for an NFT sub-domain,
 
 <div style={{textAlign:'center', margin: '0 auto'}}>
   <video width="300" style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
-    <source src="/img/docs/ton_www.mp4" type="video/mp4" />
+    <source src="/docs/img/docs/ton_www.mp4" type="video/mp4" />
   </video>
 </div>
 
@@ -116,7 +116,7 @@ You can send 10 TON as a gift to Alice by entering alice.place.ton as the recipi
 
 <div style={{textAlign:'center', margin: '0 auto'}}>
   <video width="300" style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
-    <source src="/img/docs/autorization.mp4" type="video/mp4" />
+    <source src="/docs/img/docs/autorization.mp4" type="video/mp4" />
   </video>
 </div>
 
@@ -130,7 +130,7 @@ On TON, there’s no need to register. On a site or in an app, you can sign in w
 
 <div style={{textAlign:'center', margin: '0 auto'}}>
   <video width="300" style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
-    <source src="/img/docs/hyperlinks.mp4" type="video/mp4" />
+    <source src="/docs/img/docs/hyperlinks.mp4" type="video/mp4" />
   </video>
 </div>
 
@@ -177,7 +177,7 @@ Here’s a __[guide](https://www.tonspace.co/participate/web3/setting-proxy)__ o
 
 <div style={{textAlign:'center', margin: '0 auto'}}>
   <video width="600" style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
-    <source src="/img/docs/wallets.mp4" type="video/mp4" />
+    <source src="/docs/img/docs/wallets.mp4" type="video/mp4" />
   </video>
 </div>
 
