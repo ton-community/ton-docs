@@ -50,16 +50,8 @@ const config = {
 
           // payment processing
           {
-            to: '/develop/dapps/asset-processing/',
+            to: '/develop/howto/overview',
             from: '/develop/payment-processing/overview',
-          },
-          {
-            to: '/develop/dapps/asset-processing/',
-            from: '/develop/howto/overview',
-          },
-          {
-            to: '/develop/howto/fees-low-level',
-            from: '/develop/howto/fees_low_level',
           },
           {
             to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
@@ -92,7 +84,7 @@ const config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'ko', 'zh-Hant'],
+    locales: ['en', 'ko'],
   },
 
   presets: [
