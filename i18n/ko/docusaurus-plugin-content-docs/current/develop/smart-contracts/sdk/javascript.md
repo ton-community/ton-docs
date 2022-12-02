@@ -173,7 +173,7 @@ Pull Requests to the tonstarter-contracts are welcome!
 ### Where to go next?
 
 After that feel free to go:
-* [TON Hello World: Step by step guide for writing your first smart contract in FunC](https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func)
+* [TON Hello World: Step by step guide for writing your first smart contract in FunC](https://blog.ton.org/step-by-step-guide-for-writing-your-first-smart-contract-in-func)
 * ... or continue to [Testing & Debugging](/develop/smart-contracts/testing/tonstarter) section to test example smart contract.
 
 

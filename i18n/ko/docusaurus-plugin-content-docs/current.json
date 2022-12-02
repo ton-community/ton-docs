@@ -129,7 +129,7 @@
   },
   "sidebar.develop.link.TON Hello World": {
     "message": "TON Hello World",
-    "description": "The label for link TON Hello World in sidebar develop, linking to https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func"
+    "description": "The label for link TON Hello World in sidebar develop, linking to https://blog.ton.org/step-by-step-guide-for-writing-your-first-smart-contract-in-func"
   },
   "sidebar.develop.link.Using tonstarter-contracts": {
     "message": "Using tonstarter-contracts",
@@ -149,7 +149,7 @@
   },
   "sidebar.develop.link.How to shard your TON smart contract and why": {
     "message": "How to shard your TON smart contract and why",
-    "description": "The label for link How to shard your TON smart contract and why in sidebar develop, linking to https://society.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-theanatomy-of-tons-jettons"
+    "description": "The label for link How to shard your TON smart contract and why in sidebar develop, linking to https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-theanatomy-of-tons-jettons"
   },
   "sidebar.develop.link.TON Concepts": {
     "message": "TON Concepts",

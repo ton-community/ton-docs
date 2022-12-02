@@ -173,7 +173,7 @@ Pull requests for tonstarter-contracts are always welcome!
 ### Where to go next?
 
 After that, feel free to go:
-* [TON Hello World: Step-by-step guide for writing your first smart contract in FunC](https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func)
+* [TON Hello World: Step-by-step guide for writing your first smart contract in FunC](https://blog.ton.org/step-by-step-guide-for-writing-your-first-smart-contract-in-func)
 * ... or continue to [Testing & Debugging](/develop/smart-contracts/testing/tonstarter) section to test example smart contracts.
 
 
@@ -181,11 +181,11 @@ After that, feel free to go:
 
 Directory structure looks like:
 
-* `contracts/*.fc`—smart contracts for TON Blockchain written in [FunC](https://ton.org/docs/#/func) language
-* `test/*.spec.ts`—test suite for the contracts in TypeScript ([MochaJS](https://mochajs.org/) test runner)
-* `build/_build.ts`—build script to compile the FunC code to [Fift](https://ton.org/docs/fiftbase.pdf) and [TVM](https://ton.org/docs/tvm.pdf) opcodes
-* `build/_deploy.ts` —deploy script to deploy the compiled code to TON
-* `build/_setup.ts`—setup script to install build dependencies
+* `contracts/*.fc` — smart contracts for TON Blockchain written in [FunC](/develop/func/overview) language
+* `test/*.spec.ts` — test suite for the contracts in TypeScript ([MochaJS](https://mochajs.org/) test runner)
+* `build/_build.ts` — build script to compile the FunC code to [Fift](https://ton.org/docs/fiftbase.pdf) and [TVM](https://ton.org/docs/tvm.pdf) opcodes
+* `build/_deploy.ts` — deploy script to deploy the compiled code to TON
+* `build/_setup.ts` — setup script to install build dependencies
 
 :::info
 The optimal setup to develop fully tested contracts in the most seamless way possible.
@@ -194,7 +194,7 @@ The optimal setup to develop fully tested contracts in the most seamless way pos
 ### Principles
 
 * **Cross-platform support** works on Mac M1, Mac Intel, Windows, or Linux.
-* **Strong belief in tests**—contracts often manage money; they must be developed under high scrutiny.
+* **Strong belief in tests** — contracts often manage money; they must be developed under high scrutiny.
 * **Clear and documented code** to help users audit the contract sources and understand what they do.
 * **Reliance on modern TypeScript** to develop clean, typed scripts and tests in a modern framework.
 * **Reliance on TypeScript for deployment** instead of working with `fift` CLI tools - it's simply easier.

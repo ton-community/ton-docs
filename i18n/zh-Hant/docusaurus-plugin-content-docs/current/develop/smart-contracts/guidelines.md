@@ -13,5 +13,5 @@ This page collects some recommendations and best practices that could be followe
 * [Get-methods](/develop/smart-contracts/guidelines/get-methods)
 * ["accept_message" effects](/develop/smart-contracts/guidelines/accept)
 * [Paying for processing queries and sending responses](/develop/smart-contracts/guidelines/processing)
-* [How and why to shard your TON smart contract. Studying the anatomy of TON's Jettons](https://society.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-theanatomy-of-tons-jettons)
+* [How and why to shard your TON smart contract. Studying the anatomy of TON's Jettons](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-theanatomy-of-tons-jettons)
 * [Materials from TON developers](https://www.youtube.com/watch?v=oEO29KmOpv4)

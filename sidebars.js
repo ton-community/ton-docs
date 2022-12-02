@@ -151,7 +151,7 @@ const sidebars = {
     {
       type: 'link',
       label: 'TON Hello World',
-      href: 'https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func',
+      href: 'https://blog.ton.org/step-by-step-guide-for-writing-your-first-smart-contract-in-func',
     },
     {
       'type': 'html',
@@ -256,7 +256,7 @@ const sidebars = {
             {
               type: 'link',
               label: 'How to shard your TON smart contract and why',
-              href: 'https://society.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-theanatomy-of-tons-jettons',
+              href: 'https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-theanatomy-of-tons-jettons',
             },
           ],
         },

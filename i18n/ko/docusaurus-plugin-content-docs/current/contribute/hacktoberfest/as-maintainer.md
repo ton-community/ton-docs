@@ -12,7 +12,7 @@ Prepare your project for contributions by following these best practices:
 
 1. Add the “hacktoberfest” topic to your repository to **OPT-IN TO HACKTOBERFEST** and indicate you’re looking for contributions.
 2. Apply the “hacktoberfest” label to issues you want contributors to help with in your GitHub or GitLab project.
-3. Please, read and use [essential tips for new open-source maintainers](https://society.ton.org/essential-tips-for-new-open-source-maintainers) by TON Society.
+3. Please, read and use [essential tips for new open-source maintainers](https://blog.ton.org/essential-tips-for-new-open-source-maintainers) by TON Society.
 4. Be ready to review pull/merge requests, accepting those that are valid by merging them, leaving an overall approving review, or by adding the “hacktoberfest-accepted” label.
 5. Reject any spammy requests you receive by labeling them as “spam”, and any other invalid contributions by closing them or labeling them as “invalid.”
 

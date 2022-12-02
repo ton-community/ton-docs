@@ -4,7 +4,7 @@ A tonstarter-contracts project rely on _TON Contract Executor_ library. Tests ar
 
 Read this article first to understand all approaches to test in TON:
 
-* [TON Hello World: Step-by-step guide for writing your first smart contract in FunC (part 2) — Testing and Debugging](https://society.ton.org/ton-hello-world-guide-for-writing-first-smart-contract-in-func-part-2)
+* [TON Hello World: Step-by-step guide for writing your first smart contract in FunC (part 2) — Testing and Debugging](https://blog.ton.org/step-by-step-guide-for-writing-your-first-smart-contract-in-func-2)
 
 ## Testing using TON Contract Executor
 

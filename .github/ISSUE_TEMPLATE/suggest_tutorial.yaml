@@ -45,11 +45,12 @@ body:
   - type: dropdown
     id: tutorial_hosted
     attributes:
-      label: Hosted on ton.org/dev, ton society blog or hosted elsewhere?
+      label: Hosted on ton.org/dev, blog.ton.org, blog.ton.org or hosted elsewhere?
       description: Let us know if you want your tutorial to be hosted on the ethereum.org website or if it is published elsewhere and you want us to link out to the tutorial
       options:
         - "Hosted on ton.org/dev"
-        - "Hosted on society.ton.org"
+        - "Hosted on blog.ton.org"
+        - "Hosted on blog.ton.org"
         - "Hosted elsewhere"
     validations:
       required: true

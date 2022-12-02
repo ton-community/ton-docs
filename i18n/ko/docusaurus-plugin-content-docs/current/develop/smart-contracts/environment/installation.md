@@ -19,7 +19,7 @@ All binaries for development and testing are provided with the packages:
 For local development of TON smart contracts _without Javascript_ you need to prepare binaries of `func`, `fift` and `lite-client` on your machine.
 
 You can download and setup them below, or read article from TON Society:
-* [Setting up a TON Development Environment](https://society.ton.org/setting-up-a-ton-development-environment)
+* [Setting up a TON Development Environment](https://blog.ton.org/setting-up-a-ton-development-environment)
 
 ### 1. Download
  

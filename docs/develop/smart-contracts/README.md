@@ -2,8 +2,8 @@
 
 
 Right now, there are three great approaches of how to start developing TON smart contracts:
-* [TON Hello World: Step-by-step guide for writing your first smart contract in FunC](https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func)
-* [TON Learn FunC journey: 10 zero-to-hero lessons](https://society.ton.org/func-journey-part-1) ([Ru version](https://github.com/romanovichim/TonFunClessons_ru))
+* [TON Hello World: Step-by-step guide for writing your first smart contract in FunC](https://blog.ton.org/step-by-step-guide-for-writing-your-first-smart-contract-in-func)
+* [TON Learn FunC journey: 10 zero-to-hero lessons](https://blog.ton.org/func-journey) ([Ru version](https://github.com/romanovichim/TonFunClessons_ru))
 * [Introduction to FunC: how to start developing on TON?](https://dev.to/dvlkv/introduction-in-func-how-to-start-developing-in-ton-50hp)
 
 ## Environment
@@ -84,7 +84,7 @@ Messages to smart contracts are binary data. To construct such messages, you can
 
 Since Fift is close to TVM opcodes, it also helps to test the limits of your brain.
 
-- [Introduction to Fift](http://society.ton.org/introduction-to-fift) by TON Society
+- [Introduction to Fift](http://blog.ton.org/introduction-to-fift) by TON Society
 - [Fift documentation](https://ton.org/fiftbase.pdf)
 - [Fift scripts for standard smart contracts](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
 

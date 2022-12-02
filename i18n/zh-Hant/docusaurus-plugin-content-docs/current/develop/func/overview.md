@@ -49,8 +49,8 @@ Other materials gracefully provided by the experts from the community:
 * [Learn FunC in Y Minutes](https://learnxinyminutes.com/docs/func/) by **@romanovichim**
 * [10 FunC Lessons](https://github.com/romanovichim/TonFunClessons_Eng) by **@romanovichim**, using **toncli** and **toncli** tests v1
 * [10 FunC lessons](https://github.com/romanovichim/TonFunClessons_ru) by **@romanovichim**, using **toncli** and **toncli** tests v1 in Russian
-* [TON Hello World: part 1](https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func): Step by step guide for writing your first smart contract in FunC by **TON Society** using **ton.js**
-* [TON Hello World: part 2](https://society.ton.org/ton-hello-world-guide-for-writing-first-smart-contract-in-func-part-2): The second part of the guide by **TON Society** about testing and debugging
+* [TON Hello World: part 1](https://blog.ton.org/step-by-step-guide-for-writing-your-first-smart-contract-in-func): Step by step guide for writing your first smart contract in FunC by **TON Society** using **ton.js**
+* [TON Hello World: part 2](https://blog.ton.org/step-by-step-guide-for-writing-your-first-smart-contract-in-func-2): The second part of the guide by **TON Society** about testing and debugging
 * [FunC Quiz](https://t.me/toncontests/60) by **Vadim**—Good for selfcheck. It will take 10–15 minutes. The questions are mainly about FunС with a few general questions about TON
 * [FunC Quiz](https://t.me/toncontests/58?comment=14888) by **Vadim**—FunC Quiz in Russian
 
