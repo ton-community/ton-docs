@@ -1,0 +1,70 @@
+import ConceptImage from '@site/src/components/conceptImage'
+
+# Message delivery guarantees
+
+TON is an asynchronous blockchain with complex structure which is very different from other blockchains. In this regard, new developers have questions about low-level things in TON. In this article we will have a look at one of these related to message delivery.
+
+## What is a message?
+
+If we look at Ethereum or almost any other synchronous blockchain, each transaction can contain several smart contract calls in it. For example, DEXs are performing multiple exchanges in one transaction if there are no liquidity for the selected trading pair.
+
+In asynchronous system you can't get response from the destination smart contract in the same transaction. Contract call may take a few blocks to be processed, depending on the length of the route between source and destination.
+
+To achieve the infinite sharding paradigm, it is necessary to ensure full parallelization, which means that the execution of transactions is independent of each other. Therefore, instead of transactions that affect and change the state of many contracts at a time in TON, each transaction is only executed on one smart contract and smart contracts are communicating through messages. That way, smart contracts can only interact with each other by calling their functions with special messages, and getting response from them in other messages later.
+
+If transaction in Ethereum is just a set of function calls in different contracts, transaction in TON is some inbound message that triggered it and some set of outbound messages which are sent to other contracts.
+
+## What is a Logical time?
+
+In such a system with asyncronous and parallel smart contract calls, it can be hard to define the order of actions to process. That's why each message in TON has it's _Logical time_ or _Lamport time_ (later just _lt_). It is used to understand which event caused another one and what do validator need to process first.
+
+It is strictly guaranteed that the transaction resulting from the message will have _lt_ greater than the _lt_ of the message. In order, _lt_ of message sent in some transaction is strictly greater than _lt_ of the transaction. Besides messages sent by one account as well as transactions happened on one account is strictly ordered as well. That way for each account we always know order of transactions, received and send messages.
+
+Moreover if account A sent two messages to account B, it is guaranteed that message with lower _lt_ will be processed earlier. Otherwise, an attempt to synchronize delivery would require the state of all the others to be known before processing one shard, and thereby break parallelization and destroy efficient sharding.
+
+
+For each block, we can define its _lt_ span, which starts with the first transaction and ends with the _lt_ of the last event in the block (message or transaction). Blocks are ordered the same way as any other events in TON, that way if one block depends on the other it has higher _lt_. Child block in shard has higher _lt_ than it's parent. Masterchain block _lt_ is higher that _lt's_ of shard blocks it lists, since master block _depends_ on listed shardblocks. In order each shard block contains reference to latest (at the moment of shard block creation) masterblock and thus shard block _lt_ is higher than referenced master block _lt_.
+
+## Message delivery
+
+Fortunately, TON is working such way that any internal message will surely be received on the destination account. Message cannot be lost anywhere between the source and destination. External messages is a little bit different since it's acceptance to the block is at validators discretionm however once message is accepted to the incoming message queue it will be delivered.
+
+### Delivery order
+
+It looks like _lt_ solves the issue about message delivery order, because we know that transaction with lower _lt_ will be processed first. But doesn't work for all scenarios.
+
+Suppose that there are two contracts - _A_ and _B_. Then _A_ receives an external message which triggers it to send two internal messages to _B_, let's call these messages _1_ and _2_. In that simple case we can be 100% sure that _1_ will be processed by _B_ before _2_ because it has lower _lt_.
+
+<ConceptImage src="/img/docs/msg-delivery-1.png" />
+
+It is just a simple case when we have only two contracts. What if our system works with more of them?
+
+### Several smart contracts
+
+Suppose that we have three contracts - _A_, _B_ and _C_. In some transaction, _A_ sends two internal messages _1_ and _2_: one to _B_ and another one to _C_. Even though they were created in some exact order (_1_, then _2_), we can't be sure that _1_ will be processed before _2_. That happens because routes from _A_ to _B_ and from _A_ to _C_ can differ in length and validator sets. If these contracts are in different shardchains, one of the messages may require several blocks to reach the destination contract.
+
+<ConceptImage src="/img/docs/msg-delivery-2.png" />
+
+The same thing happens in a reverse situation, when two contracts _B_ and _C_ send a message to one contract _A_. Even if message `B -> A` was sent before `C -> A`, we can't know which of them will be deliveried first. `B -> A` route may require more shardchain hops.
+
+<ConceptImage src="/img/docs/msg-delivery-3.png" />
+
+### Chains of messages
+
+Even more interesting things can happend when we have chains of messages. Let's have a look at a few examples.
+
+Suppose that we have contracts A, B and C. In some transcation, A sends two internal messages 1 and 2: one to B and one to C. And after receiving 1, contract B also sends a message 3 to C. In this case we can be 100% sure that message 2 will be deliveried before message 3, because the path `A -> C` is shorter than `A -> B -> C`.
+
+<ConceptImage src="/img/docs/msg-delivery-4.png" />
+
+Next example is similar to what was described in [Several smart contracts](#several-smart-contracts). Let's say that we have contracts A, B, C and D. In some transaction, A sends an internal message 1 to B and an internal message 2 to C. Both B and C will send a message (3 and 4) to D after receiving a message from A. In this case, we also can't be sure which message, 3 or 4 will be deliveried first.
+
+<ConceptImage src="/img/docs/msg-delivery-5.png" />
+
+And the most absurd example is shown on the image below. In this case we also can't say which message will be deliveried to B first. Yes, the chances of message 2 being faster than 6 are obviously higher, but still not 100%.
+
+<ConceptImage src="/img/docs/msg-delivery-6.png" />
+
+## Conclusion
+
+TON is very fast and scalable blockchain, but the price for it is that developer should be more careful and accurate when developing smart contracts. If the logic of the contract depends on the order in which messages are processed, the developer needs to carefully examine the guarantees that TON provides and make sure that the desired order is maintained even when the contracts are in different shards or workchains.
