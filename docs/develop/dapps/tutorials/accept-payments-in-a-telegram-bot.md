@@ -859,7 +859,7 @@ If you have any errors, you can check them in the terminal. Maybe you missed som
 
 Example of a working bot [@AirDealerBot](https://t.me/AirDealerBot)
 
-![bot](/static/img/tutorials/apiatb-bot.png)
+![bot](/img/tutorials/apiatb-bot.png)
 
 ## References
 
