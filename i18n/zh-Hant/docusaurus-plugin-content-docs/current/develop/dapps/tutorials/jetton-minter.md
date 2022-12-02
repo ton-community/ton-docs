@@ -198,7 +198,7 @@ To make any changes, begin here:
 ## What's next?
 
 If you want to go deeper, read this article by Tal Kol:  
-* [How and why to shard your smart contract—studying the anatomy of TON Jettons](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons)
+* [How and why to shard your smart contract—studying the anatomy of TON Jettons](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)
 
 
 ## References
