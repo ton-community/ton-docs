@@ -9,19 +9,22 @@ If you want to find a wallet to install, open [ton.org/wallets](https://ton.org/
 ## Non-custodial wallets
 
 * [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) — one of the first wallets in the TON ecosystem developed by TON Foundation.
-* [Tonkeeper](https://tonkeeper.com/) - is an alternative wallet, that is a favourite among users today. 
-* [Tonhub](https://tonhub.com/) - is another rapidly developing wallet with new advanced features (Extension, TON Whales Staking UI). 
+* [Tonkeeper](https://tonkeeper.com/) — is an alternative wallet, that is a favourite among users today. 
+* [Tonhub](https://tonhub.com/) — is another rapidly developing wallet with new advanced features (Extension, TON Whales Staking UI). 
+* [OpenMask](https://www.openmask.app/) — is the trailblazing tool enabling user interactions and experience on Web3 as browser extension.
 
 ### Basics features
-| Wallet     | Jetton          | NFT transfers   | Authorization                                               | Wallet contract                                                                                              |
-|------------|-----------------|-----------------|-------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| TON Wallet | Not implemented | Not implemented | Not implemented                                             | [wallet v3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)              |
-| Tonkeeper  | Supported       | Supported       | [ton-connect](https://github.com/tonkeeper/ton-connect)     | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f) |
-| Tonhub     | Supported       | Supported*      | [tonhub connector](https://developers.tonhub.com/docs/apps) | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f) |
+| Wallet     | Jetton          | NFT transfers   | Authorization                                                                                  | Wallet contract                                                                                               |
+|------------|-----------------|-----------------|------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| TON Wallet | Not implemented | Not implemented | Not implemented                                                                                | [wallet v3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)               |
+| Tonkeeper  | Supported       | Supported       | [ton-connect](https://github.com/tonkeeper/ton-connect)                                        | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
+| Tonhub     | Supported       | Supported*      | [tonhub connector](https://developers.tonhub.com/docs/apps)                                    | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
+| OpenMask   | Supported       | Supported       | [OpenMask connecting](https://www.openmask.app/docs/getting-started#connecting-to-openmask)    | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
 
 
 
   > *Tonhub extension opens a built-in browser which allows for NFT market placements.
+
 
 ### TON Wallet
 
@@ -56,7 +59,7 @@ If you want to find a wallet to install, open [ton.org/wallets](https://ton.org/
 - ❌ To contribute requires advanced skills. A lot of the job already done and it will be hard for newcomers to add something significant.
 
 #### Tonkeeper test environment
-To switch Tonkeeper application between Mainnet and Testnet; move to settings, at the bottom of the settings screen tap several times on the Tonkeeper icon and switch net in the dev menu.
+To switch Tonkeeper application between Mainnet and Testnet: move to settings, at the bottom of the settings screen tap several times on the Tonkeeper icon and switch net in the dev menu.
 
 #### Links 
 - [Github](https://github.com/tonkeeper/wallet)
@@ -72,10 +75,10 @@ To switch Tonkeeper application between Mainnet and Testnet; move to settings, a
 
 #### Pros and Cons
 
- - ✅ Advanced extension feature that accomodates open 3rd party services from the built-in Tonhub browser.
+ - ✅ Advanced extension feature that accommodates open 3rd party services from the built-in Tonhub browser.
  - ✅ Supports MacOS.
  - ❌ Have no support for desktop platforms.
- - ❌ To contribute requires requires advanced skills.
+ - ❌ To contribute requires advanced skills.
 
 #### Tonhub test environment
 For use in testnet necessary separate the application Sandbox.
@@ -85,6 +88,26 @@ For use in testnet necessary separate the application Sandbox.
 - [Sandbox iOS](https://apps.apple.com/app/ton-development-wallet/id1607857373)
 - [Sandbox Android](https://play.google.com/store/apps/details?id=com.tonhub.wallet.testnet)
 
+
+### OpenMask
+
+| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![OpenMask](/img/docs/OpenMask.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [OpenMask](https://www.openmask.app/) - is the trailblazing tool enabling user interactions and experience on Web3 as browser extension.                                                                  |
+
+#### Pros and Cons
+- ✅ Convenient for developers environment to learn and create dApps via desktop without mobile devices.
+- ✅ Unique functions such as multiple wallets, with detailed descriptions and examples in its documentation.
+- ❌ Has almost no integration with dApps at the moment.
+- ❌ Supports only browser extension platform.
+
+#### OpenMask test environment
+To switch OpenMask between Mainnet and Testnet: you need to click on "mainnet/testnet" button on the top of the OpenMask's main screen and chose network you need.
+
+#### Links
+
+ - [GitHub](https://github.com/OpenProduct/openmask-extension)
+ - [Documentation](https://www.openmask.app/docs/introduction)
 
 
 ## Custodial wallets

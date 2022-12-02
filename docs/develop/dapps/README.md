@@ -6,7 +6,7 @@ Here you can see links to the most important resources for you to get started wi
 
 - [Wallets](https://ton.org/wallets)—a list of popular wallets for TON.
 - [Explorers](https://ton.app/explorers)—to track transactions in the blockchain.
-- [Testnet](/develop/smart-contracts/environment/testnet)—info about the testnet and how to use it.
+- [Testnet](/develop/smart-contracts/environment/testnet.md)—info about the testnet and how to use it.
 
 ## Examples
 
@@ -22,6 +22,7 @@ If you are a web or bot developer, you may find the following repositories usefu
   * [Payment channel example](https://github.com/toncenter/payment-channels-example/blob/main/index.js) (tonweb)
 * [TON Bridge front-end](https://github.com/ton-blockchain/bridge) (Vue.js, no comments)
 * [Web Wallet source code](https://github.com/toncenter/ton-wallet) (tonweb, no comments)
+* [Bot for sales of dumplings](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js)
 
 
 ### Python
@@ -29,7 +30,8 @@ If you are a web or bot developer, you may find the following repositories usefu
 - [psylopank/pytonlib examples](https://github.com/psylopunk/pytonlib/tree/main/examples)
 - [Transfer NFT & Jettons by creating a transfer message from the owner wallet](https://github.com/tonfactory/tonsdk#transfer-nft--jettons-by-creating-a-transfer-message-from-an-owner-wallet)
 - [Create mnemonic, init wallet class, create an external message to deploy the wallet](https://github.com/tonfactory/tonsdk#create-mnemonic-init-wallet-class-create-external-message-to-deploy-the-wallet)
-- [Accept payments using a Telegram bot](../dapps/payment-processing/accept-payments-in-a-telegram-bot.md) (Python with Aiogram)
+- [Storefront bot with payments in TON](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot)
+- [Bot with own balance](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2)
 
 ### Go
 

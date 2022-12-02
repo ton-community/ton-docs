@@ -48,11 +48,6 @@ const config = {
             from: '/learn/overviews/adnl',
           },
 
-          // payment processing
-          {
-            to: '/develop/howto/overview',
-            from: '/develop/payment-processing/overview',
-          },
           {
             to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
             from: '/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot',

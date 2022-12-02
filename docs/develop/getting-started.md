@@ -31,5 +31,5 @@ For web developers the best approach is to start from this article:
 
 ### DeFi Development
 
-* [Fungible (FT) / Non-fungible (NFT) tokens](/develop/dapps/defi/tokens)—smart contracts, examples, tools
-* [Off-chain Payments Processing](/develop/dapps/payment-processing/overview)—examples and concepts
+* [Fungible (FT) / Non-fungible (NFT) tokens](/develop/dapps/defi/tokens) — smart contracts, examples, tools
+* [Off-chain Payments Processing](/develop/dapps/asset-processing) — examples and concepts
