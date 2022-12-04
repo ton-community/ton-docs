@@ -92,7 +92,7 @@ cmake --build . --target func
 To compile FunC smart contract:
 
 ```bash
-func -o output.fif -SPA source0.fc source1.fc ...
+./crypto/func -o output.fif -SPA source0.fc source1.fc ...
 ```
 
 ## Fift
@@ -106,7 +106,7 @@ cmake --build . --target fift
 To run Fift script:
 
 ```bash
-fift -s script.fif script_param0 script_param1 ..
+./crypto/fift -s script.fif script_param0 script_param1 ..
 ```
 
 ## Tonlib-cli
