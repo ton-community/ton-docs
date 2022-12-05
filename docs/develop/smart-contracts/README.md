@@ -65,7 +65,8 @@ If you're already familiar with smart contracts, you can try to read the followi
 - [Fungible (Jettons), Non-Fungible (NFT), Semi-Fungible Tokens smart contracts](https://github.com/ton-blockchain/token-contract/tree/main)
 - [Standard smart contracts examples](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
 - [Wallet V4 smart contract example](https://github.com/ton-blockchain/wallet-contract)
-- [Math.func library](https://github.com/TonoxDeFi/math.func)—a ready-to-use library made by community
+
+Discover more [FunC libraries and SDK](/develop/smart-contracts/libraries) in the FunC Documentation.
 
 ## Smart Contract Guidelines
 

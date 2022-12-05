@@ -1,6 +1,11 @@
-# FunC libraries
+# FunC SDK and libraries  
+
+## Standard libraries
 
  - [stdlib](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) — Standard library for FunC
+ 
+## Libraries from Community
+
  - [open-contracts/utils](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/utils) — Utility library
  - [open-contracts/strings](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/strings) — Provides operations on strings
  - [open-contracts/math](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/math) — Math library that extends FunC arithmetic operations

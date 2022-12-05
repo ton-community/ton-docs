@@ -208,13 +208,8 @@ const sidebars = {
             },
             {
               type: 'link',
-              label: 'Using Online IDE',
-              href: 'https://glitch.com/edit/#!/remix/clone-from-repo?&REPO_URL=https%3A%2F%2Fgithub.com%2Fton-defi-org%2Ftonstarter-contracts.git',
-            },
-            {
-              type: 'link',
               label: 'Using toncli',
-              href: 'https://github.com/disintar/toncli',
+              href: 'https://github.com/romanovichim/TonFunClessons_Eng/blob/main/1lesson/firstlesson.md',
             },
           ],
         },
@@ -226,17 +221,11 @@ const sidebars = {
             'develop/smart-contracts/security/ton-hack-challenge-1',
           ],
         },
-        'develop/smart-contracts/libraries',
         {
           type: 'category',
           label: 'Best Practices',
           items: [
             'develop/smart-contracts/guidelines',
-            {
-              type: 'link',
-              label: 'getgems.io NFT Contracts',
-              href: 'https://github.com/getgems-io/nft-contracts',
-            },
             'develop/smart-contracts/fees',
             'develop/smart-contracts/messages',
             {
@@ -255,6 +244,11 @@ const sidebars = {
             'develop/smart-contracts/guidelines/tips',
             {
               type: 'link',
+              label: 'getgems.io NFT Contracts',
+              href: 'https://github.com/getgems-io/nft-contracts',
+            },
+            {
+              type: 'link',
               label: 'How to shard your TON smart contract and why',
               href: 'https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons',
             },
@@ -266,7 +260,12 @@ const sidebars = {
           items: [
             'develop/smart-contracts/tutorials/multisig'
           ]
-        }
+        },
+        {
+          type: 'link',
+          label: 'Discover FunC language',
+          href: '/develop/func/overview',
+        },
       ],
     },
     {
@@ -373,40 +372,10 @@ const sidebars = {
             'develop/func/stdlib',
           ],
         },
+        'develop/smart-contracts/libraries',
       ],
     },
-    {
-      type: 'link',
-      label: 'TON Concepts',
-      href: '/learn/introduction',
-    },
-    {
-      type: 'link',
-      label: 'TON Services',
-      href: '/learn/services/payments',
-    },
-    {
-      type: 'link',
-      label: 'TON Whitepapers',
-      href: '/learn/docs',
-    },
-    {
-      type: 'category',
-      label: 'Network Configs',
-      items: [
-        {
-          type: 'link',
-          label: 'Mainnet config',
-          href: 'https://ton.org/global-config.json',
-        },
-        {
-          type: 'link',
-          label: 'Testnet config',
-          href: 'https://ton.org/testnet-global.config.json',
-        },
-      ],
-    },
-
+    'develop/howto/network-configs',
     {
       type: 'category',
       label: 'Low Level Internals',
@@ -440,6 +409,11 @@ const sidebars = {
           id: 'develop/howto/compile-swap',
         },
       ],
+    },
+    {
+      type: 'link',
+      label: 'TON Whitepapers',
+      href: '/learn/docs',
     },
   ],
   participate: [

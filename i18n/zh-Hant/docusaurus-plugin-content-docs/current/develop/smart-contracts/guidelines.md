@@ -14,4 +14,4 @@ This page collects some recommendations and best practices that could be followe
 * ["accept_message" effects](/develop/smart-contracts/guidelines/accept)
 * [Paying for processing queries and sending responses](/develop/smart-contracts/guidelines/processing)
 * [How and why to shard your TON smart contract. Studying the anatomy of TON's Jettons](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)
-* [Materials from TON developers](https://www.youtube.com/watch?v=oEO29KmOpv4)
+* [TON Keeper founders Oleg Andreev and Oleg Illarionov on TON jettons](https://www.youtube.com/watch?v=oEO29KmOpv4)

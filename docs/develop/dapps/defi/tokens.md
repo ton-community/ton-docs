@@ -7,6 +7,7 @@
 ### Guides & Tutorials
 
 * [Mint your first Jetton](/develop/dapps/tutorials/jetton-minter/) — Learn how to deploy and customize your first Jetton
+* [[YouTube] TON Keeper founders Oleg Andreev and Oleg Illarionov on TON jettons](https://www.youtube.com/watch?v=oEO29KmOpv4)
 
 ### Smart contracts
 
