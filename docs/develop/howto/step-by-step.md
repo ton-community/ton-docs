@@ -58,7 +58,7 @@ The resulting 36-byte sequence is converted into a 48-character base64 or base64
 
 Inspecting the state of smart contracts with the aid of the TON Lite Client is easy. For the sample smart contract described above, you would run the Lite Client and enter the following commands:
 
-```cpp
+```func
 > last
 ...
 > getaccount -1:fcb91a3a3816d0f7b8c2c76108b8a9bc5a6b7a55bd79f8ab101c52db29232260

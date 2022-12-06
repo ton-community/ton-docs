@@ -2,7 +2,7 @@
 The FunC program is essentially a list of function declarations/definitions and global variable declarations. This section covers the second topic.
 
 A global variable can be declared with the `global` keyword followed by the variable type and the variable name. For example,
-```cpp
+```func
 global ((int, int) -> int) op;
 
 int check_assoc(int a, int b, int c) {
@@ -19,7 +19,7 @@ is a simple program that writes to a global functional variable `op` the additio
 Internally, global variables are stored in the c7 control register of TVM.
 
 The type of a global variable can be omitted. If so, it will be inferred from the usage of the variable. For example, we can rewrite the program as:
-```cpp
+```func
 global op;
 
 int check_assoc(int a, int b, int c) {
@@ -33,17 +33,17 @@ int main() {
 ```
 
 It is possible to declare several variables after the same `global` keyword. The following codes are equivalent:
-```cpp
+```func
 global int A;
 global cell B;
 global C;
 ```
-```cpp
+```func
 global int A, cell B, C;
 ```
 
 It is not allowed to declare a local variable with the same name as an already-declared global variable. For example, this code wouldn't compile:
-```cpp
+```func
 global cell C;
 
 int main() {
@@ -52,7 +52,7 @@ int main() {
 }
 ```
 Note that the following code is correct:
-```cpp
+```func
 global int C;
 
 int main() {

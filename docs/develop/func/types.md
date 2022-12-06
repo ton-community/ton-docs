@@ -48,7 +48,7 @@ Types of the form `[A, B, ...]` represent TVM tuples with specific lengths and t
 
 ## Polymorphism with type variables
 FunC has Miller-Rabin type system with support for polymorphic functions. For example, the following function:
-```cpp
+```func
 forall X -> (X, X) duplicate(X value) {
   return (value, value);
 }

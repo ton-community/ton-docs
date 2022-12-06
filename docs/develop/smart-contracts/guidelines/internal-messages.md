@@ -12,7 +12,7 @@ In order to achieve this goal, the following recommended internal message layout
 
 1. The body of the message can be embedded into the message itself, or be stored in a separate cell referred to from the message, as indicated by the TL-B scheme fragment:
 
-```cpp
+```tlb
 message$_ {X:Type} ... body:(Either X ^X) = Message X;
 ```
 

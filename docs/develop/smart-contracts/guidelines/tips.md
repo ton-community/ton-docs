@@ -58,7 +58,7 @@ stack ([func docs](/develop/func/stdlib#impure_touch))
 
 In this code:
 
-```cpp
+```func
 () recv_external(slice in_msg) impure {
      var signature = in_msg~load_bits(512);
      var cs = in_msg;

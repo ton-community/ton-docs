@@ -12,7 +12,7 @@ TL-B stands for "Typed Language - Binary". It is used to describe a scheme of (d
 Each TL-B scheme consists of declarations. Each declaration describes a _constructor_ for some _type_. For instance, a Bool _type_ may have two _constructors_ for `true` and `false` values.
 
 Typical TL-B declarations are shown below:
-```cpp
+```tlb
 bool_false$0 = Bool;
 bool_true$1 = Bool;
 
@@ -33,7 +33,7 @@ Each TL-B declaration consist of:
 * (optionally parametrized) _Type name_
 
 Example: two constructors (with different binary prefixes) for a `Bool` type.
-```cpp
+```tlb
 bool_false$0 = Bool;
 bool_true$1 = Bool;
 ```
@@ -79,7 +79,7 @@ _type-expr_ usually consist of (optionally parametrized) _Type_ only as: `last_t
 #### Implicit
 Some fields may be implicit. Their definitions are surrounded by curly brackets, which indicate that the field is not actually present in the serialization, but that its value must be deduced from some other data (usually the parameters of the type being serialized).
 For instance 
-```cpp
+```tlb
 nothing$0 {X:Type} = Maybe X;
 just$1 {X:Type} value:X = Maybe X;
 ```
@@ -94,7 +94,7 @@ It can be parametrized by one or more parameters.
 Some occurrences of “variables” are prefixed by a tilde (`~`). This means that, prior to deserialization, the exact value of that variable is not known, but instead will be computed during deserialization.
 
 Let's consider:
-```cpp
+```tlb
 unary_zero$0 = Unary ~0;
 unary_succ$1 {n:#} x:(Unary ~n) = Unary ~(n + 1);
 ```
@@ -107,7 +107,7 @@ So after the deserialization of `Unary ~N` from Slice(`0b1111111100101`) we get 
 Some implicit fields may contain constraints, for instance `{n <= m}`. It means that the previously defined variables n and m should satisfy the corresponding inequality. This inequality is an inherent property of the constructor. It should be checked during serialization and objects with variables which do not satisfy these constraints are invalid.
 
 An example of constructors with constraints:
-```cpp
+```tlb
 hml_short$0 {m:#} {n:#} len:(Unary ~n) {n <= m} s:(n * Bit) = HmLabel ~n m;
 hml_long$10 {m:#} n:(#<= m) s:(n * Bit) = HmLabel ~n m;
 hml_same$11 {m:#} v:Bit n:(#<= m) = HmLabel ~n m;
@@ -115,7 +115,7 @@ hml_same$11 {m:#} v:Bit n:(#<= m) = HmLabel ~n m;
 
 ## Comments
 TL-B schemas support C-like comments:
-```cpp
+```tlb
 /* 
 This is a
 multiline

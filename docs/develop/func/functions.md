@@ -3,18 +3,18 @@ FunC program is essentially a list of function declarations/definitions and glob
 
 Any function declaration or definition starts with a common pattern and one of the three things goes next:
 - single `;`, which means that the function is declared but not defined yet. It may be defined later in the same file or in some other file which is passed before the current one to the FunC compiler. For example,
-  ```cpp
+  ```func
   int add(int x, int y);
   ```
   is a simple declaration of a function named `add` of type `(int, int) -> int`.
 - assembler function body definition. It is the way to define functions by low-level TVM primitives for later use in FunC program. For example,
-  ```cpp
+  ```func
   int add(int x, int y) asm "ADD";
   ```
   is an assembler definition of the same function `add` of type `(int, int) -> int` which will translate to the TVM opcode `ADD`.
 
 - ordinary block statement function body definition. It is the usual way to define functions. For example,
-  ```cpp
+  ```func
   int add(int x, int y) {
     return x + y;
   }
@@ -23,7 +23,7 @@ Any function declaration or definition starts with a common pattern and one of t
 
 ## Function declaration
 As said before, any function declaration or definition starts with a common pattern. The following is the pattern:
-```cpp
+```func
 [<forall declarator>] <return_type> <function_name>(<comma_separated_function_args>) <specifiers>
 ```
 where `[ ... ]` corresponds to an optional entry.
@@ -46,7 +46,7 @@ Every program must have a function with id 0, that is, `main` or `recv_internal`
 
 ### Return type
 Return type can be any atomic or composite type as described in the [types](/develop/func/types.md) section. For example,
-```cpp
+```func
 int foo();
 (int, int) foo'();
 [int, int] foo''();
@@ -56,7 +56,7 @@ int foo();
 are valid function declarations.
 
 Type inference is also allowed. For example,
-```cpp
+```func
 _ pyth(int m, int n) {
   return (m * m - n * n, 2 * m * n, m * m + n * n);
 }
@@ -67,7 +67,7 @@ is a valid definition of function `pyth` of type `(int, int) -> (int, int, int)`
 Function arguments are separated by commas. The valid declarations of an argument are following:
 - Ordinary declaration: type + name. For example, `int x` is a declaration of argument of type `int` and name `x` in the function declaration `() foo(int x);`
 - Unused argument declaration: only type. For example,
-  ```cpp
+  ```func
   int first(int x, int) {
     return x;
   }
@@ -75,7 +75,7 @@ Function arguments are separated by commas. The valid declarations of an argumen
   is a valid function definition of type `(int, int) -> int`
 - Argument with an inferred type declaration: only name.
   For example,
-  ```cpp
+  ```func
   int inc(x) {
     return x + 1;
   }
@@ -92,7 +92,7 @@ There are three types of specifiers: `impure`, `inline`/`inline_ref`, and `metho
 If `impure` is not specified and the result of the function call is not used, then the FunC compiler may and will delete this function call.
 
 For example, in the [stdlib.fc](/develop/func/stdlib) function
-```cpp
+```func
 int random() impure asm "RANDU256";
 ```
 is defined. `impure` is used because `RANDU256` changes the internal state of the random number generator.
@@ -105,7 +105,7 @@ The code of a function with the `inline_ref` specifier is put into a separate ce
 Every function in TVM program has an internal integer id by which it can be called. Ordinary functions are usually numbered by subsequent integers starting from 1, but get-methods of the contract are numbered by crc16 hashes of their names. `method_id(<some_number>)` specifier allows to set the id of a function to specified value, and `method_id` uses the default value `(crc16(<function_name>) & 0xffff) | 0x10000`. If a function has `method_id` specifier, then it can be called in lite-client or ton-explorer as a get-method by its name.
 
 For example,
-```cpp
+```func
 (int, int) get_n_k() method_id {
   (_, int n, int k, _, _, _, _) = unpack_state();
   return (n, k);
@@ -115,13 +115,13 @@ is a get-method of multisig contract.
 
 ### Polymorphism with forall
 Before any function declaration or definition, there can be `forall` type variables declarator. It has the following syntax:
-```cpp
+```func
 forall <comma_separated_type_variables_names> ->
 ```
 where type variable name can be any [identifier](/develop/func/literals_identifiers#identifiers). Usually, they are named with capital letters.
 
 For example,
-```cpp
+```func
 forall X, Y -> [Y, X] pair_swap([X, Y] pair) {
   [X p1, Y p2] = pair;
   return [p2, p1];
@@ -138,11 +138,11 @@ Also, it is worth noticing that the type width of `X` and `Y` is supposed to be 
 ## Assembler function body definition
 As mentioned above, a function can be defined by the assembler code. The syntax is an `asm` keyword followed by one or several assembler commands, represented as strings.
 For example, one can define:
-```cpp
+```func
 int inc_then_negate(int x) asm "INC" "NEGATE";
 ```
 – a function that increments an integer and then negates it. Calls to this function will be translated to 2 assembler commands `INC` and `NEGATE`. Alternative way to define the function is:
-```cpp
+```func
 int inc_then_negate'(int x) asm "INC NEGATE";
 ```
 `INC NEGATE` will be considered by FunC as one assembler command, but it is OK, because Fift assembler knows that it is 2 separate commands.
@@ -156,30 +156,30 @@ In some cases, we want to pass arguments to the assembler function in a differen
 
 For example, suppose that the assembler command STUXQ takes an integer, builder, and integer; then it returns the builder, along with the integer flag, indicating the success or failure of the operation.
 We may define the function:
-```cpp
+```func
 (builder, int) store_uint_quite(int x, builder b, int len) asm "STUXQ";
 ```
 However, suppose we want to rearrange arguments. Then we can define:
-```cpp
+```func
 (builder, int) store_uint_quite(builder b, int x, int len) asm(x b len) "STUXQ";
 ```
 So you can indicate the required order of arguments after the `asm` keyword.
 
 Also, we can rearrange return values like this:
-```cpp
+```func
 (int, builder) store_uint_quite(int x, builder b, int len) asm( -> 1 0) "STUXQ";
 ```
 The numbers correspond to the indexes of returned values (0 is the deepest stack entry among returned values).
 
 Combining this techniques is also possible.
-```cpp
+```func
 (int, builder) store_uint_quite(builder b, int x, int len) asm(x b len -> 1 0) "STUXQ";
 ```
 
 ### Multiline asms
 Multiline assembler command or even Fift-code snippets can be defined via multiline strings which starts and ends with `"""`.
 
-```cpp
+```func
 slice hello_world() asm """
   "Hello"
   " "

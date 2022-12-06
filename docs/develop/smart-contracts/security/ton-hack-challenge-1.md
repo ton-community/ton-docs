@@ -15,7 +15,7 @@ Always check functions for [`impure`](/develop/func/functions#impure-specifier) 
 
 The first task was very simple. The attacker could find that `authorize` function was not `impure`. The absence of this modifier allows a compiler to skip calls to that function if it returns nothing or the return value is unused.
 
-```cpp
+```func
 () authorize (sender) inline {
   throw_unless(187, equal_slice_bits(sender, addr1) | equal_slice_bits(sender, addr2));
 }
@@ -29,7 +29,7 @@ Always check for [modifying/non-modifying](/develop/func/statements#methods-call
 
 `udict_delete_get?` was called with `.` instead `~`, so the real dict was untouched.
 
-```cpp
+```func
 (_, slice old_balance_slice, int found?) = accounts.udict_delete_get?(256, sender);
 ```
 
@@ -41,7 +41,7 @@ Use signed integers if you really need it.
 
 Voting power was stored in message as an integer. So the attacker could send a negative value during power transfer and get infinite voting power.
 
-```cpp
+```func
 (cell,()) transfer_voting_power (cell votes, slice from, slice to, int amount) impure {
   int from_votes = get_voting_power(votes, from);
   int to_votes = get_voting_power(votes, to);
@@ -66,7 +66,7 @@ Always randomize seed before doing [`rand()`](/develop/func/stdlib#rand)
 
 Seed was brought from logical time of the transaction, and a hacker can win by bruteforcing the logical time in the current block (cause lt is sequential in the borders of one block).
 
-```cpp
+```func
 int seed = cur_lt();
 int seed_size = min(in_msg_body.slice_bits(), 128);
 
@@ -100,7 +100,7 @@ Make your conditions as strict as possible.
 
 The vault has the following code in the database message handler:
 
-```cpp
+```func
 int mode = null();
 if (op == op_not_winner) {
     mode = 64; ;; Refund remaining check-TONs
@@ -130,7 +130,7 @@ There were race conditions in the contract: you could deposit money, then try to
 Avoid executing third-party code in your contract.
 :::
 
-```cpp
+```func
 slice try_execute(int image, (int -> slice) dehasher) asm "<{ TRY:<{ EXECUTE DEPTH 2 THROWIFNOT }>CATCH<{ 2DROP NULL }> }>CONT"   "2 1 CALLXARGS";
 
 slice safe_execute(int image, (int -> slice) dehasher) inline {

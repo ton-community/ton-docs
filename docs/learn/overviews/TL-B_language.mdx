@@ -12,13 +12,14 @@ TL-B (Type Language - Binary) serves to describe the type system, constructors a
 We refer to any set of TL-B constructs as TL-B documents. A TL-B document usually consists of declarations of types (i.e. their constructors) and functional combinators. The declaration of each combinator ends with a semicolon (`;`).
 
 Here is an example of a possible TL-B document:
-<img alt="tlb structure" src="/docs/img/docs/tlb.drawio.svg" width="100%"/>
+
+<img alt="tlb structure" src="/docs/img/docs/tlb.drawio.svg" width={'100%'}/>
 
 ## Constructors
 
 Constructors are used to specify the type of combinator, including the state at serialization. For example, constructors can also be used when you want to specify an `op` in query to a smart contract in TON.
 
-```cpp
+```tlb
 // ....
 hm_edge#_ {n:#} {X:Type} {l:#} {m:#} label:(HmLabel ~l n)
 {n = (~m) + l} node:(HashmapNode m X) = Hashmap n X;
@@ -47,7 +48,7 @@ All constructor names must be distinct and constructor tags for the same type mu
 This is an example from the [TonToken](https://github.com/akifoq/TonToken/blob/master/func/token/scheme.tlb) repository that shows  
 us how to implement an internal message TL-B scheme:
 
-```cpp
+```tlb
 extra#_ amount:Grams = Extra;
 
 addr_std$10 anycast:(## 1) {anycast = 0}
@@ -87,14 +88,14 @@ The constructor and its optional tag are followed by field definitions. Each fie
 Some fields may be implicit. Their definitions are surrounded by curly
 brackets(`{`, `}`), which indicate that the field is not actually present in the serialization, but that its value must be deduced from other data (usually the parameters of the type being serialized). Example:
 
-```cpp
+```tlb
 nothing$0 {X:Type} = Maybe X;
 just$1 {X:Type} value:X = Maybe X;
 ```
 
 Finally, some equalities/inequalities may be included in curly brackets as well. These are certain “equations” which must be satisfied by the “variables” included in them. If one of the variables is prefixed by a tilde (~), its value will be uniquely determined by the values of all other variables participating in the equation (which must be known at this point) when the definition is processed from the left to the right. For example:
 
-```cpp
+```tlb
 addr_std$10 anycast:(## 1) {anycast = 0}
       workchain_id:int8 address:bits256 = MsgAddrSmpl;
 ```
@@ -103,7 +104,7 @@ Some occurrences of “variables” (i.e. already-defined fields) are prefixed b
 
 For example, we can use this to write a TL-B scheme for a simple transaction in TON with comment (which must be serialized as a sequence of cells):
 
-```cpp
+```tlb
 empty#_ b:bits = Snake ~0;
 cons#_ {n:#} b:bits next:^(Snake ~n) = Snake ~(n + 1);
 
@@ -114,7 +115,7 @@ A caret (`ˆ`) preceding a type `X` means that instead of serializing a value of
 
 Parametrized type `#<= p` with `p : #` (this notation means `“p of type #”`, i.e. a natural number) denotes the subtype of the natural numbers type `#`, consisting of integers `0 ... p;` it is serialized into `[log2(p + 1)]` bits as an unsigned big-endian integer. Type `#` by itself is serialized as an unsigned 32-bit integer. Parametrized type `## b` with `b : #<=31` is equivalent to `#<= 2^b − 1`  (i.e. it is an unsigned b-bit integer). For example:
 
-```cpp
+```tlb
 action_send_msg#0ec3c86d mode:(## 8) 
   out_msg:^(MessageRelaxed Any) = OutAction;
 ```
@@ -127,7 +128,7 @@ The serialization of conditional fields is determined by the other already speci
 
 For example (from [`block.tlb`](https://github.com/newton-blockchain/ton/blob/ae5c0720143e231c32c3d2034cfe4e533a16d969/crypto/block/block.tlb#L418)):
 
-```cpp
+```tlb
 block_info#9bc7a987 version:uint32 
   not_master:(## 1) 
   after_merge:(## 1) before_split:(## 1) 
@@ -159,7 +160,7 @@ Available in the TL version from Telegram, but as it turned out, it was not used
 ## Comments
 
 Comments are the same as in C++
-```cpp
+```tlb
 /* 
 This is
 a comment 
@@ -179,7 +180,7 @@ You can use TL-B libraries to extend your documents and to avoid writing repetit
 In TL-B libraries there is no concept of cyclic import. Just indicate the dependency on some other document (library) at the top of the document with the keyword `dependson`. For example:
 
 file `mydoc.tlb`:
-```cpp
+```tlb
 //
 // dependson "libraries/tonstdlib.tlb"
 //

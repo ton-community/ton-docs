@@ -16,7 +16,7 @@ FunC documentation was initially written by [@akifoq](https://github.com/akifoq)
 
 Here is a simple example method for sending money written in FunC:
 
-```cpp
+```func
 () send_money(slice address, int amount) impure inline {
     var msg = begin_cell()
         .store_uint(0x10, 6) ;; nobounce
