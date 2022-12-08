@@ -1,4 +1,4 @@
-# Cells
+# Cells as Data Storage
 
 Everything in TON is stored in cells. A cell is a data structure containing:
 

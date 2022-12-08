@@ -30,6 +30,7 @@ const sidebars = {
       label: 'TON Blockchain',
       items: [
         'learn/overviews/TON_blockchain_overview',
+        'learn/overviews/addresses',
         'learn/overviews/Cells',
         {
           type: 'category',
