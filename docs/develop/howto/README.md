@@ -13,7 +13,7 @@
 
 * **Full Node**
 
-  Step-by-step instructions for setting up a Full Node in the TON Blockchain Network.
+  Step-by-step instructions for setting up a Full Node in the TON Blockchain.
 
 * **Validator**
 

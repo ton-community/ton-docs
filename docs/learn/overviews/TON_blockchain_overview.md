@@ -58,10 +58,10 @@ In TON there can be many sets of rules and thus many blockchains which operate s
 
 ### Workchain: Blockchain with your own rules
 
-If you want to customize rules of the group of ShardChains, you could create a **WorkChain**. A good example is to make a workchain that works on the base of EVM to run Solidity smart contracts on it.
+If you want to customize rules of the group of Shardchains, you could create a **Workchain**. A good example is to make a workchain that works on the base of EVM to run Solidity smart contracts on it.
 
 
-Theoretically, everyone in community can create own workchain. In fact, it's pretty complicated task to build it, after that to pay (expensive) price of creating it and receive 2/3 of votes from validators to approve creation of your WorkChain.
+Theoretically, everyone in community can create own workchain. In fact, it's pretty complicated task to build it, after that to pay (expensive) price of creating it and receive 2/3 of votes from validators to approve creation of your Workchain.
 
 TON allows creating up to `2^30` workchains, each subdivided to up to `2^60` shards.
 

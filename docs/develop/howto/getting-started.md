@@ -48,7 +48,7 @@ BASIC COMPILATION AND INSTALLATION INSTRUCTIONS
     ./lite-client/lite-client -C global.config.json
     ```
 
-    If everything was installed successfully, the Lite Client will connect to a special server (a full node for the TON Blockchain Network) and send some queries to it.
+    If everything was installed successfully, the Lite Client will connect to a special server (a full node for the TON Blockchain) and send some queries to it.
     If you indicate a writeable "database" directory as an extra argument to the client, it will download and save the block and the state corresponding to the newest masterchain block:
 
     ```

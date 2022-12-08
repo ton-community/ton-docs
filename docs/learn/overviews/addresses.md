@@ -2,8 +2,6 @@
 
 After reading this article you will understand how the actors became smart contracts, what the smart-contract address is in TON, and from which parts it consists.
 
-You will understand what is raw and user-friendly form of the address, what the difference between bounceable and non-bounceable address version and how to work with them from Javascript.
-
 ## Everything is a smart contract
 
 We started from [Actor model](/learn/overviews/TON_blockchain_overview#single-actor). In fact, actors in TON are technically represented as smart contracts. This means that even your wallet is a simple actor (and smart contract).
@@ -25,11 +23,11 @@ Later, in raw address overview we will see how **(workchain_id, account_id)** pa
 
 ### Workchain ID, Account ID
 
-#### WorkChain ID
+#### Workchain ID
 
 [As we've seen before](/learn/overviews/TON_blockchain_overview#workchain-blockchain-with-your-own-rules), there could be up to `2^30` workchains in TON Blockchain. By this 32-bit prefix in smart contract address you understand to which workchain it belongs, so that TON will send a message in it.
 
-Nowadays, only the Masterchain _(workchain_id=-1)_ and occasionally the basic workchain (workchain_id=0) are running in the TON Blockchain Network.
+Nowadays, only the Masterchain _(workchain_id=-1)_ and occasionally the basic workchain (workchain_id=0) are running in the TON Blockchain.
 
 Both of them have 256-bit addresses, so we henceforth assume that workchain_id is either 0 or -1 and that the address inside the workchain is exactly 256-bit.
 
@@ -37,16 +35,16 @@ Both of them have 256-bit addresses, so we henceforth assume that workchain_id i
 
 All account IDs have 256-bit address in the MasterChain and BaseChain (basic workchain).
 
-In fact, Account ID **(account_id)** it's a hash function of a smart contract object (for example, SHA256). Every smart contract has always at least 2 things stored in TVM:
+In fact, Account ID **(account_id)** it's a hash function of a smart contract object (for example, SHA256). Every smart contract has always at least 2 things stored in TON Blockchain:
 
 1. _Compiled code_. By this way, your smart contract reacts to inbound messages.
 2. _Initial state_. TL-B scheme of the smart contract.
 
-Combined these 2 parts becomes [StateInit](/develop/howto/step-by-step#3-compiling-a-new-smart-contract) object.
+Combined these 2 parts becomes _StateInit_ structure.
 
 Finally, to receive address of the account TON will calculate a hash of the StateInit object. We won't go deep to the [TVM](/learn/tvm-instructions/tvm_overview) right now, but it's important to understand the concept:
 
-**account_id = hash(code, state) = hash(StateInit)**
+**account_id = hash(StateInit)**
 
 You will read more about technical information in TVM, TL-B and other articles later. But now you know the core concept behind the formation of **account_id** of smart contract address.
 
@@ -97,8 +95,8 @@ Flags of the user-friendly address:
    - isUrlSafe. Deprecated flag, as all addresses are url safe now.
 2. _\[1 byte for workchain_id]_ — A signed 8-bit integer with the _workchain_id_.  
 (_0x00_ for the BaseChain, _0xff_ for the MasterChain)
-3. _\[32 bytes account_id]_ — 256 bits address inside the workchain. (big-endian)
-4. _\[2 bytes for verification]_ — CRC16-CCITT signature of the previous 34 bytes.  
+3. _\[32 bytes account_id]_ — 256 bits address inside the workchain. ([big-endian](https://www.freecodecamp.org/news/what-is-endianness-big-endian-vs-little-endian/))
+4. _\[2 bytes for verification]_ — CRC16-CCITT signature of the previous 34 bytes. ([example](https://github.com/andreypfau/ton-kotlin/blob/proxy/ton-kotlin-crypto/src/commonMain/kotlin/org/ton/crypto/crc32/crc32.kt))
 In fact, the idea of verification is pretty similar to the [Luhn algorithm](https://en.wikipedia.org/wiki/Luhn_algorithm) used in every bank card in the world to prevent you from writing non-existing card number by mistake.
 
 Finally, you will have `1 + 1 + 32 + 2 = 36` bytes totally!
@@ -153,9 +151,11 @@ The resulting 36-byte sequence is converted into a 48-character base64 or base64
 
 ### Convert User-friendly/raw address
 
-The most simple way to convert address by hand is an official tool:
+The most simple way to convert address by hand is a bunch of official tools and APIs:
 
 * [ton.org/address](https://ton.org/address)
+* [toncenter API methods in mainnet](https://toncenter.com/api/v2/#/accounts/pack_address_packAddress_get)
+* [toncenter API methods in testnet](https://testnet.toncenter.com/api/v2/#/accounts/pack_address_packAddress_get)
 
 Also, there are 2 ways to work with wallets using JavaScript:
 
