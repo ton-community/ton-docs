@@ -50,7 +50,6 @@ body:
       options:
         - "Hosted on ton.org/dev"
         - "Hosted on blog.ton.org"
-        - "Hosted on blog.ton.org"
         - "Hosted elsewhere"
     validations:
       required: true
