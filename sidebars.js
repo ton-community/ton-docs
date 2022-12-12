@@ -359,6 +359,10 @@ const sidebars = {
           id: 'develop/func/overview',
         },
         {
+          type: 'doc',
+          id: 'develop/func/cookbook',
+        },
+        {
           type: 'category',
           label: 'Documentation',
           items: [
