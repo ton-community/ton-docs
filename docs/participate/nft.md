@@ -27,7 +27,7 @@ In November, the Telegram team launched [Fragment](https://fragment.com/) market
 
 Moreover, in December the Telegram team released [No-SIM sign-up](https://telegram.org/blog/ultimate-privacy-topics-2-0#sign-up-without-a-sim-card). You can buy a **virtual phone number** as a NFT to sign up to Telegram Messenger and ensure that your privacy is secured by TON Blockchain.
 
-## Domain as a NFT
+## Domain as an NFT
 
 The TON DNS service works fully on-chain. If you want to own a domain in the decentralized web backed by TON like `mystore.ton` you need to buy the NFT domain on [DNS marketplace](https://dns.ton.org/) for your wallet and pay renting fee for storing and processing data in the blockchain.
 
@@ -41,13 +41,13 @@ That's why a wallet backed by the domain `billy.ton` would work better for users
 
 [Tonkeeper](https://tonkeeper.com/) wallet already implemented this approach. You can check it now.
 
-## Ticket as a NFT
+## Ticket as an NFT
 
 :::caution draft   
 We're still looking for someone experienced for help with this section.
 :::
 
-## Authorization token as a NFT
+## Authorization token as an NFT
 
 :::caution draft   
 We're still looking for someone experienced for help with this section.
