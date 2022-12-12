@@ -454,6 +454,11 @@ const sidebars = {
     },
     {
       type: 'doc',
+      label: 'NFT Use Cases in TON',
+      id: 'participate/nft',
+    },
+    {
+      type: 'doc',
       label: 'Stake with Nominator Pools',
       id: 'participate/nominators',
     },
