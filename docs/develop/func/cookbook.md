@@ -168,7 +168,7 @@ cell msg = begin_cell()
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
 
-### How to iterate turples (in both directions)
+### How to iterate tuples (in both directions)
 ```func
 (int) tlen (tuple t) asm "TLEN";
 forall X -> (tuple) to_tuple (X x) asm "NOP";
