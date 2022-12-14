@@ -29,7 +29,7 @@ body:
     id: tutorial_tags
     attributes:
       label: Tutorial tags
-      description: What topics are covered in your tutorial?
+      description: What topics are covered in your tutorial? (NFT, DeFi, FunC, smart contracts, payments, telegram bot, WebApp, React, VueJS, Python, etc)
     validations:
       required: true
   - type: dropdown
@@ -48,16 +48,11 @@ body:
       label: Hosted on ton.org/dev, blog.ton.org, blog.ton.org or hosted elsewhere?
       description: Let us know if you want your tutorial to be hosted on the ethereum.org website or if it is published elsewhere and you want us to link out to the tutorial
       options:
-        - "Hosted on ton.org/dev"
+        - "Hosted on ton.org/docs"
         - "Hosted on blog.ton.org"
         - "Hosted elsewhere"
     validations:
       required: true
-  - type: textarea
-    id: tutorial_content
-    attributes:
-      label: "For tutorials to be hosted on ton.org: Tutorial Content"
-      description: Please provide a detailed outline of the content for the tutorial
   - type: input
     id: tutorial_url
     attributes:
