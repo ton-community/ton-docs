@@ -14,7 +14,7 @@ This is a concept article. We're still looking for someone experienced to write 
 ```func
 cell c = begin_cell().store_uint(1337, 16).end_cell();
 
-if (c.begin_parse().slice_empty?()){
+if (c.begin_parse().slice_empty?()) {
     ;; cell is empty
 }
 else {
@@ -26,7 +26,7 @@ else {
 ```func 
 slice s = "Hello, world!";
 
-if (s.slice_empty?()){
+if (s.slice_empty?()) {
     ;; slice is empty
 }
 else {
@@ -70,7 +70,7 @@ else {
 ```func
 cell c = get_data();
 
-if (c.begin_parse().slice_empty?()){
+if (c.begin_parse().slice_empty?()) {
     ;; contract data is empty
 }
 else {
