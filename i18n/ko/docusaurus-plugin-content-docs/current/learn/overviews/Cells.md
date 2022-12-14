@@ -34,7 +34,7 @@ In particular, it deduplicates data: if there are several eqivalent sub-cells re
 
 Another special cell flavor is used in TVM:
 
-* _Continuation_  for cells containing op-codes (instructions) for Ton Virtual Machine, see [TVM Bird's-eye overview](/learn/tvm-instructions/tvm_overview).
+* _Continuation_  for cells containing op-codes (instructions) for Ton Virtual Machine, see [TVM Bird's-eye overview](/learn/tvm-instructions/tvm-overview).
 
 ## Serialization of data to cells
 

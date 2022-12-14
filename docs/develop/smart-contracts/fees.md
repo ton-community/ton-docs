@@ -72,7 +72,7 @@ transaction_fee = storage_fees
 
 TON validators collect storage fees from smart contracts.
 
-Storage fees are collected from the smart contract balance at the **Storage phase** of any transaction. Read more about phases and how TVM works [here](/learn/tvm-instructions/tvm_overview#transactions-and-phases).
+Storage fees are collected from the smart contract balance at the **Storage phase** of any transaction. Read more about phases and how TVM works [here](/learn/tvm-instructions/tvm-overview#transactions-and-phases).
 
 It’s important to keep in mind that on TON you pay for both the execution of a smart contract and for the **used storage**:
 

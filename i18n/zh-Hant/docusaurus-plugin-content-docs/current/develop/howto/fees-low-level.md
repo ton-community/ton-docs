@@ -9,7 +9,7 @@ This document provides a general idea of transaction fees on TON and particularl
 
 # Transactions and phases
 
-As was described in the [TVM overview](/learn/tvm-instructions/tvm_overview), transaction execution consists of a few phases. During those phases, the corresponding fees may be deducted.
+As was described in the [TVM overview](/learn/tvm-instructions/tvm-overview), transaction execution consists of a few phases. During those phases, the corresponding fees may be deducted.
 
 Generally:
 ```cpp

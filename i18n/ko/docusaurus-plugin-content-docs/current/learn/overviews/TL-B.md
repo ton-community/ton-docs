@@ -5,7 +5,7 @@ This information is **very low level** and could be hard to understand for newco
 So feel free to read about it later.
 :::
 
-TL-B stands for "Typed Language - Binary". It is used to describe scheme of (de)serialization of objects to [Cells](/learn/overviews/Cells.md). There are detailed and complete TL-B schemes for all objects in TON: https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb.
+TL-B stands for "Typed Language - Binary". It is used to describe scheme of (de)serialization of objects to [Cells](/learn/overviews/cells.md). There are detailed and complete TL-B schemes for all objects in TON: https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb.
 
 ## Scheme
 

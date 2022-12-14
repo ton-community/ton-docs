@@ -1,5 +1,9 @@
 # Step-by-Step Deep Dive
 
+:::caution
+This section describes instructions and manuals for interacting with TON at a low level.
+:::
+
 The aim of this document is to provide step-by-step instructions for compiling and creating a simple smart contract (a simple wallet) in the TON Blockchain Test Network using the TON Blockchain Lite Client and associated software.
 
 We assume here that the Lite Client is already properly downloaded, compiled, and installed.
@@ -7,6 +11,10 @@ We assume here that the Lite Client is already properly downloaded, compiled, an
 > Note that this tutorial is for a testnet, so you must use this config:  https://ton.org/testnet-global.config.json
 
 ## 1. Smart contract addresses
+
+:::tip new version available
+Please, read new version of [Smart contract addresses](/learn/overviews/addresses) article.
+:::
 
 Smart contract addresses in the TON Network consist of two parts: 
 

@@ -1,15 +1,14 @@
-# Low Level Fees Overview
+# Fees (low-level)
 
-:::caution advanced level
-This information is **very low level** and could be hard to understand for newcomers.  
-So feel free to read about it later.
+:::caution
+This section describes instructions and manuals for interacting with TON at a low level.
 :::
 
 This document provides a general idea of transaction fees on TON and particularly computation fees for the FunC code. There is also a [detailed specification in the TVM whitepaper](https://ton.org/tvm.pdf).
 
-# Transactions and phases
+## Transactions and phases
 
-As was described in the [TVM overview](/learn/tvm-instructions/tvm_overview), transaction execution consists of a few phases. During those phases, the corresponding fees may be deducted.
+As was described in the [TVM overview](/learn/tvm-instructions/tvm-overview), transaction execution consists of a few phases. During those phases, the corresponding fees may be deducted.
 
 Generally:
 ```cpp

@@ -1,5 +1,9 @@
 # Config Params
 
+:::caution
+This section describes instructions and manuals for interacting with TON at a low level.
+:::
+
 The aim of this document is to provide a basic explanation of configuration parameters of the TON Blockchain, and to give step-by-step instructions for changing these parameters by a consensus of a majority of validators. We assume that the reader is already familiar with Fift and the Lite Client as explained in [LiteClient-HOWTO](https://toncoin.org/#/howto/step-by-step), with [FullNode-HOWTO](https://toncoin.org/#/howto/full-node), and [Validator-HOWTO](https://toncoin.org/#/howto/validator) in the sections where validators' voting for the configuration proposals is described.
 
 ## 1. Configuration parameters

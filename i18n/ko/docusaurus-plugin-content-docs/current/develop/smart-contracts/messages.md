@@ -1,6 +1,6 @@
 # Sending messages
 
-Composition, parsing and sending messages lie on the intersection of [TL-B schemas](/learn/overviews/TL-B), [transaction phases and TVM](/learn/tvm-instructions/tvm_overview.md).
+Composition, parsing and sending messages lie on the intersection of [TL-B schemas](/learn/overviews/TL-B), [transaction phases and TVM](/learn/tvm-instructions/tvm-overview.md).
 
 Indeed, FunC expose [send_raw_message](/develop/func/stdlib#send_raw_message) function which expects serialized message as argument.
 
@@ -142,7 +142,7 @@ Full scheme of messages layout as well as layout of all constituting fields (as 
 ## Message size
 
 :::info cell size
-Note that any [Cell](/learn/overviews/Cells) may contain up to `1023` bits. If you need to store more data you should split it into chunks and store in reference cells.
+Note that any [Cell](/learn/overviews/cells) may contain up to `1023` bits. If you need to store more data you should split it into chunks and store in reference cells.
 :::
 
 If, for instance, your message body size is 900 bits long you can not to store it in the same cell with the message header.

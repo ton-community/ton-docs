@@ -4,7 +4,7 @@ After reading this article you will understand how the actors became smart contr
 
 ## Everything is a smart contract
 
-We started from [Actor model](/learn/overviews/TON_blockchain_overview#single-actor). In fact, actors in TON are technically represented as smart contracts. This means that even your wallet is a simple actor (and smart contract).
+We started from [Actor model](/learn/overviews/ton-blockchain#single-actor). In fact, actors in TON are technically represented as smart contracts. This means that even your wallet is a simple actor (and smart contract).
 
 Usually, actor processes incoming messages, changes own internal state and generates some outbound messages as a result. That's why every actor (i.e. smart contract) in TON Blockchain must have an _address_ to be possible to receipt message from other actors.
 
@@ -25,7 +25,7 @@ Later, in raw address overview we will see how **(workchain_id, account_id)** pa
 
 #### Workchain ID
 
-[As we've seen before](/learn/overviews/TON_blockchain_overview#workchain-blockchain-with-your-own-rules), there could be up to `2^30` workchains in TON Blockchain. By this 32-bit prefix in smart contract address you understand to which workchain it belongs, so that TON will send a message in it.
+[As we've seen before](/learn/overviews/ton-blockchain#workchain-blockchain-with-your-own-rules), there could be up to `2^30` workchains in TON Blockchain. By this 32-bit prefix in smart contract address you understand to which workchain it belongs, so that TON will send a message in it.
 
 Nowadays, only the Masterchain _(workchain_id=-1)_ and occasionally the basic workchain (workchain_id=0) are running in the TON Blockchain.
 
@@ -42,7 +42,7 @@ In fact, Account ID **(account_id)** it's a hash function of a smart contract ob
 
 Combined these 2 parts becomes _StateInit_ structure.
 
-Finally, to receive address of the account TON will calculate a hash of the StateInit object. We won't go deep to the [TVM](/learn/tvm-instructions/tvm_overview) right now, but it's important to understand the concept:
+Finally, to receive address of the account TON will calculate a hash of the StateInit object. We won't go deep to the [TVM](/learn/tvm-instructions/tvm-overview) right now, but it's important to understand the concept:
 
 **account_id = hash(StateInit)**
 

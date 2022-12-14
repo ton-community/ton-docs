@@ -1,5 +1,9 @@
 # TON mining guide
 
+:::warning deprecated
+This information may be out of date and no longer useful. Feel free to omit it.
+:::
+
 
 ## <a id="introduction"></a>Introduction
 This document provides an introduction to the process of mining Toncoin using PoW givers. Please visit [ton.org/mining](https://ton.org/mining) for up-to-date status of TON mining.

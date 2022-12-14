@@ -34,6 +34,29 @@ const config = {
       '@docusaurus/plugin-client-redirects',
       {
         redirects: [
+          // CamelCase to kebab-case
+          {
+            to: '/learn/tvm-instructions/tvm-exit-codes',
+            from: '/learn/tvm-instructions/tvm_exit_codes',
+          },
+          {
+            to: '/learn/tvm-instructions/tvm-overview',
+            from: '/learn/tvm-instructions/tvm_overview',
+          },
+          {
+            to: '/learn/overviews/cells',
+            from: '/learn/overviews/Cells',
+          },
+          {
+            to: '/learn/overviews/ton-blockchain',
+            from: '/learn/overviews/TON_Blockchain_overview',
+          },
+          {
+            to: '/learn/overviews/tl-b-language',
+            from: '/learn/overviews/TL-B_Language',
+          },
+
+
           // services
           {
             to: '/learn/services/dns',

@@ -167,7 +167,7 @@ Returns the third element of a triple.
 
 ## Domain specific primitives
 ### Extracting info from c7
-Some useful information regarding smart contract invocation can be found in the [c7 special register](/learn/tvm-instructions/tvm_overview#control-registers). These primitives serve for convenient data extraction.
+Some useful information regarding smart contract invocation can be found in the [c7 special register](/learn/tvm-instructions/tvm-overview#control-registers). These primitives serve for convenient data extraction.
 #### now
 ```cpp
 int now() asm "NOW";
@@ -329,7 +329,7 @@ Sends a raw message contained in `msg`, which should contain a correctly seriali
 Creates an output action that would change this smart contract code to that given by cell `new_code`. Notice that this change will take effect only after the successful termination of the current run of the smart contract. (Cf. [set_c3](/develop/func/stdlib#set_c3.))
 
 ### Random number generator primitives
-The pseudo-random number generator uses the random seed, an unsigned 256-bit Integer, and (sometimes) other data kept in [c7](/learn/tvm-instructions/tvm_overview#control-registers). The initial value of the random seed before a smart contract is executed in TON Blockchain is a hash of the smart contract address and the global block random seed. If there are several runs of the same smart contract inside a block, then all of these runs will have the same random seed. This can be fixed, for example, by running `randomize_lt` before using the pseudo-random number generator for the first time.
+The pseudo-random number generator uses the random seed, an unsigned 256-bit Integer, and (sometimes) other data kept in [c7](/learn/tvm-instructions/tvm-overview#control-registers). The initial value of the random seed before a smart contract is executed in TON Blockchain is a hash of the smart contract address and the global block random seed. If there are several runs of the same smart contract inside a block, then all of these runs will have the same random seed. This can be fixed, for example, by running `randomize_lt` before using the pseudo-random number generator for the first time.
 #### random
 ```cpp
 int random() impure asm "RANDU256";

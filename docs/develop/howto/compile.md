@@ -1,5 +1,9 @@
 # Compile from Sources
 
+:::caution
+This section describes instructions and manuals for interacting with TON at a low level.
+:::
+
 ## Common
 
 The software is likely to compile and work properly on most Linux systems. It should work on macOS and even Windows.

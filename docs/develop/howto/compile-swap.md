@@ -1,5 +1,9 @@
 # Compile TON on a low-memory machines
 
+:::caution
+This section describes instructions and manuals for interacting with TON at a low level.
+:::
+
 Creating a swap partitions to compile TON on a computer with low memory (less than 1GB).
 
 ## Prerequisites

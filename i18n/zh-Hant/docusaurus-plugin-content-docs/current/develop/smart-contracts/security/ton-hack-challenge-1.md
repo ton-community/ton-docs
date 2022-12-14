@@ -147,7 +147,7 @@ slice safe_execute(int image, (int -> slice) dehasher) inline {
 }
 ```
 
-There is no way to safe execute a third-party code in the contract, because [`out of gas`](/learn/tvm-instructions/tvm_exit_codes#standard-exit-codes) exception cannot be handled by `CATCH`. The attacker simply can [`COMMIT`](/learn/tvm-instructions/instructions#11-application-specific-primitives) any state of contract and raise `out of gas`.
+There is no way to safe execute a third-party code in the contract, because [`out of gas`](/learn/tvm-instructions/tvm-exit-codes#standard-exit-codes) exception cannot be handled by `CATCH`. The attacker simply can [`COMMIT`](/learn/tvm-instructions/instructions#11-application-specific-primitives) any state of contract and raise `out of gas`.
 
 ## Conclusion
 

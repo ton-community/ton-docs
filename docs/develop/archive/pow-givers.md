@@ -1,6 +1,6 @@
 # POW Givers
 
-:::caution deprecated
+:::warning deprecated
 This information may be out of date and no longer useful. Feel free to omit it.
 :::
 

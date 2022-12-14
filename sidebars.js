@@ -29,15 +29,15 @@ const sidebars = {
       type: 'category',
       label: 'TON Blockchain',
       items: [
-        'learn/overviews/TON_blockchain_overview',
+        'learn/overviews/ton-blockchain',
         'learn/overviews/addresses',
-        'learn/overviews/Cells',
+        'learn/overviews/cells',
         {
           type: 'category',
           label: 'TON Virtual Machine (TVM)',
           items: [
-            'learn/tvm-instructions/tvm_overview',
-            'learn/tvm-instructions/tvm_exit_codes',
+            'learn/tvm-instructions/tvm-overview',
+            'learn/tvm-instructions/tvm-exit-codes',
             'learn/tvm-instructions/instructions',
           ],
         },
@@ -46,7 +46,7 @@ const sidebars = {
           label: 'TL-B Language',
           items: [
             'learn/overviews/TL-B',
-            'learn/overviews/TL-B_language',
+            'learn/overviews/tl-b-language',
           ],
         },
         {
@@ -385,9 +385,12 @@ const sidebars = {
       type: 'category',
       label: 'Low Level Internals',
       items: [
-        'develop/howto/fees-low-level',
+        'develop/howto/README',
         'develop/howto/step-by-step',
         'develop/howto/config-params',
+        'develop/howto/fees-low-level',
+        'develop/howto/full-node',
+        'develop/howto/validator',
         {
           type: 'category',
           label: 'Archived',
@@ -457,16 +460,6 @@ const sidebars = {
       ]
     },
     {
-      type: 'doc',
-      label: 'NFT Use Cases in TON',
-      id: 'participate/nft',
-    },
-    {
-      type: 'doc',
-      label: 'Stake with Nominator Pools',
-      id: 'participate/nominators',
-    },
-    {
       type: 'category',
       label: 'Run a Node',
       items: [
@@ -481,6 +474,16 @@ const sidebars = {
           href: 'https://ton.org/validator',
         },
       ],
+    },
+    {
+      type: 'doc',
+      label: 'NFT Use Cases in TON',
+      id: 'participate/nft',
+    },
+    {
+      type: 'doc',
+      label: 'Stake with Nominator Pools',
+      id: 'participate/nominators',
     },
     {
       type: 'link',

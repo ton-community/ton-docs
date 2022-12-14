@@ -43,7 +43,7 @@ Start developing, testing, and debugging smart contracts easily with these resou
 TON smart contracts are executed on their own TON Virtual Machine (TVM).  
 TVM is built on the stack principle, which makes it efficient and easy to implement.  
 
-You can read more about how TVM works in [TVM bird's-eye overview](/learn/tvm-instructions/tvm_overview).
+You can read more about how TVM works in [TVM bird's-eye overview](/learn/tvm-instructions/tvm-overview).
 
 ## FunC language
 
