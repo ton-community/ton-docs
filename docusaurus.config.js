@@ -13,21 +13,21 @@ const config = {
   baseUrl: '/docs/',
   themes: [
     '@docusaurus/theme-live-codeblock',
-    [
-      require.resolve('@easyops-cn/docusaurus-search-local'),
-      {
-        // ... Your options.
-        // `hashed` is recommended as long-term-cache of index file is possible.
-        hashed: true,
-        indexPages: true,
-        indexBlog: false,
-        searchBarShortcutHint: false,
-        // For Docs using Chinese, The `language` is recommended to set to:
-        // ```
-        // language: ["en", "zh"],
-        // ```
-      },
-    ],
+    // [
+    //   require.resolve('@easyops-cn/docusaurus-search-local'),
+    //   {
+    //     // ... Your options.
+    //     // `hashed` is recommended as long-term-cache of index file is possible.
+    //     hashed: true,
+    //     indexPages: true,
+    //     indexBlog: false,
+    //     searchBarShortcutHint: false,
+    //     // For Docs using Chinese, The `language` is recommended to set to:
+    //     // ```
+    //     // language: ["en", "zh"],
+    //     // ```
+    //   },
+    // ],
   ],
   plugins: [
     [
@@ -159,29 +159,29 @@ const config = {
   themeConfig:
   /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // algolia: {
-      //   // The application ID provided by Algolia
-      //   appId: 'EQK8VZ6CS7',
-      //
-      //   // Public API key: it is safe to commit it
-      //   apiKey: '7b6c50af331e4e34d47f8b930a986ca1',
-      //
-      //   indexName: 'ton_docs',
-      //
-      //   // Optional: see doc section below
-      //   contextualSearch: true,
-      //
-      //   // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
-      //   // externalUrlRegex: 'external\\.com|domain\\.com',
-      //
-      //   // Optional: Algolia search parameters
-      //   searchParameters: {},
-      //
-      //   // Optional: path for search page that enabled by default (`false` to disable it)
-      //   searchPagePath: 'search',
-      //
-      //   //... other Algolia params
-      // },
+      algolia: {
+        // The application ID provided by Algolia
+        appId: 'AIQ3FM6W39',
+
+        // Public API key: it is safe to commit it
+        apiKey: 'ab02d1c08f877a738f59233af7f5ed6b',
+
+        indexName: 'ton',
+
+        // Optional: see doc section below
+        contextualSearch: true,
+
+        // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
+        // externalUrlRegex: 'external\\.com|domain\\.com',
+
+        // Optional: Algolia search parameters
+        searchParameters: {},
+
+        // Optional: path for search page that enabled by default (`false` to disable it)
+        searchPagePath: 'search',
+
+        //... other Algolia params
+      },
 
       // announcementBar: {
       //   id: 'contribute/hacktoberfest',
