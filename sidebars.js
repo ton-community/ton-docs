@@ -150,6 +150,11 @@ const sidebars = {
 
     'develop/getting-started',
     {
+      type: 'doc',
+      label: 'TON Onboarding Challenge',
+      id: 'develop/onboarding-challenge',
+    },
+    {
       type: 'link',
       label: 'TON Hello World',
       href: 'https://blog.ton.org/step-by-step-guide-for-writing-your-first-smart-contract-in-func',
