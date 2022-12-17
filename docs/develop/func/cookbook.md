@@ -137,7 +137,7 @@ cell msg = begin_cell()
 
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
-You can find more in [docs](https://ton.org/docs/develop/smart-contracts/messages). You can jump in [layout](Million dollar: business) with this link
+You can find more in [docs](https://ton.org/docs/develop/smart-contracts/messages). You can jump in [layout](https://ton.org/docs/develop/smart-contracts/messages#message-layout) with this link
 
 ### How to contain a body as ref to an internal message cell
 ```func
