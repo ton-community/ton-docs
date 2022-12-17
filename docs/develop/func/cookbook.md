@@ -200,17 +200,20 @@ Sometimes we want to iterate nested tuples. The following example will iterate a
 ```
 int tuple_length (tuple t) asm "TLEN";
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
+forall X -> int is_tuple (X x) asm "ISTUPLE";
 forall X -> tuple cast_to_tuple (X x) asm "NOP";
 forall X -> int cast_to_int (X x) asm "NOP";
 
-() iterateTuple (tuple t) {
+() iterate_tuple (tuple t) impure {
     repeat (t.tuple_length()) {
         var value = t~tpop();
         if (is_tuple(value)) {
             tuple valueAsTuple = cast_to_tuple(value);
             iterateTuple(valueAsTuple);
         }
-        ~dump(value);
+        else {
+            ~dump(value);
+        }
     }
 }
 ```
@@ -220,19 +223,17 @@ forall X -> int cast_to_int (X x) asm "NOP";
 The following example checks if some value is contained in a tuple, but tuple contains values X (cell, slice, int, tuple, int). We need to check the value and cast accordingly.
 
 ```
-int tuple_length (tuple t) asm "TLEN";
 forall X -> int is_null (X x) asm "ISNULL";
 forall X -> int is_int (X x) asm "<{ TRY:<{ 0 PUSHINT ADD DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
 forall X -> int is_cell (X x) asm "<{ TRY:<{ CTOS DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
 forall X -> int is_slice (X x) asm "<{ TRY:<{ SBITS DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
 forall X -> int is_tuple (X x) asm "ISTUPLE";
-forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 forall X -> int cast_to_int (X x) asm "NOP";
 forall X -> cell cast_to_cell (X x) asm "NOP";
 forall X -> slice cast_to_slice (X x) asm "NOP";
 forall X -> tuple cast_to_tuple (X x) asm "NOP";
 
-forall X -> () resolve_type_x (X value) {
+forall X -> () resolve_type (X value) impure {
     ;; value here is of type X, since we dont know what is the exact value - we would need to check what is the value and then cast it
     
     if (is_null(value)) {
@@ -280,7 +281,6 @@ Note that xp+zp is a valid variable name ( without spaces between ).
 ```
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 int tuple_length (tuple t) asm "TLEN";
-forall X -> int cast_to_int (X x) asm "NOP";
 
 (tuple) reverse_tuple (tuple t1) {
     tuple t2 = empty_tuple();
@@ -330,9 +330,13 @@ forall X -> int is_int (X x) asm "<{ TRY:<{ 0 PUSHINT ADD DROP -1 PUSHINT }>CATC
 forall X -> int is_cell (X x) asm "<{ TRY:<{ CTOS DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
 forall X -> int is_slice (X x) asm "<{ TRY:<{ SBITS DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
 forall X -> int is_tuple (X x) asm "ISTUPLE";
+int are_slices_equal? (slice a, slice b) asm "SDEQ";
+int are_cells_equal? (cell a, cell b) {
+    return a.cell_hash() == b.cell_hash();
+}
 
 (int) are_tuples_equal? (tuple t1, tuple t2) {
-    int areEqual = -1; ;; initial value to true
+    int equal? = -1; ;; initial value to true
     
     if (t1.tuple_length() != t2.tuple_length()) {
         ;; if tuples are differ in length they cannot be equal
@@ -341,7 +345,7 @@ forall X -> int is_tuple (X x) asm "ISTUPLE";
 
     int i = t1.tuple_length();
     
-    while (i > 0 & areEqual) {
+    while (i > 0 & equal?) {
         var v1 = t1~tpop();
         var v2 = t2~tpop();
         
@@ -349,41 +353,34 @@ forall X -> int is_tuple (X x) asm "ISTUPLE";
             ;; nulls are always equal
         }
         elseif (is_int(v1) & is_int(v2)) {
-            int v1Int = cast_to_int(v1);
-            int v2Int = cast_to_int(v2);
-            if (v1Int != v2Int) {
-                areEqual = 0;
+            if (cast_to_int(v1) != cast_to_int(v2)) {
+                equal? = 0;
             }
         }
         elseif (is_slice(v1) & is_slice(v2)) {
-            slice v1Slice = cast_to_slice(v1);
-            slice v2Slice = cast_to_slice(v2);
-            if (sliceHash(v1Slice) != sliceHash(v2Slice)) {
-                areEqual = 0;
+            if (~ are_slices_equal?(cast_to_slice(v1), cast_to_slice(v2))) {
+                equal? = 0;
             }
         }
         elseif (is_cell(v1) & is_cell(v2)) {
-            cell v1Cell = cast_to_cell(v1);
-            cell v2Cell = cast_to_cell(v2);
-            if (cellHash(v1Cell) != cellHash(v2Cell)) {
-                areEqual = 0;
+            if (~ are_cells_equal?(cast_to_cell(v1), cast_to_cell(v2))) {
+                equal? = 0;
             }
         }
         elseif (is_tuple(v1) & is_tuple(v2)) {
-            tuple v1Tuple = cast_to_tuple(v1);
-            tuple v2Tuple = cast_to_tuple(v2);
-
             ;; recursively determine nested tuples
-            areEqual = are_tuples_equal?(v1Tuple, v2Tuple);
+            if (~ are_tuples_equal?(cast_to_tuple(v1), cast_to_tuple(v2))) {
+                equal? = 0;
+            }
         }
         else {
-            areEqual = 0;
+            equal? = 0;
         }
 
         i -= 1;
     }
 
-    return areEqual;
+    return equal?;
 }
 ```
 
@@ -393,19 +390,15 @@ forall X -> int is_tuple (X x) asm "ISTUPLE";
 Creates an internal address for the corresponding MsgAddressInt TLB.
 
 ```
-slice test_internal_address () impure method_id {
-    ;;   addr_std$10 anycast:(Maybe Anycast) workchain_id:int8 address:bits256  = MsgAddressInt;
-    
-    var address = random();
+(slice) generate_internal_address (int workchain_id, int address) {
+    ;; addr_std$10 anycast:(Maybe Anycast) workchain_id:int8 address:bits256  = MsgAddressInt;
 
-    slice s = begin_cell()
+    return begin_cell()
         .store_uint(2, 2) ;; addr_std$10
         .store_uint(0, 1) ;; anycast nothing
-        .store_int(-1, 8) ;; workchain_id: -1
+        .store_int(workchain_id, 8) ;; workchain_id: -1
         .store_uint(address, 256)
     .end_cell().begin_parse();
-
-    return s;
 }
 ```
 
@@ -414,18 +407,16 @@ slice test_internal_address () impure method_id {
 Creates an external address for the corresponding MsgAddressExt TLB.
 
 ```
-slice test_external_address (int address_length) impure method_id {
-    ;; addr_extern$01 len:(## 9) external_address:(bits len) = MsgAddressExt;
+slice generate_external_address (int address) {
+    ;; addr_extern$01 len:(## 8) external_address:(bits len) = MsgAddressExt;
     
-    var address = random();
-
-    slice s = begin_cell()
+    int address_length = ubitsize(address);
+    
+    return begin_cell()
         .store_uint(1, 2) ;; addr_extern$01
-        .store_uint(address_length, 9)
+        .store_uint(address_length, 8)
         .store_uint(address, address_length)
     .end_cell().begin_parse();
-
-    return s;
 }
 ```
 
