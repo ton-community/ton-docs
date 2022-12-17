@@ -203,7 +203,6 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 forall X -> tuple cast_to_tuple (X x) asm "NOP";
 forall X -> int cast_to_int (X x) asm "NOP";
 
-
 () iterateTuple (tuple t) {
     repeat (t.tuple_length()) {
         var value = t~tpop();
@@ -211,9 +210,7 @@ forall X -> int cast_to_int (X x) asm "NOP";
             tuple valueAsTuple = cast_to_tuple(value);
             iterateTuple(valueAsTuple);
         }
-
-        int valueAsInt = cast_to_int(value);
-        ~dump(valueAsInt);
+        ~dump(value);
     }
 }
 ```
@@ -235,16 +232,15 @@ forall X -> cell cast_to_cell (X x) asm "NOP";
 forall X -> slice cast_to_slice (X x) asm "NOP";
 forall X -> tuple cast_to_tuple (X x) asm "NOP";
 
-
-() resolve_type_x (tuple t) {
-    ;; value here is returned as X, since we dont know what is the exact value - we would need to check what is the value and then cast it
-    var value = t~tpop();
+forall X -> () resolve_type_x (X value) {
+    ;; value here is of type X, since we dont know what is the exact value - we would need to check what is the value and then cast it
+    
     if (is_null(value)) {
-        ;; logic for null
+        ;; do something with the null
     }
     elseif (is_int(value)) {
         int valueAsInt = cast_to_int(value);
-        ;; so something with the int
+        ;; do something with the int
     }
     elseif (is_slice(value)) {
         slice valueAsSlice = cast_to_slice(value);
@@ -271,7 +267,7 @@ Note that xp+zp is a valid variable name ( without spaces between ).
    ;; 2^255 - 19 is a prime number for montgomery curves, meaning all operations should be done against its prime
    int prime = 57896044618658097711785492504343953926634992332820282019728792003956564819949; 
 
-   int xp+zp = (xp + zp + prime) % prime;
+   int xp+zp = (xp + zp) % prime;
    int xp-zp = (xp - zp + prime) % prime;
 
    (_, int xp+zp*xp-zp) = muldivmod(xp+zp, xp-zp, prime);
@@ -301,14 +297,11 @@ forall X -> int cast_to_int (X x) asm "NOP";
 There are two different ways we can determine the equality. One is based on the slice hash, while the other one by using the SDEQ asm instruction.
 
 ```
-int equal_slices (slice a, slice b) asm "SDEQ";
-(int) areSlicesEqual (slice s1, slice s2) {
-    return equal_slices(s1, s2);
+int are_slices_equal_1? (slice a, slice b) {
+    return a.slice_hash() == b.slice_hash();
 }
 
-(int) areSlicesEqual (slice s1, slice s2) {
-    return sliceHash(s1) == sliceHash(s2);
-}
+int are_slices_equal_2? (slice a, slice b) asm "SDEQ";
 ```
 
 ### Determine if cells are equal 
@@ -316,8 +309,8 @@ int equal_slices (slice a, slice b) asm "SDEQ";
 We can easily determine cell equality based on their hash.
 
 ```
-(int) areCellsEqual (cell c1, cell c2) {
-    return cellHash(c1) == cellHash(c2);
+int are_cells_equal? (cell a, cell b) {
+    return a.cell_hash() == b.cell_hash();
 }
 ```
 
@@ -338,9 +331,11 @@ forall X -> int is_cell (X x) asm "<{ TRY:<{ CTOS DROP -1 PUSHINT }>CATCH<{ 2DRO
 forall X -> int is_slice (X x) asm "<{ TRY:<{ SBITS DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
 forall X -> int is_tuple (X x) asm "ISTUPLE";
 
-(int) areTuplesEqual (tuple t1, tuple t2) {
+(int) are_tuples_equal? (tuple t1, tuple t2) {
     int areEqual = -1; ;; initial value to true
+    
     if (t1.tuple_length() != t2.tuple_length()) {
+        ;; if tuples are differ in length they cannot be equal
         return 0;
     }
 
@@ -350,7 +345,7 @@ forall X -> int is_tuple (X x) asm "ISTUPLE";
         var v1 = t1~tpop();
         var v2 = t2~tpop();
         
-        if(is_null(t1) & is_null(t2)) {
+        if (is_null(t1) & is_null(t2)) {
             ;; nulls are always equal
         }
         elseif (is_int(v1) & is_int(v2)) {
@@ -379,7 +374,7 @@ forall X -> int is_tuple (X x) asm "ISTUPLE";
             tuple v2Tuple = cast_to_tuple(v2);
 
             ;; recursively determine nested tuples
-            areEqual = areTuplesEqual(v1Tuple, v2Tuple);
+            areEqual = are_tuples_equal?(v1Tuple, v2Tuple);
         }
         else {
             areEqual = 0;
@@ -399,8 +394,7 @@ Creates an internal address for the corresponding MsgAddressInt TLB.
 
 ```
 slice test_internal_address () impure method_id {
-    ;;   addr_std$10 anycast:(Maybe Anycast)
-    ;;   workchain_id:int8 address:bits256  = MsgAddressInt;
+    ;;   addr_std$10 anycast:(Maybe Anycast) workchain_id:int8 address:bits256  = MsgAddressInt;
     
     var address = random();
 
