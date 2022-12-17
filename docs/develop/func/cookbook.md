@@ -206,11 +206,9 @@ forall X -> int cast_to_int(X x) asm "NOP";
 
 () iterateTuple(tuple t)
 {
-    repeat(t.tuple_length())
-    {
+    repeat(t.tuple_length()) {
         var value = t~tpop();
-        if (is_tuple(value))
-        {
+        if (is_tuple(value)) {
             tuple valueAsTuple = cast_to_tuple(value);
             iterateTuple(valueAsTuple);
         }
@@ -243,27 +241,22 @@ forall X -> tuple cast_to_tuple(X x) asm "NOP";
 {
     ;; value here is returned as X, since we dont know what is the exact value - we would need to check what is the value and then cast it
     var value = t~tpop();
-    if(is_null(value))
-    {
+    if(is_null(value)) {
         ;; logic for null
     }
-    else if(is_int(value))
-    {
+    else if(is_int(value)) {
         int valueAsInt = cast_to_int(value);
         ;; so something with the int
     }
-    else if (is_slice(value))
-    {
+    else if (is_slice(value)) {
         slice valueAsSlice = cast_to_slice(value);
         ;; do something with the slice
     }
-    else if (is_cell(value))
-    {
+    else if (is_cell(value)) {
         cell valueAsCell = cast_to_cell(value);
         ;; do something with the cell
     }
-    else if (is_tuple(value))
-    {
+    else if (is_tuple(value)) {
         tuple valueAsTuple = cast_to_tuple(value);
         ;;do something with the tuple
     }
@@ -299,8 +292,7 @@ forall X -> int cast_to_int(X x) asm "NOP";
 (tuple) reverse_tuple(tuple t1)
 {
     tuple t2 = empty_tuple();
-    repeat(t1.tuple_length())
-    {
+    repeat(t1.tuple_length()) {
         var value = t1~tpop();
         t2~tpush(value);
     }
@@ -357,57 +349,46 @@ forall X -> int is_tuple(X x) asm "ISTUPLE";
 (int) areTuplesEqual(tuple t1, tuple t2)
 {
     int areEqual = -1;; initial value to true
-    if( t1.tuple_length() != t2.tuple_length())
-    {
+    if( t1.tuple_length() != t2.tuple_length()) {
         return 0;
     }
 
     int i = t1.tuple_length();
-    while(i > 0 & areEqual)
-    {
+    while(i > 0 & areEqual) {
         var v1 = t1~tpop();
         var v2 = t2~tpop();
-        if(is_null(t1) & is_null(t2))
-        {
+        if(is_null(t1) & is_null(t2)) {
         }
-        else if(is_int(v1) & is_int(v2))
-        {
+        else if(is_int(v1) & is_int(v2)) {
             int v1Int = cast_to_int(v1);
             int v2Int = cast_to_int(v2);
 
-            if(v1Int != v2Int)
-            {
+            if(v1Int != v2Int) {
                 areEqual = 0;
             }
         }
-        else if (is_slice(v1) & is_slice(v2))
-        {
+        else if (is_slice(v1) & is_slice(v2)) {
             slice v1Slice = cast_to_slice(v1);
             slice v2Slice = cast_to_slice(v2);
-            if(sliceHash(v1Slice) != sliceHash(v2Slice))
-            {
+            if(sliceHash(v1Slice) != sliceHash(v2Slice)) {
                 areEqual = 0;
             }
         }
-        else if (is_cell(v1) & is_cell(v2))
-        {
+        else if (is_cell(v1) & is_cell(v2)) {
             cell v1Cell = cast_to_cell(v1);
             cell v2Cell = cast_to_cell(v2);
-            if(cellHash(v1Cell) != cellHash(v2Cell))
-            {
+            if(cellHash(v1Cell) != cellHash(v2Cell)) {
                 areEqual = 0;
             }
         }
-        else if (is_tuple(v1) & is_tuple(v2))
-        {
+        else if (is_tuple(v1) & is_tuple(v2)) {
             tuple v1Tuple = cast_to_tuple(v1);
             tuple v2Tuple = cast_to_tuple(v2);
 
             ;; recursively determine nested tuples
             areEqual = areTuplesEqual(v1Tuple, v2Tuple);
         }
-        else
-        {
+        else {
             areEqual = 0;
         }
 
@@ -469,8 +450,7 @@ The logic for loading the dictionary
 ```
 slice local_storage = get_data().begin_parse();
 cell dictionary_cell = new_dict();
-if (~ slice_empty?(local_storage))
-{
+if (~ slice_empty?(local_storage)) {
     dictionary_cell = local_storage~load_dict();
 }
 ```
