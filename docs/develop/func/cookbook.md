@@ -198,15 +198,14 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 Sometimes we want to iterate nested tuples. The following example will iterate and print all of the items in a tuple of format `[[2,6],[1,[3,[3,5]]], 3]` starting from the head
 
 ```
-int tuple_length(tuple t) asm "TLEN";
-forall X -> (tuple, X) ~tpop(tuple t) asm "TPOP";
-forall X -> tuple cast_to_tuple(X x) asm "NOP";
-forall X -> int cast_to_int(X x) asm "NOP";
+int tuple_length (tuple t) asm "TLEN";
+forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
+forall X -> tuple cast_to_tuple (X x) asm "NOP";
+forall X -> int cast_to_int (X x) asm "NOP";
 
 
-() iterateTuple(tuple t)
-{
-    repeat(t.tuple_length()) {
+() iterateTuple (tuple t) {
+    repeat (t.tuple_length()) {
         var value = t~tpop();
         if (is_tuple(value)) {
             tuple valueAsTuple = cast_to_tuple(value);
@@ -224,41 +223,40 @@ forall X -> int cast_to_int(X x) asm "NOP";
 The following example checks if some value is contained in a tuple, but tuple contains values X (cell, slice, int, tuple, int). We need to check the value and cast accordingly.
 
 ```
-int tuple_length(tuple t) asm "TLEN";
-forall X -> int is_null(X x) asm "ISNULL";
-forall X -> int is_int(X x) asm "<{ TRY:<{ 0 PUSHINT ADD DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
-forall X -> int is_cell(X x) asm "<{ TRY:<{ CTOS DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
-forall X -> int is_slice(X x) asm "<{ TRY:<{ SBITS DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
-forall X -> int is_tuple(X x) asm "ISTUPLE";
-forall X -> (tuple, X) ~tpop(tuple t) asm "TPOP";
-forall X -> int cast_to_int(X x) asm "NOP";
-forall X -> cell cast_to_cell(X x) asm "NOP";
-forall X -> slice cast_to_slice(X x) asm "NOP";
-forall X -> tuple cast_to_tuple(X x) asm "NOP";
+int tuple_length (tuple t) asm "TLEN";
+forall X -> int is_null (X x) asm "ISNULL";
+forall X -> int is_int (X x) asm "<{ TRY:<{ 0 PUSHINT ADD DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
+forall X -> int is_cell (X x) asm "<{ TRY:<{ CTOS DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
+forall X -> int is_slice (X x) asm "<{ TRY:<{ SBITS DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
+forall X -> int is_tuple (X x) asm "ISTUPLE";
+forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
+forall X -> int cast_to_int (X x) asm "NOP";
+forall X -> cell cast_to_cell (X x) asm "NOP";
+forall X -> slice cast_to_slice (X x) asm "NOP";
+forall X -> tuple cast_to_tuple (X x) asm "NOP";
 
 
-(int) resolve_type_x(tuple t)
-{
+() resolve_type_x (tuple t) {
     ;; value here is returned as X, since we dont know what is the exact value - we would need to check what is the value and then cast it
     var value = t~tpop();
-    if(is_null(value)) {
+    if (is_null(value)) {
         ;; logic for null
     }
-    else if(is_int(value)) {
+    elseif (is_int(value)) {
         int valueAsInt = cast_to_int(value);
         ;; so something with the int
     }
-    else if (is_slice(value)) {
+    elseif (is_slice(value)) {
         slice valueAsSlice = cast_to_slice(value);
         ;; do something with the slice
     }
-    else if (is_cell(value)) {
+    elseif (is_cell(value)) {
         cell valueAsCell = cast_to_cell(value);
         ;; do something with the cell
     }
-    else if (is_tuple(value)) {
+    elseif (is_tuple(value)) {
         tuple valueAsTuple = cast_to_tuple(value);
-        ;;do something with the tuple
+        ;; do something with the tuple
     }
 }
 ```
@@ -269,15 +267,14 @@ As an example, lets say that we want to run the following calculation of all 256
 Note that xp+zp is a valid variable name ( without spaces between ).
 
 ```
-(int) modulo_operations(int xp, int zp)
-{  
-  ;;2^255 - 19 is a prime number for montgomery curves, meaning all operations should be done against its prime
+(int) modulo_operations (int xp, int zp) {  
+   ;; 2^255 - 19 is a prime number for montgomery curves, meaning all operations should be done against its prime
    int prime = 57896044618658097711785492504343953926634992332820282019728792003956564819949; 
 
    int xp+zp = (xp + zp + prime) % prime;
    int xp-zp = (xp - zp + prime) % prime;
 
-   (_, int xp+zp*xp-zp) = muldivmod( xp+zp, xp-zp, prime );
+   (_, int xp+zp*xp-zp) = muldivmod(xp+zp, xp-zp, prime);
    return xp+zp*xp-zp;
 }
 ```
@@ -285,18 +282,16 @@ Note that xp+zp is a valid variable name ( without spaces between ).
 ### Reversing tuples
 
 ```
-forall X -> (tuple, X) ~tpop(tuple t) asm "TPOP";
-int tuple_length(tuple t) asm "TLEN";
-forall X -> int cast_to_int(X x) asm "NOP";
+forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
+int tuple_length (tuple t) asm "TLEN";
+forall X -> int cast_to_int (X x) asm "NOP";
 
-(tuple) reverse_tuple(tuple t1)
-{
+(tuple) reverse_tuple (tuple t1) {
     tuple t2 = empty_tuple();
-    repeat(t1.tuple_length()) {
+    repeat (t1.tuple_length()) {
         var value = t1~tpop();
         t2~tpush(value);
     }
-
     return t2;
 }
 ```
@@ -306,14 +301,12 @@ forall X -> int cast_to_int(X x) asm "NOP";
 There are two different ways we can determine the equality. One is based on the slice hash, while the other one by using the SDEQ asm instruction.
 
 ```
-int equal_slices(slice a, slice b) asm "SDEQ";
-(int) areSlicesEqual(slice s1, slice s2)
-{
+int equal_slices (slice a, slice b) asm "SDEQ";
+(int) areSlicesEqual (slice s1, slice s2) {
     return equal_slices(s1, s2);
 }
 
-(int) areSlicesEqual(slice s1, slice s2)
-{
+(int) areSlicesEqual (slice s1, slice s2) {
     return sliceHash(s1) == sliceHash(s2);
 }
 ```
@@ -323,8 +316,7 @@ int equal_slices(slice a, slice b) asm "SDEQ";
 We can easily determine cell equality based on their hash.
 
 ```
-(int) areCellsEqual(cell c1, cell c2)
-{
+(int) areCellsEqual (cell c1, cell c2) {
     return cellHash(c1) == cellHash(c2);
 }
 ```
@@ -334,54 +326,55 @@ We can easily determine cell equality based on their hash.
 A more advanced example would be to iterate and compare each of the tuple values. Since they are X we need to check and cast to the corresponding type and if it is tuple to iterate it recursively.
 
 ```
-int tuple_length(tuple t) asm "TLEN";
-forall X -> (tuple, X) ~tpop(tuple t) asm "TPOP";
-forall X -> int cast_to_int(X x) asm "NOP";
-forall X -> cell cast_to_cell(X x) asm "NOP";
-forall X -> slice cast_to_slice(X x) asm "NOP";
-forall X -> tuple cast_to_tuple(X x) asm "NOP";
-forall X -> int is_null(X x) asm "ISNULL";
-forall X -> int is_int(X x) asm "<{ TRY:<{ 0 PUSHINT ADD DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
-forall X -> int is_cell(X x) asm "<{ TRY:<{ CTOS DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
-forall X -> int is_slice(X x) asm "<{ TRY:<{ SBITS DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
-forall X -> int is_tuple(X x) asm "ISTUPLE";
+int tuple_length (tuple t) asm "TLEN";
+forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
+forall X -> int cast_to_int (X x) asm "NOP";
+forall X -> cell cast_to_cell (X x) asm "NOP";
+forall X -> slice cast_to_slice (X x) asm "NOP";
+forall X -> tuple cast_to_tuple (X x) asm "NOP";
+forall X -> int is_null (X x) asm "ISNULL";
+forall X -> int is_int (X x) asm "<{ TRY:<{ 0 PUSHINT ADD DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
+forall X -> int is_cell (X x) asm "<{ TRY:<{ CTOS DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
+forall X -> int is_slice (X x) asm "<{ TRY:<{ SBITS DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
+forall X -> int is_tuple (X x) asm "ISTUPLE";
 
-(int) areTuplesEqual(tuple t1, tuple t2)
-{
-    int areEqual = -1;; initial value to true
-    if( t1.tuple_length() != t2.tuple_length()) {
+(int) areTuplesEqual (tuple t1, tuple t2) {
+    int areEqual = -1; ;; initial value to true
+    if (t1.tuple_length() != t2.tuple_length()) {
         return 0;
     }
 
     int i = t1.tuple_length();
-    while(i > 0 & areEqual) {
+    
+    while (i > 0 & areEqual) {
         var v1 = t1~tpop();
         var v2 = t2~tpop();
+        
         if(is_null(t1) & is_null(t2)) {
+            ;; nulls are always equal
         }
-        else if(is_int(v1) & is_int(v2)) {
+        elseif (is_int(v1) & is_int(v2)) {
             int v1Int = cast_to_int(v1);
             int v2Int = cast_to_int(v2);
-
-            if(v1Int != v2Int) {
+            if (v1Int != v2Int) {
                 areEqual = 0;
             }
         }
-        else if (is_slice(v1) & is_slice(v2)) {
+        elseif (is_slice(v1) & is_slice(v2)) {
             slice v1Slice = cast_to_slice(v1);
             slice v2Slice = cast_to_slice(v2);
-            if(sliceHash(v1Slice) != sliceHash(v2Slice)) {
+            if (sliceHash(v1Slice) != sliceHash(v2Slice)) {
                 areEqual = 0;
             }
         }
-        else if (is_cell(v1) & is_cell(v2)) {
+        elseif (is_cell(v1) & is_cell(v2)) {
             cell v1Cell = cast_to_cell(v1);
             cell v2Cell = cast_to_cell(v2);
-            if(cellHash(v1Cell) != cellHash(v2Cell)) {
+            if (cellHash(v1Cell) != cellHash(v2Cell)) {
                 areEqual = 0;
             }
         }
-        else if (is_tuple(v1) & is_tuple(v2)) {
+        elseif (is_tuple(v1) & is_tuple(v2)) {
             tuple v1Tuple = cast_to_tuple(v1);
             tuple v2Tuple = cast_to_tuple(v2);
 
@@ -405,18 +398,18 @@ forall X -> int is_tuple(X x) asm "ISTUPLE";
 Creates an internal address for the corresponding MsgAddressInt TLB.
 
 ```
-slice test_internal_address() impure method_id {
+slice test_internal_address () impure method_id {
     ;;   addr_std$10 anycast:(Maybe Anycast)
     ;;   workchain_id:int8 address:bits256  = MsgAddressInt;
+    
     var address = random();
 
     slice s = begin_cell()
-            .store_uint(2, 2) ;; addr_std$10
-            .store_uint(0, 1) ;; anycast nothing
-            .store_int(-1, 8) ;; workchain_id: -1
-            .store_uint(address, 256)
-            .end_cell()
-            .begin_parse();
+        .store_uint(2, 2) ;; addr_std$10
+        .store_uint(0, 1) ;; anycast nothing
+        .store_int(-1, 8) ;; workchain_id: -1
+        .store_uint(address, 256)
+    .end_cell().begin_parse();
 
     return s;
 }
@@ -427,17 +420,16 @@ slice test_internal_address() impure method_id {
 Creates an external address for the corresponding MsgAddressExt TLB.
 
 ```
-slice test_external_address(int address_length) impure method_id {
-    ;;addr_extern$01 len:(## 9) external_address:(bits len)
-    ;; = MsgAddressExt;
+slice test_external_address (int address_length) impure method_id {
+    ;; addr_extern$01 len:(## 9) external_address:(bits len) = MsgAddressExt;
+    
     var address = random();
 
     slice s = begin_cell()
-            .store_uint(1, 2) ;; addr_extern$01
-            .store_uint(address_length, 9)
-            .store_uint(address, address_length)
-            .end_cell()
-            .begin_parse();
+        .store_uint(1, 2) ;; addr_extern$01
+        .store_uint(address_length, 9)
+        .store_uint(address, address_length)
+    .end_cell().begin_parse();
 
     return s;
 }
