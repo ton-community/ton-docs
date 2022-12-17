@@ -204,11 +204,11 @@ forall X -> tuple cast_to_tuple(X x) asm "NOP";
 forall X -> int cast_to_int(X x) asm "NOP";
 
 
-() iterateTuple(tuple myTuple)
+() iterateTuple(tuple t)
 {
-    repeat(myTuple.tuple_length())
+    repeat(t.tuple_length())
     {
-        var value = myTuple~tpop();
+        var value = t~tpop();
         if (is_tuple(value))
         {
             tuple valueAsTuple = cast_to_tuple(value);
@@ -239,10 +239,10 @@ forall X -> slice cast_to_slice(X x) asm "NOP";
 forall X -> tuple cast_to_tuple(X x) asm "NOP";
 
 
-(int) resolve_type_x(tuple myTuple)
+(int) resolve_type_x(tuple t)
 {
     ;; value here is returned as X, since we dont know what is the exact value - we would need to check what is the value and then cast it
-    var value = myTuple~tpop();
+    var value = t~tpop();
     if(is_null(value))
     {
         ;; logic for null
@@ -272,7 +272,7 @@ forall X -> tuple cast_to_tuple(X x) asm "NOP";
 
 ### Modulo operations
 
-As an example, lets say that we want to run the following calculation of all 256 numbers : `((xp + zp)*(xp-zp))-((xp + zp)/(xp-zp))`. Since most of those operations are used for cryptography, in the following example we are using the modulo operator for montogomery curves.
+As an example, lets say that we want to run the following calculation of all 256 numbers : `(xp + zp)*(xp-zp)`. Since most of those operations are used for cryptography, in the following example we are using the modulo operator for montogomery curves.
 Note that xp+zp is a valid variable name ( without spaces between ).
 
 ```
@@ -281,12 +281,11 @@ Note that xp+zp is a valid variable name ( without spaces between ).
   ;;2^255 - 19 is a prime number for montgomery curves, meaning all operations should be done against its prime
    int prime = 57896044618658097711785492504343953926634992332820282019728792003956564819949; 
 
-   int xp+zp = (xp + zp) % prime;
-   int xp-zp = (xp - zp) % prime;
-   int xp+zp/xp-zp = (xp / z) % prime;
+   int xp+zp = (xp + zp + prime) % prime;
+   int xp-zp = (xp - zp + prime) % prime;
 
    (_, int xp+zp*xp-zp) = muldivmod( xp+zp, xp-zp, prime );
-   return (xp+zp*xp-zp - xp+zp/xp-zp) % prime;
+   return xp+zp*xp-zp;
 }
 ```
 
@@ -297,17 +296,16 @@ forall X -> (tuple, X) ~tpop(tuple t) asm "TPOP";
 int tuple_length(tuple t) asm "TLEN";
 forall X -> int cast_to_int(X x) asm "NOP";
 
-(tuple) reverse_tuple(tuple original_tuple)
+(tuple) reverse_tuple(tuple t1)
 {
-    tuple reverted_order_tuple = unsafe_tuple([]);
-    repeat(original_tuple.tuple_length())
+    tuple t2 = empty_tuple();
+    repeat(t1.tuple_length())
     {
-        var initial = original_tuple~tpop();
-        int result_as_int = cast_to_int(initial);
-        reverted_order_tuple~tpush(result_as_int);
+        var value = t1~tpop();
+        t2~tpush(value);
     }
 
-    return reverted_order_tuple;
+    return t2;
 }
 ```
 
@@ -317,14 +315,14 @@ There are two different ways we can determine the equality. One is based on the 
 
 ```
 int equal_slices(slice a, slice b) asm "SDEQ";
-(int) areSlicesEqual(slice firstSlice, slice secondSlice)
+(int) areSlicesEqual(slice s1, slice s2)
 {
-    return equal_slices(first_slice, second_slice);
+    return equal_slices(s1, s2);
 }
 
-(int) areSlicesEqual(slice firstSlice, slice secondSlice)
+(int) areSlicesEqual(slice s1, slice s2)
 {
-    return sliceHash(first_slice) == sliceHash(secondSlice);
+    return sliceHash(s1) == sliceHash(s2);
 }
 ```
 
@@ -333,9 +331,9 @@ int equal_slices(slice a, slice b) asm "SDEQ";
 We can easily determine cell equality based on their hash.
 
 ```
-(int) areCellsEqual(cell firstCell, cell secondCell)
+(int) areCellsEqual(cell c1, cell c2)
 {
-    return cellHash(firstCell) == cellHash(secondCell);
+    return cellHash(c1) == cellHash(c2);
 }
 ```
 
@@ -356,64 +354,64 @@ forall X -> int is_cell(X x) asm "<{ TRY:<{ CTOS DROP -1 PUSHINT }>CATCH<{ 2DROP
 forall X -> int is_slice(X x) asm "<{ TRY:<{ SBITS DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
 forall X -> int is_tuple(X x) asm "ISTUPLE";
 
-(int) areTuplesEqual(tuple firstTuple, tuple secondTuple)
+(int) areTuplesEqual(tuple t1, tuple t2)
 {
     int areEqual = -1;; initial value to true
-    if( firstTuple.tuple_length() != secondTuple.tuple_length())
+    if( t1.tuple_length() != t2.tuple_length())
     {
         return 0;
     }
 
-    int counter = firstTuple.tuple_length();
-    while(counter > 0 & areEqual)
+    int i = t1.tuple_length();
+    while(i > 0 & areEqual)
     {
-        var firstValue = firstTuple~tpop();
-        var secondValue = secondTuple~tpop();
-        if(is_null(firstTuple) & is_null(secondTuple))
+        var v1 = t1~tpop();
+        var v2 = t2~tpop();
+        if(is_null(t1) & is_null(t2))
         {
         }
-        else if(is_int(firstValue) & is_int(secondValue))
+        else if(is_int(v1) & is_int(v2))
         {
-            int firstValueInt = cast_to_int(firstValue);
-            int secondValueInt = cast_to_int(secondValue);
+            int v1Int = cast_to_int(v1);
+            int v2Int = cast_to_int(v2);
 
-            if(firstValueInt != secondValueInt)
+            if(v1Int != v2Int)
             {
                 areEqual = 0;
             }
         }
-        else if (is_slice(firstValue) & is_slice(secondValue))
+        else if (is_slice(v1) & is_slice(v2))
         {
-            slice firstValueSlice = cast_to_slice(firstValue);
-            slice secondValueSlice = cast_to_slice(secondValue);
-            if(sliceHash(firstValueSlice) != sliceHash(secondValueSlice))
+            slice v1Slice = cast_to_slice(v1);
+            slice v2Slice = cast_to_slice(v2);
+            if(sliceHash(v1Slice) != sliceHash(v2Slice))
             {
                 areEqual = 0;
             }
         }
-        else if (is_cell(firstValue) & is_cell(secondValue))
+        else if (is_cell(v1) & is_cell(v2))
         {
-            cell firstValueCell = cast_to_cell(firstValue);
-            cell secondValueCell = cast_to_cell(secondValue);
-            if(cellHash(firstValueCell) != cellHash(secondValueCell))
+            cell v1Cell = cast_to_cell(v1);
+            cell v2Cell = cast_to_cell(v2);
+            if(cellHash(v1Cell) != cellHash(v2Cell))
             {
                 areEqual = 0;
             }
         }
-        else if (is_tuple(firstValue) & is_tuple(secondValue))
+        else if (is_tuple(v1) & is_tuple(v2))
         {
-            tuple firstValueTuple = cast_to_tuple(firstValue);
-            tuple secondValueTuple = cast_to_tuple(secondValue);
+            tuple v1Tuple = cast_to_tuple(v1);
+            tuple v2Tuple = cast_to_tuple(v2);
 
             ;; recursively determine nested tuples
-            areEqual = areTuplesEqual(firstValueTuple, secondValueTuple);
+            areEqual = areTuplesEqual(v1Tuple, v2Tuple);
         }
         else
         {
             areEqual = 0;
         }
 
-        counter -= 1;
+        i -= 1;
     }
 
     return areEqual;
@@ -431,7 +429,7 @@ slice test_internal_address() impure method_id {
     ;;   workchain_id:int8 address:bits256  = MsgAddressInt;
     var address = random();
 
-    slice address_cell = begin_cell()
+    slice s = begin_cell()
             .store_uint(2, 2) ;; addr_std$10
             .store_uint(0, 1) ;; anycast nothing
             .store_int(-1, 8) ;; workchain_id: -1
@@ -439,7 +437,7 @@ slice test_internal_address() impure method_id {
             .end_cell()
             .begin_parse();
 
-    return address_cell;
+    return s;
 }
 ```
 
@@ -453,14 +451,14 @@ slice test_external_address(int address_length) impure method_id {
     ;; = MsgAddressExt;
     var address = random();
 
-    slice address_cell = begin_cell()
+    slice s = begin_cell()
             .store_uint(1, 2) ;; addr_extern$01
             .store_uint(address_length, 9)
             .store_uint(address, address_length)
             .end_cell()
             .begin_parse();
 
-    return address_cell;
+    return s;
 }
 ```
 
