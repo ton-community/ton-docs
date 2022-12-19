@@ -245,11 +245,6 @@ const sidebars = {
             'develop/smart-contracts/guidelines/tips',
             {
               type: 'link',
-              label: 'getgems.io NFT Contracts',
-              href: 'https://github.com/getgems-io/nft-contracts',
-            },
-            {
-              type: 'link',
               label: 'How to shard your TON smart contract and why',
               href: 'https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons',
             },

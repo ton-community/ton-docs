@@ -9,48 +9,88 @@ This is a concept article. We're still looking for someone experienced to write 
 :::
 
 ## Basics
-
-### How to determine a cell is empty
+### How to write an if statement
 ```func
-cell c = begin_cell().store_uint(1337, 16).end_cell();
+int a = 1;
 
-if (c.begin_parse().slice_empty?()) {
-    ;; cell is empty
+if (a == 1) {
+    ;; do something
 }
 else {
-    ;; cell is not empty
+    ;; do something else
 }
 ```
+["If statement" in docs](https://ton.org/docs/develop/func/statements#if-statements)
 
-### How to determine a slice is empty
+### How to write a while loop
+```func
+int a = 50;
+
+while (a > 0) {
+    ;; do something
+    a -= 1;
+}
+```
+["While loop" in docs](https://ton.org/docs/develop/func/statements#while-loop)
+
+### How to write a do until loop
+```func 
+int a = 0;
+
+do {
+    ;; do something
+    a += 1;
+} until (a == 10);
+```
+["Until loop" in docs](https://ton.org/docs/develop/func/statements#until-loop)
+
+### How to determine if slice is empty
 ```func 
 slice s = "Hello, world!";
 
-if (s.slice_empty?()) {
+if (s.slice_empty?()) { ;; Determine if slice is empty
     ;; slice is empty
 }
 else {
     ;; slice is not empty
 }
 ```
+[slice_empty?() in docs](https://ton.org/docs/develop/func/stdlib#slice_empty)
 
-### How to determine a dict is empty
+### How to determine if cell is empty
+```func
+cell c = begin_cell().store_uint(1337, 16).end_cell();
+
+if (c.begin_parse().slice_empty?()) { ;; Change 'c' type to slice with begin_parse(), determine if slice is empty
+    ;; cell is empty
+}
+else {
+    ;; cell is not empty
+}
+```
+[slice_empty?() in docs](https://ton.org/docs/develop/func/stdlib#slice_empty)
+[begin_parse() in docs](https://ton.org/docs/develop/func/stdlib#begin_parse)
+
+### How to determine if dict is empty
 ```func
 cell d = new_dict();
 d~udict_set(256, 0, "hello");
 d~udict_set(256, 1, "world");
 
-if (d.dict_empty?()) {
+if (d.dict_empty?()) { ;; Determine if dict is empty
     ;; dict is empty
 }
 else {
     ;; dict is not empty
 }
 ```
+[dict_empty?() in docs](https://ton.org/docs/develop/func/stdlib#dict_empty)
+We are adding some elements in dict d with [dict_set()](https://ton.org/docs/develop/func/stdlib/#dict_set) function, so it is not empty
 
-### How to determine a tuple is empty
+### How to determine if tuple is empty
 ```func
 (int) tlen (tuple t) asm "TLEN";
+;; Declare tlen function because it's not presented in stdlib
 
 () main () {
     tuple t = empty_tuple();
@@ -65,6 +105,8 @@ else {
     }
 }
 ```
+We are declaring tlen assembly function. You can read more [here](https://ton.org/docs/develop/func/functions#assembler-function-body-definition) and see [list of all assembler commands](https://ton.org/docs/learn/tvm-instructions/instructions)
+
 
 ### How to determine a state of the contract is empty
 ```func
@@ -77,38 +119,7 @@ else {
     ;; contract data is not empty
 }
 ```
-
-### How to write an if statement
-```func
-int a = 1;
-
-if (a == 1) {
-    ;; do something
-}
-else {
-    ;; do something else
-}
-```
-
-### How to write a while statement
-```func
-int a = 50;
-
-while (a > 0) {
-    ;; do something
-    a -= 1;
-}
-```
-
-### How to write a do until statement
-```func 
-int a = 0;
-
-do {
-    ;; do something
-    a += 1;
-} until (a == 10);
-```
+We can determine that state of contract is empty by determining that [cell is empty](https://ton.org/docs/develop/func/cookbook#how-to-determine-if-cell-is-empty)
 
 ### How to build an internal message cell
 ```func
@@ -126,13 +137,14 @@ cell msg = begin_cell()
 
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
+You can find more in [docs](https://ton.org/docs/develop/smart-contracts/messages). You can jump in [layout](https://ton.org/docs/develop/smart-contracts/messages#message-layout) with this link
 
 ### How to contain a body as ref to an internal message cell
 ```func
 slice addr = "EQArzP5prfRJtDM5WrMNWyr9yUTAi0c9o6PfR4hkWy9UQXHx"a;
 int amount = 1000000000;
 int op = 0;
-cell message_body = begin_cell()
+cell message_body = begin_cell() ;; Creating a cell with message
     .store_uint(op, 32)
     .store_slice("❤")
 .end_cell();
@@ -148,13 +160,14 @@ cell msg = begin_cell()
 
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
+We are [building a message](https://ton.org/docs/develop/func/cookbook#how-to-build-an-internal-message-cell) but adding message body separetly
 
 ### How to contain a body as slice to an internal message cell
 ```func 
 slice addr = "EQArzP5prfRJtDM5WrMNWyr9yUTAi0c9o6PfR4hkWy9UQXHx"a;
 int amount = 1000000000;
 int op = 0;
-slice message_body = "❤";
+slice message_body = "❤"; 
 
 cell msg = begin_cell()
     .store_uint(0x18, 6)
@@ -167,8 +180,10 @@ cell msg = begin_cell()
 
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
+We are [building a message](https://ton.org/docs/develop/func/cookbook#how-to-build-an-internal-message-cell) but adding message as a slice
 
 ### How to iterate tuples (in both directions)
+
 ```func
 (int) tlen (tuple t) asm "TLEN";
 forall X -> (tuple) to_tuple (X x) asm "NOP";
@@ -192,6 +207,10 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
     }
 }
 ```
+
+We are declaring __tlen__ assembly function. You can read more [here](https://ton.org/docs/develop/func/functions#assembler-function-body-definition) and see [list of all assembler commands](https://ton.org/docs/learn/tvm-instructions/instructions)
+Also we declaring __to_tuple__ function. It just changes data type of any input to tuple, so be careful while using itю
+
 
 ### Iterating n-nested tuples
 
