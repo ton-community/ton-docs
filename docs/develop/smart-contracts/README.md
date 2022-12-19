@@ -63,8 +63,9 @@ Standard basic smart contracts like wallets, electors (manage validation on TON)
 If you're already familiar with smart contracts, you can try to read the following articles:
 
 - [Fungible (Jettons), Non-Fungible (NFT), Semi-Fungible Tokens smart contracts](https://github.com/ton-blockchain/token-contract/tree/main)
-- [Standard smart contracts examples](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
+- [Getgems NFT, sale, auctions smart contracts (FunC)](https://github.com/getgems-io/nft-contracts)
 - [Wallet V4 smart contract example](https://github.com/ton-blockchain/wallet-contract)
+- [Standard smart contracts examples](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
 
 Discover more [FunC libraries and SDK](/develop/smart-contracts/libraries) in the FunC Documentation.
 
