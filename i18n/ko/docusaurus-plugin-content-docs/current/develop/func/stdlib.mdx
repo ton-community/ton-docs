@@ -315,7 +315,7 @@ Creates an output action which would reserve exactly `amount` nanotoncoins (if `
 ```cpp
 () raw_reserve_extra(int amount, cell extra_amount, int mode) impure asm "RAWRESERVEX";
 ```
-Similar to `raw_reserve`, but also accepts a dictionary `extra_amount` (represented by a `cell` or `null`) with extra currencies. In this way currencies other than TonCoin can be reserved.
+Similar to `raw_reserve`, but also accepts a dictionary `extra_amount` (represented by a `cell` or `null`) with extra currencies. In this way currencies other than Toncoin can be reserved.
 #### send_raw_message
 ```cpp
 () send_raw_message(cell msg, int mode) impure asm "SENDRAWMSG";
@@ -491,11 +491,11 @@ Loads the first `0 ≤ len ≤ 1023` bits from slice `s` into a separate slice `
 ```
 Preloads the first `0 ≤ len ≤ 1023` bits from slice `s` into a separate slice `s''`.
 
-#### load_grams
+#### load_coins
 ```cpp
-(slice, int) load_grams(slice s) asm( -> 1 0) "LDGRAMS";
+(slice, int) load_coins(slice s) asm( -> 1 0) "LDGRAMS";
 ```
-Loads serialized amount of TonCoins (any unsigned integer up to `2^128 - 1`).
+Loads serialized amount of Toncoin (any unsigned integer up to `2^128 - 1`).
 
 #### skip_bits
 ```cpp
@@ -611,7 +611,7 @@ builder store_grams(builder b, int x) asm "STGRAMS";
 ```
 Stores (serializes) an integer `x` in the range `0..2^128 − 1` into builder `b`. The serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, which is the smallest integer `l ≥ 0`, such that `x < 2^8l`, followed by an `8l`-bit unsigned big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.
 
-It is the usual way to store amounts of TonCoins.
+It is the usual way to store amounts of Toncoins.
 
 #### store_dict
 ```cpp

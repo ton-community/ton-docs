@@ -418,7 +418,7 @@ async def welcome_handler(message: types.Message):
     await message.answer('Hi!\nI am example bot '
                          'made for [this article](https://www.tonspace.co/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot-2).\n'
                          'My goal is to show how simple it is to receive '
-                         'payments in TonCoin with Python.\n\n'
+                         'payments in Toncoin with Python.\n\n'
                          'Use keyboard to test my functionality.',
                          reply_markup=keyboard,
                          parse_mode=ParseMode.MARKDOWN)
