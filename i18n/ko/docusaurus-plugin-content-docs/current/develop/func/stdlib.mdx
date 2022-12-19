@@ -592,12 +592,12 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
 Stores a reference to cell `c` into builder `b`.
 #### store_uint
 ```cpp
-;; builder store_uint(builder b, int x, int len) asm(x b len) "STUX";
+builder store_uint(builder b, int x, int len) asm(x b len) "STUX";
 ```
 Stores an unsigned `len`-bit integer `x` into `b` for `0 ≤ len ≤ 256`.
 #### store_int
 ```cpp
-;; builder store_int(builder b, int x, int len) asm(x b len) "STIX";
+builder store_int(builder b, int x, int len) asm(x b len) "STIX";
 ```
 Stores a signed `len`-bit integer `x` into `b` for `0 ≤ len ≤ 257`.
 #### store_slice
