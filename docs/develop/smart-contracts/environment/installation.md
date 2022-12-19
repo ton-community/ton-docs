@@ -76,7 +76,7 @@ padding: '0.2rem',
 
   7. If you plan to use fift, you need `FIFTPATH` environment variable with the necessary imports:
 
-     1. Download [fiftlib.zip](https://github.com/ton-defi-org/ton-binaries/releases/download/fiftlib/fiftlib.zip)
+     1. Download [fiftlib.zip](/ton-binaries/windows/fiftlib.zip)
      2. Open the zip in some directory on your machine (like **`C:/Users/%USERNAME%/ton/lib/fiftlib`**)
      3. Create a new (click button <Highlight color="#1877F2">"New"</Highlight>) environment variable `FIFTPATH` in "_User variables_" section. 
      4. In the "_Variable value_" field, specify the path to the files: **`/%USERNAME%/ton/lib/fiftlib`** and click <Highlight color="#1877F2">OK</Highlight>. Done.

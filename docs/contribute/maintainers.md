@@ -19,4 +19,4 @@ We’d like to recognize a few people who have made significant contributions to
 
 - [tolya-yanot](https://github.com/tolya-yanot)
 - [EmelyanenkoK](https://github.com/EmelyanenkoK)
-- [Tal Kol](https://github.com/search?q=Tal+Kol&type=users)
+- [Tal Kol](https://github.com/talkol)
