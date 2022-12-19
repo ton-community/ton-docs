@@ -1,11 +1,13 @@
+import ConceptImage from '@site/src/components/conceptImage'
+
 # Onboarding Challenge
 
 Welcome aboard! 🛳 Today you will become a true **TVM Developer** on the most advanced asynchronous blockchain in the world called The Open Network (TON).
 
 As the first miners on TON, you will go through the Proof-of-Work smart contract and finally mine a secret reward for your TON wallet. Look at that:
 
-<div style={{textAlign:'center', margin: '0 auto'}}>
-  <video width={'300'} style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
+<div style={{ textAlign: 'center', margin: '0 auto' }}>
+  <video width={'300'} style={{ borderRadius: '10pt', margin: '15pt auto' }} muted={true} autoPlay={true} loop={true}>
     <source src="/docs/files/onboarding-nft.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
@@ -26,8 +28,9 @@ The initial historical mining process on TON was finished a long time ago. After
 
 But right now, you will finish the old ritual of becoming a true **TVM Developer**. Let's leave the boring Toncoins for old ones. Let's mine an NFT today! Here is what you will make:
 
-<div style={{textAlign:'center', margin: '0 auto'}}>
-  <video style={{borderRadius:'10pt', margin:'15pt auto', maxWidth: '90%'}} muted={true} autoPlay={true} loop={true}>
+<div style={{ textAlign: 'center', margin: '0 auto' }}>
+  <video style={{ borderRadius: '10pt', margin: '15pt auto', maxWidth: '90%' }} muted={true} autoPlay={true}
+         loop={true}>
     <source src="/docs/files/onboarding.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
@@ -36,10 +39,6 @@ But right now, you will finish the old ritual of becoming a true **TVM Developer
 Amazed? It's possible to make miner in __2 hours__ from now, just stay in focus.
 
 Let's go deeper into the Onboarding Challenge now.
-
-## 📚 Basic Concepts
-
-Before start, it would be good for you to understand some concepts. Otherwise, you would be scary of the things we will cover later. We won't go deep in theory, but some points are necessary to understand:
 
 ## 📲 Prepare a Wallet
 
@@ -52,11 +51,16 @@ So, prepare your wallet by these 2 steps:
 
 Easy! Let's go to development right now.
 
+[//]:  # (## 📚 Basic Concepts)
+
+[//]:  # ()
+[//]:  # (Before start, it would be good for you to understand some concepts. Otherwise, you would be scary of the things we will cover later. We won't go deep in theory, but some points are necessary to understand:)
+
 ##  🦄 Project setup
 
 To make your life easier and omit routine low-level stuff, we will use a boilerplate. Please, use the [ton-onboarding-challenge](https://github.com/ton-community/ton-onboarding-challenge) template to create your project there:
 
-![[Pasted image 20221213204148.png]]
+<ConceptImage src="/img/tutorials/onboarding/1.png" />
 
 After completing this step, you get a fully-fledged repository that can be used as your miner's core. Congratulations! ✨
 
@@ -74,11 +78,11 @@ Before we'll cover environment setup, you should know: _it's possible to complet
 
 Good, so you decided to use the cloud today! In 2022 it's easy to start any project in the cloud with one simple step on your GitHub repository:
 
-![[Pasted image 20221213215943.png]]
+<ConceptImage src="/img/tutorials/onboarding/2.png" />
 
 After this, GitHub will create a special cloud workspace with VSCode Online IDE. You don't need to install git, nodejs, or other tools.
 
-Just wait for ~30 seconds so that the terminal will install all dependencies.
+Just wait for _~30 seconds_ so that the terminal will install all dependencies.
 
 #### Local environment
 
@@ -95,23 +99,187 @@ To start development, please:
 
 Great! After these steps you're ready to go deeper to the TON Blockchain secrets.
 
-## 🛠 Miner Development
+## 🎯 Connect to TON
 
-### Step 1: define functions
+Okay, what you need to connect to the TON Blockchain?
 
-### Step 2: define addresses
+* __Smart contract address__ as a point of destination. Our goal is to mine NFT from the _proof-of-work smart contract_, so we need an address to get current mining complexity.
+* __API provider__ to make requests to the TON Blockchain. TON has multiple [API types](/develop/dapps/apis/) for different purposes. We will use testnet version of [toncenter.com](https://toncenter.com/) API.
+* __JavaScript SDK__ to parse address and prepare it to make API request. Read more about [smart contract addresses](/learn/overviews/addresses) to understand why we should parse it. We will use [ton.js](https://github.com/ton-community/ton).
 
-### Step 3: define client
+Let's go deeper to understand how to make your very first request to the TON Blockchain using toncenter API and `ton.js` and get data from the proof-of-work smart contract!
 
-### step 4: run get_mining_data
+### Smart contract addresses
 
-### step 5: show the goal
+[Find the collection address on GetGems](#).
+
+We need to add two addresses to the miner:
+
+1. Your wallet address which will receive an NFT reward. Please, copy your testnet address from the Tonkeeper
+2. Collection address to which we will make requests
+
+Open your `index.ts` file in your project and create main function in it:
+
+```ts title="ton-onboarding-challenge/index.ts"
+import {Address} from "ton"
+
+async function main () {
+
+    // let's write Miner here!
+
+  const wallet = Address.parse('YOUR_WALLET_ADDRESS');
+  const collection = Address.parse('COLLECTION_ADDRESS');
+
+}
+
+main()
+
+```
+
+#### Why do we need `async function main()` function?
+
+Later, you will make some requests to the public API, so you need to wait for responses from API in your code with some `await` constructions. Async/await allows us save simplicity of code comparing to promises approach.
+
+
+
+### Connect to API provider
+
+```ts title="ton-onboarding-challenge/index.ts"
+
+  const client = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+    apiKey: '9984b6927d6aabe53e12712fbf54e35c29747cfd20e660fbd5f4d0f23c2641e0',
+  })
+
+```
+
+### Get Mining Data from TON
+
+```ts title="ton-onboarding-challenge/index.ts"
+
+
+  const miningData = await client.callGetMethod(collection, 'get_mining_data')
+
+  console.log(miningData)
+
+
+```
+
+#### Make Mining Data user-friendly
+
+```ts title="ton-onboarding-challenge/index.ts"
+
+
+  const parseStackNum = (sn: any) => new BN(sn[1].substring(2), 'hex');
+
+  const complexity = parseStackNum(miningData.stack[0]);
+  const last_success = parseStackNum(miningData.stack[1]);
+  const seed = parseStackNum(miningData.stack[2]);
+  const target_delta = parseStackNum(miningData.stack[3]);
+  const min_cpl = parseStackNum(miningData.stack[4]);
+  const max_cpl = parseStackNum(miningData.stack[5]);
+
+  console.log('complexity', complexity);
+  console.log('last_success', last_success.toString());
+  console.log('seed', seed);
+  console.log('target_delta', target_delta.toString());
+  console.log('min_cpl', min_cpl.toString());
+  console.log('max_cpl', max_cpl.toString());
+
+
+```
+
+## ⛏ Prepare an NFT Miner
 
 ### step 6: define mineParameters
 
+```ts title="ton-onboarding-challenge/index.ts"
+  import {MineMessageParams, Queries} from "./src/giver/NftGiver.data";
+
+// ...
+
+  const mineParams : MineMessageParams = {
+    expire: unixNow() + 30,
+    mintTo: wallet,
+    data1: new BN(0),
+    seed
+  };
+
+```
+
 ### step 7: write miner
+
+```ts title="ton-onboarding-challenge/index.ts"
+
+
+  let msg = Queries.mine(mineParams);
+  let progress = 0;
+
+  while (new BN(msg.hash(), 'be').gte(complexity)) {
+    progress += 1
+    console.clear()
+    console.log(`Mining started: please, wait for 30-60 seconds to mine your NFT!`)
+    console.log(' ')
+    console.log(`⛏ Mined ${progress} hashes! Last: `, new BN(msg.hash(), 'be').toString())
+
+    mineParams.expire = unixNow() + 30
+    mineParams.data1.iaddn(1)
+    msg = Queries.mine(mineParams)
+  }
+
+  console.log(' ')
+  console.log('💎 Mission completed: msg_hash less than pow_complexity found!');
+  console.log(' ')
+  console.log('msg_hash: ', new BN(msg.hash(), 'be').toString())
+  console.log('pow_complexity: ', complexity.toString())
+  console.log('msg_hash < pow_complexity: ', new BN(msg.hash(), 'be').lte(complexity))
+
+```
+
+## 🎨 Make a Mining Transaction
 
 ### Step 8: prepare a payment link
 
+```ts title="ton-onboarding-challenge/index.ts"
+
+
+  console.log(' ');
+  console.log("💣 WARNING! As soon as you find the hash, you should quickly make a transaction.");
+  console.log("If someone else makes a transaction, the seed changes, and you have to find a hash again!");
+  console.log(' ');
+
+  const collectionAddr = collection.toFriendly({
+    urlSafe: true,
+    bounceable: true,
+  })
+  const amountToSend = toNano('0.05').toString()
+  const preparedBodyCell = msg.toBoc().toString('base64url')
+
+  const tonDeepLink = (address: string, amount: string, body: string) => {
+    return `ton://transfer/${address}?amount=${amount}&bin=${body}`;
+  };
+
+  const link = tonDeepLink(collectionAddr, amountToSend, preparedBodyCell);
+
+  // console.log('🚀 Link to receive mine NFT (use Tonhub or Tonkeeper):')
+  // console.log(link);
+
+```
+
 ### Step 9: link for smartphone
 
+```ts title="ton-onboarding-challenge/index.ts"
+
+
+const qrcode = require('qrcode-terminal');
+
+  qrcode.generate(link, {small: true}, function (qrcode : any) {
+    console.log('🚀 Link to mine your NFT (use Tonkeeper in testnet mode):')
+    console.log(qrcode);
+    console.log('* If QR is still too big, please run script from the terminal. (or make the font smaller)')
+  });
+
+```
+
+
+### Step 10: mine in mainnet

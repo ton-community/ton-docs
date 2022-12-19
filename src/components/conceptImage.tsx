@@ -10,7 +10,7 @@ function ConceptImage({src}) {
     imgUrl = useBaseUrl(src);
 
   return (
-    <img style={{maxWidth: '80%',textAlign: 'center', margin: '0 auto', display: 'block'}} src={imgUrl}  alt={'concept image'}/>
+    <img style={{maxWidth: '80%',textAlign: 'center', margin: '10pt auto', display: 'block'}} src={imgUrl}  alt={'concept image'}/>
   );
 }
 
