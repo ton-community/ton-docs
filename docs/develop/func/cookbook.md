@@ -216,7 +216,7 @@ Also we declaring __to_tuple__ function. It just changes data type of any input 
 
 Sometimes we want to iterate nested tuples. The following example will iterate and print all of the items in a tuple of format `[[2,6],[1,[3,[3,5]]], 3]` starting from the head
 
-```
+```func
 int tuple_length (tuple t) asm "TLEN";
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 forall X -> int is_tuple (X x) asm "ISTUPLE";
@@ -241,7 +241,7 @@ forall X -> int cast_to_int (X x) asm "NOP";
 
 The following example checks if some value is contained in a tuple, but tuple contains values X (cell, slice, int, tuple, int). We need to check the value and cast accordingly.
 
-```
+```func
 forall X -> int is_null (X x) asm "ISNULL";
 forall X -> int is_int (X x) asm "<{ TRY:<{ 0 PUSHINT ADD DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
 forall X -> int is_cell (X x) asm "<{ TRY:<{ CTOS DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
@@ -282,7 +282,7 @@ forall X -> () resolve_type (X value) impure {
 As an example, lets say that we want to run the following calculation of all 256 numbers : `(xp + zp)*(xp-zp)`. Since most of those operations are used for cryptography, in the following example we are using the modulo operator for montogomery curves.
 Note that xp+zp is a valid variable name ( without spaces between ).
 
-```
+```func
 (int) modulo_operations (int xp, int zp) {  
    ;; 2^255 - 19 is a prime number for montgomery curves, meaning all operations should be done against its prime
    int prime = 57896044618658097711785492504343953926634992332820282019728792003956564819949; 
@@ -297,7 +297,7 @@ Note that xp+zp is a valid variable name ( without spaces between ).
 
 ### Reversing tuples
 
-```
+```func
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 int tuple_length (tuple t) asm "TLEN";
 
@@ -315,7 +315,7 @@ int tuple_length (tuple t) asm "TLEN";
 
 There are two different ways we can determine the equality. One is based on the slice hash, while the other one by using the SDEQ asm instruction.
 
-```
+```func
 int are_slices_equal_1? (slice a, slice b) {
     return a.slice_hash() == b.slice_hash();
 }
@@ -327,7 +327,7 @@ int are_slices_equal_2? (slice a, slice b) asm "SDEQ";
 
 We can easily determine cell equality based on their hash.
 
-```
+```func
 int are_cells_equal? (cell a, cell b) {
     return a.cell_hash() == b.cell_hash();
 }
@@ -337,7 +337,7 @@ int are_cells_equal? (cell a, cell b) {
 
 A more advanced example would be to iterate and compare each of the tuple values. Since they are X we need to check and cast to the corresponding type and if it is tuple to iterate it recursively.
 
-```
+```func
 int tuple_length (tuple t) asm "TLEN";
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 forall X -> int cast_to_int (X x) asm "NOP";
@@ -408,7 +408,7 @@ int are_cells_equal? (cell a, cell b) {
 
 Creates an internal address for the corresponding MsgAddressInt TLB.
 
-```
+```func
 (slice) generate_internal_address (int workchain_id, int address) {
     ;; addr_std$10 anycast:(Maybe Anycast) workchain_id:int8 address:bits256  = MsgAddressInt;
 
@@ -425,7 +425,7 @@ Creates an internal address for the corresponding MsgAddressInt TLB.
 
 Creates an external address for the corresponding MsgAddressExt TLB.
 
-```
+```func
 slice generate_external_address (int address) {
     ;; addr_extern$01 len:(## 8) external_address:(bits len) = MsgAddressExt;
     
@@ -443,7 +443,7 @@ slice generate_external_address (int address) {
 
 The logic for loading the dictionary
 
-```
+```func
 slice local_storage = get_data().begin_parse();
 cell dictionary_cell = new_dict();
 if (~ slice_empty?(local_storage)) {
@@ -453,6 +453,6 @@ if (~ slice_empty?(local_storage)) {
 
 While the logic for storing the dictionary is like the following example:
 
-```
+```func
 set_data(begin_cell().store_dict(dictionary_cell).end_cell());
 ```
