@@ -456,3 +456,208 @@ While the logic for storing the dictionary is like the following example:
 ```func
 set_data(begin_cell().store_dict(dictionary_cell).end_cell());
 ```
+
+### How to send a simple message
+
+```func
+cell msg = begin_cell()
+    .store_uint(0x18, 6) ;; flags
+    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
+    .store_coins(100) ;; amount of nanoTons to send
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 107 zero-bits
+    .store_uint(0, 32) ;; zero opcode - means simple transfer message with comment
+    .store_slice("Hello from FunC!") ;; comment
+.end_cell();
+send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
+```
+
+### How to send a message with an incoming account
+
+```func
+() recv_internal (slice in_msg_body) {
+    {-
+        This is a simple example of a proxy-contract.
+        It will expect in_msg_body to contain message mode, body and destination address to be sent to.
+    -}
+
+    int mode = in_msg_body~load_uint(8); ;; first byte will contain msg mode
+    slice addr = in_msg_body~load_msg_addr(); ;; then we parse the destination address
+    slice body = in_msg_body; ;; everything that is left in in_msg_body will be our new message's body
+
+    cell msg = begin_cell()
+        .store_uint(0x18, 6)
+        .store_slice(addr)
+        .store_coins(100) ;; just for example
+        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+        .store_slice(body)
+    .end_cell();
+    send_raw_message(msg, mode);
+}
+```
+
+### How to send a message with the entire balance
+
+```func
+cell msg = begin_cell()
+    .store_uint(0x18, 6) ;; flags
+    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
+    .store_coins(0) ;; we don't care about this value right now
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 107 zero-bits
+    .store_uint(0, 32) ;; zero opcode - means simple transfer message with comment
+    .store_slice("Hello from FunC!") ;; comment
+.end_cell();
+send_raw_message(msg, 128); ;; mode = 128 is used for messages that are to carry all the remaining balance of the current smart contract
+```
+
+### How to specify a message body via a reference
+
+```func
+cell body = begin_cell()
+    .store_uint(0, 32) ;; zero opcode - simple message with comment
+    .store_slice("hello!")
+.end_cell();
+
+cell msg = begin_cell()
+    .store_uint(0x18, 6) ;; flags
+    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
+    .store_coins(100) ;; amount of nanoTons to send
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) ;; 106 zero-bits, necessary for internal messages
+    .store_uint(1, 1) ;; we want to store body as a ref
+    .store_ref(body)
+.end_cell();
+send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
+```
+
+### How to send a message with a long text comment
+
+```func
+{-
+    If we want to send a message with really long comment, we should split the comment to several slices.
+    Each slice should have <1023 bits of data (127 chars).
+    Each slice should have a reference to the next one, forming a snake-like structure.
+-}
+
+cell body = begin_cell()
+    .store_uint(0, 32) ;; zero opcode - simple message with comment
+    .store_slice("long long long message...")
+    .store_ref(begin_cell()
+        .store_slice(" you can store string of almost any length here.")
+        .store_ref(begin_cell()
+            .store_slice(" just don't forget about the 127 chars limit for each slice")
+        .end_cell())
+    .end_cell())
+.end_cell();
+
+cell msg = begin_cell()
+    .store_uint(0x18, 6) ;; flags
+    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
+    .store_coins(100) ;; amount of nanoTons to send
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) ;; 106 zero-bits, necessary for internal messages
+    .store_uint(1, 1) ;; we want to store body as a ref
+    .store_ref(body)
+.end_cell();
+send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
+```
+
+### How to get only data bits from a slice (without refs)
+
+```func
+slice s = begin_cell()
+    .store_slice("Some data bits...")
+    .store_ref(begin_cell().end_cell()) ;; some references
+    .store_ref(begin_cell().end_cell()) ;; some references
+.end_cell().begin_parse();
+
+slice s_only_data = s.preload_bits(s.slice_bits());
+```
+
+### How to define your own modifying method
+
+```func
+(slice, (int)) load_digit (slice s) {
+    int x = s~load_uint(8); ;; load 8 bits (one char) from slice
+    x -= 48; ;; char '0' has code of 48, so we substract it to get the digit as a number
+    return (s, (x)); ;; return our modified slice and loaded digit
+}
+
+() main () {
+    slice s = "258";
+    int c1 = s~load_digit();
+    int c2 = s~load_digit();
+    int c3 = s~load_digit();
+    ;; here s is equal to "", and c1 = 2, c2 = 5, c3 = 8
+}
+```
+
+### How to iterate dictionaries
+
+```func
+cell d = new_dict();
+d~udict_set(256, 1, "value 1");
+d~udict_set(256, 5, "value 2");
+d~udict_set(256, 12, "value 3");
+
+;; iterate keys from small to big
+(int key, slice val, int flag) = d.udict_get_min?(256);
+while (flag) {
+    ;; do something with pair key->val
+    
+    (key, val, flag) = d.udict_get_next?(256, key);
+}
+```
+
+### How to iterate cell tree recursively
+
+```func
+forall X -> int is_null (X x) asm "ISNULL";
+
+() main () {
+    ;; just some cell for example
+    cell c = begin_cell()
+        .store_uint(1, 16)
+        .store_ref(begin_cell()
+            .store_uint(2, 16)
+        .end_cell())
+        .store_ref(begin_cell()
+            .store_uint(3, 16)
+            .store_ref(begin_cell()
+                .store_uint(4, 16)
+            .end_cell())
+            .store_ref(begin_cell()
+                .store_uint(5, 16)
+            .end_cell())
+        .end_cell())
+    .end_cell();
+
+    tuple stack = null();
+    stack = cons(c, stack);
+    while (~ stack.is_null()) {
+        (cell v, stack) = stack.uncons();
+        slice s = v.begin_parse();
+
+        ;; do something with s data
+
+        repeat (s.slice_refs()) {
+            stack = cons(s~load_ref(), stack);
+        }
+    }
+}
+```
+
+### How to send a message with stateInit
+
+```func
+;; since it is just an example, let's just say that state_init and body will be empty cells
+cell state_init = begin_cell().end_cell();
+cell body = begin_cell().end_cell();
+
+cell msg = begin_cell()
+    .store_uint(0x18, 6) ;; flags
+    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
+    .store_coins(100) ;; amount of nanoTons to send
+    .store_uint(7, 108) ;; 105 zero-bits and 3 one bits which means that we store both body and stateInit in refs
+    .store_ref(state_init) ;; cell with stateInit
+    .store_ref(body) ;; cell with body
+.end_cell();
+send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
+```
