@@ -20,7 +20,7 @@ else {
     ;; do something else
 }
 ```
-["If statement" in docs](https://ton.org/docs/develop/func/statements#if-statements)
+["If statement" in docs](/docs/develop/func/statements#if-statements)
 
 ### How to write a while loop
 ```func
@@ -31,7 +31,7 @@ while (a > 0) {
     a -= 1;
 }
 ```
-["While loop" in docs](https://ton.org/docs/develop/func/statements#while-loop)
+["While loop" in docs](/docs/develop/func/statements#while-loop)
 
 ### How to write a do until loop
 ```func 
@@ -42,7 +42,7 @@ do {
     a += 1;
 } until (a == 10);
 ```
-["Until loop" in docs](https://ton.org/docs/develop/func/statements#until-loop)
+["Until loop" in docs](/docs/develop/func/statements#until-loop)
 
 ### How to determine if slice is empty
 ```func 
@@ -55,7 +55,7 @@ else {
     ;; slice is not empty
 }
 ```
-[slice_empty?() in docs](https://ton.org/docs/develop/func/stdlib#slice_empty)
+[slice_empty?() in docs](/docs/develop/func/stdlib#slice_empty)
 
 ### How to determine if cell is empty
 ```func
@@ -68,8 +68,8 @@ else {
     ;; cell is not empty
 }
 ```
-[slice_empty?() in docs](https://ton.org/docs/develop/func/stdlib#slice_empty)
-[begin_parse() in docs](https://ton.org/docs/develop/func/stdlib#begin_parse)
+[slice_empty?() in docs](/docs/develop/func/stdlib#slice_empty)
+[begin_parse() in docs](/docs/develop/func/stdlib#begin_parse)
 
 ### How to determine if dict is empty
 ```func
@@ -84,8 +84,8 @@ else {
     ;; dict is not empty
 }
 ```
-[dict_empty?() in docs](https://ton.org/docs/develop/func/stdlib#dict_empty)
-We are adding some elements in dict d with [dict_set()](https://ton.org/docs/develop/func/stdlib/#dict_set) function, so it is not empty
+[dict_empty?() in docs](/docs/develop/func/stdlib#dict_empty)
+We are adding some elements in dict d with [dict_set()](/docs/develop/func/stdlib/#dict_set) function, so it is not empty
 
 ### How to determine if tuple is empty
 ```func
@@ -105,7 +105,7 @@ We are adding some elements in dict d with [dict_set()](https://ton.org/docs/dev
     }
 }
 ```
-We are declaring tlen assembly function. You can read more [here](https://ton.org/docs/develop/func/functions#assembler-function-body-definition) and see [list of all assembler commands](https://ton.org/docs/learn/tvm-instructions/instructions)
+We are declaring tlen assembly function. You can read more [here](/docs/develop/func/functions#assembler-function-body-definition) and see [list of all assembler commands](/docs/learn/tvm-instructions/instructions)
 
 
 ### How to determine a state of the contract is empty
@@ -119,7 +119,7 @@ else {
     ;; contract data is not empty
 }
 ```
-We can determine that state of contract is empty by determining that [cell is empty](https://ton.org/docs/develop/func/cookbook#how-to-determine-if-cell-is-empty)
+We can determine that state of contract is empty by determining that [cell is empty](/docs/develop/func/cookbook#how-to-determine-if-cell-is-empty)
 
 ### How to build an internal message cell
 ```func
@@ -137,7 +137,7 @@ cell msg = begin_cell()
 
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
-You can find more in [docs](https://ton.org/docs/develop/smart-contracts/messages). You can jump in [layout](https://ton.org/docs/develop/smart-contracts/messages#message-layout) with this link
+You can find more in [docs](/docs/develop/smart-contracts/messages). You can jump in [layout](/docs/develop/smart-contracts/messages#message-layout) with this link
 
 ### How to contain a body as ref to an internal message cell
 ```func
@@ -160,7 +160,7 @@ cell msg = begin_cell()
 
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
-We are [building a message](https://ton.org/docs/develop/func/cookbook#how-to-build-an-internal-message-cell) but adding message body separetly
+We are [building a message](/docs/develop/func/cookbook#how-to-build-an-internal-message-cell) but adding message body separetly
 
 ### How to contain a body as slice to an internal message cell
 ```func 
@@ -180,7 +180,7 @@ cell msg = begin_cell()
 
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
-We are [building a message](https://ton.org/docs/develop/func/cookbook#how-to-build-an-internal-message-cell) but adding message as a slice
+We are [building a message](/docs/develop/func/cookbook#how-to-build-an-internal-message-cell) but adding message as a slice
 
 ### How to iterate tuples (in both directions)
 
@@ -208,7 +208,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 }
 ```
 
-We are declaring __tlen__ assembly function. You can read more [here](https://ton.org/docs/develop/func/functions#assembler-function-body-definition) and see [list of all assembler commands](https://ton.org/docs/learn/tvm-instructions/instructions)
+We are declaring __tlen__ assembly function. You can read more [here](/docs/develop/func/functions#assembler-function-body-definition) and see [list of all assembler commands](/docs/learn/tvm-instructions/instructions)
 Also we declaring __to_tuple__ function. It just changes data type of any input to tuple, so be careful while using itю
 
 
@@ -471,6 +471,8 @@ cell msg = begin_cell()
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
 ```
 
+[Message layout in docs](/docs/develop/smart-contracts/messages)
+
 ### How to send a message with an incoming account
 
 ```func
@@ -495,6 +497,8 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
 }
 ```
 
+[Message layout in docs](/docs/develop/smart-contracts/messages)
+
 ### How to send a message with the entire balance
 
 ```func
@@ -508,6 +512,9 @@ cell msg = begin_cell()
 .end_cell();
 send_raw_message(msg, 128); ;; mode = 128 is used for messages that are to carry all the remaining balance of the current smart contract
 ```
+
+[Message layout in docs](/docs/develop/smart-contracts/messages)
+[Message modes](/docs/develop/func/stdlib/#send_raw_message)
 
 ### How to specify a message body via a reference
 
@@ -527,6 +534,8 @@ cell msg = begin_cell()
 .end_cell();
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
 ```
+
+[Message layout in docs](/docs/develop/smart-contracts/messages)
 
 ### How to send a message with a long text comment
 
@@ -559,6 +568,8 @@ cell msg = begin_cell()
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
 ```
 
+[Internal messages in docs](/docs/develop/smart-contracts/guidelines/internal-messages)
+
 ### How to get only data bits from a slice (without refs)
 
 ```func
@@ -570,6 +581,8 @@ slice s = begin_cell()
 
 slice s_only_data = s.preload_bits(s.slice_bits());
 ```
+
+[Slice primitives in docs](/docs/develop/func/stdlib/#slice-primitives)
 
 ### How to define your own modifying method
 
@@ -589,6 +602,8 @@ slice s_only_data = s.preload_bits(s.slice_bits());
 }
 ```
 
+[Modifying methods in docs](/docs/develop/func/statements#modifying-methods)
+
 ### How to iterate dictionaries
 
 ```func
@@ -606,10 +621,14 @@ while (flag) {
 }
 ```
 
+[Dictonaries primitives in docs](/docs/develop/func/stdlib/#dictionaries-primitives)
+
 ### How to iterate cell tree recursively
 
 ```func
 forall X -> int is_null (X x) asm "ISNULL";
+forall X -> (tuple, ()) push_back (tuple tail, X head) asm "CONS";
+forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 
 () main () {
     ;; just some cell for example
@@ -630,34 +649,43 @@ forall X -> int is_null (X x) asm "ISNULL";
     .end_cell();
 
     tuple stack = null();
-    stack = cons(c, stack);
+    stack~push_back(c);
     while (~ stack.is_null()) {
-        (cell v, stack) = stack.uncons();
-        slice s = v.begin_parse();
+        slice s = stack~pop_back().begin_parse();
 
         ;; do something with s data
 
         repeat (s.slice_refs()) {
-            stack = cons(s~load_ref(), stack);
+            stack~push_back(s~load_ref());
         }
     }
 }
 ```
 
-### How to send a message with stateInit
+[Lisp-style lists in docs](/docs/develop/func/stdlib/#lisp-style-lists)
+
+### How to iterate through lisp-style list
 
 ```func
-;; since it is just an example, let's just say that state_init and body will be empty cells
-cell state_init = begin_cell().end_cell();
-cell body = begin_cell().end_cell();
+forall X -> int is_null (X x) asm "ISNULL";
+forall X -> (tuple, ()) push_back (tuple tail, X head) asm "CONS";
+forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 
-cell msg = begin_cell()
-    .store_uint(0x18, 6) ;; flags
-    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
-    .store_coins(100) ;; amount of nanoTons to send
-    .store_uint(7, 108) ;; 105 zero-bits and 3 one bits which means that we store both body and stateInit in refs
-    .store_ref(state_init) ;; cell with stateInit
-    .store_ref(body) ;; cell with body
-.end_cell();
-send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
+() main () {
+    ;; some example list
+    tuple l = null();
+    l~push_back(1);
+    l~push_back(2);
+    l~push_back(3);
+
+    ;; iterating through elements
+    ;; note that this iteration is in reversed order
+    while (~ l.is_null()) {
+        var x = l~pop_back();
+
+        ;; do something with x
+    }
+}
 ```
+
+[Lisp-style lists in docs](/docs/develop/func/stdlib/#lisp-style-lists)
