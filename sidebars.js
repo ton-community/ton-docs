@@ -156,7 +156,7 @@ const sidebars = {
     },
     {
       type: 'doc',
-      label: 'TON Onboarding Challenge',
+      label: 'Become a TVM Developer',
       id: 'develop/onboarding-challenge',
     },
     {

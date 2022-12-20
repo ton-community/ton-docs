@@ -2,7 +2,11 @@ import ConceptImage from '@site/src/components/conceptImage'
 
 # Onboarding Challenge
 
-Welcome aboard! 🛳 Today you will become a true **TVM Developer** on the most advanced asynchronous blockchain in the world called The Open Network (TON).
+Welcome aboard! 🛳 You came here to become a true **TVM Developer** on the most advanced asynchronous blockchain in the world called The Open Network (TON).
+
+Through this tutorial, you'll learn how to make blockchain transactions using JavaScript easily. You'll learn the same even without this tutorial, but here is the cool way.
+
+_You'll mine an NFT rocket!!!_
 
 As the first miners on TON, you will go through the Proof-of-Work smart contract and finally mine a secret reward for your TON wallet. Look at that:
 
@@ -16,6 +20,10 @@ As the first miners on TON, you will go through the Proof-of-Work smart contract
 Our goal for today is to mine an NFT! This achievement will stay with you *forever*.
 
 Finally, you can mine this NFT achievement even in mainnet. (_it costs only 0,05 TON!_)
+
+:::caution tutorial in open beta
+You are one of the first explorers here. If you found any mistake or feel stacked, please send feedback to [@SwiftAdviser](https://t.me/SwiftAdviser). I will fix it asap.
+:::
 
 ## ⛏ Mining on TON
 
@@ -90,7 +98,7 @@ For local development you need 3 things:
 
 - **Git**. Essential tool for every developer. Download it here.
 - **NodeJS**. We will use Javascript with TypeScript mode as the most popular choice for DApp development. Download it here.
-- **Javascript IDE**. Use your normal choice.
+- **Javascript IDE**. Your normal choice for development. VSCode Online, for example.
 
 To start development, please:
 
@@ -115,17 +123,15 @@ Let's go deeper to understand how to make your very first request to the TON Blo
 
 We need to add two addresses to the miner:
 
-1. Your wallet address which will receive an NFT reward. Please, copy your testnet address from the Tonkeeper
-2. Collection address to which we will make requests
+1. __Wallet address__ which will receive an NFT reward.
+2. __Collection address__ smart contract to mine an NFT.
 
-Open your `index.ts` file in your project and create main function in it:
+Open your `index.ts` file in your project and create main function with initial constants:
 
 ```ts title="ton-onboarding-challenge/index.ts"
 import {Address} from "ton"
 
 async function main () {
-
-    // let's write Miner here!
 
   const wallet = Address.parse('YOUR_WALLET_ADDRESS');
   const collection = Address.parse('COLLECTION_ADDRESS');
@@ -133,42 +139,128 @@ async function main () {
 }
 
 main()
-
 ```
 
 #### Why do we need `async function main()` function?
 
 Later, you will make some requests to the public API, so you need to wait for responses from API in your code with some `await` constructions. Async/await allows us save simplicity of code comparing to promises approach.
 
+#### Why do we need to parse addresses?
 
+In TON, addresses could have different forms and even different flags. Today we will use a _user-friendly form_, but if you are interested read more about [smart contract addresses](/learn/overviews/addresses).
+
+`Address.parse()` from `ton.js` SDK allows you to create an address object to convert address from one form to another easily.
 
 ### Connect to API provider
 
+We need to connect to the TonCenter API provider hosted on [toncenter.com](https://toncenter.com).
+
+In `ton.js`, you can use _TonClient_ for that:
+
 ```ts title="ton-onboarding-challenge/index.ts"
+import {Address, TonClient} from "ton"
+
+  // ... previous code
 
   const client = new TonClient({
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
-    apiKey: '9984b6927d6aabe53e12712fbf54e35c29747cfd20e660fbd5f4d0f23c2641e0',
+    apiKey: 'YOUR_API_KEY',
   })
 
 ```
 
+If you try to make a request without an API key, you probably will have problems.
+
+API key allows you to make 10 requests per second. It's not suitable for production, but in our case 10 requests is more than enough for the Onboarding Challenge:
+
+* [Get an API key](/develop/dapps/apis/toncenter#get-api-key) for testnet on the API page
+
+:::info what to do in production?
+It's better to use RPC node provider or run your own ton-http-api instance for that. Read more on the [TonCenter API page](/develop/dapps/apis/toncenter).
+:::
+
 ### Get Mining Data from TON
 
-```ts title="ton-onboarding-challenge/index.ts"
+Finally, we can try to get some data from the TON Blockchain!
 
+Regarding the initial [README file](https://github.com/ton-community/ton-onboarding-challenge#mining-process-advanced) of the ton-onboarding-challenge we can see that the latest mining data you can get by running `get_mining_data` method.
+
+As a result we should receive an array with these fields:
+
+```bash
+(
+	int pow_complexity,
+	int last_success,
+	int seed,
+	int target_delta,
+	int min_cpl,
+	int max_cpl
+)
+```
+
+#### How to run a method of any smart contract in TON?
+
+With `ton.js` you can run `callGetMethod(SMART_CONTRACT_ADDRESS, METHOD)` function.
+Try to run this code and read the console output:
+
+```ts title="ton-onboarding-challenge/index.ts"
+  // ... previous code
 
   const miningData = await client.callGetMethod(collection, 'get_mining_data')
 
   console.log(miningData)
-
-
 ```
+
+To run the script you need to write in terminal (in project directory!):
+
+```bash
+npm run start
+```
+
+Good! If all the things are good, you successfully connected to the API and received some data to the console. Probably, you won't understand anything from the raw console output:
+
+```bash
+{
+  gas_used: 2374,
+  stack: [
+    [
+      'num',
+      '0x2880000000000000000000000000000000000000000000000000000000000'
+    ],
+    [ 'num', '0x63984815' ],
+    [ 'num', '0x357401cf9b4f2386950faefd6b616264' ],
+    [ 'num', '0x1e' ],
+    [ 'num', '0xab' ],
+    [ 'num', '0xfc' ]
+  ]
+}
+```
+
+Yes, we see here how many gas was used to run the method and some _num_ values in `hex` format, but even this information is useless for us right now.
+
+We need to convert hex output to something _useful_.
+
+:::note how gas works in ton?
+__Warning__: this information is pretty low level and __not necessary for this tutorial__. Read about it only if you are excited to go down to the low level technical aspects of TON.
+1. Understand the concepts of TVM and _how transactions work_ in [TVM overview](/learn/tvm-instructions/tvm-overview).
+2. After that go deeper in [transaction fees](/develop/smart-contracts/fees) concepts to see _what the gas is_.
+3. Finally, see [the exact values in gas](/learn/tvm-instructions/instructions#11-gas-prices) for TVM instructions.
+
+Again, it's not necessary, you can read it _later_. Let's return to the tutorial!
+:::
 
 #### Make Mining Data user-friendly
 
-```ts title="ton-onboarding-challenge/index.ts"
+Ok, then we must convert `hex` numbers to something we can understand and use.
 
+But we have a problem here. As you see with your output, even hex numbers are pretty big. We can't just move them to the variable and use it, because of [JavaScript limitations](https://stackoverflow.com/questions/307179/what-is-javascripts-highest-integer-value-that-a-number-can-go-to-without-losin#:~:text=Note%20that%20the%20bitwise%20operators,31%2D1%2C%20or%202%2C147%2C483%2C647.).
+
+That's why we need `bn.js`. It's a library to work with Big Numbers, that are bigger than maximum JavaScript integer values. Use this example to see the _Mining Data_:
+
+```ts title="ton-onboarding-challenge/index.ts"
+import {BN} from 'bn.js'
+
+  // ... previous code
 
   const parseStackNum = (sn: any) => new BN(sn[1].substring(2), 'hex');
 
@@ -185,9 +277,35 @@ Later, you will make some requests to the public API, so you need to wait for re
   console.log('target_delta', target_delta.toString());
   console.log('min_cpl', min_cpl.toString());
   console.log('max_cpl', max_cpl.toString());
-
-
 ```
+
+As you see, _miningData_ is a stack array with hex numbers. To get the values, we added `parseStackNum` function that creates a _BN_ object from hex number.
+
+After that we try to print values in console. Some values are printed as BN, as it will provide more user-friendly way for us. Try to run the script again with command:
+
+```bash
+npm run start
+```
+
+#### What do you see in console?
+
+Here is an example output:
+
+```bash
+complexity <BN: 2880000000000000000000000000000000000000000000000000000000000>
+last_success 1670924309
+seed <BN: 357401cf9b4f2386950faefd6b616264>
+target_delta 30
+min_cpl 171
+max_cpl 252
+```
+
+Let's cover the Mining Data deeper to understand the concepts of mining:
+
+* `complexity` is the most important number for miner. It's a Proof-of-Work complexity for the values. You're successful, _if the final hash is less than complexity_.
+* `last_success` is a unixtime of the last mining transaction. Every time last_success changes you need to run miner again, because seed changes too.
+* `seed` is a unique value generated by smart contract to calculate a hash. If you're interested how seed changes search in the project files with `ctx_seed` keyword.
+* `target_delta`, `min_cpl` and `max_cpl` won't be used in our tutorial. But you always can read more how they used in smart contract to calculate proof-of-work complexity in source files of collection in your project.
 
 ## ⛏ Prepare an NFT Miner
 

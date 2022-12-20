@@ -14,6 +14,13 @@ You can connect to public [toncenter.com](https://toncenter.com) or run your own
 👎 — Simplified. It's not possible to receive information where you need an indexed TON API.
 👎 — HTTP-Middleware. You can't fully trust server responses, because they do not contain _Merkle proofs_ to validate that your data is genuine.  
 
+## Get API key
+
+To work with public TonCenter API you need a key:
+
+* Get API key for mainnet: [@tonapibot](https://t.me/tonapibot)
+* Get API key for testnet: [@tontestnetapibot](https://t.me/tontestnetapibot)
+
 ## RPC Nodes
 
 * [https://toncenter.com/api/v2/](https://toncenter.com/api/v2/) — community-hosted project for Quick Start with API.
