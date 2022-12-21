@@ -697,7 +697,7 @@ Similar to `dict_set` but with the value set to a reference to cell `value`.
 (slice, int) idict_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIGET" "NULLSWAPIFNOT";
 (slice, int) udict_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUGET" "NULLSWAPIFNOT";
 ```
-Looks up key `index` in dictionary `dict` with `ket_len`-bit keys. On success, returns the value found as a slice along with a `-1` flag indicating success. If fails, it returns `(null, 0)`.
+Looks up key `index` in dictionary `dict` with `key_len`-bit keys. On success, returns the value found as a slice along with a `-1` flag indicating success. If fails, it returns `(null, 0)`.
 #### dict_get_ref?
 ```func
 (cell, int) idict_get_ref?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIGETREF";
@@ -729,7 +729,7 @@ Deletes `key_len`-bit key `index` from the dictionary `dict`. If the key is pres
 (cell, (slice, int)) ~idict_delete_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIDELGET" "NULLSWAPIFNOT";
 (cell, (slice, int)) ~udict_delete_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUDELGET" "NULLSWAPIFNOT";
 ```
-Deletes `ket_len`-bit key `index` from dictionary `dict`. If the key is present, returns the modified dictionary `dict'`, the original value `x` associated with the key k (represented by a Slice), and the success flag `−1`. Otherwise, returns `(dict, null, 0)`.
+Deletes `key_len`-bit key `index` from dictionary `dict`. If the key is present, returns the modified dictionary `dict'`, the original value `x` associated with the key k (represented by a Slice), and the success flag `−1`. Otherwise, returns `(dict, null, 0)`.
 #### dict_add?
 ```func
 (cell, int) udict_add?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTUADD";
