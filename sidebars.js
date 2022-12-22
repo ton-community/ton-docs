@@ -154,6 +154,11 @@ const sidebars = {
       label: 'TON Hello World',
       href: 'https://blog.ton.org/step-by-step-guide-for-writing-your-first-smart-contract-in-func',
     },
+    // {
+    //   type: 'doc',
+    //   label: 'Become a TVM Developer',
+    //   id: 'develop/onboarding-challenge',
+    // },
     {
       'type': 'html',
       'value': '<hr/>',
