@@ -52,6 +52,14 @@ ____________
 
 **Bloodbath** — a colloquial term often used to describe a severe and sustained market crash, which results in multiple deep red bars on price charts.
 
+### BoC
+
+**BoC** — Bag of Cells. Usually, used in code.
+
+### BoF
+
+**BoF** — Bag of Files. Usually, used in code.
+
 ### Bot
 
 **Bot** — a program written for two ecosystems to interact with each other — e.g., The Open Network and the Telegram messenger. On Telegram, bots are accounts in the messenger operated by software.
