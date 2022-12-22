@@ -235,11 +235,15 @@ const config = {
               },
               {
                 to: 'https://answers.ton.org/',
-                label: 'Q&A',
+                label: 'TON Overflow',
               },
               {
                 to: 'https://t.me/TonDev_eng',
-                label: 'TON Dev Chat',
+                label: 'TON Developers Chat',
+              },
+              {
+                to: 'https://github.com/ton-blockchain/TEPs',
+                label: 'Standards Discussion (TEPs)',
               },
             ],
           },

@@ -432,7 +432,7 @@ const sidebars = {
     },
     {
       'type': 'html',
-      'value': '<span class=\'menu__link\'><b><small> Participate in TON Ecosystem </small></b></span>',
+      'value': '<span class=\'menu__link\'><b><small> Infrastructure </small></b></span>',
     },
     'participate/explorers',
     {
@@ -486,23 +486,12 @@ const sidebars = {
       id: 'participate/nominators',
     },
     {
-      type: 'link',
-      label: 'Standards Discussion (TEPs)',
-      href: 'https://github.com/ton-blockchain/TEPs',
-    },
-    {
-      type: 'link',
-      label: 'Ask a Question about TON',
-      href: 'https://answers.ton.org/',
-      className: 'noIcons',
-    },
-    {
       'type': 'html',
       'value': '<hr/>',
     },
     {
       'type': 'html',
-      'value': '<span class=\'menu__link\'><b><small> Participate in Web3 </small></b></span>',
+      'value': '<span class=\'menu__link\'><b><small> Web3 </small></b></span>',
     },
     'participate/web3/overview',
     'participate/web3/dns',
