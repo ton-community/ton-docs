@@ -152,3 +152,35 @@ The binary will be located as:
 ```bash
 utils/generate-random-id
 ```
+
+# Compile old TON versions
+
+TON releases: https://github.com/ton-blockchain/ton/tags
+
+```bash
+git clone https://github.com/ton-blockchain/ton.git
+cd ton
+# git checkout <TAG> for example checkout func-0.2.0
+git checkout func-0.2.0
+git submodule update --init --recursive 
+cd ..
+mkdir ton-build
+cd ton-build
+cmake ../ton
+# build func 0.2.0
+cmake --build . --target func
+```
+
+## Compile old versions on Apple M1:
+
+TON supports Apple M1 from 11 Jun 2022 ([Add apple m1 support (#401)](https://github.com/ton-blockchain/ton/blob/c00302ced4bc4bf1ee0efd672e7c91e457652430) commit).
+
+To compile older TON revisions on Apple M1:
+
+1. Update RocksDb submodule to 6.27.3
+   ```bash
+   cd ton/third-party/rocksdb/
+   git checkout fcf3d75f3f022a6a55ff1222d6b06f8518d38c7c
+   ```
+
+2. Replace root `CMakeLists.txt` by https://github.com/ton-blockchain/ton/blob/c00302ced4bc4bf1ee0efd672e7c91e457652430/CMakeLists.txt
