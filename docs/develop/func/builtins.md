@@ -2,9 +2,7 @@
 This section describes some language constructions which are less fundamental than the ones described in previous articles. They could be defined in [stdlib.fc](/develop/func/stdlib) but it would leave less room for the FunC optimizer.
 
 ## Throwing exceptions
-Exceptions can be thrown by conditional primitives `throw_if`, and `throw_unless`, and by unconditional `throw`. The first argument is the error code; the second is the condition (`throw` has only one argument).
-
-Currently, FunC doesn't support catching exceptions unless an exception handler is set with low-level TVM primitives. The primary purpose of the described primitives is to reverse transactions that don't satisfy some mandatory conditions (like `require` and `revert` in Solidity programming language).
+Exceptions can be thrown by conditional primitives `throw_if`, and `throw_unless`, and by unconditional `throw`. The first argument is the error code; the second is the condition (`throw` has only one argument). These primitives have parametrized versions `throw_arg_if`, `throw_arg_unless`, and `throw_arg`. The first argument is the exception parameter of any type; the second is the error code; the third is the condition (`throw_arg` has only two arguments).
 
 ## Booleans
 - `true` is alias for `-1`

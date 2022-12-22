@@ -297,6 +297,33 @@ if (flag1)
   do_something();
 ```
 
+## Try-Catch statements
+Executes the code in `try` block. If it fails, completely rolls back everything that was done in `try` block and executes `catch` block; `catch` receives two arguments: the exception parameter of any type (`x`) and the error code (`n`, integer). Unlike many other languages in FunC's version of `try-catch`, all changes made in `try` block (including changes to global variables, registers and sent messages) are discarded in case of an error in `try` block.
+Examples:
+```func
+try {
+  do_something();
+} catch (x, n) {
+  handle_exception();
+}
+```
+```func
+try {
+  throw_arg(-1, 100);
+} catch (x, n) {
+  ;; x = -1, n = 100
+}
+```
+```func
+int x = 0;
+try {
+  x += 1;
+  throw(100);
+} catch (_, _) {
+}
+;; x = 0 (not 1)
+```
+
 ## Block statements
 Block statements are also allowed. They open a new nested scope:
 ```func
