@@ -1,8 +1,12 @@
 # Use TON Storage
 
-A Bag of Files, or Bag, in the TON is a collection of files that are distributed over the TON Storage network. TON Storage uses a technology similar to torrents to transmit data, but it has its own overlay network and uses the TON DHT network to find peers.
+TON Storage uses a technology similar to torrents to transmit data, but it has its own [overlay network](/learn/networking/overlay-subnetworks#overview) and uses the [TON DHT network](/learn/networking/ton-dht#overview) to find peers.
 
 Let's go deeper to some key concepts to understand what's going on.
+
+:::tip starter tip
+You can start with [Storage Daemon](#storage-daemon) first, if you want to try TON Storage on practice.
+:::
 
 ## Key concepts
 
