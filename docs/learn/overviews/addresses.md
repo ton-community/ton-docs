@@ -96,7 +96,7 @@ Flags of the user-friendly address:
 2. _\[1 byte for workchain_id]_ — A signed 8-bit integer with the _workchain_id_.  
 (_0x00_ for the BaseChain, _0xff_ for the MasterChain)
 3. _\[32 bytes account_id]_ — 256 bits address inside the workchain. ([big-endian](https://www.freecodecamp.org/news/what-is-endianness-big-endian-vs-little-endian/))
-4. _\[2 bytes for verification]_ — CRC16-CCITT signature of the previous 34 bytes. ([example](https://github.com/andreypfau/ton-kotlin/blob/proxy/ton-kotlin-crypto/src/commonMain/kotlin/org/ton/crypto/crc32/crc32.kt))
+4. _\[2 bytes for verification]_ — CRC16-CCITT signature of the previous 34 bytes. ([example](https://github.com/andreypfau/ton-kotlin/blob/ce9595ec9e2ad0eb311351c8a270ef1bd2f4363e/ton-kotlin-crypto/common/src/crc32.kt))
 In fact, the idea of verification is pretty similar to the [Luhn algorithm](https://en.wikipedia.org/wiki/Luhn_algorithm) used in every bank card in the world to prevent you from writing non-existing card number by mistake.
 
 Finally, you will have `1 + 1 + 32 + 2 = 36` bytes totally!
