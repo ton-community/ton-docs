@@ -84,9 +84,19 @@ Join a special Telegram [Community Chat](https://t.me/+1mQMqTopB1FkNjIy) for TWA
 
 To add login button to your website or web app use the following:
 
-### ton-connect
+### TON Connect
 
-[ton-connect](https://github.com/ton-connect) is a unified authorization standard for every wallet in the TON ecosystem. It's supported and developed by Tonkeeper team with tech advisors from TON Community.
+[ton-connect](
+https://tonkeeper.gitbook.io/ton-connect-2.0-guide-for-sdk/) is a unified authorization standard for every wallet in the TON ecosystem. It's supported and developed by Tonkeeper team with tech advisors from TON Community.
+
+#### Documentation
+
+* [Introducing TON Connect](
+  https://tonkeeper.gitbook.io/ton-connect-2.0-guide-for-sdk/)
+* [TON Connect for Developers](https://tonkeeper.gitbook.io/ton-connect-2.0-guide-for-sdk/ton-connect-for-developers)
+* [TON Connect 2.0 vs 1.0](https://tonkeeper.gitbook.io/ton-connect-2.0-guide-for-sdk/ton-connect-2.0-vs-1.0)
+
+#### Development
 
 - [ton-connect/sdk](https://github.com/ton-connect) — JS SDK for authorization
 - [ton-connect/docs](https://github.com/ton-connect/docs) — Documentation of standard
