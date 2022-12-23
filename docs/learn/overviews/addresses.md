@@ -119,7 +119,7 @@ For example, the "test giver" (a special smart contract residing in the masterch
 
 Let's convert "test giver" raw address to the user-friendly form:
 
-* `kf/8uRo6OBbQ97jCx2EIuKm8Wmt6Vb15-KsQHFLbKSMiYIny` (base64)
+* `kf/8uRo6OBbQ97jCx2EIuKm8Wmt6Vb15+KsQHFLbKSMiYIny` (base64)
 * `kf_8uRo6OBbQ97jCx2EIuKm8Wmt6Vb15-KsQHFLbKSMiYIny` (base64url)
 
 :::info
