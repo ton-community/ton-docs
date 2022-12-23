@@ -1,6 +1,6 @@
 # Storage daemon
 
-*A storage daemon is a program used to download and share torrents in the TON network. The storage daemon console program, `storage-daemon-cli`, is used to manage a running storage daemon.*
+*A storage daemon is a program used to download and share files in the TON network. The storage daemon console program, `storage-daemon-cli`, is used to manage a running storage daemon.*
 
 The current version of the storage daemon can be found in the [tonstorage](https://github.com/SpyCheese/ton/tree/master/storage) branch.
 
