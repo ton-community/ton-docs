@@ -46,6 +46,8 @@ Oracle 7 - [Ef_tTGGToGmONePskH_Y6ZG-QLV9Kcg5DIXeKwBvCX4YifKa](https://tonscan.or
 
 Oracle 8 - [Ef94L53akPw-4gOk2uQOenUyDYLOaif2g2uRoiu1nv0cWYMC](https://tonscan.org/address/Ef94L53akPw-4gOk2uQOenUyDYLOaif2g2uRoiu1nv0cWYMC)
 
+EVM Addresses: 0xC4c9bd836ab8b446519736166919e3d62491E041,0xCF4A7c26186aA41390E246FA04115A0495085Ab9,0x17DcaB1B1481610F6C7a7A98cf0370dC0EC704a6,0x32162CAaEd276E77EF63194820586C942009a962,0x039f4e886432bd4f3cb5062f9861EFef3F6aDA28,0xFf441F9889Aa475d9D3b1C638C59B84c5179846D,0x0933738699dc733C46A0D4CBEbDA2f842e1Ac7d9,0x7F2bbaaC14F0f1834E6D0219F8855A5F619Fe2C4,0xfc5c6A2d01A984ba9eab7CF87A6D169aA9720c0C.
+
 ## Testnet
 
 ### Testnet TON-Ethereum Toncoin Bridge
@@ -70,8 +72,20 @@ Governance Address - [kf83VnnXuaqQV1Ts2qvUr6agacM0ydOux5NNa1mcU-cEO693](https://
 
 ### Testnet Toncoin Oracles
 
-Oracle 0 - [Ef9fwskZLEuGDfYTRAtvt9k-mEdkaIskkUOsEwPw1wzXk7zR](https://testnet.tonscan.org/address/Ef9fwskZLEuGDfYTRAtvt9k-mEdkaIskkUOsEwPw1wzXk7zR)
+* Oracle 0
 
-Oracle 1 - [Ef8jPzrhTYloKgTCsGgEFNx7OdH-sJ98etJnwrIVSsFxH9mu](https://testnet.tonscan.org/address/Ef8jPzrhTYloKgTCsGgEFNx7OdH-sJ98etJnwrIVSsFxH9mu)
+    TON Address - [Ef9fwskZLEuGDfYTRAtvt9k-mEdkaIskkUOsEwPw1wzXk7zR](https://testnet.tonscan.org/address/Ef9fwskZLEuGDfYTRAtvt9k-mEdkaIskkUOsEwPw1wzXk7zR)
 
-Oracle 2 - [Ef-fxGCPuPKNR6T4GcFxNQuLU5TykLKEAtkxWEfA1wBWy6JE](https://testnet.tonscan.org/address/Ef-fxGCPuPKNR6T4GcFxNQuLU5TykLKEAtkxWEfA1wBWy6JE)
+    EVM Address - 0xe54cd631c97be0767172ad16904688962d09d2fe
+
+* Oracle 1
+
+    TON Address - [Ef8jPzrhTYloKgTCsGgEFNx7OdH-sJ98etJnwrIVSsFxH9mu](https://testnet.tonscan.org/address/Ef8jPzrhTYloKgTCsGgEFNx7OdH-sJ98etJnwrIVSsFxH9mu)
+
+    EVM Addresss - 0xeb05E1B6AC0d574eF2CF29FDf01cC0bA3D8F9Bf1
+
+* Oracle 2
+
+    TON Address - [Ef-fxGCPuPKNR6T4GcFxNQuLU5TykLKEAtkxWEfA1wBWy6JE](https://testnet.tonscan.org/address/Ef-fxGCPuPKNR6T4GcFxNQuLU5TykLKEAtkxWEfA1wBWy6JE)
+
+    EVM Address - 0xF636f40Ebe17Fb2A1343e5EEee9D13AA90888b51
