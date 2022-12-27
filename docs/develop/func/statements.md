@@ -298,6 +298,7 @@ if (flag1)
 ```
 
 ## Try-Catch statements
+*Experimental, only available in func v0.4.0*
 Executes the code in `try` block. If it fails, completely rolls back everything that was done in `try` block and executes `catch` block; `catch` receives two arguments: the exception parameter of any type (`x`) and the error code (`n`, integer). Unlike many other languages in FunC's version of `try-catch`, all changes made in `try` block (including changes to global variables, registers and sent messages) are discarded in case of an error in `try` block.
 Examples:
 ```func
