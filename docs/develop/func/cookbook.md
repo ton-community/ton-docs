@@ -107,6 +107,20 @@ We are adding some elements in dict d with [dict_set()](/docs/develop/func/stdli
 ```
 We are declaring tlen assembly function. You can read more [here](/docs/develop/func/functions#assembler-function-body-definition) and see [list of all assembler commands](/docs/learn/tvm-instructions/instructions)
 
+### How to determine if lisp-style list is empty
+
+```func
+tuple numbers = null();
+numbers = cons(100, numbers);
+
+if (numbers.null?()){
+    ;; list-style list is empty
+} else {
+    ;; list-style list is not empty
+}
+```
+
+We are adding number 100 to our list-style list with [cons](/docs/develop/func/stdlib/#cons) function, so it's not empty.
 
 ### How to determine a state of the contract is empty
 ```func
@@ -237,6 +251,34 @@ forall X -> int cast_to_int (X x) asm "NOP";
 }
 ```
 
+### Basic operations with tuples
+
+```func
+(int) tlen (tuple t) asm "TLEN";
+forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
+
+;; creating an empty tuple
+tuple names = empty_tuple(); 
+  
+;; push new items
+names~tpush("Naito Narihira");
+names~tpush("Shiraki Shinichi");
+names~tpush("Akamatsu Hachemon");
+names~tpush("Takaki Yuichi");
+  
+;; pop last item
+slice last_name = names~tpop();
+
+;; get first item
+slice first_name = names.first();
+
+;; get an item by index
+slice best_name = names.at(2);
+
+;; getting the length of the list 
+int number_names = names.tlen();
+```
+
 ### Resolving type X
 
 The following example checks if some value is contained in a tuple, but tuple contains values X (cell, slice, int, tuple, int). We need to check the value and cast accordingly.
@@ -277,6 +319,35 @@ forall X -> () resolve_type (X value) impure {
 }
 ```
 
+### How to get current time
+
+```func
+int current_time = now();
+  
+if (current_time > 1672080143) {
+    ;; do some stuff 
+}
+```
+
+### How to generate random number
+
+```func
+() recv_internal (cell message, slice in_msg_body) {
+  slice cs = message.begin_parse();
+  int msg_hash = slice_hash(cs);
+
+  int hash = cell_hash(begin_cell()
+        .store_uint(msg_hash, 256)
+        .store_uint(cur_lt(), 64)
+        .store_uint(now(), 64)
+        .end_cell()
+  );
+  randomize(hash);
+
+  int random_number = rand(10); ;; generate random number in the range from 0 to 9 inclusive
+}
+```
+
 ### Modulo operations
 
 As an example, lets say that we want to run the following calculation of all 256 numbers : `(xp + zp)*(xp-zp)`. Since most of those operations are used for cryptography, in the following example we are using the modulo operator for montogomery curves.
@@ -295,6 +366,20 @@ Note that xp+zp is a valid variable name ( without spaces between ).
 }
 ```
 
+### How to throw errors
+
+```func
+int number = 198;
+
+throw_if(35, number > 50); ;; the error will be triggered only if the number is greater than 50
+
+throw_unless(39, number == 198); ;; the error will be triggered only if the number is NOT EQUAL to 198
+
+throw(36); ;; the error will be triggered anyway
+```
+
+[Standard tvm exception codes](/docs/learn/tvm-instructions/tvm-exit-codes.md)
+
 ### Reversing tuples
 
 ```func
@@ -309,6 +394,37 @@ int tuple_length (tuple t) asm "TLEN";
     }
     return t2;
 }
+```
+
+### How to remove an item with a certain index from the list
+
+```
+(tuple, ()) remove_item (tuple old_tuple, int place) {
+  tuple new_tuple = empty_tuple();
+
+  int i = 0;
+  while (i < old_tuple.tlen()) {
+    int el = old_tuple.at(i);
+    if (i != place) {
+      new_tuple~tpush(el);
+    }
+    i += 1;  
+  }
+  return (new_tuple, ());
+}
+
+
+tuple numbers = empty_tuple();
+
+numbers~tpush(19);
+numbers~tpush(999);
+numbers~tpush(54);
+
+~dump(numbers); ;; [19 999 54]
+
+numbers~remove_item(1); 
+
+~dump(numbers); ;; [19 54]
 ```
 
 ### Determine if slices are equal
@@ -604,6 +720,69 @@ slice s_only_data = s.preload_bits(s.slice_bits());
 
 [Modifying methods in docs](/docs/develop/func/statements#modifying-methods)
 
+### How to raise number to the power of n
+
+```func
+;; Unoptimized variant
+int pow(int a, int n) {
+  int i = 0;
+  int value = a; 
+
+  while (i < n - 1) {
+    a *= value;   
+    i += 1;
+  }
+  return a;
+}
+
+;; Optimized variant
+int binpow(int a, int n) {
+  int res = 1;
+  while (n) {
+    if (n & 1){
+      res *= a;
+    }
+    a *= a;
+    n >>= 1;
+  }
+  return res;
+}
+
+int num = binpow(2, 3);
+```
+
+### How to convert string to int
+
+```func
+slice string_number = "26052021";
+int number = 0;
+
+while (~ string_number.slice_empty?()) {
+    int char = string_number~load_uint(8);
+    number = (number * 10) + (char - 48);
+}
+
+~dump(number);
+```
+
+### How to convert int to string
+
+```func
+int n = 261119911;
+builder string = begin_cell();
+tuple chars = null();
+do {
+    int r = n~divmod(10);
+    chars = cons(r + 48, chars);
+} until (n == 0);
+do {
+    int char = chars~list_next();
+    string~store_uint(char, 8);
+} until (null?(chars));
+
+~dump(string.end_cell().begin_parse());
+```
+
 ### How to iterate dictionaries
 
 ```func
@@ -622,6 +801,22 @@ while (flag) {
 ```
 
 [Dictonaries primitives in docs](/docs/develop/func/stdlib/#dictionaries-primitives)
+
+### How to delete value from dictionaries
+
+```func
+cell names = new_dict();
+names~udict_set(256, 27, "Alice");
+names~udict_set(256, 25, "Bob");
+
+(int key, slice val, int flag) = names.udict_get_min?(256);
+
+if (val.slice_hash() == "Bob".slice_hash()) {
+    names~udict_delete?(256, key);
+} 
+(int key, slice val, int flag) = names.udict_get_min?(256);
+~dump(key) ;; 27
+```
 
 ### How to iterate cell tree recursively
 
