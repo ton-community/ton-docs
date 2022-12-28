@@ -1,50 +1,20 @@
 # Storage daemon
 
-*A storage daemon is a program used to download and share files in the TON network. The storage daemon console program, `storage-daemon-cli`, is used to manage a running storage daemon.*
+*A storage daemon is a program used to download and share files in the TON network. The `storage-daemon-cli` console program, is used to manage a running storage daemon.*
 
-The current version of the storage daemon can be found in the [tonstorage](https://github.com/SpyCheese/ton/tree/master/storage) branch.
+The current version of the storage daemon can be found in the [testnet](https://github.com/ton-blockchain/ton/tree/testnet) branch.
 
+## Binaries 
 
-## Installation 
+You can download `storage-daemon` and `storage-daemon-cli` for Linux/Windows/MacOS binaries from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Atestnet+is%3Asuccess) (`storage/` folder).
 
-Before installing all the necessary components, it is worth reading [this tutorial on installing](https://ton.org/docs/develop/smart-contracts/environment/installation) the environment.
+## Compile from sources
 
-### Linux (Ubuntu / Debian):
-
-* Download the latest version of the TON Blockchain source code available at the [GitHub repository](https://github.com/ton-blockchain/ton/)
-
-```
-git clone --recurse-submodules https://github.com/ton-blockchain/ton.git
-```
-
-* Install the latest versions of:
-     * `make`
-     * `cmake` version 3.0.2+
-     * C++ Compiler: `g++` or `clang` 
-     * OpenSSL
-
-* Run this in the linux terminal:
-
-```bash
-sudo apt update
-sudo apt install git make cmake g++ libssl-dev zlib1g-dev wget
-cd ~ && git clone https://github.com/ton-blockchain/ton.git
-cd ~/ton && git submodule update --init
-mkdir ~/ton/build && cd ~/ton/build && cmake .. -DCMAKE_BUILD_TYPE=Release && make -j 4
-```
-
-### Run project
-
-
-To run, run this and you're done:
-```
-cmake --build . --target storage-daemon storage-daemon-cli
-```
-
+You can compile `storage-daemon` and `storage-damon-cli` from sources using this [instruction](https://ton.org/docs/develop/howto/compile#generate-random-id).
 
 ## Key concepts
 * *Bag of files* or *Bag* - a collection of files distributed through TON Storage
-* TON Storage's network part is based on technology similar to torrents, so the terms *Torrent*, *Bag of files*, and *Bag* will be used interchangeably. It's important to note some differences, however: TON Storage transfers data over ADNL, each *Bag* is distributed through its own overlay, the merkle structure can exist in two versions - with large chunks for efficient downloading and small ones for efficient ownership proof, and TON's DHT network is used for finding peers.
+* TON Storage's network part is based on technology similar to torrents, so the terms *Torrent*, *Bag of files*, and *Bag* will be used interchangeably. It's important to note some differences, however: TON Storage transfers data over [ADNL](https://ton.org/docs/learn/networking/adnl) by [RLDP](https://ton.org/docs/learn/networking/rldp) protocol, each *Bag* is distributed through its own network overlay, the merkle structure can exist in two versions - with large chunks for efficient downloading and small ones for efficient ownership proof, and [TON DHT](https://ton.org/docs/learn/networking/ton-dht) network is used for finding peers.
 * A *Bag of files* consists of *torrent info* and a data block.
 * The data block starts with a *torrent header* - a structure that contains a list of files with their names and sizes. The files themselves follow in the data block.
 * The data block is divided into chunks (128 KB by default), and a *merkle tree* (made of TVM cells) is built on the SHA256 hashes of these chunks. This allows building and verifying *merkle proofs* of individual chunks, as well as efficiently updating the *Bag* by exchanging only the proof of the modified chunk.
@@ -65,9 +35,9 @@ cmake --build . --target storage-daemon storage-daemon-cli
 ```storage-daemon -v 3 -C global.config.json -I <ip>:3333 -p 5555 -D storage-db```
 
 * `-v` - verbosity level (INFO)
-* `-C` - global network config
+* `-C` - global network config ([download global config](https://ton.org/docs/develop/howto/compile#download-global-config))
 * `-I` - IP address and port for adnl
-* `-p` - tcp port for console interface
+* `-p` - TCP port for console interface
 * `-D` - directory for the storage daemon database
 
 ### storage-daemon-cli management
@@ -107,9 +77,11 @@ When adding a *Bag* by a meta-file, information about the *Bag* will be immediat
 
 
 ## Managing Added Bags
+
 * The `list` command outputs a list of *Bags*. 
-* `list --hashes` outputs a list with full hashes. In all subsequent commands, 
-* `<BagID>` is either a hash (hexadecimal) or an ordinal number of the *Bag* within the session (a number that can be seen in the list by the `list` command). Ordinal numbers of *Bags* are not saved between restarts of storage-daemon-cli and are not available in non-interactive mode.
+* `list --hashes` outputs a list with full hashes. 
+
+In all subsequent commands, `<BagID>` is either a hash (hexadecimal) or an ordinal number of the *Bag* within the session (a number that can be seen in the list by the `list` command). Ordinal numbers of *Bags* are not saved between restarts of storage-daemon-cli and are not available in non-interactive mode.
 
 ### Methods
 

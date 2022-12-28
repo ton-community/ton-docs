@@ -157,6 +157,24 @@ The binary will be located as:
 utils/generate-random-id
 ```
 
+## storage-daemon
+
+To build storage-daemon and storage-daemon-cli, do [common part](/develop/howto/compile#common) and then do:
+
+:::tip
+Currently storage-daemon located at `testnet` branch, so you need type `git checkout testnet` after cloning the repo.
+:::
+
+```bash
+cmake --build . --target storage-daemon storage-daemon-cli
+```
+
+The binary will be located at:
+
+```bash
+storage/storage-daemon/
+```
+
 # Compile old TON versions
 
 TON releases: https://github.com/ton-blockchain/ton/tags
