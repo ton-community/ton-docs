@@ -10,7 +10,7 @@ You can download `storage-daemon` and `storage-daemon-cli` for Linux/Windows/Mac
 
 ## Compile from sources
 
-You can compile `storage-daemon` and `storage-damon-cli` from sources using this [instruction](https://ton.org/docs/develop/howto/compile#generate-random-id).
+You can compile `storage-daemon` and `storage-damon-cli` from sources using this [instruction](https://ton.org/docs/develop/howto/compile#storage-daemon).
 
 ## Key concepts
 * *Bag of files* or *Bag* - a collection of files distributed through TON Storage
