@@ -53,7 +53,16 @@ storage-daemon-cli -I 127.0.0.1:5555 -k storage-db/cli-keys/client -p storage-db
 ### List of commands
 
 The list of `storage-daemon-cli` commands can be obtained with the `help` command.
-Parameters with spaces should be enclosed in quotes.
+
+Commands have positional parameters and flags. Parameters with spaces should be enclosed in quotes (`'` or `"`), also spaces can be escaped. Other escapes are available, for example:
+```
+create filename\ with\ spaces.txt -d "Description\nSecond line of \"description\"\nBackslash: \\"
+```
+
+All parameters after flag `--` are positional parameters. It can be used to specify filenames that start with a dash:
+```
+create -d "Description" -- -filename.txt
+```
 
 `storage-daemon-cli` can be run in non-interactive mode by passing it commands to execute:
 
@@ -88,6 +97,7 @@ In all subsequent commands, `<BagID>` is either a hash (hexadecimal) or an ordin
 * `get <BagID>` - outputs detailed information about the *Bag*: description, size, download speed, list of files.
 * `get-peers <BagID>` - outputs a list of peers.
 * `download-pause <BagID>`, `download-resume <BagID>` - pauses or resumes downloading.
+* `upload-pause <BagID>`, `upload-resume <BagID>` - pauses or resumes uploading.
 * `remove <BagID>` - removes the *Bag*. `remove --remove-files` also deletes all files of the *Bag*. Note that if the *Bag* is saved in the internal storage daemon directory, the files will be deleted in any case.
 
 
@@ -120,7 +130,9 @@ create <path>
 ```
 create <path> -d "Bag of Files description"
 ```
-After the *Bag* is created, the console will display detailed information about it (including the hash, which is the `BagID` by which the *Bag* will be identified), and the daemon will start distributing the torrent.
+After the *Bag* is created, the console will display detailed information about it (including the hash, which is the `BagID` by which the *Bag* will be identified), and the daemon will start distributing the torrent. Extra options for `create`:
+* `--no-upload` - daemon will not distribute files to peers. Upload can be started using `upload-resume`.
+* `--copy` - files will be copied to an internal directory of storage daemon.
 
 To download the *Bag*, other users just need to know its hash. You can also save the torrent meta file:
 ```
