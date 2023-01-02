@@ -380,6 +380,7 @@ const sidebars = {
         'develop/smart-contracts/libraries',
       ],
     },
+    'develop/fift-deep-dive',
     'develop/howto/network-configs',
     {
       type: 'category',
