@@ -2,6 +2,8 @@
 
 Fift is stack-based programming language that has TON-specific features and therefore can work with cells. TVM assembly is also a stack-based programming language, also specific to TON, and it also can work with cells. So what's the difference between them?
 
+## The difference
+
 Fift is executed **at compile-time** - when your compiler builds smart-contract code BOC, after FunC code is processed. Fift can look differently:
 
 ```
@@ -51,7 +53,7 @@ TVM opcodes, on the other hand, are executed **at run-time** - they're code of s
 
 ## Usage in smart-contracts
 
-### [Fift] Putting big BOC into contract
+### [Fift] - Putting big BOC into contract
 
 Edit `project.yaml` so that `fift/blob.fif` is included when building smart-contract code:
 ```
@@ -76,7 +78,7 @@ cell load_blob() asm "LDBLOB";
 }
 ```
 
-### [TVM assembly] Converting integer to string
+### [TVM assembly] - Converting integer to string
 
 "Sadly", int-to-string conversion attempt using Fift primitives fails.
 ```
@@ -101,7 +103,7 @@ builder store_signed(builder msg, int v) inline_ref {
 }
 ```
 
-### [TVM assembly] Cheap modulo multiplication
+### [TVM assembly] - Cheap modulo multiplication
 
 ```
 int mul_mod(int a, int b, int m) inline_ref {               ;; 1232 gas units
