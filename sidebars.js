@@ -380,6 +380,7 @@ const sidebars = {
         'develop/smart-contracts/libraries',
       ],
     },
+    'develop/fift-and-tvm-assembly',
     'develop/howto/network-configs',
     {
       type: 'category',
