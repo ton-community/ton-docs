@@ -8,7 +8,7 @@ Serious understanding of stack languages' basics required.
 :::
 
 ## Simple arithmetic
-You are able to use Fift interpreter as calculator, writing in expressions in reverse Polish notation.
+You are able to use Fift interpreter as calculator, writing in expressions in [reverse Polish notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation).
 ```
 6 17 17 * * 289 + .
 2023 ok
@@ -69,7 +69,7 @@ There are also words `while` and `until`.
 ```
 > Fift.fif
 
-Comments are defined in Fift.fif. Single-line comment starts with `//` and continues to the end of line; multiline comment starts with `/*` and ends with `*/`.
+Comments are defined in `Fift.fif`. Single-line comment starts with `//` and continues to the end of line; multiline comment starts with `/*` and ends with `*/`.
 
 Let's understand why they work so.  
 Fift program is essentially sequence of words, each of those transforming stack in some way or defining new words. First line of `Fift.fif` (code shown above) is declaration of new word `//`.
@@ -92,13 +92,13 @@ x{00} @Defop NOP
 ```
 > Asm.fif (lines order reversed)
 
-@Defop takes care of checking if there is enough space for opcode (@havebitrefs), and if there is not, it goes on writing to another builder (`@|`; also known as implicit jump). That's why you generally don't want to write `x{A988} s,` as an opcode: there could be insufficient space to place this opcode, so compilation would fail; you should write `x{A988} @addop` instead.
+`@Defop` takes care of checking if there is enough space for opcode (`@havebitrefs`), and if there is not, it goes on writing to another builder (`@|`; also known as implicit jump). That's why you generally don't want to write `x{A988} s,` as an opcode: there could be insufficient space to place this opcode, so compilation would fail; you should write `x{A988} @addop` instead.
 
 You may use Fift for including big bag-of-cells into contract:
 ```
 <b 8 4 u, 8 4 u, "fift/blob.boc" file>B B>boc ref, b> <s @Defop LDBLOB
 ```
-This command defines opcode which, when being included into program, writes `x{88}` (PUSHREF) and a reference to provided bag-of-cells. So when LDBLOB instruction is ran, it pushes the cell to TVM stack.
+This command defines opcode which, when being included into program, writes `x{88}` (`PUSHREF`) and a reference to provided bag-of-cells. So when `LDBLOB` instruction is ran, it pushes the cell to TVM stack.
 
 ## Special features
 
@@ -114,4 +114,4 @@ This command defines opcode which, when being included into program, writes `x{8
 
 ## Continue learning
 
-https://ton.org/docs/fiftbase.pdf by Nikolai Durov
+ - [Fift: A Brief Introduction](https://ton.org/docs/fiftbase.pdf) by Nikolai Durov
