@@ -1,4 +1,4 @@
-# Fift - deep dive
+# Fift deep dive
 
 A high-level stack-based language Fift is used for local manipulation with cells and other TVM primitives, mostly for converting TVM assembly code into contract code bag-of-cells.
 
