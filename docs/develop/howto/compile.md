@@ -19,12 +19,13 @@ git clone --recurse-submodules https://github.com/ton-blockchain/ton.git
    - `cmake` version 3.0.2 or later
    - `g++` or `clang` (or another C++14-compatible compiler as appropriate for your operating system).
    - OpenSSL (including C header files) version 1.1.1 or later
+   - `build-essential`, `zlib1g-dev`, `gperf`, `libreadline-dev`, `ccache`, `libmicrohttpd-dev`
 
    On Ubuntu:
 
 ```bash
 apt update
-apt install cmake g++ zlib1g-dev libssl-dev
+sudo apt install build-essential cmake clang openssl libssl-dev zlib1g-dev gperf libreadline-dev ccache libmicrohttpd-dev
 ```
 
 
@@ -38,7 +39,9 @@ mkdir ton-build
 
 ```bash
 cd ton-build
-cmake ../ton
+export CC=clang
+export CXX=clang++
+cmake -DCMAKE_BUILD_TYPE=Release ../ton && cmake --build . -j$(nproc)
 ```
 
 :::tip
