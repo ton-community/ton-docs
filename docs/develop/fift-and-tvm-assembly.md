@@ -4,7 +4,7 @@ Fift is stack-based programming language that has TON-specific features and ther
 
 ## The difference
 
-Fift is executed **at compile-time** - when your compiler builds smart-contract code BOC, after FunC code is processed. Fift can look differently:
+Fift is executed **at compile-time** - when your compiler (`toncli`) builds smart-contract code BOC, after FunC code is processed. Fift can look differently:
 
 ```
 // tuple primitives
@@ -55,6 +55,7 @@ TVM opcodes, on the other hand, are executed **at run-time** - they're code of s
 
 ### [Fift] - Putting big BOC into contract
 
+This is possible if you are using `toncli`. If you use other compilers to build contract, possibly there are other ways to include big BOC.
 Edit `project.yaml` so that `fift/blob.fif` is included when building smart-contract code:
 ```
 contract:
@@ -84,7 +85,7 @@ cell load_blob() asm "LDBLOB";
 ```
 slice int_to_string(int x) asm "(.) $>s PUSHSLICE";
 ```
-The reason is obvious: Fift is doing calculations in compile-time, where no `x` is yet available for conversion. To convert non-constant integer to string slice, you need TVM assembly. For example, that's how I did it during TON Smart Challenge 3:
+The reason is obvious: Fift is doing calculations in compile-time, where no `x` is yet available for conversion. To convert non-constant integer to string slice, you need TVM assembly. For example, this is code by one of TON Smart Challenge 3 participants':
 ```
 tuple digitize_number(int value)
   asm "NIL WHILE:<{ OVER }>DO<{ SWAP TEN DIVMOD s1 s2 XCHG TPUSH }> NIP";
