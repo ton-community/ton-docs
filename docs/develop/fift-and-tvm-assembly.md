@@ -4,7 +4,7 @@ Fift is stack-based programming language that has TON-specific features and ther
 
 ## The difference
 
-Fift is executed **at compile-time** - when your compiler (`toncli`) builds smart-contract code BOC, after FunC code is processed. Fift can look differently:
+Fift is executed **at compile-time** - when your compiler builds smart-contract code BOC, after FunC code is processed. Fift can look differently:
 
 ```
 // tuple primitives
