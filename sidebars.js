@@ -500,26 +500,26 @@ const sidebars = {
       'type': 'category',
       'label': 'TON DNS',
       'items': [
-        'participate/web3/ton-dns/dns'
+        'participate/web3/dns'
       ],
     },
     {
       'type': 'category',
       'label': 'TON Proxy & Sites',
       'items': [
-        'participate/web3/ton-proxy-and-sites/setting-proxy',
-        'participate/web3/ton-proxy-and-sites/how-to-open-any-ton-site',
-        'participate/web3/ton-proxy-and-sites/sites-and-proxy',
-        'participate/web3/ton-proxy-and-sites/site-management'
+        'participate/web3/setting-proxy',
+        'participate/web3/how-to-open-any-ton-site',
+        'participate/web3/sites-and-proxy',
+        'participate/web3/site-management'
       ],
     },
     {
       'type': 'category',
       'label': 'TON Storage',
       'items': [
-        'participate/web3/ton-storage/storage-daemon',
-        'participate/web3/ton-storage/storage-provider',
-        'participate/web3/ton-storage/storage-faq'
+        'participate/ton-storage/storage-daemon',
+        'participate/ton-storage/storage-provider',
+        'participate/ton-storage/storage-faq'
       ],
     },
   ],
