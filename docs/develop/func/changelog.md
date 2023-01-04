@@ -7,10 +7,10 @@ Initial version was done by Telegram and active development was ceased after May
 Released in [05.2022 update](https://github.com/ton-blockchain/ton/releases/tag/v2022.05).
 
 In this version were added:
-- [Constants](develop/func/literals_identifiers#constants)
-- [Extended string literals](develop/func/literals_identifiers#string-literals)
-- [Semver pragmas](develop/func/compiler_directives#pragma-version)
-- [Includes](develop/func/compiler_directives#pragma-version)
+- [Constants](/develop/func/literals_identifiers#constants)
+- [Extended string literals](/develop/func/literals_identifiers#string-literals)
+- [Semver pragmas](/develop/func/compiler_directives#pragma-version)
+- [Includes](/develop/func/compiler_directives#pragma-version)
 
 Fixed:
 - Fixed rarely manifested bugs in Asm.fif.
@@ -32,7 +32,7 @@ Fixed:
 Released in [10.2022 update](https://github.com/ton-blockchain/ton/releases/tag/v2022.10).
 
 In this version were added:
-- [Multiline asms](develop/func/functions#multiline-asms)
+- [Multiline asms](/develop/func/functions#multiline-asms)
 - Duplication of identical definition for constants and asms became allowed
 - Bitwise operations for constants for constants became allowed
 
@@ -40,8 +40,8 @@ In this version were added:
 Released in [01.2023 update](https://github.com/ton-blockchain/ton/releases/tag/v2023.01).
 
 In this version were added:
-- [try/catch statements](develop/func/statements#try-catch-statements)
-- [throw_arg functions](develop/func/builtins#throwing-exceptions)
+- [try/catch statements](/develop/func/statements#try-catch-statements)
+- [throw_arg functions](/develop/func/builtins#throwing-exceptions)
 - allowed in-place modification and mass-assignments of global variables: `a~inc()` and `(a, b) = (3, 5)`, where `a` is global
 
 Fixed:
