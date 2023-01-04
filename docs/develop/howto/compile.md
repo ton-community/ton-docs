@@ -45,10 +45,10 @@ cmake -DCMAKE_BUILD_TYPE=Release ../ton && cmake --build . -j$(nproc)
 ```
 
 :::warning
-On MacOS Intel before next step we need maybe install `openssl3.3` with `brew` or just link the lib:
+On MacOS Intel before next step we need maybe install `openssl@3` with `brew` or just link the lib:
 
 ```zsh
-brew install openssl3.3
+brew install openssl@3
 ```
 
 Then need to inspect `/usr/local/opt`:
@@ -57,10 +57,10 @@ Then need to inspect `/usr/local/opt`:
 ls /usr/local/opt
 ```
 
-Find `openssl` lib and export local variable:
+Find `openssl@3` lib and export local variable:
 
 ```zsh
-export OPENSSL_ROOT_DIR=/usr/local/opt/openssl@3.3
+export OPENSSL_ROOT_DIR=/usr/local/opt/openssl@3
 ```
 
 :::
