@@ -35,7 +35,7 @@ Enthusiast, docs contributor & author of multiple articles
 
 ### maxuver
 
-Python developer, TON Test Challenge winner, docs contributor
+Python developer with DevOps experience, TON Test Challenge winner, docs contributor
 
 * Telegram: [@maxuver](https://t.me/maxuver)
 * Github: [maxuver](https://github.com/maxuver)
