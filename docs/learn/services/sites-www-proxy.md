@@ -35,7 +35,7 @@ TON Blockchain is not the only thing that uses TON Network.
 
 Starting today, you can launch a web server with your website and make it available on the TON Network (i.e. you can make a TON Site).
 
-Read the guide __[here](https://www.tonspace.co/learn/services/sites-www-proxy)__.
+Read the guide __[here](https://ton.org/docs/participate/web3/sites-and-proxy#running-ton-site)__.
 
 ### Mandatory encryption and verifying the authenticity of data
 
