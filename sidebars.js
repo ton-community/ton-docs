@@ -372,24 +372,32 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'develop/tact/tact-cookbook',
+          id: 'develop/tact/docs/tact-cookbook',
+        },
+        {
+          type: 'category',
+          label: 'Learn',
+          items: [
+            'develop/tact/introduce/getting-start',
+            'develop/tact/introduce/hello-world-guide',
+            'develop/tact/introduce/tact-sdk'
+          ],
         },
         {
           type: 'category',
           label: 'Documentation',
           items: [
-            'develop/tact/tact-types',
-            'develop/tact/tact-comments',
-            'develop/tact/tact-literals-identifiers',
-            'develop/tact/tact-functions',
-            'develop/tact/tact-global-variables',
-            'develop/tact/tact-compiler-directives',
-            'develop/tact/tact-statements',
-            'develop/tact/tact-builtins',
-            'develop/tact/tact-stdlib',
+            'develop/tact/docs/tact-types',
+            'develop/tact/docs/tact-comments',
+            'develop/tact/docs/tact-literals-identifiers',
+            'develop/tact/docs/tact-functions',
+            'develop/tact/docs/tact-global-variables',
+            'develop/tact/docs/tact-compiler-directives',
+            'develop/tact/docs/tact-statements',
+            'develop/tact/docs/tact-builtins',
+            'develop/tact/docs/tact-stdlib',
           ],
-        },
-        'develop/tact/tact-sdk',
+        }
       ]
     },
     {
