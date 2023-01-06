@@ -352,6 +352,36 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Tact language',
+      items: [
+        {
+          type: 'doc',
+          id: 'develop/tact/tact-overview',
+        },
+        {
+          type: 'doc',
+          id: 'develop/tact/tact-cookbook',
+        },
+        {
+          type: 'category',
+          label: 'Documentation',
+          items: [
+            'develop/tact/tact-types',
+            'develop/tact/tact-comments',
+            'develop/tact/tact-literals-identifiers',
+            'develop/tact/tact-functions',
+            'develop/tact/tact-global-variables',
+            'develop/tact/tact-compiler-directives',
+            'develop/tact/tact-statements',
+            'develop/tact/tact-builtins',
+            'develop/tact/tact-stdlib',
+          ],
+        },
+        'develop/tact/tact-sdk',
+      ]
+    },
+    {
+      type: 'category',
       label: 'FunC language',
       items: [
         {
