@@ -8,7 +8,7 @@ This section describes instructions and manuals for interacting with TON at a lo
 
 The software is likely to compile and work properly on most Linux systems. It should work on macOS and even Windows.
 
-1) Download the newest version of the TON Blockchain sources available at the GitHub repository https://github.com/ton-blockchain/ton/ :
+1) Download the newest version of the TON Blockchain sources available at the GitHub repository https://github.com/ton-blockchain/ton/:
 
 ```bash
 git clone --recurse-submodules https://github.com/ton-blockchain/ton.git
@@ -19,12 +19,13 @@ git clone --recurse-submodules https://github.com/ton-blockchain/ton.git
    - `cmake` version 3.0.2 or later
    - `g++` or `clang` (or another C++14-compatible compiler as appropriate for your operating system).
    - OpenSSL (including C header files) version 1.1.1 or later
+   - `build-essential`, `zlib1g-dev`, `gperf`, `libreadline-dev`, `ccache`, `libmicrohttpd-dev`
 
    On Ubuntu:
 
 ```bash
 apt update
-apt install cmake g++ zlib1g-dev libssl-dev
+sudo apt install build-essential cmake clang openssl libssl-dev zlib1g-dev gperf libreadline-dev ccache libmicrohttpd-dev
 ```
 
 
@@ -34,12 +35,35 @@ apt install cmake g++ zlib1g-dev libssl-dev
 mkdir ton-build
 ```
 
-   Then run the following in a terminal of Linux:
+Then run the following in a terminal of Linux or MacOS:
 
 ```bash
 cd ton-build
-cmake ../ton
+export CC=clang
+export CXX=clang++
+cmake -DCMAKE_BUILD_TYPE=Release ../ton && cmake --build . -j$(nproc)
 ```
+
+:::warning
+On MacOS Intel before next step we need maybe install `openssl@3` with `brew` or just link the lib:
+
+```zsh
+brew install openssl@3
+```
+
+Then need to inspect `/usr/local/opt`:
+
+```zsh
+ls /usr/local/opt
+```
+
+Find `openssl@3` lib and export local variable:
+
+```zsh
+export OPENSSL_ROOT_DIR=/usr/local/opt/openssl@3
+```
+
+:::
 
 :::tip
 If you are compiling on a computer with low memory (e.g., 1 Gb), don't forget to [create a swap partitions](/develop/howto/compile-swap).
@@ -155,6 +179,24 @@ The binary will be located as:
 
 ```bash
 utils/generate-random-id
+```
+
+## storage-daemon
+
+To build storage-daemon and storage-daemon-cli, do [common part](/develop/howto/compile#common) and then do:
+
+:::tip
+Currently storage-daemon located at `testnet` branch, so you need type `git checkout testnet` after cloning the repo.
+:::
+
+```bash
+cmake --build . --target storage-daemon storage-daemon-cli
+```
+
+The binary will be located at:
+
+```bash
+storage/storage-daemon/
 ```
 
 # Compile old TON versions

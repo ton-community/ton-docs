@@ -2,40 +2,13 @@
 # Storage provider
 *A storage provider* is a service that stores files for a fee. 
 
-## Installation 
+## Binaries
 
-Before installing all the necessary components, it is worth reading [this tutorial on installing](https://ton.org/docs/develop/smart-contracts/environment/installation) the environment.
+You can download `storage-daemon` and `storage-daemon-cli` for Linux/Windows/MacOS binaries from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Atestnet+is%3Asuccess) (`storage/` folder).
 
-### Linux (Ubuntu / Debian):
+## Compile from sources
 
-* Download the latest version of the TON Blockchain source code available at the [GitHub repository](https://github.com/ton-blockchain/ton/)
-
-```
-git clone --recurse-submodules https://github.com/ton-blockchain/ton.git
-```
-
-* Install the latest versions of:
-     * `make`
-     * `cmake` version 3.0.2+
-     * C++ Compiler: `g++` or `clang` 
-     * OpenSSL
-
-* Run this in the linux terminal:
-
-```bash
-sudo apt update
-sudo apt install git make cmake g++ libssl-dev zlib1g-dev wget
-cd ~ && git clone https://github.com/ton-blockchain/ton.git
-cd ~/ton && git submodule update --init
-mkdir ~/ton/build && cd ~/ton/build && cmake .. -DCMAKE_BUILD_TYPE=Release && make -j 4
-```
-
-### Run project
-
-To run, run this and you're done:
-```
-cmake --build . --target storage-daemon storage-daemon-cli
-```
+You can compile `storage-daemon` and `storage-damon-cli` from sources using this [instruction](https://ton.org/docs/develop/howto/compile#storage-daemon).
 
 ## Key concepts
 It consists of a smart contract that accepts storage requests and manages payment from clients, and an application that uploads and serves the files to clients. Here's how it works:
@@ -51,9 +24,12 @@ It consists of a smart contract that accepts storage requests and manages paymen
 The client can also retrieve their files at any time by providing proof of ownership to the storage contract. The contract will then release the files to the client and deactivate itself.
 :::
 
+## Smart contract
+
+[Smart Contract Source Code](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont).
 
 ## Using a Provider by Clients
-In order to use a storage provider, you need to know the address of its smart contract. The client can obtain the provider's parameters with the following command:
+In order to use a storage provider, you need to know the address of its smart contract. The client can obtain the provider's parameters with the following command in `storage-daemon-cli`:
 ```
 get-provider-params <address>
 ```
@@ -77,22 +53,22 @@ new-contract-message <BagID> <file> --query-id 0 --provider <address>
 
 Executing this command may take some time for large *Bags*. The message body will be saved to `<file>` (not the entire internal message). Query id can be any number from 0 to `2^64-1`. The message contains the provider's parameters (rate and max span). These parameters will be printed out after executing the command, so they should be double checked before sending. If the provider's owner changes the parameters, the message will be rejected, so the conditions of the new storage contract will be exactly what the client expects.
 
-The client must then send the message with this body to the provider's address. In case of an error the message will come back to the sender (bounce). Otherwise, a new storage contract will be created and the client will receive a message from it with [`op=0xbf7bd0c1`](https://github.com/SpyCheese/ton/blob/tonstorage/storage/storage-daemon/smartcont/constants.fc#L3) and the same query id.
+The client must then send the message with this body to the provider's address. In case of an error the message will come back to the sender (bounce). Otherwise, a new storage contract will be created and the client will receive a message from it with [`op=0xbf7bd0c1`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L3) and the same query id.
 
 At this point the contract is not yet active. Once the provider downloads the *Bag*, it will activate the storage contract and the client will receive a message with [`op=0xd4caedcd`](https://github.com/SpyCheese/ton/blob/tonstorage/storage/storage-daemon/smartcont/constants.fc#L4) (also from the storage contract).
 
-The storage contract has a "client balance" - these are the funds that the client transferred to the contract and which have not yet been paid to the provider. Funds are gradually debited from this balance (at a rate equal to the rate per megabyte per day). The initial balance is what the client transferred with the request to create the storage contract. The client can then top up the balance by making simple transfers to the storage contract (this can be done from any address). The remaining client balance is returned by the [`get_storage_contract_data`](https://github.com/SpyCheese/ton/blob/tonstorage/storage/storage-daemon/smartcont/storage-contract.fc#L222) get method as the second value (`balance`).
+The storage contract has a "client balance" - these are the funds that the client transferred to the contract and which have not yet been paid to the provider. Funds are gradually debited from this balance (at a rate equal to the rate per megabyte per day). The initial balance is what the client transferred with the request to create the storage contract. The client can then top up the balance by making simple transfers to the storage contract (this can be done from any address). The remaining client balance is returned by the [`get_storage_contract_data`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/storage-contract.fc#L222) get method as the second value (`balance`).
 
 ### The contract may be closed for the following cases:
 
 :::info
-In case of the storage contract being closed, the client receives a message with the remaining balance and [`op=0xb6236d63`](https://github.com/SpyCheese/ton/blob/tonstorage/storage/storage-daemon/smartcont/constants.fc#L6). 
+In case of the storage contract being closed, the client receives a message with the remaining balance and [`op=0xb6236d63`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L6). 
 :::
 
 * Immediately after creation, before activation, if the provider refuses to accept the contract (the provider's limit is exceeded or other errors).
 * The client balance reaches 0.
 * The provider can voluntarily close the contract.
-* The client can voluntarily close the contract by sending a message with [`op=0x79f937ea`](https://github.com/SpyCheese/ton/blob/tonstorage/storage/storage-daemon/smartcont/constants.fc#L2) from its own address and any query id.
+* The client can voluntarily close the contract by sending a message with [`op=0x79f937ea`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L2) from its own address and any query id.
 
 
 ## Running and Configuring a Provider

@@ -76,3 +76,6 @@ You can also study previous competitions for learning purposes:
 Standard basic smart contracts like wallets, electors (manages validation on TON), multi-signature wallets, etc. can be a reference when studying.
 
 * [Smart contract examples](/develop/smart-contracts/#smart-contracts-examples)
+
+## Changelog
+[History of funC updates](/develop/func/changelog).

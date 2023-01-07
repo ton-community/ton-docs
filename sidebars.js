@@ -380,6 +380,8 @@ const sidebars = {
         'develop/smart-contracts/libraries',
       ],
     },
+    'develop/fift-and-tvm-assembly',
+    'develop/fift-deep-dive',
     'develop/howto/network-configs',
     {
       type: 'category',
@@ -494,17 +496,32 @@ const sidebars = {
       'value': '<span class=\'menu__link\'><b><small> Web3 </small></b></span>',
     },
     'participate/web3/overview',
-    'participate/web3/dns',
     {
       'type': 'category',
-      'label': 'Use TON Proxy',
+      'label': 'TON DNS',
       'items': [
-        'participate/web3/how-to-open-any-ton-site',
-        'participate/web3/setting-proxy',
-        'participate/web3/sites-and-proxy',
+        'participate/web3/dns'
       ],
     },
-    'participate/web3/site-management',
+    {
+      'type': 'category',
+      'label': 'TON Proxy & Sites',
+      'items': [
+        'participate/web3/setting-proxy',
+        'participate/web3/how-to-open-any-ton-site',
+        'participate/web3/sites-and-proxy',
+        'participate/web3/site-management'
+      ],
+    },
+    {
+      'type': 'category',
+      'label': 'TON Storage',
+      'items': [
+        'participate/ton-storage/storage-daemon',
+        'participate/ton-storage/storage-provider',
+        'participate/ton-storage/storage-faq'
+      ],
+    },
   ],
   contribute: [
     {
