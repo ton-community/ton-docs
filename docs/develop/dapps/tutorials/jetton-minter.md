@@ -4,7 +4,7 @@ Welcome, dev! It's great to have you here. 👋
 
 In this article, we'll tell you about creating your first fungible token (Jetton) on TON.
 
-To mint Jettons we will be using the [jetton.live](https://www.jetton.live) browser service.
+To mint Jettons we will be using the [TON Minter](https://minter.ton.org/) browser service.
 
 ## 📖 What you'll learn
 
@@ -27,7 +27,7 @@ In this article, you'll learn how to:
  
 ## 🚀 Let's get started!
 
-Use your web browser to open the service [jetton.live](https://www.jetton.live).
+Use your web browser to open the service [TON Minter](https://minter.ton.org/).
 
 <img src="/img/tutorials/jetton/jetton-main-page.png" alt="drawing"/>
 
