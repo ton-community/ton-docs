@@ -106,7 +106,7 @@ Then go to **your token**, set the **amount** to send, and enter the **recipient
 
  ## ✏️ Jetton (token) customization
 
-With [FunC](https://www.tonspace.co/develop/func/overview) language you can change the behavior of the token in your favor.
+With [FunC](/develop/func/overview) language you can change the behavior of the token in your favor.
 
 To make any changes, begin here:
 
