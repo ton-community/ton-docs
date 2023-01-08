@@ -58,8 +58,9 @@ Developer Onboarding Manager at TON Foundation
 
 TON Docs was originally created by [tolya-yanot](https://github.com/tolya-yanot) and [EmelyanenkoK](https://github.com/EmelyanenkoK).
 
-We’d like to recognize a few people who have made significant contributions to TON Docs in the past and helped maintain and develop them:
+We also would like to recognize the following people who have made significant contributions to TON Docs in the past and help to maintain and develop them:
 
-- [tolya-yanot](https://github.com/tolya-yanot)
-- [EmelyanenkoK](https://github.com/EmelyanenkoK)
+- [SpyCheese](https://github.com/SpyCheese)
+- [awesome-doge](https://github.com/awesome-doge)
+- [akifoq](https://github.com/akifoq)
 - [Tal Kol](https://github.com/talkol)
