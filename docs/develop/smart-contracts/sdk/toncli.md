@@ -103,7 +103,7 @@ toncli start nft_colletion/jetton_minter/nft_item/jetton_wallet
 
 All of these projects have a lot of interesting examples of toncli and blockchain interaction, as well as extremely tests that will help in developing custom smart contracts.
 
-## To test smart contracts using toncli, go to [testing](https://ton.org/docs/develop/smart-contracts/testing/toncli)
+## To test smart contracts using toncli, go to [testing](/develop/smart-contracts/testing/toncli)
 
 
 ## Useful articles

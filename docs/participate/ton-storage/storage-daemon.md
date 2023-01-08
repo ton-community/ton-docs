@@ -10,11 +10,11 @@ You can download `storage-daemon` and `storage-daemon-cli` for Linux/Windows/Mac
 
 ## Compile from sources
 
-You can compile `storage-daemon` and `storage-damon-cli` from sources using this [instruction](https://ton.org/docs/develop/howto/compile#storage-daemon).
+You can compile `storage-daemon` and `storage-damon-cli` from sources using this [instruction](/develop/howto/compile#storage-daemon).
 
 ## Key concepts
 * *Bag of files* or *Bag* - a collection of files distributed through TON Storage
-* TON Storage's network part is based on technology similar to torrents, so the terms *Torrent*, *Bag of files*, and *Bag* will be used interchangeably. It's important to note some differences, however: TON Storage transfers data over [ADNL](https://ton.org/docs/learn/networking/adnl) by [RLDP](https://ton.org/docs/learn/networking/rldp) protocol, each *Bag* is distributed through its own network overlay, the merkle structure can exist in two versions - with large chunks for efficient downloading and small ones for efficient ownership proof, and [TON DHT](https://ton.org/docs/learn/networking/ton-dht) network is used for finding peers.
+* TON Storage's network part is based on technology similar to torrents, so the terms *Torrent*, *Bag of files*, and *Bag* will be used interchangeably. It's important to note some differences, however: TON Storage transfers data over [ADNL](/learn/networking/adnl) by [RLDP](/learn/networking/rldp) protocol, each *Bag* is distributed through its own network overlay, the merkle structure can exist in two versions - with large chunks for efficient downloading and small ones for efficient ownership proof, and [TON DHT](/learn/networking/ton-dht) network is used for finding peers.
 * A *Bag of files* consists of *torrent info* and a data block.
 * The data block starts with a *torrent header* - a structure that contains a list of files with their names and sizes. The files themselves follow in the data block.
 * The data block is divided into chunks (128 KB by default), and a *merkle tree* (made of TVM cells) is built on the SHA256 hashes of these chunks. This allows building and verifying *merkle proofs* of individual chunks, as well as efficiently updating the *Bag* by exchanging only the proof of the modified chunk.
@@ -35,7 +35,7 @@ You can compile `storage-daemon` and `storage-damon-cli` from sources using this
 ```storage-daemon -v 3 -C global.config.json -I <ip>:3333 -p 5555 -D storage-db```
 
 * `-v` - verbosity level (INFO)
-* `-C` - global network config ([download global config](https://ton.org/docs/develop/howto/compile#download-global-config))
+* `-C` - global network config ([download global config](/develop/howto/compile#download-global-config))
 * `-I` - IP address and port for adnl
 * `-p` - TCP port for console interface
 * `-D` - directory for the storage daemon database
