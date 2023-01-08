@@ -14,7 +14,7 @@ Here is a summary of these points for new contributors.
 
 3. It would be good if the repository included the whole source code for the contracts used, so that users could make minor changes to the standard code. For example, the Jetton smart contract allows users to experiment with custom behavior.
 
-4. If it is possible, create a user-friendly interface that will allow users to deploy or run the project without having to download the code or configure anything. Notice that this should still be standalone and served from GitHub Pages to run 100% client-side on the user's device. Example: https://jetton.live 
+4. If it is possible, create a user-friendly interface that will allow users to deploy or run the project without having to download the code or configure anything. Notice that this should still be standalone and served from GitHub Pages to run 100% client-side on the user's device. Example: [TON Minter](https://minter.ton.org/)
 
 5. Explain to users what every field choice means and explain best practices.
 

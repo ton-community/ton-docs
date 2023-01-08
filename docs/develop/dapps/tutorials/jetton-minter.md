@@ -4,7 +4,7 @@ Welcome, dev! It's great to have you here. 👋
 
 In this article, we'll tell you about creating your first fungible token (Jetton) on TON.
 
-To mint Jettons we will be using the [jetton.live](https://www.jetton.live) browser service.
+To mint Jettons we will be using the [TON Minter](https://minter.ton.org/) browser service.
 
 ## 📖 What you'll learn
 
@@ -27,9 +27,9 @@ In this article, you'll learn how to:
  
 ## 🚀 Let's get started!
 
-Use your web browser to open the service [jetton.live](https://www.jetton.live).
+Use your web browser to open the service [TON Minter](https://minter.ton.org/).
 
-<img src="/img/tutorials/jetton/jetton-main-page.png" alt="drawing"/>
+![image](/img/tutorials/jetton/jetton-main-page.png)
 
 ### Deploy a Jetton using your browser
 
@@ -37,7 +37,7 @@ Use your web browser to open the service [jetton.live](https://www.jetton.live).
 
 Click the `Connect Wallet` button to connect your [Tonhub](https://ton.app/wallets/tonhub-wallet) wallet or a [Chrome extension](https://ton.app/wallets/chrome-plugin).
 
-<img src="/img/tutorials/jetton/jetton-connect-wallet.png" alt="drawing"/>
+![image](/img/tutorials/jetton/jetton-connect-wallet.png)
 
 **Scan the QR-code** in [Tonhub](https://ton.app/wallets/tonhub-wallet) or **sign in** to the wallet via the [Chrome extension](https://ton.app/wallets/chrome-plugin).
 
@@ -79,11 +79,11 @@ If you want to have an attractive Jetton token, you need a beautiful logo hosted
  ## 💸 Send and receive Jettons
  On the right side of the screen, you see a connected wallet that can **receive tokens.**
 
- <img src="/img/tutorials/jetton/jetton-receive-tokens.png" alt="drawing"/>
+![image](/img/tutorials/jetton/jetton-receive-tokens.png)
 
  Just below you can **send tokens** to multi-currency wallets like [Tonkeeper](https://tonkeeper.com/) or [Tonhub](https://ton.app/wallets/tonhub-wallet).
 
- <img src="/img/tutorials/jetton/jetton-send-tokens.png" alt="drawing"/>
+![image](/img/tutorials/jetton/jetton-send-tokens.png)
 
 
 :::info
@@ -102,7 +102,7 @@ Prerequisites:
 
 Then go to **your token**, set the **amount** to send, and enter the **recipient address.**
 
-<img src="/img/tutorials/jetton/jetton-send-tutorial.png" alt="drawing"/>
+![image](/img/tutorials/jetton/jetton-send-tokens.png)
 
  ## ✏️ Jetton (token) customization
 
