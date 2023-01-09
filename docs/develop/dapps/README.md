@@ -87,14 +87,13 @@ To add login button to your website or web app use the following:
 ### TON Connect
 
 [ton-connect](
-https://tonkeeper.gitbook.io/ton-connect-2.0-guide-for-sdk/) is a unified authorization standard for every wallet in the TON ecosystem. It's supported and developed by Tonkeeper team with tech advisors from TON Community.
+/develop/dapps/tonconnect) is a unified authorization standard for every wallet in the TON ecosystem. It's supported and developed by Tonkeeper team with tech advisors from TON Community.
 
 #### Documentation
 
-* [Introducing TON Connect](
-  https://tonkeeper.gitbook.io/ton-connect-2.0-guide-for-sdk/)
-* [TON Connect for Developers](https://tonkeeper.gitbook.io/ton-connect-2.0-guide-for-sdk/ton-connect-for-developers)
-* [TON Connect 2.0 vs 1.0](https://tonkeeper.gitbook.io/ton-connect-2.0-guide-for-sdk/ton-connect-2.0-vs-1.0)
+* [Introducing TON Connect](/develop/dapps/tonconnect)
+* [TON Connect for Developers](/develop/dapps/tonconnect/developers)
+* [TON Connect 2.0 vs 1.0](/develop/dapps/tonconnect/comparison)
 
 #### Development
 
