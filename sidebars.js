@@ -387,6 +387,7 @@ const sidebars = {
           type: 'category',
           label: 'Documentation',
           items: [
+            'develop/tact/docs/tact-abi',
             'develop/tact/docs/tact-types',
             'develop/tact/docs/tact-comments',
             'develop/tact/docs/tact-literals-identifiers',
