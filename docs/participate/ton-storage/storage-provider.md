@@ -26,7 +26,7 @@ The client can also retrieve their files at any time by providing proof of owner
 
 ## Smart contract
 
-[Smart Contract Source Code](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont).
+[Smart Contract Source Code](https://github.com/ton-blockchain/ton/tree/master/storage/storage-daemon/smartcont).
 
 ## Using a Provider by Clients
 In order to use a storage provider, you need to know the address of its smart contract. The client can obtain the provider's parameters with the following command in `storage-daemon-cli`:
