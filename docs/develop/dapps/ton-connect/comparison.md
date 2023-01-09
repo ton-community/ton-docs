@@ -1,6 +1,8 @@
 # TON Connect 2.0 vs 1.0
 
-TON Connect 2.0 solves many problems of the first version of the protocol. TON Connect 2.0 provides the highest level of security, user experience driven by real-time UX, and ease of development of decentralized applications.
+TON Connect 2.0 solves many problems of the first version of the protocol.
+
+TON Connect 2.0 provides the highest level of security, user experience driven by real-time UX, and ease of development of decentralized applications.
 
 See the protocols comparison below:
 

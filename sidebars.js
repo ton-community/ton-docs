@@ -295,13 +295,13 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Ton Connect',
+          label: 'TON Connect',
           items: [
-            'develop/dapps/tonconnect/README',
-            'develop/dapps/tonconnect/business',
-            'develop/dapps/tonconnect/developers',
-            'develop/dapps/tonconnect/security',
-            'develop/dapps/tonconnect/comparison',
+            'develop/dapps/ton-connect/README',
+            'develop/dapps/ton-connect/business',
+            'develop/dapps/ton-connect/developers',
+            'develop/dapps/ton-connect/security',
+            'develop/dapps/ton-connect/comparison',
           ],
         },
         {
