@@ -12,15 +12,15 @@ Repository contains three packages:
 
 ## TON Connect SDK
 
-- ​[github link](https://github.com/ton-connect/sdk/tree/main/packages/sdk)​
-- ​[npm link](https://www.npmjs.com/package/@tonconnect/sdk)​
+- ​[GitHub](https://github.com/ton-connect/sdk/tree/main/packages/sdk)​
+- ​[NPM](https://www.npmjs.com/package/@tonconnect/sdk)​
 
 Use it to connect your app to TON wallets via TON Connect protocol. You can find the full description in the link above.
 
 ## TON Connect protocol models
 
-- ​[github link](https://github.com/ton-connect/sdk/tree/main/packages/protocol)​
-- ​[npm link](https://www.npmjs.com/package/@tonconnect/protocol)​
+- ​[GitHub](https://github.com/ton-connect/sdk/tree/main/packages/protocol)​
+- ​[NPM](https://www.npmjs.com/package/@tonconnect/protocol)​
 
 This package contains protocol requests, responses and event models and encoding, decoding functions. You can use it to integrate TON Connect to your wallet app (written with TypeScript). If you want to integrate TON Connect to your dapp, you should use [@tonconnect/sdk](https://www.npmjs.com/package/@tonconnect/sdk).
 
@@ -28,11 +28,11 @@ This package contains protocol requests, responses and event models and encoding
 
 This package is work in progress right now. It will allow you to integrate TON Connect to your app easier using our UI elements such as "connect wallet button", "select wallet dialog" and confirmation modals.
 
-Basic example of an app functionality in the dapp browser: [github link](https://ton-connect.github.io/demo-dapp/)​
+Basic example of an app functionality in the dapp browser: [GitHub](https://ton-connect.github.io/demo-dapp/)​
 
-Example of a backend part of the dapp above [github link](https://github.com/ton-connect/demo-dapp-backend)​
+Example of a backend part of the dapp above [GitHub](https://github.com/ton-connect/demo-dapp-backend)​
 
-Bridge server on Go: [github link](https://github.com/ton-connect/bridge)​
+Bridge server on Go: [GitHub](https://github.com/ton-connect/bridge)​
 
 ​
 

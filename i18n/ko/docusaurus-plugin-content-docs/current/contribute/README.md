@@ -34,7 +34,7 @@ You can use Gitpod (a free, online, VS Code-like IDE) for contributing. With a s
 
 :::tip
 
-If you are adding a new document, it is recommended to just have a basic summary/introduction and a link to your github or documentation for more details.
+If you are adding a new document, it is recommended to just have a basic summary/introduction and a link to your GitHub or documentation for more details.
 
 :::
 

@@ -73,7 +73,7 @@ Here is a list of modern SDKs that are constantly supported and improved:
 
 - [ton-defi-org/tonstarter-twa](https://github.com/ton-defi-org/tonstarter-twa) — template for new TWA interaction with TON
 - [twa-dev/boilerplate](https://github.com/twa-dev/Boilerplate) — another boilerplate for a new TWA.
-- [twa-dev/sdk](https://github.com/twa-dev/sdk) — npm package for TWA SDK
+- [twa-dev/sdk](https://github.com/twa-dev/sdk) — NPM package for TWA SDK
 - [twa-dev/Mark42](https://github.com/twa-dev/Mark42) — Mark42 is a simple lightweight tree-shakable UI library for TWA
 
 :::info Community
