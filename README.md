@@ -56,13 +56,19 @@ Use Gitpod (a free, online VS code-like IDE) for contributing. It will launch a 
 
 1. Download repository from GitHub
 2. Install [NodeJS](https://nodejs.org/en/download/) to run local build
-3. Open Terminal in project directory
-4. Install dependencies with command:
+3. Use compitable node verison
+    * [install nvm](https://github.com/nvm-sh/nvm)
+    * use node verison defined in .nvmrc
+    ```sh
+    nvm install && nvm use
+    ```
+4. Open Terminal in project directory
+5. Install dependencies with command:
 
     ```
     npm install
     ```
-5. Run project with command:
+6. Run project with command:
 
     ```
     npm run start
