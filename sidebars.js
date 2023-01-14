@@ -295,17 +295,6 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'TON Connect',
-          items: [
-            'develop/dapps/ton-connect/README',
-            'develop/dapps/ton-connect/business',
-            'develop/dapps/ton-connect/developers',
-            'develop/dapps/ton-connect/security',
-            'develop/dapps/ton-connect/comparison',
-          ],
-        },
-        {
-          type: 'category',
           label: 'Payment Processing',
           items: [
             'develop/dapps/asset-processing/README',
@@ -391,7 +380,6 @@ const sidebars = {
         'develop/smart-contracts/libraries',
       ],
     },
-    'develop/fift-and-tvm-assembly',
     'develop/fift-deep-dive',
     'develop/howto/network-configs',
     {
@@ -489,6 +477,13 @@ const sidebars = {
       ],
     },
     {
+      type: 'category',
+      label: 'Blockchain Details',
+      items: [
+        'participate/own-blockchain-software/random',
+      ],
+    },
+    {
       type: 'doc',
       label: 'NFT Use Cases in TON',
       id: 'participate/nft',
@@ -507,32 +502,17 @@ const sidebars = {
       'value': '<span class=\'menu__link\'><b><small> Web3 </small></b></span>',
     },
     'participate/web3/overview',
+    'participate/web3/dns',
     {
       'type': 'category',
-      'label': 'TON DNS',
+      'label': 'Use TON Proxy',
       'items': [
-        'participate/web3/dns'
-      ],
-    },
-    {
-      'type': 'category',
-      'label': 'TON Proxy & Sites',
-      'items': [
-        'participate/web3/setting-proxy',
         'participate/web3/how-to-open-any-ton-site',
+        'participate/web3/setting-proxy',
         'participate/web3/sites-and-proxy',
-        'participate/web3/site-management'
       ],
     },
-    {
-      'type': 'category',
-      'label': 'TON Storage',
-      'items': [
-        'participate/ton-storage/storage-daemon',
-        'participate/ton-storage/storage-provider',
-        'participate/ton-storage/storage-faq'
-      ],
-    },
+    'participate/web3/site-management',
   ],
   contribute: [
     {
