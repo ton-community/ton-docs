@@ -41,6 +41,7 @@ For web developers the best approach is to start from this article:
 
 #### Could you share a brief overview of TON?
 
+- [Introduction to The Open Network](/learn/introduction)
 - [The TON Blockchain is based on PoS consensus](https://blog.ton.org/the-ton-blockchain-is-based-on-pos-consensus)
 - [TON Whitepapers](/docs/learn/docs)
     
