@@ -1,30 +1,30 @@
-# TON Hello world with Tact
+# Tact Hello world
 
 This article helps to learn how to write simple smart contract via Tact language, look through usefull frameworks for deploying and testing smart contract in testnet.
 Main goal is trying and touch the smart contract developing process and find out what you should learn next.
 You need spend only one-two hours to find out basic details and try main steps of TON blockchain developing! Let's do it!
 
-## Tact's facts #1
+### Tact's facts #1
 
 Five things you need to know in the beginning:
 * Smart contract is a computer program that stores and executes in blockchain.
-* TON blockchain is ecosystem, particular, for building decentralized application(dApp), that will not depend on someone else, but only from logic input in smart contracts.
+* TON blockchain is ecosystem, particular, for building decentralized application(dApp), that will not depend on someone else, but only from logic input in smart contracts. In this article, when we speak about blockchain it means directly to TON blockchain.
 * For to cope with the challenges of scalability and versatility for dApps TON designed with original Ton Virtual Machine(TVM).
 * Tact is special langauge designed for developing smart in simplest and convinient way contracts in TON. Perhaps it will look very hard to understand how all works from the first sight. It is a price for opportunities that TON offers in return and worth it.
-* Tact uses JavaSrcript frameworks, so basic knowing helps you learn it faster, but even you just newcomer it is possible learn from the beginning.
+* Tact uses JavaScript frameworks, so basic knowing helps you learn it faster, but even you just newcomer it is possible learn from the beginning.
 
 :::info
-If you have choice it's better to chose Unix like operating system for developing or MacOS. In Windows OS you will face some additional issue, so it up to you.
+If you have choice it's better to use Unix like operating system for developing or MacOS. In Windows OS you will face some additional issues.
 :::
 
-## Practice #1 - set up your environment
+### Tactical practise #1 - set up your environment
 Annoying, but you have to do some preparation steps:
 
 - **Git**. Essential tool for every developer to work with repositories. Download it [here](https://git-scm.com/downloads).
 - **NodeJS**. We will use JavaScript with TypeScript mode as the most popular choice for dApp development on TON. Download it [here](https://nodejs.org/en/download/).
 - **JavaScript IDE**. Your normal choice for development. [VSCode](https://code.visualstudio.com/download), for example.
 
-## Tact's facts #2
+### Tact's facts #2
 
 Next step big one for absolute newcomers with git. If you now how it works, just skip this.
 If you never works with git before there is small briefing for you:
@@ -37,7 +37,7 @@ If you never works with git before there is small briefing for you:
 command that you should input in your command line
 ```
 
-## Practice #2 - get template from Github
+### Tactical practise #2 - get template from Github
 
 For beginning let's take basic tact project from community repository:
 ```bash
@@ -59,7 +59,7 @@ Something like this you should see:
 
 ![Tact ABI template](/img/docs/tact-hello-world/tact-compile-success.jpg?raw=true)
 
-## Tact's facts #3
+### Tact's facts #3
 
 tact-template is basic project for developing tact contract on Tact language. Let's learn general things about this:
 
@@ -84,12 +84,16 @@ yarn build # To build contract
 yarn deploy # To deploy contract
 ```
 
-## Tact to contract plan thoughts #1
+### Tact to contract plan thoughts #1
 
 A lot of important details you should learn to understand how TON works, but here, we simplify our field of knowledge and goals.
-So, let's say, Contracts(smart contract) and Messages our main characters in blockchain. You will meet this words in many places, but one more time: everything in TON blockchain is a Smart Contract.
-If we try to find similar to smart contract entity it will be computer program. And in other words - smart contract is a program that defines, stores and executes in blockchain.
-The second part - messages - are native TON blockchain tool to communicate between smart contracts.
+So, let's say, **contracts**(smart contract) and **messages** our main characters in blockchain. 
+
+A very rough definition **contract** is a program that defines, stores and executes operations in blockchain. Each smart contract performs own function, so you can imagine that the different circles in the diagram are different types of smart contracts. For example, one of the main - is the wallet contract. 
+
+The second part **messages** are native TON blockchain tool to communicate between **smart contracts** and ask them to execute actions.
+
+![Tact deploy](/img/docs/tact-hello-world/tact-compiler-process-5.png?raw=true)
 
 To summarize these, in common words, main goal of smart contract developer is to declare and write logic of actions in smart contract correspondingly to messages it gets from other smart contracts.
 Ok, now we want to declare behaviour of our contract for messages. This contract will cover 3 feature:
@@ -98,7 +102,7 @@ Ok, now we want to declare behaviour of our contract for messages. This contract
 2. Accept messages and check its contents. If it contents "Increment", increment from contract integer by 1 and update this in contracts.  If it contents "Add" message, increment from contract integer by value of Add message and update this in contracts.
 3. Store "owner" Address and check if messages got from owner or not. (TBD)
 
-## Tactical Practise #3 - create contract
+### Tactical practise #3 - create contract
 
 Let's open our contract file `contract.tact` file and clear what it contents. That, our first Tact string is declaring additional library, where some usefully Tact functions defined.
 
@@ -163,7 +167,7 @@ Where `self` - special Tact keyword of current level struct, here we using it fo
 * Initialize `counter` value equal to 0.
 
 
-## Tact's facts #4
+### Tact's facts #4
 Let's take a little break and learn little bit more about tools in Tact.
 We have some additional default Contract's tools that helps us to describe contract's behaviour. `init()` - is one of them, let briefly check several another:
 
@@ -178,7 +182,7 @@ We have some additional default Contract's tools that helps us to describe contr
  
 
 
-## Tactical Practise #4 - add contract's behaviour
+### Tactical Practise #4 - add contract's behaviour
 
 Ok, one more time, we need extend our contract's behaviour
 
@@ -247,12 +251,12 @@ Now we on finale stage. We need to deploy our contract to Blockchain. To do this
 * To deploy new contract we need send message with initilize information in message. 
 * We can know destination address of contract because of definition of Address depends on only from contract's data. 
 * To send message in blockchain it is necessary to communicate with TON blockchain nodes. Wallet application will do this with own API, so we will avoid lowlevel details in current lesson.
-* To send message in TON, sender should pay for outcomming message. In our case, we need some funds on Ton wallet to pay this action.
+* To send message in TON, sender should pay fees for outcomming message. In our case, we need some funds on Ton wallet to pay this action.
 
-![Tact ABI template](/img/docs/tact-hello-world/tact-compiler-process-4.png?raw=true)
+![Tact deploy](/img/docs/tact-hello-world/tact-compiler-process-6.png?raw=true)
 
 
-## Tactical Practise #5 - deploy the contract
+### Tactical Practise #5 - deploy the contract
 
 Before deployment, according to said before we need to prepare Ton wallet contract with funds. We will you test environment, that maintained with test nodes and called testnet(production calls mainnet).
 
@@ -270,13 +274,14 @@ Before deployment, according to said before we need to prepare Ton wallet contra
 ```bash
 yarn deploy
 ```
-//need fix or add suggestion about owner address in deployment link and ton amount(10 -> 1)
+** need fix or add suggestion about owner address in deployment link and ton amount(10 -> 1)
+
 4. Read deployment link through reading QR or open link via your testnet TON wallet, confirm outcomming message.
 
 ![deployment-1](/img/docs/tact-hello-world/tact-deployment-process-2.png)
 
 
-## Last Tact and next steps
+### Last Tact and next steps
 
 We send and deploy our Contract. We can check this with blockchain explorer. 
 Take your new contract address from terminal or follow ready-made link and check result of sent message in explorer.
