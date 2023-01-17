@@ -44,7 +44,7 @@ jobs:
           file: "deployment/Docker/Dockerfile"
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          tags: ${{ secrets.REGISTRY_URL }}/nwt/ton_docs:master
+          tags: ${{ secrets.REGISTRY_URL }}/nwt/ton_docs:latest
           push: true
 
       - name: Trigger deploy
