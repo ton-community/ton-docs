@@ -1,11 +1,11 @@
-name: Build prod image
+name: Build staging image
 
 on:
   push:
-    branches: [ main ]
+    branches: [ staging ]
 
 # jobs with same concurrency label will be put in pending state
-concurrency: prod-ci
+concurrency: staging-ci
 
 jobs:
   docker:
@@ -30,22 +30,12 @@ jobs:
 
       - uses: docker/build-push-action@v3
         with:
-          # To pass .git for docusaurus
           context: .
           file: "deployment/Docker/Dockerfile"
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          tags: ${{ secrets.REGISTRY_URL }}/nwt/ton_docs:${{ github.sha }}
-          push: true
-
-      - uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: "deployment/Docker/Dockerfile"
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          tags: ${{ secrets.REGISTRY_URL }}/nwt/ton_docs:master
+          tags: ${{ secrets.REGISTRY_URL }}/nwt/ton_docs:staging
           push: true
 
       - name: Trigger deploy
-        run: curl -s "${{ secrets.CD_URL }}"
+        run: curl -s "${{ secrets.CD_URL_STAGING }}"

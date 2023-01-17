@@ -1,11 +1,11 @@
-name: Build prod image
+name: Build demo image
 
 on:
   push:
-    branches: [ main ]
+    branches: [ demo ]
 
 # jobs with same concurrency label will be put in pending state
-concurrency: prod-ci
+concurrency: demo-ci
 
 jobs:
   docker:
@@ -28,15 +28,6 @@ jobs:
           password: ${{ secrets.REGISTRY_PASS }}
           registry: ${{ secrets.REGISTRY_URL }}
 
-      - uses: docker/build-push-action@v3
-        with:
-          # To pass .git for docusaurus
-          context: .
-          file: "deployment/Docker/Dockerfile"
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          tags: ${{ secrets.REGISTRY_URL }}/nwt/ton_docs:${{ github.sha }}
-          push: true
 
       - uses: docker/build-push-action@v3
         with:
@@ -44,8 +35,8 @@ jobs:
           file: "deployment/Docker/Dockerfile"
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          tags: ${{ secrets.REGISTRY_URL }}/nwt/ton_docs:master
+          tags: ${{ secrets.REGISTRY_URL }}/nwt/ton_docs:demo
           push: true
 
       - name: Trigger deploy
-        run: curl -s "${{ secrets.CD_URL }}"
+        run: curl -s "${{ secrets.CD_URL_DEMO }}"
