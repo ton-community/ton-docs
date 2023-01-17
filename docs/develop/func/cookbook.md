@@ -437,7 +437,9 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors
 
 ### How to contain a body as ref to an internal message cell
 
-In the body of a message that follows flags and other technical data, we can send `int`, `slice`, and `cell`. In the case of the latter, it is necessary to set the bit to `1` before `store_ref()` to indicate that the `cell` will go on.
+In the body of a message that follows flags and other technical data, we can send `int`, `slice`, and `cell`. In the case of the latter, it is necessary to set the bit to `1` before `store_ref()` to indicate that the `cell` will go on. 
+
+We can also send the body of the message inside the same `cell` as header, if we are sure that we have enough space. In this case, we need to set the bit to `0`.
 
 ```func
 ;; We use literal `a` to get valid address inside slice from string containing address 
@@ -467,7 +469,7 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors
 
 > 💡 Noted
 >
-> In this example, we used mode 3 to take the incoming tones and send exactly as much as specified (amount) while paying commission from the contract balance and ignoring the errors. Mode 64 is needed to return all the tones received, subtracting the commission, and mode 128 will send the entire balance.
+> In this example, we used mode 3 to take the incoming tons and send exactly as much as specified (amount) while paying commission from the contract balance and ignoring the errors. Mode 64 is needed to return all the tons received, subtracting the commission, and mode 128 will send the entire balance.
 
 > 💡 Noted
 >
@@ -516,7 +518,7 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors
 
 > 💡 Noted
 >
-> In this example, we used mode 3 to take the incoming tones and send exactly as much as specified (amount) while paying commission from the contract balance and ignoring the errors. Mode 64 is needed to return all the tones received, subtracting the commission, and mode 128 will send the entire balance.
+> In this example, we used mode 3 to take the incoming tons and send exactly as much as specified (amount) while paying commission from the contract balance and ignoring the errors. Mode 64 is needed to return all the tons received, subtracting the commission, and mode 128 will send the entire balance.
 
 > 💡 Noted
 >
@@ -757,10 +759,10 @@ Note that xp+zp is a valid variable name ( without spaces between ).
    ;; 2^255 - 19 is a prime number for montgomery curves, meaning all operations should be done against its prime
    int prime = 57896044618658097711785492504343953926634992332820282019728792003956564819949; 
 
-   int xp+zp = (xp + zp) % prime;
-   int xp-zp = (xp - zp + prime) % prime;
-
-   (_, int xp+zp*xp-zp) = muldivmod(xp+zp, xp-zp, prime);
+   ;; muldivmod handles the next two lines itself
+   ;; int xp+zp = (xp + zp) % prime;
+   ;; int xp-zp = (xp - zp + prime) % prime;
+   (_, int xp+zp*xp-zp) = muldivmod(xp + zp, xp - zp, prime);
    return xp+zp*xp-zp;
 }
 ```
