@@ -40,6 +40,10 @@ To work with public TonCenter API you need a key:
 
 - [tonfactory/tonsdk](https://github.com/tonfactory/tonsdk) — Analogue of the tonweb js library (TON Center HTTP API)
 
+### Elixir SDK
+
+- [ayrat555/ton](https://github.com/ayrat555/ton) - TON SDK for Elixir
+
 ## Usage examples
 
 ### JavaScript
