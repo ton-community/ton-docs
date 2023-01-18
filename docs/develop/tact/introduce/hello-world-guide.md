@@ -41,12 +41,17 @@ command that you should input in your command line
 
 For beginning let's take basic tact project from community repository:
 ```bash
-https://github.com/ton-community/tact-template.git
+https://github.com/Reveloper/tact-template/tree/double_qr_support
 ```
 and then open this local directory in command line:
 
 ```bash
 cd tact-template
+```
+
+To finish installing, resolve predefined dependencies for tact-template, check updates fot Tact.
+```bash
+yarn add ton-tact
 ```
 
 To check, that everything is ok, input command:
@@ -57,24 +62,21 @@ yarn build
 
 Something like this you should see:
 
-![Tact ABI template](/img/docs/tact-hello-world/tact-compile-success.jpg?raw=true)
+![deployment-1](/img/docs/tact-hello-world/tact-compiler-process-1.png)
 
 ### Tact's facts #3
 
 tact-template is basic project for developing tact contract on Tact language. Let's learn general things about this:
 
-* By default, this project has a number of additional frameworks used in it, that specified in "yarn". To simplify, we skip details of this in current lesson and will take attention to the general structure, where smart contract define.
-* Main folder with files we need to learn placed in `*/src/` folder:
+* By default, this project has a number of additional frameworks used in it, that specified in "yarn". To simplify, we skip details of this in current lesson and will take attention to the general structure, where smart contract define. All you need to use template, resolving dependencies with `yarn add ton-tact` we did before.
+* Main folder with files we need to learn placed in `*/cources/` folder:
 ```
 - sources
     - contract.deploy.ts
     - contract.spec.ts
     - contract.tact
 ```
-* Our Tact langauge smart contract placed in `contract.tact`. Command `yarn build` will compile `contract.tact` and place result in `tact-template/src/output`.
-
-  ![Tact compile scheme](/img/docs/tact-hello-world/tact-compiler-scheme.png?raw=true)
-
+* Our Tact langauge smart contract will be written in `contract.tact`. 
 * File `contract.spec.ts` contents tests for using `yarn tests` for launching local tests. Not necessary for deployment. Some actions we want to check before using smart contract in productions really faster to check with local tests.
 * File `contract.deploy.ts` contents instructions to generate a deployment link. This link includes all necessary information to send our smart contract in blockchain. When our smart contract appears in Blockchain as bytecode and ready to work as program he becomes "deployed".
 * As a result we use three yarn commands to work with Tact project template:
@@ -100,7 +102,7 @@ Ok, now we want to declare behaviour of our contract for messages. This contract
 
 1. Store inside integer number that we will call "Total";
 2. Accept messages and check its contents. If it contents "Increment", increment from contract integer by 1 and update this in contracts.  If it contents "Add" message, increment from contract integer by value of Add message and update this in contracts.
-3. Store "owner" Address and check if messages got from owner or not. (TBD)
+3. Store "owner" Address and check if messages got from owner or not. 
 
 ### Tactical practise #3 - create contract
 
@@ -115,12 +117,12 @@ import "@stdlib/deploy";
 `@stdlib/deploy` module extends our tools with `Trait` Deployable, so we can use it Trait later and its contents messages.
 Note, that Tact language consists of some unusual for classic program language, here is what we face in the lesson:
 
-| Type     | Description                                                                                                       |
-|----------|-------------------------------------------------------------------------------------------------------------------|
-| Contract | Basic type of Tact that declares contract entity in it's `{}` block.                                              |
-| Message  | Special Tact type for convenient message's declaration.                                                           |
-| Trait    | Struct similar to Contract, but serves as extension for contract(similar to Interfaces, Inheritance).             |
-| Address  | Smart contract address in native TON declaration. You'll see this parameter as sender or destination of messages. |
+| Type     | Description                                                                                                                                            |
+|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Contract | Basic type of Tact that declares contract entity in it's `{}` block.                                                                                   |
+| Message  | Special Tact type for convenient message's declaration.                                                                                                |
+| Trait    | Struct similar to Contract, but serves as extension for Contract(it's similar to interfaces or inheritance for Classes in classic Object‑oriented PL). |
+| Address  | Smart contract address in native TON declaration. You'll see this parameter as sender or destination of messages.                                      |
 
 
 Next step, we need to specify our message Add, that will force contract do actions according to (2).
@@ -242,13 +244,16 @@ Now our contract is ready, we need compile this, so run:
 ```bash
 yarn build
 ```
+Command `yarn build` will compile `contract.tact` and place result in `tact-template/src/output`.
+
+![Tact compile scheme](/img/docs/tact-hello-world/tact-compiler-scheme.png?raw=true)
 
 
 ## Tact's facts #5
 
 Now we on finale stage. We need to deploy our contract to Blockchain. To do this, we will use another smart contract, wallet. In this way we avoid a lot of details about deployment process, but you can find more about this in low-levels guides.
 
-* To deploy new contract we need send message with initilize information in message. 
+* To deploy new contract we need send message with init information in message. 
 * We can know destination address of contract because of definition of Address depends on only from contract's data. 
 * To send message in blockchain it is necessary to communicate with TON blockchain nodes. Wallet application will do this with own API, so we will avoid lowlevel details in current lesson.
 * To send message in TON, sender should pay fees for outcomming message. In our case, we need some funds on Ton wallet to pay this action.
@@ -274,11 +279,15 @@ Before deployment, according to said before we need to prepare Ton wallet contra
 ```bash
 yarn deploy
 ```
-** need fix or add suggestion about owner address in deployment link and ton amount(10 -> 1)
+
 
 4. Read deployment link through reading QR or open link via your testnet TON wallet, confirm outcomming message.
 
 ![deployment-1](/img/docs/tact-hello-world/tact-deployment-process-2.png)
+
+:::info
+If you faced some compile issue and can't figure out what is wrong, just compare with target contract placed in `sources/increment.tact`. 
+:::
 
 
 ### Last Tact and next steps
