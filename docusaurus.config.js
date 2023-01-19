@@ -44,10 +44,6 @@ const config = {
             from: '/learn/tvm-instructions/tvm_overview',
           },
           {
-            to: '/learn/overviews/cells',
-            from: '/learn/overviews/Cells',
-          },
-          {
             to: '/learn/overviews/ton-blockchain',
             from: '/learn/overviews/TON_Blockchain_overview',
           },
