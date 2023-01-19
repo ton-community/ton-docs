@@ -221,7 +221,7 @@ Computes sha256 of the data bits of `slice s`. If the bit length of `s` is not d
 ```func
 int check_signature(int hash, slice signature, int public_key) asm "CHKSIGNU";
 ```
-Checks the Ed25519 `signature` of `hash` (a 256-bit unsigned integer, usually computed as the hash of some data) using `public_key` (also represented by a 256-bit unsigned integer). The signature must contain at least 512 data bits; only the first 512 bits are used. If the signature is valid, the result is 1; otherwise, it is 0. Note that `CHKSIGNU` creates a 256-bit slice with the hash and calls `CHKSIGNS`. That is, if `hash` is computed as the hash of some data, this data is hashed _twice_, the second hashing occurring inside `CHKSIGNS`.
+Checks the Ed25519 `signature` of `hash` (a 256-bit unsigned integer, usually computed as the hash of some data) using `public_key` (also represented by a 256-bit unsigned integer). The signature must contain at least 512 data bits; only the first 512 bits are used. If the signature is valid, the result is `-1`; otherwise, it is `0`. Note that `CHKSIGNU` creates a 256-bit slice with the hash and calls `CHKSIGNS`. That is, if `hash` is computed as the hash of some data, this data is hashed _twice_, the second hashing occurring inside `CHKSIGNS`.
 #### check_data_signature
 ```func
 int check_data_signature(slice data, slice signature, int public_key) asm "CHKSIGNS";
