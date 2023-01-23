@@ -9,11 +9,13 @@ This separation of concerns enables rapid innovation and high level of security 
 
 TON Connect aims of offering a seamless user experience between wallets and apps.
 
-## TON Connect Documentation
-
-You will find main steps to implement TON Connect in your application:
+## Why TON Connect? Is it safe?
 
 - [TON Connect for Business](/develop/dapps/ton-connect/business)
 - [TON Connect for Developers](/develop/dapps/ton-connect/developers)
 - [TON Connect for Security](/develop/dapps/ton-connect/security)
 - [TON Connect 2.0 vs 1.0](/develop/dapps/ton-connect/comparison)
+
+## TON Connect Manuals
+
+Go on to [integration manual](/develop/dapps/ton-connect/integration) to find main steps to implement TON Connect in your application.
