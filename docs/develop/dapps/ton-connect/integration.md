@@ -8,8 +8,9 @@ In this tutorial, we are going to create a sample web app supporting TON Connect
 
 ## Documentation links
 
-[SDK documentation](https://www.npmjs.com/package/@tonconnect/sdk)  
-[Protocol of wallet-application message exchange](https://github.com/ton-connect/docs/blob/main/requests-responses.md), includes manifest format.
+1. [SDK documentation](https://www.npmjs.com/package/@tonconnect/sdk)  
+2. [Protocol of wallet-application message exchange](https://github.com/ton-connect/docs/blob/main/requests-responses.md), includes manifest format.
+3. [Tonkeeper implementation of wallet side](https://github.com/tonkeeper/wallet/tree/main/src/tonconnect)
 
 ## Prerequisites
 
@@ -22,7 +23,7 @@ TON Connect 2.0 is technology that is going to be widely adopted, so many wallet
 So, at the moment our sample web app does following:
 1. loads TON Connect SDK (helper library for easy integration),
 2. creates a connector (currently without application manifest),
-3. and loads list of supported wallets (from https://raw.githubusercontent.com/ton-connect/wallets-list/main/wallets.json).
+3. and loads list of supported wallets (from [wallets.json on GitHub](https://raw.githubusercontent.com/ton-connect/wallets-list/main/wallets.json)).
 
 ```html
 <!DOCTYPE html>
@@ -46,7 +47,7 @@ So, at the moment our sample web app does following:
 
 If you load this page in browser and look into console, you may get something like that:
 
-```
+```js
 > Array [ {…}, {…} ]
 
 0: Object { name: "Tonkeeper", imageUrl: "https://tonkeeper.com/assets/tonconnect-icon.png", aboutUrl: "https://tonkeeper.com", … }
@@ -72,7 +73,7 @@ If you load this page in browser and look into console, you may get something li
 ```
 
 According to TON Connect 2.0 specification, wallet app information has the following format:
-```
+```js
 {
     name: string;
     imageUrl: string;
@@ -98,7 +99,8 @@ Current page produces the following result:
   <head>
     <meta charset="utf-8">
     <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js" defer></script>
-    
+
+    // highlight-start
     <style>
       body {
         width: 1000px;
@@ -118,10 +120,13 @@ Current page produces the following result:
         font-weight: 800;
       }
     </style>
+    // highlight-end
   </head>
   <body>
+    // highlight-start
     <div class="section" id="tonconnect-buttons">
     </div>
+    // highlight-end
     
     <script>
       const $ = document.querySelector.bind(document);
@@ -129,7 +134,8 @@ Current page produces the following result:
       window.onload = async () => {
         const connector = new TonConnectSDK.TonConnect();
         const walletsList = await connector.getWallets();
-        
+
+        // highlight-start
         let buttonsContainer = $('#tonconnect-buttons');
         
         for (let wallet of walletsList) {
@@ -150,7 +156,8 @@ Current page produces the following result:
           
           buttonsContainer.appendChild(connectButton);
         }
-      }
+	// highlight-end
+      };
     </script>
   </body>
 </html>
@@ -178,7 +185,7 @@ Script shall be changed as following:
         );
         
         let buttonsContainer = $('#tonconnect-buttons');
-        
+
         for (let wallet of walletsList) {
           let connectButton = document.createElement('button');
           connectButton.innerText = 'Connect with ' + wallet.name;
@@ -189,6 +196,7 @@ Script shall be changed as following:
             connectButton.classList.add('featured');
           }
           
+          // highlight-start
           if (wallet.embedded || wallet.injected) {
             connectButton.onclick = () => {
               connectButton.disabled = true;
@@ -206,24 +214,33 @@ Script shall be changed as following:
             // wallet app does not provide any auth method
             connectButton.disabled = true;
           }
+	  // highlight-end
           
           buttonsContainer.appendChild(connectButton);
         }
-      }
+      };
 ```
 
 Now we are logging status changes (to see whether TON Connect works). Showing modals with QR codes for connection is out of scope for this article; for testing you may either use browser extension or send connection link to your phone via any means (for example, Telegram works well).
 
 Please note we haven't created app manifest yet. We're trying to see what happens if we don't fulfill this requirement.
 
-##### Logging in with Tonkeeper
+### Logging in with Tonkeeper
 
-Link created for auth was `https://app.tonkeeper.com/ton-connect?v=2&id=3c12f5311be7e305094ffbf5c9b830e53a4579b40485137f29b0ca0c893c4f31&r=%7B%22manifestUrl%22%3A%22null%2Ftonconnect-manifest.json%22%2C%22items%22%3A%5B%7B%22name%22%3A%22ton_addr%22%7D%5D%7D`.  
+Link created for auth (provided for reference):
+```
+https://app.tonkeeper.com/ton-connect?v=2&id=3c12f5311be7e305094ffbf5c9b830e53a4579b40485137f29b0ca0c893c4f31&r=%7B%22manifestUrl%22%3A%22null%2Ftonconnect-manifest.json%22%2C%22items%22%3A%5B%7B%22name%22%3A%22ton_addr%22%7D%5D%7D
+```
+When decoded, `r` parameter produces the following JSON:
+```js
+{"manifestUrl":"null/tonconnect-manifest.json","items":[{"name":"ton_addr"}]}
+```
+
 Upon tapping the link on mobile phone, Tonkeeper app automatically opened and then closed, dismissing the request. Also, an error appeared in web app page console: `Error: [TON_CONNECT_SDK_ERROR] Can't get null/tonconnect-manifest.json`.
    
 Conclusion: application manifest must be available for downloading.
 
-##### Logging in with OpenMask
+### Logging in with OpenMask
 
 OpenMask didn't inject its information in the window so connecting with it failed. The most probable reason is using local page for web app.
 
@@ -249,6 +266,7 @@ with
 ```js
       window.onload = async () => {
         const connector = new TonConnectSDK.TonConnect({manifestUrl: 'https://ratingers.pythonanywhere.com/ratelance/tonconnect-manifest.json'});
+        // highlight-next-line
         window.connector = connector;  // for experimenting in browser console
         
         const walletsList = await connector.getWallets();
@@ -258,19 +276,20 @@ with
             console.log('Connection status:', walletInfo);
           }
         );
+	// highlight-next-line
         connector.restoreConnection();
 ```
 
 We added storing local `connector` variable in `window` for it to be accessible in browser console. Also we use `restoreConnection` for user not to log in on each webapp page.
 
-##### Logging in with Tonkeeper
+### Logging in with Tonkeeper
 
 First of all, I tested declining the request. The result that appeared in console was `Error: [TON_CONNECT_SDK_ERROR] Wallet declined the request`.
 
 Then, the user is able to accept the same login request if he saves the link. So web app should handle authentication decline as non-final, or else it can be messed up with.
 
 After that, I've accepted login request. It was immediately reflected in browser console:
-```
+```js
 22:40:13.887 Connection status:
 Object { device: {…}, provider: "http", account: {…} }
   account: Object { address: "0:b2a1ec...", chain: "-239", walletStateInit: "te6cckECFgEAAwQAAgE0ARUBFP8A9..." }
@@ -340,9 +359,25 @@ New connection code follows:
             };
 ```
 
-Connection link: `https://app.tonkeeper.com/ton-connect?v=2&id=4b0a7e2af3b455e0f0bafe14dcdc93f1e9e73196ae2afaca4d9ba77e94484a44&r=%7B%22manifestUrl%22%3A%22https%3A%2F%2Fratingers.pythonanywhere.com%2Fratelance%2Ftonconnect-manifest.json%22%2C%22items%22%3A%5B%7B%22name%22%3A%22ton_addr%22%7D%2C%7B%22name%22%3A%22ton_proof%22%2C%22payload%22%3A%22doc-example-%3CBACKEND_AUTH_ID%3E%22%7D%5D%7D`.
+Connection link:
+```
+https://app.tonkeeper.com/ton-connect?v=2&id=4b0a7e2af3b455e0f0bafe14dcdc93f1e9e73196ae2afaca4d9ba77e94484a44&r=%7B%22manifestUrl%22%3A%22https%3A%2F%2Fratingers.pythonanywhere.com%2Fratelance%2Ftonconnect-manifest.json%22%2C%22items%22%3A%5B%7B%22name%22%3A%22ton_addr%22%7D%2C%7B%22name%22%3A%22ton_proof%22%2C%22payload%22%3A%22doc-example-%3CBACKEND_AUTH_ID%3E%22%7D%5D%7D
+```
+Expanded and prettified `r` parameter:
+```js
+{
+  "manifestUrl":
+    "https://ratingers.pythonanywhere.com/ratelance/tonconnect-manifest.json",
+  "items": [
+    {"name": "ton_addr"},
+    {"name": "ton_proof", "payload": "doc-example-<BACKEND_AUTH_ID>"}
+  ]
+}
+```
 
-Here's full wallet information which we receive upon successful connection:
+Then we transfer this link to phone and open it through Tonkeeper.
+
+And here's full wallet information which we receive upon successful connection:
 ```js
 {
   "device": {
@@ -411,13 +446,18 @@ verify_key = nacl.signing.VerifyKey(bytes(public_key))
 
 After that, we look into documentation to check what exactly is signed with wallet key.
 
+> ```
 > message = utf8_encode("ton-proof-item-v2/") ++  
 >           Address ++  
 >           AppDomain ++  
 >           Timestamp ++  
 >           Payload
 > 
-> signature = Ed25519Sign(privkey, sha256(0xffff ++ utf8_encode("ton-connect") ++ sha256(message)))
+> signature = Ed25519Sign(
+>   privkey,
+>   sha256(0xffff ++ utf8_encode("ton-connect") ++ sha256(message))
+> )
+> ```
 > 
 > where:
 > -   `Address` is the wallet address encoded as a sequence:
@@ -427,9 +467,10 @@ After that, we look into documentation to check what exactly is signed with wall
 >     -   `Length` is 32-bit value of utf-8 encoded app domain name length in bytes
 >     -   `EncodedDomainName` id `Length`-byte utf-8 encoded app domain name
 > -   `Timestamp` 64-bit unix epoch time of the signing operation
-> -   `Payload` is a variable-length binary string.
+> -   `Payload` is a variable-length binary string
+> -   `utf8_encode` produces plain byte string with no length prefixes.
 
-Let's reimplement this in Python. Endianness of some integers is not specified so we must look into some example -- for example, Tonkeeper: https://github.com/tonkeeper/wallet/blob/77992c08c663dceb63ca6a8e918a2150c75cca3a/src/tonconnect/ConnectReplyBuilder.ts#L42.
+Let's reimplement this in Python. Endianness of some integers is not specified so we must look into some example -- for example, you may refer to Tonkeeper implementation: [ConnectReplyBuilder.ts](https://github.com/tonkeeper/wallet/blob/77992c08c663dceb63ca6a8e918a2150c75cca3a/src/tonconnect/ConnectReplyBuilder.ts#L42).
 
 ```python
 received_timestamp = 1674392728
