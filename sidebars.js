@@ -295,6 +295,18 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'TON Connect',
+          items: [
+            'develop/dapps/ton-connect/README',
+            'develop/dapps/ton-connect/integration',
+            'develop/dapps/ton-connect/business',
+            'develop/dapps/ton-connect/developers',
+            'develop/dapps/ton-connect/security',
+            'develop/dapps/ton-connect/comparison',
+          ],
+        },
+        {
+          type: 'category',
           label: 'Payment Processing',
           items: [
             'develop/dapps/asset-processing/README',

@@ -19,7 +19,7 @@ TON Network is deeply integrated with TON Blockchain, the project’s native Ton
 * The network uses the UDP/IP and TCP/IP internet protocols.
 
 
-You can find a more technical explanation of the protocols on the TON Network in Chapter 3 of The Open Network’s __[White Paper](https://www.tonspace.co/learn/docs)__.
+You can find a more technical explanation of the protocols on the TON Network in Chapter 3 of The Open Network’s __[White Paper](/learn/docs)__.
 
 ### TON Blockchain relies on TON Network
 
@@ -35,7 +35,7 @@ TON Blockchain is not the only thing that uses TON Network.
 
 Starting today, you can launch a web server with your website and make it available on the TON Network (i.e. you can make a TON Site).
 
-Read the guide __[here](https://www.tonspace.co/learn/services/sites-www-proxy)__.
+Read the guide __[here](/learn/services/sites-www-proxy)__.
 
 ### Mandatory encryption and verifying the authenticity of data
 
@@ -69,11 +69,11 @@ The biggest problem is that your domain name can be blocked or taken away from y
 
 Anyone can write to a domain name registry, saying that your website is engaging in illegal activity. It would be a false claim, but the registry’s employee would have to block your site, even without having all the details to fully understand the situation. This would inevitably lead to a lot of headaches and large losses.
 
-TON Sites uses __[TON DNS](https://www.tonspace.co/learn/services/dns)__, a fully decentralized domain name system.
+TON Sites uses __[TON DNS](/learn/services/dns)__, a fully decentralized domain name system.
 
 Incumbent domain registries require owners to make non-trivial payments, which go to pay for employees and other expenses, whereas with TON DNS, all you have to do is make an annual micropayment as a symbolic “sign of life” to confirm domain ownership.
 
-__[How to link a TON Site to a domain](https://www.tonspace.co/participate/web3/site-management#how-to-link-a-ton-site-to-a-domain)__
+__[How to link a TON Site to a domain](/participate/web3/site-management#how-to-link-a-ton-site-to-a-domain)__
 
 ### Sub-domains
 
@@ -158,11 +158,11 @@ Everything mentioned above is what creates TON WWW: the collection of web pages 
 
 To gain access to the TON Network, first, users must connect to a special entry point. In technical terms, this is called an "entry proxy".
 
-Currently, you can use __[public entry points](https://www.tonspace.co/participate/web3/setting-proxy#public-entry-ton-proxies)__ launched by TON Foundation.
+Currently, you can use __[public entry points](/participate/web3/setting-proxy#public-entry-ton-proxies)__ launched by TON Foundation.
 
 __|__ _Use public entry points along with HTTP for trial purposes only, as in this case, traffic outside the TON Network is not encrypted_
 
-Tech-savvy users can already __[launch entry proxies](https://www.tonspace.co/participate/web3/sites-and-proxy#running-entry-proxy-on-remote-computer)__ directly on their devices — in the near future, this will become available to all users in the form of a simple application.
+Tech-savvy users can already __[launch entry proxies](/participate/web3/sites-and-proxy#running-entry-proxy-on-remote-computer)__ directly on their devices — in the near future, this will become available to all users in the form of a simple application.
 
 ### In a browser
 ![image](/img/docs/in_a_browser.jpg)
@@ -171,7 +171,7 @@ Because TON Proxy is compatible with HTTP Proxy, you can simply open the setting
 
 You’ll then be able to open “.ton” sites directly in your browser, just like regular websites.
 
-Here’s a __[guide](https://www.tonspace.co/participate/web3/setting-proxy)__ on setting up TON Proxy for various browsers.
+Here’s a __[guide](/participate/web3/setting-proxy)__ on setting up TON Proxy for various browsers.
 
 ### Wallets
 
@@ -222,7 +222,7 @@ Starting with the TON Proxy 2.0 version, full anonymity will be available in the
 
 For the third stage, decentralized Toncoin economy will launch for the use of intermediary TON Proxies, which provide privacy to users and security to sites.
 
-The payment will occur through the Payment Network technology, a network of payment channels __[developed](https://www.tonspace.co/learn/services/payments)__ in Q2 2022. An intermediary proxy node is going to receive micropayments for internet traffic packages (e.g. for 128 KiB) that run through it. These micropayments will be charged and deducted from users’ crypto wallets.
+The payment will occur through the Payment Network technology, a network of payment channels __[developed](/learn/services/payments)__ in Q2 2022. An intermediary proxy node is going to receive micropayments for internet traffic packages (e.g. for 128 KiB) that run through it. These micropayments will be charged and deducted from users’ crypto wallets.
 
 Thanks to this decentralized payments system, independent administrators will be able to run intermediary proxy nodes in various parts of the world, which will increase the effectiveness and speed of the network and make it more scalable and stable.
 

@@ -2,7 +2,7 @@
 
 ## How to assign a TON domain to a TON Storage bag of files
 
-1. [Upload](https://ton.org/docs/participate/ton-storage/storage-daemon#creating-a-bag-of-files) the bag of files to the network and get the Bag ID
+1. [Upload](/participate/ton-storage/storage-daemon#creating-a-bag-of-files) the bag of files to the network and get the Bag ID
 
 2. Open the Google Chrome browser on your computer.
 
@@ -17,7 +17,7 @@
 
 ## How to host static TON site in TON Storage
 
-1. [Create](https://ton.org/docs/participate/ton-storage/storage-daemon#creating-a-bag-of-files) the Bag from folder with website files, upload it to the network and get the Bag ID. Folder must contain `index.html` file.
+1. [Create](/participate/ton-storage/storage-daemon#creating-a-bag-of-files) the Bag from folder with website files, upload it to the network and get the Bag ID. Folder must contain `index.html` file.
 
 2. Open the Google Chrome browser on your computer.
 
@@ -46,7 +46,7 @@ dns_storage_address#7473 bag_id:uint256 = DNSRecord;
 
 ## How to host static TON site in TON Storage (Low Level)
 
-[Create](https://ton.org/docs/participate/ton-storage/storage-daemon#creating-a-bag-of-files) the Bag from folder with website files, upload it to the network and get the Bag ID. Folder must contain `index.html` file.
+[Create](/participate/ton-storage/storage-daemon#creating-a-bag-of-files) the Bag from folder with website files, upload it to the network and get the Bag ID. Folder must contain `index.html` file.
 
 You need to assign the following value to the sha256("site") DNS Record of your TON domain:
 

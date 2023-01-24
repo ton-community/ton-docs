@@ -11,22 +11,22 @@ This is a concept article. We're still looking for someone experienced to write 
 ## Basics
 ### How to write an if statement
 
-TODO: please provide some description like in a `Modulo operations` section
+Let's say we want to check if any event is relevant. To do this, we use the flag variable. Remember that in FunC `true` is `-1` and `false` is `0`.
 
 ```func
-int a = 1;
+int flag = 0; ;; false
 
-if (a == 1) {
+if (flag) { 
     ;; do something
 }
 else {
-    ;; do something else
+    ;; reject the transaction
 }
 ```
 
 > 💡 Noted
 > 
-> TODO: We should show the developer an example with `if (variable) {...}` and remind that `true` is `-1` and `false` is `0`.
+> We do not need the operator `==`, because the value `0` is `false`, so any other value will be `true`.
 
 > 💡 Useful links
 >  
@@ -34,13 +34,16 @@ else {
 
 ### How to write a repeat loop
 
-TODO: please provide some description like in a `Modulo operations` section
+As an example, we can take exponentiation
 
 ```func
-int count = 50;
+int number = 2;
+int multiplier = number;
+int degree = 5;
 
-repeat(count) {
-    ;; do something
+repeat(degree - 1) {
+
+    number *= multiplier;
 }
 ```
 
@@ -50,41 +53,52 @@ repeat(count) {
 
 ### How to write a while loop
 
-TODO: please provide some description like in a `Modulo operations` section
+While is useful when we do not know how often to perform a particular action. For example, take a `cell`, which is known to store up to four references to other cells. 
 
 ```func
-int i = 0;
+cell inner_cell = begin_cell() ;; create a new empty builder
+        .store_uint(123, 16) ;; store uint with value 123 and length 16 bits
+        .end_cell(); ;; convert builder to a cell
 
-while (i < 50) {
+cell message = begin_cell()
+        .store_ref(inner_cell) ;; store cell as reference
+        .store_ref(inner_cell)
+        .end_cell();
+
+slice msg = message.begin_parse(); ;; convert cell to slice
+while (msg.slice_refs_empty?() != -1) { ;; we should remind that -1 is true
+    cell inner_cell = msg~load_ref(); ;; load cell from slice msg
     ;; do something
-    i += 1;
 }
 ```
-
-> 💡 Noted
-> 
-> TODO: We should remind that `true` is `-1` and `false` is `0`.
 
 > 💡 Useful links
 > 
 > ["While loop" in docs](/docs/develop/func/statements#while-loop)
+>
+> ["Cell" in docs](/docs/learn/overviews/cells)
+>
+> ["slice_refs_empty?()" in docs](/docs/develop/func/stdlib#slice_refs_empty)
+>
+> ["store_ref()" in docs](/docs/develop/func/stdlib#store_ref)
+> 
+> ["begin_cell()" in docs](/docs/develop/func/stdlib#begin_cell)
+> 
+> ["end_cell()" in docs](/docs/develop/func/stdlib#end_cell)
+> 
+> ["begin_parse()" in docs](/docs/develop/func/stdlib#begin_parse)
 
 ### How to write a do until loop
 
-TODO: please provide some description like in a `Modulo operations` section
+When we need the cycle to run at least once, we use `do until`.
 
 ```func 
-int i = 0;
+int flag = 0;
 
 do {
-    ;; do something
-    i += 1;
-} until (i == 10);
+    ;; do something even flag is false (0) 
+} until (flag == -1); ;; -1 is true
 ```
-
-> 💡 Noted
-> 
-> TODO: We should remind that `true` is `-1` and `false` is `0`.
 
 > 💡 Useful links
 > 
@@ -92,9 +106,7 @@ do {
 
 ### How to determine if slice is empty
 
-TODO: please provide some description like in a `Modulo operations` section
-
-> 💡 TODO: We should notice that `slice_empty?()` will check `bits` and `refs`. 
+Before working with `slice`, it is necessary to check whether it has any data to process it correctly. We can use `slice_empty?()` to do this, but we have to consider that it will return `-1` (`true`) if there is at least one `bit` of data or one `ref`.
 
 ```func
 ;; creating empty slice
@@ -141,7 +153,7 @@ slice_with_bits_and_refs.slice_empty?();
 
 ### How to determine if slice is empty (dosen't have any bits, but may have refs)
 
-TODO: please provide some description like in a `Modulo operations` section
+If we need to check only the `bits` and it does not matter if there are any `refs` in `slice`, then we should use `slice_data_empty?()`.
 
 ```func 
 ;; creating empty slice
@@ -172,10 +184,6 @@ slice slice_with_bits_and_refs = begin_cell()
 slice_with_bits_and_refs.slice_data_empty?();
 ```
 
-> 💡 Noted
->
-> TODO: We should notice that `slice_data_empty?()` will check `bits` but not will check `refs`. 
-
 > 💡 Useful links
 >
 > ["slice_data_empty?()" in docs](/docs/develop/func/stdlib#slice_data_empty)
@@ -193,7 +201,7 @@ slice_with_bits_and_refs.slice_data_empty?();
 
 ### How to determine if slice is empty (dosen't have any refs, but may have bits)
 
-TODO: please provide some description like in a `Modulo operations` section
+In case we are only interested in `refs`, we should check their presence using `slice_refs_empty?()`.
 
 ```func 
 ;; creating empty slice
@@ -224,10 +232,6 @@ slice slice_with_bits_and_refs = begin_cell()
 slice_with_bits_and_refs.slice_refs_empty?();
 ```
 
-> 💡 Noted
->
-> TODO: We should notice that `slice_refs_empty?()` will check `refs` but not will check `bits`
-
 > 💡 Useful links
 > 
 > ["slice_refs_empty?()" in docs](/docs/develop/func/stdlib#slice_refs_empty)
@@ -244,7 +248,7 @@ slice_with_bits_and_refs.slice_refs_empty?();
 
 ### How to determine if cell is empty
 
-TODO: please provide some description like in a `Modulo operations` section
+To check if there is any data in a `cell`, we should first convert it to `slice`. If we are only interested in having `bits`, we should use `slice_data_empty?()`, if only `refs` - `slice_data_refs?()`. In case we want to check the presence of any data regardless of whether it is a `bit` or `ref`, we need to use `slice_empty?()`.
 
 ```func
 cell cell_with_bits_and_refs = begin_cell()
@@ -264,10 +268,6 @@ else {
 }
 ```
 
-> 💡 Noted
-> 
-> TODO: We should notice that `slice_empty?()` will check `bits` and `refs`, and should notice that dev can use `slice_data_empty?()` or `slice_refs_empty?()` with reason: if you want check only bits is exists you have to use `slice_data_empty?()`, and if you want check only bits is exists you have to use `slice_refs_empty?()`.
-
 > 💡 Useful links
 >
 > ["slice_empty?()" in docs](/docs/develop/func/stdlib#slice_empty)
@@ -282,7 +282,7 @@ else {
 
 ### How to determine if dict is empty
 
-TODO: please provide some description like in a `Modulo operations` section
+There is a method of `dict_empty?()` to check the date presence in dict. This method is the equivalent of `cell_null?()` because usually a `null`-cell is an empty dictionary.
 
 ```func
 cell d = new_dict();
@@ -297,10 +297,6 @@ else {
 }
 ```
 
-> 💡 Noted
->
-> TODO: We should notice that if dict is empty that dict cell is null.
-
 > 💡 Useful links
 >
 > ["dict_empty?()" in docs](/docs/develop/func/stdlib#dict_empty)
@@ -311,7 +307,7 @@ else {
 
 ### How to determine if tuple is empty
 
-TODO: please provide some description like in a `Modulo operations` section
+When working with `tuples`, it is important always to know if any values are inside for extraction. If we try to extract value from an empty `tuple`, we get an error: "not a tuple of valid size" with `exit code 7`.
 
 ```func
 ;; Declare tlen function because it's not presented in stdlib
@@ -340,11 +336,27 @@ TODO: please provide some description like in a `Modulo operations` section
 > ["empty_tuple?()" in docs](/docs/develop/func/stdlib#empty_tuple)
 >
 > ["tpush()" in docs](/docs/develop/func/stdlib/#tpush)
+>
+> ["Exit codes" in docs](/docs/learn/tvm-instructions/tvm-exit-codes)
 
+### How to determine if lisp-style list is empty
+
+```func
+tuple numbers = null();
+numbers = cons(100, numbers);
+
+if (numbers.null?()) {
+    ;; list-style list is empty
+} else {
+    ;; list-style list is not empty
+}
+```
+
+We are adding number 100 to our list-style list with [cons](/docs/develop/func/stdlib/#cons) function, so it's not empty.
 
 ### How to determine a state of the contract is empty
 
-TODO: please provide some description like in a `Modulo operations` section
+Let’s say we have a `counter` that stores the number of transactions. This variable is not available during the first transaction in the smart contract state, because the state is empty, so it is necessary to process such a case. If the state is empty, we create a variable `counter` and save it.
 
 ```func
 ;; `get_data()` will return the data cell from contract state
@@ -352,10 +364,16 @@ cell contract_data = get_data();
 slice cs = contract_data.begin_parse();
 
 if (cs.slice_empty?()) {
-    ;; contract data is empty
+    ;; contract data is empty, so we create counter and save it
+    int counter = 1;
+    ;; create cell, add counter and save in contract state
+    set_data(begin_cell().store_uint(counter, 32).end_cell());
 }
 else {
-    ;; contract data is not empty
+    ;; contract data is not empty, so we get our counter, increase it and save
+    ;; we should specify correct length of our counter in bits
+    int counter = cs~load_uint(32) + 1;
+    set_data(begin_cell().store_uint(counter, 32).end_cell());
 }
 ```
 
@@ -370,15 +388,18 @@ else {
 > ["begin_parse()" in docs](/docs/develop/func/stdlib/#begin_parse)
 >
 > ["slice_empty?()" in docs](/docs/develop/func/stdlib/#slice_empty)
+>
+> ["set_data?()" in docs](/docs/develop/func/stdlib#set_data)
 
 ### How to build an internal message cell
 
-TODO: please provide some description like in a `Modulo operations` section
+If we want the contract to send an internal message, we should first properly create it as a cell, specifying the technical flags, the recipient address, and the rest data.
 
 ```func
-;; TODO: what is `a` literal?
+;; We use literal `a` to get valid address inside slice from string containing address 
 slice addr = "EQArzP5prfRJtDM5WrMNWyr9yUTAi0c9o6PfR4hkWy9UQXHx"a;
 int amount = 1000000000;
+;; we use `op` for identifying operations
 int op = 0;
 
 cell msg = begin_cell()
@@ -394,11 +415,11 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors
 
 > 💡 Noted
 >
-> TODO: what is literal `a` and were devs can find more information about literal `a`?
+> In this example, we use literal `a` to get address. You can find more about string literals in [docs](/docs/develop/func/literals_identifiers#string-literals)
 
 > 💡 Noted
 >
-> You can find more in [docs](/docs/develop/smart-contracts/messages). You can jump in [layout](/docs/develop/smart-contracts/messages#message-layout) with this link.
+> You can find more in [docs](/docs/develop/smart-contracts/messages). Also, you can jump in [layout](/docs/develop/smart-contracts/messages#message-layout) with this link.
 
 > 💡 Useful links
 >
@@ -416,10 +437,12 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors
 
 ### How to contain a body as ref to an internal message cell
 
-TODO: please provide some description like in a `Modulo operations` section
+In the body of a message that follows flags and other technical data, we can send `int`, `slice`, and `cell`. In the case of the latter, it is necessary to set the bit to `1` before `store_ref()` to indicate that the `cell` will go on. 
+
+We can also send the body of the message inside the same `cell` as header, if we are sure that we have enough space. In this case, we need to set the bit to `0`.
 
 ```func
-;; TODO: what is `a` literal?
+;; We use literal `a` to get valid address inside slice from string containing address 
 slice addr = "EQArzP5prfRJtDM5WrMNWyr9yUTAi0c9o6PfR4hkWy9UQXHx"a;
 int amount = 1000000000;
 int op = 0;
@@ -432,8 +455,8 @@ cell msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)
     .store_coins(amount)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1)
-    .store_uint(1, 1)
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) 
+    .store_uint(1, 1) ;; set bit to 1 to indicate that the cell will go on
     .store_ref(message_body)
 .end_cell();
 
@@ -442,11 +465,11 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors
 
 > 💡 Noted
 >
-> TODO: what is literal `a` and were devs can find more information about literal `a`?
+> In this example, we use literal `a` to get address. You can find more about string literals in [docs](/docs/develop/func/literals_identifiers#string-literals)
 
 > 💡 Noted
 >
-> TODO: what is mode `3` and which preffer mode to use in most cases? When we should use mode 64 and 128?
+> In this example, we used mode 3 to take the incoming tons and send exactly as much as specified (amount) while paying commission from the contract balance and ignoring the errors. Mode 64 is needed to return all the tons received, subtracting the commission, and mode 128 will send the entire balance.
 
 > 💡 Noted
 >
@@ -468,10 +491,10 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors
 
 ### How to contain a body as slice to an internal message cell
 
-TODO: please provide some description like in a `Modulo operations` section
+When sending messages, the body message can be sent either as `cell` or as `slice`. In this example, we send the body of the message inside the `slice`.
 
 ```func 
-;; TODO: what is `a` literal?
+;; We use literal `a` to get valid address inside slice from string containing address 
 slice addr = "EQArzP5prfRJtDM5WrMNWyr9yUTAi0c9o6PfR4hkWy9UQXHx"a;
 int amount = 1000000000;
 int op = 0;
@@ -491,11 +514,11 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors
 
 > 💡 Noted
 >
-> TODO: what is literal `a` and were devs can find more information about literal `a`?
+> In this example, we use literal `a` to get address. You can find more about string literals in [docs](/docs/develop/func/literals_identifiers#string-literals)
 
 > 💡 Noted
 >
-> TODO: what is mode `3` and which preffer mode to use in most cases? When we should use mode 64 and 128?
+> In this example, we used mode 3 to take the incoming tons and send exactly as much as specified (amount) while paying commission from the contract balance and ignoring the errors. Mode 64 is needed to return all the tons received, subtracting the commission, and mode 128 will send the entire balance.
 
 > 💡 Noted
 >
@@ -503,7 +526,7 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors
 
 ### How to iterate tuples (in both directions)
 
-TODO: please provide some description like in a `Modulo operations` section
+If we want to work with an array or stack in FunC, then tuple will be necessary there. And first of all we need to be able to iterate values to work with them.
 
 ```func
 (int) tlen (tuple t) asm "TLEN";
@@ -537,7 +560,33 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
 ### How to write own functions using `asm` keyword
 
-> TODO: Before we can move on, we need to show examples of how to make custom functions using asm. Please, add few examples bellow: 👇
+When using any features we actually use pre-prepared for us methods inside `stdlib.fc`. But in fact, we have many more opportunities available to us, and we need to learn to write them ourselves.
+
+For example, we have the method of `tpush`, which adds an element to `tuple`, but without `tpop`. In this case, we should do this:
+```func
+;; ~ means it is modifying method
+forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP"; 
+```
+
+If we want to know the length of `tuple` for iteration, we should write a new function with the `TLEN` asm instruction:
+```func
+int tuple_length (tuple t) asm "TLEN";
+```
+
+Some examples of functions already known to us from stdlib.fc:
+```func
+slice begin_parse(cell c) asm "CTOS";
+builder begin_cell() asm "NEWC";
+cell end_cell(builder b) asm "ENDC";
+```
+
+> 💡 Useful links:
+>
+> ["modifying method" in docs](/docs/develop/func/statements#modifying-methods)
+>
+> ["stdlib" in docs](/docs/develop/func/stdlib)
+>
+> ["TVM instructions" in docs](/docs/learn/tvm-instructions/instructions)
 
 ### Iterating n-nested tuples
 
@@ -549,6 +598,10 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 forall X -> int is_tuple (X x) asm "ISTUPLE";
 forall X -> tuple cast_to_tuple (X x) asm "NOP";
 forall X -> int cast_to_int (X x) asm "NOP";
+forall X -> (tuple) to_tuple (X x) asm "NOP";
+
+;; define global variable
+global int max_value;
 
 () iterate_tuple (tuple t) impure {
     repeat (t.tuple_length()) {
@@ -558,18 +611,60 @@ forall X -> int cast_to_int (X x) asm "NOP";
             iterate_tuple(tuple_value);
         }
         else {
-            ~dump(value);
-            ;; do something with the value
+            if(value > max_value) {
+                max_value = value;
+            }
         }
     }
 }
 
-;; TODO: please provide an example how to use it
+() main () {
+    tuple t = to_tuple([[2,6], [1, [3, [3, 5]]], 3]);
+    int len = t.tuple_length();
+    max_value = 0; ;; reset max_value;
+    iterate_tuple(t); ;; iterate tuple and find max value
+    ~dump(max_value); ;; 6
+}
 ```
 
 > 💡 Useful links
 >
-> TODO: please add useful links for all functions like in above sections 
+> ["Global variables" in docs](/docs/develop/func/global_variables)
+>
+> ["~dump" in docs](/docs/develop/func/builtins#dump-variable)
+>
+> ["TVM instructions" in docs](/docs/learn/tvm-instructions/instructions) 
+
+
+### Basic operations with tuples
+
+```func
+(int) tlen (tuple t) asm "TLEN";
+forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
+
+() main () {
+    ;; creating an empty tuple
+    tuple names = empty_tuple(); 
+    
+    ;; push new items
+    names~tpush("Naito Narihira");
+    names~tpush("Shiraki Shinichi");
+    names~tpush("Akamatsu Hachemon");
+    names~tpush("Takaki Yuichi");
+    
+    ;; pop last item
+    slice last_name = names~tpop();
+
+    ;; get first item
+    slice first_name = names.first();
+
+    ;; get an item by index
+    slice best_name = names.at(2);
+
+    ;; getting the length of the list 
+    int number_names = names.tlen();
+}
+```
 
 ### Resolving type X
 
@@ -585,6 +680,7 @@ forall X -> int cast_to_int (X x) asm "NOP";
 forall X -> cell cast_to_cell (X x) asm "NOP";
 forall X -> slice cast_to_slice (X x) asm "NOP";
 forall X -> tuple cast_to_tuple (X x) asm "NOP";
+forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
 forall X -> () resolve_type (X value) impure {
     ;; value here is of type X, since we dont know what is the exact value - we would need to check what is the value and then cast it
@@ -610,12 +706,48 @@ forall X -> () resolve_type (X value) impure {
     }
 }
 
-;; TODO: please provide an example how to use it
+() main () {
+    ;; creating an empty tuple
+    tuple stack = empty_tuple();
+    ;; let's say we have tuple and do not know the exact types of them
+    stack~tpush("Some text");
+    stack~tpush(4);
+    ;; we use var because we do not know type of value
+    var value = stack~tpop();
+    resolve_type(value);
+}
 ```
 
 > 💡 Useful links
 >
-> TODO: please add useful links for all functions like in above sections 
+> ["TVM instructions" in docs](/docs/learn/tvm-instructions/instructions) 
+
+
+### How to get current time
+
+```func
+int current_time = now();
+  
+if (current_time > 1672080143) {
+    ;; do some stuff 
+}
+```
+
+### How to generate random number
+
+:::caution draft
+Please note that this method of generating random numbers isn't safe.
+
+TODO: add link to an article about generating random numbers
+:::
+
+```func
+randomize_lt(); ;; do this once
+
+int a = rand(10);
+int b = rand(1000000);
+int c = random();
+```
 
 ### Modulo operations
 
@@ -627,27 +759,41 @@ Note that xp+zp is a valid variable name ( without spaces between ).
    ;; 2^255 - 19 is a prime number for montgomery curves, meaning all operations should be done against its prime
    int prime = 57896044618658097711785492504343953926634992332820282019728792003956564819949; 
 
-   int xp+zp = (xp + zp) % prime;
-   int xp-zp = (xp - zp + prime) % prime;
-
-   (_, int xp+zp*xp-zp) = muldivmod(xp+zp, xp-zp, prime);
+   ;; muldivmod handles the next two lines itself
+   ;; int xp+zp = (xp + zp) % prime;
+   ;; int xp-zp = (xp - zp + prime) % prime;
+   (_, int xp+zp*xp-zp) = muldivmod(xp + zp, xp - zp, prime);
    return xp+zp*xp-zp;
 }
-
-;; TODO: please provide an example how to use it
 ```
 
 > 💡 Useful links
 >
-> TODO: please add useful links for all functions like in above sections 
+> ["muldivmod" in docs](/docs/learn/tvm-instructions/instructions#52-division)
+
+
+### How to throw errors
+
+```func
+int number = 198;
+
+throw_if(35, number > 50); ;; the error will be triggered only if the number is greater than 50
+
+throw_unless(39, number == 198); ;; the error will be triggered only if the number is NOT EQUAL to 198
+
+throw(36); ;; the error will be triggered anyway
+```
+
+[Standard tvm exception codes](/docs/learn/tvm-instructions/tvm-exit-codes.md)
 
 ### Reversing tuples
 
-TODO: please provide some description like in a `Modulo operations` section
+Because tuple stores data as a stack, sometimes we have to reverse tuple to read data from the other end.
 
 ```func
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 int tuple_length (tuple t) asm "TLEN";
+forall X -> (tuple) to_tuple (X x) asm "NOP";
 
 (tuple) reverse_tuple (tuple t1) {
     tuple t2 = empty_tuple();
@@ -658,12 +804,51 @@ int tuple_length (tuple t) asm "TLEN";
     return t2;
 }
 
-;; TODO: please provide an example how to use it
+() main () {
+    tuple t = to_tuple([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    tuple reversed_t = reverse_tuple(t);
+    ~dump(reversed_t); ;; [10 9 8 7 6 5 4 3 2 1]
+}
 ```
 
 > 💡 Useful links
 >
-> TODO: please add useful links for all functions like in above sections 
+> ["tpush()" in docs](/docs/develop/func/stdlib/#tpush)
+
+
+### How to remove an item with a certain index from the list
+
+```func
+int tlen (tuple t) asm "TLEN";
+
+(tuple, ()) remove_item (tuple old_tuple, int place) {
+    tuple new_tuple = empty_tuple();
+
+    int i = 0;
+    while (i < old_tuple.tlen()) {
+        int el = old_tuple.at(i);
+        if (i != place) {
+            new_tuple~tpush(el);
+        }
+        i += 1;  
+    }
+    return (new_tuple, ());
+}
+
+() main () {
+    tuple numbers = empty_tuple();
+
+    numbers~tpush(19);
+    numbers~tpush(999);
+    numbers~tpush(54);
+
+    ~dump(numbers); ;; [19 999 54]
+
+    numbers~remove_item(1); 
+
+    ~dump(numbers); ;; [19 54]
+}
+```
 
 ### Determine if slices are equal
 
@@ -676,12 +861,23 @@ int are_slices_equal_1? (slice a, slice b) {
 
 int are_slices_equal_2? (slice a, slice b) asm "SDEQ";
 
-;; TODO: please provide an example how to use it
+() main () {
+    slice a = "Some text";
+    slice b = "Some text";
+    ~dump(are_slices_equal_1?(a, b)); ;; -1 = true
+
+    a = "Text";
+    ;; We use literal `a` to get valid address inside slice from string containing address
+    b = "EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF"a;
+    ~dump(are_slices_equal_2?(a, b)); ;; 0 = false
+}
 ```
 
 > 💡 Useful links
 >
-> TODO: please add useful links for all functions like in above sections 
+> ["slice_hash()" in docs](/docs/develop/func/stdlib/#slice_hash)
+>
+> ["SDEQ" in docs](docs/learn/tvm-instructions/instructions#62-other-comparison)
 
 ### Determine if cells are equal 
 
@@ -692,12 +888,22 @@ int are_cells_equal? (cell a, cell b) {
     return a.cell_hash() == b.cell_hash();
 }
 
-;; TODO: please provide an example how to use it
+() main () {
+    cell a = begin_cell()
+            .store_uint(123, 16)
+            .end_cell();
+
+    cell b = begin_cell()
+            .store_uint(123, 16)
+            .end_cell();
+
+    ~dump(are_cells_equal?(a, b)); ;; -1 = true
+}
 ```
 
 > 💡 Useful links
 >
-> TODO: please add useful links for all functions like in above sections 
+> ["cell_hash()" in docs](/docs/develop/func/stdlib/#cell_hash)
 
 ### Determine if tuples are equal
 
@@ -716,6 +922,7 @@ forall X -> int is_cell (X x) asm "<{ TRY:<{ CTOS DROP -1 PUSHINT }>CATCH<{ 2DRO
 forall X -> int is_slice (X x) asm "<{ TRY:<{ SBITS DROP -1 PUSHINT }>CATCH<{ 2DROP 0 PUSHINT }> }>CONT 1 1 CALLXARGS";
 forall X -> int is_tuple (X x) asm "ISTUPLE";
 int are_slices_equal? (slice a, slice b) asm "SDEQ";
+
 int are_cells_equal? (cell a, cell b) {
     return a.cell_hash() == b.cell_hash();
 }
@@ -768,37 +975,51 @@ int are_cells_equal? (cell a, cell b) {
     return equal?;
 }
 
-;; TODO: please provide an example how to use it
+() main () {
+    tuple t1 = cast_to_tuple([[2, 6], [1, [3, [3, 5]]], 3]);
+    tuple t2 = cast_to_tuple([[2, 6], [1, [3, [3, 5]]], 3]);
+
+    ~dump(are_tuples_equal?(t1, t2)); ;; -1 
+}
 ```
 
 > 💡 Useful links
 >
-> TODO: please add useful links for all functions like in above sections 
+> ["cell_hash()" in docs](/docs/develop/func/stdlib/#cell_hash)
+>
+> ["TVM instructions" in docs](/docs/learn/tvm-instructions/instructions)
 
 ### Generate internal address
 
-TODO: please provide some description like in a `Modulo operations` section
+We need to generate an internal address when our contract should deploy a new contract, but do not know his address. Suppose we already have `state_init` - the code and data of the new contract. 
 
 Creates an internal address for the corresponding MsgAddressInt TLB.
 
 ```func
-(slice) generate_internal_address (int workchain_id, int address) {
+(slice) generate_internal_address (int workchain_id, cell state_init) {
     ;; addr_std$10 anycast:(Maybe Anycast) workchain_id:int8 address:bits256  = MsgAddressInt;
 
     return begin_cell()
         .store_uint(2, 2) ;; addr_std$10
         .store_uint(0, 1) ;; anycast nothing
         .store_int(workchain_id, 8) ;; workchain_id: -1
-        .store_uint(address, 256)
+        .store_uint(cell_hash(state_init), 256)
     .end_cell().begin_parse();
 }
 
-;; TODO: please provide an example how to use it
+() main () {
+    slice deploy_address = generate_internal_address(workchain(), state_init);
+    ;; then we can deploy new contract
+}
 ```
+
+> 💡 Noted
+> 
+> In this example, we use `workchain()` to get id of workchain. You can find more about Workchain ID in [docs](/docs/learn/overviews/addresses#workchain-id).
 
 > 💡 Useful links
 >
-> TODO: please add useful links for all functions like in above sections 
+> ["cell_hash()" in docs](/docs/develop/func/stdlib/#cell_hash)
 
 ### Generate external address
 
@@ -844,11 +1065,19 @@ set_data(begin_cell().store_dict(dictionary_cell).end_cell());
 
 > 💡 Useful links
 >
-> TODO: please add useful links for all functions like in above sections 
+> ["get_data()" in docs](/docs/develop/func/stdlib/#get_data)
+>
+> ["new_dict()" in docs](/docs/develop/func/stdlib/#new_dict)
+>
+> ["slice_empty?()" in docs](/docs/develop/func/stdlib/#slice_empty)
+>
+> ["load_dict()" in docs](/docs/develop/func/stdlib/#load_dict)
+>
+> ["~" in docs](/docs/develop/func/statements#unary-operators)
 
 ### How to send a simple message
 
-TODO: please provide some description like in a `Modulo operations` section
+The usual way for us to send tons with a comment is actually a simple message. To specify that the body of the message is a `comment`, we should set `32 bits` before the message text to 0.
 
 ```func
 cell msg = begin_cell()
@@ -865,12 +1094,10 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
 > 💡 Useful links
 >
 > ["Message layout" in docs](/docs/develop/smart-contracts/messages)
->
-> TODO: please add useful links for all functions like in above sections 
 
 ### How to send a message with an incoming account
 
-TODO: please provide some description like in a `Modulo operations` section
+The contract example below is useful to us if we need to perform any actions between the user and the main contract, that is, we need a proxy contract.
 
 ```func
 () recv_internal (slice in_msg_body) {
@@ -898,11 +1125,11 @@ TODO: please provide some description like in a `Modulo operations` section
 > 
 > ["Message layout" in docs](/docs/develop/smart-contracts/messages)
 >
-> TODO: please add useful links for all functions like in above sections 
+> ["load_msg_addr()" in docs](/docs/develop/func/stdlib/#load_msg_addr)
 
 ### How to send a message with the entire balance
 
-TODO: please provide some description like in a `Modulo operations` section
+If we need to send the entire balance of the smart contract, then, in this case, we need to use send `mode 128`. An example of such a case would be a proxy contract that accepts payments and forwards to the main contract.
 
 ```func
 cell msg = begin_cell()
@@ -921,39 +1148,10 @@ send_raw_message(msg, 128); ;; mode = 128 is used for messages that are to carry
 > ["Message layout" in docs](/docs/develop/smart-contracts/messages)
 > 
 > ["Message modes" in docs](/docs/develop/func/stdlib/#send_raw_message)
->
-> TODO: please add useful links for all functions like in above sections 
-
-### How to specify a message body via a reference
-
-TODO: please provide some description like in a `Modulo operations` section
-
-```func
-cell body = begin_cell()
-    .store_uint(0, 32) ;; zero opcode - simple message with comment
-    .store_slice("hello!")
-.end_cell();
-
-cell msg = begin_cell()
-    .store_uint(0x18, 6) ;; flags
-    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
-    .store_coins(100) ;; amount of nanoTons to send
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) ;; 106 zero-bits, necessary for internal messages
-    .store_uint(1, 1) ;; we want to store body as a ref
-    .store_ref(body)
-.end_cell();
-send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
-```
-
-> 💡 Useful links
-> 
-> ["Message layout" in docs](/docs/develop/smart-contracts/messages)
->
-> TODO: please add useful links for all functions like in above sections 
 
 ### How to send a message with a long text comment
 
-TODO: please provide some description like in a `Modulo operations` section
+As we know, only 127 characters can fit into a single `cell` (<1023 bits). In case we need more - we need to organize a snake cells.
 
 ```func
 {-
@@ -975,6 +1173,7 @@ cell body = begin_cell()
 
 cell msg = begin_cell()
     .store_uint(0x18, 6) ;; flags
+    ;; We use literal `a` to get valid address inside slice from string containing address 
     .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
     .store_coins(100) ;; amount of nanoTons to send
     .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) ;; 106 zero-bits, necessary for internal messages
@@ -987,12 +1186,10 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
 > 💡 Useful links
 >
 > ["Internal messages" in docs](/docs/develop/smart-contracts/guidelines/internal-messages)
->
-> TODO: please add useful links for all functions like in above sections
 
 ### How to get only data bits from a slice (without refs)
 
-TODO: please provide some description like in a `Modulo operations` section
+If we are not interested in `refs` inside the `slice`, then we can get a separate date and work with it.
 
 ```func
 slice s = begin_cell()
@@ -1008,11 +1205,13 @@ slice s_only_data = s.preload_bits(s.slice_bits());
 > 
 > ["Slice primitives" in docs](/docs/develop/func/stdlib/#slice-primitives)
 >
-> TODO: please add useful links for all functions like in above sections 
+> ["preload_bits()" in docs](/docs/develop/func/stdlib/#preload_bits)
+>
+> ["slice_bits()" in docs](/docs/develop/func/stdlib/#slice_bits)
 
 ### How to define your own modifying method
 
-TODO: please provide some description like in a `Modulo operations` section
+Modifying methods allow data to be modified within the same variable. This can be compared to referencing in other programming languages.
 
 ```func
 (slice, (int)) load_digit (slice s) {
@@ -1033,12 +1232,79 @@ TODO: please provide some description like in a `Modulo operations` section
 > 💡 Useful links
 > 
 > ["Modifying methods" in docs](/docs/develop/func/statements#modifying-methods)
->
-> TODO: please add useful links for all functions like in above sections 
+
+### How to raise number to the power of n
+
+```func
+;; Unoptimized variant
+int pow (int a, int n) {
+    int i = 0;
+    int value = a;
+    while (i < n - 1) {
+        a *= value;
+        i += 1;
+    }
+    return a;
+}
+
+;; Optimized variant
+(int) binpow (int n, int e) {
+    if (e == 0) {
+        return 1;
+    }
+    if (e == 1) {
+        return n;
+    }
+    int p = binpow(n, e / 2);
+    p *= p;
+    if ((e % 2) == 1) {
+        p *= n;
+    }
+    return p;
+}
+
+() main () {
+    int num = binpow(2, 3);
+    ~dump(num); ;; 8
+}
+```
+
+### How to convert string to int
+
+```func
+slice string_number = "26052021";
+int number = 0;
+
+while (~ string_number.slice_empty?()) {
+    int char = string_number~load_uint(8);
+    number = (number * 10) + (char - 48); ;; we use ASCII table
+}
+
+~dump(number);
+```
+
+### How to convert int to string
+
+```func
+int n = 261119911;
+builder string = begin_cell();
+tuple chars = null();
+do {
+    int r = n~divmod(10);
+    chars = cons(r + 48, chars);
+} until (n == 0);
+do {
+    int char = chars~list_next();
+    string~store_uint(char, 8);
+} until (null?(chars));
+
+slice result = string.end_cell().begin_parse();
+~dump(result);
+```
 
 ### How to iterate dictionaries
 
-TODO: please provide some description like in a `Modulo operations` section
+Dictionaries are very useful when working with a lot of data. We can get minimum and maximum key values using the built-in methods `dict_get_min?` and `dict_get_max?` respectively. Additionally, we can use `dict_get_next?` to iterate the dictionary.
 
 ```func
 cell d = new_dict();
@@ -1059,11 +1325,30 @@ while (flag) {
 >
 > ["Dictonaries primitives" in docs](/docs/develop/func/stdlib/#dictionaries-primitives)
 >
-> TODO: please add useful links for all functions like in above sections 
+> ["dict_get_max?()" in docs](/docs/develop/func/stdlib/#dict_get_max)
+>
+> ["dict_get_min?()" in docs](/docs/develop/func/stdlib/#dict_get_min)
+>
+> ["dict_get_next?()" in docs](/docs/develop/func/stdlib/#dict_get_next)
+>
+> ["dict_set()" in docs](/docs/develop/func/stdlib/#dict_set)
+
+### How to delete value from dictionaries
+
+```func
+cell names = new_dict();
+names~udict_set(256, 27, "Alice");
+names~udict_set(256, 25, "Bob");
+
+names~udict_delete?(256, 27);
+
+(slice val, int key) = names.udict_get?(256, 27);
+~dump(val); ;; null() -> means that key was not found in a dictionary
+```
 
 ### How to iterate cell tree recursively
 
-TODO: please provide some description like in a `Modulo operations` section
+As we know, one `cell` can store up to `1023 bits` of data and up to `4 refs`. To get around this limit, we can use a tree of cells, but to do this we need to be able to iterate it for proper data processing.
 
 ```func
 forall X -> int is_null (X x) asm "ISNULL";
@@ -1088,13 +1373,18 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
         .end_cell())
     .end_cell();
 
+    ;; creating tuple with no data, which plays the role of stack
     tuple stack = null();
+    ;; bring the main cell into the stack to process it in the loop
     stack~push_back(c);
+    ;; do it until stack is not null
     while (~ stack.is_null()) {
+        ;; get the cell from the stack and convert it to a slice to be able to process it
         slice s = stack~pop_back().begin_parse();
 
         ;; do something with s data
 
+        ;; if the current slice has any refs, add them to stack
         repeat (s.slice_refs()) {
             stack~push_back(s~load_ref());
         }
@@ -1106,11 +1396,13 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 > 
 > ["Lisp-style lists" in docs](/docs/develop/func/stdlib/#lisp-style-lists)
 >
-> TODO: please add useful links for all functions like in above sections
+> ["null()" in docs](/docs/develop/func/stdlib/#null)
+>
+> ["slice_refs()" in docs](/docs/develop/func/stdlib/#slice_refs)
 
 ### How to iterate through lisp-style list
 
-TODO: please provide some description like in a `Modulo operations` section
+The data type tuple can hold up to 255 values. If this is not enough, then we should use a lisp-style list. We can put a tuple inside a tuple, thus bypassing the limit.
 
 ```func
 forall X -> int is_null (X x) asm "ISNULL";
@@ -1138,4 +1430,4 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 > 
 > ["Lisp-style lists" in docs](/docs/develop/func/stdlib/#lisp-style-lists)
 >
-> TODO: please add useful links for all functions like in above sections 
+> ["null()" in docs](/docs/develop/func/stdlib/#null)

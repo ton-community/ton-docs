@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        We'll consider [our tutorial guidelines](https://www.tonspace.co/contribute/guidelines) when reviewing the tutorial, so please take a look there first.
+        We'll consider [our tutorial guidelines](/contribute/guidelines) when reviewing the tutorial, so please take a look there first.
   - type: markdown
     id: tutorial_info
     attributes:
