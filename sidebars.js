@@ -490,6 +490,13 @@ const sidebars = {
       ],
     },
     {
+      type: 'category',
+      label: 'Blockchain Details',
+      items: [
+        'participate/own-blockchain-software/random',
+      ],
+    },
+    {
       type: 'doc',
       label: 'NFT Use Cases in TON',
       id: 'participate/nft',
