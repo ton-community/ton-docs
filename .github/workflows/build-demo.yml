@@ -33,6 +33,8 @@ jobs:
         with:
           context: .
           file: "deployment/Docker/Dockerfile"
+          # https://github.com/docker/buildx/issues/1533
+          provenance: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: ${{ secrets.REGISTRY_URL }}/nwt/ton_docs:demo
