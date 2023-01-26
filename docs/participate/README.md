@@ -29,7 +29,7 @@ Participate section focused on builders who want to discover what it's possible 
 
 * [TON Web3 Overview](/participate/web3/overview)
 * [Use TON DNS for your domains](/participate/web3/dns)
-* [Site & Domain management](/docs/participate/web3/site-management)
+* [Site & Domain management](/participate/web3/site-management)
 * [\[Tutorial\] How to run your own TON Site?](/develop/dapps/tutorials/how-to-run-ton-site)
 
 ### TON Proxy

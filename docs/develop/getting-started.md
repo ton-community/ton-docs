@@ -43,11 +43,11 @@ For web developers the best approach is to start from this article:
 
 - [Introduction to The Open Network](/learn/introduction)
 - [The TON Blockchain is based on PoS consensus](https://blog.ton.org/the-ton-blockchain-is-based-on-pos-consensus)
-- [TON Whitepapers](/docs/learn/docs)
+- [TON Whitepapers](/learn/docs)
     
 #### Similarities and differences versus EVM chains?
 
-- [Ethereum to TON](/docs/learn/introduction#ethereum-to-ton)
+- [Ethereum to TON](/learn/introduction#ethereum-to-ton)
 
 ### Block
 
