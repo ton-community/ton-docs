@@ -246,6 +246,7 @@ const sidebars = {
             'develop/smart-contracts/guidelines/get-methods',
             'develop/smart-contracts/guidelines/accept',
             'develop/smart-contracts/guidelines/processing',
+            'develop/smart-contracts/guidelines/random-number-generation',
             'develop/smart-contracts/governance',
             'develop/smart-contracts/guidelines/tips',
             {

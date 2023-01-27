@@ -1,0 +1,117 @@
+# Random number generation
+
+Generating random numbers is a common task which you may need in many different projects. You might have already seen `random()` function in FunC docs, but note that its result can be easily predicted unless you use some additional tricks.
+
+## How can someone predict a random number?
+
+Computers are really bad at generating random information, because all they do is following the instructions of users. But since people really need random numbers often, they came up with different ways of generating _pseudo-random_ numbers.
+
+These algorithms usually require you to provide some `seed` value which will be used to generate a sequence of pseudo-random numbers. So if you run the same program with the same seed several times, you will eventually get the same result every time. In TON, the seed is different for each block.
+
+ * [Generation of block random seed](https://ton.org/docs/participate/own-blockchain-software/random)
+
+So in order to predict the result of `random()` function in some smart contract, you just need to know the current seed of the block (which is possible).
+
+## And what about `randomize_lt()`?
+
+To make the random number generation a bit more unpredictable, you can add the current `Logical time` to the seed, so different transactions will have different seeds and different results. But the thing is that `Logical time` is easily predictable.
+
+As was seen in TON Hack Challenge, generating random numbers with just `randomize_lt()` and `random()` is not safe. Take a look at the solution of 4th task called **Lottery**:
+ - https://github.com/ton-blockchain/hack-challenge-1/blob/master/Solutions/4.%20lottery.md
+ - https://ton.org/docs/develop/smart-contracts/security/ton-hack-challenge-1#4-lottery
+
+By writing a simple smart contract you can predict the results of `random()` function even if there was a `randomize_lt()` call.
+
+## So how do I generate random numbers safely?
+
+There can possibly be different approaches, but one of the simpliest is just skipping at least one block before generating a number. If we skip a block, the seed will change in a less predictable way, thus your RNG will be a lot safer.
+
+Skipping blocks is not a complex task. You can do that by simply sending a message to Masterchain and back to the workchain of your contract. Let's have a look at the simple example!
+
+:::caution
+Do not use this example contract in real projects, write your own instead.
+:::
+
+### Masterchain echo-contract
+
+The purpose of this contract is just to forward the message back to sender. This can be done in a few FunC lines of code:
+
+```func
+() recv_internal (cell in_msg_full, slice in_msg_body) impure {
+    var cs = in_msg_full.begin_parse();
+    var flags = cs~load_uint(4);
+    if (flags & 1) { ;; ignore bounced messages
+        return ();
+    }
+    slice sender = cs~load_msg_addr();
+    send_raw_message(
+        begin_cell()
+            .store_uint(0x18, 6)
+            .store_slice(sender)
+            .store_coins(0)
+            .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+            .store_slice(in_msg_body)
+        .end_cell(),
+        64 + 2 ;; send the remaining value of an incoming msg & ignore errors
+    );
+}
+```
+
+Just deploy this contract in Masterchain and let's move to the main contract.
+
+### Main contract in any workchain
+
+Let's write a simple lottery contract as an example. User will send 1 TON to it and with a chance of 50% will get 2 TON back.
+
+```func
+;; set the echo-contract address
+const echo_address = "Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s"a;
+
+() recv_internal (int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    var cs = in_msg_full.begin_parse();
+    var flags = cs~load_uint(4);
+    if (flags & 1) { ;; ignore bounced messages
+        return ();
+    }
+    slice sender = cs~load_msg_addr();
+
+    int op = in_msg_body~load_uint(32);
+    if (op == 0) { ;; bet from user
+        throw_unless(501, msg_value == 1000000000); ;; 1 TON
+
+        send_raw_message(
+            begin_cell()
+                .store_uint(0x18, 6)
+                .store_slice(echo_address)
+                .store_coins(0)
+                .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+                .store_uint(1, 32) ;; let 1 be echo opcode in our contract
+                .store_slice(sender) ;; forward user address
+            .end_cell(),
+            64 ;; send the remaining value of an incoming msg
+        );
+    }
+    elseif (op == 1) { ;; echo
+        throw_unless(502, equal_slice_bits(sender, echo_address)); ;; only accept echoes from our echo-contract
+        
+        slice user = in_msg_body~load_msg_addr();
+
+        ;; at this point, the random is already unpredictable, so let's just generate it
+        randomize_lt();
+        int x = rand(2); ;; generate a random number (either 0 or 1)
+        if (x == 1) { ;; user won
+            send_raw_message(
+                begin_cell()
+                    .store_uint(0x18, 6)
+                    .store_slice(user)
+                    .store_coins(2000000000) ;; 2 TON
+                    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+                .end_cell(),
+                3 ;; ignore errors & pay fees separately
+            );
+        }
+    }
+}
+```
+
+Deploy this contract in any workchain you need (probably Basechain) and you're done!
