@@ -17,10 +17,10 @@ So in order to predict the result of `random()` function in some smart contract,
 To make the random number generation a bit more unpredictable, you can add the current `Logical time` to the seed, so different transactions will have different seeds and different results. But the thing is that `Logical time` is easily predictable.
 
 As was seen in TON Hack Challenge, generating random numbers with just `randomize_lt()` and `random()` is not safe. Take a look at the solution of 4th task called **Lottery**:
- - https://github.com/ton-blockchain/hack-challenge-1/blob/master/Solutions/4.%20lottery.md
- - https://ton.org/docs/develop/smart-contracts/security/ton-hack-challenge-1#4-lottery
+ - [Original solution of the 4th task](https://github.com/ton-blockchain/hack-challenge-1/blob/master/Solutions/4.%20lottery.md)
+ - [Drawing conclusions from TON Hack Challenge \(Task 4\)](/develop/smart-contracts/security/ton-hack-challenge-1#4-lottery)
 
-By writing a simple smart contract you can predict the results of `random()` function even if there was a `randomize_lt()` call.
+You can predict the results of `random()` by writing a simple smart contract function even if there was a `randomize_lt()` call.
 
 ## So how do I generate random numbers safely?
 
@@ -76,9 +76,9 @@ const echo_address = "Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s"a;
     slice sender = cs~load_msg_addr();
 
     int op = in_msg_body~load_uint(32);
-    if (op == 0) { ;; bet from user
+    if ((op == 0) & equal_slice_bits(in_msg_body, "bet")) { ;; bet from user
         throw_unless(501, msg_value == 1000000000); ;; 1 TON
-
+        
         send_raw_message(
             begin_cell()
                 .store_uint(0x18, 6)
@@ -96,7 +96,10 @@ const echo_address = "Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s"a;
         
         slice user = in_msg_body~load_msg_addr();
 
-        ;; at this point, the random is already unpredictable, so let's just generate it
+        {-
+            at this point we have skipped 1+ blocks
+            so let's just generate the random number
+        -}
         randomize_lt();
         int x = rand(2); ;; generate a random number (either 0 or 1)
         if (x == 1) { ;; user won
@@ -115,3 +118,9 @@ const echo_address = "Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s"a;
 ```
 
 Deploy this contract in any workchain you need (probably Basechain) and you're done!
+
+## Is this method 100% secure?
+
+It is safe in most cases, but there is still a **chance of manipulating it**.
+
+An evil validator with some probability [can affect](/participate/own-blockchain-software/random#conclusion) the `seed`, on which the random depends. Even if this probability is extremely small, it is still worth considering.
