@@ -4,7 +4,7 @@ Generating random numbers is a common task which you may need in many different 
 
 ## How can someone predict a random number?
 
-Computers are really bad at generating random information, because all they do is following the instructions of users. But since people really need random numbers often, they came up with different ways of generating _pseudo-random_ numbers.
+Computers are terrible at generating random information, because all they do is following the instructions of users. But since people really need random numbers often, they came up with different ways of generating _pseudo-random_ numbers.
 
 These algorithms usually require you to provide some `seed` value which will be used to generate a sequence of pseudo-random numbers. So if you run the same program with the same seed several times, you will eventually get the same result every time. In TON, the seed is different for each block.
 
@@ -22,7 +22,7 @@ As was seen in TON Hack Challenge, generating random numbers with just `randomiz
 
 You can predict the results of `random()` by writing a simple smart contract function even if there was a `randomize_lt()` call.
 
-## So how do I generate random numbers safely?
+## So, how do I generate random numbers safely?
 
 There can possibly be different approaches, but one of the simpliest is just skipping at least one block before generating a number. If we skip a block, the seed will change in a less predictable way, thus your RNG will be a lot safer.
 
@@ -34,7 +34,7 @@ Do not use this example contract in real projects, write your own instead.
 
 ### Masterchain echo-contract
 
-The purpose of this contract is just to forward the message back to sender. This can be done in a few FunC lines of code:
+The purpose of this contract is just to forward the message back to the sender. This can be done in a few FunC lines of code:
 
 ```func
 () recv_internal (cell in_msg_full, slice in_msg_body) impure {
