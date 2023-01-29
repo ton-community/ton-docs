@@ -225,6 +225,7 @@ const sidebars = {
           items: [
             'develop/smart-contracts/security/README',
             'develop/smart-contracts/security/ton-hack-challenge-1',
+            'develop/smart-contracts/guidelines/random-number-generation'
           ],
         },
         {
@@ -246,7 +247,6 @@ const sidebars = {
             'develop/smart-contracts/guidelines/get-methods',
             'develop/smart-contracts/guidelines/accept',
             'develop/smart-contracts/guidelines/processing',
-            'develop/smart-contracts/guidelines/random-number-generation',
             'develop/smart-contracts/governance',
             'develop/smart-contracts/guidelines/tips',
             {
