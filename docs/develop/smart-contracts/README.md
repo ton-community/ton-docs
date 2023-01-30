@@ -1,27 +1,24 @@
 # Introduction
 
+TON Hello World guide is _the easiest way_ to start with smart contracts development:
+* [TON Hello World: Step-by-step guide for writing your first smart contract](https://ton-community.github.io/tutorials/02-contract/)
 
-Right now, there are three great approaches of how to start developing TON smart contracts:
-* [TON Hello World: Step-by-step guide for writing your first smart contract in FunC](https://blog.ton.org/step-by-step-guide-for-writing-your-first-smart-contract-in-func)
+More articles from TON community:
+
 * [TON Learn FunC journey: 10 zero-to-hero lessons](https://blog.ton.org/func-journey) ([Ru version](https://github.com/romanovichim/TonFunClessons_ru))
 * [Introduction to FunC: how to start developing on TON?](https://dev.to/dvlkv/introduction-in-func-how-to-start-developing-in-ton-50hp)
 
 ## Environment
 
-### Local
-
 A local environment allows you to develop contracts _faster_, with more comfort, and use bonuses like [IDE plugins](/develop/smart-contracts/environment/ide-plugins) with syntax highlight for smart contracts development.
 
 Read more in the [INSTALLATION](/develop/smart-contracts/environment/installation) guide.
 
-### Online
+## Testing and Debugging
 
-You can try to deploy TON smart contracts online using [Glitch Workspace](https://glitch.com/edit/#!/remix/clone-from-repo?&REPO_URL=https%3A%2F%2Fgithub.com%2Fton-defi-org%2Ftonstarter-contracts.git).
+The easiest way to start testing your smart contract is:
 
-Glitch runs the [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) environment directly in the browser, so it is almost identical to the local setup but doesn't require installing anything to your device.
-
-[![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button-v2.svg)](https://glitch.com/edit/#!/remix/clone-from-repo?&REPO_URL=https%3A%2F%2Fgithub.com%2Fton-defi-org%2Ftonstarter-contracts.git)
-
+- [TON Hello World part 4: Step by step guide for testing your first smart contract](https://ton-community.github.io/tutorials/04-testing/)
 
 ## Development Toolkit
 
@@ -33,10 +30,11 @@ Start developing, testing, and debugging smart contracts easily with these resou
 
 ### Other Tools
 
-* [disintar/toncli](/develop/smart-contracts/sdk/toncli)—Comfy CLI to build, deploy, and test FunC contracts
-* [MyLocalTON](/participate/nodes/local-ton)—Run your private TON Blockchain
-* [tonwhales.com/tools/boc](https://tonwhales.com/tools/boc)—BOC parser
-* [tonwhales.com/tools/introspection-id](https://tonwhales.com/tools/introspection-id)—crc32 generator
+* [disintar/toncli](/develop/smart-contracts/sdk/toncli) — Comfy CLI to build, deploy, and test FunC contracts
+* [MyLocalTON](/participate/nodes/local-ton) — Run your private TON Blockchain
+* [tonwhales.com/tools/boc](https://tonwhales.com/tools/boc) — BOC parser
+* [tonwhales.com/tools/introspection-id](https://tonwhales.com/tools/introspection-id) — crc32 generator
+* [@orbs-network/ton-access](https://www.orbs.com/ton-access/) — decentralized API gateway
 
 ## TON Virtual Machine
 
@@ -50,7 +48,6 @@ You can read more about how TVM works in [TVM bird's-eye overview](/learn/tvm-in
 High-level language FunC is used to program smart contracts on TON.
 
 Feel free to read more about FunC in [DOCUMENTATION](/develop/func/overview.md) section.
-
 
 ## Smart Contract Examples
 

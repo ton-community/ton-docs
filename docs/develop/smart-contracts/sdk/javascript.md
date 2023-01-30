@@ -21,7 +21,7 @@ npm install ton-compiler
 * Multiple FunC compiler versions
 * Doesn't need to install and compile TON
 * Programmatic and CLI interfaces
-* Ready to use in unit-testing (with tonstarter-contracts)
+* Ready to use in unit-testing
 
 ### How to use
 
@@ -140,63 +140,3 @@ Note that all FunC source file contents used in your project should be passed to
 * entry points
 * stdlib.fc (if you use it)
 * all files included in entry points
-
-
-
-## tonstarter-contracts
-
-### Overview
-
-Project boilerplate for smart contract development and testing based on TypeScript.
-
-* [GitHub repository](https://github.com/ton-defi-org/tonstarter-contracts)
-* [Online IDE using Glitch](https://glitch.com/edit/#!/remix/clone-from-repo?&REPO_URL=https%3A%2F%2Fgithub.com%2Fton-defi-org%2Ftonstarter-contracts.git)
-
-### Quick Start
-
-To start developing on your local machine just clone the following repository:
-
-```bash
-git clone https://github.com/ton-defi-org/tonstarter-contracts
-cd tonstarter-contracts
-```
-or use a pre-defined Online IDE provided before.
-
-#### Project upgrade needed
-
-tonstarter-contracts still uses the old versions of ton-compiler, so please install and upgrade ton-compiler or func-js manually.
-
-:::tip OPEN-SOURCE OPPORTUNITY
-Pull requests for tonstarter-contracts are always welcome!
-:::
-
-### Where to go next?
-
-After that, feel free to go:
-* [TON Hello World: Step-by-step guide for writing your first smart contract in FunC](https://blog.ton.org/step-by-step-guide-for-writing-your-first-smart-contract-in-func)
-* ... or continue to [Testing & Debugging](/develop/smart-contracts/testing/tonstarter) section to test example smart contracts.
-
-
-### Directory structure
-
-Directory structure looks like:
-
-* `contracts/*.fc` — smart contracts for TON Blockchain written in [FunC](/develop/func/overview) language
-* `test/*.spec.ts` — test suite for the contracts in TypeScript ([MochaJS](https://mochajs.org/) test runner)
-* `build/_build.ts` — build script to compile the FunC code to [Fift](https://ton.org/docs/fiftbase.pdf) and [TVM](https://ton.org/docs/tvm.pdf) opcodes
-* `build/_deploy.ts` — deploy script to deploy the compiled code to TON
-* `build/_setup.ts` — setup script to install build dependencies
-
-:::info
-The optimal setup to develop fully tested contracts in the most seamless way possible.
-:::
-
-### Principles
-
-* **Cross-platform support** works on Mac M1, Mac Intel, Windows, or Linux.
-* **Strong belief in tests** — contracts often manage money; they must be developed under high scrutiny.
-* **Clear and documented code** to help users audit the contract sources and understand what they do.
-* **Reliance on modern TypeScript** to develop clean, typed scripts and tests in a modern framework.
-* **Reliance on TypeScript for deployment** instead of working with `fift` CLI tools - it's simply easier.
-* **Tests are executed in JavaScript** with TVM in web-assembly - a great balance of speed and convenience.
-* Following the TON contract [best practices](/develop/smart-contracts/guidelines) appearing in the official docs.
