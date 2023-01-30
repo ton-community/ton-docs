@@ -321,7 +321,7 @@ Similar to `raw_reserve` but also accepts a dictionary `extra_amount` (represent
 ```
 Sends a raw message contained in `msg`, which should contain a correctly serialized object Message X, with the only exception that the source address is allowed to have a dummy value `addr_none` (to be automatically replaced with the current smart contract address), and `ihr_fee`, `fwd_fee`, `created_lt` and `created_at` fields can have arbitrary values (to be rewritten with correct values during the action phase of the current transaction). The integer parameter `mode` contains the flags.
 
-There are currently 3 Modes and 3 Flags for messages. You can combine a single mode with several (maybe none) flags to get a required `mode`. Combination simply means getting sum of their values. The table with description is below.
+There are currently 3 Modes and 3 Flags for messages. You can combine a single mode with several (maybe none) flags to get a required `mode`. Combination simply means getting sum of their values. A table with descriptions of Modes and Flags is given below.
 
 | Mode | Description |
 |:-|:-|
