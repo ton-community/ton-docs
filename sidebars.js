@@ -582,6 +582,7 @@ const sidebars = {
       'type': 'category',
       'label': 'Become a Contributor',
       'items': [
+        'contribute/contribute-to-earn',
         'contribute/README',
         'contribute/maintainers',
         'contribute/guidelines',
