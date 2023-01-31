@@ -381,7 +381,8 @@ const sidebars = {
             'develop/tact/introduce/getting-start',
             'develop/tact/introduce/hello-world-guide',
             'develop/tact/introduce/tact-sdk',
-            'develop/tact/smart-contracts/tact-wallet'
+            'develop/tact/smart-contracts/tact-wallet',
+            'develop/tact/smart-contracts/tact-jetton'
           ],
         },
         {

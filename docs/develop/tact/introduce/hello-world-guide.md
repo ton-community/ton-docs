@@ -2,13 +2,13 @@
 
 ## Introduction to TON Smart Contracts using Tact
 
-In this guide, we will walk through the process of creating and deploying a simple smart contract using the TON Contract Language (Tact).
+In this guide, we will walk through the process of creating and deploying a simple smart contract using the Tact program language.
 Main goal is trying and touch the smart contract developing process and find out what you should learn next.
 You need spend about one-two hours, it depends on your background knowledge.
 
 :::caution tutorial in open beta
-Did you meet something unclear and hard to understand?🙈 Are you are stuck and have no clues how to solve your issue?🤯 Please ask a question in the [Telegram chat](https://t.me/tondev_eng) or ask me directly at Telegram - [@iftryalexg](https://t.me/iftryalexg).
-Based on the questions received, the guide will be updated ASAP and unclear points will be clarified 🚒💦💦🔥🔥🔥.
+Did you notice something unclear or get stuck with some issue in guide? Please ask a question in the Telegram [chat](https://t.me/tondev_eng) or text me directly [@iftryalexg](https://t.me/iftryalexg).
+Guide will be updated ASAP and all unclear points will be clarified 🚒💦🔥.
 :::
 
 ### Tact's facts #1
@@ -29,10 +29,6 @@ But instead of a notebook, it's a stores on multiple servers. And instead of jus
 
 
 ### Tactical practise #1 - set up your environment
-
-:::info
-If you have choice it's better to use Unix like or MacOS operating system for developing. In Windows OS you will face some additional issues.
-:::
 
 Get ready to build your own blockchain creation! First, you'll need to gather a few tools to help you along the way.
 
@@ -57,18 +53,51 @@ command that you should input in your command line
 You should execute it in your [terminal](https://askubuntu.com/questions/38162/what-is-a-terminal-and-how-do-i-open-and-use-it) bash, zdsh, windows PowerShell or IDE implicit command line.
 
 
-### Tactical practise #2 - get template from Github
+### Tactical practise #2 - get template from GitHub
 
-For beginning let's take basic tact project from community repository:
+For beginning let's take basic tact project from community repository.
 
-Open local directory, where you want to keep your project
+#### Install yarn tool
+To manage our project with comfort we will use `yarn`, you need install this with following command:
 ```bash
-cd usr/dev 
+npm install --global yarn
+```
+:::info Windows scripts execution
+For launching scripts in Windows terminal in first time, you should [allow](https://learn.microsoft.com/en-gb/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.3) this action. You can input and execute from terminal command: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`. It will allow to run commands with `yarn` from terminal.
+:::
+
+
+#### Choose local directory
+Choose local directory, where you want to keep your project.
+For example, if you want to place you project in new directory `dev`:
+
+- For [Windows terminal](https://learn.microsoft.com/en-gb/windows/terminal/install)
+```bash
+ cd C:\
+```
+```bash
+ mkdir dev
+```
+```bash
+ cd dev
 ```
 
-Take template of Tact project to your local environment:
+- For Linux/MacOS
+
 ```bash
-git clone https://github.com/Reveloper/tact-guide-template
+ cd ~
+```
+```bash
+ mkdir dev
+```
+```bash
+ cd dev
+```
+
+#### Clone template of Tact project to your local environment
+Clone with command:
+```bash
+git clone https://github.com/ton-community/tact-guide-template
 ```
 
 Then open new downloaded local directory:
@@ -76,10 +105,14 @@ Then open new downloaded local directory:
 cd tact-guide-template
 ```
 
+
+#### Update and check
 To finish the installation process and resolve predefined dependencies for tact-template, check updates of relevant libraries via the following commands:
 
 ```bash
 yarn install
+```
+```bash
 yarn add ton-tact
 ```
 
@@ -127,7 +160,7 @@ So, let's say, **contracts** and **messages** our main characters in blockchain.
 
 2. **message** - is a command that we send to the contract. It tells the contract what to do and can include information like how much funds to transfer or what information to store.
 
-Think of it like a game, where the contract is the game rules and the messages are the moves you make to play the game. On the scheme you can see graphic representation of working in blockchain, where different smart contracts(circles) communicate to each other with messages.
+On the scheme you can see not perfectly accurate graphic representation of working in blockchain, where different smart contracts(circles) communicate to each other with messages.
 
 ![Tact deploy](/img/docs/tact-hello-world/tact-hello-world-5.png?raw=true)
 
@@ -138,7 +171,7 @@ To summarize these, in common words, main goal of smart contract developer is to
 
 Let's talk about the design of our contract.
 Our smart contract is like a piggy bank with several common features:
-1. _Store Total value_. We will keep `Total` integer value in blockchain. 
+1. _Keep Total value_. We will keep `Total` integer value in blockchain. 
 2. _Get Total value_. Special tool for reading current `Total` value from blockchain. We can read this directly from blockchain via special `get` method.
 3. _Processing "Increment" text comment command_. When contract gets a message, it checks what the message says. If the message says "Increment," it will add `1` to the `Total` inside the piggy bank and update it. 
 4. _Processing `Add` message command_. If the message says "Add," it will add a specific number to the Total inside the piggy bank and update it. 
@@ -310,12 +343,12 @@ Command `yarn build` will compile `contract.tact` and place result in `tact-temp
 ![Tact compile scheme](/img/docs/tact-hello-world/tact-compiler-scheme.png?raw=true)
 
 
-## Tact's facts #5
+### Tact's facts #5
 
 Now we on finale stage. We need to deploy our contract to Blockchain. To do this, we will use Ton wallet application. In this way we avoid a lot of details about deployment process, but you can find more about this in low-levels guides.
 
-* To deploy our new contract we need send message with init information in message to address of our contract. 
-* We can know destination address of contract because of definition of Address depends on only from contract's data. 
+* To deploy our new contract we need send message with init information in its to address of our contract. 
+* We can know destination address of contract because of definition of Address depends on only from contract's data and code. We know both. 
 * To send message in blockchain it is necessary to communicate with TON blockchain nodes. Wallet application will do this with own API, so we will avoid this details in current lesson.
 * To send outgoing message in TON, sender should pay fees. In our case, we need some funds on Ton wallet to pay this action.
 
@@ -346,19 +379,19 @@ For me, it was `kQDND6yHEzKB82ZGRn58aY9Tt_69Ie_uz73e2VuuJ3fVVcxf`:
 let owner = Address.parse('kQDND6yHEzKB82ZGRn58aY9Tt_69Ie_uz73e2VuuJ3fVVcxf'); // Replace owner with your address
 ```
 
-5. Run `contract.deploy.ts` script to get deployment link in terminal. It will ask from you wallet you want use:
+5. Run `contract.deploy.ts` script to get deployment link in terminal with following command in terminal:
 
 ```bash
 yarn deploy
 ```
+It will ask from you wallet you want use, choose what you used before(Tonkeeper/Sandbox).
 
-
-4. Read deployment link through reading QR or open link via your testnet TON wallet, confirm outgoing message in wallet application.
+6. Read deployment link through reading QR or open link via your testnet TON wallet, confirm outgoing message in wallet application.
 
 ![deployment-1](/img/docs/tact-hello-world/tact-deployment-process-2.png)
 
 :::info
-If you faced some compile issue and can't figure out what is wrong, just compare with target contract placed in `sources/example/increment.tact`. 
+If you faced some compile issue and can't figure out what is wrong, just compare with target contract placed in `sources/example/increment.tact` or [here](https://github.com/ton-community/tact-guide-template/blob/main/sources/example/increment.tact). 
 :::
 
 
@@ -377,7 +410,7 @@ Let's try to find out how it works now?
 Another blockchain explorer allows to use get function. Let's check current Total value in our contract:
 1. Find your deployed contract again in another blockchain explorer testnet - [ton.cx](https://testnet.ton.cx/). In the tutorial it is: `kQAd00TX4YPxBfyWjArkionTZJVMoRzFQUM2ntQBcFycWYr4`. 
 2. Open Get methods tab.
-3. Input get function name - `counter` in field. Run this and check result (it shows in hexadecimal format). 
+3. Input get method name - `counter` in _Arbitrary method_ field. Run this and check result (it shows in hexadecimal format). 
 
 ![deployment-4](/img/docs/tact-hello-world/tact-deployment-process-4.png)
 
