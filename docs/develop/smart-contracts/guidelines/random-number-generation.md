@@ -24,8 +24,15 @@ You can predict the results of `random()` by writing a simple smart contract fun
 
 ## So, how do I generate random numbers safely?
 
-but the simpliest one is just mixing several parameters to seed. This can be easily done like this:
+There can be different approaches, but the simpliest one is just mixing several parameters to seed. This can be easily done like this:
 ```func
+int seed = cell_hash(begin_cell()
+    .store_uint(now(), 256)
+    .store_uint(block_lt(), 256)
+    .store_uint(cur_lt(), 256)
+.end_cell());
+randomize(seed);
+;; now you can just call rand() or random() functions to get random numbers
 ```
 
 This is enough for most cases, but there is still a chance that some evil validator will specifically substitute parameters like the current time to get such a `seed`, with which he will get the number he needs.
