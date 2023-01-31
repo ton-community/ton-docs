@@ -24,7 +24,13 @@ You can predict the results of `random()` by writing a simple smart contract fun
 
 ## So, how do I generate random numbers safely?
 
-There can possibly be different approaches, but one of the simpliest is just skipping at least one block before generating a number. If we skip a block, the seed will change in a less predictable way, thus your RNG will be a lot safer.
+but the simpliest one is just mixing several parameters to seed. This can be easily done like this:
+```func
+```
+
+This is enough for most cases, but there is still a chance that some evil validator will specifically substitute parameters like the current time to get such a `seed`, with which he will get the number he needs.
+
+In order to prevent (or at least complicate) the substitution of the Seed, you can use more complex schemes. For example, you can skip one block before generating a random number. If we skip a block, the seed will change in a less predictable way, thus your RNG will be a lot safer.
 
 Skipping blocks is not a complex task. You can do that by simply sending a message to Masterchain and back to the workchain of your contract. Let's have a look at the simple example!
 
