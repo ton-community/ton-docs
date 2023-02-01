@@ -47,11 +47,11 @@ It can be used for blacklisting a specific version known to have problems, for e
 ### #pragma allow-post-modification
 _funC v0.4.1_
 
-By default it is prohibited to use variable prior to it's modification in the same expression. In other words, expression `(x, y) = (ds, ds~load_uint(8))` won't compile, while `(x, y) = (ds~load_uint(8), ds)` is valid.
+By default it is prohibited to use variable prior to its modification in the same expression. In other words, expression `(x, y) = (ds, ds~load_uint(8))` won't compile, while `(x, y) = (ds~load_uint(8), ds)` is valid.
 
-This rule can be overwritten, by `#pragma allow-post-modification`. Note that in this case all sub-expressions will be computed left to write: `(x, y) = (ds, ds~load_uint(8))` will result in `x` containing initial `ds`.
+This rule can be overwritten, by `#pragma allow-post-modification`, which allow to modify variable after usage in mass assignments and function invocation; as usual sub-expressions will be computed left to right: `(x, y) = (ds, ds~load_bits(8))` will result in `x` containing initial `ds`; `f(ds, ds~load_bits(8))` first argument of `f` will contain initial `ds`, and second - 8 bits of `ds`.
 
-`#pragma allow-post-modification` works only for code described after it's usage.
+`#pragma allow-post-modification` works only for code described after its usage.
 
 ### #pragma compute-asm-ltr
 _funC v0.4.1_
@@ -76,6 +76,6 @@ As a result in
 ...
 idict_set_ref(ds~load_dict(), ds~load_uint(8), ds~load_uint(256), ds~load_ref());
 ```
-order of parsing will be `load_dict()`, `load_uint(8)`, `load_uint(256)`, `load_ref()` and all asm permutation will happend after computation.
+order of parsing will be `load_dict()`, `load_uint(8)`, `load_uint(256)`, `load_ref()` and all asm permutation will happen after computation.
 
-`#pragma compute-asm-ltr` works only for code described after it's usage.
+`#pragma compute-asm-ltr` works only for code described after its usage.
