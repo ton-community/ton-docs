@@ -2,6 +2,11 @@
 
 This article explains how wallet contract works in Tact, how to deploy and test this.
 
+:::caution article in open beta
+Did you notice something unclear, incorrect or get stuck with some issue in guide? Please ask a question in the Telegram [chat](https://t.me/tondev_eng) or text me directly [@iftryalexg](https://t.me/iftryalexg).
+Guide will be updated ASAP and all unclear points will be clarified 🚒💦🔥.
+:::
+
 
 ### Set up your environment
 
@@ -246,7 +251,7 @@ You can launch test via `yarn test` or specify your own with help of jest and to
 
 ### Wallet deployment
 
-For deployment wallet we have to demo options to run:
+For deployment wallet we have two demo options to run:
 
 ```bash
 yarn deploy
@@ -275,7 +280,7 @@ yarn deploy
 
 The way, some applications in production uses is public API. It is acceptable solution for services that not requires operative updating data and just need sometimes send messages.
 Demo script for this process needs to fill with your wallet 24 words of wallet in testnet, you also can use your wallet from previous step.
-So, this wallet will called "deployment wallet" and will be use in similar to wallet application way.
+So, this wallet will call _deployment wallet_ and will be use in similar to wallet application way.
 
 ![Tact API deploy](/img/docs/smart-contract/tact-deployment-2.png?raw=true)
 
@@ -289,4 +294,4 @@ Step list here:
 
 TON dApps uses code hash as identifier of contract type, and wallet contract will absolutely different hash for its, so it will not work from the box.
 This contract is generic, so in production all application already set up for using original FunC contract, but still it is most used contract so it was used for learning and explanation purposes of how it works.
-You can learn more about launching and testing your own tact contract from NFT Tact implement article.
+You can learn more about launching and testing your own tact contract from Jetton Tact article.
