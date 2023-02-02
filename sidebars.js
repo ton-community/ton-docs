@@ -394,8 +394,6 @@ const sidebars = {
             'develop/tact/docs/tact-comments',
             'develop/tact/docs/tact-literals-identifiers',
             'develop/tact/docs/tact-functions',
-            'develop/tact/docs/tact-global-variables',
-            'develop/tact/docs/tact-compiler-directives',
             'develop/tact/docs/tact-statements',
             'develop/tact/docs/tact-builtins',
             'develop/tact/docs/tact-stdlib',
