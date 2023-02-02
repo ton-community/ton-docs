@@ -2,6 +2,11 @@
 
 This article explains how wallet contract works in Tact, how to deploy and test this.
 
+:::caution article in open beta
+Did you notice something unclear, incorrect or get stuck with some issue in guide? Please ask a question in the Telegram [chat](https://t.me/tondev_eng) or text me directly [@iftryalexg](https://t.me/iftryalexg).
+Guide will be updated ASAP and all unclear points will be clarified 🚒💦🔥.
+:::
+
 
 ### Set up your environment
 
