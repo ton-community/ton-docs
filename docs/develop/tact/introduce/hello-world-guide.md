@@ -1,4 +1,4 @@
-# Tact Hello world
+# Tact Hello World
 
 ## Introduction to TON Smart Contracts using Tact
 
@@ -422,9 +422,16 @@ Check your `counter` value after this, make sure that counter value changed.
 
 ## What is next?
 You are great! Take a break young developer, because it was really not simple for you! 
+If you ready to continue to learn, here some examples of where you can go next.
 
-
-But once you want to come back and learn more, you can try one of following tutorial: 
+### What to read next?
 
 * [Wallet.tact contract deployment through public API](docs/develop/tact/smart-contracts/tact-wallet.md)
-* [FunC tutorials](https://ton-community.github.io/tutorials/01-wallet/)
+* [Jetton.tact contract overview and deployment](docs/develop/tact/smart-contracts/tact-jetton.md)
+* [Ton Tutorials](https://ton-community.github.io/tutorials/01-wallet/)
+* [FunC journey](https://blog.ton.org/func-journey)
+
+### Useful links
+* [Tact Telegram chat](https://t.me/tactlang)
+* [Tact ton-core documentation ](https://docs.tact-lang.org/)
+* [Tact main repository](https://github.com/ton-core/tact)
