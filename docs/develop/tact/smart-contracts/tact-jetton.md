@@ -1,4 +1,4 @@
-# Tact Jetton smart contract
+# Tact jetton contract
 
 :::caution article in open beta
 Did you notice something unclear, incorrect or get stuck with some issue in guide? Please ask a question in the Telegram [chat](https://t.me/tondev_eng) or text me directly [@iftryalexg](https://t.me/iftryalexg).
