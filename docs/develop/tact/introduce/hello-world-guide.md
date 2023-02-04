@@ -3,11 +3,11 @@
 ## Introduction to TON Smart Contracts using Tact
 
 In this guide, we will walk through the process of creating and deploying a simple smart contract using the Tact program language.
-Main goal is trying and touch the smart contract developing process and find out what you should learn next.
-You need spend about one-two hours, it depends on your background knowledge.
+The main goal is trying and touch the smart contract developing process and find out what you should learn next.
+You need to spend about one-two hours, depending on your background knowledge.
 
-:::caution tutorial in open beta
-Did you notice something unclear, incorrect or get stuck with some issue in guide? Please ask a question in the Telegram [chat](https://t.me/tondev_eng) or text me directly [@iftryalexg](https://t.me/iftryalexg).
+:::caution tutorial is in open beta
+Did you notice something unclear, incorrect or get stuck with some issue in this guide? Please ask a question in the Telegram [chat](https://t.me/tondev_eng) or text me directly [@iftryalexg](https://t.me/iftryalexg).
 Guide will be updated ASAP and all unclear points will be clarified 🚒💦🔥.
 :::
 
@@ -16,26 +16,26 @@ Guide will be updated ASAP and all unclear points will be clarified 🚒💦🔥
 Five things you need to know in the beginning:
 
 * Smart contract is a computer program that stores and executes in blockchain.
-* Blockchain is a shared and structured way to keep data. Data that stored in blockchain impossible to edit and replace with fake.
-* TON Blockchain works on its own special program software, called the Ton Virtual Machine(TVM). 
+* Blockchain is a shared and structured way to keep data. Data stored in blockchain is impossible to edit and be replaced with fake.
+* TON Blockchain works on its own special program software, called the Ton Virtual Machine (TVM). 
 * Tact is a special computer language that helps people make smart contracts on the TON blockchain. Smart contracts are like computer programs that live on the internet and can do things like store information and make decisions.
-* Tact uses JavaScript frameworks, so basic knowing helps you learn it faster, but even you just newcomer it is possible learn from the beginning.
+* Tact uses JavaScript frameworks, so basic knowledge of them helps you learn it faster, but even if you are just a newcomer it is possible to learn from the scratch.
 
 
 :::info What is blockchain?
 **Blockchain** is like a digital notebook where important information is written down and shared with many people. Once something is written in the notebook, it can't be changed or erased. It's like a permanent record that everyone can trust.
-But instead of a notebook, it's a stores on multiple servers. And instead of just one person writing in it, many people can write in it at the same time. This way, everyone can see and agree on the information that is written in the blockchain. And because it's placed on a multiple servers, it's safe and can't be lost or changed by accident.
+But instead of a notebook, it is stored on multiple servers. And instead of just one person writing in it, many people can write in it at the same time. This way, everyone can see and agree on the information that is written in the blockchain. And because it's placed on a multiple servers, it's safe and can't be lost or changed by accident.
 :::
 
 
-### Tactical practise #1 - set up your environment
+### Tactical practice #1 - set up your environment
 
 Get ready to build your own blockchain creation! First, you'll need to gather a few tools to help you along the way.
 
 - **Git** is like a magic toolbox for developers. It helps you keep track of all the different parts of your project, so you can work on them together with your team. You can download it [here](https://git-scm.com/downloads).
-- **NodeJS** is JavaScript central tool. We'll be using JavaScript and a special version called TypeScript to create our smart contract. You can download it  [here](https://nodejs.org/en/download/).
-- **JavaScript IDE** is like your own personal workshop. It's where you'll be building and designing your code, code text editor with highlights. A popular choice is [VSCode](https://code.visualstudio.com/download), for example. Get it now and let's get building!
-- **Tact language** extension for IDE makes it more comfortable to work. For example, in VScode you can install [extension](https://marketplace.visualstudio.com/items?itemName=ton-community.tact-vscode).
+- **NodeJS** is a central tool in JavaScript world. We'll be using JavaScript and its special version called TypeScript to create our smart contract. You can download it  [here](https://nodejs.org/en/download/).
+- **JavaScript IDE** is like your own personal workshop. It's where you'll be building and designing your code, a text editor for code with highlighting. A popular choice is [VS Code](https://code.visualstudio.com/download), for example. Get it now and let's get building!
+- **Tact language** extension for IDE makes it more comfortable to work. For example, in VS Code you can install an [extension](https://marketplace.visualstudio.com/items?itemName=ton-community.tact-vscode).
 
 ### Tact's facts #2
 
@@ -44,8 +44,8 @@ Then, you need to use the command `git clone <link>` to copy the project files f
 
 The project files will be downloaded and stored in a new folder with the same name as the project.
 From there, you can start working on the project and make changes. You can use commands like `git add`, `git commit`, and `git push` to save your changes and share them with others working on the project.
-Note, that git is a complex tool with many features and commands, but for beginners, these basic steps will be enough to get started. In current guide we will use `git clone` only. As you continue to work with git, you can learn more advanced features and commands.
-Commands for git and terminal generally will be demonstrated in special code block: 
+Note that git is a complex tool with many features and commands, but for beginners, these basic steps will be enough to get started. In the current guide we will use `git clone` only. As you continue to work with git, you can learn more advanced features and commands.
+Commands for git and terminal generally will be demonstrated in a special code block: 
 
 ```
 command that you should input in your command line
@@ -53,12 +53,12 @@ command that you should input in your command line
 You should execute it in your [terminal](https://askubuntu.com/questions/38162/what-is-a-terminal-and-how-do-i-open-and-use-it) bash, zdsh, windows PowerShell or IDE implicit command line.
 
 
-### Tactical practise #2 - get template from GitHub
+### Tactical practice #2 - get template from GitHub
 
-For beginning let's take basic tact project from community repository.
+For beginning let's take basic tact project from a community repository.
 
 #### Install yarn tool
-To manage our project with comfort we will use `yarn`, you need install this with following command:
+To manage our project with comfort we will use `yarn`, you need install it with a following command:
 ```bash
 npm install --global yarn
 ```
@@ -68,7 +68,7 @@ For launching scripts in Windows terminal in first time, you should [allow](http
 
 
 #### Choose local directory
-Choose local directory, where you want to keep your project.
+Choose a local directory, where you want to keep your project.
 For example, if you want to place you project in new directory `dev`:
 
 - For [Windows terminal](https://learn.microsoft.com/en-gb/windows/terminal/install)
@@ -140,7 +140,7 @@ Result of successes executing this should be see in your terminal window like fo
 |   |  +-- contract.tact
 
 ```
-*  `contract.tact` - Tact langauge smart contract will be written here. 
+*  `contract.tact` - Tact language smart contract will be written here. 
 *  `contract.spec.ts` - contents tests for using `yarn tests` for launching local tests. Not necessary part for deployment. Some actions we want to check before using smart contract in productions really faster to check with local tests.
 *  `contract.deploy.ts` - contents instructions to generate a deployment link. This link includes all necessary information to send our smart contract in blockchain.  When our smart contract is delivered in TON Blockchain as bytecode he becomes **deployed**.
 
@@ -154,13 +154,13 @@ yarn deploy # To deploy contract
 ### Tact's deep thoughts #1
 
 A lot of important details you should learn to understand how TON works, but here, we simplify our field of knowledge and goals.
-So, let's say, **contracts** and **messages** our main characters in blockchain. 
+So, let's say, **contracts** and **messages** are our main characters in blockchain. 
 
 1. **contract** - is a computer program that lives on the blockchain. It can store information and carry out certain actions based on the instructions that are written inside it.
 
 2. **message** - is a command that we send to the contract. It tells the contract what to do and can include information like how much funds to transfer or what information to store.
 
-On the scheme you can see not perfectly accurate graphic representation of working in blockchain, where different smart contracts(circles) communicate to each other with messages.
+On the scheme you can see not perfectly accurate graphic representation of working in blockchain, where different smart contracts (circles) communicate to each other with messages.
 
 ![Tact deploy](/img/docs/tact-hello-world/tact-hello-world-5.png?raw=true)
 
@@ -178,7 +178,7 @@ Our smart contract is like a piggy bank with several common features:
 
 Additional restriction for our smart contract - It will check if the person sending the message is the owner of the piggy bank or not. This way, only the owner can add or increment the `Total` inside the piggy bank.
 
-### Tactical practise #3 - create contract
+### Tactical practice #3 - create contract
 
 Let's open our `tact-guide-template` project via IDE(VScode) and begin to write contract file `contract.tact`. That, our first Tact string is declaring additional library, where some usefully Tact functions defined.
 
@@ -278,7 +278,7 @@ We have additional Contract's tools that helps us to describe contract's behavio
  
 
 
-### Tactical Practise #4 - add contract's behaviour
+### Tactical Practice #4 - add contract's behaviour
 
 Ok, one more time, we need extend our contract's behaviour
 
@@ -357,7 +357,7 @@ Now we on finale stage. We need to deploy our contract to Blockchain. To do this
 ![Tact deploy](/img/docs/tact-hello-world/tact-hello-world-6.png?raw=true)
 
 
-### Tactical Practise #5 - deploy the contract
+### Tactical Practice #5 - deploy the contract
 
 Before deployment, according to said before we need to prepare Ton wallet contract with funds. We will use test environment, that maintained with test nodes and called testnet(production calls mainnet).
 
