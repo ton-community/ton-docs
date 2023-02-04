@@ -1,12 +1,18 @@
 # Overview
 
-## Prerequisites
+The best place to start is a TON Hello World guide of how to create your first Web App:
+
+- [TON Hello World: Step by step guide for building your first web client](https://ton-community.github.io/tutorials/03-client/)
+
+
+## Tools
 
 Here you can see links to the most important resources for you to get started with TON:
 
 - [Wallets](/participate/wallets/apps) — a list of popular wallets for TON.
 - [Explorers](/participate/explorers) — to track transactions in the blockchain.
 - [Testnet](/develop/smart-contracts/environment/testnet.md) — info about the testnet and how to use it.
+
 
 ## Examples
 

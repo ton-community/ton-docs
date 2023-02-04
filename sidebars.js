@@ -150,14 +150,35 @@ const sidebars = {
 
     'develop/getting-started',
     {
-      type: 'link',
-      label: 'TON Hello World',
-      href: 'https://blog.ton.org/step-by-step-guide-for-writing-your-first-smart-contract-in-func',
+      type: 'doc',
+      label: 'TON Onboarding Challenge',
+      id: 'develop/onboarding-challenge',
     },
     {
-      type: 'doc',
-      label: 'Become a TVM Developer',
-      id: 'develop/onboarding-challenge',
+      type: 'category',
+      label: 'TON Hello World',
+      items: [
+        {
+          type: 'link',
+          label: 'Working with your wallet',
+          href: 'https://ton-community.github.io/tutorials/01-wallet',
+        },
+        {
+          type: 'link',
+          label: 'Writing first smart contract',
+          href: 'https://ton-community.github.io/tutorials/02-contract',
+        },
+        {
+          type: 'link',
+          label: 'Building first web client',
+          href: 'https://ton-community.github.io/tutorials/03-client',
+        },
+        {
+          type: 'link',
+          label: 'Testing your smart contract',
+          href: 'https://ton-community.github.io/tutorials/04-testing',
+        },
+      ],
     },
     {
       'type': 'html',
@@ -199,7 +220,7 @@ const sidebars = {
               type: 'link',
               label: 'PyTVM',
               href: 'https://github.com/disintar/PyTVM',
-            }
+            },
           ],
         },
         'develop/smart-contracts/compile/README',
@@ -209,8 +230,8 @@ const sidebars = {
           items: [
             {
               type: 'link',
-              label: 'Using tonstarter-contracts',
-              href: 'https://github.com/ton-defi-org/tonstarter-contracts',
+              label: 'Using TypeScript',
+              href: 'https://ton-community.github.io/tutorials/02-contract/',
             },
             {
               type: 'link',
@@ -225,6 +246,7 @@ const sidebars = {
           items: [
             'develop/smart-contracts/security/README',
             'develop/smart-contracts/security/ton-hack-challenge-1',
+            'develop/smart-contracts/guidelines/random-number-generation',
           ],
         },
         {
@@ -259,8 +281,8 @@ const sidebars = {
           type: 'category',
           label: 'Tutorials & Examples',
           items: [
-            'develop/smart-contracts/tutorials/multisig'
-          ]
+            'develop/smart-contracts/tutorials/multisig',
+          ],
         },
         {
           type: 'link',
@@ -307,6 +329,31 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Tutorials & Examples',
+          items: [
+            'develop/dapps/tutorials/overview',
+            'develop/dapps/tutorials/jetton-minter',
+            {
+              type: 'category',
+              label: 'Telegram bots',
+              items: [
+                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
+                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
+                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js',
+              ],
+            },
+            'develop/dapps/tutorials/how-to-run-ton-site',
+          ],
+        },
+
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Integrate with TON',
+      items: [
+        {
+          type: 'category',
           label: 'Payment Processing',
           items: [
             'develop/dapps/asset-processing/README',
@@ -329,30 +376,11 @@ const sidebars = {
               type: 'link',
               label: 'Withdrawal processing',
               href: 'https://github.com/toncenter/examples/blob/main/withdrawals.js',
-            }
-          ],
-        },
-
-        {
-          type: 'category',
-          label: 'Tutorials & Examples',
-          items: [
-            'develop/dapps/tutorials/overview',
-            'develop/dapps/tutorials/jetton-minter',
-            {
-              type: 'category',
-              label: 'Telegram bots',
-              items: [
-                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
-                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
-                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js',
-              ],
             },
-            'develop/dapps/tutorials/how-to-run-ton-site'
           ],
         },
 
-      ],
+      ]
     },
     {
       'type': 'html',
@@ -362,6 +390,7 @@ const sidebars = {
       'type': 'html',
       'value': '<span class=\'menu__link\'><b><small> References & Documentation </small></b></span>',
     },
+    'develop/howto/faq',
     {
       type: 'category',
       label: 'Tact language',
@@ -432,8 +461,14 @@ const sidebars = {
         'develop/smart-contracts/libraries',
       ],
     },
-    'develop/fift-and-tvm-assembly',
-    'develop/fift-deep-dive',
+    {
+      type: 'category',
+      label: 'Fift language',
+      items: [
+        'develop/fift-and-tvm-assembly',
+        'develop/fift-deep-dive',
+      ]
+    },
     'develop/howto/network-configs',
     {
       type: 'category',
@@ -451,7 +486,7 @@ const sidebars = {
           items: [
             'develop/archive/pow-givers',
             'develop/archive/mining',
-          ]
+          ],
         },
       ],
     },
@@ -511,7 +546,7 @@ const sidebars = {
           label: 'Bridges Addresses',
           id: 'participate/crosschain/bridge-addresses',
         },
-      ]
+      ],
     },
     {
       type: 'category',
@@ -527,6 +562,13 @@ const sidebars = {
           label: 'Run a Validator Node',
           href: 'https://ton.org/validator',
         },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Blockchain Details',
+      items: [
+        'participate/own-blockchain-software/random',
       ],
     },
     {
@@ -552,7 +594,7 @@ const sidebars = {
       'type': 'category',
       'label': 'TON DNS',
       'items': [
-        'participate/web3/dns'
+        'participate/web3/dns',
       ],
     },
     {
@@ -562,7 +604,7 @@ const sidebars = {
         'participate/web3/setting-proxy',
         'participate/web3/how-to-open-any-ton-site',
         'participate/web3/sites-and-proxy',
-        'participate/web3/site-management'
+        'participate/web3/site-management',
       ],
     },
     {
@@ -571,7 +613,7 @@ const sidebars = {
       'items': [
         'participate/ton-storage/storage-daemon',
         'participate/ton-storage/storage-provider',
-        'participate/ton-storage/storage-faq'
+        'participate/ton-storage/storage-faq',
       ],
     },
   ],
@@ -580,6 +622,7 @@ const sidebars = {
       'type': 'category',
       'label': 'Become a Contributor',
       'items': [
+        'contribute/contribute-to-earn',
         'contribute/README',
         'contribute/maintainers',
         'contribute/guidelines',

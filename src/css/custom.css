@@ -1337,6 +1337,7 @@ html[theme=light] {
   border: 0;
   background: 0 0;
   color: inherit;
+  margin-right: 10px;
   line-height: var(--button-line-height);
   padding: var(--button-top-padding) var(--button-horizontal-padding) var(--button-bottom-padding);
   border-radius: var(--button-border-radius);
@@ -1800,6 +1801,7 @@ a img,button img {
 
 .button--primary, .button--secondary{
   border-radius: 40px;
+  margin-right: 10px;
 }
 
 .button--primary{
@@ -1847,4 +1849,7 @@ a img,button img {
 [data-theme=dark] .button--secondary:hover  {
   background-color: #36363C;
   color: #FFFFFF;
+}
+.button--sm {
+  --ifm-button-size-multiplier: 1.1 !important;
 }

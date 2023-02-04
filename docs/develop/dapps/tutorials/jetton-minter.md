@@ -113,6 +113,7 @@ To make any changes, begin here:
 * https://github.com/ton-blockchain/minter-contract
 
 ### Step-by-step guide
+
  1. Make sure you have all "Dependencies and Requirements" from the [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) repo.
  2. Clone the [minter-contract repository](https://github.com/ton-blockchain/minter-contract) and rename the project. 
  3. To install you need to open a terminal at the root and run:
