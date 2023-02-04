@@ -412,7 +412,7 @@ Another blockchain explorer allows to use get function. Let's check current Tota
 2. Open Get methods tab.
 3. Input get method name - `counter` in _Arbitrary method_ field. Run this and check result (it shows in hexadecimal format). 
 
-![deployment-4](/img/docs/tact-hello-world/tact-deployment-process-4.png)
+![deployment-4](/img/docs/tact-hello-world/tact-deployment-process-4-b.png)
 
 Now, lets try to send `Add(1)` message, according to our plan we should send common message with "increment" comment to our contract.
 
