@@ -401,15 +401,17 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'develop/tact/introduce/getting-start',
+        },
+        {
+          type: 'doc',
           id: 'develop/tact/docs/tact-cookbook',
         },
         {
           type: 'category',
           label: 'Learn',
           items: [
-            'develop/tact/introduce/getting-start',
             'develop/tact/introduce/hello-world-guide',
-            'develop/tact/introduce/tact-sdk',
             'develop/tact/smart-contracts/tact-wallet',
             'develop/tact/smart-contracts/tact-jetton'
           ],
@@ -418,15 +420,22 @@ const sidebars = {
           type: 'category',
           label: 'Documentation',
           items: [
-            'develop/tact/docs/tact-abi',
+            'develop/tact/docs/tact-documentation-caution',
+            'develop/tact/docs/tact-message-lifecycle',
+            'develop/tact/docs/tact-send',
+            'develop/tact/docs/tact-contract',
             'develop/tact/docs/tact-types',
-            'develop/tact/docs/tact-comments',
-            'develop/tact/docs/tact-literals-identifiers',
             'develop/tact/docs/tact-functions',
+            'develop/tact/docs/tact-comments',
             'develop/tact/docs/tact-statements',
             'develop/tact/docs/tact-builtins',
             'develop/tact/docs/tact-stdlib',
+            'develop/tact/docs/tact-abi'
           ],
+        },
+        {
+          type: 'doc',
+          id: 'develop/tact/introduce/tact-sdk'
         }
       ]
     },

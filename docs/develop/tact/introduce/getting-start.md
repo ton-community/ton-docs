@@ -1,17 +1,26 @@
-# Get started Tact
+# Getting started Tact
 
-# TACT template project
+## Getting started from scratch
 
-## Overview
-
-Get tact-template from community repository:
+Tact is distributed via `npm` package manager and is meant to be installed to typescript/javascript projects:
 
 ```bash
-git clone https://github.com/ton-community/tact-template
+yarn add tact
+```
+
+
+## Getting started from template
+
+To get started, you can use the template project. It contains a simple contract that can be deployed to the TON blockchain, example of implementing unit tests and helper functions for contract deployment.
+
+To create a project from template, just create a new repository from the template project: https://github.com/ton-core/tact-template.
+
+```bash
+git clone https://github.com/ton-core/tact-template
 cd tact-template
 ```
 
-This project has ready to use TACT compiler, typescript + jest with [ton-emulator](https://github.com/ton-community/ton-emulator), example how to do tests.
+## Using Tact template
 
 You have three ready-to-use commands configured for template. Try to input them in terminal and look how it works:
 
@@ -20,7 +29,7 @@ yarn test # To test contract
 yarn build # To build contract
 yarn deploy # To deploy contract
 ```
-## Customize Tact project
+## Customize Tact template
 
 If you want to go further and try to find little more about tact let's find out how it works.
 
@@ -43,4 +52,4 @@ Where:
 * `path` - is path to *.tact contract file it will be used when `yarn build` run.
 * `output` - is path to building files when yarn build run. `yarn test` & `yarn deploy` use these output files.
 
-In this way you can use template project to play with Tact smart contract examples from [examples](https://github.com/ton-community/tact/tree/main/examples). Good luck!
+In this way you can use template project to play with Tact smart contract examples from [examples](https://github.com/ton-core/tact/tree/main/examples). Good luck!

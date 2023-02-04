@@ -1,20 +1,19 @@
-# Type system
+# Tact type system
 
-
-Every variable, item, and value in a TACT program has a type:
+Every variable, item, and value in a Tact program has a type:
 
 * Primitives: Int, Bool, Slice, Cell, Builder, String and StringBuilder;
 * Map
 * Structs and Messages
 * Contracts and Traits
 
-Also, all types could be defined as nullable.
+Also all types could be defined as nullable.
 
 ## Primitive types
 
-* Int - all integers in TACT are 257 bit signed integers.
+* Int - all integers in Tact are 257 bit signed integers.
 * Bool - classical boolean with true/false values.
-* Address - standard address.
+* Address - standart address.
 * Slice, Cell, Builder - low level primitive of TON VM.
 * String - type that represents text strings in TON VM.
 * StringBuilder - helper type that allows you to concatenate strings in gas-efficient way
@@ -23,11 +22,12 @@ Also, all types could be defined as nullable.
 
 Structs and Messages are almost the same thing with an only difference that message has a header in it's serialization and therefore could be used as receivers.
 
-> **Warning**
-> Currently circular **types** are not possible. Meaning that struct/message **A** can't have field of a struct/message **B** that have field of a struct/message **A**.
+:::warning
+Currently circular **types** are not possible. Meaning that struct/message **A** can't have field of a struct/message **B** that have field of a struct/message **A**.
+:::
 
 Example:
-```java
+```tact
 struct Point {
     x: Int;
     y: Int;
@@ -58,7 +58,7 @@ Possible value types:
 
 Contracts are the main entry of a smart contract on TON blockchain. It holds all functions, getters and receivers of a contract.
 
-```java
+```tact
 contract HelloWorld {
   counter: Int;
 
@@ -78,9 +78,9 @@ contract HelloWorld {
 
 ## Traits
 
-TACT doesn't support classical class inheritance, but instead introduces concept of **traits**. Trait defines functions, receivers and required fields. Trait is like abstract classes, but it does not define how and where fields must be stored. **All** fields from all traits must be explicitly declared in the contract itself. Traits itself also don't have constructors and all initial field initialization also must be done in main contract.
+Tact doesn't support classical class inheritance, but instead introduces concept of **traits**. Trait defines functions, receivers and required fields. Trait is like abstract classes, but it does not define how and where fields must be stored. **All** fields from all traits must be explicitly declared in the contract itself. Traits itself also don't have constructors and all initial field initialization also must be done in main contract.
 
-```java
+```tact
 trait Ownable {
     owner: Address;
 
@@ -96,7 +96,7 @@ trait Ownable {
 
 And contract that uses trait:
 
-```java
+```tact
 contract Treasure with Ownable {
   owner: Address; // Field from trait MUST be defined in contract itself
   

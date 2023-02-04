@@ -1,6 +1,6 @@
-# TACT functions
+# Functions and their types
 
-Functions in TACT could be defined in different ways:
+Functions in Tact could be defined in different ways:
 
 * Global static function
 * Extension functions
@@ -13,7 +13,7 @@ Functions in TACT could be defined in different ways:
 
 You can define global function anywhere in you program:
 
-```java
+```tact
 fun pow(a: Int, c: Int): Int {
   let res: Int = a;
   repeat(c) {
@@ -30,7 +30,7 @@ Extension functions allows you to implement extension for any possible type.
 > **Warning**
 > Name of the first argument MUST be named `self` and type of this argument is the type you are extending.
 
-```java
+```tact
 extends fun pow(self: Int, c: Int) {
   let res: Int = a;
   repeat(c) {
@@ -44,7 +44,7 @@ extends fun pow(self: Int, c: Int) {
 
 Mutable functions are performing mutation of a value replacing it with an execution result. To perform mutation function must change `self` value.
 
-```java
+```tact
 extends mutates fun pow(self: Int, c: Int) {
   let res: Int = a;
   repeat(c) {
@@ -59,9 +59,9 @@ extends mutates fun pow(self: Int, c: Int) {
 Native functions are direct binding to a func functions:
 
 > **Note**
-> Native functions could be also mutable and extension
+> Native functions could be also mutable and extension one
 
-```
+```tact
 @name(store_uint)
 native storeUint(s: Builder, value: Int, bits: Int): Builder;
 
@@ -73,7 +73,7 @@ extends mutates native loadInt(self: Slice, l: Int): Int;
 
 Receiver functions are special function that are responsible of receiving messages in contracts and could be defined only within a contract or trait.
 
-```java
+```tact
 contract Treasure {
 
   // ...
@@ -89,7 +89,7 @@ contract Treasure {
 
 Getter functions that defines getters on smart contract and can be defined only within a contract or trait.
 
-```java
+```tact
 contract Treasure {
 
   // ...

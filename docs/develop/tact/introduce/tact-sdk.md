@@ -2,12 +2,14 @@
 
 ### Tact  
 
-Official repository of [Tact](https://github.com/ton-core/tact) language.
+* [Main Tact language repository](https://github.com/ton-core/tact)
+* [Tact ton-core docs](https://docs.tact-lang.org/)
+* [Documentation Git](https://github.com/ton-core/tact-docs)
 
-### VS Code plugin
+### VS Code Tact highlight extension
 
-Install plug-in from [here](https://marketplace.visualstudio.com/items?itemName=ton-community.tact-vscode).
-Git project [here](https://github.com/ton-core/vscode-tact).
+* [Install Tact VScode extension](https://marketplace.visualstudio.com/items?itemName=ton-community.tact-vscode).
+* [Tact VScode extension repository](https://github.com/ton-core/vscode-tact).
 
 
 
