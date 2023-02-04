@@ -1,0 +1,73 @@
+# Sending messages
+
+TON blockchain is a message-based one to communicate with other contracts you need to send messages.
+
+Message consists of:
+* `value` in TON - amount of TON you want to send with the message. This value is used to cover gas fees on receiver side.
+* `bounce` - if set to `true` (default) then message will be bounced back to sender if receiver contract doesn't exist or wasn't able to process the message.
+* `code` and `data` - init package, useful for deployments
+* `body` - message body as `Cell`
+* `mode` - 8-bit flag that configures how to send message
+
+## Send simple reply
+
+Simplest message is a reply to the incoming message with returning all excess value of a message:
+
+```tact
+reply("Hello, World!".asComment()); // asComment converts string to a Cell with a comment
+```
+
+## Send message
+
+If you need a more advanced logic you can use `send` function directly.
+
+This example sends a message to the `to` address with `value` of 1 TON and `body` of a comment with a string "Hello, World!".
+
+`SendIgnoreErrors` means that even when error occurs during message sending next messages would be sent anyway. **No error during sending phase would revert a transaction.**
+
+```tact
+let to: Address = ...;
+let value: Int = ton("1");
+send(SendParameters{
+    to: to,
+    value: value,
+    mode: SendIgnoreErrors,
+    bounce: true,
+    body: "Hello, World!".asComment()
+});
+```
+
+## Send typed message
+
+To send a binary typed message you can use next code:
+
+```tact
+let to: Address = ...;
+let value: Int = ton("1");
+send(SendParameters{
+    to: to,
+    value: value,
+    mode: SendIgnoreErrors,
+    bounce: true,
+    body: SomeMessage{arg1: 123, arg2: 1234}.toCell()
+});
+```
+
+## Deploy contract
+
+To deploy contract you need to calculate it's address and init package, then send it with an initial message. You can always send init package with a message and it would be ignored, but would cost more than the message without init package.
+
+```tact
+let init: StateInit = initOf SecondContract(arg1, arg2);
+let address: Address = cotnractAddress(init);
+let value: Int = ton("1");
+send(SendParameters{
+    to: address,
+    value: value,
+    mode: SendIgnoreErrors,
+    bounce: true,
+    code: init.code,
+    data: init.data,
+    body: "Hello, World!".asComment()
+});
+```

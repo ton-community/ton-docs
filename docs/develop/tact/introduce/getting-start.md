@@ -1,13 +1,12 @@
 # Get started Tact
 
-# TACT template project
 
-## Overview
+## Tact template
 
 Get tact-template from community repository:
 
 ```bash
-git clone https://github.com/ton-community/tact-template
+git clone https://github.com/ton-core/tact-template
 cd tact-template
 ```
 
@@ -43,4 +42,4 @@ Where:
 * `path` - is path to *.tact contract file it will be used when `yarn build` run.
 * `output` - is path to building files when yarn build run. `yarn test` & `yarn deploy` use these output files.
 
-In this way you can use template project to play with Tact smart contract examples from [examples](https://github.com/ton-community/tact/tree/main/examples). Good luck!
+In this way you can use template project to play with Tact smart contract examples from [examples](https://github.com/ton-core/tact/tree/main/examples). Good luck!

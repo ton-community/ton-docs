@@ -4,7 +4,7 @@
 
 Declaring variable always requires initial value and an explicit type:
 
-```java
+```tact
 let value: Int = 123;
 ```
 
@@ -12,7 +12,7 @@ let value: Int = 123;
 
 Anywhere in the function body a static functions can be called:
 
-```java
+```tact
 let expiration: Int = now() + 1000; // now() is stdlib static function
 ```
 
@@ -20,20 +20,20 @@ let expiration: Int = now() + 1000; // now() is stdlib static function
 
 Some functions are defined only for specific types, they can be called this way:
 
-```java
+```tact
 let some: String = 95.toString(); // toString() is a stdlib function that is defined on Int type
 ```
 
 ## Operators
 
-TACT supports operations:
+Tact supports operations:
 
 * `!!` suffix operator - enforce non-null value, defined only for nullable types.
 * `!` - logical inversion, defined only for `Bool` type.
 * `/`, `*`, `%` - division and multiplication operations, defined only for `Int` type
 * `-`, `+` - arithmetic operations, defined only for `Int` type
-* !=, == - equality operations
-* _>_, _<_, _>=_, _<=_ - compare operations, defined only for `Int` type
+* `!=`, `==` - equality operations
+* `>`, `<`, `>=`, `<=` - compare operations, defined only for `Int` type
 * `&&`, `||` - logical `AND` and `OR`
 
 ## Loops
@@ -43,7 +43,7 @@ Repeat loop:
 > **Note**
 > Repeat number must be 32 bit int or out of range exception is thrown. Negative values are ignored.
 
-```java
+```tact
 let a: Int = 1;
 repeat(10) {
   a = a * a;
@@ -52,7 +52,7 @@ repeat(10) {
 
 While loop:
 
-```java
+```tact
 let x: Int = 10;
 while(x > 0) {
   x = x - 1;
@@ -61,11 +61,11 @@ while(x > 0) {
 
 Until loop:
 
-```java
+```tact
 let x: Int = 10;
 do {
   x = x - 1;
-} until (x > 0);
+} until (x <= 0);
 ```
 
 ## If Statements
@@ -73,13 +73,13 @@ do {
 > **Warn**
 > Curly brackets are required
 
-```java
+```tact
 if (condition) {
   doSomething();
 }
 ```
 
-```java
+```tact
 if (condition) {
   doSomething();
 } else {
@@ -87,7 +87,7 @@ if (condition) {
 }
 ```
 
-```java
+```tact
 if (condition) {
   doSomething();
 } else if (condition2) {
@@ -101,6 +101,6 @@ if (condition) {
 
 Allows to compute init state for a contract:
 
-```java
+```tact
 let state: StateInit = initOf Contract(123, 123);
 ```
