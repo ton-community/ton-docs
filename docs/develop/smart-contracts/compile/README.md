@@ -6,7 +6,7 @@ Here is a list of libraries and repos to build your smart contract.
 
 ### Overview
 
-A development environment for TON blockchain for writing, testing, and deploying smart contracts. Read more in [Blueprint repository](https://github.com/ton-community/blueprint).
+A development environment for TON blockchain for writing, testing, and deploying smart contracts. Read more in [Blueprint git repository](https://github.com/ton-community/blueprint).
 
 ### Installation
 
@@ -37,8 +37,9 @@ npm create ton@latest
 * IDE with TypeScript and FunC support like [Visual Studio Code](https://code.visualstudio.com/) with the [FunC plugin](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode)
 
 ### How to use?
-Read well detailed explanation in [Blueprint repo](https://github.com/ton-community/blueprint#create-a-new-project).
-[Watch DoraHacks presentation with demo of working with blueprint](https://www.youtube.com/watch?v=5ROXVM-Fojo).
+* [Watch DoraHacks presentation with demo of working with blueprint](https://www.youtube.com/watch?v=5ROXVM-Fojo).
+* Read well detailed explanation in [Blueprint repo](https://github.com/ton-community/blueprint#create-a-new-project).
+
 
 ## ton-compiler
 
