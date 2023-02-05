@@ -13,13 +13,15 @@ Guide will be updated ASAP and all unclear points will be clarified 🚒💦🔥
 For this project you should install 
 
 
-- **Git**. Essential tool for every developer to work with repositories. Download it [here](https://git-scm.com/downloads).
-- **NodeJS**. We will use JavaScript with TypeScript mode as the most popular choice for dApp development on TON. Download it [here](https://nodejs.org/en/download/).
-- **JavaScript IDE**. Your normal choice for development. [VSCode](https://code.visualstudio.com/download), for example.
+* **Git**. Essential tool for every developer to work with repositories. Download it [here](https://git-scm.com/downloads).
+* **NodeJS**. We will use JavaScript with TypeScript mode as the most popular choice for dApp development on TON. Download it [here](https://nodejs.org/en/download/).
+* **JavaScript IDE**. Your normal choice for development. [VSCode](https://code.visualstudio.com/download), for example.
+* **Wallet app**. You need one of TON noncustodial testnet [wallet app](docs/participate/wallets/apps) (better with support Walletv4), for example [Sandbox](https://apps.apple.com/app/ton-development-wallet/id1607857373)/[Tonkeeper](https://tonkeeper.com/). This is as part of simplify demonstration, you also can get access to your wallet from code, example added in demo. 
 
-Generally information about Tact SDK placed [here](docs/devvelop/tact/introduce/tact-sdk).
+- [Tact SDK and libraries full list](docs/develop/tact/introduce/tact-sdk)
 
 
+### Tact wallet demo project
 Get tact-wallet project from git:
 
 ```bash
@@ -37,50 +39,49 @@ yarn deploy # To deploy contract via deployment link
 yarn deploy-api # To deploy through API(need to input deployment wallet in wallet.deploy-api.ts before using)
 ```
 
-## Overview
-This project contents demo of Tact wallet contract and deployment demo scripts.
-Note, that this project not intended for using in production environment just for learning of how tact compiler and ton library works.
+### Briefing for Tact project structure
 
-1) Describes `wallet.tact` that will be used in `yarn build`
-2) Describes `wallet.spec.ts` tests for using `yarn tests` for launching local tests on your local IDE. Not necessary for deployment.
-3) Describes `wallet.deploy.ts` according to your `wallet.tact` for `yarn deploy` to generate a deployment link. In particular, it is necessary to correctly call the Init() function from the contract. From the beginning in the template project using Tonhub endpoint in the deeplink, that means you can deploy your smart contract via [Tonhub/Sandbox](https://ton.org/docs/participate/wallets/apps#tonhub) application.
-4) Describes alternative deployment script `wallet.deploy-api.ts` for `yarn deploy-api` according to your `contract.tact` to send deployment message from deployment wallet. You need to input your deployment wallet 24 words [here](sources/wallet.deploy-api.ts#L19).
+In the `tact-wallet/sources/` directory placed core project files, that defines what `yarn` commands will do:
 
-Detailed explanation about project structure in [tact-template](docs/devvelop/tact/introduce/getting-start).
+1. File `wallet.tact` contract on Tact language, that will be compiled with Tact compiler in `yarn build`
+2. File `wallet.spec.ts` contents unit tests for `yarn tests` command. This command allow to launch local tests on your local IDE. Not necessary for deployment.
+3. File `wallet.deploy.ts` is a helper, that allow to deploy your `wallet.tact` compiled file(src/output) with deployment link. From the beginning you can deploy your smart contract via [Sandbox](https://apps.apple.com/app/ton-development-wallet/id1607857373)/[Tonkeeper](https://tonkeeper.com/) application.
+4. Describes alternative deployment script `wallet.deploy-api.ts` for `yarn deploy-api` according to your `contract.tact` to send deployment message from deployment wallet. You need to input your deployment wallet 24 words [here](sources/wallet.deploy-api.ts#L19).
 
-### Learn the Tact contract
+
+### What is wallet contract general idea?
+
+Wallet similar to usual smart contract serve as a platform for managing and transferring funds in a decentralized and secure manner. However, it is important to note that while a smart contract may have built-in features for handling funds, additional steps may be necessary to make the user experience more convenient and secure. This may involve handling additional user stories and implementing additional features to meet real-life requirements.
+
+Let's describe small list of feature for wallet contract:
+* Deployment of smart contract where placed information of its owner with public key.
+* Requests for action with funds by owner.
+* Get and handle messages from other smart-contracts, including incoming transfer of funds.
+
+:::info
+Explorers recognize and its type by hash of the smart contract's code or by interfaces founded in smart contract. If you check your common wallet contract with explorer, you will see that it recognized with type "wallet". From this side, tact-wallet contract is a new version, and it will have
+different hash(because of original FunC contract and FunC compiled from Tact will be absolutely different). On the same reason current wallet application will not support Tact contract until they add its tact version to their applications.
+:::
+
+### Contract structure
 
 Tact language allows to define behaviour of contracts with convenient tools as Contract, Trait, Receiver, Message. Generally simple contract has such structure:
 
 * Includes
 * Custom Messages and Structs declaration
 * Contract's body
-- Contract's fields(Keeped in contract's storage)
-- Contract's fun(optional)
-- Contract's receivers
-- Contract's getters
+  * Fields
+  * Init function
+  * Functions
+  * Receivers
+  * Getters
 
-
-### What is wallet contract general idea?
-
-Wallet smart contract is a smart contract that serves for storing, sending and getting funds for key owner. The trick that from the beginning TON smart contract has such kind issues, but it works only from first sight.
-To make wallet for user's more convenient and secure we should handle use cases that comes from real life. So, wallet contract solves these cases in most optional way.
-
-Let's describe small list of feature for wallet contract:
-* Deployment of smart contract where placed information of its owner with public key.
-* Requests for action with funds by owner.
-* Get messages from other smart-contracts, that serves to resend funds and notifications.
-
-:::info
-Explorers recognize and its type by hash of the smart contract's code. If you check your usual wallet with explorer, you will see that it recognized with type "wallet". From this side, tact-wallet contract is a new version, and it will have
-different hash(because of original FunC contract and FunC compiled from Tact will be very different). With same reason current wallet application will not support tact contract until they add its tact version to their applications.
-:::
-
+  
 ### Wallet contract overview
 
-As we mention earlier, contract consists of
-1. Predefined section.
-2. Contract body with ordered usual content such as contract fields, init function, functions helpers, receivers and getters. 
+As we mentioned earlier, contract consists of
+1. Includes and struct definition
+2. Contract's body
 
 For contract wallet we will define struct Transfer as base struct for messages:
 
@@ -94,7 +95,8 @@ amount: Int as coins;
 body: Cell?;
 }
 ```
-And next will be wallet contract body with correspondingly sections.
+
+Next will be wallet contract body with all included sections:
 
 ```java title="tact-wallet/sources/wallet.tact"
 
@@ -118,7 +120,7 @@ For features of wallet contract we declare following:
 
 * seqno - is field that store last executed transaction id. Used for deduplication of transactions.
 * key - key of owner. Used for checks if transaction asked from wallet owner.
-* walletId - wallet identificator for supporting numbers of wallets based on one key.
+* walletId - wallet id, serves for supporting different(up to uint64) instance of wallets based on one key. For each `walledId` we deploy unique smart contract with access by same `key`.
 
 ```java title="tact-wallet/sources/wallet.tact"
 
@@ -139,7 +141,7 @@ contract Wallet {
 
 #### Wallet init
 
-Next, the init() function define first state of our smart contract for deploying process. To deploy our wallet contract we will store public key and id in its store. Usually, public keypair - public and secret keys computes locally on device which initiate deployment. Secret key stores locally for future approving transaction of owner, and public key sent as argument in init() function.
+The `init()` function define first state of our smart contract for deploying process. To deploy our wallet contract we will keep public key and id in its store. Usually, public keypair - public and secret keys computes locally on device which initiate deployment. Secret key stores locally for future signing transaction of owner, and public key sent as argument in `init()` function.
 Wallet ID, according to definition of field allows to create several(up to uin64) wallets based on same keypair.
 
 ```java title="tact-wallet/sources/wallet.tact"
@@ -167,6 +169,7 @@ Contract receivers define how contract acts depending on what it was received in
 * msg: Slice - if msg_body is Slice we check that incoming message was not bounced before, and if this requirements successes increment our seqno counter.
 * "notify" - receiver declares actions when incoming message contents string comment "notify". Here it will increment seqno field.
 * "duplicate" - receiver declares actions when incoming message contents string comment "duplicate". Here it will increment seqno field.
+* bounced() - special receiver for handling bounced messages.
 
 ```java title="tact-wallet/sources/wallet.tact"
 contract Wallet {
@@ -190,20 +193,20 @@ contract Wallet {
     }
 
     receive(msg: Slice) {
-        if (!context().bounced) {
             self.seqno = self.seqno + 1;
-        }
     }
 
     receive("notify") {
-        if (!context().bounced) {
             self.seqno = self.seqno + 1;
-        }
     }
 
     receive("duplicate") {
         // Create new wallet
         let walletInit: StateInit = initOf Wallet(self.key, self.walletId + 1);
+    }
+    
+    bounced(msg: Slice) {
+        // TODO: Handle
     }
     
     // get functions
@@ -245,7 +248,7 @@ Get functions allows to get information about contract's data for free. It's hel
 
 ### Wallet tests overview
 
-By default, some tests distributed with contract in wallet.spec.contract.
+From the beginning example of unit tests distributed with contract in wallet.spec.contract.
 You can launch test via `yarn test` or specify your own with help of jest and ton-emulator library.
 
 
