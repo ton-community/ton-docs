@@ -29,7 +29,7 @@ There are three types of messages:
 
 We will start with the internal message layout.
 
-TL-B scheme, which describes messages that can be sent by smart contracts,is as follows:
+TL-B scheme, which describes messages that can be sent by smart contracts, is as follows:
 ```tlb
 message$_ {X:Type} info:CommonMsgInfoRelaxed 
   init:(Maybe (Either StateInit ^StateInit))
