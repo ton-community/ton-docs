@@ -442,6 +442,26 @@ const sidebars = {
         'develop/howto/validator',
         {
           type: 'category',
+          label: 'Data formats',
+          items: [
+            'develop/data-formats/cell-boc',
+            'develop/data-formats/tl',
+            'develop/data-formats/tl-b'
+          ]
+        },
+        {
+          type: 'category',
+          label: 'Network protocols',
+          items: [
+            'develop/network/adnl-tcp',
+            'develop/network/adnl-udp',
+            'develop/network/dht',
+            'develop/network/rldp',
+            'develop/network/overlay'
+          ]
+        },
+        {
+          type: 'category',
           label: 'Archived',
           items: [
             'develop/archive/pow-givers',

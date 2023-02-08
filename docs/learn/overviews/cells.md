@@ -43,6 +43,8 @@ Any object in TON (message, message queue, block, whole blockchain state, contra
 The process of serialization is described by a TL-B scheme: a formal description of how this object can be serialized into _Builder_ or how to parse an object of a given type from the _Slice_.
 TL-B for cells is the same as TL or ProtoBuf for byte-streams.
 
+If you want to know more details about cell (de)serialization, you could read [Cell & Bag of Cells](/docs/develop/data-formats/cell-boc) article.
+
 :::tip TL-B
 Navigate to the [TL-B](/learn/overviews/TL-B) section for more information.
 :::

@@ -64,5 +64,5 @@ new sequence number is larger (to prevent replay attacks).
 TON DHT is not only used to store the IP Addresses of ADNL Nodes, but is also used for other purposes - it can store a list of addresses of the nodes which are storing a specific torrent of TON Storage, a list of addresses of nodes included in an overlay subnetwork, ADNL Addresses of TON services or ADNL Addresses of accounts of the TON Blockchain and so on.
 
 :::info
-Read more about TON DHT in Chapter 3.2. of the [TON Whitepaper](https://ton.org/docs/ton.pdf).
+Read more about TON DHT in [DHT](/docs/develop/network/dht) article, or in Chapter 3.2. of the [TON Whitepaper](https://ton.org/docs/ton.pdf).
 :::
