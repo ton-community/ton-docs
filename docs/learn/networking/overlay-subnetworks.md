@@ -28,6 +28,6 @@ Overlay subnetworks can be public or private.
 Overlay subnetworks work according to a special [gossip](https://en.wikipedia.org/wiki/Gossip_protocol) protocol.
 
 :::info
-Read more about ADNL overlay subnetworks in Chapter 3.3 of the [TON Whitepaper](https://ton.org/docs/ton.pdf).
+Read more about overlays in [Overlay subnetworks](/docs/develop/network/overlay) article, or in Chapter 3.3 of the [TON Whitepaper](https://ton.org/docs/ton.pdf).
 :::
 
