@@ -26,9 +26,9 @@ Here are tutorials made using a toncli library:
 
 ### Linux / macOS (intel)
 
-1) Download the necessary special pre-builds 
-* for Linux: [here](https://github.com/SpyCheese/ton/actions/runs/3176936192)
-* for Mac: [here](https://github.com/SpyCheese/ton/actions/runs/3176936191)
+1) Download the necessary special pre-builds (use the latest build)
+* for Linux: [here](https://github.com/SpyCheese/ton/actions/workflows/ubuntu-compile.yml?query=branch%3Atoncli-local++)
+* for Mac: [here](https://github.com/SpyCheese/ton/actions/workflows/macos-10.15-compile.yml?query=branch%3Atoncli-local)
 
 :::info Download special pre-builds tip
 To download the necessary files, you must log-in to your account
@@ -47,7 +47,7 @@ If you see `WARNING: The script toncli is installed in '/Python/3.9/bin' which i
 
 ### Windows
 
-1) Download the necessary special pre-builds from [here](https://github.com/SpyCheese/ton/actions/runs/3176936196)
+1) Download the necessary special pre-builds from [here](https://github.com/SpyCheese/ton/actions/workflows/win-2019-compile.yml?query=branch%3Atoncli-local) (use the latest build)
 
 :::info Download special pre-builds tip
 To download the necessary files, you must log-in to your account
