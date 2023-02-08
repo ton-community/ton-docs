@@ -14,6 +14,10 @@ This section covers the most popular questions about TON Blockchain.
 
 - [Ethereum to TON](/learn/introduction#ethereum-to-ton)
 
+### Does TON have a test environment?
+
+- [Testnet](/develop/smart-contracts/environment/testnet)
+
 ## Block
 
 ### What is the RPC method used to retrieve block information?
@@ -104,6 +108,14 @@ Example of using batch-featured contract (high-load wallet):
 - https://github.com/tonuniverse/highload-wallet-api
 
 ## Standards
+
+### What accuracy of currencies is available for TON?
+
+_9 digits_
+
+:::info
+Number of decimal places supported by mainnet : 9 digits.
+:::
 
 ### Is there a standard for tokens and NFTs? i.e. a standard way to parse mint, burn, transfer fungible and non-fungible tokens from a transaction
 
