@@ -6,7 +6,11 @@ This section describes instructions and manuals for interacting with TON at a lo
 
 The aim of this document is to provide step-by-step instructions for setting up a full node for the TON Blockchain as a validator. We assume that a TON Blockchain Full Node is already up and running as explained in [FullNode-HOWTO](https://toncoin.org/#/howto/full-node). We also assume some familiarity with the TON Blockchain Lite Client.
 
-Note that a validator must be run on a dedicated high-performance server with high network bandwidth installed in a reliable data center, and that you'll need a large amount of TON (test TON, if you want to run a validator in the "testnet") as stakes for your validator. If your validator works incorrectly or is not available for prolonged periods of time, you may lose part or all of your stake, so it makes sense to use high-performance, reliable servers. We recommend a dual-processor server with at least eight cores in each processor, at least 256 MiB RAM, at least 8 TB of conventional HDD storage, and at least 512 GB of faster SSD storage, with 1 Gbit/s network (and Internet) connectivity to reliably accommodate peak loads.
+Note that a validator must be run on a dedicated high-performance server with high network bandwidth installed in a reliable data center, and that you'll need a large amount of TON (test TON, if you want to run a validator in the "testnet") as stakes for your validator. If your validator works incorrectly or is not available for prolonged periods of time, you may lose part or all of your stake, so it makes sense to use high-performance, reliable servers.
+
+:::info
+We recommend a server with at least eight cores CPU, at least 64 GB RAM, and at least 512 GB NVMe SSD, with 1 Gbit/s network (and Internet) connectivity to reliably accommodate peak loads.
+:::
 
 ## 0. Downloading and compiling
 
