@@ -673,6 +673,11 @@ int cell_null?(cell c) asm "ISNULL";
 Checks whether `c` is a `null`. Usually a `null`-cell represents an empty dictionary. FunC also has polymorphic `null?` built-in. (See [built-ins](/develop/func/builtins#other-primitives).)
 
 ## Dictionaries primitives
+
+:::caution
+The dictionary primitives below are low-level and do not check that the structure of the cell, they are applied to, matches the operation signature. Applying a dictionary operation to a "non-dictionary" or applying an operation corresponding to one key length/sign to a dictionary with a different kind of keys, for instance simultaneous writing to one dictionary key-values with 8bit-signed key and 7bit-unsigned key, is **Undefined Behavior**. Often in such cases an exception is thrown, but in rare cases the wrong value can be written / read. Developers are strongly encouraged to avoid such code.
+:::
+
 As said in [TVM.pdf](https://ton.org/tvm.pdf):
 > Dictionaries admit two different representations as TVM stack values:
 > * A slice `s` with a serialization of a TL-B value of type `HashmapE(n, X)`. In other words, `s` consists either of one bit equal to zero (if the dictionary is empty) or of one bit equal to one and a reference to a cell containing the root of the binary tree, i.e., a serialized value of type `Hashmap(n, X)`.
