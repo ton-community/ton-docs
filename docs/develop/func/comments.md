@@ -10,3 +10,20 @@ It also has multi-line comments which start with `{-` and end with `-}`. Note th
     {- this is a comment in the comment -}
 -}
 ```
+
+Moreover, there can be one-line comments inside multi-line ones, and one-line comments `;;` are "stronger" than multiline `{- -}`. In other words in the following example:
+
+```func
+{-
+  Start of the comment
+
+;; this comment ending is itself commented -> -}
+
+const a = 10;
+;; this comment begining is itself commented -> {-
+
+  End of the comment
+-}
+```
+
+`const a = 10;` is inside multiline comment and is commented out.
