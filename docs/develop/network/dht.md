@@ -21,7 +21,7 @@ The ADNL address in hex representation is `516618cf6cbe9004f6883e742c9a2e3ca53ed
 Now our goal is to find the ip, port and public key of the node that has this address.
 
 To do this, we need to get the ID of the DHT key, first we will fill the DHT key schema:
-```
+```tlb
 dht.key id:int256 name:bytes idx:int = dht.Key
 ```
 `name` is the type of key, for ADNL addresses the word `address` is used, and, for example, to search for shardchain nodes - `nodes`. But the key type can be any array of bytes, depending on the value you are looking for.
@@ -36,7 +36,7 @@ Filling in this schema, we get:
 Next - get the key ID, sha256 hash from the bytes serialized above. It will be `b30af0538916421b46df4ce580bf3a29316831e0c3323a7f156df0236c5b2f75`
 
 Now we can start searching. To do this, we need to execute a query that has [schema](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L197):
-```
+```tlb
 dht.findValue key:int256 k:int = dht.ValueResult
 ```
 `key` is the id of our DHT key, and `k` is the "width" of the search, the smaller it is, the more accurate, but fewer potential nodes to query. The maximum k for nodes in a TON is 10, usually 6 is used.
@@ -52,7 +52,7 @@ If we get `dht.valueNotFound`, the response will contain a list of nodes that ar
 After that, from the list of all nodes known to us, select the closest, accessible and not yet requested, and make the same request to it. And so on until we try all the nodes in the range we have chosen or until we stop receiving new nodes.
 
 Let's analyze the response fields in more detail, the schemas used:
-```
+```tlb
 adnl.address.udp ip:int port:int = adnl.Address;
 adnl.addressList addrs:(vector adnl.Address) version:int reinit_date:int priority:int expire_at:int = adnl.AddressList;
 
@@ -77,7 +77,7 @@ If the distance is small enough, we can make the same request to this node. And 
 The response will contain the value itself, the full key information, and optionally a signature (depends on value type).
 
 Let's analyze the response fields in more detail, the schemas used:
-```
+```tlb
 adnl.address.udp ip:int port:int = adnl.Address;
 adnl.addressList addrs:(vector adnl.Address) version:int reinit_date:int priority:int expire_at:int = adnl.AddressList;
 
@@ -112,12 +112,12 @@ We check the key signature in the same way as last time, make the signature an e
 Used for keys containing information about other nodes-shards of the workchain in the network, the value always has the TL structure `overlay.nodes`. 
 The value field must be empty.
 
-```
+```tlb
 overlay.node id:PublicKey overlay:int256 version:int signature:bytes = overlay.Node;
 overlay.nodes nodes:(vector overlay.node) = overlay.Nodes;
 ```
 To check for validity, we must check all `nodes` and for each check `signature` against its `id` by serializing the TL structure:
-```
+```tlb
 overlay.node.toSign id:adnl.id.short overlay:int256 version:int = overlay.node.ToSign;
 ```
 As we can see, id should be replaced with adnl.id.short, which is the key id (hash) of the `id` field from the original structure. After serialization - we check the signature with the data.

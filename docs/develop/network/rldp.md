@@ -10,7 +10,7 @@ to access TON websites and TON Storage.
 ## Protocol
 
 RLDP uses the following TL structures for communication:
-```
+```tlb
 fec.raptorQ data_size:int symbol_size:int symbols_count:int = fec.Type;
 fec.roundRobin data_size:int symbol_size:int symbols_count:int = fec.Type;
 fec.online data_size:int symbol_size:int symbols_count:int = fec.Type;
@@ -53,7 +53,7 @@ All requests from the TON network come via the RLDP protocol to the proxy, and t
 The user on his side launches the proxy, for example, [Tonutils Proxy](https://github.com/xssnick/TonUtils-Proxy), and uses the `.ton` sites, all traffic is wrapped in the reverse order, requests go to the local HTTP proxy, and it sends them via RLDP to the remote TON site.
 
 HTTP inside RLDP is implemented using TL structures:
-```
+```tlb
 http.header name:string value:string = http.Header;
 http.payloadPart data:bytes trailer:(vector http.header) last:Bool = http.PayloadPart;
 http.response http_version:string status_code:int reason:string headers:(vector http.header) no_payload:Bool = http.Response;
@@ -79,7 +79,7 @@ Let's say we have already got its ADNL address by calling the Get method of the 
 
 ### Send a GET request to `foundation.ton`
 To do this, fill in the structure:
-```
+```tlb
 http.request id:int256 method:string url:string http_version:string headers:(vector http.header) = http.Response;
 ```
 
@@ -123,7 +123,7 @@ Symbols are encoded and sent in a round-robin style: we initially define `seqno`
 And so until we receive a message that the peer has accepted the data.
 
 Now, when we have created the encoder, we are ready to send data, for this we will fill in the TL schema:
-```
+```tlb
 fec.raptorQ data_size:int symbol_size:int symbols_count:int = fec.Type;
 
 rldp.messagePart transfer_id:int256 fec_type:fec.Type part:int total_size:long seqno:int data:bytes = rldp.MessagePart;
@@ -157,7 +157,7 @@ We need them to initialize the RaptorQ decoder. [[Example]](https://github.com/x
 After initialization, we add the received symbols with their `seqno` to our decoder, and once we have accumulated the minimum required number equal to `symbols_count`, we can try to decode the full message. On success, we will send `rldp.complete`. [[Example]](https://github.com/xssnick/tonutils-go/blob/be3411cf412f23e6889bf0b648904306a15936e7/adnl/rldp/rldp.go#L168)
 
 The result will be a `rldp.answer` message with the same query_id as in the `rldp.query` we sent. The data must contain `http.response`.
-```
+```tlb
 http.response http_version:string status_code:int reason:string headers:(vector http.header) no_payload:Bool = http.Response;
 ```
 With the main fields, I think everything is clear, the essence is the same as in HTTP. 
@@ -166,13 +166,13 @@ The response from the server can be considered received.
 
 If `no_payload` = false, then there is content in the response, and we need to get it. 
 To do this, we need to send a request with a TL schema `http.getNextPayloadPart` wrapped in `rldp.query`.
-```
+```tlb
 http.getNextPayloadPart id:int256 seqno:int max_chunk_size:int = http.PayloadPart;
 ```
 `id` should be the same as we sent in `http.request`, `seqno` - 0, and +1 for each next part. `max_chunk_size` is the maximum chunk size we are ready to accept, typically 128 KB (131072 bytes) is used.
 
 In response, we will receive:
-```
+```tlb
 http.payloadPart data:bytes trailer:(vector http.header) last:Bool = http.PayloadPart;
 ```
 If `last` = true, then we have reached the end, we can put all the pieces together and get a complete response body, for example, html.

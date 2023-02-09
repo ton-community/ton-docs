@@ -144,10 +144,14 @@ We already know how to get the masterchain block, so now we can call any lite se
 Let's analyze **runSmcMethod** - this is a method that calls a function from a smart contract and returns a result. Here we need to understand some new data types such as [TL-B](/docs/develop/data-formats/tl-b), [Cell](/docs/develop/data-formats/cell-boc#cell) and [BoC](/docs/develop/data-formats/cell-boc#bag-of-cells).
 
 To execute the smart contract method, we need to build and send a request using the TL schema:
-`liteServer.runSmcMethod mode:# id:tonNode.blockIdExt account:liteServer.accountId method_id:long params:bytes = liteServer.RunMethodResult`
+```tlb
+liteServer.runSmcMethod mode:# id:tonNode.blockIdExt account:liteServer.accountId method_id:long params:bytes = liteServer.RunMethodResult
+```
 
 And wait for a response with schema:
-`liteServer.runMethodResult mode:# id:tonNode.blockIdExt shardblk:tonNode.blockIdExt shard_proof:mode.0?bytes proof:mode.0?bytes state_proof:mode.1?bytes init_c7:mode.3?bytes lib_extras:mode.4?bytes exit_code:int result:mode.2?bytes = liteServer.RunMethodResult;`
+```tlb
+liteServer.runMethodResult mode:# id:tonNode.blockIdExt shardblk:tonNode.blockIdExt shard_proof:mode.0?bytes proof:mode.0?bytes state_proof:mode.1?bytes init_c7:mode.3?bytes lib_extras:mode.4?bytes exit_code:int result:mode.2?bytes = liteServer.RunMethodResult;
+```
 
 In the request, we see the following fields:
 1. mode:# - uint32 bitmask of what we want to see in the response, for example, `result:mode.2?bytes` will only be present in the response if the bit with index 2 is set to one.
@@ -166,7 +170,7 @@ For example, we only need `result:mode.2?bytes`, then our mode will be equal to 
 Let's analyze the call and getting the result from the `a2` method of the contract `EQBL2_3lMiyywU17g-or8N7v9hDmPCpttzBPE2isF2GTzpK4`:
 
 Method code in FunC:
-```
+```func
 (cell, cell) a2() method_id {
   cell a = begin_cell().store_uint(0xAABBCC8, 32).end_cell();
   cell b = begin_cell().store_uint(0xCCFFCC1, 32).end_cell();
@@ -189,7 +193,7 @@ In response, we get:
 * `result:mode.2?bytes` -> [Stack](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/crypto/block/block.tlb#L783) containing the data returned by the method in [BoC](/docs/develop/data-formats/cell-boc#bag-of-cells) format, we will unpack it.
 
 Inside `result` we received `b5ee9c7201010501001b000208000002030102020203030400080ccffcc1000000080aabbcc8`, this is [BoC](/docs/develop/data-formats/cell-boc#bag-of-cells) containing the data. When we deserialize it, we will get a cell:
-```
+```json
 32[00000203] -> {
   8[03] -> {
     0[],
@@ -203,17 +207,17 @@ The first 3 bytes of the root cell `000002` - is the depth of the stack, that is
 
 We continue parsing, the next 8 bits (1 byte) is the value type at the current stack level. For some types, it may take 2 bytes. Possible options can be seen in [schema](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/crypto/block/block.tlb#L766).
 In our case, we have `03`, which means:
-```
+```tlb
 vm_stk_cell#03 cell:^Cell = VmStackValue;
 ```
 So the type of our value is - cell, and, according to the schema, it stores the value itself as a reference. But, if we look at the stack element storage schema:
-```
+```tlb
 vm_stk_cons#_ {n:#} rest:^(VmStackList n) tos:VmStackValue = VmStackList (n + 1);
 ```
 We will see that the first link `rest:^(VmStackList n)` - is the cell of the next value on the stack, and our value `tos:VmStackValue` comes second, so to get the value we need to read the second link, that is `32[0CCFFCC1]` - this is our first cell that the contract returned.
 
 Now we can go deeper and get the second element of the stack, we go through the first link, now we have:
-```
+```json
 8[03] -> {
     0[],
     32[0AABBCC8]
@@ -229,7 +233,7 @@ Note that they are in reverse order. In the same way, you need to pass arguments
 To get account state data such as balance, code and contract data, we can use [getAccountState](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/lite_api.tl#L68). For the request, we need a [fresh master block](#getmasterchaininfo) and account address. In response, we will receive the TL structure [AccountState](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/lite_api.tl#L38).
 
 Let's analyze the AccountState TL schema:
-```
+```tlb
 liteServer.accountState id:tonNode.blockIdExt shardblk:tonNode.blockIdExt shard_proof:bytes proof:bytes state:bytes = liteServer.AccountState;
 ```
 1. `id` - is our master block, regarding which we got the data.
@@ -241,7 +245,7 @@ liteServer.accountState id:tonNode.blockIdExt shardblk:tonNode.blockIdExt shard_
 Of all this data, what we need is in the state, we will analyze it.
 
 For example, let's get the status of account `EQAhE3sLxHZpsyZ_HecMuwzvXHKLjYx4kEUehhOy2JmCcHCT`, `state` in the response will be (at the moment of writing this article):
-```
+```hex
 b5ee9c720102350100051e000277c0021137b0bc47669b3267f1de70cbb0cef5c728b8d8c7890451e8613b2d899827026a886043179d3f6000006e233be8722201d7d239dba7d818134001020114ff00f4a413f4bcf2c80b0d021d0000000105036248628d00000000e003040201cb05060013a03128bb16000000002002012007080043d218d748bc4d4f4ff93481fd41c39945d5587b8e2aa2d8a35eaf99eee92d9ba96004020120090a0201200b0c00432c915453c736b7692b5b4c76f3a90e6aeec7a02de9876c8a5eee589c104723a18020004307776cd691fbe13e891ed6dbd15461c098b1b95c822af605be8dc331e7d45571002000433817dc8de305734b0c8a3ad05264e9765a04a39dbe03dd9973aa612a61f766d7c02000431f8c67147ceba1700d3503e54c0820f965f4f82e5210e9a3224a776c8f3fad1840200201200e0f020148101104daf220c7008e8330db3ce08308d71820f90101d307db3c22c00013a1537178f40e6fa1f29fdb3c541abaf910f2a006f40420f90101d31f5118baf2aad33f705301f00a01c20801830abcb1f26853158040f40e6fa120980ea420c20af2670edff823aa1f5340b9f2615423a3534e2a2d2b2c0202cc12130201201819020120141502016616170003d1840223f2980bc7a0737d0986d9e52ed9e013c7a21c2b2f002d00a908b5d244a824c8b5d2a5c0b5007404fc02ba1b04a0004f085ba44c78081ba44c3800740835d2b0c026b500bc02f21633c5b332781c75c8f20073c5bd0032600201201a1b02012020210115bbed96d5034705520db3c8340201481c1d0201201e1f0173b11d7420c235c6083e404074c1e08075313b50f614c81e3d039be87ca7f5c2ffd78c7e443ca82b807d01085ba4d6dc4cb83e405636cf0069006031003daeda80e800e800fa02017a0211fc8080fc80dd794ff805e47a0000e78b64c00015ae19574100d56676a1ec40020120222302014824250151b7255b678626466a4610081e81cdf431c24d845a4000331a61e62e005ae0261c0b6fee1c0b77746e102d0185b5599b6786abe06fedb1c68a2270081e8f8df4a411c4605a400031c34410021ae424bae064f613990039e2ca840090081e886052261c52261c52265c4036625ccd88302d02012026270203993828290111ac1a6d9e2f81b609402d0015adf94100cc9576a1ec1840010da936cf0557c1602d0015addc2ce0806ab33b50f6200220db3c02f265f8005043714313db3ced542d34000ad3ffd3073004a0db3c2fae5320b0f26212b102a425b3531cb9b0258100e1aa23a028bcb0f269820186a0f8010597021110023e3e308e8d11101fdb3c40d778f44310bd05e254165b5473e7561053dcdb3c54710a547abc2e2f32300020ed44d0d31fd307d307d33ff404f404d10048018e1a30d20001f2a3d307d3075003d70120f90105f90115baf2a45003e06c2170542013000c01c8cbffcb0704d6db3ced54f80f70256e5389beb198106e102d50c75f078f1b30542403504ddb3c5055a046501049103a4b0953b9db3c5054167fe2f800078325a18e2c268040f4966fa52094305303b9de208e1638393908d2000197d3073016f007059130e27f080705926c31e2b3e63006343132330060708e2903d08308d718d307f40430531678f40e6fa1f2a5d70bff544544f910f2a6ae5220b15203bd14a1236ee66c2232007e5230be8e205f03f8009322d74a9802d307d402fb0002e83270c8ca0040148040f44302f0078e1771c8cb0014cb0712cb0758cf0158cf1640138040f44301e201208e8a104510344300db3ced54925f06e234001cc8cb1fcb07cb07cb3ff400f400c9
 ```
 
@@ -250,7 +254,7 @@ b5ee9c720102350100051e000277c0021137b0bc47669b3267f1de70cbb0cef5c728b8d8c7890451
 <details>
   <summary>large cell</summary>
 
-  ```
+  ```json
   473[C0021137B0BC47669B3267F1DE70CBB0CEF5C728B8D8C7890451E8613B2D899827026A886043179D3F6000006E233BE8722201D7D239DBA7D818130_] -> {
     80[FF00F4A413F4BCF2C80B] -> {
       2[0_] -> {
@@ -354,14 +358,14 @@ b5ee9c720102350100051e000277c0021137b0bc47669b3267f1de70cbb0cef5c728b8d8c7890451
 </details>
 
 Now we need to parse the cell according to the TL-B structure:
-```
+```tlb
 account_none$0 = Account;
 
 account$1 addr:MsgAddressInt storage_stat:StorageInfo
           storage:AccountStorage = Account;
 ```
 Our structure references other structures, such as:
-```
+```tlb
 anycast_info$_ depth:(#<= 30) { depth >= 1 } rewrite_pfx:(bits depth) = Anycast;
 addr_std$10 anycast:(Maybe Anycast) workchain_id:int8 address:bits256  = MsgAddressInt;
 addr_var$11 anycast:(Maybe Anycast) addr_len:(## 9) workchain_id:int32 address:(bits addr_len) = MsgAddressInt;
@@ -395,12 +399,12 @@ Convert it to binary form and get:
 Let's look at our main TL-B structure, we see that we have 2 options for what can be there - `account_none$0` or `account$1`. We can understand which option we have by reading the prefix declared after the symbol $, in our case it is 1 bit. If there is 0, then we have `account_none`, or 1, then `account`.
 
 Our first bit from the data above = 1, so we are working with `account$1` and will use the schema:
-```
+```tlb
 account$1 addr:MsgAddressInt storage_stat:StorageInfo
           storage:AccountStorage = Account;
 ```
 Next we have `addr:MsgAddressInt`, we see that for MsgAddressInt we also have several options:
-```
+```tlb
 addr_std$10 anycast:(Maybe Anycast) workchain_id:int8 address:bits256  = MsgAddressInt;
 addr_var$11 anycast:(Maybe Anycast) addr_len:(## 9) workchain_id:int32 address:(bits addr_len) = MsgAddressInt;
 ```
@@ -414,15 +418,15 @@ Next, we read `address:bits256`, this is 256 bits of the address, in the same wa
 
 
 We read the address `addr:MsgAddressInt`, then we have `storage_stat:StorageInfo` from the main structure, its schema is:
-```
+```tlb
 storage_info$_ used:StorageUsed last_paid:uint32 due_payment:(Maybe Grams) = StorageInfo;
 ```
 First comes `used:StorageUsed`, with the schema:
-```
+```tlb
 storage_used$_ cells:(VarUInteger 7) bits:(VarUInteger 7) public_cells:(VarUInteger 7) = StorageUsed;
 ```
 This is the number of cells and bits used to store account data. Each field is defined as `VarUInteger 7`, which means a uint of dynamic size, but a maximum of 7 bits. You can understand how it is arranged according to the scheme:
-```
+```tlb
 var_uint$_ {n:#} len:(#< n) value:(uint (len * 8)) = VarUInteger n;
 ```
 In our case, n will be equal to 7. In len we will have `(#< 7)` which means the number of bits that can hold a number up to 7. You can determine it by translating 7-1=6 into binary form - `110`, we get 3 bits, so length len = 3 bits. And value is `(uint (len * 8))`. To determine it, we need to read 3 bits of the length, get a number and multiply by 8, this will be the size of `value`, that is, the number of bits that need to be read to get the value of VarUInteger.
@@ -432,11 +436,11 @@ Read `cells:(VarUInteger 7)`, take our next bits from the root cell, look at the
 We successfully read `used:StorageUsed`, next we have `last_paid:uint32`, we read 32 bits. Everything is just as simple with `due_payment:(Maybe Grams)` here Maybe, which will be 0, so we skip Grams. But, if Maybe is 1, we can look at the Grams `amount:(VarUInteger 16) = Grams` schema and immediately understand that we already know how to work with this. Like last time, only instead of 7 we have 16.
 
 Next we have `storage:AccountStorage` with a schema:
-```
+```tlb
 account_storage$_ last_trans_lt:uint64 balance:CurrencyCollection state:AccountState = AccountStorage;
 ```
 We read `last_trans_lt:uint64`, this is 64 bits, storing lt of the last account transaction. And finally, the balance represented by the schema:
-```
+```tlb
 currencies$_ grams:Grams other:ExtraCurrencyCollection = CurrencyCollection;
 ```
 From here we will read `grams:Grams` which will be the account balance in nano-tones.
@@ -459,7 +463,7 @@ Now, having studied all the information, you can call and process responses for 
 The key id is the SHA256 hash of the serialized TL schema.
 
 The most commonly used TL schemas for the keys are:
-```
+```tlb
 pub.ed25519 key:int256 = PublicKey -- ID c6b41348
 pub.aes key:int256 = PublicKey     -- ID d4adbc2d
 pub.overlay name:bytes = PublicKey -- ID cb45ba34

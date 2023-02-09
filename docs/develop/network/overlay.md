@@ -25,7 +25,7 @@ Once we connect to a sufficient number of nodes, we can receive all blocks infor
 Let's look at an example of getting nodes in an overlay.
 
 To do this, send a request `overlay.getRandomPeers` to any known node of the overlay, serialize the TL schema:
-```
+```tlb
 overlay.node id:PublicKey overlay:int256 version:int signature:bytes = overlay.Node;
 overlay.nodes nodes:(vector overlay.node) = overlay.Nodes;
 
@@ -37,7 +37,7 @@ In case if we want to not just get some information, but participate in overlay 
 When peers will get info about us - they will start to send us broadcasts using ADNL or RLDP.
 
 Each request inside the overlay must be prefixed with the TL schema:
-```
+```tlb
 overlay.query overlay:int256 = True;
 ```
 The `overlay` should be the id of the overlay - the id of the `tonNode.ShardPublicOverlayId` schema key - the same one we used to search the DHT.
@@ -55,11 +55,11 @@ For requests of this kind, the RLDP protocol is used. And it's important not to 
 There is nothing unusual about the requests themselves, they are very similar to what we [did in the article about ADNL TCP](/docs/develop/network/adnl-tcp#getmasterchaininfo).
 
 For example, the `downloadBlockFull` request uses the already familiar schema of block id:
-```
+```tlb
 tonNode.downloadBlockFull block:tonNode.blockIdExt = tonNode.DataFull;
 ```
 By passing it, we will be able to download the full information about the block, in response we will receive:
-```
+```tlb
 tonNode.dataFull id:tonNode.blockIdExt proof:bytes block:bytes is_link:Bool = tonNode.DataFull;
   or
 tonNode.dataFullEmpty = tonNode.DataFull;
