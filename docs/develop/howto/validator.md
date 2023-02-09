@@ -12,6 +12,10 @@ Note that a validator must be run on a dedicated high-performance server with hi
 We recommend a server with at least eight cores CPU, at least 64 GB RAM, and at least 512 GB NVMe SSD, with 1 Gbit/s network (and Internet) connectivity to reliably accommodate peak loads.
 :::
 
+:::info
+To successfully participate in validation, the time on the node server must be within 5 seconds of the world time.
+:::
+
 ## 0. Downloading and compiling
 
 The basic instructions are the same as for a TON Blockchain Full Node, as explained in the [FullNode-HOWTO](https://toncoin.org/#/howto/full-node). In fact, any Full Node will automatically work as a validator if it discovers that the public key corresponding to its private key appears as a member of the current validator set for the currently selected TON Blockchain instance. In particular, the Full Node and the Validator use the same binary file `validator-engine`, and are controlled by means of the same `validator-engine-console`.
