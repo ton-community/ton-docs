@@ -11,3 +11,7 @@ A reliable arbitrary-size datagram protocol built upon the ADNL, called RLDP,
 is used instead of a TCP-like protocol. This reliable datagram protocol can
 be employed, for instance, to send RPC queries to remote hosts and receive
 answers from them.
+
+:::info
+Detailed description with examples can be found in [RLDP](/docs/develop/network/rldp) article of `develop` section.
+:::

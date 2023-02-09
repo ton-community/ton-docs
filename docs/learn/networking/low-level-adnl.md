@@ -73,6 +73,10 @@ The receiving peer must fetch the first 4 bytes, decrypt it into the `length` fi
 
 The first datagram in the session always goes from the server to the client after a handshake packet was successfully accepted by the server and it's actual buffer is empty. The client should decrypt it and disconnect from the server in case of failure, because it means that the server has not followed the protocol properly and the actual session keys differs on the server and client side.
 
+### Communication details
+
+If you want to dive into communication details, you could check article [ADNL TCP - Liteserver](/docs/develop/network/adnl-tcp) to see some examples.
+
 ### Security considerations
 #### Handshake padding
 It is unknown why the initial TON team decided to include this field into the handshake. `aes_params` integrity is protected by a SHA-256 hash and confidentiality is protected by the key derived from the `secret` parameter. Probably, it was intended to migrate from AES-CTR at some point. To do this, specification may be extended to include a special magic value in `aes_params`, which will signal that the peer is ready to use the updated primitives. The response to such a handshake may be decrypted twice, with new and old schemes, to clarify which scheme the other peer is actually using.
@@ -85,7 +89,8 @@ If an encryption key is derived only from the `secret` parameter, it will be sta
 It is not obvious why the `nonce` field in the datagram is present because, even without it, any two ciphertexts will differ because of the session-bounded keys for AES and encryption in CTR mode. However, the following attack can be performed in the case of an absent or predictable nonce. CTR encryption mode turns block ciphers, such as AES, into stream ciphers to make it possible to perform a bit-flipping attack. If the attacker knows the plaintext which belongs to encrypted datagram, they can obtain a pure keystream, XOR it with their own plaintext and efficiently replace the message which was sent by peer. The buffer integrity is protected by a SHA-256 hash, but an attacker can replace it too because having knowledge of a full plaintext means having knowledge of its hash. The nonce field is present to prevent such an attack, so no attacker can replace the SHA-256 without having knowledge of the nonce.
 
 ## P2P protocol (ADNL over UDP)
-TBD
+
+Detailed description can be found in article [ADNL UDP - Internode](/docs/develop/network/adnl-udp).
 
 ## References
 - [The Open Network, p. 80](https://ton.org/ton.pdf)

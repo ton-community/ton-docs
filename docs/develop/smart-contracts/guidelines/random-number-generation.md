@@ -6,15 +6,15 @@ Generating random numbers is a common task which you may need in many different 
 
 Computers are terrible at generating random information, because all they do is following the instructions of users. But since people really need random numbers often, they came up with different ways of generating _pseudo-random_ numbers.
 
-These algorithms usually require you to provide some `seed` value which will be used to generate a sequence of pseudo-random numbers. So if you run the same program with the same seed several times, you will eventually get the same result every time. In TON, the seed is different for each block.
+These algorithms usually require you to provide some _seed_ value which will be used to generate a sequence of pseudo-random numbers. So if you run the same program with the same _seed_ several times, you will eventually get the same result every time. In TON, the _seed_ is different for each block.
 
  * [Generation of block random seed](https://ton.org/docs/participate/own-blockchain-software/random)
 
-So in order to predict the result of `random()` function in some smart contract, you just need to know the current seed of the block (which is possible).
+So in order to predict the result of `random()` function in some smart contract, you just need to know the current _seed_ of the block (which is possible).
 
 ## And what about `randomize_lt()`?
 
-To make the random number generation a bit more unpredictable, you can add the current `Logical time` to the seed, so different transactions will have different seeds and different results. But the thing is that `Logical time` is easily predictable.
+To make the random number generation a bit more unpredictable, you can add the current `Logical time` to the _seed_, so different transactions will have different `seeds` and different results. But the thing is that `Logical time` is easily predictable.
 
 As was seen in TON Hack Challenge, generating random numbers with just `randomize_lt()` and `random()` is not safe. Take a look at the solution of 4th task called **Lottery**:
  - [Original solution of the 4th task](https://github.com/ton-blockchain/hack-challenge-1/blob/master/Solutions/4.%20lottery.md)
@@ -24,7 +24,20 @@ You can predict the results of `random()` by writing a simple smart contract fun
 
 ## So, how do I generate random numbers safely?
 
-There can possibly be different approaches, but one of the simpliest is just skipping at least one block before generating a number. If we skip a block, the seed will change in a less predictable way, thus your RNG will be a lot safer.
+There can be different approaches, but the simpliest one is just mixing several parameters to _seed_. This can be easily done like this:
+```func
+int seed = cell_hash(begin_cell()
+    .store_uint(now(), 256)
+    .store_uint(block_lt(), 256)
+    .store_uint(cur_lt(), 256)
+.end_cell());
+randomize(seed);
+;; now you can just call rand() or random() functions to get random numbers
+```
+
+This is enough for most cases, but there is still a chance that some evil validator will specifically substitute parameters like the current time to get such a _seed_, with which he will get the number he needs.
+
+In order to prevent (or at least complicate) the substitution of the _seed_, you can use more complex schemes. For example, you can skip one block before generating a random number. If we skip a block, the _seed_ will change in a less predictable way, thus your RNG will be a lot safer.
 
 Skipping blocks is not a complex task. You can do that by simply sending a message to Masterchain and back to the workchain of your contract. Let's have a look at the simple example!
 
@@ -123,4 +136,4 @@ Deploy this contract in any workchain you need (probably Basechain) and you're d
 
 It is safe in most cases, but there is still a **chance of manipulating it**.
 
-An evil validator with some probability [can affect](/participate/own-blockchain-software/random#conclusion) the `seed`, on which the random depends. Even if this probability is extremely small, it is still worth considering.
+An evil validator with some probability [can affect](/participate/own-blockchain-software/random#conclusion) the _seed_, on which the random depends. Even if this probability is extremely small, it is still worth considering.

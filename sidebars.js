@@ -393,54 +393,6 @@ const sidebars = {
     'develop/howto/faq',
     {
       type: 'category',
-      label: 'Tact language',
-      items: [
-        {
-          type: 'doc',
-          id: 'develop/tact/tact-overview',
-        },
-        {
-          type: 'doc',
-          id: 'develop/tact/introduce/getting-start',
-        },
-        {
-          type: 'doc',
-          id: 'develop/tact/docs/tact-cookbook',
-        },
-        {
-          type: 'category',
-          label: 'Learn',
-          items: [
-            'develop/tact/introduce/hello-world-guide',
-            'develop/tact/smart-contracts/tact-wallet',
-            'develop/tact/smart-contracts/tact-jetton'
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Documentation',
-          items: [
-            'develop/tact/docs/tact-documentation-caution',
-            'develop/tact/docs/tact-message-lifecycle',
-            'develop/tact/docs/tact-send',
-            'develop/tact/docs/tact-contract',
-            'develop/tact/docs/tact-types',
-            'develop/tact/docs/tact-functions',
-            'develop/tact/docs/tact-comments',
-            'develop/tact/docs/tact-statements',
-            'develop/tact/docs/tact-builtins',
-            'develop/tact/docs/tact-stdlib',
-            'develop/tact/docs/tact-abi'
-          ],
-        },
-        {
-          type: 'doc',
-          id: 'develop/tact/introduce/tact-sdk'
-        }
-      ]
-    },
-    {
-      type: 'category',
       label: 'FunC language',
       items: [
         {
@@ -488,6 +440,26 @@ const sidebars = {
         'develop/howto/fees-low-level',
         'develop/howto/full-node',
         'develop/howto/validator',
+        {
+          type: 'category',
+          label: 'Data formats',
+          items: [
+            'develop/data-formats/cell-boc',
+            'develop/data-formats/tl',
+            'develop/data-formats/tl-b'
+          ]
+        },
+        {
+          type: 'category',
+          label: 'Network protocols',
+          items: [
+            'develop/network/adnl-tcp',
+            'develop/network/adnl-udp',
+            'develop/network/dht',
+            'develop/network/rldp',
+            'develop/network/overlay'
+          ]
+        },
         {
           type: 'category',
           label: 'Archived',

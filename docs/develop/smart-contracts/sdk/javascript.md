@@ -35,5 +35,6 @@ npm create ton
 
 ### Materials
 
+- [Blueprint using on DoraHacks stream](https://www.youtube.com/watch?v=5ROXVM-Fojo)
 - [Create a new project](https://github.com/ton-community/blueprint#create-a-new-project)
 - [Develop a new smart contract](https://github.com/ton-community/blueprint#develop-a-new-contract)

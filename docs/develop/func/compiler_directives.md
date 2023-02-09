@@ -43,3 +43,39 @@ This directive may be used multiple times; the compiler version must satisfy all
 The syntax of this pragma is the same as the version pragma but it fails if the condition is satisfied.
 
 It can be used for blacklisting a specific version known to have problems, for example.
+
+### #pragma allow-post-modification
+_funC v0.4.1_
+
+By default it is prohibited to use variable prior to its modification in the same expression. In other words, expression `(x, y) = (ds, ds~load_uint(8))` won't compile, while `(x, y) = (ds~load_uint(8), ds)` is valid.
+
+This rule can be overwritten, by `#pragma allow-post-modification`, which allow to modify variable after usage in mass assignments and function invocation; as usual sub-expressions will be computed left to right: `(x, y) = (ds, ds~load_bits(8))` will result in `x` containing initial `ds`; `f(ds, ds~load_bits(8))` first argument of `f` will contain initial `ds`, and second - 8 bits of `ds`.
+
+`#pragma allow-post-modification` works only for code after the pragma.
+
+### #pragma compute-asm-ltr
+_funC v0.4.1_
+
+Asm declarations can overwrite order of arguments, for instance in the following expression 
+
+```func
+idict_set_ref(ds~load_dict(), ds~load_uint(8), ds~load_uint(256), ds~load_ref())
+```
+
+order of parsing will be: `load_ref()`, `load_uint(256)`, `load_dict()` and `load_uint(8)` due to following asm declaration (note `asm(value index dict key_len)`):
+
+```func
+cell idict_set_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTISETREF";
+```
+
+This behavior can be changed to strict left-to-right order of computation via `#pragma compute-asm-ltr`
+
+As a result in
+```func
+#pragma compute-asm-ltr
+...
+idict_set_ref(ds~load_dict(), ds~load_uint(8), ds~load_uint(256), ds~load_ref());
+```
+order of parsing will be `load_dict()`, `load_uint(8)`, `load_uint(256)`, `load_ref()` and all asm permutation will happen after computation.
+
+`#pragma compute-asm-ltr` works only for code after the pragma.
