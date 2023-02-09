@@ -11,6 +11,9 @@ Exceptions can be thrown by conditional primitives `throw_if`, and `throw_unless
 ## Dump variable
 A variable can be dumped to the debug log by the `~dump` function.
 
+## Dump string
+A string can be dumped to the debug log by the `~strdump` function.
+
 ## Integer operations
 - `muldiv` is a multiple-then-divide operation. The intermediate result is stored in 513-bit integer, so it won't overflow if the actual result fits into a 257-bit integer.
 

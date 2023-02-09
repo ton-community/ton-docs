@@ -441,6 +441,10 @@ ________
 
 **Trading** — buying and selling cryptocurrencies with the goal of making a profit.
 
+### TVL
+
+**TVL** (Total Value Locked) — Тotal value locked represents the number of assets currently being staked in a specific protocol.
+
 ___________
 
 ## V

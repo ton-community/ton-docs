@@ -6,7 +6,7 @@ Indeed, FunC exposes [send_raw_message](/develop/func/stdlib#send_raw_message) f
 
 Since TON is a comprehensive system with wide functionality, messages which need to be able to support all of this functionality may look quite complicated. Still, most of that functionality is not used in common scenarios, and message serialization in most cases may be reduced to:
 ```func
-  var msg = begin_cell()
+  cell msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)
     .store_coins(amount)
@@ -29,7 +29,7 @@ There are three types of messages:
 
 We will start with the internal message layout.
 
-TL-B scheme, which describes messages that can be sent by smart contracts,is as follows:
+TL-B scheme, which describes messages that can be sent by smart contracts, is as follows:
 ```tlb
 message$_ {X:Type} info:CommonMsgInfoRelaxed 
   init:(Maybe (Either StateInit ^StateInit))

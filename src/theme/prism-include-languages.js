@@ -19,6 +19,7 @@ export default function prismIncludeLanguages(PrismObject) {
   require('./prism/prism-fift');
   require('./prism/prism-func');
   require('./prism/prism-tlb');
+  require('./prism/prism-tact');
 
   delete globalThis.Prism;
 }

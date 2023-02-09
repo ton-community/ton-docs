@@ -9,16 +9,19 @@
 * [Mint your first Jetton](/develop/dapps/tutorials/jetton-minter/) — Learn how to deploy and customize your first Jetton
 * [[YouTube] TON Keeper founders Oleg Andreev and Oleg Illarionov on TON jettons](https://www.youtube.com/watch?v=oEO29KmOpv4)
 
-### Smart contracts
+### Standards
 
 * [Jettons standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)
+
+### Smart contracts
+
 * [Smart contracts implementation (FunC)](https://github.com/ton-blockchain/token-contract/)
 
 ### Jetton Deployer
 
 Jettons are custom fungible tokens on the TON Blockchain. You can create your own token on the TON Blockchain using the Jetton Deployer example below:
 
-* **[Jetton.Live](https://jetton.live/)** — open-source Jetton Deployer dApp
+* **[TON Minter](https://minter.ton.org/)** — open-source Jetton Deployer dApp
 * [Jetton Deployer — contracts](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)
 * [Jetton Deployer — WebClient](https://github.com/ton-defi-org/jetton-deployer-webclient) (React, TypeScript)
 
@@ -27,13 +30,17 @@ Jettons are custom fungible tokens on the TON Blockchain. You can create your ow
 * [Scaleton](http://scaleton.io)—see your custom token balance
 * [@tegro/ton3-client](https://github.com/TegroTON/ton3-client#jettons-example)—SDK to query information about Jettons
 
-
 ## NFT
+
+### Standards
+
+* [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
+* [SBT (Soulbound NFT) standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0085-sbt-standard.md)
+* [NFTRoyalty standard extension](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md)
+
 
 ### Smart Contracts
 
-* [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
-* [NFTRoyalty standard extension](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md)
 * [Smart contracts implementation (FunC)](https://github.com/ton-blockchain/token-contract/)
 * [Getgems NFT, sale, auctions smart contracts (FunC)](https://github.com/getgems-io/nft-contracts)
 

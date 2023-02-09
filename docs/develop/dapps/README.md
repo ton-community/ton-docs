@@ -1,12 +1,18 @@
 # Overview
 
-## Prerequisites
+The best place to start is a TON Hello World guide of how to create your first Web App:
+
+- [TON Hello World: Step by step guide for building your first web client](https://ton-community.github.io/tutorials/03-client/)
+
+
+## Tools
 
 Here you can see links to the most important resources for you to get started with TON:
 
-- [Wallets](https://ton.org/wallets)—a list of popular wallets for TON.
-- [Explorers](https://ton.app/explorers)—to track transactions in the blockchain.
-- [Testnet](/develop/smart-contracts/environment/testnet.md)—info about the testnet and how to use it.
+- [Wallets](/participate/wallets/apps) — a list of popular wallets for TON.
+- [Explorers](/participate/explorers) — to track transactions in the blockchain.
+- [Testnet](/develop/smart-contracts/environment/testnet.md) — info about the testnet and how to use it.
+
 
 ## Examples
 
@@ -43,8 +49,8 @@ Here is a list of modern SDKs that are constantly supported and improved:
 
 ### JavaScript SDK
 
-* [ton-community/ton-js](https://github.com/ton-community/ton) — _Modern_ cross-platform client for TON by the TON Community
-* [toncenter/tonweb](https://github.com/toncenter/tonweb) — Legacy cross-platform client for TON Blockchain by TON Center
+* [ton-community/ton](https://github.com/ton-community/ton) — _Modern_ cross-platform client for TON by the TON Community
+* [toncenter/tonweb](https://github.com/toncenter/tonweb) — cross-platform client for TON Blockchain by TON Center
 * [@tegro/ton3-client](https://github.com/TegroTON/ton3-client) — JS ton3-client for tonhold API by TonHold
 * [nns2009/ton-payment-tracker](https://github.com/nns2009/ton-payment-tracker) — TON payment tracker.
 
@@ -73,7 +79,7 @@ Here is a list of modern SDKs that are constantly supported and improved:
 
 - [ton-defi-org/tonstarter-twa](https://github.com/ton-defi-org/tonstarter-twa) — template for new TWA interaction with TON
 - [twa-dev/boilerplate](https://github.com/twa-dev/Boilerplate) — another boilerplate for a new TWA.
-- [twa-dev/sdk](https://github.com/twa-dev/sdk) — npm package for TWA SDK
+- [twa-dev/sdk](https://github.com/twa-dev/sdk) — NPM package for TWA SDK
 - [twa-dev/Mark42](https://github.com/twa-dev/Mark42) — Mark42 is a simple lightweight tree-shakable UI library for TWA
 
 :::info Community
@@ -87,14 +93,13 @@ To add login button to your website or web app use the following:
 ### TON Connect
 
 [ton-connect](
-https://tonkeeper.gitbook.io/ton-connect-2.0-guide-for-sdk/) is a unified authorization standard for every wallet in the TON ecosystem. It's supported and developed by Tonkeeper team with tech advisors from TON Community.
+/develop/dapps/ton-connect) is a unified authorization standard for every wallet in the TON ecosystem. It's supported and developed by Tonkeeper team with tech advisors from TON Community.
 
 #### Documentation
 
-* [Introducing TON Connect](
-  https://tonkeeper.gitbook.io/ton-connect-2.0-guide-for-sdk/)
-* [TON Connect for Developers](https://tonkeeper.gitbook.io/ton-connect-2.0-guide-for-sdk/ton-connect-for-developers)
-* [TON Connect 2.0 vs 1.0](https://tonkeeper.gitbook.io/ton-connect-2.0-guide-for-sdk/ton-connect-2.0-vs-1.0)
+* [Introducing TON Connect](/develop/dapps/ton-connect)
+* [TON Connect for Developers](/develop/dapps/ton-connect/developers)
+* [TON Connect 2.0 vs 1.0](/develop/dapps/ton-connect/comparison)
 
 #### Development
 

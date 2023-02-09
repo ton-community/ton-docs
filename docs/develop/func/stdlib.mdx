@@ -221,7 +221,7 @@ Computes sha256 of the data bits of `slice s`. If the bit length of `s` is not d
 ```func
 int check_signature(int hash, slice signature, int public_key) asm "CHKSIGNU";
 ```
-Checks the Ed25519 `signature` of `hash` (a 256-bit unsigned integer, usually computed as the hash of some data) using `public_key` (also represented by a 256-bit unsigned integer). The signature must contain at least 512 data bits; only the first 512 bits are used. If the signature is valid, the result is 1; otherwise, it is 0. Note that `CHKSIGNU` creates a 256-bit slice with the hash and calls `CHKSIGNS`. That is, if `hash` is computed as the hash of some data, this data is hashed _twice_, the second hashing occurring inside `CHKSIGNS`.
+Checks the Ed25519 `signature` of `hash` (a 256-bit unsigned integer, usually computed as the hash of some data) using `public_key` (also represented by a 256-bit unsigned integer). The signature must contain at least 512 data bits; only the first 512 bits are used. If the signature is valid, the result is `-1`; otherwise, it is `0`. Note that `CHKSIGNU` creates a 256-bit slice with the hash and calls `CHKSIGNS`. That is, if `hash` is computed as the hash of some data, this data is hashed _twice_, the second hashing occurring inside `CHKSIGNS`.
 #### check_data_signature
 ```func
 int check_data_signature(slice data, slice signature, int public_key) asm "CHKSIGNS";
@@ -319,8 +319,23 @@ Similar to `raw_reserve` but also accepts a dictionary `extra_amount` (represent
 ```func
 () send_raw_message(cell msg, int mode) impure asm "SENDRAWMSG";
 ```
-Sends a raw message contained in `msg`, which should contain a correctly serialized object Message X, with the only exception that the source address is allowed to have a dummy value `addr_none` (to be automatically replaced with the current smart contract address), and `ihr_fee`, `fwd_fee`, `created_lt` and `created_at` fields can have arbitrary values (to be rewritten with correct values during the action phase of the current transaction). The integer parameter `mode` contains the flags. Currently, `mode = 0` is used for ordinary messages;
-`mode = 128` is used for messages that are to carry all the remaining balance of the current smart contract (instead of the value originally indicated in the message); `mode = 64` is used for messages that carry all the remaining value of the inbound message in addition to the value initially indicated in the new message (if bit 0 is not set, the gas fees are deducted from this amount); `mode' = mode + 1` means that the sender wants to pay transfer fees separately; `mode' = mode + 2` means that any errors arising while processing this message during the action phase should be ignored. Finally, `mode' = mode + 32` means that the current account must be destroyed if its resulting balance is zero. This flag is usually employed together with +128.
+Sends a raw message contained in `msg`, which should contain a correctly serialized object Message X, with the only exception that the source address is allowed to have a dummy value `addr_none` (to be automatically replaced with the current smart contract address), and `ihr_fee`, `fwd_fee`, `created_lt` and `created_at` fields can have arbitrary values (to be rewritten with correct values during the action phase of the current transaction). The integer parameter `mode` contains the flags.
+
+There are currently 3 Modes and 3 Flags for messages. You can combine a single mode with several (maybe none) flags to get a required `mode`. Combination simply means getting sum of their values. A table with descriptions of Modes and Flags is given below.
+
+| Mode | Description |
+|:-|:-|
+| `0` | Ordinary message |
+| `64` | Carry all the remaining value of the inbound message in addition to the value initially indicated in the new message |
+| `128` | Carry all the remaining balance of the current smart contract instead of the value originally indicated in the message |
+
+| Flag | Description |
+|:-|:-|
+| `+1` | Pay transfer fees separately from the message value |
+| `+2` | Ignore any errors arising while processing this message during the action phase |
+| `+32` | Current account must be destroyed if its resulting balance is zero (often used with Mode 128) |
+
+For example, if you want to send a regular message and pay transfer fees separately, use the Mode `0` and Flag `+1` to get `mode = 1`. If you want to send the whole contract balance and destroy it immidiately, use the Mode `128` and Flag `+32` to get `mode = 160`.
 
 #### set_code
 ```func
@@ -330,6 +345,11 @@ Creates an output action that would change this smart contract code to that give
 
 ### Random number generator primitives
 The pseudo-random number generator uses the random seed, an unsigned 256-bit Integer, and (sometimes) other data kept in [c7](/learn/tvm-instructions/tvm-overview#control-registers). The initial value of the random seed before a smart contract is executed in TON Blockchain is a hash of the smart contract address and the global block random seed. If there are several runs of the same smart contract inside a block, then all of these runs will have the same random seed. This can be fixed, for example, by running `randomize_lt` before using the pseudo-random number generator for the first time.
+
+:::caution
+Keep in mind that random numbers generated by the functions below can be predicted if you do not use additional tricks.
+ - [Random number generation](/develop/smart-contracts/guidelines/random-number-generation)
+:::
 #### random
 ```func
 int random() impure asm "RANDU256";
@@ -775,7 +795,7 @@ Similar to `dict_replace?` but accepts a builder.
 (cell, (int, slice, int)) ~udict::delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTUREMMIN" "NULLSWAPIFNOT2";
 (cell, (slice, slice, int)) ~dict::delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTREMMIN" "NULLSWAPIFNOT2";
 ```
-Computes the minimum key `k` in dictionary `dict`, removes it, and returns `(dict', x, k, -1)`, where `dict'` is the modified version of `dict` and `x` is the value associated with `k`. If the dict is empty, returns `(dict, null, null, 0)`.
+Computes the minimum key `k` in dictionary `dict`, removes it, and returns `(dict', k, x, -1)`, where `dict'` is the modified version of `dict` and `x` is the value associated with `k`. If the dict is empty, returns `(dict, null, null, 0)`.
 
 Note that the key returned by `idict_delete_get_min` may differ from the key returned by `dict_delete_get_min` and `udict_delete_get_min`.
 
@@ -788,7 +808,7 @@ Note that the key returned by `idict_delete_get_min` may differ from the key ret
 (cell, (int, slice, int)) ~idict::delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTIREMMAX" "NULLSWAPIFNOT2";
 (cell, (slice, slice, int)) ~dict::delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTREMMAX" "NULLSWAPIFNOT2";
 ```
-Computes the maximum key `k` in dictionary `dict`, removes it, and returns `(dict', x, k, -1)`, where `dict'` is the modified version of `dict` and `x` is the value associated with `k`. If the dict is empty, returns `(dict, null, null, 0)`.
+Computes the maximum key `k` in dictionary `dict`, removes it, and returns `(dict', k, x, -1)`, where `dict'` is the modified version of `dict` and `x` is the value associated with `k`. If the dict is empty, returns `(dict, null, null, 0)`.
 
 #### dict_get_min?
 ```func

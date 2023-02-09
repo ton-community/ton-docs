@@ -47,8 +47,8 @@ The best place to start to develop using FunC: [INTRODUCTION](/develop/smart-con
 Other materials gracefully provided by the experts from the community:
 
 * [Learn FunC in Y Minutes](https://learnxinyminutes.com/docs/func/) by **@romanovichim**
-* [TON Hello World: part 1](https://blog.ton.org/step-by-step-guide-for-writing-your-first-smart-contract-in-func): Step by step guide for writing your first smart contract in FunC by **Tal Kol** using **ton.js**
-* [TON Hello World: part 2](https://blog.ton.org/step-by-step-guide-for-writing-your-first-smart-contract-in-func-2): The second part of the guide by **Tal Kol** about testing and debugging
+* [TON Hello World: Step-by-step guide for writing your first smart contract](https://ton-community.github.io/tutorials/02-contract/)
+* [TON Hello World: Step by step guide for testing your first smart contract](https://ton-community.github.io/tutorials/04-testing/)
 * [10 FunC Lessons](https://github.com/romanovichim/TonFunClessons_Eng) by **@romanovichim**, using **toncli** and **toncli** tests v1
 * [10 FunC lessons](https://github.com/romanovichim/TonFunClessons_ru) by **@romanovichim**, using **toncli** and **toncli** tests v1 in Russian
 * [FunC Quiz](https://t.me/toncontests/60) by **Vadim**—Good for selfcheck. It will take 10–15 minutes. The questions are mainly about FunС with a few general questions about TON
@@ -76,3 +76,6 @@ You can also study previous competitions for learning purposes:
 Standard basic smart contracts like wallets, electors (manages validation on TON), multi-signature wallets, etc. can be a reference when studying.
 
 * [Smart contract examples](/develop/smart-contracts/#smart-contracts-examples)
+
+## Changelog
+[History of funC updates](/develop/func/changelog).

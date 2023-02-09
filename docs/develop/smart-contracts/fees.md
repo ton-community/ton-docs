@@ -38,7 +38,7 @@ Validators receive a small fee for processing transactions, and charging higher 
 
 ### How to calculate fees?
 
-Fees on TON are difficult to calculate in advance, as their amount depends on transaction run time, account status, message content and size, blockchain network settings, and a number of other variables that cannot be calculated until the transaction is sent. Read about [computation fees](https://www.tonspace.co/develop/howto/fees-low-level#computation-fees) in low-level article overview.
+Fees on TON are difficult to calculate in advance, as their amount depends on transaction run time, account status, message content and size, blockchain network settings, and a number of other variables that cannot be calculated until the transaction is sent. Read about [computation fees](/develop/howto/fees-low-level#computation-fees) in low-level article overview.
 
 That is why even NFT marketplaces usually take an extra amount of TON (_~1 TON_) and return (_`1 - transaction_fee`_) later.
 
@@ -167,7 +167,7 @@ Average fee for minting one NFT is 0.08 TON.
 
 ### Cost of saving data in TON?
 
-Saving 1 MB of data for one year on TON will cost you 4.03 TON. Note that you don't usually need to store big amounts of data on-chain. Consider [TON Storage](https://ton.org/docs/participate/ton-storage/storage-daemon) if you need decentralized storage.
+Saving 1 MB of data for one year on TON will cost you 4.03 TON. Note that you don't usually need to store big amounts of data on-chain. Consider [TON Storage](/participate/ton-storage/storage-daemon) if you need decentralized storage.
 
 ### How to calculate fees in FunC?
 

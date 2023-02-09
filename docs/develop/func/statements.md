@@ -2,7 +2,7 @@
 This section briefly discusses FunC statements, constituting the code of ordinary function bodies.
 
 ## Expression statements
-The most common type of a statement is the expression statement. It's an expression followed by `;`. Expression's description would be quite complicated, so only a sketch is presented here.
+The most common type of a statement is the expression statement. It's an expression followed by `;`. Expression's description would be quite complicated, so only a sketch is presented here. As a rule all sub-expressions are computed left to right with one exception of [asm stack rearrangement](develop/func/functions#rearranging-stack-entries) which may define order manually.
 
 ### Variable declaration
 It is not possible to declare a local variable without defining its initial value.
@@ -300,6 +300,9 @@ if (flag1)
 ## Try-Catch statements
 *Experimental, only available in func v0.4.0*
 Executes the code in `try` block. If it fails, completely rolls back everything that was done in `try` block and executes `catch` block; `catch` receives two arguments: the exception parameter of any type (`x`) and the error code (`n`, integer). Unlike many other languages in FunC's version of `try-catch`, all changes made in `try` block (including changes to global variables, registers and sent messages) are discarded in case of an error in `try` block.
+
+Note that exception parameter can be of any type (possibly different in case of different exceptions) and thus funC can not predict it on compile time. That means that developer need to "help" compiler by casting exception parameter to some type (see Example 2 below):
+
 Examples:
 ```func
 try {
@@ -309,10 +312,14 @@ try {
 }
 ```
 ```func
+forall X -> int cast_to_int(X x) asm "NOP";
+...
 try {
   throw_arg(-1, 100);
 } catch (x, n) {
+  x.cast_to_int();
   ;; x = -1, n = 100
+  return x + 1;
 }
 ```
 ```func

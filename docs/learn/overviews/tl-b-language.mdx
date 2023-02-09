@@ -34,7 +34,7 @@ Learn by examples!
 
 | constructor           | serialization                             |
 |-----------------------|-------------------------------------------|
-| `some#0x3f5476ca`     | 32-bit uint serialize from hex value      |
+| `some#3f5476ca`     | 32-bit uint serialize from hex value      |
 | `some$0101`           | serialize `0101` raw bits                 |
 | `some`                | serialize `crc32(equation) \| 0x80000000` |
 | `some#_` or `some$_`  | serialize nothing                         |
@@ -151,7 +151,7 @@ block_info#9bc7a987 version:uint32
   = BlockInfo;
 ```
 
-In this example, the cell reference `^BlkMasterInfo` will be serialized only if `not_master` > 0. And the `GlobalVersion` will be serialized only if `flags == 0`.
+In this example, the cell reference `^BlkMasterInfo` will be serialized only if `not_master` > 0. And the `GlobalVersion` will be serialized only if the bit at index 0 in a binary representation of `flags` is set.
 
 ## Namespaces
 

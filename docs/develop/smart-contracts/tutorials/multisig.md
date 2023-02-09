@@ -142,7 +142,7 @@ lite-client -C global.config.json
 ```
 
 :::info Where get `global.config.json`?
-You can get fresh config file `global.config.json` for [mainnet]((https://ton.org/global-config.json)) or [testnet](https://ton.org/testnet-global.config.json).
+You can get fresh config file `global.config.json` for [mainnet](https://ton.org/global-config.json) or [testnet](https://ton.org/testnet-global.config.json).
 :::
 
 After starting lite-client, it's best to run the `time` command in lite-client console to make sure the connection was successful:
