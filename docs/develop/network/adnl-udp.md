@@ -46,7 +46,7 @@ Find the node you like in [global config](https://ton-blockchain.github.io/globa
 3. Combine with the port, get `65.21.7.173:15813` and establish a UDP connection.
 
 We want to open a channel to communicate with node and get some information, and as the main task - to receive a list of signed addresses from it. To do this, we will generate 2 messages, the first - [create a channel](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L129):
-```
+```tlb
 adnl.message.createChannel key:int256 date:int = adnl.Message
 ```
 Here we have 2 parameters - key and date. As a date, we will specify the current unix timestamp. And for the key - we need to generate a new ED25519 private+public key pair specially for the channel, they will be used for initialization of [public encryption key](/docs/develop/network/adnl-tcp#getting-a-shared-key-using-ecdh). We will use our generated public key in the `key` parameter of the message, and just save the private one for now.
@@ -60,13 +60,13 @@ d59d8e3991be20b54dde8b78b3af18b379a62fa30e64af361c75452f6af019d7 -- key
 
 Next, let's move to our main query - [get a list of addresses](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L198). 
 To execute it, we first need to serialize its TL structure:
-```
+```tlb
 dht.getSignedAddressList = dht.Node
 ```
 It has no parameters, so we just serialize it. It will be just its id - `ed4879a9`.
 
 Next, since this is a higher level request of the DHT protocol, we need to first wrap it in an `adnl.message.query` TL structure:
-```
+```tlb
 adnl.message.query query_id:int256 query:bytes = adnl.Message
 ```
 As `query_id` we generate random 32 bytes, as `query` we use our main request, [wrapped as an array of bytes](/docs/develop/data-formats/tl#encoding-bytes-array).
@@ -80,7 +80,7 @@ d7be82afbc80516ebca39784b8e2209886a69601251571444514b7f17fcd8875 -- query_id
 ### Building the packet
 
 All communication is carried out using packets, the content of which is [TL structure](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L81):
-```
+```tlb
 adnl.packetContents 
   rand1:bytes                                     -- random 7 or 15 bytes
   flags:#                                         -- bit flags, used to determine the presence of fields further
@@ -192,7 +192,6 @@ Now we can send our built packet to peer via UDP, and wait for a response.
 
 In response, we will receive a packet with similar structure, but with different messages. It will consist of:
 ```
-
 68426d4906bafbd5fe25baf9e0608cf24fffa7eca0aece70765d64f61f82f005  -- ID of our key
 2d11e4a08031ad3778c5e060569645466e52bd1bd2c7b78ddd56def1cf3760c9  -- server public key, for shared key
 f32fa6286d8ae61c0588b5a03873a220a3163cad2293a5dace5f03f06681e88a  -- sha256 content hash (before encryption)
@@ -300,7 +299,7 @@ For basic communication, messages like `adnl.message.query` and `adnl.message.an
 
 ### adnl.message.part
 This message type is a piece of one of the other possible message types, such as `adnl.message.answer`. This method of data transferring is used when the message is too large to be transmitted in a single UDP datagram.
-```
+```tlb
 adnl.message.part 
 hash:int256            -- sha256 hash of the original message
 total_size:int         -- original message size
@@ -312,7 +311,7 @@ Thus, in order to assemble the original message, we need to get several parts an
 And then process it as a message (according to the ID prefix in this bytes array).
 
 ### adnl.message.custom
-```
+```tlb
 adnl.message.custom data:bytes = adnl.Message;
 ```
 Such messages are used when the logic at the higher level does not correspond to the request-response format, messages of this type allow you to completely move the processing to the higher level, since the message carries only an array of bytes, without query_id and other fields. 
