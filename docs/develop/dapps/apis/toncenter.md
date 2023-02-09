@@ -11,7 +11,7 @@ You can connect to public [toncenter.com](https://toncenter.com) or run your own
 👍 — Habitual. Suitable for a quick start for every newcomer to play with TON.  
 👍 — Web-oriented. Perfect to interact with TON transactions, smart contracts from Web.
 
-👎 — Simplified. It's not possible to receive information where you need an indexed TON API.
+👎 — Simplified. It's not possible to receive information where you need an indexed TON API.  
 👎 — HTTP-Middleware. You can't fully trust server responses, because they do not contain _Merkle proofs_ to validate that your data is genuine.  
 
 ## Get API key
