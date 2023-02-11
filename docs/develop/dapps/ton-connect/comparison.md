@@ -16,4 +16,4 @@ See the protocols comparison below:
 |            Realtime UX             |                          |                          ✔︎                          |
 |         Switching accounts         |                          |                         soon                         |
 | Messages from the app to the user  |                          |                         soon                         |
-|              Wallets               |        Tonkeeper         | Tonkeeper, OpenMask (soon), TonHub (soon) and others |
+|              Wallets               |        Tonkeeper         | Tonkeeper, OpenMask, TonHub (soon) and others        |
