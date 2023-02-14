@@ -432,6 +432,26 @@ const sidebars = {
     'develop/howto/network-configs',
     {
       type: 'category',
+      label: 'Data formats',
+      items: [
+        'develop/data-formats/cell-boc',
+        'develop/data-formats/tl',
+        'develop/data-formats/tl-b'
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Network protocols',
+      items: [
+        'develop/network/adnl-tcp',
+        'develop/network/adnl-udp',
+        'develop/network/dht',
+        'develop/network/rldp',
+        'develop/network/overlay'
+      ]
+    },
+    {
+      type: 'category',
       label: 'Low Level Internals',
       items: [
         'develop/howto/README',
@@ -440,26 +460,6 @@ const sidebars = {
         'develop/howto/fees-low-level',
         'develop/howto/full-node',
         'develop/howto/validator',
-        {
-          type: 'category',
-          label: 'Data formats',
-          items: [
-            'develop/data-formats/cell-boc',
-            'develop/data-formats/tl',
-            'develop/data-formats/tl-b'
-          ]
-        },
-        {
-          type: 'category',
-          label: 'Network protocols',
-          items: [
-            'develop/network/adnl-tcp',
-            'develop/network/adnl-udp',
-            'develop/network/dht',
-            'develop/network/rldp',
-            'develop/network/overlay'
-          ]
-        },
         {
           type: 'category',
           label: 'Archived',
