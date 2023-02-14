@@ -175,8 +175,10 @@ Here’s a __[guide](/participate/web3/setting-proxy)__ on setting up TON Proxy 
 
 ### Wallets
 
+
+
 <div style={{textAlign:'center', margin: '0 auto'}}>
-  <video width="600" style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
+  <video width="450" style={{borderRadius:'10pt', margin:'15pt auto'}} muted={true} autoPlay={true} loop={true}>
     <source src="/docs/img/docs/wallets.mp4" type="video/mp4" />
   </video>
 </div>
