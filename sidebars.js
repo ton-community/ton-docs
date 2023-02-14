@@ -533,13 +533,13 @@ const sidebars = {
       label: 'Run a Node',
       items: [
         'participate/nodes/node-types',
+        'participate/nodes/run-node',
         'participate/nodes/local-ton',
         'participate/nodes/node-maintenance-and-security',
-        'participate/nodes/run-node',
         'participate/nodes/collators',
         {
           type: 'link',
-          label: 'Run a Validator Node',
+          label: 'Become a Validator',
           href: 'https://ton.org/validator',
         },
       ],

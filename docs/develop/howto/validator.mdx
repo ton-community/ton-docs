@@ -1,20 +1,20 @@
+import Button from '@site/src/components/button'
+
 # Validator setup (low-level)
 
 :::caution
 This section describes instructions and manuals for interacting with TON at a low level.
 :::
 
-The aim of this document is to provide step-by-step instructions for setting up a full node for the TON Blockchain as a validator. We assume that a TON Blockchain Full Node is already up and running as explained in [FullNode-HOWTO](https://toncoin.org/#/howto/full-node). We also assume some familiarity with the TON Blockchain Lite Client.
+The aim of this document is to provide step-by-step instructions for setting up a full node for the TON Blockchain as a validator. We assume that a TON Blockchain Full Node is already up and running as explained in [Running a Full Node](participate/nodes/run-node). We also assume some familiarity with the TON Blockchain Lite Client.
 
 Note that a validator must be run on a dedicated high-performance server with high network bandwidth installed in a reliable data center, and that you'll need a large amount of TON (test TON, if you want to run a validator in the "testnet") as stakes for your validator. If your validator works incorrectly or is not available for prolonged periods of time, you may lose part or all of your stake, so it makes sense to use high-performance, reliable servers.
 
-:::info
-We recommend a server with at least eight cores CPU, at least 64 GB RAM, and at least 512 GB NVMe SSD, with 1 Gbit/s network (and Internet) connectivity to reliably accommodate peak loads.
-:::
+<Button href="/participate/nodes/run-node"
+        colorType="primary" sizeType={'lg'}>
+  Running a Full Node (video)
+</Button>
 
-:::info
-To successfully participate in validation, the time on the node server must be within 5 seconds of the world time.
-:::
 
 ## 0. Downloading and compiling
 
