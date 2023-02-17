@@ -434,6 +434,8 @@ const sidebars = {
       type: 'category',
       label: 'Data formats',
       items: [
+        'develop/data-formats/tl-b-language',
+        'develop/data-formats/Tl-B-overview',
         'develop/data-formats/cell-boc',
         'develop/data-formats/tl',
         'develop/data-formats/tl-b'
