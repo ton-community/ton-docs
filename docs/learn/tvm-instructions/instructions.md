@@ -32,7 +32,7 @@ The gas price of each instruction is specified in this document. The basic gas p
 6. _Moving stack elements between continuations_: **1 gas unit** per element, however moving the first 32 elements is free.
 
 ### 1.2 CSV table
-A machine-readable list of TVM instructions is available [here](https://github.com/ton-blockchain/blob/master/smart-contracts/tvm-instructions/instructions.csv).
+A machine-readable list of TVM instructions is available [here](https://github.com/ton-community/ton-docs/blob/main/docs/learn/tvm-instructions/instructions.csv).
 
 ## 2 Stack manipulation primitives
 Here `0 <= i,j,k <= 15` if not stated otherwise.
