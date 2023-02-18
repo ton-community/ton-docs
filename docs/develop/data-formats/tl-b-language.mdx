@@ -13,11 +13,16 @@ We refer to any set of TL-B constructs as TL-B documents. A TL-B document usuall
 
 Here is an example of a possible combinator declaration:
 
-![TL-B example](/img/docs/data-formats/tl-b-docs-1.png?raw=true)
+![TL-B example](/img/docs/data-formats/tl-b-docs-2.png?raw=true)
 
-## Constructors
+## TL-B structure
+
+### Constructors
 
 The left-hand side of each equation describes the way to define, or serialize, a value of the type indicated on the right-hand side. Such a description begins with the name of a constructor.
+
+![TL-B example](/img/docs/data-formats/tl-b-docs-3.png?raw=true)
+
 
 Constructors are used to specify the type of combinator, including the state at serialization. For example, constructors can also be used when you want to specify an `op`(operation code) in query to a smart contract in TON.
 
@@ -46,8 +51,8 @@ Learn by examples!
 
 | constructor           | serialization details                     | result  |
 |-----------------------|-------------------------------------------|---------|
-| `some#3f5476ca`       | 32-bit uint serialize from hex value      | 111111010101000111011011001010 |
-| `some$0101`           | serialize `0101` raw bits                 | 0101 |
+| `some#3f5476ca`       | 32-bit uint serialize from hex value      | `0x3f5476ca` |
+| `some$0101`           | serialize `0101` raw bits                 | `0101` |
 | `some#_` or `some$_`  | serialize nothing                         | |
 | `some`                | serialize `crc32(equation)` \| `0x80000000` | `0xf6cedc4e` |
 
@@ -62,18 +67,15 @@ This is an example from the [TonToken](https://github.com/akifoq/TonToken/blob/m
 us how to implement an internal message TL-B scheme:
 
 ```tlb
-extra#_ amount:Grams = Extra;
-
-addr_std$10 anycast:(## 1) {anycast = 0}
-      workchain_id:int8 address:bits256 = MsgAddrSmpl;
-
 transfer#4034a3c0 query_id:uint64
     reciever:MsgAddrSmpl amount:Extra body:Any = Request;
 ```
 
 In this example, `transfer#4034a3c0` will be serialized as a 32-bit unsigned integer from the hex value after the hash sign(`#`). This meets the standard requirements for an `op` in the [smart contract guidelines](/develop/smart-contracts/guidelines).
 
-To meet the standard described in paragraph 5 of the [smart contract guidelines](/develop/smart-contracts/guidelines), it is not enough for us to calculate the CRC32. You can utilise the following examples to define an `op` in requests or responses from smart contracts in a TL-B scheme:
+Last option about calculation constructor's name, it is additional value for request and response version of some structures.
+For example, if you need create these for `some request` TL-B scheme, it will be defined by following:
+
 
 ```python
 import binascii
@@ -94,17 +96,49 @@ if __name__ == "__main__":
 ```
 
 
-## Field definitions
+### Field definition
 
-The constructor and its optional tag are followed by field definitions. Each field definition is of the form `ident:type-expr`, where ident is an identifier with the name of the field16 (replaced by an underscore for anonymous fields), and type-expr is the field’s type. The type provided here is a type expression, which may include simple types or parametrized types with suitable parameters. Variables — i.e. the (identifiers of the) previously defined fields of types `#` (natural numbers) or `Type` (type of types) — may be used as parameters for the parametrized types. The serialization process recursively serializes each field according to its type and the serialization of a value ultimately consists of the concatenation of bitstrings representing the constructor (i.e. the constructor tag) and the field values.
+#### Explicit
 
+The constructor and its optional tag are followed by field definitions. Each field definition is of the form `ident:type-expr`, where ident is an identifier with the name of the field16 (replaced by an underscore for anonymous fields), and type-expr is the field’s type. The type provided here is a type expression, which may include simple types or parametrized types with suitable parameters.
+
+```tlb
+bool_false$0 = Bool;
+bool_true$1 = Bool;
+tick_tock$_ tick:Bool tock:Bool = TickTock;
+```
+
+Variables — i.e. the (identifiers of the) previously defined fields of types `#` (natural numbers) or `Type` (type of types) — may be used as parameters for the parametrized types. The serialization process recursively serializes each field according to its type and the serialization of a value ultimately consists of the concatenation of bitstrings representing the constructor (i.e. the constructor tag) and the field values.
+
+Here Type `TickTock` defined with `tick_tock$_` contructor and `tick:Bool`, `tock:Bool` explicit fields definitions. `Bool` type defined with two another equation(functional combinator name). In summary this scheme tell us, that `TickTock` is a binary struct consists of two bits, each of them could be equla `1` or `0`, for example: `01`.
+
+|scheme | meaning |
+|---|---|
+| # |  an unsigned 32-bit number|
+| ## N| The same as uintN - means an unsigned N-bit number|
+|#<= N| A number between 0 and N (including both). Such a number is stored in ceil(log2(N+1)) bits. |
+| N * Bit |  means N-bit slice |
+|Type | stands for arbitrary type (but only presents in implicit definitions). |
+| ^Cell | An arbitrary cell in reference |
+| ^[_field_def_] | means that _field_definitions_ are stored in the referenced cell |
+
+#### Implicit
 Some fields may be implicit. Their definitions are surrounded by curly
-brackets(`{`, `}`), which indicate that the field is not actually present in the serialization, but that its value must be deduced from other data (usually the parameters of the type being serialized). Example:
+brackets(`{`, `}`), which indicate that the field is not actually present in the current scheme, but that its value must be deduced from other data (usually the parameters of the type being serialized). Example:
 
 ```tlb
 nothing$0 {X:Type} = Maybe X;
 just$1 {X:Type} value:X = Maybe X;
 ```
+
+Maybe struct defined for any Type, and when it will use in another TL-B scheme, X - should be defined type:
+
+```tlb
+cp:(Maybe int16) = VmControlData;
+```
+
+Here `int16` defined and VmControlData serialized as `0` or `1` and `int16` number.
+
 
 Finally, some equalities/inequalities may be included in curly brackets as well. These are certain “equations” which must be satisfied by the “variables” included in them. If one of the variables is prefixed by a tilde (~), its value will be uniquely determined by the values of all other variables participating in the equation (which must be known at this point) when the definition is processed from the left to the right. For example:
 
