@@ -15,7 +15,31 @@ Here is an example of a possible combinator declaration:
 
 ![TL-B example](/img/docs/data-formats/tl-b-docs-2.png?raw=true)
 
+## Context
+
+At the current stage of evolving TON, TL-B is more of a descriptive scheme of the structure, and it is not necessary to parse something into it or from it automatically.
+
+For developers planning to interact TON blockchain is useful to learn how to read and use the most frequent data structures to put correct data in your messages. It will useful for both tasks - developing your own very first smart contracts or interacting with any already deployed.
+
+Usually, tl-b is placed as documentation about data in a contract's directory or may describe in a comment right before the corresponding data is determined.
+
+From the perspective that TON should onboard mass adoption of dApps, TL-B serves for creating unified and very accurate documents about structures that should be used in these dApps. The developer can implement tl-b parser or use one of the created ones. Here, TL-B parser means the code that implements serialization based on the TL-B scheme, which will allow you to load consistently the right number and meaning of bits.
+
+For example, in https://github.com/xssnick/tonutils-go/tree/master/tlb you can assign attributes to fields of the structure, the size in bits, and most schemes will be parsed automatically. This is not a pure tlb, but rather mapping bits to fields. Creating such tools requires deep knowledge and understanding of TL-B schemes.
+
 ## TL-B structure
+
+### Comments
+
+Comments are the same as in C++
+```tlb
+/*
+This is
+a comment
+*/
+
+// This is one line comment
+```
 
 ### Constructors
 
@@ -47,7 +71,7 @@ true$_ = True;
 config_mc_gas_prices#_ GasLimitsPrices = ConfigParam 20;
 ```
 
-Learn by examples!
+Examples:
 
 | constructor           | serialization details                     | result  |
 |-----------------------|-------------------------------------------|---------|
@@ -102,15 +126,17 @@ if __name__ == "__main__":
 
 The constructor and its optional tag are followed by field definitions. Each field definition is of the form `ident:type-expr`, where ident is an identifier with the name of the field16 (replaced by an underscore for anonymous fields), and type-expr is the field’s type. The type provided here is a type expression, which may include simple types or parametrized types with suitable parameters.
 
+Variables — i.e. the (identifiers of the) previously defined fields of types `#` (natural numbers) or `Type` (type of types) — may be used as parameters for the parametrized types. The serialization process recursively serializes each field according to its type and the serialization of a value ultimately consists of the concatenation of bitstrings representing the constructor (i.e. the constructor tag) and the field values.
+
 ```tlb
 bool_false$0 = Bool;
 bool_true$1 = Bool;
 tick_tock$_ tick:Bool tock:Bool = TickTock;
 ```
 
-Variables — i.e. the (identifiers of the) previously defined fields of types `#` (natural numbers) or `Type` (type of types) — may be used as parameters for the parametrized types. The serialization process recursively serializes each field according to its type and the serialization of a value ultimately consists of the concatenation of bitstrings representing the constructor (i.e. the constructor tag) and the field values.
+Here Type `TickTock` defined with `tick_tock$_` contructor and `tick:Bool`, `tock:Bool` explicit fields definitions. `Bool` type defined with two another equation(functional combinator name). In summary this scheme tell us, that `TickTock` is a binary struct consists of two bits, each of them could be equal `1` or `0`, for example: `01`.
 
-Here Type `TickTock` defined with `tick_tock$_` contructor and `tick:Bool`, `tock:Bool` explicit fields definitions. `Bool` type defined with two another equation(functional combinator name). In summary this scheme tell us, that `TickTock` is a binary struct consists of two bits, each of them could be equla `1` or `0`, for example: `01`.
+
 
 |scheme | meaning |
 |---|---|
@@ -135,18 +161,25 @@ Maybe struct defined for any Type, and when it will use in another TL-B scheme, 
 
 ```tlb
 cp:(Maybe int16) = VmControlData;
+// VmControlData = 0
+// VmControlData = 1 0000 0000 0000 0001
 ```
 
-Here `int16` defined and VmControlData serialized as `0` or `1` and `int16` number.
+Here `int16` defined Type for `Maybe` and `VmControlData` serialized as `0` or `1` and `int16` number in binary form.
 
+### References
 
-Finally, some equalities/inequalities may be included in curly brackets as well. These are certain “equations” which must be satisfied by the “variables” included in them. If one of the variables is prefixed by a tilde (~), its value will be uniquely determined by the values of all other variables participating in the equation (which must be known at this point) when the definition is processed from the left to the right. For example:
+A caret (`ˆ`) preceding a type `X` means that instead of serializing a value of type `X` as a bitstring inside the current cell, we place this value into a separate cell and add a reference to it into the current cell. Therefore `ˆX` means “the type of references to cells containing values of type `X`”.
+
+Parametrized type `#<= p` with `p : #` (this notation means `“p of type #”`, i.e. a natural number) denotes the subtype of the natural numbers type `#`, consisting of integers `0 ... p;` it is serialized into `[log2(p + 1)]` bits as an unsigned big-endian integer. Type `#` by itself is serialized as an unsigned 32-bit integer. Parametrized type `## b` with `b : #<=31` is equivalent to `#<= 2^b − 1`  (i.e. it is an unsigned b-bit integer). For example:
 
 ```tlb
-addr_std$10 anycast:(## 1) {anycast = 0}
-      workchain_id:int8 address:bits256 = MsgAddrSmpl;
+action_send_msg#0ec3c86d mode:(## 8)
+  out_msg:^(MessageRelaxed Any) = OutAction;
 ```
 
+
+### Recurrent schemes
 Some occurrences of “variables” (i.e. already-defined fields) are prefixed by a tilde(`~`). This indicates that the variable’s occurrence is used in the opposite way to the default behavior: on the left-hand side of the equation, it means that the variable will be deduced (computed) based on this occurrence, instead of substituting its previously computed value; in the right-hand side, conversely, it means that the variable will not be deduced from the type being serialized, but rather that it will be computed during the deserialization process. In other words, a tilde transforms an “input argument” into an “output argument” or vice versa.
 
 For example, we can use this to write a TL-B scheme for a simple transaction in TON with comment (which must be serialized as a sequence of cells):
@@ -158,14 +191,6 @@ cons#_ {n:#} b:bits next:^(Snake ~n) = Snake ~(n + 1);
 op:#0 comment:Snake = Request;
 ```
 
-A caret (`ˆ`) preceding a type `X` means that instead of serializing a value of type `X` as a bitstring inside the current cell, we place this value into a separate cell and add a reference to it into the current cell. Therefore `ˆX` means “the type of references to cells containing values of type `X`”.
-
-Parametrized type `#<= p` with `p : #` (this notation means `“p of type #”`, i.e. a natural number) denotes the subtype of the natural numbers type `#`, consisting of integers `0 ... p;` it is serialized into `[log2(p + 1)]` bits as an unsigned big-endian integer. Type `#` by itself is serialized as an unsigned 32-bit integer. Parametrized type `## b` with `b : #<=31` is equivalent to `#<= 2^b − 1`  (i.e. it is an unsigned b-bit integer). For example:
-
-```tlb
-action_send_msg#0ec3c86d mode:(## 8) 
-  out_msg:^(MessageRelaxed Any) = OutAction;
-```
 
 In this scheme `mode:(## 8)` will be serialized as an 8-bit unsigned integer.
 
@@ -200,23 +225,13 @@ block_info#9bc7a987 version:uint32
 
 In this example, the cell reference `^BlkMasterInfo` will be serialized only if `not_master` > 0. And the `GlobalVersion` will be serialized only if the bit at index 0 in a binary representation of `flags` is set.
 
-## Namespaces
-
-Available in the TL version from Telegram, but as it turned out, it was not used in TL-B
-
-## Comments
-
-Comments are the same as in C++
-```tlb
-/* 
-This is
-a comment 
-*/
-
-// This is one line comment
-```
 
 ## Library usage
+
+
+:::info Namespaces
+Namespaces are available in the TL version from Telegram, but as it turned out, it was not used in TL-B
+:::
 
 You can use TL-B libraries to extend your documents and to avoid writing repetitive schemes. We have prepared a set of ready-made libraries that you can use. They are mostly based on block.tlb but we have also added some combinators of our own.
 
@@ -247,15 +262,10 @@ In dependencies, you are required to specify the correct relative path. The exam
 └── ...
 ```
 
-## IDE Support
-
-The [intellij-ton](https://github.com/andreypfau/intellij-ton) plugin supports Fift, FunC and also TL-B.  
-The TL-B grammar is described in the [TlbParser.bnf](https://github.com/andreypfau/intellij-ton/blob/main/src/main/grammars/TlbParser.bnf) file.
-
 ## Useful sources
 
 - [Telegram Open Network Virtual Machine](https://ton.org/tvm.pdf)
+- [Actual version of TL-B scheme - block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb)
 - [A description of an older version of TL](https://core.telegram.org/mtproto/TL)
-- [block.tlb](https://github.com/newton-blockchain/ton/blob/master/crypto/block/block.tlb)
 
-_Thanks to the [Vudi](https://github.com/Vudi) and [cryshado](https://github.com/cryshado) for contributing to the community!_
+_Thanks to the [Vudi](https://github.com/Vudi) and [cryshado](https://github.com/cryshado) for creating original tl-b overview articles for the TON community!_
