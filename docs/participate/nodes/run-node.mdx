@@ -5,6 +5,19 @@ import TabItem from '@theme/TabItem';
 
 To install and manage your own node, use the **[mytonctrl](https://github.com/ton-blockchain/mytonctrl)** open source tool developed by TON Foundation. The majority of TON Nodes are reliable and tested by **mytonctrl**.
 
+## Hardware requirements
+
+You need a machine with a **fixed IP address** and a **high-bandwidth network connection** to run a TON Blockchain Full Node. Typically you'll need a sufficiently powerful server in a data center with good network connectivity, using at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
+
+Recommendations to run a Full Node:
+
+- at least 8 cores CPU
+- at least 64 GB RAM
+- at least 512 GB NVMe SSD
+- 1 Gbit/s network connectivity
+- public IP address (_fixed IP address_)
+
+
 ## Installation
 
 ### How to run the Node? (video)
@@ -46,14 +59,16 @@ su root -c 'bash install.sh -m full'
 * [How to become a validator with mytonctrl (v0.2, OS Ubuntu)](https://github.com/ton-blockchain/mytonctrl/blob/master/docs/en/manual-ubuntu.md)
 
 
-## Become a validator
+## Become a Validator
 
-To use your full node as an endpoint, skip everything about the validator function. There is no need to send coins to your wallet.
+To become a validator:
 
-To become a validator, send Toncoin to your wallet. 
+1. Send Toncoin to your wallet.
+2. **mytonctrl** automatically joins validation from the next election round.
+3. Check the manual: [How to become a validator with mytonctrl (v0.2, OS Ubuntu)](https://github.com/ton-blockchain/mytonctrl/blob/master/docs/en/manual-ubuntu.md)
 
-**mytonctrl** automatically joins validation from the next election round.
+:::info
 
-Check the manual here:
+To use your Full Node just as an endpoint, skip everything about the validator function. There is no need to send coins to your wallet.
 
-* [How to become a validator with mytonctrl (v0.2, OS Ubuntu)](https://github.com/ton-blockchain/mytonctrl/blob/master/docs/en/manual-ubuntu.md)
+:::
