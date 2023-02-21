@@ -25,7 +25,7 @@ Later, in raw address overview we will see how **(workchain_id, account_id)** pa
 
 #### Workchain ID
 
-[As we've seen before](/learn/overviews/ton-blockchain#workchain-blockchain-with-your-own-rules), there could be up to `2^30` workchains in TON Blockchain. By this 32-bit prefix in smart contract address you understand to which workchain it belongs, so that TON will send a message in it.
+[As we've seen before](/learn/overviews/ton-blockchain#workchain-blockchain-with-your-own-rules), there could be up to `2^32` workchains in TON Blockchain. By this 32-bit prefix in smart contract address you understand to which workchain it belongs, so that TON will send a message in it.
 
 Nowadays, only the Masterchain (workchain_id=-1) and occasionally the basic workchain (workchain_id=0) are running in the TON Blockchain.
 
