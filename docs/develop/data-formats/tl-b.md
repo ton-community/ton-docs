@@ -1,5 +1,11 @@
-# TL-B
+# TL-B Structures
 In this section, complex and non-obvious TL-B structures are analyzed. To get started, I recommend reading [this documentation](/docs/learn/overviews/tl-b-language) first.
+
+:::caution advanced level
+This information is **very low-level** and could be hard to understand for newcomers.
+So feel free to read about it later.
+:::
+
 
 ## Unary
 Unary is commonly used for dynamic sizing in structures such as [hml_short](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb#L29).

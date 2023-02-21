@@ -1,13 +1,26 @@
 # Cell & Bag of Cells
 
 ## Cell
-Cell represents a container for data that can store up to 1023 bits and have up to 4 references to other Cells. In TON, everything consists of cells, contract code, stored data, blocks. This approach achieves flexibility.
+Cell represents a container for data that can store up to 1023 bits and have up to 4 references to other Cells. 
+
+![TL-B example](/img/docs/data-formats/tl-b-docs-5.png?raw=true)
+
 
 ## Bag of Cells
+
 Bag of Cells - format for serializing cells into an array of bytes, described as [TL-B schema](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25).
+
+![TL-B example](/img/docs/data-formats/tl-b-docs-6.png?raw=true)
+
+In TON, everything consists of cells, contract code, stored data, blocks. This approach achieves flexibility.
+
+![TL-B example](/img/docs/data-formats/tl-b-docs-4.png?raw=true)
 
 ### Cell serialization
 Let's analyze this kind of cell:
+
+![TL-B example](/img/docs/data-formats/tl-b-docs-7.png?raw=true)
+
 ```json
 1[8_] -> {
   24[0AAAAA],
@@ -62,7 +75,32 @@ And put it all together:
 And concat it into the single array of bytes:
 `0201c002010101ff0200060aaaaa`, size 14 bytes.
 
-[Serialization example](https://github.com/xssnick/tonutils-go/blob/3d9ee052689376061bf7e4a22037ff131183afad/tvm/cell/serialize.go#L205)
+
+<details>
+  <summary><b>Show example</b></summary>
+
+```golang
+func (c *Cell) descriptors() []byte {
+ceilBytes := c.bitsSz / 8
+if c.bitsSz%8 ! = 0 {
+ceilBytes++
+}
+
+	// calc size
+	ln := ceilBytes + c.bitsSz/8
+
+	specBit := byte(0)
+	if c.special {
+		specBit = 8
+	}
+
+	return []byte{byte(len(c.refs)) + specBit + c.level*32, byte(ln)}
+}
+```
+[Source](https://github.com/xssnick/tonutils-go/blob/3d9ee052689376061bf7e4a22037ff131183afad/tvm/cell/serialize.go#L205)
+
+</details>
+
 
 ### Packing in BoC
 Let's pack the cell from the previous section. We have already serialized it into a flat 14 byte array.

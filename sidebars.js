@@ -434,12 +434,19 @@ const sidebars = {
       type: 'category',
       label: 'Data formats',
       items: [
-        'develop/data-formats/cell-boc',
-        'develop/data-formats/tl-b-language',
-        'develop/data-formats/tl-b',
+        {
+          type: 'category',
+          label: 'TL-B',
+          items: [
+            'develop/data-formats/cell-boc',
+            'develop/data-formats/tl-b-language',
+            'develop/data-formats/tl-b',
+            'develop/data-formats/msg-tlb',
+            'develop/data-formats/crc32',
+            'develop/data-formats/tlb-ide'
+          ]
+        },
         'develop/data-formats/tl',
-        'develop/data-formats/tlb-ide',
-        'develop/data-formats/crc32',
         'develop/data-formats/Tl-B-overview'
       ]
     },
