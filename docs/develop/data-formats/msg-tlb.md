@@ -65,6 +65,8 @@ Recall how `Maybe` and `Either` works, we can serialize different cases:
 
 ## CommonMsgInfo TL-B
 
+### CommonMsgInfo
+
 `CommonMsgInfo` is a list of parameters, that defines how message will be delivered in TON blockchain.
 
 
@@ -84,11 +86,59 @@ ext_out_msg_info$11 src:MsgAddressInt dest:MsgAddressExt
   created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 ```
 
+### int_msg_info$0
+
+`int_msg_info` is a case of internal message. This means they could be sent between contracts, and only between contracts.
 
 
-| Structure     | Type   | Required | Description                                                                                                  |
-|---------------|--------|----------|--------------------------------------------------------------------------------------------------------------|
-| message$_     | Atomic | -        | It defined according the constructor ruler. Empty tag `$_` means we will not add any bits in the beginning   |
-| CommonMsgInfo | Nested | Required | Detailed Message properties define destination and its value. Always placed in message root cell.            |
-| StateInit     | Nested | Optional | General structure using in TON for initilizing new contracts. Could be write in cell reference or root cell. |
-| X             | Nested | Required | Message Payload. Could be write in cell reference or root cell.                                              |                                                                                            |
+```tlb
+//internal message
+int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
+  src:MsgAddressInt dest:MsgAddressInt 
+  value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
+  created_lt:uint64 created_at:uint32 = CommonMsgInfo;
+```
+
+| Structure      | Type               | Required | Description                                                                                                   |
+|----------------|--------------------|----------|---------------------------------------------------------------------------------------------------------------|
+| int_msg_info$0 | Constructor        | Required | $0 tag means, that in serialization CommonMsgInfo started with 0 bit describes a internal message.            |
+| ihr_disabled   | Bool               | Required | Hyper routing flag. v                                                                                         |
+| bounce         | Bool               | Required | General structure using in TON for initializing new contracts. Could be write in cell reference or root cell. |
+| bounced        | Bool               | Required | Message Payload. Could be write in cell reference or root cell.                                               |       
+| src            | MsgAddressInt      | Required | Address of smart contract sender of message.                                                                  |
+| dest           | MsgAddressInt      | Required | Address of smart contract destination of message.                                                             |
+| value          | CurrencyCollection | Required | Structure which describes additional currency information.                                                    |
+| ihr_fee        | Grams              | Required | Fees for hyper routing delivery                                                                               |
+| fwd_fee        | Grams              | Required | Fees for forwarding messages assigned by validators                                                           |
+| created_lt     | uint64             | Required | Logic time of sending message assigned by validator. Using for odering actions in smart contract.             |
+| created_at     | uint32             | Required | Unix time                                                                                                     |
+
+
+
+### ext_in_msg_info$10
+
+`ext_in_msg_info$10` is a case of external incoming message. This means they could be sent between contracts, and only between contracts.
+
+
+```tlb
+//internal message
+int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
+  src:MsgAddressInt dest:MsgAddressInt 
+  value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
+  created_lt:uint64 created_at:uint32 = CommonMsgInfo;
+```
+
+| Structure      | Type               | Required | Description                                                                                                   |
+|----------------|--------------------|----------|---------------------------------------------------------------------------------------------------------------|
+| int_msg_info$0 | Constructor        | Required | $0 tag means, that in serialization CommonMsgInfo started with 0 bit describes a internal message.            |
+| ihr_disabled   | Bool               | Required | Hyper routing flag. v                                                                                         |
+| bounce         | Bool               | Required | General structure using in TON for initializing new contracts. Could be write in cell reference or root cell. |
+| bounced        | Bool               | Required | Message Payload. Could be write in cell reference or root cell.                                               |       
+| src            | MsgAddressInt      | Required | Address of smart contract sender of message.                                                                  |
+| dest           | MsgAddressInt      | Required | Address of smart contract destination of message.                                                             |
+| value          | CurrencyCollection | Required | Structure which describes additional currency information.                                                    |
+| ihr_fee        | Grams              | Required | Fees for hyper routing delivery                                                                               |
+| fwd_fee        | Grams              | Required | Fees for forwarding messages assigned by validators                                                           |
+| created_lt     | uint64             | Required | Logic time of sending message assigned by validator. Using for odering actions in smart contract.             |
+| created_at     | uint32             | Required | Unix time                                                                                                     |
+ 
