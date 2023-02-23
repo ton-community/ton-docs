@@ -160,18 +160,33 @@ cp:(Maybe int16) = VmControlData;
 // VmControlData = 1 0000 0000 0000 0001
 ```
 
+#### Parametrized types `##` and `#`
+
+Parametrized type `#<= p` with `p : #` (this notation means `“p of type #”`, i.e. a natural number) denotes the subtype of the natural numbers type `#`, consisting of integers `0 ... p;` it is serialized into `[log2(p + 1)]` bits as an unsigned big-endian integer.
+
+Type `#` by itself is serialized as an unsigned 32-bit integer. Parametrized type `## b` with `b : #<=31` is equivalent to `#<= 2^b − 1`  (i.e. it is an unsigned b-bit integer). For example:
+
+
+```tlb
+action_send_msg#0ec3c86d mode:(## 8)
+  out_msg:^(MessageRelaxed Any) = OutAction;
+```
+
+In this scheme `mode:(## 8)` will be serialized as an 8-bit unsigned integer.
+
+
 Here `int16` defined Type for `Maybe` and `VmControlData` serialized as `0` or `1` and `int16` number in binary form.
 
 ### References
 
 A caret (`ˆ`) preceding a type `X` means that instead of serializing a value of type `X` as a bitstring inside the current cell, we place this value into a separate cell and add a reference to it into the current cell. Therefore `ˆX` means “the type of references to cells containing values of type `X`”.
 
-Parametrized type `#<= p` with `p : #` (this notation means `“p of type #”`, i.e. a natural number) denotes the subtype of the natural numbers type `#`, consisting of integers `0 ... p;` it is serialized into `[log2(p + 1)]` bits as an unsigned big-endian integer. Type `#` by itself is serialized as an unsigned 32-bit integer. Parametrized type `## b` with `b : #<=31` is equivalent to `#<= 2^b − 1`  (i.e. it is an unsigned b-bit integer). For example:
-
 ```tlb
-action_send_msg#0ec3c86d mode:(## 8)
-  out_msg:^(MessageRelaxed Any) = OutAction;
+account_descr$_ account:^Account last_trans_hash:bits256
+  last_trans_lt:uint64 = ShardAccount;
 ```
+
+According to this scheme `Account` will be placed in a separate cell and then placed as reference in the `ShardAccount` cell.
 
 
 ### Recurrent schemes
@@ -187,7 +202,6 @@ op:#0 comment:Snake = Request;
 ```
 
 
-In this scheme `mode:(## 8)` will be serialized as an 8-bit unsigned integer.
 
 ## Conditional (optional) fields
 
