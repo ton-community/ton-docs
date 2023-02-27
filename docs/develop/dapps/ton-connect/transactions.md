@@ -1,14 +1,14 @@
 # Sending messages
 
-:::warning
+:::info
 There is no description of connecting a wallet on this page. We suppose you have already connected the wallet to your dApp. If not, you can refer to [integration manual](develop/dapps/ton-connect/integration).
 :::
 
-TON Connect 2 has more powerful options than only authenticating dApp user: it's possible to send outgoing messages via connected wallets!
+TON Connect 2 has more powerful options than only authenticating dApp of users: it's possible to send outgoing messages via connected wallets!
 
 ## Playground page
 
-We'll experiment in browser console on some page where wallet is already connected. Here is a sample page.
+We'll experiment in the browser console on a page where the wallet is already connected. Here is the sample page.
 
 ```html
 <!DOCTYPE html>
@@ -33,13 +33,13 @@ We'll experiment in browser console on some page where wallet is already connect
 
 ## Sending multiple messages
 
-Let's start with something interesting! We will send two messages in one transaction: one to your own address, carrying 0.2 TON, and one to author of this article (as a donation), carrying 0.1 TON.
+Let's start with something interesting! We will send two separate messages in one transaction: one to your own address, carrying 0.2 TON, and one to the other wallet address carrying 0.1 TON.
 
 By the way, there is a limit of messages sent in one transaction:
-- standard (v3/v4) wallets: 4 outgoing msgs;
-- highload wallets: 250-255 outgoing msgs (close to blockchain limitations).
+- standard (v3/v4) wallets: 4 outgoing messages;
+- highload wallets: 250-255 outgoing messages (close to blockchain limitations).
 
-Enter the following code in console
+Enter the following code in the console
 
 ```js
 console.log(await connector.sendTransaction({
@@ -57,9 +57,13 @@ console.log(await connector.sendTransaction({
 }));
 ```
 
-You'll notice that this command does not print anything into console, not even `null` or `undefined`, as functions returning nothing do. This means that `connector.sendTransaction` does not exit immediately.
+:::info
+Here we work with the Raw Address of the wallet contract. If you need to decode your User-Friendly Address to raw form use, for example [toncenter api](https://toncenter.com/api/v2/#/accounts/unpack_address_unpackAddress_get).
+:::
 
-Open your wallet application, and you'll see why. There is a request, showing what are you sending and where would coins go.
+You'll notice that this command does not print anything into the console, null or undefined, as functions returning nothing do. This means that connector.sendTransaction does not exit immediately.
+
+Open your wallet application, and you'll see why. There is a request, showing what you are sending and where coins would go.
 
 Accept the request. The function will exit, and something will be printed.
 
@@ -69,7 +73,7 @@ Accept the request. The function will exit, and something will be printed.
 }
 ```
 
-Decode this BOC in the tool of your choice, and you'll get tree like this:
+Decode this BOC in the tool of your choice, and you'll get the following tree of cells:
 
 ```
 x{88016543D9EAA8BC0ED9A6D5CA2DD4FD7BE655D401195457095F30CD7D9641112B5A02501DD1A83C401673E97A8D7DD57FE38A29A7F41C27AB7CF0714FCC3231D134DE6C0B9B72CA6055DD2275AE3CB2B1C023AC30C500857F884F960724843CFF70094D4D18BB1F72F5600000024800181C_}
@@ -90,7 +94,7 @@ x{88016543D9EAA8BC0ED9A6D5CA2DD4FD7BE655D401195457095F30CD7D964111...
   ...
 ```
 
-The purpose of returning BOC of sent transaction is to track it.
+The purpose of returning BOC of the sent transaction is to track it.
 
 ## Transfer with comment, contract deployment
 
@@ -99,7 +103,7 @@ You can use [toncenter/tonweb](https://github.com/toncenter/tonweb) JS SDK or yo
 :::
 
 Text comment on transfer is encoded as opcode 0 (32 zero bits) + UTF-8 bytes of comment.  
-Here's an example on how to convert it into bag of cells.
+Here's an example of how to convert it into a bag of cells.
 
 ```js
 let a = new TonWeb.boc.Cell();
@@ -150,8 +154,8 @@ console.log(await connector.sendTransaction({
 
 After confirmation, we may see our transaction complete at [tonscan.org](https://tonscan.org/tx/pCA8LzWlCRTBc33E2y-MYC7rhUiXkhODIobrZVVGORg=).
 
-## What happens if user rejects transaction request?
+## What happens if the user rejects a transaction request?
 
 It's pretty easy to handle request rejection, but when you're developing some project it's better to know what would happen in advance.
 
-When user clicks "Cancel" in popup in wallet application, an exception is thrown: `Error: [TON_CONNECT_SDK_ERROR] Wallet declined the request`. This error can be considered final (unlike connection cancellation) - if it has been raised, then the requested transaction will definitely not happen until next request is sent.
+When a user clicks "Cancel" in the popup in the wallet application, an exception is thrown: `Error: [TON_CONNECT_SDK_ERROR] Wallet declined the request`. This error can be considered final (unlike connection cancellation) - if it has been raised, then the requested transaction will definitely not happen until the next request is sent.
