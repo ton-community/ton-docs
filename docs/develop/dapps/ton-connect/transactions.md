@@ -36,8 +36,8 @@ We'll experiment in the browser console on a page where the wallet is already co
 Let's start with something interesting! We will send two separate messages in one transaction: one to your own address, carrying 0.2 TON, and one to the other wallet address carrying 0.1 TON.
 
 By the way, there is a limit of messages sent in one transaction:
-- standard ([v3](../../../participate/wallets/contracts#wallet-v3)/[v4](../../../participate/wallets/contracts#wallet-v4)) wallets: 4 outgoing messages;
-- highload wallets: 250-255 outgoing messages (close to blockchain limitations).
+- standard ([v3](/participate/wallets/contracts#wallet-v3)/[v4](/participate/wallets/contracts#wallet-v4)) wallets: 4 outgoing messages;
+- highload wallets: 255 outgoing messages (close to blockchain limitations).
 
 Run the following code
 
