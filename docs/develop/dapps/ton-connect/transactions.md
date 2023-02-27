@@ -4,7 +4,7 @@
 There is no description of connecting a wallet on this page. We suppose you have already connected the wallet to your dApp. If not, you can refer to [integration manual](develop/dapps/ton-connect/integration).
 :::
 
-TON Connect 2 has more powerful options than only authenticating dApp of users: it's possible to send outgoing messages via connected wallets!
+TON Connect 2 has more powerful options than just authenticating users in the dApp: it's possible to send outgoing messages via connected wallets!
 
 ## Playground page
 
@@ -36,10 +36,10 @@ We'll experiment in the browser console on a page where the wallet is already co
 Let's start with something interesting! We will send two separate messages in one transaction: one to your own address, carrying 0.2 TON, and one to the other wallet address carrying 0.1 TON.
 
 By the way, there is a limit of messages sent in one transaction:
-- standard (v3/v4) wallets: 4 outgoing messages;
+- standard ([v3](../../../participate/wallets/contracts#wallet-v3)/[v4](../../../participate/wallets/contracts#wallet-v4)) wallets: 4 outgoing messages;
 - highload wallets: 250-255 outgoing messages (close to blockchain limitations).
 
-Enter the following code in the console
+Run the following code
 
 ```js
 console.log(await connector.sendTransaction({
@@ -57,11 +57,7 @@ console.log(await connector.sendTransaction({
 }));
 ```
 
-:::info
-Here we work with the Raw Address of the wallet contract. If you need to decode your User-Friendly Address to raw form use, for example [toncenter api](https://toncenter.com/api/v2/#/accounts/unpack_address_unpackAddress_get).
-:::
-
-You'll notice that this command does not print anything into the console, null or undefined, as functions returning nothing do. This means that connector.sendTransaction does not exit immediately.
+You'll notice that this command does not print anything into the console, `null` or `undefined`, as functions returning nothing do. This means that `connector.sendTransaction` does not exit immediately.
 
 Open your wallet application, and you'll see why. There is a request, showing what you are sending and where coins would go.
 
