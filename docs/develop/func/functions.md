@@ -40,9 +40,27 @@ FunC (actually Fift assembler) has several reserved function names with predefin
 - `run_ticktock` has id = -2
 
 Every program must have a function with id 0, that is, `main` or `recv_internal` function.
+`run_ticktock` is called in ticktock transactions of special smart contracts.
 
-`recv_internal` is called when a smart contract receives an inbound internal message; `recv_external` is for inbound external messages; `run_ticktock` is called in ticktock transactions of special smart contracts.
+#### Receive internal
 
+`recv_internal` is called when a smart contract receives an inbound internal message.
+There are some variables at the stack when [TVM initiates](https://ton.org/docs/learn/tvm-instructions/tvm-overview#initialization-of-tvm), by setting arguments in `recv_internal` we give smart-contract code awareness about some of them. 
+
+```func
+() recv_internal(int balance, int msg_value, cell in_msg_cell, slice in_msg) {}
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) {}
+() recv_internal(cell in_msg_cell, slice in_msg) {}
+() recv_internal(slice in_msg) {}
+```
+
+Those arguments about which code will not know, will just lie at the bottom of the stack never touched.
+
+
+
+#### Receive external
+
+`recv_external` is for inbound external messages.
 
 ### Return type
 Return type can be any atomic or composite type as described in the [types](/develop/func/types.md) section. For example,
@@ -92,6 +110,11 @@ Note that although a function may look like a function of several arguments, it'
 Non-modifying function supports short function call form with `.`
 :::
 
+```func
+example(a);
+a.example();
+```
+
 If a function has at least one argument, it can be called as a non-modifying method. For example, `store_uint` has type `(builder, int, int) -> builder` (the second argument is the value to store, and the third is the bit length). `begin_cell` is a function that creates a new builder. The following codes are equivalent:
 ```func
 builder b = begin_cell();
@@ -115,12 +138,19 @@ builder b = begin_cell().store_uint(239, 8)
 
 #### Modifying functions
 :::info
-Modifying function `int c domath(int a)` could be called with `.` operator - `c = a.domath()`, then the modified result `a` will be returned by the function.
-
-Also modifying functions could be used with `~` operator - `a~domath()`, then its operand `a` will be modified at once without reassigning.
+Modifying function supports short form with `~` and `.` operators.
 :::
 
-If the first argument of a function has type `A` and the return value of the function has the shape of `(A, B)` where `B` is some arbitrary type, then the function can be called as a modifying method. Modifying method calls may take some arguments and return some values, but they modify their first argument, that is, assign the first component of the returned value to the variable from the first argument. For example, suppose `cs` is a cell slice and `load_uint` has type `(slice, int) -> (slice, int)`: it takes a cell slice and number of bits to load and returns the remainder of the slice and the loaded value. The following codes are equivalent:
+If the first argument of a function has type `A` and the return value of the function has the shape of `(A, B)` where `B` is some arbitrary type, then the function can be called as a modifying method.
+
+Modifying function calls may take some arguments and return some values, but they modify their first argument, that is, assign the first component of the returned value to the variable from the first argument. 
+```func
+a~example();
+a = example(a);
+```
+
+
+For example, suppose `cs` is a cell slice and `load_uint` has type `(slice, int) -> (slice, int)`: it takes a cell slice and number of bits to load and returns the remainder of the slice and the loaded value. The following codes are equivalent:
 ```func
 (cs, int x) = load_uint(cs, 8);
 ```
