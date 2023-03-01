@@ -84,6 +84,89 @@ Function arguments are separated by commas. The valid declarations of an argumen
 
 Note that although a function may look like a function of several arguments, it's actually a function of one [tensor-type](/develop/func/types#tensor-types) argument. To see the difference, please refer to [function application](/develop/func/statements#function-application). Nevertheless, the components of the argument tensor are conventionally called function arguments.
 
+### Function calls
+
+#### Non-modifying methods
+
+:::info
+Non-modifying function supports short function call form with `.`
+:::
+
+If a function has at least one argument, it can be called as a non-modifying method. For example, `store_uint` has type `(builder, int, int) -> builder` (the second argument is the value to store, and the third is the bit length). `begin_cell` is a function that creates a new builder. The following codes are equivalent:
+```func
+builder b = begin_cell();
+b = store_uint(b, 239, 8);
+```
+```func
+builder b = begin_cell();
+b = b.store_uint(239, 8);
+```
+So the first argument of a function can be passed to it being located before the function name, if separated by `.`. The code can be further simplified:
+```func
+builder b = begin_cell().store_uint(239, 8);
+```
+Multiple calls of methods are also possible:
+```func
+builder b = begin_cell().store_uint(239, 8)
+                        .store_int(-1, 16)
+                        .store_uint(0xff, 10);
+```
+
+
+#### Modifying functions
+:::info
+Modifying function `int c domath(int a)` could be called with `.` operator - `c = a.domath()`, then the modified result `a` will be returned by the function.
+
+Also modifying functions could be used with `~` operator - `a~domath()`, then its operand `a` will be modified at once without reassigning.
+:::
+
+If the first argument of a function has type `A` and the return value of the function has the shape of `(A, B)` where `B` is some arbitrary type, then the function can be called as a modifying method. Modifying method calls may take some arguments and return some values, but they modify their first argument, that is, assign the first component of the returned value to the variable from the first argument. For example, suppose `cs` is a cell slice and `load_uint` has type `(slice, int) -> (slice, int)`: it takes a cell slice and number of bits to load and returns the remainder of the slice and the loaded value. The following codes are equivalent:
+```func
+(cs, int x) = load_uint(cs, 8);
+```
+```func
+(cs, int x) = cs.load_uint(8);
+```
+```func
+int x = cs~load_uint(8);
+```
+In some cases we want to use a function as a modifying method that doesn't return any value and only modifies the first argument. It can be done using unit types as follows: Suppose we want to define function `inc` of type `int -> int`, which increments an integer, and use it as a modifying method. Then we should define `inc` as a function of type `int -> (int, ())`:
+```func
+(int, ()) inc(int x) {
+  return (x + 1, ());
+}
+```
+When defined like that, it can be used as a modifying method. The following will increment `x`.
+```func
+x~inc();
+```
+
+#### `.` and `~` in function names
+Suppose we want to use `inc` as a non-modifying method too. We can write something like that:
+```func
+(int y, _) = inc(x);
+```
+But it is possible to override the definition of `inc` as a modifying method.
+```func
+int inc(int x) {
+  return x + 1;
+}
+(int, ()) ~inc(int x) {
+  return (x + 1, ());
+}
+```
+And then call it like that:
+```func
+x~inc();
+int y = inc(x);
+int z = x.inc();
+```
+The first call will modify x; the second and third won't.
+
+In summary, when a function with the name `foo` is called as a non-modifying or modifying method (i.e. with `.foo` or `~foo` syntax), the FunC compiler uses the definition of `.foo` or `~foo` correspondingly if such a definition is presented, and if not, it uses the definition of `foo`.
+
+
+
 ### Specifiers
 There are three types of specifiers: `impure`, `inline`/`inline_ref`, and `method_id`. One, several, or none of them can be put in a function declaration but currently they must be presented in the right order. For example, it is not allowed to put `impure` after `inline`.
 #### Impure specifier
@@ -134,6 +217,8 @@ is a function that takes a tuple of length exactly 2, but with values of any (si
 In this example `X` and `Y` are [type variables](/develop/func/types#polymorphism-with-type-variables). When the function is called, type variables are substituted with actual types, and the code of the function is executed. Note that although the function is polymorphic, the actual assembler code for it is the same for every type substitution. It is achieved essentially by the polymorphism of stack manipulation primitives. Currently, other forms of polymorphism (like ad-hoc polymorphism with type classes) are not supported.
 
 Also, it is worth noticing that the type width of `X` and `Y` is supposed to be equal to 1; that is, the values of `X` or `Y` must occupy a single stack entry. So you actually can't call the function `pair_swap` on a tuple of type `[(int, int), int]`, because type `(int, int)` has width 2, i.e., it occupies 2 stack entries.
+
+
 
 ## Assembler function body definition
 As mentioned above, a function can be defined by the assembler code. The syntax is an `asm` keyword followed by one or several assembler commands, represented as strings.
