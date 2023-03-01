@@ -425,6 +425,7 @@ const sidebars = {
       type: 'category',
       label: 'Fift language',
       items: [
+        'develop/fift/overview',
         'develop/fift/fift-and-tvm-assembly',
         'develop/fift/fift-deep-dive',
       ]
