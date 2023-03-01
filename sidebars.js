@@ -425,8 +425,8 @@ const sidebars = {
       type: 'category',
       label: 'Fift language',
       items: [
-        'develop/fift-and-tvm-assembly',
-        'develop/fift-deep-dive',
+        'develop/fift/fift-and-tvm-assembly',
+        'develop/fift/fift-deep-dive',
       ]
     },
     'develop/howto/network-configs',
