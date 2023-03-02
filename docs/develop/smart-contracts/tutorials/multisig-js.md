@@ -138,3 +138,8 @@ And of course you can get public properties from `MultisigWallet`, `MultisigOrde
  * MultisigOrder
     - `payload` - `Cell` with order payload
     - `signatures` - `Dictionary<number, Buffer>` of signatures *ownerId => signature*
+
+## References
+ * [Low-level multisig guide](/develop/smart-contracts/tutorials/multisig)
+ * [ton.js Documentation](https://ton-community.github.io/ton/)
+ * [Multisig contract sources](https://github.com/ton-blockchain/multisig-contract)
