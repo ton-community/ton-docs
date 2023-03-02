@@ -59,7 +59,7 @@ The easiest way is the following:
 - Stop validator `sudo systemctl stop validator`
 - Update service file `sudo nano /etc/systemd/system/validator.service`: add `--lite-validator` flag
 - Reload systemctl `sudo systemctl daemon-reload`
-- Start validator `sudo systemctl stop validator`
+- Start validator `sudo systemctl start validator`
 
 ## Lite server
 
