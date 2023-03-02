@@ -2,7 +2,7 @@
 description: At the end of this guide you will deploy multisig wallet and send some transactions using ton.js
 ---
 
-# Interact with multisig wallets in JS
+# Interact with multisig wallets using ton.js
 
 ## Introduction
 If you don't know what is multisig wallet in TON, you can check it out [here](/develop/smart-contracts/tutorials/multisig)
@@ -11,16 +11,19 @@ Following this steps you will learn how to:
  * Create and deploy multisig wallet
  * Create, sign and send transactions with that wallet
 
-We will use [ton.js](https://www.npmjs.com/package/ton) library, so you need to install it first:
+We will create a TypeScript project and use [ton.js](https://www.npmjs.com/package/ton) library, so you need to install it first. We will also use the [ton-access](https://www.orbs.com/ton-access/):
 
 ```bash
-yarn add ton ton-crypto ton-core buffer
+yarn add typescript @types/node ton ton-crypto ton-core buffer @orbs-network/ton-access
+yarn tsc --init -t es2022
 ```
 ## Create and deploy multisig wallet
-Before all we need to import all important stuff
+Let's create a source file, `main.ts` for example. Open it in your favorite code editor and follow this guide!
+
+At firstwe need to import all important stuff
 ```js
 import { Address, beginCell, MessageRelaxed, toNano, TonClient, WalletContractV4, MultisigWallet, MultisigOrder, MultisigOrderBuilder } from "ton";
-import { getSecureRandomBytes, keyPairFromSeed, sign } from 'ton-crypto';
+import { KeyPair, mnemonicToPrivateKey } from 'ton-crypto';
 import { getHttpEndpoint } from "@orbs-network/ton-access";
 ```
 
@@ -110,6 +113,18 @@ And finally, send the signed order:
 ```js
 await mw.sendOrder(order1b, keyPairs[0].secretKey);
 ```
+
+Now build the project
+```bash
+yarn tsc
+```
+
+And run the compiled file
+```bash
+node main.js
+```
+
+If it does not throw any errors, you made everything right! Now check if your transaction succeed with any explorer or wallet.
 
 ## Other methods and properties
 You can easily clear messages from `MultisigOrderBuilder` objects:
