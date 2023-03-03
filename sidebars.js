@@ -447,7 +447,6 @@ const sidebars = {
           ]
         },
         'develop/data-formats/tl',
-        'develop/data-formats/Tl-B-overview'
       ]
     },
     {
@@ -477,6 +476,7 @@ const sidebars = {
           items: [
             'develop/archive/pow-givers',
             'develop/archive/mining',
+            'develop/archive/Tl-B-overview'
           ],
         },
       ],
