@@ -5,7 +5,7 @@
 The [intellij-ton](https://github.com/andreypfau/intellij-ton) plugin supports Fift, FunC and also TL-B.  
 The TL-B grammar is described in the [TlbParser.bnf](https://github.com/andreypfau/intellij-ton/blob/main/src/main/grammars/TlbParser.bnf) file.
 
-### SDK
+### TL-B Parsers
 
 TL-B parsers helps to serialize basic structures. Each of them implements TL-B structures as object, and returns serialized binary data.
 
