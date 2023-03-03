@@ -322,6 +322,7 @@ const sidebars = {
           items: [
             'develop/dapps/ton-connect/README',
             'develop/dapps/ton-connect/integration',
+            'develop/dapps/ton-connect/transactions',
             'develop/dapps/ton-connect/business',
             'develop/dapps/ton-connect/developers',
             'develop/dapps/ton-connect/security',
