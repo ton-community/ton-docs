@@ -1,8 +1,8 @@
 ---
-description: At the end of this guide you will deploy multisig wallet and send some transactions using ton.js
+description: At the end of this guide you will deploy multisig wallet and send some transactions using ton library
 ---
 
-# Interact with multisig wallets using ton.js
+# Interact with multisig wallets using ton library
 
 ## Introduction
 If you don't know what is multisig wallet in TON, you can check it out [here](/develop/smart-contracts/tutorials/multisig)
@@ -11,16 +11,20 @@ Following this steps you will learn how to:
  * Create and deploy multisig wallet
  * Create, sign and send transactions with that wallet
 
-We will create a TypeScript project and use [ton.js](https://www.npmjs.com/package/ton) library, so you need to install it first. We will also use the [ton-access](https://www.orbs.com/ton-access/):
+We will create a TypeScript project and use [ton](https://www.npmjs.com/package/ton) library, so you need to install it first. We will also use the [ton-access](https://www.orbs.com/ton-access/):
 
 ```bash
 yarn add typescript @types/node ton ton-crypto ton-core buffer @orbs-network/ton-access
 yarn tsc --init -t es2022
 ```
+
+The full code of this guide is available here:
+ * https://github.com/Gusarich/multisig-ts-example
+
 ## Create and deploy multisig wallet
 Let's create a source file, `main.ts` for example. Open it in your favorite code editor and follow this guide!
 
-At firstwe need to import all important stuff
+At first we need to import all important stuff
 ```js
 import { Address, beginCell, MessageRelaxed, toNano, TonClient, WalletContractV4, MultisigWallet, MultisigOrder, MultisigOrderBuilder } from "ton";
 import { KeyPair, mnemonicToPrivateKey } from 'ton-crypto';
