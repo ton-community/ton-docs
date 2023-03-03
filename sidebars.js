@@ -437,9 +437,19 @@ const sidebars = {
       type: 'category',
       label: 'Data formats',
       items: [
-        'develop/data-formats/cell-boc',
+        {
+          type: 'category',
+          label: 'TL-B',
+          items: [
+            'develop/data-formats/cell-boc',
+            'develop/data-formats/tl-b-language',
+            'develop/data-formats/tl-b',
+            'develop/data-formats/msg-tlb',
+            'develop/data-formats/crc32',
+            'develop/data-formats/tlb-ide'
+          ]
+        },
         'develop/data-formats/tl',
-        'develop/data-formats/tl-b'
       ]
     },
     {
@@ -472,6 +482,7 @@ const sidebars = {
           items: [
             'develop/archive/pow-givers',
             'develop/archive/mining',
+            'develop/archive/Tl-B-overview'
           ],
         },
       ],

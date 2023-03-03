@@ -1,13 +1,26 @@
-# Cell & Bag of Cells
+# Cell & Bag of Cells(BoC)
 
 ## Cell
-Cell represents a container for data that can store up to 1023 bits and have up to 4 references to other Cells. In TON, everything consists of cells, contract code, stored data, blocks. This approach achieves flexibility.
+A cell represents a data structure on the TON blockchain. Cells are able to store up to 1023 bits and possess up to 4 references to other cells.
+
+![TL-B example](/img/docs/data-formats/tl-b-docs-5.png?raw=true)
+
 
 ## Bag of Cells
-Bag of Cells - format for serializing cells into an array of bytes, described as [TL-B schema](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25).
+
+On TON, a Bag of Cells (BoC) is a format for serializing cells into byte arrays, which is further described in the [TL-B schema](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25).
+
+![TL-B example](/img/docs/data-formats/tl-b-docs-6.png?raw=true)
+
+On TON, everything consists of cells, including contract code, stored data, blocks, achieving streamline and robust flexibility in the process.
+
+![TL-B example](/img/docs/data-formats/tl-b-docs-4.png?raw=true)
 
 ### Cell serialization
-Let's analyze this kind of cell:
+Let's analyze our first example of a Bag of Cells :
+
+![TL-B example](/img/docs/data-formats/tl-b-docs-7.png?raw=true)
+
 ```json
 1[8_] -> {
   24[0AAAAA],
@@ -16,9 +29,9 @@ Let's analyze this kind of cell:
   }
 }
 ```
-Here we have a 1-bit size root cell that has 2 links: the first to a 24-bit cell and the second to a 7-bit cell, which has 1 link to a 24-bit cell.
+In this example we have a 1-bit size root cell that has 2 links: the first to a 24-bit cell and the second to a 7-bit cell which possesses 1 link to a 24-bit cell.
 
-We need to turn the cells into a flat set of bytes, for this we first need to leave only unique cells - we have 3 out of 4 of them. We have:
+For this framework to work as intended, it’s necessary to turn the cells into a single sequence of bytes. To accomplish this, first, we leverage only unique cell types, below 3 out of 4 are presented as follows:
 ```json
 1[8_]
 24[0AAAAA]
@@ -31,21 +44,25 @@ Now let's arrange them in such an order that the parent cells do not point backw
 24[0AAAAA] -> index 2
 ```
 
-Let's calculate descriptors for each of them. These are 2 bytes that store flags, information about the length of the data and the number of links. The flags will be omitted in the current parse, they are almost always 0. The first byte contains 5 flag bits and 3 link count bits. 
-The second byte is the length of the full 4-bit groups (but at least 1 if not empty). We get:
+Now, let's calculate descriptions for each of the 3 cells touched on above. These descriptions are made up of 2 bytes that store flags composed of information about the length of the data and the number of data linkages. 
+
+The flags are omitted in the current parse and almost always possess a value of 0. The first byte contains 5 flag bits and 3 link count bits. The second byte is the length of the full 4-bit groups (but at least 1 if it isn’t empty). The result is:
+
 ```json
 1[8_]      -> 0201 -> 2 links, length 1 
 7[FE]      -> 0101 -> 1 link, length 1
 24[0AAAAA] -> 0006 -> 0 links, length 6
 ```
-For data with incomplete 4-bit groups, 1 bit is added to the end. It means the end bit of the group and is used to determine the true size of incomplete groups. Let's add it:
+For data with incomplete 4-bit groups, 1 bit is added to the end of the sequence. This means it denotes the end bit of the group and is used to determine the true size of incomplete groups. Let's add the bits below:
+
+
 ```json
 1[8_]      -> C0     -> 0b10000000->0b11000000
 7[FE]      -> FF     -> 0b11111110->0b11111111
 24[0AAAAA] -> 0AAAAA -> do not change (full groups)
 ```
 
-Now let's add link indexes:
+Now let's add the link indexes:
 ```json
 0 1[8_]      -> 0201 -> refers to 2 cells with such indexes
 1 7[FE]      -> 02 -> refers to cells with index 2
@@ -59,15 +76,40 @@ And put it all together:
 0006 0AAAAA 
 ```
 
-And concat it into the single array of bytes:
+And concat it by joining the corresponding strings into a single array of bytes: 
 `0201c002010101ff0200060aaaaa`, size 14 bytes.
 
-[Serialization example](https://github.com/xssnick/tonutils-go/blob/3d9ee052689376061bf7e4a22037ff131183afad/tvm/cell/serialize.go#L205)
 
-### Packing in BoC
-Let's pack the cell from the previous section. We have already serialized it into a flat 14 byte array.
+<details>
+  <summary><b>Show example</b></summary>
 
-We build the title according to [schema](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25).
+```golang
+func (c *Cell) descriptors() []byte {
+ceilBytes := c.bitsSz / 8
+if c.bitsSz%8 ! = 0 {
+ceilBytes++
+}
+
+	// calc size
+	ln := ceilBytes + c.bitsSz/8
+
+	specBit := byte(0)
+	if c.special {
+		specBit = 8
+	}
+
+	return []byte{byte(len(c.refs)) + specBit + c.level*32, byte(ln)}
+}
+```
+[Source](https://github.com/xssnick/tonutils-go/blob/3d9ee052689376061bf7e4a22037ff131183afad/tvm/cell/serialize.go#L205)
+
+</details>
+
+
+### Packing a Bag of Cells
+Let's pack the cell from the section directly above. We have already serialized it into a flat 14 byte array.
+
+Therefore, we build the header according to its [schema](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25).
 
 ```
 b5ee9c72                      -> id tl-b of the BoC structure
@@ -84,34 +126,40 @@ b5ee9c72                      -> id tl-b of the BoC structure
 0201c002010101ff0200060aaaaa  -> serialized cells
 ```
 
-We concat everything above into an array of bytes and get:
-`b5ee9c7201010301000e000201c002010101ff0200060aaaaa` This is our final BoC!
+Next, we concat everything above into an array of bytes into our final BoC:
+`b5ee9c7201010301000e000201c002010101ff0200060aaaaa`
 
-BoC Implementation Examples: [Serialization](https://github.com/xssnick/tonutils-go/blob/master/tvm/cell/serialize.go), [Deserialization](https://github.com/xssnick/tonutils-go/blob/master/tvm/cell/parse.go)
+Bag of Cells Implementation Examples: [Serialization](https://github.com/xssnick/tonutils-go/blob/master/tvm/cell/serialize.go), [Deserialization](https://github.com/xssnick/tonutils-go/blob/master/tvm/cell/parse.go)
 
 ## Special cells
 
-Cells are divided into two types: ordinary and special. Most of the cells that the user works with are ordinary and simply carry information. But for the internal functionality of the network, special cells are often used, which work according to a slightly different scenario, depending on the subtype of the special cell.
+Generally, cells operating on TON are divided into two main types: ordinary cells and special cells. Most of the cells that the users work with are ordinary cells responsible for carrying information. 
 
-The type of special cell is determined by the first 8 bits of its data and can be one of the following:
+Nevertheless, to realize internal functionality of the network, special cells are sometimes needed and are used for a diverse range of purposes, depending on their subtype.
+
+Special cell subtypes are determined by the first 8 bits that form their data structures. The main subtype variations include:
+
 ```js
 0x01: PrunnedBranch
 0x02: Library
 0x03: MerkleProof
 0x04: MerkleUpdate
 ```
-In the sections below, we will discuss special types in more detail.
 
 ### Merkle Proof
-A cell of this type is a hash tree and carries a proof that a part of the cell tree data belongs to the full tree, while the verifier may not know the full contents of the tree, but only know its root hash.
+Merkle Proof cells are actually a hash tree that is used to cryptographically verify (via the merkle proof) that a portion of the cell tree data belongs to the full tree. This design often prevents the verifier from knowing the full contents of the tree, while only revealing its root hash.
 
-Within itself, a cell carries the root hash of an object, for example, a block, and a hash tree of its branches as a child cell. The internal tree itself repeats the structure of the original object, the proof of which it is, but at the same time, all branches that are not part of the data that needs to be proved and do not lead to it are replaced by special cells of the `PrunnedBranch` type, which instead of data store its hash. 
-Thus, having calculated the root hash of the entire tree, we should get the same hash from the root cell data of the merkle proof type, which should match the hash known to us in advance, for example, hash of a block. This approach allows us to prove, for example, the existence of a transaction in a block, provided that the one to whom we prove this knows the hash of the block.
+Within itself, a cell carries the root hash of an object (for example, a block) and a hash tree of its branches as a child cell. The internal tree itself repeats the structure of the original object (by cryptographically proving its integrity), but at the same time, all branches that are not part of the data and don’t need verification and don’t lead to it are replaced by special `PrunnedBranch` cells, which instead of storing data, store the cell’s individualized hash.
+
+Therefore, having calculated the root hash of the entire tree, the same hash should be derived from the root cell data of the merkle proof, which should match the hash known to us in advance (e.g., the hash of a block). This approach allows us to prove, for example, the existence of a transaction in a block, provided that the party knows the hash of the block in the first place.
 
 #### Proof example for getAccountState
-The object is a proof for the structure [ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb#L399). But instead of the whole block - contains only our requested account - `EQCVRJ-RqeZWcDqgTzzcxUIrChFYs0SyKGUvye9kGOuEWndQ`. All branches that are not related to it and not leading to it are replaced with `Prunned`, and those that lead to it are `Ordinary` cells and contain the actual block data.
+The getAccountState is a proof used to verify the integrity of the [ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb#L399) structure. But instead of the whole block, the getAccountState proof contains only the requested account:  `EQCVRJ-RqeZWcDqgTzzcxUIrChFYs0SyKGUvye9kGOuEWndQ`. 
 
-The symbol `*` marks special cells, the root one has type 0x03 - MerkleProof, the rest 0x01 - Pruned.
+All branches that are not related to or leading to the getAccountState are replaced with a `PrunnedBranch`, and those leading to it are `Ordinary` cells and contain the actual block data.
+
+The symbol `*` denotes a special cell, the root which uses the 0x03 denotes a MerkleProof, while the 0x01 denotes a PrunedBranch.
+
 <details>
   <summary><b>Show example</b></summary>
 
