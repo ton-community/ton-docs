@@ -63,13 +63,15 @@ right$1 {X:Type} {Y:Type} value:Y = Either X Y;
 
 Recall how `Maybe` and `Either` works, we can serialize different cases:
 
-* `[CommonMsgInfo][11][^StateInit][1][^X]` - `Message X` with references
-
-  ![TL-B example](/img/docs/data-formats/tl-b-docs-8.png?raw=true)
-
 * `[CommonMsgInfo][10][StateInit][0][X]` - `Message X` in the one cell
 
 ![TL-B example](/img/docs/data-formats/tl-b-docs-9.png?raw=true)
+
+* `[CommonMsgInfo][11][^StateInit][1][^X]` - `Message X` with references
+
+![TL-B example](/img/docs/data-formats/tl-b-docs-8.png?raw=true)
+
+
 
 ## CommonMsgInfo TL-B
 
