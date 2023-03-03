@@ -22,5 +22,9 @@ Usually, using the Fift is not required for a programming smart contracts in TON
 ## Tutorials
 
 * [Introduction To Fift](https://blog.ton.org/introduction-to-fift)
-* [Tutorial videos Fift[RU]](https://youtube.com/playlist?list=PLyDBPwv9EPsCYG-hR4N5FRTKUkfM8POgh) by **@MarcoDaTr0p0je** using Fift compiler.
+* [Tutorial videos Fift[RU]](https://youtube.com/playlist?list=PLyDBPwv9EPsCYG-hR4N5FRTKUkfM8POgh) by **@MarcoDaTr0p0je**&**@Wikimar** using Fift compiler.
+
+## Sources
+
+* [Fift scripts for standard smart contracts](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
 
