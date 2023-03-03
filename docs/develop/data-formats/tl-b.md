@@ -7,6 +7,9 @@ So feel free to read about it later.
 :::
 
 
+<img alt="tlb structure" src="/docs/img/docs/tlb.drawio.svg" width={'100%'}/>
+
+
 ## Unary
 Unary is commonly used for dynamic sizing in structures such as [hml_short](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb#L29).
 
