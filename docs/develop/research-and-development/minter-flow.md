@@ -45,10 +45,10 @@ Upon receiving message from `0:0000...0000`
 2. if there are tokens with corresponding id on minter balance send them to this currency owner with `ok` message
 3. otherwise send to currency owner `fail` message
 
-## Further issues
+## Issues to be resolved
 1. Workaround with sending a message to `0:0000...0000` for postponement of request processing is quite dirty.
 2. Cases, when minting failed, should be thought out. For now, it looks like the only possible situation is when a currency amount is 0 or such that the current balance plus a minted amount doesn't fit into `(VarUInteger 32)`
 3. How to burn? At first glance, there are no ways.
-4. Should minting fees be prohibitive? In other words, is it dangerous to have millions of extracurrencies (big config, many dict operations on collation?)
+4. Should minting fees be prohibitive? In other words, is it dangerous to have millions of extracurrencies (big config, potential DoS due to unbound number of dict operations on collation?)
 
 
