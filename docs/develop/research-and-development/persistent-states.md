@@ -18,6 +18,8 @@ In 2022 there is the following long-term (at least 3 months) persistent states (
 | | 2022-08-19 22:00:00 | 388 days | 2023-09-12 06:00:00 |
 | | 2022-10-07 11:00:00 |  97 days | 2023-01-12 12:00:00 |
 | | 2022-11-25 00:00:00 | 194 days | 2023-06-07 03:00:00 |
+| | 2022-11-25 00:00:00 | 194 days | 2023-06-07 03:00:00 |
+| 27747086 | 2022-03-02 05:08:11 | 1553 days | 2027-06-02 18:50:19 |
 
 When the node starts for the first time, it has to download a persistent state. This is implemented in [validator/manager-init.cpp](https://github.com/ton-blockchain/ton/blob/master/validator/manager-init.cpp).
 
