@@ -1430,3 +1430,61 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 > ["Lisp-style lists" in docs](/develop/func/stdlib/#lisp-style-lists)
 >
 > ["null()" in docs](/develop/func/stdlib/#null)
+
+### How to send a deploy message (with stateInit only, with stateInit and body)
+
+```func
+() deploy_with_stateinit(cell message_header, cell state_init) impure {
+  var msg = begin_cell()
+    .store_slice(begin_parse(msg_header))
+    .store_uint(2 + 1, 2) ;; init:(Maybe (Either StateInit ^StateInit))
+    .store_uint(0, 1) ;; body:(Either X ^X)
+    .store_ref(state_init)
+    .end_cell();
+
+  ;; mode 64 - carry the remaining value in the new message
+  send_raw_message(msg, 64); 
+}
+
+() deploy_with_stateinit_body(cell message_header, cell state_init, cell body) impure {
+  var msg = begin_cell()
+    .store_slice(begin_parse(msg_header))
+    .store_uint(2 + 1, 2) ;; init:(Maybe (Either StateInit ^StateInit))
+    .store_uint(1, 1) ;; body:(Either X ^X)
+    .store_ref(state_init)
+    .store_ref(body)
+    .end_cell();
+
+  ;; mode 64 - carry the remaining value in the new message
+  send_raw_message(msg, 64); 
+}
+```
+
+### How to build a stateInit cell
+
+```func
+() build_stateinit(cell init_code, cell init_data) {
+  var state_init = begin_cell()
+    .store_uint(0, 1) ;; split_depth:(Maybe (## 5))
+    .store_uint(0, 1) ;; special:(Maybe TickTock)
+    .store_uint(1, 1) ;; (Maybe ^Cell)
+    .store_uint(1, 1) ;; (Maybe ^Cell)
+    .store_uint(0, 1) ;; (HashmapE 256 SimpleLib)
+    .store_ref(init_code)
+    .store_ref(init_data)
+    .end_cell();
+}
+```
+
+### How to calculate a contract address (using stateInit)
+
+```func
+() calc_address(cell state_init) {
+  var future_address = begin_cell() 
+    .store_uint(2, 2) ;; addr_std$10
+    .store_uint(0, 1) ;; anycast:(Maybe Anycast)
+    .store_uint(0, 8) ;; workchain_id:int8
+    .store_uint(cell_hash(state_init), 256) ;; address:bits256
+    .end_cell();
+}
+```
