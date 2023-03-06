@@ -14,12 +14,12 @@ If you want to find a wallet to install, open [ton.org/wallets](https://ton.org/
 * [OpenMask](https://www.openmask.app/) — is the trailblazing tool enabling user interactions and experience on Web3 as browser extension.
 
 ### Basics features
-| Wallet     | Jetton          | NFT transfers   | Authorization                                                                                  | Wallet contract                                                                                               |
-|------------|-----------------|-----------------|------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
-| TON Wallet | Not implemented | Not implemented | Not implemented                                                                                | [wallet v3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)               |
-| Tonkeeper  | Supported       | Supported       | [ton-connect](https://github.com/tonkeeper/ton-connect)                                        | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
-| Tonhub     | Supported       | Supported*      | [tonhub connector](https://developers.tonhub.com/docs/apps)                                    | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
-| OpenMask   | Supported       | Supported       | [OpenMask connecting](https://www.openmask.app/docs/getting-started#connecting-to-openmask)    | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
+| Wallet     | Jetton & NFT transfers        | Ton Connect 2.0                                                            | Authorization                                                                                  | Wallet contract                                                                                               |
+|------------|-----------------|----------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| TON Wallet | Not implemented | -                                                                          | Not implemented                                                                                | [wallet v3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)               |
+| Tonkeeper  | Supported       | Supported                                                                  | [ton-connect](https://github.com/tonkeeper/ton-connect)                                        | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
+| Tonhub     | Supported*        | [In progress](https://github.com/ton-society/ton-footsteps/issues/108 )    | [tonhub connector](https://developers.tonhub.com/docs/apps)                                    | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
+| OpenMask   | Supported       | Supported                                                                  | [OpenMask connecting](https://www.openmask.app/docs/getting-started#connecting-to-openmask)    | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
 
 
 
@@ -28,9 +28,11 @@ If you want to find a wallet to install, open [ton.org/wallets](https://ton.org/
 
 ### TON Wallet
 
-|                                                                                                                                                                                                                       |                                                                                                                                                            |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![TON wallet](/img/docs/TonWallet.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | TON Wallet was the first step in mass-adoption blockchain technology available to ordinary users. It demonstrates how a wallet must works on TON Blockchain. |
+TON Wallet was the first step in mass-adoption blockchain technology available to ordinary users. It demonstrates how a wallet must works on TON Blockchain.
+
+|                                            |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![TON wallet](/img/docs/wallet-apps/TonWallet.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | 
 
 
 #### Pros and Cons
@@ -39,6 +41,10 @@ If you want to find a wallet to install, open [ton.org/wallets](https://ton.org/
 - ✅ Updates are rare. There is huge potential for contributions to be made by newcomers because the current project is relatively simple.
 - ❌ Rare updates. This wallet does not have not all up-to-date features (TON DNS address, wallet-v4 contract not supported).
 - ❌ The current UI is outdated and is worse than alternative wallets.
+
+#### Ton wallet test environment
+
+To switch Ton classic wallet to test environment, you should to open in browser with testnet parameter:
  
 #### Links
 - [Github*](https://github.com/ton-blockchain/wallet-ios)
@@ -47,33 +53,45 @@ If you want to find a wallet to install, open [ton.org/wallets](https://ton.org/
 
 ### Tonkeeper
 
+[Tonkeeper](https://tonkeeper.com/) - is the most downloaded wallet, developed by the Tonkeeper team and has active support from both users and developers.
 
-|                                                                                                                                                                                                                      |                                                                                                                                                            |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![Tonkeeper](/img/docs/Tonkeeper.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | [Tonkeeper](https://tonkeeper.com/) - is the most downloaded wallet, developed by the Tonkeeper team and has active support from both users and developers.   |
+|                                               |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![Tonkeeper](/img/docs/wallet-apps/Tonkeeper.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | 
+
 
 #### Pros and Cons
-- ✅ Most popular mobile wallet with over 100k downloads from various stores. This app is most popular with users.
+- ✅ This app is most popular with users.
 - ✅ Supports all up-to-date features including native NFT transfer between user wallets.
 - ❌ Tonkeeper is only supported by mobile iOS and Android platforms. Tonkeeper's team plans to only support mobile platforms.
 - ❌ To contribute requires advanced skills. A lot of the job already done and it will be hard for newcomers to add something significant.
 
 #### Tonkeeper test environment
-To switch Tonkeeper application between Mainnet and Testnet: move to settings, at the bottom of the settings screen tap several times on the Tonkeeper icon and switch net in the dev menu.
 
-![TestMode](/img/tutorials/tonkeeper/test-mode.webp)
+
+To switch Tonkeeper application between Mainnet and Testnet: open settings, at the bottom of the settings screen tap 5 times on the Tonkeeper icon and switch net in the dev menu.
+
+|                                                      |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![TestMode](/img/docs/wallet-apps/Tonkeeper-testnet.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | 
+
+
 
 #### Links 
 - [Github](https://github.com/tonkeeper/wallet)
+- [Tonkeeper wallet-api](https://github.com/tonkeeper/wallet-api)
 
 
 
 
 ### Tonhub
 
-|                                                                                                                                                                                                                |                                                                                                                                                                                   |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![Tonhub](/img/docs/Tonhub.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | [Tonhub](https://tonhub.com/) - is another fully-fledged TON wallet, that has basic up-to-date features support. Ton Whales are rapidly increasing the capabilities of the wallet.|
+[Tonhub](https://tonhub.com/) - is another fully-fledged TON wallet, that has basic up-to-date features support. Ton Whales are rapidly increasing the capabilities of the wallet.
+
+|                                    |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![Tonhub](/img/docs/wallet-apps/Tonhub.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | 
+
 
 #### Pros and Cons
 
@@ -93,9 +111,11 @@ For use in testnet necessary separate the application Sandbox.
 
 ### OpenMask
 
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![OpenMask](/img/docs/OpenMask.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+[OpenMask](https://www.openmask.app/) - is the trailblazing tool enabling user interactions and experience on Web3 as browser extension.
+
+|                                                                |
 |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [OpenMask](https://www.openmask.app/) - is the trailblazing tool enabling user interactions and experience on Web3 as browser extension.                                                                  |
+| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![OpenMask](/img/docs/wallet-apps/OpenMask.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
 
 #### Pros and Cons
 - ✅ Convenient for developers environment to learn and create dApps via desktop without mobile devices.
