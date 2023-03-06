@@ -213,6 +213,22 @@ is defined. `impure` is used because `RANDU256` changes the internal state of th
 
 #### Inline specifier
 If a function has `inline` specifier, its code is actually substituted in every place where the function is called. It goes without saying that recursive calls to inlined functions are not possible.
+
+For example, you can using `inline` like this way in this example: [ICO-Minter.fc](https://github.com/ton-blockchain/token-contract/blob/f2253cb0f0e1ae0974d7dc0cef3a62cb6e19f806/ft/jetton-minter-ICO.fc#L16)
+
+```func
+() save_data(int total_supply, slice admin_address, cell content, cell jetton_wallet_code) impure inline {
+  set_data(begin_cell()
+            .store_coins(total_supply)
+            .store_slice(admin_address)
+            .store_ref(content)
+            .store_ref(jetton_wallet_code)
+           .end_cell()
+          );
+}
+```
+
+
 #### Inline_ref specifier
 The code of a function with the `inline_ref` specifier is put into a separate cell, and every time when the function is called, a `CALLREF` command is executed by TVM. So it's similar to `inline`, but because a cell can be reused in several places without duplicating it, it is almost always more efficient in terms of code size to use `inline_ref` specifier instead of `inline` unless the function is called exactly once. Recursive calls of `inline_ref`'ed functions are still impossible because there are no cyclic references in the TVM cells.
 #### method_id
