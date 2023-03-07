@@ -69,7 +69,7 @@ To switch Ton classic wallet to test environment, you should to open in browser 
 #### Pros and Cons
 - ✅ This app is most popular with users.
 - ✅ Supports all up-to-date features including native NFT transfer between user wallets.
-- ❌ Tonkeeper is only supported by mobile iOS and Android platforms. Tonkeeper's team plans to only support mobile platforms.
+- ❌ Tonkeeper is only supported by mobile iOS and Android platforms. 
 - ❌ To contribute requires advanced skills. A lot of the job already done and it will be hard for newcomers to add something significant.
 
 #### Tonkeeper test environment
@@ -101,7 +101,6 @@ To switch Tonkeeper application between Mainnet and Testnet: open settings, at t
 
 #### Pros and Cons
 
- - ✅ Most features of the TON Blockchain are supported rapidly.
  - ✅ Has own custom [Ton Nominator](https://github.com/tonwhales/ton-nominators) contract supported with Tonhub UI.
  - ✅ Open-sourced wallet from the beginning of the existing application.
  - ✅ [Bug-bounty program](https://tonwhales.com/bounty).
