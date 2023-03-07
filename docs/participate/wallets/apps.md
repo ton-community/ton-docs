@@ -8,22 +8,28 @@ If you want to find a wallet to install, open [ton.org/wallets](https://ton.org/
 
 ## Non-custodial wallets
 
+:::info
+With a non-custodial wallet, you own the wallet and hold its private key by yourself.
+:::
+
 * [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) — one of the first wallets in the TON ecosystem developed by TON Foundation.
 * [Tonkeeper](https://tonkeeper.com/) — is an alternative wallet, that is a favourite among users today. 
-* [Tonhub](https://tonhub.com/) — is another rapidly developing wallet with new advanced features (Extension, TON Whales Staking UI). 
-* [OpenMask](https://www.openmask.app/) — is the trailblazing tool enabling user interactions and experience on Web3 as browser extension.
+* [Tonhub](https://tonhub.com/) — is another rapidly developing wallet with advanced features (TON Whales Staking UI). 
+* [OpenMask](https://www.openmask.app/) — an open-source browser extension wallet with biometric authentication.
+* [MyTonWallet](https://mytonwallet.io/) — is the most full-featured web wallet and browser extension for TON.
+
 
 ### Basics features
-| Wallet     | Jetton & NFT transfers        | Ton Connect 2.0                                                            | Authorization                                                                                  | Wallet contract                                                                                               |
-|------------|-----------------|----------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
-| TON Wallet | Not implemented | -                                                                          | Not implemented                                                                                | [wallet v3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)               |
-| Tonkeeper  | Supported       | Supported                                                                  | [ton-connect](https://github.com/tonkeeper/ton-connect)                                        | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
-| Tonhub     | Supported*        | [In progress](https://github.com/ton-society/ton-footsteps/issues/108 )    | [tonhub connector](https://developers.tonhub.com/docs/apps)                                    | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
-| OpenMask   | Supported       | Supported                                                                  | [OpenMask connecting](https://www.openmask.app/docs/getting-started#connecting-to-openmask)    | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
+| Wallet     | Jetton & NFT transfers        | Ton Connect 2.0                                                         | Authorization                                               | Wallet contract                                                                                               |
+|------------|-----------------|-------------------------------------------------------------------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| TON Wallet | Not implemented | -                                                                       | -                                                           | [wallet v3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)               |
+| Tonkeeper  | Supported       | [Supported](https://github.com/ton-society/ton-footsteps/issues/161)    | [TON Connect 2.0](/develop/dapps/ton-connect)               | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
+| Tonhub     | Supported*        | [In progress](https://github.com/ton-society/ton-footsteps/issues/108 ) | [tonhub connector](https://developers.tonhub.com/docs/apps) | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
+| OpenMask   | Supported       | [Supported](https://github.com/ton-society/ton-footsteps/issues/107)    | [TON Connect 2.0](/develop/dapps/ton-connect)               | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
+| MyTonWallet| Supported | [Supported](https://github.com/ton-society/ton-footsteps/issues/149)    | [TON Connect 2.0](/develop/dapps/ton-connect)               | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f) |
 
 
-
-  > *Tonhub extension opens a built-in browser which allows for NFT market placements.
+  > *Tonhub extension opens a built-in browser which allows for NFT market placements. Jetton is full supported.
 
 
 ### TON Wallet
@@ -38,7 +44,7 @@ TON Wallet was the first step in mass-adoption blockchain technology available t
 #### Pros and Cons
 - ✅ The original wallet developed by TON Foundation. TON Wallet works according to the vision of TON Blockchain's core developers.
 - ✅ Multi-platform architecture support. It works in Linux, Windows, MacOS, iOS, Android and as well as a Chrome plugin.
-- ✅ Updates are rare. There is huge potential for contributions to be made by newcomers because the current project is relatively simple.
+- ✅ [Bug bounty program](https://github.com/ton-blockchain/bug-bounty)
 - ❌ Rare updates. This wallet does not have not all up-to-date features (TON DNS address, wallet-v4 contract not supported).
 - ❌ The current UI is outdated and is worse than alternative wallets.
 
@@ -79,7 +85,7 @@ To switch Tonkeeper application between Mainnet and Testnet: open settings, at t
 
 #### Links 
 - [Github](https://github.com/tonkeeper/wallet)
-- [Tonkeeper wallet-api](https://github.com/tonkeeper/wallet-api)
+- [Tonkeeper Wallet API](https://github.com/tonkeeper/wallet-api)
 
 
 
@@ -95,9 +101,11 @@ To switch Tonkeeper application between Mainnet and Testnet: open settings, at t
 
 #### Pros and Cons
 
- - ✅ Advanced extension feature that accommodates open 3rd party services from the built-in Tonhub browser.
- - ✅ Supports MacOS.
- - ❌ Have no support for desktop platforms.
+ - ✅ Most features of the TON Blockchain are supported rapidly.
+ - ✅ Has own custom [Ton Nominator](https://github.com/tonwhales/ton-nominators) contract supported with Tonhub UI.
+ - ✅ Open-sourced wallet from the beginning of the existing application.
+ - ✅ [Bug-bounty program](https://tonwhales.com/bounty).
+ - ❌ Have no support for all desktop platforms.
  - ❌ To contribute requires advanced skills.
 
 #### Tonhub test environment
@@ -131,8 +139,74 @@ To switch OpenMask between Mainnet and Testnet: you need to click on "mainnet/te
  - [GitHub](https://github.com/OpenProduct/openmask-extension)
  - [Documentation](https://www.openmask.app/docs/introduction)
 
+### MyTonWallet
+
+
+[MyTonWallet](https://mytonwallet.io/) - is the most feature-rich web wallet and browser extension for TON – with support of tokens, NFT, TON DNS, TON Sites, TON Proxy, and TON Magic.
+
+
+|                                                                                                                                                                                                                                   |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![MyTonWallet](/img/docs/wallet-apps/MyTonWallet.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+
+
+
+
+#### Pros and Cons
+- ✅ Implemented all basic functions.
+- ✅ Unique feature - management of the official [Nominator Pool contract](https://github.com/ton-blockchain/nominator-pool) from wallet UI.
+- ❌ Supports only web browser and Chrome extension platform.
+
+#### MyTonWallet test environment
+To switch the MyTonWallet to Testnet: open Settings and by clicking 5 times on the app version open the network switcher.
+
+#### Links
+
+- [GitHub](https://github.com/mytonwalletorg/mytonwallet)
+- [MyTonWallet Telegram](https://t.me/MyTonWalletRu)
+
 
 ## Custodial wallets
 
-* @wallet — bot application to send and receive TON inside Telegram.
-* @cryptobot — telegram bot 
+:::info
+With a custodial wallet, you trust somebody else to hold the wallet's private key.
+:::
+
+### @wallet
+
+[@wallet](https://t.me/wallet) — bot application to send and receive or trade p2p TON inside Telegram. Supports Telegram Web App UI.
+
+
+|                                                                                                                                                                                                                            |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![wallet](/img/docs/wallet-apps/Wallet.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+
+
+### @cryptobot
+
+[@cryptobot](https://t.me/cryptobot) — A Telegram bot wallet for storing, transferring and exchanging TON. 
+
+
+|                                                                                                                                                                                                                                 |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![CryptoBot](/img/docs/wallet-apps/CryptoBot.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+
+
+#### Links for 3d-party integrations
+
+- [Crypto Pay API](https://help.crypt.bot/crypto-pay-api)
+
+### @tonRocketBot
+
+[@tonRocketBot](https://t.me/tonRocketBot) - A Telegram bot wallet for storing, transferring and exchanging TON. Supports Jetton trading as well.
+
+
+|                                                                |
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![tonRocketBot](/img/docs/wallet-apps/tonRocketBot.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+
+
+#### Links for 3d-party integrations
+
+- [Rocket exchange](https://trade.ton-rocket.com/api/)
+- [Rocket pay docs](https://pay.ton-rocket.com/api/)
