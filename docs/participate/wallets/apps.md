@@ -9,7 +9,7 @@ If you want to find a wallet to install, open [ton.org/wallets](https://ton.org/
 ## Non-custodial wallets
 
 :::info
-With a non-custodial wallet, you own the wallet and hold its private key by yourself.
+With a non-custodial wallet, the user owns the wallet and holds its private key by themself.
 :::
 
 * [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) — one of the first wallets in the TON ecosystem developed by TON Foundation.
@@ -168,7 +168,7 @@ To switch the MyTonWallet to Testnet: open Settings and by clicking 5 times on t
 ## Custodial wallets
 
 :::info
-With a custodial wallet, you trust somebody else to hold the wallet's private key.
+With a custodial wallet, user trusts somebody else to hold the wallet's private key.
 :::
 
 ### @wallet
