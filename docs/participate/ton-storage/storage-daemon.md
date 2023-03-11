@@ -13,25 +13,23 @@ You can download `storage-daemon` and `storage-daemon-cli` for Linux/Windows/Mac
 You can compile `storage-daemon` and `storage-damon-cli` from sources using this [instruction](/develop/howto/compile#storage-daemon).
 
 ## Key concepts
-* *Bag of files* or *Bag* - a collection of files distributed through TON Storage
-* TON Storage's network part is based on technology similar to torrents, so the terms *Torrent*, *Bag of files*, and *Bag* will be used interchangeably. It's important to note some differences, however: TON Storage transfers data over [ADNL](/learn/networking/adnl) by [RLDP](/learn/networking/rldp) protocol, each *Bag* is distributed through its own network overlay, the merkle structure can exist in two versions - with large chunks for efficient downloading and small ones for efficient ownership proof, and [TON DHT](/learn/networking/ton-dht) network is used for finding peers.
-* A *Bag of files* consists of *torrent info* and a data block.
-* The data block starts with a *torrent header* - a structure that contains a list of files with their names and sizes. The files themselves follow in the data block.
-* The data block is divided into chunks (128 KB by default), and a *merkle tree* (made of TVM cells) is built on the SHA256 hashes of these chunks. This allows building and verifying *merkle proofs* of individual chunks, as well as efficiently updating the *Bag* by exchanging only the proof of the modified chunk.
-* *Torrent info* contains the *merkle root* of the 
-    * Chunk size (data block)
-    * the list of chunks' sizes
-    * Hash *merkle tree*
-    * Description - any text specified by the creator of the torrent
-* *Torrent info* is serialized to a TVM cell. The hash of this cell is called *BagID*, and it uniquely identifies *Bag*.
-* *Bag meta* is a file containing *torrent info* and *torrent header*.* This is an analog `.torrent` files.
+* Bag of files or Bag refers to a collection of files distributed through TON Storage. 
+* TON Storage's network part is based on technology similar to torrents, so the terms **Torrent**, **Bag of files**, and **Bag** are often used interchangeably. However, it's important to note that there are some differences between them. For instance, TON Storage transfers data over [ADNL](/learn/networking/adnl) by [RLDP](/learn/networking/rldp), and each **Bag** is distributed through its own network overlay. The merkle structure can exist in two versions - one with large chunks for efficient downloading and the other with small ones for efficient ownership proof. Additionally, [TON DHT](/learn/networking/ton-dht)network is used for finding peers.
+
+* A **Bag of files** consists of a torrent info and a data block. 
+* The data block starts with a **torrent header**, which is a structure containing a list of files with their names and sizes. The files themselves follow in the data block. 
+* The data block is divided into chunks (128 KB by default), and **a merkle tree** (made of TVM cells) is built on the SHA256 hashes of these chunks. This allows building and verifying merkle proofs of individual chunks, as well as efficiently updating the Bag by exchanging only the proof of the modified chunk.
+
+* **Torrent info** contains the merkle root of the chunk size (data block), the list of chunks' sizes, hash merkle tree, and description - any text specified by the creator of the torrent. 
+* **Torrent info** is serialized to a TVM cell. The hash of this cell is called _BagID_, and it uniquely identifies Bag.
+
+Bag meta is a file that contains torrent info and torrent header. This is analogous to `.torrent` files used in other torrent systems.
 
 
 ## Starting the storage daemon and storage-daemon-cli
 
-### An example command for starting the storage-daemon:
 
-
+An example command for starting the storage-daemon:
 ```storage-daemon -v 3 -C global.config.json -I <ip>:3333 -p 5555 -D storage-db```
 
 * `-v` - verbosity level (INFO)
