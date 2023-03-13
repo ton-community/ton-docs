@@ -1,4 +1,4 @@
-# TL-B Structures
+# TL-B Types
 :::caution advanced level
 This information is **very low-level** and could be hard to understand for newcomers.
 So feel free to read about it later.
@@ -41,7 +41,7 @@ Now, to understand the result more clearly, let's retrieve the return value path
 left$0 {X:Type} {Y:Type} value:X = Either X Y;
 right$1 {X:Type} {Y:Type} value:Y = Either X Y;
 ```
-The Either structure type is used when one of two resulting types are possible. In this case, the type choice depends on the prefix bit shown. If the prefix bit is 0, the left type is serialized, while if the 1 prefix bit is used, the right one is serialized. 
+The Either type is used when one of two resulting types are possible. In this case, the type choice depends on the prefix bit shown. If the prefix bit is 0, the left type is serialized, while if the 1 prefix bit is used, the right one is serialized. 
 
 It is used, for example, when serializing messages, when the body is either part of the main cell or linked to another cell.
 
@@ -50,17 +50,17 @@ It is used, for example, when serializing messages, when the body is either part
 nothing$0 {X:Type} = Maybe X;
 just$1 {X:Type} value:X = Maybe X;
 ```
-The Maybe structure type is used in conjunction with optional values. In these instances, if the first bit is 0, the value itself is not serialized (and is actually skipped), while if the value is 1, it is serialized.
+The Maybe type is used in conjunction with optional values. In these instances, if the first bit is 0, the value itself is not serialized (and is actually skipped), while if the value is 1, it is serialized.
 
 ## Both
 ```tlb
 pair$_ {X:Type} {Y:Type} first:X second:Y = Both X Y;
 ```
-The Both structure type variation is used only in conjunction with normal pairs, whereby both types are serialized, one after the other, without conditions.
+The Both type variation is used only in conjunction with normal pairs, whereby both types are serialized, one after the other, without conditions.
 
 ## Hashmap
 
-The Hashmap complex structure type is used for storing dict from the FunC smart contract code(`dict`).
+The Hashmap complex type is used for storing dict from the FunC smart contract code(`dict`).
 
 The following TL-B structures are used to serialize a Hashmap with a fixed key length:
 
