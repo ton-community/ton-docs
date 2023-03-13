@@ -12,7 +12,7 @@ Here you can see links to the most important resources for you to get started wi
 - [Wallets](/participate/wallets/apps) — a list of popular wallets for TON.
 - [Explorers](/participate/explorers) — to track transactions in the blockchain.
 - [Testnet](/develop/smart-contracts/environment/testnet.md) — info about the testnet and how to use it.
-
+- [Unfreezer](https://ton-community.github.io/unfreezer/) - Unfreeze a TON contract that ran out of gas for rent.
 
 ## Examples
 
