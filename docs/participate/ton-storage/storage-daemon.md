@@ -6,7 +6,7 @@ The current version of the storage daemon can be found in the [testnet](https://
 
 ## Binaries 
 
-You can download `storage-daemon` and `storage-daemon-cli` for Linux/Windows/MacOS binaries from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Atestnet+is%3Asuccess) (`storage/` folder).
+You can download `storage-daemon` and `storage-daemon-cli` for Linux/Windows/MacOS binaries from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
 ## Compile from sources
 
