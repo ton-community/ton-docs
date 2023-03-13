@@ -201,6 +201,10 @@ Yes, this is possible. If smartcontract implements method ... it's code can be u
 It's possible to *deploy many contracts with different addresses with **same** private key*.
 :::
 
+### Are smart contract addresses case sensitive?
+
+Yes, smart contract addresses are case sensitive because they are generated using the [base64 algorithm](https://en.wikipedia.org/wiki/Base64).  You can learn more about smart contract addresses [here](/docs/learn/overviews/addresses).
+
 ## RPC
 
 ### Provide a list of recommended node providers for data extraction
