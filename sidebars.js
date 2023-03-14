@@ -151,7 +151,7 @@ const sidebars = {
     'develop/getting-started',
     {
       type: 'doc',
-      label: 'TON Onboarding Challenge',
+      label: 'Get Started with TON',
       id: 'develop/onboarding-challenge',
     },
     {
