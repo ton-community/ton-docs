@@ -135,7 +135,7 @@ function storageFeeCalculator() {
   const cell_price_ps = 500
 
   const pricePerSec = size * bit_price_ps +
-  + Math.round(bit_price_ps / 1023) * cell_price_ps
+  + Math.ceil(size / 1023) * cell_price_ps
 
   let fee = (pricePerSec * duration / 2**16 * 10**-9)
   let mb = (size / 1024 / 1024 / 8).toFixed(2)
@@ -167,7 +167,7 @@ Average fee for minting one NFT is 0.08 TON.
 
 ### Cost of saving data in TON?
 
-Saving 1 MB of data for one year on TON will cost you 4.03 TON. Note that you don't usually need to store big amounts of data on-chain. Consider [TON Storage](/participate/ton-storage/storage-daemon) if you need decentralized storage.
+Saving 1 MB of data for one year on TON will cost you 6.01 TON. Note that you don't usually need to store big amounts of data on-chain. Consider [TON Storage](/participate/ton-storage/storage-daemon) if you need decentralized storage.
 
 ### How to calculate fees in FunC?
 
