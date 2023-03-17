@@ -450,7 +450,7 @@ const sidebars = {
           items: [
             'develop/data-formats/cell-boc',
             'develop/data-formats/tl-b-language',
-            'develop/data-formats/tl-b',
+            'develop/data-formats/tl-b-types',
             'develop/data-formats/msg-tlb',
             'develop/data-formats/crc32',
             'develop/data-formats/tlb-ide'

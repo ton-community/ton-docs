@@ -10,32 +10,6 @@ In this section, complex and unconventional typed language binary (TL-B) structu
 <img alt="tlb structure" src="/docs/img/docs/tlb.drawio.svg" width={'100%'}/>
 
 
-## Unary
-The Unary functional type is commonly used for dynamic sizing in structures such as [hml_short](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb#L29).
-
-Unary presents two main options:
-
-```tlb
-unary_zero$0 = Unary ~0;
-unary_succ$1 {n:#} x:(Unary ~n) = Unary ~(n + 1);
-```
-
-Generally, using the `unary_zero` variation is quite simple: if the first bit is 0, then the result of whole Unary deserialization is 0.
-
-That said, the `unary_succ` variation is more complex because it is loaded recursively and possesses a value of `~(n + 1)`. This means it sequentially calls itself until it reaches `unary_zero`. In other words, the desired value will be equal to the number of units in a row.
-
-For instance, let's analyze parsing the bitstring `1110`.
-
-The call chain will be as follows:
-```tlb
-unary_succ$1 -> unary_succ$1 -> unary_succ$1 -> unary_zero$0
-```
-
-Once we reach `unary_zero`, the value is returned to the end of a serialized bitstring similarly to a recursive function call. 
-Now, to understand the result more clearly, let's retrieve the return value path, which is displayed as follows:
-
-```0 -> ~(0 + 1) -> ~(1 + 1) -> ~(2 + 1) -> 3```
-
 ## Either
 ```tlb
 left$0 {X:Type} {Y:Type} value:X = Either X Y;
@@ -57,6 +31,51 @@ The Maybe type is used in conjunction with optional values. In these instances, 
 pair$_ {X:Type} {Y:Type} first:X second:Y = Both X Y;
 ```
 The Both type variation is used only in conjunction with normal pairs, whereby both types are serialized, one after the other, without conditions.
+
+## Unary
+The Unary functional type is commonly used for dynamic sizing in structures such as [hml_short](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb#L29).
+
+Unary presents two main options:
+
+```tlb
+unary_zero$0 = Unary ~0;
+unary_succ$1 {n:#} x:(Unary ~n) = Unary ~(n + 1);
+```
+### Unary serialization
+
+Generally, using the `unary_zero` variation is quite simple: if the first bit is 0, then the result of whole Unary deserialization is 0.
+
+That said, the `unary_succ` variation is more complex because it is loaded recursively and possesses a value of `~(n + 1)`. This means it sequentially calls itself until it reaches `unary_zero`. In other words, the desired value will be equal to the number of units in a row.
+
+For instance, let's analyze serialization of the bitstring `110`.
+
+The call chain will be as follows:
+```tlb
+unary_succ$1 -> unary_succ$1 -> unary_zero$0
+```
+
+Once we reach `unary_zero`, the value is returned to the end of a serialized bitstring similarly to a recursive function call.
+
+Now, to understand the result more clearly, let's retrieve the return value path, which is displayed as follows:
+
+```0 -> ~(0 + 1) -> ~(1 + 1) -> 2```, that means we serialized `110` in `Unary 2`.
+
+### Unary deserialization
+
+Suppose we have `Foo` type:
+```tlb
+foo$_  u:(Unary 2) = Foo;
+```
+
+According said above, `Foo` will be deserialized into:
+
+![TL-B example](/img/docs/data-formats/tl-b-docs-10.png?raw=true)
+
+```tlb
+foo u:(unary_succ x:(unary_succ x:(unnary_zero)))
+```
+
+
 
 ## Hashmap
 
