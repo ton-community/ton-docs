@@ -1,7 +1,13 @@
 # Compile from Sources
 
+You can download prebuilt binaries [here](/develop/smart-contracts/environment/installation#1-download).
+
+If you still want to compile sources yourself, follow the instructions below.
+
 :::caution
-This section describes instructions and manuals for interacting with TON at a low level.
+This is a simplified quick build guide. 
+
+If you are building for production and not for home use, it's better to use [autobuild scripts](https://github.com/ton-blockchain/ton/tree/master/.github/workflows).
 :::
 
 ## Common
@@ -19,13 +25,13 @@ git clone --recurse-submodules https://github.com/ton-blockchain/ton.git
    - `cmake` version 3.0.2 or later
    - `g++` or `clang` (or another C++14-compatible compiler as appropriate for your operating system).
    - OpenSSL (including C header files) version 1.1.1 or later
-   - `build-essential`, `zlib1g-dev`, `gperf`, `libreadline-dev`, `ccache`, `libmicrohttpd-dev`
+   - `build-essential`, `zlib1g-dev`, `gperf`, `libreadline-dev`, `ccache`, `libmicrohttpd-dev`, `pkg-config`
 
    On Ubuntu:
 
 ```bash
 apt update
-sudo apt install build-essential cmake clang openssl libssl-dev zlib1g-dev gperf libreadline-dev ccache libmicrohttpd-dev
+sudo apt install build-essential cmake clang openssl libssl-dev zlib1g-dev gperf libreadline-dev ccache libmicrohttpd-dev pkg-config
 ```
 
 
