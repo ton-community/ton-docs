@@ -48,7 +48,7 @@ cmake -DCMAKE_BUILD_TYPE=Release ../ton && cmake --build . -j$(nproc)
 On MacOS Intel before next step we need maybe install `openssl@3` with `brew` or just link the lib:
 
 ```zsh
-brew install openssl@3
+brew install openssl ninja libmicrohttpd pkg-config
 ```
 
 Then need to inspect `/usr/local/opt`:
