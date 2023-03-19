@@ -185,10 +185,6 @@ utils/generate-random-id
 
 To build storage-daemon and storage-daemon-cli, do [common part](/develop/howto/compile#common) and then do:
 
-:::tip
-Currently storage-daemon located at `testnet` branch, so you need type `git checkout testnet` after cloning the repo.
-:::
-
 ```bash
 cmake --build . --target storage-daemon storage-daemon-cli
 ```
