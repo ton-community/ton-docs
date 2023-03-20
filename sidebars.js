@@ -193,13 +193,13 @@ const sidebars = {
       label: 'Develop Smart Contracts',
       items: [
         'develop/smart-contracts/README',
-        {
-          type: 'category',
-          label: 'Learn',
-          items: [
-            'develop/smart-contracts/learn/deployment',
-          ],
-        },
+//        {
+//          type: 'category',
+//          label: 'Learn',
+//          items: [
+//            'develop/smart-contracts/learn/deployment',
+//          ],
+//        },
         {
           type: 'category',
           label: 'Environment',
