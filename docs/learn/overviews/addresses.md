@@ -80,47 +80,48 @@ Using the Raw Address form presents two main issues:
 
 1. When using the raw address format, it's not possible to verify addresses to eliminate errors prior to sending a transaction.
    This means that if you accidentally add or remove characters in the address string prior to sending the transaction, your transaction will be sent to the wrong destination, resulting in loss of funds.
-2. It's not possible to add any special flags as you can in user-friendly version.  
-_We will cover which flags you can use below._
+2. When using the raw address format, it's impossible to add special flags like those used when sending transactions that employ user-friendly addresses.
+   To help you better understand this concept, we’ll explain which flags can be used below.
 
-### User-friendly address
+### User-Friendly Address
 
-User-friendly address was created to secure and simplify experience for the end users of TON who will share address on the web, inside the Telegram and in real life.
+User-friendly addresses were developed to secure and simplify the experience for TON users who share addresses on the internet (for example, on public messaging platforms and via their email service providers) and in the real world.
 
-#### How to obtain user-friendly address?
+#### User-Friendly Address Structure
 
-"User-friendly" address is obtained by generating:
+User-friendly addresses are made up of 36 bytes in total and are obtained by generating the following components in order:
 
-1. _[1 byte for flag]_ — Flag changes the way smart-contract reacts to the message.  
-Flags of the user-friendly address:
-   - isBounceable. (_0x11_ for "bounceable", _0x51_ for "non-bounceable")
-   - isTestnetOnly. Add _0x80_ if the address should not be accepted by software running in the production network.
-   - isUrlSafe. Deprecated flag, as all addresses are url safe now.
-2. _\[1 byte for workchain_id]_ — A signed 8-bit integer with the _workchain_id_.  
+1. _[flags - 1 byte]_ — Flags that are pinned to addresses change the way smart contracts react to the received message.
+   Flags types that employ the user-friendly address format include:
+
+   - isBounceable. Denotes a bounceable or non-bounceable address type. (_0x11_ for "bounceable", _0x51_ for "non-bounceable")
+   - isTestnetOnly. Denotes an address type used for testnet purposes only. Addresses beginning with _0x80_ should not be accepted by software running on the production network
+   - isUrlSafe. Denotes a deprecated flag that is defined as url safe for an address. All addresses are then considered url safe.
+2. _\[workchain_id - 1 byte]_ — The workchain ID (_workchain_id_) is defined by a signed 8-bit integer _workchain_id_.  
 (_0x00_ for the BaseChain, _0xff_ for the MasterChain)
-3. _\[32 bytes account_id]_ — 256 bits address inside the workchain. ([big-endian](https://www.freecodecamp.org/news/what-is-endianness-big-endian-vs-little-endian/))
-4. _\[2 bytes for verification]_ — CRC16-CCITT signature of the previous 34 bytes. ([example](https://github.com/andreypfau/ton-kotlin/blob/ce9595ec9e2ad0eb311351c8a270ef1bd2f4363e/ton-kotlin-crypto/common/src/crc32.kt))
-In fact, the idea of verification is pretty similar to the [Luhn algorithm](https://en.wikipedia.org/wiki/Luhn_algorithm) used in every bank card in the world to prevent you from writing non-existing card number by mistake.
+3. _\[account_id - 32 byte]_ — The account ID is made up of a ([big-endian](https://www.freecodecamp.org/news/what-is-endianness-big-endian-vs-little-endian/)) 256-bit address inside the workchain.
+4. _\[address verification - 2 bytes]_ —  In user-friendly addresses, address verification is composed of a CRC16-CCITT signature from the previous 34 bytes. ([for example](https://github.com/andreypfau/ton-kotlin/blob/ce9595ec9e2ad0eb311351c8a270ef1bd2f4363e/ton-kotlin-crypto/common/src/crc32.kt))
+   In fact, the idea pertaining to verification for user-friendly addresses is quite similar to the [Luhn algorithm](https://en.wikipedia.org/wiki/Luhn_algorithm) used in all bank cards to prevent the user from writing non-existing card numbers by mistake.
 
-Finally, you will have `1 + 1 + 32 + 2 = 36` bytes totally!
+The addition of these 4 main components means that: `1 + 1 + 32 + 2 = 36` bytes in total (per user-friendly address).
 
-To get "user-friendly" address, you need to encode the obtained 36 bytes using either:
+To generate a user-friendly address, the developer must encode all 36 bytes using either:
 - _base64_ (i.e., with digits, upper and lowercase Latin letters, '/' and '+')
 - _base64url_ (with '_' and '-' instead of '/' and '+')
 
-After that you receive a "user-friendly" address with a length of 48 non-space characters.
+After this process is complete, the generation of a user-friendly address with a length of 48 non-spaced characters is finalized.
 
-:::info FLAG in DNS address
-In TON it's possible to use DNS address like `mywallet.ton` instead of raw and user-friendly form. In fact, DNS address covers the user-friendly address with all the flags inside. So you can get all the flags from the DNS record of the TON domain.
+:::info DNS ADDRESS FLAGS
+On TON, DNS addresses such as mywallet.ton are sometimes used instead of raw and user-friendly addresses. In fact, DNS addresses are made up of user-friendly addresses and include all required flags that allow developers to access all flags from the DNS record within the TON domain.
 :::
 
-#### Example of user-friendly address
+#### User-Friendly Address Encoding Examples
 
-For example, the "test giver" (a special smart contract residing in the masterchain of the Testnet that gives up to 20 test coins to anybody who asks) has raw address:
+For example, a "test giver" smart contract (a special smart contract residing in the testnet masterchain that sends 2 test tokens to anyone who requests them) makes use of the following raw address:
 
 `-1:fcb91a3a3816d0f7b8c2c76108b8a9bc5a6b7a55bd79f8ab101c52db29232260`
 
-Let's convert "test giver" raw address to the user-friendly form:
+The above "test giver" raw address must be converted into the user-friendly address form. This is obtained using either the base64 or base64url forms (that we introduced previously) as follows:
 
 * `kf/8uRo6OBbQ97jCx2EIuKm8Wmt6Vb15+KsQHFLbKSMiYIny` (base64)
 * `kf_8uRo6OBbQ97jCx2EIuKm8Wmt6Vb15-KsQHFLbKSMiYIny` (base64url)
@@ -129,41 +130,46 @@ Let's convert "test giver" raw address to the user-friendly form:
 Notice that both forms (_base64_ and _base64url_) are valid and must be accepted!
 :::
 
-#### Bounceable vs non-bounceable addresses
+#### Bounceable vs Non-Bounceable Addresses
 
-The core idea behind the "bounceable" flag is security for sender.
+The core idea behind the bounceable address flag is sender security.
 
-For example, if the destination smart contract does not exist, or if it throws an unhandled exception while processing this message, the message will be "bounced" back carrying the remainder of the original value (minus all message transfer and gas fees).
+For example, if the destination smart contract does not exist, or if retrieval issues become apparent while processing the transaction, the message will be "bounced" back to the sender and constitute the remainder of the original value of the transaction (minus all transfer and gas fees). This ensures the sender doesn't lose their funds that were sent to an address that cannot accept the transaction.
 
-In fact, **bounceable=false** means that receiver is a wallet and **bounceable=true** is a custom smart contract with own logic (for example, DEX) and you shouldn't send him any non-bounceable messages because of the security reasons.
+In relation to bounceable addresses specifically:
 
-Read more in [Non-bounceable messages](/develop/smart-contracts/guidelines/non-bouncable-messages) article.
+1. The **bounceable=false** flag generally means the receiver is a wallet.
+2. The **bounceable=true** flag typically denotes a custom smart contract with its own application logic (for example, a DEX). In this example, non-bounceable messages should not be sent because of security reasons.
 
-#### Did you know?
+Feel free to read more on this topic in our documentation to gain a better understanding of [non-bounceable messages](/develop/smart-contracts/guidelines/non-bouncable-messages).
 
-Incidentally, other binary data related to the TON Blockchain has similar "armored" base64 representations, differing by their first bytes. For example, the ubiquitous 256-bit Ed25519 public keys are represented by first creating a 36-byte sequence as follows:
-- one tag byte _0x3E_, meaning that this is a public key
-- one tag byte _0xE6_, meaning that this is a Ed25519 public key
+#### Armored base64 Representations
+
+Additional binary data related to the TON blockchain employs similar “armored” base64 user-friendly address representations. These differentiate from one another depending on the first 4 characters of their byte tag. For example, 256-bit Ed25519 public keys are represented by first creating a 36-byte sequence using the below process in order:
+
+- A single byte tag using the _0x3E_ format denotes a public key
+- A single byte tag using the _0xE6_ format denotes a Ed25519 public key
 - 32 bytes containing the standard binary representation of the Ed25519 public key
 - 2 bytes containing the big-endian representation of CRC16-CCITT of the previous 34 bytes
 
-The resulting 36-byte sequence is converted into a 48-character base64 or base64url string in the standard fashion. For example, the Ed25519 public key `E39ECDA0A7B0C60A7107EC43967829DBE8BC356A49B9DFC6186B3EAC74B5477D` (usually represented by a sequence of 32 bytes `0xE3, 0x9E, ..., 0x7D`) has the following "armored" representation:
+
+The resulting 36-byte sequence is converted into a 48-character base64 or base64url string in the standard fashion. For example, the Ed25519 public key `E39ECDA0A7B0C60A7107EC43967829DBE8BC356A49B9DFC6186B3EAC74B5477D` (usually represented by a sequence of 32 bytes such as:  `0xE3, 0x9E, ..., 0x7D`) presents itself through the "armored" representation as follows:
 
 `Pubjns2gp7DGCnEH7EOWeCnb6Lw1akm538YYaz6sdLVHfRB2`
 
 
-### Convert User-friendly/raw address
+### Converting User-Friendly Addresses and Raw Addresses
 
-The most simple way to convert address by hand is a bunch of official tools and APIs:
+The simplest way to convert user-friendly and raw addresses is realized through the use of several TON APIs and other tools, including:
 
 * [ton.org/address](https://ton.org/address)
 * [toncenter API methods in mainnet](https://toncenter.com/api/v2/#/accounts/pack_address_packAddress_get)
 * [toncenter API methods in testnet](https://testnet.toncenter.com/api/v2/#/accounts/pack_address_packAddress_get)
 
-Also, there are 2 ways to work with wallets using JavaScript:
+Additionally, there are two ways to convert user-friendly and raw addresses for wallets using JavaScript:
 
 * [Convert address from/to user-friendly or raw form using ton.js](https://github.com/ton-community/ton/blob/master/src/address/Address.spec.ts)
 * [Convert address from/to user-friendly or raw form using tonweb](https://github.com/toncenter/tonweb/tree/master/src/utils#address-class)
 
-It's possible to find the same methods in [SDK](/develop/dapps/#most-popular-sdk) for other languages too.
+It's also possible to make use of similar mechanisms using [SDKs](/develop/dapps/#most-popular-sdk).
 
