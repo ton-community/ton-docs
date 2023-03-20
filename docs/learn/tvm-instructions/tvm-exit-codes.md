@@ -16,8 +16,7 @@ allowed by this version of TVM.
 * `9` - Cell underflow. Read from slice primitive tried to read more bits or references than there are.
 * `10` - Dictionary error. Error during manipulation with dictionary (hashmaps).
 * `11` - Most oftenly caused by trying to call get-method whose id wasn't found in the code (missing `method_id` modifier or wrong get-method name specified when trying to call it). In [TVM docs](https://ton.org/tvm.pdf) its described as "Unknown error, may be thrown by user programs".
-* `12` - Thrown by TVM in situations deemed impos-
-sible.
+* `12` - Thrown by TVM in situations deemed impossible.
 * `13` - Out of gas error. Thrown by TVM when the remaining gas becomes negative.
 * `32` - Action list is invalid. Set during action phase if c5 register after execution contains unparsable object.
 * `32` (the same as prev) - Method ID not found. Returned by TonLib during an attempt to execute non-existent get method.
