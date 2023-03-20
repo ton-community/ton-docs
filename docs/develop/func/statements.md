@@ -2,7 +2,7 @@
 This section briefly discusses FunC statements, constituting the code of ordinary function bodies.
 
 ## Expression statements
-The most common type of a statement is the expression statement. It's an expression followed by `;`. Expression's description would be quite complicated, so only a sketch is presented here. As a rule all sub-expressions are computed left to right with one exception of [asm stack rearrangement](develop/func/functions#rearranging-stack-entries) which may define order manually.
+The most common type of a statement is the expression statement. It's an expression followed by `;`. Expression's description would be quite complicated, so only a sketch is presented here. As a rule all sub-expressions are computed left to right with one exception of [asm stack rearrangement](functions#rearranging-stack-entries) which may define order manually.
 
 ### Variable declaration
 It is not possible to declare a local variable without defining its initial value.
@@ -151,7 +151,7 @@ The first call will modify x; the second and third won't.
 In summary, when a function with the name `foo` is called as a non-modifying or modifying method (i.e. with `.foo` or `~foo` syntax), the FunC compiler uses the definition of `.foo` or `~foo` correspondingly if such a definition is presented, and if not, it uses the definition of `foo`.
 
 ### Operators
-Note that currently all of the unary and binary operators are integer operators. Logical operators are represented as bitwise integer operators  (cf. [absene of boolean type](/develop/func/types#absence-of-boolean-type)).
+Note that currently all of the unary and binary operators are integer operators. Logical operators are represented as bitwise integer operators  (cf. [absence of boolean type](/develop/func/types#absence-of-boolean-type)).
 #### Unary operators
 There are two unary operators:
 - `~` is bitwise not (priority 75)
@@ -249,7 +249,7 @@ while (x < 100) {
 }
 ;; x = 256
 ```
-Note that the truth value of condition `x < 100` is of type `int` (cf. [absene of boolean type](/develop/func/types#absence-of-boolean-type)).
+Note that the truth value of condition `x < 100` is of type `int` (cf. [absence of boolean type](/develop/func/types#absence-of-boolean-type)).
 
 ### Until loop
 Has the following syntax:
@@ -298,8 +298,11 @@ if (flag1)
 ```
 
 ## Try-Catch statements
-*Experimental, only available in func v0.4.0*
-Executes the code in `try` block. If it fails, completely rolls back everything that was done in `try` block and executes `catch` block; `catch` receives two arguments: the exception parameter of any type (`x`) and the error code (`n`, integer). Unlike many other languages in FunC's version of `try-catch`, all changes made in `try` block (including changes to global variables, registers and sent messages) are discarded in case of an error in `try` block.
+*Available in func since v0.4.0*
+
+Executes the code in `try` block. If it fails, completely rolls back changes made in `try` block and executes `catch` block instead; `catch` receives two arguments: the exception parameter of any type (`x`) and the error code (`n`, integer).
+
+Unlike many other languages in the FunC try-catch statement, the changes made in the try block, in particular the modification of local and global variables, all registers' changes (i.e. `c4` storage register, `c5` action/message register, `c7` context register and others) **are discarded** if there is an error in the try block and consequently all contract storage updates and message sending will be reverted. It is important to note that some TVM state parameters such as _codepage_ and gas counters will not be rolled back. This means, in particular, that all gas spent in the try block will be taken into account, and the effects of OPs that change the gas limit (`accept_message` and `set_gas_limit`) will be preserved.
 
 Note that exception parameter can be of any type (possibly different in case of different exceptions) and thus funC can not predict it on compile time. That means that developer need to "help" compiler by casting exception parameter to some type (see Example 2 below):
 

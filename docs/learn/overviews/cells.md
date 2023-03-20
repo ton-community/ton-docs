@@ -45,6 +45,6 @@ TL-B for cells is the same as TL or ProtoBuf for byte-streams.
 
 If you want to know more details about cell (de)serialization, you could read [Cell & Bag of Cells](/docs/develop/data-formats/cell-boc) article.
 
-:::tip TL-B
-Navigate to the [TL-B](/learn/overviews/TL-B) section for more information.
-:::
+## What's next?
+
+* Navigate to the [TL-B](/learn/overviews/TL-B) section for more information.

@@ -40,9 +40,29 @@ FunC (actually Fift assembler) has several reserved function names with predefin
 - `run_ticktock` has id = -2
 
 Every program must have a function with id 0, that is, `main` or `recv_internal` function.
+`run_ticktock` is called in ticktock transactions of special smart contracts.
 
-`recv_internal` is called when a smart contract receives an inbound internal message; `recv_external` is for inbound external messages; `run_ticktock` is called in ticktock transactions of special smart contracts.
+#### Receive internal
 
+`recv_internal` is called when a smart contract receives an inbound internal message.
+There are some variables at the stack when [TVM initiates](https://ton.org/docs/learn/tvm-instructions/tvm-overview#initialization-of-tvm), by setting arguments in `recv_internal` we give smart-contract code awareness about some of them. Those arguments about which code will not know, will just lie at the bottom of the stack never touched. 
+
+So each of the following `recv_internal` declarations is correct, but those with less variables will spend slightly less gas (each unused argument adds additional `DROP` instructions)
+
+```func
+
+() recv_internal(int balance, int msg_value, cell in_msg_cell, slice in_msg) {}
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) {}
+() recv_internal(cell in_msg_cell, slice in_msg) {}
+() recv_internal(slice in_msg) {}
+```
+
+
+
+
+#### Receive external
+
+`recv_external` is for inbound external messages.
 
 ### Return type
 Return type can be any atomic or composite type as described in the [types](/develop/func/types.md) section. For example,
@@ -84,6 +104,101 @@ Function arguments are separated by commas. The valid declarations of an argumen
 
 Note that although a function may look like a function of several arguments, it's actually a function of one [tensor-type](/develop/func/types#tensor-types) argument. To see the difference, please refer to [function application](/develop/func/statements#function-application). Nevertheless, the components of the argument tensor are conventionally called function arguments.
 
+### Function calls
+
+#### Non-modifying methods
+
+:::info
+Non-modifying function supports short function call form with `.`
+:::
+
+```func
+example(a);
+a.example();
+```
+
+If a function has at least one argument, it can be called as a non-modifying method. For example, `store_uint` has type `(builder, int, int) -> builder` (the second argument is the value to store, and the third is the bit length). `begin_cell` is a function that creates a new builder. The following codes are equivalent:
+```func
+builder b = begin_cell();
+b = store_uint(b, 239, 8);
+```
+```func
+builder b = begin_cell();
+b = b.store_uint(239, 8);
+```
+So the first argument of a function can be passed to it being located before the function name, if separated by `.`. The code can be further simplified:
+```func
+builder b = begin_cell().store_uint(239, 8);
+```
+Multiple calls of methods are also possible:
+```func
+builder b = begin_cell().store_uint(239, 8)
+                        .store_int(-1, 16)
+                        .store_uint(0xff, 10);
+```
+
+
+#### Modifying functions
+:::info
+Modifying function supports short form with `~` and `.` operators.
+:::
+
+If the first argument of a function has type `A` and the return value of the function has the shape of `(A, B)` where `B` is some arbitrary type, then the function can be called as a modifying method.
+
+Modifying function calls may take some arguments and return some values, but they modify their first argument, that is, assign the first component of the returned value to the variable from the first argument. 
+```func
+a~example();
+a = example(a);
+```
+
+
+For example, suppose `cs` is a cell slice and `load_uint` has type `(slice, int) -> (slice, int)`: it takes a cell slice and number of bits to load and returns the remainder of the slice and the loaded value. The following codes are equivalent:
+```func
+(cs, int x) = load_uint(cs, 8);
+```
+```func
+(cs, int x) = cs.load_uint(8);
+```
+```func
+int x = cs~load_uint(8);
+```
+In some cases we want to use a function as a modifying method that doesn't return any value and only modifies the first argument. It can be done using unit types as follows: Suppose we want to define function `inc` of type `int -> int`, which increments an integer, and use it as a modifying method. Then we should define `inc` as a function of type `int -> (int, ())`:
+```func
+(int, ()) inc(int x) {
+  return (x + 1, ());
+}
+```
+When defined like that, it can be used as a modifying method. The following will increment `x`.
+```func
+x~inc();
+```
+
+#### `.` and `~` in function names
+Suppose we want to use `inc` as a non-modifying method too. We can write something like that:
+```func
+(int y, _) = inc(x);
+```
+But it is possible to override the definition of `inc` as a modifying method.
+```func
+int inc(int x) {
+  return x + 1;
+}
+(int, ()) ~inc(int x) {
+  return (x + 1, ());
+}
+```
+And then call it like that:
+```func
+x~inc();
+int y = inc(x);
+int z = x.inc();
+```
+The first call will modify x; the second and third won't.
+
+In summary, when a function with the name `foo` is called as a non-modifying or modifying method (i.e. with `.foo` or `~foo` syntax), the FunC compiler uses the definition of `.foo` or `~foo` correspondingly if such a definition is presented, and if not, it uses the definition of `foo`.
+
+
+
 ### Specifiers
 There are three types of specifiers: `impure`, `inline`/`inline_ref`, and `method_id`. One, several, or none of them can be put in a function declaration but currently they must be presented in the right order. For example, it is not allowed to put `impure` after `inline`.
 #### Impure specifier
@@ -99,6 +214,22 @@ is defined. `impure` is used because `RANDU256` changes the internal state of th
 
 #### Inline specifier
 If a function has `inline` specifier, its code is actually substituted in every place where the function is called. It goes without saying that recursive calls to inlined functions are not possible.
+
+For example, you can using `inline` like this way in this example: [ICO-Minter.fc](https://github.com/ton-blockchain/token-contract/blob/f2253cb0f0e1ae0974d7dc0cef3a62cb6e19f806/ft/jetton-minter-ICO.fc#L16)
+
+```func
+() save_data(int total_supply, slice admin_address, cell content, cell jetton_wallet_code) impure inline {
+  set_data(begin_cell()
+            .store_coins(total_supply)
+            .store_slice(admin_address)
+            .store_ref(content)
+            .store_ref(jetton_wallet_code)
+           .end_cell()
+          );
+}
+```
+
+
 #### Inline_ref specifier
 The code of a function with the `inline_ref` specifier is put into a separate cell, and every time when the function is called, a `CALLREF` command is executed by TVM. So it's similar to `inline`, but because a cell can be reused in several places without duplicating it, it is almost always more efficient in terms of code size to use `inline_ref` specifier instead of `inline` unless the function is called exactly once. Recursive calls of `inline_ref`'ed functions are still impossible because there are no cyclic references in the TVM cells.
 #### method_id
@@ -135,6 +266,8 @@ In this example `X` and `Y` are [type variables](/develop/func/types#polymorphis
 
 Also, it is worth noticing that the type width of `X` and `Y` is supposed to be equal to 1; that is, the values of `X` or `Y` must occupy a single stack entry. So you actually can't call the function `pair_swap` on a tuple of type `[(int, int), int]`, because type `(int, int)` has width 2, i.e., it occupies 2 stack entries.
 
+
+
 ## Assembler function body definition
 As mentioned above, a function can be defined by the assembler code. The syntax is an `asm` keyword followed by one or several assembler commands, represented as strings.
 For example, one can define:
@@ -155,7 +288,7 @@ The list of assembler commands can be found here: [TVM instructions](/learn/tvm-
 In some cases, we want to pass arguments to the assembler function in a different order than the assembler command requires, or/and take the result in a different stack entry order than the command returns. We could manually rearrange the stack by adding corresponding stack primitives, but FunC can do it automatically.
 
 :::info
-Note, that in case of manual rearranging, arguments will be computed in the rearranged order. To overwrite this behavior use `#pragma compute-asm-ltr`: [compute-asm-ltr](develop/func/compiler_directives#pragma-compute-asm-ltr)
+Note, that in case of manual rearranging, arguments will be computed in the rearranged order. To overwrite this behavior use `#pragma compute-asm-ltr`: [compute-asm-ltr](compiler_directives#pragma-compute-asm-ltr)
 :::
 
 For example, suppose that the assembler command STUXQ takes an integer, builder, and integer; then it returns the builder, along with the integer flag, indicating the success or failure of the operation.

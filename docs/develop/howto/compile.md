@@ -1,7 +1,13 @@
 # Compile from Sources
 
+You can download prebuilt binaries [here](/develop/smart-contracts/environment/installation#1-download).
+
+If you still want to compile sources yourself, follow the instructions below.
+
 :::caution
-This section describes instructions and manuals for interacting with TON at a low level.
+This is a simplified quick build guide. 
+
+If you are building for production and not for home use, it's better to use [autobuild scripts](https://github.com/ton-blockchain/ton/tree/master/.github/workflows).
 :::
 
 ## Common
@@ -19,13 +25,13 @@ git clone --recurse-submodules https://github.com/ton-blockchain/ton.git
    - `cmake` version 3.0.2 or later
    - `g++` or `clang` (or another C++14-compatible compiler as appropriate for your operating system).
    - OpenSSL (including C header files) version 1.1.1 or later
-   - `build-essential`, `zlib1g-dev`, `gperf`, `libreadline-dev`, `ccache`, `libmicrohttpd-dev`
+   - `build-essential`, `zlib1g-dev`, `gperf`, `libreadline-dev`, `ccache`, `libmicrohttpd-dev`, `pkg-config`
 
    On Ubuntu:
 
 ```bash
 apt update
-sudo apt install build-essential cmake clang openssl libssl-dev zlib1g-dev gperf libreadline-dev ccache libmicrohttpd-dev
+sudo apt install build-essential cmake clang openssl libssl-dev zlib1g-dev gperf libreadline-dev ccache libmicrohttpd-dev pkg-config
 ```
 
 
@@ -48,7 +54,7 @@ cmake -DCMAKE_BUILD_TYPE=Release ../ton && cmake --build . -j$(nproc)
 On MacOS Intel before next step we need maybe install `openssl@3` with `brew` or just link the lib:
 
 ```zsh
-brew install openssl@3
+brew install openssl@3 ninja libmicrohttpd pkg-config
 ```
 
 Then need to inspect `/usr/local/opt`:
@@ -184,10 +190,6 @@ utils/generate-random-id
 ## storage-daemon
 
 To build storage-daemon and storage-daemon-cli, do [common part](/develop/howto/compile#common) and then do:
-
-:::tip
-Currently storage-daemon located at `testnet` branch, so you need type `git checkout testnet` after cloning the repo.
-:::
 
 ```bash
 cmake --build . --target storage-daemon storage-daemon-cli

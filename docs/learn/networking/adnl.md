@@ -33,6 +33,7 @@ ADNL allows you to set up point-to-point channels and tunnels (a chain of proxie
 
 A TCP-like stream protocol can be built over ADNL.
 
-:::info
-Read more about ADNL in the [Low-Level ADNL article](/learn/networking/low-level-adnl) or in Chapter 3.1 of the [TON Whitepaper](https://ton.org/docs/ton.pdf).
-:::
+## What's next?
+
+* Read more about ADNL in the [Low-Level ADNL article](/learn/networking/low-level-adnl)
+* Chapter 3.1 of the [TON Whitepaper](https://ton.org/docs/ton.pdf).

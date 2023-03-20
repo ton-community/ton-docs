@@ -144,8 +144,9 @@ Docs on TL-B can be found in the [TVM Whitepaper](https://ton.org/tvm.pdf) and i
 ## Generator of serializators and deserializators
 An example of a generator used by a TON node can be found in the [Ton node sources](https://github.com/ton-blockchain/ton/blob/master/crypto/tl/tlbc.cpp).
 
-## More about TL-B
+## What's next?
 
 If you want to know more about TL-B serialization and see some examples of complex structures parsing, 
-you can continue by reading [TL-B](/docs/develop/data-formats/tl-b) article at `develop` section of documentation.
+you can continue by reading:
+* [Deep Dive into TL-B](/docs/develop/data-formats/tl-b)
 

@@ -151,7 +151,7 @@ const sidebars = {
     'develop/getting-started',
     {
       type: 'doc',
-      label: 'TON Onboarding Challenge',
+      label: 'Get Started with TON',
       id: 'develop/onboarding-challenge',
     },
     {
@@ -193,6 +193,13 @@ const sidebars = {
       label: 'Develop Smart Contracts',
       items: [
         'develop/smart-contracts/README',
+//        {
+//          type: 'category',
+//          label: 'Learn',
+//          items: [
+//            'develop/smart-contracts/learn/deployment',
+//          ],
+//        },
         {
           type: 'category',
           label: 'Environment',
@@ -282,6 +289,7 @@ const sidebars = {
           label: 'Tutorials & Examples',
           items: [
             'develop/smart-contracts/tutorials/multisig',
+            'develop/smart-contracts/tutorials/multisig-js'
           ],
         },
         {
@@ -321,6 +329,7 @@ const sidebars = {
           items: [
             'develop/dapps/ton-connect/README',
             'develop/dapps/ton-connect/integration',
+            'develop/dapps/ton-connect/transactions',
             'develop/dapps/ton-connect/business',
             'develop/dapps/ton-connect/developers',
             'develop/dapps/ton-connect/security',
@@ -425,11 +434,42 @@ const sidebars = {
       type: 'category',
       label: 'Fift language',
       items: [
-        'develop/fift-and-tvm-assembly',
-        'develop/fift-deep-dive',
+        'develop/fift/overview',
+        'develop/fift/fift-and-tvm-assembly',
+        'develop/fift/fift-deep-dive',
       ]
     },
     'develop/howto/network-configs',
+    {
+      type: 'category',
+      label: 'Data formats',
+      items: [
+        {
+          type: 'category',
+          label: 'TL-B',
+          items: [
+            'develop/data-formats/cell-boc',
+            'develop/data-formats/tl-b-language',
+            'develop/data-formats/tl-b-types',
+            'develop/data-formats/msg-tlb',
+            'develop/data-formats/crc32',
+            'develop/data-formats/tlb-ide'
+          ]
+        },
+        'develop/data-formats/tl',
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Network protocols',
+      items: [
+        'develop/network/adnl-tcp',
+        'develop/network/adnl-udp',
+        'develop/network/dht',
+        'develop/network/rldp',
+        'develop/network/overlay'
+      ]
+    },
     {
       type: 'category',
       label: 'Low Level Internals',
@@ -440,32 +480,16 @@ const sidebars = {
         'develop/howto/fees-low-level',
         'develop/howto/full-node',
         'develop/howto/validator',
-        {
-          type: 'category',
-          label: 'Data formats',
-          items: [
-            'develop/data-formats/cell-boc',
-            'develop/data-formats/tl',
-            'develop/data-formats/tl-b'
-          ]
-        },
-        {
-          type: 'category',
-          label: 'Network protocols',
-          items: [
-            'develop/network/adnl-tcp',
-            'develop/network/adnl-udp',
-            'develop/network/dht',
-            'develop/network/rldp',
-            'develop/network/overlay'
-          ]
-        },
+        'develop/research-and-development/boc',
+        'develop/research-and-development/minter-flow',
+         'develop/research-and-development/persistent-states',
         {
           type: 'category',
           label: 'Archived',
           items: [
             'develop/archive/pow-givers',
             'develop/archive/mining',
+            'develop/archive/Tl-B-overview'
           ],
         },
       ],
@@ -533,13 +557,13 @@ const sidebars = {
       label: 'Run a Node',
       items: [
         'participate/nodes/node-types',
+        'participate/nodes/run-node',
         'participate/nodes/local-ton',
         'participate/nodes/node-maintenance-and-security',
-        'participate/nodes/run-node',
         'participate/nodes/collators',
         {
           type: 'link',
-          label: 'Run a Validator Node',
+          label: 'Become a Validator',
           href: 'https://ton.org/validator',
         },
       ],
