@@ -1,31 +1,32 @@
-# Smart Contract Address
+# Smart Contract Addresses
 
-After reading this article you will understand how the actors became smart contracts, what the smart-contract address is in TON, and from which parts it consists.
+This section will detail the specifics of smart contract addresses on TON Blockchain. It will also explain how actors are synonymous with smart contracts on TON.
 
-## Everything is a smart contract
+## Everything is a Smart Contract
 
-We started from [Actor model](/learn/overviews/ton-blockchain#single-actor). In fact, actors in TON are technically represented as smart contracts. This means that even your wallet is a simple actor (and smart contract).
+On TON, smart contracts are built using the [Actor model](/learn/overviews/ton-blockchain#single-actor). In fact, actors in TON are technically represented as smart contracts. This means that even your wallet is a simple actor (and smart contract).
 
-Usually, actor processes incoming messages, changes own internal state and generates some outbound messages as a result. That's why every actor (i.e. smart contract) in TON Blockchain must have an _address_ to be possible to receipt message from other actors.
+Typically, actors process incoming messages, change their internal state, and generate outbound messages as a result. That's why every actor (i.e., smart contract) on TON Blockchain must have an address so it is able to receive messages from other actors.
 
 :::info EVM EXPERIENCE
-You probably got used that _Addresses_ are something different from smart contracts in EVM. Dive in to the differences by article ["Six unique aspects of TON Blockchain that will surprise Solidity developers"](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers) by Tal Kol.
+On the Ethereum Virtual Machine (EVM), addresses are completely separate from smart contracts. Feel free to learn more about the differences by reading our article ["Six unique aspects of TON Blockchain that will surprise Solidity developers"](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers) by Tal Kol.
 :::
 
 ## Address of Smart Contract
 
-Smart contract address in the TON Network always consists of two parts:
+Smart contract addresses operating on TON typically consist of two main components:
 
-* **(workchain_id)** the workchain ID (a signed 32-bit integer)
-* **(account_id)** the address of the account (64-512 bits depending on the workchain).
+* **(workchain_id)**: denotes the workchain ID (a signed 32-bit integer)
 
-Later, in raw address overview we will see how **(workchain_id, account_id)** pair looks like.
+* **(account_id)** denotes the address of the account (64-512 bits, depending on the workchain)
 
-### Workchain ID, Account ID
+In the raw address overview section of this documentation, we'll discuss how  **(workchain_id, account_id)** pairs present themselves.
+
+### Workchain ID and Account ID
 
 #### Workchain ID
 
-[As we've seen before](/learn/overviews/ton-blockchain#workchain-blockchain-with-your-own-rules), there could be up to `2^32` workchains in TON Blockchain. By this 32-bit prefix in smart contract address you understand to which workchain it belongs, so that TON will send a message in it.
+[As we've seen before](/learn/overviews/ton-blockchain#workchain-blockchain-with-your-own-rules), it is possible to create as many as `2^32` workchains operating on TON Blockchain. We also noted how 32-bit prefix smart contract addresses identify and are linked to smart contract addresses within different workchains. This allows smart contracts to send and receive messages to and from different workchains on TON Blockchain.
 
 Nowadays, only the Masterchain (workchain_id=-1) and occasionally the basic workchain (workchain_id=0) are running in the TON Blockchain.
 
@@ -33,50 +34,52 @@ Both of them have 256-bit addresses, so we henceforth assume that workchain_id i
 
 #### Account ID
 
-All account IDs have 256-bit address in the MasterChain and BaseChain (basic workchain).
+All account IDs on TON make use of 256-bit addresses on the MasterChain and BaseChain (or basic workchain).
 
-In fact, Account ID **(account_id)** it's a hash function of a smart contract object (for example, SHA256). Every smart contract has always at least 2 things stored in TON Blockchain:
+In fact, Account ID’s **(account_id)** defined as hash functions for smart contract objects (particular, the SHA256). Every smart contract operating on the TON blockchain stores two main components. These include:
 
-1. _Compiled code_. By this way, your smart contract reacts to inbound messages.
-2. _Initial state_. TL-B scheme of the smart contract.
+1. _Compiled code_. Logic of smart contract compiled in byte code.
+2. _Initial state_. Contract’s values in its initial moment deploying on-chain.
 
-Combined these 2 parts becomes _StateInit_ structure.
 
-Finally, to receive address of the account TON will calculate a hash of the StateInit object. We won't go deep to the [TVM](/learn/tvm-instructions/tvm-overview) right now, but it's important to understand the concept:
+Finally, to correctly receive the address account it is necessary to calculate the hash corresponding to the pair **(Initial code, Initial state)** object. At this time, we won't take a deep dive into how the [TVM](/learn/tvm-instructions/tvm-overview)works, but it's important to understand that account ID’s on TON are determined using this formula:
+:
+**account_id = hash(initial code, initial state)**
 
-**account_id = hash(StateInit)**
+In time, throughout this documentation, we'll dive deeper into the technical specifications and overview of the TVM and TL-B scheme. Now that we are familiar with the formation of **account_id** and their interaction with smart contract addresses on TON, let’s explain Raw and User-Friendly addresses.
 
-You will read more about technical information in TVM, TL-B and other articles later. But now you know the core concept behind the formation of **account_id** of smart contract address.
+## Raw and User-Friendly Addresses
 
-## Raw and user-friendly addresses
+After providing a brief overview of how smart contract addresses on TON leverage workchains and account ID’s (for the MasterChain and BaseChain specifically), it's important to understand that these addresses are expressed in two main formats:
 
-Under the conditions stated above, the smart-contract address can be represented in the following forms: _raw_ and _user-friendly_.
+* **Raw addresses**: Original full representation of smart contract addresses.
+* **User-friendly addresses**: User-friendly addresses are an enhanced format of raw address that employ better security and ease of use.
 
-Raw form is easier to understand for new people in TON, while user-friendly one is used widely across all the apps in the ecosystem.  Let's dive in to the differences and discover why user-friendly address was created.
+Below, we’ll explain more about the differences between these two address types and dive deeper into why user-friendly addresses are used on TON.
 
 ### Raw address
 
-A raw smart contract address consists of **(workchain_id, account_id)** in this format:
+Raw smart contract addresses consist of a workchain ID and account ID *(workchain_id, account_id)* and are displayed in the following format:
 
 * [decimal workchain_id\]:[64 hexadecimal digits with account_id\]
 
 
-Finally, we get a _raw smart contract address_  in format **(workchain_id, account_id)**:
+Provided below, is an example of a raw smart contract address using a  workchain ID and account ID together (expressed as **workchain_id** and **account_id**):
 
 `-1:fcb91a3a3816d0f7b8c2c76108b8a9bc5a6b7a55bd79f8ab101c52db29232260`
 
-Here you could see `-1`, which is a _workchain_id_ of the MasterChain.
+Notice the `-1` at the start of the address string, this denotes a _workchain_id_ that belongs to the MasterChain.
 
 :::note
-Notice that uppercase Latin letters 'A'..'F' may be used instead of 'a'..'f' too.
+Uppercase letters (such as 'A', ‘B’, ‘C’, ‘D’ etc.) may be used in address strings instead of their lower-case counterparts (such as 'a', ‘b’, ’c’ 'd' etc.).
 :::
 
-#### What's the problem?
+#### Issues With Raw Addresses
 
-But this approach of smart-contract address has 2 serious cons:
+Using the Raw Address form presents two main issues:
 
-1. It's not possible to verify address for mistakes before sending message.  
-_For example, if you have added one symbol by mistake you'll lose your money._
+1. When using the raw address format, it's not possible to verify addresses to eliminate errors prior to sending a transaction.
+   This means that if you accidentally add or remove characters in the address string prior to sending the transaction, your transaction will be sent to the wrong destination, resulting in loss of funds.
 2. It's not possible to add any special flags as you can in user-friendly version.  
 _We will cover which flags you can use below._
 
