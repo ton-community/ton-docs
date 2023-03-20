@@ -43,6 +43,10 @@ Requests and responses to the server are described by a TL schema that allows yo
 - [psylopunk/pytonlib](https://github.com/psylopunk/pytonlib) — Newbie-friendly Python SDK (ADNL API)
 - [toncenter/pytonlib](https://github.com/toncenter/pytonlib) — Python SDK (ADNL API)
 
+### .NET SDK
+
+- [justdmitry/TonLib.NET](https://github.com/justdmitry/TonLib.NET) — .NET SDK (ADNL API)
+
 ### Legacy TonLib SDK
 
 These SDKs are _long-term support_ stage, so feel free to use these SDK too.
