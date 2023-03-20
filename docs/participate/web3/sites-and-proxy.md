@@ -12,7 +12,7 @@ In order to access existing sites and create new TON, Sites one needs special ga
 
 In order to access existing TON Sites, you need to run a RLDP-HTTP Proxy on your computer.
 
-1. Download **rldp-http-proxy** from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Amaster+is%3Acompleted) (`rldp-http-proxy` folder). Binaries are available for Windows, MacOS (Intel), Ubuntu.
+1. Download **rldp-http-proxy** from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
 Or you can compile the **rldp-http-proxy** yourself by following these [instructions](/develop/howto/compile#rldp-http-proxy).
 
@@ -32,13 +32,13 @@ Your entry proxy will be available by HTTP on `localhost` port `8080`.
 
 ## Running an entry proxy on a remote computer
 
-1. Download **rldp-http-proxy** from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Amaster+is%3Acompleted) (`rldp-http-proxy` folder). Binaries available for Windows, MacOS (Intel), Ubuntu.
+1. Download **rldp-http-proxy** from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
 Or you can compile the **rldp-http-proxy** yourself by following these [instructions](/develop/howto/compile#rldp-http-proxy).
 
 2. [Download](/develop/howto/compile#download-global-config) TON global config.
 
-3. Download **generate-random-id** from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Amaster+is%3Acompleted) (`generate-random-id` folder). Binaries are available for Windows, MacOS (Intel), Ubuntu.
+3. Download **generate-random-id** from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
 Or you can compile the **generate-random-id** yourself by following these [instructions](/develop/howto/compile#generate-random-id).
 
@@ -127,13 +127,13 @@ Most people will need just to access existing TON Sites, not to create new ones.
 
 We suppose that you know already how to set up an ordinary website, and that you have already configured one on your server, are accepting incoming HTTP connections on TCP port `<your-server-ip>:80`, and have defined the required TON Network domain name (e.g. `example.ton`) as the main domain name or an alias for your website in the configuration of your web server.
 
-1. Download **rldp-http-proxy** from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Amaster+is%3Acompleted) (`rldp-http-proxy` folder). Binaries available for Windows, MacOS (Intel), Ubuntu.
+1. Download **rldp-http-proxy** from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
 Or you can compile the **rldp-http-proxy** yourself by this [instruction](/develop/howto/compile#rldp-http-proxy).
 
 2. [Download](/develop/howto/compile#download-global-config) TON global config.
 
-3. Download **generate-random-id** from [TON Auto Builds](https://github.com/ton-blockchain/ton/actions?query=branch%3Amaster+is%3Acompleted) (`generate-random-id` folder). Binaries available for Windows, MacOS (Intel), Ubuntu.
+3. Download **generate-random-id** from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
 Or you can compile the **generate-random-id** yourself by following these [instructions](/develop/howto/compile#generate-random-id).
 

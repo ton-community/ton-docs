@@ -50,6 +50,7 @@ There are some variables at the stack when [TVM initiates](https://ton.org/docs/
 So each of the following `recv_internal` declarations is correct, but those with less variables will spend slightly less gas (each unused argument adds additional `DROP` instructions)
 
 ```func
+
 () recv_internal(int balance, int msg_value, cell in_msg_cell, slice in_msg) {}
 () recv_internal(int msg_value, cell in_msg_cell, slice in_msg) {}
 () recv_internal(cell in_msg_cell, slice in_msg) {}

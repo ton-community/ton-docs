@@ -298,8 +298,11 @@ if (flag1)
 ```
 
 ## Try-Catch statements
-*Experimental, only available in func v0.4.0*
-Executes the code in `try` block. If it fails, completely rolls back everything that was done in `try` block and executes `catch` block; `catch` receives two arguments: the exception parameter of any type (`x`) and the error code (`n`, integer). Unlike many other languages in FunC's version of `try-catch`, all changes made in `try` block (including changes to global variables, registers and sent messages) are discarded in case of an error in `try` block.
+*Available in func since v0.4.0*
+
+Executes the code in `try` block. If it fails, completely rolls back changes made in `try` block and executes `catch` block instead; `catch` receives two arguments: the exception parameter of any type (`x`) and the error code (`n`, integer).
+
+Unlike many other languages in the FunC try-catch statement, the changes made in the try block, in particular the modification of local and global variables, all registers' changes (i.e. `c4` storage register, `c5` action/message register, `c7` context register and others) **are discarded** if there is an error in the try block and consequently all contract storage updates and message sending will be reverted. It is important to note that some TVM state parameters such as _codepage_ and gas counters will not be rolled back. This means, in particular, that all gas spent in the try block will be taken into account, and the effects of OPs that change the gas limit (`accept_message` and `set_gas_limit`) will be preserved.
 
 Note that exception parameter can be of any type (possibly different in case of different exceptions) and thus funC can not predict it on compile time. That means that developer need to "help" compiler by casting exception parameter to some type (see Example 2 below):
 

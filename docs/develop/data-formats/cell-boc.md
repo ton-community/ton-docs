@@ -8,7 +8,7 @@ A cell represents a data structure on the TON blockchain. Cells are able to stor
 
 ## Bag of Cells
 
-On TON, a Bag of Cells (BoC) is a format for serializing cells into byte arrays, which is further described in the [TL-B schema](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25).
+Bag of Cells (BoC) is a format for serializing cells into byte arrays, which is further described in the [TL-B schema](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25).
 
 ![TL-B example](/img/docs/data-formats/tl-b-docs-6.png?raw=true)
 
