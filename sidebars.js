@@ -34,23 +34,6 @@ const sidebars = {
         'learn/overviews/cells',
         {
           type: 'category',
-          label: 'TON Virtual Machine (TVM)',
-          items: [
-            'learn/tvm-instructions/tvm-overview',
-            'learn/tvm-instructions/tvm-exit-codes',
-            'learn/tvm-instructions/instructions',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'TL-B Language',
-          items: [
-            'learn/overviews/TL-B',
-            'learn/overviews/tl-b-language',
-          ],
-        },
-        {
-          type: 'category',
           label: 'TON Networking',
           items: [
             {
@@ -190,6 +173,15 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'API & SDK',
+      items: [
+        'develop/dapps/apis/README',
+        'develop/dapps/apis/toncenter',
+        'develop/dapps/apis/adnl',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Develop Smart Contracts',
       items: [
         'develop/smart-contracts/README',
@@ -301,28 +293,9 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Develop dApps & Bots',
+      label: 'Develop Apps',
       items: [
         'develop/dapps/README',
-        {
-          type: 'category',
-          label: 'API & SDK',
-          items: [
-            'develop/dapps/apis/README',
-            'develop/dapps/apis/toncenter',
-            'develop/dapps/apis/adnl',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'DeFi Development',
-          items: [
-            'develop/dapps/defi/coins',
-            'develop/dapps/defi/tokens',
-            'develop/dapps/defi/ton-payments',
-            'develop/dapps/defi/subscriptions',
-          ],
-        },
         {
           type: 'category',
           label: 'TON Connect',
@@ -336,12 +309,31 @@ const sidebars = {
             'develop/dapps/ton-connect/comparison',
           ],
         },
+
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Integrate with TON',
+      items: [
+        'develop/dapps/asset-processing/README',
+        'develop/dapps/asset-processing/jettons',
+        'develop/dapps/tutorials/jetton-minter',
+        {
+          type: 'category',
+          label: 'DeFi Development',
+          items: [
+            'develop/dapps/defi/coins',
+            'develop/dapps/defi/tokens',
+            'develop/dapps/defi/ton-payments',
+            'develop/dapps/defi/subscriptions',
+          ],
+        },
         {
           type: 'category',
           label: 'Tutorials & Examples',
           items: [
             'develop/dapps/tutorials/overview',
-            'develop/dapps/tutorials/jetton-minter',
             {
               type: 'category',
               label: 'Telegram bots',
@@ -351,44 +343,8 @@ const sidebars = {
                 'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js',
               ],
             },
-            'develop/dapps/tutorials/how-to-run-ton-site',
           ],
         },
-
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Integrate with TON',
-      items: [
-        {
-          type: 'category',
-          label: 'Payment Processing',
-          items: [
-            'develop/dapps/asset-processing/README',
-            {
-              type: 'link',
-              label: 'Create a key pair and a wallet',
-              href: 'https://github.com/toncenter/examples/blob/main/common.js',
-            },
-            {
-              type: 'link',
-              label: 'Accepting deposits to a single wallet',
-              href: 'https://github.com/toncenter/examples/blob/main/deposits-single-wallet.js',
-            },
-            {
-              type: 'link',
-              label: 'Accepting deposits to multiple wallets',
-              href: 'https://github.com/toncenter/examples/blob/main/deposits-multi-wallet.js',
-            },
-            {
-              type: 'link',
-              label: 'Withdrawal processing',
-              href: 'https://github.com/toncenter/examples/blob/main/withdrawals.js',
-            },
-          ],
-        },
-
       ]
     },
     {
@@ -439,10 +395,28 @@ const sidebars = {
         'develop/fift/fift-deep-dive',
       ]
     },
+
+    {
+      type: 'category',
+      label: 'TON Virtual Machine (TVM)',
+      items: [
+        'learn/tvm-instructions/tvm-overview',
+        'learn/tvm-instructions/tvm-exit-codes',
+        'learn/tvm-instructions/instructions',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'TL-B Language',
+      items: [
+        'learn/overviews/TL-B',
+        'learn/overviews/tl-b-language',
+      ],
+    },
     'develop/howto/network-configs',
     {
       type: 'category',
-      label: 'Data formats',
+      label: 'Low Level Internals',
       items: [
         {
           type: 'category',
@@ -608,6 +582,7 @@ const sidebars = {
         'participate/web3/setting-proxy',
         'participate/web3/how-to-open-any-ton-site',
         'participate/web3/sites-and-proxy',
+        'develop/dapps/tutorials/how-to-run-ton-site',
         'participate/web3/site-management',
       ],
     },

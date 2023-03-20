@@ -1,4 +1,4 @@
-# How to run TON Site
+# How to run TON Sites
 
 ## 👋 Introduction
 

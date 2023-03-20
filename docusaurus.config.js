@@ -200,25 +200,130 @@ const config = {
             type: 'doc',
             docId: 'learn/introduction',
             position: 'left',
-            label: 'Learn',
+            label: 'Concepts',
           },
           {
-            type: 'doc',
-            docId: 'develop/getting-started',
+            type: 'dropdown',
+            to: 'develop/dapps',
+            position: 'left',
+            label: 'Apps',
+            items: [
+              {
+                to: 'develop/onboarding-challenge',
+                label: 'Get Started with TON',
+              },
+              {
+                to: 'develop/dapps/apis',
+                label: 'Understand APIs',
+              },
+              {
+                to: 'develop/dapps/ton-connect',
+                label: 'Authenticate with TON',
+              },
+              {
+                to: 'https://ton-community.github.io/tutorials/03-client/',
+                label: 'Build your first WebApp',
+              },
+
+            ],
+          },
+          {
+            type: 'dropdown',
+            to: 'develop/dapps/defi/coins',
+            position: 'left',
+            label: 'Tokens',
+            items: [
+              {
+                to: 'develop/dapps/asset-processing',
+                label: 'Payments processing',
+              },
+              {
+                to: 'develop/dapps/defi/coins',
+                label: 'Native token: Toncoin',
+              },
+              {
+                to: 'develop/dapps/defi/tokens',
+                label: 'Tokens (FT, NFT)',
+              },
+              {
+                to: 'develop/dapps/tutorials/jetton-minter',
+                label: 'Mint Jettons (Tokens)',
+              },
+              {
+                to: 'develop/dapps/defi/ton-payments',
+                label: 'TON Payments',
+              },
+              {
+                to: 'develop/dapps/defi/subscriptions',
+                label: 'Subscriptions',
+              },
+
+
+            ],
+          },
+          {
+            type: 'dropdown',
+            to: 'develop/getting-started',
             position: 'left',
             label: 'Develop',
+            items: [
+              {
+                to: 'develop/smart-contracts',
+                label: 'Write smart contracts'
+              },
+              {
+                to: 'learn/tvm-instructions/tvm-overview',
+                label: 'TON Virtual Machine (TVM)'
+              },
+              {
+                to: 'develop/smart-contracts/fees',
+                label: 'Transaction fees'
+              },
+              {
+                to: 'develop/smart-contracts/guidelines',
+                label: 'Best Practices'
+              },
+              {
+                to: 'develop/func/overview',
+                label: 'FunC on TON'
+              },
+              {
+                to: 'develop/func/cookbook',
+                label: 'FunC Cookbook'
+              },
+            ],
           },
-          // {
-          //   type: 'doc',
-          //   docId: 'develop/nodes/node-types',
-          //   position: 'left',
-          //   label: 'Integrate',
-          // },
           {
-            type: 'doc',
-            docId: 'participate/README',
+            type: 'dropdown',
+            to: 'participate',
             position: 'left',
             label: 'Participate',
+            items: [
+              {
+                to: 'participate/nodes/node-types',
+                label: 'Run a Node',
+              },
+              {
+                to: 'participate/web3/how-to-open-any-ton-site',
+                label: 'Connect to TON Sites',
+              },
+              {
+                to: 'develop/dapps/tutorials/how-to-run-ton-site',
+                label: 'How to run TON Sites',
+              },
+              {
+                to: 'participate/web3/dns',
+                label: 'Use TON DNS & Domains',
+              },
+              {
+                to: 'participate/ton-storage/storage-daemon',
+                label: 'Run a Storage Daemon',
+              },
+              {
+                to: 'participate/ton-storage/storage-provider',
+                label: 'Become a Storage Provider',
+              },
+            ],
           },
           {
             type: 'dropdown',
@@ -265,11 +370,11 @@ const config = {
             label: 'Dev Chat',
             position: 'right',
           },
-          {
-            to: 'https://ton-blockchain.github.io/docs/#/',
-            label: 'V 1.0',
-            position: 'right',
-          },
+          // {
+          //   to: 'https://ton-blockchain.github.io/docs/#/',
+          //   label: 'V 1.0',
+          //   position: 'right',
+          // },
           {
             href: 'https://github.com/ton-community/ton-docs',
             position: 'right',
