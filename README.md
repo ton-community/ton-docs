@@ -55,7 +55,7 @@ Use Gitpod (a free, online VS code-like IDE) for contributing. It will launch a 
 ### Local (default way)
 
 1. Download repository from GitHub
-2. Install [NodeJS](https://nodejs.org/en/download/) to run local build
+2. Install last version [NodeJS LTS](https://nodejs.org/en/download/) to run local build
 3. Open Terminal in project directory
 4. Install dependencies with command:
 
