@@ -42,7 +42,7 @@ In fact, Account ID’s **(account_id)** defined as hash functions for smart con
 2. _Initial state_. Contract’s values in its initial moment deploying on-chain.
 
 
-Finally, to correctly receive the address account it is necessary to calculate the hash corresponding to the pair **(Initial code, Initial state)** object. At this time, we won't take a deep dive into how the [TVM](/learn/tvm-instructions/tvm-overview)works, but it's important to understand that account ID’s on TON are determined using this formula:
+Finally, to correctly receive the address account it is necessary to calculate the hash corresponding to the pair **(Initial code, Initial state)** object. At this time, we won't take a deep dive into how the [TVM](/learn/tvm-instructions/tvm-overview) works, but it's important to understand that account ID’s on TON are determined using this formula:
 :
 **account_id = hash(initial code, initial state)**
 

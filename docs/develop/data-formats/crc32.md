@@ -3,7 +3,7 @@
 
 ## Overview
 
-A cyclic redundancy check (CRC) is an error-detecting algorithm commonly used in digital networks and storage devices to detect accidental changes to digital data. Blocks of data entering these systems are typically attached with a short check value based on the remainder of a polynomial division of their contents.
+CRC stands for Cyclic Redundancy Check, a commonly used method for verifying the integrity of digital data. It is an error-detecting algorithm used to check if errors have occurred in digital data during transmission or storage. A CRC generates a short checksum or hash of the data being transmitted or stored, which is appended to the data. When the data is received or retrieved, the CRC is recalculated and compared to the original checksum. If the two checksums match, it is assumed that the data has not been corrupted. If they do not match, it indicates that an error has occurred and the data needs to be resent or retrieved again
 
 The CRC32 IEEE version used for TL-B schemes. By viewing this [NFT op code](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema) example a clearer understanding of calculation TL-B for various messages is achieved.
 
