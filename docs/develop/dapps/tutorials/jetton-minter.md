@@ -18,13 +18,14 @@ In this article, you'll learn how to:
 
 ## 📌 Prepare before you start
 
-1. First you need to have the [Tonhub](https://ton.app/wallets/tonhub-wallet) wallet or [Chrome extension](https://ton.app/wallets/chrome-plugin).
+1. First you need to have the [Tonhub](https://ton.app/wallets/tonhub-wallet) / [Tonkeeper](https://ton.app/wallets/tonkeeper) wallet or [Chrome extension](https://ton.app/wallets/chrome-plugin) or any other supported on the service.
 2. You must have on your balance more than 0.25 Toncoin + funds to cover the blockchain commission. 
 
 :::tip Starter tip
  ~0.5 TON is definitely enough for this tutorial.
 :::
  
+
 ## 🚀 Let's get started!
 
 Use your web browser to open the service [TON Minter](https://minter.ton.org/).
@@ -35,11 +36,11 @@ Use your web browser to open the service [TON Minter](https://minter.ton.org/).
 
 #### Connect Wallet
 
-Click the `Connect Wallet` button to connect your [Tonhub](https://ton.app/wallets/tonhub-wallet) wallet or a [Chrome extension](https://ton.app/wallets/chrome-plugin).
+Click the `Connect Wallet` button to connect your [Tonhub](https://ton.app/wallets/tonhub-wallet) wallet or a [Chrome extension](https://ton.app/wallets/chrome-plugin) or another wallet from the ones below.
 
-![image](/img/tutorials/jetton/jetton-connect-wallet.png)
+#### ![image](/img/tutorials/jetton/jetton-connect-wallet.png)
 
-**Scan the QR-code** in [Tonhub](https://ton.app/wallets/tonhub-wallet) or **sign in** to the wallet via the [Chrome extension](https://ton.app/wallets/chrome-plugin).
+**Scan the QR-code** in a [Mobile wallet (Tonhub e.g.)](https://ton.app/wallets/tonhub-wallet) or **sign in** to the wallet via the [Chrome extension](https://ton.app/wallets/chrome-plugin).
 
 #### Fill in the blanks with relevant information
 
@@ -47,11 +48,10 @@ Click the `Connect Wallet` button to connect your [Tonhub](https://ton.app/walle
 2. Symbol (usually 3-5 uppercase characters).
 3. Amount (for example, 1,000,000).
 4. Description of the token (optional).
-5. Token logo URL (optional).
-6. Deploy your token (Jetton) and complete a transaction in the wallet.
 
+#### Token logo URL (optional)
 
-#### Token logo URL
+![image](/img/tutorials/jetton/jetton-token-logo.png)
 
 If you want to have an attractive Jetton token, you need a beautiful logo hosted somewhere.  For example:
 
@@ -76,20 +76,16 @@ If you want to have an attractive Jetton token, you need a beautiful logo hosted
  5. If you have your own domain, then it would be good to use `.org` instead of `github.io`.
  
 
- ## 💸 Send and receive Jettons
- On the right side of the screen, you see a connected wallet that can **receive tokens.**
-
-![image](/img/tutorials/jetton/jetton-receive-tokens.png)
-
- Just below you can **send tokens** to multi-currency wallets like [Tonkeeper](https://tonkeeper.com/) or [Tonhub](https://ton.app/wallets/tonhub-wallet).
+ ## 💸 Send Jettons
+ On the right side of the screen, you can **send tokens** to multi-currency wallets like [Tonkeeper](https://tonkeeper.com/) or [Tonhub](https://ton.app/wallets/tonhub-wallet).
 
 ![image](/img/tutorials/jetton/jetton-send-tokens.png)
 
-
 :::info
  You always also **burn** your Jettons to reduce their amount.
+ 
+ ![image](/img/tutorials/jetton/jetton-burn-tokens.png)
 :::
-
 
  ### 📱 Send tokens from phone using Tonkeeper
 
@@ -102,7 +98,19 @@ Prerequisites:
 
 Then go to **your token**, set the **amount** to send, and enter the **recipient address.**
 
-![image](/img/tutorials/jetton/jetton-send-tokens.png)
+![image](/img/tutorials/jetton/jetton-send-tutorial.png)
+
+
+ ## 📚 Using the token on the site
+
+ You can access the **search field** at the top of the site by entering the address of the token to use the owner's rights to manage.
+ 
+:::info
+ The address can be found on the right side if you are already in the owner panel, or you can find the token address when receiving an airdrop.
+
+ ![image](/img/tutorials/jetton/jetton-wallet-address.png)
+:::
+
 
  ## ✏️ Jetton (token) customization
 
@@ -112,7 +120,7 @@ To make any changes, begin here:
 
 * https://github.com/ton-blockchain/minter-contract
 
-### Step-by-step guide
+### Step-by-step guide for developers
 
  1. Make sure you have all "Dependencies and Requirements" from the [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) repo.
  2. Clone the [minter-contract repository](https://github.com/ton-blockchain/minter-contract) and rename the project. 
@@ -130,7 +138,6 @@ To make any changes, begin here:
  npm run build
  ```
  The build result will be describes the process of creating the necessary files, as well as the search for smart contracts. 
- 
  
  :::info
  Read the console, there are a lot of tips!
