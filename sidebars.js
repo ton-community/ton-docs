@@ -289,6 +289,10 @@ const sidebars = {
           label: 'Discover FunC language',
           href: '/develop/func/overview',
         },
+        'develop/howto/config-params',
+        'develop/howto/fees-low-level',
+        'develop/howto/step-by-step',
+        'develop/research-and-development/minter-flow',
       ],
     },
     {
@@ -356,6 +360,7 @@ const sidebars = {
       'value': '<span class=\'menu__link\'><b><small> References & Documentation </small></b></span>',
     },
     'develop/howto/faq',
+    'develop/howto/network-configs',
     {
       type: 'category',
       label: 'FunC language',
@@ -407,16 +412,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'TL-B Language',
-      items: [
-        'learn/overviews/TL-B',
-        'learn/overviews/tl-b-language',
-      ],
-    },
-    'develop/howto/network-configs',
-    {
-      type: 'category',
-      label: 'Low Level Internals',
+      label: 'Data Formats',
       items: [
         {
           type: 'category',
@@ -425,6 +421,7 @@ const sidebars = {
             'develop/data-formats/cell-boc',
             'develop/data-formats/tl-b-language',
             'develop/data-formats/tl-b-types',
+            'develop/research-and-development/boc',
             'develop/data-formats/msg-tlb',
             'develop/data-formats/crc32',
             'develop/data-formats/tlb-ide'
@@ -435,7 +432,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Network protocols',
+      label: 'Network Protocols',
       items: [
         'develop/network/adnl-tcp',
         'develop/network/adnl-udp',
@@ -443,30 +440,6 @@ const sidebars = {
         'develop/network/rldp',
         'develop/network/overlay'
       ]
-    },
-    {
-      type: 'category',
-      label: 'Low Level Internals',
-      items: [
-        'develop/howto/README',
-        'develop/howto/step-by-step',
-        'develop/howto/config-params',
-        'develop/howto/fees-low-level',
-        'develop/howto/full-node',
-        'develop/howto/validator',
-        'develop/research-and-development/boc',
-        'develop/research-and-development/minter-flow',
-         'develop/research-and-development/persistent-states',
-        {
-          type: 'category',
-          label: 'Archived',
-          items: [
-            'develop/archive/pow-givers',
-            'develop/archive/mining',
-            'develop/archive/Tl-B-overview'
-          ],
-        },
-      ],
     },
     {
       type: 'category',
@@ -486,11 +459,17 @@ const sidebars = {
       ],
     },
     {
-      type: 'link',
-      label: 'TON Whitepapers',
-      href: '/learn/docs',
+      type: 'category',
+      label: 'Archived',
+      items: [
+        'develop/archive/pow-givers',
+        'develop/archive/mining',
+        'develop/archive/Tl-B-overview',
+        'learn/overviews/TL-B',
+        'learn/overviews/tl-b-language'
+      ],
     },
-  ],
+],
   participate: [
     'participate/README',
     {
@@ -532,6 +511,8 @@ const sidebars = {
       items: [
         'participate/nodes/node-types',
         'participate/nodes/run-node',
+        'develop/howto/full-node',
+        'develop/howto/validator',
         'participate/nodes/local-ton',
         'participate/nodes/node-maintenance-and-security',
         'participate/nodes/collators',
@@ -547,6 +528,7 @@ const sidebars = {
       label: 'Blockchain Details',
       items: [
         'participate/own-blockchain-software/random',
+        'develop/research-and-development/persistent-states',
       ],
     },
     {
