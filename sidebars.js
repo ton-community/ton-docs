@@ -34,23 +34,6 @@ const sidebars = {
         'learn/overviews/cells',
         {
           type: 'category',
-          label: 'TON Virtual Machine (TVM)',
-          items: [
-            'learn/tvm-instructions/tvm-overview',
-            'learn/tvm-instructions/tvm-exit-codes',
-            'learn/tvm-instructions/instructions',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'TL-B Language',
-          items: [
-            'learn/overviews/TL-B',
-            'learn/overviews/tl-b-language',
-          ],
-        },
-        {
-          type: 'category',
           label: 'TON Networking',
           items: [
             {
@@ -190,6 +173,15 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'API & SDK',
+      items: [
+        'develop/dapps/apis/README',
+        'develop/dapps/apis/toncenter',
+        'develop/dapps/apis/adnl',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Develop Smart Contracts',
       items: [
         'develop/smart-contracts/README',
@@ -297,32 +289,17 @@ const sidebars = {
           label: 'Discover FunC language',
           href: '/develop/func/overview',
         },
+        'develop/howto/config-params',
+        'develop/howto/fees-low-level',
+        'develop/howto/step-by-step',
+        'develop/research-and-development/minter-flow',
       ],
     },
     {
       type: 'category',
-      label: 'Develop dApps & Bots',
+      label: 'Develop Apps',
       items: [
         'develop/dapps/README',
-        {
-          type: 'category',
-          label: 'API & SDK',
-          items: [
-            'develop/dapps/apis/README',
-            'develop/dapps/apis/toncenter',
-            'develop/dapps/apis/adnl',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'DeFi Development',
-          items: [
-            'develop/dapps/defi/coins',
-            'develop/dapps/defi/tokens',
-            'develop/dapps/defi/ton-payments',
-            'develop/dapps/defi/subscriptions',
-          ],
-        },
         {
           type: 'category',
           label: 'TON Connect',
@@ -336,12 +313,31 @@ const sidebars = {
             'develop/dapps/ton-connect/comparison',
           ],
         },
+
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Integrate with TON',
+      items: [
+        'develop/dapps/asset-processing/README',
+        'develop/dapps/asset-processing/jettons',
+        'develop/dapps/tutorials/jetton-minter',
+        {
+          type: 'category',
+          label: 'DeFi Development',
+          items: [
+            'develop/dapps/defi/coins',
+            'develop/dapps/defi/tokens',
+            'develop/dapps/defi/ton-payments',
+            'develop/dapps/defi/subscriptions',
+          ],
+        },
         {
           type: 'category',
           label: 'Tutorials & Examples',
           items: [
             'develop/dapps/tutorials/overview',
-            'develop/dapps/tutorials/jetton-minter',
             {
               type: 'category',
               label: 'Telegram bots',
@@ -351,44 +347,8 @@ const sidebars = {
                 'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js',
               ],
             },
-            'develop/dapps/tutorials/how-to-run-ton-site',
           ],
         },
-
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Integrate with TON',
-      items: [
-        {
-          type: 'category',
-          label: 'Payment Processing',
-          items: [
-            'develop/dapps/asset-processing/README',
-            {
-              type: 'link',
-              label: 'Create a key pair and a wallet',
-              href: 'https://github.com/toncenter/examples/blob/main/common.js',
-            },
-            {
-              type: 'link',
-              label: 'Accepting deposits to a single wallet',
-              href: 'https://github.com/toncenter/examples/blob/main/deposits-single-wallet.js',
-            },
-            {
-              type: 'link',
-              label: 'Accepting deposits to multiple wallets',
-              href: 'https://github.com/toncenter/examples/blob/main/deposits-multi-wallet.js',
-            },
-            {
-              type: 'link',
-              label: 'Withdrawal processing',
-              href: 'https://github.com/toncenter/examples/blob/main/withdrawals.js',
-            },
-          ],
-        },
-
       ]
     },
     {
@@ -400,6 +360,7 @@ const sidebars = {
       'value': '<span class=\'menu__link\'><b><small> References & Documentation </small></b></span>',
     },
     'develop/howto/faq',
+    'develop/howto/network-configs',
     {
       type: 'category',
       label: 'FunC language',
@@ -439,10 +400,19 @@ const sidebars = {
         'develop/fift/fift-deep-dive',
       ]
     },
-    'develop/howto/network-configs',
+
     {
       type: 'category',
-      label: 'Data formats',
+      label: 'TON Virtual Machine (TVM)',
+      items: [
+        'learn/tvm-instructions/tvm-overview',
+        'learn/tvm-instructions/tvm-exit-codes',
+        'learn/tvm-instructions/instructions',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Data Formats',
       items: [
         {
           type: 'category',
@@ -451,6 +421,7 @@ const sidebars = {
             'develop/data-formats/cell-boc',
             'develop/data-formats/tl-b-language',
             'develop/data-formats/tl-b-types',
+            'develop/research-and-development/boc',
             'develop/data-formats/msg-tlb',
             'develop/data-formats/crc32',
             'develop/data-formats/tlb-ide'
@@ -461,7 +432,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Network protocols',
+      label: 'Network Protocols',
       items: [
         'develop/network/adnl-tcp',
         'develop/network/adnl-udp',
@@ -469,30 +440,6 @@ const sidebars = {
         'develop/network/rldp',
         'develop/network/overlay'
       ]
-    },
-    {
-      type: 'category',
-      label: 'Low Level Internals',
-      items: [
-        'develop/howto/README',
-        'develop/howto/step-by-step',
-        'develop/howto/config-params',
-        'develop/howto/fees-low-level',
-        'develop/howto/full-node',
-        'develop/howto/validator',
-        'develop/research-and-development/boc',
-        'develop/research-and-development/minter-flow',
-         'develop/research-and-development/persistent-states',
-        {
-          type: 'category',
-          label: 'Archived',
-          items: [
-            'develop/archive/pow-givers',
-            'develop/archive/mining',
-            'develop/archive/Tl-B-overview'
-          ],
-        },
-      ],
     },
     {
       type: 'category',
@@ -512,11 +459,17 @@ const sidebars = {
       ],
     },
     {
-      type: 'link',
-      label: 'TON Whitepapers',
-      href: '/learn/docs',
+      type: 'category',
+      label: 'Archived',
+      items: [
+        'develop/archive/pow-givers',
+        'develop/archive/mining',
+        'develop/archive/Tl-B-overview',
+        'learn/overviews/TL-B',
+        'learn/overviews/tl-b-language'
+      ],
     },
-  ],
+],
   participate: [
     'participate/README',
     {
@@ -558,6 +511,8 @@ const sidebars = {
       items: [
         'participate/nodes/node-types',
         'participate/nodes/run-node',
+        'develop/howto/full-node',
+        'develop/howto/validator',
         'participate/nodes/local-ton',
         'participate/nodes/node-maintenance-and-security',
         'participate/nodes/collators',
@@ -573,6 +528,7 @@ const sidebars = {
       label: 'Blockchain Details',
       items: [
         'participate/own-blockchain-software/random',
+        'develop/research-and-development/persistent-states',
       ],
     },
     {
@@ -608,6 +564,7 @@ const sidebars = {
         'participate/web3/setting-proxy',
         'participate/web3/how-to-open-any-ton-site',
         'participate/web3/sites-and-proxy',
+        'develop/dapps/tutorials/how-to-run-ton-site',
         'participate/web3/site-management',
       ],
     },

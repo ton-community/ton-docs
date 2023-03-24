@@ -1,6 +1,43 @@
-# Asset processing on TON
+# Payments processing
 This page contains an overview and specific details that explain how to process (send and accept) digital assets on the TON network.
 
+## Examples
+
+### JavaScript
+
+#### Official
+
+Using tonweb SDK (officially supported by TON Foundation):
+
+1. [Create a key pair, a wallet and get a wallet address](https://github.com/toncenter/examples/blob/main/common.js)
+2. [Accepting deposits to a single wallet](https://github.com/toncenter/examples/blob/main/deposits-single-wallet.js)
+3. [Accepting deposits to multiple wallets](https://github.com/toncenter/examples/blob/main/deposits-multi-wallet.js)
+4. [Withdrawal processing](https://github.com/toncenter/examples/blob/main/withdrawals.js)
+
+#### Made by community
+
+Using ton.js SDK (supported by TON Community):
+
+- [Create a wallet, get balance, make a transfer](https://github.com/ton-community/ton#usage)
+
+### Python
+
+
+#### Made by community
+
+Using psylopunk/pytonlib (Simple python client for The Open Network):
+
+- [Sending transactions](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
+
+Using tonsdk library (similar to tonweb):
+
+- [Init wallet, create external message to deploy the wallet](https://github.com/tonfactory/tonsdk#create-mnemonic-init-wallet-class-create-external-message-to-deploy-the-wallet)
+
+### Golang
+
+#### Made by community
+
+- [See full list of examples](https://github.com/xssnick/tonutils-go#how-to-use)
 
 ## Global overview
 Embodying a fully asynchronous approach, the TON Blockchain involves a few concepts which are uncommon to traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred messages between smart contracts and/or the external world. The common path of any interaction starts with an external message sent to a `wallet` smart contract, which authenticates the message sender using public-key cryptography, takes charge of fee payment, and sends inner blockchain messages. That way, transactions on the TON network are not synonymous with user interaction with the blockchain but merely nodes of the message graph: the result of accepting and processing a message by a smart contract, which may or may not lead to the emergence of new messages. The interaction may consist of an arbitrary number of messages and transactions and span a prolonged period of time. Technically, transactions with queues of messages are aggregated into blocks processed by validators. The asynchronous nature of the **TON Blockchain does not allow to predict the hash and lt (logical time) of a transaction** at the stage of sending a message. The transaction accepted to the block is final and will not be modified.
