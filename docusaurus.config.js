@@ -336,7 +336,7 @@ const config = {
               },
               {
                 to: 'https://answers.ton.org/',
-                label: 'TON Overflow',
+                label: 'TON Answers',
               },
               {
                 to: 'https://t.me/TonDev_eng',
