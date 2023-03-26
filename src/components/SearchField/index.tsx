@@ -27,6 +27,9 @@ type Props<DataItem> = {
    * Property that determines a key that will be used for searching
    * */
   searchBy: keyof DataItem;
+  /**
+   * Decides which keys will be shown in the results
+   * */
   showKeys: DataKey<keyof DataItem>[];
 } & HTMLAttributes<HTMLInputElement>
 
@@ -73,7 +76,7 @@ export const SearchField = <T extends Record<string, string>>({ data, searchBy, 
   }, [inputValue])
 
   useEffect(() => {
-    setFilteredData(data.filter((item) => String(item[searchBy]).includes(debouncedValue)))
+    setFilteredData(data.filter((item) => String(JSON.stringify(Object.values(item))).includes(debouncedValue)))
   }, [data, debouncedValue, searchBy])
 
   useEffect(() => () => {
