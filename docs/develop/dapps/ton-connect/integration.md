@@ -1,29 +1,28 @@
 # Integration manual
 
-:::info
-Information present on this page might become outdated. Though, a strong effort is made to create such an article that will allow developers to handle everything new that is introduced in the future.
-:::
-
-In this tutorial, we are going to create a sample web app supporting TON Connect 2.0 authentication. It will be able to check signatures so user would be unable to impersonate someone else without establishing an agreement with that party.
+In this tutorial, we’ll create a sample web app that supports TON Connect 2.0 authentication. It will allow for signature verification to eliminate the possibility of fraudulent identity impersonation without agreement establishment between parties.
 
 ## Documentation links
 
-1. [SDK documentation](https://www.npmjs.com/package/@tonconnect/sdk)  
-2. [Protocol of wallet-application message exchange](https://github.com/ton-connect/docs/blob/main/requests-responses.md), includes manifest format.
+1. [TON Connect SDK documentation](https://www.npmjs.com/package/@tonconnect/sdk)  
+2. [Wallet-application message exchange protoco](https://github.com/ton-connect/docs/blob/main/requests-responses.md), includes manifest format.
 3. [Tonkeeper implementation of wallet side](https://github.com/tonkeeper/wallet/tree/main/src/tonconnect)
 
 ## Prerequisites
 
-The web app must have a manifest accessible by users' wallet applications. Thus, the prerequisite is a host for static files. For example, you may wish to use GitHub Pages, or deploy your site with TON Sites technology and host it on your computer. From now we will assume the web app site is publicly accessible.
+In order for connectivity to be fluent between apps and wallets, the web app must make use of manifest that is accessible via wallet applications. The prerequisite to accomplish this is typically a host for static files. For example, say if a developer wants to make use of GitHub pages, or deploy their website using TON Sites hosted on their computer. This would therefore mean their web app site is publicly accessible.
 
 ## Getting wallets support list
 
-TON Connect 2.0 is technology that is going to be widely adopted, so many wallet applications are going to support this. When this article's subject was suggested, only Tonkeeper was supporting it; at the moment of writing there are two wallets, Tonkeeper and OpenMask. We are going to support **every** wallet application that works with TON Connect 2.0.
+To increase the overall adoption of TON Blockchain, it is necessary that TON Connect 2.0 is able to facilitate a vast number of application and wallet connectivity integrations. Of late and of significant importance, the ongoing development of TON Connect 2.0 has allowed for the connection of the Tonkeeper and OpenMask wallets with various TON Ecosystem Apps. It is our mission to eventually allow for the exchange of data between applications and all wallet types built on TON via the TON Connect protocol. For now, this is realized by providing the ability for TON Connect to load an extensive list of available wallets currently operating within the TON Ecosystem.
 
-So, at the moment our sample web app does following:
-1. loads TON Connect SDK (helper library for easy integration),
-2. creates a connector (currently without application manifest),
-3. and loads list of supported wallets (from [wallets.json on GitHub](https://raw.githubusercontent.com/ton-connect/wallets-list/main/wallets.json)).
+At the moment our sample web app enables the following:
+
+1. loads the TON Connect SDK (library meant to simplify integration),
+2. creates a connector (currently without an application manifest),
+3. loads a list of supported wallets (from  [wallets.json on GitHub](https://raw.githubusercontent.com/ton-connect/wallets-list/main/wallets.json)).
+
+For learning purposes, let's take a looks at the HTML page described by the following code:
 
 ```html
 <!DOCTYPE html>
@@ -72,7 +71,7 @@ If you load this page in browser and look into console, you may get something li
   tondns: undefined
 ```
 
-According to TON Connect 2.0 specification, wallet app information has the following format:
+According to TON Connect 2.0 specifications, wallet app information always makes use of the following format:
 ```js
 {
     name: string;
@@ -88,10 +87,10 @@ According to TON Connect 2.0 specification, wallet app information has the follo
 }
 ```
 
-## Showing buttons for each wallet
+## Button display for various wallet apps
 
-Buttons may vary according to your web app style.  
-Current page produces the following result:
+Buttons may vary according to your web application design.
+The current page produces the following result:
 
 ```html
 <!DOCTYPE html>
@@ -163,13 +162,15 @@ Current page produces the following result:
 </html>
 ```
 
-Please note we haven't ever started connecting users but we already have a rather complex code! Let's look at two details:
-1. If user is seeing our page through wallet application, it sets property `embedded` to `true`. So we should highlight this login option as it's the easiest to user and probably it is what he wants.
-2. If some wallet is JS-only (it has no `bridgeUrl`) and it hasn't set property `injected` (or `embedded`, for safety), then it is clearly inaccessible so we should disable that button.
+Please note the following:
 
-## Connection without app manifest
+1. If the web page is displayed through a wallet application, it sets the property `embedded` option to `true`. This means it is important to highlight this login option because it's most commonly used.
+2. If a specific wallet is built using only JavaScript (it has no `bridgeUrl`) and it hasn't set property `injected` (or `embedded`, for safety), then it is clearly inaccessible and the button should be disabled.
 
-Script shall be changed as following:
+
+## Connection without the app manifest
+
+In the instance the connection is made without the app manifest, the script should be changed as follows:
 
 ```js
       const $ = document.querySelector.bind(document);
@@ -221,35 +222,35 @@ Script shall be changed as following:
       };
 ```
 
-Now we are logging status changes (to see whether TON Connect works). Showing modals with QR codes for connection is out of scope for this article; for testing you may either use browser extension or send connection link to your phone via any means (for example, Telegram works well).
-
-Please note we haven't created app manifest yet. We're trying to see what happens if we don't fulfill this requirement.
+Now that the above process has been carried out, status changes are being logged (to see whether TON Connect works or not). Showing the modals with QR codes for connectivity is out of the scope of this manual. For testing purposes, it is possible to use a browser extension or send a connection request link to the user’s phone by any means necessary (for example, using Telegram).
+Note: we haven't created an app manifest yet. At this time, the best approach is  to analyze the end result if this requirement is not fulfilled.
 
 ### Logging in with Tonkeeper
 
-Link created for auth (provided for reference):
+In order to log into Tonkeeper, the following link is created for authentication (provided below for reference):
 ```
 https://app.tonkeeper.com/ton-connect?v=2&id=3c12f5311be7e305094ffbf5c9b830e53a4579b40485137f29b0ca0c893c4f31&r=%7B%22manifestUrl%22%3A%22null%2Ftonconnect-manifest.json%22%2C%22items%22%3A%5B%7B%22name%22%3A%22ton_addr%22%7D%5D%7D
 ```
-When decoded, `r` parameter produces the following JSON:
+When decoded, the `r` parameter produces the following JSON format:
 ```js
 {"manifestUrl":"null/tonconnect-manifest.json","items":[{"name":"ton_addr"}]}
 ```
 
-Upon tapping the link on mobile phone, Tonkeeper app automatically opened and then closed, dismissing the request. Also, an error appeared in web app page console: `Error: [TON_CONNECT_SDK_ERROR] Can't get null/tonconnect-manifest.json`.
-   
-Conclusion: application manifest must be available for downloading.
+Upon clicking the mobile phone link, Tonkeeper automatically opens and then closes, dismissing the request. Additionally, the following error appears in the web app page console:
+`Error: [TON_CONNECT_SDK_ERROR] Can't get null/tonconnect-manifest.json`.
+
+This means the application manifest must be available for download.
 
 ### Logging in with OpenMask
 
-OpenMask didn't inject its information in the window so connecting with it failed. The most probable reason is using local page for web app.
+OpenMask didn't inject its information in the window, so connecting with it failed. The most probable reason is because a local page for the web app was used.
 
-## Connection with app manifest
+## Connection with using app manifest
 
-Starting from here, you need to host your files (mostly tonconnect-manifest.json) somewhere.
-I will use manifest of *other* webapp. This is not recommended but it's possible.
+Starting from this point forward, it is necessary to host user files (mostly tonconnect-manifest.json) somewhere. In this instance we’ll use the manifest from another web application. This however  is not recommended for production environments, but allowed for testing purposes.
 
-You have to replace script lines
+The following code snippet:
+
 ```js
       window.onload = async () => {
         const connector = new TonConnectSDK.TonConnect();
@@ -262,7 +263,7 @@ You have to replace script lines
           }
         );
 ```
-with
+Must be replaced with this version:
 ```js
       window.onload = async () => {
         const connector = new TonConnectSDK.TonConnect({manifestUrl: 'https://ratingers.pythonanywhere.com/ratelance/tonconnect-manifest.json'});
@@ -280,15 +281,17 @@ with
         connector.restoreConnection();
 ```
 
-We added storing local `connector` variable in `window` for it to be accessible in browser console. Also we use `restoreConnection` for user not to log in on each webapp page.
+In the newer version above, the storing `connector`  variable in the `window` was added so it is accessible in the browser console. Additionally, the `restoreConnection` so users don’t have to log in on each web application page.
+
 
 ### Logging in with Tonkeeper
 
-First of all, I tested declining the request. The result that appeared in console was `Error: [TON_CONNECT_SDK_ERROR] Wallet declined the request`.
+If we decline our request from wallet, The result that appeared in the console will `Error: [TON_CONNECT_SDK_ERROR] Wallet declined the request`.
 
-Then, the user is able to accept the same login request if he saves the link. So web app should handle authentication decline as non-final, or else it can be messed up with.
+Therefore, the user is able to accept the same login request if the link is saved. This means the web app should be able to handle the authentication decline as non-final so it works correctly.
 
-After that, I've accepted login request. It was immediately reflected in browser console:
+Afterwards, the login request is accepted and is immediately reflected in the browser console as follows:
+
 ```js
 22:40:13.887 Connection status:
 Object { device: {…}, provider: "http", account: {…} }
@@ -297,21 +300,25 @@ Object { device: {…}, provider: "http", account: {…} }
   provider: "http"
 ```
 
-So, what do we get is:
-1. Account information: address (workchain+hash), network (mainnet/testnet), wallet stateInit that can be used for public key extraction.
-2. Device information: name and version of wallet application (name should be equal to that we requested, but we can check that for additional confidence), the platform name and supported features list.
-3. Provider: http -- that means all requests and responses between wallet app and web app are served over the bridge.
+The results above take the following into consideration:
+1. **Account**: information: contains the address (workchain+hash), network (mainnet/testnet), and the wallet stateInit that is used for public key extraction.
+2. **Device**: information: contains the name and wallet application version (the name should be equal to what was requested initially, but this can be verified to ensure authenticity), and the platform name and supported features list.
+3. **Provider**: contains http -- which allows all requests and responses between the wallet and web applications to be served over the bridge.
 
 ## Logging out and requesting TonProof
 
-We have logged into our webapp, but... how does backend know that's us? We need to request the wallet ownership proof!
-This can be done only at authentication, so we need to log out. Run the following code in console.
+Now we have logged into our webapp, but... how does the backend know that it is the correct party? To verify this we must request the wallet ownership proof. 
+
+This can be completed only using authentication, so we must log out. Therefore, we run the following code in the console:
+
 ```js
 connector.disconnect();
 ```
-It returns a promise with no value. Also, when disconnect is complete, you'll see the line `Connection status: null`.
 
-Before we go on adding TonProof, let's tamper with our code to show that current implementation is unsafe.
+When the disconnection process is complete, the `Connection status: null` will be displayed.
+
+Before the TonProof is added, let's alter the code to show that the current implementation is insecure:
+
 ```js
 let connHandler = connector.statusChangeSubscriptions[0];
 connHandler({
@@ -332,15 +339,13 @@ connHandler({
 });
 ```
 
-You'll see lines in console almost identical to those when we connected normally. So if backend doesn't perform user authentication we can pretend to be even TON Foundation, and if balance or some token ownership gives any privileges to user we can get that privilege as well.
-Of course, provided code doesn't change any variables in `connector`, but user can do anything unless that `connector` is protected by the closure; and even then it would not be that hard to extract it using debugger and breakpoints.
+The resulting lines of code in the console are almost identical to those displayed when the connection was initiated in the first place. Therefore, if the backend doesn't perform user authentication correctly as expected, a way to test if it is working correctly is required. To accomplish this, it is possible to act as the TON Foundation within the console, so the legitimacy of token balances and token ownership parameters can be tested. Naturally, the provided code doesn't change any variables in the connector, but the user is able to use the app as desired unless that connector is protected by the closure. Even if that is the case, it is not difficult to extract it using a debugger and coding breakpoints.
 
-So that necessity of authenticating user was proved, let's proceed to writing the code.
+Now that the authentication of the user has been verified, let's proceed to writing the code.
 
-## Connection with TonProof
+## Connection using TonProof
 
-According to documentation, we can pass second argument to `.connect()` method. It contains a payload that will be wrapped and signed by the wallet.
-New connection code follows:
+According to TON Connect’s SDK documentation, the second argument refers to the `connect()` method which contains a payload that will be wrapped and signed by the wallet. Therefore, the result is new connection code:
 
 ```js
           if (wallet.embedded || wallet.injected) {
@@ -363,7 +368,7 @@ Connection link:
 ```
 https://app.tonkeeper.com/ton-connect?v=2&id=4b0a7e2af3b455e0f0bafe14dcdc93f1e9e73196ae2afaca4d9ba77e94484a44&r=%7B%22manifestUrl%22%3A%22https%3A%2F%2Fratingers.pythonanywhere.com%2Fratelance%2Ftonconnect-manifest.json%22%2C%22items%22%3A%5B%7B%22name%22%3A%22ton_addr%22%7D%2C%7B%22name%22%3A%22ton_proof%22%2C%22payload%22%3A%22doc-example-%3CBACKEND_AUTH_ID%3E%22%7D%5D%7D
 ```
-Expanded and prettified `r` parameter:
+Expanded and simplified `r` parameter:
 ```js
 {
   "manifestUrl":
@@ -375,9 +380,10 @@ Expanded and prettified `r` parameter:
 }
 ```
 
-Then we transfer this link to phone and open it through Tonkeeper.
+Next, the url address link is sent to a mobile device and opened using Tonkeeper.
 
-And here's full wallet information which we receive upon successful connection:
+After this process is complete, the following wallet-specific information is received:
+
 ```js
 {
   "device": {
@@ -411,15 +417,13 @@ And here's full wallet information which we receive upon successful connection:
   }
 }
 ```
+Let's verify the received signature. In order to accomplish this, the signature verification uses Python because it can easily interact with the backend. The libraries required to carry out this process are the `tonsdk` and the `pynacl`.
 
-Let's verify the received signature. We'll do this with Python to show that this is possible on backend side.
-Required libraries: `tonsdk`, `pynacl`.
+Next, it is necessary to retrieve the wallet's public key. To accomplish this, `tonapi.io` or similar services are not used because the end result cannot be reliably trusted. Instead, this is accomplished by parsing the `walletStateInit`.
 
-First of all, we must get wallet's public key. We will NOT use `tonapi.io` or similar services as there are no reasons why we may rely on their answer. We will parse `walletStateInit`.
+It is also critical to ensure that the `address` and `walletStateInit`  match, or the payload could be signed with their wallet key by providing their own wallet in the `stateInit` field and another wallet in the `address` field.
 
-Also, we have to check that `address` and `walletStateInit` match, or one could sign the payload with their wallet key, provide own wallet in stateInit field and other wallet in address field.
-
-StateInit has two references: one for code and one for data. We want to get public key so we load the second reference. Then we skip 8 bytes (4 bytes are used for `seqno` and 4 for `subwallet_id` in all modern wallet contracts) and load the next 32 bytes (256 bits) -- they are the key.
+The `StateInit` is made up of two reference types: one for code and one for data. In this context, the purpose is to retrieve the public key so the second reference (the data reference) is loaded. Then 8 bytes are skipped (4 bytes are used for the `seqno` field and 4 for `subwallet_id` in all modern wallet contracts) and the next 32 bytes are loaded (256 bits) -- the public key.
 
 ```python
 import nacl.signing
@@ -444,7 +448,7 @@ print(public_key)
 verify_key = nacl.signing.VerifyKey(bytes(public_key))
 ```
 
-After that, we look into documentation to check what exactly is signed with wallet key.
+After the sequencing code above is implemented, the correct documentation is consulted to check which parameters are verified and signed using the wallet key:
 
 > ```
 > message = utf8_encode("ton-proof-item-v2/") ++  
@@ -458,19 +462,20 @@ After that, we look into documentation to check what exactly is signed with wall
 >   sha256(0xffff ++ utf8_encode("ton-connect") ++ sha256(message))
 > )
 > ```
-> 
-> where:
-> -   `Address` is the wallet address encoded as a sequence:
+
+
+> Whereby the:
+> -   `Address` denotes the wallet address encoded as a sequence:
 >     -   `workchain`: 32-bit signed integer big endian;
 >     -   `hash`: 256-bit unsigned integer big endian;
-> -   `AppDomain` is Length ++ EncodedDomainName
->     -   `Length` is 32-bit value of utf-8 encoded app domain name length in bytes
+> -   `AppDomain` is the Length ++ EncodedDomainName
+>     -   `Length` uses a 32-bit value of utf-8 encoded app domain name length in bytes
 >     -   `EncodedDomainName` id `Length`-byte utf-8 encoded app domain name
-> -   `Timestamp` 64-bit unix epoch time of the signing operation
-> -   `Payload` is a variable-length binary string
-> -   `utf8_encode` produces plain byte string with no length prefixes.
+> -   `Timestamp` denotes the 64-bit unix epoch time of the signing operation
+> -   `Payload` denotes a variable-length binary string
+> -   `utf8_encode` produces a plain byte string with no length prefixes.
 
-Let's reimplement this in Python. Endianness of some integers is not specified so we must look into some example -- for example, you may refer to Tonkeeper implementation: [ConnectReplyBuilder.ts](https://github.com/tonkeeper/wallet/blob/77992c08c663dceb63ca6a8e918a2150c75cca3a/src/tonconnect/ConnectReplyBuilder.ts#L42).
+Let's reimplement this in Python.  The endianness of some of the integers above is not specified, so several examples must be considered. Please refer to the following Tonkeeper implementation detailing some related examples: : [ConnectReplyBuilder.ts](https://github.com/tonkeeper/wallet/blob/77992c08c663dceb63ca6a8e918a2150c75cca3a/src/tonconnect/ConnectReplyBuilder.ts#L42).
 
 ```python
 received_timestamp = 1674392728
@@ -490,15 +495,16 @@ verify_key.verify(hashlib.sha256(signed).digest(), base64.b64decode(signature))
 # b'\x0eT\xd6\xb5\xd5\xe8HvH\x0b\x10\xdc\x8d\xfc\xd3#n\x93\xa8\xe9\xb9\x00\xaaH%\xb5O\xac:\xbd\xcaM'
 ```
 
-Now, if attacker tries to impersonate someone and doesn't provide valid signature, we will get error: `nacl.exceptions.BadSignatureError: Signature was forged or corrupt`.
+After implementing the above parameters, if an attacker tries to impersonate a user and doesn't provide a valid signature, the following error will be displayed: `nacl.exceptions.BadSignatureError: Signature was forged or corrupt`.
 
 ## Next steps
 
-When writing your dApp, here's a list of things you should consider as well:
-- after successful connection (either restored or new), you should display `Disconnect` button instead of a few `Connect` ones;
-- when user disconnects, you'll need to recreate `Connect` buttons;
+When writing a dApp, the following should also be considered:
+
+- after a successful connection is completed (either a restored or new connection), the `Disconnect` button should be displayed instead of several `Connect` buttons
+- after a user disconnects, `Disconnect` buttons will need to be recreated
 - wallet code should be checked, because
-   - newer wallet versions could place public key in a different location, and
-   - currently user may sign in not with wallet but with some other contract, which will luckily contain his public key in expected location.
+   - newer wallet versions could place public keys in a different location and create issues
+   - the current user may sign in using another type of contract instead of a wallet. Thankfully, this will contain the public key in the expected location
 
 Good luck and have fun writing dApps!
