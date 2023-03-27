@@ -42,6 +42,7 @@ If you are a web or bot developer, you may find the following repositories usefu
 ### Go
 
 - [10+ examples from xssnick/tonutils-go](https://github.com/xssnick/tonutils-go/tree/master/example)
+- [7+ examples from tonkeeper/tongo](https://github.com/tonkeeper/tongo/tree/master/example)
 
 ## Most popular SDK
 
@@ -64,7 +65,7 @@ Here is a list of modern SDKs that are constantly supported and improved:
 ### Go SDK
 
 - [xssnick/tonutils-go](https://github.com/xssnick/tonutils-go) — Golang SDK for the TON Blockchain. 
-- [startfellows/tongo](https://github.com/startfellows/tongo) — Golang SDK with native ADNL support, cells manipulations and CGO for TVM and tx emulations.
+- [tonkeeper/tongo](https://github.com/tonkeeper/tongo) — Golang SDK with native ADNL support, cells manipulations and CGO for TVM and tx emulations.
 
 
 ### Kotlin / Java SDK
