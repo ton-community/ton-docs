@@ -1,55 +1,51 @@
 # TON Connect for Developers
 
-**Before you start implementing TON Connect in your application or service, we recommend to read the following documentation.**
+:::info
+Before commencing the implementation of TON Connect in your application or service, we recommend reading the following [documentation](https://github.com/ton-connect/docs) which details more on the TON Connect protocol. It is also recommended that developers go over some of our TON Connect dApp integration examples in our [GitHub](https://github.com/ton-connect/demo-dapp).
+:::
 
-This is the implementation of the TON Connect. To find more details about TON Connect protocol see the dedicated [docs](https://github.com/ton-connect/docs). Also you can observe example of the TON Connect integration in the dapp on [Github](https://github.com/ton-connect/demo-dapp).
+The TON Connect repository contains three main packages:
 
-Repository contains three packages:
-
-- ​[@tonconnect/sdk](https://www.npmjs.com/package/@tonconnect/sdk)​
-- ​[@tonconnect/protocol](https://www.npmjs.com/package/@tonconnect/protocol)​
-- @tonconnect/ui
+- [@tonconnect/sdk](https://www.npmjs.com/package/@tonconnect/sdk)  - TON Connect SDK
+- [@tonconnect/protocol](https://www.npmjs.com/package/@tonconnect/protocol) - TON Connect protocol specifications
+- @tonconnect/ui - TON Connect User Interface (UI)
 
 ## TON Connect SDK
 
-- ​[GitHub](https://github.com/ton-connect/sdk/tree/main/packages/sdk)​
-- ​[NPM](https://www.npmjs.com/package/@tonconnect/sdk)​
+The first of the three frameworks that helps developers integrate TON Connect into their applications is the TON Connect SDK. It is primarily used to connect apps to TON Wallets via the TON Connect protocol.
 
-Use it to connect your app to TON wallets via TON Connect protocol. You can find the full description in the link above.
+- [GitHub](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
+- [NPM](https://www.npmjs.com/package/@tonconnect/sdk)
 
 ## TON Connect protocol models
 
-- ​[GitHub](https://github.com/ton-connect/sdk/tree/main/packages/protocol)​
-- ​[NPM](https://www.npmjs.com/package/@tonconnect/protocol)​
+This package contains protocol requests, protocol responses, event models and encoding and decoding functions. It can be used to integrate TON Connect to wallet apps written in TypeScript. In order to integrate TON Connect into a dApp the [@tonconnect/sdk](https://www.npmjs.com/package/@tonconnect/sdk) should be used.
 
-This package contains protocol requests, responses and event models and encoding, decoding functions. You can use it to integrate TON Connect to your wallet app (written with TypeScript). If you want to integrate TON Connect to your dapp, you should use [@tonconnect/sdk](https://www.npmjs.com/package/@tonconnect/sdk).
+- [GitHub](https://github.com/ton-connect/sdk/tree/main/packages/protocol)
+- [NPM](https://www.npmjs.com/package/@tonconnect/protocol)
+
 
 ## TON Connect UI
 
-This package is work in progress right now. It will allow you to integrate TON Connect to your app easier using our UI elements such as "connect wallet button", "select wallet dialog" and confirmation modals.
+The TON Connect User Interface (UI) is a framework that allows developers to improve the user experience (UX) for application users. TON Connect can easily be integrated with apps using simple UI elements such as the "connect wallet button", "select wallet dialog" and confirmation modals. Here are three main examples of how TON Connect improves UX in apps:
 
-Basic example of an app functionality in the dapp browser: [GitHub](https://ton-connect.github.io/demo-dapp/)​
+* Example of app functionality in the dApp browser: [GitHub](https://ton-connect.github.io/demo-dapp/)
 
-Example of a backend part of the dapp above [GitHub](https://github.com/ton-connect/demo-dapp-backend)​
+* Example of a backend partition of the dApp above: [GitHub](https://github.com/ton-connect/demo-dapp-backend)
 
-Bridge server on Go: [GitHub](https://github.com/ton-connect/bridge)​
+* Bridge server using Go: [GitHub](https://github.com/ton-connect/bridge)
 
-​
 
-## Coming soon
+The TON Connect UI includes:
 
-In the near future, the standard TON Connect UI will be available to all developers, including:
+* modal wallet selection window
+* connect button
+* interfaces for connecting and signing transactions, etc.
 
-- modal wallet selection window;
+This kit will simplify the implementation of TON Connect in apps built for TON Blockchain. Standard frontend frameworks are supported, as well as applications that don’t use predetermined frameworks
 
-- connect button;
+## General Questions and Concerns
 
-- interfaces for connecting and signing transactions, etc.
+If any of our developers or community members encounter any additional issues during the implementation of TON Connect 2.0, please contact the [Tonkeeper developer](https://t.me/tonkeeperdev) channel.
 
-This kit will simplify the implementation of TON Connect in your apps. Standard frontend frameworks will be supported, as well as applications implemented without frameworks
-
-For additional issues in the process of TON Connect 2.0 implementation, you should to contact with our team in the special chat: [Telegram chat for the Developers](https://t.me/tonkeeperdev)​
-
-​
-
-If you have any issues or proposals, you can send it directly through appropriate [GitHub directory](https://github.com/ton-connect/).
+If you experience any additional issues, or would like to present a proposal on how to improve TON Connect 2.0, please contact us directly through the appropriate [GitHub directory](https://github.com/ton-connect/).

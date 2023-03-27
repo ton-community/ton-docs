@@ -71,11 +71,11 @@ addshard 0 -9223372036854775808
 
 Masterchain is always monitored by default. Shards can be removed using `delshard 0 -9223372036854775808`.
 
-### Lite client
+### Lite Client
 
-Global config should contain at least one of two secions: `liteservers` and `liteservers_v2`. First section contains "full" liteservers which have data about all shard states. Second section contains "partial" liteservers which contain data about some part of the blockchain.
+Global config should contain at least one of two secions: `liteservers` and `liteservers_v2`. First section contains "full" Liteservers which have data about all shard states. Second section contains "partial" liteservers which contain data about some part of the blockchain.
 
-"Partial" liteservers are described as following:
+"Partial" Liteservers are described as following:
 
 ```json
 "liteservers_v2": [
@@ -97,7 +97,7 @@ Global config should contain at least one of two secions: `liteservers` and `lit
 ]
 ```
 
-Lite-client and Tonlib support this config and can choose a suitable liteserver for each query. Note that each liteserver monitors masterchain by default, and each server in `liteservers_v2` is implicitly configured to accept queries about masterchain. Shard `wc:shard_pfx` in the config means that the server accepts queries about shard `wc:shard_pfx`, its ancestors and its descendsnts (just like configuration of collators).
+Lite Client and Tonlib support this config and can choose a suitable Liteserver for each query. Note that each Liteserver monitors masterchain by default, and each server in `liteservers_v2` is implicitly configured to accept queries about masterchain. Shard `wc:shard_pfx` in the config means that the server accepts queries about shard `wc:shard_pfx`, its ancestors and its descendsnts (just like configuration of collators).
 
 ## Full collated data
 By default validators proposing new block in validator set do not attach data that proves "prior to block" state. This data should be obtained by other validators from locally stored state. That way old (from master branch) and new nodes may reach consensus, but new validators should keep eye on all network state.
@@ -113,4 +113,4 @@ The practical ability to separate *Validator* and *Collator* roles is the main m
 - ensure stable and secure way to interaction of Validators and Collators
 - ensure suitable financial model for Collators which incentivize durable collation of new blocks
 
-Currently these tasks are out of the scope.
+Currently, these tasks are out of the scope.

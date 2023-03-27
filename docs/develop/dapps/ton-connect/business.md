@@ -1,58 +1,54 @@
 # TON Connect for Business
 
-TON Connect offers powerful features, attracts traffic and increases retention.
+TON Connect is built to be customizable for businesses by offering powerful features that attract traffic and increase user retention.
 
 ## Product features
 
-- secure and private authentication with controlled disclosure of personal data;
-- signing arbitrary transactions on the TON blockchain within a single user session;
-- instant connectivity between your app and the user’s wallet;
-- your app is automatically available right within the wallet.
+- secure and private authentication with controlled personal data disclosure
+- arbitrary transaction signing on TON within a single user session
+- instant connectivity between applications and user wallets
+- automatic application availability directly within wallets
 
-## Impact on product metrics
+## Product metric impact
 
-- attract traffic through the wallets supporting TON Connect;
-- increase user retention by saving the app to recently opened list and favorites apps list;
-- increase user engagement through interaction with multiple applications;
+- attract additional traffic through wallets supporting TON Connect
+- increased user retention with in-app list saving feature (e.g., recently opened and favorites app lists)
+- increased user engagement through multi application interaction
 
 ## Adopting TON Connect
 
 ### Basic steps
 
-Implement TON Connect in your application using the SDK. The implementation requires minimal efforts, and can be performed by your app’s developer. The standard and documentation is available openly.
+In order for developers to integrate TON Connect into their applications the specialized TON Connect SDK is used. The process is quite simple and can be performed by accessing the correct documentation when needed.
 
-Users launch your app and connect it to one of the wallets that support TON Connect via QR code and or a universal link. Apps could also be opened within a wallet in a built-in browser.
+TON Connect allows users to connect their applications with numerous wallets via a QR code or universal connectivity link. Apps can also be opened within a wallet using a built-in browser extension and it is critical to keep up to date with additional features that are added to TON Connect moving forward.
 
-Keep your up to date with future features in TON Connect.
+### Developer Integration assistance for TON Connect
 
-### Integration assistance from the TON Connect developers
+1. Describing the existing user flow of your application
+2. Identifying the operations required (e.g. transaction authorization, message signing)
+3. Describing your technology stack to our team
 
-Describe the existing user flow of your application.
 
-Identify the operations you need (e.g. transaction authorization, message signing).
-
-Describe your technology stack.
-
-Send information to our [bizdev team](https://t.me/tonrostislav). We will offer you the optimal solution for your application.
+If you’re interested in learning more about TON Connect and its various services and capabilities, feel free to reach out to TON Connect Business [developer](https://t.me/tonrostislav) to discuss your desired solution.
 
 ### Common implementation cases
 
-In this [SDK](https://github.com/ton-connect/sdk) you can find detailed instructions to implement TON Connect.
+By using the [TON Connect SDK](https://github.com/ton-connect/sdk) , detailed instructions to integrate TON Connect allows developers to:
 
-Provided functionality allows:
 
-- connect to your application with a TON wallet,
-- log in to your backend using the wallet's address,
-- send transactions and then sign any actions with the wallet.
+- connect their applications with carious TON wallet types
+- backend login via the corresponding wallet's address
+- sending request transactions and in-wallet signing(accepting requests)
 
-SDK, specifications and a demo app are available on Github: [https://github.com/ton-connect/](https://github.com/ton-connect/demo-dapp)​
+To gain a better understand of what is possible with this solution, check out our demo app that is available on Github: [https://github.com/ton-connect/](https://github.com/ton-connect/demo-dapp)
 
 ### Currently supported technology stack:
 
-- any web applications — serverless and backends;
-- React-Native mobile apps;
-- coming soon: SDK for mobile applications in Swift, Java, Kotlin.
+- all web applications — serverless and backends
+- React-Native mobile apps
+- coming soon: SDK for mobile applications in Swift, Java, Kotlin
 
-TON Connect is an open protocol. You can implement and use it to develop dapps in any environment and with any programming language.
+TON Connect is an open protocol and can be used to develop dapps with any programming language or development environment.
 
-For JavaScript applications, we have made a JS SDK that implements the protocol and allows you to integrate TON Connect in minutes. SDKs for other popular programming languages will be available in the future.
+For JavaScript (JS) applications, the TON developer community created a JavaScript SDK that allows developers to integrate TON Connect seamlessly in minutes. In the future, SDKs designed to operate with additional programming languages will be available.

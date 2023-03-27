@@ -246,6 +246,7 @@ const sidebars = {
             'develop/smart-contracts/security/README',
             'develop/smart-contracts/security/ton-hack-challenge-1',
             'develop/smart-contracts/guidelines/random-number-generation',
+            'develop/smart-contracts/security/random',
           ],
         },
         {
@@ -527,7 +528,6 @@ const sidebars = {
       type: 'category',
       label: 'Blockchain Details',
       items: [
-        'participate/own-blockchain-software/random',
         'develop/research-and-development/persistent-states',
       ],
     },
