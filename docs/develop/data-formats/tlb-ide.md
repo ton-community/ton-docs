@@ -8,7 +8,7 @@ Additionally, the correct TL-B syntax specifications are described in the [TlbPa
 
 ### TL-B Parsers
 
-TL-B parsers help carry out the serialization of basic [TL-B types](/docs/develop/data-formats-tl-b-types). Each of which implements TL-B types as an object, and returns serialized binary data.
+TL-B parsers help carry out the serialization of basic [TL-B types](/develop/data-formats/tl-b-types). Each of which implements TL-B types as an object, and returns serialized binary data.
 
 | Language   | SDK                                                                                                         | Social                 |
 |------------|-------------------------------------------------------------------------------------------------------------|------------------------|

@@ -7,7 +7,7 @@ So feel free to read about it later.
 
 In this section, complex and unconventional typed language binary (TL-B) structures are analyzed. To get started, we recommend reading [this documentation](/docs/learn/overviews/tl-b-language) first to become more familiar with the topic.
 
-<img alt="tlb structure" src="/docs/img/docs/tlb.drawio.svg" width={'100%'}/>
+<img alt="tlb structure" src="/img/docs/tlb.drawio.svg" width={'100%'}/>
 
 
 ## Either
