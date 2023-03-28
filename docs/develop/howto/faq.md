@@ -60,7 +60,7 @@ Find more actual params in [Network Configs](/develop/howto/network-configs).
 
 ### What is the schema of a block?
 
-- [Block layout](https://ton.org/docs/tblkch.pdf#page=96&zoom=100,148,172), TON Blockchain, p.96
+- [Block layout](https://docs.ton.org/tblkch.pdf#page=96&zoom=100,148,172), TON Blockchain, p.96
 
 ## Transactions
 

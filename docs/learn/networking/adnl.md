@@ -36,4 +36,4 @@ A TCP-like stream protocol can be built over ADNL.
 ## What's next?
 
 * Read more about ADNL in the [Low-Level ADNL article](/learn/networking/low-level-adnl)
-* Chapter 3.1 of the [TON Whitepaper](https://ton.org/docs/ton.pdf).
+* Chapter 3.1 of the [TON Whitepaper](https://docs.ton.org/ton.pdf).
