@@ -7,7 +7,7 @@ Current members of the TON Docs team are listed alphabetically below.
 
 ### Alex Golev
 
-Enthusiast, docs contributor, author of multiple articles
+[TON Docs](https://github.com/ton-community/ton-docs) maintainer, author of multiple articles
 
 * Telegram: [@iftryalexg](https://t.me/iftryalexg)
 * GitHub: [Reveloper](https://github.com/Reveloper)
@@ -21,7 +21,7 @@ Web3 Developer, [TON Dev community](https://github.com/ton-community) contributo
 
 ### Gusarich
 
-Web3 Developer, [TON Dev community](https://github.com/ton-community) and [TON Society](https://github.com/ton-society) contributor, author of multiple articles in docs
+Web3 Developer, [TON Dev community](https://github.com/ton-community) contributor and [TON Footsteps](https://github.com/ton-society/ton-footsteps) maintainer, author of multiple articles in docs
 
 * Telegram: [@Gusarich](https://t.me/Gusarich)
 * GitHub: [Gusarich](https://github.com/Gusarich)
@@ -42,7 +42,7 @@ Python developer with DevOps experience, TON Test Challenge winner, docs contrib
 
 ### Slava
 
-Enthusiast, author of multiple articles in docs
+[TON Footsteps](https://github.com/ton-society/ton-footsteps) maintainer, author of multiple articles in docs
 
 * Telegram: [@delovoyslava](https://t.me/delovoyslava)
 * GitHub: [delovoyhomie](https://github.com/delovoyhomie)
