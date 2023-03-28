@@ -511,6 +511,7 @@ const sidebars = {
       label: 'Run a Node',
       items: [
         'participate/nodes/node-types',
+        'participate/nodes/lite-client',
         'participate/nodes/run-node',
         'develop/howto/full-node',
         'develop/howto/validator',
