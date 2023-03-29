@@ -10,7 +10,7 @@ Please note that here and later the code, comments and/or documentation may cont
 
 * [TON Whitepaper](https://docs.ton.org/ton.pdf)
 
-  TON Whitepaper – a general description of TON Network and TON Blockchain.
+  TON Whitepaper – a general description of TON(The Open Network) Blockchain.
 
 * [TON Virtual Machine](https://docs.ton.org/tvm.pdf)
 
@@ -18,7 +18,7 @@ Please note that here and later the code, comments and/or documentation may cont
 
 * [TON Blockchain](https://docs.ton.org/tblkch.pdf)
 
-  TON Blockchain description (may include outdated information).
+  Telegram Open Network Blockchain description (may include outdated information).
 
 * [Catchain Consensus Protocol](https://docs.ton.org/catchain.pdf)
 
