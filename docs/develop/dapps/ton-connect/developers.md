@@ -44,6 +44,12 @@ The TON Connect UI includes:
 
 This kit will simplify the implementation of TON Connect in apps built for TON Blockchain. Standard frontend frameworks are supported, as well as applications that don’t use predetermined frameworks
 
+## TON Connect Python
+
+Example of checking proof from Ton Connect on Python
+
+https://github.com/disintar/ton-connect-python-proof/blob/master/check_proof.ipynb
+
 ## General Questions and Concerns
 
 If any of our developers or community members encounter any additional issues during the implementation of TON Connect 2.0, please contact the [Tonkeeper developer](https://t.me/tonkeeperdev) channel.
