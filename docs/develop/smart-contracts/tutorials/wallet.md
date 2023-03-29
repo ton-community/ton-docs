@@ -28,7 +28,7 @@ Working with testnet often leads to issues like errors while deploying, difficul
 
 **OPTIONAL: ** You can also install [tonutils-go](https://github.com/xssnick/tonutils-go) library and GoLand IDE for that. This library will be used in the tutorial and will help to understand some points better.
 
-<Tabs group>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```bash
