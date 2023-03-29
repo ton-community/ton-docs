@@ -28,7 +28,7 @@ Working with testnet often leads to issues like errors while deploying, difficul
 
 **OPTIONAL: ** You can also install [tonutils-go](https://github.com/xssnick/tonutils-go) library and GoLand IDE for that. This library will be used in the tutorial and will help to understand some points better.
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```bash
@@ -392,7 +392,7 @@ If the number fits in fewer bits than we specified, then the missing zeros are a
 
 We can now start preparing our transaction, which will be sent to our wallet v3. First, let’s say user wants to send 0.5 TON to themeself with the text "**Hello, TON!**" ([How to send message with a comment](/develop/func/cookbook#how-to-send-a-simple-message)).
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -425,7 +425,7 @@ We have created an `InternalMessageBody` in which we store the body of our messa
 
 Then create `InternalMessage` according to the information we have studied earlier:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -489,7 +489,7 @@ internalMessage := cell.BeginCell().
 
 We need to get `seqno` of our wallet smart contract. To do this, create `Client`, using which we will send a request to run the Get method "seqno" of our wallet. We will also add mnemonic, which we can get from the **Tonkeeper** settings to sign our transaction in the next steps:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -562,7 +562,7 @@ privateKey := ed25519.NewKeyFromSeed(k)
 
 Thus, we have the following objects that we want to send: `seqno`, `keys`, `internal message`. Now we need to create a message for our wallet and store the data in this message in the sequence which was at the beginning of the tutorial: 
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -619,7 +619,7 @@ Wallet V4 code, after all the checks that we reviewed in the first part of the t
 
 To deliver any internal message to a blockchain from the outer world, we need to send it inside an external transaction. As we have previously considered, we are only interested in `ext_in_msg_info$10`, as the goal is to send an external message to our contract. Let's create an external message that will be sent to our wallet:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -665,7 +665,7 @@ Message Body | The message that we want to pass to the contract for processing.
 
 Now we have a completed message that is ready to be sent to our contract. To do this, it should first be serialized to `BOC` (Bag of Cells), then be sent:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -713,7 +713,7 @@ We will create our wallet from scratch. You will learn how to compile the code o
 
 The first thing to start with is to get a `private` and `public` key. We generate a mnemonic phrase and then extract private and public keys using cryptographic libraries:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -785,7 +785,7 @@ throw_unless(34, subwallet_id == stored_subwallet);
 
 We will need to add this value to the starting date of the contract, so save it in the variable:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -875,7 +875,7 @@ Hash: idlku00WfSC36ujyK2JVT92sMBEpCNRUXOGO4sJVBPA=
 
 And now we can, using base64 encoded output, get the same cell with our wallet code in other libraries in other languages:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="go" label="Golang">
 
 ```go
@@ -921,7 +921,7 @@ library | A library that is resided on the [masterchain](/learn/overviews/ton-bl
 
 Now we need to prepare the `initial data`, which will be in the storage of our contract immediately after the deployment:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -950,7 +950,7 @@ dataCell := cell.BeginCell().
 
 At this stage, we have both the contract `code` and its `initial data`. With this data, we can finally get our **wallet address**. As previously considered, the address of the wallet depends on the State Init, which includes the code and initial data.
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -999,7 +999,7 @@ With State Init, we can now build the transaction and send it to the blockchain.
 
 Let’s start with building the transaction we built *in the previous section*:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -1080,7 +1080,7 @@ Now we have State Init and Message Body.
 
 The **main change** will be in the external message, because here the State Init will be stored for deploying. Since the contract does not have its own code yet, it cannot process any internal messages. So we send its code and the initial data and **after the deployment it can process our message** with "Hello, TON!":
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -1119,7 +1119,7 @@ externalMessage := cell.BeginCell().
 
 Finally, we can send our transaction to blockchain to deploy our wallet and use it.
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -1181,7 +1181,7 @@ As you may already know, [one cell can store up to 1023 bits of data and up to 4
 
 To do this, it is necessary to create 4 different internal messages. We can do this manually or through a `loop`. Create `three arrays`: in first TON amount for each transaction will be stored; in the second - a comment; and the last - the destination address. We will also create another array for our messages:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -1234,7 +1234,7 @@ var internalMessages [len(internalMessagesAmount)]*cell.Cell // array for our in
 
 For transactions mode, we will not create an array because all transactions will be sent with `mode 3`, but if you require different modes, you can create an array for that too. Now create a loop in which our internal messages will be built and add them to the array:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -1331,7 +1331,7 @@ for i := 0; i < len(internalMessagesAmount); i++ {
 
 Now lets use our knowledge from **chapter two** of the tutorial to build a transaction for our wallet, which will send 4 transactions simultaneously:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -1422,7 +1422,7 @@ toSign := cell.BeginCell().
 
 And now add our messages that we built earlier in the loop:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -1449,7 +1449,7 @@ for i := 0; i < len(internalMessages); i++ {
 
 What is left to do is to **sign** our message,  **build external message** as in previous chapters and  **send it** to the blockchain:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -1536,7 +1536,7 @@ We need [TL-B from this standard for the NFT transfer](https://github.com/ton-bl
 
 Now let's move on to building the transaction itself:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -1644,7 +1644,7 @@ We look at two methods: `get_public_key` and `is_plugin_installed`. They have be
 
 First we need a client who will send requests. I will use my wallet address ([EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF](https://tonscan.org/address/EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF)) as an example:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -1693,7 +1693,7 @@ walletAddress := address.MustParseAddr("EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72
 
 Now we need to call GET method wallet.
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -1722,7 +1722,7 @@ After the call we get a huge number (256 bits), which must be translated into he
 
 Now we can switch to `is_plugin_installed`. As an example I will use my old wallet ([EQAM7M-HGyfxlErAIUODrxBA3y5roBeYiTuy6BHgJ3Sx8k](https://tonscan.org/address/EQAM7M--HGyfxlErAIUODrxBA3yj5roBeYiTuy6BHgJ3Sx8k)) and the plugin ([EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_N9qwOTSAy3sQSZ](https://tonscan.org/address/EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_N9qwOTSAy3sQSZ)) that will be installed for at least a few decades:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -1743,7 +1743,7 @@ subscriptionAddress := address.MustParseAddr("EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_
 
 Now we need to get the hash address of our plugin. After that we can translate it into number and send it to GET Method. 
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -1790,7 +1790,7 @@ In chapter three, we deployed our wallet. To do this, we first sent some TON and
 
 We will use the smart V3R2 wallet contract that was used in [the third chapter](/develop/smart-contracts/tutorials/wallet#compiling-our-wallet-code). In this case, set `subwallet_id` to `3` or any other number that you want to get a different address when using the same private key (changeable):
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -1869,7 +1869,7 @@ stateInit := cell.BeginCell().
 
 Now we will get the address of our contract and build InternalMessage. Also we wil add "Deploying..." comment to our transaction.
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -1936,7 +1936,7 @@ Note that we have specified the bits, and then save stateInit and internalMessag
 
 Next, we only need to prepare a message for our wallet and send it:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -2240,7 +2240,7 @@ Here we will only go into a few details as they were detailed previously in this
 
 First, we need to copy [the code of the smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc) to the same directory where stdlib.fc and wallet_v3 are located and remember to add the code `#include "stdlib.fc";` to the beginning of the code. Then we should compile the code of high-load wallet as we did in [chapter three](/develop/smart-contracts/tutorials/wallet#compiling-our-wallet-code):
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -2282,7 +2282,7 @@ Hash: lJTRzI7fEvBWcaGpugmSEJbrUIEeGSTsZcPGKfu4CBI=
 
 And now we can, using base64 encoded output, get the same cell with our wallet code in other libraries in other languages:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="go" label="Golang">
 
 ```go
@@ -2306,7 +2306,7 @@ log.Println("Hash:", base64.StdEncoding.EncodeToString(codeCell.Hash())) // get 
 
 Now we need to get a cell with an initial data, build State Init and get high-load wallet address. We have already studied the smart contract code and have realized that subwallet_id, last_cleaned, public_key and old_queries are sequentially stored in the storage:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -2389,7 +2389,7 @@ Everything else we do is the same as in [Contract deploy via wallet](http://loca
 
 Now we need to send several messages at the same time from our highload wallet. For example, let's take 12 transactions per message so that the commission is small. Each message will have its own comment with a code, and the destination address will be our wallet from which we deployed:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -2462,7 +2462,7 @@ for i := 0; i < 12; i++ {
 
 We now have an array of internal messages. We need to create a dictionary in which we will store our messages and also prepare and sign the body:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
@@ -2568,7 +2568,7 @@ Note that on JS/TS we saved the messages into an array without a mode. TIt happe
 
 Now we have to create an external message and send it to the blockchain:
 
-<Tabs>
+<Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
 
 ```js
