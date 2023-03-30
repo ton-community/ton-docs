@@ -26,8 +26,7 @@ To work with public TonCenter API you need a key:
 * [https://toncenter.com/api/v2/](https://toncenter.com/api/v2/) — community-hosted project for Quick Start with API.
 * [GetBlock Nodes](https://getblock.io/nodes/ton/) — connect and test your dApps using GetBlocks Nodes.
 * [toncenter/ton-http-api](https://github.com/toncenter/ton-http-api) — run your own RPC node.
-
-## SDK
+* [NOWNodes API](https://nownodes.io/nodes/toncoin)- try FREE access to the TON node and Block Explorer.
 
 ### JavaScript SDK
 
