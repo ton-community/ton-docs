@@ -324,6 +324,8 @@ const sidebars = {
       items: [
         'develop/dapps/asset-processing/README',
         'develop/dapps/asset-processing/jettons',
+        'develop/dapps/asset-processing/nfts',
+        'develop/dapps/asset-processing/nft-content',
         'develop/dapps/tutorials/jetton-minter',
         {
           type: 'category',
