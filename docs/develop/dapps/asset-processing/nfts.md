@@ -54,6 +54,9 @@ Let's look at each parameter you need:
 This message is your primary way to interact with NFT. You send it to change the owner. And you receive notifications about receiving NFT as a result of this message. The forward amount should be set to an appropriate value(0.01 TON for regular wallet or more if you wan't to execute contract by transfering NFT), to ensure that the new owner receives a notification about the ownership transfer. This is important because the new owner will not know that they have received the NFT without this notification.
 
 ## Getting NFT Data
+
+Most SDKs have ready handlers for this: [tonweb(js)](https://github.com/toncenter/tonweb/blob/b550969d960235314974008d2c04d3d4e5d1f546/src/contract/token/nft/NftItem.js#L38), [tonutils-go](https://github.com/xssnick/tonutils-go/blob/fb9b3fa7fcd734eee73e1a73ab0b76d2fb69bf04/ton/nft/item.go#L132), [pytonlib](https://github.com/toncenter/pytonlib/blob/d96276ec8a46546638cb939dea23612876a62881/pytonlib/client.py#L771), etc
+
 To get NFT data you should use `get_nft_data()` getter. For example let's check NFT `EQB43-VCmf17O7YMd51fAvOjcMkCw46N_3JMCoegH_ZDo40e`(also known as `foundation.ton` domain).
 
 First you need to execute get method. We will use toncenter.com API for that.
@@ -106,10 +109,11 @@ The process for retrieving all NFTs in a collection differs depending on whether
 Retrieving all NFTs in an ordered collection is relatively straightforward since we already know the number of NFTs we need to retrieve and can easily obtain their addresses. Here are the steps:
 1. Invoke the `get_collection_data` method via the TonCenter API on the collection contract and retrieve the `next_item_index` value from the response.
 2. Use the `get_nft_address_by_index` method, passing in the index value `i` (initially set to 0), to retrieve the address of the first NFT in the collection.
-3. Retrieve the NFT data using the address obtained in the previous step.
+3. Retrieve the NFT data using the address obtained in the previous step. Check that initial NFT collection coinsides with NFT collection reported by NFT itself (in other words Collection didn't appropriate someone else's NFT)
 4. Call method `get_nft_content` with `i` and `individual_content` from previous step.
 5. Increase `i` by 1 and repeat items 2-5 until `i` is equal to `next_item_index`.
 6. At this point, you will have all the necessary information about the collection and its individual items.
+
 
 ### Unordered collection
 Retrieving the list of all NFTs in an unordered collection is a more challenging task because there is no inherent way to obtain the addresses of the NFTs that belong to the collection. Therefore, it is necessary to parse all transactions on the collection contract and check every outgoing message to identify the ones that correspond to NFTs belonging to the collection. To do so, the NFT data must be retrieved, and the `get_nft_address_by_index` method is called on the collection with the `ID` returned by the NFT. If the NFT contract address and the address returned by the `get_nft_address_by_index` method match, it indicates that the NFT belongs to the current collection. However, parsing all messages to the collection can be a lengthy process and may require archive nodes.
