@@ -1,7 +1,10 @@
+import { SearchField } from '@site/src/components/SearchField';
+import { opcodes } from '@site/src/data/opcodes';
+
 # TVM Instructions
 
 :::caution advanced level
-This information is **very low-level** and could be hard to understand for newcomers.  
+This information is **very low-level** and could be hard to understand for newcomers.
 So feel free to read about it later.
 :::
 
@@ -34,8 +37,23 @@ The gas price of each instruction is specified in this document. The basic gas p
 ### 1.2 CSV table
 A machine-readable list of TVM instructions is available [here](https://github.com/ton-community/ton-docs/blob/main/docs/learn/tvm-instructions/instructions.csv).
 
+
+
 ## 2 Stack manipulation primitives
 Here `0 <= i,j,k <= 15` if not stated otherwise.
+
+<SearchField
+  data={opcodes}
+  searchBy="doc_opcode"
+  placeholder="Search for an opcode"
+  showKeys={[
+    { key: 'doc_opcode', name: 'Opcode', isGrouped: true },
+    { key: 'doc_fift', name: 'Fift syntax', isGrouped: true },
+    { key: 'doc_stack', name: 'Stack', isGrouped: true },
+    { key: 'doc_gas', name: 'Gas', isGrouped: true },
+    { key: 'doc_description', name: 'Description' },
+  ]}
+/>
 
 ### 2.1 Basic stack manipulation primitives
 | xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
@@ -953,4 +971,5 @@ Other primitives listed here have opcodes from the same set. When debug is enabl
 | **`FF00`** | `SETCP0` | _`-`_ | Selects TVM (test) codepage zero as described in this document. | `26` |
 | **`FFFz`** | `[z-16] SETCP` | _`-`_ | Selects TVM codepage `z-16` for `1 <= z <= 15`. Negative codepages `-13...-1` are reserved for restricted versions of TVM needed to validate runs of TVM in other codepages. Negative codepage `-14` is reserved for experimental codepages, not necessarily compatible between different TVM implementations, and should be disabled in the production versions of TVM. | `26` |
 | **`FFF0`** | `SETCPX` | _`c - `_ | Selects codepage `c` with `-2^15 <= c < 2^15` passed in the top of the stack. | `26` |
+
 

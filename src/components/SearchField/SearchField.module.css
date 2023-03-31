@@ -1,0 +1,24 @@
+.searchField {
+  outline: none;
+  border: none;
+  background: var(--gray-9);
+  height: 56px;
+  width: 100%;
+  border-radius: 4px;
+  font-size: 1.2em;
+  padding: 0 12px;
+  margin-bottom: 1rem;
+}
+
+[data-theme=dark] .searchField {
+  background: var(--gray-1);
+}
+
+.searchField:focus {
+  background: #FFFFFF;
+  box-shadow: inset 0 0 0 2px var(--ifm-color-primary);
+}
+
+[data-theme=dark] .searchField:focus {
+  background: #000000;
+}
