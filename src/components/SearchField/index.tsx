@@ -1,7 +1,6 @@
 import React, {
   ChangeEvent,
   KeyboardEvent,
-  MouseEvent,
   HTMLAttributes,
   useCallback,
   useEffect,
@@ -50,21 +49,6 @@ export const SearchField = <T extends Record<string, string>>({ data, searchBy, 
     }
   }, [])
 
-  const handleCopy = useCallback((value: string | number) => (event: MouseEvent<HTMLSpanElement>) => {
-    navigator.clipboard.writeText(String(value)).then(() => {
-      const element = event.target;
-
-      if (element instanceof HTMLSpanElement) {
-        timeout.current = null;
-        element.style.opacity = '1';
-
-        timeout.current = setTimeout(() => {
-          element.style.opacity = '0';
-        }, 1000)
-      }
-    });
-  }, [])
-
   useEffect(() => {
     const timeout = setTimeout(() => {
       setDebouncedValue(inputValue);
@@ -76,7 +60,7 @@ export const SearchField = <T extends Record<string, string>>({ data, searchBy, 
   }, [inputValue])
 
   useEffect(() => {
-    setFilteredData(data.filter((item) => String(JSON.stringify(Object.values(item))).includes(debouncedValue)))
+    setFilteredData(data.filter((item) => String(JSON.stringify(Object.values(item))).toLowerCase().includes(debouncedValue?.toLowerCase())))
   }, [data, debouncedValue, searchBy])
 
   useEffect(() => () => {
@@ -97,29 +81,49 @@ export const SearchField = <T extends Record<string, string>>({ data, searchBy, 
         {...props}
       />
 
-      {debouncedValue.length !== 0 && filteredData.map((item, index) => (
-        <div key={index} className={styles.card}>
-          {groupedKeys.length > 0 && (
-            <div className={styles.keyContainer}>
-              {groupedKeys.map((keyEntity) => String(item[keyEntity.key]).length > 0 && (
-                <div className={styles.groupedKey} key={keyEntity.name}>
-                  <span>{keyEntity.name}:</span> <code>{item[keyEntity.key]}</code>
+      <table>
+        <thead>
+          <tr>
+            <th style={{ textAlign: "left" }}>xxxxxxx<br/>Opcode</th>
+            <th style={{ textAlign: "left" }}>xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax</th>
+            <th style={{ textAlign: "left" }}>xxxxxxxxxxxxxxxxx<br/>Stack</th>
+            <th style={{ textAlign: "left" }}>xxxx<br/>Gas</th>
+            <th style={{ textAlign: "left" }}>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description</th>
+          </tr>
+        </thead>
 
-                  <span className={styles.copiedState} onClick={handleCopy(item[keyEntity.key])}>
-                    Copied!
-                  </span>
-                </div>
-              ))}
-            </div>
+        <tbody>
+          {debouncedValue.length === 0 ? (
+            <tr>
+              <td colSpan={groupedKeys.length + separateKeys.length}>
+                Please enter a search query
+              </td>
+            </tr>
+          ) : filteredData.length === 0 ? (
+            <tr>
+              <td colSpan={groupedKeys.length + separateKeys.length}>
+                No results found
+              </td>
+            </tr>
+          ) : (
+            filteredData.map((item, index) => (
+              <tr key={index}>
+                {groupedKeys.map((keyEntity) => (
+                  <td key={keyEntity.name}>
+                    {item[keyEntity.key] && <code>{item[keyEntity.key]}</code>}
+                  </td>
+                ))}
+                {separateKeys.map((keyEntity) => (
+                  <td key={keyEntity.name}>
+                    {item[keyEntity.key] && (<Markdown>{item[keyEntity.key]}</Markdown>)}
+                  </td>
+                ))}
+              </tr>
+            ))
           )}
+        </tbody>
+      </table>
 
-          {separateKeys.map((keyEntity) => (
-            <div className={styles.separateKey} key={keyEntity.name}>
-              <strong>{keyEntity.name}:</strong> <Markdown>{item[keyEntity.key]}</Markdown>
-            </div>
-          ))}
-        </div>
-      ))}
     </>
   )
 }
