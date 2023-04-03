@@ -1,6 +1,6 @@
 # TON Payments
 
-<img src="/docs/img/docs/ton-payments.jpeg" style={{margin: "20px 0"}} alt="TON Payments overview"/>
+<img src="/img/docs/ton-payments.jpeg" style={{margin: "20px 0"}} alt="TON Payments overview"/>
 
 On TON Blockchain, block time is about 5 seconds. Even with an increase in network load, that time won’t increase. In other words, in those 5 seconds, millions of transactions can be processed.
 
@@ -37,7 +37,7 @@ We need the help of contributor here! We want to migrate the article from [payme
 :::
 
 :::info
-The theory of payment channels is well described in [TON Whitepaper](https://ton.org/docs/ton.pdf), Chapter 5.1.
+The theory of payment channels is well described in [TON Whitepaper](https://docs.ton.org/ton.pdf), Chapter 5.1.
 :::
 
 
@@ -54,7 +54,7 @@ As the technology improves, payments channels will have the capacity to join tog
 Current smart contracts are already designed to support the functionality of uniting into a single off-chain network.
 
 :::info
-The theory of payment channel network is described in [TON Whitepaper](https://ton.org/docs/ton.pdf), chapter 5.2.
+The theory of payment channel network is described in [TON Whitepaper](https://docs.ton.org/ton.pdf), chapter 5.2.
 :::
 
 ## Conclusion

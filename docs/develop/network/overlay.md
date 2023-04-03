@@ -14,7 +14,7 @@ For the public overlays you can find nodes using DHT.
 ## Interaction with overlay nodes
 
 We have already analyzed an example with finding overlay nodes in an article about DHT,
-in the section [Search for nodes that store the state of the blockchain](/docs/develop/network/dht#search-for-nodes-that-store-the-state-of-the-blockchain). 
+in the section [Search for nodes that store the state of the blockchain](/develop/network/dht#search-for-nodes-that-store-the-state-of-the-blockchain). 
 In this section, we will focus on interacting with them.
 
 When querying the DHT, we will get the addresses of the overlay nodes, from which we can find out the addresses of other nodes of this overlay using [overlay.getRandomPeers](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L237) query.
@@ -52,7 +52,7 @@ Once the connection is established, we can access the overlay nodes using [reque
 
 For requests of this kind, the RLDP protocol is used. And it's important not to forget the `overlay.query` prefix - it must be used for every query in the overlay.
 
-There is nothing unusual about the requests themselves, they are very similar to what we [did in the article about ADNL TCP](/docs/develop/network/adnl-tcp#getmasterchaininfo).
+There is nothing unusual about the requests themselves, they are very similar to what we [did in the article about ADNL TCP](/develop/network/adnl-tcp#getmasterchaininfo).
 
 For example, the `downloadBlockFull` request uses the already familiar schema of block id:
 ```tlb

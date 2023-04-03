@@ -2,10 +2,9 @@
 
 ## About bounce TON back
 
-If you have the `throw_if` function (with code != 0) in recv_internal triggered and the bounce flag
-set([tblkch.pdf 4.2.5](https://newton-blockchain.github.io/tblkch.pdf)), all coins will be sent back.
+If you have the [`throw_if`](/develop/func/builtins#throwing-exceptions) function (with code != 0) in recv_internal triggered and the bounce flag
+set (learn about the bounce flag in [Message Layout](/develop/smart-contracts/messages#message-layout) section), all coins will be sent back.
 
-Read more in the [original discussion](https://t.me/tondev/44958).
 
 ## Payload size in bounced messages
 
