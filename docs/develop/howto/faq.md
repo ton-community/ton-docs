@@ -71,7 +71,7 @@ Find more actual params in [Network Configs](/develop/howto/network-configs).
 
 ### RPC method to get transactions data
 
-- [see answer above](/develop/getting-started#what-is-the-rpc-method-used-to-retrieve-block-information)
+- [see answer above](/develop/howto/faq#are-there-any-standardized-protocols-for-minting-burning-and-transferring-fungible-and-non-fungible-tokens-in-transactions)
 
 ### Is TON transaction asynchronous or synchronous? Is it possible to access documentation that show how this system works?
 
@@ -206,7 +206,7 @@ It is also possible to deploy numerous contracts that are integrated with differ
 
 ### Are smart contract addresses case sensitive?
 
-Yes, smart contract addresses are case sensitive because they are generated using the [base64 algorithm](https://en.wikipedia.org/wiki/Base64).  You can learn more about smart contract addresses [here](/docs/learn/overviews/addresses).
+Yes, smart contract addresses are case sensitive because they are generated using the [base64 algorithm](https://en.wikipedia.org/wiki/Base64).  You can learn more about smart contract addresses [here](/learn/overviews/addresses).
 
 ## Remote Procedure Calls (RPCs)
 
