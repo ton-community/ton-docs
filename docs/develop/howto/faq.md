@@ -208,6 +208,20 @@ It is also possible to deploy numerous contracts that are integrated with differ
 
 Yes, smart contract addresses are case sensitive because they are generated using the [base64 algorithm](https://en.wikipedia.org/wiki/Base64).  You can learn more about smart contract addresses [here](/learn/overviews/addresses).
 
+
+### Is the Ton Virtual Machine (TVM) EVM-compatible?
+
+  The TVM is not compatible with the Ethereum Virtual Machine (EVM) because TON leverages a completely different architecture (TON is asynchronous, while Ethereum is synchronous).
+
+  [Read more on asynchronous smart contracts](https://telegra.ph/Its-time-to-try-something-new-Asynchronous-smart-contracts-03-25).
+
+### Is it possible to write on Solidity for TON?
+
+  Relatedly, the TON ecosystem does not support development in Ethereum’s Solidity programming language.
+
+  But if you add asynchronous messages to the Solidity syntax and the ability to interact with data at a low level, then you get FunC. FunC features a syntax that is common to most modern programming languages and is designed specifically for development on TON.
+
+
 ## Remote Procedure Calls (RPCs)
 
 ### Recommended node providers for data extraction include:
