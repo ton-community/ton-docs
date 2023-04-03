@@ -10,9 +10,11 @@ This section covers the most popular questions about TON Blockchain.
 - [The TON Blockchain is based on PoS consensus](https://blog.ton.org/the-ton-blockchain-is-based-on-pos-consensus)
 - [TON Whitepapers](/learn/docs)
 
-### Similarities and differences versus EVM chains?
+### What are some of the main similarities and differences to EVM blockchains?
 
 - [Ethereum to TON](/learn/introduction#ethereum-to-ton)
+- [Comparison of TON, Solana and Ethereum 2.0](https://ton.org/comparison_of_blockchains.pdf)
+
 
 ### Does TON have a test environment?
 
@@ -22,21 +24,24 @@ This section covers the most popular questions about TON Blockchain.
 
 ### What is the RPC method used to retrieve block information?
 
-Blocks produced by Validators. Existing blocks available via Liteservers. Liteservers accessible via Liteclients. On top of Liteclient built 3rd-party tools like wallets, explorers, dapps, etc.
+Blocks produced by Validators. Existing blocks available via Liteservers. Liteservers accessible via Lite Сlients. On top of Lite Сlient built 3rd-party tools like wallets, explorers, dapps, etc.
 
-- Liteclient core: [ton-blockchain/tonlib](https://github.com/ton-blockchain/ton/tree/master/tonlib)
+- To access the Lite Client core check out this section of our GitHub:  [ton-blockchain/tonlib](https://github.com/ton-blockchain/ton/tree/master/tonlib)
 
-3rd-party high-level block explorers:
-- [Explorers for Developers](/participate/explorers)
+
+Additionally, here are three high-level third-party block explorers:
+- https://explorer.toncoin.org/last
 - https://toncenter.com/
-- https://ton.app/explorers
+- https://tonwhales.com/explorer
+
+Read more in the [Explorers in TON](/participate/explorers) section of our documentation.
 
 ### Block time
 
 _2-5s_
 
 :::info
-Read more at [ton.org/analysis](https://ton.org/analysis).
+Compare TON's on-chain metrics, including block time and time-to-finality, to Solana and Ethereum by reading our analysis at [ton.org/analysis](https://ton.org/analysis).
 :::
 
 ### Time-to-finality
@@ -44,7 +49,7 @@ Read more at [ton.org/analysis](https://ton.org/analysis).
 _Under 6 sec._
 
 :::info
-Read more at [ton.org/analysis](https://ton.org/analysis).
+Compare TON's on-chain metrics, including block time and time-to-finality, to Solana and Ethereum by reading our analysis at [ton.org/analysis](https://ton.org/analysis).
 :::
 
 ### Average block size
@@ -58,7 +63,7 @@ max_block_bytes:2097152
 Find more actual params in [Network Configs](/develop/howto/network-configs).
 :::
 
-### What is the schema of a block?
+### What is the layout of blocks on TON?
 
 - [Block layout](https://docs.ton.org/tblkch.pdf#page=96&zoom=100,148,172), TON Blockchain, p.96
 
@@ -68,41 +73,43 @@ Find more actual params in [Network Configs](/develop/howto/network-configs).
 
 - [see answer above](/develop/getting-started#what-is-the-rpc-method-used-to-retrieve-block-information)
 
-### Is it async or synchronous? If async, any documentation on how it works?
+### Is TON transaction asynchronous or synchronous? Is it possible to access documentation that show how this system works?
 
-TON Blockchain is async:
-- sender prepare tx body and broadcast it via liteclient (or higher-level tool)
-- liteclient return status of broadcast, not tx result
-- sender check desired result
+TON Blockchain messages asynchronous:
+- sender prepares the transaction body(message boc) and broadcasts it via Lite Client (or higher-level tool)
+- Lite Client returns status of broadcast, not result of executing the Transaction
+- sender checks desired result by listening target account(address) state or the whole blockchain state
 
-Example for Wallet contract transfer (high-level):
+An explanation of how TON asynchronous messaging works is explained using an example related to Wallet smart contracts:
 - [How TON wallets work and how to access them using JavaScript](https://blog.ton.org/how-ton-wallets-work-and-how-to-access-them-from-javascript#1b-sending-a-transfer)
 
 Example for Wallet contract transfer (low-level):
 - https://github.com/xssnick/tonutils-go/blob/master/example/wallet/main.go
 
-### How do we determine if a transaction is truly successful? Is querying the transaction level status enough?
+### Is it possible to determine if a transaction is 100% finalized? Is querying the transaction level data sufficient to obtain this information?
 
-**Short answer:** check receiver's account state until it changed, see examples:
+**Short answer:** To ensure the transaction is finalized, the receiver's account must be checked.
+
+To learn more about transaction verification, please see the following examples:
 - Go: [Wallet example](https://github.com/xssnick/tonutils-go/blob/master/example/wallet/main.go)
 - Python: [Storefront bot with payments in TON](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot)
-- JavaScript: [Bot for sales of dumplings](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js)
+- JavaScript: [Bot being used for dumpling sales](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js)
 
-### What is the schema of a transaction?
+### What is the layout of a transaction in TON?
 
 Fundamentals:
+For more info on TON transaction fundamentals please see [page 75 of TON Whitepaper](https://ton.org/docs/tblkch.pdf#page=75&zoom=100,148,290):
 
-- https://ton.org/docs/tblkch.pdf#page=75&zoom=100,148,290 p.75
 
 Example from explorers (transfer tx):
 - https://tonscan.org/tx/FiR7bn5LuBO0FYjx7Fst9kuwnXs128NVFA9YYniKG-A=
 - https://ton.cx/tx/33513508000001:FiR7bn5LuBO0FYjx7Fst9kuwnXs128NVFA9YYniKG+A=:EQBfAN7LfaUYgXZNw5Wc7GBgkEX2yhuJ5ka95J1JJwXXf4a8
 
-### Is batching transactions possible?
+### Is transaction batching possible?
 
-Yes, this is possible in two ways:
-- utilization of async nature of TON, i.e. sending independed transactions to the network
-- using smartcontract which receive a task and then execute it as a batch
+Yes, transaction batching on TON can be accomplished in two distinct ways:
+- By utilizing the asynchronous nature of TON, i.e. sending independent transactions to the network
+- By making use of smart contracts which receive task and execute it as a batch
 
 Example of using batch-featured contract (high-load wallet):
 - https://github.com/tonuniverse/highload-wallet-api
@@ -114,36 +121,33 @@ Example of using batch-featured contract (high-load wallet):
 _9 digits_
 
 :::info
-Number of decimal places supported by mainnet : 9 digits.
+Number of decimal places supported by Mainnet : 9 digits.
 :::
 
-### Is there a standard for tokens and NFTs? i.e. a standard way to parse mint, burn, transfer fungible and non-fungible tokens from a transaction
+### Are there any standardized protocols for minting, burning, and transferring fungible and non-fungible tokens in transactions?
 
-NFTs:
+Non-fungible tokens (NFTs):
 - [TEP-62: NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
-- [Documentation about NFTs](/develop/dapps/defi/tokens#nft)
+- [NFT documentation](/develop/dapps/defi/tokens#nft)
 
 Jettons (tokens):
 - [TEP-74: Jettons standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)
-- [Distributed TON tokens overview](https://telegra.ph/Scalable-DeFi-in-TON-03-30)
-- [Documentation about Jettons](/develop/dapps/defi/tokens#jettons)
+- [Distributed tokens overview](https://telegra.ph/Scalable-DeFi-in-TON-03-30)
+- [Fungible token documentation(Jettons)](/develop/dapps/defi/tokens#jettons)
 
-Other standards:
+Other Standards:
 - https://github.com/ton-blockchain/TEPs
 
-### Are there examples of parsing these events
+### Are there examples of parsing events with Jettons(Tokens) and NFT?
 
-Everything in TON is a boc-message, so using NFT isn't a special event, it's a regular message from/to contract as a regular let's say wallet.
+On TON, all data is transmitted as boc-messages. This means that using NFTs in transactions is not an exceptional event. Rather, it is a regular message that is sent to or received from a (NFT- or Wallet-)contract, much like a transaction involving a standard wallet.
 
-However, some indexed API allows you see all messages from/to contract, so you can filter them by your needs:
+However, certain indexed APIs allow you to view all messages sent to or from a contract, and filter them based on your specific requirements.
 
 - https://tonapi.io/swagger-ui
 
+To better understand how this process works, please refer [Payments Processing](/develop/dapps/asset-processing/) section.
 
-### Please also share how we can get the schema for these events.
-
-https://ton.org/docs/tblkch.pdf#page=53&zoom=100,148,172
-p.53
 
 ## Account Structure
 
@@ -153,7 +157,7 @@ p.53
 
 ### Is it possible to have a named account similar to ENS
 
-Yes, using TON DNS:
+Yes, use TON DNS:
 - [What is TON DNS?](/learn/services/dns)
 
 ### How to distinguish between a normal account and a smart contract?
@@ -166,7 +170,7 @@ For a **Jettons** contract must implement [standard's interface](https://github.
 
 ### Are there any special accounts (e.g. accounts owned by the network) that have different rules or methods from the rest?
 
-There is a special blockchain inside a TON called masterchain. It consists of network-wide contracts with network configuration, validator-related contracts, etc:
+There is a special master blockchain inside a TON called Masterchain. It consists of network-wide contracts with network configuration, validator-related contracts, etc:
 
 :::info
 Read more about masterchain, workchains and shardchains in TON Blockchain overview article: [Blockchain of Blockchains](/learn/overviews/ton-blockchain).
@@ -177,13 +181,14 @@ Good example is smart governance contract, which is a part of masterchain:
 
 ## Smart Contracts
 
-### How do we detect contract deployment events?
+### Is it possible to detect contract deployment events on TON?
 
 [Everything in TON is a smart contract](/learn/overviews/addresses#everything-is-a-smart-contract).
 
 Account address generated from _private key_, _contract code_, and it's _initial state_.
-
 If any component changed - address changed accordingly. Smart contract code itself can be sent to the network later.
+
+Deployment of smart contract means Smart Contract's code is delivered to Blockchain Nodes, and linked on its(smart contract's) address. We need to check contracts deployed by act with code, for example, we can use it's get method or check its Address via Blockchain Explorer.
 
 To protect sending messages to non-existing contracts TON use "bounce" feature. Read more in these articles:
 
@@ -191,36 +196,38 @@ To protect sending messages to non-existing contracts TON use "bounce" feature. 
 - [Paying for processing queries and sending responses](https://ton.org/docs/develop/smart-contracts/guidelines/processing)
 - [Tips & Tricks: bounce TON back](https://ton.org/docs/develop/smart-contracts/guidelines/tips)
 
-### Is it possible to re-deploy code to an existing address or do we have to deploy it as a new contract?
+### Is it possible to re-deploy code to an existing address or does it have to be deployed as a new contract?
 
-Yes, this is possible. If smartcontract implements method ... it's code can be updated and address will remain same.
+Yes, this is possible. If a smart contract carries out specific instructions(set_code()) its code can be updated and the address will remain the same.
 
-- https://ton.org/docs/tblkch.pdf#page=30&zoom=100,148,685 p.30
-
-:::info by the way
-It's possible to *deploy many contracts with different addresses with **same** private key*.
+:::info
+It is also possible to deploy numerous contracts that are integrated with different addresses using the same **private key**.
 :::
 
 ### Are smart contract addresses case sensitive?
 
 Yes, smart contract addresses are case sensitive because they are generated using the [base64 algorithm](https://en.wikipedia.org/wiki/Base64).  You can learn more about smart contract addresses [here](/docs/learn/overviews/addresses).
 
-## RPC
+## Remote Procedure Calls (RPCs)
 
-### Provide a list of recommended node providers for data extraction
+### Recommended node providers for data extraction include:
 
 API types:
 - Read more about different [API Types](/develop/dapps/apis/) (Indexed, HTTP, and ADNL)
 
 Node providers partners:
 
+- https://toncenter.com/api/v2/
 - [getblock.io](https://getblock.io/)
+- https://www.orbs.com/ton-access/
+- [toncenter/ton-http-api](https://github.com/toncenter/ton-http-api) 
+- [nownodes.io](https://nownodes.io/nodes)
 
 TON directory with projects from TON Community:
 
 - [ton.app](https://ton.app/)
 
-###  Are there any public node endpoints we can get started with to explore the chain (mainnet and testnet)
+###  Provided below are two main resources used to obtain information related to public node endpoints on TON Blockchain (for both TON Mainnet and TON Testnet).
 
 - [Network Configs](/develop/howto/network-configs)
 - [Examples and tutorials](/develop/dapps/#examples)
