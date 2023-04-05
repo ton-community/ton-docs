@@ -57,11 +57,11 @@ See more detailed guide in [Running Full Node](/participate/nodes/run-node) sect
 
 1. Before performing a restore, you must stop the validator by running the command:
 ```sh
-systemctl stop validator.service.
+systemctl stop validator.service
 ```
 2. Make a backup of config files `/var/ton-work/db/config.json` and `/var/ton-work/db/keyring`.
 ```sh
-`mv /var/ton-work /var/ton-work.bak`
+mv /var/ton-work /var/ton-work.bak
 ```
 3. Tell plzip to use as many cores as your machine allows to speed up extraction process (-n parameter). Another handy tool to use is pipe viewer utility. Here is example command to restore the dump directly from this server via curl:
 
@@ -83,7 +83,7 @@ Please be patient once you start the node and observe the logs. Dumps come witho
 :::
 9. Start the validator by running the command: 
 ```sh
-systemctl start validator.service.
+systemctl start validator.service
 ```
 10. Open `mytonctrl` and check the node status using the status command.
 
