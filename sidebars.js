@@ -516,9 +516,10 @@ const sidebars = {
         'participate/nodes/node-types',
         'participate/nodes/lite-client',
         'participate/nodes/run-node',
-        'develop/howto/full-node',
-        'develop/howto/validator',
+        'participate/nodes/archive-node',
         'participate/nodes/local-ton',
+        'develop/howto/validator',
+        'develop/howto/full-node',
         'participate/nodes/node-maintenance-and-security',
         'participate/nodes/collators',
         {
