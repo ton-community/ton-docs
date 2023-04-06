@@ -392,7 +392,7 @@ import { CallbackQuery } from 'node-telegram-bot-api';
 import { getWallets } from './ton-connect/wallets';
 import { bot } from './bot';
 
-export const callbacks = { // Define buttons callbacks
+export const walletMenuCallbacks = { // Define buttons callbacks
     chose_wallet: onChooseWalletClick
 };
 
@@ -409,11 +409,11 @@ bot.on('callback_query', query => { // Parse callback data and execute correspon
         return;
     }
 
-    if (!callbacks[request.method as keyof typeof callbacks]) {
+    if (!walletMenuCallbacks[request.method as keyof typeof walletMenuCallbacks]) {
         return;
     }
 
-    callbacks[request.method as keyof typeof callbacks](query, request.data);
+    walletMenuCallbacks[request.method as keyof typeof walletMenuCallbacks](query, request.data);
 });
 
 async function onChooseWalletClick(query: CallbackQuery, _: string): Promise<void> {
@@ -581,7 +581,7 @@ In `onOpenUniversalQRClick` handler we just regenerate a QR and deeplink and mod
 
 In `onWalletClick` handler we are creating special QR and universal link for selected wallet only, and modify the message.
 
-Now we have to register this functions as callbacks: 
+Now we have to register this functions as callbacks (`walletMenuCallbacks`): 
 
 ```ts
 // src/connect-wallet-menu.ts
@@ -592,7 +592,7 @@ import * as fs from 'fs';
 import { getConnector } from './ton-connect/connector';
 import QRCode from 'qrcode';
 
-export const callbacks = {
+export const walletMenuCallbacks = {
     chose_wallet: onChooseWalletClick,
     select_wallet: onWalletClick,
     universal_qr: onOpenUniversalQRClick
@@ -1083,7 +1083,7 @@ CONNECTOR_TTL_MS=600000
 Now let's use it in the `handelConnectCommand`
 
 ```ts
-// src/main.ts
+// src/commands-handlers.ts
 
 import {
     CHAIN,
