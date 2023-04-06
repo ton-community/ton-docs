@@ -21,6 +21,8 @@ After validation round that lasts 65536 seconds or ~18 hours (Network Parameter 
 
 At the moment of writing (April 6 2023), total reward pool per round is ~40'000 Toncoin and average reward per validator is ~120 Toncoin (maximal difference in weight and thus in reward is ~3).
 
+Given 5 billion Toncoins of total supply that gives inflation rate of about 0.3-0.6% annually. This number, however is not constant and may deviate depending on network condition. Eventually it will tend to deflation after Deflation mechanism activation and growth of network utilization.
+
 ## Negative incentives
 
 Generally there are two types of validator misbehaving: idle and malicious, both are and prohibited may be fined.
