@@ -84,11 +84,11 @@ export const SearchField = <T extends Record<string, string>>({ data, searchBy, 
       <table>
         <thead>
           <tr>
-            <th style={{ textAlign: "left" }}>xxxxxxx<br/>Opcode</th>
-            <th style={{ textAlign: "left" }}>xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax</th>
-            <th style={{ textAlign: "left" }}>xxxxxxxxxxxxxxxxx<br/>Stack</th>
-            <th style={{ textAlign: "left" }}>xxxx<br/>Gas</th>
-            <th style={{ textAlign: "left" }}>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description</th>
+            <th style={{ textAlign: "left" }}>Opcode</th>
+            <th style={{ textAlign: "left" }}>Fift syntax</th>
+            <th style={{ textAlign: "left" }}>Stack</th>
+            <th style={{ textAlign: "left" }}>Gas</th>
+            <th style={{ textAlign: "left" }}>Description</th>
           </tr>
         </thead>
 

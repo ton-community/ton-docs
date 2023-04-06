@@ -27,6 +27,7 @@ Jettons are custom fungible tokens on the TON Blockchain. You can create your ow
 
 ### Tools to work with Jettons
 
+* [NFT Jetton Sale Contract](https://github.com/dvlkv/nft-jetton-sale-smc) - NFT Sale contract with jetton support
 * [Scaleton](http://scaleton.io)—see your custom token balance
 * [@tegro/ton3-client](https://github.com/TegroTON/ton3-client#jettons-example)—SDK to query information about Jettons
 

@@ -109,22 +109,22 @@ const sidebars = {
         {
           type: 'link',
           label: 'TON',
-          href: 'https://ton.org/docs/ton.pdf',
+          href: 'https://docs.ton.org/ton.pdf',
         },
         {
           type: 'link',
           label: 'TON Virtual Machine',
-          href: 'https://ton.org/docs/tvm.pdf',
+          href: 'https://docs.ton.org/tvm.pdf',
         },
         {
           type: 'link',
           label: 'TON Blockchain',
-          href: 'https://ton.org/docs/tblkch.pdf',
+          href: 'https://docs.ton.org/tblkch.pdf',
         },
         {
           type: 'link',
           label: 'Catchain Consensus Protocol',
-          href: 'https://ton.org/docs/catchain.pdf',
+          href: 'https://docs.ton.org/catchain.pdf',
         },
       ],
     },
@@ -514,10 +514,12 @@ const sidebars = {
       label: 'Run a Node',
       items: [
         'participate/nodes/node-types',
+        'participate/nodes/lite-client',
         'participate/nodes/run-node',
-        'develop/howto/full-node',
-        'develop/howto/validator',
+        'participate/nodes/archive-node',
         'participate/nodes/local-ton',
+        'develop/howto/validator',
+        'develop/howto/full-node',
         'participate/nodes/node-maintenance-and-security',
         'participate/nodes/collators',
         {

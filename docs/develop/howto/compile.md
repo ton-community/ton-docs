@@ -221,7 +221,7 @@ cmake --build . --target func
 
 ## Compile old versions on Apple M1:
 
-TON supports Apple M1 from 11 Jun 2022 ([Add apple m1 support (#401)](https://github.com/ton-blockchain/ton/blob/c00302ced4bc4bf1ee0efd672e7c91e457652430) commit).
+TON supports Apple M1 from 11 Jun 2022 ([Add apple m1 support (#401)](https://github.com/ton-blockchain/ton/commit/c00302ced4bc4bf1ee0efd672e7c91e457652430) commit).
 
 To compile older TON revisions on Apple M1:
 

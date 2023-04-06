@@ -30,6 +30,29 @@ To summarize, the workflow is as follows:
 5. The tutorial is ***merged and published***
 6. ***Promote your tutorial*** on social media!
 
+## TON Naming
+
+- It is essential to ensure the correct use of _THE_ in the TON documentation. _TON Blockchain_ and _TON Ecosystem_ are capitalized terms, and therefore, do not require _THE_ in their usage.
+- We write _TON_ with regular nouns, and if it requires _THE_ according to English grammar, we use it. For instance: "_The_ TON Connect _protocol_ is a..."
+
+:::info
+TON Blockchain...
+
+TON Ecosystem...
+
+The TON Connect protocol...
+:::
+
+Please refer to the actual TON brand assets [here](https://ton.org/en/brand-assets).
+
+## Context
+
+The primary issue with adding "THE" before "TON" is that during the development of TON documentation and editorial policy, various departments such as marketing, vendors, and developers joined the discussion to capitalize words such as "Blockchain," "Ecosystem," and others in conjunction with "TON" to create a strong image of a single system, network, and brand. After lengthy discussions, we concluded that for a strong brand image, we should create a glossary of words and phrases that can be written without "THE" and capitalized. If it can be capitalized, the article is unnecessary. Currently, there are two such word combinations: TON Blockchain and TON Ecosystem.
+
+For other TON module names such as TON Connect, TON SDK, TON Grants, etc., it depends on the context. We apply the capitalization rule but are flexible with the article rule. If the component name stands alone, it is better without the article. However, if it is combined with a common noun, such as the TON Connect protocol, the article is needed because it refers to the entity protocol.
+
+Regarding other word combinations like "TON + noun" (e.g., "the TON world," "the TON community," etc.), we do not restrict the use of the article because we naturally expect to see the article in combination with a noun.
+
 ## General tips
 
 - **Do not copy and paste pre-existing content**. Plagiarism is a serious issue and will not be tolerated. If the tutorial is inspired by some existing content, reference it and link to it. When linking to other tutorials/resources, use TON Docs resources if possible.

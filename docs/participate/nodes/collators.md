@@ -61,9 +61,9 @@ The easiest way is the following:
 - Reload systemctl `sudo systemctl daemon-reload`
 - Start validator `sudo systemctl start validator`
 
-## Lite server
+## Liteserver
 
-Just like collators, liteservers can be configured to only monitor some part of the blockchain. It can be done by running a node with option `-M` and adding shards in `validator-engine-console`:
+Just like Collators, Liteservers can be configured to only monitor some part of the blockchain. It can be done by running a node with option `-M` and adding shards in `validator-engine-console`:
 
 ```bash
 addshard 0 -9223372036854775808

@@ -8,23 +8,23 @@ This section presents the original documentation written by Dr. Nikolai Durov, w
 Please note that here and later the code, comments and/or documentation may contain parameters, methods and definitions of “gram”, “nanogram”, etc, that are a legacy of the original TON code, developed by Telegram. Gram cryptocurrency was never issued. The currency of TON is Toncoin and the currency of TON testnet is Test Toncoin.
 :::
 
-* [TON Whitepaper](https://ton.org/docs/ton.pdf)
+* [TON Whitepaper](https://docs.ton.org/ton.pdf)
 
-  TON Whitepaper – a general description of TON Network and TON Blockchain.
+  TON Whitepaper – a general description of TON(The Open Network) Blockchain.
 
-* [TON Virtual Machine](https://ton.org/docs/tvm.pdf)
+* [TON Virtual Machine](https://docs.ton.org/tvm.pdf)
 
   TON Virtual Machine description.
 
-* [TON Blockchain](https://ton.org/docs/tblkch.pdf)
+* [TON Blockchain](https://docs.ton.org/tblkch.pdf)
 
-  TON Blockchain description (may include outdated information).
+  Telegram Open Network Blockchain description (may include outdated information).
 
-* [Catchain Consensus Protocol](https://ton.org/docs/catchain.pdf)
+* [Catchain Consensus Protocol](https://docs.ton.org/catchain.pdf)
 
   Description of the Byzantine Fault Tolerant (BFT) Consensus protocol employed by TON Blockchain while creating new blocks.
   
-* [Fift Documentation](https://ton.org/docs/fiftbase.pdf)
+* [Fift Documentation](https://docs.ton.org/fiftbase.pdf)
 
   Description of Fift language and how to use it in TON.
 
