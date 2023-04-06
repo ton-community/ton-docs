@@ -339,7 +339,7 @@ Third screen:
 
 Let's start with adding inline keyboard to the `/connect` command handler in the `main.ts`
 ```ts
-// src/connect-wallet-menu.ts
+// src/main.ts
 bot.onText(/\/connect/, async msg => {
     const chatId = msg.chat.id;
     const wallets = await getWallets();
