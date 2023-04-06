@@ -10,7 +10,7 @@ const config = {
   tagline: 'Mass adoption. Massive distribution',
   url: 'https://ton.org',
   staticDirectories: ['public', 'static'],
-  baseUrl: '/docs/',
+  baseUrl: '/',
   themes: [
     '@docusaurus/theme-live-codeblock',
     // [
