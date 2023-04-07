@@ -11,7 +11,7 @@ An Archive Node is a type of Full Node that stores extended historical data of a
 
 * at least 8 cores CPU 
 * at least 64 GB RAM 
-* at least 6TB SSD on your server,  3TB if you enable ZFS compression. 
+* at least 4TB SSD on your server
 * 1 Gbit/s network connectivity 
 * a public IP address (fixed IP address)
 
@@ -59,7 +59,7 @@ See more detailed guide in [Running Full Node](/participate/nodes/run-node) sect
 ```sh
 systemctl stop validator.service
 ```
-2. Make a backup of config files `/var/ton-work/db/config.json` and `/var/ton-work/db/keyring`.
+2. Make a backup of config files `/var/ton-work/db/config.json` and `/var/ton-work/db/keyring` (they will be erased after the recovery process).
 ```sh
 mv /var/ton-work /var/ton-work.bak
 ```
@@ -69,11 +69,10 @@ mv /var/ton-work /var/ton-work.bak
 curl -u username:password -s https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d -n8 | zfs recv mypool/ton-work
 ```
 
-4. Copy `config.json` and keyring to a new folder (they will be erased after the recovery process).
-5. Mount zfs: `zfs set mountpoint=/var/ton-work data/ton-work && zfs mount data/ton-work`
-6. Restore config.json, keys and db/keyring from backup to `/var/ton-work`
-7. Fix permissions: `chown -R validator:validator /var/ton-work`
-8. Add storage settings for the node to the file `/etc/systemd/system/validator.service` in the `ExecStart` line: 
+4. Mount zfs: `zfs set mountpoint=/var/ton-work data/ton-work && zfs mount data/ton-work`
+5. Restore config.json, keys and db/keyring from backup to `/var/ton-work`
+6. Fix permissions: `chown -R validator:validator /var/ton-work`
+7. Add storage settings for the node to the file `/etc/systemd/system/validator.service` in the `ExecStart` line: 
 ```sh
 --state-ttl 315360000 --archive-ttl 315360000 --block-ttl 315360000
 ```
@@ -81,11 +80,11 @@ curl -u username:password -s https://archival-dump.ton.org/dumps/latest.zfs.lz |
 :::info
 Please be patient once you start the node and observe the logs. Dumps come without DHT caches, so it will take your node some time to find other nodes and then sync with them. Depending on the age of the snapshot, your node might take from a few hours to several days to catch up with the network. This is normal.
 :::
-9. Start the validator by running the command: 
+8. Start the validator by running the command: 
 ```sh
 systemctl start validator.service
 ```
-10. Open `mytonctrl` and check the node status using the status command.
+9. Open `mytonctrl` and check the node status using the status command.
 
 
 ## Node maintenance
