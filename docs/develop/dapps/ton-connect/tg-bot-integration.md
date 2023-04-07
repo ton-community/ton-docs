@@ -49,6 +49,9 @@ Run `npm i` to install dependencies.
 ### Add a tsconfig.json
 Create a `tsconfig.json`:
 
+<details>
+<summary>tsconfig.json code</summary>
+
 ```json
 {
   "compilerOptions": {
@@ -87,6 +90,7 @@ Create a `tsconfig.json`:
     "./tests","node_modules", "lib", "types"]
 }
 ```
+</details>
 
 [Read more about tsconfig.json](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
 
@@ -384,8 +388,44 @@ Note that we replaced `connector.connect` call arguments. Now we are generating 
 Next we tell Telegram to call `callback_query` handler with `{ "method": "chose_wallet" }` value when user clicks to the `Choose a Wallet` button.
 
 ### Add Choose a Wallet button handler
-Now we will add `callback_query` handler. Create a file `src/connect-wallet-menu.ts`:
+Create a file `src/connect-wallet-menu.ts`.
 
+Let's add 'Choose a Wallet' button click handler there:
+
+```ts
+// src/connect-wallet-menu.ts
+
+async function onChooseWalletClick(query: CallbackQuery, _: string): Promise<void> {
+    const wallets = await getWallets();
+
+    await bot.editMessageReplyMarkup(
+        {
+            inline_keyboard: [
+                wallets.map(wallet => ({
+                    text: wallet.name,
+                    callback_data: JSON.stringify({ method: 'select_wallet', data: wallet.name })
+                })),
+                [
+                    {
+                        text: '« Back',
+                        callback_data: JSON.stringify({
+                            method: 'universal_qr'
+                        })
+                    }
+                ]
+            ]
+        },
+        {
+            message_id: query.message!.message_id,
+            chat_id: query.message!.chat.id
+        }
+    );
+}
+```
+Here we are replacing the message inline keyboard with a new one that contains clickable list of wallets and 'Back' button.
+
+
+Now we will add global `callback_query` handler and register `onChooseWalletClick` there:
 ```ts
 // src/connect-wallet-menu.ts
 import { CallbackQuery } from 'node-telegram-bot-api';
@@ -416,6 +456,223 @@ bot.on('callback_query', query => { // Parse callback data and execute correspon
     walletMenuCallbacks[request.method as keyof typeof walletMenuCallbacks](query, request.data);
 });
 
+// ... other code from the previous ster
+async function onChooseWalletClick ...
+```
+
+Here we define buttons handlers list and `callback_query` parser. Unfortunately callback data is always string, so we have to pass JSON to the `callback_data` and parse it later in the `callback_query` handler. 
+Then we are looking for the requested method and call it with passed parameters.
+
+Now we should add `conenct-wallet-menu.ts` import to the `main.ts`
+```ts
+// src/main.ts
+
+// ... other imports 
+
+import './connect-wallet-menu';
+
+// ... other code
+```
+
+Compile and run the bot. You can click to the Choose a wallet button and bot will replace inline keyboard buttons!
+
+### Add other buttons handlers
+Let's complete this menu and add rest commands handlers.
+
+Firstly we will create a utility function `editQR`. Editing message media (QR image) is a bit tricky. We need to store image to the file and send it to the Telegram server. Then we can remove this file.
+
+
+```ts
+// src/connect-wallet-menu.ts
+
+// ... other code
+
+
+async function editQR(message: TelegramBot.Message, link: string): Promise<void> {
+    const fileName = 'QR-code-' + Math.round(Math.random() * 10000000000);
+
+    await QRCode.toFile(`./${fileName}`, link);
+
+    await bot.editMessageMedia(
+        {
+            type: 'photo',
+            media: `attach://${fileName}`
+        },
+        {
+            message_id: message?.message_id,
+            chat_id: message?.chat.id
+        }
+    );
+
+    await new Promise(r => fs.rm(`./${fileName}`, r));
+}
+```
+
+
+In `onOpenUniversalQRClick` handler we just regenerate a QR and deeplink and modify the message:
+```ts
+// src/connect-wallet-menu.ts
+
+// ... other code
+
+async function onOpenUniversalQRClick(query: CallbackQuery, _: string): Promise<void> {
+    const chatId = query.message!.chat.id;
+    const wallets = await getWallets();
+
+    const connector = getConnector(chatId);
+
+    connector.onStatusChange(wallet => {
+        if (wallet) {
+            bot.sendMessage(chatId, `${wallet.device.appName} wallet connected!`);
+        }
+    });
+
+    const link = connector.connect(wallets);
+
+    await editQR(query.message!, link);
+
+    await bot.editMessageReplyMarkup(
+        {
+            inline_keyboard: [
+                [
+                    {
+                        text: 'Open Wallet',
+                        url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
+                            link
+                        )}`
+                    },
+                    {
+                        text: 'Choose a Wallet',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    }
+                ]
+            ]
+        },
+        {
+            message_id: query.message?.message_id,
+            chat_id: query.message?.chat.id
+        }
+    );
+}
+
+// ... other code
+```
+
+
+In `onWalletClick` handler we are creating special QR and universal link for selected wallet only, and modify the message.
+```ts
+// src/connect-wallet-menu.ts
+
+// ... other code
+
+async function onWalletClick(query: CallbackQuery, data: string): Promise<void> {
+    const chatId = query.message!.chat.id;
+    const connector = getConnector(chatId);
+
+    connector.onStatusChange(wallet => {
+        if (wallet) {
+            bot.sendMessage(chatId, `${wallet.device.appName} wallet connected!`);
+        }
+    });
+
+    const wallets = await getWallets();
+
+    const selectedWallet = wallets.find(wallet => wallet.name === data);
+    if (!selectedWallet) {
+        return;
+    }
+
+    const link = connector.connect({
+        bridgeUrl: selectedWallet.bridgeUrl,
+        universalLink: selectedWallet.universalLink
+    });
+
+    await editQR(query.message!, link);
+
+    await bot.editMessageReplyMarkup(
+        {
+            inline_keyboard: [
+                [
+                    {
+                        text: '« Back',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: `Open ${data}`,
+                        url: link
+                    }
+                ]
+            ]
+        },
+        {
+            message_id: query.message?.message_id,
+            chat_id: chatId
+        }
+    );
+}
+
+// ... other code
+```
+
+Now we have to register this functions as callbacks (`walletMenuCallbacks`):
+
+```ts
+// src/connect-wallet-menu.ts
+import TelegramBot, { CallbackQuery } from 'node-telegram-bot-api';
+import { getWallets } from './ton-connect/wallets';
+import { bot } from './bot';
+import * as fs from 'fs';
+import { getConnector } from './ton-connect/connector';
+import QRCode from 'qrcode';
+
+export const walletMenuCallbacks = {
+    chose_wallet: onChooseWalletClick,
+    select_wallet: onWalletClick,
+    universal_qr: onOpenUniversalQRClick
+};
+
+// ... other code
+```
+<details>
+<summary>Currently src/connect-wallet-menu.ts looks like that</summary>
+
+```ts
+// src/connect-wallet-menu.ts
+
+import TelegramBot, { CallbackQuery } from 'node-telegram-bot-api';
+import { getWallets } from './ton-connect/wallets';
+import { bot } from './bot';
+import { getConnector } from './ton-connect/connector';
+import QRCode from 'qrcode';
+import * as fs from 'fs';
+
+export const walletMenuCallbacks = {
+    chose_wallet: onChooseWalletClick,
+    select_wallet: onWalletClick,
+    universal_qr: onOpenUniversalQRClick
+};
+
+bot.on('callback_query', query => { // Parse callback data and execute corresponing function 
+    if (!query.data) {
+        return;
+    }
+
+    let request: { method: string; data: string };
+
+    try {
+        request = JSON.parse(query.data);
+    } catch {
+        return;
+    }
+
+    if (!callbacks[request.method as keyof typeof callbacks]) {
+        return;
+    }
+
+    callbacks[request.method as keyof typeof callbacks](query, request.data);
+});
+
+
 async function onChooseWalletClick(query: CallbackQuery, _: string): Promise<void> {
     const wallets = await getWallets();
 
@@ -442,31 +699,6 @@ async function onChooseWalletClick(query: CallbackQuery, _: string): Promise<voi
         }
     );
 }
-```
-
-Here we define buttons handlers list and `callback_query` parser. Unfortunately callback data is always string, so we have to pass JSON to the `callback_data` and parse it later in the `callback_query` handler. 
-Then we are looking for the requested method and call it with passed parameters.
-
-Now we should add `conenct-wallet-menu.ts` import to the `main.ts`
-```ts
-// src/main.ts
-
-// ... other imports 
-
-import './connect-wallet-menu';
-
-// ... other code
-```
-
-Compile and run the bot. You can click to the Choose a wallet button and bot will replace inline keyboard buttons!
-
-### Add other buttons handlers
-Let's complete this menu and add rest commands handlers:
-
-```ts
-// src/connect-wallet-menu.ts
-
-// ... other code
 
 async function onOpenUniversalQRClick(query: CallbackQuery, _: string): Promise<void> {
     const chatId = query.message!.chat.id;
@@ -573,33 +805,7 @@ async function editQR(message: TelegramBot.Message, link: string): Promise<void>
     await new Promise(r => fs.rm(`./${fileName}`, r));
 }
 ```
-
-Editing message media (QR image) is little tricky. We need to store image to the file and send it to the Telegram server. Then we can remove this file.
-See details in the `editQR` function.
-
-In `onOpenUniversalQRClick` handler we just regenerate a QR and deeplink and modify the message.
-
-In `onWalletClick` handler we are creating special QR and universal link for selected wallet only, and modify the message.
-
-Now we have to register this functions as callbacks (`walletMenuCallbacks`): 
-
-```ts
-// src/connect-wallet-menu.ts
-import TelegramBot, { CallbackQuery } from 'node-telegram-bot-api';
-import { getWallets } from './ton-connect/wallets';
-import { bot } from './bot';
-import * as fs from 'fs';
-import { getConnector } from './ton-connect/connector';
-import QRCode from 'qrcode';
-
-export const walletMenuCallbacks = {
-    chose_wallet: onChooseWalletClick,
-    select_wallet: onWalletClick,
-    universal_qr: onOpenUniversalQRClick
-};
-
-// ... other code
-```
+</details>
 
 Compile and run the bot to check how wallet connection works now.
 
@@ -933,6 +1139,49 @@ DELETE_SEND_TX_MESSAGE_TIMEOUT_MS=600000
 Now we are going to improve `handleSendTXCommand` function and wrap tx sending to the `pTimeout`
 
 ```ts
+// src/commands-handlers.ts
+
+// export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<void> { ...
+
+pTimeout(
+    connector.sendTransaction({
+        validUntil: Math.round(
+            (Date.now() + Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS)) / 1000
+        ),
+        messages: [
+            {
+                amount: '1000000',
+                address: '0:0000000000000000000000000000000000000000000000000000000000000000'
+            }
+        ]
+    }),
+    Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS)
+)
+    .then(() => {
+        bot.sendMessage(chatId, `Transaction sent successfully`);
+    })
+    .catch(e => {
+        if (e === pTimeoutException) {
+            bot.sendMessage(chatId, `Transaction was not confirmed`);
+            return;
+        }
+
+        if (e instanceof UserRejectsError) {
+            bot.sendMessage(chatId, `You rejected the transaction`);
+            return;
+        }
+
+        bot.sendMessage(chatId, `Unknown error happened`);
+    })
+    .finally(() => connector.pauseConnection());
+
+// ... other code
+```
+
+<details>
+<summary>Full handleSendTXCommand code</summary>
+
+```ts
 export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<void> {
     const chatId = msg.chat.id;
 
@@ -1003,6 +1252,8 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
 }
 ```
 
+</details>
+
 If user doesn't confirm the transaction during `DELETE_SEND_TX_MESSAGE_TIMEOUT_MS` (10min), the transaction will be cancelled and bot will send a message `Transaction was not confirmed`.
 
 You can set this parameter to `5000` compile and rerun the bot and test its behaviour.
@@ -1012,8 +1263,11 @@ At this moment we create a new connector on the every navigation through the wal
 That is poorly because we don't close previous connectors connection when create new connectors.
 Let's improve this behaviour and create a cache-mapping for users connectors.
 
+<details>
+<summary>src/ton-connect/connector.ts code</summary>
+
 ```ts
-// src/ton-connect/conenctor.ts
+// src/ton-connect/connector.ts
 
 import TonConnect from '@tonconnect/sdk';
 import { TonConnectStorage } from './storage';
@@ -1063,6 +1317,8 @@ export function getConnector(
 }
 ```
 
+</details>
+
 This code may look a little tricky, but here we go. 
 Here we store a connector, it's cleaning timeout and list of callback that should be executed after the timeout for each user.
 
@@ -1080,7 +1336,10 @@ DELETE_SEND_TX_MESSAGE_TIMEOUT_MS=600000
 CONNECTOR_TTL_MS=600000
 ```
 
-Now let's use it in the `handelConnectCommand`
+Now let's use it in the handelConnectCommand
+
+<details>
+<summary>src/commands-handlers.ts code</summary>
 
 ```ts
 // src/commands-handlers.ts
@@ -1116,7 +1375,7 @@ export async function handleConnectCommand(msg: TelegramBot.Message): Promise<vo
     if (connector.connected) {
         await bot.sendMessage(
             chatId,
-            `You have already connect a ${
+            `You have already connected a ${
                 connector.wallet!.device.appName
             } wallet\nYour address: ${toUserFriendlyAddress(
                 connector.wallet!.account.address,
@@ -1180,6 +1439,8 @@ export async function handleConnectCommand(msg: TelegramBot.Message): Promise<vo
 // ... other code
 ```
 
+</details>
+
 We defined `newConnectRequestListenersMap` to store cleanup callback for the last connect request for each user. 
 If user calls `/connect` multiple times, bot will delete previous message with QR. 
 Also, we subscribed to the connector expiration timeout to delete the QR-code message when it is expired.  
@@ -1187,6 +1448,9 @@ Also, we subscribed to the connector expiration timeout to delete the QR-code me
 
 Now we should remove `connector.onStatusChange` subscription from the `connect-wallet-menu.ts` functions,
 because they use the same connector instance and one subscription in the `handleConnectCommand` in enough.
+
+<details>
+<summary>src/connect-wallet-menu.ts code</summary>
 
 ```ts
 // src/connect-wallet-menu.ts
@@ -1270,6 +1534,8 @@ async function onWalletClick(query: CallbackQuery, data: string): Promise<void> 
 // ... other code
 ```
 
+</details>
+
 That's it! Compile and run the bot and try to call `/connect` twice.
 
 ## Add a permanent storage
@@ -1333,18 +1599,8 @@ export class TonConnectStorage implements IStorage {
 
 To make it work we have to wait for the redis initialisation in the `main.ts`. Let's wrap code in this file to an async function:
 ```ts
-import dotenv from 'dotenv';
-dotenv.config();
-
-import { bot } from './bot';
-import { walletMenuCallbacks } from './connect-wallet-menu';
-import {
-    handleConnectCommand,
-    handleDisconnectCommand,
-    handleSendTXCommand,
-    handleShowMyWalletCommand
-} from './commands-handlers';
-import { initRedisClient } from './ton-connect/storage';
+// src/main.ts
+// ... imports
 
 async function main(): Promise<void> {
     await initRedisClient();
