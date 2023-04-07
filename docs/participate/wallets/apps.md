@@ -12,21 +12,21 @@ If you want to find a wallet to install, open [ton.org/wallets](https://ton.org/
 With a non-custodial wallet, the user owns the wallet and holds its private key by themself.
 :::
 
-* [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) — one of the first wallets in the TON ecosystem developed by TON Foundation.
-* [Tonkeeper](https://tonkeeper.com/) — is an alternative wallet, that is a favourite among users today.
-* [Tonhub](https://tonhub.com/) — is another rapidly developing wallet with advanced features (TON Whales Staking UI).
+* [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) — Multiplatform(iOS, Android, MacOS, Linux, Windows) classic wallets of TON Ecosystem developed by TON Foundation.
+* [Tonkeeper](https://tonkeeper.com/) — an open-source (iOS, Android) mobile phone wallet application with great user base.
+* [Tonhub](https://tonhub.com/) — an open-source (iOS, Android) alternative mobile phone wallet with advanced features (TON Whales Staking UI).
 * [OpenMask](https://www.openmask.app/) — an open-source browser extension wallet with biometric authentication.
-* [MyTonWallet](https://mytonwallet.io/) — is the most full-featured web wallet and browser extension for TON.
+* [MyTonWallet](https://mytonwallet.io/) — an open-source browser web wallet and browser extension wallet for TON.
 
 
 ### Basics features
-| Wallet     | Jetton & NFT transfers        | Ton Connect 2.0                                                         | Authorization                                               | Wallet contract                                                                                               |
-|------------|-----------------|-------------------------------------------------------------------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
-| TON Wallet | Not implemented | -                                                                       | -                                                           | [wallet v3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)               |
-| Tonkeeper  | Supported       | [Supported](https://github.com/ton-society/ton-footsteps/issues/161)    | [TON Connect 2.0](/develop/dapps/ton-connect)               | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
-| Tonhub     | Supported*        | [In progress](https://github.com/ton-society/ton-footsteps/issues/108 ) | [tonhub connector](https://developers.tonhub.com/docs/apps) | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
-| OpenMask   | Supported       | [Supported](https://github.com/ton-society/ton-footsteps/issues/107)    | [TON Connect 2.0](/develop/dapps/ton-connect)               | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
-| MyTonWallet| Supported | [Supported](https://github.com/ton-society/ton-footsteps/issues/149)    | [TON Connect 2.0](/develop/dapps/ton-connect)               | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f) |
+| Wallet     | Jetton & NFT transfers        | Ton Connect 2.0                                                       | Authorization                                               | Wallet contract                                                                                               |
+|------------|-----------------|-----------------------------------------------------------------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| TON Wallet | Not implemented | -                                                                     | -                                                           | [wallet v3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)               |
+| Tonkeeper  | Supported       | [Supported](https://github.com/ton-society/ton-footsteps/issues/161)  | [TON Connect 2.0](/develop/dapps/ton-connect)               | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
+| Tonhub     | Supported*        | [Supported](https://github.com/ton-society/ton-footsteps/issues/108 ) | [TON Connect 2.0](/develop/dapps/ton-connect) | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
+| OpenMask   | Supported       | [Supported](https://github.com/ton-society/ton-footsteps/issues/107)  | [TON Connect 2.0](/develop/dapps/ton-connect)               | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)  |
+| MyTonWallet| Supported | [Supported](https://github.com/ton-society/ton-footsteps/issues/149)  | [TON Connect 2.0](/develop/dapps/ton-connect)               | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f) |
 
 
 > *Tonhub extension opens a built-in browser which allows for NFT market placements. Jetton is full supported.
