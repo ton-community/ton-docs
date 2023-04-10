@@ -485,44 +485,43 @@ const sidebars = {
       'type': 'html',
       'value': '<span class=\'menu__link\'><b><small> Infrastructure </small></b></span>',
     },
-    'participate/explorers',
-    {
-      type: 'category',
-      label: 'Wallets in TON',
-      items: [
-        'participate/wallets/apps',
-        'participate/wallets/contracts',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Cross-chain Bridges',
-      items: [
         {
-          type: 'doc',
-          label: 'Overview',
-          id: 'participate/crosschain/overview',
+        type: 'category',
+        label: 'Main Components',
+        items: [
+        'participate/explorers',
+        {
+          type: 'category',
+          label: 'Wallets in TON',
+          items: [
+            'participate/wallets/apps',
+            'participate/wallets/contracts',
+          ],
         },
         {
-          type: 'doc',
-          label: 'Bridges Addresses',
-          id: 'participate/crosschain/bridge-addresses',
+          type: 'category',
+          label: 'Cross-chain Bridges',
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'participate/crosschain/overview',
+            },
+            {
+              type: 'doc',
+              label: 'Bridges Addresses',
+              id: 'participate/crosschain/bridge-addresses',
+            },
+          ],
         },
-      ],
-    },
+    ]},
     {
       type: 'category',
       label: 'Run a Node',
       items: [
-        'participate/nodes/node-types',
-        'participate/nodes/lite-client',
         'participate/nodes/run-node',
         'participate/nodes/archive-node',
         'participate/nodes/local-ton',
-        'develop/howto/validator',
-        'develop/howto/full-node',
-        'participate/nodes/node-maintenance-and-security',
-        'participate/nodes/collators',
         {
           type: 'link',
           label: 'Become a Validator',
@@ -532,9 +531,22 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Blockchain Nodes',
+      items: [
+        'develop/howto/validator',
+        'develop/howto/full-node',
+        'participate/nodes/node-maintenance-and-security',
+        'participate/nodes/collators',
+        'participate/nodes/node-types',
+        'participate/nodes/lite-client',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Blockchain Details',
       items: [
-        'develop/research-and-development/persistent-states',
+        'participate/blockchain-details/staking-incentives',
+        'participate/blockchain-details/persistent-states',
       ],
     },
     {
