@@ -1,7 +1,7 @@
 
 # TON Validators and staking-incentives
 
-
+## Election and Staking
 TON Blockchain makes use of the Proof of Stake (PoS) consensus algorithm which means, like all PoS networks, that the network’s security and stability is maintained by a set of network validators. In particular, validators propose candidates for new blocks (made up of transaction batches), while other validators _validate_ and approve them via digital signatures.
 
 
@@ -17,7 +17,7 @@ In contrast, each shardchain is validated by a set of 23 validators (defined as 
 
 ## Positive incentives
 
-Similarly to all blockchain networks, each transaction on TON requires a computation fee called `gas` used to conduct network storage and the transaction processing on-chain. On TON, these fees are accumulated within the Elector contract in a reward pool.
+Similarly to all blockchain networks, each transaction on TON requires a computation fee called [gas](https://blog.ton.org/what-is-blockchain) used to conduct network storage and the transaction processing on-chain. On TON, these fees are accumulated within the Elector contract in a reward pool.
 
 The network also subsidizes block creation by adding a subsidy to the reward pool equal to 1.7 TON for each masterchain block and 1 TON for each basechain block (Network Parameters `Config14:masterchain_block_fee` and `Config14:basechain_block_fee`). Note, that when splitting a basechain into more than one shardchain, the subsidy per shardchain block is split accordingly. This process allows the subsidy per unit of time to be kept near constant.
 
@@ -29,7 +29,14 @@ After a validation cycle round lasting 65536 seconds or ~18 hours (Network Param
 
 As of April 2023, the total reward pool per consensus round for all validators on the network is approximately 40,000 TON, with the average reward per validator being ~ 120 TON (the maximum difference between voting weight and the accrued rewards is ~3 TON).
 
-Given the total supply of Toncoin (5 billion TON) has an inflation rate of approximately 0.3-0.6% annually. This inflation rate, however, is not always constant, and may deviate depending on the network’s current state. Eventually it will tend to deflation after Deflation mechanism activation and growth of network utilization.
+Given the total supply of Toncoin (5 billion TON) has an inflation rate of approximately 0.3-0.6% annually.
+
+This inflation rate, however, is not always constant, and may deviate depending on the network’s current state. Eventually it will tend to deflation after Deflation mechanism activation and growth of network utilization.
+
+:::info
+Learn current TON Blockchain stats [here](https://tontech.io/stats/).
+:::
+
 
 ## Negative incentives
 
@@ -44,3 +51,9 @@ TON is planning to increase the _Standard fine_ for validators by the end of 202
 On TON, slashing penalties (fines given to validators) allow any network participant to file a complaint if they believe a validator is misbehaving. During this process, the participant issuing the complaint must attach cryptographic proofs of misbehavior for Elector submission. During the `stake_held_for` dispute resolution period, all validators operating on the network check the validity of complaints and vote whether they will pursue the complaint collectively (while determining the legitimacy of misbehaving proofs and fine allotment).  
 
 Upon reaching 66% validator approval (measured by an equal voting weight), a slashing penalty is deducted from the validator and withdrawn from the validator’s total stake. The validation process for penalization and complaint resolution is typically conducted automatically using the MyTonCtrl.
+
+
+## See Also
+
+[Running a Full Node (Validator)](/participate/nodes/run-node)
+[Transaction Fees](/develop/smart-contracts/fees)

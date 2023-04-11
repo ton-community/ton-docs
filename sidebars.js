@@ -517,47 +517,49 @@ const sidebars = {
     ]},
     {
       type: 'category',
-      label: 'Run a Node',
-      items: [
-        'participate/nodes/run-node',
-        'participate/nodes/archive-node',
-        'participate/nodes/local-ton',
-        {
-          type: 'link',
-          label: 'Become a Validator',
-          href: 'https://ton.org/validator',
-        },
-      ],
-    },
-    {
-      type: 'category',
       label: 'Blockchain Nodes',
       items: [
-        'develop/howto/validator',
-        'develop/howto/full-node',
-        'participate/nodes/node-maintenance-and-security',
-        'participate/nodes/collators',
-        'participate/nodes/node-types',
-        'participate/nodes/lite-client',
+          {
+              type: 'category',
+              label: 'Run a Node',
+              items: [
+                  'participate/run-nodes/full-node',
+                  'participate/run-nodes/archive-node',
+                  'participate/run-nodes/local-ton',
+                    {
+                      type: 'link',
+                      label: 'Become a Validator',
+                      href: 'https://ton.org/validator',
+                    },
+              ],
+          },
+          {
+              type: 'category',
+              label: 'Nodes Infrastructure',
+              items: [
+                'participate/nodes/lite-client',
+                'participate/nodes/node-types',
+                'participate/nodes/full-node',
+                'participate/nodes/validator',
+                'participate/nodes/node-maintenance-and-security',
+              ],
+          },
       ],
     },
     {
       type: 'category',
-      label: 'Blockchain Details',
+      label: 'Network Maintenance',
       items: [
-        'participate/blockchain-details/staking-incentives',
-        'participate/blockchain-details/persistent-states',
+        'participate/network-maintenance/staking-incentives',
+        'participate/network-maintenance/nominators',
+        'participate/network-maintenance/persistent-states',
+        'participate/nodes/collators',
       ],
     },
     {
       type: 'doc',
       label: 'NFT Use Cases in TON',
       id: 'participate/nft',
-    },
-    {
-      type: 'doc',
-      label: 'Stake with Nominator Pools',
-      id: 'participate/nominators',
     },
     {
       'type': 'html',
