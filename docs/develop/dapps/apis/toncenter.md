@@ -32,14 +32,14 @@ To work with public TonCenter API you need a key:
 
 ### JavaScript SDK
 
-* [ton-community/ton-js](https://github.com/ton-community/ton) — _Modern_ cross-platform client for TON by the TON Community
-* [toncenter/tonweb](https://github.com/toncenter/tonweb) — Cross-platform client for TON by TON Center
-* [@tegro/ton3-client](https://github.com/TegroTON/ton3-client) — JS ton3-client by TonHold
+* [toncenter/tonweb](https://github.com/toncenter/tonweb) — _Legacy_ Cross-platform sdk with HTTP API client for TON by TON Center
+* [ton-core/ton-js](https://github.com/ton-core/ton) — _Modern_ Cross-platform sdk with HTTP API client for TON by the TON Community
+* [@tegro/ton3-client](https://github.com/TegroTON/ton3-client) — _Module_ TON Center HTTP API client for [ton3](https://github.com/tonkite/ton3-core)
 * [nns2009/ton-payment-tracker](https://github.com/nns2009/ton-payment-tracker) — TON payment tracker based on TON Center API
 
 ### Python SDK
 
-- [tonfactory/tonsdk](https://github.com/tonfactory/tonsdk) — Analogue of the tonweb js library (TON Center HTTP API)
+- [tonfactory/tonsdk](https://github.com/tonfactory/tonsdk) — Analogue of the tonweb js library (with TON Center HTTP API client)
 
 ### Elixir SDK
 
