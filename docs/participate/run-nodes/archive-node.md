@@ -1,9 +1,5 @@
 # Running an Archive Node
 
-:::warning
-Page in development
-:::
-
 ## Overview
 An Archive Node is a type of Full Node that stores extended historical data of a blockchain. If you are creating a blockchain explorer or a similar application that requires access to historical data, using an Archive Node as an indexer is recommended.
 
@@ -116,5 +112,5 @@ Have question or problem? Ask in the [TON dev chat](https://t.me/tondev_eng).
 ## See Also
 
 * [TON Node Types](/participate/nodes/node-types)
-* [Run a Full Node(Validator)](/participate/nodes/run-node)
-* [Full-node (low-level)](/develop/howto/full-node)
+* [Run a Full Node(Validator)](/participate/run-nodes/full-node)
+* [Full-node (low-level)](/participate/nodes/full-node)
