@@ -485,67 +485,81 @@ const sidebars = {
       'type': 'html',
       'value': '<span class=\'menu__link\'><b><small> Infrastructure </small></b></span>',
     },
-    'participate/explorers',
+        {
+        type: 'category',
+        label: 'Main Components',
+        items: [
+        'participate/explorers',
+        {
+          type: 'category',
+          label: 'Wallets in TON',
+          items: [
+            'participate/wallets/apps',
+            'participate/wallets/contracts',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Cross-chain Bridges',
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'participate/crosschain/overview',
+            },
+            {
+              type: 'doc',
+              label: 'Bridges Addresses',
+              id: 'participate/crosschain/bridge-addresses',
+            },
+          ],
+        },
+    ]},
     {
       type: 'category',
-      label: 'Wallets in TON',
+      label: 'Blockchain Nodes',
       items: [
-        'participate/wallets/apps',
-        'participate/wallets/contracts',
+          {
+              type: 'category',
+              label: 'Run a Node',
+              items: [
+                  'participate/run-nodes/full-node',
+                  'participate/run-nodes/archive-node',
+                  'participate/run-nodes/local-ton',
+                    {
+                      type: 'link',
+                      label: 'Become a Validator',
+                      href: 'https://ton.org/validator',
+                    },
+              ],
+          },
+          {
+              type: 'category',
+              label: 'Nodes Infrastructure',
+              items: [
+                'participate/nodes/lite-client',
+                'participate/nodes/node-types',
+                'participate/nodes/full-node',
+                'participate/nodes/validator',
+                'participate/nodes/node-maintenance-and-security',
+              ],
+          },
       ],
     },
     {
       type: 'category',
-      label: 'Cross-chain Bridges',
+      label: 'Network Maintenance',
       items: [
-        {
-          type: 'doc',
-          label: 'Overview',
-          id: 'participate/crosschain/overview',
-        },
-        {
-          type: 'doc',
-          label: 'Bridges Addresses',
-          id: 'participate/crosschain/bridge-addresses',
-        },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Run a Node',
-      items: [
-        'participate/nodes/node-types',
-        'participate/nodes/lite-client',
-        'participate/nodes/run-node',
-        'participate/nodes/archive-node',
-        'participate/nodes/local-ton',
-        'develop/howto/validator',
-        'develop/howto/full-node',
-        'participate/nodes/node-maintenance-and-security',
+        'participate/network-maintenance/staking-incentives',
+        'participate/network-maintenance/nominators',
+        'participate/network-maintenance/persistent-states',
         'participate/nodes/collators',
-        {
-          type: 'link',
-          label: 'Become a Validator',
-          href: 'https://ton.org/validator',
-        },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Blockchain Details',
-      items: [
-        'develop/research-and-development/persistent-states',
       ],
     },
     {
       type: 'doc',
       label: 'NFT Use Cases in TON',
       id: 'participate/nft',
-    },
-    {
-      type: 'doc',
-      label: 'Stake with Nominator Pools',
-      id: 'participate/nominators',
     },
     {
       'type': 'html',

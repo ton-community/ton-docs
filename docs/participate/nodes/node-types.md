@@ -2,10 +2,6 @@
 
 There are different types of nodes in The Open Network:
 
-* **Lite Client**
-
-  Clients, such as wallets, that do not store the full state of the blockchain but request what is needed from the full nodes.
-
 * **Full Node**
 
   A node that is synchronized with the blockchain, stores the current state of the blockchain and the block history or part of the block history.
