@@ -1,10 +1,11 @@
 # Overview
 
-Participate section focused on builders who want to discover what it's possible to develop using TON Blockchain and which essential instruments (explorers, wallets, TEPs) are necessary to participate in TON Ecosystem and idea of TON WWW.
+The participate section of our documentation is tailored to allow users to discover the capabilities of working with TON
+It is also meant to offer essential frameworks (explorers, wallets, TEPs) that are necessary to participate in TON Ecosystem and the creation of TON’s vision for the TON World Wide Web (TWWW).
 
 ## Participate in TON Ecosystem
 
-* [Explorers in TON](/participate/explorers)
+* [TON Explorers](/participate/explorers)
 * [Wallet Apps (for Developers)](/participate/wallets/apps)
 * [Types of Wallet Contracts](/participate/wallets/contracts)
 

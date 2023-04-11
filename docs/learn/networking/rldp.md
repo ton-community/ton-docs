@@ -13,5 +13,5 @@ be employed, for instance, to send RPC queries to remote hosts and receive
 answers from them.
 
 :::info
-Detailed description with examples can be found in [RLDP](/docs/develop/network/rldp) article of `develop` section.
+Detailed description with examples can be found in [RLDP](/develop/network/rldp) article of `develop` section.
 :::

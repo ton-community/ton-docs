@@ -75,7 +75,7 @@ The first datagram in the session always goes from the server to the client afte
 
 ### Communication details
 
-If you want to dive into communication details, you could check article [ADNL TCP - Liteserver](/docs/develop/network/adnl-tcp) to see some examples.
+If you want to dive into communication details, you could check article [ADNL TCP - Liteserver](/develop/network/adnl-tcp) to see some examples.
 
 ### Security considerations
 #### Handshake padding
@@ -90,7 +90,7 @@ It is not obvious why the `nonce` field in the datagram is present because, even
 
 ## P2P protocol (ADNL over UDP)
 
-Detailed description can be found in article [ADNL UDP - Internode](/docs/develop/network/adnl-udp).
+Detailed description can be found in article [ADNL UDP - Internode](/develop/network/adnl-udp).
 
 ## References
 - [The Open Network, p. 80](https://ton.org/ton.pdf)

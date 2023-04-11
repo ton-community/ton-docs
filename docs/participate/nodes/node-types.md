@@ -2,10 +2,6 @@
 
 There are different types of nodes in The Open Network:
 
-* **Lite clients**
-
-  Clients, such as wallets, that do not store the full state of the blockchain but request what is needed from the full nodes.
-
 * **Full Node**
 
   A node that is synchronized with the blockchain, stores the current state of the blockchain and the block history or part of the block history.
@@ -20,13 +16,13 @@ There are different types of nodes in The Open Network:
 
      For most cases, you will be fine with a regular node that only stores the latest blocks and has significantly lower hardware requirements.
 
-  * **Lite server**
+  * **Liteserver**
 
-     If you enable an endpoint in a full node, then it starts to perform the functions of a lite server - it can receive and respond to requests from lite clients.
+     If you enable an endpoint in a full node, then it starts to perform the functions of a Liteserver - it can receive and respond to requests from Lite Clients.
 
      Using this node, your product can interact with TON Blockchain.
 
-      TON Foundation supports a number of **public lite servers** that you can find in the global config ([mainnet](https://ton.org/global-config.json) and [testnet](https://ton.org/testnet-global.config.json)).
+      TON Foundation supports a number of **public Liteservers** that you can find in the global config ([mainnet](https://ton.org/global-config.json) and [testnet](https://ton.org/testnet-global.config.json)).
 
      These are endpoints available to everyone, for example, standard wallets connect to them.
 

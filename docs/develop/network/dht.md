@@ -13,7 +13,7 @@ The task is to store the key on the nodes as close as possible to the key, so th
 the same algorithm, find a node that can give data on this key.
 
 ## Finding a value by key
-Let's look at an example with a search for a key, [connect to any DHT node and establish a connection via ADNL UDP](/docs/develop/network/adnl-udp#packet-structure-and-communication).
+Let's look at an example with a search for a key, [connect to any DHT node and establish a connection via ADNL UDP](/develop/network/adnl-udp#packet-structure-and-communication).
 
 For example, we want to find the address and public key for connecting to the node that hosts foundation.ton site. 
 Let's say we have already obtained the ADNL address of this site by executing the Get method of the DNS contract. 
@@ -41,7 +41,7 @@ dht.findValue key:int256 k:int = dht.ValueResult
 ```
 `key` is the id of our DHT key, and `k` is the "width" of the search, the smaller it is, the more accurate, but fewer potential nodes to query. The maximum k for nodes in a TON is 10, usually 6 is used.
 
-Let's populate this structure, serialize and send the request using the `adnl.message.query` schema. [You can read more about this in another article](/docs/develop/network/adnl-udp#packet-structure-and-communication).
+Let's populate this structure, serialize and send the request using the `adnl.message.query` schema. [You can read more about this in another article](/develop/network/adnl-udp#packet-structure-and-communication).
 
 In response, we can get:
 * `dht.valueNotFound` - if the value is not found.
@@ -70,7 +70,7 @@ We check on the received serialized bytes, using the public key from `id` field.
 
 From the list `addrs:(vector adnl.Address)` we take the address and try to establish an ADNL UDP connection, as the server key we use `id`, which is the public key.
 
-To find out the "distance" to this node - we need to take [key id](/docs/develop/network/adnl-tcp#getting-key-id) from the key from the `id` field and check the distance by the XOR operation from the node's key id and the desired key. 
+To find out the "distance" to this node - we need to take [key id](/develop/network/adnl-tcp#getting-key-id) from the key from the `id` field and check the distance by the XOR operation from the node's key id and the desired key. 
 If the distance is small enough, we can make the same request to this node. And so on, until we find a value or there are no more new nodes.
 
 ##### dht.valueFound

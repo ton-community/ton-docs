@@ -38,5 +38,5 @@ _From [TON Community post](https://t.me/toncoin/543)._
 * [Nominator Pool smart contract source code](https://github.com/ton-blockchain/nominator-pool)
 
 :::info
-The theory of nominators is described in [TON Whitepaper](https://ton.org/docs/ton.pdf), chapters 2.6.3, 2.6.25.
+The theory of nominators is described in [TON Whitepaper](https://docs.ton.org/ton.pdf), chapters 2.6.3, 2.6.25.
 :::

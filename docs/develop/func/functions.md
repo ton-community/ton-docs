@@ -45,7 +45,7 @@ Every program must have a function with id 0, that is, `main` or `recv_internal`
 #### Receive internal
 
 `recv_internal` is called when a smart contract receives an inbound internal message.
-There are some variables at the stack when [TVM initiates](https://ton.org/docs/learn/tvm-instructions/tvm-overview#initialization-of-tvm), by setting arguments in `recv_internal` we give smart-contract code awareness about some of them. Those arguments about which code will not know, will just lie at the bottom of the stack never touched. 
+There are some variables at the stack when [TVM initiates](/learn/tvm-instructions/tvm-overview#initialization-of-tvm), by setting arguments in `recv_internal` we give smart-contract code awareness about some of them. Those arguments about which code will not know, will just lie at the bottom of the stack never touched. 
 
 So each of the following `recv_internal` declarations is correct, but those with less variables will spend slightly less gas (each unused argument adds additional `DROP` instructions)
 

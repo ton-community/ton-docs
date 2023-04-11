@@ -8,7 +8,7 @@ Computers are terrible at generating random information, because all they do is 
 
 These algorithms usually require you to provide some _seed_ value which will be used to generate a sequence of pseudo-random numbers. So if you run the same program with the same _seed_ several times, you will eventually get the same result every time. In TON, the _seed_ is different for each block.
 
- * [Generation of block random seed](https://ton.org/docs/participate/own-blockchain-software/random)
+ * [Generation of block random seed](/develop/smart-contracts/security/random)
 
 So in order to predict the result of `random()` function in some smart contract, you just need to know the current _seed_ of the block (which is possible).
 

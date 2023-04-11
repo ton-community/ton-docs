@@ -114,4 +114,4 @@ This command defines opcode which, when being included into program, writes `x{8
 
 ## Continue learning
 
- - [Fift: A Brief Introduction](https://ton.org/docs/fiftbase.pdf) by Nikolai Durov
+ - [Fift: A Brief Introduction](https://docs.ton.org/fiftbase.pdf) by Nikolai Durov

@@ -109,22 +109,22 @@ const sidebars = {
         {
           type: 'link',
           label: 'TON',
-          href: 'https://ton.org/docs/ton.pdf',
+          href: 'https://docs.ton.org/ton.pdf',
         },
         {
           type: 'link',
           label: 'TON Virtual Machine',
-          href: 'https://ton.org/docs/tvm.pdf',
+          href: 'https://docs.ton.org/tvm.pdf',
         },
         {
           type: 'link',
           label: 'TON Blockchain',
-          href: 'https://ton.org/docs/tblkch.pdf',
+          href: 'https://docs.ton.org/tblkch.pdf',
         },
         {
           type: 'link',
           label: 'Catchain Consensus Protocol',
-          href: 'https://ton.org/docs/catchain.pdf',
+          href: 'https://docs.ton.org/catchain.pdf',
         },
       ],
     },
@@ -246,6 +246,7 @@ const sidebars = {
             'develop/smart-contracts/security/README',
             'develop/smart-contracts/security/ton-hack-challenge-1',
             'develop/smart-contracts/guidelines/random-number-generation',
+            'develop/smart-contracts/security/random',
           ],
         },
         {
@@ -281,7 +282,8 @@ const sidebars = {
           label: 'Tutorials & Examples',
           items: [
             'develop/smart-contracts/tutorials/multisig',
-            'develop/smart-contracts/tutorials/multisig-js'
+            'develop/smart-contracts/tutorials/multisig-js',
+            'develop/smart-contracts/tutorials/wallet'
           ],
         },
         {
@@ -306,6 +308,7 @@ const sidebars = {
           items: [
             'develop/dapps/ton-connect/README',
             'develop/dapps/ton-connect/integration',
+            'develop/dapps/ton-connect/tg-bot-integration',
             'develop/dapps/ton-connect/transactions',
             'develop/dapps/ton-connect/business',
             'develop/dapps/ton-connect/developers',
@@ -322,6 +325,8 @@ const sidebars = {
       items: [
         'develop/dapps/asset-processing/README',
         'develop/dapps/asset-processing/jettons',
+        'develop/dapps/asset-processing/nfts',
+        'develop/dapps/asset-processing/metadata',
         'develop/dapps/tutorials/jetton-minter',
         {
           type: 'category',
@@ -480,66 +485,81 @@ const sidebars = {
       'type': 'html',
       'value': '<span class=\'menu__link\'><b><small> Infrastructure </small></b></span>',
     },
-    'participate/explorers',
+        {
+        type: 'category',
+        label: 'Main Components',
+        items: [
+        'participate/explorers',
+        {
+          type: 'category',
+          label: 'Wallets in TON',
+          items: [
+            'participate/wallets/apps',
+            'participate/wallets/contracts',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Cross-chain Bridges',
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'participate/crosschain/overview',
+            },
+            {
+              type: 'doc',
+              label: 'Bridges Addresses',
+              id: 'participate/crosschain/bridge-addresses',
+            },
+          ],
+        },
+    ]},
     {
       type: 'category',
-      label: 'Wallets in TON',
+      label: 'Blockchain Nodes',
       items: [
-        'participate/wallets/apps',
-        'participate/wallets/contracts',
+          {
+              type: 'category',
+              label: 'Run a Node',
+              items: [
+                  'participate/run-nodes/full-node',
+                  'participate/run-nodes/archive-node',
+                  'participate/run-nodes/local-ton',
+                    {
+                      type: 'link',
+                      label: 'Become a Validator',
+                      href: 'https://ton.org/validator',
+                    },
+              ],
+          },
+          {
+              type: 'category',
+              label: 'Nodes Infrastructure',
+              items: [
+                'participate/nodes/lite-client',
+                'participate/nodes/node-types',
+                'participate/nodes/full-node',
+                'participate/nodes/validator',
+                'participate/nodes/node-maintenance-and-security',
+              ],
+          },
       ],
     },
     {
       type: 'category',
-      label: 'Cross-chain Bridges',
+      label: 'Network Maintenance',
       items: [
-        {
-          type: 'doc',
-          label: 'Overview',
-          id: 'participate/crosschain/overview',
-        },
-        {
-          type: 'doc',
-          label: 'Bridges Addresses',
-          id: 'participate/crosschain/bridge-addresses',
-        },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Run a Node',
-      items: [
-        'participate/nodes/node-types',
-        'participate/nodes/run-node',
-        'develop/howto/full-node',
-        'develop/howto/validator',
-        'participate/nodes/local-ton',
-        'participate/nodes/node-maintenance-and-security',
+        'participate/network-maintenance/staking-incentives',
+        'participate/network-maintenance/nominators',
+        'participate/network-maintenance/persistent-states',
         'participate/nodes/collators',
-        {
-          type: 'link',
-          label: 'Become a Validator',
-          href: 'https://ton.org/validator',
-        },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Blockchain Details',
-      items: [
-        'participate/own-blockchain-software/random',
-        'develop/research-and-development/persistent-states',
       ],
     },
     {
       type: 'doc',
       label: 'NFT Use Cases in TON',
       id: 'participate/nft',
-    },
-    {
-      type: 'doc',
-      label: 'Stake with Nominator Pools',
-      id: 'participate/nominators',
     },
     {
       'type': 'html',

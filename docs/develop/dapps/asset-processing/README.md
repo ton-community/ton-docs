@@ -50,7 +50,10 @@ Smart contracts **pay fees for transactions** (usually from the balance of an in
 
 
 ## Digital assets on TON
-TON has three types of digital assets. The first is Toncoin, the main token of the network. It is used for all basic operations on the blockchain, for example, paying gas fees or staking for validation. The second type is native tokens, which are special kinds of assets that can be attached to any message on the network. These assets are currently not in use since the functionality for issuing new native tokens is closed. Finally, the third type is contract assets, which are analogous to the ERC-20 standard and are managed by arbitrary contracts (there are a few proposed specifications) and thus can require custom rules for processing.
+TON has three types of digital assets.
+- Toncoin, the main token of the network. It is used for all basic operations on the blockchain, for example, paying gas fees or staking for validation.
+- Native tokens, which are special kinds of assets that can be attached to any message on the network. These assets are currently not in use since the functionality for issuing new native tokens is closed.
+- Contract assets, such as tokens and NFTs, which are analogous to the ERC-20/ERC-721 standards and are managed by arbitrary contracts and thus can require custom rules for processing. You can find more info on it's processin in [process NFTs](/develop/dapps/nfts) and [process Jettons](/develop/dapps/jettons) articles.
 
 ### Simple Toncoin transfer
 To send Toncoin, the user needs to send a request via an external message, that is, a message from the outside world to the blockchain, to a special `wallet` smart contract (see below). Upon receiving this request, `wallet` will send an inner message with the desired amount of assets and optional data payload, for instance a text comment.

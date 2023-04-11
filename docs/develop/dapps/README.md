@@ -12,7 +12,7 @@ Here you can see links to the most important resources for you to get started wi
 - [Wallets](/participate/wallets/apps) — a list of popular wallets for TON.
 - [Explorers](/participate/explorers) — to track transactions in the blockchain.
 - [Testnet](/develop/smart-contracts/environment/testnet.md) — info about the testnet and how to use it.
-- [Unfreezer](https://ton-community.github.io/unfreezer/) - Unfreeze a TON contract that ran out of gas for rent.
+- [Unfreezer](https://unfreezer.ton.org/) - Unfreeze a TON contract that ran out of gas for rent.
 
 ## Examples
 
@@ -42,6 +42,7 @@ If you are a web or bot developer, you may find the following repositories usefu
 ### Go
 
 - [10+ examples from xssnick/tonutils-go](https://github.com/xssnick/tonutils-go/tree/master/example)
+- [7+ examples from tonkeeper/tongo](https://github.com/tonkeeper/tongo/tree/master/example)
 
 ## Most popular SDK
 
@@ -64,7 +65,7 @@ Here is a list of modern SDKs that are constantly supported and improved:
 ### Go SDK
 
 - [xssnick/tonutils-go](https://github.com/xssnick/tonutils-go) — Golang SDK for the TON Blockchain. 
-- [startfellows/tongo](https://github.com/startfellows/tongo) — Golang SDK with native ADNL support, cells manipulations and CGO for TVM and tx emulations.
+- [tonkeeper/tongo](https://github.com/tonkeeper/tongo) — Golang SDK with native ADNL support, cells manipulations and CGO for TVM and tx emulations.
 
 
 ### Kotlin / Java SDK

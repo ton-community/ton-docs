@@ -148,5 +148,5 @@ An example of a generator used by a TON node can be found in the [Ton node sourc
 
 If you want to know more about TL-B serialization and see some examples of complex structures parsing, 
 you can continue by reading:
-* [Deep Dive into TL-B](/docs/develop/data-formats/tl-b)
+* [Deep Dive into TL-B](/develop/data-formats/tl-b-language)
 

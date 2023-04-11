@@ -49,7 +49,7 @@ We want to open a channel to communicate with node and get some information, and
 ```tlb
 adnl.message.createChannel key:int256 date:int = adnl.Message
 ```
-Here we have 2 parameters - key and date. As a date, we will specify the current unix timestamp. And for the key - we need to generate a new ED25519 private+public key pair specially for the channel, they will be used for initialization of [public encryption key](/docs/develop/network/adnl-tcp#getting-a-shared-key-using-ecdh). We will use our generated public key in the `key` parameter of the message, and just save the private one for now.
+Here we have 2 parameters - key and date. As a date, we will specify the current unix timestamp. And for the key - we need to generate a new ED25519 private+public key pair specially for the channel, they will be used for initialization of [public encryption key](/develop/network/adnl-tcp#getting-a-shared-key-using-ecdh). We will use our generated public key in the `key` parameter of the message, and just save the private one for now.
 
 Serialize the filled TL structure and get:
 ```
@@ -69,7 +69,7 @@ Next, since this is a higher level request of the DHT protocol, we need to first
 ```tlb
 adnl.message.query query_id:int256 query:bytes = adnl.Message
 ```
-As `query_id` we generate random 32 bytes, as `query` we use our main request, [wrapped as an array of bytes](/docs/develop/data-formats/tl#encoding-bytes-array).
+As `query_id` we generate random 32 bytes, as `query` we use our main request, [wrapped as an array of bytes](/develop/data-formats/tl#encoding-bytes-array).
 We will get:
 ```
 7af98bb4                                                         -- TL ID adnl.message.query
@@ -108,7 +108,7 @@ First, let's analyze the main packet, which is used for initialization.
 
 During the initial data exchange, outside the channel, the serialized content structure of the packet is prefixed with the public key of the peer - 32 bytes. 
 Our public key is 32 bytes, the sha256 hash of the serialized TL of the content structure of the packet - 32 bytes. 
-The content of the packet is encrypted using the [shared key](/docs/develop/network/adnl-tcp#getting-a-shared-key-using-ecdh), obtained from our private key and the public key of the server.
+The content of the packet is encrypted using the [shared key](/develop/network/adnl-tcp#getting-a-shared-key-using-ecdh), obtained from our private key and the public key of the server.
 
 Serialize our packet content structure, and parse it byte by byte:
 ```

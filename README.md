@@ -1,11 +1,10 @@
-#test
 <img align="left" width="300px" src="static\img\readme\about.png">
 
-## TON Blockchain Documentation 💎
+## TON Blockchain Documentation 📚
 
 This is the official repository for The Open Network documentation.
 
-Check latest documentation release: [ton.org/docs](https://ton.org/docs)
+Latest documentation release: [docs.ton.org](https://docs.ton.org)
 
 The mission of this documentation is to collect all available information and knowledge that can help TON developers.
 
@@ -15,19 +14,21 @@ You can improve the documentation by following steps below.
 
 <img align="right" width="300px" src="static\img\readme\contribute.png">
 
-## Contribution to TON Documentation 🌱
+## Join TON Docs Club 💎
 
-TON is an actively growing ecosystem, and every day many people contribute to its development. 
+TON is an actively growing ecosystem, and every day many devs contribute to its development. 
 
-You can also participate in this by helping organize knowledge and creating tutorials to help other developers.
-
+You can participate in TON by helping organize knowledge, making Pull Requests and creating tutorials to help other developers. 
 Feedback, lectures, technical articles, tutorials, and examples. All this can help the developers community grow even faster!
+
+Join TON Docs Club chat in Telegram and get latest tasks from maintainers:
+* https://t.me/+c-0fVO4XHQsyOWM8
 
 ---
 
 <img align="left" width="300px" src="static\img\readme\how.png">
 
-## How to Contribute? 🎓
+## How to Contribute? 🦄
 
 As said before, it's up to you.
 
@@ -55,7 +56,7 @@ Use Gitpod (a free, online VS code-like IDE) for contributing. It will launch a 
 ### Local (default way)
 
 1. Download repository from GitHub
-2. Install [NodeJS](https://nodejs.org/en/download/) to run local build
+2. Install last version [NodeJS LTS](https://nodejs.org/en/download/) to run local build
 3. Open Terminal in project directory
 4. Install dependencies with command:
 

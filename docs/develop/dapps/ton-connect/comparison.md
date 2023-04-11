@@ -1,19 +1,20 @@
 # TON Connect 2.0 vs 1.0
 
-TON Connect 2.0 solves many problems of the first version of the protocol.
 
-TON Connect 2.0 provides the highest level of security, user experience driven by real-time UX, and ease of development of decentralized applications.
+TON Connect 2.0 solves many problems that were present in TON Connect 1.0.
 
-See the protocols comparison below:
+The TON Connect 2.0 protocol provides the highest levels of security, a developer-friendly environment for the development of decentralized applications (dApps), and a streamlined user experience driven by real-time UX.
 
-|                                    | TON&nbsp;Connect&nbsp;v1 |               TON&nbsp;Connect&nbsp;v2               |
-| :--------------------------------: | :----------------------: | :--------------------------------------------------: |
-|   Connecting to web-based dapps    |            ✔︎            |                          ✔︎                          |
-|        Sending transactions        |            ✔︎            |                          ✔︎                          |
-| Connecting dapps within the wallet |                          |                          ✔︎                          |
-|          Scanning QR code          |     for every action     |               once, during connection                |
-|          Serverless dapps          |                          |                          ✔︎                          |
-|            Realtime UX             |                          |                          ✔︎                          |
-|         Switching accounts         |                          |                         soon                         |
-| Messages from the app to the user  |                          |                         soon                         |
-|              Wallets               |        Tonkeeper         | Tonkeeper, OpenMask, TonHub (soon) and others        |
+Please see the comparison between both versions below:
+
+|                                              | TON&nbsp;Connect&nbsp;v1 |                   TON&nbsp;Connect&nbsp;v2                    |
+|:--------------------------------------------:| :----------------------: |:-------------------------------------------------------------:|
+|        Connecting to web-based dApps         |            ✔︎            |                              ✔︎                               |
+|             Sending transactions             |            ✔︎            |                              ✔︎                               |
+|      Connecting dapps within the wallet      |                          |                              ✔︎                               |
+|               QR code scanning               |     for every action     |                    once, during connection                    |
+|               Serverless dApps               |                          |                              ✔︎                               |
+|                 Realtime UX                  |                          |                              ✔︎                               |
+|              Switching accounts              |                          |                             soon                              |
+|    Messages sending between app and user     |                          |                             soon                              |
+|             Wallet compatibility             |        Tonkeeper         | Tonkeeper, OpenMask, MyTonWallet TonHub (soon) and [others](/participate/wallets/apps#basics-features) |

@@ -452,7 +452,7 @@ Let's analyze our remaining bits according to our data:
 ```
 Read first 4 bits - `1000`, this is 8. 8*8=64, read next 64 bits = `0000011101011111010010001110011101101110100111110110000001100000`, removing extra zero bits, we get `11101011111010010001110011101101110100111110110000001100000`, that is equal to `531223439883591776`, and, translating from nano to TON, we get `531223439.883591776`.
 
-We will stop here, since we have already analyzed all the main cases, the rest can be obtained in a similar way with what we have analyzed. Also, additional information on parsing TL-B can be found in [official documentation](/TL-B.md)
+We will stop here, since we have already analyzed all the main cases, the rest can be obtained in a similar way with what we have analyzed. Also, additional information on parsing TL-B can be found in [official documentation](/develop/data-formats/tl-b-language)
 
 ### Other methods
 Now, having studied all the information, you can call and process responses for other lite-server methods as well. Same principle :)
