@@ -2662,27 +2662,32 @@ It will be hard to understand everything, but it will be very useful in any case
 
 If you have any issues or suggestions, you can always write to me on [Telegram](https://t.me/aspite) (@SpiteMoriarty). Also, you can visit my [GitHub](https://github.com/aSpite).
 
-## 📖 References
+## 📖 See Also
 
 - Wallets' source code: [V3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc), [V4](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc), [High-load](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc)
 
 - Useful official documents: [ton.pdf](https://ton.org/ton.pdf), [tblkch.pdf](https://ton.org/tblkch.pdf), [tvm.pdf](https://ton.org/tvm.pdf)
 
-- The main sources of code: 
+The main sources of code:
+
   - [ton (JS/TS)](https://github.com/ton-core/ton)
   - [ton-core (JS/TS)](https://github.com/ton-core/ton-core)
   - [ton-crypto (JS/TS)](https://github.com/ton-core/ton-crypto)
   - [tonutils-go (GO)](https://github.com/xssnick/tonutils-go).
 
-- Official documentation:
+Official documentation:
 
-  - ["Internal messages" in docs](/develop/smart-contracts/guidelines/internal-messages)
+  - [Internal messages](/develop/smart-contracts/guidelines/internal-messages)
 
-  - ["External messages" in docs](/develop/smart-contracts/guidelines/external-messages)
+  - [External messages](/develop/smart-contracts/guidelines/external-messages)
 
-  - ["Types of Wallet Contracts" in docs](/participate/wallets/contracts#wallet-v4)
+  - [Types of Wallet Contracts](/participate/wallets/contracts#wallet-v4)
+  
+  - [TL-B](/develop/data-formats/tl-b-language)
 
   - [Blockchain of Blockchains](https://docs.ton.org/learn/overviews/ton-blockchain)
+
+External references:
 
 - [Ton Deep](https://github.com/xssnick/ton-deep-doc)
 

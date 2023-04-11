@@ -1641,7 +1641,12 @@ async function main(): Promise<void> {
 main();
 ```
 
-## Next steps
+## Summary
+
+What is next?
 - If you want to run the bot in production you may want to install and use a process manager like [pm2](https://pm2.keymetrics.io/).
 - You can add better errors handling in the bot.
-- In this tutorial we covered sending a simple transaction just for instance. Take a look at [this section](/develop/dapps/ton-connect/transactions) if you want to execute a smart contract method or create a more complicated transaction
+
+## See Also
+- [Sending messages](/develop/dapps/ton-connect/transactions)
+- [Integration Manual](/develop/dapps/ton-connect/integration)

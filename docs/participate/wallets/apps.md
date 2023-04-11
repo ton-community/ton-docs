@@ -209,3 +209,8 @@ With a custodial wallet, user trusts somebody else to hold the wallet's private 
 
 - [Rocket exchange](https://trade.ton-rocket.com/api/)
 - [Rocket pay docs](https://pay.ton-rocket.com/api/)
+
+## See Also
+
+- [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)
+- [Types of Wallet Contracts](/participate/wallets/contracts)

@@ -112,5 +112,5 @@ Have question or problem? Ask in the [TON dev chat](https://t.me/tondev_eng).
 ## See Also
 
 * [TON Node Types](/participate/nodes/node-types)
-* [Run a Full Node(Validator)](/participate/nodes/run-node)
-* [Full-node (low-level)](/develop/howto/full-node)
+* [Run a Full Node(Validator)](/participate/run-nodes/full-node)
+* [Full-node (low-level)](/participate/nodes/full-node)
