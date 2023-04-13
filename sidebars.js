@@ -599,25 +599,45 @@ const sidebars = {
     },
   ],
   contribute: [
+       'contribute/README',
+     {
+       'type': 'category',
+       'label': 'Common Rules',
+       'items': [
+         'contribute/contribution-rules',
+         'contribute/contribute-to-earn',
+         'contribute/maintainers',
+       ],
+     },
     {
       'type': 'category',
-      'label': 'Become a Contributor',
+      'label': 'Documentation',
       'items': [
-        'contribute/contribute-to-earn',
-        'contribute/README',
-        'contribute/maintainers',
-        'contribute/guidelines',
-        'contribute/principles-of-a-good-tutorial',
-        'contribute/sample-tutorial',
+            'contribute/docs/guidelines',
       ],
     },
     {
       'type': 'category',
-      'label': 'Hacktoberfest 2022',
+      'label': 'Tutorials',
       'items': [
-        'contribute/hacktoberfest/README',
-        'contribute/hacktoberfest/as-contributor',
-        'contribute/hacktoberfest/as-maintainer',
+        'contribute/tutorials/guidelines',
+        'contribute/tutorials/principles-of-a-good-tutorial',
+        'contribute/tutorials/sample-tutorial',
+      ],
+    },
+    {
+      'type': 'category',
+      'label': 'Archive',
+      'items': [
+        {
+          'type': 'category',
+          'label': 'Hacktoberfest 2022',
+          'items': [
+            'contribute/archive/hacktoberfest-2022/README',
+            'contribute/archive/hacktoberfest-2022/as-contributor',
+            'contribute/archive/hacktoberfest-2022/as-maintainer',
+          ],
+        },
       ],
     },
   ],

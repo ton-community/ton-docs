@@ -1,4 +1,4 @@
-# Tutorial styling guidelines
+# Tutorial Styling Guidelines
 
 So you've decided to write a tutorial for TON Documentation?
 
@@ -30,20 +30,6 @@ To summarize, the workflow is as follows:
 5. The tutorial is ***merged and published***
 6. ***Promote your tutorial*** on social media!
 
-## TON Naming
-
-- It is essential to ensure the correct use of _THE_ in the TON documentation. _TON Blockchain_ and _TON Ecosystem_ are capitalized terms, and therefore, do not require _THE_ in their usage.
-- We write _TON_ with regular nouns, and if it requires _THE_ according to English grammar, we use it. For instance: "_The_ TON Connect _protocol_ is a..."
-
-:::info
-TON Blockchain...
-
-TON Ecosystem...
-
-The TON Connect protocol...
-:::
-
-Please refer to the actual TON brand assets [here](https://ton.org/en/brand-assets).
 
 ## Context
 
