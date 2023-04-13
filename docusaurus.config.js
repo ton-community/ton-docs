@@ -116,7 +116,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         gtag: {
-          trackingID: 'G-0H1PSP2K6F',
+          trackingID: 'G-0PVST6PCG8',
           anonymizeIP: true,
         },
         docs: {
