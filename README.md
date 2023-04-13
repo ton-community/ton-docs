@@ -21,7 +21,7 @@ TON is an actively growing ecosystem, and every day many devs contribute to its 
 You can participate in TON by helping organize knowledge, making Pull Requests and creating tutorials to help other developers. 
 Feedback, lectures, technical articles, tutorials, and examples. All this can help the developers community grow even faster!
 
-Join TON Docs Club chat in Telegram and get latest tasks from maintainers:
+Join TON Docs Club chat in Telegram and get the latest tasks from maintainers:
 * https://t.me/+c-0fVO4XHQsyOWM8
 
 ---
