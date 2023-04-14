@@ -7,12 +7,12 @@ A development environment for TON for writing, testing, and deploying smart cont
 Run the following in terminal to create a new project and follow the on-screen instructions:
 
 ```bash
-npm create ton
+npm create ton@latest
 ```
 
 ### Core features
 
-- Create a development environment from template in one click - `npm create ton`
+- Create a development environment from template in one click - `npm create ton@latest`
 - Streamlined workflow for building, testing and deploying smart contracts
 - Dead simple deployment to mainnet/testnet using your favorite wallet (eg. Tonkeeper)
 - Blazing fast testing of multiple smart contracts in an isolated blockchain running in-process
