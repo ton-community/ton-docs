@@ -185,43 +185,45 @@ const sidebars = {
       label: 'Develop Smart Contracts',
       items: [
         'develop/smart-contracts/README',
-//        {
-//          type: 'category',
-//          label: 'Learn',
-//          items: [
-//            'develop/smart-contracts/learn/deployment',
-//          ],
-//        },
         {
           type: 'category',
-          label: 'Environment',
+          label: 'Learn',
           items: [
-            'develop/smart-contracts/environment/installation',
-            'develop/smart-contracts/environment/ide-plugins',
-            'develop/smart-contracts/environment/testnet',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Choose Your SDK',
-          items: [
-            'develop/smart-contracts/sdk/javascript',
-            'develop/smart-contracts/sdk/toncli',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Testing & Debugging',
-          items: [
-            'develop/smart-contracts/testing/tonstarter',
-            'develop/smart-contracts/testing/toncli',
+            'develop/smart-contracts/learn/deployment',
+            {
+              type: 'category',
+              label: 'Testing & Debugging',
+              items: [
+                'develop/smart-contracts/testing/tonstarter',
+                'develop/smart-contracts/testing/toncli',
+                {
+                  type: 'link',
+                  label: 'PyTVM',
+                  href: 'https://github.com/disintar/PyTVM',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Tutorials & Examples',
+              items: [
+                'develop/smart-contracts/tutorials/multisig',
+                'develop/smart-contracts/tutorials/multisig-js',
+                'develop/smart-contracts/tutorials/wallet'
+              ],
+            },
             {
               type: 'link',
-              label: 'PyTVM',
-              href: 'https://github.com/disintar/PyTVM',
+              label: 'How to shard your TON smart contract and why',
+              href: 'https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons',
             },
           ],
-        },
+       },
+       {
+         type: 'category',
+         label: 'Guidelines',
+         items: [
+
         'develop/smart-contracts/compile/README',
         {
           type: 'category',
@@ -272,29 +274,36 @@ const sidebars = {
             'develop/smart-contracts/guidelines/tips',
             {
               type: 'link',
-              label: 'How to shard your TON smart contract and why',
-              href: 'https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons',
+              label: 'Discover FunC language',
+              href: '/develop/func/overview',
+            },
+            'develop/howto/config-params',
+            'develop/howto/fees-low-level',
+            'develop/howto/step-by-step',
+            'develop/research-and-development/minter-flow',
+          ],
+        }
+         ],
+       },
+        {
+          type: 'category',
+          label: 'Environment',
+          items: [
+            'develop/smart-contracts/environment/installation',
+            'develop/smart-contracts/environment/ide-plugins',
+            'develop/smart-contracts/environment/testnet',
+
+            {
+              type: 'category',
+              label: 'Choose Your SDK',
+              items: [
+                'develop/smart-contracts/sdk/javascript',
+                'develop/smart-contracts/sdk/toncli',
+              ],
             },
           ],
         },
-        {
-          type: 'category',
-          label: 'Tutorials & Examples',
-          items: [
-            'develop/smart-contracts/tutorials/multisig',
-            'develop/smart-contracts/tutorials/multisig-js',
-            'develop/smart-contracts/tutorials/wallet'
-          ],
-        },
-        {
-          type: 'link',
-          label: 'Discover FunC language',
-          href: '/develop/func/overview',
-        },
-        'develop/howto/config-params',
-        'develop/howto/fees-low-level',
-        'develop/howto/step-by-step',
-        'develop/research-and-development/minter-flow',
+
       ],
     },
     {
