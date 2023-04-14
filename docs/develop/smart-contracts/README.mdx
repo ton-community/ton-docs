@@ -2,24 +2,44 @@
 
 Smart contract creation, development, and deployment on TON Blockchain leverages the FunC programming language and TON Virtual Machine (TVM). The section of our documentation will give software engineers an overview of smart contract development on TON and provide an overview of the various tooling systems and frameworks needed to ensure a seamless developer experience for all involved.
 
+## Write and Deploy
+
+Write and deploy your first smart contract with Blueprint(JS) and Toncli frameworks.
+
+### Blueprint
+
+Blueprint — is a development environment for TON blockchain for writing, testing, and deploying smart contracts.
+To create a new demo project and follow the on-screen instructions, run the following code in the terminal:
+
+```console
+npm create ton@latest
+```
+
+Follow process with video tutorial [How to write and deploy Smart Contract in FunC with Blueprint?](https://www.youtube.com/watch?v=isfFGmyJvns&list=PLyDBPwv9EPsA5vcUM2vzjQOomf264IdUZ)
+
+Learn more in the [Blue Print](/develop/smart-contracts/sdk/javascript) section
+
+### Toncli
+
+Toncli — is a TON cross-platform smart contract command line interface. Install this and run test project via following command:
+
+```console
+toncli start wallet
+```
+
+Learn more in the [Toncli](/develop/smart-contracts/sdk/toncli) section.
+
+
+
 ## Getting Started
 
 TON Hello World guide is _the easiest way_ to start with smart contracts development:
 * [TON Hello World: Step-by-step guide for writing your first smart contract](https://ton-community.github.io/tutorials/02-contract/)
 
-### Community Tutorials
+Detailed and cautionary explanations of smart contract basics:
+* [How to work with wallet smart contracts](/develop/smart-contracts/tutorials/wallet)
 
-More articles from TON community:
 
-* [How to work with wallet smart contracts](/develop/smart-contracts/tutorials/wallet) - Detailed and cautionary explanations of smart contract basics.
-* [TON Learn FunC journey: 10 zero-to-hero lessons](https://blog.ton.org/func-journey) ([Ru version](https://github.com/romanovichim/TonFunClessons_ru))
-* [Introduction to FunC: how to start developing on TON?](https://dev.to/dvlkv/introduction-in-func-how-to-start-developing-in-ton-50hp)
-
-## Testing and Debugging
-
-The easiest way to start testing your smart contract is:
-
-- [TON Hello World part 4: Step by step guide for testing your first smart contract](https://ton-community.github.io/tutorials/04-testing/)
 
 ## Environment
 
@@ -73,12 +93,12 @@ If you're familiar with smart contracts, consider reading the following GitHub s
 
 Additionally, discover more [FunC libraries and SDK](/develop/smart-contracts/libraries) in the FunC section of our documentation.
 
-## Smart Contract Guidelines
+### Smart Contract Guidelines
 
 TON’s systemized smart contract development allows engineers to build smart contracts for many uses. That said, to unlock the full capabilities of smart contract iteration on TON, it's necessary to follow our predetermined smart contract guidelines to ensure their correct composition.
 * [Smart contract guidelines](/develop/smart-contracts/guidelines)
 
-## Fift language
+### Fift language
 
 :::caution advanced level
 This information is **very low level** and may be challenging for newcomers to understand. Therefore, we suggest that you read about it later at your convenience.
@@ -88,10 +108,25 @@ Messages to smart contracts are binary data. To construct such messages, you can
 
 * [Fift Overview](/docs/develop/fift/overview)
 
-## Tact language
+### Tact language
 
 :::caution advanced level
 The Tact language is developed by independent developers. Use at your own risk.
 :::
 
 [https://docs.tact-lang.org/](https://docs.tact-lang.org/)
+
+
+
+## References
+
+More articles from TON community:
+
+* [TON Learn FunC journey: 10 zero-to-hero lessons](https://blog.ton.org/func-journey) ([Ru version](https://github.com/romanovichim/TonFunClessons_ru))
+* [Introduction to FunC: how to start developing on TON?](https://dev.to/dvlkv/introduction-in-func-how-to-start-developing-in-ton-50hp)
+* [TON Hello World part 4: Step by step guide for testing your first smart contract](https://ton-community.github.io/tutorials/04-testing/)
+
+
+
+## See Also
+
