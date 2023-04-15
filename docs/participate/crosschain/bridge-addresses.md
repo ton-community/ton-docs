@@ -95,7 +95,7 @@ Governance Address - [kf83VnnXuaqQV1Ts2qvUr6agacM0ydOux5NNa1mcU-cEO693](https://
 
 ### Mainnet TON-Ethereum Token Bridge
 
-Ethereum Bridge Address - [0xb323692b6d4DB96af1f52E4499a2bd0Ded9af3C5](https://etherscan.io/token/0xb323692b6d4DB96af1f52E4499a2bd0Ded9af3C5)
+Ethereum Bridge Address - [0xb323692b6d4DB96af1f52E4499a2bd0Ded9af3C5](https://etherscan.io/address/0xb323692b6d4DB96af1f52E4499a2bd0Ded9af3C5)
 
 Bridge Address - [Ef-1JetbPF9ubc1ga-57oHoOyDA1IShJt-BVlJnA9rrVTfrB](https://tonscan.org/address/Ef-1JetbPF9ubc1ga-57oHoOyDA1IShJt-BVlJnA9rrVTfrB)
 
@@ -181,13 +181,13 @@ Governance Address - [Ef8hHxV0v2I9FHh3CMX91WXjKaJav6SQlemEQm8ZvPBJdLde](https://
 
 ### Testnet TON-Ethereum Token Bridge
 
-Ethereum Bridge Address - [0x4Efd8f04B6fb4CFAF0cfaAC11Fb489b97DBebB60](https://etherscan.io/token/0x4Efd8f04B6fb4CFAF0cfaAC11Fb489b97DBebB60)
+Ethereum Bridge Address - [0x4Efd8f04B6fb4CFAF0cfaAC11Fb489b97DBebB60](https://goerli.etherscan.io/address/0x4Efd8f04B6fb4CFAF0cfaAC11Fb489b97DBebB60)
 
-Bridge Address - [Ef-lJBALjXSSwSKiedKzriSHixwQUxJ1BxTE05Ur5AXwZVjp](https://tonscan.org/address/Ef-lJBALjXSSwSKiedKzriSHixwQUxJ1BxTE05Ur5AXwZVjp)
+Bridge Address - [Ef-lJBALjXSSwSKiedKzriSHixwQUxJ1BxTE05Ur5AXwZVjp](https://testnet.tonscan.org/address/Ef-lJBALjXSSwSKiedKzriSHixwQUxJ1BxTE05Ur5AXwZVjp)
 
-Collector Address - [EQC1ZeKX1LNrlQ4bwi3je3KVM1AoZ3rkeyHM5hv9pYzmIh4v](https://tonscan.org/address/EQC1ZeKX1LNrlQ4bwi3je3KVM1AoZ3rkeyHM5hv9pYzmIh4v)
+Collector Address - [EQC1ZeKX1LNrlQ4bwi3je3KVM1AoZ3rkeyHM5hv9pYzmIh4v](https://testnet.tonscan.org/address/EQC1ZeKX1LNrlQ4bwi3je3KVM1AoZ3rkeyHM5hv9pYzmIh4v)
 
-Governance Address - [kf9NLH8CsGUkEKGYzCxaLd9Th6T5YkO-MXsCEU9Rw1fiRhf9](https://tonscan.org/address/kf9NLH8CsGUkEKGYzCxaLd9Th6T5YkO-MXsCEU9Rw1fiRhf9)
+Governance Address - [kf9NLH8CsGUkEKGYzCxaLd9Th6T5YkO-MXsCEU9Rw1fiRhf9](https://testnet.tonscan.org/address/kf9NLH8CsGUkEKGYzCxaLd9Th6T5YkO-MXsCEU9Rw1fiRhf9)
 
 ### Testnet Token Oracles
 
