@@ -7,7 +7,7 @@ A development environment for TON for writing, testing, and deploying smart cont
 Run the following in terminal to create a new project and follow the on-screen instructions:
 
 ```bash
-npm create ton
+npm create ton@latest
 ```
 
 ### Core features
