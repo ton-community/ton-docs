@@ -328,6 +328,7 @@ const sidebars = {
         'develop/dapps/asset-processing/nfts',
         'develop/dapps/asset-processing/metadata',
         'develop/dapps/tutorials/jetton-minter',
+        'develop/dapps/tutorials/collection-minting',
         {
           type: 'category',
           label: 'DeFi Development',
