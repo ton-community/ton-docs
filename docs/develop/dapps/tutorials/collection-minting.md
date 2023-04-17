@@ -517,7 +517,7 @@ After that we just create cell of code of NFT item's, that will be created in ou
     dataCell.storeRef(NftItemCodeCell);
 ```
 
-Roalty params stored in smart-contract by royaltyFactor, royaltyBase, royaltyAddress. Percentage of royalty can be calculated with the formula `(royaltyFactor / royaltyBase) * 100%`. So if we know royaltyPercent it's not a problem to get royaltyFactor.
+Royalty params stored in smart-contract by royaltyFactor, royaltyBase, royaltyAddress. Percentage of royalty can be calculated with the formula `(royaltyFactor / royaltyBase) * 100%`. So if we know royaltyPercent it's not a problem to get royaltyFactor.
 
 ```ts
     const royaltyBase = 1000;
@@ -715,7 +715,7 @@ By the end, we will write short method, that will get address of NFT by it's ind
 
 Start with creation of client variable, that will help us to call get-method of collection.
 ```ts
-  static async addressByIndex(
+  static async getAddressByIndex(
     collectionAddress: Address,
     itemIndex: number
   ): Promise<Address> {
@@ -755,7 +755,7 @@ await waitSeqno(seqno, wallet);
 console.log(`Balance top-upped`);
 ```
 
-Thirdly, go through each file with metadata, create instance of our `NftItem` class and call deploy method. After that we need to wait a bit, until the seqno increases:
+Eventually, go through each file with metadata, create `NftItem` instance and call deploy method. After that we need to wait a bit, until the seqno increases:
 ```ts
 for (const file of files) {
     console.log(`Start deploy of ${index + 1} NFT`);
@@ -780,10 +780,10 @@ for (const file of files) {
 In order to put the nft for sale, we need two smart contracts.
 
 - Marketplace, which is responsible only for logic of creating new sales
-- Sale contract, which is responsible for the logic of buying/canceling a sale
+- Sale contract, which is responsible for the logic of buying/cancelling a sale
 
 ### Deploy marketplace
-Create new file in `/contracts/NftMarketplace.ts`. As usual create basic class, which will accept address of owner of this marketplace and create cell with code(we will use [basic version of NFT-Marketplace smart-contract](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-marketplace.fc)) of this smart contract & initional data. 
+Create new file in `/contracts/NftMarketplace.ts`. As usual create basic class, which will accept address of owner of this marketplace and create cell with code(we will use [basic version of NFT-Marketplace smart-contract](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-marketplace.fc)) of this smart contract & initial data. 
 
 ```ts
 import {
@@ -834,7 +834,7 @@ public get address(): Address {
   }
 ```
 
-After that we need to crete method, that will deploy our marketplace actually:
+After that we need to create method, that will deploy our marketplace actually:
 
 ```ts
 public async deploy(wallet: OpenedWallet): Promise<number> {
@@ -870,7 +870,7 @@ console.log("Successfully deployed new marketplace");
 
 Great! Right now we can already deploy smart contract of our NFT sale. How it will works? We need to deploy new contract, and after that "transfer" our nft to sale contract(in other words, we just need to change owner of our NFT to sale contract in item data). In this tutorial we will use [nft-fixprice-sale-v2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v2.fc) sale smart contract.
 
-First of all let's declare new type in ts, that will describe data of our smart contract:
+First of all let's declare new type, that will describe data of our sale smart-contract:
 ```ts
 import {
   Address,
@@ -1032,7 +1032,7 @@ In addition to the op-code, query-id and address of the new owner, we must also 
 
 Nice, now we can we are already very close to the end. Back to the `app.ts` and let's get address of our nft, that we want to put on sale:
 ```ts
-const nftToSaleAddress = await NftItem.addressByIndex(collection.address, 0);
+const nftToSaleAddress = await NftItem.getAddressByIndex(collection.address, 0);
 ```
 
 Create variable, that will store information about our sale:
