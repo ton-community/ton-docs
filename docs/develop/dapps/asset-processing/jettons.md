@@ -1,7 +1,9 @@
 # TON Jetton processing
-This section of our documentation provides an overview that explains how to process (send and receive) distributed tokens (jettons) on TON Blockchain..
 
+:::info
+This section of our documentation provides an overview that explains how to process (send and receive) distributed tokens (jettons) on TON Blockchain.
 The reader should be familiar with the basic principles of asset processing described in [this section of our documentation](/develop/dapps/asset-processing/). In particular, it is important to be familiar with contracts, wallets, messages and contract deployments.
+:::
 
 # Overview
 
@@ -80,7 +82,7 @@ console.log('URI to off-chain metadata:', data.jettonContentUri);
 ```
 
 #### Jetton metadata
-More info on parsing metadata is provided [here](develop/dapps/asset-processing/metadata).
+More info on parsing metadata is provided [here](/develop/dapps/asset-processing/metadata).
 
 ## Jetton wallet smart contracts
 Jetton wallet contracts are used to send, receive, and burn jettons. Each _jetton wallet contract_ stores wallet balance information for specific users. 
@@ -250,7 +252,7 @@ Several scenarios that allow a user to accept Jettons are possible. Jettons can 
 
 To process Jettons, unlike individualized TON processing, a hot wallet is required (a v3R2, highload wallet) in addition 
 to a Jetton wallet or more than one Jetton wallet. Jetton hot wallet deployment is described in the [wallet deployment](/develop/dapps/asset-processing/#wallet-deployment) of our documentation. 
-That said, deployment of Jetton wallets according to the [Jetton wallet deployment](#Jetton-wallet-deploy) criteria is not required. 
+That said, deployment of Jetton wallets according to the [Jetton wallet deployment](#jetton-wallet-deployment) criteria is not required. 
 However, when Jettons are received, Jetton wallets are deployed automatically, meaning that when Jettons are withdrawn, 
 it is assumed that they are already in the user’s possession.
 
@@ -260,8 +262,8 @@ When processing funds, it is also recommended to provide a cold wallet for stori
 
 ### Adding new Jettons for asset processing and initial verification
 
-1. To find the correct smart contract token master address please see the following source: [How to find the right Jetton master contract](#How-to-find-the-right-Jetton-master-contract)
-2. Additionally, to retrieve the metadata for a specific Jetton please see the following source: [How to receive Jetton metadata](#How-to-get-Jetton-metadata).
+1. To find the correct smart contract token master address please see the following source: [How to find the right Jetton master contract](#jetton-master-smart-contract)
+2. Additionally, to retrieve the metadata for a specific Jetton please see the following source: [How to receive Jetton metadata](#retrieving-jetton-data).
    In order to correctly display new Jettons to users, the correct `decimals` and `symbol` are needed.
 
 For the safety of all of our users, it is critical to avoid Jettons that could be  counterfeited (fake). For example, 
@@ -309,8 +311,8 @@ Tonweb examples:
 
 #### Processing incoming Jettons
 1. Load the list of accepted Jettons
-2. Retrieve a Jetton wallet address for your deployed hot wallet: [How to retrieve a Jetton wallet address for a given user](#How-to-get-Jetton-wallet-address-for-a-given-user)
-3. Retrieve a Jetton master address for each Jetton wallet: [How to retrieve data for a Jetton wallet](#How-to-get-data-for-Jetton-wallet).
+2. Retrieve a Jetton wallet address for your deployed hot wallet: [How to retrieve a Jetton wallet address for a given user](#retrieving-jetton-wallet-addresses-for-a-given-user)
+3. Retrieve a Jetton master address for each Jetton wallet: [How to retrieve data for a Jetton wallet](#retrieving-data-for-a-specific-jetton-wallet).
    To carry out this process, the `jetton` parameter is required (which is actually the address 
 of the Jetton master contract).
 4. Compare the addresses of the Jetton master contracts from step 1. and step 3 (directly above). 
@@ -326,7 +328,7 @@ If not, then skip processing the transaction and check the next transaction.
 [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L91)
    If the message body is empty or the op code is invalid - skip the transaction.
 9. Read the message body’s other data, including the `query_id`, `amount`, `sender`, `forward_payload`. 
-[Jetton contracts message layouts](#Jetton-contracts-message-layouts), [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L105)
+[Jetton contracts message layouts](#jetton-contract-message-layouts), [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L105)
 10. Try to retrieve text comments from the `forward_payload` data. The first 32 bits must match 
 the text comment op code `0x00000000` and the remaining - UTF-8 encoded text.
 [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L110)
@@ -360,18 +362,18 @@ const wallet = new WalletClass(tonweb.provider, {
 
 #### Preparation
 
-1. Prepare a list of accepted Jettons: [Adding new Jettons for processing and initial checks](#Adding-a-new-Jettons-for-processing-and-initial-checks)
-2. Hot wallet [Wallet Deployment](https://ton.org/docs/develop/dapps/asset-processing/#deploying-wallet)
+1. Prepare a list of accepted Jettons: [Adding new Jettons for processing and initial checks](#adding-new-jettons-for-asset-processing-and-initial-verification)
+2. Hot wallet [Wallet Deployment](/develop/dapps/asset-processing/#wallet-deployment)
 
 #### Creating deposits
 
 1. Accept a request to create a new deposit for the user.
-2. Generate a new subwallet (v3R2) address based on the hot wallet seed. [Creating a subwallet in Tonweb](#Creating-a-subwallet-in-Tonweb)
+2. Generate a new subwallet (v3R2) address based on the hot wallet seed. [Creating a subwallet in Tonweb](#creating-a-subwallet-in-tonweb)
 3. The receiving address can be given to the user as the address used for Jetton deposits (this is the address of 
 the owner of the deposit Jetton wallet). Wallet initialization is not required, this can be 
 accomplished when withdrawing Jettons from the deposit.
 4. For this address, it is necessary to calculate the address of the Jetton wallet through the Jetton master contract. 
-[How to retrieve a Jetton wallet address for a given user](#How-to-get-Jetton-wallet-address-for-a-given-user).  
+[How to retrieve a Jetton wallet address for a given user](#retrieving-jetton-wallet-addresses-for-a-given-user).  
 5. Add the Jetton wallet address to the address pool for transaction monitoring and save the subwallet address.
 
 #### Processing transactions
@@ -391,7 +393,7 @@ This process is conducted as follows:
 3. Receive transactions from blocks.
 4. Filter transactions used only with addresses from the deposit Jetton wallet pool.
 5. Decode messages using the `transfer notification` body to receive more detailed data including the 
-`sender` address, Jetton `amount` and comment. (See: [#### Processing incoming Jettons](#Processing-incoming-Jettons))
+`sender` address, Jetton `amount` and comment. (See: [Processing incoming Jettons](#processing-incoming-jettons))
 6. If there is at least one transaction with non-decodable out messages (the message body does not contain op codes for 
 `transfer notification` and op codes for `excesses`) or without out messages present within the
 account, then the Jetton balance must be requested using the get method for the current block, while the previous 
@@ -430,25 +432,25 @@ init and body with the `transfer` message for depositing into the Jetton wallet 
 the user must specify the address of the hot wallet as the `destination` and `response destination`.
 A text comment can be added  to make it simpler to identify the transfer.
 6. It is possible to verify Jetton delivery using the deposit address to the hot wallet address by 
-taking into consideration the [processing of incoming Jettons info found here](#Processing-incoming-Jettons).
+taking into consideration the [processing of incoming Jettons info found here](#processing-incoming-jettons).
 
 ### Jetton withdrawals
 
 To withdraw Jettons, the wallet sends messages with the `transfer` body to its corresponding Jetton wallet. 
 The Jetton wallet then sends the Jettons to the recipient. In good faith, it is important to attach some TON 
 as the  `forward_ton_amount` (and optional comment to `forward_payload`) to trigger a `transfer notification`. 
-See: [Jetton contracts message layouts](#Jetton-contracts-message-layouts) 
+See: [Jetton contracts message layouts](#jetton-contract-message-layouts) 
 
 #### Preparation
 
-1. Prepare a list of Jettons for withdrawals: [Adding new Jettons for processing and initial verification](#Adding-a-new-Jettons-for-processing-and-initial-checks)
-2. Hot wallet deployment is initiated. Highload v2 is recommended. [Wallet Deployment](https://ton.org/docs/develop/dapps/asset-processing/#deploying-wallet)
+1. Prepare a list of Jettons for withdrawals: [Adding new Jettons for processing and initial verification](#adding-new-jettons-for-asset-processing-and-initial-verification)
+2. Hot wallet deployment is initiated. Highload v2 is recommended. [Wallet Deployment](/develop/dapps/asset-processing/#wallet-deployment)
 3. Carry out a Jetton transfer using a hot wallet address to initialize the Jetton wallet and replenish its balance.
 
 #### Processing withdrawals
 1. Load a list of processed Jettons
-2. Retrieve Jetton wallet addresses for the deployed hot wallet: [How to retrieve Jetton wallet addresses for a given user](#How-to-get-Jetton-wallet-address-for-a-given-user)
-3. Retrieve Jetton master addresses for each Jetton wallet: [How to retrieve data for Jetton wallets](#How-to-get-data-for-Jetton-wallet).
+2. Retrieve Jetton wallet addresses for the deployed hot wallet: [How to retrieve Jetton wallet addresses for a given user](#retrieving-jetton-wallet-addresses-for-a-given-user)
+3. Retrieve Jetton master addresses for each Jetton wallet: [How to retrieve data for Jetton wallets](#retrieving-data-for-a-specific-jetton-wallet).
    A `jetton` parameter is required (which is actually the address of Jetton master contract).
 4. Compare the addresses from Jetton master contracts from step 1. and step 3. If the addresses do not match, then a Jetton address verification error should be reported.
 5. Withdrawal requests are received which actually indicate the type of Jetton, the amount being transferred, and the recipient wallet address.
@@ -456,7 +458,7 @@ See: [Jetton contracts message layouts](#Jetton-contracts-message-layouts)
 7. Generate a message using the Jetton `transfer` body by filling in the required fields, including: the query_id, amount being sent, 
 destination (the recipient's non-Jetton wallet address), response_destination (it is recommended to specify the user’s hot wallet), 
 forward_ton_amount (it is recommended to set this to at least 0.05 TON to invoke a `transfer notification`), `forward_payload`
-   (optional, if sending a comment is needed). [Jetton contracts message layouts, Tonweb example](#Jetton-contracts-message-layouts), 
+   (optional, if sending a comment is needed). [Jetton contracts message layouts](#jetton-contract-message-layouts), 
 [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/jettons-withdrawals.js#L69)
    In order to check the successful validation of the transaction, it is necessary to assign a unique value to the
    `query_id` for each message.
@@ -508,3 +510,10 @@ parameters can be crafted to mislead users, leaving those affected as potential 
 
 
 Authored by [kosrk](https://github.com/kosrk), [krigga](https://github.com/krigga), [EmelyanenkoK](https://github.com/EmelyanenkoK/) and [tolya-yanot](https://github.com/tolya-yanot/).
+
+
+## See Also
+
+* [Payments Processing](/develop/dapps/asset-processing/)
+* [NFT processing on TON](/develop/dapps/asset-processing/nfts)
+* [Metadata parsing on TON](/develop/dapps/asset-processing/metadata)
