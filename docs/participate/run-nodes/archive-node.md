@@ -62,7 +62,7 @@ mv /var/ton-work /var/ton-work.bak
 3. Tell plzip to use as many cores as your machine allows to speed up extraction process (-n parameter). Another handy tool to use is pipe viewer utility. Here is example command to restore the dump directly from this server via curl:
 
 ```sh
-curl -u username:password -s https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d -n8 | zfs recv mypool/ton-work
+wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d | zfs recv ton-pool/db
 ```
 
 4. Mount zfs: `zfs set mountpoint=/var/ton-work data/ton-work && zfs mount data/ton-work`
