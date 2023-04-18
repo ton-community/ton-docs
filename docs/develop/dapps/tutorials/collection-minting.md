@@ -22,7 +22,7 @@ You must already have a testnet wallet with at least 2 TON on it. It's possible 
 To open testnet network on tonkeeper go to the settings and click 5 times on the tonkeeper logo located in the bottom, after that choose testnet instead of mainnet.
 :::
 
-Also you need to create an account on [pinata.cloud](https://pinata.cloud) and get api_key & api_secreat. Official Pinata [documentation tutorial](https://docs.pinata.cloud/pinata-api/authentication) can help with that. As long as you get these api tokens, I'll be waiting for you here!!!
+We will use Pinata as our IPFS storage system, so you also need to create an account on [pinata.cloud](https://pinata.cloud) and get api_key & api_secreat. Official Pinata [documentation tutorial](https://docs.pinata.cloud/pinata-api/authentication) can help with that. As long as you get these api tokens, I'll be waiting for you here!!!
 
 ## 💎 What is it NFT on TON?
 
@@ -108,7 +108,7 @@ You can get toncenter api key from [@tontestnetapibot](https://t.me/@tontestneta
 
 Great! Now we are ready to start writing code for our project.
 
-### Write functions - helpers
+### Write helper functions
 
 Firstly let's create function in `src/utils.ts`, that will open our wallet by mnemonic and return publicKey/secretKey of it. 
 
@@ -120,7 +120,6 @@ import {
   Cell,
   OpenedContract,
   TonClient,
-  WalletContractV3R2,
   WalletContractV4,
 } from "ton";
 
@@ -136,25 +135,25 @@ export async function openWallet(mnemonic: string[], testnet: boolean) {
 
 Create a class instance to interact with toncenter:
 ```ts
-  const toncenterBaseEndpoint: string = testnet
-    ? "https://testnet.toncenter.com"
-    : "https://toncenter.com";
+const toncenterBaseEndpoint: string = testnet
+  ? "https://testnet.toncenter.com"
+  : "https://toncenter.com";
 
-  const client = new TonClient({
-    endpoint: `${toncenterBaseEndpoint}/api/v2/jsonRPC`,
-    apiKey: process.env.TONCENTER_API_KEY,
-  });
+const client = new TonClient({
+  endpoint: `${toncenterBaseEndpoint}/api/v2/jsonRPC`,
+  apiKey: process.env.TONCENTER_API_KEY,
+});
 ```  
 
 And finally open our wallet:
 ```ts
-  const wallet = WalletContractV3R2.create({
-      workchain: 0,
-      publicKey: keyPair.publicKey,
-    });
+const wallet = WalletContractV4.create({
+    workchain: 0,
+    publicKey: keyPair.publicKey,
+  });
 
-  const contract = client.open(wallet);
-  return { contract, keyPair };
+const contract = client.open(wallet);
+return { contract, keyPair };
 ```
 
 Nice, after that we will create main entrypoint for our project - `app.ts`. 
@@ -192,6 +191,10 @@ export function sleep(ms: number): Promise<void> {
 }
 ```
 
+:::info What is it - seqno?
+In simply words, seqno it's just a counter of outgoing transactions sent by wallet.
+Seqno used to prevent Replay Attacks. When a transaction is sent to a wallet smart contract, it compares the seqno field of the transaction with the one inside its storage. If they match, it's accepted and the stored seqno is incremented by one. If they don't match, the transaction is discarded. That's why we will need to wait a bit, after every outgoing transaction.
+:::
 
 
 ## 🖼 Prepare metadata
@@ -297,15 +300,15 @@ export async function updateMetadataFiles(metadataFolderPath: string, imagesIpfs
 ```
 Here we firstly read all of the files in specified folder:
 ```ts
-  const files = readdirSync(metadataFolderPath);
+const files = readdirSync(metadataFolderPath);
 ```
 
 Iterate over each file and get its content
 ```ts
-    const filePath = path.join(metadataFolderPath, filename)
-    const file = await readFile(filePath);
-    
-    const metadata = JSON.parse(file.toString());
+const filePath = path.join(metadataFolderPath, filename)
+const file = await readFile(filePath);
+
+const metadata = JSON.parse(file.toString());
 ```
 
 After that, we assign the value `ipfs://{IpfsHash}/{index}.jpg` to the image field if it's not last file in the folder, otherwise `ipfs://{imagesIpfsHash}/logo.jpg` and actually rewrite our file with new data.
@@ -393,7 +396,7 @@ function bufferToChunks(buff: Buffer, chunkSize: number) {
 }
 ```
 
-And create function, that will bind all the chunks into 1 cell:
+And create function, that will bind all the chunks into 1 snake-cell:
 ```ts
 function makeSnakeCell(data: Buffer): Cell {
   const chunks = bufferToChunks(data, 127);
@@ -463,6 +466,15 @@ export type collectionData = {
 }
 ```
 
+Name | Explanation 
+---|---
+ownerAddress |	Address that will be set as owner of our collection. Only owner will be able to mint new NFT
+royaltyPercent | Percent of each sale amount, that will go to the specified address
+royaltyAddress | Address of wallet, that will receive royalty from sales of this NFT collection
+nextItemIndex | The index that the next NFT item should have
+collectionContentUrl | URL to the collection metadata
+commonContentUrl | Base url for NFT items metadata
+
 Firstly let's write private method, that will return cell with code of our collection. 
 
 ```ts
@@ -486,66 +498,66 @@ Okey, remained only cell with init data of our collection.
 Basicly, we just need to store data from collectionData in correct way. Firstly we need to create an empty cell and store there collection owner address and index of next item that will be minted.
 
 ```ts
-  private createDataCell(): Cell {
-    const data = this.collectionData;
-    const dataCell = beginCell();
+private createDataCell(): Cell {
+  const data = this.collectionData;
+  const dataCell = beginCell();
 
-    dataCell.storeAddress(data.ownerAddress);
-    dataCell.storeUint(data.nextItemIndex, 64);
+  dataCell.storeAddress(data.ownerAddress);
+  dataCell.storeUint(data.nextItemIndex, 64);
 ```
 
 Next after that, we creating an empty cell that will store content of our collection, and after that store ref to the cell with encoded content of our collection. And right after that store ref to contentCell in our main data cell.
 ```ts
-    const contentCell = beginCell();
+const contentCell = beginCell();
 
-    const collectionContent = encodeOffChainContent(data.collectionContentUrl);
+const collectionContent = encodeOffChainContent(data.collectionContentUrl);
 
-    const commonContent = beginCell();
-    commonContent.storeBuffer(Buffer.from(data.commonContentUrl));
+const commonContent = beginCell();
+commonContent.storeBuffer(Buffer.from(data.commonContentUrl));
 
-    contentCell.storeRef(collectionContent);
-    contentCell.storeRef(commonContent.asCell());
-    dataCell.storeRef(contentCell);
+contentCell.storeRef(collectionContent);
+contentCell.storeRef(commonContent.asCell());
+dataCell.storeRef(contentCell);
 ```
 
 After that we just create cell of code of NFT item's, that will be created in our collection, and store ref to this cell in dataCell
 
 ```ts
-    const NftItemCodeCell = Cell.fromBase64(
-      "te6cckECDQEAAdAAART/APSkE/S88sgLAQIBYgMCAAmhH5/gBQICzgcEAgEgBgUAHQDyMs/WM8WAc8WzMntVIAA7O1E0NM/+kAg10nCAJp/AfpA1DAQJBAj4DBwWW1tgAgEgCQgAET6RDBwuvLhTYALXDIhxwCSXwPg0NMDAXGwkl8D4PpA+kAx+gAxcdch+gAx+gAw8AIEs44UMGwiNFIyxwXy4ZUB+kDUMBAj8APgBtMf0z+CEF/MPRRSMLqOhzIQN14yQBPgMDQ0NTWCEC/LJqISuuMCXwSED/LwgCwoAcnCCEIt3FzUFyMv/UATPFhAkgEBwgBDIywVQB88WUAX6AhXLahLLH8s/Im6zlFjPFwGRMuIByQH7AAH2UTXHBfLhkfpAIfAB+kDSADH6AIIK+vCAG6EhlFMVoKHeItcLAcMAIJIGoZE24iDC//LhkiGOPoIQBRONkchQCc8WUAvPFnEkSRRURqBwgBDIywVQB88WUAX6AhXLahLLH8s/Im6zlFjPFwGRMuIByQH7ABBHlBAqN1viDACCAo41JvABghDVMnbbEDdEAG1xcIAQyMsFUAfPFlAF+gIVy2oSyx/LPyJus5RYzxcBkTLiAckB+wCTMDI04lUC8ANqhGIu"
-    );
-    dataCell.storeRef(NftItemCodeCell);
+const NftItemCodeCell = Cell.fromBase64(
+  "te6cckECDQEAAdAAART/APSkE/S88sgLAQIBYgMCAAmhH5/gBQICzgcEAgEgBgUAHQDyMs/WM8WAc8WzMntVIAA7O1E0NM/+kAg10nCAJp/AfpA1DAQJBAj4DBwWW1tgAgEgCQgAET6RDBwuvLhTYALXDIhxwCSXwPg0NMDAXGwkl8D4PpA+kAx+gAxcdch+gAx+gAw8AIEs44UMGwiNFIyxwXy4ZUB+kDUMBAj8APgBtMf0z+CEF/MPRRSMLqOhzIQN14yQBPgMDQ0NTWCEC/LJqISuuMCXwSED/LwgCwoAcnCCEIt3FzUFyMv/UATPFhAkgEBwgBDIywVQB88WUAX6AhXLahLLH8s/Im6zlFjPFwGRMuIByQH7AAH2UTXHBfLhkfpAIfAB+kDSADH6AIIK+vCAG6EhlFMVoKHeItcLAcMAIJIGoZE24iDC//LhkiGOPoIQBRONkchQCc8WUAvPFnEkSRRURqBwgBDIywVQB88WUAX6AhXLahLLH8s/Im6zlFjPFwGRMuIByQH7ABBHlBAqN1viDACCAo41JvABghDVMnbbEDdEAG1xcIAQyMsFUAfPFlAF+gIVy2oSyx/LPyJus5RYzxcBkTLiAckB+wCTMDI04lUC8ANqhGIu"
+);
+dataCell.storeRef(NftItemCodeCell);
 ```
 
 Royalty params stored in smart-contract by royaltyFactor, royaltyBase, royaltyAddress. Percentage of royalty can be calculated with the formula `(royaltyFactor / royaltyBase) * 100%`. So if we know royaltyPercent it's not a problem to get royaltyFactor.
 
 ```ts
-    const royaltyBase = 1000;
-    const royaltyFactor = Math.floor(data.royaltyPercent * royaltyBase);
+const royaltyBase = 1000;
+const royaltyFactor = Math.floor(data.royaltyPercent * royaltyBase);
 ```
 
 After our calculations we need to store royalty data in separate cell and provide ref to this cell in dataCell.
 
 ```ts
-    const royaltyCell = beginCell();
-    royaltyCell.storeUint(royaltyFactor, 16);
-    royaltyCell.storeUint(royaltyBase, 16);
-    royaltyCell.storeAddress(data.royaltyAddress);
-    dataCell.storeRef(royaltyCell);
+const royaltyCell = beginCell();
+royaltyCell.storeUint(royaltyFactor, 16);
+royaltyCell.storeUint(royaltyBase, 16);
+royaltyCell.storeAddress(data.royaltyAddress);
+dataCell.storeRef(royaltyCell);
 
-    return dataCell.endCell();
-  }
+return dataCell.endCell();
+}
 ```
 
 
 Now let's actually write getter, that will return StateInit of our collection:
 ```ts
-  public get stateInit(): StateInit {
-    const code = this.createCodeCell();
-    const data = this.createDataCell();
+public get stateInit(): StateInit {
+  const code = this.createCodeCell();
+  const data = this.createDataCell();
 
-    return { code, data };
-  }
+  return { code, data };
+}
 ```
 
 And getter, that will calculate Address of our collection(address of smart-contract in TON is just hash of it's StateInit)
@@ -584,8 +596,9 @@ public async topUpBalance(
     wallet: OpenedWallet,
     nftAmount: number
   ): Promise<number> {
+    const feeAmount = 0.026 // approximate value of fees for 1 transaction in our case 
     const seqno = await wallet.contract.getSeqno();
-    const amount = nftAmount * 0.026;
+    const amount = nftAmount * feeAmount;
 
     await wallet.contract.sendTransfer({
       seqno,
@@ -664,15 +677,15 @@ Later on create an empty cell and store owner address of this NFT:
 
 And store ref in this cell(with NFT Item content) ref to the metadata of this item:
 ```ts
-    const uriContent = beginCell();
-    uriContent.storeBuffer(Buffer.from(params.commonContentUrl));
-    nftItemContent.storeRef(uriContent.endCell());
+const uriContent = beginCell();
+uriContent.storeBuffer(Buffer.from(params.commonContentUrl));
+nftItemContent.storeRef(uriContent.endCell());
 ```
 
 Store ref to cell with item content in our body cell:
 ```ts
-    body.storeRef(nftItemContent.endCell());
-    return body.endCell();
+body.storeRef(nftItemContent.endCell());
+return body.endCell();
 ```
 
 Great! Now we can comeback to `NftItem.ts`. All we have to do is just send message to our collection contract with body of our NFT.
@@ -715,37 +728,37 @@ By the end, we will write short method, that will get address of NFT by it's ind
 
 Start with creation of client variable, that will help us to call get-method of collection.
 ```ts
-  static async getAddressByIndex(
-    collectionAddress: Address,
-    itemIndex: number
-  ): Promise<Address> {
-    const client = new TonClient({
-      endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
-      apiKey: process.env.TONCENTER_API_KEY,
-    });
-  }
+static async getAddressByIndex(
+  collectionAddress: Address,
+  itemIndex: number
+): Promise<Address> {
+  const client = new TonClient({
+    endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
+    apiKey: process.env.TONCENTER_API_KEY,
+  });
+}
 ```
 
 Then we will call get-method of collection, that will return address of NFT in this collection with such index
 ```ts
-    const response = await client.runMethod(
-      collectionAddress,
-      "get_nft_address_by_index",
-      [{ type: "int", value: BigInt(itemIndex) }]
-    );
+const response = await client.runMethod(
+  collectionAddress,
+  "get_nft_address_by_index",
+  [{ type: "int", value: BigInt(itemIndex) }]
+);
 ```
 
 ... and parse this address!
 ```ts
-    return response.stack.readAddress();
+return response.stack.readAddress();
 ```
 
 
 Now let's add some code in `app.ts`, to automate the minting process of each NFT. Firstly read all of the files in folder with our metadata:
 ```ts
-  const files = await readdir(metadataFolderPath);
-  files.pop();
-  let index = 0;
+const files = await readdir(metadataFolderPath);
+files.pop();
+let index = 0;
 ```
 
 Secondly top up balance of our collection:
@@ -923,40 +936,40 @@ export class NftSale {
 }
 ```
 
-Following that we can create an empty cell and just store in it information from saleData in correct order and right after that store ref to the cell with the fees information
+Following that we can create an empty cell and just store in it information from saleData in correct order and right after that store ref to the cell with the fees information:
 ```ts
-    const dataCell = beginCell();
+const dataCell = beginCell();
 
-    dataCell.storeUint(saleData.isComplete ? 1 : 0, 1);
-    dataCell.storeUint(saleData.createdAt, 32);
-    dataCell.storeAddress(saleData.marketplaceAddress);
-    dataCell.storeAddress(saleData.nftAddress);
-    dataCell.storeAddress(saleData.nftOwnerAddress);
-    dataCell.storeCoins(saleData.fullPrice);
-    dataCell.storeRef(feesCell.endCell());
+dataCell.storeUint(saleData.isComplete ? 1 : 0, 1);
+dataCell.storeUint(saleData.createdAt, 32);
+dataCell.storeAddress(saleData.marketplaceAddress);
+dataCell.storeAddress(saleData.nftAddress);
+dataCell.storeAddress(saleData.nftOwnerAddress);
+dataCell.storeCoins(saleData.fullPrice);
+dataCell.storeRef(feesCell.endCell());
 
-    return dataCell.endCell();
+return dataCell.endCell();
 ```
 
 And as always add method's to get stateInit, init code cell and address of our smart contract.
 ```ts
-  public get address(): Address {
-    return contractAddress(0, this.stateInit);
-  }
+public get address(): Address {
+  return contractAddress(0, this.stateInit);
+}
 
-  public get stateInit(): StateInit {
-    const code = this.createCodeCell();
-    const data = this.createDataCell();
+public get stateInit(): StateInit {
+  const code = this.createCodeCell();
+  const data = this.createDataCell();
 
-    return { code, data };
-  }
+  return { code, data };
+}
 
-  private createCodeCell(): Cell {
-    const NftFixPriceSaleV2CodeBoc =
-      "te6cckECDAEAAikAART/APSkE/S88sgLAQIBIAMCAATyMAIBSAUEAFGgOFnaiaGmAaY/9IH0gfSB9AGoYaH0gfQB9IH0AGEEIIySsKAVgAKrAQICzQgGAfdmCEDuaygBSYKBSML7y4cIk0PpA+gD6QPoAMFOSoSGhUIehFqBSkHCAEMjLBVADzxYB+gLLaslx+wAlwgAl10nCArCOF1BFcIAQyMsFUAPPFgH6AstqyXH7ABAjkjQ04lpwgBDIywVQA88WAfoCy2rJcfsAcCCCEF/MPRSBwCCIYAYyMsFKs8WIfoCy2rLHxPLPyPPFlADzxbKACH6AsoAyYMG+wBxVVAGyMsAFcsfUAPPFgHPFgHPFgH6AszJ7VQC99AOhpgYC42EkvgnB9IBh2omhpgGmP/SB9IH0gfQBqGBNgAPloyhFrpOEBWccgGRwcKaDjgskvhHAoomOC+XD6AmmPwQgCicbIiV15cPrpn5j9IBggKwNkZYAK5Y+oAeeLAOeLAOeLAP0BZmT2qnAbE+OAcYED6Y/pn5gQwLCQFKwAGSXwvgIcACnzEQSRA4R2AQJRAkECPwBeA6wAPjAl8JhA/y8AoAyoIQO5rKABi+8uHJU0bHBVFSxwUVsfLhynAgghBfzD0UIYAQyMsFKM8WIfoCy2rLHxnLPyfPFifPFhjKACf6AhfKAMmAQPsAcQZQREUVBsjLABXLH1ADzxYBzxYBzxYB+gLMye1UABY3EDhHZRRDMHDwBTThaBI=";
+private createCodeCell(): Cell {
+  const NftFixPriceSaleV2CodeBoc =
+    "te6cckECDAEAAikAART/APSkE/S88sgLAQIBIAMCAATyMAIBSAUEAFGgOFnaiaGmAaY/9IH0gfSB9AGoYaH0gfQB9IH0AGEEIIySsKAVgAKrAQICzQgGAfdmCEDuaygBSYKBSML7y4cIk0PpA+gD6QPoAMFOSoSGhUIehFqBSkHCAEMjLBVADzxYB+gLLaslx+wAlwgAl10nCArCOF1BFcIAQyMsFUAPPFgH6AstqyXH7ABAjkjQ04lpwgBDIywVQA88WAfoCy2rJcfsAcCCCEF/MPRSBwCCIYAYyMsFKs8WIfoCy2rLHxPLPyPPFlADzxbKACH6AsoAyYMG+wBxVVAGyMsAFcsfUAPPFgHPFgHPFgH6AszJ7VQC99AOhpgYC42EkvgnB9IBh2omhpgGmP/SB9IH0gfQBqGBNgAPloyhFrpOEBWccgGRwcKaDjgskvhHAoomOC+XD6AmmPwQgCicbIiV15cPrpn5j9IBggKwNkZYAK5Y+oAeeLAOeLAOeLAP0BZmT2qnAbE+OAcYED6Y/pn5gQwLCQFKwAGSXwvgIcACnzEQSRA4R2AQJRAkECPwBeA6wAPjAl8JhA/y8AoAyoIQO5rKABi+8uHJU0bHBVFSxwUVsfLhynAgghBfzD0UIYAQyMsFKM8WIfoCy2rLHxnLPyfPFifPFhjKACf6AhfKAMmAQPsAcQZQREUVBsjLABXLH1ADzxYBzxYBzxYB+gLMye1UABY3EDhHZRRDMHDwBTThaBI=";
 
-    return Cell.fromBase64(NftFixPriceSaleV2CodeBoc);
-  }
+  return Cell.fromBase64(NftFixPriceSaleV2CodeBoc);
+}
 ```
 
 It remains only to form a message that we will send to our marketplace to deploy sale contract and actually send this message
@@ -1022,12 +1035,12 @@ static createTransferBody(params: {
 In addition to the op-code, query-id and address of the new owner, we must also store the address where to send a response with confirmation of a successful transfer and the rest of the incoming message coins. The amount of TON that will come to the new owner and whether he will receive a text payload.
 
 ```ts
-    msgBody.storeAddress(params.responseTo || null);
-    msgBody.storeBit(false); // no custom payload
-    msgBody.storeCoins(params.forwardAmount || 0);
-    msgBody.storeBit(0); // no forward_payload 
+msgBody.storeAddress(params.responseTo || null);
+msgBody.storeBit(false); // no custom payload
+msgBody.storeCoins(params.forwardAmount || 0);
+msgBody.storeBit(0); // no forward_payload 
 
-    return msgBody.endCell();
+return msgBody.endCell();
 ```
 
 Nice, now we can we are already very close to the end. Back to the `app.ts` and let's get address of our nft, that we want to put on sale:
@@ -1062,16 +1075,15 @@ await waitSeqno(seqno, wallet);
 ... and transfer it!
 ```ts
 await NftItem.transfer(wallet, nftToSaleAddress, nftSaleContract.address);
-
 ```
-
-## Conclusion 
 
 Now we can launch our project and enjoy the process!
 ```
 yarn start
 ```
 Go to https://testnet.getgems.io/YOUR_COLLECTION_ADDRESS_HERE and look to this perfect ducks!
+
+## Conclusion 
 
 Today you have learned a lot of new things about TON and even created your own beautiful NFT collection in the testnet! If you still have any questions or have noticed an error - feel free to write to the author - [@coalus](https:/t.me/coalus)
 
