@@ -1,9 +1,5 @@
 # Running an Archive Node
 
-:::warning
-Page in development
-:::
-
 ## Overview
 An Archive Node is a type of Full Node that stores extended historical data of a blockchain. If you are creating a blockchain explorer or a similar application that requires access to historical data, using an Archive Node as an indexer is recommended.
 
@@ -66,7 +62,7 @@ mv /var/ton-work /var/ton-work.bak
 3. Tell plzip to use as many cores as your machine allows to speed up extraction process (-n parameter). Another handy tool to use is pipe viewer utility. Here is example command to restore the dump directly from this server via curl:
 
 ```sh
-curl -u username:password -s https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d -n8 | zfs recv mypool/ton-work
+wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d | zfs recv ton-pool/db
 ```
 
 4. Mount zfs: `zfs set mountpoint=/var/ton-work data/ton-work && zfs mount data/ton-work`
@@ -116,5 +112,5 @@ Have question or problem? Ask in the [TON dev chat](https://t.me/tondev_eng).
 ## See Also
 
 * [TON Node Types](/participate/nodes/node-types)
-* [Run a Full Node(Validator)](/participate/nodes/run-node)
-* [Full-node (low-level)](/develop/howto/full-node)
+* [Run a Full Node(Validator)](/participate/run-nodes/full-node)
+* [Full-node (low-level)](/participate/nodes/full-node)

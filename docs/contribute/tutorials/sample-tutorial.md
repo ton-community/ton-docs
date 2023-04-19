@@ -94,21 +94,22 @@ This section should summarize what was learned in the tutorial, reinforce key po
 Please remember that this code is not meant for production; there are still a few other things to consider if you wanted to deploy this to mainnet, such as disabling the transfer method if the token is listed on the market, and so on.
 >
 
-## Next Steps *(Optional)*
+## See Also
 
-The Next Steps heading **must** be H2: `## Next Steps`
+The Next Steps heading **must** be H2: `## See Also`
 
 Use this section to explain what can be done next after this tutorial to continue learning.
 Feel free to add recommended projects and articles relating to this tutorial.
 If you're working on any other advanced tutorials, you can briefly mention them here.
+Typically, only related pages from docs.ton.org are placed here.
 
-## About the Author
+## About the Author *(Optional)*
 
 The About the Author heading **must** be H2: `## About the Author`
 
 Keep it short. One or two lines at most. You can include a link to your GitHub profile + Telegram profile. Please refrain from adding your LinkedIn or Twitter here.
 
-## References
+## References *(Optional)*
 
 The References heading **must** be H2: `## References`
 

@@ -55,5 +55,6 @@ Upon reaching 66% validator approval (measured by an equal voting weight), a sla
 
 ## See Also
 
-[Running a Full Node (Validator)](/participate/nodes/run-node)
-[Transaction Fees](/develop/smart-contracts/fees)
+* [Running a Full Node (Validator)](/participate/run-nodes/full-node)
+* [Transaction Fees](/develop/smart-contracts/fees)
+* [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)
