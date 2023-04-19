@@ -86,7 +86,7 @@ Here `0 <= i,j,k <= 15` if not stated otherwise.
 | **`52ij`** | `s[i] s[j-1] PUXC` |  | Equivalent to [`s[i] PUSH`](#instr-push) [`SWAP`](#instr-swap) [`s[j] XCHG0`](#instr-xchg-0i). | `26` |
 | **`53ij`** | `s[i] s[j] PUSH2` |  | Equivalent to [`s[i] PUSH`](#instr-push) [`s[j+1] PUSH`](#instr-push). | `26` |
 | **`540ijk`** | `s[i] s[j] s[k] XCHG3_l` |  | Long form of [`XCHG3`](#instr-xchg3). | `34` |
-| **`541ijk`** | `s[i] s[j] s[k] XC2PU` |  | Equivalent to [`s[i] s[j] XCHG2`](#instr-xchg2) [`s[k] PUSH`](#instr-push). | `34` |
+| 541ijk | `s[i] s[j] s[k] XC2PU` |  | Equivalent to [`s[i] s[j] XCHG2`](#instr-xchg2) [`s[k] PUSH`](#instr-push). | `34` |
 | **`542ijk`** | `s[i] s[j] s[k-1] XCPUXC` |  | Equivalent to [`s1 s[i] XCHG`](#instr-xchg-ij) [`s[j] s[k-1] PUXC`](#instr-puxc). | `34` |
 | **`543ijk`** | `s[i] s[j] s[k] XCPU2` |  | Equivalent to [`s[i] XCHG0`](#instr-xchg-0i) [`s[j] s[k] PUSH2`](#instr-push2). | `34` |
 | **`544ijk`** | `s[i] s[j-1] s[k-1] PUXC2` |  | Equivalent to [`s[i] PUSH`](#instr-push) [`s2 XCHG0`](#instr-xchg-0i) [`s[j] s[k] XCHG2`](#instr-xchg2). | `34` |

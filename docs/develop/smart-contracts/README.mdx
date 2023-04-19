@@ -1,3 +1,5 @@
+import Button from '@site/src/components/button'
+
 # Introduction
 
 Smart contract creation, development, and deployment on TON Blockchain leverages the FunC programming language and TON Virtual Machine (TVM). The section of our documentation will give software engineers an overview of smart contract development on TON and provide an overview of the various tooling systems and frameworks needed to ensure a seamless developer experience for all involved.
@@ -14,10 +16,11 @@ To create a new demo project and follow the on-screen instructions, run the foll
 ```console
 npm create ton@latest
 ```
-
-Follow process with video tutorial [How to write and deploy Smart Contract in FunC with Blueprint?](https://www.youtube.com/watch?v=isfFGmyJvns&list=PLyDBPwv9EPsA5vcUM2vzjQOomf264IdUZ)
-
-Learn more in the [Blue Print](/develop/smart-contracts/sdk/javascript) section
+<Button href="https://youtu.be/y5XcaQAwxIQ" colorType={'primary'} sizeType={'sm'}>Learn Through Videos</Button>
+<Button href="/develop/smart-contracts/sdk/javascript"
+        colorType="secondary" sizeType={'sm'}>
+  Learn More
+</Button>
 
 ### Toncli
 
@@ -26,19 +29,93 @@ Toncli — is a TON cross-platform smart contract command line interface. Instal
 ```console
 toncli start wallet
 ```
-
-Learn more in the [Toncli](/develop/smart-contracts/sdk/toncli) section.
-
+<Button href="/develop/smart-contracts/sdk/toncli"
+        colorType="secondary" sizeType={'sm'}>
+  Learn More
+</Button>
 
 
 ## Getting Started
 
+### Fast Track Tutorials
+
 TON Hello World guide is _the easiest way_ to start with smart contracts development:
 * [TON Hello World: Step-by-step guide for writing your first smart contract](https://ton-community.github.io/tutorials/02-contract/)
+
+### Comprehensive and Detailed Tutorials
 
 Detailed and cautionary explanations of smart contract basics:
 * [How to work with wallet smart contracts](/develop/smart-contracts/tutorials/wallet)
 
+
+## Smart Contract Guidelines
+
+Learn principals of designing and architecture of TON.
+
+TON’s systemized smart contract development allows engineers to build smart contracts for many uses. That said, to unlock the full capabilities of smart contract iteration on TON, it's necessary to follow our predetermined smart contract guidelines to ensure their correct composition.
+* [Smart contract guidelines](/develop/smart-contracts/guidelines)
+
+
+## TON Virtual Machine
+
+TON smart contracts are executed on TON Virtual Machine (TVM).
+The TVM is a stack-based virtual machine that employs many qualities that make it efficient and easy to implement.
+
+To get a better understanding of how the TVM works, consider reading the TVM Overview section of our documentation.
+
+<Button href="/learn/tvm-instructions/tvm-overview" colorType={'primary'} sizeType={'sm'}>TVM Overview</Button>
+
+## Programming Languages
+
+### FunC Language
+
+FunC is TON’s high-level programming language used to program smart contracts on TON Blockchain. The proprietary in-house language is a domain-specific statically typed framework which exhibits many characteristics simply not found in competing language types.
+
+<Button href="/develop/func/overview" colorType={'primary'} sizeType={'sm'}>FunC Overview</Button>
+
+### Fift language
+
+:::caution advanced level
+This information is **very low level** and may be challenging for newcomers to understand. Therefore, we suggest that you read about it later at your convenience.
+:::
+
+Messages to smart contracts are binary data. To construct such messages, you can use one of the SDKs **or** the special programming language Fift.
+
+<Button href="/docs/develop/fift/overview" colorType={'primary'} sizeType={'sm'}>Fift Overview</Button>
+
+### Tact language
+
+:::caution advanced level
+The Tact language is developed by independent developers. Use at your own risk.
+:::
+
+<Button href="https://docs.tact-lang.org/" colorType={'primary'} sizeType={'sm'}>Official Site</Button>
+<Button href="https://tact-by-example.org/"
+        colorType="secondary" sizeType={'sm'}>
+  Tact Hello World
+</Button>
+
+
+
+
+
+## Smart Contract Examples
+
+:::info little tip
+Feel free to focus on smart contracts written using _FunC_. it's often better to focus on smart contracts written using FunC (*.fc) instead of the lower-level Fift (*.fif) language.
+:::
+
+Standard examples of smart contracts on TON include wallets, electors (which manage validation on TON), multi-signature wallets can be a reference when studying.
+
+If you're familiar with smart contracts, consider reading the following GitHub specifications for more context:
+
+- [Fungible (Jettons), Non-Fungible (NFT), Semi-Fungible Tokens smart contracts](https://github.com/ton-blockchain/token-contract/tree/main)
+- [Getgems NFT, sale, auctions smart contracts (FunC)](https://github.com/getgems-io/nft-contracts)
+- [Wallet V4 smart contract example](https://github.com/ton-blockchain/wallet-contract)
+- [Standard smart contracts examples](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
+- [Super Simple Chatbot: doge.fc](https://github.com/LaDoger/doge.fc)
+
+Additionally, discover more [FunC libraries and SDK](/develop/smart-contracts/libraries) in the FunC section of our documentation.
 
 
 ## Environment
@@ -62,61 +139,6 @@ Development toolkits play a pivotal role in the development of smart contracts o
 * [tonwhales.com/tools/introspection-id](https://tonwhales.com/tools/introspection-id) — crc32 generator.
 * [@orbs-network/ton-access](https://www.orbs.com/ton-access/) — decentralized API gateway.
 
-## TON Virtual Machine
-
-TON smart contracts are executed on TON Virtual Machine (TVM).
-The TVM is a stack-based virtual machine that employs many qualities that make it efficient and easy to implement.
-
-To get a better understanding of how the TVM works, consider reading the [TVM Overview](/learn/tvm-instructions/tvm-overview) section of our documentation. .
-
-## FunC Programming Language
-
-FunC is TON’s high-level programming language used to program smart contracts on TON Blockchain. The proprietary in-house language is a domain-specific statically typed framework which exhibits many characteristics simply not found in competing language types.
-
-Feel free to read more about FunC in the [FunC Overview section](/develop/func/overview.md) of our documentation.
-
-## Smart Contract Examples
-
-:::info little tip
-Feel free to focus on smart contracts written using _FunC_. it's often better to focus on smart contracts written using FunC (*.fc) instead of the lower-level Fift (*.fif) language.
-:::
-
-Standard examples of smart contracts on TON include wallets, electors (which manage validation on TON), multi-signature wallets can be a reference when studying.
-
-If you're familiar with smart contracts, consider reading the following GitHub specifications for more context:
-
-- [Fungible (Jettons), Non-Fungible (NFT), Semi-Fungible Tokens smart contracts](https://github.com/ton-blockchain/token-contract/tree/main)
-- [Getgems NFT, sale, auctions smart contracts (FunC)](https://github.com/getgems-io/nft-contracts)
-- [Wallet V4 smart contract example](https://github.com/ton-blockchain/wallet-contract)
-- [Standard smart contracts examples](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
-- [Super Simple Chatbot: doge.fc](https://github.com/LaDoger/doge.fc)
-
-Additionally, discover more [FunC libraries and SDK](/develop/smart-contracts/libraries) in the FunC section of our documentation.
-
-### Smart Contract Guidelines
-
-TON’s systemized smart contract development allows engineers to build smart contracts for many uses. That said, to unlock the full capabilities of smart contract iteration on TON, it's necessary to follow our predetermined smart contract guidelines to ensure their correct composition.
-* [Smart contract guidelines](/develop/smart-contracts/guidelines)
-
-### Fift language
-
-:::caution advanced level
-This information is **very low level** and may be challenging for newcomers to understand. Therefore, we suggest that you read about it later at your convenience.
-:::
-
-Messages to smart contracts are binary data. To construct such messages, you can use one of the SDKs **or** the special programming language Fift.
-
-* [Fift Overview](/docs/develop/fift/overview)
-
-### Tact language
-
-:::caution advanced level
-The Tact language is developed by independent developers. Use at your own risk.
-:::
-
-[https://docs.tact-lang.org/](https://docs.tact-lang.org/)
-
-
 
 ## References
 
@@ -127,6 +149,9 @@ More articles from TON community:
 * [TON Hello World part 4: Step by step guide for testing your first smart contract](https://ton-community.github.io/tutorials/04-testing/)
 
 
-
 ## See Also
+
+* [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)
+* [Payments processing](/develop/dapps/asset-processing)
+* [Transaction Fees](/develop/smart-contracts/fees#how-to-calculate-fees)
 
