@@ -223,12 +223,11 @@ const sidebars = {
          type: 'category',
          label: 'Guidelines',
          items: [
-
-        'develop/smart-contracts/compile/README',
         {
           type: 'category',
           label: 'Deploying Contract',
           items: [
+            'develop/smart-contracts/compile/README',
             {
               type: 'link',
               label: 'Using TypeScript',
@@ -251,40 +250,53 @@ const sidebars = {
             'develop/smart-contracts/security/random',
           ],
         },
+        'develop/smart-contracts/guidelines/get-methods',
         {
-          type: 'category',
-          label: 'Best Practices',
+        type: 'category',
+        label: 'Messages',
           items: [
-            'develop/smart-contracts/guidelines',
+          'develop/smart-contracts/messages',
+          'develop/smart-contracts/guidelines/internal-messages',
+          'develop/smart-contracts/guidelines/external-messages',
+          'develop/smart-contracts/guidelines/non-bouncable-messages',
+          'develop/smart-contracts/guidelines/message-delivery-guarantees',
+          ],
+          },
+          {
+          type: 'category',
+          label: 'Fees',
+            items: [
             'develop/smart-contracts/fees',
-            'develop/smart-contracts/messages',
-            {
-              type: 'link',
-              label: 'Coming from Solidity',
-              href: '/learn/introduction#ethereum-to-ton',
-            },
-            'develop/smart-contracts/guidelines/internal-messages',
-            'develop/smart-contracts/guidelines/external-messages',
-            'develop/smart-contracts/guidelines/non-bouncable-messages',
-            'develop/smart-contracts/guidelines/message-delivery-guarantees',
-            'develop/smart-contracts/guidelines/get-methods',
+            'develop/howto/fees-low-level',
             'develop/smart-contracts/guidelines/accept',
             'develop/smart-contracts/guidelines/processing',
-            'develop/smart-contracts/governance',
-            'develop/smart-contracts/guidelines/tips',
-            {
-              type: 'link',
-              label: 'Discover FunC language',
-              href: '/develop/func/overview',
+            ],
             },
-            'develop/howto/config-params',
-            'develop/howto/fees-low-level',
-            'develop/howto/step-by-step',
-            'develop/research-and-development/minter-flow',
-          ],
-        }
+           {
+             type: 'category',
+             label: 'Archive',
+               items: [
+                    'develop/smart-contracts/guidelines',
+                    'develop/smart-contracts/guidelines/tips',
+                    {
+                      type: 'link',
+                      label: 'Discover FunC language',
+                      href: '/develop/func/overview',
+                    },
+                    'develop/howto/step-by-step',
+               ],
+               },
          ],
        },
+       {
+            type: 'category',
+            label: 'Core Contracts',
+            items: [
+                'develop/smart-contracts/governance',
+                'develop/howto/config-params',
+                'develop/research-and-development/minter-flow',
+            ]
+        },
         {
           type: 'category',
           label: 'Environment',
