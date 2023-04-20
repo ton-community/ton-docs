@@ -1,4 +1,4 @@
-# Fees (low-level)
+# Low-level fees overview
 
 :::caution
 This section describes instructions and manuals for interacting with TON at a low level.

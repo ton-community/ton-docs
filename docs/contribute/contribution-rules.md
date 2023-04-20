@@ -32,9 +32,10 @@ Every page in TON documentation should be finished with See Also section. Place 
 :::
 
 ## English Helpful Sources
-TON Ecosystem building for all world, so it's very important to keep clear for each person on Earth. Here we provide matherials, that helpful for junior Techwriters, who want to improve their English skiils
+The TON Ecosystem is being built for the entire world, so it's crucial that it's understandable for everyone on Earth. Here, we provide materials that are helpful for junior tech writers who want to improve their English skills.
 
 * [Plural Nouns](https://www.grammarly.com/blog/plural-nouns/)
+* [Articles: A versus An](https://owl.purdue.edu/owl/general_writing/grammar/articles_a_versus_an.html)
 
 
 ## See Also
