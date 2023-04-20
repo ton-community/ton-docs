@@ -14,12 +14,12 @@ Read more about Merkle proofs at [TON Whitepaper](https://ton.org/ton.pdf) 2.3.1
 
 ## Pros & Cons
 
-👍 — Reliable. Uses API with Merkle proof hashes to verify incoming binary data.  
-👍 — Secure. Since it checks Merkle proofs, you can even use untrusted lite servers.  
-👍 — Fast. Instead of HTTP-middleware directly connects to TON Blockchain nodes. 
+- ✅ Reliable. Uses API with Merkle proof hashes to verify incoming binary data.  
+- ✅ Secure. Since it checks Merkle proofs, you can even use untrusted lite servers.  
+- ✅ Fast. Instead of HTTP-middleware directly connects to TON Blockchain nodes. 
 
-👎 — Complicated. More time is required to figure things out.  
-👎 — Back-end first. Not compatible with web frontends (built for non-HTTP protocol).
+- ❌ Complicated. More time is required to figure things out.  
+- ❌ Back-end first. Not compatible with web frontends (built for non-HTTP protocol).
 
 ## API reference
 
