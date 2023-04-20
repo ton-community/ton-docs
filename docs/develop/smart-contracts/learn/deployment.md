@@ -1,10 +1,12 @@
 # Deployment
 
-1. Compile to ByteCode 
-2. Wrap the bytecode to BoC 
-3. Execute the message address destination 
-4. Top Up balance 
-5. Send BoC to destination address 
+Steps to deploy a smart contract on TON blockchain:
+
+1. Compile to ByteCode
+2. Wrap the bytecode to BoC
+3. Execute the message address destination
+4. Top Up balance
+5. Send BoC to destination address
 6. Check success in the explorer
 
 Let's take a look at each step in more detail.
