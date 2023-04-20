@@ -322,7 +322,17 @@ const sidebars = {
           type: 'category',
           label: 'Learn',
           items: [
+            'develop/dapps/tutorials/overview',
             'develop/dapps/tutorials/jetton-minter',
+            {
+              type: 'category',
+              label: 'Telegram bots',
+              items: [
+                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
+                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
+                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js',
+              ],
+            },
           ],
         },
 
@@ -347,22 +357,6 @@ const sidebars = {
             'develop/dapps/defi/subscriptions',
           ],
         },
-        {
-          type: 'category',
-          label: 'Tutorials & Examples',
-          items: [
-            'develop/dapps/tutorials/overview',
-            {
-              type: 'category',
-              label: 'Telegram bots',
-              items: [
-                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
-                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
-                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js',
-              ],
-            },
-          ],
-        },
       ]
     },
    {
@@ -384,6 +378,8 @@ const sidebars = {
         label: 'Guidelines',
         items: [
                 'develop/dapps/ton-connect/developers',
+                'develop/dapps/ton-connect/wallet-guidelines',
+                'develop/dapps/ton-connect/workflow',
         ],
       },
 
