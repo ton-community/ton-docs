@@ -643,7 +643,7 @@ const sidebars = {
        'label': 'Common Rules',
        'items': [
          'contribute/contribution-rules',
-         'contribute/contribute-to-earn',
+         'contribute/participate',
          'contribute/maintainers',
        ],
      },
