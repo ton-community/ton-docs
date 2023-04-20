@@ -196,11 +196,6 @@ const sidebars = {
               items: [
                 'develop/smart-contracts/testing/tonstarter',
                 'develop/smart-contracts/testing/toncli',
-                {
-                  type: 'link',
-                  label: 'PyTVM',
-                  href: 'https://github.com/disintar/PyTVM',
-                },
               ],
             },
             {
@@ -318,37 +313,30 @@ const sidebars = {
 
       ],
     },
-    {
+   {
       type: 'category',
       label: 'Develop Apps',
       items: [
         'develop/dapps/README',
         {
           type: 'category',
-          label: 'TON Connect',
+          label: 'Learn',
           items: [
-            'develop/dapps/ton-connect/README',
-            'develop/dapps/ton-connect/integration',
-            'develop/dapps/ton-connect/tg-bot-integration',
-            'develop/dapps/ton-connect/transactions',
-            'develop/dapps/ton-connect/business',
-            'develop/dapps/ton-connect/developers',
-            'develop/dapps/ton-connect/security',
-            'develop/dapps/ton-connect/comparison',
+            'develop/dapps/tutorials/jetton-minter',
           ],
         },
 
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Integrate with TON',
-      items: [
-        'develop/dapps/asset-processing/README',
-        'develop/dapps/asset-processing/jettons',
-        'develop/dapps/asset-processing/nfts',
-        'develop/dapps/asset-processing/metadata',
-        'develop/dapps/tutorials/jetton-minter',
+        {
+          type: 'category',
+          label: 'Guidelines',
+          items: [
+            'develop/dapps/asset-processing/README',
+            'develop/dapps/asset-processing/jettons',
+            'develop/dapps/asset-processing/nfts',
+            'develop/dapps/asset-processing/metadata',
+          ],
+        },
+
         {
           type: 'category',
           label: 'DeFi Development',
@@ -376,6 +364,39 @@ const sidebars = {
           ],
         },
       ]
+    },
+   {
+      type: 'category',
+      label: 'TON Connect',
+      items: [
+        'develop/dapps/ton-connect/README',
+     {
+        type: 'category',
+        label: 'Learn',
+        items: [
+          'develop/dapps/ton-connect/integration',
+          'develop/dapps/ton-connect/tg-bot-integration',
+          'develop/dapps/ton-connect/transactions',
+        ],
+      },
+     {
+        type: 'category',
+        label: 'Guidelines',
+        items: [
+                'develop/dapps/ton-connect/developers',
+        ],
+      },
+
+       {
+          type: 'category',
+          label: 'Business',
+          items: [
+                'develop/dapps/ton-connect/business',
+                'develop/dapps/ton-connect/security',
+                'develop/dapps/ton-connect/comparison',
+          ],
+        },
+      ],
     },
     {
       'type': 'html',
