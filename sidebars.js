@@ -189,7 +189,7 @@ const sidebars = {
           type: 'category',
           label: 'Learn',
           items: [
-            'develop/smart-contracts/learn/deployment',
+           // 'develop/smart-contracts/learn/deployment',
             {
               type: 'category',
               label: 'Testing & Debugging',
