@@ -190,6 +190,22 @@ const sidebars = {
           label: 'Learn',
           items: [
            // 'develop/smart-contracts/learn/deployment',
+             {
+                 type: 'category',
+                 label: 'Deploying Contract',
+                 items: [
+                   {
+                     type: 'link',
+                     label: 'Using TypeScript',
+                     href: 'https://ton-community.github.io/tutorials/02-contract/',
+                   },
+                   {
+                     type: 'link',
+                     label: 'Using toncli',
+                     href: 'https://github.com/romanovichim/TonFunClessons_Eng/blob/main/1lesson/firstlesson.md',
+                   },
+                 ],
+               },
             {
               type: 'category',
               label: 'Testing & Debugging',
@@ -207,45 +223,13 @@ const sidebars = {
                 'develop/smart-contracts/tutorials/wallet'
               ],
             },
-            {
-              type: 'link',
-              label: 'How to shard your TON smart contract and why',
-              href: 'https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons',
-            },
           ],
        },
        {
          type: 'category',
          label: 'Guidelines',
          items: [
-        {
-          type: 'category',
-          label: 'Deploying Contract',
-          items: [
-            'develop/smart-contracts/compile/README',
-            {
-              type: 'link',
-              label: 'Using TypeScript',
-              href: 'https://ton-community.github.io/tutorials/02-contract/',
-            },
-            {
-              type: 'link',
-              label: 'Using toncli',
-              href: 'https://github.com/romanovichim/TonFunClessons_Eng/blob/main/1lesson/firstlesson.md',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Security Rules',
-          items: [
-            'develop/smart-contracts/security/README',
-            'develop/smart-contracts/security/ton-hack-challenge-1',
-            'develop/smart-contracts/guidelines/random-number-generation',
-            'develop/smart-contracts/security/random',
-          ],
-        },
-        'develop/smart-contracts/guidelines/get-methods',
+         'develop/smart-contracts/compile/README',
         {
         type: 'category',
         label: 'Messages',
@@ -267,6 +251,29 @@ const sidebars = {
             'develop/smart-contracts/guidelines/processing',
             ],
             },
+           'develop/smart-contracts/guidelines/get-methods',
+           {
+             type: 'category',
+             label: 'Security Rules',
+             items: [
+               'develop/smart-contracts/security/README',
+               'develop/smart-contracts/security/ton-hack-challenge-1',
+               'develop/smart-contracts/guidelines/random-number-generation',
+               'develop/smart-contracts/security/random',
+             ],
+           },
+           {
+               type: 'category',
+               label: 'Design and Architecture',
+               items: [
+                     {
+                       type: 'link',
+                       label: 'How to shard your TON smart contract and why',
+                       href: 'https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons',
+                     },
+               ],
+             },
+
            {
              type: 'category',
              label: 'Archive',
