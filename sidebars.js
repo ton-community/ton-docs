@@ -561,6 +561,7 @@ const sidebars = {
               type: 'category',
               label: 'Run a Node',
               items: [
+                  'participate/nodes/node-types',
                   'participate/run-nodes/full-node',
                   'participate/run-nodes/archive-node',
                   'participate/run-nodes/local-ton',
@@ -576,7 +577,6 @@ const sidebars = {
               label: 'Nodes Infrastructure',
               items: [
                 'participate/nodes/lite-client',
-                'participate/nodes/node-types',
                 'participate/nodes/full-node',
                 'participate/nodes/validator',
                 'participate/nodes/node-maintenance-and-security',
