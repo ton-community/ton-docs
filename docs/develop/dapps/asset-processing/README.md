@@ -1,3 +1,5 @@
+import Button from '@site/src/components/button'
+
 # Payments processing
 This page contains an overview and specific details that explain how to process (send and accept) digital assets on the TON network.
 
@@ -76,7 +78,7 @@ This `wallet` type follows an approach based on storing the identifier of the no
 Basic operations on the TON Blockchain can be carried out via TonLib. It is a shared library which can be compiled along with a TON node and expose APIs for interaction with the blockchain via so-called lite servers (servers for lite clients). TonLib follows a trustless approach by checking proofs for all incoming data; thus, there is no necessity for a trusted data provider. Methods available to TonLib are listed [in the TL scheme](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L234). They can be used either as a shared library via wrappers like [pyTON](https://github.com/EmelyanenkoK/pyTON) or [tonlib-go](https://github.com/mercuryoio/tonlib-go/tree/master/v2) (technically those are the wrappers for `tonlibjson`) or through `tonlib-cli`.
 
 
-## Deploying wallet
+## Wallet deployment
 To deploy a wallet via TonLib one needs to:
 1. Generate a private/public key pair via [createNewKey](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L213) or its wrapper functions (example in [tonlib-go](https://github.com/mercuryoio/tonlib-go/tree/master/v2#create-new-private-key)). Note that the private key is generated locally and does not leave the host machine.
 2. Form [InitialAccountWallet](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L60) structure corresponding to one of the enabled `wallets`. Currently `wallet.v3`, `wallet.highload.v1`, `wallet.highload.v2` are available.
@@ -109,6 +111,53 @@ To accept payments based on attached comments, the service should
 3. Users should be instructed to send Toncoin to the service's `wallet` contract with an attached `invoice` as a comment.
 4. Service should regularly poll the getTransactions method for the `wallet` contract.
 5. For new transactions, the incoming message should be extracted, `comment` matched against the database, and the value (see **Incoming message value** paragraph) deposited to the user's account.
+
+## Invoices
+
+### Invoices with ton:// link
+
+If you need an easy integration for a simple user flow, it is suitable to use the ton:// link.
+Best suited for one-time payments and invoices.
+
+```bash
+ton://transfer/<destination-address>?
+    [nft=<nft-address>&]
+    [fee-amount=<nanocoins>&]
+    [forward-amount=<nanocoins>] 
+```
+
+- ✅ Easy integration
+- ✅ No need to connect a wallet
+
+- ❌ Users need to scan a new QR code for each payment
+- ❌ It's not possible to track whether the user has signed the transaction or not
+- ❌ No information about the user's address
+- ❌ Workarounds are needed on platforms where such links are not clickable (e.g. messages from bots for Telegram desktop clients )
+
+
+<Button href="https://github.com/tonkeeper/wallet-api#payment-urls"
+colorType="primary" sizeType={'lg'}>
+Learn More
+</Button>
+
+### Invoices with Ton Connect
+
+Best suited for dApps that need to sign multiple payments/transactions within a session or need to maintain a connection to the wallet for some time.
+
+- ✅ There's a permanent communication channel with the wallet, information about the user's address
+- ✅ Users only need to scan a QR code once
+- ✅ It's possible to find out whether the user confirmed the transaction in the wallet, track the transaction by the returned BOC
+- ✅ Ready-made SDKs and UI kits are available for different platforms
+
+- ❌ If you only need to send one payment, the user needs to take two actions: connect the wallet and confirm the transaction
+- ❌ Integration is more complex than the ton:// link
+
+
+<Button href="/develop/dapps/ton-connect/"
+colorType="primary" sizeType={'lg'}>
+Learn More
+</Button>
+
 
 ## Sending payments
 

@@ -1,5 +1,5 @@
 
-# Contribute to Earn
+# Contribution Guide
 
 Here is a step-by-step guide of contributing to TON Documentation with Tutorials.
 

@@ -12,7 +12,7 @@ A development environment for TON blockchain for writing, testing, and deploying
 
 Run the following in terminal to create a new project and follow the on-screen instructions:
 
-```console
+```bash
 npm create ton@latest
 ```
 
@@ -20,7 +20,6 @@ npm create ton@latest
 
 ### Features
 
-* Create a development environment from template in one click - `npm create ton`
 * Streamlined workflow for building, testing and deploying smart contracts
 * Dead simple deployment to mainnet/testnet using your favorite wallet (eg. Tonkeeper)
 * Blazing fast testing of multiple smart contracts in an isolated blockchain running in-process

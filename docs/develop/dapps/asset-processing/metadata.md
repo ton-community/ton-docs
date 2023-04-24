@@ -1,4 +1,4 @@
-# Metadata parsing on TON
+# TON Metadata Parsing
 
 Metadata standard, which cover NFT, NFT Collection and Jetton content, is described in [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
 

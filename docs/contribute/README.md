@@ -4,12 +4,12 @@
 
 There are several ways to identify the area where you can contribute to TON Docs:
 
-- The easiest is to reach out to one of the [Docs maintainers](/contribute/maintainers)
-  saying, "I'd like to contribute to TON Docs." They’ll work with you to find an area where you can contribute.
+- Join [TON Docs Club chat](https://t.me/+c-0fVO4XHQsyOWM8) in Telegram and get the latest tasks from maintainers.
 - If you have a specific contribution in mind but are unsure about it, confirm whether
   the contribution is appropriate by contacting one of the [Docs maintainers](/contribute/maintainers) directly.
-- Get familiar with the most frequently asked questions in the TON Developers chats.
-- Please read over the issues in the GitHub repository.
+- Get familiar with the most frequently asked questions in the [TON Developers](https://t.me/tondev_eng) chats.
+- Please read over the [issues](https://github.com/ton-community/ton-docs/issues) in the GitHub repository.
+- Learn available [footsteps](https://github.com/ton-society/ton-footsteps/issues?q=documentation) for the documentation.
 
 ## TL;DR
 

@@ -2,7 +2,7 @@
 description: At the end of this guide you will deploy multisig wallet and send some transactions using ton library
 ---
 
-# Interact with multisig wallets using ton library
+# Interact with multisig wallets using TypeScript
 
 ## Introduction
 If you don't know what is multisig wallet in TON, you can check it out [here](/develop/smart-contracts/tutorials/multisig)
