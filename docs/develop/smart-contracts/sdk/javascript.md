@@ -49,3 +49,4 @@ npm create ton@latest
 * [Develop Smart Contract Introduction](/develop/smart-contracts/)
 * [How to work with wallet smart contracts](/develop/smart-contracts/tutorials/wallet)
 * [Using toncli](/develop/smart-contracts/sdk/toncli)
+

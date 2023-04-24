@@ -27,9 +27,11 @@
 
 ### Convert Address into Raw and Friendly forms
 
+
 :::info
 It is preferable to convert address via local algorithm, read more in the [Addresses](/learn/overviews/addresses) section of documentation.
 :::
+
 
 #### From Friendly to Raw form
 
@@ -69,7 +71,9 @@ Response body
 }
 ```
 
+
 ### Retrieve data for the Wallet Smart Contract
+
 
 #### Toncenter
 

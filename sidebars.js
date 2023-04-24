@@ -189,6 +189,7 @@ const sidebars = {
           type: 'category',
           label: 'Learn',
           items: [
+
            // 'develop/smart-contracts/learn/deployment',
              {
                  type: 'category',
@@ -273,6 +274,7 @@ const sidebars = {
                      },
                ],
              },
+
 
            {
              type: 'category',
