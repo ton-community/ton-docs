@@ -1,3 +1,5 @@
+import Button from '@site/src/components/button'
+
 # Payments processing
 This page contains an overview and specific details that explain how to process (send and accept) digital assets on the TON network.
 
@@ -109,6 +111,53 @@ To accept payments based on attached comments, the service should
 3. Users should be instructed to send Toncoin to the service's `wallet` contract with an attached `invoice` as a comment.
 4. Service should regularly poll the getTransactions method for the `wallet` contract.
 5. For new transactions, the incoming message should be extracted, `comment` matched against the database, and the value (see **Incoming message value** paragraph) deposited to the user's account.
+
+## Invoices
+
+### Invoices with ton:// link
+
+If you need an easy integration for a simple user flow, it is suitable to use the ton:// link.
+Best suited for one-time payments and invoices.
+
+```bash
+ton://transfer/<destination-address>?
+    [nft=<nft-address>&]
+    [fee-amount=<nanocoins>&]
+    [forward-amount=<nanocoins>] 
+```
+
+- ✅ Easy integration
+- ✅ No need to connect a wallet
+
+- ❌ Users need to scan a new QR code for each payment
+- ❌ It's not possible to track whether the user has signed the transaction or not
+- ❌ No information about the user's address
+- ❌ Workarounds are needed on platforms where such links are not clickable (e.g. messages from bots for Telegram desktop clients )
+
+
+<Button href="https://github.com/tonkeeper/wallet-api#payment-urls"
+colorType="primary" sizeType={'lg'}>
+Learn More
+</Button>
+
+### Invoices with Ton Connect
+
+Best suited for dApps that need to sign multiple payments/transactions within a session or need to maintain a connection to the wallet for some time.
+
+- ✅ There's a permanent communication channel with the wallet, information about the user's address
+- ✅ Users only need to scan a QR code once
+- ✅ It's possible to find out whether the user confirmed the transaction in the wallet, track the transaction by the returned BOC
+- ✅ Ready-made SDKs and UI kits are available for different platforms
+
+- ❌ If you only need to send one payment, the user needs to take two actions: connect the wallet and confirm the transaction
+- ❌ Integration is more complex than the ton:// link
+
+
+<Button href="/develop/dapps/ton-connect/"
+colorType="primary" sizeType={'lg'}>
+Learn More
+</Button>
+
 
 ## Sending payments
 

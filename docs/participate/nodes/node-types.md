@@ -1,3 +1,5 @@
+import Button from '@site/src/components/button'
+
 # TON Node Types
 
 There are different types of nodes in The Open Network:
@@ -15,6 +17,11 @@ There are different types of nodes in The Open Network:
      An archive node requires a lot of resources and is needed if you are making a blockchain explorer or something like that.
 
      For most cases, you will be fine with a regular node that only stores the latest blocks and has significantly lower hardware requirements.
+  
+    <Button href="/participate/run-nodes/archive-node"
+    colorType="primary" sizeType={'lg'}>
+    Running an Archive Node
+    </Button>
 
   * **Liteserver**
 
@@ -31,3 +38,8 @@ There are different types of nodes in The Open Network:
      If you enable the validator functionality in the node and you have a sufficient number of Toncoin (stake), then the node will begin to participate in the process of validating new network blocks. 
   
      TON is a Proof-of-Stake blockchain, so validators keep the network running and are rewarded in Toncoin for doing so.
+  
+    <Button href="/participate/run-nodes/full-node"
+    colorType="primary" sizeType={'lg'}>
+    Running a Full Node (Validator)
+    </Button>
