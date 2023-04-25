@@ -173,6 +173,8 @@ You’ll then be able to open “.ton” sites directly in your browser, just li
 
 Here’s a __[guide](/participate/web3/setting-proxy)__ on setting up TON Proxy for various browsers.
 
+If you an iPhone user, you can already use .ton sites out of the box in __[JUSTON](https://apps.apple.com/ge/app/juston/id1629214799)__ non custodial wallet with dApp browser (visit [GitHub](https://github.com/labraburn/juston-ios)).
+
 ### Wallets
 
 <div style={{textAlign:'center', margin: '0 auto'}}>
