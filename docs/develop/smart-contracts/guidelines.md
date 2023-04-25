@@ -5,7 +5,7 @@ This information can be hard to understand for newcomers.
 So feel free to read about it later.
 :::
 
-This page collects some recommendations and best practices that could be followed when developing new smart contracts on the TON Blockchain.
+This page collects some recommendations and best practices that could be followed when developing new smart contracts on TON Blockchain.
 
 * [Internal messages](/develop/smart-contracts/guidelines/internal-messages)
 * [External messages](/develop/smart-contracts/guidelines/external-messages)

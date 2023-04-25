@@ -1,7 +1,7 @@
 # Cell & Bag of Cells(BoC)
 
 ## Cell
-A cell represents a data structure on the TON blockchain. Cells are able to store up to 1023 bits and possess up to 4 references to other cells.
+A cell represents a data structure on TON Blockchain. Cells are able to store up to 1023 bits and possess up to 4 references to other cells.
 
 ![TL-B example](/img/docs/data-formats/tl-b-docs-5.png?raw=true)
 

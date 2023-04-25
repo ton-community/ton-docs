@@ -230,6 +230,7 @@ const sidebars = {
          type: 'category',
          label: 'Guidelines',
          items: [
+         'develop/smart-contracts/guidelines',
          'develop/smart-contracts/compile/README',
         {
         type: 'category',
@@ -280,7 +281,6 @@ const sidebars = {
              type: 'category',
              label: 'Archive',
                items: [
-                    'develop/smart-contracts/guidelines',
                     'develop/smart-contracts/guidelines/tips',
                     {
                       type: 'link',

@@ -1,7 +1,7 @@
 # External messages
 
 
-External messages are `sent from the outside` to the smart contracts residing in the TON Blockchain to make them perform certain actions. 
+External messages are `sent from the outside` to the smart contracts residing in TON Blockchain to make them perform certain actions. 
 
 For instance, a wallet smart contract expects to receive external messages containing orders (e.g., internal messages to be sent from the wallet smart contract) signed by the wallet's owner. When such an external message is received by the wallet smart contract, it first checks the signature, then accepts the message (by running the TVM primitive `ACCEPT`), and then performs whatever actions are required.
 

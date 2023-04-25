@@ -19,7 +19,7 @@
 
 ### Jetton Deployer
 
-Jettons are custom fungible tokens on the TON Blockchain. You can create your own token on the TON Blockchain using the Jetton Deployer example below:
+Jettons are custom fungible tokens on TON Blockchain. You can create your own token on TON Blockchain using the Jetton Deployer example below:
 
 * **[TON Minter](https://minter.ton.org/)** — open-source Jetton Deployer dApp
 * [Jetton Deployer — contracts](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)

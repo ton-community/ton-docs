@@ -31,12 +31,12 @@ Requests and responses to the server are described by a TL schema that allows yo
 
 ### Golang SDK
 
-- [xssnick/tonutils-go](https://github.com/xssnick/tonutils-go) — _Modern_ Golang SDK for the TON Blockchain.
+- [xssnick/tonutils-go](https://github.com/xssnick/tonutils-go) — _Modern_ Golang SDK for TON Blockchain.
 - [startfellows/tongo](https://github.com/startfellows/tongo) — Golang SDK with native ADNL support, cells manipulations and CGO for TVM and tx emulations.
 
 ### Kotlin & Java SDK
 
-- [ton-kotlin](https://github.com/andreypfau/ton-kotlin) — Kotlin SDK for the TON Blockchain.
+- [ton-kotlin](https://github.com/andreypfau/ton-kotlin) — Kotlin SDK for TON Blockchain.
 
 ### Python SDK
 

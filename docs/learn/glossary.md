@@ -302,7 +302,7 @@ __________
 
 ### Nominator
 
-**Nominator** — those who provide financial resources to validators so the latter can confirm blocks on the TON Blockchain.
+**Nominator** — those who provide financial resources to validators so the latter can confirm blocks on TON Blockchain.
 
 ### Non-custodial
 
