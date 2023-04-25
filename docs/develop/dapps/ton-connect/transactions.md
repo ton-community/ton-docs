@@ -1,7 +1,7 @@
 # Sending messages
 
 :::info
-There is no description of connecting a wallet on this page. We suppose you have already connected the wallet to your dApp. If not, you can refer to [integration manual](develop/dapps/ton-connect/integration).
+There is no description of connecting a wallet on this page. We suppose you have already connected the wallet to your dApp. If not, you can refer to [integration manual](/develop/dapps/ton-connect/integration).
 :::
 
 TON Connect 2 has more powerful options than just authenticating users in the dApp: it's possible to send outgoing messages via connected wallets!
