@@ -138,8 +138,8 @@ Here Type `TickTock` defined with `tick_tock$_` contructor and `tick:Bool`, `toc
 | # |  an unsigned 32-bit number|
 | ## N| The same as uintN - means an unsigned N-bit number|
 |#<= N| A number between 0 and N (including both). Such a number is stored in ceil(log2(N+1)) bits. |
-|intN| A signed N-bit integer. Supported values of N: 8, 16, 24, 32, 64, 128, 256, 257|
-|uintN| An unsigned N-bit integer. Supported values of N: 8, 16, 24, 32, 64, 128, 256|
+|intN| A signed N-bit integer. Supported values of N: 1 <= N <= 257|
+|uintN| An unsigned N-bit integer. Supported values of N: 1 <= N <= 256|
 | N * Bit |  means N-bit slice |
 |Type | stands for arbitrary type (but only presents in implicit definitions). |
 | ^Cell | An arbitrary cell in reference |
