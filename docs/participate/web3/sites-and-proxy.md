@@ -14,15 +14,15 @@ In order to access existing TON Sites, you need to run a RLDP-HTTP Proxy on your
 
 1. Download **rldp-http-proxy** from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
-Or you can compile the **rldp-http-proxy** yourself by following these [instructions](/develop/howto/compile#rldp-http-proxy).
+   Or you can compile the **rldp-http-proxy** yourself by following these [instructions](/develop/howto/compile#rldp-http-proxy).
 
 2. [Download](/develop/howto/compile#download-global-config) TON global config.
 
-3. Run **rldp-http-proxy**:
+3. Run **rldp-http-proxy**
 
- ```
- rldp-http-proxy/rldp-http-proxy -p 8080 -c 3333 -C global.config.json
- ```
+   ```bash
+   rldp-http-proxy/rldp-http-proxy -p 8080 -c 3333 -C global.config.json
+   ```
 
 In the above example, `8080` is the TCP port that will be listened to at localhost for incoming HTTP queries, and `3333` is the UDP port that will be used for all outbound and inbound RLDP and ADNL activity (i.e. for connecting to TON Sites via the TON Network). `global.config.json` is the filename of TON global config.
 
@@ -34,48 +34,47 @@ Your entry proxy will be available by HTTP on `localhost` port `8080`.
 
 1. Download **rldp-http-proxy** from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
-Or you can compile the **rldp-http-proxy** yourself by following these [instructions](/develop/howto/compile#rldp-http-proxy).
+   Or you can compile the **rldp-http-proxy** yourself by following these [instructions](/develop/howto/compile#rldp-http-proxy).
 
 2. [Download](/develop/howto/compile#download-global-config) TON global config.
 
 3. Download **generate-random-id** from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
-Or you can compile the **generate-random-id** yourself by following these [instructions](/develop/howto/compile#generate-random-id).
+   Or you can compile the **generate-random-id** yourself by following these [instructions](/develop/howto/compile#generate-random-id).
 
 4. Generate a persistent ANDL Address for your entry proxy
 
-```
-mkdir keyring
+   ```bash
+   mkdir keyring
 
-utils/generate-random-id -m adnlid
-```
+   utils/generate-random-id -m adnlid
+   ```
 
-You see something like
+   You will see something like
+   ```
+   45061C1D4EC44A937D0318589E13C73D151D1CEF5D3C0E53AFBCF56A6C2FE2BD vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3
+   ```
 
-```
-45061C1D4EC44A937D0318589E13C73D151D1CEF5D3C0E53AFBCF56A6C2FE2BD vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3
-```
+   This is your newly-generated persistent ADNL Address, in hexadecimal and user-friendly form. The corresponding private key is saved into file `45061...2DB` in the current directory. Move key into the keyring directory
 
-This is your newly-generated persistent ADNL Address, in hexadecimal and user-friendly form. The corresponding private key is saved into file `45061...2DB` in the current directory. Move it into the keyring directory:
+   ```bash
+   mv 45061C1* keyring/
+   ```
 
-```
-mv 45061C1* keyring/
-```
+5. Run **rldp-http-proxy**
 
-6. Run **rldp-http-proxy**:
+   ```
+   rldp-http-proxy/rldp-http-proxy -p 8080 -a <your_public_ip>:3333 -C global.config.json -A <your_adnl_address>
+   ```
 
- ```
- rldp-http-proxy/rldp-http-proxy -p 8080 -a <your_public_ip>:3333 -C global.config.json -A <your_adnl_address>
- ```
+   where `<your_public_ip>` is your public IPv4 address and `<your_adnl_address>` is the ADNL Address generated in the previous step.
 
-where `<your_public_ip>` is your public IPv4 address and `<your_adnl_address>` is the ADNL Address generated in the previous step.
+   Example:
+   ```
+   rldp-http-proxy/rldp-http-proxy -p 8080 -a 777.777.777.777:3333 -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3
+   ```
 
-Example:
- ```
- rldp-http-proxy/rldp-http-proxy -p 8080 -a 777.777.777.777:3333 -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3
- ```
-
-In the above example, `8080` is the TCP port that will be listened to at localhost for incoming HTTP queries, and `3333` is the UDP port that will be used for all outbound and inbound RLDP and ADNL activity (i.e. for connecting to TON Sites via the TON Network). `global.config.json` is the filename of TON global config.
+   In the above example, `8080` is the TCP port that will be listened to at localhost for incoming HTTP queries, and `3333` is the UDP port that will be used for all outbound and inbound RLDP and ADNL activity (i.e. for connecting to TON Sites via the TON Network). `global.config.json` is the filename of TON global config.
 
 If you have done everything correctly, the Proxy will not terminate, but it will continue running in the terminal. It can be used now for accessing TON Sites. When you don't need it anymore, you can terminate it by pressing `Ctrl-C`, or simply by closing the terminal window. You can run this as a unix service to run permanently.
 
@@ -106,7 +105,7 @@ attempts to download the main page of (TON) Site `just-for-test.ton` using the p
 
 ```
 
-You can also access TON Sites by means of their ADNL Addresses by using a fake domain `<adnl-addr>.adnl`:
+You can also access TON Sites by means of their ADNL Addresses by using a fake domain `<adnl-addr>.adnl`
 
 ```bash
 curl -x 127.0.0.1:8080 http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h72gllt.adnl/
@@ -129,45 +128,45 @@ We suppose that you know already how to set up an ordinary website, and that you
 
 1. Download **rldp-http-proxy** from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
-Or you can compile the **rldp-http-proxy** yourself by this [instruction](/develop/howto/compile#rldp-http-proxy).
+   Or you can compile the **rldp-http-proxy** yourself by this [instruction](/develop/howto/compile#rldp-http-proxy).
 
 2. [Download](/develop/howto/compile#download-global-config) TON global config.
 
 3. Download **generate-random-id** from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
-Or you can compile the **generate-random-id** yourself by following these [instructions](/develop/howto/compile#generate-random-id).
+   Or you can compile the **generate-random-id** yourself by following these [instructions](/develop/howto/compile#generate-random-id).
 
 4. Generate a persistent ANDL Address for your server
 
-```bash
-mkdir keyring
+   ```bash
+   mkdir keyring
 
-utils/generate-random-id -m adnlid
-```
+   utils/generate-random-id -m adnlid
+   ```
 
-You see something like
+   You will see something like
 
-```bash
-45061C1D4EC44A937D0318589E13C73D151D1CEF5D3C0E53AFBCF56A6C2FE2BD vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3
-```
+   ```bash
+   45061C1D4EC44A937D0318589E13C73D151D1CEF5D3C0E53AFBCF56A6C2FE2BD vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3
+   ```
 
-This is your newly-generated persistent ADNL Address, in hexadecimal and user-friendly form. The corresponding private key is saved into file `45061...2DB` in the current directory. Move it into the keyring directory:
+   This is your newly-generated persistent ADNL Address, in hexadecimal and user-friendly form. The corresponding private key is saved into file `45061...2DB` in the current directory. Move it into the keyring directory
 
-```bash
-mv 45061C1* keyring/
-```
+   ```bash
+   mv 45061C1* keyring/
+   ```
 
-5. Make sure your webserver accepts HTTP requests with .ton and .adnl domains.
+5. Make sure your webserver accepts HTTP requests with `.ton` and `.adnl` domains.
 
-For example if you use nginx with config `server_name example.com;`, you need to change it to `server_name _;` or `server_name example.com example.ton vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3.adnl;`.
+   For example if you use nginx with config `server_name example.com;`, you need to change it to `server_name _;` or `server_name example.com example.ton vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3.adnl;`.
 
-6. Run the proxy in reverse mode:
+6. Run the proxy in reverse mode
 
- ```bash
- rldp-http-proxy/rldp-http-proxy -a <your-server-ip>:3333 -L '*' -C global.config.json -A <your-adnl-address> -d -l <log-file>
- ```
+   ```bash
+   rldp-http-proxy/rldp-http-proxy -a <your-server-ip>:3333 -L '*' -C global.config.json -A <your-adnl-address> -d -l <log-file>
+   ```
 
-where `<your_public_ip>` is your server public IPv4 address and `<your_adnl_address>` is the ADNL Address generated in the previous step.
+   where `<your_public_ip>` is your server public IPv4 address and `<your_adnl_address>` is the ADNL Address generated in the previous step.
 
 If you want your TON Site to run permanently, you'll have to use options `-d` and `-l <log-file>`.
 

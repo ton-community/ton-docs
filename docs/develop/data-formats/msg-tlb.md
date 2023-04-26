@@ -215,7 +215,7 @@ addr_none$00 = MsgAddressExt;
 
 | Structure           | Type               | Required | Description                                                                                                             |
 |---------------------|--------------------|----------|-------------------------------------------------------------------------------------------------------------------------|
-| ext_out_msg_info$11 | Constructor        | Required | `$00` tag means, that in serialization MsgAddressExt started with `00` bits. This means whole external address is `00`. |
+| addr_none$00 | Constructor        | Required | `$00` tag means, that in serialization MsgAddressExt started with `00` bits. This means whole external address is `00`. |
 
 
 ### addr_extern$01

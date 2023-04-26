@@ -1,4 +1,4 @@
-# NFT processing on TON
+# TON NFT processing
 In this page we will take a look at NFTs. What they are, how to interact with them and how to accept them. Content on this page assumes you have already read [previous part](/develop/dapps/asset-processing) on working with Toncoin and have basic understanding of working with wallets.
 
 ## Basic NFT Knowledge
