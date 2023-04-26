@@ -333,6 +333,7 @@ const sidebars = {
           items: [
             'develop/dapps/tutorials/overview',
             'develop/dapps/tutorials/jetton-minter',
+            'develop/dapps/tutorials/collection-minting',
             {
               type: 'category',
               label: 'Telegram bots',
@@ -345,17 +346,18 @@ const sidebars = {
           ],
         },
 
-        {
-          type: 'category',
-          label: 'Guidelines',
-          items: [
-            'develop/dapps/asset-processing/README',
-            'develop/dapps/asset-processing/jettons',
-            'develop/dapps/asset-processing/nfts',
-            'develop/dapps/asset-processing/metadata',
-          ],
-        },
-
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Integrate with TON',
+      items: [
+        'develop/dapps/asset-processing/README',
+        'develop/dapps/asset-processing/jettons',
+        'develop/dapps/asset-processing/nfts',
+        'develop/dapps/asset-processing/metadata',
+        'develop/dapps/tutorials/jetton-minter',
+        'develop/dapps/tutorials/collection-minting',
         {
           type: 'category',
           label: 'DeFi Development',
