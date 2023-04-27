@@ -1,6 +1,6 @@
 # TON ADNL API
 
-Clients connect directly to lite servers (nodes) using a binary protocol.
+Clients connect directly to Liteservers (nodes) using a binary protocol.
 
 The client downloads keyblocks, the current state of the account, and their **Merkle proofs**, which guarantees the validity of the received data.
 
@@ -8,7 +8,7 @@ Read operations (like get-method calls) are made by launching a local TVM with a
 
 There is no need to download the full state of the blockchain, the client downloads only what is needed for the operation. Calling the local TVM is also ineffective.
 
-You can connect to public lite servers from the global config ([mainnet](https://ton.org/global-config.json) or [testnet](https://ton.org/testnet-global.config.json)) or run your own lite server.
+You can connect to public lite servers from the global config ([Mainnet](https://ton.org/global-config.json) or [Testnet](https://ton.org/testnet-global.config.json)) or run your own lite server.
 
 Read more about Merkle proofs at [TON Whitepaper](https://ton.org/ton.pdf) 2.3.10, 2.3.11.
 

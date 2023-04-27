@@ -32,3 +32,9 @@ Find examples of using payment channels in the [Hack-a-TON #1](https://ton.org/h
 * [nns2009/Hack-a-TON-1_Tonario](https://github.com/nns2009/Hack-a-TON-1_Tonario)—OnlyGrams payments project ([website](https://onlygrams.io/), [video](https://www.youtube.com/watch?v=gm5-FPWn1XM))
 * [sevenzing/hack-a-ton](https://github.com/sevenzing/hack-a-ton)—Pay-per-Request API usage in TON ([video](https://www.youtube.com/watch?v=7lAnbyJdpOA&feature=youtu.be))
 * [illright/diamonds](https://github.com/illright/diamonds)—Pay-per-Minute learning platform ([website](https://diamonds-ton.vercel.app/), [video](https://www.youtube.com/watch?v=g9wmdOjAv1s))
+
+
+## See Also
+
+* [Payments Processing](/develop/dapps/asset-processing)
+* [TON Connect](/develop/dapps/ton-connect) 

@@ -2,9 +2,13 @@
 
 [Distributed TON tokens overview](https://telegra.ph/Scalable-DeFi-in-TON-03-30)
 
-## Jettons
+## Jettons(Fungible Tokens)
 
-### Guides & Tutorials
+### Guides
+* [TON Jetton processing](/develop/dapps/asset-processing/jettons.md)
+* [TON Metadata Parsing](/develop/dapps/asset-processing/metadata.md)
+
+### Tutorials
 
 * [Mint your first Jetton](/develop/dapps/tutorials/jetton-minter/) — Learn how to deploy and customize your first Jetton
 * [[YouTube] TON Keeper founders Oleg Andreev and Oleg Illarionov on TON jettons](https://www.youtube.com/watch?v=oEO29KmOpv4)
