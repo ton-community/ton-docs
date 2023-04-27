@@ -1,25 +1,26 @@
 import Button from '@site/src/components/button'
 
 # Payments processing
+
 This page contains an overview and specific details that explain how to process (send and accept) digital assets on the TON network.
 
 Best practices with comments on Toncoin processing:
 
-## [Create a key pair, a wallet and get a wallet address](https://github.com/toncenter/examples/blob/main/common.js)
+- [Create a key pair, a wallet and get a wallet address](https://github.com/toncenter/examples/blob/main/common.js)
 
-## [JS algo to accept Toncoin deposits](https://github.com/toncenter/examples/blob/main/deposits.js)
+- [JS algo to accept Toncoin deposits](https://github.com/toncenter/examples/blob/main/deposits.js)
 
-## [JS algo to Toncoin withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals.js)
+- [JS algo to Toncoin withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals.js)
 
-[Detailed info](https://docs.ton.org/develop/dapps/asset-processing#global-overview)
+- [Detailed info](https://docs.ton.org/develop/dapps/asset-processing#global-overview)
 
 Best practices with comments on jettons processing:
 
-## [JS algo to accept jettons deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
+- [JS algo to accept jettons deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
 
-## [JS algo to jettons withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons.js)
+- [JS algo to jettons withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons.js)
 
-[Detailed info](https://docs.ton.org/develop/dapps/asset-processing/jettons)
+- [Detailed info](https://docs.ton.org/develop/dapps/asset-processing/jettons)
 
 ## Other Examples
 

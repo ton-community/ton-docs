@@ -2,9 +2,9 @@
 
 Best practices with comments on jettons processing:
 
-## [JS algo to accept jettons deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
+- [JS algo to accept jettons deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
 
-## [JS algo to jettons withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons.js)
+- [JS algo to jettons withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons.js)
 
 In most cases, this should be enough for you, if not, you can find detailed information below.
 
