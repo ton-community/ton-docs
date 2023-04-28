@@ -2,7 +2,14 @@
 
 *A storage daemon is a program used to download and share files in the TON network. The `storage-daemon-cli` console program, is used to manage a running storage daemon.*
 
-The current version of the storage daemon can be found in the [testnet](https://github.com/ton-blockchain/ton/tree/testnet) branch.
+The current version of the storage daemon can be found in the [Testnet](https://github.com/ton-blockchain/ton/tree/testnet) branch.
+
+## Hardware requirements
+
+* at least 1GHz and 2 cores CPU
+* at least 2 GB RAM
+* at least 2 GB SSD (Without taking into account space for torrents)
+* 10 Mb/s network  bandwidth with static IP
 
 ## Binaries 
 
