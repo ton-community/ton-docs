@@ -12,5 +12,5 @@ Test of your software with the following quality assurance providers:
 
 
 ## See Also
-[Outsource Development](/develop/companies/outsource)
-[Ton Jobs](https://jobs.ton.org/jobs)
+* [Outsource Development](/develop/companies/outsource)
+* [Ton Jobs](https://jobs.ton.org/jobs)

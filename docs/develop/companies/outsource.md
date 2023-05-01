@@ -55,17 +55,5 @@ Wev3.0 Software House & Startup Studio with a strong focus on blockchain-based s
 - http://blockczech.io
 - [@blockczech](https://t.me/blockczech)
 
-
-### EvaCodes
-
-#### Summary
-
-#### Workstreams
-
-#### Projects
-
-#### Contacts
-
-
 ## See Also
-[Security Assurance Providers](/develop/companies/auditors)
+* [Security Assurance Providers](/develop/companies/auditors)
