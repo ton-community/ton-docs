@@ -275,21 +275,6 @@ const sidebars = {
                      },
                ],
              },
-
-
-           {
-             type: 'category',
-             label: 'Archive',
-               items: [
-                    'develop/smart-contracts/guidelines/tips',
-                    {
-                      type: 'link',
-                      label: 'Discover FunC language',
-                      href: '/develop/func/overview',
-                    },
-                    'develop/howto/step-by-step',
-               ],
-               },
          ],
        },
        {
