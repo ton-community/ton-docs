@@ -296,7 +296,7 @@ At the time of writing the tutorial all wallets by default use Wallet v4. We wil
 
 ### TL-B
 
-As you may already know, everything in the TON blockchain is a `cell`. And to properly serialize and deserialize the data we need standarts. To do this, `TL-B` was invented, with which you could learn about what, how and in what sequence should be stored inside cells. 
+As you may already know, everything in TON Blockchain is a `cell`. And to properly serialize and deserialize the data we need standarts. To do this, `TL-B` was invented, with which you could learn about what, how and in what sequence should be stored inside cells. 
 
 In this section, we will look at [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb). This file will be very useful during future development, as it will describe how different cells should be assembled. In our case, we will refer to details related to internal and external transactions.
 
@@ -763,11 +763,11 @@ You should output the generated mnemonic to the console, **save** and use it, as
 
 ### What is Subwallet ID?
 
-One of the most notable benefits of wallets being smart contracts is the ability to create **a vast number of wallets** using just one private key. This is because the address of any smart contract in the TON blockchain is computed from several factors, one of which is `stateInit`. The stateInit contains the `code` and `initial data`, which should be stored in the smart contract storage. 
+One of the most notable benefits of wallets being smart contracts is the ability to create **a vast number of wallets** using just one private key. This is because the address of any smart contract in TON Blockchain is computed from several factors, one of which is `stateInit`. The stateInit contains the `code` and `initial data`, which should be stored in the smart contract storage. 
 
 And by changing just one bit in stateInit, you can get a different address. That is why `subwallet_id` was invented, which is constantly stored in the contract storage. You can get many different wallets with one private key by changing it. For instance, it can be very useful when accepting a different wallet in different centralized services. 
 
-The default subwallet_id value is `698983191` according to the [next line](https://github.com/ton-blockchain/ton/blob/4b940f8bad9c2d3bf44f196f6995963c7cee9cc3/tonlib/tonlib/TonlibClient.cpp#L2420) from the source code of the TON blockchain:
+The default subwallet_id value is `698983191` according to the [next line](https://github.com/ton-blockchain/ton/blob/4b940f8bad9c2d3bf44f196f6995963c7cee9cc3/tonlib/tonlib/TonlibClient.cpp#L2420) from the source code of TON Blockchain:
 
 ```cpp
 res.wallet_id = td::as<td::uint32>(res.config.zero_state_id.root_hash.as_slice().data());
@@ -1522,7 +1522,7 @@ After that, we can go to any explorer and see that **our wallet sent four transa
 
 In addition to regular translations, users often send NFT to each other. At the same time, not all libraries contain methods to help with this type of smart contract. So we will write a code that will build a transaction for sending an NFT. But before that, we lets look at some details of the [standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md).
 
-We need [TL-B from this standard for the NFT transfer](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#1-transfer). As you may already know, TL-B describes various structures in the TON blockchain. Let’s look at some points that may not be immediately clear:
+We need [TL-B from this standard for the NFT transfer](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#1-transfer). As you may already know, TL-B describes various structures in TON Blockchain. Let’s look at some points that may not be immediately clear:
 
 - `query_id`: This value can be set to 0. It is needed to separate different NFT transfer requests. Used in different services, that is, what query_id will be, depends only on the service and the purpose for which it will use it.
 
@@ -2648,9 +2648,9 @@ After that we can go into any explorer and see 12 outgoing transactions on our w
 
 ## 🏁 Conclusion
 
-This tutorial studied wallets in the TON blockchain within the smallest details. At the same time, we learned how to create external and internal messages ourselves without using pre-prepared library methods. 
+This tutorial studied wallets in TON Blockchain within the smallest details. At the same time, we learned how to create external and internal messages ourselves without using pre-prepared library methods. 
 
-This helps us not only to be independent on libraries but also to understand the structure of the TON blockchain better. Additionally, we learned how to use the high-load wallet and analysed a lot of details about various operations with different types of data.
+This helps us not only to be independent on libraries but also to understand the structure of TON Blockchain better. Additionally, we learned how to use the high-load wallet and analysed a lot of details about various operations with different types of data.
 
 ## 🧩 Next Steps
 

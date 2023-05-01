@@ -230,6 +230,7 @@ const sidebars = {
          type: 'category',
          label: 'Guidelines',
          items: [
+         'develop/smart-contracts/guidelines',
          'develop/smart-contracts/compile/README',
         {
         type: 'category',
@@ -274,22 +275,6 @@ const sidebars = {
                      },
                ],
              },
-
-
-           {
-             type: 'category',
-             label: 'Archive',
-               items: [
-                    'develop/smart-contracts/guidelines',
-                    'develop/smart-contracts/guidelines/tips',
-                    {
-                      type: 'link',
-                      label: 'Discover FunC language',
-                      href: '/develop/func/overview',
-                    },
-                    'develop/howto/step-by-step',
-               ],
-               },
          ],
        },
        {
@@ -523,6 +508,16 @@ const sidebars = {
         'learn/overviews/tl-b-language'
       ],
     },
+    {
+      'type': 'html',
+      'value': '<hr/>',
+    },
+    {
+      'type': 'html',
+      'value': '<span class=\'menu__link\'><b><small>Quality Assurance & Outsource</small></b></span>',
+    },
+    'develop/companies/auditors',
+    'develop/companies/outsource',
 ],
   participate: [
     'participate/README',

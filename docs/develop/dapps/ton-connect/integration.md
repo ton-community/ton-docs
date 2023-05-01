@@ -5,7 +5,7 @@ In this tutorial, we’ll create a sample web app that supports TON Connect 2.0 
 ## Documentation links
 
 1. [TON Connect SDK documentation](https://www.npmjs.com/package/@tonconnect/sdk)  
-2. [Wallet-application message exchange protoco](https://github.com/ton-connect/docs/blob/main/requests-responses.md), includes manifest format.
+2. [Wallet-application message exchange protocol](https://github.com/ton-connect/docs/blob/main/requests-responses.md), includes manifest format.
 3. [Tonkeeper implementation of wallet side](https://github.com/tonkeeper/wallet/tree/main/src/tonconnect)
 
 ## Prerequisites

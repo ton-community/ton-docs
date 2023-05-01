@@ -14,7 +14,7 @@ If you are building for production and not for home use, it's better to use [aut
 
 The software is likely to compile and work properly on most Linux systems. It should work on macOS and even Windows.
 
-1) Download the newest version of the TON Blockchain sources available at the GitHub repository https://github.com/ton-blockchain/ton/:
+1) Download the newest version of TON Blockchain sources available at the GitHub repository https://github.com/ton-blockchain/ton/:
 
 ```bash
 git clone --recurse-submodules https://github.com/ton-blockchain/ton.git

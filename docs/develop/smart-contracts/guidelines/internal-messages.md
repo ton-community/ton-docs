@@ -8,7 +8,7 @@ In particular, the processing transaction can create one or several outbound int
 
 This approach leads to the necessity of distinguishing whether an internal message is intended as a "query", "response", or doesn't require any additional processing (like a "simple money transfer"). Furthermore, when a response is received, there must be a means to understand to which query it corresponds.
 
-In order to achieve this goal, the following recommended internal message layout can be used (notice that the TON Blockchain does not enforce any restrictions on the message body, so these are indeed just recommendations):
+In order to achieve this goal, the following recommended internal message layout can be used (notice that TON Blockchain does not enforce any restrictions on the message body, so these are indeed just recommendations):
 
 1. The body of the message can be embedded into the message itself, or be stored in a separate cell referred to from the message, as indicated by the TL-B scheme fragment:
 

@@ -1,6 +1,6 @@
 # TON ADNL API
 
-Clients connect directly to lite servers (nodes) using a binary protocol.
+Clients connect directly to Liteservers (nodes) using a binary protocol.
 
 The client downloads keyblocks, the current state of the account, and their **Merkle proofs**, which guarantees the validity of the received data.
 
@@ -8,7 +8,7 @@ Read operations (like get-method calls) are made by launching a local TVM with a
 
 There is no need to download the full state of the blockchain, the client downloads only what is needed for the operation. Calling the local TVM is also ineffective.
 
-You can connect to public lite servers from the global config ([mainnet](https://ton.org/global-config.json) or [testnet](https://ton.org/testnet-global.config.json)) or run your own lite server.
+You can connect to public lite servers from the global config ([Mainnet](https://ton.org/global-config.json) or [Testnet](https://ton.org/testnet-global.config.json)) or run your own lite server.
 
 Read more about Merkle proofs at [TON Whitepaper](https://ton.org/ton.pdf) 2.3.10, 2.3.11.
 
@@ -31,12 +31,12 @@ Requests and responses to the server are described by a TL schema that allows yo
 
 ### Golang SDK
 
-- [xssnick/tonutils-go](https://github.com/xssnick/tonutils-go) — _Modern_ Golang SDK for the TON Blockchain.
+- [xssnick/tonutils-go](https://github.com/xssnick/tonutils-go) — _Modern_ Golang SDK for TON Blockchain.
 - [startfellows/tongo](https://github.com/startfellows/tongo) — Golang SDK with native ADNL support, cells manipulations and CGO for TVM and tx emulations.
 
 ### Kotlin & Java SDK
 
-- [ton-kotlin](https://github.com/andreypfau/ton-kotlin) — Kotlin SDK for the TON Blockchain.
+- [ton-kotlin](https://github.com/andreypfau/ton-kotlin) — Kotlin SDK for TON Blockchain.
 
 ### Python SDK
 

@@ -6,7 +6,7 @@ FunC is a domain-specific, C-like, statically typed language.
 
 FunC programs are compiled into Fift assembler code, which generates corresponding bytecode for the [TON Virtual Machine](/learn/tvm-instructions/tvm-overview).
 
-Further this bytecode (actually a [tree of cells](/learn/overviews/cells), like any other data in the TON Blockchain) can be used for creating smart contracts in the blockchain or can be run on a local instance of TVM.
+Further this bytecode (actually a [tree of cells](/learn/overviews/cells), like any other data in TON Blockchain) can be used for creating smart contracts in the blockchain or can be run on a local instance of TVM.
 
 You can find more information about FunC in the [DOCUMENTATION](/develop/func/types) section.
 
@@ -30,7 +30,17 @@ Here is a simple example method for sending money written in FunC:
 
 ## Compiler
 
-To compile FunC locally you need binaries setup on your machine. FunC compiler binaries for Windows, MacOS (Intel/M1), and Ubuntu can be downloaded from:
+### Compile with JS
+
+Most convenient and quick way to begin develop and compile smart contracts is using Blueprint framework. Read more in [Blueprint](/develop/smart-contracts/sdk/javascript) section.
+
+```bash
+npm create ton@latest
+```
+
+### Compile with original binaries 
+
+If you want to use native TON compiler FunC locally you need binaries setup on your machine. FunC compiler binaries for Windows, MacOS (Intel/M1), and Ubuntu can be downloaded from:
 * [Environment Setup Page](/develop/smart-contracts/environment/installation)
 
 :::info
@@ -46,6 +56,7 @@ The best place to start to develop using FunC: [INTRODUCTION](/develop/smart-con
 
 Other materials gracefully provided by the experts from the community:
 
+* [Func & BluePrint](https://youtube.com/playlist?list=PLyDBPwv9EPsDjIMAF3XqNI2XGNwdcB3sg) by **@MarcoDaTr0p0je**
 * [Learn FunC in Y Minutes](https://learnxinyminutes.com/docs/func/) by **@romanovichim**
 * [TON Hello World: Step-by-step guide for writing your first smart contract](https://ton-community.github.io/tutorials/02-contract/)
 * [TON Hello World: Step by step guide for testing your first smart contract](https://ton-community.github.io/tutorials/04-testing/)

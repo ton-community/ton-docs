@@ -64,13 +64,13 @@ Here is a list of modern SDKs that are constantly supported and improved:
 
 ### Go SDK
 
-- [xssnick/tonutils-go](https://github.com/xssnick/tonutils-go) — Golang SDK for the TON Blockchain. 
+- [xssnick/tonutils-go](https://github.com/xssnick/tonutils-go) — Golang SDK for TON Blockchain. 
 - [tonkeeper/tongo](https://github.com/tonkeeper/tongo) — Golang SDK with native ADNL support, cells manipulations and CGO for TVM and tx emulations.
 
 
 ### Kotlin / Java SDK
 
-- [ton-kotlin](https://github.com/andreypfau/ton-kotlin) — Kotlin SDK for the TON Blockchain
+- [ton-kotlin](https://github.com/andreypfau/ton-kotlin) — Kotlin SDK for TON Blockchain
 
 ## Telegram WebApps (TWA)
 
@@ -119,7 +119,7 @@ To add login button to your website or web app use the following:
 These technologies contains very low-level stack, so please use it if any other SDKs don't work for you. It will save a lot of your time.
 :::
 
-TonLib was one of the first libraries for working with the TON Blockchain.
+TonLib was one of the first libraries for working with TON Blockchain.
 
 - [C++ TonLib](https://github.com/ton-blockchain/ton/tree/master/example/cpp)
 - [Python TonLib wrapper](https://github.com/toncenter/pytonlib)

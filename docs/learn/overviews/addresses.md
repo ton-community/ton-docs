@@ -28,7 +28,7 @@ In the raw address overview section of this documentation, we'll discuss how  **
 
 [As we've seen before](/learn/overviews/ton-blockchain#workchain-blockchain-with-your-own-rules), it is possible to create as many as `2^32` workchains operating on TON Blockchain. We also noted how 32-bit prefix smart contract addresses identify and are linked to smart contract addresses within different workchains. This allows smart contracts to send and receive messages to and from different workchains on TON Blockchain.
 
-Nowadays, only the Masterchain (workchain_id=-1) and occasionally the basic workchain (workchain_id=0) are running in the TON Blockchain.
+Nowadays, only the Masterchain (workchain_id=-1) and occasionally the basic workchain (workchain_id=0) are running in TON Blockchain.
 
 Both of them have 256-bit addresses, so we henceforth assume that workchain_id is either 0 or -1 and that the address inside the workchain is exactly 256-bit.
 
@@ -36,7 +36,7 @@ Both of them have 256-bit addresses, so we henceforth assume that workchain_id i
 
 All account IDs on TON make use of 256-bit addresses on the MasterChain and BaseChain (or basic workchain).
 
-In fact, Account ID’s **(account_id)** defined as hash functions for smart contract objects (particular, the SHA256). Every smart contract operating on the TON blockchain stores two main components. These include:
+In fact, Account ID’s **(account_id)** defined as hash functions for smart contract objects (particular, the SHA256). Every smart contract operating on TON Blockchain stores two main components. These include:
 
 1. _Compiled code_. Logic of smart contract compiled in byte code.
 2. _Initial state_. Contract’s values in its initial moment deploying on-chain.
@@ -145,7 +145,7 @@ Feel free to read more on this topic in our documentation to gain a better under
 
 #### Armored base64 Representations
 
-Additional binary data related to the TON blockchain employs similar “armored” base64 user-friendly address representations. These differentiate from one another depending on the first 4 characters of their byte tag. For example, 256-bit Ed25519 public keys are represented by first creating a 36-byte sequence using the below process in order:
+Additional binary data related to TON Blockchain employs similar “armored” base64 user-friendly address representations. These differentiate from one another depending on the first 4 characters of their byte tag. For example, 256-bit Ed25519 public keys are represented by first creating a 36-byte sequence using the below process in order:
 
 - A single byte tag using the _0x3E_ format denotes a public key
 - A single byte tag using the _0xE6_ format denotes a Ed25519 public key

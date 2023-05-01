@@ -49,7 +49,7 @@ Otherwise, if you don't want to use [Docker](#-running-with-docker), you can dow
 
 Before you start, make sure that you already have a regular website running on port 80. We will consider installing on a Linux machine, but the same steps can be performed on other operating systems.
 
-1.  Download the newest version of the TON blockchain sources, available at GitHub repository https://github.com/ton-blockchain/ton/:
+1.  Download the newest version of TON Blockchain sources, available at GitHub repository https://github.com/ton-blockchain/ton/:
 ```bash
 git clone --recurse-submodules https://github.com/ton-blockchain/ton.git
 ```

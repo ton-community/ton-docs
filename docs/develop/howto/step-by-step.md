@@ -4,7 +4,7 @@
 This section describes instructions and manuals for interacting with TON at a low level.
 :::
 
-The aim of this document is to provide step-by-step instructions for compiling and creating a simple smart contract (a simple wallet) in the TON Blockchain Test Network using the TON Blockchain Lite Client and associated software.
+The aim of this document is to provide step-by-step instructions for compiling and creating a simple smart contract (a simple wallet) in TON Blockchain Test Network using the TON Blockchain Lite Client and associated software.
 
 We assume here that the Lite Client is already properly downloaded, compiled, and installed.
 
@@ -22,7 +22,7 @@ Smart contract addresses in the TON Network consist of two parts:
 
 (b) the address inside the workchain (64-512 bits depending on the workchain). 
 
-Currently, only the masterchain (workchain_id=-1) and occasionally the basic workchain (workchain_id=0) are running in the TON Blockchain Network. Both of them have 256-bit addresses, so we henceforth assume that workchain_id is either 0 or -1 and that the address inside the workchain is exactly 256-bit.
+Currently, only the masterchain (workchain_id=-1) and occasionally the basic workchain (workchain_id=0) are running in TON Blockchain Network. Both of them have 256-bit addresses, so we henceforth assume that workchain_id is either 0 or -1 and that the address inside the workchain is exactly 256-bit.
 
 Under the conditions stated above, the smart-contract address can be represented in the following forms:
 
@@ -52,7 +52,7 @@ and:
 
 in the "user-friendly" form (to be displayed by user-friendly clients). Notice that both forms (base64 and base64url) are valid and must be accepted.
 
-Incidentally, other binary data related to the TON Blockchain has similar "armored" base64 representations, differing by their first bytes. For example, the ubiquitous 256-bit Ed25519 public keys are represented by first creating a 36-byte sequence as follows:
+Incidentally, other binary data related to TON Blockchain has similar "armored" base64 representations, differing by their first bytes. For example, the ubiquitous 256-bit Ed25519 public keys are represented by first creating a 36-byte sequence as follows:
 - one tag byte 0x3E, meaning that this is a public key
 - one tag byte 0xE6, meaning that this is a Ed25519 public key
 - 32 bytes containing the standard binary representation of the Ed25519 public key
@@ -119,19 +119,19 @@ last transaction lt = 2310000001 hash = 73F89C6F8910F598AD84504A777E5945C798AC8C
 
 The first information line `got account state ... for ...` shows the account address and the masterchain block identifier with respect to which the account state has been dumped. Notice that even if the account state changes in a subsequent block, the `getaccount xxx` command will return the same result until the reference block is updated to a newer value by a `last` command. In this way, one can study the state of all accounts and obtain consistent results.
 
-The `account state is (account ... ` line begins the pretty-printed deserialized view of the account state. It is a deserialization of TL-B data type Account, used to represent account states in the TON Blockchain as explained in the TON Blockchain documentation. (You can find the TL-B scheme used for deserialization in the source file `crypto/block/block.tlb`; notice that if the scheme is out of date, the deserialization may have a breakdown.)
+The `account state is (account ... ` line begins the pretty-printed deserialized view of the account state. It is a deserialization of TL-B data type Account, used to represent account states in TON Blockchain as explained in the TON Blockchain documentation. (You can find the TL-B scheme used for deserialization in the source file `crypto/block/block.tlb`; notice that if the scheme is out of date, the deserialization may have a breakdown.)
 
 Finally, the last several lines beginning with `x{CFF...` (the "raw dump") contain the same information displayed as a tree of cells. In this case, we have one root cell containing the data bits `CFF...34_` (the underscore means that the last binary one and all subsequent binary zeroes are to be removed, so hexadecimal `4_` corresponds to binary `0`) and two cells that are its children (displayed with one-space indentation).
 
 We can see that `x{FF0020DD20...}` is the code of this smart contract. If we consult Appendix A of the TON Virtual Machine documentation, we can even disassemble this code: `FF00` is `SETCP 0`, `20` is `DUP`, `DD` is `IFNOTRET`, `20` is `DUP`, and so on. (Incidentally, you can find the source code of this smart contract in the source file `crypto/block/new-testgiver.fif`)
 
-We can also see that `x{00009A15}` (the actual value you see may be different) is the persistent data of this smart contract. It is actually an unsigned 32-bit integer, used by the smart contract as the counter of operations performed so far. Notice that this value is big-endian (i.e., 3 is encoded as `x{00000003}`, not as `x{03000000}`), as are all integers inside the TON Blockchain. In this case, the counter is equal to `0x9A15` = `39445`.
+We can also see that `x{00009A15}` (the actual value you see may be different) is the persistent data of this smart contract. It is actually an unsigned 32-bit integer, used by the smart contract as the counter of operations performed so far. Notice that this value is big-endian (i.e., 3 is encoded as `x{00000003}`, not as `x{03000000}`), as are all integers inside TON Blockchain. In this case, the counter is equal to `0x9A15` = `39445`.
 
 The current balance of the smart contract is easily seen in the pretty-printed portion of the output. In this case, we see `... balance:(currencies:(grams:(nanograms:(... value:1000000000000000...))))`, which is the balance of the account in (test) nanotons (a million test Toncoin in this example; the actual number you see may be smaller). If you study the TL-B scheme provided in `crypto/block/scheme.tlb`, you will be able to find this number (10^15) in binary big-endian form in the raw dump portion as well (it is located near the end of the data bits of the root cell).
 
 ## 3. Compiling a new smart contract
 
-Before uploading a new smart contract into the TON Blockchain, you need to determine its code and data and save them in serialized form into a file (called a "bag-of-cells" or BOC file, usually with a .boc suffix). Let's consider the case of a simple wallet smart contract, which stores a 32-bit operations counter and a 256-bit Ed25519 public key of its owner in its persistent data.
+Before uploading a new smart contract into TON Blockchain, you need to determine its code and data and save them in serialized form into a file (called a "bag-of-cells" or BOC file, usually with a .boc suffix). Let's consider the case of a simple wallet smart contract, which stores a 32-bit operations counter and a 256-bit Ed25519 public key of its owner in its persistent data.
 
 Obviously, you'll need some tools for developing smart contracts, namely a TON smart contract compiler. Basically, a TON smart contract compiler is a program that reads the source of a smart contract in a specialized high-level programming language and creates a .boc file from this source.
 
@@ -249,7 +249,7 @@ In a nutshell, the Fift assembler (loaded by the `Asm.fif` include line) is used
 
 The code and data for the new smart contract are combined into a `StateInit` structure (in the next lines), the address of the new smart contract (equal to the hash of this `StateInit` structure) is computed and output, and then an external message with a destination address equal to that of the new smart contract is created. This external message contains both the correct `StateInit` for the new smart contract and a non-trivial payload (signed by the correct private key).
 
-Finally, the external message is serialized into a bag of cells (represented by `B5EE...BE63`) and saved into the file `my_wallet_name-query.boc`. Essentially, this file is your compiled smart contract with all the additional information necessary to upload it to the TON Blockchain.
+Finally, the external message is serialized into a bag of cells (represented by `B5EE...BE63`) and saved into the file `my_wallet_name-query.boc`. Essentially, this file is your compiled smart contract with all the additional information necessary to upload it to TON Blockchain.
 
 ## 4. Transferring some funds to the new smart contract
 
@@ -522,7 +522,7 @@ x{CFF60C04141C6A7B96D68615E7A91D265AD0F3A9A922E9AE9C901D4FA83F5D3C0D020680F0C2E4
  x{00000001F61CF0BC8E891AD7636E0CD35229D579323AA2DA827EB85D8071407464DC2FA3}
 ```
 
-You will see that the smart contract has been initialized using code and data from the `StateInit` of the external message, and its balance has been slightly decreased because of the processing fees. Now it is up and running, and you can activate it by generating new external messages and uploading them to the TON Blockchain using the `sendfile` command of the Lite Client.
+You will see that the smart contract has been initialized using code and data from the `StateInit` of the external message, and its balance has been slightly decreased because of the processing fees. Now it is up and running, and you can activate it by generating new external messages and uploading them to TON Blockchain using the `sendfile` command of the Lite Client.
 
 ## 8. Using the simple wallet smart contract
 
