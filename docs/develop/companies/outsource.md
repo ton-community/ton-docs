@@ -8,7 +8,6 @@ Discover TON development teams for your project
 
 * [Astralyx](#astralyx)
 * [Blockczech R&D Lab](#blockczech-rd-lab)
-* [EvaCodes](#evacodes)
 
 
 ### Astralyx
