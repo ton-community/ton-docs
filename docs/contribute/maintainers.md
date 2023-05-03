@@ -9,7 +9,7 @@ Current members of the TON Docs team are listed alphabetically below.
 
 [TON Docs](https://github.com/ton-community/ton-docs) maintainer, author of multiple articles
 
-* Telegram: [@iftryalexg](https://t.me/iftryalexg)
+* Telegram: [@alexgton](https://t.me/alexgton)
 * GitHub: [Reveloper](https://github.com/Reveloper)
 
 ### coalus
