@@ -307,7 +307,8 @@ const sidebars = {
 
       ],
     },
-   {
+
+    {
       type: 'category',
       label: 'Develop Apps',
       items: [
@@ -317,8 +318,8 @@ const sidebars = {
           label: 'Learn',
           items: [
             'develop/dapps/tutorials/overview',
-            'develop/dapps/tutorials/jetton-minter',
             'develop/dapps/tutorials/collection-minting',
+            'develop/dapps/tutorials/jetton-minter',
             {
               type: 'category',
               label: 'Telegram bots',
@@ -331,18 +332,17 @@ const sidebars = {
           ],
         },
 
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Integrate with TON',
-      items: [
-        'develop/dapps/asset-processing/README',
-        'develop/dapps/asset-processing/jettons',
-        'develop/dapps/asset-processing/nfts',
-        'develop/dapps/asset-processing/metadata',
-        'develop/dapps/tutorials/jetton-minter',
-        'develop/dapps/tutorials/collection-minting',
+        {
+          type: 'category',
+          label: 'Guidelines',
+          items: [
+            'develop/dapps/asset-processing/README',
+            'develop/dapps/asset-processing/jettons',
+            'develop/dapps/asset-processing/nfts',
+            'develop/dapps/asset-processing/metadata',
+          ],
+        },
+
         {
           type: 'category',
           label: 'DeFi Development',
@@ -355,41 +355,125 @@ const sidebars = {
         },
       ]
     },
-   {
+    {
       type: 'category',
       label: 'TON Connect',
       items: [
         'develop/dapps/ton-connect/README',
-     {
-        type: 'category',
-        label: 'Learn',
-        items: [
-          'develop/dapps/ton-connect/integration',
-          'develop/dapps/ton-connect/tg-bot-integration',
-          'develop/dapps/ton-connect/transactions',
-        ],
-      },
-     {
-        type: 'category',
-        label: 'Guidelines',
-        items: [
-                'develop/dapps/ton-connect/developers',
-                'develop/dapps/ton-connect/wallet-guidelines',
-                'develop/dapps/ton-connect/workflow',
-        ],
-      },
+        {
+          type: 'category',
+          label: 'Learn',
+          items: [
+            'develop/dapps/ton-connect/integration',
+            'develop/dapps/ton-connect/tg-bot-integration',
+            'develop/dapps/ton-connect/transactions',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Guidelines',
+          items: [
+            'develop/dapps/ton-connect/developers',
+            'develop/dapps/ton-connect/wallet-guidelines',
+            'develop/dapps/ton-connect/workflow',
+          ],
+        },
 
-       {
+        {
           type: 'category',
           label: 'Business',
           items: [
-                'develop/dapps/ton-connect/business',
-                'develop/dapps/ton-connect/security',
-                'develop/dapps/ton-connect/comparison',
+            'develop/dapps/ton-connect/business',
+            'develop/dapps/ton-connect/security',
+            'develop/dapps/ton-connect/comparison',
           ],
         },
       ],
     },
+
+   // {
+   //    type: 'category',
+   //    label: 'Develop Apps',
+   //    items: [
+   //      'develop/dapps/README',
+   //      {
+   //        type: 'category',
+   //        label: 'Learn',
+   //        items: [
+   //          'develop/dapps/tutorials/overview',
+   //          'develop/dapps/tutorials/jetton-minter',
+   //          'develop/dapps/tutorials/collection-minting',
+   //          {
+   //            type: 'category',
+   //            label: 'Telegram bots',
+   //            items: [
+   //              'develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
+   //              'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
+   //              'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js',
+   //            ],
+   //          },
+   //        ],
+   //      },
+   //
+   //    ],
+   //  },
+   //  {
+   //    type: 'category',
+   //    label: 'Integrate with TON',
+   //    items: [
+   //      'develop/dapps/asset-processing/README',
+   //      'develop/dapps/asset-processing/jettons',
+   //      'develop/dapps/asset-processing/nfts',
+   //      'develop/dapps/asset-processing/metadata',
+   //      'develop/dapps/tutorials/jetton-minter',
+   //      'develop/dapps/tutorials/collection-minting',
+   //      {
+   //        type: 'category',
+   //        label: 'DeFi Development',
+   //        items: [
+   //          'develop/dapps/defi/coins',
+   //          'develop/dapps/defi/tokens',
+   //          'develop/dapps/defi/ton-payments',
+   //          'develop/dapps/defi/subscriptions',
+   //        ],
+   //      },
+   //    ]
+   //  },
+   // {
+   //    type: 'category',
+   //    label: 'TON Connect',
+   //    items: [
+   //      'develop/dapps/ton-connect/README',
+   //   {
+   //      type: 'category',
+   //      label: 'Learn',
+   //      items: [
+   //        'develop/dapps/ton-connect/integration',
+   //        'develop/dapps/ton-connect/tg-bot-integration',
+   //        'develop/dapps/ton-connect/transactions',
+   //      ],
+   //    },
+   //   {
+   //      type: 'category',
+   //      label: 'Guidelines',
+   //      items: [
+   //              'develop/dapps/ton-connect/developers',
+   //              'develop/dapps/ton-connect/wallet-guidelines',
+   //              'develop/dapps/ton-connect/workflow',
+   //      ],
+   //    },
+   //
+   //     {
+   //        type: 'category',
+   //        label: 'Business',
+   //        items: [
+   //              'develop/dapps/ton-connect/business',
+   //              'develop/dapps/ton-connect/security',
+   //              'develop/dapps/ton-connect/comparison',
+   //        ],
+   //      },
+   //    ],
+   //  },
     {
       'type': 'html',
       'value': '<hr/>',

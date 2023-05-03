@@ -23,7 +23,7 @@ If you are a web or bot developer, you may find the following repositories usefu
 * Payment processing using JavaScript:
   * [Create a key pair and a wallet](https://github.com/toncenter/examples/blob/main/common.js) (tonweb)
   * [Accepting deposits to a single wallet](https://github.com/toncenter/examples/blob/main/deposits-single-wallet.js) (tonweb)
-  * [Accepting deposits to multiple wallets](https://github.com/toncenter/examples/blob/main/deposits-multi-wallet.js) (tonweb)
+  * [Accepting deposits to multiple wallets](https://github.com/toncenter/examples/blob/main/deposits.js) (tonweb)
   * [Withdrawal process](https://github.com/toncenter/examples/blob/main/withdrawals.js) (tonweb)
   * [Payment channel example](https://github.com/toncenter/payment-channels-example/blob/main/index.js) (tonweb)
 * [TON Bridge front-end](https://github.com/ton-blockchain/bridge) (Vue.js, no comments)
