@@ -4,7 +4,7 @@
 If you are fully prepared to become an outsourced agent for TON Ecosystem, promote your company through [PR](https://github.com/ton-community/ton-docs/pulls).
 :::
 
-Discover TON development teams for your project
+Discover 3-d party development teams for your TON project
 
 * [Astralyx](#astralyx)
 * [Blockczech R&D Lab](#blockczech-rd-lab)

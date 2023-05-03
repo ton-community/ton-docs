@@ -256,7 +256,7 @@ const config = {
               },
               {
                 to: 'develop/dapps/asset-processing/jettons',
-                label: 'TON Jetton(Tokens) processing',
+                label: 'TON Jetton (Tokens) processing',
               },
               {
                 to: '/develop/dapps/asset-processing/nfts',
