@@ -8,6 +8,7 @@ Discover TON development teams for your project
 
 * [Astralyx](#astralyx)
 * [Blockczech R&D Lab](#blockczech-rd-lab)
+* [EvaCodes](#evacodes)
 
 
 ### Astralyx
@@ -53,6 +54,26 @@ Wev3.0 Software House & Startup Studio with a strong focus on blockchain-based s
 #### Contacts
 - http://blockczech.io
 - [@blockczech](https://t.me/blockczech)
+
+### EvaCodes
+
+#### Summary
+EvaCodes is a top Eastern European blockchain development company with teams located in Ukraine, Armenia, and Poland. The company comprises over 50 skilled developers who have delivered 60+ web3 solutions, including web3 banking solutions, L1 blockchains, and web3 infrastructure.
+
+#### Workstreams
+- DeFi
+- Crypto Wallets
+- NFT-based solutions
+
+#### Projects
+- [alium.finance](https://alium.finance/)
+- [trush.io ](https://trush.io/)
+- [konsta.network](https://konsta.network/)
+
+#### Contacts
+- ton@evacodes.com
+- [evacodes.com](https://evacodes.com/)
+- TG [@elijahkoniukh](https://t.me/elijahkoniukh)
 
 ## See Also
 * [Security Assurance Providers](/develop/companies/auditors)
