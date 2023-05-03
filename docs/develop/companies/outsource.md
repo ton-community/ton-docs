@@ -73,7 +73,7 @@ EvaCodes is a top Eastern European blockchain development company with teams loc
 #### Contacts
 - ton@evacodes.com
 - [evacodes.com](https://evacodes.com/)
-- TG [@elijahkoniukh](https://t.me/elijahkoniukh)
+- TG [@salesevacodes](https://t.me/salesevacodes)
 
 ## See Also
 * [Security Assurance Providers](/develop/companies/auditors)
