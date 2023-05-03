@@ -6,9 +6,10 @@ Test of your software with the following quality assurance providers:
 
 * https://skynet.certik.com/
 * https://chainsulting.de/
-* https://www.slowmist.com/
+* https://slowmist.com/
 * https://hexens.io/
 * https://quantstamp.com/
+* https://vidma.io/
 
 
 ## See Also
