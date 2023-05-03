@@ -392,10 +392,6 @@ const config = {
             position: 'left',
             items: [
               {
-                to: 'contribute',
-                label: 'Contribute to Docs',
-              },
-              {
                 to: 'https://answers.ton.org/',
                 label: 'TON Answers',
               },
@@ -407,46 +403,18 @@ const config = {
                 to: 'https://github.com/ton-blockchain/TEPs',
                 label: 'Standards Discussion (TEPs)',
               },
+              {
+                to: 'contribute',
+                label: 'Contribute to Docs',
+              },
             ],
           },
-          // {
-          //   type: 'doc',
-          //   docId: 'intro',
-          //   position: 'left',
-          //   label: 'Integrate',
-          // },
-
-          {
-            to: 'contribute',
-            label: 'Contribute',
-            position: 'right',
-          },
-          {
-            to: 'https://answers.ton.org/',
-            label: 'Q&A',
-            position: 'right',
-          },
-          {
-            to: 'https://t.me/TonDev_eng',
-            label: 'Dev Chat',
-            position: 'right',
-          },
-          // {
-          //   to: 'https://ton-blockchain.github.io/docs/#/',
-          //   label: 'V 1.0',
-          //   position: 'right',
-          // },
           {
             href: 'https://github.com/ton-community/ton-docs',
             position: 'right',
             className: 'header-github-link',
             'aria-label': 'GitHub repository',
           },
-          // {
-          //   type: 'localeDropdown',
-          //   position: 'right',
-          // },
-          //
         ],
       },
       footer: {
