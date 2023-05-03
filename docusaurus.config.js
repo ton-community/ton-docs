@@ -218,16 +218,24 @@ const config = {
             label: 'Apps',
             items: [
               {
-                to: 'develop/onboarding-challenge',
-                label: 'Get Started with TON',
-              },
-              {
                 to: 'develop/dapps/apis',
                 label: 'Understand APIs',
               },
               {
+                to: 'develop/dapps/asset-processing',
+                label: 'Payments processing',
+              },
+              {
                 to: 'develop/dapps/ton-connect',
                 label: 'Authenticate with TON',
+              },
+              {
+                to: 'develop/dapps/defi/ton-payments',
+                label: 'TON Payments',
+              },
+              {
+                to: 'develop/dapps/defi/subscriptions',
+                label: 'Subscriptions',
               },
               {
                 to: 'https://ton-community.github.io/tutorials/03-client/',
@@ -238,35 +246,71 @@ const config = {
           },
           {
             type: 'dropdown',
-            to: 'develop/dapps/defi/coins',
+            to: 'develop/dapps/defi/tokens',
             position: 'left',
             label: 'Tokens',
             items: [
-              {
-                to: 'develop/dapps/asset-processing',
-                label: 'Payments processing',
-              },
               {
                 to: 'develop/dapps/defi/coins',
                 label: 'Native token: Toncoin',
               },
               {
-                to: 'develop/dapps/defi/tokens',
-                label: 'Tokens (FT, NFT)',
+                to: 'develop/dapps/asset-processing/jettons',
+                label: 'TON Jetton(Tokens) processing',
+              },
+              {
+                to: '/develop/dapps/asset-processing/nfts',
+                label: 'TON NFT processing',
+              },
+              {
+                to: '/develop/dapps/asset-processing/metadata',
+                label: 'TON Metadata Parsing',
+              },
+            ],
+          },
+          {
+            type: 'dropdown',
+            to: '/develop/dapps/tutorials/overview',
+            position: 'left',
+            label: 'Learn',
+            items: [
+
+              {
+                to: 'develop/onboarding-challenge',
+                label: 'Get Started with TON',
+              },
+              {
+                to: '/learn/overviews/addresses',
+                label: 'Smart Contract Addresses',
+              },
+              {
+                to: '/develop/smart-contracts/tutorials/wallet',
+                label: 'How to interact with wallet',
               },
               {
                 to: 'develop/dapps/tutorials/jetton-minter',
                 label: 'Mint Jettons (Tokens)',
               },
               {
-                to: 'develop/dapps/defi/ton-payments',
-                label: 'TON Payments',
+                to: '/develop/dapps/tutorials/collection-minting',
+                label: 'Mint NFT Collection',
               },
               {
-                to: 'develop/dapps/defi/subscriptions',
-                label: 'Subscriptions',
+                to: '/develop/dapps/ton-connect/integration',
+                label: 'TON Connect Integration Manual',
               },
-
+              {
+                to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
+                label: 'Telegram bot with Payments',
+              },
+              {
+                to: '/develop/dapps/ton-connect/tg-bot-integration ',
+                label: 'Telegram bot with TON Connect',
+              },
+              {
+                to: 'https://ton-community.github.io/tutorials/01-wallet/',
+                label: 'TON Community Tutorials',
+              }
 
             ],
           },
@@ -278,27 +322,35 @@ const config = {
             items: [
               {
                 to: 'develop/smart-contracts',
-                label: 'Write smart contracts'
+                label: 'Write Smart Contracts'
               },
               {
-                to: 'learn/tvm-instructions/tvm-overview',
-                label: 'TON Virtual Machine (TVM)'
+                to: '/develop/smart-contracts/messages',
+                label: 'Sending Messages'
               },
               {
                 to: 'develop/smart-contracts/fees',
-                label: 'Transaction fees'
+                label: 'Transaction Fees'
               },
               {
                 to: 'develop/smart-contracts/guidelines',
-                label: 'Best Practices'
+                label: 'Best Practices for Contracts'
               },
               {
                 to: 'develop/func/overview',
-                label: 'FunC on TON'
+                label: 'FunC Development Language'
               },
               {
                 to: 'develop/func/cookbook',
                 label: 'FunC Cookbook'
+              },
+              {
+                to: '/develop/data-formats/cell-boc',
+                label: 'Data formats'
+              },
+              {
+                to: 'learn/tvm-instructions/tvm-overview',
+                label: 'TON Virtual Machine (TVM)'
               },
             ],
           },
