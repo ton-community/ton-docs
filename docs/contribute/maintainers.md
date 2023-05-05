@@ -42,7 +42,7 @@ Python developer with DevOps experience, TON Test Challenge winner, docs contrib
 
 ### Slava
 
-[TON Footsteps](https://github.com/ton-society/ton-footsteps) maintainer, author of multiple articles in docs
+Managing director of [TON Footsteps](https://github.com/ton-society/ton-footsteps), author of multiple articles in docs
 
 * Telegram: [@delovoyslava](https://t.me/delovoyslava)
 * GitHub: [delovoyhomie](https://github.com/delovoyhomie)
