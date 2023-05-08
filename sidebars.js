@@ -359,6 +359,7 @@ const sidebars = {
       type: 'category',
       label: 'TON Connect',
       items: [
+        'develop/dapps/ton-connect/overview',
         'develop/dapps/ton-connect/README',
         {
           type: 'category',
