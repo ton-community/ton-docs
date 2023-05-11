@@ -296,7 +296,7 @@ At the time of writing the tutorial all wallets by default use Wallet v4. We wil
 
 ### TL-B
 
-As you may already know, everything in TON Blockchain is a `cell`. And to properly serialize and deserialize the data we need standarts. To do this, `TL-B` was invented, with which you could learn about what, how and in what sequence should be stored inside cells. 
+As you may already know, everything in TON Blockchain is a `cell`. And to properly serialize and deserialize the data we need standards. To do this, `TL-B` was invented, with which you could learn about what, how and in what sequence should be stored inside cells. 
 
 In this section, we will look at [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb). This file will be very useful during future development, as it will describe how different cells should be assembled. In our case, we will refer to details related to internal and external transactions.
 
@@ -2693,4 +2693,4 @@ External references:
 
 - [Block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb)
 
-- [Standarts in TON](https://github.com/ton-blockchain/TEPs)
+- [Standards in TON](https://github.com/ton-blockchain/TEPs)
