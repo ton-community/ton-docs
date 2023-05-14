@@ -71,32 +71,6 @@ const sidebars = {
         },
       ],
     },
-
-    {
-      type: 'category',
-      label: 'TON Services',
-      items: [
-        'learn/services/payments',
-        {
-          type: 'doc',
-          label: 'TON DNS',
-          id: 'learn/services/dns',
-        },
-        {
-          type: 'doc',
-          label: 'TON Sites, WWW, and Proxy',
-          id: 'learn/services/sites-www-proxy',
-        },
-        {
-          'type': 'html',
-          'value': '<span class=\'menu__link\'>TON Storage [2022 Q4]</span>',
-        },
-        {
-          'type': 'html',
-          'value': '<span class=\'menu__link\'>Bitcoin & EVM Crosschain</span>',
-        },
-      ],
-    },
     {
       type: 'category',
       label: 'TON Whitepapers',
