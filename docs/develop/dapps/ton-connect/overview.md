@@ -3,7 +3,7 @@
 TON Ecosystem is a great WEB 3.0 space of connected application(stores, games, exchange). 
 Use cases
 
-## 
+## What TON Ecosystem deliverables
 Some use deliverable for integrating with TON (Ecosystem):
 
 - attract additional traffic through crypto wallets supporting TON Connect
