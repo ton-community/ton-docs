@@ -8,8 +8,8 @@ Discover deliverables for integrating with the TON Ecosystem.
 - attract additional traffic through crypto wallets supporting TON Connect
 - increased user retention with in-app list saving feature (e.g., recently opened and favorites app lists)
 - increased user engagement through multi application interaction
-- process payments through fast and secure TON Blockchain(with Toncoin or wrapped stablecoins jUSDC/jUSDT)
-- TON user's wallet as an ready made account for your userbase exclude authenticate step for better UX
+- process payments through fast and secure TON Blockchain(with Toncoin or wrapped stable coins jUSDC/jUSDT)
+- TON user's wallet as a ready-made account for your userbase exclude authenticate step for better UX
 
 
 ## Connect with TON Ecosystem
