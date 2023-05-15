@@ -64,13 +64,13 @@ const config = {
 
           // services
           {
-            to: '/learn/services/dns',
-            from: '/develop/services/dns',
-          },
-          {
-            to: '/learn/services/payments',
-            from: '/develop/services/payments',
-          },
+//            to: '/learn/services/dns',
+//            from: '/develop/services/dns',
+//          },
+//          {
+//            to: '/learn/services/payments',
+//            from: '/develop/services/payments',
+//          },
           {
             to: '/learn/networking/low-level-adnl',
             from: '/learn/overviews/adnl',
