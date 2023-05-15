@@ -331,9 +331,13 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'TON Connect',
+      label: 'Integrate with TON',
       items: [
         'develop/dapps/ton-connect/overview',
+        {
+              type: 'category',
+              label: 'TON Connect',
+              items: [
         'develop/dapps/ton-connect/README',
         {
           type: 'category',
@@ -362,6 +366,8 @@ const sidebars = {
             'develop/dapps/ton-connect/security',
             'develop/dapps/ton-connect/comparison',
           ],
+        },
+        ]
         },
       ],
     },

@@ -1,49 +1,25 @@
 # Connect with TON Ecosystem
 
-TON Ecosystem is a great WEB 3.0 space of connected application(stores, games, exchange). 
-Use cases
+TON Ecosystem is a Web 3.0 space of applications that are develop and live in [The Open Network](/learn/introduction).
 
-## What TON Ecosystem deliverables
-Some use deliverable for integrating with TON (Ecosystem):
+## TON Ecosystem Deliverables
+Discover deliverables for integrating with the TON Ecosystem.
 
 - attract additional traffic through crypto wallets supporting TON Connect
 - increased user retention with in-app list saving feature (e.g., recently opened and favorites app lists)
 - increased user engagement through multi application interaction
-- process payments through fast and secure TON Blockchain(support Toncoin or stablecoin jUSDC/jUSDT)
+- process payments through fast and secure TON Blockchain(with Toncoin or wrapped stablecoins jUSDC/jUSDT)
+- TON user's wallet as an ready made account for your userbase exclude authenticate step for better UX
 
-Supported features
 
+## Connect with TON Ecosystem
+For connecting your service with TON Ecosystem you need to support following:
 
-## How to connect with TON?
-If you want to connect your service with TON you need to support following:
-
-- Create specified transaction message with ton libraries.
-- Support TON Connect protocol in the application.
-- Process payments through public API([tonapi](https://tonapi.io/)) or own indexer([gobycicle](http://github.com/gobicycle/bicycle)).
+- Create specified transaction message with TON libraries. Read about sending messages [here](/develop/smart-contracts/messages).
+- Support TON Connect protocol in the application. Learn how to support TON Connect in [this](/develop/dapps/ton-connect) section of our documentation.
+- Process payments through public API([tonapi](https://tonapi.io/)) or own indexer(for e.g. [gobycicle](http://github.com/gobicycle/bicycle)). Learn more in [this](/develop/dapps/asset-processing) section of our documentation.
 
 :::info
-Nowadays there is no production ready universal solution for integration(with payments support) stores in TON Ecosystem.
+Note, that not all Apps require payment processing. This means, if the business logic of your service will not require it, you will not have to support this.
 :::
 
-
-
-
-TON Connect Protocol supports the following features:
-
-- Quick and secure account linking: The protocol utilizes advanced cryptographic techniques to enable quick and easy account linking while maintaining user privacy and data security.
-
-- Customizable data sharing: Users can define custom scopes to share only necessary data, providing improved user privacy.
-
-- Cross-device compatibility: TON Connect Protocol enables users to link their digital identity across various devices and applications.
-
-Account linking flows
-
-TON Connect Protocol features a secure and user-friendly account linking process, which involves the following steps:
-
-- User authentication: Users are authenticated using their blockchain wallet credentials.
-
-- Account linking consent: Users are presented with a consent form, defining the scope of data sharing and the blockchain applications with which they want to link their account.
-
-- Sharing of encrypted data: The protocol shares only the necessary data with the requested applications, which is encrypted using advanced cryptographic techniques.
-
-- Revocation of data access: Users can easily revoke access to their data using the unlinking feature, allowing them to maintain control over their data.
