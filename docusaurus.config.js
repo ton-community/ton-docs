@@ -63,7 +63,7 @@ const config = {
 
 
           // services
-          {
+//          {
 //            to: '/learn/services/dns',
 //            from: '/develop/services/dns',
 //          },
