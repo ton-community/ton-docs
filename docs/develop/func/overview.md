@@ -82,6 +82,11 @@ You can also study previous competitions for learning purposes:
   [Solutions](https://github.com/ton-blockchain/func-contest1-solutions),
   [Tests](https://github.com/ton-blockchain/func-contest1-tests).
 
+* TON Smart Challenge #3 (intermediate):
+  [Contest Page](https://ton.org/en/ton-smart-challenge-3),
+  [Tasks](https://github.com/ton-blockchain/func-contest3),
+  [Solutions](https://github.com/nns2009/TON-FunC-contest-3).
+
 ## Smart contract examples
 
 Standard basic smart contracts like wallets, electors (manages validation on TON), multi-signature wallets, etc. can be a reference when studying.

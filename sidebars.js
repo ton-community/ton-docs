@@ -71,32 +71,6 @@ const sidebars = {
         },
       ],
     },
-
-    {
-      type: 'category',
-      label: 'TON Services',
-      items: [
-        'learn/services/payments',
-        {
-          type: 'doc',
-          label: 'TON DNS',
-          id: 'learn/services/dns',
-        },
-        {
-          type: 'doc',
-          label: 'TON Sites, WWW, and Proxy',
-          id: 'learn/services/sites-www-proxy',
-        },
-        {
-          'type': 'html',
-          'value': '<span class=\'menu__link\'>TON Storage [2022 Q4]</span>',
-        },
-        {
-          'type': 'html',
-          'value': '<span class=\'menu__link\'>Bitcoin & EVM Crosschain</span>',
-        },
-      ],
-    },
     {
       type: 'category',
       label: 'TON Whitepapers',
@@ -357,8 +331,13 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'TON Connect',
+      label: 'Integrate with TON',
       items: [
+        'develop/dapps/ton-connect/overview',
+        {
+              type: 'category',
+              label: 'TON Connect',
+              items: [
         'develop/dapps/ton-connect/README',
         {
           type: 'category',
@@ -387,6 +366,8 @@ const sidebars = {
             'develop/dapps/ton-connect/security',
             'develop/dapps/ton-connect/comparison',
           ],
+        },
+        ]
         },
       ],
     },
