@@ -55,7 +55,7 @@ It is optimal to send a ping packet once every 5 seconds. This is necessary to m
 The ping packet, like all the others, is built according to the standard schema described [above](#packet-structure), and carries the request ID and ping ID as payload data.
 
 Let's find the desired schema for the ping request [here](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L35) and calculate the schema id as
-`crc32_IEEEE("tcp.ping random_id:long = tcp.Pong")`. When converted to little endian bytes, we get **9a2b084d**.
+`crc32_IEEE("tcp.ping random_id:long = tcp.Pong")`. When converted to little endian bytes, we get **9a2b084d**.
 
 Thus, our ADNL ping packet will look like this:
 * 4 bytes of packet size in little endian -> 64 + (4+8) = **76**
