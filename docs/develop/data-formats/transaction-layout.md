@@ -35,12 +35,10 @@ acc_state_active$10 = AccountStatus;
 acc_state_nonexist$11 = AccountStatus;
 ```
 
-| Value  | Description                |
-| ------ | -------------------------- |
-| `[00]` | Account is not initialized |
-| `[01]` | Account is frozen          |
-| `[10]` | Account is active          |
-| `[11]` | Account does not exist     |
+-   `[00]`: Account is not initialized
+-   `[01]`: Account is frozen
+-   `[10]`: Account is active
+-   `[11]`: Account does not exist
 
 ## HASH_UPDATE
 
@@ -56,17 +54,17 @@ update_hashes#72 {X:Type} old_hash:bits256 new_hash:bits256
 
 ## TransactionDescr Types
 
-| Type            | Description               |
-| --------------- | ------------------------- |
-| `Ordinary`      | [Details](#ordinary)      |
-| `Storage`       | [Details](#storage)       |
-| `Tick-tock`     | [Details](#tick-tock)     |
-| `Split prepare` | [Details](#split-prepare) |
-| `Split install` | [Details](#split-install) |
-| `Merge prepare` | [Details](#merge-prepare) |
-| `Merge install` | [Details](#merge-install) |
+-   [Ordinary](#ordinary)
+-   [Storage](#storage)
+-   [Tick-tock](#tick-tock)
+-   [Split prepare](#split-prepare)
+-   [Split install](#split-install)
+-   [Merge prepare](#merge-prepare)
+-   [Merge install](#merge-install)
 
 ## Ordinary
+
+This is the most common type of transaction and it fulfills most developers' needs. Transactions of this type have exactly one incoming message and can create several outgoing messages.
 
 ```tlb
 trans_ord$0000 credit_first:Bool
@@ -91,6 +89,8 @@ trans_ord$0000 credit_first:Bool
 
 ## Storage
 
+Transactions of this type can be inserted by validators at their discretion. They do not process any inbound messages and do not invoke any code. Their only effect is to collect storage payments from an account, affecting its storage statistics and balance. If the resulting _Toncoin_ balance of the account drops below a certain amount, the account may be frozen, and its code and data replaced by their combined hash.
+
 ```tlb
 trans_storage$0001 storage_ph:TrStoragePhase
     = TransactionDescr;
@@ -101,6 +101,8 @@ trans_storage$0001 storage_ph:TrStoragePhase
 | `storage_ph` | TrStoragePhase | Contains information about storage phase of a transaction execution. |
 
 ## Tick-tock
+
+`Tick` and `Tock` transactions are reserved for special system smart contracts that are required to be automatically invoked in each block. `Tick` transactions are invoked at the beginning of each masterchain block, and `Tock` transactions are invoked at the end.
 
 ```tlb
 trans_tick_tock$001 is_tock:Bool storage_ph:TrStoragePhase
@@ -118,6 +120,12 @@ trans_tick_tock$001 is_tock:Bool storage_ph:TrStoragePhase
 | `destroyed`  | Bool                 | Indicates whether the account was destroyed during the execution.    |
 
 ## Split prepare
+
+:::warning
+This type of transaction is not currently in use.
+:::
+
+Split transactions are triggered on large smart contracts that need to split under high load. The contract should support this type of transaction and manage the splitting process to balance the load. More information on this process is currently limited.
 
 ```tlb
 trans_split_prepare$0100 split_info:SplitMergeInfo
@@ -138,6 +146,12 @@ trans_split_prepare$0100 split_info:SplitMergeInfo
 
 ## Split install
 
+:::warning
+This type of transaction is not currently in use.
+:::
+
+Split transactions are triggered on large smart contracts that need to split under high load. The contract should support this type of transaction and manage the splitting process to balance the load. More information on this process is currently limited.
+
 ```tlb
 trans_split_install$0101 split_info:SplitMergeInfo
     prepare_transaction:^Transaction
@@ -152,6 +166,12 @@ trans_split_install$0101 split_info:SplitMergeInfo
 
 ## Merge prepare
 
+:::warning
+This type of transaction is not currently in use.
+:::
+
+Merge transactions are triggered on large smart contracts that need to merge again after being split due to high load. The contract should support this type of transaction and manage the merging process to balance the load. More information on this process is currently limited.
+
 ```tlb
 trans_merge_prepare$0110 split_info:SplitMergeInfo
     storage_ph:TrStoragePhase aborted:Bool
@@ -165,6 +185,12 @@ trans_merge_prepare$0110 split_info:SplitMergeInfo
 | `aborted`    | Bool           | Indicates whether the transaction execution was aborted.             |
 
 ## Merge install
+
+:::warning
+This type of transaction is not currently in use.
+:::
+
+Merge transactions are triggered on large smart contracts that need to merge again after being split due to high load. The contract should support this type of transaction and manage the merging process to balance the load. More information on this process is currently limited.
 
 ```tlb
 trans_merge_install$0111 split_info:SplitMergeInfo
