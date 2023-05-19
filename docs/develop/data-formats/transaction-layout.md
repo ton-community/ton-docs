@@ -90,7 +90,7 @@ Hash of the account state after executing the transaction.
 
 ## description:^TransactionDescr
 
-The last field is a detailed description of a transaction. It has 7 possible variations, depending on a transaction type.
+The last field is a detailed description of a transaction execution process. It has 7 possible variations, depending on a transaction type.
 
 ### Ordinary
 
@@ -103,6 +103,30 @@ trans_ord$0000 credit_first:Bool
     destroyed:Bool
     = TransactionDescr;
 ```
+
+#### credit_first:Bool
+
+A flag that correlates with `bounce` flag of an incoming message. If it was received with `bounce = false`, then `credit_first = true`, and for `bounce = true` we get `credit_first = false`.
+
+#### storage_ph:(Maybe TrStoragePhase) credit_ph:(Maybe TrCreditPhase) compute_ph:TrComputePhase action:(Maybe ^TrActionPhase)
+
+These fields contain information about phases of a transaction execution. Read more:
+
+-   [Transactions and phases](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)
+
+#### aborted:Bool
+
+Flag that indicates whether the transaction execution was aborted during _compute_ and _action_ phases.
+
+#### bounce:(Maybe TrBouncePhase)
+
+If the transaction execution failed, the bounce phase begins. A bounced message is sent to the receiver. Read more about bouncing:
+
+-   [Non-bounceable messages](https://docs.ton.org/develop/smart-contracts/guidelines/non-bouncable-messages)
+
+#### destroyed:Bool
+
+Flag that indicates whether the account was destroyed during the execution of the transaction. It usually can happen when the contract sends an outgoing message with `mode = 160` that destroys itself.
 
 ### Storage
 
