@@ -17,7 +17,7 @@ An ID of the network where this block is created. `-239` for mainnet and `-3` fo
 
 ## info:^BlockInfo
 
-This field contains information about the block, such as its version, sequence numbers, identifiers, and other flags. The detailed structure is as follows:
+This field contains information about the block, such as its version, sequence numbers, identifiers, and other flags.
 
 ```tlb
 block_info#9bc7a987 version:uint32
@@ -42,27 +42,36 @@ block_info#9bc7a987 version:uint32
     = BlockInfo;
 ```
 
--   `version`: The version of the block structure.
--   `not_master`: A flag indicating if this block is a masterchain block.
--   `after_merge`, `before_split`, `after_split`: Flags indicating the state of the block in the shardchain split and merge process.
--   `want_split`, `want_merge`: Flags indicating whether a shardchain split or merge is desired.
--   `key_block`: A flag indicating if this block is a key block.
--   `vert_seqno_incr`: Increment of the vertical sequence number.
--   `flags`: Additional flags for the block.
--   `seq_no`, `vert_seq_no`: Sequence numbers related to the block.
--   `shard`: The identifier of the shard where this block belongs.
--   `gen_utime`: The generation time of the block.
--   `start_lt`, `end_lt`: Logical time ranges associated with the block.
--   `gen_validator_list_hash_short`, `gen_catchain_seqno`: Information related to validators and catchain.
--   `min_ref_mc_seqno`, `prev_key_block_seqno`: Sequence numbers of referenced and previous key blocks.
--   `gen_software`: The version of the software that generated the block.
--   `master_ref`: A reference to the master block info if the block is not a master block.
--   `prev_ref`: A reference to the info of the previous block.
--   `prev_vert_ref`: A reference to the info of the previous block in the vertical sequence.
+| Field                           | Type                             | Description                                                               |
+| ------------------------------- | -------------------------------- | ------------------------------------------------------------------------- |
+| `version`                       | uint32                           | The version of the block structure.                                       |
+| `not_master`                    | (## 1)                           | A flag indicating if this block is a masterchain block.                   |
+| `after_merge`                   | (## 1)                           | A flag indicating the state of the block in the shardchain merge process. |
+| `before_split`                  | (## 1)                           | A flag indicating the state of the block before shardchain split.         |
+| `after_split`                   | (## 1)                           | A flag indicating the state of the block after shardchain split.          |
+| `want_split`                    | Bool                             | A flag indicating whether a shardchain split is desired.                  |
+| `want_merge`                    | Bool                             | A flag indicating whether a shardchain merge is desired.                  |
+| `key_block`                     | Bool                             | A flag indicating if this block is a key block.                           |
+| `vert_seqno_incr`               | (## 1)                           | Increment of the vertical sequence number.                                |
+| `flags`                         | (## 8)                           | Additional flags for the block.                                           |
+| `seq_no`                        | #                                | Sequence number related to the block.                                     |
+| `vert_seq_no`                   | #                                | Vertical sequence number related to the block.                            |
+| `shard`                         | ShardIdent                       | The identifier of the shard where this block belongs.                     |
+| `gen_utime`                     | uint32                           | The generation time of the block.                                         |
+| `start_lt`                      | uint64                           | Start logical time associated with the block.                             |
+| `end_lt`                        | uint64                           | End logical time associated with the block.                               |
+| `gen_validator_list_hash_short` | uint32                           | Short hash related to the list of validators.                             |
+| `gen_catchain_seqno`            | uint32                           | Sequence number related to the catchain.                                  |
+| `min_ref_mc_seqno`              | uint32                           | Minimum sequence number of referenced masterchain blocks.                 |
+| `prev_key_block_seqno`          | uint32                           | Sequence number of the previous key block.                                |
+| `gen_software`                  | flags . 0?GlobalVersion          | The version of the software that generated the block.                     |
+| `master_ref`                    | not_master?^BlkMasterInfo        | A reference to the master block info if the block is not a master block.  |
+| `prev_ref`                      | ^(BlkPrevInfo after_merge)       | A reference to the info of the previous block.                            |
+| `prev_vert_ref`                 | vert_seqno_incr?^(BlkPrevInfo 0) | A reference to the info of the previous block in the vertical sequence.   |
 
-## value_flow:^ValueFlow
+### value_flow:^ValueFlow
 
-This field represents the flow of currency within the block, including fees collected and other transactions involving currency:
+This field represents the flow of currency within the block, including fees collected and other transactions involving currency.
 
 ```tlb
 value_flow#b8e48dfb ^[ from_prev_blk:CurrencyCollection
@@ -78,16 +87,32 @@ value_flow#b8e48dfb ^[ from_prev_blk:CurrencyCollection
     ] = ValueFlow;
 ```
 
--   `from_prev_blk`, `to_next_blk`, `imported`, `exported`: These fields represent the flow of currency between blocks and in imports and exports.
--   `fees_collected`: The total amount of fees collected in the block.
--   `fees_imported`: The amount of fees imported into the block.
--   `recovered`: The amount of currency recovered in the block.
--   `created`: The amount of new currency created in the block.
--   `minted`: The amount of currency minted in the block.
+| Field            | Type               | Description                                              |
+| ---------------- | ------------------ | -------------------------------------------------------- |
+| `from_prev_blk`  | CurrencyCollection | Represents the flow of currency from the previous block. |
+| `to_next_blk`    | CurrencyCollection | Represents the flow of currency to the next block.       |
+| `imported`       | CurrencyCollection | Represents the flow of currency imported to the block.   |
+| `exported`       | CurrencyCollection | Represents the flow of currency exported from the block. |
+| `fees_collected` | CurrencyCollection | The total amount of fees collected in the block.         |
+| `fees_imported`  | CurrencyCollection | The amount of fees imported into the block.              |
+| `recovered`      | CurrencyCollection | The amount of currency recovered in the block.           |
+| `created`        | CurrencyCollection | The amount of new currency created in the block.         |
+| `minted`         | CurrencyCollection | The amount of currency minted in the block.              |
 
-## state_update:^(MERKLE_UPDATE ShardState)
+### state_update:^(MERKLE_UPDATE ShardState)
 
-This field represents the update of the shard state. The full scheme is as follows:
+This field represents the update of the shard state.
+
+| Field      | Type                        | Description                      |
+| ---------- | --------------------------- | -------------------------------- |
+| `old_hash` | bits256                     | The old hash of the shard state. |
+| `new_hash` | bits256                     | The new hash of the shard state. |
+| `old`      | \^[ShardState](#shardstate) | The old tate of the shard.       |
+| `new`      | \^[ShardState](#shardstate) | The new state of the shard.      |
+
+### ShardState
+
+`ShardState` can contain either information about the shard, or, in case if this shard is splitted, information about left and right splitted parts.
 
 ```tlb
 !merkle_update#02 {X:Type} old_hash:bits256 new_hash:bits256
@@ -108,39 +133,48 @@ shard_state#9023afe2 global_id:int32
     master_ref:(Maybe BlkMasterInfo) ]
     custom:(Maybe ^McStateExtra)
     = ShardStateUnsplit;
+```
 
+### ShardState Unsplitted
+
+```tlb
 _ ShardStateUnsplit = ShardState;
+```
+
+| Field                  | Type                    | Description                                                                             |
+| ---------------------- | ----------------------- | --------------------------------------------------------------------------------------- |
+| `global_id`            | int32                   | An ID of the network where this shard belongs. `-239` for mainnet and `-3` for testnet. |
+| `shard_id`             | ShardIdent              | The identifier of the shard.                                                            |
+| `seq_no`               | uint32                  | The latest sequence number associated with this shardchain.                             |
+| `vert_seq_no`          | #                       | The latest vertical sequence number associated with this shardchain.                    |
+| `gen_utime`            | uint32                  | The generation time associated with the creation of the shard.                          |
+| `gen_lt`               | uint64                  | The logical time associated with the creation of the shard.                             |
+| `min_ref_mc_seqno`     | uint32                  | Sequence number of the referenced masterchain block.                                    |
+| `out_msg_queue_info`   | ^OutMsgQueueInfo        | Information about the out message queue of this shard.                                  |
+| `before_split`         | (## 1)                  | A flag indicating whether a split happened in the previous block of this shardchain.    |
+| `accounts`             | ^ShardAccounts          | The state of accounts in the shard.                                                     |
+| `overload_history`     | uint64                  | History of overload events for the shard.                                               |
+| `underload_history`    | uint64                  | History of underload events for the shard.                                              |
+| `total_balance`        | CurrencyCollection      | Total balance for the shard.                                                            |
+| `total_validator_fees` | CurrencyCollection      | Total validator fees for the shard.                                                     |
+| `libraries`            | (HashmapE 256 LibDescr) | A hashmap of library descriptions in this shard.                                        |
+| `master_ref`           | (Maybe BlkMasterInfo)   | A reference to the master block info.                                                   |
+| `custom`               | (Maybe ^McStateExtra)   | Custom extra data for the shard state.                                                  |
+
+### ShardState Splitted
+
+```tlb
 split_state#5f327da5 left:^ShardStateUnsplit right:^ShardStateUnsplit = ShardState;
 ```
 
-`ShardState` can contain either information about the shard, or, in case if this shard is splitted, information about left and right splitted parts.
+| Field   | Type                                          | Description                         |
+| ------- | --------------------------------------------- | ----------------------------------- |
+| `left`  | \^[ShardStateUnsplit](#shardstate-unsplitted) | The state of the left split shard.  |
+| `right` | \^[ShardStateUnsplit](#shardstate-unsplitted) | The state of the right split shard. |
 
-Useful information in `MERKLE_UPDATE`:
+### extra:^BlockExtra
 
--   `old_hash`, `new_hash`: The old and new hash of the shard state.
--   `old`, `new`: The old and new state of the shard.
-
-The state of an unsplitted shard:
-
--   `global_id`: An ID of the network where this shard belongs. `-239` for mainnet and `-3` for testnet.
--   `shard_id`: The identifier of the shard.
--   `seq_no`, `vert_seq_no`: The latest sequence numbers associated with this shardchain.
--   `gen_utime`, `gen_lt`: The generation time and logical time associated with the creation of the shard.
--   `min_ref_mc_seqno`: Sequence number of the referenced masterchain block.
--   `out_msg_queue_info`: Information about the out message queue of this shard.
--   `before_split`: A flag indicating whether a split happened in the previous block of this shardchain.
--   `accounts`: The state of accounts in the shard.
--   `overload_history`, `underload_history`: History of overload and underload events for the shard.
--   `total_balance`, `total_validator_fees`: Total balance and validator fees for the shard.
--   `libraries`: A hashmap of library descriptions in this shard.
--   `master_ref`: A reference to the master block info.
--   `custom`: Custom extra data for the shard state.
-
-In the case of a split shard, `ShardState` simply contains the states of the `left` and `right` split shards.
-
-## extra:^BlockExtra
-
-This field contains extra information about the block:
+This field contains extra information about the block.
 
 ```tlb
 block_extra in_msg_descr:^InMsgDescr
@@ -151,8 +185,11 @@ block_extra in_msg_descr:^InMsgDescr
     custom:(Maybe ^McBlockExtra) = BlockExtra;
 ```
 
--   `in_msg_descr`, `out_msg_descr`: Descriptors of the incoming and outgoing messages in the block.
--   `account_blocks`: The block's associated account blocks.
--   `rand_seed`: The random seed for the block.
--   `created_by`: The entity (usually a validator's public key) that created the block.
--   `custom`: Custom extra data for the block.
+| Field            | Type                  | Description                                                           |
+| ---------------- | --------------------- | --------------------------------------------------------------------- |
+| `in_msg_descr`   | ^InMsgDescr           | Descriptor of the incoming messages in the block.                     |
+| `out_msg_descr`  | ^OutMsgDescr          | Descriptor of the outgoing messages in the block.                     |
+| `account_blocks` | ^ShardAccountBlocks   | The block's associated account blocks.                                |
+| `rand_seed`      | bits256               | The random seed for the block.                                        |
+| `created_by`     | bits256               | The entity (usually a validator's public key) that created the block. |
+| `custom`         | (Maybe ^McBlockExtra) | Custom extra data for the block.                                      |
