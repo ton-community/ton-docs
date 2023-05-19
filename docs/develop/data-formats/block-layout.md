@@ -103,11 +103,16 @@ value_flow#b8e48dfb ^[ from_prev_blk:CurrencyCollection
 
 This field represents the update of the shard state.
 
+```tlb
+!merkle_update#02 {X:Type} old_hash:bits256 new_hash:bits256
+    old:^X new:^X = MERKLE_UPDATE X;
+```
+
 | Field      | Type                        | Description                      |
 | ---------- | --------------------------- | -------------------------------- |
 | `old_hash` | bits256                     | The old hash of the shard state. |
 | `new_hash` | bits256                     | The new hash of the shard state. |
-| `old`      | \^[ShardState](#shardstate) | The old tate of the shard.       |
+| `old`      | \^[ShardState](#shardstate) | The old state of the shard.      |
 | `new`      | \^[ShardState](#shardstate) | The new state of the shard.      |
 
 ### ShardState
@@ -115,9 +120,13 @@ This field represents the update of the shard state.
 `ShardState` can contain either information about the shard, or, in case if this shard is splitted, information about left and right splitted parts.
 
 ```tlb
-!merkle_update#02 {X:Type} old_hash:bits256 new_hash:bits256
-    old:^X new:^X = MERKLE_UPDATE X;
+_ ShardStateUnsplit = ShardState;
+split_state#5f327da5 left:^ShardStateUnsplit right:^ShardStateUnsplit = ShardState;
+```
 
+### ShardState Unsplitted
+
+```tlb
 shard_state#9023afe2 global_id:int32
     shard_id:ShardIdent
     seq_no:uint32 vert_seq_no:#
@@ -133,12 +142,6 @@ shard_state#9023afe2 global_id:int32
     master_ref:(Maybe BlkMasterInfo) ]
     custom:(Maybe ^McStateExtra)
     = ShardStateUnsplit;
-```
-
-### ShardState Unsplitted
-
-```tlb
-_ ShardStateUnsplit = ShardState;
 ```
 
 | Field                  | Type                    | Description                                                                             |
@@ -162,10 +165,6 @@ _ ShardStateUnsplit = ShardState;
 | `custom`               | (Maybe ^McStateExtra)   | Custom extra data for the shard state.                                                  |
 
 ### ShardState Splitted
-
-```tlb
-split_state#5f327da5 left:^ShardStateUnsplit right:^ShardStateUnsplit = ShardState;
-```
 
 | Field   | Type                                          | Description                         |
 | ------- | --------------------------------------------- | ----------------------------------- |
