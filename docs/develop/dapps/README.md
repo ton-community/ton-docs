@@ -72,6 +72,10 @@ Here is a list of modern SDKs that are constantly supported and improved:
 
 - [ton-kotlin](https://github.com/andreypfau/ton-kotlin) — Kotlin SDK for TON Blockchain
 
+### Rust SDK
+
+- [ston-fi/tonlib-rs](https://github.com/ston-fi/tonlib-rs) — Rust SDK for The Open Network.
+
 ## Telegram WebApps (TWA)
 
 - [Telegram WebApps Documentation](https://core.telegram.org/bots/webapps) — full description on Telegram website.
