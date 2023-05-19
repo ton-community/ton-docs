@@ -1,0 +1,158 @@
+# Transaction layout
+
+Raw TL-B scheme of a transaction looks as:
+
+```tlb
+transaction$0111 account_addr:bits256 lt:uint64
+    prev_trans_hash:bits256 prev_trans_lt:uint64 now:uint32
+    outmsg_cnt:uint15
+    orig_status:AccountStatus end_status:AccountStatus
+    ^[ in_msg:(Maybe ^(Message Any)) out_msgs:(HashmapE 15 ^(Message Any)) ]
+    total_fees:CurrencyCollection state_update:^(HASH_UPDATE Account)
+    description:^TransactionDescr = Transaction;
+```
+
+Let's take a closer look at each field.
+
+## account_addr:bits256
+
+Hash part of the address, on which the transaction was executed. The workchain part isn't stored here, because there's no need in it as the transaction itself is already in some block with specified workchain.
+
+Read more about addresses:
+
+-   [Address of Smart Contract](https://docs.ton.org/learn/overviews/addresses#address-of-smart-contract)
+
+## lt:uint64
+
+`lt` is a _Logical time_ - you can read more about it here:
+
+-   [What is a logical time](https://docs.ton.org/develop/smart-contracts/guidelines/message-delivery-guarantees#what-is-a-logical-time)
+
+## prev_trans_hash:bits256
+
+The hash of a previous transaction on this account.
+
+## prev_trans_lt:uint64
+
+The `lt` of a previous transaction on this account.
+
+## now:uint32
+
+The `now` value that was set on executing this transaction. It's Unix timestamp in seconds.
+
+## outmsg_cnt:uint15
+
+The number of outgoing messages created while executing this transaction.
+
+## orig_status:AccountStatus
+
+Status of this account before executing the transaction. It can be one of these:
+
+```tlb
+acc_state_uninit$00 = AccountStatus;
+acc_state_frozen$01 = AccountStatus;
+acc_state_active$10 = AccountStatus;
+acc_state_nonexist$11 = AccountStatus;
+```
+
+## end_status:AccountStatus
+
+Status of this account after executing the transaction.
+
+## in_msg:(Maybe ^(Message Any))
+
+Incoming message, which triggered the execution of the transaction. There can be no message at all in case of special transactions such as _Storage_, _Tick_, _Tock_, _Split_, _Merge_.
+
+## out_msgs:(HashmapE 15 ^(Message Any))
+
+The dictionary which contains the list of a outgoing messages that were created while executing this transaction. The amount of these messages is stored in `outmsg_cnt:uint15` field which was described above.
+
+## total_fees:CurrencyCollection
+
+The total amount of fees that were collected while executing this transaction. It consists of a _Toncoin_ value and possibly some [Extra-currencies](https://docs.ton.org/develop/dapps/defi/coins#extra-currencies).
+
+## state_update:^(HASH_UPDATE Account)
+
+The `HASH_UPDATE` structure has the following scheme:
+
+```tlb
+update_hashes#72 {X:Type} old_hash:bits256 new_hash:bits256
+  = HASH_UPDATE X;
+```
+
+### old_hash:bits256
+
+Hash of the account state before executing the transaction.
+
+### new_hash:bits256
+
+Hash of the account state after executing the transaction.
+
+## description:^TransactionDescr
+
+The last field is a detailed description of a transaction. It has 7 possible variations, depending on a transaction type.
+
+### Ordinary
+
+```tlb
+trans_ord$0000 credit_first:Bool
+    storage_ph:(Maybe TrStoragePhase)
+    credit_ph:(Maybe TrCreditPhase)
+    compute_ph:TrComputePhase action:(Maybe ^TrActionPhase)
+    aborted:Bool bounce:(Maybe TrBouncePhase)
+    destroyed:Bool
+    = TransactionDescr;
+```
+
+### Storage
+
+```tlb
+trans_storage$0001 storage_ph:TrStoragePhase
+    = TransactionDescr;
+```
+
+### Tick-tock
+
+```tlb
+trans_tick_tock$001 is_tock:Bool storage_ph:TrStoragePhase
+    compute_ph:TrComputePhase action:(Maybe ^TrActionPhase)
+    aborted:Bool destroyed:Bool = TransactionDescr;
+```
+
+### Split prepare
+
+```tlb
+trans_split_prepare$0100 split_info:SplitMergeInfo
+    storage_ph:(Maybe TrStoragePhase)
+    compute_ph:TrComputePhase action:(Maybe ^TrActionPhase)
+    aborted:Bool destroyed:Bool
+    = TransactionDescr;
+```
+
+### Split install
+
+```tlb
+trans_split_install$0101 split_info:SplitMergeInfo
+    prepare_transaction:^Transaction
+    installed:Bool = TransactionDescr;
+```
+
+### Merge prepare
+
+```tlb
+trans_merge_prepare$0110 split_info:SplitMergeInfo
+    storage_ph:TrStoragePhase aborted:Bool
+    = TransactionDescr;
+```
+
+### Merge install
+
+```tlb
+trans_merge_install$0111 split_info:SplitMergeInfo
+    prepare_transaction:^Transaction
+    storage_ph:(Maybe TrStoragePhase)
+    credit_ph:(Maybe TrCreditPhase)
+    compute_ph:TrComputePhase action:(Maybe ^TrActionPhase)
+    aborted:Bool destroyed:Bool
+    = TransactionDescr;
+```
