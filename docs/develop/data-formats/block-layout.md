@@ -87,17 +87,17 @@ value_flow#b8e48dfb ^[ from_prev_blk:CurrencyCollection
     ] = ValueFlow;
 ```
 
-| Field            | Type               | Description                                              |
-| ---------------- | ------------------ | -------------------------------------------------------- |
-| `from_prev_blk`  | CurrencyCollection | Represents the flow of currency from the previous block. |
-| `to_next_blk`    | CurrencyCollection | Represents the flow of currency to the next block.       |
-| `imported`       | CurrencyCollection | Represents the flow of currency imported to the block.   |
-| `exported`       | CurrencyCollection | Represents the flow of currency exported from the block. |
-| `fees_collected` | CurrencyCollection | The total amount of fees collected in the block.         |
-| `fees_imported`  | CurrencyCollection | The amount of fees imported into the block.              |
-| `recovered`      | CurrencyCollection | The amount of currency recovered in the block.           |
-| `created`        | CurrencyCollection | The amount of new currency created in the block.         |
-| `minted`         | CurrencyCollection | The amount of currency minted in the block.              |
+| Field            | Type               | Description                                                |
+| ---------------- | ------------------ | ---------------------------------------------------------- |
+| `from_prev_blk`  | CurrencyCollection | Represents the flow of currencies from the previous block. |
+| `to_next_blk`    | CurrencyCollection | Represents the flow of currencies to the next block.       |
+| `imported`       | CurrencyCollection | Represents the flow of currencies imported to the block.   |
+| `exported`       | CurrencyCollection | Represents the flow of currencies exported from the block. |
+| `fees_collected` | CurrencyCollection | The total amount of fees collected in the block.           |
+| `fees_imported`  | CurrencyCollection | The amount of fees imported into the block.                |
+| `recovered`      | CurrencyCollection | The amount of currencies recovered in the block.           |
+| `created`        | CurrencyCollection | The amount of new currencies created in the block.         |
+| `minted`         | CurrencyCollection | The amount of currencies minted in the block.              |
 
 ### state_update:^(MERKLE_UPDATE ShardState)
 
