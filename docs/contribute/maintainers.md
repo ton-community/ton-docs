@@ -33,19 +33,19 @@ Over time, TON Docs has benefitted from the intellect and dedication of [numerou
 
 However, we would like to specially acknowledge the substantial contributions made by the following individuals. Their respective contributions have greatly enriched the quality and depth of our documentation:
 
--   [SpyCheese](https://github.com/SpyCheese): early contributions
--   [awesome-doge](https://github.com/awesome-doge): early contributions
 -   [akifoq](https://github.com/akifoq): early contributions
--   [Tal Kol](https://github.com/talkol): early contributions
--   [aSpite](https://github.com/aSpite): content
--   [krau5](https://github.com/krau5): improvements
--   [xssnick](https://github.com/xssnick): content
--   [LevZed](https://github.com/LevZed): content
--   [siandreev](https://github.com/siandreev): content
--   [TrueCarry](https://github.com/TrueCarry): content
 -   [amnch1](https://github.com/amnch1): fixes
--   [delovoyhomie](https://github.com/delovoyhomie): content
--   [ProgramCrafter](https://github.com/ProgramCrafter): content
+-   [aSpite](https://github.com/aSpite): content
+-   [awesome-doge](https://github.com/awesome-doge): early contributions
 -   [coalus](https://github.com/coalus): content
+-   [delovoyhomie](https://github.com/delovoyhomie): content
+-   [krau5](https://github.com/krau5): improvements
+-   [LevZed](https://github.com/LevZed): content
+-   [ProgramCrafter](https://github.com/ProgramCrafter): content
+-   [siandreev](https://github.com/siandreev): content
+-   [SpyCheese](https://github.com/SpyCheese): early contributions
+-   [Tal Kol](https://github.com/talkol): early contributions
+-   [TrueCarry](https://github.com/TrueCarry): content
+-   [xssnick](https://github.com/xssnick): content
 
 Our sincere appreciation to each and every contributor who has aided in making TON Docs a rich and reliable resource.
