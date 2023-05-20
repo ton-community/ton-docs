@@ -4,6 +4,8 @@
 To maximize your comprehension of this page, familiarizing yourself with the [TL-B language](/develop/data-formats/cell-boc) is highly recommended.
 :::
 
+## Transaction
+
 ```tlb
 transaction$0111 account_addr:bits256 lt:uint64
     prev_trans_hash:bits256 prev_trans_lt:uint64 now:uint32
@@ -14,21 +16,21 @@ transaction$0111 account_addr:bits256 lt:uint64
     description:^TransactionDescr = Transaction;
 ```
 
-| Field             | Type                                          | Description                                                                                                                                                                                                           |
-| ----------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `account_addr`    | bits256                                       | The hash part of the address on which the transaction was executed. [More about addresses](https://docs.ton.org/learn/overviews/addresses#address-of-smart-contract)                                                  |
-| `lt`              | uint64                                        | Represents _Logical time_. [More about logical time](https://docs.ton.org/develop/smart-contracts/guidelines/message-delivery-guarantees#what-is-a-logical-time)                                                      |
-| `prev_trans_hash` | bits256                                       | The hash of the previous transaction on this account.                                                                                                                                                                 |
-| `prev_trans_lt`   | uint64                                        | The `lt` of the previous transaction on this account.                                                                                                                                                                 |
-| `now`             | uint32                                        | The `now` value that was set when executing this transaction. It's a Unix timestamp in seconds.                                                                                                                       |
-| `outmsg_cnt`      | uint15                                        | The number of outgoing messages created while executing this transaction.                                                                                                                                             |
-| `orig_status`     | [AccountStatus](#accountstatus)               | The status of this account before the transaction was executed.                                                                                                                                                       |
-| `end_status`      | [AccountStatus](#accountstatus)               | The status of this account after executing the transaction.                                                                                                                                                           |
-| `in_msg`          | Maybe ^(Message Any)                          | The incoming message that triggered the execution of the transaction.                                                                                                                                                 |
-| `out_msgs`        | HashmapE 15 ^(Message Any)                    | The dictionary that contains the list of outgoing messages that were created while executing this transaction.                                                                                                        |
-| `total_fees`      | CurrencyCollection                            | The total amount of fees that were collected while executing this transaction. It consists of a _Toncoin_ value and possibly some [Extra-currencies](https://docs.ton.org/develop/dapps/defi/coins#extra-currencies). |
-| `state_update`    | ^([HASH_UPDATE](#hash_update) Account)        | The `HASH_UPDATE` structure                                                                                                                                                                                           |
-| `description`     | \^[TransactionDescr](#transactiondescr-types) | A detailed description of the transaction execution process.                                                                                                                                                          |
+| Field             | Type                                         | Description                                                                                                                                                                                                           |
+| ----------------- | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `account_addr`    | bits256                                      | The hash part of the address on which the transaction was executed. [More about addresses](https://docs.ton.org/learn/overviews/addresses#address-of-smart-contract)                                                  |
+| `lt`              | uint64                                       | Represents _Logical time_. [More about logical time](https://docs.ton.org/develop/smart-contracts/guidelines/message-delivery-guarantees#what-is-a-logical-time)                                                      |
+| `prev_trans_hash` | bits256                                      | The hash of the previous transaction on this account.                                                                                                                                                                 |
+| `prev_trans_lt`   | uint64                                       | The `lt` of the previous transaction on this account.                                                                                                                                                                 |
+| `now`             | uint32                                       | The `now` value that was set when executing this transaction. It's a Unix timestamp in seconds.                                                                                                                       |
+| `outmsg_cnt`      | uint15                                       | The number of outgoing messages created while executing this transaction.                                                                                                                                             |
+| `orig_status`     | [AccountStatus](#accountstatus)              | The status of this account before the transaction was executed.                                                                                                                                                       |
+| `end_status`      | [AccountStatus](#accountstatus)              | The status of this account after executing the transaction.                                                                                                                                                           |
+| `in_msg`          | Maybe ^(Message Any)                         | The incoming message that triggered the execution of the transaction.                                                                                                                                                 |
+| `out_msgs`        | HashmapE 15 ^(Message Any)                   | The dictionary that contains the list of outgoing messages that were created while executing this transaction.                                                                                                        |
+| `total_fees`      | CurrencyCollection                           | The total amount of fees that were collected while executing this transaction. It consists of a _Toncoin_ value and possibly some [Extra-currencies](https://docs.ton.org/develop/dapps/defi/coins#extra-currencies). |
+| `state_update`    | ^([HASH_UPDATE](#hash_update) Account)       | The `HASH_UPDATE` structure                                                                                                                                                                                           |
+| `description`     | ^[TransactionDescr](#transactiondescr-types) | A detailed description of the transaction execution process.                                                                                                                                                          |
 
 ## AccountStatus
 
@@ -125,7 +127,7 @@ trans_tick_tock$001 is_tock:Bool storage_ph:TrStoragePhase
 
 ## Split prepare
 
-:::warning
+:::note
 This type of transaction is not currently in use.
 :::
 
@@ -150,7 +152,7 @@ trans_split_prepare$0100 split_info:SplitMergeInfo
 
 ## Split install
 
-:::warning
+:::note
 This type of transaction is not currently in use.
 :::
 
@@ -162,15 +164,15 @@ trans_split_install$0101 split_info:SplitMergeInfo
     installed:Bool = TransactionDescr;
 ```
 
-| Field                 | Type                                 | Description                                                                           |
-| --------------------- | ------------------------------------ | ------------------------------------------------------------------------------------- |
-| `split_info`          | SplitMergeInfo                       | Information about split process.                                                      |
-| `prepare_transaction` | \^[Transaction](#transaction-layout) | Information about the [transaction prepared](#split-prepare) for the split operation. |
-| `installed`           | Bool                                 | Indicates whether the transaction was installed.                                      |
+| Field                 | Type                         | Description                                                                           |
+| --------------------- | ---------------------------- | ------------------------------------------------------------------------------------- |
+| `split_info`          | SplitMergeInfo               | Information about split process.                                                      |
+| `prepare_transaction` | ^[Transaction](#transaction) | Information about the [transaction prepared](#split-prepare) for the split operation. |
+| `installed`           | Bool                         | Indicates whether the transaction was installed.                                      |
 
 ## Merge prepare
 
-:::warning
+:::note
 This type of transaction is not currently in use.
 :::
 
@@ -190,7 +192,7 @@ trans_merge_prepare$0110 split_info:SplitMergeInfo
 
 ## Merge install
 
-:::warning
+:::note
 This type of transaction is not currently in use.
 :::
 
@@ -206,13 +208,13 @@ trans_merge_install$0111 split_info:SplitMergeInfo
     = TransactionDescr;
 ```
 
-| Field                 | Type                                 | Description                                                                                                                                                        |
-| --------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `split_info`          | SplitMergeInfo                       | Information about merge process.                                                                                                                                   |
-| `prepare_transaction` | \^[Transaction](#transaction-layout) | Information about the [transaction prepared](#merge-prepare) for the merge operation.                                                                              |
-| `storage_ph`          | Maybe TrStoragePhase                 | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases) |
-| `credit_ph`           | Maybe TrCreditPhase                  | Contains information about credit phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)  |
-| `compute_ph`          | TrComputePhase                       | Contains information about compute phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases) |
-| `action`              | Maybe ^TrActionPhase                 | Contains information about action phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)  |
-| `aborted`             | Bool                                 | Indicates whether the transaction execution was aborted.                                                                                                           |
-| `destroyed`           | Bool                                 | Indicates whether the account was destroyed during the execution.                                                                                                  |
+| Field                 | Type                         | Description                                                                                                                                                        |
+| --------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `split_info`          | SplitMergeInfo               | Information about merge process.                                                                                                                                   |
+| `prepare_transaction` | ^[Transaction](#transaction) | Information about the [transaction prepared](#merge-prepare) for the merge operation.                                                                              |
+| `storage_ph`          | Maybe TrStoragePhase         | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases) |
+| `credit_ph`           | Maybe TrCreditPhase          | Contains information about credit phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)  |
+| `compute_ph`          | TrComputePhase               | Contains information about compute phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases) |
+| `action`              | Maybe ^TrActionPhase         | Contains information about action phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)  |
+| `aborted`             | Bool                         | Indicates whether the transaction execution was aborted.                                                                                                           |
+| `destroyed`           | Bool                         | Indicates whether the account was destroyed during the execution.                                                                                                  |
