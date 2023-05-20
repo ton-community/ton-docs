@@ -1,5 +1,9 @@
 # Transaction layout
 
+:::info
+To maximize your comprehension of this page, familiarizing yourself with the [TL-B language](/develop/data-formats/cell-boc) is highly recommended.
+:::
+
 ```tlb
 transaction$0111 account_addr:bits256 lt:uint64
     prev_trans_hash:bits256 prev_trans_lt:uint64 now:uint32
