@@ -4,6 +4,8 @@
 To maximize your comprehension of this page, familiarizing yourself with the [TL-B language](/develop/data-formats/cell-boc) is highly recommended.
 :::
 
+## Block
+
 Raw TL-B scheme of a block looks as:
 
 ```tlb
@@ -103,7 +105,7 @@ value_flow#b8e48dfb ^[ from_prev_blk:CurrencyCollection
 | `created`        | CurrencyCollection | The amount of new currencies created in the block.         |
 | `minted`         | CurrencyCollection | The amount of currencies minted in the block.              |
 
-### state_update:^(MERKLE_UPDATE ShardState)
+## state_update:^(MERKLE_UPDATE ShardState)
 
 This field represents the update of the shard state.
 
@@ -112,12 +114,12 @@ This field represents the update of the shard state.
     old:^X new:^X = MERKLE_UPDATE X;
 ```
 
-| Field      | Type                        | Description                      |
-| ---------- | --------------------------- | -------------------------------- |
-| `old_hash` | bits256                     | The old hash of the shard state. |
-| `new_hash` | bits256                     | The new hash of the shard state. |
-| `old`      | \^[ShardState](#shardstate) | The old state of the shard.      |
-| `new`      | \^[ShardState](#shardstate) | The new state of the shard.      |
+| Field      | Type                       | Description                      |
+| ---------- | -------------------------- | -------------------------------- |
+| `old_hash` | bits256                    | The old hash of the shard state. |
+| `new_hash` | bits256                    | The new hash of the shard state. |
+| `old`      | ^[ShardState](#shardstate) | The old state of the shard.      |
+| `new`      | ^[ShardState](#shardstate) | The new state of the shard.      |
 
 ### ShardState
 
@@ -170,12 +172,12 @@ shard_state#9023afe2 global_id:int32
 
 ### ShardState Splitted
 
-| Field   | Type                                          | Description                         |
-| ------- | --------------------------------------------- | ----------------------------------- |
-| `left`  | \^[ShardStateUnsplit](#shardstate-unsplitted) | The state of the left split shard.  |
-| `right` | \^[ShardStateUnsplit](#shardstate-unsplitted) | The state of the right split shard. |
+| Field   | Type                                         | Description                         |
+| ------- | -------------------------------------------- | ----------------------------------- |
+| `left`  | ^[ShardStateUnsplit](#shardstate-unsplitted) | The state of the left split shard.  |
+| `right` | ^[ShardStateUnsplit](#shardstate-unsplitted) | The state of the right split shard. |
 
-### extra:^BlockExtra
+## extra:^BlockExtra
 
 This field contains extra information about the block.
 
