@@ -78,7 +78,7 @@ trans_ord$0000 credit_first:Bool
 
 | Field          | Type                 | Description                                                                                                                                                        |
 | -------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `credit_first` | Bool                 | A flag that correlates with `bounce` flag of an incoming message.                                                                                                  |
+| `credit_first` | Bool                 | A flag that correlates with `bounce` flag of an incoming message. `credit_first = !bounce`                                                                         |
 | `storage_ph`   | Maybe TrStoragePhase | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases) |
 | `credit_ph`    | Maybe TrCreditPhase  | Contains information about credit phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)  |
 | `compute_ph`   | TrComputePhase       | Contains information about compute phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases) |
@@ -96,9 +96,9 @@ trans_storage$0001 storage_ph:TrStoragePhase
     = TransactionDescr;
 ```
 
-| Field        | Type           | Description                                                          |
-| ------------ | -------------- | -------------------------------------------------------------------- |
-| `storage_ph` | TrStoragePhase | Contains information about storage phase of a transaction execution. |
+| Field        | Type           | Description                                                                                                                                                        |
+| ------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `storage_ph` | TrStoragePhase | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases) |
 
 ## Tick-tock
 
@@ -110,14 +110,14 @@ trans_tick_tock$001 is_tock:Bool storage_ph:TrStoragePhase
     aborted:Bool destroyed:Bool = TransactionDescr;
 ```
 
-| Field        | Type                 | Description                                                          |
-| ------------ | -------------------- | -------------------------------------------------------------------- |
-| `is_tock`    | Bool                 | A flag indicating the type of transaction                            |
-| `storage_ph` | TrStoragePhase       | Contains information about storage phase of a transaction execution. |
-| `compute_ph` | TrComputePhase       | Contains information about compute phase of a transaction execution. |
-| `action`     | Maybe ^TrActionPhase | Contains information about action phase of a transaction execution.  |
-| `aborted`    | Bool                 | Indicates whether the transaction execution was aborted.             |
-| `destroyed`  | Bool                 | Indicates whether the account was destroyed during the execution.    |
+| Field        | Type                 | Description                                                                                                                                                        |
+| ------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `is_tock`    | Bool                 | A flag indicating the type of transaction. Used to separate `Tick` and `Tock` transactions                                                                         |
+| `storage_ph` | TrStoragePhase       | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases) |
+| `compute_ph` | TrComputePhase       | Contains information about compute phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases) |
+| `action`     | Maybe ^TrActionPhase | Contains information about action phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)  |
+| `aborted`    | Bool                 | Indicates whether the transaction execution was aborted.                                                                                                           |
+| `destroyed`  | Bool                 | Indicates whether the account was destroyed during the execution.                                                                                                  |
 
 ## Split prepare
 
@@ -135,14 +135,14 @@ trans_split_prepare$0100 split_info:SplitMergeInfo
     = TransactionDescr;
 ```
 
-| Field        | Type                 | Description                                                          |
-| ------------ | -------------------- | -------------------------------------------------------------------- |
-| `split_info` | SplitMergeInfo       | Information about split transactions.                                |
-| `storage_ph` | Maybe TrStoragePhase | Contains information about storage phase of a transaction execution. |
-| `compute_ph` | TrComputePhase       | Contains information about compute phase of a transaction execution. |
-| `action`     | Maybe ^TrActionPhase | Contains information about action phase of a transaction execution.  |
-| `aborted`    | Bool                 | Indicates whether the transaction execution was aborted.             |
-| `destroyed`  | Bool                 | Indicates whether the account was destroyed during the execution.    |
+| Field        | Type                 | Description                                                                                                                                                        |
+| ------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `split_info` | SplitMergeInfo       | Information about split process.                                                                                                                                   |
+| `storage_ph` | Maybe TrStoragePhase | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases) |
+| `compute_ph` | TrComputePhase       | Contains information about compute phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases) |
+| `action`     | Maybe ^TrActionPhase | Contains information about action phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)  |
+| `aborted`    | Bool                 | Indicates whether the transaction execution was aborted.                                                                                                           |
+| `destroyed`  | Bool                 | Indicates whether the account was destroyed during the execution.                                                                                                  |
 
 ## Split install
 
@@ -160,7 +160,7 @@ trans_split_install$0101 split_info:SplitMergeInfo
 
 | Field                 | Type           | Description                                                         |
 | --------------------- | -------------- | ------------------------------------------------------------------- |
-| `split_info`          | SplitMergeInfo | Information about split transactions.                               |
+| `split_info`          | SplitMergeInfo | Information about split process.                                    |
 | `prepare_transaction` | ^Transaction   | Information about the transaction prepared for the split operation. |
 | `installed`           | Bool           | Indicates whether the transaction was installed.                    |
 
@@ -178,11 +178,11 @@ trans_merge_prepare$0110 split_info:SplitMergeInfo
     = TransactionDescr;
 ```
 
-| Field        | Type           | Description                                                          |
-| ------------ | -------------- | -------------------------------------------------------------------- |
-| `split_info` | SplitMergeInfo | Information about merge transactions.                                |
-| `storage_ph` | TrStoragePhase | Contains information about storage phase of a transaction execution. |
-| `aborted`    | Bool           | Indicates whether the transaction execution was aborted.             |
+| Field        | Type           | Description                                                                                                                                                        |
+| ------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `split_info` | SplitMergeInfo | Information about merge process.                                                                                                                                   |
+| `storage_ph` | TrStoragePhase | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases) |
+| `aborted`    | Bool           | Indicates whether the transaction execution was aborted.                                                                                                           |
 
 ## Merge install
 
@@ -202,13 +202,13 @@ trans_merge_install$0111 split_info:SplitMergeInfo
     = TransactionDescr;
 ```
 
-| Field                 | Type                 | Description                                                          |
-| --------------------- | -------------------- | -------------------------------------------------------------------- |
-| `split_info`          | SplitMergeInfo       | Information about merge transactions.                                |
-| `prepare_transaction` | ^Transaction         | Information about the transaction prepared for the merge operation.  |
-| `storage_ph`          | Maybe TrStoragePhase | Contains information about storage phase of a transaction execution. |
-| `credit_ph`           | Maybe TrCreditPhase  | Contains information about credit phase of a transaction execution.  |
-| `compute_ph`          | TrComputePhase       | Contains information about compute phase of a transaction execution. |
-| `action`              | Maybe ^TrActionPhase | Contains information about action phase of a transaction execution.  |
-| `aborted`             | Bool                 | Indicates whether the transaction execution was aborted.             |
-| `destroyed`           | Bool                 | Indicates whether the account was destroyed during the execution.    |
+| Field                 | Type                 | Description                                                                                                                                                        |
+| --------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `split_info`          | SplitMergeInfo       | Information about merge process.                                                                                                                                   |
+| `prepare_transaction` | ^Transaction         | Information about the transaction prepared for the merge operation.                                                                                                |
+| `storage_ph`          | Maybe TrStoragePhase | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases) |
+| `credit_ph`           | Maybe TrCreditPhase  | Contains information about credit phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)  |
+| `compute_ph`          | TrComputePhase       | Contains information about compute phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases) |
+| `action`              | Maybe ^TrActionPhase | Contains information about action phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)  |
+| `aborted`             | Bool                 | Indicates whether the transaction execution was aborted.                                                                                                           |
+| `destroyed`           | Bool                 | Indicates whether the account was destroyed during the execution.                                                                                                  |
