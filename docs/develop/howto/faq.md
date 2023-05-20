@@ -97,6 +97,9 @@ To learn more about transaction verification, please see the following examples:
 
 ### What is the layout of a transaction in TON?
 
+Detailed explanations on each field of the layout:
+- [Transaction layout](/develop/data-formats/transaction-layout)
+
 Fundamentals:
 For more info on TON transaction fundamentals please see [page 75 of TON Whitepaper](https://ton.org/docs/tblkch.pdf#page=75&zoom=100,148,290):
 
