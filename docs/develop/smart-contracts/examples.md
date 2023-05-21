@@ -9,15 +9,16 @@ Make sure you have thoroughly tested contracts before using them in a production
 ## FunC Smart Contracts
 
 ### TON Production used Smart Contracts
-* https://github.com/ton-blockchain/wallet-contract
-* https://github.com/ton-blockchain/governance-contract
-* https://github.com/ton-blockchain/bridge-func
-* https://github.com/ton-blockchain/token-bridge-func
-* https://github.com/ton-blockchain/lockup-wallet-contract/tree/main/universal
-* https://github.com/ton-blockchain/lockup-wallet-contract/tree/main/vesting
-* https://github.com/ton-blockchain/multisig-contract
-* https://github.com/ton-blockchain/token-contract
-* https://github.com/ton-blockchain/dns-contract
+
+* [wallet-contract](https://github.com/ton-blockchain/wallet-contract)
+* [governance-contract](https://github.com/ton-blockchain/governance-contract)
+* [ton-blockchain/bridge-func](https://github.com/ton-blockchain/bridge-func)
+* [token-bridge-func](https://github.com/ton-blockchain/token-bridge-func)
+* [lockup-wallet-contract/universal](https://github.com/ton-blockchain/lockup-wallet-contract/tree/main/universal)
+* [lockup-wallet-contract/vesting](https://github.com/ton-blockchain/lockup-wallet-contract/tree/main/vesting)
+* [multisig-contract](https://github.com/ton-blockchain/multisig-contract)
+* [token-contract](https://github.com/ton-blockchain/token-contract)
+* [dns-contract](https://github.com/ton-blockchain/dns-contract)
 
 
 ### TON Ecosystem Smart Contracts
@@ -97,6 +98,49 @@ Make sure you have thoroughly tested contracts before using them in a production
 * https://github.com/Trinketer22/governance_tests/blob/master/config_tests/tests/
 * https://github.com/Trinketer22/governance_tests/blob/master/elector_tests/tests/complaint-test.fc
 
+
+## Fift Smart Contracts
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/CreateState.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/asm-to-cpp.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/auto-dns.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/complaint-vote-req.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/complaint-vote-signed.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/config-proposal-vote-req.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/config-proposal-vote-signed.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/create-config-proposal.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/create-config-upgrade-proposal.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/create-elector-upgrade-proposal.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/envelope-complaint.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/gen-zerostate-test.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/gen-zerostate.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-one.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/manual-dns-manage.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-auto-dns.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-highload-wallet-v2.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-highload-wallet.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-manual-dns.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-pinger.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-pow-testgiver.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-restricted-wallet.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-restricted-wallet2.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-restricted-wallet3.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-testgiver.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-wallet-v2.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-wallet-v3.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-wallet.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/show-addr.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/testgiver.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/update-config-smc.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/update-config.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/update-elector-smc.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/validator-elect-req.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/validator-elect-signed.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-v2.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-v3.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet.fif
+* https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-v3-code.fif
 
 ## FunC Libraries and Helpers
 
