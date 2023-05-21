@@ -313,7 +313,7 @@ const config = {
           },
           {
             type: 'dropdown',
-            to: 'develop/getting-started',
+            to: 'develop/overview',
             position: 'left',
             label: 'Develop',
             items: [
