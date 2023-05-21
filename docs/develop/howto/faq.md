@@ -158,7 +158,7 @@ To better understand how this process works, please refer [Payments Processing](
 ### Is it possible to have a named account similar to ENS
 
 Yes, use TON DNS:
-- [What is TON DNS?](/learn/services/dns)
+- [TON DNS & Domains](/participate/web3/dns)
 
 ### How to distinguish between a normal account and a smart contract?
 

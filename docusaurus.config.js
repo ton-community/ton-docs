@@ -60,17 +60,6 @@ const config = {
             to: '/learn/overviews/tl-b-language',
             from: '/learn/overviews/TL-B_Language',
           },
-
-
-          // services
-//          {
-//            to: '/learn/services/dns',
-//            from: '/develop/services/dns',
-//          },
-//          {
-//            to: '/learn/services/payments',
-//            from: '/develop/services/payments',
-//          },
           {
             to: '/learn/networking/low-level-adnl',
             from: '/learn/overviews/adnl',
@@ -83,6 +72,14 @@ const config = {
           {
             to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
             from: '/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot-2',
+          },
+          {
+            to: '/develop/get-started-with-ton'
+            from: '/develop/onboarding-challenge'
+          },
+          {
+            to: '/develop/overview'
+            from: '/develop/getting-started'
           },
         ],
       },
