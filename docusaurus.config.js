@@ -73,6 +73,14 @@ const config = {
             to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
             from: '/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot-2',
           },
+          {
+            to: '/develop/get-started-with-ton'
+            from: '/develop/onboarding-challenge'
+          },
+          {
+            to: '/develop/overview'
+            from: '/develop/getting-started'
+          },
         ],
       },
     ],
