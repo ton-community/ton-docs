@@ -60,17 +60,6 @@ const config = {
             to: '/learn/overviews/tl-b-language',
             from: '/learn/overviews/TL-B_Language',
           },
-
-
-          // services
-//          {
-//            to: '/learn/services/dns',
-//            from: '/develop/services/dns',
-//          },
-//          {
-//            to: '/learn/services/payments',
-//            from: '/develop/services/payments',
-//          },
           {
             to: '/learn/networking/low-level-adnl',
             from: '/learn/overviews/adnl',

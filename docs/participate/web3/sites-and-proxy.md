@@ -6,7 +6,7 @@ From the technical perspective, TON Sites are very much like standard websites, 
 
 In order to access existing sites and create new TON, Sites one needs special gateways between the "ordinary" internet and the TON Network. Essentially, TON Sites are accessed with the aid of a HTTP->RLDP proxy running locally on the client's machine and they are created by means of a reverse RLDP->HTTP proxy running on a remote web server.
 
-[Read more about TON Sites, WWW, and Proxy](/learn/services/sites-www-proxy)
+[Read more about TON Sites, WWW, and Proxy](https://blog.ton.org/ton-sites)
 
 ## Running an entry proxy
 

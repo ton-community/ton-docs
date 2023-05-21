@@ -7,7 +7,7 @@ containing the transactions in question is confirmed.
 
 Because the overall expense of such instant payments is so minimal, they can be used for micropayments in games, APIs, and off-chain apps. [See examples](/develop/dapps/defi/ton-payments#examples).
 
-* [TON Payments overview article](/learn/services/payments)
+* [Payments on TON](https://blog.ton.org/ton-payments)
 
 ## Payment channels
 

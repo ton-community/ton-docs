@@ -114,5 +114,5 @@ App receives the encrypted message, decrypts it and closes the “pending confir
 ## See Also
 
 * [Ton Connect Overview](/dapps/ton-connect/)
-* [Integration manual](/develop/dapps/integration)
+* [Integration manual](/develop/dapps/ton-connect/integration)
 * [Telegram bot integration manual](/develop/dapps/ton-connect/tg-bot-integration)

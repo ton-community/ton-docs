@@ -2,10 +2,6 @@
 
 TON DNS is a service for translating human-readable domain names (such as `test.ton` or `mysite.temp.ton`) into TON Smart Contract Addresses, ADNL Addresses employed by services running on the TON Network (such as TON Sites) and so on.
 
-:::tip Starter tip
-To understand more about how it works, please read the '[What is TON DNS?](/learn/services/dns)' article.
-:::
-
 ## Standard
 
 [TON DNS Standard](https://github.com/ton-blockchain/TIPs/issues/81) describes the format of domain names, the process of resolving a domain, the interface of DNS smart contracts and the format of DNS records.
