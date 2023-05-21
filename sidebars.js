@@ -105,11 +105,11 @@ const sidebars = {
   ],
   develop: [
 
-    'develop/getting-started',
+    'develop/overview',
     {
       type: 'doc',
       label: 'Get Started with TON',
-      id: 'develop/onboarding-challenge',
+      id: 'develop/get-started-with-ton',
     },
     {
       type: 'category',
