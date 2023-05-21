@@ -135,4 +135,4 @@ In a few minutes you will be able to access your website using the chosen domain
  * [TON DNS](/participate/web3/dns)
  * [TON Web3 Overview](/participate/web3/overview/)
  * [Site & Domain Management](/participate/web3/site-management)
- * Author: [Andrew Burnosov](https://github.com/AndreyBur) (TG: [@AndrewBurnosov](https://t.me/AndreyBurnosov))
+ * Author: [Andrew Burnosov](https://github.com/AndreyBurnosov) (TG: [@AndrewBurnosov](https://t.me/AndreyBurnosov))
