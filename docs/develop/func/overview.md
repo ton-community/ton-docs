@@ -3,17 +3,6 @@
 A high-level language FunC is used to program smart contracts on TON.
 
 FunC is a domain-specific, C-like, statically typed language.
-
-FunC programs are compiled into Fift assembler code, which generates corresponding bytecode for the [TON Virtual Machine](/learn/tvm-instructions/tvm-overview).
-
-Further this bytecode (actually a [tree of cells](/learn/overviews/cells), like any other data in TON Blockchain) can be used for creating smart contracts in the blockchain or can be run on a local instance of TVM.
-
-You can find more information about FunC in the [DOCUMENTATION](/develop/func/types) section.
-
-:::info
-FunC documentation was initially written by [@akifoq](https://github.com/akifoq).
-:::
-
 Here is a simple example method for sending money written in FunC:
 
 ```func
@@ -27,6 +16,16 @@ Here is a simple example method for sending money written in FunC:
     send_raw_message(msg, 64);
 }
 ```
+
+FunC programs are compiled into Fift assembler code, which generates corresponding bytecode for the [TON Virtual Machine](/learn/tvm-instructions/tvm-overview).
+
+Further this bytecode (actually a [tree of cells](/learn/overviews/cells), like any other data in TON Blockchain) can be used for creating smart contracts in the blockchain or can be run on a local instance of TVM.
+
+You can find more information about FunC in the [DOCUMENTATION](/develop/func/types) section.
+
+:::info
+FunC documentation was initially written by [@akifoq](https://github.com/akifoq).
+:::
 
 ## Compiler
 
@@ -91,7 +90,7 @@ You can also study previous competitions for learning purposes:
 
 Standard basic smart contracts like wallets, electors (manages validation on TON), multi-signature wallets, etc. can be a reference when studying.
 
-* [Smart contract examples](/develop/smart-contracts/#smart-contracts-examples)
+* [Smart contract examples](/develop/smart-contracts/examples)
 
 ## Changelog
 [History of funC updates](/develop/func/changelog).
