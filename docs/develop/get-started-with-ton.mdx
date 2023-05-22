@@ -198,8 +198,10 @@ import {getHttpEndpoint} from "@orbs-network/ton-access";
 
   // ... previous code
 
-  // get the decentralized RPC endpoint
-  const endpoint = await getHttpEndpoint();
+  // get the decentralized RPC endpoint in Testnet
+  const endpoint = await getHttpEndpoint({
+    network: "testnet",
+  });
 
   // initialize ton library
   const client = new TonClient({ endpoint });
@@ -547,7 +549,7 @@ There are two main ways to mine an NFT on TON:
 
 Below are the steps needed to initiate your first Testnet transaction to mine your NFT:
 
-1. Activate [Testnet mode within your Tonkeeper walle](/participate/wallets/apps#tonkeeper-test-environment)
+1. Activate [Testnet mode within your Tonkeeper wallet](/participate/wallets/apps#tonkeeper-test-environment)
 2. Input our testnet wallet address from Tonkeeper into `wallet` variable in the `index.ts`
 3. Input address of the [NFT collection from Testnet](https://testnet.getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX) into `collection` variable in the `index.ts`
 
@@ -587,8 +589,12 @@ Hey! For those who wish to mine an NFT on TON Mainnet, these instructions should
 1. You have activated _mainnet_ mode in your Tonkeeper (it should hold at least 0.1 TON).
 2. Input our _mainnet_ wallet address from Tonkeeper into `wallet` variable in the `index.ts`
 3. Input address of the [NFT collection from the Mainnet](https://getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX) into `collection` variable in the `index.ts`
-4. You have __changed API provider__ URL to the _mainnet_:
-    * remove `testnet.` subdomain from the API URL
+4. Replace __endpoint__ to the _Mainnet_, for orbs-access it enables with excluding testnet argument in _getHttpEndpoint_:
+
+```ts title="ton-onboarding-challenge/index.ts"
+// get the decentralized RPC endpoint in Mainnet
+const endpoint = await getHttpEndpoint();
+```
 
 
 #### Mine A Mainnet NFT Rocket

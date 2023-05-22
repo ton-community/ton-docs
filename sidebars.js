@@ -195,7 +195,8 @@ const sidebars = {
               items: [
                 'develop/smart-contracts/tutorials/multisig',
                 'develop/smart-contracts/tutorials/multisig-js',
-                'develop/smart-contracts/tutorials/wallet'
+                'develop/smart-contracts/tutorials/wallet',
+                'develop/smart-contracts/examples'
               ],
             },
           ],
