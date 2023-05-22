@@ -198,3 +198,7 @@ block_extra in_msg_descr:^InMsgDescr
 | `rand_seed`      | bits256               | The random seed for the block.                                        |
 | `created_by`     | bits256               | The entity (usually a validator's public key) that created the block. |
 | `custom`         | (Maybe ^McBlockExtra) | Custom extra data for the block.                                      |
+
+## See also
+
+-   Original description of [Block layout](https://docs.ton.org/tblkch.pdf#page=96&zoom=100,148,172) from whitepaper
