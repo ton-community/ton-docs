@@ -273,7 +273,7 @@ const config = {
             items: [
 
               {
-                to: 'develop/onboarding-challenge',
+                to: 'develop/get-started-with-ton',
                 label: 'Get Started with TON',
               },
               {
