@@ -48,32 +48,32 @@ block_info#9bc7a987 version:uint32
     = BlockInfo;
 ```
 
-| Field                           | Type                    | Description                                                                                                       |
-| ------------------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `version`                       | uint32                  | The version of the block structure.                                                                               |
-| `not_master`                    | (## 1)                  | A flag indicating if this block is a masterchain block.                                                           |
-| `after_merge`                   | (## 1)                  | A flag indicating if this block was created right after the merge of two shardchains, so it has two parent blocks |
-| `before_split`                  | (## 1)                  | A flag indicating if this block was created right before the split of its shardchain                              |
-| `after_split`                   | (## 1)                  | A flag indicating if this block was created right after the split of its shardchain                               |
-| `want_split`                    | Bool                    | A flag indicating whether a shardchain split is desired.                                                          |
-| `want_merge`                    | Bool                    | A flag indicating whether a shardchain merge is desired.                                                          |
-| `key_block`                     | Bool                    | A flag indicating if this block is a key block.                                                                   |
-| `vert_seqno_incr`               | (## 1)                  | Increment of the vertical sequence number.                                                                        |
-| `flags`                         | (## 8)                  | Additional flags for the block.                                                                                   |
-| `seq_no`                        | #                       | Sequence number related to the block.                                                                             |
-| `vert_seq_no`                   | #                       | Vertical sequence number related to the block.                                                                    |
-| `shard`                         | ShardIdent              | The identifier of the shard where this block belongs.                                                             |
-| `gen_utime`                     | uint32                  | The generation time of the block.                                                                                 |
-| `start_lt`                      | uint64                  | Start logical time associated with the block.                                                                     |
-| `end_lt`                        | uint64                  | End logical time associated with the block.                                                                       |
-| `gen_validator_list_hash_short` | uint32                  | Short hash related to the list of validators at the moment of generation of this block.                           |
-| `gen_catchain_seqno`            | uint32                  | [Catchain](/catchain.pdf) sequence number related to this block.                                                  |
-| `min_ref_mc_seqno`              | uint32                  | Minimum sequence number of referenced masterchain block.                                                          |
-| `prev_key_block_seqno`          | uint32                  | Sequence number of the previous key block.                                                                        |
-| `gen_software`                  | flags . 0?GlobalVersion | The version of the software that generated the block.                                                             |
-| `master_ref`                    | BlkMasterInfo           | A reference to the master block if the block is not a master. Stored in a reference. block.                       |
-| `prev_ref`                      | BlkPrevInfo after_merge | A reference to the previous block. Stored in a reference.                                                         |
-| `prev_vert_ref`                 | BlkPrevInfo 0           | A reference to the previous block in the vertical sequence if it exists. Stored in a reference.                   |
+| Field                           | Type                    | Description                                                                                                           |
+| ------------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `version`                       | uint32                  | The version of the block structure.                                                                                   |
+| `not_master`                    | (## 1)                  | A flag indicating if this block is a masterchain block.                                                               |
+| `after_merge`                   | (## 1)                  | A flag indicating if this block was created right after the merge of two shardchains, so it has two parent blocks     |
+| `before_split`                  | (## 1)                  | A flag indicating if this block was created right before the split of its shardchain                                  |
+| `after_split`                   | (## 1)                  | A flag indicating if this block was created right after the split of its shardchain                                   |
+| `want_split`                    | Bool                    | A flag indicating whether a shardchain split is desired.                                                              |
+| `want_merge`                    | Bool                    | A flag indicating whether a shardchain merge is desired.                                                              |
+| `key_block`                     | Bool                    | A flag indicating if this block is a key block.                                                                       |
+| `vert_seqno_incr`               | (## 1)                  | Increment of the vertical sequence number.                                                                            |
+| `flags`                         | (## 8)                  | Additional flags for the block.                                                                                       |
+| `seq_no`                        | #                       | Sequence number related to the block.                                                                                 |
+| `vert_seq_no`                   | #                       | Vertical sequence number related to the block.                                                                        |
+| `shard`                         | ShardIdent              | The identifier of the shard where this block belongs.                                                                 |
+| `gen_utime`                     | uint32                  | The generation time of the block.                                                                                     |
+| `start_lt`                      | uint64                  | Start logical time associated with the block.                                                                         |
+| `end_lt`                        | uint64                  | End logical time associated with the block.                                                                           |
+| `gen_validator_list_hash_short` | uint32                  | Short hash related to the list of validators at the moment of generation of this block.                               |
+| `gen_catchain_seqno`            | uint32                  | [Catchain](/catchain.pdf) sequence number related to this block.                                                      |
+| `min_ref_mc_seqno`              | uint32                  | Minimum sequence number of referenced masterchain block.                                                              |
+| `prev_key_block_seqno`          | uint32                  | Sequence number of the previous key block.                                                                            |
+| `gen_software`                  | GlobalVersion           | The version of the software that generated the block. Only presented if the first bit of the `version` is set to `1`. |
+| `master_ref`                    | BlkMasterInfo           | A reference to the master block if the block is not a master. Stored in a reference. block.                           |
+| `prev_ref`                      | BlkPrevInfo after_merge | A reference to the previous block. Stored in a reference.                                                             |
+| `prev_vert_ref`                 | BlkPrevInfo 0           | A reference to the previous block in the vertical sequence if it exists. Stored in a reference.                       |
 
 ### value_flow:^ValueFlow
 
@@ -150,32 +150,32 @@ shard_state#9023afe2 global_id:int32
     = ShardStateUnsplit;
 ```
 
-| Field                  | Type                    | Description                                                                             |
-| ---------------------- | ----------------------- | --------------------------------------------------------------------------------------- |
-| `global_id`            | int32                   | An ID of the network where this shard belongs. `-239` for mainnet and `-3` for testnet. |
-| `shard_id`             | ShardIdent              | The identifier of the shard.                                                            |
-| `seq_no`               | uint32                  | The latest sequence number associated with this shardchain.                             |
-| `vert_seq_no`          | #                       | The latest vertical sequence number associated with this shardchain.                    |
-| `gen_utime`            | uint32                  | The generation time associated with the creation of the shard.                          |
-| `gen_lt`               | uint64                  | The logical time associated with the creation of the shard.                             |
-| `min_ref_mc_seqno`     | uint32                  | Sequence number of the latest referenced masterchain block.                             |
-| `out_msg_queue_info`   | OutMsgQueueInfo         | Information about the out message queue of this shard. Stored in a reference.           |
-| `before_split`         | (## 1)                  | A flag indicating whether a split will in the next block of this shardchain.            |
-| `accounts`             | ShardAccounts           | The state of accounts in the shard. Stored in a reference.                              |
-| `overload_history`     | uint64                  | History of overload events for the shard. Used for load balancing through sharding.     |
-| `underload_history`    | uint64                  | History of underload events for the shard. Used for load balancing through sharding.    |
-| `total_balance`        | CurrencyCollection      | Total balance for the shard.                                                            |
-| `total_validator_fees` | CurrencyCollection      | Total validator fees for the shard.                                                     |
-| `libraries`            | (HashmapE 256 LibDescr) | A hashmap of library descriptions in this shard.                                        |
-| `master_ref`           | (Maybe BlkMasterInfo)   | A reference to the master block info.                                                   |
-| `custom`               | (Maybe McStateExtra)    | Custom extra data for the shard state. Stored in a reference.                           |
+| Field                  | Type                  | Required | Description                                                                             |
+| ---------------------- | --------------------- | -------- | --------------------------------------------------------------------------------------- |
+| `global_id`            | int32                 | Yes      | An ID of the network where this shard belongs. `-239` for mainnet and `-3` for testnet. |
+| `shard_id`             | ShardIdent            | Yes      | The identifier of the shard.                                                            |
+| `seq_no`               | uint32                | Yes      | The latest sequence number associated with this shardchain.                             |
+| `vert_seq_no`          | #                     | Yes      | The latest vertical sequence number associated with this shardchain.                    |
+| `gen_utime`            | uint32                | Yes      | The generation time associated with the creation of the shard.                          |
+| `gen_lt`               | uint64                | Yes      | The logical time associated with the creation of the shard.                             |
+| `min_ref_mc_seqno`     | uint32                | Yes      | Sequence number of the latest referenced masterchain block.                             |
+| `out_msg_queue_info`   | OutMsgQueueInfo       | Yes      | Information about the out message queue of this shard. Stored in a reference.           |
+| `before_split`         | ## 1                  | Yes      | A flag indicating whether a split will in the next block of this shardchain.            |
+| `accounts`             | ShardAccounts         | Yes      | The state of accounts in the shard. Stored in a reference.                              |
+| `overload_history`     | uint64                | Yes      | History of overload events for the shard. Used for load balancing through sharding.     |
+| `underload_history`    | uint64                | Yes      | History of underload events for the shard. Used for load balancing through sharding.    |
+| `total_balance`        | CurrencyCollection    | Yes      | Total balance for the shard.                                                            |
+| `total_validator_fees` | CurrencyCollection    | Yes      | Total validator fees for the shard.                                                     |
+| `libraries`            | HashmapE 256 LibDescr | Yes      | A hashmap of library descriptions in this shard.                                        |
+| `master_ref`           | BlkMasterInfo         | No       | A reference to the master block info.                                                   |
+| `custom`               | McStateExtra          | No       | Custom extra data for the shard state. Stored in a reference.                           |
 
 ### ShardState Splitted
 
-| Field   | Type                                         | Description                         |
-| ------- | -------------------------------------------- | ----------------------------------- |
-| `left`  | ^[ShardStateUnsplit](#shardstate-unsplitted) | The state of the left split shard.  |
-| `right` | ^[ShardStateUnsplit](#shardstate-unsplitted) | The state of the right split shard. |
+| Field   | Type                                        | Description                                                |
+| ------- | ------------------------------------------- | ---------------------------------------------------------- |
+| `left`  | [ShardStateUnsplit](#shardstate-unsplitted) | The state of the left split shard. Stored in a reference.  |
+| `right` | [ShardStateUnsplit](#shardstate-unsplitted) | The state of the right split shard. Stored in a reference. |
 
 ## extra:^BlockExtra
 
@@ -190,14 +190,14 @@ block_extra in_msg_descr:^InMsgDescr
     custom:(Maybe ^McBlockExtra) = BlockExtra;
 ```
 
-| Field            | Type                 | Description                                                              |
-| ---------------- | -------------------- | ------------------------------------------------------------------------ |
-| `in_msg_descr`   | InMsgDescr           | Descriptor of the incoming messages in the block. Stored in a reference. |
-| `out_msg_descr`  | OutMsgDescr          | Descriptor of the outgoing messages in the block. Stored in a reference. |
-| `account_blocks` | ShardAccountBlocks   | The block's associated account blocks. Stored in a reference.            |
-| `rand_seed`      | bits256              | The random seed for the block.                                           |
-| `created_by`     | bits256              | The entity (usually a validator's public key) that created the block.    |
-| `custom`         | (Maybe McBlockExtra) | Custom extra data for the block. Stored in a reference.                  |
+| Field            | Type               | Required | Description                                                              |
+| ---------------- | ------------------ | -------- | ------------------------------------------------------------------------ |
+| `in_msg_descr`   | InMsgDescr         | Yes      | Descriptor of the incoming messages in the block. Stored in a reference. |
+| `out_msg_descr`  | OutMsgDescr        | Yes      | Descriptor of the outgoing messages in the block. Stored in a reference. |
+| `account_blocks` | ShardAccountBlocks | Yes      | The block's associated account blocks. Stored in a reference.            |
+| `rand_seed`      | bits256            | Yes      | The random seed for the block.                                           |
+| `created_by`     | bits256            | Yes      | The entity (usually a validator's public key) that created the block.    |
+| `custom`         | McBlockExtra       | No       | Custom extra data for the block. Stored in a reference.                  |
 
 ## See also
 
