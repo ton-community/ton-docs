@@ -4,6 +4,10 @@
 To maximize your comprehension of this page, familiarizing yourself with the [TL-B language](/develop/data-formats/cell-boc) is highly recommended.
 :::
 
+The TON Blockchain operates using three key parts: accounts, messages, and transactions. This page describes the structure and the layout of transactions.
+
+A transaction is an operation that processes inbound and outbound messages related to a specific account, altering its state and potentially generating fees for validators.
+
 ## Transaction
 
 ```tlb
