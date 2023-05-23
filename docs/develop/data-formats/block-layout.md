@@ -4,6 +4,10 @@
 To maximize your comprehension of this page, familiarizing yourself with the [TL-B language](/develop/data-formats/cell-boc) is highly recommended.
 :::
 
+A block in the blockchain is a record of new transactions that, once completed, is added to the blockchain as a permanent and immutable part of this decentralized ledger. Each block contains information such as transaction data, time, and a reference to the previous block, thereby forming a chain of blocks.
+
+The blocks in the TON Blockchain possess a rather complex structure due to the system's overall complexity. This page describes the structure and layout of these blocks.
+
 ## Block
 
 Raw TL-B scheme of a block looks as:
