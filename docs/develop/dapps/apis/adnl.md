@@ -47,10 +47,6 @@ Requests and responses to the server are described by a TL schema that allows yo
 
 - [justdmitry/TonLib.NET](https://github.com/justdmitry/TonLib.NET) — .NET SDK (ADNL API)
 
-### Rust SDK
-
-- [ston-fi/tonlib-rs](https://github.com/ston-fi/tonlib-rs) — Rust SDK for The Open Network.
-
 ### Legacy TonLib SDK
 
 These SDKs are _long-term support_ stage, so feel free to use these SDK too.
