@@ -218,3 +218,7 @@ trans_merge_install$0111 split_info:SplitMergeInfo
 | `action`              | Maybe ^TrActionPhase         | Contains information about action phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)  |
 | `aborted`             | Bool                         | Indicates whether the transaction execution was aborted.                                                                                                           |
 | `destroyed`           | Bool                         | Indicates whether the account was destroyed during the execution.                                                                                                  |
+
+## See also
+
+-   Original description of [Transaction layout](https://ton.org/docs/tblkch.pdf#page=75&zoom=100,148,290) from whitepaper
