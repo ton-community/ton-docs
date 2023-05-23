@@ -93,17 +93,17 @@ value_flow#b8e48dfb ^[ from_prev_blk:CurrencyCollection
     ] = ValueFlow;
 ```
 
-| Field            | Type               | Description                                                |
-| ---------------- | ------------------ | ---------------------------------------------------------- |
-| `from_prev_blk`  | CurrencyCollection | Represents the flow of currencies from the previous block. |
-| `to_next_blk`    | CurrencyCollection | Represents the flow of currencies to the next block.       |
-| `imported`       | CurrencyCollection | Represents the flow of currencies imported to the block.   |
-| `exported`       | CurrencyCollection | Represents the flow of currencies exported from the block. |
-| `fees_collected` | CurrencyCollection | The total amount of fees collected in the block.           |
-| `fees_imported`  | CurrencyCollection | The amount of fees imported into the block.                |
-| `recovered`      | CurrencyCollection | The amount of currencies recovered in the block.           |
-| `created`        | CurrencyCollection | The amount of new currencies created in the block.         |
-| `minted`         | CurrencyCollection | The amount of currencies minted in the block.              |
+| Field            | Type               | Description                                                                      |
+| ---------------- | ------------------ | -------------------------------------------------------------------------------- |
+| `from_prev_blk`  | CurrencyCollection | Represents the flow of currencies from the previous block.                       |
+| `to_next_blk`    | CurrencyCollection | Represents the flow of currencies to the next block.                             |
+| `imported`       | CurrencyCollection | Represents the flow of currencies imported to the block.                         |
+| `exported`       | CurrencyCollection | Represents the flow of currencies exported from the block.                       |
+| `fees_collected` | CurrencyCollection | The total amount of fees collected in the block.                                 |
+| `fees_imported`  | CurrencyCollection | The amount of fees imported into the block. Non-zero only in masterchain.        |
+| `recovered`      | CurrencyCollection | The amount of currencies recovered in the block. Non-zero only in masterchain.   |
+| `created`        | CurrencyCollection | The amount of new currencies created in the block. Non-zero only in masterchain. |
+| `minted`         | CurrencyCollection | The amount of currencies minted in the block. Non-zero only in masterchain.      |
 
 ## state_update:^(MERKLE_UPDATE ShardState)
 
@@ -150,25 +150,25 @@ shard_state#9023afe2 global_id:int32
     = ShardStateUnsplit;
 ```
 
-| Field                  | Type                  | Required | Description                                                                             |
-| ---------------------- | --------------------- | -------- | --------------------------------------------------------------------------------------- |
-| `global_id`            | int32                 | Yes      | An ID of the network where this shard belongs. `-239` for mainnet and `-3` for testnet. |
-| `shard_id`             | ShardIdent            | Yes      | The identifier of the shard.                                                            |
-| `seq_no`               | uint32                | Yes      | The latest sequence number associated with this shardchain.                             |
-| `vert_seq_no`          | #                     | Yes      | The latest vertical sequence number associated with this shardchain.                    |
-| `gen_utime`            | uint32                | Yes      | The generation time associated with the creation of the shard.                          |
-| `gen_lt`               | uint64                | Yes      | The logical time associated with the creation of the shard.                             |
-| `min_ref_mc_seqno`     | uint32                | Yes      | Sequence number of the latest referenced masterchain block.                             |
-| `out_msg_queue_info`   | OutMsgQueueInfo       | Yes      | Information about the out message queue of this shard. Stored in a reference.           |
-| `before_split`         | ## 1                  | Yes      | A flag indicating whether a split will in the next block of this shardchain.            |
-| `accounts`             | ShardAccounts         | Yes      | The state of accounts in the shard. Stored in a reference.                              |
-| `overload_history`     | uint64                | Yes      | History of overload events for the shard. Used for load balancing through sharding.     |
-| `underload_history`    | uint64                | Yes      | History of underload events for the shard. Used for load balancing through sharding.    |
-| `total_balance`        | CurrencyCollection    | Yes      | Total balance for the shard.                                                            |
-| `total_validator_fees` | CurrencyCollection    | Yes      | Total validator fees for the shard.                                                     |
-| `libraries`            | HashmapE 256 LibDescr | Yes      | A hashmap of library descriptions in this shard.                                        |
-| `master_ref`           | BlkMasterInfo         | No       | A reference to the master block info.                                                   |
-| `custom`               | McStateExtra          | No       | Custom extra data for the shard state. Stored in a reference.                           |
+| Field                  | Type                  | Required | Description                                                                                                                                                 |
+| ---------------------- | --------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `global_id`            | int32                 | Yes      | An ID of the network where this shard belongs. `-239` for mainnet and `-3` for testnet.                                                                     |
+| `shard_id`             | ShardIdent            | Yes      | The identifier of the shard.                                                                                                                                |
+| `seq_no`               | uint32                | Yes      | The latest sequence number associated with this shardchain.                                                                                                 |
+| `vert_seq_no`          | #                     | Yes      | The latest vertical sequence number associated with this shardchain.                                                                                        |
+| `gen_utime`            | uint32                | Yes      | The generation time associated with the creation of the shard.                                                                                              |
+| `gen_lt`               | uint64                | Yes      | The logical time associated with the creation of the shard.                                                                                                 |
+| `min_ref_mc_seqno`     | uint32                | Yes      | Sequence number of the latest referenced masterchain block.                                                                                                 |
+| `out_msg_queue_info`   | OutMsgQueueInfo       | Yes      | Information about the out message queue of this shard. Stored in a reference.                                                                               |
+| `before_split`         | ## 1                  | Yes      | A flag indicating whether a split will in the next block of this shardchain.                                                                                |
+| `accounts`             | ShardAccounts         | Yes      | The state of accounts in the shard. Stored in a reference.                                                                                                  |
+| `overload_history`     | uint64                | Yes      | History of overload events for the shard. Used for load balancing through sharding.                                                                         |
+| `underload_history`    | uint64                | Yes      | History of underload events for the shard. Used for load balancing through sharding.                                                                        |
+| `total_balance`        | CurrencyCollection    | Yes      | Total balance for the shard.                                                                                                                                |
+| `total_validator_fees` | CurrencyCollection    | Yes      | Total validator fees for the shard.                                                                                                                         |
+| `libraries`            | HashmapE 256 LibDescr | Yes      | A hashmap of library descriptions in this shard. Currently, non-empty only in the masterchain.                                                              |
+| `master_ref`           | BlkMasterInfo         | No       | A reference to the master block info.                                                                                                                       |
+| `custom`               | McStateExtra          | No       | Custom extra data for the shard state. This field is present only in the masterchain and contains all the masterchain-specific data. Stored in a reference. |
 
 ### ShardState Splitted
 
@@ -190,14 +190,14 @@ block_extra in_msg_descr:^InMsgDescr
     custom:(Maybe ^McBlockExtra) = BlockExtra;
 ```
 
-| Field            | Type               | Required | Description                                                              |
-| ---------------- | ------------------ | -------- | ------------------------------------------------------------------------ |
-| `in_msg_descr`   | InMsgDescr         | Yes      | Descriptor of the incoming messages in the block. Stored in a reference. |
-| `out_msg_descr`  | OutMsgDescr        | Yes      | Descriptor of the outgoing messages in the block. Stored in a reference. |
-| `account_blocks` | ShardAccountBlocks | Yes      | The block's associated account blocks. Stored in a reference.            |
-| `rand_seed`      | bits256            | Yes      | The random seed for the block.                                           |
-| `created_by`     | bits256            | Yes      | The entity (usually a validator's public key) that created the block.    |
-| `custom`         | McBlockExtra       | No       | Custom extra data for the block. Stored in a reference.                  |
+| Field            | Type               | Required | Description                                                                                                                                                  |
+| ---------------- | ------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `in_msg_descr`   | InMsgDescr         | Yes      | Descriptor of the incoming messages in the block. Stored in a reference.                                                                                     |
+| `out_msg_descr`  | OutMsgDescr        | Yes      | Descriptor of the outgoing messages in the block. Stored in a reference.                                                                                     |
+| `account_blocks` | ShardAccountBlocks | Yes      | The collection of all transactions processed in the block along with all updates of the states of the accounts assigned to the shard. Stored in a reference. |
+| `rand_seed`      | bits256            | Yes      | The random seed for the block.                                                                                                                               |
+| `created_by`     | bits256            | Yes      | The entity (usually a validator's public key) that created the block.                                                                                        |
+| `custom`         | McBlockExtra       | No       | This field is present only in the masterchain and contains all the masterchain-specific data. Custom extra data for the block. Stored in a reference.        |
 
 ## See also
 
