@@ -190,14 +190,40 @@ block_extra in_msg_descr:^InMsgDescr
     custom:(Maybe ^McBlockExtra) = BlockExtra;
 ```
 
-| Field            | Type               | Required | Description                                                                                                                                                  |
-| ---------------- | ------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `in_msg_descr`   | InMsgDescr         | Yes      | Descriptor of the incoming messages in the block. Stored in a reference.                                                                                     |
-| `out_msg_descr`  | OutMsgDescr        | Yes      | Descriptor of the outgoing messages in the block. Stored in a reference.                                                                                     |
-| `account_blocks` | ShardAccountBlocks | Yes      | The collection of all transactions processed in the block along with all updates of the states of the accounts assigned to the shard. Stored in a reference. |
-| `rand_seed`      | bits256            | Yes      | The random seed for the block.                                                                                                                               |
-| `created_by`     | bits256            | Yes      | The entity (usually a validator's public key) that created the block.                                                                                        |
-| `custom`         | McBlockExtra       | No       | This field is present only in the masterchain and contains all the masterchain-specific data. Custom extra data for the block. Stored in a reference.        |
+| Field            | Type                          | Required | Description                                                                                                                                                  |
+| ---------------- | ----------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `in_msg_descr`   | InMsgDescr                    | Yes      | Descriptor of the incoming messages in the block. Stored in a reference.                                                                                     |
+| `out_msg_descr`  | OutMsgDescr                   | Yes      | Descriptor of the outgoing messages in the block. Stored in a reference.                                                                                     |
+| `account_blocks` | ShardAccountBlocks            | Yes      | The collection of all transactions processed in the block along with all updates of the states of the accounts assigned to the shard. Stored in a reference. |
+| `rand_seed`      | bits256                       | Yes      | The random seed for the block.                                                                                                                               |
+| `created_by`     | bits256                       | Yes      | The entity (usually a validator's public key) that created the block.                                                                                        |
+| `custom`         | [McBlockExtra](#mcblockextra) | No       | This field is present only in the masterchain and contains all the masterchain-specific data. Custom extra data for the block. Stored in a reference.        |
+
+### McBlockExtra
+
+This field contains extra information about the masterchain block.
+
+```tlb
+masterchain_block_extra#cca5
+    key_block:(## 1)
+    shard_hashes:ShardHashes
+    shard_fees:ShardFees
+    ^[ prev_blk_signatures:(HashmapE 16 CryptoSignaturePair)
+    recover_create_msg:(Maybe ^InMsg)
+    mint_msg:(Maybe ^InMsg) ]
+    config:key_block?ConfigParams
+    = McBlockExtra;
+```
+
+| Field                 | Type                            | Required | Description                                                                                           |
+| --------------------- | ------------------------------- | -------- | ----------------------------------------------------------------------------------------------------- |
+| `key_block`           | ## 1                            | Yes      | Flag indicating whether the block is a key block.                                                     |
+| `shard_hashes`        | ShardHashes                     | Yes      | The hashes of the latest blocks of the corresponding shardchains.                                     |
+| `shard_fees`          | ShardFees                       | Yes      | The total fees collected from all shards in this block.                                               |
+| `prev_blk_signatures` | HashmapE 16 CryptoSignaturePair | Yes      | Previous block signatures.                                                                            |
+| `recover_create_msg`  | InMsg                           | No       | The message related to recovering extra-currencies, if any. Stored in a reference.                    |
+| `mint_msg`            | InMsg                           | No       | The message related to minting extra-currencies, if any. Stored in a reference.                       |
+| `config`              | ConfigParams                    | No       | The actual configuration parameters for this block. This field is present only if `key_block` is set. |
 
 ## See also
 
