@@ -94,7 +94,7 @@ Easy! Let's go to the development now.
 
 To make your life easier and skip routine low-level stuff, we will use a boilerplate.
 
-:::info
+:::tip
 Note, you need to [sign in](https://github.com/login) to GitHub for further work.
 :::
 
@@ -116,7 +116,7 @@ After completing this step, you’ll have access to a highly performant reposito
 
 The next step is to choose which developer environment is best suited to your needs, experience level, and overall skill-set. As you can see, it is possible to carry out this process by using either a cloud-based or local environment. Developing on the cloud is often considered simpler and easier to get started. Below, we’ll outline the steps required for both approaches.
 
-:::info
+:::tip
 Make sure you have opened the repository in your GitHub profile that was generated from the template in the previous step.
 :::
 
@@ -163,6 +163,37 @@ To begin using a local development environment you’ll need access to 3 main to
 - **JavaScript IDE**. JavaScript IDE’s are typically used for development within local development environments. An example of this case is Visual Studio Code ([VSCode](https://code.visualstudio.com/download)).
 
 To get started you’ll clone your GitHub repository boilerplate and open the correct repository in your Integrated Development Environment (IDE).
+
+
+#### Running Scripts
+
+In this guide, you will need to run a TypeScript script. All commands, such as running a script or installing a module, are inputted via the command line, which is located in the special workspace of IDE called _Terminal_. This workspace is usually located at the bottom of the IDE.
+
+For example, in the Cloud Codespaces, you should open the Terminal workspace (if it is not already open):
+
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/tutorials/onboarding/6.png?raw=true',
+        dark: '/img/tutorials/onboarding/6-dark.png?raw=true',
+    }}
+/>
+<br></br><br></br>
+
+Input commands in this window and execute them with _Enter_:
+
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/tutorials/onboarding/4.png?raw=true',
+        dark: '/img/tutorials/onboarding/4-dark.png?raw=true',
+    }}
+/>
+<br></br><br></br>
+
+The Terminal is also available as a separate application. Please choose the appropriate version based on your IDE and OS.
 
 Great! After these steps you're ready to get deeper into TON Blockchain secrets. 👀
 
@@ -213,15 +244,26 @@ The `Address.parse()` command found in the `ton.js` SDK allows the developer to 
 
 ### Connect to an API Provider
 
-To continue the process, we'll need to connect to a specific API provider called the TonCenter API provider (which is hosted on [toncenter.com](https://toncenter.com)).
+In this step, we'll connect with TON via toncenter (which is hosted on toncenter.com) API provider using specific commands in the script.
 
-The simplest way to learn is by using `@orbs-network/ton-access`
+The simplest way to learn how it works is by using @orbs-network/ton-access.
 
-:::info
-Remember, if you are adding new modules with `import`, that You may need to install them by executing the command `npm i @orbs-network/ton-access`.
+:::tip
+Remember, if you are adding new modules with `import`, that You may need to install them by executing the command `npm i @orbs-network/ton-access` in the [terminal](/develop/get-started-with-ton#running-scripts).
 :::
 
-Using the `ton.js`, we’ll execute a series of code using _TonClient_ and _getHttpEndpoint_:
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/tutorials/onboarding/5.png?raw=true',
+        dark: '/img/tutorials/onboarding/5-dark.png?raw=true',
+    }}
+/>
+<br></br>
+
+
+We are adding `client` and `endpoint` in the `index.ts` script using _TonClient_ and _getHttpEndpoint_ from `@orbs-network/ton-access`:
 
 ```ts title="ton-onboarding-challenge/index.ts"
 import {Address, TonClient} from "ton"
@@ -238,7 +280,6 @@ import {getHttpEndpoint} from "@orbs-network/ton-access";
   const client = new TonClient({ endpoint });
 
 ```
-
 
 :::info what to do in production?
 It's better to use an RPC node provider or to run your own ton-http-api instance for that. Read more at the [TonCenter API page](/develop/dapps/apis/toncenter).
@@ -277,11 +318,16 @@ Running this code will result in the following console output:
   console.log(miningData)
 ```
 
-Furthermore, to run the script, it is necessary to enter the following command in the terminal:
+
+
+Furthermore, to run the script, it is necessary to enter the following command [in the terminal](/develop/get-started-with-ton#running-scripts):
 
 ```bash
 npm run start
 ```
+:::tip
+To avoid unexpected issues, make sure you have finalized all previous steps, including inputting contract addresses.
+:::
 
 Good! As long as the above processes were executed correctly, successful connection to the API will be achieved and the necessary data will be received within the console. The correct console output should be initiated as follows:
 
