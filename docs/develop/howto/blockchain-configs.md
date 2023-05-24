@@ -16,7 +16,7 @@ You can view the parameter values in the [current configuration](https://explore
 The binary encoding at the end of the TON blockchain parameter is a serialized binary representation of its configuration, enabling efficient storage or transmission of the configuration. The precise details of serialization depend on the specific encoding scheme used by the TON blockchain.
 :::
 
-##  🚀 Let's get started!
+## 🚀 Let's get started!
 
 All parameters are in order, and you won't get lost. For your convenience, use the right sidebar for quick navigation.
 
@@ -79,9 +79,9 @@ This parameter indicates the network version and additional capabilities support
 Validators are nodes in the blockchain network that are responsible for creating new blocks and verifying transactions.
 :::
 
-* `version`: This field specifies the version.
+-   `version`: This field specifies the version.
 
-* `capabilities`: This field is a set of flags that are used to indicate the presence or absence of certain features or capabilities.
+-   `capabilities`: This field is a set of flags that are used to indicate the presence or absence of certain features or capabilities.
 
 Thus, when updating the network, validators will vote to change parameter 8. This way, the TON network can be updated without downtime.
 
@@ -97,12 +97,12 @@ This parameter represents a list (binary tree) of critical TON parameters, the c
 
 This parameter indicates under what conditions proposals to change the TON configuration are accepted.
 
-- `min_tot_rounds` - the minimum number of rounds before a proposal can be applied
-- `max_tot_rounds` - the maximum number of rounds, upon reaching which the proposal will automatically be rejected
-- `min_wins` - the required number of wins (3/4 of validators by the sum of the pledge must vote in favor)
-- `max_losses` - the maximum number of losses, upon reaching which the proposal will automatically be rejected
-- `min_store_sec` and `max_store_sec` determine the possible time interval during which the proposal will be stored
-- `bit_price` and `cell_price` indicate the price of storing one bit or one cell of the proposal
+-   `min_tot_rounds` - the minimum number of rounds before a proposal can be applied
+-   `max_tot_rounds` - the maximum number of rounds, upon reaching which the proposal will automatically be rejected
+-   `min_wins` - the required number of wins (3/4 of validators by the sum of the pledge must vote in favor)
+-   `max_losses` - the maximum number of losses, upon reaching which the proposal will automatically be rejected
+-   `min_store_sec` and `max_store_sec` determine the possible time interval during which the proposal will be stored
+-   `bit_price` and `cell_price` indicate the price of storing one bit or one cell of the proposal
 
 ## Param 12
 
@@ -110,27 +110,27 @@ This parameter represents the configuration of a workchain in the TON blockchain
 
 ## Workchain configuration parameters:
 
-- `enabled_since`: a UNIX timestamp of the moment this workchain was enabled;
+-   `enabled_since`: a UNIX timestamp of the moment this workchain was enabled;
 
-- `actual_min_split`: the minimum depth of the split (sharding) of this workchain, supported by validators;
+-   `actual_min_split`: the minimum depth of the split (sharding) of this workchain, supported by validators;
 
-- `min_split`: the minimum depth of the split of this workchain, set by the configuration;
+-   `min_split`: the minimum depth of the split of this workchain, set by the configuration;
 
-- `max_split`: the maximum depth of the split of this workchain;
+-   `max_split`: the maximum depth of the split of this workchain;
 
-- `basic`: a boolean flag (1 for true, 0 for false) indicating whether this workchain is basic (handles TON coins, smart contracts based on the TON Virtual Machine);
+-   `basic`: a boolean flag (1 for true, 0 for false) indicating whether this workchain is basic (handles TON coins, smart contracts based on the TON Virtual Machine);
 
-- `active`: a boolean flag indicating whether this workchain is active at the moment;
+-   `active`: a boolean flag indicating whether this workchain is active at the moment;
 
-- `accept_msgs`: a boolean flag indicating whether this workchain is accepting messages at the moment;
+-   `accept_msgs`: a boolean flag indicating whether this workchain is accepting messages at the moment;
 
-- `flags`: additional flags for the workchain (reserved, currently always 0);
+-   `flags`: additional flags for the workchain (reserved, currently always 0);
 
-- `zerostate_root_hash` and `zerostate_file_hash`: hashes of the first block of the workchain;
+-   `zerostate_root_hash` and `zerostate_file_hash`: hashes of the first block of the workchain;
 
-- `version`: version of the workchain;
+-   `version`: version of the workchain;
 
-- `format`: the format of the workchain, which includes vm_version and vm_mode - the virtual machine used there.
+-   `format`: the format of the workchain, which includes vm_version and vm_mode - the virtual machine used there.
 
 ## Param 13
 
@@ -144,18 +144,18 @@ This parameter represents the reward for block creation in the TON blockchain. N
 
 This parameter contains the duration of different stages of elections and validators' work in the TON blockchain.
 
-For each validation period, there is an `election_id` equal to the UNIX-format time at the start of the validation. 
+For each validation period, there is an `election_id` equal to the UNIX-format time at the start of the validation.
 You can get the current `election_id` (if elections are ongoing) or the past one by invoking the Elector contract's respective get-methods `active_election_id` and `past_election_ids`.
 
 ## Workchain configuration parameters:
 
-- `validators_elected_for`: the number of seconds the elected set of validators perform their role (one round).
+-   `validators_elected_for`: the number of seconds the elected set of validators perform their role (one round).
 
-- `elections_start_before`: how many seconds before the end of the current round the election process for the next period will start.
+-   `elections_start_before`: how many seconds before the end of the current round the election process for the next period will start.
 
-- `elections_end_before`: how many seconds before the end of the current round the validators for the next round will be chosen.
+-   `elections_end_before`: how many seconds before the end of the current round the validators for the next round will be chosen.
 
-- `stake_held_for`: the period for which a validator's stake is held (for handling complaints) after the round expires.
+-   `stake_held_for`: the period for which a validator's stake is held (for handling complaints) after the round expires.
 
 :::info
 Each value in the arguments is determined by the `uint32` data type.
@@ -171,7 +171,7 @@ In the TON blockchain, it is customary to conventionally divide validation perio
 
 ```python
 constants = {
-    'validators_elected_for': 65536,  # 18.2 hours 
+    'validators_elected_for': 65536,  # 18.2 hours
     'elections_start_before': 32768,  # 9.1 hours
     'elections_end_before': 8192,     # 2.2 hours
     'stake_held_for': 32768           # 9.1 hours
@@ -201,7 +201,7 @@ Thus, at the moment, the length of one round of one parity is `1600131072 - 1600
 
 ```python
 constants = {
-    'validators_elected_for': 7200,  # 2 hours 
+    'validators_elected_for': 7200,  # 2 hours
     'elections_start_before': 2400,  # 40 minutes
     'elections_end_before': 180,     # 3 minutes
     'stake_held_for': 900            # 15 minutes
@@ -231,11 +231,11 @@ This parameter represents the limits on the number of validators in the TON bloc
 
 ### Configuration parameters for the number of validators for elections:
 
-- `max_validators`: This parameter represents the maximum number of validators that can participate in the network operation at any given time.
+-   `max_validators`: This parameter represents the maximum number of validators that can participate in the network operation at any given time.
 
-- `max_main_validators`: This parameter represents the maximum number of masterchain validators.
+-   `max_main_validators`: This parameter represents the maximum number of masterchain validators.
 
-- `min_validators`: This parameter represents the minimum number of validators that must support the network operation.
+-   `min_validators`: This parameter represents the minimum number of validators that must support the network operation.
 
 1. The maximum number of validators is greater than or equal to the maximum number of masterchain validators.
 2. The maximum number of masterchain validators must be greater than or equal to the minimum number of validators.
@@ -247,13 +247,13 @@ This parameter represents the stake parameters configuration in the TON blockcha
 
 ## Configuration parameters:
 
-- `min_stake`: This parameter represents the minimum amount of TONs that an interested party needs to stake to participate in the validation process.
+-   `min_stake`: This parameter represents the minimum amount of TONs that an interested party needs to stake to participate in the validation process.
 
-- `max_stake`: This parameter represents the maximum amount of TONs that an interested party can stake.
+-   `max_stake`: This parameter represents the maximum amount of TONs that an interested party can stake.
 
-- `min_total_stake`: This parameter represents the minimum total amount of TONs that must be held by the chosen set of validators.
+-   `min_total_stake`: This parameter represents the minimum total amount of TONs that must be held by the chosen set of validators.
 
-- `max_stake_factor`: This parameter is a multiplier indicating how many times the maximum effective stake (pledge) can exceed the minimum stake sent by any other validator.
+-   `max_stake_factor`: This parameter is a multiplier indicating how many times the maximum effective stake (pledge) can exceed the minimum stake sent by any other validator.
 
 :::info
 Each value in the arguments is determined by the `uint32` data type.
@@ -265,11 +265,11 @@ This parameter represents the configuration for determining the prices for data 
 
 ### Dictionary of storage fee parameters:
 
-- `utime_since`: This parameter provides the initial Unix timestamp from which the specified prices apply.
+-   `utime_since`: This parameter provides the initial Unix timestamp from which the specified prices apply.
 
-- `bit_price_ps` and `cell_price_ps`: These parameters represent the storage prices for one bit or one cell of information in the main workchains of the TON blockchain for 65536 seconds
+-   `bit_price_ps` and `cell_price_ps`: These parameters represent the storage prices for one bit or one cell of information in the main workchains of the TON blockchain for 65536 seconds
 
-- `mc_bit_price_ps` and `mc_cell_price_ps`: These parameters represent the prices for computational resources specifically in the TON masterchain for 65536 seconds
+-   `mc_bit_price_ps` and `mc_cell_price_ps`: These parameters represent the prices for computational resources specifically in the TON masterchain for 65536 seconds
 
 :::info
 
@@ -282,19 +282,19 @@ The rest accept values in the `uint64` data type.
 
 These parameters define the cost of computations in the TON network. The complexity of any computation is estimated in gas units.
 
-- `flat_gas_limit` and `flat_gas_price`: A certain starting amount of gas is provided at a price of `flat_gas_price` (to offset the costs of launching the TON Virtual Machine).
+-   `flat_gas_limit` and `flat_gas_price`: A certain starting amount of gas is provided at a price of `flat_gas_price` (to offset the costs of launching the TON Virtual Machine).
 
-- `gas_price`: This parameter reflects the price of gas in the network, in nanotons per 65536 gas units.
+-   `gas_price`: This parameter reflects the price of gas in the network, in nanotons per 65536 gas units.
 
-- `gas_limit`: This parameter represents the maximum amount of gas that can be consumed per transaction.
+-   `gas_limit`: This parameter represents the maximum amount of gas that can be consumed per transaction.
 
-- `special_gas_limit`: This parameter represents the limit on the amount of gas that can be consumed per transaction of a special (system) contract.
+-   `special_gas_limit`: This parameter represents the limit on the amount of gas that can be consumed per transaction of a special (system) contract.
 
-- `gas_credit`: This parameter represents a credit in gas units that is provided to transactions for the purpose of checking an external message.
+-   `gas_credit`: This parameter represents a credit in gas units that is provided to transactions for the purpose of checking an external message.
 
-- `block_gas_limit`: This parameter represents the maximum amount of gas that can be consumed within a single block.
+-   `block_gas_limit`: This parameter represents the maximum amount of gas that can be consumed within a single block.
 
-- `freeze_due_limit` and `delete_due_limit`: Limits of accumulated storage fees (in nanoTON) at which a contract is frozen and deleted, respectively.
+-   `freeze_due_limit` and `delete_due_limit`: Limits of accumulated storage fees (in nanoTON) at which a contract is frozen and deleted, respectively.
 
 :::info
 More about `gas_credit` and other parameters in the section with external messages [here](https://docs.ton.org/develop/smart-contracts/guidelines/accept#external-messages).
@@ -306,17 +306,17 @@ These parameters set limits on the block, upon reaching which the block is final
 
 ### Configuration parameters:
 
-- `bytes`: This section sets the limits on the block size in bytes.
+-   `bytes`: This section sets the limits on the block size in bytes.
 
-- `underload`: Underload is a state when the shard realizes that there is no load and is inclined to merge if a neighboring shard is willing.
+-   `underload`: Underload is a state when the shard realizes that there is no load and is inclined to merge if a neighboring shard is willing.
 
-- `soft_limit`: Soft limit - when this limit is reached, internal messages stop being processed.
+-   `soft_limit`: Soft limit - when this limit is reached, internal messages stop being processed.
 
-- `hard_limit`: Hard limit - this is the absolute maximum size.
+-   `hard_limit`: Hard limit - this is the absolute maximum size.
 
-- `gas`: This section sets the limits on the amount of gas that a block can consume. Gas in the context of blockchain is an indicator of computational work. The limits on underload, soft and hard limit work the same as for size in bytes.
+-   `gas`: This section sets the limits on the amount of gas that a block can consume. Gas in the context of blockchain is an indicator of computational work. The limits on underload, soft and hard limit work the same as for size in bytes.
 
-- `lt_delta`: This section sets the limits on the difference in logical time between the first and the last transaction. Logical time is a concept used in the TON blockchain for ordering events. The limits on underload, soft and hard limit work the same as for size in bytes and gas.
+-   `lt_delta`: This section sets the limits on the difference in logical time between the first and the last transaction. Logical time is a concept used in the TON blockchain for ordering events. The limits on underload, soft and hard limit work the same as for size in bytes and gas.
 
 :::info
 In case of insufficient load on the shard and, accordingly, the desire to merge with a neighbor, `soft_limit` defines a state above which internal (internal) messages stop being processed, but external (external) ones continue. External (external) messages are processed until a limit equal to `(soft_limit + hard_limit)/2 is reached`.
@@ -330,20 +330,20 @@ Parameter 25 represents the configuration for the cost of sending messages in al
 
 ### Configuration parameters defining the costs of forwarding:
 
-- `lump_price`: This parameter means the base price for forwarding a message, regardless of its size or complexity.
+-   `lump_price`: This parameter means the base price for forwarding a message, regardless of its size or complexity.
 
-- `bit_price`: This parameter represents the cost per bit of message forwarding.
+-   `bit_price`: This parameter represents the cost per bit of message forwarding.
 
-- `cell_price`: This parameter reflects the cost of forwarding a message per cell. A cell is the basic unit of data storage on the TON blockchain.
+-   `cell_price`: This parameter reflects the cost of forwarding a message per cell. A cell is the basic unit of data storage on the TON blockchain.
 
-- `ihr_price_factor`: This is a factor used to calculate the cost of immediate hypercube routing (IHR).
-:::info
-IHR is a method of message delivery in the TON Blockchain network, where messages are sent directly to the recipient's shard chain.
-:::
+-   `ihr_price_factor`: This is a factor used to calculate the cost of immediate hypercube routing (IHR).
+    :::info
+    IHR is a method of message delivery in the TON Blockchain network, where messages are sent directly to the recipient's shard chain.
+    :::
 
-- `first_frac`: This parameter defines the fraction of the remaining remainder that will be used for the first transition along the message route.
+-   `first_frac`: This parameter defines the fraction of the remaining remainder that will be used for the first transition along the message route.
 
-- `next_frac`: This parameter defines the fraction of the remaining remainder that will be used for subsequent transitions along the message route.
+-   `next_frac`: This parameter defines the fraction of the remaining remainder that will be used for subsequent transitions along the message route.
 
 ## Param 28
 
@@ -351,17 +351,17 @@ This parameter provides the configuration for the Catchain protocol in the TON b
 
 ### Configuration parameters:
 
-- `flags`: A general field that can be used to set various binary parameters. In this case, it equals 0, which means that no specific flags are set.
+-   `flags`: A general field that can be used to set various binary parameters. In this case, it equals 0, which means that no specific flags are set.
 
-- `shuffle_mc_validators`: A Boolean value indicating whether to shuffle the masterchain validators or not. If this parameter is set to 1, the validators will be shuffled; otherwise, they will not.
+-   `shuffle_mc_validators`: A Boolean value indicating whether to shuffle the masterchain validators or not. If this parameter is set to 1, the validators will be shuffled; otherwise, they will not.
 
-- `mc_catchain_lifetime`: The lifetime of masterchain catchain groups in seconds.
+-   `mc_catchain_lifetime`: The lifetime of masterchain catchain groups in seconds.
 
-- `shard_catchain_lifetime`: The lifetime of shardchain catchain groups in seconds.
+-   `shard_catchain_lifetime`: The lifetime of shardchain catchain groups in seconds.
 
-- `shard_validators_lifetime`: The lifetime of a shardchain validators group in seconds.
+-   `shard_validators_lifetime`: The lifetime of a shardchain validators group in seconds.
 
-- `shard_validators_num`: The number of validators in each shardchain validation group.
+-   `shard_validators_num`: The number of validators in each shardchain validation group.
 
 ## Param 29
 
@@ -369,29 +369,29 @@ This parameter provides the configuration for the consensus protocol above catch
 
 ### Configuration parameters:
 
-- `flags`: A general field that can be used to set various binary parameters. In this case, it equals 0, which means that no specific flags are set.
+-   `flags`: A general field that can be used to set various binary parameters. In this case, it equals 0, which means that no specific flags are set.
 
-- `new_catchain_ids`: A Boolean value indicating whether to generate new Catchain identifiers. If this parameter is set to 1, new identifiers will be generated. In this case, it is assigned the value of 1, which means that new identifiers will be generated.
+-   `new_catchain_ids`: A Boolean value indicating whether to generate new Catchain identifiers. If this parameter is set to 1, new identifiers will be generated. In this case, it is assigned the value of 1, which means that new identifiers will be generated.
 
-- `round_candidates`: The number of candidates to be considered in each round of the consensus protocol. Here, it is set to 3.
+-   `round_candidates`: The number of candidates to be considered in each round of the consensus protocol. Here, it is set to 3.
 
-- `next_candidate_delay_ms`: The delay in milliseconds before the right to generate a block candidate passes to the next validator. Here, it is set to 2000 ms (2 seconds).
+-   `next_candidate_delay_ms`: The delay in milliseconds before the right to generate a block candidate passes to the next validator. Here, it is set to 2000 ms (2 seconds).
 
-- `consensus_timeout_ms`: The timeout for block consensus in milliseconds. Here, it is set to 16000 ms (16 seconds).
+-   `consensus_timeout_ms`: The timeout for block consensus in milliseconds. Here, it is set to 16000 ms (16 seconds).
 
-- `fast_attempts`: The number of "fast" attempts to reach consensus. Here, it is set to 3.
+-   `fast_attempts`: The number of "fast" attempts to reach consensus. Here, it is set to 3.
 
-- `attempt_duration`: The duration of each attempt at agreement. Here, it is set to 8.
+-   `attempt_duration`: The duration of each attempt at agreement. Here, it is set to 8.
 
-- `catchain_max_deps`: The maximum number of dependencies of a Catchain block. Here, it is set to 4.
+-   `catchain_max_deps`: The maximum number of dependencies of a Catchain block. Here, it is set to 4.
 
-- `max_block_bytes`: The maximum size of a block in bytes. Here, it is set to 2097152 bytes (2 MB).
+-   `max_block_bytes`: The maximum size of a block in bytes. Here, it is set to 2097152 bytes (2 MB).
 
-- `max_collated_bytes`: The maximum size of serialized block correctness proofs in bytes. Here, it is set to 2097152 bytes (2 MB).
+-   `max_collated_bytes`: The maximum size of serialized block correctness proofs in bytes. Here, it is set to 2097152 bytes (2 MB).
 
-- `proto_version`: The protocol version. Here, it is set to 2.
+-   `proto_version`: The protocol version. Here, it is set to 2.
 
-- `catchain_max_blocks_coeff`: The coefficient limiting the rate of block generation in Catchain, [description](https://github.com/ton-blockchain/ton/blob/master/doc/catchain-dos.md). Here, it is set to 10000.
+-   `catchain_max_blocks_coeff`: The coefficient limiting the rate of block generation in Catchain, [description](https://github.com/ton-blockchain/ton/blob/master/doc/catchain-dos.md). Here, it is set to 10000.
 
 ## Param 31
 
@@ -403,15 +403,15 @@ Lists of validators from the previous (32), current (34), and next (36) rounds. 
 
 ### Configuration parameters:
 
-- `cur_validators`: This is the current list of validators. Validators are typically responsible for verifying transactions in a blockchain network.
+-   `cur_validators`: This is the current list of validators. Validators are typically responsible for verifying transactions in a blockchain network.
 
-- `utime_since` and `utime_until`: These parameters provide the time period during which these validators are active.
+-   `utime_since` and `utime_until`: These parameters provide the time period during which these validators are active.
 
-- `total` and `main`: These parameters provide the total number of validators and the number of validators validating the masterchain in the network.
+-   `total` and `main`: These parameters provide the total number of validators and the number of validators validating the masterchain in the network.
 
-- `total_weight`: This adds up the weights of the validators.
+-   `total_weight`: This adds up the weights of the validators.
 
-- `list`: A list of validators in the tree format `id->validator-data`: `validator_addr`, `public_key`, `weight`, `adnl_addr`: These parameters provide details about each validator - their 256 addresses in the masterchain, public key, weight, ADNL address (the address used at the network level of TON).
+-   `list`: A list of validators in the tree format `id->validator-data`: `validator_addr`, `public_key`, `weight`, `adnl_addr`: These parameters provide details about each validator - their 256 addresses in the masterchain, public key, weight, ADNL address (the address used at the network level of TON).
 
 ## Param 40
 
@@ -423,19 +423,19 @@ This parameter defines the structure of the configuration for punishment for imp
 
 It contains several fields:
 
-- `default_flat_fine`: This part of the fine does not depend on the stake size.
+-   `default_flat_fine`: This part of the fine does not depend on the stake size.
 
-- `default_proportional_fine`: This part of the fine is proportional to the validator's stake size.
+-   `default_proportional_fine`: This part of the fine is proportional to the validator's stake size.
 
-- `severity_flat_mult`: This is the multiplier applied to the `default_flat_fine` value for significant violations by the validator.
+-   `severity_flat_mult`: This is the multiplier applied to the `default_flat_fine` value for significant violations by the validator.
 
-- `severity_proportional_mult`: This is the multiplier applied to the `default_proportional_fine` value for significant violations by the validator.
+-   `severity_proportional_mult`: This is the multiplier applied to the `default_proportional_fine` value for significant violations by the validator.
 
-- `unpunishable_interval`: This parameter represents the period during which offenders are not punished to eliminate temporary network problems or other anomalies.
+-   `unpunishable_interval`: This parameter represents the period during which offenders are not punished to eliminate temporary network problems or other anomalies.
 
-- `long_interval`, `long_flat_mult`, `long_proportional_mult`: These parameters define a "long" period of time and multipliers for flat and proportional fines for improper behavior.
+-   `long_interval`, `long_flat_mult`, `long_proportional_mult`: These parameters define a "long" period of time and multipliers for flat and proportional fines for improper behavior.
 
-- `medium_interval`, `medium_flat_mult`, `medium_proportional_mult`: Similarly, they define a "medium" period of time and multipliers for flat and proportional fines for improper behavior.
+-   `medium_interval`, `medium_flat_mult`, `medium_proportional_mult`: Similarly, they define a "medium" period of time and multipliers for flat and proportional fines for improper behavior.
 
 ## Param 43
 
@@ -443,32 +443,32 @@ This parameter pertains to various size limits and other characteristics of acco
 
 ### Configuration parameters:
 
-- `max_msg_bits`: maximum message size in bits.
+-   `max_msg_bits`: maximum message size in bits.
 
-- `max_msg_cells`: maximum number of cells (a form of storage unit) a message can occupy.
+-   `max_msg_cells`: maximum number of cells (a form of storage unit) a message can occupy.
 
-- `max_library_cells`: maximum number of cells that can be used for library cells.
+-   `max_library_cells`: maximum number of cells that can be used for library cells.
 
-- `max_vm_data_depth`: maximum cell depth in messages and account state.
+-   `max_vm_data_depth`: maximum cell depth in messages and account state.
 
-- `max_ext_msg_size`: maximum external message size in bits.
+-   `max_ext_msg_size`: maximum external message size in bits.
 
-- `max_ext_msg_depth`: maximum external message depth. This could refer to the depth of the data structure within the message.
+-   `max_ext_msg_depth`: maximum external message depth. This could refer to the depth of the data structure within the message.
 
-- `max_acc_state_cells`: maximum number of cells that an account state can occupy.
+-   `max_acc_state_cells`: maximum number of cells that an account state can occupy.
 
-- `max_acc_state_bits`: maximum account state size in bits.
+-   `max_acc_state_bits`: maximum account state size in bits.
 
 If absent, the default parameters are taken:
 
-- `max_size` = 65535
-- `max_depth` = 512
-- `max_msg_bits` = 1 << 21
-- `max_msg_cells` = 1 << 13
-- `max_library_cells` = 1000
-- `max_vm_data_depth` = 512
-- `max_acc_state_cells` = 1 << 16
-- `max_acc_state_bits` = (1 << 16) * 1023
+-   `max_size` = 65535
+-   `max_depth` = 512
+-   `max_msg_bits` = 1 << 21
+-   `max_msg_cells` = 1 << 13
+-   `max_library_cells` = 1000
+-   `max_vm_data_depth` = 512
+-   `max_acc_state_cells` = 1 << 16
+-   `max_acc_state_bits` = (1 << 16) \* 1023
 
 :::info
 You can view more details about the standard parameters [here](https://github.com/ton-blockchain/ton/blob/fc9542f5e223140fcca833c189f77b1a5ae2e184/crypto/block/mc-config.h#L379) in the source code.
@@ -486,39 +486,39 @@ The stabilization of the tokenomics is further described in the [official report
 
 This parameter pertains to bridges for wrapping TON in other networks:
 
-* ETH-TON ** (71)**
-* BSC-TON ** (72) ** 
-* Polygon-TON ** (73) **
+-   ETH-TON ** (71)**
+-   BSC-TON ** (72) **
+-   Polygon-TON ** (73) **
 
 ### Configuration parameters:
 
-- `bridge_address`: This is the bridge contract address that accepts TON to issue wrapped TON in other networks.
+-   `bridge_address`: This is the bridge contract address that accepts TON to issue wrapped TON in other networks.
 
-- `oracle_multisig_address`: This is the bridge management wallet address. A multisig wallet is a type of digital wallet that requires signatures from multiple parties to authorize a transaction. It is often used to increase security. The oracles act as the parties.
+-   `oracle_multisig_address`: This is the bridge management wallet address. A multisig wallet is a type of digital wallet that requires signatures from multiple parties to authorize a transaction. It is often used to increase security. The oracles act as the parties.
 
-- `oracles`: list of oracles in the form of a tree `id->address`
+-   `oracles`: list of oracles in the form of a tree `id->address`
 
-- `external_chain_address`: This is the bridge contract address in the corresponding external blockchain.
+-   `external_chain_address`: This is the bridge contract address in the corresponding external blockchain.
 
 ## Param 79, 81 and 82
 
 This parameter pertains to bridges for wrapping tokens from other networks into tokens on the TON network:
 
-* ETH-TON ** (79) **
-* BSC-TON ** (81) **
-* Polygon-TON ** (82) **
+-   ETH-TON ** (79) **
+-   BSC-TON ** (81) **
+-   Polygon-TON ** (82) **
 
 ### Configuration parameters:
 
-- `bridge_address` and `oracles_address`: These are the blockchain addresses of the bridge and the bridge management contract (oracles multisig), respectively.
+-   `bridge_address` and `oracles_address`: These are the blockchain addresses of the bridge and the bridge management contract (oracles multisig), respectively.
 
-- `oracles`: list of oracles in the form of a tree `id->address`
+-   `oracles`: list of oracles in the form of a tree `id->address`
 
-- `state_flags`: State flag. This parameter is responsible for enabling/disabling separate bridge functions.
+-   `state_flags`: State flag. This parameter is responsible for enabling/disabling separate bridge functions.
 
-- `prices`: This parameter contains a list or dictionary of prices for different operations or fees associated with the bridge, such as `bridge_burn_fee`, `bridge_mint_fee`, `wallet_min_tons_for_storage`, `wallet_gas_consumption`, `minter_min_tons_for_storage`, `discover_gas_consumption`.
+-   `prices`: This parameter contains a list or dictionary of prices for different operations or fees associated with the bridge, such as `bridge_burn_fee`, `bridge_mint_fee`, `wallet_min_tons_for_storage`, `wallet_gas_consumption`, `minter_min_tons_for_storage`, `discover_gas_consumption`.
 
-- `external_chain_address`: The bridge contract address in another blockchain.
+-   `external_chain_address`: The bridge contract address in another blockchain.
 
 ## Negative Parameters
 
@@ -530,12 +530,13 @@ The difference between negative parameters and positive ones is the need for val
 
 After a deep dive into this article, it is strongly recommended that you take the time for a more detailed study of the following documents:
 
-* For extensive study: Whitepaper [Eng](https://ton.org/whitepaper.pdf) or [Ru](https://github.com/Korolyow/TON_docs_ru/blob/main/pdf/ton_whitepaper_ru.pdf) and [tblkch.pdf](https://ton.org/tblkch.pdf).
+-   Original, but limited descriptions in [whitepaper.pdf](https://ton.org/whitepaper.pdf) and [tblkch.pdf](/tblkch.pdf).
 
-* For a narrow study of the TON blockchain config parameters: [mc-config.h](https://github.com/ton-blockchain/ton/blob/fc9542f5e223140fcca833c189f77b1a5ae2e184/crypto/block/mc-config.h), [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb) and [BlockMasterConfig Type](https://docs.evercloud.dev/reference/graphql-api/field_descriptions#blockmasterconfig-type).
+-   [mc-config.h](https://github.com/ton-blockchain/ton/blob/fc9542f5e223140fcca833c189f77b1a5ae2e184/crypto/block/mc-config.h), [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb) and [BlockMasterConfig Type](https://docs.evercloud.dev/reference/graphql-api/field_descriptions#blockmasterconfig-type).
 
 ## 📖 See Also
-On this page, you can find active network configurations of the TON blockchain:
 
-Mainnet: https://ton.org/global-config.json
-Testnet: https://ton.org/testnet-global.config.json
+On this page, you can find active network configurations of the TON Blockchain:
+
+-   Mainnet: https://ton.org/global-config.json
+-   Testnet: https://ton.org/testnet-global.config.json
