@@ -97,13 +97,8 @@ To learn more about transaction verification, please see the following examples:
 
 ### What is the layout of a transaction in TON?
 
-Fundamentals:
-For more info on TON transaction fundamentals please see [page 75 of TON Whitepaper](https://ton.org/docs/tblkch.pdf#page=75&zoom=100,148,290):
-
-
-Example from explorers (transfer tx):
-- https://tonscan.org/tx/FiR7bn5LuBO0FYjx7Fst9kuwnXs128NVFA9YYniKG-A=
-- https://ton.cx/tx/33513508000001:FiR7bn5LuBO0FYjx7Fst9kuwnXs128NVFA9YYniKG+A=:EQBfAN7LfaUYgXZNw5Wc7GBgkEX2yhuJ5ka95J1JJwXXf4a8
+Detailed explanations on each field of the layout:
+- [Transaction layout](/develop/data-formats/transaction-layout)
 
 ### Is transaction batching possible?
 
