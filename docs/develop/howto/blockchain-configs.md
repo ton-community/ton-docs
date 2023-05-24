@@ -1,10 +1,10 @@
 # Blockchain Config
 
-### The Russian version of this article can be found [here](https://github.com/delovoyhomie/description-config-for-TON-Blockchain/blob/main/Russian-version.md).
+#### The Russian version of this article can be found [here](https://github.com/delovoyhomie/description-config-for-TON-Blockchain/blob/main/Russian-version.md).
 
 ## 👋 Introduction
 
-On this page, you can find a description of the configuration parameters used in the TON blockchain.
+On this page, you can find a description of the configuration parameters used in the TON Blockchain.
 TON has a complex configuration with many technical parameters: some are used by the blockchain itself, some by the ecosystem. However, only a few people understand what these parameters mean. This article is necessary to provide users with a simple way to understand the parameters and their purpose.
 
 ## 💡 Prerequisites
@@ -13,7 +13,7 @@ This material is intended to be read alongside the parameter list.
 You can view the parameter values in the [current configuration](https://explorer.toncoin.org/config), and the way they are written into [cells](/learn/overviews/cells) is described in the [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb) file in [TL-B](/develop/data-formats/tl-b-language) format.
 
 :::info
-The binary encoding at the end of the TON blockchain parameter is a serialized binary representation of its configuration, enabling efficient storage or transmission of the configuration. The precise details of serialization depend on the specific encoding scheme used by the TON blockchain.
+The binary encoding at the end of the TON Blockchain parameter is a serialized binary representation of its configuration, enabling efficient storage or transmission of the configuration. The precise details of serialization depend on the specific encoding scheme used by the TON Blockchain.
 :::
 
 ## 🚀 Let's get started!
@@ -106,7 +106,7 @@ This parameter indicates under what conditions proposals to change the TON confi
 
 ## Param 12
 
-This parameter represents the configuration of a workchain in the TON blockchain. Workchains in the TON Blockchain are designed as independent blockchains that can operate in parallel, allowing TON to scale and process a very large number of transactions and smart contracts.
+This parameter represents the configuration of a workchain in the TON Blockchain. Workchains in the TON Blockchain are designed as independent blockchains that can operate in parallel, allowing TON to scale and process a very large number of transactions and smart contracts.
 
 ## Workchain configuration parameters:
 
@@ -138,11 +138,11 @@ This parameter defines the cost of filing complaints about incorrect operation o
 
 ## Param 14
 
-This parameter represents the reward for block creation in the TON blockchain. Nanograms are nanoTON, thus, the reward for block creation in the masterchain equals 1.7 TON, and in the basic workchain - 1.0 TON (meanwhile, in the event of a workchain split, the block reward also splits: if there are two shardchains in the workchain, then the shard block reward will be 0.5 TON).
+This parameter represents the reward for block creation in the TON Blockchain. Nanograms are nanoTON, thus, the reward for block creation in the masterchain equals 1.7 TON, and in the basic workchain - 1.0 TON (meanwhile, in the event of a workchain split, the block reward also splits: if there are two shardchains in the workchain, then the shard block reward will be 0.5 TON).
 
 ## Param 15
 
-This parameter contains the duration of different stages of elections and validators' work in the TON blockchain.
+This parameter contains the duration of different stages of elections and validators' work in the TON Blockchain.
 
 For each validation period, there is an `election_id` equal to the UNIX-format time at the start of the validation.
 You can get the current `election_id` (if elections are ongoing) or the past one by invoking the Elector contract's respective get-methods `active_election_id` and `past_election_ids`.
@@ -163,7 +163,7 @@ Each value in the arguments is determined by the `uint32` data type.
 
 ### Examples
 
-In the TON blockchain, it is customary to conventionally divide validation periods into even and odd ones. These rounds follow one another. Since voting for the next round takes place during the previous one, a validator needs to divide funds into two pools to have the opportunity to participate in both rounds.
+In the TON Blockchain, it is customary to conventionally divide validation periods into even and odd ones. These rounds follow one another. Since voting for the next round takes place during the previous one, a validator needs to divide funds into two pools to have the opportunity to participate in both rounds.
 
 #### Mainnet
 
@@ -227,7 +227,7 @@ Thus, at the moment, the length of one round of one parity is `160010500 - 16000
 
 ## Param 16
 
-This parameter represents the limits on the number of validators in the TON blockchain. It is directly used by the Elector smart contract.
+This parameter represents the limits on the number of validators in the TON Blockchain. It is directly used by the Elector smart contract.
 
 ### Configuration parameters for the number of validators for elections:
 
@@ -243,7 +243,7 @@ This parameter represents the limits on the number of validators in the TON bloc
 
 ## Param 17
 
-This parameter represents the stake parameters configuration in the TON blockchain. In many blockchain systems, especially those using the Proof-of-Stake or Delegated Proof-of-Stake consensus algorithm, cryptocurrency owners native to the network can "stake" their tokens to become validators and earn rewards.
+This parameter represents the stake parameters configuration in the TON Blockchain. In many blockchain systems, especially those using the Proof-of-Stake or Delegated Proof-of-Stake consensus algorithm, cryptocurrency owners native to the network can "stake" their tokens to become validators and earn rewards.
 
 ## Configuration parameters:
 
@@ -261,13 +261,13 @@ Each value in the arguments is determined by the `uint32` data type.
 
 ## Param 18
 
-This parameter represents the configuration for determining the prices for data storage on the TON blockchain. This serves as a measure to prevent spam and encourages network maintenance.
+This parameter represents the configuration for determining the prices for data storage on the TON Blockchain. This serves as a measure to prevent spam and encourages network maintenance.
 
 ### Dictionary of storage fee parameters:
 
 -   `utime_since`: This parameter provides the initial Unix timestamp from which the specified prices apply.
 
--   `bit_price_ps` and `cell_price_ps`: These parameters represent the storage prices for one bit or one cell of information in the main workchains of the TON blockchain for 65536 seconds
+-   `bit_price_ps` and `cell_price_ps`: These parameters represent the storage prices for one bit or one cell of information in the main workchains of the TON Blockchain for 65536 seconds
 
 -   `mc_bit_price_ps` and `mc_cell_price_ps`: These parameters represent the prices for computational resources specifically in the TON masterchain for 65536 seconds
 
@@ -316,7 +316,7 @@ These parameters set limits on the block, upon reaching which the block is final
 
 -   `gas`: This section sets the limits on the amount of gas that a block can consume. Gas in the context of blockchain is an indicator of computational work. The limits on underload, soft and hard limit work the same as for size in bytes.
 
--   `lt_delta`: This section sets the limits on the difference in logical time between the first and the last transaction. Logical time is a concept used in the TON blockchain for ordering events. The limits on underload, soft and hard limit work the same as for size in bytes and gas.
+-   `lt_delta`: This section sets the limits on the difference in logical time between the first and the last transaction. Logical time is a concept used in the TON Blockchain for ordering events. The limits on underload, soft and hard limit work the same as for size in bytes and gas.
 
 :::info
 In case of insufficient load on the shard and, accordingly, the desire to merge with a neighbor, `soft_limit` defines a state above which internal (internal) messages stop being processed, but external (external) ones continue. External (external) messages are processed until a limit equal to `(soft_limit + hard_limit)/2 is reached`.
@@ -324,7 +324,7 @@ In case of insufficient load on the shard and, accordingly, the desire to merge 
 
 ## Param 24 and 25
 
-Parameter 24 represents the configuration for the cost of sending messages in the masterchain of the TON blockchain.
+Parameter 24 represents the configuration for the cost of sending messages in the masterchain of the TON Blockchain.
 
 Parameter 25 represents the configuration for the cost of sending messages in all other cases.
 
@@ -334,7 +334,7 @@ Parameter 25 represents the configuration for the cost of sending messages in al
 
 -   `bit_price`: This parameter represents the cost per bit of message forwarding.
 
--   `cell_price`: This parameter reflects the cost of forwarding a message per cell. A cell is the basic unit of data storage on the TON blockchain.
+-   `cell_price`: This parameter reflects the cost of forwarding a message per cell. A cell is the basic unit of data storage on the TON Blockchain.
 
 -   `ihr_price_factor`: This is a factor used to calculate the cost of immediate hypercube routing (IHR).
     :::info
@@ -347,7 +347,7 @@ Parameter 25 represents the configuration for the cost of sending messages in al
 
 ## Param 28
 
-This parameter provides the configuration for the Catchain protocol in the TON blockchain. Catchain is the lowest level consensus protocol used in TON to achieve agreement among validators.
+This parameter provides the configuration for the Catchain protocol in the TON Blockchain. Catchain is the lowest level consensus protocol used in TON to achieve agreement among validators.
 
 ### Configuration parameters:
 
@@ -365,7 +365,7 @@ This parameter provides the configuration for the Catchain protocol in the TON b
 
 ## Param 29
 
-This parameter provides the configuration for the consensus protocol above catchain ([Param 28](#param-28)) in the TON blockchain. The consensus protocol is a crucial component of a blockchain network, and it ensures that all nodes agree on the state of the distributed ledger.
+This parameter provides the configuration for the consensus protocol above catchain ([Param 28](#param-28)) in the TON Blockchain. The consensus protocol is a crucial component of a blockchain network, and it ensures that all nodes agree on the state of the distributed ledger.
 
 ### Configuration parameters:
 
