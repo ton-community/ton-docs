@@ -105,11 +105,11 @@ const sidebars = {
   ],
   develop: [
 
-    'develop/getting-started',
+    'develop/overview',
     {
       type: 'doc',
       label: 'Get Started with TON',
-      id: 'develop/onboarding-challenge',
+      id: 'develop/get-started-with-ton',
     },
     {
       type: 'category',
@@ -195,7 +195,8 @@ const sidebars = {
               items: [
                 'develop/smart-contracts/tutorials/multisig',
                 'develop/smart-contracts/tutorials/multisig-js',
-                'develop/smart-contracts/tutorials/wallet'
+                'develop/smart-contracts/tutorials/wallet',
+                'develop/smart-contracts/examples'
               ],
             },
           ],
@@ -444,6 +445,7 @@ const sidebars = {
             'develop/research-and-development/boc',
             'develop/data-formats/msg-tlb',
             'develop/data-formats/block-layout',
+            'develop/data-formats/transaction-layout',
             'develop/data-formats/crc32',
             'develop/data-formats/tlb-ide'
           ]

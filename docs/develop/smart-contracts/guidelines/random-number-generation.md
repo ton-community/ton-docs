@@ -136,4 +136,4 @@ Deploy this contract in any workchain you need (probably Basechain) and you're d
 
 It is safe in most cases, but there is still a **chance of manipulating it**.
 
-An evil validator with some probability [can affect](/participate/own-blockchain-software/random#conclusion) the _seed_, on which the random depends. Even if this probability is extremely small, it is still worth considering.
+An evil validator with some probability [can affect](/develop/smart-contracts/security/random#conclusion) the _seed_, on which the random depends. Even if this probability is extremely small, it is still worth considering.

@@ -46,7 +46,7 @@ Run the installation script as administrator:
 sudo bash install.sh -m full
 ```
 
-See more detailed guide in [Running Full Node](/participate/nodes/run-node) section.
+See more detailed guide in [Running Full Node](/participate/run-nodes/full-node) section.
 
 
 ### Run an Archive Node

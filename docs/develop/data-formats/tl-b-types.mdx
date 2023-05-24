@@ -1,3 +1,5 @@
+import ThemedImage from '@theme/ThemedImage';
+
 # TL-B Types
 :::caution advanced level
 This information is **very low-level** and could be hard to understand for newcomers.
@@ -69,7 +71,16 @@ foo$_  u:(Unary 2) = Foo;
 
 According said above, `Foo` will be deserialized into:
 
-![TL-B example](/img/docs/data-formats/tl-b-docs-10.png?raw=true)
+<br></br>
+<ThemedImage
+alt=""
+sources={{
+light: '/img/docs/data-formats/tl-b-docs-10.png?raw=true',
+dark: '/img/docs/data-formats/tl-b-docs-10-dark.png?raw=true',
+}}
+/>
+<br></br>
+
 
 ```tlb
 foo u:(unary_succ x:(unary_succ x:(unnary_zero)))

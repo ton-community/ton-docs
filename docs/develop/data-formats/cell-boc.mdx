@@ -1,25 +1,58 @@
+import ThemedImage from '@theme/ThemedImage';
+
 # Cell & Bag of Cells(BoC)
 
 ## Cell
 A cell represents a data structure on TON Blockchain. Cells are able to store up to 1023 bits and possess up to 4 references to other cells.
-
-![TL-B example](/img/docs/data-formats/tl-b-docs-5.png?raw=true)
+<br></br>
+<ThemedImage
+alt=""
+sources={{
+    light: '/img/docs/data-formats/tl-b-docs-5.png?raw=true',
+    dark: '/img/docs/data-formats/tl-b-docs-5-dark.png?raw=true',
+}}
+/>
+<br></br>
 
 
 ## Bag of Cells
 
 Bag of Cells (BoC) is a format for serializing cells into byte arrays, which is further described in the [TL-B schema](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25).
 
-![TL-B example](/img/docs/data-formats/tl-b-docs-6.png?raw=true)
+<br></br>
+<ThemedImage
+alt=""
+sources={{
+    light: '/img/docs/data-formats/tl-b-docs-6.png?raw=true',
+    dark: '/img/docs/data-formats/tl-b-docs-6-dark.png?raw=true',
+}}
+/>
+<br></br>
 
 On TON, everything consists of cells, including contract code, stored data, blocks, achieving streamline and robust flexibility in the process.
 
-![TL-B example](/img/docs/data-formats/tl-b-docs-4.png?raw=true)
+<br></br>
+<ThemedImage
+alt=""
+sources={{
+    light: '/img/docs/data-formats/tl-b-docs-4.png?raw=true',
+    dark: '/img/docs/data-formats/tl-b-docs-4-dark.png?raw=true',
+}}
+/>
+<br></br>
 
 ### Cell serialization
 Let's analyze our first example of a Bag of Cells :
 
-![TL-B example](/img/docs/data-formats/tl-b-docs-7.png?raw=true)
+<br></br>
+<ThemedImage
+alt=""
+sources={{
+    light: '/img/docs/data-formats/tl-b-docs-7.png?raw=true',
+    dark: '/img/docs/data-formats/tl-b-docs-7-dark.png?raw=true',
+}}
+/>
+<br></br>
 
 ```json
 1[8_] -> {

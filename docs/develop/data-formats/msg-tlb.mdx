@@ -1,3 +1,5 @@
+import ThemedImage from '@theme/ThemedImage';
+
 # Messages TL-B schemes
 
 In this section detailed explanation of TL-B schemes for messages.
@@ -65,11 +67,28 @@ Recall how `Maybe` and `Either` works, we can serialize different cases:
 
 * `[CommonMsgInfo][10][StateInit][0][X]` - `Message X` in the one cell
 
-![TL-B example](/img/docs/data-formats/tl-b-docs-9.png?raw=true)
+<br></br>
+<ThemedImage
+alt=""
+sources={{
+light: '/img/docs/data-formats/tl-b-docs-9.png?raw=true',
+dark: '/img/docs/data-formats/tl-b-docs-9-dark.png?raw=true',
+}}
+/>
+<br></br>
 
 * `[CommonMsgInfo][11][^StateInit][1][^X]` - `Message X` with references
 
-![TL-B example](/img/docs/data-formats/tl-b-docs-8.png?raw=true)
+<br></br>
+<ThemedImage
+alt=""
+sources={{
+light: '/img/docs/data-formats/tl-b-docs-8.png?raw=true',
+dark: '/img/docs/data-formats/tl-b-docs-8-dark.png?raw=true',
+}}
+/>
+<br></br>
+
 
 
 

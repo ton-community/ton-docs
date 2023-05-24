@@ -2,7 +2,7 @@
 
 ## 👋 Introduction
 
-[TON Sites](/learn/services/sites-www-proxy) work almost like regular sites except for their installation. A number of additional actions are required to launch them. In this tutorial I will show you how to do it.
+[TON Sites](https://blog.ton.org/ton-sites) work almost like regular sites except for their installation. A number of additional actions are required to launch them. In this tutorial I will show you how to do it.
 
 ## 🖥 Running TON Site
 
@@ -131,8 +131,8 @@ In a few minutes you will be able to access your website using the chosen domain
 
 ## 📌 References
 
- * [TON Sites, TON WWW and TON Proxy](/learn/services/sites-www-proxy/)
- * [TON DNS](/learn/services/dns/)
+ * [TON Sites, TON WWW and TON Proxy](https://blog.ton.org/ton-sites)
+ * [TON DNS](/participate/web3/dns)
  * [TON Web3 Overview](/participate/web3/overview/)
  * [Site & Domain Management](/participate/web3/site-management)
- * Author: [Andrew Burnosov](https://github.com/AndreyBur) (TG: [@AndrewBurnosov](https://t.me/AndreyBurnosov))
+ * Author: [Andrew Burnosov](https://github.com/AndreyBurnosov) (TG: [@AndrewBurnosov](https://t.me/AndreyBurnosov))

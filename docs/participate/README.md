@@ -13,7 +13,7 @@ It is also meant to offer essential frameworks (explorers, wallets, TEPs) that a
 
 * [TON Enhancement Proposals (TEPs)](https://github.com/ton-blockchain/TEPs)
 * [Ask a Question about TON on answers.ton.org](https://answers.ton.org/)
-* [Stake with TON Nominators](/participate/nominators)
+* [Stake with TON Nominators](/participate/network-maintenance/nominators)
 
 ### Bridges
 
@@ -23,7 +23,7 @@ It is also meant to offer essential frameworks (explorers, wallets, TEPs) that a
 ### Run a Node
 
 * [Discover Node Types in TON](/participate/nodes/node-types)
-* [Run your Full Node or Validator](/participate/nodes/run-node)
+* [Run your Full Node or Validator](/participate/run-nodes/full-node)
 * [TON Validator maintenance & security](/participate/nodes/node-maintenance-and-security)
 
 ## Participate in TON Web3

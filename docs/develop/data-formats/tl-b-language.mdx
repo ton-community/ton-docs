@@ -1,3 +1,5 @@
+import ThemedImage from '@theme/ThemedImage';
+
 # TL-B Language
 
 TL-B (Type Language - Binary) serves to describe the type system, constructors and existing functions. For example, we can use TL-B schemes to build binary structures associated with TON Blockchain. Special TL-B parsers can read schemes to deserialize binary data into different objects.
@@ -7,8 +9,16 @@ TL-B (Type Language - Binary) serves to describe the type system, constructors a
 We refer to any set of TL-B constructs as TL-B documents. A TL-B document usually consists of declarations of types (i.e. their constructors) and functional combinators. The declaration of each combinator ends with a semicolon (`;`).
 
 Here is an example of a possible combinator declaration:
+<br></br>
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/data-formats/tl-b-docs-2.png?raw=true',
+    dark: '/img/docs/data-formats/tl-b-docs-2-dark.png?raw=true',
+  }}
+/>
+<br></br>
 
-![TL-B example](/img/docs/data-formats/tl-b-docs-2.png?raw=true)
 
 ## Context
 
@@ -40,7 +50,16 @@ a comment
 
 The left-hand side of each equation describes the way to define, or serialize, a value of the type indicated on the right-hand side. Such a description begins with the name of a constructor.
 
-![TL-B example](/img/docs/data-formats/tl-b-docs-3.png?raw=true)
+<br></br>
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/data-formats/tl-b-docs-3.png?raw=true',
+    dark: '/img/docs/data-formats/tl-b-docs-3-dark.png?raw=true',
+  }}
+/>
+<br></br>
+
 
 
 Constructors are used to specify the type of combinator, including the state at serialization. For example, constructors can also be used when you want to specify an `op`(operation code) in query to a smart contract in TON.
@@ -138,8 +157,8 @@ Here Type `TickTock` defined with `tick_tock$_` contructor and `tick:Bool`, `toc
 | # |  an unsigned 32-bit number|
 | ## N| The same as uintN - means an unsigned N-bit number|
 |#<= N| A number between 0 and N (including both). Such a number is stored in ceil(log2(N+1)) bits. |
-|intN| A signed N-bit integer. Supported values of N: 1 <= N <= 257|
-|uintN| An unsigned N-bit integer. Supported values of N: 1 <= N <= 256|
+|intN| A signed N-bit integer. Supported values of N: 1 <= N <= 256|
+|uintN| An unsigned N-bit integer. Supported values of N: 1 <= N <= 257|
 | N * Bit |  means N-bit slice |
 |Type | stands for arbitrary type (but only presents in implicit definitions). |
 | ^Cell | An arbitrary cell in reference |
