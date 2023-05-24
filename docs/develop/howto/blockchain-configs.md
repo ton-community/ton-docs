@@ -1,5 +1,7 @@
 # Blockchain Config
 
+### The Russian version of this article can be found [here](https://github.com/delovoyhomie/description-config-for-TON-Blockchain/blob/main/Russian-version.md).
+
 ## 👋 Introduction
 
 On this page, you can find a description of the configuration parameters used in the TON blockchain.
