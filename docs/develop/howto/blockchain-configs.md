@@ -10,7 +10,7 @@ TON has a complex configuration with many technical parameters: some are used by
 ## 💡 Prerequisites
 
 This material is intended to be read alongside the parameter list.
-You can view the parameter values in the [current configuration](https://explorer.toncoin.org/config), and the way they are written into [cells](https://docs.ton.org/learn/overviews/cells) is described in the [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb) file in [TL-B](https://docs.ton.org/develop/data-formats/tl-b-language) format.
+You can view the parameter values in the [current configuration](https://explorer.toncoin.org/config), and the way they are written into [cells](/learn/overviews/cells) is described in the [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb) file in [TL-B](/develop/data-formats/tl-b-language) format.
 
 :::info
 The binary encoding at the end of the TON blockchain parameter is a serialized binary representation of its configuration, enabling efficient storage or transmission of the configuration. The precise details of serialization depend on the specific encoding scheme used by the TON blockchain.
@@ -25,12 +25,12 @@ All parameters are in order, and you won't get lost. For your convenience, use t
 This parameter is the address of a special smart contract that stores the blockchain's configuration. The configuration is stored in the contract to simplify its loading and modification during validator voting.
 
 :::info
-In the configuration parameter, only the hash portion of the address is recorded, as the contract always resides in the [masterchain](https://docs.ton.org/learn/overviews/ton-blockchain#masterchain-blockchain-of-blockchains) (workchain -1). Therefore, the full address of the contract will be written as `-1:<value of the configuration parameter>`.
+In the configuration parameter, only the hash portion of the address is recorded, as the contract always resides in the [masterchain](/learn/overviews/ton-blockchain#masterchain-blockchain-of-blockchains) (workchain -1). Therefore, the full address of the contract will be written as `-1:<value of the configuration parameter>`.
 :::
 
 ## Param 1
 
-This parameter is the address of the [Elector](https://ton.org/docs/develop/smart-contracts/governance#elector) smart contract, responsible for appointing validators, distributing rewards, and voting on changes to blockchain parameters.
+This parameter is the address of the [Elector](/develop/smart-contracts/governance#elector) smart contract, responsible for appointing validators, distributing rewards, and voting on changes to blockchain parameters.
 
 ## Param 2
 
@@ -53,7 +53,7 @@ If parameter 3 is missing (as is the case at the time of writing), transaction f
 This parameter is the address of the root DNS contract of the TON network.
 
 :::info
-More detailed information can be found in the [TON DNS & Domains](https://docs.ton.org/participate/web3/dns) article and in a more detailed original description [here](https://github.com/ton-blockchain/TEPs/blob/master/text/0081-dns-standard.md).
+More detailed information can be found in the [TON DNS & Domains](/participate/web3/dns) article and in a more detailed original description [here](https://github.com/ton-blockchain/TEPs/blob/master/text/0081-dns-standard.md).
 This contract is not responsible for selling .ton domains.
 :::
 
@@ -64,12 +64,12 @@ This parameter is responsible for minting fees of new currencies.
 :::info
 Currently, minting additional currency is not implemented and does not work. The implementation and launch of the minter are planned.
 
-You can learn more about the issues and prospects in the [relevant article](https://docs.ton.org/develop/research-and-development/minter-flow).
+You can learn more about the issues and prospects in the [relevant article](/develop/research-and-development/minter-flow).
 :::
 
 ## Param 7
 
-This parameter stores the volume of each of the additional currencies in circulation. Data is stored in the form of a [dictionary](https://docs.ton.org/develop/data-formats/tl-b-types#hashmap-parsing-example) (binary tree; probably during TON's development this structure was mistakenly named hashmap) `extracurrency_id -> amount`, the amount is presented as `VarUint 32` - an integer from `0` to `2^248`.
+This parameter stores the volume of each of the additional currencies in circulation. Data is stored in the form of a [dictionary](/develop/data-formats/tl-b-types#hashmap-parsing-example) (binary tree; probably during TON's development this structure was mistakenly named hashmap) `extracurrency_id -> amount`, the amount is presented as `VarUint 32` - an integer from `0` to `2^248`.
 
 ## Param 8
 
@@ -134,7 +134,7 @@ This parameter represents the configuration of a workchain in the TON blockchain
 
 ## Param 13
 
-This parameter defines the cost of filing complaints about incorrect operation of validators in the [Elector](https://ton.org/docs/develop/smart-contracts/governance#elector) contract.
+This parameter defines the cost of filing complaints about incorrect operation of validators in the [Elector](/develop/smart-contracts/governance#elector) contract.
 
 ## Param 14
 
@@ -297,7 +297,7 @@ These parameters define the cost of computations in the TON network. The complex
 -   `freeze_due_limit` and `delete_due_limit`: Limits of accumulated storage fees (in nanoTON) at which a contract is frozen and deleted, respectively.
 
 :::info
-More about `gas_credit` and other parameters in the section with external messages [here](https://docs.ton.org/develop/smart-contracts/guidelines/accept#external-messages).
+More about `gas_credit` and other parameters in the section with external messages [here](/develop/smart-contracts/guidelines/accept#external-messages).
 :::
 
 ## Param 22 and 23
@@ -365,7 +365,7 @@ This parameter provides the configuration for the Catchain protocol in the TON b
 
 ## Param 29
 
-This parameter provides the configuration for the consensus protocol above catchain ([Param 28](http://docs.ton.org/develop/howto/network-configs#param-28)) in the TON blockchain. The consensus protocol is a crucial component of a blockchain network, and it ensures that all nodes agree on the state of the distributed ledger.
+This parameter provides the configuration for the consensus protocol above catchain ([Param 28](#param-28)) in the TON blockchain. The consensus protocol is a crucial component of a blockchain network, and it ensures that all nodes agree on the state of the distributed ledger.
 
 ### Configuration parameters:
 
