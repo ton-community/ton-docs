@@ -178,7 +178,83 @@ constants = {
 
 ##### Scheme
 
-![image](static/img/tutorials/jetton/jetton-main-page.png)
-![image](static/img/docs/config15-mainnet.png)
+![image](/img/docs/blockchain-configs/config15-mainnet.png)
 
-#### g
+#### How to calculate periods?
+
+Let `election_id = validation_start = 1600032768`. Then:
+
+```python
+election_start = election_id - constants['elections_start_before'] = 1600032768 - 32768 = 1600000000
+election_end = delay_start = election_id - constants['elections_end_before'] = 1600032768 - 8192 = 1600024576
+hold_start = validation_end = election_id + constants['validators_elected_for'] = 1600032768 + 65536 = 1600098304
+hold_end = hold_start + constants['stake_held_for'] = 1600098304 + 32768 = 1600131072
+```
+
+Thus, at the moment, the length of one round of one parity is `1600131072 - 1600000000 = 131072 seconds = 36.40888... hours`
+
+#### Testnet
+
+##### Current values:
+
+```python
+constants = {
+    'validators_elected_for': 7200,  # 2 hours 
+    'elections_start_before': 2400,  # 40 minutes
+    'elections_end_before': 180,     # 3 minutes
+    'stake_held_for': 900            # 15 minutes
+}
+```
+
+##### Scheme
+
+![image](/img/docs/blockchain-configs/config15-testnet.png)
+
+###### How to calculate periods?
+
+Let `election_id = validation_start = 160002400`. Then:
+
+```python
+election_start = election_id - constants['elections_start_before'] = 160002400 - 2400 = 1600000000
+election_end = delay_start = election_id - constants['elections_end_before'] = 160002400 - 180 = 160002220
+hold_start = validation_end = election_id + constants['validators_elected_for'] = 160002400 + 7200 = 160009600
+hold_end = hold_start + constants['stake_held_for'] = 160009600 + 900 = 160010500
+```
+
+Thus, at the moment, the length of one round of one parity is `160010500 - 1600000000 = 10500 секунд = 175 минут = 2.91666... hours`
+
+## Param 16
+
+This parameter represents the limits on the number of validators in the TON blockchain. It is directly used by the Elector smart contract.
+
+### Configuration parameters for the number of validators for elections:
+
+- `max_validators`: This parameter represents the maximum number of validators that can participate in the network operation at any given time.
+
+- `max_main_validators`: This parameter represents the maximum number of masterchain validators.
+
+- `min_validators`: This parameter represents the minimum number of validators that must support the network operation.
+
+1. The maximum number of validators is greater than or equal to the maximum number of masterchain validators.
+2. The maximum number of masterchain validators must be greater than or equal to the minimum number of validators.
+3. The minimum number of validators must be no less than 1.
+
+## Param 17
+
+This parameter represents the stake parameters configuration in the TON blockchain. In many blockchain systems, especially those using the Proof-of-Stake or Delegated Proof-of-Stake consensus algorithm, cryptocurrency owners native to the network can "stake" their tokens to become validators and earn rewards.
+
+## Configuration parameters:
+
+- `min_stake`: This parameter represents the minimum amount of TONs that an interested party needs to stake to participate in the validation process.
+
+- `max_stake`: This parameter represents the maximum amount of TONs that an interested party can stake.
+
+- `min_total_stake`: This parameter represents the minimum total amount of TONs that must be held by the chosen set of validators.
+
+- `max_stake_factor`: This parameter is a multiplier indicating how many times the maximum effective stake (pledge) can exceed the minimum stake sent by any other validator.
+
+:::info
+Each value in the arguments is determined by the `uint32` data type.
+:::
+
+## Param 18
