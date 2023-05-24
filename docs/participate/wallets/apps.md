@@ -75,7 +75,7 @@ To switch Ton classic wallet to test environment, you should to open in browser 
 #### Tonkeeper test environment
 
 
-To switch Tonkeeper application between Mainnet and Testnet: open settings, at the bottom of the settings screen tap 5 times on the Tonkeeper icon and switch net in the dev menu.
+To switch Tonkeeper application between Mainnet and Testnet: open settings, at the bottom of the settings screen tap 5 times on the Tonkeeper icon and switch net in the dev menu. In the Dev menu tap `Switch to Testnet` or `Switch to Mainnet` according network you need.
 
 |                                                      |
 |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
