@@ -104,3 +104,81 @@ This parameter indicates under what conditions proposals to change the TON confi
 
 ## Param 12
 
+This parameter represents the configuration of a workchain in the TON blockchain. Workchains in the TON Blockchain are designed as independent blockchains that can operate in parallel, allowing TON to scale and process a very large number of transactions and smart contracts.
+
+## Workchain configuration parameters:
+
+- `enabled_since`: a UNIX timestamp of the moment this workchain was enabled;
+
+- `actual_min_split`: the minimum depth of the split (sharding) of this workchain, supported by validators;
+
+- `min_split`: the minimum depth of the split of this workchain, set by the configuration;
+
+- `max_split`: the maximum depth of the split of this workchain;
+
+- `basic`: a boolean flag (1 for true, 0 for false) indicating whether this workchain is basic (handles TON coins, smart contracts based on the TON Virtual Machine);
+
+- `active`: a boolean flag indicating whether this workchain is active at the moment;
+
+- `accept_msgs`: a boolean flag indicating whether this workchain is accepting messages at the moment;
+
+- `flags`: additional flags for the workchain (reserved, currently always 0);
+
+- `zerostate_root_hash` and `zerostate_file_hash`: hashes of the first block of the workchain;
+
+- `version`: version of the workchain;
+
+- `format`: the format of the workchain, which includes vm_version and vm_mode - the virtual machine used there.
+
+## Param 13
+
+This parameter defines the cost of filing complaints about incorrect operation of validators in the [Elector](https://ton.org/docs/develop/smart-contracts/governance#elector) contract.
+
+## Param 14
+
+This parameter represents the reward for block creation in the TON blockchain. Nanograms are nanoTON, thus, the reward for block creation in the masterchain equals 1.7 TON, and in the basic workchain - 1.0 TON (meanwhile, in the event of a workchain split, the block reward also splits: if there are two shardchains in the workchain, then the shard block reward will be 0.5 TON).
+
+## Param 15
+
+This parameter contains the duration of different stages of elections and validators' work in the TON blockchain.
+
+For each validation period, there is an `election_id` equal to the UNIX-format time at the start of the validation. 
+You can get the current `election_id` (if elections are ongoing) or the past one by invoking the Elector contract's respective get-methods `active_election_id` and `past_election_ids`.
+
+## Workchain configuration parameters:
+
+- `validators_elected_for`: the number of seconds the elected set of validators perform their role (one round).
+
+- `elections_start_before`: how many seconds before the end of the current round the election process for the next period will start.
+
+- `elections_end_before`: how many seconds before the end of the current round the validators for the next round will be chosen.
+
+- `stake_held_for`: the period for which a validator's stake is held (for handling complaints) after the round expires.
+
+:::info
+Each value in the arguments is determined by the `uint32` data type.
+:::
+
+### Examples
+
+In the TON blockchain, it is customary to conventionally divide validation periods into even and odd ones. These rounds follow one another. Since voting for the next round takes place during the previous one, a validator needs to divide funds into two pools to have the opportunity to participate in both rounds.
+
+#### Mainnet
+
+##### Current values:
+
+```python
+constants = {
+    'validators_elected_for': 65536,  # 18.2 hours 
+    'elections_start_before': 32768,  # 9.1 hours
+    'elections_end_before': 8192,     # 2.2 hours
+    'stake_held_for': 32768           # 9.1 hours
+}
+```
+
+##### Scheme
+
+![image](static/img/tutorials/jetton/jetton-main-page.png)
+![image](static/img/docs/config15-mainnet.png)
+
+#### g
