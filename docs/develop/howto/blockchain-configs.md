@@ -258,3 +258,282 @@ Each value in the arguments is determined by the `uint32` data type.
 :::
 
 ## Param 18
+
+This parameter represents the configuration for determining the prices for data storage on the TON blockchain. This serves as a measure to prevent spam and encourages network maintenance.
+
+### Dictionary of storage fee parameters:
+
+- `utime_since`: This parameter provides the initial Unix timestamp from which the specified prices apply.
+
+- `bit_price_ps` and `cell_price_ps`: These parameters represent the storage prices for one bit or one cell of information in the main workchains of the TON blockchain for 65536 seconds
+
+- `mc_bit_price_ps` and `mc_cell_price_ps`: These parameters represent the prices for computational resources specifically in the TON masterchain for 65536 seconds
+
+:::info
+
+`utime_since` accepts values in the `uint32` data type.
+
+The rest accept values in the `uint64` data type.
+:::
+
+## Param 20 and 21
+
+These parameters define the cost of computations in the TON network. The complexity of any computation is estimated in gas units.
+
+- `flat_gas_limit` and `flat_gas_price`: A certain starting amount of gas is provided at a price of `flat_gas_price` (to offset the costs of launching the TON Virtual Machine).
+
+- `gas_price`: This parameter reflects the price of gas in the network, in nanotons per 65536 gas units.
+
+- `gas_limit`: This parameter represents the maximum amount of gas that can be consumed per transaction.
+
+- `special_gas_limit`: This parameter represents the limit on the amount of gas that can be consumed per transaction of a special (system) contract.
+
+- `gas_credit`: This parameter represents a credit in gas units that is provided to transactions for the purpose of checking an external message.
+
+- `block_gas_limit`: This parameter represents the maximum amount of gas that can be consumed within a single block.
+
+- `freeze_due_limit` and `delete_due_limit`: Limits of accumulated storage fees (in nanoTON) at which a contract is frozen and deleted, respectively.
+
+:::info
+More about `gas_credit` and other parameters in the section with external messages [here](https://docs.ton.org/develop/smart-contracts/guidelines/accept#external-messages).
+:::
+
+## Param 22 and 23
+
+These parameters set limits on the block, upon reaching which the block is finalized and the callback of the remaining messages (if any) is carried over to the next block.
+
+### Configuration parameters:
+
+- `bytes`: This section sets the limits on the block size in bytes.
+
+- `underload`: Underload is a state when the shard realizes that there is no load and is inclined to merge if a neighboring shard is willing.
+
+- `soft_limit`: Soft limit - when this limit is reached, internal messages stop being processed.
+
+- `hard_limit`: Hard limit - this is the absolute maximum size.
+
+- `gas`: This section sets the limits on the amount of gas that a block can consume. Gas in the context of blockchain is an indicator of computational work. The limits on underload, soft and hard limit work the same as for size in bytes.
+
+- `lt_delta`: This section sets the limits on the difference in logical time between the first and the last transaction. Logical time is a concept used in the TON blockchain for ordering events. The limits on underload, soft and hard limit work the same as for size in bytes and gas.
+
+:::info
+In case of insufficient load on the shard and, accordingly, the desire to merge with a neighbor, `soft_limit` defines a state above which internal (internal) messages stop being processed, but external (external) ones continue. External (external) messages are processed until a limit equal to `(soft_limit + hard_limit)/2 is reached`.
+:::
+
+## Param 24 and 25
+
+Parameter 24 represents the configuration for the cost of sending messages in the masterchain of the TON blockchain.
+
+Parameter 25 represents the configuration for the cost of sending messages in all other cases.
+
+### Configuration parameters defining the costs of forwarding:
+
+- `lump_price`: This parameter means the base price for forwarding a message, regardless of its size or complexity.
+
+- `bit_price`: This parameter represents the cost per bit of message forwarding.
+
+- `cell_price`: This parameter reflects the cost of forwarding a message per cell. A cell is the basic unit of data storage on the TON blockchain.
+
+- `ihr_price_factor`: This is a factor used to calculate the cost of immediate hypercube routing (IHR).
+:::info
+IHR is a method of message delivery in the TON Blockchain network, where messages are sent directly to the recipient's shard chain.
+:::
+
+- `first_frac`: This parameter defines the fraction of the remaining remainder that will be used for the first transition along the message route.
+
+- `next_frac`: This parameter defines the fraction of the remaining remainder that will be used for subsequent transitions along the message route.
+
+## Param 28
+
+This parameter provides the configuration for the Catchain protocol in the TON blockchain. Catchain is the lowest level consensus protocol used in TON to achieve agreement among validators.
+
+### Configuration parameters:
+
+- `flags`: A general field that can be used to set various binary parameters. In this case, it equals 0, which means that no specific flags are set.
+
+- `shuffle_mc_validators`: A Boolean value indicating whether to shuffle the masterchain validators or not. If this parameter is set to 1, the validators will be shuffled; otherwise, they will not.
+
+- `mc_catchain_lifetime`: The lifetime of masterchain catchain groups in seconds.
+
+- `shard_catchain_lifetime`: The lifetime of shardchain catchain groups in seconds.
+
+- `shard_validators_lifetime`: The lifetime of a shardchain validators group in seconds.
+
+- `shard_validators_num`: The number of validators in each shardchain validation group.
+
+## Param 29
+
+This parameter provides the configuration for the consensus protocol above catchain ([Param 28](http://docs.ton.org/develop/howto/network-configs#param-28)) in the TON blockchain. The consensus protocol is a crucial component of a blockchain network, and it ensures that all nodes agree on the state of the distributed ledger.
+
+### Configuration parameters:
+
+- `flags`: A general field that can be used to set various binary parameters. In this case, it equals 0, which means that no specific flags are set.
+
+- `new_catchain_ids`: A Boolean value indicating whether to generate new Catchain identifiers. If this parameter is set to 1, new identifiers will be generated. In this case, it is assigned the value of 1, which means that new identifiers will be generated.
+
+- `round_candidates`: The number of candidates to be considered in each round of the consensus protocol. Here, it is set to 3.
+
+- `next_candidate_delay_ms`: The delay in milliseconds before the right to generate a block candidate passes to the next validator. Here, it is set to 2000 ms (2 seconds).
+
+- `consensus_timeout_ms`: The timeout for block consensus in milliseconds. Here, it is set to 16000 ms (16 seconds).
+
+- `fast_attempts`: The number of "fast" attempts to reach consensus. Here, it is set to 3.
+
+- `attempt_duration`: The duration of each attempt at agreement. Here, it is set to 8.
+
+- `catchain_max_deps`: The maximum number of dependencies of a Catchain block. Here, it is set to 4.
+
+- `max_block_bytes`: The maximum size of a block in bytes. Here, it is set to 2097152 bytes (2 MB).
+
+- `max_collated_bytes`: The maximum size of serialized block correctness proofs in bytes. Here, it is set to 2097152 bytes (2 MB).
+
+- `proto_version`: The protocol version. Here, it is set to 2.
+
+- `catchain_max_blocks_coeff`: The coefficient limiting the rate of block generation in Catchain, [description](https://github.com/ton-blockchain/ton/blob/master/doc/catchain-dos.md). Here, it is set to 10000.
+
+## Param 31
+
+This parameter represents the configuration of smart contract addresses from which no fees are charged for either gas or storage, and where tick-tok transactions can be created. The list usually includes governance contracts. The parameter is presented as a binary tree structure — a tree (HashMap 256), where the keys are a 256-bit representation of the address. Only addresses in the masterchain can be present in this list.
+
+## Param 32, 34 and 36
+
+Lists of validators from the previous (32), current (34), and next (36) rounds. Parameter 36 is set from the end of the elections until the start of the round.
+
+### Configuration parameters:
+
+- `cur_validators`: This is the current list of validators. Validators are typically responsible for verifying transactions in a blockchain network.
+
+- `utime_since` and `utime_until`: These parameters provide the time period during which these validators are active.
+
+- `total` and `main`: These parameters provide the total number of validators and the number of validators validating the masterchain in the network.
+
+- `total_weight`: This adds up the weights of the validators.
+
+- `list`: A list of validators in the tree format `id->validator-data`: `validator_addr`, `public_key`, `weight`, `adnl_addr`: These parameters provide details about each validator - their 256 addresses in the masterchain, public key, weight, ADNL address (the address used at the network level of TON).
+
+## Param 40
+
+This parameter defines the structure of the configuration for punishment for improper behavior (non-validation). In the absence of the parameter, the default fine size is 101 TON.
+
+## Configuration parameters:
+
+** `MisbehaviourPunishmentConfig` **: This data structure defines how improper behavior in the system is punished.
+
+It contains several fields:
+
+- `default_flat_fine`: This part of the fine does not depend on the stake size.
+
+- `default_proportional_fine`: This part of the fine is proportional to the validator's stake size.
+
+- `severity_flat_mult`: This is the multiplier applied to the `default_flat_fine` value for significant violations by the validator.
+
+- `severity_proportional_mult`: This is the multiplier applied to the `default_proportional_fine` value for significant violations by the validator.
+
+- `unpunishable_interval`: This parameter represents the period during which offenders are not punished to eliminate temporary network problems or other anomalies.
+
+- `long_interval`, `long_flat_mult`, `long_proportional_mult`: These parameters define a "long" period of time and multipliers for flat and proportional fines for improper behavior.
+
+- `medium_interval`, `medium_flat_mult`, `medium_proportional_mult`: Similarly, they define a "medium" period of time and multipliers for flat and proportional fines for improper behavior.
+
+## Param 43
+
+This parameter pertains to various size limits and other characteristics of accounts and messages.
+
+### Configuration parameters:
+
+- `max_msg_bits`: maximum message size in bits.
+
+- `max_msg_cells`: maximum number of cells (a form of storage unit) a message can occupy.
+
+- `max_library_cells`: maximum number of cells that can be used for library cells.
+
+- `max_vm_data_depth`: maximum cell depth in messages and account state.
+
+- `max_ext_msg_size`: maximum external message size in bits.
+
+- `max_ext_msg_depth`: maximum external message depth. This could refer to the depth of the data structure within the message.
+
+- `max_acc_state_cells`: maximum number of cells that an account state can occupy.
+
+- `max_acc_state_bits`: maximum account state size in bits.
+
+If absent, the default parameters are taken:
+
+- `max_size` = 65535
+- `max_depth` = 512
+- `max_msg_bits` = 1 << 21
+- `max_msg_cells` = 1 << 13
+- `max_library_cells` = 1000
+- `max_vm_data_depth` = 512
+- `max_acc_state_cells` = 1 << 16
+- `max_acc_state_bits` = (1 << 16) * 1023
+
+:::info
+You can view more details about the standard parameters [here](https://github.com/ton-blockchain/ton/blob/fc9542f5e223140fcca833c189f77b1a5ae2e184/crypto/block/mc-config.h#L379) in the source code.
+:::
+
+## Param 44
+
+This parameter defines the list of suspended addresses, which cannot be initialized until `suspended_until`. It only applies to yet uninitiated accounts. This is a measure for stabilizing the tokenomics (limiting early miners). If not set - there are no limitations. Each address is represented as an end node in this tree, and the tree-like structure allows to effectively check the presence or absence of an address in the list.
+
+:::info
+The stabilization of the tokenomics is further described in the [official report](https://t.me/tonblockchain/178) of the "The Open Network" Telegram channel.
+:::
+
+## Param 71 - 73
+
+This parameter pertains to bridges for wrapping TON in other networks:
+
+* ETH-TON ** (71)**
+* BSC-TON ** (72) ** 
+* Polygon-TON ** (73) **
+
+### Configuration parameters:
+
+- `bridge_address`: This is the bridge contract address that accepts TON to issue wrapped TON in other networks.
+
+- `oracle_multisig_address`: This is the bridge management wallet address. A multisig wallet is a type of digital wallet that requires signatures from multiple parties to authorize a transaction. It is often used to increase security. The oracles act as the parties.
+
+- `oracles`: list of oracles in the form of a tree `id->address`
+
+- `external_chain_address`: This is the bridge contract address in the corresponding external blockchain.
+
+## Param 79, 81 and 82
+
+This parameter pertains to bridges for wrapping tokens from other networks into tokens on the TON network:
+
+* ETH-TON ** (79) **
+* BSC-TON ** (81) **
+* Polygon-TON ** (82) **
+
+### Configuration parameters:
+
+- `bridge_address` and `oracles_address`: These are the blockchain addresses of the bridge and the bridge management contract (oracles multisig), respectively.
+
+- `oracles`: list of oracles in the form of a tree `id->address`
+
+- `state_flags`: State flag. This parameter is responsible for enabling/disabling separate bridge functions.
+
+- `prices`: This parameter contains a list or dictionary of prices for different operations or fees associated with the bridge, such as `bridge_burn_fee`, `bridge_mint_fee`, `wallet_min_tons_for_storage`, `wallet_gas_consumption`, `minter_min_tons_for_storage`, `discover_gas_consumption`.
+
+- `external_chain_address`: The bridge contract address in another blockchain.
+
+## Negative Parameters
+
+:::info
+The difference between negative parameters and positive ones is the need for validators' verification; they usually do not have a specific assigned role.
+:::
+
+## Next Steps
+
+After a deep dive into this article, it is strongly recommended that you take the time for a more detailed study of the following documents:
+
+* For extensive study: Whitepaper [Eng](https://ton.org/whitepaper.pdf) or [Ru](https://github.com/Korolyow/TON_docs_ru/blob/main/pdf/ton_whitepaper_ru.pdf) and [tblkch.pdf](https://ton.org/tblkch.pdf).
+
+* For a narrow study of the TON blockchain config parameters: [mc-config.h](https://github.com/ton-blockchain/ton/blob/fc9542f5e223140fcca833c189f77b1a5ae2e184/crypto/block/mc-config.h), [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb) and [BlockMasterConfig Type](https://docs.evercloud.dev/reference/graphql-api/field_descriptions#blockmasterconfig-type).
+
+## 📖 See Also
+On this page, you can find active network configurations of the TON blockchain:
+
+Mainnet: https://ton.org/global-config.json
+Testnet: https://ton.org/testnet-global.config.json
