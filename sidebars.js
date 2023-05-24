@@ -381,6 +381,7 @@ const sidebars = {
       'value': '<span class=\'menu__link\'><b><small> References & Documentation </small></b></span>',
     },
     'develop/howto/faq',
+    'develop/howto/blockchain-configs',
     'develop/howto/network-configs',
     {
       type: 'category',
