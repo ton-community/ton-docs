@@ -444,6 +444,7 @@ const sidebars = {
             'develop/data-formats/tl-b-types',
             'develop/research-and-development/boc',
             'develop/data-formats/msg-tlb',
+            'develop/data-formats/block-layout',
             'develop/data-formats/transaction-layout',
             'develop/data-formats/crc32',
             'develop/data-formats/tlb-ide'

@@ -65,7 +65,9 @@ Find more actual params in [Network Configs](/develop/howto/network-configs).
 
 ### What is the layout of blocks on TON?
 
-- [Block layout](https://docs.ton.org/tblkch.pdf#page=96&zoom=100,148,172), TON Blockchain, p.96
+Detailed explanations on each field of the layout:
+
+- [Block layout](/develop/data-formats/block-layout)
 
 ## Transactions
 
