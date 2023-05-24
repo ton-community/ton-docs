@@ -153,7 +153,7 @@ Uses OpenSSL implementation. Interface is similar to `CHKSIGNS`/`CHKSIGNU`. Comp
 
 | xxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description |
 |:-|:-|:-|
-| `R256_CHKSIGNS` | _`d sig k - ?`_ | Checks seck256k1-signature `sig` of data portion of slice `d` and public key `k`. Returns -1 on success, 0 on failure.<br/>Public key is a 33-byte slice (encoded according to Sec. 2.3.4 point 2 of [SECG SEC 1](https://www.secg.org/sec1-v2.pdf)).<br/>Signature `sig` is a 64-byte slice (two 256-bit unsigned integers `r` and `s`).<br/>_3526 gas_ |
+| `R256_CHKSIGNS` | _`d sig k - ?`_ | Checks seck256r1-signature `sig` of data portion of slice `d` and public key `k`. Returns -1 on success, 0 on failure.<br/>Public key is a 33-byte slice (encoded according to Sec. 2.3.4 point 2 of [SECG SEC 1](https://www.secg.org/sec1-v2.pdf)).<br/>Signature `sig` is a 64-byte slice (two 256-bit unsigned integers `r` and `s`).<br/>_3526 gas_ |
 | `R256_CHKSIGNU` | _`h sig k - ?`_ | Same thing, but the signed data is 32-byte encoding of 256-bit unsigned integer `h`.<br/>_3526 gas_ |
 
 ### Ristretto
