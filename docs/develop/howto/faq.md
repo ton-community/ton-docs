@@ -111,7 +111,7 @@ Yes, transaction batching on TON can be accomplished in two distinct ways:
 Example of using batch-featured contract (high-load wallet):
 - https://github.com/tonuniverse/highload-wallet-api
 
-Default wallets (v3r2/v4r2) also support sending multiple messages in one transaction.
+Default wallets (v3/v4) also support sending multiple messages (up to 4) in one transaction.
 
 ## Standards
 
@@ -218,9 +218,9 @@ Yes, smart contract addresses are case sensitive because they are generated usin
 
 ### Is it possible to write on Solidity for TON?
 
-  Recently, the TON ecosystem did not support development in Ethereum’s Solidity programming language.
+  The TON ecosystem does not support development in Ethereum’s Solidity programming language.
   
-  The tool to write TON contracts in Solidity is in development. See it on Github: https://github.com/tonlabs/TON-Solidity-Compiler
+  There is an experimental tool to write TON contracts in Solidity, developed by a third party: https://github.com/tonlabs/TON-Solidity-Compiler. We cannot guarantee that it will work correctly all the time because of fundamental differences between Ethereum and The Open Network.
 
   Actually, when you add asynchronous messages to the Solidity syntax and the ability to interact with data at a low level, you get FunC. FunC is designed specifically for development on TON.
 
