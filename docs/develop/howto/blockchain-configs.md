@@ -223,7 +223,7 @@ hold_start = validation_end = election_id + constants['validators_elected_for'] 
 hold_end = hold_start + constants['stake_held_for'] = 160009600 + 900 = 160010500
 ```
 
-Thus, at the moment, the length of one round of one parity is `160010500 - 1600000000 = 10500 секунд = 175 минут = 2.91666... hours`
+Thus, at the moment, the length of one round of one parity is `160010500 - 1600000000 = 10500 seconds = 175 minutes = 2.91666... hours`
 
 ## Param 16
 
