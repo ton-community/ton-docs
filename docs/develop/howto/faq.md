@@ -218,11 +218,9 @@ Yes, smart contract addresses are case sensitive because they are generated usin
 
 ### Is it possible to write on Solidity for TON?
 
-  The TON ecosystem does not support development in Ethereum’s Solidity programming language.
-  
-  There is an experimental tool to write TON contracts in Solidity, developed by a third party: https://github.com/tonlabs/TON-Solidity-Compiler. We cannot guarantee that it will work correctly all the time because of fundamental differences between Ethereum and The Open Network.
+  Relatedly, the TON ecosystem does not support development in Ethereum’s Solidity programming language.
 
-  Actually, when you add asynchronous messages to the Solidity syntax and the ability to interact with data at a low level, you get FunC. FunC is designed specifically for development on TON.
+  But if you add asynchronous messages to the Solidity syntax and the ability to interact with data at a low level, then you get FunC. FunC features a syntax that is common to most modern programming languages and is designed specifically for development on TON.
 
 
 ## Remote Procedure Calls (RPCs)
