@@ -111,6 +111,8 @@ Yes, transaction batching on TON can be accomplished in two distinct ways:
 Example of using batch-featured contract (high-load wallet):
 - https://github.com/tonuniverse/highload-wallet-api
 
+Default wallets (v3/v4) also support sending multiple messages (up to 4) in one transaction.
+
 ## Standards
 
 ### What accuracy of currencies is available for TON?
@@ -182,12 +184,12 @@ Good example is smart governance contract, which is a part of masterchain:
 
 [Everything in TON is a smart contract](/learn/overviews/addresses#everything-is-a-smart-contract).
 
-Account address generated from _private key_, _contract code_, and it's _initial state_.
-If any component changed - address changed accordingly. Smart contract code itself can be sent to the network later.
+Account address is generated deterministically from its _initial state_, which includes _initial code_ and _initial data_ (for wallets, initial data includes public key among other parameters).
+When any component changes, the address changes accordingly.
 
-Deployment of smart contract means Smart Contract's code is delivered to Blockchain Nodes, and linked on its(smart contract's) address. We need to check contracts deployed by act with code, for example, we can use it's get method or check its Address via Blockchain Explorer.
+Smart contract can exist in uninitialized state, meaning that its state is not available in blockchain but contract has non-zero balance. Initial state itself can be sent to the network later with an internal or external message, so those can be monitored to detect contract deployment.
 
-To protect sending messages to non-existing contracts TON use "bounce" feature. Read more in these articles:
+To protect message chains from being halted at non-existing contracts TON use "bounce" feature. Read more in these articles:
 
 - [Deploying wallet via TonLib](https://ton.org/docs/develop/dapps/asset-processing/#deploying-wallet)
 - [Paying for processing queries and sending responses](https://ton.org/docs/develop/smart-contracts/guidelines/processing)
@@ -195,11 +197,13 @@ To protect sending messages to non-existing contracts TON use "bounce" feature. 
 
 ### Is it possible to re-deploy code to an existing address or does it have to be deployed as a new contract?
 
-Yes, this is possible. If a smart contract carries out specific instructions(set_code()) its code can be updated and the address will remain the same.
+Yes, this is possible. If a smart contract carries out specific instructions (`set_code()`) its code can be updated and the address will remain the same.
 
-:::info
-It is also possible to deploy numerous contracts that are integrated with different addresses using the same **private key**.
-:::
+If the contract cannot initially execute `set_code()` (via its code or execution of other code coming from the outside), then its code cannot be changed ever. No one will be able to redeploy contract with other code at the same address.
+
+### Can smart contract be deleted?
+
+Yes, either as a result of storage fee accumulation (contract needs to reach -1 TON balance to be deleted) or by sending a message with [mode 160](https://docs.ton.org/develop/smart-contracts/messages#message-modes).
 
 ### Are smart contract addresses case sensitive?
 
@@ -233,6 +237,7 @@ Node providers partners:
 - https://www.orbs.com/ton-access/
 - [toncenter/ton-http-api](https://github.com/toncenter/ton-http-api) 
 - [nownodes.io](https://nownodes.io/nodes)
+- https://dton.io/graphql
 
 TON directory with projects from TON Community:
 
