@@ -153,8 +153,8 @@ Uses OpenSSL implementation. Interface is similar to `CHKSIGNS`/`CHKSIGNU`. Comp
 
 | xxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description |
 |:-|:-|:-|
-| `R256_CHKSIGNS` | _`d sig k - ?`_ | Checks seck256r1-signature `sig` of data portion of slice `d` and public key `k`. Returns -1 on success, 0 on failure.<br/>Public key is a 33-byte slice (encoded according to Sec. 2.3.4 point 2 of [SECG SEC 1](https://www.secg.org/sec1-v2.pdf)).<br/>Signature `sig` is a 64-byte slice (two 256-bit unsigned integers `r` and `s`).<br/>_3526 gas_ |
-| `R256_CHKSIGNU` | _`h sig k - ?`_ | Same thing, but the signed data is 32-byte encoding of 256-bit unsigned integer `h`.<br/>_3526 gas_ |
+| `P256_CHKSIGNS` | _`d sig k - ?`_ | Checks seck256r1-signature `sig` of data portion of slice `d` and public key `k`. Returns -1 on success, 0 on failure.<br/>Public key is a 33-byte slice (encoded according to Sec. 2.3.4 point 2 of [SECG SEC 1](https://www.secg.org/sec1-v2.pdf)).<br/>Signature `sig` is a 64-byte slice (two 256-bit unsigned integers `r` and `s`).<br/>_3526 gas_ |
+| `P256_CHKSIGNU` | _`h sig k - ?`_ | Same thing, but the signed data is 32-byte encoding of 256-bit unsigned integer `h`.<br/>_3526 gas_ |
 
 ### Ristretto
 Extended docs are [here](https://ristretto.group/). In short, Curve25519 was developed with performance in mind, however it exhibits symmetry due to which group elements have multiple representations. Simpler protocols such as Schnorr signatures or Diffie-Hellman apply tricks at the protocol level to mitigate some issues, but break key derivation and key blinding schemes. And those tricks do not scale to more complex protocols such as Bulletproofs. Ristretto is an arithmetic abstraction over Curve25519 such that each group element corresponds to a unique point, which is the requirement for most cryptographic protocols. Ristretto is essentially a compression/decompression protocol for Curve25519 that offers the required arithmetic abstraction. As a result, crypto protocols are easy to write correctly, while benefiting from the high performance of Curve25519.
