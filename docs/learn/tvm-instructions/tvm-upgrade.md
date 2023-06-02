@@ -220,7 +220,7 @@ BLS values are represented in TVM in the following way:
 | `BLS_PUSHR` | _`- r`_ | Push the order of G1 and G2 (approx. `2^255`).<br/>_`gas=34`_ |
 
 ## RUNVM
-Currently there is no way for code in TVM to call external untrusted code "in sandbox". In other words, external code always can irreversibly update code, data of contract, or set actions (such as sening all money).
+Currently there is no way for code in TVM to call external untrusted code "in sandbox". In other words, external code always can irreversibly update code, data of contract, or set actions (such as sending all money).
 `RUNVM` instruction allows to spawn an independent VM instance, run desired code and get needed data (stack, registers, gas consumption etc) without risks of polluting caller's state. Running arbitrary code in a safe way may be useful for w4-style plugins, Tact's `init` style subcontract calculation etc.
 
 | xxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description |
