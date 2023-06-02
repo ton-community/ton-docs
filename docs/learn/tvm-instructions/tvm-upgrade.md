@@ -221,7 +221,7 @@ BLS values are represented in TVM in the following way:
 
 ## RUNVM
 Currently there is no way for code in TVM to call external untrusted code "in sandbox". In other words, external code always can irreversibly update code, data of contract, or set actions (such as sending all money).
-`RUNVM` instruction allows to spawn an independent VM instance, run desired code and get needed data (stack, registers, gas consumption etc) without risks of polluting caller's state. Running arbitrary code in a safe way may be useful for w4-style plugins, Tact's `init` style subcontract calculation etc.
+`RUNVM` instruction allows to spawn an independent VM instance, run desired code and get needed data (stack, registers, gas consumption etc) without risks of polluting caller's state. Running arbitrary code in a safe way may be useful for [v4-style plugins](/participate/wallets/contracts#wallet-v4), Tact's `init` style subcontract calculation etc.
 
 | xxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description |
 |:-|:-|:-|
