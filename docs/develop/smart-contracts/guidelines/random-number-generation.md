@@ -14,7 +14,7 @@ Therefore, to predict the result of the `random()` function in a smart contract,
 
 ## Simply use `randomize_lt()`
 
-To make the random number generation unpredictable, you can add the current Logical Time to the seed, so different transactions will have different seeds and results.
+To make the random number generation unpredictable, you can add the current [Logical Time](/develop/smart-contracts/guidelines/message-delivery-guarantees#what-is-a-logical-time) to the seed, so different transactions will have different seeds and results.
 
 Just add the `randomize_lt()` call before generating random numbers, and your random numbers will become unpredictable:
 
