@@ -125,3 +125,9 @@ Deploy this contract in any workchain you need (probably Basechain) and you're d
 ## Is this method 100% secure?
 
 While it certainly helps, there's still a chance of manipulation if an intruder has control over several validators simultaneously. In this case, they might, with some probability, [affect](/develop/smart-contracts/security/random#conclusion) the _seed_, which the random number depends on. Even if this probability is extremely small, it's still worth considering.
+
+With the latest TVM upgrade, the introduction of new values to the `c7` register can further boost the security of random number generation. Specifically, the upgrade adds information about the last 16 masterchain blocks to the `c7` register.
+
+The masterchain block information, due to its constantly changing nature, can serve as an additional source of entropy for random number generation. By incorporating this data into your randomness algorithm, you can create numbers that are even harder for potential adversaries to predict.
+
+For more detailed information on this TVM upgrade, please refer to [TVM Upgrade](/learn/tvm-instructions/tvm-upgrade).
