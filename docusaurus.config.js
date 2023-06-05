@@ -81,6 +81,10 @@ const config = {
             to: '/develop/overview',
             from: '/develop/getting-started',
           },
+          {
+            to: '/develop/data-formats/tl-b-language',
+            from: '/develop/data-formats/tl-b',
+          },
         ],
       },
     ],

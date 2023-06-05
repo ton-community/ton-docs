@@ -488,9 +488,6 @@ const sidebars = {
       items: [
         'develop/archive/pow-givers',
         'develop/archive/mining',
-        'develop/archive/Tl-B-overview',
-        'learn/overviews/TL-B',
-        'learn/overviews/tl-b-language'
       ],
     },
     {
