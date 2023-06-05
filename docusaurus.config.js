@@ -85,6 +85,10 @@ const config = {
             to: '/develop/data-formats/tl-b-language',
             from: '/develop/data-formats/tl-b',
           },
+          {
+            to: '/learn/tvm-instructions/tvm-upgrade-2023-07',
+            from: '/learn/tvm-instructions/tvm-upgrade',
+          },
         ],
       },
     ],
