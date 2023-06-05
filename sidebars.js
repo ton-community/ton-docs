@@ -370,6 +370,7 @@ const sidebars = {
         },
         ]
         },
+        'develop/howto/subresolvers',
       ],
     },
     {
