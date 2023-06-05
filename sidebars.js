@@ -430,6 +430,7 @@ const sidebars = {
         'learn/tvm-instructions/tvm-overview',
         'learn/tvm-instructions/tvm-exit-codes',
         'learn/tvm-instructions/instructions',
+        'learn/tvm-instructions/tvm-upgrade-2023-07',
       ],
     },
     {

@@ -130,4 +130,4 @@ With the latest TVM upgrade, the introduction of new values to the `c7` register
 
 The masterchain block information, due to its constantly changing nature, can serve as an additional source of entropy for random number generation. By incorporating this data into your randomness algorithm, you can create numbers that are even harder for potential adversaries to predict.
 
-For more detailed information on this TVM upgrade, please refer to [TVM Upgrade](/learn/tvm-instructions/tvm-upgrade).
+For more detailed information on this TVM upgrade, please refer to [TVM Upgrade](/learn/tvm-instructions/tvm-upgrade-2023-07).

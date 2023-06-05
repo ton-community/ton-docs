@@ -1,6 +1,8 @@
-# TVM upgrade 2023.07
+# TVM Upgrade 2023.07
 
-**Work in progress**: some operation codes may be removed, some gas prices are likely to be changed. It is expected that no new opcodes will be added to the list.
+:::caution **Work in progress**:
+Some operation codes may be removed, some gas prices are likely to be changed. It is expected that no new opcodes will be added to the list.
+:::
 
 This upgrade expected to be shipped in testnet by the end of the May and in mainnet by the end of the June.
 
