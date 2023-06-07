@@ -302,6 +302,10 @@ Commits the current state of registers `c4` (“persistent data”) and `c5` (�
 ```func
 () buy_gas(int gram) impure asm "BUYGAS";
 ```
+:::caution
+`BUYGAS` opcode is currently not implemented
+:::
+
 Computes the amount of gas that can be bought for `gram` nanotoncoins and sets `gl` accordingly in the same way as `set_gas_limit`.
 
 ### Actions primitives
