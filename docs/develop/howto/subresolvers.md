@@ -4,14 +4,17 @@
 
 TON DNS is a powerful tool. It allows not only to assign TON Sites/Storage bags to domains, but also to set up subdomain resolving.
 
+## Domain contracts searcher
+
 Subdomains have practical use. For example, blockchain explorers don't currently provide way to find domain contract by its name. Let's explore how to create contract that gives an opportunity to find such domains.
 
 :::info
-This contract is deployed at `EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH_Zp` and linked to `resolve-contract.ton`. To test it, you may write `<your-domain.ton>.resolve-contract.ton` in the address bar of your favourite TON explorer and get to the page of TON DNS domain contract. Subdomains and .t.me domains are supported as well.  
+This contract is deployed at `EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH_Zp` and linked to `resolve-contract.ton`. To test it, you may write `<your-domain.ton>.resolve-contract.ton` in the address bar of your favourite TON explorer and get to the page of TON DNS domain contract. Subdomains and .t.me domains are supported as well.
+
 You can attempt to see the resolver code by going to `resolve-contract.ton.resolve-contract.ton`. Unfortunately, that will not show you the subresolver (that is a different smart-contract), you will see the page of domain contract itself.
 :::
 
-## dnsresolve() code
+### dnsresolve() code
 
 Some repeated parts are omitted.
 
@@ -96,7 +99,7 @@ Some repeated parts are omitted.
 }
 ```
 
-## Explanation of dnsresolve()
+### Explanation of dnsresolve()
 
 - User requests `"stabletimer.ton.resolve-contract.ton"`.
 - Application translates that into `"\0ton\0resolve-contract\0ton\0stabletimer\0"` (the first zero byte is optional).
@@ -107,6 +110,7 @@ Some repeated parts are omitted.
 **This is the point where dnsresolve() is invoked.** A step-by-step breakdown of how it works:
 
 1. It takes the subdomain and category as input.
+1. If there is zero byte at the beginning, it is skipped.
 2. It checks if the subdomain starts with `"ton\0"`. If so,
     1. it skips the first 32 bits (subdomain = `"resolve-contract\0"`)
     2. `subdomain_sfx` value is set to `subdomain`, and the function reads the bytes until zero byte
@@ -136,11 +140,120 @@ Actually, base64 addresses parsing does not work: if you attempt to enter `<some
 
 ## Creating own subdomains manager
 
-Subdomains can be useful for regular users - for example, to link several projects to a single domain, or to link to friends' wallets. Here is **not** a code of such a subdomain manager, *because prefix dictionaries in TON do not actually work and are currently under investigation*.
+Subdomains can be useful for regular users - for example, to link several projects to a single domain, or to link to friends' wallets.
+
+### Contract data
+
+We need to store owner's address and the *domain*->*record hash*->*record value* dictionary in the contract data.
+
+```func
+global slice owner;
+global cell domains;
+
+() load_data() impure {
+  slice ds = get_data().begin_parse();
+  owner = ds~load_msg_addr();
+  domains = ds~load_dict();
+}
+() save_data() impure {
+  set_data(begin_cell().store_slice(owner).store_dict(domains).end_cell());
+}
+```
+
+### Processing records update
+
+```func
+const int op::update_record = 0x537a3491;
+;; op::update_record#537a3491 domain_name:^Cell record_key:uint256
+;;     value:(Maybe ^Cell) = InMsgBody;
+
+() recv_internal(cell in_msg, slice in_msg_body) {
+  if (in_msg_body.slice_empty?()) { return (); }   ;; simple money transfer
+
+  slice in_msg_full = in_msg.begin_parse();
+  if (in_msg_full~load_uint(4) & 1) { return (); } ;; bounced message
+
+  slice sender = in_msg_full~load_msg_addr();
+  load_data();
+  throw_unless(501, equal_slices(sender, owner));
+  
+  int op = in_msg_body~load_uint(32);
+  if (op == op::update_record) {
+    slice domain = in_msg_body~load_ref().begin_parse();
+    (cell records, _) = domains.udict_get_ref?(256, string_hash(domain));
+
+    int key = in_msg_body~load_uint(256);
+    throw_if(502, key == 0);  ;; cannot update "all records" record
+
+    if (in_msg_body~load_uint(1) == 1) {
+      cell value = in_msg_body~load_ref();
+      records~udict_set_ref(256, key, value);
+    } else {
+      records~udict_delete?(256, key);
+    }
+
+    domains~udict_set_ref(256, string_hash(domain), records);
+    save_data();
+  }
+}
+```
+
+We check that the incoming message contains some request, is not bounced, comes from the owner and that the request is `op::update_record`.
+
+Then we load domain name from the message. We can't store domains in dictionary as-is: they may have different lengths, but TVM non-prefix dictionaries can only contain keys of equal length. Thus, we calculate `string_hash(domain)` - SHA-256 of domain name; domain name is guaranteed to have an integer number of octets so that works.
+
+After that, we update the record for the specified domain and save new data into the contract storage.
+
+### Resolving domains
+
+```func
+(slice, slice) ~parse_sd(slice subdomain) {
+  ;; "test\0qwerty\0" -> "test" "qwerty\0"
+  slice subdomain_sfx = subdomain;
+  while (subdomain_sfx~load_uint(8)) { }  ;; searching zero byte
+  subdomain~skip_last_bits(slice_bits(subdomain_sfx));
+  return (subdomain, subdomain_sfx);
+}
+
+(int, cell) dnsresolve(slice subdomain, int category) method_id {
+  int subdomain_bits = slice_bits(subdomain);
+  throw_unless(70, subdomain_bits % 8 == 0);
+  if (subdomain.preload_uint(8) == 0) { subdomain~skip_bits(8); }
+  
+  slice subdomain_suffix = subdomain~parse_sd();  ;; "test\0" -> "test" ""
+  int subdomain_suffix_bits = slice_bits(subdomain_suffix);
+
+  load_data();
+  (cell records, _) = domains.udict_get_ref?(256, string_hash(subdomain));
+
+  if (subdomain_suffix_bits > 0) { ;; more than "<SUBDOMAIN>\0" requested
+    category = "dns_next_resolver"H;
+  }
+
+  int resolved = subdomain_bits - subdomain_suffix_bits;
+
+  if (category == 0) { ;; all categories are requested
+    return (resolved, records);
+  }
+
+  (cell value, int found) = records.udict_get_ref?(256, category);
+  return (resolved, value);
+}
+```
+
+The `dnsresolve` function checks if the requested subdomain contains integer number of octets, skips optional zero byte in the beginning of the subdomain slice, then splits it into the topmost-level domain and everything other (`test\0qwerty\0` gets split into `test` and `qwerty\0`). The record dictionary corresponding to the requested domain is loaded.
+
+If there is a non-empty subdomain suffix, the function returns the number of bytes resolved and the next resolver record, found at `"dns_next_resolver"H` key. Otherwise, the function returns the number of bytes resolved (that is, the full slice length) and the record requested.
+
+There is a way to improve this function by handling errors more gracefully, but it is not strictly required.
+
+### Full code
+
+See at https://github.com/Gusarich/simple-subdomain/blob/198485bbc9f7f6632165b7ab943902d4e125d81a/contracts/subdomain-manager.fc.
 
 ## Appendix 1. Code of resolve-contract.ton
 
-```func
+```func showLineNumbers
 (builder, ()) ~store_slice(builder to, slice s) asm "STSLICER";
 int starts_with(slice a, slice b) asm "SDPFXREV";
 
