@@ -201,7 +201,10 @@ Given an index and [individual NFT content](#get_nft_data), this method fetches 
 
 ## How to work with get methods
 
-We will use Javascript libraries and tools for these examples.
+We will use Javascript libraries and tools for these examples:
+
+-   [ton](https://github.com/ton-core/ton) library
+-   [Blueprint](/develop/smart-contracts/sdk/javascript) SDK
 
 ### Calling get methods from code
 
@@ -215,7 +218,7 @@ Let's say there is some contract with a following get method:
 
 This method returns a single number loaded from the contract data.
 
-The code snippet below can be used to call this get method:
+The code snippet below can be used to call this get method on some contract deployed at the known address:
 
 ```ts
 import { Address, TonClient } from 'ton';
