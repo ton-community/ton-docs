@@ -55,7 +55,7 @@ The best place to start to develop using FunC: [INTRODUCTION](/develop/smart-con
 
 Other materials gracefully provided by the experts from the community:
 
-* [Func & BluePrint](https://youtube.com/playlist?list=PLyDBPwv9EPsDjIMAF3XqNI2XGNwdcB3sg) by **@MarcoDaTr0p0je**
+* [Func & BluePrint](https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa) by **@MarcoDaTr0p0je**
 * [Learn FunC in Y Minutes](https://learnxinyminutes.com/docs/func/) by **@romanovichim**
 * [TON Hello World: Step-by-step guide for writing your first smart contract](https://ton-community.github.io/tutorials/02-contract/)
 * [TON Hello World: Step by step guide for testing your first smart contract](https://ton-community.github.io/tutorials/04-testing/)

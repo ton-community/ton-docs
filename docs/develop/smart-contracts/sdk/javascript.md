@@ -41,7 +41,7 @@ npm create ton@latest
 - [Blueprint using on DoraHacks stream](https://www.youtube.com/watch?v=5ROXVM-Fojo)
 - [Create a new project](https://github.com/ton-community/blueprint#create-a-new-project)
 - [Develop a new smart contract](https://github.com/ton-community/blueprint#develop-a-new-contract)
-- [[YouTube] Func with Blueprint](https://youtube.com/playlist?list=PLyDBPwv9EPsDjIMAF3XqNI2XGNwdcB3sg)[RU](https://youtube.com/playlist?list=PLyDBPwv9EPsA5vcUM2vzjQOomf264IdUZ)
+- [[YouTube] Func with Blueprint EN](https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa) ([RU version](https://youtube.com/playlist?list=PLyDBPwv9EPsA5vcUM2vzjQOomf264IdUZ))
 
 
 ## See Also
