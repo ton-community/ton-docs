@@ -80,8 +80,8 @@ Transaction information is not as detailed as, for example, on TON Whales.
 - **Trace**
 - TON DNS support
 
-| basic address info                                   | transaction                                         |
-| ---------------------------------------------------- | --------------------------------------------------- |
+| basic address info                                         | transaction                                               |
+| ---------------------------------------------------------- | --------------------------------------------------------- |
 | ![tonviewer](/img/explorers-in-ton/eit-tonviewer-info.png) | ![tonviewer](/img/explorers-in-ton/eit-tonviewer-txn.png) |
 
 ### Links
