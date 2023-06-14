@@ -133,7 +133,7 @@ Also, it has a feature that allows you to see the computation phase of the trans
 
 ## Want to be in this list?
 
-Please, write to one of the [maintainers](/docs/contribute/maintainers).
+Please, write to one of the [maintainers](/docs/contribute/maintainers.md).
 
 ## References
 
