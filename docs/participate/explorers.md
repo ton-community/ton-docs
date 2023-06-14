@@ -65,7 +65,7 @@ This explorer is more oriented towards developers than ordinary users.
 
 - URL: https://tonwhales.com/explorer
 
-## TON API Explorer
+## Tonviewer Explorer
 
 This explorer is the newest and has its own unique features.
 For example, Trace. This feature allows you to see the entire sequence of transactions between smart contracts, even if subsequent transactions do not contain your address.
@@ -82,12 +82,12 @@ Transaction information is not as detailed as, for example, on TON Whales.
 
 | basic address info                                   | transaction                                         |
 | ---------------------------------------------------- | --------------------------------------------------- |
-| ![tonapi](/img/explorers-in-ton/eit-tonapi-info.png) | ![tonapi](/img/explorers-in-ton/eit-tonapi-txn.png) |
+| ![tonviewer](/img/explorers-in-ton/eit-tonviewer-info.png) | ![tonviewer](/img/explorers-in-ton/eit-tonviewer-txn.png) |
 
 ### Links
 
-- URL: https://tonapi.io/
-- Testnet URL: https://testnet.tonapi.io/
+- URL: https://tonviewer.com/
+- Testnet URL: https://testnet.tonviewer.com/
 
 ## TON NFT EXPLORER
 
