@@ -201,12 +201,26 @@ Given an index and [individual NFT content](#get_nft_data), this method fetches 
 
 ## How to work with get methods
 
-We will use Javascript libraries and tools for these examples:
+### Calling get methods on popular explorers
+
+#### Tonviewer
+
+You can call get methods on the bottom of the page in the "Source code" tab.
+
+-   https://tonviewer.com/EQAWrNGl875lXA6Fff7nIOwTIYuwiJMq0SmtJ5Txhgnz4tXI?section=Source+code
+
+#### Ton.cx
+
+You can call get methods on the "Get methods" tab.
+
+-   https://ton.cx/address/EQAWrNGl875lXA6Fff7nIOwTIYuwiJMq0SmtJ5Txhgnz4tXI
+
+### Calling get methods from code
+
+We will use Javascript libraries and tools for the examples below:
 
 -   [ton](https://github.com/ton-core/ton) library
 -   [Blueprint](/develop/smart-contracts/sdk/javascript) SDK
-
-### Calling get methods from code
 
 Let's say there is some contract with a following get method:
 
