@@ -38,10 +38,6 @@ Good explorer for everyday use. It has a convenient interface, a lot of informat
 - Сontract types
 - Contract disassembler
 
-| basic address info                                            | transaction                                                  |
-| ------------------------------------------------------------- | ------------------------------------------------------------ |
-| ![tonscan](/static/img/explorers-in-ton/eit-tonscan-info.png) | ![tonscan](/static/img/explorers-in-ton/eit-tonscan-txn.png) |
-
 ### Links
 
 - URL: https://tonscan.org/
@@ -56,10 +52,6 @@ This explorer is more oriented towards developers than ordinary users.
 - **Convenient for developers**
 - Сontract types
 - Contract disassembler
-
-| basic address info                                                | transaction                                                      |
-| ----------------------------------------------------------------- | ---------------------------------------------------------------- |
-| ![tonwhales](/static/img/explorers-in-ton/eit-tonwhales-info.png) | ![tonwhales](/static/img/explorers-in-ton/eit-tonwhales-txn.png) |
 
 ### Links
 
@@ -80,10 +72,6 @@ Transaction information is not as detailed as, for example, on TON Whales.
 - **Trace**
 - TON DNS support
 
-| basic address info                                                | transaction                                                      |
-| ----------------------------------------------------------------- | ---------------------------------------------------------------- |
-| ![tonviewer](/static/img/explorers-in-ton/eit-tonviewer-info.png) | ![tonviewer](/static/img/explorers-in-ton/eit-tonviewer-txn.png) |
-
 ### Links
 
 - URL: https://tonviewer.com/
@@ -100,10 +88,6 @@ When viewing the wallet address, you can find out which NFT it stores and, when 
 - Convenient for developers
 - Сontract types
 - **Specialized in NFT**
-
-| nft address info                                                    | nft data                                                               |
-| ------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| ![tonnft](/static/img/explorers-in-ton/eit-tonnftexplorer-info.png) | ![tonnft](/static/img/explorers-in-ton/eit-tonnftexplorer-nftdata.png) |
 
 ### Links
 
@@ -122,10 +106,6 @@ Also, it has a feature that allows you to see the computation phase of the trans
 - Extended information about the computation phase
 - Сontract types
 - Contract disassembler
-
-| basic address info                               | transaction                                     |
-| ------------------------------------------------------- | ------------------------------------------------------ |
-| ![dton](/static/img/explorers-in-ton/eit-dton-info.png) | ![dton](/static/img/explorers-in-ton/eit-dton-txn.png) |
 
 ### Links
 
