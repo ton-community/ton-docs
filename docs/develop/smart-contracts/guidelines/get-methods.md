@@ -205,9 +205,9 @@ Given an index and [individual NFT content](#get_nft_data), this method fetches 
 
 #### Tonviewer
 
-You can call get methods on the bottom of the page in the "Source code" tab.
+You can call get methods on the bottom of the page in the "Methods" tab.
 
--   https://tonviewer.com/EQAWrNGl875lXA6Fff7nIOwTIYuwiJMq0SmtJ5Txhgnz4tXI?section=Source+code
+-   https://tonviewer.com/EQAWrNGl875lXA6Fff7nIOwTIYuwiJMq0SmtJ5Txhgnz4tXI?section=Methods
 
 #### Ton.cx
 
