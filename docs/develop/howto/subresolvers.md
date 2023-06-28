@@ -4,12 +4,21 @@
 
 TON DNS is a powerful tool. It allows not only to assign TON Sites/Storage bags to domains, but also to set up subdomain resolving.
 
+## Relevant links
+
+1. [TON smart-contract address system](/learn/overviews/addresses)
+1. [TEP-0081 - TON DNS Standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0081-dns-standard.md)
+1. [Source code of .ton DNS collection](https://tonscan.org/address/EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz#source)
+1. [Source code of .t.me DNS collection](https://tonscan.org/address/EQCA14o1-VWhS2efqoh_9M1b_A9DtKTuoqfmkn83AbJzwnPi#source)
+1. [Domain contracts searcher](https://tonscan.org/address/EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH_Zp#source)
+1. [Simple subdomain manager code](https://github.com/Gusarich/simple-subdomain/blob/198485bbc9f7f6632165b7ab943902d4e125d81a/contracts/subdomain-manager.fc)
+
 ## Domain contracts searcher
 
 Subdomains have practical use. For example, blockchain explorers don't currently provide way to find domain contract by its name. Let's explore how to create contract that gives an opportunity to find such domains.
 
 :::info
-This contract is deployed at `EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH_Zp` and linked to `resolve-contract.ton`. To test it, you may write `<your-domain.ton>.resolve-contract.ton` in the address bar of your favourite TON explorer and get to the page of TON DNS domain contract. Subdomains and .t.me domains are supported as well.
+This contract is deployed at [EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH_Zp](https://tonscan.org/address/EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH_Zp#source) and linked to `resolve-contract.ton`. To test it, you may write `<your-domain.ton>.resolve-contract.ton` in the address bar of your favourite TON explorer and get to the page of TON DNS domain contract. Subdomains and .t.me domains are supported as well.
 
 You can attempt to see the resolver code by going to `resolve-contract.ton.resolve-contract.ton`. Unfortunately, that will not show you the subresolver (that is a different smart-contract), you will see the page of domain contract itself.
 :::
@@ -138,6 +147,12 @@ So in summary, dnsresolve() either:
 Actually, base64 addresses parsing does not work: if you attempt to enter `<some-address>.address.resolve-contract.ton`, you will get an error saying that domain is misconfigured or does not exist. The reason for that is that domain names are case-insensitive (feature inherited from real DNS) and thus are converted to lowercase, taking you to some address of non-existent workchain.
 :::
 
+### Binding the resolver
+
+Now that the subresolver contract is deployed, we need to point the domain to it, that is, to change domain `dns_next_resolver` record. We may do so by sending message with the following TL-B structure to the domain contract.
+
+1. `change_dns_record#4eb1f0f9 query_id:uint64 record_key#19f02441ee588fdb26ee24b2568dd035c3c9206e11ab979be62e55558a1d17ff record:^[dns_next_resolver#ba93 resolver:MsgAddressInt]`
+
 ## Creating own subdomains manager
 
 Subdomains can be useful for regular users - for example, to link several projects to a single domain, or to link to friends' wallets.
@@ -247,11 +262,10 @@ If there is a non-empty subdomain suffix, the function returns the number of byt
 
 There is a way to improve this function by handling errors more gracefully, but it is not strictly required.
 
-### Full code
-
-See at https://github.com/Gusarich/simple-subdomain/blob/198485bbc9f7f6632165b7ab943902d4e125d81a/contracts/subdomain-manager.fc.
-
 ## Appendix 1. Code of resolve-contract.ton
+
+<details>
+<summary>subresolver.fc</summary>
 
 ```func showLineNumbers
 (builder, ()) ~store_slice(builder to, slice s) asm "STSLICER";
@@ -428,3 +442,5 @@ slice decode_base64_address(slice readable) method_id {
   return ();
 }
 ```
+
+</details>
