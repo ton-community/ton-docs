@@ -33,17 +33,44 @@ root_cell("0x00000000" - 32 bit, "string" up to 123 bytes)
                  ↳1st_ref("string continuation" up to 127 bytes)
                          ↳....
 ```
-   The same format is used for comments for [jetton transfers](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#forward_payload-format).
+   The same format is used for comments for NFT and [jetton](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#forward_payload-format) transfers.
    
    For instance, users may indicate the purpose of a simple transfer from their wallet to the wallet of another user in this text field. On the other hand, if the comment begins with the byte `0xff`, the remainder is a "binary comment", which should not be displayed to the end user as text (only as a hex dump if necessary). The intended use of "binary comments" is, e.g., to contain a purchase identifier for payments in a store, to be automatically generated and processed by the store's software.
 
    Most smart contracts should not perform non-trivial actions or reject the inbound message on receiving a "simple transfer message". In this way, once `op` is found to be zero, the smart contract function for processing inbound internal messages (usually called `recv_internal()`) should immediately terminate with a zero exit code indicating success (e.g., by throwing exception `0`, if no custom exception handler has been installed by the smart contract). This will lead to the receiving account being credited with the value transferred by the message without any further effect.
 
-4. A "simple transfer message without comment" has an empty body (without even an `op` field). The above considerations apply to such messages as well. Note that such messages should have their bodies embedded into the message cell.
+4. If `op` is `0x2167da4b`, then the message is a "transfer message with encrypted comment". This message is serialized as follows:
 
-5. We expect "query" messages to have an `op` with the high-order bit clear, i.e., in the range `1 .. 2^31-1`, and "response" messages to have an `op` with the high-order bit set, i.e., in the range `2^31 .. 2^32-1`. If a method is neither a query nor a response (so that the corresponding message body does not contain a `query_id` field), it should use an `op` in the "query" range `1 .. 2^31 - 1`.
+   Input:
+   
+   * `pub_1` and `priv_1` - Ed25519 public and private keys of the sender, 32 bytes each.
+   * `pub_2` - Ed25519 public key of the receiver, 32 bytes.
+   * `msg` - a message to be encrypted, arbitrary byte string. `len(msg) <= 960`.
+   
+   Encryption algo is as follows:
+   
+   1. Calculate `shared_secret` using `priv_1` and `pub_2`.
+   2. Let `salt` be the [bas64url representation](https://docs.ton.org/learn/overviews/addresses#user-friendly-address) of the sender wallet address with `isBounceable=1` and `isTestnetOnly=0`.
+   3. Select byte string `prefix` of length between 16 and 31 such that `len(prefix+msg)` is divisible by 16. The first byte of `prefix` is equal to `len(prefix)`, other bytes are random. Let `data = prefix + msg`.
+   4. Let `msg_key` be the first 16 bytes of `hmac_sha512(salt, data)`.
+   5. Calculate `x = hmac_sha512(shared_secret, msg_key)`. Let `key=x[0:32]` and `iv=x[32:48]`.
+   6. Encrypt `data` using AES-256 in CBC mode with `key` and `iv`.
+   7. Construct the encrypted comment:
+       1. `pub_xor = pub_1 ^ pub_2` - 32 bytes. This allows each party to decrypt the message without looking up other's public key.
+       2. `msg_key` - 16 bytes.
+       3. Encrypted `data`.
+   8. The body of the message starts with the 4-byte tag `0x2167da4b`. Then this encrypted comment is stored:
+       1. Byte string is divided into segments and is stored in a chain of cells `c_1,...,c_k` (`c_1` is the root of the body). Each cell (except for the last one) has a reference to the next.
+       2. `c_1` contains up to 35 bytes (not including 4-byte tag), all other cells contain up to 127 bytes.
+       3. This format has the following limitations: `k <= 16`, max string length is 1024.
 
-6. There are some "standard" response messages with the `op` equal to `0xffffffff` and `0xfffffffe`. In general, the values of `op` from `0xfffffff0` to `0xffffffff` are reserved for such standard responses.
+   The same format is used for comments for NFT and jetton transfers, note that public key of sender address and receiver address (not jetton-wallet addresses) should be used.
+
+5. A "simple transfer message without comment" has an empty body (without even an `op` field). The above considerations apply to such messages as well. Note that such messages should have their bodies embedded into the message cell.
+
+6. We expect "query" messages to have an `op` with the high-order bit clear, i.e., in the range `1 .. 2^31-1`, and "response" messages to have an `op` with the high-order bit set, i.e., in the range `2^31 .. 2^32-1`. If a method is neither a query nor a response (so that the corresponding message body does not contain a `query_id` field), it should use an `op` in the "query" range `1 .. 2^31 - 1`.
+
+7. There are some "standard" response messages with the `op` equal to `0xffffffff` and `0xfffffffe`. In general, the values of `op` from `0xfffffff0` to `0xffffffff` are reserved for such standard responses.
 
     * `op` = `0xffffffff` means "operation not supported". It is followed by the 64-bit `query_id` extracted from the original query, and the 32-bit `op` of the original query. All but the simplest smart contracts should return this error when they receive a query with an unknown `op` in the range `1 .. 2^31-1`.
     * `op` = `0xfffffffe` means "operation not allowed". It is followed by the 64-bit `query_id` of the original query, followed by the 32-bit `op` extracted from the original query.
