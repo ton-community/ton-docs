@@ -1,39 +1,72 @@
 # TL-B Language
 
-:::caution advanced level
-This information is **very low-level** and could be hard to understand for newcomers.
-So feel free to read about it later.
-:::
 
 TL-B (Type Language - Binary) serves to describe the type system, constructors and existing functions. For example, we
 can use TL-B schemes to build binary structures associated with TON Blockchain. Special TL-B parsers can read schemes to
-deserialize binary data into different objects.
+deserialize binary data into different objects. TL-B describes data schemes for `Cell` objects. If you not familiar
+with `Cells`, please read [Cell & Bag of Cells(BOC)](https://docs.ton.org/develop/data-formats/cell-boc#cell) article.
 
 ## Overview
-
-<img alt="tlb structure" src="/img/docs/tlb.drawio.svg" width={'100%'}/>
 
 We refer to any set of TL-B constructs as TL-B documents. A TL-B document usually consists of declarations of types (
 i.e. their constructors) and functional combinators. The declaration of each combinator ends with a semicolon (`;`).
 
+Here is an example of a possible combinator declaration:
+<br></br>
+<ThemedImage
+alt=""
+sources={{
+light: '/img/docs/data-formats/tl-b-docs-2.png?raw=true',
+dark: '/img/docs/data-formats/tl-b-docs-2-dark.png?raw=true',
+}}
+/>
+<br></br>
+
 ## Constructors
 
+The left-hand side of each equation describes the way to define, or serialize, a value of the type indicated on the
+right-hand side. Such a description begins with the name of a constructor.
+
+<br></br>
+<ThemedImage
+alt=""
+sources={{
+light: '/img/docs/data-formats/tl-b-docs-3.png?raw=true',
+dark: '/img/docs/data-formats/tl-b-docs-3-dark.png?raw=true',
+}}
+/>
+<br></br>
+
 Constructors are used to specify the type of combinator, including the state at serialization. For example, constructors
-can also be used when you want to specify an `op` in query to a smart contract in TON.
+can also be used when you want to specify an `op`(operation code) in query to a smart contract in TON.
 
 ```tlb
 // ....
-message#3f5476ca value:# = CoolMessage;
-
-bool_true$0 = Bool;
-bool_false$1 = Bool;
-
+transfer#5fcc3d14 <...> = InternalMsgBody;
 // ....
+```
+
+* constructor name: `transfer`
+* constructor prefix code: `#5fcc3d14`
+
+Notice, every constructor name immediately followed by an optional constructor tag, such as `#_` or `$10`, which
+describes the bitstring used to encode (serialize) the constructor in question.
+
+```tlb
+// Explicit binary constructor tag
+addr_none$00 = MsgAddressExt;
+
+// Implicit binary constructor tag
+true$_ = True;
+
+// Implicit hexadecimal constructor tag
+config_mc_gas_prices#_ GasLimitsPrices = ConfigParam 20;
 ```
 
 The left-hand side of each equation describes the way to define, or serialize, a value of the type indicated on the
 right-hand side. Such a description begins with the name of a constructor, such as `message` or `bool_true`, immediately
-followed by an optional constructor tag, such as `#3f5476ca` or `$0`, which describes the bitstring used to encode (serialize)
+followed by an optional constructor tag, such as `#3f5476ca` or `$0`, which describes the bits used to encode (
+serialize)
 the constructor in question.
 
 | constructor                | serialization                             |
@@ -55,20 +88,75 @@ Type `Bool` has two tags `0` and `1`. Codegen pseudocode might look like:
 ```python3
 
 class Bool:
-    tags = [0, 1]
+    tags = [1, 0]
     tags_names = ['bool_true', 'bool_false']
 ```
 
 If you don't want to define any name for current constructor, just pass `_`, e.g. `_ a:(## 32) = 32Int;`
 
-Constructor tags may be given in either binary (after a dollar sign) or hexadecimal notation (after a hash sign). If a tag is not
+Constructor tags may be given in either binary (after a dollar sign) or hexadecimal notation (after a hash sign). If a
+tag is not
 explicitly provided, the TL-B parser must compute a default 32-bit constructor tag by hashing with CRC32 algorithm
 the text of the “equation” with `| 0x80000000` defining this constructor in a certain fashion. Therefore, empty tags
 must be explicitly provided by `#_` or `$_`.
 
+This tag willies used to guess current type of bitstring in deserialization process. E.g. we have 1 bit bitstring `0`,
+if we tell TLB to parse this bitstring in type of `Bool` it will parse it as `Bool.bool_false`.
+
+Let's say we have more complex examples:
+
+```tbl
+tag_a$10 val:(## 32) = A;
+tag_b$00 val(## 64) = A;
+```
+
+If we parse `1000000000000000000000000000000001` (1 and 33 zeroes and 1) in TLB type `A` - firstly we need to get first
+two bits to define tag. In this example `10` is two first bits and they represent `tag_a`. So now we know that next 32
+bits are `val` variable, `1` in our example. Some "parsed" pseudocode variables may look like:
+
+```python3
+A.tag = 'tag_a'
+A.tag_bits = '10'
+A.val = 1
+```
+
 All constructor names must be distinct and constructor tags for the same type must constitute a prefix code (otherwise
 the deserialization would not be unique); i.e. no tag can be a prefix of any other in same type.
 
+<b>Binary example:</b>
+
+```tlb
+example_a$10 = A;
+example_b$01 = A;
+example_c$11 = A;
+example_d$00 = A;
+```
+
+Codegen pseudocode might look like:
+
+```python3
+
+class A:
+    tags = [2, 1, 3, 0]
+    tags_names = ['example_a', 'example_b', 'example_c', 'example_d']
+```
+
+<b>Hex tag example:</b>
+
+```tlb
+example_a#0 = A;
+example_b#1 = A;
+example_c#f = A;
+```
+
+Codegen pseudocode might look like:
+
+```python3
+
+class A:
+    tags = [0, 1, 15]
+    tags_names = ['example_a', 'example_b', 'example_c']
+```
 
 ## Field definitions
 
@@ -77,15 +165,28 @@ form `ident:type-expr`, where ident is an identifier with the name of the field 
 anonymous fields), and type-expr is the field’s type. The type provided here is a type expression, which may include
 simple types, parametrized types with suitable parameters or complex expressions.
 
+<b>In sum ap all fields defined in type must not be greater than Cell (`1023` bits and `4` refs)</b>
+
 <b>Simple types:</b>
 
-- `_ a:# = Type;` - `Type.a` here is 32 bit integer
-- `_ a:(## 64) = Type;` - `Type.a` here is 64 bit integer
-- `_ a:Owner = NFT;` - `Type.a` here is `Owner` type
+- `_ a:# = Type;` - `Type.a` here is 32-bit integer
+- `_ a:(## 64) = Type;` - `Type.a` here is 64-bit integer
+- `_ a:Owner = NFT;` - `NFT.a` here is `Owner` type
+- `_ a:^Owner = NFT;` - `Type.a` here is cell ref to `Owner` type means `Owner` is stored in next cell reference.
+
+<b>Anonymous fields:</b>
+
+- `_ _:# = A;` - first field is anonymous 32-bit integer
+
+<b>Anonymous tuple fields:</b>
+
+- `_ val:^[ a:(##32) b:(## 32) c:(## 32)] = A;` - `A.val` is anonymous cell reference. `A.val.a` / `A.val.b` / `A.val.c`
+  are
+  32-bit integers.
 
 <b>Parametrized types:</b>
 
-Suppose we have IntWithObj type: 
+Suppose we have `IntWithObj` type:
 
 ```tlb
 _ {X:Type} a:# b:X = IntWithObj X;
@@ -103,14 +204,15 @@ _ a:(IntWithObj uint32) = IntWithUint32;
    ```tlb
    _ a:(## 1) b:a?(## 32) = Example;
    ``` 
-   In `Example` type variable `b` serialized only if `a` is `1`
+  In `Example` type variable `b` serialized only if `a` is `1`
 
-- Multiply expression (`x * Type` means copy object X times):
+
+- Multiply expression for tuples creation (`x * T` means create tuple of length `x` of type `T`):
     ```tlb
     a$_ a:(## 32) = A;
     b$_ b:(2 * A) = B;
     ```
-  
+
    ```tlb
    _ (## 1) = Bit;
    _ 2bits:(2 * Bit) = 2Bits;
@@ -122,16 +224,16 @@ _ a:(IntWithObj uint32) = IntWithUint32;
    ``` 
   In `Example` type variable `b` serialized only if second bit `a` is `1`
 
+
 - Other `Nat` operators also allowed (look `Allowed contraints`)
-  
+
 ## Built-in types
 
-- `#` - `Nat` 32 bits
+- `#` - `Nat` 32 bits unsigned integer
 - `## x` - `Nat` with `x` bits
-- `#< x` - `Nat` less than `x` bit integer stored as `x` bits
-- `#<= x` - `Nat` less than `x` bit integer stored as `x` bits
-- `Any`
-- `Cell` - rest of cell
+- `#< x` - `Nat` less than `x` bit unsigned integer stored as `x` bits
+- `#<= x` - `Nat` less or equal5 than `x` bit unsigned integer stored as `x` bits
+- `Any` / `Cell` - rest of cell bits&refs
 - `Int` - 257 bits
 - `UInt` - 256 bits
 - `Bits` - 1023 bits
@@ -150,19 +252,7 @@ equal `100`.
 
 Allowed contraints: `E` | `E = E` | `E <= E` | `E < E` | `E >= E` | `E > E` | `E + E` | `E * E` | `E ? E`
 
-
-//todo
-```tlb
-_ a:(## 32) { b:# } { ~b = a + 100 } = B_Calc_Example;
-```
-
-## TODO
-
-Variables — i.e. the (identifiers of the) previously
-defined fields of types `#` (natural numbers) or `Type` (type of types) — may be used as parameters for the parametrized
-types. The serialization process recursively serializes each field according to its type and the serialization of a
-value ultimately consists of the concatenation of bitstrings representing the constructor (i.e. the constructor tag) and
-the field values.
+## Implicit fields
 
 Some fields may be implicit. Their definitions are surrounded by curly
 brackets(`{`, `}`), which indicate that the field is not actually present in the serialization, but that its value must
@@ -173,15 +263,67 @@ nothing$0 {X:Type} = Maybe X;
 just$1 {X:Type} value:X = Maybe X;
 ```
 
-Finally, some equalities/inequalities may be included in curly brackets as well. These are certain “equations” which
-must be satisfied by the “variables” included in them. If one of the variables is prefixed by a tilde (~), its value
-will be uniquely determined by the values of all other variables participating in the equation (which must be known at
-this point) when the definition is processed from the left to the right. For example:
+```tlb
+_ {x:#} a:(## 32) { ~x = a + 1 } = Example;
+```
+
+## Parametrized types
+
+Variables — i.e. the (identifiers of the) previously
+defined fields of types `#` (natural numbers) or `Type` (type of types) — may be used as parameters for the parametrized
+types. The serialization process recursively serializes each field according to its type and the serialization of a
+value ultimately consists of the concatenation of bits representing the constructor (i.e. the constructor tag) and
+the field values.
 
 ```tlb
-addr_std$10 anycast:(## 1) {anycast = 0}
-      workchain_id:int8 address:bits256 = MsgAddrSmpl;
+_ {X:Type} my_val:(## 32) next_val:X = A X;
 ```
+
+Means that `A` is parametrized by `X` type. In deserialization process we will fetch 32-bit integer and than parse
+bits&refs of type `X`.
+
+Usage example of such parametrized type can be:
+
+```tlb
+_ bit:(## 1) = Bit;
+_ 32intwbit:(A Bit) = 32IntWithBit;
+``` 
+
+In this example we pass type `Bit` to `A` as parameter.
+
+If you don't want to define type, but want to deserialize by this scheme you may use `Any` word:
+
+```tlb
+_ my_val:(A Any) = Example;
+``` 
+
+Means that if we deserialize `Example` type we will fetch 32-bit integer and then rest of cell (bits&refs) to `my_val`.
+
+You can create complex types with several parameters:
+
+```tlb
+_ {X:Type} {Y:Type} my_val:(## 32) next_val:X next_next_val:Y = A X Y;
+_ bit:(## 1) = Bit;
+_ a_with_two_bits:(A Bit Bit) = AWithTwoBits;
+```
+
+Also you can use partial apply on such parametrized types:
+
+```tlb
+_ {X:Type} {Y:Type} v1:X v2:Y = A X Y;
+_ bit:(## 1) = Bit;
+_ {X:Type} bits:(A Bit X) = BitA X;
+```
+
+Or even parametrized types itself:
+
+```tlb
+_ {X:Type} v1:X = A X;
+_ {X:Type} d1:X = B X;
+_ {X:Type} bits:(A (B X)) = AB X;
+```
+
+## Negate operator (`~`)
 
 Some occurrences of “variables” (i.e. already-defined fields) are prefixed by a tilde(`~`). This indicates that the
 variable’s occurrence is used in the opposite way to the default behavior: on the left-hand side of the equation, it
@@ -189,6 +331,32 @@ means that the variable will be deduced (computed) based on this occurrence, ins
 computed value; in the right-hand side, conversely, it means that the variable will not be deduced from the type being
 serialized, but rather that it will be computed during the deserialization process. In other words, a tilde transforms
 an “input argument” into an “output argument” or vice versa.
+
+Simple example for negate operator is definition of new variable base on another variable:
+
+```tlb
+_ a:(## 32) { b:# } { ~b = a + 100 } = B_Calc_Example;
+```
+
+After definition, you can use new variable for passing it to other types:
+
+```tlb
+_ {X:Type} a:^X = PutToRef X;
+_ a:(## 32) { b:# } { ~b = a + 100 }
+  my_ref: (PutToRef b) = B_Calc_Example;
+```
+
+Also you can define variables with negate operator in add or multiply complex expressions:
+
+```tlb
+_ a:(## 32) { b:# } { ~b + 100 = a }  = B_Calc_Example;
+```
+
+```tlb
+_ a:(## 32) { b:# } { ~b * 5 = a }  = B_Calc_Example;
+```
+
+## TODO
 
 For example, we can use this to write a TL-B scheme for a simple transaction in TON with comment (which must be
 serialized as a sequence of cells):
@@ -203,24 +371,6 @@ op:#0 comment:Snake = Request;
 A caret (`ˆ`) preceding a type `X` means that instead of serializing a value of type `X` inside the current cell, we
 place this value into a separate cell and add a reference to it into the current cell. Therefore `ˆX` means “the type of
 next reference of cell containing values of type `X`”.
-
-Parametrized type `#<= p` with `p : #` (this notation means `“p of type #”`, i.e. a natural number) denotes the subtype
-of the natural numbers type `#`, consisting of integers `0 ... p;` it is serialized into `[log2(p + 1)]` bits as an
-unsigned big-endian integer. Type `#` by itself is serialized as an unsigned 32-bit integer. Parametrized type `## b`
-with `b : #<=31` is equivalent to `#<= 2^b − 1`  (i.e. it is an unsigned b-bit integer). For example:
-
-```tlb
-action_send_msg#0ec3c86d mode:(## 8) 
-  out_msg:^(MessageRelaxed Any) = OutAction;
-```
-
-In this scheme `mode:(## 8)` will be serialized as an 8-bit unsigned integer.
-
-
-
-```tlb
-
-```
 
 ## Comments
 
@@ -243,9 +393,8 @@ the [TlbParser.bnf](https://github.com/andreypfau/intellij-ton/blob/main/src/mai
 
 ## Useful sources
 
-- [Telegram Open Network Virtual Machine](https://ton.org/tvm.pdf)
 - [A description of an older version of TL](https://core.telegram.org/mtproto/TL)
-- [block.tlb](https://github.com/newton-blockchain/ton/blob/master/crypto/block/block.tlb)
+- [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb)
+- [tlbc tool](https://github.com/ton-blockchain/ton/blob/master/crypto/tl/tlbc.cpp)
+- [CPP Codegen](https://github.com/ton-blockchain/ton/blob/master/crypto/tl/tlbc-gen-cpp.cpp)
 
-_Thanks to the [Vudi](https://github.com/Vudi) and [cryshado](https://github.com/cryshado) for contributing to the
-community!_
