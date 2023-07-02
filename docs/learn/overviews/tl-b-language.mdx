@@ -171,7 +171,7 @@ simple types, parametrized types with suitable parameters or complex expressions
 - `_ a:# = Type;` - `Type.a` here is 32-bit integer
 - `_ a:(## 64) = Type;` - `Type.a` here is 64-bit integer
 - `_ a:Owner = NFT;` - `NFT.a` here is `Owner` type
-- `_ a:^Owner = NFT;` - `Type.a` here is cell ref to `Owner` type means `Owner` is stored in next cell reference.
+- `_ a:^Owner = NFT;` - `NFT.a` here is cell ref to `Owner` type means `Owner` is stored in next cell reference.
 
 ### Anonymous fields
 
@@ -243,14 +243,14 @@ _ a:(IntWithObj uint32) = IntWithUint32;
 - `#` - `Nat` 32 bits unsigned integer
 - `## x` - `Nat` with `x` bits
 - `#< x` - `Nat` less than `x` bit unsigned integer stored as `x` bits
-- `#<= x` - `Nat` less or equal5 than `x` bit unsigned integer stored as `x` bits
+- `#<= x` - `Nat` less or equal than `x` bit unsigned integer stored as `x` bits
 - `Any` / `Cell` - rest of cell bits&refs
 - `Int` - 257 bits
 - `UInt` - 256 bits
 - `Bits` - 1023 bits
 - `uint1` - `uint256` - 1 - 256 bits
 - `int1` - `int257` - 1 - 257 bits
-- `bits1` - `int1023` - 1 - 1023 bits
+- `bits1` - `bits1023` - 1 - 1023 bits
 
 ## Constraints
 
