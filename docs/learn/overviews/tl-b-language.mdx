@@ -1,6 +1,5 @@
 # TL-B Language
 
-
 TL-B (Type Language - Binary) serves to describe the type system, constructors and existing functions. For example, we
 can use TL-B schemes to build binary structures associated with TON Blockchain. Special TL-B parsers can read schemes to
 deserialize binary data into different objects. TL-B describes data schemes for `Cell` objects. If you not familiar
@@ -167,24 +166,36 @@ simple types, parametrized types with suitable parameters or complex expressions
 
 <b>In sum ap all fields defined in type must not be greater than Cell (`1023` bits and `4` refs)</b>
 
-<b>Simple types:</b>
+### Simple types
 
 - `_ a:# = Type;` - `Type.a` here is 32-bit integer
 - `_ a:(## 64) = Type;` - `Type.a` here is 64-bit integer
 - `_ a:Owner = NFT;` - `NFT.a` here is `Owner` type
 - `_ a:^Owner = NFT;` - `Type.a` here is cell ref to `Owner` type means `Owner` is stored in next cell reference.
 
-<b>Anonymous fields:</b>
+### Anonymous fields
 
 - `_ _:# = A;` - first field is anonymous 32-bit integer
 
-<b>Anonymous tuple fields:</b>
+### Extend cell with references
 
-- `_ val:^[ a:(##32) b:(## 32) c:(## 32)] = A;` - `A.val` is anonymous cell reference. `A.val.a` / `A.val.b` / `A.val.c`
-  are
-  32-bit integers.
+```tlb
+_ a:(##32) ^[ b:(##32) c:(## 32) d:(## 32)] = A;
+```
 
-<b>Parametrized types:</b>
+- If for some reason we want to separate some fields to another
+  cell we can use `^[ ... ]` syntax.
+  In this example `A.a` / `A.b` / `A.c` / `A.d` are 32-bit unsigned integers, but `A.a` is stored in first cell,
+  and `A.b` / `A.c` / `A.d` are stored in next cell (1 ref)
+
+```tlb
+_ ^[ a:(## 32) ^[ b:(## 32) ^[ c:(## 32) ] ] ] = A;
+```
+
+- Chain of references are also allowed. In this example each of
+  variables (`a`, `b`, `c`) are stored in separated cells
+
+### Parametrized types
 
 Suppose we have `IntWithObj` type:
 
@@ -198,7 +209,7 @@ Now we can use it in other types:
 _ a:(IntWithObj uint32) = IntWithUint32;
 ```
 
-<b>Complex expressions:</b>
+### Complex expressions
 
 - Conditional fields (only for `Nat`) (`E?T` means if expression `E` is True than field has type `T`)
    ```tlb
@@ -247,7 +258,8 @@ _ a:(IntWithObj uint32) = IntWithUint32;
 _ flags:(## 10) { flags <= 100 } = Flag;
 ```
 
-`Nat` fields allowed in constraints. In this example `{ flags <= 100 }` constraint means that `flag` variable is less or
+`Nat` fields allowed in constraints. In this example `{ flags <= 100 }` constraint means that `flags` variable is less
+or
 equal `100`.
 
 Allowed contraints: `E` | `E = E` | `E <= E` | `E < E` | `E >= E` | `E > E` | `E + E` | `E * E` | `E ? E`
@@ -275,11 +287,29 @@ types. The serialization process recursively serializes each field according to 
 value ultimately consists of the concatenation of bits representing the constructor (i.e. the constructor tag) and
 the field values.
 
+### Natural numbers (`Nat`)
+
+```tlb
+_ {x:#} my_val:(## x) = A x;
+```
+
+Means that `A` is parametrized by `x` `Nat`. In deserialization process we will fetch `x`-bit unsigned integer E.g.:
+
+```tlb
+_ value:(A 32) = My32UintValue;
+```
+
+Means than in deserialization process of `My32UintValue` type we will fetch 32-bit unsigned integer (because of `32`
+parameter to `A` type)
+
+### Types
+
 ```tlb
 _ {X:Type} my_val:(## 32) next_val:X = A X;
 ```
 
-Means that `A` is parametrized by `X` type. In deserialization process we will fetch 32-bit integer and than parse
+Means that `A` is parametrized by `X` type. In deserialization process we will fetch 32-bit unsigned integer and than
+parse
 bits&refs of type `X`.
 
 Usage example of such parametrized type can be:
@@ -323,6 +353,40 @@ _ {X:Type} d1:X = B X;
 _ {X:Type} bits:(A (B X)) = AB X;
 ```
 
+### Expression in parametrized types
+
+```tlb
+_ {x:#} value:(## x) = Example (x * 2);
+_ _:(Example 4) = 2BitInteger;
+```
+
+In this example `Example.value` type is determinate in runtime.
+
+In `2BitInteger` definition we set value `Example 4` type. To determinate this type we use `Example (x * 2)`
+definition and calculate `x` by formula (`y = 2`, `z = 4`):
+
+```c++
+static inline bool mul_r1(int& x, int y, int z) {
+  return y && !(z % y) && (x = z / y) >= 0;
+}
+```
+
+We can also use add operator:
+
+```tlb
+_ {x:#} value:(## x) = ExampleSum (x + 3);
+_ _:(ExampleSum 4) = 1BitInteger;
+```
+
+In `1BitInteger` definition we set value `ExampleSum 4` type. To determinate this type we use `ExampleSum (x + 3)`
+definition and calculate `x` by formula (`y = 3`, `z = 4`):
+
+```c++
+static inline bool add_r1(int& x, int y, int z) {
+  return z >= y && (x = z - y) >= 0;
+}
+```
+
 ## Negate operator (`~`)
 
 Some occurrences of “variables” (i.e. already-defined fields) are prefixed by a tilde(`~`). This indicates that the
@@ -338,7 +402,17 @@ Simple example for negate operator is definition of new variable base on another
 _ a:(## 32) { b:# } { ~b = a + 100 } = B_Calc_Example;
 ```
 
-After definition, you can use new variable for passing it to other types:
+After definition, you can use new variable for passing it to `Nat` types:
+
+```tlb
+_ a:(## 8) { b:# } { ~b = a + 10 }
+  example_dynamic_var:(## b) = B_Calc_Example;
+```
+
+The size of `example_dynamic_var` will be computed in runtime, when we load `a` variable and use it value for
+determination of `example_dynamic_var` size.
+
+Or to other types:
 
 ```tlb
 _ {X:Type} a:^X = PutToRef X;
@@ -356,21 +430,33 @@ _ a:(## 32) { b:# } { ~b + 100 = a }  = B_Calc_Example;
 _ a:(## 32) { b:# } { ~b * 5 = a }  = B_Calc_Example;
 ```
 
-## TODO
-
-For example, we can use this to write a TL-B scheme for a simple transaction in TON with comment (which must be
-serialized as a sequence of cells):
+### Negate operator (`~`) in type definition
 
 ```tlb
-empty#_ b:bits = Snake ~0;
-cons#_ {n:#} b:bits next:^(Snake ~n) = Snake ~(n + 1);
-
-op:#0 comment:Snake = Request;
+_ {m:#} n:(## m) = Define ~n m;
+_ {n_from_define:#} defined_val:(Define ~n_from_define 8) real_value:(## n_from_define) = Example;
 ```
 
-A caret (`ˆ`) preceding a type `X` means that instead of serializing a value of type `X` inside the current cell, we
-place this value into a separate cell and add a reference to it into the current cell. Therefore `ˆX` means “the type of
-next reference of cell containing values of type `X`”.
+Assume we have class `Define ~n m` which takes `m` and compute `n` loading it from `m` bit unsigned integer.
+
+In `Example` type we store variable computed by `Define` type into `n_from_define`, also we know that it's `8` bit
+unsigned integer, because we apply `Define` type with `Define ~n_from_define 8`. Now we can use `n_from_define` variable
+in other types to determinate serialization process.
+
+This technic lead to more complex type definitions (such as Unions, Hashmaps).
+
+```tlb
+unary_zero$0 = Unary ~0;
+unary_succ$1 {n:#} x:(Unary ~n) = Unary ~(n + 1);
+_ u:(Unary Any) = UnaryChain;
+```
+
+This is example has good explanation in [TL-B Types](https://docs.ton.org/develop/data-formats/tl-b-types#unary)
+article. The main idea here is that `UnaryChain` will recursively deserialize until reach of `unary_zero$0` (because we
+know last element of `Unary X` type by definition `unary_zero$0 = Unary ~0;` and `X` is calculated in runtime
+due `Unary ~(n + 1)` definition).
+
+Note: `x:(Unary ~n)` means that `n` is defined in process of serialization of `Unary` class.
 
 ## Comments
 
