@@ -30,32 +30,3 @@ To work with public TonCenter API you need a key:
 
 ## SDK
 
-### JavaScript SDK
-
-* [ton-community/ton-js](https://github.com/ton-community/ton) — _Modern_ cross-platform client for TON by the TON Community
-* [toncenter/tonweb](https://github.com/toncenter/tonweb) — Cross-platform client for TON by TON Center
-* [@tegro/ton3-client](https://github.com/TegroTON/ton3-client) — JS ton3-client by TonHold
-* [nns2009/ton-payment-tracker](https://github.com/nns2009/ton-payment-tracker) — TON payment tracker based on TON Center API
-
-### Python SDK
-
-- [tonfactory/tonsdk](https://github.com/tonfactory/tonsdk) — Analogue of the tonweb js library (TON Center HTTP API)
-
-### Elixir SDK
-
-- [ayrat555/ton](https://github.com/ayrat555/ton) - TON SDK for Elixir
-
-## Usage examples
-
-### JavaScript
-
-- [A standard web wallet](https://github.com/toncenter/ton-wallet) (Plain JS)
-- [Bridge frontend](https://github.com/ton-blockchain/bridge) (Vue.js)
-- [Bot for sales of dumplings](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js)
-
-### Python
-
-- [Transfer NFT & Jettons by creating a transfer message from the owner wallet](https://github.com/tonfactory/tonsdk#transfer-nft--jettons-by-creating-a-transfer-message-from-an-owner-wallet)
-- [Create mnemonic, init wallet class, create an external message to deploy the wallet](https://github.com/tonfactory/tonsdk#create-mnemonic-init-wallet-class-create-external-message-to-deploy-the-wallet)
-- [Storefront bot with payments in TON](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot)
-- [Bot with own balance](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2)
