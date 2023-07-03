@@ -152,6 +152,7 @@ const sidebars = {
         'develop/dapps/apis/README',
         'develop/dapps/apis/toncenter',
         'develop/dapps/apis/adnl',
+        'develop/dapps/apis/sdk'
       ],
     },
     {
@@ -306,7 +307,6 @@ const sidebars = {
             },
           ],
         },
-
         {
           type: 'category',
           label: 'Guidelines',
@@ -328,6 +328,7 @@ const sidebars = {
             'develop/dapps/defi/subscriptions',
           ],
         },
+        'develop/dapps/examples',
       ]
     },
     {
