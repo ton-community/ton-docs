@@ -7,7 +7,9 @@
 ## 🖥 Running TON Site
 Install [Tonutils Reverse Proxy](https://github.com/tonutils/reverse-proxy) to use TON Proxy for your website.
 
+
 ### Installation on any Linux
+
 ##### Download
 ```bash
 wget https://github.com/ton-utils/reverse-proxy/releases/download/v0.2.0/tonutils-reverse-proxy-linux-amd64
@@ -20,7 +22,6 @@ Run with domain configuration, and follow the steps:
 ```
 ./tonutils-reverse-proxy-linux-amd64 --domain your-domain.ton 
 ```
-<img width="500" alt="yes1" src="https://user-images.githubusercontent.com/9332353/210967656-182b0d0f-6954-49c9-bf8a-40f5b4a61aa7.png">
 Scan QR code from your terminal using Tonkeeper, Tonhub or any other wallet, execute transaction. Your domain will be linked to your site.
 
 ###### Run without domain
@@ -53,4 +54,4 @@ You can check the availability of the site by opening this address with the doma
 
  * [TON Sites, TON WWW and TON Proxy](https://blog.ton.org/ton-sites)
  * [Tonutils Reverse Proxy](https://github.com/tonutils/reverse-proxy)
- * Authors: [Andrew Burnosov](https://github.com/AndreyBurnosov) (TG: [@AndrewBurnosov](https://t.me/AndreyBurnosov)), [Daniil Sedov](https://gusarich.com) (TG: [@sedov](https://t.me/sedov)), [George Imedashvili](https://github.com/drforse) (TG: [@georgepy3](https://t.me/georgepy3))
+ * Authors: [Andrew Burnosov](https://github.com/AndreyBurnosov) (TG: [@AndrewBurnosov](https://t.me/AndreyBurnosov)), [Daniil Sedov](https://gusarich.com) (TG: [@sedov](https://t.me/sedov)), [George Imedashvili](https://github.com/drforse) 
