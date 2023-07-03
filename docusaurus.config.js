@@ -57,10 +57,6 @@ const config = {
             from: '/learn/overviews/TON_Blockchain_overview',
           },
           {
-            to: '/learn/overviews/tl-b-language',
-            from: '/learn/overviews/TL-B_Language',
-          },
-          {
             to: '/learn/networking/low-level-adnl',
             from: '/learn/overviews/adnl',
           },
