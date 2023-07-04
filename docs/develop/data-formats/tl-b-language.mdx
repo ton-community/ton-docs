@@ -242,8 +242,8 @@ _ a:(IntWithObj uint32) = IntWithUint32;
 
 - `#` - `Nat` 32 bits unsigned integer
 - `## x` - `Nat` with `x` bits
-- `#< x` - `Nat` less than `x` bit unsigned integer stored as `x` bits
-- `#<= x` - `Nat` less or equal than `x` bit unsigned integer stored as `x` bits
+- `#< x` - `Nat` less than `x` bit unsigned integer stored as `lenBits(x)` bits, up to 31 bits
+- `#<= x` - `Nat` less or equal than `x` bit unsigned integer stored as `lenBits(x)` bits, up to 32 bits
 - `Any` / `Cell` - rest of cell bits&refs
 - `Int` - 257 bits
 - `UInt` - 256 bits
