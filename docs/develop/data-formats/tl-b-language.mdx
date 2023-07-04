@@ -354,6 +354,26 @@ _ {X:Type} d1:X = B X;
 _ {X:Type} bits:(A (B X)) = AB X;
 ```
 
+### NAT fields usage for parametrized types
+
+You can use fields defined previously like parameters to types. Serialization will be determinate in runtime.
+
+Simple example:
+
+```tlb
+_ a:(## 8) b:(## a) = A;
+```
+
+This means that we store size of `b` field inside of `a` field. So when we want to serialize type `A` we need to load 8
+bit unsigned integer of `a` field and then use this number to determinate size of `b` field.
+
+This strategy works for parametrized types as well:
+
+```tlb
+_ {input:#} c:(## input) = B input;
+_ a:(## 8) c_in_b:(B a) = A;
+```
+
 ### Expression in parametrized types
 
 ```tlb
