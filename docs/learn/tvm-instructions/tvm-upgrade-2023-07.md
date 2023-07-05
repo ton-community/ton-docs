@@ -196,29 +196,29 @@ BLS values are represented in TVM in the following way:
 
 | xxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description |
 |:-|:-|:-|
-| `BLS_VERIFY` | _`pk msg sgn - bool`_ | Check BLS signature, return true on success.<br/>_61334 gas_ |
-| `BLS_AGGREGATE` | _`sig_1 ... sig_n n - sig`_ | Aggregate signatures. `n>0`.<br/>_`gas=n*4355-2611`_ |
-| `BLS_FASTAGGREGATEVERIFY`- | _`pk_1 ... pk_n msg sig - bool`_ | Check aggregated BLS signature for keys `pk_1...pk_n` and message `msg`. `n>0`.<br/>_`gas=58434+n*2990`_ |
-| `BLS_AGGREGATEVERIFY` | _`pk_1 msg_1 ... pk_n msg_n n sgn - bool`_ | Check aggregated BLS signature for kay-message pairs `pk_1 msg_1...pk_n msg_n`. `n>0`.<br/>_`gas=37309+n*22290`_ |
-| `BLS_G1_ADD` | _`x y - x+y`_ | Addition on G1.<br/>_3959 gas_ |
-| `BLS_G1_SUB` | _`x y - x-y`_ | Subtraction on G1.<br/>_3959 gas_ |
-| `BLS_G1_NEG` | _`x - -x`_ | Negation on G1.<br/>_799 gas_ |
-| `BLS_G1_MUL` | _`x s - x*s`_ | Multiply G1 point `x` by scalar `s`.<br/>_5214 gas_ |
+| `BLS_VERIFY` | _`pk msg sgn - bool`_ | Check BLS signature, return true on success.<br/>_61000 gas_ |
+| `BLS_AGGREGATE` | _`sig_1 ... sig_n n - sig`_ | Aggregate signatures. `n>0`.<br/>_`gas=n*4350-2650`_ |
+| `BLS_FASTAGGREGATEVERIFY`- | _`pk_1 ... pk_n msg sig - bool`_ | Check aggregated BLS signature for keys `pk_1...pk_n` and message `msg`. `n>0`.<br/>_`gas=58000+n*3000`_ |
+| `BLS_AGGREGATEVERIFY` | _`pk_1 msg_1 ... pk_n msg_n n sgn - bool`_ | Check aggregated BLS signature for kay-message pairs `pk_1 msg_1...pk_n msg_n`. `n>0`.<br/>_`gas=38500+n*22500`_ |
+| `BLS_G1_ADD` | _`x y - x+y`_ | Addition on G1.<br/>_3900 gas_ |
+| `BLS_G1_SUB` | _`x y - x-y`_ | Subtraction on G1.<br/>_3900 gas_ |
+| `BLS_G1_NEG` | _`x - -x`_ | Negation on G1.<br/>_750 gas_ |
+| `BLS_G1_MUL` | _`x s - x*s`_ | Multiply G1 point `x` by scalar `s`.<br/>_5200 gas_ |
 | `BLS_G1_MULTIEXP` | _`x_1 s_1 ... x_n s_n - x_1*s_1+...+x_n*s_n`_ | Calculate `x_1*s_1+...+x_n*s_n` for G1 points `x_i` and scalars `n_i`.<br/>_`gas=11409+n*630+n/floor(max(log2(n),4))*8820`_ |
 | `BLS_G1_ZERO` | _`- zero`_ | Push zero point in G1.<br/>_34 gas_ |
-| `BLS_MAP_TO_G1` | _`f - x`_ | Convert FP element `f` to a G1 point.<br/>_2364 gas_ |
-| `BLS_G1_INGROUP` | _`x - bool`_ | Check that slice `x` represents a valid element of G1.<br/>_2964 gas_ |
+| `BLS_MAP_TO_G1` | _`f - x`_ | Convert FP element `f` to a G1 point.<br/>_2350 gas_ |
+| `BLS_G1_INGROUP` | _`x - bool`_ | Check that slice `x` represents a valid element of G1.<br/>_2950 gas_ |
 | `BLS_G1_ISZERO` | _`x - bool`_ | Check that G1 point `x` is equal to zero.<br/>_34 gas_ |
 | `BLS_G2_ADD` | _`x y - x+y`_ | Addition on G2.<br/>_6134 gas_ |
 | `BLS_G2_SUB` | _`x y - x-y`_ | Subtraction on G2.<br/>_6134 gas_ |
 | `BLS_G2_NEG` | _`x - -x`_ | Negation on G2.<br/>_1584 gas_ |
-| `BLS_G2_MUL` | _`x s - x*s`_ | Multiply G2 point `x` by scalar `s`.<br/>_10564 gas_ |
+| `BLS_G2_MUL` | _`x s - x*s`_ | Multiply G2 point `x` by scalar `s`.<br/>_10550 gas_ |
 | `BLS_G2_MULTIEXP` | _`x_1 s_1 ... x_n s_n - x_1*s_1+...+x_n*s_n`_ | Calculate `x_1*s_1+...+x_n*s_n` for G2 points `x_i` and scalars `n_i`.<br/>_`gas=30422+n*1280+n/floor(max(log2(n),4))*22840`_ |
 | `BLS_G2_ZERO` | _`- zero`_ | Push zero point in G2.<br/>_34 gas_ |
-| `BLS_MAP_TO_G2` | _`f - x`_ | Convert FP2 element `f` to a G2 point.<br/>_8004 gas_ |
-| `BLS_G2_INGROUP` | _`x - bool`_ | Check that slice `x` represents a valid element of G2.<br/>_4289 gas_ |
+| `BLS_MAP_TO_G2` | _`f - x`_ | Convert FP2 element `f` to a G2 point.<br/>_7950 gas_ |
+| `BLS_G2_INGROUP` | _`x - bool`_ | Check that slice `x` represents a valid element of G2.<br/>_4250 gas_ |
 | `BLS_G2_ISZERO` | _`x - bool`_ | Check that G2 point `x` is equal to zero.<br/>_34 gas_ |
-| `BLS_PAIRING` | _`x_1 y_1 ... x_n y_n n - bool`_ | Given G1 points `x_i` and G2 points `y_i`, calculate and multiply pairings of `x_i,y_i`. Return true if the result is the multiplicative identity in FP12.<br/>_`gas=20034+n*11770`_ |
+| `BLS_PAIRING` | _`x_1 y_1 ... x_n y_n n - bool`_ | Given G1 points `x_i` and G2 points `y_i`, calculate and multiply pairings of `x_i,y_i`. Return true if the result is the multiplicative identity in FP12.<br/>_`gas=20034+n*11800`_ |
 | `BLS_PUSHR` | _`- r`_ | Push the order of G1 and G2 (approx. `2^255`).<br/>_`gas=34`_ |
 
 ## RUNVM
