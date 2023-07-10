@@ -168,8 +168,8 @@ The simplest way to convert user-friendly and raw addresses is realized through 
 
 Additionally, there are two ways to convert user-friendly and raw addresses for wallets using JavaScript:
 
-* [Convert address from/to user-friendly or raw form using ton.js](https://github.com/ton-community/ton/blob/master/src/address/Address.spec.ts)
+* [Convert address from/to user-friendly or raw form using ton.js](https://github.com/ton-org/ton-core/blob/main/src/address/Address.spec.ts)
 * [Convert address from/to user-friendly or raw form using tonweb](https://github.com/toncenter/tonweb/tree/master/src/utils#address-class)
 
-It's also possible to make use of similar mechanisms using [SDKs](/develop/dapps/#most-popular-sdk).
+It's also possible to make use of similar mechanisms using [SDKs](/develop/dapps/apis/sdk).
 
