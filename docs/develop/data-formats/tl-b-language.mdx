@@ -68,11 +68,12 @@ followed by an optional constructor tag, such as `#3f5476ca` or `$0`, which desc
 serialize)
 the constructor in question.
 
-| constructor        | serialization                        |
-|--------------------|--------------------------------------|
-| `some#3f5476ca`    | 32-bit uint serialize from hex value |
-| `some$0101`        | serialize `0101` raw bits            |
-| `some` or `some#` | serialize `crc32(equation) \| 0x80000000` |
+| constructor                 | serialization                        |
+|-----------------------------|--------------------------------------|
+| `some#3f5476ca`             | 32-bit uint serialize from hex value |
+| `some#5fe`                  | 12-bit uint serialize from hex value |
+| `some$0101`                 | serialize `0101` raw bits            |
+| `some` or `some#`           | serialize `crc32(equation) \         | 0x80000000` |
 | `some#_` or `some$_` or `_` | serialize nothing                    |
 
 Constructor names (`some` in this example) are used as variables in codegen. For example:
@@ -156,6 +157,22 @@ class A:
     tags = [0, 1, 15]
     tags_names = ['example_a', 'example_b', 'example_c']
 ```
+
+If you use `hex` tag, keep in mind that it will be serialized as maximum bit number for current `hex` value. This means:
+
+```tlb
+a#32 a:(## 32) = AMultiTagInt;
+b#1111 a:(## 32) = AMultiTagInt;
+c#5FE a:(## 32) = AMultiTagInt;
+d#3F5476CA a:(## 32) = AMultiTagInt;
+```
+
+| constructor  | serialization                        |
+|--------------|--------------------------------------|
+| `a#32`       | 8-bit uint serialize from hex value  |
+| `b#1111`     | 16-bit uint serialize from hex value |
+| `c#5FE`      | 12-bit uint serialize from hex value |
+| `d#3F5476CA` | 32-bit uint serialize from hex value |
 
 ## Field definitions
 
@@ -504,4 +521,3 @@ the [TlbParser.bnf](https://github.com/andreypfau/intellij-ton/blob/main/src/mai
 - [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb)
 - [tlbc tool](https://github.com/ton-blockchain/ton/blob/master/crypto/tl/tlbc.cpp)
 - [CPP Codegen](https://github.com/ton-blockchain/ton/blob/master/crypto/tl/tlbc-gen-cpp.cpp)
-
