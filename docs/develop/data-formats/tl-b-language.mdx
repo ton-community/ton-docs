@@ -123,6 +123,8 @@ A.val = 1
 All constructor names must be distinct and constructor tags for the same type must constitute a prefix code (otherwise
 the deserialization would not be unique); i.e. no tag can be a prefix of any other in same type.
 
+Maximum number of constructors for one type is `64`
+
 <b>Binary example:</b>
 
 ```tlb
@@ -174,6 +176,8 @@ d#3F5476CA a:(## 32) = AMultiTagInt;
 | `b#1111`     | 16-bit uint serialize from hex value |
 | `c#5FE`      | 12-bit uint serialize from hex value |
 | `d#3F5476CA` | 32-bit uint serialize from hex value |
+
+Also hex values allowed both in upper and lower case.
 
 ## Field definitions
 
