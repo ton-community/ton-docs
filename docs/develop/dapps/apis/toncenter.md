@@ -8,7 +8,7 @@ You can connect to public [toncenter.com](https://toncenter.com) or run your own
 
 ## Pros & Cons
 
-- ✅ Habitual. Suitable for a quick start for every newcomer to play with TON.  
+- ✅ Habitual and suitable for a quick start, this is perfect for every newcomer looking to play with TON. 
 - ✅ Web-oriented. Perfect to interact with TON transactions, smart contracts from Web.
 
 - ❌ Simplified. It's not possible to receive information where you need an indexed TON API.  
@@ -28,5 +28,7 @@ To work with public TonCenter API you need a key:
 * [toncenter/ton-http-api](https://github.com/toncenter/ton-http-api) — run your own RPC node.
 * [nownodes.io](https://nownodes.io/nodes) — NOWNodes full Nodes and blockbook Explorers via API.
 
-## SDK
+## See Also
+* [TON ADNL API](/develop/dapps/apis/adnl)
+* [SDKs](/develop/dapps/apis/sdk)
 

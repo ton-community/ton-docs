@@ -21,6 +21,7 @@
 
 ### API for current Toncoin value 
 
+* https://tonapi.io/v2/rates?tokens=ton&currencies=ton%2Cusd%2Crub
 * https://coinmarketcap.com/api/documentation/v1/ 
 * https://apiguide.coingecko.com/getting-started
 
@@ -245,3 +246,11 @@ curl -X 'GET' \
   ]
 }
 ```
+
+
+## See Also
+* [TON Center API](/develop/dapps/apis/toncenter)
+* [SDKs](/develop/dapps/apis/sdk)
+* [SDKs](/develop/dapps/apis/sdk)
+* [Apps Examples](/develop/dapps/examples)
+* [Smart Contract Examples](/develop/smart-contracts/examples)

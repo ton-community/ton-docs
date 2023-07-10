@@ -22,8 +22,8 @@ npm create ton@latest
 
 ### Tech stack
 - Compiling FunC with https://github.com/ton-community/func-js (no cli)
-- Testing smart contracts with https://github.com/ton-community/sandbox
-- Deploying smart contracts with TON Connect 2, Tonhub wallet or a `ton://` deeplink
+- Testing smart contracts with https://github.com/ton-org/sandbox
+- Deploying smart contracts with TON Connect 2.0 compatible wallets or a `ton://` deeplink
 
 ### Requirements
 
@@ -34,13 +34,13 @@ npm create ton@latest
 
 ### GitHub
 
-- https://github.com/ton-community/blueprint
+- https://github.com/ton-org/blueprint
 
 ### Materials
 
 - [Blueprint using on DoraHacks stream](https://www.youtube.com/watch?v=5ROXVM-Fojo)
-- [Create a new project](https://github.com/ton-community/blueprint#create-a-new-project)
-- [Develop a new smart contract](https://github.com/ton-community/blueprint#develop-a-new-contract)
+- [Create a new project](https://github.com/ton-org/blueprint#create-a-new-project)
+- [Develop a new smart contract](https://github.com/ton-org/blueprint#develop-a-new-contract)
 - [[YouTube] Func with Blueprint EN](https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa) ([RU version](https://youtube.com/playlist?list=PLyDBPwv9EPsA5vcUM2vzjQOomf264IdUZ))
 
 
@@ -49,4 +49,5 @@ npm create ton@latest
 * [Develop Smart Contract Introduction](/develop/smart-contracts/)
 * [How to work with wallet smart contracts](/develop/smart-contracts/tutorials/wallet)
 * [Using toncli](/develop/smart-contracts/sdk/toncli)
+* [SDKs](/develop/dapps/apis/sdk)
 

@@ -70,7 +70,7 @@ slice payload_encoding(int a, int b, int c) {
     begin_cell().store_uint(a,8)
                 .store_uint(b,8)
                 .store_uint(c,8)
-    end_cell().begin_parse();
+    .end_cell().begin_parse();
 }
 
 () send_message(slice destination) impure {
