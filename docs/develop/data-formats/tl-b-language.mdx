@@ -158,7 +158,8 @@ class A:
     tags_names = ['example_a', 'example_b', 'example_c']
 ```
 
-If you use `hex` tag, keep in mind that it will be serialized as maximum bit number for current `hex` value. This means:
+If you use `hex` tag, keep in mind that it will be serialized as 4 bits for each hex symbol. Maximum value is 32-bit
+unsigned integer. This means:
 
 ```tlb
 a#32 a:(## 32) = AMultiTagInt;
