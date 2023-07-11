@@ -501,6 +501,32 @@ due `Unary ~(n + 1)` definition).
 
 Note: `x:(Unary ~n)` means that `n` is defined in process of serialization of `Unary` class.
 
+## Special types
+
+Currently, TVM allow types of cells:
+
+- Ordinary
+- PrunnedBranch
+- Library
+- MerkleProof
+- MerkleUpdate
+
+By default, all cells are `Ordinary`. And all cells described in tlb are `Ordinary`.
+
+To allow load of special types in constructor you need to add `!` before constructor.
+
+Example:
+
+```tlb
+!merkle_update#02 {X:Type} old_hash:bits256 new_hash:bits256
+  old:^X new:^X = MERKLE_UPDATE X;
+  
+!merkle_proof#03 {X:Type} virtual_hash:bits256 depth:uint16 virtual_root:^X = MERKLE_PROOF X;
+```
+
+This technic allow codegen code to mark `SPECIAL` cells when you want to print structure, also it allow to correctly
+validate structures with special cells.
+
 ## Comments
 
 Comments are the same as in C++
