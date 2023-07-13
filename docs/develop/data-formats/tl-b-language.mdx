@@ -552,3 +552,9 @@ the [TlbParser.bnf](https://github.com/andreypfau/intellij-ton/blob/main/src/mai
 - [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb)
 - [tlbc tool](https://github.com/ton-blockchain/ton/blob/master/crypto/tl/tlbc.cpp)
 - [CPP Codegen](https://github.com/ton-blockchain/ton/blob/master/crypto/tl/tlbc-gen-cpp.cpp)
+- [tonpy tlb tests](https://github.com/disintar/tonpy/blob/main/src/tonpy/tests/test_tlb.py)
+- [tonpy py codegen](https://github.com/disintar/ton/blob/master/crypto/tl/tlbc-gen-py.cpp)
+
+<hr/>
+
+Documentation provided by [Disintar](https://dton.io/) team.
