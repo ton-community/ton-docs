@@ -52,14 +52,9 @@ Notice, every constructor name immediately followed by an optional constructor t
 describes the bitstring used to encode (serialize) the constructor in question.
 
 ```tlb
-// Explicit binary constructor tag
-addr_none$00 = MsgAddressExt;
-
-// Implicit binary constructor tag
-true$_ = True;
-
-// Implicit hexadecimal constructor tag
-config_mc_gas_prices#_ GasLimitsPrices = ConfigParam 20;
+message#3f5476ca value:# = CoolMessage;
+bool_true$0 = Bool;
+bool_false$1 = Bool;
 ```
 
 The left-hand side of each equation describes the way to define, or serialize, a value of the type indicated on the
