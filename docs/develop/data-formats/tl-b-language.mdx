@@ -522,6 +522,86 @@ Example:
 This technic allow codegen code to mark `SPECIAL` cells when you want to print structure, also it allow to correctly
 validate structures with special cells.
 
+## Several instances for one type without constructor uniqueness tag check
+
+It's allowed to create several instances of one type depending only on type parameters.
+In this way of definition constructor tag unique check will not be applied.
+
+Example:
+
+```tlb
+_ = A 1;
+a$01 = A 2;
+b$01 = A 3;
+_ test:# = A 4;
+```
+
+Means that actual tag for deserialization will be determinate by `A` type parameter:
+
+```python3
+# class for type `A`
+class A(TLBComplex):
+    class Tag(Enum):
+        a = 0
+        b = 1
+        cons1 = 2
+        cons4 = 3
+
+    cons_len = [2, 2, 0, 0]
+    cons_tag = [1, 1, 0, 0]
+
+    m_: int = None
+
+    def __init__(self, m: int):
+        self.m_ = m
+
+    def get_tag(self, cs: CellSlice) -> Optional["A.Tag"]:
+        tag = self.m_
+
+        if tag == 1:
+            return A.Tag.cons1
+
+        if tag == 2:
+            return A.Tag.a
+
+        if tag == 3:
+            return A.Tag.b
+
+        if tag == 4:
+            return A.Tag.cons4
+
+        return None
+```
+
+Same works with several parameters:
+
+```tlb
+_ = A 1 1;
+a$01 = A 2 1;
+b$01 = A 3 3;
+_ test:# = A 4 2;
+```
+
+Please, keep in mind that when you add parametrized type definition, tags between predefined type definition (`a`
+and `b` in our example) and
+parametrized type definition (`c` in our example) must be unique:
+
+*Not valid example:*
+
+```
+a$01 = A 2 1;
+b$11 = A 3 3;
+c$11 {X:#} {Y:#} = A X Y;
+```
+
+*Valid example:*
+
+```tlb
+a$01 = A 2 1;
+b$01 = A 3 3;
+c$11 {X:#} {Y:#} = A X Y;
+```
+
 ## Comments
 
 Comments are the same as in C++
