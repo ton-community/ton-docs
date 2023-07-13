@@ -63,13 +63,13 @@ followed by an optional constructor tag, such as `#3f5476ca` or `$0`, which desc
 serialize)
 the constructor in question.
 
-| constructor                 | serialization                        |
-|-----------------------------|--------------------------------------|
-| `some#3f5476ca`             | 32-bit uint serialize from hex value |
-| `some#5fe`                  | 12-bit uint serialize from hex value |
-| `some$0101`                 | serialize `0101` raw bits            |
-| `some` or `some#`           | serialize `crc32(equation) \         | 0x80000000` |
-| `some#_` or `some$_` or `_` | serialize nothing                    |
+| constructor                 | serialization                             |
+|-----------------------------|-------------------------------------------|
+| `some#3f5476ca`             | 32-bit uint serialize from hex value      |
+| `some#5fe`                  | 12-bit uint serialize from hex value      |
+| `some$0101`                 | serialize `0101` raw bits                 |
+| `some` or `some#`           | serialize `crc32(equation) \| 0x80000000` |
+| `some#_` or `some$_` or `_` | serialize nothing                         |
 
 Constructor names (`some` in this example) are used as variables in codegen. For example:
 
