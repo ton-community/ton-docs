@@ -389,8 +389,8 @@ Firstly create function, that will convert our buffer into chunks:
 function bufferToChunks(buff: Buffer, chunkSize: number) {
   const chunks: Buffer[] = [];
   while (buff.byteLength > 0) {
-    chunks.push(buff.slice(0, chunkSize));
-    buff = buff.slice(chunkSize);
+    chunks.push(buff.subarray(0, chunkSize));
+    buff = buff.subarray(chunkSize);
   }
   return chunks;
 }
