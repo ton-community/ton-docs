@@ -16,6 +16,7 @@ A string can be dumped to the debug log by the `~strdump` function.
 
 ## Integer operations
 - `muldiv` is a multiple-then-divide operation. The intermediate result is stored in 513-bit integer, so it won't overflow if the actual result fits into a 257-bit integer.
+- `divmod` is a operation that takes two numbers as parameters and gives the quotient and remainder of their division.
 
 ## Other primitives
 - `null?` checks whether the argument is `null`. By the value `null` of a TVM type, `Null` FunC represents absence of a value of some atomic type; see [null values](/develop/func/types#null-values).
