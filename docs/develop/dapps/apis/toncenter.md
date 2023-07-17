@@ -18,8 +18,7 @@ You can connect to public [toncenter.com](https://toncenter.com) or run your own
 
 To work with public TonCenter API you need a key:
 
-* Get API key for mainnet: [@tonapibot](https://t.me/tonapibot)
-* Get API key for testnet: [@tontestnetapibot](https://t.me/tontestnetapibot)
+* Get API key for the Mainnet and the Testnet: [@tonapibot](https://t.me/tonapibot)
 
 ## RPC Nodes
 * [https://www.orbs.com/ton-access/](https://www.orbs.com/ton-access/) - HTTP API for The Open Network (TON). 
