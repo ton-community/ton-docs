@@ -120,7 +120,8 @@ A.val = 1
 All constructor names must be distinct and constructor tags for the same type must constitute a prefix code (otherwise
 the deserialization would not be unique); i.e. no tag can be a prefix of any other in same type.
 
-Maximum number of constructors for one type is `64`
+Maximum number of constructors per one type: `64`
+Maximum bits for tag: `63`
 
 <b>Binary example:</b>
 
@@ -157,7 +158,7 @@ class A:
     tags_names = ['example_a', 'example_b', 'example_c']
 ```
 
-If you use `hex` tag, keep in mind that it will be serialized as 4 bits for each hex symbol. Maximum value is 32-bit
+If you use `hex` tag, keep in mind that it will be serialized as 4 bits for each hex symbol. Maximum value is 63-bit
 unsigned integer. This means:
 
 ```tlb
