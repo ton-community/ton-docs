@@ -14,7 +14,7 @@ Before June 2023 it wasn't possible to verify proofs on TON. Due to complex comp
 1. You will learn about ZK and specifically zk-SNARK(Zero-knowledge Succinct Non-Interactive ARgument of Knowledge)
 2. You will learn to do a trusted setup ceremony(Powers of Tau)
 3. You will write and compile a simple ZK circuit(Circom language)
-4. You will generate and deploy and test a func contract to verify a sample ZK proof
+4. You will generate and deploy and test a FunC contract to verify a sample ZK proof
 
 
 ## 🟥🟦 Prove that you can see colors!
@@ -50,7 +50,7 @@ Let's start by creating an empty [blueprint](https://github.com/ton-org/blueprin
 ```bash 
 npm create ton@latest simple-zk
 ```
-2. Now we need to clone the [snarkjs repo](https://github.com/kroist/snarkjs) that is adjusted to support func contracts
+2. Now we need to clone the [snarkjs repo](https://github.com/kroist/snarkjs) that is adjusted to support FunC contracts
 ```bash
 git clone https://github.com/kroist/snarkjs.git
 cd snarkjs
@@ -217,7 +217,7 @@ build
 
 ```
 ### ✅ Export Verifier Contract
-Final step in this section is to generate the func verifier contract which we will use in our project.
+Final step in this section is to generate the FunC verifier contract which we will use in our project.
 ```bash
 node ../../../snarkjs/build/cli.cjs zkey export funcverifier circuit_final.zkey ../../contracts/verifier.fc
 ``` 
@@ -569,7 +569,7 @@ In this tutorial
 * you learned about ZK and specifically ZkSnark.
 * Then you write your first Circom circuit and compiled it.
 * You also performed MPC and a Powers of TAU ceremony Which you used to generate verification keys for your circuit. 
-* Then you used Snarkjs library to export a func verifier of your circuit.
+* Then you used Snarkjs library to export a FunC verifier of your circuit.
 * You used blueprint to deploy and write tests for your verifier.
 
 This was just a simple ZK use case and there are many more complex use-cases that you can be implemented using ZK.
@@ -584,7 +584,7 @@ If you have any questions or have noticed an error - feel free to write to the a
 
 - [TVM June 2023 Upgrade](https://docs.ton.org/learn/tvm-instructions/tvm-upgrade)
 - [SnarkJs](https://github.com/iden3/snarkjs)
-- [SnarkJs func fork](https://github.com/kroist/snarkjs)
+- [SnarkJs FunC fork](https://github.com/kroist/snarkjs)
 - [Sample ZK on TON](https://github.com/SaberDoTcodeR/ton-zk-verifier)
 - [Blueprint](https://github.com/ton-org/blueprint)
 
