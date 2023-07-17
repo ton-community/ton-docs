@@ -147,7 +147,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'API & SDK',
+      label: 'APIs and SDKs',
       items: [
         'develop/dapps/apis/README',
         'develop/dapps/apis/toncenter',
