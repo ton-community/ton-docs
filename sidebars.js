@@ -430,6 +430,7 @@ const sidebars = {
       label: 'TON Virtual Machine (TVM)',
       items: [
         'learn/tvm-instructions/tvm-overview',
+        'learn/tvm-instructions/tvm-initialization',
         'learn/tvm-instructions/tvm-exit-codes',
         'learn/tvm-instructions/instructions',
         'learn/tvm-instructions/tvm-upgrade-2023-07',
