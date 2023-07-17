@@ -258,6 +258,12 @@ _ a:(IntWithObj uint32) = IntWithUint32;
 
 - Other `Nat` operators also allowed (look `Allowed contraints`)
 
+Note: you can combine several complex expressions:
+
+```tlb
+_ a:(## 1) b:(## 1) c:(## 2) d:(a?(b?((c . 1)?(## 64)))) = A;
+```
+
 ## Built-in types
 
 - `#` - `Nat` 32 bits unsigned integer
