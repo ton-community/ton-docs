@@ -122,7 +122,7 @@ const config = {
         },
         docs: {
           routeBasePath: '/',
-          showLastUpdateAuthor: false,
+          showLastUpdateAuthor: true,
           showLastUpdateTime: true,
           breadcrumbs: false,
           sidebarPath: require.resolve('./sidebars.js'),
