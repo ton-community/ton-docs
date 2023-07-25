@@ -38,7 +38,7 @@ First byte is always `02` - Cell type. Next 32 bytes are [Representation hash](/
 
 ### Merkle Proof
 
-Merkle Proof cells are used to verify that a portion of the Cell tree data belongs to the full tree. This design often prevents the verifier from knowing the full contents of the tree, while only revealing its root hash.
+Merkle Proof cells are used to verify that a portion of the Cell tree data belongs to the full tree. This design allows the verifier to not store the whole content of the tree, while still being able to verify the content by root hash.
 
 Merkle Proof has exactly one reference and its level `0 <= l <= 3` must be `max(Lvl(ref) - 1, 0)`. These cells contain exactly `8 + 256 + 16 = 280` bits.
 
@@ -125,7 +125,7 @@ When we (verifier) get the Proof Cell we make sure that its data contains the `c
 
 Now, when we've checked that hashes are match, we need to go deep in the Cell and verify that there is a Cell `a` (we were interested in).
 
-Such proofs repeatedly reduce the computational load and the amount of data that needs to be sent to the verifier.
+Such proofs repeatedly reduce the computational load and the amount of data that needs to be sent to or stored in the verifier.
 
 ## See also
 
