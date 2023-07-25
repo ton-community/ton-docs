@@ -445,6 +445,8 @@ const sidebars = {
           label: 'TL-B',
           items: [
             'develop/data-formats/cell-boc',
+            'develop/data-formats/exotic-cells',
+            'develop/data-formats/proofs',
             'develop/data-formats/tl-b-language',
             'develop/data-formats/tl-b-types',
             'develop/research-and-development/boc',
