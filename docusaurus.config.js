@@ -309,6 +309,10 @@ const config = {
                 label: 'Telegram bot with TON Connect',
               },
               {
+                to: '/develop/dapps/tutorials/simple-zk-on-ton',
+                label: 'Simple Zero-Knowledge Project on TON',
+              },
+              {
                 to: 'https://ton-community.github.io/tutorials/01-wallet/',
                 label: 'TON Community Tutorials',
               }
