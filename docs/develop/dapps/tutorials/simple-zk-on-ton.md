@@ -578,7 +578,7 @@ This was just a simple ZK use case and there are many more complex use-cases tha
 * private auction system🤝
 * private transactions💸(TON or JETTON)
 
-If you have any questions or have noticed an error - feel free to write to the author - [@saber_coder](https:/t.me/saber_coder)
+If you have any questions or have noticed an error - feel free to write to the author - [@saber_coder](https://t.me/saber_coder)
 
 ## 📌 References
 
@@ -597,4 +597,4 @@ If you have any questions or have noticed an error - feel free to write to the a
 
 
 ## 📬 About the author 
-- Saber on [Telegram](https:/t.me/saber_coder) or [Github](https:/github.com/saberdotcoder) or [LinkedIn](https:/www.linkedin.com/in/szafarpoor/)
+- Saber on [Telegram](https://t.me/saber_coder) or [Github](https://github.com/saberdotcoder) or [LinkedIn](https://www.linkedin.com/in/szafarpoor/)
