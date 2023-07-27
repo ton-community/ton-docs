@@ -127,6 +127,6 @@ Now, when we've checked that hashes are match, we need to go deep in the Cell an
 
 Such proofs repeatedly reduce the computational load and the amount of data that needs to be sent to or stored in the verifier.
 
-## See also
+## See Also
 
 * [Advanced Proofs verifying examples](/develop/data-formats/proofs)
