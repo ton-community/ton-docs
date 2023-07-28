@@ -106,7 +106,10 @@ If for some reason something does not work / breaks you can always [roll back](h
 If your Node works well then you can remove this snapshot to save storage space, but we do recommend to regularly snapshot your filesystem for rollback purposes because validator node has been known to corrupt data as well as config.json in some cases. [zfsnap](https://www.zfsnap.org/docs.html) is a nice tool to automate snapshot rotation.
 
 :::caution
-Have question or problem? Ask in the [TON dev chat](https://t.me/tondev_eng).
+Have question or problem?
+- MyTonCtrl support: [@mytonctrl_support_bot](https://t.me/mytonctrl_support_bot)
+- TON Support: [@ton_help_bot](https://t.me/ton_help_bot)
+- Ask in the [TON dev chat](https://t.me/tondev_eng)
 :::
 
 
