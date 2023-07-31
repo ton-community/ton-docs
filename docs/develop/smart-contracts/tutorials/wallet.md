@@ -97,24 +97,26 @@ npm run start:dev
 ```
 10. Finally, the console output will appear.
 
+![](/img/docs/how-to-wallet/wallet_1.png)
+
 :::tip Blueprint
-The TON Community has created an excellent tool for automating all processes (deploy, contract writing, tests) called [Blueprint](https://github.com/ton-community/blueprint). You can get a ready project with a single command from this library, however, we will not be needing such a powerful tool, so I suggest sticking to the instructions above.
+BLUEPRINT: The TON Community created an excellent tool for automating all development processes (deployment, contract writing, testing) called [Blueprint](https://github.com/ton-org/blueprint). However, we will not be needing such a powerful tool, so it is suggested that the instructions above are followed.
 :::
 
-**OPTIONAL: ** For Golang, use the following instructions:
+**OPTIONAL: ** When using Golang, follow these instructions::
 
-1. Install GoLand IDE.
-2. Create project folder and `go.mod` file with the following content (you may change the **version of Go** if you have a different one):
+1. Install the GoLand IDE.
+2. Create a project folder and `go.mod` file using the following content (the **version of Go** may need to be changed to conduct this process if the current version being used it outdated):
 ```
 module main
 
 go 1.20
 ```
-3. Type this command to terminal:
+3. Type the following command into the terminal:
 ```bash
 go get github.com/xssnick/tonutils-go
 ```
-4. Create `main.go` file in the root of your project with following content:
+4. Create the `main.go` file in the root of your project with following content:
 ```go
 package main
 
@@ -127,50 +129,49 @@ func main() {
 }
 
 ```
-5. Change the name of a module in `go.mod` to main.
-6. Run and see the output in the terminal.
+5. Change the name of the module in the `go.mod` to `main`.
+6. Run the code above until the output in the terminal is displayed.
 
 :::info
-You can also use any other IDE since GoLand is not free, but it is the most convenient choice.
+It is also possible to use another IDE since GoLand isn’t free, but it is preferred.
 :::
 
 :::warning IMPORTANT
-All code parts should be added to the `main` function we created in the [⚙ Set your environment](/develop/smart-contracts/tutorials/wallet#-set-your-environment) section.
+All coding components should be added to the `main` function that was created in the [⚙ Set Your Environment](/develop/smart-contracts/tutorials/wallet#-set-your-environment) section.
 
-Also, only the imports required for a specific code section will be specified in each new section. You will need to add new imports to old ones.
-
-All code examples used in this tutorial can be found in [my GitHub repository](https://github.com/aSpite/wallet-tutorial).
+Additionally, only the imports required for a specific code section will be specified in each new section and new imports will need to be added and combined with old ones.  
 :::
 
-## 🚀 Let's get started!
+## Source code
+All code examples used in this tutorial can be found in the following [GitHub repository]((https://github.com/aSpite/wallet-tutorial)).
 
-First of all, you will learn which wallets (v3 and v4) are used in TON and get acquainted with the work of their smart contracts. Then you will get to know the types of transactions on TON, and after that, we will start creating transactions, sending them to the blockchain, deploying our wallet, and in the end, working with high-load wallets.
 
-Our main task is to build transactions using various objects and functions from ton-core, ton, and ton-crypto (ExternalMessage, InternalMessage, Signing, and etc.) to understand what transactions look like on a bigger scale. We will consider only two versions of wallets: `v3` and `v4`. Exchanges, majority of users, and non-custodial wallets are using these two versions.
+## 🚀  Let's Get Started!
 
-:::note 
-There may be occasions in this tutorial when there is no explanation for any particular detail. In this case, you will be provided with an explanation on the later stages of this tutorial.
+In this tutorial we’ll learn which wallets (version’s 3 and 4) are most often used on TON Blockchain and get acquainted with how their smart contracts work. This will allow developers to better understand the different transaction types on the TON platform to make it simpler to create transactions, send them to the blockchain, deploy wallets, and eventually, be able to work with high-load wallets.
 
-**IMPORTANT:** We will use [Wallet v3 code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) to understand the working process. The reasons for this are described in the next chapter. Version v3 has two sub-versions: r1 and r2. At the moment, only the second one is being used, so when we say v3 it means v3r2.
+Our main task is to build transactions using various objects and functions for ton-core, ton, and ton-crypto (ExternalMessage, InternalMessage, Signing etc.) to understand what transactions look like on a bigger scale. To carry out this process we'll make use of two main wallet versions (v3 and v4) because of the fact that exchanges, non-custodial wallets, and most users only used these specific versions.
+
+:::note
+There may be occasions in this tutorial when there is no explanation for particular details. In these cases, more details will be provided in later stages of this tutorial.
+
+**IMPORTANT:** Throughout this tutorial [wallet v3 code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) is used to better understand the wallet development process. It should be noted that version v3 has two sub-versions: r1 and r2. Currently, only the second version is being used, this means that when we refer to v3 in this document it means v3r2.
 :::
 
-## 💎 Wallets in terms of TON blockchain
+## 💎 TON Blockchain Wallets
 
-Wallets in TON blockchain are actually smart contracts. So everything in TON is a smart contract. And as we know, we can deploy smart contracts into the network ourselves and change them any way we want. Thanks to this unique feature, we can **customize our wallets**.
+All wallets that operate and run on TON Blockchain are actually smart contracts, in the same way, everything operating on TON is a smart contract. Like most blockchains, it is possible to deploy smart contracts on the network and customize them for different uses. Thanks to this feature, **full wallet customization is possible**.
+On TON wallet smart contracts help the platform communicate with other smart contract types. However, it is important to consider how wallet communication takes place.
 
-It is wallet smart contracts that help us communicate with other smart contracts. But in this case, the question arises: 
-
-### How to communicate with the wallet?
-
-Here we are assisted by so-called external transactions. Generally, there are two types of transactions in TON blockchain: `internal` and `external`. External transactions allow us to send messages to blockchain from the outer world, thus communicating with smart contracts that accept such transactions. The function responsible for this logic is as follows:
+### Wallet Communication
+Generally, there are two transaction types on TON Blockchain: `internal` and `external`. External transactions allow for the ability to send messages to the blockchain from the outside world, thus allowing for the communication with smart contracts that accept such transactions. The function responsible for carrying out this process is as follows:
 
 ```func
 () recv_external(slice in_msg) impure {
     ;; some code
 }
 ```
-
-Before we go into more details about wallets, let’s look at how the wallet accepts an external transaction. First of all, each wallet holds the owner’s `public key`, `seqno` and `subwallet_id`. When receiving an external transaction, the wallet uses `get_data()` to retrieve data from its storage. It then conducts several checks and decides whether or not to accept the transaction:
+Before we dive into more details concerning wallets, let’s look at how wallets accept external transactions. On TON, all wallets hold the owner’s `public key`, `seqno`, and `subwallet_id`. When receiving an external transaction, the wallet uses the `get_data()` method to retrieve data from the storage portion of the wallet. It then conducts several verification procedures and decides whether to accept the transaction or not. This process is conducted as follows:
 
 ```func
 () recv_external(slice in_msg) impure {
@@ -209,21 +210,21 @@ Before we go into more details about wallets, let’s look at how the wallet acc
 
 Now let’s take a closer look.
 
-### Replay protection - Seqno
+### Replay Protection - Seqno
 
-It is very important not to repeat the transaction that has already been sent when working with wallets because, in this case, it can lead to some undesirable results. And if we take a look at the code of wallet smart contracts, we see the `seqno` (Sequence Number) there:
+Transaction replay protection in the wallet smart contract is directly related to the transaction seqno (Sequence Number) which keeps track of which transactions are sent in which order. It is very important that a single transaction is not repeated from a wallet because it throws off the integrity of the system entirely. If we further examine smart contract code within a wallet, the `seqno` is typically handled as follows:
 
 ```func
 throw_unless(33, msg_seqno == stored_seqno);
 ```
 
-This line of code above checks the seqno, which comes in the transaction and checks it with seqno, which is stored in a smart contract. The contract returns an error with `33 exit code` if they do not match. So if the sender passed invalid seqno, it means that he made some mistake in the transaction sequence, and the contract protects against such cases.
+This line of code above checks the `seqno`, which comes in the transaction and checks it with `seqno`, which is stored in a smart contract. The contract returns an error with `33 exit code` if they do not match. So if the sender passed invalid seqno, it means that he made some mistake in the transaction sequence, and the contract protects against such cases.
 
 ### Signature
 
-As mentioned earlier, wallet smart contracts accept external transactions. However, they come from the outer world, and **we should not trust this data**, so each wallet keeps the owner's public key in its storage. The smart contract verifies the signature with the public key when receiving an external transaction that the owner signed with the private key. It verifies that the transaction is actually from the owner. 
+As mentioned earlier, wallet smart contracts accept external transactions. However, these transactions come from the outside world and that data cannot be 100% trusted. Therefore, each wallet stores the owner's public key. The smart contract uses a public key to verify the legitimacy of the transaction signature when receiving an external transaction that the owner signed with the private key. This verifies that the transaction is actually from the (contract) owner.
 
-To do that, it first gets the signature from the incoming message, then loads the public key from storage and validates the signature:
+To carry out this process, the wallet must first obtain the signature from the incoming message which loads the public key from storage and validates the signature using the following process:
 
 ```func
 var signature = in_msg~load_bits(512);
@@ -232,17 +233,17 @@ var (stored_seqno, stored_subwallet, public_key) = (ds~load_uint(32), ds~load_ui
 throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
 ```
 
-And if all checks are passed, the smart contract accepts the message and processes it:
+And if all verification processes are completed correctly, the smart contract accepts the message and processes it:
 
 ```func
 accept_message();
 ```
 
 :::info accept_message()
-Since the transaction comes from the outer world, it can not contain TON to pay the fees. So in the TON, there is `gas_credit` (at the time of writing tutorial, its value is 10,000 gas units), which allows you to carry out the necessary calculations for free within the gas that does not exceed `gas_credit`. After `accept_message()` function, all the spent gas is taken from the balance of the smart contract. You can read more about it in [docs](/develop/smart-contracts/guidelines/accept).
+Because the transaction comes from the outside world, it does not contain the Toncoin required to pay the transaction fee. When sending TON using the accept_message() function, a gas_credit (at the time of writing its value is 10,000 gas units) is applied which allows the necessary calculations to be carried out for free if the gas does not exceed the gas_credit value. After the accept_message() function is used, all the gas spent (in TON) is taken from the balance of the smart contract. More can be read about this process [here](/develop/smart-contracts/guidelines/accept).
 :::
 
-### Transaction expiration
+### Transaction Expiration
 
 Another step in checking external transactions is `valid_until` field. As you can see from the variable name, this is the time in UNIX before the transaction is valid. If this check fails, the contract completes the processing of the transaction with `32 exit code`.
 
