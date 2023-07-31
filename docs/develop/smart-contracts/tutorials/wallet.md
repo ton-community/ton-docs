@@ -5,28 +5,29 @@ description: In this tutorial, you will learn how to fully work with wallets, tr
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# How to work with wallet smart contracts
+# Working With Wallet Smart Contracts
 
 ## 👋 Introduction
 
-Learning how wallets and transactions work in TON before you start working with smart contracts is essential. This knowledge will help you in learning smart contract development because by knowing how wallets, transactions, and smart contracts interact, you can understand how to implement a specific task better.
+Learning how wallets and transactions work on TON before beginning smart contracts development is essential. This knowledge will help developers understand the interaction between wallets, transactions, and smart contracts to implement specific development tasks.
 
-We will learn to create most of the operations without using most pre-cooked functions to fully understand the workflow. All references necessary for the analysis of this tutorial are located in the **References** chapter
+In this section we’ll learn to create operations without using pre-configured functions to understand development workflows. All references necessary for the analysis of this tutorial are located in the references chapter.
 
 ## 💡 Prerequisites
 
-This tutorial requires minimum knowledge of Javascript/Typescript. Golang knowledge will also be useful during the study this material. You will also need no more than 3 TON's (could be stored on stock account, non-custodial wallet or in the telegram bot) for various comissions. It is obligatory to have a basic understanding of terms such as: [cell](/learn/overviews/cells), [addresses in TON](/learn/overviews/addresses), [blockchain of blockchains](/learn/overviews/ton-blockchain) to be able to fully understand the tutorial. Here are some useful links to get familiar with those terms
+This tutorial requires basic knowledge of Javascript, Typescript, and Golang. It is also necessary to hold at least 3 TON tokens (which can be stored in a stock account, a non-custodial wallet, or by using the telegram bot wallet). It is necessary to have a basic understanding of [cell](/learn/overviews/cells), [addresses in TON](/learn/overviews/addresses), [blockchain of blockchains](/learn/overviews/ton-blockchain) to understand this tutorial.
 
-:::info Why mainnet?    
-Working with testnet often leads to issues like errors while deploying, difficulty tracking transactions, unstable network. Most of the job will be done on mainnet to avoid those obstacles and also because of the small amount of transactions in the tutorial, so the amount of fees will be minimized.
+:::info MAINNET DEVELOPMENT IS ESSENTIAL   
+Working with the TON Testnet often leads to deployment errors, difficulty tracking transactions, and unstable network functionality. Therefore, it could be beneficial to complete most development on the TON Mainnet to potentially avoid these issues, which might be necessary to reduce the number of transactions and thereby possibly minimize fees.
 :::
 
-## ✍️ What you need to get started
+## ✍️ What You Need To Get Started
 
-- Make sure to have NodeJS installed.
-- We will need the ton 13.4.1+, ton-core 0.48.0+ and the ton-crypto 3.2.0+ libraries. 
+- Ensure NodeJS is installed.
+- Specific Ton libraries are required and include: @ton/ton 13.4.1+, @ton/core 0.48.0+ and @ton/crypto 3.2.0+.
 
-**OPTIONAL: ** You can also install [tonutils-go](https://github.com/xssnick/tonutils-go) library and GoLand IDE for that. This library will be used in the tutorial and will help to understand some points better.
+**OPTIONAL**: If you prefer to use GO instead JS, it is  necessary to install the [tonutils-go](https://github.com/xssnick/tonutils-go) library and the GoLand IDE to conduct development on TON. This library will be used in this tutorial for the GO version.
+
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -47,11 +48,11 @@ go get github.com/xssnick/tonutils-go/address
 </TabItem>
 </Tabs>
 
-## ⚙ Set your environment
+## ⚙ Set Your Environment
 
-First we need to create a TypeScript project:
-1. Create an empty folder. Let's name it WalletsTutorial.
-2. Use CLI to open this folder.
+In order to create a TypeScript project its necessary to conduct the following steps in order:
+1. Create an empty folder (which we’ll name WalletsTutorial).
+2. Open the project folder using the CLI.
 3. Use the followings commands to set up your project:
 ```bash
 npm init -y
@@ -59,16 +60,16 @@ npm install typescript @types/node ts-node nodemon --save-dev
 npx tsc --init --rootDir src --outDir build \ --esModuleInterop --target es2020 --resolveJsonModule --lib es6 \ --module commonjs --allowJs true --noImplicitAny false --allowSyntheticDefaultImports true --strict false
 ```
 :::info
-We use `ts-node` to execute TypeScript code directly without precompiling and `nodemon` to restart the node application automatically when file changes in the directory are detected.
+To help us carry out the next process a `ts-node` is used to execute TypeScript code directly without precompiling. `nodemon` is used to restart the node application automatically when file changes in the directory are detected.
 :::
-4. Remove these lines from `tsconfig.json`:
+4. Next, remove these lines from `tsconfig.json`:
 ```json
   "files": [
     "\\",
     "\\"
   ]
 ```
-5. Create `nodemon.json` config in your project root with the following content:
+5. Then, create a `nodemon.json` config in your project root with the following content:
 ```json
 {
   "watch": ["src"],
@@ -82,7 +83,7 @@ We use `ts-node` to execute TypeScript code directly without precompiling and `n
 "start:dev": "npx nodemon"
 ```
 7. Create `src` folder in the project root and `index.ts` file in this folder.
-8. Let's write some code:
+8. Next, the following code should be added:
 ```ts
 async function main() {
   console.log("Hello, TON!");
@@ -94,7 +95,7 @@ main().finally(() => console.log("Exiting..."));
 ```bash
 npm run start:dev
 ```
-10. You should see the console output.
+10. Finally, the console output will appear.
 
 :::tip Blueprint
 The TON Community has created an excellent tool for automating all processes (deploy, contract writing, tests) called [Blueprint](https://github.com/ton-community/blueprint). You can get a ready project with a single command from this library, however, we will not be needing such a powerful tool, so I suggest sticking to the instructions above.
