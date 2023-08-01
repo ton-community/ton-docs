@@ -21,6 +21,10 @@ This tutorial requires basic knowledge of Javascript, Typescript, and Golang. It
 Working with the TON Testnet often leads to deployment errors, difficulty tracking transactions, and unstable network functionality. Therefore, it could be beneficial to complete most development on the TON Mainnet to potentially avoid these issues, which might be necessary to reduce the number of transactions and thereby possibly minimize fees.
 :::
 
+## Source Code
+All code examples used in this tutorial can be found in the following [GitHub repository]((https://github.com/aSpite/wallet-tutorial)).
+
+
 ## ✍️ What You Need To Get Started
 
 - Ensure NodeJS is installed.
@@ -142,8 +146,6 @@ All coding components should be added to the `main` function that was created in
 Additionally, only the imports required for a specific code section will be specified in each new section and new imports will need to be added and combined with old ones.  
 :::
 
-## Source code
-All code examples used in this tutorial can be found in the following [GitHub repository]((https://github.com/aSpite/wallet-tutorial)).
 
 
 ## 🚀  Let's Get Started!
@@ -245,24 +247,25 @@ Because the transaction comes from the outside world, it does not contain the To
 
 ### Transaction Expiration
 
-Another step in checking external transactions is `valid_until` field. As you can see from the variable name, this is the time in UNIX before the transaction is valid. If this check fails, the contract completes the processing of the transaction with `32 exit code`.
+Another step used to check the validity of external transactions is the `valid_until` field. As you can see from the variable name, this is the time in UNIX before the transaction is valid. If this verification process fails, the contract completes the processing of the transaction and returns the 32 exit code follows:
 
 ```func
 var (subwallet_id, valid_until, msg_seqno) = (cs~load_uint(32), cs~load_uint(32), cs~load_uint(32));
 throw_if(35, valid_until <= now());
 ```
 
-This is only a protection against various errors when the transaction is no longer valid but for some reason, was still sent to the blockchain.
+This algorithm works to protect against the susceptibility of various errors when the transaction is no longer valid but was still sent to the blockchain for an unknown reason.
 
-### Differences between Wallet v3 and Wallet v4
+### Wallet v3 and Wallet v4 Differences
 
-The only difference between these versions is that Wallet v4 has `plugins` that can be installed and deleted. These are special smart contracts, which have the right to ask once at a particular time a certain number of TON from a wallet smart contract. 
+The only difference between Wallet v3 and Wallet v4 is that Wallet v4 makes use of `plugins` that can be installed and deleted. These plugins are special smart contracts which are able to request a specific number of TON at a specific time from a wallet smart contract.
 
-Wallet smart contract, in turn, will send the required amount of TON in response without the need for the owner to participate. This is similar to the **subscription model** for which plugins are created. We will be going into these details in this tutorial, as this is not our main task, and wallets are identical in all other cases.
+Wallet smart contracts, in turn, will send the required amount of TON in response without the need for the owner to participate. This is similar to the **subscription model** for which plugins are created. We will not learn these details, because this is out of the scope of this tutorial.
 
-### So how do wallets help us to communicate with other smart contracts?
+### How Wallets facilitate communication with Smart Contracts
 
-As we already know, a wallet smart contract accepts external transactions, validates them and accepts them if all checks are passed. The contract then starts the loop of retrieving messages from the body of external messages, creates internal messages and sends them to the blockchain:
+As we discussed earlier, a wallet smart contract accepts external transactions, validates them and accepts them if all checks are passed. The contract then starts the loop of retrieving messages from the body of external messages then creates internal messages and sends them to the blockchain as follows:
+
 
 ```func
 cs~touch();
@@ -273,10 +276,10 @@ while (cs.slice_refs()) {
 ```
 
 :::tip touch()
-All smart contracts run on TVM (Ton Virtual Machine), which is a stack machine. ~ touch() places the variable cs on top of the stack, thus optimizing the running of the code for less gas.
+On TON, all smart contracts run on the stack-based TON Virtual Machine (TVM). ~ touch() places the variable cs on top of the stack to optimize the running of code for less gas.
 :::
 
-Since a **maximum of 4 refs** can be stored in one cell, we can send four transactions per external transaction.
+Since a **maximum of 4 references** can be stored in one cell it is necessary to send four transactions per external transaction.
 
 > 💡 Useful links:
 >
@@ -286,26 +289,30 @@ Since a **maximum of 4 refs** can be stored in one cell, we can send four transa
 >
 > ["load_ref()" in docs](/develop/func/stdlib/#load_ref)
 
-## 📬 External and Internal transactions
+## 📬  External and Internal Transactions
 
-In this section, you will learn more about `internal` and `external` transactions, and we will create transactions and send them to the network, trying to minimize the use of  pre-cooked functions. 
+In this section, we’ll learn more about `internal` and `external` transactions and we’ll create transactions and send them to the network to minimize the use of pre-cooked functions.
 
-We will use a ready-made wallet to make the task easier and help to concentrate on the study. To do this, you can use Tonkeeper, deposit 1 TON to this wallet, and send the transaction to any address (you can even use the same wallet address). This way, the wallet app (Tonkeeper) will deploy the wallet, and we can send the necessary transactions to the network.
+To carry out this process it is necessary to make use of a ready-made wallet to make the task easier. To accomplish this:
+1. Install the [wallet app](/participate/wallets/apps)(e.g., Tonkeeper is used by the author)  
+2. Switch wallet app to v3r2 address version
+3. Deposit 1 TON into the wallet 
+4. Send the transaction to another address (you can send to yourself, to the same wallet). 
+
+This way, the Tonkeeper wallet app will deploy the wallet contract and we can use it for the following steps.
 
 :::note
-At the time of writing the tutorial all wallets by default use Wallet v4. We will not use plugins, so we need the functionality provided by Wallet v3. Tonkeeper allows you to choose the version of the wallet, so I recommend to deploy v3 by sending transaction from this wallet to any address.
+At the time of writing, most wallet apps on TON by default use the wallet v4 version. Plugins are not required and we’ll make use of the functionality provided by wallet v3. During use, Tonkeeper allows the user to choose the version of the wallet they want. Therefore, it is recommended to deploy wallet version 3 (wallet v3).
 :::
 
 ### TL-B
 
-As you may already know, everything in TON Blockchain is a `cell`. And to properly serialize and deserialize the data we need standards. To do this, `TL-B` was invented, with which you could learn about what, how and in what sequence should be stored inside cells. 
+As noted, everything in TON Blockchain is a smart contracts consists of cells. To properly serialize and deserialize the data we need standards. To accomplish the serialization and deserialization process, `TL-B` was created as a universal tool to describe different data types in different ways with different sequences inside cells.
 
-In this section, we will look at [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb). This file will be very useful during future development, as it will describe how different cells should be assembled. In our case, we will refer to details related to internal and external transactions.
+In this section, we’ll examine [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb). This file will be very useful during future development, as it describes how different cells should be assembled. In our case specifically, it details the intricacies of internal and external transactions.
 
 :::info
-At this stage you do not need to understand TL-B, as the information described will be clear even without it. However, information on TL-B, in any case, will not be excessive, as you can return to this tutorial in the future.
-
-You can read about it in the [documentation](/learn/overviews/tl-b-language) or read a [very useful article](https://github.com/xssnick/ton-deep-doc/blob/master/TL-B.md) from [@xssnik](https://t.me/xssnik).
+Basic information will be provided within this guide. For further details, please refer to our TL-B [documentation](/develop/data-formats/tl-b-language) to learn more about TL-B.
 :::
 
 ### CommonMsgInfo
