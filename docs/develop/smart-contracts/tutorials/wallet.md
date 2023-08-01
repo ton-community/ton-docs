@@ -630,14 +630,12 @@ Note that here no `.endCell()` was used in the definition of the `toSign`. The f
 
 
 :::tip Wallet V4
-After the verification processes that we reviewed in the first part of the tutorial, Wallet V4 code [extracts the opcode to determine whether a simple translation or a transaction associated with the plugin](https://github.com/ton-blockchain/wallet-contract/blob/4111fd9e3313ec17d99ca9b5b1656445b5b49d8f/func/wallet-v4-code.fc#L94-L100) is required. To match this version, it is necessary to add the storeUint(0, 8). (JS/TS), MustStoreUInt(0, 8). (Golang) structures after writing the seqno (sequence number) and before specifying the transaction mode.
-
-Wallet V4 code, after all the checks that we reviewed in the first part of the tutorial, additionally [extracts the opcode to determine whether it is a simple   translation or transaction associated with the plugin](https://github.com/ton-blockchain/wallet-contract/blob/4111fd9e3313ec17d99ca9b5b1656445b5b49d8f/func/wallet-v4-code.fc#L94-L100). To match this version, we need to add `storeUint(0, 8).` (JS/TS), `MustStoreUInt(0, 8).` (Golang) after writing seqno and before specifying the mod of the transaction.
+In addition to basic verification process we learned bellow for the Wallet V3, Wallet V4 smart contracts [extracts the opcode to determine whether a simple translation or a transaction associated with the plugin](https://github.com/ton-blockchain/wallet-contract/blob/4111fd9e3313ec17d99ca9b5b1656445b5b49d8f/func/wallet-v4-code.fc#L94-L100) is required. To match this version, it is necessary to add the `storeUint(0, 8)`. (JS/TS), `MustStoreUInt(0, 8)`. (Golang) structures after writing the seqno (sequence number) and before specifying the transaction mode.
 :::
 
-### External transaction creation
+### External Transaction Creation
 
-To deliver any internal message to a blockchain from the outer world, we need to send it inside an external transaction. As we have previously considered, we are only interested in `ext_in_msg_info$10`, as the goal is to send an external message to our contract. Let's create an external message that will be sent to our wallet:
+To deliver any internal message to a blockchain from the outside world, it is necessary to send it within an external transaction. As we have previously considered, it is necessary to only make use of the `ext_in_msg_info$10` structure, as the goal is to send an external message to our contract. Now, let's create an external message that will be sent to our wallet:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -674,16 +672,16 @@ externalMessage := cell.BeginCell().
 
 Option | Explanation
 :---: | :---:
-Src | The sender address. Since an incoming external message cannot have a sender, there will always be 2 zero bits, that is addr_none. ([TL-B](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L100))
-Import Fee | Fee to import incoming external message.
-State Init | Unlike the Internal Message, the State Init in the external message is needed **to deploy a contract from the outer world**. The State Init in the Internal Message allows one contract to deploy another.
-Message Body | The message that we want to pass to the contract for processing.
+Src | The sender address. Since an incoming external message cannot have a sender, there will always be 2 zero bits (an addr_none [TL-B](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L100))
+Import Fee | The fee used to pay for importing incoming external messages.
+State Init | Unlike the Internal Message, the State Init within the external message is needed **to deploy a contract from the outside world**. The State Init used in conjunction with the Internal Message allows one contract to deploy another.
+Message Body | The message that must be sent to the contract for processing.
 
 :::tip 0b10
-0b10 (b - binary) means a binary record. We store two bits: `1` and `0`. Thus we specify that it is `ext_in_msg_info$10`.
+0b10 (b - binary) denotes a binary record. In this process, two bits are stored: `1` and `0`. Therefore, it is necessary to specify that it’s `ext_in_msg_info$10`.
 :::
 
-Now we have a completed message that is ready to be sent to our contract. To do this, it should first be serialized to `BOC` (Bag of Cells), then be sent:
+Now we have a completed message that is ready to be sent to our contract. To accomplish this, it should first be serialized to a `BOC` ([Bag of Cells](/develop/data-formats/cell-boc#bag-of-cells)), then be sent using the following code:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -719,19 +717,22 @@ if err != nil {
 
 > 💡 Useful link:
 >
-> [More about Bag of Cells](https://github.com/xssnick/ton-deep-doc/blob/master/Cells-BoC.md) from [@xssnik](https://t.me/xssnik)
+> [More about Bag of Cells](/develop/data-formats/cell-boc#bag-of-cells)
 
-We also output our BOC to the console. By copying the base64 encoded string, we can [manually send our transaction and get the hash using toncenter](https://toncenter.com/api/v2/#/send/send_boc_return_hash_sendBocReturnHash_post).
+As a result, we got the output of our BOC in the console.  By copying the base64 encoded string, it is possible to [manually send our transaction and retrieve the hash using toncenter](https://toncenter.com/api/v2/#/send/send_boc_return_hash_sendBocReturnHash_post).
 
-## 👛 Deploying our wallet
+## 👛 Deploying a Wallet
 
-At this stage, you already know how to interact with wallet smart contracts without using pre-prepared methods for this. In the past, we have facilitated our work by giving away the piece by deploying to Tonkeeper, but now we need **to deploy our wallet manually**.
+We have learned the basics of creating messages, which will now be helpful for deploying the wallet. In the past, we have deployed wallet via wallet app, but in this case we’ll need to deploy our wallet manually.
 
-We will create our wallet from scratch. You will learn how to compile the code of a wallet smart contract, generate a mnemonic, receive a wallet address and deploy it using external transactions and State Init. We will use wallet v3 for convenience.
+In this section we’ll go over how to create a wallet(wallet v3) from scratch. You’ll learn how to compile the code for a wallet smart contract, generate a mnemonic phrase, receive a wallet address, and deploy a wallet using external transactions and State Init (state initialization).
 
-### Generating mnemonic
+### Generating A Mnemonic
 
-The first thing to start with is to get a `private` and `public` key. We generate a mnemonic phrase and then extract private and public keys using cryptographic libraries:
+The first thing needed to correctly create a wallet is to retrieve a `private` and `public` key. To accomplish this task it is necessary to generate a mnemonic seed phrase and then extract private and public keys using cryptographic libraries. 
+
+This is accomplished as follows:
+
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -775,27 +776,27 @@ log.Println(mnemonic) // if we want, we can print our mnemonic
 </TabItem>
 </Tabs>
 
-The private key will be needed further to sign transactions, and the public key - to store in the storage of our contract.
+The private key is needed to sign transactions and the public key is stored in the wallet’s smart contract.
 
 :::danger IMPORTANT
-You should output the generated mnemonic to the console, **save** and use it, as in the previous section, in order to deal with the same key pair every time you run the code.
+It is necessary to output the generated mnemonic seed phrase to the console then save and use it (as detailed in the previous section) in order to use the same key pair each time the wallet’s code is run.
 :::
 
-### What is Subwallet ID?
+### Subwallet IDs
 
-One of the most notable benefits of wallets being smart contracts is the ability to create **a vast number of wallets** using just one private key. This is because the address of any smart contract in TON Blockchain is computed from several factors, one of which is `stateInit`. The stateInit contains the `code` and `initial data`, which should be stored in the smart contract storage. 
+One of the most notable benefits of wallets being smart contracts is the ability to create **a vast number of wallets** using just one private key. This is because the addresses of smart contracts on TON Blockchain are computed using several factors including the `stateInit`. The stateInit contains the `code` and `initial data`, which is stored in the blockchain’s smart contract storage.
 
-And by changing just one bit in stateInit, you can get a different address. That is why `subwallet_id` was invented, which is constantly stored in the contract storage. You can get many different wallets with one private key by changing it. For instance, it can be very useful when accepting a different wallet in different centralized services. 
+By changing just one bit within the stateInit, a different address can be generated. That is why the `subwallet_id` specification was initially created. The  `subwallet_id` specification is stored in the contract storage and it can be used to create many different wallets (with different subwallet IDs) with one private key. This functionality can be very useful when integrating various wallet types with centralized service such as exchanges.
 
-The default subwallet_id value is `698983191` according to the [next line](https://github.com/ton-blockchain/ton/blob/4b940f8bad9c2d3bf44f196f6995963c7cee9cc3/tonlib/tonlib/TonlibClient.cpp#L2420) from the source code of TON Blockchain:
+The default subwallet_id value is `698983191` according to the [line of code](https://github.com/ton-blockchain/ton/blob/4b940f8bad9c2d3bf44f196f6995963c7cee9cc3/tonlib/tonlib/TonlibClient.cpp#L2420) below taken from the TON Blockchain’s source code:
 
 ```cpp
 res.wallet_id = td::as<td::uint32>(res.config.zero_state_id.root_hash.as_slice().data());
 ```
 
-We can get information about genesis block (zero_state) from [config file](https://ton.org/global-config.json). Understanding this part is unnecessary and is written for those may be interested in details. Just remember that the default value of `subwallet_id` is `698983191`.
+It is possible to retrieve genesis block information (zero_state) from the [configuration file](https://ton.org/global-config.json). Understanding the complexities and details of this is not always necessary but it's important to remember that the default value of the `subwallet_id` is `698983191`.
 
-Each wallet contract checks this field for external transactions to avoid the cases when the request was to be sent to another wallet:
+Each wallet contract checks the subwallet_id field for external transactions to avoid instances when requests were sent to another wallet:
 
 ```func
 var (subwallet_id, valid_until, msg_seqno) = (cs~load_uint(32), cs~load_uint(32), cs~load_uint(32));
@@ -803,7 +804,7 @@ var (stored_seqno, stored_subwallet, public_key) = (ds~load_uint(32), ds~load_ui
 throw_unless(34, subwallet_id == stored_subwallet);
 ```
 
-We will need to add this value to the starting date of the contract, so save it in the variable:
+We will need to add the above value to the initial data of the contract, so the variable needs to be saved as follows:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -822,19 +823,21 @@ var subWallet uint32 = 698983191 // we use 32 bit for subwallet_id
 </TabItem>
 </Tabs>
 
-### Compiling our wallet code
+### Compiling Wallet Code
 
-Now that we have the private and public keys, subwallet_id, we need to get our wallet code. To do this, we will use the [wallet v3 code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) from the official repository. 
+Now that we have the private and public keys and the subwallet_id clearly defined we need to compile the wallet code. To accomplish this, we’ll use the [wallet v3 code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) from the official repository.
 
-We will use the [@ton-community/func-js](https://github.com/ton-community/func-js) library to compile the code. With it, we can compile our FunC code and get a cell containing the code. First, let's install library and save (--save) it to `package.json`:
+To compile wallet code it is necessary to use the [@ton-community/func-js](https://github.com/ton-community/func-js) library.
+Using this library it allows us to compile FunC code and retrieve a cell containing the code. To get started, it is necessary to install the library and save (--save) it to the `package.json` as follows:
 
 ```bash
 npm i --save @ton-community/func-js
 ```
 
-We will only use JavaScript to compile code, as the libraries for compiling code are developed here. However, after compiling, we only need to   keep the **base64 output** of our cell and it is possible to use it in other languages (like Go) as well.
+We’ll only use JavaScript to compile code, as the libraries for compiling code are JavaScript based.
+However, after compiling is finalized, as long as we have the **base64 output** of our cell and it is possible to code in languages such as Go and others.
 
-First, we need to create two files: `wallet_v3.fc` and `stdlib.fc`. The compiler works with  stdlib.fc library. All necessary and basic functions, which are corresponding with `asm` instructions were created here. We can download stdlib.fc from [here](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc). In `wallet_v3.fc`, it is necessary to copy the code mentioned above. Now we have the following structure of our project:
+First, we need to create two files: `wallet_v3.fc` and `stdlib.fc`. The compiler works with the stdlib.fc library. All necessary and basic functions, which correspond with the `asm` instructions were created in the library. The stdlib.fc file can be downloaded [here](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc). In the  `wallet_v3.fc` file it is necessary to copy the code above. Now we have the following structure for the project we are creating:
 
 ```
 .
