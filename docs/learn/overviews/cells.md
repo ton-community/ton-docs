@@ -48,4 +48,3 @@ If you want to know more details about cell (de)serialization, you could read [C
 ## See Also
 
 * [TL-B Language](/develop/data-formats/tl-b-language)
-* 
