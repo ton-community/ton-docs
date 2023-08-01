@@ -837,7 +837,9 @@ npm i --save @ton-community/func-js
 We’ll only use JavaScript to compile code, as the libraries for compiling code are JavaScript based.
 However, after compiling is finalized, as long as we have the **base64 output** of our cell and it is possible to code in languages such as Go and others.
 
-First, we need to create two files: `wallet_v3.fc` and `stdlib.fc`. The compiler works with the stdlib.fc library. All necessary and basic functions, which correspond with the `asm` instructions were created in the library. The stdlib.fc file can be downloaded [here](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc). In the  `wallet_v3.fc` file it is necessary to copy the code above. Now we have the following structure for the project we are creating:
+First, we need to create two files: `wallet_v3.fc` and `stdlib.fc`. The compiler works with the stdlib.fc library. All necessary and basic functions, which correspond with the `asm` instructions were created in the library. The stdlib.fc file can be downloaded [here](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc). In the  `wallet_v3.fc` file it is necessary to copy the code above. 
+
+Now we have the following structure for the project we are creating:
 
 ```
 .
@@ -852,16 +854,16 @@ First, we need to create two files: `wallet_v3.fc` and `stdlib.fc`. The compiler
 ```
 
 :::info
-Do not worry if your IDE plugin conflicts with `() set_seed(int) impure asm "SETRAND";` in `stdlib.fc`.
+It’s fine if your IDE plugin conflicts with the `() set_seed(int) impure asm "SETRAND";` in the `stdlib.fc` file.
 :::
 
-Remember to add the following line to the beginning of wallet_v3.fc to indicate that the functions from stdlib will be used below: 
+Remember to add the following line to the beginning of the `wallet_v3.fc` file to indicate that the functions from the stdlib will be used below:
 
 ```func
 #include "stdlib.fc";
 ```
 
-Now let’s write code to compile our smart contract and run it using `npm run start:dev`:
+Now let’s write code to compile our smart contract and run it using the `npm run start:dev`:
 
 ```js
 import { compileFunc } from '@ton-community/func-js';
@@ -888,7 +890,7 @@ console.log('Code BOC: ' + result.codeBoc);
 console.log('\nHash: ' + codeCell.hash().toString('base64')); // get the hash of cell and convert in to base64 encoded string. We will need it further
 ```
 
-You should get the following output to the terminal:
+The result will be the following output in the terminal:
 
 ```text
 Code BOC: te6ccgEBCAEAhgABFP8A9KQT9LzyyAsBAgEgAgMCAUgEBQCW8oMI1xgg0x/TH9MfAvgju/Jj7UTQ0x/TH9P/0VEyuvKhUUS68qIE+QFUEFX5EPKj+ACTINdKltMH1AL7AOgwAaTIyx/LH8v/ye1UAATQMAIBSAYHABe7Oc7UTQ0z8x1wv/gAEbjJftRNDXCx+A==
@@ -896,7 +898,7 @@ Code BOC: te6ccgEBCAEAhgABFP8A9KQT9LzyyAsBAgEgAgMCAUgEBQCW8oMI1xgg0x/TH9MfAvgju/
 Hash: idlku00WfSC36ujyK2JVT92sMBEpCNRUXOGO4sJVBPA=
 ```
 
-And now we can, using base64 encoded output, get the same cell with our wallet code in other libraries in other languages:
+Once this is completed it is possible to retrieve the same cell (using the base64 encoded output) with our wallet code using other libraries and languages:
 
 <Tabs groupId="code-examples">
 <TabItem value="go" label="Golang">
@@ -922,27 +924,27 @@ log.Println("Hash:", base64.StdEncoding.EncodeToString(codeCell.Hash())) // get 
 
 
 
-You should get the following output to the terminal:
+The result will be the following output in the terminal:
 
 ```text
 idlku00WfSC36ujyK2JVT92sMBEpCNRUXOGO4sJVBPA=
 ```
 
-So we have confirmed that we have the right code in our cell because the hashes match.
+After the above processes are complete it is confirmed that the correct code is being used within our cell because the hashes match.
 
-### Creating State Init for deploy
+### Creating the State Init for Deployment
 
-Before building a transaction, we will understand what is a State Init. First lets go through the [TL-B scheme](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L141-L143):
+Before building a transaction it is important to understand what a State Init is. First let’s go through the [TL-B scheme](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L141-L143):
 
 Option | Explanation
 :---: | :---:
-split_depth | This option is intended for highly loaded smart contracts that can be split and located on several [shardchains](/learn/overviews/ton-blockchain#many-accountchains-shards). Information about this can be found in [tblkch.pdf](https://ton.org/tblkch.pdf) (4.1.6). We will store bit `0` since we have just a wallet smart contract.
-special | Used for TicTok. Such smart contracts are automatically called every block. Not needed for ordinary contracts. Information about this can be found in [tblkch.pdf](https://ton.org/tblkch.pdf) (4.1.6). We will store bit `0` because we do not need such a function.
-code | The presence of bit `1` means the presence of the smart contract code as a reference.
-data | The presence of bit `1` means the presence of the smart contract data as a reference.
-library | A library that is resided on the [masterchain](/learn/overviews/ton-blockchain#masterchain-blockchain-of-blockchains) and can be used by different smart contracts. We will not use this, so we will set bit to `0`. Information about this can be found in [tblkch.pdf](https://ton.org/tblkch.pdf) (1.8.4).
+split_depth | This option is intended for highly loaded smart contracts that can be split and located on several [shardchains](/learn/overviews/ton-blockchain#many-accountchains-shards).  More information detailing how this works can be found in the [tblkch.pdf](https://ton.org/tblkch.pdf) (4.1.6).  Only a `0` bit is stored since it is being used only within a wallet smart contract.
+special | Used for TicTok. These smart contracts are automatically called for each block and are not needed for regular smart contracts. Information about this can be found in [this section](/develop/data-formats/transaction-layout#tick-tock) or [tblkch.pdf](https://ton.org/tblkch.pdf) (4.1.6). Only a `0` bit is stored within this specification because we do not need such a function.
+code | `1` bit means the presence of the smart contract code as a reference.
+data | `1` bit means the presence of the smart contract data as a reference.
+library | A library that operates on the [masterchain](/learn/overviews/ton-blockchain#masterchain-blockchain-of-blockchains)  and can be used by different smart contracts. This will not be used for wallet, so its bit is set to `0`. Information about this can be found in [tblkch.pdf](https://ton.org/tblkch.pdf) (1.8.4).
 
-Now we need to prepare the `initial data`, which will be in the storage of our contract immediately after the deployment:
+Next we’ll prepare the `initial data`, which will be present in our contract’s storage immediately after deployment:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -971,7 +973,7 @@ dataCell := cell.BeginCell().
 </TabItem>
 </Tabs>
 
-At this stage, we have both the contract `code` and its `initial data`. With this data, we can finally get our **wallet address**. As previously considered, the address of the wallet depends on the State Init, which includes the code and initial data.
+At this stage, both the contract `code` and its `initial data` is present. With this data, we can produce our **wallet address**. The address of the wallet depends on the State Init, which includes the code and initial data.
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1018,9 +1020,9 @@ log.Println("Contract address:", contractAddress.String()) // Output contract ad
 </TabItem>
 </Tabs>
 
-With State Init, we can now build the transaction and send it to the blockchain. But keep in mind that we need to have **at least 0.1 TON** on balance (it can be less, but this amount is guaranteed to be enough). To do this, you need to run the entire code earlier, get the wallet address and send 0.1 TON to your wallet.
+Using the State Init, we can now build the transaction and send it to the blockchain. To carry out this process **a minimum wallet balance of 0.1 TON** (the balance can be less, but this amount is guaranteed to be sufficient) is required. To accomplish this, we’ll need to run the code mentioned earlier in the tutorial, use the correct wallet address and send 0.1 TON to the wallet.
 
-Let’s start with building the transaction we built *in the previous section*:
+Let’s start with building the transaction similar to the one we built **in the previous section**:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1097,11 +1099,11 @@ body := cell.BeginCell().
 </TabItem>
 </Tabs>
 
-Now we have State Init and Message Body.
+After this is completed the result is the correct State Init and Message Body.
 
-### Sending an external transaction
+### Sending An External Transaction
 
-The **main change** will be in the external message, because here the State Init will be stored for deploying. Since the contract does not have its own code yet, it cannot process any internal messages. So we send its code and the initial data and **after the deployment it can process our message** with "Hello, TON!":
+The **main difference** will be in the presence of the external message, because the State Init is stored to help carry out correct contract deployment. Since the contract does not have its own code yet, it cannot process any internal messages. Therefore, next we send its code and the initial data **after it is successfully deployed so it can process our message** with "Hello, TON!" comment:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1140,7 +1142,7 @@ externalMessage := cell.BeginCell().
 </TabItem>
 </Tabs>
 
-Finally, we can send our transaction to blockchain to deploy our wallet and use it.
+Finally, we can send our transaction to the blockchain to deploy our wallet and use it.
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1186,23 +1188,23 @@ if err != nil {
 </TabItem>
 </Tabs>
 
-Note that we have sent an internal transaction with mode `3`. If you want to repeat the deploying of the same wallet, **you can destroy the smart contract**. To do this, set the mode 128 (take the entire balance of the smart contract) + 32 (destroy the smart contract) = `160` to get all the remaining TON on the balance back and be able to deploy the wallet again. 
+Note that we have sent an internal message using mode `3`. If it is necessary to repeat the deployment of the same wallet, **the smart contract can be destroyed**. To accomplish this, set the mode correctly by adding 128 (take the entire balance of the smart contract) + 32 (destroy the smart contract) which will = `160` to retrieve the remaining TON balance and deploy the wallet again.
 
-**Do not forget** that with each new transaction you will need **to increase seqno by one**.
+It's important to note that for each new transaction the **seqno will need to be increased by one**.
 
 :::info
-At the time of writing this contract I [verified](https://tonscan.org/tx/BL9T1i5DjX1JRLUn4z9JOgOWRKWQ80pSNevis26hGvc=) this code. On [this wallet](https://tonscan.org/address/EQDBjzo_iQCZh3bZSxFnK9ue4hLTOKgsCNKfC8LOUM4SlSCX) you can see [the code](https://tonscan.org/address/EQDBjzo_iQCZh3bZSxFnK9ue4hLTOKgsCNKfC8LOUM4SlSCX#source) that should be on your wallet.
+At the time of contract creation the code was [verified](https://tonscan.org/tx/BL9T1i5DjX1JRLUn4z9JOgOWRKWQ80pSNevis26hGvc=) this code. Explore example [here](https://tonscan.org/address/EQDBjzo_iQCZh3bZSxFnK9ue4hLTOKgsCNKfC8LOUM4SlSCX#source).
 :::
 
-## 💸 Working with wallet smart contracts
+## 💸 Working With Wallet Smart Contracts
 
-Now we can work fully with wallet smart contracts. We can deploy and destroy them, send the needed transactions and not depend on pre-prepared library methods. During the study, we sent transactions with TON and comments. To apply more studies in practice, we will try to build and send more complex transactions.
+After completing the first half of this tutorial we’re now much more familiar with wallet smart contracts and how they are developed and used. We learned how to deploy and destroy them and send messages without depending on pre-configured library frameworks. To apply more of what we learned above, in the next section, we’ll focus on building and sending more complex messages.
 
-### Sending multiple messages simultaneously
+### Sending Multiple Messages Simultaneously
 
-As you may already know, [one cell can store up to 1023 bits of data and up to 4 references](/develop/data-formats/cell-boc#cell) to other cells. In the first section of the tutorial we covered that internal messages are delivered in a while loop as a link and sent. This means it is possible to **store up to 4 internal messages inside the external**. This way, we can send four transactions at once.
+As you may already know, [one cell can store up to 1023 bits of data and up to 4 references](develop/data-formats/cell-boc#cell) to other cells. In the first section of this tutorial we detailed how internal messages are delivered in a ‘whole’ loop as a link and sent. This means it is possible to **store up to 4 internal messages inside the external** message. This allows four transactions to be sent at the same time.
 
-To do this, it is necessary to create 4 different internal messages. We can do this manually or through a `loop`. Create `three arrays`: in first TON amount for each transaction will be stored; in the second - a comment; and the last - the destination address. We will also create another array for our messages:
+To accomplish this, it is necessary to create 4 different internal messages. We can do this manually or through a `loop`. We need to define 3 arrays: array of TON amounts, array of comments, array of messages. For messages, we need to prepare another one array - internalMessages.
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1255,7 +1257,7 @@ var internalMessages [len(internalMessagesAmount)]*cell.Cell // array for our in
 </TabItem>
 </Tabs>
 
-For transactions mode, we will not create an array because all transactions will be sent with `mode 3`, but if you require different modes, you can create an array for that too. Now create a loop in which our internal messages will be built and add them to the array:
+[Sending mode](/develop/smart-contracts/messages#message-modes) for all messages set `mode 3`.  However, if different modes are required an array can be created to fulfill different purposes.
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1352,7 +1354,7 @@ for i := 0; i < len(internalMessagesAmount); i++ {
 </TabItem>
 </Tabs>
 
-Now lets use our knowledge from **chapter two** of the tutorial to build a transaction for our wallet, which will send 4 transactions simultaneously:
+Now let's use our knowledge from [chapter two](/develop/smart-contracts/tutorials/wallet#-deploying-our-wallet) to build a transaction for our wallet that can send 4 transactions simultaneously:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1443,7 +1445,7 @@ toSign := cell.BeginCell().
 </TabItem>
 </Tabs>
 
-And now add our messages that we built earlier in the loop:
+Next, we’ll add our messages that we built earlier in the loop:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1470,7 +1472,7 @@ for i := 0; i < len(internalMessages); i++ {
 </TabItem>
 </Tabs>
 
-What is left to do is to **sign** our message,  **build external message** as in previous chapters and  **send it** to the blockchain:
+Now that the above processes are complete, let’s **sign** our message, **build an external message** (as outlined in previous sections of this tutorial) and **send it** to the blockchain:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1536,28 +1538,28 @@ if err != nil {
 </Tabs>
 
 :::info Connection error
-If you get an error with the lite-server connection (Golang), just run the code until you can send the transaction. This is because the tonutils-go library uses many lite-servers from the global config that we have specified in the code, but not all lite-servers can accept our connection.
+If an error related to the lite-server connection (Golang) occurs, the code must be run until the transaction can be sent. This is because the tonutils-go library uses several different lite-servers through the global configuration that have been specified in the code. However, not all lite-servers can accept our connection.
 :::
 
-After that, we can go to any explorer and see that **our wallet sent four transactions** to the addresses you previously specified.
+After this process is completed it is possible to use a TON blockchain explorer to verify that the wallet sent four transactions to the addresses previously specified.
 
-### NFT Transfer
+### NFT Transfers
 
-In addition to regular translations, users often send NFT to each other. At the same time, not all libraries contain methods to help with this type of smart contract. So we will write a code that will build a transaction for sending an NFT. But before that, we lets look at some details of the [standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md).
+In addition to regular transactions, users often send NFTs to each other. Unfortunately, not all libraries contain methods that are tailored for use with this type of smart contract. Therefore, it is necessary to create code that will allow us to build a transaction for sending NFTs. First, let's become more familiar with the TON NFT [standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md).
 
-We need [TL-B from this standard for the NFT transfer](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#1-transfer). As you may already know, TL-B describes various structures in TON Blockchain. Let’s look at some points that may not be immediately clear:
+Especially, we need to understand TL-B for [NFT Transfers](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#1-transfer) in details. 
 
-- `query_id`: This value can be set to 0. It is needed to separate different NFT transfer requests. Used in different services, that is, what query_id will be, depends only on the service and the purpose for which it will use it.
+- `query_id`: The query ID is needed to separate different NFT transfer requests. Because the query ID is used in conjunction with different services, for each unique service using unique query_id. This value can be set to 0.
 
 - `response_destination`: After processing the ownership change transaction there will be extra TON. They will be sent to this address, if specified, otherwise remain on the NFT balance.
 
-- `custom_payload`: Needed for specific tasks. Not used in ordinary NFT.
+- `custom_payload`: The custom_payload is needed to carry out specific tasks and is not used with ordinary NFTs.
 
-- `forward_amount`: If this field is not zero, the specified amount of TON will be sent to the new owner. That way new owner will be notified that he received something.
+- `forward_amount`: If the forward_amount isn’t zero, the specified TON amount will be sent to the new owner. That way the new owner will be notified that they received some tokens.
 
-- `forward_payload`: This is an additional data that can be sent to the new owner together with forward_amount. For example, using forward_payload you can [add a comment during the transfer of the NFT](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#forward_payload-format), as we did earlier in the tutorial. However, the problem is that although it is written in the standard, the explorers do not fully support it. **In the case of Jettons the same problem is present**.
+- `forward_payload`: The forward_payload is additional data that can be sent to the new owner together with the forward_amount. For example, using forward_payload allows users to [add a comment during the transfer of the NFT](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#forward_payload-format), as shown in an earlier tutorial. However, although the forward_payload is written within TON’s NFT standard, blockchain explorers do not fully support displaying various details. The same problem also exists when displaying Jettons.
 
-Now let's move on to building the transaction itself:
+Now let's build the transaction itself:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1640,32 +1642,34 @@ internalMessage := cell.BeginCell().
 </TabItem>
 </Tabs>
 
-Opcode came from [the same standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema). All we have to do now is complete the transaction, as in the previous chapters. You can find the fully working code in the GitHub repository, which was attached at the beginning of the tutorial.
+The NFT transfer opcode comes from [the same standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema).
+Now let's complete the transaction, as is laid out in the previous sections of this tutorial. The correct code needed to complete the transaction is found in the [GitHub repository](/develop/smart-contracts/tutorials/wallet#source-code).
 
-Then you can do the same with `Jettons`. You just need to read the TL-B for the transfer of tokens from [standart](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) and understand how to collect the transaction. There is a small difference betwenn NFT and Jettons transfer.
+The same procedure can be completed with Jettons. To conduct this process, read the TL-B [standart](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) for token transfers and token collection is helpful. To this point specifically, a small difference between NFT and Jettons transfers exists.
 
-### Get methods in Wallet V3 and Wallet v4
+### Wallet v3 and Wallet v4 Get Methods
 
-Smart contracts can have GET methods. These are functions that can take arguments, process various data and return a response. However, the essence of GET methods is that they are run not inside the blockchain, but **on the client side**. These methods are very useful and provide different data on smart contracts. For example, [get_nft_data() method in NFT smart contracts](https://github.com/ton-blockchain/token-contract/blob/991bdb4925653c51b0b53ab212c53143f71f5476/nft/nft-item.fc#L142-L145) allows you to get **content**, **owner**, **collection** .
+Smart contracts often make use of [GET methods](/develop/smart-contracts/guidelines/get-methods), however, they don’t run inside the blockchain but instead on the client side. GET methods have many uses and provide accessibility to different data types for smart contracts. For example, the [get_nft_data() method in NFT smart contracts](https://github.com/ton-blockchain/token-contract/blob/991bdb4925653c51b0b53ab212c53143f71f5476/nft/nft-item.fc#L142-L145)allows users to retrieve specific content, owner, and NFT collection information.
 
-We will study the basic GET methods of [V3](https://github.com/ton-blockchain/ton/blob/e37583e5e6e8cd0aebf5142ef7d8db282f10692b/crypto/smartcont/wallet3-code.fc#L31-L41) and [V4](https://github.com/ton-blockchain/wallet-contract/blob/4111fd9e3313ec17d99ca9b5b1656445b5b49d8f/func/wallet-v4-code.fc#L164-L198) Wallets, as well as learn how to pass arguments and read the response. Let’s start with the methods that are the same for the two versions:
+Below we’ll learn more about the basics of GET methods used with [V3](https://github.com/ton-blockchain/ton/blob/e37583e5e6e8cd0aebf5142ef7d8db282f10692b/crypto/smartcont/wallet3-code.fc#L31-L41) and [V4](https://github.com/ton-blockchain/wallet-contract/blob/4111fd9e3313ec17d99ca9b5b1656445b5b49d8f/func/wallet-v4-code.fc#L164-L198). Let’s start with the methods that are the same for both wallet versions:
 
-Method | Explanation
-:---: | :---:
-int seqno() | At this stage you already know what seqno is. This method is needed to receive the **current seqno** and send transactions with the correct value. In previous chapters, we were calling this method all the time.
-int get_public_key() | Getting a public key. Not broadly used, can be used by different services. For example, some API services allow you to find all wallets with the same public key. In this case, it is useful to be able to receive the keys in advance through this method.
-
-Now let’s move to the methods that only V4 possesses:
 
 Method | Explanation
 :---: | :---:
-int get_subwallet_id() | Earlier in the tutorial we considered this. This method allows you to get subwallet_id.
-int is_plugin_installed(int wc, int addr_hash) | Lets us know if the plugin has been installed. To call, you should pass the [workchain](/learn/overviews/ton-blockchain#workchain-blockchain-with-your-own-rules) and the plugin address hash.
+int seqno() | This method is needed to receive the current seqno and send transactions with the correct value. In previous sections of this tutorial, this method was called often.
+int get_public_key() | This method is used to retrive a public key. The get_public_key() is not broadly used, and can be used by different services. For example, some API services allow for the retrieval of numerous wallets with the same public key
+
+Now let’s move to the methods that only the V4 wallet makes use of:
+
+Method | Explanation
+:---: | :---:
+int get_subwallet_id() | Earlier in the tutorial we considered this. This method allows you to retrive subwallet_id.
+int is_plugin_installed(int wc, int addr_hash) | Let’s us know if the plugin has been installed. To call this method it’s necessary to pass the  [workchain](/learn/overviews/ton-blockchain#workchain-blockchain-with-your-own-rules) and the plugin address hash.
 tuple get_plugin_list() | This method returns the address of the plugins that are installed.
 
-We look at two methods: `get_public_key` and `is_plugin_installed`. They have been chosen because at first we would have to get a public key from 256 bits of data, and after that we would have to learn how to pass a slice and different types of data to GET methods. This will be very useful in learning how to use these methods.
+Let’s consider the `get_public_key` and the `is_plugin_installed` methods. These two methods were chosen because initially the public key is selected from 256 bits of data and afterwards passes a slice for different types of data to a GET method. This is very useful to help us learn how to properly make use of these methods.
 
-First we need a client who will send requests. I will use my wallet address ([EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF](https://tonscan.org/address/EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF)) as an example:
+First we need a client that is capable of sending requests. Therefore, we’ll use a specific wallet address ([EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF](https://tonscan.org/address/EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF)) as an example:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1714,7 +1718,7 @@ walletAddress := address.MustParseAddr("EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72
 </TabItem>
 </Tabs>
 
-Now we need to call GET method wallet.
+Now we need to call the GET method wallet.
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1741,9 +1745,10 @@ log.Println(publicKey)
 </TabItem>
 </Tabs>
 
-After the call we get a huge number (256 bits), which must be translated into hex string. Hex string for my address: `430db39b13cf3cb76bfa818b6b13417b82be2c6c389170fbe06795c71996b1f8`. Now we can use [TonAPI](https://tonapi.io/swagger-ui) (/v1/wallet/findByPubkey method), put the obtained hex string and see that the first element in the array in the answer will point to my wallet.
+After the call is successfully completed the end result is an extremely large 256 bit number which must be translated into a hex string. The resulting hex string for the wallet address we provided above is as follows: `430db39b13cf3cb76bfa818b6b13417b82be2c6c389170fbe06795c71996b1f8`.
+Next, we leverage the [TonAPI](https://tonapi.io/swagger-ui) (/v1/wallet/findByPubkey method), by inputting the obtained hex string into the system and it is immediately clear that the first element in the array within the answer will identify my wallet.
 
-Now we can switch to `is_plugin_installed`. As an example I will use my old wallet ([EQAM7M-HGyfxlErAIUODrxBA3y5roBeYiTuy6BHgJ3Sx8k](https://tonscan.org/address/EQAM7M--HGyfxlErAIUODrxBA3yj5roBeYiTuy6BHgJ3Sx8k)) and the plugin ([EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_N9qwOTSAy3sQSZ](https://tonscan.org/address/EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_N9qwOTSAy3sQSZ)) that will be installed for at least a few decades:
+Then we switch to the `is_plugin_installed` method. As an example, we’ll again use the wallet we used earlier ([EQAM7M-HGyfxlErAIUODrxBA3y5roBeYiTuy6BHgJ3Sx8k](https://tonscan.org/address/EQAM7M--HGyfxlErAIUODrxBA3yj5roBeYiTuy6BHgJ3Sx8k)) and the plugin ([EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_N9qwOTSAy3sQSZ](https://tonscan.org/address/EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_N9qwOTSAy3sQSZ)):
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1764,7 +1769,7 @@ subscriptionAddress := address.MustParseAddr("EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_
 </TabItem>
 </Tabs>
 
-Now we need to get the hash address of our plugin. After that we can translate it into number and send it to GET Method. 
+Now we need to retrieve the plugin’s hash address so the address can be translated into a number and sent to the GET Method.
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1805,13 +1810,14 @@ log.Println(getResult.MustInt(0)) // -1
 </TabItem>
 </Tabs>
 
-In the response we have to get `-1`, which means true. We could send a **slice** and a **cell** if required. It would be enough to create a Slice or Cell and transfer it instead of BigInt, specifying the appropriate type.
+The response must be `-1`, meaning the result is true. It is also possible to send a slice and a cell if required. It would be enough to create a Slice or Cell and transfer it instead of using the BigInt, specifying the appropriate type.
 
-### Contract deploy via wallet
+### Contract Deployment via Wallet
 
-In chapter three, we deployed our wallet. To do this, we first sent some TON and then a transaction from this wallet to deploy the contract. However, it is not broadly used with external transactions and is primarily used for wallets. While developing contracts, the deployment process is initialized by **internal messages**. 
+In chapter three, we deployed a wallet. To accomplish this, we initially sent some TON and then a transaction from the wallet to deploy a smart contract. However, this process is not broadly used with external transactions and is often primarily used for wallets only. While developing contracts, the deployment process is initialized by sending internal messages.
 
-We will use the smart V3R2 wallet contract that was used in [the third chapter](/develop/smart-contracts/tutorials/wallet#compiling-our-wallet-code). In this case, set `subwallet_id` to `3` or any other number that you want to get a different address when using the same private key (changeable):
+To accomplish this, will use the V3R2 wallet smart contract that was used in [the third chapter](/develop/smart-contracts/tutorials/wallet#compiling-our-wallet-code).
+In this case, we’ll set the `subwallet_id` to `3` or any other number needed to retrieve another address when using the same private key (its changeable):
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1890,7 +1896,7 @@ stateInit := cell.BeginCell().
 </TabItem>
 </Tabs>
 
-Now we will get the address of our contract and build InternalMessage. Also we wil add "Deploying..." comment to our transaction.
+Next we’ll retrieve the address from our contract and build the InternalMessage. Also we add the "Deploying..." comment to our transaction.
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1954,10 +1960,10 @@ internalMessage := cell.BeginCell().
 </Tabs>
 
 :::info
-Note that we have specified the bits, and then save stateInit and internalMessageBody as references. Since the links are stored separately, we could write 4 (0b100) + 2 (0b10) + 1 (0b1) -> (4 + 2 + 1, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1) which means (0b111, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1) and then save two references.
+Note that above, the bits have been specified and that the stateInit and internalMessageBody have been saved as references. Since the links are stored separately it is generally written as 4 (0b100) + 2 (0b10) + 1 (0b1) -> (4 + 2 + 1, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1) which means (0b111, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1) and then save two references.
 :::
 
-Next, we only need to prepare a message for our wallet and send it:
+Next, we’ll prepare a message for our wallet and send it:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -2084,17 +2090,17 @@ if err != nil {
 </TabItem>
 </Tabs>
 
-This concludes our work with ordinary wallets. At this stage, you fully understand how to interact with wallet smart contracts, send the required transactions, and not to be dependent on a specific library.
+This concludes our work with ordinary wallets. At this stage, you should have a strong understanding of how to interact with wallet smart contracts, send transactions, and be able to use various library types.
 
-## 🔥 High-load wallet
+## 🔥 High-Load Wallets
 
-In some situations, sending a large number of transactions per message may be necessary. As previously reviewed, ordinary wallets support sending up to 4 transactions at a time. This was because [a maximum of 4 references](/develop/data-formats/cell-boc#cell) can be stored in a single cell. High-load wallets allow sending 255 transactions at once. This restriction exists because the maximum out messages in the blockchain config is set to 255.
+In some situations, sending a large number of transactions per message may be necessary. As previously mentioned, ordinary wallets support sending up to 4 transactions at a time by storing [a maximum of 4 references](/develop/data-formats/cell-boc#cell) in a single cell. High-load wallets only allow 255 transactions to be sent at once. This restriction exists because the maximum number of outgoing messages (actions) in the blockchain’s config settings is set to 255.
 
-Exchanges are the best example. With many users, it is necessary to send a lot of transactions for withdrawal per second.
+Exchanges are probably the best example of where high-load wallets are used on a large scale. Established exchanges like Binance and others have extremely large user bases, this means that a large number of transaction withdrawals are processed in short time periods. High-load wallets help address these withdrawal requests.
 
 ### High-load wallet FunC code
 
-First, let’s take a look at [the code of the high-load wallet smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc) , as we have done before: 
+First, let’s examine [the code structure of high-load wallet smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc): 
 
 ```func
 () recv_external(slice in_msg) impure {
@@ -2123,13 +2129,14 @@ First, let’s take a look at [the code of the high-load wallet smart contract](
 >
 > ["udict_get?()" in docs](/develop/func/stdlib/#dict_get)
 
-You can notice some differences from ordinary wallets. Now let’s take a closer look to every detail (except subwallet, since we have already studied this).
+You notice some differences from ordinary wallets. Now let’s take a closer look at more details of how high-load wallets work on TON (except subwallets as we have gone over this previously).
 
-### Query ID instead of Seqno
+### Using a Query ID In Place Of a Seqno
 
-As we have previously learned, ordinary wallets seqno is increased by `1` with each transaction. We had to wait until this value was updated, then get it using the GET method and send a new transaction. This took quite a lot of time ahead, which cannot be allowed in highload wallets. Therefore, `query_id` is used here.
+As we previously discussed, ordinary wallet seqno increase by `1` after each transaction. While using a wallet sequence we had to wait until this value was updated, then retrieve it using the GET method and send a new transaction.
+This process takes a significant amount of time which high-load wallets are not designed for (as discussed above, they are meant to send a large number of transactions very quickly). Therefore, high-load wallets on TON make use of the `query_id`.
 
-This field allows us to identify each request, and if we already have some request, the contract will not accept it, as it has already been processed:
+If numerous transaction requests already exist, the contract won’t accept it, as it has already been processed:
 
 ```func
 var (stored_subwallet, last_cleaned, public_key, old_queries) = (ds~load_uint(32), ds~load_uint(64), ds~load_uint(256), ds~load_dict()); ;; read values from storage
@@ -2138,11 +2145,11 @@ ds.end_parse(); ;; make sure we do not have anything in ds
 throw_if(32, found?); ;; if yes throw an error
 ```
 
-This way, we are **being protected from repeated transactions**, which was the role of seqno in ordinary wallets. 
+This way, we are **being protected from repeat transactions**, which seqno help ordinary wallets accomplish.
 
-### Sending transactions
+### Sending Transactions
 
-After the contract has accepted the external message, a loop starts, in which the `slices` stored in the dictionary are taken. These slices store transactions modes and the transactions themselves. Sending takes place until the dictionary is empty:
+After the contract has accepted the external message, a loop starts, in which the `slices` stored in the dictionary are taken. These slices store transaction modes and the transactions themselves. Sending new transactions takes place until the dictionary is empty.
 
 ```func
 int i = -1; ;; we write -1 because it will be the smallest value among all dictionary keys
@@ -2159,11 +2166,11 @@ do {
 >
 > ["idict_get_next()" in docs](/develop/func/stdlib/#dict_get_next)
 
-Note that if a value is found, `f` will be -1 (true). The `~ -1` operation (bitwise not) will return 0, meaning that the loop should be continued. At the same time, when we fill the dictionary with our transactions, it is necessary to start the count **with a value greater than -1** (for example, 0) and continue increasing by 1 with each transaction. So all transactions will be sent in the sequence we wanted.
+Note that if a value is found, `f` is always equal to -1 (true). The `~ -1` operation (bitwise not) will always return a value of 0, meaning that the loop should be continued. At the same time, when a dictionary is filled with transactions, it is necessary to start calculating those **with a value greater than -1** (e.g., 0) and continue increasing the value by 1 with each transaction. This structure allows transactions to be sent in the correct sequential order.
 
-### Old queries removing
+### Removing Expired Queries
 
-As you know, [smart contracts in TON pay for their storage](develop/smart-contracts/fees#storage-fee). So they can not store a lot of data in it, otherwise each transaction will be very expensive. For this, transactions that have expired more than 64 seconds ago are removed from the storage:
+Typically, [smart contracts on TON pay for their own storage](develop/smart-contracts/fees#storage-fee). This means that the amount of data smart contracts can store is limited to prevent high network transaction fees. To allow the system to be more efficient, transactions that are more than 64 seconds old are removed from the storage. This is conducted as follows:
 
 ```func
 bound -= (64 << 32);   ;; clean up records that have expired more than 64 seconds ago
@@ -2186,41 +2193,39 @@ do {
 >
 > ["udict_delete_get_min()" in docs](/develop/func/stdlib/#dict_delete_get_min)
 
-Note that we have to interact with the `f` variable several times. Since [TVM is a stack machine](learn/tvm-instructions/tvm-overview#tvm-is-a-stack-machine), at each interaction with `f` it is necessary to pop all values to get the desired variable. The `f~touch()` operation places the variable at the top of the stack to optimize code execution.
+Note that it is necessary to interact with the `f` variable several times. Since the [TVM is a stack machine](learn/tvm-instructions/tvm-overview#tvm-is-a-stack-machine), during each interaction with the `f` variable it is necessary to pop all values to get the desired variable. The `f~touch()` operation places the f  variable at the top of the stack to optimize code execution.
 
-### Bitwise left shift operation
+### Bitwise Left Shift Operation
 
-This section may seem a bit complicated for those who have not previously worked with bruised operations. The following line can be seen in the smart contract code:
+This section may seem a bit complicated for those who have not previously worked with bitwise operations. The following line of code can be seen in the smart contract code:
 
 ```func
 var bound = (now() << 32); ;; bitwise left shift operation
 ```
+As a result 32 bits are added to the number on the right side. This means that **existing values are moved 32 bits to the left**. For example, let’s consider the number 3 and translate it into a binary form with a result of 11. Applying the `3 << 2` operation, 11 is moved 2 bit places. This means that two bits are added to the right of the string. In the end, we have 1100, which is 12.
 
-As a result 32 bits are added to the number on the right side. This means that **existing values are moved to 32 bits to the left**. For example, take the number 3, translate it into a binary form, and get 11. Applying the `3 << 2` operation, 11 is moved by two bits. That is, two bits are added to the right. In the end, we have 1100, which is 12.
+The first thing to understand about this process is to remember that the `now()` function returns a result of uint32, meaning that the resulting value will be 32 bits. By shifting 32 bits to the left, space is opened up for another uint32, resulting in the correct query_id. This way, the **timestamp and query_id can be combined** within one variable for optimization.
 
-First thing to do in order to understand why this is done is to remember that `now()` returns us uint32, which means that the number will be 32 bits. By shifting it to 32 bits to the left, we get space for another uint32, which is query_id. This way, **timestamp and query_id can be combined** within one variable for optimization.
-
-Next, consider the following line:
+Next, let’s consider the following line of code:
 
 ```func
 bound -= (64 << 32); ;; clean up the records that have expired more than 64 seconds ago
 ```
 
-Here we perform the operation of shifting the number 64 by 32 bits. We do this in order to **subtract 64 seconds** from our timestamp. This way we will be able to compare past query_ids and see if they are less than the received value. If so, they expired more than 64 seconds ago:
+Above we performed an operation to shift the number 64 by 32 bits to **subtract 64 seconds** from our timestamp. This way we'll be able to compare past query_ids and see if they are less than the received value. If so, they expired more than 64 seconds ago:
 
 ```func
 if (f) { ;; check if any value has been found
   f = (i < bound); ;; check if more than 64 seconds have elapsed after expiration
 }
 ```
+To understand this better, let’s use the number `1625918400` as an example of a timestamp. Its binary representation (with the left-handed addition of zeros for 32 bits) is 01100000111010011000101111000000. By performing a 32 bit bitwise left shift, the result is 32 zeros at the end of the binary representation of our number.
 
-To understand this better, take `1625918400` as an example of timestamp. Its binary representation (with the left-handed addition of zeros for 32 bits) is 01100000111010011000101111000000. By performing a bitwise left shift by 32 bits, we get 32 zeros at the end of the binary representation of our number. 
+After this is completed, **it is possible to add any query_id (uint32)**. Then by subtracting `64 << 32` the result is a timestamp that 64 seconds ago had the same query_id. This fact can be verified by performing the following calculations `((1625918400 << 32) - (64 << 32)) >> 32`. This way we can compare the necessary portions of our number (the timestamp) and at the same time the query_id does not interfere.
 
-After that **we can add any query_id (uint32)**. Then subtracting `64 << 32`, we get a timestamp that was 64 seconds ago with the same query_id. We can make sure of that by performing `((1625918400 << 32) - (64 << 32)) >> 32`. This way we can compare the necessary part of our number (which is timestamp) and at the same time query_id does not interfere.
+### Storage Updates
 
-### Storage update
-
-After all the operations are done, only remaining thing is to save new values in the storage:
+After all operations are complete, the only task remaining is to save the new values in the storage:
 
 ```func
   set_data(begin_cell()
@@ -2234,14 +2239,14 @@ After all the operations are done, only remaining thing is to save new values in
 
 ### GET Methods
 
-The last thing we have to consider before we go to deployment and transactions creation is GET methods of high-load wallet: 
+The last thing we have to consider before we dive into wallet deployment and transaction creation is high-load wallet GET methods:
 
 Method | Explanation
 :---: | :---:
-int processed?(int query_id) | Lets us know if a particular request has been processed. Returns `-1` if yes and `0` if no. Also, this method may return `1` if the answer is unknown since this request is old and no longer stored in the contract.
-int get_public_key() | Getting a public key. We have considered this method before.
+int processed?(int query_id) | Notifies the user if a particular request has been processed. This means it returns `-1` if the request has been processed and `0` if it has not. Also, this method may return `1` if the answer is unknown since the request is old and no longer stored in the contract.
+int get_public_key() | Rerive a public key. We have considered this method before.
 
-Let’s look at `int processed?(int query_id)` closely because it will help us to understand why we need last_cleaned:
+Let’s look at the `int processed?(int query_id)` method closely to help us to understand why we need to make use of the last_cleaned:
 
 ```func
 int processed?(int query_id) method_id {
@@ -2252,16 +2257,15 @@ int processed?(int query_id) method_id {
   return found ? true : - (query_id <= last_cleaned);
 }
 ```
+The `last_cleaned` is retrieved from the storage of the contract and a dictionary of old queries. If the query is found, it is to be returned true, and if not, the expression `- (query_id <= last_cleaned)`. The last_cleaned contains the last removed request **with the highest timestamp**, as we started with the minimum timestamp when deleting the requests.
 
-We get `last_cleaned` from the storage of the contract and a dictionary of old queries. If the query is found, it will be returned true, and if not, the expression `- (query_id <= last_cleaned)`. last_cleaned contains the last removed request **with the highest timestamp**, as we started with the minimum timestamp when deleting the requests. 
+This means that if the query_id passed to the method is smaller than the last last_cleaned value, it is impossible to determine whether it was ever in the contract or not. Therefore the `query_id <= last_cleaned` returns -1 while the minus before this expression changes the answer to 1. If query_id is larger than last_cleaned method, then it has not yet been processed.
 
-This means that if the query_id passed to the method is smaller than last_cleaned, it is impossible to determine whether it was ever in the contract or not, so the `query_id <= last_cleaned` returns -1, and the minus before this expression changes the answer to 1. If query_id is larger than last_cleaned, then it has not yet been processed.
+### Deploying High-Load Wallets
 
-### Deploying high-load wallet
+In order to deploy a high-load wallet it is necessary to generate a mnemonic key in advance, which will be used by the user. It is possible to use the same key that was used in previous sections of this tutorial.
 
-Here we will only go into a few details as they were detailed previously in this tutorial. It is necessary to generate a mnemonic key in advance, which you will use. You can use the same key that was used in any of the previous chapters of this tutorial. 
-
-First, we need to copy [the code of the smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc) to the same directory where stdlib.fc and wallet_v3 are located and remember to add the code `#include "stdlib.fc";` to the beginning of the code. Then we should compile the code of high-load wallet as we did in [chapter three](/develop/smart-contracts/tutorials/wallet#compiling-our-wallet-code):
+To begin the process required to deploy a high-load wallet it's necessary to copy [the code of the smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc) to the same directory where the stdlib.fc and wallet_v3 are located and remember to add `#include "stdlib.fc";` to the beginning of the code. Next we’ll compile the high-load wallet code like we did in [section three](/develop/smart-contracts/tutorials/wallet#compiling-wallet-code):
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -2295,7 +2299,7 @@ console.log('\nHash: ' + codeCell.hash().toString('base64')); // get the hash of
 </TabItem>
 </Tabs>
 
-You should get the following output to the terminal:
+The result will be the following output in the terminal:
 
 ```text
 Code BOC: te6ccgEBCQEA5QABFP8A9KQT9LzyyAsBAgEgAgMCAUgEBQHq8oMI1xgg0x/TP/gjqh9TILnyY+1E0NMf0z/T//QE0VNggED0Dm+hMfJgUXO68qIH+QFUEIf5EPKjAvQE0fgAf44WIYAQ9HhvpSCYAtMH1DAB+wCRMuIBs+ZbgyWhyEA0gED0Q4rmMQHIyx8Tyz/L//QAye1UCAAE0DACASAGBwAXvZznaiaGmvmOuF/8AEG+X5dqJoaY+Y6Z/p/5j6AmipEEAgegc30JjJLb/JXdHxQANCCAQPSWb6VsEiCUMFMDud4gkzM2AZJsIeKz
@@ -2303,7 +2307,7 @@ Code BOC: te6ccgEBCQEA5QABFP8A9KQT9LzyyAsBAgEgAgMCAUgEBQHq8oMI1xgg0x/TP/gjqh9TIL
 Hash: lJTRzI7fEvBWcaGpugmSEJbrUIEeGSTsZcPGKfu4CBI=
 ```
 
-And now we can, using base64 encoded output, get the same cell with our wallet code in other libraries in other languages:
+With the above result it is possible to use the base64 encoded output to retrieve the cell with our wallet code in additional libraries and languages as follows:
 
 <Tabs groupId="code-examples">
 <TabItem value="go" label="Golang">
@@ -2327,7 +2331,7 @@ log.Println("Hash:", base64.StdEncoding.EncodeToString(codeCell.Hash())) // get 
 </TabItem>
 </Tabs>
 
-Now we need to get a cell with an initial data, build State Init and get high-load wallet address. We have already studied the smart contract code and have realized that subwallet_id, last_cleaned, public_key and old_queries are sequentially stored in the storage:
+Now we need to retrieve a cell composed of its initial data, build a State Init, and calculate a high-load wallet address. After studying the smart contract code it became clear that the subwallet_id, last_cleaned, public_key and old_queries are sequentially stored in the storage:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -2406,11 +2410,11 @@ log.Println("Contract address:", contractAddress.String())    // Output contract
 </TabItem>
 </Tabs> 
 
-Everything else we do is the same as in [Contract deploy via wallet](http://localhost:3000/docs/develop/smart-contracts/tutorials/wallet#contract-deploy-via-wallet) section. If you want to see the fully working code, you can visit the repository indicated at the beginning of the tutorial, where all the sources are stored.
+Everything we have detailed above follows the same steps as the contract [deployment via wallet](/develop/smart-contracts/tutorials/wallet#contract-deployment-via-wallet) section. To better analyze the fully functional code, please visit the repository indicated at the beginning of the tutorial where all sources are stored.
 
-### Sending transactions from high-load wallet
+### Sending High-Load Wallet Transactions
 
-Now we need to send several messages at the same time from our highload wallet. For example, let's take 12 transactions per message so that the commission is small. Each message will have its own comment with a code, and the destination address will be our wallet from which we deployed:
+Now let’s program a high-load wallet to send several messages at the same time. For example, let's take 12 transactions per message so that the gas fees are small. Each message carry its own comment with code and the destination address will be the wallet from which we deployed:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -2483,7 +2487,7 @@ for i := 0; i < 12; i++ {
 </TabItem>
 </Tabs>
 
-We now have an array of internal messages. We need to create a dictionary in which we will store our messages and also prepare and sign the body:
+After completing the above process, the result is an array of internal messages. Next, it's necessary to create a dictionary for message storage and prepare and sign the message body. This is completed as follows:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -2586,10 +2590,10 @@ signature := ed25519.Sign(highloadPrivateKey, toSign.EndCell().Hash())
 </Tabs>
 
 :::note IMPORTANT
-Note that on JS/TS we saved the messages into an array without a mode. TIt happens because the ton library leaves the implementation of serialization and de-serialization to the developer. Thus, we pass there a method that first saves the transaction mode, after which it saves the transaction itself. If we wrote `Dictionary.Values.Cell()` for value method, it would save our entire message as a cell reference without saving the fashion separately.
+Note that while using JavaScript and TypeScript that our messages were saved into an array without using a send mode. This occurs because during using @ton library, it is expected that developer will implement process of serialization and deserialization by own hands. Therefore, a method is passed that first saves the transaction mode after it saves the transaction itself. If we make use of the `Dictionary.Values.Cell()` specification for the value method, it saves the entire message as a cell reference without saving the mode separately.
 :::
 
-Now we have to create an external message and send it to the blockchain:
+Next we’ll create an external message and send it to the blockchain using the following code:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -2667,23 +2671,23 @@ if err != nil {
 </TabItem>
 </Tabs>
 
-After that we can go into any explorer and see 12 outgoing transactions on our wallet. We also can call GET method `processed?` with the query_id we had in the console and get `-1` (true), which means that our request has been processed. 
+After this process is completed it is possible to look up our wallet and verify that 12 outgoing transactions were sent on our wallet. Is it also possible to call the `processed?` GET method using the query_id we initially used in the console. If this request has been processed correctly it provides a result of `-1 `(true).
 
 ## 🏁 Conclusion
 
-This tutorial studied wallets in TON Blockchain within the smallest details. At the same time, we learned how to create external and internal messages ourselves without using pre-prepared library methods. 
+This tutorial provided us with a better understanding of how different wallet types operate on TON Blockchain. It also allowed us to learn how to create external and internal messages without using predefined library methods.
 
-This helps us not only to be independent on libraries but also to understand the structure of TON Blockchain better. Additionally, we learned how to use the high-load wallet and analysed a lot of details about various operations with different types of data.
+This helps us to be independent of using libraries and to understand the structure of TON Blockchain in a more in-depth way. We also learned how to use high-load wallets and analyzed many details to do with different data types and various operations.
 
 ## 🧩 Next Steps
 
-After thoroughly studying this tutorial, I recommend that you familiarize yourself with the following documents in more detail.: [ton.pdf](https://ton.org/ton.pdf) and [tblkch.pdf](https://ton.org/tblkch.pdf).
+Reading the documentation provided above is a complex undertaking and it’s difficult to understand the entirety of the TON platform. However, it is a good exercise for those passionate about building on the TON. Another suggestion is to begin learning about how how to write smart contracts on TON by consulting the following resources: [FunC Overview](https://docs.ton.org/develop/func/overview), [Best Practices](https://docs.ton.org/develop/smart-contracts/guidelines), [Examples of Smart Contracts](https://docs.ton.org/develop/smart-contracts/examples), [FunC Cookbook](https://docs.ton.org/develop/func/cookbook)
 
-It will be hard to understand everything, but it will be very useful in any case. Next, you can start learning how to write smart contracts: [FunC Overview](https://docs.ton.org/develop/func/overview), [Best Practices](https://docs.ton.org/develop/smart-contracts/guidelines), [FunC Cookbook](https://docs.ton.org/develop/func/cookbook)
+Additionally, it is recommended that readers familiarize themselves with the following documents in more detail: [ton.pdf](https://ton.org/ton.pdf) and [tblkch.pdf](https://ton.org/tblkch.pdf) documents.
 
 ## 📬 About the Author
 
-If you have any issues or suggestions, you can always write to me on [Telegram](https://t.me/aspite) (@SpiteMoriarty). Also, you can visit my [GitHub](https://github.com/aSpite).
+If you have any questions, comments, or suggestions please reach out to the author of this documentation section on [Telegram](https://t.me/aspite) (@SpiteMoriarty) or [GitHub](https://github.com/aSpite).
 
 ## 📖 See Also
 
