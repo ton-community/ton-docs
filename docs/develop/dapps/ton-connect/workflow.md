@@ -17,7 +17,7 @@
 ### First-time connection via js bridge
 1. App checks existing of the `window.[walletJsBridgeKey].tonconnect`
 2. App calls `window.[walletJsBridgeKey].tonconnect.connect()` and waits for a response
-4. Wallet sends account information to the app;
+3. Wallet sends account information to the app;
 
 ###  Making ordinary requests and responses
 1. App and wallet are in a connected state
