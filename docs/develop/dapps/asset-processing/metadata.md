@@ -1,23 +1,23 @@
 # TON Metadata Parsing
 
-Metadata standard, which cover NFT, NFT Collection and Jetton content, is described in [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
+The metadata standard, which covers NFTs, NFT Collections, and Jettons, is outlined in TON Enhancement Proposal 64 [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
 
 On TON, entities can have three types of metadata: on-chain, semi-chain, and off-chain.
-- **On-chain** metadata means that everything is stored inside the blockchain, including the name, attributes, and image.
-- **Off-chain** metadata means that we store a link to a metadata file that is hosted somewhere outside of the chain.
-- **Semi-chain** metadata is a hybrid between the two, allowing us to store small fields like name or attributes on the chain, but hosting the image outside and storing only a link to it. We will discuss how to parse each of these metadata types, but first, we need to introduce the snake format and chunked format for content encoding.
+- **On-chain metadata:** stored inside the blockchain, including the name, attributes, and image.
+- **Off-chain metadata:** stored using a link to a metadata file hosted outside of the chain.
+- **Semi-chain metadata:** a hybrid between the two which allows for the storage of small fields such as names or attributes on the blockchain, while hosting the image off-chain and storing only a link to it.
 
-## Snake format
-From the standard:
-> Snake format when we store part of the data in a cell and the rest of the data in the first child cell (and so recursively). Must be prefixed with 0x00 byte. TL-B scheme:
+## Snake Data Encoding
+The Snake encoding format allows part of the data to be stored in a standardized cell, while  the remaining portion is stored in a child cell (in a recursive manner). The Snake encoding format must be prefixed using the 0x00 byte. TL-B scheme:
+
 ```
 tail#_ {bn:#} b:(bits bn) = SnakeData ~0;
 cons#_ {bn:#} {n:#} b:(bits bn) next:^(SnakeData ~n) = SnakeData ~(n + 1);
 ```
 
-The Snake format is used to store data in a cell when the data exceeds the maximum size that can be stored in a single cell. This is achieved by storing part of the data in the root cell and the remaining part in the first child cell, and continuing to do so recursively until all the data has been stored.
+The Snake format is used to store additional data in a cell when the data exceeds the maximum size that can be stored in a single cell. This is achieved by storing part of the data in the root cell and the remaining part in the first child cell, and continuing to do so recursively until all the data has been stored.
 
-Example of Snake format encoding and decoding in TypeScript:
+Below is an example of Snake format encoding and decoding in TypeScript:
 ```typescript
 export function makeSnakeCell(data: Buffer): Cell {
   const chunks = bufferToChunks(data, 127)
@@ -68,48 +68,54 @@ export function flattenSnakeCell(cell: Cell): Buffer {
   return reader.loadBuffer(reader.remaining / 8);
 }
 ```
-It should be noted that the `0x00` byte prefix is not always required in the root cell when using the snake format, as is the case with off-chain NFT content. Additionally, cells are filled with bytes instead of bits to simplify parsing. To avoid the issue of adding a reference to a reference after it has already been written to its parent, the snake cell is constructed in reverse order.
 
-## Chunked format
-From the standard:
-> hunked format when we store data in dictionary chunk_index -> chunk. Must be prefixed with 0x01 byte. TL-B scheme:
+It should be noted that the `0x00` byte prefix is not always required in the root cell when using the snake format, as is the case with off-chain NFT content. Additionally, cells are filled with bytes instead of bits to simplify parsing. To avoid the issue of adding a reference (within the next child cell)  to a reference after it has already been written to its parent cell, the snake cell is constructed in reverse order.
+
+## Chunked Encoding
+
+The chunked encoding format is used to store data using a dictionary data structure as from the chunk_index to the chunk. Chunked encoding must be prefixed using the `0x01` byte. TL-B scheme:
+
 ```
 chunked_data#_ data:(HashMapE 32 ^(SnakeData ~0)) = ChunkedData;
 ```
 
-Example of decoding chunked data in TypeScript(in comments, because mdx throws an exception for some reason):
+Below is an example of chunked data decoding using TypeScript:
+
 ```typescript
-// interface ChunkDictValue {
-//   content: Buffer;
-// }
-// export const ChunkDictValueSerializer = {
-//   serialize(src: ChunkDictValue, builder: Builder) {},
-//   parse(src: Slice): ChunkDictValue {
-//     const snake = flattenSnakeCell(src.loadRef());
-//     return { content: snake };
-//   },
-// };
+interface ChunkDictValue {
+  content: Buffer;
+}
+export const ChunkDictValueSerializer = {
+  serialize(src: ChunkDictValue, builder: Builder) {},
+  parse(src: Slice): ChunkDictValue {
+    const snake = flattenSnakeCell(src.loadRef());
+    return { content: snake };
+  },
+};
 
-// export function ParseChunkDict(cell: Slice): Buffer {
-//   const dict = cell.loadDict(
-//     Dictionary.Keys.Uint(32),
-//     ChunkDictValueSerializer
-//   );
+export function ParseChunkDict(cell: Slice): Buffer {
+  const dict = cell.loadDict(
+    Dictionary.Keys.Uint(32),
+    ChunkDictValueSerializer
+  );
 
-//   let buf = Buffer.alloc(0);
-//   for (const [_, v] of dict) {
-//     buf = Buffer.concat([buf, v.content]);
-//   }
-//   return buf;
-// }
+  let buf = Buffer.alloc(0);
+  for (const [_, v] of dict) {
+    buf = Buffer.concat([buf, v.content]);
+  }
+  return buf;
+}
 ```
 
 ## NFT metadata attributes
-1. `uri` - Optional. Used by "Semi-chain content layout". ASCII string. A URI pointing to JSON document with metadata.
-2. `name` - Optional. UTF8 string. Identifies the asset.
-3. `description` - Optional. UTF8 string. Describes the asset.
-4. `image` - Optional. ASCII string. A URI pointing to a resource with mime type image.
-5. `image_data` - Optional. Either binary representation of the image for onchain layout or base64 for offchain layout.
+
+| Attribute     | Type         | Requirement | Description                                                                                                                                                        |
+|---------------|--------------|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `uri`         | ASCII string       | optional    | a URI pointing to the JSON document with metadata that is used by the "Semi-chain content layout." |
+| `name`        | UTF8 string  | optional    | identifies the asset                                                                              |
+| `description` | UTF8 string  | optional    | describes the asset                                                                               |
+| `image`       | ASCII string | optional   | a URI pointing to a resource with a mime type image                                               |
+| `image_data`  | binary*      | optional | either a binary representation of the image for on-chain layout or base64 for off-chain layout  |   
 
 
 ## Jetton metadata attributes
@@ -128,16 +134,41 @@ Example of decoding chunked data in TypeScript(in comments, because mdx throws a
  - "currency" - display as currency (default value). 
  - "game" - display for games. It should be displayed as NFT, but at the same time display the number of jettons considering the `amount_style`
 
-## Parsing Metadata
-To parse metadata, first you should obtain NFT data from blockchain. You can read about it in [Getting NFT Data](/develop/dapps/asset-processing/nfts#getting-nft-data) paragraph.
 
-After you retrived on-chain NFT data, you need to parse it. First we need to detect NFT content type. To do that you need to read first byte of nft content.
+
+
+| Attribute     | Type             | Requirement                                                                                                                                                                                                                                                                                             | Description |
+|---------------|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+|`uri`| ASCII string     | optional                                                                                                                                                                                                                                                                                                | a URI pointing to the JSON document with metadata that is used by the "Semi-chain content layout."            |
+|`name`| UTF8 string      | optional                                                                                                                                                                                                                                                                                                |identifies the asset|
+|`description`| UTF8 string      | optional                                                                                                                                                                                                                                                                                                |describes the asset|
+|`image`| ASCII string | optional                                                                                                                                                                                                                                                                                                |a URI pointing to a resource with a mime type image|
+|`image_data`| binary*                 | optional                                                                                                                                                                                                                                                                                                |either a binary representation of the image for on-chain layout or base64 for off-chain layout|
+|`symbol` |UTF8 string| optional                                                                                                                                                                                                                                                                                                | the symbol of the token - e.g. "XMPL" and uses the form "You received 99 XMPL"|
+|`decimals`|UTF8 string| optional                                                                                                                                                                                                                                                                                                |the number of decimals the token uses. If not specified, 9 is used by default. The UTF8 encoded string with the numbers between 0 to 255. - e.g. 8, means the token amount must be divided by 100000000 to get its user representation.|
+|`amount_style`||optional| needed by external applications to understand which format for displaying the number of jettons. Defines with _n_, _n-of-total_, _%_.                                                                                                                                                                   |
+|`render_type`||optional| Needed by external applications to understand which group the jetton belongs to and how to display it.  "currency" - displayed as a currency (default value)."game" - display used for games that is displayed as an NFT, but also displays the number of jettons and considers the amount_style value. |
+
+
+> `amount_style` parameters:
+* _n_ - number of jettons (default value). If the user has 100 tokens with 0 decimals, then it displays that the user has 100 tokens.
+* _n-of-total_ - the number of jettons out of the total number of issued jettons. For example, if the totalSupply of Jettons is 1000 and a user has 100 jettons in their wallet, it must be displayed in the user's wallet as 100 of 1000 or in another textual or graphical way to demonstrate the ratio of user tokens to the the total amount of tokens available.
+* _%_ - the percentage of jettons from the total number of jettons issued. For example, if the totalSupply of Jettons is 1000, if a user holds 100 jettons, the percentage should be displayed as 10% of the user’s wallet balance (100 ÷ 1000 = 0.1 or 10%).
+
+> `render_type` parameters:
+* _currency_ - displayed as a currency (default value).
+* _game_ - display used for games that is displayed as an NFT, but also displays the number of jettons and considers the `amount_style value`.
+
+## Parsing Metadata
+To parse metadata, NFT data must first be obtained from the blockchain. To better understand this process, consider reading the [Getting NFT Data](/develop/dapps/asset-processing/nfts#getting-nft-data) section of our TON asset processing documentation section.
+
+After on-chain NFT data is retrieved, it must be parsed. To carry out this process, the NFT content type must be determined by reading the first byte that makes up the inner workings of the NFT.
 
 ### Off-chain
-If it's `0x01` - that means we have off-chain NFT content. We decode rest of the NFT content in Snake format as ASCII string. Then we use resulting URL to get NFT content from the network and it's done. Example of off-chain NFT content:
-URL: `https://s.getgems.io/nft/b/c/62fba50217c3fe3cbaad9e7f/95/meta.json`
+If the metadata byte string starts with `0x01` it signifies an off-chain NFT content type. The remaining portion of the NFT content is decoded using a Snake encoding format as an ASCII string. After the correct NFT URL is realized, and the NFT identification data is retrieved, the process is complete. Below is an example of a URL that makes use of off-chain NFT content metadata parsing: 
+`https://s.getgems.io/nft/b/c/62fba50217c3fe3cbaad9e7f/95/meta.json`
 
-URL content:
+URL contents (from directly above):
 ```json
 {
    "name": "TON Smart Challenge #2 Winners Trophy",
@@ -149,18 +180,31 @@ URL content:
 ```
 
 ### On-chain and Semi-chain
-If the first byte is `0x00`, it indicates that the content is either on-chain or semi-chain. The metadata for our NFT is stored in a dictionary where the key is the SHA256 hash of the attribute name and the value is the data stored in either Snake or Chunked format. You need to read known nft attributes such as `uri`, `name`, `description`, `image`, `image_data`. If the `uri` field is present in the metadata, it indicates a Semi-chain layout. In such cases, the off-chain content specified in the uri field should be downloaded and merged with the dictionary values.
+If the metadata byte string starts with `0x00`, it indicates that the NFT either makes use of an on-chain or semi-chain format. 
 
-Example of on-chain nft: [EQBq5z4N_GeJyBdvNh4tPjMpSkA08p8vWyiAX6LNbr3aLjI0](https://getgems.io/collection/EQAVGhk_3rUA3ypZAZ1SkVGZIaDt7UdvwA4jsSGRKRo-MRDN/EQBq5z4N_GeJyBdvNh4tPjMpSkA08p8vWyiAX6LNbr3aLjI0)
+The metadata for our NFT is stored in a dictionary where the key is the SHA256 hash of the attribute name and the value is the data stored in either the Snake or Chunked format.
 
-Example of semi-chain nft: [EQB2NJFK0H5OxJTgyQbej0fy5zuicZAXk2vFZEDrqbQ_n5YW](https://getgems.io/nft/EQB2NJFK0H5OxJTgyQbej0fy5zuicZAXk2vFZEDrqbQ_n5YW)
+To determine what type of NFT is being used it is necessary for the developer to read known NFT attributes such as the `uri`, `name`, `image`, `description`, and `image_data`. If the `uri` field is present within the metadata, it indicates a semi-chain layout. In such cases, the off-chain content specified in the uri field should be downloaded and merged with the dictionary values.
 
-Example of on-chain Jetton Master: [EQA4pCk0yK-JCwFD4Nl5ZE4pmlg4DkK-1Ou4HAUQ6RObZNMi](https://tonscan.org/jetton/EQA4pCk0yK-JCwFD4Nl5ZE4pmlg4DkK-1Ou4HAUQ6RObZNMi)
+Example of an on-chain NFT: [EQBq5z4N_GeJyBdvNh4tPjMpSkA08p8vWyiAX6LNbr3aLjI0](https://getgems.io/collection/EQAVGhk_3rUA3ypZAZ1SkVGZIaDt7UdvwA4jsSGRKRo-MRDN/EQBq5z4N_GeJyBdvNh4tPjMpSkA08p8vWyiAX6LNbr3aLjI0)
 
-Example of on-chain nft parser: [stackblitz/ton-onchain-nft-parser](https://stackblitz.com/edit/ton-onchain-nft-parser?file=src%2Fmain.ts)
+Example of a semi-chain NFT:  [EQB2NJFK0H5OxJTgyQbej0fy5zuicZAXk2vFZEDrqbQ_n5YW](https://getgems.io/nft/EQB2NJFK0H5OxJTgyQbej0fy5zuicZAXk2vFZEDrqbQ_n5YW)
 
-## Important notes on Metadata
-1. For NFT's `name`, `description`, and `image`(or `image_data`) fields are required to display the NFT.
-2. For Jetton's `name`, `symbol`, `decimals` and `image`(or `image_data`) are primary.
-3. It's important to be aware that anyone can create an NFT/Jetton with any `name`, `description`, and `image`. To avoid confusion and scams, you should always display them in a way that clearly distinguishes them from the other parts of your app. Malicious NFTs/Jettons can be sent to a user's wallet with misleading or false information.
-4. Some items may have a `video` field, which links to video content associated with the NFT/Jetton.
+Example of an on-chain Jetton Master: [EQA4pCk0yK-JCwFD4Nl5ZE4pmlg4DkK-1Ou4HAUQ6RObZNMi](https://tonscan.org/jetton/EQA4pCk0yK-JCwFD4Nl5ZE4pmlg4DkK-1Ou4HAUQ6RObZNMi)
+
+Example of an on-chain NFT parser: [stackblitz/ton-onchain-nft-parser](https://stackblitz.com/edit/ton-onchain-nft-parser?file=src%2Fmain.ts)
+
+## Important NFT Metadata Notes
+1. For NFT metadata, the `name`, `description`, and `image`(or `image_data`) fields are required to display the NFT.
+2. For Jetton metadata, the `name`, `symbol`, `decimals` and `image`(or `image_data`) are primary.
+3. It's important to be aware that anyone can create an NFT or Jetton using any `name`, `description`, or `image`.  To avoid confusion and potential scams, users should always display their NFTs in a way that clearly distinguishes them from the other parts of their app. Malicious NFTs and Jettons can be sent to a user's wallet with misleading or false information.
+4. Some items may have a `video`  field, which links to video content associated with the NFT or Jetton.
+
+
+## References
+* [TON Enhancement Proposal 64 (TEP-64)](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md)
+
+## See Also
+* [TON NFT processing](/develop/dapps/asset-processing/nfts)
+* [TON Jetton processing](/develop/dapps/asset-processing/jettons)
+* [Mint your first Jetton](/develop/dapps/tutorials/jetton-minter)

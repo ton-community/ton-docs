@@ -28,10 +28,16 @@ There are different types of nodes in The Open Network:
      If you enable an endpoint in a full node, then it starts to perform the functions of a Liteserver - it can receive and respond to requests from Lite Clients.
 
      Using this node, your product can interact with TON Blockchain.
+  
+    :::info 
+    TON Foundation supports a number of **public Liteservers** that you can find in the global config ([mainnet](https://ton.org/global-config.json) and [testnet](https://ton.org/testnet-global.config.json)).
 
-      TON Foundation supports a number of **public Liteservers** that you can find in the global config ([mainnet](https://ton.org/global-config.json) and [testnet](https://ton.org/testnet-global.config.json)).
-
-     These are endpoints available to everyone, for example, standard wallets connect to them.
+    These are endpoints available to everyone, for example, standard wallets connect to them. 
+    :::
+    <Button href="/participate/run-nodes/liteserver"
+    colorType="primary" sizeType={'lg'}>
+    Running a Liteserver
+    </Button>
 
   * **Validator** 
 

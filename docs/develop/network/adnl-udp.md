@@ -179,9 +179,9 @@ c6b41348                                                                  -- TL 
 Now we have an assembled, signed and serialized packet, which is an array of bytes. 
 For subsequent verification of its integrity by the recipient, we need to calculate packet's sha256 hash. For example, let this be `408a2a4ed623b25a2e2ba8bbe92d01a3b5dbd22c97525092ac3203ce4044dcd2`.
 
-Now let's encrypt the content of our packet with the AES-CTR cipher, using [shared key](/docs/develop/network/adnl-tcp#getting-a-shared-key-using-ecdh), obtained from our private key and the public key of the peer (not the channel's key).
+Now let's encrypt the content of our packet with the AES-CTR cipher, using [shared key](/develop/network/adnl-tcp#getting-a-shared-key-using-ecdh), obtained from our private key and the public key of the peer (not the channel's key).
 
-We are almost ready for sending, just remains to [calculate ID](/docs/develop/network/adnl-tcp#getting-key-id) of ED25519 peer key and concat everything together:
+We are almost ready for sending, just remains to [calculate ID](/develop/network/adnl-tcp#getting-key-id) of ED25519 peer key and concat everything together:
 ```
 daa76538d99c79ea097a67086ec05acca12d1fefdbc9c96a76ab5a12e66c7ebb  -- server Key ID
 afc46336dd352049b366c7fd3fc1b143a518f0d02d9faef896cb0155488915d6  -- our public key
@@ -237,7 +237,7 @@ ee354563                                                               -- reinit
 The server responded to us with two messages: `adnl.message.confirmChannel` and `adnl.message.answer`. 
 With `adnl.message.answer` everything is simple, this is the answer to our request `dht.getSignedAddressList`, we will analyze it in the article about DHT.
 
-Let's focus on `adnl.message.confirmChannel`, which means that the peer has confirmed the creation of the channel and sent us its public channel key. Now, having our private channel key and the peer's public channel key, we can calculate the [shared key](/docs/develop/network/adnl-tcp#getting-a-shared-key-using-ecdh).
+Let's focus on `adnl.message.confirmChannel`, which means that the peer has confirmed the creation of the channel and sent us its public channel key. Now, having our private channel key and the peer's public channel key, we can calculate the [shared key](/develop/network/adnl-tcp#getting-a-shared-key-using-ecdh).
 
 Now when we have calculated the shared channel key, we need to make 2 keys out of it - one for encrypting outgoing messages, the other for decrypting incoming messages. 
 Making 2 keys out of it is quite simple, the second key is equal to the shared key written in reverse order. Example:
@@ -286,7 +286,7 @@ fe3c0f39a89917b7f393533d1d06b605b673ffae8bbfab210150fe9d29083c35          -- que
 The packets in a channel are quite simple and essentially consist of sequences (seqno) and the messages themselves.
 
 After serialization, like last time, we calculate the sha256 hash of the packet. Then we encrypt the packet using the key intended for the outgoing packets of the channel. 
-[Calculate](/docs/develop/network/adnl-tcp#getting-key-id) `pub.aes` ID of encryption key of our outgoing messages, and we build our packet:
+[Calculate](/develop/network/adnl-tcp#getting-key-id) `pub.aes` ID of encryption key of our outgoing messages, and we build our packet:
 ```
 bcd1cf47b9e657200ba21d94b822052cf553a548f51f539423c8139a83162180 -- ID of encryption key of our outgoing messages 
 6185385aeee5faae7992eb350f26ba253e8c7c5fa1e3e1879d9a0666b9bd6080 -- sha256 content hash (before encryption)

@@ -64,5 +64,5 @@ We recommend wallets provide the ability to disconnect session with a specified 
 ## See Also
 
 * [Ton Connect Overview](/dapps/ton-connect/)
-* [Integration manual](/develop/dapps/integration)
+* [Integration manual](/develop/dapps/ton-connect/integration)
 * [Telegram bot integration manual](/develop/dapps/ton-connect/tg-bot-integration)

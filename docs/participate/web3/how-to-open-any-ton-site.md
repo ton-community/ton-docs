@@ -13,9 +13,10 @@ we will start with the simplest methods and finish with the most advanced ones.
 The simplest way to open a TON Site is through [ton.run](https://ton.run). You don't need to install or set up anything on your device - just open the **ton.run** and you're ready to explore TON Sites.
 
 This method may be suitable for casual browsing of TON Sites or for some checks, but not for regular use, because it also has its drawbacks:
- * You trust your internet traffic to the **ton.run**
- * It can go offline or break at any moment
- * It can be blocked by your internet provider
+
+-   You trust your internet traffic to the **ton.run**
+-   It can go offline or break at any moment
+-   It can be blocked by your internet provider
 
 ### TON Wallet and MyTonWallet extensions
 
@@ -30,13 +31,16 @@ This method is also pretty easy, but you need to install an extension in your br
 If you don't want to install any extensions or if you are using mobile device, you can use this method. You'll have to configure something on your device to connect to the proxy.
 
 This method is described here:
- * [Connect with TON Proxy](/participate/web3/setting-proxy/)
+
+-   [Connect with TON Proxy](/participate/web3/setting-proxy/)
 
 ## 🤓 Advanced methods
 
-### Running your own TON proxy
+### Using Tonutils-Proxy
 
-This method is the hardest one. Most of the users don't need it at all, but if you're a developer or if you want to have a faster internet connection through the proxy, it can be useful for you.
+This is the most secure way of accessing TON Sites.
 
-Tutorial on how to set up your own TON Proxy can be found here:
- * [Running your own TON proxy](/participate/web3/sites-and-proxy)
+1. Download the latest version [from here](https://github.com/xssnick/Tonutils-Proxy#download-precompiled-version)
+
+2. Launch it and press "Start Gateway"
+3. Done!

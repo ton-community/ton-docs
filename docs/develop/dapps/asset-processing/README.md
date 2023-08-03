@@ -1,20 +1,28 @@
 import Button from '@site/src/components/button'
 
 # Payments processing
+
 This page contains an overview and specific details that explain how to process (send and accept) digital assets on the TON network.
 
-## Examples
+Best practices with comments on Toncoin processing:
 
-### JavaScript
+- [Create a key pair, a wallet and get a wallet address](https://github.com/toncenter/examples/blob/main/common.js)
 
-#### Official
+- [JS algo to accept Toncoin deposits](https://github.com/toncenter/examples/blob/main/deposits.js)
 
-Using tonweb SDK (officially supported by TON Foundation):
+- [JS algo to Toncoin withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals.js)
 
-1. [Create a key pair, a wallet and get a wallet address](https://github.com/toncenter/examples/blob/main/common.js)
-2. [Accepting deposits to a single wallet](https://github.com/toncenter/examples/blob/main/deposits-single-wallet.js)
-3. [Accepting deposits to multiple wallets](https://github.com/toncenter/examples/blob/main/deposits-multi-wallet.js)
-4. [Withdrawal processing](https://github.com/toncenter/examples/blob/main/withdrawals.js)
+- [Detailed info](https://docs.ton.org/develop/dapps/asset-processing#global-overview)
+
+Best practices with comments on jettons processing:
+
+- [JS algo to accept jettons deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
+
+- [JS algo to jettons withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons.js)
+
+- [Detailed info](https://docs.ton.org/develop/dapps/asset-processing/jettons)
+
+## Other Examples
 
 #### Made by community
 
@@ -42,7 +50,7 @@ Using tonsdk library (similar to tonweb):
 - [See full list of examples](https://github.com/xssnick/tonutils-go#how-to-use)
 
 ## Global overview
-Embodying a fully asynchronous approach, the TON Blockchain involves a few concepts which are uncommon to traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred messages between smart contracts and/or the external world. The common path of any interaction starts with an external message sent to a `wallet` smart contract, which authenticates the message sender using public-key cryptography, takes charge of fee payment, and sends inner blockchain messages. That way, transactions on the TON network are not synonymous with user interaction with the blockchain but merely nodes of the message graph: the result of accepting and processing a message by a smart contract, which may or may not lead to the emergence of new messages. The interaction may consist of an arbitrary number of messages and transactions and span a prolonged period of time. Technically, transactions with queues of messages are aggregated into blocks processed by validators. The asynchronous nature of the **TON Blockchain does not allow to predict the hash and lt (logical time) of a transaction** at the stage of sending a message. The transaction accepted to the block is final and will not be modified.
+Embodying a fully asynchronous approach, TON Blockchain involves a few concepts which are uncommon to traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred messages between smart contracts and/or the external world. The common path of any interaction starts with an external message sent to a `wallet` smart contract, which authenticates the message sender using public-key cryptography, takes charge of fee payment, and sends inner blockchain messages. That way, transactions on the TON network are not synonymous with user interaction with the blockchain but merely nodes of the message graph: the result of accepting and processing a message by a smart contract, which may or may not lead to the emergence of new messages. The interaction may consist of an arbitrary number of messages and transactions and span a prolonged period of time. Technically, transactions with queues of messages are aggregated into blocks processed by validators. The asynchronous nature of the **TON Blockchain does not allow to predict the hash and lt (logical time) of a transaction** at the stage of sending a message. The transaction accepted to the block is final and will not be modified.
 
 **Each inner blockchain message, that is, a message from one smart contract to another, bears some amount of digital assets as well as an arbitrary portion of data.**
 
@@ -75,7 +83,7 @@ Seqno-based wallets follow the most simple approach to sequencing messages. Each
 This `wallet` type follows an approach based on storing the identifier of the non-expired processed requests in smart-contract storage. In this approach, any request is checked for being a duplicate of an already processed request and, if a replay is detected, dropped. Due to expiration, the contract may not store all requests forever, but it will remove those that cannot be processed due to the expiration limit. Requests to this `wallet` may be sent in parallel without interfering with each other; however, this approach requires more sophisticated monitoring of request processing.
 
 ## Interaction with blockchain
-Basic operations on the TON Blockchain can be carried out via TonLib. It is a shared library which can be compiled along with a TON node and expose APIs for interaction with the blockchain via so-called lite servers (servers for lite clients). TonLib follows a trustless approach by checking proofs for all incoming data; thus, there is no necessity for a trusted data provider. Methods available to TonLib are listed [in the TL scheme](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L234). They can be used either as a shared library via wrappers like [pyTON](https://github.com/EmelyanenkoK/pyTON) or [tonlib-go](https://github.com/mercuryoio/tonlib-go/tree/master/v2) (technically those are the wrappers for `tonlibjson`) or through `tonlib-cli`.
+Basic operations on TON Blockchain can be carried out via TonLib. It is a shared library which can be compiled along with a TON node and expose APIs for interaction with the blockchain via so-called lite servers (servers for lite clients). TonLib follows a trustless approach by checking proofs for all incoming data; thus, there is no necessity for a trusted data provider. Methods available to TonLib are listed [in the TL scheme](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L234). They can be used either as a shared library via wrappers like [pyTON](https://github.com/EmelyanenkoK/pyTON) or [tonlib-go](https://github.com/mercuryoio/tonlib-go/tree/master/v2) (technically those are the wrappers for `tonlibjson`) or through `tonlib-cli`.
 
 
 ## Wallet deployment
@@ -88,7 +96,7 @@ To deploy a wallet via TonLib one needs to:
 6. Check the contract in a few seconds with [getAccountState](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L254) method.
 
 ## Incoming message value
-To calculate the incoming value that the message brings to the contract, one needs to parse the transaction. It happens when the message hits the contract. A transaction can be obtained using[getTransactions](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L236). For an incoming wallet transaction, the correct data consists of one incoming message and zero outgoing messages. Otherwise, either an external message is sent to the wallet, in which case the owner spends Toncoin, or the wallet is not deployed and the incoming transaction bounces back.
+To calculate the incoming value that the message brings to the contract, one needs to parse the transaction. It happens when the message hits the contract. A transaction can be obtained using [getTransactions](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L236). For an incoming wallet transaction, the correct data consists of one incoming message and zero outgoing messages. Otherwise, either an external message is sent to the wallet, in which case the owner spends Toncoin, or the wallet is not deployed and the incoming transaction bounces back.
 
 Anyway, in general, the amount that a message brings to the contract can be calculated as the value of the incoming message minus the sum of the values of the outgoing messages minus the fee: `value_{in_msg} - SUM(value_{out_msg}) - fee`. Technically, transaction representation contains three different fields with `fee` in name: `fee`, `storage_fee`, and `other_fee`, that is, a total fee, a part of the fee related to storage costs, and a part of the fee related to transaction processing. Only the first one should be used.
 
@@ -140,7 +148,7 @@ colorType="primary" sizeType={'lg'}>
 Learn More
 </Button>
 
-### Invoices with Ton Connect
+### Invoices with TON Connect
 
 Best suited for dApps that need to sign multiple payments/transactions within a session or need to maintain a connection to the wallet for some time.
 

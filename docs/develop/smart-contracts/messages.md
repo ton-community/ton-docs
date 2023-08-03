@@ -151,3 +151,21 @@ Indeed, in addition to message header fields, the total size of the cell will be
 Those things should be handled carefully due to the fact that some fields have variable sizes.
 
 For instance, `MsgAddress` may be represented by four constructors: `addr_none`, `addr_std`, `addr_extern`, `addr_var` with length from 2 bits ( for `addr_none`) to 586 bits (for `addr_var` in the largest form). The same stands for nanotons' amounts which is serialized as `VarUInteger 16`. That means, 4 bits indicating the byte length of the integer and then indicated earlier bytes for integer itself. That way, 0 nanotons will be serialized as `0b0000` (4 bits which encode a zero-length byte string and then zero bytes), while 100.000.000 TON (or 100000000000000000 nanotons) will be serialized as `0b10000000000101100011010001010111100001011101100010100000000000000000` (`0b1000` stands for 8 bytes and then 8 bytes themselves).
+
+## Message modes
+
+As you might've noticed, we send messages with `send_raw_message` which, apart from consuming the message itself, also accepts the mode. To figure out the mode that best suits your needs, take a look at the following table:
+
+| Mode | Description |
+|:-|:-|
+| `0` | Ordinary message |
+| `64` | Carry all the remaining value of the inbound message in addition to the value initially indicated in the new message |
+| `128` | Carry all the remaining balance of the current smart contract instead of the value originally indicated in the message |
+
+| Flag | Description |
+|:-|:-|
+| `+1` | Pay transfer fees separately from the message value |
+| `+2` | Ignore any errors arising while processing this message during the action phase |
+| `+32` | Current account must be destroyed if its resulting balance is zero (often used with Mode 128) |
+
+To build a mode for the `send_raw_message`, you just have to combine modes and flags by adding them together. For example, if you want to send a regular message and pay transfer fees separately, use the Mode `0` and Flag `+1` to get `mode = 1`. If you want to send the whole contract balance and destroy it immidiately, use the Mode `128` and Flag `+32` to get `mode = 160`.

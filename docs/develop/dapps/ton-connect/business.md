@@ -9,12 +9,6 @@ TON Connect is built to be customizable for businesses by offering powerful feat
 - instant connectivity between applications and user wallets
 - automatic application availability directly within wallets
 
-## Product metric impact
-
-- attract additional traffic through wallets supporting TON Connect
-- increased user retention with in-app list saving feature (e.g., recently opened and favorites app lists)
-- increased user engagement through multi application interaction
-
 ## Adopting TON Connect
 
 ### Basic steps

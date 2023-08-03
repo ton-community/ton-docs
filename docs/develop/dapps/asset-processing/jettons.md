@@ -1,11 +1,19 @@
 # TON Jetton processing
 
+Best practices with comments on jettons processing:
+
+- [JS algo to accept jettons deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
+
+- [JS algo to jettons withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons.js)
+
+In most cases, this should be enough for you, if not, you can find detailed information below.
+
+# Overview
+
 :::info
 This section of our documentation provides an overview that explains how to process (send and receive) distributed tokens (jettons) on TON Blockchain.
 The reader should be familiar with the basic principles of asset processing described in [this section of our documentation](/develop/dapps/asset-processing/). In particular, it is important to be familiar with contracts, wallets, messages and contract deployments.
 :::
-
-# Overview
 
 TON Blockchain and its underlying ecosystem classifies fungible tokens (FTs) as jettons. Because sharding is applied on TON Blockchain, our implementation of fungible tokens is unique when compared to similar blockchain models.
 
@@ -16,8 +24,9 @@ A less formal sharding-focused overview of jetton architecture can be found in o
 
 Here we have provided several examples of jetton code processing created by TON Community members:
 1. Javascript (tonweb):
+  - [Accepting jetton deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
   - [Accepting jetton deposits to individual hot wallets with comments (memo)](https://github.com/toncenter/examples/blob/main/deposits-jettons-single-wallet.js)
-  - [Jettons withdrawal examples](https://github.com/toncenter/examples/blob/main/jettons-withdrawals.js)
+  - [Jettons withdrawal examples](https://github.com/toncenter/examples/blob/main/withdrawals-jettons.js)
 2. Golang (tonutils-go):
   - [Transfer NFTs & jettons by creating a transfer message](https://github.com/tonfactory/tonsdk#transfer-nft--jettons-by-creating-a-transfer-message-from-an-owner-wallet)
 

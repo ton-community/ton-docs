@@ -2,11 +2,13 @@ import Button from '@site/src/components/button'
 
 # Validator setup (low-level)
 
+## Overview
+
 :::caution
 This section describes instructions and manuals for interacting with TON at a low level.
 :::
 
-The aim of this document is to provide step-by-step instructions for setting up a full node for the TON Blockchain as a validator. We assume that a TON Blockchain Full Node is already up and running as explained in [Running a Full Node](participate/nodes/run-node). We also assume some familiarity with the TON Blockchain Lite Client.
+The aim of this document is to provide step-by-step instructions for setting up a full node for TON Blockchain as a validator. We assume that a TON Blockchain Full Node is already up and running as explained in [Running a Full Node](/participate/run-nodes/full-node). We also assume some familiarity with the TON Blockchain Lite Client.
 
 Note that a validator must be run on a dedicated high-performance server with high network bandwidth installed in a reliable data center, and that you'll need a large amount of TON (test TON, if you want to run a validator in the "testnet") as stakes for your validator. If your validator works incorrectly or is not available for prolonged periods of time, you may lose part or all of your stake, so it makes sense to use high-performance, reliable servers.
 
@@ -18,13 +20,13 @@ Note that a validator must be run on a dedicated high-performance server with hi
 
 ## 0. Downloading and compiling
 
-The basic instructions are the same as for a TON Blockchain Full Node, as explained in the [FullNode-HOWTO](https://toncoin.org/#/howto/full-node). In fact, any Full Node will automatically work as a validator if it discovers that the public key corresponding to its private key appears as a member of the current validator set for the currently selected TON Blockchain instance. In particular, the Full Node and the Validator use the same binary file `validator-engine`, and are controlled by means of the same `validator-engine-console`.
+The basic instructions are the same as for a TON Blockchain Full Node, as explained in the [FullNode-HOWTO](/participate/nodes/full-node). In fact, any Full Node will automatically work as a validator if it discovers that the public key corresponding to its private key appears as a member of the current validator set for the currently selected TON Blockchain instance. In particular, the Full Node and the Validator use the same binary file `validator-engine`, and are controlled by means of the same `validator-engine-console`.
 
 ## 1. Controlling smart contract of validator
 
 In order to run a Validator, you'll need a Full Node that is already up and running (and completely synchronized with the current blockchain state) and a wallet in the masterchain holding a large amount of TON (or test TON, if you want to run a validator in the "testnet" TON Blockchain instance). Typically, you'll need at least 100,001 TON in the production network and at least 10,001 test TON in the test network. The actual value (in nanotons) can be found as the value of `min_stake` in configuration parameter `#17` (available by typing `getconfig 17` into the Lite Client), plus one Toncoin.
 
-Each validator is identified by its (Ed25519) public key. During the validator elections, the validator (or rather its public key) is also associated with a smart contract residing in the masterchain. For simplicity, we say that the validator is "controlled" by this smart contract (e.g., a wallet smart contract). Stakes are accepted on behalf of this validator only if they arrive from its associated smart contract, and only that associated smart contract is entitled to collect the validator's stake after it is unfrozen, along with the validator's share of bonuses (e.g., block mining fees, transaction and message forwarding fees collected from the users of the TON Blockchain by the validator pool). Typically, the bonuses are distributed proportionally to the (effective) stakes of the validators. On the other hand, validators with higher stakes are assigned a larger amount of work to perform (i.e., they have to create and validate blocks for more shardchains), so it is important not to stake an amount that will yield more validation work than your node is capable of handling.
+Each validator is identified by its (Ed25519) public key. During the validator elections, the validator (or rather its public key) is also associated with a smart contract residing in the masterchain. For simplicity, we say that the validator is "controlled" by this smart contract (e.g., a wallet smart contract). Stakes are accepted on behalf of this validator only if they arrive from its associated smart contract, and only that associated smart contract is entitled to collect the validator's stake after it is unfrozen, along with the validator's share of bonuses (e.g., block mining fees, transaction and message forwarding fees collected from the users of TON Blockchain by the validator pool). Typically, the bonuses are distributed proportionally to the (effective) stakes of the validators. On the other hand, validators with higher stakes are assigned a larger amount of work to perform (i.e., they have to create and validate blocks for more shardchains), so it is important not to stake an amount that will yield more validation work than your node is capable of handling.
 
 Notice that each validator (identified by its public key) can be associated with at most one controlling smart contract (residing in the masterchain), but the same controlling smart contract may be associated with several validators. In this way, you can run several validators (on different physical servers) and make stakes for them from the same smart contract. If one of these validators stops functioning and you lose its stake, the other validators should continue operating and will keep their stakes and potentially receive bonuses.
 
@@ -54,7 +56,7 @@ Bounceable address (for later access): kf-vF9tD9Atqok5yA6n4yGUjEMiMElBi0RKf6IPqo
 (Saved wallet creating query to file my_wallet_id-query.boc)
 ```
 
-Now `my_wallet_id.pk` is a new file containing the private key for controlling this wallet (you must keep it secret), and `my_wallet_id.addr` is a (not so secret) file containing the address of this wallet. Once this is done, you have to transfer some (test) TON to the non-bounceable address of your wallet and run `sendfile my_wallet_id-query.boc` in the Lite Client to finish creating the new wallet. This process is explained in more detail in the [Step-by-Step](https://toncoin.org/#/howto/step-by-step).
+Now `my_wallet_id.pk` is a new file containing the private key for controlling this wallet (you must keep it secret), and `my_wallet_id.addr` is a (not so secret) file containing the address of this wallet. Once this is done, you have to transfer some (test) TON to the non-bounceable address of your wallet and run `sendfile my_wallet_id-query.boc` in the Lite Client to finish creating the new wallet. This process is explained in more detail in the [Wallets page](https://ton.org/start).
 
 If you are running a validator in the mainnet, it is a good idea to use more sophisticated wallet smart contracts (e.g., multi-signature wallet). For the testnet a simple wallet should be enough.
 
@@ -95,7 +97,7 @@ You can also recover the list of all active participants (pairs of 256-bit valid
 
 ## 4. Creating a validator public key and ADNL address
 
-In order to participate in validator elections, you need to know the elections identifier (obtained by running get-method `active_elections_id` of the elector smart contract), and also the public key of your validator. The public key is created by running validator-engine-console (as explained in the [FullNode-HOWTO](https://toncoin.org/#/howto/full-node)) and running the following commands:
+In order to participate in validator elections, you need to know the elections identifier (obtained by running get-method `active_elections_id` of the elector smart contract), and also the public key of your validator. The public key is created by running validator-engine-console (as explained in the [FullNode-HOWTO](/participate/nodes/full-node)) and running the following commands:
 
 ```
 $ validator-engine-console ...
@@ -272,3 +274,10 @@ If you have done everything correctly (indicated the correct seqno of your walle
 ## 7. Participating in the next elections
 
 Notice that even before the term of the validator group containing your elected validator finishes, new elections for the next validator group will be announced. You'll probably want to participate in them as well. For this, you can use the same validator, but you must generate a new validator key and new ADNL address. You'll also have to make a new stake before your previous stake is returned (because your previous stake will be unfrozen and returned only sometime after the next validator group becomes active), so if you want to participate in concurrent elections, it likely does not make sense to stake more than half of your Toncoin.
+
+
+## See Also
+
+* [TON Validators and staking-incentives](/participate/network-maintenance/staking-incentives)
+* [Nominator Pools](/participate/network-maintenance/nominators)
+* [TON Node Types](/participate/nodes/node-types)

@@ -57,21 +57,6 @@ const config = {
             from: '/learn/overviews/TON_Blockchain_overview',
           },
           {
-            to: '/learn/overviews/tl-b-language',
-            from: '/learn/overviews/TL-B_Language',
-          },
-
-
-          // services
-          {
-            to: '/learn/services/dns',
-            from: '/develop/services/dns',
-          },
-          {
-            to: '/learn/services/payments',
-            from: '/develop/services/payments',
-          },
-          {
             to: '/learn/networking/low-level-adnl',
             from: '/learn/overviews/adnl',
           },
@@ -83,6 +68,22 @@ const config = {
           {
             to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
             from: '/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot-2',
+          },
+          {
+            to: '/develop/get-started-with-ton',
+            from: '/develop/onboarding-challenge',
+          },
+          {
+            to: '/develop/overview',
+            from: '/develop/getting-started',
+          },
+          {
+            to: '/develop/data-formats/tl-b-language',
+            from: '/develop/data-formats/tl-b',
+          },
+          {
+            to: '/learn/tvm-instructions/tvm-upgrade-2023-07',
+            from: '/learn/tvm-instructions/tvm-upgrade',
           },
         ],
       },
@@ -121,7 +122,7 @@ const config = {
         },
         docs: {
           routeBasePath: '/',
-          showLastUpdateAuthor: false,
+          showLastUpdateAuthor: true,
           showLastUpdateTime: true,
           breadcrumbs: false,
           sidebarPath: require.resolve('./sidebars.js'),
@@ -218,16 +219,24 @@ const config = {
             label: 'Apps',
             items: [
               {
-                to: 'develop/onboarding-challenge',
-                label: 'Get Started with TON',
-              },
-              {
                 to: 'develop/dapps/apis',
                 label: 'Understand APIs',
               },
               {
+                to: 'develop/dapps/asset-processing',
+                label: 'Payments processing',
+              },
+              {
                 to: 'develop/dapps/ton-connect',
                 label: 'Authenticate with TON',
+              },
+              {
+                to: 'develop/dapps/defi/ton-payments',
+                label: 'TON Payments',
+              },
+              {
+                to: 'develop/dapps/defi/subscriptions',
+                label: 'Subscriptions',
               },
               {
                 to: 'https://ton-community.github.io/tutorials/03-client/',
@@ -238,67 +247,115 @@ const config = {
           },
           {
             type: 'dropdown',
-            to: 'develop/dapps/defi/coins',
+            to: 'develop/dapps/defi/tokens',
             position: 'left',
             label: 'Tokens',
             items: [
-              {
-                to: 'develop/dapps/asset-processing',
-                label: 'Payments processing',
-              },
               {
                 to: 'develop/dapps/defi/coins',
                 label: 'Native token: Toncoin',
               },
               {
-                to: 'develop/dapps/defi/tokens',
-                label: 'Tokens (FT, NFT)',
+                to: 'develop/dapps/asset-processing/jettons',
+                label: 'TON Jetton (Tokens) processing',
+              },
+              {
+                to: '/develop/dapps/asset-processing/nfts',
+                label: 'TON NFT processing',
+              },
+              {
+                to: '/develop/dapps/asset-processing/metadata',
+                label: 'TON Metadata Parsing',
+              },
+            ],
+          },
+          {
+            type: 'dropdown',
+            to: '/develop/dapps/tutorials/overview',
+            position: 'left',
+            label: 'Learn',
+            items: [
+
+              {
+                to: 'develop/get-started-with-ton',
+                label: 'Get Started with TON',
+              },
+              {
+                to: '/learn/overviews/addresses',
+                label: 'Smart Contract Addresses',
+              },
+              {
+                to: '/develop/smart-contracts/tutorials/wallet',
+                label: 'How to interact with wallet',
               },
               {
                 to: 'develop/dapps/tutorials/jetton-minter',
                 label: 'Mint Jettons (Tokens)',
               },
               {
-                to: 'develop/dapps/defi/ton-payments',
-                label: 'TON Payments',
+                to: '/develop/dapps/tutorials/collection-minting',
+                label: 'Mint NFT Collection',
               },
               {
-                to: 'develop/dapps/defi/subscriptions',
-                label: 'Subscriptions',
+                to: '/develop/dapps/ton-connect/integration',
+                label: 'TON Connect Integration Manual',
               },
-
+              {
+                to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
+                label: 'Telegram bot with Payments',
+              },
+              {
+                to: '/develop/dapps/ton-connect/tg-bot-integration ',
+                label: 'Telegram bot with TON Connect',
+              },
+              {
+                to: '/develop/dapps/tutorials/simple-zk-on-ton',
+                label: 'Simple Zero-Knowledge Project on TON',
+              },
+              {
+                to: 'https://ton-community.github.io/tutorials/01-wallet/',
+                label: 'TON Community Tutorials',
+              }
 
             ],
           },
           {
             type: 'dropdown',
-            to: 'develop/getting-started',
+            to: 'develop/overview',
             position: 'left',
             label: 'Develop',
             items: [
               {
                 to: 'develop/smart-contracts',
-                label: 'Write smart contracts'
+                label: 'Write Smart Contracts'
               },
               {
-                to: 'learn/tvm-instructions/tvm-overview',
-                label: 'TON Virtual Machine (TVM)'
+                to: '/develop/smart-contracts/messages',
+                label: 'Sending Messages'
               },
               {
                 to: 'develop/smart-contracts/fees',
-                label: 'Transaction fees'
+                label: 'Transaction Fees'
               },
               {
                 to: 'develop/smart-contracts/guidelines',
-                label: 'Best Practices'
+                label: 'Best Practices for Contracts'
               },
               {
                 to: 'develop/func/overview',
-                label: 'FunC on TON'
+                label: 'FunC Development Language'
               },
               {
                 to: 'develop/func/cookbook',
                 label: 'FunC Cookbook'
+              },
+              {
+                to: '/develop/data-formats/cell-boc',
+                label: 'Data formats'
+              },
+              {
+                to: 'learn/tvm-instructions/tvm-overview',
+                label: 'TON Virtual Machine (TVM)'
               },
             ],
           },
@@ -340,10 +397,6 @@ const config = {
             position: 'left',
             items: [
               {
-                to: 'contribute',
-                label: 'Contribute to Docs',
-              },
-              {
                 to: 'https://answers.ton.org/',
                 label: 'TON Answers',
               },
@@ -355,46 +408,18 @@ const config = {
                 to: 'https://github.com/ton-blockchain/TEPs',
                 label: 'Standards Discussion (TEPs)',
               },
+              {
+                to: 'contribute',
+                label: 'Contribute to Docs',
+              },
             ],
           },
-          // {
-          //   type: 'doc',
-          //   docId: 'intro',
-          //   position: 'left',
-          //   label: 'Integrate',
-          // },
-
-          {
-            to: 'contribute',
-            label: 'Contribute',
-            position: 'right',
-          },
-          {
-            to: 'https://answers.ton.org/',
-            label: 'Q&A',
-            position: 'right',
-          },
-          {
-            to: 'https://t.me/TonDev_eng',
-            label: 'Dev Chat',
-            position: 'right',
-          },
-          // {
-          //   to: 'https://ton-blockchain.github.io/docs/#/',
-          //   label: 'V 1.0',
-          //   position: 'right',
-          // },
           {
             href: 'https://github.com/ton-community/ton-docs',
             position: 'right',
             className: 'header-github-link',
             'aria-label': 'GitHub repository',
           },
-          // {
-          //   type: 'localeDropdown',
-          //   position: 'right',
-          // },
-          //
         ],
       },
       footer: {

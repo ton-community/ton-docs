@@ -1,6 +1,6 @@
 # TON ADNL API
 
-Clients connect directly to lite servers (nodes) using a binary protocol.
+Clients connect directly to Liteservers (nodes) using a binary protocol.
 
 The client downloads keyblocks, the current state of the account, and their **Merkle proofs**, which guarantees the validity of the received data.
 
@@ -8,7 +8,7 @@ Read operations (like get-method calls) are made by launching a local TVM with a
 
 There is no need to download the full state of the blockchain, the client downloads only what is needed for the operation. Calling the local TVM is also ineffective.
 
-You can connect to public lite servers from the global config ([mainnet](https://ton.org/global-config.json) or [testnet](https://ton.org/testnet-global.config.json)) or run your own lite server.
+You can connect to public lite servers from the global config ([Mainnet](https://ton.org/global-config.json) or [Testnet](https://ton.org/testnet-global.config.json)) or run your own [Liteserver](/participate/nodes/node-types) and handle this with [ADNL SDKs](/develop/dapps/apis/sdk#adnl-based-sdks).
 
 Read more about Merkle proofs at [TON Whitepaper](https://ton.org/ton.pdf) 2.3.10, 2.3.11.
 
@@ -27,49 +27,8 @@ Requests and responses to the server are described by a TL schema that allows yo
 
 [TonLib TL Schema](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl)
 
-## SDK
 
-### Golang SDK
+## See Also
+* [TON Center API](/develop/dapps/apis/toncenter)
+* [SDKs](/develop/dapps/apis/sdk)
 
-- [xssnick/tonutils-go](https://github.com/xssnick/tonutils-go) — _Modern_ Golang SDK for the TON Blockchain.
-- [startfellows/tongo](https://github.com/startfellows/tongo) — Golang SDK with native ADNL support, cells manipulations and CGO for TVM and tx emulations.
-
-### Kotlin & Java SDK
-
-- [ton-kotlin](https://github.com/andreypfau/ton-kotlin) — Kotlin SDK for the TON Blockchain.
-
-### Python SDK
-
-- [psylopunk/pytonlib](https://github.com/psylopunk/pytonlib) — Newbie-friendly Python SDK (ADNL API)
-- [toncenter/pytonlib](https://github.com/toncenter/pytonlib) — Python SDK (ADNL API)
-
-### .NET SDK
-
-- [justdmitry/TonLib.NET](https://github.com/justdmitry/TonLib.NET) — .NET SDK (ADNL API)
-
-### Legacy TonLib SDK
-
-These SDKs are _long-term support_ stage, so feel free to use these SDK too.
-
-- [C++ TonLib](https://github.com/ton-blockchain/ton/tree/master/example/cpp)
-- [Python TonLib wrapper](https://github.com/toncenter/pytonlib)
-- [Golang TonLib wrapper](https://github.com/ton-blockchain/tonlib-go)
-- [Java TonLib wrapper (JNI)](https://github.com/ton-blockchain/tonlib-java)
-
-
-## Usage examples
-
-### Python
-
-- [psylopank/pytonlib examples](https://github.com/psylopunk/pytonlib/tree/main/examples)
-
-### Go
-
-- [10+ examples from xssnick/tonutils-go](https://github.com/xssnick/tonutils-go/tree/master/example)
-
-### Legacy TonLib SDK
-
-- [Desktop standard wallet](https://github.com/ton-blockchain/wallet-desktop) (C++ and Qt)
-- [Android standard wallet](https://github.com/ton-blockchain/wallet-android) (Java)
-- [iOS standard wallet](https://github.com/ton-blockchain/wallet-ios) (Swift)
-- [TonLib CLI](https://github.com/ton-blockchain/ton/blob/master/tonlib/tonlib/tonlib-cli.cpp) (C++)

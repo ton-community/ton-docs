@@ -65,7 +65,7 @@ transaction_fee = storage_fees
 * `computation_fees` is the amount you pay for executing code in the virtual machine. The larger the code, the more fees must be paid.
   * _Example_: each time you send a transaction with your wallet (which is a smart contract), you execute the code of your wallet contract and pay for it.
 * `action_fees` is a charge for sending outgoing messages made by a smart contract.
-* `out_fwd_fees` stands for a charge for sending messages outside the TON Blockchain to interact with off-chain services (e.g., logs) and external blockchains.
+* `out_fwd_fees` stands for a charge for sending messages outside from TON Blockchain to interact with off-chain services (e.g., logs) and external blockchains.
   * Not used because it's not implemented. So today is equal to 0.
 
 ## Storage fee

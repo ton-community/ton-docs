@@ -28,13 +28,15 @@ Bridge frontend is hosted on https://ton.org/bridge.
 * [Solidity (BSC side)](https://github.com/ton-blockchain/bridge-solidity/tree/bsc_mainnet)
 
 
-### Network Configs
+### Blockchain Configs
 
-You can get the actual bridge smart contract addresses and oracle addresses by inspecting the corresponding network config:
+You can get the actual bridge smart contract addresses and oracle addresses by inspecting the corresponding config:
 
 TON-Ethereum: [#71](https://github.com/ton-blockchain/ton/blob/35d17249e6b54d67a5781ebf26e4ee98e56c1e50/crypto/block/block.tlb#L738).
 
 TON-BSC: [#72](https://github.com/ton-blockchain/ton/blob/35d17249e6b54d67a5781ebf26e4ee98e56c1e50/crypto/block/block.tlb#L739).
+
+TON-Polygon: [#73](https://github.com/ton-blockchain/ton/blob/35d17249e6b54d67a5781ebf26e4ee98e56c1e50/crypto/block/block.tlb#L740).
 
 
 ### Documentation

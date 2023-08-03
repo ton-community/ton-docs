@@ -302,6 +302,10 @@ Commits the current state of registers `c4` (“persistent data”) and `c5` (�
 ```func
 () buy_gas(int gram) impure asm "BUYGAS";
 ```
+:::caution
+`BUYGAS` opcode is currently not implemented
+:::
+
 Computes the amount of gas that can be bought for `gram` nanotoncoins and sets `gl` accordingly in the same way as `set_gas_limit`.
 
 ### Actions primitives
@@ -766,7 +770,7 @@ An `add` counterpart of `dict_set` sets the value associated with key `index` in
 (cell, int) udict_replace?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTUREPLACE";
 (cell, int) idict_replace?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTIREPLACE";
 ```
-A `replace` operation similar to `dict_set but which sets the value of key `index` in dictionary `dict` to `value` only if the key was already present in `dict`. Returns either modified version of the dictionary and `-1` flag or `(dict, 0)`.
+A `replace` operation similar to `dict_set` but which sets the value of key `index` in dictionary `dict` to `value` only if the key was already present in `dict`. Returns either modified version of the dictionary and `-1` flag or `(dict, 0)`.
 ### Builder counterparts
 The following primitives accept the new value as a builder instead of a slice, which often is more convenient if the value needs to be serialized from several components computed in the stack. The net effect is roughly equivalent to converting b into a slice and executing the corresponding primitive listed above.
 #### dict_set_builder

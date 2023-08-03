@@ -9,7 +9,7 @@ export const firstRow = [
   {
     title: "Develop",
     status: "Intermediate",
-    linkUrl: "/develop/getting-started",
+    linkUrl: "/develop/overview",
     imageUrl: "img/ton_symbol_old.svg",
     description: "Build smart contracts, web applications or bots using TON."
   },

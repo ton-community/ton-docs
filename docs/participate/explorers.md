@@ -38,10 +38,6 @@ Good explorer for everyday use. It has a convenient interface, a lot of informat
 - Сontract types
 - Contract disassembler
 
-| basic address info                                     | transaction                                           |
-| ------------------------------------------------------ | ----------------------------------------------------- |
-| ![tonscan](/img/explorers-in-ton/eit-tonscan-info.png) | ![tonscan](/img/explorers-in-ton/eit-tonscan-txn.png) |
-
 ### Links
 
 - URL: https://tonscan.org/
@@ -57,15 +53,11 @@ This explorer is more oriented towards developers than ordinary users.
 - Сontract types
 - Contract disassembler
 
-| basic address info                                         | transaction                                               |
-| ---------------------------------------------------------- | --------------------------------------------------------- |
-| ![tonwhales](/img/explorers-in-ton/eit-tonwhales-info.png) | ![tonwhales](/img/explorers-in-ton/eit-tonwhales-txn.png) |
-
 ### Links
 
 - URL: https://tonwhales.com/explorer
 
-## TON API Explorer
+## Tonviewer Explorer
 
 This explorer is the newest and has its own unique features.
 For example, Trace. This feature allows you to see the entire sequence of transactions between smart contracts, even if subsequent transactions do not contain your address.
@@ -80,14 +72,10 @@ Transaction information is not as detailed as, for example, on TON Whales.
 - **Trace**
 - TON DNS support
 
-| basic address info                                   | transaction                                         |
-| ---------------------------------------------------- | --------------------------------------------------- |
-| ![tonapi](/img/explorers-in-ton/eit-tonapi-info.png) | ![tonapi](/img/explorers-in-ton/eit-tonapi-txn.png) |
-
 ### Links
 
-- URL: https://tonapi.io/
-- Testnet URL: https://testnet.tonapi.io/
+- URL: https://tonviewer.com/
+- Testnet URL: https://testnet.tonviewer.com/
 
 ## TON NFT EXPLORER
 
@@ -100,10 +88,6 @@ When viewing the wallet address, you can find out which NFT it stores and, when 
 - Convenient for developers
 - Сontract types
 - **Specialized in NFT**
-
-| nft address info                                             | nft data                                                        |
-| ------------------------------------------------------------ | --------------------------------------------------------------- |
-| ![tonnft](/img/explorers-in-ton/eit-tonnftexplorer-info.png) | ![tonnft](/img/explorers-in-ton/eit-tonnftexplorer-nftdata.png) |
 
 ### Links
 
@@ -123,17 +107,13 @@ Also, it has a feature that allows you to see the computation phase of the trans
 - Сontract types
 - Contract disassembler
 
-| basic address info                               | transaction                                     |
-| ------------------------------------------------ | ----------------------------------------------- |
-| ![dton](/img/explorers-in-ton/eit-dton-info.png) | ![dton](/img/explorers-in-ton/eit-dton-txn.png) |
-
 ### Links
 
 - URL: https://dton.io/
 
 ## Want to be in this list?
 
-Please, write to one of the [maintainers](/contribute/maintainers).
+Please, write to one of the [maintainers](/docs/contribute/maintainers.md).
 
 ## References
 

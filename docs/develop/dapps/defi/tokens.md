@@ -2,9 +2,13 @@
 
 [Distributed TON tokens overview](https://telegra.ph/Scalable-DeFi-in-TON-03-30)
 
-## Jettons
+## Jettons(Fungible Tokens)
 
-### Guides & Tutorials
+### Guides
+* [TON Jetton processing](/develop/dapps/asset-processing/jettons.md)
+* [TON Metadata Parsing](/develop/dapps/asset-processing/metadata.md)
+
+### Tutorials
 
 * [Mint your first Jetton](/develop/dapps/tutorials/jetton-minter/) — Learn how to deploy and customize your first Jetton
 * [[YouTube] TON Keeper founders Oleg Andreev and Oleg Illarionov on TON jettons](https://www.youtube.com/watch?v=oEO29KmOpv4)
@@ -19,7 +23,7 @@
 
 ### Jetton Deployer
 
-Jettons are custom fungible tokens on the TON Blockchain. You can create your own token on the TON Blockchain using the Jetton Deployer example below:
+Jettons are custom fungible tokens on TON Blockchain. You can create your own token on TON Blockchain using the Jetton Deployer example below:
 
 * **[TON Minter](https://minter.ton.org/)** — open-source Jetton Deployer dApp
 * [Jetton Deployer — contracts](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)

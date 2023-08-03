@@ -46,7 +46,7 @@ Run the installation script as administrator:
 sudo bash install.sh -m full
 ```
 
-See more detailed guide in [Running Full Node](/participate/nodes/run-node) section.
+See more detailed guide in [Running Full Node](/participate/run-nodes/full-node) section.
 
 
 ### Run an Archive Node
@@ -59,16 +59,17 @@ systemctl stop validator.service
 ```sh
 mv /var/ton-work /var/ton-work.bak
 ```
-3. Tell plzip to use as many cores as your machine allows to speed up extraction process (-n parameter). Another handy tool to use is pipe viewer utility. Here is example command to restore the dump directly from this server via curl:
+3. Request `user` and `password` credentials to gain access for downloading dumps in the [@TONBaseChatEn](https://t.me/TONBaseChatEn) Telegram chat.
+4. Tell plzip to use as many cores as your machine allows to speed up extraction process (-n parameter). Another handy tool to use is pipe viewer utility. Here is example command to restore the dump directly from this server via curl:
 
 ```sh
 wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d | zfs recv ton-pool/db
 ```
 
-4. Mount zfs: `zfs set mountpoint=/var/ton-work data/ton-work && zfs mount data/ton-work`
-5. Restore config.json, keys and db/keyring from backup to `/var/ton-work`
-6. Fix permissions: `chown -R validator:validator /var/ton-work`
-7. Add storage settings for the node to the file `/etc/systemd/system/validator.service` in the `ExecStart` line: 
+5. Mount zfs: `zfs set mountpoint=/var/ton-work data/ton-work && zfs mount data/ton-work`
+6. Restore config.json, keys and db/keyring from backup to `/var/ton-work`
+7. Fix permissions: `chown -R validator:validator /var/ton-work`
+8. Add storage settings for the node to the file `/etc/systemd/system/validator.service` in the `ExecStart` line: 
 ```sh
 --state-ttl 315360000 --archive-ttl 315360000 --block-ttl 315360000
 ```
@@ -76,11 +77,11 @@ wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest
 :::info
 Please be patient once you start the node and observe the logs. Dumps come without DHT caches, so it will take your node some time to find other nodes and then sync with them. Depending on the age of the snapshot, your node might take from a few hours to several days to catch up with the network. This is normal.
 :::
-8. Start the validator by running the command: 
+9. Start the validator by running the command: 
 ```sh
 systemctl start validator.service
 ```
-9. Open `mytonctrl` and check the node status using the status command.
+10. Open `mytonctrl` and check the node status using the status command.
 
 
 ## Node maintenance
@@ -105,7 +106,7 @@ If for some reason something does not work / breaks you can always [roll back](h
 If your Node works well then you can remove this snapshot to save storage space, but we do recommend to regularly snapshot your filesystem for rollback purposes because validator node has been known to corrupt data as well as config.json in some cases. [zfsnap](https://www.zfsnap.org/docs.html) is a nice tool to automate snapshot rotation.
 
 :::caution
-Have question or problem? Ask in the [TON dev chat](https://t.me/tondev_eng).
+Have question or problem? Ask in the [TON dev chat](https://t.me/tondev_eng)
 :::
 
 

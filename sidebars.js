@@ -71,32 +71,6 @@ const sidebars = {
         },
       ],
     },
-
-    {
-      type: 'category',
-      label: 'TON Services',
-      items: [
-        'learn/services/payments',
-        {
-          type: 'doc',
-          label: 'TON DNS',
-          id: 'learn/services/dns',
-        },
-        {
-          type: 'doc',
-          label: 'TON Sites, WWW, and Proxy',
-          id: 'learn/services/sites-www-proxy',
-        },
-        {
-          'type': 'html',
-          'value': '<span class=\'menu__link\'>TON Storage [2022 Q4]</span>',
-        },
-        {
-          'type': 'html',
-          'value': '<span class=\'menu__link\'>Bitcoin & EVM Crosschain</span>',
-        },
-      ],
-    },
     {
       type: 'category',
       label: 'TON Whitepapers',
@@ -131,11 +105,11 @@ const sidebars = {
   ],
   develop: [
 
-    'develop/getting-started',
+    'develop/overview',
     {
       type: 'doc',
       label: 'Get Started with TON',
-      id: 'develop/onboarding-challenge',
+      id: 'develop/get-started-with-ton',
     },
     {
       type: 'category',
@@ -173,11 +147,12 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'API & SDK',
+      label: 'APIs and SDKs',
       items: [
         'develop/dapps/apis/README',
         'develop/dapps/apis/toncenter',
         'develop/dapps/apis/adnl',
+        'develop/dapps/apis/sdk'
       ],
     },
     {
@@ -221,7 +196,8 @@ const sidebars = {
               items: [
                 'develop/smart-contracts/tutorials/multisig',
                 'develop/smart-contracts/tutorials/multisig-js',
-                'develop/smart-contracts/tutorials/wallet'
+                'develop/smart-contracts/tutorials/wallet',
+                'develop/smart-contracts/examples'
               ],
             },
           ],
@@ -230,6 +206,7 @@ const sidebars = {
          type: 'category',
          label: 'Guidelines',
          items: [
+         'develop/smart-contracts/guidelines',
          'develop/smart-contracts/compile/README',
         {
         type: 'category',
@@ -274,22 +251,6 @@ const sidebars = {
                      },
                ],
              },
-
-
-           {
-             type: 'category',
-             label: 'Archive',
-               items: [
-                    'develop/smart-contracts/guidelines',
-                    'develop/smart-contracts/guidelines/tips',
-                    {
-                      type: 'link',
-                      label: 'Discover FunC language',
-                      href: '/develop/func/overview',
-                    },
-                    'develop/howto/step-by-step',
-               ],
-               },
          ],
        },
        {
@@ -322,7 +283,8 @@ const sidebars = {
 
       ],
     },
-   {
+
+    {
       type: 'category',
       label: 'Develop Apps',
       items: [
@@ -332,6 +294,7 @@ const sidebars = {
           label: 'Learn',
           items: [
             'develop/dapps/tutorials/overview',
+            'develop/dapps/tutorials/collection-minting',
             'develop/dapps/tutorials/jetton-minter',
             {
               type: 'category',
@@ -342,9 +305,9 @@ const sidebars = {
                 'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js',
               ],
             },
+            'develop/dapps/tutorials/simple-zk-on-ton',
           ],
         },
-
         {
           type: 'category',
           label: 'Guidelines',
@@ -366,41 +329,50 @@ const sidebars = {
             'develop/dapps/defi/subscriptions',
           ],
         },
+        'develop/dapps/examples',
       ]
     },
-   {
+    {
       type: 'category',
-      label: 'TON Connect',
+      label: 'Integrate with TON',
       items: [
+        'develop/dapps/ton-connect/overview',
+        {
+              type: 'category',
+              label: 'TON Connect',
+              items: [
         'develop/dapps/ton-connect/README',
-     {
-        type: 'category',
-        label: 'Learn',
-        items: [
-          'develop/dapps/ton-connect/integration',
-          'develop/dapps/ton-connect/tg-bot-integration',
-          'develop/dapps/ton-connect/transactions',
-        ],
-      },
-     {
-        type: 'category',
-        label: 'Guidelines',
-        items: [
-                'develop/dapps/ton-connect/developers',
-                'develop/dapps/ton-connect/wallet-guidelines',
-                'develop/dapps/ton-connect/workflow',
-        ],
-      },
+        {
+          type: 'category',
+          label: 'Learn',
+          items: [
+            'develop/dapps/ton-connect/integration',
+            'develop/dapps/ton-connect/tg-bot-integration',
+            'develop/dapps/ton-connect/transactions',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Guidelines',
+          items: [
+            'develop/dapps/ton-connect/developers',
+            'develop/dapps/ton-connect/wallet-guidelines',
+            'develop/dapps/ton-connect/workflow',
+          ],
+        },
 
-       {
+        {
           type: 'category',
           label: 'Business',
           items: [
-                'develop/dapps/ton-connect/business',
-                'develop/dapps/ton-connect/security',
-                'develop/dapps/ton-connect/comparison',
+            'develop/dapps/ton-connect/business',
+            'develop/dapps/ton-connect/security',
+            'develop/dapps/ton-connect/comparison',
           ],
         },
+        ]
+        },
+        'develop/howto/subresolvers',
       ],
     },
     {
@@ -412,6 +384,7 @@ const sidebars = {
       'value': '<span class=\'menu__link\'><b><small> References & Documentation </small></b></span>',
     },
     'develop/howto/faq',
+    'develop/howto/blockchain-configs',
     'develop/howto/network-configs',
     {
       type: 'category',
@@ -458,8 +431,10 @@ const sidebars = {
       label: 'TON Virtual Machine (TVM)',
       items: [
         'learn/tvm-instructions/tvm-overview',
+        'learn/tvm-instructions/tvm-initialization',
         'learn/tvm-instructions/tvm-exit-codes',
         'learn/tvm-instructions/instructions',
+        'learn/tvm-instructions/tvm-upgrade-2023-07',
       ],
     },
     {
@@ -471,10 +446,14 @@ const sidebars = {
           label: 'TL-B',
           items: [
             'develop/data-formats/cell-boc',
+            'develop/data-formats/exotic-cells',
+            'develop/data-formats/proofs',
             'develop/data-formats/tl-b-language',
             'develop/data-formats/tl-b-types',
             'develop/research-and-development/boc',
             'develop/data-formats/msg-tlb',
+            'develop/data-formats/block-layout',
+            'develop/data-formats/transaction-layout',
             'develop/data-formats/crc32',
             'develop/data-formats/tlb-ide'
           ]
@@ -516,11 +495,18 @@ const sidebars = {
       items: [
         'develop/archive/pow-givers',
         'develop/archive/mining',
-        'develop/archive/Tl-B-overview',
-        'learn/overviews/TL-B',
-        'learn/overviews/tl-b-language'
       ],
     },
+    {
+      'type': 'html',
+      'value': '<hr/>',
+    },
+    {
+      'type': 'html',
+      'value': '<span class=\'menu__link\'><b><small>Quality Assurance & Outsource</small></b></span>',
+    },
+    'develop/companies/auditors',
+    'develop/companies/outsource',
 ],
   participate: [
     'participate/README',
@@ -572,6 +558,7 @@ const sidebars = {
               items: [
                   'participate/nodes/node-types',
                   'participate/run-nodes/full-node',
+                  'participate/run-nodes/liteserver',
                   'participate/run-nodes/archive-node',
                   'participate/run-nodes/local-ton',
                     {
