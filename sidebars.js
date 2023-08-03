@@ -340,18 +340,13 @@ const sidebars = {
         'develop/dapps/ton-connect/README',
         {
           type: 'category',
-          label: 'Platforms',
+          label: 'Platforms', //
           items: [
             {
-              type: 'link',
+              type: 'doc',
+              id: 'develop/dapps/ton-connect/twa',
               label: 'Telegram Web Apps',
-              href: 'https://ton-community.github.io/tutorials/03-client/',
             },
-            // {
-            //   type: 'doc',
-            //   id: 'develop/dapps/ton-connect/twa',
-            //   label: 'Telegram Web Apps',
-            // },
             {
               type: 'doc',
               id: 'develop/dapps/ton-connect/integration',
@@ -373,13 +368,23 @@ const sidebars = {
           type: 'category',
           label: 'Guidelines',
           items: [
+            'develop/dapps/ton-connect/developers',
             'develop/dapps/ton-connect/transactions',
             'develop/dapps/ton-connect/workflow',
-            'develop/dapps/ton-connect/developers',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Wallets',
+          items: [
+            {
+              type: 'link',
+              label: 'TON Connect Wallets',
+              href: 'https://github.com/ton-blockchain/wallets-list',
+            },
             'develop/dapps/ton-connect/wallet-guidelines',
           ],
         },
-
         {
           type: 'category',
           label: 'Business',
@@ -389,7 +394,6 @@ const sidebars = {
             'develop/dapps/ton-connect/comparison',
           ],
         },
-        'develop/howto/subresolvers',
       ],
     },
     {
@@ -626,6 +630,7 @@ const sidebars = {
       'label': 'TON DNS',
       'items': [
         'participate/web3/dns',
+        'develop/howto/subresolvers',
       ],
     },
     {
