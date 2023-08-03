@@ -1,6 +1,6 @@
-# Telegram bot integration
+# TON Connect for Telegram bots
 
-In this tutorial, we’ll create a sample telegram bot that supports TON Connect 2.0 authentication.
+In this tutorial, we’ll create a sample telegram bot that supports TON Connect 2.0 authentication using Javascript TON Connect SDK.
 We will analyze connecting a wallet, sending a transaction, getting data about the connected wallet, and disconnecting a wallet.
 
 ## Documentation links

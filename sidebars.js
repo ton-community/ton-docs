@@ -340,24 +340,33 @@ const sidebars = {
         'develop/dapps/ton-connect/README',
         {
           type: 'category',
-          label: 'Platform',
+          label: 'Platforms',
           items: [
             {
-              type: 'doc',
-              id: 'develop/dapps/ton-connect/integration',
-              label: 'Telegram Web Apps SDK',
+              type: 'link',
+              label: 'Telegram Web Apps',
+              href: 'https://ton-community.github.io/tutorials/03-client/',
             },
+            // {
+            //   type: 'doc',
+            //   id: 'develop/dapps/ton-connect/twa',
+            //   label: 'Telegram Web Apps',
+            // },
             {
               type: 'doc',
               id: 'develop/dapps/ton-connect/integration',
-              label: 'Web SDK',
+              label: 'Websites',
             },
+            // {
+            //   type: 'doc',
+            //   id: 'develop/dapps/ton-connect/integration',
+            //   label: 'Android, iOS',
+            // },
             {
               type: 'doc',
-              id: 'develop/dapps/ton-connect/integration',
-              label: 'Android, iOS SDK',
+              id: 'develop/dapps/ton-connect/tg-bot-integration',
+              label: 'Telegram bots',
             },
-            'develop/dapps/ton-connect/tg-bot-integration',
           ],
         },
         {
