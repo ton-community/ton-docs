@@ -1,4 +1,4 @@
-# Integration manual
+# TON Connect for the Web with the JavaScript SDK
 
 In this tutorial, we’ll create a sample web app that supports TON Connect 2.0 authentication. It will allow for signature verification to eliminate the possibility of fraudulent identity impersonation without agreement establishment between parties.
 

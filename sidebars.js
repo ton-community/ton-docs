@@ -337,27 +337,37 @@ const sidebars = {
       label: 'Integrate with TON',
       items: [
         'develop/dapps/ton-connect/overview',
-        {
-              type: 'category',
-              label: 'TON Connect',
-              items: [
         'develop/dapps/ton-connect/README',
         {
           type: 'category',
-          label: 'Learn',
+          label: 'Platform',
           items: [
-            'develop/dapps/ton-connect/integration',
+            {
+              type: 'doc',
+              id: 'develop/dapps/ton-connect/integration',
+              label: 'Telegram Web Apps SDK',
+            },
+            {
+              type: 'doc',
+              id: 'develop/dapps/ton-connect/integration',
+              label: 'Web SDK',
+            },
+            {
+              type: 'doc',
+              id: 'develop/dapps/ton-connect/integration',
+              label: 'Android, iOS SDK',
+            },
             'develop/dapps/ton-connect/tg-bot-integration',
-            'develop/dapps/ton-connect/transactions',
           ],
         },
         {
           type: 'category',
           label: 'Guidelines',
           items: [
+            'develop/dapps/ton-connect/transactions',
+            'develop/dapps/ton-connect/workflow',
             'develop/dapps/ton-connect/developers',
             'develop/dapps/ton-connect/wallet-guidelines',
-            'develop/dapps/ton-connect/workflow',
           ],
         },
 
@@ -369,8 +379,6 @@ const sidebars = {
             'develop/dapps/ton-connect/security',
             'develop/dapps/ton-connect/comparison',
           ],
-        },
-        ]
         },
         'develop/howto/subresolvers',
       ],
