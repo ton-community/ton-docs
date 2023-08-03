@@ -293,7 +293,11 @@ const sidebars = {
           type: 'category',
           label: 'Learn',
           items: [
-            'develop/dapps/tutorials/collection-minting',
+            {
+              type: 'doc',
+              id: 'develop/dapps/tutorials/collection-minting',
+              label: 'NFT collection minting',
+            },
             'develop/dapps/tutorials/jetton-minter',
             {
               type: 'category',
