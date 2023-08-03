@@ -5,11 +5,13 @@ TON Ecosystem is a Web 3.0 space of applications that are develop and live in [T
 ## TON Ecosystem Deliverables
 Discover deliverables for integrating with the TON Ecosystem.
 
+![](/img/docs/ton-connect/ton-connect-overview.png?raw=true)
+
+- TON user's wallet as a ready-made account for your userbase exclude authenticate step for better UX
+- process payments through fast and secure TON Blockchain(with Toncoin or wrapped stable coins jUSDC/jUSDT)
 - attract additional traffic through crypto wallets supporting TON Connect
 - increased user retention with in-app list saving feature (e.g., recently opened and favorites app lists)
 - increased user engagement through multi application interaction
-- process payments through fast and secure TON Blockchain(with Toncoin or wrapped stable coins jUSDC/jUSDT)
-- TON user's wallet as a ready-made account for your userbase exclude authenticate step for better UX
 
 
 ## Connect with TON Ecosystem

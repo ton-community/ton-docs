@@ -177,6 +177,22 @@ d#3F5476CA a:(## 32) = AMultiTagInt;
 
 Also hex values allowed both in upper and lower case.
 
+#### More about hex tags
+
+In addition to the classic hex tag definition, a hexadecimal number can be followed by the underscore character.
+This means that the tag is equal to the specified hexadecimal number without the least significant bit.
+For example there is a scheme:
+```tlb
+vm_stk_int#0201_ value:int257 = VmStackValue;
+```
+And the tag is not actually equal to `0x0201`. To compute it we need to remove LSb from the binary representation of `0x0201`:
+
+```
+0000001000000001 -> 000000100000000
+```
+
+So the tag equals to the 15-bit binary number `0b000000100000000`.
+
 ## Field definitions
 
 The constructor and its optional tag are followed by field definitions. Each field definition is of the
@@ -257,6 +273,12 @@ _ a:(IntWithObj uint32) = IntWithUint32;
 
 
 - Other `Nat` operators also allowed (look `Allowed contraints`)
+
+Note: you can combine several complex expressions:
+
+```tlb
+_ a:(## 1) b:(## 1) c:(## 2) d:(a?(b?((c . 1)?(## 64)))) = A;
+```
 
 ## Built-in types
 
