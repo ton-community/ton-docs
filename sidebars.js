@@ -293,7 +293,6 @@ const sidebars = {
           type: 'category',
           label: 'Learn',
           items: [
-            'develop/dapps/tutorials/overview',
             'develop/dapps/tutorials/collection-minting',
             'develop/dapps/tutorials/jetton-minter',
             {
