@@ -280,7 +280,6 @@ const sidebars = {
             },
           ],
         },
-
       ],
     },
 
@@ -349,6 +348,7 @@ const sidebars = {
             'develop/dapps/ton-connect/integration',
             'develop/dapps/ton-connect/tg-bot-integration',
             'develop/dapps/ton-connect/transactions',
+            'develop/dapps/ton-connect/message-builders',
           ],
         },
         {
