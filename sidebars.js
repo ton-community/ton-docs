@@ -157,7 +157,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Develop Smart Contracts',
+      label: 'Smart Contracts',
       items: [
         'develop/smart-contracts/README',
         {
@@ -286,7 +286,7 @@ const sidebars = {
 
     {
       type: 'category',
-      label: 'Develop Apps',
+      label: 'DApp Development',
       items: [
         'develop/dapps/README',
         {
@@ -329,7 +329,6 @@ const sidebars = {
             'develop/dapps/defi/subscriptions',
           ],
         },
-        'develop/dapps/examples',
       ]
     },
     {
@@ -375,8 +374,13 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Wallets',
+          label: 'Protocol specifications',
           items: [
+            {
+              type: 'link',
+              label: 'TON Connect Protocol',
+              href: 'https://github.com/ton-blockchain/ton-connect',
+            },
             {
               type: 'link',
               label: 'TON Connect Wallets',

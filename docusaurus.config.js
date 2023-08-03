@@ -208,7 +208,7 @@ const config = {
         items: [
           {
             type: 'dropdown',
-            to: '/develop/dapps/tutorials/overview',
+            to: '/learn/introduction',
             position: 'left',
             label: 'Concepts',
             items: [
@@ -241,7 +241,7 @@ const config = {
           },
           {
             type: 'dropdown',
-            to: '/develop/dapps/tutorials/overview',
+            to: '/develop/overview',
             position: 'left',
             label: 'Get Started',
             items: [
@@ -251,15 +251,15 @@ const config = {
               },
               {
                 to: 'https://ton-community.github.io/tutorials/03-client/',
-                label: 'Build your first WebApp',
+                label: 'Build your first Web App',
               },
               {
                 to: 'develop/dapps/ton-connect/overview',
                 label: 'Integrate with Wallets',
               },
               {
-                to: 'develop/dapps/tutorials/overview',
-                label: 'Guides Hub',
+                to: 'develop/dapps/',
+                label: 'Guides & Examples',
               },
 
             ],

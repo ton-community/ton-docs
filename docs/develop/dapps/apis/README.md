@@ -250,7 +250,5 @@ curl -X 'GET' \
 
 ## See Also
 * [TON Center API](/develop/dapps/apis/toncenter)
-* [SDKs](/develop/dapps/apis/sdk)
-* [SDKs](/develop/dapps/apis/sdk)
-* [Apps Examples](/develop/dapps/examples)
+* [List of SDKs](/develop/dapps/apis/sdk)
 * [Smart Contract Examples](/develop/smart-contracts/examples)
