@@ -193,7 +193,8 @@ await connector.sendTransaction({
         .storeAddress(Wallet_SRC)                 // response_destination:MsgAddress
         .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell)
         .storeCoins(toNano(0.05))                 // forward_ton_amount:(VarUInteger 16)
-        .endCell();                               // forward_payload:(Either Cell ^Cell)
+        .storeUInt(0,1)                           // forward_payload:(Either Cell ^Cell)
+        .endCell();
 ```
 
 ```js
@@ -284,13 +285,13 @@ await connector.sendTransaction({
 //   forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;
 
     const body = beginCell()
-        .storeUint(5fcc3d14, 32)                 // NFT transfer op code
+        .storeUint(0x5fcc3d14, 32)               // NFT transfer op code 0x5fcc3d14
         .storeUint(0, 64)                        // query_id:uint64
-        .storeAddress(NEW_OWNER_WALLET)          // destination:MsgAddress
+        .storeAddress(NEW_OWNER_WALLET)          // new_owner:MsgAddress
+        .storeAddress(Wallet_DST)                // response_destination:MsgAddress
         .storeUint(0, 1)                         // custom_payload:(Maybe ^Cell)
         .storeCoins(toNano('0.000000001'))       // forward_amount:(VarUInteger 16)
-        .storeAddress(Wallet_DST)                // response_destination:MsgAddress
-        .storeUint(0,1)                          // forward_amount:(VarUInteger 16)
+        .storeUint(0,1)                          // forward_payload:(Either Cell ^Cell)
         .endCell();
 ```
 
