@@ -179,9 +179,27 @@ await connector.sendTransaction({
 
 - `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts
 - `balance` - Integer, amount of Toncoin for gas payments in nanotons.
-- `body` - payload for the jettonContract, which defines what should be done
-        -  `$$type`: string, "Transfer" string (or corresponded op-code for Mint)
-        -  `amount`: bigint, amount of Jettons should be minted
+- `body` - payload for the jettonContract
+
+`body` typically should be done according the following way:
+
+```js
+    import { Address, beginCell, Cell, toNano} from '@ton/ton'
+    // transfer#0f8a7ea5 query_id:uint64 amount:(VarUInteger 16) destination:MsgAddress
+    // response_destination:MsgAddress custom_payload:(Maybe ^Cell)
+    // forward_ton_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)
+    // = InternalMsgBody;
+
+    const messageBody = beginCell()
+        .storeUint(0xf8a7ea5, 32)                 // jetton transfer op code
+        .storeUint(quiryId, 64)                   // query_id:uint64
+        .storeCoins(toNano("1"))                  //amount:(VarUInteger 16)
+        .storeAddress(Jetton_Wallet_DST)          //destination:MsgAddress
+        .storeAddress(Wallet_OWNER)               //response_destination:MsgAddress
+        .storeUint(0, 1)                          //custom_payload:(Maybe ^Cell)
+        .storeCoins(toNano(0.05))                 // forward_ton_amount:(VarUInteger 16)
+        .endCell();                               //forward_payload:(Either Cell ^Cell)
+```
 
 #### Jetton Burn
 
