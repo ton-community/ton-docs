@@ -160,11 +160,6 @@ await connector.sendTransaction({
 #### Jetton Transfer
 
 ```js
-let body = beginCell()
-     //jetton Transfer message body
-    .endCell()
-
-
 await connector.sendTransaction({
   validUntil: Math.floor(Date.now() / 1000) + 360,
   messages: [
@@ -190,26 +185,57 @@ await connector.sendTransaction({
     // forward_ton_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)
     // = InternalMsgBody;
 
-    const messageBody = beginCell()
+    const body = beginCell()
         .storeUint(0xf8a7ea5, 32)                 // jetton transfer op code
-        .storeUint(quiryId, 64)                   // query_id:uint64
-        .storeCoins(toNano("1"))                  //amount:(VarUInteger 16)
-        .storeAddress(Jetton_Wallet_DST)          //destination:MsgAddress
-        .storeAddress(Wallet_OWNER)               //response_destination:MsgAddress
-        .storeUint(0, 1)                          //custom_payload:(Maybe ^Cell)
+        .storeUint(0, 64)                         // query_id:uint64
+        .storeCoins(1000000)                      // amount:(VarUInteger 16) - 6 decimals for jUSDT, 9 decimals as default
+        .storeAddress(Wallet_DST)                 // destination:MsgAddress
+        .storeAddress(Wallet_SRC)                 // response_destination:MsgAddress
+        .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell)
         .storeCoins(toNano(0.05))                 // forward_ton_amount:(VarUInteger 16)
-        .endCell();                               //forward_payload:(Either Cell ^Cell)
+        .endCell();                               // forward_payload:(Either Cell ^Cell)
 ```
+
+```js
+import { Address, TonClient, beginCell, StateInit, storeStateInit } from '@ton/ton'
+
+async function main() {
+    const client = new TonClient({
+        endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+        apiKey: 'put your api key'
+    })
+
+    const jettonWalletAddress = Address.parse('EQBXvufa5Q9HO5O8W1J5QxfDHeSryUY6zQjOI7NDt_Zr7LCV');
+    let jettonWalletDataResult = await client.runMethod(jettonWalletAddress, 'get_wallet_data');
+    jettonWalletDataResult.stack.readNumber();
+    const ownerAddress = jettonWalletDataResult.stack.readAddress();
+    const jettonMasterAddress = jettonWalletDataResult.stack.readAddress();
+    const jettonCode = jettonWalletDataResult.stack.readCell();
+    const jettonData = beginCell()
+        .storeCoins(0)
+        .storeAddress(ownerAddress)
+        .storeAddress(jettonMasterAddress)
+        .storeRef(jettonCode)
+        .endCell();
+
+    const stateInit: StateInit = {
+        code: jettonCode,
+        data: jettonData
+    }
+
+    const stateInitCell = beginCell()
+        .store(storeStateInit(stateInit))
+        .endCell();
+
+    console.log(new Address(0, stateInitCell.hash()));
+}
+```
+
 
 #### Jetton Burn
 
 
 ```js
-let body = beginCell()
-     //jetton burn message body
-    .endCell()
-
-
 await connector.sendTransaction({
   validUntil: Math.floor(Date.now() / 1000) + 360,
   messages: [
@@ -228,9 +254,52 @@ await connector.sendTransaction({
 
 ### NFTs
 
+#### Transfer NFT
+
+Transfer the `NFTitem` to a new owner `NEW_OWNER_WALLET`.
+
+```js
+await connector.sendTransaction({
+  validUntil: Math.floor(Date.now() / 1000) + 360,
+  messages: [
+    {
+      address: NFTitem,
+      amount: toNano("0.05"),
+      payload: body.toBoc().toString("base64")
+    }
+  ]
+})
+```
+
+- `NFTitem` - Address - The address of NFT item smart contract which we want transfer to a new owner `NEW_OWNER_WALLET`.
+- `balance` - Integer, amount of Toncoin for gas payments in nanotons.
+- `body` - payload for the NFT contract
+
+`body` typically should be done according the following way:
+
+```js
+    import { Address, beginCell, Cell, toNano} from '@ton/ton'
+
+//  transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress custom_payload:(Maybe ^Cell)
+//   forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;
+
+    const body = beginCell()
+        .storeUint(5fcc3d14, 32)                 // NFT transfer op code
+        .storeUint(0, 64)                        // query_id:uint64
+        .storeAddress(NEW_OWNER_WALLET)          // destination:MsgAddress
+        .storeUint(0, 1)                         // custom_payload:(Maybe ^Cell)
+        .storeCoins(toNano('0.000000001'))       // forward_amount:(VarUInteger 16)
+        .storeAddress(Wallet_DST)                // response_destination:MsgAddress
+        .storeUint(0,1)                          // forward_amount:(VarUInteger 16)
+        .endCell();
+```
+
+`WALLET_DST` - Address - The address of the initial NFT owner for the receiving excess
+
+
 #### Deploy NFT
 
-#### Sale NFT
+#### Buy NFT
 
 
 ## TON Connect Python SDK
