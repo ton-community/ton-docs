@@ -1,4 +1,4 @@
-# 🤖 Developing a Telegram Bot App to Check Ownership of NFT 🎨
+# Developing a Telegram Bot App to Check Ownership of NFT
 
 ## 👋 Introduction
 
@@ -12,75 +12,62 @@ This article aims to provide guidance on verifying token ownership as the popula
 
 3.  Once created, BotFather will provide you with a unique token. This token is crucial as it allows your bot to communicate with the Telegram API.
 
-## 📝 Writing the Bot
+## 🧠 Description of the Bot's Functionality
 
-### 🚀 Starting Function
+### Functionality
 
-Before we begin writing the bot's handler, we need to install the required library.
+Our Telegram bot will perform the fascinating task of verifying if a user owns a network item from the TON Footsteps collection. The key components will be:
+
+- aiogram library: For interfacing with the Telegram client.
+- TON Connect 2.0: To connect with the user's wallet.
+- Redis database: To handle relevant data.
+
+### 🗂️ Project Structure
+
+- Main File: Containing the primary logic.
+- Supporting Files:
+  - Keyboards: Keyboard Storage.
+  - Database Preparation: Facilitating TON Connect.
+  - Data for TON Connect: Data handling.
+
+### 🛠️ Install the Libraries
+
+Execute the following commands to get the necessary libraries:
 
 ```bash
 pip install aiogram
+pip install redis
+pip install qrcode
+pip install tonsdk
+pip install pytonconnect
+pip install requests
 ```
 
-This library is used to interact with the Telegram Bot API and provides a high-level framework for building Telegram bots.
-
-Next, we need to import two libraries into our project.
+And then, import them to the main file:
 
 ```python
-import sqlite3
+import asyncio
+import requests
+import qrcode
+import os
+import random
+
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.types.input_file import InputFile
+from tonsdk.utils import Address
+from pytonconnect import TonConnect
 ```
 
-From the `aiogram` library, we only import the methods we need.
+### 🗄️ Redis Database Setup
 
-We also need to set up all necessary connections.
+Additionally, for setting up and launching the Redis database, I recommend acquainting yourself with the information regarding its installation and initiation, which can be found [here](https://redis.io/docs/getting-started/installation/)
 
-```python
-# Establishing a connection to the SQLite database named 'DB.db' and creating a cursor.
+## 🎨 Writing the Bot
 
-con = sqlite3.connect("DB.db", check_same_thread=False)
-cur = con.cursor()
+### 🎹 Designing the Keyboards
 
-# Сreating a database
-build_bd(cur, con)
-
-# Creating a Telegram Bot instance and a Dispatcher object for message handling.
-
-# Creating a Bot instance using the 'api_token' provided.
-bot = Bot(token=api_token)
-
-# Creating a Dispatcher instance associated with the Bot instance.
-dp = Dispatcher(bot)
-```
-
-#### 🛠 Building the Database
-
-For convenience, the database creation has been extracted into a separate file `support.py`, containing the function `build_bd`.
-
-```python
-def build_bd(cur, con):
-    cur.execute('''CREATE TABLE IF NOT EXISTS "Users" (
-        "id"	INTEGER,
-        "id_tg"	INTEGER,
-        "username"	TEXT,
-        "address"	TEXT,
-        PRIMARY KEY("id" AUTOINCREMENT)
-    )''')
-
-    con.commit()
-```
-
-We also need to import this function.
-
-```python
-from support import build_bd
-```
-
-#### 🎹 Designing the Keyboards
-
-We need to create custom keyboard buttons for the bot. This is done in a separate file `keyboards.py`.
+To begin with, let's create a file containing all the necessary keyboard configurations, and we'll name it `keyboards.py`
 
 ```python
 # Creating custom keyboard buttons and reply markup for the Telegram bot.
@@ -93,6 +80,14 @@ CheckButton = KeyboardButton('Check for footstep NFT')
 # Creating a ReplyKeyboardMarkup for the "Check" action using the CheckButton.
 # The 'resize_keyboard' parameter is set to True, allowing the keyboard to be resized in the Telegram app.
 Checkkb = ReplyKeyboardMarkup(resize_keyboard=True).add(CheckButton)
+
+# Creating additional buttons for the "Tonkeeper" and "Tonhub" actions.
+TonkeeperButton = KeyboardButton('Tonkeeper')
+TonhubButton = KeyboardButton('Tonhub')
+
+# Creating a ReplyKeyboardMarkup for the "Wallet" action using the TonkeeperButton and TonhubButton.
+# The 'resize_keyboard' parameter is set to True to allow the keyboard to be resized in the Telegram app.
+Walletkb = ReplyKeyboardMarkup(resize_keyboard=True).add(TonkeeperButton).add(TonhubButton)
 ```
 
 Since we will be using more than one keyboard in this project, we import this file with a convenient name.
@@ -101,7 +96,50 @@ Since we will be using more than one keyboard in this project, we import this fi
 import keyboards as kb
 ```
 
-#### 🌟 Writing the Startup Handler
+### 🧩 Database Preparation
+
+Now, we need to prepare our database to interface with pytonconnect.
+To do this, we will create a new file named `support.py`
+
+```python
+# Importing the Redis library to interact with the Redis database
+import redis
+# Importing the IStorage interface from pytonconnect
+from pytonconnect.storage import IStorage
+
+# Creating a connection to the Redis database running on localhost at port 6379
+r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+
+# Defining a class Storage that implements the IStorage interface from pytonconnect
+class Storage(IStorage):
+    def __init__(self, id):
+        # Constructor method initializing the unique identifier for each storage instance
+        self.id = id
+
+    # Asynchronous method to set a key-value pair in Redis, with the key being appended with the unique ID
+    async def set_item(self, key: str, value: str):
+        r.set(key + self.id, value)
+
+    # Asynchronous method to retrieve the value for a given key from Redis, with the key being appended with the unique ID
+    # If the key does not exist, returns the default value
+    async def get_item(self, key: str, default_value: str = None):
+        if r.exists(key + self.id):
+            return r.get(key + self.id)
+        else:
+            return default_value
+
+    # Asynchronous method to remove the key-value pair for a given key from Redis, with the key being appended with the unique ID
+    async def remove_item(self, key: str):
+        r.delete(key + self.id)
+```
+
+And also import it into our main file with the bot
+
+```python
+import support
+```
+
+### 🌟 Writing the Startup Handler
 
 ```python
 # This message handler is triggered when a user sends the '/start' command in a private chat with the bot.
@@ -120,34 +158,6 @@ async def start_command(message: types.Message):
 ```
 
 ### 🕵️ Function for Checking the Presence of NFT
-
-First let's add a new keyboard to our file `keyboards.py `
-
-```python
-# Creating additional buttons for the "Tonkeeper" and "Tonhub" actions.
-TonkeeperButton = KeyboardButton('Tonkeeper')
-TonhubButton = KeyboardButton('Tonhub')
-
-# Creating a ReplyKeyboardMarkup for the "Wallet" action using the TonkeeperButton and TonhubButton.
-# The 'resize_keyboard' parameter is set to True to allow the keyboard to be resized in the Telegram app.
-Walletkb = ReplyKeyboardMarkup(resize_keyboard=True).add(TonkeeperButton).add(TonhubButton)
-```
-
-Further we need to download the `requests` library.
-
-```bash
-pip install requests
-```
-
-This library is used for sending HTTP requests to the TON API and handling the API responses.
-
-Next, we need to import it.
-
-```python
-import requests
-```
-
-Now we can move on to the handler itself.
 
 ```python
 # A message handler function to check if the user has a footstep NFT and respond accordingly.
@@ -194,53 +204,6 @@ Where:
 The API request will return all the user's NFTs from the specified collection.
 
 ### 🏡 Function for Getting the User's Address via TON Connect 2.0
-
-First, we need to download and import additional libraries.
-
-```bash
-pip install qrcode
-pip install tonsdk
-pip install pytonconnect
-```
-
-```python
-import asyncio
-import qrcode
-import os
-import random
-from tonsdk.utils import Address
-from pytonconnect import TonConnect
-```
-
-These libraries are used for various tasks such as generating QR codes, converting the address, and connecting to TON wallets via the TonConnect protocol.
-
-You can learn more about pytonconnect library [here](https://github.com/XaBbl4/pytonconnect)
-
-#### Creating a File for TonConnect
-
-We also need to create a file named `pytonconnect-manifest.json`, following this template.
-
-```json
-{
-  "url": "<app-url>", // required
-  "name": "<app-name>", // required
-  "iconUrl": "<app-icon-url>", // required
-  "termsOfUseUrl": "<terms-of-use-url>", // optional
-  "privacyPolicyUrl": "<privacy-policy-url>" // optional
-}
-```
-
-For this bot, this option is suitable.
-
-```json
-{
-  "url": "",
-  "name": "Example bot",
-  "iconUrl": "https://raw.githubusercontent.com/XaBbl4/pytonconnect/main/pytonconnect.png"
-}
-```
-
-The handler itself may look like this.
 
 ```python
 # A message handler function to check if the user has a footstep NFT and respond accordingly.
@@ -297,6 +260,32 @@ async def connect_wallet_tonkeeper(message: types.Message):
     con.commit()
 ```
 
+#### 📄 Creating a File for TonConnect
+
+We also need to create a file named `pytonconnect-manifest.json`, following this template.
+
+```json
+{
+  "url": "<app-url>", // required
+  "name": "<app-name>", // required
+  "iconUrl": "<app-icon-url>", // required
+  "termsOfUseUrl": "<terms-of-use-url>", // optional
+  "privacyPolicyUrl": "<privacy-policy-url>" // optional
+}
+```
+
+For this bot, this option is suitable.
+
+```json
+{
+  "url": "",
+  "name": "Example bot",
+  "iconUrl": "https://raw.githubusercontent.com/XaBbl4/pytonconnect/main/pytonconnect.png"
+}
+```
+
+You can learn more about pytonconnect library [here](https://github.com/XaBbl4/pytonconnect)
+
 ### 🚀 Launching the Bot
 
 ```python
@@ -309,7 +298,7 @@ if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
 ```
 
-## [🎁 Final Code and Resources](https://github.com/AndreyBurnosov/Checking_for_nft_availability).
+## [🎁 Final Code and Resources](https://github.com/AndreyBurnosov/Checking_for_nft_availability)
 
 ## 📌 References
 
