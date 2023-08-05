@@ -1,10 +1,10 @@
-# Developing a Telegram Bot App to Check Ownership of NFT
+# Telegram Bot to check ownership of NFT
 
 ## 👋 Introduction
 
 This article aims to provide guidance on verifying token ownership as the popularity of NFTs continues to soar, with a growing number of individuals searching for effective methods to accomplish this.
 
-## 📝 Obtaining a Token for the Bot
+## 📝 Obtaining a token for the bot
 
 1.  Visit [BotFather](https://t.me/BotFather) on Telegram.
 
@@ -12,35 +12,29 @@ This article aims to provide guidance on verifying token ownership as the popula
 
 3.  Once created, BotFather will provide you with a unique token. This token is crucial as it allows your bot to communicate with the Telegram API.
 
-## 🧠 Description of the Bot's Functionality
+## 🧠 Description of the bot's functionality
 
 ### Functionality
 
-Our Telegram bot will perform the fascinating task of verifying if a user owns a network item from the TON Footsteps collection. The key components will be:
+Our Telegram bot will perform the fascinating example task of verifying if a user owns an NFT item from the TON Footsteps collection. The key components will be:
 
 - aiogram library: For interfacing with the Telegram client.
-- TON Connect 2.0: To connect with the user's wallet.
-- Redis database: To handle relevant data.
+- TON Connect: To connect with the user's wallet.
+- Redis database: To handle data relevant to TON Connect.
 
-### 🗂️ Project Structure
+### 🗂️ Project structure
 
-- Main File: Containing the primary logic.
-- Supporting Files:
-  - Keyboards: Keyboard Storage.
+- Main file: Containing the primary logic of the bot.
+- Helper files:
+  - Keyboards: Telegram bot keyboard objects.
   - Database Preparation: Facilitating TON Connect.
-  - Data for TON Connect: Data handling.
 
-### 🛠️ Install the Libraries
+### 🛠️ Install the libraries
 
-Execute the following commands to get the necessary libraries:
+Execute the following command to install all the necessary libraries through `pip`:
 
 ```bash
-pip install aiogram
-pip install redis
-pip install qrcode
-pip install tonsdk
-pip install pytonconnect
-pip install requests
+pip install aiogram redis qrcode tonsdk pytonconnect requests
 ```
 
 And then, import them to the main file:
@@ -59,13 +53,13 @@ from tonsdk.utils import Address
 from pytonconnect import TonConnect
 ```
 
-### 🗄️ Redis Database Setup
+### 🗄️ Redis database setup
 
 Additionally, for setting up and launching the Redis database, I recommend acquainting yourself with the information regarding its installation and initiation, which can be found [here](https://redis.io/docs/getting-started/installation/)
 
-## 🎨 Writing the Bot
+## 🎨 Writing the bot
 
-### 🎹 Designing the Keyboards
+### 🎹 Designing the keyboards
 
 To begin with, let's create a file containing all the necessary keyboard configurations, and we'll name it `keyboards.py`
 
@@ -90,15 +84,15 @@ TonhubButton = KeyboardButton('Tonhub')
 Walletkb = ReplyKeyboardMarkup(resize_keyboard=True).add(TonkeeperButton).add(TonhubButton)
 ```
 
-Since we will be using more than one keyboard in this project, we import this file with a convenient name.
+And let's add the import of this file to the `main.py`.
 
 ```python
 import keyboards as kb
 ```
 
-### 🧩 Database Preparation
+### 🧩 Database preparation
 
-Now, we need to prepare our database to interface with pytonconnect.
+Now, we need to prepare our database to interface with `pytonconnect`.
 To do this, we will create a new file named `support.py`
 
 ```python
@@ -139,7 +133,7 @@ And also import it into our main file with the bot
 import support
 ```
 
-### 🌟 Writing the Startup Handler
+### 🌟 Writing the startup handler
 
 ```python
 # Define a command handler for the '/start' command for private chats
@@ -151,7 +145,7 @@ async def start_command(message: types.Message):
     await message.answer("With my help, you can check if you have an NFT from the TON Footsteps collection")
 ```
 
-### 🕵️ Function for Checking the Presence of NFT
+### 🕵️ Function for checking the presence of NFT
 
 ```python
 # A message handler function to check if the user has a footstep NFT and respond accordingly.
@@ -184,7 +178,7 @@ async def connect_wallet_tonkeeper(message: types.Message):
             await message.answer(text="Unfortunately, you don't have NFT from the TON Footsteps collection")
 ```
 
-In order to check whether the NFT user has the necessary collection, we need to make such an api request:
+In order to check whether the NFT user has the necessary collection, we will use the [TONAPI](https://tonapi.io/). The request will look like this:
 
 ```bash
 https://tonapi.io/v2/accounts/<ADDRESS>/nfts?collection=<NFT_COLLECTION>&limit=1000&offset=0&indirect_ownership=false
@@ -192,12 +186,12 @@ https://tonapi.io/v2/accounts/<ADDRESS>/nfts?collection=<NFT_COLLECTION>&limit=1
 
 Where:
 
-- `ADDRESS` - This is the wallet address of the user we want to check for the necessary NFT.
+- `ADDRESS` - This is the wallet address of the user we want to check for the required NFT.
 - `NFT_COLLECTION` - This is the address of the required NFT collection.
 
 The API request will return all the user's NFTs from the specified collection.
 
-### 🏡 Function for Getting the User's Address via TON Connect 2.0
+### 🏡 Function for getting the user's address via TON Connect
 
 ```python
 # Define a message handler for connection to wallets (Tonkeeper or Tonhub) in private chats
@@ -256,9 +250,9 @@ async def connect_wallet_tonkeeper(message: types.Message):
     await message.answer('Your wallet has been successfully connected.', reply_markup=kb.Checkkb)
 ```
 
-#### 📄 Creating a File for TonConnect
+#### 📄 Creating the manifest for TON Connect
 
-We also need to create a file named `pytonconnect-manifest.json`, following this template.
+In order to properly use the TON Connect we also need to create a file named `pytonconnect-manifest.json`, following this template:
 
 ```json
 {
@@ -270,7 +264,7 @@ We also need to create a file named `pytonconnect-manifest.json`, following this
 }
 ```
 
-For this bot, this option is suitable.
+For this bot, it'll be enough to simply use some default icon and any desired name:
 
 ```json
 {
@@ -280,9 +274,11 @@ For this bot, this option is suitable.
 }
 ```
 
-You can learn more about pytonconnect library [here](https://github.com/XaBbl4/pytonconnect)
+You can learn more about the `pytonconnect` library [in its repository](https://github.com/XaBbl4/pytonconnect)
 
-### 🚀 Launching the Bot
+### 🚀 Launching the bot
+
+Add the folliwing code to the end of `main.py` and we'll be ready to test our bot!
 
 ```python
 # The main entry point of the Telegram bot application.
@@ -294,7 +290,15 @@ if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
 ```
 
-## [🎁 Final Code and Resources](https://github.com/AndreyBurnosov/Checking_for_nft_availability)
+Now simply run this command in your terminal:
+
+```bash
+python3 main.py
+```
+
+After that, open the dialogue with your bot in Telegram and try to use it. If you followed this guide correctly, the bot should work as expected!
+
+## [🎁 Final code and resources](https://github.com/AndreyBurnosov/Checking_for_nft_availability)
 
 ## 📌 References
 
