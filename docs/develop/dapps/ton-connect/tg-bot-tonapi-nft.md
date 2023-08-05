@@ -93,7 +93,7 @@ import keyboards as kb
 ### 🧩 Database preparation
 
 Now, we need to prepare our database to interface with `pytonconnect`.
-To do this, we will create a new file named `support.py`
+To do this, we will create a new file named `database.py`
 
 ```python
 # Importing the Redis library to interact with the Redis database
@@ -130,7 +130,7 @@ class Storage(IStorage):
 And also import it into our main file with the bot
 
 ```python
-import support
+import database
 ```
 
 ### 🌟 Writing the startup handler
@@ -198,7 +198,7 @@ The API request will return all the user's NFTs from the specified collection.
 @dp.message_handler(text=['Tonkeeper', 'Tonhub'], chat_type=types.ChatType.PRIVATE)
 async def connect_wallet_tonkeeper(message: types.Message):
     # Create a storage instance based on the user's ID
-    storage = support.Storage(str(message.from_user.id))
+    storage = database.Storage(str(message.from_user.id))
 
     # Initialize a connection using the given manifest URL and storage
     connector = TonConnect(manifest_url='https://raw.githubusercontent.com/AndreyBurnosov/Checking_for_nft_availability/main/pytonconnect-manifest.json', storage=storage)
