@@ -352,7 +352,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'develop/dapps/ton-connect/integration',
-              label: 'Websites',
+              label: 'Web',
             },
             // {
             //   type: 'doc',
