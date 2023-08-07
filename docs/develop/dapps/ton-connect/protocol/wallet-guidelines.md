@@ -1,4 +1,4 @@
-# TON Wallet Guidelines
+# Wallet Guidelines
 
 ## Networks
 
@@ -59,7 +59,7 @@ We recommend wallets provide the ability to disconnect session with a specified 
 
 ## References
 
-* https://github.com/ton-blockchain/ton-connect/blob/main/wallet-guidelines.md
+* /develop/dapps/ton-connect/protocol/wallet-guidelines
 
 ## See Also
 

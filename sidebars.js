@@ -372,7 +372,6 @@ const sidebars = {
           items: [
             'develop/dapps/ton-connect/developers',
             'develop/dapps/ton-connect/transactions',
-            'develop/dapps/ton-connect/workflow',
           ],
         },
         {
@@ -380,16 +379,20 @@ const sidebars = {
           label: 'Protocol specifications',
           items: [
             {
-              type: 'link',
+              type: 'doc',
               label: 'TON Connect Protocol',
-              href: 'https://github.com/ton-blockchain/ton-connect',
+              id: 'develop/dapps/ton-connect/protocol/README',
             },
+            'develop/dapps/ton-connect/protocol/workflow',
+            'develop/dapps/ton-connect/protocol/bridge',
+            'develop/dapps/ton-connect/protocol/session',
+            'develop/dapps/ton-connect/protocol/requests-responses',
+            'develop/dapps/ton-connect/protocol/wallet-guidelines',
             {
               type: 'link',
-              label: 'TON Connect Wallets',
+              label: 'Wallets List',
               href: 'https://github.com/ton-blockchain/wallets-list',
             },
-            'develop/dapps/ton-connect/wallet-guidelines',
           ],
         },
         {
