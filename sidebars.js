@@ -351,18 +351,18 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'develop/dapps/ton-connect/integration',
-              label: 'Web',
+              id: 'develop/dapps/ton-connect/web',
+              label: 'Websites'
             },
-            // {
-            //   type: 'doc',
-            //   id: 'develop/dapps/ton-connect/integration',
-            //   label: 'Android, iOS',
-            // },
+            {
+              type: 'doc',
+              id: 'develop/dapps/ton-connect/mobile',
+              label: 'Mobiles',
+            },
             {
               type: 'doc',
               id: 'develop/dapps/ton-connect/tg-bot-integration',
-              label: 'Telegram bots',
+              label: 'Telegram Bots',
             },
           ],
         },
@@ -371,6 +371,7 @@ const sidebars = {
           label: 'Guidelines',
           items: [
             'develop/dapps/ton-connect/developers',
+            'develop/dapps/ton-connect/integration',
             'develop/dapps/ton-connect/transactions',
           ],
         },
