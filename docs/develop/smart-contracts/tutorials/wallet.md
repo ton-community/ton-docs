@@ -22,7 +22,7 @@ Working with the TON Testnet often leads to deployment errors, difficulty tracki
 :::
 
 ## Source Code
-All code examples used in this tutorial can be found in the following [GitHub repository]((https://github.com/aSpite/wallet-tutorial)).
+All code examples used in this tutorial can be found in the following [GitHub repository](https://github.com/aSpite/wallet-tutorial).
 
 
 ## ✍️ What You Need To Get Started
