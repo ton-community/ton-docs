@@ -129,6 +129,8 @@ await connector.sendTransaction({
 
 <details>
     <summary>Jetton Wallet State Init and Address preparation example</summary>
+
+
 ```js
 import { Address, TonClient, beginCell, StateInit, storeStateInit } from '@ton/ton'
 
@@ -163,6 +165,7 @@ async function main() {
     console.log(new Address(0, stateInitCell.hash()));
 }
 ```
+
 </details>
 
 #### Jetton Burn
@@ -229,7 +232,7 @@ await connector.sendTransaction({
 `body` typically should be done according the following way:
 
 ```js
-    import { Address, beginCell, Cell, toNano} from '@ton/ton'
+import { beginCell, toNano} from '@ton/ton'
 
 //  transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress custom_payload:(Maybe ^Cell)
 //   forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;
@@ -248,224 +251,89 @@ await connector.sendTransaction({
 `WALLET_DST` - Address - The address of the initial NFT owner for the receiving excess
 
 
-#### Sale NFT Example
-
-Here example of preparing message and transaction for sale on GetGems markteplace, according to contract [nft-fixprice-sale-v3r2.fc](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc)
-
-#### Buy NFT Example
-
-
-## TON Connect React UI (WIP)
-
-[//]: # (#### Jettons)
-
-[//]: # ()
-[//]: # (Suppose, we specified simple hook built with ton-connect/react-ui useJettonContract.ts, which defines mint request from our application:)
-
-[//]: # ()
-[//]: # (<details>)
-
-[//]: # (    <summary>Open entire script</summary>)
-
-[//]: # ()
-[//]: # (    ```ts)
-
-[//]: # (    import { useEffect, useState } from "react";)
-
-[//]: # (    import { Address, fromNano, OpenedContract, toNano } from "ton-core";)
-
-[//]: # (    import {Mint, SampleJetton} from "../../build/SampleJetton/tact_SampleJetton";)
-
-[//]: # (    import {JettonDefaultWallet} from "../../build/SampleJetton/tact_JettonDefaultWallet";)
-
-[//]: # (    import { useAsyncInitialize } from "./useAsyncInitialize";)
-
-[//]: # (    import { useTonClient } from "./useTonClient";)
-
-[//]: # (    import { useTonConnect } from "./useTonConnect";)
-
-[//]: # ()
-[//]: # (    const sleep = &#40;time: number&#41; => new Promise&#40;&#40;resolve&#41; => setTimeout&#40;resolve, time&#41;&#41;)
-
-[//]: # ()
-[//]: # (    export function useJettonContract&#40;&#41; {)
-
-[//]: # (    const {client} = useTonClient&#40;&#41;)
-
-[//]: # (    const {wallet, sender} = useTonConnect&#40;&#41;)
-
-[//]: # (    const [balance, setBalance] = useState<string | null>&#40;&#41;)
-
-[//]: # ()
-[//]: # (    const jettonContract = useAsyncInitialize&#40;async&#40;&#41;=>{)
-
-[//]: # (    if&#40;!client || !wallet&#41; return;)
-
-[//]: # ()
-[//]: # (    const contract = SampleJetton.fromAddress&#40;Address.parse&#40;"EQB8StgTQXidy32a8xfu7j4HMoWYV0b0cFM8nXsP2cza_b7Y"&#41;&#41;)
-
-[//]: # ()
-[//]: # (    return client.open&#40;contract&#41; as OpenedContract<SampleJetton>)
-
-[//]: # (}, [client, wallet]&#41;)
-
-[//]: # ()
-[//]: # (    const jettonWalletContract = useAsyncInitialize&#40;async&#40;&#41;=>{)
-
-[//]: # (    if&#40;!jettonContract || !client&#41; return;)
-
-[//]: # ()
-[//]: # (    const jettonWalletAddress = await jettonContract.getGetWalletAddress&#40;)
-
-[//]: # (    Address.parse&#40;Address.parse&#40;wallet!&#41;.toString&#40;&#41;&#41;)
-
-[//]: # (    &#41;)
-
-[//]: # ()
-[//]: # (    return client.open&#40;JettonDefaultWallet.fromAddress&#40;jettonWalletAddress&#41;&#41;)
-
-[//]: # (}, [jettonContract, client]&#41;)
-
-[//]: # ()
-[//]: # (    useEffect&#40;&#40;&#41;=>{)
-
-[//]: # (    async function getBalance&#40;&#41; {)
-
-[//]: # (    if&#40;!jettonWalletContract&#41; return)
-
-[//]: # (    setBalance&#40;null&#41;)
-
-[//]: # (    const balance = &#40;await jettonWalletContract.getGetWalletData&#40;&#41;&#41;.balance)
-
-[//]: # (    setBalance&#40;fromNano&#40;balance&#41;&#41;)
-
-[//]: # (    await sleep&#40;5000&#41;)
-
-[//]: # (    getBalance&#40;&#41;)
-
-[//]: # (})
-
-[//]: # ()
-[//]: # (    getBalance&#40;&#41;)
-
-[//]: # ()
-[//]: # (}, [jettonWalletContract]&#41;)
-
-[//]: # ()
-[//]: # (    return {)
-
-[//]: # (    jettonWalletAddress: jettonWalletContract?.address.toString&#40;&#41;,)
-
-[//]: # (    balance: balance,)
-
-[//]: # (    mint: &#40;&#41; => {)
-
-[//]: # (    const message: Mint = {)
-
-[//]: # (    $$type: "Mint",)
-
-[//]: # (    amount: 150n)
-
-[//]: # (})
-
-[//]: # ()
-[//]: # (    jettonContract?.send&#40;sender, {)
-
-[//]: # (    value: toNano&#40;"0.05"&#41;)
-
-[//]: # (}, message&#41;)
-
-[//]: # (})
-
-[//]: # (})
-
-[//]: # (})
-
-[//]: # (    ```)
-
-[//]: # ()
-[//]: # (</details>)
-
-[//]: # ()
-[//]: # (```ts)
-
-[//]: # (/// previous part)
-
-[//]: # ( return {)
-
-[//]: # (        jettonWalletAddress: jettonWalletContract?.address.toString&#40;&#41;,)
-
-[//]: # (        balance: balance,)
-
-[//]: # (        mint: &#40;&#41; => {)
-
-[//]: # (            const message: Mint = {)
-
-[//]: # (                $$type: "Mint",)
-
-[//]: # (                amount: 150n)
-
-[//]: # (            })
-
-[//]: # ()
-[//]: # (            jettonContract?.send&#40;sender, {)
-
-[//]: # (                value: toNano&#40;"0.05"&#41;)
-
-[//]: # (            }, message&#41;)
-
-[//]: # (        })
-
-[//]: # (    })
-
-[//]: # (```)
-
-[//]: # ()
-[//]: # (Here our payload defined by sending `send&#40;&#41;` message with following specs:)
-
-[//]: # ()
-[//]: # (- `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts)
-
-[//]: # (- `balance` - Integer, amount of Toncoin for gas payments in nanotons.)
-
-[//]: # (- `mint` - function, which invokes internal transfer from jettonContract&#40;jetton master&#41; to sender's Jetton Wallet)
-
-[//]: # (- `sender` - wallet address, which requested mint and which will receive jettons on his Jetton Wallet)
-
-[//]: # (- `value` - amount of Toncoins carried for gas payments between Jetton Master and new Jetton Wallet)
-
-[//]: # (- `message` - payload for the jettonContract, which defines what should be done)
-
-[//]: # (-  `$$type`: string, "Mint" string &#40;or corresponded op-code for Mint&#41;)
-
-[//]: # (    -  `amount`: bigint, amount of Jettons should be minted)
-
-[//]: # ()
-[//]: # ()
-[//]: # ()
-[//]: # (```ts "title" = "destination address")
-
-[//]: # ()
-[//]: # ()
-[//]: # (```)
-
-
-
-## TON Connect Python SDK
-
-### Jettons
-
-#### Jetton Transfer
-
-#### Jetton Mint
-
-#### Jetton Burn
-
-### NFTs
-
-#### NFT Transfer
-
-#### NFT Sale (getgems)
-
-#### NFT Buy (getgems)
-
+#### NFT Sale Example
+Here example of preparing message and transaction for sale on GetGems markteplace, according to contract [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc).
+
+
+```js
+import { Address, beginCell, StateInit, storeStateInit, toNano, Cell } from '@ton/ton'
+
+async function main() {
+const fixPriceV3R2Code = Cell.fromBase64('te6cckECCwEAArkAART/APSkE/S88sgLAQIBIAIDAgFIBAUAfvIw7UTQ0wDTH/pA+kD6QPoA1NMAMMABjh34AHAHyMsAFssfUATPFljPFgHPFgH6AszLAMntVOBfB4IA//7y8AICzQYHAFegOFnaiaGmAaY/9IH0gfSB9AGppgBgYaH0gfQB9IH0AGEEIIySsKAVgAKrAQH30A6GmBgLjYSS+CcH0gGHaiaGmAaY/9IH0gfSB9AGppgBgYOCmE44BgAEqYhOmPhW8Q4YBKGATpn8cIxbMbC3MbK2QV44LJOZlvKAVxFWAAyS+G8BJrpOEBFcCBFd0VYACRWdjYKdxjgthOjq+G6hhoaYPqGAD9gHAU4ADAgB92YIQO5rKAFJgoFIwvvLhwiTQ+kD6APpA+gAwU5KhIaFQh6EWoFKQcIAQyMsFUAPPFgH6AstqyXH7ACXCACXXScICsI4XUEVwgBDIywVQA88WAfoCy2rJcfsAECOSNDTiWnCAEMjLBVADzxYB+gLLaslx+wBwIIIQX8w9FIKAejy0ZSzjkIxMzk5U1LHBZJfCeBRUccF8uH0ghAFE42RFrry4fUD+kAwRlAQNFlwB8jLABbLH1AEzxZYzxYBzxYB+gLMywDJ7VTgMDcowAPjAijAAJw2NxA4R2UUQzBw8AXgCMACmFVEECQQI/AF4F8KhA/y8AkA1Dg5ghA7msoAGL7y4clTRscFUVLHBRWx8uHKcCCCEF/MPRQhgBDIywUozxYh+gLLassfFcs/J88WJ88WFMoAI/oCE8oAyYMG+wBxUGZFFQRwB8jLABbLH1AEzxZYzxYBzxYB+gLMywDJ7VQAlsjLHxPLPyPPFlADzxbKAIIJycOA+gLKAMlxgBjIywUmzxZw+gLLaszJgwb7AHFVUHAHyMsAFssfUATPFljPFgHPFgH6AszLAMntVNZeZYk=');
+// GetGems Address
+const marketplaceAddress = Address.parse('EQBYTuYbLf8INxFtD8tQeNk5ZLy-nAX9ahQbG_yl1qQ-GEMS');
+// GetGems Address for Fees
+const marketplaceFeeAddress = Address.parse('EQCjk1hh952vWaE9bRguFkAhDAL5jj3xj9p0uPWrFBq_GEMS');
+// GetGems sale contracts deployer
+const destinationAddress = Address.parse("EQAIFunALREOeQ99syMbO6sSzM_Fa1RsPD5TBoS0qVeKQ-AR");
+
+    const walletAddress = Address.parse('EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162');
+    const royaltyAddress = Address.parse('EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162');
+    const nftAddress = Address.parse('EQCUWoe7hLlklVxH8gduCf45vPNocsjRP4wbX42UJ0Ja0S2f');
+    const price = toNano('5'); // 5 TON
+
+    const feesData = beginCell()
+        .storeAddress(marketplaceFeeAddress)
+        // 5% - GetGems fee
+        .storeCoins(price / BigInt(100) * BigInt(5))
+        .storeAddress(royaltyAddress)
+        // 5% - Royalty, can be changed
+        .storeCoins(price / BigInt(100) * BigInt(5))
+        .endCell();
+
+    const saleData = beginCell()
+        .storeBit(0) // is_complete
+        .storeUint(Math.round(Date.now() / 1000), 32) // created_at
+        .storeAddress(marketplaceAddress) // marketplace_address
+        .storeAddress(nftAddress) // nft_address
+        .storeAddress(walletAddress) // previous_owner_address
+        .storeCoins(price) // full_price
+        .storeRef(feesData) // fees_cell
+        .storeBit(0) // can_be_deployed_externally
+        .endCell();
+
+    const stateInit: StateInit = {
+        code: fixPriceV3R2Code,
+        data: saleData
+    };
+    const stateInitCell = beginCell()
+        .store(storeStateInit(stateInit))
+        .endCell();
+
+    // not needed, just for example
+    const saleContractAddress = new Address(0, stateInitCell.hash());
+
+    const saleBody = beginCell()
+        .storeUint(1, 32) // just accept coins on deploy
+        .storeUint(0, 64)
+        .endCell();
+
+    const transferNftBody = beginCell().
+        storeUint(0x5fcc3d14, 32). // Opcode for NFT transfer
+        storeUint(0, 64). // query_id
+        storeAddress(destinationAddress). // new_owner
+        storeAddress(walletAddress). // response_destination for excesses
+        storeBit(0). // we do not have custom_payload
+        storeCoins(toNano("1")). // forward_amount
+        storeBit(0). // we store forward_payload is this cell
+        // not 32, because we stored 0 bit before | do_sale opcode for deployer
+        storeUint(0x0fe0ede, 31).
+        storeRef(stateInitCell).
+        storeRef(saleBody).
+        endCell();
+```
+
+
+
+```js
+await connector.sendTransaction({
+  validUntil: Math.floor(Date.now() / 1000) + 360,
+  messages: [
+    {
+      address: nftItemAddress,
+      amount: toNano("1.08"),
+      payload: body.toBoc().toString("base64")
+    }
+  ]
+})
+```
