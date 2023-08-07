@@ -3,132 +3,59 @@
 While using TON Connect you should build Message Body for Payload for various transactions. Here you can find most relatable examples for payload for using it in TON Connect SDKs.
 
 :::warning
-Page in development.
+The page is under development.
 :::
 
 
-## Regular TON Transfer
-As ton-connect SDK is already wrapper above messages, we have no problem to prepare regular Transfer. For the following actions we should specify Payload(Message Body)
+## Regular TON Transfer Example
+TON Connect SDKs include wrappers for sending messages, making it easy to prepare regular transfers of Toncoins between two wallets. For example, a regular TON transfer using the TON Connect JS SDK can be executed as follows:
 
-
-## TON Connect React UI
-
-### Jettons
-
-Suppose, we specified simple hook built with ton-connect/react-ui useJettonContract.ts, which defines mint request from our application:
-
-<details>
-<summary>Open entire script</summary>
+if (!connector.connected) {
+    alert('Please connect wallet to send the transaction!');
+}
 
 ```ts
-import { useEffect, useState } from "react";
-import { Address, fromNano, OpenedContract, toNano } from "ton-core";
-import {Mint, SampleJetton} from "../../build/SampleJetton/tact_SampleJetton";
-import {JettonDefaultWallet} from "../../build/SampleJetton/tact_JettonDefaultWallet";
-import { useAsyncInitialize } from "./useAsyncInitialize";
-import { useTonClient } from "./useTonClient";
-import { useTonConnect } from "./useTonConnect";
+if (!connector.connected) {
+    alert('Please connect wallet to send the transaction!');
+}
 
-const sleep = (time: number) => new Promise((resolve) => setTimeout(resolve, time))
-
-export function useJettonContract() {
-    const {client} = useTonClient()
-    const {wallet, sender} = useTonConnect()
-    const [balance, setBalance] = useState<string | null>()
-
-    const jettonContract = useAsyncInitialize(async()=>{
-        if(!client || !wallet) return;
-
-        const contract = SampleJetton.fromAddress(Address.parse("EQB8StgTQXidy32a8xfu7j4HMoWYV0b0cFM8nXsP2cza_b7Y"))
-
-        return client.open(contract) as OpenedContract<SampleJetton>
-    }, [client, wallet])
-
-    const jettonWalletContract = useAsyncInitialize(async()=>{
-        if(!jettonContract || !client) return;
-
-        const jettonWalletAddress = await jettonContract.getGetWalletAddress(
-            Address.parse(Address.parse(wallet!).toString())
-        )
-
-        return client.open(JettonDefaultWallet.fromAddress(jettonWalletAddress))
-    }, [jettonContract, client])
-
-    useEffect(()=>{
-        async function getBalance() {
-            if(!jettonWalletContract) return
-            setBalance(null)
-            const balance = (await jettonWalletContract.getGetWalletData()).balance
-            setBalance(fromNano(balance))
-            await sleep(5000)
-            getBalance()
+const transaction = {
+    messages: [
+        {
+            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            amount: "20000000" //Toncoin in nanotons
         }
-
-        getBalance()
-
-    }, [jettonWalletContract])
-
-    return {
-        jettonWalletAddress: jettonWalletContract?.address.toString(),
-        balance: balance,
-        mint: () => {
-            const message: Mint = {
-                $$type: "Mint",
-                amount: 150n
-            }
-
-            jettonContract?.send(sender, {
-                value: toNano("0.05")
-            }, message)
-        }
-    }
+    ]
 }
 ```
 
-</details>
+For other custom tasks, a specific payload should be specified.
 
-```ts
-/// previous part
- return {
-        jettonWalletAddress: jettonWalletContract?.address.toString(),
-        balance: balance,
-        mint: () => {
-            const message: Mint = {
-                $$type: "Mint",
-                amount: 150n
-            }
 
-            jettonContract?.send(sender, {
-                value: toNano("0.05")
-            }, message)
-        }
+## TON Connect JS SDK Examples
+
+### Transfer with comment
+
+```js
+const body = beginCell()
+  .storeUint(0, 32) // write 32 zero bits to indicate that a text comment will follow
+  .storeStringTail("Hello, TON!") // write our text comment
+  .endCell();
+
+
+await connector.sendTransaction({
+  validUntil: Math.floor(Date.now() / 1000) + 360,
+  messages: [
+    {
+      address: jettonWalletContract,
+      amount: toNano("0.05"),
+      payload: body.toBoc().toString("base64")
     }
+  ]
+})
 ```
 
-Here our payload defined by sending `send()` message with following specs:
-
-- `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts
-- `balance` - Integer, amount of Toncoin for gas payments in nanotons.
-- `mint` - function, which invokes internal transfer from jettonContract(jetton master) to sender's Jetton Wallet
-    - `sender` - wallet address, which requested mint and which will receive jettons on his Jetton Wallet
-    - `value` - amount of Toncoins carried for gas payments between Jetton Master and new Jetton Wallet
-    - `message` - payload for the jettonContract, which defines what should be done
-        -  `$$type`: string, "Mint" string (or corresponded op-code for Mint)
-        -  `amount`: bigint, amount of Jettons should be minted
-
-
-
-```ts "title" = "destination address"
-
-
-```
-
-
-#### Jetton Transfer
-
-
-
-## TON Connect JS SDK
+### Jettons (Tokens) transaction
 
 #### Mint Jetton
 
@@ -159,13 +86,36 @@ await connector.sendTransaction({
 
 #### Jetton Transfer
 
+The `body` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) typically should be done according the following way:
+
+```js
+    import {beginCell, toNano} from '@ton/ton'
+    // transfer#0f8a7ea5 query_id:uint64 amount:(VarUInteger 16) destination:MsgAddress
+    // response_destination:MsgAddress custom_payload:(Maybe ^Cell)
+    // forward_ton_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)
+    // = InternalMsgBody;
+
+    const body = beginCell()
+        .storeUint(0xf8a7ea5, 32)                 // jetton transfer op code
+        .storeUint(0, 64)                         // query_id:uint64
+        .storeCoins(1000000)                      // amount:(VarUInteger 16) -  Jetton amount for transfer (6 - jUSDT, 9 - default)
+        .storeAddress(Wallet_DST)                 // destination:MsgAddress
+        .storeAddress(Wallet_SRC)                 // response_destination:MsgAddress
+        .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell)
+        .storeCoins(toNano(0.05))                 // forward_ton_amount:(VarUInteger 16)
+        .storeUInt(0,1)                           // forward_payload:(Either Cell ^Cell)
+        .endCell();
+```
+
+Next, sending the transaction with this body to jettonWalletContract destination executed:
+
 ```js
 await connector.sendTransaction({
   validUntil: Math.floor(Date.now() / 1000) + 360,
   messages: [
     {
-      address: jettonWalletContract,
-      amount: toNano("0.05"),
+      address: jettonWalletContract,            // dst jetton wallet
+      amount: toNano("0.05"),                   // for commission fees, excess will be returned
       payload: body.toBoc().toString("base64")
     }
   ]
@@ -176,27 +126,9 @@ await connector.sendTransaction({
 - `balance` - Integer, amount of Toncoin for gas payments in nanotons.
 - `body` - payload for the jettonContract
 
-`body` typically should be done according the following way:
 
-```js
-    import { Address, beginCell, Cell, toNano} from '@ton/ton'
-    // transfer#0f8a7ea5 query_id:uint64 amount:(VarUInteger 16) destination:MsgAddress
-    // response_destination:MsgAddress custom_payload:(Maybe ^Cell)
-    // forward_ton_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)
-    // = InternalMsgBody;
-
-    const body = beginCell()
-        .storeUint(0xf8a7ea5, 32)                 // jetton transfer op code
-        .storeUint(0, 64)                         // query_id:uint64
-        .storeCoins(1000000)                      // amount:(VarUInteger 16) - 6 decimals for jUSDT, 9 decimals as default
-        .storeAddress(Wallet_DST)                 // destination:MsgAddress
-        .storeAddress(Wallet_SRC)                 // response_destination:MsgAddress
-        .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell)
-        .storeCoins(toNano(0.05))                 // forward_ton_amount:(VarUInteger 16)
-        .storeUInt(0,1)                           // forward_payload:(Either Cell ^Cell)
-        .endCell();
-```
-
+<details>
+    <summary>Jetton Wallet State Init and Address preparation example</summary>
 ```js
 import { Address, TonClient, beginCell, StateInit, storeStateInit } from '@ton/ton'
 
@@ -206,7 +138,7 @@ async function main() {
         apiKey: 'put your api key'
     })
 
-    const jettonWalletAddress = Address.parse('EQBXvufa5Q9HO5O8W1J5QxfDHeSryUY6zQjOI7NDt_Zr7LCV');
+    const jettonWalletAddress = Address.parse('Sender_Jetton_Wallet');
     let jettonWalletDataResult = await client.runMethod(jettonWalletAddress, 'get_wallet_data');
     jettonWalletDataResult.stack.readNumber();
     const ownerAddress = jettonWalletDataResult.stack.readAddress();
@@ -231,9 +163,27 @@ async function main() {
     console.log(new Address(0, stateInitCell.hash()));
 }
 ```
-
+</details>
 
 #### Jetton Burn
+
+The `body` for Jetton Burn([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#2-burn)) typically should be done according the following way:
+
+
+```js
+    import {beginCell, toNano} from '@ton/ton'
+// burn#595f07bc query_id:uint64 amount:(VarUInteger 16)
+//               response_destination:MsgAddress custom_payload:(Maybe ^Cell)
+//               = InternalMsgBody;
+
+    const body = beginCell()
+        .storeUint(0x595f07bc, 32)                // jetton burn op code
+        .storeUint(0, 64)                         // query_id:uint64
+        .storeCoins(1000000)                      // amount:(VarUInteger 16) -  Jetton amount in decimal
+        .storeAddress(Wallet_SRC)                 // response_destination:MsgAddress - owner's wallet
+        .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell) - w/o payload typically
+        .endCell();
+```
 
 
 ```js
@@ -249,9 +199,9 @@ await connector.sendTransaction({
 })
 ```
 
-- `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts
-- `balance` - Integer, amount of Toncoin for gas payments in nanotons.
-- `body` - payload for the jetton wallet, which defines what should be done
+- `jettonWalletAddress` - Address, jettonWalletContract - which desire to burn his jettons
+- `amount` - Integer, amount of Toncoin for gas payments in nanotons.
+- `body` - payload for the jetton wallet with the `burn#595f07bc` op code
 
 ### NFTs
 
@@ -298,9 +248,207 @@ await connector.sendTransaction({
 `WALLET_DST` - Address - The address of the initial NFT owner for the receiving excess
 
 
-#### Deploy NFT
+#### Sale NFT Example
 
-#### Buy NFT
+Here example of preparing message and transaction for sale on GetGems markteplace, according to contract [nft-fixprice-sale-v3r2.fc](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc)
+
+#### Buy NFT Example
+
+
+## TON Connect React UI (WIP)
+
+[//]: # (#### Jettons)
+
+[//]: # ()
+[//]: # (Suppose, we specified simple hook built with ton-connect/react-ui useJettonContract.ts, which defines mint request from our application:)
+
+[//]: # ()
+[//]: # (<details>)
+
+[//]: # (    <summary>Open entire script</summary>)
+
+[//]: # ()
+[//]: # (    ```ts)
+
+[//]: # (    import { useEffect, useState } from "react";)
+
+[//]: # (    import { Address, fromNano, OpenedContract, toNano } from "ton-core";)
+
+[//]: # (    import {Mint, SampleJetton} from "../../build/SampleJetton/tact_SampleJetton";)
+
+[//]: # (    import {JettonDefaultWallet} from "../../build/SampleJetton/tact_JettonDefaultWallet";)
+
+[//]: # (    import { useAsyncInitialize } from "./useAsyncInitialize";)
+
+[//]: # (    import { useTonClient } from "./useTonClient";)
+
+[//]: # (    import { useTonConnect } from "./useTonConnect";)
+
+[//]: # ()
+[//]: # (    const sleep = &#40;time: number&#41; => new Promise&#40;&#40;resolve&#41; => setTimeout&#40;resolve, time&#41;&#41;)
+
+[//]: # ()
+[//]: # (    export function useJettonContract&#40;&#41; {)
+
+[//]: # (    const {client} = useTonClient&#40;&#41;)
+
+[//]: # (    const {wallet, sender} = useTonConnect&#40;&#41;)
+
+[//]: # (    const [balance, setBalance] = useState<string | null>&#40;&#41;)
+
+[//]: # ()
+[//]: # (    const jettonContract = useAsyncInitialize&#40;async&#40;&#41;=>{)
+
+[//]: # (    if&#40;!client || !wallet&#41; return;)
+
+[//]: # ()
+[//]: # (    const contract = SampleJetton.fromAddress&#40;Address.parse&#40;"EQB8StgTQXidy32a8xfu7j4HMoWYV0b0cFM8nXsP2cza_b7Y"&#41;&#41;)
+
+[//]: # ()
+[//]: # (    return client.open&#40;contract&#41; as OpenedContract<SampleJetton>)
+
+[//]: # (}, [client, wallet]&#41;)
+
+[//]: # ()
+[//]: # (    const jettonWalletContract = useAsyncInitialize&#40;async&#40;&#41;=>{)
+
+[//]: # (    if&#40;!jettonContract || !client&#41; return;)
+
+[//]: # ()
+[//]: # (    const jettonWalletAddress = await jettonContract.getGetWalletAddress&#40;)
+
+[//]: # (    Address.parse&#40;Address.parse&#40;wallet!&#41;.toString&#40;&#41;&#41;)
+
+[//]: # (    &#41;)
+
+[//]: # ()
+[//]: # (    return client.open&#40;JettonDefaultWallet.fromAddress&#40;jettonWalletAddress&#41;&#41;)
+
+[//]: # (}, [jettonContract, client]&#41;)
+
+[//]: # ()
+[//]: # (    useEffect&#40;&#40;&#41;=>{)
+
+[//]: # (    async function getBalance&#40;&#41; {)
+
+[//]: # (    if&#40;!jettonWalletContract&#41; return)
+
+[//]: # (    setBalance&#40;null&#41;)
+
+[//]: # (    const balance = &#40;await jettonWalletContract.getGetWalletData&#40;&#41;&#41;.balance)
+
+[//]: # (    setBalance&#40;fromNano&#40;balance&#41;&#41;)
+
+[//]: # (    await sleep&#40;5000&#41;)
+
+[//]: # (    getBalance&#40;&#41;)
+
+[//]: # (})
+
+[//]: # ()
+[//]: # (    getBalance&#40;&#41;)
+
+[//]: # ()
+[//]: # (}, [jettonWalletContract]&#41;)
+
+[//]: # ()
+[//]: # (    return {)
+
+[//]: # (    jettonWalletAddress: jettonWalletContract?.address.toString&#40;&#41;,)
+
+[//]: # (    balance: balance,)
+
+[//]: # (    mint: &#40;&#41; => {)
+
+[//]: # (    const message: Mint = {)
+
+[//]: # (    $$type: "Mint",)
+
+[//]: # (    amount: 150n)
+
+[//]: # (})
+
+[//]: # ()
+[//]: # (    jettonContract?.send&#40;sender, {)
+
+[//]: # (    value: toNano&#40;"0.05"&#41;)
+
+[//]: # (}, message&#41;)
+
+[//]: # (})
+
+[//]: # (})
+
+[//]: # (})
+
+[//]: # (    ```)
+
+[//]: # ()
+[//]: # (</details>)
+
+[//]: # ()
+[//]: # (```ts)
+
+[//]: # (/// previous part)
+
+[//]: # ( return {)
+
+[//]: # (        jettonWalletAddress: jettonWalletContract?.address.toString&#40;&#41;,)
+
+[//]: # (        balance: balance,)
+
+[//]: # (        mint: &#40;&#41; => {)
+
+[//]: # (            const message: Mint = {)
+
+[//]: # (                $$type: "Mint",)
+
+[//]: # (                amount: 150n)
+
+[//]: # (            })
+
+[//]: # ()
+[//]: # (            jettonContract?.send&#40;sender, {)
+
+[//]: # (                value: toNano&#40;"0.05"&#41;)
+
+[//]: # (            }, message&#41;)
+
+[//]: # (        })
+
+[//]: # (    })
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (Here our payload defined by sending `send&#40;&#41;` message with following specs:)
+
+[//]: # ()
+[//]: # (- `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts)
+
+[//]: # (- `balance` - Integer, amount of Toncoin for gas payments in nanotons.)
+
+[//]: # (- `mint` - function, which invokes internal transfer from jettonContract&#40;jetton master&#41; to sender's Jetton Wallet)
+
+[//]: # (- `sender` - wallet address, which requested mint and which will receive jettons on his Jetton Wallet)
+
+[//]: # (- `value` - amount of Toncoins carried for gas payments between Jetton Master and new Jetton Wallet)
+
+[//]: # (- `message` - payload for the jettonContract, which defines what should be done)
+
+[//]: # (-  `$$type`: string, "Mint" string &#40;or corresponded op-code for Mint&#41;)
+
+[//]: # (    -  `amount`: bigint, amount of Jettons should be minted)
+
+[//]: # ()
+[//]: # ()
+[//]: # ()
+[//]: # (```ts "title" = "destination address")
+
+[//]: # ()
+[//]: # ()
+[//]: # (```)
+
 
 
 ## TON Connect Python SDK
