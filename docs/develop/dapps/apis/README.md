@@ -1,8 +1,6 @@
-# Overview
+# API Types
 
 **High availability blockchain APIs is the core element of secure, convenient and fast development of useful applications in TON.**
-
-## API Types
 
 - [TON Center API](/develop/dapps/apis/toncenter) — fast and reliable HTTP API for The Open Network. Based on tonlib allows to get all information about accounts, transactions and blocks.
 - [TON HTTP API](https://tonapi.io/) — API that allows to work with the _indexed blockchain information_.
@@ -250,7 +248,5 @@ curl -X 'GET' \
 
 ## See Also
 * [TON Center API](/develop/dapps/apis/toncenter)
-* [SDKs](/develop/dapps/apis/sdk)
-* [SDKs](/develop/dapps/apis/sdk)
-* [Apps Examples](/develop/dapps/examples)
+* [List of SDKs](/develop/dapps/apis/sdk)
 * [Smart Contract Examples](/develop/smart-contracts/examples)

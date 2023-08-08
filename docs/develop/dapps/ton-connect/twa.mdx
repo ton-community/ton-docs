@@ -1,0 +1,69 @@
+import Button from '@site/src/components/button'
+import ThemedImage from '@theme/ThemedImage';
+
+# TON Connect for the Telegram Web Apps
+
+Telegram Web Apps (TWA) are web applications that run inside the Telegram messenger. They are built using web technologies — HTML, CSS, and JavaScript. TWA can be used to create bots, games, and other types of apps that can be run inside Telegram.
+
+
+<Button href="https://ton-community.github.io/tutorials/03-client/" colorType={'primary'} sizeType={'sm'}>Start Tutorial</Button>
+<Button href="/develop/dapps/ton-connect/twa#ton-connect-for-web-apps"
+        colorType="secondary" sizeType={'sm'}>
+  Choose an SDK
+</Button>
+
+
+
+
+## Telegram Web Apps
+
+- [Telegram Web Apps Documentation](https://core.telegram.org/bots/webapps) — full description on Telegram website.
+
+### Web Apps SDK list
+
+- [twa-dev/sdk](https://github.com/twa-dev/sdk) — NPM package for TWA SDK
+- [twa-dev/boilerplate](https://github.com/twa-dev/Boilerplate) — another boilerplate for a new TWA.
+- [twa-dev/Mark42](https://github.com/twa-dev/Mark42) — Mark42 is a simple lightweight tree-shakable UI library for TWA.
+- [ton-defi-org/tonstarter-twa](https://github.com/ton-defi-org/tonstarter-twa) — template for new TWA interaction with TON.
+
+### Community
+
+Join a special Telegram [Community Chat](https://t.me/+1mQMqTopB1FkNjIy) for TWA developers if you're interested.
+
+## TON Connect for Web Apps
+
+
+Recommended TON Connect SDK for Telegram Web Apps is a UI React SDK. It is a React component that provides a high-level way to interact with TON Connect.
+
+```bash
+npm i @tonconnect/ui-react
+```
+
+- [GitHub](https://github.com/ton-connect/sdk/tree/main/packages/ui-react)
+- [NPM](https://www.npmjs.com/package/@tonconnect/ui-react)
+- [API Documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui_react.html)
+
+### Basic usage
+
+TonConnect UI React is a React UI kit for TonConnect SDK. Use it to connect your app to TON wallets via TonConnect protocol in React apps.
+
+```jsx
+import { TonConnectUIProvider } from '@tonconnect/ui-react';
+
+export function App() {
+    return (
+        <TonConnectUIProvider manifestUrl="https://<YOUR_APP_URL>/tonconnect-manifest.json">
+            { /* Your app */ }
+        </TonConnectUIProvider>
+    );
+}
+```
+
+* Example of a DApp with `@tonconnect/ui-react`: [GitHub](https://github.com/ton-connect/demo-dapp-with-react-ui)
+* Example of deployed `demo-dapp-with-react-ui`: [GitHub](https://ton-connect.github.io/demo-dapp-with-react-ui/)
+
+### SDKs for other frameworks
+
+- If you don't use React for your app, take a look at TonConnect UI.
+- If you want to use TonConnect on the server side, you should use the TonConnect SDK.
+- Check the [supported SDKs](/develop/dapps/ton-connect/developers) list and choose the one that suits you best.

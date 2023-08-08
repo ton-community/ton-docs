@@ -157,7 +157,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Develop Smart Contracts',
+      label: 'Smart Contracts',
       items: [
         'develop/smart-contracts/README',
         {
@@ -285,15 +285,18 @@ const sidebars = {
 
     {
       type: 'category',
-      label: 'Develop Apps',
+      label: 'DApp Development',
       items: [
         'develop/dapps/README',
         {
           type: 'category',
           label: 'Learn',
           items: [
-            'develop/dapps/tutorials/overview',
-            'develop/dapps/tutorials/collection-minting',
+            {
+              type: 'doc',
+              id: 'develop/dapps/tutorials/collection-minting',
+              label: 'NFT collection minting',
+            },
             'develop/dapps/tutorials/jetton-minter',
             {
               type: 'category',
@@ -328,7 +331,6 @@ const sidebars = {
             'develop/dapps/defi/subscriptions',
           ],
         },
-        'develop/dapps/examples',
       ]
     },
     {
@@ -336,19 +338,31 @@ const sidebars = {
       label: 'Integrate with TON',
       items: [
         'develop/dapps/ton-connect/overview',
-        {
-              type: 'category',
-              label: 'TON Connect',
-              items: [
         'develop/dapps/ton-connect/README',
         {
           type: 'category',
-          label: 'Learn',
+          label: 'Platforms', //
           items: [
-            'develop/dapps/ton-connect/integration',
-            'develop/dapps/ton-connect/tg-bot-integration',
-            'develop/dapps/ton-connect/transactions',
-            'develop/dapps/ton-connect/message-builders',
+            {
+              type: 'doc',
+              id: 'develop/dapps/ton-connect/twa',
+              label: 'Telegram Web Apps',
+            },
+            {
+              type: 'doc',
+              id: 'develop/dapps/ton-connect/web',
+              label: 'Websites'
+            },
+            {
+              type: 'doc',
+              id: 'develop/dapps/ton-connect/mobile',
+              label: 'Mobiles',
+            },
+            {
+              type: 'doc',
+              id: 'develop/dapps/ton-connect/tg-bot-integration',
+              label: 'Telegram Bots',
+            },
           ],
         },
         {
@@ -356,11 +370,32 @@ const sidebars = {
           label: 'Guidelines',
           items: [
             'develop/dapps/ton-connect/developers',
-            'develop/dapps/ton-connect/wallet-guidelines',
-            'develop/dapps/ton-connect/workflow',
+            'develop/dapps/ton-connect/integration',
+            'develop/dapps/ton-connect/transactions',
+            'develop/dapps/ton-connect/message-builders',
           ],
         },
-
+        {
+          type: 'category',
+          label: 'Protocol specifications',
+          items: [
+            {
+              type: 'doc',
+              label: 'TON Connect Protocol',
+              id: 'develop/dapps/ton-connect/protocol/README',
+            },
+            'develop/dapps/ton-connect/protocol/workflow',
+            'develop/dapps/ton-connect/protocol/bridge',
+            'develop/dapps/ton-connect/protocol/session',
+            'develop/dapps/ton-connect/protocol/requests-responses',
+            'develop/dapps/ton-connect/protocol/wallet-guidelines',
+            {
+              type: 'link',
+              label: 'Wallets List',
+              href: 'https://github.com/ton-blockchain/wallets-list',
+            },
+          ],
+        },
         {
           type: 'category',
           label: 'Business',
@@ -370,9 +405,6 @@ const sidebars = {
             'develop/dapps/ton-connect/comparison',
           ],
         },
-        ]
-        },
-        'develop/howto/subresolvers',
       ],
     },
     {
@@ -609,6 +641,7 @@ const sidebars = {
       'label': 'TON DNS',
       'items': [
         'participate/web3/dns',
+        'develop/howto/subresolvers',
       ],
     },
     {

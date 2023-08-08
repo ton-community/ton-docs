@@ -207,124 +207,113 @@ const config = {
         },
         items: [
           {
-            type: 'doc',
-            docId: 'learn/introduction',
+            type: 'dropdown',
+            to: '/learn/introduction',
             position: 'left',
             label: 'Concepts',
-          },
-          {
-            type: 'dropdown',
-            to: 'develop/dapps',
-            position: 'left',
-            label: 'Apps',
             items: [
               {
-                to: 'develop/dapps/apis',
-                label: 'Understand APIs',
+                to: '/learn/introduction',
+                label: 'Introduction to TON',
               },
               {
-                to: 'develop/dapps/asset-processing',
-                label: 'Payments processing',
-              },
-              {
-                to: 'develop/dapps/ton-connect',
-                label: 'Authenticate with TON',
-              },
-              {
-                to: 'develop/dapps/defi/ton-payments',
-                label: 'TON Payments',
-              },
-              {
-                to: 'develop/dapps/defi/subscriptions',
-                label: 'Subscriptions',
-              },
-              {
-                to: 'https://ton-community.github.io/tutorials/03-client/',
-                label: 'Build your first WebApp',
-              },
-
-            ],
-          },
-          {
-            type: 'dropdown',
-            to: 'develop/dapps/defi/tokens',
-            position: 'left',
-            label: 'Tokens',
-            items: [
-              {
-                to: 'develop/dapps/defi/coins',
-                label: 'Native token: Toncoin',
-              },
-              {
-                to: 'develop/dapps/asset-processing/jettons',
-                label: 'TON Jetton (Tokens) processing',
-              },
-              {
-                to: '/develop/dapps/asset-processing/nfts',
-                label: 'TON NFT processing',
-              },
-              {
-                to: '/develop/dapps/asset-processing/metadata',
-                label: 'TON Metadata Parsing',
-              },
-            ],
-          },
-          {
-            type: 'dropdown',
-            to: '/develop/dapps/tutorials/overview',
-            position: 'left',
-            label: 'Learn',
-            items: [
-
-              {
-                to: 'develop/get-started-with-ton',
-                label: 'Get Started with TON',
+                to: '/learn/overviews/ton-blockchain',
+                label: 'Blockchain of Blockchains',
               },
               {
                 to: '/learn/overviews/addresses',
                 label: 'Smart Contract Addresses',
               },
               {
-                to: '/develop/smart-contracts/tutorials/wallet',
-                label: 'How to interact with wallet',
+                to: '/learn/overviews/cells',
+                label: 'Cells as a Data Structure',
               },
               {
-                to: 'develop/dapps/tutorials/jetton-minter',
-                label: 'Mint Jettons (Tokens)',
+                to: '/learn/networking/overview',
+                label: 'TON Networking',
               },
               {
-                to: '/develop/dapps/tutorials/collection-minting',
-                label: 'Mint NFT Collection',
+                to: '/learn/docs',
+                label: 'Whitepapers',
               },
-              {
-                to: '/develop/dapps/ton-connect/integration',
-                label: 'TON Connect Integration Manual',
-              },
-              {
-                to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
-                label: 'Telegram bot with Payments',
-              },
-              {
-                to: '/develop/dapps/ton-connect/tg-bot-integration ',
-                label: 'Telegram bot with TON Connect',
-              },
-              {
-                to: '/develop/dapps/tutorials/simple-zk-on-ton',
-                label: 'Simple Zero-Knowledge Project on TON',
-              },
-              {
-                to: 'https://ton-community.github.io/tutorials/01-wallet/',
-                label: 'TON Community Tutorials',
-              }
 
+            ],
+          },
+          {
+            type: 'dropdown',
+            to: '/develop/overview',
+            position: 'left',
+            label: 'Get Started',
+            items: [
+              {
+                to: 'develop/overview',
+                label: 'Start with Onboarding Tutorials',
+              },
+              {
+                to: 'https://ton-community.github.io/tutorials/03-client/',
+                label: 'Build your first Web App',
+              },
+              {
+                to: 'develop/dapps/ton-connect/overview',
+                label: 'Integrate with Wallets',
+              },
+              {
+                to: 'develop/dapps/',
+                label: 'Guides & Examples',
+              },
+
+            ],
+          },
+          {
+            type: 'dropdown',
+            to: 'develop/dapps',
+            position: 'left',
+            label: 'DApps',
+            items: [
+              {
+                to: 'develop/dapps/apis',
+                label: 'Understand APIs',
+              },
+              {
+                to: 'develop/dapps/defi/coins',
+                label: 'Native token: Toncoin',
+              },
+              {
+                to: 'develop/dapps/asset-processing',
+                label: 'Payments processing',
+              },
+              {
+                to: 'develop/dapps/asset-processing/jettons',
+                label: 'Jetton (Tokens) processing',
+              },
+              {
+                to: '/develop/dapps/asset-processing/nfts',
+                label: 'NFT processing',
+              },
+              {
+                to: '/develop/dapps/asset-processing/metadata',
+                label: 'TON Metadata Parsing',
+              },
+              {
+                to: 'develop/dapps/defi/subscriptions',
+                label: 'Subscriptions',
+              },
+              {
+                to: 'develop/dapps/defi/ton-payments',
+                label: 'TON Payments',
+              },
             ],
           },
           {
             type: 'dropdown',
             to: 'develop/overview',
             position: 'left',
-            label: 'Develop',
+            label: 'Smart Contracts',
             items: [
+              {
+                to: '/develop/smart-contracts/tutorials/wallet',
+                label: 'Understanding Wallets',
+              },
               {
                 to: 'develop/smart-contracts',
                 label: 'Write Smart Contracts'
@@ -363,23 +352,47 @@ const config = {
             type: 'dropdown',
             to: 'participate',
             position: 'left',
-            label: 'Participate',
+            label: 'Nodes',
             items: [
               {
                 to: 'participate/nodes/node-types',
-                label: 'Run a Node',
+                label: 'Node Types',
+              },
+              {
+                to: 'participate/nodes/full-node',
+                label: 'Run a Full Node',
+              },
+              {
+                to: 'participate/nodes/liteserver',
+                label: 'Run a Liteserver Node',
+              },
+              {
+                to: 'participate/nodes/archive-node',
+                label: 'Run an Archieve Node',
+              },
+              {
+                to: 'https://ton.org/validator',
+                label: 'Become a Validator',
+              },
+            ],
+          },
+          {
+            type: 'dropdown',
+            to: 'participate',
+            position: 'left',
+            label: 'Web3',
+            items: [
+              {
+                to: 'participate/web3/dns',
+                label: 'TON DNS & Domains',
               },
               {
                 to: 'participate/web3/how-to-open-any-ton-site',
-                label: 'Connect to TON Sites',
+                label: 'Open TON Sites',
               },
               {
                 to: 'develop/dapps/tutorials/how-to-run-ton-site',
-                label: 'How to run TON Sites',
-              },
-              {
-                to: 'participate/web3/dns',
-                label: 'Use TON DNS & Domains',
+                label: 'Run TON Sites',
               },
               {
                 to: 'participate/ton-storage/storage-daemon',
@@ -387,7 +400,7 @@ const config = {
               },
               {
                 to: 'participate/ton-storage/storage-provider',
-                label: 'Become a Storage Provider',
+                label: 'Build a Storage Provider',
               },
             ],
           },

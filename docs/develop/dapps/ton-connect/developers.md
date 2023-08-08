@@ -19,12 +19,16 @@ This page contents the list of useful libraries for TON Connect.
 
 TonConnect UI React is a React UI kit for TonConnect SDK. Use it to connect your app to TON wallets via TonConnect protocol in React apps.
 
+* Example of a DApp with `@tonconnect/ui-react`: [GitHub](https://github.com/ton-connect/demo-dapp-with-react-ui)
+* Example of deployed `demo-dapp-with-react-ui`: [GitHub](https://ton-connect.github.io/demo-dapp-with-react-ui/)
+
+```bash
+npm i @tonconnect/ui-react
+```
+
 - [GitHub](https://github.com/ton-connect/sdk/tree/main/packages/ui-react)
 - [NPM](https://www.npmjs.com/package/@tonconnect/ui-react)
-- [TON Connect UI React API Documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui_react.html)
-
-* Example of a dApp with @tonconnect/ui-react: [GitHub](https://github.com/ton-connect/demo-dapp-with-react-ui)
-* Example of deployed demo-dapp-with-react-ui: [GitHub](https://ton-connect.github.io/demo-dapp-with-react-ui/)
+- [API Documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui_react.html)
 
 
 ## TON Connect JS SDK
@@ -40,26 +44,29 @@ The TON Connect repository contains following main packages:
 
 TonConnect UI is a UI kit for TonConnect SDK. Use it to connect your app to TON wallets via TonConnect protocol. It allows you to integrate TonConnect to your app easier using our UI elements such as "connect wallet button", "select wallet dialog" and confirmation modals.
 
+```bash
+npm i @tonconnect/ui
+```
+
 - [GitHub](https://github.com/ton-connect/sdk/tree/main/packages/ui)
 - [NPM](https://www.npmjs.com/package/@tonconnect/ui)
-- [TON Connect UI API Documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui.html)
+- [API Documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui.html)
 
+The TON Connect User Interface (UI) is a framework that allows developers to improve the user experience (UX) for application users.
 
-The TON Connect User Interface (UI) is a framework that allows developers to improve the user experience (UX) for application users. TON Connect can easily be integrated with apps using simple UI elements such as the "connect wallet button", "select wallet dialog" and confirmation modals. Here are three main examples of how TON Connect improves UX in apps:
+TON Connect can easily be integrated with apps using simple UI elements such as the "connect wallet button", "select wallet dialog" and confirmation modals. Here are three main examples of how TON Connect improves UX in apps:
 
 * Example of app functionality in the dApp browser: [GitHub](https://ton-connect.github.io/demo-dapp/)
-
 * Example of a backend partition of the dApp above: [GitHub](https://github.com/ton-connect/demo-dapp-backend)
-
 * Bridge server using Go: [GitHub](https://github.com/ton-connect/bridge)
 
 
-This kit will simplify the implementation of TON Connect in apps built for TON Blockchain. Standard frontend frameworks are supported, as well as applications that don’t use predetermined frameworks
+This kit will simplify the implementation of TON Connect in apps built for TON Blockchain. Standard frontend frameworks are supported, as well as applications that don’t use predetermined frameworks.
 
 
 ### TON Connect SDK
 
-The first of the three frameworks that helps developers integrate TON Connect into their applications is the TON Connect SDK. It is primarily used to connect apps to TON Wallets via the TON Connect protocol.
+The most low-level of the three frameworks that helps developers integrate TON Connect into their applications is the TON Connect SDK. It is primarily used to connect apps to TON Wallets via the TON Connect protocol.
 
 - [GitHub](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
 - [NPM](https://www.npmjs.com/package/@tonconnect/sdk)
@@ -75,13 +82,11 @@ This package contains protocol requests, protocol responses, event models and en
 
 ## TON Connect Python
 
-Python SDK for TON Connect 2.0
-
-Analogue of the @tonconnect/sdk library.
+Python SDK for TON Connect 2.0. Analogue of the `@tonconnect/sdk` library.
 
 Use it to connect your app to TON wallets via TonConnect protocol.
 
-```python
+```bash
 pip3 install pytonconnect
 ```
 
@@ -92,13 +97,11 @@ pip3 install pytonconnect
 
 ## TON Connect Dart
 
-Dart SDK for TON Connect 2.0
-
-Analogue of the @tonconnect/sdk library.
+Dart SDK for TON Connect 2.0. Analogue of the `@tonconnect/sdk` library.
 
 Use it to connect your app to TON wallets via TonConnect protocol.
 
-```dart
+```bash
  $ dart pub add darttonconnect
 ```
 
