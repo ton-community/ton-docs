@@ -7,34 +7,41 @@ The page is under development.
 :::
 
 
-## Regular TON Transfer Example
-TON Connect SDKs include wrappers for sending messages, making it easy to prepare regular transfers of Toncoins between two wallets. For example, a regular TON transfer using the TON Connect JS SDK can be executed as follows:
+## TON Connect JS SDK Examples
 
-if (!connector.connected) {
-    alert('Please connect wallet to send the transaction!');
-}
+### Regular TON Transfer
+TON Connect SDKs include wrappers for sending messages, making it easy to prepare regular transfers of Toncoins between two wallets.
+
+All JS examples created based on connector @tonconnect/sdk:
 
 ```ts
-if (!connector.connected) {
-    alert('Please connect wallet to send the transaction!');
-}
+import TonConnect from '@tonconnect/sdk';
+const connector = new TonConnect();
+```
 
-const transaction = {
+A regular TON transfer using the TON Connect JS SDK can be executed as follows:
+
+```ts
+await connector.sendTransaction({
     messages: [
         {
             address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
             amount: "20000000" //Toncoin in nanotons
         }
     ]
-}
+})
 ```
+
+:::tip
+Learn more about [TON Smart Contract Addresses](/learn/overviews/addresses).
+:::
 
 For other custom tasks, a specific payload should be specified.
 
 
-## TON Connect JS SDK Examples
 
-### Transfer with comment
+
+### Transfer With Comment
 
 ```js
 const body = beginCell()
@@ -55,36 +62,7 @@ await connector.sendTransaction({
 })
 ```
 
-### Jettons (Tokens) transaction
-
-#### Mint Jetton
-
-```js
-let body = beginCell()
-     //Mint message body
-    .endCell()
-
-
-await connector.sendTransaction({
-  validUntil: Math.floor(Date.now() / 1000) + 360,
-  messages: [
-    {
-      address: jettonWalletContract,
-      amount: toNano("0.05"),
-      payload: body.toBoc().toString("base64")
-    }
-  ]
-})
-```
-
-- `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts
-- `balance` - Integer, amount of Toncoin for gas payments in nanotons.
-- `body` - payload for the jettonContract, which defines what should be done
-        -  `$$type`: string, "Mint" string (or corresponded op-code for Mint)
-        -  `amount`: bigint, amount of Jettons should be minted
-
-
-#### Jetton Transfer
+### Jetton Transfer
 
 The `body` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) typically should be done according the following way:
 
@@ -110,6 +88,9 @@ The `body` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/b
 Next, sending the transaction with this body to jettonWalletContract destination executed:
 
 ```js
+import TonConnect from '@tonconnect/sdk';
+const connector = new TonConnect();
+//...
 await connector.sendTransaction({
   validUntil: Math.floor(Date.now() / 1000) + 360,
   messages: [
@@ -121,7 +102,7 @@ await connector.sendTransaction({
   ]
 })
 ```
-
+- `validUntil` - UNIX-time until message valid
 - `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts
 - `balance` - Integer, amount of Toncoin for gas payments in nanotons.
 - `body` - payload for the jettonContract
@@ -168,7 +149,7 @@ async function main() {
 
 </details>
 
-#### Jetton Burn
+### Jetton Burn
 
 The `body` for Jetton Burn([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#2-burn)) typically should be done according the following way:
 
@@ -188,6 +169,7 @@ The `body` for Jetton Burn([TEP-74](https://github.com/ton-blockchain/TEPs/blob/
         .endCell();
 ```
 
+Message places into the following request:
 
 ```js
 await connector.sendTransaction({
@@ -206,9 +188,7 @@ await connector.sendTransaction({
 - `amount` - Integer, amount of Toncoin for gas payments in nanotons.
 - `body` - payload for the jetton wallet with the `burn#595f07bc` op code
 
-### NFTs
-
-#### Transfer NFT
+### NFT Transfer
 
 Transfer the `NFTitem` to a new owner `NEW_OWNER_WALLET`.
 
@@ -229,7 +209,7 @@ await connector.sendTransaction({
 - `balance` - Integer, amount of Toncoin for gas payments in nanotons.
 - `body` - payload for the NFT contract
 
-`body` typically should be done according the following way:
+The `body` message typically should be done according the following way:
 
 ```js
 import { beginCell, toNano} from '@ton/ton'
@@ -251,8 +231,29 @@ import { beginCell, toNano} from '@ton/ton'
 `WALLET_DST` - Address - The address of the initial NFT owner for the receiving excess
 
 
-#### NFT Sale Example
-Here example of preparing message and transaction for sale on GetGems markteplace, according to contract [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc).
+#### NFT Sale (GetGems)
+
+Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc).
+
+To place NFT on GetGems Sale Contract, we should prepare special message body `transferNftBody` that will be transfer NFT to special NFT Sale Contract.
+```js
+    const transferNftBody = beginCell()
+        .storeUint(0x5fcc3d14, 32) // Opcode for NFT transfer
+        .storeUint(0, 64) // query_id
+        .storeAddress(destinationAddress) // new_owner
+        .storeAddress(walletAddress) // response_destination for excesses
+        .storeBit(0) // we do not have custom_payload
+        .storeCoins(toNano("1")) // forward_amount
+        .storeBit(0) // we store forward_payload is this cell
+        .storeUint(0x0fe0ede, 31) // not 32, because previous 0 will be read as do_sale opcode in deployer
+        .storeRef(stateInitCell)
+        .storeRef(saleBody)
+        .endCell();
+```
+
+Because message requires a lot of steps, the entire algorithm huge and could be found here:
+<details>
+    <summary>Show entire script for creating message</summary>
 
 
 ```js
@@ -308,22 +309,24 @@ const destinationAddress = Address.parse("EQAIFunALREOeQ99syMbO6sSzM_Fa1RsPD5TBo
         .storeUint(0, 64)
         .endCell();
 
-    const transferNftBody = beginCell().
-        storeUint(0x5fcc3d14, 32). // Opcode for NFT transfer
-        storeUint(0, 64). // query_id
-        storeAddress(destinationAddress). // new_owner
-        storeAddress(walletAddress). // response_destination for excesses
-        storeBit(0). // we do not have custom_payload
-        storeCoins(toNano("1")). // forward_amount
-        storeBit(0). // we store forward_payload is this cell
+    const transferNftBody = beginCell()
+        .storeUint(0x5fcc3d14, 32) // Opcode for NFT transfer
+        .storeUint(0, 64) // query_id
+        .storeAddress(destinationAddress) // new_owner
+        .storeAddress(walletAddress) // response_destination for excesses
+        .storeBit(0) // we do not have custom_payload
+        .storeCoins(toNano("1")) // forward_amount
+        .storeBit(0) // we store forward_payload is this cell
         // not 32, because we stored 0 bit before | do_sale opcode for deployer
-        storeUint(0x0fe0ede, 31).
-        storeRef(stateInitCell).
-        storeRef(saleBody).
-        endCell();
+        .storeUint(0x0fe0ede, 31)
+        .storeRef(stateInitCell)
+        .storeRef(saleBody)
+        .endCell();
 ```
 
+</details>
 
+Prepared `transferNftBody` should be sent to NFT Item with at least `1.08` Tons, that expected for success processing. Excess will be returned to a sender's wallet.
 
 ```js
 await connector.sendTransaction({
@@ -332,8 +335,241 @@ await connector.sendTransaction({
     {
       address: nftItemAddress,
       amount: toNano("1.08"),
-      payload: body.toBoc().toString("base64")
+      payload: transferNftBody.toBoc().toString("base64")
     }
   ]
 })
 ```
+
+#### NFT Buy (GetGems)
+
+The process of buy NFT for [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc) sale contract could be carry out with regular transfer without payload, only important thing to send correct amount, that calculates as follows:
+`buyAmount = Nftprice TON + 1.0 TON`.
+
+```js
+await connector.sendTransaction({
+validUntil: Math.floor(Date.now() / 1000) + 360,
+messages: [
+    {
+        address: nftSaleContract,
+        amount: toNano(buyAmount),
+    }
+]
+})
+```
+
+## TON Connect Python SDK
+
+For Python examples are using [PyTonConnect](https://github.com/XaBbl4/pytonconnect) and [pytoniq](https://github.com/yungwine/pytoniq).
+
+```python
+    from pytoniq_core import Address
+    from pytonconnect import TonConnect
+```
+
+:::tip
+Read examples [source](https://github.com/yungwine/ton-connect-examples/blob/master/main.py).
+:::
+
+### Regular TON Transfer
+
+
+```python
+connector = TonConnect(
+    manifest_url='https://raw.githubusercontent.com/XaBbl4/pytonconnect/main/pytonconnect-manifest.json')
+is_connected = await connector.restore_connection()
+
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+            'address' :'0:0000000000000000000000000000000000000000000000000000000000000000', # destination address
+            'amount' : 1000000000,  # amount should be specified in nanocoins, 1 TON
+        )
+    ]
+}
+```
+
+
+### Transfer With Comment
+
+At first order, implement a message with comment via the following function:
+
+```python
+    def get_comment_message(destination_address: str, amount: int, comment: str) -> dict:
+
+        data = {
+            'address': destination_address,
+            'amount': str(amount),
+            'payload': urlsafe_b64encode(
+                begin_cell()
+                .store_uint(0, 32)  # op code for comment message
+                .store_string(comment)  # store comment
+                .end_cell()  # end cell
+                .to_boc()  # convert it to boc
+            )
+            .decode()  # encode it to urlsafe base64
+        }
+
+        return data
+```
+
+Final transaction body for transfer with comment:
+
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        get_comment_message(
+            destination_address='0:0000000000000000000000000000000000000000000000000000000000000000',
+            amount=int(0.01 * 10**9),  # amount should be specified in nanocoins
+            comment='hello world!'
+        )
+    ]
+}
+```
+:::tip
+Learn more about [TON Smart Contract Addresses](/learn/overviews/addresses).
+:::
+
+### Jetton Transfer
+
+To carry out jetton transfer need prepare the following message:
+
+```python
+from pytoniq_core import begin_cell
+from base64 import urlsafe_b64encode
+
+def get_jetton_transfer_message(jetton_wallet_address: str, recipient_address: str, transfer_fee: int, jettons_amount: int, response_address: str = None) -> dict:
+    data = {
+        'address': jetton_wallet_address,
+        'amount': str(transfer_fee),
+        'payload': urlsafe_b64encode(
+        begin_cell()
+        .store_uint(0xf8a7ea5, 32)  # op code for jetton transfer message
+        .store_uint(0, 64)  # query_id
+        .store_coins(jettons_amount)
+        .store_address(recipient_address)  # destination address
+        .store_address(response_address or recipient_address)  # address send excess to
+        .store_uint(0, 1)  # custom payload
+        .store_coins(1)  # forward amount
+        .store_uint(0, 1)  # forward payload
+        .end_cell()  # end cell
+        .to_boc()  # convert it to boc
+        )
+        .decode()  # encode it to urlsafe base64
+    }
+
+    return data
+```
+
+Final transaction body:
+
+
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        get_jetton_transfer_message(
+        jetton_wallet_address='EQCXsVvdxTVmSIvYv4tTQoQ-0Yq9mERGTKfbsIhedbN5vTVV',
+        recipient_address='0:0000000000000000000000000000000000000000000000000000000000000000',
+        transfer_fee=int(0.07 * 10**9),
+        jettons_amount=int(0.01 * 10**9),  # replace 9 for jetton decimal. For example for jUSDT it should be (amount * 10**6)
+        response_address=wallet_address
+        ),
+    ]
+}
+
+```
+
+
+### Jetton Burn
+
+To carry out Jetton Transfer need prepare the following message:
+
+```python
+from pytoniq_core import begin_cell
+from base64 import urlsafe_b64encode
+
+def get_jetton_burn_message(jetton_wallet_address: str, transfer_fee: int, jettons_amount: int, response_address: str = None) -> dict:
+    data = {
+        'address': jetton_wallet_address,
+        'amount': str(transfer_fee),
+        'payload': urlsafe_b64encode(
+            begin_cell()
+            .store_uint(0x595f07bc, 32)  # op code for jetton transfer message
+            .store_uint(0, 64)  # query_id
+            .store_coins(jettons_amount)
+            .store_address(response_address)  # address send excess to
+            .end_cell()  # end cell
+            .to_boc()  # convert it to boc
+        )
+        .decode()  # encode it to urlsafe base64
+    }
+    return data
+```
+
+Final transaction:
+
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        get_jetton_burn_message(
+            jetton_wallet_address='EQCXsVvdxTVmSIvYv4tTQoQ-0Yq9mERGTKfbsIhedbN5vTVV',
+            transfer_fee=int(0.07 * 10 ** 9),
+            jettons_amount=int(0.01 * 10 ** 9),  # replace 9 for jetton decimal. For example for jUSDT it should be (amount * 10**6)
+            response_address=wallet_address
+        ),
+    ]
+}
+```
+
+
+### NFT Transfer
+
+For the NFT transfer it is required to prepare the following message:
+
+
+```python
+from pytoniq_core import begin_cell
+from base64 import urlsafe_b64encode
+
+
+def get_nft_transfer_message(nft_address: str, recipient_address: str, transfer_fee: int, response_address: str = None) -> dict:
+    data = {
+        'address': nft_address,
+        'amount': str(transfer_fee),
+        'payload': urlsafe_b64encode(
+            begin_cell()
+            .store_uint(0x5fcc3d14, 32)  # op code for nft transfer message
+            .store_uint(0, 64)  # query_id
+            .store_address(recipient_address)  # new owner
+            .store_address(response_address or recipient_address)  # address send excess to
+            .store_uint(0, 1)  # custom payload
+            .store_coins(1)  # forward amount
+            .store_uint(0, 1)  # forward payload
+            .end_cell()  # end cell
+            .to_boc()  # convert it to boc
+        )
+        .decode()  # encode it to urlsafe base64
+    }
+    return data
+
+```
+
+
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        get_nft_transfer_message(
+            nft_address='EQDrA-3zsJXTfGo_Vdzg8d07Da4vSdHZllc6W9qvoNoMstF-',
+            recipient_address='0:0000000000000000000000000000000000000000000000000000000000000000',
+            transfer_fee=int(0.07 * 10**9),
+            response_address=wallet_address
+        ),
+    ]
+}
+```
+
+
