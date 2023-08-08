@@ -1,25 +1,21 @@
-# Supported SDKs
+# TON Connect SDKs
 
-This page contents the list of supported libraries for TON Connect.
+## SDK List
 
+:::info
+If possible, it is recommended to use the [@tonconnect/ui-react](/develop/dapps/ton-connect/developers#ton-connect-ui-react) kit for your dApps. Only switch to lower levels of the SDK or reimplement your version of the protocol if it is really necessary for your product.
+:::
+
+This page contents the list of useful libraries for TON Connect.
+
+* [TON Connect React](/develop/dapps/ton-connect/developers#ton-connect-react) 
 * [TON Connect JS SDK](/develop/dapps/ton-connect/developers#ton-connect-js-sdk)
 * [TON Connect Python SDK](/develop/dapps/ton-connect/developers#ton-connect-python)
-* [TON Connect Dart SDK](/develop/dapps/ton-connect/developers#ton-connect-dart)
+* [TON Connect Dart](/develop/dapps/ton-connect/developers#ton-connect-dart)
 
-## TON Connect JS SDK
+## TON Connect React
 
-
-The TON Connect repository contains the following main packages:
-
-- [@tonconnect/ui-react](/develop/dapps/ton-connect/developers#ton-connect-ui-react) - TON Connect User Interface (UI) for React *(recommended)*
-- [@tonconnect/ui](/develop/dapps/ton-connect/developers#ton-connect-ui) - TON Connect User Interface (UI)
-- [@tonconnect/sdk](/develop/dapps/ton-connect/developers#ton-connect-sdk)  - low-level TON Connect SDK
-- [@tonconnect/protocol](/develop/dapps/ton-connect/developers#ton-connect-protocol-models) - TON Connect protocol specifications
-
-It is recommended to use the [@tonconnect/ui-react](/develop/dapps/ton-connect/developers#ton-connect-ui-react) kit for your DApps. Only switch to lower levels of the SDK if it is really necessary for your product.
-
-
-### TON Connect UI React
+- [@tonconnect/ui-react](/develop/dapps/ton-connect/developers#ton-connect-ui-react) - TON Connect User Interface (UI) for React applications
 
 TonConnect UI React is a React UI kit for TonConnect SDK. Use it to connect your app to TON wallets via TonConnect protocol in React apps.
 
@@ -33,6 +29,16 @@ npm i @tonconnect/ui-react
 - [GitHub](https://github.com/ton-connect/sdk/tree/main/packages/ui-react)
 - [NPM](https://www.npmjs.com/package/@tonconnect/ui-react)
 - [API Documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui_react.html)
+
+
+## TON Connect JS SDK
+
+The TON Connect repository contains following main packages:
+
+- [@tonconnect/ui](/develop/dapps/ton-connect/developers#ton-connect-ui) - TON Connect User Interface (UI)
+- [@tonconnect/sdk](/develop/dapps/ton-connect/developers#ton-connect-sdk)  - TON Connect SDK
+- [@tonconnect/protocol](/develop/dapps/ton-connect/developers#ton-connect-protocol-models) - TON Connect protocol specifications
+
 
 ### TON Connect UI
 
@@ -109,6 +115,8 @@ If you experience any additional issues, or would like to present a proposal on 
 
 ## See Also
 
+* [Step by step guide for building your first web client](https://ton-community.github.io/tutorials/03-client/)
+* [[YouTube] TON Smart Contracts | 10 | Telegram dapp [EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU&t=254s&ab_channel=AlefmanVladimir%5BEN%5D)
 * [Ton Connect Getting started](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
 * [Integration Manual](/develop/dapps/ton-connect/integration)
 * [[YouTube] TON Dev Study TON Connect Protocol [RU]](https://www.youtube.com/playlist?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_)
