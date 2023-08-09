@@ -336,6 +336,11 @@ const sidebars = {
         'develop/dapps/ton-connect/overview',
         'develop/dapps/ton-connect/README',
         {
+          type: 'link',
+          href: '/develop/dapps/ton-connect/#connect-a-wallet',
+          label: 'Connect a Wallet',
+        },
+        {
           type: 'category',
           label: 'Platforms', //
           items: [

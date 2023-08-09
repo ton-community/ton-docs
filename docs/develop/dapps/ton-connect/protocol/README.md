@@ -1,14 +1,16 @@
 # Protocol specifications
 
+Understand how TON Connect works under the hood.
+
 ## Who is this section for?
 
-- If you implement an SDK
 - If you implement a wallet
+- If you develop an SDK
 - If you want to learn how TON Connect works
 
 ## Sections overview
 
-* [Protocol workflow](/develop/dapps/ton-connect/protocol/workflow): an overview of all the protocols.
+* [Protocol workflows](/develop/dapps/ton-connect/protocol/workflow) is an overview of all the protocols involved in TON Connect.
 * [Bridge API](/develop/dapps/ton-connect/protocol/bridge) specifies how the data is transmitted between the app and the wallet.
 * [Session protocol](/develop/dapps/ton-connect/protocol/session) ensures end-to-end encrypted communication over the bridge.
 * [Requests protocol](/develop/dapps/ton-connect/protocol/requests-responses) defines requests and responses for the app and the wallet.
