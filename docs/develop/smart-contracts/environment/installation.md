@@ -105,7 +105,7 @@ Instead of the `%USERNAME%` keyword, you must insert your own `username`.
    fift -V && func -V && lite-client -V
    ```
 
-  4. If you plan to `use fift`, also download [fiftlib.zip](https://github.com/ton-defi-org/ton-binaries/releases/download/fiftlib/fiftlib.zip), open the zip in some directory on your device (like `/usr/local/lib/fiftlib`), and set the environment variable `FIFTPATH` to point to this directory.
+  4. If you plan to `use fift`, also download [fiftlib.zip](/ton-binaries/windows/fiftlib.zip), open the zip in some directory on your device (like `/usr/local/lib/fiftlib`), and set the environment variable `FIFTPATH` to point to this directory.
    
    ```
    unzip fiftlib.zip
