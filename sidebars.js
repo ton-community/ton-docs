@@ -172,14 +172,9 @@ const sidebars = {
                  items: [
                    {
                      type: 'link',
-                     label: 'Using TypeScript',
+                     label: 'Using Blueprint',
                      href: 'https://ton-community.github.io/tutorials/02-contract/',
-                   },
-                   {
-                     type: 'link',
-                     label: 'Using toncli',
-                     href: 'https://github.com/romanovichim/TonFunClessons_Eng/blob/main/1lesson/firstlesson.md',
-                   },
+                   }
                  ],
                },
             {

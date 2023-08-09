@@ -55,14 +55,14 @@ The best place to start to develop using FunC: [INTRODUCTION](/develop/smart-con
 
 Other materials gracefully provided by the experts from the community:
 
-* [Func & BluePrint](https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa) by **@MarcoDaTr0p0je**
+* [Func & Blueprint](https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa) by **@MarcoDaTr0p0je**
 * [Learn FunC in Y Minutes](https://learnxinyminutes.com/docs/func/) by **@romanovichim**
 * [TON Hello World: Step-by-step guide for writing your first smart contract](https://ton-community.github.io/tutorials/02-contract/)
 * [TON Hello World: Step by step guide for testing your first smart contract](https://ton-community.github.io/tutorials/04-testing/)
-* [10 FunC Lessons](https://github.com/romanovichim/TonFunClessons_Eng) by **@romanovichim**, using **toncli** and **toncli** tests v1
-* [10 FunC lessons](https://github.com/romanovichim/TonFunClessons_ru) by **@romanovichim**, using **toncli** and **toncli** tests v1 in Russian
+* [10 FunC Lessons](https://github.com/romanovichim/TonFunClessons_Eng) by **@romanovichim**, using blueprint
+* [10 FunC lessons (RU)](https://github.com/romanovichim/TonFunClessons_ru) by **@romanovichim**, using blueprint
 * [FunC Quiz](https://t.me/toncontests/60) by **Vadim**—Good for selfcheck. It will take 10–15 minutes. The questions are mainly about FunС with a few general questions about TON
-* [FunC Quiz](https://t.me/toncontests/58?comment=14888) by **Vadim**—FunC Quiz in Russian
+* [FunC Quiz (RU)](https://t.me/toncontests/58?comment=14888) by **Vadim**—FunC Quiz in Russian
 
 ## Contests
 
