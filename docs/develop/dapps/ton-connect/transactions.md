@@ -155,3 +155,7 @@ After confirmation, we may see our transaction complete at [tonscan.org](https:/
 It's pretty easy to handle request rejection, but when you're developing some project it's better to know what would happen in advance.
 
 When a user clicks "Cancel" in the popup in the wallet application, an exception is thrown: `Error: [TON_CONNECT_SDK_ERROR] Wallet declined the request`. This error can be considered final (unlike connection cancellation) - if it has been raised, then the requested transaction will definitely not happen until the next request is sent.
+
+## See Also
+
+* [Preparing Messages](/develop/dapps/ton-connect/message-builders)
