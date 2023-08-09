@@ -23,25 +23,45 @@ Examples created based on @tonconnect/sdk and @tonconnect/ui:
 
 <Tabs groupId="TON Connect template">
 
-<TabItem value="tonconnect-ui" label="@tonconnect/ui-react">
+<TabItem value="tonconnect-react" label="@tonconnect/ui-react">
 
 ```js
 import { useTonConnectUI } from '@tonconnect/ui-react';
 const [tonConnectUI] = useTonConnectUI();
 
-tonConnectUI.sendTransaction({
-
+const transaction = {
+    //transaction body
 })
-    ```
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(transaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
 </TabItem>
 <TabItem value="tonconnect-ui" label="@tonconnect/ui">
 
 ```js
 import TonConnect from '@tonconnect/ui';
 
+const tonConnectUI = new TonConnectUI({ //connect application
+    manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+    buttonRootId: '<YOUR_CONNECT_BUTTON_ANCHOR_ID>'
+});
+
 transaction = {
     //transaction body
 }
+
+const result = await tonConnectUI.sendTransaction(transaction)
 
 ```
 
@@ -60,9 +80,6 @@ await connector.sendTransaction({
 
 </TabItem>
 
-
-
-
 </Tabs>
 
 ### Regular TON Transfer
@@ -70,6 +87,66 @@ await connector.sendTransaction({
 TON Connect SDKs include wrappers for sending messages, making it easy to prepare regular transfers of Toncoins between two wallets as default transaction without payload.
 
 A regular TON transfer using the TON Connect JS SDKs can be executed as follows:
+
+
+<Tabs groupId="Regular Transfer">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+const [tonConnectUI] = useTonConnectUI();
+
+const transaction = {
+    messages: [
+        {
+            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            amount: "20000000" //Toncoin in nanotons
+        }
+    ]
+
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(transaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnect from '@tonconnect/ui';
+
+const tonConnectUI = new TonConnectUI({ //connect application
+    manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+    buttonRootId: '<YOUR_CONNECT_BUTTON_ANCHOR_ID>'
+});
+
+transaction = {
+    messages: [
+        {
+            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            amount: "20000000" //Toncoin in nanotons
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
 
 ```js
 import TonConnect from '@tonconnect/sdk';
@@ -85,6 +162,8 @@ await connector.sendTransaction({
 })
 
 ```
+</TabItem>
+</Tabs>
 
 :::tip
 Learn more about [TON Smart Contract Addresses](/learn/overviews/addresses).
@@ -111,40 +190,39 @@ const body = beginCell()
 
 The transaction body is created by the following:
 
-<Tabs groupId="Tranasction With a Comment">
+<Tabs groupId="Transfer With a Comment">
+
 <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
 
 ```js
 import { useTonConnectUI } from '@tonconnect/ui-react';
-import { Sender, SenderArguments } from 'ton-core';
 
-export function useTonConnect(): { sender: Sender; connected: boolean } {
-  const [tonConnectUI] = useTonConnectUI();
-
-  return {
-    sender: {
-      send: async (args: SenderArguments) => {
-        tonConnectUI.sendTransaction({
-          messages: [
-            {
-              address: args.to.toString(),
-              amount: args.value.toString(),
-              payload: args.body?.toBoc().toString('base64'),
-            },
-          ],
-          validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes for user to approve
-        });
-      },
-    },
-    connected: tonConnectUI.connected,
-  };
+const myTransaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: destination,
+            amount: toNano("0.05"),
+            payload: body.toBoc().toString("base64")
+        }
+    ]
 }
 
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
 
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
 ```
 </TabItem>
 
- <TabItem value="tonconnect-ui" label="@tonconnect/ui">
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
 
 ```js
 import TonConnectUI from '@tonconnect/ui'
@@ -153,7 +231,7 @@ const transaction = {
     validUntil: Math.floor(Date.now() / 1000) + 360,
     messages: [
         {
-            address: jettonWalletContract,
+            address: destination,
             amount: toNano("0.05"),
             payload: body.toBoc().toString("base64")
         }
@@ -162,10 +240,10 @@ const transaction = {
 
 const result = await tonConnectUI.sendTransaction(transaction)
 ```
+
 </TabItem>
 
-<TabItem value="tonconnect-js" label="@tonconnect/sdk">
-
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
 
 ```js
 import TonConnect from '@tonconnect/sdk';
@@ -183,8 +261,6 @@ await connector.sendTransaction({
 })
 ```
 </TabItem>
-
-
 </Tabs>
 
 
@@ -202,7 +278,7 @@ The `body` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/b
     const body = beginCell()
         .storeUint(0xf8a7ea5, 32)                 // jetton transfer op code
         .storeUint(0, 64)                         // query_id:uint64
-        .storeCoins(1000000)                      // amount:(VarUInteger 16) -  Jetton amount for transfer (6 - jUSDT, 9 - default)
+        .storeCoins(1000000)                      // amount:(VarUInteger 16) -  Jetton amount for transfer (decimals = 6 - jUSDT, 9 - default)
         .storeAddress(Wallet_DST)                 // destination:MsgAddress
         .storeAddress(Wallet_SRC)                 // response_destination:MsgAddress
         .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell)
@@ -212,6 +288,19 @@ The `body` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/b
 ```
 
 Next, sending the transaction with this body to jettonWalletContract destination executed:
+
+<Tabs groupId="Jetton Transfer">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+```js
+//react version
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+// tonconnect-ui version
+</TabItem>
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
 
 ```js
 import TonConnect from '@tonconnect/sdk';
@@ -228,6 +317,10 @@ await connector.sendTransaction({
   ]
 })
 ```
+</TabItem>
+</Tabs>
+
+
 - `validUntil` - UNIX-time until message valid
 - `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts
 - `balance` - Integer, amount of Toncoin for gas payments in nanotons.
@@ -281,7 +374,7 @@ The `body` for Jetton Burn([TEP-74](https://github.com/ton-blockchain/TEPs/blob/
 
 
 ```js
-    import {beginCell, toNano} from '@ton/ton'
+    import {beginCell} from '@ton/ton'
 // burn#595f07bc query_id:uint64 amount:(VarUInteger 16)
 //               response_destination:MsgAddress custom_payload:(Maybe ^Cell)
 //               = InternalMsgBody;
@@ -298,6 +391,19 @@ The `body` for Jetton Burn([TEP-74](https://github.com/ton-blockchain/TEPs/blob/
 Message places into the following request:
 
 
+<Tabs groupId="Jetton Burn">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+```js
+//react version
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+// tonconnect-ui version
+</TabItem>
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
 ```js
 await connector.sendTransaction({
   validUntil: Math.floor(Date.now() / 1000) + 360,
@@ -311,30 +417,14 @@ await connector.sendTransaction({
 })
 ```
 
+</TabItem>
+</Tabs>
+
 - `jettonWalletAddress` - Address, jettonWalletContract - which desire to burn his jettons
 - `amount` - Integer, amount of Toncoin for gas payments in nanotons.
 - `body` - payload for the jetton wallet with the `burn#595f07bc` op code
 
 ### NFT Transfer
-
-Transfer the `NFTitem` to a new owner `NEW_OWNER_WALLET`.
-
-```js
-await connector.sendTransaction({
-  validUntil: Math.floor(Date.now() / 1000) + 360,
-  messages: [
-    {
-      address: NFTitem,
-      amount: toNano("0.05"),
-      payload: body.toBoc().toString("base64")
-    }
-  ]
-})
-```
-
-- `NFTitem` - Address - The address of NFT item smart contract which we want transfer to a new owner `NEW_OWNER_WALLET`.
-- `balance` - Integer, amount of Toncoin for gas payments in nanotons.
-- `body` - payload for the NFT contract
 
 The `body` message typically should be done according the following way:
 
@@ -356,7 +446,39 @@ import { beginCell, toNano} from '@ton/ton'
 ```
 
 `WALLET_DST` - Address - The address of the initial NFT owner for the receiving excess
+Transfer the `NFTitem` to a new owner `NEW_OWNER_WALLET`.
 
+<Tabs groupId="Jetton Burn">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+```js
+//react version
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+// tonconnect-ui version
+</TabItem>
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
+```js
+await connector.sendTransaction({
+  validUntil: Math.floor(Date.now() / 1000) + 360,
+  messages: [
+    {
+      address: NFTitem,
+      amount: toNano("0.05"),
+      payload: body.toBoc().toString("base64")
+    }
+  ]
+})
+```
+</TabItem>
+</Tabs>
+
+- `NFTitem` - Address - The address of NFT item smart contract which we want transfer to a new owner `NEW_OWNER_WALLET`.
+- `balance` - Integer, amount of Toncoin for gas payments in nanotons.
+- `body` - payload for the NFT contract
 
 ### NFT Sale (GetGems)
 
