@@ -356,7 +356,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'develop/dapps/ton-connect/mobile',
-              label: 'Mobiles',
+              label: 'Mobile Apps',
             },
             {
               type: 'doc',
