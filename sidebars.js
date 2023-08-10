@@ -373,6 +373,7 @@ const sidebars = {
             'develop/dapps/ton-connect/integration',
             'develop/dapps/ton-connect/message-builders',
             'develop/dapps/ton-connect/transactions',
+            'develop/dapps/ton-connect/sign'
           ],
         },
         {
