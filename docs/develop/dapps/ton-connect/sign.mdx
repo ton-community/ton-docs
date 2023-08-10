@@ -1,0 +1,54 @@
+# Sign and Verification
+
+
+:::warning
+The page is under development.
+:::
+
+
+Signature in works in TON Connect with a special `TonProof` entity, which implemented inside connector.
+
+```js
+type TonProofItemReply = TonProofItemReplySuccess | TonProofItemReplyError;
+
+type TonProofItemReplySuccess = {
+  name: "ton_proof";
+  proof: {
+    timestamp: string; // 64-bit unix epoch time of the signing operation (seconds)
+    domain: {
+      lengthBytes: number; // AppDomain Length
+      value: string;  // app domain name (as url part, without encoding)
+    };
+    signature: string; // base64-encoded signature
+    payload: string; // payload from the request
+  }
+}
+
+```
+
+## How to use TON Proof (High-Level)
+
+- Send dApp id to client(nested in the QR code typically)
+- Got signed transaction with message from client in the ton proof entity
+- Verify TON Proof on the back-end side
+
+![](\img\docs\ton-connect\ton_proof_scheme.png?raw=true)
+
+
+## How to Check TON Proof on Server Side(Low-Level)
+
+Obtain from the frontend the following data: wallet address, domain, timestamp, walletStateInit, signature
+
+* Verify that the domain corresponds to the domain of your application
+* Check that this payload was issued recently (you can issue cookies with the payload before authorization, and when checking ton_proof, verify the presence of a cookie for this client)
+* Assemble a message according to the scheme from the previous slide
+* Obtain the wallet's pubkey via the wallet contract's get method
+* If the contract is not active, then obtaining the key in this manner will be impossible; you will need to parse the walletStateInit, which is provided by the frontend
+* Verify that the signature from the frontend actually signs the assembled message and corresponds to the public key of the address
+
+
+### Examples of TON Proof verification
+
+* [GO demo app](https://github.com/ton-connect/demo-dapp-backend/blob/master/proof.go)
+* [TS example](https://gist.github.com/TrueCarry/cac00bfae051f7028085aa018c2a05c6)
+* [Python example](https://github.com/disintar/ton-connect-python-proof/blob/master/check_proof.ipynb?short_path=8776c84)
