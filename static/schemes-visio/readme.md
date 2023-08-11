@@ -2,6 +2,10 @@
 
 In this directory collected unified Visio schemes created specially for the docs.ton.org documentation.
 
+## Font
+
+It is preferable to use Inter fonts family.
+
 ## Colors
 
 ### Light Mode
