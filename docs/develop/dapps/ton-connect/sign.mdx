@@ -1,4 +1,6 @@
-# Sign and Verification
+import ThemedImage from '@theme/ThemedImage';
+
+# Signing and Verification
 
 
 :::warning
@@ -29,10 +31,62 @@ type TonProofItemReplySuccess = {
 ## How to use TON Proof (High-Level)
 
 - Send dApp id to client(nested in the QR code typically)
-- Got signed transaction with message from client in the ton proof entity
-- Verify TON Proof on the back-end side
+- Retrieve signed transaction with ton_proof entity
+- Verify ton_proof on the backend side
 
-![](\img\docs\ton-connect\ton_proof_scheme.png?raw=true)
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/ton-connect/ton_proof_scheme.svg?raw=true',
+        dark: '/img/docs/ton-connect/ton_proof_scheme-dark.svg?raw=true',
+    }}
+/>
+<br></br>
+
+## Address proof signature (`ton_proof`)
+
+If `TonProofItem` is requested, wallet proves ownership of the selected account’s key. The signed message is bound to:
+
+- Unique prefix to separate messages from on-chain messages. (`ton-connect`)
+- Wallet address.
+- App domain
+- Signing timestamp
+- App’s custom payload (where server may put its nonce, cookie id, expiration time).
+
+```
+message = utf8_encode("ton-proof-item-v2/") ++
+          Address ++
+          AppDomain ++
+          Timestamp ++
+          Payload
+signature = Ed25519Sign(privkey, sha256(0xffff ++ utf8_encode("ton-connect") ++ sha256(message)))
+```
+
+where:
+
+* `Address` is the wallet address encoded as a sequence:
+ * `workchain`: 32-bit signed integer big endian;
+ * `hash`: 256-bit unsigned integer big endian;
+* `AppDomain` is Length ++ EncodedDomainName
+- `Length` is 32-bit value of utf-8 encoded app domain name length in bytes
+- `EncodedDomainName` id `Length`-byte  utf-8 encoded app domain name
+* `Timestamp` 64-bit unix epoch time of the signing operation
+* `Payload` is a variable-length binary string.
+
+Note: payload is variable-length untrusted data. To avoid using unnecessary length prefixes we simply put it last in the message.
+
+The signature must be verified by public key:
+
+1. First, try to obtain public key via `get_public_key` get-method on smart contract deployed at `Address`.
+
+2. If the smart contract is not deployed yet, or the get-method is missing, you need:
+
+2.1. Parse `TonAddressItemReply.walletStateInit` and get public key from stateInit. You can compare the `walletStateInit.code` with the code of standard wallets contracts and parse the data according to the found wallet version.
+
+2.2. Check that `TonAddressItemReply.publicKey` equals to obtained public key
+
+2.3. Check that `TonAddressItemReply.walletStateInit.hash()` equals to `TonAddressItemReply.address`. `.hash()` means BoC hash.
 
 
 ## How to Check TON Proof on Server Side(Low-Level)
@@ -52,3 +106,7 @@ Obtain from the frontend the following data: wallet address, domain, timestamp, 
 * [GO demo app](https://github.com/ton-connect/demo-dapp-backend/blob/master/proof.go)
 * [TS example](https://gist.github.com/TrueCarry/cac00bfae051f7028085aa018c2a05c6)
 * [Python example](https://github.com/disintar/ton-connect-python-proof/blob/master/check_proof.ipynb?short_path=8776c84)
+
+## See Also
+
+[[YouTube] TON Connect ton proof [RU](https://www.youtube.com/watch?v=i2HzhM59kfQ)
