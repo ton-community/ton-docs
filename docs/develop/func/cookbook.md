@@ -1018,27 +1018,29 @@ Creates an internal address for the corresponding MsgAddressInt TLB.
 
 ### Generate external address
 
-Creates an external address for the corresponding MsgAddressExt TLB.
+We use the TL-B scheme from [block.tlb](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L101C1-L101C12) to understand how we need to create an address in this format. 
 
 ```func
+(int) ubitsize (int a) asm "UBITSIZE";
+
 slice generate_external_address (int address) {
-    ;; addr_extern$01 len:(## 8) external_address:(bits len) = MsgAddressExt;
+    ;; addr_extern$01 len:(## 9) external_address:(bits len) = MsgAddressExt;
     
     int address_length = ubitsize(address);
     
     return begin_cell()
         .store_uint(1, 2) ;; addr_extern$01
-        .store_uint(address_length, 8)
+        .store_uint(address_length, 9)
         .store_uint(address, address_length)
     .end_cell().begin_parse();
 }
-
-;; TODO: please provide an example how to use it
 ```
+
+Since we need to determine the number of bits occupied by the address, it is also necessary to [declare an asm function](#how-to-write-own-functions-using-asm-keyword) with the opcode `UBITSIZE`, which will return the minimum number of bits required to store the number.
 
 > 💡 Useful links
 >
-> TODO: please add useful links for all functions like in above sections 
+> ["TVM Instructions" in docs](/learn/tvm-instructions/instructions#53-shifts-logical-operations)
 
 ### How to store and load dictionary in local storage
 

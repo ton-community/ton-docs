@@ -172,12 +172,12 @@ const sidebars = {
                  items: [
                    {
                      type: 'link',
-                     label: 'Using TypeScript',
+                     label: 'TON Hello World',
                      href: 'https://ton-community.github.io/tutorials/02-contract/',
                    },
                    {
                      type: 'link',
-                     label: 'Using toncli',
+                     label: 'TON FunC Lessons',
                      href: 'https://github.com/romanovichim/TonFunClessons_Eng/blob/main/1lesson/firstlesson.md',
                    },
                  ],
@@ -199,6 +199,11 @@ const sidebars = {
                 'develop/smart-contracts/tutorials/wallet',
                 'develop/smart-contracts/examples'
               ],
+            },
+            {
+              type: 'link',
+              label: 'TON FunC Lessons',
+              href: 'https://github.com/romanovichim/TonFunClessons_Eng',
             },
           ],
        },
@@ -349,6 +354,7 @@ const sidebars = {
             'develop/dapps/ton-connect/integration',
             'develop/dapps/ton-connect/tg-bot-integration',
             'develop/dapps/ton-connect/transactions',
+            'develop/dapps/ton-connect/tg-bot-tonapi-nft',
           ],
         },
         {
