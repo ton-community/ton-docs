@@ -1,0 +1,204 @@
+import ThemedImage from '@theme/ThemedImage';
+
+# Signing and Verification
+
+
+:::warning
+The page is under development.
+:::
+
+
+Signature in works in TON Connect with a special `TonProof` entity, which implemented inside connector.
+
+```js
+type TonProofItemReply = TonProofItemReplySuccess | TonProofItemReplyError;
+
+type TonProofItemReplySuccess = {
+  name: "ton_proof";
+  proof: {
+    timestamp: string; // 64-bit unix epoch time of the signing operation (seconds)
+    domain: {
+      lengthBytes: number; // AppDomain Length
+      value: string;  // app domain name (as url part, without encoding)
+    };
+    signature: string; // base64-encoded signature
+    payload: string; // payload from the request
+  }
+}
+
+```
+
+## How to use TON Proof (High-Level)
+
+- Send dApp id to client. Typically, dApp id nested in the QR code.
+- Retrieve signed transaction with ton_proof entity
+- Verify ton_proof on the backend side
+
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/ton-connect/ton_proof_scheme.svg?raw=true',
+        dark: '/img/docs/ton-connect/ton_proof_scheme-dark.svg?raw=true',
+    }}
+/>
+<br></br>
+
+## How to Check TON Proof on Server Side
+
+Obtain from the frontend the following data: wallet address, domain, timestamp, walletStateInit, signature
+
+* Verify that the domain corresponds to the domain of your application
+* Check that this payload was issued recently (you can issue cookies with the payload before authorization, and when checking ton_proof, verify the presence of a cookie for this client)
+* Assemble a message according to the scheme from the previous slide
+* Obtain the wallet's pubkey via the wallet contract's get method
+* If the contract is not active, then obtaining the key in this manner will be impossible; you will need to parse the walletStateInit, which is provided by the frontend
+* Verify that the signature from the frontend actually signs the assembled message and corresponds to the public key of the address
+
+## React Example
+
+1. Add token provider to the root of your app:
+
+```tsx
+function App() {
+    const [token, setToken] = useState<string | null>(null);
+
+  return (
+      <BackendTokenContext.Provider value={{token, setToken}}>
+            { /* Your app */ }
+      </BackendTokenContext.Provider>
+  )
+}
+```
+
+2. Describe authentication for backend:
+
+<details>
+<summary>Example</summary>
+
+```tsx
+import {useContext, useEffect, useRef} from "react";
+import {BackendTokenContext} from "./BackendTokenContext";
+import {useIsConnectionRestored, useTonConnectUI, useTonWallet} from "@tonconnect/ui-react";
+import {backendAuth} from "./backend-auth";
+
+const localStorageKey = 'my-dapp-auth-token';
+const payloadTTLMS = 1000 * 60 * 20;
+
+export function useBackendAuth() {
+    const { setToken } = useContext(BackendTokenContext);
+    const isConnectionRestored = useIsConnectionRestored();
+    const wallet = useTonWallet();
+    const [tonConnectUI] = useTonConnectUI();
+    const interval = useRef<ReturnType<typeof setInterval> | undefined>();
+
+    useEffect(() => {
+        if (!isConnectionRestored || !setToken) {
+            return;
+        }
+
+        clearInterval(interval.current);
+
+        if (!wallet) {
+            localStorage.removeItem(localStorageKey);
+            setToken(null);
+
+            const refreshPayload = async () => {
+                tonConnectUI.setConnectRequestParameters({ state: 'loading' });
+
+                const value = await backendAuth.generatePayload();
+                if (!value) {
+                    tonConnectUI.setConnectRequestParameters(null);
+                } else {
+                    tonConnectUI.setConnectRequestParameters({state: 'ready', value});
+                }
+            }
+
+            refreshPayload();
+            setInterval(refreshPayload, payloadTTLMS);
+            return;
+        }
+
+        const token = localStorage.getItem(localStorageKey);
+        if (token) {
+            setToken(token);
+            return;
+        }
+
+        if (wallet.connectItems?.tonProof && !('error' in wallet.connectItems.tonProof)) {
+            backendAuth.checkProof(wallet.connectItems.tonProof.proof, wallet.account).then(result => {
+                if (result) {
+                    setToken(result);
+                    localStorage.setItem(localStorageKey, result);
+                } else {
+                    alert('Please try another wallet');
+                    tonConnectUI.disconnect();
+                }
+            })
+        } else {
+            alert('Please try another wallet');
+            tonConnectUI.disconnect();
+        }
+
+    }, [wallet, isConnectionRestored, setToken])
+}
+```
+</details>
+
+## Concept Explanation
+
+If `TonProofItem` is requested, wallet proves ownership of the selected account’s key. The signed message is bound to:
+
+- Unique prefix to separate messages from on-chain messages. (`ton-connect`)
+- Wallet address
+- App domain
+- Signing timestamp
+- App’s custom payload (where server may put its nonce, cookie id, expiration time)
+
+```
+message = utf8_encode("ton-proof-item-v2/") ++
+          Address ++
+          AppDomain ++
+          Timestamp ++
+          Payload
+
+signature = Ed25519Sign(privkey, sha256(0xffff ++ utf8_encode("ton-connect") ++ sha256(message)))
+```
+
+where:
+
+* `Address` is the wallet address encoded as a sequence:
+ * `workchain`: 32-bit signed integer big endian;
+ * `hash`: 256-bit unsigned integer big endian;
+* `AppDomain` is Length ++ EncodedDomainName
+- `Length` is 32-bit value of utf-8 encoded app domain name length in bytes
+- `EncodedDomainName` id `Length`-byte  utf-8 encoded app domain name
+* `Timestamp` 64-bit unix epoch time of the signing operation
+* `Payload` is a variable-length binary string.
+
+Note: payload is variable-length untrusted data. To avoid using unnecessary length prefixes we put it last in the message.
+
+The signature must be verified by public key:
+
+1. First, try to obtain public key via `get_public_key` get-method on smart contract deployed at `Address`.
+
+2. If the smart contract is not deployed yet, or the get-method is missing, you need:
+
+    1.  Parse `TonAddressItemReply.walletStateInit` and get public key from stateInit. You can compare the `walletStateInit.code` with the code of standard wallets contracts and parse the data according to the found wallet version.
+
+    2.  Check that `TonAddressItemReply.publicKey` equals to obtained public key
+
+    3.  Check that `TonAddressItemReply.walletStateInit.hash()` equals to `TonAddressItemReply.address`. `.hash()` means BoC hash.
+
+
+### Examples of TON Proof Verification
+
+* [GO demo app](https://github.com/ton-connect/demo-dapp-backend/blob/master/proof.go)
+* [TS example](https://gist.github.com/TrueCarry/cac00bfae051f7028085aa018c2a05c6)
+* [Python example](https://github.com/disintar/ton-connect-python-proof/blob/master/check_proof.ipynb?short_path=8776c84)
+
+## See Also
+
+* [[YouTube] Check ton_proof for @tonconnect/react-ui [RU]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=2971)
+* [Preparing Messages](/develop/dapps/ton-connect/message-builders)
+* [Sending Messages](/develop/dapps/ton-connect/transactions)

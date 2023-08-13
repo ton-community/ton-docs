@@ -1,11 +1,11 @@
-# Integration manual
+# Integration manual with the JavaScript SDK
 
 In this tutorial, we’ll create a sample web app that supports TON Connect 2.0 authentication. It will allow for signature verification to eliminate the possibility of fraudulent identity impersonation without agreement establishment between parties.
 
 ## Documentation links
 
-1. [TON Connect SDK documentation](https://www.npmjs.com/package/@tonconnect/sdk)  
-2. [Wallet-application message exchange protocol](https://github.com/ton-connect/docs/blob/main/requests-responses.md), includes manifest format.
+1. [@tonconnect/sdk documentation](https://www.npmjs.com/package/@tonconnect/sdk)  
+2. [Wallet-application message exchange protocol](https://github.com/ton-connect/docs/blob/main/requests-responses.md) 
 3. [Tonkeeper implementation of wallet side](https://github.com/tonkeeper/wallet/tree/main/src/tonconnect)
 
 ## Prerequisites
@@ -14,7 +14,7 @@ In order for connectivity to be fluent between apps and wallets, the web app mus
 
 ## Getting wallets support list
 
-To increase the overall adoption of TON Blockchain, it is necessary that TON Connect 2.0 is able to facilitate a vast number of application and wallet connectivity integrations. Of late and of significant importance, the ongoing development of TON Connect 2.0 has allowed for the connection of the Tonkeeper and OpenMask wallets with various TON Ecosystem Apps. It is our mission to eventually allow for the exchange of data between applications and all wallet types built on TON via the TON Connect protocol. For now, this is realized by providing the ability for TON Connect to load an extensive list of available wallets currently operating within the TON Ecosystem.
+To increase the overall adoption of TON Blockchain, it is necessary that TON Connect 2.0 is able to facilitate a vast number of application and wallet connectivity integrations. Of late and of significant importance, the ongoing development of TON Connect 2.0 has allowed for the connection of the Tonkeeper, TonHub, MyTonWallet and other wallets with various TON Ecosystem Apps. It is our mission to eventually allow for the exchange of data between applications and all wallet types built on TON via the TON Connect protocol. For now, this is realized by providing the ability for TON Connect to load an extensive list of available wallets currently operating within the TON Ecosystem.
 
 At the moment our sample web app enables the following:
 
@@ -46,7 +46,7 @@ For learning purposes, let's take a looks at the HTML page described by the foll
 
 If you load this page in browser and look into console, you may get something like that:
 
-```js
+```bash
 > Array [ {…}, {…} ]
 
 0: Object { name: "Tonkeeper", imageUrl: "https://tonkeeper.com/assets/tonconnect-icon.png", aboutUrl: "https://tonkeeper.com", … }
@@ -60,15 +60,6 @@ If you load this page in browser and look into console, you may get something li
   name: "Tonkeeper"
   tondns: "tonkeeper.ton"
   universalLink: "https://app.tonkeeper.com/ton-connect"
-
-1: Object { name: "OpenMask", imageUrl: "https://raw.githubusercontent.com/OpenProduct/openmask-extension/main/public/openmask-logo-288.png", aboutUrl: "https://www.openmask.app/", … }
-  aboutUrl: "https://www.openmask.app/"
-  embedded: false
-  imageUrl: "https://raw.githubusercontent.com/OpenProduct/openmask-extension/main/public/openmask-logo-288.png"
-  injected: false
-  jsBridgeKey: "openmask"
-  name: "OpenMask"
-  tondns: undefined
 ```
 
 According to TON Connect 2.0 specifications, wallet app information always makes use of the following format:
@@ -240,11 +231,7 @@ Upon clicking the mobile phone link, Tonkeeper automatically opens and then clos
 `Error: [TON_CONNECT_SDK_ERROR] Can't get null/tonconnect-manifest.json`.
 
 This means the application manifest must be available for download.
-
-### Logging in with OpenMask
-
-OpenMask didn't inject its information in the window, so connecting with it failed. The most probable reason is because a local page for the web app was used.
-
+ 
 ## Connection with using app manifest
 
 Starting from this point forward, it is necessary to host user files (mostly tonconnect-manifest.json) somewhere. In this instance we’ll use the manifest from another web application. This however  is not recommended for production environments, but allowed for testing purposes.
@@ -292,7 +279,7 @@ Therefore, the user is able to accept the same login request if the link is save
 
 Afterwards, the login request is accepted and is immediately reflected in the browser console as follows:
 
-```js
+```bash
 22:40:13.887 Connection status:
 Object { device: {…}, provider: "http", account: {…} }
   account: Object { address: "0:b2a1ec...", chain: "-239", walletStateInit: "te6cckECFgEAAwQAAgE0ARUBFP8A9..." }
@@ -307,7 +294,7 @@ The results above take the following into consideration:
 
 ## Logging out and requesting TonProof
 
-Now we have logged into our webapp, but... how does the backend know that it is the correct party? To verify this we must request the wallet ownership proof. 
+Now we have logged into our Web App, but... how does the backend know that it is the correct party? To verify this we must request the wallet ownership proof. 
 
 This can be completed only using authentication, so we must log out. Therefore, we run the following code in the console:
 

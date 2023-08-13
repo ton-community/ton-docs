@@ -1,10 +1,10 @@
-# Sending messages
+# Sending Messages
 
 :::info
 There is no description of connecting a wallet on this page. We suppose you have already connected the wallet to your dApp. If not, you can refer to [integration manual](/develop/dapps/ton-connect/integration).
 :::
 
-TON Connect 2 has more powerful options than just authenticating users in the dApp: it's possible to send outgoing messages via connected wallets!
+TON Connect 2.0 has more powerful options than just authenticating users in the dApp: it's possible to send outgoing messages via connected wallets!
 
 ## Playground page
 
@@ -30,6 +30,7 @@ We'll experiment in the browser console on a page where the wallet is already co
   </body>
 </html>
 ```
+
 
 ## Sending multiple messages
 
@@ -148,6 +149,10 @@ console.log(await connector.sendTransaction({
 }));
 ```
 
+:::info
+Learn more about payload from [Preparing Messages](/develop/dapps/ton-connect/message-builders) page for Transfer NFT and Jettons.
+:::
+
 After confirmation, we may see our transaction complete at [tonscan.org](https://tonscan.org/tx/pCA8LzWlCRTBc33E2y-MYC7rhUiXkhODIobrZVVGORg=).
 
 ## What happens if the user rejects a transaction request?
@@ -155,3 +160,7 @@ After confirmation, we may see our transaction complete at [tonscan.org](https:/
 It's pretty easy to handle request rejection, but when you're developing some project it's better to know what would happen in advance.
 
 When a user clicks "Cancel" in the popup in the wallet application, an exception is thrown: `Error: [TON_CONNECT_SDK_ERROR] Wallet declined the request`. This error can be considered final (unlike connection cancellation) - if it has been raised, then the requested transaction will definitely not happen until the next request is sent.
+
+## See Also
+
+* [Preparing Messages](/develop/dapps/ton-connect/message-builders)

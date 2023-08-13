@@ -1,0 +1,318 @@
+import Button from '@site/src/components/button'
+import ThemedImage from '@theme/ThemedImage';
+
+# TON Connect for TWA using React UI
+
+Telegram Web Apps (TWA) are web applications that run inside the Telegram messenger. They are built using web technologies — HTML, CSS, and JavaScript. TWA can be used to create bots, games, and other types of apps that can be run inside Telegram.
+
+Recommended TON Connect SDK for Telegram Web Apps is a [UI React SDK](/develop/dapps/ton-connect/developers#ton-connect-react). It is a React component that provides a high-level way to interact with TON Connect.
+
+## React UI Implementation
+
+1. Install `@tonconnect/ui-react` in the project of your website:
+
+```bash
+npm i @tonconnect/ui-react
+```
+
+2. [Create a manifest.json](/develop/dapps/ton-connect/manifest) for you application.
+
+3. Add `TonConnectUIProvider` to the root of your Web App and pass the manifest URL:
+
+```tsx
+import { TonConnectUIProvider } from '@tonconnect/ui-react';
+
+export function App() {
+    return (
+        <TonConnectUIProvider manifestUrl="https://<YOUR_APP_URL>/tonconnect-manifest.json">
+            { /* Your app */ }
+        </TonConnectUIProvider>
+    );
+}
+```
+
+4. Add `TonConnectButton`. TonConnect Button is universal UI component for initializing connection. After wallet is connected it transforms to a wallet menu. It is recommended to place it in the top right corner of your app.
+
+```tsx
+export const Header = () => {
+    return (
+        <header>
+            <span>My App with React UI</span>
+            <TonConnectButton />
+        </header>
+    );
+};
+```
+
+You can add className and style props to the button as well. Note that you cannot pass child to the TonConnectButton. <TonConnectButton className="my-button-class" style={{ float: "right" }}/>
+
+### API Documentation
+
+[Latest API documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui_react.html)
+
+### Examples
+
+* Step-by-step [TON Hello World guide](https://ton-community.github.io/tutorials/03-client/) to create a simple DApp with React UI.
+* [Demo dApp](https://github.com/ton-connect/demo-dapp-with-react-ui) - Example of a DApp with `@tonconnect/ui-react`.
+* [ton.vote](https://github.com/orbs-network/ton-vote) - Example of React website with TON Connect implementation.
+
+### SDKs for other frameworks
+
+- Don't use React for your app? Take a look at [TonConnect UI](/develop/dapps/ton-connect/developers#ton-connect-ui).
+- If you want to use TonConnect on the server side, you should use the TonConnect SDK.
+- Check the [supported SDKs](/develop/dapps/ton-connect/developers) list and choose the one that suits you best.
+
+## Use TonConnect UI hooks
+
+If you want to use some low-level TON Connect UI SDK features in your React app, you can use hooks from `@tonconnect/ui-react` package.
+
+### useTonAddress
+
+Use it to get user's current ton wallet address. Pass boolean parameter isUserFriendly to choose format of the address. If wallet is not connected hook will return empty string.
+
+```tsx
+import { useTonAddress } from '@tonconnect/ui-react';
+
+export const Address = () => {
+    const userFriendlyAddress = useTonAddress();
+    const rawAddress = useTonAddress(false);
+
+    return (
+        address && (
+            <div>
+                <span>User-friendly address: {userFriendlyAddress}</span>
+                <span>Raw address: {rawAddress}</span>
+            </div>
+        )
+    );
+};
+```
+
+### useTonWallet
+Use it to get user's current ton wallet. If wallet is not connected hook will return null.
+
+See all wallet's properties
+
+[Wallet interface](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html)
+[WalletInfo interface](https://ton-connect.github.io/sdk/types/_tonconnect_sdk.WalletInfo.html)
+
+```tsx
+import { useTonWallet } from '@tonconnect/ui-react';
+
+export const Wallet = () => {
+    const wallet = useTonWallet();
+
+    return (
+        wallet && (
+            <div>
+                <span>Connected wallet: {wallet.name}</span>
+                <span>Device: {wallet.device.appName}</span>
+            </div>
+        )
+    );
+};
+```
+
+### useTonConnectUI
+
+Use it to get access to the `TonConnectUI` instance and UI options updating function.
+
+[See more about TonConnectUI instance methods](https://github.com/ton-connect/sdk/tree/main/packages/ui#send-transaction)
+
+[See more about setOptions function](https://github.com/ton-connect/sdk/tree/main/packages/ui#change-options-if-needed)
+
+
+```tsx
+import { Locales, useTonConnectUI } from '@tonconnect/ui-react';
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    const onLanguageChange = (lang: string) => {
+        setOptions({ language: lang as Locales });
+    };
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+                Send transaction
+            </button>
+
+            <div>
+                <label>language</label>
+                <select onChange={e => onLanguageChange(e.target.value)}>
+                    <option value="en">en</option>
+                    <option value="ru">ru</option>
+                </select>
+            </div>
+        </div>
+    );
+};
+```
+
+### useIsConnectionRestored
+Indicates current status of the connection restoring process.
+You can use it to detect when connection restoring process if finished.
+
+```tsx
+import { useIsConnectionRestored } from '@tonconnect/ui-react';
+
+export const EntrypointPage = () => {
+    const connectionRestored = useIsConnectionRestored();
+
+    if (!connectionRestored) {
+        return <Loader>Please wait...</Loader>;
+    }
+
+    return <MainPage />;
+};
+```
+
+## Usage examples
+
+Let's take a look at how to use the React UI SDK on practice.
+
+### Sending transactions
+
+Here is an example of sending a transaction using the React UI SDK:
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+
+const transaction = {
+    messages: [
+        {
+            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            amount: "20000000" //Toncoin in nanotons
+        }
+    ]
+
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(transaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
+- Get more examples here: [Preparing Messages](/develop/dapps/ton-connect/message-builders)
+
+### Add connect request parameters (ton_proof)
+
+:::tip
+Understand how to sign and verify messages: [Signing and Verification](/develop/dapps/ton-connect/sign)
+:::
+
+Use `tonConnectUI.setConnectRequestParameters` function to pass your connect request parameters.
+
+This function takes one parameter:
+
+Set state to 'loading' while you are waiting for the response from your backend. If user opens connect wallet modal at this moment, he will see a loader.
+```ts
+const [tonConnectUI] = useTonConnectUI();
+
+tonConnectUI.setConnectRequestParameters({
+    state: 'loading'
+});
+```
+
+or
+
+Set state to 'ready' and define `tonProof` value. Passed parameter will be applied to the connect request (QR and universal link).
+```ts
+const [tonConnectUI] = useTonConnectUI();
+
+tonConnectUI.setConnectRequestParameters({
+    state: 'ready',
+    value: {
+        tonProof: '<your-proof-payload>'
+    }
+});
+```
+
+or
+
+Remove loader if it was enabled via `state: 'loading'` (e.g. you received an error instead of a response from your backend). Connect request will be created without any additional parameters.
+```ts
+const [tonConnectUI] = useTonConnectUI();
+
+tonConnectUI.setConnectRequestParameters(null);
+```
+
+
+You can call `tonConnectUI.setConnectRequestParameters` multiple times if your tonProof payload has bounded lifetime (e.g. you can refresh connect request parameters every 10 minutes).
+
+
+```ts
+const [tonConnectUI] = useTonConnectUI();
+
+// enable ui loader
+tonConnectUI.setConnectRequestParameters({ state: 'loading' });
+
+// fetch you tonProofPayload from the backend
+const tonProofPayload: string | null = await fetchTonProofPayloadFromBackend();
+
+if (!tonProofPayload) {
+    // remove loader, connect request will be without any additional parameters
+    tonConnectUI.setConnectRequestParameters(null);
+} else {
+    // add tonProof to the connect request
+    tonConnectUI.setConnectRequestParameters({
+        state: "ready",
+        value: { tonProof: tonProofPayload }
+    });
+}
+
+```
+
+
+You can find `ton_proof` result in the `wallet` object when wallet will be connected:
+
+```ts
+import {useTonConnectUI} from "@tonconnect/ui-react";
+
+const [tonConnectUI] = useTonConnectUI();
+
+useEffect(() =>
+    tonConnectUI.onStatusChange(wallet => {
+        if (wallet.connectItems?.tonProof && 'proof' in wallet.connectItems.tonProof) {
+            checkProofInYourBackend(wallet.connectItems.tonProof.proof, wallet.account);
+        }
+    }), []);
+```
+
+
+### Wallet Disconnection
+
+Call to disconnect the wallet:
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+
+const [tonConnectUI] = useTonConnectUI();
+
+await tonConnectUI.disconnect();
+```
+
+## Telegram Web Apps
+
+- [Telegram Web Apps documentation](https://docs.twa.dev/docs/introduction/about-platform) — a community-driven documentation for TWA.
+- [TWA Documentation by Telegram](https://core.telegram.org/bots/webapps) — full description on Telegram website.
+
+### Web Apps SDK list
+
+- [twa-dev/sdk](https://github.com/twa-dev/sdk) — NPM package for TWA SDK
+- [twa-dev/boilerplate](https://github.com/twa-dev/Boilerplate) — another boilerplate for a new TWA.
+- [twa-dev/Mark42](https://github.com/twa-dev/Mark42) — Mark42 is a simple lightweight tree-shakable UI library for TWA.
+- [ton-defi-org/tonstarter-twa](https://github.com/ton-defi-org/tonstarter-twa) — template for new TWA interaction with TON.
+
+### Community
+
+Join a special Telegram [Community Chat](https://t.me/+1mQMqTopB1FkNjIy) for TWA developers if you're interested.
+

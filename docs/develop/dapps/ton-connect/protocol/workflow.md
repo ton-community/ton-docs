@@ -39,15 +39,15 @@ App creates app’s Client Keypair (a, A):
 (a,A) <- nacl.box.keyPair()
 ```
 
-App generates the **InitialRequest**. See [requests spec](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md).
+App generates the **InitialRequest**. See [requests spec](/develop/dapps/ton-connect/protocol/requests-responses).
 
-App creates a [universal link](https://github.com/ton-blockchain/ton-connect/blob/main/bridge.md#universal-link) to a target wallet:
+App creates a [universal link](/develop/dapps/ton-connect/protocol/bridge#universal-link) to a target wallet:
 
 ```
 https://<wallet-universal-url>?v=2&id=<to_hex_str(A)>&r=<urlsafe(json.stringify(ConnectRequest))>
 ```
 
-When using the [JS bridge](https://github.com/ton-blockchain/ton-connect/blob/main/bridge.md#js-bridge), the same request is sent via the `connect()` call:
+When using the [JS bridge](/develop/dapps/ton-connect/protocol/bridge#js-bridge), the same request is sent via the `connect()` call:
 
 ```
 window.[walletJsBridgeKey].tonconnect.connect(2, <InitialRequest>)
@@ -57,7 +57,7 @@ Parameter **v** specifies the protocol version. Unsupported versions are not acc
 
 Parameter **id** specifies app’s Client ID encoded as hex (without '0x' prefix).
 
-Parameter **r** specifies URL-safe json [ConnectRequest](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#initiating-connection).
+Parameter **r** specifies URL-safe json [ConnectRequest](/develop/dapps/ton-connect/protocol/requests-responses#initiating-connection).
 
 The link may be embedded in a QR code or clicked directly.
 
@@ -67,11 +67,11 @@ App is not yet in the connected state, and may restart the whole process at any 
 
 ### Wallet establishes connection
 
-Wallet opens up a link or QR code, reads plaintext app’s **Client ID** (A from parameter “**id”**) and [InitialRequest](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#initiating-connection) (from parameter **“r”**).
+Wallet opens up a link or QR code, reads plaintext app’s **Client ID** (A from parameter “**id”**) and [InitialRequest](/develop/dapps/ton-connect/protocol/requests-responses#initiating-connection) (from parameter **“r”**).
 
-Wallet computes the [InitialResponse](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#initiating-connection).
+Wallet computes the [InitialResponse](/develop/dapps/ton-connect/protocol/requests-responses#initiating-connection).
 
-Wallet generates its own [Client Keypair](https://github.com/ton-blockchain/ton-connect/blob/main/session.md#client-keypair) (b,B) and stores alongside app’s info and ID.
+Wallet generates its own [Client Keypair](/develop/dapps/ton-connect/protocol/session#client-keypair) (b,B) and stores alongside app’s info and ID.
 
 Wallet encrypts the response and sends it to the **Bridge** using app’s Client ID A.
 
@@ -81,7 +81,7 @@ Wallet connects to the bridge (link to bridge api) and listens for events using 
 
 App receives the event from the bridge that contains the encrypted message from the Client ID **B.**
 
-App decrypts the message and parses it as [InitialResponse](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#initiating-connection).
+App decrypts the message and parses it as [InitialResponse](/develop/dapps/ton-connect/protocol/requests-responses#initiating-connection).
 
 If the reply is valid, App reads wallet info (address, public key, proof of ownership etc.) and remembers the wallet’s ID **B**.
 
@@ -91,11 +91,11 @@ The session is considered established in the app when it has the wallet’s ID a
 
 When the user performs an action in the app, it may request confirmation from the wallet.
 
-App generates a [request](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#messages).
+App generates a [request](/develop/dapps/ton-connect/protocol/requests-responses#messages).
 
 App encrypts it to the wallet’s key B (see below).
 
-App sends the encrypted message to B over the [Bridge](https://github.com/ton-blockchain/ton-connect/blob/main/bridge.md).
+App sends the encrypted message to B over the [Bridge](/develop/dapps/ton-connect/protocol/bridge).
 
 App shows “pending confirmation” UI to let user know to open the wallet.
 
@@ -103,13 +103,13 @@ Wallet receives the encrypted message through the Bridge.
 
 Wallet decrypts the message and is now assured that it came from the app with ID **A.**
 
-Wallet shows the confirmation dialog to the user, signs transaction and [replies](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#messages) over the bridge with user’s decision: “Ok, sent” or “User cancelled”.
+Wallet shows the confirmation dialog to the user, signs transaction and [replies](/develop/dapps/ton-connect/protocol/requests-responses#messages) over the bridge with user’s decision: “Ok, sent” or “User cancelled”.
 
 App receives the encrypted message, decrypts it and closes the “pending confirmation” UI.
 
 ## References
 
-* https://github.com/ton-blockchain/ton-connect/blob/main/workflows.md
+* /develop/dapps/ton-connect/protocol/workflows
 
 ## See Also
 

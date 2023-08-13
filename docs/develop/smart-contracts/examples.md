@@ -61,19 +61,19 @@ Make sure you have thoroughly tested contracts before using them in a production
 * [Blueprint jetton_minter.fc](https://github.com/liminalAngel/func-blueprint-tutorial/blob/master/6/contracts/jetton_minter.fc)
 * [Simple TON DNS Subdomain manager](https://github.com/Gusarich/simple-subdomain)
 
-### Ton Smart Challenge Solutions
+### TON Smart Challenge Solutions
 
-#### Ton Smart Challenge 1
+#### TON Smart Challenge 1
 * https://github.com/nns2009/TON-FunC-contest-1/tree/main
 * https://github.com/pyAndr3w/func-contest1-solutions
 * https://github.com/crazyministr/TonContest-FunC/tree/master/func-contest1
 
-#### Ton Smart Challenge 2
+#### TON Smart Challenge 2
 * https://github.com/ton-blockchain/func-contest2-solutions
 * https://github.com/nns2009/TON-FunC-contest-2
 * https://github.com/crazyministr/TonContest-FunC/tree/master/func-contest2
 
-#### Ton Smart Challenge 3
+#### TON Smart Challenge 3
 * https://github.com/nns2009/TON-FunC-contest-3
 * https://github.com/shuva10v/func-contest3-solutions
 * https://github.com/crazyministr/TonContest-FunC/tree/master/func-contest3

@@ -1,4 +1,4 @@
-# TON Wallet Guidelines
+# Wallet Guidelines
 
 ## Networks
 
@@ -56,13 +56,8 @@ To switch account user need to disconnect (Log out) and connect  (Login) again i
 
 We recommend wallets provide the ability to disconnect session with a specified dapp because the dapp may have an incomplete UI.
 
-
-## References
-
-* https://github.com/ton-blockchain/ton-connect/blob/main/wallet-guidelines.md
-
 ## See Also
 
-* [Ton Connect Overview](/dapps/ton-connect/)
-* [Integration manual](/develop/dapps/ton-connect/integration)
-* [Telegram bot integration manual](/develop/dapps/ton-connect/tg-bot-integration)
+* [TON Connect Overview](/dapps/ton-connect/overview)
+* [Protocol specifications](/dapps/ton-connect/protocol/)
+* [Connect a Wallet](/dapps/ton-connect/wallet)

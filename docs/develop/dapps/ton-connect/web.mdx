@@ -1,0 +1,86 @@
+# TON Connect for HTML/JS Web Apps
+
+TonConnect UI is a UI kit for TonConnect SDK. Use it to connect your HTML/JS app to TON wallets via TonConnect protocol.
+
+If you use React for your DApp, take a look at [TON Connect UI React SDK](/develop/dapps/ton-connect/twa).
+
+## HTML/JS Integration
+
+1. Add script in the `<head>` of your website (or [use npm instead](https://github.com/ton-connect/sdk/tree/main/packages/ui#installation-with-npm)):
+
+```html
+<script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+```
+
+2. [Create a manifest.json](/develop/dapps/ton-connect/manifest) for you application.
+
+3. Add a script for a connector `tonConnectUI` in `<body>` part of application page:
+
+```html
+<script>
+    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+        manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+        buttonRootId: 'ton-connect'
+    });
+</script>
+```
+
+4. Add a button with `ton-connect` id to connect to the wallet:
+
+```html
+<div id = "ton-connect"></div>
+```
+
+### SDK Documentation
+
+- [SDK documentation](https://github.com/ton-connect/sdk/blob/main/packages/ui/README.md)
+- [Latest API documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui.html)
+
+## Usage
+
+Let's take a look at the example of using the TON Connect UI in the application.
+
+### Sending messages
+
+Here is an example of sending a transaction using the TON Connect UI:
+
+```js
+import TonConnectUI from '@tonconnect/ui';
+
+const tonConnectUI = new TonConnectUI({ //connect application
+    manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+    buttonRootId: '<YOUR_CONNECT_BUTTON_ANCHOR_ID>'
+});
+
+const transaction = {
+    messages: [
+        {
+            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            amount: "20000000" //Toncoin in nanotons
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+- Get more examples here: [Preparing Messages](/develop/dapps/ton-connect/message-builders)
+
+### Signing and Verification
+
+Understand how to sign and verify messages using the TON Connect:
+- [Signing and Verification](/develop/dapps/ton-connect/sign)
+- [TON Connect UI implementation on GitHub](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-connect-request-parameters-ton_proof)
+
+### Wallet Disconnection
+
+Call to disconnect the wallet:
+```js
+await tonConnectUI.disconnect();
+```
+
+## See Also
+
+* [UI Customization](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
+* [[YouTube] TON Connect UI React [RU]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=1747)
+* [[YouTube] Connect TON Connect UI to Site [RU]](https://www.youtube.com/watch?v=HUQ1DPfFxG4&list=PLyDBPwv9EPsAIWi8vgic9kiV3KF_wvIcz&index=4)
