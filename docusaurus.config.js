@@ -250,18 +250,17 @@ const config = {
                 label: 'Start with Onboarding Tutorials',
               },
               {
-                to: 'https://ton-community.github.io/tutorials/03-client/',
+                to: '/develop/dapps/ton-connect/twa',
                 label: 'Build your first Web App',
               },
               {
-                to: 'develop/dapps/ton-connect/overview',
-                label: 'Integrate with Wallets',
+                to: '/develop/dapps',
+                label: 'Dive into DApps Development',
               },
               {
-                to: 'develop/dapps/',
-                label: 'Guides & Examples',
+                to: '/develop/dapps/tutorials/jetton-minter',
+                label: 'Mint your first Token (Jetton)',
               },
-
             ],
           },
           {
@@ -272,7 +271,11 @@ const config = {
             items: [
               {
                 to: 'develop/dapps/apis',
-                label: 'Understand APIs',
+                label: 'Understand API Types',
+              },
+              {
+                to: 'develop/dapps/apis/sdk',
+                label: 'Choose an SDK',
               },
               {
                 to: 'develop/dapps/defi/coins',
