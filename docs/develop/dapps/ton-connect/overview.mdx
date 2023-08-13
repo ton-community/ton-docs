@@ -1,6 +1,6 @@
 import Button from '@site/src/components/button'
 
-# Integrate with Wallets
+# About TON Connect
 
 Experience seamless connectivity with wallets within [TON](/learn/introduction) using TON Connect.
 
@@ -11,17 +11,16 @@ Feel free to use one of the following flows for integration of your application:
 <Button href="/develop/dapps/ton-connect/twa" colorType={'primary'} sizeType={'sm'}>Telegram Web Apps</Button>
 <Button href="/develop/dapps/ton-connect/web"
         colorType="secondary" sizeType={'sm'}>
-  Websites
-</Button>
-<Button href="/develop/dapps/ton-connect/mobile"
-        colorType="secondary" sizeType={'sm'}>
-  Mobile Apps
+  HTML/JS Web Apps
 </Button>
 <Button href="/develop/dapps/ton-connect/tg-bot-integration"
         colorType="secondary" sizeType={'sm'}>
   Telegram Bots
 </Button>
 
+## For Wallet Developers
+
+If you are a wallet developer, please read how to [integrate TON Connect into your wallet](/develop/dapps/ton-connect/wallet/).
 
 ## Use Cases For Your DApp
 
@@ -87,10 +86,6 @@ Explore these deliverables that the TON Ecosystem provides for superior DApp int
 ## Join the TON Ecosystem
 To connect your service with the TON Ecosystem, you need to implement the following:
 
-- **TON Connect**. Incorporate the TON Connect protocol within your application. Get started with our detailed [TON Connect integration guide](/develop/dapps/ton-connect).
-- **Transaction Messages**. Create specified transaction messages using TON libraries. Dive into the process of [sending messages](/develop/smart-contracts/messages) with our comprehensive guide. _TODO: fix with sending messages examples for web developers._
+- **TON Connect**. Incorporate the TON Connect protocol within your application.
+- **Transactions**. Create specified transaction messages using TON libraries. Dive into the process of [sending messages](/develop/dapps/ton-connect/message-builders) with our comprehensive guide.
 - **Payments**. Process payments via the public API ([tonapi](https://tonapi.io/)) or your own indexer, for instance, [gobycicle](http://github.com/gobicycle/bicycle). Learn more from our extensive guide on [asset processing](/develop/dapps/asset-processing).
-
-:::info
-Remember, not all apps necessitate payment processing. If your service's business logic doesn't require it, there's no need to support this feature.
-:::

@@ -184,11 +184,11 @@ The signature must be verified by public key:
 
 2. If the smart contract is not deployed yet, or the get-method is missing, you need:
 
-2.1. Parse `TonAddressItemReply.walletStateInit` and get public key from stateInit. You can compare the `walletStateInit.code` with the code of standard wallets contracts and parse the data according to the found wallet version.
+    1.  Parse `TonAddressItemReply.walletStateInit` and get public key from stateInit. You can compare the `walletStateInit.code` with the code of standard wallets contracts and parse the data according to the found wallet version.
 
-2.2. Check that `TonAddressItemReply.publicKey` equals to obtained public key
+    2.  Check that `TonAddressItemReply.publicKey` equals to obtained public key
 
-2.3. Check that `TonAddressItemReply.walletStateInit.hash()` equals to `TonAddressItemReply.address`. `.hash()` means BoC hash.
+    3.  Check that `TonAddressItemReply.walletStateInit.hash()` equals to `TonAddressItemReply.address`. `.hash()` means BoC hash.
 
 
 ### Examples of TON Proof Verification

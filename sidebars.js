@@ -333,11 +333,9 @@ const sidebars = {
       label: 'Integrate with TON',
       items: [
         'develop/dapps/ton-connect/overview',
-        'develop/dapps/ton-connect/README',
         {
-          type: 'link',
-          href: '/develop/dapps/ton-connect/#connect-a-wallet',
-          label: 'Connect a Wallet',
+          type: 'doc',
+          id: 'develop/dapps/ton-connect/wallet'
         },
         {
           type: 'category',
@@ -351,12 +349,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'develop/dapps/ton-connect/web',
-              label: 'Websites'
-            },
-            {
-              type: 'doc',
-              id: 'develop/dapps/ton-connect/mobile',
-              label: 'Mobile Apps',
+              label: 'HTML/JS Web Apps',
             },
             {
               type: 'doc',
@@ -369,11 +362,13 @@ const sidebars = {
           type: 'category',
           label: 'Guidelines',
           items: [
+            'develop/dapps/ton-connect/README',
             'develop/dapps/ton-connect/developers',
-            'develop/dapps/ton-connect/integration',
+            'develop/dapps/ton-connect/manifest',
             'develop/dapps/ton-connect/message-builders',
             'develop/dapps/ton-connect/transactions',
-            'develop/dapps/ton-connect/sign'
+            'develop/dapps/ton-connect/sign',
+            'develop/dapps/ton-connect/integration',
           ],
         },
         {
