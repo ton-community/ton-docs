@@ -3,11 +3,39 @@ import ThemedImage from '@theme/ThemedImage';
 
 # TON Connect for TWA using React UI
 
-Telegram Web Apps (TWA) are web applications that run inside the Telegram messenger. They are built using web technologies — HTML, CSS, and JavaScript. TWA can be used to create bots, games, and other types of apps that can be run inside Telegram.
+Telegram Web Apps (TWA) are web applications that run inside the Telegram messenger. They are built using web technologies — HTML, CSS, and JavaScript. TWA can be used to create DApps, games, and other types of apps that can be run inside Telegram.
+
+## Telegram Web Apps
+
+To connect your Web App to the Telegram client, place the script `telegram-web-app.js` in the `<head>` tag before any other scripts, using this code:
+
+```html
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+```
+Once the script is connected, a [window.Telegram.WebApp](https://core.telegram.org/bots/webapps#initializing-web-apps) object will become available.
+
+### TWA Documentation
+
+- [Telegram Web Apps documentation](https://docs.twa.dev/docs/introduction/about-platform) — a community-driven documentation for TWA.
+- [TWA Documentation by Telegram](https://core.telegram.org/bots/webapps) — full description on Telegram website.
+
+### Web Apps SDK list
+
+- [twa-dev/sdk](https://github.com/twa-dev/sdk) — NPM package for TWA SDK
+- [twa-dev/boilerplate](https://github.com/twa-dev/Boilerplate) — another boilerplate for a new TWA.
+- [twa-dev/Mark42](https://github.com/twa-dev/Mark42) — Mark42 is a simple lightweight tree-shakable UI library for TWA.
+- [ton-defi-org/tonstarter-twa](https://github.com/ton-defi-org/tonstarter-twa) — template for new TWA interaction with TON.
+
+### Community
+
+Join a special Telegram [Community Chat](https://t.me/+1mQMqTopB1FkNjIy) for TWA developers if you're interested.
+
+
+
+## TON Connect React UI SDK
 
 Recommended TON Connect SDK for Telegram Web Apps is a [UI React SDK](/develop/dapps/ton-connect/developers#ton-connect-react). It is a React component that provides a high-level way to interact with TON Connect.
 
-## React UI Implementation
 
 1. Install `@tonconnect/ui-react` in the project of your website:
 
@@ -299,20 +327,3 @@ const [tonConnectUI] = useTonConnectUI();
 
 await tonConnectUI.disconnect();
 ```
-
-## Telegram Web Apps
-
-- [Telegram Web Apps documentation](https://docs.twa.dev/docs/introduction/about-platform) — a community-driven documentation for TWA.
-- [TWA Documentation by Telegram](https://core.telegram.org/bots/webapps) — full description on Telegram website.
-
-### Web Apps SDK list
-
-- [twa-dev/sdk](https://github.com/twa-dev/sdk) — NPM package for TWA SDK
-- [twa-dev/boilerplate](https://github.com/twa-dev/Boilerplate) — another boilerplate for a new TWA.
-- [twa-dev/Mark42](https://github.com/twa-dev/Mark42) — Mark42 is a simple lightweight tree-shakable UI library for TWA.
-- [ton-defi-org/tonstarter-twa](https://github.com/ton-defi-org/tonstarter-twa) — template for new TWA interaction with TON.
-
-### Community
-
-Join a special Telegram [Community Chat](https://t.me/+1mQMqTopB1FkNjIy) for TWA developers if you're interested.
-
