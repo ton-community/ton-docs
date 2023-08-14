@@ -78,7 +78,7 @@ ton-compiler --input ./wallet.fc --output ./wallet.cell
 # Compile to fift (useful for debuging)
 ton-compiler --input ./wallet.fc --output-fift ./wallet.fif
 
-# Compile to fift and fift
+# Compile to binary form and fift
 ton-compiler --input ./wallet.fc --output ./wallet.cell --output-fift ./wallet.fif
 
 # Disable stdlib

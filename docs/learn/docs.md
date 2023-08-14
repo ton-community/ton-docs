@@ -31,4 +31,4 @@ Please note that here and later the code, comments and/or documentation may cont
 ## Translations
 
 * **\[RU]** [korolyow/ton_docs_ru](https://github.com/Korolyow/TON_docs_ru) — TON Whitepapers in Russian. (_this version made by community, TON Foundation can't guarantee quality of translation_)
-* **\[CN]** [awesome-doge/the-open-network-whitepaper](https://awesome-doge.github.io/the-open-network-white-paper/) — TON Whitepapers in Chinese. (_made by community, TON Foundation can't guarantee quality of translation_)
+* **\[CN]** [awesome-doge/the-open-network-whitepaper](https://github.com/awesome-doge/TON_Paper/blob/main/zh_ton.pdf) — TON Whitepapers in Chinese. (_made by community, TON Foundation can't guarantee quality of translation_)
