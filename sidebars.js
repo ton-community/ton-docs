@@ -195,6 +195,7 @@ const sidebars = {
                 'develop/smart-contracts/examples'
               ],
             },
+
           ],
        },
        {
@@ -275,6 +276,7 @@ const sidebars = {
             },
           ],
         },
+        'develop/smart-contracts/testing/overview',
       ],
     },
 

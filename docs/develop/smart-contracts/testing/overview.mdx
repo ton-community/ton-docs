@@ -1,0 +1,170 @@
+# Testing & Debugging
+
+
+# Using TypeScript
+
+## Blueprint
+
+Testing toolkit (usually, sandbox) already included to TypeScript SDK named Blueprint.
+
+- [Read more about Blueprint](develop/smart-contracts/sdk/javascript)
+
+Run tests in one line using:
+
+```bash npm2yarn
+npm test
+```
+
+## Low-level libraries
+
+### sandbox
+
+This package allows you to emulate arbitrary TON smart contracts, send messages to them and run get methods on them as if they were deployed on a real network.
+
+The key difference of this package from ton-contract-executor is the fact that the latter only emulates the compute phase of the contract - it does not know about any other phases and thus does not know anything about fees and balances (in a sense that it does not know whether a contract's balance will be enough to process all the out messages that it produces).
+
+On the other hand, this package emulates all the phases of a contract, and as a result, the emulation is much closer to what would happen in a real network.
+
+- https://github.com/ton-community/sandbox
+
+### ton-contract-executor
+
+:::info deprecated
+This library is deprecated. TON Community not developing it anymore.
+:::
+
+This library allows you to run TON Virtual Machine locally and execute contract. That allows you to write & debug & fully test your contracts before launching them to the network.
+
+- https://github.com/ton-community/ton-contract-executor
+
+## Tutorials
+
+Read this article first to understand all approaches to testing on TON:
+
+* [TON Hello World part 4: Step by step guide for testing your first smart contract](https://ton-community.github.io/tutorials/04-testing/)
+
+Writing unit tests
+We’ll use Chai assertions for our unit tests.
+
+$ npm install --save-dev chai
+We will keep our test files in a test directory. Tests are best structured by mirroring the contracts directory: for each .sol file there, create a corresponding test file.
+
+Time to write our first tests! These will test properties of the Box contract from previous guides: a simple contract that lets you retrieve a value the owner previously store d.
+
+Create a test directory in your project root. We will save the test as test/Box.test.js. Each test .js file commonly has the tests for a single contract, and is named after it.
+
+// test/Box.test.js
+// Load dependencies
+const { expect } = require('chai');
+
+// Start test block
+describe('Box', function () {
+  before(async function () {
+    this.Box = await ethers.getContractFactory('Box');
+  });
+
+  beforeEach(async function () {
+    this.box = await this.Box.deploy();
+    await this.box.deployed();
+  });
+
+  // Test case
+  it('retrieve returns a value previously stored', async function () {
+    // Store a value
+    await this.box.store(42);
+
+    // Test if the returned value is the same one
+    // Note that we need to use strings to compare the 256 bit integers
+    expect((await this.box.retrieve()).toString()).to.equal('42');
+  });
+});
+Many books have been written about how to structure unit tests. Check out the Moloch Testing Guide for a set of principles designed for testing Solidity smart contracts.
+We are now ready to run our tests!
+
+Running npx hardhat test will execute all tests in the test directory, checking that your contracts work the way you meant them to:
+
+$ npx hardhat test
+
+
+  Box
+    ✓ retrieve returns a value previously stored
+
+
+  1 passing (578ms)
+It’s also a very good idea at this point to set up a Continuous Integration service such as CircleCI to make your tests run automatically every time you commit your code to GitHub.
+
+Performing complex assertions
+Many interesting properties of your contracts may be hard to capture, such as:
+
+verifying that the contract reverts on errors
+
+measuring by how much an account’s Ether balance changed
+
+checking that the proper events are emitted
+
+OpenZeppelin Test Helpers is a library designed to help you test all of these properties. It will also simplify the tasks of simulating time passing on the blockchain and handling very large numbers.
+
+OpenZeppelin Test Helpers is web3.js based, thus Hardhat users should use the Truffle plugin for compatibility. However, we recommend instead using Hardhat Chai Matchers as a better supported alternative for Ethers.js.
+To install the OpenZeppelin Test Helpers, run:
+
+$ npm install --save-dev @openzeppelin/test-helpers
+We can then update our tests to use OpenZeppelin Test Helpers for very large number support, to check for an event being emitted and to check that a transaction reverts.
+
+// test/Box.test.js
+// Load dependencies
+const { expect } = require('chai');
+
+// Import utilities from Test Helpers
+const { BN, expectEvent, expectRevert } = require('@openzeppelin/test-helpers');
+
+// Load compiled artifacts
+const Box = artifacts.require('Box');
+
+// Start test block
+contract('Box', function ([ owner, other ]) {
+  // Use large integers ('big numbers')
+  const value = new BN('42');
+
+  beforeEach(async function () {
+    this.box = await Box.new({ from: owner });
+  });
+
+  it('retrieve returns a value previously stored', async function () {
+    await this.box.store(value, { from: owner });
+
+    // Use large integer comparisons
+    expect(await this.box.retrieve()).to.be.bignumber.equal(value);
+  });
+
+  it('store emits an event', async function () {
+    const receipt = await this.box.store(value, { from: owner });
+
+    // Test that a ValueChanged event was emitted with the new value
+    expectEvent(receipt, 'ValueChanged', { value: value });
+  });
+
+  it('non owner cannot store a value', async function () {
+    // Test a transaction reverts
+    await expectRevert(
+      this.box.store(value, { from: other }),
+      'Ownable: caller is not the owner',
+    );
+  });
+});
+These will test properties of the Ownable Box contract from previous guides: a simple contract that lets you retrieve a value the owner previously stored.
+
+Run your tests again to see the Test Helpers in action:
+
+$ npx hardhat test
+...
+  Contract: Box
+    ✓ retrieve returns a value previously stored
+    ✓ store emits an event
+    ✓ non owner cannot store a value (588ms)
+
+
+  3 passing (753ms)
+The Test Helpers will let you write powerful assertions without having to worry about the low-level details of the underlying Ethereum libraries. To learn more about what you can do with them, head to their API reference.
+
+Next steps
+Once you have thoroughly tested your contracts and are reasonably sure of their correctness, you’ll want to deploy them to a real network and start interacting with them. The following guides will get you up to speed on these topics:
