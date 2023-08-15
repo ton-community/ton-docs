@@ -37,7 +37,15 @@ func main() {
 	binary.BigEndian.PutUint32(b_data, crc)
 	var res = hex.EncodeToString(b_data)
 	fmt.Println(res)
+}
+```
 
+### TypeScript
+```typescript
+import * as crc32 from 'crc-32';
+
+export function crc32FromString(str: string, crc: number = 0xFFFFFFFF): number {
+  return crc32.str(str, crc);
 }
 ```
 
