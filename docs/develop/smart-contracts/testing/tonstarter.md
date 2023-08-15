@@ -1,4 +1,4 @@
-# Using TypeScript
+# Using TypeScript (deprecated)
 
 ## Blueprint
 
