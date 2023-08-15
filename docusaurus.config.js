@@ -85,6 +85,10 @@ const config = {
             to: '/learn/tvm-instructions/tvm-upgrade-2023-07',
             from: '/learn/tvm-instructions/tvm-upgrade',
           },
+          {
+            to: '/develop/smart-contracts/testing/overview',
+            from: '/develop/smart-contracts/testing/tonstarter',
+          },
         ],
       },
     ],

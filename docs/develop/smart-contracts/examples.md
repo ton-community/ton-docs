@@ -10,19 +10,21 @@ Make sure you have thoroughly tested contracts before using them in a production
 
 ### TON Production used Smart Contracts
 
-| Contracts                                                                                              | Description                                                                                                                                                                 |
-|--------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [wallet-contract](https://github.com/ton-blockchain/wallet-contract)                                   | Wallet v4 is proposed version of wallet to replace v3 or older wallets                                                                                                      |
-| [governance-contract](https://github.com/ton-blockchain/governance-contract)                           | Core TON Blockchain contracts `elector-code.fc` and `config-code.fc`.                                                                                                       |
-| [bridge-func](https://github.com/ton-blockchain/bridge-func)                                           | TON-EVM Toncoin Bridge.                                                                                                                                                     |
-| [token-bridge-func](https://github.com/ton-blockchain/token-bridge-func)                               | TON-EVM token bridge - FunC smart contracts.                                                                                                                                |
+| Contracts                                                                                                        | Description                                                                                                                                                                 |
+|------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [wallet-contract](https://github.com/ton-blockchain/wallet-contract)                                             | Wallet v4 is proposed version of wallet to replace v3 or older wallets                                                                                                      |
+| [liquid-staking-contract](https://github.com/ton-blockchain/liquid-staking-contract/)                            | Liquid Staking (LSt) is a protocol that connects TON holders of all caliber with hardware node operators to participate in TON Blockchain validation through assets pooling.|
+| [modern_jetton](https://github.com/EmelyanenkoK/modern_jetton)                                                   | Implementation of standard jetton with additonal withdraw_tons and withdraw_jettons.
+| [governance-contract](https://github.com/ton-blockchain/governance-contract)                                     | Core TON Blockchain contracts `elector-code.fc` and `config-code.fc`.                                                                                                       |
+| [bridge-func](https://github.com/ton-blockchain/bridge-func)                                                     | TON-EVM Toncoin Bridge.                                                                                                                                                     |
+| [token-bridge-func](https://github.com/ton-blockchain/token-bridge-func)                                         | TON-EVM token bridge - FunC smart contracts.                                                                                                                                |
 | [lockup-wallet-contract/universal](https://github.com/ton-blockchain/lockup-wallet-contract/tree/main/universal) | Universal lockup wallet is contract that can store locked and restricted coins.                                                                                             |
-| [lockup-wallet-contract/vesting](https://github.com/ton-blockchain/lockup-wallet-contract/tree/main/vesting) | Vesting wallet smart-contract                                                                                                                                               |
-| [multisig-contract](https://github.com/ton-blockchain/multisig-contract)                               | `(n, k)`-multisig wallet is a wallet with `n` private keys holders, which accepts requests to send messages if the request collects at least `k` signatures of the holders. |
-| [token-contract](https://github.com/ton-blockchain/token-contract)                                     | Fungible, Non-Fungible, Semi-Fungible Tokens Smart Contracts                                                                                                                |
-| [dns-contract](https://github.com/ton-blockchain/dns-contract)                                         | Smart contracts of `.ton` zone.                                                                                                                                             |
-| [nominator-pool](https://github.com/ton-blockchain/nominator-pool)                                     | Nominator pool smart contract                                                                                                                                               |
-| [storage](https://github.com/ton-blockchain/ton/tree/master/storage/storage-daemon/smartcont)          | TON Storage provider and fabric contracts                                                                                                                                   |
+| [lockup-wallet-contract/vesting](https://github.com/ton-blockchain/lockup-wallet-contract/tree/main/vesting)     | Vesting wallet smart-contract                                                                                                                                               |
+| [multisig-contract](https://github.com/ton-blockchain/multisig-contract)                                         | `(n, k)`-multisig wallet is a wallet with `n` private keys holders, which accepts requests to send messages if the request collects at least `k` signatures of the holders. |
+| [token-contract](https://github.com/ton-blockchain/token-contract)                                               | Fungible, Non-Fungible, Semi-Fungible Tokens Smart Contracts                                                                                                                |
+| [dns-contract](https://github.com/ton-blockchain/dns-contract)                                                   | Smart contracts of `.ton` zone.                                                                                                                                             |
+| [nominator-pool](https://github.com/ton-blockchain/nominator-pool)                                               | Nominator pool smart contract                                                                                                                                               |
+| [storage](https://github.com/ton-blockchain/ton/tree/master/storage/storage-daemon/smartcont)                    | TON Storage provider and fabric contracts                                                                                                                                   |
 
 ### TON Ecosystem Smart Contracts
 
@@ -78,6 +80,7 @@ Make sure you have thoroughly tested contracts before using them in a production
 * https://github.com/shuva10v/func-contest3-solutions
 * https://github.com/crazyministr/TonContest-FunC/tree/master/func-contest3
 
+
 ## Fift Smart Contracts
 
 * [CreateState.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/CreateState.fif)
@@ -124,7 +127,9 @@ Make sure you have thoroughly tested contracts before using them in a production
 
 ## Examples of Tests for Smart Contracts  
 
+* [liquid-staking-contract sandbox tests](https://github.com/ton-blockchain/liquid-staking-contract/tree/main/tests)
 * [governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/config_tests/tests/)
+* [JettonWallet.spec.ts](https://github.com/EmelyanenkoK/modern_jetton/blob/master/tests/JettonWallet.spec.ts)
 * [governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/elector_tests/tests/complaint-test.fc)
 * [MassSender.spec.ts](https://github.com/Gusarich/ton-mass-sender/blob/main/tests/MassSender.spec.ts)
 * [TonForwarder.spec.ts](https://github.com/TrueCarry/ton-contract-forwarder/blob/main/src/contracts/ton-forwarder/TonForwarder.spec.ts)

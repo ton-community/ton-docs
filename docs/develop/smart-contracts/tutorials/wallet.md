@@ -2201,7 +2201,7 @@ do {
 
 Note that it is necessary to interact with the `f` variable several times. Since the [TVM is a stack machine](learn/tvm-instructions/tvm-overview#tvm-is-a-stack-machine), during each interaction with the `f` variable it is necessary to pop all values to get the desired variable. The `f~touch()` operation places the f  variable at the top of the stack to optimize code execution.
 
-### Bitwise Left Shift Operation
+### Bitwise Operations
 
 This section may seem a bit complicated for those who have not previously worked with bitwise operations. The following line of code can be seen in the smart contract code:
 

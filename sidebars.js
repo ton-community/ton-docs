@@ -181,7 +181,7 @@ const sidebars = {
               type: 'category',
               label: 'Testing & Debugging',
               items: [
-                'develop/smart-contracts/testing/tonstarter',
+                'develop/smart-contracts/testing/overview',
                 'develop/smart-contracts/testing/toncli',
               ],
             },
@@ -195,6 +195,7 @@ const sidebars = {
                 'develop/smart-contracts/examples'
               ],
             },
+
           ],
        },
        {

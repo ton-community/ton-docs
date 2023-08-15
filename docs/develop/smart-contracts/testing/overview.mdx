@@ -1,0 +1,94 @@
+# Writing Tests with Blueprint
+
+## Testing Overview
+
+Testing toolkit (usually, sandbox) already included to the TypeScript SDK named Blueprint. You can create demo project and launch default test with two steps:
+
+1. Install Blueprint project
+```bash
+npm create ton@latest
+```
+
+2. Install Blueprint project
+```bash
+npx blueprint test
+```
+
+## Basic Usage
+Testing of smart contracts allows for the coverage of security, optimization of gas spending, and examination of edge cases.
+Writing tests in Blueprint (that based on Sandbox) works through defining arbitary actions with the contract and comparing their results with the expected result, for example:
+
+```typescript
+it('should execute with success', async () => {                              // description of the test case
+    const res = await main.sendMessage(sender.getSender(), toNano('0.05'));  // performing an action with contract main and saving result in res
+
+    expect(res.transactions).toHaveTransaction({                             // configure the expected result with expect() function
+        from: main.address,                                                  // set expected sender for transaction we want to test matcher properties from
+        success: true                                                        // set the desirable result using matcher property success
+    });
+
+    printTransactionFees(res.transactions);                                  // print table with details on spent fees
+});
+```
+
+
+### Writing Tests for Different Properties
+
+The basic workflow of creating a test is:
+1. Create a specific wrapped `Contract` entity using `blockchain.openContract()`.
+2. Describe the actions your `Contract` should perform and save the execution result in `res` variable.
+3. Verify the properties using the `expect()` function and the matcher `toHaveTransaction()`.
+
+The `toHaveTransaction` matcher expects an object with any combination of fields from the `FlatTransaction` type defined with the following properties
+
+| Name                 | Type          | Description                                                                                                                                                         |
+|----------------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| from                 | Address?      | Contract address of the message sender                                                                                                                              |
+| to                   | Address       | Contract address of the message destination                                                                                                                         |
+| on                   | Address       | Contract address of the message destination  (Alternative name of the property `to`).                                                                               |
+| value                | bigint?       | Amount of Toncoins in the message in nanotons                                                                                                                       |
+| body                 | Cell          | Message body defined as a Cell                                                                                                                                              |
+| inMessageBounced     | boolean?      | Boolean flag Bounced. True - message is bounced, False - message is not bounced.                                                                                    |
+| inMessageBounceable  | boolean?      | Boolean flag Bounceable. True - message can be bounced, False - message can not be bounced.                                                                         |
+| op                   | number?       | Op code is the operation identifier number (crc32 from TL-B usually). Expected in the first 32 bits of a message body.                                              |
+| initData             | Cell?         | InitData Cell. Used for contract deployment processes.                                                                                                              |
+| initCode             | Cell?         | initCode Cell. Used for contract deployment processes.                                                                                                              |
+| deploy               | boolean       | Custom Sandbox flag that indicates whether the contract was deployed during this transaction. True if contract before this transaction was not initialized and after this transaction became initialized. Otherwise - False.  |
+| lt                   | bigint        | Logical time (set by validators in a normal network, monotonically increases by a set interval in Sandbox). Used for defining order of transactions related to a certain contract                                                           |
+| now                  | bigint        | Unix timestamp of the transaction                                                                                                                                       |
+| outMessagesCount     | number        | Quantity of outbound messages in a certain transaction                                                                                                              |
+| oldStatus            | AccountStatus | AccountStatus before transaction execution                                                                                                                              |
+| endStatus            | AccountStatus | AccountStatus after transaction execution                                                                                                                               |
+| totalFees            | bigint?        | Number of spent fees in nanotons                                                                                                                                    |
+|aborted| boolean?       | True - execution of certain transaction aborted and rollbacked because of errors or insufficient gas. Otherwise - False.                                            |
+|destroyed| boolean?       | True - if the existing contract was destroyed due to executing a certain transaction. Otherwise - False.                                                            |
+|exitCode| number?        | TVM exit code (from compute phase)                                                                                                                                |
+|actionResultCode| number? | Action phase result code |
+|success| boolean?       | Custom Sandbox flag that defines the resulting status of a certain transaction. True - if both the compute and the action phase succeeded. Otherwise - False.       |
+
+
+You can omit those that you're not interested in, and you can also pass in functions accepting those types returning booleans (`true` meaning good) to check for example number ranges, message opcodes, etc. Note however that if a field is optional (like `from?: Address`), then the function needs to accept the optional type, too.
+
+## Tutorials
+
+Learn more about testing from most valuable community tutorials on TON:
+
+* [Lesson 2: Testing FunC for a Smart Contract](https://github.com/romanovichim/TonFunClessons_Eng/blob/main/lessons/smartcontract/2lesson/secondlesson.md)
+* [TON Hello World part 4: Step by step guide for testing your first smart contract](https://ton-community.github.io/tutorials/04-testing/)
+* [[YouTube]Sixth lesson FunC & Blueprint. Gas, fees, tests.](https://youtu.be/3XIpKZ6wNcg)
+
+
+## Examples
+
+Check test suites used for TON Ecosystem contracts and learn by examples.
+
+* [liquid-staking-contract sandbox tests](https://github.com/ton-blockchain/liquid-staking-contract/tree/main/tests)
+* [governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/config_tests/tests/)
+* [JettonWallet.spec.ts](https://github.com/EmelyanenkoK/modern_jetton/blob/master/tests/JettonWallet.spec.ts)
+* [governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/elector_tests/tests/complaint-test.fc)
+* [MassSender.spec.ts](https://github.com/Gusarich/ton-mass-sender/blob/main/tests/MassSender.spec.ts)
+* [TonForwarder.spec.ts](https://github.com/TrueCarry/ton-contract-forwarder/blob/main/src/contracts/ton-forwarder/TonForwarder.spec.ts)
+
+
+## See Also
+* [Using Blueprint](/develop/smart-contracts/sdk/javascript)
