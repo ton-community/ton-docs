@@ -956,7 +956,7 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
 
     connector
         .sendTransaction({
-            validUntil: Math.round((Date.now() + 600000) / 1000), // timeout is SECONDS
+            validUntil: Math.round(Date.now() / 1000) + 600, // timeout is SECONDS
             messages: [
                 {
                     amount: '1000000',
