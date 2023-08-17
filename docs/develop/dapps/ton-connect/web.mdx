@@ -1,20 +1,41 @@
-# TON Connect for HTML/JS Web Apps
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-TonConnect UI is a UI kit for TonConnect SDK. Use it to connect your HTML/JS app to TON wallets via TonConnect protocol.
+# TON Connect for JS
+
+This guide will help you integrate TON Connect into your Javascript application for user authentication and transactions.
 
 If you use React for your DApp, take a look at [TON Connect UI React SDK](/develop/dapps/ton-connect/twa).
 
-## HTML/JS Integration
+## Implementation
 
-1. Add script in the `<head>` of your website (or [use npm instead](https://github.com/ton-connect/sdk/tree/main/packages/ui#installation-with-npm)):
+### 1) Installation
+
+<Tabs groupId="Installation">
+  <TabItem value="NPM" label="NPM">
+To begin the integration of TON Connect into your app, install the @tonconnect/ui package:
+
+```bash npm2yarn
+npm i @tonconnect/ui
+```
+  </TabItem>
+  <TabItem value="CDN" label="CDN">
+Add script in the HEAD element of your website:
+    <br/>
+    <br/>
+
 
 ```html
 <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 ```
+  </TabItem>
+</Tabs>
 
-2. [Create a manifest.json](/develop/dapps/ton-connect/manifest) for you application.
+### 2) TON Connect Initiation
 
-3. Add a script for a connector `tonConnectUI` in `<body>` part of application page:
+After installing the package, you should create a `manifest.json` file for your application. More information on how to create a manifest.json file can be found [here](/develop/dapps/ton-connect/manifest).
+
+Add a script for a connector `tonConnectUI` in `<body>` part of application page:
 
 ```html
 <script>
@@ -25,13 +46,32 @@ If you use React for your DApp, take a look at [TON Connect UI React SDK](/devel
 </script>
 ```
 
-4. Add a button with `ton-connect` id to connect to the wallet:
+Add a button with `ton-connect` id to connect to the wallet:
 
 ```html
-<div id = "ton-connect"></div>
+<div id="ton-connect"></div>
 ```
 
-### SDK Documentation
+### 3) Connect to the Wallet
+
+"Connect" button (which is added at `buttonRootId`) automatically handles clicks and calls connect. But you are still able to open "connect modal" programmatically, e.g. after click on your custom connect button:
+
+```js
+const connectedWallet = await tonConnectUI.connectWallet();
+```
+
+### 4) Redirects
+
+Usually, you don't need to think about it at all. But if you want to redirect user to a specific page after wallet connection, you can [customize your return strategy](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy).
+
+### 5) UI customization
+
+TonConnect UI provides an interface that should be familiar and recognizable to the user when using various apps. However, the app developer can make changes to this interface to keep it consistent with the app interface.
+
+- [TonConnect UI documentation](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
+
+
+## SDK Documentation
 
 - [SDK documentation](https://github.com/ton-connect/sdk/blob/main/packages/ui/README.md)
 - [Latest API documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui.html)
@@ -65,6 +105,10 @@ const result = await tonConnectUI.sendTransaction(transaction)
 ```
 
 - Get more examples here: [Preparing Messages](/develop/dapps/ton-connect/message-builders)
+
+### Understanding Transaction Status by Hash
+
+The principle located in Payment Processing (using tonweb). [See more](/develop/dapps/asset-processing/#checking-contracts-transactions)
 
 ### Signing and Verification
 

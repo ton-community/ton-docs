@@ -284,6 +284,7 @@ const sidebars = {
       label: 'DApp Development',
       items: [
         'develop/dapps/README',
+        'develop/dapps/twa',
         {
           type: 'category',
           label: 'Learn',
@@ -340,22 +341,17 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Platforms', //
+          label: 'Frameworks',
           items: [
             {
               type: 'doc',
-              id: 'develop/dapps/ton-connect/twa',
-              label: 'Telegram Web Apps',
+              id: 'develop/dapps/ton-connect/react',
+              label: 'React Web Apps',
             },
             {
               type: 'doc',
               id: 'develop/dapps/ton-connect/web',
               label: 'HTML/JS Web Apps',
-            },
-            {
-              type: 'doc',
-              id: 'develop/dapps/ton-connect/tg-bot-integration',
-              label: 'Telegram Bots',
             },
           ],
         },
@@ -370,11 +366,16 @@ const sidebars = {
             'develop/dapps/ton-connect/transactions',
             'develop/dapps/ton-connect/sign',
             'develop/dapps/ton-connect/integration',
+            {
+              type: 'doc',
+              id: 'develop/dapps/ton-connect/tg-bot-integration',
+              label: 'Telegram Bots Integration',
+            },
           ],
         },
         {
           type: 'category',
-          label: 'Protocol specifications',
+          label: 'Advanced',
           items: [
             {
               type: 'doc',

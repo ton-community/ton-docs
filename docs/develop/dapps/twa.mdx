@@ -1,0 +1,43 @@
+import Button from '@site/src/components/button'
+
+# Telegram Web Apps
+
+Telegram Web Apps (TWA are web applications that run inside the Telegram messenger. They are built using web technologies — HTML, CSS, and JavaScript. TWA can be used to create DApps, games, and other types of apps that can be run inside Telegram.
+
+## Create your Web App
+
+1. To connect your Web App to the Telegram, place the script `telegram-web-app.js` in the `<head>` tag before any other scripts, using this code:
+
+  ```html
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  ```
+
+Once the script is connected, a **[window.Telegram.WebApp](https://core.telegram.org/bots/webapps#initializing-web-apps)** object become available.
+
+2. Create a bot using [@BotFather](http://t.me/BotFather) in Telegram or decide which one do you want to use.
+3. After that, build and connect your hosted Web App URL with the bot created by [@BotFather](http://t.me/BotFather) in bot settings (”Web App Button”). You can name the button as you wish.
+4. In 2-5 minutes, you will see the “App” button in the bot interface.
+
+## TWA Documentation
+
+- [Telegram Web Apps documentation](https://docs.twa.dev/docs/introduction/about-platform) — a community-driven documentation for TWA.
+- [TWA Documentation by Telegram](https://core.telegram.org/bots/webapps) — full description on Telegram website.
+
+## Web Apps SDK list
+
+- [twa-dev/sdk](https://github.com/twa-dev/sdk) — NPM package for TWA SDK
+- [twa-dev/boilerplate](https://github.com/twa-dev/Boilerplate) — another boilerplate for a new TWA.
+- [twa-dev/Mark42](https://github.com/twa-dev/Mark42) — Mark42 is a simple lightweight tree-shakable UI library for TWA.
+- [ton-defi-org/tonstarter-twa](https://github.com/ton-defi-org/tonstarter-twa) — template for new TWA interaction with TON.
+
+## Community
+
+Join a special Telegram Developers Chat to discuss TWA development:
+
+<Button href="https://t.me/+1mQMqTopB1FkNjIy" colorType={'secondary'} sizeType={'sm'}>Telegram Developers Community</Button>
+
+## What's next?
+
+Connect with users with the help of TON Connect protocol:
+
+<Button href="/develop/dapps/ton-connect/overview" colorType={'primary'} sizeType={'sm'}>Integrate TON Connect</Button>

@@ -254,7 +254,7 @@ const config = {
                 label: 'Start with Onboarding Tutorials',
               },
               {
-                to: '/develop/dapps/ton-connect/twa',
+                to: '/develop/dapps/ton-connect/react',
                 label: 'Build your first Web App',
               },
               {
