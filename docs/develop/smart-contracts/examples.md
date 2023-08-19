@@ -85,6 +85,8 @@ Make sure you have thoroughly tested contracts before using them in a production
 * https://github.com/akifoq/tsc4
 * https://github.com/Gusarich/tsc4
 * https://github.com/Skydev0h/tsc4
+* https://github.com/aSpite/tsc4-contracts (FunC solution)
+* [https://github.com/ProgramCrafter/tsc4](https://github.com/ProgramCrafter/tsc4/tree/c1616e12d1b449b01fdcb787a3aa8442e671371e/contracts) (FunC solution)
 
 ## Fift Smart Contracts
 
