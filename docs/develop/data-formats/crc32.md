@@ -37,7 +37,21 @@ func main() {
 	binary.BigEndian.PutUint32(b_data, crc)
 	var res = hex.EncodeToString(b_data)
 	fmt.Println(res)
+}
+```
 
+### TypeScript
+```typescript
+import * as crc32 from 'crc-32';
+
+function calculateRequestOpcode_1(str: string): string {
+    return (BigInt(crc32.str(str)) & BigInt(0x7fffffff)).toString(16);
+}
+
+function calculateResponseOpcode_2(str: string): string {
+    const a = BigInt(crc32.str(str));
+    const b = BigInt(0x80000000);
+    return ((a | b) < 0 ? (a | b) + BigInt('4294967296') : a | b).toString(16);
 }
 ```
 
