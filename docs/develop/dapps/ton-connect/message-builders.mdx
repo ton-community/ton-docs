@@ -1063,6 +1063,12 @@ transaction = {
 
 ### NFT Sale (GetGems)
 
+
+Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc).
+
+To place NFT on GetGems Sale Contract, we should prepare special message body `transferNftBody` that will be transfer NFT to special NFT Sale Contract.
+
+
 <details>
 <summary>Example of creating NFT Sale Body</summary>
 
@@ -1154,6 +1160,23 @@ transaction = {
             transfer_fee=int(0.07 * 10**9),
             response_address=wallet_address
         ),
+    ]
+}
+```
+
+### NFT Buy (GetGems)
+
+The process of buy NFT for [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc) sale contract could be carry out with regular transfer without payload, the only important thing is accurate TON amount, that calculates as follows:
+`buyAmount = Nftprice TON + 1.0 TON`.
+
+
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        {
+            'address': nft_address,
+            'amount': buyAmount,
     ]
 }
 ```
