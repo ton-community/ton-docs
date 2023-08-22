@@ -82,7 +82,7 @@ Make sure you have thoroughly tested contracts before using them in a production
 
 #### TON Smart Challenge 4
 
-* https://github.com/akifoq/tsc4
+* https://github.com/akifoq/tsc4 (TOP optimized)
 * https://github.com/Gusarich/tsc4
 * https://github.com/Skydev0h/tsc4
 * https://github.com/aSpite/tsc4-contracts (FunC solution)

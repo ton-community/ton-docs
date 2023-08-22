@@ -69,6 +69,11 @@ Other materials gracefully provided by the experts from the community:
 Participating in [contests](https://t.me/toncontests) is a great way to learn FunC.
 
 You can also study previous competitions for learning purposes:
+* TON Smart Challenge #4 (best for getting started):
+  [Contest Page](https://ton.org/ton-smart-challenge-4),
+  [Tasks](https://github.com/ton-community/tsc4),
+  [Solutions](/develop/smart-contracts/examples#ton-smart-challenge-4),
+
 * TON Smart Challenge #2 (good for getting started):
   [Contest Page](https://ton.org/ton-smart-challenge-2),
   [Tasks](https://github.com/ton-blockchain/func-contest2),
