@@ -95,7 +95,7 @@ Create a `tsconfig.json`:
 [Read more about tsconfig.json](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
 
 ### Add simple bot code
-Create a `.env` file and add your bot token, dApp manifest and wallets list cache time to live there:
+Create a `.env` file and add your bot token, DAppmanifest and wallets list cache time to live there:
 
 [See more about tonconnect-manifes.json](https://github.com/ton-connect/sdk/tree/main/packages/sdk#add-the-tonconnect-manifest)
 

@@ -32,7 +32,7 @@ You can find an example of the manifest below:
 ## Fields description
 |Field|Requirement|Description|
 |---|---|---|
-|`url` |required| app URL. Will be used as the dapp identifier. Will be used to open the dapp after click to its icon in the wallet. It is recommended to pass url without closing slash, e.g. 'https://mydapp.com' instead of 'https://mydapp.com/'.|
+|`url` |required| app URL. Will be used as the DAppidentifier. Will be used to open the DAppafter click to its icon in the wallet. It is recommended to pass url without closing slash, e.g. 'https://mydapp.com' instead of 'https://mydapp.com/'.|
 | `name`|required| app name. Might be simple, will not be used as identifier.|
 | `iconUrl`| required | Url to the app icon. Must be PNG, ICO, ... format. SVG icons are not supported. Perfectly pass url to a 180x180px PNG icon.|
 | `termsOfUseUrl` |optional| url to the Terms Of Use document. Optional for usual apps, but required for the apps which is placed in the Tonkeeper recommended apps list.|

@@ -79,7 +79,7 @@
 				<v:ud v:nameU="visNavOrder" v:val="VT0(1000):26"/>
 			</v:userDefs>
 			<title>Actor lifeline</title>
-			<desc>dApp frontend</desc>
+			<desc>DAppfrontend</desc>
 			<g id="shape39-2" v:mID="39" v:groupContext="shape" transform="translate(19.8425,-9.10517)">
 				<title>Sheet.39</title>
 				<rect x="0" y="342.6" width="51.0236" height="25.5118" class="st1"/>
@@ -95,7 +95,7 @@
 				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
 				<v:textRect cx="45.3543" cy="346.25" width="90.71" height="43.7221"/>
 				<rect x="0" y="324.389" width="90.7087" height="43.7221" class="st1"/>
-				<text x="22.71" y="340.85" class="st3" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>dApp <tspan
+				<text x="22.71" y="340.85" class="st3" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>DApp<tspan
 							x="8.75" dy="1.2em" class="st4">frontend</tspan></text>			</g>
 		</g>
 		<g id="group43-13" transform="translate(345.013,-286.397)" v:mID="43" v:groupContext="group">
@@ -106,7 +106,7 @@
 				<v:ud v:nameU="visNavOrder" v:val="VT0(2000):26"/>
 			</v:userDefs>
 			<title>Object lifeline</title>
-			<desc>dApp backend</desc>
+			<desc>DAppbackend</desc>
 			<g id="shape44-14" v:mID="44" v:groupContext="shape" transform="translate(19.8425,-9.10517)">
 				<title>Sheet.44</title>
 				<rect x="0" y="342.6" width="51.0236" height="25.5118" class="st1"/>
@@ -126,7 +126,7 @@
 				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
 				<v:textRect cx="45.3543" cy="346.25" width="90.71" height="43.7221"/>
 				<rect x="0" y="324.389" width="90.7087" height="43.7221" class="st1"/>
-				<text x="22.71" y="340.85" class="st3" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>dApp <tspan
+				<text x="22.71" y="340.85" class="st3" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>DApp<tspan
 							x="8.68" dy="1.2em" class="st4">backend</tspan></text>			</g>
 		</g>
 		<g id="group54-27" transform="translate(480.438,-286.397)" v:mID="54" v:groupContext="group">
