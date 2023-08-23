@@ -2,13 +2,31 @@ import ThemedImage from '@theme/ThemedImage';
 
 # Signing and Verification
 
+## ton_proof Use Case
 
-:::tip
 Please, note, that signing is not require for all dApps. It will be useful, if you want to verify your user for providing to him his personal information from back end.
-:::
+This is necessary for authorization on the backend (to prove that the user really has the declared address)
 
 
-Signature works in TON Connect with a special `TonProof` entity, which implemented inside connector.
+## How ton_proof Works?
+
+- Send dApp id to client. Typically, dApp id nested in the QR code.
+- Retrieve signed transaction with ton_proof entity
+- Verify ton_proof on the backend side
+
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/ton-connect/ton_proof_scheme.svg?raw=true',
+        dark: '/img/docs/ton-connect/ton_proof_scheme-dark.svg?raw=true',
+    }}
+/>
+<br></br>
+
+## ton_proof structure
+
+ton_proof works in TON Connect with a special `TonProof` entity, which implemented inside connector.
 
 ```js
 type TonProofItemReply = TonProofItemReplySuccess | TonProofItemReplyError;
@@ -27,22 +45,6 @@ type TonProofItemReplySuccess = {
 }
 
 ```
-
-## How to use TON Proof (High-Level)
-
-- Send dApp id to client. Typically, dApp id nested in the QR code.
-- Retrieve signed transaction with ton_proof entity
-- Verify ton_proof on the backend side
-
-<br></br>
-<ThemedImage
-    alt=""
-    sources={{
-        light: '/img/docs/ton-connect/ton_proof_scheme.svg?raw=true',
-        dark: '/img/docs/ton-connect/ton_proof_scheme-dark.svg?raw=true',
-    }}
-/>
-<br></br>
 
 ## How to Check TON Proof in dApp with API
 
