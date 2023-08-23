@@ -25,7 +25,7 @@ Best practice is to place the manifest in the root of your app, e.g. `https://my
 Make sure that manifest is available to GET by its URL.
 
 #### Fields description
-- `url` -- app URL. Will be used as the dapp identifier. Will be used to open the dapp after click to its icon in the wallet. It is recommended to pass url without closing slash, e.g. 'https://mydapp.com' instead of 'https://mydapp.com/'.
+- `url` -- app URL. Will be used as the DAppidentifier. Will be used to open the DAppafter click to its icon in the wallet. It is recommended to pass url without closing slash, e.g. 'https://mydapp.com' instead of 'https://mydapp.com/'.
 - `name` -- app name. Might be simple, will not be used as identifier.
 - `iconUrl` -- Url to the app icon. Must be PNG, ICO, ... format. SVG icons are not supported. Perfectly pass url to a 180x180px PNG icon.
 - `termsOfUseUrl` -- (optional) url to the Terms Of Use document. Optional for usual apps, but required for the apps which is placed in the Tonkeeper recommended apps list.
@@ -273,7 +273,7 @@ type WalletEventName = 'connect' | 'connect_error' | 'disconnect';
 
 Wallet must increase `id` while generating a new event. (Every next event must have `id` > previous event `id`)
 
-DApp doesn't accept any event with an id that does not greater the last processed event id of that session.
+DAppdoesn't accept any event with an id that does not greater the last processed event id of that session.
 
 ### Methods
 
@@ -292,8 +292,8 @@ interface SendTransactionRequest {
 Where `<transaction-payload>` is JSON with following properties:
 
 * `valid_until` (integer, optional): unix timestamp. after th moment transaction will be invalid.
-* `network` (NETWORK, optional): The network (mainnet or testnet) where DApp intends to send the transaction. If not set, the transaction is sent to the network currently set in the wallet, but this is not safe and DApp should always strive to set the network. If the `network` parameter is set, but the wallet has a different network set, the wallet should show an alert and DO NOT ALLOW TO SEND this transaction.
-* `from` (string in `<wc>:<hex>` format, optional) - The sender address from which DApp intends to send the transaction. If not set, wallet allows user to select the sender's address at the moment of transaction approval. If `from` parameter is set, the wallet should DO NOT ALLOW user to select the sender's address; If sending from the specified address is impossible, the wallet should show an alert and DO NOT ALLOW TO SEND this transaction.
+* `network` (NETWORK, optional): The network (mainnet or testnet) where DAppintends to send the transaction. If not set, the transaction is sent to the network currently set in the wallet, but this is not safe and DAppshould always strive to set the network. If the `network` parameter is set, but the wallet has a different network set, the wallet should show an alert and DO NOT ALLOW TO SEND this transaction.
+* `from` (string in `<wc>:<hex>` format, optional) - The sender address from which DAppintends to send the transaction. If not set, wallet allows user to select the sender's address at the moment of transaction approval. If `from` parameter is set, the wallet should DO NOT ALLOW user to select the sender's address; If sending from the specified address is impossible, the wallet should show an alert and DO NOT ALLOW TO SEND this transaction.
 * `messages` (array of messages): 1-4 outgoing messages from the wallet contract to other accounts. All messages are sent out in order, however **the wallet cannot guarantee that messages will be delivered and executed in same order**.
 
 Message structure:
@@ -377,7 +377,7 @@ Where `<sign-data-payload>` is JSON with following properties:
 
 * `schema_crc` (integer): indicates the layout of payload cell that in turn defines domain separation.
 * `cell` (string, base64 encoded Cell): contains arbitrary data per its TL-B definition.
-* `publicKey` (HEX string without 0x, optional): The public key of key pair from which DApp intends to sign the data. If not set, the wallet is not limited in what keypair to sign. If `publicKey` parameter is set, the wallet SHOULD to sign by keypair corresponding this public key; If sign by this specified keypair is impossible, the wallet should show an alert and DO NOT ALLOW TO SIGN this data.
+* `publicKey` (HEX string without 0x, optional): The public key of key pair from which DAppintends to sign the data. If not set, the wallet is not limited in what keypair to sign. If `publicKey` parameter is set, the wallet SHOULD to sign by keypair corresponding this public key; If sign by this specified keypair is impossible, the wallet should show an alert and DO NOT ALLOW TO SIGN this data.
 
 The signature will be computed in the following way:
 `ed25519(uint32be(schema_crc) ++ uint64be(timestamp) ++ cell_hash(X), privkey)`
@@ -418,7 +418,7 @@ interface SignDataResponseError {
 
 
 #### Disconnect operation
-When user disconnects the wallet in the dApp, dApp should inform the wallet to help the wallet save resources and delete unnecessary session.
+When user disconnects the wallet in the dApp, DAppshould inform the wallet to help the wallet save resources and delete unnecessary session.
 Allows the wallet to update its interface to the disconnected state.
 
 ```tsx

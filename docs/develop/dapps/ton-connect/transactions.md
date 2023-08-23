@@ -3,7 +3,7 @@
 TON Connect 2.0 has more powerful options than just authenticating users in the dApp: it's possible to send outgoing messages via connected wallets!
 
 You will understand:
-- how to send messages from the DApp to the blockchain
+- how to send messages from the DAppto the blockchain
 - how to send multiple messages in one transaction
 - how to deploy a contract using TON Connect
 

@@ -281,7 +281,7 @@ const sidebars = {
 
     {
       type: 'category',
-      label: 'DApp Development',
+      label: 'DAppDevelopment',
       items: [
         'develop/dapps/README',
         'develop/dapps/twa',
