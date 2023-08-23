@@ -615,7 +615,7 @@ To place NFT on GetGems Sale Contract, we should prepare special message body `t
     const transferNftBody = beginCell()
         .storeUint(0x5fcc3d14, 32) // Opcode for NFT transfer
         .storeUint(0, 64) // query_id
-        .storeAddress(destinationAddress) // new_owner
+        .storeAddress(destinationAddress) // new_owner - GetGems sale contracts deployer, should never change for this operation
         .storeAddress(walletAddress) // response_destination for excesses
         .storeBit(0) // we do not have custom_payload
         .storeCoins(toNano("1")) // forward_amount

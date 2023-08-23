@@ -3,12 +3,12 @@ import ThemedImage from '@theme/ThemedImage';
 # Signing and Verification
 
 
-:::warning
-The page is under development.
+:::tip
+Please, note, that signing is not require for all dApps. It will be useful, if you want to verify your user for providing to him his personal information from back end.
 :::
 
 
-Signature in works in TON Connect with a special `TonProof` entity, which implemented inside connector.
+Signature works in TON Connect with a special `TonProof` entity, which implemented inside connector.
 
 ```js
 type TonProofItemReply = TonProofItemReplySuccess | TonProofItemReplyError;
@@ -43,6 +43,15 @@ type TonProofItemReplySuccess = {
     }}
 />
 <br></br>
+
+## How to Check TON Proof in dApp with API
+
+1. Try to obtain public key via get_public_key get method on smart contract deployed at Address
+2. If the smart contract is not deployed (user just created new wallet locally in the wallet app), check the following:
+   * Parse walletStateInit via TonAddressItemReply.walletStateInit
+   * Retrieve `{public_key, address}` from `walletStateInit` with [TON API](https://tonapi.io/) method https://tonapi.io/v2/tonconnect/stateinit
+   * Check that address extracted from walletStateInit corresponds to wallet's address declared by user.
+3. Check timestamp, domain, signature (examples [GO]((https://github.com/ton-connect/demo-dapp-backend/blob/master/proof.go), [TS](https://gist.github.com/TrueCarry/cac00bfae051f7028085aa018c2a05c6), [Python]((https://github.com/XaBbl4/pytonconnect/blob/main/examples/check_proof.py)))
 
 ## How to Check TON Proof on Server Side
 
@@ -195,7 +204,7 @@ The signature must be verified by public key:
 
 * [GO demo app](https://github.com/ton-connect/demo-dapp-backend/blob/master/proof.go)
 * [TS example](https://gist.github.com/TrueCarry/cac00bfae051f7028085aa018c2a05c6)
-* [Python example](https://github.com/disintar/ton-connect-python-proof/blob/master/check_proof.ipynb?short_path=8776c84)
+* [Python example](https://github.com/XaBbl4/pytonconnect/blob/main/examples/check_proof.py)
 
 ## See Also
 
