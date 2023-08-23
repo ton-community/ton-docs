@@ -27,7 +27,7 @@ The verifier shows one of the pieces of paper to you (the prover) and asks you t
 Now if the verifier do this 10 times, and you can tell the difference every time, then the verifier will be convinced ~99.90234% (1 - (1/2)^10) that you can see colors.
 And if the verifier do this 30 times, then the verifier will be 99.99999990686774% (1 - (1/2)^30) convinced that you can see colors.
 
-But this is an interactive solution, and we can't have a DAppthat ask user to send 30 transactions to prove some claim! So we need a non-interactive solution. And this is where Zk-SNARKs and STARKs come in.
+But this is an interactive solution, and we can't have a DApp that ask user to send 30 transactions to prove some claim! So we need a non-interactive solution. And this is where Zk-SNARKs and STARKs come in.
 
 We will only cover Zk-SNARK in this tutorial, but you can read more about STARKs [here](https://starkware.co/stark/) and the comparison between Zk-SNARK and STARK [here](https://blog.pantherprotocol.io/zk-snarks-vs-zk-starks-differences-in-zero-knowledge-technologies/).
 
