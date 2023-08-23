@@ -53,7 +53,6 @@ Make sure you have thoroughly tested contracts before using them in a production
 
 | Contracts                                                                                                                                                                                                                                                                                                                             | Description                                                             |
 |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------|
-| [TonFunClessons_Eng](https://github.com/romanovichim/TonFunClessons_Eng) <br /> <small>🪄 [Run in WebIDE](https://ide.nujan.io/?importURL=https://github.com/romanovichim/TonFunClessons_Eng&name=TonFunClessons_Eng)</small>                                                                                                            | Lessons on developing smart contracts on FunC.                          |
 | [counter.fc](https://github.com/ton-community/blueprint/blob/main/example/contracts/counter.fc) <br /> <small>🪄 [Run in WebIDE](https://ide.nujan.io/?importURL=https://github.com/ton-community/blueprint/blob/main/example/contracts/counter.fc&name=counter.fc)</small>                                                              | Counter smart contract with comments.                                   |
 | [simple-distributor](https://github.com/ton-community/simple-distributor) <br /> <small>🪄 [Run in WebIDE](https://ide.nujan.io/?importURL=https://github.com/ton-community/simple-distributor&name=simple-distributor)</small>                                                                                                          | Simple TON distributor.                                                 |
 | [ping-pong.fc](https://github.com/tonwhales/ton-nft/blob/main/packages/nft/ping-pong/ping-pong.fc) <br /> <small>🪄 [Run in WebIDE](https://ide.nujan.io/?importURL=https://github.com/tonwhales/ton-nft/blob/main/packages/nft/ping-pong/ping-pong.fc&name=ping-pong.fc)</small>                                                        | Simple contract to test sending Toncoin in different modes.             |
@@ -134,7 +133,7 @@ Make sure you have thoroughly tested contracts before using them in a production
 * [wallet-v3-code.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-v3-code.fif)
 
 ## Examples of Tests for Smart Contracts  
-![img.png](img.png)
+
 * [liquid-staking-contract sandbox tests](https://github.com/ton-blockchain/liquid-staking-contract/tree/main/tests)
 * [governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/config_tests/tests/)
 * [JettonWallet.spec.ts](https://github.com/EmelyanenkoK/modern_jetton/blob/master/tests/JettonWallet.spec.ts)
