@@ -12,13 +12,6 @@ If you use React for your DApp, take a look at [TON Connect UI React SDK](/devel
 ### 1) Installation
 
 <Tabs groupId="Installation">
-  <TabItem value="NPM" label="NPM">
-To begin the integration of TON Connect into your app, install the @tonconnect/ui package:
-
-```bash npm2yarn
-npm i @tonconnect/ui
-```
-  </TabItem>
   <TabItem value="CDN" label="CDN">
 Add script in the HEAD element of your website:
     <br/>
@@ -29,13 +22,26 @@ Add script in the HEAD element of your website:
 <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 ```
   </TabItem>
+  <TabItem value="NPM" label="NPM">
+    To begin the integration of TON Connect into your app, install the @tonconnect/ui package:
+
+```bash npm2yarn
+npm i @tonconnect/ui
+```
+  </TabItem>
 </Tabs>
 
 ### 2) TON Connect Initiation
 
 After installing the package, you should create a `manifest.json` file for your application. More information on how to create a manifest.json file can be found [here](/develop/dapps/ton-connect/manifest).
 
-Add a script for a connector `tonConnectUI` in `<body>` part of application page:
+Add a button with `ton-connect` id to connect to the wallet:
+
+```html
+<div id="ton-connect"></div>
+```
+
+*After this tag* add a script for `tonConnectUI` in `<body>` part of application page:
 
 ```html
 <script>
@@ -46,18 +52,25 @@ Add a script for a connector `tonConnectUI` in `<body>` part of application page
 </script>
 ```
 
-Add a button with `ton-connect` id to connect to the wallet:
-
-```html
-<div id="ton-connect"></div>
-```
-
 ### 3) Connect to the Wallet
 
-"Connect" button (which is added at `buttonRootId`) automatically handles clicks and calls connect. But you are still able to open "connect modal" programmatically, e.g. after click on your custom connect button:
+"Connect" button (which is added at `buttonRootId`) automatically handles clicks.
 
-```js
-const connectedWallet = await tonConnectUI.connectWallet();
+But you can open "connect modal" programmatically, e.g. after click on custom button:
+
+```html
+<script>
+    async function connectToWallet() {
+        const connectedWallet = await tonConnectUI.connectWallet();
+        // Do something with connectedWallet if needed
+        console.log(connectedWallet);
+    }
+
+    // Call the function
+    connectToWallet().catch(error => {
+        console.error("Error connecting to wallet:", error);
+    });
+</script>
 ```
 
 ### 4) Redirects
