@@ -353,6 +353,11 @@ const sidebars = {
               id: 'develop/dapps/ton-connect/web',
               label: 'HTML/JS Web Apps',
             },
+            {
+              type: 'doc',
+              id: 'develop/dapps/ton-connect/tg-bot-integration',
+              label: 'Telegram Bots',
+            },
           ],
         },
         {
@@ -366,11 +371,6 @@ const sidebars = {
             'develop/dapps/ton-connect/transactions',
             'develop/dapps/ton-connect/sign',
             'develop/dapps/ton-connect/integration',
-            {
-              type: 'doc',
-              id: 'develop/dapps/ton-connect/tg-bot-integration',
-              label: 'Telegram Bots Integration',
-            },
           ],
         },
         {
