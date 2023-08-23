@@ -74,7 +74,7 @@ According to TON Connect 2.0 specifications, wallet app information always makes
     bridgeUrl?: string;
     jsBridgeKey?: string;
     injected?: boolean; // true if this wallet is injected to the webpage
-    embedded?: boolean; // true if the dapp is opened inside this wallet's browser
+    embedded?: boolean; // true if the DAppis opened inside this wallet's browser
 }
 ```
 

@@ -19,7 +19,7 @@ This page contents the list of useful libraries for TON Connect.
 
 TonConnect UI React is a React UI kit for TonConnect SDK. Use it to connect your app to TON wallets via TonConnect protocol in React apps.
 
-* Example of a DApp with `@tonconnect/ui-react`: [GitHub](https://github.com/ton-connect/demo-dapp-with-react-ui)
+* Example of a DAppwith `@tonconnect/ui-react`: [GitHub](https://github.com/ton-connect/demo-dapp-with-react-ui)
 * Example of deployed `demo-dapp-with-react-ui`: [GitHub](https://ton-connect.github.io/demo-dapp-with-react-ui/)
 
 ```bash
@@ -56,8 +56,8 @@ The TON Connect User Interface (UI) is a framework that allows developers to imp
 
 TON Connect can easily be integrated with apps using simple UI elements such as the "connect wallet button", "select wallet dialog" and confirmation modals. Here are three main examples of how TON Connect improves UX in apps:
 
-* Example of app functionality in the dApp browser: [GitHub](https://ton-connect.github.io/demo-dapp/)
-* Example of a backend partition of the dApp above: [GitHub](https://github.com/ton-connect/demo-dapp-backend)
+* Example of app functionality in the DAppbrowser: [GitHub](https://ton-connect.github.io/demo-dapp/)
+* Example of a backend partition of the DAppabove: [GitHub](https://github.com/ton-connect/demo-dapp-backend)
 * Bridge server using Go: [GitHub](https://github.com/ton-connect/bridge)
 
 
@@ -73,7 +73,7 @@ The most low-level of the three frameworks that helps developers integrate TON C
 
 ### TON Connect protocol models
 
-This package contains protocol requests, protocol responses, event models and encoding and decoding functions. It can be used to integrate TON Connect to wallet apps written in TypeScript. In order to integrate TON Connect into a dApp the [@tonconnect/sdk](https://www.npmjs.com/package/@tonconnect/sdk) should be used.
+This package contains protocol requests, protocol responses, event models and encoding and decoding functions. It can be used to integrate TON Connect to wallet apps written in TypeScript. In order to integrate TON Connect into a DAppthe [@tonconnect/sdk](https://www.npmjs.com/package/@tonconnect/sdk) should be used.
 
 - [GitHub](https://github.com/ton-connect/sdk/tree/main/packages/protocol)
 - [NPM](https://www.npmjs.com/package/@tonconnect/protocol)
@@ -116,7 +116,7 @@ If you experience any additional issues, or would like to present a proposal on 
 ## See Also
 
 * [Step by step guide for building your first web client](https://ton-community.github.io/tutorials/03-client/)
-* [[YouTube] TON Smart Contracts | 10 | Telegram dapp [EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU&t=254s&ab_channel=AlefmanVladimir%5BEN%5D)
+* [[YouTube] TON Smart Contracts | 10 | Telegram DApp[EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU&t=254s&ab_channel=AlefmanVladimir%5BEN%5D)
 * [Ton Connect Getting started](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
 * [Integration Manual](/develop/dapps/ton-connect/integration)
 * [[YouTube] TON Dev Study TON Connect Protocol [RU]](https://www.youtube.com/playlist?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_)

@@ -81,7 +81,7 @@
 				<v:ud v:nameU="visNavOrder" v:val="VT0(1000):26"/>
 			</v:userDefs>
 			<title>Actor lifeline</title>
-			<desc>dApp frontend</desc>
+			<desc>DAppfrontend</desc>
 			<g id="shape39-2" v:mID="39" v:groupContext="shape" transform="translate(19.8425,-9.10517)">
 				<title>Sheet.39</title>
 				<g id="shadow39-3" v:groupContext="shadow" v:shadowOffsetX="0.345598" v:shadowOffsetY="-1.97279" v:shadowType="1"
@@ -107,7 +107,7 @@
 					<rect x="0" y="324.389" width="90.7087" height="43.7221" class="st2"/>
 				</g>
 				<rect x="0" y="324.389" width="90.7087" height="43.7221" class="st3"/>
-				<text x="22.71" y="340.85" class="st5" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>dApp <tspan
+				<text x="22.71" y="340.85" class="st5" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>DApp<tspan
 							x="8.75" dy="1.2em" class="st6">frontend</tspan></text>			</g>
 		</g>
 		<g id="group43-22" transform="translate(345.013,-286.397)" v:mID="43" v:groupContext="group">
@@ -118,7 +118,7 @@
 				<v:ud v:nameU="visNavOrder" v:val="VT0(2000):26"/>
 			</v:userDefs>
 			<title>Object lifeline</title>
-			<desc>dApp backend</desc>
+			<desc>DAppbackend</desc>
 			<g id="shape44-23" v:mID="44" v:groupContext="shape" transform="translate(19.8425,-9.10517)">
 				<title>Sheet.44</title>
 				<g id="shadow44-24" v:groupContext="shadow" v:shadowOffsetX="0.345598" v:shadowOffsetY="-1.97279" v:shadowType="1"
@@ -152,7 +152,7 @@
 					<rect x="0" y="324.389" width="90.7087" height="43.7221" class="st2"/>
 				</g>
 				<rect x="0" y="324.389" width="90.7087" height="43.7221" class="st3"/>
-				<text x="22.71" y="340.85" class="st5" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>dApp <tspan
+				<text x="22.71" y="340.85" class="st5" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>DApp<tspan
 							x="8.68" dy="1.2em" class="st6">backend</tspan></text>			</g>
 		</g>
 		<g id="group54-48" transform="translate(480.438,-286.397)" v:mID="54" v:groupContext="group">
