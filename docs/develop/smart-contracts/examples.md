@@ -132,23 +132,6 @@ Make sure you have thoroughly tested contracts before using them in a production
 * [wallet.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet.fif)
 * [wallet-v3-code.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-v3-code.fif)
 
-## Examples of Tests for Smart Contracts  
-
-* [liquid-staking-contract sandbox tests](https://github.com/ton-blockchain/liquid-staking-contract/tree/main/tests)
-* [governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/config_tests/tests/)
-* [JettonWallet.spec.ts](https://github.com/EmelyanenkoK/modern_jetton/blob/master/tests/JettonWallet.spec.ts)
-* [governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/elector_tests/tests/complaint-test.fc)
-* [MassSender.spec.ts](https://github.com/Gusarich/ton-mass-sender/blob/main/tests/MassSender.spec.ts)
-* [TonForwarder.spec.ts](https://github.com/TrueCarry/ton-contract-forwarder/blob/main/src/contracts/ton-forwarder/TonForwarder.spec.ts)
-* [ton-tvm-bus](https://github.com/ton-defi-org/ton-tvm-bus)
-* [wTON-contract tests](https://github.com/ton-community/wton-contract/tree/main/tests) 
-* [getgems tests](https://github.com/ton-community/nft-sdk/tree/main/sandbox-examples/getgems) 
-* [Distributor.spec.ts](https://github.com/ton-community/simple-distributor/blob/main/tests/Distributor.spec.ts)
-* [Migration.spec.ts](https://github.com/Gusarich/jetton-migration/blob/main/tests/Migration.spec.ts)
-* [SubdomainManager.spec.ts](https://github.com/Gusarich/simple-subdomain/blob/main/tests/SubdomainManager.spec.ts)
-* [Token.spec.ts](https://github.com/Gusarich/ton-single-token/blob/main/tests/Token.spec.ts)
-* [Scheduler.spec.ts](https://github.com/Gusarich/external-scheduler/blob/master/tests/Scheduler.spec.ts)
-
 ## FunC Libraries and Helpers
 
 * https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc

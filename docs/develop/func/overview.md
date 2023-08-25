@@ -10,7 +10,7 @@ Here is a simple example method for sending money written in FunC:
     var msg = begin_cell()
         .store_uint(0x10, 6) ;; nobounce
         .store_slice(address)
-        .store_grams(amount)
+        .store_coins(amount)
         .end_cell();
 
     send_raw_message(msg, 64);
