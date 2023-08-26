@@ -40,7 +40,7 @@ forall X -> (tuple, X) list_next(tuple list) asm( -> 1 0) "UNCONS";
 Extracts the head and tail of a lisp-style list. Can be used as a [(non-)modifying method](/develop/func/statements#methods-calls).
 ```func
 () foo(tuple xs) {
-    int x = xs.list_next(); ;; get the first element
+    (_, int x) = xs.list_next(); ;; get the first element, `_` means do not use tail list 
     int y = xs~list_next(); ;; pop the first element
     int z = xs~list_next(); ;; pop the second element
 }
