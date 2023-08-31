@@ -27,7 +27,7 @@ Let's create a directory `ton-connect-bot`. Add the following package.json file 
   "version": "1.0.0",
   "scripts": {
     "compile": "npx rimraf dist && tsc",
-    "run": "node ./dist/main.js"
+    "start": "node ./dist/main.js"
   },
   "dependencies": {
     "@tonconnect/sdk": "^2.1.3",
