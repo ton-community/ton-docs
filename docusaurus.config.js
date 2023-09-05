@@ -1,10 +1,6 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github')
-const darkCodeTheme = require('prism-react-renderer/themes/dracula')
-
-
 // function to get current year
 function getCurrentYear() {
   const now = new Date();
@@ -456,8 +452,8 @@ const config = {
         // copyright: `Copyright © ${new Date().getFullYear()} TON Foundation`,
       },
       prism: {
-        // theme: darkCodeTheme,
-        // darkTheme: darkCodeTheme,
+        theme: require('./prism-theme'),
+        darkTheme: require('./prism-theme'),
         additionalLanguages: [
           'java',
           'python',
