@@ -107,6 +107,28 @@ Use it to connect your app to TON wallets via TonConnect protocol.
 
 * [GitHub](https://github.com/romanovichim/dartTonconnect)
 
+
+## TON Connect C#
+
+C# SDK for TON Connect 2.0. Analogue of the `@tonconnect/sdk` library.
+
+Use it to connect your app to TON wallets via TonConnect protocol.
+
+```bash
+ $ dotnet add package TonSdk.Connect
+```
+
+* [GitHub](https://github.com/continuation-team/TonSdk.NET/tree/main/TonSDK.Connect)
+
+
+## TON Connect Unity
+
+Unity asset for TON Connect 2.0. Uses `continuation-team/TonSdk.NET/tree/main/TonSDK.Connect`.
+
+Use it to integrate TonConnect protocol with your game.
+
+* [GitHub](https://github.com/continuation-team/unity-ton-connect)
+
 ## General Questions and Concerns
 
 If any of our developers or community members encounter any additional issues during the implementation of TON Connect 2.0, please contact the [Tonkeeper developer](https://t.me/tonkeeperdev) channel.
