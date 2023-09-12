@@ -45,6 +45,10 @@ const config = {
             from: '/learn/tvm-instructions/tvm_exit_codes',
           },
           {
+            to: '/develop/dapps/telegram-apps',
+            from: '/develop/dapps/twa',
+          },
+          {
             to: '/learn/tvm-instructions/tvm-overview',
             from: '/learn/tvm-instructions/tvm_overview',
           },
