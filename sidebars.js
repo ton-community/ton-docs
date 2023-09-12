@@ -182,6 +182,7 @@ const sidebars = {
               label: 'Testing & Debugging',
               items: [
                 'develop/smart-contracts/testing/overview',
+                'develop/smart-contracts/testing/writing-test-examples',
                 'develop/smart-contracts/testing/toncli',
               ],
             },
@@ -281,7 +282,7 @@ const sidebars = {
 
     {
       type: 'category',
-      label: 'DApp Development',
+      label: 'DApps Development',
       items: [
         'develop/dapps/README',
 

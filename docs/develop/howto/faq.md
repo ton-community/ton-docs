@@ -193,7 +193,6 @@ To protect message chains from being halted at non-existing contracts TON use "b
 
 - [Deploying wallet via TonLib](https://ton.org/docs/develop/dapps/asset-processing/#deploying-wallet)
 - [Paying for processing queries and sending responses](https://ton.org/docs/develop/smart-contracts/guidelines/processing)
-- [Tips & Tricks: bounce TON back](https://ton.org/docs/develop/smart-contracts/guidelines/tips)
 
 ### Is it possible to re-deploy code to an existing address or does it have to be deployed as a new contract?
 

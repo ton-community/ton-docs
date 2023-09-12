@@ -1,22 +1,42 @@
 # Writing Tests with Blueprint
 
-## Testing Overview
+## Overview
 
-Testing toolkit (usually, sandbox) already included to the TypeScript SDK named Blueprint. You can create demo project and launch default test with two steps:
+Test toolkit (usually, sandbox) already included to the TypeScript SDK named [Blueprint](/develop/smart-contracts/sdk/javascript). You can create demo project and launch default test with two steps:
 
-1. Install Blueprint project
+1. Create a new Blueprint project:
 ```bash
-npm create ton@latest
+npm create ton@latest MyProject
 ```
 
-2. Install Blueprint project
+2. Run a test:
 ```bash
+cd MyProject
 npx blueprint test
+```
+
+As a result you'll see corresponding output in the terminal window:
+
+```bash
+% npx blueprint test
+
+> MyProject@0.0.1 test
+> jest
+
+ PASS  tests/Main.spec.ts
+  Main
+    ✓ should deploy (127 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        1.224 s, estimated 2 s
+Ran all test suites.
 ```
 
 ## Basic Usage
 Testing of smart contracts allows for the coverage of security, optimization of gas spending, and examination of edge cases.
-Writing tests in Blueprint (that based on Sandbox) works through defining arbitary actions with the contract and comparing their results with the expected result, for example:
+Writing tests in Blueprint (that based on [Sandbox](https://github.com/ton-org/sandbox)) works through defining arbitary actions with the contract and comparing their results with the expected result, for example:
 
 ```typescript
 it('should execute with success', async () => {                              // description of the test case
@@ -32,7 +52,7 @@ it('should execute with success', async () => {                              // 
 ```
 
 
-### Writing Tests for Different Properties
+### Writing Tests for Complex Assertion
 
 The basic workflow of creating a test is:
 1. Create a specific wrapped `Contract` entity using `blockchain.openContract()`.
@@ -44,30 +64,17 @@ The `toHaveTransaction` matcher expects an object with any combination of fields
 | Name                 | Type          | Description                                                                                                                                                         |
 |----------------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | from                 | Address?      | Contract address of the message sender                                                                                                                              |
-| to                   | Address       | Contract address of the message destination                                                                                                                         |
 | on                   | Address       | Contract address of the message destination  (Alternative name of the property `to`).                                                                               |
 | value                | bigint?       | Amount of Toncoins in the message in nanotons                                                                                                                       |
 | body                 | Cell          | Message body defined as a Cell                                                                                                                                              |
-| inMessageBounced     | boolean?      | Boolean flag Bounced. True - message is bounced, False - message is not bounced.                                                                                    |
-| inMessageBounceable  | boolean?      | Boolean flag Bounceable. True - message can be bounced, False - message can not be bounced.                                                                         |
 | op                   | number?       | Op code is the operation identifier number (crc32 from TL-B usually). Expected in the first 32 bits of a message body.                                              |
-| initData             | Cell?         | InitData Cell. Used for contract deployment processes.                                                                                                              |
-| initCode             | Cell?         | initCode Cell. Used for contract deployment processes.                                                                                                              |
-| deploy               | boolean       | Custom Sandbox flag that indicates whether the contract was deployed during this transaction. True if contract before this transaction was not initialized and after this transaction became initialized. Otherwise - False.  |
-| lt                   | bigint        | Logical time (set by validators in a normal network, monotonically increases by a set interval in Sandbox). Used for defining order of transactions related to a certain contract                                                           |
-| now                  | bigint        | Unix timestamp of the transaction                                                                                                                                       |
-| outMessagesCount     | number        | Quantity of outbound messages in a certain transaction                                                                                                              |
-| oldStatus            | AccountStatus | AccountStatus before transaction execution                                                                                                                              |
-| endStatus            | AccountStatus | AccountStatus after transaction execution                                                                                                                               |
-| totalFees            | bigint?        | Number of spent fees in nanotons                                                                                                                                    |
-|aborted| boolean?       | True - execution of certain transaction aborted and rollbacked because of errors or insufficient gas. Otherwise - False.                                            |
-|destroyed| boolean?       | True - if the existing contract was destroyed due to executing a certain transaction. Otherwise - False.                                                            |
-|exitCode| number?        | TVM exit code (from compute phase)                                                                                                                                |
-|actionResultCode| number? | Action phase result code |
 |success| boolean?       | Custom Sandbox flag that defines the resulting status of a certain transaction. True - if both the compute and the action phase succeeded. Otherwise - False.       |
 
-
 You can omit those that you're not interested in, and you can also pass in functions accepting those types returning booleans (`true` meaning good) to check for example number ranges, message opcodes, etc. Note however that if a field is optional (like `from?: Address`), then the function needs to accept the optional type, too.
+
+:::tip
+Learn the whole list of matcher fields from the [Sandbox documentation](https://github.com/ton-org/sandbox#test-a-transaction-with-matcher).
+:::
 
 ## Tutorials
 
@@ -75,8 +82,8 @@ Learn more about testing from most valuable community tutorials on TON:
 
 * [Lesson 2: Testing FunC for a Smart Contract](https://github.com/romanovichim/TonFunClessons_Eng/blob/main/lessons/smartcontract/2lesson/secondlesson.md)
 * [TON Hello World part 4: Step by step guide for testing your first smart contract](https://ton-community.github.io/tutorials/04-testing/)
+* [TON Smart Contract Pipeline](https://dev.to/roma_i_m/ton-smart-contract-pipeline-write-simple-contract-and-compile-it-4pnh)
 * [[YouTube]Sixth lesson FunC & Blueprint. Gas, fees, tests.](https://youtu.be/3XIpKZ6wNcg)
-
 
 ## Examples
 
@@ -91,4 +98,5 @@ Check test suites used for TON Ecosystem contracts and learn by examples.
 
 
 ## See Also
-* [Using Blueprint](/develop/smart-contracts/sdk/javascript)
+* [Blueprint](/develop/smart-contracts/sdk/javascript)
+* [toncli](/develop/smart-contracts/testing/toncli)
