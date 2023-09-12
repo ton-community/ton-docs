@@ -78,8 +78,8 @@ export default function Home(): JSX.Element {
                     <h1 style={{ fontWeight: '650', textAlign:'center', padding: '0 10px' }}>Claim your NFT as proof of participating 💎</h1>
                     <p style={{ textAlign:'center', fontWeight: '400', fontSize:'18px',maxWidth:'600px', margin:'0 auto' }}>Every participant (maintainer and contributor) to any of TON Ecosystem projects will receive <b><a href="/contribute/hacktoberfest/#what-the-rewards">Limited Hack-TON-berfest NFT</a></b>:</p>
 
-                    <div style={{textAlign:'center', margin: '0 auto'}}>
-                        <video width="300" style={{borderRadius:'10pt', margin:'30pt auto 20pt'}} muted={true} autoPlay={true} loop={true}>
+                    <div style={{width: '100%', textAlign:'center', margin: '0 auto'}}>
+                        <video width="300" style={{width: '100%', borderRadius:'10pt', margin:'30pt auto 20pt'}} muted={true} autoPlay={true} loop={true}>
                             <source src="/files/nft-sm.mp4" type="video/mp4" />
                             Your browser does not support the video tag.
                         </video>
