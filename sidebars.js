@@ -281,10 +281,24 @@ const sidebars = {
 
     {
       type: 'category',
-      label: 'DAppDevelopment',
+      label: 'DApp Development',
       items: [
         'develop/dapps/README',
-        'develop/dapps/twa',
+
+        {
+          type: 'category',
+          label: 'Telegram Web Apps',
+          items: [
+            'develop/dapps/telegram-apps/README',
+            'develop/dapps/telegram-apps/step-by-step-guide',
+            'develop/dapps/telegram-apps/app-examples',
+            'develop/dapps/telegram-apps/testing-apps',
+            'develop/dapps/telegram-apps/publishing',
+            'develop/dapps/telegram-apps/monetization',
+            'develop/dapps/telegram-apps/grants',
+
+          ]
+        },
         {
           type: 'category',
           label: 'Learn',
