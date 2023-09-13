@@ -147,16 +147,6 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'APIs and SDKs',
-      items: [
-        'develop/dapps/apis/README',
-        'develop/dapps/apis/toncenter',
-        'develop/dapps/apis/adnl',
-        'develop/dapps/apis/sdk'
-      ],
-    },
-    {
-      type: 'category',
       label: 'Smart Contracts',
       items: [
         'develop/smart-contracts/README',
@@ -302,26 +292,15 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Learn',
+          label: 'APIs and SDKs',
           items: [
-            {
-              type: 'doc',
-              id: 'develop/dapps/tutorials/collection-minting',
-              label: 'NFT collection minting',
-            },
-            'develop/dapps/tutorials/jetton-minter',
-            {
-              type: 'category',
-              label: 'Telegram bots',
-              items: [
-                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
-                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
-                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js',
-              ],
-            },
-            'develop/dapps/tutorials/simple-zk-on-ton',
+            'develop/dapps/apis/README',
+            'develop/dapps/apis/toncenter',
+            'develop/dapps/apis/adnl',
+            'develop/dapps/apis/sdk'
           ],
         },
+
         {
           type: 'category',
           label: 'Guidelines',
@@ -341,6 +320,36 @@ const sidebars = {
             'develop/dapps/defi/tokens',
             'develop/dapps/defi/ton-payments',
             'develop/dapps/defi/subscriptions',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Tutorials & Examples',
+          items: [
+            {
+              type: 'doc',
+              id: 'develop/dapps/tutorials/collection-minting',
+              label: 'NFT Minting Guide',
+            },
+            {
+              type: 'doc',
+              id: 'develop/dapps/tutorials/jetton-minter',
+              label: 'Mint Your First Token',
+            },
+            {
+              type: 'doc',
+              id: 'develop/dapps/tutorials/simple-zk-on-ton',
+              label: 'Zero-Knowledge Proofs',
+            },
+            {
+              type: 'category',
+              label: 'Telegram Bot Examples',
+              items: [
+                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
+                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
+                'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js',
+              ],
+            },
           ],
         },
       ]
