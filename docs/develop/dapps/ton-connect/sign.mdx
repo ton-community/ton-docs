@@ -45,15 +45,21 @@ type TonProofItemReplySuccess = {
 
 ```
 
-## Check ton_proof with API
+## Check ton_proof 
 
 1. Retrieve `TonProofItemReply` from user.
-2. Try to obtain public key via get_public_key get method on smart contract deployed at `address`
-3. If the smart contract has not been deployed (e.g., the user has just created a new wallet locally in the wallet app) or does not support get_public_key method(v3 contracts), follow these steps:
-* a. Parse wallet's StateInit `walletStateInit = TonAddressItemReply.walletStateInit`
-* b. Retrieve `{public_key, address}` from `walletStateInit` with [TON API](https://tonapi.io/) method POST /v2/tonconnect/stateinit
-*  Check that `address` extracted from `walletStateInit` or  corresponds to wallet's `address` declared by user.
-4. Verify timestamp, domain, signature with `public_key` (examples [GO](https://github.com/ton-connect/demo-dapp-backend/blob/master/proof.go), [TS](https://gist.github.com/TrueCarry/cac00bfae051f7028085aa018c2a05c6), [Python](https://github.com/XaBbl4/pytonconnect/blob/main/examples/check_proof.py))
+2. Verify that the domain corresponds to the domain of your application
+3. Check if `TonProofItemReply.payload` permitted by original server and still active.
+4. Check timestamp
+5. Assemble a message according to the message scheme
+6. Retrieve public_key either API (a) or (b) implemented logic on back-end
+-- 6a.
+- i Retrieve {public_key, address} from walletStateInit with TON API method POST /v2/tonconnect/stateinit
+- ii Check that address extracted from walletStateInit or corresponds to wallet's address declared by user.
+-- 6b.
+- i Obtain the wallet's pubkey via the wallet contract's get method
+- ii If the contract is not active, then obtaining the key in this manner will be impossible; you will need to parse the `walletStateInit`, which is provided by the frontend and CHECK that `TonAddressItemReply.walletStateInit.hash()` equals to `TonAddressItemReply.address.hash()` means BoC hash.
+7. Verify that the signature from the frontend actually signs the assembled message and corresponds to the public key of the address
 
 ## How to Check TON Proof on Server Side
 
