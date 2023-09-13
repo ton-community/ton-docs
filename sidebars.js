@@ -108,12 +108,12 @@ const sidebars = {
     'develop/overview',
     {
       type: 'doc',
-      label: 'Get Started with TON',
+      label: 'Step-by-Step TON Guide',
       id: 'develop/get-started-with-ton',
     },
     {
       type: 'category',
-      label: 'TON Hello World',
+      label: 'TON Hello World series',
       items: [
         {
           type: 'link',
@@ -150,121 +150,85 @@ const sidebars = {
       label: 'Smart Contracts',
       items: [
         'develop/smart-contracts/README',
+
         {
           type: 'category',
-          label: 'Learn',
+          label: 'Getting Started',
           items: [
-
-           // 'develop/smart-contracts/learn/deployment',
-             {
-                 type: 'category',
-                 label: 'Deploying Contract',
-                 items: [
-                   {
-                     type: 'link',
-                     label: 'Using Blueprint',
-                     href: 'https://ton-community.github.io/tutorials/02-contract/',
-                   }
-                 ],
-               },
-            {
-              type: 'category',
-              label: 'Testing & Debugging',
-              items: [
-                'develop/smart-contracts/testing/overview',
-                'develop/smart-contracts/testing/writing-test-examples',
-                'develop/smart-contracts/testing/toncli',
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Tutorials & Examples',
-              items: [
-                'develop/smart-contracts/tutorials/multisig',
-                'develop/smart-contracts/tutorials/multisig-js',
-                'develop/smart-contracts/tutorials/wallet',
-                'develop/smart-contracts/examples'
-              ],
-            },
-
+            'develop/smart-contracts/sdk/javascript',
+            'develop/smart-contracts/environment/ide-plugins',
+            'develop/smart-contracts/environment/testnet',
           ],
-       },
-       {
-         type: 'category',
-         label: 'Guidelines',
-         items: [
-         'develop/smart-contracts/guidelines',
-         'develop/smart-contracts/compile/README',
-        {
-        type: 'category',
-        label: 'Messages',
-          items: [
-          'develop/smart-contracts/messages',
-          'develop/smart-contracts/guidelines/internal-messages',
-          'develop/smart-contracts/guidelines/external-messages',
-          'develop/smart-contracts/guidelines/non-bouncable-messages',
-          'develop/smart-contracts/guidelines/message-delivery-guarantees',
-          ],
-          },
-          {
-          type: 'category',
-          label: 'Fees',
-            items: [
-            'develop/smart-contracts/fees',
-            'develop/howto/fees-low-level',
-            'develop/smart-contracts/guidelines/accept',
-            'develop/smart-contracts/guidelines/processing',
-            ],
-            },
-           'develop/smart-contracts/guidelines/get-methods',
-           {
-             type: 'category',
-             label: 'Security Rules',
-             items: [
-               'develop/smart-contracts/security/README',
-               'develop/smart-contracts/security/ton-hack-challenge-1',
-               'develop/smart-contracts/guidelines/random-number-generation',
-               'develop/smart-contracts/security/random',
-             ],
-           },
-           {
-               type: 'category',
-               label: 'Design and Architecture',
-               items: [
-                     {
-                       type: 'link',
-                       label: 'How to shard your TON smart contract and why',
-                       href: 'https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons',
-                     },
-               ],
-             },
-         ],
-       },
-       {
-            type: 'category',
-            label: 'Core Contracts',
-            items: [
-                'develop/smart-contracts/governance',
-                'develop/howto/config-params',
-                'develop/research-and-development/minter-flow',
-            ]
         },
         {
           type: 'category',
-          label: 'Environment',
+          label: 'Testing and Debugging',
           items: [
-            'develop/smart-contracts/environment/installation',
-            'develop/smart-contracts/environment/ide-plugins',
-            'develop/smart-contracts/environment/testnet',
-
+            'develop/smart-contracts/testing/overview',
+            'develop/smart-contracts/testing/writing-test-examples',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Development Guidelines',
+          items: [
+            'develop/smart-contracts/guidelines',
+            'develop/smart-contracts/guidelines/get-methods',
             {
               type: 'category',
-              label: 'Choose Your SDK',
+              label: 'Message Management',
               items: [
-                'develop/smart-contracts/sdk/javascript',
-                'develop/smart-contracts/sdk/toncli',
+                'develop/smart-contracts/messages',
+                'develop/smart-contracts/guidelines/internal-messages',
+                'develop/smart-contracts/guidelines/external-messages',
+                'develop/smart-contracts/guidelines/non-bouncable-messages',
+                'develop/smart-contracts/guidelines/message-delivery-guarantees',
               ],
             },
+            {
+              type: 'category',
+              label: 'Transaction Fees',
+              items: [
+                'develop/smart-contracts/fees',
+                'develop/howto/fees-low-level',
+                'develop/smart-contracts/guidelines/accept',
+                'develop/smart-contracts/guidelines/processing',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Security Measures',
+              items: [
+                'develop/smart-contracts/security/README',
+                'develop/smart-contracts/security/ton-hack-challenge-1',
+                'develop/smart-contracts/guidelines/random-number-generation',
+                'develop/smart-contracts/security/random',
+              ],
+            },
+            {
+              type: 'link',
+              label: 'How to shard your TON smart contract and why',
+              href: 'https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Core Contracts',
+          items: [
+            'develop/smart-contracts/governance',
+            'develop/howto/config-params',
+            'develop/research-and-development/minter-flow',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Tutorials & Examples',
+          items: [
+            'develop/smart-contracts/tutorials/multisig',
+            'develop/smart-contracts/tutorials/multisig-js',
+            'develop/smart-contracts/tutorials/wallet',
+            'develop/smart-contracts/examples',
           ],
         },
       ],
@@ -288,7 +252,7 @@ const sidebars = {
             'develop/dapps/telegram-apps/monetization',
             'develop/dapps/telegram-apps/grants',
 
-          ]
+          ],
         },
         {
           type: 'category',
@@ -297,7 +261,7 @@ const sidebars = {
             'develop/dapps/apis/README',
             'develop/dapps/apis/toncenter',
             'develop/dapps/apis/adnl',
-            'develop/dapps/apis/sdk'
+            'develop/dapps/apis/sdk',
           ],
         },
 
@@ -352,7 +316,7 @@ const sidebars = {
             },
           ],
         },
-      ]
+      ],
     },
     {
       type: 'category',
@@ -361,7 +325,7 @@ const sidebars = {
         'develop/dapps/ton-connect/overview',
         {
           type: 'doc',
-          id: 'develop/dapps/ton-connect/wallet'
+          id: 'develop/dapps/ton-connect/wallet',
         },
         {
           type: 'category',
@@ -477,7 +441,7 @@ const sidebars = {
         'develop/fift/overview',
         'develop/fift/fift-and-tvm-assembly',
         'develop/fift/fift-deep-dive',
-      ]
+      ],
     },
 
     {
@@ -509,11 +473,11 @@ const sidebars = {
             'develop/data-formats/block-layout',
             'develop/data-formats/transaction-layout',
             'develop/data-formats/crc32',
-            'develop/data-formats/tlb-ide'
-          ]
+            'develop/data-formats/tlb-ide',
+          ],
         },
         'develop/data-formats/tl',
-      ]
+      ],
     },
     {
       type: 'category',
@@ -523,8 +487,8 @@ const sidebars = {
         'develop/network/adnl-udp',
         'develop/network/dht',
         'develop/network/rldp',
-        'develop/network/overlay'
-      ]
+        'develop/network/overlay',
+      ],
     },
     {
       type: 'category',
@@ -549,6 +513,8 @@ const sidebars = {
       items: [
         'develop/archive/pow-givers',
         'develop/archive/mining',
+        'develop/smart-contracts/compile/README',
+        'develop/smart-contracts/environment/installation',
       ],
     },
     {
@@ -561,7 +527,7 @@ const sidebars = {
     },
     'develop/companies/auditors',
     'develop/companies/outsource',
-],
+  ],
   participate: [
     'participate/README',
     {
@@ -572,10 +538,10 @@ const sidebars = {
       'type': 'html',
       'value': '<span class=\'menu__link\'><b><small> Infrastructure </small></b></span>',
     },
-        {
-        type: 'category',
-        label: 'Main Components',
-        items: [
+    {
+      type: 'category',
+      label: 'Main Components',
+      items: [
         'participate/explorers',
         {
           type: 'category',
@@ -601,37 +567,38 @@ const sidebars = {
             },
           ],
         },
-    ]},
+      ],
+    },
     {
       type: 'category',
       label: 'Blockchain Nodes',
       items: [
-          {
-              type: 'category',
-              label: 'Run a Node',
-              items: [
-                  'participate/nodes/node-types',
-                  'participate/run-nodes/full-node',
-                  'participate/run-nodes/liteserver',
-                  'participate/run-nodes/archive-node',
-                  'participate/run-nodes/local-ton',
-                    {
-                      type: 'link',
-                      label: 'Become a Validator',
-                      href: 'https://ton.org/validator',
-                    },
-              ],
-          },
-          {
-              type: 'category',
-              label: 'Nodes Infrastructure',
-              items: [
-                'participate/nodes/lite-client',
-                'participate/nodes/full-node',
-                'participate/nodes/validator',
-                'participate/nodes/node-maintenance-and-security',
-              ],
-          },
+        {
+          type: 'category',
+          label: 'Run a Node',
+          items: [
+            'participate/nodes/node-types',
+            'participate/run-nodes/full-node',
+            'participate/run-nodes/liteserver',
+            'participate/run-nodes/archive-node',
+            'participate/run-nodes/local-ton',
+            {
+              type: 'link',
+              label: 'Become a Validator',
+              href: 'https://ton.org/validator',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Nodes Infrastructure',
+          items: [
+            'participate/nodes/lite-client',
+            'participate/nodes/full-node',
+            'participate/nodes/validator',
+            'participate/nodes/node-maintenance-and-security',
+          ],
+        },
       ],
     },
     {
@@ -688,21 +655,21 @@ const sidebars = {
     },
   ],
   contribute: [
-       'contribute/README',
-     {
-       'type': 'category',
-       'label': 'Common Rules',
-       'items': [
-         'contribute/contribution-rules',
-         'contribute/participate',
-         'contribute/maintainers',
-       ],
-     },
+    'contribute/README',
+    {
+      'type': 'category',
+      'label': 'Common Rules',
+      'items': [
+        'contribute/contribution-rules',
+        'contribute/participate',
+        'contribute/maintainers',
+      ],
+    },
     {
       'type': 'category',
       'label': 'Documentation',
       'items': [
-            'contribute/docs/guidelines',
+        'contribute/docs/guidelines',
       ],
     },
     {

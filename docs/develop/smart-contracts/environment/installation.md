@@ -1,18 +1,24 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Button from '@site/src/components/button'
 
-# Installation
 
-## Javascript SDK
+# Precompiled binaries
 
-You no longer need to manually install binaries.
+:::caution important
+You no longer need to manually install binaries with Blueprint SDK.
+:::
 
-All binaries for development and testing are provided with the packages:
+All binaries for development and testing are provided with the Blueprint SDK.
 
-* [Choose your Javascript SDK](/develop/smart-contracts/sdk/javascript)
-
+<Button href="/develop/smart-contracts/sdk/javascript"
+colorType="primary" sizeType={'sm'}>
+Migrate to Blueprint SDK
+</Button>
 
 ## Precompiled binaries
+
+If you don't use Blueprint SDK for smart contracts development, you can use precompiled binaries for your operating system and tool of choice.
 
 ### Prerequisites
 

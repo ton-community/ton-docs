@@ -1,6 +1,6 @@
 
 
-# Using Blueprint
+# Blueprint SDK
 
 ![Blueprint](\img\blueprint\logo.svg)
 

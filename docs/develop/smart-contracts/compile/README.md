@@ -1,6 +1,10 @@
-# Build and Compile
+# Compile and Build smart contracts on TON
 
 Here is a list of libraries and repos to build your smart contract.
+
+**TLDR:**
+- In most cases, it's enough to use Blueprint SDK.
+- If you need more low-level approach, you can use ton-compiler or func-js.
 
 ## Blueprint
 

@@ -1,4 +1,4 @@
-# Testnet
+# Understanding Testnet
 
 Use the TON test network for development and testing purpose.
 
