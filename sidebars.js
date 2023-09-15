@@ -108,7 +108,7 @@ const sidebars = {
     'develop/overview',
     {
       type: 'doc',
-      label: 'Step-by-Step TON Guide',
+      label: 'Get Started with TON',
       id: 'develop/get-started-with-ton',
     },
     {

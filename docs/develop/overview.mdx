@@ -1,14 +1,17 @@
 import Button from '@site/src/components/button'
 import Player from '@site/src/components/player'
 
-# Overview
+# TON Documentation
 
-Welcome to the TON documentation!
+Welcome to the official TON Blockchain development documentation!
 
-Whether you're a seasoned developer or new to the space, this page provides an introduction to the tools and resources you'll need to build on TON. Feel free to focus on the approach that suits the best for you.
+This resource aims to provide you with all the necessary information you'll need to build, test, and deploy applications on the TON Blockchain.
 
-- _Get Started with TON_ is a step-by-step guide to interacting with TON Blockchain and writing your first application. (video tutorial included)
+This is a collaborative open-source initiative, and contributions are always welcome. All documentation can be edited via GitHub, just [follow these instructions](/contribute).
+
+- _Get Started with TON_ is a step-by-step guide to interacting with TON Blockchain. (video tutorial included)
 - _TON Hello World_ series provides detailed step-by-step guides to wallets, smart contracts, web apps, and testing & debugging smart contracts on TON.
+
 
 <Button href="/develop/get-started-with-ton" colorType={'primary'} sizeType={'sm'}>Get Started with TON</Button>
 <Button href="https://ton-community.github.io/tutorials/01-wallet/"
@@ -16,12 +19,35 @@ Whether you're a seasoned developer or new to the space, this page provides an i
   TON Hello World
 </Button>
 
+## Development Modules
 
-[//]: # (- [TON Hello World part 1: Step by step guide for working with your first TON wallet]&#40;https://ton-community.github.io/tutorials/01-wallet/&#41;)
+If you're new to TON Blockchain development, it's recommended that you start from the beginning and work your way through these topics.
 
-[//]: # (- [TON Onboarding Challenge: Mine your first Soulbound NFT on TON]&#40;/develop/get-started-with-ton&#41;)
+###  Foundational Concepts
 
-## Smart Contracts development
+- [The Open Network](/learn/introduction) - A high-level overview of TON Blockchain.
+- [Blockchain of Blockchains](/learn/overviews/ton-blockchain) - a down-to-earth explanation of TON Blockchain.
+- [Smart Contract Addresses](/learn/overviews/addresses) - A detailed explanation of Addresses.
+- [Cells as a Data Structure](/learn/overviews/cells) - A high-level explanation of data structures.
+- [TON Networking](/learn/networking/overview) - A high-level overview of TON peer-to-peer protocols.
+- [TON Virtual Machine (TVM)](/learn/tvm-instructions/tvm-overview) - A high-level overview of TON Virtual Machine.
+  - [Transactions and Phases](/learn/tvm-instructions/tvm-overview#transactions-and-phases) - A detailed explanation of transactions and phases.
+- [Transaction Fees](/develop/smart-contracts/fees) - A high-level explanation of transaction fees.
+
+### Infrastructure
+
+- [Node Types](/participate/nodes/node-types) - A detailed explanation of node types.
+- [Run a Full Node](/participate/run-nodes/full-node) - A detailed explanation of how to run a node.
+- [TON DNS & Sites](/participate/web3/dns) - A detailed explanation of TON DNS & Sites.
+- [TON Storage](/participate/ton-storage/storage-daemon) - A detailed explanation of TON Storage.
+
+### Additional Resources
+
+- [**FAQ**](/develop/howto/faq) - Frequently Asked Questions
+- [FunC Documentation](/develop/func/overview)
+- [Fift Documentation](/develop/fift/overview)
+
+## Smart Contracts Development
 
 Smart contracts are the building blocks of decentralized applications (DApps) on TON Blockchain. If you're looking to develop your own dApps, it's essential to understand how smart contracts work.
 
@@ -31,7 +57,6 @@ Smart contracts are the building blocks of decentralized applications (DApps) on
   Read more
 </Button>
 <br></br><br></br>
-
 
 The following resources provide valuable information for TON smart contract development:
 
@@ -43,12 +68,13 @@ The following resources provide valuable information for TON smart contract deve
 ## DApp Development
 
 Decentralized applications (DApps) are applications that run on a peer-to-peer network of computers rather than a single computer (TON Blockchain). They are similar to traditional web applications, but they are built on top of a blockchain network. This means that DApps are decentralized, meaning that no single entity controls them.
+<Button href="/develop/dapps/" colorType={'primary'} sizeType={'sm'}>Getting Started</Button>
 
 ### DeFi Development
 
-* [Off-chain Payments Processing](/develop/dapps/asset-processing) — examples and concepts
-* [TON Jetton processing](/develop/dapps/asset-processing/jettons) — examples and concepts
-* [TON Connect](/develop/dapps/ton-connect/) — integration and authentication for applications
+* [TON Connect](/develop/dapps/ton-connect/overview) — integration and authentication for DApps.
+* [Off-chain Payments Processing](/develop/dapps/asset-processing) — examples and concepts for processing payments.
+* [TON Jetton processing](/develop/dapps/asset-processing/jettons) — examples and concepts for processing Jettons.
 * [Fungible (FT) / Non-fungible (NFT) tokens](/develop/dapps/defi/tokens) — smart contracts, examples, tools
 
 Take your first steps in DApps development with a comprehensive DApps building guide:
@@ -56,18 +82,12 @@ Take your first steps in DApps development with a comprehensive DApps building g
 - [TON Hello World: Step by step guide for building your first web client](https://ton-community.github.io/tutorials/03-client/)
 - [Telegram bot integration via TON Connect](/develop/dapps/ton-connect/tg-bot-integration)
 
-
 ### SDKs and Examples
 
 * [APIs](/develop/dapps/apis)
 * [SDKs](/develop/dapps/apis/sdk)
-* [Learn application development by examples](/develop/dapps/#examples)
-* [Learn smart contracts by examples](/develop/smart-contracts/examples)
-* [Telegram Web Apps (TWA) Development](https://docs.twa.dev/docs/introduction/about-platform)
-* [Authorization SDKs](/develop/dapps/ton-connect/developers)
 
-
-## TON Community Education Library
+## TON Education Hub
 
 - [Education](https://github.com/ton-community/awesome-ton#-education) - Unveil the comprehensive list of various educational materials, meticulously crafted by the remarkable TON Community.
 
