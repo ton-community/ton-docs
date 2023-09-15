@@ -4,8 +4,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 ## Use Cases
 
-Please note that signing is not required for all DApps. It will be useful if you want to verify a user to provide them with their personal information from the back end. This is necessary for authorization on the backend, to prove that the user truly owned the declared address.
-
+Please note that signing is not required for all DApps. It will be useful if you want to verify a user to provide them with their personal information from the back end. This is necessary for authorization on the backend to make certain that the user truly owned the declared address, as it follows that the user has permission to access his data on the backend.
 
 ## How ton_proof Works?
 
@@ -45,32 +44,21 @@ type TonProofItemReplySuccess = {
 
 ```
 
-## Check ton_proof 
+## Check ton_proof on Server Side
 
-1. Retrieve `TonProofItemReply` from user.
-2. Verify that the domain corresponds to the domain of your application
+1. Retrieve `TonProofItemReply` from a user.
+2. Verify that the received domain corresponds to the domain of your application.
 3. Check if `TonProofItemReply.payload` permitted by original server and still active.
-4. Check timestamp
-5. Assemble a message according to the message scheme
-6. Retrieve public_key either API (a) or (b) implemented logic on back-end
--- 6a.
-- i Retrieve {public_key, address} from walletStateInit with TON API method POST /v2/tonconnect/stateinit
-- ii Check that address extracted from walletStateInit or corresponds to wallet's address declared by user.
--- 6b.
-- i Obtain the wallet's pubkey via the wallet contract's get method
-- ii If the contract is not active, then obtaining the key in this manner will be impossible; you will need to parse the `walletStateInit`, which is provided by the frontend and CHECK that `TonAddressItemReply.walletStateInit.hash()` equals to `TonAddressItemReply.address.hash()` means BoC hash.
-7. Verify that the signature from the frontend actually signs the assembled message and corresponds to the public key of the address
-
-## How to Check TON Proof on Server Side
-
-Obtain from the frontend the following data: wallet address, domain, timestamp, walletStateInit, signature
-
-* Verify that the domain corresponds to the domain of your application
-* Check that this payload was issued recently (you can issue cookies with the payload before authorization, and when checking ton_proof, verify the presence of a cookie for this client)
-* Assemble a message according to the scheme from the previous slide
-* Obtain the wallet's pubkey via the wallet contract's get method
-* If the contract is not active, then obtaining the key in this manner will be impossible; you will need to parse the walletStateInit, which is provided by the frontend
-* Verify that the signature from the frontend actually signs the assembled message and corresponds to the public key of the address
+4. Check if `timestamp` actual at the moment.
+5. Assemble a message according to the [message scheme](/develop/dapps/ton-connect/sign#concept-explanation).
+6. Retrieve `public_key` either API (a) or (b) implemented logic on back-end
+- 6a:
+    - Retrieve `{public_key, address}` from the `walletStateInit` with [TON API](https://docs.tonconsole.com/tonapi/api-v2#:~:text=/v2/-,tonconnect,-/stateinit) method `POST /v2/tonconnect/stateinit`.
+    - Check that the `address` extracted from `walletStateInit` or corresponds to wallet's `address` declared by user.
+- 6b:
+    - Obtain the wallet's `public_key` via the wallet contract's [get method](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc#L174).
+    - If the contract is not active, or if it lacks the get_method found in older wallet versions (v1-v3), then obtaining the key in this manner will be impossible. Instead, you will need to parse the walletStateInit provided by the frontend. Ensure that TonAddressItemReply.walletStateInit.hash() is equal to TonAddressItemReply.address.hash(), indicating a BoC hash.
+7. Verify that the `signature` from the frontend actually signs the assembled message and corresponds to the `public_key` of the address.
 
 ## React Example
 
