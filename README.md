@@ -21,7 +21,7 @@ TON is an actively growing ecosystem, and every day many devs contribute to its 
 You can participate in TON by helping organize knowledge, making Pull Requests and creating tutorials to help other developers. 
 Feedback, lectures, technical articles, tutorials, and examples. All this can help the developers community grow even faster!
 
-Join TON Docs Club chat in Telegram and get the latest tasks from maintainers:
+Join TON Docs Club chat in Telegram to join contributors party:
 * https://t.me/+c-0fVO4XHQsyOWM8
 
 ---
@@ -30,12 +30,11 @@ Join TON Docs Club chat in Telegram and get the latest tasks from maintainers:
 
 ## How to Contribute? 🦄
 
-As said before, it's up to you.
-
 If you are a developer and faced some difficulties, successfully overcoming them - share this knowledge with future developers!
 
-— Have an idea? [Submit an issue](https://github.com/ton-community/ton-docs/issues/new/choose).  
-— Want to validate changes? [Setup your environment](https://github.com/ton-community/ton-docs#set-up-your-environment-%EF%B8%8F).
+— Have an issue? [Prepare a solution with TON Docs Wizard](https://t.me/ton_docs_bot).  
+— Have an idea? [Submit a Feature Request](https://github.com/ton-community/ton-docs/issues/new/choose).  
+— Want to contribute? [Setup your environment](https://github.com/ton-community/ton-docs#set-up-your-environment-%EF%B8%8F).
 
 Contributing best practices:  [docs/contribute](https://ton.org/docs/contribute)
 
