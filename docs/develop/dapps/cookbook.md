@@ -155,6 +155,8 @@ U | 01010001 | no | no |
 k | 10010001 | yes | yes |
 0 | 11010001 | no | yes |
 
+It's important to note that in base64 encoding, each character represents **6 bits** of information. As you can observe, in all cases, the last 2 bits remain unchanged, so in this case, we can focus on the first letter. If they changed, it would affect the next character in the address.
+
 Also, in some libraries, you may notice a field called "url safe." The thing is, the base64 format is not url safe, which means there can be issues when transmitting this address in a link. When urlSafe = true, all `+` symbols are replaced with `-`, and all `/` symbols are replaced with `_`. You can obtain these address formats using the following code:
 
 <Tabs groupId="code-examples">
@@ -258,12 +260,12 @@ async function main() {
     
     const messageBody = beginCell()
         .storeUint(0x0f8a7ea5, 32) // opcode for jetton transfer
-        .storeUint(0, 64)
+        .storeUint(0, 64) // query id
         .storeCoins(toNano(5)) // jetton amount, amount * 10^9
         .storeAddress(destinationAddress)
         .storeAddress(destinationAddress) // response destination
         .storeBit(0) // no custom payload
-        .storeCoins(toNano('0.02'))
+        .storeCoins(toNano('0.02')) // forward amount
         .storeBit(1) // we store forwardPayload as a reference
         .storeRef(forwardPayload)
         .endCell();
@@ -306,13 +308,13 @@ async function main() {
     });
     const ownersAddress = [
         Address.parse('EQBbQljOpEM4Z6Hvv8Dbothp9xp2yM-TFYVr01bSqDQskHbx'),
-        Address.parse('EQBbQljOpEM4Z6Hvv8Dbothp9xp2yM-TFYVr01bSqDQskHbx'),
-        Address.parse('EQBbQljOpEM4Z6Hvv8Dbothp9xp2yM-TFYVr01bSqDQskHbx')
+        Address.parse('EQAUTbQiM522Y_XJ_T98QPhPhTmb4nV--VSPiha8kC6kRfPO'),
+        Address.parse('EQDWTH7VxFyk_34J1CM6wwEcjVeqRQceNwzPwGr30SsK43yo')
     ];
     const nftsMeta = [
         '0/meta.json',
-        '0/meta.json',
-        '0/meta.json'
+        '1/meta.json',
+        '2/meta.json'
     ];
 
     const getMethodResult = await client.runMethod(collectionAddress, 'get_collection_data');
@@ -403,8 +405,8 @@ async function main() {
     const newOwnerAddress = Address.parse('put new owner wallet address');
 
     const messageBody = beginCell()
-        .storeUint(3, 32)
-        .storeUint(0, 64)
+        .storeUint(3, 32) // opcode for changing owner
+        .storeUint(0, 64) // query id
         .storeAddress(newOwnerAddress)
         .endCell();
 
@@ -466,7 +468,7 @@ async function main() {
 
     const messageBody = beginCell()
         .storeUint(4, 32) // opcode for changing content
-        .storeUint(0, 64)
+        .storeUint(0, 64) // query id
         .storeRef(contentCell)
         .storeRef(royaltyCell)
         .endCell();
