@@ -239,7 +239,7 @@ const sidebars = {
       label: 'DApps Development',
       items: [
         'develop/dapps/README',
-
+        'develop/dapps/cookbook',
         {
           type: 'category',
           label: 'Telegram Web Apps',
