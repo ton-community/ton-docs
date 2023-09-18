@@ -1,0 +1,176 @@
+@import "media_queries";
+
+$font-weight-black: 900;
+$font-weight-extra-bold: 800;
+$font-weight-bold: 700;
+$font-weight-semi-bold: 600;
+$font-weight-medium: 500;
+$font-weight-regular: 400;
+$font-weight-light: 300;
+$font-weight-extra-light: 200;
+$font-weight-thin: 100;
+
+$ultra-font-size-mobile: 32px;
+$ultra-font-size-tablet-s: 64px;
+$ultra-font-size-desktop: 80px;
+
+$ultra-line-height-mobile: 40px;
+$ultra-line-height-tablet-s: 72px;
+$ultra-line-height-desktop: 92px;
+
+$extra-font-size-mobile: 56px;
+$extra-font-size-tablet-s: 64px;
+$extra-font-size-desktop: 80px;
+
+$extra-line-height-mobile: 64px;
+$extra-line-height-tablet-s: 72px;
+$extra-line-height-desktop: 92px;
+
+$h1-font-size-mobile: 36px;
+$h1-font-size-tablet-s: 44px;
+$h1-font-size-desktop: 64px;
+
+$h1-line-height-mobile: 44px;
+$h1-line-height-tablet-s: 56px;
+$h1-line-height-desktop: 72px;
+
+$h2-font-size-mobile: 28px;
+$h2-font-size-tablet-s: 36px;
+$h2-font-size-desktop: 56px;
+
+$h2-line-height-mobile: 36px;
+$h2-line-height-tablet-s: 44px;
+$h2-line-height-desktop: 64px;
+
+$h3-font-size-mobile: 26px;
+$h3-font-size-tablet-s: 32px;
+$h3-font-size-desktop: 48px;
+
+$h3-line-height-mobile: 32px;
+$h3-line-height-tablet-s: 40px;
+$h3-line-height-desktop: 56px;
+
+$h4-font-size-mobile: 26px;
+$h4-font-size-tablet-s: 26px;
+$h4-font-size-desktop: 40px;
+
+$h4-line-height-mobile: 32px;
+$h4-line-height-tablet-s: 32px;
+$h4-line-height-desktop: 48px;
+
+$h5-font-size-mobile: 20px;
+$h5-font-size-tablet-s: 20px;
+$h5-font-size-desktop: 32px;
+
+$h5-line-height-mobile: 28px;
+$h5-line-height-tablet-s: 28px;
+$h5-line-height-desktop: 40px;
+
+$headline-1-font-size-mobile: 20px;
+$headline-1-font-size-desktop: 24px;
+
+$headline-1-line-height-mobile: 28px;
+$headline-1-line-height-desktop: 32px;
+
+$headline-2-font-size-mobile: 18px;
+$headline-2-font-size-desktop: 20px;
+
+$headline-2-line-height-mobile: 22px;
+$headline-2-line-height-desktop: 30px;
+
+
+$button-1-font-size-mobile: 14px;
+$button-1-font-size-tablet-s: 16px;
+
+$button-1-line-height-mobile: 24px;
+$button-1-line-height-tablet-s: 24px;
+
+$button-2-font-size-mobile: 14px;
+$button-2-font-size-tablet-s: 16px;
+
+$button-2-line-height: 24px;
+
+$button-3-font-size-mobile: 12px;
+$button-3-font-size-tablet-s: 14px;
+
+$button-3-line-height: 18px;
+
+$text-1-font-size-mobile: 16px;
+$text-1-font-size-desktop: 18px;
+
+$text-1-line-height-mobile: 24px;
+$text-1-line-height-desktop: 28px;
+
+
+$text-2-font-size-mobile: 14px;
+$text-2-font-size-desktop: 16px;
+
+$text-2-line-height-mobile: 20px;
+$text-2-line-height-desktop: 24px;
+
+$caption-font-size-mobile: 12px;
+$caption-font-size-desktop: 14px;
+
+$caption-line-height-mobile: 16px;
+$caption-line-height: 20px;
+
+$font-size-large-xl: 72px;
+$font-size-large-pre-xl: 64px;
+$font-size-large-l: 56px;
+$font-size-large-m: 48px;
+$font-size-large-pre-m: 42px;
+$font-size-large-s: 40px;
+$font-size-large-xs: 36px;
+
+$font-size-md-xl: 34px;
+$font-size-md-l: 32px;
+$font-size-md-m: 28px;
+$font-size-md-s: 24px;
+
+$font-size-small-xl: 20px;
+$font-size-small-l: 18px;
+$font-size-small-m: 16px;
+$font-size-small-pre-m: 15px;
+$font-size-small-s: 14px;
+$font-size-small-xs: 12px;
+$font-size-small-xxs: 10px;
+
+
+$line-height-large-xl: 88px;
+$line-height-large-pre-xl: 72px;
+$line-height-large-l: 64px;
+$line-height-large-m: 56px;
+$line-height-large-s: 48px;
+$line-height-large-xs: 44px;
+
+$line-height-medium-xl: 40px;
+$line-height-medium-l: 38px;
+$line-height-medium-m: 36px;
+$line-height-medium-s: 32px;
+$line-height-medium-xs: 30px;
+
+$line-height-small-xl: 28px;
+$line-height-small-l: 24px;
+$line-height-small-m: 22px;
+$line-height-small-s: 18px;
+$line-height-small-xs: 14px;
+
+@mixin font-inter {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont,
+  Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+@mixin font-jet-brains-mono {
+  font-family: "JetBrains Mono", -apple-system, BlinkMacSystemFont,
+  Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+@mixin text-1 {
+  font-size: $text-1-font-size-desktop;
+  line-height: $text-1-line-height-desktop;
+
+  @include media-breakpoint-s {
+    font-size: $text-1-font-size-mobile;
+    line-height: $text-1-line-height-mobile;
+  }
+}

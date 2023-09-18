@@ -1,0 +1,40 @@
+@import "../styles/all";
+
+.Logo {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  @include with-transition(color);
+
+  &__inner {
+    display: block;
+
+    &--large {
+      @include media-breakpoint-xl {
+        display: none;
+      }
+    }
+
+    &--small {
+      display: none;
+
+      @include media-breakpoint-xl {
+        display: block;
+      }
+    }
+  }
+
+  &--dark {
+    color: var(--basic-white);
+  }
+
+  &--light {
+    color: var(--basic-black);
+  }
+}
+
+$caret-width: 24px;
+$caret-height: 8px;
+$logo-dropdown-vertical-padding: 6px;
+$logo-dropdown-vertical-offset: 10px;
+$logo-dropdown-shadow-color: 4px 4px 16px rgba(35, 35, 40, 0.08);

@@ -1,0 +1,83 @@
+$grid-columns-count: 12;
+
+$def-trans-duration: .3s;
+$transition-duration: .2s;
+$transition-timing-function: ease-in-out;
+$transition-duration-fast: .1s;
+
+$header-height: 114px;
+$header-height-xl: 114px;
+$header-height-l: 70px;
+$header-height-m: 70px;
+$header-height-s: 70px;
+
+$header-height-desktop: 68px;
+$header-height-mobile: 56px;
+
+$header-fixed-height: 78px;
+
+$container-horizontal-padding: 40px;
+$container-horizontal-padding-s: 32px;
+
+$containerMaxWidthTabletM: 936px;
+$containerMaxWidthDesktop: 1120px;
+
+// В макете главной в самой маленькой версии 16px, но лучше использовать 24px,
+// так как 16 очень мало и на всех остальных страницах для мобилки используется 24px
+$container-horizontal-padding-xs: 24px;
+
+$opacity-s: .2;
+$opacity-half: 0.56;
+
+$svg-link-filter: invert(71%) sepia(20%) saturate(288%) hue-rotate(155deg) brightness(94%) contrast(90%);
+$svg-hover-link-filter: invert(34%) sepia(83%) saturate(1078%) hue-rotate(170deg) brightness(101%) contrast(104%);
+
+$svg-tab-filter: invert(19%) sepia(1%) saturate(0%) hue-rotate(90deg) brightness(85%) contrast(91%);
+
+$container-horizontal-paddings-mobile: 32px;
+$container-horizontal-paddings-tablet-s: 80px;
+
+/* Z-INDEX */
+$base: 0;
+$above: 1;
+$below: -1;
+
+$overlapping: $above + $base;
+$main: $above + $overlapping;
+$covering: $above + $main;
+$drawer: $above + $covering;
+$fixed: $above + $drawer;
+$modal: $above + $fixed;
+$modal-tooltip: $above + $modal;
+
+//PADDINGS
+
+$card-l-padding-vertical: 40px;
+$card-l-padding-horizontal: 48px;
+$card-l-padding: $card-l-padding-vertical $card-l-padding-horizontal;
+
+$card-m-padding-vertical: 28px;
+$card-m-padding-horizontal: 32px;
+$card-m-padding: $card-m-padding-vertical $card-m-padding-horizontal;
+
+$card-s-padding-vertical: 20px;
+$card-s-padding-horizontal: 24px;
+$card-s-padding: $card-s-padding-vertical $card-s-padding-horizontal;
+
+
+//height and width
+
+$card-l-width: 496px;
+$card-l-height: 310px;
+
+$card-s-width: 295px;
+$card-s-height: 285px;
+
+$card-xs-height: 232px;
+
+//border
+$border-r-md: 24px;
+$border-r-sm: 16px;
+$border-r-xs: 12px;
+
+$button-border-width: 1.5px;

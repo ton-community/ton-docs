@@ -1,0 +1,71 @@
+@import "../../styles/all";
+
+.Caption {
+    @include font-inter;
+    font-size: $font-size-small-xs;
+    line-height: $line-height-small-s;
+
+    p {
+        overflow: visible;
+    }
+
+    @include media-breakpoint-tablet-m {
+        font-size: $font-size-small-s;
+    }
+
+    &--weight-semi {
+        font-weight: $font-weight-semi-bold;
+    }
+
+    &--weight-medium {
+        font-weight: $font-weight-medium;
+    }
+
+    &--weight-regular {
+        font-weight: $font-weight-regular;
+    }
+
+    &--scheme-light {
+        &.Caption--color {
+            &-primary {
+                color: var(--text-primary-light);
+            }
+
+            &-secondary {
+                color: var(--text-secondary-light);
+            }
+
+            &-tertiary {
+                color: var(--text-tertiary-light);
+            }
+
+            &-accent {
+                color: var(--accent-light-default);
+            }
+
+            &-error {
+                color: var(--feedback-error-light);
+            }
+        }
+
+        &--scheme-dark {
+            &.Caption--color {
+                &-primary {
+                    color: var(--text-primary-dark);
+                }
+
+                &-secondary {
+                    color: var(--text-secondary-dark);
+                }
+
+                &-tertiary {
+                    color: var(--text-tertiary-dark);
+                }
+
+                &-accent {
+                    color: var(--accent-dark-default);
+                }
+            }
+        }
+    }
+}
