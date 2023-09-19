@@ -1,7 +1,7 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Wrappers Cookbook
+# TON Cookbook
 
 During product development, various questions often arise regarding interactions with different contracts on TON.
 
@@ -127,18 +127,18 @@ func setBit(n *byte, pos uint) {
 <TabItem value="py" label="Python">
 
 ```py
-from tonsdk.utils._address import Address
+from pytoniq_core import Address
 
 address1 = Address('EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF')
 address2 = Address('0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e')
 
-# to_string() arguments: is_user_friendly, is_url_safe, is_bounceable, is_test_only
+# to_str() arguments: is_user_friendly, is_url_safe, is_bounceable, is_test_only
 
-print(address1.to_string(is_user_friendly=True, is_bounceable=True, is_url_safe=True))  # EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
-print(address1.to_string(is_user_friendly=False))  # 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+print(address1.to_str(is_user_friendly=True, is_bounceable=True, is_url_safe=True))  # EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+print(address1.to_str(is_user_friendly=False))  # 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
 
-print(address2.to_string(is_user_friendly=True, is_bounceable=True, is_url_safe=True))  # EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
-print(address2.to_string(is_user_friendly=False))  # 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+print(address2.to_str(is_user_friendly=True, is_bounceable=True, is_url_safe=True))  # EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+print(address2.to_str(is_user_friendly=False))  # 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
 ```
 
 </TabItem>
@@ -148,12 +148,12 @@ print(address2.to_string(is_user_friendly=False))  # 0:ca6e321c7cce9ecedf0a8ca24
 
 Addresses come in three formats: **bounceable**, **non-bounceable**, and **testnet**. This can be easily understood by looking at the first letter of the address, because it is the first byte (8 bits) that contains flags according to [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md#smart-contract-addresses):
 
-Letter | Binary form | Bounceable | Testnet
-:---: | :---: | :---: | :---:
-E | 00010001 | yes | no |
-U | 01010001 | no | no |
-k | 10010001 | yes | yes |
-0 | 11010001 | no | yes |
+| Letter | Binary form | Bounceable | Testnet |
+|:------:|:-----------:|:----------:|:-------:|
+|   E    |  00010001   |    yes     |   no    |
+|   U    |  01010001   |     no     |   no    |
+|   k    |  10010001   |    yes     |   yes   |
+|   0    |  11010001   |     no     |   yes   |
 
 It's important to note that in base64 encoding, each character represents **6 bits** of information. As you can observe, in all cases, the last 2 bits remain unchanged, so in this case, we can focus on the first letter. If they changed, it would affect the next character in the address.
 
@@ -223,17 +223,17 @@ func main() {
 <TabItem value="py" label="Python">
 
 ```py
-from tonsdk.utils._address import Address
+from pytoniq_core import Address
 
 address = Address('EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF')
 
-# to_string() arguments: is_user_friendly, is_url_safe, is_bounceable, is_test_only
+# to_str() arguments: is_user_friendly, is_url_safe, is_bounceable, is_test_only
 
-print(address.to_string(is_user_friendly=True, is_bounceable=True, is_url_safe=True, is_test_only=False))  # EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
-print(address.to_string(is_user_friendly=True, is_bounceable=True, is_url_safe=False, is_test_only=False))  # EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff+W72r5gqPrHF
-print(address.to_string(is_user_friendly=True, is_bounceable=False, is_url_safe=True, is_test_only=False))  # UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA
-print(address.to_string(is_user_friendly=True, is_bounceable=True, is_url_safe=True, is_test_only=True))  # kQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPgpP
-print(address.to_string(is_user_friendly=True, is_bounceable=False, is_url_safe=True, is_test_only=True))  # 0QDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPleK
+print(address.to_str(is_user_friendly=True, is_bounceable=True, is_url_safe=True, is_test_only=False))  # EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+print(address.to_str(is_user_friendly=True, is_bounceable=True, is_url_safe=False, is_test_only=False))  # EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff+W72r5gqPrHF
+print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=True, is_test_only=False))  # UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA
+print(address.to_str(is_user_friendly=True, is_bounceable=True, is_url_safe=True, is_test_only=True))  # kQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPgpP
+print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=True, is_test_only=True))  # 0QDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPleK
 ```
 
 </TabItem>
@@ -279,6 +279,68 @@ async function main() {
     const internalMessageCell = beginCell()
         .store(storeMessageRelaxed(internalMessage))
         .endCell();
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+<TabItem value="js-tonweb" label="JS (tonweb)">
+
+```js
+const TonWeb = require("tonweb");
+const {mnemonicToKeyPair} = require("tonweb-mnemonic");
+
+async function main() {
+    const tonweb = new TonWeb(new TonWeb.HttpProvider(
+        'https://toncenter.com/api/v2/jsonRPC', {
+            apiKey: 'put your api key'
+        })
+    );
+    const destinationAddress = new TonWeb.Address('put your wallet address that owns jetton wallet');
+
+    const forwardPayload = new TonWeb.boc.Cell();
+    forwardPayload.bits.writeUint(0, 32); // 0 opcode means we have a comment
+    forwardPayload.bits.writeString('Hello, TON!');
+
+    /*
+        Tonweb has a built-in class for interacting with jettons, which has 
+        a method for creating a transfer. However, it has disadvantages, so 
+        we manually create the message body. Additionally, this way we have a 
+        better understanding of what is stored and how it functions.
+     */
+    
+    const jettonTransferBody = new TonWeb.boc.Cell();
+    jettonTransferBody.bits.writeUint(0xf8a7ea5, 32); // opcode for jetton transfer
+    jettonTransferBody.bits.writeUint(0, 64); // query id
+    jettonTransferBody.bits.writeCoins(new TonWeb.utils.BN('5')); // jetton amount, amount * 10^9
+    jettonTransferBody.bits.writeAddress(destinationAddress);
+    jettonTransferBody.bits.writeAddress(destinationAddress); // response destination
+    jettonTransferBody.bits.writeBit(false); // no custom payload
+    jettonTransferBody.bits.writeCoins(TonWeb.utils.toNano('0.02')); // forward amount
+    jettonTransferBody.bits.writeBit(true); // we store forwardPayload as a reference
+    jettonTransferBody.refs.push(forwardPayload);
+
+    const keyPair = await mnemonicToKeyPair('put your mnemonic'.split(' '));
+    const jettonWallet = new TonWeb.token.ft.JettonWallet(tonweb.provider, {
+        address: 'put your jetton wallet address'
+    });
+    
+    // available wallet types: simpleR1, simpleR2, simpleR3, 
+    // v2R1, v2R2, v3R1, v3R2, v4R1, v4R2
+    const wallet = new tonweb.wallet.all['v4R2'](tonweb.provider, {
+        publicKey: keyPair.publicKey,
+        wc: 0 // workchain
+    });
+
+    await wallet.methods.transfer({
+        secretKey: keyPair.secretKey,
+        toAddress: jettonWallet.address,
+        amount: tonweb.utils.toNano('0.1'),
+        seqno: await wallet.methods.seqno().call(),
+        payload: jettonTransferBody,
+        sendMode: 3
+    }).send(); // create transfer and send it
 }
 
 main().finally(() => console.log("Exiting..."));
@@ -425,6 +487,48 @@ main().finally(() => console.log("Exiting..."));
 ```
 
 </TabItem>
+<TabItem value="js-tonweb" label="JS (tonweb)">
+
+```js
+const TonWeb = require("tonweb");
+const {mnemonicToKeyPair} = require("tonweb-mnemonic");
+
+async function main() {
+    const tonweb = new TonWeb(new TonWeb.HttpProvider(
+        'https://toncenter.com/api/v2/jsonRPC', {
+            apiKey: 'put your api key'
+        })
+    );
+    const collectionAddress  = new TonWeb.Address('put your collection address');
+    const newOwnerAddress = new TonWeb.Address('put new owner wallet address');
+
+    const messageBody  = new TonWeb.boc.Cell();
+    messageBody.bits.writeUint(3, 32); // opcode for changing owner
+    messageBody.bits.writeUint(0, 64); // query id
+    messageBody.bits.writeAddress(newOwnerAddress);
+
+    // available wallet types: simpleR1, simpleR2, simpleR3, 
+    // v2R1, v2R2, v3R1, v3R2, v4R1, v4R2
+    const keyPair = await mnemonicToKeyPair('put your mnemonic'.split(' '));
+    const wallet = new tonweb.wallet.all['v4R2'](tonweb.provider, {
+        publicKey: keyPair.publicKey,
+        wc: 0 // workchain
+    });
+
+    await wallet.methods.transfer({
+        secretKey: keyPair.secretKey,
+        toAddress: collectionAddress,
+        amount: tonweb.utils.toNano('0.05'),
+        seqno: await wallet.methods.seqno().call(),
+        payload: messageBody,
+        sendMode: 3
+    }).send(); // create transfer and send it
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
 </Tabs>
 
 
@@ -483,6 +587,67 @@ async function main() {
     const internalMessageCell = beginCell()
         .store(storeMessageRelaxed(internalMessage))
         .endCell();
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+<TabItem value="js-tonweb" label="JS (tonweb)">
+
+```js
+const TonWeb = require("tonweb");
+const {mnemonicToKeyPair} = require("tonweb-mnemonic");
+
+async function main() {
+    const tonweb = new TonWeb(new TonWeb.HttpProvider(
+        'https://testnet.toncenter.com/api/v2/jsonRPC', {
+            apiKey: 'put your api key'
+        })
+    );
+    const collectionAddress  = new TonWeb.Address('put your collection address');
+    const newCollectionMeta = 'put url fol collection meta';
+    const newNftCommonMeta = 'put common url for nft meta';
+    const royaltyAddress = new TonWeb.Address('put royalty address');
+
+    const collectionMetaCell = new TonWeb.boc.Cell();
+    collectionMetaCell.bits.writeUint(1, 8); // we have offchain metadata
+    collectionMetaCell.bits.writeString(newCollectionMeta);
+    const nftCommonMetaCell = new TonWeb.boc.Cell();
+    nftCommonMetaCell.bits.writeUint(1, 8); // we have offchain metadata
+    nftCommonMetaCell.bits.writeString(newNftCommonMeta);
+
+    const contentCell = new TonWeb.boc.Cell();
+    contentCell.refs.push(collectionMetaCell);
+    contentCell.refs.push(nftCommonMetaCell);
+
+    const royaltyCell = new TonWeb.boc.Cell();
+    royaltyCell.bits.writeUint(5, 16); // factor
+    royaltyCell.bits.writeUint(100, 16); // base
+    royaltyCell.bits.writeAddress(royaltyAddress); // this address will receive 5% of each sale
+
+    const messageBody = new TonWeb.boc.Cell();
+    messageBody.bits.writeUint(4, 32);
+    messageBody.bits.writeUint(0, 64);
+    messageBody.refs.push(contentCell);
+    messageBody.refs.push(royaltyCell);
+
+    // available wallet types: simpleR1, simpleR2, simpleR3,
+    // v2R1, v2R2, v3R1, v3R2, v4R1, v4R2
+    const keyPair = await mnemonicToKeyPair('put your mnemonic'.split(' '));
+    const wallet = new tonweb.wallet.all['v4R2'](tonweb.provider, {
+        publicKey: keyPair.publicKey,
+        wc: 0 // workchain
+    });
+
+    await wallet.methods.transfer({
+        secretKey: keyPair.secretKey,
+        toAddress: collectionAddress,
+        amount: tonweb.utils.toNano('0.05'),
+        seqno: await wallet.methods.seqno().call(),
+        payload: messageBody,
+        sendMode: 3
+    }).send(); // create transfer and send it
 }
 
 main().finally(() => console.log("Exiting..."));
