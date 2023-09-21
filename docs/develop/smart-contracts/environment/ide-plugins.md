@@ -22,6 +22,6 @@ There are several ways to install a plugin:
 
 - [GitHub repository](https://github.com/savva425/func_plugin_sublimetext3)
 
-## neovim plugin
+## Neovim
 
-- [GitHub repository](https://github.com/cryshado/neovim-ton-dev)
+To enable syntax highlighting in Neovim, simply follow the installation instructions provided in the [nvim-treesitter quickstart guide](https://github.com/nvim-treesitter/nvim-treesitter#quickstart).
