@@ -242,7 +242,7 @@ const sidebars = {
         'develop/dapps/cookbook',
         {
           type: 'category',
-          label: 'Telegram Web Apps',
+          label: 'Telegram Mini Apps',
           items: [
             'develop/dapps/telegram-apps/README',
             'develop/dapps/telegram-apps/step-by-step-guide',
