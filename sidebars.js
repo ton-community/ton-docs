@@ -334,12 +334,12 @@ const sidebars = {
             {
               type: 'doc',
               id: 'develop/dapps/ton-connect/react',
-              label: 'React Web Apps',
+              label: 'React Apps',
             },
             {
               type: 'doc',
               id: 'develop/dapps/ton-connect/web',
-              label: 'HTML/JS Web Apps',
+              label: 'HTML/JS Apps',
             },
             {
               type: 'doc',
