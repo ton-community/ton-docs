@@ -251,7 +251,7 @@ import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/
 
 async function main() {
     const jettonWalletAddress = Address.parse('put your jetton wallet address');
-    const destinationAddress = Address.parse('put your wallet address that owns jetton wallet');
+    const destinationAddress = Address.parse('put destionation wallet address');
     
     const forwardPayload = beginCell()
         .storeUint(0, 32) // 0 opcode means we have a comment
@@ -297,7 +297,7 @@ async function main() {
             apiKey: 'put your api key'
         })
     );
-    const destinationAddress = new TonWeb.Address('put your wallet address that owns jetton wallet');
+    const destinationAddress = new TonWeb.Address('put destionation wallet address');
 
     const forwardPayload = new TonWeb.boc.Cell();
     forwardPayload.bits.writeUint(0, 32); // 0 opcode means we have a comment
