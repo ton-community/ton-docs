@@ -366,15 +366,15 @@ const config = {
                 label: 'Node Types',
               },
               {
-                to: 'participate/nodes/full-node',
+                to: 'participate/run-nodes/full-node',
                 label: 'Run a Full Node',
               },
               {
-                to: 'participate/nodes/liteserver',
+                to: 'participate/run-nodes/liteserver',
                 label: 'Run a Liteserver Node',
               },
               {
-                to: 'participate/nodes/archive-node',
+                to: 'participate/run-nodes/archive-node',
                 label: 'Run an Archieve Node',
               },
               {
