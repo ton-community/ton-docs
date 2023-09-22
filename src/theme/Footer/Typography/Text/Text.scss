@@ -1,0 +1,27 @@
+@import "../../styles/all";
+
+.Text {
+  @include font-inter;
+
+  &--weight-semi {
+    font-weight: $font-weight-semi-bold;
+  }
+
+  &--scheme-light {
+    color: var(--text-secondary-light);
+  }
+
+  &--scheme-dark {
+    color: var(--text-secondary-dark);
+  }
+
+  &--level-1 {
+    font-size: $text-1-font-size-mobile;
+    line-height: $text-1-line-height-mobile;
+
+    @include media-breakpoint-desktop {
+      font-size: $text-1-font-size-desktop;
+      line-height: $text-1-line-height-desktop;
+    }
+  }
+}
