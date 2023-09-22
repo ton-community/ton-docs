@@ -78,8 +78,8 @@ export const FOOTER_COLUMN_LINKS = [
   {
     headerLangKey: "Use",
     links: [
-      { langKey: "Wallets", url: PAGE_WALLETS },
-      { langKey: "Get Toncoin", url: PAGE_BUY_TONCOIN },
+      { langKey: "Get a wallet", url: PAGE_WALLETS },
+      { langKey: "Get or sell Toncoin", url: PAGE_BUY_TONCOIN },
       { langKey: "Stake", url: PAGE_STAKE },
       { langKey: "Apps & Servies", url: FOOTER_APP_AND_DAPPS_URL },
       { langKey: "Bridge", url: FOOTER_BRIDGE_URL },
@@ -91,12 +91,12 @@ export const FOOTER_COLUMN_LINKS = [
     links: [
       { langKey: "TON Concept", url: FOOTER_TON_CONCEPT_URL },
       { langKey: "Roadmap", url: PAGE_ROADMAP },
-      { langKey: "History of mining", url: TONSTAT_URL },
+      { langKey: "TonStat", url: TONSTAT_URL },
       { langKey: "History of mining", url: PAGE_MINING },
-      { langKey: "Validators", url: PAGE_TON_COIN },
-      { langKey: "Toncoin", url: PAGE_VALIDATOR },
+      { langKey: "Toncoin", url: PAGE_TON_COIN },
+      { langKey: "Validators", url: PAGE_VALIDATOR },
       { langKey: "Blockchain comparison", url: PAGE_ANALYSIS },
-      { langKey: "Whitepaper", url: FOOTER_WHITEPAPER_URL },
+      { langKey: "White paper", url: FOOTER_WHITEPAPER_URL },
     ],
   },
   {

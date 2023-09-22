@@ -11,7 +11,7 @@ export const Caption: FC<CaptionProps> = (props) => {
 
   return (
     <div
-      className={`Caption Caption--weight-regular Caption--scheme-${scheme} Caption--color-tertiary`}
+      className={`Caption Caption--weight-medium Caption--scheme-${scheme} Caption--color-tertiary`}
       {...restProps}
     >
       {children}

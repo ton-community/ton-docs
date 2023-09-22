@@ -1556,6 +1556,26 @@ a,button {
   outline: 1px solid transparent!important
 }
 
+.navbar__brand {
+  margin-right: 0;
+}
+
+.navbar__logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar__logo img {
+  height: initial;
+}
+
+@media (max-width: 1280px) {
+  .navbar__logo img {
+    width: 73px;
+    height: 24px;
+  }
+}
+
 [class*=focused_node_modules] input {
   border: 0;
   box-shadow: none;

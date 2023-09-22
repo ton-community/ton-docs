@@ -25,11 +25,11 @@
   }
 
   &--dark {
-    color: var(--basic-white);
+    color: var(--basic-white) !important;
   }
 
   &--light {
-    color: var(--basic-black);
+    color: var(--basic-black) !important;
   }
 }
 
