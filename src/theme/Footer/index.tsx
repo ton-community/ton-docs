@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState, useEffect } from "react";
 import "./Footer.scss";
 import { NetworkIcon } from "./NetworkIcon";
 import { Caption, Text } from "./Typography";
@@ -50,11 +50,26 @@ const LINKS_ROW_CONFIG = {
 
 function Footer() {
   const { footer } = useThemeConfig();
+  const { colorMode } = useColorMode();
+  const [style, setStyle] = useState<typeof colorMode>("dark");
+
   if (!footer) {
     return null;
   }
 
-  const { colorMode: style } = useColorMode();
+  useEffect(() => {
+    const docColorMode = document.documentElement.getAttribute(
+      "data-theme"
+    ) as typeof colorMode;
+
+    if (colorMode !== docColorMode) {
+      setStyle(docColorMode);
+    }
+  }, []);
+
+  useEffect(() => {
+    setStyle(colorMode);
+  }, [colorMode]);
 
   return (
     <footer className={`CustomFooter CustomFooter--m-scheme-${style} bootstrap-wrapper`}>
