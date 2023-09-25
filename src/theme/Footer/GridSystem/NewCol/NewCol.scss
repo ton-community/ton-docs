@@ -1,0 +1,32 @@
+@import "../../styles/all";
+
+.NewCol {
+  box-sizing: border-box;
+  //position: relative;
+  padding-left: calc(#{var(--mobileGridGap)} / 2 * 1px);
+  padding-right: calc(#{var(--mobileGridGap)} / 2 * 1px);
+
+  &.withoutPaddings {
+    padding: 0;
+  }
+
+  @include media-breakpoint-tablet-s {
+    padding-left: calc(#{var(--tabletSGridGap)} / 2 * 1px);
+    padding-right: calc(#{var(--tabletSGridGap)} / 2 * 1px);
+  }
+
+  @include media-breakpoint-tablet-m {
+    padding-left: calc(#{var(--tabletMGridGap)} / 2 * 1px);
+    padding-right: calc(#{var(--tabletMGridGap)} / 2 * 1px);
+  }
+
+  @include media-breakpoint-desktop {
+    padding-left: calc(#{var(--desktopGridGap)} / 2 * 1px);
+    padding-right: calc(#{var(--desktopGridGap)} / 2 * 1px);
+  }
+
+  @include media-breakpoint-desktop-large {
+    padding-left: calc(#{var(--desktopLargeGridGap)} / 2 * 1px);
+    padding-right: calc(#{var(--desktopLargeGridGap)} / 2 * 1px);
+  }
+}

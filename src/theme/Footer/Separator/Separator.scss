@@ -1,0 +1,15 @@
+@import "../styles/all";
+
+.Separator {
+  width: 100%;
+  height: 1px;
+  opacity: 0.5;
+
+  &--m-scheme-light {
+    background: var(--separator-alpha-light);
+  }
+
+  &--m-scheme-dark {
+    background: var(--separator-alpha-dark);
+  }
+}
