@@ -18,7 +18,7 @@ This learning path contains __5 modules__ and should take you around __45 minute
 
 In this tutorial, you'll learn how to easily make blockchain transactions using JavaScript. You could learn to do it without this tutorial, but this way is cool and accessible.
 
-1. You will make your own TON Wallet with TonKeeper
+1. You will make your own TON Wallet with Tonkeeper
 2. You will use a Testnet faucet to topup your wallet for testing
 3. You will understand essential concepts of TON smart contracts (Addresses, Cells)
 4. You will learn how to interact with TON using TypeScript SDK and API provider
@@ -77,7 +77,7 @@ To get started, all developers will make use of the following components:
 
 ### Download and Create a Wallet
 
-To start off, you’ll need a non-custodial wallet that will allow you to receive and store your TON; for this purpose in this guide we are using TonKeeper. You’ll need to enable Testnet mode within the wallet to be able to receive Testnet Toncoins. These tokens will be used later on to send a final minting transaction to the smart contract.
+To start off, you’ll need a non-custodial wallet that will allow you to receive and store your TON; for this purpose in this guide we are using Tonkeeper. You’ll need to enable Testnet mode within the wallet to be able to receive Testnet Toncoins. These tokens will be used later on to send a final minting transaction to the smart contract.
 
 :::info
 With a non-custodial wallet, the user owns the wallet and holds its private key by themselves.
@@ -85,8 +85,8 @@ With a non-custodial wallet, the user owns the wallet and holds its private key 
 
 To download and create a TON wallet follow these simple steps:
 
-1. Install the TonKeeper app on your smartphone. It can be downloaded [here](https://TonKeeper.com/).
-2. Next, you’ll need to [enable test mode](/participate/wallets/apps#TonKeeper-test-environment) within TonKeeper.
+1. Install the Tonkeeper app on your smartphone. It can be downloaded [here](https://Tonkeeper.com/).
+2. Next, you’ll need to [enable test mode](/participate/wallets/apps#Tonkeeper-test-environment) within Tonkeeper.
 
 Easy! Let's go to the development now.
 
@@ -211,7 +211,7 @@ In the next section we’ll describe how users send their initial requests to TO
 
 For the miner to work correctly, we need to add two different smart contract address types. These include:
 
-1. __Wallet address__: A wallet address is required,  because it is necessary for the miner to receive their mining reward (in this case, we must use the [TonKeeper Testnet mode](/participate/wallets/apps#TonKeeper-test-environment)).
+1. __Wallet address__: A wallet address is required,  because it is necessary for the miner to receive their mining reward (in this case, we must use the [Tonkeeper Testnet mode](/participate/wallets/apps#Tonkeeper-test-environment)).
 2. __Collection address__: A collection address is required to act as a smart contract to correctly mine an NFT (to carry out this process copy the NFT collection address, under the TON unboarding challenge collection name from the [Getgems website](https://testnet.getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX)).
 
 Next, we’ll open the `index.ts` file in your miner and create a main function composed of initial constants as follows:
@@ -554,15 +554,15 @@ After these commands are executed correctly, we’ll have a visually appealing N
 
 ## 🎨 Prepare a Transaction
 
-Next, we’ll outline the steps to compile a message and send it to the blockchain with your [TonKeeper wallet](https://TonKeeper.com/).
+Next, we’ll outline the steps to compile a message and send it to the blockchain with your [Tonkeeper wallet](https://Tonkeeper.com/).
 The upcoming steps will guide you in completing the process of __mining an NFT__ on TON.
 
 
 ### Creating a Payment Link
 
-In order to ensure that the NFT mining process is carried out correctly, and that the user can store their NFT properly, we must create a payment link that is able to simultaneously interact with TON Blockchain and the TonKeeper wallet.
+In order to ensure that the NFT mining process is carried out correctly, and that the user can store their NFT properly, we must create a payment link that is able to simultaneously interact with TON Blockchain and the Tonkeeper wallet.
 
-To achieve this goal, we’ll initiate the creation of a payment URL (a payment link) using the `ton://transfer/<address>` format that can be customized using different parameters. This will work perfectly because we want to create a message, and send it to the smart contract using our TonKeeper wallet:
+To achieve this goal, we’ll initiate the creation of a payment URL (a payment link) using the `ton://transfer/<address>` format that can be customized using different parameters. This will work perfectly because we want to create a message, and send it to the smart contract using our Tonkeeper wallet:
 
 ```ts title="ton-onboarding-challenge/index.ts"
 import {toNano} from "ton"
@@ -599,7 +599,7 @@ Let’s run the above script to launch the newly created payment link. Now it’
 
 ### Creating A Smartphone Compatible Payment Link
 
-As a solution, the most brilliant minds in the world created a QR code generator specifically for use in terminal. With this tool, you can simply scan the payment link from your TonKeeper wallet to send a transaction.
+As a solution, the most brilliant minds in the world created a QR code generator specifically for use in terminal. With this tool, you can simply scan the payment link from your Tonkeeper wallet to send a transaction.
 
 ```bash
 npm install qrcode-terminal
@@ -612,7 +612,7 @@ Finally, we’ll need to encode the payment link(`link`) into the QR code and pr
   const qrcode = require('qrcode-terminal');
 
   qrcode.generate(link, {small: true}, function (qrcode : any) {
-    console.log('🚀 Link to mine your NFT (use TonKeeper in testnet mode):')
+    console.log('🚀 Link to mine your NFT (use Tonkeeper in testnet mode):')
     console.log(qrcode);
     console.log('* If QR is still too big, please run script from the terminal. (or make the font smaller)')
   });
@@ -620,7 +620,7 @@ Finally, we’ll need to encode the payment link(`link`) into the QR code and pr
 
 Do you sense the _experience_ in the air? That's you, on your way to becoming a TVM developer.
 
-Now that we have successfully encoded the QR code generator and payment link, we'll need to acquire some Testnet Toncoins to send our first transaction. This is accomplished by making use of a TON [token faucet](https://coinmarketcap.com/alexandria/glossary/faucet) (a Telegram Bot that shares Testnet Toncoins) on TON Blockchain, so we are in possession of some tokens that can be sent to the TonKeeper wallet we created.
+Now that we have successfully encoded the QR code generator and payment link, we'll need to acquire some Testnet Toncoins to send our first transaction. This is accomplished by making use of a TON [token faucet](https://coinmarketcap.com/alexandria/glossary/faucet) (a Telegram Bot that shares Testnet Toncoins) on TON Blockchain, so we are in possession of some tokens that can be sent to the Tonkeeper wallet we created.
 
 
 ## ⛏  Mine an NFT With a Wallet
@@ -634,8 +634,8 @@ There are two main ways to mine an NFT on TON:
 
 Below are the steps needed to initiate your first Testnet transaction to mine your NFT:
 
-1. Activate [Testnet mode within your TonKeeper wallet](/participate/wallets/apps#TonKeeper-test-environment)
-2. Input our testnet wallet address from TonKeeper into `wallet` variable in the `index.ts`
+1. Activate [Testnet mode within your Tonkeeper wallet](/participate/wallets/apps#Tonkeeper-test-environment)
+2. Input our testnet wallet address from Tonkeeper into `wallet` variable in the `index.ts`
 3. Input address of the [NFT collection from Testnet](https://testnet.getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX) into `collection` variable in the `index.ts`
 
 #### Top Up Wallet Balance via the Token Faucet
@@ -646,7 +646,7 @@ To proceed to the next step, we need to acquire some TON testnet tokens. This ca
 
 In order to successfully mine an NFT rocket on Testnet, it is necessary to follow these steps:
 
-1. _Open_ Open the TonKeeper wallet on your phone (it should hold some newly received TON Testnet tokens).
+1. _Open_ Open the Tonkeeper wallet on your phone (it should hold some newly received TON Testnet tokens).
 2. _Select_ scan mode in the wallet to scan the QR code.
 3. _Run_ your miner to acquire the correct hash (this process takes between 30 and 60 seconds).
 4. _Scan_ the generated QR code from the miner.
@@ -655,7 +655,7 @@ In order to successfully mine an NFT rocket on Testnet, it is necessary to follo
 Because there may be other developers carrying out the same process in an attempt to mine their own NFT, you may have to try the process a couple times to be successful (as another user could mine the next NFT available right before you).
 :::
 
-Soon after initiating this process, you will have successfully mined your very first NFT on TON (it should appear in your TonKeeper wallet).
+Soon after initiating this process, you will have successfully mined your very first NFT on TON (it should appear in your Tonkeeper wallet).
 
 ![](/img/tutorials/onboarding/8.svg)
 
@@ -666,8 +666,8 @@ Welcome aboard, __a true TVM Developer__! You did it. 🛳
 
 Hey! For those who wish to mine an NFT on TON Mainnet, these instructions should be followed:
 
-1. You have activated _mainnet_ mode in your TonKeeper (it should hold at least 0.1 TON).
-2. Input our _mainnet_ wallet address from TonKeeper into `wallet` variable in the `index.ts`
+1. You have activated _mainnet_ mode in your Tonkeeper (it should hold at least 0.1 TON).
+2. Input our _mainnet_ wallet address from Tonkeeper into `wallet` variable in the `index.ts`
 3. Input address of the [NFT collection from the Mainnet](https://getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX) into `collection` variable in the `index.ts`
 4. Replace __endpoint__ to the _Mainnet_, for orbs-access it enables with excluding testnet argument in _getHttpEndpoint_:
 
@@ -681,7 +681,7 @@ const endpoint = await getHttpEndpoint();
 
 Like we outlined in the testnet NFT rocket mining process, in order to successfully mine an NFT rocket on mainnet, it is necessary to follow these steps:
 
-1. _Open_ the TonKeeper wallet on your phone (remember, it should hold some TON tokens).
+1. _Open_ the Tonkeeper wallet on your phone (remember, it should hold some TON tokens).
 2. _Select_ scan mode in the wallet to scan the QR code.
 3. _Run_ your miner to acquire the correct hash (this process takes between 30 and 60 seconds).
 4. _Scan_ the generated QR code from the miner.
@@ -690,7 +690,7 @@ Like we outlined in the testnet NFT rocket mining process, in order to successfu
 Because there may be other developers carrying out the same process in an attempt to mine their own NFT, you may have to try the process a couple times to be successful (as another user could mine the next NFT available right before you).
 :::
 
-After some time, you will have __mined your NFT__ and become a TVM Developer in TON Blockchain. The ritual is complete. Look at your NFT in TonKeeper.
+After some time, you will have __mined your NFT__ and become a TVM Developer in TON Blockchain. The ritual is complete. Look at your NFT in Tonkeeper.
 
 <div style={{ width: '100%', textAlign: 'center', margin: '0 auto' }}>
   <video width={'300'} style={{ width: '100%', borderRadius: '10pt', margin: '15pt auto' }} muted={true} autoPlay={true} loop={true}>
