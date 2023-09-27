@@ -16,11 +16,11 @@ The bot will look like this:
 
 ## 📖 What you'll learn
 You'll learn how to:
- - Create a Telegram bot in NodeJS using Grammy
+ - Create a Telegram bot in NodeJS using grammY
  - Work with public TON Center API
 
-> Why do we use Grammy?
-Because Grammy is a modern, young, high-level framework for comfortable & fast development of telegram bots on JS/TS/Deno, in addition to this Grammy has great [documentation](https://grammy.dev) and an active community that can always help you.
+> Why do we use grammY?
+Because grammY is a modern, young, high-level framework for comfortable & fast development of telegram bots on JS/TS/Deno, in addition to this grammY has great [documentation](https://grammy.dev) and an active community that can always help you.
 
 
 ## ✍️ What you need to get started
