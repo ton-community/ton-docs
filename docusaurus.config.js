@@ -251,12 +251,12 @@ const config = {
             label: 'Get Started',
             items: [
               {
-                to: 'develop/overview',
+                to: '/develop/overview',
                 label: 'Start with Onboarding Tutorials',
               },
               {
-                to: '/develop/dapps/ton-connect/react',
-                label: 'Build your first Web App',
+                to: '/develop/dapps/telegram-apps/',
+                label: 'Build your first Mini App',
               },
               {
                 to: '/develop/dapps',

@@ -217,7 +217,6 @@ const sidebars = {
           label: 'Core Contracts',
           items: [
             'develop/smart-contracts/governance',
-            'develop/howto/config-params',
             'develop/research-and-development/minter-flow',
           ],
         },
@@ -402,8 +401,15 @@ const sidebars = {
       'value': '<span class=\'menu__link\'><b><small> References & Documentation </small></b></span>',
     },
     'develop/howto/faq',
-    'develop/howto/blockchain-configs',
-    'develop/howto/network-configs',
+    {
+      type: 'category',
+      label: 'Network Configurations',
+      items: [
+        'develop/howto/network-configs',
+        'develop/howto/blockchain-configs',
+        'develop/howto/config-params',
+      ],
+    },
     {
       type: 'category',
       label: 'FunC language',

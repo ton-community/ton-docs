@@ -1,10 +1,8 @@
-# Config Params
+# Changing the Parameters
 
-:::caution
-This section describes instructions and manuals for interacting with TON at a low level. Learn friendly explained config [params here](/develop/howto/blockchain-configs).
-:::
+The aim of this document is to provide a basic explanation of configuration parameters of TON Blockchain, and to give step-by-step instructions for changing these parameters by a consensus of a majority of validators.
 
-The aim of this document is to provide a basic explanation of configuration parameters of TON Blockchain, and to give step-by-step instructions for changing these parameters by a consensus of a majority of validators. We assume that the reader is already familiar with Fift and the Lite Client as explained in [LiteClient-HOWTO](https://toncoin.org/#/howto/step-by-step), with [FullNode-HOWTO](https://toncoin.org/#/howto/full-node), and [Validator-HOWTO](https://toncoin.org/#/howto/validator) in the sections where validators' voting for the configuration proposals is described.
+We assume that the reader is already familiar with [Fift](/develop/fift/overview) and the [Lite Client](/participate/nodes/lite-client), as explained in [FullNode-HOWTO (low-level)](/participate/nodes/full-node), and [Validator-HOWTO (low-level)](/participate/nodes/validator) in the sections where validators' voting for the configuration proposals is described.
 
 ## 1. Configuration parameters
 The **configuration parameters** are certain values that affect the behavior of validators and/or fundamental smart contracts of TON Blockchain. The current values of all configuration parameters are stored as a special part of the masterchain state and are extracted from the current masterchain state when needed. Therefore, it makes sense to speak of the values of the configuration parameters with respect to a certain masterchain block. Each shardchain block contains a reference to the latest known masterchain block; the values from the corresponding masterchain state are assumed to be active for this shardchain block and are used during its generation and validation. For masterchain blocks, the state of the previous masterchain block is used to extract the active configuration parameters. Therefore, even if one tries to change some configuration parameters inside a masterchain block, the changes will become active only for the next masterchain block.
@@ -262,8 +260,8 @@ Voting for a configuration proposal is possible only for current validators, lis
     Vm90RQAAjvFgMYDa1bWZ-oVIBpkaeqnygNvbgdZ84b7f-dZhKKE=
     Saved to file validator-to-sign.req
 ```
-- After that, the vote request has to be signed by the current validator's private key, using `sign <validator-key-id> 566F744...28A1` in `validator-engine-console` connected to the validator. This process is similar to that described in [Validator-HOWTO](https://toncoin.org/#/howto/validator) for participating in validator elections, but this time the currently active key has to be used.
-- Next, another script `config-proposal-signed.fif` has to be invoked. It has similar arguments to `config-proposal-req.fif`, but it expects two extra arguments: the base64 representation of the public key used to sign the vote request, and the base64 representation of the signature itself. Again, this is quite similar to the process described in [Validator-HOWTO](https://toncoin.org/#/howto/validator).
+- After that, the vote request has to be signed by the current validator's private key, using `sign <validator-key-id> 566F744...28A1` in `validator-engine-console` connected to the validator. This process is similar to that described in [Validator-HOWTO](/participate/nodes/validator) for participating in validator elections, but this time the currently active key has to be used.
+- Next, another script `config-proposal-signed.fif` has to be invoked. It has similar arguments to `config-proposal-req.fif`, but it expects two extra arguments: the base64 representation of the public key used to sign the vote request, and the base64 representation of the signature itself. Again, this is quite similar to the process described in [Validator-HOWTO](/participate/nodes/validator).
 - In this way, the file `vote-msg-body.boc` containing the body of an internal message carrying a signed vote for this configuration proposal is created.
 - After that, `vote-msg-body.boc` has to be carried in an internal message from any smart contract residing in the masterchain (typically, the controlling smart contract of the validator will be used) along with a small amount of Toncoin for processing (typically, 1.5 Toncoin should suffice). This is again completely similar to the procedure employed during validator elections. This is typically achieved by means of running:
 ```
@@ -286,7 +284,7 @@ This time, the list of indices of validators that voted for this configuration p
 
 ## 5. An automated way for voting on configuration proposals
 
-Similarly to the automation provided by command `createelectionbid` of `validator-engine-console` for participating in validator elections, `validator-engine` and `validator-engine-console` offer an automated way of performing most of the steps explained in the previous section, producing a `vote-msg-body.boc` ready to be used with the controlling wallet. In order to use this method, you must install the Fift scripts `config-proposal-vote-req.fif` and `config-proposal-vote-signed.fif` into the same directory that the validator-engine uses to look up `validator-elect-req.fif` and `validator-elect-signed.fif` as explained in Section 5 of [Validator-HOWTO](https://toncoin.org/#/howto/validator). After that, you simply run
+Similarly to the automation provided by command `createelectionbid` of `validator-engine-console` for participating in validator elections, `validator-engine` and `validator-engine-console` offer an automated way of performing most of the steps explained in the previous section, producing a `vote-msg-body.boc` ready to be used with the controlling wallet. In order to use this method, you must install the Fift scripts `config-proposal-vote-req.fif` and `config-proposal-vote-signed.fif` into the same directory that the validator-engine uses to look up `validator-elect-req.fif` and `validator-elect-signed.fif` as explained in Section 5 of [Validator-HOWTO](/participate/nodes/validator). After that, you simply run
 ```
     createproposalvote 64654898543692093106630260209820256598623953458404398631153796624848083036321 vote-msg-body.boc
 ```
