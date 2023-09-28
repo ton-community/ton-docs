@@ -344,7 +344,12 @@ const sidebars = {
             {
               type: 'doc',
               id: 'develop/dapps/ton-connect/tg-bot-integration',
-              label: 'Telegram Bots',
+              label: 'Telegram Bots JS',
+            },
+            {
+              type: 'doc',
+              id: 'develop/dapps/ton-connect/tg-bot-integration-py',
+              label: 'Telegram Bots Python',
             },
           ],
         },
