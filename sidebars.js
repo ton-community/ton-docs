@@ -217,7 +217,6 @@ const sidebars = {
           label: 'Core Contracts',
           items: [
             'develop/smart-contracts/governance',
-            'develop/howto/config-params',
             'develop/research-and-development/minter-flow',
           ],
         },
@@ -242,7 +241,7 @@ const sidebars = {
         'develop/dapps/cookbook',
         {
           type: 'category',
-          label: 'Telegram Web Apps',
+          label: 'Telegram Mini Apps',
           items: [
             'develop/dapps/telegram-apps/README',
             'develop/dapps/telegram-apps/step-by-step-guide',
@@ -334,12 +333,12 @@ const sidebars = {
             {
               type: 'doc',
               id: 'develop/dapps/ton-connect/react',
-              label: 'React Web Apps',
+              label: 'React Apps',
             },
             {
               type: 'doc',
               id: 'develop/dapps/ton-connect/web',
-              label: 'HTML/JS Web Apps',
+              label: 'HTML/JS Apps',
             },
             {
               type: 'doc',
@@ -407,8 +406,15 @@ const sidebars = {
       'value': '<span class=\'menu__link\'><b><small> References & Documentation </small></b></span>',
     },
     'develop/howto/faq',
-    'develop/howto/blockchain-configs',
-    'develop/howto/network-configs',
+    {
+      type: 'category',
+      label: 'Network Configurations',
+      items: [
+        'develop/howto/network-configs',
+        'develop/howto/blockchain-configs',
+        'develop/howto/config-params',
+      ],
+    },
     {
       type: 'category',
       label: 'FunC language',

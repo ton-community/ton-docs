@@ -1,6 +1,8 @@
-# Blockchain Config
+# Config Parameters
 
-#### The Russian version of this article can be found [here](https://github.com/delovoyhomie/description-config-for-TON-Blockchain/blob/main/Russian-version.md).
+:::info
+The Russian version of this article can be found [here](https://github.com/delovoyhomie/description-config-for-TON-Blockchain/blob/main/Russian-version.md).
+:::
 
 ## 👋 Introduction
 
@@ -108,7 +110,7 @@ This parameter indicates under what conditions proposals to change the TON confi
 
 This parameter represents the configuration of a workchain in the TON Blockchain. Workchains in the TON Blockchain are designed as independent blockchains that can operate in parallel, allowing TON to scale and process a very large number of transactions and smart contracts.
 
-## Workchain configuration parameters:
+## Workchain configuration parameters
 
 -   `enabled_since`: a UNIX timestamp of the moment this workchain was enabled;
 
@@ -147,7 +149,7 @@ This parameter contains the duration of different stages of elections and valida
 For each validation period, there is an `election_id` equal to the UNIX-format time at the start of the validation.
 You can get the current `election_id` (if elections are ongoing) or the past one by invoking the Elector contract's respective get-methods `active_election_id` and `past_election_ids`.
 
-## Workchain configuration parameters:
+## Workchain configuration parameters
 
 -   `validators_elected_for`: the number of seconds the elected set of validators perform their role (one round).
 
@@ -167,7 +169,7 @@ In the TON Blockchain, it is customary to conventionally divide validation perio
 
 #### Mainnet
 
-##### Current values:
+Current values:
 
 ```python
 constants = {
@@ -178,7 +180,7 @@ constants = {
 }
 ```
 
-##### Scheme
+Scheme:
 
 ![image](/img/docs/blockchain-configs/config15-mainnet.png)
 

@@ -4,7 +4,7 @@ import Player from '@site/src/components/player'
 
 ## Overview
 
-This article describes wallets from a developmental perspective. The end goal  is to create wallet applications that support TON mass adoption.
+This article describes wallets from a developmental perspective. The end goal is to create wallet applications that support TON mass adoption.
 
 <br></br>
 <Player url="https://www.youtube.com/watch?v=OfW96enpD4Q" />
@@ -15,14 +15,14 @@ If you want to find a wallet to install, open [ton.org/wallets](https://ton.org/
 ## Non-custodial wallets
 
 :::info
-With a non-custodial wallet, the user owns the wallet and holds its private key by themself.
+With a non-custodial wallet, the user owns the wallet and holds its private key by themselves.
 :::
 
-* [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) — Multiplatform(iOS, Android, MacOS, Linux, Windows) classic wallets of TON Ecosystem developed by TON Foundation.
-* [Tonkeeper](https://tonkeeper.com/) — an open-source (iOS, Android) mobile phone wallet application with great user base.
+* [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) — Multiplatform (iOS, Android, macOS, Linux, Windows) classic wallets of TON Ecosystem developed by TON Foundation.
+* [Tonkeeper](https://tonkeeper.com/) — an open-source multi-platform (iOS, Android, Firefox, Chrome) wallet with a great user base.
 * [Tonhub](https://tonhub.com/) — an open-source (iOS, Android) alternative mobile phone wallet with advanced features (TON Whales Staking UI).
-* [OpenMask](https://www.openmask.app/) — an open-source browser extension wallet with biometric authentication.
-* [MyTonWallet](https://mytonwallet.io/) — an open-source browser web wallet and browser extension wallet for TON.
+* [OpenMask](https://www.openmask.app/) — an open-source Chrome extension wallet with biometric authentication.
+* [MyTonWallet](https://mytonwallet.io/) — an open-source browser web wallet and a browser extension wallet for TON.
 
 
 ### Basics features
@@ -35,12 +35,12 @@ With a non-custodial wallet, the user owns the wallet and holds its private key 
 | MyTonWallet| Supported | [Supported](https://github.com/ton-society/ton-footsteps/issues/149)  | [TON Connect 2.0](/develop/dapps/ton-connect)               | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f) |
 
 
-> *Tonhub extension opens a built-in browser which allows for NFT market placements. Jetton is full supported.
+> *Tonhub extension opens a built-in browser, which allows NFT market placements. Jetton is fully supported.
 
 
 ### TON Wallet
 
-TON Wallet was the first step in mass-adoption blockchain technology available to ordinary users. It demonstrates how a wallet must works on TON Blockchain.
+TON Wallet was the first step in mass-adoption blockchain technology available to ordinary users. It demonstrates how a wallet should work on TON Blockchain.
 
 |                                            |
 |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -49,23 +49,23 @@ TON Wallet was the first step in mass-adoption blockchain technology available t
 
 #### Pros and Cons
 - ✅ The original wallet developed by TON Foundation. TON Wallet works according to the vision of TON Blockchain's core developers.
-- ✅ Multi-platform architecture support. It works in Linux, Windows, MacOS, iOS, Android and as well as a Chrome plugin.
+- ✅ Multi-platform architecture support. It works in Linux, Windows, macOS, iOS, Android and as well as a Chrome plugin.
 - ✅ [Bug bounty program](https://github.com/ton-blockchain/bug-bounty)
-- ❌ Rare updates. This wallet does not have not all up-to-date features (TON DNS address, wallet-v4 contract not supported).
+- ❌ Rarely updates. This wallet does not have not all up-to-date features (TON DNS addresses, and the wallet-v4 contract isn't supported).
 - ❌ The current UI is outdated and is worse than alternative wallets.
 
-#### Ton wallet test environment
+#### Ton Wallet test environment
 
-To switch Ton classic wallet to test environment, you should to open in browser with testnet parameter:
+To switch TON classic wallet to test environment, you should to open in browser with testnet parameter:
 
 #### Links
-- [Github*](https://github.com/ton-blockchain/wallet-ios)
+- [GitHub*](https://github.com/ton-blockchain/wallet-ios)
 
   > *TON Wallet clients for every supported OS placed in nearby repositories.
 
 ### Tonkeeper
 
-[Tonkeeper](https://tonkeeper.com/) - is the most downloaded wallet, developed by the Tonkeeper team and has active support from both users and developers.
+[Tonkeeper](https://tonkeeper.com/) - is the most downloaded and popular wallet, developed by the Tonkeeper team, and has active support from both users and developers.
 
 |                                               |
 |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -75,13 +75,13 @@ To switch Ton classic wallet to test environment, you should to open in browser 
 #### Pros and Cons
 - ✅ This app is most popular with users.
 - ✅ Supports all up-to-date features including native NFT transfer between user wallets.
-- ❌ Tonkeeper is only supported by mobile iOS and Android platforms.
-- ❌ To contribute requires advanced skills. A lot of the job already done and it will be hard for newcomers to add something significant.
+- ✅ Supports all major platforms, such as iOS and Android, but also works in popular browsers, such as Firefox or Chrome.
+- ❌ Requires advanced skills to contribute to its source code. A lot of the job is already done, and it will be hard for newcomers to add something significant or useful.
 
 #### Tonkeeper test environment
 
 
-To switch Tonkeeper application between Mainnet and Testnet: open settings, at the bottom of the settings screen tap 5 times on the Tonkeeper icon and switch net in the dev menu. In the Dev menu tap `Switch to Testnet` or `Switch to Mainnet` according network you need.
+To switch Tonkeeper application between Mainnet and Testnet: in settings, tap 5 times on the Tonkeeper icon at the bottom and switch the network in the Dev menu. In the Dev menu tap `Switch to Testnet` or `Switch to Mainnet` according to the network you need.
 
 |                                                      |
 |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -90,7 +90,7 @@ To switch Tonkeeper application between Mainnet and Testnet: open settings, at t
 
 
 #### Links
-- [Github](https://github.com/tonkeeper/wallet)
+- [GitHub](https://github.com/tonkeeper/wallet)
 - [Tonkeeper Wallet API](https://github.com/tonkeeper/wallet-api)
 
 
@@ -108,36 +108,36 @@ To switch Tonkeeper application between Mainnet and Testnet: open settings, at t
 #### Pros and Cons
 
 - ✅ Has own custom [Ton Nominator](https://github.com/tonwhales/ton-nominators) contract supported with Tonhub UI.
-- ✅ Open-sourced wallet from the beginning of the existing application.
-- ✅ [Bug-bounty program](https://tonwhales.com/bounty).
-- ❌ Have no support for all desktop platforms.
-- ❌ To contribute requires advanced skills.
+- ✅ Open-source wallet from the beginning of the existing application.
+- ✅ [Bug bounty program](https://tonwhales.com/bounty).
+- ❌ Doesn't have any kind of support for desktop platforms.
+- ❌ Requires advanced skills to contribute to its source code.
 
 #### Tonhub test environment
-For use in testnet necessary separate the application Sandbox.
+You will need to download separate application to connect to the Testnet.
 
 #### Links
-- [Github](https://github.com/tonwhales/wallet)
+- [GitHub](https://github.com/tonwhales/wallet)
 - [Sandbox iOS](https://apps.apple.com/app/ton-development-wallet/id1607857373)
 - [Sandbox Android](https://play.google.com/store/apps/details?id=com.tonhub.wallet.testnet)
 
 
 ### OpenMask
 
-[OpenMask](https://www.openmask.app/) - is the trailblazing tool enabling user interactions and experience on Web3 as browser extension.
+[OpenMask](https://www.openmask.app/) - is the trailblazing tool enabling user interactions and experience in Web3 as a browser extension.
 
 |                                                                |
 |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![OpenMask](/img/docs/wallet-apps/OpenMask.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
 
-#### Pros and Cons
-- ✅ Convenient for developers environment to learn and create dApps via desktop without mobile devices.
+#### Pros and Cons 
+- ✅ Convenient for developers to learn and create dApps via desktop without mobile devices.
 - ✅ Unique functions such as multiple wallets, with detailed descriptions and examples in its documentation.
 - ❌ Has almost no integration with dApps at the moment.
 - ❌ Supports only browser extension platform.
 
 #### OpenMask test environment
-To switch OpenMask between Mainnet and Testnet: you need to click on "mainnet/testnet" button on the top of the OpenMask's main screen and chose network you need.
+To switch OpenMask between Mainnet and Testnet: you need to click on "mainnet/testnet" button on the top of the OpenMask's main screen and choose the network you need.
 
 #### Links
 
@@ -158,12 +158,13 @@ To switch OpenMask between Mainnet and Testnet: you need to click on "mainnet/te
 
 
 #### Pros and Cons
-- ✅ Implemented all basic functions.
-- ✅ Unique feature - management of the official [Nominator Pool contract](https://github.com/ton-blockchain/nominator-pool) from wallet UI.
-- ❌ Supports only web browser and Chrome extension platform.
+- ✅ Has all basic features implemented.
+- ✅ Unique feature - management of the official [Nominator Pool contract](https://github.com/ton-blockchain/nominator-pool) from the wallet UI.
+- ✅ Supports all major platforms (such as macOS, Linux and Windows) and also runs in Chrome as an extension.
+- ❌ Doesn't work in Firefox as an extension.
 
 #### MyTonWallet test environment
-To switch the MyTonWallet to Testnet: open Settings and by clicking 5 times on the app version open the network switcher.
+To switch MyTonWallet to Testnet: open Settings and by clicking 5 times on the app version open the network switcher.
 
 #### Links
 
@@ -179,7 +180,7 @@ With a custodial wallet, user trusts somebody else to hold the wallet's private 
 
 ### @wallet
 
-[@wallet](https://t.me/wallet) — bot application to send and receive or trade p2p TON inside Telegram. Supports Telegram Web App UI.
+[@wallet](https://t.me/wallet) — a bot to send and receive or trade TON for real money using P2P in Telegram. Supports Telegram Web App UI.
 
 
 |                                                                                                                                                                                                                            |
@@ -189,7 +190,7 @@ With a custodial wallet, user trusts somebody else to hold the wallet's private 
 
 ### @cryptobot
 
-[@cryptobot](https://t.me/cryptobot) — A Telegram bot wallet for storing, transferring and exchanging TON.
+[@cryptobot](https://t.me/cryptobot) — A Telegram bot wallet for storing, sending and exchanging TON.
 
 
 |                                                                                                                                                                                                                                 |
@@ -203,7 +204,7 @@ With a custodial wallet, user trusts somebody else to hold the wallet's private 
 
 ### @tonRocketBot
 
-[@tonRocketBot](https://t.me/tonRocketBot) - A Telegram bot wallet for storing, transferring and exchanging TON. Supports Jetton trading as well.
+[@tonRocketBot](https://t.me/tonRocketBot) - A Telegram bot wallet for storing, sending and exchanging TON. Supports Jetton trading as well.
 
 
 |                                                                                                                                                                                                                                        |

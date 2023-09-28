@@ -57,7 +57,23 @@ Moreover, you always can initiate the connection manually, using `useTonConnectU
 
 ### 4) Redirects
 
-Usually, you don't need to think about it at all. But if you want to redirect user to a specific page after wallet connection, you can use `useTonConnectUI` hook and [customize your return strategy](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy).
+If you want to redirect user to a specific page after wallet connection, you can use `useTonConnectUI` hook and [customize your return strategy](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy).
+
+#### Telegram Mini Apps
+
+If you want to redirect user to a [Telegram Mini App](/develop/dapps/telegram-apps/) after wallet connection, you can customize the `TonConnectUIProvider` element:
+
+```tsx
+      <TonConnectUIProvider
+            // ... other parameters
+          actionsConfiguration={{
+              twaReturnUrl: 'https://t.me/<YOUR_APP_NAME>'
+          }}
+      >
+      </TonConnectUIProvider>
+```
+
+[Open example on GitHub](https://github.com/ton-connect/demo-dapp-with-wallet/blob/master/src/App.tsx)
 
 ### 5) UI customization
 

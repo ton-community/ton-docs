@@ -75,7 +75,21 @@ But you can open "connect modal" programmatically, e.g. after click on custom bu
 
 ### 4) Redirects
 
-Usually, you don't need to think about it at all. But if you want to redirect user to a specific page after wallet connection, you can [customize your return strategy](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy).
+#### Customizing return strategy
+
+To redirect user to a specific URL after connection, you can [customize your return strategy](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy).
+
+#### Telegram Mini Apps
+
+To redirect user to a [Telegram Mini App](/develop/dapps/telegram-apps/) after wallet connection use `twaReturnUrl` option:
+
+```tsx
+tonConnectUI.uiOptions = {
+      twaReturnUrl: 'https://t.me/YOUR_APP_NAME'
+  };
+```
+
+[Read more in SDK documentation](https://github.com/ton-connect/sdk/tree/main/packages/ui#use-inside-twa-telegram-web-app)
 
 ### 5) UI customization
 
