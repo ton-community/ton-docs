@@ -294,7 +294,7 @@ The results above take the following into consideration:
 
 ## Logging out and requesting TonProof
 
-Now we have logged into our Web App, but... how does the backend know that it is the correct party? To verify this we must request the wallet ownership proof. 
+Now we have logged into our Mini App, but... how does the backend know that it is the correct party? To verify this we must request the wallet ownership proof. 
 
 This can be completed only using authentication, so we must log out. Therefore, we run the following code in the console:
 

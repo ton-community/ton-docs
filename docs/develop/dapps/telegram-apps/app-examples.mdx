@@ -2,7 +2,7 @@ import Button from '@site/src/components/button'
 
 # TMA Examples
 
-Check out the examples below to see how to create your own Telegram Web App.
+Check out the examples below to see how to create your own Telegram Mini App.
 
 ## Basic TMA Example
 
@@ -13,7 +13,7 @@ Check out the examples below to see how to create your own Telegram Web App.
 </p>
 
 
-This is a basic and straightforward Telegram Web App(TWA) implemented using plain JavaScript, HTML, and CSS. This project aims to provide a minimalistic example of how to create a simple TMA and launch it within Telegram without relying on complex build tools or bleeding-edge libraries.
+This is a basic and straightforward Telegram Mini App(TMA) implemented using plain JavaScript, HTML, and CSS. This project aims to provide a minimalistic example of how to create a simple TMA and launch it within Telegram without relying on complex build tools or bleeding-edge libraries.
 
 - App is available via direct link: [t.me/simple_telegram_web_app_bot/app](https://t.me/simple_telegram_web_app_bot/app)
 - Or you can launch app with a bot menu button: [t.me/simple_telegram_web_app_bot](https://t.me/simple_telegram_web_app_bot)
@@ -62,7 +62,7 @@ Open index.html in your preferred code editor or IDE.
 
 ### Introduction
 
-Vite (which means "fast" in French) is a front-end build tool and development server that aims to provide a faster and leaner development experience for modern web projects. We will utilise Vite to create Telegram Web App example.
+Vite (which means "fast" in French) is a front-end build tool and development server that aims to provide a faster and leaner development experience for modern web projects. We will utilise Vite to create Telegram Mini App example.
 
 You can find example project here [https://github.com/twa-dev/vite-boilerplate](https://github.com/twa-dev/vite-boilerplate) or you can go through following instructions.
 
@@ -98,7 +98,7 @@ yarn create vite my-react-telegram-web-app --template react-ts
 cd my-react-telegram-web-app
 ```
 
-### Development of Web App
+### Development of Mini App
 
 Now we need to start development mode of the project, run following commands in terminal:
 
@@ -240,7 +240,7 @@ WebApp.ready();
 ReactDOM.createRoot...
 ```
 
-`WebApp.ready()` - is a method that informs the Telegram app that the Web App is ready to be displayed. It is recommended to call this method as early as possible, as soon as all essential interface elements are loaded. Once this method is called, the loading placeholder is hidden and the Web App is shown.
+`WebApp.ready()` - is a method that informs the Telegram app that the Mini App is ready to be displayed. It is recommended to call this method as early as possible, as soon as all essential interface elements are loaded. Once this method is called, the loading placeholder is hidden and the Mini App is shown.
 
 Then we will add some interaction with user. Go to `src/App.tsx` and we will add the button with alert.
 
@@ -284,11 +284,11 @@ function App() {
 export default App
 ```
 
-And now we need to create Telegram Bot so we can launch Telegram Web App within messenger application.
+And now we need to create Telegram Bot so we can launch Telegram Mini App within messenger application.
 
 ### Setting Up a Bot for the App
 
-To connect your Web App to the Telegram, you need to create a bot and set up a web app for it. Follow these steps to set up a new Telegram bot:
+To connect your Mini App to the Telegram, you need to create a bot and set up a Mini App for it. Follow these steps to set up a new Telegram bot:
 
 <Button href="/develop/dapps/telegram-apps/step-by-step-guide#setting-up-a-bot-for-the-app" colorType={'primary'} sizeType={'sm'}>Setup a Bot</Button>
 
