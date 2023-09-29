@@ -14,6 +14,10 @@ The CRC32 IEEE version used for TL-B schemes. By viewing this [NFT op code](http
 * [Online calculator example](https://emn178.github.io/online-tools/crc32.html)
 * [Tonwhales Introspection ID Generator](https://tonwhales.com/tools/introspection-id)
 
+### VS Code extension
+
+* [crc32-opcode-helper](https://marketplace.visualstudio.com/items?itemName=Gusarich.crc32-opcode-helper)
+
 ### Python
 
 ```python
