@@ -2,50 +2,54 @@ import Button from '@site/src/components/button'
 
 # TON Node Types
 
-There are different types of nodes in The Open Network:
+When diving into the world of The Open Network (TON), understanding the distinct node types and their functionalities is crucial. This article breaks down each node type to provide clarity for developers wishing to engage with the TON blockchain.
 
-* **Full Node**
+## Types of TON Nodes
 
-  A node that is synchronized with the blockchain, stores the current state of the blockchain and the block history or part of the block history.
+### Full Node
 
-  In a full node, you can enable one or more additional functionalities:
+A **Full Node** in TON is a node that maintains synchronization with the blockchain.
 
-  * **Archive node**
-  
-     A full node that stores the entire block history is called an archive node.
+It retains the _current state_ of the blockchain and can house either the entire block history or parts of it. This makes it the backbone of the TON blockchain, facilitating the network's decentralization and security.
 
-     An archive node requires a lot of resources and is needed if you are making a blockchain explorer or something like that.
+<Button href="/participate/run-nodes/full-node"
+colorType="primary" sizeType={'sm'}>
+Running a Full Node
+</Button>
 
-     For most cases, you will be fine with a regular node that only stores the latest blocks and has significantly lower hardware requirements.
-  
-    <Button href="/participate/run-nodes/archive-node"
-    colorType="primary" sizeType={'lg'}>
-    Running an Archive Node
-    </Button>
+### Archive Node
 
-  * **Liteserver**
+An **Archive Node** is essentially a full node that archives the entire block history.
 
-     If you enable an endpoint in a full node, then it starts to perform the functions of a Liteserver - it can receive and respond to requests from Lite Clients.
+Such nodes are indispensable for creating blockchain explorers or other tools that necessitate a full blockchain history.
 
-     Using this node, your product can interact with TON Blockchain.
-  
-    :::info 
-    TON Foundation supports a number of **public Liteservers** that you can find in the global config ([mainnet](https://ton.org/global-config.json) and [testnet](https://ton.org/testnet-global.config.json)).
+  [Running an Archive Node](/participate/run-nodes/archive-node)
 
-    These are endpoints available to everyone, for example, standard wallets connect to them. 
-    :::
-    <Button href="/participate/run-nodes/liteserver"
-    colorType="primary" sizeType={'lg'}>
-    Running a Liteserver
-    </Button>
 
-  * **Validator** 
+### Liteserver Node
 
-     If you enable the validator functionality in the node and you have a sufficient number of Toncoin (stake), then the node will begin to participate in the process of validating new network blocks. 
-  
-     TON is a Proof-of-Stake blockchain, so validators keep the network running and are rewarded in Toncoin for doing so.
-  
-    <Button href="/participate/run-nodes/full-node"
-    colorType="primary" sizeType={'lg'}>
-    Running a Full Node (Validator)
-    </Button>
+When an endpoint is activated in a full node, the node assumes the role of a **Liteserver**. This node type can field and respond to requests from Lite Clients, allowing for seamless interaction with the TON Blockchain.
+
+#### Interaction with Lite Clients
+
+Liteservers enable swift communication with Lite Clients, facilitating tasks like balance checks or transaction submissions without necessitating the full block history.
+
+#### Public Liteservers
+
+The TON Foundation provides several public Liteservers, integrated into the global config, which are accessible for universal use. These endpoints, such as those used by standard wallets, ensure that even without setting up a personal liteserver, interaction with the TON Blockchain remains possible.
+
+- [Public Liteserver Configurations - mainnet](https://ton.org/global-config.json)
+- [Public Liteserver Configurations - testnet](https://ton.org/testnet-global.config.json)
+
+[Running a Liteserver](/participate/run-nodes/liteserver)
+
+
+### Validator Node
+
+A **Validator Node** is activated when it holds a necessary amount of Toncoin as a stake. Validator nodes are vital for the network's operability, participating in the validation of new network blocks.
+
+#### Proof-of-Stake Mechanism and Rewards
+
+TON operates on a Proof-of-Stake mechanism, where validators are pivotal in maintaining network functionality. Validators are [rewarded in Toncoin](/participate/network-maintenance/staking-incentives) for their contributions, incentivizing network participation and ensuring network security.
+
+  [Running a Full Node as a Validator](/participate/run-nodes/full-node#become-a-validator)

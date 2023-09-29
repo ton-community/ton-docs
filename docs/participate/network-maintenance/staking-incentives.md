@@ -1,7 +1,8 @@
 
-# TON Validators and staking-incentives
+# Staking Incentives
 
 ## Election and Staking
+
 TON Blockchain makes use of the Proof of Stake (PoS) consensus algorithm which means, like all PoS networks, that the network’s security and stability is maintained by a set of network validators. In particular, validators propose candidates for new blocks (made up of transaction batches), while other validators _validate_ and approve them via digital signatures.
 
 

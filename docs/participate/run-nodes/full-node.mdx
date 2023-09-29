@@ -1,9 +1,11 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Running a Full Node (Validator)
+# Running a Full Node
 
-To install and manage your own node, use the **[mytonctrl](https://github.com/ton-blockchain/mytonctrl)** open source tool developed by TON Foundation. The majority of TON Nodes are reliable and tested by **mytonctrl**.
+To install and manage your own node, use the **MyTonCtrl** open source tool developed by TON Foundation. The majority of TON Nodes are reliable and tested by **mytonctrl**.
+
+[MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) is a console application that serves as a convenient wrapper for fift, lite-client, and validator-engine-console. It has been specifically developed to streamline wallet, domain, and validator management tasks on the Linux operating system.
 
 ## Hardware requirements
 
@@ -13,10 +15,51 @@ To install and manage your own node, use the **[mytonctrl](https://github.com/to
 - 1 Gbit/s network connectivity
 - public IP address (_fixed IP address_)
 
-:::info
 You need a machine with a **fixed IP address** and a **high-bandwidth network connection** to run a TON Blockchain Full Node. Typically you'll need a sufficiently powerful server in a data center with good network connectivity, using at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
-:::
 
+### Recommended Cloud Providers
+
+The following providers are recommended by the TON Foundation.
+
+#### AWS
+
+- **Instance Type:** `m5.4xlarge`
+- **CPU:** 16 vCPUs
+- **RAM:** 64 GB
+- **Storage:**  Provisioned IOPS 512 GB SSD volume. (io1)
+- **Network:** Up to 10 Gbps
+- **Public IP:** Associate an Elastic IP for a fixed IP address.
+
+#### GCP (Google Cloud Platform)
+
+- **Machine Type:** `n2-highmem-8` or `n2d-highmem-8`
+- **CPU:** 8 vCPUs
+- **RAM:** 64 GB
+- **Storage:** Attach a 512 GB NVMe SSD persistent disk.
+- **Network:** 16 Gbps
+- **Public IP:** Reserve a static external IP address.
+
+#### Alibaba Cloud
+
+- **Instance Type:** `ecs.g6.4xlarge` or `ecs.c6.4xlarge`
+- **CPU:** 16 vCPUs
+- **RAM:** 64 GB
+- **Storage:** Provision a 512 GB NVMe SSD disk.
+- **Network:** Up to 10 Gbps
+- **Public IP:** Bind an Elastic IP for a fixed IP address.
+
+#### Tencent Cloud
+
+- **Instance Type:** `M5.2XLARGE`
+- **CPU:** 8 vCPUs
+- **RAM:** 64 GB
+- **Storage:** Provision a 512 GB NVMe SSD cloud disk.
+- **Network:** Up to 10 Gbps
+- **Public IP:** Associate an Elastic IP for a fixed IP address.
+
+:::info
+**Note:** Prices, configurations, and availability may vary. Always check the respective cloud provider's official documentation and pricing pages before making a decision.
+:::
 
 ## Installation
 
@@ -30,9 +73,11 @@ Please, check this video step-by-step tutorial to start promtly:
     <source src="/files/setup_validator.mp4" type="video/mp4" />
 </video>
 
-### Installation steps
+### Step-by-step instructions
 
-1. Download and run the installation script. Choose your Linux distributive:
+#### 1. Install the **mytonctrl** tool
+
+Download and run the installation script. Choose your Linux distributive:
 
 
 <Tabs groupId="operating-systems">
@@ -54,21 +99,56 @@ su root -c 'bash install.sh -m full'
   </TabItem>
 </Tabs>
 
-2. Check the **mytonctrl** installation procedure at:
+#### 2. Conduct an Operability Test:
 
-* [How to become a validator with mytonctrl (v0.2, OS Ubuntu)](https://github.com/ton-blockchain/mytonctrl/blob/master/docs/en/manual-ubuntu.md)
+1. Run **mytonctrl** from the local user account used for installation in step 1:
 
+ ```sh
+ mytonctrl
+  ```
+
+2. Check the **mytonctrl** statuses, particularly the following:
+
+* **mytoncore status**: Should be in green.
+* **Local validator status**: Should also be in green.
+* **Local validator out of sync**: Initially, a large number is displayed. As soon as the newly created validator connects with other validators, the number will be around 250k. As synchronization progresses, this number decreases. When it falls below 20, the validator is synchronized.
+
+![status](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/mytonctrl-status.png)
+
+
+#### 3. View the List of Available Wallets
+
+Check out the list of available wallets. For instance, during the installation of **mytonctrl**, the **validator_wallet_001** wallet is created:
+
+![wallet list](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-wl_ru.png)
 
 ## Become a Validator
 
-To become a validator:
+1. Complete the previous installation steps.
 
-1. Send Toncoin to your wallet.
-2. **mytonctrl** automatically joins validation from the next election round.
-3. Check the manual: [How to become a validator with mytonctrl (v0.2, OS Ubuntu)](https://github.com/ton-blockchain/mytonctrl/blob/master/docs/en/manual-ubuntu.md)
+2. Send the Required Number of Coins to the Wallet and Activate It
 
-:::info
+To determine the minimum amount of coins required to participate in one election round, head to **tonmon.xyz** > **Participant stakes**.
 
-To use your Full Node just as an endpoint, skip everything about the validator function. There is no need to send coins to your wallet.
+* Use the `vas` command to display the history of transfers
+* Activate the wallet using the `aw` command
 
-:::
+![account history](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-vas-aw_ru.png)
+
+#### 2. Your Validator is Now Ready
+
+**mytoncore** will automatically join the elections. It divides the wallet balance into two parts and uses them as a stake to participate in the elections. You can also manually set the stake size:
+
+`set stake 50000` — this sets the stake size to 50k coins. If the bet is accepted and our node becomes a validator, the bet can only be withdrawn in the second election (according to the rules of the electorate).
+
+![setting stake](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-set_ru.png)
+
+## Tips & Tricks
+
+- You can use `help` to get a list of available commands:
+
+![help command](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-help_ru.png)
+
+- To check **mytoncrl** logs, open `~/.local/share/mytoncore/mytoncore.log` for a local user or `/usr/local/bin/mytoncore/mytoncore.log` for Root.
+
+![logs](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytoncore-log.png)
