@@ -239,6 +239,64 @@ print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=Tru
 </TabItem>
 </Tabs>
 
+### How to send standard TON transfer message. 
+
+To send a standard TON transfer message, first you need to open your wallet contract, after that, get your wallet seqno. And only after that can you send your TON transfer. Note that if you are using a non-V4 version of the wallet, you will need to rename WalletContractV4 to WalletContract{your wallet version}, for example, WalletContractV3R2.
+
+```js
+import { TonClient, WalletContractV4, internal } from "@ton/ton";
+import { mnemonicNew, mnemonicToPrivateKey } from "@ton/crypto";
+
+const client = new TonClient({
+  endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+});
+
+// Convert mnemonics to private key
+let mnemonics = "word1 word2 ...".split(" ");
+let keyPair = await mnemonicToPrivateKey(mnemonics);
+
+// Create wallet contract
+let workchain = 0; // Usually you need a workchain 0
+let wallet = WalletContractV4.create({ workchain, publicKey: keyPair.publicKey });
+let contract = client.open(wallet);
+
+// Create a transfer
+let seqno: number = await contract.getSeqno();
+await contract.sendTransfer({
+  seqno,
+  secretKey: keyPair.secretKey,
+  messages: [internal({
+    value: '1',
+    to: 'EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N',
+    body: 'Example transfer body',
+  })]
+});
+```
+
+### How to calculate user's Jetton wallet address.
+
+To calculate the user's jetton wallet address, we need to call the "get_wallet_address" get-method of the jetton master contract. It's important to note that we must create a new cell that will contain the user address, and right after that, we can call get-method and parse the result.
+
+```js 
+const { Address, beginCell } = require("@ton/core")
+const { TonClient } = require("@ton/ton")
+
+async function getUserWalletAddress(userAddress, jettonMasterAddress) {    
+    const client = new TonClient({
+      endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+    });
+    const userAddressCell = beginCell().storeAddress(userAddress).endCell()
+    
+    const response = await client.runMethod(jettonMasterAddress, "get_wallet_address", [{type: "slice", cell: userAddressCell}])
+    return response.stack.readAddress() 
+}
+const jettonMasterAddress = Address.parse('...') // for example EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE
+const userAddress = Address.parse('...')
+
+getUserWalletAddress(userAddress, jettonMasterAddress)
+```
+
+
 ### How to construct a message for a jetton transfer with a comment?
 
 To understand how to construct a message for token transfer, we use [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which describes the token standard. It's important to note that each token can have its own `decimals`, which defaults to `9`. So, in the example below, we multiply the quantity by 10^9. If decimals were different, you would **need to multiply by a different value**.
