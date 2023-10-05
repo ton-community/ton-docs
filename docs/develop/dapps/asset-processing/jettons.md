@@ -23,12 +23,16 @@ A less formal sharding-focused overview of jetton architecture can be found in o
 [anatomy of jettons blog post](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons).)
 
 Here we have provided several examples of jetton code processing created by TON Community members:
-1. Javascript (tonweb):
+1. Javascript (ton-js)
+  - [Ton JS Client](https://github.com/ton-org/ton/blob/master/README.md)
+2. Javascript (tonweb):
   - [Accepting jetton deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
   - [Accepting jetton deposits to individual hot wallets with comments (memo)](https://github.com/toncenter/examples/blob/main/deposits-jettons-single-wallet.js)
   - [Jettons withdrawal examples](https://github.com/toncenter/examples/blob/main/withdrawals-jettons.js)
-2. Golang (tonutils-go):
+3. Golang (tonutils-go):
   - [Transfer NFTs & jettons by creating a transfer message](https://github.com/tonfactory/tonsdk#transfer-nft--jettons-by-creating-a-transfer-message-from-an-owner-wallet)
+4. Python (TonTools):
+  - [Jetton data and transfer](https://github.com/yungwine/TonTools/blob/master/examples/Jetton/Jetton_data_and_transfer.py)
 
 We have also provided specific details discussing our third-party open-source TON Payment Processor ([bicycle](https://github.com/gobicycle/bicycle)) which allows users to deposit and withdraw both Toncoin and jettons using a separate deposit address without using a text memo.
 
