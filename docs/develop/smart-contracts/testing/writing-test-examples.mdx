@@ -31,100 +31,115 @@ Running tests using the following command:
 npx blueprint test
 ```
 
+Additional options and vmLogs may be specified with `blockchain.verbosity`:
 
-### Transaction Success Test
+```typescript
+blockchain.verbosity = {
+    ...blockchain.verbosity,
+    blockchainLogs: true,
+    vmLogs: 'vm_logs_full',
+    debugLogs: true,
+    print: false,
+}
+```
 
-This test checks if the fireworks are successfully set by sending a transaction with a value of 3.5 TON (converted to nanoTON) and the `op::set_first` (`0x5720cfeb`) op code. It then checks if the transaction was successful by validating the `from`, `to`, and `success` fields using the transaction matcher.
+## Direct Unit Tests
+
+Fireworks demonstrate different operating with sending messages in the TON Blockchain.
+![](/img/docs/test-examples/fireworks_trace_tonviewer.png?=RAW)
+
+Once you deploy this with message `set_first` with enough TON amount, it will be automatically executed with primary and usable combinations of send modes.
+
+Fireworks redeployed itself, as result it will be created 3 entities of Fireworks entities, while each of entity has own ID(keep it in storage) and, as a result, different Smart Contract Address.
+
+For clearness define different by ID Fireworks entities with the following names:
+* 1 - Fireworks setter - The entity that spread different launch op codes. Could be extended up to four different opcodes.
+* 2 - Fireworks launcher 1 - The Fireworks instance, which launch first fireworks, means messages will be sent to the launcher.
+* 3 - Fireworks launcher 2 - The Fireworks instance, which launch second fireworks, means messages will be sent launcher.
+
+Each 'firework' - is a transaction which executed with unique message body and message sending mode.
+
+
+<details>
+    <summary>Expand details on transactions</summary>
+
+
+index - is an ID of a transaction in the `launchResult` array.
+* `0` - External request to the treasury (the Launcher) that resulted with a outbound message `op::set_first` with 2.5 to fireworks
+* `1` - The transaction in Fireworks setter contract invoked with `op::set_first` and executed with two outbound messages to the Fireworks Launcher-1 and Fireworks Launcher-2
+* `2` - The transaction in the Fireworks launcher 1 invoked with `op::launch_first`, and executed with four outbound messages to the Launcher.
+* `3` - The transaction in the Fireworks launcher 2 invoked with `op::launch_second`, and executed with a outbound message to the Launcher.
+* `4` - Transaction in the Launcher with incoming message from the  Fireworks launcher 1. This message sent with `send mode = 0`.
+* `5` - Transaction in the Launcher with incoming message from the  Fireworks launcher 1. This message sent with `send mode = 1`
+* `6` - Transaction in the Launcher with incoming message from the  Fireworks launcher 1. This message sent with `send mode = 2`
+* `7` - Transaction in the Launcher with incoming message from the  Fireworks launcher 1. This message sent with `send mode = 128 + 32`
+* `8` - Transaction in the Launcher with incoming message from the  Fireworks launcher 2. This message sent with `send mode = 64`
+
+</details>
+
+
+Bellow the list of test for each transaction expected successfully executed. Transaction[ID:0] External request to the treasury (the Launcher) that resulted with a outbound message `op::set_first` with 2.5 to fireworks. In case you will deploy Fireworks to the blockchain launcher is your wallet.
+
+
+### Transaction ID:1  Success Test
+
+[This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L75) checks if the fireworks are successfully set by sending a transaction with a value of 2.5 TON.
+This is the simplest case, the main purpose here to assert result of transaction success property to true.
+To filter certain transaction from the `launhcResult.transactions` array, we can use the most convince fields.
+With
+`from` (contract sender address), `to` (contract destination address), `op` (Op code value) - we will retrieve only one transaction for this combination.
+
+The transaction[ID:1] in Fireworks Setter contract invoked with `op::set_first` and executed with two outbound messages to the Fireworks Launcher-1 and Fireworks Launcher-2
 
 ```typescript
 
-    it('should set first fireworks', async () => {
+    it('first transaction[ID:1] should set fireworks successfully', async () => {
 
         const launcher = await blockchain.treasury('launcher');
 
-        const launchResult = await fireworks.sendDeployLaunch(launcher.getSender(), toNano('3.5'));
+        const launchResult = await fireworks.sendDeployLaunch(launcher.getSender(), toNano('2.5'));
 
 
         expect(launchResult.transactions).toHaveTransaction({
             from: launcher.address,
             to: fireworks.address,
-            op: 0x5720cfeb //set_first
+            success: true,
+            op: Opcodes.set_first
         })
 
     });
 
 ```
 
-This test checks if the fireworks are successfully launched by sending a transaction with a value of 3.5 TON (converted to nanoTON) and the `op::launch_first` (`0x6efe144b`) op code. It then checks if the transaction was successful by validating the `from`, `to`, and `success` fields using the transaction matcher.
+### Transaction ID:2  Success Test
+
+[This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L92) checks if the transaction[ID:2] executed successfully.
+
+The transaction in the Fireworks launcher 1 invoked with `op::launch_first`, and executed with four outbound messages to the Launcher.
 
 ```typescript
-    it('should launch first fireworks', async () => {
+    it('should exist a transaction[ID:2] which launch first fireworks successfully', async () => {
 
         const launcher = await blockchain.treasury('launcher');
 
-        const launchResult = await fireworks.sendDeployLaunch(launcher.getSender(), toNano('3.5'));
+        const launchResult = await fireworks.sendDeployLaunch(launcher.getSender(), toNano('2.5'));
 
         expect(launchResult.transactions).toHaveTransaction({
             from: fireworks.address,
-            op: 0x6efe144b //launch_first
+            to: launched_f1.address,
+            success: true,
+            op: Opcodes.launch_first,
+            outMessagesCount: 4,
+            destroyed: true,
+            endStatus: "non-existing",
         })
 
         printTransactionFees(launchResult.transactions);
 
     });
-
 ```
 
-
-### Account Status Tests
-
-This test checks if the contract is destroyed after launching the fireworks.
-
-```typescript
-
-    it('should destroy after launching', async () => {
-
-        const launcher = await blockchain.treasury('launcher');
-
-        const launchResult = await fireworks.sendDeployLaunch(
-            launcher.getSender(),
-            toNano('3.5'),
-        );
-
-        const init_code = code;
-        const init_data = beginCell().storeUint(1, 32).endCell();
-
-
-        const state_init = beginCell()
-            .storeUint(0, 1) //no split_depth
-            .storeUint(0, 1) // no special
-            .storeUint(1, 1) // we have code
-            .storeRef(init_code)
-            .storeUint(1, 1) // we have data
-            .storeRef(init_data)
-            .storeUint(0, 1) // we have no library
-            .endCell();
-
-        const hash_dst = state_init.hash
-        if (hash_dst === null) {
-            throw Error("wrong type");
-        }
-
-
-        let launched_f1_address = new Address(0, hash_dst());
-
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: fireworks.address,
-            to: launched_f1_address,
-            success: true,
-            endStatus: 'non-existing',
-            destroyed: true
-        });
-
-    });
-
-```
+In cases, when transaction should affect the state of contract, it is possible to specify this with `destroyed`, `endStatus` fields.
 
 The full list of Account Status related fields:
 
@@ -134,345 +149,167 @@ The full list of Account Status related fields:
 * `endStatus` - AccountStatus after transaction execution. Values: `'uninitialized'`, `'frozen'`, `'active'`, `'non-existing'`.
 
 
-### Operation Code Tests
 
-This test shows how to check whether the operation code (op code) of incoming message is equal to the expected op code.
+### Transaction ID:3  Success Test
+
+[This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L113) checks if the transaction[ID:3] executed successfully.
+
+The transaction[ID:3] carries out in the Fireworks launcher 1, invokes with `op::launch_first`, and executes with four outbound messages to the Launcher.
+
 
 ```typescript
-   it('should be correct op code for the launching first fireworks', async () => {
+
+    it('should exist a transaction[ID:3] which launch second fireworks successfully', async () => {
 
         const launcher = await blockchain.treasury('launcher');
 
-        const launchResult = await fireworks.sendDeployLaunch(
-            launcher.getSender(),
-            toNano('3.5'),
-        );
-
-        const init_code = code;
-        const init_data = beginCell().storeUint(1, 32).endCell();
-
-
-        const state_init = beginCell()
-            .storeUint(0, 1) //no split_depth
-            .storeUint(0, 1) // no special
-            .storeUint(1, 1) // we have code
-            .storeRef(init_code)
-            .storeUint(1, 1) // we have data
-            .storeRef(init_data)
-            .storeUint(0, 1) // we have no library
-            .endCell();
-
-        const hash_dst = state_init.hash
-        if (hash_dst === null) {
-            throw Error("wrong type");
-        }
-
-
-        let launched_f1_address = new Address(0, hash_dst());
-
+        const launchResult = await fireworks.sendDeployLaunch(launcher.getSender(), toNano('2.5'));
 
         expect(launchResult.transactions).toHaveTransaction({
             from: fireworks.address,
-            to: launched_f1_address,
+            to: launched_f2.address,
             success: true,
-            op: 0x6efe144b, // 'launch_first' expected op code
-            outMessagesCount: 4
-        });
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f1_address,
-            to: launcher.address,
-            success: true,
-            op: 0 // 0x00000000 - comment op code
-        });
-
-    });
-```
-
-> For Tact contracts, crc32 representation could be found in the project build directory, autogenerated with build contract.md file.
-> Read more about [crc32](https://docs.ton.org/develop/data-formats/crc32) and op codes in the TON documentation.
-
-### Message Counter Tests
-
-This test checks if the correct number of messages are sent in the transaction.
-For the first fireworks contract:
-
-```typescript
-     it('should be correct op code for the launching first fireworks', async () => {
-
-        const launcher = await blockchain.treasury('launcher');
-
-        const launchResult = await fireworks.sendDeployLaunch(
-            launcher.getSender(),
-            toNano('3.5'),
-        );
-
-        const init_code = code;
-        const init_data = beginCell().storeUint(1, 32).endCell();
-
-
-        const state_init = beginCell()
-            .storeUint(0, 1) //no split_depth
-            .storeUint(0, 1) // no special
-            .storeUint(1, 1) // we have code
-            .storeRef(init_code)
-            .storeUint(1, 1) // we have data
-            .storeRef(init_data)
-            .storeUint(0, 1) // we have no library
-            .endCell();
-
-        const hash_dst = state_init.hash
-        if (hash_dst === null) {
-            throw Error("wrong type");
-        }
-
-
-        let launched_f1_address = new Address(0, hash_dst());
-
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: fireworks.address,
-            to: launched_f1_address,
-            success: true,
-            op: 0x6efe144b, // 'launch_first' op code
-            outMessagesCount: 4
-        });
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f1_address,
-            to: launcher.address,
-            success: true,
-            op: 0 // 0x00000000 - comment op code
-        });
-
-    });   it('fireworks contract should send msgs with comments in first fireworks', async() => {
-
-        const launcher = await blockchain.treasury('launcher');
-
-        const launchResult = await fireworks.sendDeployLaunch(
-            launcher.getSender(),
-            toNano('3.5'),
-        );
-
-        const init_code = code;
-        const init_data = beginCell().storeUint(1, 32).endCell();
-
-
-        const state_init = beginCell()
-            .storeUint(0, 1) //no split_depth
-            .storeUint(0, 1) // no special
-            .storeUint(1, 1) // we have code
-            .storeRef(init_code)
-            .storeUint(1, 1) // we have data
-            .storeRef(init_data)
-            .storeUint(0, 1) // we have no library
-            .endCell();
-
-        const hash_dst = state_init.hash
-        if (hash_dst === null) {
-            throw Error("wrong type");
-        }
-
-
-        let launched_f1_address = new Address(0, hash_dst());
-
-
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f1_address,
-            to: launcher.address,
-            success: true,
-            body: beginCell().storeUint(0,32).storeStringTail("send mode = 0").endCell() // 0x00000000 comment opcode and encoded comment
-
-        });
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f1_address,
-            to: launcher.address,
-            success: true,
-            body: beginCell().storeUint(0,32).storeStringTail("send mode = 1").endCell()
-        });
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f1_address,
-            to: launcher.address,
-            success: true,
-            body: beginCell().storeUint(0,32).storeStringTail("send mode = 2").endCell()
-        });
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f1_address,
-            to: launcher.address,
-            success: true,
-            body: beginCell().storeUint(0,32).storeStringTail("send mode = 32 + 128").endCell()
-        });
-    })
-
-```
-
-For the second fireworks contract:
-
-```typescript
-    it('should be correct op code for the launching second fireworks', async () => {
-
-        const launcher = await blockchain.treasury('launcher');
-
-        const launchResult = await fireworks.sendDeployLaunch(
-            launcher.getSender(),
-            toNano('3.5'),
-        );
-
-        const init_code = code;
-        const init_data = beginCell().storeUint(2, 32).endCell();
-
-
-        const state_init = beginCell()
-            .storeUint(0, 1) //no split_depth
-            .storeUint(0, 1) // no special
-            .storeUint(1, 1) // we have code
-            .storeRef(init_code)
-            .storeUint(1, 1) // we have data
-            .storeRef(init_data)
-            .storeUint(0, 1) // we have no library
-            .endCell();
-
-        const hash_dst = state_init.hash
-        if (hash_dst === null) {
-            throw Error("wrong type");
-        }
-
-
-        let launched_f2_address = new Address(0, hash_dst());
-
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: fireworks.address,
-            to: launched_f2_address,
-            success: true,
-            op: 0xa2e2c2dc, // 'launch_second' op code,
+            op: Opcodes.launch_second,
             outMessagesCount: 1
-        });
+        })
 
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f2_address,
-            to: launcher.address,
-            success: true,
-            op: 0 // 0x00000000 - comment op code
-        });
+        printTransactionFees(launchResult.transactions);
 
     });
+
+
+
+
 ```
 
 
-### Multi Transaction and Payload Tests
 
-This test checks if the fireworks contract sends multiple messages with comments correctly. The body field contains a Cell that is built with @ton/core primitives.
-#### For the first fireworks contract:
+
+### Transaction ID:4  Success Test
+
+[This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L133) checks if the transaction[ID:4] executed successfully.
+
+Transaction[ID:4] carries out in the Launcher(Deploy Wallet) with incoming message from the  Fireworks launcher 1. This message sent with `send mode = 0` in the Transaction[ID:2].
 
 ```typescript
-   it('fireworks contract should send msgs with comments in first fireworks', async() => {
+ it('should exist a transaction[ID:4] with a comment send mode = 0', async() => {
 
         const launcher = await blockchain.treasury('launcher');
 
         const launchResult = await fireworks.sendDeployLaunch(
             launcher.getSender(),
-            toNano('3.5'),
+            toNano('2.5'),
         );
 
-        const init_code = code;
-        const init_data = beginCell().storeUint(1, 32).endCell();
-
-
-        const state_init = beginCell()
-            .storeUint(0, 1) //no split_depth
-            .storeUint(0, 1) // no special
-            .storeUint(1, 1) // we have code
-            .storeRef(init_code)
-            .storeUint(1, 1) // we have data
-            .storeRef(init_data)
-            .storeUint(0, 1) // we have no library
-            .endCell();
-
-        const hash_dst = state_init.hash
-        if (hash_dst === null) {
-            throw Error("wrong type");
-        }
-
-
-        let launched_f1_address = new Address(0, hash_dst());
-
-
-
         expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f1_address,
+            from: launched_f1.address,
             to: launcher.address,
             success: true,
             body: beginCell().storeUint(0,32).storeStringTail("send mode = 0").endCell() // 0x00000000 comment opcode and encoded comment
 
         });
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f1_address,
-            to: launcher.address,
-            success: true,
-            body: beginCell().storeUint(0,32).storeStringTail("send mode = 1").endCell()
-        });
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f1_address,
-            to: launcher.address,
-            success: true,
-            body: beginCell().storeUint(0,32).storeStringTail("send mode = 2").endCell()
-        });
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f1_address,
-            to: launcher.address,
-            success: true,
-            body: beginCell().storeUint(0,32).storeStringTail("send mode = 32 + 128").endCell()
-        });
     })
-
 ```
 
-#### For the second fireworks contract:
+
+### Transaction ID:5  Success Test
+
+[This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L152) checks if the transaction[ID:5] executed successfully.
+
+Transaction[ID:5] carries out in the Launcher with incoming message from the  Fireworks launcher 1. This message sent with `send mode = 1`
 
 ```typescript
-   it('fireworks contract should send msgs with comments in second fireworks', async() => {
+     it('should exist a transaction[ID:5] with a comment send mode = 1', async() => {
 
         const launcher = await blockchain.treasury('launcher');
 
         const launchResult = await fireworks.sendDeployLaunch(
             launcher.getSender(),
-            toNano('3.5'),
+            toNano('2.5'),
         );
 
-        const init_code = code;
-        const init_data = beginCell().storeUint(2, 32).endCell();
+        expect(launchResult.transactions).toHaveTransaction({
+            from: launched_f1.address,
+            to: launcher.address,
+            success: true,
+            body: beginCell().storeUint(0,32).storeStringTail("send mode = 1").endCell() // 0x00000000 comment opcode and encoded comment
+        });
+
+    })
 
 
-        const state_init = beginCell()
-            .storeUint(0, 1) //no split_depth
-            .storeUint(0, 1) // no special
-            .storeUint(1, 1) // we have code
-            .storeRef(init_code)
-            .storeUint(1, 1) // we have data
-            .storeRef(init_data)
-            .storeUint(0, 1) // we have no library
-            .endCell();
+```
 
-        const hash_dst = state_init.hash
-        if (hash_dst === null) {
-            throw Error("wrong type");
-        }
+### Transaction ID:6  Success Test
+
+[This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L170) checks if the transaction[ID:6] executed successfully.
+
+The transaction[ID:6] carries out in the Launcher with incoming message from the  Fireworks launcher 1. This message sent with `send mode = 2`
 
 
-        let launched_f2_address = new Address(0, hash_dst());
+```typescript
+    it('should exist a transaction[ID:6] with a comment send mode = 2', async() => {
 
+        const launcher = await blockchain.treasury('launcher');
 
+        const launchResult = await fireworks.sendDeployLaunch(
+            launcher.getSender(),
+            toNano('2.5'),
+        );
 
         expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f2_address,
+            from: launched_f1.address,
+            to: launcher.address,
+            success: true,
+            body: beginCell().storeUint(0,32).storeStringTail("send mode = 2").endCell() // 0x00000000 comment opcode and encoded comment
+        });
+
+    })
+```
+
+### Transaction ID:7  Success Test
+
+[This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L188) checks if the transaction[ID:7] executed successfully.
+
+The transaction[ID:7] carries out in the Launcher with incoming message from the  Fireworks launcher 1. This message sent with `send mode = 128 + 32`
+
+```typescript
+     it('should exist a transaction[ID:7] with a comment send mode = 32 + 128', async() => {
+
+        const launcher = await blockchain.treasury('launcher');
+
+        const launchResult = await fireworks.sendDeployLaunch(
+            launcher.getSender(),
+            toNano('2.5'),
+        );
+
+        expect(launchResult.transactions).toHaveTransaction({
+            from: launched_f1.address,
+            to: launcher.address,
+            success: true,
+            body: beginCell().storeUint(0,32).storeStringTail("send mode = 32 + 128").endCell() // 0x00000000 comment opcode and encoded comment
+        });
+    })
+```
+
+#### ### Transaction ID:8  Success Test
+
+[This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L188) checks if the transaction[ID:8] executed successfully.
+
+The transaction[ID:8] carries out in the Launcher with incoming message from the  Fireworks launcher 2. This message sent with `send mode = 64`
+
+```typescript
+  it('should exist a transaction[ID:8] with a comment send mode = 64', async() => {
+
+        const launcher = await blockchain.treasury('launcher');
+
+        const launchResult = await fireworks.sendDeployLaunch(
+            launcher.getSender(),
+            toNano('2.5'),
+        );
+
+        expect(launchResult.transactions).toHaveTransaction({
+            from: launched_f2.address,
             to: launcher.address,
             success: true,
             body: beginCell().storeUint(0,32).storeStringTail("send_mode = 64").endCell() // 0x00000000 comment opcode and encoded comment
@@ -480,20 +317,6 @@ This test checks if the fireworks contract sends multiple messages with comments
         });
 
     })
-
-
-    it('should be executed and print fees', async() => {
-
-        const launcher = await blockchain.treasury('launcher');
-
-        const launchResult = await fireworks.sendDeployLaunch(
-            launcher.getSender(),
-            toNano('3.5'),
-        );
-
-        console.log(printTransactionFees(launchResult.transactions));
-
-    });
 
 ```
 
@@ -508,7 +331,7 @@ During the test, reading the details about fees can be useful for optimizing the
 
         const launchResult = await fireworks.sendDeployLaunch(
             launcher.getSender(),
-            toNano('3.5'),
+            toNano('2.5'),
         );
 
         console.log(printTransactionFees(launchResult.transactions));
@@ -520,20 +343,17 @@ During the test, reading the details about fees can be useful for optimizing the
 For instance, in case of `launchResult` the following table will be printed:
 
 
-
-
-
 | (index) |     op       |    valueIn     |    valueOut    |   totalFees    | outActions |
 |---------|--------------|----------------|----------------|----------------|------------|
-|    0    |    'N/A'     |     'N/A'      |   '3.5 TON'    | '0.010605 TON' |     1      |
-|    1    | '0x5720cfeb' |   '3.5 TON'    | '2.186786 TON' | '0.015386 TON' |     2      |
-|    2    | '0x6efe144b' | '1.093393 TON' | '1.081729 TON' | '0.008998 TON' |     4      |
-|    3    | '0xa2e2c2dc' | '1.093393 TON' | '1.089269 TON' | '0.003458 TON' |     1      |
+|    0    |    'N/A'     |     'N/A'      |   '2.5 TON'    | '0.010605 TON' |     1      |
+|    1    | '0x5720cfeb' |   '2.5 TON'    | '2.185812 TON' | '0.015836 TON' |     2      |
+|    2    | '0x6efe144b' | '1.092906 TON' | '1.081142 TON' | '0.009098 TON' |     4      |
+|    3    | '0xa2e2c2dc' | '1.092906 TON' | '1.088638 TON' | '0.003602 TON' |     1      |
 |    4    |    '0x0'     |  '0.099 TON'   |    '0 TON'     | '0.000309 TON' |     0      |
 |    5    |    '0x0'     |   '0.1 TON'    |    '0 TON'     | '0.000309 TON' |     0      |
 |    6    |    '0x0'     |  '0.099 TON'   |    '0 TON'     | '0.000309 TON' |     0      |
-|    7    |    '0x0'     | '0.783729 TON' |    '0 TON'     | '0.000309 TON' |     0      |
-|    8    |    '0x0'     | '1.089269 TON' |    '0 TON'     | '0.000309 TON' |     0      |
+|    7    |    '0x0'     | '0.783142 TON' |    '0 TON'     | '0.000309 TON' |     0      |
+|    8    |    '0x0'     | '1.088638 TON' |    '0 TON'     | '0.000309 TON' |     0      |
 
 
 
@@ -563,7 +383,7 @@ This test verifies whether the transaction fees for launching the fireworks are 
 
         const launchResult = await fireworks.sendDeployLaunch(
             launcher.getSender(),
-            toNano('3.5'),
+            toNano('2.5'),
         );
 
         //totalFee
