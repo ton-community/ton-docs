@@ -275,9 +275,30 @@ await contract.sendTransfer({
 
 ### How to calculate user's Jetton wallet address.
 
-To calculate the user's jetton wallet address, we need to call the "get_wallet_address" get-method of the jetton master contract. It's important to note that we must create a new cell that will contain the user address, and right after that, we can call get-method and parse the result.
+To calculate the user's jetton wallet address, we need to call the "get_wallet_address" get-method of the jetton master contract with user address actually. For this task we can easily use getWalletAddress method from JettonMaster or call master contract by ourselves. 
+
+<Tabs groupId="code-examples">
+<TabItem value="user-jetton-wallet-method-js" label="Use getWalletAddress method">
 
 ```js 
+const { Address, beginCell } = require("@ton/core")
+const { TonClient, JettonMaster } = require("@ton/ton")
+
+const client = new TonClient({
+    endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+});
+
+const jettonMasterAddress = Address.parse('...') // for example EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE
+const userAddress = Address.parse('...')
+
+const jettonMaster = client.open(JettonMaster.create(jettonMasterAddress))
+console.log(await jettonMaster.getWalletAddress(userAddress))
+```
+</TabItem>
+
+<TabItem value="user-jetton-wallet-get-method-js" label="Call get-method by ourselves">
+
+```js
 const { Address, beginCell } = require("@ton/core")
 const { TonClient } = require("@ton/ton")
 
@@ -295,7 +316,8 @@ const userAddress = Address.parse('...')
 
 getUserWalletAddress(userAddress, jettonMasterAddress)
 ```
-
+</TabItem>
+</Tabs>
 
 ### How to construct a message for a jetton transfer with a comment?
 
