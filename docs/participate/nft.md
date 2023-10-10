@@ -1,6 +1,6 @@
 ---
-
 ---
+
 # NFT Use Cases
 
 NFTs, or non-fungible tokens, are a type of digital asset that is unique and cannot be replaced by another identical asset. This article describes the approaches and already implemented use cases of NFTs in TON Blockchain.
@@ -23,7 +23,7 @@ This is one of the most common reasons why marketplaces like getgems.io or OpenS
 
 ## Accounts as NFTs
 
-In November, the Telegram team launched [Fragment](https://fragment.com/) marketplace where anyone can buy and own short Telegram usernames backed by an NFT on TON Blockchain. 
+In November, the Telegram team launched [Fragment](https://fragment.com/) marketplace where anyone can buy and own short Telegram usernames backed by an NFT on TON Blockchain.
 
 Moreover, in December the Telegram team released [No-SIM sign-up](https://telegram.org/blog/ultimate-privacy-topics-2-0#sign-up-without-a-sim-card). You can buy a **virtual phone number** as a NFT to sign up to Telegram Messenger and ensure that your privacy is secured by TON Blockchain.
 
@@ -65,7 +65,14 @@ Furthermore, thanks to their transparency and traceability, the authenticity and
 
 It is also worth noting that NFTs provide flexibility and adaptability in managing permissions. Since NFTs can be programmatically encoded with specific access rules or attributes, they can adapt to different authorization requirements. This flexibility allows for fine-grained control over access levels, granting or revoking permissions as needed, which can be particularly valuable in scenarios that require hierarchical access or temporary authorization restrictions.
 
+One of the services currently offering NFT authentication is [Playmuse](https://playmuse.org/), a media service built on the TON blockchain. This service aims to attract web3 musicians and other creators of creative content.
+
+Owners of NFTs from Playmuse gain access to holders chat. Being a participant in this chat provides opportunity to influence the development direction of the service, vote on various initiatives, and receive early access to presales and NFT auctions featuring renowned creators.
+
+Access to the chat is facilitated through a Telegram bot, which verifies the presence of a Playmuse NFT in the user's wallet.
+
+It is important to note that this is just one example, and as the TON ecosystem evolves, new services and technologies for authentication via NFTs may emerge. Keeping up with the latest developments in the TON space can help identify other platforms or open-source projects that provide similar authentication capabilities.
+
 ## NFT as a Virtual Asset in Games
 
 NFT integrated to game allows players to own and trade these items in a way that is verifiable and secure, which can add an extra layer of value and excitement to the game.
-
