@@ -26,23 +26,19 @@ In general, you need the following steps to run an Archive Node:
 
 Dumps come in form of ZFS Snapshots compressed using plzip, you need to install zfs on your host and restore the dump, see [Oracle Documentation](https://docs.oracle.com/cd/E23824_01/html/821-1448/gavvx.html#scrolltoc) for more details. Before restoring we highly recommend to enable compression on parent ZFS filesystem, this will save you a [lot of space](https://www.servethehome.com/the-case-for-using-zfs-compression/).
 
-1. Install zfs, [create new pool](https://ubuntu.com/tutorials/setup-zfs-storage-pool) (`data`).
-2. Enable compression: `zfs set compression=lz4 data`
-3. Create volume: `zfs create data/ton-work`
+Usually, it's a good idea to create a separate ZFS pool for your node on a _dedicated SSD drive_, this will allow you to easily manage storage space and backup your node.
+
+1. [Install zfs and create a new pool on your 4TB volume](https://ubuntu.com/tutorials/setup-zfs-storage-pool) (name it `data`).
+2. Enable compression for the `data` volume: `zfs set compression=lz4 data`
+3. Create a volume: `zfs create data/ton-work`
 
 
-### Install mytonctrl
+### Install MyTonCtrl
 
 Download the installation script. We recommend to install the tool under your local user account, not as Root. In our example a local user account is used:
 
 ```sh
 wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-```
-
-### Run a Full Node
-Run the installation script as administrator:
-
-```sh
 sudo bash install.sh -m full
 ```
 
@@ -51,8 +47,9 @@ See more detailed guide in [Running Full Node](/participate/run-nodes/full-node)
 
 ### Run an Archive Node
 
-1. Before performing a restore, you must stop the validator by running the command:
+1. Before performing a restore, you must stop the validator using root account:
 ```sh
+sudo -s
 systemctl stop validator.service
 ```
 2. Make a backup of config files `/var/ton-work/db/config.json` and `/var/ton-work/db/keyring` (they will be erased after the recovery process).

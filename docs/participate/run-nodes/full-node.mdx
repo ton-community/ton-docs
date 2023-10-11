@@ -11,7 +11,7 @@ To install and manage your own node, use the **MyTonCtrl** open source tool deve
 
 - at least 8 cores CPU
 - at least 64 GB RAM
-- at least 512 GB NVMe SSD
+- at least 512 GB NVMe SSD (25k+ IOPS)
 - 1 Gbit/s network connectivity
 - public IP address (_fixed IP address_)
 
@@ -57,6 +57,33 @@ The following providers are recommended by the TON Foundation.
 - **Network:** Up to 10 Gbps
 - **Public IP:** Associate an Elastic IP for a fixed IP address.
 
+#### Vultr
+
+- **Instance Type:** `bare metal Intel E-2388G`
+- **CPU:** 8 Cores / 16 Threads
+- **RAM:** 128 GB
+- **Storage:** 1.92TB NVMe SSD
+- **Network:** 10 Gbps
+- **Public IP:** Fixed IP address included with instance.
+
+#### DigitalOcean
+
+- **Instance Type:** `general purpose premium Intel`
+- **CPU:** 16 vCPUs
+- **RAM:** 64 GB
+- **Storage:** 480GB (Chose 2xSSD)
+- **Network:** 10 Gbps
+- **Public IP:** Fixed IP address included with instance.
+
+#### Latitude
+
+- **Instance Type:** `c3.medium.x86`
+- **CPU:** 16 Cores / 32 Threads
+- **RAM:** 128 GB
+- **Storage:** 1.9TB
+- **Network:** 10 Gbps
+- **Public IP:** Fixed IP address included with instance.
+
 :::info
 **Note:** Prices, configurations, and availability may vary. Always check the respective cloud provider's official documentation and pricing pages before making a decision.
 :::
@@ -101,24 +128,38 @@ su root -c 'bash install.sh -m full'
 
 #### 2. Conduct an Operability Test:
 
-1. Run **mytonctrl** from the local user account used for installation in step 1:
+1. Run **mytonctrl** console from the local user account used for installation in step 1:
 
  ```sh
  mytonctrl
   ```
 
-2. Check the **mytonctrl** statuses, particularly the following:
+2. Check the mytonctrl statuses using the `status` command:
+
+  ```sh
+  status
+  ```
+
+The following statuses should be displayed:
 
 * **mytoncore status**: Should be in green.
 * **Local validator status**: Should also be in green.
 * **Local validator out of sync**: Initially, a large number is displayed. As soon as the newly created validator connects with other validators, the number will be around 250k. As synchronization progresses, this number decreases. When it falls below 20, the validator is synchronized.
+
+Example of the **status** command output:
 
 ![status](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/mytonctrl-status.png)
 
 
 #### 3. View the List of Available Wallets
 
-Check out the list of available wallets. For instance, during the installation of **mytonctrl**, the **validator_wallet_001** wallet is created:
+Check out the list of available wallets in the **mytonctrl** console using the `wl` command:
+
+```sh
+wl
+```
+
+During the installation of **mytonctrl**, the **validator_wallet_001** wallet is created:
 
 ![wallet list](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-wl_ru.png)
 
@@ -130,14 +171,27 @@ Check out the list of available wallets. For instance, during the installation o
 
 To determine the minimum amount of coins required to participate in one election round, head to **tonmon.xyz** > **Participant stakes**.
 
-* Use the `vas` command to display the history of transfers
+* Use the `vas` command to display the history of transfers:
+
+  ```sh
+  vas
+  ```
+
 * Activate the wallet using the `aw` command
+
+  ```sh
+  aw
+  ```
 
 ![account history](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-vas-aw_ru.png)
 
 #### 2. Your Validator is Now Ready
 
 **mytoncore** will automatically join the elections. It divides the wallet balance into two parts and uses them as a stake to participate in the elections. You can also manually set the stake size:
+
+```sh
+set stake 50000
+```
 
 `set stake 50000` — this sets the stake size to 50k coins. If the bet is accepted and our node becomes a validator, the bet can only be withdrawn in the second election (according to the rules of the electorate).
 
