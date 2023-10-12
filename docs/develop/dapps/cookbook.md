@@ -314,7 +314,7 @@ async function getUserWalletAddress(userAddress, jettonMasterAddress) {
 const jettonMasterAddress = Address.parse('...') // for example EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE
 const userAddress = Address.parse('...')
 
-getUserWalletAddress(userAddress, jettonMasterAddress)
+console.log(getUserWalletAddress(userAddress, jettonMasterAddress))
 ```
 </TabItem>
 </Tabs>
