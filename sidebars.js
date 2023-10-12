@@ -250,6 +250,8 @@ const sidebars = {
             'develop/dapps/telegram-apps/publishing',
             'develop/dapps/telegram-apps/monetization',
             'develop/dapps/telegram-apps/grants',
+            'develop/dapps/telegram-apps/tips-and-tricks',
+
 
           ],
         },
