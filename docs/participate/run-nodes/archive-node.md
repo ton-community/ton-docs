@@ -29,15 +29,20 @@ Dumps come in form of ZFS Snapshots compressed using plzip, you need to install 
 Usually, it's a good idea to create a separate ZFS pool for your node on a _dedicated SSD drive_, this will allow you to easily manage storage space and backup your node.
 
 1. [Install zfs and create a new pool on your 4TB volume](https://ubuntu.com/tutorials/setup-zfs-storage-pool) (name it `data`).
-2. Enable compression for the `data` volume: `zfs set compression=lz4 data`
-3. Create a volume: `zfs create data/ton-work`
-
+2. Enable compression for the `data` volume:
+```shell
+zfs set compression=lz4 data
+```
+3. Create a volume:
+```shell
+zfs create data/ton-work
+```
 
 ### Install MyTonCtrl
 
 Download the installation script. We recommend to install the tool under your local user account, not as Root. In our example a local user account is used:
 
-```sh
+```shell
 wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
 sudo bash install.sh -m full
 ```
@@ -47,38 +52,64 @@ See more detailed guide in [Running Full Node](/participate/run-nodes/full-node)
 
 ### Run an Archive Node
 
+#### Prepare the node
+
 1. Before performing a restore, you must stop the validator using root account:
-```sh
+```shell
 sudo -s
 systemctl stop validator.service
 ```
 2. Make a backup of config files `/var/ton-work/db/config.json` and `/var/ton-work/db/keyring` (they will be erased after the recovery process).
-```sh
+```shell
 mv /var/ton-work /var/ton-work.bak
 ```
-3. Request `user` and `password` credentials to gain access for downloading dumps in the [@TONBaseChatEn](https://t.me/TONBaseChatEn) Telegram chat.
-4. Tell plzip to use as many cores as your machine allows to speed up extraction process (-n parameter). Another handy tool to use is pipe viewer utility. Here is example command to restore the dump directly from this server via curl:
 
-```sh
-wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d | zfs recv ton-pool/db
+#### Download the dump
+
+3. Request `user` and `password` credentials to gain access for downloading dumps in the [@TONBaseChatEn](https://t.me/TONBaseChatEn) Telegram chat.
+4. Here is an example command to download & restore the dump from the ton.org server:
+
+```shell
+wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d -n <cores> | zfs recv ton-pool/db
 ```
 
-5. Mount zfs: `zfs set mountpoint=/var/ton-work data/ton-work && zfs mount data/ton-work`
+Size of the dump is __~1.5TB__, so it will take some time to download and restore it.
+
+Prepare and run the command:
+1. Install the tools if necessary (`pv`, `plzip`)
+2. Replace `<usr>` and `<pwd>` with your credentials
+2. Tell `plzip` to use as many cores as your machine allows to speed up extraction (`-n`)
+
+#### Mount the dump
+
+5. Mount zfs:
+```shell
+zfs set mountpoint=/var/ton-work data/ton-work && zfs mount data/ton-work
+```
 6. Restore config.json, keys and db/keyring from backup to `/var/ton-work`
-7. Fix permissions: `chown -R validator:validator /var/ton-work`
+7. Fix permissions:
+```shell
+chown -R validator:validator /var/ton-work
+```
+
 8. Add storage settings for the node to the file `/etc/systemd/system/validator.service` in the `ExecStart` line: 
-```sh
+```shell
 --state-ttl 315360000 --archive-ttl 315360000 --block-ttl 315360000
 ```
 
 :::info
 Please be patient once you start the node and observe the logs. Dumps come without DHT caches, so it will take your node some time to find other nodes and then sync with them. Depending on the age of the snapshot, your node might take from a few hours to several days to catch up with the network. This is normal.
 :::
+
+#### Start the node
+
 9. Start the validator by running the command: 
-```sh
+
+```shell
 systemctl start validator.service
 ```
-10. Open `mytonctrl` and check the node status using the status command.
+
+10. Open `mytonctrl` and check the node status using the `status` command.
 
 
 ## Node maintenance
@@ -87,15 +118,22 @@ Node database requires cleansing from time to time (we advise once a week), to d
 
 
 1. Stop validator process (Never skip this!)
-2. Run
-```sh
+```shell
+sudo -s
+systemctl stop validator.service
+```
+2. Remove old logs
+```shell
 find /var/ton-work -name 'LOG.old*' -exec rm {} +
 ```
-4. Run
-```sh
+4. Remove temp files
+```shell
 rm -r /var/ton-work/db/files/packages/temp.archive.*
 ```
 5. Start validator process
+```shell
+systemctl start validator.service
+```
 
 ## Troubleshooting and backups
 If for some reason something does not work / breaks you can always [roll back](https://docs.oracle.com/cd/E23824_01/html/821-1448/gbciq.html#gbcxk) to @archstate snapshot on your ZFS filesystem, this is the original state from dump. 
