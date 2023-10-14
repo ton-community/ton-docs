@@ -70,7 +70,7 @@ mv /var/ton-work /var/ton-work.bak
 4. Here is an example command to download & restore the dump from the ton.org server:
 
 ```shell
-wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d -n <cores> | zfs recv ton-pool/db
+wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work/db
 ```
 
 Size of the dump is __~1.5TB__, so it will take some time to download and restore it.
