@@ -9,7 +9,15 @@ Telegram Mini Apps are web applications that run inside the Telegram messenger. 
 ```html
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 ```
+:::tip
+It's preferable to switch off cache in the HTML. To ensure your cache switched off, specify headers in your request according the following:
 
+```curl
+Cache-Control: no-store, must-revalidate
+Pragma: no-cache
+Expires: 0
+```
+:::
 
 2. Once the script is connected, a **[window.Telegram.WebApp](https://core.telegram.org/bots/webapps#initializing-web-apps)** object become available. You can read more about creating Mini App utilising [`telegram-web-app.js`](https://docs.ton.org/develop/dapps/telegram-apps/app-examples#basic-twa-example) here.
 
