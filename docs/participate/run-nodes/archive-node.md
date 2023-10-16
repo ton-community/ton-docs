@@ -114,7 +114,7 @@ Please be patient once you start the node and observe the logs. Dumps come witho
 systemctl start validator.service
 ```
 
-10. Open `mytonctrl` and check the node status using the `status` command.
+10. Open `mytonctrl` from _local user account_ and check the node status using the `status` command.
 
 
 ## Node maintenance
