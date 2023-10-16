@@ -59,7 +59,7 @@ See more detailed guide in [Running Full Node](/participate/run-nodes/full-node)
 sudo -s
 systemctl stop validator.service
 ```
-2. Make a backup of config files `/var/ton-work/db/config.json` and `/var/ton-work/db/keyring` (they will be erased after the recovery process).
+2. Make a backup of `ton-work` config files (we will need the `/var/ton-work/db/config.json`, `/var/ton-work/keys`, and `/var/ton-work/db/keyring`).
 ```shell
 mv /var/ton-work /var/ton-work.bak
 ```
@@ -70,7 +70,7 @@ mv /var/ton-work /var/ton-work.bak
 4. Here is an example command to download & restore the dump from the ton.org server:
 
 ```shell
-wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work/db
+wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
 ```
 
 Size of the dump is __~1.5TB__, so it will take some time to download and restore it.
@@ -86,7 +86,12 @@ Prepare and run the command:
 ```shell
 zfs set mountpoint=/var/ton-work data/ton-work && zfs mount data/ton-work
 ```
-6. Restore config.json, keys and db/keyring from backup to `/var/ton-work`
+6. Restore `db/config.json`, `keys` and `db/keyring` from backup to `/var/ton-work`
+```shell
+cp /var/ton-work.bak/db/config.json /var/ton-work/db/config.json
+cp -r /var/ton-work.bak/keys /var/ton-work/keys
+cp -r /var/ton-work.bak/db/keyring /var/ton-work/db/keyring
+```
 7. Fix permissions:
 ```shell
 chown -R validator:validator /var/ton-work
@@ -137,6 +142,20 @@ systemctl start validator.service
 
 ## Troubleshooting and backups
 If for some reason something does not work / breaks you can always [roll back](https://docs.oracle.com/cd/E23824_01/html/821-1448/gbciq.html#gbcxk) to @archstate snapshot on your ZFS filesystem, this is the original state from dump. 
+
+1. Stop validator process (Never skip this!)
+```shell
+sudo -s
+systemctl stop validator.service
+```
+2. Check the snapshot name
+```shell
+zfs list -t snapshot
+```
+3. Rollback to the snapshot
+```shell
+zfs rollback data/ton-work@dumpstate
+```
 
 If your Node works well then you can remove this snapshot to save storage space, but we do recommend to regularly snapshot your filesystem for rollback purposes because validator node has been known to corrupt data as well as config.json in some cases. [zfsnap](https://www.zfsnap.org/docs.html) is a nice tool to automate snapshot rotation.
 
