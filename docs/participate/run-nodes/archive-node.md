@@ -92,9 +92,19 @@ cp /var/ton-work.bak/db/config.json /var/ton-work/db/config.json
 cp -r /var/ton-work.bak/keys /var/ton-work/keys
 cp -r /var/ton-work.bak/db/keyring /var/ton-work/db/keyring
 ```
-7. Fix permissions:
+7. Fix permissions for `/var/ton-work`:
 ```shell
 chown -R validator:validator /var/ton-work
+```
+
+:::caution Important
+If you've installed the `mytonctrl` under a local user (as we did in the full node tutorial), you need to change the owner of the `/var/ton-work/keys` directory to the local user account. Otherwise, the node will not be able to start.
+:::
+
+Example of changing the owner to `ubuntu` user:
+
+```shell
+chown -R ubuntu:ubuntu /var/ton-work/keys
 ```
 
 8. Add storage settings for the node to the file `/etc/systemd/system/validator.service` in the `ExecStart` line: 
@@ -114,7 +124,7 @@ Please be patient once you start the node and observe the logs. Dumps come witho
 systemctl start validator.service
 ```
 
-10. Open `mytonctrl` from _local user account_ and check the node status using the `status` command.
+10. Open `mytonctrl` from _local user_ and check the node status using the `status`.
 
 
 ## Node maintenance
@@ -159,13 +169,12 @@ zfs rollback data/ton-work@dumpstate
 
 If your Node works well then you can remove this snapshot to save storage space, but we do recommend to regularly snapshot your filesystem for rollback purposes because validator node has been known to corrupt data as well as config.json in some cases. [zfsnap](https://www.zfsnap.org/docs.html) is a nice tool to automate snapshot rotation.
 
-:::caution
-Have question or problem? Ask in the [TON dev chat](https://t.me/tondev_eng)
+:::tip Need help?
+Have question or need help? Please ask in the [TON dev chat](https://t.me/tondev_eng) to get help from the community. MyTonCtrl developers also hang out there.
 :::
 
 
 ## See Also
 
 * [TON Node Types](/participate/nodes/node-types)
-* [Run a Full Node(Validator)](/participate/run-nodes/full-node)
-* [Full-node (low-level)](/participate/nodes/full-node)
+* [Run a Full Node](/participate/run-nodes/full-node)
