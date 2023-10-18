@@ -1,4 +1,4 @@
-# TON Validator node maintenance and security
+# Maintenance and Security
 
 ## <a id="introduction"></a>Introduction
 This guide provides some basic information on maintaining and securing TON Validator nodes. 

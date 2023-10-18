@@ -1,12 +1,16 @@
+import Button from '@site/src/components/button'
+
 # TON Connect for Telegram Bots
 
 In this tutorial, we’ll create a sample telegram bot that supports TON Connect 2.0 authentication using Javascript TON Connect SDK.
 We will analyze connecting a wallet, sending a transaction, getting data about the connected wallet, and disconnecting a wallet.
 
+<Button href="https://t.me/ton_connect_example_bot" colorType={'primary'} sizeType={'sm'}>Open Demo Bot</Button>
+<Button href="https://github.com/ton-connect/demo-telegram-bot" colorType={'secondary'} sizeType={'sm'}>Check out GitHub</Button>
+
 ## Documentation links
 
-1. [TON Connect SDK documentation](https://www.npmjs.com/package/@tonconnect/sdk)  
-2. [Integration example source code](https://github.com/ton-connect/demo-telegram-bot)
+- [TON Connect SDK documentation](https://www.npmjs.com/package/@tonconnect/sdk)
 
 ## Prerequisites
 
@@ -30,7 +34,7 @@ Let's create a directory `ton-connect-bot`. Add the following package.json file 
     "run": "node ./dist/main.js"
   },
   "dependencies": {
-    "@tonconnect/sdk": "^2.1.3",
+    "@tonconnect/sdk": "^3.0.0-beta.1",
     "dotenv": "^16.0.3",
     "node-telegram-bot-api": "^0.61.0",
     "qrcode": "^1.5.1"
@@ -101,7 +105,8 @@ Create a `.env` file and add your bot token, DAppmanifest and wallets list cache
 
 ```dotenv
 # .env
-TELEGRAM_BOT_TOKEN=<YOUR BOT TOKEN, LIKE 1234567890:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA>
+TELEGRAM_BOT_TOKEN=<YOUR BOT TOKEN, E.G 1234567890:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA>
+TELEGRAM_BOT_LINK=<YOUR TG BOT LINK HERE, E.G. https://t.me/ton_connect_example_bot>
 MANIFEST_URL=https://raw.githubusercontent.com/ton-connect/demo-telegram-bot/master/tonconnect-manifest.json
 WALLETS_LIST_CAHCE_TTL_MS=86400000
 ```
@@ -153,7 +158,8 @@ ton-connect-bot
 We've already installed the `@tonconnect/sdk`, so we can just import it to get started.
 
 We will start with getting wallets list. We need only http-bridge-compatible wallets. Create a folder `ton-connect` into `src` and add `wallets.ts` file there:
-
+We also define function `getWalletInfo` that queries detailed wallet info by its `appName`.
+The difference between `name` and `appName` is that `name` is a human-readable label of the wallet, and `appName` is the wallet's uniq identifier.
 ```ts
 // src/ton-connect/wallets.ts
 
@@ -166,6 +172,11 @@ const walletsListManager = new WalletsListManager({
 export async function getWallets(): Promise<WalletInfoRemote[]> {
     const wallets = await walletsListManager.getWallets();
     return wallets.filter(isWalletInfoRemote);
+}
+
+export async function getWalletInfo(walletAppName: string): Promise<WalletInfo | undefined> {
+    const wallets = await getWallets();
+    return wallets.find(wallet => wallet.appName.toLowerCase() === walletAppName.toLowerCase());
 }
 ```
 
@@ -230,7 +241,7 @@ bot.onText(/\/connect/, async msg => {
     }
   });
 
-  const tonkeeper = wallets.find(wallet => wallet.name === 'Tonkeeper')!;
+  const tonkeeper = wallets.find(wallet => wallet.appName === 'tonkeeper')!;
 
   const link = connector.connect({
     bridgeUrl: tonkeeper.bridgeUrl,
@@ -290,7 +301,7 @@ bot.onText(/\/connect/, async msg => {
         }
     });
 
-    const tonkeeper = wallets.find(wallet => wallet.name === 'Tonkeeper')!;
+    const tonkeeper = wallets.find(wallet => wallet.appName === 'tonkeeper')!;
 
     const link = connector.connect({
         bridgeUrl: tonkeeper.bridgeUrl,
@@ -328,12 +339,12 @@ We will implement following UX for wallet connection:
 ```text
 First screen:
 <Unified QR>
-<Open wallet unified link>, <Choose a wallet button (opens second screen)> 
+<Open @wallet>, <Choose a wallet button (opens second screen)>, <Open wallet unified link> 
 
 Second screen:
 <Unified QR>
 <Back (opens first screen)>
-<Tonkeeper button (opens third screen)>, <Tonhub button (opens third screen)>, <...> 
+<@wallet button (opens third screen)>, <Tonkeeper button (opens third screen)>, <Tonhub button (opens third screen)>, <...> 
 
 Third screen:
 <Selected wallet QR>
@@ -350,9 +361,11 @@ bot.onText(/\/connect/, async msg => {
 
     const connector = getConnector(chatId);
 
-    connector.onStatusChange(wallet => {
+    connector.onStatusChange(async wallet => {
         if (wallet) {
-            bot.sendMessage(chatId, `${wallet.device.appName} wallet connected!`);
+            const walletName =
+                (await getWalletInfo(wallet.device.appName))?.name || wallet.device.appName;
+            bot.sendMessage(chatId, `${walletName} wallet connected!`);
         }
     });
 
@@ -364,14 +377,14 @@ bot.onText(/\/connect/, async msg => {
             inline_keyboard: [
                 [
                     {
-                        text: 'Open Wallet',
+                        text: 'Choose a Wallet',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: 'Open Link',
                         url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
                             link
                         )}`
-                    },
-                    {
-                        text: 'Choose a Wallet',
-                        callback_data: JSON.stringify({ method: 'chose_wallet' })
                     }
                 ]
             ]
@@ -403,7 +416,7 @@ async function onChooseWalletClick(query: CallbackQuery, _: string): Promise<voi
             inline_keyboard: [
                 wallets.map(wallet => ({
                     text: wallet.name,
-                    callback_data: JSON.stringify({ method: 'select_wallet', data: wallet.name })
+                    callback_data: JSON.stringify({ method: 'select_wallet', data: wallet.appName })
                 })),
                 [
                     {
@@ -536,14 +549,14 @@ async function onOpenUniversalQRClick(query: CallbackQuery, _: string): Promise<
             inline_keyboard: [
                 [
                     {
-                        text: 'Open Wallet',
+                        text: 'Choose a Wallet',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: 'Open Link',
                         url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
                             link
                         )}`
-                    },
-                    {
-                        text: 'Choose a Wallet',
-                        callback_data: JSON.stringify({ method: 'chose_wallet' })
                     }
                 ]
             ]
@@ -575,9 +588,7 @@ async function onWalletClick(query: CallbackQuery, data: string): Promise<void> 
         }
     });
 
-    const wallets = await getWallets();
-
-    const selectedWallet = wallets.find(wallet => wallet.name === data);
+    const selectedWallet = await getWalletInfo(data);
     if (!selectedWallet) {
         return;
     }
@@ -598,7 +609,7 @@ async function onWalletClick(query: CallbackQuery, data: string): Promise<void> 
                         callback_data: JSON.stringify({ method: 'chose_wallet' })
                     },
                     {
-                        text: `Open ${data}`,
+                        text: `Open ${selectedWallet.name}`,
                         url: link
                     }
                 ]
@@ -640,7 +651,7 @@ export const walletMenuCallbacks = {
 // src/connect-wallet-menu.ts
 
 import TelegramBot, { CallbackQuery } from 'node-telegram-bot-api';
-import { getWallets } from './ton-connect/wallets';
+import { getWallets, getWalletInfo } from './ton-connect/wallets';
 import { bot } from './bot';
 import { getConnector } from './ton-connect/connector';
 import QRCode from 'qrcode';
@@ -681,7 +692,7 @@ async function onChooseWalletClick(query: CallbackQuery, _: string): Promise<voi
             inline_keyboard: [
                 wallets.map(wallet => ({
                     text: wallet.name,
-                    callback_data: JSON.stringify({ method: 'select_wallet', data: wallet.name })
+                    callback_data: JSON.stringify({ method: 'select_wallet', data: wallet.appName })
                 })),
                 [
                     {
@@ -721,14 +732,14 @@ async function onOpenUniversalQRClick(query: CallbackQuery, _: string): Promise<
             inline_keyboard: [
                 [
                     {
-                        text: 'Open Wallet',
+                        text: 'Choose a Wallet',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: 'Open Link',
                         url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
                             link
                         )}`
-                    },
-                    {
-                        text: 'Choose a Wallet',
-                        callback_data: JSON.stringify({ method: 'chose_wallet' })
                     }
                 ]
             ]
@@ -750,9 +761,7 @@ async function onWalletClick(query: CallbackQuery, data: string): Promise<void> 
         }
     });
 
-    const wallets = await getWallets();
-
-    const selectedWallet = wallets.find(wallet => wallet.name === data);
+    const selectedWallet = await getWalletInfo(data);
     if (!selectedWallet) {
         return;
     }
@@ -773,7 +782,7 @@ async function onWalletClick(query: CallbackQuery, data: string): Promise<void> 
                         callback_data: JSON.stringify({ method: 'chose_wallet' })
                     },
                     {
-                        text: `Open ${data}`,
+                        text: `Open ${selectedWallet.name}`,
                         url: link
                     }
                 ]
@@ -861,14 +870,14 @@ export async function handleConnectCommand(msg: TelegramBot.Message): Promise<vo
             inline_keyboard: [
                 [
                     {
-                        text: 'Open Wallet',
+                        text: 'Choose a Wallet',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: 'Open Link',
                         url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
                             link
                         )}`
-                    },
-                    {
-                        text: 'Choose a Wallet',
-                        callback_data: JSON.stringify({ method: 'chose_wallet' })
                     }
                 ]
             ]
@@ -952,8 +961,6 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
         return;
     }
 
-    const wallets = await connector.getWallets();
-
     connector
         .sendTransaction({
             validUntil: Math.round(Date.now() / 1000) + 600, // timeout is SECONDS
@@ -978,14 +985,14 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
         .finally(() => connector.pauseConnection());
 
     let deeplink = '';
-    const walletInfo = wallets.find(wallet => wallet.name === connector.wallet!.device.appName);
-    if (walletInfo && isWalletInfoRemote(walletInfo)) {
+    const walletInfo = await getWalletInfo(connector.wallet!.device.appName);
+    if (walletInfo) {
         deeplink = walletInfo.universalLink;
     }
 
     await bot.sendMessage(
         chatId,
-        `Open ${connector.wallet!.device.appName} and confirm transaction`,
+        `Open ${walletInfo?.name || connector.wallet!.device.appName} and confirm transaction`,
         {
             reply_markup: {
                 inline_keyboard: [
@@ -1072,11 +1079,14 @@ export async function handleShowMyWalletCommand(msg: TelegramBot.Message): Promi
         return;
     }
 
+    const walletName =
+        (await getWalletInfo(connector.wallet!.device.appName))?.name ||
+        connector.wallet!.device.appName;
+
+
     await bot.sendMessage(
         chatId,
-        `Connected wallet: ${
-            connector.wallet!.device.appName
-        }\nYour address: ${toUserFriendlyAddress(
+        `Connected wallet: ${walletName}\nYour address: ${toUserFriendlyAddress(
             connector.wallet!.account.address,
             connector.wallet!.account.chain === CHAIN.TESTNET
         )}`
@@ -1193,8 +1203,6 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
         return;
     }
 
-    const wallets = await connector.getWallets();
-
     pTimeout(
         connector.sendTransaction({
             validUntil: Math.round(
@@ -1228,14 +1236,14 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
         .finally(() => connector.pauseConnection());
 
     let deeplink = '';
-    const walletInfo = wallets.find(wallet => wallet.name === connector.wallet!.device.appName);
-    if (walletInfo && isWalletInfoRemote(walletInfo)) {
+    const walletInfo = await getWalletInfo(connector.wallet!.device.appName);
+    if (walletInfo) {
         deeplink = walletInfo.universalLink;
     }
 
     await bot.sendMessage(
         chatId,
-        `Open ${connector.wallet!.device.appName} and confirm transaction`,
+        `Open ${walletInfo?.name || connector.wallet!.device.appName} and confirm transaction`,
         {
             reply_markup: {
                 inline_keyboard: [
@@ -1351,7 +1359,7 @@ import {
     UserRejectsError
 } from '@tonconnect/sdk';
 import { bot } from './bot';
-import { getWallets } from './ton-connect/wallets';
+import { getWallets, getWalletInfo } from './ton-connect/wallets';
 import QRCode from 'qrcode';
 import TelegramBot from 'node-telegram-bot-api';
 import { getConnector } from './ton-connect/connector';
@@ -1373,11 +1381,13 @@ export async function handleConnectCommand(msg: TelegramBot.Message): Promise<vo
 
     await connector.restoreConnection();
     if (connector.connected) {
+        const connectedName =
+            (await getWalletInfo(connector.wallet!.device.appName))?.name ||
+            connector.wallet!.device.appName;
+        
         await bot.sendMessage(
             chatId,
-            `You have already connected a ${
-                connector.wallet!.device.appName
-            } wallet\nYour address: ${toUserFriendlyAddress(
+            `You have already connect ${connectedName} wallet\nYour address: ${toUserFriendlyAddress(
                 connector.wallet!.account.address,
                 connector.wallet!.account.chain === CHAIN.TESTNET
             )}\n\n Disconnect wallet firstly to connect a new one`
@@ -1390,7 +1400,9 @@ export async function handleConnectCommand(msg: TelegramBot.Message): Promise<vo
         if (wallet) {
             await deleteMessage();
 
-            await bot.sendMessage(chatId, `${wallet.device.appName} wallet connected successfully`);
+            const walletName =
+                (await getWalletInfo(wallet.device.appName))?.name || wallet.device.appName;
+            await bot.sendMessage(chatId, `${walletName} wallet connected successfully`);
             unsubscribe();
             newConnectRequestListenersMap.delete(chatId);
         }
@@ -1406,14 +1418,14 @@ export async function handleConnectCommand(msg: TelegramBot.Message): Promise<vo
             inline_keyboard: [
                 [
                     {
-                        text: 'Open Wallet',
+                        text: 'Choose a Wallet',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: 'Open Link',
                         url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
                             link
                         )}`
-                    },
-                    {
-                        text: 'Choose a Wallet',
-                        callback_data: JSON.stringify({ method: 'chose_wallet' })
                     }
                 ]
             ]
@@ -1472,14 +1484,14 @@ async function onOpenUniversalQRClick(query: CallbackQuery, _: string): Promise<
             inline_keyboard: [
                 [
                     {
-                        text: 'Open Wallet',
+                        text: 'Choose a Wallet',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: 'Open Link',
                         url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
                             link
                         )}`
-                    },
-                    {
-                        text: 'Choose a Wallet',
-                        callback_data: JSON.stringify({ method: 'chose_wallet' })
                     }
                 ]
             ]
@@ -1537,6 +1549,363 @@ async function onWalletClick(query: CallbackQuery, data: string): Promise<void> 
 </details>
 
 That's it! Compile and run the bot and try to call `/connect` twice.
+
+### Improve interaction with @wallet
+Starting from v3 TonConnect supports connection to TWA wallets like @wallet. At the moment in the tutorial the bot could be connected to the @wallet.
+However, we should improve redirection strategy to provide better UX. Moreover, let's add `Connect @wallet` button to the first ("Universal QR") screen.
+
+First, let's create some utility functions:
+```ts
+// src/utils.ts
+import { encodeTelegramUrlParameters, isTelegramUrl } from '@tonconnect/sdk';
+
+export const AT_WALLET_APP_NAME = 'telegram-wallet';
+
+// ... other code
+export function addTGReturnStrategy(link: string, strategy: string): string {
+    const parsed = new URL(link);
+    parsed.searchParams.append('ret', strategy);
+    link = parsed.toString();
+
+    const lastParam = link.slice(link.lastIndexOf('&') + 1);
+    return link.slice(0, link.lastIndexOf('&')) + '-' + encodeTelegramUrlParameters(lastParam);
+}
+
+export function convertDeeplinkToUniversalLink(link: string, walletUniversalLink: string): string {
+    const search = new URL(link).search;
+    const url = new URL(walletUniversalLink);
+
+    if (isTelegramUrl(walletUniversalLink)) {
+        const startattach = 'tonconnect-' + encodeTelegramUrlParameters(search.slice(1));
+        url.searchParams.append('startattach', startattach);
+    } else {
+        url.search = search;
+    }
+
+    return url.toString();
+}
+```
+
+TonConnect parameters in Telegram links have to be encoded in special way, that's why we use `encodeTelegramUrlParameters` to encode return strategy parameter.
+We will use `addTGReturnStrategy` to provide correct return url to the demo bot for @wallet.
+
+Since we use Universal QR page creation code in two places, we are moving it to the separate function:
+```ts
+// src/utils.ts
+
+// ... other code
+
+export async function buildUniversalKeyboard(
+    link: string,
+    wallets: WalletInfoRemote[]
+): Promise<InlineKeyboardButton[]> {
+    const atWallet = wallets.find(wallet => wallet.appName.toLowerCase() === AT_WALLET_APP_NAME);
+    const atWalletLink = atWallet
+        ? addTGReturnStrategy(
+            convertDeeplinkToUniversalLink(link, atWallet?.universalLink),
+            process.env.TELEGRAM_BOT_LINK!
+        )
+        : undefined;
+
+    const keyboard = [
+        {
+            text: 'Choose a Wallet',
+            callback_data: JSON.stringify({ method: 'chose_wallet' })
+        },
+        {
+            text: 'Open Link',
+            url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(link)}`
+        }
+    ];
+
+    if (atWalletLink) {
+        keyboard.unshift({
+            text: '@wallet',
+            url: atWalletLink
+        });
+    }
+
+    return keyboard;
+}
+```
+
+Here we are adding separate button for @wallet to the First screen (Universal QR screen). All that remains is to use this function in 
+connect-wallet-menu and command-handlers:
+
+
+<details>
+<summary>src/connect-wallet-menu.ts code</summary>
+
+```ts
+// src/connect-wallet-menu.ts
+
+// ... other code
+
+async function onOpenUniversalQRClick(query: CallbackQuery, _: string): Promise<void> {
+    const chatId = query.message!.chat.id;
+    const wallets = await getWallets();
+
+    const connector = getConnector(chatId);
+
+    const link = connector.connect(wallets);
+
+    await editQR(query.message!, link);
+
+    const keyboard = await buildUniversalKeyboard(link, wallets);
+
+    await bot.editMessageReplyMarkup(
+        {
+            inline_keyboard: [keyboard]
+        },
+        {
+            message_id: query.message?.message_id,
+            chat_id: query.message?.chat.id
+        }
+    );
+}
+
+// ... other code
+```
+
+</details>
+
+<details>
+<summary>src/commands-handlers.ts code</summary>
+
+```ts
+// src/commands-handlers.ts
+
+// ... other code
+
+export async function handleConnectCommand(msg: TelegramBot.Message): Promise<void> {
+    const chatId = msg.chat.id;
+    let messageWasDeleted = false;
+
+    newConnectRequestListenersMap.get(chatId)?.();
+
+    const connector = getConnector(chatId, () => {
+        unsubscribe();
+        newConnectRequestListenersMap.delete(chatId);
+        deleteMessage();
+    });
+
+    await connector.restoreConnection();
+    if (connector.connected) {
+        const connectedName =
+            (await getWalletInfo(connector.wallet!.device.appName))?.name ||
+            connector.wallet!.device.appName;
+        await bot.sendMessage(
+            chatId,
+            `You have already connect ${connectedName} wallet\nYour address: ${toUserFriendlyAddress(
+                connector.wallet!.account.address,
+                connector.wallet!.account.chain === CHAIN.TESTNET
+            )}\n\n Disconnect wallet firstly to connect a new one`
+        );
+
+        return;
+    }
+
+    const unsubscribe = connector.onStatusChange(async wallet => {
+        if (wallet) {
+            await deleteMessage();
+
+            const walletName =
+                (await getWalletInfo(wallet.device.appName))?.name || wallet.device.appName;
+            await bot.sendMessage(chatId, `${walletName} wallet connected successfully`);
+            unsubscribe();
+            newConnectRequestListenersMap.delete(chatId);
+        }
+    });
+
+    const wallets = await getWallets();
+
+    const link = connector.connect(wallets);
+    const image = await QRCode.toBuffer(link);
+
+    const keyboard = await buildUniversalKeyboard(link, wallets);
+
+    const botMessage = await bot.sendPhoto(chatId, image, {
+        reply_markup: {
+            inline_keyboard: [keyboard]
+        }
+    });
+
+    const deleteMessage = async (): Promise<void> => {
+        if (!messageWasDeleted) {
+            messageWasDeleted = true;
+            await bot.deleteMessage(chatId, botMessage.message_id);
+        }
+    };
+
+    newConnectRequestListenersMap.set(chatId, async () => {
+        unsubscribe();
+
+        await deleteMessage();
+
+        newConnectRequestListenersMap.delete(chatId);
+    });
+}
+
+// ... other code
+```
+
+</details>
+
+
+Now we are going to handle TG links properly when user clicks to a wallet button on the second Screen (Choosing a wallet):
+
+<details>
+<summary>src/connect-wallet-menu.ts code</summary>
+
+```ts
+// src/connect-wallet-menu.ts
+
+// ... other code
+
+
+async function onWalletClick(query: CallbackQuery, data: string): Promise<void> {
+    const chatId = query.message!.chat.id;
+    const connector = getConnector(chatId);
+
+    const selectedWallet = await getWalletInfo(data);
+    if (!selectedWallet) {
+        return;
+    }
+
+    let buttonLink = connector.connect({
+        bridgeUrl: selectedWallet.bridgeUrl,
+        universalLink: selectedWallet.universalLink
+    });
+
+    let qrLink = buttonLink;
+
+    if (isTelegramUrl(selectedWallet.universalLink)) {
+        buttonLink = addTGReturnStrategy(buttonLink, process.env.TELEGRAM_BOT_LINK!);
+        qrLink = addTGReturnStrategy(qrLink, 'none');
+    }
+
+    await editQR(query.message!, qrLink);
+
+    await bot.editMessageReplyMarkup(
+        {
+            inline_keyboard: [
+                [
+                    {
+                        text: '« Back',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: `Open ${selectedWallet.name}`,
+                        url: buttonLink
+                    }
+                ]
+            ]
+        },
+        {
+            message_id: query.message?.message_id,
+            chat_id: chatId
+        }
+    );
+}
+
+// ... other code
+```
+
+</details>
+
+Note that we place different links to the QR and button-link (`qrLink` and `buttonLink`), 
+because we don't need redirection when user scans QR by @wallet, and at the same time we need redirect back to the bot when user connects @wallet using button-link.
+
+
+Now let's add return strategy for TG links in `send transaction` handler:
+
+<details>
+<summary>src/commands-handlers.ts code</summary>
+
+```ts
+// src/commands-handlers.ts
+
+// ... other code
+
+export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<void> {
+    const chatId = msg.chat.id;
+
+    const connector = getConnector(chatId);
+
+    await connector.restoreConnection();
+    if (!connector.connected) {
+        await bot.sendMessage(chatId, 'Connect wallet to send transaction');
+        return;
+    }
+
+    pTimeout(
+        connector.sendTransaction({
+            validUntil: Math.round(
+                (Date.now() + Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS)) / 1000
+            ),
+            messages: [
+                {
+                    amount: '1000000',
+                    address: '0:0000000000000000000000000000000000000000000000000000000000000000'
+                }
+            ]
+        }),
+        Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS)
+    )
+        .then(() => {
+            bot.sendMessage(chatId, `Transaction sent successfully`);
+        })
+        .catch(e => {
+            if (e === pTimeoutException) {
+                bot.sendMessage(chatId, `Transaction was not confirmed`);
+                return;
+            }
+
+            if (e instanceof UserRejectsError) {
+                bot.sendMessage(chatId, `You rejected the transaction`);
+                return;
+            }
+
+            bot.sendMessage(chatId, `Unknown error happened`);
+        })
+        .finally(() => connector.pauseConnection());
+
+    let deeplink = '';
+    const walletInfo = await getWalletInfo(connector.wallet!.device.appName);
+    if (walletInfo) {
+        deeplink = walletInfo.universalLink;
+    }
+
+    if (isTelegramUrl(deeplink)) {
+        const url = new URL(deeplink);
+        url.searchParams.append('startattach', 'tonconnect');
+        deeplink = addTGReturnStrategy(url.toString(), process.env.TELEGRAM_BOT_LINK!);
+    }
+
+    await bot.sendMessage(
+        chatId,
+        `Open ${walletInfo?.name || connector.wallet!.device.appName} and confirm transaction`,
+        {
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        {
+                            text: `Open ${walletInfo?.name || connector.wallet!.device.appName}`,
+                            url: deeplink
+                        }
+                    ]
+                ]
+            }
+        }
+    );
+}
+
+// ... other code
+```
+
+</details>
+
+That is it. Now user is able to connect @wallet using special button on the main screen, also we have provided proper return strategy for TG links. 
 
 ## Add a permanent storage
 At this moment we store TonConnect sessions in the Map object. But you may want to store it to the database or other permanent storage to save the sessions when you restart the server.

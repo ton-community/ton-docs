@@ -372,12 +372,12 @@ const config = {
                 label: 'Run a Full Node',
               },
               {
-                to: 'participate/run-nodes/liteserver',
-                label: 'Run a Liteserver Node',
+                to: 'participate/run-nodes/archive-node',
+                label: 'Run an Archive Node',
               },
               {
-                to: 'participate/run-nodes/archive-node',
-                label: 'Run an Archieve Node',
+                to: 'participate/run-nodes/liteserver',
+                label: 'Run a Liteserver Node',
               },
               {
                 to: 'https://ton.org/validator',

@@ -59,7 +59,7 @@ The jetton master smart contract stores general information about the jetton (in
 
 It is possible for any user to create a counterfeit clone of a valuable jetton (using an arbitrary name, ticker, image, etc.) that is nearly identical to the original. Thankfully, counterfeit jettons are distinguishable by their addresses and can be identified quite easily.
 
-To eliminate the possibility of fraud for TON users, please look up the original jetton address (Jetton master contract) for specific jetton types or follow the project’s official social media channel or website to find the correct information. Most blockchain projects also have curated lists of assets to eliminate the possibility of fraud (for TON, this is found using the TonKeeper ton-assets list).
+To eliminate the possibility of fraud for TON users, please look up the original jetton address (Jetton master contract) for specific jetton types or follow the project’s official social media channel or website to find the correct information. Most blockchain projects also have curated lists of assets to eliminate the possibility of fraud (for TON, this is found using the Tonkeeper ton-assets list).
 
 ### Retrieving Jetton data
 

@@ -34,7 +34,7 @@
 
 If you used a [standard NFT smart contract](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-collection-editable.fc) for your collection, you need to send a [message](https://github.com/ton-blockchain/token-contract/blob/2d411595a4f25fba43997a2e140a203c140c728a/nft/nft-collection-editable.fc#L132) to the collection smart contract from the collection owner's wallet with a new url prefix.
 
-As an example, if the url prefix used to be https://mysite/my_collection/, the new prefix will be tonstorage://my_bag_id/.
+As an example, if the url prefix used to be `https://mysite/my_collection/`, the new prefix will be `tonstorage://my_bag_id/`.
 
 ## How to assign a TON domain to a TON Storage bag (Low Level)
 

@@ -1,4 +1,4 @@
-# Nominator Pools
+# Staking with Nominator Pools
 
 ## Overview 
 
