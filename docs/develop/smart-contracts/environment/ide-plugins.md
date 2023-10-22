@@ -10,7 +10,7 @@ Visual Studio Code is a free and popular IDE for developers.
 ## IntelliJ IDEs Plugin 
 
 :::info
-Could be used for any of JetBrains products.
+This plugin can be used with any JetBrains product.
 :::
 
 There are several ways to install a plugin:
@@ -24,4 +24,4 @@ There are several ways to install a plugin:
 
 ## Neovim
 
-To enable syntax highlighting in Neovim, simply follow the installation instructions provided in the [nvim-treesitter quickstart guide](https://github.com/nvim-treesitter/nvim-treesitter#quickstart).
+To enable syntax highlighting in Neovim, follow the installation instructions in the [nvim-treesitter quickstart guide](https://github.com/nvim-treesitter/nvim-treesitter#quickstart).
