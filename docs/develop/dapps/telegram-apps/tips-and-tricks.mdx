@@ -1,4 +1,5 @@
-
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Tips and Tricks
 
@@ -31,3 +32,58 @@ The process of development in Google Chrome more convenient because of the famil
 
 You can retrieve the launch parameters of the mini-app and open this link in Chrome. For our case, the easiest way is to retrieve the launch parameters from the web version of Telegram: [https://web.telegram.org/](https://web.telegram.org/)
 
+
+
+### Closing Behaviour
+
+
+In many web applications, users might accidentally close the app while scrolling to the top. This can happen if they drag a section of the application too far, inadvertently triggering the app to close.
+
+
+<p align="center">
+    <br />
+    <img width="240" src="/img/docs/telegram-apps/closing-behaviour.svg" alt="closing_behaviour_durgerking" />
+    <br />
+</p>
+
+
+To prevent such accidental closures, developers can use `closing_behavior` method in the TMA. This method will display a dialog where the user can either approve or decline the closing of the Web App.
+
+
+
+<Tabs groupId="code-examples">
+
+<TabItem value="web" label="Web">
+
+```typescript
+window.parent.postMessage(JSON.stringify({
+    eventType: 'web_app_setup_closing_behavior',
+    eventData: {need_confirmation: true},
+}), 'https://web.telegram.org');
+```
+
+</TabItem>
+
+<TabItem value="desktop-and-mobile" label="Desktop&Mobile">
+
+```typescript
+    window.TelegramWebviewProxy.postEvent('web_app_setup_closing_behavior', JSON.stringify({
+    need_confirmation: true
+}));
+```
+
+</TabItem>
+
+
+<TabItem value="w-phone" label="Windows Phone">
+
+```typescript
+    window.external.notify(JSON.stringify({
+    eventType: 'web_app_setup_closing_behavior',
+    eventData: {need_confirmation: true},
+}))
+
+```
+
+</TabItem>
+</Tabs>
