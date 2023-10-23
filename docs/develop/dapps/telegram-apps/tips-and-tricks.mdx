@@ -1,5 +1,3 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 # Tips and Tricks
 
@@ -47,43 +45,10 @@ In many web applications, users might accidentally close the app while scrolling
 </p>
 
 
-To prevent such accidental closures, developers can use `closing_behavior` method in the TMA. This method will display a dialog where the user can either approve or decline the closing of the Web App.
+To prevent such accidental closures, enable `closing_behavior` in the TMA. This method will add a dialog where the user can either approve or decline the closing of the Web App.
 
 
-
-<Tabs groupId="code-examples">
-
-<TabItem value="web" label="Web">
 
 ```typescript
-window.parent.postMessage(JSON.stringify({
-    eventType: 'web_app_setup_closing_behavior',
-    eventData: {need_confirmation: true},
-}), 'https://web.telegram.org');
+window.Telegram.WebApp.enableClosingConfirmation()
 ```
-
-</TabItem>
-
-<TabItem value="desktop-and-mobile" label="Desktop&Mobile">
-
-```typescript
-    window.TelegramWebviewProxy.postEvent('web_app_setup_closing_behavior', JSON.stringify({
-    need_confirmation: true
-}));
-```
-
-</TabItem>
-
-
-<TabItem value="w-phone" label="Windows Phone">
-
-```typescript
-    window.external.notify(JSON.stringify({
-    eventType: 'web_app_setup_closing_behavior',
-    eventData: {need_confirmation: true},
-}))
-
-```
-
-</TabItem>
-</Tabs>
