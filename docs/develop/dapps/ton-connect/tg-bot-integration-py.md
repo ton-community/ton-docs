@@ -1,7 +1,12 @@
-# TON Connect for Telegram Bots
+import Button from '@site/src/components/button'
+
+# TON Connect for Telegram Bots - Python
 
 In this tutorial, we’ll create a sample telegram bot that supports TON Connect 2.0 authentication using Python TON Connect SDK [pytonconnect](https://github.com/XaBbl4/pytonconnect).
 We will analyze connecting a wallet, sending a transaction, getting data about the connected wallet, and disconnecting a wallet.
+
+<Button href="https://t.me/test_tonconnect_bot" colorType={'primary'} sizeType={'sm'}>Open Demo Bot</Button>
+<Button href="https://github.com/yungwine/ton-connect-bot" colorType={'secondary'} sizeType={'sm'}>Check out GitHub</Button>
 
 ## Preparing
 
@@ -218,7 +223,7 @@ Bot gives user 3 minutes to connect a wallet, after which it reports a timeout e
 
 ## Implement Transaction requesting
 
-Let's take one of examples from the [Message builders](https://docs.ton.org/develop/dapps/ton-connect/message-builders) article:
+Let's take one of examples from the [Message builders](/develop/dapps/ton-connect/message-builders) article:
 
 ```python
 # messages.py
@@ -479,3 +484,80 @@ if __name__ == "__main__":
 
 ## Improving
 
+
+### Add permanent storage - Redis
+
+Currently, our TON Connect Storage uses dict which causes to lost sessions after bot restart. 
+Let's add permanent database storage with Redis:
+
+After you launched Redis database install python library to interact with it:
+
+```bash
+pip install redis
+```
+
+And update `TcStorage` class in `tc_storage.py`:
+
+```python
+import redis.asyncio as redis
+
+client = redis.Redis(host='localhost', port=6379)
+
+
+class TcStorage(IStorage):
+
+    def __init__(self, chat_id: int):
+        self.chat_id = chat_id
+
+    def _get_key(self, key: str):
+        return str(self.chat_id) + key
+
+    async def set_item(self, key: str, value: str):
+        await client.set(name=self._get_key(key), value=value)
+
+    async def get_item(self, key: str, default_value: str = None):
+        value = await client.get(name=self._get_key(key))
+        return value.decode() if value else default_value
+
+    async def remove_item(self, key: str):
+        await client.delete(self._get_key(key))
+```
+
+### Add QR Code
+
+Install python `qrcode` package to generate them:
+
+```bash
+pip install qrcode
+```
+
+Change `connect_wallet()` function so it generates qrcode and sends it as a photo to the user:
+
+```python
+from io import BytesIO
+import qrcode
+from aiogram.types import BufferedInputFile
+
+
+async def connect_wallet(message: Message, wallet_name: str):
+    ...
+    
+    img = qrcode.make(generated_url)
+    stream = BytesIO()
+    img.save(stream)
+    file = BufferedInputFile(file=stream.getvalue(), filename='qrcode')
+
+    await message.answer_photo(photo=file, caption='Connect wallet within 3 minutes', reply_markup=mk_b.as_markup())
+    
+    ...
+```
+
+## Summary
+
+What is next?
+- You can add better errors handling in the bot.
+- You can add start text and something like `/connect_wallet` command.
+
+## See Also
+- [Full bot code](https://github.com/yungwine/ton-connect-bot)
+- [Preparing messages](/develop/dapps/ton-connect/message-builders)
