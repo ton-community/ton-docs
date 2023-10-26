@@ -423,8 +423,8 @@ const config = {
                 label: 'TON Answers',
               },
               {
-                to: 'https://t.me/TonDev_eng',
-                label: 'TON Developers Chat',
+                to: 'https://t.me/addlist/1r5Vcb8eljk5Yzcy',
+                label: 'TON Developers Kit',
               },
               {
                 to: 'https://github.com/ton-blockchain/TEPs',
