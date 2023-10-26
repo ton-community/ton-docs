@@ -107,7 +107,7 @@ tag_a$10 val:(## 32) = A;
 tag_b$00 val(## 64) = A;
 ```
 
-If we parse `1000000000000000000000000000000001` (1 and 33 zeroes and 1) in TLB type `A` - firstly we need to get first
+If we parse `1000000000000000000000000000000001` (1 and 32 zeroes and 1) in TLB type `A` - firstly we need to get first
 two bits to define tag. In this example `10` is two first bits and they represent `tag_a`. So now we know that next 32
 bits are `val` variable, `1` in our example. Some "parsed" pseudocode variables may look like:
 
