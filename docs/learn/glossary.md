@@ -50,7 +50,7 @@ ____________
 
 ### Bloodbath
 
-**Bloodbath** — a colloquial term often used to describe a severe and sustained market crash, which results in multiple deep red bars on price charts.
+**Bloodbath** — a colloquial term often used to describe a severe and sustained market crash, that results in multiple deep red bars on price charts.
 
 ### BoC
 
