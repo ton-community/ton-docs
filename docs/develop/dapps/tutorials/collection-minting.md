@@ -104,7 +104,7 @@ PINATA_API_SECRET=your_secret_api_key
 MNEMONIC=word1 word2 word3 word4
 TONCENTER_API_KEY=aslfjaskdfjasasfas
 ```
-You can get toncenter api key from [@tontestnetapibot](https://t.me/@tontestnetapibot) ([@tonapibot](https://t.me/@tonapibot) for mainnet). In `MNEMONIC` variable store 24 words of collection owner wallet seed phrase.
+You can get toncenter api key from [@tonapibot](https://t.me/tonapibot) and choose mainnet or testnet. In `MNEMONIC` variable store 24 words of collection owner wallet seed phrase.
 
 Great! Now we are ready to start writing code for our project.
 
