@@ -365,7 +365,7 @@ Now, let's return to the tutorial!
 
 In the section above where we discuss gas amounts and numerical (_num_) values in hex format needed to receive mining data, we note that the hex numbers present within the strings of code must be converted into a more easily understandable and usable format.
 
-As it is clear when examining the given output, hex numbers can be quite substantial in size. It's not possible to make a variable and make use of them, because of specific [JavaScript limitations](https://stackoverflow.com/questions/307179/what-is-javascripts-highest-integer-value-that-a-number-can-go-to-without-losin#:~:text=Note%20that%20the%20bitwise%20operators,31%2D1%2C%20or%202%2C147%2C483%2C647.) that are outlined here.
+As it is clear when examining the given output, hex numbers can be quite substantial in size. It's not possible to make a variable and make use of them, because of specific [JavaScript limitations](https://stackoverflow.com/a/307200) that are outlined here.
 
 We need a way to translate this, that’s where the `bn.js` (the big number implementation in JavaScript) library comes in. Bn.js is a library developers use to work with large numbers that are larger than the maximum JavaScript integer values. Let’s use this example to get a better idea of the _Mining Data_ required for this process:
 
