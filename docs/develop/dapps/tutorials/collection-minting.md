@@ -478,7 +478,7 @@ commonContentUrl | Base url for NFT items metadata
 Firstly let's write private method, that will return cell with code of our collection. 
 
 ```ts
-export class Collection {
+export class NftCollection {
   private collectionData: collectionData;
 
   constructor(collectionData: collectionData) {
