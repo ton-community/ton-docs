@@ -693,12 +693,12 @@ Great! Now we can comeback to `NftItem.ts`. All we have to do is just send messa
 ```ts
 import { internal, SendMode } from "ton-core";
 import { OpenedWallet } from "utils";
-import { Collection, mintParams } from "./NftCollection";
+import { NftCollection, mintParams } from "./NftCollection";
 
 export class NftItem {
-  private collection: Collection;
+  private collection: NftCollection;
 
-  constructor(collection: Collection) {
+  constructor(collection: NftCollection) {
     this.collection = collection;
   }
 
