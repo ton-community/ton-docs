@@ -204,7 +204,7 @@ ___________
 
 **Gas** — the fee paid for transactions on the blockchain.
 
-### Github
+### GitHub
 
 **GitHub** — a platform where developers gather to create base code for programs.
 
