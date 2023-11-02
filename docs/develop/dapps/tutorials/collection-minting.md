@@ -104,7 +104,7 @@ PINATA_API_SECRET=your_secret_api_key
 MNEMONIC=word1 word2 word3 word4
 TONCENTER_API_KEY=aslfjaskdfjasasfas
 ```
-You can get toncenter api key from [@tontestnetapibot](https://t.me/@tontestnetapibot) ([@tonapibot](https://t.me/@tonapibot) for mainnet). In `MNEMONIC` variable store 24 words of collection owner wallet seed phrase.
+You can get toncenter api key from [@tonapibot](https://t.me/tonapibot) and choose mainnet or testnet. In `MNEMONIC` variable store 24 words of collection owner wallet seed phrase.
 
 Great! Now we are ready to start writing code for our project.
 
@@ -478,7 +478,7 @@ commonContentUrl | Base url for NFT items metadata
 Firstly let's write private method, that will return cell with code of our collection. 
 
 ```ts
-export class Collection {
+export class NftCollection {
   private collectionData: collectionData;
 
   constructor(collectionData: collectionData) {
@@ -693,12 +693,12 @@ Great! Now we can comeback to `NftItem.ts`. All we have to do is just send messa
 ```ts
 import { internal, SendMode } from "ton-core";
 import { OpenedWallet } from "utils";
-import { Collection, mintParams } from "./NftCollection";
+import { NftCollection, mintParams } from "./NftCollection";
 
 export class NftItem {
-  private collection: Collection;
+  private collection: NftCollection;
 
-  constructor(collection: Collection) {
+  constructor(collection: NftCollection) {
     this.collection = collection;
   }
 
