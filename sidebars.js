@@ -243,14 +243,26 @@ const sidebars = {
           type: 'category',
           label: 'Telegram Mini Apps',
           items: [
-            'develop/dapps/telegram-apps/README',
-            'develop/dapps/telegram-apps/step-by-step-guide',
-            'develop/dapps/telegram-apps/app-examples',
+                    'develop/dapps/telegram-apps/README',
+                    'develop/dapps/telegram-apps/grants',
+                {
+            type: 'category',
+            label: 'Guidelines',
+            items: [
             'develop/dapps/telegram-apps/testing-apps',
             'develop/dapps/telegram-apps/publishing',
             'develop/dapps/telegram-apps/monetization',
-            'develop/dapps/telegram-apps/grants',
             'develop/dapps/telegram-apps/tips-and-tricks',
+            ],
+            },
+            {
+                type: 'category',
+                label: 'Tutorials & Examples',
+                items: [
+                    'develop/dapps/telegram-apps/step-by-step-guide',
+                    'develop/dapps/telegram-apps/app-examples',
+                ],
+            },
 
 
           ],
