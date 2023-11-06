@@ -276,41 +276,45 @@ const config = {
             label: 'DApps',
             items: [
               {
+                  to: '/develop/dapps/telegram-apps/',
+                  label: 'TMA Development',
+              },
+              {
                 to: 'develop/dapps/apis',
-                label: 'Understand API Types',
+                label: 'APIs',
               },
               {
                 to: 'develop/dapps/apis/sdk',
-                label: 'Choose an SDK',
-              },
-              {
-                to: 'develop/dapps/defi/coins',
-                label: 'Native token: Toncoin',
+                label: 'SDKs',
               },
               {
                 to: 'develop/dapps/asset-processing',
-                label: 'Payments processing',
+                label: 'Transaction Processing',
               },
-              {
-                to: 'develop/dapps/asset-processing/jettons',
-                label: 'Jetton (Tokens) processing',
-              },
-              {
-                to: '/develop/dapps/asset-processing/nfts',
-                label: 'NFT processing',
-              },
-              {
-                to: '/develop/dapps/asset-processing/metadata',
-                label: 'TON Metadata Parsing',
-              },
-              {
+//              {
+//                to: 'develop/dapps/asset-processing/jettons',
+//                label: 'Jetton (Tokens) processing',
+//              },
+//              {
+//                to: '/develop/dapps/asset-processing/nfts',
+//                label: 'NFT processing',
+//              },
+//              {
+//                to: '/develop/dapps/asset-processing/metadata',
+//                label: 'TON Metadata Parsing',
+//              },
+             {
+               to: 'develop/dapps/defi/coins',
+               label: 'DeFi Development',
+             },
+/*              {
                 to: 'develop/dapps/defi/subscriptions',
                 label: 'Subscriptions',
               },
               {
                 to: 'develop/dapps/defi/ton-payments',
                 label: 'TON Payments',
-              },
+              },*/
             ],
           },
           {
