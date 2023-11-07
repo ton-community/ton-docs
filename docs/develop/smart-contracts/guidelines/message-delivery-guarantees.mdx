@@ -7,13 +7,10 @@ TON is an asynchronous blockchain with a complex structure very different from o
 
 ## What is a message?
 
-If we look at Ethereum or almost any other synchronous blockchain, each transaction can contain several smart contract calls in it. For example, DEXs perform multiple exchanges in one transaction if there is no liquidity for the selected trading pair.
-
-In an asynchronous system you can't get a response from the destination smart contract in the same transaction. A contract call may take a few blocks to be processed, depending on the length of the route between source and destination.
-
-Working with this type of communication is reminiscent of launching a satellite into space. We know the message we've formed, but after its launch, it is necessary to conduct separate observation to find out what results we will obtain.
+A message is a packet of data sent between actors (users, applications, smart contracts). It typically contains information instructing the receiver on what action to perform, such as updating storage or sending a new message.
 
 <br></br>
+<div class="text--center">
 <ThemedImage
   alt=""
   sources={{
@@ -21,13 +18,19 @@ Working with this type of communication is reminiscent of launching a satellite 
     dark: '/img/docs/message-delivery/message_delivery_1.svg?raw=true',
   }}
 />
+</div>
 <br></br>
+
+Working with this type of communication is reminiscent of launching a satellite into space. We know the message we've formed, but after its launch, it is necessary to conduct separate observation to find out what results we will obtain.
+
+
 
 ## What is a Transaction?
 
-To achieve the infinite sharding paradigm, it is necessary to ensure full parallelization, which means that the execution of each transactions is independent of every other. Therefore, instead of transactions which affect and change the state of many contracts at one time, each transaction in TON is only executed on a single smart contract and smart contracts communicate through messages. That way, smart contracts can only interact with each other by calling their functions with special messages and getting a response to them via other messages later.
-
-If a transaction in Ethereum is just a set of function calls in different contracts, a transaction in TON is made up of the inbound message which initially triggered it and a set of outbound messages which are sent to other contracts.
+A transaction in TON consists of the following:
+- the incoming message that initially triggers the contract
+- contract actions caused by in message, such as an update to the contract's storage
+- outgoing generated messages that are sent to other actors
 
 <br></br>
 <ThemedImage
@@ -40,12 +43,34 @@ If a transaction in Ethereum is just a set of function calls in different contra
 <br></br>
 
 
+If we look at Ethereum or almost any other synchronous blockchain, each transaction can contain several smart contract calls in it. For example, DEXs perform multiple exchanges in one transaction if there is no liquidity for the selected trading pair.
+
+In an asynchronous system you can't get a response from the destination smart contract in the same transaction. A contract call may take a few blocks to be processed, depending on the length of the route between source and destination.
+
+To achieve the infinite sharding paradigm, it is necessary to ensure full parallelization, which means that the execution of each transactions is independent of every other. Therefore, instead of transactions which affect and change the state of many contracts at one time, each transaction in TON is only executed on a single smart contract and smart contracts communicate through messages. That way, smart contracts can only interact with each other by calling their functions with special messages and getting a response to them via other messages later.
+
+
+
 
 ## What is a Logical time?
 
 In such a system with asynchronous and parallel smart contract calls, it can be hard to define the order of actions to process. That's why each message in TON has it's _Logical time_ or _Lamport time_ (later just _lt_). It is used to understand which event caused another and what a validator needs to process first.
 
-It is strictly guaranteed that the transaction resulting from a message will have a _lt_ greater than the _lt_ of the message. Likewise, the _lt_ of a message sent in some transaction is strictly greater than the _lt_ of the transaction that caused it. As well as this, messages that were sent from one account and transactions which happened on one account are strictly ordered as well. Thanks to this, for every account we always know the order of transactions, received messages and sent messages.
+It is strictly guaranteed that the transaction resulting from a message will have a _lt_ greater than the _lt_ of the message. Likewise, the _lt_ of a message sent in some transaction is strictly greater than the _lt_ of the transaction that caused it. As well as this, messages that were sent from one account and transactions which happened on one account are strictly ordered as well.
+
+<br></br>
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/message_delivery_3.svg?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_3.svg?raw=true',
+  }}
+/>
+<br></br>
+
+For the case in the image, it turns out: `in_msg_lt < tx0_lt < out_msg_lt`
+
+Thanks to this, for every account we always know the order of transactions, received messages and sent messages.
 
 Moreover, if account _A_ sent two messages to account _B_, it is guaranteed that the message with a lower _lt_ will be processed earlier. Otherwise, an attempt to synchronize delivery would require the state of all the others to be known before processing one shard, thereby breaking parallelization and destroying efficient sharding.
 
