@@ -194,14 +194,12 @@ const config = {
         //... other Algolia params
       },
 
-      announcementBar: {
-        // id: 'contribute/hacktoberfest',
-        content:
-        // '<a rel="noopener noreferrer" target="_blank" href="https://society.ton.org/hack-ton-berfest-2023?utm_source=tondocs&utm_medium=top_banner&utm_campaign=promo"><span>The HACKTOBERFEST event has already started!  Read more about the event and rewards! </span> <span class="mobile-view">Read more about The HACKTOBERFEST</span></a>',
-        '<a rel="noopener noreferrer" target="_blank" href="https://society.ton.org/hack-ton-berfest-2023?utm_source=tondocs&utm_medium=top_banner&utm_campaign=promo"><span>The <b>HACK-TON-BERFEST 2023</b> event is near! Double-merch, NFT rewards and more!</span> <span class="mobile-view">Double-merch, NFT reward and more!</span></a>',
-        textColor: '#F3F3F7',
-        isCloseable: false,
-      },
+      // announcementBar: {
+      //   // id: 'contribute/hacktoberfest',
+      //   content: '<a rel="noopener noreferrer" target="_blank" href="https://society.ton.org/hack-ton-berfest-2023?utm_source=tondocs&utm_medium=top_banner&utm_campaign=promo"><span>The <b>HACK-TON-BERFEST 2023</b> event is near! Double-merch, NFT rewards and more!</span> <span class="mobile-view">Double-merch, NFT reward and more!</span></a>',
+      //   textColor: '#F3F3F7',
+      //   isCloseable: false,
+      // },
 
       image: 'img/snippet.png',
       navbar: {
