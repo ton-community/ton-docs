@@ -103,7 +103,7 @@
 			<title>Dynamic connector.15</title>
 			<path d="M0 320.21 L1.33 320.21 L1.33 320.21 L42.52 320.21" class="st7"/>
 		</g>
-		<g id="shape16-34" v:mID="16" v:groupContext="shape" transform="translate(30.9183,-126.091)">
+		<g id="shape16-34" v:mID="16" v:groupContext="shape" transform="translate(16.4408,-126.091)">
 			<title>Sheet.16</title>
 			<desc>Basechain (workchain = 0)</desc>
 			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
@@ -389,12 +389,7 @@
 			<title>Dynamic connector.77</title>
 			<path d="M0 313.13 L-105.59 236.59" class="st7"/>
 		</g>
-		<g id="shape78-172" v:mID="78" v:groupContext="shape" v:layerMember="0" transform="translate(349.603,-252.233)">
-			<title>Dynamic connector.78</title>
-			<path d="M-7.09 313.13 C-7.09 318.44 -7.09 318.89 -7.09 319.3 C-7.09 323.76 -7.09 323.76 -7.09 336.79 C-7.09 361.65 -7.09
-						 433.95 -7.09 544.15" class="st9"/>
-		</g>
-		<g id="shape79-175" v:mID="79" v:groupContext="shape" v:layerMember="0" transform="translate(1073.64,-59.786)">
+		<g id="shape79-172" v:mID="79" v:groupContext="shape" v:layerMember="0" transform="translate(1073.64,-59.786)">
 			<title>Dynamic connector.79</title>
 			<path d="M0 306.35 L61.92 305.73" class="st7"/>
 		</g>
