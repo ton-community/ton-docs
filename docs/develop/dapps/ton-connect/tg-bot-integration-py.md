@@ -19,7 +19,7 @@ You can use pip for this purpose:
 
 ```bash
 pip install aiogram pytoniq-core python-dotenv
-pip install git+https://github.com/yungwine/pytonconnect.git
+pip install pytonconnect
 ```
 
 ### Set up config
