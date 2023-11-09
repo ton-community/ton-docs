@@ -63,7 +63,7 @@ So, if you try to optimize your code start with architecture optimization, the d
 ### Operations with cells
 Just an example of how proper cell work may substantially decrease gas costs.
 
-Let''s imagine that you want to add some encoded payload to the outgoing message. Straightforward implementation will be as follows:
+Let's imagine that you want to add some encoded payload to the outgoing message. Straightforward implementation will be as follows:
 ```cpp
 slice payload_encoding(int a, int b, int c) {
   return
