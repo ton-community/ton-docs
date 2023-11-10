@@ -95,7 +95,7 @@ export const Address = () => {
     const rawAddress = useTonAddress(false);
 
     return (
-        address && (
+        userFriendlyAddress && (
             <div>
                 <span>User-friendly address: {userFriendlyAddress}</span>
                 <span>Raw address: {rawAddress}</span>
