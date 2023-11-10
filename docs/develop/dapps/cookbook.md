@@ -239,7 +239,7 @@ print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=Tru
 </TabItem>
 </Tabs>
 
-### How to send standard TON transfer message. 
+### How to send standard TON transfer message?
 
 To send a standard TON transfer message, first you need to open your wallet contract, after that, get your wallet seqno. And only after that can you send your TON transfer. Note that if you are using a non-V4 version of the wallet, you will need to rename WalletContractV4 to WalletContract{your wallet version}, for example, WalletContractV3R2.
 
@@ -273,7 +273,7 @@ await contract.sendTransfer({
 });
 ```
 
-### How to calculate user's Jetton wallet address.
+### How to calculate user's Jetton wallet address?
 
 To calculate the user's jetton wallet address, we need to call the "get_wallet_address" get-method of the jetton master contract with user address actually. For this task we can easily use getWalletAddress method from JettonMaster or call master contract by ourselves. 
 
@@ -741,3 +741,48 @@ main().finally(() => console.log("Exiting..."));
 </Tabs>
 
 Additionally, we need to include royalty information in our message, as they also change using this opcode. It's important to note that it's not necessary to specify new values everywhere. If, for example, only the NFT common content needs to be changed, then all other values can be specified as they were before.
+
+### Processing Snake Cells
+
+Some times it's necessary to store long strings (or other large information) while cells can hold **maximum 1023 bits**. In this case, we can use snake cells. Snake cells are cells that contain a reference to another cell, which, in turn, contains a reference to another cell, and so on. 
+
+<Tabs groupId="code-examples">
+<TabItem value="js-tonweb" label="JS (tonweb)">
+
+```js
+const TonWeb = require("tonweb");
+
+function writeStringTail(str, cell) {
+    const bytes = Math.floor(cell.bits.getFreeBits() / 8); // 1 symbol = 8 bits
+    if(bytes < str.length) { // if we can't write all string
+        cell.bits.writeString(str.substring(0, bytes)); // write part of string
+        const newCell = writeStringTail(str.substring(bytes), new TonWeb.boc.Cell()); // create new cell
+        cell.refs.push(newCell); // add new cell to current cell's refs
+    } else {
+        cell.bits.writeString(str); // write all string
+    }
+
+    return cell;
+}
+
+function readStringTail(cell) {
+    const slice = cell.beginParse(); // converting cell to slice
+    if(cell.refs.length > 0) {
+        const str = new TextDecoder('ascii').decode(slice.array); // decode uint8array to string
+        return str + readStringTail(cell.refs[0]); // read next cell
+    } else {
+        return new TextDecoder('ascii').decode(slice.array);
+    }
+}
+
+let cell = new TonWeb.boc.Cell();
+const str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In euismod, ligula vel lobortis hendrerit, lectus sem efficitur enim, vel efficitur nibh dui a elit. Quisque augue nisi, vulputate vitae mauris sit amet, iaculis lobortis nisi. Aenean molestie ultrices massa eu fermentum. Cras rhoncus ipsum mauris, et egestas nibh interdum in. Maecenas ante ipsum, sodales eget suscipit at, placerat ut turpis. Nunc ac finibus dui. Donec sit amet leo id augue tempus aliquet. Vestibulum eu aliquam ex, sit amet suscipit odio. Vestibulum et arcu dui.";
+cell = writeStringTail(str, cell);
+const text = readStringTail(cell); 
+console.log(text);
+```
+
+</TabItem>
+</Tabs>
+
+This example will help you understand how you can work with such cells using recursion.
