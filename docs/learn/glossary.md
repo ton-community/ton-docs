@@ -445,6 +445,10 @@ ________
 
 **TVL** (Total Value Locked) — Тotal value locked represents the number of assets currently being staked in a specific protocol.
 
+### TVM
+
+**TVM** — Ton Virtual Machine, a machine behaving like a decentralized computer, it computes the state of the Ton blockchain after each new block and executes smart contracts.
+
 ___________
 
 ## V
