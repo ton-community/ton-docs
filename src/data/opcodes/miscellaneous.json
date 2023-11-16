@@ -1,0 +1,90 @@
+[
+  {
+    "name": "DEBUG",
+    "alias_of": "",
+    "tlb": "#FE nn:(#<= 239)",
+    "doc_category": "debug",
+    "doc_opcode": "FEnn",
+    "doc_fift": "{nn} DEBUG",
+    "doc_stack": "-",
+    "doc_gas": 26,
+    "doc_description": "`0 <= nn < 240`"
+  },
+  {
+    "name": "DEBUGSTR",
+    "alias_of": "",
+    "tlb": "#FEF n:(## 4) ssss:((n * 8 + 8) * Bit)",
+    "doc_category": "debug",
+    "doc_opcode": "FEFnssss",
+    "doc_fift": "{string} DEBUGSTR\n{string} {x} DEBUGSTRI",
+    "doc_stack": "-",
+    "doc_gas": 26,
+    "doc_description": "`0 <= n < 16`. Length of `ssss` is `n+1` bytes.\n`{string}` is a [string literal](https://github.com/Piterden/TON-docs/blob/master/Fift.%20A%20Brief%20Introduction.md#user-content-29-string-literals).\n`DEBUGSTR`: `ssss` is the given string.\n`DEBUGSTRI`: `ssss` is one-byte integer `0 <= x <= 255` followed by the given string."
+  },
+  {
+    "name": "DUMPSTK",
+    "alias_of": "DEBUG",
+    "tlb": "#FE00",
+    "doc_category": "debug",
+    "doc_opcode": "FE00",
+    "doc_fift": "DUMPSTK",
+    "doc_stack": "-",
+    "doc_gas": 26,
+    "doc_description": "Dumps the stack (at most the top 255 values) and shows the total stack depth."
+  },
+  {
+    "name": "DUMP",
+    "alias_of": "DEBUG",
+    "tlb": "#FE2 i:uint4",
+    "doc_category": "debug",
+    "doc_opcode": "FE2i",
+    "doc_fift": "s[i] DUMP",
+    "doc_stack": "-",
+    "doc_gas": 26,
+    "doc_description": "Dumps `s[i]`."
+  },
+  {
+    "name": "SETCP",
+    "alias_of": "",
+    "tlb": "#FF nn:(#<= 239)",
+    "doc_category": "codepage",
+    "doc_opcode": "FFnn",
+    "doc_fift": "[nn] SETCP",
+    "doc_stack": "-",
+    "doc_gas": 26,
+    "doc_description": "Selects TVM codepage `0 <= nn < 240`. If the codepage is not supported, throws an invalid opcode exception."
+  },
+  {
+    "name": "SETCP0",
+    "alias_of": "SETCP",
+    "tlb": "#FF00",
+    "doc_category": "codepage",
+    "doc_opcode": "FF00",
+    "doc_fift": "SETCP0",
+    "doc_stack": "-",
+    "doc_gas": 26,
+    "doc_description": "Selects TVM (test) codepage zero as described in this document."
+  },
+  {
+    "name": "SETCP_SPECIAL",
+    "alias_of": "",
+    "tlb": "#FFF z:(## 4) {1 <= z}",
+    "doc_category": "codepage",
+    "doc_opcode": "FFFz",
+    "doc_fift": "[z-16] SETCP",
+    "doc_stack": "-",
+    "doc_gas": 26,
+    "doc_description": "Selects TVM codepage `z-16` for `1 <= z <= 15`. Negative codepages `-13...-1` are reserved for restricted versions of TVM needed to validate runs of TVM in other codepages. Negative codepage `-14` is reserved for experimental codepages, not necessarily compatible between different TVM implementations, and should be disabled in the production versions of TVM."
+  },
+  {
+    "name": "SETCPX",
+    "alias_of": "",
+    "tlb": "#FFF0",
+    "doc_category": "codepage",
+    "doc_opcode": "FFF0",
+    "doc_fift": "SETCPX",
+    "doc_stack": "c -",
+    "doc_gas": 26,
+    "doc_description": "Selects codepage `c` with `-2^15 <= c < 2^15` passed in the top of the stack."
+  }
+]

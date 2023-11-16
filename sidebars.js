@@ -481,8 +481,73 @@ const sidebars = {
         'learn/tvm-instructions/tvm-overview',
         'learn/tvm-instructions/tvm-initialization',
         'learn/tvm-instructions/tvm-exit-codes',
-        'learn/tvm-instructions/instructions',
         'learn/tvm-instructions/tvm-upgrade-2023-07',
+        {
+          type: 'category',
+          label: 'TVM Instructions',
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'learn/tvm-instructions/tvm-instructions-overview'
+            },
+            {
+              type: 'doc',
+              label: 'Stack manipulation',
+              id: 'learn/tvm-instructions/instructions/stack-manipulation'
+            },
+            {
+              type: 'doc',
+              label: 'Tuple, List, and Null manipulation',
+              id: 'learn/tvm-instructions/instructions/tuple-list-null'
+            },
+            {
+              type: 'doc',
+              label: 'Constant operations',
+              id: 'learn/tvm-instructions/instructions/constant'
+            },
+            {
+              type: 'doc',
+              label: 'Arithmetic operations',
+              id: 'learn/tvm-instructions/instructions/arithmetic'
+            },
+            {
+              type: 'doc',
+              label: 'Data comparison',
+              id: 'learn/tvm-instructions/instructions/data-comparison'
+            },
+            {
+              type: 'doc',
+              label: 'Cell manipulation',
+              id: 'learn/tvm-instructions/instructions/cell-manipulation'
+            },
+            {
+              type: 'doc',
+              label: 'Continuation and control flow',
+              id: 'learn/tvm-instructions/instructions/control-flow'
+            },
+            {
+              type: 'doc',
+              label: 'Exception generating and handling',
+              id: 'learn/tvm-instructions/instructions/exception-gen-and-handling'
+            },
+            {
+              type: 'doc',
+              label: 'Dictionary manipulation',
+              id: 'learn/tvm-instructions/instructions/dictionary-manipulation'
+            },
+            {
+              type: 'doc',
+              label: 'Application-specific primitives',
+              id: 'learn/tvm-instructions/instructions/app-specific'
+            },
+            {
+              type: 'doc',
+              label: 'Miscellaneous',
+              id: 'learn/tvm-instructions/instructions/miscellaneous'
+            },
+          ]
+        }
       ],
     },
     {
