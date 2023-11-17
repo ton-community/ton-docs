@@ -1,4 +1,15 @@
 import opcodes from './opcodes.json';
+import appSpecificOpcodes from './app_specific.json';
+import arithmeticOpcodes from './arithmetic.json';
+import cellManipulationOpcodes from './cell_manipulation.json';
+import comparisonOpcodes from './comparison.json';
+import constantOpcodes from './constant.json';
+import continuationOpcodes from './continuation.json';
+import dictionaryManipulationOpcodes from './dictionaries.json';
+import exceptionOpcodes from './exceptions.json';
+import miscellaneousOpcodes from './miscellaneous.json';
+import stackManipulationOpcodes from './stack_manipulation.json';
+import tupleOpcodes from './tuple.json';
 
 type Opcode = {
   name: string;
@@ -12,4 +23,18 @@ type Opcode = {
   doc_description: string;
 }
 
-export { opcodes, Opcode };
+export {
+  opcodes,
+  appSpecificOpcodes,
+  arithmeticOpcodes,
+  cellManipulationOpcodes,
+  comparisonOpcodes,
+  constantOpcodes,
+  continuationOpcodes,
+  dictionaryManipulationOpcodes,
+  exceptionOpcodes,
+  miscellaneousOpcodes,
+  stackManipulationOpcodes,
+  tupleOpcodes,
+  Opcode
+};
