@@ -342,7 +342,7 @@ var msg = begin_cell()
   .store_uint(0x18, 6) ;; or 0x10 for non-bounce
   .store_slice(to_address)
   .store_coins(amount)
-  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
   ;; store something as a body
 ```
 
@@ -357,7 +357,7 @@ var msg = begin_cell()
   .store_uint(0, 2) ;; src -> two zero bits for addr_none
   .store_slice(to_address)
   .store_coins(amount)
-  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
   ;; store something as a body
 ```
 Now let’s go through each option in detail:
