@@ -79,7 +79,7 @@ slice payload_encoding(int a, int b, int c) {
     .store_uint(0x18, 6)
     .store_slice(destination)
     .store_coins(0)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; some flags related to message header
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; message flags (see sending messages page)
     .store_uint(0x33bbff77, 32) ;; op-code (see smart-contract guidelines)
     .store_uint(cur_lt(), 64)  ;; query_id (see smart-contract guidelines)
     .store_slice(payload)
@@ -107,7 +107,7 @@ builder payload_encoding(int a, int b, int c) {
     .store_uint(0x18, 6)
     .store_slice(destination)
     .store_coins(0)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; some flags related to message header
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; message flags (see sending messages page)
     .store_uint(0x33bbff77, 32) ;; op-code (see smart-contract guidelines)
     .store_uint(cur_lt(), 64)  ;; query_id (see smart-contract guidelines)
     .store_builder(payload)
