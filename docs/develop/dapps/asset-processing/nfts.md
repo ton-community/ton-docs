@@ -187,7 +187,7 @@ var nft_msg = begin_cell()
   .store_uint(0x18, 6)
   .store_slice(nft_address)
   .store_coins(0)
-  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; message flags (see sending messages page)
+  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
   .store_uint(op::transfer(), 32)
   .store_uint(query_id, 64)
   .store_slice(sender_address) ;; new_owner_address
