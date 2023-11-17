@@ -473,7 +473,6 @@ const sidebars = {
         'develop/fift/fift-deep-dive',
       ],
     },
-
     {
       type: 'category',
       label: 'TON Virtual Machine (TVM)',
@@ -619,6 +618,7 @@ const sidebars = {
             'participate/nodes/validator',
           ],
         },
+        'learn/archive/tvm-instructions'
       ],
     },
     {
