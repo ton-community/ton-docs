@@ -52,7 +52,7 @@ The purpose of this contract is just to forward the message back to the sender. 
             .store_uint(0x18, 6)
             .store_slice(sender)
             .store_coins(0)
-            .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+            .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; message flags (see sending messages page)
             .store_slice(in_msg_body)
         .end_cell(),
         64 + 2 ;; send the remaining value of an incoming msg & ignore errors
@@ -87,7 +87,7 @@ const echo_address = "Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s"a;
                 .store_uint(0x18, 6)
                 .store_slice(echo_address)
                 .store_coins(0)
-                .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+                .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; message flags (see sending messages page)
                 .store_uint(1, 32) ;; let 1 be echo opcode in our contract
                 .store_slice(sender) ;; forward user address
             .end_cell(),
@@ -111,7 +111,7 @@ const echo_address = "Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s"a;
                     .store_uint(0x18, 6)
                     .store_slice(user)
                     .store_coins(2000000000) ;; 2 TON
-                    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+                    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; message flags (see sending messages page)
                 .end_cell(),
                 3 ;; ignore errors & pay fees separately
             );

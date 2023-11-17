@@ -402,7 +402,7 @@ cell msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)
     .store_coins(amount)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; message flags (see sending messages page)
     .store_uint(op, 32)
 .end_cell();
 
@@ -451,7 +451,7 @@ cell msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)
     .store_coins(amount)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) 
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) ;; message flags (see sending messages page)
     .store_uint(1, 1) ;; set bit to 1 to indicate that the cell will go on
     .store_ref(message_body)
 .end_cell();
@@ -500,7 +500,7 @@ cell msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)
     .store_coins(amount)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; message flags (see sending messages page)
     .store_uint(op, 32)
     .store_slice(message_body)
 .end_cell();
@@ -1081,7 +1081,7 @@ cell msg = begin_cell()
     .store_uint(0x18, 6) ;; flags
     .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
     .store_coins(100) ;; amount of nanoTons to send
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 107 zero-bits
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; message flags (see sending messages page)
     .store_uint(0, 32) ;; zero opcode - means simple transfer message with comment
     .store_slice("Hello from FunC!") ;; comment
 .end_cell();
@@ -1111,7 +1111,7 @@ The contract example below is useful to us if we need to perform any actions bet
         .store_uint(0x18, 6)
         .store_slice(addr)
         .store_coins(100) ;; just for example
-        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; message flags (see sending messages page)
         .store_slice(body)
     .end_cell();
     send_raw_message(msg, mode);
@@ -1133,7 +1133,7 @@ cell msg = begin_cell()
     .store_uint(0x18, 6) ;; flags
     .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
     .store_coins(0) ;; we don't care about this value right now
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 107 zero-bits
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; message flags (see sending messages page)
     .store_uint(0, 32) ;; zero opcode - means simple transfer message with comment
     .store_slice("Hello from FunC!") ;; comment
 .end_cell();
@@ -1173,7 +1173,7 @@ cell msg = begin_cell()
     ;; We use literal `a` to get valid address inside slice from string containing address 
     .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
     .store_coins(100) ;; amount of nanoTons to send
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) ;; 106 zero-bits, necessary for internal messages
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) ;; message flags (see sending messages page)
     .store_uint(1, 1) ;; we want to store body as a ref
     .store_ref(body)
 .end_cell();
