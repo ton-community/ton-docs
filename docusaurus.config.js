@@ -90,6 +90,10 @@ const config = {
             to: '/develop/smart-contracts/testing/overview',
             from: '/develop/smart-contracts/testing/tonstarter',
           },
+          {
+            to: '/learn/archive/tvm-instructions',
+            from: '/learn/tvm-instructions/instructions',
+          },
         ],
       },
     ],
