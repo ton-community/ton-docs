@@ -786,3 +786,53 @@ console.log(text);
 </Tabs>
 
 This example will help you understand how you can work with such cells using recursion.
+
+### How to parse transactions of an account?
+
+The list of transactions on an account can be fetched through `getTransactions` API method. It returns an array of `Transaction` objects, with each item having lots of attributes. However, the fields that are the most commonly used are:
+ - Sender, Body and Value of the message that initiated this transaction
+ - Transaction's hash and logical time (LT)
+
+Below is an example on how you can fetch 5 most recent transactions on any blockchain account and print out these fields in a loop.
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton)">
+
+```js
+import { Address, TonClient, fromNano } from '@ton/ton';
+
+async function main() {
+    const client = new TonClient({ endpoint: 'https://toncenter.com/api/v2/jsonRPC' });
+
+    const transactions = await client.getTransactions(
+        Address.parse('EQBKgXCNLPexWhs2L79kiARR1phGH1LwXxRbNsCFF9doc2lN'), // address that you want to fetch transactions from
+        {
+            limit: 5,
+        }
+    );
+
+    transactions.forEach((tx) => {
+        const inMsg = tx.inMessage;
+
+        console.log(`inMsg Body: ${inMsg?.body}`);
+        if (inMsg?.info.type == 'internal') {
+            // we only process internal messages here because they are used the most
+            // for external messages some of the fields are empty, but the main structure is similar
+            console.log(`inMsg Sender: ${inMsg?.info.src}`);
+            console.log(`inMsg Value: ${fromNano(inMsg?.info.value.coins)}`);
+        }
+        console.log(`Hash: ${tx.hash().toString('hex')}`);
+        console.log(`LT: ${tx.lt}`);
+        console.log();
+    });
+}
+
+main().finally(() => console.log('Exiting...'));
+```
+
+</TabItem>
+</Tabs>
+
+Note that this example covers only the simplest case, where it is enough to fetch the transactions on a single account. If you want to go deeper and handle more complex chains of transactions and messages, you should take `tx.outMessages` field into an account. It contains the list of the output messages sent by smart-contract in the result of this transaction. To understand the whole logic better, you can read these articles:
+ * [Internal messages](/develop/smart-contracts/guidelines/internal-messages)
+ * [Message Delivery Guarantees](/develop/smart-contracts/guidelines/message-delivery-guarantees)
