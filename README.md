@@ -5,7 +5,7 @@
 This is the official repository for The Open Network documentation.
 
 Latest documentation release: [docs.ton.org](https://docs.ton.org)
-
+ 
 The mission of this documentation is to collect all available information and knowledge that can help TON developers.
 
 You can improve the documentation by following steps below.
