@@ -271,10 +271,10 @@ in the wallet to pay the required gas fees.
 
 Communication between Jetton wallets and TON wallets occurs through the following communication sequence:
 
-![](message_layouts.png)
+![](/img/docs/asset-processing/jetton_transfer.svg)
 
 
-`Sender -> sender' jetton wallet` means the transfer message body contains the following data:
+`Sender -> sender' jetton wallet` means the _transfer_ message body contains the following data:
 
 
 | Name                 | Type    |
