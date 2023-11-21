@@ -488,7 +488,7 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Overview',
-              id: 'learn/tvm-instructions/tvm-instructions-overview'
+              id: 'learn/tvm-instructions/instructions'
             },
             {
               type: 'doc',
