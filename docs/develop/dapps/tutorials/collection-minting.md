@@ -1043,6 +1043,36 @@ msgBody.storeBit(0); // no forward_payload
 return msgBody.endCell();
 ```
 
+And create a transfer function to transfer the NFT.
+
+```ts
+static async transfer(
+    wallet: OpenedWallet,
+    nftAddress: Address,
+    newOwner: Address
+  ): Promise<number> {
+    const seqno = await wallet.contract.getSeqno();
+
+    await wallet.contract.sendTransfer({
+      seqno,
+      secretKey: wallet.keyPair.secretKey,
+      messages: [
+        internal({
+          value: "0.05",
+          to: nftAddress,
+          body: this.createTransferBody({
+            newOwner,
+            responseTo: wallet.contract.address,
+            forwardAmount: toNano("0.02"),
+          }),
+        }),
+      ],
+      sendMode: SendMode.IGNORE_ERRORS + SendMode.PAY_GAS_SEPARATELY,
+    });
+    return seqno;
+  }
+```
+
 Nice, now we can we are already very close to the end. Back to the `app.ts` and let's get address of our nft, that we want to put on sale:
 ```ts
 const nftToSaleAddress = await NftItem.getAddressByIndex(collection.address, 0);
