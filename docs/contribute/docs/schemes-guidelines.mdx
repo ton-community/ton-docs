@@ -1,0 +1,34 @@
+# Graphic Explanations Guidelines
+
+:::danger
+Page is under development
+:::
+
+It is crucial to maintain consistency in documentation. To achieve this, a specific standard for visualizing processes in smart contracts has been developed.
+
+## Graphic Explanation Notation
+
+### Message Processing Graph
+For representing message processing, it is recommended to use graphical notation in the form of a smart contract graph with transaction and message labels.
+In cases where transaction explanations are not required on the diagram, their labels may be omitted for easier readability of message and contract details.
+
+#### Annotation Primitives
+
+|Figure|Description|Graphic|
+|------|-----------|-------|
+|Circle| Smart Contract entity | Circle.png |
+|Parallelogram | Message Entity | Parallelogram.png |
+|Parallelogram Dashed | Optional Message Entity | Parallelogram.png |
+|Arrowed lines | Transactions (separate or united) | Arrows |
+
+#### Example
+
+### Sequence Diagram
+In the case of complex and repetitive communication schemes between 2-3 actors, it is advisable to use a sequence diagram. For messages, use the notation of a common synchronous message arrow.
+
+#### Example
+
+### Recommended Format
+
+* Place schemes in SVG format for better reading from various devices.
+* Keep original files in the project git /static directory, for better modify in the future (/static/schemes-visio)

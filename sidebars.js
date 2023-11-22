@@ -751,6 +751,7 @@ const sidebars = {
       'label': 'Documentation',
       'items': [
         'contribute/docs/guidelines',
+        'contribute/docs/schemes-guidelines',
       ],
     },
     {
