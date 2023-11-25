@@ -692,6 +692,7 @@ const sidebars = {
       label: 'Network Infrastructure',
       items: [
         'participate/network-maintenance/staking-incentives',
+        'participate/network-maintenance/single-nominator',
         'participate/network-maintenance/nominators',
         'participate/network-maintenance/persistent-states',
         'participate/nodes/collators',
