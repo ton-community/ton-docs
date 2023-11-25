@@ -119,27 +119,34 @@ $ fift -s ./scripts/fift/withdraw.fif <withdraw_amount>
 
 2. Send request to single nominator address:
 
+a.
+
 ```bash
 $ tons wallet transfer <my-wallet> <single_nominator_address> <amount=1> --body withdraw.boc
 tonkeeper
 ```
 
-a.
+b.
+
 ```
 npm link typescript
 ```
 
-b.
+c.
+
 ```
 npx ts-node scripts/ts/withdraw-deeplink.ts <single-nominator-addr> <withdraw-amount>
 ```
 
-c. Open deeplink on the owner's phone
+d. Open deeplink on the owner's phone
 
 
 ## See Also
 
+* [Single Nominator Pool contract](https://github.com/orbs-network/single-nominator)
+* [Vesting Contract](/participate/network-maintenance/vesting-contract)
 * [single-nominator-quick-how-to-09-25](https://telegra.ph/single-nominator-quick-how-to-09-25)
+
 
 
 
