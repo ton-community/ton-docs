@@ -154,5 +154,5 @@ If you want share new example smart contract, make your PR for this [page](https
 
 * [Develop Smart Contracts Introduction](/develop/smart-contracts/)
 * [How to work with wallet smart contracts](/develop/smart-contracts/tutorials/wallet)
-* [[You Tube] Ton Dev Study FunC & BluePrint lessons](https://www.youtube.com/playlist?list=PLyDBPwv9EPsDjIMAF3XqNI2XGNwdcB3sg)
+* [[You Tube] Ton Dev Study FunC & BluePrint lessons](https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa)
 
