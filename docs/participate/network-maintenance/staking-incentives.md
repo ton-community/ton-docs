@@ -16,7 +16,19 @@ For each shardchain and masterchain a dedicated set of validators exists. Sets o
 
 In contrast, each shardchain is validated by a set of 23 validators (defined as Network Parameter `Config28:shard_validators_num`) and rotated randomly every 1000 seconds (Network Parameter `Config28:shard_validators_lifetime`).
 
-## Positive incentives
+## Boundary Values of Stakes
+
+The current max_factor is 3, meaning the stake of the smallest validator cannot be more than three times less than the stake of the largest one. 
+
+Based on the declared stakes, optimal values for the minimum and maximum stake are determined, with the aim of maximizing the magnitude of the total stake.
+
+:::tip
+Recently, the approximate figures have been a minimum stake of around 340 thousand Toncoins and a maximum of about one million Toncoins.
+
+Learn more about current validation stakes with [tonscan.com](https://tonscan.com/validation).
+:::
+
+## Positive Incentives
 
 Similarly to all blockchain networks, each transaction on TON requires a computation fee called [gas](https://blog.ton.org/what-is-blockchain) used to conduct network storage and the transaction processing on-chain. On TON, these fees are accumulated within the Elector contract in a reward pool.
 
@@ -39,7 +51,7 @@ Learn current TON Blockchain stats [here](https://tontech.io/stats/).
 :::
 
 
-## Negative incentives
+## Negative Incentives
 
 On TON Blockchain, there are generally two ways validators can be penalized for misbehaving: idle and malicious misbehaving; both of which are prohibited and may result in being fined (in a process called slashing) for their actions.
 
