@@ -679,6 +679,7 @@ const sidebars = {
       type: 'category',
       label: 'Blockchain Nodes',
       items: [
+          'participate/nodes/nodes-faq',
           'participate/nodes/node-types',
           'participate/run-nodes/full-node',
           'participate/run-nodes/archive-node',

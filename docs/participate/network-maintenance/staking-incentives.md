@@ -22,7 +22,7 @@ The current max_factor is 3, meaning the stake of the smallest validator cannot 
 
 Based on the declared stakes, optimal values for the minimum and maximum stake are determined, with the aim of maximizing the magnitude of the total stake.
 
-:::tip
+:::info
 Recently, the approximate figures have been a minimum stake of around 340 thousand Toncoins and a maximum of about one million Toncoins.
 
 Learn more about current validation stakes with [tonscan.com](https://tonscan.com/validation).
