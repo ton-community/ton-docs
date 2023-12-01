@@ -18,15 +18,25 @@ In contrast, each shardchain is validated by a set of 23 validators (defined as 
 
 ## Boundary Values of Stakes
 
-The current max_factor is 3, meaning the stake of the smallest validator cannot be more than three times less than the stake of the largest one. 
-
-Based on the declared stakes, optimal values for the minimum and maximum stake are determined, with the aim of maximizing the magnitude of the total stake.
+The current max_factor is 3, meaning the stake of the smallest validator cannot be more than three times less than the stake of the largest one.
 
 :::info
 Recently, the approximate figures have been a minimum stake of around 340 thousand Toncoins and a maximum of about one million Toncoins.
 
 Learn more about current validation stakes with [tonscan.com](https://tonscan.com/validation).
 :::
+
+Based on the available stakes of potential validators, optimal values for the minimum and maximum stake are determined, with the aim of maximizing the magnitude of the total stake.
+
+1. Elector takes all applicants who have a stake higher than the minimum (300k).
+2. Elector sorts them in descending order of stake.
+3. If there are more participants than the maximum number of validators, Elector discards the tail of the list. Then Elector does the following:
+
+   * For each cycle i from 1 to N (the remaining number of participants), it takes the first i applications from the sorted list.
+   * It calculates the effective stake, considering the `max_factor`. That is, if a person has put in 100k, but with a `max_factor` of 3, and the minimum stake in the list is 300k Toncoins, then the effective stake will be min(300k, 3*310k) = 300k.
+   * It calculates the total effective stake of all i participants.
+
+Once Elector finds such an i, where the total effective stake is maximal, we declare these i participants as validators.
 
 ## Positive Incentives
 

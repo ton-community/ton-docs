@@ -261,6 +261,7 @@ const sidebars = {
                 items: [
                     'develop/dapps/telegram-apps/step-by-step-guide',
                     'develop/dapps/telegram-apps/app-examples',
+                    'develop/dapps/telegram-apps/design-guidelines',
                 ],
             },
 

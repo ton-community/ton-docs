@@ -1,7 +1,7 @@
 # Config Parameters
 
 :::info
-The Russian version of this article can be found [here](https://github.com/delovoyhomie/description-config-for-TON-Blockchain/blob/main/Russian-version.md).
+Read live values via [tonviewer](https://tonviewer.com/config)
 :::
 
 ## 👋 Introduction
@@ -542,3 +542,4 @@ On this page, you can find active network configurations of the TON Blockchain:
 
 -   Mainnet: https://ton.org/global-config.json
 -   Testnet: https://ton.org/testnet-global.config.json
+-   [Russian Version](https://github.com/delovoyhomie/description-config-for-TON-Blockchain/blob/main/Russian-version.md).
