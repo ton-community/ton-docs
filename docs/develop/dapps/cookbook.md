@@ -515,6 +515,85 @@ main().finally(() => console.log("Exiting..."));
 
 To indicate that we want to include a comment, we specify 32 zero bits and then write our comment. We also specify the `response destination`, which means that a response regarding the successful transfer will be sent to this address. If we don't want a response, we can specify 2 zero bits instead of an address.
 
+### How to send swap message to DEX (DeDust)?
+
+DEXes use different protocols for their work. You can find details for the DeDust protocol on their [website](https://docs.dedust.io/).
+
+DeDust has two exchange paths: jetton <-> jetton or toncoin <-> jetton. Each has a different scheme. To swap, you need to send jettons to a specific jetton (or toncoin) **vault** by passing a special payload. Here is the scheme for swapping jetton to jetton or jetton to toncoin:
+
+```tlb
+swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
+              step#_ pool_addr:MsgAddressInt params:SwapStepParams = SwapStep;
+              step_params#_ kind:SwapKind limit:Coins next:(Maybe ^SwapStep) = SwapStepParams;
+              swap_params#_ deadline:Timestamp recipient_addr:MsgAddressInt referral_addr:MsgAddress
+                    fulfill_payload:(Maybe ^Cell) reject_payload:(Maybe ^Cell) = SwapParams;
+```
+This scheme shows what should be in the forward_payload of a message from your toncoin wallet to your jetton wallet (`transfer#f8a7ea5`)
+
+And the scheme of toncoin to jetton swap:
+```tlb
+swap#ea06185d query_id:uint64 amount:Coins _:SwapStep swap_params:^SwapParams = InMsgBody;
+              step#_ pool_addr:MsgAddressInt params:SwapStepParams = SwapStep;
+              step_params#_ kind:SwapKind limit:Coins next:(Maybe ^SwapStep) = SwapStepParams;
+              swap_params#_ deadline:Timestamp recipient_addr:MsgAddressInt referral_addr:MsgAddress
+                    fulfill_payload:(Maybe ^Cell) reject_payload:(Maybe ^Cell) = SwapParams;
+```
+This is scheme for body of trabsfer to the toncoin **vault**.
+
+First, you need to know the **vault** addresses of the jettons you will swap or toncoin **vault** address. This can be done using the get methods of the contract [**FACTORY**](https://docs.dedust.io/reference/factory) `get_vault_address`. As an argument you need to pass a slice according to the scheme:
+```tlb
+native$0000 = Asset; // for ton
+jetton$0001 workchain_id:int8 address:uint256 = Asset; // for jetton
+```
+Also for the exchange itself we need the **pool** address - `get_pool_address`. As arguments - asset slices according to the scheme above. In response, both methods will return a slice of the address of the requested **vault** / **pool**.
+
+This is enough to build the message.
+
+<Tabs groupId="code-examples">
+<TabItem value="ton-kotlin" label="ton-kotlin">
+
+```kotlin
+runBlocking {
+    wallet.transfer(pk, WalletTransfer {
+        destination = JETTON_WALLET_A // yours existing jetton wallet
+        bounceable = true
+        coins = Coins(300000000) // 0.3 ton in nanotons
+        messageData = MessageData.raw(
+            body = buildCell {
+                storeUInt(0xf8a7ea5, 32) // op Transfer
+                storeUInt(0, 64) // query_id
+                storeTlb(Coins, Coins(100000000)) // amount of jettons
+                storeSlice(addrToSlice(jettonAVaultAddress)) // destination address
+                storeSlice(addrToSlice(walletAddress))  // response address
+                storeUInt(0, 1)  // custom payload
+                storeTlb(Coins, Coins(250000000)) // forward_ton_amount // 0.25 ton in nanotons
+                storeUInt(1, 1)
+                // forward_payload
+                storeRef {
+                    storeUInt(0xe3a0d482, 32) // op swap
+                    storeSlice(addrToSlice(poolAddress)) // pool_addr
+                    storeUInt(0, 1) // kind
+                    storeTlb(Coins, Coins(0)) // limit
+                    storeUInt(0, 1) // next (for multihop)
+                    storeRef {
+                        storeUInt(System.currentTimeMillis() / 1000 + 60 * 5, 32) // deadline
+                        storeSlice(addrToSlice(walletAddress)) // recipient address
+                        storeSlice(buildCell { storeUInt(0, 2) }.beginParse()) // referral (null address)
+                        storeUInt(0, 1)
+                        storeUInt(0, 1)
+                        endCell()
+                    }
+                }
+            }
+        )
+        sendMode = 3
+    })
+}
+```
+</TabItem>
+</Tabs>
+
+
 ### How to use NFT batch deploy?
 
 Smart contracts for collections allow deploying up to 250 NFTs in a single transaction. However, it's essential to consider that, in practice, this maximum is around 100-130 NFTs due to the computation fee limit of 1 ton. To achieve this, we need to store information about the new NFTs in a dictionary.
