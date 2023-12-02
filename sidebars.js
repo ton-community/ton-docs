@@ -261,6 +261,7 @@ const sidebars = {
                 items: [
                     'develop/dapps/telegram-apps/step-by-step-guide',
                     'develop/dapps/telegram-apps/app-examples',
+                    'develop/dapps/telegram-apps/design-guidelines',
                 ],
             },
 
@@ -679,6 +680,7 @@ const sidebars = {
       type: 'category',
       label: 'Blockchain Nodes',
       items: [
+          'participate/nodes/nodes-faq',
           'participate/nodes/node-types',
           'participate/run-nodes/full-node',
           'participate/run-nodes/archive-node',
@@ -692,6 +694,8 @@ const sidebars = {
       label: 'Network Infrastructure',
       items: [
         'participate/network-maintenance/staking-incentives',
+        'participate/network-maintenance/single-nominator',
+        'participate/network-maintenance/vesting-contract',
         'participate/network-maintenance/nominators',
         'participate/network-maintenance/persistent-states',
         'participate/nodes/collators',
@@ -751,6 +755,7 @@ const sidebars = {
       'label': 'Documentation',
       'items': [
         'contribute/docs/guidelines',
+        'contribute/docs/schemes-guidelines',
       ],
     },
     {

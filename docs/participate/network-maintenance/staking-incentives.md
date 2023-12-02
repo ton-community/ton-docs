@@ -16,7 +16,29 @@ For each shardchain and masterchain a dedicated set of validators exists. Sets o
 
 In contrast, each shardchain is validated by a set of 23 validators (defined as Network Parameter `Config28:shard_validators_num`) and rotated randomly every 1000 seconds (Network Parameter `Config28:shard_validators_lifetime`).
 
-## Positive incentives
+## Boundary Values of Stakes
+
+The current max_factor is 3, meaning the stake of the smallest validator cannot be more than three times less than the stake of the largest one.
+
+:::info
+Recently, the approximate figures have been a minimum stake of around 340 thousand Toncoins and a maximum of about one million Toncoins.
+
+Learn more about current validation stakes with [tonscan.com](https://tonscan.com/validation).
+:::
+
+Based on the available stakes of potential validators, optimal values for the minimum and maximum stake are determined, with the aim of maximizing the magnitude of the total stake.
+
+1. Elector takes all applicants who have a stake higher than the minimum ([300k](https://tonviewer.com/config#17)).
+2. Elector sorts them in descending order of stake.
+3. If there are more participants than the [maximum number](https://tonviewer.com/config#16) of validators, Elector discards the tail of the list. Then Elector does the following:
+
+   * For each cycle i from 1 to N (the remaining number of participants), it takes the first i applications from the sorted list.
+   * It calculates the effective stake, considering the `max_factor`. That is, if a person has put in 310k, but with a `max_factor` of 3, and the minimum stake in the list is 300k Toncoins, then the effective stake will be min(300k, 3*310k) = 300k.
+   * It calculates the total effective stake of all i participants.
+
+Once Elector finds such an i, where the total effective stake is maximal, we declare these i participants as validators.
+
+## Positive Incentives
 
 Similarly to all blockchain networks, each transaction on TON requires a computation fee called [gas](https://blog.ton.org/what-is-blockchain) used to conduct network storage and the transaction processing on-chain. On TON, these fees are accumulated within the Elector contract in a reward pool.
 
@@ -39,7 +61,7 @@ Learn current TON Blockchain stats [here](https://tontech.io/stats/).
 :::
 
 
-## Negative incentives
+## Negative Incentives
 
 On TON Blockchain, there are generally two ways validators can be penalized for misbehaving: idle and malicious misbehaving; both of which are prohibited and may result in being fined (in a process called slashing) for their actions.
 

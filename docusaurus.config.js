@@ -277,6 +277,10 @@ const config = {
                   to: '/develop/dapps/telegram-apps/',
                   label: 'TMA Development',
               },
+                {
+                  to: 'develop/dapps/asset-processing',
+                  label: 'Transaction Processing',
+                },
               {
                 to: 'develop/dapps/apis',
                 label: 'APIs',
@@ -285,34 +289,10 @@ const config = {
                 to: 'develop/dapps/apis/sdk',
                 label: 'SDKs',
               },
-              {
-                to: 'develop/dapps/asset-processing',
-                label: 'Transaction Processing',
-              },
-//              {
-//                to: 'develop/dapps/asset-processing/jettons',
-//                label: 'Jetton (Tokens) processing',
-//              },
-//              {
-//                to: '/develop/dapps/asset-processing/nfts',
-//                label: 'NFT processing',
-//              },
-//              {
-//                to: '/develop/dapps/asset-processing/metadata',
-//                label: 'TON Metadata Parsing',
-//              },
-             {
-               to: 'develop/dapps/defi/coins',
-               label: 'DeFi Development',
-             },
-/*              {
-                to: 'develop/dapps/defi/subscriptions',
-                label: 'Subscriptions',
-              },
-              {
-                to: 'develop/dapps/defi/ton-payments',
-                label: 'TON Payments',
-              },*/
+            {
+              to: '/develop/dapps/cookbook',
+              label: 'TON Cookbook',
+            },
             ],
           },
           {
@@ -369,21 +349,22 @@ const config = {
                 to: 'participate/nodes/node-types',
                 label: 'Node Types',
               },
-              {
-                to: 'participate/run-nodes/full-node',
-                label: 'Run a Full Node',
-              },
+            {
+              to: 'https://ton.org/validator',
+              label: 'Become a Validator',
+            },
               {
                 to: 'participate/run-nodes/archive-node',
                 label: 'Run an Archive Node',
               },
+            {
+              to: '/participate/network-maintenance/single-nominator',
+              label: 'Single Nominator Pool',
+            },
+
               {
-                to: 'participate/run-nodes/liteserver',
-                label: 'Run a Liteserver Node',
-              },
-              {
-                to: 'https://ton.org/validator',
-                label: 'Become a Validator',
+                to: '/participate/network-maintenance/vesting-contract',
+                label: 'Vesting Contract',
               },
             ],
           },
