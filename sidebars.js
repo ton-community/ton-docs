@@ -261,6 +261,7 @@ const sidebars = {
                 items: [
                     'develop/dapps/telegram-apps/step-by-step-guide',
                     'develop/dapps/telegram-apps/app-examples',
+                    'develop/dapps/telegram-apps/design-guidelines',
                 ],
             },
 
@@ -679,6 +680,7 @@ const sidebars = {
       type: 'category',
       label: 'Blockchain Nodes',
       items: [
+          'participate/nodes/nodes-faq',
           'participate/nodes/node-types',
           'participate/run-nodes/full-node',
           'participate/run-nodes/archive-node',
