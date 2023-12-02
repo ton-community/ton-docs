@@ -296,18 +296,20 @@ val walletAddress = WalletV3R2Contract.address(pk, 0)
 println(walletAddress.toString(userFriendly = true, bounceable = false))
 
 val wallet = WalletV3R2Contract(liteClient, walletAddress)
-wallet.transfer(pk, WalletTransfer {
-    destination = AddrStd("EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N")
-    bounceable = true
-    coins = Coins(100000000) // 1 ton in nanotons
-    messageData = org.ton.contract.wallet.MessageData.raw(
-        body = buildCell {
-            storeUInt(0, 32)
-            storeBytes("Comment".toByteArray())
-        }
-    )
-    sendMode = 0
-})
+runBlocking {
+    wallet.transfer(pk, WalletTransfer {
+        destination = AddrStd("EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N")
+        bounceable = true
+        coins = Coins(100000000) // 1 ton in nanotons
+        messageData = org.ton.contract.wallet.MessageData.raw(
+            body = buildCell {
+                storeUInt(0, 32)
+                storeBytes("Comment".toByteArray())
+            }
+        )
+        sendMode = 0
+    })
+}
 ```
 </TabItem>
 
