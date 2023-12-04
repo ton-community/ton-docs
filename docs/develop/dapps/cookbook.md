@@ -809,12 +809,11 @@ async function main() {
         apiKey: '1b312c91c3b691255130350a49ac5a0742454725f910756aff94dfe44858388e',
     });
 
-    const transactions = await client.getTransactions(
-        Address.parse('EQBKgXCNLPexWhs2L79kiARR1phGH1LwXxRbNsCFF9doc2lN'), // address that you want to fetch transactions from
-        {
-            limit: 5,
-        }
-    );
+    const myAddress = Address.parse('EQBKgXCNLPexWhs2L79kiARR1phGH1LwXxRbNsCFF9doc2lN'); // address that you want to fetch transactions from
+
+    const transactions = await client.getTransactions(myAddress, {
+        limit: 5,
+    });
 
     for (const tx of transactions) {
         const inMsg = tx.inMessage;
@@ -843,7 +842,7 @@ async function main() {
 
                     body.skip(64); // skip query_id
                     const jettonAmount = body.loadCoins();
-                    const jettonSender = body.loadAddress();
+                    const jettonSender = body.loadAddressAny();
                     const originalForwardPayload = body.loadBit() ? body.loadRef().beginParse() : body;
                     let forwardPayload = originalForwardPayload.clone();
 
@@ -851,12 +850,13 @@ async function main() {
                     const runStack = (await client.runMethod(sender, 'get_wallet_data')).stack;
                     runStack.skip(2);
                     const jettonMaster = runStack.readAddress();
-                    const jettonSenderJettonWallet = (
+                    const jettonWallet = (
                         await client.runMethod(jettonMaster, 'get_wallet_address', [
-                            { type: 'slice', cell: beginCell().storeAddress(jettonSender).endCell() },
+                            { type: 'slice', cell: beginCell().storeAddress(myAddress).endCell() },
                         ])
                     ).stack.readAddress();
-                    if (!jettonSenderJettonWallet.equals(sender)) {
+                    if (!jettonWallet.equals(sender)) {
+                        // if sender is not our real JettonWallet: this message was faked
                         console.log(`FAKE Jetton transfer`);
                         continue;
                     }
