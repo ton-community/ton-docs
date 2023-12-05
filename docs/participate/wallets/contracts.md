@@ -52,7 +52,7 @@ Wallet source code:
 
 It is the most modern wallet version at the moment. It still has all the functionality of the previous versions, but also introduces something very powerful — `plugins`.
 
-This feature allows developers to implement complex logic that will work in tandem with a user's wallet. For example, some DAppmay require a user to pay a small amount of coins every day to use some features, so the user will need to install the plugin on their wallet by signing a transaction. This plugin will send coins to the destination address every day when it will be reqested by an external message.
+This feature allows developers to implement complex logic that will work in tandem with a user's wallet. For example, some DApp may require a user to pay a small amount of coins every day to use some features, so the user will need to install the plugin on their wallet by signing a transaction. This plugin will send coins to the destination address every day when it will be reqested by an external message.
 
 This is a very customizable feature which is unique to TON Blockchain.
 
