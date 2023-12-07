@@ -380,8 +380,7 @@ val JETTON_MASTER = AddrStd("Jetton Master contract address") // for example EQB
 
 // we need to send regular wallet address as a slice
 val userAddressSlice = CellBuilder.beginCell()
-    .storeUInt(2, 2)
-    .storeUInt(0, 1)
+    .storeUInt(4, 3)
     .storeInt(USER_ADDR.workchainId, 8)
     .storeBits(USER_ADDR.address)
     .endCell()
@@ -554,6 +553,31 @@ This is enough to build the message.
 <Tabs groupId="code-examples">
 <TabItem value="ton-kotlin" label="ton-kotlin">
 
+Build Asset slice:
+```kotlin
+val assetASlice = buildCell {
+    storeUInt(1,4)
+    storeInt(JETTON_MASTER_A.workchainId, 8)
+    storeBits(JETTON_MASTER_A.address)
+}.beginParse()
+```
+
+Run get methods:
+```kotlin
+val responsePool = runBlocking {
+    liteClient.runSmcMethod(
+        LiteServerAccountId(DEDUST_FACTORY.workchainId, DEDUST_FACTORY.address),
+        "get_pool_address",
+        VmStackValue.of(0),
+        VmStackValue.of(assetASlice),
+        VmStackValue.of(assetBSlice)
+    )
+}
+stack = responsePool.toMutableVmStack()
+val poolAddress = stack.popSlice().loadTlb(MsgAddressInt) as AddrStd
+```
+
+Build and transfer message:
 ```kotlin
 runBlocking {
     wallet.transfer(pk, WalletTransfer {
