@@ -554,8 +554,8 @@ const sidebars = {
           type: 'category',
           label: 'Blockchain Fundamentals',
           items: [
-
-            'develop/blockchain/sharding-lifecycle',
+              'develop/blockchain/shards',
+              'develop/blockchain/sharding-lifecycle',
           ],
         },
     {
