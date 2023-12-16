@@ -26,7 +26,7 @@ wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/i
 
 2. Run the installation script with the next flags:
 
-* `-m lite` - Liteserver node installation.
+* `-m full` - Full (for liteserver) node installation.
 * `-d` - **mytonctrl** will download a [dump](https://dump.ton.org/) of the latest blockchain state.
 This will reduce liteserver synchronization time by several times.
 * `-c <path>` - If you want to use not public liteservers for synchronization.
@@ -35,7 +35,7 @@ This will reduce liteserver synchronization time by several times.
   <TabItem value="ubuntu" label="Ubuntu">
 
 ```bash
-sudo bash install.sh -m lite -d
+sudo bash install.sh -m full -d
 ```
 
   </TabItem>
