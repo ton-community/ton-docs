@@ -257,7 +257,7 @@ Compared to a validator, a liteserver mode requires less resources. However, it 
 - 1 Gbit/s network connectivity
 - public IP address (_fixed IP address_)
 
-### Installation
+### Installation of liteserver
 
 1. Complete the previous steps to install [mytonctrl](/participate/run-nodes/full-node#step-by-step-instructions).
 
@@ -284,6 +284,55 @@ cp /usr/bin/ton/local.config.json ~/config.json
 cat ~/config.json
 ```
 
+### Check the firewall settings
+
+First, verify the Liteserver port specified in your `config.json` file. This port changes with each new installation of `mytonctrl`. It is located in the `port` field:
+
+```bash
+cat ~/config.json | grep port
+```
+
+If you are using a cloud provider, you need to open this port in the firewall settings. For example, if you are using AWS, you need to open the port in the [security group](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-security-groups.html).
+
+Below is an example of opening a port in the bare metal server firewall.
+
+#### Opening a port in the firewall
+
+We will use the `ufw` utility ([cheatsheet](https://www.cyberciti.biz/faq/ufw-allow-incoming-ssh-connections-from-a-specific-ip-address-subnet-on-ubuntu-debian/)). You can use the one you prefer.
+
+1. Install `ufw` if it is not installed:
+
+```bash
+sudo apt update
+sudo apt install ufw
+```
+
+2. Allow ssh connections:
+
+```bash
+sudo ufw allow ssh
+```
+
+3. Allow the port specified in the `config.json` file:
+
+```bash
+sudo ufw allow <port>/tcp
+sudo ufw allow <port>/udp
+```
+
+4. Check the firewall status. After running this command, you can verify that the rules have been added successfully by checking the UFW status:
+
+```bash
+sudo ufw status
+```
+
+5. Enable the firewall:
+
+```bash
+sudo ufw enable
+```
+
+This way, you can open the port in the firewall settings of your server.
 
 ### Interaction with Liteserver
 
@@ -450,7 +499,6 @@ cat ~/config.json
 </Tabs>
 
 3. Now you can interact with your own liteserver.
-
 
 ### See also
 
