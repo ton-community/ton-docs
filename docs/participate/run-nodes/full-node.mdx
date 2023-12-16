@@ -288,8 +288,17 @@ cat ~/config.json
 
 First, verify the Liteserver port specified in your `config.json` file. This port changes with each new installation of `mytonctrl`. It is located in the `port` field:
 
-```bash
-cat ~/config.json | grep port
+```json
+{
+  ...
+  "liteservers": [
+    {
+      "ip": 1605600994,
+      "port": LITESERVER_PORT
+      ...
+    }
+  ]
+}
 ```
 
 If you are using a cloud provider, you need to open this port in the firewall settings. For example, if you are using AWS, you need to open the port in the [security group](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-security-groups.html).
