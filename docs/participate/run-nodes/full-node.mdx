@@ -7,7 +7,20 @@ To install and manage your own node, use the **MyTonCtrl** open source tool deve
 
 [MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) is a console application that serves as a convenient wrapper for fift, lite-client, and validator-engine-console. It has been specifically developed to streamline wallet, domain, and validator management tasks on the Linux operating system.
 
+We're collecting feedback about the installation process. If you have any questions or suggestions, please, [contact us](https://t.me/SwiftAdviser).
+
+## Prerequisites
+
+We highly recommend install mytonctrl using the supported operating systems:
+* Ubuntu 20.04
+* Ubuntu 22.04
+* Debian 11
+
+Please, use a **non-root user** with **sudo** privileges to install and run mytonctrl.
+
 ## Hardware requirements
+
+This requirements are for a **full node with a validator**. If you want to run a full node without a validator (e.g. liteserver), you can use a less powerful machine.
 
 - at least 8 cores CPU
 - at least 64 GB RAM
@@ -19,7 +32,7 @@ You need a machine with a **fixed IP address** and a **high-bandwidth network co
 
 ### Recommended Cloud Providers
 
-The following providers are recommended by the TON Foundation.
+The following providers are recommended by the TON Foundation for running a Validator:
 
 #### AWS
 
@@ -88,9 +101,7 @@ The following providers are recommended by the TON Foundation.
 **Note:** Prices, configurations, and availability may vary. Always check the respective cloud provider's official documentation and pricing pages before making a decision.
 :::
 
-## Installation
-
-### How to run the Node? (video)
+## How to run a Node? (video)
 
 [//]: # (<ReactPlayer controls={true} style={{borderRadius:'10pt', margin:'15pt auto', maxWidth: '100%'}} url='/docs/files/setup_validator.mp4' />)
 
@@ -100,33 +111,63 @@ Please, check this video step-by-step tutorial to start promtly:
     <source src="/files/setup_validator.mp4" type="video/mp4" />
 </video>
 
-### Step-by-step instructions
+## Step-by-step instructions
 
-#### 1. Install the **mytonctrl** tool
+### Prerequisites
 
-Download and run the installation script. Choose your Linux distributive:
+1. Login to your server as a **non-root** user with **sudo** privileges.
+
+2. If you don't have a non-root user, create it:
+
+```bash
+sudo adduser <username>
+```
+
+3. Add your user to the sudo group:
+
+```bash
+sudo usermod -aG sudo <username>
+```
+
+4. Switch to your non-root user:
+
+```bash
+su - <username>
+```
+
+
+### Install the mytonctrl
+
+Download and run the installation script from the **non-root** user account with **sudo** privileges. Choose your Linux distributive:
+
 
 
 <Tabs groupId="operating-systems">
   <TabItem value="ubuntu" label="Ubuntu">
 
-```bash
-wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-sudo bash install.sh -m full
-```
+  ```bash
+  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+  sudo bash install.sh -m full -d
+  ```
 
   </TabItem>
   <TabItem value={'debian'} label={'Debian'}>
 
-```bash
-wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-su root -c 'bash install.sh -m full'
-```
+  ```bash
+  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+  su root -c 'bash install.sh -m full -d'
+  ```
 
   </TabItem>
 </Tabs>
 
-#### 2. Conduct an Operability Test:
+* `-m full` - Full node installation mode.
+* `-d` - **mytonctrl** will download a [dump](https://dump.ton.org/) of the latest blockchain state.
+This will reduce synchronization time by several times.
+* `-c <path>` - If you want to use not public liteservers for synchronization. _(not required)_
+
+
+### Run the mytonctrl
 
 1. Run **mytonctrl** console from the local user account used for installation in step 1:
 
@@ -140,6 +181,7 @@ su root -c 'bash install.sh -m full'
   status
   ```
 
+
 The following statuses should be displayed:
 
 * **mytoncore status**: Should be in green.
@@ -150,8 +192,12 @@ Example of the **status** command output:
 
 ![status](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/mytonctrl-status.png)
 
+Wait until `Local validator out of sync` become less than 20 seconds.
 
-#### 3. View the List of Available Wallets
+## Become a Validator
+
+
+### View the List of Wallets
 
 Check out the list of available wallets in the **mytonctrl** console using the `wl` command:
 
@@ -163,11 +209,10 @@ During the installation of **mytonctrl**, the **validator_wallet_001** wallet is
 
 ![wallet list](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-wl_ru.png)
 
-## Become a Validator
 
-1. Complete the previous installation steps.
+### Activate the Wallets
 
-2. Send the Required Number of Coins to the Wallet and Activate It
+Send the Required Number of Coins to the Wallet and Activate It
 
 To determine the minimum amount of coins required to participate in one election round, head to **tonmon.xyz** > **Participant stakes**.
 
@@ -185,7 +230,7 @@ To determine the minimum amount of coins required to participate in one election
 
 ![account history](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-vas-aw_ru.png)
 
-#### 2. Your Validator is Now Ready
+### Your Validator is Now Ready
 
 **mytoncore** will automatically join the elections. It divides the wallet balance into two parts and uses them as a stake to participate in the elections. You can also manually set the stake size:
 
@@ -197,6 +242,198 @@ set stake 50000
 
 ![setting stake](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-set_ru.png)
 
+
+## Enable Liteserver mode
+
+When an endpoint is activated in a full node, the node assumes the role of a **Liteserver**. This node type can field and respond to requests from Lite Clients, allowing for seamless interaction with the TON Blockchain.
+
+### Hardware requirements
+
+Compared to a validator, a liteserver mode requires less resources. However, it is still recommended to use a powerful machine to run a liteserver.
+
+- at least 8 cores CPU
+- at least 8 GB RAM
+- at least 512 GB NVMe SSD
+- 1 Gbit/s network connectivity
+- public IP address (_fixed IP address_)
+
+### Installation
+
+1. Complete the previous steps to install [mytonctrl](/participate/run-nodes/full-node#step-by-step-instructions).
+
+2. Create config file
+
+```bash
+MyTonCtrl> installer
+MyTonInstaller> clcf
+
+Local config file created: /usr/bin/ton/local.config.json
+```
+
+3. Copy the config file located on the specified path. You will need this file to connect to your liteserver.
+
+### Interaction with Liteserver
+
+1. Install libraries.
+
+<Tabs groupId="code-examples">
+  <TabItem value="python" label="Python">
+
+  ```bash
+  pip install pytonlib
+  ```
+
+  </TabItem>
+  <TabItem value="js" label="JavaScript">
+
+  ```bash
+  npm i --save ton-core ton-lite-client
+  ```
+
+  </TabItem>
+  <TabItem value="go" label="Golang">
+
+  ```bash
+  go get github.com/xssnick/tonutils-go
+  go get github.com/xssnick/tonutils-go/liteclient
+  go get github.com/xssnick/tonutils-go/ton
+  ```
+  </TabItem>
+</Tabs>
+
+2. Initialize client and request masterchain info to make sure liteserver is running.
+
+<Tabs groupId="code-examples">
+  <TabItem value="python" label="Python">
+
+  ```python
+  import asyncio
+  from pytonlib import TonlibClient
+  from pathlib import Path
+  import json
+
+
+  async def get_client() -> TonlibClient:
+  with open('config.json', 'r') as f:
+  config = json.loads(f.read())
+
+  keystore_dir = '/tmp/ton_keystore'
+  Path(keystore_dir).mkdir(parents=True, exist_ok=True)
+
+  client = TonlibClient(ls_index=0, config=config, keystore=keystore_dir, tonlib_timeout=10)
+  await client.init()
+
+  return client
+
+
+  async def test_client():
+  client = await get_client()
+
+  print(await client.get_masterchain_info())
+
+  await client.close()
+
+
+  if __name__ == '__main__':
+  asyncio.run(test_client())
+  ```
+
+  </TabItem>
+  <TabItem value="js" label="JavaScript">
+
+  ```js
+  import { LiteSingleEngine } from 'ton-lite-client/dist/engines/single.js'
+  import { LiteRoundRobinEngine } from 'ton-lite-client/dist/engines/roundRobin.js'
+  import { LiteClient } from 'ton-lite-client/dist/client.js'
+  import config from './config.json' assert {type: 'json'};
+
+
+  function intToIP(int ) {
+  var part1 = int & 255;
+  var part2 = ((int >> 8) & 255);
+  var part3 = ((int >> 16) & 255);
+  var part4 = ((int >> 24) & 255);
+
+  return part4 + "." + part3 + "." + part2 + "." + part1;
+}
+
+  let server = config.liteservers[0];
+
+
+  async function main() {
+  const engines = [];
+  engines.push(new LiteSingleEngine({
+  host: `tcp://${intToIP(server.ip)}:${server.port}`,
+  publicKey: Buffer.from(server.id.key, 'base64'),
+}));
+  const engine = new LiteRoundRobinEngine(engines);
+  const client = new LiteClient({ engine });
+  const master = await client.getMasterchainInfo()
+  console.log('master', master)
+
+}
+  main()
+
+  ```
+
+  </TabItem>
+  <TabItem value="go" label="Golang">
+
+  ```go
+  package main
+
+  import (
+  "context"
+  "encoding/json"
+  "io/ioutil"
+  "log"
+  "github.com/xssnick/tonutils-go/liteclient"
+  "github.com/xssnick/tonutils-go/ton"
+  )
+
+  func main() {
+  client := liteclient.NewConnectionPool()
+
+  content, err := ioutil.ReadFile("./config.json")
+  if err != nil {
+  log.Fatal("Error when opening file: ", err)
+}
+
+  config := liteclient.GlobalConfig{}
+  err = json.Unmarshal(content, &config)
+  if err != nil {
+  log.Fatal("Error during Unmarshal(): ", err)
+}
+
+  err = client.AddConnectionsFromConfig(context.Background(), &config)
+  if err != nil {
+  log.Fatalln("connection err: ", err.Error())
+  return
+}
+
+  // initialize ton api lite connection wrapper
+  api := ton.NewAPIClient(client)
+
+  master, err := api.GetMasterchainInfo(context.Background())
+  if err != nil {
+  log.Fatalln("get masterchain info err: ", err.Error())
+  return
+}
+  log.Println(master)
+}
+
+  ```
+  </TabItem>
+</Tabs>
+
+3. Now you can interact with your own liteserver.
+
+
+### See also
+
+* [[YouTube]Tutorial how to launch liteserver](https://youtu.be/p5zPMkSZzPc)
+
+
 ## Tips & Tricks
 
 - You can use `help` to get a list of available commands:
@@ -206,6 +443,7 @@ set stake 50000
 - To check **mytoncrl** logs, open `~/.local/share/mytoncore/mytoncore.log` for a local user or `/usr/local/bin/mytoncore/mytoncore.log` for Root.
 
 ![logs](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytoncore-log.png)
+
 
 ## FAQ
 
@@ -221,4 +459,8 @@ Sometimes, this process can take up to 24 hours. However, if you've been receivi
 
 If you see this error this means that you run `mytonctrl` not from the user you've installed it.
 
-Please, run `mytonctrl` from the user you've installed it.
+Please, run `mytonctrl` from the user you've installed it (non-root user using sudo):
+
+```bash
+sudo mytonctrl
+```
