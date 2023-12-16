@@ -292,17 +292,17 @@ cat ~/config.json
 1. Install libraries.
 
 <Tabs groupId="code-examples">
+  <TabItem value="js" label="JavaScript">
+
+    ```bash
+    npm i --save ton-core ton-lite-client
+    ```
+
+  </TabItem>
   <TabItem value="python" label="Python">
 
   ```bash
   pip install pytonlib
-  ```
-
-  </TabItem>
-  <TabItem value="js" label="JavaScript">
-
-  ```bash
-  npm i --save ton-core ton-lite-client
   ```
 
   </TabItem>
@@ -319,41 +319,6 @@ cat ~/config.json
 2. Initialize client and request masterchain info to make sure liteserver is running.
 
 <Tabs groupId="code-examples">
-  <TabItem value="python" label="Python">
-
-  ```python
-  import asyncio
-  from pytonlib import TonlibClient
-  from pathlib import Path
-  import json
-
-
-  async def get_client() -> TonlibClient:
-  with open('config.json', 'r') as f:
-  config = json.loads(f.read())
-
-  keystore_dir = '/tmp/ton_keystore'
-  Path(keystore_dir).mkdir(parents=True, exist_ok=True)
-
-  client = TonlibClient(ls_index=0, config=config, keystore=keystore_dir, tonlib_timeout=10)
-  await client.init()
-
-  return client
-
-
-  async def test_client():
-  client = await get_client()
-
-  print(await client.get_masterchain_info())
-
-  await client.close()
-
-
-  if __name__ == '__main__':
-  asyncio.run(test_client())
-  ```
-
-  </TabItem>
   <TabItem value="js" label="JavaScript">
 
   Change project type to `module` in your `package.json` file:
@@ -398,6 +363,41 @@ cat ~/config.json
   main()
 
   ```
+
+  </TabItem>
+  <TabItem value="python" label="Python">
+
+    ```python
+    import asyncio
+    from pytonlib import TonlibClient
+    from pathlib import Path
+    import json
+
+
+    async def get_client() -> TonlibClient:
+    with open('config.json', 'r') as f:
+    config = json.loads(f.read())
+
+    keystore_dir = '/tmp/ton_keystore'
+    Path(keystore_dir).mkdir(parents=True, exist_ok=True)
+
+    client = TonlibClient(ls_index=0, config=config, keystore=keystore_dir, tonlib_timeout=10)
+    await client.init()
+
+    return client
+
+
+    async def test_client():
+    client = await get_client()
+
+    print(await client.get_masterchain_info())
+
+    await client.close()
+
+
+    if __name__ == '__main__':
+    asyncio.run(test_client())
+    ```
 
   </TabItem>
   <TabItem value="go" label="Golang">
