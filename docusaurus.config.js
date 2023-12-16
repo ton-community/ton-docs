@@ -2,12 +2,13 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 // function to get current year
-function getCurrentYear() {
-  const now = new Date();
-  return now.getFullYear();
+function getCurrentYear () {
+  const now = new Date()
+  return now.getFullYear()
 }
+
 // show current year in text
-const currentYear = getCurrentYear();
+const currentYear = getCurrentYear()
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -149,7 +150,7 @@ const config = {
           //   }
           // }
           remarkPlugins: [
-            [require('@docusaurus/remark-plugin-npm2yarn'), {sync: true}],
+            [require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }],
           ],
         },
         blog: {
@@ -274,13 +275,13 @@ const config = {
             label: 'DApps',
             items: [
               {
-                  to: '/develop/dapps/telegram-apps/',
-                  label: 'TMA Development',
+                to: '/develop/dapps/telegram-apps/',
+                label: 'TMA Development',
               },
-                {
-                  to: 'develop/dapps/asset-processing',
-                  label: 'Transaction Processing',
-                },
+              {
+                to: 'develop/dapps/asset-processing',
+                label: 'Transaction Processing',
+              },
               {
                 to: 'develop/dapps/apis',
                 label: 'APIs',
@@ -289,10 +290,10 @@ const config = {
                 to: 'develop/dapps/apis/sdk',
                 label: 'SDKs',
               },
-            {
-              to: '/develop/dapps/cookbook',
-              label: 'TON Cookbook',
-            },
+              {
+                to: '/develop/dapps/cookbook',
+                label: 'TON Cookbook',
+              },
             ],
           },
           {
@@ -307,35 +308,35 @@ const config = {
               },
               {
                 to: 'develop/smart-contracts',
-                label: 'Write Smart Contracts'
+                label: 'Write Smart Contracts',
               },
               {
                 to: '/develop/smart-contracts/messages',
-                label: 'Sending Messages'
+                label: 'Sending Messages',
               },
               {
                 to: 'develop/smart-contracts/fees',
-                label: 'Transaction Fees'
+                label: 'Transaction Fees',
               },
               {
                 to: 'develop/smart-contracts/guidelines',
-                label: 'Best Practices for Contracts'
+                label: 'Best Practices for Contracts',
               },
               {
                 to: 'develop/func/overview',
-                label: 'FunC Development Language'
+                label: 'FunC Development Language',
               },
               {
                 to: 'develop/func/cookbook',
-                label: 'FunC Cookbook'
+                label: 'FunC Cookbook',
               },
               {
                 to: '/develop/data-formats/cell-boc',
-                label: 'Data formats'
+                label: 'Data formats',
               },
               {
                 to: 'learn/tvm-instructions/tvm-overview',
-                label: 'TON Virtual Machine (TVM)'
+                label: 'TON Virtual Machine (TVM)',
               },
             ],
           },
@@ -349,18 +350,26 @@ const config = {
                 to: 'participate/nodes/node-types',
                 label: 'Node Types',
               },
-            {
-              to: 'https://ton.org/validator',
-              label: 'Become a Validator',
-            },
+              {
+                to: 'https://ton.org/validator',
+                label: 'Become a Validator',
+              },
+              {
+                to: 'participate/run-nodes/full-node',
+                label: 'Run a Full Node',
+              },
+              {
+                to: 'https://docs.ton.org/participate/run-nodes/full-node#enable-liteserver-mode',
+                label: 'Enable Liteserver',
+              },
               {
                 to: 'participate/run-nodes/archive-node',
                 label: 'Run an Archive Node',
               },
-            {
-              to: '/participate/network-maintenance/single-nominator',
-              label: 'Single Nominator Pool',
-            },
+              {
+                to: '/participate/network-maintenance/single-nominator',
+                label: 'Single Nominator Pool',
+              },
 
               {
                 to: '/participate/network-maintenance/vesting-contract',
