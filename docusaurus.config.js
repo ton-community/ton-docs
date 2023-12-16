@@ -194,14 +194,12 @@ const config = {
         //... other Algolia params
       },
 
-      announcementBar: {
-        // id: 'contribute/hacktoberfest',
-        content:
-        // '<a rel="noopener noreferrer" target="_blank" href="https://society.ton.org/hack-ton-berfest-2023?utm_source=tondocs&utm_medium=top_banner&utm_campaign=promo"><span>The HACKTOBERFEST event has already started!  Read more about the event and rewards! </span> <span class="mobile-view">Read more about The HACKTOBERFEST</span></a>',
-        '<a rel="noopener noreferrer" target="_blank" href="https://society.ton.org/hack-ton-berfest-2023?utm_source=tondocs&utm_medium=top_banner&utm_campaign=promo"><span>The <b>HACK-TON-BERFEST 2023</b> event is near! Double-merch, NFT rewards and more!</span> <span class="mobile-view">Double-merch, NFT reward and more!</span></a>',
-        textColor: '#F3F3F7',
-        isCloseable: false,
-      },
+      // announcementBar: {
+      //   // id: 'contribute/hacktoberfest',
+      //   content: '<a rel="noopener noreferrer" target="_blank" href="https://society.ton.org/hack-ton-berfest-2023?utm_source=tondocs&utm_medium=top_banner&utm_campaign=promo"><span>The <b>HACK-TON-BERFEST 2023</b> event is near! Double-merch, NFT rewards and more!</span> <span class="mobile-view">Double-merch, NFT reward and more!</span></a>',
+      //   textColor: '#F3F3F7',
+      //   isCloseable: false,
+      // },
 
       image: 'img/snippet.png',
       navbar: {
@@ -276,41 +274,25 @@ const config = {
             label: 'DApps',
             items: [
               {
+                  to: '/develop/dapps/telegram-apps/',
+                  label: 'TMA Development',
+              },
+                {
+                  to: 'develop/dapps/asset-processing',
+                  label: 'Transaction Processing',
+                },
+              {
                 to: 'develop/dapps/apis',
-                label: 'Understand API Types',
+                label: 'APIs',
               },
               {
                 to: 'develop/dapps/apis/sdk',
-                label: 'Choose an SDK',
+                label: 'SDKs',
               },
-              {
-                to: 'develop/dapps/defi/coins',
-                label: 'Native token: Toncoin',
-              },
-              {
-                to: 'develop/dapps/asset-processing',
-                label: 'Payments processing',
-              },
-              {
-                to: 'develop/dapps/asset-processing/jettons',
-                label: 'Jetton (Tokens) processing',
-              },
-              {
-                to: '/develop/dapps/asset-processing/nfts',
-                label: 'NFT processing',
-              },
-              {
-                to: '/develop/dapps/asset-processing/metadata',
-                label: 'TON Metadata Parsing',
-              },
-              {
-                to: 'develop/dapps/defi/subscriptions',
-                label: 'Subscriptions',
-              },
-              {
-                to: 'develop/dapps/defi/ton-payments',
-                label: 'TON Payments',
-              },
+            {
+              to: '/develop/dapps/cookbook',
+              label: 'TON Cookbook',
+            },
             ],
           },
           {
@@ -367,21 +349,22 @@ const config = {
                 to: 'participate/nodes/node-types',
                 label: 'Node Types',
               },
-              {
-                to: 'participate/run-nodes/full-node',
-                label: 'Run a Full Node',
-              },
+            {
+              to: 'https://ton.org/validator',
+              label: 'Become a Validator',
+            },
               {
                 to: 'participate/run-nodes/archive-node',
                 label: 'Run an Archive Node',
               },
+            {
+              to: '/participate/network-maintenance/single-nominator',
+              label: 'Single Nominator Pool',
+            },
+
               {
-                to: 'participate/run-nodes/liteserver',
-                label: 'Run a Liteserver Node',
-              },
-              {
-                to: 'https://ton.org/validator',
-                label: 'Become a Validator',
+                to: '/participate/network-maintenance/vesting-contract',
+                label: 'Vesting Contract',
               },
             ],
           },

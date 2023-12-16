@@ -2,7 +2,7 @@
 
 ## Overview
 
-Test toolkit (usually, sandbox) already included to the TypeScript SDK named [Blueprint](/develop/smart-contracts/sdk/javascript). You can create demo project and launch default test with two steps:
+Test toolkit (usually sandbox) is already included in the TypeScript SDK named [Blueprint](/develop/smart-contracts/sdk/javascript). You can create a demo project and launch the default test with two steps:
 
 1. Create a new Blueprint project:
 ```bash
@@ -15,7 +15,7 @@ cd MyProject
 npx blueprint test
 ```
 
-As a result you'll see corresponding output in the terminal window:
+As a result you'll see the corresponding output in the terminal window:
 
 ```bash
 % npx blueprint test
@@ -36,7 +36,7 @@ Ran all test suites.
 
 ## Basic Usage
 Testing of smart contracts allows for the coverage of security, optimization of gas spending, and examination of edge cases.
-Writing tests in Blueprint (that based on [Sandbox](https://github.com/ton-org/sandbox)) works through defining arbitary actions with the contract and comparing their results with the expected result, for example:
+Writing tests in Blueprint (based on [Sandbox](https://github.com/ton-org/sandbox)) works through defining arbitrary actions with the contract and comparing test results with the expected result, for example:
 
 ```typescript
 it('should execute with success', async () => {                              // description of the test case
@@ -70,15 +70,16 @@ The `toHaveTransaction` matcher expects an object with any combination of fields
 | op                   | number?       | Op code is the operation identifier number (crc32 from TL-B usually). Expected in the first 32 bits of a message body.                                              |
 |success| boolean?       | Custom Sandbox flag that defines the resulting status of a certain transaction. True - if both the compute and the action phase succeeded. Otherwise - False.       |
 
-You can omit those that you're not interested in, and you can also pass in functions accepting those types returning booleans (`true` meaning good) to check for example number ranges, message opcodes, etc. Note however that if a field is optional (like `from?: Address`), then the function needs to accept the optional type, too.
+You can omit the fields that you're not interested in and pass functions accepting the types returning booleans (`true` meaning good) to check for example number ranges, message opcodes, etc. Please note that if a field is optional (like `from?: Address`), then the function needs to accept the optional type, too.
+
 
 :::tip
-Learn the whole list of matcher fields from the [Sandbox documentation](https://github.com/ton-org/sandbox#test-a-transaction-with-matcher).
+You can learn the whole list of matcher fields from the [Sandbox documentation](https://github.com/ton-org/sandbox#test-a-transaction-with-matcher).
 :::
 
 ## Tutorials
 
-Learn more about testing from most valuable community tutorials on TON:
+Learn more about testing from the most valuable community tutorials on TON:
 
 * [Lesson 2: Testing FunC for a Smart Contract](https://github.com/romanovichim/TonFunClessons_Eng/blob/main/lessons/smartcontract/2lesson/secondlesson.md)
 * [TON Hello World part 4: Step by step guide for testing your first smart contract](https://ton-community.github.io/tutorials/04-testing/)
@@ -95,7 +96,7 @@ Check test suites used for TON Ecosystem contracts and learn by examples.
 * [governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/elector_tests/tests/complaint-test.fc)
 * [MassSender.spec.ts](https://github.com/Gusarich/ton-mass-sender/blob/main/tests/MassSender.spec.ts)
 * [TonForwarder.spec.ts](https://github.com/TrueCarry/ton-contract-forwarder/blob/main/src/contracts/ton-forwarder/TonForwarder.spec.ts)
-
+* [Assurer.spec.ts](https://github.com/aSpite/dominant-assurance-contract/blob/main/tests/Assurer.spec.ts)
 
 ## See Also
 * [Blueprint](/develop/smart-contracts/sdk/javascript)

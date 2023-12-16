@@ -63,7 +63,7 @@ So, if you try to optimize your code start with architecture optimization, the d
 ### Operations with cells
 Just an example of how proper cell work may substantially decrease gas costs.
 
-Let''s imagine that you want to add some encoded payload to the outgoing message. Straightforward implementation will be as follows:
+Let's imagine that you want to add some encoded payload to the outgoing message. Straightforward implementation will be as follows:
 ```cpp
 slice payload_encoding(int a, int b, int c) {
   return
@@ -79,7 +79,7 @@ slice payload_encoding(int a, int b, int c) {
     .store_uint(0x18, 6)
     .store_slice(destination)
     .store_coins(0)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; some flags related to message header
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
     .store_uint(0x33bbff77, 32) ;; op-code (see smart-contract guidelines)
     .store_uint(cur_lt(), 64)  ;; query_id (see smart-contract guidelines)
     .store_slice(payload)
@@ -107,7 +107,7 @@ builder payload_encoding(int a, int b, int c) {
     .store_uint(0x18, 6)
     .store_slice(destination)
     .store_coins(0)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; some flags related to message header
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
     .store_uint(0x33bbff77, 32) ;; op-code (see smart-contract guidelines)
     .store_uint(cur_lt(), 64)  ;; query_id (see smart-contract guidelines)
     .store_builder(payload)

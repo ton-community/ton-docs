@@ -6,7 +6,8 @@
  
 ## Libraries from Community
 
- - [open-contracts/utils](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/utils) — Utility library
+ - [continuation-team/openlib.func](https://github.com/continuation-team/openlib.func) - Reduces transaction fees in common scenarios.
+  - [open-contracts/utils](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/utils) — Utility library
  - [open-contracts/strings](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/strings) — Provides operations on strings
  - [open-contracts/math](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/math) — Math library that extends FunC arithmetic operations
  - [open-contracts/tuples](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/tuples) — Collection of tuple-releated functions for FunC

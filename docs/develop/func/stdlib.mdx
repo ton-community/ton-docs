@@ -632,6 +632,10 @@ Stores slice `s` into builder `b`.
 ```func
 builder store_grams(builder b, int x) asm "STGRAMS";
 ```
+#### store_coins
+```func
+builder store_coins(builder b, int x) asm "STGRAMS";
+```
 Stores (serializes) an integer `x` in the range `0..2^120 − 1` into builder `b`. The serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, which is the smallest integer `l ≥ 0`, such that `x < 2^8l`, followed by an `8l`-bit unsigned big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.
 
 It is the most common way of storing Toncoins.

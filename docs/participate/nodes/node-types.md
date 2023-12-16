@@ -28,11 +28,11 @@ Such nodes are indispensable for creating blockchain explorers or other tools th
 
 ### Liteserver Node
 
-When an endpoint is activated in a full node, the node assumes the role of a **Liteserver**. This node type can field and respond to requests from Lite Clients, allowing for seamless interaction with the TON Blockchain.
+When an endpoint is activated on a full node, the node assumes the role of a **Liteserver**. This node type can field and respond to requests from Lite Clients, allowing to seamlessly interract with the TON Blockchain.
 
 #### Interaction with Lite Clients
 
-Liteservers enable swift communication with Lite Clients, facilitating tasks like balance checks or transaction submissions without necessitating the full block history.
+Liteservers enable swift communication with Lite Clients, facilitating tasks like retrieving balance or submitting transactions without necessitating the full block history.
 
 #### Public Liteservers
 

@@ -25,27 +25,32 @@ Please, use a **non-root user** with **sudo** privileges to install and run myto
 
 In general, you need the following steps to run an Archive Node:
 
-1. Install ZFS
+1. Install ZFS and Prepare Volume
 2. Install MyTonCtrl
 3. Run a Full Node on your server and stop validator process
 4. Download and restore dump data from https://archival-dump.ton.org
 5. Run Full Node with Configuring DB specs for Archive Node
 
 
-### Install ZFS
+### Install ZFS and Prepare Volume
 
-Dumps come in form of ZFS Snapshots compressed using plzip, you need to install zfs on your host and restore the dump, see [Oracle Documentation](https://docs.oracle.com/cd/E23824_01/html/821-1448/gavvx.html#scrolltoc) for more details. Before restoring we highly recommend to enable compression on parent ZFS filesystem, this will save you a [lot of space](https://www.servethehome.com/the-case-for-using-zfs-compression/).
+Dumps come in form of ZFS Snapshots compressed using plzip, you need to install zfs on your host and restore the dump, see [Oracle Documentation](https://docs.oracle.com/cd/E23824_01/html/821-1448/gavvx.html#scrolltoc) for more details. 
 
 Usually, it's a good idea to create a separate ZFS pool for your node on a _dedicated SSD drive_, this will allow you to easily manage storage space and backup your node.
 
-1. [Install zfs and create a new pool on your 4TB volume](https://ubuntu.com/tutorials/setup-zfs-storage-pool) (name it `data`).
-2. Enable compression for the `data` volume:
+1. Install [zfs](https://ubuntu.com/tutorials/setup-zfs-storage-pool#1-overview)
 ```shell
-zfs set compression=lz4 data
+sudo apt install zfsutils-linux
 ```
-3. Create a volume:
+2. [Create pool](https://ubuntu.com/tutorials/setup-zfs-storage-pool#3-creating-a-zfs-pool) on your dedicated 4TB `<disk>` and name it `data`
+
 ```shell
-zfs create data/ton-work
+sudo zpool create data <disk>
+```
+3. Before restoring we highly recommend to enable compression on parent ZFS filesystem, this will save you a [lot of space](https://www.servethehome.com/the-case-for-using-zfs-compression/). To enable compression for the `data` volume enter using root account:
+
+```shell
+sudo zfs set compression=lz4 data
 ```
 
 ### Install MyTonCtrl
@@ -68,8 +73,8 @@ mv /var/ton-work /var/ton-work.bak
 
 #### Download the dump
 
-3. Request `user` and `password` credentials to gain access for downloading dumps in the [@TONBaseChatEn](https://t.me/TONBaseChatEn) Telegram chat.
-4. Here is an example command to download & restore the dump from the ton.org server:
+1. Request `user` and `password` credentials to gain access for downloading dumps in the [@TONBaseChatEn](https://t.me/TONBaseChatEn) Telegram chat.
+2. Here is an example command to download & restore the dump from the ton.org server:
 
 ```shell
 wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
@@ -84,32 +89,40 @@ Prepare and run the command:
 
 #### Mount the dump
 
-5. Mount zfs:
+1. Mount zfs:
 ```shell
 zfs set mountpoint=/var/ton-work data/ton-work && zfs mount data/ton-work
 ```
-6. Restore `db/config.json`, `keys` and `db/keyring` from backup to `/var/ton-work`
+2. Restore `db/config.json`, `keys` and `db/keyring` from backup to `/var/ton-work`
 ```shell
 cp /var/ton-work.bak/db/config.json /var/ton-work/db/config.json
 cp -r /var/ton-work.bak/keys /var/ton-work/keys
 cp -r /var/ton-work.bak/db/keyring /var/ton-work/db/keyring
 ```
-7. Fix permissions for `/var/ton-work`:
+3. Make sure that permissions for `/var/ton-work` and `/var/ton-work/keys` dirs promoted correctly:
+
+- The owner for the `/var/ton-work/db` dir should be `validator` user:
+
 ```shell
-chown -R validator:validator /var/ton-work
+chown -R validator:validator /var/ton-work/db
 ```
 
-:::caution Important
-If you've installed the `mytonctrl` under a local user (as we did in the full node tutorial), you need to change the owner of the `/var/ton-work/keys` directory to the local user account. Otherwise, the node will not be able to start.
-:::
-
-Example of changing the owner to `ubuntu` user:
+- The owner for the `/var/ton-work/keys` dir should be `ubuntu` user:
 
 ```shell
 chown -R ubuntu:ubuntu /var/ton-work/keys
 ```
 
-8. Add storage settings for the node to the file `/etc/systemd/system/validator.service` in the `ExecStart` line: 
+#### Update Configuration
+
+Update node configuration for the archive node.
+
+1. Open the node config file `/etc/systemd/system/validator.service`
+```shell
+nano /etc/systemd/system/validator.service
+```
+
+2. Add storage settings for the node in the `ExecStart` line:
 ```shell
 --state-ttl 315360000 --archive-ttl 315360000 --block-ttl 315360000
 ```
@@ -120,13 +133,13 @@ Please be patient once you start the node and observe the logs. Dumps come witho
 
 #### Start the node
 
-9. Start the validator by running the command: 
+1. Start the validator by running the command: 
 
 ```shell
 systemctl start validator.service
 ```
 
-10. Open `mytonctrl` from _local user_ and check the node status using the `status`.
+2. Open `mytonctrl` from _local user_ and check the node status using the `status`.
 
 
 ## Node maintenance

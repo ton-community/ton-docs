@@ -66,7 +66,7 @@ ____________
 
 ### Bridge
 
-**Bridge** — a program connecting various blockchains to transfer tokens and data from one network to another. TON Bridge is available by this [link](https://ton.org/bridge/).
+**Bridge** — a program connecting various blockchains to transfer tokens and data from one network to another. TON Bridge is available at this [link](https://ton.org/bridge/).
 
 ### Bullish
 
@@ -204,7 +204,7 @@ ___________
 
 **Gas** — the fee paid for transactions on the blockchain.
 
-### Github
+### GitHub
 
 **GitHub** — a platform where developers gather to create base code for programs.
 
@@ -444,6 +444,10 @@ ________
 ### TVL
 
 **TVL** (Total Value Locked) — Тotal value locked represents the number of assets currently being staked in a specific protocol.
+
+### TVM
+
+**TVM** — Ton Virtual Machine, a machine behaving like a decentralized computer, it computes the state of the Ton blockchain after each new block and executes smart contracts.
 
 ___________
 

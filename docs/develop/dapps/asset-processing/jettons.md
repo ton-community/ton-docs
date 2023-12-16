@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # TON Jetton processing
 
 Best practices with comments on jettons processing:
@@ -23,12 +26,101 @@ A less formal sharding-focused overview of jetton architecture can be found in o
 [anatomy of jettons blog post](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons).)
 
 Here we have provided several examples of jetton code processing created by TON Community members:
-1. Javascript (tonweb):
-  - [Accepting jetton deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
-  - [Accepting jetton deposits to individual hot wallets with comments (memo)](https://github.com/toncenter/examples/blob/main/deposits-jettons-single-wallet.js)
-  - [Jettons withdrawal examples](https://github.com/toncenter/examples/blob/main/withdrawals-jettons.js)
-2. Golang (tonutils-go):
-  - [Transfer NFTs & jettons by creating a transfer message](https://github.com/tonfactory/tonsdk#transfer-nft--jettons-by-creating-a-transfer-message-from-an-owner-wallet)
+
+<Tabs groupId="code-examples">
+<TabItem value="tonweb" label="JS (tonweb)">
+
+```js
+const transfer = await wallet.methods.transfer({
+  secretKey: keyPair.secretKey,
+  toAddress: jettonWalletAddress,
+  amount: 0,
+  seqno: seqno,
+  sendMode: 128 + 32, // mode 128 is used for messages that are to carry all the remaining balance; mode 32 means that the current account must be destroyed if its resulting balance is zero;
+  payload: await jettonWallet.createTransferBody({
+    queryId: seqno, // any number
+    jettonAmount: jettonBalance, // jetton amount in units
+    toAddress: new TonWeb.utils.Address(MY_HOT_WALLET_ADDRESS),
+    responseAddress: new TonWeb.utils.Address(MY_HOT_WALLET_ADDRESS),
+  }),
+});
+await transfer.send();
+```
+
+</TabItem>
+<TabItem value="tonutils-go" label="Golang">
+
+```go
+client := liteclient.NewConnectionPool()
+
+// connect to testnet lite server
+err := client.AddConnectionsFromConfigUrl(context.Background(), "https://ton.org/global.config.json")
+if err != nil {
+   panic(err)
+}
+
+ctx := client.StickyContext(context.Background())
+
+// initialize ton api lite connection wrapper
+api := ton.NewAPIClient(client)
+
+// seed words of account, you can generate them with any wallet or using wallet.NewSeed() method
+words := strings.Split("birth pattern then forest walnut then phrase walnut fan pumpkin pattern then cluster blossom verify then forest velvet pond fiction pattern collect then then", " ")
+
+w, err := wallet.FromSeed(api, words, wallet.V3R2)
+if err != nil {
+   log.Fatalln("FromSeed err:", err.Error())
+   return
+}
+
+token := jetton.NewJettonMasterClient(api, address.MustParseAddr("EQD0vdSA_NedR9uvbgN9EikRX-suesDxGeFg69XQMavfLqIw"))
+
+// find our jetton wallet
+tokenWallet, err := token.GetJettonWallet(ctx, w.WalletAddress())
+if err != nil {
+   log.Fatal(err)
+}
+
+amountTokens := tlb.MustFromDecimal("0.1", 9)
+
+comment, err := wallet.CreateCommentCell("Hello from tonutils-go!")
+if err != nil {
+   log.Fatal(err)
+}
+
+// address of receiver's wallet (not token wallet, just usual)
+to := address.MustParseAddr("EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N")
+transferPayload, err := tokenWallet.BuildTransferPayload(to, amountTokens, tlb.ZeroCoins, comment)
+if err != nil {
+   log.Fatal(err)
+}
+
+// your TON balance must be > 0.05 to send
+msg := wallet.SimpleMessage(tokenWallet.Address(), tlb.MustFromTON("0.05"), transferPayload)
+
+log.Println("sending transaction...")
+tx, _, err := w.SendWaitTransaction(ctx, msg)
+if err != nil {
+   panic(err)
+}
+log.Println("transaction confirmed, hash:", base64.StdEncoding.EncodeToString(tx.Hash))
+```
+
+</TabItem>
+<TabItem value="TonTools" label="Python">
+
+```py
+my_wallet = Wallet(provider=client, mnemonics=my_wallet_mnemonics, version='v4r2')
+
+# for TonCenterClient and LsClient
+await my_wallet.transfer_jetton(destination_address='address', jetton_master_address=jetton.address, jettons_amount=1000, fee=0.15) 
+
+# for all clients
+await my_wallet.transfer_jetton_by_jetton_wallet(destination_address='address', jetton_wallet='your jetton wallet address', jettons_amount=1000, fee=0.1)  
+```
+
+</TabItem>
+</Tabs>
 
 We have also provided specific details discussing our third-party open-source TON Payment Processor ([bicycle](https://github.com/gobicycle/bicycle)) which allows users to deposit and withdraw both Toncoin and jettons using a separate deposit address without using a text memo.
 
@@ -179,10 +271,10 @@ in the wallet to pay the required gas fees.
 
 Communication between Jetton wallets and TON wallets occurs through the following communication sequence:
 
-![](message_layouts.png)
+![](/img/docs/asset-processing/jetton_transfer.svg)
 
 
-`Sender -> sender' jetton wallet` means the transfer message body contains the following data:
+`Sender -> sender' jetton wallet` means the _transfer_ message body contains the following data:
 
 
 | Name                 | Type    |

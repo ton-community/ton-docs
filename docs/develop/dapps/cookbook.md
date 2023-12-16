@@ -239,9 +239,12 @@ print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=Tru
 </TabItem>
 </Tabs>
 
-### How to send standard TON transfer message. 
+### How to send standard TON transfer message?
 
 To send a standard TON transfer message, first you need to open your wallet contract, after that, get your wallet seqno. And only after that can you send your TON transfer. Note that if you are using a non-V4 version of the wallet, you will need to rename WalletContractV4 to WalletContract{your wallet version}, for example, WalletContractV3R2.
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton)">
 
 ```js
 import { TonClient, WalletContractV4, internal } from "@ton/ton";
@@ -273,7 +276,46 @@ await contract.sendTransfer({
 });
 ```
 
-### How to calculate user's Jetton wallet address.
+</TabItem>
+
+<TabItem value="ton-kotlin" label="ton-kotlin">
+
+```kotlin
+// Setup liteClient
+val context: CoroutineContext = Dispatchers.Default
+val json = Json { ignoreUnknownKeys = true }
+val config = json.decodeFromString<LiteClientConfigGlobal>(
+    URI("https://ton.org/global-config.json").toURL().readText()
+)
+val liteClient = LiteClient(context, config)
+
+val WALLET_MNEMONIC = "word1 word2 ...".split(" ")
+
+val pk = PrivateKeyEd25519(Mnemonic.toSeed(WALLET_MNEMONIC))
+val walletAddress = WalletV3R2Contract.address(pk, 0)
+println(walletAddress.toString(userFriendly = true, bounceable = false))
+
+val wallet = WalletV3R2Contract(liteClient, walletAddress)
+runBlocking {
+    wallet.transfer(pk, WalletTransfer {
+        destination = AddrStd("EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N")
+        bounceable = true
+        coins = Coins(100000000) // 1 ton in nanotons
+        messageData = org.ton.contract.wallet.MessageData.raw(
+            body = buildCell {
+                storeUInt(0, 32)
+                storeBytes("Comment".toByteArray())
+            }
+        )
+        sendMode = 0
+    })
+}
+```
+</TabItem>
+
+</Tabs>
+
+### How to calculate user's Jetton wallet address?
 
 To calculate the user's jetton wallet address, we need to call the "get_wallet_address" get-method of the jetton master contract with user address actually. For this task we can easily use getWalletAddress method from JettonMaster or call master contract by ourselves. 
 
@@ -321,6 +363,45 @@ getUserWalletAddress(userAddress, jettonMasterAddress)
 )
 ```
 </TabItem>
+
+<TabItem value="ton-kotlin" label="ton-kotlin">
+
+```kotlin
+// Setup liteClient
+val context: CoroutineContext = Dispatchers.Default
+val json = Json { ignoreUnknownKeys = true }
+val config = json.decodeFromString<LiteClientConfigGlobal>(
+    URI("https://ton.org/global-config.json").toURL().readText()
+)
+val liteClient = LiteClient(context, config)
+
+val USER_ADDR = AddrStd("Wallet address")
+val JETTON_MASTER = AddrStd("Jetton Master contract address") // for example EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE
+
+// we need to send regular wallet address as a slice
+val userAddressSlice = CellBuilder.beginCell()
+    .storeUInt(4, 3)
+    .storeInt(USER_ADDR.workchainId, 8)
+    .storeBits(USER_ADDR.address)
+    .endCell()
+    .beginParse()
+
+val response = runBlocking {
+    liteClient.runSmcMethod(
+        LiteServerAccountId(JETTON_MASTER.workchainId, JETTON_MASTER.address),
+        "get_wallet_address",
+        VmStackValue.of(userAddressSlice)
+    )
+}
+
+val stack = response.toMutableVmStack()
+val jettonWalletAddress = stack.popSlice().loadTlb(MsgAddressInt) as AddrStd
+println("Calculated Jetton wallet:")
+println(jettonWalletAddress.toString(userFriendly = true))
+
+```
+</TabItem>
+
 </Tabs>
 
 ### How to construct a message for a jetton transfer with a comment?
@@ -434,6 +515,110 @@ main().finally(() => console.log("Exiting..."));
 </Tabs>
 
 To indicate that we want to include a comment, we specify 32 zero bits and then write our comment. We also specify the `response destination`, which means that a response regarding the successful transfer will be sent to this address. If we don't want a response, we can specify 2 zero bits instead of an address.
+
+### How to send swap message to DEX (DeDust)?
+
+DEXes use different protocols for their work. You can find details for the DeDust protocol on their [website](https://docs.dedust.io/).
+
+DeDust has two exchange paths: jetton <-> jetton or toncoin <-> jetton. Each has a different scheme. To swap, you need to send jettons to a specific jetton (or toncoin) **vault** by passing a special payload. Here is the scheme for swapping jetton to jetton or jetton to toncoin:
+
+```tlb
+swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
+              step#_ pool_addr:MsgAddressInt params:SwapStepParams = SwapStep;
+              step_params#_ kind:SwapKind limit:Coins next:(Maybe ^SwapStep) = SwapStepParams;
+              swap_params#_ deadline:Timestamp recipient_addr:MsgAddressInt referral_addr:MsgAddress
+                    fulfill_payload:(Maybe ^Cell) reject_payload:(Maybe ^Cell) = SwapParams;
+```
+This scheme shows what should be in the forward_payload of a message from your toncoin wallet to your jetton wallet (`transfer#f8a7ea5`)
+
+And the scheme of toncoin to jetton swap:
+```tlb
+swap#ea06185d query_id:uint64 amount:Coins _:SwapStep swap_params:^SwapParams = InMsgBody;
+              step#_ pool_addr:MsgAddressInt params:SwapStepParams = SwapStep;
+              step_params#_ kind:SwapKind limit:Coins next:(Maybe ^SwapStep) = SwapStepParams;
+              swap_params#_ deadline:Timestamp recipient_addr:MsgAddressInt referral_addr:MsgAddress
+                    fulfill_payload:(Maybe ^Cell) reject_payload:(Maybe ^Cell) = SwapParams;
+```
+This is scheme for body of trabsfer to the toncoin **vault**.
+
+First, you need to know the **vault** addresses of the jettons you will swap or toncoin **vault** address. This can be done using the get methods of the contract [**FACTORY**](https://docs.dedust.io/reference/factory) `get_vault_address`. As an argument you need to pass a slice according to the scheme:
+```tlb
+native$0000 = Asset; // for ton
+jetton$0001 workchain_id:int8 address:uint256 = Asset; // for jetton
+```
+Also for the exchange itself we need the **pool** address - `get_pool_address`. As arguments - asset slices according to the scheme above. In response, both methods will return a slice of the address of the requested **vault** / **pool**.
+
+This is enough to build the message.
+
+<Tabs groupId="code-examples">
+<TabItem value="ton-kotlin" label="ton-kotlin">
+
+Build Asset slice:
+```kotlin
+val assetASlice = buildCell {
+    storeUInt(1,4)
+    storeInt(JETTON_MASTER_A.workchainId, 8)
+    storeBits(JETTON_MASTER_A.address)
+}.beginParse()
+```
+
+Run get methods:
+```kotlin
+val responsePool = runBlocking {
+    liteClient.runSmcMethod(
+        LiteServerAccountId(DEDUST_FACTORY.workchainId, DEDUST_FACTORY.address),
+        "get_pool_address",
+        VmStackValue.of(0),
+        VmStackValue.of(assetASlice),
+        VmStackValue.of(assetBSlice)
+    )
+}
+stack = responsePool.toMutableVmStack()
+val poolAddress = stack.popSlice().loadTlb(MsgAddressInt) as AddrStd
+```
+
+Build and transfer message:
+```kotlin
+runBlocking {
+    wallet.transfer(pk, WalletTransfer {
+        destination = JETTON_WALLET_A // yours existing jetton wallet
+        bounceable = true
+        coins = Coins(300000000) // 0.3 ton in nanotons
+        messageData = MessageData.raw(
+            body = buildCell {
+                storeUInt(0xf8a7ea5, 32) // op Transfer
+                storeUInt(0, 64) // query_id
+                storeTlb(Coins, Coins(100000000)) // amount of jettons
+                storeSlice(addrToSlice(jettonAVaultAddress)) // destination address
+                storeSlice(addrToSlice(walletAddress))  // response address
+                storeUInt(0, 1)  // custom payload
+                storeTlb(Coins, Coins(250000000)) // forward_ton_amount // 0.25 ton in nanotons
+                storeUInt(1, 1)
+                // forward_payload
+                storeRef {
+                    storeUInt(0xe3a0d482, 32) // op swap
+                    storeSlice(addrToSlice(poolAddress)) // pool_addr
+                    storeUInt(0, 1) // kind
+                    storeTlb(Coins, Coins(0)) // limit
+                    storeUInt(0, 1) // next (for multihop)
+                    storeRef {
+                        storeUInt(System.currentTimeMillis() / 1000 + 60 * 5, 32) // deadline
+                        storeSlice(addrToSlice(walletAddress)) // recipient address
+                        storeSlice(buildCell { storeUInt(0, 2) }.beginParse()) // referral (null address)
+                        storeUInt(0, 1)
+                        storeUInt(0, 1)
+                        endCell()
+                    }
+                }
+            }
+        )
+        sendMode = 3
+    })
+}
+```
+</TabItem>
+</Tabs>
+
 
 ### How to use NFT batch deploy?
 
@@ -741,3 +926,216 @@ main().finally(() => console.log("Exiting..."));
 </Tabs>
 
 Additionally, we need to include royalty information in our message, as they also change using this opcode. It's important to note that it's not necessary to specify new values everywhere. If, for example, only the NFT common content needs to be changed, then all other values can be specified as they were before.
+
+### Processing Snake Cells
+
+Some times it's necessary to store long strings (or other large information) while cells can hold **maximum 1023 bits**. In this case, we can use snake cells. Snake cells are cells that contain a reference to another cell, which, in turn, contains a reference to another cell, and so on. 
+
+<Tabs groupId="code-examples">
+<TabItem value="js-tonweb" label="JS (tonweb)">
+
+```js
+const TonWeb = require("tonweb");
+
+function writeStringTail(str, cell) {
+    const bytes = Math.floor(cell.bits.getFreeBits() / 8); // 1 symbol = 8 bits
+    if(bytes < str.length) { // if we can't write all string
+        cell.bits.writeString(str.substring(0, bytes)); // write part of string
+        const newCell = writeStringTail(str.substring(bytes), new TonWeb.boc.Cell()); // create new cell
+        cell.refs.push(newCell); // add new cell to current cell's refs
+    } else {
+        cell.bits.writeString(str); // write all string
+    }
+
+    return cell;
+}
+
+function readStringTail(cell) {
+    const slice = cell.beginParse(); // converting cell to slice
+    if(cell.refs.length > 0) {
+        const str = new TextDecoder('ascii').decode(slice.array); // decode uint8array to string
+        return str + readStringTail(cell.refs[0]); // read next cell
+    } else {
+        return new TextDecoder('ascii').decode(slice.array);
+    }
+}
+
+let cell = new TonWeb.boc.Cell();
+const str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In euismod, ligula vel lobortis hendrerit, lectus sem efficitur enim, vel efficitur nibh dui a elit. Quisque augue nisi, vulputate vitae mauris sit amet, iaculis lobortis nisi. Aenean molestie ultrices massa eu fermentum. Cras rhoncus ipsum mauris, et egestas nibh interdum in. Maecenas ante ipsum, sodales eget suscipit at, placerat ut turpis. Nunc ac finibus dui. Donec sit amet leo id augue tempus aliquet. Vestibulum eu aliquam ex, sit amet suscipit odio. Vestibulum et arcu dui.";
+cell = writeStringTail(str, cell);
+const text = readStringTail(cell); 
+console.log(text);
+```
+
+</TabItem>
+</Tabs>
+
+This example will help you understand how you can work with such cells using recursion.
+
+### How to parse transactions of an account (Transfers, Jettons, NFTs)?
+
+The list of transactions on an account can be fetched through `getTransactions` API method. It returns an array of `Transaction` objects, with each item having lots of attributes. However, the fields that are the most commonly used are:
+ - Sender, Body and Value of the message that initiated this transaction
+ - Transaction's hash and logical time (LT)
+
+_Sender_ and _Body_ fields may be used to determine the type of message (regular transfer, jetton transfer, nft transfer etc).
+
+Below is an example on how you can fetch 5 most recent transactions on any blockchain account, parse them depending on the type and print out in a loop.
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton)">
+
+```js
+import { Address, TonClient, beginCell, fromNano } from '@ton/ton';
+
+async function main() {
+    const client = new TonClient({
+        endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+        apiKey: '1b312c91c3b691255130350a49ac5a0742454725f910756aff94dfe44858388e',
+    });
+
+    const myAddress = Address.parse('EQBKgXCNLPexWhs2L79kiARR1phGH1LwXxRbNsCFF9doc2lN'); // address that you want to fetch transactions from
+
+    const transactions = await client.getTransactions(myAddress, {
+        limit: 5,
+    });
+
+    for (const tx of transactions) {
+        const inMsg = tx.inMessage;
+
+        if (inMsg?.info.type == 'internal') {
+            // we only process internal messages here because they are used the most
+            // for external messages some of the fields are empty, but the main structure is similar
+            const sender = inMsg?.info.src;
+            const value = inMsg?.info.value.coins;
+
+            const originalBody = inMsg?.body.beginParse();
+            let body = originalBody.clone();
+            if (body.remainingBits < 32) {
+                // if body doesn't have opcode: it's a simple message without comment
+                console.log(`Simple transfer from ${sender} with value ${fromNano(value)} TON`);
+            } else {
+                const op = body.loadUint(32);
+                if (op == 0) {
+                    // if opcode is 0: it's a simple message with comment
+                    const comment = body.loadStringTail();
+                    console.log(
+                        `Simple transfer from ${sender} with value ${fromNano(value)} TON and comment: "${comment}"`
+                    );
+                } else if (op == 0x7362d09c) {
+                    // if opcode is 0x7362d09c: it's a Jetton transfer notification
+
+                    body.skip(64); // skip query_id
+                    const jettonAmount = body.loadCoins();
+                    const jettonSender = body.loadAddressAny();
+                    const originalForwardPayload = body.loadBit() ? body.loadRef().beginParse() : body;
+                    let forwardPayload = originalForwardPayload.clone();
+
+                    // IMPORTANT: we have to verify the source of this message because it can be faked
+                    const runStack = (await client.runMethod(sender, 'get_wallet_data')).stack;
+                    runStack.skip(2);
+                    const jettonMaster = runStack.readAddress();
+                    const jettonWallet = (
+                        await client.runMethod(jettonMaster, 'get_wallet_address', [
+                            { type: 'slice', cell: beginCell().storeAddress(myAddress).endCell() },
+                        ])
+                    ).stack.readAddress();
+                    if (!jettonWallet.equals(sender)) {
+                        // if sender is not our real JettonWallet: this message was faked
+                        console.log(`FAKE Jetton transfer`);
+                        continue;
+                    }
+
+                    if (forwardPayload.remainingBits < 32) {
+                        // if forward payload doesn't have opcode: it's a simple Jetton transfer
+                        console.log(`Jetton transfer from ${jettonSender} with value ${fromNano(jettonAmount)} Jetton`);
+                    } else {
+                        const forwardOp = forwardPayload.loadUint(32);
+                        if (forwardOp == 0) {
+                            // if forward payload opcode is 0: it's a simple Jetton transfer with comment
+                            const comment = forwardPayload.loadStringTail();
+                            console.log(
+                                `Jetton transfer from ${jettonSender} with value ${fromNano(
+                                    jettonAmount
+                                )} Jetton and comment: "${comment}"`
+                            );
+                        } else {
+                            // if forward payload opcode is something else: it's some message with arbitrary structure
+                            // you may parse it manually if you know other opcodes or just print it as hex
+                            console.log(
+                                `Jetton transfer with unknown payload structure from ${jettonSender} with value ${fromNano(
+                                    jettonAmount
+                                )} Jetton and payload: ${originalForwardPayload}`
+                            );
+                        }
+
+                        console.log(`Jetton Master: ${jettonMaster}`);
+                    }
+                } else if (op == 0x05138d91) {
+                    // if opcode is 0x05138d91: it's a NFT transfer notification
+
+                    body.skip(64); // skip query_id
+                    const prevOwner = body.loadAddress();
+                    const originalForwardPayload = body.loadBit() ? body.loadRef().beginParse() : body;
+                    let forwardPayload = originalForwardPayload.clone();
+
+                    // IMPORTANT: we have to verify the source of this message because it can be faked
+                    const runStack = (await client.runMethod(sender, 'get_nft_data')).stack;
+                    runStack.skip(1);
+                    const index = runStack.readBigNumber();
+                    const collection = runStack.readAddress();
+                    const itemAddress = (
+                        await client.runMethod(collection, 'get_nft_address_by_index', [{ type: 'int', value: index }])
+                    ).stack.readAddress();
+
+                    if (!itemAddress.equals(sender)) {
+                        console.log(`FAKE NFT Transfer`);
+                        continue;
+                    }
+
+                    if (forwardPayload.remainingBits < 32) {
+                        // if forward payload doesn't have opcode: it's a simple NFT transfer
+                        console.log(`NFT transfer from ${prevOwner}`);
+                    } else {
+                        const forwardOp = forwardPayload.loadUint(32);
+                        if (forwardOp == 0) {
+                            // if forward payload opcode is 0: it's a simple NFT transfer with comment
+                            const comment = forwardPayload.loadStringTail();
+                            console.log(`NFT transfer from ${prevOwner} with comment: "${comment}"`);
+                        } else {
+                            // if forward payload opcode is something else: it's some message with arbitrary structure
+                            // you may parse it manually if you know other opcodes or just print it as hex
+                            console.log(
+                                `NFT transfer with unknown payload structure from ${prevOwner} and payload: ${originalForwardPayload}`
+                            );
+                        }
+                    }
+
+                    console.log(`NFT Item: ${itemAddress}`);
+                    console.log(`NFT Collection: ${collection}`);
+                } else {
+                    // if opcode is something else: it's some message with arbitrary structure
+                    // you may parse it manually if you know other opcodes or just print it as hex
+                    console.log(
+                        `Message with unknown structure from ${sender} with value ${fromNano(
+                            value
+                        )} TON and body: ${originalBody}`
+                    );
+                }
+            }
+        }
+        console.log(`Transaction Hash: ${tx.hash().toString('hex')}`);
+        console.log(`Transaction LT: ${tx.lt}`);
+        console.log();
+    }
+}
+
+main().finally(() => console.log('Exiting...'));
+```
+
+</TabItem>
+</Tabs>
+
+Note that this example covers only the simplest case with incoming messages, where it is enough to fetch the transactions on a single account. If you want to go deeper and handle more complex chains of transactions and messages, you should take `tx.outMessages` field into an account. It contains the list of the output messages sent by smart-contract in the result of this transaction. To understand the whole logic better, you can read these articles:
+ * [Internal messages](/develop/smart-contracts/guidelines/internal-messages)
+ * [Message Delivery Guarantees](/develop/smart-contracts/guidelines/message-delivery-guarantees)

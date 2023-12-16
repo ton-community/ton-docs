@@ -104,7 +104,7 @@ PINATA_API_SECRET=your_secret_api_key
 MNEMONIC=word1 word2 word3 word4
 TONCENTER_API_KEY=aslfjaskdfjasasfas
 ```
-You can get toncenter api key from [@tontestnetapibot](https://t.me/@tontestnetapibot) ([@tonapibot](https://t.me/@tonapibot) for mainnet). In `MNEMONIC` variable store 24 words of collection owner wallet seed phrase.
+You can get toncenter api key from [@tonapibot](https://t.me/tonapibot) and choose mainnet or testnet. In `MNEMONIC` variable store 24 words of collection owner wallet seed phrase.
 
 Great! Now we are ready to start writing code for our project.
 
@@ -478,7 +478,7 @@ commonContentUrl | Base url for NFT items metadata
 Firstly let's write private method, that will return cell with code of our collection. 
 
 ```ts
-export class Collection {
+export class NftCollection {
   private collectionData: collectionData;
 
   constructor(collectionData: collectionData) {
@@ -693,12 +693,12 @@ Great! Now we can comeback to `NftItem.ts`. All we have to do is just send messa
 ```ts
 import { internal, SendMode } from "ton-core";
 import { OpenedWallet } from "utils";
-import { Collection, mintParams } from "./NftCollection";
+import { NftCollection, mintParams } from "./NftCollection";
 
 export class NftItem {
-  private collection: Collection;
+  private collection: NftCollection;
 
-  constructor(collection: Collection) {
+  constructor(collection: NftCollection) {
     this.collection = collection;
   }
 
@@ -1041,6 +1041,36 @@ msgBody.storeCoins(params.forwardAmount || 0);
 msgBody.storeBit(0); // no forward_payload 
 
 return msgBody.endCell();
+```
+
+And create a transfer function to transfer the NFT.
+
+```ts
+static async transfer(
+    wallet: OpenedWallet,
+    nftAddress: Address,
+    newOwner: Address
+  ): Promise<number> {
+    const seqno = await wallet.contract.getSeqno();
+
+    await wallet.contract.sendTransfer({
+      seqno,
+      secretKey: wallet.keyPair.secretKey,
+      messages: [
+        internal({
+          value: "0.05",
+          to: nftAddress,
+          body: this.createTransferBody({
+            newOwner,
+            responseTo: wallet.contract.address,
+            forwardAmount: toNano("0.02"),
+          }),
+        }),
+      ],
+      sendMode: SendMode.IGNORE_ERRORS + SendMode.PAY_GAS_SEPARATELY,
+    });
+    return seqno;
+  }
 ```
 
 Nice, now we can we are already very close to the end. Back to the `app.ts` and let's get address of our nft, that we want to put on sale:

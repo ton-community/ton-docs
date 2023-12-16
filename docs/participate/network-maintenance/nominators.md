@@ -23,6 +23,10 @@ To become a validator, you must meet two requirements: have a high-performance s
 
 ### Nominators
 
+:::info
+New version of Nominator Pool available, read more in the Single Nominator and Vesting Contract pages.
+:::
+
 It's evident that not everyone can afford to have 100,000s of Toncoin on their balance – here's where nominators come into play. Simply put, the nominator is a user who lends his TON to validators. Every time the validator earns a reward by validating blocks, it is distributed between the involved participants.
 
 Some time ago, Ton Whales ran the first staking pool on TON with a minimum deposit of 50 TON. Later, TON Foundation launched the first open nominator pool. Now, users may stake Toncoin in a fully-decentralized way, starting with **10,000 TON**.

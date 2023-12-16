@@ -43,7 +43,7 @@ Block ids are presented in the following format:
 [ last_mc_blocks:[BlockId0, BlockId1, ..., BlockId15]
   prev_key_block:BlockId ] : PrevBlocksInfo
 ```  
-Ids of the last 16 blocks of masterchain are included, as well as the last key block.
+Ids of the last 16 blocks of masterchain are included  (or less if masterchain seqno is less than 16), as well as the last key block.
 Inclusion of data on shardblocks may cause some data availability issues (due to merge/split events),
 it is not necessarily required (since any event/data can by proven using masterchain blocks) and thus we decided not to include it.
 

@@ -12,6 +12,8 @@ This page contents the list of useful libraries for TON Connect.
 * [TON Connect JS SDK](/develop/dapps/ton-connect/developers#ton-connect-js-sdk)
 * [TON Connect Python SDK](/develop/dapps/ton-connect/developers#ton-connect-python)
 * [TON Connect Dart](/develop/dapps/ton-connect/developers#ton-connect-dart)
+* [TON Connect C#](/develop/dapps/ton-connect/developers#ton-connect-c)
+* [TON Connect Unity](/develop/dapps/ton-connect/developers#ton-connect-unity)
 
 ## TON Connect React
 

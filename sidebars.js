@@ -243,14 +243,27 @@ const sidebars = {
           type: 'category',
           label: 'Telegram Mini Apps',
           items: [
-            'develop/dapps/telegram-apps/README',
-            'develop/dapps/telegram-apps/step-by-step-guide',
-            'develop/dapps/telegram-apps/app-examples',
+                    'develop/dapps/telegram-apps/README',
+                    'develop/dapps/telegram-apps/grants',
+                {
+            type: 'category',
+            label: 'Guidelines',
+            items: [
             'develop/dapps/telegram-apps/testing-apps',
             'develop/dapps/telegram-apps/publishing',
             'develop/dapps/telegram-apps/monetization',
-            'develop/dapps/telegram-apps/grants',
             'develop/dapps/telegram-apps/tips-and-tricks',
+            ],
+            },
+            {
+                type: 'category',
+                label: 'Tutorials & Examples',
+                items: [
+                    'develop/dapps/telegram-apps/step-by-step-guide',
+                    'develop/dapps/telegram-apps/app-examples',
+                    'develop/dapps/telegram-apps/design-guidelines',
+                ],
+            },
 
 
           ],
@@ -350,7 +363,12 @@ const sidebars = {
             {
               type: 'doc',
               id: 'develop/dapps/ton-connect/tg-bot-integration',
-              label: 'Telegram Bots',
+              label: 'Telegram Bots JS',
+            },
+            {
+              type: 'doc',
+              id: 'develop/dapps/ton-connect/tg-bot-integration-py',
+              label: 'Telegram Bots Python',
             },
           ],
         },
@@ -456,7 +474,6 @@ const sidebars = {
         'develop/fift/fift-deep-dive',
       ],
     },
-
     {
       type: 'category',
       label: 'TON Virtual Machine (TVM)',
@@ -464,10 +481,83 @@ const sidebars = {
         'learn/tvm-instructions/tvm-overview',
         'learn/tvm-instructions/tvm-initialization',
         'learn/tvm-instructions/tvm-exit-codes',
-        'learn/tvm-instructions/instructions',
         'learn/tvm-instructions/tvm-upgrade-2023-07',
+        {
+          type: 'category',
+          label: 'TVM Instructions',
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'learn/tvm-instructions/instructions'
+            },
+            {
+              type: 'doc',
+              label: 'Stack manipulation',
+              id: 'learn/tvm-instructions/instructions/stack-manipulation'
+            },
+            {
+              type: 'doc',
+              label: 'Tuple, List, and Null manipulation',
+              id: 'learn/tvm-instructions/instructions/tuple-list-null'
+            },
+            {
+              type: 'doc',
+              label: 'Constant operations',
+              id: 'learn/tvm-instructions/instructions/constant'
+            },
+            {
+              type: 'doc',
+              label: 'Arithmetic operations',
+              id: 'learn/tvm-instructions/instructions/arithmetic'
+            },
+            {
+              type: 'doc',
+              label: 'Data comparison',
+              id: 'learn/tvm-instructions/instructions/data-comparison'
+            },
+            {
+              type: 'doc',
+              label: 'Cell manipulation',
+              id: 'learn/tvm-instructions/instructions/cell-manipulation'
+            },
+            {
+              type: 'doc',
+              label: 'Continuation and control flow',
+              id: 'learn/tvm-instructions/instructions/control-flow'
+            },
+            {
+              type: 'doc',
+              label: 'Exception generating and handling',
+              id: 'learn/tvm-instructions/instructions/exception-gen-and-handling'
+            },
+            {
+              type: 'doc',
+              label: 'Dictionary manipulation',
+              id: 'learn/tvm-instructions/instructions/dictionary-manipulation'
+            },
+            {
+              type: 'doc',
+              label: 'Application-specific primitives',
+              id: 'learn/tvm-instructions/instructions/app-specific'
+            },
+            {
+              type: 'doc',
+              label: 'Miscellaneous',
+              id: 'learn/tvm-instructions/instructions/miscellaneous'
+            },
+          ]
+        }
       ],
     },
+    {
+          type: 'category',
+          label: 'Blockchain Fundamentals',
+          items: [
+              'develop/blockchain/shards',
+              'develop/blockchain/sharding-lifecycle',
+          ],
+        },
     {
       type: 'category',
       label: 'Data Formats',
@@ -537,6 +627,7 @@ const sidebars = {
             'participate/nodes/validator',
           ],
         },
+        'learn/archive/tvm-instructions'
       ],
     },
     {
@@ -589,6 +680,7 @@ const sidebars = {
       type: 'category',
       label: 'Blockchain Nodes',
       items: [
+          'participate/nodes/nodes-faq',
           'participate/nodes/node-types',
           'participate/run-nodes/full-node',
           'participate/run-nodes/archive-node',
@@ -602,6 +694,8 @@ const sidebars = {
       label: 'Network Infrastructure',
       items: [
         'participate/network-maintenance/staking-incentives',
+        'participate/network-maintenance/single-nominator',
+        'participate/network-maintenance/vesting-contract',
         'participate/network-maintenance/nominators',
         'participate/network-maintenance/persistent-states',
         'participate/nodes/collators',
@@ -661,6 +755,7 @@ const sidebars = {
       'label': 'Documentation',
       'items': [
         'contribute/docs/guidelines',
+        'contribute/docs/schemes-guidelines',
       ],
     },
     {

@@ -12,7 +12,7 @@ It is important that you take some time to become familiar with the tutorial str
 Before you start writing, *read the guidelines below*! They will help you ensure the level of standardization and quality that will make the review process much faster.
 :::
 
-Also, be sure to refer to the [**sample tutorial structure**](/contribute/sample-tutorial) we have provided.
+Also, be sure to refer to the [**sample tutorial structure**](/contribute/tutorials/sample-tutorial) we have provided.
 
 
 1. To begin, fork and then clone the [ton-docs](https://github.com/ton-community/ton-docs/) repository on GitHub and create a new branch in your local repository.
@@ -58,7 +58,7 @@ Regarding other word combinations like "TON + noun" (e.g., "the TON world," "the
 ## How to structure your tutorial
 
 :::info Sample tutorial structure
-Feel free to check out the [sample tutorial structure](/contribute/sample-tutorial) to see it with your own eyes.
+Feel free to check out the [sample tutorial structure](/contribute/tutorials/sample-tutorial) to see it with your own eyes.
 :::
 
 - The **Title** should be direct and clear, summarizing the tutorial's goal. Do not add the tutorial title as a heading inside the document; instead, use the markdown document filename. 
@@ -81,7 +81,7 @@ Feel free to check out the [sample tutorial structure](/contribute/sample-tutori
     - _For example_: "We have successfully deployed our contract."
   - When providing direct instructions, feel free to use “you”, “your”, etc.
     - _For example_: “*Your file should look like this:*”.
-- **Use Markdown properly** throughout your tutorial. Refer to [GitHub's markdown guide](https://guides.github.com/features/mastering-markdown/) as well as the [sample tutorial structure](/contribute/sample-tutorial).
+- **Use Markdown properly** throughout your tutorial. Refer to [GitHub's markdown guide](https://guides.github.com/features/mastering-markdown/) as well as the [sample tutorial structure](/contribute/tutorials/sample-tutorial).
 - **Do not use pre-formatted text for emphasis**, *for example*:
     - ❌ "TON counter `smart contract` named `counter.fc`" is incorrect.
     - ✅ "TON counter **smart contract** named `counter.fc`" is correct.
