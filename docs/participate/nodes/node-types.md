@@ -26,7 +26,7 @@ Such nodes are indispensable for creating blockchain explorers or other tools th
   [Running an Archive Node](/participate/run-nodes/archive-node)
 
 
-### Liteserver Node
+### Full Node + Liteserver
 
 When an endpoint is activated on a full node, the node assumes the role of a **Liteserver**. This node type can field and respond to requests from Lite Clients, allowing to seamlessly interract with the TON Blockchain.
 
@@ -41,7 +41,7 @@ The TON Foundation provides several public Liteservers, integrated into the glob
 - [Public Liteserver Configurations - mainnet](https://ton.org/global-config.json)
 - [Public Liteserver Configurations - testnet](https://ton.org/testnet-global.config.json)
 
-[Running a Liteserver](/participate/run-nodes/liteserver)
+[Enable Liteserver](/participate/run-nodes/full-node#enable-liteserver-mode)
 
 
 ### Validator Node
