@@ -270,9 +270,24 @@ MyTonInstaller> clcf
 Local config file created: /usr/bin/ton/local.config.json
 ```
 
-3. Copy the config file located on the specified path. You will need this file to connect to your liteserver.
+3. This file will help you to connect to your liteserver. Copy the config file located on the specified path to your home to save it.
+
+```bash
+cp /usr/bin/ton/local.config.json ~/config.json
+```
+
+4. Create an empty `config.json` file on your local machine.
+
+5. Copy the content from the console to your local machine `config.json` file.
+
+```bash
+cat ~/config.json
+```
+
 
 ### Interaction with Liteserver
+
+0. Create an empty project on your machine and paste `config.js` in the project directory.
 
 1. Install libraries.
 
@@ -341,6 +356,15 @@ Local config file created: /usr/bin/ton/local.config.json
   </TabItem>
   <TabItem value="js" label="JavaScript">
 
+  Change project type to `module` in your `package.json` file:
+
+  ```json
+  {
+    "type": "module"
+  }
+  ```
+
+  Create `index.js` file with the following content:
   ```js
   import { LiteSingleEngine } from 'ton-lite-client/dist/engines/single.js'
   import { LiteRoundRobinEngine } from 'ton-lite-client/dist/engines/roundRobin.js'
@@ -358,7 +382,6 @@ Local config file created: /usr/bin/ton/local.config.json
 }
 
   let server = config.liteservers[0];
-
 
   async function main() {
   const engines = [];
@@ -445,22 +468,50 @@ Local config file created: /usr/bin/ton/local.config.json
 ![logs](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytoncore-log.png)
 
 
-## FAQ
+## Troubleshooting
 
-This section contains answers to the most frequently asked questions about running a full node.
+This section contains answers to the most frequently asked questions about running a nodes.
 
-### Error 651
+### What does Error 651 mean?
 
-Error: 651 indicates that your node is unable to locate another node within the TON Blockchain.
+`[Error : 651 : no nodes]` indicates that your node is unable to locate another node within the TON Blockchain.
 
 Sometimes, this process can take up to 24 hours. However, if you've been receiving this error for several days, that means that your node cannot synchronize via current network connection.
+
+:::tip Solution
+You need to check the firewall settings, including any NAT settings if they exist.
+
+It should allow incoming connections on one specific port and outgoing connections from any port.
+:::
 
 ### Validator console is not settings
 
 If you see this error this means that you run `mytonctrl` not from the user you've installed it.
 
-Please, run `mytonctrl` from the user you've installed it (non-root user using sudo):
+:::tip Solution
+Run `mytonctrl` from the user you've installed it (non-root sudo user).
 
 ```bash
 sudo mytonctrl
 ```
+:::
+
+### What does block is not applied mean?
+
+Sometimes we get `block is not applied` or `block is not ready` for various request - is this normal?
+
+This is normal, typically this means you tried to retrieve block, wich does not reach the node you asked.
+
+:::tip Solution
+Retry request up to three times.
+:::
+
+### Out of Sync Issue with -d Flag
+
+If you encounter an issue where the `out of sync` equals the timestamp after downloading `mytonctrl` with the `-d` flag, it's possible that the dump wasn't installed correctly (or it's already out of date).
+
+:::tip Solution
+The recommended solution is to reinstall `mytonctrl` again with the new dump.
+:::
+
+If it takes a very long time to sync, there may have been issues with the dump. Please, [contact us](https://t.me/SwiftAdviser) for assistance.
