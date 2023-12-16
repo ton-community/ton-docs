@@ -3,7 +3,7 @@ import TabItem from '@theme/TabItem';
 
 # Running a Full Node
 
-To install and manage your own node, use the **MyTonCtrl** open source tool developed by TON Foundation. The majority of TON Nodes are reliable and tested by **mytonctrl**.
+To install and manage your own node, use the **MyTonCtrl** open-source tool developed by the TON Foundation. The majority of TON Nodes are reliable and tested by **mytonctrl**.
 
 [MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) is a console application that serves as a convenient wrapper for fift, lite-client, and validator-engine-console. It has been specifically developed to streamline wallet, domain, and validator management tasks on the Linux operating system.
 
@@ -11,7 +11,7 @@ We're collecting feedback about the installation process. If you have any questi
 
 ## Prerequisites
 
-We highly recommend install mytonctrl using the supported operating systems:
+We highly recommend installing mytonctrl using the supported operating systems:
 * Ubuntu 20.04
 * Ubuntu 22.04
 * Debian 11
@@ -20,11 +20,15 @@ Please, use a **non-root user** with **sudo** privileges to install and run myto
 
 ## Hardware requirements
 
-This requirements are for a **full node with a validator**. If you want to run a full node without a validator (e.g. liteserver), you can use a less powerful machine.
+These requirements are for a **full node with a validator**. If you want to run a full node without a validator (e.g., liteserver), you can use a less powerful machine.
 
-- at least 8 cores CPU
+* 16 x Cores CPU
+* 64GB Memory
+* 1TB NVME SSD OR Provisioned 64+k IOPS storage
+
+- at least 16 Cores CPU
 - at least 64 GB RAM
-- at least 512 GB NVMe SSD (25k+ IOPS)
+- at least 1 TB NVME SSD OR Provisioned 64K+ IOPS storage
 - 1 Gbit/s network connectivity
 - public IP address (_fixed IP address_)
 
@@ -32,7 +36,7 @@ You need a machine with a **fixed IP address** and a **high-bandwidth network co
 
 ### Recommended Providers
 
-The following providers are recommended by the TON Foundation for running a Validator:
+The TON Foundation recommends the following providers for running a Validator:
 
 #### AWS
 
@@ -105,7 +109,7 @@ The following providers are recommended by the TON Foundation for running a Vali
 
 [//]: # (<ReactPlayer controls={true} style={{borderRadius:'10pt', margin:'15pt auto', maxWidth: '100%'}} url='/docs/files/setup_validator.mp4' />)
 
-Please, check this video step-by-step tutorial to start promtly:
+Please, check this video step-by-step tutorial to start promptly:
 
 <video style={{borderRadius:'10pt', margin:'auto', width: '100%', maxWidth: '100%'}} controls={true}>
     <source src="/files/setup_validator.mp4" type="video/mp4" />
@@ -192,7 +196,7 @@ Example of the **status** command output:
 
 ![status](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/mytonctrl-status.png)
 
-Wait until `Local validator out of sync` become less than 20 seconds.
+Wait until `Local validator out of sync` becomes less than 20 seconds.
 
 ## Become a Validator
 
@@ -261,7 +265,7 @@ Compared to a validator, a liteserver mode requires less resources. However, it 
 
 1. Complete the previous steps to install [mytonctrl](/participate/run-nodes/full-node#step-by-step-instructions).
 
-2. Create config file
+2. Create a config file
 
 ```bash
 MyTonCtrl> installer
@@ -552,9 +556,9 @@ sudo mytonctrl
 ```
 :::
 
-### What does block is not applied mean?
+### What does "block is not applied" mean?
 
-Sometimes we get `block is not applied` or `block is not ready` for various request - is this normal?
+Sometimes we get `block is not applied` or `block is not ready` for various requests - is this normal?
 
 This is normal, typically this means you tried to retrieve block, wich does not reach the node you asked.
 
@@ -564,7 +568,7 @@ Retry request up to three times.
 
 ### Out of Sync Issue with -d Flag
 
-If you encounter an issue where the `out of sync` equals the timestamp after downloading `mytonctrl` with the `-d` flag, it's possible that the dump wasn't installed correctly (or it's already out of date).
+If you encounter an issue where the `out of sync` equals the timestamp after downloading `mytonctrl` with the `-d` flag, it's possible that the dump wasn't installed correctly (or it's already outdated).
 
 :::tip Solution
 The recommended solution is to reinstall `mytonctrl` again with the new dump.
