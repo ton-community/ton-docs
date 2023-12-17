@@ -330,6 +330,7 @@ async def main():
 
 
     await wallet.transfer(destination=DESTINATION_ADDRESS, amount=int(0.05*1e9), body="Example transfer body")
+	await client.close_all()
 
 asyncio.run(main())
 ```
@@ -442,6 +443,7 @@ async def main():
     jetton_wallet = (await provider.run_get_method(address=JETTON_MASTER_ADDRESS, method="get_wallet_address",
                                                    stack=[begin_cell().store_address(USER_ADDRESS).end_cell().begin_parse()]))[0].load_address()
     print(f"Jetton wallet address for {USER_ADDRESS}: {jetton_wallet.to_str(1, 1, 1)}")
+	await client.close_all()
 
 asyncio.run(main())
 ```
@@ -589,12 +591,13 @@ async def main():
                     .store_address(DESTINATION_ADDRESS) # Destination address
                     .store_address(USER_ADDRESS)        # Response address
                     .store_bit(0)                       # Custom payload is None
-                    .store_coins(0)                     # Ton forward amount in nanoton
+                    .store_coins(1)                     # Ton forward amount in nanoton
                     .store_bit(1)                       # Store forward_payload as a reference
                     .store_ref(forward_payload)         # Forward payload
                     .end_cell())
 
     await wallet.transfer(destination=USER_JETTON_WALLET, amount=int(0.05*1e9), body=transfer_cell)
+	await client.close_all()
 
 asyncio.run(main())
 ```
