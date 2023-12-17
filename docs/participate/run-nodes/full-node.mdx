@@ -3,20 +3,20 @@ import TabItem from '@theme/TabItem';
 
 # Running a Full Node
 
-To install and manage your own node, use the **MyTonCtrl** open-source tool developed by the TON Foundation. The majority of TON Nodes are reliable and tested by **mytonctrl**.
+To install and manage your own node, use the **MyTonCtrl** open-source tool developed by the TON Foundation. The majority of TON Nodes are reliable and tested by **MyTonCtrl**.
 
 [MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) is a console application that is a convenient wrapper for fift, lite-client, and validator-engine-console. It has been specifically developed to streamline wallet, domain, and validator management tasks on the Linux operating system.
 
-We're collecting feedback about the installation process. If you have any questions or suggestions, please, [contact us](https://t.me/SwiftAdviser).
+We are actively seeking feedback about the installation process. If you have any questions or suggestions, please [contact us](https://t.me/SwiftAdviser).
 
 ## Prerequisites
 
-We highly recommend installing mytonctrl using the supported operating systems:
+We highly recommend installing MyTonCtrl using the supported operating systems:
 * Ubuntu 20.04
 * Ubuntu 22.04
 * Debian 11
 
-Please, use a **non-root user** with **sudo** privileges to install and run mytonctrl.
+Please, use a **non-root user** with **sudo** privileges to install and run MyTonCtrl.
 
 ## Hardware requirements
 
@@ -28,7 +28,7 @@ These requirements are for a **full node with a validator**. If you want to run 
 - 1 Gbit/s network connectivity
 - public IP address (_fixed IP address_)
 
-You need a machine with a **fixed IP address** and a **high-bandwidth network connection** to run a TON Blockchain Full Node. Typically, you'll need a sufficiently powerful server in a data center with good network connectivity, using at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
+You need a machine with a **fixed IP address** and a **high-bandwidth network connection** to run a TON Blockchain Full Node. Typically, you'll need a sufficiently powerful server in a data center with reliable network connectivity, utilizing at least a 1 Gbit/s connection to accommodate peak loads reliably (the average load is expected to be approximately 100 Mbit/s).
 
 ### Recommended Providers
 
@@ -98,7 +98,7 @@ The TON Foundation recommends the following providers for running a Validator:
 - **Public IP:** Fixed IP address included with instance.
 
 :::info
-**Note:** Prices, configurations, and availability may vary. Always check the respective cloud provider's official documentation and pricing pages before making a decision.
+**Note:** Prices, configurations, and availability may vary. It is advisable to always check the official documentation and pricing pages of the respective cloud provider before making any decisions.
 :::
 
 ## How to run a Node? (video)
@@ -136,7 +136,7 @@ su - <username>
 ```
 
 
-### Install the mytonctrl
+### Install the MyTonCtrl
 
 Download and run the installation script from the **non-root** user account with **sudo** privileges. Choose your Linux distributive:
 
@@ -169,13 +169,13 @@ This will reduce synchronization time by several times.
 
 ### Run the mytonctrl
 
-1. Run **mytonctrl** console from the local user account used for installation in step 1:
+1. Run **MyTonCtrl** console from the local user account used for installation in step 1:
 
  ```sh
  sudo mytonctrl
   ```
 
-2. Check the mytonctrl status using the `status` command:
+2. Check the MyTonCtrl status using the `status` command:
 
   ```sh
   status
@@ -199,7 +199,7 @@ Wait until `Local validator out of sync` becomes less than 20 seconds.
 
 ### View the List of Wallets
 
-Check out the list of available wallets in the **mytonctrl** console using the `wl` command:
+Check out the list of available wallets in the **MyTonCtrl** console using the `wl` command:
 
 ```sh
 wl
@@ -259,7 +259,7 @@ Compared to a validator, a liteserver mode requires fewer resources. However, it
 
 ### Installation of liteserver
 
-1. Complete the previous steps to install [mytonctrl](/participate/run-nodes/full-node#step-by-step-instructions).
+1. Complete the previous steps to install [MyTonCtrl](/participate/run-nodes/full-node#step-by-step-instructions).
 
 2. Create a config file
 
@@ -286,7 +286,7 @@ cat ~/config.json
 
 ### Check the firewall settings
 
-First, verify the Liteserver port specified in your `config.json` file. This port changes with each new installation of `mytonctrl`. It is located in the `port` field:
+First, verify the Liteserver port specified in your `config.json` file. This port changes with each new installation of `MyTonCtrl`. It is located in the `port` field:
 
 ```json
 {
@@ -373,7 +373,7 @@ This way, you can open the port in the firewall settings of your server.
   </TabItem>
 </Tabs>
 
-2. Initialize client and request masterchain info to make sure liteserver is running.
+2. Initialize a client and request masterchain info to ensure the liteserver is running.
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
@@ -545,10 +545,10 @@ It should allow incoming connections on one specific port and outgoing connectio
 
 ### Validator console is not settings
 
-If you see this error this means that you run `mytonctrl` not from the user you've installed it.
+If you encounter this error, it indicates that you are running `MyTonCtrl` from a user other than the one you used for the installation.
 
 :::tip Solution
-Run `mytonctrl` from the user you've installed it (non-root sudo user).
+Run `MyTonCtrl` from the user you've installed it (non-root sudo user).
 
 ```bash
 sudo mytonctrl
@@ -567,10 +567,10 @@ Retry request up to three times.
 
 ### Out of Sync Issue with -d Flag
 
-If you encounter an issue where the `out of sync` equals the timestamp after downloading `mytonctrl` with the `-d` flag, it's possible that the dump wasn't installed correctly (or it's already outdated).
+If you encounter an issue where the `out of sync` equals the timestamp after downloading `MyTonCtrl` with the `-d` flag, it's possible that the dump wasn't installed correctly (or it's already outdated).
 
 :::tip Solution
-The recommended solution is to reinstall `mytonctrl` again with the new dump.
+The recommended solution is to reinstall `MyTonCtrl` again with the new dump.
 :::
 
-If it takes a very long time to sync, there may have been issues with the dump. Please, [contact us](https://t.me/SwiftAdviser) for assistance.
+If syncing takes an unusually long time, there may have been issues with the dump. Please [contact us](https://t.me/SwiftAdviser) for assistance.
