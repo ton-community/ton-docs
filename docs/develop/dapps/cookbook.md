@@ -440,8 +440,9 @@ async def main():
     USER_ADDRESS = "EQAsl59qOy9C2XL5452lGbHU9bI3l4lhRaopeNZ82NRK8nlA"
 
 
-    jetton_wallet = (await provider.run_get_method(address=JETTON_MASTER_ADDRESS, method="get_wallet_address",
-                                                   stack=[begin_cell().store_address(USER_ADDRESS).end_cell().begin_parse()]))[0].load_address()
+    result_stack = await provider.run_get_method(address=JETTON_MASTER_ADDRESS, method="get_wallet_address",
+                                                   stack=[begin_cell().store_address(USER_ADDRESS).end_cell().begin_parse()])
+    jetton_wallet = result_stack[0].load_address()
     print(f"Jetton wallet address for {USER_ADDRESS}: {jetton_wallet.to_str(1, 1, 1)}")
 	await client.close_all()
 
