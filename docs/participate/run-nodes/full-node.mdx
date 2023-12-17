@@ -5,7 +5,7 @@ import TabItem from '@theme/TabItem';
 
 To install and manage your own node, use the **MyTonCtrl** open-source tool developed by the TON Foundation. The majority of TON Nodes are reliable and tested by **mytonctrl**.
 
-[MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) is a console application that serves as a convenient wrapper for fift, lite-client, and validator-engine-console. It has been specifically developed to streamline wallet, domain, and validator management tasks on the Linux operating system.
+[MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) is a console application that is a convenient wrapper for fift, lite-client, and validator-engine-console. It has been specifically developed to streamline wallet, domain, and validator management tasks on the Linux operating system.
 
 We're collecting feedback about the installation process. If you have any questions or suggestions, please, [contact us](https://t.me/SwiftAdviser).
 
@@ -28,7 +28,7 @@ These requirements are for a **full node with a validator**. If you want to run 
 - 1 Gbit/s network connectivity
 - public IP address (_fixed IP address_)
 
-You need a machine with a **fixed IP address** and a **high-bandwidth network connection** to run a TON Blockchain Full Node. Typically you'll need a sufficiently powerful server in a data center with good network connectivity, using at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
+You need a machine with a **fixed IP address** and a **high-bandwidth network connection** to run a TON Blockchain Full Node. Typically, you'll need a sufficiently powerful server in a data center with good network connectivity, using at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
 
 ### Recommended Providers
 
@@ -175,7 +175,7 @@ This will reduce synchronization time by several times.
  sudo mytonctrl
   ```
 
-2. Check the mytonctrl statuses using the `status` command:
+2. Check the mytonctrl status using the `status` command:
 
   ```sh
   status
@@ -249,7 +249,7 @@ When an endpoint is activated in a full node, the node assumes the role of a **L
 
 ### Hardware requirements
 
-Compared to a validator, a liteserver mode requires less resources. However, it is still recommended to use a powerful machine to run a liteserver.
+Compared to a validator, a liteserver mode requires fewer resources. However, it is still recommended to use a powerful machine to run a liteserver.
 
 - at least 8 cores CPU
 - at least 8 GB RAM
@@ -491,7 +491,7 @@ This way, you can open the port in the firewall settings of your server.
           return
       }
 
-      // initialize ton api lite connection wrapper
+      // initialize ton API lite connection wrapper
       api := ton.NewAPIClient(client)
 
       master, err := api.GetMasterchainInfo(context.Background())
@@ -527,13 +527,13 @@ This way, you can open the port in the firewall settings of your server.
 
 ## Troubleshooting
 
-This section contains answers to the most frequently asked questions about running a nodes.
+This section contains answers to the most frequently asked questions about running nodes.
 
 ### What does Error 651 mean?
 
-`[Error : 651 : no nodes]` indicates that your node is unable to locate another node within the TON Blockchain.
+`[Error : 651 : no nodes]` indicates that your node cannot locate another node within the TON Blockchain.
 
-Sometimes, this process can take up to 24 hours. However, if you've been receiving this error for several days, that means that your node cannot synchronize via current network connection.
+Sometimes, this process can take up to 24 hours. However, if you've been receiving this error for several days, that means that your node cannot synchronize via a current network connection.
 
 :::tip Solution
 You need to check the firewall settings, including any NAT settings if they exist.
@@ -557,7 +557,7 @@ sudo mytonctrl
 
 Sometimes we get `block is not applied` or `block is not ready` for various requests - is this normal?
 
-This is normal, typically this means you tried to retrieve block, wich does not reach the node you asked.
+This is normal; typically, this means you tried to retrieve the block that did not reach the node you asked for.
 
 :::tip Solution
 Retry request up to three times.
