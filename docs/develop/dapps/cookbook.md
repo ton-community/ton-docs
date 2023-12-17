@@ -444,7 +444,7 @@ async def main():
                                                    stack=[begin_cell().store_address(USER_ADDRESS).end_cell().begin_parse()])
     jetton_wallet = result_stack[0].load_address()
     print(f"Jetton wallet address for {USER_ADDRESS}: {jetton_wallet.to_str(1, 1, 1)}")
-	await client.close_all()
+	await provider.close_all()
 
 asyncio.run(main())
 ```
