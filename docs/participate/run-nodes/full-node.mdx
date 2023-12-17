@@ -382,7 +382,7 @@ This way, you can open the port in the firewall settings of your server.
 
   ```json
   {
-    "type": "module"
+      "type": "module"
   }
   ```
 
@@ -395,28 +395,30 @@ This way, you can open the port in the firewall settings of your server.
 
 
   function intToIP(int ) {
-  var part1 = int & 255;
-  var part2 = ((int >> 8) & 255);
-  var part3 = ((int >> 16) & 255);
-  var part4 = ((int >> 24) & 255);
+      var part1 = int & 255;
+      var part2 = ((int >> 8) & 255);
+      var part3 = ((int >> 16) & 255);
+      var part4 = ((int >> 24) & 255);
 
-  return part4 + "." + part3 + "." + part2 + "." + part1;
-}
+      return part4 + "." + part3 + "." + part2 + "." + part1;
+  }
 
   let server = config.liteservers[0];
 
   async function main() {
-  const engines = [];
-  engines.push(new LiteSingleEngine({
-  host: `tcp://${intToIP(server.ip)}:${server.port}`,
-  publicKey: Buffer.from(server.id.key, 'base64'),
-}));
-  const engine = new LiteRoundRobinEngine(engines);
-  const client = new LiteClient({ engine });
-  const master = await client.getMasterchainInfo()
-  console.log('master', master)
+      const engines = [];
+      engines.push(new LiteSingleEngine({
+          host: `tcp://${intToIP(server.ip)}:${server.port}`,
+          publicKey: Buffer.from(server.id.key, 'base64'),
+      }));
 
-}
+      const engine = new LiteRoundRobinEngine(engines);
+      const client = new LiteClient({ engine });
+      const master = await client.getMasterchainInfo()
+      console.log('master', master)
+
+  }
+
   main()
 
   ```
@@ -424,7 +426,7 @@ This way, you can open the port in the firewall settings of your server.
   </TabItem>
   <TabItem value="python" label="Python">
 
-    ```python
+  ```python
     import asyncio
     from pytonlib import TonlibClient
     from pathlib import Path
@@ -454,7 +456,7 @@ This way, you can open the port in the firewall settings of your server.
 
     if __name__ == '__main__':
     asyncio.run(test_client())
-    ```
+  ```
 
   </TabItem>
   <TabItem value="go" label="Golang">
