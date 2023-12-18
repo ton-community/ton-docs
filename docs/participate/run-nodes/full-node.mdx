@@ -20,15 +20,18 @@ Please, use a **non-root user** with **sudo** privileges to install and run myto
 
 ## Hardware requirements
 
-This requirements are for a **full node with a validator**. If you want to run a full node without a validator (e.g. liteserver), you can use a less powerful machine.
+This requirements are for a **full node with a validator**. If you want to run a full node without a validator (e.g. [liteserver](/participate/run-nodes/full-node#hardware-requirements-1)), you can use a less powerful machine.
 
-- at least 8 cores CPU
-- at least 64 GB RAM
-- at least 512 GB NVMe SSD (25k+ IOPS)
+- 16 cores CPU
+- 64 GB RAM
+- 1TB NVME SSD _OR_ Provisioned 64+k IOPS storage
 - 1 Gbit/s network connectivity
 - public IP address (_fixed IP address_)
+- 16 TB/month traffic on peak load
 
-You need a machine with a **fixed IP address** and a **high-bandwidth network connection** to run a TON Blockchain Full Node. Typically you'll need a sufficiently powerful server in a data center with good network connectivity, using at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
+You need a machine with a **fixed IP address** and a **high-bandwidth network connection** to run a TON Blockchain Full Node.
+
+Typically you'll need a sufficiently powerful server in a data center with good network connectivity, using at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
 
 ### Recommended Providers
 
@@ -37,65 +40,72 @@ The following providers are recommended by the TON Foundation for running a Vali
 #### AWS
 
 - **Instance Type:** `m5.4xlarge`
-- **CPU:** 16 vCPUs
-- **RAM:** 64 GB
-- **Storage:**  Provisioned IOPS 512 GB SSD volume. (io1)
-- **Network:** Up to 10 Gbps
-- **Public IP:** Associate an Elastic IP for a fixed IP address.
+- **CPU:** `16 vCPUs`
+- **RAM:** `64 GB`
+- **Storage:** `1 TB NVMe SSD`
+- **Network:** `Up to 10 Gbps`
+- **Public IP:** `Associate an Elastic IP for a fixed IP address.`
+- **Traffic:** `16 TB/month`
 
 #### GCP (Google Cloud Platform)
 
-- **Machine Type:** `n2-highmem-8` or `n2d-highmem-8`
-- **CPU:** 8 vCPUs
-- **RAM:** 64 GB
-- **Storage:** Attach a 512 GB NVMe SSD persistent disk.
-- **Network:** 16 Gbps
-- **Public IP:** Reserve a static external IP address.
+- **Machine Type:** `n2-standard-16`
+- **CPU:** `16 vCPUs`
+- **RAM:** `64 GB`
+- **Storage:** `1 TB NVMe SSD persistent disk`
+- **Network:** `16 Gbps`
+- **Public IP:** `Reserve a static external IP address.`
+- **Traffic:** `16 TB/month`
 
 #### Alibaba Cloud
 
-- **Instance Type:** `ecs.g6.4xlarge` or `ecs.c6.4xlarge`
-- **CPU:** 16 vCPUs
-- **RAM:** 64 GB
-- **Storage:** Provision a 512 GB NVMe SSD disk.
-- **Network:** Up to 10 Gbps
-- **Public IP:** Bind an Elastic IP for a fixed IP address.
+- **Instance Type:** `ecs.g6.4xlarge`
+- **CPU:** `16 vCPUs`
+- **RAM:** `64 GB`
+- **Storage:** `1 TB NVMe SSD disk`
+- **Network:** `Up to 10 Gbps`
+- **Public IP:** `Bind an Elastic IP for a fixed IP address.`
+- **Traffic:** `16 TB/month`
 
 #### Tencent Cloud
 
-- **Instance Type:** `M5.2XLARGE`
-- **CPU:** 8 vCPUs
-- **RAM:** 64 GB
-- **Storage:** Provision a 512 GB NVMe SSD cloud disk.
-- **Network:** Up to 10 Gbps
-- **Public IP:** Associate an Elastic IP for a fixed IP address.
+- **Instance Type:** `M5.4XLARGE`
+- **CPU:** `16 vCPUs`
+- **RAM:** `64 GB`
+- **Storage:** `1 TB NVMe SSD cloud disk`
+- **Network:** `Up to 10 Gbps`
+- **Public IP:** `Associate an Elastic IP for a fixed IP address.`
+- **Traffic:** `16 TB/month`
 
 #### Vultr
 
 - **Instance Type:** `bare metal Intel E-2388G`
-- **CPU:** 8 Cores / 16 Threads
-- **RAM:** 128 GB
-- **Storage:** 1.92TB NVMe SSD
-- **Network:** 10 Gbps
-- **Public IP:** Fixed IP address included with instance.
+- **CPU:** `8 Cores / 16 Threads`
+- **RAM:** `128 GB`
+- **Storage:** `1.92TB NVMe SSD`
+- **Network:** `10 Gbps`
+- **Public IP:** `Fixed IP address included with instance.`
+- **Traffic:** `16 TB/month`
 
 #### DigitalOcean
 
 - **Instance Type:** `general purpose premium Intel`
-- **CPU:** 16 vCPUs
-- **RAM:** 64 GB
-- **Storage:** 480GB (Chose 2xSSD)
-- **Network:** 10 Gbps
-- **Public IP:** Fixed IP address included with instance.
+- **CPU:** `16 vCPUs`
+- **RAM:** `64 GB`
+- **Storage:** `1TB NVMe SSD`
+- **Network:** `10 Gbps`
+- **Public IP:** `Fixed IP address included with instance.`
+- **Traffic:** `16 TB/month`
 
 #### Latitude
 
 - **Instance Type:** `c3.medium.x86`
-- **CPU:** 16 Cores / 32 Threads
-- **RAM:** 128 GB
-- **Storage:** 1.9TB
-- **Network:** 10 Gbps
-- **Public IP:** Fixed IP address included with instance.
+- **CPU:** `16 Cores / 32 Threads`
+- **RAM:** `128 GB`
+- **Storage:** `1.9TB NVMe SSD`
+- **Network:** `10 Gbps`
+- **Public IP:** `Fixed IP address included with instance.`
+- **Traffic:** `16 TB/month`
 
 :::info
 **Note:** Prices, configurations, and availability may vary. Always check the respective cloud provider's official documentation and pricing pages before making a decision.
@@ -212,21 +222,25 @@ During the installation of **mytonctrl**, the **validator_wallet_001** wallet is
 
 ### Activate the Wallets
 
-Send the Required Number of Coins to the Wallet and Activate It
+1. Send the necessary number of coins to the wallet and activate it.
 
-To determine the minimum amount of coins required to participate in one election round, head to **tonmon.xyz** > **Participant stakes**.
+Recently (_at the end of 2023_), the approximate figures have been a minimum stake of around __340K TON__ and a maximum of about __1M TON__.
 
-* Use the `vas` command to display the history of transfers:
+Check current stakes with [tonscan.com](https://tonscan.com/validation) to understand necessary amount of coins.
 
-  ```sh
-  vas
-  ```
+Read more [how maximum and minimum stakes calculated](/participate/network-maintenance/staking-incentives#values-of-stakes-max-effective-stake).
 
-* Activate the wallet using the `aw` command
+2. Use the `vas` command to display the history of transfers:
 
-  ```sh
-  aw
-  ```
+```sh
+vas
+```
+
+3. Activate the wallet using the `aw` command
+
+```sh
+aw [wallet name]
+```
 
 ![account history](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-vas-aw_ru.png)
 
@@ -249,13 +263,23 @@ When an endpoint is activated in a full node, the node assumes the role of a **L
 
 ### Hardware requirements
 
-Compared to a validator, a liteserver mode requires less resources. However, it is still recommended to use a powerful machine to run a liteserver.
+Compared to a [validator](/participate/run-nodes/full-node#hardware-requirements), a liteserver mode requires less resources. However, it is still recommended to use a powerful machine to run a liteserver.
 
-- at least 8 cores CPU
-- at least 8 GB RAM
-- at least 512 GB NVMe SSD
+- at least 16 cores CPU
+- at least 64 GB RAM
+- at least 1TB GB NVMe SSD _OR_ Provisioned 32+k IOPS storage
 - 1 Gbit/s network connectivity
+- 16 TB/month traffic on peak load
 - public IP address (_fixed IP address_)
+
+#### Recommended Providers
+
+Feel free to use cloud providers listed in the [Recommended Providers](/participate/run-nodes/full-node#recommended-providers) section.
+
+Hetzner and OVH are forbidden to run a validator, but you can use them to run a liteserver:
+
+- __Hetzner__: EX101, AX102
+- __OVH__: RISE-4
 
 ### Installation of liteserver
 
@@ -515,9 +539,13 @@ This way, you can open the port in the firewall settings of your server.
 
 ## Tips & Tricks
 
+### List of available commands
+
 - You can use `help` to get a list of available commands:
 
-![help command](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-help_ru.png)
+![Help command](/img/docs/full-node/help.jpg)
+
+### Check the logs
 
 - To check **mytoncrl** logs, open `~/.local/share/mytoncore/mytoncore.log` for a local user or `/usr/local/bin/mytoncore/mytoncore.log` for Root.
 
@@ -554,13 +582,17 @@ sudo mytonctrl
 
 ### What does block is not applied mean?
 
-Sometimes we get `block is not applied` or `block is not ready` for various request - is this normal?
+__Q:__ Sometimes we get `block is not applied` or `block is not ready` for various request - is this normal?
 
-This is normal, typically this means you tried to retrieve block, wich does not reach the node you asked.
+__A:__ This is normal, typically this means you tried to retrieve block, which does not reach the node you asked.
 
-:::tip Solution
-Retry request up to three times.
-:::
+__Q:__ If comparative frequency appears, does it mean there is a problem somewhere?
+
+__A:__ No. You need to check "Local validator out of sync" value in mytonctrl. If it's less than 60 seconds, then everything is fine.
+
+But you need to keep in mind that the node is constantly synchronizing. Sometimes, you may try to receive a block that has not reached the node you requested.
+
+You need to repeat the request with a slight delay.
 
 ### Out of Sync Issue with -d Flag
 
@@ -571,3 +603,25 @@ The recommended solution is to reinstall `mytonctrl` again with the new dump.
 :::
 
 If it takes a very long time to sync, there may have been issues with the dump. Please, [contact us](https://t.me/SwiftAdviser) for assistance.
+
+
+### timed out after 3 seconds
+
+If you see this error this means that the liteserver you are trying to connect to is not available.
+
+The correct way to solve this issue for public liteservers is as follows:
+
+1. Download the config.json file from the tontech link:
+
+```bash
+wget https://api.tontech.io/ton/wallet-mainnet.autoconf.json -O /usr/bin/ton/global.config.json
+```
+
+It removes slow liteservers from the configuration file.
+
+2. Use the downloaded config.json file in your application with TON SDK.
+
+[Choose a TON SDK](/develop/dapps/apis/sdk)
+
+
+
