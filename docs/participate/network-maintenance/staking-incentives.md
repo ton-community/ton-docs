@@ -16,27 +16,45 @@ For each shardchain and masterchain a dedicated set of validators exists. Sets o
 
 In contrast, each shardchain is validated by a set of 23 validators (defined as Network Parameter `Config28:shard_validators_num`) and rotated randomly every 1000 seconds (Network Parameter `Config28:shard_validators_lifetime`).
 
-## Boundary Values of Stakes
+## Values of Stakes: Max Effective Stake
 
-The current max_factor is 3, meaning the stake of the smallest validator cannot be more than three times less than the stake of the largest one.
+The current `max_factor` in config is __3__, meaning the stake of the _smallest_ validator cannot be more than three times less than the stake of the _largest_ one.
 
-:::info
-Recently, the approximate figures have been a minimum stake of around 340 thousand Toncoins and a maximum of about one million Toncoins.
+The formula with the config parameters:
 
-Learn more about current validation stakes with [tonscan.com](https://tonscan.com/validation).
-:::
+`max_factor` =  [`max_stake_factor`](https://tonviewer.com/config#17) / [`validators_elected_for`](https://tonviewer.com/config#15)
 
-Based on the available stakes of potential validators, optimal values for the minimum and maximum stake are determined, with the aim of maximizing the magnitude of the total stake.
+### (Simplified) Selection Algorithm
 
-1. Elector takes all applicants who have a stake higher than the minimum ([300k](https://tonviewer.com/config#17)).
-2. Elector sorts them in descending order of stake.
+This algorithm, run by the [Elector smart contract](/develop/smart-contracts/governance#elector), selects the best validator candidates based on the stake they have committed. Here's a breakdown of how it works:
+
+1. **Initial Selection**: Elector considers all candidates who have staked more than a set minimum amount (300K, as specified in the [configuration](https://tonviewer.com/config#17)).
+
+2. **Ordering Candidates**: These candidates are then arranged from highest to lowest based on their stake.
+
+3. **Narrowing Down**:
+   - If the number of candidates exceeds the maximum allowed number of validators ([see configuration](https://tonviewer.com/config#16)), those with the lowest stakes are excluded.
+   - The Elector then evaluates each potential group of candidates, starting from the largest group and moving to smaller ones:
+      - It examines the top candidates in the ordered list, increasing the number one by one.
+      - For each candidate, Elector calculates their 'effective stake'. If a candidate's stake is significantly higher than the minimum, it's adjusted down (e.g., if someone staked 310k and the minimum is 100k, but there's a rule capping at three times the minimum, their effective stake is considered as 300k).
+      - It sums up the effective stakes of all candidates in this group.
+
+4. **Final Selection**: The group of candidates with the highest total effective stake is chosen as the validators by the Elector.
+
+
+#### Validator Selection Algorithm
+
+Based on the available stakes of potential validators, optimal values for the minimum and maximum stake are determined, with the aim of maximizing the magnitude of the total stake:
+
+1. Elector takes all applicants who have a stake higher than the minimum ([300K in config](https://tonviewer.com/config#17)).
+2. Elector sorts them in _descending_ order of stake.
 3. If there are more participants than the [maximum number](https://tonviewer.com/config#16) of validators, Elector discards the tail of the list. Then Elector does the following:
 
-   * For each cycle i from 1 to N (the remaining number of participants), it takes the first i applications from the sorted list.
-   * It calculates the effective stake, considering the `max_factor`. That is, if a person has put in 310k, but with a `max_factor` of 3, and the minimum stake in the list is 300k Toncoins, then the effective stake will be min(300k, 3*310k) = 300k.
-   * It calculates the total effective stake of all i participants.
+   * For each cycle __i__ from _1 to N_ (the remaining number of participants), it takes the first __i__ applications from the sorted list.
+   * It calculates the effective stake, considering the `max_factor`. That is, if a person has put in 310k, but with a `max_factor` of 3, and the minimum stake in the list is 100k Toncoins, then the effective stake will be min(310k, 3*100k) = 300k.
+   * It calculates the total effective stake of all __i__ participants.
 
-Once Elector finds such an i, where the total effective stake is maximal, we declare these i participants as validators.
+Once Elector finds such an __i__, where the total effective stake is maximal, we declare these __i__ participants as validators.
 
 ## Positive Incentives
 
