@@ -15,11 +15,15 @@ Please, use a **non-root user** with **sudo** privileges to install and run myto
 
 ## Hardware requirements 
 
-* at least 8 cores CPU 
-* at least 64 GB RAM 
-* at least 4TB SSD on your server
-* 1 Gbit/s network connectivity 
+* 16 x Cores CPU 
+* 128GB ECC Memory 
+* 4TB SSD _OR_ Provisioned 32+k IOPS storage
+* 1 Gbit/s network connectivity
+* 16 TB/month traffic on peak load
 * a public IP address (fixed IP address)
+
+
+__Note__: 4TB assumes usage of zfs volume with compression enabled
 
 ## Installation
 
