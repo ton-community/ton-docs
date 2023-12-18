@@ -3,20 +3,20 @@ import TabItem from '@theme/TabItem';
 
 # Running a Full Node
 
-To install and manage your own node, use the **MyTonCtrl** open source tool developed by TON Foundation. The majority of TON Nodes are reliable and tested by **mytonctrl**.
+To install and manage your own node, use the **MyTonCtrl** open-source tool developed by the TON Foundation. The majority of TON Nodes are reliable and tested by **MyTonCtrl**.
 
-[MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) is a console application that serves as a convenient wrapper for fift, lite-client, and validator-engine-console. It has been specifically developed to streamline wallet, domain, and validator management tasks on the Linux operating system.
+[MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) is a console application that is a convenient wrapper for fift, lite-client, and validator-engine-console. It has been specifically developed to streamline wallet, domain, and validator management tasks on the Linux operating system.
 
-We're collecting feedback about the installation process. If you have any questions or suggestions, please, [contact us](https://t.me/SwiftAdviser).
+We are actively seeking feedback about the installation process. If you have any questions or suggestions, please [contact us](https://t.me/SwiftAdviser).
 
 ## Prerequisites
 
-We highly recommend install mytonctrl using the supported operating systems:
+We highly recommend installing MyTonCtrl using the supported operating systems:
 * Ubuntu 20.04
 * Ubuntu 22.04
 * Debian 11
 
-Please, use a **non-root user** with **sudo** privileges to install and run mytonctrl.
+Please, use a **non-root user** with **sudo** privileges to install and run MyTonCtrl.
 
 ## Hardware requirements
 
@@ -35,7 +35,7 @@ Typically you'll need a sufficiently powerful server in a data center with good 
 
 ### Recommended Providers
 
-The following providers are recommended by the TON Foundation for running a Validator:
+The TON Foundation recommends the following providers for running a Validator:
 
 #### AWS
 
@@ -108,14 +108,14 @@ The following providers are recommended by the TON Foundation for running a Vali
 - **Traffic:** `16 TB/month`
 
 :::info
-**Note:** Prices, configurations, and availability may vary. Always check the respective cloud provider's official documentation and pricing pages before making a decision.
+**Note:** Prices, configurations, and availability may vary. It is advisable to always check the official documentation and pricing pages of the respective cloud provider before making any decisions.
 :::
 
 ## How to run a Node? (video)
 
 [//]: # (<ReactPlayer controls={true} style={{borderRadius:'10pt', margin:'15pt auto', maxWidth: '100%'}} url='/docs/files/setup_validator.mp4' />)
 
-Please, check this video step-by-step tutorial to start promtly:
+Please, check this video step-by-step tutorial to start promptly:
 
 <video style={{borderRadius:'10pt', margin:'auto', width: '100%', maxWidth: '100%'}} controls={true}>
     <source src="/files/setup_validator.mp4" type="video/mp4" />
@@ -127,7 +127,7 @@ Please, check this video step-by-step tutorial to start promtly:
 
 1. Login to your server as a **non-root** user with **sudo** privileges.
 
-2. If you don't have a non-root user, create it:
+2. If you don't have a non-root user, login as root and create it:
 
 ```bash
 sudo adduser <username>
@@ -146,7 +146,7 @@ su - <username>
 ```
 
 
-### Install the mytonctrl
+### Install the MyTonCtrl
 
 Download and run the installation script from the **non-root** user account with **sudo** privileges. Choose your Linux distributive:
 
@@ -179,13 +179,13 @@ This will reduce synchronization time by several times.
 
 ### Run the mytonctrl
 
-1. Run **mytonctrl** console from the local user account used for installation in step 1:
+1. Run **MyTonCtrl** console from the local user account used for installation in step 1:
 
  ```sh
  sudo mytonctrl
   ```
 
-2. Check the mytonctrl statuses using the `status` command:
+2. Check the MyTonCtrl status using the `status` command:
 
   ```sh
   status
@@ -202,14 +202,14 @@ Example of the **status** command output:
 
 ![status](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/mytonctrl-status.png)
 
-Wait until `Local validator out of sync` become less than 20 seconds.
+Wait until `Local validator out of sync` becomes less than 20 seconds.
 
 ## Become a Validator
 
 
 ### View the List of Wallets
 
-Check out the list of available wallets in the **mytonctrl** console using the `wl` command:
+Check out the list of available wallets in the **MyTonCtrl** console using the `wl` command:
 
 ```sh
 wl
@@ -283,9 +283,9 @@ Hetzner and OVH are forbidden to run a validator, but you can use them to run a 
 
 ### Installation of liteserver
 
-1. Complete the previous steps to install [mytonctrl](/participate/run-nodes/full-node#step-by-step-instructions).
+1. Complete the previous steps to install [MyTonCtrl](/participate/run-nodes/full-node#step-by-step-instructions).
 
-2. Create config file
+2. Create a config file
 
 ```bash
 MyTonCtrl> installer
@@ -310,7 +310,7 @@ cat ~/config.json
 
 ### Check the firewall settings
 
-First, verify the Liteserver port specified in your `config.json` file. This port changes with each new installation of `mytonctrl`. It is located in the `port` field:
+First, verify the Liteserver port specified in your `config.json` file. This port changes with each new installation of `MyTonCtrl`. It is located in the `port` field:
 
 ```json
 {
@@ -397,7 +397,7 @@ This way, you can open the port in the firewall settings of your server.
   </TabItem>
 </Tabs>
 
-2. Initialize client and request masterchain info to make sure liteserver is running.
+2. Initialize a client and request masterchain info to ensure the liteserver is running.
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
@@ -406,7 +406,7 @@ This way, you can open the port in the firewall settings of your server.
 
   ```json
   {
-    "type": "module"
+      "type": "module"
   }
   ```
 
@@ -419,28 +419,30 @@ This way, you can open the port in the firewall settings of your server.
 
 
   function intToIP(int ) {
-  var part1 = int & 255;
-  var part2 = ((int >> 8) & 255);
-  var part3 = ((int >> 16) & 255);
-  var part4 = ((int >> 24) & 255);
+      var part1 = int & 255;
+      var part2 = ((int >> 8) & 255);
+      var part3 = ((int >> 16) & 255);
+      var part4 = ((int >> 24) & 255);
 
-  return part4 + "." + part3 + "." + part2 + "." + part1;
-}
+      return part4 + "." + part3 + "." + part2 + "." + part1;
+  }
 
   let server = config.liteservers[0];
 
   async function main() {
-  const engines = [];
-  engines.push(new LiteSingleEngine({
-  host: `tcp://${intToIP(server.ip)}:${server.port}`,
-  publicKey: Buffer.from(server.id.key, 'base64'),
-}));
-  const engine = new LiteRoundRobinEngine(engines);
-  const client = new LiteClient({ engine });
-  const master = await client.getMasterchainInfo()
-  console.log('master', master)
+      const engines = [];
+      engines.push(new LiteSingleEngine({
+          host: `tcp://${intToIP(server.ip)}:${server.port}`,
+          publicKey: Buffer.from(server.id.key, 'base64'),
+      }));
 
-}
+      const engine = new LiteRoundRobinEngine(engines);
+      const client = new LiteClient({ engine });
+      const master = await client.getMasterchainInfo()
+      console.log('master', master)
+
+  }
+
   main()
 
   ```
@@ -448,7 +450,7 @@ This way, you can open the port in the firewall settings of your server.
   </TabItem>
   <TabItem value="python" label="Python">
 
-    ```python
+  ```python
     import asyncio
     from pytonlib import TonlibClient
     from pathlib import Path
@@ -478,7 +480,7 @@ This way, you can open the port in the firewall settings of your server.
 
     if __name__ == '__main__':
     asyncio.run(test_client())
-    ```
+  ```
 
   </TabItem>
   <TabItem value="go" label="Golang">
@@ -487,43 +489,44 @@ This way, you can open the port in the firewall settings of your server.
   package main
 
   import (
-  "context"
-  "encoding/json"
-  "io/ioutil"
-  "log"
-  "github.com/xssnick/tonutils-go/liteclient"
-  "github.com/xssnick/tonutils-go/ton"
+      "context"
+      "encoding/json"
+      "io/ioutil"
+      "log"
+      "github.com/xssnick/tonutils-go/liteclient"
+      "github.com/xssnick/tonutils-go/ton"
   )
 
   func main() {
-  client := liteclient.NewConnectionPool()
+      client := liteclient.NewConnectionPool()
 
-  content, err := ioutil.ReadFile("./config.json")
-  if err != nil {
-  log.Fatal("Error when opening file: ", err)
-}
+      content, err := ioutil.ReadFile("./config.json")
+      if err != nil {
+          log.Fatal("Error when opening file: ", err)
+      }
 
-  config := liteclient.GlobalConfig{}
-  err = json.Unmarshal(content, &config)
-  if err != nil {
-  log.Fatal("Error during Unmarshal(): ", err)
-}
+      config := liteclient.GlobalConfig{}
+      err = json.Unmarshal(content, &config)
+      if err != nil {
+          log.Fatal("Error during Unmarshal(): ", err)
+      }
 
-  err = client.AddConnectionsFromConfig(context.Background(), &config)
-  if err != nil {
-  log.Fatalln("connection err: ", err.Error())
-  return
-}
+      err = client.AddConnectionsFromConfig(context.Background(), &config)
+      if err != nil {
+          log.Fatalln("connection err: ", err.Error())
+          return
+      }
 
-  // initialize ton api lite connection wrapper
-  api := ton.NewAPIClient(client)
+      // initialize ton API lite connection wrapper
+      api := ton.NewAPIClient(client)
 
-  master, err := api.GetMasterchainInfo(context.Background())
-  if err != nil {
-  log.Fatalln("get masterchain info err: ", err.Error())
-  return
-}
-  log.Println(master)
+      master, err := api.GetMasterchainInfo(context.Background())
+      if err != nil {
+          log.Fatalln("get masterchain info err: ", err.Error())
+          return
+      }
+
+      log.Println(master)
 }
 
   ```
@@ -554,13 +557,13 @@ This way, you can open the port in the firewall settings of your server.
 
 ## Troubleshooting
 
-This section contains answers to the most frequently asked questions about running a nodes.
+This section contains answers to the most frequently asked questions about running nodes.
 
 ### What does Error 651 mean?
 
-`[Error : 651 : no nodes]` indicates that your node is unable to locate another node within the TON Blockchain.
+`[Error : 651 : no nodes]` indicates that your node cannot locate another node within the TON Blockchain.
 
-Sometimes, this process can take up to 24 hours. However, if you've been receiving this error for several days, that means that your node cannot synchronize via current network connection.
+Sometimes, this process can take up to 24 hours. However, if you've been receiving this error for several days, that means that your node cannot synchronize via a current network connection.
 
 :::tip Solution
 You need to check the firewall settings, including any NAT settings if they exist.
@@ -570,19 +573,19 @@ It should allow incoming connections on one specific port and outgoing connectio
 
 ### Validator console is not settings
 
-If you see this error this means that you run `mytonctrl` not from the user you've installed it.
+If you encounter this error, it indicates that you are running `MyTonCtrl` from a user other than the one you used for the installation.
 
 :::tip Solution
-Run `mytonctrl` from the user you've installed it (non-root sudo user).
+Run `MyTonCtrl` from the user you've installed it (non-root sudo user).
 
 ```bash
 sudo mytonctrl
 ```
 :::
 
-### What does block is not applied mean?
+### What does "block is not applied" mean?
 
-__Q:__ Sometimes we get `block is not applied` or `block is not ready` for various request - is this normal?
+__Q:__ Sometimes we get `block is not applied` or `block is not ready` for various requests - is this normal?
 
 __A:__ This is normal, typically this means you tried to retrieve block, which does not reach the node you asked.
 
@@ -596,13 +599,13 @@ You need to repeat the request with a slight delay.
 
 ### Out of Sync Issue with -d Flag
 
-If you encounter an issue where the `out of sync` equals the timestamp after downloading `mytonctrl` with the `-d` flag, it's possible that the dump wasn't installed correctly (or it's already out of date).
+If you encounter an issue where the `out of sync` equals the timestamp after downloading `MyTonCtrl` with the `-d` flag, it's possible that the dump wasn't installed correctly (or it's already outdated).
 
 :::tip Solution
-The recommended solution is to reinstall `mytonctrl` again with the new dump.
+The recommended solution is to reinstall `MyTonCtrl` again with the new dump.
 :::
 
-If it takes a very long time to sync, there may have been issues with the dump. Please, [contact us](https://t.me/SwiftAdviser) for assistance.
+If syncing takes an unusually long time, there may have been issues with the dump. Please [contact us](https://t.me/SwiftAdviser) for assistance.
 
 
 ### timed out after 3 seconds
@@ -622,6 +625,5 @@ It removes slow liteservers from the configuration file.
 2. Use the downloaded config.json file in your application with TON SDK.
 
 [Choose a TON SDK](/develop/dapps/apis/sdk)
-
 
 

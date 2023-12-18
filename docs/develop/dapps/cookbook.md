@@ -313,16 +313,40 @@ runBlocking {
 ```
 </TabItem>
 
+<TabItem value="py" label="Python">
+
+```py
+from pytoniq import LiteBalancer, WalletV4R2
+import asyncio
+
+mnemonics = ["your", "mnemonics", "here"]
+
+async def main():
+    provider = LiteBalancer.from_mainnet_config(1)
+    await provider.start_up()
+
+    wallet = await WalletV4R2.from_mnemonic(provider=provider, mnemonics=mnemonics)
+    DESTINATION_ADDRESS = "DESTINATION ADDRESS HERE"
+
+
+    await wallet.transfer(destination=DESTINATION_ADDRESS, amount=int(0.05*1e9), body="Example transfer body")
+	await client.close_all()
+
+asyncio.run(main())
+```
+
+</TabItem>
+
 </Tabs>
 
 ### How to calculate user's Jetton wallet address?
 
-To calculate the user's jetton wallet address, we need to call the "get_wallet_address" get-method of the jetton master contract with user address actually. For this task we can easily use getWalletAddress method from JettonMaster or call master contract by ourselves. 
+To calculate the user's jetton wallet address, we need to call the "get_wallet_address" get-method of the jetton master contract with user address actually. For this task we can easily use getWalletAddress method from JettonMaster or call master contract by ourselves.
 
 <Tabs groupId="code-examples">
 <TabItem value="user-jetton-wallet-method-js" label="Use getWalletAddress method">
 
-```js 
+```js
 const { Address, beginCell } = require("@ton/core")
 const { TonClient, JettonMaster } = require("@ton/ton")
 
@@ -344,14 +368,14 @@ console.log(await jettonMaster.getWalletAddress(userAddress))
 const { Address, beginCell } = require("@ton/core")
 const { TonClient } = require("@ton/ton")
 
-async function getUserWalletAddress(userAddress, jettonMasterAddress) {    
+async function getUserWalletAddress(userAddress, jettonMasterAddress) {
     const client = new TonClient({
       endpoint: 'https://toncenter.com/api/v2/jsonRPC',
     });
     const userAddressCell = beginCell().storeAddress(userAddress).endCell()
-    
+
     const response = await client.runMethod(jettonMasterAddress, "get_wallet_address", [{type: "slice", cell: userAddressCell}])
-    return response.stack.readAddress() 
+    return response.stack.readAddress()
 }
 const jettonMasterAddress = Address.parse('...') // for example EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE
 const userAddress = Address.parse('...')
@@ -402,6 +426,30 @@ println(jettonWalletAddress.toString(userFriendly = true))
 ```
 </TabItem>
 
+<TabItem value="py" label="Python">
+
+```py
+from pytoniq import LiteBalancer, begin_cell
+import asyncio
+
+async def main():
+    provider = LiteBalancer.from_mainnet_config(1)
+    await provider.start_up()
+
+    JETTON_MASTER_ADDRESS = "EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE"
+    USER_ADDRESS = "EQAsl59qOy9C2XL5452lGbHU9bI3l4lhRaopeNZ82NRK8nlA"
+
+
+    result_stack = await provider.run_get_method(address=JETTON_MASTER_ADDRESS, method="get_wallet_address",
+                                                   stack=[begin_cell().store_address(USER_ADDRESS).end_cell().begin_parse()])
+    jetton_wallet = result_stack[0].load_address()
+    print(f"Jetton wallet address for {USER_ADDRESS}: {jetton_wallet.to_str(1, 1, 1)}")
+	await provider.close_all()
+
+asyncio.run(main())
+```
+</TabItem>
+
 </Tabs>
 
 ### How to construct a message for a jetton transfer with a comment?
@@ -417,12 +465,12 @@ import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/
 async function main() {
     const jettonWalletAddress = Address.parse('put your jetton wallet address');
     const destinationAddress = Address.parse('put destination wallet address');
-    
+
     const forwardPayload = beginCell()
         .storeUint(0, 32) // 0 opcode means we have a comment
         .storeStringTail('Hello, TON!')
         .endCell();
-    
+
     const messageBody = beginCell()
         .storeUint(0x0f8a7ea5, 32) // opcode for jetton transfer
         .storeUint(0, 64) // query id
@@ -469,12 +517,12 @@ async function main() {
     forwardPayload.bits.writeString('Hello, TON!');
 
     /*
-        Tonweb has a built-in class for interacting with jettons, which has 
-        a method for creating a transfer. However, it has disadvantages, so 
-        we manually create the message body. Additionally, this way we have a 
+        Tonweb has a built-in class for interacting with jettons, which has
+        a method for creating a transfer. However, it has disadvantages, so
+        we manually create the message body. Additionally, this way we have a
         better understanding of what is stored and how it functions.
      */
-    
+
     const jettonTransferBody = new TonWeb.boc.Cell();
     jettonTransferBody.bits.writeUint(0xf8a7ea5, 32); // opcode for jetton transfer
     jettonTransferBody.bits.writeUint(0, 64); // query id
@@ -490,8 +538,8 @@ async function main() {
     const jettonWallet = new TonWeb.token.ft.JettonWallet(tonweb.provider, {
         address: 'put your jetton wallet address'
     });
-    
-    // available wallet types: simpleR1, simpleR2, simpleR3, 
+
+    // available wallet types: simpleR1, simpleR2, simpleR3,
     // v2R1, v2R2, v3R1, v3R2, v4R1, v4R2
     const wallet = new tonweb.wallet.all['v4R2'](tonweb.provider, {
         publicKey: keyPair.publicKey,
@@ -512,6 +560,51 @@ main().finally(() => console.log("Exiting..."));
 ```
 
 </TabItem>
+
+<TabItem value="py" label="Python">
+
+```py
+from pytoniq import LiteBalancer, WalletV4R2, begin_cell
+import asyncio
+
+mnemonics = ["your", "mnemonics", "here"]
+
+async def main():
+    provider = LiteBalancer.from_mainnet_config(1)
+    await provider.start_up()
+
+    wallet = await WalletV4R2.from_mnemonic(provider=provider, mnemonics=mnemonics)
+    USER_ADDRESS = wallet.address
+    JETTON_MASTER_ADDRESS = "EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE"
+    DESTINATION_ADDRESS = "EQAsl59qOy9C2XL5452lGbHU9bI3l4lhRaopeNZ82NRK8nlA"
+
+    USER_JETTON_WALLET = (await provider.run_get_method(address=JETTON_MASTER_ADDRESS,
+                                                        method="get_wallet_address",
+                                                        stack=[begin_cell().store_address(USER_ADDRESS).end_cell().begin_parse()]))[0]
+    forward_payload = (begin_cell()
+                      .store_uint(0, 32) # TextComment op-code
+                      .store_snake_string("Comment")
+                      .end_cell())
+    transfer_cell = (begin_cell()
+                    .store_uint(0xf8a7ea5, 32)          # Jetton Transfer op-code
+                    .store_uint(0, 64)                  # query_id
+                    .store_coins(1)                     # Jetton amount to transfer in nanojetton
+                    .store_address(DESTINATION_ADDRESS) # Destination address
+                    .store_address(USER_ADDRESS)        # Response address
+                    .store_bit(0)                       # Custom payload is None
+                    .store_coins(1)                     # Ton forward amount in nanoton
+                    .store_bit(1)                       # Store forward_payload as a reference
+                    .store_ref(forward_payload)         # Forward payload
+                    .end_cell())
+
+    await wallet.transfer(destination=USER_JETTON_WALLET, amount=int(0.05*1e9), body=transfer_cell)
+	await client.close_all()
+
+asyncio.run(main())
+```
+
+</TabItem>
+
 </Tabs>
 
 To indicate that we want to include a comment, we specify 32 zero bits and then write our comment. We also specify the `response destination`, which means that a response regarding the successful transfer will be sent to this address. If we don't want a response, we can specify 2 zero bits instead of an address.
@@ -677,8 +770,8 @@ To begin with, let's assume that the minimum amount of TON for the storage fee i
     }
 
 	/*
-		We need to write our custom serialization and deserialization 
-		functions to store data correctly in the dictionary since the 
+		We need to write our custom serialization and deserialization
+		functions to store data correctly in the dictionary since the
 		built-in functions in the library are not suitable for our case.
 	*/
     const messageBody = beginCell()
@@ -776,7 +869,7 @@ async function main() {
     messageBody.bits.writeUint(0, 64); // query id
     messageBody.bits.writeAddress(newOwnerAddress);
 
-    // available wallet types: simpleR1, simpleR2, simpleR3, 
+    // available wallet types: simpleR1, simpleR2, simpleR3,
     // v2R1, v2R2, v3R1, v3R2, v4R1, v4R2
     const keyPair = await mnemonicToKeyPair('put your mnemonic'.split(' '));
     const wallet = new tonweb.wallet.all['v4R2'](tonweb.provider, {
@@ -929,7 +1022,7 @@ Additionally, we need to include royalty information in our message, as they als
 
 ### Processing Snake Cells
 
-Some times it's necessary to store long strings (or other large information) while cells can hold **maximum 1023 bits**. In this case, we can use snake cells. Snake cells are cells that contain a reference to another cell, which, in turn, contains a reference to another cell, and so on. 
+Some times it's necessary to store long strings (or other large information) while cells can hold **maximum 1023 bits**. In this case, we can use snake cells. Snake cells are cells that contain a reference to another cell, which, in turn, contains a reference to another cell, and so on.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-tonweb" label="JS (tonweb)">
@@ -963,7 +1056,7 @@ function readStringTail(cell) {
 let cell = new TonWeb.boc.Cell();
 const str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In euismod, ligula vel lobortis hendrerit, lectus sem efficitur enim, vel efficitur nibh dui a elit. Quisque augue nisi, vulputate vitae mauris sit amet, iaculis lobortis nisi. Aenean molestie ultrices massa eu fermentum. Cras rhoncus ipsum mauris, et egestas nibh interdum in. Maecenas ante ipsum, sodales eget suscipit at, placerat ut turpis. Nunc ac finibus dui. Donec sit amet leo id augue tempus aliquet. Vestibulum eu aliquam ex, sit amet suscipit odio. Vestibulum et arcu dui.";
 cell = writeStringTail(str, cell);
-const text = readStringTail(cell); 
+const text = readStringTail(cell);
 console.log(text);
 ```
 
