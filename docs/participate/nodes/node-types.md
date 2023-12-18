@@ -30,19 +30,32 @@ Such nodes are indispensable for creating blockchain explorers or other tools th
 
 When an endpoint is activated on a full node, the node assumes the role of a **Liteserver**. This node type can field and respond to requests from Lite Clients, allowing to seamlessly interract with the TON Blockchain.
 
-#### Interaction with Lite Clients
+#### Lite Clients: the SDKs to interact with TON
 
 Liteservers enable swift communication with Lite Clients, facilitating tasks like retrieving balance or submitting transactions without necessitating the full block history.
 
-#### Public Liteservers
+Each SDK which supports ADNL protocol can be used as a Lite Client with `config.json` file. The `config.json` file contains a list of endpoints that can be used to connect to the TON Blockchain.
+
+[Choose a TON SDK](/develop/dapps/apis/sdk)
+
+Each SDK without ADNL support usually uses HTTP middleware to connect to the TON Blockchain. It's less secure and slower than ADNL, but it's easier to use.
+
+#### Interaction with TON: Public Liteservers (endpoints)
 
 The TON Foundation provides several public Liteservers, integrated into the global config, which are accessible for universal use. These endpoints, such as those used by standard wallets, ensure that even without setting up a personal liteserver, interaction with the TON Blockchain remains possible.
 
 - [Public Liteserver Configurations - mainnet](https://ton.org/global-config.json)
 - [Public Liteserver Configurations - testnet](https://ton.org/testnet-global.config.json)
 
-[Enable Liteserver](/participate/run-nodes/full-node#enable-liteserver-mode)
+Use the downloaded `config.json` file in your application with TON SDK.
 
+[Choose a TON SDK](/develop/dapps/apis/sdk)
+
+#### Running a Full Node as a Liteserver
+
+If your project requires a high level of _security_, you can run your own Liteserver. To run a full node as a Liteserver, simply enable the Liteserver mode in your node's configuration file:
+
+[Enable Liteserver in your Node](/participate/run-nodes/full-node#enable-liteserver-mode)
 
 ### Validator Node
 
