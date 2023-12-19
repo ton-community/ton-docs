@@ -618,15 +618,6 @@ const sidebars = {
         'develop/archive/mining',
         'develop/smart-contracts/compile/README',
         'develop/smart-contracts/environment/installation',
-        {
-          type: 'category',
-          label: 'Old Nodes Articles',
-          items: [
-            'participate/nodes/lite-client',
-            'participate/nodes/full-node',
-            'participate/nodes/validator',
-          ],
-        },
         'learn/archive/tvm-instructions'
       ],
     },

@@ -607,23 +607,3 @@ The recommended solution is to reinstall `MyTonCtrl` again with the new dump.
 
 If syncing takes an unusually long time, there may have been issues with the dump. Please [contact us](https://t.me/SwiftAdviser) for assistance.
 
-
-### timed out after 3 seconds
-
-If you see this error this means that the liteserver you are trying to connect to is not available.
-
-The correct way to solve this issue for public liteservers is as follows:
-
-1. Download the config.json file from the tontech link:
-
-```bash
-wget https://api.tontech.io/ton/wallet-mainnet.autoconf.json -O /usr/bin/ton/global.config.json
-```
-
-It removes slow liteservers from the configuration file.
-
-2. Use the downloaded config.json file in your application with TON SDK.
-
-[Choose a TON SDK](/develop/dapps/apis/sdk)
-
-
