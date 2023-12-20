@@ -607,3 +607,31 @@ The recommended solution is to reinstall `MyTonCtrl` again with the new dump.
 
 If syncing takes an unusually long time, there may have been issues with the dump. Please [contact us](https://t.me/SwiftAdviser) for assistance.
 
+Please, run `mytonctrl` from the user you've installed it.
+
+
+### Error command<...> timed out after 3 seconds
+
+This error means that the local node is not yet synchronized(out of sync lesser then 20 sec) and public nodes are being used.
+Public nodes do not always respond and end up with a timeout error.
+
+:::tip Solution
+The solution to the problem is to wait for the local node to synchronize or execute the same command several times before execution.
+:::
+
+### Local Validator Status command does not show the status properly
+
+Typically this means, something went wrong during installation and the step of creating/assigning a validator wallet was skipped.
+Also check that the validator wallet is specified.
+
+Check directly the following:
+
+```bash
+mytonctrl> get validatorWalletName
+```
+
+If validatorWalletName is null then execute the following:
+
+```bash
+mytonctrl> set validatorWalletName validator_wallet_001
+```
