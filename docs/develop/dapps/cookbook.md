@@ -710,6 +710,70 @@ runBlocking {
 }
 ```
 </TabItem>
+
+<TabItem value="py" label="Python">
+
+```py
+from pytoniq import Address, begin_cell, LiteBalancer, WalletV4R2
+import time
+import asyncio
+
+mnemonics = ["your", "mnemonics", "here"]
+
+async def main():
+    provider = LiteBalancer.from_mainnet_config(1)
+    await provider.start_up()
+
+    wallet = await WalletV4R2.from_mnemonic(provider=provider, mnemonics=mnemonics)
+
+    DEDUST_FACTORY = "EQBfBWT7X2BHg9tXAxzhz2aKiNTU1tpt5NsiK0uSDW_YAJ67"
+    DEDUST_NATIVE_VAULT = "EQDa4VOnTYlLvDJ0gZjNYm5PXfSmmtL6Vs6A_CZEtXCNICq_"
+    JETTON_MASTER = Address("EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE")
+
+    pool_type = 0 # Volatile pool type
+
+    asset_native = (begin_cell()
+                   .store_uint(0, 4) # Asset type is native
+                   .end_cell().begin_parse())
+    asset_jetton = (begin_cell()
+                   .store_uint(1, 4) # Asset type is jetton
+                   .store_uint(JETTON_MASTER.wc, 8)
+                   .store_bytes(JETTON_MASTER.hash_part)
+                   .end_cell().begin_parse())
+
+    pool_address = (await provider.run_get_method(address=DEDUST_FACTORY, method="get_pool_address",
+                                                  stack=[pool_type,
+                                                        asset_native, asset_jetton]
+                                                  ))[0].load_address()
+    
+    swap_params = (begin_cell()
+                  .store_uint(int(time.time() + 60 * 5), 32) # Deadline
+                  .store_address(wallet.address) # Recipient address
+                  .store_address(None) # Referall address
+                  .store_maybe_ref(None) # Fulfill payload
+                  .store_maybe_ref(None) # Reject payload
+                  .end_cell())
+    swap_body = (begin_cell()
+                .store_uint(0xea06185d, 32) # Swap op-code
+                .store_uint(0, 64) # Query id
+                .store_coins(int(1*1e9)) # Swap amount
+                .store_address(pool_address)
+                .store_uint(0, 1) # Swap kind
+                .store_coins(0) # Swap limit
+                .store_maybe_ref(None) # Next step for multi-hop swaps
+                .store_ref(swap_params)
+                .end_cell())
+
+    await wallet.transfer(destination=DEDUST_NATIVE_VAULT,
+                          amount=int(1.25*1e9), # Swap amount + gas
+                          body=swap_body)
+    
+    await provider.close_all()
+
+asyncio.run(main())
+```
+</TabItem>
+
 </Tabs>
 
 
@@ -1227,6 +1291,115 @@ main().finally(() => console.log('Exiting...'));
 ```
 
 </TabItem>
+
+<TabItem value="py" label="Python">
+
+```py
+from pytoniq import LiteBalancer, BlockIdExt, begin_cell
+import asyncio
+from block_scanner import BlockScanner # BlockScanner here: https://gist.github.com/shibdev/6691433812694dd6f211c6b5a4ddfec0
+
+async def handle_block(block: BlockIdExt):
+    if block.workchain == -1:  # skip masterchain blocks
+        return
+    transactions = await provider.raw_get_block_transactions_ext(block)
+    transactions = sorted(transactions, key=lambda x: x.lt)
+
+    for transaction in transactions:
+        if not transaction.in_msg.is_internal:
+            continue
+        if transaction.in_msg.info.dest.to_str(1, 1, 1) != MY_WALLET_ADDRESS:
+            continue
+
+        sender = transaction.in_msg.info.src.to_str(1, 1, 1)
+        value = transaction.in_msg.info.value_coins
+        if value != 0:
+            value = value / 1e9
+        
+        if len(transaction.in_msg.body.bits) < 32:
+            print(f"TON transfer from {sender} with value {value} TON")
+        else:
+            body_slice = transaction.in_msg.body.begin_parse()
+            op_code = body_slice.load_uint(32)
+            
+            # TextComment
+            if op_code == 0:
+                print(f"TON transfer from {sender} with value {value} TON and comment: {body_slice.load_snake_string()}")
+            
+            # Jetton Transfer Notification
+            elif op_code == 0x7362d09c:
+                body_slice.load_bits(64) # skip query_id
+                jetton_amount = body_slice.load_coins() / 1e9
+                jetton_sender = body_slice.load_address().to_str(1, 1, 1)
+                if body_slice.load_bit():
+                    forward_payload = body_slice.load_ref().begin_parse()
+                else:
+                    forward_payload = body_slice
+                
+                jetton_master = (await provider.run_get_method(address=sender, method="get_wallet_data", stack=[]))[2].load_address()
+                jetton_wallet = (await provider.run_get_method(address=jetton_master, method="get_wallet_address",
+                                                               stack=[
+                                                                        begin_cell().store_address(MY_WALLET_ADDRESS).end_cell().begin_parse()
+                                                                     ]))[0].load_address().to_str(1, 1, 1)
+
+                if jetton_wallet != sender:
+                    print("FAKE Jetton Transfer")
+                    continue
+                
+                if len(forward_payload.bits) < 32:
+                    print(f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton")
+                else:
+                    forward_payload_op_code = forward_payload.load_uint(32)
+                    if forward_payload_op_code == 0:
+                        print(f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton and comment: {forward_payload.load_snake_string()}")
+                    else:
+                        print(f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton and unknown payload: {forward_payload} ")
+            
+            # NFT Transfer Notification
+            elif op_code == 0x05138d91:
+                body_slice.load_bits(64) # skip query_id
+                prev_owner = body_slice.load_address().to_str(1, 1, 1)
+                if body_slice.load_bit():
+                    forward_payload = body_slice.load_ref().begin_parse()
+                else:
+                    forward_payload = body_slice
+
+                stack = await provider.run_get_method(address=sender, method="get_nft_data", stack=[])
+                index = stack[1]
+                collection = stack[2].load_address()
+                item_address = (await provider.run_get_method(address=collection, method="get_nft_address_by_index",
+                                                              stack=[index]))[0].load_address().to_str(1, 1, 1)
+
+                if item_address != sender:
+                    print("FAKE NFT Transfer")
+                    continue
+
+                if len(forward_payload.bits) < 32:
+                    print(f"NFT transfer from {prev_owner}")
+                else:
+                    forward_payload_op_code = forward_payload.load_uint(32)
+                    if forward_payload_op_code == 0:
+                        print(f"NFT transfer from {prev_owner} with comment: {forward_payload.load_snake_string()}")
+                    else:
+                        print(f"NFT transfer from {prev_owner} with unknown payload: {forward_payload}")
+
+                print(f"NFT Item: {item_address}")
+                print(f"NFT Collection: {collection}")
+        print(f"Transaction hash: {transaction.cell.hash.hex()}")
+        print(f"Transaction lt: {transaction.lt}")
+
+MY_WALLET_ADDRESS = "EQAsl59qOy9C2XL5452lGbHU9bI3l4lhRaopeNZ82NRK8nlA"
+provider = LiteBalancer.from_mainnet_config(1)
+
+async def main():
+    await provider.start_up()
+
+    await BlockScanner(client=provider, block_handler=handle_block).run()
+
+asyncio.run(main())
+```
+</TabItem>
+
 </Tabs>
 
 Note that this example covers only the simplest case with incoming messages, where it is enough to fetch the transactions on a single account. If you want to go deeper and handle more complex chains of transactions and messages, you should take `tx.outMessages` field into an account. It contains the list of the output messages sent by smart-contract in the result of this transaction. To understand the whole logic better, you can read these articles:
