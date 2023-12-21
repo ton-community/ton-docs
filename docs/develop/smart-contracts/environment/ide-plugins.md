@@ -15,7 +15,7 @@ This plugin can be used with any JetBrains product.
 
 There are several ways to install a plugin:
 - Find plugin directly in the IDE plugins section with "**TON Development**" keywords
-- [Marketplace link](https://plugins.jetbrains.com/plugin/18541-ton-development)
+- [Marketplace link](https://plugins.jetbrains.com/plugin/23382-ton)
 - [GitHub repository](https://github.com/ton-blockchain/intellij-ton)
 
 ## FunC Sublime Text plugin
