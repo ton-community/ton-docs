@@ -1,25 +1,24 @@
 # IDE plugins
 
+## IntelliJ IDEs Plugin
+
+![](/img/docs/ton-jetbrains-plugin.png)
+
+:::info
+This plugin can be used with any JetBrains product.
+:::
+
+There are several ways to install a plugin:
+- Find plugin directly in the IDE plugins section with "**TON**" keywords
+- [Marketplace link](https://plugins.jetbrains.com/plugin/23382-ton)
+- [GitHub repository](https://github.com/ton-blockchain/intellij-ton)
+
 ## VS Code plugin
 
 Visual Studio Code is a free and popular IDE for developers.
 
 - [Marketplace link](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode)
 - [GitHub repository](https://github.com/ton-foundation/vscode-func)
-
-## IntelliJ IDEs Plugin 
-
-:::info
-This plugin can be used with any JetBrains product.
-:::
-
-
-![](/img/docs/jetbrains-ton-plugin.jpg)
-
-There are several ways to install a plugin:
-- Find plugin directly in the IDE plugins section with "**TON**" keywords
-- [Marketplace link](https://plugins.jetbrains.com/plugin/23382-ton)
-- [GitHub repository](https://github.com/ton-blockchain/intellij-ton)
 
 ## FunC Sublime Text plugin
 
