@@ -1299,20 +1299,15 @@ main().finally(() => console.log('Exiting...'));
 <TabItem value="py" label="Python">
 
 ```py
-from pytoniq import LiteBalancer, BlockIdExt, begin_cell
+from pytoniq import LiteBalancer, begin_cell
 import asyncio
 
-async def handle_transactions(transactions, lt):
-    lts = []
-
+async def parse_transactions(transactions):
     for transaction in transactions:
         if not transaction.in_msg.is_internal:
             continue
         if transaction.in_msg.info.dest.to_str(1, 1, 1) != MY_WALLET_ADDRESS:
             continue
-        if lt != 0 and transaction.lt <= lt:
-            continue
-        lts.append(transaction.lt)
 
         sender = transaction.in_msg.info.src.to_str(1, 1, 1)
         value = transaction.in_msg.info.value_coins
@@ -1390,21 +1385,15 @@ async def handle_transactions(transactions, lt):
                 print(f"NFT Collection: {collection}")
         print(f"Transaction hash: {transaction.cell.hash.hex()}")
         print(f"Transaction lt: {transaction.lt}")
-    return lts
 
 MY_WALLET_ADDRESS = "EQAsl59qOy9C2XL5452lGbHU9bI3l4lhRaopeNZ82NRK8nlA"
 provider = LiteBalancer.from_mainnet_config(1)
 
 async def main():
     await provider.start_up()
-    max_lt = 0
-    while True:
-        transactions = await provider.get_transactions(address=MY_WALLET_ADDRESS, count=10)
-        if bool(transactions):
-            lts = await handle_transactions(transactions, max_lt)
-            if bool(lts):
-                max_lt = max(lts)
-        await asyncio.sleep(1)
+    transactions = await provider.get_transactions(address=MY_WALLET_ADDRESS, count=5)
+    await parse_transactions(transactions)
+    await provider.close_all()
 
 asyncio.run(main())
 ```
