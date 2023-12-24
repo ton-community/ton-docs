@@ -1297,19 +1297,18 @@ main().finally(() => console.log('Exiting...'));
 ```py
 from pytoniq import LiteBalancer, BlockIdExt, begin_cell
 import asyncio
-from block_scanner import BlockScanner # BlockScanner here: https://gist.github.com/shibdev/6691433812694dd6f211c6b5a4ddfec0
 
-async def handle_block(block: BlockIdExt):
-    if block.workchain == -1:  # skip masterchain blocks
-        return
-    transactions = await provider.raw_get_block_transactions_ext(block)
-    transactions = sorted(transactions, key=lambda x: x.lt)
+async def handle_transactions(transactions, lt):
+    lts = []
 
     for transaction in transactions:
         if not transaction.in_msg.is_internal:
             continue
         if transaction.in_msg.info.dest.to_str(1, 1, 1) != MY_WALLET_ADDRESS:
             continue
+        if lt != 0 and transaction.lt <= lt:
+            continue
+        lts.append(transaction.lt)
 
         sender = transaction.in_msg.info.src.to_str(1, 1, 1)
         value = transaction.in_msg.info.value_coins
@@ -1387,14 +1386,21 @@ async def handle_block(block: BlockIdExt):
                 print(f"NFT Collection: {collection}")
         print(f"Transaction hash: {transaction.cell.hash.hex()}")
         print(f"Transaction lt: {transaction.lt}")
+    return lts
 
 MY_WALLET_ADDRESS = "EQAsl59qOy9C2XL5452lGbHU9bI3l4lhRaopeNZ82NRK8nlA"
 provider = LiteBalancer.from_mainnet_config(1)
 
 async def main():
     await provider.start_up()
-
-    await BlockScanner(client=provider, block_handler=handle_block).run()
+    max_lt = 0
+    while True:
+        transactions = await provider.get_transactions(address=MY_WALLET_ADDRESS, count=10)
+        if bool(transactions):
+            lts = await handle_transactions(transactions, max_lt)
+            if bool(lts):
+                max_lt = max(lts)
+        await asyncio.sleep(1)
 
 asyncio.run(main())
 ```
