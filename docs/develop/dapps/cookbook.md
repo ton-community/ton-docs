@@ -713,10 +713,15 @@ runBlocking {
 
 <TabItem value="py" label="Python">
 
+This example shows how to swap Toncoins to Jettons.
+
 ```py
 from pytoniq import Address, begin_cell, LiteBalancer, WalletV4R2
 import time
 import asyncio
+
+DEDUST_FACTORY = "EQBfBWT7X2BHg9tXAxzhz2aKiNTU1tpt5NsiK0uSDW_YAJ67"
+DEDUST_NATIVE_VAULT = "EQDa4VOnTYlLvDJ0gZjNYm5PXfSmmtL6Vs6A_CZEtXCNICq_"
 
 mnemonics = ["your", "mnemonics", "here"]
 
@@ -726,9 +731,9 @@ async def main():
 
     wallet = await WalletV4R2.from_mnemonic(provider=provider, mnemonics=mnemonics)
 
-    DEDUST_FACTORY = "EQBfBWT7X2BHg9tXAxzhz2aKiNTU1tpt5NsiK0uSDW_YAJ67"
-    DEDUST_NATIVE_VAULT = "EQDa4VOnTYlLvDJ0gZjNYm5PXfSmmtL6Vs6A_CZEtXCNICq_"
-    JETTON_MASTER = Address("EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE")
+    JETTON_MASTER = Address("EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE")  # jetton address swap to
+    TON_AMOUNT = 10**9  # 1 ton - swap amount
+    GAS_AMOUNT = 10**9 // 4  # 0.25 ton for gas
 
     pool_type = 0 # Volatile pool type
 
@@ -741,10 +746,11 @@ async def main():
                    .store_bytes(JETTON_MASTER.hash_part)
                    .end_cell().begin_parse())
 
-    pool_address = (await provider.run_get_method(address=DEDUST_FACTORY, method="get_pool_address",
-                                                  stack=[pool_type,
-                                                        asset_native, asset_jetton]
-                                                  ))[0].load_address()
+    stack = await provider.run_get_method(
+        address=DEDUST_FACTORY, method="get_pool_address",
+        stack=[pool_type, asset_native, asset_jetton]
+    )
+    pool_address = stack[0].load_address()
     
     swap_params = (begin_cell()
                   .store_uint(int(time.time() + 60 * 5), 32) # Deadline
@@ -765,14 +771,12 @@ async def main():
                 .end_cell())
 
     await wallet.transfer(destination=DEDUST_NATIVE_VAULT,
-                          amount=int(1.25*1e9), # Swap amount + gas
+                          amount=TON_AMOUNT + GAS_AMOUNT, # swap amount + gas
                           body=swap_body)
     
     await provider.close_all()
 
 asyncio.run(main())
-```
-</TabItem>
 
 </Tabs>
 
