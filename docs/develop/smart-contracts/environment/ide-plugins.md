@@ -6,6 +6,7 @@
 
 :::info
 This plugin can be used with any JetBrains product.
+(IntelliJ IDEA, WebStorm, PyCharm, CLion, etc.)
 :::
 
 There are several ways to install a plugin:
