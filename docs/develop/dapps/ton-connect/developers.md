@@ -14,6 +14,7 @@ This page contents the list of useful libraries for TON Connect.
 * [TON Connect Dart](/develop/dapps/ton-connect/developers#ton-connect-dart)
 * [TON Connect C#](/develop/dapps/ton-connect/developers#ton-connect-c)
 * [TON Connect Unity](/develop/dapps/ton-connect/developers#ton-connect-unity)
+* [TON Connect Go](/develop/dapps/ton-connect/developers#ton-connect-go)
 
 ## TON Connect React
 
@@ -130,6 +131,18 @@ Unity asset for TON Connect 2.0. Uses `continuation-team/TonSdk.NET/tree/main/To
 Use it to integrate TonConnect protocol with your game.
 
 * [GitHub](https://github.com/continuation-team/unity-ton-connect)
+
+## TON Connect Go
+
+Go SDK for TON Connect 2.0.
+
+Use it to connect your app to TON wallets via TonConnect protocol.
+
+```bash
+ go get github.com/cameo-engineering/tonconnect
+```
+
+* [GitHub](https://github.com/cameo-engineering/tonconnect)
 
 ## General Questions and Concerns
 
