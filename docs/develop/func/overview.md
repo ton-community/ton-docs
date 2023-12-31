@@ -68,28 +68,17 @@ Other materials gracefully provided by the experts from the community:
 
 Participating in [contests](https://t.me/toncontests) is a great way to learn FunC.
 
-You can also study previous competitions for learning purposes:
-* TON Smart Challenge #4 (best for getting started):
-  [Contest Page](https://ton.org/ton-smart-challenge-4),
-  [Tasks](https://github.com/ton-community/tsc4),
-  [Solutions](/develop/smart-contracts/examples#ton-smart-challenge-4),
+You can also study previous competitions for learning purposes.
 
-* TON Smart Challenge #2 (good for getting started):
-  [Contest Page](https://ton.org/ton-smart-challenge-2),
-  [Tasks](https://github.com/ton-blockchain/func-contest2),
-  [Solutions](https://github.com/ton-blockchain/func-contest2-solutions),
-  [Tests](https://github.com/ton-blockchain/func-contest2-tests).
+#### Contests Legacy
 
-* TON Smart Challenge #1 (good for beginners):
-  [Contest Page](https://ton.org/contest),
-  [Tasks](https://github.com/ton-blockchain/func-contest1),
-  [Solutions](https://github.com/ton-blockchain/func-contest1-solutions),
-  [Tests](https://github.com/ton-blockchain/func-contest1-tests).
-
-* TON Smart Challenge #3 (intermediate):
-  [Contest Page](https://ton.org/en/ton-smart-challenge-3),
-  [Tasks](https://github.com/ton-blockchain/func-contest3),
-  [Solutions](https://github.com/nns2009/TON-FunC-contest-3).
+| Contest Descr            | Tasks                                                    | Solutions                                                              |
+|--------------------------|----------------------------------------------------------|------------------------------------------------------------------------|
+| TSC #5 (December, 2023)  | [Tasks](https://github.com/ton-community/tsc5)           |                                                                        |
+| TSC #4 (September, 2023) | [Tasks](https://github.com/ton-community/tsc4)           | [Solutions](/develop/smart-contracts/examples#ton-smart-challenge-4)   |
+| TSC #3 (December, 2022)  | [Tasks](https://github.com/ton-blockchain/func-contest3) | [Solutions](https://github.com/nns2009/TON-FunC-contest-3)             |
+| TSC #2 (July, 2022)      | [Tasks](https://github.com/ton-blockchain/func-contest2) | [Solutions](https://github.com/ton-blockchain/func-contest2-solutions) |
+| TSC #1 (March, 2022)     | [Tasks](https://github.com/ton-blockchain/func-contest1) | [Solutions](https://github.com/ton-blockchain/func-contest1-solutions) |
 
 ## Smart contract examples
 
