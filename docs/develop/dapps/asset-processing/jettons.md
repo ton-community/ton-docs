@@ -144,7 +144,11 @@ Standardized tokens on TON are implemented using a set of smart contracts, inclu
 * Jetton master smart contract
 * Jetton wallet smart contracts
 
-![](jetton_contracts.png)
+<p align="center">
+  <br />
+    <img width="520" src="/img/docs/asset-processing/jetton_contracts.svg" alt="contracts scheme" />
+      <br />
+</p>
 
 ## Jetton master smart contract
 The jetton master smart contract stores general information about the jetton (including the total supply, a metadata link, or the metadata itself).
