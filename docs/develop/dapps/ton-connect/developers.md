@@ -85,6 +85,8 @@ This package contains protocol requests, protocol responses, event models and en
 
 ## TON Connect Python
 
+### pytonconnect
+
 Python SDK for TON Connect 2.0. Analogue of the `@tonconnect/sdk` library.
 
 Use it to connect your app to TON wallets via TonConnect protocol.
@@ -96,6 +98,16 @@ pip3 install pytonconnect
 - [GitHub](https://github.com/XaBbl4/pytonconnect)
 
 
+### ClickoTON-Foundation tonconnect
+
+Library for connecting TON Connect to Python apps
+
+```bash
+git clone https://github.com/ClickoTON-Foundation/tonconnect.git
+pip install -e tonconnect
+```
+
+[GitHub](https://github.com/ClickoTON-Foundation/tonconnect)
 
 
 ## TON Connect Dart

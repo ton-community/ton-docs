@@ -607,6 +607,9 @@ asyncio.run(main())
 
 </Tabs>
 
+
+
+
 To indicate that we want to include a comment, we specify 32 zero bits and then write our comment. We also specify the `response destination`, which means that a response regarding the successful transfer will be sent to this address. If we don't want a response, we can specify 2 zero bits instead of an address.
 
 ### How to send swap message to DEX (DeDust)?
@@ -778,7 +781,11 @@ async def main():
 
 asyncio.run(main())
 
+```
+</TabItem>
 </Tabs>
+
+
 
 
 ### How to use NFT batch deploy?

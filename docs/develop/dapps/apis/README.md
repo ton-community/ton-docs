@@ -73,4 +73,4 @@ Response body
 ## See Also
 * [TON HTTP API](/develop/dapps/apis/toncenter)
 * [List of SDKs](/develop/dapps/apis/sdk)
-* [Smart Contract Examples](/develop/smart-contracts/examples)
+* [TON Cookbook](/develop/dapps/cookbook)
