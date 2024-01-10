@@ -164,6 +164,9 @@ const config = {
           {
             customCss: require.resolve('./src/css/custom.css'),
           },
+        pages: {
+          mdxPageComponent: '@site/src/components/MDXPage'
+        }
       }),
     ],
   ],

@@ -1,3 +1,8 @@
+---
+hide_table_of_contents: true
+wrapperClassName: bootstrap-wrapper
+---
+
 import { SearchField } from '@site/src/components/SearchField';
 import { stackManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
 
@@ -81,4 +86,3 @@ Here `0 <= i,j,k <= 15` if not stated otherwise.
 | **`6A`** | `ONLYTOPX` |  | Pops integer `i` from the stack, then removes all but the top `i` elements. | `18` |
 | **`6B`** | `ONLYX` |  | Pops integer `i` from the stack, then leaves only the bottom `i` elements. Approximately equivalent to [`DEPTH`](#instr-depth) [`SWAP`](#instr-swap) [`SUB`](#instr-sub) [`DROPX`](#instr-dropx). | `18` |
 | **`6Cij`** | `[i] [j] BLKDROP2` |  | Drops `i` stack elements under the top `j` elements.<br/>`1 <= i <= 15`, `0 <= j <= 15`<br/>Equivalent to [`[i+j] 0 REVERSE`](#instr-reverse) [`[i] BLKDROP`](#instr-blkdrop) [`[j] 0 REVERSE`](#instr-reverse). | `26` |
-
