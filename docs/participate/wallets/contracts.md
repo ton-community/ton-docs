@@ -71,6 +71,23 @@ This wallet is made for those who need to send hundreds of transactions in a sho
 
 It allows you to send up to `254` transactions in one smart contract call. It also uses a slightly different approach to solve replay attacks instead of seqno, so you can call this wallet several times at once to send even thousands of transactions in a second.
 
+:::caution Limitations
+Note, when dealing with highload-wallet the following limits need to be checked and taken into account.
+:::
+
+1. **Storage size limit.** Currently, size of contract storage should be less than 65535 cells. If size of
+old_queries will grow above this limit, exception in ActionPhase will be thrown and transaction will fail.
+Failed transaction may be replayed.
+2. **Gas limit.** Currently, gas limit is 1'000'000 GAS units, that means that there is a limit of how much
+old queries may be cleaned in one tx. If number of expired queries will be higher, contract will stuck.
+
+That means that it is not recommended to set too high expiration date:
+number of queries during expiration timespan should not exceed 1000.
+
+Also, number of expired queries cleaned in one transaction should be below 100.
+
+
+
 Wallet source code:
  * [ton/crypto/smartcont/highload-wallet-v2-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc)
 
