@@ -6,7 +6,7 @@ This feature is testnet only right now! Participate on your own risk.
 
 The key feature of TON blockchain is the ability to distribute transaction processing over network nodes, and switching from "everybody checks all transactions" to "every transaction is checked by secure validator subset". This ability to infinitely horizontally scale throughput over shards when one workchain splits to required number of *shardchains* distinguishes TON from other L1 networks.
 
-However it is necessary to reguralry rotate validator subsets which process one or another shard to prevent collusion. At the same time to process transactions validators obiviously should know state of the shard prior transaction. The simplest approach is to require all validators to know state of all shards.
+However it is necessary to regularly rotate validator subsets which process one or another shard to prevent collusion. At the same time to process transactions validators obiviously should know state of the shard prior transaction. The simplest approach is to require all validators to know state of all shards.
 
 This approach works well while number of TON users is within range of a few millions and TPS (transactions per second) is under hundred. However, in the future, when TON will process many thousands transactions per second and server hundred millions or billions of people, no single server would be able to keep actual state of whole network. Fortunately, TON was designed with such loads in mind and supports sharding both throughput and state update.
 
