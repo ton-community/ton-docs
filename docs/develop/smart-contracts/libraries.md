@@ -3,6 +3,7 @@
 ## Standard libraries
 
  - [stdlib](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) — Standard library for FunC
+ - [mathlib](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/mathlib.fc) — Fixed-point mathematical library
  
 ## Libraries from Community
 
