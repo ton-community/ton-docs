@@ -8071,7 +8071,7 @@
     "doc_fift": "SETLIBCODE",
     "doc_stack": "c x -",
     "doc_gas": 526,
-    "doc_description": "Creates an output action that would modify the collection of this smart contract libraries by adding or removing library with code given in _Cell_ `c`. If `x=0`, the library is actually removed if it was previously present in the collection (if not, this action does nothing). If `x=1`, the library is added as a private library, and if `x=2`, the library is added as a public library (and becomes available to all smart contracts if the current smart contract resides in the masterchain); if the library was present in the collection before, its public/private status is changed according to `x`. Values of `x` other than `0...2` are invalid."
+    "doc_description": "Creates an output action that would modify the collection of this smart contract libraries by adding or removing library with code given in _Cell_ `c`. If `x=0`, the library is actually removed if it was previously present in the collection (if not, this action does nothing). If `x=1`, the library is added as a private library, and if `x=2`, the library is added as a public library (and becomes available to all smart contracts if the current smart contract resides in the masterchain); if the library was present in the collection before, its public/private status is changed according to `x`. Also, `16` can be added to `x` to enable bounce transaction on failure. Values of `x` other than `0...2 (+16 possible)` are invalid."
   },
   {
     "name": "CHANGELIB",
