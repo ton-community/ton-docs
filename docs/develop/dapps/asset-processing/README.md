@@ -24,6 +24,14 @@ Best practices with comments on jettons processing:
 
 ## Other Examples
 
+### Self-hosted service
+
+#### Made by community
+
+[Gobicycle](https://github.com/gobicycle/bicycle) service is focused on replenishing user balances and sending payments to blockchain accounts. Both TONs and Jettons are supported. The service is written with numerous pitfalls in mind that a developer might encounter (all checks for jettons, correct operations status check, resending messages, performance during high load when blockchain is splitted by shards). Provide simple HTTP API, rabbit and webhook notifications about new payments.
+
+### JavaScript
+
 #### Made by community
 
 Using ton.js SDK (supported by TON Community):
@@ -31,7 +39,6 @@ Using ton.js SDK (supported by TON Community):
 - [Create a wallet, get its balance, make a transfer](https://github.com/ton-community/ton#usage)
 
 ### Python
-
 
 #### Made by community
 
