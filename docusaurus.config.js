@@ -91,6 +91,54 @@ const config = {
             to: '/develop/smart-contracts/testing/overview',
             from: '/develop/smart-contracts/testing/tonstarter',
           },
+          {
+            to: '/tvm-instructions/instructions/stack-manipulation',
+            from: '/learn/tvm-instructions/instructions/stack-manipulation'
+          },
+          {
+            to: '/tvm-instructions/instructions/tuple-list-null',
+            from: '/learn/tvm-instructions/instructions/tuple-list-null',
+          },
+          {
+            to: '/tvm-instructions/instructions/constant',
+            from: '/learn/tvm-instructions/instructions/constant'
+          },
+          {
+            to: '/tvm-instructions/instructions/arithmetic',
+            from: '/learn/tvm-instructions/instructions/arithmetic',
+          },
+          {
+            to: '/tvm-instructions/instructions/data-comparison',
+            from: '/learn/tvm-instructions/instructions/data-comparison',
+          },
+          {
+            to: '/tvm-instructions/instructions/cell-manipulation',
+            from: '/learn/tvm-instructions/instructions/cell-manipulation',
+          },
+          {
+            to: '/tvm-instructions/instructions/control-flow',
+            from: '/learn/tvm-instructions/instructions/control-flow',
+          },
+          {
+            to: '/tvm-instructions/instructions/exception-gen-and-handling',
+            from: '/learn/tvm-instructions/instructions/exception-gen-and-handling',
+          },
+          {
+            to: '/tvm-instructions/instructions/dictionary-manipulation',
+            from: '/learn/tvm-instructions/instructions/dictionary-manipulation',
+          },
+          {
+            to: '/tvm-instructions/instructions/app-specific',
+            from: '/learn/tvm-instructions/instructions/app-specific',
+          },
+          {
+            to: '/tvm-instructions/instructions/miscellaneous',
+            from: '/learn/tvm-instructions/instructions/miscellaneous',
+          },
+          {
+            to: '/tvm-instructions/archive/tvm-instructions',
+            from: '/learn/archive/tvm-instructions',
+          }
         ],
       },
     ],
