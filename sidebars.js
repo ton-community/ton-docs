@@ -485,7 +485,7 @@ const sidebars = {
         {
           type: 'link',
           label: 'TVM Instructions',
-          href: '/tvm-instructions',
+          href: '/learn/tvm-instructions/instructions',
         },
       ],
     },
