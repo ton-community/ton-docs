@@ -337,6 +337,7 @@ There are currently 3 Modes and 3 Flags for messages. You can combine a single m
 |:-|:-|
 | `+1` | Pay transfer fees separately from the message value |
 | `+2` | Ignore any errors arising while processing this message during the action phase |
+| `+16` | In the case of action fail - bounce transaction. No effect if `+2` is used.                   |
 | `+32` | Current account must be destroyed if its resulting balance is zero (often used with Mode 128) |
 
 For example, if you want to send a regular message and pay transfer fees separately, use the Mode `0` and Flag `+1` to get `mode = 1`. If you want to send the whole contract balance and destroy it immidiately, use the Mode `128` and Flag `+32` to get `mode = 160`.
