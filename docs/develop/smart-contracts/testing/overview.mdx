@@ -79,7 +79,7 @@ You can learn the whole list of matcher fields from the [Sandbox documentation](
 
 ### Specific Test Suite
 
-#### Extract and Assert SendMode
+#### Extract SendMode
 
 To extract the send mode of a sent message you can use the following code:
 
@@ -108,7 +108,7 @@ if (!re.result. success || !re.result.actions) {
     throw new Error('fail');
 ｝
 const actions = loadoutList(Cell.fromBase64(re.result.actions).beginParse());
-actions[0].type === 'sendMsg' && actions[0].mode
+actions[0].type === 'sendMsg' && actions[0].mode;
 
 ```
 
