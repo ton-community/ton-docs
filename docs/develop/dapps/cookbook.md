@@ -649,11 +649,12 @@ This is enough to build the message.
 <Tabs groupId="code-examples">
 
  <TabItem value="js-ton" label="JS (@ton)">
-DEXes use different protocols for their work, we need to familiar ourself with key concepts and some vital component, and also knowing TL-B schema that involved to do our swap process correctly. In this tutorial we deal with DeDust, one of famous DEX implemented entirely in TON.
+DEXs use different protocols for their work, we need to familiarize ourselves with key concepts and some vital components and also know the TL-B schema involved in doing our swap process correctly. In this tutorial, we deal with DeDust, one of the famous DEX implemented entirely in TON.
+In DeDust, we have an abstract Asset concept that includes any swappable asset types. Abstraction over asset types simplifies the swap process because the type of asset does not matter, and extra currency or even assets from other chains in this approach will be covered with ease.
 
-In DeDust , we have a abstract Asset concept that simply include any swapable asset types. Abstraction over asset types, simplify swap process because type of asset does not matters and extra-currency or even asset from other chains in this approach will be covered by ease.
 
-Following is TL-B schema that DeDust introduced for Asset concept.
+
+Following is the TL-B schema that DeDust introduced for the Asset concept.
 
 ```tlb
 native$0000 = Asset; // for ton
@@ -664,14 +665,15 @@ jetton$0001 workchain_id:int8 address:uint256 = Asset; // for any jetton,address
 extra_currency$0010 currency_id:int32 = Asset;
 ```
 
-Next, DeDust introduced three components, Vault, Pool, and Factory.These components are contract or group of
-contracts and responsible for parts of swap process. Factory act as finding other component addresses (factory, vault and pool)
+Next, DeDust introduced three components, Vault, Pool, and Factory. These components are contracts or groups of contracts and are responsible for parts of the swap process. The factory acts as finding other component addresses (like vault, and pool)
 and also building other components.
-Vault is responsible for receiving transfer messages, holding assets and just informing corresponding pool that "user A wants to swap 100 X to Y".
+Vault is responsible for receiving transfer messages, holding assets, and just informing the corresponding pool that "user A wants to swap 100 X to Y".
 
-Pool on the other hand, responsible for calculating swap amout based on predefined formula and inform other Vault that responsible for asset Y , and tell it to pay calculated amount to user.
-Calculations of swap amount is based on mathematical formula,it means so far we have two different pool, one known as Volatile, that operates based on the commonly used "Constant Product" formula: x \* y = k, And the other known as Stable-Swap - Optimized for assets of near-equal value (e.g. USDT / USDC, TON / stTON). It uses the formula: x3 • y + y3 • x = k.
-So for every swap we need corresponding Valut and it need just implemented specefic API tailored for interacting with a distinct asset type. DeDust have three implementations of Vault, Native Vault - Handles the native coin (Toncoin). Jetton Vault - Manages jettons and Extra-Currency Vault (upcoming) - Designed for TON extra-currencies.
+
+Pool, on the other hand, is responsible for calculating the swap amount based on the predefined formula informing other Vault that are responsible for asset Y, and telling it to pay a calculated amount to the user.
+Calculations of swap amount are based on a mathematical formula, which means so far we have two different pools, one known as Volatile, that operates based on the commonly used "Constant Product" formula: x * y = k, And the other known as Stable-Swap - Optimized for assets of near-equal value (e.g. USDT / USDC, TON / stTON). It uses the formula: x3 * y + y3 * x = k.
+So for every swap we need the corresponding Vault and it needs just implement a specific API tailored for interacting with a distinct asset type. DeDust has three implementations of Vault, Native Vault - Handles the native coin (Toncoin). Jetton Vault - Manages jettons and Extra-Currency Vault (upcoming) - Designed for TON extra-currencies.
+
 
 DeDust provide special SDk to work with contract, component and API, it was written in typescript.
 Enough theory, lets set up our environment to swap one jetton with TON.
