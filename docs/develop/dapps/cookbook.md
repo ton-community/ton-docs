@@ -454,7 +454,7 @@ asyncio.run(main())
 
 ### How to construct a message for a jetton transfer with a comment?
 
-To understand how to construct a message for token transfer, we use [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which describes the token standard. It's important to note that each token can have its own `decimals`, which defaults to `9`. So, in the example below, we multiply the quantity by 10^9. If decimals were different, you would **need to multiply by a different value**.
+To understand how to construct a message for token transfer, we use [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which describes the token standard. It's important to note that each token can have its own `decimals`, which default to `9`. So, in the example below, we multiply the quantity by 10^9. If decimals were different, you would **need to multiply by a different value**.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -612,7 +612,7 @@ asyncio.run(main())
 
 To indicate that we want to include a comment, we specify 32 zero bits and then write our comment. We also specify the `response destination`, which means that a response regarding the successful transfer will be sent to this address. If we don't want a response, we can specify 2 zero bits instead of an address.
 
-### How to send swap message to DEX (DeDust)?
+### How to send a swap message to DEX (DeDust)?
 
 DEXes use different protocols for their work. You can find details for the DeDust protocol on their [website](https://docs.dedust.io/).
 
@@ -635,14 +635,14 @@ swap#ea06185d query_id:uint64 amount:Coins _:SwapStep swap_params:^SwapParams = 
               swap_params#_ deadline:Timestamp recipient_addr:MsgAddressInt referral_addr:MsgAddress
                     fulfill_payload:(Maybe ^Cell) reject_payload:(Maybe ^Cell) = SwapParams;
 ```
-This is scheme for body of transfer to the toncoin **vault**.
+This is the scheme for the body of transfer to the toncoin **vault**.
 
 First, you need to know the **vault** addresses of the jettons you will swap or toncoin **vault** address. This can be done using the get methods of the contract [**FACTORY**](https://docs.dedust.io/reference/factory) `get_vault_address`. As an argument you need to pass a slice according to the scheme:
 ```tlb
 native$0000 = Asset; // for ton
 jetton$0001 workchain_id:int8 address:uint256 = Asset; // for jetton
 ```
-Also for the exchange itself we need the **pool** address - `get_pool_address`. As arguments - asset slices according to the scheme above. In response, both methods will return a slice of the address of the requested **vault** / **pool**.
+Also for the exchange itself, we need the **pool** address - `get_pool_address`. As arguments - asset slices according to the scheme above. In response, both methods will return a slice of the address of the requested **vault** / **pool**.
 
 This is enough to build the message.
 
@@ -675,8 +675,8 @@ Calculations of swap amount are based on a mathematical formula, which means so 
 So for every swap we need the corresponding Vault and it needs just implement a specific API tailored for interacting with a distinct asset type. DeDust has three implementations of Vault, Native Vault - Handles the native coin (Toncoin). Jetton Vault - Manages jettons and Extra-Currency Vault (upcoming) - Designed for TON extra-currencies.
 
 
-DeDust provide special SDk to work with contract, component and API, it was written in typescript.
-Enough theory, lets set up our environment to swap one jetton with TON.
+DeDust provides a special SDk to work with contract, component, and API, it was written in typescript.
+Enough theory, let's set up our environment to swap one jetton with TON.
 
 ```bash
 npm install --save @ton/core @ton/ton @ton/crypt
@@ -699,21 +699,21 @@ const tonClient = new TonClient4({
   endpoint: "https://mainnet-v4.tonhubapi.com",
 });
 const factory = tonClient.open(Factory.createFromAddress(MAINNET_FACTORY_ADDR));
-//The Factory contract  used to  locate other contracts.
+//The Factory contract  is used to  locate other contracts.
 ```
 
-Process of swapping has some steps, for example to swaping some TON with jetton we first need to find corresponding Vault and Pool
-then make sure they are deployed.For our example TON and SCALE, code is as follows :
+The process of swapping has some steps, for example, to swap some TON with Jetton we first need to find the corresponding Vault and Pool
+then make sure they are deployed. For our example TON and SCALE, the code is as follows :
 
 ```typescript
 import { Asset, VaultNative } from "@dedust/sdk";
 
 //Native vault is for TON
 const tonVault = tonClient.open(await factory.getNativeVault());
-// we use factory to find our native coin (Toncoin) Vault.
+//We use the factory to find our native coin (Toncoin) Vault.
 ```
 
-Next step is to find corresponding Pool, here (TON and SCALE)
+The next step is to find the corresponding Pool, here (TON and SCALE)
 
 ```typescript
 import { PoolType } from "@dedust/sdk";
@@ -730,23 +730,23 @@ const pool = tonClient.open(
 );
 ```
 
-Now we should ensure that these contract exist, since sending funds to an inactive contract could result in irretrievable loss.
+Now we should ensure that these contracts exist since sending funds to an inactive contract could result in irretrievable loss.
 
 ```typescript
 import { ReadinessStatus } from "@dedust/sdk";
 
-// Check if pool exists:
+// Check if the pool exists:
 if ((await pool.getReadinessStatus()) !== ReadinessStatus.READY) {
   throw new Error("Pool (TON, SCALE) does not exist.");
 }
 
-// Check if vault exits:
+// Check if the vault exits:
 if ((await tonVault.getReadinessStatus()) !== ReadinessStatus.READY) {
   throw new Error("Vault (TON) does not exist.");
 }
 ```
 
-After that we can send transfer messages with amount of TON
+After that, we can send transfer messages with the amount of TON
 
 ```typescript
 import { toNano } from "@ton/core";
@@ -760,21 +760,21 @@ await tonVault.sendSwap(sender, {
 });
 ```
 
-To swap Token X with Y, the process is same ,for instance we send amout of X token to vault X , vault X
-receives our asset, hold it and inform Pool of (X,Y) that this address ask for swap, now Pool base on
-calculation inform another Vault, here Vault Y to release equivalent Y to user who request swap.
+To swap Token X with Y, the process is the same, for instance, we send an amount of X token to vault X, vault X
+receives our asset, holds it, and informs Pool of (X, Y) that this address asks for a swap, now Pool based on
+calculation informs another Vault, here Vault Y releases equivalent Y to the user who requests swap.
 
-The difference between asset is just about transfer method for example, for jettons, we transfer them to the Vault using transfer message and attach a specific forward_payload, but for the native coin, we send a swap message to the Vault, attaching the corresponding amount of TON.
+The difference between assets is just about the transfer method for example, for jettons, we transfer them to the Vault using a transfer message and attach a specific forward_payload, but for the native coin, we send a swap message to the Vault, attaching the corresponding amount of TON.
 
-This is schema for TON and jetton :
+This is the schema for TON and jetton :
 
 ```tlb
 swap#ea06185d query_id:uint64 amount:Coins _:SwapStep swap_params:^SwapParams = InMsgBody;
 ```
 
-So every vault and corresponding Pool designed for specefic swap and has special API tailored to special asset.
+So every vault and corresponding Pool is designed for specific swaps and has a special API tailored to special assets.
 
-This was swaping TON with jetton SCALE. The process for swapping jetton with jetton is same, the only difference is we should provide payload that was described in TL-B schema.
+This was swapping TON with jetton SCALE. The process for swapping jetton with jetton is the same, the only difference is we should provide the payload that was described in the TL-B schema.
 
 ```TL-B
 swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
