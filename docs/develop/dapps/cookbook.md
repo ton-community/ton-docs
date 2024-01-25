@@ -752,7 +752,6 @@ After that, we can send transfer messages with the amount of TON
 import { toNano } from "@ton/core";
 import { mnemonicToPrivateKey } from "@ton/crypto";
 
-async function main() {
   if (!process.env.MNEMONIC) {
     throw new Error("Environment variable MNEMONIC is required.");
   }
@@ -767,7 +766,7 @@ async function main() {
     }),
   );
 
-  const sender = wallet.sender(keys.secretKey);
+const sender = wallet.sender(keys.secretKey);
 
 const amountIn = toNano("5"); // 5 TON
 
