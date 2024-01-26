@@ -422,8 +422,12 @@ const config = {
                 label: 'TON Developers Kit',
               },
               {
+                to: 'https://t.me/tonsupport_aibot',
+                label: 'TON Developers Kit',
+              },
+              {
                 to: 'https://github.com/ton-blockchain/TEPs',
-                label: 'Standards Discussion (TEPs)',
+                label: 'AI TON Support Agent',
               },
               {
                 to: 'contribute',
