@@ -5,10 +5,7 @@ All TON Smart Contracts are executed on their own TON Virtual Machine (TVM). TVM
 This document provides a bird's-eye view of how TVM executes transactions.
 
 :::tip
-
-* There is also a detailed specification — [**Whitepaper**](https://ton.org/tvm.pdf)
-* Could be useful — [**TVM C++ implementation**](https://github.com/ton-blockchain/ton/tree/master/crypto/vm)
-
+* TVM Source — [**TVM C++ implementation**](https://github.com/ton-blockchain/ton/tree/master/crypto/vm)
 :::
 
 ## Transactions and phases
@@ -72,3 +69,9 @@ Besides exit_code and consumed gas data, TVM indirectly outputs the following da
 All other register values will be neglected.
 
 Note, that since there is a limit on max cell-depth `<1024`, and particularly the limit on c4 and c5 depth `<=512`, there will be a limit on the number of output actions in one tx `<=255`. If a contract needs to send more than that, it may send a message with the request `continue_sending` to itself and send all necessary messages in subsequent transactions.
+
+
+## See Also
+
+- [TVM Instructions](/learn/tvm-instructions/instructions)
+- [TON TVM](https://ton.org/tvm.pdf) TVM Concepts(may include outdated information)

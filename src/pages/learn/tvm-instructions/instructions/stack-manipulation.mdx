@@ -6,7 +6,7 @@ wrapperClassName: bootstrap-wrapper
 import { SearchField } from '@site/src/components/SearchField';
 import { stackManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
 
-# Stack manipulation
+# Stack Manipulation
 
 Here `0 <= i,j,k <= 15` if not stated otherwise.
 
@@ -22,6 +22,21 @@ Here `0 <= i,j,k <= 15` if not stated otherwise.
     { key: 'doc_description', name: 'Description' },
   ]}
 />
+
+### TVM Instructions Content List
+
+* [Overview](/learn/tvm-instructions/instructions)
+* [Stack Manipulation](/learn/tvm-instructions/instructions/stack-manipulation)
+* [Tuple, List and Null](/learn/tvm-instructions/instructions/tuple-list-null)
+* [Constants and Literals](/learn/tvm-instructions/instructions/constant)
+* [Arithmetic Operations](/learn/tvm-instructions/instructions/arithmetic)
+* [Data Comparison](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell Manipulation](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation and Control Flow](/learn/tvm-instructions/instructions/control-flow)
+* [Exception Generation and Handling](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [Dictionary Manipulation](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [Application-specific Primitives](/learn/tvm-instructions/instructions/app-specific)
+* [Miscellaneous](/learn/tvm-instructions/instructions/miscellaneous)
 
 
 ### Basic stack manipulation primitives
@@ -86,3 +101,19 @@ Here `0 <= i,j,k <= 15` if not stated otherwise.
 | **`6A`** | `ONLYTOPX` |  | Pops integer `i` from the stack, then removes all but the top `i` elements. | `18` |
 | **`6B`** | `ONLYX` |  | Pops integer `i` from the stack, then leaves only the bottom `i` elements. Approximately equivalent to [`DEPTH`](#instr-depth) [`SWAP`](#instr-swap) [`SUB`](#instr-sub) [`DROPX`](#instr-dropx). | `18` |
 | **`6Cij`** | `[i] [j] BLKDROP2` |  | Drops `i` stack elements under the top `j` elements.<br/>`1 <= i <= 15`, `0 <= j <= 15`<br/>Equivalent to [`[i+j] 0 REVERSE`](#instr-reverse) [`[i] BLKDROP`](#instr-blkdrop) [`[j] 0 REVERSE`](#instr-reverse). | `26` |
+
+
+### TVM Instructions Content List
+
+* [Overview](/learn/tvm-instructions/instructions)
+* [Stack Manipulation](/learn/tvm-instructions/instructions/stack-manipulation)
+* [Tuple, List and Null](/learn/tvm-instructions/instructions/tuple-list-null)
+* [Constants and Literals](/learn/tvm-instructions/instructions/constant)
+* [Arithmetic Operations](/learn/tvm-instructions/instructions/arithmetic)
+* [Data Comparison](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell Manipulation](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation and Control Flow](/learn/tvm-instructions/instructions/control-flow)
+* [Exception Generation and Handling](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [Dictionary Manipulation](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [Application-specific Primitives](/learn/tvm-instructions/instructions/app-specific)
+* [Miscellaneous](/learn/tvm-instructions/instructions/miscellaneous)

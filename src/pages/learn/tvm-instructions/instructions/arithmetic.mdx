@@ -21,6 +21,22 @@ import { arithmeticOpcodes as opcodes } from '@site/src/data/opcodes';
   ]}
 />
 
+### TVM Instructions Content List
+
+* [Overview](/learn/tvm-instructions/instructions)
+* [Stack Manipulation](/learn/tvm-instructions/instructions/stack-manipulation)
+* [Tuple, List and Null](/learn/tvm-instructions/instructions/tuple-list-null)
+* [Constants and Literals](/learn/tvm-instructions/instructions/constant)
+* [Arithmetic Operations](/learn/tvm-instructions/instructions/arithmetic)
+* [Data Comparison](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell Manipulation](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation and Control Flow](/learn/tvm-instructions/instructions/control-flow)
+* [Exception Generation and Handling](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [Dictionary Manipulation](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [Application-specific Primitives](/learn/tvm-instructions/instructions/app-specific)
+* [Miscellaneous](/learn/tvm-instructions/instructions/miscellaneous)
+
+## Arithmetic primitives
 ### Addition, subtraction, multiplication
 
 | xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
@@ -128,3 +144,19 @@ Quiet versions of integer comparison primitives are also available ([`QUIET SGN`
 | **`B7B5cc`** | `[cc+1] QUFITS` | _`x - x`_ | Replaces `x` with a `NaN` if x is not a `cc+1`-bit unsigned integer, leaves it intact otherwise. | `34` |
 | **`B7B600`** | `QFITSX` | _`x c - x`_ | Replaces `x` with a `NaN` if x is not a c-bit signed integer, leaves it intact otherwise. | `34` |
 | **`B7B601`** | `QUFITSX` | _`x c - x`_ | Replaces `x` with a `NaN` if x is not a c-bit unsigned integer, leaves it intact otherwise. | `34` |
+
+
+### TVM Instructions Content List
+
+* [Overview](/learn/tvm-instructions/instructions)
+* [Stack Manipulation](/learn/tvm-instructions/instructions/stack-manipulation)
+* [Tuple, List and Null](/learn/tvm-instructions/instructions/tuple-list-null)
+* [Constants and Literals](/learn/tvm-instructions/instructions/constant)
+* [Arithmetic Operations](/learn/tvm-instructions/instructions/arithmetic)
+* [Data Comparison](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell Manipulation](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation and Control Flow](/learn/tvm-instructions/instructions/control-flow)
+* [Exception Generation and Handling](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [Dictionary Manipulation](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [Application-specific Primitives](/learn/tvm-instructions/instructions/app-specific)
+* [Miscellaneous](/learn/tvm-instructions/instructions/miscellaneous)

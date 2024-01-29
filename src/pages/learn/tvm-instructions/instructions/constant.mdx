@@ -6,7 +6,7 @@ wrapperClassName: bootstrap-wrapper
 import { SearchField } from '@site/src/components/SearchField';
 import { constantOpcodes as opcodes } from '@site/src/data/opcodes';
 
-# Constant or literal primitives
+# Constant or Literal Primitives
 
 <SearchField
   data={opcodes}
@@ -21,7 +21,23 @@ import { constantOpcodes as opcodes } from '@site/src/data/opcodes';
   ]}
 />
 
-### Integer and boolean constants
+### TVM Instructions Content List
+
+* [Overview](/learn/tvm-instructions/instructions)
+* [Stack Manipulation](/learn/tvm-instructions/instructions/stack-manipulation)
+* [Tuple, List and Null](/learn/tvm-instructions/instructions/tuple-list-null)
+* [Constants and Literals](/learn/tvm-instructions/instructions/constant)
+* [Arithmetic Operations](/learn/tvm-instructions/instructions/arithmetic)
+* [Data Comparison](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell Manipulation](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation and Control Flow](/learn/tvm-instructions/instructions/control-flow)
+* [Exception Generation and Handling](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [Dictionary Manipulation](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [Application-specific Primitives](/learn/tvm-instructions/instructions/app-specific)
+* [Miscellaneous](/learn/tvm-instructions/instructions/miscellaneous)
+
+## Constant or Literal Primitives
+### Integer and Boolean Constants
 
 | xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
@@ -54,3 +70,19 @@ import { constantOpcodes as opcodes } from '@site/src/data/opcodes';
 | **`8F_rxxcccc`** | `[builder] PUSHCONT`<br/>`[builder] CONT` | _`- c`_ | Pushes a continuation made from `builder`.<br/>_Details:_ Pushes the simple ordinary continuation `cccc` made from the first `0 <= r <= 3` references and the first `0 <= xx <= 127` bytes of `cc.code`. | `26` |
 | **`9xccc`** | `[builder] PUSHCONT`<br/>`[builder] CONT` | _`- c`_ | Pushes a continuation made from `builder`.<br/>_Details:_ Pushes an `x`-byte continuation for `0 <= x <= 15`. | `18` |
 |  | `<{ code }> PUSHCONT`<br/>`<{ code }> CONT`<br/>`CONT:<{ code }>` | _`- c`_ | Pushes a continuation with code `code`.<br/>Note that the assembler can replace [`PUSHCONT`](#instr-pushcont) with [`PUSHREFCONT`](#instr-pushrefcont) in certain situations (e.g. if there’s not enough space in the current continuation). |  |
+
+
+### TVM Instructions Content List
+
+* [Overview](/learn/tvm-instructions/instructions)
+* [Stack Manipulation](/learn/tvm-instructions/instructions/stack-manipulation)
+* [Tuple, List and Null](/learn/tvm-instructions/instructions/tuple-list-null)
+* [Constants and Literals](/learn/tvm-instructions/instructions/constant)
+* [Arithmetic Operations](/learn/tvm-instructions/instructions/arithmetic)
+* [Data Comparison](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell Manipulation](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation and Control Flow](/learn/tvm-instructions/instructions/control-flow)
+* [Exception Generation and Handling](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [Dictionary Manipulation](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [Application-specific Primitives](/learn/tvm-instructions/instructions/app-specific)
+* [Miscellaneous](/learn/tvm-instructions/instructions/miscellaneous)

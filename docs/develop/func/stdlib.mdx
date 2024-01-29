@@ -10,7 +10,7 @@ This section discusses the [stdlib.fc](https://github.com/ton-blockchain/ton/blo
 :::
 
 
-Currently, the library is just a wrapper for the most common assembler of the TVM commands which are not built-in. Each TVM command description used in the library can be found in the [TVM documentation](https://ton.org/tvm.pdf) (appendix A). Some descriptions were borrowed for this document.
+Currently, the library is just a wrapper for the most common assembler of the TVM commands which are not built-in. Each TVM command description used in the library can be found in the [TVM documentation](/learn/tvm-instructions/tvm-overview) section. Some descriptions were borrowed for this document.
 
 Some functions are commented out in the file. It means that they have already become built-ins for optimization purposes. However, the type signature and semantics remain the same.
 
@@ -884,7 +884,7 @@ int dict_empty?(cell c) asm "DICTEMPTY";
 Checks whether a dictionary is empty. Equivalent to `cell_null?`.
 
 ## Prefix dictionaries primitives
-TVM also supports dictionaries with non-fixed length keys which form a prefix code (i.e., there is no key that is a prefix to another key). Learn more about them in [TVM.pdf](https://ton.org/tvm.pdf).
+TVM also supports dictionaries with non-fixed length keys which form a prefix code (i.e., there is no key that is a prefix to another key). Learn more about them in the [TVM Instruction](/learn/tvm-instructions/tvm-overview) section.
 
 #### pfxdict_get?
 ```func

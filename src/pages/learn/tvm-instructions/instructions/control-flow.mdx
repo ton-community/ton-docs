@@ -21,7 +21,22 @@ import { continuationOpcodes as opcodes } from '@site/src/data/opcodes';
   ]}
 />
 
+### TVM Instructions Content List
 
+* [Overview](/learn/tvm-instructions/instructions)
+* [Stack Manipulation](/learn/tvm-instructions/instructions/stack-manipulation)
+* [Tuple, List and Null](/learn/tvm-instructions/instructions/tuple-list-null)
+* [Constants and Literals](/learn/tvm-instructions/instructions/constant)
+* [Arithmetic Operations](/learn/tvm-instructions/instructions/arithmetic)
+* [Data Comparison](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell Manipulation](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation and Control Flow](/learn/tvm-instructions/instructions/control-flow)
+* [Exception Generation and Handling](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [Dictionary Manipulation](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [Application-specific Primitives](/learn/tvm-instructions/instructions/app-specific)
+* [Miscellaneous](/learn/tvm-instructions/instructions/miscellaneous)
+
+## Continuation and control flow primitives
 ### Unconditional control flow primitives
 
 | xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
@@ -169,3 +184,19 @@ Here `s"` is the [fee for moving stack elements between continuations](#11-gas-p
 | **`F12_n`** | `[n] CALL`<br/>`[n] CALLDICT` | _`- n`_ | For `0 <= n < 2^14`, an encoding of [`[n] CALL`](#instr-calldict) for larger values of `n`. |  |
 | **`F16_n`** | `[n] JMP` | _` - n`_ | Jumps to the continuation in `c3`, pushing integer `0 <= n < 2^14` as its argument.<br/>Approximately equivalent to [`n PUSHINT`](#instr-pushint-4) [`c3 PUSHCTR`](#instr-pushctr) [`JMPX`](#instr-jmpx). |  |
 | **`F1A_n`** | `[n] PREPARE`<br/>`[n] PREPAREDICT` | _` - n c`_ | Equivalent to [`n PUSHINT`](#instr-pushint-4) [`c3 PUSHCTR`](#instr-pushctr), for `0 <= n < 2^14`.<br/>In this way, [`[n] CALL`](#instr-calldict) is approximately equivalent to [`[n] PREPARE`](#instr-preparedict) [`EXECUTE`](#instr-execute), and [`[n] JMP`](#instr-jmpdict) is approximately equivalent to [`[n] PREPARE`](#instr-preparedict) [`JMPX`](#instr-jmpx).<br/>One might use, for instance, [`CALLXARGS`](#instr-callxargs) or [`CALLCC`](#instr-callcc) instead of [`EXECUTE`](#instr-execute) here. |  |
+
+
+### TVM Instructions Content List
+
+* [Overview](/learn/tvm-instructions/instructions)
+* [Stack Manipulation](/learn/tvm-instructions/instructions/stack-manipulation)
+* [Tuple, List and Null](/learn/tvm-instructions/instructions/tuple-list-null)
+* [Constants and Literals](/learn/tvm-instructions/instructions/constant)
+* [Arithmetic Operations](/learn/tvm-instructions/instructions/arithmetic)
+* [Data Comparison](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell Manipulation](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation and Control Flow](/learn/tvm-instructions/instructions/control-flow)
+* [Exception Generation and Handling](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [Dictionary Manipulation](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [Application-specific Primitives](/learn/tvm-instructions/instructions/app-specific)
+* [Miscellaneous](/learn/tvm-instructions/instructions/miscellaneous)

@@ -14,7 +14,7 @@ Please note that here and later the code, comments and/or documentation may cont
 
 * [TON Virtual Machine](https://docs.ton.org/tvm.pdf)
 
-  TON Virtual Machine description.
+  TON Virtual Machine description(may include outdated information on OP Codes, actual list in [TVM Instruction](https://docs.ton.org/learn/tvm-instructions/tvm-overview) section).
 
 * [TON Blockchain](https://docs.ton.org/tblkch.pdf)
 
