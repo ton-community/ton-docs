@@ -6,7 +6,7 @@ wrapperClassName: bootstrap-wrapper
 import { SearchField } from '@site/src/components/SearchField';
 import { dictionaryManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
 
-# Dictionary manipulation primitives
+# Dictionary Manipulation Primitives
 
 The gas consumption of most dictionary operations is not fixed, it depends on the contents of the given dictionary.
 
@@ -23,6 +23,22 @@ The gas consumption of most dictionary operations is not fixed, it depends on th
   ]}
 />
 
+### TVM Instructions Content List
+
+* [Overview](/learn/tvm-instructions/instructions)
+* [Stack Manipulation](/learn/tvm-instructions/instructions/stack-manipulation)
+* [Tuple, List and Null](/learn/tvm-instructions/instructions/tuple-list-null)
+* [Constants and Literals](/learn/tvm-instructions/instructions/constant)
+* [Arithmetic Operations](/learn/tvm-instructions/instructions/arithmetic)
+* [Data Comparison](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell Manipulation](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation and Control Flow](/learn/tvm-instructions/instructions/control-flow)
+* [Exception Generation and Handling](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [Dictionary Manipulation](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [Application-specific Primitives](/learn/tvm-instructions/instructions/app-specific)
+* [Miscellaneous](/learn/tvm-instructions/instructions/miscellaneous)
+
+##  Dictionary Manipulation Primitives
 
 ### Dictionary creation
 | xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
@@ -221,3 +237,19 @@ These primitives are completely similar to their non-prefix code counterparts ([
 | **`F4B5`** | `SUBDICTRPGET` | _`k l D n - D'`_ | Similar to [`SUBDICTGET`](#instr-subdictget), but removes the common prefix `k` from all keys of the new dictionary `D'`, which becomes of type `HashmapE(n-l,X)`. |  |
 | **`F4B6`** | `SUBDICTIRPGET` | _`x l D n - D'`_ | Variant of [`SUBDICTRPGET`](#instr-subdictrpget) with the prefix represented by a signed big-endian `l`-bit _Integer_ `x`, where necessarily `l <= 257`. |  |
 | **`F4B7`** | `SUBDICTURPGET` | _`x l D n - D'`_ | Variant of [`SUBDICTRPGET`](#instr-subdictrpget) with the prefix represented by an unsigned big-endian `l`-bit _Integer_ `x`, where necessarily `l <= 256`. |  |
+
+
+### TVM Instructions Content List
+
+* [Overview](/learn/tvm-instructions/instructions)
+* [Stack Manipulation](/learn/tvm-instructions/instructions/stack-manipulation)
+* [Tuple, List and Null](/learn/tvm-instructions/instructions/tuple-list-null)
+* [Constants and Literals](/learn/tvm-instructions/instructions/constant)
+* [Arithmetic Operations](/learn/tvm-instructions/instructions/arithmetic)
+* [Data Comparison](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell Manipulation](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation and Control Flow](/learn/tvm-instructions/instructions/control-flow)
+* [Exception Generation and Handling](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [Dictionary Manipulation](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [Application-specific Primitives](/learn/tvm-instructions/instructions/app-specific)
+* [Miscellaneous](/learn/tvm-instructions/instructions/miscellaneous)

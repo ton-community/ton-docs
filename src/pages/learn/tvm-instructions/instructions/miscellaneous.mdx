@@ -6,7 +6,7 @@ wrapperClassName: bootstrap-wrapper
 import { SearchField } from '@site/src/components/SearchField';
 import { miscellaneousOpcodes as opcodes } from '@site/src/data/opcodes';
 
-# Debug primitives
+# Debug and Codepage Primitives
 
 Opcodes beginning with `FE` are reserved for the debug primitives. These primitives have known fixed operation length and behave as (multibyte) [`NOP`](#instr-nop) operations.
 
@@ -28,6 +28,7 @@ Other primitives listed here have opcodes from the same set. When debug is enabl
   ]}
 />
 
+### Debug Primitives
 
 | xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
@@ -36,7 +37,9 @@ Other primitives listed here have opcodes from the same set. When debug is enabl
 | **`FE00`** | `DUMPSTK` | _`-`_ | Dumps the stack (at most the top 255 values) and shows the total stack depth. | `26` |
 | **`FE2i`** | `s[i] DUMP` | _`-`_ | Dumps `s[i]`. | `26` |
 
-# Codepage primitives
+
+
+### Codepage primitives
 
 | xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
@@ -45,3 +48,18 @@ Other primitives listed here have opcodes from the same set. When debug is enabl
 | **`FFFz`** | `[z-16] SETCP` | _`-`_ | Selects TVM codepage `z-16` for `1 <= z <= 15`. Negative codepages `-13...-1` are reserved for restricted versions of TVM needed to validate runs of TVM in other codepages. Negative codepage `-14` is reserved for experimental codepages, not necessarily compatible between different TVM implementations, and should be disabled in the production versions of TVM. | `26` |
 | **`FFF0`** | `SETCPX` | _`c - `_ | Selects codepage `c` with `-2^15 <= c < 2^15` passed in the top of the stack. | `26` |
 
+
+### TVM Instructions Content List
+
+* [Overview](/learn/tvm-instructions/instructions)
+* [Stack Manipulation](/learn/tvm-instructions/instructions/stack-manipulation)
+* [Tuple, List and Null](/learn/tvm-instructions/instructions/tuple-list-null)
+* [Constants and Literals](/learn/tvm-instructions/instructions/constant)
+* [Arithmetic Operations](/learn/tvm-instructions/instructions/arithmetic)
+* [Data Comparison](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell Manipulation](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation and Control Flow](/learn/tvm-instructions/instructions/control-flow)
+* [Exception Generation and Handling](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [Dictionary Manipulation](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [Application-specific Primitives](/learn/tvm-instructions/instructions/app-specific)
+* [Miscellaneous](/learn/tvm-instructions/instructions/miscellaneous)
