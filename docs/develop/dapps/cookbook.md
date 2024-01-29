@@ -454,7 +454,7 @@ asyncio.run(main())
 
 ### How to construct a message for a jetton transfer with a comment?
 
-To understand how to construct a message for token transfer, we use [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which describes the token standard. It's important to note that each token can have its own `decimals`, which default to `9`. So, in the example below, we multiply the quantity by 10^9. If decimals were different, you would **need to multiply by a different value**.
+To understand how to construct a message for token transfer, we use [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which describes the token standard. It's important to note that each token can have its own `decimals`, which defaults to `9`. So, in the example below, we multiply the quantity by 10^9. If decimals were different, you would **need to multiply by a different value**.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -614,9 +614,10 @@ To indicate that we want to include a comment, we specify 32 zero bits and then 
 
 ### How to send a swap message to DEX (DeDust)?
 
-DEXes use different protocols for their work. You can find details for the DeDust protocol on their [website](https://docs.dedust.io/).
+DEXs use different protocols for their work. In this example we will interact with **DeDust**.
+ * [DeDust documentation](https://docs.dedust.io/).
 
-DeDust has two exchange paths: jetton <-> jetton or toncoin <-> jetton. Each has a different scheme. To swap, you need to send jettons to a specific jetton (or toncoin) **vault** by passing a special payload. Here is the scheme for swapping jetton to jetton or jetton to toncoin:
+DeDust has two exchange paths: jetton <-> jetton or toncoin <-> jetton. Each has a different scheme. To swap, you need to send jettons (or toncoin) to a specific **vault** and provide a special payload. Here is the scheme for swapping jetton to jetton or jetton to toncoin:
 
 ```tlb
 swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
@@ -625,7 +626,7 @@ swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
               swap_params#_ deadline:Timestamp recipient_addr:MsgAddressInt referral_addr:MsgAddress
                     fulfill_payload:(Maybe ^Cell) reject_payload:(Maybe ^Cell) = SwapParams;
 ```
-This scheme shows what should be in the forward_payload of a message from your toncoin wallet to your jetton wallet (`transfer#f8a7ea5`)
+This scheme shows what should be in the `forward_payload` of your jettons transfer message (`transfer#0f8a7ea5`).
 
 And the scheme of toncoin to jetton swap:
 ```tlb
@@ -637,12 +638,12 @@ swap#ea06185d query_id:uint64 amount:Coins _:SwapStep swap_params:^SwapParams = 
 ```
 This is the scheme for the body of transfer to the toncoin **vault**.
 
-First, you need to know the **vault** addresses of the jettons you will swap or toncoin **vault** address. This can be done using the get methods of the contract [**FACTORY**](https://docs.dedust.io/reference/factory) `get_vault_address`. As an argument you need to pass a slice according to the scheme:
+First, you need to know the **vault** addresses of the jettons you will swap or toncoin **vault** address. This can be done using the `get_vault_address` get method of the contract [**Factory**](https://docs.dedust.io/reference/factory). As an argument you need to pass a slice according to the scheme:
 ```tlb
 native$0000 = Asset; // for ton
 jetton$0001 workchain_id:int8 address:uint256 = Asset; // for jetton
 ```
-Also for the exchange itself, we need the **pool** address - `get_pool_address`. As arguments - asset slices according to the scheme above. In response, both methods will return a slice of the address of the requested **vault** / **pool**.
+Also for the exchange itself, we need the **pool** address - acquired from get method `get_pool_address`. As arguments - asset slices according to the scheme above. In response, both methods will return a slice of the address of the requested **vault** / **pool**.
 
 This is enough to build the message.
 
