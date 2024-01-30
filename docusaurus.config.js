@@ -427,7 +427,7 @@ const config = {
               },
               {
                 to: 'https://github.com/ton-blockchain/TEPs',
-                label: 'TEPs Discussion',
+                label: 'Standards Discussion (TEPs)',
               },
               {
                 to: 'contribute',
