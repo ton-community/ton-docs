@@ -423,11 +423,11 @@ const config = {
               },
               {
                 to: 'https://t.me/tonsupport_aibot',
-                label: 'TON Developers Kit',
+                label: 'AI TON Support Agent',
               },
               {
                 to: 'https://github.com/ton-blockchain/TEPs',
-                label: 'AI TON Support Agent',
+                label: 'TEPs Discussion',
               },
               {
                 to: 'contribute',
