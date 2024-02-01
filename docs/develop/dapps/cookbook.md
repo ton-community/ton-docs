@@ -612,11 +612,12 @@ asyncio.run(main())
 
 To indicate that we want to include a comment, we specify 32 zero bits and then write our comment. We also specify the `response destination`, which means that a response regarding the successful transfer will be sent to this address. If we don't want a response, we can specify 2 zero bits instead of an address.
 
-### How to send swap message to DEX (DeDust)?
+### How to send a swap message to DEX (DeDust)?
 
-DEXes use different protocols for their work. You can find details for the DeDust protocol on their [website](https://docs.dedust.io/).
+DEXs use different protocols for their work. In this example we will interact with **DeDust**.
+ * [DeDust documentation](https://docs.dedust.io/).
 
-DeDust has two exchange paths: jetton <-> jetton or toncoin <-> jetton. Each has a different scheme. To swap, you need to send jettons to a specific jetton (or toncoin) **vault** by passing a special payload. Here is the scheme for swapping jetton to jetton or jetton to toncoin:
+DeDust has two exchange paths: jetton <-> jetton or toncoin <-> jetton. Each has a different scheme. To swap, you need to send jettons (or toncoin) to a specific **vault** and provide a special payload. Here is the scheme for swapping jetton to jetton or jetton to toncoin:
 
 ```tlb
 swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
@@ -625,7 +626,7 @@ swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
               swap_params#_ deadline:Timestamp recipient_addr:MsgAddressInt referral_addr:MsgAddress
                     fulfill_payload:(Maybe ^Cell) reject_payload:(Maybe ^Cell) = SwapParams;
 ```
-This scheme shows what should be in the forward_payload of a message from your toncoin wallet to your jetton wallet (`transfer#f8a7ea5`)
+This scheme shows what should be in the `forward_payload` of your jettons transfer message (`transfer#0f8a7ea5`).
 
 And the scheme of toncoin to jetton swap:
 ```tlb
@@ -635,18 +636,195 @@ swap#ea06185d query_id:uint64 amount:Coins _:SwapStep swap_params:^SwapParams = 
               swap_params#_ deadline:Timestamp recipient_addr:MsgAddressInt referral_addr:MsgAddress
                     fulfill_payload:(Maybe ^Cell) reject_payload:(Maybe ^Cell) = SwapParams;
 ```
-This is scheme for body of trabsfer to the toncoin **vault**.
+This is the scheme for the body of transfer to the toncoin **vault**.
 
-First, you need to know the **vault** addresses of the jettons you will swap or toncoin **vault** address. This can be done using the get methods of the contract [**FACTORY**](https://docs.dedust.io/reference/factory) `get_vault_address`. As an argument you need to pass a slice according to the scheme:
+First, you need to know the **vault** addresses of the jettons you will swap or toncoin **vault** address. This can be done using the `get_vault_address` get method of the contract [**Factory**](https://docs.dedust.io/reference/factory). As an argument you need to pass a slice according to the scheme:
 ```tlb
 native$0000 = Asset; // for ton
 jetton$0001 workchain_id:int8 address:uint256 = Asset; // for jetton
 ```
-Also for the exchange itself we need the **pool** address - `get_pool_address`. As arguments - asset slices according to the scheme above. In response, both methods will return a slice of the address of the requested **vault** / **pool**.
+Also for the exchange itself, we need the **pool** address - acquired from get method `get_pool_address`. As arguments - asset slices according to the scheme above. In response, both methods will return a slice of the address of the requested **vault** / **pool**.
 
 This is enough to build the message.
 
 <Tabs groupId="code-examples">
+
+ <TabItem value="js-ton" label="JS (@ton)">
+DEXs use different protocols for their work, we need to familiarize ourselves with key concepts and some vital components and also know the TL-B schema involved in doing our swap process correctly. In this tutorial, we deal with DeDust, one of the famous DEX implemented entirely in TON.
+In DeDust, we have an abstract Asset concept that includes any swappable asset types. Abstraction over asset types simplifies the swap process because the type of asset does not matter, and extra currency or even assets from other chains in this approach will be covered with ease.
+
+
+
+Following is the TL-B schema that DeDust introduced for the Asset concept.
+
+```tlb
+native$0000 = Asset; // for ton
+
+jetton$0001 workchain_id:int8 address:uint256 = Asset; // for any jetton,address refer to jetton master address
+
+// Upcoming, not implemented yet.
+extra_currency$0010 currency_id:int32 = Asset;
+```
+
+Next, DeDust introduced three components, Vault, Pool, and Factory. These components are contracts or groups of contracts and are responsible for parts of the swap process. The factory acts as finding other component addresses (like vault, and pool)
+and also building other components.
+Vault is responsible for receiving transfer messages, holding assets, and just informing the corresponding pool that "user A wants to swap 100 X to Y".
+
+
+Pool, on the other hand, is responsible for calculating the swap amount based on the predefined formula informing other Vault that are responsible for asset Y, and telling it to pay a calculated amount to the user.
+Calculations of swap amount are based on a mathematical formula, which means so far we have two different pools, one known as Volatile, that operates based on the commonly used "Constant Product" formula: x * y = k, And the other known as Stable-Swap - Optimized for assets of near-equal value (e.g. USDT / USDC, TON / stTON). It uses the formula: x3 * y + y3 * x = k.
+So for every swap we need the corresponding Vault and it needs just implement a specific API tailored for interacting with a distinct asset type. DeDust has three implementations of Vault, Native Vault - Handles the native coin (Toncoin). Jetton Vault - Manages jettons and Extra-Currency Vault (upcoming) - Designed for TON extra-currencies.
+
+
+DeDust provides a special SDk to work with contract, component, and API, it was written in typescript.
+Enough theory, let's set up our environment to swap one jetton with TON.
+
+```bash
+npm install --save @ton/core @ton/ton @ton/crypt
+
+```
+
+we also need to bring DeDust SDK as well.
+
+```bash
+npm install --save @dedust/sdk
+```
+
+Now we need to initialize some objects.
+
+```typescript
+import { Factory, MAINNET_FACTORY_ADDR } from "@dedust/sdk";
+import { Address, TonClient4 } from "@ton/ton";
+
+const tonClient = new TonClient4({
+  endpoint: "https://mainnet-v4.tonhubapi.com",
+});
+const factory = tonClient.open(Factory.createFromAddress(MAINNET_FACTORY_ADDR));
+//The Factory contract  is used to  locate other contracts.
+```
+
+The process of swapping has some steps, for example, to swap some TON with Jetton we first need to find the corresponding Vault and Pool
+then make sure they are deployed. For our example TON and SCALE, the code is as follows :
+
+```typescript
+import { Asset, VaultNative } from "@dedust/sdk";
+
+//Native vault is for TON
+const tonVault = tonClient.open(await factory.getNativeVault());
+//We use the factory to find our native coin (Toncoin) Vault.
+```
+
+The next step is to find the corresponding Pool, here (TON and SCALE)
+
+```typescript
+import { PoolType } from "@dedust/sdk";
+
+const SCALE_ADDRESS = Address.parse(
+  "EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE",
+);
+// master address of SCALE jetton
+const TON = Asset.native();
+const SCALE = Asset.jetton(SCALE_ADDRESS);
+
+const pool = tonClient.open(
+  await factory.getPool(PoolType.VOLATILE, [TON, SCALE]),
+);
+```
+
+Now we should ensure that these contracts exist since sending funds to an inactive contract could result in irretrievable loss.
+
+```typescript
+import { ReadinessStatus } from "@dedust/sdk";
+
+// Check if the pool exists:
+if ((await pool.getReadinessStatus()) !== ReadinessStatus.READY) {
+  throw new Error("Pool (TON, SCALE) does not exist.");
+}
+
+// Check if the vault exits:
+if ((await tonVault.getReadinessStatus()) !== ReadinessStatus.READY) {
+  throw new Error("Vault (TON) does not exist.");
+}
+```
+
+After that, we can send transfer messages with the amount of TON
+
+```typescript
+import { toNano } from "@ton/core";
+import { mnemonicToPrivateKey } from "@ton/crypto";
+
+  if (!process.env.MNEMONIC) {
+    throw new Error("Environment variable MNEMONIC is required.");
+  }
+
+  const mnemonic = process.env.MNEMONIC.split(" ");
+
+  const keys = await mnemonicToPrivateKey(mnemonic);
+  const wallet = tonClient.open(
+    WalletContractV3R2.create({
+      workchain: 0,
+      publicKey: keys.publicKey,
+    }),
+  );
+
+const sender = wallet.sender(keys.secretKey);
+
+const amountIn = toNano("5"); // 5 TON
+
+await tonVault.sendSwap(sender, {
+  poolAddress: pool.address,
+  amount: amountIn,
+  gasAmount: toNano("0.25"),
+});
+```
+
+To swap Token X with Y, the process is the same, for instance, we send an amount of X token to vault X, vault X
+receives our asset, holds it, and informs Pool of (X, Y) that this address asks for a swap, now Pool based on
+calculation informs another Vault, here Vault Y releases equivalent Y to the user who requests swap.
+
+The difference between assets is just about the transfer method for example, for jettons, we transfer them to the Vault using a transfer message and attach a specific forward_payload, but for the native coin, we send a swap message to the Vault, attaching the corresponding amount of TON.
+
+This is the schema for TON and jetton :
+
+```tlb
+swap#ea06185d query_id:uint64 amount:Coins _:SwapStep swap_params:^SwapParams = InMsgBody;
+```
+
+So every vault and corresponding Pool is designed for specific swaps and has a special API tailored to special assets.
+
+This was swapping TON with jetton SCALE. The process for swapping jetton with jetton is the same, the only difference is we should provide the payload that was described in the TL-B schema.
+
+```TL-B
+swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
+```
+
+```typescript
+//find Vault
+const scaleVault = tonClient.open(await factory.getJettonVault(SCALE_ADDRESS));
+```
+
+```typescript
+//find jetton address
+import { JettonRoot, JettonWallet } from '@dedust/sdk';
+
+const scaleRoot = tonClient.open(JettonRoot.createFromAddress(SCALE_ADDRESS));
+const scaleWallet = tonClient.open(await scaleRoot.getWallet(sender.address);
+
+// Transfer jettons to the Vault (SCALE) with corresponding payload
+
+const amountIn = toNano('50'); // 50 SCALE
+
+await scaleWallet.sendTransfer(sender, toNano("0.3"), {
+  amount: amountIn,
+  destination: scaleVault.address,
+  responseAddress: sender.address, // return gas to user
+  forwardAmount: toNano("0.25"),
+  forwardPayload: VaultJetton.createSwapPayload({ poolAddress }),
+});
+```
+
+</TabItem>
+
 <TabItem value="ton-kotlin" label="ton-kotlin">
 
 Build Asset slice:
