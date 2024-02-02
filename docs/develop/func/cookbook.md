@@ -244,7 +244,7 @@ slice_with_bits_and_refs.slice_refs_empty?();
 
 ### How to determine if cell is empty
 
-To check if there is any data in a `cell`, we should first convert it to `slice`. If we are only interested in having `bits`, we should use `slice_data_empty?()`, if only `refs` - `slice_data_refs?()`. In case we want to check the presence of any data regardless of whether it is a `bit` or `ref`, we need to use `slice_empty?()`.
+To check if there is any data in a `cell`, we should first convert it to `slice`. If we are only interested in having `bits`, we should use `slice_data_empty?()`, if only `refs` - `slice_refs_empty?()`. In case we want to check the presence of any data regardless of whether it is a `bit` or `ref`, we need to use `slice_empty?()`.
 
 ```func
 cell cell_with_bits_and_refs = begin_cell()
