@@ -635,3 +635,44 @@ If validatorWalletName is null then execute the following:
 ```bash
 mytonctrl> set validatorWalletName validator_wallet_001
 ```
+
+
+### Transfer a Validator on the new Server
+
+:::info
+Transfer all keys and configs from the old to the working node and start it. In case something goes wrong on the new one, there is still the source where everything is set up.
+:::
+
+The best way (while the penalty for temporary non-validation is small, it can be done without interruption):
+
+1. Perform a clean installation on the new server using `mytonctrl`, and wait until everything is synchronized.
+
+2. Stop the `mytoncore` and validator `services` on both machines, make backups on the source and on the new one::
+
+- 2.1 `/usr/local/bin/mytoncore/...`
+- 2.2 `/home/${user}/.local/share/mytoncore/...`
+- 2.3 `/var/ton-work/db/config.json`
+- 2.4 `/var/ton-work/db/config.json.backup`
+- 2.5 `/var/ton-work/db/keyring`
+- 2.6 `/var/ton-work/keys`
+
+
+3. Transfer from the source to the new one (replace the contents):
+
+- 3.1 `/usr/local/bin/mytoncore/...`
+- 3.2 `/home/${user}/.local/share/mytoncore/...`
+- 3.3 `/var/ton-work/db/config.json`
+- 3.4 `/var/ton-work/db/keyring`
+- 3.5 `/var/ton-work/keys`
+
+4. In `/var/ton-work/db/config.json` edit `addrs[0].ip` to the current one, which was after installation (can be seen in the backup `/ton-work/db/config.json.backup`)
+
+5. Check the permissions on all replaced files
+
+6. On the new one, start the `mytoncore` and `validator` services, check that the node synchronizes and then validates
+
+7. On the new one, make a backup:
+
+```bash
+cp var/ton-work/db/config.json var/ton-work/db/config.json.backup
+```
