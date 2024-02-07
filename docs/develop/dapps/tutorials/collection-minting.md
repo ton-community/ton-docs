@@ -1115,12 +1115,12 @@ Go to https://testnet.getgems.io/YOUR_COLLECTION_ADDRESS_HERE and look to this p
 
 ## Conclusion 
 
-Today you have learned a lot of new things about TON and even created your own beautiful NFT collection in the testnet! If you still have any questions or have noticed an error - feel free to write to the author - [@coalus](https:/t.me/coalus)
+Today you have learned a lot of new things about TON and even created your own beautiful NFT collection in the testnet! If you still have any questions or have noticed an error - feel free to write to the author - [@coalus](https://t.me/coalus)
 
 ## References
 
-- [GetGems NFT-contracts](https:/github.com/getgems-io/nft-contracts)
+- [GetGems NFT-contracts](https://github.com/getgems-io/nft-contracts)
 - [NFT Standart](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
 
 ## About the author 
-- Coalus on [Telegram](https:/t.me/coalus) or [Github](https:/github.com/coalus)
+- Coalus on [Telegram](https://t.me/coalus) or [Github](https://github.com/coalus)
