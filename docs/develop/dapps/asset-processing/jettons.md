@@ -14,15 +14,15 @@ In most cases, this should be enough for you, if not, you can find detailed info
 ## Content List
 
 This document describes the following in order:
-1. Jetton Architecture
+1. Overview 
+2. Architecture
 2. Jetton Master Contract(Minter)
 3. Jetton Wallet Contract(User Wallet)
 4. Message Layouts
-2. Explains how to obtain jetton financial data and metadata
-3. Explains how to interact programmably with jetton wallets
-4. Provides an explanation for off-chain jetton deposits and withdrawals
-5. Provides an explanation for on-chain jetton deposits and withdrawals
-6. Describes jetton wallet processing
+4. Jetton Processing (off-chain)
+5. Jetton Processing (on-chain)
+6. Wallet processing
+7. Examples
 
 ## Overview
 
@@ -31,9 +31,9 @@ For clear understanding, the reader should be familiar with the basic principles
 :::
 
 TON Blockchain and its underlying ecosystem classifies fungible tokens (FTs) as jettons. Because sharding is applied on TON Blockchain, our implementation of fungible tokens is unique when compared to similar blockchain models.
+The core description of jetton processing described in the [Centralized Jetton Proccessing](/develop/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet) and [Users Deposits Processing](http://localhost:3000/develop/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses) chapters.
 
 In this analysis, we take a deeper dive into the formal standards detailing jetton [behavior](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) and [metadata](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
-
 A less formal sharding-focused overview of jetton architecture can be found in our
 [anatomy of jettons blog post](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons).
 
@@ -55,11 +55,13 @@ Standardized tokens on TON are implemented using a set of smart contracts, inclu
 </p>
 
 ## Jetton master smart contract
-The jetton master smart contract stores general information about the jetton (including the total supply, a metadata link, or the metadata itself).
+The jetton master smart contract stores general information about the jetton (
+
+including the total supply, a metadata link, or the metadata itself).
 
 It is possible for any user to create a counterfeit clone of a valuable jetton (using an arbitrary name, ticker, image, etc.) that is nearly identical to the original. Thankfully, counterfeit jettons are distinguishable by their addresses and can be identified quite easily.
 
-To eliminate the possibility of fraud for TON users, please look up the original jetton address (Jetton master contract) for specific jetton types or follow the project’s official social media channel or website to find the correct information. Most blockchain projects also have curated lists of assets to eliminate the possibility of fraud (for TON, this is found using the Tonkeeper ton-assets list).
+To eliminate the possibility of fraud for TON users, please look up the original jetton address (Jetton master contract) for specific jetton types or follow the project’s official social media channel or website to find the correct information. Check assets to eliminate the possibility of fraud with [Tonkeeper ton-assets list](https://github.com/tonkeeper/ton-assets).
 
 ### Retrieving Jetton data
 
@@ -77,7 +79,7 @@ This method returns the following data:
 
 
 
-It is also possible to use the method `/getTokenData` from the [Toncenter API](https://toncenter.com/api/v2/) to retrieve the already decoded Jetton data and metadata. We have also developed methods for (js) [tonweb](https://github.com/toncenter/tonweb/blob/master/src/contract/token/ft/JettonMinter.js#L85) and (js) [ton-core/ton](https://github.com/ton-core/ton/blob/master/src/jetton/JettonMaster.ts#L28), (go) [tongo](https://github.com/tonkeeper/tongo/blob/master/liteapi/jetton.go#L48) and (go) [tonutils-go](https://github.com/xssnick/tonutils-go/blob/33fd62d754d3a01329ed5c904db542ab4a11017b/ton/jetton/jetton.go#L79), (python) [pytonlib](https://github.com/toncenter/pytonlib/blob/d96276ec8a46546638cb939dea23612876a62881/pytonlib/client.py#L742) and many other SDKs.
+It is also possible to use the method `/jetton/masters` from the [Toncenter API](https://toncenter.com/api/v3/#/default/get_jetton_masters_api_v3_jetton_masters_get) to retrieve the already decoded Jetton data and metadata. We have also developed methods for (js) [tonweb](https://github.com/toncenter/tonweb/blob/master/src/contract/token/ft/JettonMinter.js#L85) and (js) [ton-core/ton](https://github.com/ton-core/ton/blob/master/src/jetton/JettonMaster.ts#L28), (go) [tongo](https://github.com/tonkeeper/tongo/blob/master/liteapi/jetton.go#L48) and (go) [tonutils-go](https://github.com/xssnick/tonutils-go/blob/33fd62d754d3a01329ed5c904db542ab4a11017b/ton/jetton/jetton.go#L79), (python) [pytonlib](https://github.com/toncenter/pytonlib/blob/d96276ec8a46546638cb939dea23612876a62881/pytonlib/client.py#L742) and many other SDKs.
 
 Example of using [Tonweb](https://github.com/toncenter/tonweb) to run a get method and get url for off-chain metadata:
 
@@ -109,11 +111,14 @@ and as a result, _her wallet_ sends an internal message to _her jetton wallet_ a
 then the jetton wallet actually executes the token transfer.
 
 ### Retrieving Jetton wallet addresses for a given user
-To retrieve a jetton wallet address using an owner address (a TON address), 
+To retrieve a jetton wallet address using an owner address (a TON Wallet address), 
 the Jetton master contract provides the get method `get_wallet_address(slice owner_address)`.
 
-To call this method, the application serializes the owner’s address to a cell using 
-the `/runGetMethod` method from the Toncenter API.
+#### Retrieve using API
+The application serializes the owner’s address to a cell using 
+the `/runGetMethod` method from the [Toncenter API](https://toncenter.com/api/v3/#/default/run_get_method_api_v3_runGetMethod_post).
+
+#### Retrieve using SDK
 This process can also be initiated using ready to use methods present in our various SDKs, for instance,  
 using the Tonweb SDK, this process can be initiated by entering the following strings:
 
@@ -133,6 +138,9 @@ if (jettonData.jettonMinterAddress.toString(false) !== new TonWeb.utils.Address(
 
 console.log('Jetton wallet address:', address.toString(true, true, true));
 ```
+:::tip
+For more examples read the [TON Cookbook](/develop/dapps/cookbook#how-to-calculate-users-jetton-wallet-address).
+:::
 
 ### Retrieving data for a specific Jetton wallet
 
@@ -148,7 +156,7 @@ This method returns the following data:
 | jetton             | slice |
 | jetton_wallet_code | cell  |
 
-It is also possible to use the `/getTokenData` get method using the Toncenter API to retrieve previously decoded jetton wallet data (or methods within an SDK). For example, using Tonweb:
+It is also possible to use the `/jetton/wallets` get method using the [Toncenter API](https://toncenter.com/api/v3/#/default/get_jetton_wallets_api_v3_jetton_wallets_get) to retrieve previously decoded jetton wallet data (or methods within an SDK). For instance, using Tonweb:
 
 ```js
 import TonWeb from "tonweb";
@@ -176,6 +184,10 @@ The recipient's jetton wallet will be deployed automatically as long as the send
 in the wallet to pay the required gas fees.
 
 ## Message Layouts
+
+:::tip Messages
+Read more about Messages [here](/develop/smart-contracts/guidelines/message-delivery-guarantees).
+:::
 
 Communication between Jetton wallets and TON wallets occurs through the following communication sequence:
 
@@ -255,6 +267,11 @@ await wallet.methods.transfer({
     sendMode: 3,
 }).send()
 ```
+
+:::tip
+For more examples read the [TON Cookbook](/develop/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment).
+:::
+
 
 ## Jetton off-chain processing
 Several scenarios that allow a user to accept Jettons are possible. Jettons can be accepted within a centralized hot wallet; as well, they can also be accepted using a wallet with a separate address for each individual user.

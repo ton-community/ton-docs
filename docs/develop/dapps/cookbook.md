@@ -1409,5 +1409,5 @@ asyncio.run(main())
 </Tabs>
 
 Note that this example covers only the simplest case with incoming messages, where it is enough to fetch the transactions on a single account. If you want to go deeper and handle more complex chains of transactions and messages, you should take `tx.outMessages` field into an account. It contains the list of the output messages sent by smart-contract in the result of this transaction. To understand the whole logic better, you can read these articles:
- * [Internal messages](/develop/smart-contracts/guidelines/internal-messages)
- * [Message Delivery Guarantees](/develop/smart-contracts/guidelines/message-delivery-guarantees)
+* [Message Overview](/develop/smart-contracts/guidelines/message-delivery-guarantees)
+* [Internal messages](/develop/smart-contracts/guidelines/internal-messages)
