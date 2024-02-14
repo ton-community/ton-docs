@@ -243,26 +243,26 @@ const sidebars = {
           type: 'category',
           label: 'Telegram Mini Apps',
           items: [
-                    'develop/dapps/telegram-apps/README',
-                    'develop/dapps/telegram-apps/grants',
-                {
-            type: 'category',
-            label: 'Guidelines',
-            items: [
-            'develop/dapps/telegram-apps/testing-apps',
-            'develop/dapps/telegram-apps/publishing',
-            'develop/dapps/telegram-apps/monetization',
-            'develop/dapps/telegram-apps/tips-and-tricks',
-            ],
+            'develop/dapps/telegram-apps/README',
+            'develop/dapps/telegram-apps/grants',
+            {
+              type: 'category',
+              label: 'Guidelines',
+              items: [
+                'develop/dapps/telegram-apps/testing-apps',
+                'develop/dapps/telegram-apps/publishing',
+                'develop/dapps/telegram-apps/monetization',
+                'develop/dapps/telegram-apps/tips-and-tricks',
+              ],
             },
             {
-                type: 'category',
-                label: 'Tutorials & Examples',
-                items: [
-                    'develop/dapps/telegram-apps/step-by-step-guide',
-                    'develop/dapps/telegram-apps/app-examples',
-                    'develop/dapps/telegram-apps/design-guidelines',
-                ],
+              type: 'category',
+              label: 'Tutorials & Examples',
+              items: [
+                'develop/dapps/telegram-apps/step-by-step-guide',
+                'develop/dapps/telegram-apps/app-examples',
+                'develop/dapps/telegram-apps/design-guidelines',
+              ],
             },
 
 
@@ -323,6 +323,11 @@ const sidebars = {
               type: 'doc',
               id: 'develop/dapps/tutorials/simple-zk-on-ton',
               label: 'Zero-Knowledge Proofs',
+            },
+            {
+              type: 'doc',
+              id: 'develop/dapps/tutorials/building-web3-game',
+              label: 'Web3 Game Example',
             },
             {
               type: 'category',
@@ -490,13 +495,13 @@ const sidebars = {
       ],
     },
     {
-          type: 'category',
-          label: 'Blockchain Fundamentals',
-          items: [
-              'develop/blockchain/shards',
-              'develop/blockchain/sharding-lifecycle',
-          ],
-        },
+      type: 'category',
+      label: 'Blockchain Fundamentals',
+      items: [
+        'develop/blockchain/shards',
+        'develop/blockchain/sharding-lifecycle',
+      ],
+    },
     {
       type: 'category',
       label: 'Data Formats',
@@ -580,42 +585,42 @@ const sidebars = {
       'type': 'html',
       'value': '<span class=\'menu__link\'><b><small> Infrastructure </small></b></span>',
     },
-      'participate/explorers',
-      {
-        type: 'category',
-        label: 'Wallets in TON',
-        items: [
-          'participate/wallets/apps',
-          'participate/wallets/contracts',
-        ],
-      },
-      {
-        type: 'category',
-        label: 'Cross-chain Bridges',
-        items: [
-          {
-            type: 'doc',
-            label: 'Overview',
-            id: 'participate/crosschain/overview',
-          },
-          {
-            type: 'doc',
-            label: 'Bridges Addresses',
-            id: 'participate/crosschain/bridge-addresses',
-          },
-        ],
-      },
+    'participate/explorers',
+    {
+      type: 'category',
+      label: 'Wallets in TON',
+      items: [
+        'participate/wallets/apps',
+        'participate/wallets/contracts',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Cross-chain Bridges',
+      items: [
+        {
+          type: 'doc',
+          label: 'Overview',
+          id: 'participate/crosschain/overview',
+        },
+        {
+          type: 'doc',
+          label: 'Bridges Addresses',
+          id: 'participate/crosschain/bridge-addresses',
+        },
+      ],
+    },
     {
       type: 'category',
       label: 'Blockchain Nodes',
       items: [
-          'participate/nodes/node-types',
-          'participate/run-nodes/full-node',
-          'participate/run-nodes/archive-node',
-          'participate/run-nodes/liteserver',
-          'participate/nodes/nodes-faq',
-          'participate/nodes/node-maintenance-and-security',
-          'participate/run-nodes/local-ton',
+        'participate/nodes/node-types',
+        'participate/run-nodes/full-node',
+        'participate/run-nodes/archive-node',
+        'participate/run-nodes/liteserver',
+        'participate/nodes/nodes-faq',
+        'participate/nodes/node-maintenance-and-security',
+        'participate/run-nodes/local-ton',
       ],
     },
     {
