@@ -202,6 +202,11 @@ Example of the **status** command output:
 
 ![status](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/mytonctrl-status.png)
 
+:::caution Make sure you have same output for status
+For all nodes type **Local Validator status** section should appear.
+Otherwise, [check troubleshooting section](/participate/run-nodes/full-node#status-command-displays-without-local-node-section) and [check node logs](/participate/run-nodes/full-node#check-the-node-logs).
+:::
+
 Wait until `Local validator out of sync` becomes less than 20 seconds.
 
 ## Become a Validator
@@ -548,11 +553,19 @@ This way, you can open the port in the firewall settings of your server.
 
 ![Help command](/img/docs/full-node/help.jpg)
 
-### Check the logs
+### Check the mytonctrl logs
 
 - To check **mytoncrl** logs, open `~/.local/share/mytoncore/mytoncore.log` for a local user or `/usr/local/bin/mytoncore/mytoncore.log` for Root.
 
 ![logs](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytoncore-log.png)
+
+### Check the node logs
+
+Check the node logs upon failure:
+
+```bash
+tail -f /var/ton-work/log.thread*
+```
 
 
 ## Troubleshooting
@@ -621,6 +634,8 @@ The solution to the problem is to wait for the local node to synchronize or exec
 
 ### Status command displays without local node section
 
+![](\img\docs\full-node\local-validator-status-absent.png)
+
 If there is no local node section in the node status, typically this means, something went wrong during installation and the step of creating/assigning a validator wallet was skipped.
 Also check that the validator wallet is specified.
 
@@ -647,7 +662,7 @@ The best way (while the penalty for temporary non-validation is small, it can be
 
 1. Perform a clean installation on the new server using `mytonctrl`, and wait until everything is synchronized.
 
-2. Stop the `mytoncore` and validator `services` on both machines, make backups on the source and on the new one::
+2. Stop the `mytoncore` and validator `services` on both machines, make backups on the source and on the new one:
 
 - 2.1 `/usr/local/bin/mytoncore/...`
 - 2.2 `/home/${user}/.local/share/mytoncore/...`
