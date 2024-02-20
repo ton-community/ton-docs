@@ -618,7 +618,7 @@ const sidebars = {
         'participate/run-nodes/full-node',
         'participate/run-nodes/archive-node',
         'participate/run-nodes/liteserver',
-        'participate/nodes/nodes-faq',
+        //'participate/nodes/nodes-faq',
         'participate/nodes/node-maintenance-and-security',
         'participate/run-nodes/local-ton',
       ],

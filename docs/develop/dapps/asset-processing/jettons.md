@@ -31,9 +31,7 @@ This document describes the following in order:
 For clear understanding, the reader should be familiar with the basic principles of asset processing described in [this section of our documentation](/develop/dapps/asset-processing/). In particular, it is important to be familiar with [contracts](/learn/overviews/addresses#everything-is-a-smart-contract), [wallets](/develop/smart-contracts/tutorials/wallet), [messages](/develop/smart-contracts/guidelines/message-delivery-guarantees) and deployment process.
 :::
 
-TON Blockchain and its underlying ecosystem classifies fungible tokens (FTs) as jettons. Because sharding is applied on TON Blockchain, our implementation of fungible tokens is unique when compared to similar blockchain models.
-
-Read the core description of jetton processing:
+Quick jump to the core description of jetton processing:
 
 <Button href="/develop/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>Centralized Proccessing</Button>
 <Button href="/develop/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses"
@@ -42,6 +40,9 @@ Read the core description of jetton processing:
 </Button>
 
 <br></br><br></br>
+
+
+TON Blockchain and its underlying ecosystem classifies fungible tokens (FTs) as jettons. Because sharding is applied on TON Blockchain, our implementation of fungible tokens is unique when compared to similar blockchain models.
 
 In this analysis, we take a deeper dive into the formal standards detailing jetton [behavior](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) and [metadata](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
 A less formal sharding-focused overview of jetton architecture can be found in our
