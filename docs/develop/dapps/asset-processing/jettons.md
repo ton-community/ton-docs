@@ -61,7 +61,7 @@ Standardized tokens on TON are implemented using a set of smart contracts, inclu
 
 <p align="center">
   <br />
-    <img width="520" src="/img/docs/asset-processing/jetton_contracts.svg" alt="contracts scheme" />
+    <img width="420" src="/img/docs/asset-processing/jetton_contracts.svg" alt="contracts scheme" />
       <br />
 </p>
 

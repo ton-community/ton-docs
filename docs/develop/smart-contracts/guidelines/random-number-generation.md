@@ -35,33 +35,6 @@ Skipping blocks isn't a complex task. You can do it by simply sending a message 
 Do not use this example contract in real projects, write your own instead.
 :::
 
-### Masterchain echo-contract
-
-The purpose of this contract is just to forward the message back to the sender. This can be accomplished in a few FunC lines of code:
-
-```func
-() recv_internal (cell in_msg_full, slice in_msg_body) impure {
-    var cs = in_msg_full.begin_parse();
-    var flags = cs~load_uint(4);
-    if (flags & 1) { ;; ignore bounced messages
-        return ();
-    }
-    slice sender = cs~load_msg_addr();
-    send_raw_message(
-        begin_cell()
-            .store_uint(0x18, 6)
-            .store_slice(sender)
-            .store_coins(0)
-            .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
-            .store_slice(in_msg_body)
-        .end_cell(),
-        64 + 2 ;; send the remaining value of an incoming msg & ignore errors
-    );
-}
-```
-
-Just deploy this contract in the Masterchain, and let's move to the main contract.
-
 ### Main contract in any workchain
 
 Let's write a simple lottery contract as an example. A user will send 1 TON to it, and with a 50% chance, will get 2 TON back.
