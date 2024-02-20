@@ -1,5 +1,6 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Button from '@site/src/components/button';
 
 # TON Jetton processing
 
@@ -16,13 +17,13 @@ In most cases, this should be enough for you, if not, you can find detailed info
 This document describes the following in order:
 1. Overview 
 2. Architecture
-2. Jetton Master Contract(Minter)
-3. Jetton Wallet Contract(User Wallet)
+2. Jetton Master Contract (Token Minter)
+3. Jetton Wallet Contract (User Wallet)
 4. Message Layouts
 4. Jetton Processing (off-chain)
 5. Jetton Processing (on-chain)
 6. Wallet processing
-7. Examples
+7. Best Practices
 
 ## Overview
 
@@ -31,7 +32,16 @@ For clear understanding, the reader should be familiar with the basic principles
 :::
 
 TON Blockchain and its underlying ecosystem classifies fungible tokens (FTs) as jettons. Because sharding is applied on TON Blockchain, our implementation of fungible tokens is unique when compared to similar blockchain models.
-The core description of jetton processing described in the [Centralized Jetton Proccessing](/develop/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet) and [Users Deposits Processing](http://localhost:3000/develop/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses) chapters.
+
+Read the core description of jetton processing:
+
+<Button href="/develop/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>Centralized Proccessing</Button>
+<Button href="/develop/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses"
+        colorType="secondary" sizeType={'sm'}>
+  On-Chain Processing
+</Button>
+
+<br></br><br></br>
 
 In this analysis, we take a deeper dive into the formal standards detailing jetton [behavior](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) and [metadata](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
 A less formal sharding-focused overview of jetton architecture can be found in our
@@ -274,6 +284,11 @@ For more examples read the [TON Cookbook](/develop/dapps/cookbook#how-to-constru
 
 
 ## Jetton off-chain processing
+
+:::info Transaction Confirmation
+TON transactions are irreversible after just one confirmation. For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
+:::
+
 Several scenarios that allow a user to accept Jettons are possible. Jettons can be accepted within a centralized hot wallet; as well, they can also be accepted using a wallet with a separate address for each individual user.
 
 To process Jettons, unlike individualized TON processing, a hot wallet is required (a v3R2, highload wallet) in addition 
@@ -404,6 +419,10 @@ accomplished when withdrawing Jettons from the deposit.
 
 #### Processing transactions
 
+:::info Transaction Confirmation
+TON transactions are irreversible after just one confirmation. For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
+:::
+
 It is not always possible to determine the exact amount of Jettons received from the message, because Jetton 
 wallets may not send `transfer notification`, `excesses`, and `internal transfer` messages are not standardized. This means 
 that there is no guarantee that the `internal transfer` message can be decoded.
@@ -474,6 +493,7 @@ See: [Jetton contracts message layouts](#jetton-contract-message-layouts)
 3. Carry out a Jetton transfer using a hot wallet address to initialize the Jetton wallet and replenish its balance.
 
 #### Processing withdrawals
+
 1. Load a list of processed Jettons
 2. Retrieve Jetton wallet addresses for the deployed hot wallet: [How to retrieve Jetton wallet addresses for a given user](#retrieving-jetton-wallet-addresses-for-a-given-user)
 3. Retrieve Jetton master addresses for each Jetton wallet: [How to retrieve data for Jetton wallets](#retrieving-data-for-a-specific-jetton-wallet).
@@ -509,6 +529,10 @@ value should be retrieved. A found `query_id` must be marked as successfully del
 
 ## Jetton processing on-chain
 
+:::info Transaction Confirmation
+TON transactions are irreversible after just one confirmation. For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
+:::
+
 Generally, to accept and process jettons, a message handler responsible for internal messages uses the `op=0x7362d09c` op code.
 
 Below is a list of recommendations that must be considered when carrying out on-chain jetton processing:
@@ -538,7 +562,7 @@ parameters can be crafted to mislead users, leaving those affected as potential 
 Authored by [kosrk](https://github.com/kosrk), [krigga](https://github.com/krigga), [EmelyanenkoK](https://github.com/EmelyanenkoK/) and [tolya-yanot](https://github.com/tolya-yanot/).
 
 
-## Examples 
+## Best Practices
 Here we have provided several examples of jetton code processing created by TON Community members:
 
 <Tabs groupId="code-examples">
