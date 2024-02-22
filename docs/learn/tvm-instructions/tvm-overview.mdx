@@ -1,3 +1,5 @@
+import Button from '@site/src/components/button'
+
 # TVM Overview
 
 All TON Smart Contracts are executed on their own TON Virtual Machine (TVM). TVM is built on the _stack principle_, which makes it efficient and easy to implement.
@@ -7,6 +9,16 @@ This document provides a bird's-eye view of how TVM executes transactions.
 :::tip
 * TVM Source — [**TVM C++ implementation**](https://github.com/ton-blockchain/ton/tree/master/crypto/vm)
 :::
+
+
+## TON Course: TVM
+
+The [TON Blockchain Course](https://stepik.org/course/176754/) is a comprehensive guide to TON Blockchain development.
+
+Module 2 completely covers __TVM__, transactions, scalability and business cases.
+
+<Button href="https://stepik.org/course/176754/" colorType={'primary'} sizeType={'sm'}>Check TON Blockchain Course</Button>
+
 
 ## Transactions and phases
 When some event happens on the account in one of the TON chains, it causes a **transaction**. The most common event is the "arrival of some message", but generally speaking there could be `tick-tock`, `merge`, `split` and other events.

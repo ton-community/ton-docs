@@ -107,11 +107,6 @@ const sidebars = {
 
     'develop/overview',
     {
-      type: 'doc',
-      label: 'Get Started with TON',
-      id: 'develop/get-started-with-ton',
-    },
-    {
       type: 'category',
       label: 'TON Hello World series',
       items: [
@@ -136,6 +131,11 @@ const sidebars = {
           href: 'https://ton-community.github.io/tutorials/04-testing',
         },
       ],
+    },
+    {
+      type: 'doc',
+      label: 'Get Started with TON',
+      id: 'develop/get-started-with-ton',
     },
     {
       'type': 'html',

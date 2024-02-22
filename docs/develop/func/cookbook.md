@@ -2,9 +2,10 @@
 
 The core reason for creating the FunC Cookbook is to collect all the experience from FunC developers in one place so that future developers will use it!
 
-Compared to the FunC Documentation, this article is more focused on everyday tasks every FunC developer resolve during the development of smart contracts.
+Compared to the [FunC Documentation](/develop/func/types), this article is more focused on everyday tasks every FunC developer resolve during the development of smart contracts.
 
 ## Basics
+
 ### How to write an if statement
 
 Let's say we want to check if any event is relevant. To do this, we use the flag variable. Remember that in FunC `true` is `-1` and `false` is `0`.
