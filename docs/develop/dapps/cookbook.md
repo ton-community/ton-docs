@@ -580,7 +580,7 @@ async def main():
 
     USER_JETTON_WALLET = (await provider.run_get_method(address=JETTON_MASTER_ADDRESS,
                                                         method="get_wallet_address",
-                                                        stack=[begin_cell().store_address(USER_ADDRESS).end_cell().begin_parse()]))[0]
+                                                        stack=[begin_cell().store_address(USER_ADDRESS).end_cell().begin_parse()]))[0].load_address()
     forward_payload = (begin_cell()
                       .store_uint(0, 32) # TextComment op-code
                       .store_snake_string("Comment")
@@ -598,7 +598,7 @@ async def main():
                     .end_cell())
 
     await wallet.transfer(destination=USER_JETTON_WALLET, amount=int(0.05*1e9), body=transfer_cell)
-	await client.close_all()
+	await provider.close_all()
 
 asyncio.run(main())
 ```
