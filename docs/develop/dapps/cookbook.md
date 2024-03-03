@@ -7,18 +7,24 @@ During product development, various questions often arise regarding interactions
 
 This document is created to gather the best practices from all developers and share them with everyone.
 
+## Standard operations
+
+<!-- TODO: zoom on click (lightbox?) -->
+
+<img src="/img/interaction-schemes/ecosystem.svg" alt="Full ecosystem scheme"></img>
+
+## Working with contracts' addresses
+
 ### How to convert (user friendly <-> raw), assemble, and extract addresses from strings?
 
-On TON, depending on the service, addresses can be seen in two formats: `user-friendly` and `raw`.
+TON address uniquely identifies contract in blockchain, indicating its workchain and original state hash. [Two common formats](/learn/overviews/addresses#raw-and-user-friendly-addresses) are used: **raw** (workchain and HEX-encoded hash separated with ":" character) and **user-friendly** (base64-encoded with certain flags).
 
-```bash
+```
 User-friendly: EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
 Raw: 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
 ```
 
-User-friendly addresses are encoded in base64, while raw addresses are encoded in hex. In the raw format, the workchain in which the address is located is written separately before the ":" character, and the case of the characters does not matter.
-
-To obtain an address from a string, you can use the following code:
+To obtain an address object from a string in your SDK, you can use the following code:
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -144,20 +150,22 @@ print(address2.to_str(is_user_friendly=False))  # 0:ca6e321c7cce9ecedf0a8ca2492e
 </TabItem>
 </Tabs>
 
-### How to obtain different types of addresses and determine the address type?
+### What flags are there in user-friendly addresses?
 
-Addresses come in three formats: **bounceable**, **non-bounceable**, and **testnet**. This can be easily understood by looking at the first letter of the address, because it is the first byte (8 bits) that contains flags according to [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md#smart-contract-addresses):
+Two flags are defined: **bounceable**/**non-bounceable** and **testnet**/**any-net**. They can be easily detected by looking at the first letter of the address, because it stands for first 6 bits in address encoding, and flags are located there according to [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md#smart-contract-addresses):
 
-| Letter | Binary form | Bounceable | Testnet |
-|:------:|:-----------:|:----------:|:-------:|
-|   E    |  00010001   |    yes     |   no    |
-|   U    |  01010001   |     no     |   no    |
-|   k    |  10010001   |    yes     |   yes   |
-|   0    |  11010001   |     no     |   yes   |
+| Address beginning | Binary form | Bounceable | Testnet-only |
+|:-----------------:|:-----------:|:----------:|:------------:|
+|        E...       |  000100.01  |    yes     |   no         |
+|        U...       |  010100.01  |     no     |   no         |
+|        k...       |  100100.01  |    yes     |   yes        |
+|        0...       |  110100.01  |     no     |   yes        |
 
-It's important to note that in base64 encoding, each character represents **6 bits** of information. As you can observe, in all cases, the last 2 bits remain unchanged, so in this case, we can focus on the first letter. If they changed, it would affect the next character in the address.
+:::tip
+Testnet-only flag doesn't have representation in blockchain at all. Non-bounceable flag makes difference only when used as destination address for a transfer: in this case, it [disallows bounce](/develop/smart-contracts/guidelines/non-bouncable-messages) for a message sent; address in blockchain, again, does not contain this flag.
+:::
 
-Also, in some libraries, you may notice a field called "url safe." The thing is, the base64 format is not url safe, which means there can be issues when transmitting this address in a link. When urlSafe = true, all `+` symbols are replaced with `-`, and all `/` symbols are replaced with `_`. You can obtain these address formats using the following code:
+Also, in some libraries, you may notice a serialization parameter called `urlSafe`. The thing is, the base64 format is not URL safe, which means that some of characters (namely, `+` and `/`) can cause issues when transmitting address in a link. When `urlSafe = true`, all `+` symbols are replaced with `-`, and all `/` symbols are replaced with `_`. You can obtain these address formats using the following code:
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -239,9 +247,17 @@ print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=Tru
 </TabItem>
 </Tabs>
 
-### How to send standard TON transfer message?
+## Standard wallets in TON ecosystem
 
-To send a standard TON transfer message, first you need to open your wallet contract, after that, get your wallet seqno. And only after that can you send your TON transfer. Note that if you are using a non-V4 version of the wallet, you will need to rename WalletContractV4 to WalletContract{your wallet version}, for example, WalletContractV3R2.
+### How to transfer TON? How to send a text message to other wallet?
+
+<img src="/img/interaction-schemes/wallets.svg" alt="Wallet operations scheme"></img>
+
+Most SDKs provide the following process for sending messages from your wallet:
+- You create wallet wrapper (object in your program) of a correct version (in most cases, v3r2; see also [wallet versions](/participate/wallets/contracts)), using secret key and workchain (usually 0, which stands for [basechain](/learn/overviews/ton-blockchain#workchain-blockchain-with-your-own-rules)).
+- You also create blockchain wrapper, or "client" - object that will route requests to API or liteservers, whichever you choose.
+- Then, you *open* contract in the blockchain wrapper. This means contract object is no longer abstract and represents actual account in either TON mainnet or testnet.
+- After that, you can form messages you want and send them. You can also send up to 4 messages per request, as described in an [advanced manual](/develop/smart-contracts/tutorials/wallet#sending-multiple-messages-simultaneously).
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -326,10 +342,14 @@ async def main():
     await provider.start_up()
 
     wallet = await WalletV4R2.from_mnemonic(provider=provider, mnemonics=mnemonics)
-    DESTINATION_ADDRESS = "DESTINATION ADDRESS HERE"
 
+    transfer = {
+        "destination": "DESTINATION ADDRESS HERE",    # please remember about bounceable flags
+        "amount":      int(10**9 * 0.05),             # amount sent, in nanoTON
+        "body":        "Example transfer body",       # may contain a cell; see next examples
+    }
 
-    await wallet.transfer(destination=DESTINATION_ADDRESS, amount=int(0.05*1e9), body="Example transfer body")
+    await wallet.transfer(**transfer)
 	await client.close_all()
 
 asyncio.run(main())
@@ -339,12 +359,66 @@ asyncio.run(main())
 
 </Tabs>
 
-### How to calculate user's Jetton wallet address?
+### Writing comments: long strings in snake format
+
+Some times it's necessary to store long strings (or other large information) while cells can hold **maximum 1023 bits**. In this case, we can use snake cells. Snake cells are cells that contain a reference to another cell, which, in turn, contains a reference to another cell, and so on.
+
+<Tabs groupId="code-examples">
+<TabItem value="js-tonweb" label="JS (tonweb)">
+
+```js
+const TonWeb = require("tonweb");
+
+function writeStringTail(str, cell) {
+    const bytes = Math.floor(cell.bits.getFreeBits() / 8); // 1 symbol = 8 bits
+    if(bytes < str.length) { // if we can't write all string
+        cell.bits.writeString(str.substring(0, bytes)); // write part of string
+        const newCell = writeStringTail(str.substring(bytes), new TonWeb.boc.Cell()); // create new cell
+        cell.refs.push(newCell); // add new cell to current cell's refs
+    } else {
+        cell.bits.writeString(str); // write all string
+    }
+
+    return cell;
+}
+
+function readStringTail(slice) {
+    const str = new TextDecoder('ascii').decode(slice.array); // decode uint8array to string
+    if (cell.refs.length > 0) {
+        return str + readStringTail(cell.refs[0].beginParse()); // read next cell
+    } else {
+        return str;
+    }
+}
+
+let cell = new TonWeb.boc.Cell();
+const str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In euismod, ligula vel lobortis hendrerit, lectus sem efficitur enim, vel efficitur nibh dui a elit. Quisque augue nisi, vulputate vitae mauris sit amet, iaculis lobortis nisi. Aenean molestie ultrices massa eu fermentum. Cras rhoncus ipsum mauris, et egestas nibh interdum in. Maecenas ante ipsum, sodales eget suscipit at, placerat ut turpis. Nunc ac finibus dui. Donec sit amet leo id augue tempus aliquet. Vestibulum eu aliquam ex, sit amet suscipit odio. Vestibulum et arcu dui.";
+cell = writeStringTail(str, cell);
+const text = readStringTail(cell.beginParse());
+console.log(text);
+```
+
+</TabItem>
+</Tabs>
+
+Many SDKs already have functions responsible for parsing and storing long strings. In others, you can work with such cells using recursion, or possibly optimize it out (trick known as "tail calls").
+
+Don't forget that comment message has 32 zero bits (one may say, that its opcode is 0)!
+
+## TEP-74 (Jettons Standard)
+
+<img src="/img/interaction-schemes/jettons.svg" alt="Jetton operations scheme"></img>
+
+### How to calculate user's Jetton wallet address (offchain)?
 
 To calculate the user's jetton wallet address, we need to call the "get_wallet_address" get-method of the jetton master contract with user address actually. For this task we can easily use getWalletAddress method from JettonMaster or call master contract by ourselves.
 
+:::info
+`JettonMaster` in `@ton/ton` lacks much functionality but has *this one* present, fortunately.
+:::
+
 <Tabs groupId="code-examples">
-<TabItem value="user-jetton-wallet-method-js" label="Use getWalletAddress method">
+<TabItem value="user-jetton-wallet-method-js" label="@ton/ton">
 
 ```js
 const { Address, beginCell } = require("@ton/core")
@@ -362,7 +436,7 @@ console.log(await jettonMaster.getWalletAddress(userAddress))
 ```
 </TabItem>
 
-<TabItem value="user-jetton-wallet-get-method-js" label="Call get-method by ourselves">
+<TabItem value="user-jetton-wallet-get-method-js" label="Manually call get-method">
 
 ```js
 const { Address, beginCell } = require("@ton/core")
@@ -370,21 +444,19 @@ const { TonClient } = require("@ton/ton")
 
 async function getUserWalletAddress(userAddress, jettonMasterAddress) {
     const client = new TonClient({
-      endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+        endpoint: 'https://toncenter.com/api/v2/jsonRPC',
     });
     const userAddressCell = beginCell().storeAddress(userAddress).endCell()
-
-    const response = await client.runMethod(jettonMasterAddress, "get_wallet_address", [{type: "slice", cell: userAddressCell}])
+    const response = await client.runMethod(jettonMasterAddress, "get_wallet_address", [
+        {type: "slice", cell: userAddressCell}
+    ])
     return response.stack.readAddress()
 }
 const jettonMasterAddress = Address.parse('...') // for example EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE
 const userAddress = Address.parse('...')
 
 getUserWalletAddress(userAddress, jettonMasterAddress)
-    .then((userJettonWalletAddress) => {
-        console.log(userJettonWalletAddress)
-    }
-)
+    .then((jettonWalletAddress) => {console.log(jettonWalletAddress)})
 ```
 </TabItem>
 
@@ -454,7 +526,13 @@ asyncio.run(main())
 
 ### How to construct a message for a jetton transfer with a comment?
 
-To understand how to construct a message for token transfer, we use [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which describes the token standard. It's important to note that each token can have its own `decimals`, which defaults to `9`. So, in the example below, we multiply the quantity by 10^9. If decimals were different, you would **need to multiply by a different value**.
+To understand how to construct a message for token transfer, we use [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which describes the token standard.
+
+:::warning
+When displayed, token doesn't usually show count of indivisible units user has; rather, amount is divided by `10 ^ decimals`. This value is commonly set to `9`, and this allows us to use `toNano` function. If decimals were different, we would **need to multiply by a different value** (for instance, if decimals are 6, then we would end up transferring thousand times the amount we wanted).
+
+Of course, one can always do calculation in indivisible units.
+:::
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -588,7 +666,7 @@ async def main():
     transfer_cell = (begin_cell()
                     .store_uint(0xf8a7ea5, 32)          # Jetton Transfer op-code
                     .store_uint(0, 64)                  # query_id
-                    .store_coins(1)                     # Jetton amount to transfer in nanojetton
+                    .store_coins(1 * 10**9)             # Jetton amount to transfer in nanojetton
                     .store_address(DESTINATION_ADDRESS) # Destination address
                     .store_address(USER_ADDRESS)        # Response address
                     .store_bit(0)                       # Custom payload is None
@@ -607,17 +685,338 @@ asyncio.run(main())
 
 </Tabs>
 
+If `forward_amount` is nonzero, a notification regarding jetton reception is sent to destination contract, as can be seen in the scheme in the top of this section. If `response_destination` address is not null, toncoins left (they're called "excesses") are sent to that address.
+
+:::tip
+Explorers support comments in jetton notifications as well as in common TON transfers. Their format is 32 zero bits and then text, preferably UTF-8.
+:::
+
+:::tip
+Jetton transfers need careful consideration for fees and amounts behind outgoing messages. For instance, if you "call" transfer with 0.2 TON, you won't be able to forward 0.1 TON and receive 0.1 TON in excess return message.
+:::
+
+## TEP-62 (NFT Standard)
+
+<img src="/img/interaction-schemes/nft.svg" alt="NFT ecosystem scheme"></img>
+
+NFT collections are very different. Actually, NFT contract on TON can be defined as "contract that has appropriate get-method and returns valid metadata". Transfer operation is standartized and quite analogous to [jetton's one](/develop/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment), so we will not dive into it and rather see additional capabilities provided by most collections you may meet!
+
+:::warning
+Reminder: all methods about NFT below are not bound by TEP-62 to work. Before trying them, please check if your NFT or collection will process those messages in an expected way. Wallet app emulation may prove useful in this case.
+:::
+
+### How to use NFT batch deploy?
+
+Smart contracts for collections allow deploying up to 250 NFTs in a single transaction. However, it's essential to consider that, in practice, this maximum is around 100-130 NFTs due to the computation fee limit of 1 ton. To achieve this, we need to store information about the new NFTs in a dictionary.
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton)">
+
+```js
+import { Address, Cell, Dictionary, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
+import { TonClient } from "@ton/ton";
+
+async function main() {
+    const collectionAddress = Address.parse('put your collection address');
+   	const nftMinStorage = '0.05';
+    const client = new TonClient({
+        endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC' // for Testnet
+    });
+    const ownersAddress = [
+        Address.parse('EQBbQljOpEM4Z6Hvv8Dbothp9xp2yM-TFYVr01bSqDQskHbx'),
+        Address.parse('EQAUTbQiM522Y_XJ_T98QPhPhTmb4nV--VSPiha8kC6kRfPO'),
+        Address.parse('EQDWTH7VxFyk_34J1CM6wwEcjVeqRQceNwzPwGr30SsK43yo')
+    ];
+    const nftsMeta = [
+        '0/meta.json',
+        '1/meta.json',
+        '2/meta.json'
+    ];
+
+    const getMethodResult = await client.runMethod(collectionAddress, 'get_collection_data');
+    let nextItemIndex = getMethodResult.stack.readNumber();
+```
+
+</TabItem>
+</Tabs>
+
+To begin with, let's assume that the minimum amount of TON for the storage fee is `0.05`. This means that after deploying an NFT, the smart contract of the collection will send this much TON to its balance. Next, we obtain arrays with the owners of the new NFTs and their content. Afterward, we get the `next_item_index` using the GET method `get_collection_data`.
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton)">
+
+```js
+	let counter = 0;
+    const nftDict = Dictionary.empty<number, Cell>();
+    for (let index = 0; index < 3; index++) {
+        const metaCell = beginCell()
+            .storeStringTail(nftsMeta[index])
+            .endCell();
+        const nftContent = beginCell()
+            .storeAddress(ownersAddress[index])
+            .storeRef(metaCell)
+            .endCell();
+        nftDict.set(nextItemIndex, nftContent);
+        nextItemIndex++;
+        counter++;
+    }
+
+	/*
+		We need to write our custom serialization and deserialization
+		functions to store data correctly in the dictionary since the
+		built-in functions in the library are not suitable for our case.
+	*/
+    const messageBody = beginCell()
+        .storeUint(2, 32)
+        .storeUint(0, 64)
+        .storeDict(nftDict, Dictionary.Keys.Uint(64), {
+            serialize: (src, builder) => {
+                builder.storeCoins(toNano(nftMinStorage));
+                builder.storeRef(src);
+            },
+            parse: (src) => {
+                return beginCell()
+                    .storeCoins(src.loadCoins())
+                    .storeRef(src.loadRef())
+                    .endCell();
+            }
+        })
+        .endCell();
+
+    const totalValue = String(
+        (counter * parseFloat(nftMinStorage) + 0.015 * counter).toFixed(6)
+    );
+
+    const internalMessage = internal({
+        to: collectionAddress,
+        value: totalValue,
+        bounce: true,
+        body: messageBody
+    });
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+</Tabs>
+
+Next, we need to correctly calculate the total transaction cost. The value of `0.015` was obtained through testing, but it can vary for each case. This mainly depends on the content of the NFT, as an increase in content size results in a higher **forward fee** (the fee for delivery).
+
+### How to change the owner of a collection's smart contract?
+
+Changing the owner of a collection is very simple. To do this, you need to specify **opcode = 3**, any query_id, and the address of the new owner:
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton)">
+
+```js
+import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
+
+async function main() {
+    const collectionAddress = Address.parse('put your collection address');
+    const newOwnerAddress = Address.parse('put new owner wallet address');
+
+    const messageBody = beginCell()
+        .storeUint(3, 32) // opcode for changing owner
+        .storeUint(0, 64) // query id
+        .storeAddress(newOwnerAddress)
+        .endCell();
+
+    const internalMessage = internal({
+        to: collectionAddress,
+        value: toNano('0.05'),
+        bounce: true,
+        body: messageBody
+    });
+    const internalMessageCell = beginCell()
+        .store(storeMessageRelaxed(internalMessage))
+        .endCell();
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+<TabItem value="js-tonweb" label="JS (tonweb)">
+
+```js
+const TonWeb = require("tonweb");
+const {mnemonicToKeyPair} = require("tonweb-mnemonic");
+
+async function main() {
+    const tonweb = new TonWeb(new TonWeb.HttpProvider(
+        'https://toncenter.com/api/v2/jsonRPC', {
+            apiKey: 'put your api key'
+        })
+    );
+    const collectionAddress  = new TonWeb.Address('put your collection address');
+    const newOwnerAddress = new TonWeb.Address('put new owner wallet address');
+
+    const messageBody  = new TonWeb.boc.Cell();
+    messageBody.bits.writeUint(3, 32); // opcode for changing owner
+    messageBody.bits.writeUint(0, 64); // query id
+    messageBody.bits.writeAddress(newOwnerAddress);
+
+    // available wallet types: simpleR1, simpleR2, simpleR3,
+    // v2R1, v2R2, v3R1, v3R2, v4R1, v4R2
+    const keyPair = await mnemonicToKeyPair('put your mnemonic'.split(' '));
+    const wallet = new tonweb.wallet.all['v4R2'](tonweb.provider, {
+        publicKey: keyPair.publicKey,
+        wc: 0 // workchain
+    });
+
+    await wallet.methods.transfer({
+        secretKey: keyPair.secretKey,
+        toAddress: collectionAddress,
+        amount: tonweb.utils.toNano('0.05'),
+        seqno: await wallet.methods.seqno().call(),
+        payload: messageBody,
+        sendMode: 3
+    }).send(); // create transfer and send it
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+</Tabs>
 
 
+### How to change the content in a collection's smart contract?
 
-To indicate that we want to include a comment, we specify 32 zero bits and then write our comment. We also specify the `response destination`, which means that a response regarding the successful transfer will be sent to this address. If we don't want a response, we can specify 2 zero bits instead of an address.
+To change the content of a smart contract's collection, we need to understand how it is stored. The collection stores all the content in a single cell, inside of which there are two cells: **collection content** and **NFT common content**. The first cell contains the collection's metadata, while the second one contains the base URL for the NFT metadata.
+
+Often, the collection's metadata is stored in a format similar to `0.json` and continues incrementing, while the address before this file remains the same. It is this address that should be stored in the NFT common content.
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton)">
+
+```js
+import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
+
+async function main() {
+    const collectionAddress = Address.parse('put your collection address');
+    const newCollectionMeta = 'put url fol collection meta';
+    const newNftCommonMeta = 'put common url for nft meta';
+    const royaltyAddress = Address.parse('put royalty address');
+
+    const collectionMetaCell = beginCell()
+        .storeUint(1, 8) // we have offchain metadata
+        .storeStringTail(newCollectionMeta)
+        .endCell();
+    const nftCommonMetaCell = beginCell()
+        .storeUint(1, 8) // we have offchain metadata
+        .storeStringTail(newNftCommonMeta)
+        .endCell();
+
+    const contentCell = beginCell()
+        .storeRef(collectionMetaCell)
+        .storeRef(nftCommonMetaCell)
+        .endCell();
+
+    const royaltyCell = beginCell()
+        .storeUint(5, 16) // factor
+        .storeUint(100, 16) // base
+        .storeAddress(royaltyAddress) // this address will receive 5% of each sale
+        .endCell();
+
+    const messageBody = beginCell()
+        .storeUint(4, 32) // opcode for changing content
+        .storeUint(0, 64) // query id
+        .storeRef(contentCell)
+        .storeRef(royaltyCell)
+        .endCell();
+
+    const internalMessage = internal({
+        to: collectionAddress,
+        value: toNano('0.05'),
+        bounce: true,
+        body: messageBody
+    });
+
+    const internalMessageCell = beginCell()
+        .store(storeMessageRelaxed(internalMessage))
+        .endCell();
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+<TabItem value="js-tonweb" label="JS (tonweb)">
+
+```js
+const TonWeb = require("tonweb");
+const {mnemonicToKeyPair} = require("tonweb-mnemonic");
+
+async function main() {
+    const tonweb = new TonWeb(new TonWeb.HttpProvider(
+        'https://testnet.toncenter.com/api/v2/jsonRPC', {
+            apiKey: 'put your api key'
+        })
+    );
+    const collectionAddress  = new TonWeb.Address('put your collection address');
+    const newCollectionMeta = 'put url fol collection meta';
+    const newNftCommonMeta = 'put common url for nft meta';
+    const royaltyAddress = new TonWeb.Address('put royalty address');
+
+    const collectionMetaCell = new TonWeb.boc.Cell();
+    collectionMetaCell.bits.writeUint(1, 8); // we have offchain metadata
+    collectionMetaCell.bits.writeString(newCollectionMeta);
+    const nftCommonMetaCell = new TonWeb.boc.Cell();
+    nftCommonMetaCell.bits.writeUint(1, 8); // we have offchain metadata
+    nftCommonMetaCell.bits.writeString(newNftCommonMeta);
+
+    const contentCell = new TonWeb.boc.Cell();
+    contentCell.refs.push(collectionMetaCell);
+    contentCell.refs.push(nftCommonMetaCell);
+
+    const royaltyCell = new TonWeb.boc.Cell();
+    royaltyCell.bits.writeUint(5, 16); // factor
+    royaltyCell.bits.writeUint(100, 16); // base
+    royaltyCell.bits.writeAddress(royaltyAddress); // this address will receive 5% of each sale
+
+    const messageBody = new TonWeb.boc.Cell();
+    messageBody.bits.writeUint(4, 32);
+    messageBody.bits.writeUint(0, 64);
+    messageBody.refs.push(contentCell);
+    messageBody.refs.push(royaltyCell);
+
+    // available wallet types: simpleR1, simpleR2, simpleR3,
+    // v2R1, v2R2, v3R1, v3R2, v4R1, v4R2
+    const keyPair = await mnemonicToKeyPair('put your mnemonic'.split(' '));
+    const wallet = new tonweb.wallet.all['v4R2'](tonweb.provider, {
+        publicKey: keyPair.publicKey,
+        wc: 0 // workchain
+    });
+
+    await wallet.methods.transfer({
+        secretKey: keyPair.secretKey,
+        toAddress: collectionAddress,
+        amount: tonweb.utils.toNano('0.05'),
+        seqno: await wallet.methods.seqno().call(),
+        payload: messageBody,
+        sendMode: 3
+    }).send(); // create transfer and send it
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+</Tabs>
+
+Additionally, we need to include royalty information in our message, as they also change using this opcode. It's important to note that it's not necessary to specify new values everywhere. If, for example, only the NFT common content needs to be changed, then all other values can be specified as they were before.
+
+## Third-party: Decentralized Exchanges (DEX)
 
 ### How to send a swap message to DEX (DeDust)?
 
 DEXs use different protocols for their work. In this example we will interact with **DeDust**.
  * [DeDust documentation](https://docs.dedust.io/).
 
-DeDust has two exchange paths: jetton <-> jetton or toncoin <-> jetton. Each has a different scheme. To swap, you need to send jettons (or toncoin) to a specific **vault** and provide a special payload. Here is the scheme for swapping jetton to jetton or jetton to toncoin:
+DeDust has two exchange paths: jetton <-> jetton or TON <-> jetton. Each has a different scheme. To swap, you need to send jettons (or toncoin) to a specific **vault** and provide a special payload. Here is the scheme for swapping jetton to jetton or jetton to toncoin:
 
 ```tlb
 swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
@@ -963,360 +1362,7 @@ asyncio.run(main())
 </TabItem>
 </Tabs>
 
-
-
-
-### How to use NFT batch deploy?
-
-Smart contracts for collections allow deploying up to 250 NFTs in a single transaction. However, it's essential to consider that, in practice, this maximum is around 100-130 NFTs due to the computation fee limit of 1 ton. To achieve this, we need to store information about the new NFTs in a dictionary.
-
-<Tabs groupId="code-examples">
-<TabItem value="js-ton" label="JS (@ton)">
-
-```js
-import { Address, Cell, Dictionary, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
-import { TonClient } from "@ton/ton";
-
-async function main() {
-    const collectionAddress = Address.parse('put your collection address');
-   	const nftMinStorage = '0.05';
-    const client = new TonClient({
-        endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC' // for Testnet
-    });
-    const ownersAddress = [
-        Address.parse('EQBbQljOpEM4Z6Hvv8Dbothp9xp2yM-TFYVr01bSqDQskHbx'),
-        Address.parse('EQAUTbQiM522Y_XJ_T98QPhPhTmb4nV--VSPiha8kC6kRfPO'),
-        Address.parse('EQDWTH7VxFyk_34J1CM6wwEcjVeqRQceNwzPwGr30SsK43yo')
-    ];
-    const nftsMeta = [
-        '0/meta.json',
-        '1/meta.json',
-        '2/meta.json'
-    ];
-
-    const getMethodResult = await client.runMethod(collectionAddress, 'get_collection_data');
-    let nextItemIndex = getMethodResult.stack.readNumber();
-```
-
-</TabItem>
-</Tabs>
-
-To begin with, let's assume that the minimum amount of TON for the storage fee is `0.05`. This means that after deploying an NFT, the smart contract of the collection will send this much TON to its balance. Next, we obtain arrays with the owners of the new NFTs and their content. Afterward, we get the `next_item_index` using the GET method `get_collection_data`.
-
-<Tabs groupId="code-examples">
-<TabItem value="js-ton" label="JS (@ton)">
-
-```js
-	let counter = 0;
-    const nftDict = Dictionary.empty<number, Cell>();
-    for (let index = 0; index < 3; index++) {
-        const metaCell = beginCell()
-            .storeStringTail(nftsMeta[index])
-            .endCell();
-        const nftContent = beginCell()
-            .storeAddress(ownersAddress[index])
-            .storeRef(metaCell)
-            .endCell();
-        nftDict.set(nextItemIndex, nftContent);
-        nextItemIndex++;
-        counter++;
-    }
-
-	/*
-		We need to write our custom serialization and deserialization
-		functions to store data correctly in the dictionary since the
-		built-in functions in the library are not suitable for our case.
-	*/
-    const messageBody = beginCell()
-        .storeUint(2, 32)
-        .storeUint(0, 64)
-        .storeDict(nftDict, Dictionary.Keys.Uint(64), {
-            serialize: (src, builder) => {
-                builder.storeCoins(toNano(nftMinStorage));
-                builder.storeRef(src);
-            },
-            parse: (src) => {
-                return beginCell()
-                    .storeCoins(src.loadCoins())
-                    .storeRef(src.loadRef())
-                    .endCell();
-            }
-        })
-        .endCell();
-
-    const totalValue = String(
-        (counter * parseFloat(nftMinStorage) + 0.015 * counter).toFixed(6)
-    );
-
-    const internalMessage = internal({
-        to: collectionAddress,
-        value: totalValue,
-        bounce: true,
-        body: messageBody
-    });
-    const internalMessageCell = beginCell()
-        .store(storeMessageRelaxed(internalMessage))
-        .endCell();
-}
-
-main().finally(() => console.log("Exiting..."));
-```
-
-</TabItem>
-</Tabs>
-
-Next, we need to correctly calculate the total transaction cost. The value of `0.015` was obtained through testing, but it can vary for each case. This mainly depends on the content of the NFT, as an increase in content size results in a higher **forward fee** (the fee for delivery).
-
-### How to change the owner of a collection's smart contract?
-
-Changing the owner of a collection is very simple. To do this, you need to specify **opcode = 3**, any query_id, and the address of the new owner:
-
-<Tabs groupId="code-examples">
-<TabItem value="js-ton" label="JS (@ton)">
-
-```js
-import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
-
-async function main() {
-    const collectionAddress = Address.parse('put your collection address');
-    const newOwnerAddress = Address.parse('put new owner wallet address');
-
-    const messageBody = beginCell()
-        .storeUint(3, 32) // opcode for changing owner
-        .storeUint(0, 64) // query id
-        .storeAddress(newOwnerAddress)
-        .endCell();
-
-    const internalMessage = internal({
-        to: collectionAddress,
-        value: toNano('0.05'),
-        bounce: true,
-        body: messageBody
-    });
-    const internalMessageCell = beginCell()
-        .store(storeMessageRelaxed(internalMessage))
-        .endCell();
-}
-
-main().finally(() => console.log("Exiting..."));
-```
-
-</TabItem>
-<TabItem value="js-tonweb" label="JS (tonweb)">
-
-```js
-const TonWeb = require("tonweb");
-const {mnemonicToKeyPair} = require("tonweb-mnemonic");
-
-async function main() {
-    const tonweb = new TonWeb(new TonWeb.HttpProvider(
-        'https://toncenter.com/api/v2/jsonRPC', {
-            apiKey: 'put your api key'
-        })
-    );
-    const collectionAddress  = new TonWeb.Address('put your collection address');
-    const newOwnerAddress = new TonWeb.Address('put new owner wallet address');
-
-    const messageBody  = new TonWeb.boc.Cell();
-    messageBody.bits.writeUint(3, 32); // opcode for changing owner
-    messageBody.bits.writeUint(0, 64); // query id
-    messageBody.bits.writeAddress(newOwnerAddress);
-
-    // available wallet types: simpleR1, simpleR2, simpleR3,
-    // v2R1, v2R2, v3R1, v3R2, v4R1, v4R2
-    const keyPair = await mnemonicToKeyPair('put your mnemonic'.split(' '));
-    const wallet = new tonweb.wallet.all['v4R2'](tonweb.provider, {
-        publicKey: keyPair.publicKey,
-        wc: 0 // workchain
-    });
-
-    await wallet.methods.transfer({
-        secretKey: keyPair.secretKey,
-        toAddress: collectionAddress,
-        amount: tonweb.utils.toNano('0.05'),
-        seqno: await wallet.methods.seqno().call(),
-        payload: messageBody,
-        sendMode: 3
-    }).send(); // create transfer and send it
-}
-
-main().finally(() => console.log("Exiting..."));
-```
-
-</TabItem>
-</Tabs>
-
-
-### How to change the content in a collection's smart contract?
-
-To change the content of a smart contract's collection, we need to understand how it is stored. The collection stores all the content in a single cell, inside of which there are two cells: **collection content** and **NFT common content**. The first cell contains the collection's metadata, while the second one contains the base URL for the NFT metadata.
-
-Often, the collection's metadata is stored in a format similar to `0.json` and continues incrementing, while the address before this file remains the same. It is this address that should be stored in the NFT common content.
-
-<Tabs groupId="code-examples">
-<TabItem value="js-ton" label="JS (@ton)">
-
-```js
-import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
-
-async function main() {
-    const collectionAddress = Address.parse('put your collection address');
-    const newCollectionMeta = 'put url fol collection meta';
-    const newNftCommonMeta = 'put common url for nft meta';
-    const royaltyAddress = Address.parse('put royalty address');
-
-    const collectionMetaCell = beginCell()
-        .storeUint(1, 8) // we have offchain metadata
-        .storeStringTail(newCollectionMeta)
-        .endCell();
-    const nftCommonMetaCell = beginCell()
-        .storeUint(1, 8) // we have offchain metadata
-        .storeStringTail(newNftCommonMeta)
-        .endCell();
-
-    const contentCell = beginCell()
-        .storeRef(collectionMetaCell)
-        .storeRef(nftCommonMetaCell)
-        .endCell();
-
-    const royaltyCell = beginCell()
-        .storeUint(5, 16) // factor
-        .storeUint(100, 16) // base
-        .storeAddress(royaltyAddress) // this address will receive 5% of each sale
-        .endCell();
-
-    const messageBody = beginCell()
-        .storeUint(4, 32) // opcode for changing content
-        .storeUint(0, 64) // query id
-        .storeRef(contentCell)
-        .storeRef(royaltyCell)
-        .endCell();
-
-    const internalMessage = internal({
-        to: collectionAddress,
-        value: toNano('0.05'),
-        bounce: true,
-        body: messageBody
-    });
-
-    const internalMessageCell = beginCell()
-        .store(storeMessageRelaxed(internalMessage))
-        .endCell();
-}
-
-main().finally(() => console.log("Exiting..."));
-```
-
-</TabItem>
-<TabItem value="js-tonweb" label="JS (tonweb)">
-
-```js
-const TonWeb = require("tonweb");
-const {mnemonicToKeyPair} = require("tonweb-mnemonic");
-
-async function main() {
-    const tonweb = new TonWeb(new TonWeb.HttpProvider(
-        'https://testnet.toncenter.com/api/v2/jsonRPC', {
-            apiKey: 'put your api key'
-        })
-    );
-    const collectionAddress  = new TonWeb.Address('put your collection address');
-    const newCollectionMeta = 'put url fol collection meta';
-    const newNftCommonMeta = 'put common url for nft meta';
-    const royaltyAddress = new TonWeb.Address('put royalty address');
-
-    const collectionMetaCell = new TonWeb.boc.Cell();
-    collectionMetaCell.bits.writeUint(1, 8); // we have offchain metadata
-    collectionMetaCell.bits.writeString(newCollectionMeta);
-    const nftCommonMetaCell = new TonWeb.boc.Cell();
-    nftCommonMetaCell.bits.writeUint(1, 8); // we have offchain metadata
-    nftCommonMetaCell.bits.writeString(newNftCommonMeta);
-
-    const contentCell = new TonWeb.boc.Cell();
-    contentCell.refs.push(collectionMetaCell);
-    contentCell.refs.push(nftCommonMetaCell);
-
-    const royaltyCell = new TonWeb.boc.Cell();
-    royaltyCell.bits.writeUint(5, 16); // factor
-    royaltyCell.bits.writeUint(100, 16); // base
-    royaltyCell.bits.writeAddress(royaltyAddress); // this address will receive 5% of each sale
-
-    const messageBody = new TonWeb.boc.Cell();
-    messageBody.bits.writeUint(4, 32);
-    messageBody.bits.writeUint(0, 64);
-    messageBody.refs.push(contentCell);
-    messageBody.refs.push(royaltyCell);
-
-    // available wallet types: simpleR1, simpleR2, simpleR3,
-    // v2R1, v2R2, v3R1, v3R2, v4R1, v4R2
-    const keyPair = await mnemonicToKeyPair('put your mnemonic'.split(' '));
-    const wallet = new tonweb.wallet.all['v4R2'](tonweb.provider, {
-        publicKey: keyPair.publicKey,
-        wc: 0 // workchain
-    });
-
-    await wallet.methods.transfer({
-        secretKey: keyPair.secretKey,
-        toAddress: collectionAddress,
-        amount: tonweb.utils.toNano('0.05'),
-        seqno: await wallet.methods.seqno().call(),
-        payload: messageBody,
-        sendMode: 3
-    }).send(); // create transfer and send it
-}
-
-main().finally(() => console.log("Exiting..."));
-```
-
-</TabItem>
-</Tabs>
-
-Additionally, we need to include royalty information in our message, as they also change using this opcode. It's important to note that it's not necessary to specify new values everywhere. If, for example, only the NFT common content needs to be changed, then all other values can be specified as they were before.
-
-### Processing Snake Cells
-
-Some times it's necessary to store long strings (or other large information) while cells can hold **maximum 1023 bits**. In this case, we can use snake cells. Snake cells are cells that contain a reference to another cell, which, in turn, contains a reference to another cell, and so on.
-
-<Tabs groupId="code-examples">
-<TabItem value="js-tonweb" label="JS (tonweb)">
-
-```js
-const TonWeb = require("tonweb");
-
-function writeStringTail(str, cell) {
-    const bytes = Math.floor(cell.bits.getFreeBits() / 8); // 1 symbol = 8 bits
-    if(bytes < str.length) { // if we can't write all string
-        cell.bits.writeString(str.substring(0, bytes)); // write part of string
-        const newCell = writeStringTail(str.substring(bytes), new TonWeb.boc.Cell()); // create new cell
-        cell.refs.push(newCell); // add new cell to current cell's refs
-    } else {
-        cell.bits.writeString(str); // write all string
-    }
-
-    return cell;
-}
-
-function readStringTail(cell) {
-    const slice = cell.beginParse(); // converting cell to slice
-    if(cell.refs.length > 0) {
-        const str = new TextDecoder('ascii').decode(slice.array); // decode uint8array to string
-        return str + readStringTail(cell.refs[0]); // read next cell
-    } else {
-        return new TextDecoder('ascii').decode(slice.array);
-    }
-}
-
-let cell = new TonWeb.boc.Cell();
-const str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In euismod, ligula vel lobortis hendrerit, lectus sem efficitur enim, vel efficitur nibh dui a elit. Quisque augue nisi, vulputate vitae mauris sit amet, iaculis lobortis nisi. Aenean molestie ultrices massa eu fermentum. Cras rhoncus ipsum mauris, et egestas nibh interdum in. Maecenas ante ipsum, sodales eget suscipit at, placerat ut turpis. Nunc ac finibus dui. Donec sit amet leo id augue tempus aliquet. Vestibulum eu aliquam ex, sit amet suscipit odio. Vestibulum et arcu dui.";
-cell = writeStringTail(str, cell);
-const text = readStringTail(cell);
-console.log(text);
-```
-
-</TabItem>
-</Tabs>
-
-This example will help you understand how you can work with such cells using recursion.
+## Basics of incoming message processing
 
 ### How to parse transactions of an account (Transfers, Jettons, NFTs)?
 
@@ -1590,10 +1636,15 @@ Note that this example covers only the simplest case with incoming messages, whe
 * [Message Overview](/develop/smart-contracts/guidelines/message-delivery-guarantees)
 * [Internal messages](/develop/smart-contracts/guidelines/internal-messages)
 
+This topic is explored in more depth in [Payments Processing](/develop/dapps/asset-processing) article.
 
 ### How to find transaction for a certain TON Connect result?
 
-BOC - is a resulted cell was send to blockchain. This is bag of cell contents the body of message, which could be used as a identifier for a corresponded transaction.
+TON Connect 2 returns only cell which was sent to blockchain, not generated transaction hash (since that transaction may not come to pass, if external message gets lost or timeouts). Provided BOC, though, allows us to search for that exact message in our account history.
+
+:::tip
+You can use an indexer to make the search easier. The provided implementation is for `TonClient` connected to a RPC.
+:::
 
 Prepare `retry` function for attempts on listening blockchain:
 ```typescript

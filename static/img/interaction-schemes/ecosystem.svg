@@ -1,0 +1,622 @@
+<svg width="610mm" height="410mm" fill-rule="evenodd" stroke-linejoin="round" stroke-width="28.22" preserveAspectRatio="xMidYMid" version="1.2" viewBox="0 0 61000 41000" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><g>
+ <g transform="translate(0 -.0009703)">
+  <desc>Master slide
+  </desc>
+  <rect y=".0009703" width="61000" height="41000" fill="none" stroke-width="28.22"/>
+ </g>
+ 
+<g transform="translate(0 10009)" fill-rule="nonzero">
+  
+  
+  
+  <path transform="matrix(1 0 0 .6759 0 328.3)" d="m10500 14213h-9500v-13200h19000v13200z" fill="#fff" stroke="#39f" stroke-linejoin="round" stroke-width="121.6"/>
+   <path d="m1e3 3646h19000" fill="none" stroke="#000" stroke-linejoin="round"/><text transform="translate(0 -9.843e-5)" x="1642.2618" y="3327.8584" font-family="Inter" font-size="476.2px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1642.2618" y="3327.8584" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="200" stroke-width="746.7">Related to <tspan fill="#3399ff" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="bold">standard wallets in TON ecosystem</tspan></tspan></text>
+  <text transform="translate(0 -5.236e-5)" x="1885" y="2252" font-family="Inter" font-size="635px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1885" y="2252" fill-rule="nonzero" font-size="635px" stroke-width="746.7">Deploying a contract</tspan></text>
+  
+  
+  
+  
+  
+  
+  <g transform="translate(-793.7 -249.6)">
+   
+   <path transform="translate(5.347e-6 -8.568e-5)" d="m8664 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m6185 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#39f" stroke-linejoin="round" stroke-width="35"/><text transform="translate(5.347e-6 -8.568e-5)" x="4426.5352" y="6495.9282" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="4426.5352" y="6495.9282" font-size="423.3px" stroke-width="746.7">external message</tspan></text>
+   
+   <g transform="translate(-105.8)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    
+   <text transform="translate(105.8)" x="4658.957" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="4658.957" y="7025.0933" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7">create and sign</tspan></text><path transform="translate(2.556e-6)" d="m4773 7047h2989v24h-2989z"/></g>
+  </g><g transform="translate(7071 -199.6)">
+   
+   <path transform="translate(5.347e-6 -8.568e-5)" d="m8664 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m6185 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#39f" stroke-linejoin="round" stroke-width="35"/><text x="4373.6187" y="6495.9282" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="4373.6187" y="6495.9282" font-size="423.3px" stroke-width="746.7">msg with StateInit</tspan></text>
+   
+   <g transform="translate(-105.8)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m5573 7047h1389v24h-1389z"/><text x="5668.9053" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5668.9053" y="7025.0933" font-size="423.3px" stroke-width="746.7">create</tspan></text>
+   </g>
+  </g><g transform="translate(6906 -194.6)">
+   <path d="m2750 7843c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/>
+   
+   <text x="2320.1106" y="6702.8511" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2320.1106" y="6702.8511" font-size="423.3px" stroke-width="746.7">user</tspan></text>
+   
+  </g><g transform="translate(-793.8 -264.6)">
+   <path d="m18250 7913c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#e6e6e6"/>
+   <path d="m18250 7913c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="none" stroke="#666" stroke-linejoin="round" stroke-width="71"/>
+   <g transform="translate(-529.2 52.92)" font-family="Inter" font-size="423px" font-weight="400">
+    <text x="17662" y="6561">destination</text>
+    <text x="17545" y="7074" fill="#000000"><tspan x="17918" fill-rule="nonzero">contract</tspan></text>
+   </g>
+  </g><circle transform="translate(-793.8 -264.6)" cx="3e3" cy="6613" r="167.8"/>
+  
+  
+  
+  
+ </g><g transform="translate(0 8.768)" fill-rule="nonzero">
+  
+  
+  
+  <path transform="matrix(1 0 0 .6759 0 328.3)" d="m10500 14213h-9500v-13200h19000v13200z" fill="#fff" stroke="#39f" stroke-linejoin="round" stroke-width="121.6"/>
+   <path d="m1e3 3646h19000" fill="none" stroke="#000" stroke-linejoin="round"/><text transform="translate(0 -9.843e-5)" x="1642.2618" y="3327.8584" font-family="Inter" font-size="476.2px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1642.2618" y="3327.8584" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="200" stroke-width="746.7">Related to <tspan fill="#3399ff" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="bold">standard wallets in TON ecosystem</tspan></tspan></text>
+  <text x="1885" y="2252" font-family="Inter" font-size="635px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1885" y="2252" fill-rule="nonzero" font-size="635px" stroke-width="746.7">Sending messages</tspan></text>
+  
+  
+  
+  
+  
+  <g transform="translate(-793.8 -264.6)">
+   
+   <path transform="translate(5.347e-6 -8.568e-5)" d="m8664 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m6185 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#39f" stroke-linejoin="round" stroke-width="35"/><text transform="translate(5.347e-6 -8.568e-5)" x="4426.5352" y="6495.9282" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="4426.5352" y="6495.9282" font-size="423.3px" stroke-width="746.7">external message</tspan></text>
+   
+   <g transform="translate(-105.8)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    
+   <text transform="translate(105.8)" x="4658.957" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="4658.957" y="7025.0933" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7">create and sign</tspan></text><path transform="translate(2.556e-6)" d="m4773 7047h2989v24h-2989z"/></g>
+  </g>
+  <g transform="translate(-793.8 -264.6)">
+   <path transform="translate(5.347e-6 -4.609e-5)" d="m16564 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><g fill="#fff" stroke="#666" stroke-linejoin="round" stroke-width="35"><path d="m14368 6966h-1850v-1370h3700v1370z"/><path d="m14262 7071h-1850v-1370h3700v1370z"/><path d="m14156 7177h-1850v-1370h3700v1370z"/><path d="m14050 7283h-1850v-1370h3700v1370z"/>
+   
+   </g><text x="12363.203" y="6753.0889" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="12363.203" y="6753.0889" font-size="423.3px" stroke-width="746.7">desired message</tspan></text>
+  </g><g transform="translate(6906 -194.6)">
+   <path d="m2750 7843c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/>
+   
+   <text x="2320.1106" y="6702.8511" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2320.1106" y="6702.8511" font-size="423.3px" stroke-width="746.7">user</tspan></text>
+   
+  </g><g transform="translate(-793.8 -264.6)"><g fill="#e6e6e6" stroke="#666" stroke-linejoin="round" stroke-width="71">
+   
+   <path d="m18568 7595c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z"/><path d="m18462 7701c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z"/><path d="m18356 7807c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z"/><path d="m18250 7913c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z"/>
+   </g><g transform="translate(-529.2 52.92)" font-family="Inter" font-size="423px" font-weight="400">
+    <text x="17662" y="6561">destination</text>
+    <text x="17545" y="7074" fill="#000000"><tspan x="17918" fill-rule="nonzero">contract</tspan></text>
+   </g>
+  </g><circle transform="translate(-793.8 -264.6)" cx="3e3" cy="6613" r="167.8"/>
+  
+  
+  
+  
+ </g><g transform="translate(2e4 14024)" fill-rule="nonzero">
+  
+  
+  
+  <path transform="matrix(1 0 0 .6759 0 328.3)" d="m10500 20131h-9500v-19118h19000v19118z" fill="#fff" stroke="#4a0" stroke-linejoin="round" stroke-width="121.6"/>
+   <path d="m1e3 3646h19000" fill="none" stroke="#000" stroke-linejoin="round"/><text transform="translate(0 -9.843e-5)" x="1642.2618" y="3327.8584" font-family="Inter" font-size="476.2px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1642.2618" y="3327.8584" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="200" stroke-width="746.7">Related to <tspan fill="#3399ff" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="bold"><tspan fill="#44aa00">TEP-74 (jettons),</tspan> standard wallets in TON ecosystem</tspan></tspan></text>
+  <text transform="translate(5.555e-5)" x="1885" y="2252" font-family="Inter" font-size="635px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1885" y="2252" fill-rule="nonzero" font-size="635px" stroke-width="746.7">Mint jettons</tspan></text><g transform="translate(-2276 3194)">
+   
+   <path d="m5842 6728 187 419 9 12 12 5 14-5 9-11 186-420 2-6v-3l-2-9-5-9-7-5-8-2h-376l-8 2-9 5-4 9-2 9v3zm249.5-3164h-81v3130h81z"/><path d="m6050 6049h-1915v-1370h3831v1370z" fill="#fff" stroke="#4a0" stroke-linejoin="round" stroke-width="35"/><text x="4765.2671" y="5216.7988" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="4765.2671" y="5216.7988" font-size="423.3px" stroke-width="746.7">mint request</tspan></text>
+   
+   <g transform="translate(-224.4 -1273)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h2989v24h-2989z"/><text transform="translate(224.4 1273)" x="4614.2607" y="5738.748" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="4614.2607" y="5738.748" stroke-width="746.7">create payload</tspan></text>
+   </g>
+  </g>
+  
+  
+  
+  
+  
+  
+  <g transform="translate(-5836 5050)">
+   <path transform="translate(5.347e-6 -4.609e-5)" d="m16564 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m14050 7283h-1850v-1370h3700v1370z" fill="#a5f075" stroke="#4a0" stroke-linejoin="round" stroke-width="35"/>
+   
+   <text x="12469.037" y="6753.0889" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="12469.037" y="6753.0889" font-size="423.3px" stroke-width="746.7">internal transfer</tspan></text>
+  </g><g transform="translate(6378 3194)">
+   
+   <path d="m5842 3999 187-419 9-12 12-5 14 5 9 11 186 420 2 6v3l-2 9-5 9-7 5-8 2h-376l-8-2-9-5-4-9-2-9v-3zm249.5 3164h-81v-3130h81z" fill="#999"/><path d="m6050 6049h-1915v-1370h3831v1370z" fill="#fff" stroke="#4a0" stroke-dasharray="35, 35" stroke-linejoin="round" stroke-width="35"/><text x="6038.0835" y="5216.7988" fill="#808080" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6038.0835" y="5216.7988" fill="#808080" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">notification</tspan></text>
+   
+   <g transform="translate(-224.4 -1273)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h2989v24h-2989z"/><text x="6265.7446" y="7023.1938" fill="#808080" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6265.7446" y="7023.1938" fill="#808080" stroke-width="746.7" text-align="center" text-anchor="middle">parse payload</tspan></text>
+   </g>
+  </g><g transform="translate(2512 3194)">
+   
+   <path d="m2581 3367-231.2-396.3-4.495-14.31 2.94-12.66 12.23-8.453 14.18-0.8917 449.6 93.98 6.04 1.876 2.436 1.75 6.143 6.875 4.392 9.312-0.023 8.602-3.043 7.664-219.4 305.4-6.292 5.33-9.312 4.392-9.643-2.002-8.476-3.626-2.436-1.75zm6480 4348-47.26 65.79-6306-4530 47.26-65.79z" fill="#999"/><path d="m6050 6049h-1915v-1370h3831v1370z" fill="#fff" stroke="#4a0" stroke-dasharray="35, 35" stroke-linejoin="round" stroke-width="35"/><text x="6055.4121" y="5504.2319" fill="#808080" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6055.4121" y="5504.2319" fill="#808080" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">excess return</tspan></text>
+   
+   
+  </g><g transform="translate(1040 -1143)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/>
+   
+   <text x="2168.5183" y="6449.2896" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2168.5183" y="6449.2896" font-size="423.3px" stroke-width="746.7">admin</tspan></text><g transform="translate(-2977 -16.23)" fill-rule="nonzero" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h1909v24h-1909z"/><text x="5723.6982" y="7018.9282" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5723.6982" y="7018.9282" stroke-width="746.7">send msg</tspan></text>
+   </g>
+   
+  </g>
+  
+  
+  
+  
+ <g transform="translate(1024 5054)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#e0ffcc" fill-rule="nonzero" stroke="#4a0" stroke-width="80"/>
+   
+   <text x="2791.4917" y="6485.5605" font-family="Inter" font-size="423.3px" stroke-width="746.7" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2791.4917" y="6485.5605" text-align="center">jetton</tspan><tspan x="2791.4917" y="7014.7266" text-align="center">master</tspan></text>
+   
+  </g><g transform="translate(9656 5054)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#e0ffcc" fill-rule="nonzero" stroke="#4a0" stroke-width="80"/><g font-family="Inter">
+   
+   <text x="2771.0464" y="6115.145" font-size="423.3px" stroke-width="746.7" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2771.0464" y="6115.145" text-align="center">jetton</tspan><tspan x="2771.0464" y="6644.3115" text-align="center">wallet</tspan></text><g transform="translate(-2977 195.4)" fill-rule="nonzero" font-size="423px" font-weight="200">
+    <text x="4773" y="7009"/>
+    <path d="m4873 7047h1709v24h-1709z"/>
+   </g>
+   
+  <text x="2743.0098" y="7178.5869" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2743.0098" y="7178.5869" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle">balance</tspan></text></g></g><g transform="translate(9677 -1143)">
+   
+   
+   <path transform="translate(-.000785)" d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/><text x="2327.2686" y="6449.2896" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2327.2686" y="6449.2896" font-size="423.3px" stroke-width="746.7">user</tspan></text><g transform="translate(-2977 -16.23)" fill-rule="nonzero" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h1909v24h-1909z" fill-rule="nonzero"/>
+   <text x="5727.5298" y="7023.7388" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5727.5298" y="7023.7388" stroke-width="746.7">track pay</tspan></text></g>
+   
+  </g><path transform="translate(-2e4 -14024)" d="m30455 25213h-783.3l391.7-678.4z" fill="#f95" stroke="#520" stroke-dasharray="34.9999, 34.9999" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="12" stroke-width="100"/></g><g transform="translate(2e4 8.768)" fill-rule="nonzero">
+  
+  
+  
+  <path transform="matrix(1 0 0 .6759 0 328.3)" d="m10500 20131h-9500v-19118h19000v19118z" fill="#fff" stroke="#4a0" stroke-linejoin="round" stroke-width="121.6"/>
+   <path d="m1e3 3646h19000" fill="none" stroke="#000" stroke-linejoin="round"/><text transform="translate(0 -9.843e-5)" x="1642.2618" y="3327.8584" font-family="Inter" font-size="476.2px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1642.2618" y="3327.8584" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="200" stroke-width="746.7">Related to <tspan fill="#3399ff" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="bold"><tspan fill="#44aa00">TEP-74 (jettons),</tspan> standard wallets in TON ecosystem</tspan></tspan></text>
+  <text transform="translate(5.555e-5)" x="1885" y="2252" font-family="Inter" font-size="635px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1885" y="2252" fill-rule="nonzero" font-size="635px" stroke-width="746.7">Transfer jettons</tspan></text><g transform="translate(-2276 3035)">
+   
+   <path d="m5842 6728 187 419 9 12 12 5 14-5 9-11 186-420 2-6v-3l-2-9-5-9-7-5-8-2h-376l-8 2-9 5-4 9-2 9v3zm249.5-3164h-81v3130h81z"/><path d="m6050 6049h-1915v-1370h3831v1370z" fill="#fff" stroke="#4a0" stroke-linejoin="round" stroke-width="35"/><text x="4447.7681" y="5216.7988" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="4447.7681" y="5216.7988" font-size="423.3px" stroke-width="746.7">transfer request</tspan></text>
+   
+   <g transform="translate(-224.4 -1273)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h2989v24h-2989z"/><text transform="translate(224.4 1273)" x="4614.2607" y="5738.748" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="4614.2607" y="5738.748" stroke-width="746.7">create payload</tspan></text>
+   </g>
+  </g>
+  
+  
+  
+  
+  
+  
+  <g transform="translate(-5836 4891)">
+   <path transform="translate(5.347e-6 -4.609e-5)" d="m16564 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m14050 7283h-1850v-1370h3700v1370z" fill="#a5f075" stroke="#4a0" stroke-linejoin="round" stroke-width="35"/>
+   
+   <text x="12469.037" y="6753.0889" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="12469.037" y="6753.0889" font-size="423.3px" stroke-width="746.7">internal transfer</tspan></text>
+  </g><g transform="translate(6378 3035)">
+   
+   <path d="m5842 3999 187-419 9-12 12-5 14 5 9 11 186 420 2 6v3l-2 9-5 9-7 5-8 2h-376l-8-2-9-5-4-9-2-9v-3zm249.5 3164h-81v-3130h81z" fill="#999"/><path d="m6050 6049h-1915v-1370h3831v1370z" fill="#fff" stroke="#4a0" stroke-dasharray="35, 35" stroke-linejoin="round" stroke-width="35"/><text x="6038.0835" y="5216.7988" fill="#808080" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6038.0835" y="5216.7988" fill="#808080" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">notification</tspan></text>
+   
+   <g transform="translate(-224.4 -1273)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h2989v24h-2989z"/><text x="6265.7446" y="7023.1938" fill="#808080" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6265.7446" y="7023.1938" fill="#808080" stroke-width="746.7" text-align="center" text-anchor="middle">parse payload</tspan></text>
+   </g>
+  </g><g transform="translate(2512 3035)">
+   
+   <path d="m2581 3367-231.2-396.3-4.495-14.31 2.94-12.66 12.23-8.453 14.18-0.8917 449.6 93.98 6.04 1.876 2.436 1.75 6.143 6.875 4.392 9.312-0.023 8.602-3.043 7.664-219.4 305.4-6.292 5.33-9.312 4.392-9.643-2.002-8.476-3.626-2.436-1.75zm6480 4348-47.26 65.79-6306-4530 47.26-65.79z" fill="#999"/><path d="m6050 6049h-1915v-1370h3831v1370z" fill="#fff" stroke="#4a0" stroke-dasharray="35, 35" stroke-linejoin="round" stroke-width="35"/><text x="6055.4121" y="5504.2319" fill="#808080" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6055.4121" y="5504.2319" fill="#808080" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">excess return</tspan></text>
+   
+   
+  </g><g transform="translate(1040 -1302)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/>
+   
+   <text x="2168.5183" y="6449.2896" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2168.5183" y="6449.2896" font-size="423.3px" stroke-width="746.7">user 1</tspan></text><g transform="translate(-2977 -16.23)" fill-rule="nonzero" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h1909v24h-1909z"/><text x="5723.6982" y="7018.9282" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5723.6982" y="7018.9282" stroke-width="746.7">send msg</tspan></text>
+   </g>
+   
+  </g>
+  
+  
+  
+  
+ <g transform="translate(1024 4895)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#e0ffcc" fill-rule="nonzero" stroke="#4a0" stroke-width="80"/><g font-family="Inter">
+   
+   <text x="2771.0464" y="6115.145" font-size="423.3px" stroke-width="746.7" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2771.0464" y="6115.145" text-align="center">jetton</tspan><tspan x="2771.0464" y="6644.3115" text-align="center">wallet 1</tspan></text><g transform="translate(-2977 195.4)" fill-rule="nonzero" font-size="423px" font-weight="200">
+    <text x="4773" y="7009"/>
+    <path d="m4873 7047h1709v24h-1709z"/>
+   </g>
+   
+  <text x="2743.0098" y="7178.5869" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2743.0098" y="7178.5869" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle">get addr</tspan></text></g></g><g transform="translate(9656 4895)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#e0ffcc" fill-rule="nonzero" stroke="#4a0" stroke-width="80"/><g font-family="Inter">
+   
+   <text x="2771.0464" y="6115.145" font-size="423.3px" stroke-width="746.7" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2771.0464" y="6115.145" text-align="center">jetton</tspan><tspan x="2771.0464" y="6644.3115" text-align="center">wallet 2</tspan></text><g transform="translate(-2977 195.4)" fill-rule="nonzero" font-size="423px" font-weight="200">
+    <text x="4773" y="7009"/>
+    <path d="m4873 7047h1709v24h-1709z"/>
+   </g>
+   
+  <text x="2743.0098" y="7178.5869" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2743.0098" y="7178.5869" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle">balance</tspan></text></g></g><g transform="translate(9677 -1302)">
+   
+   
+   <path transform="translate(-.000785)" d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/><text x="2168.5183" y="6449.2896" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2168.5183" y="6449.2896" font-size="423.3px" stroke-width="746.7">user 2</tspan></text><g transform="translate(-2977 -16.23)" fill-rule="nonzero" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h1909v24h-1909z" fill-rule="nonzero"/>
+   <text x="5727.5298" y="7023.7388" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5727.5298" y="7023.7388" stroke-width="746.7">track pay</tspan></text></g>
+   
+  </g><path transform="translate(-2e4 -14183)" d="m30455 25213h-783.3l391.7-678.4z" fill="#f95" stroke="#520" stroke-dasharray="34.9999, 34.9999" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="12" stroke-width="100"/></g><g transform="translate(0 20024)" fill-rule="nonzero">
+  
+  
+  
+  <path transform="matrix(1 0 0 .6759 0 328.3)" d="m10500 14213h-9500v-13200h19000v13200z" fill="#fff" stroke="#4a0" stroke-linejoin="round" stroke-width="121.6"/>
+   <path d="m1e3 3646h19000" fill="none" stroke="#000" stroke-linejoin="round"/><text transform="translate(0 -9.843e-5)" x="1642.2618" y="3327.8584" font-family="Inter" font-size="476.2px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1642.2618" y="3327.8584" fill-rule="nonzero" font-size="476.2px" stroke-width="746.7">Related to <tspan fill="#44aa00" font-family="Inter" font-weight="bold">TEP-74 (jettons), </tspan><tspan fill="#3399ff" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="bold">standard wallets in TON ecosystem</tspan></tspan></text>
+  <text x="1885" y="2252" font-family="Inter" font-size="635px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1885" y="2252" fill-rule="nonzero" font-size="635px" stroke-width="746.7">Burn jettons</tspan></text>
+  
+  
+  
+  
+  
+  <g transform="translate(52.92 -264.6)">
+   
+   <path transform="translate(5.347e-6 -8.568e-5)" d="m8664 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m6449 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#4a0" stroke-linejoin="round" stroke-width="35"/><text x="6434.9614" y="6495.9282" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6434.9614" y="6495.9282" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">burn request</tspan></text>
+   
+   <g transform="translate(158.8)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    
+   <text transform="translate(105.8)" x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle">create payload</tspan></text><path transform="translate(2.556e-6)" d="m4773 7047h2989v24h-2989z"/></g>
+  </g>
+  <g transform="translate(-264.6 -264.6)">
+   <path transform="translate(5.347e-6 -4.609e-5)" d="m16564 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m14315 7283h-1850v-1370h3700v1370z" fill="#a5f075" stroke="#4a0" stroke-linejoin="round" stroke-width="35"/>
+   
+   <text x="14312.18" y="6756.4492" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="14312.18" y="6756.4492" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">burn notification</tspan></text>
+  </g><g transform="translate(302.9 -205.2)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/>
+   
+   <text x="2307.9336" y="6449.2896" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2307.9336" y="6449.2896" font-size="423.3px" stroke-width="746.7">user</tspan></text><g transform="translate(-2977 -16.23)" fill-rule="nonzero" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h1909v24h-1909z"/><text x="5723.6982" y="7018.9282" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5723.6982" y="7018.9282" stroke-width="746.7">send msg</tspan></text>
+   </g>
+   
+  </g><g transform="translate(7636 -223.7)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#e0ffcc" fill-rule="nonzero" stroke="#4a0" stroke-width="80"/><g font-family="Inter">
+   
+   <text x="2771.0464" y="6115.145" font-size="423.3px" stroke-width="746.7" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2771.0464" y="6115.145" text-align="center">jetton</tspan><tspan x="2771.0464" y="6644.3115" text-align="center">wallet</tspan></text><g transform="translate(-2977 195.4)" fill-rule="nonzero" font-size="423px" font-weight="200">
+    <text x="4773" y="7009"/>
+    <path d="m4873 7047h1709v24h-1709z"/>
+   </g>
+   
+  <text x="2743.0098" y="7178.5869" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2743.0098" y="7178.5869" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle">get addr</tspan></text></g></g><g transform="translate(15235 -195.7)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#e0ffcc" fill-rule="nonzero" stroke="#4a0" stroke-width="80"/>
+   
+   <text x="2791.4917" y="6485.5605" font-family="Inter" font-size="423.3px" stroke-width="746.7" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2791.4917" y="6485.5605" text-align="center">jetton</tspan><tspan x="2791.4917" y="7014.7266" text-align="center">master</tspan></text>
+   
+  </g>
+  
+  
+  
+  
+ <path transform="translate(-14164 -19338)" d="m30455 25213h-783.3l391.7-678.4z" fill="#f95" stroke="#520" stroke-dasharray="34.9999, 34.9999" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="12" stroke-width="100"/></g><g transform="translate(40061 8.768)" fill-rule="nonzero">
+  
+  
+  
+  <path transform="matrix(1 0 0 .6759 0 328.3)" d="m10500 14213h-9500v-13200h19000v13200z" fill="#fff" stroke="#a04" stroke-linejoin="round" stroke-width="121.6"/>
+   <path d="m1e3 3646h19000" fill="none" stroke="#000" stroke-linejoin="round"/><text transform="translate(0 -9.843e-5)" x="1642.2618" y="3327.8584" font-family="Inter" font-size="476.2px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1642.2618" y="3327.8584" fill-rule="nonzero" font-size="476.2px" stroke-width="746.7">Related to <tspan fill="#44aa00" font-family="Inter" font-weight="bold"><tspan fill="#aa0044">TEP-62 (NFTs),</tspan> </tspan><tspan fill="#3399ff" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="bold">standard wallets in TON ecosystem</tspan></tspan></text>
+  <text x="1885" y="2252" font-family="Inter" font-size="635px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1885" y="2252" fill-rule="nonzero" font-size="635px" stroke-width="746.7">Transfer NFT</tspan></text>
+  
+  
+  
+  
+  
+  <g transform="translate(52.92 -264.6)">
+   
+   <path transform="translate(5.347e-6 -8.568e-5)" d="m8664 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m6449 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#a04" stroke-linejoin="round" stroke-width="35"/><text x="6434.9614" y="6495.9282" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6434.9614" y="6495.9282" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">transfer request</tspan></text>
+   
+   <g transform="translate(158.8)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    
+   <text transform="translate(105.8)" x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle">create payload</tspan></text><path transform="translate(2.556e-6)" d="m4773 7047h2989v24h-2989z"/></g>
+  </g><g transform="translate(7614 -264.6)">
+   
+   <path transform="translate(5.347e-6 -8.568e-5)" d="m8664 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m6449 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#a04" stroke-linejoin="round" stroke-width="35"/><text x="6434.9614" y="6495.9282" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6434.9614" y="6495.9282" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">in notification</tspan></text>
+   
+   <g transform="translate(158.8)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    
+   <text transform="translate(105.8)" x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle">parse payload</tspan></text><path transform="translate(2.556e-6)" d="m4773 7047h2989v24h-2989z"/></g>
+  </g><g transform="translate(7614 1935)">
+   
+   <path d="m-3435 5637-428.5-164-14.85-2.121-12.02 4.95-6.364 13.44 1.414 14.14 165.5 428.5 2.828 5.657 2.121 2.121 7.778 4.95 9.9 2.828 8.485-1.414 7.071-4.243 265.9-265.9 4.243-7.071 2.828-9.9-3.536-9.192-4.95-7.778-2.121-2.121zm4300 816.7 1135-1035-40.2-85.4-1097 1009-3827 3.293-565.8-565.8-57.28 57.28 616.2 616.2z" fill="#999"/><path d="m-1051 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#a04" stroke-dasharray="35, 35" stroke-linejoin="round" stroke-width="35"/><text x="-1065.0463" y="6745.6074" fill="#808080" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="-1065.0463" y="6745.6074" fill="#808080" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">excess return</tspan></text>
+   
+   
+  </g>
+  <g transform="translate(302.9 -205.2)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/>
+   
+   <text x="2182.7651" y="6449.2896" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2182.7651" y="6449.2896" font-size="423.3px" stroke-width="746.7">user 1</tspan></text><g transform="translate(-2977 -16.23)" fill-rule="nonzero" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h1909v24h-1909z"/><text x="5723.6982" y="7018.9282" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5723.6982" y="7018.9282" stroke-width="746.7">send msg</tspan></text>
+   </g>
+   
+  </g><g transform="translate(7636 -223.7)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#ffcce0" fill-rule="nonzero" stroke="#a04" stroke-width="80"/>
+   
+   <text x="2750.7446" y="6757.2021" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2750.7446" y="6757.2021" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">NFT</tspan></text>
+   
+  </g>
+  
+  
+  
+  
+ <g transform="translate(15235 -205.2)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/>
+   
+   <text x="2115.6016" y="6449.2896" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2115.6016" y="6449.2896" font-size="423.3px" stroke-width="746.7">user 2</tspan></text><g transform="translate(-2977 -16.23)" fill-rule="nonzero" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h1909v24h-1909z"/><text x="5723.6982" y="7018.9282" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5723.6982" y="7018.9282" stroke-width="746.7">track msg</tspan></text>
+   </g>
+   
+  </g></g><g transform="translate(40061 10024)" fill-rule="nonzero">
+  
+  
+  
+  <path transform="matrix(1 0 0 .6759 0 328.3)" d="m10500 14213h-9500v-13200h19000v13200z" fill="#fff" stroke="#a04" stroke-linejoin="round" stroke-width="121.6"/>
+   <path d="m1e3 3646h19000" fill="none" stroke="#000" stroke-linejoin="round"/><text transform="translate(0 -9.843e-5)" x="1642.2618" y="3327.8584" font-family="Inter" font-size="476.2px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1642.2618" y="3327.8584" fill-rule="nonzero" font-size="476.2px" stroke-width="746.7">Related to <tspan fill="#44aa00" font-family="Inter" font-weight="bold"><tspan fill="#aa0044">TEP-62 (NFTs),</tspan> </tspan><tspan fill="#3399ff" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="bold">standard wallets in TON ecosystem</tspan></tspan></text>
+  <text x="1885" y="2252" font-family="Inter" font-size="635px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1885" y="2252" fill-rule="nonzero" font-size="635px" stroke-width="746.7">Mint NFT <tspan font-family="Inter" font-size="529.2px" font-weight="300">(<tspan fill="#ff9955">nonstandard</tspan> --&gt; for /ton-blockchain/token-contract)</tspan></tspan></text>
+  
+  
+  
+  
+  
+  <g transform="translate(52.92 -264.6)">
+   
+   <path transform="translate(5.347e-6 -8.568e-5)" d="m8664 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m6449 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#a04" stroke-linejoin="round" stroke-width="35"/><text x="6434.9614" y="6495.9282" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6434.9614" y="6495.9282" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">mint message</tspan></text>
+   
+   <g transform="translate(158.8)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    
+   <text transform="translate(105.8)" x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle">create payload</tspan></text><path transform="translate(2.556e-6)" d="m4773 7047h2989v24h-2989z"/></g>
+  </g><g transform="translate(7614 -264.6)">
+   
+   <path transform="translate(5.347e-6 -8.568e-5)" d="m8664 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m6449 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#a04" stroke-linejoin="round" stroke-width="35"/><text x="6447.4292" y="6711.0493" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6447.4292" y="6711.0493" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">init message</tspan></text>
+   
+   
+  </g>
+  <g transform="translate(302.9 -205.2)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/>
+   
+   <text x="2146.1128" y="6449.2896" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2146.1128" y="6449.2896" font-size="423.3px" stroke-width="746.7">admin</tspan></text><g transform="translate(-2977 -16.23)" fill-rule="nonzero" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h1909v24h-1909z"/><text x="5723.6982" y="7018.9282" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5723.6982" y="7018.9282" stroke-width="746.7">send msg</tspan></text>
+   </g>
+   
+  </g><g transform="translate(7636 -223.7)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#ffcce0" fill-rule="nonzero" stroke="#a04" stroke-width="80"/>
+   
+   <text x="2750.7446" y="6757.2021" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2750.7446" y="6757.2021" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">collection</tspan></text>
+   
+  </g>
+  
+  
+  
+  
+ <g transform="translate(15235 -205.2)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#ffcce0" fill-rule="nonzero" stroke="#a04" stroke-width="80"/>
+   
+   <text x="1851.0183" y="6449.2896" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1851.0183" y="6449.2896" font-size="423.3px" stroke-width="746.7">new item</tspan></text><g transform="translate(-2977 -16.23)" fill-rule="nonzero" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h1909v24h-1909z"/><text x="5723.6982" y="7018.9282" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5723.6982" y="7018.9282" stroke-width="746.7">get addr</tspan></text>
+   </g>
+   
+  </g><path transform="translate(-21646 -19338)" d="m30455 25213h-783.3l391.7-678.4z" fill="#f95" stroke="#520" stroke-dasharray="34.9999, 34.9999" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="12" stroke-width="100"/><path transform="translate(-14085 -19338)" d="m30455 25213h-783.3l391.7-678.4z" fill="#f95" stroke="#520" stroke-dasharray="34.9999, 34.9999" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="12" stroke-width="100"/></g><g transform="translate(40061 20024)" fill-rule="nonzero">
+  
+  
+  
+  <path transform="matrix(1 0 0 .6759 0 328.3)" d="m10500 14213h-9500v-13200h19000v13200z" fill="#fff" stroke="#a04" stroke-linejoin="round" stroke-width="121.6"/>
+   <path d="m1e3 3646h19000" fill="none" stroke="#000" stroke-linejoin="round"/><text transform="translate(0 -9.843e-5)" x="1642.2618" y="3327.8584" font-family="Inter" font-size="476.2px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1642.2618" y="3327.8584" fill-rule="nonzero" font-size="476.2px" stroke-width="746.7">Related to <tspan fill="#44aa00" font-family="Inter" font-weight="bold"><tspan fill="#aa0044">TEP-62 (NFTs),</tspan> </tspan><tspan fill="#3399ff" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="bold">standard wallets in TON ecosystem</tspan></tspan></text>
+  <text x="1885" y="2252" font-family="Inter" font-size="635px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1885" y="2252" fill-rule="nonzero" font-size="635px" stroke-width="746.7">Batch mint NFT <tspan font-family="Inter" font-size="529.2px" font-weight="300">(<tspan fill="#ff9955">nonstandard</tspan> --&gt; for /ton-blockchain/token-contract)</tspan></tspan></text>
+  
+  
+  
+  
+  
+  <g transform="translate(52.92 -264.6)">
+   
+   <path transform="translate(5.347e-6 -8.568e-5)" d="m8664 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m6449 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#a04" stroke-linejoin="round" stroke-width="35"/><text x="6434.9614" y="6495.9282" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6434.9614" y="6495.9282" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">multi-mint</tspan></text>
+   
+   <g transform="translate(158.8)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    
+   <text transform="translate(105.8)" x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle">create payload</tspan></text><path transform="translate(2.556e-6)" d="m4773 7047h2989v24h-2989z"/></g>
+  </g><g transform="translate(7614 -264.6)">
+   
+   <path transform="translate(5.347e-6 -8.568e-5)" d="m8664 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><g fill="#fff" stroke="#a04" stroke-linejoin="round" stroke-width="35"><path d="m6608 6965h-1915v-1370h3831v1370z"/><path d="m6502 7071h-1915v-1370h3831v1370z"/><path d="m6396 7177h-1915v-1370h3831v1370z"/><path d="m6290 7283h-1915v-1370h3831v1370z"/></g><text x="6235.7632" y="6711.0493" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6235.7632" y="6711.0493" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">init message</tspan></text>
+   
+   
+  </g>
+  <g transform="translate(302.9 -205.2)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/>
+   
+   <text x="2146.1128" y="6449.2896" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2146.1128" y="6449.2896" font-size="423.3px" stroke-width="746.7">admin</tspan></text><g transform="translate(-2977 -16.23)" fill-rule="nonzero" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h1909v24h-1909z"/><text x="5723.6982" y="7018.9282" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5723.6982" y="7018.9282" stroke-width="746.7">send msg</tspan></text>
+   </g>
+   
+  </g><g transform="translate(7636 -223.7)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#ffcce0" fill-rule="nonzero" stroke="#a04" stroke-width="80"/>
+   
+   <text x="2750.7446" y="6757.2021" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2750.7446" y="6757.2021" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">collection</tspan></text>
+   
+  </g>
+  
+  
+  
+  
+ <g transform="translate(15235 -205.2)"><g fill="#ffcce0" fill-rule="nonzero" stroke="#a04" stroke-width="80">
+   <path d="m3068 7527c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z"/><path d="m2962 7632c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z"/><path d="m2856 7738c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z"/><path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z"/>
+   
+   </g><text x="1851.0183" y="6449.2896" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1851.0183" y="6449.2896" font-size="423.3px" stroke-width="746.7">new item</tspan></text><g transform="translate(-2977 -16.23)" fill-rule="nonzero" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h1909v24h-1909z"/><text x="5723.6982" y="7018.9282" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5723.6982" y="7018.9282" stroke-width="746.7">get addr</tspan></text>
+   </g>
+   
+  </g><path transform="translate(-21646 -19338)" d="m30455 25213h-783.3l391.7-678.4z" fill="#f95" stroke="#520" stroke-dasharray="34.9999, 34.9999" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="12" stroke-width="100"/><path transform="translate(-14244 -19338)" d="m30455 25213h-783.3l391.7-678.4z" fill="#f95" stroke="#520" stroke-dasharray="34.9999, 34.9999" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="12" stroke-width="100"/></g><g transform="translate(0 30024)" fill-rule="nonzero">
+  
+  
+  
+  <path transform="matrix(1 0 0 .6759 0 328.3)" d="m10500 14213h-9500v-13200h19000v13200z" fill="#fff" stroke="#677821" stroke-linejoin="round" stroke-width="121.6"/>
+   <path d="m1e3 3646h19000" fill="none" stroke="#000" stroke-linejoin="round"/><text transform="translate(0 -9.843e-5)" x="1642.2618" y="3327.8584" font-family="Inter" font-size="476.2px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1642.2618" y="3327.8584" fill-rule="nonzero" font-size="476.2px" stroke-width="746.7">Related to <tspan fill="#44aa00" font-family="Inter" font-weight="bold"><tspan fill="#677821">TEP-89,</tspan> TEP-74 (jettons), </tspan><tspan fill="#3399ff" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="bold">standard wallets in TON ecosystem</tspan></tspan></text>
+  <text x="1885" y="2252" font-family="Inter" font-size="635px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1885" y="2252" fill-rule="nonzero" font-size="635px" stroke-width="746.7">Request jetton wallet address</tspan></text>
+  
+  
+  
+  
+  
+  <g transform="translate(52.92 -687.9)">
+   
+   <path transform="translate(5.347e-6 -8.568e-5)" d="m8664 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m6449 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#677821" stroke-linejoin="round" stroke-width="35"/><text x="6434.9614" y="6495.9282" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6434.9614" y="6495.9282" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">provide-wallet</tspan></text>
+   
+   <g transform="translate(158.8)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    
+   <text transform="translate(105.8)" x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle">create payload</tspan></text><path transform="translate(2.556e-6)" d="m4773 7047h2989v24h-2989z"/></g>
+  </g><g transform="translate(7553 1476)">
+   
+   <path d="m-3435 5637-428.5-164-14.85-2.121-12.02 4.95-6.364 13.44 1.414 14.14 165.5 428.5 2.828 5.657 2.121 2.121 7.778 4.95 9.9 2.828 8.485-1.414 7.071-4.243 265.9-265.9 4.243-7.071 2.828-9.9-3.536-9.192-4.95-7.778-2.121-2.121zm4300 816.7 1135-1035-40.2-85.4-1097 1009-3827 3.293-565.8-565.8-57.28 57.28 616.2 616.2z"/><path d="m-1051 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#677821" stroke-linejoin="round" stroke-width="35"/><text x="-1065.0464" y="6459.9082" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="-1065.0464" y="6459.9082" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">take-wallet</tspan></text><g transform="translate(-7341 -36.02)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    
+   <text transform="translate(105.8)" x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle">parse message</tspan></text><path transform="translate(2.556e-6)" d="m4773 7047h2989v24h-2989z"/></g>
+   
+   
+  </g>
+  <g transform="translate(302.9 -628.5)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/>
+   
+   <text x="2307.9336" y="6449.2896" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2307.9336" y="6449.2896" font-size="423.3px" stroke-width="746.7">user</tspan></text><g transform="translate(-2977 -16.23)" fill-rule="nonzero" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h1909v24h-1909z"/><text x="5723.6982" y="7018.9282" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5723.6982" y="7018.9282" stroke-width="746.7">send msg</tspan></text>
+   </g>
+   
+  </g><g transform="translate(7636 -223.7)">
+   <path d="m2750 7421c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#dde9af" fill-rule="nonzero" stroke="#677821" stroke-width="80"/>
+   
+   <text x="2738.575" y="6062.2285" font-family="Inter" font-size="423.3px" stroke-width="746.7" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2738.575" y="6062.2285" text-align="center">jetton</tspan><tspan x="2738.575" y="6591.3945" text-align="center">master</tspan></text>
+   
+  </g>
+  
+  
+  
+  
+ </g><g transform="translate(2e4 28024)" fill-rule="nonzero">
+  
+  
+  
+  <g transform="translate(0 2e3)"><path transform="matrix(1 0 0 .6759 0 328.3)" d="m10500 14213h-9500v-13200h19000v13200z" fill="#fff" stroke="#a40" stroke-linejoin="round" stroke-width="121.6"/>
+   <path d="m1e3 3646h19000" fill="none" stroke="#000" stroke-linejoin="round"/><text transform="translate(0 -9.843e-5)" x="1642.2618" y="3327.8584" font-family="Inter" font-size="476.2px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1642.2618" y="3327.8584" fill-rule="nonzero" font-size="476.2px" stroke-width="746.7">Related to <tspan fill="#44aa00" font-family="Inter" font-weight="bold"><tspan fill="#aa0044"><tspan fill="#aa4400">TEP-85 (SBTs),</tspan> TEP-62 (NFTs),</tspan> </tspan><tspan fill="#3399ff" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="bold">standard wallets in TON ecosystem</tspan></tspan></text>
+  <text x="1885" y="2252" font-family="Inter" font-size="635px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1885" y="2252" fill-rule="nonzero" font-size="635px" stroke-width="746.7">Prove SBT ownership to contract</tspan></text></g>
+  
+  
+  
+  
+  
+  <g transform="translate(52.92 1735)">
+   
+   <path transform="translate(5.347e-6 -8.568e-5)" d="m8664 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m6449 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#a40" stroke-linejoin="round" stroke-width="35"/><text x="6434.9614" y="6495.9282" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6434.9614" y="6495.9282" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">request to prove</tspan></text>
+   
+   <g transform="translate(158.8)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    
+   <text transform="translate(105.8)" x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle">create payload</tspan></text><path transform="translate(2.556e-6)" d="m4773 7047h2989v24h-2989z"/></g>
+  </g><g transform="translate(7614 -264.6)">
+   
+   <path d="m8664 8822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m6449 9283h-1915v-1370h3831v1370z" fill="#fff" stroke="#a40" stroke-linejoin="round" stroke-width="35"/><text x="6447.4292" y="8499.3828" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6447.4292" y="8499.3828" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">ownership proof</tspan></text><g transform="translate(148.5 2e3)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    
+   <text transform="translate(105.8)" x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle">parse payload</tspan></text><path transform="translate(2.556e-6)" d="m4773 7047h2989v24h-2989z"/></g>
+   
+   
+  </g>
+  <g transform="translate(302.9 1795)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/>
+   
+   <text x="2146.1128" y="6449.2896" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2146.1128" y="6449.2896" font-size="423.3px" stroke-width="746.7">user 1</tspan></text><g transform="translate(-2977 -16.23)" fill-rule="nonzero" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h1909v24h-1909z"/><text x="5723.6982" y="7018.9282" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5723.6982" y="7018.9282" stroke-width="746.7">send msg</tspan></text>
+   </g>
+   
+  </g><g transform="translate(7636 1776)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#fca" fill-rule="nonzero" stroke="#a40" stroke-width="80"/>
+   
+   <text x="2750.7446" y="6757.2021" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2750.7446" y="6757.2021" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">SBT item</tspan></text>
+   
+  </g>
+  
+  
+  
+  
+ <g transform="translate(15254 1755)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#e6e6e6" fill-rule="nonzero" stroke="#6d6d6d" stroke-width="80"/>
+   
+   <text x="2750.7446" y="6757.2021" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2750.7446" y="6757.2021" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">destination</tspan></text>
+   
+  </g></g><g transform="translate(40061 28024)" fill-rule="nonzero">
+  
+  
+  
+  <g transform="translate(0 2e3)"><path transform="matrix(1 0 0 .6759 0 328.3)" d="m10500 14213h-9500v-13200h19000v13200z" fill="#fff" stroke="#a40" stroke-linejoin="round" stroke-width="121.6"/>
+   <path d="m1e3 3646h19000" fill="none" stroke="#000" stroke-linejoin="round"/><text transform="translate(0 -9.843e-5)" x="1642.2618" y="3327.8584" font-family="Inter" font-size="476.2px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1642.2618" y="3327.8584" fill-rule="nonzero" font-size="476.2px" stroke-width="746.7">Related to <tspan fill="#44aa00" font-family="Inter" font-weight="bold"><tspan fill="#aa0044"><tspan fill="#aa4400">TEP-85 (SBTs),</tspan> TEP-62 (NFTs),</tspan> </tspan><tspan fill="#3399ff" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="bold">standard wallets in TON ecosystem</tspan></tspan></text>
+  <path d="m10500 9935-1e-3 -6289" fill="none" stroke="#000" stroke-linejoin="round"/><text x="1885" y="2252" font-family="Inter" font-size="635px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1885" y="2252" fill-rule="nonzero" font-size="635px" stroke-width="746.7">Destroy SBT</tspan></text></g><g transform="translate(6907 4228)">
+   
+   <path d="m-3435 5637-428.5-164-14.85-2.121-12.02 4.95-6.364 13.44 1.414 14.14 165.5 428.5 2.828 5.657 2.121 2.121 7.778 4.95 9.9 2.828 8.485-1.414 7.071-4.243 265.9-265.9 4.243-7.071 2.828-9.9-3.536-9.192-4.95-7.778-2.121-2.121zm4300 816.7 1135-1035-40.2-85.4-1097 1009-3827 3.293-565.8-565.8-57.28 57.28 616.2 616.2z"/><path d="m-1051 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#a40" stroke-linejoin="round" stroke-width="35"/><text x="-1045.3623" y="6738.71" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="-1045.3623" y="6738.71" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">excess return</tspan></text>
+   
+   
+  </g><g transform="translate(6748 549.8)">
+   
+   <path d="m1273 6944 428.5 164 14.85 2.121 12.02-4.95 6.364-13.44-1.414-14.14-165.5-428.5-2.828-5.657-2.121-2.121-7.778-4.95-9.9-2.828-8.485 1.414-7.071 4.243-265.9 265.9-4.243 7.071-2.828 9.9 3.536 9.192 4.95 7.778 2.121 2.121zm-4300-816.7-1135 1035 40.2 85.4 1097-1009 3827-3.293 565.8 565.8 57.28-57.28-616.2-616.2z"/><path d="m-1104 6913h-1915v-1370h3831v1370z" fill="#fff" stroke="#a40" stroke-linejoin="round" stroke-width="35"/><text x="-1117.963" y="6089.4927" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="-1117.963" y="6089.4927" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">destroy</tspan></text><g transform="translate(-7394 -406.4)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    
+   <text transform="translate(105.8)" x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle">form message</tspan></text><path transform="translate(2.556e-6)" d="m4773 7047h2989v24h-2989z"/></g>
+   
+   
+  </g><g transform="translate(-159.1 2098)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/>
+   
+   <text x="2307.9336" y="6449.2896" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2307.9336" y="6449.2896" font-size="423.3px" stroke-width="746.7">user</tspan></text><g transform="translate(-2977 -16.23)" fill-rule="nonzero" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h1909v24h-1909z"/><text x="5723.6982" y="7018.9282" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5723.6982" y="7018.9282" stroke-width="746.7">send msg</tspan></text>
+   </g>
+   
+  </g><g transform="translate(6159 2521)">
+   <path d="m2750 7421c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#fca" fill-rule="nonzero" stroke="#a40" stroke-width="80"/>
+   
+   <text x="2754.2092" y="6326.8105" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2754.2092" y="6326.8105" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">SBT item</tspan></text>
+   
+  </g>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+ <g transform="translate(16248 549.8)">
+   
+   <path d="m1273 6944 428.5 164 14.85 2.121 12.02-4.95 6.364-13.44-1.414-14.14-165.5-428.5-2.828-5.657-2.121-2.121-7.778-4.95-9.9-2.828-8.485 1.414-7.071 4.243-265.9 265.9-4.243 7.071-2.828 9.9 3.536 9.192 4.95 7.778 2.121 2.121zm-4300-816.7-1135 1035 40.2 85.4 1097-1009 3827-3.293 565.8 565.8 57.28-57.28-616.2-616.2z"/><path d="m-1104 6913h-1915v-1370h3831v1370z" fill="#fff" stroke="#a40" stroke-linejoin="round" stroke-width="35"/><text x="-1117.963" y="6089.4927" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="-1117.963" y="6089.4927" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">revoke</tspan></text><g transform="translate(-7394 -406.4)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    
+   <text transform="translate(105.8)" x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="6133.9326" y="7025.0933" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle">form message</tspan></text><path transform="translate(2.556e-6)" d="m4773 7047h2989v24h-2989z"/></g>
+   
+   
+  </g><g transform="translate(9341 2098)">
+   <path d="m2750 7844c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/>
+   
+   <text x="2112.531" y="6449.2896" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2112.531" y="6449.2896" font-size="423.3px" stroke-width="746.7">admin</tspan></text><g transform="translate(-2977 -16.23)" fill-rule="nonzero" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m4773 7047h1909v24h-1909z"/><text x="5723.6982" y="7018.9282" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7" text-align="center" text-anchor="middle" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5723.6982" y="7018.9282" stroke-width="746.7">send msg</tspan></text>
+   </g>
+   
+  </g><g transform="translate(15659 2521)">
+   <path d="m2750 7421c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#fca" fill-rule="nonzero" stroke="#a40" stroke-width="80"/>
+   
+   <text x="2754.2092" y="6326.8105" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2754.2092" y="6326.8105" font-size="423.3px" stroke-width="746.7" text-align="center" text-anchor="middle">SBT item</tspan></text>
+   
+  </g></g></g><path d="m20526 0v20474h-20526" fill="none" stroke="#000" stroke-linejoin="miter" stroke-width="26.46px"/><path d="m20525 41000v-10483h20008v-30517" fill="none" stroke="#000" stroke-linejoin="miter" stroke-width="26.46px"/></svg>
