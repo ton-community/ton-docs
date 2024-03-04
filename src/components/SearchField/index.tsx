@@ -30,7 +30,9 @@ type Props<DataItem> = {
    * Decides which keys will be shown in the results
    * */
   showKeys: DataKey<keyof DataItem>[];
-} & HTMLAttributes<HTMLInputElement>
+} & HTMLAttributes<HTMLInputElement>;
+
+const uniq = <T,>(data: T[]): T[] => Array.from(new Set(data));
 
 export const SearchField = <T extends Record<string, string>>({ data, searchBy, showKeys, ...props }: Props<T>) => {
   const timeout = useRef<NodeJS.Timeout | null>(null);
@@ -60,7 +62,12 @@ export const SearchField = <T extends Record<string, string>>({ data, searchBy, 
   }, [inputValue])
 
   useEffect(() => {
-    setFilteredData(data.filter((item) => String(JSON.stringify(Object.values(item))).toLowerCase().includes(debouncedValue?.toLowerCase())))
+    const searchValue = debouncedValue.toLowerCase();
+
+    const dataByKey = data.filter((item) => item[searchBy].toLowerCase().includes(searchValue));
+    const dataByValues = data.filter((item) => JSON.stringify(Object.values(item)).toLowerCase().includes(searchValue));
+
+    setFilteredData(uniq<T>([...dataByKey, ...dataByValues]));
   }, [data, debouncedValue, searchBy])
 
   useEffect(() => () => {
@@ -93,34 +100,36 @@ export const SearchField = <T extends Record<string, string>>({ data, searchBy, 
         </thead>
 
         <tbody>
-          {debouncedValue.length === 0 ? (
+          {debouncedValue.length === 0 && (
             <tr>
               <td colSpan={groupedKeys.length + separateKeys.length}>
                 Please enter a search query
               </td>
             </tr>
-          ) : filteredData.length === 0 ? (
+          )}
+
+          {filteredData.length === 0 && (
             <tr>
               <td colSpan={groupedKeys.length + separateKeys.length}>
                 No results found
               </td>
             </tr>
-          ) : (
-            filteredData.map((item, index) => (
-              <tr key={index}>
-                {groupedKeys.map((keyEntity) => (
-                  <td key={keyEntity.name}>
-                    {item[keyEntity.key] && <code>{item[keyEntity.key]}</code>}
-                  </td>
-                ))}
-                {separateKeys.map((keyEntity) => (
-                  <td key={keyEntity.name}>
-                    {item[keyEntity.key] && (<Markdown>{item[keyEntity.key]}</Markdown>)}
-                  </td>
-                ))}
-              </tr>
-            ))
           )}
+
+          {filteredData.length !== 0 && filteredData.map((item, index) => (
+            <tr key={index}>
+              {groupedKeys.map((keyEntity) => (
+                <td key={keyEntity.name}>
+                  {item[keyEntity.key] && <code>{item[keyEntity.key]}</code>}
+                </td>
+              ))}
+              {separateKeys.map((keyEntity) => (
+                <td key={keyEntity.name}>
+                  {item[keyEntity.key] && (<Markdown>{item[keyEntity.key]}</Markdown>)}
+                </td>
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
 
