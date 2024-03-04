@@ -595,4 +595,4 @@ If you have any questions or encounter any errors in this tutorial, feel free to
 
 
 ## 📬 About the author 
-- Saber on [Telegram](https://t.me/saber_coder) or [Github](https://github.com/saberdotcoder) or [LinkedIn](https://www.linkedin.com/in/szafarpoor/)
+- Saber on [Telegram](https://t.me/saber_coder) or [GitHub](https://github.com/saberdotcoder) or [LinkedIn](https://www.linkedin.com/in/szafarpoor/)

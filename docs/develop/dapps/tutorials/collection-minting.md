@@ -1123,4 +1123,4 @@ Today you have learned a lot of new things about TON and even created your own b
 - [NFT Standart](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
 
 ## About the author 
-- Coalus on [Telegram](https:/t.me/coalus) or [Github](https:/github.com/coalus)
+- Coalus on [Telegram](https:/t.me/coalus) or [GitHub](https:/github.com/coalus)
