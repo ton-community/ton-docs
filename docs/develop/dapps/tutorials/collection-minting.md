@@ -221,7 +221,7 @@ Based on this info, let's create our own metadata file `collection.json`, that w
 ```json
 {
   "name": "Ducks on TON",
-  "description": "This collection is created for showing an example of minting NFT collection on TON. You can support creator by bying one of this NFT.",
+  "description": "This collection is created for showing an example of minting NFT collection on TON. You can support creator by buying one of this NFT.",
   "social_links": ["https://t.me/DucksOnTON"]
 }
 ```
