@@ -5464,7 +5464,7 @@
     "doc_fift": "c[i] SETALTCTR",
     "doc_stack": "x -",
     "doc_gas": 26,
-    "doc_description": "Equivalent to `c1 PUSHCTR` `c[i] SETCONTCTR` `c0 POPCTR`."
+    "doc_description": "Equivalent to `c1 PUSHCTR` `c[i] SETCONTCTR` `c1 POPCTR`."
   },
   {
     "name": "POPSAVE",
@@ -5508,7 +5508,7 @@
     "doc_fift": "c[i] SAVEBOTH\nc[i] SAVEBOTHCTR",
     "doc_stack": "",
     "doc_gas": 26,
-    "doc_description": "Equivalent to `DUP` `c[i] SAVE` `c[i] SAVEALT`."
+    "doc_description": "Equivalent to `c[i] SAVE` `c[i] SAVEALT`."
   },
   {
     "name": "PUSHCTRX",

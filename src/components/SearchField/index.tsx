@@ -4,7 +4,6 @@ import React, {
   HTMLAttributes,
   useCallback,
   useEffect,
-  useMemo,
   useState,
   useRef
 } from 'react';
@@ -14,7 +13,7 @@ import Markdown from "markdown-to-jsx";
 type DataKey<Key> = {
   key: Key;
   name: string;
-  isGrouped?: boolean;
+  hasMarkdown?: boolean;
 }
 
 type Props<DataItem> = {
@@ -74,9 +73,6 @@ export const SearchField = <T extends Record<string, string>>({ data, searchBy, 
     clearTimeout(timeout.current);
   }, [timeout.current])
 
-  const groupedKeys = useMemo(() => showKeys.filter((key) => key.isGrouped), [showKeys]);
-  const separateKeys = useMemo(() => showKeys.filter((key) => !key.isGrouped), [showKeys])
-
   return (
     <>
       <input
@@ -91,18 +87,16 @@ export const SearchField = <T extends Record<string, string>>({ data, searchBy, 
       <table>
         <thead>
           <tr>
-            <th style={{ textAlign: "left" }}>Opcode</th>
-            <th style={{ textAlign: "left" }}>Fift syntax</th>
-            <th style={{ textAlign: "left" }}>Stack</th>
-            <th style={{ textAlign: "left" }}>Gas</th>
-            <th style={{ textAlign: "left" }}>Description</th>
+            {showKeys.map((keyEntity) => (
+              <th style={{textAlign: "left"}} key={keyEntity.name}>{keyEntity.name}</th>
+            ))}
           </tr>
         </thead>
 
         <tbody>
           {debouncedValue.length === 0 && (
             <tr>
-              <td colSpan={groupedKeys.length + separateKeys.length}>
+              <td colSpan={showKeys.length}>
                 Please enter a search query
               </td>
             </tr>
@@ -110,7 +104,7 @@ export const SearchField = <T extends Record<string, string>>({ data, searchBy, 
 
           {filteredData.length === 0 && (
             <tr>
-              <td colSpan={groupedKeys.length + separateKeys.length}>
+              <td colSpan={showKeys.length}>
                 No results found
               </td>
             </tr>
@@ -118,16 +112,15 @@ export const SearchField = <T extends Record<string, string>>({ data, searchBy, 
 
           {filteredData.length !== 0 && filteredData.map((item, index) => (
             <tr key={index}>
-              {groupedKeys.map((keyEntity) => (
-                <td key={keyEntity.name}>
-                  {item[keyEntity.key] && <code>{item[keyEntity.key]}</code>}
-                </td>
-              ))}
-              {separateKeys.map((keyEntity) => (
-                <td key={keyEntity.name}>
-                  {item[keyEntity.key] && (<Markdown>{item[keyEntity.key]}</Markdown>)}
-                </td>
-              ))}
+              {showKeys.map((keyEntity) => {
+                const value = item[keyEntity.key];
+
+                return (
+                  <td key={keyEntity.name}>
+                    {keyEntity.hasMarkdown ? <Markdown>{value}</Markdown> : <code>{value}</code>}
+                  </td>
+                )
+              })}
             </tr>
           ))}
         </tbody>

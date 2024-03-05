@@ -55,11 +55,11 @@ Feel free to use the search field below to find a specific instruction:
   searchBy="doc_fift"
   placeholder="Search for an opcode"
   showKeys={[
-    { key: 'doc_opcode', name: 'Opcode', isGrouped: true },
-    { key: 'doc_fift', name: 'Fift syntax', isGrouped: true },
-    { key: 'doc_stack', name: 'Stack', isGrouped: true },
-    { key: 'doc_gas', name: 'Gas', isGrouped: true },
-    { key: 'doc_description', name: 'Description' },
+    { key: 'doc_opcode', name: 'Opcode' },
+    { key: 'doc_fift', name: 'Fift syntax' },
+    { key: 'doc_stack', name: 'Stack' },
+    { key: 'doc_description', name: 'Description', hasMarkdown: true },
+    { key: 'doc_gas', name: 'Gas' },
   ]}
 />
 
@@ -639,11 +639,11 @@ Here `s"` is the [fee for moving stack elements between continuations](#11-gas-p
 | **`ED54`** | `c4 POPCTR`<br/>`c4 POP` | _`x -`_ | Sets the “global data root'' cell reference, thus allowing modification of persistent smart-contract data. | `26` |
 | **`ED6i`** | `c[i] SETCONT`<br/>`c[i] SETCONTCTR` | _`x c - c'`_ | Stores `x` into the savelist of continuation `c` as `c(i)`, and returns the resulting continuation `c'`. Almost all operations with continuations may be expressed in terms of [`SETCONTCTR`](#instr-setcontctr), [`POPCTR`](#instr-popctr), and [`PUSHCTR`](#instr-pushctr). | `26` |
 | **`ED7i`** | `c[i] SETRETCTR` | _`x - `_ | Equivalent to [`c0 PUSHCTR`](#instr-pushctr) [`c[i] SETCONTCTR`](#instr-setcontctr) [`c0 POPCTR`](#instr-popctr). | `26` |
-| **`ED8i`** | `c[i] SETALTCTR` | _`x - `_ | Equivalent to [`c1 PUSHCTR`](#instr-pushctr) [`c[i] SETCONTCTR`](#instr-setcontctr) [`c0 POPCTR`](#instr-popctr). | `26` |
+| **`ED8i`** | `c[i] SETALTCTR` | _`x - `_ | Equivalent to [`c1 PUSHCTR`](#instr-pushctr) [`c[i] SETCONTCTR`](#instr-setcontctr) [`c1 POPCTR`](#instr-popctr). | `26` |
 | **`ED9i`** | `c[i] POPSAVE`<br/>`c[i] POPCTRSAVE` | _`x -`_ | Similar to [`c[i] POPCTR`](#instr-popctr), but also saves the old value of `c[i]` into continuation `c0`.<br/>Equivalent (up to exceptions) to [`c[i] SAVECTR`](#instr-save) [`c[i] POPCTR`](#instr-popctr). | `26` |
 | **`EDAi`** | `c[i] SAVE`<br/>`c[i] SAVECTR` |  | Saves the current value of `c(i)` into the savelist of continuation `c0`. If an entry for `c[i]` is already present in the savelist of `c0`, nothing is done. Equivalent to [`c[i] PUSHCTR`](#instr-pushctr) [`c[i] SETRETCTR`](#instr-setretctr). | `26` |
 | **`EDBi`** | `c[i] SAVEALT`<br/>`c[i] SAVEALTCTR` |  | Similar to [`c[i] SAVE`](#instr-save), but saves the current value of `c[i]` into the savelist of `c1`, not `c0`. | `26` |
-| **`EDCi`** | `c[i] SAVEBOTH`<br/>`c[i] SAVEBOTHCTR` |  | Equivalent to [`DUP`](#instr-dup) [`c[i] SAVE`](#instr-save) [`c[i] SAVEALT`](#instr-savealt). | `26` |
+| **`EDCi`** | `c[i] SAVEBOTH`<br/>`c[i] SAVEBOTHCTR` |  | Equivalent to [`c[i] SAVE`](#instr-save) [`c[i] SAVEALT`](#instr-savealt). | `26` |
 | **`EDE0`** | `PUSHCTRX` | _`i - x`_ | Similar to [`c[i] PUSHCTR`](#instr-pushctr), but with `i`, `0 <= i <= 255`, taken from the stack.<br/>Notice that this primitive is one of the few “exotic'' primitives, which are not polymorphic like stack manipulation primitives, and at the same time do not have well-defined types of parameters and return values, because the type of `x` depends on `i`. | `26` |
 | **`EDE1`** | `POPCTRX` | _`x i - `_ | Similar to [`c[i] POPCTR`](#instr-popctr), but with `0 <= i <= 255` from the stack. | `26` |
 | **`EDE2`** | `SETCONTCTRX` | _`x c i - c'`_ | Similar to [`c[i] SETCONTCTR`](#instr-setcontctr), but with `0 <= i <= 255` from the stack. | `26` |
