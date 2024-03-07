@@ -956,7 +956,7 @@ PREVBLOCKSINFOTUPLE,,#F8213,app_config,F8213,PREVBLOCKSINFOTUPLE,- t,26,Retrives
 PREVMCBLOCKS,,#F83400,app_config,F83400,PREVMCBLOCKS,- t,34,Retrives `last_mc_blocks` part of PrevBlocksInfo from c7 (parameter 13).
 PREVKEYBLOCK,,#F83401,app_config,F83401,PREVKEYBLOCK,- t,34,Retrives `prev_key_block` part of PrevBlocksInfo from c7 (parameter 13).
 GLOBALID,,#F835,app_config,F835,GLOBALID,- i,26,Retrieves global_id from 19 network config.
-GASCONSUMED,,#F802,app_gas,F802,GASCONSUMED,- g_c,26,Returns gas consumed by VM so far (including this instruction).
+GASCONSUMED,,#F807,app_gas,F807,GASCONSUMED,- g_c,26,Returns gas consumed by VM so far (including this instruction).
 MULADDDIVMOD,,#A980,arithm_div,A980,MULADDDIVMOD,x y w z - q=floor((xy+w)/z) r=(xy+w)-zq,26,Performs multiplication, addition, division, and modulo in one step. Calculates q as floor((xy+w)/z) and r as (xy+w)-zq.
 MULADDDIVMODR,,#A981,arithm_div,A981,MULADDDIVMODR,x y w z - q=round((xy+w)/z) r=(xy+w)-zq,26,Similar to MULADDDIVMOD but calculates q as round((xy+w)/z).
 MULADDDIVMODC,,#A982,arithm_div,A982,MULADDDIVMODC,x y w z - q=ceil((xy+w)/z) r=(xy+w)-zq,26,Similar to MULADDDIVMOD but calculates q as ceil((xy+w)/z).
