@@ -15,16 +15,31 @@ However, when invoked in a TVM instance with debug mode enabled, these primitive
 [`DEBUG`](#instr-debug) and [`DEBUGSTR`](#instr-debugstr) are the two debug primitives, they cover all opcodes that start with `FE`.
 Other primitives listed here have opcodes from the same set. When debug is enabled, they have their specified effects. When debug is disabled, they behave as [`NOP`](#instr-nop).
 
+### TVM Instructions Content List
+
+* [Overview](/learn/tvm-instructions/instructions)
+* [Stack Manipulation](/learn/tvm-instructions/instructions/stack-manipulation)
+* [Tuple, List and Null](/learn/tvm-instructions/instructions/tuple-list-null)
+* [Constants and Literals](/learn/tvm-instructions/instructions/constant)
+* [Arithmetic Operations](/learn/tvm-instructions/instructions/arithmetic)
+* [Data Comparison](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell Manipulation](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation and Control Flow](/learn/tvm-instructions/instructions/control-flow)
+* [Exception Generation and Handling](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [Dictionary Manipulation](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [Application-specific Primitives](/learn/tvm-instructions/instructions/app-specific)
+* [Miscellaneous](/learn/tvm-instructions/instructions/miscellaneous)
+
 <SearchField
   data={opcodes}
   searchBy="doc_fift"
   placeholder="Search for an opcode"
   showKeys={[
-    { key: 'doc_opcode', name: 'Opcode', isGrouped: true },
-    { key: 'doc_fift', name: 'Fift syntax', isGrouped: true },
-    { key: 'doc_stack', name: 'Stack', isGrouped: true },
-    { key: 'doc_gas', name: 'Gas', isGrouped: true },
-    { key: 'doc_description', name: 'Description' },
+    { key: 'doc_opcode', name: 'Opcode' },
+    { key: 'doc_fift', name: 'Fift syntax' },
+    { key: 'doc_stack', name: 'Stack' },
+    { key: 'doc_description', name: 'Description', hasMarkdown: true },
+    { key: 'doc_gas', name: 'Gas' },
   ]}
 />
 
