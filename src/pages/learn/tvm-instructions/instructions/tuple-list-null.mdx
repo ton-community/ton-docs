@@ -8,20 +8,6 @@ import { tupleOpcodes as opcodes } from '@site/src/data/opcodes';
 
 # Tuple, List, and Null primitives
 
-<SearchField
-  data={opcodes}
-  searchBy="doc_fift"
-  placeholder="Search for an opcode"
-  showKeys={[
-    { key: 'doc_opcode', name: 'Opcode' },
-    { key: 'doc_fift', name: 'Fift syntax' },
-    { key: 'doc_stack', name: 'Stack' },
-    { key: 'doc_description', name: 'Description', hasMarkdown: true },
-    { key: 'doc_gas', name: 'Gas' },
-  ]}
-/>
-
-
 ### TVM Instructions Content List
 
 * [Overview](/learn/tvm-instructions/instructions)
@@ -36,6 +22,19 @@ import { tupleOpcodes as opcodes } from '@site/src/data/opcodes';
 * [Dictionary Manipulation](/learn/tvm-instructions/instructions/dictionary-manipulation)
 * [Application-specific Primitives](/learn/tvm-instructions/instructions/app-specific)
 * [Miscellaneous](/learn/tvm-instructions/instructions/miscellaneous)
+
+<SearchField
+  data={opcodes}
+  searchBy="doc_fift"
+  placeholder="Search for an opcode"
+  showKeys={[
+    { key: 'doc_opcode', name: 'Opcode' },
+    { key: 'doc_fift', name: 'Fift syntax' },
+    { key: 'doc_stack', name: 'Stack' },
+    { key: 'doc_description', name: 'Description', hasMarkdown: true },
+    { key: 'doc_gas', name: 'Gas' },
+  ]}
+/>
 
 ### Tuple, List, and Null primitives
 

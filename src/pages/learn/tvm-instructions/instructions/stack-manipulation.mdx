@@ -10,19 +10,6 @@ import { stackManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
 
 Here `0 <= i,j,k <= 15` if not stated otherwise.
 
-<SearchField
-  data={opcodes}
-  searchBy="doc_fift"
-  placeholder="Search for an opcode"
-  showKeys={[
-    { key: 'doc_opcode', name: 'Opcode' },
-    { key: 'doc_fift', name: 'Fift syntax' },
-    { key: 'doc_stack', name: 'Stack' },
-    { key: 'doc_description', name: 'Description', hasMarkdown: true },
-    { key: 'doc_gas', name: 'Gas' },
-  ]}
-/>
-
 ### TVM Instructions Content List
 
 * [Overview](/learn/tvm-instructions/instructions)
@@ -38,6 +25,18 @@ Here `0 <= i,j,k <= 15` if not stated otherwise.
 * [Application-specific Primitives](/learn/tvm-instructions/instructions/app-specific)
 * [Miscellaneous](/learn/tvm-instructions/instructions/miscellaneous)
 
+<SearchField
+  data={opcodes}
+  searchBy="doc_fift"
+  placeholder="Search for an opcode"
+  showKeys={[
+    { key: 'doc_opcode', name: 'Opcode' },
+    { key: 'doc_fift', name: 'Fift syntax' },
+    { key: 'doc_stack', name: 'Stack' },
+    { key: 'doc_description', name: 'Description', hasMarkdown: true },
+    { key: 'doc_gas', name: 'Gas' },
+  ]}
+/>
 
 ### Basic stack manipulation primitives
 
