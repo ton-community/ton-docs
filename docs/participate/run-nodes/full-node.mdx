@@ -3,6 +3,11 @@ import TabItem from '@theme/TabItem';
 
 # Running a Full Node
 
+
+:::caution System Administrator Required
+For running nodes basic knowledge of Linux/Ubuntu system administration is required.
+:::
+
 To install and manage your own node, use the **MyTonCtrl** open-source tool developed by the TON Foundation. The majority of TON Nodes are reliable and tested by **MyTonCtrl**.
 
 [MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) is a console application that is a convenient wrapper for fift, lite-client, and validator-engine-console. It has been specifically developed to streamline wallet, domain, and validator management tasks on the Linux operating system.
@@ -11,12 +16,13 @@ We are actively seeking feedback about the installation process. If you have any
 
 ## Prerequisites
 
+
 We highly recommend installing MyTonCtrl using the supported operating systems:
 * Ubuntu 20.04
 * Ubuntu 22.04
 * Debian 11
 
-Please, use a **non-root user** with **sudo** privileges to install and run MyTonCtrl.
+Please, [non-root user with sudo privileges](/participate/run-nodes/full-node#prerequisites-1) to install and run MyTonCtrl.
 
 ## Hardware requirements
 
@@ -179,10 +185,10 @@ This will reduce synchronization time by several times.
 
 ### Run the mytonctrl
 
-1. Run **MyTonCtrl** console from the local user account used for installation in step 1:
+1. Run **MyTonCtrl** console from the local user account used for installation in [step 1](/participate/run-nodes/full-node#prerequisites-1):
 
  ```sh
- sudo mytonctrl
+mytonctrl
   ```
 
 2. Check the MyTonCtrl status using the `status` command:
@@ -589,10 +595,10 @@ It should allow incoming connections on one specific port and outgoing connectio
 If you encounter the `Validator console is not settings` error, it indicates that you are running `MyTonCtrl` from a user other than the one you used for the installation.
 
 :::tip Solution
-Run `MyTonCtrl` from the user you've installed it (non-root sudo user).
+Run `MyTonCtrl` from [the user you've installed](/participate/run-nodes/full-node#prerequisites-1) it (non-root sudo user).
 
 ```bash
-sudo mytonctrl
+mytonctrl
 ```
 :::
 

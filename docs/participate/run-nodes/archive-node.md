@@ -2,6 +2,10 @@
 
 ## Overview
 
+:::caution System Administrator Required
+For running nodes basic knowledge of Linux/Ubuntu system administration is required.
+:::
+
 An Archive Node is a type of Full Node that stores extended historical data of a blockchain. If you are creating a blockchain explorer or a similar application that requires access to historical data, using an Archive Node as an indexer is recommended.
 
 ## Prerequisites
@@ -11,7 +15,7 @@ We highly recommend install mytonctrl using the supported operating systems:
 * Ubuntu 22.04
 * Debian 11
 
-Please, use a **non-root user** with **sudo** privileges to install and run mytonctrl.
+Please, use a [non-root user with sudo privileges](/participate/run-nodes/full-node#prerequisites-1) to install and run mytonctrl.
 
 ## Hardware requirements 
 
