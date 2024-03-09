@@ -18,6 +18,7 @@ This update is activated by Config8 `version` >= 6.
   * **5**: `ConfigParam 25` (fwd fees).
   * **6**: `ConfigParam 43` (size limits).
 * **15**: "[due payment](https://github.com/ton-blockchain/ton/blob/8a9ff339927b22b72819c5125428b70c406da631/crypto/block/block.tlb#L237)" - current debt for storage fee (nanotons). Asm opcode: `DUEPAYMENT`.
+* **16**: "precompiled gas usage" - gas usage for the current contract if it is precompiled (see ConfigParam 45), null otherwise. Asm opcode: `GETPRECOMPILEDGAS`.
 
 The idea behind this extension of c7 by unpacked config parameters is the following: this data will be retrieved from global configuration by transaction executor, so it is already presented in memory of executor. However (before extension) smart-contract need to get all of these parameters one-by-one from configuration dictionary which is expensive and potentially unpredictable by gas (since cost depends on number of parameters).
 

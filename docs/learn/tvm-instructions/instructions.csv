@@ -636,7 +636,7 @@ c4 POP",x -,26,"Sets the “global data root'' cell reference, thus allowing mod
 SETCONTCTR,,#ED6 i:uint4,cont_registers,ED6i,"c[i] SETCONT
 c[i] SETCONTCTR",x c - c',26,"Stores `x` into the savelist of continuation `c` as `c(i)`, and returns the resulting continuation `c'`. Almost all operations with continuations may be expressed in terms of `SETCONTCTR`, `POPCTR`, and `PUSHCTR`."
 SETRETCTR,,#ED7 i:uint4,cont_registers,ED7i,c[i] SETRETCTR,x - ,26,Equivalent to `c0 PUSHCTR` `c[i] SETCONTCTR` `c0 POPCTR`.
-SETALTCTR,,#ED8 i:uint4,cont_registers,ED8i,c[i] SETALTCTR,x - ,26,Equivalent to `c1 PUSHCTR` `c[i] SETCONTCTR` `c0 POPCTR`.
+SETALTCTR,,#ED8 i:uint4,cont_registers,ED8i,c[i] SETALTCTR,x - ,26,Equivalent to `c1 PUSHCTR` `c[i] SETCONTCTR` `c1 POPCTR`.
 POPSAVE,,#ED9 i:uint4,cont_registers,ED9i,"c[i] POPSAVE
 c[i] POPCTRSAVE",x -,26,"Similar to `c[i] POPCTR`, but also saves the old value of `c[i]` into continuation `c0`.
 Equivalent (up to exceptions) to `c[i] SAVECTR` `c[i] POPCTR`."
@@ -645,7 +645,7 @@ c[i] SAVECTR",,26,"Saves the current value of `c(i)` into the savelist of contin
 SAVEALT,,#EDB i:uint4,cont_registers,EDBi,"c[i] SAVEALT
 c[i] SAVEALTCTR",,26,"Similar to `c[i] SAVE`, but saves the current value of `c[i]` into the savelist of `c1`, not `c0`."
 SAVEBOTH,,#EDC i:uint4,cont_registers,EDCi,"c[i] SAVEBOTH
-c[i] SAVEBOTHCTR",,26,Equivalent to `DUP` `c[i] SAVE` `c[i] SAVEALT`.
+c[i] SAVEBOTHCTR",,26,Equivalent to `c[i] SAVE` `c[i] SAVEALT`.
 PUSHCTRX,,#EDE0,cont_registers,EDE0,PUSHCTRX,i - x,26,"Similar to `c[i] PUSHCTR`, but with `i`, `0 <= i <= 255`, taken from the stack.
 Notice that this primitive is one of the few “exotic'' primitives, which are not polymorphic like stack manipulation primitives, and at the same time do not have well-defined types of parameters and return values, because the type of `x` depends on `i`."
 POPCTRX,,#EDE1,cont_registers,EDE1,POPCTRX,x i - ,26,"Similar to `c[i] POPCTR`, but with `0 <= i <= 255` from the stack."
