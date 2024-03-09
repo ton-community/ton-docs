@@ -16,19 +16,19 @@ interface NetworkIconProps {
 
 export const NetworkIcon: FC<NetworkIconProps> = ({ type }) => {
   switch (type) {
-    case "coinmarketcap":
-      return <Icon24CoinMakertCap />;
-    case "telegram":
-      return <Icon24TelegramCircle />;
-    case "github":
-      return <Icon24GithubCircle />;
-    case "twitter":
-      return <Icon24TwitterCircle />;
-    case "mail":
-      return <Icon24MailCircle />;
-    case "linkedin":
-      return <Icon24LinkedInCircle />;
-    default:
-      return null;
+  case "coinmarketcap":
+    return <Icon24CoinMakertCap />;
+  case "telegram":
+    return <Icon24TelegramCircle />;
+  case "github":
+    return <Icon24GithubCircle />;
+  case "twitter":
+    return <Icon24TwitterCircle />;
+  case "mail":
+    return <Icon24MailCircle />;
+  case "linkedin":
+    return <Icon24LinkedInCircle />;
+  default:
+    return null;
   }
 };

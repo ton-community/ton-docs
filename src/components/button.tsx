@@ -17,16 +17,16 @@ interface IButtonProps {
 }
 
 const Button = (props: IButtonProps) => {
-    const classNames = `button button--${props.colorType} button--${props.sizeType}`
+  const classNames = `button button--${props.colorType} button--${props.sizeType}`
 
-    return (
-        <Link
-            className={classNames}
-            to={props.href}
-        >
-            {props.children}
-        </Link>
-    )
+  return (
+    <Link
+      className={classNames}
+      to={props.href}
+    >
+      {props.children}
+    </Link>
+  )
 }
 
 export default Button
