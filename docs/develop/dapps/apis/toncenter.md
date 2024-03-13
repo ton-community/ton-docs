@@ -8,10 +8,10 @@ _Standard HTTP JSON RPC similar to other blockchain APIs._
 [GetBlock Nodes](https://getblock.io/nodes/ton/) - 🚀 Instant Node installation with just a few clicks.
 :::
 
+* [Toncenter](https://toncenter.com/api/v2/) — community-hosted project for Quick Start with API. (Get an API key [@tonapibot](https://t.me/tonapibot))
+* [ton-node-docker](https://github.com/fmira21/ton-node-docker) - Docker Full Node and Toncenter API.
 * [GetBlock Nodes](https://getblock.io/nodes/ton/) — connect and test your dApps using GetBlocks Nodes
 * [TON Access](https://www.orbs.com/ton-access/) - HTTP API for The Open Network (TON).
-* [Toncenter](https://toncenter.com/api/v2/) — community-hosted project for Quick Start with API. (Get an API key [@tonapibot](https://t.me/tonapibot))
-* [ton-node-docker](https://github.com/fmira21/ton-node-docker) - [⭐NEW] Docker Full Node and Toncenter API.
 * [toncenter/ton-http-api](https://github.com/toncenter/ton-http-api) — run your own RPC node. 
 * [nownodes.io](https://nownodes.io/nodes) — NOWNodes full Nodes and blockbook Explorers via API.
 * [Chainbase](https://chainbase.com/chainNetwork/TON) — Node API and data infrastructure for The Open Network.
@@ -30,7 +30,7 @@ _Standard HTTP JSON RPC similar to other blockchain APIs._
 
 ##### Toncenter TON Index
 - Using for test and development Public TON Index for free or premium for production - [toncenter.com/api/v3/](https://toncenter.com/api/v3/)
-- Run your own TON Index with [Worker](https://github.com/toncenter/ton-index-worker/tree/36134e7376986c5517ee65e6a1ddd54b1c76cdba) and [TON Index API wrapper](https://github.com/toncenter/ton-indexer).
+- Run your own TON Index with [Worker](https://github.com/toncenter/ton-index-worker/tree/main) and [TON Index API wrapper](https://github.com/toncenter/ton-indexer).
 
 #### Toncenter HTTP API
 Clients connect to the [ton-http-api](https://github.com/toncenter/ton-http-api) server that proxies requests to the liteserver (node) using TonLib.
