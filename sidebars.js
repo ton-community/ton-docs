@@ -486,11 +486,18 @@ const sidebars = {
         'learn/tvm-instructions/tvm-overview',
         'learn/tvm-instructions/tvm-initialization',
         'learn/tvm-instructions/tvm-exit-codes',
-        'learn/tvm-instructions/tvm-upgrade-2023-07',
         {
           type: 'link',
           label: 'TVM Instructions',
           href: '/learn/tvm-instructions/instructions',
+        },
+        {
+          type: 'category',
+          label: 'TVM Changelog',
+          items: [
+            'learn/tvm-instructions/fee-calculation-instructions',
+            'learn/tvm-instructions/tvm-upgrade-2023-07',
+          ],
         },
       ],
     },

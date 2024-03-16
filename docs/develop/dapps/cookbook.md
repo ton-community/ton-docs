@@ -1622,55 +1622,57 @@ Create listener function which will assert specific transaction on certain accou
 
 ```typescript
 
-    const exBoc = tonConnectUI.send(msg); // get result of sent message 
-    const client = new TonClient({
-            endpoint: 'https://toncenter.com/api/v3/jsonRPC',
-            apiKey: 'INSERT YOUR API-KEY', // https://t.me/tonapibot
+import {Cell, Address, beginCell, storeMessage} from "@ton/ton";
+
+const exBoc = tonConnectUI.send(msg); // exBoc is a result of sending message
+const client = new TonClient({
+        endpoint: 'https://toncenter.com/api/v3/jsonRPC',
+        apiKey: 'INSERT YOUR API-KEY', // https://t.me/tonapibot
+    });
+
+export async function getTxByBOC(exBoc: string): Promise<string> {
+
+    const myAddress = Address.parse('INSERT TON WALLET ADDRESS'); // Address to fetch transactions from
+
+    return retry(async () => {
+        const transactions = await client.getTransactions(myAddress, {
+            limit: 5,
         });
+        for (const tx of transactions) {
+            const inMsg = tx.inMessage;
+            if (inMsg?.info.type === 'external-in') {
 
-    export async function getTxByBOC(exBoc: string): Promise<string> {
+                const inBOC = inMsg?.body;
+                if (typeof inBOC === 'undefined') {
 
-        const myAddress = Address.parse('INSERT TON WALLET ADDRESS'); // Address to fetch transactions from
+                    reject(new Error('Invalid external'));
+                    continue;
+                }
+                const extHash = Cell.fromBase64(exBoc).hash().toString('hex')
+                const inHash = beginCell().store(storeMessage(inMsg)).endCell().hash().toString('hex')
 
-        return retry(async () => {
-            const transactions = await client.getTransactions(myAddress, {
-                limit: 5,
-            });
-            for (const tx of transactions) {
-                const inMsg = tx.inMessage;
-                if (inMsg?.info.type === 'external-in') {
-
-                    const inBOC = inMsg?.body;
-                    if (typeof inBOC === 'undefined') {
-
-                        reject(new Error('Invalid external'));
-                        continue;
-                    }
-                    const extHash = Cell.fromBase64(exBoc).hash().toString('hex')
-                    const inHash = beginCell().store(storeMessage(inMsg)).endCell().hash().toString('hex')
-
-                    console.log(' hash BOC', extHash);
-                    console.log('inMsg hash', inHash);
-                    console.log('checking the tx', tx, tx.hash().toString('hex'));
+                console.log(' hash BOC', extHash);
+                console.log('inMsg hash', inHash);
+                console.log('checking the tx', tx, tx.hash().toString('hex'));
 
 
-                    // Assuming `inBOC.hash()` is synchronous and returns a hash object with a `toString` method
-                    if (extHash === inHash) {
-                        console.log('Tx match');
-                        const txHash = tx.hash().toString('hex');
-                        console.log(`Transaction Hash: ${txHash}`);
-                        console.log(`Transaction LT: ${tx.lt}`);
-                        return (txHash);
-                    }
+                // Assuming `inBOC.hash()` is synchronous and returns a hash object with a `toString` method
+                if (extHash === inHash) {
+                    console.log('Tx match');
+                    const txHash = tx.hash().toString('hex');
+                    console.log(`Transaction Hash: ${txHash}`);
+                    console.log(`Transaction LT: ${tx.lt}`);
+                    return (txHash);
                 }
             }
-            throw new Error('Transaction not found');
-        }, {retries: 30, delay: 1000});
-    }
-    
-     txRes = getTxByBOC(exBOC);
-     console.log(txRes);
-      
+        }
+        throw new Error('Transaction not found');
+    }, {retries: 30, delay: 1000});
+}
+
+ txRes = getTxByBOC(exBOC);
+ console.log(txRes);
+  
 
 ```
 
