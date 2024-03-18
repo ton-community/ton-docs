@@ -4,6 +4,10 @@ import Button from '@site/src/components/button'
 
 This page contains an overview and specific details that explain how to process (send and accept) digital assets on the TON blockchain.
 
+:::info Transaction Confirmation
+TON transactions are irreversible after just one confirmation. For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
+:::
+
 Best practices with comments on Toncoin processing:
 
 - [Create a key pair, a wallet and get a wallet address](https://github.com/toncenter/examples/blob/main/common.js)
@@ -196,6 +200,8 @@ Learn More
 The blockchain explorer is https://tonscan.org.
 
 To generate a transaction link in the explorer, the service needs to get the lt (logic time), transaction hash, and account address (account address for which lt and txhash were retrieved via the getTransactions method). https://tonscan.org and https://explorer.toncoin.org/ may then show the page for that tx in the following format:
+
+`https://tonviewer.com/transaction/{txhash as base64url}`
 
 `https://tonscan.org/tx/{lt as int}:{txhash as base64url}:{account address}`
 

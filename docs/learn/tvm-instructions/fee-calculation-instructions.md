@@ -1,4 +1,6 @@
-# Introduction of new instructions for cheap fee calculation
+# TVM Upgrade 2024.04
+
+## Introduction of new instructions for cheap fee calculation
 
 :::tip
 This upgrade is active in testnet and expected to be activated in mainnet in April. Preview of this update for blueprint is available in `@ton-community/sandbox@0.16.0-tvmbeta.3`, `@ton-community/func-js@0.6.3-tvmbeta.3` and `@ton-community/func-js-bin@0.4.5-tvmbeta.3` packages.
@@ -6,7 +8,7 @@ This upgrade is active in testnet and expected to be activated in mainnet in Apr
 
 This update is activated by Config8 `version` >= 6.
 
-# c7
+## c7
 
 **c7** tuple extended from 14 to 16 elements:
 * **14**: tuple that contains some config parameters as cell slices. If the parameter is absent from the config, the value is null.
@@ -25,9 +27,9 @@ The idea behind this extension of c7 by unpacked config parameters is the follow
 Due payment is needed so contract can properly assess storage fees: when message sent in default (bouncable) mode to smart-contract, storage fees are deducted (or added to due_payment field that contains storage fee related debt) prior message value is added to balance. Thus, if contract after processing message send gas excesses back with mode=64, that means that if contract balance hit 0, on next transactions storage fees start accruing in due_payment (and not deducted from incoming messages). That way debt will silently accumulate until account freezes. `DUEPAYMENT` allows developer explicitly account/withhold comission for storage and thus prevent any issues.
 
 
-# New opcodes
+## New opcodes
 
-## Opcodes to work with new c7 values
+### Opcodes to work with new c7 values
 26 gas for each, except for `SENDMSG` (because of cell operations).
 
 | xxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description                                                                    |
@@ -37,7 +39,7 @@ Due payment is needed so contract can properly assess storage fees: when message
 | `GLOBALID` | _`- i`_             | Now retrieves  `ConfigParam 19` from from c7, ton form config dict.                                                      |
 | `SENDMSG` | _`msg mode - i`_    | Now retrieves `ConfigParam 24/25` (message prices) and `ConfigParam 43` (`max_msg_cells`) from c7, not from config dict. |
 
-## Opcodes to process config parameters
+### Opcodes to process config parameters
 
 The introduction of tuple of configurations slices in the TON transaction executor has made it more cost-effective to parse fee parameters. However, as new config parameters constructors may be introduced in the future, smart contracts may need to be updated to interpret these new parameters. To address this issue, special opcodes for fee calculation have been introduced. These opcodes read parameters from c7 and calculate fees in the same manner as the executor. With the introduction of new parameters constructors, these opcodes will be updated to accommodate the changes. This allows smart contracts to rely on these instructions for fee calculation without needing to interpret all types of constructors.
 
@@ -55,7 +57,7 @@ The introduction of tuple of configurations slices in the TON transaction execut
 
 `gas_used`, `cells`, `bits`, `time_delta` are integers in range `0..2^63-1`.
 
-## Cell level operations
+### Cell level operations
 Operations for working with Merkle proofs, where cells can have non-zero level and multiple hashes.
 26 gas for each.
 

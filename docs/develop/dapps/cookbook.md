@@ -478,7 +478,7 @@ async function main() {
         .storeAddress(destinationAddress)
         .storeAddress(destinationAddress) // response destination
         .storeBit(0) // no custom payload
-        .storeCoins(toNano('0.02')) // forward amount
+        .storeCoins(toNano('0.02')) // forward amount - if >0, will send notification message
         .storeBit(1) // we store forwardPayload as a reference
         .storeRef(forwardPayload)
         .endCell();
@@ -1589,3 +1589,93 @@ asyncio.run(main())
 Note that this example covers only the simplest case with incoming messages, where it is enough to fetch the transactions on a single account. If you want to go deeper and handle more complex chains of transactions and messages, you should take `tx.outMessages` field into an account. It contains the list of the output messages sent by smart-contract in the result of this transaction. To understand the whole logic better, you can read these articles:
 * [Message Overview](/develop/smart-contracts/guidelines/message-delivery-guarantees)
 * [Internal messages](/develop/smart-contracts/guidelines/internal-messages)
+
+
+### How to find transaction for a certain TON Connect result?
+
+BOC - is a resulted cell was send to blockchain. This is bag of cell contents the body of message, which could be used as a identifier for a corresponded transaction.
+
+Prepare `retry` function for attempts on listening blockchain:
+```typescript
+
+export async function retry<T>(fn: () => Promise<T>, options: { retries: number, delay: number }): Promise<T> {
+  let lastError: Error | undefined;
+  for (let i = 0; i < options.retries; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      if (e instanceof Error) {
+        lastError = e;
+      }
+      await new Promise(resolve => setTimeout(resolve, options.delay));
+    }
+  }
+  throw lastError;
+}
+
+```
+
+Create listener function which will assert specific transaction on certain account with specific incoming external message, equal to body message in boc: 
+
+<Tabs>
+<TabItem value="ts" label="@ton/ton">
+
+```typescript
+
+import {Cell, Address, beginCell, storeMessage} from "@ton/ton";
+
+const exBoc = tonConnectUI.send(msg); // exBoc is a result of sending message
+const client = new TonClient({
+        endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+        apiKey: 'INSERT YOUR API-KEY', // https://t.me/tonapibot
+    });
+
+export async function getTxByBOC(exBoc: string): Promise<string> {
+
+    const myAddress = Address.parse('INSERT TON WALLET ADDRESS'); // Address to fetch transactions from
+
+    return retry(async () => {
+        const transactions = await client.getTransactions(myAddress, {
+            limit: 5,
+        });
+        for (const tx of transactions) {
+            const inMsg = tx.inMessage;
+            if (inMsg?.info.type === 'external-in') {
+
+                const inBOC = inMsg?.body;
+                if (typeof inBOC === 'undefined') {
+
+                    reject(new Error('Invalid external'));
+                    continue;
+                }
+                const extHash = Cell.fromBase64(exBoc).hash().toString('hex')
+                const inHash = beginCell().store(storeMessage(inMsg)).endCell().hash().toString('hex')
+
+                console.log(' hash BOC', extHash);
+                console.log('inMsg hash', inHash);
+                console.log('checking the tx', tx, tx.hash().toString('hex'));
+
+
+                // Assuming `inBOC.hash()` is synchronous and returns a hash object with a `toString` method
+                if (extHash === inHash) {
+                    console.log('Tx match');
+                    const txHash = tx.hash().toString('hex');
+                    console.log(`Transaction Hash: ${txHash}`);
+                    console.log(`Transaction LT: ${tx.lt}`);
+                    return (txHash);
+                }
+            }
+        }
+        throw new Error('Transaction not found');
+    }, {retries: 30, delay: 1000});
+}
+
+ txRes = getTxByBOC(exBOC);
+ console.log(txRes);
+  
+
+```
+
+</TabItem>
+
+</Tabs>
