@@ -279,7 +279,7 @@ The `body` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/b
         .storeAddress(Wallet_SRC)                 // response_destination:MsgAddress
         .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell)
         .storeCoins(toNano(0.05))                 // forward_ton_amount:(VarUInteger 16) - if >0, will send notification message
-        .storeUInt(0,1)                           // forward_payload:(Either Cell ^Cell)
+        .storeUint(0,1)                           // forward_payload:(Either Cell ^Cell)
         .endCell();
 ```
 
@@ -413,10 +413,10 @@ async function main() {
 
 ### Jetton Transfer with Comment
 
-The `body` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) with comment we should additionally to the regular transfer `body` serialize comment and pack this in the `forwardPayload`:
+The `messageBody` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) with comment we should additionally to the regular transfer `body` serialize comment and pack this in the `forwardPayload`:
 
 ```js
-    import {beginCell, toNano} from '@ton/ton'
+    import {beginCell, toNano, Address} from '@ton/ton'
     // transfer#0f8a7ea5 query_id:uint64 amount:(VarUInteger 16) destination:MsgAddress
     // response_destination:MsgAddress custom_payload:(Maybe ^Cell)
     // forward_ton_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)
@@ -441,16 +441,6 @@ The `body` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/b
         .storeRef(forwardPayload)
         .endCell();
 
-    const body = beginCell()
-        .storeUint(0xf8a7ea5, 32)                 // jetton transfer op code
-        .storeUint(0, 64)                         // query_id:uint64
-        .storeCoins(1000000)                      // amount:(VarUInteger 16) -  Jetton amount for transfer (decimals = 6 - jUSDT, 9 - default)
-        .storeAddress(Wallet_DST)                 // destination:MsgAddress
-        .storeAddress(Wallet_SRC)                 // response_destination:MsgAddress
-        .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell)
-        .storeCoins(toNano(0.05))                 // forward_ton_amount:(VarUInteger 16)
-        .storeUInt(0,1)                           // forward_payload:(Either Cell ^Cell)
-        .endCell();
 ```
 
 Next, sending the transaction with this body to sender's jettonWalletContract executed:
