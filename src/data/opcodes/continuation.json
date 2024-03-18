@@ -943,7 +943,7 @@
     "doc_fift": "c[i] SETALTCTR",
     "doc_stack": "x -",
     "doc_gas": 26,
-    "doc_description": "Equivalent to `c1 PUSHCTR` `c[i] SETCONTCTR` `c0 POPCTR`."
+    "doc_description": "Equivalent to `c1 PUSHCTR` `c[i] SETCONTCTR` `c1 POPCTR`."
   },
   {
     "name": "POPSAVE",
@@ -987,7 +987,7 @@
     "doc_fift": "c[i] SAVEBOTH\nc[i] SAVEBOTHCTR",
     "doc_stack": "",
     "doc_gas": 26,
-    "doc_description": "Equivalent to `DUP` `c[i] SAVE` `c[i] SAVEALT`."
+    "doc_description": "Equivalent to `c[i] SAVE` `c[i] SAVEALT`."
   },
   {
     "name": "PUSHCTRX",
@@ -1252,5 +1252,27 @@
     "doc_stack": "c n - c'",
     "doc_gas": 26,
     "doc_description": "`-1 <= n <= 255`\nIf `n=-1`, this operation does nothing (`c'=c`).\nOtherwise its action is similar to `[n] SETNUMARGS`, but with `n` taken from the stack."
+  },
+  {
+    "name": "RUNVM",
+    "alias_of": "",
+    "tlb": "#DB4 flags:(## 12)",
+    "doc_category": "cont_basic",
+    "doc_opcode": "DB4fff",
+    "doc_fift": "RUNVM",
+    "doc_stack": "x_1 ... x_n n code [r] [c4] [c7] [g_l] [g_m] - x'_1 ... x'_m exitcode [data'] [c4'] [c5] [g_c]",
+    "doc_gas": "66+x",
+    "doc_description": "Runs child VM with code `code` and stack `x_1...x_n`. Returns the resulting stack `x'_1...x'_m` and exitcode. Other arguments and return values are enabled by flags."
+  },
+  {
+    "name": "RUNVMX",
+    "alias_of": "",
+    "tlb": "#DB50",
+    "doc_category": "cont_basic",
+    "doc_opcode": "DB50",
+    "doc_fift": "RUNVMX",
+    "doc_stack": "x_1 ... x_n n code [r] [c4] [c7] [g_l] [g_m] flags - x'_1 ... x'_m exitcode [data'] [c4'] [c5] [g_c]",
+    "doc_gas": "66+x",
+    "doc_description": "Same as `RUNVM`, but pops flags from stack."
   }
 ]

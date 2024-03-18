@@ -1,10 +1,8 @@
 # TVM Upgrade 2023.07
 
-:::caution **Work in progress**:
-Some operation codes may be removed, some gas prices are likely to be changed. It is expected that no new opcodes will be added to the list.
+:::tip
+This upgrade launched [run](https://t.me/tonblockchain/223) on the Mainnet from December 2023.
 :::
-
-This upgrade is in testnet and expected to be shipped to mainnet in 2023 Q4.
 
 
 # c7

@@ -1,15 +1,33 @@
 # Running an Archive Node
 
 ## Overview
+
+:::caution System Administrator Required
+For running nodes basic knowledge of Linux/Ubuntu system administration is required.
+:::
+
 An Archive Node is a type of Full Node that stores extended historical data of a blockchain. If you are creating a blockchain explorer or a similar application that requires access to historical data, using an Archive Node as an indexer is recommended.
+
+## Prerequisites
+
+We highly recommend install mytonctrl using the supported operating systems:
+* Ubuntu 20.04
+* Ubuntu 22.04
+* Debian 11
+
+Please, use a [non-root user with sudo privileges](/participate/run-nodes/full-node#prerequisites-1) to install and run mytonctrl.
 
 ## Hardware requirements 
 
-* at least 8 cores CPU 
-* at least 64 GB RAM 
-* at least 4TB SSD on your server
-* 1 Gbit/s network connectivity 
+* 16 x Cores CPU 
+* 128GB ECC Memory 
+* 4TB SSD _OR_ Provisioned 32+k IOPS storage
+* 1 Gbit/s network connectivity
+* 16 TB/month traffic on peak load
 * a public IP address (fixed IP address)
+
+
+__Note__: 4TB assumes usage of zfs volume with compression enabled
 
 ## Installation
 
@@ -45,15 +63,7 @@ sudo zfs set compression=lz4 data
 
 ### Install MyTonCtrl
 
-Download the installation script. We recommend to install the tool under your local user account, not as Root. In our example a local user account is used:
-
-```shell
-wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-sudo bash install.sh -m full
-```
-
-See more detailed guide in [Running Full Node](/participate/run-nodes/full-node) section.
-
+Please, use a [Running Full Node](/participate/run-nodes/full-node) to install mytonctrl.
 
 ### Run an Archive Node
 

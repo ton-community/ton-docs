@@ -1,6 +1,6 @@
 # Sending messages
 
-Composition, parsing, and sending messages lie at the intersection of [TL-B schemas](/learn/overviews/TL-B), [transaction phases and TVM](/learn/tvm-instructions/tvm-overview.md).
+Composition, parsing, and sending messages lie at the intersection of [TL-B schemas](/develop/data-formats/tl-b-language), [transaction phases and TVM](/learn/tvm-instructions/tvm-overview.md).
 
 Indeed, FunC exposes [send_raw_message](/develop/func/stdlib#send_raw_message) function which expects a serialized message as an argument.
 
@@ -162,10 +162,11 @@ As you might've noticed, we send messages with `send_raw_message` which, apart f
 | `64` | Carry all the remaining value of the inbound message in addition to the value initially indicated in the new message |
 | `128` | Carry all the remaining balance of the current smart contract instead of the value originally indicated in the message |
 
-| Flag | Description |
-|:-|:-|
-| `+1` | Pay transfer fees separately from the message value |
-| `+2` | Ignore any errors arising while processing this message during the action phase |
+| Flag  | Description                                                                                   |
+|:------|:----------------------------------------------------------------------------------------------|
+| `+1`  | Pay transfer fees separately from the message value                                           |
+| `+2`  | Ignore any errors arising while processing this message during the action phase               |
+| `+16` | In the case of action fail - bounce transaction. No effect if `+2` is used.                   |
 | `+32` | Current account must be destroyed if its resulting balance is zero (often used with Mode 128) |
 
 To build a mode for the `send_raw_message`, you just have to combine modes and flags by adding them together. For example, if you want to send a regular message and pay transfer fees separately, use the Mode `0` and Flag `+1` to get `mode = 1`. If you want to send the whole contract balance and destroy it immidiately, use the Mode `128` and Flag `+32` to get `mode = 160`.

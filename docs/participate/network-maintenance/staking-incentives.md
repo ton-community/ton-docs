@@ -16,7 +16,47 @@ For each shardchain and masterchain a dedicated set of validators exists. Sets o
 
 In contrast, each shardchain is validated by a set of 23 validators (defined as Network Parameter `Config28:shard_validators_num`) and rotated randomly every 1000 seconds (Network Parameter `Config28:shard_validators_lifetime`).
 
-## Positive incentives
+## Values of Stakes: Max Effective Stake
+
+The current `max_factor` in config is __3__, meaning the stake of the _smallest_ validator cannot be more than three times less than the stake of the _largest_ one.
+
+The formula with the config parameters:
+
+`max_factor` =  [`max_stake_factor`](https://tonviewer.com/config#17) / [`validators_elected_for`](https://tonviewer.com/config#15)
+
+### (Simplified) Selection Algorithm
+
+This algorithm, run by the [Elector smart contract](/develop/smart-contracts/governance#elector), selects the best validator candidates based on the stake they have committed. Here's a breakdown of how it works:
+
+1. **Initial Selection**: Elector considers all candidates who have staked more than a set minimum amount (300K, as specified in the [configuration](https://tonviewer.com/config#17)).
+
+2. **Ordering Candidates**: These candidates are then arranged from highest to lowest based on their stake.
+
+3. **Narrowing Down**:
+   - If the number of candidates exceeds the maximum allowed number of validators ([see configuration](https://tonviewer.com/config#16)), those with the lowest stakes are excluded.
+   - The Elector then evaluates each potential group of candidates, starting from the largest group and moving to smaller ones:
+      - It examines the top candidates in the ordered list, increasing the number one by one.
+      - For each candidate, Elector calculates their 'effective stake'. If a candidate's stake is significantly higher than the minimum, it's adjusted down (e.g., if someone staked 310k and the minimum is 100k, but there's a rule capping at three times the minimum, their effective stake is considered as 300k).
+      - It sums up the effective stakes of all candidates in this group.
+
+4. **Final Selection**: The group of candidates with the highest total effective stake is chosen as the validators by the Elector.
+
+
+#### Validator Selection Algorithm
+
+Based on the available stakes of potential validators, optimal values for the minimum and maximum stake are determined, with the aim of maximizing the magnitude of the total stake:
+
+1. Elector takes all applicants who have a stake higher than the minimum ([300K in config](https://tonviewer.com/config#17)).
+2. Elector sorts them in _descending_ order of stake.
+3. If there are more participants than the [maximum number](https://tonviewer.com/config#16) of validators, Elector discards the tail of the list. Then Elector does the following:
+
+   * For each cycle __i__ from _1 to N_ (the remaining number of participants), it takes the first __i__ applications from the sorted list.
+   * It calculates the effective stake, considering the `max_factor`. That is, if a person has put in 310k, but with a `max_factor` of 3, and the minimum stake in the list is 100k Toncoins, then the effective stake will be min(310k, 3*100k) = 300k.
+   * It calculates the total effective stake of all __i__ participants.
+
+Once Elector finds such an __i__, where the total effective stake is maximal, we declare these __i__ participants as validators.
+
+## Positive Incentives
 
 Similarly to all blockchain networks, each transaction on TON requires a computation fee called [gas](https://blog.ton.org/what-is-blockchain) used to conduct network storage and the transaction processing on-chain. On TON, these fees are accumulated within the Elector contract in a reward pool.
 
@@ -39,15 +79,11 @@ Learn current TON Blockchain stats [here](https://tontech.io/stats/).
 :::
 
 
-## Negative incentives
+## Negative Incentives
 
 On TON Blockchain, there are generally two ways validators can be penalized for misbehaving: idle and malicious misbehaving; both of which are prohibited and may result in being fined (in a process called slashing) for their actions.
 
 If a validator does not participate in block creation and transaction signing for a significant amount of time during a validation round, it is potentially fined using the _Standard fine_ parameter. As of April 2023, the Standard fine accrued is 101 TON (Network Parameter `ConfigParam40:MisbehaviourPunishmentConfig`).
-
-:::info
-TON is planning to increase the _Standard fine_ for validators by the end of 2023.
-:::
 
 On TON, slashing penalties (fines given to validators) allow any network participant to file a complaint if they believe a validator is misbehaving. During this process, the participant issuing the complaint must attach cryptographic proofs of misbehavior for Elector submission. During the `stake_held_for` dispute resolution period, all validators operating on the network check the validity of complaints and vote whether they will pursue the complaint collectively (while determining the legitimacy of misbehaving proofs and fine allotment).  
 

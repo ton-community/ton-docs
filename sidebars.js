@@ -107,11 +107,6 @@ const sidebars = {
 
     'develop/overview',
     {
-      type: 'doc',
-      label: 'Get Started with TON',
-      id: 'develop/get-started-with-ton',
-    },
-    {
       type: 'category',
       label: 'TON Hello World series',
       items: [
@@ -136,6 +131,11 @@ const sidebars = {
           href: 'https://ton-community.github.io/tutorials/04-testing',
         },
       ],
+    },
+    {
+      type: 'doc',
+      label: 'Get Started with TON',
+      id: 'develop/get-started-with-ton',
     },
     {
       'type': 'html',
@@ -178,11 +178,11 @@ const sidebars = {
               type: 'category',
               label: 'Message Management',
               items: [
+                'develop/smart-contracts/guidelines/message-delivery-guarantees',
                 'develop/smart-contracts/messages',
                 'develop/smart-contracts/guidelines/internal-messages',
                 'develop/smart-contracts/guidelines/external-messages',
                 'develop/smart-contracts/guidelines/non-bouncable-messages',
-                'develop/smart-contracts/guidelines/message-delivery-guarantees',
               ],
             },
             {
@@ -243,25 +243,26 @@ const sidebars = {
           type: 'category',
           label: 'Telegram Mini Apps',
           items: [
-                    'develop/dapps/telegram-apps/README',
-                    'develop/dapps/telegram-apps/grants',
-                {
-            type: 'category',
-            label: 'Guidelines',
-            items: [
-            'develop/dapps/telegram-apps/testing-apps',
-            'develop/dapps/telegram-apps/publishing',
-            'develop/dapps/telegram-apps/monetization',
-            'develop/dapps/telegram-apps/tips-and-tricks',
-            ],
+            'develop/dapps/telegram-apps/README',
+            'develop/dapps/telegram-apps/grants',
+            {
+              type: 'category',
+              label: 'Guidelines',
+              items: [
+                'develop/dapps/telegram-apps/testing-apps',
+                'develop/dapps/telegram-apps/publishing',
+                'develop/dapps/telegram-apps/monetization',
+                'develop/dapps/telegram-apps/tips-and-tricks',
+              ],
             },
             {
-                type: 'category',
-                label: 'Tutorials & Examples',
-                items: [
-                    'develop/dapps/telegram-apps/step-by-step-guide',
-                    'develop/dapps/telegram-apps/app-examples',
-                ],
+              type: 'category',
+              label: 'Tutorials & Examples',
+              items: [
+                'develop/dapps/telegram-apps/step-by-step-guide',
+                'develop/dapps/telegram-apps/app-examples',
+                'develop/dapps/telegram-apps/design-guidelines',
+              ],
             },
 
 
@@ -322,6 +323,11 @@ const sidebars = {
               type: 'doc',
               id: 'develop/dapps/tutorials/simple-zk-on-ton',
               label: 'Zero-Knowledge Proofs',
+            },
+            {
+              type: 'doc',
+              id: 'develop/dapps/tutorials/building-web3-game',
+              label: 'Web3 Game Example',
             },
             {
               type: 'category',
@@ -480,73 +486,27 @@ const sidebars = {
         'learn/tvm-instructions/tvm-overview',
         'learn/tvm-instructions/tvm-initialization',
         'learn/tvm-instructions/tvm-exit-codes',
-        'learn/tvm-instructions/tvm-upgrade-2023-07',
+        {
+          type: 'link',
+          label: 'TVM Instructions',
+          href: '/learn/tvm-instructions/instructions',
+        },
         {
           type: 'category',
-          label: 'TVM Instructions',
+          label: 'TVM Changelog',
           items: [
-            {
-              type: 'doc',
-              label: 'Overview',
-              id: 'learn/tvm-instructions/tvm-instructions-overview'
-            },
-            {
-              type: 'doc',
-              label: 'Stack manipulation',
-              id: 'learn/tvm-instructions/instructions/stack-manipulation'
-            },
-            {
-              type: 'doc',
-              label: 'Tuple, List, and Null manipulation',
-              id: 'learn/tvm-instructions/instructions/tuple-list-null'
-            },
-            {
-              type: 'doc',
-              label: 'Constant operations',
-              id: 'learn/tvm-instructions/instructions/constant'
-            },
-            {
-              type: 'doc',
-              label: 'Arithmetic operations',
-              id: 'learn/tvm-instructions/instructions/arithmetic'
-            },
-            {
-              type: 'doc',
-              label: 'Data comparison',
-              id: 'learn/tvm-instructions/instructions/data-comparison'
-            },
-            {
-              type: 'doc',
-              label: 'Cell manipulation',
-              id: 'learn/tvm-instructions/instructions/cell-manipulation'
-            },
-            {
-              type: 'doc',
-              label: 'Continuation and control flow',
-              id: 'learn/tvm-instructions/instructions/control-flow'
-            },
-            {
-              type: 'doc',
-              label: 'Exception generating and handling',
-              id: 'learn/tvm-instructions/instructions/exception-gen-and-handling'
-            },
-            {
-              type: 'doc',
-              label: 'Dictionary manipulation',
-              id: 'learn/tvm-instructions/instructions/dictionary-manipulation'
-            },
-            {
-              type: 'doc',
-              label: 'Application-specific primitives',
-              id: 'learn/tvm-instructions/instructions/app-specific'
-            },
-            {
-              type: 'doc',
-              label: 'Miscellaneous',
-              id: 'learn/tvm-instructions/instructions/miscellaneous'
-            },
-          ]
-        }
+            'learn/tvm-instructions/fee-calculation-instructions',
+            'learn/tvm-instructions/tvm-upgrade-2023-07',
+          ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Blockchain Fundamentals',
+      items: [
+        'develop/blockchain/shards',
+        'develop/blockchain/sharding-lifecycle',
       ],
     },
     {
@@ -609,16 +569,6 @@ const sidebars = {
         'develop/archive/mining',
         'develop/smart-contracts/compile/README',
         'develop/smart-contracts/environment/installation',
-        {
-          type: 'category',
-          label: 'Old Nodes Articles',
-          items: [
-            'participate/nodes/lite-client',
-            'participate/nodes/full-node',
-            'participate/nodes/validator',
-          ],
-        },
-        'learn/archive/tvm-instructions'
       ],
     },
     {
@@ -642,41 +592,42 @@ const sidebars = {
       'type': 'html',
       'value': '<span class=\'menu__link\'><b><small> Infrastructure </small></b></span>',
     },
-      'participate/explorers',
-      {
-        type: 'category',
-        label: 'Wallets in TON',
-        items: [
-          'participate/wallets/apps',
-          'participate/wallets/contracts',
-        ],
-      },
-      {
-        type: 'category',
-        label: 'Cross-chain Bridges',
-        items: [
-          {
-            type: 'doc',
-            label: 'Overview',
-            id: 'participate/crosschain/overview',
-          },
-          {
-            type: 'doc',
-            label: 'Bridges Addresses',
-            id: 'participate/crosschain/bridge-addresses',
-          },
-        ],
-      },
+    'participate/explorers',
+    {
+      type: 'category',
+      label: 'Wallets in TON',
+      items: [
+        'participate/wallets/apps',
+        'participate/wallets/contracts',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Cross-chain Bridges',
+      items: [
+        {
+          type: 'doc',
+          label: 'Overview',
+          id: 'participate/crosschain/overview',
+        },
+        {
+          type: 'doc',
+          label: 'Bridges Addresses',
+          id: 'participate/crosschain/bridge-addresses',
+        },
+      ],
+    },
     {
       type: 'category',
       label: 'Blockchain Nodes',
       items: [
-          'participate/nodes/node-types',
-          'participate/run-nodes/full-node',
-          'participate/run-nodes/archive-node',
-          'participate/run-nodes/liteserver',
-          'participate/nodes/node-maintenance-and-security',
-          'participate/run-nodes/local-ton',
+        'participate/nodes/node-types',
+        'participate/run-nodes/full-node',
+        'participate/run-nodes/archive-node',
+        //'participate/run-nodes/liteserver',
+        //'participate/nodes/nodes-faq',
+        'participate/nodes/node-maintenance-and-security',
+        'participate/run-nodes/local-ton',
       ],
     },
     {
@@ -684,6 +635,8 @@ const sidebars = {
       label: 'Network Infrastructure',
       items: [
         'participate/network-maintenance/staking-incentives',
+        'participate/network-maintenance/single-nominator',
+        'participate/network-maintenance/vesting-contract',
         'participate/network-maintenance/nominators',
         'participate/network-maintenance/persistent-states',
         'participate/nodes/collators',
@@ -743,6 +696,7 @@ const sidebars = {
       'label': 'Documentation',
       'items': [
         'contribute/docs/guidelines',
+        'contribute/docs/schemes-guidelines',
       ],
     },
     {

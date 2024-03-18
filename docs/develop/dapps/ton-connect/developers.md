@@ -14,6 +14,7 @@ This page contents the list of useful libraries for TON Connect.
 * [TON Connect Dart](/develop/dapps/ton-connect/developers#ton-connect-dart)
 * [TON Connect C#](/develop/dapps/ton-connect/developers#ton-connect-c)
 * [TON Connect Unity](/develop/dapps/ton-connect/developers#ton-connect-unity)
+* [TON Connect Go](/develop/dapps/ton-connect/developers#ton-connect-go)
 
 ## TON Connect React
 
@@ -84,6 +85,8 @@ This package contains protocol requests, protocol responses, event models and en
 
 ## TON Connect Python
 
+### pytonconnect
+
 Python SDK for TON Connect 2.0. Analogue of the `@tonconnect/sdk` library.
 
 Use it to connect your app to TON wallets via TonConnect protocol.
@@ -95,6 +98,16 @@ pip3 install pytonconnect
 - [GitHub](https://github.com/XaBbl4/pytonconnect)
 
 
+### ClickoTON-Foundation tonconnect
+
+Library for connecting TON Connect to Python apps
+
+```bash
+git clone https://github.com/ClickoTON-Foundation/tonconnect.git
+pip install -e tonconnect
+```
+
+[GitHub](https://github.com/ClickoTON-Foundation/tonconnect)
 
 
 ## TON Connect Dart
@@ -123,19 +136,37 @@ Use it to connect your app to TON wallets via TonConnect protocol.
 * [GitHub](https://github.com/continuation-team/TonSdk.NET/tree/main/TonSDK.Connect)
 
 
-## TON Connect Unity
+## TON Connect Go
 
-Unity asset for TON Connect 2.0. Uses `continuation-team/TonSdk.NET/tree/main/TonSDK.Connect`.
+Go SDK for TON Connect 2.0.
 
-Use it to integrate TonConnect protocol with your game.
+Use it to connect your app to TON wallets via TonConnect protocol.
 
-* [GitHub](https://github.com/continuation-team/unity-ton-connect)
+```bash
+ go get github.com/cameo-engineering/tonconnect
+```
+
+* [GitHub](https://github.com/cameo-engineering/tonconnect)
 
 ## General Questions and Concerns
 
 If any of our developers or community members encounter any additional issues during the implementation of TON Connect 2.0, please contact the [Tonkeeper developer](https://t.me/tonkeeperdev) channel.
 
 If you experience any additional issues, or would like to present a proposal on how to improve TON Connect 2.0, please contact us directly through the appropriate [GitHub directory](https://github.com/ton-connect/).
+
+## TON Connect Unity
+
+:::danger
+This library is outdated at the moment. 
+
+Please, use [@ton-connect/ui](https://www.npmjs.com/package/@tonconnect/ui) for your Unity applications.
+:::
+
+Unity asset for TON Connect 2.0. Uses `continuation-team/TonSdk.NET/tree/main/TonSDK.Connect`.
+
+Use it to integrate TonConnect protocol with your game.
+
+* [GitHub](https://github.com/continuation-team/unity-ton-connect)
 
 ## See Also
 

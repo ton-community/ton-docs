@@ -221,7 +221,7 @@ Based on this info, let's create our own metadata file `collection.json`, that w
 ```json
 {
   "name": "Ducks on TON",
-  "description": "This collection is created for showing an example of minting NFT collection on TON. You can support creator by bying one of this NFT.",
+  "description": "This collection is created for showing an example of minting NFT collection on TON. You can support creator by buying one of this NFT.",
   "social_links": ["https://t.me/DucksOnTON"]
 }
 ```
@@ -1043,6 +1043,36 @@ msgBody.storeBit(0); // no forward_payload
 return msgBody.endCell();
 ```
 
+And create a transfer function to transfer the NFT.
+
+```ts
+static async transfer(
+    wallet: OpenedWallet,
+    nftAddress: Address,
+    newOwner: Address
+  ): Promise<number> {
+    const seqno = await wallet.contract.getSeqno();
+
+    await wallet.contract.sendTransfer({
+      seqno,
+      secretKey: wallet.keyPair.secretKey,
+      messages: [
+        internal({
+          value: "0.05",
+          to: nftAddress,
+          body: this.createTransferBody({
+            newOwner,
+            responseTo: wallet.contract.address,
+            forwardAmount: toNano("0.02"),
+          }),
+        }),
+      ],
+      sendMode: SendMode.IGNORE_ERRORS + SendMode.PAY_GAS_SEPARATELY,
+    });
+    return seqno;
+  }
+```
+
 Nice, now we can we are already very close to the end. Back to the `app.ts` and let's get address of our nft, that we want to put on sale:
 ```ts
 const nftToSaleAddress = await NftItem.getAddressByIndex(collection.address, 0);
@@ -1081,16 +1111,16 @@ Now we can launch our project and enjoy the process!
 ```
 yarn start
 ```
-Go to https://testnet.getgems.io/YOUR_COLLECTION_ADDRESS_HERE and look to this perfect ducks!
+Go to https://testnet.getgems.io/collection/<YOUR_COLLECTION_ADDRESS_HERE> and look to this perfect ducks!
 
 ## Conclusion 
 
-Today you have learned a lot of new things about TON and even created your own beautiful NFT collection in the testnet! If you still have any questions or have noticed an error - feel free to write to the author - [@coalus](https:/t.me/coalus)
+Today you have learned a lot of new things about TON and even created your own beautiful NFT collection in the testnet! If you still have any questions or have noticed an error - feel free to write to the author - [@coalus](https://t.me/coalus)
 
 ## References
 
-- [GetGems NFT-contracts](https:/github.com/getgems-io/nft-contracts)
+- [GetGems NFT-contracts](https://github.com/getgems-io/nft-contracts)
 - [NFT Standart](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
 
 ## About the author 
-- Coalus on [Telegram](https:/t.me/coalus) or [Github](https:/github.com/coalus)
+- Coalus on [Telegram](https://t.me/coalus) or [GitHub](https://github.com/coalus)

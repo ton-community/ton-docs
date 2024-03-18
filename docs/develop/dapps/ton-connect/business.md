@@ -35,7 +35,7 @@ By using the [TON Connect SDK](https://github.com/ton-connect/sdk) , detailed in
 - backend login via the corresponding wallet's address
 - sending request transactions and in-wallet signing(accepting requests)
 
-To gain a better understand of what is possible with this solution, check out our demo app that is available on Github: [https://github.com/ton-connect/](https://github.com/ton-connect/demo-dapp)
+To gain a better understand of what is possible with this solution, check out our demo app that is available on GitHub: [https://github.com/ton-connect/](https://github.com/ton-connect/demo-dapp)
 
 ### Currently supported technology stack:
 

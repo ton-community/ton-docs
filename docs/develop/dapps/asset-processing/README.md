@@ -4,6 +4,10 @@ import Button from '@site/src/components/button'
 
 This page contains an overview and specific details that explain how to process (send and accept) digital assets on the TON blockchain.
 
+:::info Transaction Confirmation
+TON transactions are irreversible after just one confirmation. For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
+:::
+
 Best practices with comments on Toncoin processing:
 
 - [Create a key pair, a wallet and get a wallet address](https://github.com/toncenter/examples/blob/main/common.js)
@@ -24,6 +28,14 @@ Best practices with comments on jettons processing:
 
 ## Other Examples
 
+### Self-hosted service
+
+#### Made by community
+
+[Gobicycle](https://github.com/gobicycle/bicycle) service is focused on replenishing user balances and sending payments to blockchain accounts. Both TONs and Jettons are supported. The service is written with numerous pitfalls in mind that a developer might encounter (all checks for jettons, correct operations status check, resending messages, performance during high load when blockchain is splitted by shards). Provide simple HTTP API, rabbit and webhook notifications about new payments.
+
+### JavaScript
+
 #### Made by community
 
 Using ton.js SDK (supported by TON Community):
@@ -31,7 +43,6 @@ Using ton.js SDK (supported by TON Community):
 - [Create a wallet, get its balance, make a transfer](https://github.com/ton-community/ton#usage)
 
 ### Python
-
 
 #### Made by community
 
@@ -63,7 +74,8 @@ Smart contracts **pay fees for transactions** (usually from the balance of an in
 TON has three types of digital assets.
 - Toncoin, the main token of the network. It is used for all basic operations on the blockchain, for example, paying gas fees or staking for validation.
 - Native tokens, which are special kinds of assets that can be attached to any message on the network. These assets are currently not in use since the functionality for issuing new native tokens is closed.
-- Contract assets, such as tokens and NFTs, which are analogous to the ERC-20/ERC-721 standards and are managed by arbitrary contracts and thus can require custom rules for processing. You can find more info on it's processin in [process NFTs](/develop/dapps/nfts) and [process Jettons](/develop/dapps/jettons) articles.
+- Contract assets, such as tokens and NFTs, which are analogous to the ERC-20/ERC-721 standards and are managed by arbitrary contracts and thus can require custom rules for processing. You can find more info on it's processin in [process NFTs](/develop/dapps/asset-processing/nfts) and [process Jettons](/develop/dapps/asset-processing/jettons) articles.
+
 
 ### Simple Toncoin transfer
 To send Toncoin, the user needs to send a request via an external message, that is, a message from the outside world to the blockchain, to a special `wallet` smart contract (see below). Upon receiving this request, `wallet` will send an inner message with the desired amount of assets and optional data payload, for instance a text comment.
@@ -94,6 +106,11 @@ To deploy a wallet via TonLib one needs to:
 4. Send some Toncoin to the calculated address. Note that you need to send them in `non-bounce` mode since this address has no code yet and thus cannot process incoming messages. `non-bounce` flag indicates that even if processing fails, money should not be returned with a bounce message. We do not recommend using the `non-bounce` flag for other transactions, especially when carrying large sums, since the bounce mechanism provides some degree of protection against mistakes.
 5. Form the desired [action](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L148), for instance `actionNoop` for deploy only. Then use [createQuery](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L255) and [sendQuery](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L260) to initiate interactions with the blockchain.
 6. Check the contract in a few seconds with [getAccountState](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L254) method.
+
+:::tip
+Read more in the [Wallet Tutorial](/develop/smart-contracts/tutorials/wallet#-deploying-a-wallet)
+:::
+
 
 ## Incoming message value
 To calculate the incoming value that the message brings to the contract, one needs to parse the transaction. It happens when the message hits the contract. A transaction can be obtained using [getTransactions](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L236). For an incoming wallet transaction, the correct data consists of one incoming message and zero outgoing messages. Otherwise, either an external message is sent to the wallet, in which case the owner spends Toncoin, or the wallet is not deployed and the incoming transaction bounces back.
@@ -183,6 +200,8 @@ Learn More
 The blockchain explorer is https://tonscan.org.
 
 To generate a transaction link in the explorer, the service needs to get the lt (logic time), transaction hash, and account address (account address for which lt and txhash were retrieved via the getTransactions method). https://tonscan.org and https://explorer.toncoin.org/ may then show the page for that tx in the following format:
+
+`https://tonviewer.com/transaction/{txhash as base64url}`
 
 `https://tonscan.org/tx/{lt as int}:{txhash as base64url}:{account address}`
 

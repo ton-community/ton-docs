@@ -4,7 +4,6 @@ import React, {
   HTMLAttributes,
   useCallback,
   useEffect,
-  useMemo,
   useState,
   useRef
 } from 'react';
@@ -14,7 +13,7 @@ import Markdown from "markdown-to-jsx";
 type DataKey<Key> = {
   key: Key;
   name: string;
-  isGrouped?: boolean;
+  hasMarkdown?: boolean;
 }
 
 type Props<DataItem> = {
@@ -30,7 +29,9 @@ type Props<DataItem> = {
    * Decides which keys will be shown in the results
    * */
   showKeys: DataKey<keyof DataItem>[];
-} & HTMLAttributes<HTMLInputElement>
+} & HTMLAttributes<HTMLInputElement>;
+
+const uniq = <T,>(data: T[]): T[] => Array.from(new Set(data));
 
 export const SearchField = <T extends Record<string, string>>({ data, searchBy, showKeys, ...props }: Props<T>) => {
   const timeout = useRef<NodeJS.Timeout | null>(null);
@@ -60,15 +61,17 @@ export const SearchField = <T extends Record<string, string>>({ data, searchBy, 
   }, [inputValue])
 
   useEffect(() => {
-    setFilteredData(data.filter((item) => String(JSON.stringify(Object.values(item))).toLowerCase().includes(debouncedValue?.toLowerCase())))
+    const searchValue = debouncedValue.toLowerCase();
+
+    const dataByKey = data.filter((item) => item[searchBy].toLowerCase().includes(searchValue));
+    const dataByValues = data.filter((item) => JSON.stringify(Object.values(item)).toLowerCase().includes(searchValue));
+
+    setFilteredData(uniq<T>([...dataByKey, ...dataByValues]));
   }, [data, debouncedValue, searchBy])
 
   useEffect(() => () => {
     clearTimeout(timeout.current);
   }, [timeout.current])
-
-  const groupedKeys = useMemo(() => showKeys.filter((key) => key.isGrouped), [showKeys]);
-  const separateKeys = useMemo(() => showKeys.filter((key) => !key.isGrouped), [showKeys])
 
   return (
     <>
@@ -84,43 +87,42 @@ export const SearchField = <T extends Record<string, string>>({ data, searchBy, 
       <table>
         <thead>
           <tr>
-            <th style={{ textAlign: "left" }}>Opcode</th>
-            <th style={{ textAlign: "left" }}>Fift syntax</th>
-            <th style={{ textAlign: "left" }}>Stack</th>
-            <th style={{ textAlign: "left" }}>Gas</th>
-            <th style={{ textAlign: "left" }}>Description</th>
+            {showKeys.map((keyEntity) => (
+              <th style={{textAlign: "left"}} key={keyEntity.name}>{keyEntity.name}</th>
+            ))}
           </tr>
         </thead>
 
         <tbody>
-          {debouncedValue.length === 0 ? (
+          {debouncedValue.length === 0 && (
             <tr>
-              <td colSpan={groupedKeys.length + separateKeys.length}>
+              <td colSpan={showKeys.length}>
                 Please enter a search query
               </td>
             </tr>
-          ) : filteredData.length === 0 ? (
+          )}
+
+          {filteredData.length === 0 && (
             <tr>
-              <td colSpan={groupedKeys.length + separateKeys.length}>
+              <td colSpan={showKeys.length}>
                 No results found
               </td>
             </tr>
-          ) : (
-            filteredData.map((item, index) => (
-              <tr key={index}>
-                {groupedKeys.map((keyEntity) => (
-                  <td key={keyEntity.name}>
-                    {item[keyEntity.key] && <code>{item[keyEntity.key]}</code>}
-                  </td>
-                ))}
-                {separateKeys.map((keyEntity) => (
-                  <td key={keyEntity.name}>
-                    {item[keyEntity.key] && (<Markdown>{item[keyEntity.key]}</Markdown>)}
-                  </td>
-                ))}
-              </tr>
-            ))
           )}
+
+          {filteredData.length !== 0 && filteredData.map((item, index) => (
+            <tr key={index}>
+              {showKeys.map((keyEntity) => {
+                const value = item[keyEntity.key];
+
+                return (
+                  <td key={keyEntity.name}>
+                    {keyEntity.hasMarkdown ? <Markdown>{value}</Markdown> : <code>{value}</code>}
+                  </td>
+                )
+              })}
+            </tr>
+          ))}
         </tbody>
       </table>
 

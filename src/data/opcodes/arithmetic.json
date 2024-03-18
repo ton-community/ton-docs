@@ -933,5 +933,170 @@
     "doc_stack": "x c - x",
     "doc_gas": 34,
     "doc_description": "Replaces `x` with a `NaN` if x is not a c-bit unsigned integer, leaves it intact otherwise."
+  },
+  {
+    "name": "MULADDDIVMOD",
+    "alias_of": "",
+    "tlb": "#A980",
+    "doc_category": "arithm_div",
+    "doc_opcode": "A980",
+    "doc_fift": "MULADDDIVMOD",
+    "doc_stack": "x y w z - q=floor((xy+w)/z) r=(xy+w)-zq",
+    "doc_gas": 26,
+    "doc_description": "Performs multiplication, addition, division, and modulo in one step. Calculates q as floor((xy+w)/z) and r as (xy+w)-zq."
+  },
+  {
+    "name": "MULADDDIVMODR",
+    "alias_of": "",
+    "tlb": "#A981",
+    "doc_category": "arithm_div",
+    "doc_opcode": "A981",
+    "doc_fift": "MULADDDIVMODR",
+    "doc_stack": "x y w z - q=round((xy+w)/z) r=(xy+w)-zq",
+    "doc_gas": 26,
+    "doc_description": "Similar to MULADDDIVMOD but calculates q as round((xy+w)/z)."
+  },
+  {
+    "name": "MULADDDIVMODC",
+    "alias_of": "",
+    "tlb": "#A982",
+    "doc_category": "arithm_div",
+    "doc_opcode": "A982",
+    "doc_fift": "MULADDDIVMODC",
+    "doc_stack": "x y w z - q=ceil((xy+w)/z) r=(xy+w)-zq",
+    "doc_gas": 26,
+    "doc_description": "Similar to MULADDDIVMOD but calculates q as ceil((xy+w)/z)."
+  },
+  {
+    "name": "ADDDIVMOD",
+    "alias_of": "",
+    "tlb": "#A900",
+    "doc_category": "arithm_div",
+    "doc_opcode": "A900",
+    "doc_fift": "ADDDIVMOD",
+    "doc_stack": "x w z - q=floor((x+w)/z) r=(x+w)-zq",
+    "doc_gas": 26,
+    "doc_description": "Performs addition, division, and modulo in one step. Calculates q as floor((x+w)/z) and r as (x+w)-zq."
+  },
+  {
+    "name": "ADDDIVMODR",
+    "alias_of": "",
+    "tlb": "#A901",
+    "doc_category": "arithm_div",
+    "doc_opcode": "A901",
+    "doc_fift": "ADDDIVMODR",
+    "doc_stack": "x w z - q=round((x+w)/z) r=(x+w)-zq",
+    "doc_gas": 26,
+    "doc_description": "Similar to ADDDIVMOD but calculates q as round((x+w)/z)."
+  },
+  {
+    "name": "ADDDIVMODC",
+    "alias_of": "",
+    "tlb": "#A902",
+    "doc_category": "arithm_div",
+    "doc_opcode": "A902",
+    "doc_fift": "ADDDIVMODC",
+    "doc_stack": "x w y - q=ceil((x+w)/z) r=(x+w)-zq",
+    "doc_gas": 26,
+    "doc_description": "Similar to ADDDIVMOD but calculates q as ceil((x+w)/z). Incorrect stack description in the provided data; assumed typo for 'z' instead of 'y' in the input stack."
+  },
+  {
+    "name": "ADDRSHIFTMOD",
+    "alias_of": "",
+    "tlb": "#A920",
+    "doc_category": "arithm_div",
+    "doc_opcode": "A920",
+    "doc_fift": "ADDRSHIFTMOD",
+    "doc_stack": "x w z - q=floor((x+w)/2^z) r=(x+w)-q*2^z",
+    "doc_gas": 26,
+    "doc_description": "Performs addition, right shift, and modulo in one step. Calculates q as floor((x+w)/2^z) and r as (x+w)-q*2^z."
+  },
+  {
+    "name": "ADDRSHIFTMODR",
+    "alias_of": "",
+    "tlb": "#A921",
+    "doc_category": "arithm_div",
+    "doc_opcode": "A921",
+    "doc_fift": "ADDRSHIFTMODR",
+    "doc_stack": "x w z - q=round((x+w)/2^z) r=(x+w)-q*2^z",
+    "doc_gas": 26,
+    "doc_description": "Similar to ADDRSHIFTMOD but calculates q as round((x+w)/2^z)."
+  },
+  {
+    "name": "ADDRSHIFTMODC",
+    "alias_of": "",
+    "tlb": "#A922",
+    "doc_category": "arithm_div",
+    "doc_opcode": "A922",
+    "doc_fift": "ADDRSHIFTMODC",
+    "doc_stack": "x w z - q=ceil((x+w)/2^z) r=(x+w)-q*2^z",
+    "doc_gas": 26,
+    "doc_description": "Similar to ADDRSHIFTMOD but calculates q as ceil((x+w)/2^z)."
+  },
+  {
+    "name": "MULADDRSHIFTMOD",
+    "alias_of": "",
+    "tlb": "#A9A0",
+    "doc_category": "arithm_div",
+    "doc_opcode": "A9A0",
+    "doc_fift": "MULADDRSHIFTMOD",
+    "doc_stack": "x y w z - q=floor((xy+w)/2^z) r=(xy+w)-q*2^z",
+    "doc_gas": 26,
+    "doc_description": "Combines multiplication, addition, right shift, and modulo. Calculates q as floor((xy+w)/2^z) and r as (xy+w)-q*2^z."
+  },
+  {
+    "name": "MULADDRSHIFTRMOD",
+    "alias_of": "",
+    "tlb": "#A9A1",
+    "doc_category": "arithm_div",
+    "doc_opcode": "A9A1",
+    "doc_fift": "MULADDRSHIFTRMOD",
+    "doc_stack": "x y w z - q=round((xy+w)/2^z) r=(xy+w)-q*2^z",
+    "doc_gas": 26,
+    "doc_description": "Similar to MULADDRSHIFTMOD but calculates q as round((xy+w)/2^z)."
+  },
+  {
+    "name": "MULADDRSHIFTCMOD",
+    "alias_of": "",
+    "tlb": "#A9A2",
+    "doc_category": "arithm_div",
+    "doc_opcode": "A9A2",
+    "doc_fift": "MULADDRSHIFTCMOD",
+    "doc_stack": "x y w z - q=ceil((xy+w)/2^z) r=(xy+w)-q*2^z",
+    "doc_gas": 26,
+    "doc_description": "Similar to MULADDRSHIFTMOD but calculates q as ceil((xy+w)/2^z)."
+  },
+  {
+    "name": "LSHIFTADDDIVMOD",
+    "alias_of": "",
+    "tlb": "#A9D0 tt:uint8",
+    "doc_category": "arithm_div",
+    "doc_opcode": "A9D0tt",
+    "doc_fift": "[tt+1] LSHIFT#ADDDIVMOD",
+    "doc_stack": "x w z - q=floor((x*2^y+w)/z) r=(x*2^y+w)-zq",
+    "doc_gas": 34,
+    "doc_description": "Performs left shift on x, adds w, then divides by z, rounding down for q and calculates remainder r."
+  },
+  {
+    "name": "LSHIFTADDDIVMODR",
+    "alias_of": "",
+    "tlb": "#A9D1 tt:uint8",
+    "doc_category": "arithm_div",
+    "doc_opcode": "A9D1tt",
+    "doc_fift": "[tt+1] LSHIFT#ADDDIVMODR",
+    "doc_stack": "x w z - q=round((x*2^y+w)/z) r=(x*2^y+w)-zq",
+    "doc_gas": 34,
+    "doc_description": "Similar to LSHIFTADDDIVMOD but rounds q to the nearest integer."
+  },
+  {
+    "name": "LSHIFTADDDIVMODC",
+    "alias_of": "",
+    "tlb": "#A9D2 tt:uint8",
+    "doc_category": "arithm_div",
+    "doc_opcode": "A9D2tt",
+    "doc_fift": "[tt+1] LSHIFT#ADDDIVMODC",
+    "doc_stack": "x w z - q=ceil((x*2^y+w)/z) r=(x*2^y+w)-zq",
+    "doc_gas": 34,
+    "doc_description": "Similar to LSHIFTADDDIVMOD but rounds q up to the nearest integer."
   }
 ]

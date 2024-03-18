@@ -1,4 +1,4 @@
-(function(Prism) {
+(function (Prism) {
   Prism.languages.tact = {
     // reserved keywords
     'keyword': [
@@ -11,13 +11,13 @@
         greedy: true,
       },
       { // reserved function names
-        pattern: /\b(?:init|receive|bounced|external)\b/
+        pattern: /\b(?:bounced|external|init|receive)\b/
       },
     ],
 
     // built-in types
     'builtin': {
-      pattern: /\b(?:Int|Bool|Address|Slice|Cell|Builder|String|StringBuilder)\b/,
+      pattern: /\b(?:Address|Bool|Builder|Cell|Int|Slice|String|StringBuilder)\b/,
     },
 
     // SCREAMING_SNAKE_CASE for null values and names of constants
@@ -32,19 +32,27 @@
 
     // UpperCamelCase for names of contracts, traits, structs, messages
     'class-name': {
-      pattern: /\b[A-Z][\w]*\b/,
+      pattern: /\b[A-Z]\w*\b/,
     },
 
-    // native FunC functions mapping
-    'attribute': {
-      pattern: /@name/,
-      inside: {
-        'function': /.+/,
+    // mappings to FunC
+    'attribute': [
+      { // functions
+        pattern: /@name/,
+        inside: {
+          'function': /.+/,
+        },
       },
-    },
+      { // contract interfaces
+        pattern: /@interface/,
+        inside: {
+          'function': /.+/,
+        }
+      }
+    ],
 
     'function': {
-      pattern: /\b[\w]+(?=\()/,
+      pattern: /\b\w+(?=\()/,
     },
 
     'boolean': {
@@ -53,11 +61,20 @@
 
     'number': [
       { // hexadecimal, case-insensitive /i
-        pattern: /\b0x[0-9a-f]+\b/i,
+        pattern: /\b0x[0-9a-f](?:_?[0-9a-f])*\b/i,
       },
-      { // decimal integers
-        pattern: /\b[0-9]+\b/,
-      }
+      { // octal, case-insensitive /i
+        pattern: /\b0o[0-7](?:_?[0-7])*\b/i,
+      },
+      { // binary, case-insensitive /i
+        pattern: /\b0b[01](?:_?[01])*\b/i,
+      },
+      { // decimal integers, starting with 0
+        pattern: /\b0\d*\b/,
+      },
+      { // other decimal integers
+        pattern: /\b[1-9](?:_?\d)*\b/,
+      },
     ],
 
     'string': undefined,
@@ -80,7 +97,7 @@
     ],
 
     'operator': {
-     'pattern': /![!=]?|\*|\/|%|-|\+|==?|[<>]=|<<?|>>?|\|\|?|&&?/,
+      'pattern': /![!=]?|[+\-*/%=]=?|[<>]=|<<?|>>?|\|\|?|&&?/,
     },
 
   };
@@ -101,13 +118,13 @@
   // map and bounced message generic type modifiers
   Prism.languages.insertBefore('tact', 'keyword', {
     'generics': {
-      pattern: /(?:\b(?:map|bounced)\b<[^\\\r\n]*>)/,
+      pattern: /(?:\b(?:bounced|map)\b<[^\\\r\n]*>)/,
       greedy: true,
       inside: {
         'builtin': [
           Prism.languages['tact']['builtin'],
           {
-            pattern: /\b(?:map(?=<)|bounced(?=<))\b/
+            pattern: /\b(?:bounced(?=<)|map(?=<))\b/
           },
         ],
         'class-name': Prism.languages['tact']['class-name'],
