@@ -414,8 +414,8 @@ const config = {
             position: 'left',
             items: [
               {
-                to: 'https://answers.ton.org/',
-                label: 'TON Answers',
+                to: 'https://tonresear.ch/',
+                label: 'TON Research',
               },
               {
                 to: 'https://t.me/addlist/1r5Vcb8eljk5Yzcy',

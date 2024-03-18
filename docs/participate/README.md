@@ -12,7 +12,7 @@ It is also meant to offer essential frameworks (explorers, wallets, TEPs) that a
 ### Join TON Community
 
 * [TON Enhancement Proposals (TEPs)](https://github.com/ton-blockchain/TEPs)
-* [Ask a Question about TON on answers.ton.org](https://answers.ton.org/)
+* [Discover TON innovations at TON Research](https://tonresear.ch/)
 * [Stake with TON Nominators](/participate/network-maintenance/nominators)
 
 ### Bridges
