@@ -429,7 +429,7 @@ The `messageBody` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain
         .storeStringTail('Hello, TON!')
         .endCell();
 
-    const messageBody = beginCell()
+    const body = beginCell()
         .storeUint(0x0f8a7ea5, 32) // opcode for jetton transfer
         .storeUint(0, 64) // query id
         .storeCoins(toNano(5)) // jetton amount, amount * 10^9
