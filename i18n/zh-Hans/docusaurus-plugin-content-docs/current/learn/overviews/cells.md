@@ -20,7 +20,7 @@ TON 中的所有内容都存储在cell(单元)中。一个cell是一个数据结
 * Merkle 更新cell
 
 :::tip
-了解更多有关另类cell的信息，请参见：[**TVM 白皮书，第 3 节**](https://ton.org/tvm.pdf)。
+了解更多有关特殊cell的信息，请参见：[**TVM 白皮书，第 3 节**](https://ton.org/tvm.pdf)。
 :::
 
 ## Cell风格

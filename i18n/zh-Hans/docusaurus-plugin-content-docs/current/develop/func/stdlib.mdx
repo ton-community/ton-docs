@@ -203,7 +203,7 @@ cell config_param(int x) asm "CONFIGOPTPARAM";
 ```func
 int cell_hash(cell c) asm "HASHCU";
 ```
-计算`cell c`的表示哈希，并将其作为一个256位无符号整数`x`返回。用于签名和检查由cell树表示的任意实体的签名。
+计算`cell c`的 representation hash ，并将其作为一个256位无符号整数`x`返回。用于签名和检查由cell树表示的任意实体的签名。
 #### slice_hash
 ```func
 int slice_hash(slice s) asm "HASHSU";
@@ -467,7 +467,7 @@ tuple parse_addr(slice s) asm "PARSEMSGADDR";
 slice begin_parse(cell c) asm "CTOS";
 ```
 
-将 `cell` 转换为 `slice`。注意，`c` 必须是普通cell或异类cell（见 [TVM.pdf](https://ton.org/tvm.pdf), 3.1.2），自动加载以产生普通cell `c'`，然后转换为 `slice`。
+将 `cell` 转换为 `slice`。注意，`c` 必须是普通cell或特殊cell（见 [TVM.pdf](https://ton.org/tvm.pdf), 3.1.2），自动加载以产生普通cell `c'`，然后转换为 `slice`。
 
 #### end_parse
 ```func

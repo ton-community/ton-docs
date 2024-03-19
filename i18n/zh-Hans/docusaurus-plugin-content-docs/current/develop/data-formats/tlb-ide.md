@@ -1,6 +1,6 @@
 # IDE 支持
 
-### 高亮显示
+### 强调
 [intellij-ton](https://github.com/andreypfau/intellij-ton) 插件支持 Fift 和 FunC 编程语言以及类型化语言二进制（TL-B）格式。
 
 此外，正确的 TL-B 语法规范在 [TlbParser.bnf](https://github.com/andreypfau/intellij-ton/blob/main/src/main/grammars/TlbParser.bnf) 文件中有描述。
