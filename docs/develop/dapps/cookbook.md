@@ -1622,7 +1622,7 @@ Create listener function which will assert specific transaction on certain accou
 
 ```typescript
 
-import {Cell, Address, beginCell, storeMessage} from "@ton/ton";
+import {Cell, Address, beginCell, storeMessage, TonClient} from "@ton/ton";
 
 const res = tonConnectUI.send(msg); // exBoc in the result of sending message
 const exBoc = res.boc;
