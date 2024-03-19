@@ -1624,7 +1624,8 @@ Create listener function which will assert specific transaction on certain accou
 
 import {Cell, Address, beginCell, storeMessage} from "@ton/ton";
 
-const exBoc = tonConnectUI.send(msg); // exBoc is a result of sending message
+const res = tonConnectUI.send(msg); // exBoc in the result of sending message
+const exBoc = res.boc;
 const client = new TonClient({
         endpoint: 'https://toncenter.com/api/v2/jsonRPC',
         apiKey: 'INSERT YOUR API-KEY', // https://t.me/tonapibot
