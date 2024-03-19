@@ -20,9 +20,7 @@ body:(Either X ^X) = MessageRelaxed X;
 _ (Message Any) = MessageAny;
 ```
 
-这里 `Message X` - 是常见消息结构，`MessageRelaxed X` 是带有 CommonMsgInfoRelaxed 体的附加类型，而 `Message Any` 是两者的并集。
-消息结构与 X:Type 统一，换句话说就是一个 Cell。
-根据 TL-B，如果数据能够适应 1023 位，我们可以将所有数据组合在一个cell中，或者使用带有插入符号 `^` 的引用。
+这里 `Message X` - 是常见消息结构，`MessageRelaxed X` 是带有 CommonMsgInfoRelaxed 体的附加类型，而 `Message Any` 是两者的并集。消息结构与 X:Type 统一，换句话说就是一个 Cell。根据 TL-B，如果数据能够适应 1023 位，我们可以将所有数据组合在一个cell中，或者使用带有插入符号 `^` 的引用。
 
 序列化的 `Message X` 通过 FunC 方法 send_raw_message() 放置到动作列表中，然后智能合约执行此动作并发送消息。
 
@@ -72,9 +70,7 @@ dark: '/img/docs/data-formats/tl-b-docs-9-dark.png?raw=true',
 />
 <br></br>
 
-* `[Common
-
-MsgInfo][11][^StateInit][1][^X]` - `Message X` 带引用
+* `[CommonMsgInfo][11][^StateInit][1][^X]` - `Message X` 带引用
 
 <br></br>
 <ThemedImage
@@ -127,9 +123,9 @@ int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
 | 结构           | 类型                                      | 必需      | 描述                                                                                                                   |
 |----------------|------------------------------------------|----------|-----------------------------------------------------------------------------------------------------------------------|
 | int_msg_info$0 | 构造函数                                  | 必需     | $0 标记意味着序列化 CommonMsgInfo 以 0 位开始描述内部消息。                                                           |
-| ihr_disabled   | 布尔                                      | 必需     | 超立方体路由标志。                                                                                                    |
-| bounce         | 布尔                                      | 必需     | 如果处理过程中出现错误，消息应该被反弹。如果消息的 flat bounce = 1，它被称为可反弹。                                 |
-| bounced        | 布尔                                      | 必需     | 描述消息本身是反弹结果的标志。                                                                                        |       
+| ihr_disabled   | 布尔                                      | 必需     | 超立方体路由标志位。                                                                                                    |
+| bounce         | 布尔                                      | 必需     | 如果处理过程中出现错误，消息应该被弹回。如果消息的 flat bounce = 1，它被称为可弹回。                                 |
+| bounced        | 布尔                                      | 必需     | 描述消息本身是弹回结果的标志位。                                                                                        |       
 | src            | [MsgAddressInt](#msgaddressint-tl-b)     | 必需     | 消息发送者智能合约的地址。                                                                                            |
 | dest           | [MsgAddressInt](#msgaddressint-tl-b)     | 必需     | 消息目的地智能合约的地址。                                                                                            |
 | value          | [CurrencyCollection](#currencycollection)| 必需     | 描述货币信息的结构，包括消息中转移的总资金。                                                                         |
@@ -142,7 +138,7 @@ int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
 
 ### ext_in_msg_info$10
 
-`ext_in_msg_info$10` 是外部传入消息的一种情况。这意味着这种类型的消息是从合约发送到链下空间的。
+`ext_in_msg_info$10` 是外部传入消息的一种情况。这意味着这种类型的消息是从合约发送到链下空间的。\
 用例 - 钱包应用请求钱包合约。
 
 
@@ -158,7 +154,7 @@ ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt
 
 |--------------------|--------------------------------------|----------|------------------------------------------------------------------------------------------------------------------------|
 | ext_out_msg_info$10| 构造函数                              | 必需     | `$10` 标记意味着序列化 CommonMsgInfo 以 `10` 位开始描述外部传入消息。                                                  |
-| ihr_disabled       | 布尔                                 | 必需     | 超路由标志。（目前始终为真）                                                                                           |
+| ihr_disabled       | 布尔                                 | 必需     | 超路由标志位。（目前始终为真）                                                                                           |
 | src                | [MsgAddressExt](#msgaddressext-tl-b) | 必需     | 消息的外部发送者地址。                                                                                                 |
 | dest               | [MsgAddressInt](#msgaddressint-tl-b) | 必需     | 消息目的地智能合约的地址。                                                                                            |
 | import_fee         | [VarUInteger 16](#varuinteger-n)     | 必需     | 执行和传递消息的费用。                                                                                                 |
@@ -177,7 +173,7 @@ ext_out_msg_info$11 src:MsgAddressInt dest:MsgAddressExt
 | 结构                | 类型                                 | 必需      | 描述                                                                                                          |
 |---------------------|--------------------------------------|----------|--------------------------------------------------------------------------------------------------------------|
 | ext_out_msg_info$11 | 构造函数                             | 必需     | `$11` 标记意味着序列化 CommonMsgInfo 以 `11` 位开始描述外部传出消息。                                          |
-| src                 | [MsgAddressInt](#msgaddressint-tl-b) | 必需     | 超路由标志。                                                                                                 |
+| src                 | [MsgAddressInt](#msgaddressint-tl-b) | 必需     | 超路由标志位。                                                                                                 |
 | dest                | [MsgAddressExt](#msgaddressext-tl-b) | 必需     | 用于 TON 中初始化新合约的通用结构。可以写在cell引用或根cell中。                                            |
 | created_lt          | uint64                               | 必需     | 验证者指定的发送消息的逻辑时间。用于对智能合约中的动作进行排序。                                              |
 | created_at          | uint32                               | 必需     | Unix 时间                                                                                                    |
@@ -244,7 +240,7 @@ addr_extern$01 len:(## 9) external_address:(bits len)
 
  | 构造函数   | 必需     | `$01` 标记意味着序列化 MsgAddressExt 以 `01` 位开始描述外部地址。                                             |
 | len               | ## 9       | 必需     | 与 uintN 相同 - 表示无符号 N 位数字                                                                           |
-| external_address  | (bits len) | 必需     | 地址是长度等于前面的 `len` 的位字符串                                                                         |
+| external_address  | (bits len) | 必需     | 地址是长度等于前面的 `len` 的位串                                                                         |
 
 
 ## MsgAddressInt TL-B
@@ -308,7 +304,7 @@ currencies$_ grams:Grams other:ExtraCurrencyCollection
 | 结构         | 类型                    | 必需      | 描述                                                                                                    |
 |-------------|-------------------------|----------|--------------------------------------------------------------------------------------------------------|
 | currencies$_| 构造函数                | 必需     | `$_` 空标记意味着序列化 CurrencyCollection 时我们不会在开头添加任何位                                   |
-| grams       | (VarUInteger 16)        | 必需     | 以纳顿表示的消息价值                                                                                    |
+| grams       | (VarUInteger 16)        | 必需     | 以nanoTons表示的消息价值                                                                                    |
 | other       | ExtraCurrencyCollection | 可选     | ExtraCurrencyCollection 是一个为附加货币设计的字典，通常为空                                            |
 
 * ExtraCurrencyCollection 是一种复杂类型，通常在消息中为空字典
@@ -342,8 +338,8 @@ var_int$_ {n:#} len:(#< n) value:(int (len * 8))
   var msg = begin_cell()
     .store_uint(0, 1) ;; 标记
     .store_uint(1, 1) ;; ihr_disabled
-    .store_uint(1, 1) ;; 允许反弹
-    .store_uint(0, 1) ;; 本身不是反弹
+    .store_uint(1, 1) ;; 允许弹回
+    .store_uint(0, 1) ;; 本身不是弹回
     .store_slice(source)
     .store_slice(destination)
     ;; 序列化 CurrencyCollection（见下文）
@@ -353,8 +349,8 @@ var_int$_ {n:#} len:(#< n) value:(int (len * 8))
     .store_coins(fwd_value) ;; fwd_fee
     .store_uint(cur_lt(), 64) ;; 交易的 lt
     .store_uint(now(), 32) ;; 交易的 unixtime
-    .store_uint(0,  1) ;; 没有 init-field 标志（Maybe）
-    .store_uint(0,  1) ;; 原位消息体标志（Either）
+    .store_uint(0,  1) ;; 没有 init-field 标志位（Maybe）
+    .store_uint(0,  1) ;; 原位消息体标志位（Either）
     .store_slice(msg_body)
   .end_cell();
 ```

@@ -27,7 +27,7 @@ block#11ef55aa global_id:int32
 
 ## info:^BlockInfo
 
-此字段包含关于区块的信息，如其版本、序列号、标识符和其他标志。
+此字段包含关于区块的信息，如其版本、序列号、标识符和其他标志位。
 
 ```tlb
 block_info#9bc7a987 version:uint32
@@ -55,15 +55,15 @@ block_info#9bc7a987 version:uint32
 | 字段                               | 类型                    | 描述                                                                                                           |
 | ---------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------- |
 | `version`                          | uint32                  | 区块结构的版本。                                                                                               |
-| `not_master`                       | (## 1)                  | 标志，表示此区块是否为主链区块。                                                                               |
-| `after_merge`                      | (## 1)                  | 标志，表示此区块是否在两个分片链合并后创建，因此它有两个父区块。                                                |
-| `before_split`                     | (## 1)                  | 标志，表示此区块是否在其分片链分裂前创建。                                                                      |
-| `after_split`                      | (## 1)                  | 标志，表示此区块是否在其分片链分裂后创建。                                                                      |
-| `want_split`                       | Bool                    | 标志，表示是否希望分片链分裂。                                                                                  |
-| `want_merge`                       | Bool                    | 标志，表示是否希望分片链合并。                                                                                  |
-| `key_block`                        | Bool                    | 标志，表示此区块是否为关键区块。                                                                                |
+| `not_master`                       | (## 1)                  | 标志位，表示此区块是否为主链区块。                                                                               |
+| `after_merge`                      | (## 1)                  | 标志位，表示此区块是否在两个分片链合并后创建，因此它有两个父区块。                                                |
+| `before_split`                     | (## 1)                  | 标志位，表示此区块是否在其分片链分裂前创建。                                                                      |
+| `after_split`                      | (## 1)                  | 标志位，表示此区块是否在其分片链分裂后创建。                                                                      |
+| `want_split`                       | Bool                    | 标志位，表示是否希望分片链分裂。                                                                                  |
+| `want_merge`                       | Bool                    | 标志位，表示是否希望分片链合并。                                                                                  |
+| `key_block`                        | Bool                    | 标志位，表示此区块是否为关键区块。                                                                                |
 | `vert_seqno_incr`                  | (## 1)                  | 垂直序列号的增量。                                                                                             |
-| `flags`                            | (## 8)                  | 区块的附加标志。                                                                                               |
+| `flags`                            | (## 8)                  | 区块的附加标志位。                                                                                               |
 | `seq_no`                           | #                       | 与区块相关的序列号。                                                                                           |
 | `vert_seq_no`                      | #                       | 与区块相关的垂直序列号。                                                                                       |
 | `shard`                            | ShardIdent              |
@@ -129,14 +129,14 @@ value_flow#b8e48dfb ^[ from_prev_blk:CurrencyCollection
 
 ### ShardState
 
-`ShardState` 可以包含关于分片的信息，或者在该分片被分割的情况下，包含关于左右两个分割部分的信息。
+`ShardState` 可以包含关于分片的信息，或者在该分片被拆分的情况下，包含关于左右两个拆分部分的信息。
 
 ```tlb
 _ ShardStateUnsplit = ShardState;
 split_state#5f327da5 left:^ShardStateUnsplit right:^ShardStateUnsplit = ShardState;
 ```
 
-### ShardState 未分割
+### ShardState 未拆分
 
 ```tlb
 shard_state#9023afe2 global_id:int32
@@ -166,7 +166,7 @@ shard_state#9023afe2 global_id:int32
 | `gen_lt`                    | uint64                                                                 | 是       | 创建分片的逻辑时间。                                                                                 |
 | `min_ref_mc_seqno`          | uint32                                                                 | 是       | 最新引用的主链区块的序列号。                                                                         |
 | `out_msg_queue_info`        | OutMsgQueueInfo                                                        | 是       | 此分片的出消息队列信息。存储为引用。                                                                 |
-| `before_split`              | ## 1                                                                   | 是       | 标志，表示此分片链的下一个区块是否将发生分割。                                                       |
+| `before_split`              | ## 1                                                                   | 是       | 标志位，表示此分片链的下一个区块是否将发生拆分。                                                       |
 | `accounts`                  | ShardAccounts                                                          | 是       | 分片中账户的状态。存储为引用。                                                                       |
 | `overload_history`          | uint64                                                                 | 是       | 分片的超载事件历史。用于通过分片进行负载均衡。                                                       |
 | `underload_history`         | uint64                                                                 | 是       | 分片的欠载事件历史。用于通过分片进行负载均衡。                                                       |
@@ -178,12 +178,12 @@ shard_state#9023afe2 global_id:int32
 | `master_ref`                | BlkMasterInfo                                                          | 否       | 主块信息的引用。                                                                                     |
 | `custom`                    | McStateExtra                                                           | 否       | 分片状态的自定义额外数据。此字段仅在主链中存在，包含所有主链特有的数据。存储为引用。                   |
 
-### ShardState 分割
+### ShardState 拆分
 
 | 字段       | 类型                                         | 描述                                                      |
 | ---------- | -------------------------------------------- | --------------------------------------------------------- |
-| `left`     | [ShardStateUnsplit](#shardstate-unsplitted)  | 分割后左侧分片的状态。存储为引用。                         |
-| `right`    | [ShardStateUnsplit](#shardstate-unsplitted)  | 分割后右侧分片的状态。存储为引用。                         |
+| `left`     | [ShardStateUnsplit](#shardstate-unsplitted)  | 拆分后左侧分片的状态。存储为引用。                         |
+| `right`    | [ShardStateUnsplit](#shardstate-unsplitted)  | 拆分后右侧分片的状态。存储为引用。                         |
 
 ## extra:^BlockExtra
 
@@ -225,7 +225,7 @@ masterchain_block_extra#cca5
 
 | 字段                   | 类型                              | 是否必需 | 描述                                                                           |
 | ---------------------- | --------------------------------- | -------- | ------------------------------------------------------------------------------ |
-| `key_block`            | ## 1                              | 是       | 标志，表示区块是否为关键区块。                                                 |
+| `key_block`            | ## 1                              | 是       | 标志位，表示区块是否为关键区块。                                                 |
 | `shard_hashes`         | ShardHashes                       | 是       | 相应分片链的最新区块的哈希。                                                   |
 | `shard_fees`           | ShardFees                         | 是       | 此区块中所有分片收集的总费用。                                                 |
 | `prev_blk_signatures`  | HashmapE 16 CryptoSignaturePair   | 是       | 前一区块的签名。                                                               |
@@ -233,6 +233,6 @@ masterchain_block_extra#cca5
 | `mint_msg`             | InMsg                             | 否       | 与铸造额外代币相关的消息（如果有）。存储为引用。                               |
 | `config`               | ConfigParams                      | 否       | 此区块的实际配置参数。当设置了 `key_block` 时此字段存在。                       |
 
-## 另见
+## 参阅
 
 -   [白皮书](https://docs.ton.org/tblkch.pdf#page=96&zoom=100,148,172)中原始的[区块布局](#)描述
