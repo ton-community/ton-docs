@@ -15,13 +15,13 @@ colorType="primary" sizeType={'sm'}>
 运行全节点
 </Button>
 
-## 验证器节点
+## 验证者节点
 
-当**验证器节点**持有足够数量的Toncoin作为赌注时，它将被激活。验证器节点对网络的运行至关重要，参与新网络区块的验证。
+当**验证者节点**持有足够数量的Toncoin作为质押代币时，它将被激活。验证者节点对网络的运行至关重要，参与新网络区块的验证。
 
-TON基于权益证明机制运行，其中验证器在维护网络功能方面发挥着关键作用。验证器会因其贡献而[以Toncoin获得奖励](/participate/network-maintenance/staking-incentives)，激励网络参与并确保网络安全。
+TON基于权益证明机制运行，其中验证者在维护网络功能方面发挥着关键作用。验证者会因其贡献而[以Toncoin获得奖励](/participate/network-maintenance/staking-incentives)，激励网络参与并确保网络安全。
 
-[作为验证器运行全节点](/participate/run-nodes/full-node#become-a-validator)
+[作为验证者运行全节点](/participate/run-nodes/full-node#become-a-validator)
 
 ## 全节点 + Liteserver
 

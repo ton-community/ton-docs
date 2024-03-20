@@ -34,7 +34,7 @@ const address: Address = await tonweb.dns.resolve('test.ton', TonWeb.dns.DNS_CAT
 
 *.ton域名源代码 - https://github.com/ton-blockchain/dns-contract。
 
-.ton域名解析器实现了NFT集合接口，.ton域名实现了NFT项接口。
+.ton域名解析器实现了NFT集合接口，而.ton域名实现了NFT项接口。
 
 *.ton域名的首次销售通过https://dns.ton.org上的去中心化公开拍卖进行。源代码 - https://github.com/ton-blockchain/dns。
 

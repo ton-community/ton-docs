@@ -1,16 +1,16 @@
 # 运行自己的TON代理
 
-本文档旨在温和地介绍TON站点，即通过TON网络访问的网站。TON站点可以方便地作为进入其他TON服务的入口。特别是，从TON站点下载的HTML页面可能包含指向`ton://...` URI的链接，用户点击这些链接后，如果用户设备上安装了TON钱包，就可以执行支付操作。
+本文档旨在简要地介绍TON网站，即通过TON网络访问的网站。TON网站可以方便地作为进入其他TON服务的入口。特别是，从TON网站下载的HTML页面可能包含指向`ton://...` URI的链接，用户点击这些链接后，如果用户设备上安装了TON钱包，就可以执行支付操作。
 
-从技术角度看，TON站点非常类似于标准网站，但它们是通过[TON网络](/learn/networking/overview)（互联网内的一个覆盖网络）而不是互联网访问的。更具体地说，它们拥有一个[ADNL](/learn/networking/adnl)地址（而不是更常见的IPv4或IPv6地址），并通过[RLDP](/learn/networking/rldp)协议（这是建立在ADNL之上的高级RPC协议，ADNL是TON网络的主要协议）接受HTTP查询，而不是常规的TCP/IP。所有加密由ADNL处理，所以如果入口代理托管在用户设备上，就没有必要使用HTTPS（即TLS）。
+从技术角度看，TON网站非常类似于标准网站，但它们是通过[TON网络](/learn/networking/overview)（互联网内的一个覆盖网络）而不是互联网访问的。更具体地说，它们拥有一个[ADNL](/learn/networking/adnl)地址（而不是更常见的IPv4或IPv6地址），并通过[RLDP](/learn/networking/rldp)协议（这是建立在ADNL之上的高级RPC协议，ADNL是TON网络的主要协议）接受HTTP查询，而不是常规的TCP/IP。所有加密由ADNL处理，所以如果入口代理托管在用户设备上，就没有必要使用HTTPS（即TLS）。
 
-为了访问现有的网站和创建新的TON站点，需要特殊的网关来连接“普通”互联网和TON网络。本质上，通过在客户端机器上本地运行的HTTP->RLDP代理访问TON站点，并通过在远程Web服务器上运行的RLDP->HTTP代理来创建它们。
+为了访问现有的网站和创建新的TON网站，需要特殊的网关来连接“普通”互联网和TON网络。本质上，通过在客户端机器上本地运行的HTTP->RLDP代理访问TON网站，并通过在远程Web服务器上运行的RLDP->HTTP代理来创建它们。
 
-[了解更多关于TON站点、WWW和代理的信息](https://blog.ton.org/ton-sites)
+[了解更多关于TON网站、WWW和代理的信息](https://blog.ton.org/ton-sites)
 
 ## 运行入口代理
 
-为了访问现有的TON站点，你需要在你的电脑上运行一个RLDP-HTTP代理。
+为了访问现有的TON网站，你需要在你的电脑上运行一个RLDP-HTTP代理。
 
 1. 从[TON自动构建](https://github.com/ton-blockchain/ton/releases/latest)下载**rldp-http-proxy**。
 
@@ -24,9 +24,9 @@
    rldp-http-proxy/rldp-http-proxy -p 8080 -c 3333 -C global.config.json
    ```
 
-在上面的例子中，`8080`是将在本地主机上监听传入HTTP查询的TCP端口，而`3333`是将用于所有出站和入站RLDP和ADNL活动的UDP端口（即通过TON网络连接到TON站点）。`global.config.json`是TON全局配置的文件名。
+在上面的例子中，`8080`是将在本地主机上监听传入HTTP查询的TCP端口，而`3333`是将用于所有出站和入站RLDP和ADNL活动的UDP端口（即通过TON网络连接到TON网站）。`global.config.json`是TON全局配置的文件名。
 
-如果一切正确，入口代理将不会终止，而是会继续在终端运行。现在可以用它来访问TON站点。当你不再需要它时，可以通过按`Ctrl-C`或简单地关闭终端窗口来终止它。
+如果一切正确，入口代理将不会终止，而是会继续在终端运行。现在可以用它来访问TON网站。当你不再需要它时，可以通过按`Ctrl-C`或简单地关闭终端窗口来终止它。
 
 你的入口代理将通过HTTP在`localhost`端口`8080`上可用。
 
@@ -45,12 +45,11 @@
 4. 为你的入口代理生成一个持久的ANDL地址
 
    ```bash
-   mkdir
-
- keyring
+   mkdir keyring
 
    utils/generate-random-id -m adnlid
    ```
+
 
    你会看到类似于
    ```
@@ -76,13 +75,13 @@
    rldp-http-proxy/rldp-http-proxy -p 8080 -a 777.777.777.777:3333 -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3
    ```
 
-   在上面的示例中，`8080`是将在本地主机上监听传入HTTP查询的TCP端口，而`3333`是将用于所有出站和入站RLDP和ADNL活动的UDP端口（即通过TON网络连接到TON站点）。`global.config.json`是TON全局配置的文件名。
+   在上面的示例中，`8080`是将在本地主机上监听传入HTTP查询的TCP端口，而`3333`是将用于所有出站和入站RLDP和ADNL活动的UDP端口（即通过TON网络连接到TON网站）。`global.config.json`是TON全局配置的文件名。
 
-如果你做得都对，代理不会终止，而是会继续在终端运行。现在可以用它来访问TON站点。当你不再需要它时，可以通过按`Ctrl-C`或简单地关闭终端窗口来终止它。你可以将这个运行为一个unix服务以永久运行。
+如果你做得都对，代理不会终止，而是会继续在终端运行。现在可以用它来访问TON网站。当你不再需要它时，可以通过按`Ctrl-C`或简单地关闭终端窗口来终止它。你可以将这个运行为一个unix服务以永久运行。
 
 你的入口代理将通过HTTP在`<your_public_ip>`端口`8080`上可用。
 
-## 访问TON站点
+## 访问TON网站
 
 现在假设你在电脑上运行了一个RLDP-HTTP代理的实例，并且正在`localhost:8080`上监听传入的TCP连接，如[上面](#running-entry-proxy)所解释的。
 
@@ -98,16 +97,16 @@ curl -x 127.0.0.1:8080 http://just-for-test.ton
 
 <html>
 <head>
-<title>TON站点</title>
+<title>TON Site</title>
 </head>
 <body>
-<h1>TON代理工作正常！</h1>
+<h1>TON Proxy Works!</h1>
 </body>
 </html>
 
 ```
 
-你还可以通过使用假域名`<adnl-addr>.adnl`通过它们的ADNL地址访问TON站点
+你还可以通过使用假域名`<adnl-addr>.adnl`通过它们的ADNL地址访问TON网站
 
 ```bash
 curl -x 127.0.0.1:8080 http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h72gllt.adnl/
@@ -118,15 +117,15 @@ curl -x 127.0.0.1:8080 http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h7
 
 一旦你在浏览器中设置了`localhost:8080`作为HTTP代理，你就可以在浏览器的导航
 
-栏中输入所需的URI，如`http://just-for-test.ton`或`http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h72gllt.adnl/`，并以与通常网站相同的方式与TON站点交互。
+栏中输入所需的URI，如`http://just-for-test.ton`或`http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h72gllt.adnl/`，并以与通常网站相同的方式与TON网站交互。
 
-## 运行TON站点
+## 运行TON网站
 
 :::tip 教程找到了！
-嘿！不要从初学者友好的教程[如何运行TON站点？](/develop/dapps/tutorials/how-to-run-ton-site)开始
+嘿！不要从初学者友好的教程[如何运行TON网站？](/develop/dapps/tutorials/how-to-run-ton-site)开始
 :::
 
-大多数人只需要访问现有的TON站点，而不是创建新的。然而，如果你想创建一个，你需要在你的服务器上运行RLDP-HTTP代理，以及像Apache或Nginx这样的常规Web服务器软件。
+大多数人只需要访问现有的TON网站，而不是创建新的。然而，如果你想创建一个，你需要在你的服务器上运行RLDP-HTTP代理，以及像Apache或Nginx这样的常规Web服务器软件。
 
 我们假设你已经知道如何设置一个普通的网站，并且你已经在你的服务器上配置了一个，接受TCP端口`<your-server-ip>:80`上的传入HTTP连接，并且已经在你的Web服务器配置中为你的网站定义了所需的TON网络域名（例如`example.ton`）作为主域名或别名。
 
@@ -172,20 +171,18 @@ curl -x 127.0.0.1:8080 http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h7
 
    其中`<your_public_ip>`是你的服务器公共IPv4地址，`<your_adnl_address>`是在上一步中生成的ADNL地址。
 
-如果你想让你的TON站点永久运行，你将不得不使用选项`-d`和`-l <log-file>`。
+如果你想让你的TON网站永久运行，你将不得不使用选项`-d`和`-l <log-file>`。
 
 示例：
  ```bash
  rldp-http-proxy/rldp-http-proxy -a 777.777.777.777:3333 -L '*' -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3 -d -l tonsite.log
  ```
 
-如果一切正常工作
+如果一切正常工作，RLDP-HTTP代理将接受来自TON网络的传入HTTP查询，通过运行在UDP端口3333的IPv4地址`<your-server-ip>`（特别是，如果你使用防火墙，请不要忘记允许`rldp-http-proxy`从该端口接收和发送UDP数据包）的RLDP/ADNL，它将把这些HTTP查询转发到所有主机（如果你只想转发特定主机，请将`-L '*'`更改为`-L <your hostname>`）的`127.0.0.1`TCP端口`80`（即你的常规Web服务器）。
 
-，RLDP-HTTP代理将接受来自TON网络的传入HTTP查询，通过运行在UDP端口3333的IPv4地址`<your-server-ip>`（特别是，如果你使用防火墙，请不要忘记允许`rldp-http-proxy`从该端口接收和发送UDP数据包）的RLDP/ADNL，它将把这些HTTP查询转发到所有主机（如果你只想转发特定主机，请将`-L '*'`更改为`-L <your hostname>`）的`127.0.0.1`TCP端口`80`（即你的常规Web服务器）。
+你可以在客户端机器上的浏览器中访问TON网站`http://<your-adnl-address>.adnl`（在这个示例中是`http://vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3.adnl`），如“访问TON网站”部分所解释的，并检查你的TON网站是否真的对公众开放。
 
-你可以在客户端机器上的浏览器中访问TON站点`http://<your-adnl-address>.adnl`（在这个示例中是`http://vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3.adnl`），如“访问TON站点”部分所解释的，并检查你的TON站点是否真的对公众开放。
-
-如果你愿意，你可以[注册](/participate/web3/site-management)一个TON DNS域名，比如'example.ton'，并为这个域名创建一个指向你TON站点的持久ADNL地址的`site`记录。然后，在客户端模式下运行的RLDP-HTTP代理将会解析http://example.ton为指向你的ADNL地址，并访问你的TON站点。
+如果你愿意，你可以[注册](/participate/web3/site-management)一个TON DNS域名，比如'example.ton'，并为这个域名创建一个指向你TON网站的持久ADNL地址的`site`记录。然后，在客户端模式下运行的RLDP-HTTP代理将会解析http://example.ton为指向你的ADNL地址，并访问你的TON网站。
 
 你还可以在一个单独的服务器上运行反向代理，并将你的Web服务器设置为远程地址。在这种情况下，请使用`-R '*'@<YOUR_WEB_SERVER_HTTP_IP>:<YOUR_WEB_SERVER_HTTP_PORT>`替代`-L '*'`。
 

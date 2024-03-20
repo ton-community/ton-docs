@@ -5,11 +5,11 @@ import TabItem from '@theme/TabItem';
 
 要安装和管理您自己的节点，请使用TON基金会开发的**MyTonCtrl**开源工具。大多数TON节点都通过**MyTonCtrl**进行了可靠和测试。
 
-[MyTonCtrl](https://github.com/ton-blockchain/mytonctrl)是一个控制台应用程序，它是fift、lite-client和validator-engine-console的方便包装器。它专门开发用于简化在Linux操作系统上的钱包、域和验证器管理任务。
+[MyTonCtrl](https://github.com/ton-blockchain/mytonctrl)是一个控制台应用程序，它是fift、lite-client和validator-engine-console的方便包装器。它专门开发用于简化在Linux操作系统上的钱包、域和验证者管理任务。
 
 我们正在积极寻求关于安装过程的反馈。如果您有任何问题或建议，请[联系我们](https://t.me/SwiftAdviser)。
 
-## 先决条件
+## 必要条件
 
 我们强烈建议使用支持的操作系统安装MyTonCtrl：
 * Ubuntu 20.04
@@ -20,7 +20,7 @@ import TabItem from '@theme/TabItem';
 
 ## 硬件要求
 
-这些要求适用于**带验证器的全节点**。如果您想运行没有验证器的全节点（例如[liteserver](/participate/run-nodes/full-node#hardware-requirements-1)），您可以使用较低配置的机器。
+这些要求适用于**带验证者的全节点**。如果您想运行没有验证者的全节点（例如[liteserver](/participate/run-nodes/full-node#hardware-requirements-1)），您可以使用较低配置的机器。
 
 - 16核CPU
 - 64 GB RAM
@@ -35,7 +35,7 @@ import TabItem from '@theme/TabItem';
 
 ### 推荐供应商
 
-TON基金会推荐以下供应商运行验证器：
+TON基金会推荐以下供应商运行验证者：
 
 #### AWS
 
@@ -125,7 +125,7 @@ TON基金会推荐以下供应商运行验证器：
 
 ## 逐步指导
 
-### 先决条件
+### 必要条件
 
 1. 以具有**sudo**权限的**非root**用户身份登录您的服务器。
 
@@ -196,18 +196,21 @@ su - <username>
 以下状态应该显示：
 
 * **mytoncore状态**：应为绿色。
-* **本地验证器状态**：也应为绿色。
-* **本地验证器未同步**：最初显示一个大数字。一旦新创建的验证器与其他验证器连接，数字将在250k左右。随着同步的进行，这个数字会减少。当它降至20以下时，验证器已同步。
+* **本地验证者状态**：也应为绿色。
+* **本地验证者未同步**：最初显示一个大数字。一旦新创建的验证者与其他验证者连接，数字将在250k左右。随着同步的进行，这个数字会减少。当它降至20以下时，验证者已同步。
 
-**status**命令输出的示例
-
-：
+**status**命令输出的示例：
 
 ![status](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/mytonctrl-status.png)
 
+:::caution 确保状态输出相同
+对于所有类型的节点，**Local Validator status**部分应该显示。
+如果没有显示，请[查看故障排除部分](/participate/run-nodes/full-node#status-command-displays-without-local-node-section)和[检查节点日志](/participate/run-nodes/full-node#check-the-node-logs)。
+:::
+
 等到`Local validator out of sync`变为少于20秒。
 
-## 成为验证器
+## 成为验证者
 
 ### 查看钱包列表
 
@@ -224,13 +227,13 @@ wl
 
 ### 激活钱包
 
-1. 向钱包发送必要数量的硬币并激活它。
+1. 向钱包发送必要数量的coins并激活它。
 
-最近（_在2023年底_），大致数字为最低赌注约__340K TON__，最高约__1M TON__。
+最近（_在2023年底_），大致数字为最低质押代币约__340K TON__，最高约__1M TON__。
 
-查看[tonscan.com](https://tonscan.com/validation)以了解所需硬币数量。
+查看[tonscan.com](https://tonscan.com/validation)以了解所需coins数量。
 
-阅读更多关于[如何计算最大和最小赌注](/participate/network-maintenance/staking-incentives#values-of-stakes-max-effective-stake)。
+阅读更多关于[如何计算最大和最小质押代币](/participate/network-maintenance/staking-incentives#values-of-stakes-max-effective-stake)。
 
 2. 使用`vas`命令显示转账历史：
 
@@ -246,15 +249,15 @@ aw [wallet name]
 
 ![account history](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-vas-aw_ru.png)
 
-### 您的验证器现已准备就绪
+### 您的验证者现已准备就绪
 
-**mytoncore** 将自动加入选举。它将钱包余额分为两部分，并使用它们作为赌注参加选举。您也可以手动设置赌注大小：
+**mytoncore** 将自动加入选举。它将钱包余额分为两部分，并使用它们作为质押代币参加选举。您也可以手动设置质押代币大小：
 
 ```sh
 set stake 50000
 ```
 
-`set stake 50000` — 这将赌注大小设置为50k硬币。如果赌注被接受并且我们的节点成为验证器，那么赌注只能在第二次选举中提取（根据选民的规则）。
+`set stake 50000` — 这将质押代币大小设置为50k coins。如果质押代币被接受并且我们的节点成为验证者，那么质押代币只能在第二次选举中提取（根据选民的规则）。
 
 ![setting stake](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-set_ru.png)
 
@@ -264,7 +267,7 @@ set stake 50000
 
 ### 硬件要求
 
-与[验证器](/participate/run-nodes/full-node#hardware-requirements)相比，liteserver模式需要较少的资源。然而，仍建议使用功能强大的机器运行liteserver。
+与[验证者](/participate/run-nodes/full-node#hardware-requirements)相比，liteserver模式需要较少的资源。然而，仍建议使用功能强大的机器运行liteserver。
 
 - 至少16核CPU
 - 至少64 GB RAM
@@ -277,7 +280,7 @@ set stake 50000
 
 请随意使用[推荐供应商](/participate/run-nodes/full-node#recommended-providers)部分中列出的云提供商。
 
-Hetzner和OVH被禁止运行验证器，但您可以使用它们运行liteserver：
+Hetzner和OVH被禁止运行验证者，但您可以使用它们运行liteserver：
 
 - __Hetzner__：EX101, AX102
 - __OVH__：RISE-4
@@ -295,14 +298,13 @@ MyTonInstaller> clcf
 本地配置文件已创建：/usr/bin/ton/local.config.json
 ```
 
-3. 这个文件将帮助您连接到您的liteserver。将位于指定路径的配置文件复制到您的家目录以保存它。
+3. 这个文件将帮助您连接到您的liteserver。将位于指定路径的配置文件复制到您的目录以保存它。
 
 ```bash
 cp /usr/bin/ton/local.config.json ~/config.json
 ```
 
 4. 在您的本地机器上创建一个空的`config.json`文件。
-
 
 
 5. 将控制台中的内容复制到您本地机器的`config.json`文件。
@@ -330,7 +332,7 @@ cat ~/config.json
 
 如果您使用的是云提供商，您需要在防火墙设置中打开此端口。例如，如果您使用的是AWS，您需要在[安全组](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-security-groups.html)中打开端口。
 
-以下是在裸金属服务器防火墙中打开端口的示例。
+以下是在裸机服务器防火墙中打开端口的示例。
 
 #### 在防火墙中打开端口
 
@@ -407,13 +409,6 @@ sudo ufw enable
 
   将项目类型更改为`module`在您的`package.json`文件：
 
-  ```json
-  {
-      "type": "module"
-  }
-  ```
-
-  创建`index.js`文件，内容如下：
   ```js
   import { LiteSingleEngine } from 'ton-lite-client/dist/engines/single.js'
   import { LiteRoundRobinEngine } from 'ton-lite-client/dist/engines/roundRobin.js'
@@ -442,9 +437,7 @@ sudo ufw enable
       const engine = new LiteRoundRobinEngine(engines);
       const client = new LiteClient({ engine });
       const master = await client.getMasterchainInfo()
-      console.log('master', master
-
-)
+      console.log('master', master)
 
   }
 
@@ -540,7 +533,7 @@ sudo ufw enable
 
 3. 现在您可以与您自己的liteserver互动。
 
-### 另请参阅
+### 参阅
 
 * [[YouTube]教程如何启动liteserver](https://youtu.be/p5zPMkSZzPc)
 
@@ -576,9 +569,9 @@ sudo ufw enable
 它应该允许在一个特定端口上的传入连接和从任何端口的传出连接。
 :::
 
-### 验证器控制台未设置
+### 验证者控制台未设置
 
-如果您遇到`Validator console is not settings`错误，这表明您正在以安装以外的用户运行`MyTonCtrl`。
+如果您遇到 `Validator console is not settings` 错误，这表示您正在以一个非安装时使用的用户身份运行 `MyTonCtrl`。
 
 :::tip 解决方案
 以您安装它的用户（非root sudo用户）运行`MyTonCtrl`。
@@ -592,9 +585,7 @@ sudo mytonctrl
 
 __问：__ 有时我们对各种请求得到`block is not applied`或`block is not ready`的回应 - 这正常吗？
 
-__答：__ 这是正常的，通常这意味着您试图检索尚未到达您请求的节点的
-
-区块。
+__答：__ 这是正常的，通常这意味着您试图检索尚未到达您请求的节点的区块。
 
 __问：__ 如果比较频繁出现，是否意味着某处存在问题？
 
@@ -628,8 +619,10 @@ __答：__ 不。您需要检查mytonctrl中的“Local validator out of sync”
 
 ### Status命令未显示本地节点部分
 
-如果节点状态中没有本地节点部分，通常意味着安装过程中出了问题，跳过了创建/分配验证器钱包的步骤。
-还要检查是否指定了验证器钱包。
+![](\img\docs\full-node\local-validator-status-absent.png)
+
+如果节点状态中没有本地节点部分，通常意味着安装过程中出了问题，跳过了创建/分配验证者钱包的步骤。
+还要检查是否指定了验证者钱包。
 
 直接检查以下内容：
 
@@ -644,17 +637,17 @@ mytonctrl> set validatorWalletName validator_wallet_001
 ```
 
 
-### 在新服务器上转移验证器
+### 在新服务器上转移验证者
 
 :::info
-将所有密钥和配置从旧节点转移到新的工作节点并启动它。以防新的出现问题，还有原始设置好的来源。
+将所有密钥和配置从旧节点转移到工作节点并启动它。如果新节点出现问题，原来的节点仍然保留着所有已设置的内容。
 :::
 
 最好的方法（当暂时不验证的罚款很小时，可以不间断地进行）：
 
 1. 在新服务器上使用`mytonctrl`进行干净的安装，并等待一切同步。
 
-2. 在两台机器上停止`mytoncore`和验证器`服务`，在源和新的上进行备份：
+2. 在两台机器上停止`mytoncore`和验证者`服务`，在源和新的上进行备份：
 
 - 2.1 `/usr/local/bin/mytoncore/...`
 - 2.2 `/home/${user}/.local/share/mytoncore/...`

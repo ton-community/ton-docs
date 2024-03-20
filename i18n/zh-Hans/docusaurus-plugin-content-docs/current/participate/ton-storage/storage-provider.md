@@ -52,11 +52,9 @@ new-contract-message <BagID> <file> --query-id 0 --provider <address>
 
 执行此命令可能需要一些时间来处理大型包。消息正文将保存到`<file>`（不是整个内部消息）。查询ID可以是0到`2^64-1`的任何数字。消息包含提供商的参数（价格和最大间隔）。这些参数将在执行命令后打印出来，因此应在发送前进行双重检查。如果提供商的所有者更改参数，消息将被拒绝，因此新存储合约的条件将完全符合客户的预期。
 
-然后，客户端必须将带有此正文的消息发送到提供商的地址。如果出现错误，消息将返回给发件人（反弹）。否则，将创建一个新的存储合约，客户端将收到来自它的消息，其中包含[`op=0xbf7bd0c1`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L3)和相同的查询ID。
+然后，客户端必须将带有此 body 的消息发送到提供商的地址。如果出现错误，消息将返回给发件人（弹回）。否则，将创建一个新的存储合约，客户端将收到来自它的消息，其中包含[`op=0xbf7bd0c1`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L3)和相同的查询ID。
 
-此时，合约尚未
-
-激活。一旦提供商下载了包，它将激活存储合约，客户端将收到来自存储合约的[`op=0xd4caedcd`](https://github.com/SpyCheese/ton/blob/tonstorage/storage/storage-daemon/smartcont/constants.fc#L4)消息。
+此时，合约尚未激活。一旦提供商下载了包，它将激活存储合约，客户端将收到来自存储合约的[`op=0xd4caedcd`](https://github.com/SpyCheese/ton/blob/tonstorage/storage/storage-daemon/smartcont/constants.fc#L4)消息。
 
 存储合约有一个“客户端余额” - 这是客户端转移给合约的资金，尚未支付给提供商。资金以每天每兆字节的速率逐渐从此余额中扣除。初始余额是客户端随创建存储合约的请求一起转移的金额。然后，客户端可以通过对存储合约进行简单转账来补充余额（可以从任何地址进行）。剩余客户端余额可通过[`get_storage_contract_data`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/storage-contract.fc#L222) get方法返回，作为第二个值（`balance`）。
 
@@ -82,7 +80,7 @@ deploy-provider
 ```
 
 :::info 重要！
-您将被要求向指定地址发送1 TON的不可反弹消息以初始化提供商。您可以使用`get-provider-info`命令检查合约是否已创建。
+您将被要求向指定地址发送1 TON的不可弹回消息以初始化提供商。您可以使用`get-provider-info`命令检查合约是否已创建。
 :::
 
 默认情况下，合约设置为不接受新的存储合约。在激活它之前，您需要配置提供商。提供商的设置由配置（存储在`storage-daemon`中）和合约参数（存储在区块链中）组成。
@@ -108,9 +106,7 @@ set-provider-params --accept 1 --rate 1000000000 --max-span 86400 --min-file-siz
 
 ### 值得注意的是
 
-注意：在`set-provider-params`命令中，您可以仅指定部分参数。其他参数将从当前参数中获取。由于区块链中的数据不是立即更新的，因此连续几个`set-provider-params`命令可能导致意
-
-外结果。
+注意：在`set-provider-params`命令中，您可以仅指定部分参数。其他参数将从当前参数中获取。由于区块链中的数据不是立即更新的，因此连续几个`set-provider-params`命令可能导致意外结果。
 
 建议最初在提供商的余额上放置超过1 TON，以便有足够的资金支付与存储合约相关的手续费。但不要在第一个不可反弹消息中发送太多TON。
 

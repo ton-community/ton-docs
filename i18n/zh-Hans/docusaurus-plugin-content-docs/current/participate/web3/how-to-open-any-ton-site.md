@@ -18,7 +18,7 @@
 -   它可能随时离线或出故障
 -   它可能被您的互联网提供商封锁
 
-### TON Wallet和MyTonWallet扩展
+### TON Wallet 和 MyTonWallet 扩展
 
 稍微困难一点但更好的方法是使用某些浏览器扩展，它将连接您到TON代理，并允许您在没有任何中间服务（如ton.run）的情况下浏览TON网站。
 

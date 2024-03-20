@@ -304,7 +304,7 @@
 
 ### Nominator
 
-**Nominator** — 向验证器提供财务资源以便后者在TON区块链上确认区块的人。
+**Nominator** — 向验证者提供财务资源以便后者在TON区块链上确认区块的人。
 
 ### Non-custodial
 

@@ -36,7 +36,7 @@
 
 例如，如果URL前缀曾经是`https://mysite/my_collection/`，新前缀将是`tonstorage://my_bag_id/`。
 
-## 如何将TON域名分配给TON存储的文件包（低级）
+## 如何将TON域名分配给TON存储的文件包（低层级）
 
 您需要将以下值分配给TON域的sha256("storage") DNS记录：
 
@@ -44,7 +44,7 @@
 dns_storage_address#7473 bag_id:uint256 = DNSRecord;
 ```
 
-## 如何在TON存储中托管静态TON网站（低级）
+## 如何在TON存储中托管静态TON网站（低层级）
 
 [创建](/participate/ton-storage/storage-daemon#creating-a-bag-of-files)一个文件夹的包，其中包含网站文件，将其上传到网络并获取Bag ID。文件夹必须包含`index.html`文件。
 
