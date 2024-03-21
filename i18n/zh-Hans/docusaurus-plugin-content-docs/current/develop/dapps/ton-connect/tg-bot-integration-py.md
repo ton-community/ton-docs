@@ -1,6 +1,6 @@
 import Button from '@site/src/components/button'
 
-# TON Connect 对 Telegram 机器人的支持 - Python
+# Telegram 机器人的 TON Connect - Python
 
 在本教程中，我们将创建一个示例 Telegram 机器人，该机器人支持使用 Python TON Connect SDK [pytonconnect](https://github.com/XaBbl4/pytonconnect) 的 TON Connect 2.0 认证。
 我们将分析连接钱包、发送交易、获取有关已连接钱包的数据以及断开钱包的连接。

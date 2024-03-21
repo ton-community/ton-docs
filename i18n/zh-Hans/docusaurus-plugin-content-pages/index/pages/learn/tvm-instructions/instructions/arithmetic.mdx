@@ -1,0 +1,162 @@
+---
+hide_table_of_contents: true
+wrapperClassName: bootstrap-wrapper
+---
+
+import { SearchField } from '@site/src/components/SearchField';
+import { arithmeticOpcodes as opcodes } from '@site/src/data/opcodes';
+
+# 算术原语
+
+<SearchField
+  data={opcodes}
+  searchBy="doc_opcode"
+  placeholder="搜索操作码"
+  showKeys={[
+    { key: 'doc_opcode', name: '操作码', isGrouped: true },
+    { key: 'doc_fift', name: 'Fift 语法', isGrouped: true },
+    { key: 'doc_stack', name: '堆栈', isGrouped: true },
+    { key: 'doc_gas', name: 'Gas', isGrouped: true },
+    { key: 'doc_description', name: '描述' },
+  ]}
+/>
+
+### TVM 指令内容列表
+
+* [概览](/learn/tvm-instructions/instructions)
+* [栈操作](/learn/tvm-instructions/instructions/stack-manipulation)
+* [元组、列表和 Null](/learn/tvm-instructions/instructions/tuple-list-null)
+* [常量和文字](/learn/tvm-instructions/instructions/constant)
+* [算术操作](/learn/tvm-instructions/instructions/arithmetic)
+* [数据比较](/learn/tvm-instructions/instructions/data-comparison)
+* [单元操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [异常生成和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [应用特定原语](/learn/tvm-instructions/instructions/app-specific)
+* [其他](/learn/tvm-instructions/instructions/miscellaneous)
+
+## 算术原语
+### 加法、减法、乘法
+
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`A0`** | `ADD` | _`x y - x+y`_ |  | `18` |
+| **`A1`** | `SUB` | _`x y - x-y`_ |  | `18` |
+| **`A2`** | `SUBR` | _`x y - y-x`_ | 等同于 [`SWAP`](#instr-swap) [`SUB`](#instr-sub)。 | `18` |
+| **`A3`** | `NEGATE` | _`x - -x`_ | 等同于 [`-1 MULCONST`](#instr-mulconst) 或 [`ZERO SUBR`](#instr-subr)。<br/>注意，如果 `x=-2^256` 时会触发整数溢出异常。 | `18` |
+| **`A4`** | `INC` | _`x - x+1`_ | 等同于 [`1 ADDCONST`](#instr-addconst)。 | `18` |
+| **`A5`** | `DEC` | _`x - x-1`_ | 等同于 [`-1 ADDCONST`](#instr-addconst)。 | `18` |
+| **`A6cc`** | `[cc] ADDCONST`<br/>`[cc] ADDINT`<br/>`[-cc] SUBCONST`<br/>`[-cc] SUBINT` | _`x - x+cc`_ | `-128 <= cc <= 127`。 | `26` |
+| **`A7cc`** | `[cc] MULCONST`<br/>`[cc] MULINT` | _`x - x*cc`_ | `-128 <= cc <= 127`。 | `26` |
+| **`A8`** | `MUL` | _`x y - x*y`_ |  | `18` |
+
+### 除法
+
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`A9mscdf`** |  |  | 这是除法的通用编码，可选进行预乘和用移位替换除法或乘法。变量字段如下：<br/>`0 <= m <= 1`  -  表示是否有预乘（[`MULDIV`](#instr-muldiv) 及其变体），可能被左移替换。<br/>`0 <= s <= 2`  -  表示乘法或除法中的哪一个被移位替换：`s=0` - 无替换，`s=1` - 除法被右移替换，`s=2` - 乘法被左移替换（仅当 `m=1` 时可能）。<br/>`0 <= c <= 1`  -  表示是否有移位操作符的一个字节常量参数 `tt`（如果 `s!=0`）。对于 `s=0`，`c=0`。如果 `c=1`，则 `0 <= tt <= 255`，并且移位由 `tt+1` 位执行。如果 `s!=0` 且 `c=0`，则移位量作为栈顶的 _整数_在 `0...256` 范围内提供。<br/>`1 <= d <= 3`  -  表示需要哪些除法结果：`1` - 仅商，`2` - 仅余数，`3` - 商和余数。<br/>`0 <= f <= 2`  -  舍入模式：`0` - 向下取整，`1` - 最近整数，`2` - 向上取整。<br/>下列所有指令均为此变体。 | `26` |
+| **`A904`** | `DIV` | _`x y - q`_ | `q=floor(x/y)`，`r=x-y*q` | `26` |
+| **`A905`** | `DIVR` | _`x y - q’`_ | `q’=round(x/y)`，`r’=x-y*q’` | `26` |
+| **`A906`** | `DIVC` | _`x y - q''`_ | `q’’=ceil(x/y)`，`r’’=x-y*q’’` | `26` |
+| **`A908`** | `MOD` | _`x y - r`_ |  | `26` |
+| **`A90C`** | `DIVMOD` | _`x y - q r`_ |  | `26` |
+| **`A90D`** | `DIVMODR` | _`x y - q' r'`_ |  | `26` |
+| **`A90E`** | `DIVMODC` | _`x y - q'' r''`_ |  | `26` |
+| **`A925`** | `RSHIFTR` | _`x y - round(x/2^y)`_ |  | `26` |
+| **`A926`** | `RSHIFTC` | _`x y - ceil(x/2^y)`_ |  | `34` |
+| **`A935tt`** | `[tt+1] RSHIFTR#` | _`x y - round(x/2^(tt+1))`_ |  | `34` |
+| **`A936tt`** | `[tt+1] RSHIFTC#` | _`x y - ceil(x/2^(tt+1))`_ |  | `34` |
+| **`A938tt`** | `[tt+1] MODPOW2#` | _`x - x mod 2^(tt+1)`_ |  | `34` |
+| **`A98`** | `MULDIV` | _`x y z - q`_ | `q=floor(x*y/z)` | `26` |
+| **`A985`** | `MULDIVR` | _`x y z - q'`_ | `q'=round(x*y/z)` | `26` |
+| **`A98C`** | `MULDIVMOD` | _`x y z - q r`_ | `q=floor(x*y/z)`，`r=x*y-z*q` | `26` |
+| **`A9A4`** | `MULRSHIFT` | _`x y z - floor(x*y/2^z)`_ | `0 <= z <= 256` | `26` |
+| **`A9A5`** | `MULRSHIFTR` | _`x y z - round(x*y/2^z)`_ | `0 <= z <= 256` | `26` |
+| **`A9A6`** | `MULRSHIFTC` | _`x y z - ceil(x*y/2^z)`_ | `0 <= z <= 256` | `34` |
+| **`A9B4tt`** | `[tt+1] MULRSHIFT#` | _`x y - floor(x*y/2^(tt+1))`_ |  | `34` |
+| **`A9B5tt`** | `[tt+1] MULRSHIFTR#` | _`x y - round(x*y/2^(tt+1))`_ |  | `34` |
+| **`A9B6tt`** | `[tt+1] MULRSHIFTC#` | _`x y - ceil(x*y/2^(tt+1))`_ |  | `26` |
+| **`A9C4`** | `LSHIFTDIV` | _`x y z - floor(2^z*x/y)`_ | `0 <= z <= 256` | `26` |
+| **`A9C5`** | `LSHIFTDIVR` | _`x y z - round(2^z*x/y)`_ | `0 <= z <= 256` | `26` |
+| **`A9C6`** | `LSHIFTDIVC` | _`x y z - ceil(2^z*x/y)`_ | `0 <= z <= 256` | `34` |
+| **`A9D4tt`** | `[tt+1] LSHIFT#DIV` | _`x y - floor(2^(tt+1)*x/y)`_ |  | `34` |
+| **`A9D5tt`** | `[tt+1] LSHIFT#DIVR` | _`x y - round(2^(tt+1)*x/y)`_ |  | `34` |
+| **`A9D6tt`** | `[tt+1] LSHIFT#DIVC` | _`x y - ceil(2^(tt+1)*x/y)`_ |  | `26` |
+
+### 移位、逻辑操作
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`AAcc`** | `[cc+1] LSHIFT#` | _`x - x*2^(cc+1)`_ | `0 <= cc <= 255` | `26` |
+| **`ABcc`** | `[cc+1] RSHIFT#` | _`x - floor(x/2^(cc+1))`_ | `0 <= cc <= 255` | `18` |
+| **`AC`** | `LSHIFT` | _`x y - x*2^y`_ | `0 <= y <= 1023` | `18` |
+| **`AD`** | `RSHIFT` | _`x y - floor(x/2^y)`_ | `0 <= y <= 1023` | `18` |
+| **`AE`** | `POW2` | _`y - 2^y`_ | `0 <= y <= 1023`<br/>等同于 [`ONE`](#instr-one) [`SWAP`](#instr-swap) [`LSHIFT`](#instr-lshift-var)。 | `18` |
+| **`B0`** | `AND` | _`x y - x&y`_ | 对两个有符号整数 `x` 和 `y` 进行按位与运算，符号扩展到无限。 | `18` |
+| **`B1`** | `OR` | _`x y - x\|y`_ | 对两个整数进行按位或运算。 | `18` |
+| **`B2`** | `XOR` | _`x y - x xor y`_ | 对两个整数进行按位异或运算。 | `18` |
+| **`B3`** | `NOT` | _`x - ~x`_ | 一个整数的按位非运算。 | `26` |
+| **`B4cc`** | `[cc+1] FITS` | _`x - x`_ | 检查 `x` 是否为 `cc+1` 位有符号整数，对于 `0 <= cc <= 255`（即 `-2^cc <= x < 2^cc`）。<br/>如果不是，要么触发整数溢出异常，要么用 `NaN` 替换 `x`（静默版本）。 | `26/76` |
+| **`B400`** | `CHKBOOL` | _`x - x`_ | 检查 `x` 是否为“布尔值”（即 0 或 -1）。 | `26/76` |
+| **`B5cc`** | `[cc+1] UFITS` | _`x - x`_ | 检查 `x` 是否为 `cc+1` 位无符号整数，对于 `0 <= cc <= 255`（即 `0 <= x < 2^(cc+1)`）。 | `26/76` |
+| **`B500`** | `CHKBIT` | _`x - x`_ | 检查 `x` 是否为二进制数字（即零或一）。 | `26/76` |
+| **`B600`** | `FITSX` | _`x c - x`_ | 检查 `x` 是否为 `c` 位有符号整数，对于 `0 <= c <= 1023`。 | `26/76` |
+| **`B601`** | `UFITSX` | _`x c - x`_ | 检查 `x` 是否为 `c` 位无符号整数，对于 `0 <= c <= 1023`。 | `26/76` |
+| **`B602`** | `BITSIZE` | _`x - c`_ | 计算最小的 `c >= 0` 使得 `x` 适合于 `c` 位有符号整数（`-2^(c-1) <= c < 2^(c-1)`）。 | `26` |
+| **`B603`** | `UBITSIZE` | _`x - c`_ | 计算最小的 `c >= 0` 使得 `x` 适合于 `c` 位无符号整数（`0 <= x < 2^c`），或抛出范围检查异常。 | `26` |
+| **`B608`** | `MIN` | _`x y - x or y`_ | 计算两个整数 `x` 和 `y` 的最小值。 | `26` |
+| **`B609`** | `MAX` | _`x y - x or y`_ | 计算两个整数 `x` 和 `y` 的最大值。 | `26` |
+| **`B60A`** | `MINMAX`<br/>`INTSORT2` | _`x y - x y or y x`_ | 排序两个整数。如果任一参数为 `NaN`s，静默版本的此操作返回两个 `NaN`s。 | `26` |
+| **`B60B`** | `ABS` | _`x - \|x\|`_ | 计算整数 `x` 的绝对值。 | `26` |
+
+### 静默算术原语
+
+静默操作在其参数之一为 `NaN` 或在整数溢出的情况下返回 `NaN`，而不是抛出异常。
+静默操作如下所示带有 `Q` 前缀。另一种使操作变为静默的方法是在其前添加 `QUIET`（即可以写 [`QUIET ADD`](#instr-add) 而不是 [`QADD`](#instr-qadd)）。
+整数比较原语的静默版本也可用（[`QUIET SGN`](#instr-sgn)，[`QUIET LESS`](#instr-less) 等）。
+
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`B7A0`** | `QADD` | _`x y - x+y`_ |  | `26` |
+| **`B7A1`** | `QSUB` | _`x y - x-y`_ |  | `26` |
+| **`B7A2`** | `QSUBR` | _`x y - y-x`_ |  | `26` |
+| **`B7A3`** | `QNEGATE` | _`x - -x`_ |  | `26` |
+| **`B7A4`** | `QINC` | _`x - x+1`_ |  | `26` |
+| **`B7A5`** | `QDEC` | _`x - x-1`_ |  | `26` |
+| **`B7A8`** | `QMUL` | _`x y - x*y`_ |  | `26` |
+| **`B7A904`** | `QDIV` | _`x y - q`_ | 如果 `y=0` 则除法返回 `NaN`。 | `34` |
+| **`B7A905`** | `QDIVR` | _`x y - q’`_ |  | `34` |
+| **`B7A906`** | `QDIVC` | _`x y - q''`_ |  | `34` |
+| **`B7A908`** | `QMOD` | _`x y - r`_ |  | `34` |
+| **`B7A90C`** | `QDIVMOD` | _`x y - q r`_ |  | `34` |
+| **`B7A90D`** | `QDIVMODR` | _`x y - q' r'`_ |  | `34` |
+| **`B7A90E`** | `QDIVMODC` | _`x y - q'' r''`_ |  | `34` |
+| **`B7A985`** | `QMULDIVR` | _`x y z - q'`_ |  | `34` |
+| **`B7A98C`** | `QMULDIVMOD` | _`x y z - q r`_ |  | `34` |
+| **`B7AC`** | `QLSHIFT` | _`x y - x*2^y`_ |  | `26` |
+| **`B7AD`** | `QRSHIFT` | _`x y - floor(x/2^y)`_ |  | `26` |
+| **`B7AE`** | `QPOW2` | _`y - 2^y`_ |  | `26` |
+| **`B7B0`** | `QAND` | _`x y - x&y`_ |  | `26` |
+| **`B7B1`** | `QOR` | _`x y - x\|y`_ |  | `26` |
+| **`B7B2`** | `QXOR` | _`x y - x xor y`_ |  | `26` |
+| **`B7B3`** | `QNOT` | _`x - ~x`_ |  | `26` |
+| **`B7B4cc`** | `[cc+1] QFITS` | _`x - x`_ | 如果 `x` 不是 `cc+1` 位有符号整数，则用 `NaN` 替换 `x`，否则保持不变。 | `34` |
+| **`B7B5cc`** | `[cc+1] QUFITS` | _`x - x`_ | 如果 `x` 不是 `cc+1` 位无符号整数，则用 `NaN` 替换 `x`，否则保持不变。 | `34` |
+| **`B7B600`** | `QFITSX` | _`x c - x`_ | 如果 `x` 不是 `c` 位有符号整数，则用 `NaN` 替换 `x`，否则保持不变。 | `34` |
+| **`B7B601`** | `QUFITSX` | _`x c - x`_ | 如果 `x` 不是 `c` 位无符号整数，则用 `NaN` 替换 `x`，否则保持不变。 | `34` |
+
+
+### TVM 指令内容列表
+
+* [概览](/learn/tvm-instructions/instructions)
+* [栈操作](/learn/tvm-instructions/instructions/stack-manipulation)
+* [元组、列表和 Null](/learn/tvm-instructions/instructions/tuple-list-null)
+* [常量和文字](/learn/tvm-instructions/instructions/constant)
+* [算术操作](/learn/tvm-instructions/instructions/arithmetic)
+* [数据比较](/learn/tvm-instructions/instructions/data-comparison)
+* [单元操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [异常生成和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [应用特定原语](/learn/tvm-instructions/instructions/app-specific)
+* [其他](/learn/tvm-instructions/instructions/miscellaneous)
