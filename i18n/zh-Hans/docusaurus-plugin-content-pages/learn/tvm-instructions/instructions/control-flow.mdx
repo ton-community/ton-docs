@@ -145,7 +145,7 @@ import { continuationOpcodes as opcodes } from '@site/src/data/opcodes';
 | **`EErn`** | `[r] [n] BLESSARGS` | _`x_1...x_r s - c`_ | `0 <= r <= 15`, `-1 <= n <= 14`<br/>等同于 [`BLESS`](#instr-bless) [`[r] [n] SETCONTARGS`](#instr-setcontargs-n)。<br/>`n` 的值由 4 位整数 `n mod 16` 内部表示。 | `26` |
 | **`EE0n`** | `[n] BLESSNUMARGS` | _`s - c`_ | 也将 _Slice_ `s` 转换为 _Continuation_ `c`，但将 `c.nargs` 设置为 `0 <= n <= 14`。 | `26` |
 
-### 与 continuation savelists 和控制寄存器的操作
+### Continuation 保存列表和控制寄存器的操作
 | xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`ED4i`** | `c[i] PUSHCTR`<br/>`c[i] PUSH` | _`- x`_ | 推送控制寄存器 `c(i)` 的当前值。如果当前代码页不支持该控制寄存器，或者它没有值，则触发异常。 | `26` |

@@ -530,462 +530,460 @@ Fift 是一种基于栈的编程语言，旨在管理 TON 智能合约。Fift �
 | **`D764`** | `SDEPTH` | _`s - x`_ | 返回 _切片_ `s` 的深度。如果 `s` 没有引用，则 `x=0`；否则 `x` 是从 `s` 引用的cell的最大深度加 1。 | `26` |
 | **`D765`** | `CDEPTH` | _`c - x`_ | 返回 _cell_ `c` 的深度。如果 `c` 没有引用，则 `x=0`；否则 `x` 是从 `c` 引用的cell的最大深度加 1。如果 `c` 是 _空（Null）_ 而不是 _cell_，返回零。 | `26` |
 
-## 8 Continuation and control flow primitives
-### 8.1 Unconditional control flow primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+## 8 Continuation 和控制流原语
+### 8.1 无条件控制流原语
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`D8`** | `EXECUTE`<br/>`CALLX` | _`c - `_ | _Calls_, or _executes_, continuation `c`. | `18` |
-| **`D9`** | `JMPX` | _`c - `_ | _Jumps_, or transfers control, to continuation `c`.<br/>The remainder of the previous current continuation `cc` is discarded. | `18` |
-| **`DApr`** | `[p] [r] CALLXARGS` | _`c - `_ | _Calls_ continuation `c` with `p` parameters and expecting `r` return values<br/>`0 <= p <= 15`, `0 <= r <= 15` | `26` |
-| **`DB0p`** | `[p] -1 CALLXARGS` | _`c - `_ | _Calls_ continuation `c` with `0 <= p <= 15` parameters, expecting an arbitrary number of return values. | `26` |
-| **`DB1p`** | `[p] JMPXARGS` | _`c - `_ | _Jumps_ to continuation `c`, passing only the top `0 <= p <= 15` values from the current stack to it (the remainder of the current stack is discarded). | `26` |
-| **`DB2r`** | `[r] RETARGS` |  | _Returns_ to `c0`, with `0 <= r <= 15` return values taken from the current stack. | `26` |
-| **`DB30`** | `RET`<br/>`RETTRUE` |  | _Returns_ to the continuation at `c0`. The remainder of the current continuation `cc` is discarded.<br/>Approximately equivalent to [`c0 PUSHCTR`](#instr-pushctr) [`JMPX`](#instr-jmpx). | `26` |
-| **`DB31`** | `RETALT`<br/>`RETFALSE` |  | _Returns_ to the continuation at `c1`.<br/>Approximately equivalent to [`c1 PUSHCTR`](#instr-pushctr) [`JMPX`](#instr-jmpx). | `26` |
-| **`DB32`** | `BRANCH`<br/>`RETBOOL` | _`f - `_ | Performs [`RETTRUE`](#instr-ret) if integer `f!=0`, or [`RETFALSE`](#instr-retalt) if `f=0`. | `26` |
-| **`DB34`** | `CALLCC` | _`c - `_ | _Call with current continuation_, transfers control to `c`, pushing the old value of `cc` into `c`'s stack (instead of discarding it or writing it into new `c0`). | `26` |
-| **`DB35`** | `JMPXDATA` | _`c - `_ | Similar to [`CALLCC`](#instr-callcc), but the remainder of the current continuation (the old value of `cc`) is converted into a _Slice_ before pushing it into the stack of `c`. | `26` |
-| **`DB36pr`** | `[p] [r] CALLCCARGS` | _`c - `_ | Similar to [`CALLXARGS`](#instr-callxargs), but pushes the old value of `cc` (along with the top `0 <= p <= 15` values from the original stack) into the stack of newly-invoked continuation `c`, setting `cc.nargs` to `-1 <= r <= 14`. | `34` |
-| **`DB38`** | `CALLXVARARGS` | _`c p r - `_ | Similar to [`CALLXARGS`](#instr-callxargs), but takes `-1 <= p,r <= 254` from the stack. The next three operations also take `p` and `r` from the stack, both in the range `-1...254`. | `26` |
-| **`DB39`** | `RETVARARGS` | _`p r - `_ | Similar to [`RETARGS`](#instr-retargs). | `26` |
-| **`DB3A`** | `JMPXVARARGS` | _`c p r - `_ | Similar to [`JMPXARGS`](#instr-jmpxargs). | `26` |
-| **`DB3B`** | `CALLCCVARARGS` | _`c p r - `_ | Similar to [`CALLCCARGS`](#instr-callccargs). | `26` |
-| **`DB3C`** | `[ref] CALLREF` |  | Equivalent to [`PUSHREFCONT`](#instr-pushrefcont) [`CALLX`](#instr-execute). | `126/51` |
-| **`DB3D`** | `[ref] JMPREF` |  | Equivalent to [`PUSHREFCONT`](#instr-pushrefcont) [`JMPX`](#instr-jmpx). | `126/51` |
-| **`DB3E`** | `[ref] JMPREFDATA` |  | Equivalent to [`PUSHREFCONT`](#instr-pushrefcont) [`JMPXDATA`](#instr-jmpxdata). | `126/51` |
-| **`DB3F`** | `RETDATA` |  | Equivalent to [`c0 PUSHCTR`](#instr-pushctr) [`JMPXDATA`](#instr-jmpxdata). In this way, the remainder of the current continuation is converted into a _Slice_ and returned to the caller. | `26` |
-### 8.2 Conditional control flow primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`D8`** | `EXECUTE`<br/>`CALLX` | _`c - `_ | _调用_ 或 _执行_ Continuation `c`。 | `18` |
+| **`D9`** | `JMPX` | _`c - `_ | _跳转_ 或 控制转移到 Continuation `c`。<br/>之前当前continuation `cc`的剩余部分被丢弃。 | `18` |
+| **`DApr`** | `[p] [r] CALLXARGS` | _`c - `_ | 用 `p` 参数 _调用_ continuation `c` 并期待 `r` 返回值<br/>`0 <= p <= 15`, `0 <= r <= 15` | `26` |
+| **`DB0p`** | `[p] -1 CALLXARGS` | _`c - `_ | 用 `0 <= p <= 15` 参数 _调用_ continuation `c`, 期望任意数量的返回值。 | `26` |
+| **`DB1p`** | `[p] JMPXARGS` | _`c - `_ | _跳转_ 到 continuation `c`, 只将当前栈顶的 `0 <= p <= 15` 个值传递给它（当前栈的其余部分被丢弃）。 | `26` |
+| **`DB2r`** | `[r] RETARGS` |  | _返回_ 到 `c0`, 携带 `0 <= r <= 15` 个从当前栈中取得的返回值。 | `26` |
+| **`DB30`** | `RET`<br/>`RETTRUE` |  | _返回_ 到 continuation `c0`。当前 continuation `cc`的剩余部分被丢弃。<br/>大致相当于 [`c0 PUSHCTR`](#instr-pushctr) [`JMPX`](#instr-jmpx)。 | `26` |
+| **`DB31`** | `RETALT`<br/>`RETFALSE` |  | _返回_ 到 continuation `c1`。<br/>大致相当于 [`c1 PUSHCTR`](#instr-pushctr) [`JMPX`](#instr-jmpx)。 | `26` |
+| **`DB32`** | `BRANCH`<br/>`RETBOOL` | _`f - `_ | 如果整数 `f!=0`, 执行 [`RETTRUE`](#instr-ret)，如果 `f=0`，执行 [`RETFALSE`](#instr-retalt)。 | `26` |
+| **`DB34`** | `CALLCC` | _`c - `_ | _带当前 continuation 调用_，控制权转移到 `c`，将旧的 `cc` 值推入 `c` 的栈中（而不是丢弃它或将其写入新的 `c0`中）。 | `26` |
+| **`DB35`** | `JMPXDATA` | _`c - `_ | 类似于 [`CALLCC`](#instr-callcc)，但是当前 continuation 的剩余部分（旧的 `cc` 值）在推入 `c` 的栈之前被转换成一个 _Slice_。 | `26` |
+| **`DB36pr`** | `[p] [r] CALLCCARGS` | _`c - `_ | 类似于 [`CALLXARGS`](#instr-callxargs)，但是将旧的 `cc` 值（连同最初栈顶的 `0 <= p <= 15` 个值）推入被调用 continuation `c` 的栈中，设置 `cc.nargs` 为 `-1 <= r <= 14`。 | `34` |
+| **`DB38`** | `CALLXVARARGS` | _`c p r - `_ | 类似于 [`CALLXARGS`](#instr-callxargs)，但从栈中取 `-1 <= p,r <= 254`。接下来的三个操作也从栈中取 `p` 和 `r`，范围都是 `-1...254`。 | `26` |
+| **`DB39`** | `RETVARARGS` | _`p r - `_ | 类似于 [`RETARGS`](#instr-retargs)。 | `26` |
+| **`DB3A`** | `JMPXVARARGS` | _`c p r - `_ | 类似于 [`JMPXARGS`](#instr-jmpxargs)。 | `26` |
+| **`DB3B`** | `CALLCCVARARGS` | _`c p r - `_ | 类似于 [`CALLCCARGS`](#instr-callccargs)。 | `26` |
+| **`DB3C`** | `[ref] CALLREF` |  | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`CALLX`](#instr-execute)。 | `126/51` |
+| **`DB3D`** | `[ref] JMPREF` |  | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`JMPX`](#instr-jmpx)。 | `126/51` |
+| **`DB3E`** | `[ref] JMPREFDATA` |  | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`JMPXDATA`](#instr-jmpxdata)。 | `126/51` |
+| **`DB3F`** | `RETDATA` |  | 等同于 [`c0 PUSHCTR`](#instr-pushctr) [`JMPXDATA`](#instr-jmpxdata)。这样，当前 continuation 的剩余部分被转换成一个 _Slice_ 并返回给调用者。 | `26` |
+### 8.2 条件控制流原语
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`DC`** | `IFRET`<br/>`IFNOT:` | _`f - `_ | Performs a [`RET`](#instr-ret), but only if integer `f` is non-zero. If `f` is a `NaN`, throws an integer overflow exception. | `18` |
-| **`DD`** | `IFNOTRET`<br/>`IF:` | _`f - `_ | Performs a [`RET`](#instr-ret), but only if integer `f` is zero. | `18` |
-| **`DE`** | `IF` | _`f c - `_ | Performs [`EXECUTE`](#instr-execute) for `c` (i.e., _executes_ `c`), but only if integer `f` is non-zero. Otherwise simply discards both values. | `18` |
-| **`DE`** | `IF:<{ code }>`<br/>`<{ code }>IF` | _`f -`_ | Equivalent to [`<{ code }> CONT`](#instr-pushcont) [`IF`](#instr-if). |  |
-| **`DF`** | `IFNOT` | _`f c - `_ | Executes continuation `c`, but only if integer `f` is zero. Otherwise simply discards both values. | `18` |
-| **`DF`** | `IFNOT:<{ code }>`<br/>`<{ code }>IFNOT` | _`f -`_ | Equivalent to [`<{ code }> CONT`](#instr-pushcont) [`IFNOT`](#instr-ifnot). |  |
-| **`E0`** | `IFJMP` | _`f c - `_ | Jumps to `c` (similarly to [`JMPX`](#instr-jmpx)), but only if `f` is non-zero. | `18` |
-| **`E0`** | `IFJMP:<{ code }>` | _`f -`_ | Equivalent to [`<{ code }> CONT`](#instr-pushcont) [`IFJMP`](#instr-ifjmp). |  |
-| **`E1`** | `IFNOTJMP` | _`f c - `_ | Jumps to `c` (similarly to [`JMPX`](#instr-jmpx)), but only if `f` is zero. | `18` |
-| **`E1`** | `IFNOTJMP:<{ code }>` | _`f -`_ | Equivalent to [`<{ code }> CONT`](#instr-pushcont) [`IFNOTJMP`](#instr-ifnotjmp). |  |
-| **`E2`** | `IFELSE` | _`f c c' - `_ | If integer `f` is non-zero, executes `c`, otherwise executes `c'`. Equivalent to [`CONDSELCHK`](#instr-condselchk) [`EXECUTE`](#instr-execute). | `18` |
-| **`E2`** | `IF:<{ code1 }>ELSE<{ code2 }>` | _`f -`_ | Equivalent to [`<{ code1 }> CONT`](#instr-pushcont) [`<{ code2 }> CONT`](#instr-pushcont) [`IFELSE`](#instr-ifelse). |  |
-| **`E300`** | `[ref] IFREF` | _`f - `_ | Equivalent to [`PUSHREFCONT`](#instr-pushrefcont) [`IF`](#instr-if), with the optimization that the cell reference is not actually loaded into a _Slice_ and then converted into an ordinary _Continuation_ if `f=0`.<br/>Gas consumption of this primitive depends on whether `f=0` and whether the reference was loaded before.<br/>Similar remarks apply other primitives that accept a continuation as a reference. | `26/126/51` |
-| **`E301`** | `[ref] IFNOTREF` | _`f - `_ | Equivalent to [`PUSHREFCONT`](#instr-pushrefcont) [`IFNOT`](#instr-ifnot). | `26/126/51` |
-| **`E302`** | `[ref] IFJMPREF` | _`f - `_ | Equivalent to [`PUSHREFCONT`](#instr-pushrefcont) [`IFJMP`](#instr-ifjmp). | `26/126/51` |
-| **`E303`** | `[ref] IFNOTJMPREF` | _`f - `_ | Equivalent to [`PUSHREFCONT`](#instr-pushrefcont) [`IFNOTJMP`](#instr-ifnotjmp). | `26/126/51` |
-| **`E304`** | `CONDSEL` | _`f x y - x or y`_ | If integer `f` is non-zero, returns `x`, otherwise returns `y`. Notice that no type checks are performed on `x` and `y`; as such, it is more like a conditional stack operation. Roughly equivalent to [`ROT`](#instr-rot) [`ISZERO`](#instr-iszero) [`INC`](#instr-inc) [`ROLLX`](#instr-rollx) [`NIP`](#instr-nip). | `26` |
-| **`E305`** | `CONDSELCHK` | _`f x y - x or y`_ | Same as [`CONDSEL`](#instr-condsel), but first checks whether `x` and `y` have the same type. | `26` |
-| **`E308`** | `IFRETALT` | _`f -`_ | Performs [`RETALT`](#instr-retalt) if integer `f!=0`. | `26` |
-| **`E309`** | `IFNOTRETALT` | _`f -`_ | Performs [`RETALT`](#instr-retalt) if integer `f=0`. | `26` |
-| **`E30D`** | `[ref] IFREFELSE` | _`f c -`_ | Equivalent to [`PUSHREFCONT`](#instr-pushrefcont) [`SWAP`](#instr-swap) [`IFELSE`](#instr-ifelse), with the optimization that the cell reference is not actually loaded into a _Slice_ and then converted into an ordinary _Continuation_ if `f=0`. Similar remarks apply to the next two primitives: cells are converted into continuations only when necessary. | `26/126/51` |
-| **`E30E`** | `[ref] IFELSEREF` | _`f c -`_ | Equivalent to [`PUSHREFCONT`](#instr-pushrefcont) [`IFELSE`](#instr-ifelse). | `26/126/51` |
-| **`E30F`** | `[ref] [ref] IFREFELSEREF` | _`f -`_ | Equivalent to [`PUSHREFCONT`](#instr-pushrefcont) [`PUSHREFCONT`](#instr-pushrefcont) [`IFELSE`](#instr-ifelse). | `126/51` |
-| **`E39_n`** | `[n] IFBITJMP` | _`x c - x`_ | Checks whether bit `0 <= n <= 31` is set in integer `x`, and if so, performs [`JMPX`](#instr-jmpx) to continuation `c`. Value `x` is left in the stack. | `26` |
-| **`E3B_n`** | `[n] IFNBITJMP` | _`x c - x`_ | Jumps to `c` if bit `0 <= n <= 31` is not set in integer `x`. | `26` |
-| **`E3D_n`** | `[ref] [n] IFBITJMPREF` | _`x - x`_ | Performs a [`JMPREF`](#instr-jmpref) if bit `0 <= n <= 31` is set in integer `x`. | `126/51` |
-| **`E3F_n`** | `[ref] [n] IFNBITJMPREF` | _`x - x`_ | Performs a [`JMPREF`](#instr-jmpref) if bit `0 <= n <= 31` is not set in integer `x`. | `126/51` |
-### 8.3 Control flow primitives: loops
-| xxxxxxx<br />Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`DC`** | `IFRET`<br/>`IFNOT:` | _`f - `_ | 如果整数 `f` 非零，则执行 [`RET`](#instr-ret)。如果 `f` 是 `NaN`, 抛出一个整数溢出异常。 | `18` |
+| **`DD`** | `IFNOTRET`<br/>`IF:` | _`f - `_ | 如果整数 `f` 为零，则执行 [`RET`](#instr-ret)。 | `18` |
+| **`DE`** | `IF` | _`f c - `_ | 如果整数 `f` 非零，执行 `c`（即，_执行_ `c`），否则简单地丢弃两个值。 | `18` |
+| **`DE`** | `IF:<{ code }>`<br/>`<{ code }>IF` | _`f -`_ | 等同于 [`<{ code }> CONT`](#instr-pushcont) [`IF`](#instr-if)。 |  |
+| **`DF`** | `IFNOT` | _`f c - `_ | 如果整数 `f` 为零，则执行 continuation `c`，否则简单地丢弃两个值。 | `18` |
+| **`DF`** | `IFNOT:<{ code }>`<br/>`<{ code }>IFNOT` | _`f -`_ | 等同于 [`<{ code }> CONT`](#instr-pushcont) [`IFNOT`](#instr-ifnot)。 |  |
+| **`E0`** | `IFJMP` | _`f c - `_ | 只有当 `f` 非零时，跳转到 `c`（类似于 [`JMPX`](#instr-jmpx)）。 | `18` |
+| **`E0`** | `IFJMP:<{ code }>` | _`f -`_ | 等同于 [`<{ code }> CONT`](#instr-pushcont) [`IFJMP`](#instr-ifjmp)。 |  |
+| **`E1`** | `IFNOTJMP` | _`f c - `_ | 只有当 `f` 为零时，跳转到 `c`（类似于 [`JMPX`](#instr-jmpx)）。 | `18` |
+| **`E1`** | `IFNOTJMP:<{ code }>` | _`f -`_ | 等同于 [`<{ code }> CONT`](#instr-pushcont) [`IFNOTJMP`](#instr-ifnotjmp)。 |  |
+| **`E2`** | `IFELSE` | _`f c c' - `_ | 如果整数 `f` 非零，执行 `c`，否则执行 `c'`。等同于 [`CONDSELCHK`](#instr-condselchk) [`EXECUTE`](#instr-execute)。 | `18` |
+| **`E2`** | `IF:<{ code1 }>ELSE<{ code2 }>` | _`f -`_ | 等同于 [`<{ code1 }> CONT`](#instr-pushcont) [`<{ code2 }> CONT`](#instr-pushcont) [`IFELSE`](#instr-ifelse)。 |  |
+| **`E300`** | `[ref] IFREF` | _`f - `_ | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`IF`](#instr-if)，但优化了cell引用不实际加载入一个 _Slice_ 再转换成一个普通 _Continuation_ 如果 `f=0`。<br/>这个原语的 Gas 消耗取决于 `f=0` 以及引用是否之前加载过。<br/>类似的评论适用于接受 continuation 作为引用的其他原语。 | `26/126/51` |
+| **`E301`** | `[ref] IFNOTREF` | _`f - `_ | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`IFNOT`](#instr-ifnot)。 | `26/126/51` |
+| **`E302`** | `[ref] IFJMPREF` | _`f - `_ | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`IFJMP`](#instr-ifjmp)。 | `26/126/51` |
+| **`E303`** | `[ref] IFNOTJMPREF` | _`f - `_ | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`IFNOTJMP`](#instr-ifnotjmp)。 | `26/126/51` |
+| **`E304`** | `CONDSEL` | _`f x y - x 或 y`_ | 如果整数 `f` 非零，返回 `x`，否则返回 `y`。注意 `x` 和 `y` 上不执行类型检查；因此，它更像是一个条件栈操作。大致等同于 [`ROT`](#instr-rot) [`ISZERO`](#instr-iszero) [`INC`](#instr-inc) [`ROLLX`](#instr-rollx) [`NIP`](#instr-nip)。 | `26` |
+| **`E305`** | `CONDSELCHK` | _`f x y - x 或 y`_ | 与 [`CONDSEL`](#instr-condsel) 相同，但首先检查 `x` 和 `y` 是否类型相同。 | `26` |
+| **`E308`** | `IFRETALT` | _`f -`_ | 如果整数 `f!=0` 执行 [`RETALT`](#instr-retalt)。 | `26` |
+| **`E309`** | `IFNOTRETALT` | _`f -`_ | 如果整数 `f=0` 执行 [`RETALT`](#instr-retalt)。 | `26` |
+| **`E30D`** | `[ref] IFREFELSE` | _`f c -`_ | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`SWAP`](#instr-swap) [`IFELSE`](#instr-ifelse)，但优化了在 `f=0` 时，实际上并不需要将cell引用加载进一个_Slice_，然后再转换成普通的 _Continuation_。对接下来的两个原语也适用类似的备注：只有在必要时，才将cell转换成 continuations。 | `26/126/51` |
+| **`E30E`** | `[ref] IFELSEREF` | _`f c -`_ | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`IFELSE`](#instr-ifelse)。 | `26/126/51` |
+| **`E30F`** | `[ref] [ref] IFREFELSEREF` | _`f -`_ | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`PUSHREFCONT`](#instr-pushrefcont) [`IFELSE`](#instr-ifelse)。 | `126/51` |
+| **`E39_n`** | `[n] IFBITJMP` | _`x c - x`_ | 检查整数 `x` 中是否设置了位 `0 <= n <= 31`，如果是，则执行 [`JMPX`](#instr-jmpx) 跳转到 continuation `c`。值 `x` 保留在栈中。 | `26` |
+| **`E3B_n`** | `[n] IFNBITJMP` | _`x c - x`_ | 如果整数 `x` 中位 `0 <= n <= 31` 未设置，跳转到 `c`。 | `26` |
+| **`E3D_n`** | `[ref] [n] IFBITJMPREF` | _`x - x`_ | 如果整数 `x` 中设置了位 `0 <= n <= 31`，执行 [`JMPREF`](#instr-jmpref)。 | `126/51` |
+| **`E3F_n`** | `[ref] [n] IFNBITJMPREF` | _`x - x`_ | 如果整数 `x` 中未设置位 `0 <= n <= 31`，执行 [`JMPREF`](#instr-jmpref)。 | `126/51` |
+### 8.3 控制流原语：循环
+| xxxxxxx<br />操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`E4`** | `REPEAT` | _`n c - `_ | Executes continuation `c` `n` times, if integer `n` is non-negative. If `n>=2^31` or `n<-2^31`, generates a range check exception.<br/>Notice that a [`RET`](#instr-ret) inside the code of `c` works as a `continue`, not as a `break`. One should use either alternative (experimental) loops or alternative [`RETALT`](#instr-retalt) (along with a [`SETEXITALT`](#instr-setexitalt) before the loop) to `break` out of a loop. | `18` |
-| **`E4`** | `REPEAT:<{ code }>`<br/>`<{ code }>REPEAT` | _`n -`_ | Equivalent to [`<{ code }> CONT`](#instr-pushcont) [`REPEAT`](#instr-repeat). |  |
-| **`E5`** | `REPEATEND`<br/>`REPEAT:` | _`n - `_ | Similar to [`REPEAT`](#instr-repeat), but it is applied to the current continuation `cc`. | `18` |
-| **`E6`** | `UNTIL` | _`c - `_ | Executes continuation `c`, then pops an integer `x` from the resulting stack. If `x` is zero, performs another iteration of this loop. The actual implementation of this primitive involves an extraordinary continuation `ec_until` with its arguments set to the body of the loop (continuation `c`) and the original current continuation `cc`. This extraordinary continuation is then saved into the savelist of `c` as `c.c0` and the modified `c` is then executed. The other loop primitives are implemented similarly with the aid of suitable extraordinary continuations. | `18` |
-| **`E6`** | `UNTIL:<{ code }>`<br/>`<{ code }>UNTIL` | _`-`_ | Equivalent to [`<{ code }> CONT`](#instr-pushcont) [`UNTIL`](#instr-until). |  |
-| **`E7`** | `UNTILEND`<br/>`UNTIL:` | _`-`_ | Similar to [`UNTIL`](#instr-until), but executes the current continuation `cc` in a loop. When the loop exit condition is satisfied, performs a [`RET`](#instr-ret). | `18` |
-| **`E8`** | `WHILE` | _`c' c - `_ | Executes `c'` and pops an integer `x` from the resulting stack. If `x` is zero, exists the loop and transfers control to the original `cc`. If `x` is non-zero, executes `c`, and then begins a new iteration. | `18` |
-| **`E8`** | `WHILE:<{ cond }>DO<{ code }>` | _`-`_ | Equivalent to [`<{ cond }> CONT`](#instr-pushcont) [`<{ code }> CONT`](#instr-pushcont) [`WHILE`](#instr-while). |  |
-| **`E9`** | `WHILEEND` | _`c' - `_ | Similar to [`WHILE`](#instr-while), but uses the current continuation `cc` as the loop body. | `18` |
-| **`EA`** | `AGAIN` | _`c - `_ | Similar to [`REPEAT`](#instr-repeat), but executes `c` infinitely many times. A [`RET`](#instr-ret) only begins a new iteration of the infinite loop, which can be exited only by an exception, or a [`RETALT`](#instr-retalt) (or an explicit [`JMPX`](#instr-jmpx)). | `18` |
-| **`EA`** | `AGAIN:<{ code }>`<br/>`<{ code }>AGAIN` | _`-`_ | Equivalent to [`<{ code }> CONT`](#instr-pushcont) [`AGAIN`](#instr-again). |  |
-| **`EB`** | `AGAINEND`<br/>`AGAIN:` | _`-`_ | Similar to [`AGAIN`](#instr-again), but performed with respect to the current continuation `cc`. | `18` |
-| **`E314`** | `REPEATBRK` | _`n c -`_ | Similar to [`REPEAT`](#instr-repeat), but also sets `c1` to the original `cc` after saving the old value of `c1` into the savelist of the original `cc`. In this way [`RETALT`](#instr-retalt) could be used to break out of the loop body. | `26` |
-| **`E314`** | `REPEATBRK:<{ code }>`<br/>`<{ code }>REPEATBRK` | _`n -`_ | Equivalent to [`<{ code }> CONT`](#instr-pushcont) [`REPEATBRK`](#instr-repeatbrk). |  |
-| **`E315`** | `REPEATENDBRK` | _`n -`_ | Similar to [`REPEATEND`](#instr-repeatend), but also sets `c1` to the original `c0` after saving the old value of `c1` into the savelist of the original `c0`. Equivalent to [`SAMEALTSAVE`](#instr-samealtsave) [`REPEATEND`](#instr-repeatend). | `26` |
-| **`E316`** | `UNTILBRK` | _`c -`_ | Similar to [`UNTIL`](#instr-until), but also modifies `c1` in the same way as [`REPEATBRK`](#instr-repeatbrk). | `26` |
-| **`E316`** | `UNTILBRK:<{ code }>` | _`-`_ | Equivalent to [`<{ code }> CONT`](#instr-pushcont) [`UNTILBRK`](#instr-untilbrk). |  |
-| **`E317`** | `UNTILENDBRK`<br/>`UNTILBRK:` | _`-`_ | Equivalent to [`SAMEALTSAVE`](#instr-samealtsave) [`UNTILEND`](#instr-untilend). | `26` |
-| **`E318`** | `WHILEBRK` | _`c' c -`_ | Similar to [`WHILE`](#instr-while), but also modifies `c1` in the same way as [`REPEATBRK`](#instr-repeatbrk). | `26` |
-| **`E318`** | `WHILEBRK:<{ cond }>DO<{ code }>` | _`-`_ | Equivalent to [`<{ cond }> CONT`](#instr-pushcont) [`<{ code }> CONT`](#instr-pushcont) [`WHILEBRK`](#instr-whilebrk). |  |
-| **`E319`** | `WHILEENDBRK` | _`c -`_ | Equivalent to [`SAMEALTSAVE`](#instr-samealtsave) [`WHILEEND`](#instr-whileend). | `26` |
-| **`E31A`** | `AGAINBRK` | _`c -`_ | Similar to [`AGAIN`](#instr-again), but also modifies `c1` in the same way as [`REPEATBRK`](#instr-repeatbrk). | `26` |
-| **`E31A`** | `AGAINBRK:<{ code }>` | _`-`_ | Equivalent to [`<{ code }> CONT`](#instr-pushcont) [`AGAINBRK`](#instr-againbrk). |  |
-| **`E31B`** | `AGAINENDBRK`<br/>`AGAINBRK:` | _`-`_ | Equivalent to [`SAMEALTSAVE`](#instr-samealtsave) [`AGAINEND`](#instr-againend). | `26` |
-### 8.4 Manipulating the stack of continuations
-Here `s"` is the [fee for moving stack elements between continuations](#11-gas-prices). It is equal to the size of the resulting stack minus 32 (or 0 if the stack is smaller than 32).
+| **`E4`** | `REPEAT` | _`n c - `_ | 如果整数 `n` 为非负数，则执行 continuation `c` `n` 次。如果 `n>=2^31` 或 `n<-2^31`，会生成一个范围检查异常。<br/>注意，在 `c` 的代码内部的 [`RET`](#instr-ret) 作为 `continue` 使用，而不是 `break`。应使用另一种（实验性的）循环或者 [`RETALT`](#instr-retalt)（循环前与 [`SETEXITALT`](#instr-setexitalt) 一起使用）来从循环中 `break` 出去。 | `18` |
+| **`E4`** | `REPEAT:<{ code }>`<br/>`<{ code }>REPEAT` | _`n -`_ | 等同于 [`<{ code }> CONT`](#instr-pushcont) [`REPEAT`](#instr-repeat)。 |  |
+| **`E5`** | `REPEATEND`<br/>`REPEAT:` | _`n - `_ | 类似于 [`REPEAT`](#instr-repeat)，但它应用于当前 continuation `cc`。 | `18` |
+| **`E6`** | `UNTIL` | _`c - `_ | 执行 continuation `c`，然后从结果栈中弹出一个整数 `x`。如果 `x` 为零，执行此循环的另一次迭代。这个原语的实际实现涉及一个特殊的 continuation `ec_until`，其参数设置为循环体（continuation `c`）和原始的当前 continuation `cc`。然后这个特殊的 continuation 被保存到 `c` 的 savelist 作为 `c.c0`，然后执行修改后的 `c`。其他循环原语也类似地借助适当的特殊 continuations 实现。 | `18` |
+| **`E6`** | `UNTIL:<{ code }>`<br/>`<{ code }>UNTIL` | _`-`_ | 等同于 [`<{ code }> CONT`](#instr-pushcont) [`UNTIL`](#instr-until)。 |  |
+| **`E7`** | `UNTILEND`<br/>`UNTIL:` | _`-`_ | 类似于 [`UNTIL`](#instr-until)，但在循环中执行当前 continuation `cc`。当满足循环退出条件时，执行 [`RET`](#instr-ret)。 | `18` |
+| **`E8`** | `WHILE` | _`c' c - `_ | 执行 `c'` 并从结果栈中弹出一个整数 `x`。如果 `x` 为零，则退出循环并将控制权转移给原始 `cc`。如果 `x` 非零，则执行 `c`，然后开始新的迭代。 | `18` |
+| **`E8`** | `WHILE:<{ cond }>DO<{ code }>` | _`-`_ | 等同于 [`<{ cond }> CONT`](#instr-pushcont) [`<{ code }> CONT`](#instr-pushcont) [`WHILE`](#instr-while)。 |  |
+| **`E9`** | `WHILEEND` | _`c' - `_ | 类似于 [`WHILE`](#instr-while)，但使用当前 continuation `cc` 作为循环体。 | `18` |
+| **`EA`** | `AGAIN` | _`c - `_ | 类似于 [`REPEAT`](#instr-repeat)，但无限次执行 `c`。一个 [`RET`](#instr-ret) 只是开始一个无限循环的新迭代，只能通过异常或 [`RETALT`](#instr-retalt)（或显式的 [`JMPX`](#instr-jmpx)）退出。 | `18` |
+| **`EA`** | `AGAIN:<{ code }>`<br/>`<{ code }>AGAIN` | _`-`_ | 等同于 [`<{ code }> CONT`](#instr-pushcont) [`AGAIN`](#instr-again)。 |  |
+| **`EB`** | `AGAINEND`<br/>`AGAIN:` | _`-`_ | 类似于 [`AGAIN`](#instr-again)，但相对于当前 continuation `cc` 执行。 | `18` |
+| **`E314`** | `REPEATBRK` | _`n c -`_ | 类似于 [`REPEAT`](#instr-repeat)，但在将旧的 `c1` 值保存到原始 `cc`的 savelist 后，还将 `c1` 设置为原始 `cc`。这样，[`RETALT`](#instr-retalt) 可以用来退出循环体。 | `26` |
+| **`E314`** | `REPEATBRK:<{ code }>`<br/>`<{ code }>REPEATBRK` | _`n -`_ | 等同于 [`<{ code }> CONT`](#instr-pushcont) [`REPEATBRK`](#instr-repeatbrk)。 |  |
+| **`E315`** | `REPEATENDBRK` | _`n -`_ | 类似于 [`REPEATEND`](#instr-repeatend)，但在将旧的 `c1` 值保存到原始 `c0`的 savelist 后，还将 `c1` 设置为原始 `c0`。等同于 [`SAMEALTSAVE`](#instr-samealtsave) [`REPEATEND`](#instr-repeatend)。 | `26` |
+| **`E316`** | `UNTILBRK` | _`c -`_ | 类似于 [`UNTIL`](#instr-until)，但也以与 [`REPEATBRK`](#instr-repeatbrk) 相同的方式修改 `c1`。 | `26` |
+| **`E316`** | `UNTILBRK:<{ code }>` | _`-`_ | 等同于 [`<{ code }> CONT`](#instr-pushcont) [`UNTILBRK`](#instr-untilbrk)。 |  |
+| **`E317`** | `UNTILENDBRK`<br/>`UNTILBRK:` | _`-`_ | 等同于 [`SAMEALTSAVE`](#instr-samealtsave) [`UNTILEND`](#instr-untilend)。 | `26` |
+| **`E318`** | `WHILEBRK` | _`c' c -`_ | 类似于 [`WHILE`](#instr-while)，但也以与 [`REPEATBRK`](#instr-repeatbrk) 相同的方式修改 `c1`。 | `26` |
+| **`E318`** | `WHILEBRK:<{ cond }>DO<{ code }>` | _`-`_ | 等同于 [`<{ cond }> CONT`](#instr-pushcont) [`<{ code }> CONT`](#instr-pushcont) [`WHILEBRK`](#instr-whilebrk)。 |  |
+| **`E319`** | `WHILEENDBRK` | _`c -`_ | 等同于 [`SAMEALTSAVE`](#instr-samealtsave) [`WHILEEND`](#instr-whileend)。 | `26` |
+| **`E31A`** | `AGAINBRK` | _`c -`_ | 类似于 [`AGAIN`](#instr-again)，但也以与 [`REPEATBRK`](#instr-repeatbrk) 相同的方式修改 `c1`。 | `26` |
+| **`E31A`** | `AGAINBRK:<{ code }>` | _`-`_ | 等同于 [`<{ code }> CONT`](#instr-pushcont) [`AGAINBRK`](#instr-againbrk)。 |  |
+| **`E31B`** | `AGAINENDBRK`<br/>`AGAINBRK:` | _`-`_ | 等同于 [`SAMEALTSAVE`](#instr-samealtsave) [`AGAINEND`](#instr-againend)。 | `26` |
+### 8.4 操作 continuation 栈
+这里的 `s"` 是[在 continuations 之间移动栈元素的费用](#11-gas-prices)。它等于结果栈的大小减去32（如果栈大小小于32，则为0）。
 
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`ECrn`** | `[r] [n] SETCONTARGS` | _`x_1 x_2...x_r c - c'`_ | Similar to [`[r] -1 SETCONTARGS`](#instr-setcontargs-n), but sets `c.nargs` to the final size of the stack of `c'` plus `n`. In other words, transforms `c` into a _closure_ or a _partially applied function_, with `0 <= n <= 14` arguments missing. | `26+s”` |
-| **`EC0n`** | `[n] SETNUMARGS` | _`c - c'`_ | Sets `c.nargs` to `n` plus the current depth of `c`'s stack, where `0 <= n <= 14`. If `c.nargs` is already set to a non-negative value, does nothing. | `26` |
-| **`ECrF`** | `[r] -1 SETCONTARGS` | _`x_1 x_2...x_r c - c'`_ | Pushes `0 <= r <= 15` values `x_1...x_r` into the stack of (a copy of) the continuation `c`, starting with `x_1`. If the final depth of `c`'s stack turns out to be greater than `c.nargs`, a stack overflow exception is generated. | `26+s”` |
-| **`ED0p`** | `[p] RETURNARGS` | _`-`_ | Leaves only the top `0 <= p <= 15` values in the current stack (somewhat similarly to [`ONLYTOPX`](#instr-onlytopx)), with all the unused bottom values not discarded, but saved into continuation `c0` in the same way as [`SETCONTARGS`](#instr-setcontargs-n) does. | `26+s”` |
-| **`ED10`** | `RETURNVARARGS` | _`p -`_ | Similar to [`RETURNARGS`](#instr-returnargs), but with Integer `0 <= p <= 255` taken from the stack. | `26+s”` |
-| **`ED11`** | `SETCONTVARARGS` | _`x_1 x_2...x_r c r n - c'`_ | Similar to [`SETCONTARGS`](#instr-setcontargs-n), but with `0 <= r <= 255` and `-1 <= n <= 255` taken from the stack. | `26+s”` |
-| **`ED12`** | `SETNUMVARARGS` | _`c n - c'`_ | `-1 <= n <= 255`<br/>If `n=-1`, this operation does nothing (`c'=c`).<br/>Otherwise its action is similar to [`[n] SETNUMARGS`](#instr-setnumargs), but with `n` taken from the stack. | `26` |
-### 8.5 Creating simple continuations and closures
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`ECrn`** | `[r] [n] SETCONTARGS` | _`x_1 x_2...x_r c - c'`_ | 类似于 [`[r] -1 SETCONTARGS`](#instr-setcontargs-n)，但将 `c.nargs` 设置为 `c'` 的栈的最终大小加上 `n`。换句话说，将 `c` 转换成一个_闭包_或_部分应用函数_，缺少 `0 <= n <= 14` 个参数。 | `26+s”` |
+| **`EC0n`** | `[n] SETNUMARGS` | _`c - c'`_ | 设置 `c.nargs` 为 `n` 加上 `c` 的当前栈的深度，其中 `0 <= n <= 14`。如果 `c.nargs` 已经设置为非负值，则不进行任何操作。 | `26` |
+| **`ECrF`** | `[r] -1 SETCONTARGS` | _`x_1 x_2...x_r c - c'`_ | 将 `0 <= r <= 15` 个值 `x_1...x_r` 推入（复制的）continuation `c` 的栈中，从 `x_1` 开始。如果 `c` 的栈最终深度超过了 `c.nargs`，将生成栈溢出异常。 | `26+s”` |
+| **`ED0p`** | `[p] RETURNARGS` | _`-`_ | 仅保留当前栈顶的 `0 <= p <= 15` 个值（类似于 [`ONLYTOPX`](#instr-onlytopx)），所有未使用的底部值不被丢弃，而是以与 [`SETCONTARGS`](#instr-setcontargs-n) 相同的方式保存到 continuation `c0` 中。 | `26+s”` |
+| **`ED10`** | `RETURNVARARGS` | _`p -`_ | 类似于 [`RETURNARGS`](#instr-returnargs)，但从栈中取整数 `0 <= p <= 255`。 | `26+s”` |
+| **`ED11`** | `SETCONTVARARGS` | _`x_1 x_2...x_r c r n - c'`_ | 类似于 [`SETCONTARGS`](#instr-setcontargs-n)，但从栈中取 `0 <= r <= 255` 和 `-1 <= n <= 255`。 | `26+s”` |
+| **`ED12`** | `SETNUMVARARGS` | _`c n - c'`_ | `-1 <= n <= 255`<br/>如果 `n=-1`，此操作不进行任何操作（`c'=c`）。<br/>否则其行为类似于 [`[n] SETNUMARGS`](#instr-setnumargs)，但 `n` 是从栈中取得的。 | `26` |
+### 8.5 创建简单的 continuations 和 闭包
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`ED1E`** | `BLESS` | _`s - c`_ | Transforms a _Slice_ `s` into a simple ordinary continuation `c`, with `c.code=s` and an empty stack and savelist. | `26` |
-| **`ED1F`** | `BLESSVARARGS` | _`x_1...x_r s r n - c`_ | Equivalent to [`ROT`](#instr-rot) [`BLESS`](#instr-bless) [`ROTREV`](#instr-rotrev) [`SETCONTVARARGS`](#instr-setcontvarargs). | `26+s”` |
-| **`EErn`** | `[r] [n] BLESSARGS` | _`x_1...x_r s - c`_ | `0 <= r <= 15`, `-1 <= n <= 14`<br/>Equivalent to [`BLESS`](#instr-bless) [`[r] [n] SETCONTARGS`](#instr-setcontargs-n).<br/>The value of `n` is represented inside the instruction by the 4-bit integer `n mod 16`. | `26` |
-| **`EE0n`** | `[n] BLESSNUMARGS` | _`s - c`_ | Also transforms a _Slice_ `s` into a _Continuation_ `c`, but sets `c.nargs` to `0 <= n <= 14`. | `26` |
-### 8.6 Operations with continuation savelists and control registers
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`ED1E`** | `BLESS` | _`s - c`_ | 将 _Slice_ `s` 转换为简单的普通 continuation `c`，其中 `c.code=s`，并且栈和 savelist 为空。 | `26` |
+| **`ED1F`** | `BLESSVARARGS` | _`x_1...x_r s r n - c`_ | 等同于 [`ROT`](#instr-rot) [`BLESS`](#instr-bless) [`ROTREV`](#instr-rotrev) [`SETCONTVARARGS`](#instr-setcontvarargs)。 | `26+s”` |
+| **`EErn`** | `[r] [n] BLESSARGS` | _`x_1...x_r s - c`_ | `0 <= r <= 15`, `-1 <= n <= 14`<br/>等同于 [`BLESS`](#instr-bless) [`[r] [n] SETCONTARGS`](#instr-setcontargs-n)。<br/>`n` 的值由 4 位整数 `n mod 16` 内部表示。 | `26` |
+| **`EE0n`** | `[n] BLESSNUMARGS` | _`s - c`_ | 也将 _Slice_ `s` 转换为 _Continuation_ `c`，但将 `c.nargs` 设置为 `0 <= n <= 14`。 | `26` |
+### 8.6 Continuation 保存列表和控制寄存器的操作
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`ED4i`** | `c[i] PUSHCTR`<br/>`c[i] PUSH` | _`- x`_ | Pushes the current value of control register `c(i)`. If the control register is not supported in the current codepage, or if it does not have a value, an exception is triggered. | `26` |
-| **`ED44`** | `c4 PUSHCTR`<br/>`c4 PUSH` | _`- x`_ | Pushes the “global data root'' cell reference, thus enabling access to persistent smart-contract data. | `26` |
-| **`ED5i`** | `c[i] POPCTR`<br/>`c[i] POP` | _`x - `_ | Pops a value `x` from the stack and stores it into control register `c(i)`, if supported in the current codepage. Notice that if a control register accepts only values of a specific type, a type-checking exception may occur. | `26` |
-| **`ED54`** | `c4 POPCTR`<br/>`c4 POP` | _`x -`_ | Sets the “global data root'' cell reference, thus allowing modification of persistent smart-contract data. | `26` |
-| **`ED6i`** | `c[i] SETCONT`<br/>`c[i] SETCONTCTR` | _`x c - c'`_ | Stores `x` into the savelist of continuation `c` as `c(i)`, and returns the resulting continuation `c'`. Almost all operations with continuations may be expressed in terms of [`SETCONTCTR`](#instr-setcontctr), [`POPCTR`](#instr-popctr), and [`PUSHCTR`](#instr-pushctr). | `26` |
-| **`ED7i`** | `c[i] SETRETCTR` | _`x - `_ | Equivalent to [`c0 PUSHCTR`](#instr-pushctr) [`c[i] SETCONTCTR`](#instr-setcontctr) [`c0 POPCTR`](#instr-popctr). | `26` |
-| **`ED8i`** | `c[i] SETALTCTR` | _`x - `_ | Equivalent to [`c1 PUSHCTR`](#instr-pushctr) [`c[i] SETCONTCTR`](#instr-setcontctr) [`c0 POPCTR`](#instr-popctr). | `26` |
-| **`ED9i`** | `c[i] POPSAVE`<br/>`c[i] POPCTRSAVE` | _`x -`_ | Similar to [`c[i] POPCTR`](#instr-popctr), but also saves the old value of `c[i]` into continuation `c0`.<br/>Equivalent (up to exceptions) to [`c[i] SAVECTR`](#instr-save) [`c[i] POPCTR`](#instr-popctr). | `26` |
-| **`EDAi`** | `c[i] SAVE`<br/>`c[i] SAVECTR` |  | Saves the current value of `c(i)` into the savelist of continuation `c0`. If an entry for `c[i]` is already present in the savelist of `c0`, nothing is done. Equivalent to [`c[i] PUSHCTR`](#instr-pushctr) [`c[i] SETRETCTR`](#instr-setretctr). | `26` |
-| **`EDBi`** | `c[i] SAVEALT`<br/>`c[i] SAVEALTCTR` |  | Similar to [`c[i] SAVE`](#instr-save), but saves the current value of `c[i]` into the savelist of `c1`, not `c0`. | `26` |
-| **`EDCi`** | `c[i] SAVEBOTH`<br/>`c[i] SAVEBOTHCTR` |  | Equivalent to [`DUP`](#instr-dup) [`c[i] SAVE`](#instr-save) [`c[i] SAVEALT`](#instr-savealt). | `26` |
-| **`EDE0`** | `PUSHCTRX` | _`i - x`_ | Similar to [`c[i] PUSHCTR`](#instr-pushctr), but with `i`, `0 <= i <= 255`, taken from the stack.<br/>Notice that this primitive is one of the few “exotic'' primitives, which are not polymorphic like stack manipulation primitives, and at the same time do not have well-defined types of parameters and return values, because the type of `x` depends on `i`. | `26` |
-| **`EDE1`** | `POPCTRX` | _`x i - `_ | Similar to [`c[i] POPCTR`](#instr-popctr), but with `0 <= i <= 255` from the stack. | `26` |
-| **`EDE2`** | `SETCONTCTRX` | _`x c i - c'`_ | Similar to [`c[i] SETCONTCTR`](#instr-setcontctr), but with `0 <= i <= 255` from the stack. | `26` |
-| **`EDF0`** | `COMPOS`<br/>`BOOLAND` | _`c c' - c''`_ | Computes the composition `compose0(c, c’)`, which has the meaning of “perform `c`, and, if successful, perform `c'`'' (if `c` is a boolean circuit) or simply “perform `c`, then `c'`''. Equivalent to [`SWAP`](#instr-swap) [`c0 SETCONT`](#instr-setcontctr). | `26` |
-| **`EDF1`** | `COMPOSALT`<br/>`BOOLOR` | _`c c' - c''`_ | Computes the alternative composition `compose1(c, c’)`, which has the meaning of “perform `c`, and, if not successful, perform `c'`'' (if `c` is a boolean circuit). Equivalent to [`SWAP`](#instr-swap) [`c1 SETCONT`](#instr-setcontctr). | `26` |
-| **`EDF2`** | `COMPOSBOTH` | _`c c' - c''`_ | Computes composition `compose1(compose0(c, c’), c’)`, which has the meaning of “compute boolean circuit `c`, then compute `c'`, regardless of the result of `c`''. | `26` |
-| **`EDF3`** | `ATEXIT` | _`c - `_ | Sets `c0` to `compose0(c, c0)`. In other words, `c` will be executed before exiting current subroutine. | `26` |
-| **`EDF3`** | `ATEXIT:<{ code }>`<br/>`<{ code }>ATEXIT` | _`-`_ | Equivalent to [`<{ code }> CONT`](#instr-pushcont) [`ATEXIT`](#instr-atexit). |  |
-| **`EDF4`** | `ATEXITALT` | _`c - `_ | Sets `c1` to `compose1(c, c1)`. In other words, `c` will be executed before exiting current subroutine by its alternative return path. | `26` |
-| **`EDF4`** | `ATEXITALT:<{ code }>`<br/>`<{ code }>ATEXITALT` | _`-`_ | Equivalent to [`<{ code }> CONT`](#instr-pushcont) [`ATEXITALT`](#instr-atexitalt). |  |
-| **`EDF5`** | `SETEXITALT` | _`c - `_ | Sets `c1` to `compose1(compose0(c, c0), c1)`,<br/>In this way, a subsequent [`RETALT`](#instr-retalt) will first execute `c`, then transfer control to the original `c0`. This can be used, for instance, to exit from nested loops. | `26` |
-| **`EDF6`** | `THENRET` | _`c - c'`_ | Computes `compose0(c, c0)`. | `26` |
-| **`EDF7`** | `THENRETALT` | _`c - c'`_ | Computes `compose0(c, c1)` | `26` |
-| **`EDF8`** | `INVERT` | _`-`_ | Interchanges `c0` and `c1`. | `26` |
-| **`EDF9`** | `BOOLEVAL` | _`c - ?`_ | Performs `cc:=compose1(compose0(c, compose0(-1 PUSHINT, cc)), compose0(0 PUSHINT, cc))`. If `c` represents a boolean circuit, the net effect is to evaluate it and push either `-1` or `0` into the stack before continuing. | `26` |
-| **`EDFA`** | `SAMEALT` | _`-`_ | Sets `c1` to `c0`. Equivalent to [`c0 PUSHCTR`](#instr-pushctr) [`c1 POPCTR`](#instr-popctr). | `26` |
-| **`EDFB`** | `SAMEALTSAVE` | _`-`_ | Sets `c1` to `c0`, but first saves the old value of `c1` into the savelist of `c0`.<br/>Equivalent to [`c1 SAVE`](#instr-save) [`SAMEALT`](#instr-samealt). | `26` |
-### 8.7 Dictionary subroutine calls and jumps
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`ED4i`** | `c[i] PUSHCTR`<br/>`c[i] PUSH` | _`- x`_ | 推送控制寄存器 `c(i)` 的当前值。如果当前代码页不支持该控制寄存器，或者它没有值，则触发异常。 | `26` |
+| **`ED44`** | `c4 PUSHCTR`<br/>`c4 PUSH` | _`- x`_ | 推送“全局数据根”cell引用，从而使访问持久智能合约数据成为可能。 | `26` |
+| **`ED5i`** | `c[i] POPCTR`<br/>`c[i] POP` | _`x - `_ | 从栈中弹出一个值 `x` 并存储到控制寄存器 `c(i)` 中（如果当前代码页支持）。注意，如果控制寄存器仅接受特定类型的值，则可能发生类型检查异常。 | `26` |
+| **`ED54`** | `c4 POPCTR`<br/>`c4 POP` | _`x -`_ | 设置“全局数据根”cell引用，从而允许修改持久智能合约数据。 | `26` |
+| **`ED6i`** | `c[i] SETCONT`<br/>`c[i] SETCONTCTR` | _`x c - c'`_ | 将 `x` 存储到 continuation `c` 的 savelist 中作为 `c(i)`，并返回结果 continuation `c'`。几乎所有与 continuations 的操作都可以用 [`SETCONTCTR`](#instr-setcontctr)、[`POPCTR`](#instr-popctr) 和 [`PUSHCTR`](#instr-pushctr) 来表达。 | `26` |
+| **`ED7i`** | `c[i] SETRETCTR` | _`x - `_ | 等同于 [`c0 PUSHCTR`](#instr-pushctr) [`c[i] SETCONTCTR`](#instr-setcontctr) [`c0 POPCTR`](#instr-popctr)。 | `26` |
+| **`ED8i`** | `c[i] SETALTCTR` | _`x - `_ | 等同于 [`c1 PUSHCTR`](#instr-pushctr) [`c[i] SETCONTCTR`](#instr-setcontctr) [`c0 POPCTR`](#instr-popctr)。 | `26` |
+| **`ED9i`** | `c[i] POPSAVE`<br/>`c[i] POPCTRSAVE` | _`x -`_ | 类似于 [`c[i] POPCTR`](#instr-popctr)，但还将 `c[i]` 的旧值保存到 continuation `c0` 中。<br/>等同于（直到异常）[`c[i] SAVECTR`](#instr-save) [`c[i] POPCTR`](#instr-popctr)。 | `26` |
+| **`EDAi`** | `c[i] SAVE`<br/>`c[i] SAVECTR` |  | 将 `c(i)` 的当前值保存到 continuation `c0` 的 savelist 中。如果 `c0` 的 savelist 中已存在 `c[i]` 的条目，则不做任何操作。等同于 [`c[i] PUSHCTR`](#instr-pushctr) [`c[i] SETRETCTR`](#instr-setretctr)。 | `26` |
+| **`EDBi`** | `c[i] SAVEALT`<br/>`c[i] SAVEALTCTR` |  | 类似于 [`c[i] SAVE`](#instr-save)，但将 `c[i]` 的当前值保存到 `c1`（而不是 `c0`）的 savelist 中。 | `26` |
+| **`EDCi`** | `c[i] SAVEBOTH`<br/>`c[i] SAVEBOTHCTR` |  | 等同于 [`DUP`](#instr-dup) [`c[i] SAVE`](#instr-save) [`c[i] SAVEALT`](#instr-savealt)。 | `26` |
+| **`EDE0`** | `PUSHCTRX` | _`i - x`_ | 类似于 [`c[i] PUSHCTR`](#instr-pushctr)，但 `i`, `0 <= i <= 255`, 来自栈。<br/>注意，这个原语是少数“异乎寻常”的原语之一，它们不像栈操作原语那样是多态的，同时参数和返回值的类型也没有良好定义，因为 `x` 的类型取决于 `i`。 | `26` |
+| **`EDE1`** | `POPCTRX` | _`x i - `_ | 类似于 [`c[i] POPCTR`](#instr-popctr)，但 `0 <= i <= 255` 来自栈。 | `26` |
+| **`EDE2`** | `SETCONTCTRX` | _`x c i - c'`_ | 类似于 [`c[i] SETCONTCTR`](#instr-setcontctr)，但 `0 <= i <= 255` 来自栈。 | `26` |
+| **`EDF0`** | `COMPOS`<br/>`BOOLAND` | _`c c' - c''`_ | 计算组合 `compose0(c, c’)`，它的意义为“执行 `c`，如果成功，执行 `c'`”（如果 `c` 是布尔电路）或简单地“执行 `c`，然后执行 `c'`”。等同于 [`SWAP`](#instr-swap) [`c0 SETCONT`](#instr-setcontctr)。 | `26` |
+| **`EDF1`** | `COMPOSALT`<br/>`BOOLOR` | _`c c' - c''`_ | 计算替代组合 `compose1(c, c’)`，它的意义为“执行 `c`，如果不成功，执行 `c'`”（如果 `c` 是布尔电路）。等同于 [`SWAP`](#instr-swap) [`c1 SETCONT`](#instr-setcontctr)。 | `26` |
+| **`EDF2`** | `COMPOSBOTH` | _`c c' - c''`_ | 计算组合 `compose1(compose0(c, c’), c’)`，它的意义为“计算布尔电路 `c`，然后无论 `c` 的结果如何，都计算 `c'`”。 | `26` |
+| **`EDF3`** | `ATEXIT` | _`c - `_ | 将 `c0` 设置为 `compose0(c, c0)`。换句话说，`c` 将在退出当前子程序之前执行。 | `26` |
+| **`EDF3`** | `ATEXIT:<{ code }>`<br/>`<{ code }>ATEXIT` | _`-`_ | 等同于 [`<{ code }> CONT`](#instr-pushcont) [`ATEXIT`](#instr-atexit)。 |  |
+| **`EDF4`** | `ATEXITALT` | _`c - `_ | 将 `c1` 设置为 `compose1(c, c1)`。换句话说，`c` 将在通过其替代返回路径退出当前子程序之前执行。 | `26` |
+| **`EDF4`** | `ATEXITALT:<{ code }>`<br/>`<{ code }>ATEXITALT` | _`-`_ | 等同于 [`<{ code }> CONT`](#instr-pushcont) [`ATEXITALT`](#instr-atexitalt)。 |  |
+| **`EDF5`** | `SETEXITALT` | _`c - `_ | 将 `c1` 设置为 `compose1(compose0(c, c0), c1)`，<br/>这样，后续的 [`RETALT`](#instr-retalt) 将首先执行 `c`，然后将控制权转移给原始的 `c0`。例如，这可以用来从嵌套循环中退出。 | `26` |
+| **`EDF6`** | `THENRET` | _`c - c'`_ | 计算 `compose0(c, c0)`。 | `26` |
+| **`EDF7`** | `THENRETALT` | _`c - c'`_ | 计算 `compose0(c, c1)` | `26` |
+| **`EDF8`** | `INVERT` | _`-`_ | 交换 `c0` 和 `c1`。 | `26` |
+| **`EDF9`** | `BOOLEVAL` | _`c - ?`_ | 执行 `cc:=compose1(compose0(c, compose0(-1 PUSHINT, cc)), compose0(0 PUSHINT, cc))`。如果 `c` 代表一个布尔电路，其最终效果是评估它，并在继续执行之前将 `-1` 或 `0` 推入栈中。 | `26` |
+| **`EDFA`** | `SAMEALT` | _`-`_ | 将 `c1` 设置为 `c0`。等同于 [`c0 PUSHCTR`](#instr-pushctr) [`c1 POPCTR`](#instr-popctr)。 | `26` |
+| **`EDFB`** | `SAMEALTSAVE` | _`-`_ | 将 `c1` 设置为 `c0`，但首先将 `c1` 的旧值保存到 `c0` 的 savelist 中。<br/>等同于 [`c1 SAVE`](#instr-save) [`SAMEALT`](#instr-samealt)。 | `26` |
+### 8.7 字典子程序调用和跳转
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F0nn`** | `[nn] CALL`<br/>`[nn] CALLDICT` | _`- nn`_ | Calls the continuation in `c3`, pushing integer `0 <= nn <= 255` into its stack as an argument.<br/>Approximately equivalent to [`[nn] PUSHINT`](#instr-pushint-4) [`c3 PUSHCTR`](#instr-pushctr) [`EXECUTE`](#instr-execute). |  |
-| **`F12_n`** | `[n] CALL`<br/>`[n] CALLDICT` | _`- n`_ | For `0 <= n < 2^14`, an encoding of [`[n] CALL`](#instr-calldict) for larger values of `n`. |  |
-| **`F16_n`** | `[n] JMP` | _` - n`_ | Jumps to the continuation in `c3`, pushing integer `0 <= n < 2^14` as its argument.<br/>Approximately equivalent to [`n PUSHINT`](#instr-pushint-4) [`c3 PUSHCTR`](#instr-pushctr) [`JMPX`](#instr-jmpx). |  |
-| **`F1A_n`** | `[n] PREPARE`<br/>`[n] PREPAREDICT` | _` - n c`_ | Equivalent to [`n PUSHINT`](#instr-pushint-4) [`c3 PUSHCTR`](#instr-pushctr), for `0 <= n < 2^14`.<br/>In this way, [`[n] CALL`](#instr-calldict) is approximately equivalent to [`[n] PREPARE`](#instr-preparedict) [`EXECUTE`](#instr-execute), and [`[n] JMP`](#instr-jmpdict) is approximately equivalent to [`[n] PREPARE`](#instr-preparedict) [`JMPX`](#instr-jmpx).<br/>One might use, for instance, [`CALLXARGS`](#instr-callxargs) or [`CALLCC`](#instr-callcc) instead of [`EXECUTE`](#instr-execute) here. |  |
+| **`F0nn`** | `[nn] CALL`<br/>`[nn] CALLDICT` | _`- nn`_ | 调用 `c3` 中的 continuation，将整数 `0 <= nn <= 255` 作为参数推入其栈。<br/>大致相当于 [`[nn] PUSHINT`](#instr-pushint-4) [`c3 PUSHCTR`](#instr-pushctr) [`EXECUTE`](#instr-execute)。 |  |
+| **`F12_n`** | `[n] CALL`<br/>`[n] CALLDICT` | _`- n`_ | 对于 `0 <= n < 2^14`，这是更大值的 `n` 的 [`[n] CALL`](#instr-calldict) 的编码。 |  |
+| **`F16_n`** | `[n] JMP` | _` - n`_ | 跳转到 `c3` 中的 continuation，将整数 `0 <= n < 2^14` 作为其参数推入。<br/>大致相当于 [`n PUSHINT`](#instr-pushint-4) [`c3 PUSHCTR`](#instr-pushctr) [`JMPX`](#instr-jmpx)。 |  |
+| **`F1A_n`** | `[n] PREPARE`<br/>`[n] PREPAREDICT` | _` - n c`_ | 等同于 [`n PUSHINT`](#instr-pushint-4) [`c3 PUSHCTR`](#instr-pushctr)，适用于 `0 <= n < 2^14`。<br/>这样，[`[n] CALL`](#instr-calldict) 大致等同于 [`[n] PREPARE`](#instr-preparedict) [`EXECUTE`](#instr-execute)，而 [`[n] JMP`](#instr-jmpdict) 大致等同于 [`[n] PREPARE`](#instr-preparedict) [`JMPX`](#instr-jmpx)。<br/>例如，这里可以使用 [`CALLXARGS`](#instr-callxargs) 或 [`CALLCC`](#instr-callcc) 代替 [`EXECUTE`](#instr-execute)。 |  |
 
-## 9 Exception generating and handling primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+## 9 异常产生与处理原语
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F22_n`** | `[n] THROW` | _` - 0 n`_ | Throws exception `0 <= n <= 63` with parameter zero.<br/>In other words, it transfers control to the continuation in `c2`, pushing `0` and `n` into its stack, and discarding the old stack altogether. | `76` |
-| **`F26_n`** | `[n] THROWIF` | _`f - `_ | Throws exception `0 <= n <= 63` with  parameter zero only if integer `f!=0`. | `26/76` |
-| **`F2A_n`** | `[n] THROWIFNOT` | _`f - `_ | Throws exception `0 <= n <= 63` with parameter zero only if integer `f=0`. | `26/76` |
-| **`F2C4_n`** | `[n] THROW` | _`- 0 nn`_ | For `0 <= n < 2^11`, an encoding of [`[n] THROW`](#instr-throw-short) for larger values of `n`. | `84` |
-| **`F2CC_n`** | `[n] THROWARG` | _`x - x nn`_ | Throws exception `0 <= n <  2^11` with parameter `x`, by copying `x` and `n` into the stack of `c2` and transferring control to `c2`. | `84` |
-| **`F2D4_n`** | `[n] THROWIF` | _`f - `_ | For `0 <= n < 2^11`, an encoding of [`[n] THROWIF`](#instr-throwif-short) for larger values of `n`. | `34/84` |
-| **`F2DC_n`** | `[n] THROWARGIF` | _`x f - `_ | Throws exception `0 <= nn < 2^11` with parameter `x` only if integer `f!=0`. | `34/84` |
-| **`F2E4_n`** | `[n] THROWIFNOT` | _`f - `_ | For `0 <= n < 2^11`, an encoding of [`[n] THROWIFNOT`](#instr-throwifnot-short) for larger values of `n`. | `34/84` |
-| **`F2EC_n`** | `[n] THROWARGIFNOT` | _`x f - `_ | Throws exception `0 <= n < 2^11` with parameter `x` only if integer `f=0`. | `34/84` |
-| **`F2F0`** | `THROWANY` | _`n - 0 n`_ | Throws exception `0 <= n < 2^16` with parameter zero.<br/>Approximately equivalent to [`ZERO`](#instr-zero) [`SWAP`](#instr-swap) [`THROWARGANY`](#instr-throwargany). | `76` |
-| **`F2F1`** | `THROWARGANY` | _`x n - x n`_ | Throws exception `0 <= n < 2^16` with parameter `x`, transferring control to the continuation in `c2`.<br/>Approximately equivalent to [`c2 PUSHCTR`](#instr-pushctr) [`2 JMPXARGS`](#instr-jmpxargs). | `76` |
-| **`F2F2`** | `THROWANYIF` | _`n f - `_ | Throws exception `0 <= n < 2^16` with parameter zero only if `f!=0`. | `26/76` |
-| **`F2F3`** | `THROWARGANYIF` | _`x n f - `_ | Throws exception `0 <= n<2^16` with parameter `x` only if `f!=0`. | `26/76` |
-| **`F2F4`** | `THROWANYIFNOT` | _`n f - `_ | Throws exception `0 <= n<2^16` with parameter zero only if `f=0`. | `26/76` |
-| **`F2F5`** | `THROWARGANYIFNOT` | _`x n f - `_ | Throws exception `0 <= n<2^16` with parameter `x` only if `f=0`. | `26/76` |
-| **`F2FF`** | `TRY` | _`c c' - `_ | Sets `c2` to `c'`, first saving the old value of `c2` both into the savelist of `c'` and into the savelist of the current continuation, which is stored into `c.c0` and `c'.c0`. Then runs `c` similarly to [`EXECUTE`](#instr-execute). If `c` does not throw any exceptions, the original value of `c2` is automatically restored on return from `c`. If an exception occurs, the execution is transferred to `c'`, but the original value of `c2` is restored in the process, so that `c'` can re-throw the exception by [`THROWANY`](#instr-throwany) if it cannot handle it by itself. | `26` |
-| **`F2FF`** | `TRY:<{ code1 }>CATCH<{ code2 }>` | _`-`_ | Equivalent to [`<{ code1 }> CONT`](#instr-pushcont) [`<{ code2 }> CONT`](#instr-pushcont) [`TRY`](#instr-try). |  |
-| **`F3pr`** | `[p] [r] TRYARGS` | _`c c' - `_ | Similar to [`TRY`](#instr-try), but with [`[p] [r] CALLXARGS`](#instr-callxargs) internally used instead of [`EXECUTE`](#instr-execute).<br/>In this way, all but the top `0 <= p <= 15` stack elements will be saved into current continuation's stack, and then restored upon return from either `c` or `c'`, with the top `0 <= r <= 15` values of the resulting stack of `c` or `c'` copied as return values. | `26` |
+| **`F22_n`** | `[n] THROW` | _` - 0 n`_ | 抛出参数为零的 `0 <= n <= 63` 异常。<br/>换句话说，它将控制权转移到 `c2` 中的continuation，将 `0` 和 `n` 推入其堆栈，并彻底丢弃旧堆栈。 | `76` |
+| **`F26_n`** | `[n] THROWIF` | _`f - `_ | 只有当整数 `f!=0` 时，才抛出参数为零的 `0 <= n <= 63` 异常。 | `26/76` |
+| **`F2A_n`** | `[n] THROWIFNOT` | _`f - `_ | 只有当整数 `f=0` 时，才抛出参数为零的 `0 <= n <= 63` 异常。 | `26/76` |
+| **`F2C4_n`** | `[n] THROW` | _`- 0 nn`_ | 对于 `0 <= n < 2^11`，是 [`[n] THROW`](#instr-throw-short) 的编码，用于 `n` 的较大值。 | `84` |
+| **`F2CC_n`** | `[n] THROWARG` | _`x - x nn`_ | 抛出带有参数 `x` 的 `0 <= n <  2^11` 异常，通过将 `x` 和 `n` 复制到 `c2` 的堆栈并将控制权转移给 `c2`。 | `84` |
+| **`F2D4_n`** | `[n] THROWIF` | _`f - `_ | 对于 `0 <= n < 2^11`，是 [`[n] THROWIF`](#instr-throwif-short) 的编码，用于 `n` 的较大值。 | `34/84` |
+| **`F2DC_n`** | `[n] THROWARGIF` | _`x f - `_ | 只有当整数 `f!=0` 时，才抛出带有参数 `x` 的 `0 <= nn < 2^11` 异常。 | `34/84` |
+| **`F2E4_n`** | `[n] THROWIFNOT` | _`f - `_ | 对于 `0 <= n < 2^11`，是 [`[n] THROWIFNOT`](#instr-throwifnot-short) 的编码，用于 `n` 的较大值。 | `34/84` |
+| **`F2EC_n`** | `[n] THROWARGIFNOT` | _`x f - `_ | 只有当整数 `f=0` 时，才抛出带有参数 `x` 的 `0 <= n < 2^11` 异常。 | `34/84` |
+| **`F2F0`** | `THROWANY` | _`n - 0 n`_ | 抛出参数为零的 `0 <= n < 2^16` 异常。<br/>大致相当于 [`ZERO`](#instr-zero) [`SWAP`](#instr-swap) [`THROWARGANY`](#instr-throwargany)。 | `76` |
+| **`F2F1`** | `THROWARGANY` | _`x n - x n`_ | 抛出带有参数 `x` 的 `0 <= n < 2^16` 异常，将控制权转移到 `c2` 中。<br/>大致相当于 [`c2 PUSHCTR`](#instr-pushctr) [`2 JMPXARGS`](#instr-jmpxargs)。 | `76` |
+| **`F2F2`** | `THROWANYIF` | _`n f - `_ | 只有当 `f!=0` 时，才抛出参数为零的 `0 <= n < 2^16` 异常。 | `26/76` |
+| **`F2F3`** | `THROWARGANYIF` | _`x n f - `_ | 只有当 `f!=0` 时，才抛出带有参数 `x` 的 `0 <= n<2^16` 异常。 | `26/76` |
+| **`F2F4`** | `THROWANYIFNOT` | _`n f - `_ | 只有当 `f=0` 时，才抛出参数为零的 `0 <= n<2^16` 异常。 | `26/76` |
+| **`F2F5`** | `THROWARGANYIFNOT` | _`x n f - `_ | 只有当 `f=0` 时，才抛出带有参数 `x` 的 `0 <= n<2^16` 异常。 | `26/76` |
+| **`F2FF`** | `TRY` | _`c c' - `_ | 设置 `c2` 为 `c'`，首先将 `c2` 的旧值同时保存到 `c'` 的保存列表和当前continuation的保存列表中，该当前continuation存储到 `c.c0` 和 `c'.c0` 中。然后类似于 [`EXECUTE`](#instr-execute) 运行 `c`。如果 `c` 没有引发任何异常，从 `c` 返回时会自动恢复 `c2` 的原始值。如果发生异常，则执行权转移到 `c'`，但在此过程中恢复了 `c2` 的原始值，以便 `c'` 可以通过 [`THROWANY`](#instr-throwany) 重新抛出异常（如果它自己无法处理）。 | `26` |
+| **`F2FF`** | `TRY:<{ code1 }>CATCH<{ code2 }>` | _`-`_ | 等效于 [`<{ code1 }> CONT`](#instr-pushcont) [`<{ code2 }> CONT`](#instr-pushcont) [`TRY`](#instr-try)。 |  |
+| **`F3pr`** | `[p] [r] TRYARGS` | _`c c' - `_ | 类似于 [`TRY`](#instr-try)，但内部使用的是 [`[p] [r] CALLXARGS`](#instr-callxargs) 而不是 [`EXECUTE`](#instr-execute)。<br/>这样，顶部 `0 <= p <= 15` 堆栈元素以外的所有元素将保存到当前continuation的堆栈中，然后从 `c` 或 `c'` 返回时恢复，并将 `c` 或 `c'` 的结果堆栈的顶部 `0 <= r <= 15` 值作为返回值复制。 | `26` |
 
-## 10 Dictionary manipulation primitives
-The gas consumption of most dictionary operations is not fixed, it depends on the contents of the given dictionary.
-### 10.1 Dictionary creation
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+## 10 字典操作原语
+大多数字典操作的燃气消耗不是固定的，它取决于给定字典的内容。
+### 10.1 字典创建
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`6D`** | `NEWDICT` | _` - D`_ | Returns a new empty dictionary.<br/>It is an alternative mnemonics for [`PUSHNULL`](#instr-null). | `18` |
-| **`6E`** | `DICTEMPTY` | _`D - ?`_ | Checks whether dictionary `D` is empty, and returns `-1` or `0` accordingly.<br/>It is an alternative mnemonics for [`ISNULL`](#instr-isnull). | `18` |
-### 10.2 Dictionary serialization and deserialization
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`6D`** | `NEWDICT` | _` - D`_ | 返回一个新的空字典。<br/>它是 [`PUSHNULL`](#instr-null) 的另一种助记符。 | `18` |
+| **`6E`** | `DICTEMPTY` | _`D - ?`_ | 检查字典 `D` 是否为空，并相应地返回 `-1` 或 `0`。<br/>它是 [`ISNULL`](#instr-isnull) 的另一种助记符。 | `18` |
+### 10.2 字典序列化与反序列化
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`CE`** | `STDICTS`<br/>`` | _`s b - b'`_ | Stores a _Slice_-represented dictionary `s` into _Builder_ `b`.<br/>It is actually a synonym for [`STSLICE`](#instr-stslice). | `18` |
-| **`F400`** | `STDICT`<br/>`STOPTREF` | _`D b - b'`_ | Stores dictionary `D` into _Builder_ `b`, returing the resulting _Builder_ `b'`.<br/>In other words, if `D` is a cell, performs [`STONE`](#instr-stone) and [`STREF`](#instr-stref); if `D` is _Null_, performs [`NIP`](#instr-nip) and [`STZERO`](#instr-stzero); otherwise throws a type checking exception. | `26` |
-| **`F401`** | `SKIPDICT`<br/>`SKIPOPTREF` | _`s - s'`_ | Equivalent to [`LDDICT`](#instr-lddict) [`NIP`](#instr-nip). | `26` |
-| **`F402`** | `LDDICTS` | _`s - s' s''`_ | Loads (parses) a (_Slice_-represented) dictionary `s'` from _Slice_ `s`, and returns the remainder of `s` as `s''`.<br/>This is a “split function'' for all `HashmapE(n,X)` dictionary types. | `26` |
-| **`F403`** | `PLDDICTS` | _`s - s'`_ | Preloads a (_Slice_-represented) dictionary `s'` from _Slice_ `s`.<br/>Approximately equivalent to [`LDDICTS`](#instr-lddicts) [`DROP`](#instr-drop). | `26` |
-| **`F404`** | `LDDICT`<br/>`LDOPTREF` | _`s - D s'`_ | Loads (parses) a dictionary `D` from _Slice_ `s`, and returns the remainder of `s` as `s'`. May be applied to dictionaries or to values of arbitrary `(^Y)?` types. | `26` |
-| **`F405`** | `PLDDICT`<br/>`PLDOPTREF` | _`s - D`_ | Preloads a dictionary `D` from _Slice_ `s`.<br/>Approximately equivalent to [`LDDICT`](#instr-lddict) [`DROP`](#instr-drop). | `26` |
-| **`F406`** | `LDDICTQ` | _`s - D s' -1 or s 0`_ | A quiet version of [`LDDICT`](#instr-lddict). | `26` |
-| **`F407`** | `PLDDICTQ` | _`s - D -1 or 0`_ | A quiet version of [`PLDDICT`](#instr-plddict). | `26` |
-### 10.3 Get dictionary operations
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`CE`** | `STDICTS`<br/>`` | _`s b - b'`_ | 将以_切片_表示的字典 `s` 存储进_构建器_ `b`中。<br/>实际上，这是 [`STSLICE`](#instr-stslice) 的同义词。 | `18` |
+| **`F400`** | `STDICT`<br/>`STOPTREF` | _`D b - b'`_ | 将字典 `D` 存入_构建器_ `b`，返回结果 _构建器_ `b'`。<br/>换言之，如果 `D` 是一个cell，执行 [`STONE`](#instr-stone) 和 [`STREF`](#instr-stref)；如果 `D` 是 _Null_，执行 [`NIP`](#instr-nip) 和 [`STZERO`](#instr-stzero)；否则抛出类型检查异常。 | `26` |
+| **`F401`** | `SKIPDICT`<br/>`SKIPOPTREF` | _`s - s'`_ | 相当于 [`LDDICT`](#instr-lddict) [`NIP`](#instr-nip)。 | `26` |
+| **`F402`** | `LDDICTS` | _`s - s' s''`_ | 从_切片_ `s`中加载（解析）以_切片_表示的字典 `s'`，并将 `s`的剩余部分作为 `s''` 返回。<br/>这是所有 `HashmapE(n,X)` 类型字典的“分裂函数”。 | `26` |
+| **`F403`** | `PLDDICTS` | _`s - s'`_ | 从_切片_ `s`中预加载以_切片_表示的字典 `s'`。<br/>大致相当于 [`LDDICTS`](#instr-lddicts) [`DROP`](#instr-drop)。 | `26` |
+| **`F404`** | `LDDICT`<br/>`LDOPTREF` | _`s - D s'`_ | 从_切片_ `s`中加载（解析）字典 `D`，并将 `s`的剩余部分作为 `s'` 返回。可应用于字典或任意 `(^Y)?` 类型的值。 | `26` |
+| **`F405`** | `PLDDICT`<br/>`PLDOPTREF` | _`s - D`_ | 从_切片_ `s`中预加载字典 `D`。<br/>大致相当于 [`LDDICT`](#instr-lddict) [`DROP`](#instr-drop)。 | `26` |
+| **`F406`** | `LDDICTQ` | _`s - D s' -1或 s 0`_ | [`LDDICT`](#instr-lddict) 的静默版本。 | `26` |
+| **`F407`** | `PLDDICTQ` | _`s - D -1或0`_ | [`PLDDICT`](#instr-plddict) 的静默版本。 | `26` |
+### 10.3 获取字典操作
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F40A`** | `DICTGET` | _`k D n - x -1 or 0`_ | Looks up key `k` (represented by a _Slice_, the first `0 <= n <= 1023` data bits of which are used as a key) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys.<br/>On success, returns the value found as a _Slice_ `x`. |  |
-| **`F40B`** | `DICTGETREF` | _`k D n - c -1 or 0`_ | Similar to [`DICTGET`](#instr-dictget), but with a [`LDREF`](#instr-ldref) [`ENDS`](#instr-ends) applied to `x` on success.<br/>This operation is useful for dictionaries of type `HashmapE(n,^Y)`. |  |
-| **`F40C`** | `DICTIGET` | _`i D n - x -1 or 0`_ | Similar to [`DICTGET`](#instr-dictget), but with a signed (big-endian) `n`-bit _Integer_ `i` as a key. If `i` does not fit into `n` bits, returns `0`. If `i` is a `NaN`, throws an integer overflow exception. |  |
-| **`F40D`** | `DICTIGETREF` | _`i D n - c -1 or 0`_ | Combines [`DICTIGET`](#instr-dictiget) with [`DICTGETREF`](#instr-dictgetref): it uses signed `n`-bit _Integer_ `i` as a key and returns a _Cell_ instead of a _Slice_ on success. |  |
-| **`F40E`** | `DICTUGET` | _`i D n - x -1 or 0`_ | Similar to [`DICTIGET`](#instr-dictiget), but with _unsigned_ (big-endian) `n`-bit _Integer_ `i` used as a key. |  |
-| **`F40F`** | `DICTUGETREF` | _`i D n - c -1 or 0`_ | Similar to [`DICTIGETREF`](#instr-dictigetref), but with an unsigned `n`-bit _Integer_ key `i`. |  |
-### 10.4 Set/Replace/Add dictionary operations
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`F40A`** | `DICTGET` | _`k D n - x -1或0`_ | 在类型为 `HashmapE(n,X)` 且拥有 `n`-位键的字典 `D` 中查找键 `k`（由_切片_表示，其前 `0 <= n <= 1023` 数据位被用作键）。<br/>成功时，以_切片_ `x` 的形式返回找到的值。 |  |
+| **`F40B`** | `DICTGETREF` | _`k D n - c -1或0`_ | 与 [`DICTGET`](#instr-dictget) 类似，但在成功时对 `x` 应用 [`LDREF`](#instr-ldref) [`ENDS`](#instr-ends)。<br/>此操作对于类型为 `HashmapE(n,^Y)` 的字典很有用。 |  |
+| **`F40C`** | `DICTIGET` | _`i D n - x -1或0`_ | 与 [`DICTGET`](#instr-dictget) 类似，但使用带符号的（大端）`n`-位 _整型_ `i` 作为键。如果 `i` 不能放入 `n` 位，则返回 `0`。如果 `i` 是 `NaN`，抛出整数溢出异常。 |  |
+| **`F40D`** | `DICTIGETREF` | _`i D n - c -1或0`_ | 组合 [`DICTIGET`](#instr-dictiget) 与 [`DICTGETREF`](#instr-dictgetref)：它使用带符号的 `n`-位 _整型_ `i` 作为键，并在成功时返回 _cell_ 而不是_切片_。 |  |
+| **`F40E`** | `DICTUGET` | _`i D n - x -1或0`_ | 与 [`DICTIGET`](#instr-dictiget) 类似，但使用_无符号_的（大端）`n`-位 _整型_ `i` 作为键。 |  |
+| **`F40F`** | `DICTUGETREF` | _`i D n - c -1或0`_ | 与 [`DICTIGETREF`](#instr-dictigetref) 类似，但使用一个无符号 `n`-位 _整型_ 键 `i`。 |  |
+### 10.4 设置/替换/添加字典操作
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F412`** | `DICTSET` | _`x k D n - D'`_ | Sets the value associated with `n`-bit key `k` (represented by a _Slice_ as in [`DICTGET`](#instr-dictget)) in dictionary `D` (also represented by a _Slice_) to value `x` (again a _Slice_), and returns the resulting dictionary as `D'`. |  |
-| **`F413`** | `DICTSETREF` | _`c k D n - D'`_ | Similar to [`DICTSET`](#instr-dictset), but with the value set to a reference to _Cell_ `c`. |  |
-| **`F414`** | `DICTISET` | _`x i D n - D'`_ | Similar to [`DICTSET`](#instr-dictset), but with the key represented by a (big-endian) signed `n`-bit integer `i`. If `i` does not fit into `n` bits, a range check exception is generated. |  |
-| **`F415`** | `DICTISETREF` | _`c i D n - D'`_ | Similar to [`DICTSETREF`](#instr-dictsetref), but with the key a signed `n`-bit integer as in [`DICTISET`](#instr-dictiset). |  |
-| **`F416`** | `DICTUSET` | _`x i D n - D'`_ | Similar to [`DICTISET`](#instr-dictiset), but with `i` an _unsigned_ `n`-bit integer. |  |
-| **`F417`** | `DICTUSETREF` | _`c i D n - D'`_ | Similar to [`DICTISETREF`](#instr-dictisetref), but with `i` unsigned. |  |
-| **`F41A`** | `DICTSETGET` | _`x k D n - D' y -1 or D' 0`_ | Combines [`DICTSET`](#instr-dictset) with [`DICTGET`](#instr-dictget): it sets the value corresponding to key `k` to `x`, but also returns the old value `y` associated with the key in question, if present. |  |
-| **`F41B`** | `DICTSETGETREF` | _`c k D n - D' c' -1 or D' 0`_ | Combines [`DICTSETREF`](#instr-dictsetref) with [`DICTGETREF`](#instr-dictgetref) similarly to [`DICTSETGET`](#instr-dictsetget). |  |
-| **`F41C`** | `DICTISETGET` | _`x i D n - D' y -1 or D' 0`_ | [`DICTISETGET`](#instr-dictisetget), but with `i` a signed `n`-bit integer. |  |
-| **`F41D`** | `DICTISETGETREF` | _`c i D n - D' c' -1 or D' 0`_ | [`DICTISETGETREF`](#instr-dictisetgetref), but with `i` a signed `n`-bit integer. |  |
-| **`F41E`** | `DICTUSETGET` | _`x i D n - D' y -1 or D' 0`_ | [`DICTISETGET`](#instr-dictisetget), but with `i` an unsigned `n`-bit integer. |  |
-| **`F41F`** | `DICTUSETGETREF` | _`c i D n - D' c' -1 or D' 0`_ | [`DICTISETGETREF`](#instr-dictisetgetref), but with `i` an unsigned `n`-bit integer. |  |
-| **`F422`** | `DICTREPLACE` | _`x k D n - D' -1 or D 0`_ | A _Replace_ operation, which is similar to [`DICTSET`](#instr-dictset), but sets the value of key `k` in dictionary `D` to `x` only if the key `k` was already present in `D`. |  |
-| **`F423`** | `DICTREPLACEREF` | _`c k D n - D' -1 or D 0`_ | A _Replace_ counterpart of [`DICTSETREF`](#instr-dictsetref). |  |
-| **`F424`** | `DICTIREPLACE` | _`x i D n - D' -1 or D 0`_ | [`DICTREPLACE`](#instr-dictreplace), but with `i` a signed `n`-bit integer. |  |
-| **`F425`** | `DICTIREPLACEREF` | _`c i D n - D' -1 or D 0`_ | [`DICTREPLACEREF`](#instr-dictreplaceref), but with `i` a signed `n`-bit integer. |  |
-| **`F426`** | `DICTUREPLACE` | _`x i D n - D' -1 or D 0`_ | [`DICTREPLACE`](#instr-dictreplace), but with `i` an unsigned `n`-bit integer. |  |
-| **`F427`** | `DICTUREPLACEREF` | _`c i D n - D' -1 or D 0`_ | [`DICTREPLACEREF`](#instr-dictreplaceref), but with `i` an unsigned `n`-bit integer. |  |
-| **`F42A`** | `DICTREPLACEGET` | _`x k D n - D' y -1 or D 0`_ | A _Replace_ counterpart of [`DICTSETGET`](#instr-dictsetget): on success, also returns the old value associated with the key in question. |  |
-| **`F42B`** | `DICTREPLACEGETREF` | _`c k D n - D' c' -1 or D 0`_ | A _Replace_ counterpart of [`DICTSETGETREF`](#instr-dictsetgetref). |  |
-| **`F42C`** | `DICTIREPLACEGET` | _`x i D n - D' y -1 or D 0`_ | [`DICTREPLACEGET`](#instr-dictreplaceget), but with `i` a signed `n`-bit integer. |  |
-| **`F42D`** | `DICTIREPLACEGETREF` | _`c i D n - D' c' -1 or D 0`_ | [`DICTREPLACEGETREF`](#instr-dictreplacegetref), but with `i` a signed `n`-bit integer. |  |
-| **`F42E`** | `DICTUREPLACEGET` | _`x i D n - D' y -1 or D 0`_ | [`DICTREPLACEGET`](#instr-dictreplaceget), but with `i` an unsigned `n`-bit integer. |  |
-| **`F42F`** | `DICTUREPLACEGETREF` | _`c i D n - D' c' -1 or D 0`_ | [`DICTREPLACEGETREF`](#instr-dictreplacegetref), but with `i` an unsigned `n`-bit integer. |  |
-| **`F432`** | `DICTADD` | _`x k D n - D' -1 or D 0`_ | An _Add_ counterpart of [`DICTSET`](#instr-dictset): sets the value associated with key `k` in dictionary `D` to `x`, but only if it is not already present in `D`. |  |
-| **`F433`** | `DICTADDREF` | _`c k D n - D' -1 or D 0`_ | An _Add_ counterpart of [`DICTSETREF`](#instr-dictsetref). |  |
-| **`F434`** | `DICTIADD` | _`x i D n - D' -1 or D 0`_ | [`DICTADD`](#instr-dictadd), but with `i` a signed `n`-bit integer. |  |
-| **`F435`** | `DICTIADDREF` | _`c i D n - D' -1 or D 0`_ | [`DICTADDREF`](#instr-dictaddref), but with `i` a signed `n`-bit integer. |  |
-| **`F436`** | `DICTUADD` | _`x i D n - D' -1 or D 0`_ | [`DICTADD`](#instr-dictadd), but with `i` an unsigned `n`-bit integer. |  |
-| **`F437`** | `DICTUADDREF` | _`c i D n - D' -1 or D 0`_ | [`DICTADDREF`](#instr-dictaddref), but with `i` an unsigned `n`-bit integer. |  |
-| **`F43A`** | `DICTADDGET` | _`x k D n - D' -1 or D y 0`_ | An _Add_ counterpart of [`DICTSETGET`](#instr-dictsetget): sets the value associated with key `k` in dictionary `D` to `x`, but only if key `k` is not already present in `D`. Otherwise, just returns the old value `y` without changing the dictionary. |  |
-| **`F43B`** | `DICTADDGETREF` | _`c k D n - D' -1 or D c' 0`_ | An _Add_ counterpart of [`DICTSETGETREF`](#instr-dictsetgetref). |  |
-| **`F43C`** | `DICTIADDGET` | _`x i D n - D' -1 or D y 0`_ | [`DICTADDGET`](#instr-dictaddget), but with `i` a signed `n`-bit integer. |  |
-| **`F43D`** | `DICTIADDGETREF` | _`c i D n - D' -1 or D c' 0`_ | [`DICTADDGETREF`](#instr-dictaddgetref), but with `i` a signed `n`-bit integer. |  |
-| **`F43E`** | `DICTUADDGET` | _`x i D n - D' -1 or D y 0`_ | [`DICTADDGET`](#instr-dictaddget), but with `i` an unsigned `n`-bit integer. |  |
-| **`F43F`** | `DICTUADDGETREF` | _`c i D n - D' -1 or D c' 0`_ | [`DICTADDGETREF`](#instr-dictaddgetref), but with `i` an unsigned `n`-bit integer. |  |
-### 10.5 Builder-accepting variants of Set dictionary operations
-The following primitives accept the new value as a _Builder_ `b` instead of a _Slice_ `x`.
-
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`F412`** | `DICTSET` | _`x k D n - D'`_ | 在字典 `D`（同样用_切片_表示）中设置 `n`-位键 `k`（如 [`DICTGET`](#instr-dictget) 中用_切片_表示）关联的值为 `x`（再次是_切片_），并返回结果字典 `D'`。 |  |
+| **`F413`** | `DICTSETREF` | _`c k D n - D'`_ | 类似于 [`DICTSET`](#instr-dictset)，但设置的值为对_cell_ `c` 的引用。 |  |
+| **`F414`** | `DICTISET` | _`x i D n - D'`_ | 类似于 [`DICTSET`](#instr-dictset)，但键由（大端）有符号 `n`-位整数 `i` 表示。如果 `i` 不能放入 `n` 位，则生成范围检查异常。 |  |
+| **`F415`** | `DICTISETREF` | _`c i D n - D'`_ | 类似于 [`DICTSETREF`](#instr-dictsetref)，但键由 [`DICTISET`](#instr-dictiset) 中的有符号 `n`-位整数表示。 |  |
+| **`F416`** | `DICTUSET` | _`x i D n - D'`_ | 类似于 [`DICTISET`](#instr-dictiset)，但 `i` 为 _无符号_ `n`-位整数。 |  |
+| **`F417`** | `DICTUSETREF` | _`c i D n - D'`_ | 类似于 [`DICTISETREF`](#instr-dictisetref)，但 `i` 为无符号。 |  |
+| **`F41A`** | `DICTSETGET` | _`x k D n - D' y -1或 D' 0`_ | 结合 [`DICTSET`](#instr-dictset) 和 [`DICTGET`](#instr-dictget)：它将键 `k` 对应的值设置为 `x`，但也返回该键原有的旧值 `y`（如果存在）。 |  |
+| **`F41B`** | `DICTSETGETREF` | _`c k D n - D' c' -1或 D' 0`_ | 类似于 [`DICTSETGET`](#instr-dictsetget) 的 [`DICTSETREF`](#instr-dictsetref) 与 [`DICTGETREF`](#instr-dictgetref) 的组合。 |  |
+| **`F41C`** | `DICTISETGET` | _`x i D n - D' y -1或 D' 0`_ | [`DICTISETGET`](#instr-dictisetget)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F41D`** | `DICTISETGETREF` | _`c i D n - D' c' -1或 D' 0`_ | [`DICTISETGETREF`](#instr-dictisetgetref)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F41E`** | `DICTUSETGET` | _`x i D n - D' y -1或 D' 0`_ | [`DICTISETGET`](#instr-dictisetget)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F41F`** | `DICTUSETGETREF` | _`c i D n - D' c' -1或 D' 0`_ | [`DICTISETGETREF`](#instr-dictisetgetref)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F422`** | `DICTREPLACE` | _`x k D n - D' -1或 D 0`_ | 一个 _替换_ 操作，类似于 [`DICTSET`](#instr-dictset)，但只有当键 `k` 已经存在于 `D` 中时才会将 `D` 中键 `k` 的值设置为 `x`。 |  |
+| **`F423`** | `DICTREPLACEREF` | _`c k D n - D' -1或 D 0`_ | [`DICTSETREF`](#instr-dictsetref) 的 _替换_ 对应操作。 |  |
+| **`F424`** | `DICTIREPLACE` | _`x i D n - D' -1或 D 0`_ | [`DICTREPLACE`](#instr-dictreplace)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F425`** | `DICTIREPLACEREF` | _`c i D n - D' -1或 D 0`_ | [`DICTREPLACEREF`](#instr-dictreplaceref)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F426`** | `DICTUREPLACE` | _`x i D n - D' -1或 D 0`_ | [`DICTREPLACE`](#instr-dictreplace)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F427`** | `DICTUREPLACEREF` | _`c i D n - D' -1或 D 0`_ | [`DICTREPLACEREF`](#instr-dictreplaceref)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F42A`** | `DICTREPLACEGET` | _`x k D n - D' y -1或 D 0`_ | [`DICTSETGET`](#instr-dictsetget) 的 _替换_ 对应操作：成功时，还会返回与该键相关的旧值。 |  |
+| **`F42B`** | `DICTREPLACEGETREF` | _`c k D n - D' c' -1或 D 0`_ | [`DICTSETGETREF`](#instr-dictsetgetref) 的 _替换_ 对应操作。 |  |
+| **`F42C`** | `DICTIREPLACEGET` | _`x i D n - D' y -1或 D 0`_ | [`DICTREPLACEGET`](#instr-dictreplaceget)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F42D`** | `DICTIREPLACEGETREF` | _`c i D n - D' c' -1或 D 0`_ | [`DICTREPLACEGETREF`](#instr-dictreplacegetref)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F42E`** | `DICTUREPLACEGET` | _`x i D n - D' y -1或 D 0`_ | [`DICTREPLACEGET`](#instr-dictreplaceget)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F42F`** | `DICTUREPLACEGETREF` | _`c i D n - D' c' -1或 D 0`_ | [`DICTREPLACEGETREF`](#instr-dictreplacegetref)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F432`** | `DICTADD` | _`x k D n - D' -1或 D 0`_ | [`DICTSET`](#instr-dictset) 的 _添加_ 对应操作：在字典 `D` 中将与键 `k` 关联的值设置为 `x`，但只有当它还未在 `D` 中存在时。 |  |
+| **`F433`** | `DICTADDREF` | _`c k D n - D' -1或 D 0`_ | [`DICTSETREF`](#instr-dictsetref) 的 _添加_ 对应操作。 |  |
+| **`F434`** | `DICTIADD` | _`x i D n - D' -1或 D 0`_ | [`DICTADD`](#instr-dictadd)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F435`** | `DICTIADDREF` | _`c i D n - D' -1或 D 0`_ | [`DICTADDREF`](#instr-dictaddref)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F436`** | `DICTUADD` | _`x i D n - D' -1或 D 0`_ | [`DICTADD`](#instr-dictadd)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F437`** | `DICTUADDREF` | _`c i D n - D' -1或 D 0`_ | [`DICTADDREF`](#instr-dictaddref)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F43A`** | `DICTADDGET` | _`x k D n - D' -1或 D y 0`_ | [`DICTSETGET`](#instr-dictsetget) 的 _添加_ 对应操作：在字典 `D` 中将与键 `k` 关联的值设置为 `x`，但只有当键 `k` 还未在 `D` 中存在时。否则，仅返回旧值 `y`，不更改字典。 |  |
+| **`F43B`** | `DICTADDGETREF` | _`c k D n - D' -1或 D c' 0`_ | [`DICTSETGETREF`](#instr-dictsetgetref) 的 _添加_ 对应操作。 |  |
+| **`F43C`** | `DICTIADDGET` | _`x i D n - D' -1或 D y 0`_ | [`DICTADDGET`](#instr-dictaddget)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F43D`** | `DICTIADDGETREF` | _`c i D n - D' -1或 D c' 0`_ | [`DICTADDGETREF`](#instr-dictaddgetref)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F43E`** | `DICTUADDGET` | _`x i D n - D' -1或 D y 0`_ | [`DICTADDGET`](#instr-dictaddget)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F43F`** | `DICTUADDGETREF` | _`c i D n - D' -1或 D c' 0`_ | [`DICTADDGETREF`](#instr-dictaddgetref)，但 `i` 为无符号 `n`-位整数。 |  |
+### 10.5 接受构建器的字典设置操作变体
+以下操作接受新值作为_构建器_ `b`，而不是_切片_ `x`。
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F441`** | `DICTSETB` | _`b k D n - D'`_ |  |  |
 | **`F442`** | `DICTISETB` | _`b i D n - D'`_ |  |  |
 | **`F443`** | `DICTUSETB` | _`b i D n - D'`_ |  |  |
-| **`F445`** | `DICTSETGETB` | _`b k D n - D' y -1 or D' 0`_ |  |  |
-| **`F446`** | `DICTISETGETB` | _`b i D n - D' y -1 or D' 0`_ |  |  |
-| **`F447`** | `DICTUSETGETB` | _`b i D n - D' y -1 or D' 0`_ |  |  |
-| **`F449`** | `DICTREPLACEB` | _`b k D n - D' -1 or D 0`_ |  |  |
-| **`F44A`** | `DICTIREPLACEB` | _`b i D n - D' -1 or D 0`_ |  |  |
-| **`F44B`** | `DICTUREPLACEB` | _`b i D n - D' -1 or D 0`_ |  |  |
-| **`F44D`** | `DICTREPLACEGETB` | _`b k D n - D' y -1 or D 0`_ |  |  |
-| **`F44E`** | `DICTIREPLACEGETB` | _`b i D n - D' y -1 or D 0`_ |  |  |
-| **`F44F`** | `DICTUREPLACEGETB` | _`b i D n - D' y -1 or D 0`_ |  |  |
-| **`F451`** | `DICTADDB` | _`b k D n - D' -1 or D 0`_ |  |  |
-| **`F452`** | `DICTIADDB` | _`b i D n - D' -1 or D 0`_ |  |  |
-| **`F453`** | `DICTUADDB` | _`b i D n - D' -1 or D 0`_ |  |  |
-| **`F455`** | `DICTADDGETB` | _`b k D n - D' -1 or D y 0`_ |  |  |
-| **`F456`** | `DICTIADDGETB` | _`b i D n - D' -1 or D y 0`_ |  |  |
-| **`F457`** | `DICTUADDGETB` | _`b i D n - D' -1 or D y 0`_ |  |  |
-### 10.6 Delete dictionary operations
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`F445`** | `DICTSETGETB` | _`b k D n - D' y -1或 D' 0`_ |  |  |
+| **`F446`** | `DICTISETGETB` | _`b i D n - D' y -1或 D' 0`_ |  |  |
+| **`F447`** | `DICTUSETGETB` | _`b i D n - D' y -1或 D' 0`_ |  |  |
+| **`F449`** | `DICTREPLACEB` | _`b k D n - D' -1或 D 0`_ |  |  |
+| **`F44A`** | `DICTIREPLACEB` | _`b i D n - D' -1或 D 0`_ |  |  |
+| **`F44B`** | `DICTUREPLACEB` | _`b i D n - D' -1或 D 0`_ |  |  |
+| **`F44D`** | `DICTREPLACEGETB` | _`b k D n - D' y -1或 D 0`_ |  |  |
+| **`F44E`** | `DICTIREPLACEGETB` | _`b i D n - D' y -1或 D 0`_ |  |  |
+| **`F44F`** | `DICTUREPLACEGETB` | _`b i D n - D' y -1或 D 0`_ |  |  |
+| **`F451`** | `DICTADDB` | _`b k D n - D' -1或 D 0`_ |  |  |
+| **`F452`** | `DICTIADDB` | _`b i D n - D' -1或 D 0`_ |  |  |
+| **`F453`** | `DICTUADDB` | _`b i D n - D' -1或 D 0`_ |  |  |
+| **`F455`** | `DICTADDGETB` | _`b k D n - D' -1或 D y 0`_ |  |  |
+| **`F456`** | `DICTIADDGETB` | _`b i D n - D' -1或 D y 0`_ |  |  |
+| **`F457`** | `DICTUADDGETB` | _`b i D n - D' -1或 D y 0`_ |  |  |
+### 10.6 删除字典操作
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F459`** | `DICTDEL` | _`k D n - D' -1 or D 0`_ | Deletes `n`-bit key, represented by a _Slice_ `k`, from dictionary `D`. If the key is present, returns the modified dictionary `D'` and the success flag `-1`. Otherwise, returns the original dictionary `D` and `0`. |  |
-| **`F45A`** | `DICTIDEL` | _`i D n - D' ?`_ | A version of [`DICTDEL`](#instr-dictdel) with the key represented by a signed `n`-bit _Integer_ `i`. If `i` does not fit into `n` bits, simply returns `D` `0` (“key not found, dictionary unmodified''). |  |
-| **`F45B`** | `DICTUDEL` | _`i D n - D' ?`_ | Similar to [`DICTIDEL`](#instr-dictidel), but with `i` an unsigned `n`-bit integer. |  |
-| **`F462`** | `DICTDELGET` | _`k D n - D' x -1 or D 0`_ | Deletes `n`-bit key, represented by a _Slice_ `k`, from dictionary `D`. If the key is present, returns the modified dictionary `D'`, the original value `x` associated with the key `k` (represented by a _Slice_), and the success flag `-1`. Otherwise, returns the original dictionary `D` and `0`. |  |
-| **`F463`** | `DICTDELGETREF` | _`k D n - D' c -1 or D 0`_ | Similar to [`DICTDELGET`](#instr-dictdelget), but with [`LDREF`](#instr-ldref) [`ENDS`](#instr-ends) applied to `x` on success, so that the value returned `c` is a _Cell_. |  |
-| **`F464`** | `DICTIDELGET` | _`i D n - D' x -1 or D 0`_ | [`DICTDELGET`](#instr-dictdelget), but with `i` a signed `n`-bit integer. |  |
-| **`F465`** | `DICTIDELGETREF` | _`i D n - D' c -1 or D 0`_ | [`DICTDELGETREF`](#instr-dictdelgetref), but with `i` a signed `n`-bit integer. |  |
-| **`F466`** | `DICTUDELGET` | _`i D n - D' x -1 or D 0`_ | [`DICTDELGET`](#instr-dictdelget), but with `i` an unsigned `n`-bit integer. |  |
-| **`F467`** | `DICTUDELGETREF` | _`i D n - D' c -1 or D 0`_ | [`DICTDELGETREF`](#instr-dictdelgetref), but with `i` an unsigned `n`-bit integer. |  |
-### 10.7 "Maybe reference" dictionary operations
-The following operations assume that a dictionary is used to store values `c?` of type _Maybe Cell_.  The representation is as follows: if `c?` is a _Cell_ , it is stored as a value with no data bits and exactly one reference to this _Cell_.  If `c?` is _Null_, then the corresponding key must be absent from the dictionary.
+| **`F459`** | `DICTDEL` | _`k D n - D' -1或 D 0`_ | 从字典 `D` 中删除由_切片_ `k` 表示的 `n`-位键。如果键存在，返回修改后的字典 `D'` 和成功标志位 `-1`。否则，返回原始字典 `D` 和 `0`。 |  |
+| **`F45A`** | `DICTIDEL` | _`i D n - D' ?`_ | [`DICTDEL`](#instr-dictdel) 的一个版本，键由有符号的 `n`-位 _整数_ `i` 表示。如果 `i` 不能放入 `n` 位，简单地返回 `D` `0`（“键未找到，字典未修改”）。 |  |
+| **`F45B`** | `DICTUDEL` | _`i D n - D' ?`_ | 类似于 [`DICTIDEL`](#instr-dictidel)，但 `i` 为无符号的 `n`-位整数。 |  |
+| **`F462`** | `DICTDELGET` | _`k D n - D' x -1或 D 0`_ | 从字典 `D` 中删除由_切片_ `k` 表示的 `n`-位键。如果键存在，返回修改后的字典 `D'`、与键 `k` 关联的原始值 `x`（由_切片_表示），和成功标志位 `-1`。否则，返回原始字典 `D` 和 `0`。 |  |
+| **`F463`** | `DICTDELGETREF` | _`k D n - D' c -1或 D 0`_ | 类似于 [`DICTDELGET`](#instr-dictdelget)，但成功时对 `x` 应用 [`LDREF`](#instr-ldref) [`ENDS`](#instr-ends)，以便返回的值 `c` 是一个_cell_。 |  |
+| **`F464`** | `DICTIDELGET` | _`i D n - D' x -1或 D 0`_ | [`DICTDELGET`](#instr-dictdelget)，但 `i` 为有符号的 `n`-位整数。 |  |
+| **`F465`** | `DICTIDELGETREF` | _`i D n - D' c -1或 D 0`_ | [`DICTDELGETREF`](#instr-dictdelgetref)，但 `i` 为有符号的 `n`-位整数。 |  |
+| **`F466`** | `DICTUDELGET` | _`i D n - D' x -1或 D 0`_ | [`DICTDELGET`](#instr-dictdelget)，但 `i` 为无符号的 `n`-位整数。 |  |
+| **`F467`** | `DICTUDELGETREF` | _`i D n - D' c -1或 D 0`_ | [`DICTDELGETREF`](#instr-dictdelgetref)，但 `i` 为无符号的 `n`-位整数。 |  |
+### 10.7 “可能是引用”的字典操作
+以下操作假设使用字典存储类型为_可能是cell（Maybe Cell）_的值 `c?`。表示如下：如果 `c?` 是一个_cell_，它作为一个没有数据位且恰好有一个对这个_cell_的引用的值存储。如果 `c?` 是_Null_，则对应的键必须从字典中缺失。
 
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F469`** | `DICTGETOPTREF` | _`k D n - c^?`_ | A variant of [`DICTGETREF`](#instr-dictgetref) that returns _Null_ instead of the value `c^?` if the key `k` is absent from dictionary `D`. |  |
-| **`F46A`** | `DICTIGETOPTREF` | _`i D n - c^?`_ | [`DICTGETOPTREF`](#instr-dictgetoptref), but with `i` a signed `n`-bit integer. If the key `i` is out of range, also returns _Null_. |  |
-| **`F46B`** | `DICTUGETOPTREF` | _`i D n - c^?`_ | [`DICTGETOPTREF`](#instr-dictgetoptref), but with `i` an unsigned `n`-bit integer. If the key `i` is out of range, also returns _Null_. |  |
-| **`F46D`** | `DICTSETGETOPTREF` | _`c^? k D n - D' ~c^?`_ | A variant of both [`DICTGETOPTREF`](#instr-dictgetoptref) and [`DICTSETGETREF`](#instr-dictsetgetref) that sets the value corresponding to key `k` in dictionary `D` to `c^?` (if `c^?` is _Null_, then the key is deleted instead), and returns the old value `~c^?` (if the key `k` was absent before, returns _Null_ instead). |  |
-| **`F46E`** | `DICTISETGETOPTREF` | _`c^? i D n - D' ~c^?`_ | Similar to primitive [`DICTSETGETOPTREF`](#instr-dictsetgetoptref), but using signed `n`-bit _Integer_ `i` as a key. If `i` does not fit into `n` bits, throws a range checking exception. |  |
-| **`F46F`** | `DICTUSETGETOPTREF` | _`c^? i D n - D' ~c^?`_ | Similar to primitive [`DICTSETGETOPTREF`](#instr-dictsetgetoptref), but using unsigned `n`-bit _Integer_ `i` as a key. |  |
-### 10.8 Prefix code dictionary operations
-These are some basic operations for constructing prefix code dictionaries.
-These primitives are completely similar to their non-prefix code counterparts ([`DICTSET`](#instr-dictset) etc), with the obvious difference that even a _Set_ may fail in a prefix code dictionary, so a success flag must be returned by [`PFXDICTSET`](#instr-pfxdictset) as well.
+| **`F469`** | `DICTGETOPTREF` | _`k D n - c^?`_ | [`DICTGETREF`](#instr-dictgetref) 的一个变体，如果键 `k` 不存在于字典 `D` 中，则返回 _Null_ 而不是值 `c^?`。 |  |
+| **`F46A`** | `DICTIGETOPTREF` | _`i D n - c^?`_ | [`DICTGETOPTREF`](#instr-dictgetoptref) 的版本，但 `i` 为有符号的 `n`-位整数。如果键 `i` 超出范围，也返回 _Null_。 |  |
+| **`F46B`** | `DICTUGETOPTREF` | _`i D n - c^?`_ | [`DICTGETOPTREF`](#instr-dictgetoptref) 的版本，但 `i` 为无符号的 `n`-位整数。如果键 `i` 超出范围，也返回 _Null_。 |  |
+| **`F46D`** | `DICTSETGETOPTREF` | _`c^? k D n - D' ~c^?`_ | [`DICTGETOPTREF`](#instr-dictgetoptref) 和 [`DICTSETGETREF`](#instr-dictsetgetref) 的一个变体，将字典 `D` 中键 `k` 对应的值设置为 `c^?`（如果 `c^?` 是_Null_，则删除该键），并返回旧值 `~c^?`（如果键 `k` 之前缺失，返回_Null_）。 |  |
+| **`F46E`** | `DICTISETGETOPTREF` | _`c^? i D n - D' ~c^?`_ | 类似于 [`DICTSETGETOPTREF`](#instr-dictsetgetoptref) 的原语，但使用有符号的 `n`-位 _整数_ `i` 作为键。如果 `i` 不能放入 `n` 位，抛出范围检查异常。 |  |
+| **`F46F`** | `DICTUSETGETOPTREF` | _`c^? i D n - D' ~c^?`_ | 类似于 [`DICTSETGETOPTREF`](#instr-dictsetgetoptref) 的原语，但使用无符号的 `n`-位 _整数_ `i` 作为键。 |  |
+### 10.8 前缀码字典操作
+构建前缀码字典的一些基本操作。
+这些原语与它们非前缀码（[`DICTSET`](#instr-dictset) 等）的对应操作完全相同，不过在前缀码字典中，即使是 _Set_ 也可能失败，因此 [`PFXDICTSET`](#instr-pfxdictset) 也必须返回成功标志位。
 
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F470`** | `PFXDICTSET` | _`x k D n - D' -1 or D 0`_ |  |  |
-| **`F471`** | `PFXDICTREPLACE` | _`x k D n - D' -1 or D 0`_ |  |  |
-| **`F472`** | `PFXDICTADD` | _`x k D n - D' -1 or D 0`_ |  |  |
-| **`F473`** | `PFXDICTDEL` | _`k D n - D' -1 or D 0`_ |  |  |
-### 10.9 Variants of GetNext and GetPrev operations
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`F470`** | `PFXDICTSET` | _`x k D n - D' -1或 D 0`_ |  |  |
+| **`F471`** | `PFXDICTREPLACE` | _`x k D n - D' -1或 D 0`_ |  |  |
+| **`F472`** | `PFXDICTADD` | _`x k D n - D' -1或 D 0`_ |  |  |
+| **`F473`** | `PFXDICTDEL` | _`k D n - D' -1或 D 0`_ |  |  |
+### 10.9 GetNext 和 GetPrev 操作的变体
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F474`** | `DICTGETNEXT` | _`k D n - x' k' -1 or 0`_ | Computes the minimal key `k'` in dictionary `D` that is lexicographically greater than `k`, and returns `k'` (represented by a _Slice_) along with associated value `x'` (also represented by a _Slice_). |  |
-| **`F475`** | `DICTGETNEXTEQ` | _`k D n - x' k' -1 or 0`_ | Similar to [`DICTGETNEXT`](#instr-dictgetnext), but computes the minimal key `k'` that is lexicographically greater than or equal to `k`. |  |
-| **`F476`** | `DICTGETPREV` | _`k D n - x' k' -1 or 0`_ | Similar to [`DICTGETNEXT`](#instr-dictgetnext), but computes the maximal key `k'` lexicographically smaller than `k`. |  |
-| **`F477`** | `DICTGETPREVEQ` | _`k D n - x' k' -1 or 0`_ | Similar to [`DICTGETPREV`](#instr-dictgetprev), but computes the maximal key `k'` lexicographically smaller than or equal to `k`. |  |
-| **`F478`** | `DICTIGETNEXT` | _`i D n - x' i' -1 or 0`_ | Similar to [`DICTGETNEXT`](#instr-dictgetnext), but interprets all keys in dictionary `D` as big-endian signed `n`-bit integers, and computes the minimal key `i'` that is larger than _Integer_ `i` (which does not necessarily fit into `n` bits). |  |
-| **`F479`** | `DICTIGETNEXTEQ` | _`i D n - x' i' -1 or 0`_ | Similar to [`DICTGETNEXTEQ`](#instr-dictgetnexteq), but interprets keys as signed `n`-bit integers. |  |
-| **`F47A`** | `DICTIGETPREV` | _`i D n - x' i' -1 or 0`_ | Similar to [`DICTGETPREV`](#instr-dictgetprev), but interprets keys as signed `n`-bit integers. |  |
-| **`F47B`** | `DICTIGETPREVEQ` | _`i D n - x' i' -1 or 0`_ | Similar to [`DICTGETPREVEQ`](#instr-dictgetpreveq), but interprets keys as signed `n`-bit integers. |  |
-| **`F47C`** | `DICTUGETNEXT` | _`i D n - x' i' -1 or 0`_ | Similar to [`DICTGETNEXT`](#instr-dictgetnext), but interprets all keys in dictionary `D` as big-endian unsigned `n`-bit integers, and computes the minimal key `i'` that is larger than _Integer_ `i` (which does not necessarily fit into `n` bits, and is not necessarily non-negative). |  |
-| **`F47D`** | `DICTUGETNEXTEQ` | _`i D n - x' i' -1 or 0`_ | Similar to [`DICTGETNEXTEQ`](#instr-dictgetnexteq), but interprets keys as unsigned `n`-bit integers. |  |
-| **`F47E`** | `DICTUGETPREV` | _`i D n - x' i' -1 or 0`_ | Similar to [`DICTGETPREV`](#instr-dictgetprev), but interprets keys as unsigned `n`-bit integers. |  |
-| **`F47F`** | `DICTUGETPREVEQ` | _`i D n - x' i' -1 or 0`_ | Similar to [`DICTGETPREVEQ`](#instr-dictgetpreveq), but interprets keys a unsigned `n`-bit integers. |  |
-### 10.10 GetMin, GetMax, RemoveMin, RemoveMax operations
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`F474`** | `DICTGETNEXT` | _`k D n - x' k' -1或 0`_ | 计算字典 `D` 中字典序大于 `k` 的最小键 `k'`，并返回 `k'`（由_切片_表示）及其关联的值 `x'`（也由_切片_表示）。 |  |
+| **`F475`** | `DICTGETNEXTEQ` | _`k D n - x' k' -1或 0`_ | 类似于 [`DICTGETNEXT`](#instr-dictgetnext)，但计算字典序大于或等于 `k` 的最小键 `k'`。 |  |
+| **`F476`** | `DICTGETPREV` | _`k D n - x' k' -1或 0`_ | 类似于 [`DICTGETNEXT`](#instr-dictgetnext)，但计算字典序小于 `k` 的最大键 `k'`。 |  |
+| **`F477`** | `DICTGETPREVEQ` | _`k D n - x' k' -1或 0`_ | 类似于 [`DICTGETPREV`](#instr-dictgetprev)，但计算字典序小于或等于 `k` 的最大键 `k'`。 |  |
+| **`F478`** | `DICTIGETNEXT` | _`i D n - x' i' -1或 0`_ | 类似于 [`DICTGETNEXT`](#instr-dictgetnext)，但将字典 `D` 中的所有键解释为大端有符号的 `n`-位整数，并计算大于整数 `i` 的最小键 `i'`（`i` 不一定能放入 `n` 位）。 |  |
+| **`F479`** | `DICTIGETNEXTEQ` | _`i D n - x' i' -1或 0`_ | 类似于 [`DICTGETNEXTEQ`](#instr-dictgetnexteq)，但将键解释为有符号的 `n`-位整数。 |  |
+| **`F47A`** | `DICTIGETPREV` | _`i D n - x' i' -1或 0`_ | 类似于 [`DICTGETPREV`](#instr-dictgetprev)，但将键解释为有符号的 `n`-位整数。 |  |
+| **`F47B`** | `DICTIGETPREVEQ` | _`i D n - x' i' -1或 0`_ | 类似于 [`DICTGETPREVEQ`](#instr-dictgetpreveq)，但将键解释为有符号的 `n`-位整数。 |  |
+| **`F47C`** | `DICTUGETNEXT` | _`i D n - x' i' -1或 0`_ | 类似于 [`DICTGETNEXT`](#instr-dictgetnext)，但将字典 `D` 中的所有键解释为大端无符号的 `n`-位整数，并计算大于整数 `i` 的最小键 `i'`（`i` 不一定能放入 `n` 位，也不一定是非负的）。 |  |
+| **`F47D`** | `DICTUGETNEXTEQ` | _`i D n - x' i' -1或 0`_ | 类似于 [`DICTGETNEXTEQ`](#instr-dictgetnexteq)，但将键解释为无符号的 `n`-位整数。 |  |
+| **`F47E`** | `DICTUGETPREV` | _`i D n - x' i' -1或 0`_ | 类似于 [`DICTGETPREV`](#instr-dictgetprev)，但将键解释为无符号的 `n`-位整数。 |  |
+| **`F47F`** | `DICTUGETPREVEQ` | _`i D n - x' i' -1或 0`_ | 类似于 [`DICTGETPREVEQ`](#instr-dictgetpreveq)，但将键解释为无符号的 `n`-位整数。 |  |
+### 10.10 GetMin, GetMax, RemoveMin, RemoveMax 操作
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F482`** | `DICTMIN` | _`D n - x k -1 or 0`_ | Computes the minimal key `k` (represented by a _Slice_ with `n` data bits) in dictionary `D`, and returns `k` along with the associated value `x`. |  |
-| **`F483`** | `DICTMINREF` | _`D n - c k -1 or 0`_ | Similar to [`DICTMIN`](#instr-dictmin), but returns the only reference in the value as a _Cell_ `c`. |  |
-| **`F484`** | `DICTIMIN` | _`D n - x i -1 or 0`_ | Similar to [`DICTMIN`](#instr-dictmin), but computes the minimal key `i` under the assumption that all keys are big-endian signed `n`-bit integers. Notice that the key and value returned may differ from those computed by [`DICTMIN`](#instr-dictmin) and [`DICTUMIN`](#instr-dictumin). |  |
-| **`F485`** | `DICTIMINREF` | _`D n - c i -1 or 0`_ | Similar to [`DICTIMIN`](#instr-dictimin), but returns the only reference in the value. |  |
-| **`F486`** | `DICTUMIN` | _`D n - x i -1 or 0`_ | Similar to [`DICTMIN`](#instr-dictmin), but returns the key as an unsigned `n`-bit _Integer_ `i`. |  |
-| **`F487`** | `DICTUMINREF` | _`D n - c i -1 or 0`_ | Similar to [`DICTUMIN`](#instr-dictumin), but returns the only reference in the value. |  |
-| **`F48A`** | `DICTMAX` | _`D n - x k -1 or 0`_ | Computes the maximal key `k` (represented by a _Slice_ with `n` data bits) in dictionary `D`, and returns `k` along with the associated value `x`. |  |
-| **`F48B`** | `DICTMAXREF` | _`D n - c k -1 or 0`_ | Similar to [`DICTMAX`](#instr-dictmax), but returns the only reference in the value. |  |
-| **`F48C`** | `DICTIMAX` | _`D n - x i -1 or 0`_ | Similar to [`DICTMAX`](#instr-dictmax), but computes the maximal key `i` under the assumption that all keys are big-endian signed `n`-bit integers. Notice that the key and value returned may differ from those computed by [`DICTMAX`](#instr-dictmax) and [`DICTUMAX`](#instr-dictumax). |  |
-| **`F48D`** | `DICTIMAXREF` | _`D n - c i -1 or 0`_ | Similar to [`DICTIMAX`](#instr-dictimax), but returns the only reference in the value. |  |
-| **`F48E`** | `DICTUMAX` | _`D n - x i -1 or 0`_ | Similar to [`DICTMAX`](#instr-dictmax), but returns the key as an unsigned `n`-bit _Integer_ `i`. |  |
-| **`F48F`** | `DICTUMAXREF` | _`D n - c i -1 or 0`_ | Similar to [`DICTUMAX`](#instr-dictumax), but returns the only reference in the value. |  |
-| **`F492`** | `DICTREMMIN` | _`D n - D' x k -1 or D 0`_ | Computes the minimal key `k` (represented by a _Slice_ with `n` data bits) in dictionary `D`, removes `k` from the dictionary, and returns `k` along with the associated value `x` and the modified dictionary `D'`. |  |
-| **`F493`** | `DICTREMMINREF` | _`D n - D' c k -1 or D 0`_ | Similar to [`DICTREMMIN`](#instr-dictremmin), but returns the only reference in the value as a _Cell_ `c`. |  |
-| **`F494`** | `DICTIREMMIN` | _`D n - D' x i -1 or D 0`_ | Similar to [`DICTREMMIN`](#instr-dictremmin), but computes the minimal key `i` under the assumption that all keys are big-endian signed `n`-bit integers. Notice that the key and value returned may differ from those computed by [`DICTREMMIN`](#instr-dictremmin) and [`DICTUREMMIN`](#instr-dicturemmin). |  |
-| **`F495`** | `DICTIREMMINREF` | _`D n - D' c i -1 or D 0`_ | Similar to [`DICTIREMMIN`](#instr-dictiremmin), but returns the only reference in the value. |  |
-| **`F496`** | `DICTUREMMIN` | _`D n - D' x i -1 or D 0`_ | Similar to [`DICTREMMIN`](#instr-dictremmin), but returns the key as an unsigned `n`-bit _Integer_ `i`. |  |
-| **`F497`** | `DICTUREMMINREF` | _`D n - D' c i -1 or D 0`_ | Similar to [`DICTUREMMIN`](#instr-dicturemmin), but returns the only reference in the value. |  |
-| **`F49A`** | `DICTREMMAX` | _`D n - D' x k -1 or D 0`_ | Computes the maximal key `k` (represented by a _Slice_ with `n` data bits) in dictionary `D`, removes `k` from the dictionary, and returns `k` along with the associated value `x` and the modified dictionary `D'`. |  |
-| **`F49B`** | `DICTREMMAXREF` | _`D n - D' c k -1 or D 0`_ | Similar to [`DICTREMMAX`](#instr-dictremmax), but returns the only reference in the value as a _Cell_ `c`. |  |
-| **`F49C`** | `DICTIREMMAX` | _`D n - D' x i -1 or D 0`_ | Similar to [`DICTREMMAX`](#instr-dictremmax), but computes the minimal key `i` under the assumption that all keys are big-endian signed `n`-bit integers. Notice that the key and value returned may differ from those computed by [`DICTREMMAX`](#instr-dictremmax) and [`DICTUREMMAX`](#instr-dicturemmax). |  |
-| **`F49D`** | `DICTIREMMAXREF` | _`D n - D' c i -1 or D 0`_ | Similar to [`DICTIREMMAX`](#instr-dictiremmax), but returns the only reference in the value. |  |
-| **`F49E`** | `DICTUREMMAX` | _`D n - D' x i -1 or D 0`_ | Similar to [`DICTREMMAX`](#instr-dictremmax), but returns the key as an unsigned `n`-bit _Integer_ `i`. |  |
-| **`F49F`** | `DICTUREMMAXREF` | _`D n - D' c i -1 or D 0`_ | Similar to [`DICTUREMMAX`](#instr-dicturemmax), but returns the only reference in the value. |  |
-### 10.11 Special Get dictionary and prefix code dictionary operations and constant dictionaries
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`F482`** | `DICTMIN` | _`D n - x k -1或 0`_ | 计算字典 `D` 中的最小键 `k`（由拥有 `n` 数据位的_切片_表示），并返回 `k` 及其关联的值 `x`。 |  |
+| **`F483`** | `DICTMINREF` | _`D n - c k -1或 0`_ | 类似于 [`DICTMIN`](#instr-dictmin)，但返回值中唯一的引用作为_cell_ `c`。 |  |
+| **`F484`** | `DICTIMIN` | _`D n - x i -1或 0`_ | 类似于 [`DICTMIN`](#instr-dictmin)，但在假设所有键为大端有符号的 `n`-位整数的情况下计算最小键 `i`。注意，返回的键和值可能与 [`DICTMIN`](#instr-dictmin) 和 [`DICTUMIN`](#instr-dictumin) 计算出的不同。 |  |
+| **`F485`** | `DICTIMINREF` | _`D n - c i -1或 0`_ | 类似于 [`DICTIMIN`](#instr-dictimin)，但返回值中唯一的引用。 |  |
+| **`F486`** | `DICTUMIN` | _`D n - x i -1或 0`_ | 类似于 [`DICTMIN`](#instr-dictmin)，但以无符号 `n`-位 _整数_ `i` 的形式返回键。 |  |
+| **`F487`** | `DICTUMINREF` | _`D n - c i -1或 0`_ | 类似于 [`DICTUMIN`](#instr-dictumin)，但返回值中唯一的引用。 |  |
+| **`F48A`** | `DICTMAX` | _`D n - x k -1或 0`_ | 计算字典 `D` 中的最大键 `k`（由拥有 `n` 数据位的_切片_表示），并返回 `k` 及其关联的值 `x`。 |  |
+| **`F48B`** | `DICTMAXREF` | _`D n - c k -1或 0`_ | 类似于 [`DICTMAX`](#instr-dictmax)，但返回值中唯一的引用。 |  |
+| **`F48C`** | `DICTIMAX` | _`D n - x i -1或 0`_ | 类似于 [`DICTMAX`](#instr-dictmax)，但在假设所有键为大端有符号的 `n`-位整数的情况下计算最大键 `i`。注意，返回的键和值可能与 [`DICTMAX`](#instr-dictmax) 和 [`DICTUMAX`](#instr-dictumax) 计算出的不同。 |  |
+| **`F48D`** | `DICTIMAXREF` | _`D n - c i -1或 0`_ | 类似于 [`DICTIMAX`](#instr-dictimax)，但返回值中唯一的引用。 |  |
+| **`F48E`** | `DICTUMAX` | _`D n - x i -1或 0`_ | 类似于 [`DICTMAX`](#instr-dictmax)，但以无符号 `n`-位 _整数_ `i` 的形式返回键。 |  |
+| **`F48F`** | `DICTUMAXREF` | _`D n - c i -1或 0`_ | 类似于 [`DICTUMAX`](#instr-dictumax)，但返回值中唯一的引用。 |  |
+| **`F492`** | `DICTREMMIN` | _`D n - D' x k -1或D 0`_ | 计算字典 `D` 中的最小键 `k`（以_n_数据位的_切片_形式表示），从字典中移除 `k`，并返回 `k` 及其关联的值 `x` 和修改后的字典 `D'`。 |  |
+| **`F493`** | `DICTREMMINREF` | _`D n - D' c k -1或D 0`_ | 类似于 [`DICTREMMIN`](#instr-dictremmin)，但返回值中唯一的引用作为_cell_ `c`。 |  |
+| **`F494`** | `DICTIREMMIN` | _`D n - D' x i -1或D 0`_ | 类似于 [`DICTREMMIN`](#instr-dictremmin)，但计算最小键 `i`，假设所有键都是大端有符号的_n_-位整数。请注意，返回的键和值可能与[`DICTREMMIN`](#instr-dictremmin) 和 [`DICTUREMMIN`](#instr-dicturemmin)计算的不同。 |  |
+| **`F495`** | `DICTIREMMINREF` | _`D n - D' c i -1或D 0`_ | 类似于 [`DICTIREMMIN`](#instr-dictiremmin)，但返回值中唯一的引用。 |  |
+| **`F496`** | `DICTUREMMIN` | _`D n - D' x i -1或D 0`_ | 类似于 [`DICTREMMIN`](#instr-dictremmin)，但以无符号_n_-位_整数_ `i` 形式返回键。 |  |
+| **`F497`** | `DICTUREMMINREF` | _`D n - D' c i -1或D 0`_ | 类似于 [`DICTUREMMIN`](#instr-dicturemmin)，但返回值中唯一的引用。 |  |
+| **`F49A`** | `DICTREMMAX` | _`D n - D' x k -1或D 0`_ | 计算字典 `D` 中的最大键 `k`（以_n_数据位的_切片_形式表示），从字典中移除 `k`，并返回 `k` 及其关联的值 `x` 和修改后的字典 `D'`。 |  |
+| **`F49B`** | `DICTREMMAXREF` | _`D n - D' c k -1或D 0`_ | 类似于 [`DICTREMMAX`](#instr-dictremmax)，但返回值中唯一的引用作为_cell_ `c`。 |  |
+| **`F49C`** | `DICTIREMMAX` | _`D n - D' x i -1或D 0`_ | 类似于 [`DICTREMMAX`](#instr-dictremmax)，但计算最大键 `i`，假设所有键都是大端有符号的_n_-位整数。请注意，返回的键和值可能与[`DICTREMMAX`](#instr-dictremmax) 和 [`DICTUREMMAX`](#instr-dicturemmax)计算的不同。 |  |
+| **`F49D`** | `DICTIREMMAXREF` | _`D n - D' c i -1或D 0`_ | 类似于 [`DICTIREMMAX`](#instr-dictiremmax)，但返回值中唯一的引用。 |  |
+| **`F49E`** | `DICTUREMMAX` | _`D n - D' x i -1或D 0`_ | 类似于 [`DICTREMMAX`](#instr-dictremmax)，但以无符号_n_-位_整数_ `i` 形式返回键。 |  |
+| **`F49F`** | `DICTUREMMAXREF` | _`D n - D' c i -1或D 0`_ | 类似于 [`DICTUREMMAX`](#instr-dicturemmax)，但返回值中唯一的引用。 |  |
+### 10.11 特殊的获取字典和前缀码字典操作以及常量字典
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F4A0`** | `DICTIGETJMP` | _`i D n - `_ | Similar to [`DICTIGET`](#instr-dictiget), but with `x` [`BLESS`](#instr-bless)ed into a continuation with a subsequent [`JMPX`](#instr-jmpx) to it on success. On failure, does nothing. This is useful for implementing `switch`/`case` constructions. |  |
-| **`F4A1`** | `DICTUGETJMP` | _`i D n - `_ | Similar to [`DICTIGETJMP`](#instr-dictigetjmp), but performs [`DICTUGET`](#instr-dictuget) instead of [`DICTIGET`](#instr-dictiget). |  |
-| **`F4A2`** | `DICTIGETEXEC` | _`i D n - `_ | Similar to [`DICTIGETJMP`](#instr-dictigetjmp), but with [`EXECUTE`](#instr-execute) instead of [`JMPX`](#instr-jmpx). |  |
-| **`F4A3`** | `DICTUGETEXEC` | _`i D n - `_ | Similar to [`DICTUGETJMP`](#instr-dictugetjmp), but with [`EXECUTE`](#instr-execute) instead of [`JMPX`](#instr-jmpx). |  |
-| **`F4A6_n`** | `[ref] [n] DICTPUSHCONST` | _` - D n`_ | Pushes a non-empty constant dictionary `D` (as a `Cell^?`) along with its key length `0 <= n <= 1023`, stored as a part of the instruction. The dictionary itself is created from the first of remaining references of the current continuation. In this way, the complete [`DICTPUSHCONST`](#instr-dictpushconst) instruction can be obtained by first serializing `xF4A4_`, then the non-empty dictionary itself (one `1` bit and a cell reference), and then the unsigned 10-bit integer `n` (as if by a `STU 10` instruction). An empty dictionary can be pushed by a [`NEWDICT`](#instr-newdict) primitive instead. | `34` |
-| **`F4A8`** | `PFXDICTGETQ` | _`s D n - s' x s'' -1 or s 0`_ | Looks up the unique prefix of _Slice_ `s` present in the prefix code dictionary represented by `Cell^?` `D` and `0 <= n <= 1023`. If found, the prefix of `s` is returned as `s'`, and the corresponding value (also a _Slice_) as `x`. The remainder of `s` is returned as a _Slice_ `s''`. If no prefix of `s` is a key in prefix code dictionary `D`, returns the unchanged `s` and a zero flag to indicate failure. |  |
-| **`F4A9`** | `PFXDICTGET` | _`s D n - s' x s''`_ | Similar to [`PFXDICTGET`](#instr-pfxdictget), but throws a cell deserialization failure exception on failure. |  |
-| **`F4AA`** | `PFXDICTGETJMP` | _`s D n - s' s'' or s`_ | Similar to [`PFXDICTGETQ`](#instr-pfxdictgetq), but on success [`BLESS`](#instr-bless)es the value `x` into a _Continuation_ and transfers control to it as if by a [`JMPX`](#instr-jmpx). On failure, returns `s` unchanged and continues execution. |  |
-| **`F4AB`** | `PFXDICTGETEXEC` | _`s D n - s' s''`_ | Similar to [`PFXDICTGETJMP`](#instr-pfxdictgetjmp), but `EXEC`utes the continuation found instead of jumping to it. On failure, throws a cell deserialization exception. |  |
-| **`F4AE_n`** | `[ref] [n] PFXDICTCONSTGETJMP`<br/>`[ref] [n] PFXDICTSWITCH` | _`s - s' s'' or s`_ | Combines [`[n] DICTPUSHCONST`](#instr-dictpushconst) for `0 <= n <= 1023` with [`PFXDICTGETJMP`](#instr-pfxdictgetjmp). |  |
-| **`F4BC`** | `DICTIGETJMPZ` | _`i D n - i or nothing`_ | A variant of [`DICTIGETJMP`](#instr-dictigetjmp) that returns index `i` on failure. |  |
-| **`F4BD`** | `DICTUGETJMPZ` | _`i D n - i or nothing`_ | A variant of [`DICTUGETJMP`](#instr-dictugetjmp) that returns index `i` on failure. |  |
-| **`F4BE`** | `DICTIGETEXECZ` | _`i D n - i or nothing`_ | A variant of [`DICTIGETEXEC`](#instr-dictigetexec) that returns index `i` on failure. |  |
-| **`F4BF`** | `DICTUGETEXECZ` | _`i D n - i or nothing`_ | A variant of [`DICTUGETEXEC`](#instr-dictugetexec) that returns index `i` on failure. |  |
-### 10.12 SubDict dictionary operations
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`F4A0`** | `DICTIGETJMP` | _`i D n - `_ | 类似于 [`DICTIGET`](#instr-dictiget)，但在成功时将 `x` [`BLESS`](#instr-bless) 成一个continuation，并随后执行对其的 [`JMPX`](#instr-jmpx)。失败时不执行任何操作。这对于实现 `switch`/`case` 结构很有用。 |  |
+| **`F4A1`** | `DICTUGETJMP` | _`i D n - `_ | 类似于 [`DICTIGETJMP`](#instr-dictigetjmp)，但执行 [`DICTUGET`](#instr-dictuget) 而非 [`DICTIGET`](#instr-dictiget)。 |  |
+| **`F4A2`** | `DICTIGETEXEC` | _`i D n - `_ | 类似于 [`DICTIGETJMP`](#instr-dictigetjmp)，但使用 [`EXECUTE`](#instr-execute) 而非 [`JMPX`](#instr-jmpx)。 |  |
+| **`F4A3`** | `DICTUGETEXEC` | _`i D n - `_ | 类似于 [`DICTUGETJMP`](#instr-dictugetjmp)，但使用 [`EXECUTE`](#instr-execute) 而非 [`JMPX`](#instr-jmpx)。 |  |
+| **`F4A6_n`** | `[ref] [n] DICTPUSHCONST` | _` - D n`_ | 推送非空常量字典 `D`（作为`Cell^?`）和其键长 `0 <= n <= 1023`，存储为指令的一部分。字典本身是从当前continuation的剩余引用中的第一个创建的。通过这种方式，完整的 [`DICTPUSHCONST`](#instr-dictpushconst) 指令可以通过首先序列化 `xF4A4_`，然后是非空字典本身（一个 `1` 位和一个cell引用），然后是无符号的 10 位整数 `n`（仿佛通过 `STU 10` 指令）获得。空字典可以通过 [`NEWDICT`](#instr-newdict) 原语推送。 | `34` |
+| **`F4A8`** | `PFXDICTGETQ` | _`s D n - s' x s'' -1或s 0`_ | 在前缀码字典中查找切片 `s` 的唯一前缀，该字典由 `Cell^?` `D` 和 `0 <= n <= 1023` 表示。如果找到，作为 `s'` 返回 `s` 的前缀，并作为切片 `x` 返回相应的值。`s` 的剩余部分作为切片 `s''` 返回。如果 `s` 的任何前缀不是前缀码字典 `D` 中的键，则返回未更改的 `s` 和零标志位以表示失败。 |  |
+| **`F4A9`** | `PFXDICTGET` | _`s D n - s' x s''`_ | 类似于 [`PFXDICTGET`](#instr-pfxdictget)，但在失败时抛出cell反序列化失败异常。 |  |
+| **`F4AA`** | `PFXDICTGETJMP` | _`s D n - s' s''或s`_ | 类似于 [`PFXDICTGETQ`](#instr-pfxdictgetq)，但成功时将值 `x` [`BLESS`](#instr-bless) 成一个_continuation_，并像执行 [`JMPX`](#instr-jmpx) 一样转移控制权。失败时，返回未改变的 `s` 并继续执行。 |  |
+| **`F4AB`** | `PFXDICTGETEXEC` | _`s D n - s' s''`_ | 类似于 [`PFXDICTGETJMP`](#instr-pfxdictgetjmp)，但执行找到的continuation而非跳转它。失败时，抛出cell反序列化异常。 |  |
+| **`F4AE_n`** | `[ref] [n] PFXDICTCONSTGETJMP`<br/>`[ref] [n] PFXDICTSWITCH` | _`s - s' s''或s`_ | 将 [`[n] DICTPUSHCONST`](#instr-dictpushconst) 和 [`PFXDICTGETJMP`](#instr-pfxdictgetjmp) 结合起来，用于 `0 <= n <= 1023`。 |  |
+| **`F4BC`** | `DICTIGETJMPZ` | _`i D n - i或nothing`_ | [`DICTIGETJMP`](#instr-dictigetjmp) 的一个变种，在失败时返回索引 `i`。 |  |
+| **`F4BD`** | `DICTUGETJMPZ` | _`i D n - i或nothing`_ | [`DICTUGETJMP`](#instr-dictugetjmp) 的一个变种，在失败时返回索引 `i`。 |  |
+| **`F4BE`** | `DICTIGETEXECZ` | _`i D n - i或nothing`_ | [`DICTIGETEXEC`](#instr-dictigetexec) 的一个变种，在失败时返回索引 `i`。 |  |
+| **`F4BF`** | `DICTUGETEXECZ` | _`i D n - i或nothing`_ | [`DICTUGETEXEC`](#instr-dictugetexec) 的一个变种，在失败时返回索引 `i`。 |  |
+### 10.12 SubDict 字典操作
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F4B1`** | `SUBDICTGET` | _`k l D n - D'`_ | Constructs a subdictionary consisting of all keys beginning with prefix `k` (represented by a _Slice_, the first `0 <= l <= n <= 1023` data bits of which are used as a key) of length `l` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, returns the new subdictionary of the same type `HashmapE(n,X)` as a _Slice_ `D'`. |  |
-| **`F4B2`** | `SUBDICTIGET` | _`x l D n - D'`_ | Variant of [`SUBDICTGET`](#instr-subdictget) with the prefix represented by a signed big-endian `l`-bit _Integer_ `x`, where necessarily `l <= 257`. |  |
-| **`F4B3`** | `SUBDICTUGET` | _`x l D n - D'`_ | Variant of [`SUBDICTGET`](#instr-subdictget) with the prefix represented by an unsigned big-endian `l`-bit _Integer_ `x`, where necessarily `l <= 256`. |  |
-| **`F4B5`** | `SUBDICTRPGET` | _`k l D n - D'`_ | Similar to [`SUBDICTGET`](#instr-subdictget), but removes the common prefix `k` from all keys of the new dictionary `D'`, which becomes of type `HashmapE(n-l,X)`. |  |
-| **`F4B6`** | `SUBDICTIRPGET` | _`x l D n - D'`_ | Variant of [`SUBDICTRPGET`](#instr-subdictrpget) with the prefix represented by a signed big-endian `l`-bit _Integer_ `x`, where necessarily `l <= 257`. |  |
-| **`F4B7`** | `SUBDICTURPGET` | _`x l D n - D'`_ | Variant of [`SUBDICTRPGET`](#instr-subdictrpget) with the prefix represented by an unsigned big-endian `l`-bit _Integer_ `x`, where necessarily `l <= 256`. |  |
+| **`F4B1`** | `SUBDICTGET` | _`k l D n - D'`_ | 构建一个由所有以前缀 `k`（由一个_切片_表示，其前 `0 <= l <= n <= 1023` 个数据位用作键）为前缀的字典 `D` 中的键组成的子字典。这里的 `D` 是类型为 `HashmapE(n,X)` 的字典，拥有 `n` 位的键。成功时，返回同类型 `HashmapE(n,X)` 的新子字典作为一个_切片_ `D'`。 |  |
+| **`F4B2`** | `SUBDICTIGET` | _`x l D n - D'`_ | [`SUBDICTGET`](#instr-subdictget) 的变体，前缀由有符号的大端 `l`-位_整数_ `x` 表示，必须满足 `l <= 257`。 |  |
+| **`F4B3`** | `SUBDICTUGET` | _`x l D n - D'`_ | [`SUBDICTGET`](#instr-subdictget) 的变体，前缀由无符号的大端 `l`-位_整数_ `x` 表示，必须满足 `l <= 256`。 |  |
+| **`F4B5`** | `SUBDICTRPGET` | _`k l D n - D'`_ | 类似于 [`SUBDICTGET`](#instr-subdictget)，但从新字典 `D'` 的所有键中移除公共前缀 `k`，它变为 `HashmapE(n-l,X)` 类型。 |  |
+| **`F4B6`** | `SUBDICTIRPGET` | _`x l D n - D'`_ | [`SUBDICTRPGET`](#instr-subdictrpget) 的变体，前缀由有符号的大端 `l`-位_整数_ `x` 表示，必须满足 `l <= 257`。 |  |
+| **`F4B7`** | `SUBDICTURPGET` | _`x l D n - D'`_ | [`SUBDICTRPGET`](#instr-subdictrpget) 的变体，前缀由无符号的大端 `l`-位_整数_ `x` 表示，必须满足 `l <= 256`。 |  |
 
-## 11 Application-specific primitives
-### 11.1 Gas-related primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+## 11 应用特定原语
+### 11.1 与 Gas 相关的原语
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F800`** | `ACCEPT` | _`-`_ | Sets current gas limit `g_l` to its maximal allowed value `g_m`, and resets the gas credit `g_c` to zero, decreasing the value of `g_r` by `g_c` in the process.<br/>In other words, the current smart contract agrees to buy some gas to finish the current transaction. This action is required to process external messages, which bring no value (hence no gas) with themselves. | `26` |
-| **`F801`** | `SETGASLIMIT` | _`g - `_ | Sets current gas limit `g_l` to the minimum of `g` and `g_m`, and resets the gas credit `g_c` to zero. If the gas consumed so far (including the present instruction) exceeds the resulting value of `g_l`, an (unhandled) out of gas exception is thrown before setting new gas limits. Notice that [`SETGASLIMIT`](#instr-setgaslimit) with an argument `g >= 2^63-1` is equivalent to [`ACCEPT`](#instr-accept). | `26` |
-| **`F80F`** | `COMMIT` | _`-`_ | Commits the current state of registers `c4` (“persistent data'') and `c5` (“actions'') so that the current execution is considered “successful'' with the saved values even if an exception is thrown later. | `26` |
-### 11.2 Pseudo-random number generator primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`F800`** | `ACCEPT` | _`-`_ | 将当前的 Gas 限制 `g_l` 设置为其允许的最大值 `g_m`，并将 Gas 信用 `g_c` 重置为零，同时减少 `g_r` 的值 `g_c`。<br/>换句话说，当前的智能合约同意购买一些 Gas 以完成当前交易。此操作是处理外部消息所必需的，这些消息本身不携带价值（因而没有 Gas）。 | `26` |
+| **`F801`** | `SETGASLIMIT` | _`g - `_ | 将当前的 Gas 限制 `g_l` 设置为 `g` 与 `g_m` 的最小值，并将 Gas 信用 `g_c` 重置为零。如果到目前为止所消耗的 Gas（包括当前指令）超过了所得的 `g_l` 值，则在设置新的 Gas 限制之前抛出（未处理的）Gas 超限异常。请注意，带有参数 `g >= 2^63-1` 的 [`SETGASLIMIT`](#instr-setgaslimit) 等同于 [`ACCEPT`](#instr-accept)。 | `26` |
+| **`F80F`** | `COMMIT` | _`-`_ | 提交寄存器 `c4`（“持久数据”）和 `c5`（“操作”）的当前状态，以便即使后来抛出异常，当前执行也被视为“成功”，并保存了这些值。 | `26` |
+### 11.2 伪随机数生成器原语
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F810`** | `RANDU256` | _`- x`_ | Generates a new pseudo-random unsigned 256-bit _Integer_ `x`. The algorithm is as follows: if `r` is the old value of the random seed, considered as a 32-byte array (by constructing the big-endian representation of an unsigned 256-bit integer), then its `sha512(r)` is computed; the first 32 bytes of this hash are stored as the new value `r'` of the random seed, and the remaining 32 bytes are returned as the next random value `x`. | `26+\|c7\|+\|c1_1\|` |
-| **`F811`** | `RAND` | _`y - z`_ | Generates a new pseudo-random integer `z` in the range `0...y-1` (or `y...-1`, if `y<0`). More precisely, an unsigned random value `x` is generated as in `RAND256U`; then `z:=floor(x*y/2^256)` is computed.<br/>Equivalent to [`RANDU256`](#instr-randu256) [`256 MULRSHIFT`](#instr-mulrshift-var). | `26+\|c7\|+\|c1_1\|` |
-| **`F814`** | `SETRAND` | _`x - `_ | Sets the random seed to unsigned 256-bit _Integer_ `x`. | `26+\|c7\|+\|c1_1\|` |
-| **`F815`** | `ADDRAND`<br/>`RANDOMIZE` | _`x - `_ | Mixes unsigned 256-bit _Integer_ `x` into the random seed `r` by setting the random seed to `Sha` of the concatenation of two 32-byte strings: the first with the big-endian representation of the old seed `r`, and the second with the big-endian representation of `x`. | `26` |
-### 11.3 Configuration primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`F810`** | `RANDU256` | _`- x`_ | 生成一个新的伪随机的无符号 256 位 _整数_ `x`。算法如下: 如果 `r` 是旧的随机种子值，被视为一个 32 字节的数组（通过构造一个无符号 256 位整数的大端表示），则计算其 `sha512(r)`；这个哈希的前 32 字节被存储为新的随机种子值 `r'`，剩下的 32 字节作为下一个随机值 `x` 返回。 | `26+\|c7\|+\|c1_1\|` |
+| **`F811`** | `RAND` | _`y - z`_ | 在 `0...y-1`（或 `y...-1`, 如果 `y<0`）范围内生成一个新的伪随机整数 `z`。更确切地说，生成一个无符号随机值 `x`，如同在 `RAND256U` 中；然后计算 `z:=floor(x*y/2^256)`。<br/>等同于 [`RANDU256`](#instr-randu256) [`256 MULRSHIFT`](#instr-mulrshift-var). | `26+\|c7\|+\|c1_1\|` |
+| **`F814`** | `SETRAND` | _`x - `_ | 将随机种子设置为无符号 256 位 _整数_ `x`。 | `26+\|c7\|+\|c1_1\|` |
+| **`F815`** | `ADDRAND`<br/>`RANDOMIZE` | _`x - `_ | 将无符号 256 位 _整数_ `x` 混入随机种子 `r` 中，通过将随机种子设为两个 32 字节字符串的连结的 `Sha`，第一个字符串以旧种子 `r` 的大端表示，第二个字符串以 `x` 的大端表示。 | `26` |
+### 11.3 配置原语
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F82i`** | `[i] GETPARAM` | _` - x`_ | Returns the `i`-th parameter from the _Tuple_ provided at `c7` for `0 <= i <= 15`. Equivalent to [`c7 PUSHCTR`](#instr-pushctr) [`FIRST`](#instr-first) [`[i] INDEX`](#instr-index).<br/>If one of these internal operations fails, throws an appropriate type checking or range checking exception. | `26` |
-| **`F823`** | `NOW` | _` - x`_ | Returns the current Unix time as an _Integer_. If it is impossible to recover the requested value starting from `c7`, throws a type checking or range checking exception as appropriate.<br/>Equivalent to [`3 GETPARAM`](#instr-getparam). | `26` |
-| **`F824`** | `BLOCKLT` | _` - x`_ | Returns the starting logical time of the current block.<br/>Equivalent to [`4 GETPARAM`](#instr-getparam). | `26` |
-| **`F825`** | `LTIME` | _` - x`_ | Returns the logical time of the current transaction.<br/>Equivalent to [`5 GETPARAM`](#instr-getparam). | `26` |
-| **`F826`** | `RANDSEED` | _` - x`_ | Returns the current random seed as an unsigned 256-bit _Integer_.<br/>Equivalent to [`6 GETPARAM`](#instr-getparam). | `26` |
-| **`F827`** | `BALANCE` | _` - t`_ | Returns the remaining balance of the smart contract as a _Tuple_ consisting of an _Integer_ (the remaining Gram balance in nanograms) and a _Maybe Cell_ (a dictionary with 32-bit keys representing the balance of “extra currencies'').<br/>Equivalent to [`7 GETPARAM`](#instr-getparam).<br/>Note that `RAW` primitives such as [`SENDRAWMSG`](#instr-sendrawmsg) do not update this field. | `26` |
-| **`F828`** | `MYADDR` | _` - s`_ | Returns the internal address of the current smart contract as a _Slice_ with a `MsgAddressInt`. If necessary, it can be parsed further using primitives such as [`PARSEMSGADDR`](#instr-parsemsgaddr) or [`REWRITESTDADDR`](#instr-rewritestdaddr).<br/>Equivalent to [`8 GETPARAM`](#instr-getparam). | `26` |
-| **`F829`** | `CONFIGROOT` | _` - D`_ | Returns the _Maybe Cell_ `D` with the current global configuration dictionary. Equivalent to `9 GETPARAM `. | `26` |
-| **`F830`** | `CONFIGDICT` | _` - D 32`_ | Returns the global configuration dictionary along with its key length (32).<br/>Equivalent to [`CONFIGROOT`](#instr-configroot) [`32 PUSHINT`](#instr-pushint-4). | `26` |
-| **`F832`** | `CONFIGPARAM` | _`i - c -1 or 0`_ | Returns the value of the global configuration parameter with integer index `i` as a _Cell_ `c`, and a flag to indicate success.<br/>Equivalent to [`CONFIGDICT`](#instr-configdict) [`DICTIGETREF`](#instr-dictigetref). |  |
-| **`F833`** | `CONFIGOPTPARAM` | _`i - c^?`_ | Returns the value of the global configuration parameter with integer index `i` as a _Maybe Cell_ `c^?`.<br/>Equivalent to [`CONFIGDICT`](#instr-configdict) [`DICTIGETOPTREF`](#instr-dictigetoptref). |  |
-### 11.4 Global variable primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`F82i`** | `[i] GETPARAM` | _` - x`_ | 从提供于 `c7` 的 _元组_ 中返回第 `i` 个参数，对于 `0 <= i <= 15`。等同于 [`c7 PUSHCTR`](#instr-pushctr) [`FIRST`](#instr-first) [`[i] INDEX`](#instr-index).<br/>如果这些内部操作之一失败，则抛出相应的类型检查或范围检查异常。 | `26` |
+| **`F823`** | `NOW` | _` - x`_ | 返回当前 Unix 时间作为一个 _整数_。如果从 `c7` 开始无法恢复请求的值，则抛出类型检查或范围检查异常。<br/>等同于 [`3 GETPARAM`](#instr-getparam). | `26` |
+| **`F824`** | `BLOCKLT` | _` - x`_ | 返回当前区块的开始逻辑时间。<br/>等同于 [`4 GETPARAM`](#instr-getparam). | `26` |
+| **`F825`** | `LTIME` | _` - x`_ | 返回当前交易的逻辑时间。<br/>等同于 [`5 GETPARAM`](#instr-getparam). | `26` |
+| **`F826`** | `RANDSEED` | _` - x`_ | 以无符号 256 位 _整数_ 的形式返回当前的随机种子。<br/>等同于 [`6 GETPARAM`](#instr-getparam). | `26` |
+| **`F827`** | `BALANCE` | _` - t`_ | 以 _元组_ 形式返回智能合约剩余的余额，_元组_ 包含一个 _整数_（剩余的Gram余额，以nanograms为单位）和一个 _可能的cell_（以 32 位键表示的“额外代币”的余额字典）。<br/>等同于 [`7 GETPARAM`](#instr-getparam).<br/>请注意，如 [`SENDRAWMSG`](#instr-sendrawmsg) 等 `RAW` 原语不会更新此字段。 | `26` |
+| **`F828`** | `MYADDR` | _` - s`_ | 以 _分片_ 形式返回当前智能合约的内部地址，包含一个 `MsgAddressInt`。如果必要，可以使用诸如 [`PARSEMSGADDR`](#instr-parsemsgaddr) 或 [`REWRITESTDADDR`](#instr-rewritestdaddr) 之类的原语进一步解析它。<br/>等同于 [`8 GETPARAM`](#instr-getparam). | `26` |
+| **`F829`** | `CONFIGROOT` | _` - D`_ | 以 _可能的cell_ `D` 形式返回当前全局配置字典。等同于 `9 GETPARAM `。 | `26` |
+| **`F830`** | `CONFIGDICT` | _` - D 32`_ | 返回全局配置字典及其键长（32）。<br/>等同于 [`CONFIGROOT`](#instr-configroot) [`32 PUSHINT`](#instr-pushint-4). | `26` |
+| **`F832`** | `CONFIGPARAM` | _`i - c -1 或 0`_ | 以 _cell_ `c` 的形式返回整数索引 `i` 的全局配置参数的值，以及指示成功的标志位。<br/>等同于 [`CONFIGDICT`](#instr-configdict) [`DICTIGETREF`](#instr-dictigetref). |  |
+| **`F833`** | `CONFIGOPTPARAM` | _`i - c^?`_ | 以 _可能的cell_ `c^?` 的形式返回整数索引 `i` 的全局配置参数的值。<br/>等同于 [`CONFIGDICT`](#instr-configdict) [`DICTIGETOPTREF`](#instr-dictigetoptref). |  |
+### 11.4 全局变量原语
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F840`** | `GETGLOBVAR` | _`k - x`_ | Returns the `k`-th global variable for `0 <= k < 255`.<br/>Equivalent to [`c7 PUSHCTR`](#instr-pushctr) [`SWAP`](#instr-swap) [`INDEXVARQ`](#instr-indexvarq). | `26` |
-| **`F85_k`** | `[k] GETGLOB` | _` - x`_ | Returns the `k`-th global variable for `1 <= k <= 31`.<br/>Equivalent to [`c7 PUSHCTR`](#instr-pushctr) [`[k] INDEXQ`](#instr-indexq). | `26` |
-| **`F860`** | `SETGLOBVAR` | _`x k - `_ | Assigns `x` to the `k`-th global variable for `0 <= k < 255`.<br/>Equivalent to [`c7 PUSHCTR`](#instr-pushctr) [`ROTREV`](#instr-rotrev) [`SETINDEXVARQ`](#instr-setindexvarq) [`c7 POPCTR`](#instr-popctr). | `26+\|c7’\|` |
-| **`F87_k`** | `[k] SETGLOB` | _`x - `_ | Assigns `x` to the `k`-th global variable for `1 <= k <= 31`.<br/>Equivalent to [`c7 PUSHCTR`](#instr-pushctr) [`SWAP`](#instr-swap) [`k SETINDEXQ`](#instr-setindexq) [`c7 POPCTR`](#instr-popctr). | `26+\|c7’\|` |
-### 11.5 Hashing and cryptography primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`F840`** | `GETGLOBVAR` | _`k - x`_ | 返回第 `k` 个全局变量，对于 `0 <= k < 255`。<br/>相当于 [`c7 PUSHCTR`](#instr-pushctr) [`SWAP`](#instr-swap) [`INDEXVARQ`](#instr-indexvarq)。 | `26` |
+| **`F85_k`** | `[k] GETGLOB` | _` - x`_ | 返回第 `k` 个全局变量，对于 `1 <= k <= 31`。<br/>相当于 [`c7 PUSHCTR`](#instr-pushctr) [`[k] INDEXQ`](#instr-indexq)。 | `26` |
+| **`F860`** | `SETGLOBVAR` | _`x k - `_ | 将 `x` 分配给第 `k` 个全局变量，对于 `0 <= k < 255`。<br/>相当于 [`c7 PUSHCTR`](#instr-pushctr) [`ROTREV`](#instr-rotrev) [`SETINDEXVARQ`](#instr-setindexvarq) [`c7 POPCTR`](#instr-popctr)。 | `26+\|c7’\|` |
+| **`F87_k`** | `[k] SETGLOB` | _`x - `_ | 将 `x` 分配给第 `k` 个全局变量，对于 `1 <= k <= 31`。<br/>相当于 [`c7 PUSHCTR`](#instr-pushctr) [`SWAP`](#instr-swap) [`k SETINDEXQ`](#instr-setindexq) [`c7 POPCTR`](#instr-popctr)。 | `26+\|c7’\|` |
+### 11.5 哈希和密码学原语
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F900`** | `HASHCU` | _`c - x`_ | Computes the representation hash of a _Cell_ `c` and returns it as a 256-bit unsigned integer `x`. Useful for signing and checking signatures of arbitrary entities represented by a tree of cells. | `26` |
-| **`F901`** | `HASHSU` | _`s - x`_ | Computes the hash of a _Slice_ `s` and returns it as a 256-bit unsigned integer `x`. The result is the same as if an ordinary cell containing only data and references from `s` had been created and its hash computed by [`HASHCU`](#instr-hashcu). | `526` |
-| **`F902`** | `SHA256U` | _`s - x`_ | Computes `Sha` of the data bits of _Slice_ `s`. If the bit length of `s` is not divisible by eight, throws a cell underflow exception. The hash value is returned as a 256-bit unsigned integer `x`. | `26` |
-| **`F910`** | `CHKSIGNU` | _`h s k - ?`_ | Checks the Ed25519-signature `s` of a hash `h` (a 256-bit unsigned integer, usually computed as the hash of some data) using public key `k` (also represented by a 256-bit unsigned integer).<br/>The signature `s` must be a _Slice_ containing at least 512 data bits; only the first 512 bits are used. The result is `-1` if the signature is valid, `0` otherwise.<br/>Notice that [`CHKSIGNU`](#instr-chksignu) is equivalent to [`ROT`](#instr-rot) [`NEWC`](#instr-newc) [`256 STU`](#instr-stu) [`ENDC`](#instr-endc) [`ROTREV`](#instr-rotrev) [`CHKSIGNS`](#instr-chksigns), i.e., to [`CHKSIGNS`](#instr-chksigns) with the first argument `d` set to 256-bit _Slice_ containing `h`. Therefore, if `h` is computed as the hash of some data, these data are hashed _twice_, the second hashing occurring inside [`CHKSIGNS`](#instr-chksigns). | `26` |
-| **`F911`** | `CHKSIGNS` | _`d s k - ?`_ | Checks whether `s` is a valid Ed25519-signature of the data portion of _Slice_ `d` using public key `k`, similarly to [`CHKSIGNU`](#instr-chksignu). If the bit length of _Slice_ `d` is not divisible by eight, throws a cell underflow exception. The verification of Ed25519 signatures is the standard one, with `Sha` used to reduce `d` to the 256-bit number that is actually signed. | `26` |
-### 11.6 Miscellaneous primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`F900`** | `HASHCU` | _`c - x`_ | 计算 _cell_ `c` 的表示哈希，并将其作为 256 位无符号整数 `x` 返回。用于对由cell树表示的任意实体进行签名和检查签名。 | `26` |
+| **`F901`** | `HASHSU` | _`s - x`_ | 计算 _分片_ `s` 的哈希，并将其作为 256 位无符号整数 `x` 返回。结果与如果创建了一个仅包含 `s` 的数据和引用的普通cell并通过 [`HASHCU`](#instr-hashcu) 计算其哈希相同。 | `526` |
+| **`F902`** | `SHA256U` | _`s - x`_ | 对 _分片_ `s` 的数据位计算 `Sha`。如果 `s` 的位长度不能被八整除，抛出一个cell下溢异常。哈希值作为 256 位无符号整数 `x` 返回。 | `26` |
+| **`F910`** | `CHKSIGNU` | _`h s k - ?`_ | 使用公钥 `k`（也用一个 256 位无符号整数表示）检查哈希 `h`（通常作为某些数据的哈希，为一个 256 位无符号整数）的 Ed25519 签名 `s`。<br/>签名 `s` 必须是至少包含 512 位数据的 _分片_；仅使用前 512 位。结果为 `-1` 则签名有效，否则为 `0`。<br/>请注意，[`CHKSIGNU`](#instr-chksignu) 相当于 [`ROT`](#instr-rot) [`NEWC`](#instr-newc) [`256 STU`](#instr-stu) [`ENDC`](#instr-endc) [`ROTREV`](#instr-rotrev) [`CHKSIGNS`](#instr-chksigns)，即，相当于用第一个参数 `d` 设置为包含 `h` 的 256 位 _分片_ 的 [`CHKSIGNS`](#instr-chksigns)。因此，如果 `h` 是作为某些数据的哈希计算的，这些数据会被 _两次_ 哈希，第二次哈希发生在 [`CHKSIGNS`](#instr-chksigns) 内部。 | `26` |
+| **`F911`** | `CHKSIGNS` | _`d s k - ?`_ | 检查 `s` 是否是使用公钥 `k` 对 _分片_ `d` 的数据部分的有效 Ed25519 签名，类似于 [`CHKSIGNU`](#instr-chksignu)。如果 _分片_ `d` 的位长度不能被八整除，抛出一个cell下溢异常。Ed25519 签名的验证是标准的，使用 `Sha` 将 `d` 缩减为实际签名的 256 位数字。 | `26` |
+### 11.6 其他原语
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F940`** | `CDATASIZEQ` | _`c n - x y z -1 or 0`_ | Recursively computes the count of distinct cells `x`, data bits `y`, and cell references `z` in the dag rooted at _Cell_ `c`, effectively returning the total storage used by this dag taking into account the identification of equal cells. The values of `x`, `y`, and `z` are computed by a depth-first traversal of this dag, with a hash table of visited cell hashes used to prevent visits of already-visited cells. The total count of visited cells `x` cannot exceed non-negative _Integer_ `n`; otherwise the computation is aborted before visiting the `(n+1)`-st cell and a zero is returned to indicate failure. If `c` is _Null_, returns `x=y=z=0`. |  |
-| **`F941`** | `CDATASIZE` | _`c n - x y z`_ | A non-quiet version of [`CDATASIZEQ`](#instr-cdatasizeq) that throws a cell overflow exception (8) on failure. |  |
-| **`F942`** | `SDATASIZEQ` | _`s n - x y z -1 or 0`_ | Similar to [`CDATASIZEQ`](#instr-cdatasizeq), but accepting a _Slice_ `s` instead of a _Cell_. The returned value of `x` does not take into account the cell that contains the slice `s` itself; however, the data bits and the cell references of `s` are accounted for in `y` and `z`. |  |
-| **`F943`** | `SDATASIZE` | _`s n - x y z`_ | A non-quiet version of [`SDATASIZEQ`](#instr-sdatasizeq) that throws a cell overflow exception (8) on failure. |  |
-### 11.7 Currency manipulation primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`F940`** | `CDATASIZEQ` | _`c n - x y z -1 或 0`_ | 递归计算以 _cell_ `c` 为根的 dag 中不同cell `x`、数据位 `y` 和cell引用 `z` 的计数，有效地返回考虑等价cell标识时该 dag 使用的总存储量。`x`、`y` 和 `z` 的值通过该 dag 的深度优先遍历来计算，使用访问过的cell哈希表来防止已访问cell的重复访问。访问的cell总数 `x` 不能超过非负 _整数_ `n`；否则，在访问第 `(n+1)` 个cell之前计算被中断，并返回零表示失败。如果 `c` 为 _空_，则返回 `x=y=z=0`。 |  |
+| **`F941`** | `CDATASIZE` | _`c n - x y z`_ | [`CDATASIZEQ`](#instr-cdatasizeq) 的非静默版本，失败时抛出cell溢出异常（8）。 |  |
+| **`F942`** | `SDATASIZEQ` | _`s n - x y z -1 或 0`_ | 类似于 [`CDATASIZEQ`](#instr-cdatasizeq)，但接受一个 _分片_ `s` 而非 _cell_。返回的 `x` 值不包括包含切片 `s` 本身的cell；然而，`s` 的数据位和cell引用在 `y` 和 `z` 中被计算在内。 |  |
+| **`F943`** | `SDATASIZE` | _`s n - x y z`_ | [`SDATASIZEQ`](#instr-sdatasizeq) 的非静默版本，失败时抛出cell溢出异常（8）。 |  |
+### 11.7 代币操作原语
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`FA00`** | `LDGRAMS`<br/>`LDVARUINT16` | _`s - x s'`_ | Loads (deserializes) a `Gram` or `VarUInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, followed by an `8l`-bit unsigned big-endian representation of `x`.<br/>The net effect is approximately equivalent to [`4 LDU`](#instr-ldu) [`SWAP`](#instr-swap) [`3 LSHIFT#`](#instr-lshift) [`LDUX`](#instr-ldux). | `26` |
-| **`FA01`** | `LDVARINT16` | _`s - x s'`_ | Similar to [`LDVARUINT16`](#instr-ldgrams), but loads a _signed_ _Integer_ `x`.<br/>Approximately equivalent to [`4 LDU`](#instr-ldu) [`SWAP`](#instr-swap) [`3 LSHIFT#`](#instr-lshift) [`LDIX`](#instr-ldix). | `26` |
-| **`FA02`** | `STGRAMS`<br/>`STVARUINT16` | _`b x - b'`_ | Stores (serializes) an _Integer_ `x` in the range `0...2^120-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, which is the smallest integer `l>=0`, such that `x<2^(8l)`, followed by an `8l`-bit unsigned big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown. | `26` |
-| **`FA03`** | `STVARINT16` | _`b x - b'`_ | Similar to [`STVARUINT16`](#instr-stgrams), but serializes a _signed_ _Integer_ `x` in the range `-2^119...2^119-1`. | `26` |
-### 11.8 Message and address manipulation primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`FA00`** | `LDGRAMS`<br/>`LDVARUINT16` | _`s - x s'`_ | 从 _分片_ `s` 中加载（反序列化）一个 `Gram` 或 `VarUInteger 16` 数量，并以 _整数_ `x` 形式返回数量及 `s` 的剩余部分 `s'`。`x` 的预期序列化格式包括一个 4 位无符号大端整数 `l`，随后是 `x` 的一个 `8l` 位无符号大端表示。<br/>其效果大致等同于 [`4 LDU`](#instr-ldu) [`SWAP`](#instr-swap) [`3 LSHIFT#`](#instr-lshift) [`LDUX`](#instr-ldux)。 | `26` |
+| **`FA01`** | `LDVARINT16` | _`s - x s'`_ | 与 [`LDVARUINT16`](#instr-ldgrams) 相似，但加载一个 _有符号_ _整数_ `x`。<br/>大致等同于 [`4 LDU`](#instr-ldu) [`SWAP`](#instr-swap) [`3 LSHIFT#`](#instr-lshift) [`LDIX`](#instr-ldix)。 | `26` |
+| **`FA02`** | `STGRAMS`<br/>`STVARUINT16` | _`b x - b'`_ | 将范围为 `0...2^120-1` 内的 _整数_ `x` 存储（序列化）到 _构建器_ `b` 中，并返回 _构建器_ `b'`的结果。`x` 的序列化格式包括一个 4 位无符号大端整数 `l`，这是满足 `x<2^(8l)` 的最小的 `l>=0` 整数，随后是 `x` 的一个 `8l` 位无符号大端表示。如果 `x` 不在支持的范围内，则抛出范围检查异常。 | `26` |
+| **`FA03`** | `STVARINT16` | _`b x - b'`_ | 类似于 [`STVARUINT16`](#instr-stgrams)，但序列化一个范围为 `-2^119...2^119-1` 的 _有符号_ _整数_ `x`。 | `26` |
+### 11.8 消息和地址操作原语
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`FA40`** | `LDMSGADDR` | _`s - s' s''`_ | Loads from _Slice_ `s` the only prefix that is a valid `MsgAddress`, and returns both this prefix `s'` and the remainder `s''` of `s` as slices. | `26` |
-| **`FA41`** | `LDMSGADDRQ` | _`s - s' s'' -1 or s 0`_ | A quiet version of [`LDMSGADDR`](#instr-ldmsgaddr): on success, pushes an extra `-1`; on failure, pushes the original `s` and a zero. | `26` |
-| **`FA42`** | `PARSEMSGADDR` | _`s - t`_ | Decomposes _Slice_ `s` containing a valid `MsgAddress` into a _Tuple_ `t` with separate fields of this `MsgAddress`. If `s` is not a valid `MsgAddress`, a cell deserialization exception is thrown. | `26` |
-| **`FA43`** | `PARSEMSGADDRQ` | _`s - t -1 or 0`_ | A quiet version of [`PARSEMSGADDR`](#instr-parsemsgaddr): returns a zero on error instead of throwing an exception. | `26` |
-| **`FA44`** | `REWRITESTDADDR` | _`s - x y`_ | Parses _Slice_ `s` containing a valid `MsgAddressInt` (usually a `msg_addr_std`), applies rewriting from the `anycast` (if present) to the same-length prefix of the address, and returns both the workchain `x` and the 256-bit address `y` as integers. If the address is not 256-bit, or if `s` is not a valid serialization of `MsgAddressInt`, throws a cell deserialization exception. | `26` |
-| **`FA45`** | `REWRITESTDADDRQ` | _`s - x y -1 or 0`_ | A quiet version of primitive [`REWRITESTDADDR`](#instr-rewritestdaddr). | `26` |
-| **`FA46`** | `REWRITEVARADDR` | _`s - x s'`_ | A variant of [`REWRITESTDADDR`](#instr-rewritestdaddr) that returns the (rewritten) address as a _Slice_ `s`, even if it is not exactly 256 bit long (represented by a `msg_addr_var`). | `26` |
-| **`FA47`** | `REWRITEVARADDRQ` | _`s - x s' -1 or 0`_ | A quiet version of primitive [`REWRITEVARADDR`](#instr-rewritevaraddr). | `26` |
-### 11.9 Outbound message and output action primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| **`FA40`** | `LDMSGADDR` | _`s - s' s''`_ | 从 _分片_ `s` 中加载唯一有效的 `MsgAddress` 前缀，并将该前缀 `s'` 和 `s` 的剩余部分 `s''` 作为分片返回。 | `26` |
+| **`FA41`** | `LDMSGADDRQ` | _`s - s' s'' -1 或 s 0`_ | [`LDMSGADDR`](#instr-ldmsgaddr) 的静默版本：成功时额外推送 `-1`；失败时推送原始 `s` 和零。 | `26` |
+| **`FA42`** | `PARSEMSGADDR` | _`s - t`_ | 将包含有效 `MsgAddress` 的 _分片_ `s` 分解为一个具有此 `MsgAddress` 独立字段的 _元组_ `t`。如果 `s` 不是有效的 `MsgAddress`，则抛出cell反序列化异常。 | `26` |
+| **`FA43`** | `PARSEMSGADDRQ` | _`s - t -1 或 0`_ | [`PARSEMSGADDR`](#instr-parsemsgaddr) 的静默版本：错误时返回零而不是抛出异常。 | `26` |
+| **`FA44`** | `REWRITESTDADDR` | _`s - x y`_ | 解析包含有效 `MsgAddressInt`（通常是 `msg_addr_std`）的 _分片_ `s`，应用从 `anycast`（如果存在）到地址的相同长度前缀的重写，并以整数形式返回工作链 `x` 和 256 位地址 `y`。如果地址不是 256 位的，或者如果 `s` 不是有效的 `MsgAddressInt` 序列化，则抛出cell反序列化异常。 | `26` |
+| **`FA45`** | `REWRITESTDADDRQ` | _`s - x y -1 或 0`_ | 原语 [`REWRITESTDADDR`](#instr-rewritestdaddr) 的静默版本。 | `26` |
+| **`FA46`** | `REWRITEVARADDR` | _`s - x s'`_ | [`REWRITESTDADDR`](#instr-rewritestdaddr) 的变体，即使地址不是完全为 256 位长（由 `msg_addr_var` 表示），也返回（重写的）地址作为 _分片_ `s`。 | `26` |
+| **`FA47`** | `REWRITEVARADDRQ` | _`s - x s' -1 或 0`_ | 原语 [`REWRITEVARADDR`](#instr-rewritevaraddr) 的静默版本。 | `26` |
+### 11.9 出站消息和输出操作原语
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`FB00`** | `SENDRAWMSG` | _`c x - `_ | Sends a raw message contained in _Cell `c`_, which should contain a correctly serialized object `Message X`, with the only exception that the source address is allowed to have dummy value `addr_none` (to be automatically replaced with the current smart-contract address), and `ihr_fee`, `fwd_fee`, `created_lt` and `created_at` fields can have arbitrary values (to be rewritten with correct values during the action phase of the current transaction). Integer parameter `x` contains the flags. Currently `x=0` is used for ordinary messages; `x=128` is used for messages that are to carry all the remaining balance of the current smart contract (instead of the value originally indicated in the message); `x=64` is used for messages that carry all the remaining value of the inbound message in addition to the value initially indicated in the new message (if bit 0 is not set, the gas fees are deducted from this amount); `x'=x+1` means that the sender wants to pay transfer fees separately; `x'=x+2` means that any errors arising while processing this message during the action phase should be ignored. Finally, `x'=x+32` means that the current account must be destroyed if its resulting balance is zero. This flag is usually employed together with `+128`. | `526` |
-| **`FB02`** | `RAWRESERVE` | _`x y - `_ | Creates an output action which would reserve exactly `x` nanograms (if `y=0`), at most `x` nanograms (if `y=2`), or all but `x` nanograms (if `y=1` or `y=3`), from the remaining balance of the account. It is roughly equivalent to creating an outbound message carrying `x` nanograms (or `b-x` nanograms, where `b` is the remaining balance) to oneself, so that the subsequent output actions would not be able to spend more money than the remainder. Bit `+2` in `y` means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved. Bit `+8` in `y` means `x:=-x` before performing any further actions. Bit `+4` in `y` means that `x` is increased by the original balance of the current account (before the compute phase), including all extra currencies, before performing any other checks and actions. Currently `x` must be a non-negative integer, and `y` must be in the range `0...15`. | `526` |
-| **`FB03`** | `RAWRESERVEX` | _`x D y - `_ | Similar to [`RAWRESERVE`](#instr-rawreserve), but also accepts a dictionary `D` (represented by a _Cell_ or _Null_) with extra currencies. In this way currencies other than Grams can be reserved. | `526` |
-| **`FB04`** | `SETCODE` | _`c - `_ | Creates an output action that would change this smart contract code to that given by _Cell_ `c`. Notice that this change will take effect only after the successful termination of the current run of the smart contract. | `526` |
-| **`FB06`** | `SETLIBCODE` | _`c x - `_ | Creates an output action that would modify the collection of this smart contract libraries by adding or removing library with code given in _Cell_ `c`. If `x=0`, the library is actually removed if it was previously present in the collection (if not, this action does nothing). If `x=1`, the library is added as a private library, and if `x=2`, the library is added as a public library (and becomes available to all smart contracts if the current smart contract resides in the masterchain); if the library was present in the collection before, its public/private status is changed according to `x`. Also, `16` can be added to `x` to enable bounce transaction on failure. Values of `x` other than `0...2 (+16 possible)` are invalid. | `526` |
-| **`FB07`** | `CHANGELIB` | _`h x - `_ | Creates an output action similarly to [`SETLIBCODE`](#instr-setlibcode), but instead of the library code accepts its hash as an unsigned 256-bit integer `h`. If `x!=0` and the library with hash `h` is absent from the library collection of this smart contract, this output action will fail. | `526` |
+| **`FB00`** | `SENDRAWMSG` | _`c x - `_ | 发送包含在 _cell_ `c` 中的原始消息，其中应包含正确序列化的对象 `Message X`，唯一的例外是源地址允许有虚拟值 `addr_none`（将自动替换为当前智能合约地址），且 `ihr_fee`、`fwd_fee`、`created_lt` 和 `created_at` 字段可以有任意值（在当前交易的操作阶段将被正确值重写）。整数参数 `x` 包含标志位。当前 `x=0` 用于普通消息；`x=128` 用于携带当前智能合约所有剩余余额的消息（而非消息最初指示的值）；`x=64` 用于携带除初始指示的新消息值外，入站消息的所有剩余值的消息（如果未设置位 0，则此金额中扣除 gas 费用）；`x'=x+1` 表示发送者想要单独支付转账费用；`x'=x+2` 表示在操作阶段处理此消息时发生的任何错误都应被忽略。最后，`x'=x+32` 意味着如果当前账户的最终余额为零，则必须销毁该账户。这个标志位通常与 `+128` 一起使用。 | `526` |
+| **`FB02`** | `RAWRESERVE` | _`x y - `_ | 创建一个输出操作，该操作将从账户的剩余余额中准确预留 `x` nanograms（如果 `y=0`），最多 `x` nanograms（如果 `y=2`），或除 `x` nanograms外的所有nanograms（如果 `y=1` 或 `y=3`）。这大致相当于创建一个携带 `x` nanograms（或 `b-x` nanograms，其中 `b` 是剩余余额）到自己的出站消息，以便后续输出操作无法花费超过剩余金额的资金。`y` 中的位 `+2` 表明，如果无法预留指定金额，外部操作不会失败；相反，将预留所有剩余余额。`y` 中的位 `+8` 表示在执行任何进一步操作之前 `x:=-x`。`y` 中的位 `+4` 表示在执行任何其他检查和操作之前，`x` 会增加当前帐户（在计算阶段之前）的原始余额，包括所有额外货币。当前 `x` 必须是非负整数，且 `y` 必须在 `0...15` 范围内。 | `526` |
+| **`FB03`** | `RAWRESERVEX` | _`x D y - `_ | 类似于 [`RAWRESERVE`](#instr-rawreserve)，但也接受一个代表额外代币的字典 `D`（由 _cell_ 或 _空_ 表示）。这种方式可以预留Grams以外的货币。 | `526` |
+| **`FB04`** | `SETCODE` | _`c - `_ | 创建一个输出操作，该操作将此智能合约代码更改为由 _cell_ `c` 给出的代码。请注意，此更改仅在当前智能合约运行成功终止后生效。 | `526` |
+| **`FB06`** | `SETLIBCODE` | _`c x - `_ | 创建一个输出操作，用于修改此智能合约库的集合，通过添加或移除在 _cell_ `c` 中给定代码的库。如果 `x=0`，若库先前存在于集合中，则实际上会被移除（如果不存在，则此操作无效）。如果 `x=1`，则库被作为私有库添加；如果 `x=2`，则库被作为公共库添加（如果当前智能合约位于主链中，则变得对所有智能合约可用）；如果库之前已存在于集合中，则其公共/私有状态将根据 `x` 改变。另外，`16` 可以加到 `x` 上，以在失败时启用弹回交易。`x` 的值除了 `0...2 (+16 可能)` 之外都是无效的。 | `526` |
+| **`FB07`** | `CHANGELIB` | _`h x - `_ | 类似于 [`SETLIBCODE`](#instr-setlibcode)，创建一个输出操作，但它接受库的哈希而非库代码，哈希以无符号 256 位整数 `h` 的形式给出。如果 `x!=0` 且该智能合约的库集合中不存在哈希值为 `h` 的库，此输出操作将失败。 | `526` |
 
-## 12 Debug primitives
-Opcodes beginning with `FE` are reserved for the debug primitives. These primitives have known fixed operation length and behave as (multibyte) [`NOP`](#instr-nop) operations.
+## 12 调试原语
+以 `FE` 开头的操作码保留给调试原语使用。这些原语具有已知的固定操作长度，并且作为（多字节）[`NOP`](#instr-nop) 操作行为。
 
-However, when invoked in a TVM instance with debug mode enabled, these primitives can produce a specific output into the text debug log of the TVM instance, never affecting the TVM state.
+然而，当在启用调试模式的 TVM 实例中调用时，这些原语可以产生特定输出到 TVM 实例的文本调试日志中，不影响 TVM 状态。
 
-[`DEBUG`](#instr-debug) and [`DEBUGSTR`](#instr-debugstr) are the two debug primitives, they cover all opcodes that start with `FE`.
-Other primitives listed here have opcodes from the same set. When debug is enabled, they have their specified effects. When debug is disabled, they behave as [`NOP`](#instr-nop).
+[`DEBUG`](#instr-debug) 和 [`DEBUGSTR`](#instr-debugstr) 是两个调试原语，它们涵盖了所有以 `FE` 开头的操作码。当调试启用时，这里列出的其他原语具有其指定的效果。当调试禁用时，它们表现为 [`NOP`](#instr-nop)。
 
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`FEnn`** | `{nn} DEBUG` | _`-`_ | `0 <= nn < 240` | `26` |
-| **`FEFnssss`** | `{string} DEBUGSTR`<br/>`{string} {x} DEBUGSTRI` | _`-`_ | `0 <= n < 16`. Length of `ssss` is `n+1` bytes.<br/>`{string}` is a [string literal](https://github.com/Piterden/TON-docs/blob/master/Fift.%20A%20Brief%20Introduction.md#user-content-29-string-literals).<br/>[`DEBUGSTR`](#instr-debugstr): `ssss` is the given string.<br/>[`DEBUGSTRI`](#instr-debugstr): `ssss` is one-byte integer `0 <= x <= 255` followed by the given string. | `26` |
-| **`FE00`** | `DUMPSTK` | _`-`_ | Dumps the stack (at most the top 255 values) and shows the total stack depth. | `26` |
-| **`FE2i`** | `s[i] DUMP` | _`-`_ | Dumps `s[i]`. | `26` |
+| **`FEFnssss`** | `{string} DEBUGSTR`<br/>`{string} {x} DEBUGSTRI` | _`-`_ | `0 <= n < 16`。`ssss` 的长度为 `n+1` 字节。<br/>`{string}` 是一个[字符串字面量](https://github.com/Piterden/TON-docs/blob/master/Fift.%20A%20Brief%20Introduction.md#user-content-29-string-literals)。<br/>[`DEBUGSTR`](#instr-debugstr): `ssss` 是给定的字符串。<br/>[`DEBUGSTRI`](#instr-debugstr): `ssss` 是由一个字节的整数 `0 <= x <= 255` 加上给定字符串组成。| `26` |
+| **`FE00`** | `DUMPSTK` | _`-`_ | 转储堆栈（最多顶部 255 个值）并显示总堆栈深度。 | `26` |
+| **`FE2i`** | `s[i] DUMP` | _`-`_ | 转储 `s[i]`。| `26` |
 
-## 13 Codepage primitives
-| xxxxxxx<br/>Opcode | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description | xxxx<br/>Gas |
+## 13 代码页原语
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`FFnn`** | `[nn] SETCP` | _`-`_ | Selects TVM codepage `0 <= nn < 240`. If the codepage is not supported, throws an invalid opcode exception. | `26` |
-| **`FF00`** | `SETCP0` | _`-`_ | Selects TVM (test) codepage zero as described in this document. | `26` |
-| **`FFFz`** | `[z-16] SETCP` | _`-`_ | Selects TVM codepage `z-16` for `1 <= z <= 15`. Negative codepages `-13...-1` are reserved for restricted versions of TVM needed to validate runs of TVM in other codepages. Negative codepage `-14` is reserved for experimental codepages, not necessarily compatible between different TVM implementations, and should be disabled in the production versions of TVM. | `26` |
-| **`FFF0`** | `SETCPX` | _`c - `_ | Selects codepage `c` with `-2^15 <= c < 2^15` passed in the top of the stack. | `26` |
+| **`FFnn`** | `[nn] SETCP` | _`-`_ | 选择 TVM 代码页 `0 <= nn < 240`。如果不支持代码页，则抛出无效的操作码异常。| `26` |
+| **`FF00`** | `SETCP0` | _`-`_ | 选择本文档描述的 TVM（测试）代码页零。| `26` |
+| **`FFFz`** | `[z-16] SETCP` | _`-`_ | 选择 TVM 代码页 `z-16`，适用于 `1 <= z <= 15`。负代码页 `-13...-1` 保留用于验证其他代码页中 TVM 运行所需的限制性 TVM 版本。负代码页 `-14` 保留用于实验性代码页，不一定在不同 TVM 实现之间兼容，并且应在 TVM 的生产版本中禁用。 | `26` |
+| **`FFF0`** | `SETCPX` | _`c - `_ | 选择通过栈顶传入的代码页 `c`，`-2^15 <= c < 2^15`。 | `26` |
 
-## See Also
+## 参阅
 
-- [TVM Overview](/learn/tvm-instructions/tvm-overview)
-- [TVM Instructions](/learn/tvm-instructions/instructions)
-- [TON TVM](https://ton.org/tvm.pdf) TVM Concepts(may include outdated information)
+- [TVM 概览](/learn/tvm-instructions/tvm-overview)
+- [TVM 指令](/learn/tvm-instructions/instructions)
+- [TON TVM](https://ton.org/tvm.pdf) TVM 概念（可能包含过时信息）
