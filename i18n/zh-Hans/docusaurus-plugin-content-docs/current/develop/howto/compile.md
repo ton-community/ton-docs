@@ -76,7 +76,7 @@ export OPENSSL_ROOT_DIR=/usr/local/opt/openssl@3
 
 ## 下载全局配置
 
-对于像轻客户端这样的工具，您需要下载全球网络配置。
+对于像轻客户端这样的工具，您需要下载全局网络配置。
 
 从 https://ton-blockchain.github.io/global.config.json 下载主网的最新配置文件：
 

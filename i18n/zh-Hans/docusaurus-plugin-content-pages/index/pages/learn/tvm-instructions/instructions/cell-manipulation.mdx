@@ -6,7 +6,7 @@ wrapperClassName: bootstrap-wrapper
 import { SearchField } from '@site/src/components/SearchField';
 import { cellManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
 
-# 单元格原语
+# cell原语
 
 <SearchField
   data={opcodes}
@@ -29,23 +29,23 @@ import { cellManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
 * [常量和文字](/learn/tvm-instructions/instructions/constant)
 * [算术操作](/learn/tvm-instructions/instructions/arithmetic)
 * [数据比较](/learn/tvm-instructions/instructions/data-comparison)
-* [单元格操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
 * [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
 * [异常生成和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
 * [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
 * [应用特定原语](/learn/tvm-instructions/instructions/app-specific)
 * [其他](/learn/tvm-instructions/instructions/miscellaneous)
 
-## 单元格原语
-### 单元格序列化原语
+## Cell原语
+### Cell序列化原语
 
 | xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`C8`** | `NEWC` | _`- b`_ | 创建一个新的空 _构建器_。 | `18` |
-| **`C9`** | `ENDC` | _`b - c`_ | 将 _构建器_ 转换为普通的 _单元格_。 | `518` |
+| **`C9`** | `ENDC` | _`b - c`_ | 将 _构建器_ 转换为普通的 _cell_。 | `518` |
 | **`CAcc`** | `[cc+1] STI` | _`x b - b'`_ | 将 `0 <= cc <= 255` 的有符号 `cc+1`-位整数 `x` 存入 _构建器_ `b` 中，如果 `x` 不适合于 `cc+1` 位，则抛出范围检查异常。 | `26` |
 | **`CBcc`** | `[cc+1] STU` | _`x b - b'`_ | 将无符号的 `cc+1`-位整数 `x` 存入 _构建器_ `b` 中。在其他方面，它与 [`STI`](#instr-sti) 类似。 | `26` |
-| **`CC`** | `STREF` | _`c b - b'`_ | 将 _单元格_ `c` 的引用存入 _构建器_ `b` 中。 | `18` |
+| **`CC`** | `STREF` | _`c b - b'`_ | 将 _cell_ `c` 的引用存入 _构建器_ `b` 中。 | `18` |
 | **`CD`** | `STBREFR`<br/>`ENDCST` | _`b b'' - b`_ | 等同于 [`ENDC`](#instr-endc) [`SWAP`](#instr-swap) [`STREF`](#instr-stref)。 | `518` |
 | **`CE`** | `STSLICE` | _`s b - b'`_ | 将 _分片_ `s` 存入 _构建器_ `b` 中。 | `18` |
 | **`CF00`** | `STIX` | _`x b l - b'`_ | 为 `0 <= l <= 257`，将有符号 `l`-位整数 `x` 存入 `b` 中。 | `26` |
@@ -82,15 +82,15 @@ import { cellManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
 | **`CF1F`** | `STBRQ`<br/>`BCONCATQ` | _`b b' - b b' -1 or b'' 0`_ | [`STBR`](#instr-stbr) 的静默版本。 | `26` |
 | **`CF20`** | `[ref] STREFCONST` | _`b - b’`_ | 等同于 [`PUSHREF`](#instr-pushref) [`STREFR`](#instr-strefr)。 | `26` |
 | **`CF21`** | `[ref] [ref] STREF2CONST` | _`b - b’`_ | 等同于 [`STREFCONST`](#instr-strefconst) [`STREFCONST`](#instr-strefconst)。 | `26` |
-| **`CF23`** |  | _`b x - c`_ | 如果 `x!=0`，从 _构建器_ `b` 创建一个 _特殊_ 或 _异类_ 单元格。<br/>异类单元格的类型必须存储在 `b` 的前 8 位中。<br/>如果 `x=0`，它相当于 [`ENDC`](#instr-endc)。否则，将在创建异类单元格之前对 `b` 的数据和引用执行一些有效性检查。 | `526` |
+| **`CF23`** |  | _`b x - c`_ | 如果 `x!=0`，从 _构建器_ `b` 创建一个 _特殊_ 或 _异类_ cell。<br/>异类cell的类型必须存储在 `b` 的前 8 位中。<br/>如果 `x=0`，它相当于 [`ENDC`](#instr-endc)。否则，将在创建异类cell之前对 `b` 的数据和引用执行一些有效性检查。 | `526` |
 | **`CF28`** | `STILE4` | _`x b - b'`_ | 存储一个小端有符号 32 位整数。 | `26` |
 | **`CF29`** | `STULE4` | _`x b - b'`_ | 存储一个小端无符号 32 位整数。 | `26` |
 | **`CF2A`** | `STILE8` | _`x b - b'`_ | 存储一个小端有符号 64 位整数。 | `26` |
 | **`CF2B`** | `STULE8` | _`x b - b'`_ | 存储一个小端无符号 64 位整数。 | `26` |
-| **`CF30`** | `BDEPTH` | _`b - x`_ | 返回 _构建器_ `b` 的深度。如果 `b` 中没有存储单元格引用，则 `x=0`；否则 `x` 是对 `b` 中引用的单元格的深度的最大值加 1。 | `26` |
+| **`CF30`** | `BDEPTH` | _`b - x`_ | 返回 _构建器_ `b` 的深度。如果 `b` 中没有存储cell引用，则 `x=0`；否则 `x` 是对 `b` 中引用的cell的深度的最大值加 1。 | `26` |
 | **`CF31`** | `BBITS` | _`b - x`_ | 返回已经存储在 _构建器_ `b` 中的数据位数。 | `26` |
-| **`CF32`** | `BREFS` | _`b - y`_ | 返回已经存储在 `b` 中的单元格引用数。 | `26` |
-| **`CF33`** | `BBITREFS` | _`b - x y`_ | 返回 `b` 中数据位数和单元格引用数。 | `26` |
+| **`CF32`** | `BREFS` | _`b - y`_ | 返回已经存储在 `b` 中的cell引用数。 | `26` |
+| **`CF33`** | `BBITREFS` | _`b - x y`_ | 返回 `b` 中数据位数和cell引用数。 | `26` |
 | **`CF35`** | `BREMBITS` | _`b - x'`_ | 返回仍然可以存储在 `b` 中的数据位数。 | `26` |
 | **`CF36`** | `BREMREFS` | _`b - y'`_ | 返回仍然可以存储在 `b` 中的引用数。 | `26` |
 | **`CF37`** | `BREMBITREFS` | _`b - x' y'`_ | 返回仍然可以存储在 `b` 中的数据位数和引用数。 | `26` |
@@ -109,22 +109,22 @@ import { cellManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
 | **`CF81`** | `STZERO` | _`b - b'`_ | 存储一个二进制零。 | `24` |
 | **`CF83`** | `STONE` | _`b - b'`_ | 存储一个二进制一。 | `24` |
 
-### 单元格反序列化原语
+### cell反序列化原语
 
 | xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`D0`** | `CTOS` | _`c - s`_ | 将 _单元格_ 转换为 _切片_。请注意，`c` 必须是普通单元格，或者是自动 _加载_ 以产生普通单元格 `c'` 的异类单元格，然后转换为 _切片_。 | `118/43` |
+| **`D0`** | `CTOS` | _`c - s`_ | 将 _cell_ 转换为 _切片_。请注意，`c` 必须是普通cell，或者是自动 _加载_ 以产生普通cell `c'` 的异类cell，然后转换为 _切片_。 | `118/43` |
 | **`D1`** | `ENDS` | _`s - `_ | 从堆栈中移除 _切片_ `s`，如果不为空则抛出异常。 | `18/68` |
 | **`D2cc`** | `[cc+1] LDI` | _`s - x s'`_ | 从 _切片_ `s` 中加载（即解析）一个有符号的 `cc+1`-位整数 `x`，并返回 `s` 的剩余部分作为 `s'`。 | `26` |
 | **`D3cc`** | `[cc+1] LDU` | _`s - x s'`_ | 从 _切片_ `s` 中加载一个无符号 `cc+1`-位整数 `x`。 | `26` |
-| **`D4`** | `LDREF` | _`s - c s'`_ | 从 `s` 中加载一个单元格引用 `c`。 | `18` |
+| **`D4`** | `LDREF` | _`s - c s'`_ | 从 `s` 中加载一个cell引用 `c`。 | `18` |
 | **`D5`** | `LDREFRTOS` | _`s - s' s''`_ | 等效于 [`LDREF`](#instr-ldref) [`SWAP`](#instr-swap) [`CTOS`](#instr-ctos)。 | `118/43` |
 | **`D6cc`** | `[cc+1] LDSLICE` | _`s - s'' s'`_ | 将 `s` 的接下来的 `cc+1` 位切割为一个独立的 _切片_ `s''`。 | `26` |
 | **`D700`** | `LDIX` | _`s l - x s'`_ | 从 _切片_ `s` 中加载一个有符号的 `l`-位（`0 <= l <= 257`）整数 `x`，并返回 `s` 的剩余部分作为 `s'`。 | `26` |
 | **`D701`** | `LDUX` | _`s l - x s'`_ | 从 `s` 的前 `l` 位（`0 <= l <= 256`）加载一个无符号 `l`-位整数 `x`。 | `26` |
 | **`D702`** | `PLDIX` | _`s l - x`_ | 从 _切片_ `s` 中预加载一个有符号 `l`-位整数，`0 <= l <= 257`。 | `26` |
 | **`D703`** | `PLDUX` | _`s l - x`_ | 从 `s` 中预加载一个无符号 `l`-位整数，`0 <= l <= 256`。 | `26` |
-| **`D704`** | `LDIXQ` | _`s l - x s' -1 or s 0`_ | [`LDIX`](#instr-ldix) 的静默版本：类似地从 `s` 中加载一个有符号 `l`-位整数，但在成功时返回一个成功标志 `-1`，失败时（如果 `s` 没有 `l` 位）返回 `0`，而不是抛出单元格下溢异常。 | `26` |
+| **`D704`** | `LDIXQ` | _`s l - x s' -1 or s 0`_ | [`LDIX`](#instr-ldix) 的静默版本：类似地从 `s` 中加载一个有符号 `l`-位整数，但在成功时返回一个成功标志位 `-1`，失败时（如果 `s` 没有 `l` 位）返回 `0`，而不是抛出cell下溢异常。 | `26` |
 | **`D705`** | `LDUXQ` | _`s l - x s' -1 or s 0`_ | [`LDUX`](#instr-ldux) 的静默版本。 | `26` |
 | **`D706`** | `PLDIXQ` | _`s l - x -1 or 0`_ | [`PLDIX`](#instr-pldix) 的静默版本。 | `26` |
 | **`D707`** | `PLDUXQ` | _`s l - x -1 or 0`_ | [`PLDUX`](#instr-pldux) 的静默版本。 | `26` |
@@ -150,7 +150,7 @@ import { cellManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
 | **`D722`** | `SDCUTLAST` | _`s l - s'`_ | 返回 `s` 的后 `0 <= l <= 1023` 位。 | `26` |
 | **`D723`** | `SDSKIPLAST` | _`s l - s'`_ | 返回除了 `s` 的后 `0 <= l <= 1023` 位以外的所有位。 | `26` |
 | **`D724`** | `SDSUBSTR` | _`s l l' - s'`_ | 返回 `s` 的从偏移量 `0 <= l <= 1023` 开始的 `0 <= l' <= 1023` 位，从 `s` 的数据中提取出一个位子字符串。 | `26` |
-| **`D726`** | `SDBEGINSX` | _`s s' - s''`_ | 检查 `s` 是否以 `s'`（数据位）开始，并在成功时从 `s` 中移除 `s'`。失败抛出单元格反序列化异常。原语 [`SDPFXREV`](#instr-sdpfxrev) 可以认为是 [`SDBEGINSX`](#instr-sdbeginsx) 的静默版本。 | `26` |
+| **`D726`** | `SDBEGINSX` | _`s s' - s''`_ | 检查 `s` 是否以 `s'`（数据位）开始，并在成功时从 `s` 中移除 `s'`。失败抛出cell反序列化异常。原语 [`SDPFXREV`](#instr-sdpfxrev) 可以认为是 [`SDBEGINSX`](#instr-sdbeginsx) 的静默版本。 | `26` |
 | **`D727`** | `SDBEGINSXQ` | _`s s' - s'' -1 or s 0`_ | [`SDBEGINSX`](#instr-sdbeginsx) 的静默版本。 | `26` |
 | **`D72A_xsss`** | `[slice] SDBEGINS` | _`s - s''`_ | 检查 `s` 是否以常量位串 `sss` 开始，`sss` 的长度为 `8x+3`（假定有完成位），其中 `0 <= x <= 127`，并在成功时从 `s` 中移除 `sss`。 | `31` |
 | **`D72E_xsss`** | `[slice] SDBEGINSQ` | _`s - s'' -1 or s 0`_ | [`SDBEGINS`](#instr-sdbegins) 的静默版本。 | `31` |
@@ -161,21 +161,21 @@ import { cellManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
 | **`D734`** | `SUBSLICE` | _`s l r l' r' - s'`_ | 在跳过 `s` 的前 `0 <= l <= 1023` 位和前 `0 <= r <= 4` 个引用后，返回来自 _切片_ `s` 的 `0 <= l' <= 1023` 位和 `0 <= r' <= 4` 个引用。 | `26` |
 | **`D736`** | `SPLIT` | _`s l r - s' s''`_ | 将 `s` 的前 `0 <= l <= 1023` 个数据位和前 `0 <= r <= 4` 个引用分割成 `s'`，并返回 `s` 的剩余部分作为 `s''`。 | `26` |
 | **`D737`** | `SPLITQ` | _`s l r - s' s'' -1 或 s 0`_ | [`SPLIT`](#instr-split) 的静默版本。 | `26` |
-| **`D739`** |  | _`c - s？`_ | 将普通或异类单元格转换为 _切片_，就好像它是一个普通单元格一样。返回一个标志，指示 `c` 是否是异类的。如果是这样，其类型可以稍后从 `s` 的前八位中反序列化。 |  |
-| **`D73A`** |  | _`c - c'`_ | 加载异类单元格 `c` 并返回一个普通单元格 `c'`。如果 `c` 已经是普通的，则不执行任何操作。如果 `c` 无法加载，抛出异常。 |  |
-| **`D73B`** |  | _`c - c' -1 或 c 0`_ | 加载异类单元格 `c` 并返回一个普通单元格 `c'`。如果 `c` 已经是普通的，则不执行任何操作。如果 `c` 无法加载，返回 0。 |  |
-| **`D741`** | `SCHKBITS` | _`s l - `_ | 检查 _切片_ `s` 中是否至少有 `l` 个数据位。如果不是这种情况，抛出单元格反序列化（即单元格下溢）异常。 | `26/76` |
+| **`D739`** |  | _`c - s？`_ | 将普通或异类cell转换为 _切片_，就好像它是一个普通cell一样。返回一个标志位，指示 `c` 是否是异类的。如果是这样，其类型可以稍后从 `s` 的前八位中反序列化。 |  |
+| **`D73A`** |  | _`c - c'`_ | 加载异类cell `c` 并返回一个普通cell `c'`。如果 `c` 已经是普通的，则不执行任何操作。如果 `c` 无法加载，抛出异常。 |  |
+| **`D73B`** |  | _`c - c' -1 或 c 0`_ | 加载异类cell `c` 并返回一个普通cell `c'`。如果 `c` 已经是普通的，则不执行任何操作。如果 `c` 无法加载，返回 0。 |  |
+| **`D741`** | `SCHKBITS` | _`s l - `_ | 检查 _切片_ `s` 中是否至少有 `l` 个数据位。如果不是这种情况，抛出cell反序列化（即cell下溢）异常。 | `26/76` |
 | **`D742`** | `SCHKREFS` | _`s r - `_ | 检查 _切片_ `s` 中是否至少有 `r` 个引用。 | `26/76` |
 | **`D743`** | `SCHKBITREFS` | _`s l r - `_ | 检查 _切片_ `s` 中是否至少有 `l` 个数据位和 `r` 个引用。 | `26/76` |
 | **`D745`** | `SCHKBITSQ` | _`s l - ?`_ | 检查 _切片_ `s` 中是否至少有 `l` 个数据位。 | `26` |
 | **`D746`** | `SCHKREFSQ` | _`s r - ?`_ | 检查 _切片_ `s` 中是否至少有 `r` 个引用。 | `26` |
 | **`D747`** | `SCHKBITREFSQ` | _`s l r - ?`_ | 检查 _切片_ `s` 中是否至少有 `l` 个数据位和 `r` 个引用。 | `26` |
-| **`D748`** | `PLDREFVAR` | _`s n - c`_ | 返回 _切片_ `s` 的第 `n` 个单元格引用，`0 <= n <= 3`。 | `26` |
+| **`D748`** | `PLDREFVAR` | _`s n - c`_ | 返回 _切片_ `s` 的第 `n` 个cell引用，`0 <= n <= 3`。 | `26` |
 | **`D749`** | `SBITS` | _`s - l`_ | 返回 _切片_ `s` 中的数据位数。 | `26` |
 | **`D74A`** | `SREFS` | _`s - r`_ | 返回 _切片_ `s` 中的引用数。 | `26` |
 | **`D74B`** | `SBITREFS` | _`s - l r`_ | 返回 `s` 中的数据位数和引用数。 | `26` |
-| **`D74E_n`** | `[n] PLDREFIDX` | _`s - c`_ | 返回 _切片_ `s` 的第 `n` 个单元格引用，`0 <= n <= 3`。 | `26` |
-| **`D74C`** | `PLDREF` | _`s - c`_ | 预加载 _切片_ 的第一个单元格引用。 | `26` |
+| **`D74E_n`** | `[n] PLDREFIDX` | _`s - c`_ | 返回 _切片_ `s` 的第 `n` 个cell引用，`0 <= n <= 3`。 | `26` |
+| **`D74C`** | `PLDREF` | _`s - c`_ | 预加载 _切片_ 的第一个cell引用。 | `26` |
 | **`D750`** | `LDILE4` | _`s - x s'`_ | 加载一个小端有符号 32 位整数。 | `26` |
 | **`D751`** | `LDULE4` | _`s - x s'`_ | 加载一个小端无符号 32 位整数。 | `26` |
 | **`D752`** | `LDILE8` | _`s - x s'`_ | 加载一个小端有符号 64 位整数。 | `26` |
@@ -195,8 +195,8 @@ import { cellManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
 | **`D760`** | `LDZEROES` | _`s - n s'`_ | 返回 `s` 中前导零位的计数 `n`，并从 `s` 中移除这些位。 | `26` |
 | **`D761`** | `LDONES` | _`s - n s'`_ | 返回 `s` 中前导一位的计数 `n`，并从 `s` 中移除这些位。 | `26` |
 | **`D762`** | `LDSAME` | _`s x - n s'`_ | 返回 `s` 中与 `0 <= x <= 1` 相等的前导位的计数 `n`，并从 `s` 中移除这些位。 | `26` |
-| **`D764`** | `SDEPTH` | _`s - x`_ | 返回 _切片_ `s` 的深度。如果 `s` 没有引用，则 `x=0`；否则 `x` 是从 `s` 引用的单元格的最大深度加 1。 | `26` |
-| **`D765`** | `CDEPTH` | _`c - x`_ | 返回 _单元格_ `c` 的深度。如果 `c` 没有引用，则 `x=0`；否则 `x` 是从 `c` 引用的单元格的最大深度加 1。如果 `c` 是 _空（Null）_ 而不是 _单元格_，返回零。 | `26` |
+| **`D764`** | `SDEPTH` | _`s - x`_ | 返回 _切片_ `s` 的深度。如果 `s` 没有引用，则 `x=0`；否则 `x` 是从 `s` 引用的cell的最大深度加 1。 | `26` |
+| **`D765`** | `CDEPTH` | _`c - x`_ | 返回 _cell_ `c` 的深度。如果 `c` 没有引用，则 `x=0`；否则 `x` 是从 `c` 引用的cell的最大深度加 1。如果 `c` 是 _空（Null）_ 而不是 _cell_，返回零。 | `26` |
 
 
 ### TVM 指令内容列表
@@ -207,7 +207,7 @@ import { cellManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
 * [常量和文字](/learn/tvm-instructions/instructions/constant)
 * [算术操作](/learn/tvm-instructions/instructions/arithmetic)
 * [数据比较](/learn/tvm-instructions/instructions/data-comparison)
-* [单元格操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
 * [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
 * [异常生成和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
 * [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)

@@ -29,8 +29,8 @@ import { comparisonOpcodes as opcodes } from '@site/src/data/opcodes';
 * [常量和字面量](/learn/tvm-instructions/instructions/constant)
 * [算术操作](/learn/tvm-instructions/instructions/arithmetic)
 * [数据比较](/learn/tvm-instructions/instructions/data-comparison)
-* [单元格操作](/learn/tvm-instructions/instructions/cell-manipulation)
-* [继续和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
 * [异常生成和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
 * [词典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
 * [应用特定的原语](/learn/tvm-instructions/instructions/app-specific)
@@ -63,11 +63,11 @@ import { comparisonOpcodes as opcodes } from '@site/src/data/opcodes';
 
 ### 其他比较
 
-这些“其他比较”原语大多实际上比较的是_切片_的数据部分作为位串（如无另外说明，忽略引用）。
+这些“其他比较”原语中的大多数实际上将_Slice_的数据部分作为位串进行比较（如果没有另外声明，忽略引用）。
 
 | xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`C700`** | `SEMPTY` | _`s - ?`_ | 检查切片 `s` 是否为空（即，不包含任何数据位和单元格引用）。 | `26` |
+| **`C700`** | `SEMPTY` | _`s - ?`_ | 检查切片 `s` 是否为空（即，不包含任何数据位和cell引用）。 | `26` |
 | **`C701`** | `SDEMPTY` | _`s - ?`_ | 检查切片 `s` 是否没有数据位。 | `26` |
 | **`C702`** | `SREMPTY` | _`s - ?`_ | 检查切片 `s` 是否没有引用。 | `26` |
 | **`C703`** | `SDFIRST` | _`s - ?`_ | 检查切片 `s` 的第一个位是否为一。 | `26` |
@@ -95,8 +95,8 @@ import { comparisonOpcodes as opcodes } from '@site/src/data/opcodes';
 * [常量和字面量](/learn/tvm-instructions/instructions/constant)
 * [算术操作](/learn/tvm-instructions/instructions/arithmetic)
 * [数据比较](/learn/tvm-instructions/instructions/data-comparison)
-* [单元格操作](/learn/tvm-instructions/instructions/cell-manipulation)
-* [继续和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
 * [异常生成和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
 * [词典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
 * [应用特定的原语](/learn/tvm-instructions/instructions/app-specific)

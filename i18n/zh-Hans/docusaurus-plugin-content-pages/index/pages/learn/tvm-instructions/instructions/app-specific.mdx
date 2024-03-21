@@ -29,7 +29,7 @@ import { appSpecificOpcodes as opcodes } from '@site/src/data/opcodes';
 * [常量和文字](/learn/tvm-instructions/instructions/constant)
 * [算术操作](/learn/tvm-instructions/instructions/arithmetic)
 * [数据比较](/learn/tvm-instructions/instructions/data-comparison)
-* [单元操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
 * [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
 * [异常生成和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
 * [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
@@ -63,12 +63,12 @@ import { appSpecificOpcodes as opcodes } from '@site/src/data/opcodes';
 | **`F824`** | `BLOCKLT` | _` - x`_ | 返回当前区块的开始逻辑时间。<br/>等同于 [`4 GETPARAM`](#instr-getparam). | `26` |
 | **`F825`** | `LTIME` | _` - x`_ | 返回当前交易的逻辑时间。<br/>等同于 [`5 GETPARAM`](#instr-getparam). | `26` |
 | **`F826`** | `RANDSEED` | _` - x`_ | 以无符号 256 位 _整数_ 的形式返回当前的随机种子。<br/>等同于 [`6 GETPARAM`](#instr-getparam). | `26` |
-| **`F827`** | `BALANCE` | _` - t`_ | 以 _元组_ 形式返回智能合约剩余的余额，_元组_ 包含一个 _整数_（剩余的Gram余额，以nanograms为单位）和一个 _可能的单元格_（以 32 位键表示的“额外代币”的余额字典）。<br/>等同于 [`7 GETPARAM`](#instr-getparam).<br/>请注意，如 [`SENDRAWMSG`](#instr-sendrawmsg) 等 `RAW` 原语不会更新此字段。 | `26` |
+| **`F827`** | `BALANCE` | _` - t`_ | 以 _元组_ 形式返回智能合约剩余的余额，_元组_ 包含一个 _整数_（剩余的Gram余额，以nanograms为单位）和一个 _可能的cell_（以 32 位键表示的“额外代币”的余额字典）。<br/>等同于 [`7 GETPARAM`](#instr-getparam).<br/>请注意，如 [`SENDRAWMSG`](#instr-sendrawmsg) 等 `RAW` 原语不会更新此字段。 | `26` |
 | **`F828`** | `MYADDR` | _` - s`_ | 以 _分片_ 形式返回当前智能合约的内部地址，包含一个 `MsgAddressInt`。如果必要，可以使用诸如 [`PARSEMSGADDR`](#instr-parsemsgaddr) 或 [`REWRITESTDADDR`](#instr-rewritestdaddr) 之类的原语进一步解析它。<br/>等同于 [`8 GETPARAM`](#instr-getparam). | `26` |
-| **`F829`** | `CONFIGROOT` | _` - D`_ | 以 _可能的单元格_ `D` 形式返回当前全局配置字典。等同于 `9 GETPARAM `。 | `26` |
+| **`F829`** | `CONFIGROOT` | _` - D`_ | 以 _可能的cell_ `D` 形式返回当前全局配置字典。等同于 `9 GETPARAM `。 | `26` |
 | **`F830`** | `CONFIGDICT` | _` - D 32`_ | 返回全局配置字典及其键长（32）。<br/>等同于 [`CONFIGROOT`](#instr-configroot) [`32 PUSHINT`](#instr-pushint-4). | `26` |
-| **`F832`** | `CONFIGPARAM` | _`i - c -1 或 0`_ | 以 _单元格_ `c` 的形式返回整数索引 `i` 的全局配置参数的值，以及指示成功的标志。<br/>等同于 [`CONFIGDICT`](#instr-configdict) [`DICTIGETREF`](#instr-dictigetref). |  |
-| **`F833`** | `CONFIGOPTPARAM` | _`i - c^?`_ | 以 _可能的单元格_ `c^?` 的形式返回整数索引 `i` 的全局配置参数的值。<br/>等同于 [`CONFIGDICT`](#instr-configdict) [`DICTIGETOPTREF`](#instr-dictigetoptref). |  |
+| **`F832`** | `CONFIGPARAM` | _`i - c -1 或 0`_ | 以 _cell_ `c` 的形式返回整数索引 `i` 的全局配置参数的值，以及指示成功的标志位。<br/>等同于 [`CONFIGDICT`](#instr-configdict) [`DICTIGETREF`](#instr-dictigetref). |  |
+| **`F833`** | `CONFIGOPTPARAM` | _`i - c^?`_ | 以 _可能的cell_ `c^?` 的形式返回整数索引 `i` 的全局配置参数的值。<br/>等同于 [`CONFIGDICT`](#instr-configdict) [`DICTIGETOPTREF`](#instr-dictigetoptref). |  |
 
 ### 全局变量原语
 | xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
@@ -81,19 +81,19 @@ import { appSpecificOpcodes as opcodes } from '@site/src/data/opcodes';
 ### 哈希和密码学原语
 | xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F900`** | `HASHCU` | _`c - x`_ | 计算 _单元格_ `c` 的表示哈希，并将其作为 256 位无符号整数 `x` 返回。用于对由单元格树表示的任意实体进行签名和检查签名。 | `26` |
-| **`F901`** | `HASHSU` | _`s - x`_ | 计算 _分片_ `s` 的哈希，并将其作为 256 位无符号整数 `x` 返回。结果与如果创建了一个仅包含 `s` 的数据和引用的普通单元格并通过 [`HASHCU`](#instr-hashcu) 计算其哈希相同。 | `526` |
-| **`F902`** | `SHA256U` | _`s - x`_ | 对 _分片_ `s` 的数据位计算 `Sha`。如果 `s` 的位长度不能被八整除，抛出一个单元格下溢异常。哈希值作为 256 位无符号整数 `x` 返回。 | `26` |
+| **`F900`** | `HASHCU` | _`c - x`_ | 计算 _cell_ `c` 的表示哈希，并将其作为 256 位无符号整数 `x` 返回。用于对由cell树表示的任意实体进行签名和检查签名。 | `26` |
+| **`F901`** | `HASHSU` | _`s - x`_ | 计算 _分片_ `s` 的哈希，并将其作为 256 位无符号整数 `x` 返回。结果与如果创建了一个仅包含 `s` 的数据和引用的普通cell并通过 [`HASHCU`](#instr-hashcu) 计算其哈希相同。 | `526` |
+| **`F902`** | `SHA256U` | _`s - x`_ | 对 _分片_ `s` 的数据位计算 `Sha`。如果 `s` 的位长度不能被八整除，抛出一个cell下溢异常。哈希值作为 256 位无符号整数 `x` 返回。 | `26` |
 | **`F910`** | `CHKSIGNU` | _`h s k - ?`_ | 使用公钥 `k`（也用一个 256 位无符号整数表示）检查哈希 `h`（通常作为某些数据的哈希，为一个 256 位无符号整数）的 Ed25519 签名 `s`。<br/>签名 `s` 必须是至少包含 512 位数据的 _分片_；仅使用前 512 位。结果为 `-1` 则签名有效，否则为 `0`。<br/>请注意，[`CHKSIGNU`](#instr-chksignu) 相当于 [`ROT`](#instr-rot) [`NEWC`](#instr-newc) [`256 STU`](#instr-stu) [`ENDC`](#instr-endc) [`ROTREV`](#instr-rotrev) [`CHKSIGNS`](#instr-chksigns)，即，相当于用第一个参数 `d` 设置为包含 `h` 的 256 位 _分片_ 的 [`CHKSIGNS`](#instr-chksigns)。因此，如果 `h` 是作为某些数据的哈希计算的，这些数据会被 _两次_ 哈希，第二次哈希发生在 [`CHKSIGNS`](#instr-chksigns) 内部。 | `26` |
-| **`F911`** | `CHKSIGNS` | _`d s k - ?`_ | 检查 `s` 是否是使用公钥 `k` 对 _分片_ `d` 的数据部分的有效 Ed25519 签名，类似于 [`CHKSIGNU`](#instr-chksignu)。如果 _分片_ `d` 的位长度不能被八整除，抛出一个单元格下溢异常。Ed25519 签名的验证是标准的，使用 `Sha` 将 `d` 缩减为实际签名的 256 位数字。 | `26` |
+| **`F911`** | `CHKSIGNS` | _`d s k - ?`_ | 检查 `s` 是否是使用公钥 `k` 对 _分片_ `d` 的数据部分的有效 Ed25519 签名，类似于 [`CHKSIGNU`](#instr-chksignu)。如果 _分片_ `d` 的位长度不能被八整除，抛出一个cell下溢异常。Ed25519 签名的验证是标准的，使用 `Sha` 将 `d` 缩减为实际签名的 256 位数字。 | `26` |
 
 ### 其他原语
 | xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`F940`** | `CDATASIZEQ` | _`c n - x y z -1 或 0`_ | 递归计算以 _单元格_ `c` 为根的 dag 中不同单元格 `x`、数据位 `y` 和单元格引用 `z` 的计数，有效地返回考虑等价单元格标识时该 dag 使用的总存储量。`x`、`y` 和 `z` 的值通过该 dag 的深度优先遍历来计算，使用访问过的单元格哈希表来防止已访问单元格的重复访问。访问的单元格总数 `x` 不能超过非负 _整数_ `n`；否则，在访问第 `(n+1)` 个单元格之前计算被中断，并返回零表示失败。如果 `c` 为 _空_，则返回 `x=y=z=0`。 |  |
-| **`F941`** | `CDATASIZE` | _`c n - x y z`_ | [`CDATASIZEQ`](#instr-cdatasizeq) 的非静默版本，失败时抛出单元格溢出异常（8）。 |  |
-| **`F942`** | `SDATASIZEQ` | _`s n - x y z -1 或 0`_ | 类似于 [`CDATASIZEQ`](#instr-cdatasizeq)，但接受一个 _分片_ `s` 而非 _单元格_。返回的 `x` 值不包括包含切片 `s` 本身的单元格；然而，`s` 的数据位和单元格引用在 `y` 和 `z` 中被计算在内。 |  |
-| **`F943`** | `SDATASIZE` | _`s n - x y z`_ | [`SDATASIZEQ`](#instr-sdatasizeq) 的非静默版本，失败时抛出单元格溢出异常（8）。 |  |
+| **`F940`** | `CDATASIZEQ` | _`c n - x y z -1 或 0`_ | 递归计算以 _cell_ `c` 为根的 dag 中不同cell `x`、数据位 `y` 和cell引用 `z` 的计数，有效地返回考虑等价cell标识时该 dag 使用的总存储量。`x`、`y` 和 `z` 的值通过该 dag 的深度优先遍历来计算，使用访问过的cell哈希表来防止已访问cell的重复访问。访问的cell总数 `x` 不能超过非负 _整数_ `n`；否则，在访问第 `(n+1)` 个cell之前计算被中断，并返回零表示失败。如果 `c` 为 _空_，则返回 `x=y=z=0`。 |  |
+| **`F941`** | `CDATASIZE` | _`c n - x y z`_ | [`CDATASIZEQ`](#instr-cdatasizeq) 的非静默版本，失败时抛出cell溢出异常（8）。 |  |
+| **`F942`** | `SDATASIZEQ` | _`s n - x y z -1 或 0`_ | 类似于 [`CDATASIZEQ`](#instr-cdatasizeq)，但接受一个 _分片_ `s` 而非 _cell_。返回的 `x` 值不包括包含切片 `s` 本身的cell；然而，`s` 的数据位和cell引用在 `y` 和 `z` 中被计算在内。 |  |
+| **`F943`** | `SDATASIZE` | _`s n - x y z`_ | [`SDATASIZEQ`](#instr-sdatasizeq) 的非静默版本，失败时抛出cell溢出异常（8）。 |  |
 
 ### 代币操作原语
 | xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
@@ -108,9 +108,9 @@ import { appSpecificOpcodes as opcodes } from '@site/src/data/opcodes';
 |:-|:-|:-|:-|:-|
 | **`FA40`** | `LDMSGADDR` | _`s - s' s''`_ | 从 _分片_ `s` 中加载唯一有效的 `MsgAddress` 前缀，并将该前缀 `s'` 和 `s` 的剩余部分 `s''` 作为分片返回。 | `26` |
 | **`FA41`** | `LDMSGADDRQ` | _`s - s' s'' -1 或 s 0`_ | [`LDMSGADDR`](#instr-ldmsgaddr) 的静默版本：成功时额外推送 `-1`；失败时推送原始 `s` 和零。 | `26` |
-| **`FA42`** | `PARSEMSGADDR` | _`s - t`_ | 将包含有效 `MsgAddress` 的 _分片_ `s` 分解为一个具有此 `MsgAddress` 独立字段的 _元组_ `t`。如果 `s` 不是有效的 `MsgAddress`，则抛出单元格反序列化异常。 | `26` |
+| **`FA42`** | `PARSEMSGADDR` | _`s - t`_ | 将包含有效 `MsgAddress` 的 _分片_ `s` 分解为一个具有此 `MsgAddress` 独立字段的 _元组_ `t`。如果 `s` 不是有效的 `MsgAddress`，则抛出cell反序列化异常。 | `26` |
 | **`FA43`** | `PARSEMSGADDRQ` | _`s - t -1 或 0`_ | [`PARSEMSGADDR`](#instr-parsemsgaddr) 的静默版本：错误时返回零而不是抛出异常。 | `26` |
-| **`FA44`** | `REWRITESTDADDR` | _`s - x y`_ | 解析包含有效 `MsgAddressInt`（通常是 `msg_addr_std`）的 _分片_ `s`，应用从 `anycast`（如果存在）到地址的相同长度前缀的重写，并以整数形式返回工作链 `x` 和 256 位地址 `y`。如果地址不是 256 位的，或者如果 `s` 不是有效的 `MsgAddressInt` 序列化，则抛出单元格反序列化异常。 | `26` |
+| **`FA44`** | `REWRITESTDADDR` | _`s - x y`_ | 解析包含有效 `MsgAddressInt`（通常是 `msg_addr_std`）的 _分片_ `s`，应用从 `anycast`（如果存在）到地址的相同长度前缀的重写，并以整数形式返回工作链 `x` 和 256 位地址 `y`。如果地址不是 256 位的，或者如果 `s` 不是有效的 `MsgAddressInt` 序列化，则抛出cell反序列化异常。 | `26` |
 | **`FA45`** | `REWRITESTDADDRQ` | _`s - x y -1 或 0`_ | 原语 [`REWRITESTDADDR`](#instr-rewritestdaddr) 的静默版本。 | `26` |
 | **`FA46`** | `REWRITEVARADDR` | _`s - x s'`_ | [`REWRITESTDADDR`](#instr-rewritestdaddr) 的变体，即使地址不是完全为 256 位长（由 `msg_addr_var` 表示），也返回（重写的）地址作为 _分片_ `s`。 | `26` |
 | **`FA47`** | `REWRITEVARADDRQ` | _`s - x s' -1 或 0`_ | 原语 [`REWRITEVARADDR`](#instr-rewritevaraddr) 的静默版本。 | `26` |
@@ -118,11 +118,11 @@ import { appSpecificOpcodes as opcodes } from '@site/src/data/opcodes';
 ### 出站消息和输出操作原语
 | xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`FB00`** | `SENDRAWMSG` | _`c x - `_ | 发送包含在 _单元格_ `c` 中的原始消息，其中应包含正确序列化的对象 `Message X`，唯一的例外是源地址允许有虚拟值 `addr_none`（将自动替换为当前智能合约地址），且 `ihr_fee`、`fwd_fee`、`created_lt` 和 `created_at` 字段可以有任意值（在当前交易的操作阶段将被正确值重写）。整数参数 `x` 包含标志。当前 `x=0` 用于普通消息；`x=128` 用于携带当前智能合约所有剩余余额的消息（而非消息最初指示的值）；`x=64` 用于携带除初始指示的新消息值外，入站消息的所有剩余值的消息（如果未设置位 0，则此金额中扣除 gas 费用）；`x'=x+1` 表示发送者想要单独支付转账费用；`x'=x+2` 表示在操作阶段处理此消息时发生的任何错误都应被忽略。最后，`x'=x+32` 意味着如果当前账户的最终余额为零，则必须销毁该账户。这个标志通常与 `+128` 一起使用。 | `526` |
+| **`FB00`** | `SENDRAWMSG` | _`c x - `_ | 发送包含在 _cell_ `c` 中的原始消息，其中应包含正确序列化的对象 `Message X`，唯一的例外是源地址允许有虚拟值 `addr_none`（将自动替换为当前智能合约地址），且 `ihr_fee`、`fwd_fee`、`created_lt` 和 `created_at` 字段可以有任意值（在当前交易的操作阶段将被正确值重写）。整数参数 `x` 包含标志位。当前 `x=0` 用于普通消息；`x=128` 用于携带当前智能合约所有剩余余额的消息（而非消息最初指示的值）；`x=64` 用于携带除初始指示的新消息值外，入站消息的所有剩余值的消息（如果未设置位 0，则此金额中扣除 gas 费用）；`x'=x+1` 表示发送者想要单独支付转账费用；`x'=x+2` 表示在操作阶段处理此消息时发生的任何错误都应被忽略。最后，`x'=x+32` 意味着如果当前账户的最终余额为零，则必须销毁该账户。这个标志位通常与 `+128` 一起使用。 | `526` |
 | **`FB02`** | `RAWRESERVE` | _`x y - `_ | 创建一个输出操作，该操作将从账户的剩余余额中准确预留 `x` nanograms（如果 `y=0`），最多 `x` nanograms（如果 `y=2`），或除 `x` nanograms外的所有nanograms（如果 `y=1` 或 `y=3`）。这大致相当于创建一个携带 `x` nanograms（或 `b-x` nanograms，其中 `b` 是剩余余额）到自己的出站消息，以便后续输出操作无法花费超过剩余金额的资金。`y` 中的位 `+2` 表明，如果无法预留指定金额，外部操作不会失败；相反，将预留所有剩余余额。`y` 中的位 `+8` 表示在执行任何进一步操作之前 `x:=-x`。`y` 中的位 `+4` 表示在执行任何其他检查和操作之前，`x` 会增加当前帐户（在计算阶段之前）的原始余额，包括所有额外货币。当前 `x` 必须是非负整数，且 `y` 必须在 `0...15` 范围内。 | `526` |
-| **`FB03`** | `RAWRESERVEX` | _`x D y - `_ | 类似于 [`RAWRESERVE`](#instr-rawreserve)，但也接受一个代表额外代币的字典 `D`（由 _单元格_ 或 _空_ 表示）。这种方式可以预留Grams以外的货币。 | `526` |
-| **`FB04`** | `SETCODE` | _`c - `_ | 创建一个输出操作，该操作将此智能合约代码更改为由 _单元格_ `c` 给出的代码。请注意，此更改仅在当前智能合约运行成功终止后生效。 | `526` |
-| **`FB06`** | `SETLIBCODE` | _`c x - `_ | 创建一个输出操作，用于修改此智能合约库的集合，通过添加或移除在 _单元_ `c` 中给定代码的库。如果 `x=0`，若库先前存在于集合中，则实际上会被移除（如果不存在，则此操作无效）。如果 `x=1`，则库被作为私有库添加；如果 `x=2`，则库被作为公共库添加（如果当前智能合约位于主链中，则变得对所有智能合约可用）；如果库之前已存在于集合中，则其公共/私有状态将根据 `x` 改变。另外，`16` 可以加到 `x` 上，以在失败时启用弹回交易。`x` 的值除了 `0...2 (+16 可能)` 之外都是无效的。 | `526` |
+| **`FB03`** | `RAWRESERVEX` | _`x D y - `_ | 类似于 [`RAWRESERVE`](#instr-rawreserve)，但也接受一个代表额外代币的字典 `D`（由 _cell_ 或 _空_ 表示）。这种方式可以预留Grams以外的货币。 | `526` |
+| **`FB04`** | `SETCODE` | _`c - `_ | 创建一个输出操作，该操作将此智能合约代码更改为由 _cell_ `c` 给出的代码。请注意，此更改仅在当前智能合约运行成功终止后生效。 | `526` |
+| **`FB06`** | `SETLIBCODE` | _`c x - `_ | 创建一个输出操作，用于修改此智能合约库的集合，通过添加或移除在 _cell_ `c` 中给定代码的库。如果 `x=0`，若库先前存在于集合中，则实际上会被移除（如果不存在，则此操作无效）。如果 `x=1`，则库被作为私有库添加；如果 `x=2`，则库被作为公共库添加（如果当前智能合约位于主链中，则变得对所有智能合约可用）；如果库之前已存在于集合中，则其公共/私有状态将根据 `x` 改变。另外，`16` 可以加到 `x` 上，以在失败时启用弹回交易。`x` 的值除了 `0...2 (+16 可能)` 之外都是无效的。 | `526` |
 | **`FB07`** | `CHANGELIB` | _`h x - `_ | 类似于 [`SETLIBCODE`](#instr-setlibcode)，创建一个输出操作，但它接受库的哈希而非库代码，哈希以无符号 256 位整数 `h` 的形式给出。如果 `x!=0` 且该智能合约的库集合中不存在哈希值为 `h` 的库，此输出操作将失败。 | `526` |
 
 
@@ -134,7 +134,7 @@ import { appSpecificOpcodes as opcodes } from '@site/src/data/opcodes';
 * [常量和文字](/learn/tvm-instructions/instructions/constant)
 * [算术操作](/learn/tvm-instructions/instructions/arithmetic)
 * [数据比较](/learn/tvm-instructions/instructions/data-comparison)
-* [单元操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
 * [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
 * [异常生成和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
 * [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)

@@ -15,7 +15,7 @@ import { continuationOpcodes as opcodes } from '@site/src/data/opcodes';
   showKeys={[
     { key: 'doc_opcode', name: '操作码', isGrouped: true },
     { key: 'doc_fift', name: 'Fift 语法', isGrouped: true },
-    { key: 'doc_stack', name: '栈', isGrouped: true },
+    { key: 'doc_stack', name: '堆栈', isGrouped: true },
     { key: 'doc_gas', name: 'Gas', isGrouped: true },
     { key: 'doc_description', name: '描述' },
   ]}
@@ -29,17 +29,17 @@ import { continuationOpcodes as opcodes } from '@site/src/data/opcodes';
 * [常量和字面量](/learn/tvm-instructions/instructions/constant)
 * [算术操作](/learn/tvm-instructions/instructions/arithmetic)
 * [数据比较](/learn/tvm-instructions/instructions/data-comparison)
-* [单元操作](/learn/tvm-instructions/instructions/cell-manipulation)
-* [连续性和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
 * [异常生成和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
 * [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
 * [特定应用原语](/learn/tvm-instructions/instructions/app-specific)
 * [杂项](/learn/tvm-instructions/instructions/miscellaneous)
 
-## 连续性和控制流原语
+## Continuation 和控制流原语
 ### 无条件控制流原语
 
-| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`D8`** | `EXECUTE`<br/>`CALLX` | _`c - `_ | _调用_ 或 _执行_ Continuation `c`。 | `18` |
 | **`D9`** | `JMPX` | _`c - `_ | _跳转_ 或 控制转移到 Continuation `c`。<br/>之前当前continuation `cc`的剩余部分被丢弃。 | `18` |
@@ -53,7 +53,7 @@ import { continuationOpcodes as opcodes } from '@site/src/data/opcodes';
 | **`DB34`** | `CALLCC` | _`c - `_ | _带当前 continuation 调用_，控制权转移到 `c`，将旧的 `cc` 值推入 `c` 的栈中（而不是丢弃它或将其写入新的 `c0`中）。 | `26` |
 | **`DB35`** | `JMPXDATA` | _`c - `_ | 类似于 [`CALLCC`](#instr-callcc)，但是当前 continuation 的剩余部分（旧的 `cc` 值）在推入 `c` 的栈之前被转换成一个 _Slice_。 | `26` |
 | **`DB36pr`** | `[p] [r] CALLCCARGS` | _`c - `_ | 类似于 [`CALLXARGS`](#instr-callxargs)，但是将旧的 `cc` 值（连同最初栈顶的 `0 <= p <= 15` 个值）推入被调用 continuation `c` 的栈中，设置 `cc.nargs` 为 `-1 <= r <= 14`。 | `34` |
-| **`DB38`** | `CALLXVARARGS` | _`c p r - `_ | 类似于 [`CALLXARGS`](#instr-callxargs)，但从栈中取 `-1 <= p,r <= 254`。下三个操作也从栈中取 `p` 和 `r`，范围都是 `-1...254`。 | `26` |
+| **`DB38`** | `CALLXVARARGS` | _`c p r - `_ | 类似于 [`CALLXARGS`](#instr-callxargs)，但从栈中取 `-1 <= p,r <= 254`。接下来的三个操作也从栈中取 `p` 和 `r`，范围都是 `-1...254`。 | `26` |
 | **`DB39`** | `RETVARARGS` | _`p r - `_ | 类似于 [`RETARGS`](#instr-retargs)。 | `26` |
 | **`DB3A`** | `JMPXVARARGS` | _`c p r - `_ | 类似于 [`JMPXARGS`](#instr-jmpxargs)。 | `26` |
 | **`DB3B`** | `CALLCCVARARGS` | _`c p r - `_ | 类似于 [`CALLCCARGS`](#instr-callccargs)。 | `26` |
@@ -64,7 +64,7 @@ import { continuationOpcodes as opcodes } from '@site/src/data/opcodes';
 
 ### 条件控制流原语
 
-| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`DC`** | `IFRET`<br/>`IFNOT:` | _`f - `_ | 如果整数 `f` 非零，则执行 [`RET`](#instr-ret)。如果 `f` 是 `NaN`, 抛出一个整数溢出异常。 | `18` |
 | **`DD`** | `IFNOTRET`<br/>`IF:` | _`f - `_ | 如果整数 `f` 为零，则执行 [`RET`](#instr-ret)。 | `18` |
@@ -78,7 +78,7 @@ import { continuationOpcodes as opcodes } from '@site/src/data/opcodes';
 | **`E1`** | `IFNOTJMP:<{ code }>` | _`f -`_ | 等同于 [`<{ code }> CONT`](#instr-pushcont) [`IFNOTJMP`](#instr-ifnotjmp)。 |  |
 | **`E2`** | `IFELSE` | _`f c c' - `_ | 如果整数 `f` 非零，执行 `c`，否则执行 `c'`。等同于 [`CONDSELCHK`](#instr-condselchk) [`EXECUTE`](#instr-execute)。 | `18` |
 | **`E2`** | `IF:<{ code1 }>ELSE<{ code2 }>` | _`f -`_ | 等同于 [`<{ code1 }> CONT`](#instr-pushcont) [`<{ code2 }> CONT`](#instr-pushcont) [`IFELSE`](#instr-ifelse)。 |  |
-| **`E300`** | `[ref] IFREF` | _`f - `_ | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`IF`](#instr-if)，但优化了单元引用不实际加载入一个 _Slice_ 再转换成一个普通 _Continuation_ 如果 `f=0`。<br/>这个原语的 Gas 消耗取决于 `f=0` 以及引用是否之前加载过。<br/>类似的评论适用于接受 continuation 作为引用的其他原语。 | `26/126/51` |
+| **`E300`** | `[ref] IFREF` | _`f - `_ | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`IF`](#instr-if)，但优化了cell引用不实际加载入一个 _Slice_ 再转换成一个普通 _Continuation_ 如果 `f=0`。<br/>这个原语的 Gas 消耗取决于 `f=0` 以及引用是否之前加载过。<br/>类似的评论适用于接受 continuation 作为引用的其他原语。 | `26/126/51` |
 | **`E301`** | `[ref] IFNOTREF` | _`f - `_ | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`IFNOT`](#instr-ifnot)。 | `26/126/51` |
 | **`E302`** | `[ref] IFJMPREF` | _`f - `_ | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`IFJMP`](#instr-ifjmp)。 | `26/126/51` |
 | **`E303`** | `[ref] IFNOTJMPREF` | _`f - `_ | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`IFNOTJMP`](#instr-ifnotjmp)。 | `26/126/51` |
@@ -86,7 +86,7 @@ import { continuationOpcodes as opcodes } from '@site/src/data/opcodes';
 | **`E305`** | `CONDSELCHK` | _`f x y - x 或 y`_ | 与 [`CONDSEL`](#instr-condsel) 相同，但首先检查 `x` 和 `y` 是否类型相同。 | `26` |
 | **`E308`** | `IFRETALT` | _`f -`_ | 如果整数 `f!=0` 执行 [`RETALT`](#instr-retalt)。 | `26` |
 | **`E309`** | `IFNOTRETALT` | _`f -`_ | 如果整数 `f=0` 执行 [`RETALT`](#instr-retalt)。 | `26` |
-| **`E30D`** | `[ref] IFREFELSE` | _`f c -`_ | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`SWAP`](#instr-swap) [`IFELSE`](#instr-ifelse)，但如果 `f=0` 则优化了单元引用不实际加载入一个 _Slice_ 再转换成一个普通 _Continuation_ 类似的评论适用于后两个原语：单元仅在需要时转换成 continuations。 | `26/126/51` |
+| **`E30D`** | `[ref] IFREFELSE` | _`f c -`_ | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`SWAP`](#instr-swap) [`IFELSE`](#instr-ifelse)，但优化了在 `f=0` 时，实际上并不需要将cell引用加载进一个_Slice_，然后再转换成普通的 _Continuation_。对接下来的两个原语也适用类似的备注：只有在必要时，才将cell转换成 continuations。 | `26/126/51` |
 | **`E30E`** | `[ref] IFELSEREF` | _`f c -`_ | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`IFELSE`](#instr-ifelse)。 | `26/126/51` |
 | **`E30F`** | `[ref] [ref] IFREFELSEREF` | _`f -`_ | 等同于 [`PUSHREFCONT`](#instr-pushrefcont) [`PUSHREFCONT`](#instr-pushrefcont) [`IFELSE`](#instr-ifelse)。 | `126/51` |
 | **`E39_n`** | `[n] IFBITJMP` | _`x c - x`_ | 检查整数 `x` 中是否设置了位 `0 <= n <= 31`，如果是，则执行 [`JMPX`](#instr-jmpx) 跳转到 continuation `c`。值 `x` 保留在栈中。 | `26` |
@@ -96,7 +96,7 @@ import { continuationOpcodes as opcodes } from '@site/src/data/opcodes';
 
 ### 控制流原语：循环
 
-| xxxxxxx<br />操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+| xxxxxxx<br />操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`E4`** | `REPEAT` | _`n c - `_ | 如果整数 `n` 为非负数，则执行 continuation `c` `n` 次。如果 `n>=2^31` 或 `n<-2^31`，会生成一个范围检查异常。<br/>注意，在 `c` 的代码内部的 [`RET`](#instr-ret) 作为 `continue` 使用，而不是 `break`。应使用另一种（实验性的）循环或者 [`RETALT`](#instr-retalt)（循环前与 [`SETEXITALT`](#instr-setexitalt) 一起使用）来从循环中 `break` 出去。 | `18` |
 | **`E4`** | `REPEAT:<{ code }>`<br/>`<{ code }>REPEAT` | _`n -`_ | 等同于 [`<{ code }> CONT`](#instr-pushcont) [`REPEAT`](#instr-repeat)。 |  |
@@ -127,18 +127,18 @@ import { continuationOpcodes as opcodes } from '@site/src/data/opcodes';
 
 这里的 `s"` 是[在 continuations 之间移动栈元素的费用](#11-gas-prices)。它等于结果栈的大小减去32（如果栈大小小于32，则为0）。
 
-| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
-| **`ECrn`** | `[r] [n] SETCONTARGS` | _`x_1 x_2...x_r c - c'`_ | 类似于 [`[r] -1 SETCONTARGS`](#instr-setcontargs-n)，但将 `c.nargs` 设置为 `c'` 的栈最终大小加上 `n`。换句话说，将 `c` 转换成一个_闭包_或_部分应用函数_，缺少 `0 <= n <= 14` 个参数。 | `26+s”` |
-| **`EC0n`** | `[n] SETNUMARGS` | _`c - c'`_ | 设置 `c.nargs` 为 `n` 加上 `c` 的当前栈深度，其中 `0 <= n <= 14`。如果 `c.nargs` 已经设置为非负值，则不进行任何操作。 | `26` |
+| **`ECrn`** | `[r] [n] SETCONTARGS` | _`x_1 x_2...x_r c - c'`_ | 类似于 [`[r] -1 SETCONTARGS`](#instr-setcontargs-n)，但将 `c.nargs` 设置为 `c'` 的栈的最终大小加上 `n`。换句话说，将 `c` 转换成一个_闭包_或_部分应用函数_，缺少 `0 <= n <= 14` 个参数。 | `26+s”` |
+| **`EC0n`** | `[n] SETNUMARGS` | _`c - c'`_ | 设置 `c.nargs` 为 `n` 加上 `c` 的当前栈的深度，其中 `0 <= n <= 14`。如果 `c.nargs` 已经设置为非负值，则不进行任何操作。 | `26` |
 | **`ECrF`** | `[r] -1 SETCONTARGS` | _`x_1 x_2...x_r c - c'`_ | 将 `0 <= r <= 15` 个值 `x_1...x_r` 推入（复制的）continuation `c` 的栈中，从 `x_1` 开始。如果 `c` 的栈最终深度超过了 `c.nargs`，将生成栈溢出异常。 | `26+s”` |
 | **`ED0p`** | `[p] RETURNARGS` | _`-`_ | 仅保留当前栈顶的 `0 <= p <= 15` 个值（类似于 [`ONLYTOPX`](#instr-onlytopx)），所有未使用的底部值不被丢弃，而是以与 [`SETCONTARGS`](#instr-setcontargs-n) 相同的方式保存到 continuation `c0` 中。 | `26+s”` |
 | **`ED10`** | `RETURNVARARGS` | _`p -`_ | 类似于 [`RETURNARGS`](#instr-returnargs)，但从栈中取整数 `0 <= p <= 255`。 | `26+s”` |
 | **`ED11`** | `SETCONTVARARGS` | _`x_1 x_2...x_r c r n - c'`_ | 类似于 [`SETCONTARGS`](#instr-setcontargs-n)，但从栈中取 `0 <= r <= 255` 和 `-1 <= n <= 255`。 | `26+s”` |
-| **`ED12`** | `SETNUMVARARGS` | _`c n - c'`_ | `-1 <= n <= 255`<br/>如果 `n=-1`，此操作不进行任何操作（`c'=c`）。<br/>否则其行为类似于 [`[n] SETNUMARGS`](#instr-setnumargs)，但 `n` 来自栈。 | `26` |
+| **`ED12`** | `SETNUMVARARGS` | _`c n - c'`_ | `-1 <= n <= 255`<br/>如果 `n=-1`，此操作不进行任何操作（`c'=c`）。<br/>否则其行为类似于 [`[n] SETNUMARGS`](#instr-setnumargs)，但 `n` 是从栈中取得的。 | `26` |
 
 ### 创建简单的 continuations 和 闭包
-| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`ED1E`** | `BLESS` | _`s - c`_ | 将 _Slice_ `s` 转换为简单的普通 continuation `c`，其中 `c.code=s`，并且栈和 savelist 为空。 | `26` |
 | **`ED1F`** | `BLESSVARARGS` | _`x_1...x_r s r n - c`_ | 等同于 [`ROT`](#instr-rot) [`BLESS`](#instr-bless) [`ROTREV`](#instr-rotrev) [`SETCONTVARARGS`](#instr-setcontvarargs)。 | `26+s”` |
@@ -146,12 +146,12 @@ import { continuationOpcodes as opcodes } from '@site/src/data/opcodes';
 | **`EE0n`** | `[n] BLESSNUMARGS` | _`s - c`_ | 也将 _Slice_ `s` 转换为 _Continuation_ `c`，但将 `c.nargs` 设置为 `0 <= n <= 14`。 | `26` |
 
 ### 与 continuation savelists 和控制寄存器的操作
-| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`ED4i`** | `c[i] PUSHCTR`<br/>`c[i] PUSH` | _`- x`_ | 推送控制寄存器 `c(i)` 的当前值。如果当前代码页不支持该控制寄存器，或者它没有值，则触发异常。 | `26` |
-| **`ED44`** | `c4 PUSHCTR`<br/>`c4 PUSH` | _`- x`_ | 推送“全局数据根”单元引用，从而使访问持久智能合约数据成为可能。 | `26` |
+| **`ED44`** | `c4 PUSHCTR`<br/>`c4 PUSH` | _`- x`_ | 推送“全局数据根”cell引用，从而使访问持久智能合约数据成为可能。 | `26` |
 | **`ED5i`** | `c[i] POPCTR`<br/>`c[i] POP` | _`x - `_ | 从栈中弹出一个值 `x` 并存储到控制寄存器 `c(i)` 中（如果当前代码页支持）。注意，如果控制寄存器仅接受特定类型的值，则可能发生类型检查异常。 | `26` |
-| **`ED54`** | `c4 POPCTR`<br/>`c4 POP` | _`x -`_ | 设置“全球数据根”单元引用，从而允许修改持久智能合约数据。 | `26` |
+| **`ED54`** | `c4 POPCTR`<br/>`c4 POP` | _`x -`_ | 设置“全局数据根”cell引用，从而允许修改持久智能合约数据。 | `26` |
 | **`ED6i`** | `c[i] SETCONT`<br/>`c[i] SETCONTCTR` | _`x c - c'`_ | 将 `x` 存储到 continuation `c` 的 savelist 中作为 `c(i)`，并返回结果 continuation `c'`。几乎所有与 continuations 的操作都可以用 [`SETCONTCTR`](#instr-setcontctr)、[`POPCTR`](#instr-popctr) 和 [`PUSHCTR`](#instr-pushctr) 来表达。 | `26` |
 | **`ED7i`** | `c[i] SETRETCTR` | _`x - `_ | 等同于 [`c0 PUSHCTR`](#instr-pushctr) [`c[i] SETCONTCTR`](#instr-setcontctr) [`c0 POPCTR`](#instr-popctr)。 | `26` |
 | **`ED8i`** | `c[i] SETALTCTR` | _`x - `_ | 等同于 [`c1 PUSHCTR`](#instr-pushctr) [`c[i] SETCONTCTR`](#instr-setcontctr) [`c0 POPCTR`](#instr-popctr)。 | `26` |
@@ -173,17 +173,17 @@ import { continuationOpcodes as opcodes } from '@site/src/data/opcodes';
 | **`EDF6`** | `THENRET` | _`c - c'`_ | 计算 `compose0(c, c0)`。 | `26` |
 | **`EDF7`** | `THENRETALT` | _`c - c'`_ | 计算 `compose0(c, c1)` | `26` |
 | **`EDF8`** | `INVERT` | _`-`_ | 交换 `c0` 和 `c1`。 | `26` |
-| **`EDF9`** | `BOOLEVAL` | _`c - ?`_ | 执行 `cc:=compose1(compose0(c, compose0(-1 PUSHINT, cc)), compose0(0 PUSHINT, cc))`。如果 `c` 代表布尔电路，最终效果是在继续之前评估它，并将 `-1` 或 `0` 推入栈中。 | `26` |
+| **`EDF9`** | `BOOLEVAL` | _`c - ?`_ | 执行 `cc:=compose1(compose0(c, compose0(-1 PUSHINT, cc)), compose0(0 PUSHINT, cc))`。如果 `c` 代表一个布尔电路，其最终效果是评估它，并在继续执行之前将 `-1` 或 `0` 推入栈中。 | `26` |
 | **`EDFA`** | `SAMEALT` | _`-`_ | 将 `c1` 设置为 `c0`。等同于 [`c0 PUSHCTR`](#instr-pushctr) [`c1 POPCTR`](#instr-popctr)。 | `26` |
 | **`EDFB`** | `SAMEALTSAVE` | _`-`_ | 将 `c1` 设置为 `c0`，但首先将 `c1` 的旧值保存到 `c0` 的 savelist 中。<br/>等同于 [`c1 SAVE`](#instr-save) [`SAMEALT`](#instr-samealt)。 | `26` |
 
 ### 字典子程序调用和跳转
-| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`F0nn`** | `[nn] CALL`<br/>`[nn] CALLDICT` | _`- nn`_ | 调用 `c3` 中的 continuation，将整数 `0 <= nn <= 255` 作为参数推入其栈。<br/>大致相当于 [`[nn] PUSHINT`](#instr-pushint-4) [`c3 PUSHCTR`](#instr-pushctr) [`EXECUTE`](#instr-execute)。 |  |
 | **`F12_n`** | `[n] CALL`<br/>`[n] CALLDICT` | _`- n`_ | 对于 `0 <= n < 2^14`，这是更大值的 `n` 的 [`[n] CALL`](#instr-calldict) 的编码。 |  |
 | **`F16_n`** | `[n] JMP` | _` - n`_ | 跳转到 `c3` 中的 continuation，将整数 `0 <= n < 2^14` 作为其参数推入。<br/>大致相当于 [`n PUSHINT`](#instr-pushint-4) [`c3 PUSHCTR`](#instr-pushctr) [`JMPX`](#instr-jmpx)。 |  |
-| **`F1A_n`** | `[n] PREPARE`<br/>`[n] PREPAREDICT` | _` - n c`_ | 等同于 [`n PUSHINT`](#instr-pushint-4) [`c3 PUSHCTR`](#instr-pushctr)，对于 `0 <= n < 2^14`。<br/>这样，[`[n] CALL`](#instr-calldict) 大致等同于 [`[n] PREPARE`](#instr-preparedict) [`EXECUTE`](#instr-execute)，而 [`[n] JMP`](#instr-jmpdict) 大致等同于 [`[n] PREPARE`](#instr-preparedict) [`JMPX`](#instr-jmpx)。<br/>例如，可以使用 [`CALLXARGS`](#instr-callxargs) 或 [`CALLCC`](#instr-callcc) 代替 [`EXECUTE`](#instr-execute)。 |  |
+| **`F1A_n`** | `[n] PREPARE`<br/>`[n] PREPAREDICT` | _` - n c`_ | 等同于 [`n PUSHINT`](#instr-pushint-4) [`c3 PUSHCTR`](#instr-pushctr)，适用于 `0 <= n < 2^14`。<br/>这样，[`[n] CALL`](#instr-calldict) 大致等同于 [`[n] PREPARE`](#instr-preparedict) [`EXECUTE`](#instr-execute)，而 [`[n] JMP`](#instr-jmpdict) 大致等同于 [`[n] PREPARE`](#instr-preparedict) [`JMPX`](#instr-jmpx)。<br/>例如，这里可以使用 [`CALLXARGS`](#instr-callxargs) 或 [`CALLCC`](#instr-callcc) 代替 [`EXECUTE`](#instr-execute)。 |  |
 
 
 ### TVM 指令内容列表
@@ -194,8 +194,8 @@ import { continuationOpcodes as opcodes } from '@site/src/data/opcodes';
 * [常量和字面量](/learn/tvm-instructions/instructions/constant)
 * [算术操作](/learn/tvm-instructions/instructions/arithmetic)
 * [数据比较](/learn/tvm-instructions/instructions/data-comparison)
-* [单元操作](/learn/tvm-instructions/instructions/cell-manipulation)
-* [连续性和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
 * [异常生成和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
 * [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
 * [特定应用原语](/learn/tvm-instructions/instructions/app-specific)

@@ -316,7 +316,7 @@ while (cs.slice_refs()) {
 
 ### CommonMsgInfo
 
-首先，每个消息必须首先存储 `CommonMsgInfo`（[TL-B](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L123-L130)）或 `CommonMsgInfoRelaxed`（[TL-B](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L132-L137)）。这允许我们定义与交易类型、交易时间、接收者地址、技术标志和费用相关的技术细节。
+首先，每个消息必须首先存储 `CommonMsgInfo`（[TL-B](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L123-L130)）或 `CommonMsgInfoRelaxed`（[TL-B](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L132-L137)）。这允许我们定义与交易类型、交易时间、接收者地址、技术标志位和费用相关的技术细节。
 
 通过阅读 `block.tlb` 文件，我们可以注意到 CommonMsgInfo有三种不同的类型：`int_msg_info$0`、`ext_in_msg_info$10`、`ext_out_msg_info$11`。我们将不对 `ext_out_msg_info` 的 TL-B 结构的具体细节进行详细解释。但需要注意的是，它是由智能合约发送的外部交易类型，用作外部日志。要查看此格式的示例，请仔细查看 [Elector](https://tonscan.org/address/Ef8zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM0vF) 合约。
 
@@ -2285,7 +2285,7 @@ const codeCell = Cell.fromBoc(Buffer.from(result.codeBoc, 'base64'))[0];
 
 // 现在我们有了编译后代码的 base64 编码 BOC 在 result.codeBoc 中
 console.log('代码 BOC: ' + result.codeBoc);
-console.log('\n哈希值: ' + codeCell.hash().toString('base64')); // 获取单元的哈希值并转换为 base64 编码字符串
+console.log('\n哈希值: ' + codeCell.hash().toString('base64')); // 获取cell的哈希值并转换为 base64 编码字符串
 
 ```
 

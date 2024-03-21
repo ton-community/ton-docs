@@ -31,8 +31,8 @@ import { stackManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
 * [常量和字面量](/learn/tvm-instructions/instructions/constant)
 * [算术操作](/learn/tvm-instructions/instructions/arithmetic)
 * [数据比较](/learn/tvm-instructions/instructions/data-comparison)
-* [单元格操作](/learn/tvm-instructions/instructions/cell-manipulation)
-* [续延和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
 * [异常产生和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
 * [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
 * [应用特定原语](/learn/tvm-instructions/instructions/app-specific)
@@ -56,7 +56,7 @@ import { stackManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
 | **`30`** | `DROP` | _`x -`_ | 等同于 [`s0 POP`](#instr-pop)，丢弃堆栈顶部值。 | `18` |
 | **`31`** | `NIP` | _`x y - y`_ | 等同于 [`s1 POP`](#instr-pop)。 | `18` |
 
-### 复杂堆栈操作
+### 复杂堆栈操作原语
 
 | xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
@@ -111,8 +111,8 @@ import { stackManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
 * [常量和字面量](/learn/tvm-instructions/instructions/constant)
 * [算术操作](/learn/tvm-instructions/instructions/arithmetic)
 * [数据比较](/learn/tvm-instructions/instructions/data-comparison)
-* [单元格操作](/learn/tvm-instructions/instructions/cell-manipulation)
-* [续延和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
 * [异常产生和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
 * [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
 * [应用特定原语](/learn/tvm-instructions/instructions/app-specific)

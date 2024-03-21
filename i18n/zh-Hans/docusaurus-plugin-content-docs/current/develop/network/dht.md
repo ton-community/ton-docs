@@ -132,7 +132,7 @@ DHT也用于查找存储工作链及其分片数据的节点的信息。该过�
 ```
 tonNode.shardPublicOverlayId workchain:int shard:long zero_state_file_hash:int256 = tonNode.ShardPublicOverlayId;
 ```
-其中`workchain`在主链的情况下将等于-1，它的分片将等于-922337203685477580（0xFFFFFFFFFFFFFFFF），而`zero_state_file_hash`是链的零状态的哈希（file_hash），像其他数据一样，可以从全球网络配置中获取，在`"validator"`字段中
+其中`workchain`在主链的情况下将等于-1，它的分片将等于-922337203685477580（0xFFFFFFFFFFFFFFFF），而`zero_state_file_hash`是链的零状态的哈希（file_hash），像其他数据一样，可以从全局网络配置中获取，在`"validator"`字段中
 ```json
 "zero_state": {
   "workchain": -1,

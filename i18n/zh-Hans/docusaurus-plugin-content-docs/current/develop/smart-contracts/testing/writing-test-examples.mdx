@@ -42,7 +42,7 @@ blockchain.verbosity = {
 }
 ```
 
-## 直接单元测试
+## 直接 cell 测试
 
 Fireworks演示了在TON区块链中发送消息的不同操作。
 
@@ -146,7 +146,7 @@ index - 是`launchResult`数组中交易的ID。
 完整的账户状态相关字段列表：
 
 * `destroyed` - `true` - 如果现有合约因执行某个交易而被销毁。否则 - `false`。
-* `deploy` - 自定义沙盒标志，表明合约在此交易期间是否部署。如果合约在此交易前未初始化，而在此交易后变为已初始化，则为`true`。否则 - `false`。
+* `deploy` - 自定义沙盒标志位，表明合约在此交易期间是否部署。如果合约在此交易前未初始化，而在此交易后变为已初始化，则为`true`。否则 - `false`。
 * `oldStatus` - 交易执行前的账户状态。值：`'uninitialized'`, `'frozen'`, `'active'`, `'non-existing'`。
 * `endStatus` - 交易执行后的账户状态。值：`'uninitialized'`, `'frozen'`, `'active'`, `'non-existing'`。
 
