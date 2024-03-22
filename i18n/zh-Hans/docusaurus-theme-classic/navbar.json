@@ -1,140 +1,198 @@
 {
-    "item.label.Concepts": {
-        "message": "概念"
-    },
-    "item.label.Introduction to TON": {
-        "message": "TON简介"
-    },
-    "item.label.Blockchain of Blockchains": {
-        "message": "区块链的区块链"
-    },
-    "item.label.Smart Contract Addresses": {
-        "message": "智能合约地址"
-    },
-    "item.label.Cells as a Data Structure": {
-        "message": "Cell作为数据结构"
-    },
-    "item.label.TON Networking": {
-        "message": "TON网络"
-    },
-    "item.label.Whitepapers": {
-        "message": "白皮书"
-    },
-    "item.label.Get Started": {
-        "message": "开始"
-    },
-    "item.label.Start with Onboarding Tutorials": {
-        "message": "入门教程"
-    },
-    "item.label.Build your first Mini App": {
-        "message": "构建你的第一个小程序"
-    },
-    "item.label.Dive into DApps Development": {
-        "message": "深入DApps开发"
-    },
-    "item.label.Mint your first Token (Jetton)": {
-        "message": "铸造你的第一个代币（Jetton）"
-    },
-    "item.label.TMA Development": {
-        "message": "Telegram小程序开发"
-    },
-    "item.label.Transaction Processing": {
-        "message": "交易处理"
-    },
-    "item.label.TON Cookbook": {
-        "message": "TON菜谱"
-    },
-    "item.label.DApps": {
-        "message": "去中心化应用"
-    },
-    "item.label.Smart Contracts": {
-        "message": "智能合约"
-    },
-    "item.label.Understanding Wallets": {
-        "message": "理解钱包"
-    },
-    "item.label.Write Smart Contracts": {
-        "message": "编写智能合约"
-    },
-    "item.label.Sending Messages": {
-        "message": "发送消息"
-    },
-    "item.label.Transaction Fees": {
-        "message": "交易费用"
-    },
-    "item.label.Best Practices for Contracts": {
-        "message": "合约最佳实践"
-    },
-    "item.label.FunC Development Language": {
-        "message": "FunC开发语言"
-    },
-    "item.label.FunC Cookbook": {
-        "message": "FunC菜谱"
-    },
-    "item.label.Data formats": {
-        "message": "数据格式"
-    },
-    "item.label.TON Virtual Machine (TVM)": {
-        "message": "TON虚拟机（TVM）"
-    },
-    "item.label.Nodes": {
-        "message": "节点"
-    },
-    "item.label.Node Types": {
-        "message": "节点类型"
-    },
-    "item.label.Become a Validator": {
-        "message": "成为验证者"
-    },
-    "item.label.Run a Full Node": {
-        "message": "运行全节点"
-    },
-    "item.label.Enable Liteserver": {
-        "message": "启用Liteserver"
-    },
-    "item.label.Run an Archive Node": {
-        "message": "运行归档节点"
-    },
-    "item.label.Single Nominator Pool": {
-        "message": "单个提名池"
-    },
-    "item.label.Vesting Contract": {
-        "message": "锁仓合约"
-    },
-    "item.label.Web3": {
-        "message": "Web3"
-    },
-    "item.label.TON DNS & Domains": {
-        "message": "TON DNS & 域名"
-    },
-    "item.label.Open TON Sites": {
-        "message": "开放TON网站"
-    },
-    "item.label.Run TON Sites": {
-        "message": "运行TON网站"
-    },
-    "item.label.Run a Storage Daemon": {
-        "message": "运行存储守护程序"
-    },
-    "item.label.Build a Storage Provider": {
-        "message": "构建存储提供商"
-    },
-    "item.label.Community": {
-        "message": "社区"
-    },
-    "item.label.TON Answers": {
-        "message": "TON问答"
-    },
-    "item.label.TON Developers Kit": {
-        "message": "TON开发者工具包"
-    },
-    "item.label.AI TON Support Agent": {
-        "message": "TON AI客服机器人"
-    },
-    "item.label.Standards Discussion (TEPs)": {
-        "message": "标准讨论（TEPs）"
-    },
-    "item.label.Contribute to Docs": {
-        "message": "贡献文档"
-    }
+  "item.label.Concepts": {
+    "message": "概念",
+    "description": "Navbar item with label Concepts"
+  },
+  "item.label.Introduction to TON": {
+    "message": "TON简介",
+    "description": "Navbar item with label Introduction to TON"
+  },
+  "item.label.Blockchain of Blockchains": {
+    "message": "区块链的区块链",
+    "description": "Navbar item with label Blockchain of Blockchains"
+  },
+  "item.label.Smart Contract Addresses": {
+    "message": "智能合约地址",
+    "description": "Navbar item with label Smart Contract Addresses"
+  },
+  "item.label.Cells as a Data Structure": {
+    "message": "Cell作为数据结构",
+    "description": "Navbar item with label Cells as a Data Structure"
+  },
+  "item.label.TON Networking": {
+    "message": "TON网络",
+    "description": "Navbar item with label TON Networking"
+  },
+  "item.label.Whitepapers": {
+    "message": "白皮书",
+    "description": "Navbar item with label Whitepapers"
+  },
+  "item.label.Get Started": {
+    "message": "开始",
+    "description": "Navbar item with label Get Started"
+  },
+  "item.label.Start with Onboarding Tutorials": {
+    "message": "入门教程",
+    "description": "Navbar item with label Start with Onboarding Tutorials"
+  },
+  "item.label.Build your first Mini App": {
+    "message": "构建你的第一个小程序",
+    "description": "Navbar item with label Build your first Mini App"
+  },
+  "item.label.Dive into DApps Development": {
+    "message": "深入DApps开发",
+    "description": "Navbar item with label Dive into DApps Development"
+  },
+  "item.label.Mint your first Token (Jetton)": {
+    "message": "铸造你的第一个代币（Jetton）",
+    "description": "Navbar item with label Mint your first Token (Jetton)"
+  },
+  "item.label.TMA Development": {
+    "message": "Telegram小程序开发",
+    "description": "Navbar item with label TMA Development"
+  },
+  "item.label.Transaction Processing": {
+    "message": "交易处理",
+    "description": "Navbar item with label Transaction Processing"
+  },
+  "item.label.TON Cookbook": {
+    "message": "TON菜谱",
+    "description": "Navbar item with label TON Cookbook"
+  },
+  "item.label.DApps": {
+    "message": "去中心化应用",
+    "description": "Navbar item with label DApps"
+  },
+  "item.label.Smart Contracts": {
+    "message": "智能合约",
+    "description": "Navbar item with label Smart Contracts"
+  },
+  "item.label.Understanding Wallets": {
+    "message": "理解钱包",
+    "description": "Navbar item with label Understanding Wallets"
+  },
+  "item.label.Write Smart Contracts": {
+    "message": "编写智能合约",
+    "description": "Navbar item with label Write Smart Contracts"
+  },
+  "item.label.Sending Messages": {
+    "message": "发送消息",
+    "description": "Navbar item with label Sending Messages"
+  },
+  "item.label.Transaction Fees": {
+    "message": "交易费用",
+    "description": "Navbar item with label Transaction Fees"
+  },
+  "item.label.Best Practices for Contracts": {
+    "message": "合约最佳实践",
+    "description": "Navbar item with label Best Practices for Contracts"
+  },
+  "item.label.FunC Development Language": {
+    "message": "FunC开发语言",
+    "description": "Navbar item with label FunC Development Language"
+  },
+  "item.label.FunC Cookbook": {
+    "message": "FunC菜谱",
+    "description": "Navbar item with label FunC Cookbook"
+  },
+  "item.label.Data formats": {
+    "message": "数据格式",
+    "description": "Navbar item with label Data formats"
+  },
+  "item.label.TON Virtual Machine (TVM)": {
+    "message": "TON虚拟机（TVM）",
+    "description": "Navbar item with label TON Virtual Machine (TVM)"
+  },
+  "item.label.Nodes": {
+    "message": "节点",
+    "description": "Navbar item with label Nodes"
+  },
+  "item.label.Node Types": {
+    "message": "节点类型",
+    "description": "Navbar item with label Node Types"
+  },
+  "item.label.Become a Validator": {
+    "message": "成为验证者",
+    "description": "Navbar item with label Become a Validator"
+  },
+  "item.label.Run a Full Node": {
+    "message": "运行全节点",
+    "description": "Navbar item with label Run a Full Node"
+  },
+  "item.label.Enable Liteserver": {
+    "message": "启用Liteserver",
+    "description": "Navbar item with label Enable Liteserver"
+  },
+  "item.label.Run an Archive Node": {
+    "message": "运行归档节点",
+    "description": "Navbar item with label Run an Archive Node"
+  },
+  "item.label.Single Nominator Pool": {
+    "message": "单个提名池",
+    "description": "Navbar item with label Single Nominator Pool"
+  },
+  "item.label.Vesting Contract": {
+    "message": "锁仓合约",
+    "description": "Navbar item with label Vesting Contract"
+  },
+  "item.label.Web3": {
+    "message": "Web3",
+    "description": "Navbar item with label Web3"
+  },
+  "item.label.TON DNS & Domains": {
+    "message": "TON DNS & 域名",
+    "description": "Navbar item with label TON DNS & Domains"
+  },
+  "item.label.Open TON Sites": {
+    "message": "开放TON网站",
+    "description": "Navbar item with label Open TON Sites"
+  },
+  "item.label.Run TON Sites": {
+    "message": "运行TON网站",
+    "description": "Navbar item with label Run TON Sites"
+  },
+  "item.label.Run a Storage Daemon": {
+    "message": "运行存储守护程序",
+    "description": "Navbar item with label Run a Storage Daemon"
+  },
+  "item.label.Build a Storage Provider": {
+    "message": "构建存储提供商",
+    "description": "Navbar item with label Build a Storage Provider"
+  },
+  "item.label.Community": {
+    "message": "社区",
+    "description": "Navbar item with label Community"
+  },
+  "item.label.TON Answers": {
+    "message": "TON问答",
+    "description": "Navbar item with label TON Answers"
+  },
+  "item.label.TON Developers Kit": {
+    "message": "TON开发者工具包",
+    "description": "Navbar item with label TON Developers Kit"
+  },
+  "item.label.AI TON Support Agent": {
+    "message": "TON AI客服机器人",
+    "description": "Navbar item with label AI TON Support Agent"
+  },
+  "item.label.Standards Discussion (TEPs)": {
+    "message": "标准讨论（TEPs）",
+    "description": "Navbar item with label Standards Discussion (TEPs)"
+  },
+  "item.label.Contribute to Docs": {
+    "message": "贡献文档",
+    "description": "Navbar item with label Contribute to Docs"
+  },
+  "logo.alt": {
+    "message": "TON",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.APIs": {
+    "message": "APIs",
+    "description": "Navbar item with label APIs"
+  },
+  "item.label.SDKs": {
+    "message": "SDKs",
+    "description": "Navbar item with label SDKs"
+  }
 }
