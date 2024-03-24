@@ -616,6 +616,127 @@
     "doc_description": "Retrieves global_id from 19 network config"
   },
   {
+    "name": "GETGASFEE",
+    "alias_of": "",
+    "tlb": "#F836",
+    "doc_category": "app_config",
+    "doc_opcode": "F836",
+    "doc_fift": "GETGASFEE",
+    "doc_stack": "gas_used is_mc - price",
+    "doc_gas": "",
+    "doc_description": "Calculates gas fee"
+  },
+  {
+    "name": "GETSTORAGEFEE",
+    "alias_of": "",
+    "tlb": "#F837",
+    "doc_category": "app_config",
+    "doc_opcode": "F837",
+    "doc_fift": "GETSTORAGEFEE",
+    "doc_stack": "cells bits seconds is_mc - price",
+    "doc_gas": "",
+    "doc_description": "Calculates storage fees in nanotons for contract based on current storage prices. `cells` and `bits` are the size of the [AccountState](https://github.com/ton-blockchain/ton/blob/8a9ff339927b22b72819c5125428b70c406da631/crypto/block/block.tlb#L247) (with deduplication, including root cell)."
+  },
+  {
+    "name": "GETFORWARDFEE",
+    "alias_of": "",
+    "tlb": "#F838",
+    "doc_category": "app_config",
+    "doc_opcode": "F838",
+    "doc_fift": "GETFORWARDFEE",
+    "doc_stack": "cells bits is_mc - price",
+    "doc_gas": "",
+    "doc_description": "Calculates forward fees in nanotons for outgoing message. `is_mc` is true if the source or the destination is in masterchain, false if both are in basechain. Note, cells and bits in Message should be counted with account for deduplication and root-is-not-counted rules."
+  },
+  {
+    "name": "GETPRECOMPILEDGAS",
+    "alias_of": "",
+    "tlb": "#F839",
+    "doc_category": "app_config",
+    "doc_opcode": "F839",
+    "doc_fift": "GETPRECOMPILEDGAS",
+    "doc_stack": "- x",
+    "doc_gas": "",
+    "doc_description": "reserved, currently returns null. Will return cost of contract execution in gas units if this contract is precompiled"
+  },
+  {
+    "name": "GETORIGINALFWDFEE",
+    "alias_of": "",
+    "tlb": "#F83A",
+    "doc_category": "app_config",
+    "doc_opcode": "F83A",
+    "doc_fift": "GETORIGINALFWDFEE",
+    "doc_stack": "fwd_fee is_mc - orig_fwd_fee",
+    "doc_gas": "",
+    "doc_description": "calculate `fwd_fee * 2^16 / first_frac`. Can be used to get the original `fwd_fee` of the message (as replacement for hardcoded values like [this](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/jetton-wallet.fc#L224C17-L224C46)) from `fwd_fee` parsed from incoming message. `is_mc` is true if the source or the destination is in masterchain, false if both are in basechain."
+  },
+  {
+    "name": "GETGASFEESIMPLE",
+    "alias_of": "",
+    "tlb": "#F83B",
+    "doc_category": "app_config",
+    "doc_opcode": "F83B",
+    "doc_fift": "GETGASFEESIMPLE",
+    "doc_stack": "gas_used is_mc - price",
+    "doc_gas": "",
+    "doc_description": "Same as `GETGASFEE`, but without flat price (just `(gas_used * price) / 2^16)`."
+  },
+  {
+    "name": "GETFORWARDFEESIMPLE",
+    "alias_of": "",
+    "tlb": "#F83C",
+    "doc_category": "app_config",
+    "doc_opcode": "F83C",
+    "doc_fift": "GETFORWARDFEESIMPLE",
+    "doc_stack": "cells bits is_mc - price",
+    "doc_gas": "",
+    "doc_description": "Calculates additional forward cost in nanotons for message that contains additional `cells` and `bits`. In other words, same as `GETFORWARDFEE`, but without lump price (just `(bits*bit_price + cells*cell_price) / 2^16`)."
+  },
+  {
+    "name": "UNPACKEDCONFIGTUPLE",
+    "alias_of": "",
+    "tlb": "#F82E",
+    "doc_category": "app_config",
+    "doc_opcode": "F82E",
+    "doc_fift": "UNPACKEDCONFIGTUPLE",
+    "doc_stack": "- c",
+    "doc_gas": 26,
+    "doc_description": "Retrieves tuple of configs slices from c7"
+  },
+  {
+    "name": "DUEPAYMENT",
+    "alias_of": "",
+    "tlb": "#F82F",
+    "doc_category": "app_config",
+    "doc_opcode": "F82F",
+    "doc_fift": "DUEPAYMENT",
+    "doc_stack": "- i",
+    "doc_gas": 26,
+    "doc_description": "Retrieves value of due payment from c7"
+  },
+  {
+    "name": "GLOBALID",
+    "alias_of": "",
+    "tlb": "#F835",
+    "doc_category": "app_config",
+    "doc_opcode": "F835",
+    "doc_fift": "GLOBALID",
+    "doc_stack": "- i",
+    "doc_gas": 26,
+    "doc_description": "Now retrieves `ConfigParam 19` from from c7, ton form config dict."
+  },
+  {
+    "name": "SENDMSG",
+    "alias_of": "",
+    "tlb": "#FB08",
+    "doc_category": "app_config",
+    "doc_opcode": "FB08",
+    "doc_fift": "SENDMSG",
+    "doc_stack": "msg mode - i",
+    "doc_gas": "",
+    "doc_description": "Now retrieves `ConfigParam 24/25` (message prices) and `ConfigParam 43` (`max_msg_cells`) from c7, not from config dict."
+  },
+  {
     "name": "GASCONSUMED",
     "alias_of": "",
     "tlb": "#F802",

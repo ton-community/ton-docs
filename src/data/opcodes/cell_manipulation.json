@@ -1659,5 +1659,49 @@
     "doc_stack": "c - x",
     "doc_gas": 26,
     "doc_description": "Returns the depth of _Cell_ `c`. If `c` has no references, then `x=0`; otherwise `x` is one plus the maximum of depths of cells referred to from `c`. If `c` is a _Null_ instead of a _Cell_, returns zero."
+  },
+  {
+    "name": "CLEVEL",
+    "alias_of": "",
+    "tlb": "#D766",
+    "doc_category": "cell_parse",
+    "doc_opcode": "D766",
+    "doc_fift": "CLEVEL",
+    "doc_stack": "cell - level",
+    "doc_gas": 26,
+    "doc_description": "Returns level of the cell"
+  },
+  {
+    "name": "CLEVELMASK",
+    "alias_of": "",
+    "tlb": "#D767",
+    "doc_category": "cell_parse",
+    "doc_opcode": "D767",
+    "doc_fift": "CLEVELMASK",
+    "doc_stack": "cell - level_mask",
+    "doc_gas": 26,
+    "doc_description": "Returns level mask of the cell"
+  },
+  {
+    "name": "CHASHIX",
+    "alias_of": "",
+    "tlb": "#D770",
+    "doc_category": "cell_parse",
+    "doc_opcode": "D770",
+    "doc_fift": "CHASHIX",
+    "doc_stack": "cell i - depth",
+    "doc_gas": 26,
+    "doc_description": "Returns ith hash of the cell (i is in range 0..3)"
+  },
+  {
+    "name": "CDEPTHIX",
+    "alias_of": "",
+    "tlb": "#D771",
+    "doc_category": "cell_parse",
+    "doc_opcode": "D771",
+    "doc_fift": "CDEPTHIX",
+    "doc_stack": "cell i - depth",
+    "doc_gas": 26,
+    "doc_description": "Returns ith depth of the cell (i is in range 0..3)"
   }
 ]
