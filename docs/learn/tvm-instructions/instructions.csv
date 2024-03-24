@@ -1009,3 +1009,18 @@ RIST255_QMUL,,#B7F924,app_crypto,B7F924,RIST255_QMUL,x n - 0 or x*n -1,2034,Quie
 RIST255_QMULBASE,,#B7F925,app_crypto,B7F925,RIST255_QMULBASE,n - 0 or g*n -1,784,Quiet version of `RIST255_MULBASE`
 RUNVM,,#DB4 flags:(## 12),cont_basic,DB4fff,RUNVM,x_1 ... x_n n code [r] [c4] [c7] [g_l] [g_m] - x'_1 ... x'_m exitcode [data'] [c4'] [c5] [g_c],66+x,Runs child VM with code `code` and stack `x_1...x_n`. Returns the resulting stack `x'_1...x'_m` and exitcode. Other arguments and return values are enabled by flags.
 RUNVMX,,#DB50,cont_basic,DB50,RUNVMX,x_1 ... x_n n code [r] [c4] [c7] [g_l] [g_m] flags - x'_1 ... x'_m exitcode [data'] [c4'] [c5] [g_c],66+x,Same as `RUNVM`, but pops flags from stack.
+GETGASFEE,,#F836,app_config,F836,GETGASFEE,gas_used is_mc - price,,Calculates gas fee
+GETSTORAGEFEE,,#F837,app_config,F837,GETSTORAGEFEE,cells bits seconds is_mc - price,,Calculates storage fees in nanotons for contract based on current storage prices. `cells` and `bits` are the size of the [AccountState](https://github.com/ton-blockchain/ton/blob/8a9ff339927b22b72819c5125428b70c406da631/crypto/block/block.tlb#L247) (with deduplication, including root cell).
+GETFORWARDFEE,,#F838,app_config,F838,GETFORWARDFEE,cells bits is_mc - price,,Calculates forward fees in nanotons for outgoing message. `is_mc` is true if the source or the destination is in masterchain, false if both are in basechain. Note, cells and bits in Message should be counted with account for deduplication and root-is-not-counted rules.
+GETPRECOMPILEDGAS,,#F839,app_config,F839,GETPRECOMPILEDGAS,- x,,reserved, currently returns null. Will return cost of contract execution in gas units if this contract is precompiled
+GETORIGINALFWDFEE,,#F83A,app_config,F83A,GETORIGINALFWDFEE,fwd_fee is_mc - orig_fwd_fee,,calculate `fwd_fee * 2^16 / first_frac`. Can be used to get the original `fwd_fee` of the message (as replacement for hardcoded values like [this](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/jetton-wallet.fc#L224C17-L224C46)) from `fwd_fee` parsed from incoming message. `is_mc` is true if the source or the destination is in masterchain, false if both are in basechain.
+GETGASFEESIMPLE,,#F83B,app_config,F83B,GETGASFEESIMPLE,gas_used is_mc - price,,Same as `GETGASFEE`, but without flat price (just `(gas_used * price) / 2^16)`.
+GETFORWARDFEESIMPLE,,#F83C,app_config,F83C,GETFORWARDFEESIMPLE,cells bits is_mc - price,,Calculates additional forward cost in nanotons for message that contains additional `cells` and `bits`. In other words, same as `GETFORWARDFEE`, but without lump price (just `(bits*bit_price + cells*cell_price) / 2^16)`.
+UNPACKEDCONFIGTUPLE,,#F82E,app_config,F82E,UNPACKEDCONFIGTUPLE,- c,26,Retrieves tuple of configs slices from c7
+DUEPAYMENT,,#F82F,app_config,F82F,DUEPAYMENT,- i,26,Retrieves value of due payment from c7
+GLOBALID,,#F835,app_config,F835,GLOBALID,- i,26,Now retrieves `ConfigParam 19` from from c7, ton form config dict.
+SENDMSG,,#FB08,app_config,FB08,SENDMSG,msg mode - i,,Now retrieves `ConfigParam 24/25` (message prices) and `ConfigParam 43` (`max_msg_cells`) from c7, not from config dict.
+CLEVEL,,#D766,cell_parse,D766,CLEVEL,cell - level,26,Returns level of the cell
+CLEVELMASK,,#D767,cell_parse,D767,CLEVELMASK,cell - level_mask,26,Returns level mask of the cell
+CHASHIX,,#D770,cell_parse,D770,CHASHIX,cell i - depth,26,Returns ith hash of the cell (i is in range 0..3)
+CDEPTHIX,,#D771,cell_parse,D771,CDEPTHIX,cell i - depth,26,Returns ith depth of the cell (i is in range 0..3)
