@@ -22,17 +22,17 @@
 
 我们将使用Pinata作为我们的IPFS存储系统，因此你还需要在[pinata.cloud](https://pinata.cloud)上创建一个帐户并获取api_key & api_secreat。官方Pinata [文档教程](https://docs.pinata.cloud/pinata-api/authentication)可以帮助完成这一点。只要你拿到这些api令牌，我就在这里等你！！！
 
-## 💎 什么是TON上的NFT?
+## 💎 什么是 TON 上的 NFT?
 
 在开始我们教程的主要部分之前，我们需要了解一下通常意义上TON中NFT是如何工作的。出乎意料的是，我们将从解释ETH中NFT的工作原理开始，为了理解TON中NFT实现的特殊性，与行业中常见的区块链相比。
 
-### ETH上的NFT实现
+### ETH 上的 NFT 实现
 
 ETH中NFT的实现极其简单 - 存在1个主要的集合合约，它存储一个简单的哈希映射，该哈希映射反过来存储此集合中NFT的数据。所有与此集合相关的请求（如果任何用户想要转移NFT、将其出售等）都特别发送到此1个集合合约。
 
 ![](/img/tutorials/nft/eth-collection.png)
 
-### 在TON中如此实现可能出现的问题
+### 在 TON 中如此实现可能出现的问题
 
 在TON的上下文中，此类实现的问题由[TON的NFT标准](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)完美描述：
 
@@ -42,7 +42,7 @@ ETH中NFT的实现极其简单 - 存在1个主要的集合合约，它存储一�
 
 *简而言之，ETH的解决方案不可扩展且不适用于像TON这样的异步区块链。*
 
-### TON上的NFT实现
+### TON 上的 NFT 实现
 
 在TON中，我们有1个主合约-我们集合的智能合约，它存储它的元数据和它所有者的地址，以及最重要的 - 如果我们想要创建（"铸造"）新的NFT项目 - 我们只需要向这个集合合约发送消息。而这个集合合约将为我们部署新NFT项目的合约，并提供我们提供的数据。
 
@@ -201,7 +201,7 @@ Seqno用于预防重放攻击。当交易发送到钱包智能合约时，它将
 
 首先，我们需要在`/data/images`中存储我们NFT的图片，命名为`0.png`、`1.png`...用于物品的照片，以及`logo.png`用于我们集合的头像。你可以轻松[下载](/img/tutorials/nft/ducks.zip)包含鸭子图片的包或将你的图片放入该文件夹。我们还将在`/data/metadata/`文件夹中存储所有的元数据文件。
 
-### NFT规范
+### NFT 规范
 
 TON上的大多数产品支持以下元数据规范来存储有关NFT集合的信息：
 
@@ -434,7 +434,7 @@ export function encodeOffChainContent(content: string) {
 }
 ```
 
-## 🚢 部署NFT集合
+## 🚢 部署 NFT 集合
 当我们的元数据已经准备好并且已经上传到IPFS时，我们可以开始部署我们的集合了！
 
 我们将在 `/contracts/NftCollection.ts` 文件中创建一个文件，该文件将存储与我们的集合相关的所有逻辑。我们将从导入开始：
@@ -630,7 +630,7 @@ console.log(`Collection deployed: ${collection.address}`);
 await waitSeqno(seqno, wallet);
 ```
 
-## 🚢 部署NFT项目
+## 🚢 部署 NFT 项目
 当我们的收藏准备好后，我们可以开始铸造我们的NFT！我们将存储代码在`src/contracts/NftItem.ts`
 
 意外地，但现在我们需要回到`NftCollection.ts`。并在文件顶部的`collectionData`附近添加此类型。
@@ -783,7 +783,7 @@ for (const file of files) {
   }
 ```
 
-## 🏷 将NFT出售
+## 🏷 将 NFT 出售
 
 为了将nft出售，我们需要两个智能合约。
 

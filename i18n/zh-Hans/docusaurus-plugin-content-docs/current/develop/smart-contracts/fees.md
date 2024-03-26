@@ -22,13 +22,13 @@
 当前的gas数量写在网络配置[参数20](https://explorer.toncoin.org/config?workchain=-1&shard=8000000000000000&seqno=22185244&roothash=165D55B3CFFC4043BFC43F81C1A3F2C41B69B33D6615D46FBFD2036256756382&filehash=69C43394D872B02C334B75F59464B2848CD4E23031C03CA7F3B1F98E8A13EE05#configparam20)中。
 :::
 
-### Gas变更投票过程
+### Gas 变更投票过程
 
 像TON的许多其他参数一样，gas费用是可配置的，可以通过主网上的特殊投票来更改。
 
 更改任何参数都需要获得66％的验证者投票。
 
-#### Gas的成本会更高吗？
+#### Gas 的成本会更高吗？
 
 > *这是否意味着有一天gas价格可能会上涨1000倍甚至更多？*
 
@@ -152,23 +152,23 @@ function storageFeeCalculator() {
 
 这里是TON访客最常问的问题：
 
-### 发送TON的费用？
+### 发送 TON 的费用？
 
 发送任何数量的TON的平均费用为0.0055 TON。
 
-### 发送Jettons的费用？
+### 发送 Jettons 的费用？
 
 发送任何数量的自定义Jettons的平均费用为0.037 TON。
 
-### 铸造NFT的成本？
+### 铸造 NFT 的成本？
 
 铸造一个NFT的平均费用为0.08 TON。
 
-### 在TON上保存数据的成本？
+### 在 TON 上保存数据的成本？
 
 在TON上保存1 MB数据一年的成本为6.01 TON。请注意，您通常不需要在链上存储大量数据。如果您需要去中心化存储，请考虑[TON Storage](/participate/ton-storage/storage-daemon)。
 
-### 如何在FunC中计算费用？
+### 如何在 FunC 中计算费用？
 
 * [在FunC中计算转发费用的智能合约函数](https://github.com/ton-blockchain/token-contract/blob/main/misc/forward-fee-calc.fc)
 

@@ -141,7 +141,7 @@ curl -X 'GET' \
 
 现在我们准备好创建一个交易检查器了
 
-### 使用TON
+### 使用 TON
 
 让我们先导入所需的TON库
 ```js
@@ -219,7 +219,7 @@ export function generatePaymentLink(toWallet, amount, comment, app) {
 ```
 我们所需的只是将交易参数代入URL中。不要忘记将交易值转换为nano。
 
-## Telegram机器人
+## Telegram 机器人
 
 ### 初始化
 
@@ -287,7 +287,7 @@ async function runApp() {
 
 ### 消息处理
 
-#### /start命令
+#### /start 命令
 
 我们从处理`/start`命令开始。当用户首次启动机器人或重新启动它时，将调用此函数。
 

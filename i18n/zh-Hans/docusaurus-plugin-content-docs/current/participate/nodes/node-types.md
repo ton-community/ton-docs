@@ -1,6 +1,6 @@
 import Button from '@site/src/components/button'
 
-# TON节点类型
+# TON 节点类型
 
 深入了解开放网络（TON）的世界时，理解不同的节点类型及其功能至关重要。本文为希望与TON区块链互动的开发者详细介绍了每种节点类型。
 
@@ -27,7 +27,7 @@ TON基于权益证明机制运行，其中验证者在维护网络功能方面�
 
 当在全节点上激活端点时，节点将承担**Liteserver**的角色。这种节点类型可以处理并响应来自轻客户端的请求，允许与TON区块链无缝互动。
 
-### 轻客户端：与TON交互的SDK
+### 轻客户端：与 TON 交互的SDK
 
 Liteservers使与轻客户端的快速通信成为可能，便于执行检索余额或提交交易等任务，而不需要完整的区块历史。
 
@@ -37,7 +37,7 @@ Liteservers使与轻客户端的快速通信成为可能，便于执行检索余
 
 每个不支持ADNL的SDK通常使用HTTP中间件来连接TON区块链。它的安全性和速度不如ADNL，但使用起来更简单。
 
-### 与TON的互动：公共Liteservers（端点）
+### 与 TON 的互动：公共Liteservers（端点）
 
 TON基金会提供了几个公共Liteservers，集成到全局配置中，可供普遍使用。这些端点，如标准钱包使用的端点，确保即使不设置个人liteserver，也能与TON区块链进行交互。
 
@@ -66,7 +66,7 @@ wget https://api.tontech.io/ton/wallet-mainnet.autoconf.json -O /usr/bin/ton/glo
 
 [选择TON SDK](/develop/dapps/apis/sdk)
 
-### 作为Liteserver运行全节点
+### 作为 Liteserver 运行全节点
 
 如果您的项目需要高级别的_安全性_，您可以运行自己的Liteserver。要作为Liteserver运行全节点，只需在节点的配置文件中启用Liteserver模式：
 

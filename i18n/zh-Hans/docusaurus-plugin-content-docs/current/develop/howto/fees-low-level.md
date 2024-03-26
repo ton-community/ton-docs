@@ -32,7 +32,7 @@ transaction_fee = storage_fees
 
 基本链当前的设置如下：1个gas单位的成本是1000 nanotons。
 
-## TVM指令成本
+## TVM 指令成本
 在最低层级（TVM指令执行），大多数原语的gas价格等于_基本gas价格_，计算为`P_b := 10 + b + 5r`，其中`b`是指令长度（以位为单位），`r`是包含在指令中的cell引用数。
 
 除了这些基本费用外，还有以下费用：
@@ -49,7 +49,7 @@ transaction_fee = storage_fees
 | 移动堆栈元素                | **1**      | 在continuations之间移动堆栈元素的价格。每个元素都将收取相应的gas价格。然而，前32个元素的移动是免费的。                                                                                         |                                                                                       
 
 
-## FunC构造的gas费用
+## FunC 构造的 gas 费用
 
 FunC中使用的几乎所有函数都在[stdlib.func](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc)中定义，它将FunC函数映射到Fift汇编指令。反过来，Fift汇编指令在[asm.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/fift/lib/Asm.fif)中映射到位序列指令。因此，如果你想了解指令调用的确切成本，你需要在`stdlib.func`中找到`asm`表示，然后在`asm.fif`中找到位序列并计算指令长度（以位为单位）。
 
@@ -57,7 +57,7 @@ FunC中使用的几乎所有函数都在[stdlib.func](https://github.com/ton-blo
 
 因此，如果你试图优化你的代码，首先从架构优化开始，减少cell解析/创建操作的数量，然后减少跳转的数量。
 
-### 与cell进行的操作
+### 与 cell 进行的操作
 一个关于如何通过适当的cell工作显著降低gas成本的示例。
 
 假设你想在出站消息中添加一些编码的有效负载。直接实现将如下：

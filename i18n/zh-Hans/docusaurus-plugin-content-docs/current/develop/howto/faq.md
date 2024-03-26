@@ -4,18 +4,18 @@
 
 ## 概述
 
-### 能分享一下关于TON的简要概述吗？
+### 能分享一下关于 TON 的简要概述吗？
 
 - [The Open Network简介](/learn/introduction)
 - [TON区块链基于PoS共识](https://blog.ton.org/the-ton-blockchain-is-based-on-pos-consensus)
 - [TON白皮书](/learn/docs)
 
-### TON与EVM区块链的主要相似之处和不同之处是什么？
+### TON 与 EVM 区块链的主要相似之处和不同之处是什么？
 
 - [从以太坊到TON](/learn/introduction#ethereum-to-ton)
 - [TON、Solana和以太坊2.0的比较](https://ton.org/comparison_of_blockchains.pdf)
 
-### TON有测试环境吗？
+### TON 有测试环境吗？
 
 - [Testnet测试网](/develop/smart-contracts/environment/testnet)
 
@@ -61,7 +61,7 @@ max_block_bytes:2097152
 在[Network Configs](/develop/howto/network-configs)中找到更多实际参数。
 :::
 
-### TON上的区块布局是怎样的？
+### TON 上的区块布局是怎样的？
 
 对布局中每个字段的详细解释：
 
@@ -73,7 +73,7 @@ max_block_bytes:2097152
 
 - [请参见上面的答案](/develop/howto/faq#are-there-any-standardized-protocols-for-minting-burning-and-transferring-fungible-and-non-fungible-tokens-in-transactions)
 
-### TON交易是异步的还是同步的？是否有文档显示这个系统是如何工作的？
+### TON 交易是异步的还是同步的？是否有文档显示这个系统是如何工作的？
 
 TON区块链消息是异步的：
 - 发送者准备交易正文（消息boc）并通过轻客户端（或更高级工具）广播
@@ -95,7 +95,7 @@ TON区块链消息是异步的：
 - Python: [带支付的Storefront bot](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot)
 - JavaScript: [饺子销售机器人](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js)
 
-### TON中交易的布局是怎样的？
+### TON 中交易的布局是怎样的？
 
 对布局中每个字段的详细解释：
 - [交易布局](/develop/data-formats/transaction-layout)
@@ -113,7 +113,7 @@ TON区块链消息是异步的：
 
 ## 标准
 
-### TON的货币精度是多少？
+### TON 的货币精度是多少？
 
 _9位小数_
 
@@ -135,7 +135,7 @@ Jettons（代币）：
 其他标准：
 - https://github.com/ton-blockchain/TEPs
 
-### 是否有用Jettons（代币）和NFT解析事件的示例？
+### 是否有用 Jettons（代币）和 NFT 解析事件的示例？
 
 在TON上，所有数据都以boc消息的形式传输。这意味着在交易中使用NFT并不是特殊事件。相反，它是发送给或从（NFT或钱包）合约接收的常规消息，就像涉及标准钱包的交易一样。
 
@@ -151,7 +151,7 @@ Jettons（代币）：
 
 - [智能合约地址](/learn/overviews/addresses)
 
-### 是否可以拥有类似于ENS的命名账户
+### 是否可以拥有类似于 ENS 的命名账户
 
 是的，请使用TON DNS：
 - [TON DNS和域名](/participate/web3/dns)
@@ -177,7 +177,7 @@ TON内有一个特殊的主链叫做Masterchain。它由网络范围内的合约
 
 ## 智能合约
 
-### 是否可以检测到TON上的合约部署事件？
+### 是否可以检测到 TON 上的合约部署事件？
 
 [TON中的一切都是智能合约](/learn/overviews/addresses#everything-is-a-smart-contract)。
 
@@ -204,20 +204,20 @@ TON内有一个特殊的主链叫做Masterchain。它由网络范围内的合约
 
 是的，智能合约地址是区分大小写的，因为它们是使用[base64算法](https://en.wikipedia.org/wiki/Base64)生成的。您可以在[这里](/learn/overviews/addresses)了解更多关于智能合约地址的信息。
 
-### Ton虚拟机（TVM）与EVM兼容吗？
+### Ton 虚拟机（TVM）与 EVM 兼容吗？
 
   TVM与以太坊虚拟机（EVM）不兼容，因为TON采用了完全不同的架构（TON是异步的，而以太坊是同步的）。
 
   [了解更多关于异步智能合约](https://telegra.ph/Its-time-to-try-something-new-Asynchronous-smart-contracts-03-25)。
 
-### 是否可以为TON编写Solidity？
+### 是否可以为 TON 编写 Solidity？
 
   相关地，TON生态系统不支持在以太坊的Solidity编程语言中开发。
 
   但如果您在Solidity语法中添加异步消息并能够与数据进行低层级交互，那么您可以使用FunC。FunC具有大多数现代编程语言通用的语法，并专为TON上的开发设计。
 
 
-## 远程过程调用（RPC）
+## 远程过程调用(RPC)
 
 ### 推荐的节点提供商用于数据提取包括：
 

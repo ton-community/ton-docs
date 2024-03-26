@@ -221,7 +221,7 @@ async def main_callback_handler(call: CallbackQuery):
 
 机器人给用户 3 分钟时间连接钱包，之后会报告超时错误。
 
-## 实现事务请求
+## 实现交易请求
 
 让我们以 [消息构建器](/develop/dapps/ton-connect/message-builders) 文章之一为例：
 

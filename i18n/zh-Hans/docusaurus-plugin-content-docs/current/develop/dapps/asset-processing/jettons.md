@@ -222,7 +222,7 @@ Jetton 钱包和 TON 钱包之间的通信是通过以下通信序列进行的�
 
 `query_id` 标识符允许应用程序将三种消息类型 `Transfer`、 `Transfer notification` 和 `Excesses` 相互关联。为了正确执行此过程，建议始终使用唯一的查询 id。
 
-### 如何发送附带评论和通知的Jetton转账
+### 如何发送附带评论和通知的 Jetton 转账
 
 为了进行附带通知的转账（随后在钱包内用于通知目的），必须通过设置非零的 `forward_ton_amount` 值附加足够数量的TON到发送的消息中，并且如有必要，将文本评论附加到 `forward_payload`。文本评论的编码方式与发送Toncoin时的文本评论类似。
 
@@ -257,7 +257,7 @@ await wallet.methods.transfer({
 :::
 
 
-## Jetton链下处理
+## Jetton 链下处理
 
 :::info 交易确认
 TON交易在仅一次确认后就不可逆转。为了最佳用户体验，建议在TON区块链上的交易一旦完成后，不要等待额外的区块。在 [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3) 中阅读更多信息。
@@ -271,7 +271,7 @@ TON交易在仅一次确认后就不可逆转。为了最佳用户体验，建�
 
 在处理资金时，也建议提供一个冷钱包用于存储不参与自动存款和提款过程的额外资金。
 
-### 添加新的Jettons进行资产处理和初步验证
+### 添加新的 Jettons 进行资产处理和初步验证
 
 1. 要找到正确的智能合约代币主地址，请参见以下来源：[如何找到正确的Jetton master合约](#jetton-master-smart-contract)
 2. 此外，要检索特定Jetton的元数据，请参见以下来源：[如何接收Jetton元数据](#retrieving-jetton-data)。
@@ -279,7 +279,7 @@ TON交易在仅一次确认后就不可逆转。为了最佳用户体验，建�
    
 为了确保所有用户的安全，至关重要的是避免可能被伪造（假冒）的Jettons。例如，`symbol`==`TON` 的Jettons或那些包含系统通知消息的Jettons，例如：`ERROR`、`SYSTEM` 等。务必确保jettons以这样的方式在你的界面中显示，以便它们不能与TON转账、系统通知等混淆。有时，即使`symbol`、`name`和`image`被设计得几乎与原始的一模一样，也是只是希望误导用户的。
 
-### 在收到转账通知消息时识别未知的Jetton
+### 在收到转账通知消息时识别未知的 Jetton
 
 1. 如果在你的钱包内收到了关于未知Jetton的转账通知消息，那么你的钱包就被创建为持有特定Jetton的钱包。接下来，进行几个验证过程很重要。
 2. 包含 `Transfer notification` 体的内部消息的发送地址是新的Jetton钱包的地址。不要与 `Transfer notification` 体内的 `sender` 字段混淆，Jetton钱包的地址是消息来源的地址。
@@ -291,7 +291,7 @@ TON交易在仅一次确认后就不可逆转。为了最佳用户体验，建�
 7. 检查 `symbol` 和 `name` 字段是否为欺诈的迹象。如有必要，警告用户。[为处理和初步检查添加新的Jettons](#adding-new-jettons-for-asset-processing-and-initial-verification)。
 
 
-### 通过中心化钱包接收用户的Jettons
+### 通过中心化钱包接收用户的 Jettons
 
 在这种情况下，支付服务为每个发送者创建一个唯一的备忘录标识符，公开中心化钱包的地址和发送的金额。发送者将代币发送到指定的中心化地址，并且必须在评论中包含备忘录。
 
@@ -310,7 +310,7 @@ Tonweb示例：
 2. 热钱包部署（如果预期没有Jetton提款，则使用v3R2；如果预期有Jetton提款，则使用高负载v2）[钱包部署](/develop/dapps/asset-processing/#wallet-deployment)。
 3. 使用热钱包地址执行测试Jetton转账以初始化钱包。
 
-#### 处理收到的Jettons
+#### 处理收到的 Jettons
 1. 加载接受的Jettons列表
 2. 检索你部署的热钱包的Jetton钱包地址：[如何检索特定用户的Jetton钱包地址](#retrieving-jetton-wallet-addresses-for-a-given-user)
 3. 为每个Jetton钱包检索Jetton master地址：[如何检索特定Jetton钱包的信息](#retrieving-data-for-a-specific-jetton-wallet)。
@@ -329,14 +329,14 @@ Tonweb示例：
 12. 将接收到的评论与保存的备忘录比较。如果有匹配（始终可以识别用户）- 存入转账。
 13. 从步骤5重新开始并重复该过程，直到遍历完所有交易的整个列表。
 
-### 通过用户存款地址接收Jettons
+### 通过用户存款地址接收 Jettons
 
 要从用户存款地址接收Jettons，支付服务需要为发送资金的每位参与者创建其自己的个人地址（存款）。在这种情况下提供的服务涉及执行几个并行过程，包括创建新的存款、扫描区块中的交易、将资金从存款中提到热钱包，等等。
 
 因为一个热钱包可以使用一个Jetton钱包为每种Jetton类型，因此需要为初始化存款创建多个钱包。为了创建大量的钱包，同时用一个种子短语（或私钥）管理它们，创建钱包时需要指定不同的 `subwallet_id`。TON上创建子钱包的功能由v3钱包及更高版本支持。
 
 
-#### 在Tonweb中创建子钱包
+#### 在 Tonweb 中创建子钱包
 
 ```Tonweb
 const WalletClass = tonweb.wallet.all['v3R2'];
@@ -406,7 +406,7 @@ TON交易在仅一次确认后就不可逆转。为了最佳用户体验，建�
 6. 可以使用存款地址到热钱包地址的Jetton传送进行验证，通过考虑
    [这里找到的处理传入Jettons信息](#处理传入-jettons)。
 
-### Jetton提款
+### Jetton 提款
 
 要提取Jettons，钱包发送带有`transfer`正文的消息到其对应的Jetton钱包。
 然后Jetton钱包将Jettons发送给收件人。本着诚信，重要的是要附上一些TON
@@ -453,7 +453,7 @@ TON交易在仅一次确认后就不可逆转。为了最佳用户体验，建�
     值。找到的`query_id`必须标记为成功传送。
 17. 转到第5步。未成功发送的过期请求应重新加入提款列表。
 
-## 在链上处理Jetton
+## 在链上处理 Jetton
 
 :::info 交易确认
 TON交易在仅一次确认后即不可逆转。为了最佳用户体验，建议一旦交易在TON区块链上最终确定后就不再等待其他区块。在[catchain.pdf](https://docs.ton.org/catchain.pdf#page=3)中阅读更多。
@@ -473,7 +473,7 @@ TON交易在仅一次确认后即不可逆转。为了最佳用户体验，建�
 6. 强烈建议在合约级别使用不可分割的jetton单位。十进制相关逻辑通常用于增强用户界面（UI）的显示，并与链上数值记录无关。
 7. 欲了解更多关于[在FunC中安全智能合约编程 by CertiK](https://blog.ton.org/secure-smart-contract-programming-in-func)，请随时阅读此资源。建议开发者处理所有智能合约异常，以便在应用开发期间永远不会被忽略。
 
-## Jetton钱包处理
+## Jetton 钱包处理
 通常，用于链下jetton处理的所有验证程序都适用于钱包。对于Jetton钱包处理，我们最重要的建议如下：
 
 1. 当钱包从未知的jetton钱包收到转账通知时，信任jetton钱包及其主地址至关重要，因为它可能是恶意伪造的。为了保护自己，请检查Jetton主（主合约）使用其提供的地址，以确保您的验证过程将jetton钱包视为合法的。在您信任钱包并验证其为合法后，您可以允许它访问您的帐户余额和其他钱包内数据。如果Jetton主不识别此钱包，建议不启动或公开您的jetton转账，只显示传入的TON转账（即附加到转账通知的Toncoin）。
