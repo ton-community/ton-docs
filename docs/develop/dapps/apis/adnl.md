@@ -12,6 +12,8 @@ You can connect to public liteservers from the global config ([Mainnet](https://
 
 Read more about Merkle proofs at [TON Whitepaper](https://ton.org/ton.pdf) 2.3.10, 2.3.11.
 
+Public liteservers (from the global config) exist to get you started with TON quickly. It can be used for learning to program in TON, or for applications and scripts that do not require 100% uptime. If you want stable liteserver infrastructure - you can [set up own liteserver](https://docs.ton.org/participate/run-nodes/full-node#enable-liteserver-mode), or buy private lite-channel in [@liteserver_bot](https://t.me/liteserver_bot)
+
 ## Pros & Cons
 
 - ✅ Reliable. Uses API with Merkle proof hashes to verify incoming binary data.  
