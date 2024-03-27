@@ -28,7 +28,6 @@ systemctl status validator
 #### Perform database cleanup
 ```sh
 find /var/ton-work/db -name 'LOG.old*' -exec rm {} +
-rm -r /var/ton-work/db/files/packages/temp.archive.*
 ```
 #### Start validator service
 ```sh
