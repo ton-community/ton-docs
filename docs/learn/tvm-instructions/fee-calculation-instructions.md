@@ -3,7 +3,7 @@
 ## Introduction of new instructions for cheap fee calculation
 
 :::tip
-This upgrade is active in mainnet since March 16 (see https://t.me/tonstatus/101). Preview of this update for blueprint is available in `@ton-community/sandbox@0.16.0-tvmbeta.3`, `@ton-community/func-js@0.6.3-tvmbeta.3` and `@ton-community/func-js-bin@0.4.5-tvmbeta.3` packages.
+This upgrade is active in mainnet since March 16 (see https://t.me/tonstatus/101). Preview of this update for blueprint is available in `@ton/sandbox@0.16.0-tvmbeta.3`, `@ton-community/func-js@0.6.3-tvmbeta.3` and `@ton-community/func-js-bin@0.4.5-tvmbeta.3` packages.
 :::
 
 This update is activated by Config8 `version` >= 6.
