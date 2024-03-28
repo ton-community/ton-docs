@@ -1,0 +1,117 @@
+---
+hide_table_of_contents: true
+wrapperClassName: bootstrap-wrapper
+---
+
+import { SearchField } from '@site/src/components/SearchField';
+import { tupleOpcodes as opcodes } from '@site/src/data/opcodes';
+
+# 元组、列表和 Null 原语
+
+<SearchField
+  data={opcodes}
+  searchBy="doc_opcode"
+  placeholder="搜索操作码"
+  showKeys={[
+    { key: 'doc_opcode', name: '操作码', isGrouped: true },
+    { key: 'doc_fift', name: 'Fift 语法', isGrouped: true },
+    { key: 'doc_stack', name: '堆栈', isGrouped: true },
+    { key: 'doc_gas', name: 'Gas', isGrouped: true },
+    { key: 'doc_description', name: '描述' },
+  ]}
+/>
+
+
+### TVM 指令内容列表
+
+* [概览](/learn/tvm-instructions/instructions)
+* [堆栈操作](/learn/tvm-instructions/instructions/stack-manipulation)
+* [元组、列表和空值](/learn/tvm-instructions/instructions/tuple-list-null)
+* [常量和字面量](/learn/tvm-instructions/instructions/constant)
+* [算术操作](/learn/tvm-instructions/instructions/arithmetic)
+* [数据比较](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [异常产生和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [应用特定原语](/learn/tvm-instructions/instructions/app-specific)
+* [杂项](/learn/tvm-instructions/instructions/miscellaneous)
+
+### 元组、列表和 Null 原语
+
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`6D`** | `NULL`<br/>`PUSHNULL` | _` - null`_ | 推入类型为 _Null_ 的唯一值。 | `18` |
+| **`6E`** | `ISNULL` | _`x - ?`_ | 检查 `x` 是否为 _Null_，根据情况分别返回 `-1` 或 `0`。 | `18` |
+| **`6F0n`** | `[n] TUPLE` | _`x_1 ... x_n - t`_ | 创建包含 `n` 值 `x_1`,..., `x_n` 的新 _Tuple_ `t=(x_1, … ,x_n)`。<br/>`0 <= n <= 15` | `26+n` |
+| **`6F00`** | `NIL` | _`- t`_ | 推入长度为零的唯一 _Tuple_ `t=()`。 | `26` |
+| **`6F01`** | `SINGLE` | _`x - t`_ | 创建单例 `t:=(x)`，即长度为一的 _Tuple_。 | `27` |
+| **`6F02`** | `PAIR`<br/>`CONS` | _`x y - t`_ | 创建对 `t:=(x,y)`。 | `28` |
+| **`6F03`** | `TRIPLE` | _`x y z - t`_ | 创建三元组 `t:=(x,y,z)`。 | `29` |
+| **`6F1k`** | `[k] INDEX` | _`t - x`_ | 返回 _Tuple_ `t` 的第 `k` 个元素。<br/>`0 <= k <= 15`。 | `26` |
+| **`6F10`** | `FIRST`<br/>`CAR` | _`t - x`_ | 返回 _Tuple_ 的第一个元素。 | `26` |
+| **`6F11`** | `SECOND`<br/>`CDR` | _`t - y`_ | 返回 _Tuple_ 的第二个元素。 | `26` |
+| **`6F12`** | `THIRD` | _`t - z`_ | 返回 _Tuple_ 的第三个元素。 | `26` |
+| **`6F2n`** | `[n] UNTUPLE` | _`t - x_1 ... x_n`_ | 解包长度等于 `0 <= n <= 15` 的 _Tuple_ `t=(x_1,...,x_n)`。<br/>如果 `t` 不是 _Tuple_ 或 `\|t\| != n`，则抛出类型检查异常。 | `26+n` |
+| **`6F21`** | `UNSINGLE` | _`t - x`_ | 解包单例 `t=(x)`。 | `27` |
+| **`6F22`** | `UNPAIR`<br/>`UNCONS` | _`t - x y`_ | 解包对 `t=(x,y)`。 | `28` |
+| **`6F23`** | `UNTRIPLE` | _`t - x y z`_ | 解包三元组 `t=(x,y,z)`。 | `29` |
+| **`6F3k`** | `[k] UNPACKFIRST` | _`t - x_1 ... x_k`_ | 解包 _Tuple_ `t` 的前 `0 <= k <= 15` 个元素。<br/>如果 `\|t\|<k`，抛出类型检查异常。 | `26+k` |
+| **`6F30`** | `CHKTUPLE` | _`t -`_ | 检查 `t` 是否为 _Tuple_。如果不是，则抛出类型检查异常。 | `26` |
+| **`6F4n`** | `[n] EXPLODE` | _`t - x_1 ... x_m m`_ | 解包 _Tuple_ `t=(x_1,...,x_m)` 并返回其长度 `m`，但仅当 `m <= n <= 15`。否则抛出类型检查异常。 | `26+m` |
+| **`6F5k`** | `[k] SETINDEX` | _`t x - t'`_ | 计算 _Tuple_ `t'`，它与 `t` 仅在位置 `t'_{k+1}` 上不同，该位置被设置为 `x`。<br/>`0 <= k <= 15`<br/>如果 `k >= \|t\|`，则抛出范围检查异常。 | `26+\|t\|` |
+| **`6F50`** | `SETFIRST` | _`t x - t'`_ | 将 _Tuple_ `t` 的第一个组件设置为 `x` 并返回结果 _Tuple_ `t'`。 | `26+\|t\|` |
+| **`6F51`** | `SETSECOND` | _`t x - t'`_ | 将 _Tuple_ `t` 的第二个组件设置为 `x` 并返回结果 _Tuple_ `t'`。 | `26+\|t\|` |
+| **`6F52`** | `SETTHIRD` | _`t x - t'`_ | 将 _Tuple_ `t` 的第三个组件设置为 `x` 并返回结果 _Tuple_ `t'`。 | `26+\|t\|` |
+| **`6F6k`** | `[k] INDEXQ` | _`t - x`_ | 返回 _Tuple_ `t` 的第 `k` 个元素，其中 `0 <= k <= 15`。换句话说，如果 `t=(x_1,...,x_n)`，则返回 `x_{k+1}`。如果 `k>=n` 或 `t` 为 _Null_，则返回 _Null_ 而不是 `x`。 | `26` |
+| **`6F60`** | `FIRSTQ`<br/>`CARQ` | _`t - x`_ | 返回 _Tuple_ 的第一个元素。 | `26` |
+| **`6F61`** | `SECONDQ`<br/>`CDRQ` | _`t - y`_ | 返回 _Tuple_ 的第二个元素。 | `26` |
+| **`6F62`** | `THIRDQ` | _`t - z`_ | 返回 _Tuple_ 的第三个元素。 | `26` |
+| **`6F7k`** | `[k] SETINDEXQ` | _`t x - t'`_ | 在 _Tuple_ `t` 中设置第 `k` 个组件为 `x`，其中 `0 <= k < 16`，并返回结果 _Tuple_ `t'`。<br/>如果 `\|t\| <= k`，首先通过将所有新组件设置为 _Null_ 来将原始 _Tuple_ 扩展到长度 `n’=k+1`。如果原始值 `t` 为 _Null_，则将其视为空 _Tuple_。如果 `t` 既不是 _Null_ 也不是 _Tuple_，抛出异常。如果 `x` 为 _Null_ 且 `\|t\| <= k` 或 `t` 为 _Null_，则总是返回 `t'=t`（并且不消耗元组创建 gas）。 | `26+\|t’\|` |
+| **`6F70`** | `SETFIRSTQ` | _`t x - t'`_ | 将 _Tuple_ `t` 的第一个组件设置为 `x` 并返回结果 _元组_ `t'`。 | `26+\|t’\|` |
+| **`6F71`** | `SETSECONDQ` | _`t x - t'`_ | 将 _Tuple_ `t` 的第二个组件设置为 `x` 并返回结果 _元组_ `t'`。 | `26+\|t’\|` |
+| **`6F72`** | `SETTHIRDQ` | _`t x - t'`_ | 将 _Tuple组_ `t` 的第三个组件设置为 `x` 并返回结果 _元组_ `t'`。 | `26+\|t’\|` |
+| **`6F80`** | `TUPLEVAR` | _`x_1 ... x_n n - t`_ | 以类似于 [`TUPLE`](#instr-tuple) 的方式创建长度为 `n` 的新 _Tuple_ `t`，但 `0 <= n <= 255` 从堆栈获取。 | `26+n` |
+| **`6F81`** | `INDEXVAR` | _`t k - x`_ | 类似于 [`k INDEX`](#instr-index)，但 `0 <= k <= 254` 从堆栈获取。 | `26` |
+| **`6F82`** | `UNTUPLEVAR` | _`t n - x_1 ... x_n`_ | 类似于 [`n UNTUPLE`](#instr-untuple)，但 `0 <= n <= 255` 从堆栈获取。 | `26+n` |
+| **`6F83`** | `UNPACKFIRSTVAR` | _`t n - x_1 ... x_n`_ | 类似于 [`n UNPACKFIRST`](#instr-unpackfirst)，但 `0 <= n <= 255` 从堆栈获取。 | `26+n` |
+| **`6F84`** | `EXPLODEVAR` | _`t n - x_1 ... x_m m`_ | 类似于 [`n EXPLODE`](#instr-explode)，但 `0 <= n <= 255` 从堆栈获取。 | `26+m` |
+| **`6F85`** | `SETINDEXVAR` | _`t x k - t'`_ | 类似于 [`k SETINDEX`](#instr-setindex)，但 `0 <= k <= 254` 从堆栈获取。 | `26+\|t’\|` |
+| **`6F86`** | `INDEXVARQ` | _`t k - x`_ | 类似于 [`n INDEXQ`](#instr-indexq)，但 `0 <= k <= 254` 从堆栈获取。 | `26` |
+| **`6F87`** | `SETINDEXVARQ` | _`t x k - t'`_ | 类似于 [`k SETINDEXQ`](#instr-setindexq)，但 `0 <= k <= 254` 从堆栈获取。 | `26+\|t’\|` |
+| **`6F88`** | `TLEN` | _`t - n`_ | 返回 _Tuple_ 的长度。 | `26` |
+| **`6F89`** | `QTLEN` | _`t - n or -1`_ | 类似于 [`TLEN`](#instr-tlen)，但如果 `t` 不是 _Tuple_，则返回 `-1`。 | `26` |
+| **`6F8A`** | `ISTUPLE` | _`t - ?`_ | 根据 `t` 是否为 _Tuple_，分别返回 `-1` 或 `0`。 | `26` |
+| **`6F8B`** | `LAST` | _`t - x`_ | 返回非空 _Tuple_ `t` 的最后一个元素。 | `26` |
+| **`6F8C`** | `TPUSH`<br/>`COMMA` | _`t x - t'`_ | 将值 `x` 附加到 _Tuple_ `t=(x_1,...,x_n)`，但仅当结果 _Tuple_ `t'=(x_1,...,x_n,x)` 的长度最多为 255 时。否则抛出类型检查异常。 | `26+\|t’\|` |
+| **`6F8D`** | `TPOP` | _`t - t' x`_ | 从非空 _Tuple_ `t=(x_1,...,x_n)` 分离最后一个元素 `x=x_n`，并返回结果 _Tuple_ `t'=(x_1,...,x_{n-1})` 和原始的最后一个元素 `x`。 | `26+\|t’\|` |
+| **`6FA0`** | `NULLSWAPIF` | _`x - x or null x`_ | 在顶部的 _Integer_ `x` 下推入一个 _Null_，但仅当 `x!=0` 时。 | `26` |
+| **`6FA1`** | `NULLSWAPIFNOT` | _`x - x or null x`_ | 在顶部的 _Integer_ `x` 下推入一个 _Null_，但仅当 `x=0` 时。可用于在类似于 [`PLDUXQ`](#instr-plduxq) 这样的静默原语后进行堆栈对齐。 | `26` |
+| **`6FA2`** | `NULLROTRIF` | _`x y - x y or null x y`_ | 在顶部第二个堆栈条目下推入一个 _Null_，但仅当顶部的 _Integer_ `y` 非零时。 | `26` |
+| **`6FA3`** | `NULLROTRIFNOT` | _`x y - x y or null x y`_ | 在顶部第二个堆栈条目下推入一个 _Null_，但仅当顶部的 _Integer_ `y` 为零时。可用于在类似于 [`LDUXQ`](#instr-lduxq) 这样的静默原语后进行堆栈对齐。 | `26` |
+| **`6FA4`** | `NULLSWAPIF2` | _`x - x or null null x`_ | 在顶部的 _Integer_ `x` 下推入两个 _Null_，但仅当 `x!=0` 时。<br/>等同于 [`NULLSWAPIF`](#instr-nullswapif) [`NULLSWAPIF`](#instr-nullswapif)。 | `26` |
+| **`6FA5`** | `NULLSWAPIFNOT2` | _`x - x or null null x`_ | 在顶部的 _Integer_ `x` 下推入两个 _Null_，但仅当 `x=0` 时。<br/>等同于 [`NULLSWAPIFNOT`](#instr-nullswapifnot) [`NULLSWAPIFNOT`](#instr-nullswapifnot)。 | `26` |
+| **`6FA6`** | `NULLROTRIF2` | _`x y - x y or null null x y`_ | 在顶部第二个堆栈条目下推入两个 _Null_，但仅当顶部的 _Integer_ `y` 非零时。<br/>等同于 [`NULLROTRIF`](#instr-nullrotrif) [`NULLROTRIF`](#instr-nullrotrif)。 | `26` |
+| **`6FA7`** | `NULLROTRIFNOT2` | _`x y - x y 或 null null x y`_ | 仅当最顶部的 _Integer_ `y` 为零时，才在顶部第二个堆栈条目下推入两个 _Null_。<br/>等同于两次 [`NULLROTRIFNOT`](#instr-nullrotrifnot)。 | `26` |
+| **`6FBij`** | `[i] [j] INDEX2` | _`t - x`_ | 对于 `0 <= i,j <= 3`，恢复 `x=(t_{i+1})_{j+1}`。<br/>等同于 [`[i] INDEX`](#instr-index) [`[j] INDEX`](#instr-index)。 | `26` |
+| **`6FB4`** | `CADR` | _`t - x`_ | 恢复 `x=(t_2)_1`。 | `26` |
+| **`6FB5`** | `CDDR` | _`t - x`_ | 恢复 `x=(t_2)_2`。 | `26` |
+| **`6FE_ijk`** | `[i] [j] [k] INDEX3` | _`t - x`_ | 恢复 `x=t_{i+1}_{j+1}_{k+1}`。<br/>`0 <= i,j,k <= 3`<br/>等同于 [`[i] [j] INDEX2`](#instr-index2) [`[k] INDEX`](#instr-index)。 | `26` |
+| **`6FD4`** | `CADDR` | _`t - x`_ | 恢复 `x=t_2_2_1`。 | `26` |
+| **`6FD5`** | `CDDDR` | _`t - x`_ | 恢复 `x=t_2_2_2`。 | `26` |
+
+
+### TVM 指令内容列表
+
+* [概览](/learn/tvm-instructions/instructions)
+* [堆栈操作](/learn/tvm-instructions/instructions/stack-manipulation)
+* [元组、列表和空值](/learn/tvm-instructions/instructions/tuple-list-null)
+* [常量和字面量](/learn/tvm-instructions/instructions/constant)
+* [算术操作](/learn/tvm-instructions/instructions/arithmetic)
+* [数据比较](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [异常产生和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [应用特定原语](/learn/tvm-instructions/instructions/app-specific)
+* [杂项](/learn/tvm-instructions/instructions/miscellaneous)

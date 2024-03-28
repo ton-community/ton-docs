@@ -1,0 +1,88 @@
+---
+hide_table_of_contents: true
+wrapperClassName: bootstrap-wrapper
+---
+
+import { SearchField } from '@site/src/components/SearchField';
+import { constantOpcodes as opcodes } from '@site/src/data/opcodes';
+
+# 常量或字面量原语
+
+<SearchField
+  data={opcodes}
+  searchBy="doc_opcode"
+  placeholder="搜索操作码"
+  showKeys={[
+    { key: 'doc_opcode', name: '操作码', isGrouped: true },
+    { key: 'doc_fift', name: 'Fift 语法', isGrouped: true },
+    { key: 'doc_stack', name: '堆栈', isGrouped: true },
+    { key: 'doc_gas', name: 'Gas', isGrouped: true },
+    { key: 'doc_description', name: '描述' },
+  ]}
+/>
+
+### TVM 指令内容列表
+
+* [概述](/learn/tvm-instructions/instructions)
+* [栈操作](/learn/tvm-instructions/instructions/stack-manipulation)
+* [元组、列表和空值](/learn/tvm-instructions/instructions/tuple-list-null)
+* [常数和字面量](/learn/tvm-instructions/instructions/constant)
+* [算术操作](/learn/tvm-instructions/instructions/arithmetic)
+* [数据比较](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [异常生成和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [特定于应用的原语](/learn/tvm-instructions/instructions/app-specific)
+* [杂项](/learn/tvm-instructions/instructions/miscellaneous)
+
+## 常量或字面量原语
+### 整数和布尔常量
+
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`7i`** | `[x] PUSHINT`<br/>`[x] INT` | _`- x`_ | 将整数 `x` 压入栈。`-5 <= x <= 10`。<br/>这里的 `i` 等于 `x` 的四个低阶位 (`i=x mod 16`)。 | `18` |
+| **`70`** | `ZERO`<br/>`FALSE` | _`- 0`_ |  | `18` |
+| **`71`** | `ONE` | _`- 1`_ |  | `18` |
+| **`72`** | `TWO` | _`- 2`_ |  | `18` |
+| **`7A`** | `TEN` | _`- 10`_ |  | `18` |
+| **`7F`** | `TRUE` | _`- -1`_ |  | `18` |
+| **`80xx`** | `[xx] PUSHINT`<br/>`[xx] INT` | _`- xx`_ | 将整数 `xx` 压入栈。`-128 <= xx <= 127`。 | `26` |
+| **`81xxxx`** | `[xxxx] PUSHINT`<br/>`[xxxx] INT` | _`- xxxx`_ | 将整数 `xxxx` 压入栈。`-2^15 <= xx < 2^15`。 | `34` |
+| **`82lxxx`** | `[xxx] PUSHINT`<br/>`[xxx] INT` | _`- xxx`_ | 将整数 `xxx` 压入栈。<br/>_细节:_ 5位的 `0 <= l <= 30` 决定了有符号大端整数 `xxx` 的长度 `n=8l+19`。<br/>此指令的总长度为 `l+4` 字节或 `n+13=8l+32` 位。 | `23` |
+| **`83xx`** | `[xx+1] PUSHPOW2` | _`- 2^(xx+1)`_ | （静默地）推送 `2^(xx+1)`，对于 `0 <= xx <= 255`。<br/>`2^256` 是一个 `NaN`。 | `26` |
+| **`83FF`** | `PUSHNAN` | _`- NaN`_ | 推送一个 `NaN`。 | `26` |
+| **`84xx`** | `[xx+1] PUSHPOW2DEC` | _`- 2^(xx+1)-1`_ | 推送 `2^(xx+1)-1`，对于 `0 <= xx <= 255`。 | `26` |
+| **`85xx`** | `[xx+1] PUSHNEGPOW2` | _`- -2^(xx+1)`_ | 推送 `-2^(xx+1)`，对于 `0 <= xx <= 255`。 | `26` |
+
+### 常量切片、continuation、cell和引用
+
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`88`** | `[ref] PUSHREF` | _`- c`_ | 将引用 `ref` 推送到栈中。<br/>_细节:_ 将 `cc.code` 的第一个引用作为 _cell_ 推入栈（并从当前continuation中移除此引用）。 | `18` |
+| **`89`** | `[ref] PUSHREFSLICE` | _`- s`_ | 类似于 [`PUSHREF`](#instr-pushref)，但将cell转换为 _切片_。 | `118/43` |
+| **`8A`** | `[ref] PUSHREFCONT` | _`- cont`_ | 类似于 [`PUSHREFSLICE`](#instr-pushrefslice)，但将cell制作成一个简单的普通 _continuation_。 | `118/43` |
+| **`8Bxsss`** | `[slice] PUSHSLICE`<br/>`[slice] SLICE` | _`- s`_ | 将切片 `slice` 推入栈。<br/>_细节:_ 推送 `cc.code` 的 (前缀) 子切片，其由其前 `8x+4` 位和零个引用组成（即，基本上是一个位串），其中 `0 <= x <= 15`。<br/>假设有一个完成标记，意味着所有尾随零和最后一个二进制一（如果存在）都从这个位串中被移除。<br/>如果原始位串仅由零组成，则会推入一个空切片。 | `22` |
+| **`8Crxxssss`** | `[slice] PUSHSLICE`<br/>`[slice] SLICE` | _`- s`_ | 将切片 `slice` 推入栈。<br/>_细节:_ 推送 `cc.code` 的 (前缀) 子切片，其由其前 `1 <= r+1 <= 4` 个引用和最多前 `8xx+1` 位数据组成，其中 `0 <= xx <= 31`。<br/>也假设有一个完成标记。 | `25` |
+| **`8Drxxsssss`** | `[slice] PUSHSLICE`<br/>`[slice] SLICE` | _`- s`_ | 将切片 `slice` 推入栈。<br/>_细节:_ 推送 `cc.code` 的子切片，其由 `0 <= r <= 4` 个引用和最多 `8xx+6` 位数据组成，其中 `0 <= xx <= 127`。<br/>假设有一个完成标记。 | `28` |
+|  | `x{} PUSHSLICE`<br/>`x{ABCD1234} PUSHSLICE`<br/>`b{01101} PUSHSLICE` | _`- s`_ | [`PUSHSLICE`](#instr-pushslice) 的示例。<br/>`x{}` 是一个空切片。`x{...}` 是一个十六进制字面量。`b{...}` 是一个二进制字面量。<br/>关于切片字面量的更多信息[在这里](https://github.com/Piterden/TON-docs/blob/master/Fift.%20A%20Brief%20Introduction.md#user-content-51-slice-literals)。<br/>注意，汇编程序可以在某些情况下（例如，如果当前continuation中没有足够的空间）将 [`PUSHSLICE`](#instr-pushslice) 替换为 [`PUSHREFSLICE`](#instr-pushrefslice)。 |  |
+|  | `<b x{AB12} s, b> PUSHREF`<br/>`<b x{AB12} s, b> PUSHREFSLICE` | _`- c/s`_ | [`PUSHREF`](#instr-pushref) 和 [`PUSHREFSLICE`](#instr-pushrefslice) 的示例。<br/>关于在 fift 中构建cell的更多信息[在这里](https://github.com/Piterden/TON-docs/blob/master/Fift.%20A%20Brief%20Introduction.md#user-content-52-builder-primitives)。 |  |
+| **`8F_rxxcccc`** | `[builder] PUSHCONT`<br/>`[builder] CONT` | _`- c`_ | 从 `builder` 中推送continuation。<br/>_细节:_ 推送由 `cc.code` 的前 `0 <= r <= 3` 个引用和前 `0 <= xx <= 127` 字节制成的简单普通continuation `cccc`。 | `26` |
+| **`9xccc`** | `[builder] PUSHCONT`<br/>`[builder] CONT` | _`- c`_ | 从 `builder` 中推送continuation。<br/>_细节:_ 推送一个 `x` 字节的continuation，对于 `0 <= x <= 15`。 | `18` |
+|  | `<{ code }> PUSHCONT`<br/>`<{ code }> CONT`<br/>`CONT:<{ code }>` | _`- c`_ | 用代码 `code` 推送continuation。<br/>注意，汇编程序可以在某些情况下（例如，如果当前continuation中没有足够的空间）将 [`PUSHCONT`](#instr-pushcont) 替换为 [`PUSHREFCONT`](#instr-pushrefcont)。 |  |
+
+
+### TVM 指令内容列表
+
+* [概述](/learn/tvm-instructions/instructions)
+* [栈操作](/learn/tvm-instructions/instructions/stack-manipulation)
+* [元组、列表和空值](/learn/tvm-instructions/instructions/tuple-list-null)
+* [常数和字面量](/learn/tvm-instructions/instructions/constant)
+* [算术操作](/learn/tvm-instructions/instructions/arithmetic)
+* [数据比较](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [异常生成和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [特定于应用的原语](/learn/tvm-instructions/instructions/app-specific)
+* [杂项](/learn/tvm-instructions/instructions/miscellaneous)

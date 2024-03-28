@@ -1,0 +1,103 @@
+---
+hide_table_of_contents: true
+wrapperClassName: bootstrap-wrapper
+---
+
+import { SearchField } from '@site/src/components/SearchField';
+import { comparisonOpcodes as opcodes } from '@site/src/data/opcodes';
+
+# 比较原语
+
+<SearchField
+  data={opcodes}
+  searchBy="doc_opcode"
+  placeholder="搜索操作码"
+  showKeys={[
+    { key: 'doc_opcode', name: '操作码', isGrouped: true },
+    { key: 'doc_fift', name: 'Fift 语法', isGrouped: true },
+    { key: 'doc_stack', name: '堆栈', isGrouped: true },
+    { key: 'doc_gas', name: 'Gas', isGrouped: true },
+    { key: 'doc_description', name: '描述' },
+  ]}
+/>
+
+### TVM 指令内容列表
+
+* [概览](/learn/tvm-instructions/instructions)
+* [栈操作](/learn/tvm-instructions/instructions/stack-manipulation)
+* [元组、列表和空值](/learn/tvm-instructions/instructions/tuple-list-null)
+* [常量和字面量](/learn/tvm-instructions/instructions/constant)
+* [算术操作](/learn/tvm-instructions/instructions/arithmetic)
+* [数据比较](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [异常生成和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [词典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [应用特定的原语](/learn/tvm-instructions/instructions/app-specific)
+* [杂项](/learn/tvm-instructions/instructions/miscellaneous)
+
+## 比较原语
+### 整数比较
+
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`B8`** | `SGN` | _`x - sgn(x)`_ | 计算整数 `x` 的符号：<br/>`x<0` 时为 `-1`，`x=0` 时为 `0`，`x>0` 时为 `1`。 | `18` |
+| **`B9`** | `LESS` | _`x y - x<y`_ | 如 `x<y`，返回 `-1`，否则返回 `0`。 | `18` |
+| **`BA`** | `EQUAL` | _`x y - x=y`_ | 如 `x=y`，返回 `-1`，否则返回 `0`。 | `18` |
+| **`BB`** | `LEQ` | _`x y - x<=y`_ |  | `18` |
+| **`BC`** | `GREATER` | _`x y - x>y`_ |  | `18` |
+| **`BD`** | `NEQ` | _`x y - x!=y`_ | 等同于 [`EQUAL`](#instr-equal) [`NOT`](#instr-not)。 | `18` |
+| **`BE`** | `GEQ` | _`x y - x>=y`_ | 等同于 [`LESS`](#instr-less) [`NOT`](#instr-not)。 | `18` |
+| **`BF`** | `CMP` | _`x y - sgn(x-y)`_ | 计算 `x-y` 的符号：<br/>`x<y` 时为 `-1`，`x=y` 时为 `0`，`x>y` 时为 `1`。<br/>除非 `x` 或 `y` 为 `NaN`，否则不会发生整数溢出。 | `18` |
+| **`C0yy`** | `[yy] EQINT` | _`x - x=yy`_ | 如 `x=yy`，返回 `-1`，否则返回 `0`。<br/>`-2^7 <= yy < 2^7`。 | `26` |
+| **`C000`** | `ISZERO` | _`x - x=0`_ | 检查一个整数是否为零。对应 Forth 的 `0=`。 | `26` |
+| **`C1yy`** | `[yy] LESSINT`<br/>`[yy-1] LEQINT` | _`x - x<yy`_ | 如 `x<yy`，返回 `-1`，否则返回 `0`。<br/>`-2^7 <= yy < 2^7`。 | `26` |
+| **`C100`** | `ISNEG` | _`x - x<0`_ | 检查一个整数是否为负数。对应 Forth 的 `0<`。 | `26` |
+| **`C101`** | `ISNPOS` | _`x - x<=0`_ | 检查一个整数是否非正。 | `26` |
+| **`C2yy`** | `[yy] GTINT`<br/>`[yy+1] GEQINT` | _`x - x>yy`_ | 如 `x>yy`，返回 `-1`，否则返回 `0`。<br/>`-2^7 <= yy < 2^7`。 | `26` |
+| **`C200`** | `ISPOS` | _`x - x>0`_ | 检查一个整数是否为正数。对应 Forth 的 `0>`。 | `26` |
+| **`C2FF`** | `ISNNEG` | _`x - x >=0`_ | 检查一个整数是否非负。 | `26` |
+| **`C3yy`** | `[yy] NEQINT` | _`x - x!=yy`_ | 如 `x!=yy`，返回 `-1`，否则返回 `0`。<br/>`-2^7 <= yy < 2^7`。 | `26` |
+| **`C4`** | `ISNAN` | _`x - x=NaN`_ | 检查 `x` 是否为 `NaN`。 | `18` |
+| **`C5`** | `CHKNAN` | _`x - x`_ | 如果 `x` 为 `NaN`，抛出算术溢出异常。 | `18/68` |
+
+### 其他比较
+
+这些“其他比较”原语中的大多数实际上将_Slice_的数据部分作为位串进行比较（如果没有另外声明，忽略引用）。
+
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`C700`** | `SEMPTY` | _`s - ?`_ | 检查切片 `s` 是否为空（即，不包含任何数据位和cell引用）。 | `26` |
+| **`C701`** | `SDEMPTY` | _`s - ?`_ | 检查切片 `s` 是否没有数据位。 | `26` |
+| **`C702`** | `SREMPTY` | _`s - ?`_ | 检查切片 `s` 是否没有引用。 | `26` |
+| **`C703`** | `SDFIRST` | _`s - ?`_ | 检查切片 `s` 的第一个位是否为一。 | `26` |
+| **`C704`** | `SDLEXCMP` | _`s s' - x`_ | 字典序比较 `s` 和 `s'` 的数据，根据结果返回 `-1`、0 或 1。 | `26` |
+| **`C705`** | `SDEQ` | _`s s' - ?`_ | 检查 `s` 和 `s'` 的数据部分是否一致，等同于 [`SDLEXCMP`](#instr-sdlexcmp) [`ISZERO`](#instr-iszero)。 | `26` |
+| **`C708`** | `SDPFX` | _`s s' - ?`_ | 检查 `s` 是否是 `s'` 的前缀。 | `26` |
+| **`C709`** | `SDPFXREV` | _`s s' - ?`_ | 检查 `s'` 是否是 `s` 的前缀，等同于 [`SWAP`](#instr-swap) [`SDPFX`](#instr-sdpfx)。 | `26` |
+| **`C70A`** | `SDPPFX` | _`s s' - ?`_ | 检查 `s` 是否是 `s'` 的真前缀（即，一个与 `s'` 不同的前缀）。 | `26` |
+| **`C70B`** | `SDPPFXREV` | _`s s' - ?`_ | 检查 `s'` 是否是 `s` 的真前缀。 | `26` |
+| **`C70C`** | `SDSFX` | _`s s' - ?`_ | 检查 `s` 是否是 `s'` 的后缀。 | `26` |
+| **`C70D`** | `SDSFXREV` | _`s s' - ?`_ | 检查 `s'` 是否是 `s` 的后缀。 | `26` |
+| **`C70E`** | `SDPSFX` | _`s s' - ?`_ | 检查 `s` 是否是 `s'` 的真后缀。 | `26` |
+| **`C70F`** | `SDPSFXREV` | _`s s' - ?`_ | 检查 `s'` 是否是 `s` 的真后缀。 | `26` |
+| **`C710`** | `SDCNTLEAD0` | _`s - n`_ | 返回 `s` 中前导零的数量。 | `26` |
+| **`C711`** | `SDCNTLEAD1` | _`s - n`_ | 返回 `s` 中前导一的数量。 | `26` |
+| **`C712`** | `SDCNTTRAIL0` | _`s - n`_ | 返回 `s` 中末尾零的数量。 | `26` |
+| **`C713`** | `SDCNTTRAIL1` | _`s - n`_ | 返回 `s` 中末尾一的数量。 | `26` |
+
+
+### TVM 指令内容列表
+
+* [概览](/learn/tvm-instructions/instructions)
+* [栈操作](/learn/tvm-instructions/instructions/stack-manipulation)
+* [元组、列表和空值](/learn/tvm-instructions/instructions/tuple-list-null)
+* [常量和字面量](/learn/tvm-instructions/instructions/constant)
+* [算术操作](/learn/tvm-instructions/instructions/arithmetic)
+* [数据比较](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [异常生成和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [词典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [应用特定的原语](/learn/tvm-instructions/instructions/app-specific)
+* [杂项](/learn/tvm-instructions/instructions/miscellaneous)

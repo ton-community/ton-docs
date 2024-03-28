@@ -19,21 +19,21 @@ const config = {
   baseUrl: '/',
   themes: [
     '@docusaurus/theme-live-codeblock',
-    // [
-    //   require.resolve('@easyops-cn/docusaurus-search-local'),
-    //   {
-    //     // ... Your options.
-    //     // `hashed` is recommended as long-term-cache of index file is possible.
-    //     hashed: true,
-    //     indexPages: true,
-    //     indexBlog: false,
-    //     searchBarShortcutHint: false,
-    //     // For Docs using Chinese, The `language` is recommended to set to:
-    //     // ```
-    //     // language: ["en", "zh"],
-    //     // ```
-    //   },
-    // ],
+    [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      {
+        // ... Your options.
+        // `hashed` is recommended as long-term-cache of index file is possible.
+        hashed: true,
+        indexPages: true,
+        indexBlog: false,
+        searchBarShortcutHint: false,
+        // For Docs using Chinese, The `language` is recommended to set to:
+        // ```
+        language: ["en", "zh"],
+        // ```
+      },
+    ],
   ],
   plugins: [
     ['docusaurus-plugin-sass', {}],
@@ -114,7 +114,15 @@ const config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'ko'],
+    locales: ['en', 'zh-Hans'],
+    localeConfigs: {
+      en: {
+        label: 'English',
+      },
+      'zh-Hans': {
+        label: '简体中文',
+      },
+    },
   },
 
   presets: [
@@ -441,6 +449,10 @@ const config = {
             className: 'header-github-link',
             'aria-label': 'GitHub repository',
           },
+          {
+          type: 'localeDropdown',
+          position: 'right',
+        },
         ],
       },
       footer: {
