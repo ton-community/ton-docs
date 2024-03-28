@@ -1,16 +1,22 @@
-# Subscriptions on TON
+# Content Subscriptions
 
 Due to the fact that transactions in TON Blockchain are fast and the network fees are low, you can process recurring payments on-chain via smart contracts.
 
 For example, users can subscribe to digital content (or anything else) and be charged a monthly fee of 1 TON.
 
-There is no specific standard for this.
+:::tip
+This content is specific for wallets of version v4. Older wallets don't have this functionality; it is eligible to change in future versions as well.
+:::
 
-## Use case flow
+:::warning
+Subscription contract requires authorization exactly once, on installation; then it can withdraw TON as it pleases. Do your own research before attaching unknown subscriptions.
 
-The current standard method:
+On the other hand, user can't get subscription installed without their knowledge.
+:::
 
-- Users use a v4 wallet. (V4R2 is TON Blockchain's default wallet smart contract.) It allows additional smart contracts, known as plugins, to extend its functionality.
+## Example flow
+
+- Users use a v4 wallet. It allows additional smart contracts, known as plugins, to extend its functionality.
 
    After ensuring their functionality, the user can approve the addresses of trusted smart contracts (plugins) for his wallet. Following that, the trusted smart contracts can withdraw Toncoin from the wallet. This is similar to "Infinite Approval" in some other blockchains.
 
@@ -19,6 +25,8 @@ The current standard method:
    This smart contract guarantees that a specified amount of Toncoin will be debited from a user's wallet no more than once within a specified period.
 
 - The service's backend initiates payments on a regular basis by sending an external message to subscription smart contracts.
+
+- Either user or service can decide they no longer need a subscription and terminate it.
 
 ## Smart contract examples
 

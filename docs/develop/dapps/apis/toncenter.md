@@ -1,50 +1,47 @@
-# TON HTTP API
-
-_Standard HTTP JSON RPC similar to other blockchain APIs._
-
-## RPC Nodes
+# TON HTTP-based APIs
 
 :::tip
-[GetBlock Nodes](https://getblock.io/nodes/ton/) - 🚀 Instant Node installation with just a few clicks.
-:::
 
-* [Toncenter](https://toncenter.com/api/v2/) — community-hosted project for Quick Start with API. (Get an API key [@tonapibot](https://t.me/tonapibot))
-* [ton-node-docker](https://github.com/fmira21/ton-node-docker) - Docker Full Node and Toncenter API.
-* [GetBlock Nodes](https://getblock.io/nodes/ton/) — connect and test your dApps using GetBlocks Nodes
-* [TON Access](https://www.orbs.com/ton-access/) - HTTP API for The Open Network (TON).
-* [toncenter/ton-http-api](https://github.com/toncenter/ton-http-api) — run your own RPC node. 
-* [nownodes.io](https://nownodes.io/nodes) — NOWNodes full Nodes and blockbook Explorers via API.
-* [Chainbase](https://chainbase.com/chainNetwork/TON) — Node API and data infrastructure for The Open Network.
+There are different ways to connect to blockchain:
+1. **RPC data provider or another API**: in most cases, you have to *rely* on its stability and security.
+2. ADNL connection: you're connecting to a [liteserver](/participate/run-nodes/liteserver). They might be inaccessible, but with a certain level of validation (implemented in the library), cannot lie.
+3. Tonlib binary: you're connecting to liteserver as well, so all benefits and downsides apply, but your application also contains a dynamic-loading library compiled outside.
+4. Offchain-only. Such SDKs allow to create and serialize cells, which you can then send to APIs.
+
+:::
 
 ## Pros & Cons
 
 - ✅ Habitual and suitable for a quick start, this is perfect for every newcomer looking to play with TON.
-- ✅ Web-oriented. Perfect to interact with TON transactions, smart contracts from Web.
+- ✅ Web-oriented. Perfect to load data of TON smart contracts from Web, also allows to send messages there.
 
 - ❌ Simplified. It's not possible to receive information where you need an indexed TON API.
-- ❌ HTTP-Middleware. You can't fully trust server responses, because they do not contain _Merkle proofs_ to validate that your data is genuine.
+- ❌ HTTP-Middleware. You can't fully trust server responses, unless server augments blockchain data with [Merkle proofs](/develop/data-formats/proofs) to allow validation that it is genuine.
 
+## RPC Nodes
 
-### Toncenter API
+* [GetBlock Nodes](https://getblock.io/nodes/ton/) — connect and test your dApps using GetBlocks Nodes
+* [TON Access](https://www.orbs.com/ton-access/) - HTTP API for The Open Network (TON).
+* [Toncenter](https://toncenter.com/api/v2/) — community-hosted project for Quick Start with API. (Get an API key [@tonapibot](https://t.me/tonapibot))
+* [ton-node-docker](https://github.com/fmira21/ton-node-docker) - Docker Full Node and Toncenter API.
+* [toncenter/ton-http-api](https://github.com/toncenter/ton-http-api) — run your own RPC node. 
+* [nownodes.io](https://nownodes.io/nodes) — NOWNodes full Nodes and blockbook Explorers via API.
+* [Chainbase](https://chainbase.com/chainNetwork/TON) — Node API and data infrastructure for The Open Network.
 
+#### Toncenter TON Index
 
-##### Toncenter TON Index
-- Using for test and development Public TON Index for free or premium for production - [toncenter.com/api/v3/](https://toncenter.com/api/v3/)
-- Run your own TON Index with [Worker](https://github.com/toncenter/ton-index-worker/tree/main) and [TON Index API wrapper](https://github.com/toncenter/ton-indexer).
+Indexers allow to list jetton wallets, NFTs, transactions by certain filters, not only retrieve specific ones.
 
-#### Toncenter HTTP API
-Clients connect to the [ton-http-api](https://github.com/toncenter/ton-http-api) server that proxies requests to the liteserver (node) using TonLib.
+- Public TON Index can be used: tests and development are for free, premium for production - [toncenter.com/api/v3/](https://toncenter.com/api/v3/).
+- Run your own TON Index with [Worker](https://github.com/toncenter/ton-index-worker/tree/36134e7376986c5517ee65e6a1ddd54b1c76cdba) and [TON Index API wrapper](https://github.com/toncenter/ton-indexer).
 
-You can connect to public [toncenter.com](https://toncenter.com) or run your own http-api instance.
+## GraphQL Nodes
 
+GraphQL nodes act as indexers as well.
 
-## Get API key
+* [tvmlabs.io](https://ton-testnet.tvmlabs.dev/graphql) (for TON, testnet only at the moment of writing) - has wide variety of transaction/block data, ways to filter it, etc.
+* [dton.io](https://dton.io/graphql) - as well as providing contracts data augmented with parsed "is jetton", "is NFT" flags, allows emulating transactions and receiving execution traces.
 
-To work with public TonCenter API you need an API key:
+## Other APIs
 
-* Get an API key for Mainnet and Testnet: [@tonapibot](https://t.me/tonapibot)
-
-## See Also
-* [TON ADNL API](/develop/dapps/apis/adnl)
-* [SDKs](/develop/dapps/apis/sdk)
-
+* [TonAPI](https://docs.tonconsole.com/tonapi/api-v2) - API that is designed to provide users with a streamlined experience, not worrying about low-level details of smart contracts.

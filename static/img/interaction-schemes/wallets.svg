@@ -1,0 +1,96 @@
+<svg width="205.4mm" height="204.9mm" fill-rule="evenodd" stroke-linejoin="round" stroke-width="28.22" preserveAspectRatio="xMidYMid" version="1.2" viewBox="0 0 20540 20487" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><g>
+ <g transform="translate(0 -.001)">
+  <desc>Master slide
+  </desc>
+  <rect y=".0009703" width="20540" height="20487" fill="none" stroke-width="11.58"/>
+ </g>
+ 
+<g transform="translate(0 10009)" fill-rule="nonzero">
+  
+  
+  
+  <path transform="matrix(1 0 0 .6759 0 328.3)" d="m10500 14213h-9500v-13200h19000v13200z" fill="#fff" stroke="#39f" stroke-linejoin="round" stroke-width="121.6"/>
+   <path d="m1e3 3646h19000" fill="none" stroke="#000" stroke-linejoin="round"/><text transform="translate(0 -9.843e-5)" x="1642.2618" y="3327.8584" font-family="Inter" font-size="476.2px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1642.2618" y="3327.8584" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="200" stroke-width="746.7">Related to <tspan fill="#3399ff" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="bold">standard wallets in TON ecosystem</tspan></tspan></text>
+  <text transform="translate(0 -5.236e-5)" x="1885" y="2252" font-family="Inter" font-size="635px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1885" y="2252" fill-rule="nonzero" font-size="635px" stroke-width="746.7">Deploying a contract</tspan></text>
+  
+  
+  
+  
+  
+  
+  <g transform="translate(-793.7 -249.6)">
+   
+   <path transform="translate(5.347e-6 -8.568e-5)" d="m8664 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m6185 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#39f" stroke-linejoin="round" stroke-width="35"/><text transform="translate(5.347e-6 -8.568e-5)" x="4426.5352" y="6495.9282" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="4426.5352" y="6495.9282" font-size="423.3px" stroke-width="746.7">external message</tspan></text>
+   
+   <g transform="translate(-105.8)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    
+   <text transform="translate(105.8)" x="4658.957" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="4658.957" y="7025.0933" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7">create and sign</tspan></text><path transform="translate(2.556e-6)" d="m4773 7047h2989v24h-2989z"/></g>
+  </g><g transform="translate(7071 -199.6)">
+   
+   <path transform="translate(5.347e-6 -8.568e-5)" d="m8664 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m6185 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#39f" stroke-linejoin="round" stroke-width="35"/><text x="4373.6187" y="6495.9282" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="4373.6187" y="6495.9282" font-size="423.3px" stroke-width="746.7">msg with StateInit</tspan></text>
+   
+   <g transform="translate(-105.8)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    <path d="m5573 7047h1389v24h-1389z"/><text x="5668.9053" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="5668.9053" y="7025.0933" font-size="423.3px" stroke-width="746.7">create</tspan></text>
+   </g>
+  </g><g transform="translate(6906 -194.6)">
+   <path d="m2750 7843c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/>
+   
+   <text x="2320.1106" y="6702.8511" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2320.1106" y="6702.8511" font-size="423.3px" stroke-width="746.7">user</tspan></text>
+   
+  </g><g transform="translate(-793.8 -264.6)">
+   <path d="m18250 7913c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#e6e6e6"/>
+   <path d="m18250 7913c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="none" stroke="#666" stroke-linejoin="round" stroke-width="71"/>
+   <g transform="translate(-529.2 52.92)" font-family="Inter" font-size="423px" font-weight="400">
+    <text x="17662" y="6561">destination</text>
+    <text x="17545" y="7074" fill="#000000"><tspan x="17918" fill-rule="nonzero">contract</tspan></text>
+   </g>
+  </g><circle transform="translate(-793.8 -264.6)" cx="3e3" cy="6613" r="167.8"/>
+  
+  
+  
+  
+ </g><g transform="translate(0,8.767)" fill-rule="nonzero">
+  
+  
+  
+  <path transform="matrix(1 0 0 .6759 0 328.3)" d="m10500 14213h-9500v-13200h19000v13200z" fill="#fff" stroke="#39f" stroke-linejoin="round" stroke-width="121.6"/>
+   <path d="m1e3 3646h19000" fill="none" stroke="#000" stroke-linejoin="round"/><text transform="translate(0 -9.843e-5)" x="1642.2618" y="3327.8584" font-family="Inter" font-size="476.2px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1642.2618" y="3327.8584" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="200" stroke-width="746.7">Related to <tspan fill="#3399ff" fill-rule="nonzero" font-family="Inter" font-size="476.2px" font-weight="bold">standard wallets in TON ecosystem</tspan></tspan></text>
+  <text x="1885" y="2252" font-family="Inter" font-size="635px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="1885" y="2252" fill-rule="nonzero" font-size="635px" stroke-width="746.7">Sending messages</tspan></text>
+  
+  
+  
+  
+  
+  <g transform="translate(-793.8 -264.6)">
+   
+   <path transform="translate(5.347e-6 -8.568e-5)" d="m8664 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><path d="m6185 7283h-1915v-1370h3831v1370z" fill="#fff" stroke="#39f" stroke-linejoin="round" stroke-width="35"/><text transform="translate(5.347e-6 -8.568e-5)" x="4426.5352" y="6495.9282" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="4426.5352" y="6495.9282" font-size="423.3px" stroke-width="746.7">external message</tspan></text>
+   
+   <g transform="translate(-105.8)" font-family="Inter" font-size="423px" font-weight="200">
+    
+    
+   <text transform="translate(105.8)" x="4658.957" y="7025.0933" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="4658.957" y="7025.0933" font-family="Inter" font-size="423.3px" font-weight="200" stroke-width="746.7">create and sign</tspan></text><path transform="translate(2.556e-6)" d="m4773 7047h2989v24h-2989z"/></g>
+  </g>
+  <g transform="translate(-793.8 -264.6)">
+   <path transform="translate(5.347e-6 -4.609e-5)" d="m16564 6822 419-187 12-9 5-12-5-14-11-9-420-186-6-2h-3l-9 2-9 5-5 7-2 8v376l2 8 5 9 9 4 9 2h3zm-5664-249.5v81h5630v-81z"/><g fill="#fff" stroke="#666" stroke-linejoin="round" stroke-width="35"><path d="m14368 6966h-1850v-1370h3700v1370z"/><path d="m14262 7071h-1850v-1370h3700v1370z"/><path d="m14156 7177h-1850v-1370h3700v1370z"/><path d="m14050 7283h-1850v-1370h3700v1370z"/>
+   
+   </g><text x="12363.203" y="6753.0889" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="12363.203" y="6753.0889" font-size="423.3px" stroke-width="746.7">desired message</tspan></text>
+  </g><g transform="translate(6906 -194.6)">
+   <path d="m2750 7843c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z" fill="#cce5ff" fill-rule="nonzero" stroke="#39f" stroke-width="80"/>
+   
+   <text x="2320.1106" y="6702.8511" font-family="Inter" font-size="423.3px" stroke-width="746.7" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="2320.1106" y="6702.8511" font-size="423.3px" stroke-width="746.7">user</tspan></text>
+   
+  </g><g transform="translate(-793.8 -264.6)"><g fill="#e6e6e6" stroke="#666" stroke-linejoin="round" stroke-width="71">
+   
+   <path d="m18568 7595c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z"/><path d="m18462 7701c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z"/><path d="m18356 7807c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z"/><path d="m18250 7913c-230 0-426-52-625-167-199-116-342-259-458-458-115-199-167-395-167-625s52-426 167-625c116-199 259-342 458-458 199-115 395-167 625-167s426 52 625 167c199 116 342 259 458 458 115 199 167 395 167 625s-52 426-167 625c-116 199-259 342-458 458-199 115-395 167-625 167z"/>
+   </g><g transform="translate(-529.2 52.92)" font-family="Inter" font-size="423px" font-weight="400">
+    <text x="17662" y="6561">destination</text>
+    <text x="17545" y="7074" fill="#000000"><tspan x="17918" fill-rule="nonzero">contract</tspan></text>
+   </g>
+  </g><circle transform="translate(-793.8 -264.6)" cx="3e3" cy="6613" r="167.8"/>
+  
+  
+  
+  
+ </g></g><path d="m20526 0v20474h-20526" fill="none" stroke="#000" stroke-linejoin="miter" stroke-width="26.46px"/></svg>

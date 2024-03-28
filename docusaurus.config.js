@@ -278,24 +278,24 @@ const config = {
             label: 'DApps',
             items: [
               {
-                to: '/develop/dapps/telegram-apps/',
-                label: 'TMA Development',
-              },
-              {
-                to: 'develop/dapps/asset-processing',
-                label: 'Transaction Processing',
-              },
-              {
-                to: 'develop/dapps/apis',
-                label: 'APIs',
-              },
-              {
                 to: 'develop/dapps/apis/sdk',
-                label: 'SDKs',
+                label: 'APIs and SDKs',
               },
               {
                 to: '/develop/dapps/cookbook',
-                label: 'TON Cookbook',
+                label: 'Common Tasks Cookbook',
+              },
+              {
+                to: '/develop/dapps/cookbook-diagram',
+                label: 'Common Tasks Scheme',
+              },
+              {
+                to: '/develop/dapps/telegram-apps/',
+                label: 'Working in Telegram',
+              },
+              {
+                to: 'develop/dapps/asset-processing',
+                label: 'Advanced Asset Holding',
               },
             ],
           },
