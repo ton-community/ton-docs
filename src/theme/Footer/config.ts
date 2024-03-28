@@ -74,7 +74,7 @@ const FOOTER_TON_CONCEPT_URL = TON_CONCEPT_URL;
 const FOOTER_TON_FOOTSTEPS_URL = TON_FOOTSTEPS;
 const FOOTER_PRESS_RELEASES_URL = TON_BLOG_PRESS_RELEASES_URL;
 
-export const FOOTER_COLUMN_LINKS = [
+export const FOOTER_COLUMN_LINKS_EN = [
   {
     headerLangKey: "Use",
     links: [
@@ -130,6 +130,66 @@ export const FOOTER_COLUMN_LINKS = [
       { langKey: "Support and Feedback", url: FOOTER_SUPPORT_AND_FEEDBACK },
       { langKey: "Brand assets", url: PAGE_BRAND_ASSETS },
       { langKey: "Contact us", url: PAGE_CONTACT_US },
+    ],
+  },
+];
+
+export const FOOTER_COLUMN_LINKS_CN = [
+  {
+    headerLangKey: "使用",
+    links: [
+      { langKey: "获取钱包", url: PAGE_WALLETS },
+      { langKey: "获取或出售Toncoin", url: PAGE_BUY_TONCOIN },
+      { langKey: "质押", url: PAGE_STAKE },
+      { langKey: "应用和服务", url: FOOTER_APP_AND_DAPPS_URL },
+      { langKey: "桥接", url: FOOTER_BRIDGE_URL },
+      { langKey: "域名", url: FOOTER_DNS_URL },
+    ],
+  },
+  {
+    headerLangKey: "学习",
+    links: [
+      { langKey: "TON概念", url: FOOTER_TON_CONCEPT_URL },
+      { langKey: "路线图", url: PAGE_ROADMAP },
+      { langKey: "TonStat", url: TONSTAT_URL },
+      { langKey: "挖矿历史", url: PAGE_MINING },
+      { langKey: "Toncoin", url: PAGE_TON_COIN },
+      { langKey: "验证者", url: PAGE_VALIDATOR },
+      { langKey: "区块链比较", url: PAGE_ANALYSIS },
+      { langKey: "白皮书", url: FOOTER_WHITEPAPER_URL },
+    ],
+  },
+  {
+    headerLangKey: "构建",
+    links: [
+      { langKey: "入门指南", url: PAGE_DEV },
+      { langKey: "文档", url: FOOTER_DOCUMENTATION_URL },
+      { langKey: "TON Overflow", url: FOOTER_TON_OVERFLOW_URL },
+      { langKey: "开发社区", url: FOOTER_DEV_COMMUNITY_URL },
+      { langKey: "赠款", url: PAGE_GRANTS },
+      { langKey: "流动性计划", url: PAGE_LIQUIDITY_PROGRAM },
+      { langKey: "TON Footsteps", url: FOOTER_TON_FOOTSTEPS_URL },
+      { langKey: "漏洞赏金", url: FOOTER_BUG_BOUNTY_URL },
+    ],
+  },
+  {
+    headerLangKey: "社区",
+    links: [
+      { langKey: "社区", url: PAGE_COMMUNITY },
+      { langKey: "TON基金会", url: TON_FOUNDATION_URL },
+      { langKey: "活动", url: PAGE_EVENTS },
+      { langKey: "合作", url: PAGE_COLLABORATE },
+      { langKey: "博客", url: TON_BLOG_URL },
+      { langKey: "新闻稿", url: FOOTER_PRESS_RELEASES_URL },
+      { langKey: "职业", url: FOOTER_CAREERS_URL },
+    ],
+  },
+  {
+    headerLangKey: "其他",
+    links: [
+      { langKey: "支持和反馈", url: FOOTER_SUPPORT_AND_FEEDBACK },
+      { langKey: "品牌资产", url: PAGE_BRAND_ASSETS },
+      { langKey: "联系我们", url: PAGE_CONTACT_US },
     ],
   },
 ];

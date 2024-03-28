@@ -1,0 +1,76 @@
+---
+hide_table_of_contents: true
+wrapperClassName: bootstrap-wrapper
+---
+
+import { SearchField } from '@site/src/components/SearchField';
+import { exceptionOpcodes as opcodes } from '@site/src/data/opcodes';
+
+# 异常的产生与处理原语
+
+<SearchField
+  data={opcodes}
+  searchBy="doc_opcode"
+  placeholder="搜索操作码"
+  showKeys={[
+    { key: 'doc_opcode', name: '操作码', isGrouped: true },
+    { key: 'doc_fift', name: 'Fift 语法', isGrouped: true },
+    { key: 'doc_stack', name: '堆栈', isGrouped: true },
+    { key: 'doc_gas', name: 'Gas', isGrouped: true },
+    { key: 'doc_description', name: '描述' },
+  ]}
+/>
+
+### TVM 指令内容列表
+
+* [概览](/learn/tvm-instructions/instructions)
+* [堆栈操作](/learn/tvm-instructions/instructions/stack-manipulation)
+* [元组、列表和空值](/learn/tvm-instructions/instructions/tuple-list-null)
+* [常量和字面量](/learn/tvm-instructions/instructions/constant)
+* [算术操作](/learn/tvm-instructions/instructions/arithmetic)
+* [数据比较](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [异常产生和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [应用特定原语](/learn/tvm-instructions/instructions/app-specific)
+* [杂项](/learn/tvm-instructions/instructions/miscellaneous)
+
+## 异常产生与处理原语
+
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`F22_n`** | `[n] THROW` | _` - 0 n`_ | 抛出参数为零的 `0 <= n <= 63` 异常。<br/>换句话说，它将控制权转移到 `c2` 中的continuation，将 `0` 和 `n` 推入其堆栈，并彻底丢弃旧堆栈。 | `76` |
+| **`F26_n`** | `[n] THROWIF` | _`f - `_ | 只有当整数 `f!=0` 时，才抛出参数为零的 `0 <= n <= 63` 异常。 | `26/76` |
+| **`F2A_n`** | `[n] THROWIFNOT` | _`f - `_ | 只有当整数 `f=0` 时，才抛出参数为零的 `0 <= n <= 63` 异常。 | `26/76` |
+| **`F2C4_n`** | `[n] THROW` | _`- 0 nn`_ | 对于 `0 <= n < 2^11`，是 [`[n] THROW`](#instr-throw-short) 的编码，用于 `n` 的较大值。 | `84` |
+| **`F2CC_n`** | `[n] THROWARG` | _`x - x nn`_ | 抛出带有参数 `x` 的 `0 <= n <  2^11` 异常，通过将 `x` 和 `n` 复制到 `c2` 的堆栈并将控制权转移给 `c2`。 | `84` |
+| **`F2D4_n`** | `[n] THROWIF` | _`f - `_ | 对于 `0 <= n < 2^11`，是 [`[n] THROWIF`](#instr-throwif-short) 的编码，用于 `n` 的较大值。 | `34/84` |
+| **`F2DC_n`** | `[n] THROWARGIF` | _`x f - `_ | 只有当整数 `f!=0` 时，才抛出带有参数 `x` 的 `0 <= nn < 2^11` 异常。 | `34/84` |
+| **`F2E4_n`** | `[n] THROWIFNOT` | _`f - `_ | 对于 `0 <= n < 2^11`，是 [`[n] THROWIFNOT`](#instr-throwifnot-short) 的编码，用于 `n` 的较大值。 | `34/84` |
+| **`F2EC_n`** | `[n] THROWARGIFNOT` | _`x f - `_ | 只有当整数 `f=0` 时，才抛出带有参数 `x` 的 `0 <= n < 2^11` 异常。 | `34/84` |
+| **`F2F0`** | `THROWANY` | _`n - 0 n`_ | 抛出参数为零的 `0 <= n < 2^16` 异常。<br/>大致相当于 [`ZERO`](#instr-zero) [`SWAP`](#instr-swap) [`THROWARGANY`](#instr-throwargany)。 | `76` |
+| **`F2F1`** | `THROWARGANY` | _`x n - x n`_ | 抛出带有参数 `x` 的 `0 <= n < 2^16` 异常，将控制权转移到 `c2` 中。<br/>大致相当于 [`c2 PUSHCTR`](#instr-pushctr) [`2 JMPXARGS`](#instr-jmpxargs)。 | `76` |
+| **`F2F2`** | `THROWANYIF` | _`n f - `_ | 只有当 `f!=0` 时，才抛出参数为零的 `0 <= n < 2^16` 异常。 | `26/76` |
+| **`F2F3`** | `THROWARGANYIF` | _`x n f - `_ | 只有当 `f!=0` 时，才抛出带有参数 `x` 的 `0 <= n<2^16` 异常。 | `26/76` |
+| **`F2F4`** | `THROWANYIFNOT` | _`n f - `_ | 只有当 `f=0` 时，才抛出参数为零的 `0 <= n<2^16` 异常。 | `26/76` |
+| **`F2F5`** | `THROWARGANYIFNOT` | _`x n f - `_ | 只有当 `f=0` 时，才抛出带有参数 `x` 的 `0 <= n<2^16` 异常。 | `26/76` |
+| **`F2FF`** | `TRY` | _`c c' - `_ | 设置 `c2` 为 `c'`，首先将 `c2` 的旧值同时保存到 `c'` 的保存列表和当前continuation的保存列表中，该当前continuation存储到 `c.c0` 和 `c'.c0` 中。然后类似于 [`EXECUTE`](#instr-execute) 运行 `c`。如果 `c` 没有引发任何异常，从 `c` 返回时会自动恢复 `c2` 的原始值。如果发生异常，则执行权转移到 `c'`，但在此过程中恢复了 `c2` 的原始值，以便 `c'` 可以通过 [`THROWANY`](#instr-throwany) 重新抛出异常（如果它自己无法处理）。 | `26` |
+| **`F2FF`** | `TRY:<{ code1 }>CATCH<{ code2 }>` | _`-`_ | 等效于 [`<{ code1 }> CONT`](#instr-pushcont) [`<{ code2 }> CONT`](#instr-pushcont) [`TRY`](#instr-try)。 |  |
+| **`F3pr`** | `[p] [r] TRYARGS` | _`c c' - `_ | 类似于 [`TRY`](#instr-try)，但内部使用的是 [`[p] [r] CALLXARGS`](#instr-callxargs) 而不是 [`EXECUTE`](#instr-execute)。<br/>这样，顶部 `0 <= p <= 15` 堆栈元素以外的所有元素将保存到当前continuation的堆栈中，然后从 `c` 或 `c'` 返回时恢复，并将 `c` 或 `c'` 的结果堆栈的顶部 `0 <= r <= 15` 值作为返回值复制。 | `26` |
+
+
+### TVM 指令内容列表
+
+* [概览](/learn/tvm-instructions/instructions)
+* [堆栈操作](/learn/tvm-instructions/instructions/stack-manipulation)
+* [元组、列表和空值](/learn/tvm-instructions/instructions/tuple-list-null)
+* [常量和字面量](/learn/tvm-instructions/instructions/constant)
+* [算术操作](/learn/tvm-instructions/instructions/arithmetic)
+* [数据比较](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [异常产生和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [应用特定原语](/learn/tvm-instructions/instructions/app-specific)
+* [杂项](/learn/tvm-instructions/instructions/miscellaneous)

@@ -67,6 +67,12 @@ Use Gitpod (a free, online VS code-like IDE) for contributing. It will launch a 
     ```
     npm run start
     ```
+6. Build with multiple locales and run it locally
+
+    ```
+    npm run build
+    npm run serve
+    ```
 
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
