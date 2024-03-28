@@ -2,7 +2,7 @@
 
 _标准HTTP JSON RPC，类似于其他区块链API。_
 
-## RPC节点
+## RPC 节点
 
 :::tip
 [GetBlock节点](https://getblock.io/nodes/ton/) - 🚀 仅需几次点击即可立即安装节点。
@@ -37,7 +37,7 @@ _标准HTTP JSON RPC，类似于其他区块链API。_
 您可以连接到公共的[toncenter.com](https://toncenter.com)或运行您自己的http-api实例。
 
 
-## 获取API密钥
+## 获取 API 密钥
 
 要使用公共TonCenter API，您需要一个API密钥：
 

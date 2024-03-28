@@ -101,7 +101,7 @@ type TonAddressItemReply = {
   address: string; // TON 地址原始 (`0:<hex>`)
   network: NETWORK; // 网络 global_id
   publicKey: string; // HEX 字符串，不带 0x
-  walletStateInit: string; // Base64（不安全 URL）编码的钱包合约的 stateinit 单元
+  walletStateInit: string; // Base64（不安全 URL）编码的钱包合约的 stateinit cell
 }
 
 type TonProofItemReply = TonProofItemReplySuccess | TonProofItemReplyError;
@@ -295,13 +295,13 @@ interface SendTransactionRequest {
 * `valid_until`（整数，可选）：unix 时间戳。该时刻之后交易将无效。
 * `network`（NETWORK，可选）：DApp打算发送交易的网络（主网或测试网）。如果未设置，交易将发送到钱包当前设置的网络，但这不安全，DApp 应始终努力设置网络。如果设置了 `network` 参数，但钱包设置了不同的网络，钱包应显示警告并不允许发送此交易。
 * `from`（以 `<wc>:<hex>` 格式的字符串，可选）- DApp打算从中发送交易的发送者地址。如果未设置，钱包允许用户在交易批准时选择发送者的地址。如果设置了 `from` 参数，钱包不应允许用户选择发送者的地址；如果从指定地址发送不可能，钱包应显示警告并不允许发送此交易。
-* `messages`（信息数组）：1-4 条从钱包合约到其他账户的外发消息。所有消息按顺序发送出去，但 **钱包无法保证消息会按相同顺序被传递和执行**。
+* `messages`（信息数组）：1-4 条从钱包合约到其他账户的输出消息。所有消息按顺序发送出去，但 **钱包无法保证消息会按相同顺序被传递和执行**。
 
 消息结构：
 * `address`（字符串）：消息目的地
 * `amount`（小数字符串）：要发送的纳币数量。
-* `payload`（base64 编码的字符串，可选）：以 Base64 编码的原始单元 BoC。
-* `stateInit`（base64 编码的字符串，可选）：以 Base64 编码的原始单元 BoC。
+* `payload`（base64 编码的字符串，可选）：以 Base64 编码的原始cell BoC。
+* `stateInit`（base64 编码的字符串，可选）：以 Base64 编码的原始cell BoC。
 
 #### 常见情况
 1. 无 payload，无 stateInit：简单转账，无消息。
@@ -376,8 +376,8 @@ interface SignDataRequest {
 
 其中 `<sign-data-payload>` 是具有以下属性的 JSON：
 
-* `schema_crc`（整数）：指示payload 单元的布局，进而定义域分割。
-* `cell`（字符串，base64 编码单元）：根据其 TL-B 定义包含任意数据。
+* `schema_crc`（整数）：指示payload cell的布局，进而定义域分割。
+* `cell`（字符串，base64 编码cell）：根据其 TL-B 定义包含任意数据。
 * `publicKey`（HEX 字符串，不含0x，可选）：DApp打算用来签署数据的密钥对的公钥。如果未设置，钱包在签名时不受限制使用哪个密钥对。如果设置了 `publicKey` 参数，钱包应使用与此公钥对应的密钥对签名；如果使用指定的密钥对签名不可能，钱包应显示警告并不允许签署此数据。
 
 签名将以以下方式计算：
@@ -385,7 +385,7 @@ interface SignDataRequest {
 
 [查看详情](https://github.com/oleganza/TEPs/blob/datasig/text/0000-data-signatures.md)
 
-钱包应根据 schema_crc 解码单元，并向用户显示相应数据。
+钱包应根据 schema_crc 解码cell，并向用户显示相应数据。
 如果钱包不知道 schema_crc，钱包应向用户显示危险通知/UI。
 
 钱包以 **SignDataResponse** 回复：

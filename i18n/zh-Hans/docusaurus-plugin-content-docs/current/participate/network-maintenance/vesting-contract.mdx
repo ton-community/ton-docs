@@ -67,7 +67,7 @@ Get方法`is_whitelisted(slice address)`检查此地址是否在白名单上。
 
 无法从白名单中移除地址。
 
-此外，始终可以将锁定的硬币发送到`vesting_sender_address`（无需单独添加到白名单）。
+此外，始终可以将锁定的代币发送到`vesting_sender_address`（无需单独添加到白名单）。
 
 ## 充值
 
@@ -77,9 +77,7 @@ Get方法`is_whitelisted(slice address)`检查此地址是否在白名单上。
 
 该合约设计类似于[标准钱包V3智能合约](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)。
 
-在其数据中，它保
-
-留`seqno`、`subwallet_id`、`public_key`，并接受相同格式的外部消息。
+在其数据中，它保留`seqno`、`subwallet_id`、`public_key`，并接受相同格式的外部消息。
 
 Get方法`seqno()`、`get_subwallet_id()`和`get_public_key()`可用。
 
@@ -125,7 +123,8 @@ Get方法`seqno()`、`get_subwallet_id()`和`get_public_key()`可用。
 
 对不在白名单上的地址没有限制。
 
-即使我们发送到白名单或`vesting_sender_address`，发送已解锁的Toncoin时也不适用限制。
+发送未锁定的 Toncoin 时不适用任何限制，即使我们发送到白名单`vesting_sender_address`。
+
 
 ## 项目结构
 

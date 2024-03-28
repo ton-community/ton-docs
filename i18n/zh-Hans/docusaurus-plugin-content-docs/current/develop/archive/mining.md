@@ -1,4 +1,4 @@
-# TON挖矿指南
+# TON 挖矿指南
 
 :::warning deprecated
 此信息可能已过时，不再有效。可以忽略它。

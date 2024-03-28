@@ -4,7 +4,7 @@
 
 归档节点是一种全节点，它存储区块链的扩展历史数据。如果您正在创建一个区块链浏览器或类似需要访问历史数据的应用程序，推荐使用归档节点作为索引器。
 
-## 先决条件
+## 必要条件
 
 我们强烈建议使用支持的操作系统安装mytonctrl：
 * Ubuntu 20.04
@@ -30,7 +30,7 @@ __注意__：假设使用启用压缩的zfs卷的4TB
 
 1. 安装ZFS并准备卷
 2. 安装MyTonCtrl
-3. 在您的服务器上运行全节点并停止验证器进程
+3. 在您的服务器上运行全节点并停止验证者进程
 4. 从https://archival-dump.ton.org下载并恢复转储数据
 5. 使用配置归档节点DB规格的方式运行全节点
 
@@ -63,7 +63,7 @@ sudo zfs set compression=lz4 data
 
 #### 准备节点
 
-1. 在执行恢复之前，您必须使用root账户停止验证器：
+1. 在执行恢复之前，您必须使用root账户停止验证者：
 ```shell
 sudo -s
 systemctl stop validator.service
@@ -82,9 +82,7 @@ mv /var/ton-work /var/ton-work.bak
 wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
 ```
 
-转储的大小约为
-
-__1.5TB__，因此下载和恢复它将需要一些时间。
+转储的大小约为__1.5TB__，因此下载和恢复它将需要一些时间。
 
 准备并运行命令：
 1. 如有必要，安装工具（`pv`，`plzip`）
@@ -132,12 +130,12 @@ nano /etc/systemd/system/validator.service
 ```
 
 :::info
-启动节点后请耐心等待并观察日志。转储没有DHT缓存，所以您的节点需要一些时间来找到其他节点，然后与它们同步。根据快照的年龄，您的节点可能需要从几小时到几天的时间来赶上网络。这是正常的。
+启动节点后请耐心等待并观察日志。转储没有DHT缓存，所以您的节点需要一些时间来找到其他节点，然后与它们同步。根据快照的时间，您的节点可能需要从几小时到几天的时间来赶上网络。这是正常的。
 :::
 
 #### 启动节点
 
-1. 运行以下命令启动验证器：
+1. 运行以下命令启动验证者：
 
 ```shell
 systemctl start validator.service
@@ -150,7 +148,7 @@ systemctl start validator.service
 节点数据库需要不时清理（我们建议每周一次），请以root身份执行以下步骤：
 
 
-1. 停止验证器进程（切勿跳过此步骤！）
+1. 停止验证者进程（切勿跳过此步骤！）
 ```shell
 sudo -s
 systemctl stop validator.service
@@ -163,7 +161,7 @@ find /var/ton-work -name 'LOG.old*' -exec rm {} +
 ```shell
 rm -r /var/ton-work/db/files/packages/temp.archive.*
 ```
-5. 启动验证器进程
+5. 启动验证者进程
 ```shell
 systemctl start validator.service
 ```
@@ -171,7 +169,7 @@ systemctl start validator.service
 ## 故障排除和备份
 如果出于某种原因某些东西不起作用/出现故障，您始终可以[回滚](https://docs.oracle.com/cd/E23824_01/html/821-1448/gbciq.html#gbcxk)到ZFS文件系统上的@archstate快照，这是转储的原始状态。
 
-1. 停止验证器进程（切勿跳过此步骤！）
+1. 停止验证者进程（切勿跳过此步骤！）
 ```shell
 sudo -s
 systemctl stop validator.service
@@ -185,9 +183,7 @@ zfs list -t snapshot
 zfs rollback data/ton-work@dumpstate
 ```
 
-如果您的节点运行良好，则可以删除此快照以节省存储空间，但我们建议定期对文件系统进行快照，以备份用途，因为验证器节点已知会在某些情况下损
-
-坏数据以及config.json。[zfsnap](https://www.zfsnap.org/docs.html)是自动化快照轮换的好工具。
+如果您的节点运行良好，则可以删除此快照以节省存储空间，但我们建议定期对文件系统进行快照，以备份用途，因为验证者节点已知会在某些情况下损坏数据以及config.json。[zfsnap](https://www.zfsnap.org/docs.html)是自动化快照轮换的好工具。
 
 :::tip 需要帮助吗？
 有问题或需要帮助？请在[TON开发者聊天](https://t.me/tondev_eng)中询问，以获得社区的帮助。MyTonCtrl开发者也常在那里。

@@ -1,4 +1,4 @@
-# 在TON上编译和构建智能合约
+# 在 TON 上编译和构建智能合约
 
 以下是构建智能合约的库和库列表。
 
@@ -63,7 +63,7 @@ npm install ton-compiler
 * 多个FunC编译器版本
 * 无需安装和编译TON
 * 程序化和CLI接口
-* 适用于单元测试
+* 适用于cell测试
 
 ### 如何使用
 
@@ -101,7 +101,7 @@ let result = await compileContract({ code: '
 source code', stdlib: true, version: 'latest' });
 if (result.ok) {
   console.log(result.fift); // 编译的Fift汇编器
-  console.log(result.cell); // 编译的单元Buffer
+  console.log(result.cell); // 编译的cell Buffer
 } else {
   console.warn(result.logs); // 输出日志
 }
@@ -128,7 +128,7 @@ npm install @ton-community/func-js
 
 * 无需编译或下载FunC二进制文件
 * 在Node.js和**WEB**中都可工作（需要WASM支持）
-* 直接编译为带有代码单元的BOC
+* 直接编译为带有代码cell的BOC
 * 返回汇编版本用于调试目的
 * 不依赖文件系统
 
@@ -171,7 +171,7 @@ async function main() {
         return;
     }
 
-    // result.codeBoc包含编码的BOC，带有代码单元
+    // result.codeBoc包含编码的BOC，带有代码cell
     let codeCell = Cell.fromBoc(Buffer.from(result.codeBoc, "base64"))[0];
     
     // result.fiftCode包含您代码的汇编版本（用于调试目的）

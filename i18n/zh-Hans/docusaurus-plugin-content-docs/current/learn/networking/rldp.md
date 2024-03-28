@@ -1,4 +1,4 @@
-# RLDP协议
+# RLDP 协议
 
 实现：
 * https://github.com/ton-blockchain/ton/tree/master/rldp

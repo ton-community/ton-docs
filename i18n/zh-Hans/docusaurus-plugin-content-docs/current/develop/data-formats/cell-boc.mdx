@@ -73,7 +73,7 @@ sources={{
 :::note
 为了只留下唯一的cell，需要进行比较。为此，我们需要比较cell的[哈希](#cell-hash)。
 :::
-现在让我们按照父cell不指向后面的顺序排列它们。被其余cell指向的cell必须在指向它的那些cell之后出现在列表中。我们得到：
+现在，让我们将它们排列成这样一个顺序：父cell不会向后指。被其余cell指向的cell必须在指向它的那些cell之后出现在列表中。我们得到：
 ```json
 1[8_]      -> 索引 0 (根cell)
 7[FE]      -> 索引 1
@@ -82,9 +82,7 @@ sources={{
 
 现在，让我们计算上述3个cell的描述。这些描述由2个字节组成，存储了有关数据长度和数据链接数量的标志信息。
 
-第一个字节 - **引用描述符** - 计算为 `r+8s+32l`，其中 `0 ≤ r ≤ 4` 是cell引用（链接）的数量，`0 ≤ s ≤ 1` 对于[异域](#special-exotic-cells)cell为1，对于普通cell为0，`0 ≤ l ≤ 3` 是cell的[层级](
-
-#cell-level)。
+第一个字节 - **引用描述符** - 计算为 `r+8s+32l`，其中 `0 ≤ r ≤ 4` 是cell引用（链接）的数量，`0 ≤ s ≤ 1` 对于[异类](#special-exotic-cells)cell为1，对于普通cell为0，`0 ≤ l ≤ 3` 是cell的[层级](#cell-level)。
 
 第二个字节 - **位描述符** - 等于 `floor(b / 8) + ceil (b / 8)`，其中 `0 <= b <= 1023` 是cell中的位数。这个描述符代表cell数据的完整4位组的长度（但如果不为空至少为1）。
 
@@ -150,7 +148,7 @@ ceilBytes++
 ### 打包cell包
 让我们打包上一节直接提到的cell。我们已经将其序列化为一个扁平的14字节数组。
 
-因此，我们根据其[架构](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25)构建头部。
+因此，我们根据其[架构](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25)构建header。
 
 ```
 b5ee9c72                      -> BoC结构的tl-b ID
@@ -162,7 +160,7 @@ b5ee9c72                      -> BoC结构的tl-b ID
 01                            -> 根cell的数量 - 1
 00                            -> 不存在，当前实现中始终为0
 0e                            -> 序列化cell的大小，1字节（上面定义的大小），等于14
-00                            -> 根cell索引，大小1（由头部的3位大小:(## 3)确定），
+00                            -> 根cell索引，大小1（由头部的3大小：(## 3)位确定），
                                  始终为0
 0201c002010101ff0200060aaaaa  -> 序列化cell
 ```
@@ -172,7 +170,7 @@ b5ee9c72                      -> BoC结构的tl-b ID
 
 cell包实现示例：[序列化](https://github.com/xssnick/tonutils-go/blob/master/tvm/cell/serialize.go)，[反序列化](https://github.com/xssnick/tonutils-go/blob/master/tvm/cell/parse.go)
 
-## 特殊（异域）cell
+## 特殊cell
 
 通常，TON上运行的cell分为两大类：普通cell和特殊cell。用户处理的大多数cell是普通cell，负责携带信息。
 
@@ -193,23 +191,21 @@ Lvl(c) = max(Lvl(r_0), ..., Lvl(r_i), ..., Lvl(r_e))
 
 _没有引用的普通cell层级为零_
 
-### 异域cell层级
-异域cell对其层级的设置有不同的规则，这些规则在[此文](/develop/data-formats/exotic-cells)中有描述。
+### 特殊cell层级
+特殊cell对其层级的设置有不同的规则，这些规则在[此文](/develop/data-formats/exotic-cells)中有描述。
 
 ## cell哈希
-在大多数情况下，用户使用的是层级为0的普通cell，它们只有一个哈希，称为表示哈希（或无限哈希）。
+在大多数情况下，用户使用的是层级为0的普通cell，它们只有一个哈希，称为 representation hash（或 hash infinity）。
 
-层级为`Lvl(c) = l`的cell`c`，其中`1 ≤ l ≤ 3`，除了表示哈希外，还有`l`个**"更高"**的哈希。
+层级为`Lvl(c) = l`的cell`c`，其中`1 ≤ l ≤ 3`，除了 representation hash 外，还有`l`个**"更高"**的哈希。
 
-### 标准cell表示哈希计算
+### 标准cell representation hash 计算
 首先，我们需要计算cell表示（类似于上面描述的cell序列化）
 
 1. 计算描述符字节
 2. 添加序列化cell数据
 3. 对于每个cell的引用，添加其深度
-4. 对于每个单
-
-元格的引用，添加其表示哈希
+4. 对于每个cell的引用，添加其 representation hash 
 5. 计算结果的SHA256哈希
 
 让我们分析以下示例：
@@ -240,7 +236,7 @@ _没有引用的普通cell层级为零_
 
 5. SHA256计算
 
-连接前面步骤的字节，我们得到 `00080000000f`，其SHA256为 `57b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f9` - 这就是cell表示哈希。
+连接前面步骤的字节，我们得到 `00080000000f`，其SHA256为 `57b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f9` - 这就是cell representation hash 。
 
 #### 带有引用的cell
 ```json
@@ -273,18 +269,17 @@ _没有引用的普通cell层级为零_
 5. SHA256计算
 
 连接前面步骤的字节，我们得到 `020600000b0000000057b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f957b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f9`
-，其SHA256为 `f345277cc6cfa747f001367e1e873dcfa8a936b8492431248b7a3eeafa8030e7` - 这就是cell表示哈希。
+，其SHA256为 `f345277cc6cfa747f001367e1e873dcfa8a936b8492431248b7a3eeafa8030e7` - 这就是cell representation hash 。
 
 ### 更高哈希的计算
 
-普通cell`c`的更高哈希与其表示哈希的计算类似，
-但使用其引用的更高哈希而不是它们的表示哈希。
+普通cell`c`的更高哈希与其 representation hash 的计算类似，但使用其引用的更高哈希而不是它们的 representation hash。
 
-异域cell有其自己的计算更高哈希的规则，这些规则在[此文](/develop/data-formats/exotic-cells)中有描述。
+特殊cell有其自己的计算更高哈希的规则，这些规则在[此文](/develop/data-formats/exotic-cells)中有描述。
 
 
-## 另见
+## 参阅
 
 [//]: # (* [原文RU]&#40;https://github.com/xssnick/ton-deep-doc/blob/master/Cells-BoC.md&#41;)
-* [异域（特殊）cell](/develop/data-formats/exotic-cells)
+* [特殊cell](/develop/data-formats/exotic-cells)
 * [默克尔证明验证](/develop/data-formats/proofs)

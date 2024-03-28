@@ -33,7 +33,7 @@ TL-B（类型语言 - 二进制）用于描述类型系统、构造函数和现�
 />
 <br></br>
 
-构造函数用于指定组合子的类型，包括序列化时的状态。例如，当你想在向 TON 智能合约查询时指定一个 `op`（操作码）时，也可以使用构造函数。
+构造函数用于指定组合器的类型，包括在序列化时的状态。例如，当你想在向 TON 智能合约查询时指定一个 `op`（操作码）的时候，也可以使用构造函数。
 
 ```tlb
 // ....
@@ -44,7 +44,7 @@ transfer#5fcc3d14 <...> = InternalMsgBody;
 * 构造函数名称：`transfer`
 * 构造函数前缀代码：`#5fcc3d14`
 
-注意，每个构造函数名称后面紧跟一个可选的构造函数标签，例如 `#_` 或 `$10`，它描述了用于编码（序列化）所讨论的构造函数的比特串。
+注意，每个构造函数名称后面紧跟一个可选的构造函数标签，例如 `#_` 或 `$10`，它描述了用于编码（序列化）所讨论的构造函数的位串(bitstring)。
 
 ```tlb
 message#3f5476ca value:# = CoolMessage;
@@ -52,13 +52,13 @@ bool_true$0 = Bool;
 bool_false$1 = Bool;
 ```
 
-每个等式的左侧描述了定义或序列化右侧指示类型的值的方式。这样的描述以构造函数的名称开始，如 `message` 或 `bool_true`，紧接着是一个可选的构造函数标签，例如 `#3f5476ca` 或 `$0`，它描述了用于编码（序列化）所讨论的构造函数的比特。
+每个等式的左侧描述了定义或序列化右侧指示类型的值的方式。这样的描述以构造函数的名称开始，如 `message` 或 `bool_true`，紧接着是一个可选的构造函数标签，例如 `#3f5476ca` 或 `$0`，它描述了用于编码（序列化）所讨论的构造函数的位。
 
 | 构造函数                     | 序列化                                   |
 |-------------------------------|------------------------------------------|
-| `some#3f5476ca`               | 从十六进制值序列化 32 位 uint            |
-| `some#5fe`                    | 从十六进制值序列化 12 位 uint            |
-| `some$0101`                   | 序列化 `0101` 原始比特                   |
+| `some#3f5476ca`               | 从十六进制值序列化为 32 位 uint            |
+| `some#5fe`                    | 从十六进制值序列化为 12 位 uint            |
+| `some$0101`                   | 序列化 `0101` 原始位                   |
 | `some` 或 `some#`             | 序列化 `crc32(equation) \| 0x80000000`   |
 | `some#_` 或 `some$_` 或 `_`   | 不进行序列化                             |
 
@@ -78,13 +78,11 @@ class Bool:
     tags_names = ['bool_true', 'bool_false']
 ```
 
-如果你不想为当前构造
-
-函数定义任何名称，只需传递 `_`，例如 `_ a:(## 32) = 32Int;`
+如果你不想为当前构造函数定义任何名称，只需传递 `_`，例如 `_ a:(## 32) = 32Int;`
 
 构造函数标签可以用二进制（在美元符号后）或十六进制表示法（在井号后）给出。如果未明确提供标签，则 TL-B 解析器必须通过用 CRC32 算法散列定义此构造函数的“等式”文本，并带有 `| 0x80000000` 来计算默认的 32 位构造函数标签。因此，必须通过 `#_` 或 `$_` 明确提供空标签。
 
-此标签将用于在反序列化过程中猜测当前比特串的类型。例如，我们有 1 位比特串 `0`，如果我们告诉 TLB 将此比特串解析为 `Bool` 类型，它将被解析为 `Bool.bool_false`。
+此标签将用于在反序列化过程中猜测当前位串的类型。例如，我们有 1 位位串 `0`，如果我们告诉 TLB 将此位串解析为 `Bool` 类型，它将被解析为 `Bool.bool_false`。
 
 假设我们有更复杂的示例：
 
@@ -152,18 +150,16 @@ d#3F5476CA a:(## 32) = AMultiTagInt;
 
 | 构造函数      | 序列化                                 |
 |---------------|----------------------------------------|
-| `a#32`        | 从十六进制值序列化 8 位 uint           |
-| `b#1111`      | 从十六进制值序列化 16 位 uint          |
-| `c#5FE`       | 从十六进制值序列化 12 位 uint          |
-| `d#3F5476CA`  | 从十六进制值序列化 32 位 uint          |
+| `a#32`        | 从十六进制值序列化为 8 位 uint           |
+| `b#1111`      | 从十六进制值序列化为 16 位 uint          |
+| `c#5FE`       | 从十六进制值序列化为 12 位 uint          |
+| `d#3F5476CA`  | 从十六进制值序列化为 32 位 uint          |
 
 十六进制值允许使用大写和小写。
 
 #### 关于十六进制标签的更多信息
 
-除了经典的十六进制标签定义外，十
-
-六进制数字后面可以跟一个下划线字符。这意味着标签等于指定的十六进制数字，但没有最低有效位。例如，有一个方案：
+除了经典的十六进制标签定义外，十六进制数字后面可以跟一个下划线字符。这意味着标签等于指定的十六进制数字，但没有最低有效位。例如，有一个方案：
 ```tlb
 vm_stk_int#0201_ value:int257 = VmStackValue;
 ```
@@ -186,7 +182,7 @@ vm_stk_int#0201_ value:int257 = VmStackValue;
 - `_ a:# = Type;` - 这里 `Type.a` 是 32 位整数
 - `_ a:(## 64) = Type;` - 这里 `Type.a` 是 64 位整数
 - `_ a:Owner = NFT;` - 这里 `NFT.a` 是 `Owner` 类型
-- `_ a:^Owner = NFT;` - 这里 `NFT.a` 是指向 `Owner` 类型的 cell 引用，意味着 `Owner` 存储在下一个cell引用中。
+- `_ a:^Owner = NFT;` - 这里 `NFT.a` 是指向 `Owner` 类型的cell引用，意味着 `Owner` 存储在下一个cell引用中。
 
 ### 匿名字段
 
@@ -241,11 +237,11 @@ _ a:(IntWithObj uint32) = IntWithUint32;
    _ 2bits:(2 * Bit) = 2Bits;
    ```
 
-- 比特选择（仅适用于 `Nat`）（`E . B` 表示获取 `Nat` `E` 的比特 `B`）
+- 位选择（仅适用于 `Nat`）（`E . B` 表示获取 `Nat` `E` 的位 `B`）
    ```tlb
    _ a:(## 2) b:(a . 1)?(## 32) = Example;
    ``` 
-  在 `Example` 类型中，变量 `b` 仅在 `a` 的第二个比特是 `1` 时序列化。
+  在 `Example` 类型中，变量 `b` 仅在 `a` 的第二个位是 `1` 时序列化。
 
 - 其他 `Nat` 运算符也允许（查看 `允许的约束`）
 
@@ -260,9 +256,7 @@ _ a:(## 1) b:(## 1) c:(## 2) d:(a?(b?((c . 1)?(## 64)))) = A;
 - `#` - `Nat` 32 位无符号整数
 - `## x` - `Nat` 有 `x` 位
 - `#< x` - `Nat` 小于 `x` 位无符号整数，以 `lenBits(x - 1)` 位存储，最多 31 位
-- `
-
-#<= x` - `Nat` 小于等于 `x` 位无符号整数，以 `lenBits(x)` 位存储，最多 32 位
+- `#<= x` - `Nat` 小于等于 `x` 位无符号整数，以 `lenBits(x)` 位存储，最多 32 位
 - `Any` / `Cell` - cell剩余的位数和引用
 - `Int` - 257 位
 - `UInt` - 256 位
@@ -297,7 +291,7 @@ _ {x:#} a:(## 32) { ~x = a + 1 } = Example;
 
 ## 参数化类型
 
-变量 - 即（标识符）类型 `#`（自然数）或 `Type`（类型的类型）之前定义的字段 - 可用作参数化类型的参数。序列化过程递归地根据其类型序列化每个字段，值的序列化最终由代表构造函数（即构造函数标签）和字段值的位串的连接组成。
+变量 — 即先前定义的字段的（标识符）类型 `#`（自然数）或 `Type`（类型的类型） — 可用作参数化类型的参数。序列化过程递归地根据其类型序列化每个字段，而一个值的序列化最终由表示构造器（即构造器标签）和字段值的位的串联构成。
 
 ### 自然数（`Nat`）
 
@@ -471,23 +465,19 @@ unary_succ$1 {n:#} x:(Unary ~n) = Unary ~(n + 1);
 _ u:(Unary Any) = UnaryChain;
 ```
 
-这个示例在 [TL-B 类型](https://docs.ton.org/develop/data-formats/tl-b-types#unary) 文章中有很好的解释。主要思想是 `UnaryChain` 将递归反序列化，直到达到 `unary_zero$0`（因为我们通过定义 `unary_zero$0 = Unary ~0;` 和 `X` 在运行时由 `Unary ~(n + 1)` 定义计算
-
-得知 `Unary X` 类型的最后一个元素）。
+这个示例在 [TL-B 类型](https://docs.ton.org/develop/data-formats/tl-b-types#unary) 文章中有很好的解释。主要思想是 `UnaryChain` 将递归反序列化，直到达到 `unary_zero$0`（因为我们通过定义 `unary_zero$0 = Unary ~0;` 和 `X` 在运行时由 `Unary ~(n + 1)` 定义计算得知 `Unary X` 类型的最后一个元素）。
 
 注意：`x:(Unary ~n)` 意味着 `n` 在序列化 `Unary` 类的过程中被定义。
-
-Here's the translation of the provided content into Chinese in markdown format:
 
 ## 特殊类型
 
 目前，TVM允许以下cell类型：
 
 - 普通（Ordinary）
-- 被剪枝的分支（PrunnedBranch）
-- 库（Library）
-- Merkle证明（MerkleProof）
-- Merkle更新（MerkleUpdate）
+- 裁剪分支（Prunned Branch）
+- 库引用（Library Reference）
+- Merkle证明（Merkle Proof）
+- Merkle更新（Merkle Update）
 
 默认情况下，所有cell都是`普通`类型。并且在tlb中描述的所有cell都是`普通`类型。
 
@@ -520,9 +510,38 @@ _ test:# = A 4;
 意味着实际的反序列化标签将由`A`类型参数确定：
 
 ```python3
-# 类型 `A` 的类
+# class for type `A`
 class A(TLBComplex):
-    ... // 类的定义被省略以节省空间
+    class Tag(Enum):
+        a = 0
+        b = 1
+        cons1 = 2
+        cons4 = 3
+
+    cons_len = [2, 2, 0, 0]
+    cons_tag = [1, 1, 0, 0]
+
+    m_: int = None
+
+    def __init__(self, m: int):
+        self.m_ = m
+
+    def get_tag(self, cs: CellSlice) -> Optional["A.Tag"]:
+        tag = self.m_
+
+        if tag == 1:
+            return A.Tag.cons1
+
+        if tag == 2:
+            return A.Tag.a
+
+        if tag == 3:
+            return A.Tag.b
+
+        if tag == 4:
+            return A.Tag.cons4
+
+        return None
 ```
 
 带有多个参数的情况也是一样的：

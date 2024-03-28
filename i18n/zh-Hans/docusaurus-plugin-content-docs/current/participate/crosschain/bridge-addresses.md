@@ -1,30 +1,30 @@
-# 桥接地址
+# 跨链桥地址
 
 :::caution
-要准确获取当前桥接智能合约的地址，请直接在[区块链配置](/participate/crosschain/overview#blockchain-configs)中查看。这是最安全的方式。
+要准确获取当前跨链桥智能合约的地址，请直接在[区块链配置](/participate/crosschain/overview#blockchain-configs)中查看。这是最安全的方式。
 :::
 
 ## Toncoin主网
 
-### 主网TON-以太坊Toncoin桥
+### 主网 TON-Ethereum Toncoin桥
 
-封装的TONCOIN地址 - [0x582d872a1b094fc48f5de31d3b73f2d9be47def1](https://etherscan.io/token/0x582d872a1b094fc48f5de31d3b73f2d9be47def1)
+封装的 TONCOIN 地址 - [0x582d872a1b094fc48f5de31d3b73f2d9be47def1](https://etherscan.io/token/0x582d872a1b094fc48f5de31d3b73f2d9be47def1)
 
-桥接地址 - [Ef_dJMSh8riPi3BTUTtcxsWjG8RLKnLctNjAM4rw8NN-xWdr](https://tonscan.org/address/Ef_dJMSh8riPi3BTUTtcxsWjG8RLKnLctNjAM4rw8NN-xWdr)
+Bridge 地址 - [Ef_dJMSh8riPi3BTUTtcxsWjG8RLKnLctNjAM4rw8NN-xWdr](https://tonscan.org/address/Ef_dJMSh8riPi3BTUTtcxsWjG8RLKnLctNjAM4rw8NN-xWdr)
 
-收集器地址 - [EQCuzvIOXLjH2tv35gY4tzhIvXCqZWDuK9kUhFGXKLImgxT5](https://tonscan.org/address/EQCuzvIOXLjH2tv35gY4tzhIvXCqZWDuK9kUhFGXKLImgxT5)
+Collector 地址 - [EQCuzvIOXLjH2tv35gY4tzhIvXCqZWDuK9kUhFGXKLImgxT5](https://tonscan.org/address/EQCuzvIOXLjH2tv35gY4tzhIvXCqZWDuK9kUhFGXKLImgxT5)
 
-治理地址 - [Ef87m7_QrVM4uXAPCDM4DuF9Rj5Rwa5nHubwiQG96JmyAjQY](https://tonscan.org/address/Ef87m7_QrVM4uXAPCDM4DuF9Rj5Rwa5nHubwiQG96JmyAjQY)
+Governance 地址 - [Ef87m7_QrVM4uXAPCDM4DuF9Rj5Rwa5nHubwiQG96JmyAjQY](https://tonscan.org/address/Ef87m7_QrVM4uXAPCDM4DuF9Rj5Rwa5nHubwiQG96JmyAjQY)
 
-### 主网TON-BSC Toncoin桥
+### 主网 TON-BSC Toncoin桥
 
-封装的TONCOIN地址 - [0x76A797A59Ba2C17726896976B7B3747BfD1d220f](https://bscscan.com/token/0x76A797A59Ba2C17726896976B7B3747BfD1d220f)
+封装的 TONCOIN 地址 - [0x76A797A59Ba2C17726896976B7B3747BfD1d220f](https://bscscan.com/token/0x76A797A59Ba2C17726896976B7B3747BfD1d220f)
 
-桥接地址 - [Ef9NXAIQs12t2qIZ-sRZ26D977H65Ol6DQeXc5_gUNaUys5r](https://tonscan.org/address/Ef9NXAIQs12t2qIZ-sRZ26D977H65Ol6DQeXc5_gUNaUys5r)
+Bridge 地址 - [Ef9NXAIQs12t2qIZ-sRZ26D977H65Ol6DQeXc5_gUNaUys5r](https://tonscan.org/address/Ef9NXAIQs12t2qIZ-sRZ26D977H65Ol6DQeXc5_gUNaUys5r)
 
-收集器地址 - [EQAHI1vGuw7d4WG-CtfDrWqEPNtmUuKjKFEFeJmZaqqfWTvW](https://tonscan.org/address/EQAHI1vGuw7d4WG-CtfDrWqEPNtmUuKjKFEFeJmZaqqfWTvW)
+Collector 地址 - [EQAHI1vGuw7d4WG-CtfDrWqEPNtmUuKjKFEFeJmZaqqfWTvW](https://tonscan.org/address/EQAHI1vGuw7d4WG-CtfDrWqEPNtmUuKjKFEFeJmZaqqfWTvW)
 
-治理地址 - [Ef8OvX_5ynDgbp4iqJIvWudSEanWo0qAlOjhWHtga9u2YjVp](https://tonscan.org/address/Ef8OvX_5ynDgbp4iqJIvWudSEanWo0qAlOjhWHtga9u2YjVp)
+Governance 地址 - [Ef8OvX_5ynDgbp4iqJIvWudSEanWo0qAlOjhWHtga9u2YjVp](https://tonscan.org/address/Ef8OvX_5ynDgbp4iqJIvWudSEanWo0qAlOjhWHtga9u2YjVp)
 
 ### 主网Toncoin预言机
 
@@ -50,25 +50,25 @@ EVM地址: 0xC4c9bd836ab8b446519736166919e3d62491E041,0xCF4A7c26186aA41390E246FA
 
 ## Toncoin测试网
 
-### 测试网TON-以太坊Toncoin桥
+### 测试网 TON-Ethereum Toncoin桥
 
 封装的TONCOIN地址 - [0xDB15ffaf2c88F2d89Db9365a5160D5b8c9448Ea6](https://goerli.etherscan.io/token/0xDB15ffaf2c88F2d89Db9365a5160D5b8c9448Ea6)
 
-桥接地址 - [Ef-56ZiqKUbtp_Ax2Qg4Vwh7yXXJCO8cNJAb229J6XXe4-aC](https://testnet.tonscan.org/address/Ef-56ZiqKUbtp_Ax2Qg4Vwh7yXXJCO8cNJAb229J6XXe4-aC)
+Bridge 地址 - [Ef-56ZiqKUbtp_Ax2Qg4Vwh7yXXJCO8cNJAb229J6XXe4-aC](https://testnet.tonscan.org/address/Ef-56ZiqKUbtp_Ax2Qg4Vwh7yXXJCO8cNJAb229J6XXe4-aC)
 
-收集器地址 - [EQCA1W_I267-luVo9CzV7iCcrA1OO5vVeXD0QHACvBn1jIVU](https://testnet.tonscan.org/address/EQCA1W_I267-luVo9CzV7iCcrA1OO5vVeXD0QHACvBn1jIVU)
+Collector 地址 - [EQCA1W_I267-luVo9CzV7iCcrA1OO5vVeXD0QHACvBn1jIVU](https://testnet.tonscan.org/address/EQCA1W_I267-luVo9CzV7iCcrA1OO5vVeXD0QHACvBn1jIVU)
 
-治理地址 - [kf-OV1dpgFVEzEmyvAETT8gnhqZ1IqHn8RzT6dmEmvnze-9n](https://testnet.tonscan.org/address/kf-OV1dpgFVEzEmyvAETT8gnhqZ1IqHn8RzT6dmEmvnze-9n)
+Governance 地址 - [kf-OV1dpgFVEzEmyvAETT8gnhqZ1IqHn8RzT6dmEmvnze-9n](https://testnet.tonscan.org/address/kf-OV1dpgFVEzEmyvAETT8gnhqZ1IqHn8RzT6dmEmvnze-9n)
 
-### 测试网TON-BSC Toncoin桥
+### 测试网 TON-BSC Toncoin桥
 
 封装的TONCOIN地址 - [0xdb15ffaf2c88f2d89db9365a5160d5b8c9448ea6](https://testnet.bscscan.com/token/0xdb15ffaf2c88f2d89db9365a5160d5b8c9448ea6)
 
-桥接地址 - [Ef_GmJntTDokxfhLGF1jRvMGC8Jav2V5keoNj4El2jzhHsID](https://testnet.tonscan.org/address/Ef_GmJntTDokxfhLGF1jRvMGC8Jav2V5keoNj4El2jzhHsID)
+Bridge 地址 - [Ef_GmJntTDokxfhLGF1jRvMGC8Jav2V5keoNj4El2jzhHsID](https://testnet.tonscan.org/address/Ef_GmJntTDokxfhLGF1jRvMGC8Jav2V5keoNj4El2jzhHsID)
 
-收集器地址 - [EQDBNfV4DQzSyzNMw6BCTSZSoUi-CzWcYNsfhKxoDqfrwFtS](https://testnet.tonscan.org/address/EQDBNfV4DQzSyzNMw6BCTSZSoUi-CzWcYNsfhKxoDqfrwFtS)
+Collector 地址 - [EQDBNfV4DQzSyzNMw6BCTSZSoUi-CzWcYNsfhKxoDqfrwFtS](https://testnet.tonscan.org/address/EQDBNfV4DQzSyzNMw6BCTSZSoUi-CzWcYNsfhKxoDqfrwFtS)
 
-治理地址 - [kf83VnnXuaqQV1Ts2qvUr6agacM0ydOux5NNa1mcU-cEO693](https://testnet.tonscan.org/address/kf83VnnXuaqQV1Ts2qvUr6agacM0ydOux5NNa1mcU-cEO693)
+Governance 地址 - [kf83VnnXuaqQV1Ts2qvUr6agacM0ydOux5NNa1mcU-cEO693](https://testnet.tonscan.org/address/kf83VnnXuaqQV1Ts2qvUr6agacM0ydOux5NNa1mcU-cEO693)
 
 ### 测试网Toncoin预言机
 
@@ -94,15 +94,15 @@ EVM地址: 0xC4c9bd836ab8b446519736166919e3d62491E041,0xCF4A7c26186aA41390E246FA
 
 ## Token主网
 
-### 主网TON-以太坊Token桥
+### 主网 TON-Ethereum Token桥
 
-以太坊桥接地址 - [0xb323692b6d4DB96af1f52E4499a2bd0Ded9af3C5](https://etherscan.io/address/0xb323692b6d4DB96af1f52E4499a2bd0Ded9af3C5)
+以太坊Bridge地址 - [0xb323692b6d4DB96af1f52E4499a2bd0Ded9af3C5](https://etherscan.io/address/0xb323692b6d4DB96af1f52E4499a2bd0Ded9af3C5)
 
-桥接地址 - [Ef-1JetbPF9ubc1ga-57oHoOyDA1IShJt-BVlJnA9rrVTfrB](https://tonscan.org/address/Ef-1JetbPF9ubc1ga-57oHoOyDA1IShJt-BVlJnA9rrVTfrB)
+Bridge 地址 - [Ef-1JetbPF9ubc1ga-57oHoOyDA1IShJt-BVlJnA9rrVTfrB](https://tonscan.org/address/Ef-1JetbPF9ubc1ga-57oHoOyDA1IShJt-BVlJnA9rrVTfrB)
 
-收集器地址 - [EQDF6fj6ydJJX_ArwxINjP-0H8zx982W4XgbkKzGvceUWvXl](https://tonscan.org/address/EQDF6fj6ydJJX_ArwxINjP-0H8zx982W4XgbkKzGvceUWvXl)
+Collector 地址 - [EQDF6fj6ydJJX_ArwxINjP-0H8zx982W4XgbkKzGvceUWvXl](https://tonscan.org/address/EQDF6fj6ydJJX_ArwxINjP-0H8zx982W4XgbkKzGvceUWvXl)
 
-治理地址 - [Ef8hHxV0v2I9FHh3CMX91WXjKaJav6SQlemEQm8ZvPBJdLde](https://tonscan.org/address/Ef8hHxV0v2I9FHh3CMX91WXjKaJav6SQlemEQm8ZvPBJdLde)
+Governance 地址 - [Ef8hHxV0v2I9FHh3CMX91WXjKaJav6SQlemEQm8ZvPBJdLde](https://tonscan.org/address/Ef8hHxV0v2I9FHh3CMX91WXjKaJav6SQlemEQm8ZvPBJdLde)
 
 ### 主网Token预言机
 
@@ -180,15 +180,15 @@ EVM地址: 0xC4c9bd836ab8b446519736166919e3d62491E041,0xCF4A7c26186aA41390E246FA
 
 ## Token测试网
 
-### 测试网TON-以太坊Token桥
+### 测试网 TON-Ethereum Token桥
 
-以太坊桥接地址 - [0x4Efd8f04B6fb4CFAF0cfaAC11Fb489b97DBebB60](https://goerli.etherscan.io/address/0x4Efd8f04B6fb4CFAF0cfaAC11Fb489b97DBebB60)
+以太坊 Bridge 地址 - [0x4Efd8f04B6fb4CFAF0cfaAC11Fb489b97DBebB60](https://goerli.etherscan.io/address/0x4Efd8f04B6fb4CFAF0cfaAC11Fb489b97DBebB60)
 
-桥接地址 - [Ef-lJBALjXSSwSKiedKzriSHixwQUxJ1BxTE05Ur5AXwZVjp](https://testnet.tonscan.org/address/Ef-lJBALjXSSwSKiedKzriSHixwQUxJ1BxTE05Ur5AXwZVjp)
+Bridge 地址 - [Ef-lJBALjXSSwSKiedKzriSHixwQUxJ1BxTE05Ur5AXwZVjp](https://testnet.tonscan.org/address/Ef-lJBALjXSSwSKiedKzriSHixwQUxJ1BxTE05Ur5AXwZVjp)
 
-收集器地址 - [EQC1ZeKX1LNrlQ4bwi3je3KVM1AoZ3rkeyHM5hv9pYzmIh4v](https://testnet.tonscan.org/address/EQC1ZeKX1LNrlQ4bwi3je3KVM1AoZ3rkeyHM5hv9pYzmIh4v)
+Collector 地址 - [EQC1ZeKX1LNrlQ4bwi3je3KVM1AoZ3rkeyHM5hv9pYzmIh4v](https://testnet.tonscan.org/address/EQC1ZeKX1LNrlQ4bwi3je3KVM1AoZ3rkeyHM5hv9pYzmIh4v)
 
-治理地址 - [kf9NLH8CsGUkEKGYzCxaLd9Th6T5YkO-MXsCEU9Rw1fiRhf9](https://testnet.tonscan.org/address/kf9NLH8CsGUkEKGYzCxaLd9Th6T5YkO-MXsCEU9Rw1fiRhf9)
+Governance 地址 - [kf9NLH8CsGUkEKGYzCxaLd9Th6T5YkO-MXsCEU9Rw1fiRhf9](https://testnet.tonscan.org/address/kf9NLH8CsGUkEKGYzCxaLd9Th6T5YkO-MXsCEU9Rw1fiRhf9)
 
 ### 测试网Token预言机
 

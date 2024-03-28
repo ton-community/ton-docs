@@ -1,4 +1,3 @@
-```markdown
 import Button from '@site/src/components/button'
 
 # Telegram 机器人的 TON Connect
@@ -13,7 +12,7 @@ import Button from '@site/src/components/button'
 
 - [TON Connect SDK 文档](https://www.npmjs.com/package/@tonconnect/sdk)
 
-## 先决条件
+## 必要条件
 
 - 你需要使用 [@BotFather](https://t.me/BotFather) 创建一个 telegram 机器人，并保存其令牌。
 - 应安装 Node JS（本教程中我们使用版本 18.1.0）。
@@ -100,7 +99,7 @@ import Button from '@site/src/components/button'
 [了解更多关于 tsconfig.json](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
 
 ### 添加简单的机器人代码
-创建一个 `.env` 文件，并在其中添加你的机器人令牌、DAppmanifest 和钱包列表缓存生存时间：
+创建一个 `.env` 文件，并在其中添加你的机器人令牌、DAppmanifest 和钱包列表缓存存活时间：
 
 [了解更多关于 tonconnect-manifes.json](https://github.com/ton-connect/sdk/tree/main/packages/sdk#add-the-tonconnect-manifest)
 
@@ -137,11 +136,11 @@ import { bot } from './bot';
 bot.on('message', msg => {
   const chatId = msg.chat.id;
 
-  bot.sendMessage(chatId, '收到了你的消息');
+  bot.sendMessage(chatId, 'Received your message');
 });
 ```
 
-我们可以了。你可以运行 `npm run compile` 和 `npm run start`，然后给你的机器人发送任何消息。机器人将回复“收到了你的消息”。我们准备好进行 TonConnect 集成了。
+我们可以了。你可以运行 `npm run compile` 和 `npm run start`，然后给你的机器人发送任何消息。机器人将回复“Received your message”。我们准备好进行 TonConnect 集成了。
 
 目前我们有以下文件结构：
 ```text
@@ -238,7 +237,7 @@ bot.onText(/\/connect/, async msg => {
 
   connector.onStatusChange(wallet => {
     if (wallet) {
-      bot.sendMessage(chatId, `${wallet.device.appName} 钱包已连接！`);
+      bot.sendMessage(chatId, `${wallet.device.appName} wallet connected!`);
     }
   });
 
@@ -378,11 +377,11 @@ bot.onText(/\/connect/, async msg => {
             inline_keyboard: [
                 [
                     {
-                        text: '选择钱包',
+                        text: 'Choose a Wallet',
                         callback_data: JSON.stringify({ method: 'chose_wallet' })
                     },
                     {
-                        text: '打开链接',
+                        text: 'Open Link',
                         url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
                             link
                         )}`
@@ -421,7 +420,7 @@ async function onChooseWalletClick(query: CallbackQuery, _: string): Promise<voi
                 })),
                 [
                     {
-                        text: '« 返回',
+                        text: '« Back',
                         callback_data: JSON.stringify({
                             method: 'universal_qr'
                         })
@@ -490,10 +489,11 @@ import './connect-wallet-menu';
 
 编译并运行机器人。你现在可以点击选择钱包按钮，机器人将替换内联键盘按钮！
 
-### 添加其他的buttons handlers
+### 添加其他的 buttons handlers
 让我们完成这个菜单并添加其余的命令处理程序。
 
 首先，我们将创建一个工具函数 `editQR`。编辑消息媒体（QR 图像）有点棘手。我们需要将图像存储到文件中并将其发送到 Telegram 服务器。然后我们可以删除这个文件。
+
 
 ```ts
 // src/connect-wallet-menu.ts
@@ -548,11 +548,11 @@ async function onOpenUniversalQRClick(query: CallbackQuery, _: string): Promise<
             inline_keyboard: [
                 [
                     {
-                        text: '选择钱包',
+                        text: 'Choose a Wallet',
                         callback_data: JSON.stringify({ method: 'chose_wallet' })
                     },
                     {
-                        text: '打开链接',
+                        text: 'Open Link',
                         url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
                             link
                         )}`
@@ -603,11 +603,11 @@ async function onWalletClick(query: CallbackQuery, data: string): Promise<void> 
             inline_keyboard: [
                 [
                     {
-                        text: '« 返回',
+                        text: '« Back',
                         callback_data: JSON.stringify({ method: 'chose_wallet' })
                     },
                     {
-                        text: `打开 ${selectedWallet.name}`,
+                        text: `Open ${selectedWallet.name}`,
                         url: link
                     }
                 ]
@@ -694,7 +694,7 @@ async function onChooseWalletClick(query: CallbackQuery, _: string): Promise<voi
                 })),
                 [
                     {
-                        text: '« 返回',
+                        text: '« Back',
                         callback_data: JSON.stringify({
                             method: 'universal_qr'
                         })
@@ -730,11 +730,11 @@ async function onOpenUniversalQRClick(query: CallbackQuery, _: string): Promise<
             inline_keyboard: [
                 [
                     {
-                        text: '选择钱包',
+                        text: 'Choose a Wallet',
                         callback_data: JSON.stringify({ method: 'chose_wallet' })
                     },
                     {
-                        text: '打开链接',
+                        text: 'Open Link',
                         url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
                             link
                         )}`
@@ -776,11 +776,11 @@ async function onWalletClick(query: CallbackQuery, data: string): Promise<void> 
             inline_keyboard: [
                 [
                     {
-                        text: '« 返回',
+                        text: '« Back',
                         callback_data: JSON.stringify({ method: 'chose_wallet' })
                     },
                     {
-                        text: `打开 ${selectedWallet.name}`,
+                        text: `Open ${selectedWallet.name}`,
                         url: link
                     }
                 ]
@@ -868,11 +868,11 @@ export async function handleConnectCommand(msg: TelegramBot.Message): Promise<vo
             inline_keyboard: [
                 [
                     {
-                        text: '选择钱包',
+                        text: 'Choose a Wallet',
                         callback_data: JSON.stringify({ method: 'chose_wallet' })
                     },
                     {
-                        text: '打开链接',
+                        text: 'Open Link',
                         url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
                             link
                         )}`
@@ -955,13 +955,13 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
 
     await connector.restoreConnection();
     if (!connector.connected) {
-        await bot.sendMessage(chatId, '连接钱包以发送交易');
+        await bot.sendMessage(chatId, 'Connect wallet to send transaction');
         return;
     }
 
     connector
         .sendTransaction({
-            validUntil: Math.round(Date.now() / 1000) + 600, // 超时时间是秒
+            validUntil: Math.round(Date.now() / 1000) + 600, // timeout is SECONDS
             messages: [
                 {
                     amount: '1000000',
@@ -970,15 +970,15 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
             ]
         })
         .then(() => {
-            bot.sendMessage(chatId, `交易成功发送`);
+            bot.sendMessage(chatId, `Transaction sent successfully`);
         })
         .catch(e => {
             if (e instanceof UserRejectsError) {
-                bot.sendMessage(chatId, `你拒绝了交易`);
+                bot.sendMessage(chatId, `You rejected the transaction`);
                 return;
             }
 
-            bot.sendMessage(chatId, `发生未知错误`);
+            bot.sendMessage(chatId, `Unknown error happened`);
         })
         .finally(() => connector.pauseConnection());
 
@@ -990,13 +990,13 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
 
     await bot.sendMessage(
         chatId,
-        `打开 ${walletInfo?.name || connector.wallet!.device.appName} 并确认交易`,
+        `Open ${walletInfo?.name || connector.wallet!.device.appName} and confirm transaction`,
         {
             reply_markup: {
                 inline_keyboard: [
                     [
                         {
-                            text: '打开钱包',
+                            text: 'Open Wallet',
                             url: deeplink
                         }
                     ]
@@ -1057,13 +1057,13 @@ export async function handleDisconnectCommand(msg: TelegramBot.Message): Promise
 
     await connector.restoreConnection();
     if (!connector.connected) {
-        await bot.sendMessage(chatId, "你还没有连接钱包");
+        await bot.sendMessage(chatId, "You didn't connect a wallet");
         return;
     }
 
     await connector.disconnect();
 
-    await bot.sendMessage(chatId, '钱包已断开连接');
+    await bot.sendMessage(chatId, 'Wallet has been disconnected');
 }
 
 export async function handleShowMyWalletCommand(msg: TelegramBot.Message): Promise<void> {
@@ -1073,7 +1073,7 @@ export async function handleShowMyWalletCommand(msg: TelegramBot.Message): Promi
 
     await connector.restoreConnection();
     if (!connector.connected) {
-        await bot.sendMessage(chatId, "你还没有连接钱包");
+        await bot.sendMessage(chatId, "You didn't connect a wallet");
         return;
     }
 
@@ -1084,7 +1084,7 @@ export async function handleShowMyWalletCommand(msg: TelegramBot.Message): Promi
 
     await bot.sendMessage(
         chatId,
-        `已连接的钱包: ${walletName}\n你的地址: ${toUserFriendlyAddress(
+        `Connected wallet: ${walletName}\nYour address: ${toUserFriendlyAddress(
             connector.wallet!.account.address,
             connector.wallet!.account.chain === CHAIN.TESTNET
         )}`
@@ -1166,20 +1166,20 @@ pTimeout(
     Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS)
 )
     .then(() => {
-        bot.sendMessage(chatId, `交易成功发送`);
+        bot.sendMessage(chatId, `Transaction sent successfully`);
     })
     .catch(e => {
         if (e === pTimeoutException) {
-            bot.sendMessage(chatId, `交易未被确认`);
+            bot.sendMessage(chatId, `Transaction was not confirmed`);
             return;
         }
 
         if (e instanceof UserRejectsError) {
-            bot.sendMessage(chatId, `你拒绝了交易`);
+            bot.sendMessage(chatId, `You rejected the transaction`);
             return;
         }
 
-        bot.sendMessage(chatId, `发生未知错误`);
+        bot.sendMessage(chatId, `Unknown error happened`);
     })
     .finally(() => connector.pauseConnection());
 
@@ -1197,7 +1197,7 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
 
     await connector.restoreConnection();
     if (!connector.connected) {
-        await bot.sendMessage(chatId, '连接钱包以发送交易');
+        await bot.sendMessage(chatId, 'Connect wallet to send transaction');
         return;
     }
 
@@ -1216,20 +1216,20 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
         Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS)
     )
         .then(() => {
-            bot.sendMessage(chatId, `交易成功发送`);
+            bot.sendMessage(chatId, `Transaction sent successfully`);
         })
         .catch(e => {
             if (e === pTimeoutException) {
-                bot.sendMessage(chatId, `交易未被确认`);
+                bot.sendMessage(chatId, `Transaction was not confirmed`);
                 return;
             }
 
             if (e instanceof UserRejectsError) {
-                bot.sendMessage(chatId, `你拒绝了交易`);
+                bot.sendMessage(chatId, `You rejected the transaction`);
                 return;
             }
 
-            bot.sendMessage(chatId, `发生未知错误`);
+            bot.sendMessage(chatId, `Unknown error happened`);
         })
         .finally(() => connector.pauseConnection());
 
@@ -1241,13 +1241,13 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
 
     await bot.sendMessage(
         chatId,
-        `打开 ${walletInfo?.name || connector.wallet!.device.appName} 并确认交易`,
+        `Open ${walletInfo?.name || connector.wallet!.device.appName} and confirm transaction`,
         {
             reply_markup: {
                 inline_keyboard: [
                     [
                         {
-                            text: '打开钱包',
+                            text: 'Open Wallet',
                             url: deeplink
                         }
                     ]
@@ -1260,13 +1260,14 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
 
 </details>
 
-如果用户在 `DELETE_SEND_TX_MESSAGE_TIMEOUT_MS`（10分钟）内未确认交易，交易将被取消并且机器人将发送消息“交易未被确认”。
+如果用户在 `DELETE_SEND_TX_MESSAGE_TIMEOUT_MS`（10分钟）内未确认交易，交易将被取消并且机器人将发送消息“Transaction was not confirmed”。
 
 你可以将此参数设置为 `5000`，编译并重新运行机器人，测试其行为。
 
-我们此时每次通过钱包连接菜单步骤时都会创建一个新的连接器。
-这样做效率很低，因为在创建新的连接器时我们没有关闭之前连接器的连接。
-让我们改进这一行为，为用户的连接器创建一个缓存映射。
+### 钱包连接流程优化
+目前，我们在每次通过钱包连接菜单步骤时都会创建一个新的连接器。
+这种做法不太好，因为在创建新连接器时我们并没有关闭之前连接器的连接。
+让我们改进这种行为，为用户的连接器创建一个缓存映射。
 
 <details>
 <summary>src/ton-connect/connector.ts 代码</summary>
@@ -1415,11 +1416,11 @@ export async function handleConnectCommand(msg: TelegramBot.Message): Promise<vo
             inline_keyboard: [
                 [
                     {
-                        text: '选择钱包',
+                        text: 'Choose a Wallet',
                         callback_data: JSON.stringify({ method: 'chose_wallet' })
                     },
                     {
-                        text: '打开链接',
+                        text: 'Open Link',
                         url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
                             link
                         )}`
@@ -1450,9 +1451,9 @@ export async function handleConnectCommand(msg: TelegramBot.Message): Promise<vo
 
 </details>
 
-我们定义了`newConnectRequestListenersMap`来为每个用户存储最后一个连接请求的清理回调。
-如果用户多次调用`/connect`，机器人将删除上一个带有 QR 码的消息。
-此外，我们订阅了连接器过期超时以在 QR 码消息过期时删除它。
+我们定义了 `newConnectRequestListenersMap` 来存储每个用户最后一次连接请求的清理回调。
+如果用户多次调用 `/connect`，机器人将删除之前带有二维码的消息。
+此外，我们还订阅了连接器到期超时，以便在二维码消息过期时将其删除。
 
 
 现在我们应该从`connect-wallet-menu.ts`中的函数中移除`connector.onStatusChange`订阅，
@@ -1481,11 +1482,11 @@ async function onOpenUniversalQRClick(query: CallbackQuery, _: string): Promise<
             inline_keyboard: [
                 [
                     {
-                        text: '选择钱包',
+                        text: 'Choose a Wallet',
                         callback_data: JSON.stringify({ method: 'chose_wallet' })
                     },
                     {
-                        text: '打开链接',
+                        text: 'Open Link',
                         url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
                             link
                         )}`
@@ -1523,11 +1524,11 @@ async function onWalletClick(query: CallbackQuery, data: string): Promise<void> 
             inline_keyboard: [
                 [
                     {
-                        text: '« 返回',
+                        text: '« Back',
                         callback_data: JSON.stringify({ method: 'chose_wallet' })
                     },
                     {
-                        text: `打开 ${data}`,
+                        text: `Open ${data}`,
                         url: link
                     }
                 ]
@@ -1549,7 +1550,7 @@ async function onWalletClick(query: CallbackQuery, data: string): Promise<void> 
 
 ### 优化与 @wallet 的交互
 从 v3 版本开始，TonConnect 支持连接到如 @wallet 这样的 TWA 钱包。目前在教程中，机器人可以连接到 @wallet。
-然而，我们应该改进重定向策略以提供更好的用户体验。此外，让我们在第一个（“通用 QR”）屏幕上添加 `连接 @wallet` 按钮。
+然而，我们应该改进重定向策略以提供更好的用户体验。此外，让我们在第一个（“Universal QR”）屏幕上添加 `Connect @wallet` 按钮。
 
 首先，让我们创建一些实用函数：
 ```ts
@@ -1606,11 +1607,11 @@ export async function buildUniversalKeyboard(
 
     const keyboard = [
         {
-            text: '选择钱包',
+            text: 'Choose a Wallet',
             callback_data: JSON.stringify({ method: 'chose_wallet' })
         },
         {
-            text: '打开链接',
+            text: 'Open Link',
             url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(link)}`
         }
     ];
@@ -1626,7 +1627,8 @@ export async function buildUniversalKeyboard(
 }
 ```
 
-这里我们为 First screen（通用 QR 屏幕）添加独立的 @wallet 按钮。接下来的工作是在 connect-wallet-menu 和 command-handlers 中使用这个函数：
+这里我们为第一屏幕（通用 QR 屏幕）添加独立的 @wallet 按钮。接下来的工作是在 connect-wallet-menu 和
+command-handlers 中使用这个函数：
 
 
 <details>
@@ -1787,11 +1789,11 @@ async function onWalletClick(query: CallbackQuery, data: string): Promise<void> 
             inline_keyboard: [
                 [
                     {
-                        text: '« 返回',
+                        text: '« Back',
                         callback_data: JSON.stringify({ method: 'chose_wallet' })
                     },
                     {
-                        text: `打开 ${selectedWallet.name}`,
+                        text: `Open ${selectedWallet.name}`,
                         url: buttonLink
                     }
                 ]
@@ -1830,7 +1832,7 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
 
     await connector.restoreConnection();
     if (!connector.connected) {
-        await bot.sendMessage(chatId, '连接钱包以发送交易');
+        await bot.sendMessage(chatId, 'Connect wallet to send transaction');
         return;
     }
 
@@ -1849,20 +1851,20 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
         Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS)
     )
         .then(() => {
-            bot.sendMessage(chatId, `交易成功发送`);
+            bot.sendMessage(chatId, `Transaction sent successfully`);
         })
         .catch(e => {
             if (e === pTimeoutException) {
-                bot.sendMessage(chatId, `交易未确认`);
+                bot.sendMessage(chatId, `Transaction was not confirmed`);
                 return;
             }
 
             if (e instanceof UserRejectsError) {
-                bot.sendMessage(chatId, `你拒绝了交易`);
+                bot.sendMessage(chatId, `You rejected the transaction`);
                 return;
             }
 
-            bot.sendMessage(chatId, `发生未知错误`);
+            bot.sendMessage(chatId, `Unknown error happened`);
         })
         .finally(() => connector.pauseConnection());
 
@@ -1880,13 +1882,13 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
 
     await bot.sendMessage(
         chatId,
-        `打开 ${walletInfo?.name || connector.wallet!.device.appName} 并确认交易`,
+        `Open ${walletInfo?.name || connector.wallet!.device.appName} and confirm transaction`,
         {
             reply_markup: {
                 inline_keyboard: [
                     [
                         {
-                            text: `打开 ${walletInfo?.name || connector.wallet!.device.appName}`,
+                            text: `Open ${walletInfo?.name || connector.wallet!.device.appName}`,
                             url: deeplink
                         }
                     ]
@@ -2012,6 +2014,6 @@ main();
 - 如果你想在生产环境中运行机器人，你可能想要安装并使用进程管理器，如 [pm2](https://pm2.keymetrics.io/)。
 - 你可以在机器人中增加更好的错误处理。
 
-## 参见
+## 参阅
 - [发送消息](/develop/dapps/ton-connect/transactions)
 - [集成手册](/develop/dapps/ton-connect/integration)

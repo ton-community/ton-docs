@@ -2,7 +2,7 @@
 description: 在本指南结束时，您将部署多重签名钱包并使用ton库发送一些交易
 ---
 
-# 使用TypeScript与多重签名钱包交互
+# 使用 TypeScript 与多重签名钱包交互
 
 ## 引言
 如果您不知道TON中的多重签名钱包是什么，可以在[此处](/develop/smart-contracts/tutorials/multisig)查看。

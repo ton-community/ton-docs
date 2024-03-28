@@ -2,16 +2,16 @@ import React, { FC, useState, useEffect } from "react";
 import "./Footer.scss";
 import { NetworkIcon } from "./NetworkIcon";
 import { Caption, Text } from "./Typography";
-import { NETWORKS } from "./config";
 import { Logo } from "./Logo";
 import { Separator } from "./Separator";
-import { FOOTER_COLUMN_LINKS } from "./config";
+import { FOOTER_COLUMN_LINKS_EN, FOOTER_COLUMN_LINKS_CN, NETWORKS } from "./config";
 import { NewRow, NewCol } from "./GridSystem";
 import { useThemeConfig } from "@docusaurus/theme-common";
 import { useColorMode } from "@docusaurus/theme-common";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
 interface IFooterColumnContentProps {
-  column: (typeof FOOTER_COLUMN_LINKS)[0];
+  column: (typeof FOOTER_COLUMN_LINKS_EN)[0];
   scheme?: "dark" | "light";
 }
 
@@ -52,10 +52,22 @@ function Footer() {
   const { footer } = useThemeConfig();
   const { colorMode } = useColorMode();
   const [style, setStyle] = useState<typeof colorMode>("dark");
+  const [FOOTER_COLUMN_LINKS, setFOOTER_COLUMN_LINKS] = useState(
+    FOOTER_COLUMN_LINKS_EN
+  );
+  const { siteConfig, i18n } = useDocusaurusContext();
 
+
+  useEffect(() => {
+    if (i18n.currentLocale === "zh-Hans") {
+      setFOOTER_COLUMN_LINKS(FOOTER_COLUMN_LINKS_CN);
+    }
+  }, [i18n.currentLocale]);
+  
   if (!footer) {
     return null;
   }
+
 
   useEffect(() => {
     const docColorMode = document.documentElement.getAttribute(

@@ -239,7 +239,7 @@ print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=Tru
 </TabItem>
 </Tabs>
 
-### 如何发送标准TON转账消息？
+### 如何发送标准 TON 转账消息？
 
 要发送标准TON转账消息，首先需要打开您的钱包合约，之后获取您的钱包序列号（seqno）。只有完成这些步骤之后，您才能发送您的TON转账。请注意，如果您使用的是非V4版本的钱包，您需要将WalletContractV4重命名为WalletContract{您的钱包版本}，例如，WalletContractV3R2。
 
@@ -339,7 +339,7 @@ asyncio.run(main())
 
 </Tabs>
 
-### 如何计算用户的Jetton钱包地址？
+### 如何计算用户的 Jetton 钱包地址？
 
 为了计算用户的Jetton钱包地址，我们需要调用jetton主合约的"get_wallet_address" get方法，并实际传入用户地址。对于这项任务，我们可以轻松使用JettonMaster的getWalletAddress方法或者自行调用主合约。
 
@@ -609,7 +609,7 @@ asyncio.run(main())
 
 为了表示我们想要包含一个评论，我们指定了 32 个零位，然后写下我们的评论。我们还指定了`响应目的地`，这意味着关于成功转账的响应将发送到这个地址。如果我们不想要响应，我们可以指定 2 个零位而不是一个地址。
 
-### 如何向DEX（DeDust）发送交换(swap)信息？
+### 如何向 DEX(DeDust)发送交换(swap)信息？
 
 DEX使用不同的协议来进行交易。在这个例子中，我们将与**DeDust**交互。
 * [DeDust文档](https://docs.dedust.io/)。
@@ -959,7 +959,7 @@ asyncio.run(main())
 
 
 
-### 如何使用NFT批量部署?
+### 如何使用 NFT 批量部署?
 
 集合的智能合约允许在单个交易中部署多达250个NFT。但是，实际上，由于1ton的计算费用限制，这个最大数量在100到130个NFT之间。为此，我们需要在字典中存储有关新NFT的信息。
 
@@ -1264,7 +1264,7 @@ main().finally(() => console.log("Exiting..."));
 
 另外，我们需要在消息中包含版权信息，因为使用这个 opcode 时，它们也会改变。需要注意的是，不是一定要在所有地方指定新值。例如，如果只需要更改NFT通用内容，则所有其他值可以按照之前的指定。
 
-### 处理 蛇形Cells
+### 处理蛇形Cells
 
 有时候，在cell最多可以包含 **1023位** 的情况下，需要存储长字符串（或其他大型信息）。这种情况下，我们可以使用 蛇形cells。蛇形cells 是包含对另一个cell的引用的cell，而该cell又包含对另一个cell的引用，依此类推。
 

@@ -1,4 +1,4 @@
-# 以Cell为数据存储
+# 以 Cell 为数据存储
 
 TON 中的所有内容都存储在cell(单元)中。一个cell是一个数据结构，包含：
 
@@ -11,7 +11,7 @@ TON 中的所有内容都存储在cell(单元)中。一个cell是一个数据结
 
 ![Directed Acylic Graph](/img/docs/dag.png)
 
-## Cell类型
+## Cell 类型
 
 目前，有 5 种类型的cell：_普通_ 和 4 种 _另类_。另类类型包括以下内容：
 * 裁剪分支cell
@@ -20,10 +20,10 @@ TON 中的所有内容都存储在cell(单元)中。一个cell是一个数据结
 * Merkle 更新cell
 
 :::tip
-了解更多有关另类cell的信息，请参见：[**TVM 白皮书，第 3 节**](https://ton.org/tvm.pdf)。
+了解更多有关特殊cell的信息，请参见：[**TVM 白皮书，第 3 节**](https://ton.org/tvm.pdf)。
 :::
 
-## Cell风格
+## Cell 风格
 
 cell是一种为紧凑存储而优化的不透明对象。
 
@@ -35,7 +35,7 @@ cell是一种为紧凑存储而优化的不透明对象。
 
 * _Continuation_ 用于包含 TON 虚拟机的操作码（指令）的cell，请参阅[TVM 概览](/learn/tvm-instructions/tvm-overview)。
 
-## 将数据序列化为Cell
+## 将数据序列化为 Cell
 
 TON 中的任何对象（消息、消息队列、区块、整个区块链状态、合约代码和数据）都可以序列化为cell。
 

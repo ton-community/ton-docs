@@ -1,6 +1,6 @@
 import Button from '@site/src/components/button'
 
-# TON Connect 对 Telegram 机器人的支持 - Python
+# Telegram 机器人的 TON Connect - Python
 
 在本教程中，我们将创建一个示例 Telegram 机器人，该机器人支持使用 Python TON Connect SDK [pytonconnect](https://github.com/XaBbl4/pytonconnect) 的 TON Connect 2.0 认证。
 我们将分析连接钱包、发送交易、获取有关已连接钱包的数据以及断开钱包的连接。
@@ -148,15 +148,15 @@ async def command_start_handler(message: Message):
 
     mk_b = InlineKeyboardBuilder()
     if connected:
-        mk_b.button(text='发送交易', callback_data='send_tr')
-        mk_b.button(text='断开连接', callback_data='disconnect')
-        await message.answer(text='您已经连接！', reply_markup=mk_b.as_markup())
+        mk_b.button(text='Send Transaction', callback_data='send_tr')
+        mk_b.button(text='Disconnect', callback_data='disconnect')
+        await message.answer(text='You are already connected!', reply_markup=mk_b.as_markup())
     else:
         wallets_list = TonConnect.get_wallets()
         for wallet in wallets_list:
             mk_b.button(text=wallet['name'], callback_data=f'connect:{wallet["name"]}')
         mk_b.adjust(1, )
-        await message.answer(text='选择要连接的钱包', reply_markup=mk_b.as_markup())
+        await message.answer(text='Choose wallet to connect', reply_markup=mk_b.as_markup())
 
 ```
 
@@ -177,17 +177,17 @@ async def connect_wallet(message: Message, wallet_name: str):
             wallet = w
 
     if wallet is None:
-        raise Exception(f'未知钱包：{wallet_name}')
+        raise Exception(f'Unknown wallet: {wallet_name}')
 
     generated_url = await connector.connect(wallet)
 
     mk_b = InlineKeyboardBuilder()
-    mk_b.button(text='连接', url=generated_url)
+    mk_b.button(text='Connect', url=generated_url)
 
-    await message.answer(text='在 3 分钟内连接钱包', reply_markup=mk_b.as_markup())
+    await message.answer(text='Connect wallet within 3 minutes', reply_markup=mk_b.as_markup())
 
     mk_b = InlineKeyboardBuilder()
-    mk_b.button(text='开始', callback_data='start')
+    mk_b.button(text='Start', callback_data='start')
 
     for i in range(1, 180):
         await asyncio.sleep(1)
@@ -195,11 +195,11 @@ async def connect_wallet(message: Message, wallet_name: str):
             if connector.account.address:
                 wallet_address = connector.account.address
                 wallet_address = Address(wallet_address).to_str(is_bounceable=False)
-                await message.answer(f'您已连接到地址 <code>{wallet_address}</code>', reply_markup=mk_b.as_markup())
-                logger.info(f'已连接到地址：{wallet_address}')
+                await message.answer(f'You are connected with address <code>{wallet_address}</code>', reply_markup=mk_b.as_markup())
+                logger.info(f'Connected with address: {wallet_address}')
             return
 
-    await message.answer(f'超时错误！', reply_markup=mk_b.as_markup())
+    await message.answer(f'Timeout error!', reply_markup=mk_b.as_markup())
 
 
 @dp.callback_query(lambda call: True)
@@ -221,7 +221,7 @@ async def main_callback_handler(call: CallbackQuery):
 
 机器人给用户 3 分钟时间连接钱包，之后会报告超时错误。
 
-## 实现事务请求
+## 实现交易请求
 
 让我们以 [消息构建器](/develop/dapps/ton-connect/message-builders) 文章之一为例：
 
@@ -240,12 +240,12 @@ def get_comment_message(destination_address: str, amount: int, comment: str) -> 
         'amount': str(amount),
         'payload': urlsafe_b64encode(
             begin_cell()
-            .store_uint(0, 32)  # 评论消息的操作码
-            .store_string(comment)  # 存储评论
-            .end_cell()  # 结束单元
-            .to_boc()  # 转换为 boc
+            .store_uint(0, 32)  # op code for comment message
+            .store_string(comment)  # store comment
+            .end_cell()  # end cell
+            .to_boc()  # convert it to boc
         )
-        .decode()  # 编码为 url 安全的 base64
+        .decode()  # encode it to urlsafe base64
     }
 
     return data
@@ -262,7 +262,7 @@ async def send_transaction(message: Message):
     connector = get_connector(message.chat.id)
     connected = await connector.restore_connection()
     if not connected:
-        await message.answer('请先连接钱包！')
+        await message.answer('Connect wallet first!')
         return
     
     transaction = {
@@ -276,7 +276,7 @@ async def send_transaction(message: Message):
         ]
     }
 
-    await message.answer(text='请在您的钱包应用中批准交易！')
+    await message.answer(text='Approve transaction in your wallet app!')
     await connector.send_transaction(
         transaction=transaction
     )
@@ -288,18 +288,19 @@ async def send_transaction(message: Message):
 @dp.message(Command('transaction'))
 async def send_transaction(message: Message):
     ...
-    await message.answer(text='请在您的钱包应用中批准交易！')
+    await message.answer(text='Approve transaction in your wallet app!')
     try:
         await asyncio.wait_for(connector.send_transaction(
             transaction=transaction
         ), 300)
     except asyncio.TimeoutError:
-        await message.answer(text='超时错误！')
+        await message.answer(text='Timeout error!')
     except pytonconnect.exceptions.UserRejectsError:
-        await message.answer(text='您拒绝了交易！')
+        await message.answer(text='You rejected the transaction!')
     except Exception as e:
-        await message.answer(text=f'未知错误：{e}')
+        await message.answer(text=f'Unknown error: {e}')
 ```
+
 
 ## 添加断开连接处理器
 
@@ -310,7 +311,7 @@ async def disconnect_wallet(message: Message):
     connector = get_connector(message.chat.id)
     await connector.restore_connection()
     await connector.disconnect()
-    await message.answer('您已成功断开连接！')
+    await message.answer('You have been successfully disconnected!')
 ```
 
 目前，项目结构如下：
@@ -366,16 +367,16 @@ async def command_start_handler(message: Message):
 
     mk_b = InlineKeyboardBuilder()
     if connected:
-        mk_b.button(text='发送交易', callback_data='send_tr')
-        mk_b.button(text='断开连接', callback_data='disconnect')
-        await message.answer(text='您已经连接！', reply_markup=mk_b.as_markup())
+        mk_b.button(text='Send Transaction', callback_data='send_tr')
+        mk_b.button(text='Disconnect', callback_data='disconnect')
+        await message.answer(text='You are already connected!', reply_markup=mk_b.as_markup())
 
     else:
         wallets_list = TonConnect.get_wallets()
         for wallet in wallets_list:
             mk_b.button(text=wallet['name'], callback_data=f'connect:{wallet["name"]}')
         mk_b.adjust(1, )
-        await message.answer(text='选择要连接的钱包', reply_markup=mk_b.as_markup())
+        await message.answer(text='Choose wallet to connect', reply_markup=mk_b.as_markup())
 
 
 @dp.message(Command('transaction'))
@@ -383,7 +384,7 @@ async def send_transaction(message: Message):
     connector = get_connector(message.chat.id)
     connected = await connector.restore_connection()
     if not connected:
-        await message.answer('请先连接钱包！')
+        await message.answer('Connect wallet first!')
         return
 
     transaction = {
@@ -397,17 +398,17 @@ async def send_transaction(message: Message):
         ]
     }
 
-    await message.answer(text='请在您的钱包应用中批准交易！')
+    await message.answer(text='Approve transaction in your wallet app!')
     try:
         await asyncio.wait_for(connector.send_transaction(
             transaction=transaction
         ), 300)
     except asyncio.TimeoutError:
-        await message.answer(text='超时错误！')
+        await message.answer(text='Timeout error!')
     except pytonconnect.exceptions.UserRejectsError:
-        await message.answer(text='您拒绝了交易！')
+        await message.answer(text='You rejected the transaction!')
     except Exception as e:
-        await message.answer(text=f'未知错误：{e}')
+        await message.answer(text=f'Unknown error: {e}')
 
 
 async def connect_wallet(message: Message, wallet_name: str):
@@ -421,17 +422,17 @@ async def connect_wallet(message: Message, wallet_name: str):
             wallet = w
 
     if wallet is None:
-        raise Exception(f'未知钱包：{wallet_name}')
+        raise Exception(f'Unknown wallet: {wallet_name}')
 
     generated_url = await connector.connect(wallet)
 
     mk_b = InlineKeyboardBuilder()
-    mk_b.button(text='连接', url=generated_url)
+    mk_b.button(text='Connect', url=generated_url)
 
-    await message.answer(text='请在三分钟内连接钱包', reply_markup=mk_b.as_markup())
+    await message.answer(text='Connect wallet within 3 minutes', reply_markup=mk_b.as_markup())
 
     mk_b = InlineKeyboardBuilder()
-    mk_b.button(text='开始', callback_data='start')
+    mk_b.button(text='Start', callback_data='start')
 
     for i in range(1, 180):
         await asyncio.sleep(1)
@@ -439,18 +440,18 @@ async def connect_wallet(message: Message, wallet_name: str):
             if connector.account.address:
                 wallet_address = connector.account.address
                 wallet_address = Address(wallet_address).to_str(is_bounceable=False)
-                await message.answer(f'您已通过地址 <code>{wallet_address}</code> 连接', reply_markup=mk_b.as_markup())
-                logger.info(f'已通过地址连接：{wallet_address}')
+                await message.answer(f'You are connected with address <code>{wallet_address}</code>', reply_markup=mk_b.as_markup())
+                logger.info(f'Connected with address: {wallet_address}')
             return
 
-    await message.answer(f'超时错误！', reply_markup=mk_b.as_markup())
+    await message.answer(f'Timeout error!', reply_markup=mk_b.as_markup())
 
 
 async def disconnect_wallet(message: Message):
     connector = get_connector(message.chat.id)
     await connector.restore_connection()
     await connector.disconnect()
-    await message.answer('您已成功断开连接！')
+    await message.answer('You have been successfully disconnected!')
 
 
 @dp.callback_query(lambda call: True)
@@ -547,7 +548,7 @@ async def connect_wallet(message: Message, wallet_name: str):
     img.save(stream)
     file = BufferedInputFile(file=stream.getvalue(), filename='qrcode')
 
-    await message.answer_photo(photo=file, caption='请在三分钟内连接钱包', reply_markup=mk_b.as_markup())
+    await message.answer_photo(photo=file, caption='Connect wallet within 3 minutes', reply_markup=mk_b.as_markup())
     
     ...
 ```

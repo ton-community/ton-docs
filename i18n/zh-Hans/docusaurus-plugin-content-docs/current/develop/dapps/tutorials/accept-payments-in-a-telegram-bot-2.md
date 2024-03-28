@@ -144,7 +144,7 @@ def get_balance(uid):
 ## TON Center API
 在`ton.py`文件中，我们将声明一个函数，该函数将处理所有新的存款，增加用户余额，并通知用户。
 
-### getTransactions方法
+### getTransactions 方法
 
 我们将使用TON Center API。他们的文档在这里：
 https://toncenter.com/api/v2/
@@ -211,7 +211,7 @@ https://toncenter.com/api/v2/
 
 现在我们准备好创建支付处理程序了。
 
-### 从代码中发送API请求
+### 从代码中发送 API 请求
 
 让我们从导入所需的库和之前的两个文件`config.py`和`db.py`开始。
 ```python
@@ -364,7 +364,7 @@ while True:
 `ton.py`文件的内容就这些了！
 我们的机器人现在已完成3/4；我们只需要在机器人自身创建一个包含几个按钮的用户界面。
 
-## Telegram机器人
+## Telegram 机器人
 
 ### 初始化
 
@@ -403,7 +403,7 @@ dp = Dispatcher(bot)
 
 ### 消息处理器
 
-#### /start命令
+#### /start 命令
 
 我们首先处理`/start`和`/help`命令。当用户第一次启动机器人、重新启动它或使用`/help`命令时，将调用此函数。
 

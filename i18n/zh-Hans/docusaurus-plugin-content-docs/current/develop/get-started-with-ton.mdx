@@ -421,7 +421,7 @@ max_cpl 252
 
 现在，我们理解了上述不同的参数，我们将在下一章中使用这些值（`complexity`、`last_success`、`seed`）在我们的 NFT 挖矿中。
 
-## 🛠 准备一个NFT Miner
+## 🛠 准备一个 NFT Miner
 
 嘿，你做得很好！
 
@@ -467,7 +467,7 @@ cell是TON上的数据存储结构，用于多种目的，包括提高网络可�
 虽然查看源代码（`./src/giver/NftGiver.data`）可能很有趣，但不是必须的。
 :::
 
-### 创建TON NFT Miners
+### 创建 TON NFT Miners
 
 现在我们已经完成了为我们的TON Miner准备消息的过程，让我们开始实际创建Miner的初始过程。首先，让我们考虑这行代码：
 
@@ -500,7 +500,7 @@ Miner可能将无限期地运行，只要 `msg.hash()` 大于 `complexity`（消
 
 虽然完成上述步骤后Miner将正常工作，但它的视觉上看起来不够好（尝试 `npm run start`）。因此，我们必须解决这个问题。让我们开始吧。
 
-#### 改善TON Miner的外观 ✨
+#### 改善 TON Miner 的外观 ✨
 
 我们现在想让Miner看起来性感！我们该怎么做？
 
@@ -623,14 +623,14 @@ npm install qrcode-terminal
 
 现在我们已经成功地编码了二维码生成器和支付链接，我们需要获得一些Testnet Toncoins来发送我们的第一笔交易。这是通过使用TON区块链上的[TON代币水龙头](https://coinmarketcap.com/alexandria/glossary/faucet)（一个分享Testnet Toncoins的Telegram Bot）来完成的，这样我们就拥有了一些可以发送到我们创建的Tonkeeper钱包的代币。
 
-## ⛏ 使用钱包挖掘NFT
+## ⛏ 使用钱包挖掘 NFT
 
 在TON上挖掘NFT有两种主要方式：
 
 * [简单的：测试网NFT挖掘](/develop/get-started-with-ton#simple-mine-in-testnet)
 * [真正的：主网NFT挖掘](/develop/get-started-with-ton#genuine-mine-in-mainnet)
 
-### 简单的：测试网NFT挖掘
+### 简单的：测试网 NFT 挖掘
 
 以下是启动您的第一个测试网交易以挖掘NFT所需的步骤：
 
@@ -642,7 +642,7 @@ npm install qrcode-terminal
 
 为了进行下一步，我们需要获取一些TON测试网代币。这可以通过使用[测试网水龙头](https://t.me/testgiver_ton_bot)来实现。
 
-#### 挖掘测试网NFT Rocket
+#### 挖掘测试网 NFT Rocket
 
 为了在测试网上成功挖掘NFT Rocket，必须遵循以下步骤：
 
@@ -661,7 +661,7 @@ npm install qrcode-terminal
 
 欢迎上岸，__真正的TVM开发者__！你做到了。🛳
 
-### 真正的：主网NFT挖掘
+### 真正的：主网 NFT 挖掘
 
 嘿！对于那些希望在TON主网上挖掘NFT的人来说，应该遵循以下指示：
 
@@ -675,7 +675,7 @@ npm install qrcode-terminal
 const endpoint = await getHttpEndpoint();
 ```
 
-#### 挖掘主网NFT Rocket
+#### 挖掘主网 NFT Rocket
 
 就像我们在测试网NFT火箭挖掘过程中概述的那样，为了在主网上成功挖掘NFT火箭，必须遵循以下步骤：
 

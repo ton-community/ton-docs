@@ -24,13 +24,13 @@
 * TON存储的网络部分基于类似于种子的技术，因此术语*种子*、*文件包*和*包*将互换使用。但重要的是要注意一些区别：TON存储通过[ADNL](/learn/networking/adnl)通过[RLDP](/learn/networking/rldp)协议传输数据，每个*包*通过其自己的网络覆盖层分发，merkle结构可以存在两个版本 - 用于高效下载的大块和用于高效所有权证明的小块，以及[TON DHT](/learn/networking/ton-dht)网络用于查找节点。
 * *文件包*由*种子信息*和数据块组成。
 * 数据块以*种子头*开头 - 包含文件列表及其名称和大小的结构。文件本身紧随在数据块中。
-* 数据块被划分为块（默认128 KB），并在这些块的SHA256哈希上构建*merkle树*（由TVM单元组成）。这允许构建和验证单个块的*merkle证明*，以及通过仅交换修改块的证明高效更新*包*。
+* 数据块被划分为块（默认为128 KB），并且在这些块的 SHA256 散列上构建了一个 *merkle 树*（由 TVM cell构成）。这允许构建和验证单个块的 *merkle 证明*，以及通过仅交换修改块的证明来高效重建 *包*。
 * *种子信息*包含*merkle根*：
     * 块大小（数据块）
     * 块大小列表
     * Hash *merkle树*
     * 描述 - 种子创建者指定的任何文本
-* *种子信息*被序列化为TVM单元。此单元的哈希称为*BagID*，它唯一标识*包*。
+* *种子信息*被序列化为TVM cell。此cell的哈希称为*BagID*，它唯一标识*包*。
 * *包元数据*是一个包含*种子信息*和*种子头*的文件。*这是`.torrent`文件的类比。
 
 ## 启动存储守护程序和storage-daemon-cli
@@ -53,9 +53,7 @@ storage-daemon-cli -I 127.0.0.1:5555 -k storage-db/cli-keys/client -p storage-db
 ```
 
 * `-I` - 守护程序的IP地址和端口（端口与上面的`-p`参数相同）
-* `-k` 和 `-p`
-
- - 这是客户端的私钥和服务器的公钥（类似于`validator-engine-console`）。这些密钥在守护程序第一次运行时生成，并放置在`<db>/cli-keys/`中。
+* `-k` 和 `-p`- 这是客户端的私钥和服务器的公钥（类似于`validator-engine-console`）。这些密钥在守护程序第一次运行时生成，并放置在`<db>/cli-keys/`中。
 
 ### 命令列表
 
@@ -71,44 +69,46 @@ create filename\ with\ spaces.txt -d "Description\nSecond line of \"description\
 create -d "Description" -- -filename.txt
 ```
 
-`storage-daemon-cli`可以通过将要执行的命令传递给它以非交互模式运行：
+`storage-daemon-cli` 可以通过传递要执行的命令来以非交互模式运行：
 
 ```
 storage-daemon-cli ... -c "add-by-meta m" -c "list --hashes"
 ```
 
 ## 添加文件包
-要下载*文件包*，您需要知道其`BagID`或拥有元文件。以下命令可用于添加*包*进行下载：
+要下载 *文件包*，您需要知道其 `BagID` 或拥有一个元文件。以下命令可用于添加下载 *包*：
 ```
 add-by-hash <hash> -d directory
 add-by-meta <meta-file> -d directory
 ```
-*包*将被下载到指定的目录。您可以省略它，然后它将被保存到存储守护程序目录中。
+*包* 将被下载到指定的目录。您可以省略它，然后它将被保存到存储守护程序目录中。
 
 :::info
 哈希以十六进制形式指定（长度 - 64个字符）。
 :::
 
-通过元文件添加*包*时，关于*包*的信息将立即可用：大小、描述、文件列表。通过哈希添加时，您将不得不等待加载此信息。
+通过元文件添加 *包* 时，有关 *包* 的信息将立即可用：大小，描述，文件列表。通过哈希添加时，您将必须等待这些信息被加载。
 
-## 管理已添加的包
 
-* `list`命令输出*包*的列表。
-* `list --hashes`输出带有完整哈希的列表。
+## 管理添加的包
 
-在所有后续命令中，`<BagID>`要么是哈希（十六进制），要么是会话中*包*的序号（可以在`list`命令的列表中看到）。*包*的序号在重启storage-daemon-cli之间不会保存，且在非交互模式下不可用。
+* `list` 命令输出 *包* 列表。
+* `list --hashes` 输出带有完整哈希的列表。
+
+在所有后续命令中，`<BagID>` 要么是哈希（十六进制），要么是会话中 *包* 的序号（可以在 `list` 命令中看到的数字）。*包* 的序号不会在 storage-daemon-cli 重启之间保存，并且在非交互模式下不可用。
 
 ### 方法
 
-* `get <BagID>` - 输出有关*包*的详细信息：描述、大小、下载速度、文件列表。
-* `get-peers <BagID>` - 输出节点列表。
-* `download-pause <BagID>`, `download-resume <BagID>` - 暂停或恢复下载。
-* `upload-pause <BagID>`, `upload-resume <BagID>` - 暂停或恢复上传。
-* `remove <BagID>` - 移除*包*。`remove --remove-files`还会删除*包*的所有文件。请注意，如果*包*保存在内部存储守护程序目录中，无论如何文件都将被删除。
+* `get <BagID>` - 输出有关 *包* 的详细信息：描述，大小，下载速度，文件列表。
+* `get-peers <BagID>` - 输出对方节点列表。
+* `download-pause <BagID>`、`download-resume <BagID>` - 暂停或恢复下载。
+* `upload-pause <BagID>`、`upload-resume <BagID>` - 暂停或恢复上传。
+* `remove <BagID>` - 移除 *包*。`remove --remove-files` 还会删除 *包* 的所有文件。请注意，如果 *包* 保存在内部存储守护程序目录中，无论如何都会删除文件。
+
 
 ## 部分下载，优先级
 :::info
-添加*包*时，您可以指定要从中下载哪些文件：
+添加 *包* 时，您可以指定您想从中下载哪些文件：
 :::
 ```
 add-by-hash <hash> -d dir --partial file1 file2 file3
@@ -117,30 +117,29 @@ add-by-meta <meta-file> -d dir --partial file1 file2 file3
 
 ### 优先级
 
-*包*中的每个文件都有优先级，从0到255的数字。优先级0意味着文件不会被下载。`--partial`标志将指定的文件设置为优先级1，其他为0。
+*包文件* 中的每个文件都有一个优先级，从 0 到 255 的数字。优先级 0 表示文件不会被下载。`--partial` 标志位将指定的文件设置为优先级 1，其余文件设置为 0。
 
-您可以使用以下命令更改已添加*包*的优先级：
+可以使用以下命令更改已添加 *包* 中的优先级：
 * `priority-all <BagID> <priority>` - 对所有文件。
-* `priority-idx <BagID> <idx> <priority>` - 按数字（见`get`命令）对一个文件。
-* `priority-name <BagID> <name> <priority>` - 按名称对一个文件。
-即使文件列表尚未下载，也可以设置优先级。
+* `priority-idx <BagID> <idx> <priority>` - 根据数字为单个文件设置（见 `get` 命令）。
+* `priority-name <BagID> <name> <priority>` - 根据名称为单个文件设置。
+即使在文件列表下载之前，也可以设置优先级。
+
 
 ## 创建文件包
-要创建*包*并开始分发它，请使用`create
-
-`命令：
+要创建 *包* 并开始分发它，请使用 `create` 命令：
 ```
 create <path>
 ```
-`<path>`可以指向单个文件或目录。创建*包*时，您可以指定描述：
+`<path>` 可以指向单个文件或目录。创建 *包* 时，您可以指定描述：
 ```
 create <path> -d "文件包描述"
 ```
-创建*包*后，控制台将显示有关它的详细信息（包括哈希，这是*包*将由其识别的`BagID`），守护程序将开始分发种子。`create`的额外选项：
-* `--no-upload` - 守护程序不会向节点分发文件。上传可以使用`upload-resume`启动。
-* `--copy` - 文件将被复制到存储守护程序的内部目录。
+创建 *包* 后，控制台将显示有关它的详细信息（包括哈希，即通过该哈希标识 *包* 的 `BagID`），并且守护程序将开始分发种子。`create` 的额外选项：
+* `--no-upload` - 守护程序不会向对方节点分发文件。可以使用 `upload-resume` 启动上传。
+* `--copy` - 文件将被复制到存储守护程序的内部目录中。
 
-要下载*包*，其他用户只需要知道其哈希。您还可以保存种子元文件：
+要下载 *包*，其他用户只需知道其哈希即可。您还可以保存种子元文件：
 ```
 get-meta <BagID> <meta-file>
 ```
