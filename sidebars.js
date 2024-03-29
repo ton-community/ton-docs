@@ -255,12 +255,12 @@ const sidebars = {
             'develop/dapps/defi/ton-payments',
           ],
         },
-        'develop/dapps/cookbook-diagrams',
         {
           type: 'category',
           label: 'APIs and SDKs',
           items: [
             'develop/dapps/apis/sdk',
+            'develop/dapps/apis/README',
             'develop/dapps/apis/toncenter',
             'develop/dapps/apis/adnl',
           ],
