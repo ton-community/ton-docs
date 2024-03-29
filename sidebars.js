@@ -239,70 +239,30 @@ const sidebars = {
       items: [
         'develop/dapps/README',
         'develop/dapps/cookbook',
-        {
-          type: 'category',
-          label: 'Telegram Mini Apps',
-          items: [
-            'develop/dapps/telegram-apps/README',
-            'develop/dapps/telegram-apps/grants',
-            {
-              type: 'category',
-              label: 'Guidelines',
-              items: [
-                'develop/dapps/telegram-apps/testing-apps',
-                'develop/dapps/telegram-apps/publishing',
-                'develop/dapps/telegram-apps/monetization',
-                'develop/dapps/telegram-apps/tips-and-tricks',
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Tutorials & Examples',
-              items: [
-                'develop/dapps/telegram-apps/step-by-step-guide',
-                'develop/dapps/telegram-apps/app-examples',
-                'develop/dapps/telegram-apps/design-guidelines',
-              ],
-            },
-
-
-          ],
-        },
-        {
-          type: 'category',
-          label: 'APIs and SDKs',
-          items: [
-            'develop/dapps/apis/README',
-            'develop/dapps/apis/toncenter',
-            'develop/dapps/apis/adnl',
-            'develop/dapps/apis/sdk',
-          ],
-        },
 
         {
           type: 'category',
-          label: 'Guidelines',
-          items: [
-            'develop/dapps/asset-processing/README',
-            'develop/dapps/asset-processing/jettons',
-            'develop/dapps/asset-processing/nfts',
-            'develop/dapps/asset-processing/metadata',
-          ],
-        },
-
-        {
-          type: 'category',
-          label: 'DeFi Development',
+          label: 'DeFi Principles',
           items: [
             'develop/dapps/defi/coins',
             'develop/dapps/defi/tokens',
             {
               type: 'doc',
               label: 'NFT Use Cases in TON',
-              id: 'participate/nft',
+              id: 'develop/dapps/defi/nft',
             },
-            'develop/dapps/defi/ton-payments',
             'develop/dapps/defi/subscriptions',
+            'develop/dapps/defi/ton-payments',
+          ],
+        },
+        'develop/dapps/cookbook-diagrams',
+        {
+          type: 'category',
+          label: 'APIs and SDKs',
+          items: [
+            'develop/dapps/apis/sdk',
+            'develop/dapps/apis/toncenter',
+            'develop/dapps/apis/adnl',
           ],
         },
         {
@@ -338,6 +298,45 @@ const sidebars = {
                 'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js',
               ],
             },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Telegram Mini Apps',
+          items: [
+            'develop/dapps/telegram-apps/README',
+            'develop/dapps/telegram-apps/grants',
+            {
+              type: 'category',
+              label: 'Guidelines',
+              items: [
+                'develop/dapps/telegram-apps/testing-apps',
+                'develop/dapps/telegram-apps/publishing',
+                'develop/dapps/telegram-apps/monetization',
+                'develop/dapps/telegram-apps/tips-and-tricks',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Tutorials & Examples',
+              items: [
+                'develop/dapps/telegram-apps/step-by-step-guide',
+                'develop/dapps/telegram-apps/app-examples',
+                'develop/dapps/telegram-apps/design-guidelines',
+              ],
+            },
+
+
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Advanced Asset Holding',
+          items: [
+            'develop/dapps/asset-processing/README',
+            'develop/dapps/asset-processing/jettons',
+            'develop/dapps/asset-processing/nfts',
+            'develop/dapps/asset-processing/metadata',
           ],
         },
       ],
