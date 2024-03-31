@@ -28,14 +28,16 @@ There are different ways to connect to blockchain:
 * [nownodes.io](https://nownodes.io/nodes) — NOWNodes full Nodes and blockbook Explorers via API.
 * [Chainbase](https://chainbase.com/chainNetwork/TON) — Node API and data infrastructure for The Open Network.
 
-#### Toncenter TON Index
+## Indexer
+
+### Toncenter TON Index
 
 Indexers allow to list jetton wallets, NFTs, transactions by certain filters, not only retrieve specific ones.
 
 - Public TON Index can be used: tests and development are for free, premium for production - [toncenter.com/api/v3/](https://toncenter.com/api/v3/).
 - Run your own TON Index with [Worker](https://github.com/toncenter/ton-index-worker/tree/36134e7376986c5517ee65e6a1ddd54b1c76cdba) and [TON Index API wrapper](https://github.com/toncenter/ton-indexer).
 
-## GraphQL Nodes
+### GraphQL Nodes
 
 GraphQL nodes act as indexers as well.
 
