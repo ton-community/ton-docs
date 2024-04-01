@@ -62,8 +62,8 @@ export const SearchField = <T extends Record<string, string>>({ data, searchBy, 
 
   useEffect(() => {
     const searchValue = debouncedValue.toLowerCase();
-
-    const dataByKey = data.filter((item) => item[searchBy].toLowerCase().includes(searchValue));
+    
+    const dataByKey = data.filter((item) => item[searchBy].toString().toLowerCase().includes(searchValue));
     const dataByValues = data.filter((item) => JSON.stringify(Object.values(item)).toLowerCase().includes(searchValue));
 
     setFilteredData(uniq<T>([...dataByKey, ...dataByValues]));
