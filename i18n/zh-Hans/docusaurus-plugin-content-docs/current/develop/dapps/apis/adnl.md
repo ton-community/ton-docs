@@ -1,5 +1,15 @@
 # TON ADNL API
 
+:::tip
+
+连接到区块链有不同的方式:
+1. RPC data provider or another API: 在大多数情况下，你必须*依赖*它的稳定性和安全性。
+2. **ADNL connection**: 您正在连接到[liteserver](/participation/run-nodes/liteserver)。它们可能是不可访问的，但通过一定级别的验证(在库中实现)，它们不会说谎。
+3. Tonlib binary: 您还连接到liteserver，因此所有的优点和缺点都适用，但您的应用程序还包含外部编译的动态加载库。
+4. Offchain-only。这样的sdk允许创建和序列化cell，然后您可以将其发送给api。
+
+:::
+
 客户端使用二进制协议直接连接到Liteservers（节点）。
 
 客户端下载关键区块、账户的当前状态及其**Merkle证明**，这保证了接收数据的有效性。
@@ -12,6 +22,12 @@
 
 更多关于Merkle证明的信息，请参阅[TON白皮书](https://ton.org/ton.pdf) 2.3.10, 2.3.11。
 
+公共的litesserver(来自全局配置)的存在是为了让你快速开始使用TON。它可以用于学习在TON中编程，或者用于不需要100%正常运行时间的应用程序和脚本。
+
+对于构建生产基础设施-建议使用准备良好的基础设施:
+- [建立自己的liteserver](https://docs.ton.org/participate/run-nodes/full-node#enable-liteserver-mode), 
+- 使用Liteserver高级提供商 [@liteserver_bot](https://t.me/liteserver_bot)
+
 ## 优点和缺点
 
 - ✅ 可靠。使用带有Merkle证明哈希的API来验证传入的二进制数据。
@@ -19,14 +35,10 @@
 - ✅ 快速。直接连接到TON区块链节点，而不是使用HTTP中间件。
 
 - ❌ 复杂。需要更多时间来弄清楚事情。
-- ❌ 以后端为主。不兼容Web前端（为非HTTP协议构建）。
+- ❌ 以后端为主。不兼容Web前端（为非HTTP协议构建）,或需要HTTP-ADNL代理。
 
 ## API 参考
 
-对服务器的请求和响应由TL模式描述，允许您为某种编程语言生成类型化接口。
+对服务器的请求和响应由[TL](/develop/data-formats/tl)模式描述，允许您为某种编程语言生成类型化接口。
 
 [TonLib TL模式](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl)
-
-## 参阅
-* [TON Center API](/develop/dapps/apis/toncenter)
-* [SDKs](/develop/dapps/apis/sdk)
