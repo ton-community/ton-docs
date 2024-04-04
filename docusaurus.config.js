@@ -114,12 +114,12 @@ const config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'zh-Hans'],
+    locales: ['en', 'mandarin'],
     localeConfigs: {
       en: {
         label: 'English',
       },
-      'zh-Hans': {
+      mandarin: {
         label: '简体中文',
       },
     },
