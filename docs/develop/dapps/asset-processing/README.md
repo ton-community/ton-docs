@@ -14,7 +14,7 @@ Best practices with comments on Toncoin processing:
 
 - [JS code to accept Toncoin deposits](https://github.com/toncenter/examples/blob/main/deposits.js)
 
-- [JS code to withdraw (send) Toncoins from a wallet](https://github.com/toncenter/examples/blob/main/withdrawals.js)
+- [JS code to withdraw (send) Toncoins from a wallet](https://github.com/toncenter/examples/blob/main/withdrawals-highload.js)
 
 - [Detailed info](https://docs.ton.org/develop/dapps/asset-processing#global-overview)
 
