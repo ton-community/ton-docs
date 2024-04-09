@@ -218,6 +218,7 @@ const sidebars = {
           items: [
             'develop/smart-contracts/governance',
             'develop/research-and-development/minter-flow',
+            'develop/smart-contracts/core-contracts/precompiled',
           ],
         },
         {

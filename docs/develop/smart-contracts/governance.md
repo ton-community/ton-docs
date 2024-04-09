@@ -1,4 +1,4 @@
-# Governance contracts
+# Governance Contracts
 
 In TON, consensus parameters of node operation related to TVM, catchain, fees, and chain topology (as well as how those parameters are stored and updated) are controlled by a set of special smart contracts (in contrast to the old-fashioned and inflexible ways of hardcoding those parameters adopted by blockchains of previous generations). That way, TON implements comprehensive and transparent on-chain governance. The set of special contracts itself is governed by parameters and currently includes the Elector, Config, and DNS contracts and in future will be extended by extra-currency Minter and others.
 
@@ -67,3 +67,7 @@ History of emergency updates:
  - On March 2, 2023, the number of applications for the election grew big enough that even `20m` were not enough to conduct election. However, this time masterchain continue to process external messages due to higher `hard_limit`. An emergency key was used to update ConfigParam 20 `special_gas_limit` to 25m and `block_gas_limit` to 27m (in block `27747086`). As a result, the election was successfully conducted in next block. The total postponement of elections was about 6 hours, besides elections, functionality of the both master chain and base chain was unaffected.
  - On November 22, 2023, key was used to [renounce itself](https://t.me/tonblockchain/221) (in block `34312810`). As a result, public key was replaced with 32 zero bytes.
  - Due to switch to OpenSSL implementation of Ed25519 signature verification, check for special case [all bytes of public key are the same](https://github.com/ton-blockchain/ton/blob/7fcf26771748338038aec4e9ec543dc69afeb1fa/crypto/ellcurve/Ed25519.cpp#L57C1-L57C1) was disabled. As a result, check agaisnt zero public key stopped work as intended. Using this issue, emergency key was [updated on December 9](https://t.me/tonstatus/80) yet another time (in block `34665437`, [tx](https://tonscan.org/tx/MU%2FNmSFkC0pJiCi730Fmt6PszBooRZkzgiQMv0sExfY=)) to nothing-in-my-sleeve byte-sequence `82b17caadb303d53c3286c06a6e1affc517d1bc1d3ef2e4489d18b873f5d7cd1` that is `sha256("Not a valid curve point")`. Now, the only way to update network configuration parameters is through validator consensus.
+
+
+## See Also
+- [Precompiled Contracts](/develop/smart-contracts/governance)

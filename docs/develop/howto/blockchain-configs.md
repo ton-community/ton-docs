@@ -484,6 +484,18 @@ This parameter defines the list of suspended addresses, which cannot be initiali
 The stabilization of the tokenomics is further described in the [official report](https://t.me/tonblockchain/178) of the "The Open Network" Telegram channel.
 :::
 
+## Param 45
+
+The list of precompiled contracts is stored in the masterchain config:
+
+```
+precompiled_smc#b0 gas_usage:uint64 = PrecompiledSmc;
+precompiled_contracts_config#c0 list:(HashmapE 256 PrecompiledSmc) = PrecompiledContractsConfig;
+_ PrecompiledContractsConfig = ConfigParam 45;
+```
+
+More details about precompiled contracts on [this page](develop/smart-contracts/core-contracts/precompiled).
+
 ## Param 71 - 73
 
 This parameter pertains to bridges for wrapping TON in other networks:
