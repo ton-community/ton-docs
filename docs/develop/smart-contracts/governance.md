@@ -70,4 +70,4 @@ History of emergency updates:
 
 
 ## See Also
-- [Precompiled Contracts](/develop/smart-contracts/governance)
+- [Precompiled Contracts](/develop/smart-contracts/core-contracts/precompiled)

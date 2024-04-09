@@ -36,4 +36,4 @@ This allows adding new entries to `ConfigParam 45` without requiring all validat
 Hic sunt dracones.
 
 ## See Also
-- [Governance Contracts](develop/smart-contracts/core-contracts/precompiled)
+- [Governance Contracts](/develop/smart-contracts/governance)

@@ -216,9 +216,9 @@ const sidebars = {
           type: 'category',
           label: 'Core Contracts',
           items: [
+            'develop/smart-contracts/core-contracts/precompiled',
             'develop/smart-contracts/governance',
             'develop/research-and-development/minter-flow',
-            'develop/smart-contracts/core-contracts/precompiled',
           ],
         },
         {
