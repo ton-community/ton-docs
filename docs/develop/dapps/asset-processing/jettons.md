@@ -8,7 +8,7 @@ Best practices with comments on jettons processing:
 
 - [JS algo to accept jettons deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
 
-- [JS algo to jettons withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons.js)
+- [JS algo to jettons withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload.js)
 
 :::info Transaction Confirmation
 TON transactions are irreversible after just one confirmation. For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
@@ -335,6 +335,10 @@ If they match, it’s ideal. If not, then you likely received a scam token that 
 
 
 ### Accepting Jettons from users through a centralized wallet
+
+:::info
+To prevent a bottleneck in incoming transactions to a single wallet, it is suggested to accept deposits across multiple wallets and to expand the number of these wallets as needed.
+:::
 
 In this scenario, the payment service creates a unique memo identifier for each sender disclosing 
 the address of the centralized wallet and the amounts being sent. The sender sends the tokens 

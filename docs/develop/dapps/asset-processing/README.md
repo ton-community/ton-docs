@@ -13,6 +13,10 @@ Best practices with comments on Toncoin processing:
 - [Create a key pair, a wallet and get a wallet address](https://github.com/toncenter/examples/blob/main/common.js)
 
 - [JS code to accept Toncoin deposits](https://github.com/toncenter/examples/blob/main/deposits.js)
+  :::info
+  It is suggested to accept deposits across multiple wallets.
+  :::
+
 
 - [JS code to withdraw (send) Toncoins from a wallet](https://github.com/toncenter/examples/blob/main/withdrawals-highload.js)
 
@@ -22,7 +26,11 @@ Best practices with comments on jettons processing:
 
 - [JS code to accept jettons deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
 
-- [JS code to withdraw (send) jettons from a wallet](https://github.com/toncenter/examples/blob/main/withdrawals-jettons.js)
+  :::info
+  It is suggested to accept deposits across multiple wallets.
+  :::
+
+- [JS code to withdraw (send) jettons from a wallet](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload.js)
 
 - [Detailed info](https://docs.ton.org/develop/dapps/asset-processing/jettons)
 
