@@ -9,6 +9,10 @@ For the same reason many structures in TON are simultaneously rich, convinient a
 
 So, when we have a family of similar contracts (for instance jetton-wallets), node stores duplicating data (the same code of each jetton-wallet) only once. There is special mechanism how developers may utilize this deduplication mechanism to decrease storage and forward fees. This mechanism is called Library Cells.
 
+:::info Highlevel analogy
+You can consider library cell as C++ pointer: one small cell that points to larger Cell with (possibly) many refs. The referenced cell (cell to which library cell points) should exist and registered in public context (_"published"_).
+:::
+
 Library cell is exotic cell that contains a reference to some other static cell. In particular it contains 256 bit of hash of referenced cell. For TVM library cells works as follows: whenever TVM gets command to open cell to slice (opcode `CTOS`, funC `.begin_parse()`), it searches cell with hash from library cell in masterchain library context and if found open referenced cell and return it's slice. Opening library cell costs the same as opening ordinar cell, so it can be used as transparent replacement for static cells that however occupy much less space (and thus costs less fees for storage and sending).
 
 Note, that it is possible to make library cell that is reference to library cell that is reference to library cell ... and so on. For such case `.begin_parse()` will raise exception. Such library however can be unwrapped step-wise via `XLOAD` opcode.
@@ -20,14 +24,14 @@ To be found in masterchain library context and thus referenced by some Library C
 
 # Using in smart-contracts
 
-Since library cell behaves the same way as ordinary cell it referenced to in all contexts except fee calculation you can just use it instead of any cell with static data. For instance, you can store jetton-wallet code as library cell (so 1 cell and 256+8 bits, instead of usually ~20 cells and 6000 bits) which will result is order magnitude less storage and forward fees.
+Since library cell behaves the same way as ordinary cell it referenced to in all contexts except fee calculation you can just use it instead of any cell with static data. For instance, you can store jetton-wallet code as library cell (so 1 cell and 256+8 bits, instead of usually ~20 cells and 6000 bits) which will result is order magnitude less storage and forward fees. In particular, forward fees for `internal_transfer` message that contains `init_code` will be decreased from 0.011 to 0.003 TON.
 
 ## How to store data in library cell
 Lets consider example of storing jetton-wallet code as library cell to decrease fees. First we need to compile jetton-wallet to ordinary cell that contains it's code.
 
 Than you need to create library cell with reference to ordinary cell. Library cell contains 8-bit tag of library `0x02` followed by 256-bit of referenced cell hash.
 
-So basically you need to put tag and hash to the builder and then "close cell as exotic".
+So basically you need to put tag and hash to the builder and then "close builder as exotic cell".
 
 It can be done in Fift-asm construction like [this](https://github.com/ton-blockchain/multisig-contract-v2/blob/master/contracts/auto/order_code.func), example of compilation some contract directly to library cell [here](https://github.com/ton-blockchain/multisig-contract-v2/blob/master/wrappers/Order.compile.ts).
 
