@@ -1079,7 +1079,7 @@ DeDust provides a special SDk to work with contract, component, and API, it was 
 Enough theory, let's set up our environment to swap one jetton with TON.
 
 ```bash
-npm install --save @ton/core @ton/ton @ton/crypt
+npm install --save @ton/core @ton/ton @ton/crypto
 
 ```
 

@@ -108,7 +108,7 @@ Before working with `slice`, it is necessary to check whether it has any data to
 ```func
 ;; creating empty slice
 slice empty_slice = "";
-;; `slice_empty?()` returns `true`, because slice dosen't have any `bits` and `refs`
+;; `slice_empty?()` returns `true`, because slice doesn't have any `bits` and `refs`
 empty_slice.slice_empty?();
 
 ;; creating slice which contains bits only
@@ -148,14 +148,14 @@ slice_with_bits_and_refs.slice_empty?();
 > ["begin_parse()" in docs](/develop/func/stdlib#begin_parse)
 
 
-### How to determine if slice is empty (dosen't have any bits, but may have refs)
+### How to determine if slice is empty (doesn't have any bits, but may have refs)
 
 If we need to check only the `bits` and it does not matter if there are any `refs` in `slice`, then we should use `slice_data_empty?()`.
 
 ```func 
 ;; creating empty slice
 slice empty_slice = "";
-;; `slice_data_empty?()` returns `true`, because slice dosen't have any `bits`
+;; `slice_data_empty?()` returns `true`, because slice doesn't have any `bits`
 empty_slice.slice_data_empty?();
 
 ;; creating slice which contains bits only
@@ -168,7 +168,7 @@ slice slice_with_refs_only = begin_cell()
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_data_empty?()` returns `true`, because slice dosen't have any `bits`
+;; `slice_data_empty?()` returns `true`, because slice doesn't have any `bits`
 slice_with_refs_only.slice_data_empty?();
 
 ;; creating slice which contains bits and refs
@@ -196,19 +196,19 @@ slice_with_bits_and_refs.slice_data_empty?();
 > ["begin_parse()" in docs](/develop/func/stdlib#begin_parse)
 
 
-### How to determine if slice is empty (dosen't have any refs, but may have bits)
+### How to determine if slice is empty (doesn't have any refs, but may have bits)
 
 In case we are only interested in `refs`, we should check their presence using `slice_refs_empty?()`.
 
 ```func 
 ;; creating empty slice
 slice empty_slice = "";
-;; `slice_refs_empty?()` returns `true`, because slice dosen't have any `refs`
+;; `slice_refs_empty?()` returns `true`, because slice doesn't have any `refs`
 empty_slice.slice_refs_empty?();
 
 ;; creating slice which contains bits only
 slice slice_with_bits_only = "Hello, world!";
-;; `slice_refs_empty?()` returns `true`, because slice dosen't have any `refs`
+;; `slice_refs_empty?()` returns `true`, because slice doesn't have any `refs`
 slice_with_bits_only.slice_refs_empty?();
 
 ;; creating slice which contains refs only
@@ -735,7 +735,7 @@ if (current_time > 1672080143) {
 :::caution draft
 Please note that this method of generating random numbers isn't safe.
 
-TODO: add link to an article about generating random numbers
+Checkout [Random Number Generation](https://docs.ton.org/develop/smart-contracts/guidelines/random-number-generation) for more information.
 :::
 
 ```func
