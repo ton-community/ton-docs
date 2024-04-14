@@ -519,6 +519,7 @@ const sidebars = {
           items: [
             'develop/data-formats/cell-boc',
             'develop/data-formats/exotic-cells',
+            'develop/data-formats/library-cells',
             'develop/data-formats/proofs',
             'develop/data-formats/tl-b-language',
             'develop/data-formats/tl-b-types',
