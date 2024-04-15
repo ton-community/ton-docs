@@ -8,30 +8,32 @@ This page contains an overview and specific details that explain how to process 
 TON transactions are irreversible after just one confirmation. For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
 :::
 
-Best practices with comments on Toncoin processing:
+## Best Practices
+
+#### Fundamentals Examples
 
 - [Create a key pair, a wallet and get a wallet address](https://github.com/toncenter/examples/blob/main/common.js)
 
+- [JS code batch for the sending Toncoin](https://github.com/toncenter/examples/blob/main/withdrawals-highload-batch.js)
+
+#### Toncoin Deposits and Withdrawals
+
+:::info
+It is suggested to accept deposits across multiple wallets on your side.
+:::
+
 - [JS code to accept Toncoin deposits](https://github.com/toncenter/examples/blob/main/deposits.js)
-  :::info
-  It is suggested to accept deposits across multiple wallets.
-  :::
-
-
 - [JS code to withdraw (send) Toncoins from a wallet](https://github.com/toncenter/examples/blob/main/withdrawals-highload.js)
-
 - [Detailed info](https://docs.ton.org/develop/dapps/asset-processing#global-overview)
 
-Best practices with comments on jettons processing:
+#### Jetton Deposits and Withdrawals
+
+:::info
+It is suggested to accept deposits across multiple wallets on your side.
+:::
 
 - [JS code to accept jettons deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
-
-  :::info
-  It is suggested to accept deposits across multiple wallets.
-  :::
-
 - [JS code to withdraw (send) jettons from a wallet](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload.js)
-
 - [Detailed info](https://docs.ton.org/develop/dapps/asset-processing/jettons)
 
 ## Other Examples
