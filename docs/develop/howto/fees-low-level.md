@@ -20,7 +20,7 @@ transaction_fee = storage_fees
 ```
 where:
    * `storage_fees`—fees corresponding to occupation of some space in chain state by contract
-   * `in_fwd_fees`—fees for importing to blockchain incoming message (it is only relevant for messages which were not previously on-chain, that is, `external` messages. For ordinary messages from contract to contract this fee is not applicable)
+   * `in_fwd_fees`—fees for importing to blockchain incoming message (it is only relevant for messages which were not previously on-chain, e.g. `external` messages. Read [the TON Blockchain paper](https://docs.ton.org/tblkch.pdf) to learn more about inbound messages. For ordinary messages from contract to contract this fee is not applicable)
    * `computation_fees`—fees corresponding to execution of TVM instructions
    * `action_fees`—fees related to processing of action list (sending messages, setting libraries etc.)
    * `out_fwd_fees`—fees related to importing to blockchain of outcoming message

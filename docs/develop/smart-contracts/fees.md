@@ -64,9 +64,12 @@ transaction_fee = storage_fees
   * _Example_: each transaction you make with your wallet app (like Tonkeeper) requires first to be distributed among validation nodes.
 * `computation_fees` is the amount you pay for executing code in the virtual machine. The larger the code, the more fees must be paid.
   * _Example_: each time you send a transaction with your wallet (which is a smart contract), you execute the code of your wallet contract and pay for it.
-* `action_fees` is a charge for sending outgoing messages made by a smart contract.
+* `action_fees` is a charge for sending outgoing messages made by a smart contract, updating the smart contract code, updating the libraries, etc.
 * `out_fwd_fees` stands for a charge for sending messages outside from TON Blockchain to interact with off-chain services (e.g., logs) and external blockchains.
-  * Not used because it's not implemented. So today is equal to 0.
+
+:::info
+`fwd_fee` covers 2/3 of the cost, as 1/3 is allocated to the `action_fee` when the message is created.
+:::
 
 ## Storage fee
 
