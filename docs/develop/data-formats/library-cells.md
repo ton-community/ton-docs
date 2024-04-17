@@ -91,9 +91,9 @@ Actual for 04.2024 and suppose to be enhanced in the near future.
 
 
 ### LS, contract type detection and get methods
-Liteserver when running get methods automatically set correct library context. If you want to detect type of contract by get methods or run getmethods locally you need to download corresponding cells via LS method [liteServer.getLibraries](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L85).
+Liteserver when running get methods automatically set correct library context. If you want to detect type of contract by get methods or run getmethods locally you need to download corresponding cells via LS method [liteServer.getLibraries](https://github.com/ton-blockchain/ton/blob/4cfe1d1a96acf956e28e2bbc696a143489e23631/tl/generate/scheme/lite_api.tl#L96).
 
-You can also get library from dton.io/graphql:
+You can also get library from [dton.io/graphql](https://dton.io/graphql):
 ```
 {
   get_lib(
