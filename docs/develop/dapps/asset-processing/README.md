@@ -40,6 +40,7 @@ It is suggested to accept deposits across multiple wallets on your side.
 
 #### Jetton Withdrawals
 - [JS code to withdraw (send) jettons from a wallet](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload.js)
+- [JS code to withdraw (send) jettons from a wallet in batches](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload-batch.js)
 
 - [Detailed info](https://docs.ton.org/develop/dapps/asset-processing/jettons)
 

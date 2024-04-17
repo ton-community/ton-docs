@@ -10,6 +10,8 @@ Best practices with comments on jettons processing:
 
 - [JS algo to jettons withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload.js)
 
+- [JS code to withdraw (send) jettons from a wallet in batches](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload-batch.js)
+
 :::info Transaction Confirmation
 TON transactions are irreversible after just one confirmation. For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
 :::
