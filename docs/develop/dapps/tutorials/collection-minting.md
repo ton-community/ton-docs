@@ -168,7 +168,7 @@ import { readdir } from "fs/promises";
 dotenv.config();
 
 async function init() {
-  const wallet = await openWallet(process.env.MNEMONIC!.split(" "), true);  
+  const wallet = await openWallet([process.env.MNEMONIC!], true);  
 }
 
 void init();
