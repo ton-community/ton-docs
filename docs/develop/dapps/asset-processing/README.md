@@ -79,14 +79,18 @@ Using tonsdk library (similar to tonweb):
 - [See full list of examples](https://github.com/xssnick/tonutils-go#how-to-use)
 
 ## Global overview
-Embodying a fully asynchronous approach, TON Blockchain involves a few concepts which are uncommon to traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred messages between smart contracts and/or the external world. The common path of any interaction starts with an external message sent to a `wallet` smart contract, which authenticates the message sender using public-key cryptography, takes charge of fee payment, and sends inner blockchain messages. That way, transactions on the TON network are not synonymous with user interaction with the blockchain but merely nodes of the message graph: the result of accepting and processing a message by a smart contract, which may or may not lead to the emergence of new messages. The interaction may consist of an arbitrary number of messages and transactions and span a prolonged period of time. Technically, transactions with queues of messages are aggregated into blocks processed by validators. The asynchronous nature of the TON Blockchain **does not allow to predict the hash and lt (logical time) of a transaction** at the stage of sending a message. The transaction accepted to the block is final and cannot be modified.
+Embodying a fully asynchronous approach, TON Blockchain involves a few concepts which are uncommon to traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred messages between smart contracts and/or the external world. Each transaction consists of one incoming message and up to 256 outgoing messages. The common path of any interaction starts with an external message sent to a `wallet` smart contract, which authenticates the message sender using public-key cryptography, takes charge of fee payment, and sends inner blockchain messages. This message is considered incoming for the first transaction that creates a new outgoing message. That way, transactions on the TON network are not synonymous with user interaction with the blockchain but merely nodes of the message graph: the result of accepting and processing a message by a smart contract, which may or may not lead to the emergence of new messages. The interaction may consist of an arbitrary number of messages and transactions and span a prolonged period of time. Technically, transactions with queues of messages are aggregated into blocks processed by validators. The asynchronous nature of the TON Blockchain **does not allow to predict the hash and lt (logical time) of a transaction** at the stage of sending a message. The transaction accepted to the block is final and cannot be modified.
 
 **Each inner blockchain message is a message from one smart contract to another, which bears some amount of digital assets, as well as an arbitrary portion of data.**
 
-Smart contract guidelines recommend treating the data payload, which begins with 32 binary zeros, as a human-readable text message. Most software, such as wallets and libraries, support this specification and allow to send text comments along with Toncoin as well as display comments in other messages.
-
 Smart contracts **pay fees for transactions** (usually from the balance of an incoming message) as well as a **storage fee for the contract's stored code and data**. Fees depend on workchain configs with maximal fees on `masterchain` and substantially lower fees on `basechain`.
 
+![](/img/docs/asset-processing/msg_dag_example.svg)
+
+* `external message` is the input message for `wallet A v4` contract with empty soure (a message from nowhere, such as [Tonkeeper](https://tonkeeper.com/)).
+* `outgoing message` is the output message for `wallet A v4` contract and input message for `wallet B v4` contract with `wallet A v4` source and `wallet B v4` destination.
+
+As a result there are 2 transactions with their set of input and output messages.
 
 ## Digital assets on TON
 TON has three types of digital assets.
@@ -143,6 +147,8 @@ A contract's transactions can be obtained using [getTransactions](https://github
 4. Incoming payments are transactions in which the incoming message has a source address; outgoing payments are transactions in which the incoming message has no source address and also presents the outgoing messages. These transactions should be processed accordingly.
 5. If all of those 10 transactions are unseen, the next 10 transactions should be loaded and steps 2,3,4,5 should be repeated.
 
+## Checking transactions' flow
+It's possible to track messages flow during transaction processing. Since the message flow is a DAG it's enough to get the input `in_msg` or output `out_msgs` messages of current transaction using [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method to find incoming transaction with [tryLocateResultTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_result_tx_tryLocateResultTx_get) or outgoing transactions with [tryLocateSourceTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_source_tx_tryLocateSourceTx_get).
 
 ## Accepting payments
 There are a few approaches to accepting payments that differ in their method of distinguishing users.
