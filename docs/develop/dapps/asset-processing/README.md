@@ -83,6 +83,8 @@ Embodying a fully asynchronous approach, TON Blockchain involves a few concepts 
 
 **Each inner blockchain message is a message from one smart contract to another, which bears some amount of digital assets, as well as an arbitrary portion of data.**
 
+Smart contract guidelines recommend treating the data payload, which begins with 32 binary zeros, as a human-readable text message. Most software, such as wallets and libraries, support this specification and allow to send text comments along with Toncoin as well as display comments in other messages.
+
 Smart contracts **pay fees for transactions** (usually from the balance of an incoming message) as well as a **storage fee for the contract's stored code and data**. Fees depend on workchain configs with maximal fees on `masterchain` and substantially lower fees on `basechain`.
 
 ![](/img/docs/asset-processing/msg_dag_example.svg)
