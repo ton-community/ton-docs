@@ -859,6 +859,7 @@ async function main() {
         .storeRef(stateInitCell)
         .storeRef(saleBody)
         .endCell();
+}
 ```
 
 </details>
@@ -1033,9 +1034,10 @@ is_connected = await connector.restore_connection()
 transaction = {
     'valid_until': int(time.time() + 3600),
     'messages': [
+        {
             'address' :'0:0000000000000000000000000000000000000000000000000000000000000000', # destination address
             'amount' : 1000000000,  # amount should be specified in nanocoins, 1 TON
-        )
+        }
     ]
 }
 ```
@@ -1147,7 +1149,7 @@ def get_jetton_burn_message(jetton_wallet_address: str, transfer_fee: int, jetto
         'amount': str(transfer_fee),
         'payload': urlsafe_b64encode(
             begin_cell()
-            .store_uint(0x595f07bc, 32)  # op code for jetton transfer message
+            .store_uint(0x595f07bc, 32)  # op code for jetton burn message
             .store_uint(0, 64)  # query_id
             .store_coins(jettons_amount)
             .store_address(response_address)  # address send excess to
@@ -1237,7 +1239,7 @@ To place NFT on GetGems Sale Contract, we should prepare special message body `t
 <summary>Example of creating NFT Sale Body</summary>
 
 ```python
-    import time
+import time
 from base64 import urlsafe_b64encode
 
 from pytoniq_core.boc import Cell, begin_cell, Address
@@ -1318,11 +1320,12 @@ The final transaction body:
 transaction = {
     'valid_until': int(time.time() + 3600),
     'messages': [
-        get_nft_transfer_message(
+        get_sale_body(
             nft_address='EQDrA-3zsJXTfGo_Vdzg8d07Da4vSdHZllc6W9qvoNoMstF-',
-            recipient_address='0:0000000000000000000000000000000000000000000000000000000000000000',
-            transfer_fee=int(0.07 * 10**9),
-            response_address=wallet_address
+            wallet_address='0:0000000000000000000000000000000000000000000000000000000000000000',
+            royalty_address='0:0000000000000000000000000000000000000000000000000000000000000000',
+            price=int(5 * 10**9),
+            amount=int(1.08 * 10**9)
         ),
     ]
 }
@@ -1341,16 +1344,411 @@ transaction = {
         {
             'address': nft_address,
             'amount': buyAmount,
+        }
     ]
+}
+```
+
+## TON Connect Go SDK
+
+Go examples are using [tonconnect](https://github.com/cameo-engineering/tonconnect) and [tonutils-go](https://github.com/xssnick/tonutils-go).
+
+```go
+import "github.com/cameo-engineering/tonconnect"
+import "github.com/xssnick/tonutils-go/ton"
+```
+
+:::tip
+Read [tonconnect](https://github.com/cameo-engineering/tonconnect/blob/master/examples/basic/main.go) and [tonutils-go](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#how-to-use) examples.
+:::
+
+### Initiate connector and send transaction
+
+There you can find how to create tonconnect session and send transaction constructed with messages.
+
+```go
+s, _ := tonconnect.NewSession()
+// create ton links
+// ...
+// create new message msg and transaction
+boc, _ := s.SendTransaction(ctx, *tx)
+```
+
+In further examples only messages and transactions will be created.
+
+### Regular TON Transfer
+
+Example of function for building regular TON transfer message:
+
+```go
+func transfer(dest string, amount uint64) (*tonconnect.Message, error) {
+	msg, err := tonconnect.NewMessage(
+		dest,
+		fmt.Sprintf("%d", amount), // nanocoins to transfer/compute message
+	)
+	return msg, err
+}
+```
+Final transaction body:
+
+```go
+msg, err := transfer("0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbLZ", uint64(math.Pow(10, 9)))
+if err != nil {
+    log.Fatal(err)
+}
+tx, err := tonconnect.NewTransaction(
+    tonconnect.WithTimeout(10*time.Minute),
+    tonconnect.WithTestnet(),
+    tonconnect.WithMessage(*msg),
+)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+### Transfer with Comment
+
+Example of function for building transfer with comment message:
+
+```go
+func transfer_with_comment(dest string, amount uint64, comment string) (*tonconnect.Message, error) {
+	payload, _ := cell.BeginCell().
+		MustStoreUInt(0, 32).
+		MustStoreStringSnake(comment).
+		EndCell().MarshalJSON()
+	msg, err := tonconnect.NewMessage(
+		dest,
+		fmt.Sprintf("%d", amount), // nanocoins to transfer/compute message
+		tonconnect.WithPayload(payload))
+	return msg, err
+}
+```
+Final transaction body:
+
+```go
+msg, err := transfer_with_comment("0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbLZ", uint64(math.Pow(10, 9)), "new comment")
+if err != nil {
+    log.Fatal(err)
+}
+tx, err := tonconnect.NewTransaction(
+    tonconnect.WithTimeout(10*time.Minute),
+    tonconnect.WithTestnet(),
+    tonconnect.WithMessage(*msg),
+)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+### Jetton Transfer
+
+Example of function for jetton transfer message:
+
+```go
+func jetton_transfer_message(jetton_wallet_address string, amount uint64,
+	jettons_amount uint64, recipient_address, response_address string,
+	fwd_amount uint64, fwd_payload *cell.Cell) (*tonconnect.Message, error) {
+	payload, _ := cell.BeginCell().
+		MustStoreUInt(0xf8a7ea5, 32). // op code for jetton transfer message (op::transfer)
+		MustStoreUInt(0, 64).         // query_id
+		MustStoreCoins(jettons_amount).
+		MustStoreAddr(address.MustParseAddr(recipient_address)). // address send excess to
+		MustStoreAddr(address.MustParseAddr(response_address)).
+		MustStoreUInt(0, 1).        // custom payload
+		MustStoreCoins(fwd_amount). // set 0 if don't want transfer notification
+		MustStoreMaybeRef(fwd_payload).
+		EndCell().MarshalJSON()
+
+	msg, err := tonconnect.NewMessage(
+		jetton_wallet_address,
+		fmt.Sprintf("%d", amount), // nanocoins to transfer/compute message
+		tonconnect.WithPayload(payload))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return msg, nil
+}
+```
+
+Final transaction body:
+
+```go
+msg, err := jetton_transfer_message("kQA8Q7m_pSNPr6FcqRYxllpAZv-0ieXy_KYER2iP195hBXiX", 
+                                    uint64(math.Pow(10, 9)), 
+                                    uint64(10),
+                                    "0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbL2",
+                                    "EQBuObr2M7glm08w6cBGjIuuCbmvBFGwuVs6qb3AQpac9XpX", 
+                                    uint64(0), nil)
+if err != nil {
+    log.Fatal(err)
+}
+tx, err := tonconnect.NewTransaction(
+    tonconnect.WithTimeout(10*time.Minute),
+    tonconnect.WithTestnet(),
+    tonconnect.WithMessage(*msg),
+)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+### Jetton Burn
+
+Example of function for jetton burn message:
+
+```go
+func jetton_burn_message(jetton_wallet_address string, amount uint64,
+	jettons_amount uint64, response_address string) (*tonconnect.Message, error) {
+
+	payload, _ := cell.BeginCell().
+		MustStoreUInt(0xf8a7ea5, 32).                           // op code for jetton burn message (op::burn)
+		MustStoreUInt(0, 64).                                   // query_id
+		MustStoreCoins(jettons_amount).                         // jetton amount to burn
+		MustStoreAddr(address.MustParseAddr(response_address)). // address send excess to
+		EndCell().MarshalJSON()
+
+	msg, err := tonconnect.NewMessage(
+		jetton_wallet_address,
+		fmt.Sprintf("%d", amount), // nanocoins to transfer/compute message
+		tonconnect.WithPayload(payload))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return msg, nil
+}
+```
+
+Final transaction body:
+
+```go
+msg, err := jetton_burn_message("kQA8Q7m_pSNPr6FcqRYxllpAZv-0ieXy_KYER2iP195hBXiX",
+                                uint64(math.Pow(10, 9)),
+                                uint64(10),
+                                "EQBuObr2M7glm08w6cBGjIuuCbmvBFGwuVs6qb3AQpac9XpX")
+if err != nil {
+    log.Fatal(err)
+}
+tx, err := tonconnect.NewTransaction(
+    tonconnect.WithTimeout(10*time.Minute),
+    tonconnect.WithTestnet(),
+    tonconnect.WithMessage(*msg),
+)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+### NFT Transfer
+
+Example of function for NFT transfer message:
+
+```go
+func nft_transfer_message(nft_address string, amount uint64, recipient_address, response_address string,
+	fwd_amount uint64, fwd_payload *cell.Cell) (*tonconnect.Message, error) {
+
+	payload, _ := cell.BeginCell().
+		MustStoreUInt(0x5fcc3d14, 32).                           // op code for nft transfer message (op::transfer())
+		MustStoreUInt(0, 64).                                    // query_id
+		MustStoreAddr(address.MustParseAddr(recipient_address)). // new owner
+		MustStoreAddr(address.MustParseAddr(response_address)).  // address send excess to
+		MustStoreUInt(0, 1).                                     // custom payload
+		MustStoreCoins(fwd_amount).                              // set 0 if don't want transfer notification
+		MustStoreMaybeRef(fwd_payload).
+		EndCell().MarshalJSON()
+
+	msg, err := tonconnect.NewMessage(
+		nft_address,
+		fmt.Sprintf("%d", amount), // nanocoins to transfer/compute message
+		tonconnect.WithPayload(payload))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return msg, nil
+}
+```
+
+Final transaction body:
+
+```go
+msg, err := nft_transfer_message("EQDrA-3zsJXTfGo_Vdzg8d07Da4vSdHZllc6W9qvoNoMstF-",
+                                uint64(math.Pow(10, 9)),
+                                "0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbL2",
+                                "0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbL2",
+                                uint64(0), nil)
+if err != nil {
+    log.Fatal(err)
+}
+tx, err := tonconnect.NewTransaction(
+    tonconnect.WithTimeout(10*time.Minute),
+    tonconnect.WithTestnet(),
+    tonconnect.WithMessage(*msg),
+)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+### NFT Sale (GetGems)
+
+Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc).
+
+To place NFT on GetGems Sale Contract, we should prepare special message body `transferNftBody` that will be transfer NFT to special NFT Sale Contract.
+```go
+transferNftBody := cell.BeginCell().
+    MustStoreUInt(0x5fcc3d14, 32).        // opcode for NFT transfer
+    MustStoreUInt(0, 64).                 // query_id
+    MustStoreAddress(destinationAddress). // new_owner - GetGems sale contracts deployer, should never change for this operation
+    MustStoreAddress(walletAddress).      // response_destination for excesses
+    MustStoreUInt(0, 1).                  // we do not have custom_payload
+    MustStoreCoins(1.08*math.Pow(10, 9)). // forward_amount
+    MustStoreUInt(0, 1).                  // we store forward_payload is this cell
+    MustStoreUInt(0x0fe0ede, 31).         // not 32, because previous 0 will be read as do_sale opcode in deployer (op::do_sale)
+    MustStoreRef(stateInitCell).
+    MustStoreRef(saleBody).
+    EndCell()
+```
+
+Because message requires a lot of steps, the entire algorithm huge and could be found here:
+<details>
+    <summary>Show entire algorithm for the creating NFT Sale message body</summary>
+
+```go
+func nft_sale_message(wallet, royalty, nft string, amount, price uint64) (*tonconnect.Message, error) {
+	fixPriceV3R2Code := new(cell.Cell)
+	fixPriceV3R2Code.UnmarshalJSON([]byte("te6cckECCwEAArkAART/APSkE/S88sgLAQIBIAIDAgFIBAUAfvIw7UTQ0wDTH/pA+kD6QPoA1NMAMMABjh34AHAHyMsAFssfUATPFljPFgHPFgH6AszLAMntVOBfB4IA//7y8AICzQYHAFegOFnaiaGmAaY/9IH0gfSB9AGppgBgYaH0gfQB9IH0AGEEIIySsKAVgAKrAQH30A6GmBgLjYSS+CcH0gGHaiaGmAaY/9IH0gfSB9AGppgBgYOCmE44BgAEqYhOmPhW8Q4YBKGATpn8cIxbMbC3MbK2QV44LJOZlvKAVxFWAAyS+G8BJrpOEBFcCBFd0VYACRWdjYKdxjgthOjq+G6hhoaYPqGAD9gHAU4ADAgB92YIQO5rKAFJgoFIwvvLhwiTQ+kD6APpA+gAwU5KhIaFQh6EWoFKQcIAQyMsFUAPPFgH6AstqyXH7ACXCACXXScICsI4XUEVwgBDIywVQA88WAfoCy2rJcfsAECOSNDTiWnCAEMjLBVADzxYB+gLLaslx+wBwIIIQX8w9FIKAejy0ZSzjkIxMzk5U1LHBZJfCeBRUccF8uH0ghAFE42RFrry4fUD+kAwRlAQNFlwB8jLABbLH1AEzxZYzxYBzxYB+gLMywDJ7VTgMDcowAPjAijAAJw2NxA4R2UUQzBw8AXgCMACmFVEECQQI/AF4F8KhA/y8AkA1Dg5ghA7msoAGL7y4clTRscFUVLHBRWx8uHKcCCCEF/MPRQhgBDIywUozxYh+gLLassfFcs/J88WJ88WFMoAI/oCE8oAyYMG+wBxUGZFFQRwB8jLABbLH1AEzxZYzxYBzxYB"))
+
+	marketplaceAddress := address.MustParseAddr("EQBYTuYbLf8INxFtD8tQeNk5ZLy-nAX9ahQbG_yl1qQ-GEMS")    // GetGems Address
+	marketplaceFeeAddress := address.MustParseAddr("EQCjk1hh952vWaE9bRguFkAhDAL5jj3xj9p0uPWrFBq_GEMS") // GetGems Address for Fees
+	destinationAddress := address.MustParseAddr("EQAIFunALREOeQ99syMbO6sSzM_Fa1RsPD5TBoS0qVeKQ-AR")    // GetGems sale contracts deployer
+
+	walletAddress := address.MustParseAddr(wallet)
+	royaltyAddress := address.MustParseAddr(royalty)
+	nftAddress := address.MustParseAddr(nft)
+
+	feesData := cell.BeginCell().
+		MustStoreAddr(marketplaceFeeAddress).
+		// 5% - GetGems fee
+		MustStoreCoins(price * 100 * 5).
+		MustStoreAddr(royaltyAddress).
+		// 5% - Royalty, can be changed
+		MustStoreCoins(price / 100 * 5).
+		EndCell()
+
+	saleData := cell.BeginCell().
+		MustStoreUInt(0, 1).                                // is_complete
+		MustStoreUInt(uint64(time.Now().UTC().Unix()), 32). // created_at
+		MustStoreAddr(marketplaceAddress).                  // marketplace_address
+		MustStoreAddr(nftAddress).                          // nft_address
+		MustStoreAddr(walletAddress).                       // previous_owner_address
+		MustStoreCoins(price).                              // full price in nanotons
+		MustStoreRef(feesData).                             // fees_cell
+		MustStoreUInt(0, 1).                                // can_be_deployed_externally
+		EndCell()
+
+	stateInit := &tlb.StateInit{
+		Data: saleData,
+		Code: fixPriceV3R2Code,
+	}
+
+	stateInitCell, err := tlb.ToCell(stateInit)
+	if err != nil {
+		return nil, err
+	}
+
+	// not needed, just for example
+	// saleContractAddress := address.NewAddress(0, 0, stateInitCell.Hash())
+
+	saleBody := cell.BeginCell().
+		MustStoreUInt(1, 32). // just accept coins on deploy
+		MustStoreUInt(0, 64).
+		EndCell()
+
+	transferNftBody, err := cell.BeginCell().
+		MustStoreUInt(0x5fcc3d14, 32).             // opcode for NFT transfer
+		MustStoreUInt(0, 64).                      // query_id
+		MustStoreAddr(destinationAddress).         // new_owner - GetGems sale contracts deployer, should never change for this operation
+		MustStoreAddr(walletAddress).              // response_destination for excesses
+		MustStoreUInt(0, 1).                       // we do not have custom_payload
+		MustStoreCoins(uint64(1*math.Pow(10, 9))). // forward_amount
+		MustStoreUInt(0, 1).                       // we store forward_payload is this cell
+		MustStoreUInt(0x0fe0ede, 31).              // not 32, because previous 0 will be read as do_sale opcode in deployer (op::do_sale)
+		MustStoreRef(stateInitCell).
+		MustStoreRef(saleBody).
+		EndCell().MarshalJSON()
+
+	if err != nil {
+		return nil, err
+	}
+
+	msg, err := tonconnect.NewMessage(
+		nftAddress.String(),
+		fmt.Sprintf("%d", amount),
+		tonconnect.WithPayload(transferNftBody))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return msg, nil
+}
+```
+
+The final transaction body:
+
+```go
+msg, err := nft_sale_message("EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162",
+                            "EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162",
+                            "EQCUWoe7hLlklVxH8gduCf45vPNocsjRP4wbX42UJ0Ja0S2f",
+                            uint64(1.08*math.Pow(10, 9)), uint64(5*math.Pow(10, 9)))
+if err != nil {
+    log.Fatal(err)
+}
+tx, err := tonconnect.NewTransaction(
+    tonconnect.WithTimeout(10*time.Minute),
+    tonconnect.WithTestnet(),
+    tonconnect.WithMessage(*msg),
+)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+</details>
+
+### NFT Buy (GetGems)
+
+The process of buy NFT for [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc) sale contract could be carry out with regular transfer without payload, the only important thing is accurate TON amount, that calculates as follows:
+`buyAmount = Nftprice TON + 1.0 TON`.
+
+```go
+msg, err := tonconnect.NewMessage(nftAddress, buyAmount)
+if err != nil {
+    log.Fatal(err)
+}
+tx, err := tonconnect.NewTransaction(
+    tonconnect.WithTimeout(10*time.Minute),
+    tonconnect.WithTestnet(),
+    tonconnect.WithMessage(*msg),
+)
+if err != nil {
+    log.Fatal(err)
 }
 ```
 
 ## Authors
 - JavaScript examples provided by [@aSpite](https://t.me/aspite)
 - Python examples provided by [@yunwine](https://t.me/yungwine)
+- Go examples provided by [@gleb498](https://t.me/gleb498)
 
 ## See Also
-
 * [TON Connect SDKs](/develop/dapps/ton-connect/developers)
 * [TON Connect - Sending Messages](/develop/dapps/ton-connect/transactions)
 * [Smart Contract Developmet - Sending Messages (Low Level)](/develop/smart-contracts/messages)
+* [TON Jetton processing](/develop/dapps/asset-processing/jettons)
+* [NFT processing on TON](/develop/dapps/asset-processing/nfts)
