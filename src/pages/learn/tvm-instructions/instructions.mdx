@@ -4,7 +4,8 @@ wrapperClassName: bootstrap-wrapper
 ---
 
 import { SearchField } from '@site/src/components/SearchField';
-import { opcodes } from '@site/src/data/opcodes';
+import { InstructionGroups } from '@site/src/components/Instructions';
+import { opcodes, cp0 } from '@site/src/data/opcodes';
 
 # TVM Instructions
 
@@ -58,6 +59,8 @@ Each section of TVM Instructions includes a built-in search component for findin
 On this page, however, the search covers all existing opcodes, providing a comprehensive search option across the entire opcode range.
 
 Feel free to use the search field below to find a specific instruction:
+
+<InstructionGroups instructions={cp0.instructions}/>
 
 <SearchField
   data={opcodes}
