@@ -662,6 +662,9 @@ await my_wallet.transfer_jetton_by_jetton_wallet(destination_address='address', 
 
 ### Jetton Transfer with Comment parse
 
+<Tabs groupId="parse-code-examples">
+<TabItem value="tonweb" label="JS (tonweb)">
+
 ```ts
 import {
     Address,
@@ -768,7 +771,6 @@ export async function tryProcessJetton(orderId: string) : Promise<string> {
     }
 
     // Subscribe
-
     const Subscription = async ():Promise<Transaction[]> =>{
 
       const client = new TonClient({
@@ -783,13 +785,10 @@ export async function tryProcessJetton(orderId: string) : Promise<string> {
         return transactions;
     }
 
-
-
-
     return retry(async () => {
 
         await prepare();
-       const Transactions = await Subscription();
+        const Transactions = await Subscription();
 
         for (const tx of Transactions) {
 
@@ -828,7 +827,7 @@ export async function tryProcessJetton(orderId: string) : Promise<string> {
             let body = originalBody?.clone();
             const op = body?.loadUint(32);
             if (!(op == 0x7362d09c)) {
-                continue; // op == transfer_notification
+                continue; // op != transfer_notification
             }
 
             console.log('op code check passed', tx.hash().toString('hex'));
@@ -856,8 +855,202 @@ export async function tryProcessJetton(orderId: string) : Promise<string> {
         throw new Error('Transaction not found');
     }, {retries: 30, delay: 1000});
 }
-
 ```
+
+</TabItem>
+<TabItem value="tonutils-go" label="Golang">
+
+```go
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/xssnick/tonutils-go/address"
+	"github.com/xssnick/tonutils-go/liteclient"
+	"github.com/xssnick/tonutils-go/tlb"
+	"github.com/xssnick/tonutils-go/ton"
+	"github.com/xssnick/tonutils-go/ton/jetton"
+	"github.com/xssnick/tonutils-go/tvm/cell"
+)
+
+const (
+	MainnetConfig   = "https://ton.org/global.config.json"
+	TestnetConfig   = "https://ton.org/global.config.json"
+	MyWalletAddress = "INSERT-YOUR-HOT-WALLET-ADDRESS"
+)
+
+type JettonInfo struct {
+	address  string
+	decimals int
+}
+
+type Jettons struct {
+	jettonMinter        *jetton.Client
+	jettonWalletAddress string
+	jettonWallet        *jetton.WalletClient
+}
+
+func prepare(api ton.APIClientWrapped, jettonsInfo map[string]JettonInfo) (map[string]Jettons, error) {
+	userAddress := address.MustParseAddr(MyWalletAddress)
+	block, err := api.CurrentMasterchainInfo(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
+	jettons := make(map[string]Jettons)
+
+	for name, info := range jettonsInfo {
+		jettonMaster := jetton.NewJettonMasterClient(api, address.MustParseAddr(info.address))
+		jettonWallet, err := jettonMaster.GetJettonWallet(context.Background(), userAddress)
+		if err != nil {
+			return nil, err
+		}
+
+		jettonUserAddress := jettonWallet.Address()
+
+		jettonData, err := api.RunGetMethod(context.Background(), block, jettonUserAddress, "get_wallet_data")
+		if err != nil {
+			return nil, err
+		}
+
+		slice := jettonData.MustCell(0).BeginParse()
+		slice.MustLoadCoins() // skip balance
+		slice.MustLoadAddr()  // skip owneer address
+		adminAddress := slice.MustLoadAddr()
+
+		if adminAddress.String() != info.address {
+			return nil, fmt.Errorf("jetton minter address from jetton wallet doesnt match config")
+		}
+
+		jettons[name] = Jettons{
+			jettonMinter:        jettonMaster,
+			jettonWalletAddress: jettonUserAddress.String(),
+			jettonWallet:        jettonWallet,
+		}
+	}
+
+	return jettons, nil
+}
+
+func jettonWalletAddressToJettonName(jettons map[string]Jettons, jettonWalletAddress string) string {
+	for name, info := range jettons {
+		if info.jettonWallet.Address().String() == jettonWalletAddress {
+			return name
+		}
+	}
+	return ""
+}
+
+func GetTransferTransactions(orderId string, foundTransfer chan<- *tlb.Transaction) {
+	jettonsInfo := map[string]JettonInfo{
+		"jUSDC": {address: "EQB-MPwrd1G6WKNkLz_VnV6WqBDd142KMQv-g1O-8QUA3728", decimals: 6},
+		"jUSDT": {address: "EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA", decimals: 6},
+	}
+
+	client := liteclient.NewConnectionPool()
+
+	cfg, err := liteclient.GetConfigFromUrl(context.Background(), MainnetConfig)
+	if err != nil {
+		log.Fatalln("get config err: ", err.Error())
+	}
+
+	// connect to lite servers
+	err = client.AddConnectionsFromConfig(context.Background(), cfg)
+	if err != nil {
+		log.Fatalln("connection err: ", err.Error())
+	}
+
+	// initialize ton api lite connection wrapper
+	api := ton.NewAPIClient(client, ton.ProofCheckPolicySecure).WithRetry()
+	master, err := api.CurrentMasterchainInfo(context.Background())
+	if err != nil {
+		log.Fatalln("get masterchain info err: ", err.Error())
+	}
+
+	// address on which we are accepting payments
+	treasuryAddress := address.MustParseAddr("EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N")
+
+	acc, err := api.GetAccount(context.Background(), master, treasuryAddress)
+	if err != nil {
+		log.Fatalln("get masterchain info err: ", err.Error())
+	}
+
+	jettons, err := prepare(api, jettonsInfo)
+	if err != nil {
+		log.Fatalln("can't prepare jettons data: ", err.Error())
+	}
+
+	lastProcessedLT := acc.LastTxLT
+
+	transactions := make(chan *tlb.Transaction)
+
+	go api.SubscribeOnTransactions(context.Background(), treasuryAddress, lastProcessedLT, transactions)
+
+	log.Println("waiting for transfers...")
+
+	// listen for new transactions from channel
+	for tx := range transactions {
+		if tx.IO.In == nil || tx.IO.In.MsgType != tlb.MsgTypeInternal {
+			// external message - not related to jettons
+			continue
+		}
+
+		msg := tx.IO.In.Msg
+		sourceAddress := msg.SenderAddr()
+
+		// jetton master contract address check
+		jettonName := jettonWalletAddressToJettonName(jettons, sourceAddress.String())
+		if len(jettonName) == 0 {
+			// unknown or fake jetton transfer
+			continue
+		}
+
+		if msg.Payload() == nil || msg.Payload() == cell.BeginCell().EndCell() {
+			// no in_msg body
+			continue
+		}
+
+		msgBodySlice := msg.Payload().BeginParse()
+
+		op := msgBodySlice.MustLoadUInt(32)
+		if op != 0x7362d09c {
+			continue // op != transfer_notification
+		}
+
+		// just skip bits
+		msgBodySlice.MustLoadUInt(64)
+		amount := msgBodySlice.MustLoadCoins()
+		msgBodySlice.MustLoadAddr()
+
+		payload := msgBodySlice.MustLoadMaybeRef()
+		payloadOp := payload.MustLoadUInt(32)
+		if payloadOp == 0 {
+			log.Println("no text comment in transfer_notification")
+			continue
+		}
+
+		comment := payload.MustLoadStringSnake()
+		if comment != orderId {
+			continue
+		}
+
+		// process transaction
+		log.Printf("Got %s jetton deposit %d units with text comment %s\n", jettonName, amount, comment)
+		foundTransfer <- tx
+	}
+}
+```
+
+</TabItem>
+<TabItem value="TonTools" label="Python">
+
+```py
+```
+
+</TabItem>
+
+</Tabs>
 
 # Done
 Best practices with comments on jettons processing:
