@@ -4,32 +4,18 @@ import Button from '@site/src/components/button';
 
 # TON Jetton processing
 
-Best practices with comments on jettons processing:
-
-- [JS algo to accept jettons deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
-
-- [JS algo to jettons withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload.js)
-
-- [JS code to withdraw (send) jettons from a wallet in batches](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload-batch.js)
-
-:::info Transaction Confirmation
-TON transactions are irreversible after just one confirmation. For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
-:::
-
-In most cases, this should be enough for you, if not, you can find detailed information below.
-
 ## Content List
 
 This document describes the following in order:
-1. Overview 
+1. Overview
 2. Architecture
-2. Jetton Master Contract (Token Minter)
-3. Jetton Wallet Contract (User Wallet)
-4. Message Layouts
-4. Jetton Processing (off-chain)
-5. Jetton Processing (on-chain)
-6. Wallet processing
-7. Best Practices
+3. Jetton Master Contract (Token Minter)
+4. Jetton Wallet Contract (User Wallet)
+5. Message Layouts
+6. Jetton Processing (off-chain)
+7. Jetton Processing (on-chain)
+8. Wallet processing
+9. Best Practices
 
 ## Overview
 
@@ -41,8 +27,8 @@ Quick jump to the core description of jetton processing:
 
 <Button href="/develop/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>Centralized Proccessing</Button>
 <Button href="/develop/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses"
-        colorType="secondary" sizeType={'sm'}>
-  On-Chain Processing
+colorType="secondary" sizeType={'sm'}>
+On-Chain Processing
 </Button>
 
 <br></br><br></br>
@@ -55,9 +41,6 @@ A less formal sharding-focused overview of jetton architecture can be found in o
 [anatomy of jettons blog post](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons).
 
 We have also provided specific details discussing our third-party open-source TON Payment Processor ([bicycle](https://github.com/gobicycle/bicycle)) which allows users to deposit and withdraw both Toncoin and jettons using a separate deposit address without using a text memo.
-
-
-
 
 ## Jetton Architecture
 
@@ -72,27 +55,27 @@ Standardized tokens on TON are implemented using a set of smart contracts, inclu
 </p>
 
 ## Jetton master smart contract
-The jetton master smart contract stores general information about the jetton (
+The jetton master smart contract stores general information about the jetton (including the total supply, a metadata link, or the metadata itself).
 
-including the total supply, a metadata link, or the metadata itself).
-
-It is possible for any user to create a counterfeit clone of a valuable jetton (using an arbitrary name, ticker, image, etc.) that is nearly identical to the original. Thankfully, counterfeit jettons are distinguishable by their addresses and can be identified quite easily.
+:::info Jetton scam
+It is possible for any user to create a counterfeit **clone** of a valuable jetton (using an arbitrary name, ticker, image, etc.) that is **nearly identical to the original**. Thankfully, counterfeit jettons are **distinguishable by their addresses** and can be identified quite easily.
 
 To eliminate the possibility of fraud for TON users, please look up the original jetton address (Jetton master contract) for specific jetton types or follow the project’s official social media channel or website to find the correct information. Check assets to eliminate the possibility of fraud with [Tonkeeper ton-assets list](https://github.com/tonkeeper/ton-assets).
+:::
 
 ### Retrieving Jetton data
 
-To retrieve more specific Jetton data, the `get_jetton_data()` get method is used.
+To retrieve more specific Jetton data use _get_ method `get_jetton_data()`.
 
 This method returns the following data:
 
-| Name               | Type  | Description |
-|--------------------|-------|-------------------- |
-| `total_supply`       | `int`  | the total number of issued jettons measured in indivisible units. |
-| `mintable`          | `int`   | details whether new jettons can be minted or not. This value is either -1 (can be minted) or 0 (cannot be minted). |
-| `admin_address`      | `slice` |   |
-| `jetton_content`     | `cell` | data in accordance with [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md). |
-| `jetton_wallet_code` | `cell`  |  |
+| Name               | Type  | Description                                                                                                                                                                                                     |
+|--------------------|-------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `total_supply`       | `int`  | the total number of issued jettons measured in indivisible units.                                                                                                                                               |
+| `mintable`          | `int`   | details whether new jettons can be minted or not. This value is either -1 (can be minted) or 0 (cannot be minted).                                                                                              |
+| `admin_address`      | `slice` |                                                                                                                                                                                                                 |
+| `jetton_content`     | `cell` | data in accordance with [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md), check [jetton metadata parsing page](/develop/dapps/asset-processing/metadata) for more. |
+| `jetton_wallet_code` | `cell`  |                                                                                                                                                                                                                 |
 
 
 
@@ -109,10 +92,7 @@ console.log('Total supply:', data.totalSupply.toString());
 console.log('URI to off-chain metadata:', data.jettonContentUri);
 ```
 
-#### Jetton metadata
-More info on parsing metadata is provided [here](/develop/dapps/asset-processing/metadata).
-
-## Jetton Wallet smart contracts
+## Jetton wallet smart contract
 Jetton wallet contracts are used to send, receive, and burn jettons. Each _jetton wallet contract_ stores wallet balance information for specific users. 
 In specific instances, jetton wallets are used for individual jetton holders for each jetton type.
 
@@ -127,17 +107,24 @@ When Alice initiates the sending of jettons in a wallet she manages, she sends e
 and as a result, _her wallet_ sends an internal message to _her jetton wallet_ and 
 then the jetton wallet actually executes the token transfer.
 
+### Jetton Wallet Deployment
+When transferring jettons between wallets, transactions (messages) require a certain amount of TON
+as payment for network gas fees and the execution of actions according to the Jetton wallet contract's code.
+This means that the recipient does not need to deploy a jetton wallet prior to receiving jettons.
+The recipient's jetton wallet will be deployed automatically as long as the sender holds enough TON
+in the wallet to pay the required gas fees.
+
 ### Retrieving Jetton wallet addresses for a given user
 To retrieve a jetton wallet address using an owner address (a TON Wallet address), 
 the Jetton master contract provides the get method `get_wallet_address(slice owner_address)`.
 
-#### Retrieve using API
-The application serializes the owner’s address to a cell using 
-the `/runGetMethod` method from the [Toncenter API](https://toncenter.com/api/v3/#/default/run_get_method_api_v3_runGetMethod_post).
+<Tabs groupId="retrieve-wallet-address">
+<TabItem value="api" label="API">
 
-#### Retrieve using SDK
-This process can also be initiated using ready to use methods present in our various SDKs, for instance,  
-using the Tonweb SDK, this process can be initiated by entering the following strings:
+> Run `get_wallet_address(slice owner_address)` through `/runGetMethod` method from the [Toncenter API](https://toncenter.com/api/v3/#/default/run_get_method_api_v3_runGetMethod_post).
+
+</TabItem>
+<TabItem value="js" label="js">
 
 ```js
 import TonWeb from "tonweb";
@@ -155,13 +142,13 @@ if (jettonData.jettonMinterAddress.toString(false) !== new TonWeb.utils.Address(
 
 console.log('Jetton wallet address:', address.toString(true, true, true));
 ```
-:::tip
-For more examples read the [TON Cookbook](/develop/dapps/cookbook#how-to-calculate-users-jetton-wallet-address).
-:::
+
+</TabItem>
+</Tabs>
 
 ### Retrieving data for a specific Jetton wallet
 
-To retrieve the wallet’s account balance, owner identification information, and other info related to a specific jetton wallet contract, the `get_wallet_data()` get method is used within the jetton wallet contract.
+To retrieve the wallet’s account balance, owner identification information, and other info related to a specific jetton wallet contract use the `get_wallet_data()` get method within the jetton wallet contract.
 
 
 This method returns the following data:
@@ -173,7 +160,14 @@ This method returns the following data:
 | jetton             | slice |
 | jetton_wallet_code | cell  |
 
-It is also possible to use the `/jetton/wallets` get method using the [Toncenter API](https://toncenter.com/api/v3/#/default/get_jetton_wallets_api_v3_jetton_wallets_get) to retrieve previously decoded jetton wallet data (or methods within an SDK). For instance, using Tonweb:
+<Tabs groupId="retrieve-jetton-wallet-data">
+<TabItem value="api" label="API">
+
+> Use the `/jetton/wallets` get method from the [Toncenter API](https://toncenter.com/api/v3/#/default/get_jetton_wallets_api_v3_jetton_wallets_get) to retrieve previously decoded jetton wallet data.
+
+</TabItem>
+
+<TabItem value="js" label="js">
 
 ```js
 import TonWeb from "tonweb";
@@ -193,14 +187,10 @@ if (expectedJettonWalletAddress.toString(false) !== new TonWeb.utils.Address(wal
 console.log('Jetton master address:', data.jettonMinterAddress.toString(true, true, true));
 ```
 
-### Jetton Wallet Deployment
-When transferring jettons between wallets, transactions (messages) require a certain amount of TON 
-as payment for network gas fees and the execution of actions according to the Jetton wallet contract's code. 
-This means that the recipient does not need to deploy a jetton wallet prior to receiving jettons. 
-The recipient's jetton wallet will be deployed automatically as long as the sender holds enough TON 
-in the wallet to pay the required gas fees.
+</TabItem>
+</Tabs>
 
-## Message Layouts
+## Messages in jetton wallets communication
 
 :::tip Messages
 Read more about Messages [here](/develop/smart-contracts/guidelines/message-delivery-guarantees).
@@ -211,30 +201,30 @@ Communication between Jetton wallets and TON wallets occurs through the followin
 ![](/img/docs/asset-processing/jetton_transfer.svg)
 
 
-`Sender -> sender' jetton wallet` means the _transfer_ message body contains the following data:
+`Sender -> sender's jetton wallet` means the _transfer_ message body contains the following data:
 
 
-| Name                 | Type    |
-|----------------------|---------|
-| `query_id `            | uint64  |
-| `amount  `             | coins   |
-| `destination  `        | address |
+| Name             | Type    |
+|------------------|---------|
+| `query_id`       | uint64  |
+| `amount`         | coins   |
+| `destination`    | address |
 | `response_destination` | address |
-| `custom_payload  `     | cell    |
-| `forward_ton_amount`   | coins   |
-| `forward_payload`      | cell    |
+| `custom_payload` | cell    |
+| `forward_ton_amount` | coins   |
+| `forward_payload` | cell    |
 
-`payee' jetton wallet -> payee`  means the message notification body contains the following data:
+`payee's jetton wallet -> payee`  means the message notification body contains the following data:
 
 
-| Name            | Type    |
-|-----------------|---------|
-| query_id    `    | uint64  |
-| amount   `       | coins   |
-| sender  `        | address |
-| forward_payload` | cell    |
+| Name     | Type    |
+|----------|---------|
+| `query_id` | uint64  |
+| `amount` | coins   |
+| `sender` | address |
+| `forward_payload` | cell    |
 
-`payee' jetton wallet -> Sender` means the excess message body contains the following data:
+`payee's jetton wallet -> Sender` means the excess message body contains the following data:
 
 
 | Name                 | Type           |
@@ -256,9 +246,7 @@ a sufficient amount of TON must be attached to the message being sent by setting
 value and, if necessary, attaching a text comment to the `forward_payload`.
 A text comment is encoded similarly to a text comment when sending Toncoin.
 
-[Fees for sending Jettons](https://docs.ton.org/develop/smart-contracts/fees#fees-for-sending-jettons)
-
-However, the commission depends on several factors including the Jetton code details and the need to deploy a new Jetton wallet for recipients.
+However, the [fee for sending Jettons](https://docs.ton.org/develop/smart-contracts/fees#fees-for-sending-jettons) depends on several factors including the Jetton code details and the need to deploy a new Jetton wallet for recipients.
 Therefore, it is recommended to attach Toncoin with a margin and then set the address as the  `response_destination`
 to retrieve `Excesses` messages. For example, 0.05 TON can be attached to the message while setting the `forward_ton_amount`
 value to 0.01 TON (this amount of TON will be attached to the `Transfer notification` message).
@@ -870,6 +858,21 @@ export async function tryProcessJetton(orderId: string) : Promise<string> {
 }
 
 ```
+
+# Done
+Best practices with comments on jettons processing:
+
+- [JS algo to accept jettons deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
+
+- [JS algo to jettons withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload.js)
+
+- [JS code to withdraw (send) jettons from a wallet in batches](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload-batch.js)
+
+:::info Transaction Confirmation
+TON transactions are irreversible after just one confirmation. For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
+:::
+
+In most cases, this should be enough for you, if not, you can find detailed information below.
 
 
 ## See Also
