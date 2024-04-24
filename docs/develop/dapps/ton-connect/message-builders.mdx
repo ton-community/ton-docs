@@ -27,7 +27,7 @@ const [tonConnectUI] = useTonConnectUI();
 
 const transaction = {
     //transaction body
-})
+}
 
 export const Settings = () => {
     const [tonConnectUI, setOptions] = useTonConnectUI();
@@ -1355,14 +1355,12 @@ Go examples are using [tonconnect](https://github.com/cameo-engineering/tonconne
 
 ```go
 import "github.com/cameo-engineering/tonconnect"
-import "github.com/xssnick/tonutils-go/ton"
+import "github.com/xssnick/tonutils-go/address"
 ```
 
 :::tip
 Read [tonconnect](https://github.com/cameo-engineering/tonconnect/blob/master/examples/basic/main.go) and [tonutils-go](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#how-to-use) examples.
 :::
-
-### Initiate connector and send transaction
 
 There you can find how to create tonconnect session and send transaction constructed with messages.
 
@@ -1381,7 +1379,13 @@ In further examples only messages and transactions will be created.
 Example of function for building regular TON transfer message:
 
 ```go
-func transfer(dest string, amount uint64) (*tonconnect.Message, error) {
+import (
+	"fmt"
+
+	"github.com/cameo-engineering/tonconnect"
+)
+
+func Transfer(dest string, amount uint64) (*tonconnect.Message, error) {
 	msg, err := tonconnect.NewMessage(
 		dest,
 		fmt.Sprintf("%d", amount), // nanocoins to transfer/compute message
@@ -1392,7 +1396,7 @@ func transfer(dest string, amount uint64) (*tonconnect.Message, error) {
 Final transaction body:
 
 ```go
-msg, err := transfer("0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbLZ", uint64(math.Pow(10, 9)))
+msg, err := Transfer("0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbLZ", uint64(math.Pow(10, 9)))
 if err != nil {
     log.Fatal(err)
 }
@@ -1411,7 +1415,14 @@ if err != nil {
 Example of function for building transfer with comment message:
 
 ```go
-func transfer_with_comment(dest string, amount uint64, comment string) (*tonconnect.Message, error) {
+import (
+	"fmt"
+
+	"github.com/cameo-engineering/tonconnect"
+	"github.com/xssnick/tonutils-go/tvm/cell"
+)
+
+func TransferWithComment(dest string, amount uint64, comment string) (*tonconnect.Message, error) {
 	payload, _ := cell.BeginCell().
 		MustStoreUInt(0, 32).
 		MustStoreStringSnake(comment).
@@ -1426,7 +1437,7 @@ func transfer_with_comment(dest string, amount uint64, comment string) (*tonconn
 Final transaction body:
 
 ```go
-msg, err := transfer_with_comment("0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbLZ", uint64(math.Pow(10, 9)), "new comment")
+msg, err := TransferWithComment("0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbLZ", uint64(math.Pow(10, 9)), "new comment")
 if err != nil {
     log.Fatal(err)
 }
@@ -1445,7 +1456,15 @@ if err != nil {
 Example of function for jetton transfer message:
 
 ```go
-func jetton_transfer_message(jetton_wallet_address string, amount uint64,
+import (
+	"fmt"
+
+	"github.com/cameo-engineering/tonconnect"
+	"github.com/xssnick/tonutils-go/address"
+	"github.com/xssnick/tonutils-go/tvm/cell"
+)
+
+func JettonTransferMessage(jetton_wallet_address string, amount uint64,
 	jettons_amount uint64, recipient_address, response_address string,
 	fwd_amount uint64, fwd_payload *cell.Cell) (*tonconnect.Message, error) {
 	payload, _ := cell.BeginCell().
@@ -1475,7 +1494,7 @@ func jetton_transfer_message(jetton_wallet_address string, amount uint64,
 Final transaction body:
 
 ```go
-msg, err := jetton_transfer_message("kQA8Q7m_pSNPr6FcqRYxllpAZv-0ieXy_KYER2iP195hBXiX", 
+msg, err := JettonTransferMessage("kQA8Q7m_pSNPr6FcqRYxllpAZv-0ieXy_KYER2iP195hBXiX", 
                                     uint64(math.Pow(10, 9)), 
                                     uint64(10),
                                     "0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbL2",
@@ -1499,7 +1518,15 @@ if err != nil {
 Example of function for jetton burn message:
 
 ```go
-func jetton_burn_message(jetton_wallet_address string, amount uint64,
+import (
+	"fmt"
+
+	"github.com/cameo-engineering/tonconnect"
+	"github.com/xssnick/tonutils-go/address"
+	"github.com/xssnick/tonutils-go/tvm/cell"
+)
+
+func JettonBurnMessage(jetton_wallet_address string, amount uint64,
 	jettons_amount uint64, response_address string) (*tonconnect.Message, error) {
 
 	payload, _ := cell.BeginCell().
@@ -1525,7 +1552,7 @@ func jetton_burn_message(jetton_wallet_address string, amount uint64,
 Final transaction body:
 
 ```go
-msg, err := jetton_burn_message("kQA8Q7m_pSNPr6FcqRYxllpAZv-0ieXy_KYER2iP195hBXiX",
+msg, err := JettonBurnMessage("kQA8Q7m_pSNPr6FcqRYxllpAZv-0ieXy_KYER2iP195hBXiX",
                                 uint64(math.Pow(10, 9)),
                                 uint64(10),
                                 "EQBuObr2M7glm08w6cBGjIuuCbmvBFGwuVs6qb3AQpac9XpX")
@@ -1547,7 +1574,15 @@ if err != nil {
 Example of function for NFT transfer message:
 
 ```go
-func nft_transfer_message(nft_address string, amount uint64, recipient_address, response_address string,
+import (
+	"fmt"
+
+	"github.com/cameo-engineering/tonconnect"
+	"github.com/xssnick/tonutils-go/address"
+	"github.com/xssnick/tonutils-go/tvm/cell"
+)
+
+func NftTransferMessage(nft_address string, amount uint64, recipient_address, response_address string,
 	fwd_amount uint64, fwd_payload *cell.Cell) (*tonconnect.Message, error) {
 
 	payload, _ := cell.BeginCell().
@@ -1576,7 +1611,7 @@ func nft_transfer_message(nft_address string, amount uint64, recipient_address, 
 Final transaction body:
 
 ```go
-msg, err := nft_transfer_message("EQDrA-3zsJXTfGo_Vdzg8d07Da4vSdHZllc6W9qvoNoMstF-",
+msg, err := NftTransferMessage("EQDrA-3zsJXTfGo_Vdzg8d07Da4vSdHZllc6W9qvoNoMstF-",
                                 uint64(math.Pow(10, 9)),
                                 "0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbL2",
                                 "0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbL2",
@@ -1619,7 +1654,18 @@ Because message requires a lot of steps, the entire algorithm huge and could be 
     <summary>Show entire algorithm for the creating NFT Sale message body</summary>
 
 ```go
-func nft_sale_message(wallet, royalty, nft string, amount, price uint64) (*tonconnect.Message, error) {
+import (
+	"fmt"
+	"math"
+	"time"
+
+	"github.com/cameo-engineering/tonconnect"
+	"github.com/xssnick/tonutils-go/address"
+	"github.com/xssnick/tonutils-go/tlb"
+	"github.com/xssnick/tonutils-go/tvm/cell"
+)
+
+func NftSaleMessage(wallet, royalty, nft string, amount, price uint64) (*tonconnect.Message, error) {
 	fixPriceV3R2Code := new(cell.Cell)
 	fixPriceV3R2Code.UnmarshalJSON([]byte("te6cckECCwEAArkAART/APSkE/S88sgLAQIBIAIDAgFIBAUAfvIw7UTQ0wDTH/pA+kD6QPoA1NMAMMABjh34AHAHyMsAFssfUATPFljPFgHPFgH6AszLAMntVOBfB4IA//7y8AICzQYHAFegOFnaiaGmAaY/9IH0gfSB9AGppgBgYaH0gfQB9IH0AGEEIIySsKAVgAKrAQH30A6GmBgLjYSS+CcH0gGHaiaGmAaY/9IH0gfSB9AGppgBgYOCmE44BgAEqYhOmPhW8Q4YBKGATpn8cIxbMbC3MbK2QV44LJOZlvKAVxFWAAyS+G8BJrpOEBFcCBFd0VYACRWdjYKdxjgthOjq+G6hhoaYPqGAD9gHAU4ADAgB92YIQO5rKAFJgoFIwvvLhwiTQ+kD6APpA+gAwU5KhIaFQh6EWoFKQcIAQyMsFUAPPFgH6AstqyXH7ACXCACXXScICsI4XUEVwgBDIywVQA88WAfoCy2rJcfsAECOSNDTiWnCAEMjLBVADzxYB+gLLaslx+wBwIIIQX8w9FIKAejy0ZSzjkIxMzk5U1LHBZJfCeBRUccF8uH0ghAFE42RFrry4fUD+kAwRlAQNFlwB8jLABbLH1AEzxZYzxYBzxYB+gLMywDJ7VTgMDcowAPjAijAAJw2NxA4R2UUQzBw8AXgCMACmFVEECQQI/AF4F8KhA/y8AkA1Dg5ghA7msoAGL7y4clTRscFUVLHBRWx8uHKcCCCEF/MPRQhgBDIywUozxYh+gLLassfFcs/J88WJ88WFMoAI/oCE8oAyYMG+wBxUGZFFQRwB8jLABbLH1AEzxZYzxYBzxYB"))
 
@@ -1702,7 +1748,7 @@ func nft_sale_message(wallet, royalty, nft string, amount, price uint64) (*tonco
 The final transaction body:
 
 ```go
-msg, err := nft_sale_message("EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162",
+msg, err := NftSaleMessage("EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162",
                             "EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162",
                             "EQCUWoe7hLlklVxH8gduCf45vPNocsjRP4wbX42UJ0Ja0S2f",
                             uint64(1.08*math.Pow(10, 9)), uint64(5*math.Pow(10, 9)))
