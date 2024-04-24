@@ -17,7 +17,16 @@ There are 3 types of messages, that are fully described [here](/develop/smart-co
 
 The common path of any interaction starts with an external message sent to a `wallet` smart contract, which authenticates the message sender using public-key cryptography, takes charge of fee payment, and sends internal blockchain messages. That messages queue form directional acyclic graph, or a tree.
 
-Each action, when contract take message as input (triggered by it), process it and generate outgoing messages as output, called `transaction`. Read more about transactions [here](/develop/smart-contracts/guidelines/message-delivery-guarantees#what-is-a-transaction).
+For example:
+
+![](/img/docs/asset-processing/alicemsgDAG.svg)
+
+* `external message` is the input message for `wallet A v4` contract with empty soure (a message from nowhere, such as [Tonkeeper](https://tonkeeper.com/)).
+* `outgoing message` is the output message for `wallet A v4` contract and input message for `wallet B v4` contract with `wallet A v4` source and `wallet B v4` destination.
+
+As a result there are 2 transactions with their set of input and output messages.
+
+Each action, when contract take message as input (triggered by it), process it and generate or not generate outgoing messages as output, called `transaction`. Read more about transactions [here](/develop/smart-contracts/guidelines/message-delivery-guarantees#what-is-a-transaction).
 
 That `transactions` can span a **prolonged period** of time. Technically, transactions with queues of messages are aggregated into blocks processed by validators. The asynchronous nature of the TON Blockchain **does not allow to predict the hash and lt (logical time) of a transaction** at the stage of sending a message.
 
@@ -37,7 +46,7 @@ TON has three types of digital assets.
 - Native token, which is special kind of assets that can be attached to any message on the network. But these asset is currently not in use since the functionality for issuing new native tokens is closed.
 
 ## Interaction with TON blockchain
-Basic operations on TON Blockchain can be carried out via TonLib. It is a shared library which can be compiled along with a TON node and expose APIs for interaction with the blockchain via so-called lite servers (servers for lite clients). TonLib follows a trustless approach by checking proofs for all incoming data; thus, there is no necessity for a trusted data provider. Methods available to TonLib are listed [in the TL scheme](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L234). They can be used either as a shared library via wrappers like [pyTON](https://github.com/EmelyanenkoK/pyTON) or [tonlib-go](https://github.com/mercuryoio/tonlib-go/tree/master/v2) (technically those are the wrappers for `tonlibjson`) or through `tonlib-cli`.
+Basic operations on TON Blockchain can be carried out via TonLib. It is a shared library which can be compiled along with a TON node and expose APIs for interaction with the blockchain via so-called lite servers (servers for lite clients). TonLib follows a trustless approach by checking proofs for all incoming data; thus, there is no necessity for a trusted data provider. Methods available to TonLib are listed [in the TL scheme](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L234). They can be used either as a shared library via [wrappers](/develop/dapps/asset-processing/#repositories).
 
 ## Wallet smart contract
 
@@ -72,7 +81,7 @@ Read more in the [Wallet Tutorial](/develop/smart-contracts/tutorials/wallet#-de
 ## Work with transfers
 
 ### Check contract's transactions
-A contract's transactions can be obtained using [getTransactions](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L236). This method allows to get 10 transactions from some `transactionId` and earlier. To process all incoming transactions, the following steps should be followed:
+A contract's transactions can be obtained using [getTransactions](https://toncenter.com/api/v2/). This method allows to get 10 transactions from some `transactionId` and earlier. To process all incoming transactions, the following steps should be followed:
 1. The latest `last_transaction_id` can be obtained using [getAccountState](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L235)
 2. List of 10 transactions should be loaded via the `getTransactions` method.
 3. Unseen transactions from this list should be processed.
@@ -167,24 +176,25 @@ To generate a transaction link in the explorer, the service needs to get the lt 
 ### Wallet creation
 
 <Tabs groupId="example-create_wallet">
-<TabItem value="js toncenter" label="js toncenter">
+<TabItem value="js" label="js">
 
-[Wallet creation + get wallet address](https://github.com/toncenter/examples/blob/main/common.js)
+- **toncenter:** 
+  - [Wallet creation + get wallet address](https://github.com/toncenter/examples/blob/main/common.js)
 
-</TabItem>
-<TabItem value="js ton-community/ton" label="js ton-community/ton">
-
-[Wallet creation + get balance](https://github.com/ton-community/ton#usage)
-
-</TabItem>
-<TabItem value="python" label="psylopunk/pythonlib">
-
-[Wallet creation + get wallet address](https://github.com/psylopunk/pytonlib/blob/main/examples/generate_wallet.py)
+- **ton-community/ton:**
+  - [Wallet creation + get balance](https://github.com/ton-community/ton#usage)
 
 </TabItem>
-<TabItem value="xssnick/tonutils-go" label="xssnick/tonutils-go">
+<TabItem value="python" label="python">
 
-[Wallet creation + get balance](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#wallet)
+- **psylopunk/pythonlib:** 
+  - [Wallet creation + get wallet address](https://github.com/psylopunk/pytonlib/blob/main/examples/generate_wallet.py)
+
+</TabItem>
+<TabItem value="go" label="go">
+
+- **xssnick/tonutils-go:** 
+  - [Wallet creation + get balance](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#wallet)
 
 </TabItem>
 </Tabs>
@@ -192,11 +202,11 @@ To generate a transaction link in the explorer, the service needs to get the lt 
 ### Toncoin Deposits (Get toncoins)
 
 <Tabs groupId="example-toncoin_deposit">
-<TabItem value="js toncenter" label="js toncenter">
+<TabItem value="js" label="js">
 
-[Process Toncoins deposit](https://github.com/toncenter/examples/blob/main/deposits.js)
-
-[Process Toncoins deposit multi wallets](https://github.com/toncenter/examples/blob/main/deposits-multi-wallets.js)
+- **toncenter:** 
+  - [Process Toncoins deposit](https://github.com/toncenter/examples/blob/main/deposits.js) 
+  - [Process Toncoins deposit multi wallets](https://github.com/toncenter/examples/blob/main/deposits-multi-wallets.js)
 
 </TabItem>
 </Tabs>
@@ -204,52 +214,53 @@ To generate a transaction link in the explorer, the service needs to get the lt 
 ### Toncoin Withdrawals (Send toncoins)
 
 <Tabs groupId="example-toncoin_withdrawals">
-<TabItem value="js toncenter" label="js toncenter">
+<TabItem value="js" label="js">
 
-[Withdraw Toncoins from a wallet in batches](https://github.com/toncenter/examples/blob/main/withdrawals-highload-batch.js)
+- **toncenter:**
+  - [Withdraw Toncoins from a wallet in batches](https://github.com/toncenter/examples/blob/main/withdrawals-highload-batch.js)
+  - [Withdraw Toncoins from a wallet](https://github.com/toncenter/examples/blob/main/withdrawals-highload.js)
 
-[Withdraw Toncoins from a wallet](https://github.com/toncenter/examples/blob/main/withdrawals-highload.js)
-
-</TabItem>
-<TabItem value="js ton-community/ton" label="js ton-community/ton">
-
-[Withdraw Toncoins from a wallet](https://github.com/ton-community/ton#usage)
+- **ton-community/ton:**
+  - [Withdraw Toncoins from a wallet](https://github.com/ton-community/ton#usage)
 
 </TabItem>
-<TabItem value="psylopunk/pythonlib" label="psylopunk/pythonlib">
+<TabItem value="python" label="python">
 
-[Withdraw Toncoins from a wallet](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
+- **psylopunk/pythonlib:**
+  - [Withdraw Toncoins from a wallet](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
 
 </TabItem>
-<TabItem value="xssnick/tonutils-go" label="xssnick/tonutils-go">
+<TabItem value="go" label="go">
 
-  [Withdraw Toncoins from a wallet](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#wallet)
+- **xssnick/tonutils-go:**
+  - [Withdraw Toncoins from a wallet](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#wallet)
 
-  </TabItem>
-  </Tabs>
+</TabItem>
+</Tabs>
 
-## Repositories
+### Get contract's transactions
 
-### Golang
+<Tabs groupId="example-get_transactions">
+<TabItem value="js" label="js">
 
-- [Tonutils](https://github.com/xssnick/tonutils-go#how-to-use)
-- **Self-hosted service**
+- **ton-community/ton:**
+  - [Client with getTransaction method](https://github.com/ton-community/ton/blob/master/src/client/TonClient.ts)
 
-  [Gobicycle](https://github.com/gobicycle/bicycle) service is focused on replenishing user balances and sending payments to blockchain accounts. Both TONs and Jettons are supported. The service is written with numerous pitfalls in mind that a developer might encounter (all checks for jettons, correct operations status check, resending messages, performance during high load when blockchain is splitted by shards). Provide simple HTTP API, rabbit and webhook notifications about new payments.
+</TabItem>
+<TabItem value="python" label="python">
 
-### JavaScript
+- **psylopunk/pythonlib:**
+  - [Get transactions](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
 
-  Using ton.js SDK (supported by TON Community):
+</TabItem>
+<TabItem value="go" label="go">
 
-- [Create a wallet, get its balance, make a transfer](https://github.com/ton-community/ton#usage)
+- **xssnick/tonutils-go:**
+  - [Get transactions](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#account-info-and-transactions)
 
-### Python
+</TabItem>
+</Tabs>
 
-  Using psylopunk/pytonlib (Simple Python client for The Open Network):
+## SDKs
 
-- [Sending transactions](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
-
-  Using tonsdk library (similar to tonweb):
-
-- [Init wallet, create external message to deploy the wallet](https://github.com/tonfactory/tonsdk#create-mnemonic-init-wallet-class-create-external-message-to-deploy-the-wallet)
-
+You can find a list of SDKs for various languages (js, python, golang, C#, Rust, etc.) list [here](/develop/dapps/apis/sdk).
