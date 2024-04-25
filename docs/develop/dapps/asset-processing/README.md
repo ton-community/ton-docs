@@ -21,6 +21,7 @@ For example:
 
 ![](/img/docs/asset-processing/alicemsgDAG.svg)
 
+* `Alice` use e.g [Tonkeeper](https://tonkeeper.com/) to send an `external message` to her wallet.
 * `external message` is the input message for `wallet A v4` contract with empty soure (a message from nowhere, such as [Tonkeeper](https://tonkeeper.com/)).
 * `outgoing message` is the output message for `wallet A v4` contract and input message for `wallet B v4` contract with `wallet A v4` source and `wallet B v4` destination.
 
@@ -81,15 +82,105 @@ Read more in the [Wallet Tutorial](/develop/smart-contracts/tutorials/wallet#-de
 ## Work with transfers
 
 ### Check contract's transactions
-A contract's transactions can be obtained using [getTransactions](https://toncenter.com/api/v2/). This method allows to get 10 transactions from some `transactionId` and earlier. To process all incoming transactions, the following steps should be followed:
-1. The latest `last_transaction_id` can be obtained using [getAccountState](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L235)
+A contract's transactions can be obtained using [getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get). This method allows to get 10 transactions from some `last_transaction_id` and earlier. To process all incoming transactions, the following steps should be followed:
+1. The latest `last_transaction_id` can be obtained using [getAddressInformation](https://toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get)
 2. List of 10 transactions should be loaded via the `getTransactions` method.
-3. Unseen transactions from this list should be processed.
-4. Incoming payments are transactions in which the incoming message has a source address; outgoing payments are transactions in which the incoming message has no source address and also presents the outgoing messages. These transactions should be processed accordingly.
-5. If all of those 10 transactions are unseen, the next 10 transactions should be loaded and steps 2,3,4,5 should be repeated.
+3. Process transactions with not empty source in incoming message and destination equals to account address.  
+4. If all of those 10 transactions are unseen, the next 10 transactions should be loaded and steps 2,3,4,5 should be repeated.
+
+<Tabs groupId="flow-code-examples">
+<TabItem value="go" label="Golang">
+
+<details>
+<summary>Checking incoming transactions</summary>
+
+```go
+package main 
+
+import (
+	"context"
+	"encoding/base64"
+	"log"
+
+	"github.com/xssnick/tonutils-go/address"
+	"github.com/xssnick/tonutils-go/liteclient"
+	"github.com/xssnick/tonutils-go/ton"
+)
+
+const (
+	num = 10
+)
+
+func main() {
+	client := liteclient.NewConnectionPool()
+	err := client.AddConnectionsFromConfigUrl(context.Background(), "https://ton.org/global.config.json")
+	if err != nil {
+		panic(err)
+	}
+
+	api := ton.NewAPIClient(client, ton.ProofCheckPolicyFast).WithRetry()
+
+	accountAddr := address.MustParseAddr("0QA__NJI1SLHyIaG7lQ6OFpAe9kp85fwPr66YwZwFc0p5wIu")
+
+	// we need fresh block info to run get methods
+	b, err := api.CurrentMasterchainInfo(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// we use WaitForBlock to make sure block is ready,
+	// it is optional but escapes us from liteserver block not ready errors
+	res, err := api.WaitForBlock(b.SeqNo).GetAccount(context.Background(), b, accountAddr)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	lastTransactionId := res.LastTxHash
+	lastTransactionLT := res.LastTxLT
+
+	headSeen := false
+
+	for {
+		trxs, err := api.ListTransactions(context.Background(), accountAddr, num, lastTransactionLT, lastTransactionId)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for i, tx := range trxs {
+			// should include only first time lastTransactionLT
+			if !headSeen {
+				headSeen = true
+			} else if i == 0 {
+				continue
+			}
+
+			if tx.IO.In == nil || tx.IO.In.Msg.SenderAddr().IsAddrNone() {
+				// external message should be omitted
+				continue
+			}
+
+			if string(tx.IO.In.Msg.DestAddr().Data()) == string(accountAddr.Data()) {
+				// process trx
+				log.Printf("found in transaction hash %s", base64.StdEncoding.EncodeToString(tx.Hash))
+			}
+		}
+
+		if len(trxs) == 0 || (headSeen && len(trxs) == 1) {
+			break
+		}
+
+		lastTransactionId = trxs[0].Hash
+		lastTransactionLT = trxs[0].LT
+	}
+}
+```
+
+</details>
+</TabItem>
+</Tabs>
 
 ### Checking transaction's flow
-It's possible to track messages flow during transaction processing. Since the message flow is a DAG it's enough to get the input `in_msg` or output `out_msgs` messages of current transaction using [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method to find incoming transaction with [tryLocateResultTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_result_tx_tryLocateResultTx_get) or outgoing transactions with [tryLocateSourceTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_source_tx_tryLocateSourceTx_get).
+It's possible to track messages flow during transaction processing. Since the message flow is a DAG it's enough to get the input `in_msg` or output `out_msgs` messages of the current transaction using [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method to find incoming transaction with [tryLocateResultTx](https://toncenter.com/api/v2/#/transactions/get_try_locate_result_tx_tryLocateResultTx_get) or outgoing transactions with [tryLocateSourceTx](https://toncenter.com/api/v2/#/transactions/get_try_locate_source_tx_tryLocateSourceTx_get).
 
 ### Send payments
 
