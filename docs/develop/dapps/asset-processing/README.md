@@ -86,7 +86,7 @@ A contract's transactions can be obtained using [getTransactions](https://toncen
 1. The latest `last_transaction_id` can be obtained using [getAddressInformation](https://toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get)
 2. List of 10 transactions should be loaded via the `getTransactions` method.
 3. Process transactions with not empty source in incoming message and destination equals to account address.  
-4. If all of those 10 transactions are unseen, the next 10 transactions should be loaded and steps 2,3,4,5 should be repeated.
+4. The next 10 transactions should be loaded and steps 2,3,4,5 should be repeated until you processed all incoming transactions.
 
 <Tabs groupId="flow-code-examples">
 <TabItem value="go" label="Golang">
