@@ -88,11 +88,137 @@ A contract's transactions can be obtained using [getTransactions](https://toncen
 3. Process transactions with not empty source in incoming message and destination equals to account address.  
 4. The next 10 transactions should be loaded and steps 2,3,4,5 should be repeated until you processed all incoming transactions.
 
-<Tabs groupId="flow-code-examples">
-<TabItem value="go" label="Golang">
+### Checking transaction's flow
+It's possible to track messages flow during transaction processing. Since the message flow is a DAG it's enough to get the input `in_msg` or output `out_msgs` messages of the current transaction using [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method to find incoming transaction with [tryLocateResultTx](https://toncenter.com/api/v2/#/transactions/get_try_locate_result_tx_tryLocateResultTx_get) or outgoing transactions with [tryLocateSourceTx](https://toncenter.com/api/v2/#/transactions/get_try_locate_source_tx_tryLocateSourceTx_get).
+
+### Send payments
+
+1. Service should deploy a `wallet` and keep it funded to prevent contract destruction due to storage fees. Note that storage fees are generally less than 1 Toncoin per year.
+2. Service should get from the user `destination_address` and optional `comment`. Note that for the meantime, we recommend either prohibiting unfinished outgoing payments with the same (`destination_address`, `value`, `comment`) set or proper scheduling of those payments; that way, the next payment is initiated only after the previous one is confirmed.
+3. Form [msg.dataText](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L98) with `comment` as text.
+4. Form [msg.message](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L108) which contains `destination_address`, empty `public_key`, `amount` and `msg.dataText`.
+5. Form [Action](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L149) which contains a set of outgoing messages.
+6. Use [createQuery](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L255) and [sendQuery](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L260) queries to send outgoing payments.
+7. Service should regularly poll the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method for the `wallet` contract. Matching confirmed transactions with the outgoing payments by (`destination_address`, `value`, `comment`) allows to mark payments as finished; detect and show the user the corresponding transaction hash and lt (logical time).
+8. Requests to `v3` of `high-load` wallets have an expiration time equal to 60 seconds by default. After that time unprocessed requests can be safely resent to the network (see steps 3-6).
+
+## Invoice-based payment accept
+To accept payments based on attached comments, the service should
+1. Deploy the `wallet` contract.
+2. Generate a unique `invoice` for each user. String representation of uuid32 will be enough.
+3. Users should be instructed to send Toncoin to the service's `wallet` contract with an attached `invoice` as a comment.
+4. Service should regularly poll the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method for the `wallet` contract.
+5. For new transactions, the incoming message should be extracted, `comment` matched against the database, and the **incoming message value** deposited to the user's account.
+
+To calculate the **incoming message value** that the message brings to the contract, one needs to parse the transaction. It happens when the message hits the contract. A transaction can be obtained using [getTransactions](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L236). For an incoming wallet transaction, the correct data consists of one incoming message and zero outgoing messages. Otherwise, either an external message is sent to the wallet, in which case the owner spends Toncoin, or the wallet is not deployed and the incoming transaction bounces back.
+
+Anyway, in general, the amount that a message brings to the contract can be calculated as the value of the incoming message minus the sum of the values of the outgoing messages minus the fee: `value_{in_msg} - SUM(value_{out_msg}) - fee`. Technically, transaction representation contains three different fields with `fee` in name: `fee`, `storage_fee`, and `other_fee`, that is, a total fee, a part of the fee related to storage costs, and a part of the fee related to transaction processing. Only the first one should be used.
+
+### Invoices with TON Connect
+
+Best suited for dApps that need to sign multiple payments/transactions within a session or need to maintain a connection to the wallet for some time.
+
+- ✅ There's a permanent communication channel with the wallet, information about the user's address
+- ✅ Users only need to scan a QR code once
+- ✅ It's possible to find out whether the user confirmed the transaction in the wallet, track the transaction by the returned BOC
+- ✅ Ready-made SDKs and UI kits are available for different platforms
+
+- ❌ If you only need to send one payment, the user needs to take two actions: connect the wallet and confirm the transaction
+- ❌ Integration is more complex than the ton:// link
+
+
+<Button href="/develop/dapps/ton-connect/"
+colorType="primary" sizeType={'lg'}>
+Learn More
+</Button>
+
+### Invoices with ton:// link
+
+:::warning
+Ton link is deprecated, avoid using it
+:::
+
+If you need an easy integration for a simple user flow, it is suitable to use the ton:// link.
+Best suited for one-time payments and invoices.
+
+```bash
+ton://transfer/<destination-address>?
+    [nft=<nft-address>&]
+    [fee-amount=<nanocoins>&]
+    [forward-amount=<nanocoins>] 
+```
+
+- ✅ Easy integration
+- ✅ No need to connect a wallet
+
+- ❌ Users need to scan a new QR code for each payment
+- ❌ It's not possible to track whether the user has signed the transaction or not
+- ❌ No information about the user's address
+- ❌ Workarounds are needed on platforms where such links are not clickable (e.g. messages from bots for Telegram desktop clients )
+
+
+[Learn more about ton links here](https://github.com/tonkeeper/wallet-api#payment-urls)
+
+## Explorers
+
+The blockchain explorer is https://tonscan.org.
+
+To generate a transaction link in the explorer, the service needs to get the lt (logic time), transaction hash, and account address (account address for which lt and txhash were retrieved via the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method). https://tonscan.org and https://explorer.toncoin.org/ may then show the page for that tx in the following format:
+
+`https://tonviewer.com/transaction/{txhash as base64url}`
+
+`https://tonscan.org/tx/{lt as int}:{txhash as base64url}:{account address}`
+
+`https://explorer.toncoin.org/transaction?account={account address}&lt={lt as int}&hash={txhash as base64url}`
+
+## Best Practices
+
+### Wallet creation
+
+<Tabs groupId="example-create_wallet">
+<TabItem value="JS" label="JS">
+
+- **toncenter:** 
+  - [Wallet creation + get wallet address](https://github.com/toncenter/examples/blob/main/common.js)
+
+- **ton-community/ton:**
+  - [Wallet creation + get balance](https://github.com/ton-community/ton#usage)
+
+</TabItem>
+
+<TabItem value="Go" label="Go">
+
+- **xssnick/tonutils-go:** 
+  - [Wallet creation + get balance](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#wallet)
+
+</TabItem>
+
+<TabItem value="Python" label="Python">
+
+- **psylopunk/pythonlib:** 
+  - [Wallet creation + get wallet address](https://github.com/psylopunk/pytonlib/blob/main/examples/generate_wallet.py)
+
+</TabItem>
+
+</Tabs>
+
+### Toncoin Deposits (Get toncoins)
+
+<Tabs groupId="example-toncoin_deposit">
+<TabItem value="JS" label="JS">
+
+- **toncenter:** 
+  - [Process Toncoins deposit](https://github.com/toncenter/examples/blob/main/deposits.js) 
+  - [Process Toncoins deposit multi wallets](https://github.com/toncenter/examples/blob/main/deposits-multi-wallets.js)
+
+</TabItem>
+
+<TabItem value="Go" label="Go">
+
+- **xssnick/tonutils-go:**
 
 <details>
-<summary>Checking incoming transactions</summary>
+<summary>Checking deposits</summary>
 
 ```go
 package main 
@@ -159,10 +285,13 @@ func main() {
 				continue
 			}
 
-			if string(tx.IO.In.Msg.DestAddr().Data()) == string(accountAddr.Data()) {
-				// process trx
-				log.Printf("found in transaction hash %s", base64.StdEncoding.EncodeToString(tx.Hash))
+      if tx.IO.Out != nil {
+				// no outgoing messages - this is incoming Toncoins
+				continue
 			}
+
+			// process trx
+			log.Printf("found in transaction hash %s", base64.StdEncoding.EncodeToString(tx.Hash))
 		}
 
 		if len(trxs) == 0 || (headSeen && len(trxs) == 1) {
@@ -177,135 +306,13 @@ func main() {
 
 </details>
 </TabItem>
-</Tabs>
 
-### Checking transaction's flow
-It's possible to track messages flow during transaction processing. Since the message flow is a DAG it's enough to get the input `in_msg` or output `out_msgs` messages of the current transaction using [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method to find incoming transaction with [tryLocateResultTx](https://toncenter.com/api/v2/#/transactions/get_try_locate_result_tx_tryLocateResultTx_get) or outgoing transactions with [tryLocateSourceTx](https://toncenter.com/api/v2/#/transactions/get_try_locate_source_tx_tryLocateSourceTx_get).
-
-### Send payments
-
-1. Service should deploy a `wallet` and keep it funded to prevent contract destruction due to storage fees. Note that storage fees are generally less than 1 Toncoin per year.
-2. Service should get from the user `destination_address` and optional `comment`. Note that for the meantime, we recommend either prohibiting unfinished outgoing payments with the same (`destination_address`, `value`, `comment`) set or proper scheduling of those payments; that way, the next payment is initiated only after the previous one is confirmed.
-3. Form [msg.dataText](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L98) with `comment` as text.
-4. Form [msg.message](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L108) which contains `destination_address`, empty `public_key`, `amount` and `msg.dataText`.
-5. Form [Action](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L149) which contains a set of outgoing messages.
-6. Use [createQuery](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L255) and [sendQuery](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L260) queries to send outgoing payments.
-7. Service should regularly poll the getTransactions method for the `wallet` contract. Matching confirmed transactions with the outgoing payments by (`destination_address`, `value`, `comment`) allows to mark payments as finished; detect and show the user the corresponding transaction hash and lt (logical time).
-8. Requests to `v3` of `high-load` wallets have an expiration time equal to 60 seconds by default. After that time unprocessed requests can be safely resent to the network (see steps 3-6).
-
-## Invoice-based payment accept
-To accept payments based on attached comments, the service should
-1. Deploy the `wallet` contract.
-2. Generate a unique `invoice` for each user. String representation of uuid32 will be enough.
-3. Users should be instructed to send Toncoin to the service's `wallet` contract with an attached `invoice` as a comment.
-4. Service should regularly poll the getTransactions method for the `wallet` contract.
-5. For new transactions, the incoming message should be extracted, `comment` matched against the database, and the **incoming message value** deposited to the user's account.
-
-To calculate the **incoming message value** that the message brings to the contract, one needs to parse the transaction. It happens when the message hits the contract. A transaction can be obtained using [getTransactions](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L236). For an incoming wallet transaction, the correct data consists of one incoming message and zero outgoing messages. Otherwise, either an external message is sent to the wallet, in which case the owner spends Toncoin, or the wallet is not deployed and the incoming transaction bounces back.
-
-Anyway, in general, the amount that a message brings to the contract can be calculated as the value of the incoming message minus the sum of the values of the outgoing messages minus the fee: `value_{in_msg} - SUM(value_{out_msg}) - fee`. Technically, transaction representation contains three different fields with `fee` in name: `fee`, `storage_fee`, and `other_fee`, that is, a total fee, a part of the fee related to storage costs, and a part of the fee related to transaction processing. Only the first one should be used.
-
-### Invoices with TON Connect
-
-Best suited for dApps that need to sign multiple payments/transactions within a session or need to maintain a connection to the wallet for some time.
-
-- ✅ There's a permanent communication channel with the wallet, information about the user's address
-- ✅ Users only need to scan a QR code once
-- ✅ It's possible to find out whether the user confirmed the transaction in the wallet, track the transaction by the returned BOC
-- ✅ Ready-made SDKs and UI kits are available for different platforms
-
-- ❌ If you only need to send one payment, the user needs to take two actions: connect the wallet and confirm the transaction
-- ❌ Integration is more complex than the ton:// link
-
-
-<Button href="/develop/dapps/ton-connect/"
-colorType="primary" sizeType={'lg'}>
-Learn More
-</Button>
-
-### Invoices with ton:// link
-
-:::warning
-Ton link is deprecated, avoid using it
-:::
-
-If you need an easy integration for a simple user flow, it is suitable to use the ton:// link.
-Best suited for one-time payments and invoices.
-
-```bash
-ton://transfer/<destination-address>?
-    [nft=<nft-address>&]
-    [fee-amount=<nanocoins>&]
-    [forward-amount=<nanocoins>] 
-```
-
-- ✅ Easy integration
-- ✅ No need to connect a wallet
-
-- ❌ Users need to scan a new QR code for each payment
-- ❌ It's not possible to track whether the user has signed the transaction or not
-- ❌ No information about the user's address
-- ❌ Workarounds are needed on platforms where such links are not clickable (e.g. messages from bots for Telegram desktop clients )
-
-
-[Learn more about ton links here](https://github.com/tonkeeper/wallet-api#payment-urls)
-
-## Explorers
-
-The blockchain explorer is https://tonscan.org.
-
-To generate a transaction link in the explorer, the service needs to get the lt (logic time), transaction hash, and account address (account address for which lt and txhash were retrieved via the getTransactions method). https://tonscan.org and https://explorer.toncoin.org/ may then show the page for that tx in the following format:
-
-`https://tonviewer.com/transaction/{txhash as base64url}`
-
-`https://tonscan.org/tx/{lt as int}:{txhash as base64url}:{account address}`
-
-`https://explorer.toncoin.org/transaction?account={account address}&lt={lt as int}&hash={txhash as base64url}`
-
-## Best Practices
-
-### Wallet creation
-
-<Tabs groupId="example-create_wallet">
-<TabItem value="js" label="js">
-
-- **toncenter:** 
-  - [Wallet creation + get wallet address](https://github.com/toncenter/examples/blob/main/common.js)
-
-- **ton-community/ton:**
-  - [Wallet creation + get balance](https://github.com/ton-community/ton#usage)
-
-</TabItem>
-<TabItem value="python" label="python">
-
-- **psylopunk/pythonlib:** 
-  - [Wallet creation + get wallet address](https://github.com/psylopunk/pytonlib/blob/main/examples/generate_wallet.py)
-
-</TabItem>
-<TabItem value="go" label="go">
-
-- **xssnick/tonutils-go:** 
-  - [Wallet creation + get balance](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#wallet)
-
-</TabItem>
-</Tabs>
-
-### Toncoin Deposits (Get toncoins)
-
-<Tabs groupId="example-toncoin_deposit">
-<TabItem value="js" label="js">
-
-- **toncenter:** 
-  - [Process Toncoins deposit](https://github.com/toncenter/examples/blob/main/deposits.js) 
-  - [Process Toncoins deposit multi wallets](https://github.com/toncenter/examples/blob/main/deposits-multi-wallets.js)
-
-</TabItem>
 </Tabs>
 
 ### Toncoin Withdrawals (Send toncoins)
 
 <Tabs groupId="example-toncoin_withdrawals">
-<TabItem value="js" label="js">
+<TabItem value="JS" label="JS">
 
 - **toncenter:**
   - [Withdraw Toncoins from a wallet in batches](https://github.com/toncenter/examples/blob/main/withdrawals-highload-batch.js)
@@ -315,43 +322,49 @@ To generate a transaction link in the explorer, the service needs to get the lt 
   - [Withdraw Toncoins from a wallet](https://github.com/ton-community/ton#usage)
 
 </TabItem>
-<TabItem value="python" label="python">
 
-- **psylopunk/pythonlib:**
-  - [Withdraw Toncoins from a wallet](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
-
-</TabItem>
-<TabItem value="go" label="go">
+<TabItem value="Go" label="Go">
 
 - **xssnick/tonutils-go:**
   - [Withdraw Toncoins from a wallet](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#wallet)
 
 </TabItem>
+
+<TabItem value="Python" label="Python">
+
+- **psylopunk/pythonlib:**
+  - [Withdraw Toncoins from a wallet](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
+
+</TabItem>
+
 </Tabs>
 
 ### Get contract's transactions
 
 <Tabs groupId="example-get_transactions">
-<TabItem value="js" label="js">
+<TabItem value="JS" label="JS">
 
 - **ton-community/ton:**
   - [Client with getTransaction method](https://github.com/ton-community/ton/blob/master/src/client/TonClient.ts)
 
 </TabItem>
-<TabItem value="python" label="python">
 
-- **psylopunk/pythonlib:**
-  - [Get transactions](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
-
-</TabItem>
-<TabItem value="go" label="go">
+<TabItem value="Go" label="Go">
 
 - **xssnick/tonutils-go:**
   - [Get transactions](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#account-info-and-transactions)
 
 </TabItem>
+
+<TabItem value="Python" label="Python">
+
+- **psylopunk/pythonlib:**
+  - [Get transactions](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
+
+</TabItem>
+
 </Tabs>
 
 ## SDKs
 
-You can find a list of SDKs for various languages (js, python, golang, C#, Rust, etc.) list [here](/develop/dapps/apis/sdk).
+You can find a list of SDKs for various languages (JS, Python, Golang, C#, Rust, etc.) list [here](/develop/dapps/apis/sdk).
