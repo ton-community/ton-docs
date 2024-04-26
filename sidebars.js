@@ -641,6 +641,7 @@ const sidebars = {
         'participate/network-maintenance/nominators',
         'participate/network-maintenance/persistent-states',
         'participate/nodes/collators',
+        'participate/network-maintenance/custom-overlays',
       ],
     },
     {
