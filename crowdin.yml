@@ -1,4 +1,5 @@
 project_id: "663652"
+api_token_env: CROWDIN_PERSONAL_TOKEN
 preserve_hierarchy: true
 files:
   - source: /i18n/en/**/*
