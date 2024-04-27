@@ -1,0 +1,34 @@
+# How to Check Valid TON Wallet Address
+
+## Address verification examples
+
+```js
+JavaScript:
+
+const TonWeb = require("tonweb")
+
+TonWeb.utils.Address.isValid('...')
+
+Go:
+
+if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
+ return errors.New("invalid address")
+}
+
+Java:
+
+try {
+   Address.of("...");
+} catch (e) {
+   // not valid address
+}
+
+Kotlin:
+
+try {
+    AddrStd("...")
+} catch(e: IllegalArgumentException) {
+   // not valid address
+}
+
+```

@@ -575,6 +575,31 @@ tail -f /var/ton-work/log.thread*
 
 This section contains answers to the most frequently asked questions about running nodes.
 
+
+### Failed to get account state
+
+```
+Failed to get account state
+```
+
+This error means that there are issues during search for this account in shard state.
+Most probably it means that liteserver node is syncing too slow, in particular the Masterchain synchronisation overtook shardchains (Basechain) synchronisation. In this case node knows the recent Masterchain block but can not check account state in recent shardchain block and returns Failed to get account state.
+
+
+### Failed to unpack account state
+
+```
+Failed to unpack account state
+```
+This error means that requested account doesn't exist in current state. That means that this account is simultaneously is not deployed AND has zero balance
+
+### Cannot apply external message to current state : External message was not accepted
+
+```
+Cannot apply external message to current state : External message was not accepted
+```
+This error means that contract didn't accepted external message. You need to find exitcode in trace. -13 means that account doesn't have enough TON to accept message (or it requires more than gas_credit). In case of wallet contracts exitcode=33 means wrong seqno (probably seqno data you use is outdatd), exitcode=34 means wrong subwallet_id (for old wallets v1/v2 it means wrong signature), exitcode=35 means that either message is expired or signature is wrong.
+
 ### What does Error 651 mean?
 
 `[Error : 651 : no nodes]` indicates that your node cannot locate another node within the TON Blockchain.
