@@ -7,19 +7,16 @@ TTL of a state from period `x` is equal to `2^(18 + ctz(x))`, where `ctz(x)` is 
 
 That means that persistent states are created every 1.5 days, half of them have TTL of `2^18` seconds (3 days), half of the remaining states have TTL of `2^19` seconds (6 days) and so on.
 
-In 2022 there is the following long-term (at least 3 months) persistent states (times in the future are approximate):
+In 2024 there is the following long-term (at least 3 months) persistent states:
 
 | Block seqno | Block time | TTL | Expires at |
 |--:|--:|--:|--:|
-| 18155329 | 2022-02-07 01:31:53 | 777 days | 2024-03-24 18:52:57 |
-| 19365422 | 2022-03-27 14:36:58 |  97 days | 2022-07-02 16:47:06 |
-| | 2022-05-14 20:00:00 | 194 days | 2022-11-24 23:00:00 |
-| | 2022-07-02 09:00:00 |  97 days | 2022-10-07 10:00:00 |
-| | 2022-08-19 22:00:00 | 388 days | 2023-09-12 06:00:00 |
-| | 2022-10-07 11:00:00 |  97 days | 2023-01-12 12:00:00 |
-| | 2022-11-25 00:00:00 | 194 days | 2023-06-07 03:00:00 |
-| | 2022-11-25 00:00:00 | 194 days | 2023-06-07 03:00:00 |
-| 27747086 | 2022-03-02 05:08:11 | 1553 days | 2027-06-02 18:50:19 |
+| [8930706](https://explorer.toncoin.org/search?workchain=-1&shard=8000000000000000&seqno=8930706) | 2021-01-14 15:08:40 | 12427 days | 2055-01-24 08:45:44 |
+| [27747086](https://explorer.toncoin.org/search?workchain=-1&shard=8000000000000000&seqno=27747086) | 2023-03-02 05:08:11 | 1553 days | 2027-06-02 19:50:19 |
+| [32638387](https://explorer.toncoin.org/search?workchain=-1&shard=8000000000000000&seqno=32638387) | 2023-09-12 09:27:36 | 388 days | 2024-10-04 18:08:08 |
+| [34835953](https://explorer.toncoin.org/search?workchain=-1&shard=8000000000000000&seqno=34835953) | 2023-12-18 11:37:48 | 194 days | 2024-06-29 15:58:04 |
+| [35893070](https://explorer.toncoin.org/search?workchain=-1&shard=8000000000000000&seqno=35893070) | 2024-02-05 00:42:50 | 97 days | 2024-05-12 02:52:58 |
+| [36907647](https://explorer.toncoin.org/search?workchain=-1&shard=8000000000000000&seqno=36907647) | 2024-03-24 13:47:57 | 776 days | 2026-05-10 07:09:01 |
 
 When the node starts for the first time, it has to download a persistent state. This is implemented in [validator/manager-init.cpp](https://github.com/ton-blockchain/ton/blob/master/validator/manager-init.cpp).
 
