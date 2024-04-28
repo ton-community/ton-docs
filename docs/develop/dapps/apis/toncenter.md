@@ -34,7 +34,7 @@ There are different ways to connect to blockchain:
 
 Indexers allow to list jetton wallets, NFTs, transactions by certain filters, not only retrieve specific ones.
 
-- Public TON Index can be used: tests and development are for free, premium for production - [toncenter.com/api/v3/](https://toncenter.com/api/v3/).
+- Public TON Index can be used: tests and development are for free, [premium](https://t.me/tonapibot) for production - [toncenter.com/api/v3/](https://toncenter.com/api/v3/).
 - Run your own TON Index with [Worker](https://github.com/toncenter/ton-index-worker/tree/36134e7376986c5517ee65e6a1ddd54b1c76cdba) and [TON Index API wrapper](https://github.com/toncenter/ton-indexer).
 
 ### GraphQL Nodes

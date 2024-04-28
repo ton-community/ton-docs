@@ -8,7 +8,7 @@
   - i18n/**/*
 
 "documentation :book:":
-  - README.md
+  - academy-overview.md
 
 "tooling :wrench:":
   - .github/**/*
