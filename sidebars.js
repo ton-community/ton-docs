@@ -23,6 +23,25 @@ const sidebars = {
     },
     {
       'type': 'html',
+      'value': '<span class=\'menu__link\'><b><small> TON Academy </small></b></span>',
+    },
+    {
+      type: 'category',
+      label: 'Learn',
+      items: [
+        {
+          type: 'doc',
+          label: 'Overview',
+          id: 'learn/academy/academy-overview',
+        },
+      ]
+    },
+    {
+      'type': 'html',
+      'value': '<hr/>',
+    },
+    {
+      'type': 'html',
       'value': '<span class=\'menu__link\'><b><small> TON Concepts </small></b></span>',
     },
     {
