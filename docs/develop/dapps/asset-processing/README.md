@@ -4,50 +4,8 @@ import TabItem from '@theme/TabItem';
 
 # Payments processing
 
-This page contains an overview on TON transactions and specific details that explain how to work with ton wallets and process (send and accept) digital assets on the TON blockchain.
-
-## Global overview
-Embodying a fully asynchronous approach, TON Blockchain involves a few concepts which are uncommon to traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred [messages](/develop/smart-contracts/guidelines/message-delivery-guarantees) between smart contracts and/or the external world. Each transaction consists of one incoming message and up to 512 outgoing messages.
-
-There are 3 types of messages, that are fully described [here](/develop/smart-contracts/messages#types-of-messages). To put it briefly:
-* [external message](/develop/smart-contracts/guidelines/external-messages):
-  *  `external in message` (sometimes called just `external message`) is message that is sent from *outside* of the blockchain to a smart contract *inside* the blockchain.
-  *  `external out message` (usually called `logs message`) is sent from a *blockchain entity* to the *outer world*.
-* [internal message](/develop/smart-contracts/guidelines/internal-messages) is sent from one *blockchain entity* to *another*, can carry some amount of digital assets and arbitrary portion of data.
-
-The common path of any interaction starts with an external message sent to a `wallet` smart contract, which authenticates the message sender using public-key cryptography, takes charge of fee payment, and sends internal blockchain messages. That messages queue form directional acyclic graph, or a tree.
-
-For example:
-
-![](/img/docs/asset-processing/alicemsgDAG.svg)
-
-* `Alice` use e.g [Tonkeeper](https://tonkeeper.com/) to send an `external message` to her wallet.
-* `external message` is the input message for `wallet A v4` contract with empty soure (a message from nowhere, such as [Tonkeeper](https://tonkeeper.com/)).
-* `outgoing message` is the output message for `wallet A v4` contract and input message for `wallet B v4` contract with `wallet A v4` source and `wallet B v4` destination.
-
-As a result there are 2 transactions with their set of input and output messages.
-
-Each action, when contract take message as input (triggered by it), process it and generate or not generate outgoing messages as output, called `transaction`. Read more about transactions [here](/develop/smart-contracts/guidelines/message-delivery-guarantees#what-is-a-transaction).
-
-That `transactions` can span a **prolonged period** of time. Technically, transactions with queues of messages are aggregated into blocks processed by validators. The asynchronous nature of the TON Blockchain **does not allow to predict the hash and lt (logical time) of a transaction** at the stage of sending a message.
-
-The `transaction` accepted to the block is final and cannot be modified.
-
-:::info Transaction Confirmation
-TON transactions are irreversible after just one confirmation. For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
-:::
-
-Smart contracts pay several types of [fees](/develop/smart-contracts/fees) for transactions (usually from the balance of an incoming message, behavior depends on [message mode](/develop/smart-contracts/messages#message-modes)). Amount of fees depends on workchain configs with maximal fees on `masterchain` and substantially lower fees on `basechain`.
-
-## Digital asset types on TON
-
-TON has three types of digital assets.
-- Toncoin, the main token of the network. It is used for all basic operations on the blockchain, for example, paying gas fees or staking for validation.
-- Contract assets, such as tokens and NFTs, which are analogous to the ERC-20/ERC-721 standards and are managed by arbitrary contracts and thus can require custom rules for processing. You can find more info on it's processing in [process NFTs](/develop/dapps/asset-processing/nfts) and [process Jettons](/develop/dapps/asset-processing/jettons) articles.
-- Native token, which is special kind of assets that can be attached to any message on the network. But these asset is currently not in use since the functionality for issuing new native tokens is closed.
-
-## Interaction with TON blockchain
-Basic operations on TON Blockchain can be carried out via TonLib. It is a shared library which can be compiled along with a TON node and expose APIs for interaction with the blockchain via so-called lite servers (servers for lite clients). TonLib follows a trustless approach by checking proofs for all incoming data; thus, there is no necessity for a trusted data provider. Methods available to TonLib are listed [in the TL scheme](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L234). They can be used either as a shared library via [wrappers](/develop/dapps/asset-processing/#repositories).
+This page **explains how to process** (send and accept) `digital assets` on the TON blockchain.
+It **mostly** describes how to work with `TON coins`, but **theoretical part** is **important** even if you want to process only `jettons`.
 
 ## Wallet smart contract
 
@@ -56,7 +14,7 @@ Wallet smart contracts are contracts on the TON Network which serve the task of 
 * replays protection: Prohibits the repetitive execution of one request, for instance sending assets to some other smart contract.
 * initiates arbitrary interaction with other smart contracts.
 
-Standard solution for the first challenge is public-key cryptography: `wallet` stores the public key and checks that an incoming message with a request is signed by the corresponding private key which is known only by the owner. 
+Standard solution for the first challenge is public-key cryptography: `wallet` stores the public key and checks that an incoming message with a request is signed by the corresponding private key which is known only by the owner.
 
 The solution to the third challenge is common as well; generally, a request contains a fully formed inner message `wallet` sends to the network. However, for replay protection, there are a few different approaches.
 
@@ -79,13 +37,73 @@ To deploy a wallet via TonLib one needs to:
 Read more in the [Wallet Tutorial](/develop/smart-contracts/tutorials/wallet#-deploying-a-wallet)
 :::
 
+### Check the validity of wallet address
+
+Most SDKs force you to verify address (most verify it during wallet creation or transaction preparation process), so, usually, it's not require any additional complex steps from you.
+
+<Tabs groupId="address-examples">
+
+  <TabItem value="Tonweb" label="JS (Tonweb)">
+
+  ```js
+    const TonWeb = require("tonweb")
+    TonWeb.utils.Address.isValid('...')
+  ```
+
+  </TabItem>
+  <TabItem value="GO" label="tonutils-go">
+
+  ```python
+  package main
+
+  import (
+    "fmt"
+    "github.com/xssnick/tonutils-go/address"
+  )
+
+  if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
+    return errors.New("invalid address")
+  }
+  ```
+
+
+  </TabItem>
+  <TabItem value="Java" label="Ton4j">
+
+  ```javascript
+  try {
+    Address.of("...");
+    } catch (e) {
+    // not valid address
+  }
+  ```
+
+  </TabItem>
+  <TabItem value="Kotlin" label="ton-kotlin">
+
+```javascript
+  try {
+    AddrStd("...")
+  } catch(e: IllegalArgumentException) {
+      // not valid address
+  }
+```
+
+  </TabItem>
+</Tabs>
+
+:::tip
+Full Address description on the [Smart Contract Addresses](/learn/overviews/addresses) page.
+:::
+
+
 ## Work with transfers
 
 ### Check contract's transactions
 A contract's transactions can be obtained using [getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get). This method allows to get 10 transactions from some `last_transaction_id` and earlier. To process all incoming transactions, the following steps should be followed:
 1. The latest `last_transaction_id` can be obtained using [getAddressInformation](https://toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get)
 2. List of 10 transactions should be loaded via the `getTransactions` method.
-3. Process transactions with not empty source in incoming message and destination equals to account address.  
+3. Process transactions with not empty source in incoming message and destination equals to account address.
 4. The next 10 transactions should be loaded and steps 2,3,4,5 should be repeated until you processed all incoming transactions.
 
 ### Checking transaction's flow
@@ -178,7 +196,7 @@ To generate a transaction link in the explorer, the service needs to get the lt 
 <Tabs groupId="example-create_wallet">
 <TabItem value="JS" label="JS">
 
-- **toncenter:** 
+- **toncenter:**
   - [Wallet creation + get wallet address](https://github.com/toncenter/examples/blob/main/common.js)
 
 - **ton-community/ton:**
@@ -188,41 +206,15 @@ To generate a transaction link in the explorer, the service needs to get the lt 
 
 <TabItem value="Go" label="Go">
 
-- **xssnick/tonutils-go:** 
+- **xssnick/tonutils-go:**
   - [Wallet creation + get balance](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#wallet)
 
 </TabItem>
 
 <TabItem value="Python" label="Python">
 
-- **psylopunk/pythonlib:** 
+- **psylopunk/pythonlib:**
   - [Wallet creation + get wallet address](https://github.com/psylopunk/pytonlib/blob/main/examples/generate_wallet.py)
-  
-- **pytoniq**
-<details>
-<summary>Create wallet</summary>
-```py
-import asyncio
-
-from pytoniq.contract.wallets.wallet import WalletV4R2
-from pytoniq.liteclient.balancer import LiteBalancer
-
-
-async def main():
-    provider = LiteBalancer.from_mainnet_config(2)
-    await provider.start_up()
-
-    mnemonics, wallet = await WalletV4R2.create(provider)
-    print(f"{wallet.address=} and {mnemonics=}")
-
-    await provider.close_all()
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```
-</details>
-</TabItem>
 
 </TabItem>
 
@@ -233,8 +225,8 @@ if __name__ == "__main__":
 <Tabs groupId="example-toncoin_deposit">
 <TabItem value="JS" label="JS">
 
-- **toncenter:** 
-  - [Process Toncoins deposit](https://github.com/toncenter/examples/blob/main/deposits.js) 
+- **toncenter:**
+  - [Process Toncoins deposit](https://github.com/toncenter/examples/blob/main/deposits.js)
   - [Process Toncoins deposit multi wallets](https://github.com/toncenter/examples/blob/main/deposits-multi-wallets.js)
 
 </TabItem>
@@ -333,71 +325,6 @@ func main() {
 </details>
 </TabItem>
 
-<TabItem value="Python" label="Python">
-
-- **yungwine/pytoniq:**
-
-<details>
-<summary>Checking deposits</summary>
-
-```python
-import asyncio
-
-from pytoniq_core import Transaction
-
-from pytoniq import LiteClient, Address
-
-MY_ADDRESS = Address("kf8zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM_BP")
-
-
-async def main():
-    client = LiteClient.from_mainnet_config(ls_i=0, trust_level=2)
-
-    await client.connect()
-
-    last_block = await client.get_trusted_last_mc_block()
-
-    _account, shard_account = await client.raw_get_account_state(MY_ADDRESS, last_block)
-    assert shard_account
-
-    last_trans_lt, last_trans_hash = (
-        shard_account.last_trans_lt,
-        shard_account.last_trans_hash,
-    )
-
-    while True:
-        print(f"Waiting for{last_block=}")
-
-        transactions = await client.get_transactions(
-            MY_ADDRESS, 1024, last_trans_lt, last_trans_hash
-        )
-        toncoin_deposits = [tx for tx in transactions if filter_toncoin_deposit(tx)]
-        print(f"Got {len(transactions)=} with {len(toncoin_deposits)=}")
-
-        for deposit_tx in toncoin_deposits:
-            # Process toncoin deposit transaction
-            print(deposit_tx.cell.hash.hex())
-
-        last_trans_lt = transactions[0].lt
-        last_trans_hash = transactions[0].cell.hash
-
-
-def filter_toncoin_deposit(tx: Transaction):
-    if tx.out_msgs:
-        return False
-
-    if tx.in_msg:
-        return False
-
-    return True
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```
-
-</details>
-</TabItem>
 </Tabs>
 
 ### Toncoin Withdrawals (Send toncoins)
@@ -426,36 +353,6 @@ if __name__ == "__main__":
 - **psylopunk/pythonlib:**
   - [Withdraw Toncoins from a wallet](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
 
-- **yungwine/pytoniq:**
-<details>
-
-```python
-import asyncio
-
-from pytoniq_core import Address
-from pytoniq.contract.wallets.wallet import WalletV4R2
-from pytoniq.liteclient.balancer import LiteBalancer
-
-
-MY_MNEMONICS = "one two tree ..."
-DESTINATION_WALLET = Address("Destination wallet address")
-
-
-async def main():
-    provider = LiteBalancer.from_mainnet_config()
-    await provider.start_up()
-
-    wallet = await WalletV4R2.from_mnemonic(provider, MY_MNEMONICS)
-
-    await wallet.transfer(DESTINATION_WALLET, 5)
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```
-
-</details>
-
 </TabItem>
 
 </Tabs>
@@ -481,9 +378,6 @@ if __name__ == "__main__":
 
 - **psylopunk/pythonlib:**
   - [Get transactions](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
-  
-- **yungwine/pytoniq:**
-  - [Get transactions](https://github.com/yungwine/pytoniq/blob/master/examples/transactions.py)
 
 </TabItem>
 
