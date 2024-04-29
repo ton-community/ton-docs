@@ -1,7 +1,7 @@
 import React from 'react';
-import { InstructionHead } from '@site/src/components/Instructions/InstructionHead';
-import { InstructionRow } from '@site/src/components/Instructions/InstructionRow';
-import { Instruction } from '@site/src/components/Instructions/types';
+import { InstructionHead } from './InstructionHead';
+import { InstructionRow } from './InstructionRow';
+import { Instruction } from './types';
 
 type InstructionTableProps = {
   instructions: Instruction[];

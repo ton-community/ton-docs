@@ -1,4 +1,4 @@
-import { Instruction } from '@site/src/components/Instructions/types';
+import { Instruction } from './types';
 import React from 'react';
 import Markdown from 'markdown-to-jsx';
 
@@ -14,12 +14,6 @@ export function InstructionRow({ instruction }: InstructionRowProps) {
       <td><code>{instruction.doc.stack ?? ''}</code></td>
       <td><Markdown>{instruction.doc.description}</Markdown></td>
       <td><code>{instruction.doc.gas}</code></td>
-      <td>
-        <details>
-          <summary>Details</summary>
-          {instruction.doc.category}
-        </details>
-      </td>
     </tr>
   );
 }

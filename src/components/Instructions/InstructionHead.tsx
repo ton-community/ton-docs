@@ -8,7 +8,6 @@ export function InstructionHead() {
       <th>Stack</th>
       <th>Description</th>
       <th>Gas</th>
-      <th>Additional</th>
     </tr>
   );
 }

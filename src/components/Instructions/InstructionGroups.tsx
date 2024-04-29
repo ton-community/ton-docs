@@ -1,8 +1,10 @@
-import React from 'react';
-import { Instruction } from '@site/src/components/Instructions/types';
-import { InstructionTable } from '@site/src/components/Instructions/InstructionTable';
+import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { Instruction } from './types';
+import { InstructionTable } from './InstructionTable';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import styles from './InstructionGroups.module.css';
+import { useDebounce } from '@site/src/hooks';
 
 type InstructionGroupsProps = {
   instructions: Instruction[];
@@ -40,15 +42,59 @@ const sections = [
 ];
 
 export function InstructionGroups({ instructions }: InstructionGroupsProps) {
+  const timeout = useRef<NodeJS.Timeout | null>(null);
+
+  const [inputValue, setInputValue] = useState('');
+  const debouncedValue = useDebounce(inputValue, 500);
+  const [filteredInstructions, setFilteredInstructions] = useState(instructions);
+
+  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  }, []);
+
+  const handleKeyUp = useCallback((event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.currentTarget.blur();
+    }
+  }, []);
+
+  useEffect(() => {
+    const searchValue = debouncedValue.toLowerCase();
+
+    const dataByValues = instructions.filter(
+      (item) =>
+        item.doc?.opcode?.toLowerCase()?.includes(searchValue) ||
+        item.doc?.fift?.toLowerCase()?.includes(searchValue) ||
+        item?.doc?.description?.toLowerCase()?.includes(searchValue),
+    );
+
+    setFilteredInstructions(dataByValues);
+  }, [instructions, debouncedValue]);
+
+  useEffect(() => () => {
+    clearTimeout(timeout.current);
+  }, [timeout.current]);
+
   return (
-    <div style={{ margin: '0 -25%' }}>
-      <Tabs className="all-len">
-        {sections.map(({ label, types, value }) => (
-          <TabItem label={label} value={value}>
-            <InstructionTable
-              instructions={types ? instructions.filter(instruction => types.includes(instruction.doc.category)) : instructions}/>
-          </TabItem>
-        ))}
+    <div style={{ margin: '0 calc((105% - 100vw)/2)' }}>
+      <input
+        className={styles.searchField}
+        onChange={handleChange}
+        onKeyUp={handleKeyUp}
+        value={inputValue}
+        type="text"
+        placeholder={'Search'}
+      />
+      <Tabs>
+        {sections.map(({ label, types, value }) => {
+          const tabInstructions = types ? filteredInstructions.filter(instruction => types.includes(instruction.doc.category)) : filteredInstructions;
+          return (tabInstructions?.length ?
+            <TabItem label={label} value={value} key={value}>
+              <InstructionTable
+                instructions={tabInstructions}/>
+            </TabItem> : null);
+        },
+        )}
       </Tabs>
     </div>
   );
