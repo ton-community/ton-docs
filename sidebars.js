@@ -351,10 +351,10 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Advanced Asset Holding',
+          label: 'Advanced Asset Processing',
           items: [
+            'develop/dapps/asset-processing/overview',
             'develop/dapps/asset-processing/README',
-            'develop/dapps/asset-processing/address-verification',
             'develop/dapps/asset-processing/jettons',
             'develop/dapps/asset-processing/nfts',
             'develop/dapps/asset-processing/metadata',
