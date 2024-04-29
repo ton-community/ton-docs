@@ -2416,7 +2416,9 @@ log.Println("Contract address:", contractAddress.String())    // Output contract
 </TabItem>
 </Tabs> 
 
-Everything we have detailed above follows the same steps as the contract [deployment via wallet](/develop/smart-contracts/tutorials/wallet#contract-deployment-via-wallet) section. To better analyze the fully functional code, please visit the repository indicated at the beginning of the tutorial where all sources are stored.
+:::caution
+Everything we have detailed above follows the same steps as the contract [deployment via wallet](/develop/smart-contracts/tutorials/wallet#contract-deployment-via-wallet) section. To better understanding, read the entire [GitHub source code]((https://github.com/aSpite/wallet-tutorial)).
+:::
 
 ### Sending High-Load Wallet Transactions
 

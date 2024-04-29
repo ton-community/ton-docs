@@ -247,6 +247,64 @@ print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=Tru
 </TabItem>
 </Tabs>
 
+
+### How to Check the Validity of a TON Wallet Address?
+
+
+<Tabs groupId="address-examples">
+
+<TabItem value="Tonweb" label="JS (Tonweb)">
+
+```js
+
+const TonWeb = require("tonweb")
+
+TonWeb.utils.Address.isValid('...')
+```
+
+</TabItem>
+<TabItem value="GO" label="tonutils-go">
+
+```python
+package main
+
+import (
+    "fmt"
+    "github.com/xssnick/tonutils-go/address"
+)
+
+if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
+ return errors.New("invalid address")
+}
+```
+
+
+</TabItem>
+<TabItem value="Java" label="Ton4j">
+
+```javascript
+try {
+   Address.of("...");
+} catch (e) {
+   // not valid address
+}
+```
+
+</TabItem>
+<TabItem value="Kotlin" label="ton-kotlin">
+
+```javascript
+try {
+    AddrStd("...")
+} catch(e: IllegalArgumentException) {
+   // not valid address
+}
+```
+
+</TabItem>
+</Tabs>
+
+
 ## Standard wallets in TON ecosystem
 
 ### How to transfer TON? How to send a text message to other wallet?
@@ -560,6 +618,47 @@ const userJettonWalletAddress = new Address(0, jettonWalletStateInit.hash());
 
 console.log('User Jetton Wallet address:', userJettonWalletAddress.toString());
 ```
+
+</TabItem>
+
+<TabItem value="Python" label="Python">
+
+```python
+
+from pytoniq_core import Address, Cell, begin_cell
+
+def calculate_jetton_address(
+    owner_address: Address, jetton_master_address: Address, jetton_wallet_code: str
+):
+    # Recreate from jetton-utils.fc calculate_jetton_wallet_address()
+    # https://tonscan.org/jetton/EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs#source
+
+    data_cell = (
+        begin_cell()
+        .store_uint(0, 4)
+        .store_coins(0)
+        .store_address(owner_address)
+        .store_address(jetton_master_address)
+        .end_cell()
+    )
+
+    code_cell = Cell.one_from_boc(jetton_wallet_code)
+
+    state_init = (
+        begin_cell()
+        .store_uint(0, 2)
+        .store_maybe_ref(code_cell)
+        .store_maybe_ref(data_cell)
+        .store_uint(0, 1)
+        .end_cell()
+    )
+    state_init_hex = state_init.hash.hex()
+    jetton_address = Address(f'0:{state_init_hex}')
+
+    return jetton_address
+
+```
+Read the entire example [here](/static/example-code-snippets/pythoniq/jetton-offline-address-calc-wrapper.py).
 
 </TabItem>
 </Tabs>
