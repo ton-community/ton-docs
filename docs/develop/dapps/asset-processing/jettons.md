@@ -308,7 +308,7 @@ await wallet.methods.transfer({
     seqno: seqno,
     payload: await jettonWallet.createTransferBody({
         jettonAmount: TonWeb.utils.toNano('500'), // Jetton amount (in basic indivisible units)
-        toAddress: new TonWeb.utils.Address(WALLET2_ADDRESS), // recepient user's wallet address (not Jetton wallet)
+        toAddress: new TonWeb.utils.Address(WALLET2_ADDRESS), // recipient user's wallet address (not Jetton wallet)
         forwardAmount: TonWeb.utils.toNano('0.01'), // some amount of TONs to invoke Transfer notification message
         forwardPayload: comment, // text comment for Transfer notification message
         responseAddress: walletAddress // return the TONs after deducting commissions back to the sender's wallet address

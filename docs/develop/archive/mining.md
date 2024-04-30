@@ -99,7 +99,7 @@ Yes, there is a third-party app—[TON Miner Bot](https://t.me/TonMinerBot).
 #### <a id="faq-general-stats"></a>Where can I see mining statistics?
 [ton.org/mining](https://ton.org/mining)
 #### <a id="faq-general-howmany"></a>How many miners are out there?
-We cannot say this. All we know is the total hashrate of all miners on the network. However, there are graphs on [ton.org/mining](https://ton.org/mining) that attempt to estimate quantity of machines of certan type needed to provide aproximate total hashrate.
+We cannot say this. All we know is the total hashrate of all miners on the network. However, there are graphs on [ton.org/mining](https://ton.org/mining) that attempt to estimate quantity of machines of certain type needed to provide approximate total hashrate.
 #### <a id="faq-general-noincome"></a>Do I need Toncoin to start mining?
 No, you do not. Anyone can start mining without owning a single Toncoin.
 #### <a id="faq-mining-noincome"></a>I mine for hours, why my wallet total does not increase, not even by 1 TON?
