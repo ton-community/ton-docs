@@ -23,6 +23,25 @@ const sidebars = {
     },
     {
       'type': 'html',
+      'value': '<span class=\'menu__link\'><b><small> TON Academy </small></b></span>',
+    },
+    {
+      type: 'category',
+      label: 'Learn',
+      items: [
+        {
+          type: 'doc',
+          label: 'Overview',
+          id: 'learn/academy/academy-overview',
+        },
+      ]
+    },
+    {
+      'type': 'html',
+      'value': '<hr/>',
+    },
+    {
+      'type': 'html',
       'value': '<span class=\'menu__link\'><b><small> TON Concepts </small></b></span>',
     },
     {
@@ -332,8 +351,9 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Advanced Asset Holding',
+          label: 'Advanced Asset Processing',
           items: [
+            'develop/dapps/asset-processing/overview',
             'develop/dapps/asset-processing/README',
             'develop/dapps/asset-processing/jettons',
             'develop/dapps/asset-processing/nfts',
@@ -641,6 +661,7 @@ const sidebars = {
         'participate/network-maintenance/nominators',
         'participate/network-maintenance/persistent-states',
         'participate/nodes/collators',
+        'participate/network-maintenance/custom-overlays',
       ],
     },
     {

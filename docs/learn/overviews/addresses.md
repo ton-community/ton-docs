@@ -173,3 +173,7 @@ Additionally, there are two ways to convert user-friendly and raw addresses for 
 
 It's also possible to make use of similar mechanisms using [SDKs](/develop/dapps/apis/sdk).
 
+### Address Examples
+
+Learn more examples on TON Addresses in the [TON Cookbook](/develop/dapps/cookbook#working-with-contracts-addresses).
+
