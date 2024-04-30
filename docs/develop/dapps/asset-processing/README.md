@@ -63,6 +63,12 @@ Smart contract guidelines recommend treating the data payload, which begins with
 
 Smart contracts **pay fees for transactions** (usually from the balance of an incoming message) as well as a **storage fee for the contract's stored code and data**. Fees depend on workchain configs with maximal fees on `masterchain` and substantially lower fees on `basechain`.
 
+![](/img/docs/asset-processing/msg_dag_example.svg)
+
+* `external message` is the input message for `wallet A v4` contract with empty soure (a message from nowhere, such as [Tonkeeper](https://tonkeeper.com/)).
+* `outgoing message` is the output message for `wallet A v4` contract and input message for `wallet B v4` contract with `wallet A v4` source and `wallet B v4` destination.
+
+As a result there are 2 transactions with their set of input and output messages.
 
 ## Digital assets on TON
 TON has three types of digital assets.
@@ -119,6 +125,8 @@ A contract's transactions can be obtained using [getTransactions](https://github
 4. Incoming payments are transactions in which the incoming message has a source address; outgoing payments are transactions in which the incoming message has no source address and also presents the outgoing messages. These transactions should be processed accordingly.
 5. If all of those 10 transactions are unseen, the next 10 transactions should be loaded and steps 2,3,4,5 should be repeated.
 
+## Checking transactions' flow
+It's possible to track messages flow during transaction processing. Since the message flow is a DAG it's enough to get the input `in_msg` or output `out_msgs` messages of current transaction using [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method to find incoming transaction with [tryLocateResultTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_result_tx_tryLocateResultTx_get) or outgoing transactions with [tryLocateSourceTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_source_tx_tryLocateSourceTx_get).
 
 ## Accepting payments
 There are a few approaches to accepting payments that differ in their method of distinguishing users.
