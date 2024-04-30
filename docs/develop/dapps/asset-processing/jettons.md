@@ -8,11 +8,15 @@ import Button from '@site/src/components/button';
 For clear understanding, the reader should be familiar with the basic principles of asset processing described in [payments processing section](/develop/dapps/asset-processing/) of our documentation.
 :::
 
-TON Blockchain and its underlying ecosystem classifies fungible tokens (FTs) as jettons. Because sharding is applied on TON Blockchain, our implementation of fungible tokens is unique when compared to similar blockchain models.
+Jettons are tokens on TON Blockchain - one can consider them similarly to ERC-20 tokens on Ethereum.
 
 In this analysis, we take a deeper dive into the formal standards detailing jetton [behavior](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) and [metadata](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
 A less formal sharding-focused overview of jetton architecture can be found in our
 [anatomy of jettons blog post](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons).
+
+Also, you should keep in mind that there are two approaches to working with jetton withdraws:
+- [Memo Deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js) - This allows you to keep one deposit wallet, and users add a memo in order to be identified by your system. This means that you don’t need to scan the entire blockchain, but is slightly less easy for users.
+- [Memo-less deposits](https://github.com/gobicycle/bicycle) - This solution also exists, but is more difficult to integrate. However, we can assist with this, if you would prefer to take this route. Please notify us before deciding to implement this approach.
 
 ## Jetton Architecture
 
