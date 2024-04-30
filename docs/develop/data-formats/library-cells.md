@@ -88,12 +88,30 @@ Note, that current blueprint version (`@ton/blueprint:0.19.0`) doesn't automatic
 Actual for 04.2024 and suppose to be enhanced in the near future.
 :::
 
+### Get Methods for Library Cell Based Contracts
+
+You have jetton-wallet with its code stored in a library cell and desire to check balance. 
+
+To check its balance, you need to execute a get method in the code. This involves:
+- accessing the library cell
+- retrieving the hash of the referenced cell
+- finding the cell with that hash in the masterchain's library collection
+- executing the code from there. 
+
+In Layered Solutions (LS), all these processes happen behind the scenes without the user needing to know about the specific code storage method.
+
+However, when working locally, things are different. For example, if you use an explorer or wallet, you may take an account state and try to determine its type—whether it's an NFT, wallet, token, or auction. 
+
+For regular contracts, you can look at the available get methods, i.e., the interface, to understand it. Or, you may "steal" an account state to my local pseudonet and execute methods there. 
+
+For the a library cell, this isn't possible because it doesn't contain data on its own. You must manually detect and retrieve the necessary cells from the context. This can be done through LS (though bindings do not yet support this) or via DTon.
 
 
-### LS, contract type detection and get methods
-Liteserver when running get methods automatically set correct library context. If you want to detect type of contract by get methods or run getmethods locally you need to download corresponding cells via LS method [liteServer.getLibraries](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L85).
+#### Retrieving Library Cell with Liteserver
+Liteserver when running get methods automatically set correct library context. If you want to detect type of contract by get methods or run getmethods locally you need to download corresponding cells via LS method [liteServer.getLibraries](https://github.com/ton-blockchain/ton/blob/4cfe1d1a96acf956e28e2bbc696a143489e23631/tl/generate/scheme/lite_api.tl#L96).
 
-You can also get library from dton.io/graphql:
+#### Retrieving Library Cell with DTon
+You can also get library from [dton.io/graphql](https://dton.io/graphql):
 ```
 {
   get_lib(

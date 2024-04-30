@@ -45,7 +45,7 @@ Several such <b>AccountChains</b> combined within a single shard form a <b>Shard
 These groups of accounts are denoted by a common binary prefix, which serves as a criterion for clustering them in the same shard.
 This prefix appears in shard id which presented by a 64-bit integer and has the following structure: `<binary prefix>100000...`. For example, shard with id `1011100000...` contains all accounts started with prefix `1011`.
 
-When number of transactions in some shard growth, it splits into two shards. New shards obtaining the following ids: `<parent prefix>01000...` and `<parent prefix>11000...` and responsible for accounts starting with `<parent prefix>0` and `<parent prefix>1` correspondingly. The seqnos of blocks in shards goes continuously starting from parent last seqno plus 1. After split shards go independently and may have different seqnos.
+When number of transactions in some shard grows, this shard splits into two shards. New shards obtain the following ids: `<parent prefix>01000...` and `<parent prefix>11000...` and become responsible for accounts starting with `<parent prefix>0` and `<parent prefix>1` correspondingly. The seqnos of blocks in shards go continuously starting from the parent last seqno plus 1. After split, shards go independently and may have different seqnos.
 
 A simple example:
 ![](/img/docs/blockchain-fundamentals/shardchains-split.jpg)
@@ -54,12 +54,12 @@ Masterchain block contains information about shards in its header. After the blo
 
 An actual example:
 * Masterchain block `seqno=34607821` has 2 shards: `(0,4000000000000000,40485798)` and `(0,c000000000000000,40485843)` (https://toncenter.com/api/v2/shards?seqno=34607821).
-* Shard `shard=4000000000000000` was splitted into `shard=2000000000000000` and `shard=6000000000000000` and masterchain block `seqno=34607822` already has 3 shards: `(0,2000000000000000,40485799)` and `(0,6000000000000000,40485799)`. Note, that both new shards has the same seqnos but different shard IDs (https://toncenter.com/api/v2/shards?seqno=34607822).
-* New shards go independently and after 100 masterchain blocks (in masterchain block `seqno=34607921`) one shard has last block `(0,2000000000000000,40485901)` and another one has `(0,6000000000000000,40485897)` (https://toncenter.com/api/v2/shards?seqno=34607921).
+* Shard `shard=4000000000000000` was splitted into `shard=2000000000000000` and `shard=6000000000000000`, and the masterchain block `seqno=34607822` obtains 3 shards: `(0,2000000000000000,40485799)` and `(0,6000000000000000,40485799)`. Note that both new shards have the same seqnos but different shard IDs (https://toncenter.com/api/v2/shards?seqno=34607822).
+* New shards go independently and after 100 masterchain blocks (in masterchain block `seqno=34607921`) one shard has the last block `(0,2000000000000000,40485901)` and another one has `(0,6000000000000000,40485897)` (https://toncenter.com/api/v2/shards?seqno=34607921).
 
 ## Merging
-When shards load goes down they can merge back as follow:
-* Two shards can merge if they have common parent and, therefore, their shard ids are `<parent prefix>010...` and `<parent prefix110...`. Merged shard will have shard id `<parent prefix>10...` (for example `10010...` + `10110...` = `1010...`). The first block of merged shard will have `seqno=max(seqno1, seqno2) + 1`.
+If the load on shards goes down they can merge back:
+* Two shards can merge if they have a common parent and, therefore, their shard ids are `<parent prefix>010...` and `<parent prefix110...`. Merged shard will have shard id `<parent prefix>10...` (for example `10010...` + `10110...` = `1010...`). The first block of a merged shard will have `seqno=max(seqno1, seqno2) + 1`.
 
 A simple example:
 ![](/img/docs/blockchain-fundamentals/shardchains-merge.jpg)
