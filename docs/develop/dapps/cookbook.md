@@ -247,6 +247,64 @@ print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=Tru
 </TabItem>
 </Tabs>
 
+
+### How to Check the Validity of a TON Wallet Address?
+
+
+<Tabs groupId="address-examples">
+
+<TabItem value="Tonweb" label="JS (Tonweb)">
+
+```js
+
+const TonWeb = require("tonweb")
+
+TonWeb.utils.Address.isValid('...')
+```
+
+</TabItem>
+<TabItem value="GO" label="tonutils-go">
+
+```python
+package main
+
+import (
+    "fmt"
+    "github.com/xssnick/tonutils-go/address"
+)
+
+if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
+ return errors.New("invalid address")
+}
+```
+
+
+</TabItem>
+<TabItem value="Java" label="Ton4j">
+
+```javascript
+try {
+   Address.of("...");
+} catch (e) {
+   // not valid address
+}
+```
+
+</TabItem>
+<TabItem value="Kotlin" label="ton-kotlin">
+
+```javascript
+try {
+    AddrStd("...")
+} catch(e: IllegalArgumentException) {
+   // not valid address
+}
+```
+
+</TabItem>
+</Tabs>
+
+
 ## Standard wallets in TON ecosystem
 
 ### How to transfer TON? How to send a text message to other wallet?
@@ -524,6 +582,89 @@ asyncio.run(main())
 
 </Tabs>
 
+### How to calculate user's Jetton wallet address (offline)?
+
+Calling the GET method every time to get the wallet address can take a lot of time and resources. If we know the Jetton Wallet code and its storage structure in advance, we can get the wallet address without any network requests.
+
+You can get the code using Tonviewer. Let's take `jUSDT` as an example, the Jetton Master address is `EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA`. If we [go to this address](https://tonviewer.com/EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA?section=method) and open the Methods tab, we can see that there is already a `get_jetton_data` method there. By calling it, we can get the hex form of the cell with the Jetton Wallet code:
+
+```
+b5ee9c7201021301000385000114ff00f4a413f4bcf2c80b0102016202030202cb0405001ba0f605da89a1f401f481f481a9a30201ce06070201580a0b02f70831c02497c138007434c0c05c6c2544d7c0fc07783e903e900c7e800c5c75c87e800c7e800c1cea6d0000b4c7c076cf16cc8d0d0d09208403e29fa96ea68c1b088d978c4408fc06b809208405e351466ea6cc1b08978c840910c03c06f80dd6cda0841657c1ef2ea7c09c6c3cb4b01408eebcb8b1807c073817c160080900113e910c30003cb85360005c804ff833206e953080b1f833de206ef2d29ad0d30731d3ffd3fff404d307d430d0fa00fa00fa00fa00fa00fa00300008840ff2f00201580c0d020148111201f70174cfc0407e803e90087c007b51343e803e903e903534544da8548b31c17cb8b04ab0bffcb8b0950d109c150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c032481c007e401d3232c084b281f2fff274013e903d010c7e800835d270803cb8b13220060072c15401f3c59c3e809dc072dae00e02f33b51343e803e903e90353442b4cfc0407e80145468017e903e9014d771c1551cdbdc150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c0325c007e401d3232c084b281f2fff2741403f1c147ac7cb8b0c33e801472a84a6d8206685401e8062849a49b1578c34975c2c070c00870802c200f1000aa13ccc88210178d4519580a02cb1fcb3f5007fa0222cf165006cf1625fa025003cf16c95005cc2391729171e25007a813a008aa005004a017a014bcf2e2c501c98040fb004300c85004fa0258cf1601cf16ccc9ed5400725269a018a1c882107362d09c2902cb1fcb3f5007fa025004cf165007cf16c9c8801001cb0527cf165004fa027101cb6a13ccc971fb0050421300748e23c8801001cb055006cf165005fa027001cb6a8210d53276db580502cb1fcb3fc972fb00925b33e24003c85004fa0258cf1601cf16ccc9ed5400eb3b51343e803e903e9035344174cfc0407e800870803cb8b0be903d01007434e7f440745458a8549631c17cb8b049b0bffcb8b0b220841ef765f7960100b2c7f2cfc07e8088f3c58073c584f2e7f27220060072c148f3c59c3e809c4072dab33260103ec01004f214013e809633c58073c5b3327b55200087200835c87b51343e803e903e9035344134c7c06103c8608405e351466e80a0841ef765f7ae84ac7cbd34cfc04c3e800c04e81408f214013e809633c58073c5b3327b5520
+```
+
+Now, knowing the Jetton Wallet code, the Jetton Master address and the vault structure, we can manually calculate the wallet address:
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton/ton)">
+
+```js
+import { Address, Cell, beginCell, storeStateInit } from '@ton/core';
+
+const JETTON_WALLET_CODE = Cell.fromBoc(Buffer.from('b5ee9c7201021301000385000114ff00f4a413f4bcf2c80b0102016202030202cb0405001ba0f605da89a1f401f481f481a9a30201ce06070201580a0b02f70831c02497c138007434c0c05c6c2544d7c0fc07783e903e900c7e800c5c75c87e800c7e800c1cea6d0000b4c7c076cf16cc8d0d0d09208403e29fa96ea68c1b088d978c4408fc06b809208405e351466ea6cc1b08978c840910c03c06f80dd6cda0841657c1ef2ea7c09c6c3cb4b01408eebcb8b1807c073817c160080900113e910c30003cb85360005c804ff833206e953080b1f833de206ef2d29ad0d30731d3ffd3fff404d307d430d0fa00fa00fa00fa00fa00fa00300008840ff2f00201580c0d020148111201f70174cfc0407e803e90087c007b51343e803e903e903534544da8548b31c17cb8b04ab0bffcb8b0950d109c150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c032481c007e401d3232c084b281f2fff274013e903d010c7e800835d270803cb8b13220060072c15401f3c59c3e809dc072dae00e02f33b51343e803e903e90353442b4cfc0407e80145468017e903e9014d771c1551cdbdc150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c0325c007e401d3232c084b281f2fff2741403f1c147ac7cb8b0c33e801472a84a6d8206685401e8062849a49b1578c34975c2c070c00870802c200f1000aa13ccc88210178d4519580a02cb1fcb3f5007fa0222cf165006cf1625fa025003cf16c95005cc2391729171e25007a813a008aa005004a017a014bcf2e2c501c98040fb004300c85004fa0258cf1601cf16ccc9ed5400725269a018a1c882107362d09c2902cb1fcb3f5007fa025004cf165007cf16c9c8801001cb0527cf165004fa027101cb6a13ccc971fb0050421300748e23c8801001cb055006cf165005fa027001cb6a8210d53276db580502cb1fcb3fc972fb00925b33e24003c85004fa0258cf1601cf16ccc9ed5400eb3b51343e803e903e9035344174cfc0407e800870803cb8b0be903d01007434e7f440745458a8549631c17cb8b049b0bffcb8b0b220841ef765f7960100b2c7f2cfc07e8088f3c58073c584f2e7f27220060072c148f3c59c3e809c4072dab33260103ec01004f214013e809633c58073c5b3327b55200087200835c87b51343e803e903e9035344134c7c06103c8608405e351466e80a0841ef765f7ae84ac7cbd34cfc04c3e800c04e81408f214013e809633c58073c5b3327b5520', 'hex'))[0];
+const JETTON_MASTER_ADDRESS = Address.parse('EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA');
+const USER_ADDRESS = Address.parse('UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA');
+
+const jettonWalletStateInit = beginCell().store(storeStateInit({
+    code: JETTON_WALLET_CODE,
+    data: beginCell()
+        .storeCoins(0)
+        .storeAddress(USER_ADDRESS)
+        .storeAddress(JETTON_MASTER_ADDRESS)
+        .storeRef(JETTON_WALLET_CODE)
+        .endCell()
+}))
+.endCell();
+const userJettonWalletAddress = new Address(0, jettonWalletStateInit.hash());
+
+console.log('User Jetton Wallet address:', userJettonWalletAddress.toString());
+```
+
+</TabItem>
+
+<TabItem value="Python" label="Python">
+
+```python
+
+from pytoniq_core import Address, Cell, begin_cell
+
+def calculate_jetton_address(
+    owner_address: Address, jetton_master_address: Address, jetton_wallet_code: str
+):
+    # Recreate from jetton-utils.fc calculate_jetton_wallet_address()
+    # https://tonscan.org/jetton/EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs#source
+
+    data_cell = (
+        begin_cell()
+        .store_uint(0, 4)
+        .store_coins(0)
+        .store_address(owner_address)
+        .store_address(jetton_master_address)
+        .end_cell()
+    )
+
+    code_cell = Cell.one_from_boc(jetton_wallet_code)
+
+    state_init = (
+        begin_cell()
+        .store_uint(0, 2)
+        .store_maybe_ref(code_cell)
+        .store_maybe_ref(data_cell)
+        .store_uint(0, 1)
+        .end_cell()
+    )
+    state_init_hex = state_init.hash.hex()
+    jetton_address = Address(f'0:{state_init_hex}')
+
+    return jetton_address
+
+```
+Read the entire example [here](/static/example-code-snippets/pythoniq/jetton-offline-address-calc-wrapper.py).
+
+</TabItem>
+</Tabs>
+
+Most major tokens do not have a different storage structure because they use [a standard implementation of the TEP-74 standard](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc). The exception is the new [Jetton-with-governance contracts](https://github.com/ton-blockchain/stablecoin-contract) for centralized stablecoins. In these, the difference is [the presence of a wallet status field and the absence of a code cell in the vault](https://github.com/ton-blockchain/stablecoin-contract/blob/7a22416d4de61336616960473af391713e100d7b/contracts/jetton-utils.fc#L3-L12).
+
 ### How to construct a message for a jetton transfer with a comment?
 
 To understand how to construct a message for token transfer, we use [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which describes the token standard.
@@ -699,7 +840,7 @@ Jetton transfers need careful consideration for fees and amounts behind outgoing
 
 <img src="/img/interaction-schemes/nft.svg" alt="NFT ecosystem scheme"></img>
 
-NFT collections are very different. Actually, NFT contract on TON can be defined as "contract that has appropriate get-method and returns valid metadata". Transfer operation is standartized and quite analogous to [jetton's one](/develop/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment), so we will not dive into it and rather see additional capabilities provided by most collections you may meet!
+NFT collections are very different. Actually, NFT contract on TON can be defined as "contract that has appropriate get-method and returns valid metadata". Transfer operation is standardized and quite analogous to [jetton's one](/develop/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment), so we will not dive into it and rather see additional capabilities provided by most collections you may meet!
 
 :::warning
 Reminder: all methods about NFT below are not bound by TEP-62 to work. Before trying them, please check if your NFT or collection will process those messages in an expected way. Wallet app emulation may prove useful in this case.
@@ -1079,7 +1220,7 @@ DeDust provides a special SDk to work with contract, component, and API, it was 
 Enough theory, let's set up our environment to swap one jetton with TON.
 
 ```bash
-npm install --save @ton/core @ton/ton @ton/crypt
+npm install --save @ton/core @ton/ton @ton/crypto
 
 ```
 

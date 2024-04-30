@@ -1,12 +1,52 @@
 # Single Nominator Pool
 
-Currently [mytonctrl](https://github.com/ton-blockchain/mytonctrl) have no native support to `single_nominator` contract, so here steps how to setup it.
+## Using mytonctrl
 
-:::info
-Native support will be released in Q4 2023
-:::
+Currently [mytonctrl](https://github.com/ton-blockchain/mytonctrl) supports `single_nominator` contracts, but firstly you need to install mytonctrl 2.0.
 
-## Prepare the Validator
+### mytonctrl 2.0
+
+If you already have installed mytonctrl just use command `update mytonctrl2`. If you have no mytonctrl installed, follow these steps:
+
+1. Download installation script:
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/mytonctrl2/scripts/install.sh
+```
+
+2. Run installation script:
+
+```bash
+sudo bash ./install.sh -b mytonctrl2
+```
+
+### Set up single-nominator
+
+After you have created and activated validator's wallet, follow these steps:
+
+1. Enable single nominator mode
+
+```bash
+MyTonCtrl> enable_mode single-nominator
+```
+
+2. Create pool
+
+```bash
+MyTonCtrl> new_single_pool <pool-name> <owner_address>
+```
+
+3. Type `pools_list` to display pool addresses
+
+4. Send 1 TON to the pool and activate it
+
+```bash
+MyTonCtrl> activate_single_pool <pool-name>
+```
+
+Now you can work with this pool via mytonctrl like with a standard nominator pool.
+
+## Without mytonctrl
 
 #### Prepare launched Validator
 

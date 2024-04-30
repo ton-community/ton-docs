@@ -266,16 +266,20 @@ const config = {
                 label: 'Start with Onboarding Tutorials',
               },
               {
+                to: '/develop/dapps/tutorials/jetton-minter',
+                label: 'Mint your Tokens',
+              },
+              {
+                to: '/develop/dapps/tutorials/collection-minting',
+                label: 'Mint your NFTs',
+              },
+              {
                 to: '/develop/dapps/telegram-apps/',
                 label: 'Build your first Mini App',
               },
               {
                 to: '/develop/dapps',
                 label: 'Dive into DApps Development',
-              },
-              {
-                to: '/develop/dapps/tutorials/jetton-minter',
-                label: 'Mint your first Token (Jetton)',
               },
             ],
           },
@@ -290,20 +294,20 @@ const config = {
                 label: 'APIs and SDKs',
               },
               {
-                to: '/develop/dapps/cookbook',
-                label: 'Common Tasks Cookbook',
+                to: 'develop/dapps/asset-processing',
+                label: 'Asset Processing',
               },
               {
-                to: '/develop/dapps/cookbook-diagram',
-                label: 'Common Tasks Scheme',
+                to: 'develop/dapps/asset-processing/jettons',
+                label: 'Jetton Processing',
+              },
+              {
+                to: '/develop/dapps/cookbook',
+                label: 'Cookbook',
               },
               {
                 to: '/develop/dapps/telegram-apps/',
-                label: 'Working in Telegram',
-              },
-              {
-                to: 'develop/dapps/asset-processing',
-                label: 'Advanced Asset Holding',
+                label: 'TMA Development',
               },
             ],
           },
