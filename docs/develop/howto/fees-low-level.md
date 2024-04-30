@@ -93,7 +93,7 @@ function storageFeeCalculator() {
 
 ## Forward fees
 
-Internal messages define an `ihr_fee` in Grams, which is subtracted from the value attached to the message and awarded to the validators of the destination shardchain if they include the message by the IHR mechanism. The `fwd_fee` is the original total forwarding fee paid for using the HR mechanism; it is automatically computed from some configuration parameters and the size of the message at the time the message is generated. Notice that the total value carried by a newly-created internal outbound message equals the sum of value, `ihr_fee`, and `fwd_fee`. This sum is deducted from the balance of the source account. Of these components, only value is always credited to the destination account on message delivery. The `fwd_fee` is collected by the validators on the HR path from the source to the destination, and the `ihr_fee` is either collected by the validators of the destination shardchain (if the message is delivered via IHR), or credited to the destination account.
+Internal messages define an `ihr_fee` in Toncoins, which is subtracted from the value attached to the message and awarded to the validators of the destination shardchain if they include the message by the IHR mechanism. The `fwd_fee` is the original total forwarding fee paid for using the HR mechanism; it is automatically computed from some configuration parameters and the size of the message at the time the message is generated. Notice that the total value carried by a newly-created internal outbound message equals the sum of value, `ihr_fee`, and `fwd_fee`. This sum is deducted from the balance of the source account. Of these components, only value is always credited to the destination account on message delivery. The `fwd_fee` is collected by the validators on the HR path from the source to the destination, and the `ihr_fee` is either collected by the validators of the destination shardchain (if the message is delivered via IHR), or credited to the destination account.
 
 :::info
 `fwd_fee` covers 2/3 of the cost, as 1/3 is allocated to the `action_fee` when the message is created.
@@ -227,7 +227,7 @@ Action fee is deducted from the balance of the source account during processing 
 These are the actions that lead to pay fees:
 
 * `SENDRAWMSG` sends a raw message.
-* `RAWRESERVE` creates an output action which would reserve N nanograms.
+* `RAWRESERVE` creates an output action which would reserve N Nanotons.
 * `RAWRESERVEX` similar to `RAWRESERVE`, but also accepts a dictionary with extra currencies.
 * `SETCODE` creates an output action that would change this smart contract code.
 * `SETLIBCODE` creates an output action that would modify the collection of this smart contract libraries by adding or removing library with given code.
