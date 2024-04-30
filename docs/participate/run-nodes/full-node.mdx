@@ -39,6 +39,16 @@ You need a machine with a **fixed IP address** and a **high-bandwidth network co
 
 Typically you'll need a sufficiently powerful server in a data center with good network connectivity, using at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
 
+### Port Forwarding
+
+All types of nodes require a static external IP address, one UDP port to be forwarded for incoming connections and all outgoing connections to be open - the node uses random ports for new outgoing connections. It's necessarily for the node to be visible to the outside world over the NAT. 
+
+It can be done with your network provider or [rent a server](/participate/run-nodes/full-node#recommended-providers) to run a node.
+
+:::info
+It's possible to find out which UDP port is opened from the `netstat -tulpn` command.
+:::
+
 ### Recommended Providers
 
 The TON Foundation recommends the following providers for running a Validator:
@@ -607,7 +617,7 @@ This error means that contract didn't accepted external message. You need to fin
 Sometimes, this process can take up to 24 hours. However, if you've been receiving this error for several days, that means that your node cannot synchronize via a current network connection.
 
 :::tip Solution
-You need to check the firewall settings, including any NAT settings if they exist.
+You need to check the firewall settings, including any [NAT](/participate/run-nodes/full-node#port-forwarding) settings if they exist.
 
 It should allow incoming connections on one specific port and outgoing connections from any port.
 :::
