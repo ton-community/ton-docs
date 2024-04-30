@@ -17,7 +17,7 @@ Since TON is a comprehensive system with wide functionality, messages which need
 
 Therefore, the developer should not be afraid, and if something in this document seems incomprehensible on first reading, it's okay. Just grasp the general idea.
 
-Sometimes the word **'gram'** may be mentioned in the documentation, mostly in code examples, it's just an outdated name for toncoin.
+Sometimes the word **'gram'** may be mentioned in the documentation, mostly in code examples, it's just an outdated name for **toncoin**.
 
 Let's dive in!
 
@@ -127,7 +127,7 @@ currencies$_ grams:Grams other:ExtraCurrencyCollection
 
 This scheme means that in addition to the TON value, message may carry the dictionary of additional _extra-currencies_. However, currently we may neglect it and just assume that the message value is serialized as "number of nanotons as variable integer" and "`0` - empty dictionary bit".
 
-Indeed, in the elector code above we serialize coins' amounts via `.store_coins(grams)` but then just put a string of zeros with length equal to `1 + 4 + 4 + 64 + 32 + 1 + 1`. What is it? 
+Indeed, in the elector code above we serialize coins' amounts via `.store_coins(toncoins)` but then just put a string of zeros with length equal to `1 + 4 + 4 + 64 + 32 + 1 + 1`. What is it? 
 * First bit stands for empty extra-currencies dictionary.
 * Then we have two 4-bit long fields. They encode 0 as `VarUInteger 16`. In fact, since `ihr_fee` and `fwd_fee` will be overwritten, we may as well put there zeroes.
 * Then we put zero to `created_lt` and `created_at` fields. Those fields will be overwritten as well; however, in contrast to fees, these fields have a fixed length and are thus encoded as 64- and 32-bit long strings.
