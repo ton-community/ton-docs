@@ -1,3 +1,4 @@
+
 import Button from '@site/src/components/button'
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -222,9 +223,7 @@ To generate a transaction link in the explorer, the service needs to get the lt 
 - **psylopunk/pythonlib:**
   - [Wallet creation + get wallet address](https://github.com/psylopunk/pytonlib/blob/main/examples/generate_wallet.py)
   
-- **pytoniq**
-<details>
-<summary>Create wallet</summary>
+- **yungwine/pytoniq:**
 ```py
 import asyncio
 
@@ -245,8 +244,6 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 ```
-</details>
-</TabItem>
 
 </TabItem>
 
@@ -361,7 +358,6 @@ func main() {
 
 - **yungwine/pytoniq:**
 
-<details>
 <summary>Checking deposits</summary>
 
 ```python
@@ -420,7 +416,6 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-</details>
 </TabItem>
 </Tabs>
 
@@ -451,7 +446,6 @@ if __name__ == "__main__":
   - [Withdraw Toncoins from a wallet](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
 
 - **yungwine/pytoniq:**
-<details>
 
 ```python
 import asyncio
@@ -472,13 +466,13 @@ async def main():
     wallet = await WalletV4R2.from_mnemonic(provider, MY_MNEMONICS)
 
     await wallet.transfer(DESTINATION_WALLET, 5)
+    
+    await provider.close_all()
 
 
 if __name__ == "__main__":
     asyncio.run(main())
 ```
-
-</details>
 
 </TabItem>
 
