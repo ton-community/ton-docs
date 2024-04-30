@@ -250,7 +250,7 @@ Because the transaction comes from the outside world, it does not contain the To
 
 ### Transaction Expiration
 
-Another step used to check the validity of external transactions is the `valid_until` field. As you can see from the variable name, this is the time in UNIX before the transaction is valid. If this verification process fails, the contract completes the processing of the transaction and returns the 32 exit code follows:
+Another step used to check the validity of external transactions is the `valid_until` field. As you can see from the variable name, this is the time in UNIX before the transaction is valid. If this verification process fails, the contract completes the processing of the transaction and returns the 35 exit code follows:
 
 ```func
 var (subwallet_id, valid_until, msg_seqno) = (cs~load_uint(32), cs~load_uint(32), cs~load_uint(32));
