@@ -2,14 +2,24 @@
 
 Every TON user should keep in mind that _commission depends on many factors_.
 
+Most fees are nominated in nanotons or nanotons multiplied by 2^16 to maintain accuracy while using integer.
+
 ## Gas
 
-All fees are calculated in Gas. It's a special currency for fees in TON.
+All [computation costs](/develop/howto/fees-low-level#computation-fees) are nominated in gas units and fixed in a certain gas amount. 
 
-All fees are nominated and fixed in a certain gas amount, but the gas price itself is not fixed. Today the price for gas is:
+The price of gas units is determined by the [chain config](https://tonviewer.com/config#20) and may be changed only by consensus of validators. Note that unlike in other systems, the user cannot set his own gas price, and there is no fee market.
+
+Current settings in basechain are as follows: 1 unit of gas costs 400 nanotons.
 
 ```cpp
-1 gas = 1000 nanotons = 0,000 001 TON
+1 gas = 26214400 / 2^16 nanotons = 0,000 000 4 TON
+```
+
+Current settings in masterchain are as follows: 1 unit of gas costs 10000 nanotons.
+
+```cpp
+1 gas = 655360000 / 2^16 nanotons = 0,000 01 TON
 ```
 
 ### Average transaction cost
@@ -19,7 +29,7 @@ All fees are nominated and fixed in a certain gas amount, but the gas price itse
 Even if TON price increases 100 times, transactions will remain ultra-cheap; less than $0.01. Moreover, validators may lower this value if they see commissions have become expensive [read why they're interested](#gas-changing-voting-process).
 
 :::info
-The current gas amount is written in the Network Config [param 20](https://explorer.toncoin.org/config?workchain=-1&shard=8000000000000000&seqno=22185244&roothash=165D55B3CFFC4043BFC43F81C1A3F2C41B69B33D6615D46FBFD2036256756382&filehash=69C43394D872B02C334B75F59464B2848CD4E23031C03CA7F3B1F98E8A13EE05#configparam20).
+The current gas amount is written in the Network Config [param 20](https://tonviewer.com/config#20) and [param 21](https://tonviewer.com/config#21) for masterchain and basechain respectivly.
 :::
 
 ### Gas changing voting process
@@ -38,7 +48,7 @@ Validators receive a small fee for processing transactions, and charging higher 
 
 ### How to calculate fees?
 
-Fees on TON are difficult to calculate in advance, as their amount depends on transaction run time, account status, message content and size, blockchain network settings, and a number of other variables that cannot be calculated until the transaction is sent. Read about [computation fees](/develop/howto/fees-low-level#computation-fees) in low-level article overview.
+Fees on TON are difficult to calculate in advance, as their amount depends on transaction run time, account status, message content and size, blockchain network settings, and a number of other variables that cannot be calculated until the transaction is sent.
 
 That is why even NFT marketplaces usually take an extra amount of TON (_~1 TON_) and return (_`1 - transaction_fee`_) later.
 
@@ -56,7 +66,7 @@ transaction_fee = storage_fees
                 + out_fwd_fees
 ```
 
-## Elements of transaction fee
+### Elements of transaction fee
 
 * `storage_fees` is the amount you pay for storing a smart contract in the blockchain. In fact, you pay for every second the smart contract is stored on the blockchain.
   * _Example_: your TON Wallet is also a smart contract, and it pays a storage fee every time you receive or send a transaction. Read more about [how storage fees are calculated](/develop/smart-contracts/fees#storage-fee).
@@ -88,10 +98,9 @@ If you have not used your TON Wallet for a significant period of time (1 year), 
 
 You can approximately calculate storage fees for smart contracts using this formula:
 
-
 ```cpp
   storage_fee = (cells_count * cell_price + bits_count * bit_price)
-  / 2^16 * time_delta
+  * time_delta / 2^16 
 ```
 
 Let's examine each value more closely:
@@ -102,7 +111,7 @@ Let's examine each value more closely:
 * `cell_price`—price of single cell
 * `bit_price`—price of single bit
 
-Both `cell_price` and `bit_price` could be obtained from Network Config [param 18](https://explorer.toncoin.org/config?workchain=-1&shard=8000000000000000&seqno=22185244&roothash=165D55B3CFFC4043BFC43F81C1A3F2C41B69B33D6615D46FBFD2036256756382&filehash=69C43394D872B02C334B75F59464B2848CD4E23031C03CA7F3B1F98E8A13EE05#configparam18).
+Both `cell_price` and `bit_price` could be obtained from Network Config [param 18](https://tonviewer.com/config#18).
 
 Current values are:
 
@@ -125,11 +134,12 @@ You can use this JS script to calculate storage price for 1 MB in the workchain 
 
 // Welcome to LIVE editor!
 // feel free to change any variables
-  
+// Source code uses RoundUp for the fee amount, so does the calculator
+
 function storageFeeCalculator() {
   
-  const size = 1024 * 1024 * 8		    // 1MB in bits  
-  const duration = 60 * 60 * 24 * 365	// 1 Year in secs
+  const size = 1024 * 1024 * 8        // 1MB in bits  
+  const duration = 60 * 60 * 24 * 365 // 1 Year in secs
 
   const bit_price_ps = 1
   const cell_price_ps = 500
@@ -137,7 +147,7 @@ function storageFeeCalculator() {
   const pricePerSec = size * bit_price_ps +
   + Math.ceil(size / 1023) * cell_price_ps
 
-  let fee = (pricePerSec * duration / 2**16 * 10**-9)
+  let fee = Math.ceil(pricePerSec * duration / 2**16) * 10**-9
   let mb = (size / 1024 / 1024 / 8).toFixed(2)
   let days = Math.floor(duration / (3600 * 24))
   
