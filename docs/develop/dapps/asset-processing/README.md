@@ -136,13 +136,20 @@ To accept payments based on attached comments, the service should
 ### Invoices with ton:// link
 
 If you need an easy integration for a simple user flow, it is suitable to use the ton:// link.
-Best suited for one-time payments and invoices.
+Best suited for one-time payments and invoices with Toncoin.
 
-```bash
+```text
 ton://transfer/<destination-address>?
-    [nft=<nft-address>&]
-    [fee-amount=<nanocoins>&]
-    [forward-amount=<nanocoins>] 
+    [amount=<toncoin-in-nanocoins>&]
+    [text=<url-encoded-utf8-comment>]
+```
+
+Example of ton:// link generation:
+
+```typescript
+const tonLink = `ton://transfer/${address.toString({
+  urlSafe: true,
+})}?amount=${amount}${text ? `&text=${encodeURIComponent(text)}` : ''}`;
 ```
 
 - ✅ Easy integration
