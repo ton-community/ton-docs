@@ -617,6 +617,57 @@ await my_wallet.transfer_jetton_by_jetton_wallet(destination_address='address', 
 </details>
 
 </TabItem>
+
+<TabItem value="pytoniq" label="Python">
+
+<details>
+<summary>
+Source code
+</summary>
+
+```py
+from pytoniq import LiteBalancer, WalletV4R2, begin_cell
+import asyncio
+
+mnemonics = ["your", "mnemonics", "here"]
+
+async def main():
+    provider = LiteBalancer.from_mainnet_config(1)
+    await provider.start_up()
+
+    wallet = await WalletV4R2.from_mnemonic(provider=provider, mnemonics=mnemonics)
+    USER_ADDRESS = wallet.address
+    JETTON_MASTER_ADDRESS = "EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE"
+    DESTINATION_ADDRESS = "EQAsl59qOy9C2XL5452lGbHU9bI3l4lhRaopeNZ82NRK8nlA"
+
+    USER_JETTON_WALLET = (await provider.run_get_method(address=JETTON_MASTER_ADDRESS,
+                                                        method="get_wallet_address",
+                                                        stack=[begin_cell().store_address(USER_ADDRESS).end_cell().begin_parse()]))[0].load_address()
+    forward_payload = (begin_cell()
+                      .store_uint(0, 32) # TextComment op-code
+                      .store_snake_string("Comment")
+                      .end_cell())
+    transfer_cell = (begin_cell()
+                    .store_uint(0xf8a7ea5, 32)          # Jetton Transfer op-code
+                    .store_uint(0, 64)                  # query_id
+                    .store_coins(1 * 10**9)             # Jetton amount to transfer in nanojetton
+                    .store_address(DESTINATION_ADDRESS) # Destination address
+                    .store_address(USER_ADDRESS)        # Response address
+                    .store_bit(0)                       # Custom payload is None
+                    .store_coins(1)                     # Ton forward amount in nanoton
+                    .store_bit(1)                       # Store forward_payload as a reference
+                    .store_ref(forward_payload)         # Forward payload
+                    .end_cell())
+
+    await wallet.transfer(destination=USER_JETTON_WALLET, amount=int(0.05*1e9), body=transfer_cell)
+    await provider.close_all()
+
+asyncio.run(main())
+```
+
+</details>
+
+</TabItem>
 </Tabs>
 
 
@@ -1012,6 +1063,110 @@ func GetTransferTransactions(orderId string, foundTransfer chan<- *tlb.Transacti
 		foundTransfer <- tx
 	}
 }
+```
+
+</details>
+</TabItem>
+
+<TabItem value="pythoniq" label="Python">
+
+<details>
+<summary>
+Source code
+</summary>
+
+```py
+import asyncio
+
+from pytoniq import LiteBalancer, begin_cell
+
+MY_WALLET_ADDRESS = "EQAsl59qOy9C2XL5452lGbHU9bI3l4lhRaopeNZ82NRK8nlA"
+
+
+async def parse_transactions(provider: LiteBalancer, transactions):
+    for transaction in transactions:
+        if not transaction.in_msg.is_internal:
+            continue
+        if transaction.in_msg.info.dest.to_str(1, 1, 1) != MY_WALLET_ADDRESS:
+            continue
+
+        sender = transaction.in_msg.info.src.to_str(1, 1, 1)
+        value = transaction.in_msg.info.value_coins
+        if value != 0:
+            value = value / 1e9
+
+        if len(transaction.in_msg.body.bits) < 32:
+            print(f"TON transfer from {sender} with value {value} TON")
+            continue
+
+        body_slice = transaction.in_msg.body.begin_parse()
+        op_code = body_slice.load_uint(32)
+        if op_code != 0x7362D09C:
+            continue
+
+        body_slice.load_bits(64)  # skip query_id
+        jetton_amount = body_slice.load_coins() / 1e9
+        jetton_sender = body_slice.load_address().to_str(1, 1, 1)
+        if body_slice.load_bit():
+            forward_payload = body_slice.load_ref().begin_parse()
+        else:
+            forward_payload = body_slice
+
+        jetton_master = (
+            await provider.run_get_method(
+                address=sender, method="get_wallet_data", stack=[]
+            )
+        )[2].load_address()
+        jetton_wallet = (
+            (
+                await provider.run_get_method(
+                    address=jetton_master,
+                    method="get_wallet_address",
+                    stack=[
+                        begin_cell()
+                        .store_address(MY_WALLET_ADDRESS)
+                        .end_cell()
+                        .begin_parse()
+                    ],
+                )
+            )[0]
+            .load_address()
+            .to_str(1, 1, 1)
+        )
+
+        if jetton_wallet != sender:
+            print("FAKE Jetton Transfer")
+            continue
+
+        if len(forward_payload.bits) < 32:
+            print(
+                f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton"
+            )
+        else:
+            forward_payload_op_code = forward_payload.load_uint(32)
+            if forward_payload_op_code == 0:
+                print(
+                    f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton and comment: {forward_payload.load_snake_string()}"
+                )
+            else:
+                print(
+                    f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton and unknown payload: {forward_payload} "
+                )
+
+        print(f"Transaction hash: {transaction.cell.hash.hex()}")
+        print(f"Transaction lt: {transaction.lt}")
+
+
+async def main():
+    provider = LiteBalancer.from_mainnet_config(1)
+    await provider.start_up()
+    transactions = await provider.get_transactions(address=MY_WALLET_ADDRESS, count=5)
+    await parse_transactions(provider, transactions)
+    await provider.close_all()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 </details>
