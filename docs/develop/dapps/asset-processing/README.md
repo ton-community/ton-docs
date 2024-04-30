@@ -197,6 +197,32 @@ To generate a transaction link in the explorer, the service needs to get the lt 
 
 - **psylopunk/pythonlib:** 
   - [Wallet creation + get wallet address](https://github.com/psylopunk/pytonlib/blob/main/examples/generate_wallet.py)
+  
+- **pytoniq**
+<details>
+<summary>Create wallet</summary>
+```py
+import asyncio
+
+from pytoniq.contract.wallets.wallet import WalletV4R2
+from pytoniq.liteclient.balancer import LiteBalancer
+
+
+async def main():
+    provider = LiteBalancer.from_mainnet_config(2)
+    await provider.start_up()
+
+    mnemonics, wallet = await WalletV4R2.create(provider)
+    print(f"{wallet.address=} and {mnemonics=}")
+
+    await provider.close_all()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+</details>
+</TabItem>
 
 </TabItem>
 
@@ -307,6 +333,71 @@ func main() {
 </details>
 </TabItem>
 
+<TabItem value="Python" label="Python">
+
+- **yungwine/pytoniq:**
+
+<details>
+<summary>Checking deposits</summary>
+
+```python
+import asyncio
+
+from pytoniq_core import Transaction
+
+from pytoniq import LiteClient, Address
+
+MY_ADDRESS = Address("kf8zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM_BP")
+
+
+async def main():
+    client = LiteClient.from_mainnet_config(ls_i=0, trust_level=2)
+
+    await client.connect()
+
+    last_block = await client.get_trusted_last_mc_block()
+
+    _account, shard_account = await client.raw_get_account_state(MY_ADDRESS, last_block)
+    assert shard_account
+
+    last_trans_lt, last_trans_hash = (
+        shard_account.last_trans_lt,
+        shard_account.last_trans_hash,
+    )
+
+    while True:
+        print(f"Waiting for{last_block=}")
+
+        transactions = await client.get_transactions(
+            MY_ADDRESS, 1024, last_trans_lt, last_trans_hash
+        )
+        toncoin_deposits = [tx for tx in transactions if filter_toncoin_deposit(tx)]
+        print(f"Got {len(transactions)=} with {len(toncoin_deposits)=}")
+
+        for deposit_tx in toncoin_deposits:
+            # Process toncoin deposit transaction
+            print(deposit_tx.cell.hash.hex())
+
+        last_trans_lt = transactions[0].lt
+        last_trans_hash = transactions[0].cell.hash
+
+
+def filter_toncoin_deposit(tx: Transaction):
+    if tx.out_msgs:
+        return False
+
+    if tx.in_msg:
+        return False
+
+    return True
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+</details>
+</TabItem>
 </Tabs>
 
 ### Toncoin Withdrawals (Send toncoins)
@@ -335,6 +426,36 @@ func main() {
 - **psylopunk/pythonlib:**
   - [Withdraw Toncoins from a wallet](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
 
+- **yungwine/pytoniq:**
+<details>
+
+```python
+import asyncio
+
+from pytoniq_core import Address
+from pytoniq.contract.wallets.wallet import WalletV4R2
+from pytoniq.liteclient.balancer import LiteBalancer
+
+
+MY_MNEMONICS = "one two tree ..."
+DESTINATION_WALLET = Address("Destination wallet address")
+
+
+async def main():
+    provider = LiteBalancer.from_mainnet_config()
+    await provider.start_up()
+
+    wallet = await WalletV4R2.from_mnemonic(provider, MY_MNEMONICS)
+
+    await wallet.transfer(DESTINATION_WALLET, 5)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+</details>
+
 </TabItem>
 
 </Tabs>
@@ -360,6 +481,9 @@ func main() {
 
 - **psylopunk/pythonlib:**
   - [Get transactions](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
+  
+- **yungwine/pytoniq:**
+  - [Get transactions](https://github.com/yungwine/pytoniq/blob/master/examples/transactions.py)
 
 </TabItem>
 
