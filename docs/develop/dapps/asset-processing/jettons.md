@@ -1094,76 +1094,65 @@ async def parse_transactions(provider: LiteBalancer, transactions):
         value = transaction.in_msg.info.value_coins
         if value != 0:
             value = value / 1e9
-        
+
         if len(transaction.in_msg.body.bits) < 32:
             print(f"TON transfer from {sender} with value {value} TON")
+            continue
+
+        body_slice = transaction.in_msg.body.begin_parse()
+        op_code = body_slice.load_uint(32)
+        if op_code != 0x7362D09C:
+            continue
+
+        body_slice.load_bits(64)  # skip query_id
+        jetton_amount = body_slice.load_coins() / 1e9
+        jetton_sender = body_slice.load_address().to_str(1, 1, 1)
+        if body_slice.load_bit():
+            forward_payload = body_slice.load_ref().begin_parse()
         else:
-            body_slice = transaction.in_msg.body.begin_parse()
-            op_code = body_slice.load_uint(32)
-            
-            # TextComment
-            if op_code == 0:
-                print(f"TON transfer from {sender} with value {value} TON and comment: {body_slice.load_snake_string()}")
-            
-            # Jetton Transfer Notification
-            elif op_code == 0x7362d09c:
-                body_slice.load_bits(64) # skip query_id
-                jetton_amount = body_slice.load_coins() / 1e9
-                jetton_sender = body_slice.load_address().to_str(1, 1, 1)
-                if body_slice.load_bit():
-                    forward_payload = body_slice.load_ref().begin_parse()
-                else:
-                    forward_payload = body_slice
-                
-                jetton_master = (await provider.run_get_method(address=sender, method="get_wallet_data", stack=[]))[2].load_address()
-                jetton_wallet = (await provider.run_get_method(address=jetton_master, method="get_wallet_address",
-                                                               stack=[
-                                                                        begin_cell().store_address(MY_WALLET_ADDRESS).end_cell().begin_parse()
-                                                                     ]))[0].load_address().to_str(1, 1, 1)
+            forward_payload = body_slice
 
-                if jetton_wallet != sender:
-                    print("FAKE Jetton Transfer")
-                    continue
-                
-                if len(forward_payload.bits) < 32:
-                    print(f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton")
-                else:
-                    forward_payload_op_code = forward_payload.load_uint(32)
-                    if forward_payload_op_code == 0:
-                        print(f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton and comment: {forward_payload.load_snake_string()}")
-                    else:
-                        print(f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton and unknown payload: {forward_payload} ")
-            
-            # NFT Transfer Notification
-            elif op_code == 0x05138d91:
-                body_slice.load_bits(64) # skip query_id
-                prev_owner = body_slice.load_address().to_str(1, 1, 1)
-                if body_slice.load_bit():
-                    forward_payload = body_slice.load_ref().begin_parse()
-                else:
-                    forward_payload = body_slice
+        jetton_master = (
+            await provider.run_get_method(
+                address=sender, method="get_wallet_data", stack=[]
+            )
+        )[2].load_address()
+        jetton_wallet = (
+            (
+                await provider.run_get_method(
+                    address=jetton_master,
+                    method="get_wallet_address",
+                    stack=[
+                        begin_cell()
+                        .store_address(MY_WALLET_ADDRESS)
+                        .end_cell()
+                        .begin_parse()
+                    ],
+                )
+            )[0]
+            .load_address()
+            .to_str(1, 1, 1)
+        )
 
-                stack = await provider.run_get_method(address=sender, method="get_nft_data", stack=[])
-                index = stack[1]
-                collection = stack[2].load_address()
-                item_address = (await provider.run_get_method(address=collection, method="get_nft_address_by_index",
-                                                              stack=[index]))[0].load_address().to_str(1, 1, 1)
+        if jetton_wallet != sender:
+            print("FAKE Jetton Transfer")
+            continue
 
-                if item_address != sender:
-                    print("FAKE NFT Transfer")
-                    continue
+        if len(forward_payload.bits) < 32:
+            print(
+                f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton"
+            )
+        else:
+            forward_payload_op_code = forward_payload.load_uint(32)
+            if forward_payload_op_code == 0:
+                print(
+                    f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton and comment: {forward_payload.load_snake_string()}"
+                )
+            else:
+                print(
+                    f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton and unknown payload: {forward_payload} "
+                )
 
-                if len(forward_payload.bits) < 32:
-                    print(f"NFT transfer from {prev_owner}")
-                else:
-                    forward_payload_op_code = forward_payload.load_uint(32)
-                    if forward_payload_op_code == 0:
-                        print(f"NFT transfer from {prev_owner} with comment: {forward_payload.load_snake_string()}")
-                    else:
-                        print(f"NFT transfer from {prev_owner} with unknown payload: {forward_payload}")
-
-                print(f"NFT Item: {item_address}")
-                print(f"NFT Collection: {collection}")
         print(f"Transaction hash: {transaction.cell.hash.hex()}")
         print(f"Transaction lt: {transaction.lt}")
 
