@@ -17,6 +17,8 @@ Since TON is a comprehensive system with wide functionality, messages which need
 
 Therefore, the developer should not be afraid, and if something in this document seems incomprehensible on first reading, it's okay. Just grasp the general idea.
 
+Sometimes the word **'gram'** may be mentioned in the documentation, mostly in code examples, it's just an outdated name for toncoin.
+
 Let's dive in!
 
 ## Types of messages
