@@ -178,7 +178,7 @@ As you might've noticed, we send messages with `send_raw_message` which, apart f
 
 :::info +2 flag
 Note that `+2` flag ignore only following errors arising while processing message during the action phase:
-1. Not enough grams:
+1. Not enough Toncoins:
     - Not enough value to transfer with the message (all of the inbound message value has been consumed).
     - Not enough funds to process a message.
     - Not enough value attached to the message to pay forwarding fees.
