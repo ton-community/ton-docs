@@ -10,10 +10,15 @@ TON中的**全节点**是与区块链保持同步的节点。
 
 它保留了区块链的_当前状态_，可以包含整个区块历史或其部分。这使其成为TON区块链的支柱，促进网络的去中心化和安全。
 
+````mdx-code-block 
 <Button href="/participate/run-nodes/full-node"
 colorType="primary" sizeType={'sm'}>
+````
 运行全节点
+
+````mdx-code-block 
 </Button>
+````
 
 ## 验证者节点
 

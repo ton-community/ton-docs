@@ -5,8 +5,20 @@ import Button from '@site/src/components/button'
 在本教程中，我们将创建一个示例 Telegram 机器人，该机器人支持使用 Python TON Connect SDK [pytonconnect](https://github.com/XaBbl4/pytonconnect) 的 TON Connect 2.0 认证。
 我们将分析连接钱包、发送交易、获取有关已连接钱包的数据以及断开钱包的连接。
 
-<Button href="https://t.me/test_tonconnect_bot" colorType={'primary'} sizeType={'sm'}>打开演示机器人</Button>
-<Button href="https://github.com/yungwine/ton-connect-bot" colorType={'secondary'} sizeType={'sm'}>查看 GitHub</Button>
+````mdx-code-block 
+<Button href="https://t.me/test_tonconnect_bot" colorType={'primary'} sizeType={'sm'}>
+````
+打开演示机器人
+````mdx-code-block 
+</Button>
+````
+````mdx-code-block 
+<Button href="https://github.com/yungwine/ton-connect-bot" colorType={'secondary'} sizeType={'sm'}>
+````
+查看 GitHub
+````mdx-code-block 
+</Button>
+````
 
 ## 准备工作
 

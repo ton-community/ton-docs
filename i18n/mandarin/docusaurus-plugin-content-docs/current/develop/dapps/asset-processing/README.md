@@ -154,10 +154,15 @@ ton://transfer/<destination-address>?
 - ❌ 关于用户地址的信息
 - ❌ 在某些平台不可点击此类链接（例如Telegram桌面客户端的机器人消息）时需要变通方法
 
+````mdx-code-block 
 <Button href="https://github.com/tonkeeper/wallet-api#payment-urls"
 colorType="primary" sizeType={'lg'}>
+````
 了解更多
+
+````mdx-code-block 
 </Button>
+````
 
 ### 带有 TON Connect 的发票
 
@@ -173,10 +178,15 @@ colorType="primary" sizeType={'lg'}>
 - ❌ 如果您只需要发送一次支付，用户需要进行两个操作：连接钱包和确认交易
 - ❌ 集成比ton://链接更复杂
 
+````mdx-code-block 
 <Button href="/develop/dapps/ton-connect/"
 colorType="primary" sizeType={'lg'}>
+````
 了解更多
+
+````mdx-code-block 
 </Button>
+````
 
 ## 发送支付
 

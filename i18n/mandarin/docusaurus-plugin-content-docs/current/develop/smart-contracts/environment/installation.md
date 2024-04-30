@@ -10,10 +10,15 @@ import Button from '@site/src/components/button'
 
 Blueprint SDK已提供所有开发和测试所需的二进制文件。
 
+````mdx-code-block 
 <Button href="/develop/smart-contracts/sdk/javascript"
 colorType="primary" sizeType={'sm'}>
+````
 迁移到Blueprint SDK
+
+````mdx-code-block 
 </Button>
+````
 
 ## 预编译二进制文件
 
@@ -39,7 +44,7 @@ colorType="primary" sizeType={'sm'}>
 | Linux  arm64  | [下载](https://github.com/ton-blockchain/ton/releases/latest/download/ton-linux-arm64.zip)   | |                                                                                              |  | `sudo apt install libatomic1 libssl-dev`                                             |
 
 ### 2. 设置您的二进制文件
-
+````mdx-code-block 
 export const Highlight = ({children, color}) => (
 <span
 style={{
@@ -51,7 +56,7 @@ padding: '0.2rem',
 {children}
 </span>
 );
-
+````
 <Tabs groupId="operating-systems">
   <TabItem value="win" label="Windows">
 
