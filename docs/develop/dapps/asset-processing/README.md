@@ -1,6 +1,6 @@
 import Button from '@site/src/components/button'
 
-# Payments processing
+# Processing Global Overview
 
 This page contains an overview and specific details that explain how to process (send and accept) digital assets on the TON blockchain.
 
@@ -10,76 +10,52 @@ TON transactions are irreversible after just one confirmation. For the best user
 
 ## Best Practices
 
-### Fundamentals for Wallet
-
-- [Create a key pair, a wallet and get a wallet address](https://github.com/toncenter/examples/blob/main/common.js)
-
 ### Toncoin 
 
 #### Toncoin Deposits
+
 :::info
-It is suggested to accept deposits across multiple wallets on your side.
+It is suggested to set several MEMO deposit wallets for better performance.
 :::
-- [JS code to accept Toncoin deposits](https://github.com/toncenter/examples/blob/main/deposits.js)
+
+- [MEMO Deposits](https://github.com/toncenter/examples/blob/main/deposits.js)
 
 #### Toncoin Withdrawals
-- [JS code to withdraw (send) Toncoin from a wallet in batches](https://github.com/toncenter/examples/blob/main/withdrawals-highload-batch.js)
-- [JS code to withdraw (send) Toncoins from a wallet](https://github.com/toncenter/examples/blob/main/withdrawals-highload.js)
+
+- [Batched withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-highload-batch.js)
+- [Withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-highload.js)
 
 
-- [Detailed info](https://docs.ton.org/develop/dapps/asset-processing#global-overview)
+- [Detailed info](/develop/dapps/asset-processing#global-overview)
 
 ### Jetton 
 
-#### Jetton Deposits
-:::info
-It is suggested to accept deposits across multiple wallets on your side.
-:::
+- [Read Jetton Proccesing](/develop/dapps/asset-processing/jettons)
 
-- [JS code to accept jettons deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
 
-#### Jetton Withdrawals
-- [JS code to withdraw (send) jettons from a wallet](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload.js)
-- [JS code to withdraw (send) jettons from a wallet in batches](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload-batch.js)
+### Made by TON Community
 
-- [Detailed info](https://docs.ton.org/develop/dapps/asset-processing/jettons)
+#### GO
 
-## Other Examples
+- [Gobicycle](https://github.com/gobicycle/bicycle) - service is focused on replenishing user balances and sending payments to blockchain accounts. Both TONs and Jettons are supported. The service is written with numerous pitfalls in mind that a developer might encounter (all checks for jettons, correct operations status check, resending messages, performance during high load when blockchain is splitted by shards). Provide simple HTTP API, rabbit and webhook notifications about new payments.
+- [GO examples](https://github.com/xssnick/tonutils-go#how-to-use)
 
-### Self-hosted service
-
-#### Made by community
-
-[Gobicycle](https://github.com/gobicycle/bicycle) service is focused on replenishing user balances and sending payments to blockchain accounts. Both TONs and Jettons are supported. The service is written with numerous pitfalls in mind that a developer might encounter (all checks for jettons, correct operations status check, resending messages, performance during high load when blockchain is splitted by shards). Provide simple HTTP API, rabbit and webhook notifications about new payments.
-
-### JavaScript
-
-#### Made by community
+#### JavaScript
 
 Using ton.js SDK (supported by TON Community):
 
+- [Create a key pair, a wallet and get a wallet address](https://github.com/toncenter/examples/blob/main/common.js)
 - [Create a wallet, get its balance, make a transfer](https://github.com/ton-community/ton#usage)
 
-### Python
-
-#### Made by community
-
-Using psylopunk/pytonlib (Simple Python client for The Open Network):
-
-- [Sending transactions](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
+#### Python
 
 Using tonsdk library (similar to tonweb):
 
 - [Init wallet, create external message to deploy the wallet](https://github.com/tonfactory/tonsdk#create-mnemonic-init-wallet-class-create-external-message-to-deploy-the-wallet)
 
-### Golang
 
-#### Made by community
-
-- [See full list of examples](https://github.com/xssnick/tonutils-go#how-to-use)
-
-## Global overview
-Embodying a fully asynchronous approach, TON Blockchain involves a few concepts which are uncommon to traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred messages between smart contracts and/or the external world. Each transaction consists of one incoming message and up to 512 outgoing messages. The common path of any interaction starts with an external message sent to a `wallet` smart contract, which authenticates the message sender using public-key cryptography, takes charge of fee payment, and sends inner blockchain messages. This message is considered incoming for the first transaction that creates a new outgoing message. That way, transactions on the TON network are not synonymous with user interaction with the blockchain but merely nodes of the message graph: the result of accepting and processing a message by a smart contract, which may or may not lead to the emergence of new messages. The interaction may consist of an arbitrary number of messages and transactions and span a prolonged period of time. Technically, transactions with queues of messages are aggregated into blocks processed by validators. The asynchronous nature of the TON Blockchain **does not allow to predict the hash and lt (logical time) of a transaction** at the stage of sending a message. The transaction accepted to the block is final and cannot be modified.
+## Global Overview
+Embodying a fully asynchronous approach, TON Blockchain involves a few concepts which are uncommon to traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred messages between smart contracts and/or the external world. The common path of any interaction starts with an external message sent to a `wallet` smart contract, which authenticates the message sender using public-key cryptography, takes charge of fee payment, and sends inner blockchain messages. That way, transactions on the TON network are not synonymous with user interaction with the blockchain but merely nodes of the message graph: the result of accepting and processing a message by a smart contract, which may or may not lead to the emergence of new messages. The interaction may consist of an arbitrary number of messages and transactions and span a prolonged period of time. Technically, transactions with queues of messages are aggregated into blocks processed by validators. The asynchronous nature of the TON Blockchain **does not allow to predict the hash and lt (logical time) of a transaction** at the stage of sending a message. The transaction accepted to the block is final and cannot be modified.
 
 **Each inner blockchain message is a message from one smart contract to another, which bears some amount of digital assets, as well as an arbitrary portion of data.**
 
@@ -168,13 +144,20 @@ To accept payments based on attached comments, the service should
 ### Invoices with ton:// link
 
 If you need an easy integration for a simple user flow, it is suitable to use the ton:// link.
-Best suited for one-time payments and invoices.
+Best suited for one-time payments and invoices with Toncoin.
 
-```bash
+```text
 ton://transfer/<destination-address>?
-    [nft=<nft-address>&]
-    [fee-amount=<nanocoins>&]
-    [forward-amount=<nanocoins>] 
+    [amount=<toncoin-in-nanocoins>&]
+    [text=<url-encoded-utf8-comment>]
+```
+
+Example of ton:// link generation:
+
+```typescript
+const tonLink = `ton://transfer/${address.toString({
+  urlSafe: true,
+})}?amount=${amount}${text ? `&text=${encodeURIComponent(text)}` : ''}`;
 ```
 
 - ✅ Easy integration

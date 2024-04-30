@@ -416,10 +416,10 @@ First, let’s say a user wants to send 0.5 TON to themselves with the text "**H
 ```js
 import { beginCell } from '@ton/core';
 
-let internalMessageBody = beginCell().
-  storeUint(0, 32). // write 32 zero bits to indicate that a text comment will follow
-  storeStringTail("Hello, TON!"). // write our text comment
-  endCell();
+let internalMessageBody = beginCell()
+  .storeUint(0, 32) // write 32 zero bits to indicate that a text comment will follow
+  .storeStringTail("Hello, TON!") // write our text comment
+  .endCell();
 ```
 
 </TabItem>
@@ -451,23 +451,23 @@ import { toNano, Address } from '@ton/ton';
 
 const walletAddress = Address.parse('put your wallet address');
 
-let internalMessage = beginCell().
-  storeUint(0, 1). // indicate that it is an internal message -> int_msg_info$0
-  storeBit(1). // IHR Disabled
-  storeBit(1). // bounce
-  storeBit(0). // bounced
-  storeUint(0, 2). // src -> addr_none
-  storeAddress(walletAddress).
-  storeCoins(toNano("0.2")). // amount
-  storeBit(0). // Extra currency
-  storeCoins(0). // IHR Fee
-  storeCoins(0). // Forwarding Fee
-  storeUint(0, 64). // Logical time of creation
-  storeUint(0, 32). // UNIX time of creation
-  storeBit(0). // No State Init
-  storeBit(1). // We store Message Body as a reference
-  storeRef(internalMessageBody). // Store Message Body as a reference
-  endCell();
+let internalMessage = beginCell()
+  .storeUint(0, 1) // indicate that it is an internal message -> int_msg_info$0
+  .storeBit(1) // IHR Disabled
+  .storeBit(1) // bounce
+  .storeBit(0) // bounced
+  .storeUint(0, 2) // src -> addr_none
+  .storeAddress(walletAddress)
+  .storeCoins(toNano("0.2")) // amount
+  .storeBit(0) // Extra currency
+  .storeCoins(0) // IHR Fee
+  .storeCoins(0) // Forwarding Fee
+  .storeUint(0, 64) // Logical time of creation
+  .storeUint(0, 32) // UNIX time of creation
+  .storeBit(0) // No State Init
+  .storeBit(1) // We store Message Body as a reference
+  .storeRef(internalMessageBody) // Store Message Body as a reference
+  .endCell();
 ```
 
 </TabItem>
@@ -585,19 +585,19 @@ Therefore, the `seqno`, `keys`, and `internal message` need to be sent. Now we n
 ```js
 import { sign } from '@ton/crypto';
 
-let toSign = beginCell().
-  storeUint(698983191, 32). // subwallet_id | We consider this further
-  storeUint(Math.floor(Date.now() / 1e3) + 60, 32). // Transaction expiration time, +60 = 1 minute
-  storeUint(seqno, 32). // store seqno
-  storeUint(3, 8). // store mode of our internal transaction
-  storeRef(internalMessage); // store our internalMessage as a reference
+let toSign = beginCell()
+  .storeUint(698983191, 32) // subwallet_id | We consider this further
+  .storeUint(Math.floor(Date.now() / 1e3) + 60, 32) // Transaction expiration time, +60 = 1 minute
+  .storeUint(seqno, 32) // store seqno
+  .storeUint(3, 8) // store mode of our internal transaction
+  .storeRef(internalMessage); // store our internalMessage as a reference
 
 let signature = sign(toSign.endCell().hash(), keyPair.secretKey); // get the hash of our message to wallet smart contract and sign it to get signature
 
-let body = beginCell().
-  storeBuffer(signature). // store signature
-  storeBuilder(toSign). // store our message
-  endCell();
+let body = beginCell()
+  .storeBuffer(signature) // store signature
+  .storeBuilder(toSign) // store our message
+  .endCell();
 ```
 
 </TabItem>
@@ -641,15 +641,15 @@ To deliver any internal message to a blockchain from the outside world, it is ne
 <TabItem value="js" label="JavaScript">
 
 ```js
-let externalMessage = beginCell().
-  storeUint(0b10, 2). // 0b10 -> 10 in binary
-  storeUint(0, 2). // src -> addr_none
-  storeAddress(walletAddress). // Destination address
-  storeCoins(0). // Import Fee
-  storeBit(0). // No State Init
-  storeBit(1). // We store Message Body as a reference
-  storeRef(body). // Store Message Body as a reference
-  endCell();
+let externalMessage = beginCell()
+  .storeUint(0b10, 2) // 0b10 -> 10 in binary
+  .storeUint(0, 2) // src -> addr_none
+  .storeAddress(walletAddress) // Destination address
+  .storeCoins(0) // Import Fee
+  .storeBit(0) // No State Init
+  .storeBit(1) // We store Message Body as a reference
+  .storeRef(body) // Store Message Body as a reference
+  .endCell();
 ```
 
 </TabItem>
@@ -954,11 +954,11 @@ Next we’ll prepare the `initial data`, which will be present in our contract�
 ```js
 import { beginCell } from '@ton/core';
 
-const dataCell = beginCell().
-  storeUint(0, 32). // Seqno
-  storeUint(698983191, 32). // Subwallet ID
-  storeBuffer(keyPair.publicKey). // Public Key
-  endCell();
+const dataCell = beginCell()
+  .storeUint(0, 32) // Seqno
+  .storeUint(698983191, 32) // Subwallet ID
+  .storeBuffer(keyPair.publicKey) // Public Key
+  .endCell();
 ```
 
 </TabItem>
@@ -983,15 +983,15 @@ At this stage, both the contract `code` and its `initial data` is present. With 
 ```js
 import { Address } from '@ton/core';
 
-const stateInit = beginCell().
-  storeBit(0). // No split_depth
-  storeBit(0). // No special
-  storeBit(1). // We have code
-  storeRef(codeCell).
-  storeBit(1). // We have data
-  storeRef(dataCell).
-  storeBit(0). // No library
-  endCell();
+const stateInit = beginCell()
+  .storeBit(0) // No split_depth
+  .storeBit(0) // No special
+  .storeBit(1) // We have code
+  .storeRef(codeCell)
+  .storeBit(1) // We have data
+  .storeRef(dataCell)
+  .storeBit(0) // No library
+  .endCell();
 
 const contractAddress = new Address(0, stateInit.hash()); // get the hash of stateInit to get the address of our smart contract in workchain with ID 0
 console.log(`Contract address: ${contractAddress.toString()}`); // Output contract address to console
@@ -1033,32 +1033,32 @@ Let’s start with building the transaction similar to the one we built **in the
 import { sign } from '@ton/crypto';
 import { toNano } from '@ton/core';
 
-const internalMessageBody = beginCell().
-  storeUint(0, 32).
-  storeStringTail("Hello, TON!").
-  endCell();
+const internalMessageBody = beginCell()
+  .storeUint(0, 32)
+  .storeStringTail("Hello, TON!")
+  .endCell();
 
-const internalMessage = beginCell().
-  storeUint(0x10, 6). // no bounce
-  storeAddress(Address.parse("put your first wallet address from were you sent 0.1 TON")).
-  storeCoins(toNano("0.03")).
-  storeUint(1, 1 + 4 + 4 + 64 + 32 + 1 + 1). // We store 1 that means we have body as a reference
-  storeRef(internalMessageBody).
-  endCell();
+const internalMessage = beginCell()
+  .storeUint(0x10, 6) // no bounce
+  .storeAddress(Address.parse("put your first wallet address from were you sent 0.1 TON"))
+  .storeCoins(toNano("0.03"))
+  .storeUint(1, 1 + 4 + 4 + 64 + 32 + 1 + 1) // We store 1 that means we have body as a reference
+  .storeRef(internalMessageBody)
+  .endCell();
 
 // transaction for our wallet
-const toSign = beginCell().
-  storeUint(subWallet, 32).
-  storeUint(Math.floor(Date.now() / 1e3) + 60, 32).
-  storeUint(0, 32). // We put seqno = 0, because after deploying wallet will store 0 as seqno
-  storeUint(3, 8).
-  storeRef(internalMessage);
+const toSign = beginCell()
+  .storeUint(subWallet, 32)
+  .storeUint(Math.floor(Date.now() / 1e3) + 60, 32)
+  .storeUint(0, 32) // We put seqno = 0, because after deploying wallet will store 0 as seqno
+  .storeUint(3, 8)
+  .storeRef(internalMessage);
 
 const signature = sign(toSign.endCell().hash(), keyPair.secretKey);
-const body = beginCell().
-  storeBuffer(signature).
-  storeBuilder(toSign).
-  endCell();
+const body = beginCell()
+  .storeBuffer(signature)
+  .storeBuilder(toSign)
+  .endCell();
 ```
 
 </TabItem>
@@ -1111,17 +1111,17 @@ The **main difference** will be in the presence of the external message, because
 <TabItem value="js" label="JavaScript">
 
 ```js
-const externalMessage = beginCell().
-  storeUint(0b10, 2). // indicate that it is an incoming external transaction
-  storeUint(0, 2). // src -> addr_none
-  storeAddress(contractAddress).
-  storeCoins(0). // Import fee
-  storeBit(1). // We have State Init
-  storeBit(1). // We store State Init as a reference
-  storeRef(stateInit). // Store State Init as a reference
-  storeBit(1). // We store Message Body as a reference
-  storeRef(body). // Store Message Body as a reference
-  endCell();
+const externalMessage = beginCell()
+  .storeUint(0b10, 2) // indicate that it is an incoming external transaction
+  .storeUint(0, 2) // src -> addr_none
+  .storeAddress(contractAddress)
+  .storeCoins(0) // Import fee
+  .storeBit(1) // We have State Init
+  .storeBit(1) // We store State Init as a reference
+  .storeRef(stateInit) // Store State Init as a reference
+  .storeBit(1) // We store Message Body as a reference
+  .storeRef(body) // Store Message Body as a reference
+  .endCell();
 ```
 
 </TabItem>
@@ -1270,11 +1270,11 @@ import { Address, beginCell, toNano } from '@ton/core';
 for (let index = 0; index < internalMessagesAmount.length; index++) {
   const amount = internalMessagesAmount[index];
   
-  let internalMessage = beginCell().
-      storeUint(0x18, 6). // bounce
-      storeAddress(Address.parse(destinationAddresses[index])).
-      storeCoins(toNano(amount)).
-      storeUint(0, 1 + 4 + 4 + 64 + 32 + 1);
+  let internalMessage = beginCell()
+      .storeUint(0x18, 6) // bounce
+      .storeAddress(Address.parse(destinationAddresses[index]))
+      .storeCoins(toNano(amount))
+      .storeUint(0, 1 + 4 + 4 + 64 + 32 + 1);
       
   /*
       At this stage, it is not clear if we will have a message body. 
@@ -1286,10 +1286,10 @@ for (let index = 0; index < internalMessagesAmount.length; index++) {
   if(internalMessagesComment[index] != "") {
     internalMessage.storeBit(1) // we store Message Body as a reference
 
-    let internalMessageBody = beginCell().
-      storeUint(0, 32).
-      storeStringTail(internalMessagesComment[index]).
-      endCell();
+    let internalMessageBody = beginCell()
+      .storeUint(0, 32)
+      .storeStringTail(internalMessagesComment[index])
+      .endCell();
 
     internalMessage.storeRef(internalMessageBody);
   } 
@@ -1376,11 +1376,11 @@ let seqno = getMethodResult.stack.readNumber(); // get seqno from response
 const mnemonicArray = mnemonic.split(' '); // get array from string
 const keyPair = await mnemonicToWalletKey(mnemonicArray); // get Secret and Public keys from mnemonic 
 
-let toSign = beginCell().
-  storeUint(698983191, 32). // subwallet_id
-  storeUint(Math.floor(Date.now() / 1e3) + 60, 32). // Transaction expiration time, +60 = 1 minute
-  storeUint(seqno, 32); // store seqno
-  // Do not forget that if we use Wallet V4, we need to add storeUint(0, 8). 
+let toSign = beginCell()
+  .storeUint(698983191, 32) // subwallet_id
+  .storeUint(Math.floor(Date.now() / 1e3) + 60, 32) // Transaction expiration time, +60 = 1 minute
+  .storeUint(seqno, 32); // store seqno
+  // Do not forget that if we use Wallet V4, we need to add .storeUint(0, 8) 
 ```
 
 </TabItem>
@@ -1482,20 +1482,20 @@ import { sign } from '@ton/crypto';
 
 let signature = sign(toSign.endCell().hash(), keyPair.secretKey); // get the hash of our message to wallet smart contract and sign it to get signature
 
-let body = beginCell().
-    storeBuffer(signature). // store signature
-    storeBuilder(toSign). // store our message
-    endCell();
+let body = beginCell()
+    .storeBuffer(signature) // store signature
+    .storeBuilder(toSign) // store our message
+    .endCell();
 
-let externalMessage = beginCell().
-    storeUint(0b10, 2). // ext_in_msg_info$10
-    storeUint(0, 2). // src -> addr_none
-    storeAddress(walletAddress). // Destination address
-    storeCoins(0). // Import Fee
-    storeBit(0). // No State Init
-    storeBit(1). // We store Message Body as a reference
-    storeRef(body). // Store Message Body as a reference
-    endCell();
+let externalMessage = beginCell()
+    .storeUint(0b10, 2) // ext_in_msg_info$10
+    .storeUint(0, 2) // src -> addr_none
+    .storeAddress(walletAddress) // Destination address
+    .storeCoins(0) // Import Fee
+    .storeBit(0) // No State Init
+    .storeBit(1) // We store Message Body as a reference
+    .storeRef(body) // Store Message Body as a reference
+    .endCell();
 
 client.sendFile(externalMessage.toBoc());
 ```
@@ -1573,21 +1573,21 @@ const nftAddress = Address.parse("put your nft address");
 
 // We can add a comment, but it will not be displayed in the explorers, 
 // as it is not supported by them at the time of writing the tutorial.
-const forwardPayload = beginCell().
-  storeUint(0, 32).
-  storeStringTail("Hello, TON!").
-  endCell();
+const forwardPayload = beginCell()
+  .storeUint(0, 32)
+  .storeStringTail("Hello, TON!")
+  .endCell();
 
-const transferNftBody = beginCell().
-  storeUint(0x5fcc3d14, 32). // Opcode for NFT transfer
-  storeUint(0, 64). // query_id
-  storeAddress(destinationAddress). // new_owner
-  storeAddress(walletAddress). // response_destination for excesses
-  storeBit(0). // we do not have custom_payload
-  storeCoins(toNano("0.01")). // forward_amount
-  storeBit(1). // we store forward_payload as a reference
-  storeRef(forwardPayload). // store forward_payload as a reference
-  endCell();
+const transferNftBody = beginCell()
+  .storeUint(0x5fcc3d14, 32) // Opcode for NFT transfer
+  .storeUint(0, 64) // query_id
+  .storeAddress(destinationAddress) // new_owner
+  .storeAddress(walletAddress) // response_destination for excesses
+  .storeBit(0) // we do not have custom_payload
+  .storeCoins(toNano("0.01")) // forward_amount
+  .storeBit(1) // we store forward_payload as a reference
+  .storeRef(forwardPayload) // store forward_payload as a .reference
+  .endCell();
 
 const internalMessage = beginCell().
   storeUint(0x18, 6). // bounce
@@ -1836,21 +1836,21 @@ const mnemonicArray = 'put your mnemonic'.split(" ");
 const keyPair = await mnemonicToWalletKey(mnemonicArray); // extract private and public keys from mnemonic
 
 const codeCell = Cell.fromBase64('te6ccgEBCAEAhgABFP8A9KQT9LzyyAsBAgEgAgMCAUgEBQCW8oMI1xgg0x/TH9MfAvgju/Jj7UTQ0x/TH9P/0VEyuvKhUUS68qIE+QFUEFX5EPKj+ACTINdKltMH1AL7AOgwAaTIyx/LH8v/ye1UAATQMAIBSAYHABe7Oc7UTQ0z8x1wv/gAEbjJftRNDXCx+A==');
-const dataCell = beginCell().
-    storeUint(0, 32). // Seqno
-    storeUint(3, 32). // Subwallet ID
-    storeBuffer(keyPair.publicKey). // Public Key
-    endCell();
+const dataCell = beginCell()
+    .storeUint(0, 32) // Seqno
+    .storeUint(3, 32) // Subwallet ID
+    .storeBuffer(keyPair.publicKey) // Public Key
+    .endCell();
 
-const stateInit = beginCell().
-    storeBit(0). // No split_depth
-    storeBit(0). // No special
-    storeBit(1). // We have code
-    storeRef(codeCell).
-    storeBit(1). // We have data
-    storeRef(dataCell).
-    storeBit(0). // No library
-    endCell();
+const stateInit = beginCell()
+    .storeBit(0) // No split_depth
+    .storeBit(0) // No special
+    .storeBit(1) // We have code
+    .storeRef(codeCell)
+    .storeBit(1) // We have data
+    .storeRef(dataCell)
+    .storeBit(0) // No library
+    .endCell();
 ```
 
 </TabItem>
@@ -1913,22 +1913,22 @@ import { Address, toNano } from '@ton/core';
 const contractAddress = new Address(0, stateInit.hash()); // get the hash of stateInit to get the address of our smart contract in workchain with ID 0
 console.log(`Contract address: ${contractAddress.toString()}`); // Output contract address to console
 
-const internalMessageBody = beginCell().
-    storeUint(0, 32).
-    storeStringTail('Deploying...').
-    endCell();
+const internalMessageBody = beginCell()
+    .storeUint(0, 32)
+    .storeStringTail('Deploying...')
+    .endCell();
 
-const internalMessage = beginCell().
-    storeUint(0x10, 6). // no bounce
-    storeAddress(contractAddress).
-    storeCoins(toNano('0.01')).
-    storeUint(0, 1 + 4 + 4 + 64 + 32).
-    storeBit(1). // We have State Init
-    storeBit(1). // We store State Init as a reference
-    storeRef(stateInit). // Store State Init as a reference
-    storeBit(1). // We store Message Body as a reference
-    storeRef(internalMessageBody). // Store Message Body Init as a reference
-    endCell();
+const internalMessage = beginCell()
+    .storeUint(0x10, 6) // no bounce
+    .storeAddress(contractAddress)
+    .storeCoins(toNano('0.01'))
+    .storeUint(0, 1 + 4 + 4 + 64 + 32)
+    .storeBit(1) // We have State Init
+    .storeBit(1) // We store State Init as a reference
+    .storeRef(stateInit) // Store State Init as a reference
+    .storeBit(1) // We store Message Body as a reference
+    .storeRef(internalMessageBody) // Store Message Body Init as a reference
+    .endCell();
 ```
 
 </TabItem>
@@ -1990,29 +1990,29 @@ const getMethodResult = await client.runMethod(walletAddress, 'seqno'); // run "
 const seqno = getMethodResult.stack.readNumber(); // get seqno from response
 
 // transaction for our wallet
-const toSign = beginCell().
-    storeUint(698983191, 32). // subwallet_id
-    storeUint(Math.floor(Date.now() / 1e3) + 60, 32). // Transaction expiration time, +60 = 1 minute
-    storeUint(seqno, 32). // store seqno
-    // Do not forget that if we use Wallet V4, we need to add storeUint(0, 8). 
-    storeUint(3, 8).
-    storeRef(internalMessage);
+const toSign = beginCell()
+    .storeUint(698983191, 32) // subwallet_id
+    .storeUint(Math.floor(Date.now() / 1e3) + 60, 32) // Transaction expiration time, +60 = 1 minute
+    .storeUint(seqno, 32) // store seqno
+    // Do not forget that if we use Wallet V4, we need to add .storeUint(0, 8) 
+    .storeUint(3, 8)
+    .storeRef(internalMessage);
 
 const signature = sign(toSign.endCell().hash(), walletKeyPair.secretKey); // get the hash of our message to wallet smart contract and sign it to get signature
-const body = beginCell().
-    storeBuffer(signature). // store signature
-    storeBuilder(toSign). // store our message
-    endCell();
+const body = beginCell()
+    .storeBuffer(signature) // store signature
+    .storeBuilder(toSign) // store our message
+    .endCell();
 
-const external = beginCell().
-    storeUint(0b10, 2). // indicate that it is an incoming external transaction
-    storeUint(0, 2). // src -> addr_none
-    storeAddress(walletAddress).
-    storeCoins(0). // Import fee
-    storeBit(0). // We do not have State Init
-    storeBit(1). // We store Message Body as a reference
-    storeRef(body). // Store Message Body as a reference
-    endCell();
+const external = beginCell()
+    .storeUint(0b10, 2) // indicate that it is an incoming external transaction
+    .storeUint(0, 2) // src -> addr_none
+    .storeAddress(walletAddress)
+    .storeCoins(0) // Import fee
+    .storeBit(0) // We do not have State Init
+    .storeBit(1) // We store Message Body as a reference
+    .storeRef(body) // Store Message Body as a reference
+    .endCell();
 
 console.log(external.toBoc().toString('base64'));
 client.sendFile(external.toBoc());
@@ -2350,22 +2350,22 @@ import { mnemonicToWalletKey } from '@ton/crypto';
 const highloadMnemonicArray = 'put your mnemonic that you have generated and saved before'.split(' ');
 const highloadKeyPair = await mnemonicToWalletKey(highloadMnemonicArray); // extract private and public keys from mnemonic
 
-const dataCell = beginCell().
-    storeUint(698983191, 32). // Subwallet ID
-    storeUint(0, 64). // Last cleaned
-    storeBuffer(highloadKeyPair.publicKey). // Public Key
-    storeBit(0). // indicate that the dictionary is empty
-    endCell();
+const dataCell = beginCell()
+    .storeUint(698983191, 32) // Subwallet ID
+    .storeUint(0, 64) // Last cleaned
+    .storeBuffer(highloadKeyPair.publicKey) // Public Key
+    .storeBit(0) // indicate that the dictionary is empty
+    .endCell();
 
-const stateInit = beginCell().
-    storeBit(0). // No split_depth
-    storeBit(0). // No special
-    storeBit(1). // We have code
-    storeRef(codeCell).
-    storeBit(1). // We have data
-    storeRef(dataCell).
-    storeBit(0). // No library
-    endCell();
+const stateInit = beginCell()
+    .storeBit(0) // No split_depth
+    .storeBit(0) // No special
+    .storeBit(1) // We have code
+    .storeRef(codeCell)
+    .storeBit(1) // We have data
+    .storeRef(dataCell)
+    .storeBit(0) // No library
+    .endCell();
 
 const contractAddress = new Address(0, stateInit.hash()); // get the hash of stateInit to get the address of our smart contract in workchain with ID 0
 console.log(`Contract address: ${contractAddress.toString()}`); // Output contract address to console
@@ -2416,7 +2416,9 @@ log.Println("Contract address:", contractAddress.String())    // Output contract
 </TabItem>
 </Tabs> 
 
-Everything we have detailed above follows the same steps as the contract [deployment via wallet](/develop/smart-contracts/tutorials/wallet#contract-deployment-via-wallet) section. To better analyze the fully functional code, please visit the repository indicated at the beginning of the tutorial where all sources are stored.
+:::caution
+Everything we have detailed above follows the same steps as the contract [deployment via wallet](/develop/smart-contracts/tutorials/wallet#contract-deployment-via-wallet) section. To better understanding, read the entire [GitHub source code]((https://github.com/aSpite/wallet-tutorial)).
+:::
 
 ### Sending High-Load Wallet Transactions
 
@@ -2438,20 +2440,20 @@ let internalMessages:Cell[] = [];
 const walletAddress = Address.parse('put your wallet address from which you deployed high-load wallet');
 
 for (let i = 0; i < 12; i++) {
-    const internalMessageBody = beginCell().
-        storeUint(0, 32).
-        storeStringTail(`Hello, TON! #${i}`).
-        endCell();
+    const internalMessageBody = beginCell()
+        .storeUint(0, 32)
+        .storeStringTail(`Hello, TON! #${i}`)
+        .endCell();
 
-    const internalMessage = beginCell().
-        storeUint(0x18, 6). // bounce
-        storeAddress(walletAddress).
-        storeCoins(toNano('0.01')).
-        storeUint(0, 1 + 4 + 4 + 64 + 32).
-        storeBit(0). // We do not have State Init
-        storeBit(1). // We store Message Body as a reference
-        storeRef(internalMessageBody). // Store Message Body Init as a reference
-        endCell();
+    const internalMessage = beginCell()
+        .storeUint(0x18, 6) // bounce
+        .storeAddress(walletAddress)
+        .storeCoins(toNano('0.01'))
+        .storeUint(0, 1 + 4 + 4 + 64 + 32)
+        .storeBit(0) // We do not have State Init
+        .storeBit(1) // We store Message Body as a reference
+        .storeRef(internalMessageBody) // Store Message Body Init as a reference
+        .endCell();
 
     internalMessages.push(internalMessage);
 }
@@ -2522,12 +2524,12 @@ const timeout = 120; // timeout for message expiration, 120 seconds = 2 minutes
 const finalQueryID = (BigInt(now + timeout) << 32n) + BigInt(queryID); // get our final query_id
 console.log(finalQueryID); // print query_id. With this query_id we can call GET method to check if our request has been processed
 
-const toSign = beginCell().
-    storeUint(698983191, 32). // subwallet_id
-    storeUint(finalQueryID, 64).
+const toSign = beginCell()
+    .storeUint(698983191, 32) // subwallet_id
+    .storeUint(finalQueryID, 64)
     // Here we create our own method that will save the 
     // transaction mode and a reference to the transaction
-    storeDict(dictionary, Dictionary.Keys.Int(16), {
+    .storeDict(dictionary, Dictionary.Keys.Int(16), {
         serialize: (src, buidler) => {
             buidler.storeUint(3, 8); // save transaction mode, mode = 3
             buidler.storeRef(src); // save transaction as reference
@@ -2535,10 +2537,10 @@ const toSign = beginCell().
         // We won't actually use this, but this method 
         // will help to read our dictionary that we saved
         parse: (src) => {
-            let cell = beginCell().
-                storeUint(src.loadUint(8), 8).
-                storeRef(src.loadRef()).
-                endCell();
+            let cell = beginCell()
+                .storeUint(src.loadUint(8), 8)
+                .storeRef(src.loadRef())
+                .endCell();
             return cell;
         }
     }
@@ -2613,20 +2615,20 @@ Next we’ll create an external message and send it to the blockchain using the 
 ```js
 import { TonClient } from '@ton/ton';
 
-const body = beginCell().
-    storeBuffer(signature). // store signature
-    storeBuilder(toSign). // store our message
-    endCell();
+const body = beginCell()
+    .storeBuffer(signature) // store signature
+    .storeBuilder(toSign) // store our message
+    .endCell();
 
-const externalMessage = beginCell().
-    storeUint(0b10, 2). // indicate that it is an incoming external transaction
-    storeUint(0, 2). // src -> addr_none
-    storeAddress(highloadWalletAddress).
-    storeCoins(0). // Import fee
-    storeBit(0). // We do not have State Init
-    storeBit(1). // We store Message Body as a reference
-    storeRef(body). // Store Message Body as a reference
-    endCell();
+const externalMessage = beginCell()
+    .storeUint(0b10, 2) // indicate that it is an incoming external transaction
+    .storeUint(0, 2) // src -> addr_none
+    .storeAddress(highloadWalletAddress)
+    .storeCoins(0) // Import fee
+    .storeBit(0) // We do not have State Init
+    .storeBit(1) // We store Message Body as a reference
+    .storeRef(body) // Store Message Body as a reference
+    .endCell();
 
 // We do not need a key here as we will be sending 1 request per second
 const client = new TonClient({
