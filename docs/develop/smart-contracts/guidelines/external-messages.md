@@ -9,6 +9,7 @@ For instance, a wallet smart contract expects to receive external messages conta
 Notice that all external messages `must be protected` against replay attacks. The validators normally remove an external message from the pool of suggested external messages (received from the network); however, in some situations `another validator` could process the same external message twice (thus creating a second transaction for the same external message, leading to the duplication of the original action). Even worse, a `malicious actor could extract` the external message from the block containing the processing transaction and re-send it later. This could force a wallet smart contract to repeat a payment, for example.
 :::
 
+````mdx-code-block 
 export const Highlight = ({children, color}) => (
 <span
 style={{
@@ -20,7 +21,7 @@ padding: '0.2rem',
 {children}
 </span>
 );
-
+````
 
 The <Highlight color="#ffeced">simplest way to protect smart contracts from replay attacks</Highlight> related to external messages is to store a 32-bit counter `cur-seqno` in the persistent data of the smart contract, and to expect a `req-seqno` value in (the signed part of) any inbound external messages. Then an external message is accepted only if both the signature is valid and `req-seqno` equals `cur-seqno`. After successful processing, the `cur-seqno` value in the persistent data is increased by one, so the <Highlight color="#ffeced">same external message will never be accepted again</Highlight>.
 

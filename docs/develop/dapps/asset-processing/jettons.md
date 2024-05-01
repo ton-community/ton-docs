@@ -71,11 +71,22 @@ For the best user experience, it is suggested to avoid waiting on additional blo
 
 Quick jump to the core description of jetton processing:
 
-<Button href="/develop/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>Centralized Proccessing</Button>
+````mdx-code-block 
+<Button href="/develop/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>
+````
+Centralized Proccessing
+````mdx-code-block 
+</Button>
+````
+````mdx-code-block 
 <Button href="/develop/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses"
         colorType="secondary" sizeType={'sm'}>
+````
   On-Chain Processing
+
+````mdx-code-block 
 </Button>
+````
 
 <br></br><br></br>
 

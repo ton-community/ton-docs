@@ -169,10 +169,15 @@ const tonLink = `ton://transfer/${address.toString({
 - ❌ Workarounds are needed on platforms where such links are not clickable (e.g. messages from bots for Telegram desktop clients )
 
 
+````mdx-code-block 
 <Button href="https://github.com/tonkeeper/wallet-api#payment-urls"
 colorType="primary" sizeType={'lg'}>
+````
 Learn More
+
+````mdx-code-block 
 </Button>
+````
 
 ### Invoices with TON Connect
 
@@ -187,10 +192,15 @@ Best suited for dApps that need to sign multiple payments/transactions within a 
 - ❌ Integration is more complex than the ton:// link
 
 
+````mdx-code-block 
 <Button href="/develop/dapps/ton-connect/"
 colorType="primary" sizeType={'lg'}>
+````
 Learn More
+
+````mdx-code-block 
 </Button>
+````
 
 
 ## Sending payments
