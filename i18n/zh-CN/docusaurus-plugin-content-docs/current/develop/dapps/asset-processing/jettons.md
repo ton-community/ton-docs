@@ -65,13 +65,13 @@ TON 区块链及其底层生态系统将可替代代币（FTs）分类为 jetton
 TON 上的标准化代币使用一组智能合约来实现，包括：
 * [Jetton 主智能合约](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-minter.fc)
 * [Jetton 钱包智能合约](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc)
-
+````mdx-code-block
 <p align="center">
   <br />
     <img width="420" src="/img/docs/asset-processing/jetton_contracts.svg" alt="contracts scheme" />
       <br />
 </p>
-
+````
 ## Jetton 主智能合约
 Jetton 主智能合约存储了有关 jetton 的常见信息（包括总供应量、元数据链接或元数据本身）。
 

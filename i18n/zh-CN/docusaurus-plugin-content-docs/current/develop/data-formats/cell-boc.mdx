@@ -4,6 +4,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 ## cell
 cell是TON区块链上的一种数据结构。cell能够存储多达1023位，并且可以拥有最多4个对其他cell的引用。
+````mdx-code-block
 <br></br>
 <ThemedImage
 alt=""
@@ -13,12 +14,13 @@ sources={{
 }}
 />
 <br></br>
-
+````
 
 ## cell包
 
 cell包 (BoC) 是一种将cell序列化为字节数组的格式，这一格式在 [TL-B schema](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25) 中有进一步描述。
 
+````mdx-code-block
 <br></br>
 <ThemedImage
 alt=""
@@ -28,9 +30,10 @@ sources={{
 }}
 />
 <br></br>
-
+````
 在TON上，所有东西都由cell构成，包括合约代码、存储的数据、区块等，实现了过程中的流线型和强大的灵活性。
 
+````mdx-code-block
 <br></br>
 <ThemedImage
 alt=""
@@ -40,10 +43,11 @@ sources={{
 }}
 />
 <br></br>
-
+````
 ### cell序列化
 让我们分析我们的第一个cell包示例：
 
+````mdx-code-block
 <br></br>
 <ThemedImage
 alt=""
@@ -53,7 +57,7 @@ sources={{
 }}
 />
 <br></br>
-
+````
 ```json
 1[8_] -> {
   24[0AAAAA],
