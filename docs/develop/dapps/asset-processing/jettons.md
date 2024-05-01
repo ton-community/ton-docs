@@ -82,8 +82,7 @@ Centralized Proccessing
 <Button href="/develop/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses"
         colorType="secondary" sizeType={'sm'}>
 ````
-  On-Chain Processing
-
+On-Chain Processing
 ````mdx-code-block 
 </Button>
 ````
@@ -107,13 +106,13 @@ We have also provided specific details discussing our third-party open-source TO
 Standardized tokens on TON are implemented using a set of smart contracts, including:
 * [Jetton master](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-minter.fc) smart contract
 * [Jetton wallet](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc) smart contracts
-
+````mdx-code-block
 <p align="center">
   <br />
     <img width="420" src="/img/docs/asset-processing/jetton_contracts.svg" alt="contracts scheme" />
       <br />
 </p>
-
+````
 ## Jetton master smart contract
 The jetton master smart contract stores general information about the jetton (
 

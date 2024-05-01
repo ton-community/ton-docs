@@ -15,7 +15,6 @@ Blueprint SDK已提供所有开发和测试所需的二进制文件。
 colorType="primary" sizeType={'sm'}>
 ````
 迁移到Blueprint SDK
-
 ````mdx-code-block 
 </Button>
 ````

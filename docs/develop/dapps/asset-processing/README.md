@@ -174,7 +174,6 @@ const tonLink = `ton://transfer/${address.toString({
 colorType="primary" sizeType={'lg'}>
 ````
 Learn More
-
 ````mdx-code-block 
 </Button>
 ````
@@ -197,7 +196,6 @@ Best suited for dApps that need to sign multiple payments/transactions within a 
 colorType="primary" sizeType={'lg'}>
 ````
 Learn More
-
 ````mdx-code-block 
 </Button>
 ````

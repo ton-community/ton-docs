@@ -15,7 +15,6 @@ It retains the _current state_ of the blockchain and can house either the entire
 colorType="primary" sizeType={'sm'}>
 ````
 Running a Full Node
-
 ````mdx-code-block 
 </Button>
 ````

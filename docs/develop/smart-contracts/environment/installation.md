@@ -16,7 +16,6 @@ All binaries for development and testing are provided with the Blueprint SDK.
 colorType="primary" sizeType={'sm'}>
 ````
 Migrate to Blueprint SDK
-
 ````mdx-code-block 
 </Button>
 ````

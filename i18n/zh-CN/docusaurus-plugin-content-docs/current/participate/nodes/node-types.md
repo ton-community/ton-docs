@@ -15,7 +15,6 @@ TON中的**全节点**是与区块链保持同步的节点。
 colorType="primary" sizeType={'sm'}>
 ````
 运行全节点
-
 ````mdx-code-block 
 </Button>
 ````

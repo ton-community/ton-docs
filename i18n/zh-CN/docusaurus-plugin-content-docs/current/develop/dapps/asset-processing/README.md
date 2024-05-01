@@ -159,7 +159,6 @@ ton://transfer/<destination-address>?
 colorType="primary" sizeType={'lg'}>
 ````
 了解更多
-
 ````mdx-code-block 
 </Button>
 ````
@@ -183,7 +182,6 @@ colorType="primary" sizeType={'lg'}>
 colorType="primary" sizeType={'lg'}>
 ````
 了解更多
-
 ````mdx-code-block 
 </Button>
 ````

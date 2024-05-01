@@ -44,8 +44,7 @@ import Button from '@site/src/components/button';
 <Button href="/develop/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses"
         colorType="secondary" sizeType={'sm'}>
 ````
-  链上处理
-
+链上处理
 ````mdx-code-block 
 </Button>
 ````
