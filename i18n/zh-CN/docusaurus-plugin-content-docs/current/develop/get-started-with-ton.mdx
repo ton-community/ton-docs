@@ -28,14 +28,14 @@ import Player from '@site/src/components/player';
  _您将挖掘 NFT 火箭成就!!!_
 
 作为 TON 上的第一批矿工，您将通过工作证明的智能合约，最终为您的 TON 钱包挖掘一个秘密奖励。快来看看：
-
+````mdx-code-block
 <div style={{width: '100%', maxWidth:'250pt',  textAlign: 'center', margin: '0 auto' }}>
   <video width={'300'} style={{width: '100%', maxWidth:'250pt',  borderRadius: '10pt', margin: '15pt auto' }} muted={true} autoPlay={true} loop={true}>
     <source src="/files/onboarding-nft.mp4" type="video/mp4" />
     您的浏览器不支持 video 标签。
   </video>
 </div>
-
+````
 我们今天的目标是挖掘一个 NFT！这个成就将与您*永远*同在。
 
 最终，您甚至可以在主网上挖掘这个 NFT 成就。(_只需 0.05 TON！_)
@@ -56,7 +56,7 @@ import Player from '@site/src/components/player';
 
 
 现在，让我们专注于成为 **TVM 开发者** 的第一步，学习如何在 TON 上挖掘一个 NFT！下面是我们要创建的示例。
-
+````mdx-code-block
 <div style={{ width: '100%', textAlign: 'center', margin: '0 auto' }}>
   <video style={{ width: '100%', borderRadius: '10pt', margin: '15pt auto', maxWidth: '90%' }} muted={true} autoPlay={true}
          loop={true}>
@@ -64,7 +64,7 @@ import Player from '@site/src/components/player';
     您的浏览器不支持 video 标签。
   </video>
 </div>
-
+````
 如果我们集中注意力，大约半小时内就能创建成为一个矿工。
 
 ## 🦄 开始
@@ -100,6 +100,7 @@ import Player from '@site/src/components/player';
 
 请使用 [ton-onboarding-challenge](https://github.com/ton-community/ton-onboarding-challenge) 模板创建您的项目，点击“Use this template”按钮并选择“Create a new repository”选项，如下图所示：
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -109,7 +110,7 @@ import Player from '@site/src/components/player';
     }}
 />
 <br></br>
-
+````
 完成此步骤后，您将获得一个高性能的存储库，可用作您挖矿的核心。恭喜！ ✨
 
 ### 开发环境
@@ -120,6 +121,7 @@ import Player from '@site/src/components/player';
 确保您已在 GitHub 个人资料中打开了从前一步模板生成的代码库。
 :::
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -129,7 +131,7 @@ import Player from '@site/src/components/player';
     }}
 />
 <br></br>
-
+````
 #### 本地和云端开发环境
 
 * 对于不熟悉 JavaScript 的用户，使用 JavaScript IDE 可能会有挑战，特别是如果您的计算机和工具系统未以此为目的进行配置。
@@ -140,6 +142,7 @@ import Player from '@site/src/components/player';
 
 如果选择云开发环境，首先选择 _Code_ 选项卡，然后在 GitHub 代码库内点击 _Create codespace on master_ 按钮，如下图所示：
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -149,7 +152,7 @@ import Player from '@site/src/components/player';
     }}
 />
 <br></br>
-
+````
 完成此步骤后，GitHub 将创建一个特殊的云工作空间，允许您访问 VSCode 在线 IDE（Visual Code 在线集成开发环境）。
 
 一旦授予访问权限（codespace 通常在约 30 秒内启动），您将拥有一切开始所需的内容，无需安装 Git、Node.js 或其他开发工具。
@@ -171,6 +174,7 @@ import Player from '@site/src/components/player';
 
 例如，在 Cloud Codespaces 中，您应该打开终端工作区：
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -180,9 +184,10 @@ import Player from '@site/src/components/player';
     }}
 />
 <br></br><br></br>
-
+````
 在此窗口中输入命令，然后按 _Enter_ 执行：
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -192,7 +197,7 @@ import Player from '@site/src/components/player';
     }}
 />
 <br></br><br></br>
-
+````
 终端也可以作为一个独立的应用程序使用。请根据您的 IDE 和操作系统选择适当的版本。
 
 太好了！完成这些步骤后，您就可以深入了解 TON 区块链的奥秘了。👀
@@ -252,6 +257,7 @@ main()
 请记住，如果您正在使用 `import` 添加新模块，可能需要通过在 [终端](/develop/get-started-with-ton#running-scripts) 中执行 `npm i @orbs-network/ton-access` 命令来安装它们。
 :::
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -261,7 +267,7 @@ main()
     }}
 />
 <br></br>
-
+````
 
 我们在 `index.ts` 脚本中使用 _TonClient_ 和 `@orbs-network/ton-access` 中的 _getHttpEndpoint_ 添加 `client` 和 `endpoint`：
 
@@ -538,6 +544,7 @@ Miner可能将无限期地运行，只要 `msg.hash()` 大于 `complexity`（消
 npm run start
 ```
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -547,7 +554,7 @@ npm run start
     }}
 />
 <br></br>
-
+````
 _很酷，不是吗？_ 😏
 
 正确执行这些命令后，我们将拥有一个外观更易读的NFT Miner。在下一部分，我们将专注于将钱包连接到Miner，以创建一个可以接受和发送TON区块链交易的支付通道。
@@ -689,14 +696,14 @@ const endpoint = await getHttpEndpoint();
 :::
 
 一段时间后，您将__挖掘到您的NFT__，成为TON区块链上的TVM开发者。完成了，请查看您在Tonkeeper中的NFT。
-
+````mdx-code-block
 <div style={{ width: '100%', textAlign: 'center', margin: '0 auto' }}>
   <video width={'300'} style={{ width: '100%', borderRadius: '10pt', margin: '15pt auto' }} muted={true} autoPlay={true} loop={true}>
     <source src="/files/onboarding-nft.mp4" type="video/mp4" />
     您的浏览器不支持视频标签。
   </video>
 </div>
-
+````
 欢迎上岸，__TVM开发者__！你做到了。🛳
 
 

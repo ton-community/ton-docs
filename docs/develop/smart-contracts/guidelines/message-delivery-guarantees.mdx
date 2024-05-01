@@ -8,7 +8,7 @@ TON is an asynchronous blockchain with a complex structure very different from o
 ## What is a message?
 
 A message is a packet of data sent between actors (users, applications, smart contracts). It typically contains information instructing the receiver on what action to perform, such as updating storage or sending a new message.
-
+````mdx-code-block
 <br></br>
 <div class="text--center">
 <ThemedImage
@@ -20,7 +20,7 @@ A message is a packet of data sent between actors (users, applications, smart co
 />
 </div>
 <br></br>
-
+````
 Working with this type of communication is reminiscent of launching a satellite into space. We know the message we've formed, but after its launch, it is necessary to conduct separate observation to find out what results we will obtain.
 
 
@@ -36,6 +36,7 @@ A transaction in TON consists of the following:
 
 >Not every transaction results in outgoing messages or updates to the contract's storage — this depends on the actions defined by the contract's code.
 
+````mdx-code-block
 <br></br>
 <ThemedImage
   alt=""
@@ -45,7 +46,7 @@ A transaction in TON consists of the following:
   }}
 />
 <br></br>
-
+````
 
 If we look at Ethereum or almost any other synchronous blockchain, each transaction can contain several smart contract calls in it. For example, DEXs perform multiple exchanges in one transaction if there is no liquidity for the selected trading pair.
 
@@ -63,6 +64,7 @@ In such a system with asynchronous and parallel smart contract calls, it can be 
 
 It is strictly guaranteed that the transaction resulting from a message will have a _lt_ greater than the _lt_ of the message. Likewise, the _lt_ of a message sent in some transaction is strictly greater than the _lt_ of the transaction that caused it. As well as this, messages that were sent from one account and transactions which happened on one account are strictly ordered as well.
 
+````mdx-code-block
 <br></br>
 <ThemedImage
   alt=""
@@ -72,7 +74,7 @@ It is strictly guaranteed that the transaction resulting from a message will hav
   }}
 />
 <br></br>
-
+````
 For the case in the image, it turns out: `in_msg_lt < tx0_lt < out_msg_lt`
 
 Thanks to this, for every account we always know the order of transactions, received messages and sent messages.
@@ -80,7 +82,7 @@ Thanks to this, for every account we always know the order of transactions, rece
 Moreover, if account _A_ sent two messages to account _B_, it is guaranteed that the message with a lower _lt_ will be processed earlier:
 
 If `msg1_lt < msg2_lt` => `tx1_lt < tx2_lt`.
-
+````mdx-code-block
 <br></br>
 <div class="text--center">
 <ThemedImage
@@ -92,7 +94,7 @@ If `msg1_lt < msg2_lt` => `tx1_lt < tx2_lt`.
 />
 </div>
 <br></br>
-
+````
 
 
 Otherwise, an attempt to synchronize delivery would require the state of all the others to be known before processing one shard, thereby breaking parallelization and destroying efficient sharding.
@@ -108,9 +110,9 @@ Fortunately, TON works in such a way that any internal message will definitely b
 It therefore seems like _lt_ solves the issue about message delivery order, because we know that a transaction with a lower _lt_ will be processed first. But this doesn't work in every scenario.
 
 Suppose that there are two contracts - _A_ and _B_. _A_ receives an external message which triggers it to send two internal messages to _B_, let's call these messages _1_ and _2_. In this simple case, we can be 100% sure that _1_ will be processed by _B_ before _2_ because it has a lower _lt_.
-
+````mdx-code-block
 <ConceptImage src="/img/docs/msg-delivery-1.png" />
-
+````
 But this is just a simple case when we only have two contracts. How does our system works in more complex cases?
 
 ### Several Smart Contracts
@@ -121,7 +123,7 @@ For better clearness suppose our contracts send back messages `msg1'` and `msg2'
 We have two possible trace for these transaction,
 
 1. The first possible order is `tx1'_lt < tx2'_lt`:
-
+````mdx-code-block
 <br></br>
 <div class="text--center">
 <ThemedImage
@@ -133,9 +135,9 @@ We have two possible trace for these transaction,
 />
 </div>
 <br></br>
-
+````
 2. The second possible order is `tx2'_lt < tx1'_lt`:
-
+````mdx-code-block
 <br></br>
 <div class="text--center">
 <ThemedImage
@@ -147,17 +149,17 @@ We have two possible trace for these transaction,
 />
 </div>
 <br></br>
-
+````
 The same thing happens in the reverse case, when two contracts _B_ and _C_ send a message to one contract _A_. Even if message `B -> A` was sent before `C -> A`, we can't know which one of them will be delivered first. The `B -> A` route may require more shard chain hops.
-
+````mdx-code-block
 <ConceptImage src="/img/docs/msg-delivery-3.png" />
-
+````
 There can be many possible scenarios of smart contract interactions, and in any scenario with more than 2 contracts, the order of messages delivery may be arbitrary. The only guarantee is that messages from any contract _A_ to any contract _B_ will be processed in order of their logical time. Some examples are below.
-
+````mdx-code-block
 <ConceptImage src="/img/docs/msg-delivery-4.png" />
 <ConceptImage src="/img/docs/msg-delivery-5.png" />
 <ConceptImage src="/img/docs/msg-delivery-6.png" />
-
+````
 ## Conclusion
 
 The TON blockchain's asynchronous structure creates challenges for message delivery guarantees. Logical time helps to establish event and transaction order but doesn't guarantee message delivery order between multiple smart contracts due to varying routes in shard chains. Despite these complexities, TON ensures internal message delivery, maintaining network reliability. Developers must adapt to these nuances to harness TON's full potential in building innovative decentralized applications.
