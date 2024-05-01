@@ -840,7 +840,7 @@ Jetton transfers need careful consideration for fees and amounts behind outgoing
 
 <img src="/img/interaction-schemes/nft.svg" alt="NFT ecosystem scheme"></img>
 
-NFT collections are very different. Actually, NFT contract on TON can be defined as "contract that has appropriate get-method and returns valid metadata". Transfer operation is standartized and quite analogous to [jetton's one](/develop/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment), so we will not dive into it and rather see additional capabilities provided by most collections you may meet!
+NFT collections are very different. Actually, NFT contract on TON can be defined as "contract that has appropriate get-method and returns valid metadata". Transfer operation is standardized and quite analogous to [jetton's one](/develop/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment), so we will not dive into it and rather see additional capabilities provided by most collections you may meet!
 
 :::warning
 Reminder: all methods about NFT below are not bound by TEP-62 to work. Before trying them, please check if your NFT or collection will process those messages in an expected way. Wallet app emulation may prove useful in this case.
@@ -1220,7 +1220,7 @@ DeDust provides a special SDk to work with contract, component, and API, it was 
 Enough theory, let's set up our environment to swap one jetton with TON.
 
 ```bash
-npm install --save @ton/core @ton/ton @ton/crypt
+npm install --save @ton/core @ton/ton @ton/crypto
 
 ```
 

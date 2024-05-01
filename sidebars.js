@@ -443,6 +443,21 @@ const sidebars = {
       ],
     },
     {
+      type: 'category',
+      label: 'Oracles',
+      items: [
+        'develop/oracles/about_blockchain_oracles',
+
+        {
+          type: 'category',
+          label: 'Oracles in TON',
+          items: [
+            'develop/oracles/red_stone',
+          ],
+        },
+      ],
+    },
+    {
       'type': 'html',
       'value': '<hr/>',
     },

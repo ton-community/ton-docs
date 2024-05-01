@@ -6,7 +6,7 @@
 For running nodes basic knowledge of Linux/Ubuntu system administration is required.
 :::
 
-An Archive Node is a type of Full Node that stores extended historical data of a blockchain. If you are creating a blockchain explorer or a similar application that requires access to historical data, using an Archive Node as an indexer is recommended.
+An Archive Node is a type of [Full Node](/participate/run-nodes/full-node) that stores extended historical data of a blockchain. If you are creating a blockchain explorer or a similar application that requires access to historical data, using an Archive Node as an indexer is recommended.
 
 ## Prerequisites
 

@@ -88,8 +88,6 @@ Note, that current blueprint version (`@ton/blueprint:0.19.0`) doesn't automatic
 Actual for 04.2024 and suppose to be enhanced in the near future.
 :::
 
-
-
 ### Get Methods for Library Cell Based Contracts
 
 You have jetton-wallet with its code stored in a library cell and desire to check balance. 
@@ -110,10 +108,10 @@ For the a library cell, this isn't possible because it doesn't contain data on i
 
 
 #### Retrieving Library Cell with Liteserver
-Liteserver when running get methods automatically set correct library context. If you want to detect type of contract by get methods or run getmethods locally you need to download corresponding cells via LS method [liteServer.getLibraries](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L85).
+Liteserver when running get methods automatically set correct library context. If you want to detect type of contract by get methods or run getmethods locally you need to download corresponding cells via LS method [liteServer.getLibraries](https://github.com/ton-blockchain/ton/blob/4cfe1d1a96acf956e28e2bbc696a143489e23631/tl/generate/scheme/lite_api.tl#L96).
 
 #### Retrieving Library Cell with DTon
-You can also get library from dton.io/graphql:
+You can also get library from [dton.io/graphql](https://dton.io/graphql):
 ```
 {
   get_lib(
