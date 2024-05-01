@@ -110,9 +110,9 @@ Fortunately, TON works in such a way that any internal message will definitely b
 It therefore seems like _lt_ solves the issue about message delivery order, because we know that a transaction with a lower _lt_ will be processed first. But this doesn't work in every scenario.
 
 Suppose that there are two contracts - _A_ and _B_. _A_ receives an external message which triggers it to send two internal messages to _B_, let's call these messages _1_ and _2_. In this simple case, we can be 100% sure that _1_ will be processed by _B_ before _2_ because it has a lower _lt_.
-
+````mdx-code-block
 <ConceptImage src="/img/docs/msg-delivery-1.png" />
-
+````
 But this is just a simple case when we only have two contracts. How does our system works in more complex cases?
 
 ### Several Smart Contracts
@@ -151,15 +151,15 @@ We have two possible trace for these transaction,
 <br></br>
 ````
 The same thing happens in the reverse case, when two contracts _B_ and _C_ send a message to one contract _A_. Even if message `B -> A` was sent before `C -> A`, we can't know which one of them will be delivered first. The `B -> A` route may require more shard chain hops.
-
+````mdx-code-block
 <ConceptImage src="/img/docs/msg-delivery-3.png" />
-
+````
 There can be many possible scenarios of smart contract interactions, and in any scenario with more than 2 contracts, the order of messages delivery may be arbitrary. The only guarantee is that messages from any contract _A_ to any contract _B_ will be processed in order of their logical time. Some examples are below.
-
+````mdx-code-block
 <ConceptImage src="/img/docs/msg-delivery-4.png" />
 <ConceptImage src="/img/docs/msg-delivery-5.png" />
 <ConceptImage src="/img/docs/msg-delivery-6.png" />
-
+````
 ## Conclusion
 
 The TON blockchain's asynchronous structure creates challenges for message delivery guarantees. Logical time helps to establish event and transaction order but doesn't guarantee message delivery order between multiple smart contracts due to varying routes in shard chains. Despite these complexities, TON ensures internal message delivery, maintaining network reliability. Developers must adapt to these nuances to harness TON's full potential in building innovative decentralized applications.
