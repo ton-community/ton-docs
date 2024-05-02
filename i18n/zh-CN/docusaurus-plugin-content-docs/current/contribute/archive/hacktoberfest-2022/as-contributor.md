@@ -16,10 +16,10 @@
 
 Hacktoberfest 是首次尝试开源贡献的绝佳场所。有很多关于如何开始的直播、帖子、指南和讨论。你将会认识许多在这个月开始他们旅程的人们！
 
-* [初学者关于 Hacktoberfest 的基本信息](https://hacktoberfest.com/participation/#beginner-resources)
-* [进行首次贡献的指南](https://dev.to/codesandboxio/how-to-make-your-first-open-source-contribution-2oim)，作者 Ceora Ford
-* [练习工作流程来进行你的首次贡献](https://github.com/firstcontributions/first-contributions)
-* [克服在开源贡献中的冒名顶替综合征](https://blackgirlbytes.dev/conquering-the-fear-of-contributing-to-open-source)
+- [初学者关于 Hacktoberfest 的基本信息](https://hacktoberfest.com/participation/#beginner-resources)
+- [进行首次贡献的指南](https://dev.to/codesandboxio/how-to-make-your-first-open-source-contribution-2oim)，作者 Ceora Ford
+- [练习工作流程来进行你的首次贡献](https://github.com/firstcontributions/first-contributions)
+- [克服在开源贡献中的冒名顶替综合征](https://blackgirlbytes.dev/conquering-the-fear-of-contributing-to-open-source)
 
 ## 我如何为 TON 做贡献？
 
