@@ -1,7 +1,5 @@
 # Blockchain services
 
-## dApp hosting
-
 ## Domain Name Systems
 
 In Ethereum, users use the Ethereum Name Service (ENS), which is a decentralized naming system built on top of the Ethereum blockchain.
