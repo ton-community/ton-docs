@@ -248,7 +248,7 @@ print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=Tru
 </Tabs>
 
 
-### How to Check the Validity of a TON Wallet Address?
+### How to Check the Validity of a TON Address?
 
 
 <Tabs groupId="address-examples">
@@ -280,15 +280,23 @@ if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
 
 
 </TabItem>
-<TabItem value="Java" label="Ton4j">
+<TabItem value="Java" label="ton4j">
 
-```javascript
-try {
-   Address.of("...");
-} catch (e) {
-   // not valid address
-}
-```
+  ```javascript
+    /* Maven
+    <dependency>
+      <groupId>io.github.neodix42</groupId>
+      <artifactId>address</artifactId>
+      <version>0.3.2</version>
+    </dependency>
+    */
+
+    try {
+    Address.of("...");
+    } catch (Exception e) {
+    // not valid address
+    }
+  ```
 
 </TabItem>
 <TabItem value="Kotlin" label="ton-kotlin">

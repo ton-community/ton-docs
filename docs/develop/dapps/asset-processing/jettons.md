@@ -27,6 +27,7 @@ It is suggested to set several MEMO deposit wallets for better performance.
 
 [Memo-less deposits](https://github.com/gobicycle/bicycle) - This solution also exists, but is more difficult to integrate. However, we can assist with this, if you would prefer to take this route. Please notify us before deciding to implement this approach.
 
+
 ### Additional Info
 
 :::caution Transaction Notification
@@ -39,16 +40,29 @@ if you will be allowing your users set a custom memo when withdrawing jettons - 
 
 - For Go, one should consider [tonutils-go](https://github.com/xssnick/tonutils-go). At the moment, we recommend the JS lib.
 
+## Ready Solutions for CEX
 
-## Content List
+### Tonapi Embed
 
+Tonapi Embed - on-premises solution designed to operate with deposits and withdrawals, ensuring high-performance and lightweight deployment.
+
+* Trust-less system running on any TON Liteservers.
+* Maintaining deposits and withdrawals for Toncoin and Jettons as well.
+* Solution developed according to the recommended MEMO-deposits and highload withdrawals guidelines provided by TF Core team.
+
+For cooperation, please contact to [@tonrostislav](https://t.me/tonrostislav).
+
+
+## Jetton Processing Global Overview 
+
+### Content List
 
 :::tip
 In following docs offers details about Jettons architecture generally, as well as core concepts of TON which may be different from EVM-like and other blockchains. This is crucial reading in order for one to grasp a good understanding of TON, and will greatly help you.
 :::
 
 This document describes the following in order:
-1. Overview 
+1. Introduction 
 2. Architecture
 2. Jetton Master Contract (Token Minter)
 3. Jetton Wallet Contract (User Wallet)
@@ -58,15 +72,11 @@ This document describes the following in order:
 6. Wallet processing
 7. Best Practices
 
-## Overview
+### Introduction
 
 :::info
 TON transactions are irreversible after just one confirmation.
 For clear understanding, the reader should be familiar with the basic principles of asset processing described in [this section of our documentation](/develop/dapps/asset-processing/). In particular, it is important to be familiar with [contracts](/learn/overviews/addresses#everything-is-a-smart-contract), [wallets](/develop/smart-contracts/tutorials/wallet), [messages](/develop/smart-contracts/guidelines/message-delivery-guarantees) and deployment process.
-:::
-
-:::Info
-For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
 :::
 
 Quick jump to the core description of jetton processing:
