@@ -33,7 +33,19 @@ It is suggested to set several MEMO deposit wallets for better performance.
 - [Read Jetton Proccesing](/develop/dapps/asset-processing/jettons)
 
 
-### Made by TON Community
+## Ready Solutions for CEX
+
+### Tonapi Embed
+
+Tonapi Embed - on-premises solution designed to operate with deposits and withdrawals, ensuring high-performance and lightweight deployment. 
+
+* Trust-less system running on any TON Liteservers.
+* Maintaining deposits and withdrawals for Toncoin and Jettons as well. 
+* Solution developed according to the recommended MEMO-deposits and highload withdrawals guidelines provided by TF Core team.
+
+For cooperation, please contact to [@tonrostislav](https://t.me/tonrostislav).
+
+## Made by TON Community
 
 #### GO
 
