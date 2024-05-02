@@ -107,14 +107,65 @@ A contract's transactions can be obtained using [getTransactions](https://toncen
 3. Process transactions with not empty source in incoming message and destination equals to account address.
 4. The next 10 transactions should be loaded and steps 2,3,4,5 should be repeated until you processed all incoming transactions.
 
-### Check contract's transactions
+### Get incoming/outgoing transactions
+It's possible to track messages flow during transaction processing. Since the message flow is a DAG it's enough to get current transaction using [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method and find incoming transaction by `out_msg` with [tryLocateResultTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_result_tx_tryLocateResultTx_get) or outgoing transactions by `in_msg` with [tryLocateSourceTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_source_tx_tryLocateSourceTx_get).
 
-A contract's transactions can be obtained using [getTransactions](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L236). This method allows to get 10 transactions from some `transactionId` and earlier. To process all incoming transactions, the following steps should be followed:
-1. The latest `last_transaction_id` can be obtained using [getAccountState](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L235)
-2. List of 10 transactions should be loaded via the `getTransactions` method.
-3. Unseen transactions from this list should be processed.
-4. Incoming payments are transactions in which the incoming message has a source address; outgoing payments are transactions in which the incoming message has no source address and also presents the outgoing messages. These transactions should be processed accordingly.
-5. If all of those 10 transactions are unseen, the next 10 transactions should be loaded and steps 2,3,4,5 should be repeated.
+<Tabs groupId="example-outgoing-transaction">
+<TabItem value="JS" label="JS">
+
+```ts
+import { TonClient, Transaction } from '@ton/ton';
+import { getHttpEndpoint } from '@orbs-network/ton-access';
+import { CommonMessageInfoInternal } from '@ton/core';
+
+async function findIncomingTransaction(client: TonClient, transaction: Transaction): Promise<Transaction | null> {
+  const inMessage = transaction.inMessage?.info;
+  if (inMessage?.type !== 'internal') return null;
+  return client.tryLocateSourceTx(inMessage.src, inMessage.dest, inMessage.createdLt.toString());
+}
+
+async function findOutgoingTransactions(client: TonClient, transaction: Transaction): Promise<Transaction[]> {
+  const outMessagesInfos = transaction.outMessages.values()
+    .map(message => message.info)
+    .filter((info): info is CommonMessageInfoInternal => info.type === 'internal');
+  
+  return Promise.all(
+    outMessagesInfos.map((info) => client.tryLocateResultTx(info.src, info.dest, info.createdLt.toString())),
+  );
+}
+
+async function traverseIncomingTransactions(client: TonClient, transaction: Transaction): Promise<void> {
+  const inTx = await findIncomingTransaction(client, transaction);
+  // now you can traverse this transaction graph backwards
+  if (!inTx) return;
+  await traverseIncomingTransactions(client, inTx);
+}
+
+async function traverseOutgoingTransactions(client: TonClient, transaction: Transaction): Promise<void> {
+  const outTxs = await findOutgoingTransactions(client, transaction);
+  // do smth with out txs
+  for (const out of outTxs) {
+    await traverseOutgoingTransactions(client, out);
+  }
+}
+
+async function main() {
+  const endpoint = await getHttpEndpoint({ network: 'testnet' });
+  const client = new TonClient({
+    endpoint,
+    apiKey: '[API-KEY]',
+  });
+  
+  const transaction: Transaction = ...; // Obtain first transaction to start traversing
+  await traverseIncomingTransactions(client, transaction);
+  await traverseOutgoingTransactions(client, transaction);
+}
+
+main();
+```
+
+</TabItem>
+</Tabs>
 
 ### Send payments
 
