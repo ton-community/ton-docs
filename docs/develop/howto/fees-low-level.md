@@ -39,13 +39,13 @@ You can approximately calculate storage fees for smart contracts using this form
 
 Let's examine each value more closely:
 
-* `price`—price for storage for `time_delta` seconds
+* `storage_fee`—price for storage for `time_delta` seconds
 * `cells_count`—count of cells used by smart contract
 * `bits_count`—count of bits used by smart contract
 * `cell_price`—price of single cell
 * `bit_price`—price of single bit
 
-Both `cell_price` and `bit_price` could be obtained from Network Config [param 18](https://explorer.toncoin.org/config?workchain=-1&shard=8000000000000000&seqno=22185244&roothash=165D55B3CFFC4043BFC43F81C1A3F2C41B69B33D6615D46FBFD2036256756382&filehash=69C43394D872B02C334B75F59464B2848CD4E23031C03CA7F3B1F98E8A13EE05#configparam18).
+Both `cell_price` and `bit_price` could be obtained from Network Config [param 18](/develop/howto/blockchain-configs#param-18).
 
 Current values are:
 
