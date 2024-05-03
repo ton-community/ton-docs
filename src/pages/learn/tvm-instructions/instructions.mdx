@@ -3,16 +3,16 @@ hide_table_of_contents: true
 wrapperClassName: bootstrap-wrapper
 ---
 
-import { SearchField } from '@site/src/components/SearchField';
-import { opcodes } from '@site/src/data/opcodes';
+import { InstructionGroups } from '@site/src/components/Instructions';
+import { cp0 } from '@site/src/data/opcodes';
 
 # TVM Instructions
 
-:::caution
-Due to limitations in Docusaurus, the single-page version moved [here](/learn/archive/tvm-instructions).
+:::caution advanced level
+This information is **very low-level** and could be hard to understand for newcomers.
+So feel free to read about it later.
 :::
 
-...
 * [Exit From TVM Instruction Full Screen Mode](/learn/tvm-instructions/tvm-overview)
 
 ## Introduction
@@ -48,7 +48,6 @@ The gas price of each instruction is specified in this document. The basic gas p
 ### Quick search
 
 :::info
-
 A full machine-readable list of TVM instructions is available [here](https://github.com/ton-community/ton-docs/blob/main/docs/learn/tvm-instructions/instructions.csv).
 :::
 
@@ -59,40 +58,6 @@ On this page, however, the search covers all existing opcodes, providing a compr
 
 Feel free to use the search field below to find a specific instruction:
 
-<SearchField
-  data={opcodes}
-  searchBy="doc_fift"
-  placeholder="Search for an opcode"
-  showKeys={[
-    { key: 'doc_opcode', name: 'Opcode' },
-    { key: 'doc_fift', name: 'Fift syntax' },
-    { key: 'doc_stack', name: 'Stack' },
-    { key: 'doc_description', name: 'Description', hasMarkdown: true },
-    { key: 'doc_gas', name: 'Gas' },
-  ]}
-/>
-
-### TVM Instructions Content List
-
-* [Overview](/learn/tvm-instructions/instructions)
-* [Stack Manipulation](/learn/tvm-instructions/instructions/stack-manipulation)
-* [Tuple, List and Null](/learn/tvm-instructions/instructions/tuple-list-null)
-* [Constants and Literals](/learn/tvm-instructions/instructions/constant)
-* [Arithmetic Operations](/learn/tvm-instructions/instructions/arithmetic)
-* [Data Comparison](/learn/tvm-instructions/instructions/data-comparison)
-* [Cell Manipulation](/learn/tvm-instructions/instructions/cell-manipulation)
-* [Continuation and Control Flow](/learn/tvm-instructions/instructions/control-flow)
-* [Exception Generation and Handling](/learn/tvm-instructions/instructions/exception-gen-and-handling)
-* [Dictionary Manipulation](/learn/tvm-instructions/instructions/dictionary-manipulation)
-* [Application-specific Primitives](/learn/tvm-instructions/instructions/app-specific)
-* [Miscellaneous](/learn/tvm-instructions/instructions/miscellaneous)
-
-...
+<InstructionGroups instructions={cp0.instructions}/>
 
 * [Exit From TVM Instruction Full Screen Mode](/learn/tvm-instructions/tvm-overview)
-
-
-### See Also
-
-* [Stack Manipulation](/learn/tvm-instructions/instructions/stack-manipulation)
-* [[Archived One Page] TVM Instructions](/learn/archive/tvm-instructions)

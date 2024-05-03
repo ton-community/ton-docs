@@ -45,10 +45,7 @@ The TON Foundation provides several public Liteservers, integrated into the glob
 - [Public Liteserver Configurations - mainnet](https://ton.org/global-config.json)
 - [Public Liteserver Configurations - testnet](https://ton.org/testnet-global.config.json)
 
-Use the downloaded `config.json` file in your application with TON SDK.
-
-[Choose a TON SDK](/develop/dapps/apis/sdk)
-
+Use the downloaded `config.json` file in your application with [TON SDK](/participate/nodes/node-types#lite-clients-the-sdks-to-interact-with-ton).
 
 #### Troubleshooting
 
@@ -64,10 +61,7 @@ wget https://api.tontech.io/ton/wallet-mainnet.autoconf.json -O /usr/bin/ton/glo
 
 It removes slow liteservers from the configuration file.
 
-2. Use the downloaded config.json file in your application with TON SDK.
-
-[Choose a TON SDK](/develop/dapps/apis/sdk)
-
+2. Use the downloaded config.json file in your application with [TON SDK](/participate/nodes/node-types#lite-clients-the-sdks-to-interact-with-ton).
 
 
 ### Running a Full Node as a Liteserver

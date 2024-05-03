@@ -39,6 +39,16 @@ You need a machine with a **fixed IP address** and a **high-bandwidth network co
 
 Typically you'll need a sufficiently powerful server in a data center with good network connectivity, using at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
 
+### Port Forwarding
+
+All types of nodes require a static external IP address, one UDP port to be forwarded for incoming connections and all outgoing connections to be open - the node uses random ports for new outgoing connections. It's necessarily for the node to be visible to the outside world over the NAT. 
+
+It can be done with your network provider or [rent a server](/participate/run-nodes/full-node#recommended-providers) to run a node.
+
+:::info
+It's possible to find out which UDP port is opened from the `netstat -tulpn` command.
+:::
+
 ### Recommended Providers
 
 The TON Foundation recommends the following providers for running a Validator:
@@ -575,6 +585,31 @@ tail -f /var/ton-work/log.thread*
 
 This section contains answers to the most frequently asked questions about running nodes.
 
+
+### Failed to get account state
+
+```
+Failed to get account state
+```
+
+This error means that there are issues during search for this account in shard state.
+Most probably it means that liteserver node is syncing too slow, in particular the Masterchain synchronisation overtook shardchains (Basechain) synchronisation. In this case node knows the recent Masterchain block but can not check account state in recent shardchain block and returns Failed to get account state.
+
+
+### Failed to unpack account state
+
+```
+Failed to unpack account state
+```
+This error means that requested account doesn't exist in current state. That means that this account is simultaneously is not deployed AND has zero balance
+
+### Cannot apply external message to current state : External message was not accepted
+
+```
+Cannot apply external message to current state : External message was not accepted
+```
+This error means that contract didn't accepted external message. You need to find exitcode in trace. -13 means that account doesn't have enough TON to accept message (or it requires more than gas_credit). In case of wallet contracts exitcode=33 means wrong seqno (probably seqno data you use is outdatd), exitcode=34 means wrong subwallet_id (for old wallets v1/v2 it means wrong signature), exitcode=35 means that either message is expired or signature is wrong.
+
 ### What does Error 651 mean?
 
 `[Error : 651 : no nodes]` indicates that your node cannot locate another node within the TON Blockchain.
@@ -582,7 +617,7 @@ This section contains answers to the most frequently asked questions about runni
 Sometimes, this process can take up to 24 hours. However, if you've been receiving this error for several days, that means that your node cannot synchronize via a current network connection.
 
 :::tip Solution
-You need to check the firewall settings, including any NAT settings if they exist.
+You need to check the firewall settings, including any [NAT](/participate/run-nodes/full-node#port-forwarding) settings if they exist.
 
 It should allow incoming connections on one specific port and outgoing connections from any port.
 :::

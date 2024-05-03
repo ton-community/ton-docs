@@ -494,7 +494,7 @@ precompiled_contracts_config#c0 list:(HashmapE 256 PrecompiledSmc) = Precompiled
 _ PrecompiledContractsConfig = ConfigParam 45;
 ```
 
-More details about precompiled contracts on [this page](develop/smart-contracts/core-contracts/precompiled).
+More details about precompiled contracts on [this page](/develop/smart-contracts/core-contracts/precompiled).
 
 ## Param 71 - 73
 

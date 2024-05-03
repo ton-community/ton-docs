@@ -250,7 +250,7 @@ Because the transaction comes from the outside world, it does not contain the To
 
 ### Transaction Expiration
 
-Another step used to check the validity of external transactions is the `valid_until` field. As you can see from the variable name, this is the time in UNIX before the transaction is valid. If this verification process fails, the contract completes the processing of the transaction and returns the 32 exit code follows:
+Another step used to check the validity of external transactions is the `valid_until` field. As you can see from the variable name, this is the time in UNIX before the transaction is valid. If this verification process fails, the contract completes the processing of the transaction and returns the 35 exit code follows:
 
 ```func
 var (subwallet_id, valid_until, msg_seqno) = (cs~load_uint(32), cs~load_uint(32), cs~load_uint(32));
@@ -2176,7 +2176,7 @@ Note that if a value is found, `f` is always equal to -1 (true). The `~ -1` oper
 
 ### Removing Expired Queries
 
-Typically, [smart contracts on TON pay for their own storage](develop/smart-contracts/fees#storage-fee). This means that the amount of data smart contracts can store is limited to prevent high network transaction fees. To allow the system to be more efficient, transactions that are more than 64 seconds old are removed from the storage. This is conducted as follows:
+Typically, [smart contracts on TON pay for their own storage](/develop/howto/fees-low-level#storage-fee). This means that the amount of data smart contracts can store is limited to prevent high network transaction fees. To allow the system to be more efficient, transactions that are more than 64 seconds old are removed from the storage. This is conducted as follows:
 
 ```func
 bound -= (64 << 32);   ;; clean up records that have expired more than 64 seconds ago
@@ -2416,7 +2416,9 @@ log.Println("Contract address:", contractAddress.String())    // Output contract
 </TabItem>
 </Tabs> 
 
-Everything we have detailed above follows the same steps as the contract [deployment via wallet](/develop/smart-contracts/tutorials/wallet#contract-deployment-via-wallet) section. To better analyze the fully functional code, please visit the repository indicated at the beginning of the tutorial where all sources are stored.
+:::caution
+Everything we have detailed above follows the same steps as the contract [deployment via wallet](/develop/smart-contracts/tutorials/wallet#contract-deployment-via-wallet) section. To better understanding, read the entire [GitHub source code]((https://github.com/aSpite/wallet-tutorial)).
+:::
 
 ### Sending High-Load Wallet Transactions
 

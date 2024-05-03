@@ -2,26 +2,67 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Button from '@site/src/components/button';
 
-# TON Jetton processing
+# Jetton Processing
 
-Best practices with comments on jettons processing:
+## Best Practices on Jettons Processing
 
-- [JS algo to accept jettons deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
-
-- [JS algo to jettons withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload.js)
-
-- [JS code to withdraw (send) jettons from a wallet in batches](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload-batch.js)
+Jettons are tokens on TON Blockchain - one can consider them similarly to ERC-20 tokens on Ethereum.
 
 :::info Transaction Confirmation
-TON transactions are irreversible after just one confirmation. For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
+TON transactions are irreversible after just one confirmation. For the best UX/UI avoid additional waiting. 
 :::
 
-In most cases, this should be enough for you, if not, you can find detailed information below.
+#### Withdrawal
 
-## Content List
+[Highload Wallet v3](/participate/wallets/contracts#highload-wallet-v3) - this is TON Blockchain latest solution which is the gold standard for jetton withdrawals. It allows you to take advantage of batched withdrawals.
+
+[Batched withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload-batch.js) - Meaning that multiple withdrawals are sent in batches, allowing for quick and cheap withdrawals.
+
+#### Deposits
+:::info
+It is suggested to set several MEMO deposit wallets for better performance.
+:::
+
+[Memo Deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js) - This allows you to keep one deposit wallet, and users add a memo in order to be identified by your system. This means that you don’t need to scan the entire blockchain, but is slightly less easy for users.
+
+[Memo-less deposits](https://github.com/gobicycle/bicycle) - This solution also exists, but is more difficult to integrate. However, we can assist with this, if you would prefer to take this route. Please notify us before deciding to implement this approach.
+
+
+### Additional Info
+
+:::caution Transaction Notification
+if you will be allowing your users set a custom memo when withdrawing jettons - make sure to set forwardAmount to 0.000000001 TON (1 nanoton) whenever a memo (text comment) is attached, otherwise the transfer will not be standard compliant and will not be able to be processed by other CEXes and other such services.
+:::
+
+- Please find the JS lib example - [tonweb](https://github.com/toncenter/tonweb) - which is the official JS library from the TON Foundation. 
+
+- If you want to use Java, you can look into [ton4j](https://github.com/neodix42/ton4j/tree/main). 
+
+- For Go, one should consider [tonutils-go](https://github.com/xssnick/tonutils-go). At the moment, we recommend the JS lib.
+
+## Ready Solutions for CEX
+
+### Tonapi Embed
+
+Tonapi Embed - on-premises solution designed to operate with deposits and withdrawals, ensuring high-performance and lightweight deployment.
+
+* Trust-less system running on any TON Liteservers.
+* Maintaining deposits and withdrawals for Toncoin and Jettons as well.
+* Solution developed according to the recommended MEMO-deposits and highload withdrawals guidelines provided by TF Core team.
+
+For cooperation, please contact to [@tonrostislav](https://t.me/tonrostislav).
+
+
+## Jetton Processing Global Overview 
+
+### Content List
+
+:::tip
+In following docs offers details about Jettons architecture generally, as well as core concepts of TON which may be different from EVM-like and other blockchains. This is crucial reading in order for one to grasp a good understanding of TON, and will greatly help you.
+:::
 
 This document describes the following in order:
-1. Overview 
+1. Introduction 
 2. Architecture
 2. Jetton Master Contract (Token Minter)
 3. Jetton Wallet Contract (User Wallet)
@@ -31,9 +72,10 @@ This document describes the following in order:
 6. Wallet processing
 7. Best Practices
 
-## Overview
+### Introduction
 
 :::info
+TON transactions are irreversible after just one confirmation.
 For clear understanding, the reader should be familiar with the basic principles of asset processing described in [this section of our documentation](/develop/dapps/asset-processing/). In particular, it is important to be familiar with [contracts](/learn/overviews/addresses#everything-is-a-smart-contract), [wallets](/develop/smart-contracts/tutorials/wallet), [messages](/develop/smart-contracts/guidelines/message-delivery-guarantees) and deployment process.
 :::
 
@@ -276,7 +318,7 @@ await wallet.methods.transfer({
     seqno: seqno,
     payload: await jettonWallet.createTransferBody({
         jettonAmount: TonWeb.utils.toNano('500'), // Jetton amount (in basic indivisible units)
-        toAddress: new TonWeb.utils.Address(WALLET2_ADDRESS), // recepient user's wallet address (not Jetton wallet)
+        toAddress: new TonWeb.utils.Address(WALLET2_ADDRESS), // recipient user's wallet address (not Jetton wallet)
         forwardAmount: TonWeb.utils.toNano('0.01'), // some amount of TONs to invoke Transfer notification message
         forwardPayload: comment, // text comment for Transfer notification message
         responseAddress: walletAddress // return the TONs after deducting commissions back to the sender's wallet address
@@ -340,6 +382,11 @@ If they match, it’s ideal. If not, then you likely received a scam token that 
 
 :::info
 To prevent a bottleneck in incoming transactions to a single wallet, it is suggested to accept deposits across multiple wallets and to expand the number of these wallets as needed.
+:::
+
+
+:::caution Transaction Notification
+if you will be allowing your users set a custom memo when withdrawing jettons - make sure to set forwardAmount to 0.000000001 TON (1 nanoton) whenever a memo (text comment) is attached, otherwise the transfer will not be standard compliant and will not be able to be processed by other CEXes and other such services.
 :::
 
 In this scenario, the payment service creates a unique memo identifier for each sender disclosing 

@@ -247,6 +247,72 @@ print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=Tru
 </TabItem>
 </Tabs>
 
+
+### How to Check the Validity of a TON Address?
+
+
+<Tabs groupId="address-examples">
+
+<TabItem value="Tonweb" label="JS (Tonweb)">
+
+```js
+
+const TonWeb = require("tonweb")
+
+TonWeb.utils.Address.isValid('...')
+```
+
+</TabItem>
+<TabItem value="GO" label="tonutils-go">
+
+```python
+package main
+
+import (
+    "fmt"
+    "github.com/xssnick/tonutils-go/address"
+)
+
+if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
+ return errors.New("invalid address")
+}
+```
+
+
+</TabItem>
+<TabItem value="Java" label="ton4j">
+
+  ```javascript
+    /* Maven
+    <dependency>
+      <groupId>io.github.neodix42</groupId>
+      <artifactId>address</artifactId>
+      <version>0.3.2</version>
+    </dependency>
+    */
+
+    try {
+    Address.of("...");
+    } catch (Exception e) {
+    // not valid address
+    }
+  ```
+
+</TabItem>
+<TabItem value="Kotlin" label="ton-kotlin">
+
+```javascript
+try {
+    AddrStd("...")
+} catch(e: IllegalArgumentException) {
+   // not valid address
+}
+```
+
+</TabItem>
+</Tabs>
+
+
 ## Standard wallets in TON ecosystem
 
 ### How to transfer TON? How to send a text message to other wallet?
@@ -562,6 +628,47 @@ console.log('User Jetton Wallet address:', userJettonWalletAddress.toString());
 ```
 
 </TabItem>
+
+<TabItem value="Python" label="Python">
+
+```python
+
+from pytoniq_core import Address, Cell, begin_cell
+
+def calculate_jetton_address(
+    owner_address: Address, jetton_master_address: Address, jetton_wallet_code: str
+):
+    # Recreate from jetton-utils.fc calculate_jetton_wallet_address()
+    # https://tonscan.org/jetton/EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs#source
+
+    data_cell = (
+        begin_cell()
+        .store_uint(0, 4)
+        .store_coins(0)
+        .store_address(owner_address)
+        .store_address(jetton_master_address)
+        .end_cell()
+    )
+
+    code_cell = Cell.one_from_boc(jetton_wallet_code)
+
+    state_init = (
+        begin_cell()
+        .store_uint(0, 2)
+        .store_maybe_ref(code_cell)
+        .store_maybe_ref(data_cell)
+        .store_uint(0, 1)
+        .end_cell()
+    )
+    state_init_hex = state_init.hash.hex()
+    jetton_address = Address(f'0:{state_init_hex}')
+
+    return jetton_address
+
+```
+Read the entire example [here](/static/example-code-snippets/pythoniq/jetton-offline-address-calc-wrapper.py).
+
+</TabItem>
 </Tabs>
 
 Most major tokens do not have a different storage structure because they use [a standard implementation of the TEP-74 standard](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc). The exception is the new [Jetton-with-governance contracts](https://github.com/ton-blockchain/stablecoin-contract) for centralized stablecoins. In these, the difference is [the presence of a wallet status field and the absence of a code cell in the vault](https://github.com/ton-blockchain/stablecoin-contract/blob/7a22416d4de61336616960473af391713e100d7b/contracts/jetton-utils.fc#L3-L12).
@@ -741,7 +848,7 @@ Jetton transfers need careful consideration for fees and amounts behind outgoing
 
 <img src="/img/interaction-schemes/nft.svg" alt="NFT ecosystem scheme"></img>
 
-NFT collections are very different. Actually, NFT contract on TON can be defined as "contract that has appropriate get-method and returns valid metadata". Transfer operation is standartized and quite analogous to [jetton's one](/develop/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment), so we will not dive into it and rather see additional capabilities provided by most collections you may meet!
+NFT collections are very different. Actually, NFT contract on TON can be defined as "contract that has appropriate get-method and returns valid metadata". Transfer operation is standardized and quite analogous to [jetton's one](/develop/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment), so we will not dive into it and rather see additional capabilities provided by most collections you may meet!
 
 :::warning
 Reminder: all methods about NFT below are not bound by TEP-62 to work. Before trying them, please check if your NFT or collection will process those messages in an expected way. Wallet app emulation may prove useful in this case.
@@ -1121,7 +1228,7 @@ DeDust provides a special SDk to work with contract, component, and API, it was 
 Enough theory, let's set up our environment to swap one jetton with TON.
 
 ```bash
-npm install --save @ton/core @ton/ton @ton/crypt
+npm install --save @ton/core @ton/ton @ton/crypto
 
 ```
 

@@ -1,0 +1,71 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Wallet Address Validation
+
+### How to Check the Validity of a TON Address?
+
+
+
+<Tabs groupId="address-examples">
+
+  <TabItem value="Tonweb" label="JS (Tonweb)">
+
+  ```js
+    const TonWeb = require("tonweb")
+    TonWeb.utils.Address.isValid('...')
+  ```
+
+  </TabItem>
+  <TabItem value="GO" label="tonutils-go">
+
+  ```python
+  package main
+
+  import (
+    "fmt"
+    "github.com/xssnick/tonutils-go/address"
+  )
+
+  if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
+    return errors.New("invalid address")
+  }
+  ```
+
+
+  </TabItem>
+  <TabItem value="Java" label="ton4j">
+
+  ```javascript
+    /* Maven
+    <dependency>
+      <groupId>io.github.neodix42</groupId>
+      <artifactId>address</artifactId>
+      <version>0.3.2</version>
+    </dependency>
+    */
+
+    try {
+    Address.of("...");
+    } catch (Exception e) {
+    // not valid address
+    }
+  ```
+
+  </TabItem>
+  <TabItem value="Kotlin" label="ton-kotlin">
+
+```javascript
+  try {
+    AddrStd("...")
+  } catch (e: IllegalArgumentException) {
+      // not valid address
+  }
+```
+
+  </TabItem>
+</Tabs>
+
+:::tip
+Full Address description on the [Smart Contract Addresses](/learn/overviews/addresses) page.
+:::

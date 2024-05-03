@@ -140,6 +140,7 @@ Apart from those basic fees, the following fees appear:
 | Implicit Back Jump      | **5**        | It is paid when all instructions in the current continuation are executed and execution flow jumps back to the continuation from which the just finished continuation was called.             |                                                                                      
 | Moving stack elements   | **1**        | Price for moving stack elements between continuations. It will charge correspond gas price for every element. However, the first 32 elements moving is free.                                  |                                                                                       
 
+
 ### FunC constructions gas fees
 
 Almost all functions used in FunC are defined in [stdlib.func](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) which maps FunC functions to Fift assembler instructions. In turn, Fift assembler instructions are mapped to bit-sequence instructions in [asm.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/fift/lib/Asm.fif). So if you want to understand how much exactly the instruction call will cost you, you need to find `asm` representation in `stdlib.func`, then find bit-sequence in `asm.fif` and calculate instruction length in bits.
@@ -245,7 +246,7 @@ These are the actions that lead to pay fees:
 * `CHANGELIB` creates an output action similarly to `SETLIBCODE`, but instead of the library code accepts its hash.
 * `FB08–FB3F` reserved for output action primitives.
 
-## Fee's calculation Formulas
+## Fee's calculation formulas
 
 ### storage_fees
 
@@ -257,7 +258,6 @@ storage_fees = ceil(
 ```
 
 ### in_fwd_fees, out_fwd_fees
-
 ```cpp
 msg_fwd_fees = (lump_price
              + ceil(
