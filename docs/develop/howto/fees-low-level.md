@@ -8,7 +8,7 @@ This document provides a general idea of transaction fees on TON and particularl
 
 ## Transactions and phases
 
-AAs was described in the [TVM overview](/learn/tvm-instructions/tvm-overview), transaction execution consists of a few phases. During those phases, the corresponding fees may be deducted. There is a [high-level fees overview](/develop/smart-contracts/fees).
+As was described in the [TVM overview](/learn/tvm-instructions/tvm-overview), transaction execution consists of a few phases. During those phases, the corresponding fees may be deducted. There is a [high-level fees overview](/develop/smart-contracts/fees).
 
 ## Storage fee
 
