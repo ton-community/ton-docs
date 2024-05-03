@@ -2,6 +2,8 @@ import Button from '@site/src/components/button'
 
 # TON Node Types
 
+In *simplified terms*, a blockchain `node` is **one of the computers** that **collectively run the blockchain's software**. It enables the blockchain to search and validate transactions and keep the network secure ensuring that the network remains **decentralized**.
+
 When diving into the world of The Open Network (TON), understanding the distinct node types and their functionalities is crucial. This article breaks down each node type to provide clarity for developers wishing to engage with the TON blockchain.
 
 ## Full Node
@@ -17,12 +19,16 @@ Running a Full Node
 
 ## Validator Node
 
-A **Validator Node** is activated when it holds a necessary amount of Toncoin as a stake. Validator nodes are vital for the network's operability, participating in the validation of new network blocks.
+After `full node` install, you can began use `Validator Node`.
+
+A `Validator Node` is activated when it (your `full node`) holds a necessary amount of Toncoin as a stake. Validator nodes are vital for the network's operability, participating in the validation of new network blocks.
 
 TON operates on a Proof-of-Stake mechanism, where validators are pivotal in maintaining network functionality. Validators are [rewarded in Toncoin](/participate/network-maintenance/staking-incentives) for their contributions, incentivizing network participation and ensuring network security.
 
-[Running a Full Node as a Validator](/participate/run-nodes/full-node#become-a-validator)
-
+<Button href="/participate/run-nodes/full-node"
+colorType="primary" sizeType={'sm'}>
+Running a Validator Node
+</Button>
 
 ## Full Node + Liteserver
 
