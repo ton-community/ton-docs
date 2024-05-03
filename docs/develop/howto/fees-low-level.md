@@ -38,7 +38,7 @@ You can approximately calculate storage fees for smart contracts using this form
 
 Let's examine each value more closely:
 
-* `price`—price for storage for `time_delta` seconds
+* `storage_fee`—price for storage for `time_delta` seconds
 * `cells_count`—count of cells used by smart contract
 * `bits_count`—count of bits used by smart contract
 * `cell_price`—price of single cell
