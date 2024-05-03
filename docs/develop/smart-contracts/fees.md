@@ -69,7 +69,7 @@ transaction_fee = storage_fees
 ## Elements of transaction fee
 
 * `storage_fees` is the amount you pay for storing a smart contract in the blockchain. In fact, you pay for every second the smart contract is stored on the blockchain.
-  * _Example_: your TON Wallet is also a smart contract, and it pays a storage fee every time you receive or send a transaction. Read more about [how storage fees are calculated](/develop/smart-contracts/fees#storage-fee).
+  * _Example_: your TON Wallet is also a smart contract, and it pays a storage fee every time you receive or send a transaction. Read more about [how storage fees are calculated](/develop/howto/fees-low-level#storage-fee).
 * `in_fwd_fees` is a charge for importing messages only from outside the blockchain, e.g. `external` messages. Every time you make a transaction, it must be delivered to the validators who will process it. For ordinary messages from contract to contract this fee is not applicable. Read [the TON Blockchain paper](https://docs.ton.org/tblkch.pdf) to learn more about inbound messages.
   * _Example_: each transaction you make with your wallet app (like Tonkeeper) requires first to be distributed among validation nodes.
 * `computation_fees` is the amount you pay for executing code in the virtual machine. The larger the code, the more fees must be paid.
