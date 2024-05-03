@@ -2,8 +2,6 @@
 
 Every TON user should keep in mind that _commission depends on many factors_.
 
-Most fees are nominated in nanotons or nanotons multiplied by 2^16 to maintain accuracy while using integer.
-
 ## Gas
 
 All [computation costs](/develop/howto/fees-low-level#computation-fees) are nominated in gas units and fixed in a certain gas amount.
