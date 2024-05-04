@@ -30,15 +30,15 @@
 
 不久前，Ton Whales在TON上运行了第一个质押池，最低存款为50 TON。后来，TON基金会推出了第一个开放的提名者池。现在，用户可以以**10,000 TON**开始，以完全去中心化的方式质押Toncoin。
 
-_来自[TON社区帖子](https://t.me/toncoin/543)。_
+*来自[TON社区帖子](https://t.me/toncoin/543)。*
 
 ## 如何参与？
 
-* [TON提名者池列表](https://tonvalidators.org/)
+- [TON提名者池列表](https://tonvalidators.org/)
 
 ## 源代码
 
-* [提名者池智能合约源代码](https://github.com/ton-blockchain/nominator-pool)
+- [提名者池智能合约源代码](https://github.com/ton-blockchain/nominator-pool)
 
 :::info
 提名者的理论在[TON白皮书](https://docs.ton.org/ton.pdf)中有描述，章节2.6.3, 2.6.25。
