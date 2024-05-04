@@ -2,7 +2,7 @@
 
 这些原则最初由 [talkol](https://github.com/talkol) 提出：
 
- - [TON Footstep #7 上的原始评论](https://github.com/ton-society/ton-footsteps/issues/7#issuecomment-1187581181)
+- [TON Footstep #7 上的原始评论](https://github.com/ton-society/ton-footsteps/issues/7#issuecomment-1187581181)
 
 以下是这些要点的总结，供新贡献者参考。
 
