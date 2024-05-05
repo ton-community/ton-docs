@@ -10,6 +10,7 @@ import exceptionOpcodes from './exceptions.json';
 import miscellaneousOpcodes from './miscellaneous.json';
 import stackManipulationOpcodes from './stack_manipulation.json';
 import tupleOpcodes from './tuple.json';
+import cp0 from './cp0.json';
 
 type Opcode = {
   name: string;
@@ -36,5 +37,6 @@ export {
   miscellaneousOpcodes,
   stackManipulationOpcodes,
   tupleOpcodes,
-  Opcode
+  Opcode,
+  cp0
 };

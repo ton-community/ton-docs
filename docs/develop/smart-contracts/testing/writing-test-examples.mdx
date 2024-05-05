@@ -472,7 +472,7 @@ If the `integer` value went beyond the expected range, then 5 exit code is throw
 
 ### Compute Phase | exit code = 6
 
-On a lower level, instead of the familiar functions names, opcodes are used, which can be seen in [this table](/learn/archive/tvm-instructions) in HEX form. In this example, we [use](https://github.com/ton-community/fireworks-func/blob/ef49b4da12d287a8f6c2b6f0c19d65814c1578fc/contracts/fireworks.fc#L25) `@addop`, which adds a non-existent opcode.
+On a lower level, instead of the familiar functions names, opcodes are used, which can be seen in [this table](/learn/tvm-instructions/instructions) in HEX form. In this example, we [use](https://github.com/ton-community/fireworks-func/blob/ef49b4da12d287a8f6c2b6f0c19d65814c1578fc/contracts/fireworks.fc#L25) `@addop`, which adds a non-existent opcode.
 
 The emulator, when trying to process this opcode, does not recognize it and throws 6.
 
@@ -524,7 +524,7 @@ That is why when trying to read the value, we get 10 exit code.
 root_cell
 ├── key-value
 └── key-value
-``` 
+```
 
 **Note:** In fact, the structure of the dictionary (how the data is located in the cells) is more complicated than indicated in the examples above. Therefore, they are simplified for understanding the example.
 

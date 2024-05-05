@@ -42,11 +42,15 @@ Fees on TON are difficult to calculate in advance, as their amount depends on tr
 
 That is why even NFT marketplaces usually take an extra amount of TON (_~1 TON_) and return (_`1 - transaction_fee`_) later.
 
+:::info
+Please use [new TVM opcodes](/learn/tvm-instructions/fee-calculation-instructions#opcodes-to-process-config-parameters) in your smart contracts to dynamically calculate fees and do not hardcode fees in Toncoins in the smart contract code
+:::
+
 However, let's read more about how fees are supposed to function on TON.
 
 ## Basic Fees Formula
 
-According to the [low-level fees overview](/develop/howto/fees-low-level), fees on TON are calculated by this formula:
+Fees on TON are calculated by this formula:
 
 ```cpp
 transaction_fee = storage_fees
@@ -60,94 +64,12 @@ transaction_fee = storage_fees
 
 * `storage_fees` is the amount you pay for storing a smart contract in the blockchain. In fact, you pay for every second the smart contract is stored on the blockchain.
   * _Example_: your TON Wallet is also a smart contract, and it pays a storage fee every time you receive or send a transaction. Read more about [how storage fees are calculated](/develop/smart-contracts/fees#storage-fee).
-* `in_fwd_fees` is a charge for importing messages from outside the blockchain. Every time you make a transaction, it must be delivered to the validators who will process it.
+* `in_fwd_fees` is a charge for importing messages only from outside the blockchain, e.g. `external` messages. Every time you make a transaction, it must be delivered to the validators who will process it. For ordinary messages from contract to contract this fee is not applicable. Read [the TON Blockchain paper](https://docs.ton.org/tblkch.pdf) to learn more about inbound messages.
   * _Example_: each transaction you make with your wallet app (like Tonkeeper) requires first to be distributed among validation nodes.
 * `computation_fees` is the amount you pay for executing code in the virtual machine. The larger the code, the more fees must be paid.
   * _Example_: each time you send a transaction with your wallet (which is a smart contract), you execute the code of your wallet contract and pay for it.
-* `action_fees` is a charge for sending outgoing messages made by a smart contract.
+* `action_fees` is a charge for sending outgoing messages made by a smart contract, updating the smart contract code, updating the libraries, etc.
 * `out_fwd_fees` stands for a charge for sending messages outside from TON Blockchain to interact with off-chain services (e.g., logs) and external blockchains.
-  * Not used because it's not implemented. So today is equal to 0.
-
-## Storage fee
-
-TON validators collect storage fees from smart contracts.
-
-Storage fees are collected from the smart contract balance at the **Storage phase** of any transaction. Read more about phases and how TVM works [here](/learn/tvm-instructions/tvm-overview#transactions-and-phases).
-
-It’s important to keep in mind that on TON you pay for both the execution of a smart contract and for the **used storage**:
-
-```cpp
-bytes * second
-```
-
-It means you have to pay a storage fee for having TON Wallet (even if it's very-very small).
-
-If you have not used your TON Wallet for a significant period of time (1 year), _you will have to pay a significantly larger commission than usual because the wallet pays commission on sending and receiving transactions_.
-
-### Formula
-
-You can approximately calculate storage fees for smart contracts using this formula:
-
-
-```cpp
-  storage_fee = (cells_count * cell_price + bits_count * bit_price)
-  / 2^16 * time_delta
-```
-
-Let's examine each value more closely:
-
-* `price`—price for storage for `time_delta` seconds
-* `cells_count`—count of cells used by smart contract
-* `bits_count`—count of bits used by smart contract
-* `cell_price`—price of single cell
-* `bit_price`—price of single bit
-
-Both `cell_price` and `bit_price` could be obtained from Network Config [param 18](https://explorer.toncoin.org/config?workchain=-1&shard=8000000000000000&seqno=22185244&roothash=165D55B3CFFC4043BFC43F81C1A3F2C41B69B33D6615D46FBFD2036256756382&filehash=69C43394D872B02C334B75F59464B2848CD4E23031C03CA7F3B1F98E8A13EE05#configparam18).
-
-Current values are:
-
-* Workchain.
-    ```cpp
-    bit_price_ps:1
-    cell_price_ps:500
-    ```
-* Masterchain.
-    ```cpp
-    mc_bit_price_ps:1000
-    mc_cell_price_ps:500000
-    ```
-
-### Calculator Example
-
-You can use this JS script to calculate storage price for 1 MB in the workchain for 1 year
-
-```js live
-
-// Welcome to LIVE editor!
-// feel free to change any variables
-  
-function storageFeeCalculator() {
-  
-  const size = 1024 * 1024 * 8		    // 1MB in bits  
-  const duration = 60 * 60 * 24 * 365	// 1 Year in secs
-
-  const bit_price_ps = 1
-  const cell_price_ps = 500
-
-  const pricePerSec = size * bit_price_ps +
-  + Math.ceil(size / 1023) * cell_price_ps
-
-  let fee = (pricePerSec * duration / 2**16 * 10**-9)
-  let mb = (size / 1024 / 1024 / 8).toFixed(2)
-  let days = Math.floor(duration / (3600 * 24))
-  
-  let str = `Storage Fee: ${fee} TON (${mb} MB for ${days} days)`
-  
-  return str
-}
-
-
-```
 
 ## FAQ
 
@@ -175,5 +97,8 @@ Saving 1 MB of data for one year on TON will cost you 6.01 TON. Note that you do
 
 ## References
 
-* ["Low-level fees overview"](/develop/howto/fees-low-level#fees-calculation-formulas)—read about the formulas for calculating commissions.
-* *Based on the [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22) originally written by [menschee](https://github.com/menschee)*
+* Based on the [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22) originally written by [menschee](https://github.com/menschee)*
+
+## See Also
+
+* ["Low-level fees overview"](/develop/howto/fees-low-level)—read about the formulas for calculating commissions.

@@ -2176,7 +2176,8 @@ Note that if a value is found, `f` is always equal to -1 (true). The `~ -1` oper
 
 ### Removing Expired Queries
 
-Typically, [smart contracts on TON pay for their own storage](/develop/smart-contracts/fees#storage-fee). This means that the amount of data smart contracts can store is limited to prevent high network transaction fees. To allow the system to be more efficient, transactions that are more than 64 seconds old are removed from the storage. This is conducted as follows:
+Typically, [smart contracts on TON pay for their own storage](/develop/howto/fees-low-level#storage-fee). This means that the amount of data smart contracts can store is limited to prevent high network transaction fees. To allow the system to be more efficient, transactions that are more than 64 seconds old are removed from the storage. This is conducted as follows:
+
 
 ```func
 bound -= (64 << 32);   ;; clean up records that have expired more than 64 seconds ago

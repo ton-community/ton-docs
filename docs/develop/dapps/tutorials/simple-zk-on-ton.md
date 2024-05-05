@@ -572,9 +572,6 @@ Note: The above examples taught us how to build a simple ZK use case. That said,
 * private auction systems 🤝
 * private transactions💸 (for Toncoin or Jettons) 
 
-If you have any questions or have noticed an error - feel free to write to the author - [@saber_coder](https://t.me/saber_coder)
-
-
 If you have any questions or encounter any errors in this tutorial, feel free to write to the author: [@saber_coder](https://t.me/saber_coder)
 
 
