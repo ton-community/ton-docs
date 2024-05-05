@@ -17,6 +17,8 @@ Since TON is a comprehensive system with wide functionality, messages which need
 
 Therefore, the developer should not be afraid, and if something in this document seems incomprehensible on first reading, it's okay. Just grasp the general idea.
 
+Sometimes the word **'gram'** may be mentioned in the documentation, mostly in code examples, it's just an outdated name for **toncoin**.
+
 Let's dive in!
 
 ## Types of messages
@@ -125,7 +127,7 @@ currencies$_ grams:Grams other:ExtraCurrencyCollection
 
 This scheme means that in addition to the TON value, message may carry the dictionary of additional _extra-currencies_. However, currently we may neglect it and just assume that the message value is serialized as "number of nanotons as variable integer" and "`0` - empty dictionary bit".
 
-Indeed, in the elector code above we serialize coins' amounts via `.store_coins(grams)` but then just put a string of zeros with length equal to `1 + 4 + 4 + 64 + 32 + 1 + 1`. What is it? 
+Indeed, in the elector code above we serialize coins' amounts via `.store_coins(toncoins)` but then just put a string of zeros with length equal to `1 + 4 + 4 + 64 + 32 + 1 + 1`. What is it? 
 * First bit stands for empty extra-currencies dictionary.
 * Then we have two 4-bit long fields. They encode 0 as `VarUInteger 16`. In fact, since `ihr_fee` and `fwd_fee` will be overwritten, we may as well put there zeroes.
 * Then we put zero to `created_lt` and `created_at` fields. Those fields will be overwritten as well; however, in contrast to fees, these fields have a fixed length and are thus encoded as 64- and 32-bit long strings.
@@ -152,6 +154,13 @@ Those things should be handled carefully due to the fact that some fields have v
 
 For instance, `MsgAddress` may be represented by four constructors: `addr_none`, `addr_std`, `addr_extern`, `addr_var` with length from 2 bits ( for `addr_none`) to 586 bits (for `addr_var` in the largest form). The same stands for nanotons' amounts which is serialized as `VarUInteger 16`. That means, 4 bits indicating the byte length of the integer and then indicated earlier bytes for integer itself. That way, 0 nanotons will be serialized as `0b0000` (4 bits which encode a zero-length byte string and then zero bytes), while 100.000.000 TON (or 100000000000000000 nanotons) will be serialized as `0b10000000000101100011010001010111100001011101100010100000000000000000` (`0b1000` stands for 8 bytes and then 8 bytes themselves).
 
+:::info message size
+Note that message has general size limits and cell count limits too,
+e.g.: maximum message size must not exceed `max_msg_bits`, the number of cells per message must not exceed `max_msg_cells`...
+
+More configuration parameters and there values can be found [here](/develop/howto/blockchain-configs#param-43).
+:::
+
 ## Message modes
 
 As you might've noticed, we send messages with `send_raw_message` which, apart from consuming the message itself, also accepts the mode. To figure out the mode that best suits your needs, take a look at the following table:
@@ -162,11 +171,29 @@ As you might've noticed, we send messages with `send_raw_message` which, apart f
 | `64` | Carry all the remaining value of the inbound message in addition to the value initially indicated in the new message |
 | `128` | Carry all the remaining balance of the current smart contract instead of the value originally indicated in the message |
 
-| Flag  | Description                                                                                   |
-|:------|:----------------------------------------------------------------------------------------------|
-| `+1`  | Pay transfer fees separately from the message value                                           |
-| `+2`  | Ignore any errors arising while processing this message during the action phase               |
-| `+16` | In the case of action fail - bounce transaction. No effect if `+2` is used.                   |
-| `+32` | Current account must be destroyed if its resulting balance is zero (often used with Mode 128) |
+| Flag  | Description                                                                                         |
+|:------|:----------------------------------------------------------------------------------------------------|
+| `+1`  | Pay transfer fees separately from the message value                                                 |
+| `+2`  | Ignore some errors arising while processing this message during the action phase (check note below) |
+| `+16` | In the case of action fail - bounce transaction. No effect if `+2` is used.                         |
+| `+32` | Current account must be destroyed if its resulting balance is zero (often used with Mode 128)       |
+
+:::info +2 flag
+Note that `+2` flag ignore only following errors arising while processing message during the action phase:
+1. Not enough Toncoins:
+    - Not enough value to transfer with the message (all of the inbound message value has been consumed).
+    - Not enough funds to process a message.
+    - Not enough value attached to the message to pay forwarding fees.
+    - Not enough extra currency to send with the message.
+    - Not enough funds to pay for an outbound external message.
+2. Message is too large (check [Message size](messages#message-size) for more).
+3. The message has too big Merkle depth.
+
+However, it does not ignore errors in the following scenarios:
+1. The message has an invalid format.
+2. The message mode includes both 64 and 128 mods.
+3. The outbound message has invalid libraries in StateInit.
+4. The external message is not ordinary or includes +16 or +32 flag or both.
+:::
 
 To build a mode for the `send_raw_message`, you just have to combine modes and flags by adding them together. For example, if you want to send a regular message and pay transfer fees separately, use the Mode `0` and Flag `+1` to get `mode = 1`. If you want to send the whole contract balance and destroy it immidiately, use the Mode `128` and Flag `+32` to get `mode = 160`.
