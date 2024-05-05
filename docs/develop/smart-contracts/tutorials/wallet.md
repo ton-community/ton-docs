@@ -1204,7 +1204,7 @@ After completing the first half of this tutorial we’re now much more familiar 
 
 ### Sending Multiple Messages Simultaneously
 
-As you may already know, [one cell can store up to 1023 bits of data and up to 4 references](develop/data-formats/cell-boc#cell) to other cells. In the first section of this tutorial we detailed how internal messages are delivered in a ‘whole’ loop as a link and sent. This means it is possible to **store up to 4 internal messages inside the external** message. This allows four transactions to be sent at the same time.
+As you may already know, [one cell can store up to 1023 bits of data and up to 4 references](/develop/data-formats/cell-boc#cell) to other cells. In the first section of this tutorial we detailed how internal messages are delivered in a ‘whole’ loop as a link and sent. This means it is possible to **store up to 4 internal messages inside the external** message. This allows four transactions to be sent at the same time.
 
 To accomplish this, it is necessary to create 4 different internal messages. We can do this manually or through a `loop`. We need to define 3 arrays: array of TON amount, array of comments, array of messages. For messages, we need to prepare another one array - internalMessages.
 
@@ -2178,6 +2178,7 @@ Note that if a value is found, `f` is always equal to -1 (true). The `~ -1` oper
 
 Typically, [smart contracts on TON pay for their own storage](/develop/howto/fees-low-level#storage-fee). This means that the amount of data smart contracts can store is limited to prevent high network transaction fees. To allow the system to be more efficient, transactions that are more than 64 seconds old are removed from the storage. This is conducted as follows:
 
+
 ```func
 bound -= (64 << 32);   ;; clean up records that have expired more than 64 seconds ago
 old_queries~udict_set_builder(64, query_id, begin_cell()); ;; add current query to dictionary
@@ -2199,7 +2200,7 @@ do {
 >
 > ["udict_delete_get_min()" in docs](/develop/func/stdlib/#dict_delete_get_min)
 
-Note that it is necessary to interact with the `f` variable several times. Since the [TVM is a stack machine](learn/tvm-instructions/tvm-overview#tvm-is-a-stack-machine), during each interaction with the `f` variable it is necessary to pop all values to get the desired variable. The `f~touch()` operation places the f  variable at the top of the stack to optimize code execution.
+Note that it is necessary to interact with the `f` variable several times. Since the [TVM is a stack machine](/learn/tvm-instructions/tvm-overview#tvm-is-a-stack-machine), during each interaction with the `f` variable it is necessary to pop all values to get the desired variable. The `f~touch()` operation places the f  variable at the top of the stack to optimize code execution.
 
 ### Bitwise Operations
 
