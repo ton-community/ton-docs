@@ -19,18 +19,18 @@ C++: fatal error: Killed signal terminated program cc1plus compilation terminate
 这是由于内存不足引起的，通过创建交换分区来解决。
 
 ```bash
-# 创建分区路径
+# Create the partition path
 sudo mkdir -p /var/cache/swap/
-# 设置分区大小
-# bs=64M是块大小，count=64是块数，所以交换空间大小为bs*count=4096MB=4GB
+# Set the size of the partition
+# bs=64M is the block size, count=64 is the number of blocks, so the swap space size is bs*count=4096MB=4GB
 sudo dd if=/dev/zero of=/var/cache/swap/swap0 bs=64M count=64
-# 为此目录设置权限
+# Set permissions for this directory
 sudo chmod 0600 /var/cache/swap/swap0
-# 创建SWAP文件
+# Create the SWAP file
 sudo mkswap /var/cache/swap/swap0
-# 激活SWAP文件
+# Activate the SWAP file
 sudo swapon /var/cache/swap/swap0
-# 检查SWAP信息是否正确
+# Check if SWAP information is correct
 sudo swapon -s
 ```
 
@@ -45,6 +45,6 @@ sudo rm /var/cache/swap/swap0
 
 ```bash
 sudo swapoff -a
-#详细使用方法：swapoff --help
-#查看当前内存使用情况：--swapoff: free -m
+#Detailed usage: swapoff --help
+#View current memory usage: --swapoff: free -m
 ```
