@@ -641,7 +641,7 @@ Debug primitives can be used for inspecting state of various variables while run
 forall X -> () ~dump(X value) impure asm "s0 DUMP";
 ```
 
-Outputs a value.
+Outputs a value. Several values can be dumped as a tuple, e.g. `~dump([v1, v2, v3])`.
 
 #### ~strdump
 
