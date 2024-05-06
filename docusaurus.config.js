@@ -389,7 +389,6 @@ const config = {
                 to: '/participate/network-maintenance/single-nominator',
                 label: 'Single Nominator Pool',
               },
-
               {
                 to: '/participate/network-maintenance/vesting-contract',
                 label: 'Vesting Contract',
@@ -458,9 +457,9 @@ const config = {
             'aria-label': 'GitHub repository',
           },
           {
-          type: 'localeDropdown',
-          position: 'right',
-        },
+            type: 'localeDropdown',
+            position: 'right',
+          },
         ],
       },
       footer: {
