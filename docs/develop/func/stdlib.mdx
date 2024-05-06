@@ -475,7 +475,7 @@ Similar to `raw_reserve` but also accepts a dictionary `extra_amount` (represent
 
 Sends a raw message contained in `msg`, which should contain a correctly serialized object Message X, with the only exception that the source address is allowed to have a dummy value `addr_none` (to be automatically replaced with the current smart contract address), and `ihr_fee`, `fwd_fee`, `created_lt` and `created_at` fields can have arbitrary values (to be rewritten with correct values during the action phase of the current transaction). The integer parameter `mode` contains the flags.
 
-There are currently 3 Modes and 3 Flags for messages. You can combine a single mode with several (maybe none) flags to get a required `mode`. Combination simply means getting sum of their values. A table with descriptions of Modes and Flags is given below.
+There are currently 3 Modes and 4 Flags for messages. You can combine a single mode with several (maybe none) flags to get a required `mode`. Combination simply means getting sum of their values. A table with descriptions of Modes and Flags is given below.
 
 | Mode  | Description                                                                                                            |
 | :---- | :--------------------------------------------------------------------------------------------------------------------- |
@@ -483,12 +483,30 @@ There are currently 3 Modes and 3 Flags for messages. You can combine a single m
 | `64`  | Carry all the remaining value of the inbound message in addition to the value initially indicated in the new message   |
 | `128` | Carry all the remaining balance of the current smart contract instead of the value originally indicated in the message |
 
-| Flag  | Description                                                                                   |
-| :---- | :-------------------------------------------------------------------------------------------- |
-| `+1`  | Pay transfer fees separately from the message value                                           |
-| `+2`  | Ignore any errors arising while processing this message during the action phase               |
-| `+16` | In the case of action fail - bounce transaction. No effect if `+2` is used.                   |
-| `+32` | Current account must be destroyed if its resulting balance is zero (often used with Mode 128) |
+| Flag  | Description                                                                                                       |
+| :---- | :---------------------------------------------------------------------------------------------------------------- |
+| `+1`  | Pay transfer fees separately from the message value                                                               |
+| `+2`  | Ignore some errors arising while processing this message during the action phase (check note below)               |
+| `+16` | In the case of action fail - bounce transaction. No effect if `+2` is used.                                       |
+| `+32` | Current account must be destroyed if its resulting balance is zero (often used with Mode 128)                     |
+
+:::info +2 flag
+Note that `+2` flag ignore only following errors arising while processing message during the action phase:
+1. Not enough Toncoins:
+    - Not enough value to transfer with the message (all of the inbound message value has been consumed).
+    - Not enough funds to process a message.
+    - Not enough value attached to the message to pay forwarding fees.
+    - Not enough extra currency to send with the message.
+    - Not enough funds to pay for an outbound external message.
+2. Message is too large (check [Message size](/develop/smart-contracts/messages#message-size) for more).
+3. The message has too big Merkle depth.
+
+However, it does not ignore errors in the following scenarios:
+1. The message has an invalid format.
+2. The message mode includes both 64 and 128 mods.
+3. The outbound message has invalid libraries in StateInit.
+4. The external message is not ordinary or includes +16 or +32 flag or both.
+:::
 
 For example, if you want to send a regular message and pay transfer fees separately, use the Mode `0` and Flag `+1` to get `mode = 1`. If you want to send the whole contract balance and destroy it immidiately, use the Mode `128` and Flag `+32` to get `mode = 160`.
 
