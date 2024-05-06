@@ -650,7 +650,23 @@ A variant of `parse_std_addr` that returns the (rewritten) address as a slice `s
 
 ## Debug primitives
 
-Currently, only one function is available.
+Debug primitives can be used for inspecting state of various variables while running tests or console scripts.
+
+#### ~dump
+
+```func
+forall X -> () ~dump(X value) impure asm "s0 DUMP";
+```
+
+Outputs a value.
+
+#### ~strdump
+
+```func
+() ~strdump(slice str) impure asm "STRDUMP";
+```
+
+Dumps a string. Slice parameter bit length must be divisible by 8.
 
 #### dump_stack
 
