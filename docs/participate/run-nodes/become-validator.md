@@ -1,5 +1,8 @@
 # Validator Node
 
+:::info
+Read about [Full Node](/participate/run-nodes/full-node) before this article
+:::
 
 ## View the List of Wallets
 

@@ -4,8 +4,8 @@ import TabItem from '@theme/TabItem';
 # Full Node
 
 
-:::caution System Administrator Required
-You shouldn't run any type of node on your local machine for long, even if it is satisfy requirements. Nodes actively use disks and can destroy them fast.
+:::caution Node usage on personal local machine
+You shouldn't run any type of node on your personal local machine for long, even if it is satisfy the requirements. Nodes actively use disks and can damage them fast.
 :::
 
 To install and manage your own node, use the **MyTonCtrl** open-source tool developed by the TON Foundation. The majority of TON Nodes are reliable and tested by **MyTonCtrl**.
@@ -67,7 +67,7 @@ Please, check this video step-by-step tutorial to start promptly:
 
 ### Switch to non-root user
 
-If you don't have **non-root** user, you can create this with the following steps steps (otherwise skip first two steps and go to the third).
+If you don't have **non-root** user, you can create this with the following steps (otherwise skip first two steps and go to the third).
 
 1. Login as root and create new user:
 
@@ -90,8 +90,6 @@ su - username
 ### Install the MyTonCtrl
 
 Download and run the installation script from the **non-root** user account with **sudo** privileges:
-
-
 
 <Tabs groupId="operating-systems">
   <TabItem value="ubuntu" label="Ubuntu">
@@ -162,7 +160,7 @@ Wait until `Local validator out of sync` becomes less than 20 seconds.
 
 ### Check the mytonctrl logs
 
-- To check **mytoncrl** logs, open `~/.local/share/mytoncore/mytoncore.log` for a local user or `/usr/local/bin/mytoncore/mytoncore.log` for Root.
+- To check **mytonctrl** logs, open `~/.local/share/mytoncore/mytoncore.log` for a local user or `/usr/local/bin/mytoncore/mytoncore.log` for Root.
 
 ![logs](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytoncore-log.png)
 
