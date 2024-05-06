@@ -52,7 +52,7 @@ Actually, there are two public `Liteservers`, that already have been provided by
 
 These endpoints, such as those used by standard wallets, ensure that even without setting up a personal liteserver, interaction with the TON Blockchain remains possible.
 
-If your project requires a high level of _security_, you can run your own `Liteserver`. To run a `full node` as a `Liteserver`, simply enable the `Liteserver` mode in your node's configuration file:
+If your project requires a high level of _security_, you can run your own `Liteserver`. To run a `full node` as a `Liteserver`, simply enable the `Liteserver` mode in your node's configuration file.
 
 <Button href="/participate/run-nodes/full-node#enable-liteserver-mode"
 colorType="primary" sizeType={'sm'}>
