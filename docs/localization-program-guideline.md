@@ -15,25 +15,35 @@ Our localization project is running on [Crowdin](https://crowdin.com/project/ton
 
 :::info IMPORTANT
 
-1. Before you start contributing, **read the guidelines below**! They will help you ensure the level of standardization and quality that will make the review process much faster.
+Before you start contributing, **read the guidelines below**! They will help you ensure the level of standardization and quality that will make the review process much faster.
 
-2. All these works are based on **side-by-side** mode in Crowdin Editor, if you don't know how to get into this, click a file you wanna start work, on the top right of the page, you can see Editor view button, we choose **side-by-side** mode, which will make editor more clear. 
+## side-by-side mode
+
+All these works are based on **side-by-side** mode in Crowdin Editor, if you don't know how to get into this, click a file you wanna start work, on the top right of the page, you can see Editor view button, we choose **side-by-side** mode, which will make editor more clear. 
+![side-by-side mode](/img/localizationProgramGuideline/side-by-side.png)
 :::
 
 ### Proofreader
 
 As a **Proofreader**, the files that have a **blue progress bar** are you gonna work in.
-
+![proofread step1](/img/localizationProgramGuideline/proofread-step1.png)
 Click one of the files, you'll get into an editing interface.
 
-First of all, we should make your workspace more suitable for work:
+#### Let's start contribute.
 
-1. First, let's find out which lines of translations need to be proofread, you can see there is a **filter** button on the **right** of Search in file input, let's choose **Not Approved** option.
+1. First of all, we should make your workspace more suitable for work:
+
+  Make sure you're in [**side by side mode**](#side-by-side-mode), then let's find out which lines of translations need to be proofread, you can see there is a **filter** button on the **right** of Search in file input, let's choose **Not Approved** option.
+![proofread filter](/img/localizationProgramGuideline/proofread-filter.png)
+
 
 2. Great, we're ready to start work now, here are the rules you should follow:
-   - select a string that has a **blue background**, which means it's translated but hasn't been proofread, check it carefully:
+   - select a string that has a **blue cube icon** on left, which means it's translated but hasn't been proofread, check it carefully:
      - if it's all **right**, click the ☑️ button on top.
      - if it's **not right**, just ignore it, go to the next line.
+
+![proofread approved](/img/localizationProgramGuideline/proofread-approved.png)
+     
 
 :::info
 **You also have the right to check lines which already been proofread**: 
@@ -44,6 +54,7 @@ First of all, we should make your workspace more suitable for work:
 <br/>
 
 3. Well done! if you wanna go to the next file in editor mode, just **click the file name** on the top, you can see a pop-up window, click the file name you will be transported to that file, and continue your proofread travel.
+![to next](/img/localizationProgramGuideline/redirect-to-next.png)
 
 ### Translator
 
@@ -51,14 +62,21 @@ The **translator** decides what readers can see in this doc, so make sure to tra
 
 Our mission is to make the **blue progress bar** of the file reach 100%.
 
+#### Let's start translate.
+
 Don't be stressed about this, you can ask for help from **AI** and **other translators**, follow these guides to help you do better:
 
-Click files that haven't been 100% translated, after you get into the editor, make sure you're in **side-by-side** mode:
+Click files that haven't been 100% translated.
+![translator select](/img/localizationProgramGuideline/translator-select.png)
+
+Again, after you get into the editor, make sure you're in [**side by side mode**](#side-by-side-mode):
 
 1. To list lines that need to be translated. you can see there is a **filter** button on the right of Search in file input, let's choose **Untranslated**.
+![translator filter](/img/localizationProgramGuideline/translator-filter.png)
 
 2. You can see the whole page has been separated to four-part:
     - The **top left** one is where you **input your translation**. According to Source string, you should input the correct translation to its right input.
+    - The **bottom left** one is the preview of the translated file. Make sure to **keep the translated format** as same as the original one, this is also **important**.
     - The **bottom right** one are the **suggestion translations** from crowdin. If there is a right translation in there, you can just click that translate, and crowdin will input that into the target translation. 
 
       :::info
@@ -67,5 +85,8 @@ Click files that haven't been 100% translated, after you get into the editor, ma
 
   
 3. Once you think your translation is done or wanna take a break, **click Save button** on the top, your current translation will update to the project, waiting for proofreading.
+![translator save](/img/localizationProgramGuideline/translator-save.png)
+
 
 4. Congrats, now you know how to work like a translator, if you wanna go to the next file in the editor, just **click the file name** on the top, and it will have a pop-up window, click the file name you will be transported to that file, enjoy it!
+![to next](/img/localizationProgramGuideline/redirect-to-next.png)
