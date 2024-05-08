@@ -11,6 +11,18 @@ To integrate Tether’s USD₮ Token on TON Blockchain use the contract address:
 [EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs](https://tonviewer.com/EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs?section=jetton)
 :::
 
+## Transfer Fee
+
+Fee consumed by Ethereum USD₮ transfer is calculated dynamically depending on the network load. That's why transaction can cost a lot.
+
+ ```cpp
+transaction_fee = gas_used * gas_price
+```
+
+* `gas_used` is the amount of gas was used during transaction execution.
+* `gas_price` price on 1 unit of gas in Gwei, calculated dynamically
+
+On the other hand average fee for sending any amount of a custom Jettons (e.g., jUSDT) in TON Blockchain is about 0.037 TON nowadays. Even if TON price increases 100 times, transactions will [remain ultra-cheap](/develop/smart-contracts/fees#average-transaction-cost).
 
 ## jUSDT vs USDT
 
@@ -26,4 +38,5 @@ See important [recommendations](/develop/dapps/asset-processing/jettons#jetton-w
 
 ## See Also
 
+* [Jetton Processing](/develop/dapps/asset-processing/jettons)
 * [Payments Processing](/develop/dapps/asset-processing/)
