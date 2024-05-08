@@ -56,6 +56,11 @@ Click one of the files, you'll get into an editing interface.
 3. Well done! if you wanna go to the next file in editor mode, just **click the file name** on the top, you can see a pop-up window, click the file name you will be transported to that file, and continue your proofread travel.
 ![to next](/img/localizationProgramGuideline/redirect-to-next.png)
 
+#### We also provide you with a great function: 
+You can see the fruits of your labor in time. Every content approved by proofreaders will be deployed in a preview website in one hour. Check [**our repo**](https://github.com/TownSquareXYZ/ton-docs/pulls), you'll find **preview** link in newest pr.
+![preview link](/img/localizationProgramGuideline/preview-link.png)
+
+
 ### Translator
 
 The **translator** decides what readers can see in this doc, so make sure to translate docs faithfulness and expressiveness, in another way, **make your translation close to the original meaning and also as simple and understandable as possible**.
