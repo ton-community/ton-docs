@@ -1,6 +1,24 @@
 # Localization Program Guideline
 
-In the process of letting Ton become the most successful Blockchain, how to let Ton docs be more understandable to people around the world is also an important issue to resolve, that's why we need localization, and we're **glad** you're here ready to participate in.
+In the process of **letting TON become the most successful Blockchain**, how to let TON docs be more understandable to people around the world is also an important issue to resolve, that's why we need localization, and we're **glad** you're here ready to participate in.
+
+<br />
+
+:::tip TON X TownSquare localization program
+This system **TON X TownSquare localization program** was designed by :            
+[**TownSquare**](https://github.com/TownSquareXYZ) one of the closest partners of **TON**. 
+
+We commit ourselves to making an open infrastructure for multilingual community collaboration to **make TON get into a better phrase**, which includes:
+  1. **Suitable for multilingual communities**
+  2. **Automate development, integration, and deployment**
+  3. **Decoupling the roles of developer, translator, and verifier**
+  4. **Community contribution incentive**
+    
+    **...**
+
+It's not just some project for only one language user, our goal is **for the global developer ecosystem**.
+:::
+
 
 ## Roles
 
@@ -57,7 +75,7 @@ Click one of the files, you'll get into an editing interface.
 ![to next](/img/localizationProgramGuideline/redirect-to-next.png)
 
 #### We also provide you with a great function: 
-You can see the fruits of your labor in time. Every content approved by proofreaders will be deployed in a preview website in one hour. Check [**our repo**](https://github.com/TownSquareXYZ/ton-docs/pulls), you'll find **preview** link in newest pr.
+You can **see the fruits of your labor in time**. Every content approved by proofreaders will be deployed in a preview website in one hour. Check [**our repo**](https://github.com/TownSquareXYZ/ton-docs/pulls), you'll find **preview** link in newest pr.
 ![preview link](/img/localizationProgramGuideline/preview-link.png)
 
 
