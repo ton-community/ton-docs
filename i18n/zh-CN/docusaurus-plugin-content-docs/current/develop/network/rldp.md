@@ -1,4 +1,4 @@
-# RLDP
+#
 
 RLDP（可靠的大数据报协议）是基于ADNL UDP之上的协议，用于传输大数据块，并包括正向错误校正（FEC）算法来替代另一端的确认包。这使得在网络组件之间更高效地传输数据成为可能，但会消耗更多的流量。
 
@@ -7,6 +7,7 @@ RLDP在TON基础设施中广泛使用，例如，从其他节点下载区块并�
 ## 协议
 
 RLDP使用以下TL结构进行通信：
+
 ```tlb
 fec.raptorQ data_size:int symbol_size:int symbols_count:int = fec.Type;
 fec.roundRobin data_size:int symbol_size:int symbols_count:int = fec.Type;
@@ -20,16 +21,18 @@ rldp.message id:int256 data:bytes = rldp.Message;
 rldp.query query_id:int256 max_answer_size:long timeout:int data:bytes = rldp.Message;
 rldp.answer query_id:int256 data:bytes = rldp.Message;
 ```
+
 序列化结构被包裹在`adnl.message.custom` TL模式中，并通过ADNL UDP发送。RLDP传输用于传输大数据，随机生成`transfer_id`，数据本身由FEC算法处理。生成的片段被包裹在`rldp.messagePart`结构中并发送给对方，直到对方向我们发送`rldp.complete`或超时为止。
 
 当接收方收集到组装完整消息所需的`rldp.messagePart`片段时，它会将它们全部连接起来，使用FEC解码并将结果字节数组反序列化为`rldp.query`或`rldp.answer`结构之一，取决于类型（tl前缀id）。
 
-### FEC
+###
 
 有效的正向错误校正算法用于RLDP包括RoundRobin、Online和RaptorQ。
 目前用于数据编码的是[RaptorQ](https://www.qualcomm.com/media/documents/files/raptorq-technical-overview.pdf)。
 
-#### RaptorQ
+####
+
 RaptorQ的本质是将数据分割成所谓的符号 - 同一预定大小的块。
 
 从块创建矩阵，并对其应用离散数学运算。这使我们能够从相同的数据创建几乎无限数量的符号。
@@ -39,13 +42,14 @@ RaptorQ的本质是将数据分割成所谓的符号 - 同一预定大小的块�
 
 [[RaptorQ在Golang中的实现示例]](https://github.com/xssnick/tonutils-go/tree/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/rldp/raptorq)
 
-## RLDP-HTTP
+##
 
 为了与TON Sites互动，使用了封装在RLDP中的HTTP。托管者在任何HTTP网络服务器上运行他的站点，并在旁边启动rldp-http-proxy。TON网络中的所有请求通过RLDP协议发送到代理，代理将请求重新组装为简单的HTTP，并在本地调用原始网络服务器。
 
 用户在他的一侧启动代理，例如，[Tonutils Proxy](https://github.com/xssnick/TonUtils-Proxy)，并使用`.ton` sites，所有流量都以相反的顺序包裹，请求发送到本地HTTP代理，它通过RLDP将它们发送到远程TON站点。
 
 RLDP中的HTTP使用TL结构实现：
+
 ```tlb
 http.header name:string value:string = http.Header;
 http.payloadPart data:bytes trailer:(vector http.header) last:Bool = http.PayloadPart;
@@ -54,16 +58,18 @@ http.response http_version:string status_code:int reason:string headers:(vector 
 http.request id:int256 method:string url:string http_version:string headers:(vector http.header) = http.Response;
 http.getNextPayloadPart id:int256 seqno:int max_chunk_size:int = http.PayloadPart;
 ```
+
 这不是纯文本形式的HTTP，一切都包裹在二进制TL中，并由代理自己解包以发送给网络服务器或浏览器。
 
 工作方案如下：
-* 客户端发送`http.request`
-* 服务器在接收请求时检查`Content-Length`头
-* * 如果不为0，向客户端发送`http.getNextPayloadPart`请求
-* * 接收到请求时，客户端发送`http.payloadPart` - 请求的正文片段，取决于`seqno`和`max_chunk_size`。
-* * 服务器重复请求，递增`seqno`，直到从客户端接收到所有块，即直到接收到的最后一个块的`last:Bool`字段为真。
-* 处理请求后，服务器发送`http.response`，客户端检查`Content-Length`头
-* * 如果不为0，则向服务器发送`http.getNextPayloadPart`请求，并重复这些操作，就像客户端一样，反之亦然
+
+- 客户端发送`http.request`
+- 服务器在接收请求时检查`Content-Length`头
+- - 如果不为0，向客户端发送`http.getNextPayloadPart`请求
+- - 接收到请求时，客户端发送`http.payloadPart` - 请求的正文片段，取决于`seqno`和`max_chunk_size`。
+- - 服务器重复请求，递增`seqno`，直到从客户端接收到所有块，即直到接收到的最后一个块的`last:Bool`字段为真。
+- 处理请求后，服务器发送`http.response`，客户端检查`Content-Length`头
+- - 如果不为0，则向服务器发送`http.getNextPayloadPart`请求，并重复这些操作，就像客户端一样，反之亦然
 
 ## 请求TON站点
 
@@ -71,12 +77,15 @@ http.getNextPayloadPart id:int256 seqno:int max_chunk_size:int = http.PayloadPar
 假设我们已经通过调用NFT-DNS合约的Get方法获得了其ADNL地址，[使用DHT确定了RLDP服务的地址和端口](https://github.com/xssnick/ton-deep-doc/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/DHT.md)，并[通过ADNL UDP连接到它](https://github.com/xssnick/ton-deep-doc/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/ADNL-UDP-Internal.md)。
 
 ### 向`foundation.ton`发送GET请求
+
 为此，填写结构：
+
 ```tlb
 http.request id:int256 method:string url:string http_version:string headers:(vector http.header) = http.Response;
 ```
 
 通过填写字段序列化`http.request`：
+
 ```
 e191b161                                                           -- TL ID http.request      
 116505dac8a9a3cdb464f9b5dd9af78594f23f1c295099a9b50c8245de471194   -- id           = {random}
@@ -89,15 +98,14 @@ e191b161                                                           -- TL ID http
 ```
 
 现在让我们将序列化的`http.request`包装进`rldp.query`并且也序列化它：
+
 ```
 694d798a                                                              -- TL ID rldp.query
 184c01cb1a1e4dc9322e5cabe8aa2d2a0a4dd82011edaf59eb66f3d4d15b1c5c      -- query_id        = {random}
-0004040000000000                                                      -- max_answer_size = 257 KB, 可以是任何我们接受的足够大的大小
+0004040000000000                                                      -- max_answer_size = 257 KB, can be any sufficient size that we accept as headers
 258f9063                                                              -- timeout (unix)  = 1670418213
 34 e191b161116505dac8a9a3cdb464f9b5dd9af78594f23f1c295099a9b50c8245   -- data (http.request)
-   de4711940347455416687474703a2f2f666f
-
-756e646174696f6e2e746f6e2f00
+   de4711940347455416687474703a2f2f666f756e646174696f6e2e746f6e2f00
    08485454502f312e310000000100000004486f73740000000e666f756e646174
    696f6e2e746f6e00 000000
 ```
@@ -115,20 +123,22 @@ e191b161                                                           -- TL ID http
 符号按循环方式编码和发送：我们最初定义`seqno`为0，并为每个后续编码的数据包增加1。例如，如果我们有2个符号，那么我们编码并发送第一个，增加seqno 1，然后第二个并增加seqno 1，然后再次第一个并增加seqno，此时已经等于2，再增加1。如此直到我们收到对方已接受数据的消息。
 
 现在，当我们创建了编码器，我们准备发送数据，为此我们将填写TL模式：
+
 ```tlb
 fec.raptorQ data_size:int symbol_size:int symbols_count:int = fec.Type;
 
 rldp.messagePart transfer_id:int256 fec_type:fec.Type part:int total_size:long seqno:int data:bytes = rldp.MessagePart;
 ```
-* `transfer_id` - 随机int256，对于同一数据传输中的所有messageParts相同。
-*  `fec_type`是`fec.raptorQ`。
-*  * `data_size` = 156
-*  * `symbol_size` = 768
-*  * `symbols_count` = 1
-*  `part`在我们的案例中始终为0，可用于达到大小限制的传输。
-*  `total_size` = 156。我们传输数据的大小。
-*  `seqno` - 对于第一个数据包将等于0，对于每个后续数据包将递增1，将用作解码和编码符号的参数。
-*  `data` - 我们编码的符号，大小为768字节。
+
+- `transfer_id` - 随机int256，对于同一数据传输中的所有messageParts相同。
+- `fec_type`是`fec.raptorQ`。
+- -
+- -
+- -
+- `part`在我们的案例中始终为0，可用于达到大小限制的传输。
+- `total_size` = 156。我们传输数据的大小。
+- `seqno` - 对于第一个数据包将等于0，对于每个后续数据包将递增1，将用作解码和编码符号的参数。
+- `data` - 我们编码的符号，大小为768字节。
 
 序列化`rldp.messagePart`后，将其包裹在`adnl.message.custom`中并通过ADNL UDP发送。
 
@@ -145,23 +155,29 @@ rldp.messagePart transfer_id:int256 fec_type:fec.Type part:int total_size:long s
 初始化后，我们将收到的符号及其`seqno`添加到解码器中，一旦我们积累了等于`symbols_count`的最小所需数量，我们就可以尝试解码完整消息。成功后，我们将发送`rldp.complete`。[[示例]](https://github.com/xssnick/tonutils-go/blob/be3411cf412f23e6889bf0b648904306a15936e7/adnl/rldp/rldp.go#L168)
 
 结果将是带有与我们发送的`rldp.query`中相同query_id的`rldp.answer`消息。数据必须包含`http.response`。
+
 ```tlb
 http.response http_version:string status_code:int reason:string headers:(vector http.header) no_payload:Bool = http.Response;
 ```
+
 对于主要字段，我认为一切都很清楚，实质与HTTP相同。这里有趣的标志位是`no_payload`，如果它为真，则响应中没有正文，（`Content-Length` = 0）。可以认为服务器的响应已经接收。
 
 如果`no_payload` = false，那么响应中有内容，我们需要获取它。为此，我们需要发送一个TL模式`http.getNextPayloadPart`包裹在`rldp.query`中的请求。
+
 ```tlb
 http.getNextPayloadPart id:int256 seqno:int max_chunk_size:int = http.PayloadPart;
 ```
+
 `id`应与我们在`http.request`中发送的相同，`seqno` - 0，对于每个下一个部分+1。`max_chunk_size`是我们准备接受的最大块大小，通常使用128 KB（131072字节）。
 
 作为回应，我们将收到：
+
 ```tlb
 http.payloadPart data:bytes trailer:(vector http.header) last:Bool = http.PayloadPart;
 ```
+
 如果`last` = true，那么我们已经到达尾部，我们可以将所有部分放在一起，获得完整的响应正文，例如html。
 
-## 参考
+## 参考资料
 
-_这里是[原文链接](https://github.com/xssnick/ton-deep-doc/blob/master/RLDP.md)，作者是[Oleg Baranov](https://github.com/xssnick)。_
+*这里是[原文链接](https://github.com/xssnick/ton-deep-doc/blob/master/RLDP.md)，作者是[Oleg Baranov](https://github.com/xssnick)。*
