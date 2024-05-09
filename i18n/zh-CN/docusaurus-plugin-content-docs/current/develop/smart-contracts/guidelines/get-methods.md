@@ -19,20 +19,20 @@ Get方法是智能合约中用于查询特定数据的特殊函数。它们的�
    示例：
 
    ```func
-    int get_balance() method_id {
-        return get_data().begin_parse().preload_uint(64);
-    }
-    ```
+   int get_balance() method_id {
+       return get_data().begin_parse().preload_uint(64);
+   }
+   ```
 
 2. **聚合数据检索**：另一种常见的模式是创建一次返回合约状态中多个数据点的方法。这通常在某些数据点一起使用时采用。这些在[Jetton](#jettons)和[NFT](#nfts)合约中非常常见。
 
    示例：
 
-    ```func
-    (int, slice, slice, cell) get_wallet_data() method_id {
-        return load_data();
-    }
-    ```
+   ```func
+   (int, slice, slice, cell) get_wallet_data() method_id {
+       return load_data();
+   }
+   ```
 
 ### 高级 get 方法设计模式
 
@@ -40,29 +40,29 @@ Get方法是智能合约中用于查询特定数据的特殊函数。它们的�
 
    示例：
 
-    ```func
-    slice get_wallet_address(slice owner_address) method_id {
-        (int total_supply, slice admin_address, cell content, cell jetton_wallet_code) = load_data();
-        return calculate_user_jetton_wallet_address(owner_address, my_address(), jetton_wallet_code);
-    }
-    ```
+   ```func
+   slice get_wallet_address(slice owner_address) method_id {
+       (int total_supply, slice admin_address, cell content, cell jetton_wallet_code) = load_data();
+       return calculate_user_jetton_wallet_address(owner_address, my_address(), jetton_wallet_code);
+   }
+   ```
 
 2. **条件数据检索**：有时需要检索的数据取决于某些条件，如当前时间。
 
    示例：
 
-    ```func
-    (int) get_ready_to_be_used() method_id {
-        int ready? = now() >= 1686459600;
-        return ready?;
-    }
-    ```
+   ```func
+   (int) get_ready_to_be_used() method_id {
+       int ready? = now() >= 1686459600;
+       return ready?;
+   }
+   ```
 
 ## 最常见的 get 方法
 
 ### 标准钱包
 
-#### seqno()
+####
 
 ```func
 int seqno() method_id {
@@ -72,7 +72,7 @@ int seqno() method_id {
 
 返回特定钱包中交易的序列号。这个方法主要用于[重放保护](/develop/smart-contracts/tutorials/wallet#replay-protection---seqno)。
 
-#### get_subwallet_id()
+####
 
 ```func
 int get_subwallet_id() method_id {
@@ -80,9 +80,9 @@ int get_subwallet_id() method_id {
 }
 ```
 
--   [什么是Subwallet ID？](/develop/smart-contracts/tutorials/wallet#what-is-subwallet-id)
+- [什么是Subwallet ID？](/develop/smart-contracts/tutorials/wallet#what-is-subwallet-id)
 
-#### get_public_key()
+####
 
 ```func
 int get_public_key() method_id {
@@ -93,9 +93,9 @@ int get_public_key() method_id {
 
 检索与钱包关联的公钥。
 
-### Jettons
+###
 
-#### get_wallet_data()
+####
 
 ```func
 (int, slice, slice, cell) get_wallet_data() method_id {
@@ -105,12 +105,12 @@ int get_public_key() method_id {
 
 这个方法返回与Jetton钱包相关的完整数据集：
 
--   (int) 余额
--   (slice) 持有者地址
--   (slice) Jetton主合约地址
--   (cell) Jetton钱包代码
+- (int) 余额
+- (slice) 持有者地址
+- (slice) Jetton主合约地址
+- (cell) Jetton钱包代码
 
-#### get_jetton_data()
+####
 
 ```func
 (int, int, slice, cell, cell) get_jetton_data() method_id {
@@ -121,7 +121,7 @@ int get_public_key() method_id {
 
 返回Jetton主合约的数据，包括其总供应量、管理员地址、Jetton内容和钱包代码。
 
-#### get_wallet_address(slice owner_address)
+####
 
 ```func
 slice get_wallet_address(slice owner_address) method_id {
@@ -132,9 +132,9 @@ slice get_wallet_address(slice owner_address) method_id {
 
 根据所有者的地址，此方法计算并返回所有者的Jetton钱包合约地址。
 
-### NFTs
+###
 
-#### get_nft_data()
+####
 
 ```func
 (int, int, slice, slice, cell) get_nft_data() method_id {
@@ -145,7 +145,7 @@ slice get_wallet_address(slice owner_address) method_id {
 
 返回与非同质化代币相关的数据，包括是否已初始化、在集合中的索引、集合地址、所有者地址和个体内容。
 
-#### get_collection_data()
+####
 
 ```func
 (int, cell, slice) get_collection_data() method_id {
@@ -157,7 +157,7 @@ slice get_wallet_address(slice owner_address) method_id {
 
 返回NFT集合的数据，包括下一个要铸造的项目索引、集合内容和所有者地址。
 
-#### get_nft_address_by_index(int index)
+####
 
 ```func
 slice get_nft_address_by_index(int index) method_id {
@@ -169,7 +169,7 @@ slice get_nft_address_by_index(int index) method_id {
 
 给定索引，此方法计算并返回该集合的相应NFT项目合约地址。
 
-#### royalty_params()
+####
 
 ```func
 (int, int, slice) royalty_params() method_id {
@@ -181,7 +181,7 @@ slice get_nft_address_by_index(int index) method_id {
 
 获取NFT的版税参数。这些参数包括原始创作者在NFT被出售时应支付的版税百分比。
 
-#### get_nft_content(int index, cell individual_nft_content)
+####
 
 ```func
 cell get_nft_content(int index, cell individual_nft_content) method_id {
@@ -190,7 +190,7 @@ cell get_nft_content(int index, cell individual_nft_content) method_id {
     cs~load_ref();
     slice common_content = cs~load_ref().begin_parse();
     return (begin_cell()
-            .store_uint(1, 8) ;; 离线标签
+            .store_uint(1, 8) ;; offchain tag
             .store_slice(common_content)
             .store_ref(individual_nft_content)
             .end_cell());
@@ -203,24 +203,24 @@ cell get_nft_content(int index, cell individual_nft_content) method_id {
 
 ### 在流行的浏览器上调用 get 方法
 
-#### Tonviewer
+####
 
 您可以在页面底部的"Methods"标签中调用get方法。
 
--   https://tonviewer.com/EQAWrNGl875lXA6Fff7nIOwTIYuwiJMq0SmtJ5Txhgnz4tXI?section=Methods
+-
 
-#### Ton.cx
+####
 
 您可以在"Get methods"标签中调用get方法。
 
--   https://ton.cx/address/EQAWrNGl875lXA6Fff7nIOwTIYuwiJMq0SmtJ5Txhgnz4tXI
+-
 
 ### 从代码中调用 get 方法
 
 我们将使用以下Javascript库和工具来提供以下示例：
 
--   [ton](https://github.com/ton-core/ton)库
--   [Blueprint](/develop/smart-contracts/sdk/javascript) SDK
+- [ton](https://github.com/ton-core/ton)库
+-
 
 假设有一个合约，其中有以下get方法：
 
@@ -275,7 +275,7 @@ async getTotal(provider: ContractProvider) {
 最后，我们可以在测试中使用这个方法。导航到`tests/Counter.spec.ts`并添加一个新的测试：
 
 ```ts
-it('应该从get方法返回正确的数字', async () => {
+it('should return correct number from get method', async () => {
     const caller = await blockchain.treasury('caller');
     await counter.sendNumber(caller.getSender(), toNano('0.01'), 123);
     expect(await counter.getTotal()).toEqual(123);
@@ -350,13 +350,13 @@ int get_total() method_id {
 
 在这个示例中，合约接收并处理内部消息，通过解读操作码、执行特定方法和适当地返回响应：
 
--   操作码`1`表示更新合约数据中的数字的请求。
--   操作码`2`表示从合约数据中查询数字的请求。
--   操作码`3`用于响应消息，发起调用的智能合约必须处理以接收结果。
+- 操作码`1`表示更新合约数据中的数字的请求。
+- 操作码`2`表示从合约数据中查询数字的请求。
+- 操作码`3`用于响应消息，发起调用的智能合约必须处理以接收结果。
 
 为了简单起见，我们只是使用了简单的小数字1、2和3作为操作码。但对于真实项目，请根据标准设置它们：
 
--   [用于操作码的CRC32哈希](/develop/data-formats/crc32)
+- [用于操作码的CRC32哈希](/develop/data-formats/crc32)
 
 ## 常见陷阱及如何避免
 
