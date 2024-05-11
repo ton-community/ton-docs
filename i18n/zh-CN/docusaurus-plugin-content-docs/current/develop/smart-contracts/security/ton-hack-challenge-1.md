@@ -26,16 +26,16 @@ TON Hack挑战赛于10月23日举行。在TON主网上部署了几个带有人�
 始终检查[修改/非修改](/develop/func/statements#methods-calls)方法。
 :::
 
-使用`.`而不是`~`调用了`udict_delete_get?`，所以真正的字典没有被触及。
+使用`.`而不是`~`调用了`udict_delete_get?`，所以真正的 dict 没有被触及。
 
 ```func
 (_, slice old_balance_slice, int found?) = accounts.udict_delete_get?(256, sender);
 ```
 
-### 3. DAO
+###
 
 :::note 安全规则
-如果你真的需要，使用有符号整数。
+如果你真的需要，使用符号整数。
 :::
 
 投票权在消息中以整数形式存储。所以攻击者可以在转移投票权时发送一个负值，并获得无限投票权。
@@ -75,7 +75,7 @@ if(in_msg_body.slice_bits() > 0) {
 set_seed(seed);
 var balance = get_balance().pair_first();
 if(balance > 5000 * 1000000000) {
-    ;; 禁止过大的奖池
+    ;; forbid too large jackpot
     raw_reserve( balance - 5000 * 1000000000, 0);
 }
 if(rand(10000) == 7777) { ...send reward... }
@@ -102,11 +102,11 @@ if(rand(10000) == 7777) { ...send reward... }
 ```func
 int mode = null();
 if (op == op_not_winner) {
-    mode = 64; ;; 退还剩余的支票TON
-               ;; addr_hash 对应于支票请求者
+    mode = 64; ;; Refund remaining check-TONs
+               ;; addr_hash corresponds to check requester
 } else {
-     mode = 128; ;; 颁发奖金
-                 ;; addr_hash 对应于中奖条目中的取款地址
+     mode = 128; ;; Award the prize
+                 ;; addr_hash corresponds to the withdrawal address from the winning entry
 }
 ```
 
@@ -115,12 +115,12 @@ if (op == op_not_winner) {
 ### 7. 更好的银行
 
 :::note 安全规则
-永远不要为了好玩而销毁账户。做[`raw_reserve`](/develop/func/stdlib#raw_reserve)而不是把钱发给自己。考虑可能的竞争条件。小心哈希映射的gas消耗。
+永远不要为了好玩而销毁账户。做[`raw_reserve`](/develop/func/stdlib#raw_reserve)而不是把钱发给自己。考虑可能的竞争条件。小心哈希映射的gas费用消耗。
 :::
 
 合约中存在竞争条件：你可以存入钱，然后尝试在并发消息中两次提取它。无法保证保留有资金的消息会被处理，所以银行在第二次提款后可能会关闭。之后，合约可以被重新部署，任何人都可以提取未领取的资金。
 
-### 8. Dehasher
+### 8. 驱逐者
 
 :::note 安全规则
 避免在合约中执行第三方代码。
@@ -134,9 +134,9 @@ slice safe_execute(int image, (int -> slice) dehasher) inline {
 
   slice preimage = try_execute(image, dehasher);
 
-  ;; 如果dehasher破坏了它，恢复c4
+  ;; restore c4 if dehasher spoiled it
   set_data(c4);
-  ;; 如果dehasher破坏了它们，清除操作
+  ;; clean actions if dehasher spoiled them
   set_c5(begin_cell().end_cell());
 
   return preimage;
