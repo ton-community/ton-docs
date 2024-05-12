@@ -66,6 +66,16 @@ import TabItem from '@theme/TabItem';
   </TabItem>
 </Tabs>
 
+<TabItem value="Python" label="pytoniq">
+
+```python
+from pytoniq_core.boc.address import Address, AddressError
+
+try:
+    Address(address)
+except AddressError as e:
+    print(e)
+```
 :::tip
 Full Address description on the [Smart Contract Addresses](/learn/overviews/addresses) page.
 :::
