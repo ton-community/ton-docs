@@ -26,7 +26,7 @@ git clone --recurse-submodules https://github.com/ton-blockchain/ton.git
    - `cmake` 版本 3.0.2 或更高
    - `g++` 或 `clang`（或适用于您的操作系统的另一种C++14兼容编译器）。
    - OpenSSL（包括C头文件）版本 1.1.1 或更高
-   -
+   - `build-essential`, `zlib1g-dev`, `gperf`, `libreadline-dev`, `ccache`, `libmicrohttpd-dev`, `pkg-config`, `libsodium-dev`, `libsecp256k1-dev`
 
    在Ubuntu上：
 
