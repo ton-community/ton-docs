@@ -1,6 +1,6 @@
 # 使用TypeScript
 
-## 蓝图
+## Blueprint
 
 测试工具包（通常是沙盒）已包含在名为Blueprint的TypeScript SDK中。
 
