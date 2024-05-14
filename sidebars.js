@@ -210,6 +210,7 @@ const sidebars = {
               items: [
                 'develop/smart-contracts/fees',
                 'develop/howto/fees-low-level',
+                'develop/smart-contracts/fee-calculation',
                 'develop/smart-contracts/guidelines/accept',
                 'develop/smart-contracts/guidelines/processing',
               ],
