@@ -5,9 +5,9 @@ This section describes instructions and manuals for interacting with TON at a lo
 :::
 
 :::caution
-Here you will find the formulas for calculating commissions and fees on TON.
+Here you will find the **raw formulas** for calculating commissions and fees on TON.
 
-But most of them are **already implemented through opcodes**! So, you **should use them instead of manual calculations**. After reading this section, check [fees calculation](/develop/smart-contracts/fee-calculation) to learn how to calculate fees in FunC contracts using the **new TVM opcodes**.
+However, most of them are **already implemented through opcodes**! So, you **should use these opcodes instead of manual calculations**. After reading this section, check the [fees calculation](/develop/smart-contracts/fee-calculation) to learn how to calculate fees in FunC contracts using the new TVM opcodes.
 :::
 
 This document provides a general idea of transaction fees on TON and particularly computation fees for the FunC code. There is also a [detailed specification in the TVM whitepaper](https://ton.org/tvm.pdf).
