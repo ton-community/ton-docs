@@ -22,9 +22,9 @@ npm test
 
 另一方面，这个包模拟了合约的所有阶段，因此，模拟更接近于在真实网络中发生的情况。
 
--
+- https://github.com/ton-community/sandbox
 
-###
+### ton-contract-executor
 
 :::info 已弃用
 这个库已被弃用。TON社区不再开发它。
@@ -32,7 +32,7 @@ npm test
 
 这个库允许您在本地运行TON虚拟机并执行合约。这使您能够在将它们发布到网络之前编写、调试和完全测试您的合约。
 
--
+- https://github.com/ton-community/ton-contract-executor
 
 ## 教程
 
