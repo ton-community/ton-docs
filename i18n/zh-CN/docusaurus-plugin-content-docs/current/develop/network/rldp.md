@@ -1,4 +1,4 @@
-#
+# RLDP
 
 RLDP（可靠的大数据报协议）是基于ADNL UDP之上的协议，用于传输大数据块，并包括正向错误校正（FEC）算法来替代另一端的确认包。这使得在网络组件之间更高效地传输数据成为可能，但会消耗更多的流量。
 
@@ -26,12 +26,12 @@ rldp.answer query_id:int256 data:bytes = rldp.Message;
 
 当接收方收集到组装完整消息所需的`rldp.messagePart`片段时，它会将它们全部连接起来，使用FEC解码并将结果字节数组反序列化为`rldp.query`或`rldp.answer`结构之一，取决于类型（tl前缀id）。
 
-###
+### FEC
 
 有效的正向错误校正算法用于RLDP包括RoundRobin、Online和RaptorQ。
 目前用于数据编码的是[RaptorQ](https://www.qualcomm.com/media/documents/files/raptorq-technical-overview.pdf)。
 
-####
+#### RaptorQ
 
 RaptorQ的本质是将数据分割成所谓的符号 - 同一预定大小的块。
 
@@ -42,7 +42,7 @@ RaptorQ的本质是将数据分割成所谓的符号 - 同一预定大小的块�
 
 [[RaptorQ在Golang中的实现示例]](https://github.com/xssnick/tonutils-go/tree/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/rldp/raptorq)
 
-##
+## RLDP-HTTP
 
 为了与TON Sites互动，使用了封装在RLDP中的HTTP。托管者在任何HTTP网络服务器上运行他的站点，并在旁边启动rldp-http-proxy。TON网络中的所有请求通过RLDP协议发送到代理，代理将请求重新组装为简单的HTTP，并在本地调用原始网络服务器。
 
@@ -132,9 +132,9 @@ rldp.messagePart transfer_id:int256 fec_type:fec.Type part:int total_size:long s
 
 - `transfer_id` - 随机int256，对于同一数据传输中的所有messageParts相同。
 - `fec_type`是`fec.raptorQ`。
-- -
-- -
-- -
+- - `data_size` = 156
+- - `symbol_size` = 768
+- - `symbols_count` = 1
 - `part`在我们的案例中始终为0，可用于达到大小限制的传输。
 - `total_size` = 156。我们传输数据的大小。
 - `seqno` - 对于第一个数据包将等于0，对于每个后续数据包将递增1，将用作解码和编码符号的参数。
