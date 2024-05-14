@@ -77,15 +77,17 @@ ping数据包与其他所有数据包一样，根据[上文](#packet-structure)�
 
 旨在从区块链获取信息的所有请求都包裹在[Liteserver Query](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/lite_api.tl#L83)模式中，该模式又被包裹在[ADNL Query](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/lite_api.tl#L22)模式中。
 
+LiteQuery:
+`liteServer.query data:bytes = Object`, id **df068c79**
 
-
-
+ADNLQuery:
+`adnl.message.query query_id:int256 query:bytes = adnl.Message`, id **7af98bb4**
 
 LiteQuery作为`query:bytes`传递给ADNLQuery内部，最终查询作为`data:bytes`传递给LiteQuery内部。
 
 [解析TL中的编码字节](/develop/data-formats/tl)
 
-###
+### getMasterchainInfo
 
 现在，由于我们已经知道如何为Lite API生成TL数据包，我们可以请求有关当前TON masterchain块的信息。
 masterchain区块在许多后续请求中用作输入参数，以指示我们需要信息的状态（时刻）。
@@ -148,7 +150,7 @@ ac2253594c86bd308ed631d57a63db4ab21279e9382e416128b58ee95897e164     -> sha256
 520c46d1ea4daccdf27ae21750ff4982d59a30672b3ce8674195e8a23e270d21          -> sha256
 ```
 
-###
+### runSmcMethod
 
 我们已经知道如何获取masterchain区块，所以现在我们可以调用任何轻服务器方法。
 让我们分析**runSmcMethod** - 这是一个调用智能合约中的函数并返回结果的方法。在这里，我们需要了解一些新的数据类型，如[TL-B](/develop/data-formats/tl-b)、[Cell](/develop/data-formats/cell-boc#cell)和[BoC](/develop/data-formats/cell-boc#bag-of-cells)。
@@ -253,7 +255,7 @@ vm_stk_cons#_ {n:#} rest:^(VmStackList n) tos:VmStackValue = VmStackList (n + 1)
 
 [实现示例](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/ton/runmethod.go#L24)
 
-###
+### getAccountState
 
 要获取账户状态数据，如余额、代码和合约数据，我们可以使用[getAccountState](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/lite_api.tl#L68)。请求需要一个[最新的主链块](#getmasterchaininfo)和账户地址。响应中，我们将接收到TL结构[AccountState](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/lite_api.tl#L38)。
 
@@ -280,6 +282,7 @@ b5ee9c720102350100051e000277c0021137b0bc47669b3267f1de70cbb0cef5c728b8d8c7890451
 [解析此BoC](/develop/data-formats/cell-boc#bag-of-cells)并获取
 
 <details>
+  <summary>large cell</summary>
 
 ```json
 473[C0021137B0BC47669B3267F1DE70CBB0CEF5C728B8D8C7890451E8613B2D899827026A886043179D3F6000006E233BE8722201D7D239DBA7D818130_] -> {
