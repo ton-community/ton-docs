@@ -7,7 +7,7 @@
 - 在大多数情况下，使用Blueprint SDK就足够了。
 - 如果您需要更低级别的方法，可以使用ton-compiler或func-js。
 
-##
+## Blueprint
 
 ### 概览
 
@@ -21,7 +21,7 @@ TON区块链的开发环境，用于编写、测试和部署智能合约。在[B
 npm create ton@latest
 ```
 
-
+&nbsp;
 
 ### 特点
 
@@ -45,7 +45,7 @@ npm create ton@latest
 - [观看DoraHacks演示，了解使用blueprint的演示](https://www.youtube.com/watch?v=5ROXVM-Fojo)。
 - 在[Blueprint库](https://github.com/ton-community/blueprint#create-a-new-project)中阅读详细的说明。
 
-##
+## ton-compiler
 
 ### 概览
 
@@ -107,7 +107,7 @@ if (result.ok) {
 }
 ```
 
-##
+## func-js
 
 ### 概览
 
