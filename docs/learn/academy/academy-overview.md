@@ -1,12 +1,13 @@
 # Educational Resources
 
+### TON Speedrun
 
-## TON Blockchain Course
+* [TON Speedrun](https://tonspeedrun.com/) - A specialized platform designed for a practical approach to learning in TON development.
 
-:::danger
-Page under the development.
-:::
+### Courses
 
+* [Blockchain Basics with TON](https://stepik.org/course/201294/promo) - 
+This course introduces blockchain basics, with a special focus on practical skills in the TON ecosystem. You will understand how blockchain functions and its diverse applications.
 
 ## See Also
 
