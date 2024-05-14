@@ -319,7 +319,7 @@ bcd1cf47b9e657200ba21d94b822052cf553a548f51f539423c8139a83162180 -- ID of encryp
 
 对于基本通信，使用像`adnl.message.query`和`adnl.message.answer`这样的消息，我们在上面讨论了，但对于某些情况，也使用其他类型的消息，我们将在本节中讨论。
 
-###
+### adnl.message.part
 
 此消息类型是其他可能消息类型的一部分，例如`adnl.message.answer`。当消息太大而无法通过单个UDP数据报传输时，使用此传输数据的方法。
 
@@ -335,7 +335,7 @@ data:bytes             -- piece of data of the original message
 因此，为了组装原始消息，我们需要获取几个部分，并根据偏移量将它们连接成一个字节数组。
 然后将其作为消息处理（根据这个字节数组中的ID前缀）。
 
-###
+### adnl.message.custom
 
 ```tlb
 adnl.message.custom data:bytes = adnl.Message;
