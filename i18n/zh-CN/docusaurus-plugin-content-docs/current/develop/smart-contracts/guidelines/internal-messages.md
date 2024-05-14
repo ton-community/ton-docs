@@ -83,8 +83,9 @@ root_cell("0x00000000" - 32 bit, "string" up to 123 bytes)
 :::info
 Learn from examples of the message encryption algorithm:
 
--
--
+- [encryption.js](https://github.com/toncenter/ton-wallet/blob/master/src/js/util/encryption.js)
+- [SimpleEncryption.cpp](https://github.com/ton-blockchain/ton/blob/master/tonlib/tonlib/keys/SimpleEncryption.cpp)
+  :::
 
 ### 不带评论的简单转移消息
 
