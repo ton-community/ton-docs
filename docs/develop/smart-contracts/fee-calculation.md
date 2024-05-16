@@ -1,21 +1,15 @@
 # Fees Calculation
 
-:::caution
-Read [theoretical `storage fee` explanation](/develop/howto/fees-low-level#storage-fee) before proceeding.
-:::
-
-When your contract starts processing an incoming message, you should check the amount of TONs attached to the message to ensure they are enough to cover the fees. To do this, you need to calculate (or predict) the fee for the current transaction.
+When your contract starts processing an incoming message, you should check the amount of TONs attached to the message to ensure they are enough to cover [all types of fees](/develop/smart-contracts/fees#elements-of-transaction-fee). To do this, you need to calculate (or predict) the fee for the current transaction.
 
 This document describes how to calculate fees in FunC contracts using the new TVM opcodes.
 
 :::info More information on opcodes
-If you don't know what a FunC opcode is, check the [function doc page](/develop/func/functions).
-
 For a comprehensive list of TVM opcodes, including those mentioned below, check the [TVM instruction page](/learn/tvm-instructions/instructions).
 :::
 
 :::info
-All functions with the opcodes described below are presented in the [stdlib](/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) library.
+Most functions with the opcodes described below are presented in the [stdlib](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) library. If your contract use previous version of stdlib.fc, you can add functions with required opcodes manually.
 :::
 
 ## Storage Fee
@@ -52,19 +46,16 @@ int calculate_storage_fee(int balance, int msg_value, int workchain, int seconds
 
 This way, you can check if the contract has enough balance to be stored for the `seconds` time before the next message arrives.
 
-## Gas Fee (Computation Cost)
+## Computation Fee
 
 ### Overview
 
-Generally, there are two cases of gas fee processing:
-- **If it's impossible to predict gas usage** (similar to the third case of [forward fee calculation](/develop/smart-contracts/fee-calculation#forward-fee), which you should read if you want to use this opcode), there is the `GASCONSUMED` opcode. Use it with `SENDMSG` as described below in the forward fee calculation section. **Please, do not use `GASCONSUMED` unless necessary**.
+In most cases use the `GETGASFEE` opcode with the following parameters:
 
-- Otherwise (in most cases), use the `GETGASFEE` opcode with the following parameters:
-
-  | Param      | Description                                      |
-      |:-----------|:-------------------------------------------------|
-  | `gas_used` | Gas amount, calculated in tests and hardcoded    |
-  | `is_mc`    | True if the source or destination is in the masterchain |
+| Param      | Description                                             |
+|:-----------|:--------------------------------------------------------|
+| `gas_used` | Gas amount, calculated in tests and hardcoded           |
+| `is_mc`    | True if the source or destination is in the masterchain |
 
 ### Calculation Flow
 
@@ -124,6 +115,15 @@ const transferTx = findTransactionRequired(sendResult.transactions, {
     success: true
 });
 
+let computedGeneric: (transaction: Transaction) => TransactionComputeVm;
+computedGeneric = (transaction) => {
+  if(transaction.description.type !== "generic")
+    throw("Expected generic transactionaction");
+  if(transaction.description.computePhase.type !== "vm")
+    throw("Compute phase expected")
+  return transaction.description.computePhase;
+}
+
 let printTxGasStats: (name: string, trans: Transaction) => bigint;
 printTxGasStats = (name, transaction) => {
     const txComputed = computedGeneric(transaction);
@@ -133,7 +133,6 @@ printTxGasStats = (name, transaction) => {
 }
 
 send_gas_fee = printTxGasStats("Jetton transfer", transferTx);
-send_gas_fee = computeGasFee(gasPrices, 9255n);
 ```
 
 ## Forward Fee
@@ -172,7 +171,22 @@ If even `GETORIGINALFWDFEE` can't be used, there is one more option. **It is the
 | cells      | Number of cells |
 | mode       | Message mode |
 
-It creates an output action and returns a fee for creating a message.
+It creates an output action and returns a fee for creating a message. However, it uses an unpredictable amount of gas, which can't be calculated using formulas, so how can it be calculated? Use `GASCONSUMED`:
+
+```func
+int send_message(cell msg, int mode) impure asm "SENDMSG";
+int gas_consumed() asm "GASCONSUMED";
+;; ... some code ...
+
+() calculate_forward_fee(cell msg, int mode) inline {
+  int gas_before = gas_consumed();
+  int forward_fee = send_message(msg, mode);
+  int gas_usage = gas_consumed() - gas_before;
+  
+  ;; forward fee -- fee value
+  ;; gas_usage -- amount of gas, used to send msg
+}
+```
 
 ## See Also
 - [Stablecoin contract with fees calculation](https://github.com/ton-blockchain/stablecoin-contract)
