@@ -3,6 +3,9 @@ import TabItem from '@theme/TabItem';
 
 # Full Node
 
+:::caution MyTonCtrl requires terminal restarting
+if you get error without visible reason, ***like [Validator is not settings](/participate/run-nodes/nodes-troubleshooting#validator-console-is-not-settings) even from owner***, try to restart terminal
+:::
 
 :::caution Node usage on personal local machine
 You shouldn't run any type of node on your personal local machine for long, even if it is satisfy the requirements. Nodes actively use disks and can damage them fast.
@@ -149,6 +152,23 @@ Otherwise, [check troubleshooting section](/participate/run-nodes/full-node#stat
 :::
 
 Wait until `Local validator out of sync` becomes less than 20 seconds.
+
+### Uninstall mytonctrl
+
+Download script and run it:
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/uninstall.sh
+sudo bash uninstall
+```
+
+### Check mytonctrl owner
+
+Run:
+
+```bash
+ls -lh /var/ton-work/keys/
+```
 
 ## Tips & Tricks
 
