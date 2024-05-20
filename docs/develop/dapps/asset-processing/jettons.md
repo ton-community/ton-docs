@@ -409,8 +409,8 @@ to the specified centralized address with the obligatory memo in the comment.
 
 Tonweb examples:
 
-1. [Accepting Jetton deposits to an individual HOT wallet with comments (memo)](https://github.com/toncenter/examples/blob/main/deposits-jettons-single-wallet.js)
-2. [Jettons withdrawals example](https://github.com/toncenter/examples/blob/main/jettons-withdrawals.js)
+1. [Accepting Jetton deposits to an individual HOT wallet with comments (memo)](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
+2. [Jettons withdrawals example](https://github.com/toncenter/examples/blob/main/withdrawals-jettons.js)
 
 #### Preparations
 

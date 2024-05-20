@@ -4,7 +4,7 @@
 
 测试工具包（通常是沙盒）已经包含在名为Blueprint的TypeScript SDK中。
 
-- [了解更多关于Blueprint](develop/smart-contracts/sdk/javascript)
+- [了解更多关于Blueprint](/develop/smart-contracts/sdk/javascript)
 
 使用以下命令一行运行测试：
 

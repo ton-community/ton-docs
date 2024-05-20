@@ -4,7 +4,7 @@
 
 Testing toolkit (usually, sandbox) already included to TypeScript SDK named Blueprint.
 
-- [Read more about Blueprint](develop/smart-contracts/sdk/javascript)
+- [Read more about Blueprint](/develop/smart-contracts/sdk/javascript)
 
 Run tests in one line using:
 

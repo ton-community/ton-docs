@@ -608,7 +608,7 @@ This error means that requested account doesn't exist in current state. That mea
 ```
 Cannot apply external message to current state : External message was not accepted
 ```
-This error means that contract didn't accepted external message. You need to find exitcode in trace. -13 means that account doesn't have enough TON to accept message (or it requires more than gas_credit). In case of wallet contracts exitcode=33 means wrong seqno (probably seqno data you use is outdatd), exitcode=34 means wrong subwallet_id (for old wallets v1/v2 it means wrong signature), exitcode=35 means that either message is expired or signature is wrong.
+This error means that contract didn't accepted external message. You need to find exitcode in trace. -13 means that account doesn't have enough TON to accept message (or it requires more than gas_credit). In case of wallet contracts exitcode=33 means wrong seqno (probably seqno data you use is outdatd), exitcode=34 means wrong subwallet_id (for old wallets v1/v2 it means wrong signature), exitcode=35 means that either message is expired (wallets v1-v3) or signature is wrong (v4r2), exitcode=36 means message is expired (usually it means that system time is incorrect).
 
 ### What does Error 651 mean?
 
