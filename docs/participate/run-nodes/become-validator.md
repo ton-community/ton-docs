@@ -30,10 +30,10 @@ During the installation of **mytonctrl**, the **validator_wallet_001** wallet is
 2. Use the `vas` command to display the history of transfers:
 
     ```sh
-    vas
+    vas [wallet name]
     ```
 
-3. Activate the wallet using the `aw` command
+3. Activate the wallet using the `aw` command (`wallet name` is optional, if no arguments provided it will activate all available)
 
     ```sh
     aw [wallet name]

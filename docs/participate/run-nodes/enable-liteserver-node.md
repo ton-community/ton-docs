@@ -100,16 +100,16 @@ sudo ufw allow ssh
 sudo ufw allow <port>
 ```
 
-4. Check the firewall status. After running this command, you can verify that the rules have been added successfully by checking the UFW status:
-
-```bash
-sudo ufw status
-```
-
-5. Enable the firewall:
+4. Enable the firewall:
 
 ```bash
 sudo ufw enable
+```
+
+5. Check the firewall status:
+
+```bash
+sudo ufw status
 ```
 
 This way, you can open the port in the firewall settings of your server.
