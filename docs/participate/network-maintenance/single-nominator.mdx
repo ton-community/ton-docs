@@ -1,10 +1,14 @@
 # Single Nominator Pool
 
-## Using mytonctrl
+[Single Nominator](https://github.com/orbs-network/single-nominator) is a new TON smart contract that enables secure validation for TON blockchain via an air gapped cold wallet.The contract is designed for TON validators that have enough self stake to validate by themselves without relying on third-party nominators.
+
+The contract provides an alternative simplified implementation for the core team’s Nominator Pool smart contract that supports a single nominator only. The benefit of this implementation is that it's more secure since the attack surface is considerably smaller. This is due to a massive reduction in complexity of the Nominator Pool that has to support multiple third-party nominators.
+
+## Start using mytonctrl
 
 Currently [mytonctrl](https://github.com/ton-blockchain/mytonctrl) supports `single_nominator` contracts, but firstly you need to install mytonctrl 2.0.
 
-### mytonctrl 2.0
+### Launch mytonctrl 2.0
 
 If you already have installed mytonctrl just use command `update mytonctrl2`. If you have no mytonctrl installed, follow these steps:
 
@@ -46,7 +50,7 @@ MyTonCtrl> activate_single_pool <pool-name>
 
 Now you can work with this pool via mytonctrl like with a standard nominator pool.
 
-## Without mytonctrl
+## Start without mytonctrl
 
 #### Prepare launched Validator
 
@@ -60,10 +64,11 @@ Now you can work with this pool via mytonctrl like with a standard nominator poo
    2. Stop validation and withdraw all funds.
 
 
-## Prepare single_nominator
+### Prepare Single Nominator
 
 
 1. Install [nodejs](https://nodejs.org/en) v.16 and later and npm  ([detailed instructions](https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions))
+
 2. Install `ts-node` and `arg` module
 
 ```bash
@@ -71,8 +76,7 @@ $ sudo apt install ts-node
 $ sudo npm i arg -g
 ```
 
-
-4. Create symlinks:
+4. Create symlinks for compilers:
 
 ```bash
 $ sudo ln -s /usr/bin/ton/crypto/fift /usr/local/bin/fift
@@ -87,9 +91,7 @@ $ npm run test
 
 6. Replace mytonctrl nominator-pool scripts: https://raw.githubusercontent.com/orbs-network/single-nominator/main/mytonctrl-scripts/install-pool-scripts.sh
 
-
-
-## Create single_nominator Pool
+### Create Single Nominator Pool
 
 1. Get Toncenter API key from a Telegram [@tonapibot](https://t.me/tonapibot)
 2. Set env variables:
@@ -127,9 +129,9 @@ $ fift -s ./scripts/fift/str-to-addr.fif Ef-kC0..._WLqgs
 7. Copy "single-nominator.addr" to "mytoncore/pools/single-nominator-1.addr"
 8. Send stake from owner address to single nominator address
 
-## Withdrawals from Single Nominator
+### Withdrawals from Single Nominator
 
-Using wallets to withdraw from single_nominator
+Using wallets to withdraw from Single Nominator
 Fift:
 
 1. Create "withdraw.boc" request with amount:
