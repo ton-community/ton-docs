@@ -1,6 +1,6 @@
 # POW Givers
 
-:::warning deprecated
+:::warning 已弃用
 此信息可能已过时，不再有用。您可以随意忽略它。
 :::
 
@@ -14,29 +14,29 @@
 
 小额赠予者（每几分钟提供10至100 Toncoin）：
 
-* kf-kkdY_B7p-77TLn2hUhM6QidWrrsl8FYWCIvBMpZKprBtN
-* kf8SYc83pm5JkGt0p3TQRkuiM58O9Cr3waUtR9OoFq716lN-
-* kf-FV4QTxLl-7Ct3E6MqOtMt-RGXMxi27g4I645lw6MTWraV
-* kf_NSzfDJI1A3rOM0GQm7xsoUXHTgmdhN5-OrGD8uwL2JMvQ
-* kf8gf1PQy4u2kURl-Gz4LbS29eaN4sVdrVQkPO-JL80VhOe6
-* kf8kO6K6Qh6YM4ddjRYYlvVAK7IgyW8Zet-4ZvNrVsmQ4EOF
-* kf-P_TOdwcCh0AXHhBpICDMxStxHenWdLCDLNH5QcNpwMHJ8
-* kf91o4NNTryJ-Cw3sDGt9OTiafmETdVFUMvylQdFPoOxIsLm
-* kf9iWhwk9GwAXjtwKG-vN7rmXT3hLIT23RBY6KhVaynRrIK7
-* kf8JfFUEJhhpRW80_jqD7zzQteH6EBHOzxiOhygRhBdt4z2N
+- kf-kkdY_B7p-77TLn2hUhM6QidWrrsl8FYWCIvBMpZKprBtN
+- kf8SYc83pm5JkGt0p3TQRkuiM58O9Cr3waUtR9OoFq716lN-
+- kf-FV4QTxLl-7Ct3E6MqOtMt-RGXMxi27g4I645lw6MTWraV
+- kf_NSzfDJI1A3rOM0GQm7xsoUXHTgmdhN5-OrGD8uwL2JMvQ
+- kf8gf1PQy4u2kURl-Gz4LbS29eaN4sVdrVQkPO-JL80VhOe6
+- kf8kO6K6Qh6YM4ddjRYYlvVAK7IgyW8Zet-4ZvNrVsmQ4EOF
+- kf-P_TOdwcCh0AXHhBpICDMxStxHenWdLCDLNH5QcNpwMHJ8
+- kf91o4NNTryJ-Cw3sDGt9OTiafmETdVFUMvylQdFPoOxIsLm
+- kf9iWhwk9GwAXjtwKG-vN7rmXT3hLIT23RBY6KhVaynRrIK7
+- kf8JfFUEJhhpRW80_jqD7zzQteH6EBHOzxiOhygRhBdt4z2N
 
 大额赠予者（每天至少提供10,000 Toncoin）：
 
-* kf8guqdIbY6kpMykR8WFeVGbZcP2iuBagXfnQuq0rGrxgE04
-* kf9CxReRyaGj0vpSH0gRZkOAitm_yDHvgiMGtmvG-ZTirrMC
-* kf-WXA4CX4lqyVlN4qItlQSWPFIy00NvO2BAydgC4CTeIUme
-* kf8yF4oXfIj7BZgkqXM6VsmDEgCqWVSKECO1pC0LXWl399Vx
-* kf9nNY69S3_heBBSUtpHRhIzjjqY0ChugeqbWcQGtGj-gQxO
-* kf_wUXx-l1Ehw0kfQRgFtWKO07B6WhSqcUQZNyh4Jmj8R4zL
-* kf_6keW5RniwNQYeq3DNWGcohKOwI85p-V2MsPk4v23tyO3I
-* kf_NSPpF4ZQ7mrPylwk-8XQQ1qFD5evLnx5_oZVNywzOjSfh
-* kf-uNWj4JmTJefr7IfjBSYQhFbd3JqtQ6cxuNIsJqDQ8SiEA
-* kf8mO4l6ZB_eaMn1OqjLRrrkiBcSt7kYTvJC_dzJLdpEDKxn
+- kf8guqdIbY6kpMykR8WFeVGbZcP2iuBagXfnQuq0rGrxgE04
+- kf9CxReRyaGj0vpSH0gRZkOAitm_yDHvgiMGtmvG-ZTirrMC
+- kf-WXA4CX4lqyVlN4qItlQSWPFIy00NvO2BAydgC4CTeIUme
+- kf8yF4oXfIj7BZgkqXM6VsmDEgCqWVSKECO1pC0LXWl399Vx
+- kf9nNY69S3_heBBSUtpHRhIzjjqY0ChugeqbWcQGtGj-gQxO
+- kf_wUXx-l1Ehw0kfQRgFtWKO07B6WhSqcUQZNyh4Jmj8R4zL
+- kf_6keW5RniwNQYeq3DNWGcohKOwI85p-V2MsPk4v23tyO3I
+- kf_NSPpF4ZQ7mrPylwk-8XQQ1qFD5evLnx5_oZVNywzOjSfh
+- kf-uNWj4JmTJefr7IfjBSYQhFbd3JqtQ6cxuNIsJqDQ8SiEA
+- kf8mO4l6ZB_eaMn1OqjLRrrkiBcSt7kYTvJC_dzJLdpEDKxn
 
 > 请注意，目前所有大额赠予者已被耗尽。
 
@@ -58,7 +58,7 @@
 
 在轻客户端控制台中，并获得像这样的输出：
 
-``` ...
+```...
     arguments:  [ 101616 ] 
     result:  [ 229760179690128740373110445116482216837 53919893334301279589334030174039261347274288845081144962207220498432 100000000000 256 ] 
     remote result (not to be trusted):  [ 229760179690128740373110445116482216837 53919893334301279589334030174039261347274288845081144962207220498432 100000000000 256 ]
@@ -73,12 +73,13 @@ $ crypto/pow-miner -vv -w<num-threads> -t<timeout-in-sec> <your-wallet-address> 
 ```
 
 这里：
-* `<num-threads>`是您希望用于挖矿的CPU核心数量。
-* `<timeout-in-sec>`是矿工运行失败前的最长秒数。
-* `<your-wallet-address>`是您的钱包地址（可能尚未初始化）。它要么在主链上，要么在工作链上（请注意，您需要一个主链钱包来控制验证者）。
-* `<seed>`和`<complexity>`是通过运行get方法`get-pow-params`获得的最新值。
-* `<pow-giver-address>`是所选proof-of-work giver智能合约的地址。
-* `<boc-filename>`是成功时保存工作量证明的外部消息的输出文件的文件名。
+
+- `<num-threads>`是您希望用于挖矿的CPU核心数量。
+- `<timeout-in-sec>`是矿工运行失败前的最长秒数。
+- `<your-wallet-address>`是您的钱包地址（可能尚未初始化）。它要么在主链上，要么在工作链上（请注意，您需要一个主链钱包来控制验证者）。
+- `<seed>`和`<complexity>`是通过运行get方法`get-pow-params`获得的最新值。
+- `<pow-giver-address>`是所选proof-of-work giver智能合约的地址。
+- `<boc-filename>`是成功时保存工作量证明的外部消息的输出文件的文件名。
 
 例如，如果您的钱包地址是`kQBWkNKqzCAwA9vjMwRmg7aY75Rf8lByPA9zKXoqGkHi8SM7`，您可能会运行：
 
@@ -118,6 +119,7 @@ $ crypto/pow-miner -vv -w7 -t100 kQBWkNKqzCAwA9vjMwRmg7aY75Rf8lByPA9zKXoqGkHi8SM
 :::info
 请注意，在此处和以下的代码、注释和/或文档中可能包含“gram”、“nanogram”等参数、方法和定义。这是原始TON代码的遗产，由Telegram开发。Gram加密货币从未发行。TON的货币是Toncoin，TON测试网的代币是Test Toncoin。
 :::
+
 ```
 > last
 > getaccount kQBWkNKqzCAwA9vjMwRmg7aY75Rf8lByPA9zKXoqGkHi8SM7
