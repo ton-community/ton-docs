@@ -4,13 +4,13 @@ Telegram Mini Apps (TMA) are web applications that run inside the Telegram messe
 
 ## Create your App
 
-1. To connect your Mini App to the Telegram, place the SDK script `telegram-web-app.js` using this code:
+1. To connect your Mini App to Telegram, place the SDK script `telegram-web-app.js` using this code:
 
 ```html
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 ```
 :::tip
-It's preferable to switch off cache in the HTML. To ensure your cache switched off, specify headers in your request according the following:
+It's preferable to switch off cache in the HTML. To ensure your cache is switched off, specify headers in your request according to the following:
 
 ```curl
 Cache-Control: no-store, must-revalidate
@@ -19,7 +19,7 @@ Expires: 0
 ```
 :::
 
-2. Once the script is connected, a **[window.Telegram.WebApp](https://core.telegram.org/bots/webapps#initializing-web-apps)** object become available. You can read more about creating Mini App utilising [`telegram-web-app.js`](https://docs.ton.org/develop/dapps/telegram-apps/app-examples#basic-twa-example) here.
+2. Once the script is connected, a **[window.Telegram.WebApp](https://core.telegram.org/bots/webapps#initializing-web-apps)** object becomes available. You can read more about creating Mini App utilizing [`telegram-web-app.js`](https://docs.ton.org/develop/dapps/telegram-apps/app-examples#basic-twa-example) here.
 
 3. The modern way to connect SDK is npm package for Telegram Mini Apps SDK:
 
@@ -27,13 +27,13 @@ Expires: 0
 npm i @twa-dev/sdk
 ```
 
-You can find guide for [`@twa-dev/sdk`](https://docs.ton.org/develop/dapps/telegram-apps/app-examples#modern-twa-example ) here.
+You can find a guide for [`@twa-dev/sdk`](https://docs.ton.org/develop/dapps/telegram-apps/app-examples#modern-twa-example ) here.
 
 5. When your Mini App is ready and deployed to the web server, follow to the next step.
 
 ## Setting Up a Bot for the App
 
-To connect your Mini App to the Telegram, you need to create a bot and set up a Mini App for it. Follow these steps to set up a new Telegram bot:
+To connect your Mini App to Telegram, you need to create a bot and set up a Mini App for it. Follow these steps to set up a new Telegram bot:
 
 ### 1. Start a Chat with BotFather
 

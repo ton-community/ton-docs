@@ -219,6 +219,8 @@ const sidebars = {
               label: 'Security Measures',
               items: [
                 'develop/smart-contracts/security/README',
+                'develop/smart-contracts/security/secure-programming',
+                'develop/smart-contracts/security/things-to-focus',
                 'develop/smart-contracts/security/ton-hack-challenge-1',
                 'develop/smart-contracts/guidelines/random-number-generation',
                 'develop/smart-contracts/security/random',
