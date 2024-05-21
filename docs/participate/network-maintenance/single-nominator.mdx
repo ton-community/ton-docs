@@ -34,15 +34,23 @@ After you have created and activated validator's wallet, follow these steps:
 MyTonCtrl> enable_mode single-nominator
 ```
 
-2. Create pool
+2. Check if single-nominator mode is enabled.
+
+```bash
+MyTonCtrl> status_modes
+Name              Status             Description                                                                                                                                                                                                                                     
+single-nominator  enabled   Orbs's single nominator pools.                                                                                                            
+```
+
+3. Create pool
 
 ```bash
 MyTonCtrl> new_single_pool <pool-name> <owner_address>
 ```
 
-3. Type `pools_list` to display pool addresses
+4. Type `pools_list` to display pool addresses
 
-4. Send 1 TON to the pool and activate it
+5. Send 1 TON to the pool and activate it
 
 ```bash
 MyTonCtrl> activate_single_pool <pool-name>
@@ -186,8 +194,12 @@ d. Open deeplink on the owner's phone
 
 If user doesn't want to take part in validating anymore it's possible to withdraws the funds from the Single Nominator contract to validators personal wallet.
 
+## Get pool info
 
-## Check status
+```bash
+MyTonCtrl> get_pool_data <pool-name | pool-addr>                                                                                                          
+```
+
 ## Deposit pool
 
 
