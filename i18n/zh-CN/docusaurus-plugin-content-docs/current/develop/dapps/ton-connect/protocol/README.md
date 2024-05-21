@@ -10,11 +10,11 @@
 
 ## 部分概述
 
-* [协议工作流程](/develop/dapps/ton-connect/protocol/workflow) 是 TON Connect 涉及所有协议的概述。
-* [桥接 API](/develop/dapps/ton-connect/protocol/bridge) 指定了数据如何在应用和钱包之间传输。
-* [会话协议](/develop/dapps/ton-connect/protocol/session) 确保在桥接上进行端到端加密通信。
-* [请求协议](/develop/dapps/ton-connect/protocol/requests-responses) 为应用和钱包定义了请求和响应。
-* [钱包指南](/develop/dapps/ton-connect/protocol/wallet-guidelines) 为钱包开发者定义了指南。
+- [协议工作流程](/develop/dapps/ton-connect/protocol/workflow) 是 TON Connect 涉及所有协议的概述。
+- [桥接 API](/develop/dapps/ton-connect/protocol/bridge) 指定了数据如何在应用和钱包之间传输。
+- [会话协议](/develop/dapps/ton-connect/protocol/session) 确保在桥接上进行端到端加密通信。
+- [请求协议](/develop/dapps/ton-connect/protocol/requests-responses) 为应用和钱包定义了请求和响应。
+- [钱包指南](/develop/dapps/ton-connect/protocol/wallet-guidelines) 为钱包开发者定义了指南。
 
 ## 常见问题解答
 
@@ -28,7 +28,7 @@
 
 #### 如何检测应用是否嵌入在钱包中？
 
-JS SDK 为你做了这件事; 只需获取钱包列表 `connector.getWallets()` 并检查相应列表项的 `embedded` 属性。如果你构建自己的 SDK，你应该检查 `window.[targetWalletJsBridgeKey].tonconnect.isWalletBrowser`。
+JS SDK 为开发者做了这件事; 只需获取钱包列表 `connector.getWallets()` 并检查相应列表项的 `embedded` 属性。如果你构建自己的 SDK，你应该检查 `window.[targetWalletJsBridgeKey].tonconnect.isWalletBrowser`。
 
 #### 如何检测钱包是否为浏览器扩展？
 
