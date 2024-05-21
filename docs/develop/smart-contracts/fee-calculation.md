@@ -9,7 +9,7 @@ For a comprehensive list of TVM opcodes, including those mentioned below, check 
 :::
 
 :::info
-Most functions with the opcodes described below are presented in the [stdlib](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) library. If your contract use previous version of stdlib.fc, you can add functions with required opcodes manually.
+Almost all FunC functions used in this article are defined in [stablecoin stdlib.fc contract](https://github.com/ton-blockchain/stablecoin-contract). Actually, stdlib.fc with new opcodes is currently **under development** and **not yet presented on the mainnet repos**, but you can use `stdlib.fc` from [stablecoin](https://github.com/ton-blockchain/ton) source code as reference.
 :::
 
 ## Storage Fee
@@ -70,6 +70,8 @@ To calculate `gas_used`, you should write a test for your contract that:
 1. Makes a transfer.
 2. Checks if it's successful and retrieves the transfer info.
 3. Checks the actual amount of gas used by that transfer for computation.
+
+Contract computation flow can depend on input data. You should run contract in that way to use as much gas as possible. Make sure that you are using the most expensive compute way to compute contract
 
 ```ts
 // Just Init code
