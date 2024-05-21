@@ -16,11 +16,11 @@
 
 在TON上运行的智能合约地址通常包含两个主要组成部分：
 
-* **(workchain_id)**：代表工作链ID（一个有符号的32位整数）
+- **(workchain_id)**：代表工作链ID（一个有符号的32位整数）
 
-* **(account_id)** 代表账户的地址（根据工作链不同，为64-512位，）
+- **(account_id)** 代表账户的地址（根据工作链不同，为64-512位，）
 
-在本文档的原始地址概述部分，我们将讨论**(workchain_id, account_id)** 是如何呈现。
+在本文档的原始地址概述部分，我们将讨论\*\*(workchain_id, account_id)\*\* 是如何呈现。
 
 ### 工作链ID和账户ID
 
@@ -38,10 +38,10 @@ TON的所有账户ID都在主链和基本链（或基本工作链）上使用256
 
 实际上，账户ID **(account_id)** 被定义为智能合约对象的哈希函数（专指SHA-256）。每个在TON区块链上运行的智能合约都存储两个主要组件。这些包括：
 
-1. _编译后的代码_。智能合约的逻辑以字节码形式编译。
-2. _初始状态_。合约在链上部署时的值。
+1. *编译后的代码*。智能合约的逻辑以字节码形式编译。
+2. *初始状态*。合约在链上部署时的值。
 
-最后，为了准确地推导出合约的地址，需要计算与**（初始代码，初始状态）** 对象相对应的哈希。目前，我们不会深入研究[TVM](/learn/tvm-instructions/tvm-overview)的工作方式，但重要的是要理解TON上的账户ID是使用这个公式确定的：
+最后，为了准确地推导出合约的地址，需要计算与\*\*（初始代码，初始状态）\*\* 对象相对应的哈希。目前，我们不会深入研究[TVM](/learn/tvm-instructions/tvm-overview)的工作方式，但重要的是要理解TON上的账户ID是使用这个公式确定的：
 :
 **account_id = hash（初始代码，初始状态）**
 
@@ -51,16 +51,16 @@ TON的所有账户ID都在主链和基本链（或基本工作链）上使用256
 
 在简要概述了TON上的智能合约地址是如何利用工作链和账户ID（特别是对于主链和基本链）之后，那重要的是要理解这些地址以下面两种主要格式表示：
 
-* **原始地址**：智能合约地址的原始完整表示。
-* **用户友好地址**：用户友好地址是原始地址的增强格式，有更好的安全性和易用性。
+- **原始地址**：智能合约地址的原始完整表示。
+- **用户友好地址**：用户友好地址是原始地址的增强格式，有更好的安全性和易用性。
 
 以下，我们将更详细地解释这两种地址类型的区别，并深入探讨TON上使用用户友好地址的原因。
 
 ### 原始地址
 
-原始智能合约地址由工作链ID和账户ID组成*(workchain_id, account_id)*，并以以下格式显示：
+原始智能合约地址由工作链ID和账户ID组成\*(workchain_id, account_id)\*，并以以下格式显示：
 
-* [十进制workchain_id\]：[64个十六进制数字的account_id\]
+- [十进制workchain_id\]：[64个十六进制数字的account_id\]
 
 以下是一个使用工作链ID和账户ID的原始智能合约地址示例（表示为**workchain_id**和**account_id**）：
 
@@ -89,23 +89,24 @@ TON的所有账户ID都在主链和基本链（或基本工作链）上使用256
 
 用户友好地址总共由36个字节组成，按顺序生成以下组件：
 
-1. _[标志位 - 1字节]_ — 附加到地址的标志位会改变智能合约对收到的消息的反应。
+1. *[标志位 - 1字节]* — 附加到地址的标志位会改变智能合约对收到的消息的反应。
    使用用户友好地址格式的标志位类型包括：
 
-   - isBounceable。表示可弹回或不可弹回的地址类型。(_0x11_ 表示“可弹回”，_0x51_ 表示“不可弹回”)
+   - isBounceable。表示可弹回或不可弹回的地址类型。(*0x11* 表示“可弹回”，*0x51* 表示“不可弹回”)
    - isTestnetOnly。表示仅用于测试网的地址类型。以_0x80_ 开头的地址不应被生产网络上运行的软件接受
    - isUrlSafe。表示已定义为地址的URL安全的已弃用标志位。所有地址都被认为是URL安全的。
-2. _\[workchain_id - 1字节]_ — 工作链ID (_workchain_id_) 由一个有符号的8位整数 _workchain_id_ 定义。  
-(_0x00_ 表示基本链，_0xff_ 表示主链)
-3. _\[account_id - 32字节]_ — 账户ID由工作链中的256位（[大端序](https://www.freecodecamp.org/news/what-is-endianness-大端-vs-little-endian/)）地址组成。
-4. _\[地址验证 - 2字节]_ — 在用户友好地址中，地址验证由前34个字节的CRC16-CCITT签名组成。([示例](https://github.com/andreypfau/ton-kotlin/blob/ce9595ec9e2ad0eb311351c8a270ef1bd2f4363e/ton-kotlin-crypto/common/src/crc32.kt))
+2. *\[workchain_id - 1字节]* — 工作链ID (*workchain_id*) 由一个有符号的8位整数 *workchain_id* 定义。\
+   (*0x00* 表示基本链，*0xff* 表示主链)
+3. *\[account_id - 32字节]* — 账户ID由工作链中的256位（[大端序](https://www.freecodecamp.org/news/what-is-endianness-大端-vs-little-endian/)）地址组成。
+4. *\[地址验证 - 2字节]* — 在用户友好地址中，地址验证由前34个字节的CRC16-CCITT签名组成。([示例](https://github.com/andreypfau/ton-kotlin/blob/ce9595ec9e2ad0eb311351c8a270ef1bd2f4363e/ton-kotlin-crypto/common/src/crc32.kt))
    实际上，用户友好地址的验证思想与所有信用卡上使用的[Luhn算法](https://en.wikipedia.org/wiki/Luhn_algorithm)类似，以防止用户错误输入不存在的卡号。
 
 这4个主要组件的总计`1 + 1 + 32 + 2 = 36`字节（每个用户友好地址）。
 
 要生成用户友好地址，开发者必须使用以下方式对所有36个字节进行编码：
-- _base64_（即数字、大小写拉丁字母、'/' 和 '+'）
-- _base64url_（用 '_' 和 '-' 代替 '/' 和 '+'）
+
+- *base64*（即数字、大小写拉丁字母、'/' 和 '+'）
+- *base64url*（用 '_' 和 '-' 代替 '/' 和 '+'）
 
 完成这个过程后，会生成一个长度为48个非空格字符的用户友好地址。
 
@@ -121,11 +122,11 @@ TON的所有账户ID都在主链和基本链（或基本工作链）上使用256
 
 上述“测试赠予者”的原始地址必须转换为用户友好地址形式。这可以通过使用之前介绍的base64或base64url形式来获得，如下所示：
 
-* `kf/8uRo6OBbQ97jCx2EIuKm8Wmt6Vb15+KsQHFLbKSMiYIny` (base64)
-* `kf_8uRo6OBbQ97jCx2EIuKm8Wmt6Vb15-KsQHFLbKSMiYIny` (base64url)
+- `kf/8uRo6OBbQ97jCx2EIuKm8Wmt6Vb15+KsQHFLbKSMiYIny` (base64)
+- `kf_8uRo6OBbQ97jCx2EIuKm8Wmt6Vb15-KsQHFLbKSMiYIny` (base64url)
 
 :::info
-注意，_base64_ 和 _base64url_ 两种形式都是有效的，都会被接受！
+注意，*base64* 和 *base64url* 两种形式都是有效的，都会被接受！
 :::
 
 #### 可弹回与不可弹回地址
@@ -158,13 +159,17 @@ TON区块链相关的附加二进制数据采用类似的"加固型" base64 用�
 
 转换用户友好和原始地址的最简单方式是使用几个TON API和其他工具，包括：
 
-* [ton.org/address](https://ton.org/address)
-* [toncenter主网的API方法](https://toncenter.com/api/v2/#/accounts/pack_address_packAddress_get)
-* [toncenter测试网的API方法](https://testnet.toncenter.com/api/v2/#/accounts/pack_address_packAddress_get)
+- [ton.org/address](https://ton.org/address)
+- [toncenter主网的API方法](https://toncenter.com/api/v2/#/accounts/pack_address_packAddress_get)
+- [toncenter测试网的API方法](https://testnet.toncenter.com/api/v2/#/accounts/pack_address_packAddress_get)
 
 此外，使用JavaScript为钱包转换用户友好和原始地址有两种方式：
 
-* [使用ton.js转换地址的形式，从/到用户友好或原始形式](https://github.com/ton-org/ton-core/blob/main/src/address/Address.spec.ts)
-* [使用tonweb转换地址的形式，从/到用户友好或原始形式](https://github.com/toncenter/tonweb/tree/master/src/utils#address-class)
+- [使用ton.js转换地址的形式，从/到用户友好或原始形式](https://github.com/ton-org/ton-core/blob/main/src/address/Address.spec.ts)
+- [使用tonweb转换地址的形式，从/到用户友好或原始形式](https://github.com/toncenter/tonweb/tree/master/src/utils#address-class)
 
 还可以使用[SDKs](/develop/dapps/apis/sdk)进行类似的转换。
+
+### 地址示例
+
+在 [TON Cookbook](/develop/dapps/cookbook#working-with-contracts-addresses) 中了解有关 TON 地址的更多示例。
