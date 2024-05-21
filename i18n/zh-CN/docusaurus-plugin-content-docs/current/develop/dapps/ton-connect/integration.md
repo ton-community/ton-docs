@@ -4,8 +4,8 @@
 
 ## 文档链接
 
-1. [@tonconnect/sdk 文档](https://www.npmjs.com/package/@tonconnect/sdk)  
-2. [钱包应用消息交换协议](https://github.com/ton-connect/docs/blob/main/requests-responses.md) 
+1. [@tonconnect/sdk 文档](https://www.npmjs.com/package/@tonconnect/sdk)
+2. [钱包应用消息交换协议](https://github.com/ton-connect/docs/blob/main/requests-responses.md)
 3. [Tonkeeper 钱包端实现](https://github.com/tonkeeper/wallet/tree/main/src/tonconnect)
 
 ## 必要条件
@@ -63,6 +63,7 @@
 ```
 
 根据 TON Connect 2.0 规范，钱包应用信息总是使用以下格式：
+
 ```js
 {
     name: string;
@@ -73,8 +74,8 @@
     deepLink?: string;
     bridgeUrl?: string;
     jsBridgeKey?: string;
-    injected?: boolean; // 如果这个钱包被注入到网页中，则为true
-    embedded?: boolean; // 如果 DApp 在这个钱包的浏览器中打开，则为true
+    injected?: boolean; // true if this wallet is injected to the webpage
+    embedded?: boolean; // true if the DAppis opened inside this wallet's browser
 }
 ```
 
@@ -133,14 +134,14 @@
           connectButton.innerText = 'Connect with ' + wallet.name;
           
           if (wallet.embedded) {
-            // `embedded` 表示我们正在从钱包应用中浏览应用
-            // 我们需要以某种方式标记这个登录选项
+            // `embedded` means we are browsing the app from wallet application
+            // we need to mark this sign-in option somehow
             connectButton.classList.add('featured');
           }
           
           if (!wallet.bridgeUrl && !wallet.injected && !wallet.embedded) {
-            // 没有 `bridgeUrl` 表示这个钱包应用正在注入 JS 代码
-            // 没有 `injected` 和没有 `embedded` -> 应用在这个页面不可访问
+            // no `bridgeUrl` means this wallet app is injecting JS code
+            // no `injected` and no `embedded` -> app is inaccessible on this page
             connectButton.disabled = true;
           }
           
@@ -182,8 +183,8 @@
           connectButton.innerText = 'Connect with ' + wallet.name;
           
           if (wallet.embedded) {
-            // `embedded` 表示我们正在从钱包应用中浏览应用
-            // 我们需要以某种方式标记这个登录选项
+            // `embedded` means we are browsing the app from wallet application
+            // we need to mark this sign-in option somehow
             connectButton.classList.add('featured');
           }
           
@@ -202,7 +203,7 @@
               }));
             };
           } else {
-            // 钱包应用不提供任何认证方法
+            // wallet app does not provide any auth method
             connectButton.disabled = true;
           }
 	  // highlight-end
@@ -218,10 +219,13 @@
 ### 使用 Tonkeeper 登录
 
 为了用 Tonkeeper 登录，创建了以下用于认证的链接（下面提供参考）：
+
 ```
 https://app.tonkeeper.com/ton-connect?v=2&id=3c12f5311be7e305094ffbf5c9b830e53a4579b40485137f29b0ca0c893c4f31&r=%7B%22manifestUrl%22%3A%22null%2Ftonconnect-manifest.json%22%2C%22items%22%3A%5B%7B%22name%22%3A%22ton_addr%22%7D%5D%7D
 ```
+
 当解码时，`r` 参数产生以下 JSON 格式：
+
 ```js
 {"manifestUrl":"null/tonconnect-manifest.json","items":[{"name":"ton_addr"}]}
 ```
@@ -249,12 +253,14 @@ https://app.tonkeeper.com/ton-connect?v=2&id=3c12f5311be7e305094ffbf5c9b830e53a4
           }
         );
 ```
+
 必须被这个版本替换：
+
 ```js
       window.onload = async () => {
         const connector = new TonConnectSDK.TonConnect({manifestUrl: 'https://ratingers.pythonanywhere.com/ratelance/tonconnect-manifest.json'});
         // highlight-next-line
-        window.connector = connector;  // 用于在浏览器控制台中实验
+        window.connector = connector;  // for experimenting in browser console
         
         const walletsList = await connector.getWallets();
         
@@ -286,6 +292,7 @@ Object { device: {…}, provider: "http", account: {…} }
 ```
 
 以上结果考虑了以下内容：
+
 1. **账户**：包含地址（工作链+哈希）、网络（主网/测试网）以及用于提取公钥的walletStateInit的信息。
 2. **设备**：包含请求时的名称和钱包应用程序版本（名称应该与最初请求的相同，但这可以进行验证以确保真实性），以及平台名称和支持功能列表。
 3. **提供者**：包含http -- 这允许钱包与Web应用程序之间进行的所有请求与响应通过bridge进行服务。
@@ -350,10 +357,13 @@ connHandler({
 ```
 
 连接链接：
+
 ```
 https://app.tonkeeper.com/ton-connect?v=2&id=4b0a7e2af3b455e0f0bafe14dcdc93f1e9e73196ae2afaca4d9ba77e94484a44&r=%7B%22manifestUrl%22%3A%22https%3A%2F%2Fratingers.pythonanywhere.com%2Fratelance%2Ftonconnect-manifest.json%22%2C%22items%22%3A%5B%7B%22name%22%3A%22ton_addr%22%7D%2C%7B%22name%22%3A%22ton_proof%22%2C%22payload%22%3A%22doc-example-%3CBACKEND_AUTH_ID%3E%22%7D%5D%7D
 ```
+
 展开并简化的`r`参数：
+
 ```js
 {
   "manifestUrl":
@@ -384,7 +394,7 @@ https://app.tonkeeper.com/ton-connect?v=2&id=4b0a7e2af3b455e0f0bafe14dcdc93f1e9e
   "account": {
     "address": "0:b2a1ecf5545e076cd36ae516ea7ebdf32aea008caa2b84af9866becb208895ad",
     "chain": "-239",
-    "walletStateInit": "te6cckECFgEAAwQAAgE0ARUBFP8A9KQT9LzyyAsCAgEgAxACAUgEBwLm0AHQ0wMhcbCSXwTgItdJwSCSXwTgAtMfIYIQcGx1Z70ighBkc3RyvbCSXwXgA/pAMCD6RAHIygfL/8nQ7UTQgQFA1yH0BDBcgQEI9ApvoTGzkl8H4AXTP8glghBwbHVnupI4MOMNA4IQZHN0crqSXwbjDQUGAHgB+gD0BDD4J28iMFAKoSG+8uBQghBwbHVngx6xcIAYUATLBSbPFlj6Ahn0AMtpF8sfUmDLPyDJgED7AAYAilAEgQEI9Fkw7UTQgQFA1yDIAc8W9ADJ7VQBcrCOI4IQZHN0coMesXCAGFAFywVQA88WI/oCE8tqyx/LP8mAQPsAkl8D4gIBIAgPAgEgCQ4CAVgKCwA9sp37UTQgQFA1yH0BDACyMoHy//J0AGBAQj0Cm+hMYAIBIAwNABmtznaiaEAga5Drhf/AABmvHfaiaEAQa5DrhY/AABG4yX7UTQ1wsfgAWb0kK29qJoQICga5D6AhhHDUCAhHpJN9KZEM5pA+n/mDeBKAG3gQFImHFZ8xhAT48oMI1xgg0x/TH9MfAvgju/Jk7UTQ0x/TH9P/9ATRUUO68qFRUbryogX5AVQQZPkQ8qP4ACSkyMsfUkDLH1Iwy/9SEPQAye1U+A8B0wchwACfbFGTINdKltMH1AL7AOgw4CHAAeMAIcAC4wABwAORMOMNA6TIyx8Syx/L/xESExQAbtIH+gDU1CL5AAXIygcVy//J0Hd0gBjIywXLAiLPFlAF+gIUy2sSzMzJc/sAyEAUgQEI9FHypwIAcIEBCNcY+gDTP8hUIEeBAQj0UfKnghBub3RlcHSAGMjLBcsCUAbPFlAE+gIUy2oSyx/LP8lz+wACAGyBAQjXGPoA0z8wUiSBAQj0WfKnghBkc3RycHSAGMjLBcsCUAXPFlAD+gITy2rLHxLLP8lz+wAACvQAye1UAFEAAAAAKamjFyM60x2mt5eboNyOTE+5RGOe9Ee2rK1Qcb+0ZuiP9vb7QJRlz/c='
+    "walletStateInit": "te6cckECFgEAAwQAAgE0ARUBFP8A9KQT9LzyyAsCAgEgAxACAUgEBwLm0AHQ0wMhcbCSXwTgItdJwSCSXwTgAtMfIYIQcGx1Z70ighBkc3RyvbCSXwXgA/pAMCD6RAHIygfL/8nQ7UTQgQFA1yH0BDBcgQEI9ApvoTGzkl8H4AXTP8glghBwbHVnupI4MOMNA4IQZHN0crqSXwbjDQUGAHgB+gD0BDD4J28iMFAKoSG+8uBQghBwbHVngx6xcIAYUATLBSbPFlj6Ahn0AMtpF8sfUmDLPyDJgED7AAYAilAEgQEI9Fkw7UTQgQFA1yDIAc8W9ADJ7VQBcrCOI4IQZHN0coMesXCAGFAFywVQA88WI/oCE8tqyx/LP8mAQPsAkl8D4gIBIAgPAgEgCQ4CAVgKCwA9sp37UTQgQFA1yH0BDACyMoHy//J0AGBAQj0Cm+hMYAIBIAwNABmtznaiaEAga5Drhf/AABmvHfaiaEAQa5DrhY/AABG4yX7UTQ1wsfgAWb0kK29qJoQICga5D6AhhHDUCAhHpJN9KZEM5pA+n/mDeBKAG3gQFImHFZ8xhAT48oMI1xgg0x/TH9MfAvgju/Jk7UTQ0x/TH9P/9ATRUUO68qFRUbryogX5AVQQZPkQ8qP4ACSkyMsfUkDLH1Iwy/9SEPQAye1U+A8B0wchwACfbFGTINdKltMH1AL7AOgw4CHAAeMAIcAC4wABwAORMOMNA6TIyx8Syx/L/xESExQAbtIH+gDU1CL5AAXIygcVy//J0Hd0gBjIywXLAiLPFlAF+gIUy2sSzMzJc/sAyEAUgQEI9FHypwIAcIEBCNcY+gDTP8hUIEeBAQj0UfKnghBub3RlcHSAGMjLBcsCUAbPFlAE+gIUy2oSyx/LP8lz+wACAGyBAQjXGPoA0z8wUiSBAQj0WfKnghBkc3RycHSAGMjLBcsCUAXPFlAD+gITy2rLHxLLP8lz+wAACvQAye1UAFEAAAAAKamjFyM60x2mt5eboNyOTE+5RGOe9Ee2rK1Qcb+0ZuiP9vb7QJRlz/c="
   },
   "connectItems": {
     "tonProof": {
@@ -402,6 +412,7 @@ https://app.tonkeeper.com/ton-connect?v=2&id=4b0a7e2af3b455e0f0bafe14dcdc93f1e9e
   }
 }
 ```
+
 让我们验证接收到的签名。为了完成这一点，签名验证使用Python，因为它可以轻松地与后端交互。要进行这个过程所需的库是`tonsdk`和`pynacl`。
 
 接下来，需要检索钱包的公钥。为了完成这一任务，不使用`tonapi.io`或类似服务，因为最终结果不能可靠地被信任。取而代之，这是通过解析`walletStateInit`完成的。
@@ -417,7 +428,7 @@ import tonsdk
 import hashlib
 import base64
 
-received_state_init = 'te6cckECFgEAAwQAAgE0ARUBFP8A9KQT9LzyyAsCAgEgAxACAUgEBwLm0AHQ0wMhcbCSXwTgItdJwSCSXwTgAtMfIYIQcGx1Z70ighBkc3RyvbCSXwXgA/pAMCD6RAHIygfL/8nQ7UTQgQFA1yH0BDBcgQEI9ApvoTGzkl8H4AXTP8glghBwbHVnupI4MOMNA4IQZHN0crqSXwbjDQUGAHgB+gD0BDD4J28iMFAKoSG+8uBQghBwbHVngx6xcIAYUATLBSbPFlj6Ahn0AMtpF8sfUmDLPyDJgED7AAYAilAEgQEI9Fkw7UTQgQFA1yHIAc8W9ADJ7VQBcrCOI4IQZHN0coMesXCAGFAFywVQA88WI/oCE8tqyx/LP8mAQPsAkl8D4gIBIAgPAgEgCQ4CAVgKCwA9sp37UTQgQFA1yH0BDACyMoHy//J0AGBAQj0Cm+hMYAIBIAwNABmtznaiaEAga5Drhf/AABmvHfaiaEAQa5DrhY/AABG4yX7UTQ1wsfgAWb0kK29qJoQICga5D6AhhHDUCAhHpJN9KZEM5pA+n/mDeBKAG3gQFImHFZ8xhAT48oMI1xgg0x/TH9MfAvgju/Jk7UTQ0x/TH9P/9ATRUUO68qFRUbryogX5AVQQZPkQ8qP4ACSkyMsfUkDLH1Iwy/9SEPQAye1U+A8B0wchwACfbFGTINdKltMH1AL7AOgw4CHAAeMAIcAC4wABwAORMOMNA6TIyx8Syx/L/xESExQAbtIH+gDU1CL5AAXIygcVy//J0Hd0gBjIywXLAiLPFlAF+gIUy2sSzMzJc/sAyEAUgQEI9FHypwIAcIEBCNcY+gDTP8hUIEeBAQj0UfKnghBub3RlcHSAGMjLBcsCUAbPFlAE+gIUy2oSyx/LP8lz+wACAGyBAQjXGPoA0z8wUiSBAQj0WfKnghBkc3RycHSAGMjLBcsCUAXPFlAD+gITy2rLHxLLP8lz+wAACvQAye1UAFEAAAAAKamjFyM60x2mt5eboNyOTE+5RGOe9Ee2rK1Qcb+0ZuiP9vb7QJRlz/c='
+received_state_init = 'te6cckECFgEAAwQAAgE0ARUBFP8A9KQT9LzyyAsCAgEgAxACAUgEBwLm0AHQ0wMhcbCSXwTgItdJwSCSXwTgAtMfIYIQcGx1Z70ighBkc3RyvbCSXwXgA/pAMCD6RAHIygfL/8nQ7UTQgQFA1yH0BDBcgQEI9ApvoTGzkl8H4AXTP8glghBwbHVnupI4MOMNA4IQZHN0crqSXwbjDQUGAHgB+gD0BDD4J28iMFAKoSG+8uBQghBwbHVngx6xcIAYUATLBSbPFlj6Ahn0AMtpF8sfUmDLPyDJgED7AAYAilAEgQEI9Fkw7UTQgQFA1yDIAc8W9ADJ7VQBcrCOI4IQZHN0coMesXCAGFAFywVQA88WI/oCE8tqyx/LP8mAQPsAkl8D4gIBIAgPAgEgCQ4CAVgKCwA9sp37UTQgQFA1yH0BDACyMoHy//J0AGBAQj0Cm+hMYAIBIAwNABmtznaiaEAga5Drhf/AABmvHfaiaEAQa5DrhY/AABG4yX7UTQ1wsfgAWb0kK29qJoQICga5D6AhhHDUCAhHpJN9KZEM5pA+n/mDeBKAG3gQFImHFZ8xhAT48oMI1xgg0x/TH9MfAvgju/Jk7UTQ0x/TH9P/9ATRUUO68qFRUbryogX5AVQQZPkQ8qP4ACSkyMsfUkDLH1Iwy/9SEPQAye1U+A8B0wchwACfbFGTINdKltMH1AL7AOgw4CHAAeMAIcAC4wABwAORMOMNA6TIyx8Syx/L/xESExQAbtIH+gDU1CL5AAXIygcVy//J0Hd0gBjIywXLAiLPFlAF+gIUy2sSzMzJc/sAyEAUgQEI9FHypwIAcIEBCNcY+gDTP8hUIEeBAQj0UfKnghBub3RlcHSAGMjLBcsCUAbPFlAE+gIUy2oSyx/LP8lz+wACAGyBAQjXGPoA0z8wUiSBAQj0WfKnghBkc3RycHSAGMjLBcsCUAXPFlAD+gITy2rLHxLLP8lz+wAACvQAye1UAFEAAAAAKamjFyM60x2mt5eboNyOTE+5RGOe9Ee2rK1Qcb+0ZuiP9vb7QJRlz/c='
 received_address = '0:b2a1ecf5545e076cd36ae516ea7ebdf32aea008caa2b84af9866becb208895ad'
 
 state_init = tonsdk.boc.Cell.one_from_boc(base64.b64decode(received_state_init))
@@ -428,7 +439,7 @@ assert received_address.endswith(address_hash_part)
 public_key = state_init.refs[1].bits.array[8:][:32]
 
 print(public_key)
-# bytearray(b'#:\xd3\x1d\xa6\xb7\x97\x9b\xa0\xdc\x8eLO\xb9Dc\x9e\xf4G\xb6\xac\xadPq\xbf\xb4m\xe8\x8f\xf6\xf6\xfb')
+# bytearray(b'#:\xd3\x1d\xa6\xb7\x97\x9b\xa0\xdc\x8eLO\xb9Dc\x9e\xf4G\xb6\xac\xadPq\xbf\xb4f\xe8\x8f\xf6\xf6\xfb')
 
 verify_key = nacl.signing.VerifyKey(bytes(public_key))
 ```
@@ -441,7 +452,7 @@ verify_key = nacl.signing.VerifyKey(bytes(public_key))
 >           AppDomain ++  
 >           Timestamp ++  
 >           Payload
-> 
+>
 > signature = Ed25519Sign(
 >   privkey,
 >   sha256(0xffff ++ utf8_encode("ton-connect") ++ sha256(message))
@@ -449,15 +460,16 @@ verify_key = nacl.signing.VerifyKey(bytes(public_key))
 > ```
 
 > 其中：
-> -   `Address` 表示钱包地址编码为序列：
->     -   `workchain`：32位有符号整数大端序；
->     -   `hash`：256位无符号整数大端序；
-> -   `AppDomain` 是 长度 ++ 编码的域名
->     -   `Length` 使用32位值表示utf-8编码的app域名长度（以字节为单位）
->     -   `EncodedDomainName` 是 `Length` 字节的utf-8编码的域名
-> -   `Timestamp` 表示签名操作的64位Unix纪元时间
-> -   `Payload` 表示变长的二进制字符串
-> -   `utf8_encode` 生成一个没有长度前缀的纯字节串。
+>
+> - `Address` 表示钱包地址编码为序列：
+>   - `workchain`：32位有符号整数大端序；
+>   - `hash`：256位无符号整数大端序；
+> - `AppDomain` 是  Length ++ EncodedDomainName
+>   - `Length` 使用32位值表示utf-8编码的app域名长度（以字节为单位）
+>   - `EncodedDomainName` 是 `Length` 字节的utf-8编码的域名
+> - `Timestamp` 表示签名操作的64位 unix epoch 时间
+> - `Payload` 表示可变长度的二进制字符串
+> - `utf8_encode` 生成一个没有长度前缀的纯字节字符串。
 
 接下来用Python重实现这一部分。上述部分整数的端序没有详细说明，因此需要考虑几个示例。请参阅以下Tonkeeper实现，详细了解相关示例：： [ConnectReplyBuilder.ts](https://github.com/tonkeeper/wallet/blob/77992c08c663dceb63ca6a8e918a2150c75cca3a/src/tonconnect/ConnectReplyBuilder.ts#L42)。
 
@@ -485,10 +497,10 @@ verify_key.verify(hashlib.sha256(signed).digest(), base64.b64decode(signature))
 
 当编写dApp时，还应该考虑：
 
-- 在成功完成连接（无论是恢复的连接还是新连接）后，应显示`断开连接`按钮，而不是多个`连接`按钮
-- 用户断开连接后，需要重新创建`断开连接`按钮
+- 在成功完成连接（无论是恢复的连接还是新连接）后，应显示`Disconnect`按钮，而不是多个`Connect`按钮
+- 用户断开连接后，需要重新创建`Disconnect`按钮
 - 应检查钱包代码，因为
-   - 最新版本的钱包可能会将公钥放在不同的位置，并导致问题
-   - 当前用户可能使用非钱包类型的合约登录。幸运的是，这将在预期的位置包含公钥
+  - 最新版本的钱包可能会将公钥放在不同的位置，并导致问题
+  - 当前用户可能使用非钱包类型的合约登录。幸运的是，这将在预期的位置包含公钥
 
 祝你编写dApps时好运，并且能够享受乐趣！
