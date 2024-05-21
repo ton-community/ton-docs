@@ -50,8 +50,8 @@
    utils/generate-random-id -m adnlid
    ```
 
-
    你会看到类似于
+
    ```
    45061C1D4EC44A937D0318589E13C73D151D1CEF5D3C0E53AFBCF56A6C2FE2BD vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3
    ```
@@ -71,6 +71,7 @@
    其中`<your_public_ip>`是你的公共IPv4地址，`<your_adnl_address>`是在上一步中生成的ADNL地址。
 
    示例：
+
    ```
    rldp-http-proxy/rldp-http-proxy -p 8080 -a 777.777.777.777:3333 -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3
    ```
@@ -111,13 +112,12 @@ curl -x 127.0.0.1:8080 http://just-for-test.ton
 ```bash
 curl -x 127.0.0.1:8080 http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h72gllt.adnl/
 ```
+
 目前获取的是同一个TON网页。
 
 或者，你可以在浏览器中将`localhost:8080`设置为HTTP代理。例如，如果你使用Firefox，请访问[设置] -> 通用 -> 网络设置 -> 设置 -> 配置代理访问 -> 手动代理配置，并在“HTTP代理”字段中输入“127.0.0.1”，在“端口”字段中输入“8080”。
 
 一旦你在浏览器中设置了`localhost:8080`作为HTTP代理，你就可以在浏览器的导航
-
-栏中输入所需的URI，如`http://just-for-test.ton`或`http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h72gllt.adnl/`，并以与通常网站相同的方式与TON网站交互。
 
 ## 运行TON网站
 
@@ -127,9 +127,9 @@ curl -x 127.0.0.1:8080 http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h7
 
 大多数人只需要访问现有的TON网站，而不是创建新的。然而，如果你想创建一个，你需要在你的服务器上运行RLDP-HTTP代理，以及像Apache或Nginx这样的常规Web服务器软件。
 
-我们假设你已经知道如何设置一个普通的网站，并且你已经在你的服务器上配置了一个，接受TCP端口`<your-server-ip>:80`上的传入HTTP连接，并且已经在你的Web服务器配置中为你的网站定义了所需的TON网络域名（例如`example.ton`）作为主域名或别名。
+我们假设您已经知道如何建立一个普通网站，并且已经在服务器上配置了一个网站，接受 TCP 端口 `<your-server-ip>:80` 的 HTTP 连接，并在网络服务器配置中定义了所需的 TON 网络域名（例如 `example.ton`）作为网站的主域名或别名。
 
-1. 从[TON自动构建](https://github.com/ton-blockchain/ton/releases/latest)下载**rldp-http-proxy**。
+1. 从 [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest) 下载 **rldp-http-proxy** 。
 
    或者你可以按照这个[指示](/develop/howto/compile#rldp-http-proxy)自己编译**rldp-http-proxy**。
 
@@ -153,7 +153,7 @@ curl -x 127.0.0.1:8080 http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h7
    45061C1D4EC44A937D0318589E13C73D151D1CEF5D3C0E53AFBCF56A6C2FE2BD vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3
    ```
 
-   这是你新生成的持久ADNL地址，以十六进制和用户友好形式显示。相应的私钥保存在当前目录的文件`45061...2DB`中。将它移动到keyring目录
+   这是你新生成的持久ADNL地址，以十六进制和用户友好形式显示。相应的私钥保存在当前目录的文件`45061...2DB`中。将密钥移动到keyring目录
 
    ```bash
    mv 45061C1* keyring/
@@ -173,10 +173,11 @@ curl -x 127.0.0.1:8080 http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h7
 
 如果你想让你的TON网站永久运行，你将不得不使用选项`-d`和`-l <log-file>`。
 
-示例：
- ```bash
- rldp-http-proxy/rldp-http-proxy -a 777.777.777.777:3333 -L '*' -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3 -d -l tonsite.log
- ```
+示例:
+
+```bash
+rldp-http-proxy/rldp-http-proxy -a 777.777.777.777:3333 -L '*' -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3 -d -l tonsite.log
+```
 
 如果一切正常工作，RLDP-HTTP代理将接受来自TON网络的传入HTTP查询，通过运行在UDP端口3333的IPv4地址`<your-server-ip>`（特别是，如果你使用防火墙，请不要忘记允许`rldp-http-proxy`从该端口接收和发送UDP数据包）的RLDP/ADNL，它将把这些HTTP查询转发到所有主机（如果你只想转发特定主机，请将`-L '*'`更改为`-L <your hostname>`）的`127.0.0.1`TCP端口`80`（即你的常规Web服务器）。
 
@@ -186,7 +187,8 @@ curl -x 127.0.0.1:8080 http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h7
 
 你还可以在一个单独的服务器上运行反向代理，并将你的Web服务器设置为远程地址。在这种情况下，请使用`-R '*'@<YOUR_WEB_SERVER_HTTP_IP>:<YOUR_WEB_SERVER_HTTP_PORT>`替代`-L '*'`。
 
-示例：
+示例:
+
 ```bash
 rldp-http-proxy/rldp-http-proxy -a 777.777.777.777:3333 -R '*'@333.333.333.333:80 -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3 -d -l tonsite.log
 ```
@@ -197,6 +199,6 @@ rldp-http-proxy/rldp-http-proxy -a 777.777.777.777:3333 -R '*'@333.333.333.333:8
 
 由于匿名功能将只在TON Proxy 2.0中可用，如果你不想公开你的Web服务器的IP地址，你可以通过以下两种方式实现：
 
- * 在单独的服务器上运行反向代理，并使用`-R`标志，如上所述。
+- 在单独的服务器上运行反向代理，并使用`-R`标志，如上所述。
 
- * 制作一个带有你网站副本的重复服务器，并在本地运行反向代理。
+- 制作一个带有你网站副本的重复服务器，并在本地运行反向代理。
