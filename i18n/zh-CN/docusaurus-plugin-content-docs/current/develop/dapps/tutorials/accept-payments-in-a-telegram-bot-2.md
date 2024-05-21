@@ -4,7 +4,6 @@ description: 在本文中，我们将创建一个简单的Telegram机器人，�
 
 # 带有自己余额的机器人
 
-
 在本文中，我们将创建一个简单的Telegram机器人，用于接收TON支付。
 
 ## 🦄 外观
@@ -16,34 +15,43 @@ description: 在本文中，我们将创建一个简单的Telegram机器人，�
 ### 源代码
 
 源代码可在GitHub上获得：
-* https://github.com/Gusarich/ton-bot-example
+
+- https://github.com/Gusarich/ton-bot-example
 
 ## 📖 你将学到什么
+
 你将学会：
- - 使用Aiogram在Python3中创建一个Telegram机器人
- - 使用SQLITE数据库
- - 使用公共TON API
+
+- 使用Aiogram在Python3中创建一个Telegram机器人
+- 使用SQLITE数据库
+- 使用公共TON API
 
 ## ✍️ 开始之前你需要
+
 如果还没有安装[Python](https://www.python.org/)，请先安装。
 
 还需要以下PyPi库：
- - aiogram
- - requests
+
+- aiogram
+- requests
 
 你可以在终端中用一条命令安装它们。
+
 ```bash
 pip install aiogram==2.21 requests
 ```
 
 ## 🚀 开始吧！
+
 为我们的机器人创建一个目录，其中包含四个文件：
- - `bot.py`—运行Telegram机器人的程序
- - `config.py`—配置文件
- - `db.py`—与sqlite3数据库交互的模块
- - `ton.py`—处理TON支付的模块
+
+- `bot.py`—运行Telegram机器人的程序
+- `config.py`—配置文件
+- `db.py`—与sqlite3数据库交互的模块
+- `ton.py`—处理TON支付的模块
 
 目录应该看起来像这样：
+
 ```
 my_bot
 ├── bot.py
@@ -55,14 +63,16 @@ my_bot
 现在，让我们开始编写代码吧！
 
 ## 配置
+
 我们先从`config.py`开始，因为它是最小的一个。我们只需要在其中设置一些参数。
 
 **config.py**
+
 ```python
 BOT_TOKEN = 'YOUR BOT TOKEN'
 DEPOSIT_ADDRESS = 'YOUR DEPOSIT ADDRESS'
 API_KEY = 'YOUR API KEY'
-RUN_IN_MAINNET = True  # 切换True/False以改变主网到测试网
+RUN_IN_MAINNET = True  # Switch True/False to change mainnet to testnet
 
 if RUN_IN_MAINNET:
     API_BASE_URL = 'https://toncenter.com'
@@ -71,29 +81,34 @@ else:
 ```
 
 这里你需要在前三行填入值：
- - `BOT_TOKEN`是你的Telegram机器人令牌，可以在[创建机器人](https://t.me/BotFather)后获得。
- - `DEPOSIT_ADDRESS`是你的项目钱包地址，将接受所有支付。你可以简单地创建一个新的TON钱包并复制其地址。
- - `API_KEY`是你从TON Center获得的API密钥，可以在[这个机器人](https://t.me/tonapibot)中获得。
+
+- `BOT_TOKEN`是你的Telegram机器人令牌，可以在[创建机器人](https://t.me/BotFather)后获得。
+- `DEPOSIT_ADDRESS`是你的项目钱包地址，将接受所有支付。你可以简单地创建一个新的TON钱包并复制其地址。
+- `API_KEY`是你从TON Center获得的API密钥，可以在[这个机器人](https://t.me/tonapibot)中获得。
 
 你还可以选择你的机器人是运行在测试网上还是主网上（第4行）。
 
 配置文件就是这些了，我们可以继续向前了！
 
 ## 数据库
+
 现在让我们编辑`db.py`文件，该文件将处理我们机器人的数据库。
 
 导入sqlite3库。
+
 ```python
 import sqlite3
 ```
 
 初始化数据库连接和游标（你可以选择任何文件名，而不仅限于`db.sqlite`）。
+
 ```python
 con = sqlite3.connect('db.sqlite')
 cur = con.cursor()
 ```
 
 为了存储关于用户的信息（在我们的案例中是他们的余额），创建一个名为"Users"的表，包含用户ID和余额行。
+
 ```python
 cur.execute('''CREATE TABLE IF NOT EXISTS Users (
                 uid INTEGER,
@@ -105,14 +120,16 @@ con.commit()
 现在我们需要声明一些函数来处理数据库。
 
 `add_user`函数将用于将新用户插入数据库。
+
 ```python
 def add_user(uid):
-    # 新用户的余额始终为0
+    # new user always has balance = 0
     cur.execute(f'INSERT INTO Users VALUES ({uid}, 0)')
     con.commit()
 ```
 
 `check_user`函数将用于检查用户是否存在于数据库中。
+
 ```python
 def check_user(uid):
     cur.execute(f'SELECT * FROM Users WHERE uid = {uid}')
@@ -123,6 +140,7 @@ def check_user(uid):
 ```
 
 `add_balance`函数将用于增加用户的余额。
+
 ```python
 def add_balance(uid, amount):
     cur.execute(f'UPDATE Users SET balance = balance + {amount} WHERE uid = {uid}')
@@ -130,6 +148,7 @@ def add_balance(uid, amount):
 ```
 
 `get_balance`函数将用于检索用户的余额。
+
 ```python
 def get_balance(uid):
     cur.execute(f'SELECT balance FROM Users WHERE uid = {uid}')
@@ -142,6 +161,7 @@ def get_balance(uid):
 现在，我们可以在机器人的其他组件中使用这四个函数来处理数据库。
 
 ## TON Center API
+
 在`ton.py`文件中，我们将声明一个函数，该函数将处理所有新的存款，增加用户余额，并通知用户。
 
 ### getTransactions 方法
@@ -162,10 +182,10 @@ https://toncenter.com/api/v2/
   "ok": true,
   "result": [
     {
-    ...
+      ...
     },
     {
-    ...
+      ...
     }
   ]
 }
@@ -214,6 +234,7 @@ https://toncenter.com/api/v2/
 ### 从代码中发送 API 请求
 
 让我们从导入所需的库和之前的两个文件`config.py`和`db.py`开始。
+
 ```python
 import requests
 import asyncio
@@ -222,7 +243,7 @@ import asyncio
 from aiogram import Bot
 from aiogram.types import ParseMode
 
-# 我们还需要在这里用到config和database
+# We also need config and database here
 import config
 import db
 ```
@@ -238,36 +259,38 @@ import db
 所以我们需要定义一个新的异步函数；让我们称之为`start`。为什么这个函数需要是异步的？因为Telegram机器人的Aiogram库也是异步的，稍后使用异步函数会更容易。
 
 这是我们的`start`函数应该看起来的样子：
+
 ```python
 async def start():
     try:
-        # 尝试从文件中加载last_lt
+        # Try to load last_lt from file
         with open('last_lt.txt', 'r') as f:
             last_lt = int(f.read())
     except FileNotFoundError:
-        # 如果找不到文件，则将last_lt设置为0
+        # If file not found, set last_lt to 0
         last_lt = 0
 
-    # 我们在这里需要Bot实例来向用户发送存款通知
+    # We need the Bot instance here to send deposit notifications to users
     bot = Bot(token=config.BOT_TOKEN)
 
     while True:
-        # 在这里，我们将每隔几秒调用API并获取新交易。
+        # Here we will call API every few seconds and fetch new transactions.
         ...
-```        
+```
 
 现在让我们编写while循环的主体。我们需要每隔几秒在这里调用TON Center API。
+
 ```python
 while True:
-    # 每次检查之间延迟2秒
+    # 2 Seconds delay between checks
     await asyncio.sleep(2)
 
-    # 调用TON Center API，返回我们钱包的最后100笔交易
+    # API call to TON Center that returns last 100 transactions of our wallet
     resp = requests.get(f'{config.API_BASE_URL}/api/v2/getTransactions?'
                         f'address={config.DEPOSIT_ADDRESS}&limit=100&'
                         f'archival=true&api_key={config.API_KEY}').json()
 
-    # 如果调用不成功，再试一次
+    # If call was not successful, try again
     if not resp['ok']:
         continue
     
@@ -282,25 +305,26 @@ while True:
 while True:
     ...
 
-    # 遍历交易
+    # Iterating over transactions
     for tx in resp['result']:
-        # LT是逻辑时间，Hash是我们交易的哈希值
+        # LT is Logical Time and Hash is hash of our transaction
         lt, hash = int(tx['transaction_id']['lt']), tx['transaction_id']['hash']
 
-        # 如果这笔交易的逻辑时间小于我们的last_lt,
-        # 我们已经处理过了，所以跳过它
+        # If this transaction's logical time is lower than our last_lt,
+        # we already processed it, so skip it
 
         if lt <= last_lt:
             continue
         
-        # 此时，`tx`是一笔我们尚未处理的新交易
+        # at this moment, `tx` is some new transaction that we haven't processed yet
         ...
 ```
 
 我们如何处理一笔新的交易呢？我们需要：
- - 理解哪个用户发送了它
- - 增加该用户的余额
- - 通知用户他们的存款
+
+- 理解哪个用户发送了它
+- 增加该用户的余额
+- 通知用户他们的存款
 
 下面是将完成所有这些操作的代码：
 
@@ -310,7 +334,7 @@ while True:
 
     for tx in resp['result']:
         ...
-        # 此时，`tx`是一笔我们尚未处理的新交易
+        # at this moment, `tx` is some new transaction that we haven't processed yet
 
         value = int(tx['in_msg']['value'])
         if value > 0:
@@ -326,7 +350,7 @@ while True:
 
             db.add_balance(uid, value)
 
-            await bot.send_message(uid, '存款已确认！\n'
+            await bot.send_message(uid, 'Deposit confirmed!\n'
                                     f'*+{value / 1e9:.2f} TON*',
                                     parse_mode=ParseMode.MARKDOWN)
 ```
@@ -348,14 +372,15 @@ while True:
 太棒了！程序现在可以处理新交易并通知用户存款情况。但我们不应忘记之前我们使用过的`lt`，我们必须更新最后的`lt`，因为处理了一个更新的交易。
 
 这很简单：
+
 ```python
 while True:
     ...
     for tx in resp['result']:
         ...
-        # 我们处理了这个tx
+        # we have processed this tx
 
-        # lt变量此处包含最后处理的交易的LT
+        # lt variable here contains LT of the last processed transaction
         last_lt = lt
         with open('last_lt.txt', 'w') as f:
             f.write(str(last_lt))
@@ -369,29 +394,32 @@ while True:
 ### 初始化
 
 打开`bot.py`文件并导入我们所需的所有模块。
+
 ```python
-# 日志模块
+# Logging module
 import logging
 
-# Aiogram导入
+# Aiogram imports
 from aiogram import Bot, Dispatcher, types
 from aiogram.dispatcher.filters import Text
 from aiogram.types import ParseMode, ReplyKeyboardMarkup, KeyboardButton, \
                           InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils import executor
 
-# 本地模块以处理数据库和TON网络
+# Local modules to work with the Database and TON Network
 import config
 import ton
 import db
 ```
 
 让我们设置日志记录，以便我们以后可以看到发生的事情以便调试。
+
 ```python
 logging.basicConfig(level=logging.INFO)
 ```
 
 现在我们需要使用Aiogram初始化机器人对象及其调度器。
+
 ```python
 bot = Bot(token=config.BOT_TOKEN)
 dp = Dispatcher(bot)
@@ -410,18 +438,18 @@ dp = Dispatcher(bot)
 ```python
 @dp.message_handler(commands=['start', 'help'])
 async def welcome_handler(message: types.Message):
-    uid = message.from_user.id  # 不是必须的，只是为了使代码更短
+    uid = message.from_user.id  # Not neccessary, just to make code shorter
 
-    # 如果用户在数据库中不存在，插入它
+    # If user doesn't exist in database, insert it
     if not db.check_user(uid):
         db.add_user(uid)
 
-    # 带有两个主按钮的键盘：存款和余额
+    # Keyboard with two main buttons: Deposit and Balance
     keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.row(KeyboardButton('Deposit'))
     keyboard.row(KeyboardButton('Balance'))
 
-    # 发送欢迎文本并包含键盘
+    # Send welcome text and include the keyboard
     await message.answer('Hi!\nI am example bot '
                          'made for [this article](/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot-2).\n'
                          'My goal is to show how simple it is to receive '
@@ -445,11 +473,11 @@ async def welcome_handler(message: types.Message):
 async def balance_handler(message: types.Message):
     uid = message.from_user.id
 
-    # 从数据库获取用户余额
-    # 别忘了1 TON = 1e9 (十亿) Nanoton
+    # Get user balance from database
+    # Also don't forget that 1 TON = 1e9 (billion) Nanoton
     user_balance = db.get_balance(uid) / 1e9
 
-    # 格式化余额并发送给用户
+    # Format balance and send to user
     await message.answer(f'Your balance: *{user_balance:.2f} TON*',
                          parse_mode=ParseMode.MARKDOWN)
 ```
@@ -466,13 +494,13 @@ async def balance_handler(message: types.Message):
 async def deposit_handler(message: types.Message):
     uid = message.from_user.id
 
-    # 带有deposit URL的键盘
+    # Keyboard with deposit URL
     keyboard = InlineKeyboardMarkup()
     button = InlineKeyboardButton('Deposit',
                                   url=f'ton://transfer/{config.DEPOSIT_ADDRESS}&text={uid}')
     keyboard.add(button)
 
-    # 向用户发送如何向机器人存款的说明文本
+    # Send text that explains how to make a deposit into bot to user
     await message.answer('It is very easy to top up your balance here.\n'
                          'Simply send any amount of TON to this address:\n\n'
                          f'`{config.DEPOSIT_ADDRESS}`\n\n'
@@ -492,13 +520,13 @@ async def deposit_handler(message: types.Message):
 
 ```python
 if __name__ == '__main__':
-    # 为我们的机器人创建Aiogram执行器
+    # Create Aiogram executor for our bot
     ex = executor.Executor(dp)
 
-    # 使用我们的执行器启动存款等待器
+    # Launch the deposit waiter with our executor
     ex.loop.create_task(ton.start())
 
-    # 启动机器人
+    # Launch the bot
     ex.start_polling()
 ```
 
@@ -508,5 +536,5 @@ if __name__ == '__main__':
 
 ## 参考资料
 
- - 作为[ton-footsteps/8](https://github.com/ton-society/ton-footsteps/issues/8)的一部分
- - 由Gusarich提供（[Telegram @Gusarich](https://t.me/Gusarich), [Gusarich on GitHub](https://github.com/Gusarich)）
+- 作为[ton-footsteps/8](https://github.com/ton-society/ton-footsteps/issues/8)的一部分
+- 由Gusarich提供（[Telegram @Gusarich](https://t.me/Gusarich), [Gusarich on GitHub](https://github.com/Gusarich)）
