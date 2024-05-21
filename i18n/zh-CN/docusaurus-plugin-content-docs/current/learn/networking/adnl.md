@@ -1,7 +1,8 @@
 # ADNL 协议
 
 实现：
-* https://github.com/ton-blockchain/ton/tree/master/adnl
+
+- https://github.com/ton-blockchain/ton/tree/master/adnl
 
 ## 概览
 
@@ -33,5 +34,5 @@ ADNL允许您建立点对点的通道和隧道（一系列代理）。
 
 ## 参阅
 
-* 在[低层级ADNL文章](/learn/networking/low-level-adnl)中阅读更多关于ADNL的信息
-* [TON白皮书](https://docs.ton.org/ton.pdf)的第3.1章。
+- 在[低层级ADNL文章](/learn/networking/low-level-adnl)中阅读更多关于ADNL的信息
+- [TON白皮书](https://docs.ton.org/ton.pdf)的第3.1章。
