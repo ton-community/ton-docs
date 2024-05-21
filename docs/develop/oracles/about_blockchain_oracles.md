@@ -1,6 +1,6 @@
 # About Oracles
 
-Blockchain oracles are entities that connect the blockchain to external systems, allowing smart contracts to be executed based on real-world inputs and outputs.
+Blockchain oracles are entities that connect the blockchain to external systems, allowing smart contracts to be executed based on real-world inputs.
 
 ## How blockchain oracles work
 
@@ -20,7 +20,7 @@ Software oracles work with online data that is stored in various digital sources
 
 ### Incoming and outgoing oracles
 	
-Inbound oracles feed information into the blockchain, such as weather data for insurance contracts. Outbound oracles, in turn, send data from the blockchain to the outside world, such as transaction notifications. This is necessary to improve reliability and address the single point of failure problem.
+Inbound oracles send information to the blockchain, such as weather data for insurance contracts. Outbound oracles, in turn, send data from the blockchain to the outside world, such as transaction notifications. Using both types of oracles improves the overall reliability of the system by ensuring a continuous and accurate flow of data in both directions. It also reduces the likelihood of a single point of failure problem by diversifying the sources and destinations of critical data, reducing the risk that a failure in one component could jeopardize the entire system.
 
 ### Centralized and decentralized oracles
 	
@@ -32,8 +32,7 @@ These oracles are developed individually for certain smart contracts and may not
 
 ### Crosschain oracles
 	
-These are used to transfer data between different blockchains. Used when networks are incompatible with each other. Useful for decentralized applications that use cross-chain transactions, such as cross-chain transfer of crypto-assets from one network to another.
-
+These oracles are used to transfer data between different blockchains and are a critical component of bridges. They are used for decentralized applications that use cross-chain transactions, such as cross-chain transfer of cryptoassets from one network to another.
 
 ## Application of blockchain oracles
 	
@@ -41,7 +40,7 @@ Blockchain oracles build bridges between the digital world of blockchains and re
 
 ### DeFi (decentralized finance)
 	
-Oracles play a critical role in the DeFi ecosystem by providing market price and cryptocurrency data. Price oracles allow DeFi platforms to link token values to real assets, which is essential for controlling liquidity and securing users' positions. This makes transactions more transparent and secure, contributing to the stability and reliability of financial transactions.
+Oracles play a critical role in the DeFi ecosystem by providing market price and cryptocurrency data. Price oracles allow DeFi platforms to link token values to real assets, which is essential for controlling liquidity and securing users' positions. Additionally, oracles are vital for lending platforms, where accurate price data ensures proper collateral valuation and risk management, safeguarding both lenders and borrowers. This makes transactions more transparent and secure, contributing to the stability and reliability of financial transactions.
 
 ### Insurance
 	
@@ -57,7 +56,5 @@ It is difficult to generate random numbers in smart contracts because all operat
 
 ## List of oracles in TON
 
-* [RedStone Oracles](/develop/oracles/red_stone) 
-
-## See Also
+* [RedStone Oracles](/develop/oracles/red_stone)
 
