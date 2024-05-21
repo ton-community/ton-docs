@@ -20,20 +20,24 @@ TON中的所有链，包括主链，都使用它们自己的overlay进行通信�
 让我们看一个在overlay中获取节点的例子。
 
 为此，向任何已知的overlay节点发送`overlay.getRandomPeers`请求，序列化TL模式：
+
 ```tlb
 overlay.node id:PublicKey overlay:int256 version:int signature:bytes = overlay.Node;
 overlay.nodes nodes:(vector overlay.node) = overlay.Nodes;
 
 overlay.getRandomPeers peers:overlay.nodes = overlay.Nodes;
 ```
+
 `peers` - 应包含我们已知的节点，这样我们就不会再次得到它们，但由于我们还不知道任何节点，`peers.nodes`将是一个空数组。
 
 如果我们不只是想获取一些信息，而是想参与overlay并获取广播，我们还应该在`peers`中添加我们节点的信息，从中我们发出请求。当对方获取到我们的信息 - 他们将开始使用ADNL或RLDP向我们发送广播。
 
 overlay内的每个请求都必须以TL模式为前缀：
+
 ```tlb
 overlay.query overlay:int256 = True;
 ```
+
 `overlay`应该是overlay的id - `tonNode.ShardPublicOverlayId`模式键的id - 与我们用于搜索DHT时使用的相同。
 
 我们需要通过简单地连接2个序列化的字节数组来连接2个序列化的模式，`overlay.query`将首先出现，其次是`overlay.getRandomPeers`。
@@ -44,27 +48,28 @@ overlay.query overlay:int256 = True;
 
 一旦建立了连接，我们可以使用[请求](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L413) `tonNode.*`访问overlay节点。
 
-这类请求使用RLDP协议
+对于此类请求，使用的是 RLDP 协议。重要的是，不要忘记 `overlay.query` 前缀--overlay中的每个查询都必须使用它。
 
-。重要的是不要忘记`overlay.query`前缀 - 它必须用于overlay中的每个查询。
+请求本身并无异常，与我们[在有关 ADNL TCP 的文章中所做的](/develop/network/adnl-tcp#getmasterchaininfo)非常相似。
 
-请求本身并没有什么不寻常的，它们与我们在[关于ADNL TCP的文章](/develop/network/adnl-tcp#getmasterchaininfo)中所做的非常相似。
+例如，"downloadBlockFull "请求使用的是我们已经熟悉的区块 ID 模式：
 
-例如，`downloadBlockFull`请求使用了我们已经熟悉的区块id模式：
 ```tlb
 tonNode.downloadBlockFull block:tonNode.blockIdExt = tonNode.DataFull;
 ```
+
 通过传递它，我们将能够下载关于区块的完整信息，作为回应我们将收到：
+
 ```tlb
 tonNode.dataFull id:tonNode.blockIdExt proof:bytes block:bytes is_link:Bool = tonNode.DataFull;
-  或
+  or
 tonNode.dataFullEmpty = tonNode.DataFull;
 ```
+
 如果存在，`block`字段将包含TL-B格式的数据。
 
-因此，我们可以直接从节点接收信息。
+因此，我们可以直接从节点获得信息。
 
-## 参考
+## 参考资料
 
-_这里是[原文链接](https://github.com/xssnick/ton-deep-doc/blob/master/Overlay-Network.md)，作者是[Oleg Baranov](https://github.com/xssnick)。_
-
+*这里是[原文链接](https://github.com/xssnick/ton-deep-doc/blob/master/Overlay-Network.md)，作者是[Oleg Baranov](https://github.com/xssnick)。*
