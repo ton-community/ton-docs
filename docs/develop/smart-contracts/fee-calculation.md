@@ -166,7 +166,15 @@ However, sometimes the outgoing message depends significantly on the incoming st
 | fwd_fee    | Parsed from the incoming message                    |
 | is_mc      | True if the source or destination is in the masterchain |
 
-If even `GETORIGINALFWDFEE` can't be used, there is one more option. **It is the least optimal way but better than not checking**. Use the `SENDMSG` opcode with the following parameters:
+:::caution Be careful with `SENDMSG` opcode
+Next opcode, `SENDMSG`, **is the least optimal way** to calculate fee, but **better than not checking**.
+
+It uses an **unpredictable amount** of gas.
+
+Do not use it unless necessary.
+:::
+
+If even `GETORIGINALFWDFEE` can't be used, there is one more option. Use the `SENDMSG` opcode with the following parameters:
 
 | Param name | Description  |
 |:-----------|:-------------|
