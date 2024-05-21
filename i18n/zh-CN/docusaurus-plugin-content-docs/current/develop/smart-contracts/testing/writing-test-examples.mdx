@@ -19,8 +19,8 @@ describe('Fireworks', () => {
 });
 
 it('should deploy', async () => {
-    // 检查在beforeEach中完成
-    // blockchain和fireworks已准备就绪
+    // the check is done inside beforeEach
+    // blockchain and fireworks are ready to use
 });
 ```
 
@@ -53,25 +53,25 @@ Fireworks演示了在TON区块链中发送消息的不同操作。
 Fireworks重新部署自己，结果将创建3个Fireworks实体，每个实体都有自己的ID（被保存在存储中），因此有不同的智能合约地址。
 
 为了清晰起见，我们定义不同ID的Fireworks实例（不同的`state_init`）并以下列名称命名：
-* 1 - Fireworks setter - 传播不同启动操作码的实体。可以扩展到四种不同的操作码。
-* 2 - Fireworks launcher-1 - 启动第一个firework的Fireworks实例，意味着消息将被发送给launcher。
-* 3 - Fireworks launcher-2 - 启动第二个firework的Fireworks实例，意味着消息将被发送给launcher。
 
+- 1 - Fireworks setter - 传播不同启动操作码的实体。可以扩展到四种不同的操作码。
+- 2 - Fireworks launcher-1 - 启动第一个firework的Fireworks实例，意味着消息将被发送给launcher。
+- 3 - Fireworks launcher-2 - 启动第二个firework的Fireworks实例，意味着消息将被发送给launcher。
 
 <details>
     <summary>展开交易细节</summary>
 
-
 index - 是`launchResult`数组中交易的ID。
-* `0` - 对资金库(the Launcher)的外部请求，导致向fireworks发送2.5 TON的出站消息`op::set_first`
-* `1` - 在Fireworks setter合约中使用`op::set_first`调用的交易，并执行了两个出站消息到Fireworks Launcher-1和Fireworks Launcher-2
-* `2` - 在Fireworks launcher 1中使用`op::launch_first`调用的交易，并执行了四个出站消息到the Launcher。
-* `3` - 在Fireworks launcher 2中使用`op::launch_second`调用的交易，并执行了一个出站消息到the Launcher。
-* `4` - 在the Launcher中来自Fireworks launcher 1的入站消息的交易。此消息以`send mode = 0`发送。
-* `5` - 在the Launcher中来自Fireworks launcher 1的入站消息的交易。此消息以`send mode = 1`发送。
-* `6` - 在the Launcher中来自Fireworks launcher 1的入站消息的交易。此消息以`send mode = 2`发送。
-* `7` - 在the Launcher中来自Fireworks launcher 1的入站消息的交易。此消息以`send mode = 128 + 32`发送。
-* `8` - 在the Launcher中来自Fireworks launcher 2的入站消息的交易。此消息以`send mode = 64`发送。
+
+- `0` - 对资金库(the Launcher)的外部请求，导致向fireworks发送2.5 TON的出站消息`op::set_first`
+- `1` - 在Fireworks setter合约中使用`op::set_first`调用的交易，并执行了两个出站消息到Fireworks Launcher-1和Fireworks Launcher-2
+- `2` - 在Fireworks launcher 1中使用`op::launch_first`调用的交易，并执行了四个出站消息到the Launcher。
+- `3` - 在Fireworks launcher 2中使用`op::launch_second`调用的交易，并执行了一个出站消息到the Launcher。
+- `4` - 在the Launcher中来自Fireworks launcher 1的入站消息的交易。此消息以`send mode = 0`发送。
+- `5` - 在the Launcher中来自Fireworks launcher 1的入站消息的交易。此消息以`send mode = 1`发送。
+- `6` - 在the Launcher中来自Fireworks launcher 1的入站消息的交易。此消息以`send mode = 2`发送。
+- `7` - 在the Launcher中来自Fireworks launcher 1的入站消息的交易。此消息以`send mode = 128 + 32`发送。
+- `8` - 在the Launcher中来自Fireworks launcher 2的入站消息的交易。此消息以`send mode = 64`发送。
 
 </details>
 
@@ -145,12 +145,10 @@ index - 是`launchResult`数组中交易的ID。
 
 完整的账户状态相关字段列表：
 
-* `destroyed` - `true` - 如果现有合约因执行某个交易而被销毁。否则 - `false`。
-* `deploy` - 自定义沙盒标志位，表明合约在此交易期间是否部署。如果合约在此交易前未初始化，而在此交易后变为已初始化，则为`true`。否则 - `false`。
-* `oldStatus` - 交易执行前的账户状态。值：`'uninitialized'`, `'frozen'`, `'active'`, `'non-existing'`。
-* `endStatus` - 交易执行后的账户状态。值：`'uninitialized'`, `'frozen'`, `'active'`, `'non-existing'`。
-
-
+- `destroyed` - `true` - 如果现有合约因执行某个交易而被销毁。否则 - `false`。
+- `deploy` - 自定义沙盒标志位，表明合约在此交易期间是否部署。如果合约在此交易前未初始化，而在此交易后变为已初始化，则为`true`。否则 - `false`。
+- `oldStatus` - 交易执行前的账户状态。值：`'uninitialized'`, `'frozen'`, `'active'`, `'non-existing'`。
+- `endStatus` - 交易执行后的账户状态。值：`'uninitialized'`, `'frozen'`, `'active'`, `'non-existing'`。
 
 ### 交易ID:3 成功测试
 
@@ -159,7 +157,6 @@ index - 是`launchResult`数组中交易的ID。
 ![](/img/docs/writing-test-examples/test-examples-schemes_id3.svg)
 
 交易[ID:3]在Fireworks launcher 1中进行，用`op::launch_first`调用，并执行了四个出站消息到the Launcher。
-
 
 ```typescript
 
@@ -185,9 +182,6 @@ index - 是`launchResult`数组中交易的ID。
 
 
 ```
-
-
-
 
 ### 交易ID:4 成功测试
 
@@ -216,7 +210,6 @@ index - 是`launchResult`数组中交易的ID。
         });
     })
 ```
-
 
 ### 交易ID:5 成功测试
 
@@ -255,7 +248,6 @@ index - 是`launchResult`数组中交易的ID。
 ![](/img/docs/writing-test-examples/test-examples-schemes_id6.svg)
 
 收到来自Fireworks launcher 1的入站消息，交易[ID:6]在the Launcher中进行。此消息以`send mode = 2`发送。
-
 
 ```typescript
     it('should exist a transaction[ID:6] with a comment send mode = 2', async() => {
@@ -337,6 +329,7 @@ index - 是`launchResult`数组中交易的ID。
 ## 打印和阅读交易费用
 
 在测试期间，阅读有关费用的详细信息对优化合约很有用。printTransactionFees函数以一种方便的方式打印整个交易链。"
+
 ```typescript
 
     it('should be executed and print fees', async() => {
@@ -356,34 +349,31 @@ index - 是`launchResult`数组中交易的ID。
 
 例如，在`launchResult`的情况下，将打印以下表格：
 
-
-| (index) |     op       |    valueIn     |    valueOut    |   totalFees    | outActions |
-|---------|--------------|----------------|----------------|----------------|------------|
-|    0    |    'N/A'     |     'N/A'      |   '2.5 TON'    | '0.010605 TON' |     1      |
-|    1    | '0x5720cfeb' |   '2.5 TON'    | '2.185812 TON' | '0.015836 TON' |     2      |
-|    2    | '0x6efe144b' | '1.092906 TON' | '1.081142 TON' | '0.009098 TON' |     4      |
-|    3    | '0xa2e2c2dc' | '1.092906 TON' | '1.088638 TON' | '0.003602 TON' |     1      |
-|    4    |    '0x0'     |  '0.099 TON'   |    '0 TON'     | '0.000309 TON' |     0      |
-|    5    |    '0x0'     |   '0.1 TON'    |    '0 TON'     | '0.000309 TON' |     0      |
-|    6    |    '0x0'     |  '0.099 TON'   |    '0 TON'     | '0.000309 TON' |     0      |
-|    7    |    '0x0'     | '0.783142 TON' |    '0 TON'     | '0.000309 TON' |     0      |
-|    8    |    '0x0'     | '1.088638 TON' |    '0 TON'     | '0.000309 TON' |     0      |
-
-
+| (index) | op           | valueIn        | valueOut       | totalFees      | outActions |
+| -------------------------- | ------------ | -------------- | -------------- | -------------- | ---------- |
+| 0                          | 'N/A'        | 'N/A'          | '2.5 TON'      | '0.010605 TON' | 1          |
+| 1                          | '0x5720cfeb' | '2.5 TON'      | '2.185812 TON' | '0.015836 TON' | 2          |
+| 2                          | '0x6efe144b' | '1.092906 TON' | '1.081142 TON' | '0.009098 TON' | 4          |
+| 3                          | '0xa2e2c2dc' | '1.092906 TON' | '1.088638 TON' | '0.003602 TON' | 1          |
+| 4                          | '0x0'        | '0.099 TON'    | '0 TON'        | '0.000309 TON' | 0          |
+| 5                          | '0x0'        | '0.1 TON'      | '0 TON'        | '0.000309 TON' | 0          |
+| 6                          | '0x0'        | '0.099 TON'    | '0 TON'        | '0.000309 TON' | 0          |
+| 7                          | '0x0'        | '0.783142 TON' | '0 TON'        | '0.000309 TON' | 0          |
+| 8                          | '0x0'        | '1.088638 TON' | '0 TON'        | '0.000309 TON' | 0          |
 
 ![](/img/docs/writing-test-examples/fireworks_trace_tonviewer.png?=RAW)
 
 index - 是`launchResult`数组中交易的ID。
-* `0` - 对资金库(the Launcher)的外部请求，导致发送消息`op::set_first`到Fireworks
-* `1` - 导致发送4条消息到the Launcher的Fireworks交易
-* `2` - 在Launched Fireworks - 1中从the Launcher收到消息，消息使用`op::launch_first`操作码发送。
-* `2` - 在Launched Fireworks - 2中从the Launcher收到消息，消息使用`op::launch_second`操作码发送。
-* `4` - 在the Launcher中收到来自Launched Fireworks - 1的消息的交易，消息以`send mode = 0`发送
-* `5` - 在the Launcher中收到来自Launched Fireworks - 1的消息的交易，消息以`send mode = 1`发送
-* `6` - 在the Launcher中收到来自Launched Fireworks - 1的消息的交易，消息以`send mode = 2`发送
-* `7` - 在the Launcher中收到来自Launched Fireworks - 1的消息的交易，消息以`send mode = 128 + 32`发送
-* `8` - 在the Launcher中收到来自Launched Fireworks - 2的消息的交易，消息以`send mode = 64`发送
 
+- `0` - 对资金库(the Launcher)的外部请求，导致发送消息`op::set_first`到Fireworks
+- `1` - 导致发送4条消息到the Launcher的Fireworks交易
+- `2` - 在Launched Fireworks - 1中从the Launcher收到消息，消息使用`op::launch_first`操作码发送。
+- `2` - 在Launched Fireworks - 2中从the Launcher收到消息，消息使用`op::launch_second`操作码发送。
+- `4` - 在the Launcher中收到来自Launched Fireworks - 1的消息的交易，消息以`send mode = 0`发送
+- `5` - 在the Launcher中收到来自Launched Fireworks - 1的消息的交易，消息以`send mode = 1`发送
+- `6` - 在the Launcher中收到来自Launched Fireworks - 1的消息的交易，消息以`send mode = 2`发送
+- `7` - 在the Launcher中收到来自Launched Fireworks - 1的消息的交易，消息以`send mode = 128 + 32`发送
+- `8` - 在the Launcher中收到来自Launched Fireworks - 2的消息的交易，消息以`send mode = 64`发送
 
 ## 交易费用测试
 
@@ -460,7 +450,7 @@ TVM是[堆栈机](/learn/tvm-instructions/tvm-overview#tvm-is-a-stack-machine)�
 
 ### Compute Phase | exit code = 4
 
-在TVM中，`integer`可以在-2<sup>256</sup> < x < 2<sup>256</sup>范围内。如果在计算过程中值超出此范围，则抛出exit code 4。
+在TVM中，`integer`可以在-2<sup>256</sup> \< x \< 2<sup>256</sup>范围内。如果在计算过程中值超出此范围，则抛出exit code 4。
 
 ### Compute Phase | exit code = 5
 
@@ -478,23 +468,21 @@ TVM是[堆栈机](/learn/tvm-instructions/tvm-overview#tvm-is-a-stack-machine)�
 
 还有许多其他情况会抛出此错误。其中一些：
 
-- [不是null](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L433)
-- [不是integer](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L441)
-- [不是cell](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L478)
-- [不是cell builder
-
-](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L500)
-- [不是cell slice](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L509)
-- [不是string](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L518)
-- [不是bytes chunk](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L527)
-- [不是continuation](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L536)
-- [不是box](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L545)
-- [不是tuple](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L554)
-- [不是atom](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L598)
+- [not a null](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L433)
+- [not an integer](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L441)
+- [not a cell](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L478)
+- [not a cell builder](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L500)
+- [not a cell slice](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L509)
+- [not a string](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L518)
+- [not a bytes chunk](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L527)
+- [not a continuation](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L536)
+- [not a box](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L545)
+- [not a tuple](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L554)
+- [not an atom](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L598)
 
 ### Compute Phase | exit code = 8
 
-TON中的所有数据都存储在[cells](/develop/data-formats/cell-boc#cell)中。一个cell有能力存储1023位数据和4个对其他cells的引用。如果尝试写入超过1023位或超过4个引用，则抛出exit code 8。
+TON 中的所有数据都存储在 [cells](/develop/data-formats/cell-boc#cell) 中。一个单元格可存储 1023 位数据和 4 个指向其他单元格的引用。如果尝试写入超过 1023 位的数据或超过 4 个引用，将抛出 exit code 8。
 
 ### Compute Phase | exit code = 9
 
@@ -514,15 +502,16 @@ root_cell
 └── key
     └── value
 ```
-That is why when trying to read the value, we get 10 exit code.
 
-**Additional:** You can also store the value next to the key in the dictionary:
+这就是为什么在尝试读取数值时，我们会得到 exit code 10。
+
+**附加：** 您还可以在字典中存储键旁的值：
 
 ```
 root_cell
 ├── key-value
 └── key-value
-``` 
+```
 
 **注意：** 实际上，字典的结构（数据如何放置在cell中）比上面的示例更复杂。因此，它们被简化了，以便理解示例。
 
@@ -548,11 +537,11 @@ Action Phase在Compute Phase之后开始，它处理在Compute Phase期间写入
 
 ### Action Phase | exit code = 34
 
-exit code是造成处理action时的大部分错误的原因：无效消息、不正确动作等。
+Exit code是造成处理action时的大部分错误的原因：无效消息、不正确动作等。
 
 ### Action Phase | exit code = 35
 
-在构建消息的[CommonMsgInfo](/develop/smart-contracts/tutorials/wallet#commonmsginfo)部分时，必须指定正确的源地址。它必须等于[addr_none](/develop/data-formats/msg-tlb#addr_none00)或发送消息的账户地址。
+在构建消息的 [CommonMsgInfo](/develop/smart-contracts/tutorials/wallet#commonmsginfo) 部分时，必须指定正确的源地址。它必须等于[addr_none](/develop/data-formats/msg-tlb#addr_none00) 或发送消息的账户地址。
 
 在区块链代码中，这由[check_replace_src_addr](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1985)处理。
 
@@ -572,7 +561,7 @@ exit code是造成处理action时的大部分错误的原因：无效消息、�
 
 在这种情况下，有足够的TON来处理消息的某个部分（比如说5个cell），而消息中有10个cell，将抛出exit code 40。
 
-### Action Phase |exit code = 43
+### Action Phase | exit code = 43
 
 可能发生的情况是超过了库中cell的最大数量或超过了Merkle树的最大深度。
 
