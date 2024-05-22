@@ -196,4 +196,12 @@ However, it does not ignore errors in the following scenarios:
 4. The external message is not ordinary or includes +16 or +32 flag or both.
 :::
 
+:::info +16 flag
+If contract receives bounceable message, it will process `storage` phase **before** `credit` phase.
+
+Otherwise, it will process `credit` phase **before** `storage` phase.
+
+Check [source code with checks for `bounce-enable` flag](https://github.com/ton-blockchain/ton/blob/master/validator/impl/collator.cpp#L2810).
+:::
+
 To build a mode for the `send_raw_message`, you just have to combine modes and flags by adding them together. For example, if you want to send a regular message and pay transfer fees separately, use the Mode `0` and Flag `+1` to get `mode = 1`. If you want to send the whole contract balance and destroy it immidiately, use the Mode `128` and Flag `+32` to get `mode = 160`.
