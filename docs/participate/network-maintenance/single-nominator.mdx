@@ -190,18 +190,37 @@ npx ts-node scripts/ts/withdraw-deeplink.ts <single-nominator-addr> <withdraw-am
 
 d. Open deeplink on the owner's phone
 
-## Stop participating
-
-If user doesn't want to take part in validating anymore it's possible to withdraws the funds from the Single Nominator contract to validators personal wallet.
-
-## Get pool info
-
-```bash
-MyTonCtrl> get_pool_data <pool-name | pool-addr>                                                                                                          
-```
-
 ## Deposit pool
 
+1. Go to the pool’s page https://tonscan.org/nominator/<pool_address>.
+
+2. Make sure that the information about the pool is fully displayed as in the screenshot below, if the pool has the wrong smart contract, there will be no information.
+
+3. Press the ADD STAKE button or scan the QR-code using Tonkeeper or any other TON Wallet.
+
+4. After you are transferred to the wallet, please, enter the amount of TON and then send the transaction. After that TON coins will be added to staking.
+
+If the wallet does not open automatically, you can send the transaction manually by copying the pool address. The minimum deposit for the nominator is 10,001 TON, add a comment **d** (small letter) to the transaction, as in the screenshot above, and send it through any TON wallet. From the sent transaction, 1 TON will be debited as a commission for processing the deposit.
+
+## Stop participating
+
+If user doesn't want to take part in validating anymore it's possible to withdraws the funds from the Single Nominator contract to validators personal wallet. To get coins back after staking, send 1 TON to the pool’s address, add a comment **w** (small letter) to the transaction. This 1 TON minus commission will be returned, and a smart-contract will understand that you want to bring the coins back and it will send them back right after the end of the validator’s work cycle.
+
+To return coins partly is impossible, stake always returns back fully. It usually takes up to 18 hours.
+
+## Check status
+
+To check a Single Nominator Pool status use the following command:
+
+```bash
+MyTonCtrl> status
+```
+
+and for Testnet:
+
+```bash
+MyTonCtrl> status fast
+```
 
 ## See Also
 
