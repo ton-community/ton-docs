@@ -20,15 +20,22 @@ In brief, `storage fees` are the amounts you pay for storing a smart contract on
 
 Use the `GETSTORAGEFEE` opcode with the following parameters:
 
-| Param name | Description                                         |
-|:-----------|:----------------------------------------------------|
-| cells      | Number of message cells                             |
-| bits       | Number of message bits                              |
+| Param name | Description                                             |
+|:-----------|:--------------------------------------------------------|
+| cells      | Number of contract cells                                |
+| bits       | Number of contract bits                                 |
 | is_mc      | True if the source or destination is in the masterchain |
+
+:::info Only unique hash cells are counted for storage and fwd fees i.e. 3 identical hash cells are counted as one.
+
+In particular, it deduplicates data: if there are several equivalent sub-cells referenced in different branches, their content is only stored once.
+
+[Read more about deduplication](/develop/data-formats/library-cells).
+:::
 
 ### Calculation Flow
 
-Each contract has its balance. You can calculate how many TONs your contract requires to remain valid for a specified `seconds` time using the function **presented in the [stdlib](/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) library**:
+Each contract has its balance. You can calculate how many TONs your contract requires to remain valid for a specified `seconds` time using the function:
 
 ```func
 int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells bits seconds workchain) "GETSTORAGEFEE";
@@ -37,14 +44,28 @@ int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells b
 You can then hardcode that value into the contract and calculate the current storage fee using:
 
 ```func
-int calculate_storage_fee(int balance, int msg_value, int workchain, int seconds, int bits, int cells) inline {
-    int balance_before_message = balance - msg_value;
-    int storage_fee_for_whole_period = get_storage_fee(workchain, seconds, bits, cells);
-    int storage_fee = storage_fee_for_whole_period - min(balance_before_message, storage_fee_for_whole_period);
+;; functions from func stdlib (not presented on mainnet)
+() raw_reserve(int amount, int mode) impure asm "RAWRESERVE";
+int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells bits seconds workchain) "GETSTORAGEFEE";
+int my_storage_due() asm "DUEPAYMENT";
+
+;; constants from stdlib
+;;; Creates an output action which would reserve exactly x nanograms (if y = 0).
+const int RESERVE_REGULAR = 0;
+;;; Creates an output action which would reserve at most x nanograms (if y = 2).
+;;; Bit +2 in y means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved.
+const int RESERVE_AT_MOST = 2;
+;;; in the case of action fail - bounce transaction. No effect if RESERVE_AT_MOST (+2) is used. TVM UPGRADE 2023-07. https://docs.ton.org/learn/tvm-instructions/tvm-upgrade-2023-07#sending-messages
+const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;
+
+() calculate_and_reserve_storage_fee(int balance, int msg_value, int workchain, int seconds, int bits, int cells) inline {
+    int to_leave_on_balance = my_ton_balance - msg_value + my_storage_due();
+    int min_storage_fee = get_storage_fee(workchain, seconds, bits, cells); ;; can be hardcoded IF CODE OF THE CONTRACT WILL NOT BE UPDATED
+    raw_reserve(max(to_leave_on_balance, min_storage_fee), RESERVE_AT_MOST);
 }
 ```
 
-This way, you can check if the contract has enough balance to be stored for the `seconds` time before the next message arrives.
+If `storage_fee` is hardcoded, **remember to update it** during contract update process. Not all contracts support updating, so this is an optional requirement.
 
 ## Computation Fee
 
@@ -153,11 +174,18 @@ Generally, there are three cases of forward fee processing:
 
 If the message structure is deterministic, use the `GETFORWARDFEE` opcode with the following parameters:
 
-| Param name | Description                                                                               |
-|:-----------|:------------------------------------------------------------------------------------------|
-| cells      | Number of cells, read more [here](/develop/howto/fees-low-level#in_fwd_fees-out_fwd_fees) |
-| bits       | Number of bits, read more [here](/develop/howto/fees-low-level#in_fwd_fees-out_fwd_fees)  |
-| is_mc      | True if the source or destination is in the masterchain                                   |
+| Param name | Description                                                                            |
+|:-----------|:---------------------------------------------------------------------------------------|
+| cells      | Number of cells                                                                        |
+| bits       | Number of bits                                                                         |
+| is_mc      | True if the source or destination is in the masterchain                                |
+
+:::info Only unique hash cells are counted for storage and fwd fees i.e. 3 identical hash cells are counted as one.
+
+In particular, it deduplicates data: if there are several equivalent sub-cells referenced in different branches, their content is only stored once.
+
+[Read more about deduplication](/develop/data-formats/library-cells).
+:::
 
 However, sometimes the outgoing message depends significantly on the incoming structure, and in that case, you can't fully predict the fee. Try to use the `GETORIGINALFWDFEE` opcode with the following parameters:
 
