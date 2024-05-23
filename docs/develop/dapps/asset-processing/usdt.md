@@ -39,6 +39,8 @@ On the other hand average fee for sending any amount of USD₮ in TON Blockchain
 
 TON’s high throughput and rapid confirmation times enable USD₮ transactions to be processed more quickly than ever before.
 
+## Advanced Details
+
 :::caution IMPORTANT
 In TON Blockchain Jettons can be created with duplicate names. Technically, it will not differ in any way from the real USD₮ but it will have no value because of no security. You can check it for fraud only by checking Jetton Master address.
 
