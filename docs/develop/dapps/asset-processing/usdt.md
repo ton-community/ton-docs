@@ -4,13 +4,7 @@ import Button from '@site/src/components/button'
 
 ## Tether
 
-Stablecoins are a type of cryptocurrency whose value is pegged to another asset, such as a fiat currency or gold, to maintain a stable price. Until recently, there was a jUSDT token, which is a wrapped ERC-20 from the Ethereum token bridged with [bridge.ton.org](bridge.ton.org). But on [18.04.2023](https://t.me/toncoin/824) the public launch of **native** USD₮ token issued by the company [Tether](https://tether.to/en/) was happened. USD₮ token is pegged 1-to-1 with USD and backed 100% by Tether’s reserves. This 1:1 pegging gives USD₮ a stable value, setting it apart from other, more volatile digital currencies. Such stability is essential for daily transactions, trading, remittances, and protecting your holdings against the price fluctuations of other digital currencies. This means that stablecoins can be used for exchanges, DeFi, and peer-to-peer transactions. After launching USD₮, the jUSDT has moved to the second priority token but is still used in services as an alternative or addition to USD₮.
-
-:::warning IMPORTANT
-In TON Blockchain Jettons can be created with duplicate names, i.e. anyone can also create their own token and name it USD₮ or jUSDT. Technically, it will not differ in any way from the real USD₮ but it will have no value because such a token has no security. Therefore, you need to be extremely careful when dealing with stablecoins on TON Network. You can check a stablecoin or a wrapped token on TON Network for fraud only by checking Jetton Master address.
-
-See important [recommendations](/develop/dapps/asset-processing/jettons#jetton-wallet-processing).
-:::
+Stablecoins are a type of cryptocurrency whose value is 1:1 pegged to another asset, such as a fiat currency or gold, to maintain a stable price. Until recently, there was a jUSDT token, which is a wrapped ERC-20 from the Ethereum token bridged with [bridge.ton.org](bridge.ton.org). But on [18.04.2023](https://t.me/toncoin/824) the public launch of **native** USD₮ token issued by the company [Tether](https://tether.to/en/) was happened. After launching USD₮, the jUSDT has moved to the second priority token but is still used in services as an alternative or addition to USD₮.
 
 In TON Blockchain USD₮ supported as a [Jetton Asset](/develop/dapps/asset-processing/jettons).
 
@@ -45,6 +39,11 @@ On the other hand average fee for sending any amount of USD₮ in TON Blockchain
 
 TON’s high throughput and rapid confirmation times enable USD₮ transactions to be processed more quickly than ever before.
 
+:::caution IMPORTANT
+In TON Blockchain Jettons can be created with duplicate names. Technically, it will not differ in any way from the real USD₮ but it will have no value because of no security. You can check it for fraud only by checking Jetton Master address.
+
+See important [recommendations](/develop/dapps/asset-processing/jettons#jetton-wallet-processing).
+:::
 
 ## See Also
 
