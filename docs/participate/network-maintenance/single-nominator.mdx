@@ -219,6 +219,12 @@ d. Open deeplink on the owner's phone
 
 If the wallet does not open automatically, you can send the transaction manually by copying the pool address. Send it through any TON wallet. From the sent transaction, 1 TON will be debited as a commission for processing the deposit.
 
+You can also make a deposit using mytonctrl, using the following command:
+
+```sh
+MyTonCtrl> mg <from-wallet-name> <pool-account-addr> <amount>
+```
+
 **MyTonCtrl** will automatically join the elections. You can set the stake amount that mytonctrl sends to [Elector contract](/develop/smart-contracts/governance#elector) ~ every 18 hours.
 
 ```sh
@@ -307,6 +313,13 @@ MyTonCtrl> status fast
 ```
 
 ![](/img/docs/single-nominator/testnet-status.png)
+
+## Transitioning a Regular Validator to Nominator Pool Mode
+
+1. Input set stake 0 to discontinue election participation.
+2. Await the return of both your stakes from the elector.
+3. Proceed with the following [steps](/participate/network-maintenance/single-nominator#set-up-single-nominator).
+
 
 ## See Also
 
