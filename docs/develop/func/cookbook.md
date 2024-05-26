@@ -1490,8 +1490,6 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 
 ### How to update the smart contract logic
 
-The smart contract logic is stored in the cells of register `c3` and the persistent storage in the cells of register `c4`. This design allows developers to overwrite the contract logic with set_code and overwrite the existing storage with set_data, allowing for in-place updates without the need for proxy templates.
-
 Below is a simple `СounterV1` smart-contract that has the functionality to increment the counter and update the smart-contract logic. 
 
 ```func
