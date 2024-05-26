@@ -201,9 +201,9 @@ Currently, the ability to update smart contracts is a normal practice and is wid
 How to mitigate the risks:
 
 1. Pay attention to projects with a good reputation and well-known development teams.
-1. Reputable projects always conduct independent code audits to make sure the code is safe and reliable. Look for projects that have several completed audits from reputable auditing firms.
-1. An active community and positive feedback can serve as an additional indicator of a project's reliability.
-1. Examine exactly how the project implements the update process. The more transparent and decentralized the process, the less risk to users.
+2. Reputable projects always conduct independent code audits to make sure the code is safe and reliable. Look for projects that have several completed audits from reputable auditing firms.
+3. An active community and positive feedback can serve as an additional indicator of a project's reliability.
+4. Examine exactly how the project implements the update process. The more transparent and decentralized the process, the less risk to users.
 
 ### How can users be sure that the contract owner will not change certain conditions (via an update)?
 
