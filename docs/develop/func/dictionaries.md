@@ -6,8 +6,8 @@ Smart contracts can make use of dictionaries - ordered key-value mappings. They 
 Working with potentially large trees of cells creates a couple of considerations:
 
 1. Every update operation builds a notable amount of cells (and each built cell costs 500 gas, as may be found on [TVM Instructions](/learn/tvm-instructions/instructions#gas-prices) page), meaning that those operations may run out of gas if used without care.
-    - In particular, Wallet bot has run into such a problem once, when using highload-v2 wallet. The failure led to repeated transactions like [fd78228f352f582a544ab7ad7eb716610668b23b88dae48e4f4dbd4404b5d7f6](https://tonviewer.com/transaction/fd78228f352f582a544ab7ad7eb716610668b23b88dae48e4f4dbd4404b5d7f6) draining its balance.
-2. The binary tree for N key-value pairs contains N-1 forks, and thus at least 2N-1 cells in total. Smart contract storage is limited to 65536 cells, so maximum number of entries in dictionary is 32768.
+    - In particular, Wallet bot has run into such a problem once, when using highload-v2 wallet. The unbounded loop combined with expensive dictionary updates on each iteration led to gas running out and eventually to repeated transactions like [fd78228f352f582a544ab7ad7eb716610668b23b88dae48e4f4dbd4404b5d7f6](https://tonviewer.com/transaction/fd78228f352f582a544ab7ad7eb716610668b23b88dae48e4f4dbd4404b5d7f6) draining its balance.
+2. The binary tree for N key-value pairs contains N-1 forks, and thus at least 2N-1 cells in total. Smart contract storage is limited to 65536 unique cells, so maximum number of entries in dictionary is 32768 or slightly more if there are repeated cells.
 :::
 
 ## Dictionary kinds
@@ -33,6 +33,42 @@ In order for contract not to break of gas limit exceeding, only a limited number
 :::info
 There are instructions for retrieving a subdictionary: subset of entries within a given key range. Those have not been tested, so you can check them out only in TVM assembly form: `SUBDICTGET` and similar.
 :::
+
+#### Hashmap examples
+
+Let's see what hashmaps look like, looking specifically at mapping of 257-bit integer keys to empty value slices (such a map would only indicate presence or absence of element).
+
+A way to check that quickly is to run following script in Python (possibly replacing `pytoniq` with other SDK as appropriate):
+
+```python
+import pytoniq
+k = pytoniq.HashMap(257)
+em = pytoniq.begin_cell().to_slice()
+k.set(5, em)
+k.set(7, em)
+k.set(5 - 2**256, em)
+k.set(6 - 2**256, em)
+print(str(pytoniq.begin_cell().store_maybe_ref(k.serialize()).end_cell()))
+```
+
+The structure is binary tree, even a balanced one if we overlook the root cell.
+
+```
+1[80] -> {
+	2[00] -> {
+		265[9FC00000000000000000000000000000000000000000000000000000000000000080] -> {
+			4[50],
+			4[50]
+		},
+		266[9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF40] -> {
+			2[00],
+			2[00]
+		}
+	}
+}
+```
+
+There are [more examples on hashmap parsing](/develop/data-formats/tl-b-types#hashmap-parsing-example) in documentation.
 
 ### Augmented maps (with additional data in each node)
 
