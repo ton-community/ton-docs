@@ -78,8 +78,6 @@ In the final version of this technology, users wallets will allow transactions t
 Wallet source code:
  * [tonkeeper/w5](https://github.com/tonkeeper/w5)
 
-
-
 ## Special wallets
 
 Sometimes the functionality of basic wallets isn't enough. That's why there are several types of specialized wallet: `high-load`, `lockup` and `restricted`.
