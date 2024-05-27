@@ -502,6 +502,7 @@ const sidebars = {
             'develop/func/compiler_directives',
             'develop/func/statements',
             'develop/func/builtins',
+            'develop/func/dictionaries',
             'develop/func/stdlib',
           ],
         },
