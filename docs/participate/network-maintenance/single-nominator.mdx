@@ -51,6 +51,12 @@ single-nominator  enabled   Orbs's single nominator pools.
 MyTonCtrl> new_single_pool <pool-name> <owner_address>
 ```
 
+If you have already created pool it's possible to import it:
+
+```bash
+MyTonCtrl> import_pool <pool-name> <pool-addr>
+```
+
 4. Type `pools_list` to display pool addresses
 
 ```bash
@@ -219,11 +225,19 @@ d. Open deeplink on the owner's phone
 
 If the wallet does not open automatically, you can send the transaction manually by copying the pool address. Send it through any TON wallet. From the sent transaction, 1 TON will be debited as a commission for processing the deposit.
 
-You can also make a deposit using mytonctrl, using the following command:
+You can also make a deposit using mytonctrl, using the following commands:
 
 ```sh
 MyTonCtrl> mg <from-wallet-name> <pool-account-addr> <amount>
 ```
+
+or
+
+```sh
+MyTonCtrl> deposit_to_pool <pool-addr> <amount>
+```
+
+which deposits pool from validation wallet.
 
 **MyTonCtrl** will automatically join the elections. You can set the stake amount that mytonctrl sends to [Elector contract](/develop/smart-contracts/governance#elector) ~ every 18 hours.
 
@@ -238,7 +252,13 @@ Minimal stake amount could be found using `status` command.
 
 If user doesn't want to take part in validating anymore it's possible to withdraw all funds from the Single Nominator contract to validators personal wallet. To get coins back after staking, send 1 TON to the pool’s address, add a comment **w** (small letter) to the transaction. This 1 TON minus commission will be returned, and a smart-contract will understand that you want to bring the coins back and it will send them back right after the end of the validator’s work cycle. It usually takes up to 18 hours.
 
-It's possible to return coins partly, but you need to create and send transaction manually:
+You can also withdraw funds using the following command:
+
+```sh
+MyTonCtrl> withdraw_from_pool <pool-addr> <amount>
+```
+
+Or you can create and send transaction manually:
 
 <Tabs groupId="code-examples">
 <TabItem value="toncore" label="JS (@ton)">
@@ -313,6 +333,14 @@ MyTonCtrl> status fast
 ```
 
 ![](/img/docs/single-nominator/testnet-status.png)
+
+## Delete pool
+
+It's also possible to delete local pool:
+
+```bash
+MyTonCtrl> delete_pool <pool-name>
+```
 
 ## Transitioning a Regular Validator to Nominator Pool Mode
 
