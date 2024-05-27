@@ -59,6 +59,27 @@ This is a very customizable feature which is unique to TON Blockchain.
 Wallet source code:
  * [ton-blockchain/wallet-contract](https://github.com/ton-blockchain/wallet-contract)
 
+### Wallet V5
+
+:::warning
+This is an experimental version that is in public beta testing
+:::
+
+This is an extensible wallet specification  developed by the Tonkeeper team, aimed at replacing V4 and allowing arbitrary extensions.
+
+The W5 wallet standard offers many benefits that improve the experience for both users and merchants. W5 supports gas-free transactions, account delegation and recovery, subscription payments using tokens and Toncoin, and low-cost multi-transfers.
+
+Users will have access to a 25% reduction in blockchain fees, a new flexible plugin interface for developers, and an internal message signature that enables delegation of gas payments.
+
+:::tip
+In the final version of this technology, users wallets will allow transactions to be initiated by the user but paid for by another contract. Consequently, there will be services (such as [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)) that provide this functionality: they pay the transaction fees in TONs on behalf of the user, but charge a fee in tokens. This means they cover the TON fees only for transactions that include a payment to the service.
+:::
+
+Wallet source code:
+ * [tonkeeper/w5](https://github.com/tonkeeper/w5)
+
+
+
 ## Special wallets
 
 Sometimes the functionality of basic wallets isn't enough. That's why there are several types of specialized wallet: `high-load`, `lockup` and `restricted`.
