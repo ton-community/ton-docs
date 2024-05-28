@@ -760,6 +760,27 @@ const sidebars = {
         },
       ],
     },
+    {
+      type: 'category',
+      label: 'Localization Program',
+      items: [
+        {
+          type: 'doc',
+          label: 'Overview',
+          id: 'contribute/localization-program/overview',
+        },
+        {
+          type: 'doc',
+          label: 'Localization Program Guideline',
+          id: 'contribute/localization-program/localization-program-guideline',
+        },
+        {
+          type: 'doc',
+          label: 'Translators Guide',
+          id: 'contribute/localization-program/translators-guide',
+        },
+      ],
+    },
   ],
 
 }

@@ -19,6 +19,18 @@ We commit ourselves to making an open infrastructure for multilingual community 
 It's not just some project for only one language user, our goal is **for the global developer ecosystem**.
 :::
 
+## How to add support for a new language
+For now, we have all languages we wanted in Crowdin, if you are a community manager, you just need:
+1. Add a new branch named your `[lang]_localization`(like if you're korean community manager use `ko_localization`), on [TownSquareXYZ/ton-docs](https://github.com/TownSquareXYZ/ton-docs).
+2. **Contact vercel owner of this repo**, let him know what language you wanna show in menu.
+3. create a pr request to dev branch. **Never merge it to dev**, it just for preview.
+
+That's all! now you can see the preview of your language in the pr request. 
+![ko preview](/img/localizationProgramGuideline/ko_preview.png)
+
+When your lang is ready to show on TON docs, create an issue, we'll set your lang into prod env.
+
+
 
 ## Roles
 
