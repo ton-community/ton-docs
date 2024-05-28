@@ -49,8 +49,8 @@ Voting power was stored in message as an integer. So the attacker could send a n
   from_votes -= amount;
   to_votes += amount;
 
-  ;; No need to check that result from_votes is positive: set_voting_power will throw for negative votes
-  ;; throw_unless(998, from_votes > 0);
+  // No need to check that result from_votes is positive: set_voting_power will throw for negative votes
+  // throw_unless(998, from_votes > 0);
 
   votes~set_voting_power(from, from_votes);
   votes~set_voting_power(to, to_votes);
@@ -76,7 +76,7 @@ if(in_msg_body.slice_bits() > 0) {
 set_seed(seed);
 var balance = get_balance().pair_first();
 if(balance > 5000 * 1000000000) {
-    ;; forbid too large jackpot
+    // forbid too large jackpot
     raw_reserve( balance - 5000 * 1000000000, 0);
 }
 if(rand(10000) == 7777) { ...send reward... }
@@ -103,11 +103,11 @@ The vault has the following code in the database message handler:
 ```func
 int mode = null();
 if (op == op_not_winner) {
-    mode = 64; ;; Refund remaining check-TONs
-               ;; addr_hash corresponds to check requester
+    mode = 64; // Refund remaining check-TONs
+               // addr_hash corresponds to check requester
 } else {
-     mode = 128; ;; Award the prize
-                 ;; addr_hash corresponds to the withdrawal address from the winning entry
+     mode = 128; // Award the prize
+                 // addr_hash corresponds to the withdrawal address from the winning entry
 }
 ```
 
@@ -138,9 +138,9 @@ slice safe_execute(int image, (int -> slice) dehasher) inline {
 
   slice preimage = try_execute(image, dehasher);
 
-  ;; restore c4 if dehasher spoiled it
+  // restore c4 if dehasher spoiled it
   set_data(c4);
-  ;; clean actions if dehasher spoiled them
+  // clean actions if dehasher spoiled them
   set_c5(begin_cell().end_cell());
 
   return preimage;

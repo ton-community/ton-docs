@@ -63,7 +63,7 @@
     - \```javascript *或* ```js可用于任何JavaScript代码。
     - \```typescript或```ts可用于任何TypeScript代码。
     - \```jsx用于ReactJS代码。
-    - \```cpp用于Func代码。
+    - \```func用于FunC代码。
     - 使用\```graphql突出显示GraphQL语法。
     - 使用\```json突出显示有效的JSON。（对于无效的JSON示例，请使用\```text。）
     - \```bash应*仅*用于需要#样式注释的代码块。这必须小心进行，因为在许多情况下，#字符将呈现为markdown标题。如果发生这种情况，通常目录会受到影响。

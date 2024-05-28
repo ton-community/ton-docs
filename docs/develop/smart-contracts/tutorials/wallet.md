@@ -169,20 +169,20 @@ Generally, there are two transaction types on TON Blockchain: `internal` and `ex
 
 ```func
 () recv_external(slice in_msg) impure {
-    ;; some code
+    // some code
 }
 ```
 Before we dive into more details concerning wallets, let’s look at how wallets accept external transactions. On TON, all wallets hold the owner’s `public key`, `seqno`, and `subwallet_id`. When receiving an external transaction, the wallet uses the `get_data()` method to retrieve data from the storage portion of the wallet. It then conducts several verification procedures and decides whether to accept the transaction or not. This process is conducted as follows:
 
 ```func
 () recv_external(slice in_msg) impure {
-  var signature = in_msg~load_bits(512); ;; get signature from the message body
+  var signature = in_msg~load_bits(512); // get signature from the message body
   var cs = in_msg;
-  var (subwallet_id, valid_until, msg_seqno) = (cs~load_uint(32), cs~load_uint(32), cs~load_uint(32));  ;; get rest values from the message body
-  throw_if(35, valid_until <= now()); ;; check the relevance of the transaction
-  var ds = get_data().begin_parse(); ;; get data from storage and convert it into a slice to be able to read values
-  var (stored_seqno, stored_subwallet, public_key) = (ds~load_uint(32), ds~load_uint(32), ds~load_uint(256)); ;; read values from storage
-  ds.end_parse(); ;; make sure we do not have anything in ds variable
+  var (subwallet_id, valid_until, msg_seqno) = (cs~load_uint(32), cs~load_uint(32), cs~load_uint(32));  // get rest values from the message body
+  throw_if(35, valid_until <= now()); // check the relevance of the transaction
+  var ds = get_data().begin_parse(); // get data from storage and convert it into a slice to be able to read values
+  var (stored_seqno, stored_subwallet, public_key) = (ds~load_uint(32), ds~load_uint(32), ds~load_uint(256)); // read values from storage
+  ds.end_parse(); // make sure we do not have anything in ds variable
   throw_unless(33, msg_seqno == stored_seqno);
   throw_unless(34, subwallet_id == stored_subwallet);
   throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
@@ -273,8 +273,8 @@ As we discussed earlier, a wallet smart contract accepts external transactions, 
 ```func
 cs~touch();
 while (cs.slice_refs()) {
-    var mode = cs~load_uint(8); ;; load transaction mode
-    send_raw_message(cs~load_ref(), mode); ;; get each new internal message as a cell with the help of load_ref() and send it
+    var mode = cs~load_uint(8); // load transaction mode
+    send_raw_message(cs~load_ref(), mode); // get each new internal message as a cell with the help of load_ref() and send it
 }
 ```
 
@@ -339,26 +339,26 @@ Internal transactions are used to send messages between contracts. When analyzin
 
 ```func
 var msg = begin_cell()
-  .store_uint(0x18, 6) ;; or 0x10 for non-bounce
+  .store_uint(0x18, 6) // or 0x10 for non-bounce
   .store_slice(to_address)
   .store_coins(amount)
-  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
-  ;; store something as a body
+  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // default message headers (see sending messages page)
+  // store something as a body
 ```
 
 Let’s first consider `0x18` and `0x10` (x - hexadecimal), which are hexadecimal numbers laid out in the following manner (given that we allocate 6 bits): `011000` and `010000`. This means that the code above can be overwritten as follows:
 
 ```func
 var msg = begin_cell()
-  .store_uint(0, 1) ;; this bit indicates that we send an internal message according to int_msg_info$0  
-  .store_uint(1, 1) ;; IHR Disabled
-  .store_uint(1, 1) ;; or .store_uint(0, 1) for 0x10 | bounce
-  .store_uint(0, 1) ;; bounced
-  .store_uint(0, 2) ;; src -> two zero bits for addr_none
+  .store_uint(0, 1) // this bit indicates that we send an internal message according to int_msg_info$0  
+  .store_uint(1, 1) // IHR Disabled
+  .store_uint(1, 1) // or .store_uint(0, 1) for 0x10 | bounce
+  .store_uint(0, 1) // bounced
+  .store_uint(0, 2) // src -> two zero bits for addr_none
   .store_slice(to_address)
   .store_coins(amount)
-  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
-  ;; store something as a body
+  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // default message headers (see sending messages page)
+  // store something as a body
 ```
 Now let’s go through each option in detail:
 
@@ -382,14 +382,14 @@ Finally, let’s look at the remaining lines of code:
 
 ```func
 ...
-  .store_uint(0, 1) ;; Extra currency
-  .store_uint(0, 4) ;; IHR fee
-  .store_uint(0, 4) ;; Forwarding fee
-  .store_uint(0, 64) ;; Logical time of creation
-  .store_uint(0, 32) ;; UNIX time of creation
-  .store_uint(0, 1) ;; State Init
-  .store_uint(0, 1) ;; Message body
-  ;; store something as a body
+  .store_uint(0, 1) // Extra currency
+  .store_uint(0, 4) // IHR fee
+  .store_uint(0, 4) // Forwarding fee
+  .store_uint(0, 64) // Logical time of creation
+  .store_uint(0, 32) // UNIX time of creation
+  .store_uint(0, 1) // State Init
+  .store_uint(0, 1) // Message body
+  // store something as a body
 ```
 Option | Explanation
 :---: | :---:
@@ -2110,20 +2110,20 @@ First, let’s examine [the code structure of high-load wallet smart contract](h
 
 ```func
 () recv_external(slice in_msg) impure {
-  var signature = in_msg~load_bits(512); ;; get signature from the message body
+  var signature = in_msg~load_bits(512); // get signature from the message body
   var cs = in_msg;
-  var (subwallet_id, query_id) = (cs~load_uint(32), cs~load_uint(64)); ;; get rest values from the message body
-  var bound = (now() << 32); ;; bitwise left shift operation
-  throw_if(35, query_id < bound); ;; throw an error if transaction has expired
+  var (subwallet_id, query_id) = (cs~load_uint(32), cs~load_uint(64)); // get rest values from the message body
+  var bound = (now() << 32); // bitwise left shift operation
+  throw_if(35, query_id < bound); // throw an error if transaction has expired
   var ds = get_data().begin_parse();
-  var (stored_subwallet, last_cleaned, public_key, old_queries) = (ds~load_uint(32), ds~load_uint(64), ds~load_uint(256), ds~load_dict()); ;; read values from storage
-  ds.end_parse(); ;; make sure we do not have anything in ds
-  (_, var found?) = old_queries.udict_get?(64, query_id); ;; check if we have already had such a request
-  throw_if(32, found?); ;; if yes throw an error
+  var (stored_subwallet, last_cleaned, public_key, old_queries) = (ds~load_uint(32), ds~load_uint(64), ds~load_uint(256), ds~load_dict()); // read values from storage
+  ds.end_parse(); // make sure we do not have anything in ds
+  (_, var found?) = old_queries.udict_get?(64, query_id); // check if we have already had such a request
+  throw_if(32, found?); // if yes throw an error
   throw_unless(34, subwallet_id == stored_subwallet);
   throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
-  var dict = cs~load_dict(); ;; get dictionary with messages
-  cs.end_parse(); ;; make sure we do not have anything in cs
+  var dict = cs~load_dict(); // get dictionary with messages
+  cs.end_parse(); // make sure we do not have anything in cs
   accept_message();
 ```
 
@@ -2145,10 +2145,10 @@ This process takes a significant amount of time which high-load wallets are not 
 If the same transaction request already exists, the contract won’t accept it, as it has already been processed:
 
 ```func
-var (stored_subwallet, last_cleaned, public_key, old_queries) = (ds~load_uint(32), ds~load_uint(64), ds~load_uint(256), ds~load_dict()); ;; read values from storage
-ds.end_parse(); ;; make sure we do not have anything in ds
-(_, var found?) = old_queries.udict_get?(64, query_id); ;; check if we have already had such a request
-throw_if(32, found?); ;; if yes throw an error
+var (stored_subwallet, last_cleaned, public_key, old_queries) = (ds~load_uint(32), ds~load_uint(64), ds~load_uint(256), ds~load_dict()); // read values from storage
+ds.end_parse(); // make sure we do not have anything in ds
+(_, var found?) = old_queries.udict_get?(64, query_id); // check if we have already had such a request
+throw_if(32, found?); // if yes throw an error
 ```
 
 This way, we are **being protected from repeat transactions**, which was the role of seqno in ordinary wallets.
@@ -2158,14 +2158,14 @@ This way, we are **being protected from repeat transactions**, which was the rol
 After the contract has accepted the external message, a loop starts, in which the `slices` stored in the dictionary are taken. These slices store transaction modes and the transactions themselves. Sending new transactions takes place until the dictionary is empty.
 
 ```func
-int i = -1; ;; we write -1 because it will be the smallest value among all dictionary keys
+int i = -1; // we write -1 because it will be the smallest value among all dictionary keys
 do {
-  (i, var cs, var f) = dict.idict_get_next?(16, i); ;; get the key and its corresponding value with the smallest key, which is greater than i
-  if (f) { ;; check if any value was found
-    var mode = cs~load_uint(8); ;; load transaction mode
-    send_raw_message(cs~load_ref(), mode); ;; load transaction itself and send it
+  (i, var cs, var f) = dict.idict_get_next?(16, i); // get the key and its corresponding value with the smallest key, which is greater than i
+  if (f) { // check if any value was found
+    var mode = cs~load_uint(8); // load transaction mode
+    send_raw_message(cs~load_ref(), mode); // load transaction itself and send it
   }
-} until (~ f); ;; if any value was found continue
+} until (~ f); // if any value was found continue
 ```
 
 > 💡 Useful link:
@@ -2180,18 +2180,18 @@ Typically, [smart contracts on TON pay for their own storage](/develop/howto/fee
 
 
 ```func
-bound -= (64 << 32);   ;; clean up records that have expired more than 64 seconds ago
-old_queries~udict_set_builder(64, query_id, begin_cell()); ;; add current query to dictionary
-var queries = old_queries; ;; copy dictionary to another variable
+bound -= (64 << 32);   // clean up records that have expired more than 64 seconds ago
+old_queries~udict_set_builder(64, query_id, begin_cell()); // add current query to dictionary
+var queries = old_queries; // copy dictionary to another variable
 do {
   var (old_queries', i, _, f) = old_queries.udict_delete_get_min(64);
   f~touch();
-  if (f) { ;; check if any value was found
-    f = (i < bound); ;; check if more than 64 seconds have elapsed after expiration
+  if (f) { // check if any value was found
+    f = (i < bound); // check if more than 64 seconds have elapsed after expiration
   }
   if (f) { 
-    old_queries = old_queries'; ;; if yes save changes in our dictionary
-    last_cleaned = i; ;; save last removed query
+    old_queries = old_queries'; // if yes save changes in our dictionary
+    last_cleaned = i; // save last removed query
   }
 } until (~ f);
 ```
@@ -2207,7 +2207,7 @@ Note that it is necessary to interact with the `f` variable several times. Since
 This section may seem a bit complicated for those who have not previously worked with bitwise operations. The following line of code can be seen in the smart contract code:
 
 ```func
-var bound = (now() << 32); ;; bitwise left shift operation
+var bound = (now() << 32); // bitwise left shift operation
 ```
 As a result 32 bits are added to the number on the right side. This means that **existing values are moved 32 bits to the left**. For example, let’s consider the number 3 and translate it into a binary form with a result of 11. Applying the `3 << 2` operation, 11 is moved 2 bit places. This means that two bits are added to the right of the string. In the end, we have 1100, which is 12.
 
@@ -2216,14 +2216,14 @@ The first thing to understand about this process is to remember that the `now()`
 Next, let’s consider the following line of code:
 
 ```func
-bound -= (64 << 32); ;; clean up the records that have expired more than 64 seconds ago
+bound -= (64 << 32); // clean up the records that have expired more than 64 seconds ago
 ```
 
 Above we performed an operation to shift the number 64 by 32 bits to **subtract 64 seconds** from our timestamp. This way we'll be able to compare past query_ids and see if they are less than the received value. If so, they expired more than 64 seconds ago:
 
 ```func
-if (f) { ;; check if any value has been found
-  f = (i < bound); ;; check if more than 64 seconds have elapsed after expiration
+if (f) { // check if any value has been found
+  f = (i < bound); // check if more than 64 seconds have elapsed after expiration
 }
 ```
 To understand this better, let’s use the number `1625918400` as an example of a timestamp. Its binary representation (with the left-handed addition of zeros for 32 bits) is 01100000111010011000101111000000. By performing a 32 bit bitwise left shift, the result is 32 zeros at the end of the binary representation of our number.

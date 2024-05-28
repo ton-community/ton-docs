@@ -61,7 +61,7 @@ FunC中使用的几乎所有函数都在[stdlib.func](https://github.com/ton-blo
 一个关于如何通过适当的cell工作显著降低gas成本的示例。
 
 假设你想在出站消息中添加一些编码的有效负载。直接实现将如下：
-```cpp
+```func
 slice payload_encoding(int a, int b, int c) {
   return
     begin_cell().store_uint(a,8)
@@ -76,9 +76,9 @@ slice payload_encoding(int a, int b, int c) {
     .store_uint(0x18, 6)
     .store_slice(destination)
     .store_coins(0)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
-    .store_uint(0x33bbff77, 32) ;; op-code (see smart-contract guidelines)
-    .store_uint(cur_lt(), 64)  ;; query_id (see smart-contract guidelines)
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // default message headers (see sending messages page)
+    .store_uint(0x33bbff77, 32) // op-code (see smart-contract guidelines)
+    .store_uint(cur_lt(), 64)  // query_id (see smart-contract guidelines)
     .store_slice(payload)
   .end_cell();
   send_raw_message(msg, 64);
@@ -87,8 +87,8 @@ slice payload_encoding(int a, int b, int c) {
 
 这段代码的问题是什么？`payload_encoding`为了生成切片位字符串，首先通过`end_cell()`创建一个cell（+500 gas单位）。然后解析它`begin_parse()`（+100 gas单位）。通过改变一些常用类型，可以不使用这些不必要的操作来重写相同的代码：
 
-```cpp
-;; 我们为stdlib中不存在的函数添加asm，该函数将一个构建器存储到另一个构建器中
+```func
+// 我们为stdlib中不存在的函数添加asm，该函数将一个构建器存储到另一个构建器中
 builder store_builder(builder to, builder what) asm(what to) "STB";
 
 builder payload_encoding(int a, int b, int c) {
@@ -104,9 +104,9 @@ builder payload_encoding(int a, int b, int c) {
     .store_uint(0x18, 6)
     .store_slice(destination)
     .store_coins(0)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 默认消息头（见发送消息页面）
-    .store_uint(0x33bbff77, 32) ;; 操作码（见智能合约指南）
-    .store_uint(cur_lt(), 64)  ;; query_id（见智能合约指南）
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // 默认消息头（见发送消息页面）
+    .store_uint(0x33bbff77, 32) // 操作码（见智能合约指南）
+    .store_uint(cur_lt(), 64)  // query_id（见智能合约指南）
     .store_builder(payload)
   .end_cell();
   send_raw_message(msg, 64);
@@ -125,7 +125,7 @@ TON中的字典是作为cell的树（更准确地说是DAG）被引入的。这�
 
 ### 堆栈操作
 注意FunC在底层操作堆栈条目。这意味着代码：
-```cpp
+```func
 (int a, int b, int c) = some_f();
 return (c, b, a);
 ```

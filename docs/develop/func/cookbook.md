@@ -11,13 +11,13 @@ Compared to the [FunC Documentation](/develop/func/types), this article is more 
 Let's say we want to check if any event is relevant. To do this, we use the flag variable. Remember that in FunC `true` is `-1` and `false` is `0`.
 
 ```func
-int flag = 0; ;; false
+int flag = 0; // false
 
 if (flag) { 
-    ;; do something
+    // do something
 }
 else {
-    ;; reject the transaction
+    // reject the transaction
 }
 ```
 
@@ -39,7 +39,6 @@ int multiplier = number;
 int degree = 5;
 
 repeat(degree - 1) {
-
     number *= multiplier;
 }
 ```
@@ -53,19 +52,19 @@ repeat(degree - 1) {
 While is useful when we do not know how often to perform a particular action. For example, take a `cell`, which is known to store up to four references to other cells. 
 
 ```func
-cell inner_cell = begin_cell() ;; create a new empty builder
-        .store_uint(123, 16) ;; store uint with value 123 and length 16 bits
-        .end_cell(); ;; convert builder to a cell
+cell inner_cell = begin_cell() // create a new empty builder
+        .store_uint(123, 16) // store uint with value 123 and length 16 bits
+        .end_cell(); // convert builder to a cell
 
 cell message = begin_cell()
-        .store_ref(inner_cell) ;; store cell as reference
+        .store_ref(inner_cell) // store cell as reference
         .store_ref(inner_cell)
         .end_cell();
 
-slice msg = message.begin_parse(); ;; convert cell to slice
-while (msg.slice_refs_empty?() != -1) { ;; we should remind that -1 is true
-    cell inner_cell = msg~load_ref(); ;; load cell from slice msg
-    ;; do something
+slice msg = message.begin_parse(); // convert cell to slice
+while (msg.slice_refs_empty?() != -1) { // we should remind that -1 is true
+    cell inner_cell = msg~load_ref(); // load cell from slice msg
+    // do something
 }
 ```
 
@@ -93,8 +92,8 @@ When we need the cycle to run at least once, we use `do until`.
 int flag = 0;
 
 do {
-    ;; do something even flag is false (0) 
-} until (flag == -1); ;; -1 is true
+    // do something even flag is false (0) 
+} until (flag == -1); // -1 is true
 ```
 
 > 💡 Useful links
@@ -106,31 +105,31 @@ do {
 Before working with `slice`, it is necessary to check whether it has any data to process it correctly. We can use `slice_empty?()` to do this, but we have to consider that it will return `-1` (`true`) if there is at least one `bit` of data or one `ref`.
 
 ```func
-;; creating empty slice
+// creating empty slice
 slice empty_slice = "";
-;; `slice_empty?()` returns `true`, because slice doesn't have any `bits` and `refs`
+// `slice_empty?()` returns `true`, because slice doesn't have any `bits` and `refs`
 empty_slice.slice_empty?();
 
-;; creating slice which contains bits only
+// creating slice which contains bits only
 slice slice_with_bits_only = "Hello, world!";
-;; `slice_empty?()` returns `false`, because slice have any `bits`
+// `slice_empty?()` returns `false`, because slice have any `bits`
 slice_with_bits_only.slice_empty?();
 
-;; creating slice which contains refs only
+// creating slice which contains refs only
 slice slice_with_refs_only = begin_cell()
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_empty?()` returns `false`, because slice have any `refs`
+// `slice_empty?()` returns `false`, because slice have any `refs`
 slice_with_refs_only.slice_empty?();
 
-;; creating slice which contains bits and refs
+// creating slice which contains bits and refs
 slice slice_with_bits_and_refs = begin_cell()
     .store_slice("Hello, world!")
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_empty?()` returns `false`, because slice have any `bits` and `refs`
+// `slice_empty?()` returns `false`, because slice have any `bits` and `refs`
 slice_with_bits_and_refs.slice_empty?();
 ```
 > 💡 Useful links
@@ -153,31 +152,31 @@ slice_with_bits_and_refs.slice_empty?();
 If we need to check only the `bits` and it does not matter if there are any `refs` in `slice`, then we should use `slice_data_empty?()`.
 
 ```func 
-;; creating empty slice
+// creating empty slice
 slice empty_slice = "";
-;; `slice_data_empty?()` returns `true`, because slice doesn't have any `bits`
+// `slice_data_empty?()` returns `true`, because slice doesn't have any `bits`
 empty_slice.slice_data_empty?();
 
-;; creating slice which contains bits only
+// creating slice which contains bits only
 slice slice_with_bits_only = "Hello, world!";
-;; `slice_data_empty?()` returns `false`, because slice have any `bits`
+// `slice_data_empty?()` returns `false`, because slice have any `bits`
 slice_with_bits_only.slice_data_empty?();
 
-;; creating slice which contains refs only
+// creating slice which contains refs only
 slice slice_with_refs_only = begin_cell()
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_data_empty?()` returns `true`, because slice doesn't have any `bits`
+// `slice_data_empty?()` returns `true`, because slice doesn't have any `bits`
 slice_with_refs_only.slice_data_empty?();
 
-;; creating slice which contains bits and refs
+// creating slice which contains bits and refs
 slice slice_with_bits_and_refs = begin_cell()
     .store_slice("Hello, world!")
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_data_empty?()` returns `false`, because slice have any `bits`
+// `slice_data_empty?()` returns `false`, because slice have any `bits`
 slice_with_bits_and_refs.slice_data_empty?();
 ```
 
@@ -201,31 +200,31 @@ slice_with_bits_and_refs.slice_data_empty?();
 In case we are only interested in `refs`, we should check their presence using `slice_refs_empty?()`.
 
 ```func 
-;; creating empty slice
+// creating empty slice
 slice empty_slice = "";
-;; `slice_refs_empty?()` returns `true`, because slice doesn't have any `refs`
+// `slice_refs_empty?()` returns `true`, because slice doesn't have any `refs`
 empty_slice.slice_refs_empty?();
 
-;; creating slice which contains bits only
+// creating slice which contains bits only
 slice slice_with_bits_only = "Hello, world!";
-;; `slice_refs_empty?()` returns `true`, because slice doesn't have any `refs`
+// `slice_refs_empty?()` returns `true`, because slice doesn't have any `refs`
 slice_with_bits_only.slice_refs_empty?();
 
-;; creating slice which contains refs only
+// creating slice which contains refs only
 slice slice_with_refs_only = begin_cell()
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_refs_empty?()` returns `false`, because slice have any `refs`
+// `slice_refs_empty?()` returns `false`, because slice have any `refs`
 slice_with_refs_only.slice_refs_empty?();
 
-;; creating slice which contains bits and refs
+// creating slice which contains bits and refs
 slice slice_with_bits_and_refs = begin_cell()
     .store_slice("Hello, world!")
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_refs_empty?()` returns `false`, because slice have any `refs`
+// `slice_refs_empty?()` returns `false`, because slice have any `refs`
 slice_with_bits_and_refs.slice_refs_empty?();
 ```
 
@@ -253,15 +252,15 @@ cell cell_with_bits_and_refs = begin_cell()
     .store_ref(null())
     .end_cell();
 
-;; Change `cell` type to slice with `begin_parse()`
+// Change `cell` type to slice with `begin_parse()`
 slice cs = cell_with_bits_and_refs.begin_parse();
 
-;; determine if slice is empty
+// determine if slice is empty
 if (cs.slice_empty?()) {
-    ;; cell is empty
+    // cell is empty
 }
 else {
-    ;; cell is not empty
+    // cell is not empty
 }
 ```
 
@@ -286,11 +285,11 @@ cell d = new_dict();
 d~udict_set(256, 0, "hello");
 d~udict_set(256, 1, "world");
 
-if (d.dict_empty?()) { ;; Determine if dict is empty
-    ;; dict is empty
+if (d.dict_empty?()) { // Determine if dict is empty
+    // dict is empty
 }
 else {
-    ;; dict is not empty
+    // dict is not empty
 }
 ```
 
@@ -307,7 +306,7 @@ else {
 When working with `tuples`, it is important always to know if any values are inside for extraction. If we try to extract value from an empty `tuple`, we get an error: "not a tuple of valid size" with `exit code 7`.
 
 ```func
-;; Declare tlen function because it's not presented in stdlib
+// Declare tlen function because it's not presented in stdlib
 (int) tlen (tuple t) asm "TLEN";
 
 () main () {
@@ -316,10 +315,10 @@ When working with `tuples`, it is important always to know if any values are ins
     t~tpush(37);
 
     if (t.tlen() == 0) {
-        ;; tuple is empty
+        // tuple is empty
     }
     else {
-        ;; tuple is not empty
+        // tuple is not empty
     }
 }
 ```
@@ -343,9 +342,9 @@ tuple numbers = null();
 numbers = cons(100, numbers);
 
 if (numbers.null?()) {
-    ;; list-style list is empty
+    // list-style list is empty
 } else {
-    ;; list-style list is not empty
+    // list-style list is not empty
 }
 ```
 
@@ -356,19 +355,19 @@ We are adding number 100 to our list-style list with [cons](/develop/func/stdlib
 Let’s say we have a `counter` that stores the number of transactions. This variable is not available during the first transaction in the smart contract state, because the state is empty, so it is necessary to process such a case. If the state is empty, we create a variable `counter` and save it.
 
 ```func
-;; `get_data()` will return the data cell from contract state
+// `get_data()` will return the data cell from contract state
 cell contract_data = get_data();
 slice cs = contract_data.begin_parse();
 
 if (cs.slice_empty?()) {
-    ;; contract data is empty, so we create counter and save it
+    // contract data is empty, so we create counter and save it
     int counter = 1;
-    ;; create cell, add counter and save in contract state
+    // create cell, add counter and save in contract state
     set_data(begin_cell().store_uint(counter, 32).end_cell());
 }
 else {
-    ;; contract data is not empty, so we get our counter, increase it and save
-    ;; we should specify correct length of our counter in bits
+    // contract data is not empty, so we get our counter, increase it and save
+    // we should specify correct length of our counter in bits
     int counter = cs~load_uint(32) + 1;
     set_data(begin_cell().store_uint(counter, 32).end_cell());
 }
@@ -393,21 +392,21 @@ else {
 If we want the contract to send an internal message, we should first properly create it as a cell, specifying the technical flags, the recipient address, and the rest data.
 
 ```func
-;; We use literal `a` to get valid address inside slice from string containing address 
+// We use literal `a` to get valid address inside slice from string containing address 
 slice addr = "EQArzP5prfRJtDM5WrMNWyr9yUTAi0c9o6PfR4hkWy9UQXHx"a;
 int amount = 1000000000;
-;; we use `op` for identifying operations
+// we use `op` for identifying operations
 int op = 0;
 
 cell msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)
     .store_coins(amount)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // default message headers (see sending messages page)
     .store_uint(op, 32)
 .end_cell();
 
-send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
+send_raw_message(msg, 3); // mode 3 - pay fees separately and ignore errors 
 ```
 
 > 💡 Noted
@@ -439,11 +438,11 @@ In the body of a message that follows flags and other technical data, we can sen
 We can also send the body of the message inside the same `cell` as header, if we are sure that we have enough space. In this case, we need to set the bit to `0`.
 
 ```func
-;; We use literal `a` to get valid address inside slice from string containing address 
+// We use literal `a` to get valid address inside slice from string containing address 
 slice addr = "EQArzP5prfRJtDM5WrMNWyr9yUTAi0c9o6PfR4hkWy9UQXHx"a;
 int amount = 1000000000;
 int op = 0;
-cell message_body = begin_cell() ;; Creating a cell with message
+cell message_body = begin_cell() // Creating a cell with message
     .store_uint(op, 32)
     .store_slice("❤")
 .end_cell();
@@ -452,12 +451,12 @@ cell msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)
     .store_coins(amount)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) ;; default message headers (see sending messages page)
-    .store_uint(1, 1) ;; set bit to 1 to indicate that the cell will go on
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) // default message headers (see sending messages page)
+    .store_uint(1, 1) // set bit to 1 to indicate that the cell will go on
     .store_ref(message_body)
 .end_cell();
 
-send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
+send_raw_message(msg, 3); // mode 3 - pay fees separately and ignore errors 
 ```
 
 > 💡 Noted
@@ -491,7 +490,7 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors
 When sending messages, the body message can be sent either as `cell` or as `slice`. In this example, we send the body of the message inside the `slice`.
 
 ```func 
-;; We use literal `a` to get valid address inside slice from string containing address 
+// We use literal `a` to get valid address inside slice from string containing address 
 slice addr = "EQArzP5prfRJtDM5WrMNWyr9yUTAi0c9o6PfR4hkWy9UQXHx"a;
 int amount = 1000000000;
 int op = 0;
@@ -501,12 +500,12 @@ cell msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)
     .store_coins(amount)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // default message headers (see sending messages page)
     .store_uint(op, 32)
     .store_slice(message_body)
 .end_cell();
 
-send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
+send_raw_message(msg, 3); // mode 3 - pay fees separately and ignore errors 
 ```
 
 > 💡 Noted
@@ -536,14 +535,14 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
     int i = 0;
     while (i < len) {
         int x = t.at(i);
-        ;; do something with x
+        // do something with x
         i = i + 1;
     }
 
     i = len - 1;
     while (i >= 0) {
         int x = t.at(i);
-        ;; do something with x
+        // do something with x
         i = i - 1;
     }
 }
@@ -561,7 +560,7 @@ When using any features we actually use pre-prepared for us methods inside `stdl
 
 For example, we have the method of `tpush`, which adds an element to `tuple`, but without `tpop`. In this case, we should do this:
 ```func
-;; ~ means it is modifying method
+// ~ means it is modifying method
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP"; 
 ```
 
@@ -597,7 +596,7 @@ forall X -> tuple cast_to_tuple (X x) asm "NOP";
 forall X -> int cast_to_int (X x) asm "NOP";
 forall X -> (tuple) to_tuple (X x) asm "NOP";
 
-;; define global variable
+// define global variable
 global int max_value;
 
 () iterate_tuple (tuple t) impure {
@@ -618,9 +617,9 @@ global int max_value;
 () main () {
     tuple t = to_tuple([[2,6], [1, [3, [3, 5]]], 3]);
     int len = t.tuple_length();
-    max_value = 0; ;; reset max_value;
-    iterate_tuple(t); ;; iterate tuple and find max value
-    ~dump(max_value); ;; 6
+    max_value = 0; // reset max_value;
+    iterate_tuple(t); // iterate tuple and find max value
+    ~dump(max_value); // 6
 }
 ```
 
@@ -640,25 +639,25 @@ global int max_value;
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
 () main () {
-    ;; creating an empty tuple
+    // creating an empty tuple
     tuple names = empty_tuple(); 
     
-    ;; push new items
+    // push new items
     names~tpush("Naito Narihira");
     names~tpush("Shiraki Shinichi");
     names~tpush("Akamatsu Hachemon");
     names~tpush("Takaki Yuichi");
     
-    ;; pop last item
+    // pop last item
     slice last_name = names~tpop();
 
-    ;; get first item
+    // get first item
     slice first_name = names.first();
 
-    ;; get an item by index
+    // get an item by index
     slice best_name = names.at(2);
 
-    ;; getting the length of the list 
+    // getting the length of the list 
     int number_names = names.tlen();
 }
 ```
@@ -680,36 +679,36 @@ forall X -> tuple cast_to_tuple (X x) asm "NOP";
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
 forall X -> () resolve_type (X value) impure {
-    ;; value here is of type X, since we dont know what is the exact value - we would need to check what is the value and then cast it
+    // value here is of type X, since we dont know what is the exact value - we would need to check what is the value and then cast it
     
     if (is_null(value)) {
-        ;; do something with the null
+        // do something with the null
     }
     elseif (is_int(value)) {
         int valueAsInt = cast_to_int(value);
-        ;; do something with the int
+        // do something with the int
     }
     elseif (is_slice(value)) {
         slice valueAsSlice = cast_to_slice(value);
-        ;; do something with the slice
+        // do something with the slice
     }
     elseif (is_cell(value)) {
         cell valueAsCell = cast_to_cell(value);
-        ;; do something with the cell
+        // do something with the cell
     }
     elseif (is_tuple(value)) {
         tuple valueAsTuple = cast_to_tuple(value);
-        ;; do something with the tuple
+        // do something with the tuple
     }
 }
 
 () main () {
-    ;; creating an empty tuple
+    // creating an empty tuple
     tuple stack = empty_tuple();
-    ;; let's say we have tuple and do not know the exact types of them
+    // let's say we have tuple and do not know the exact types of them
     stack~tpush("Some text");
     stack~tpush(4);
-    ;; we use var because we do not know type of value
+    // we use var because we do not know type of value
     var value = stack~tpop();
     resolve_type(value);
 }
@@ -726,7 +725,7 @@ forall X -> () resolve_type (X value) impure {
 int current_time = now();
   
 if (current_time > 1672080143) {
-    ;; do some stuff 
+    // do some stuff 
 }
 ```
 
@@ -739,7 +738,7 @@ Checkout [Random Number Generation](https://docs.ton.org/develop/smart-contracts
 :::
 
 ```func
-randomize_lt(); ;; do this once
+randomize_lt(); // do this once
 
 int a = rand(10);
 int b = rand(1000000);
@@ -753,12 +752,12 @@ Note that xp+zp is a valid variable name ( without spaces between ).
 
 ```func
 (int) modulo_operations (int xp, int zp) {  
-   ;; 2^255 - 19 is a prime number for montgomery curves, meaning all operations should be done against its prime
+   // 2^255 - 19 is a prime number for montgomery curves, meaning all operations should be done against its prime
    int prime = 57896044618658097711785492504343953926634992332820282019728792003956564819949; 
 
-   ;; muldivmod handles the next two lines itself
-   ;; int xp+zp = (xp + zp) % prime;
-   ;; int xp-zp = (xp - zp + prime) % prime;
+   // muldivmod handles the next two lines itself
+   // int xp+zp = (xp + zp) % prime;
+   // int xp-zp = (xp - zp + prime) % prime;
    (_, int xp+zp*xp-zp) = muldivmod(xp + zp, xp - zp, prime);
    return xp+zp*xp-zp;
 }
@@ -774,11 +773,11 @@ Note that xp+zp is a valid variable name ( without spaces between ).
 ```func
 int number = 198;
 
-throw_if(35, number > 50); ;; the error will be triggered only if the number is greater than 50
+throw_if(35, number > 50); // the error will be triggered only if the number is greater than 50
 
-throw_unless(39, number == 198); ;; the error will be triggered only if the number is NOT EQUAL to 198
+throw_unless(39, number == 198); // the error will be triggered only if the number is NOT EQUAL to 198
 
-throw(36); ;; the error will be triggered anyway
+throw(36); // the error will be triggered anyway
 ```
 
 [Standard tvm exception codes](/learn/tvm-instructions/tvm-exit-codes.md)
@@ -804,7 +803,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 () main () {
     tuple t = to_tuple([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     tuple reversed_t = reverse_tuple(t);
-    ~dump(reversed_t); ;; [10 9 8 7 6 5 4 3 2 1]
+    ~dump(reversed_t); // [10 9 8 7 6 5 4 3 2 1]
 }
 ```
 
@@ -839,11 +838,11 @@ int tlen (tuple t) asm "TLEN";
     numbers~tpush(999);
     numbers~tpush(54);
 
-    ~dump(numbers); ;; [19 999 54]
+    ~dump(numbers); // [19 999 54]
 
     numbers~remove_item(1); 
 
-    ~dump(numbers); ;; [19 54]
+    ~dump(numbers); // [19 54]
 }
 ```
 
@@ -861,12 +860,12 @@ int are_slices_equal_2? (slice a, slice b) asm "SDEQ";
 () main () {
     slice a = "Some text";
     slice b = "Some text";
-    ~dump(are_slices_equal_1?(a, b)); ;; -1 = true
+    ~dump(are_slices_equal_1?(a, b)); // -1 = true
 
     a = "Text";
-    ;; We use literal `a` to get valid address inside slice from string containing address
+    // We use literal `a` to get valid address inside slice from string containing address
     b = "EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF"a;
-    ~dump(are_slices_equal_2?(a, b)); ;; 0 = false
+    ~dump(are_slices_equal_2?(a, b)); // 0 = false
 }
 ```
 
@@ -893,7 +892,7 @@ int are_cells_equal? (cell a, cell b) {
             .store_uint(123, 16)
             .end_cell();
 
-    ~dump(are_cells_equal?(a, b)); ;; -1 = true
+    ~dump(are_cells_equal?(a, b)); // -1 = true
 }
 ```
 
@@ -924,10 +923,10 @@ int are_cells_equal? (cell a, cell b) {
 }
 
 (int) are_tuples_equal? (tuple t1, tuple t2) {
-    int equal? = -1; ;; initial value to true
+    int equal? = -1; // initial value to true
     
     if (t1.tuple_length() != t2.tuple_length()) {
-        ;; if tuples are differ in length they cannot be equal
+        // if tuples are differ in length they cannot be equal
         return 0;
     }
 
@@ -938,7 +937,7 @@ int are_cells_equal? (cell a, cell b) {
         var v2 = t2~tpop();
         
         if (is_null(t1) & is_null(t2)) {
-            ;; nulls are always equal
+            // nulls are always equal
         }
         elseif (is_int(v1) & is_int(v2)) {
             if (cast_to_int(v1) != cast_to_int(v2)) {
@@ -956,7 +955,7 @@ int are_cells_equal? (cell a, cell b) {
             }
         }
         elseif (is_tuple(v1) & is_tuple(v2)) {
-            ;; recursively determine nested tuples
+            // recursively determine nested tuples
             if (~ are_tuples_equal?(cast_to_tuple(v1), cast_to_tuple(v2))) {
                 equal? = 0;
             }
@@ -975,7 +974,7 @@ int are_cells_equal? (cell a, cell b) {
     tuple t1 = cast_to_tuple([[2, 6], [1, [3, [3, 5]]], 3]);
     tuple t2 = cast_to_tuple([[2, 6], [1, [3, [3, 5]]], 3]);
 
-    ~dump(are_tuples_equal?(t1, t2)); ;; -1 
+    ~dump(are_tuples_equal?(t1, t2)); // -1 
 }
 ```
 
@@ -993,19 +992,19 @@ Creates an internal address for the corresponding MsgAddressInt TLB.
 
 ```func
 (slice) generate_internal_address (int workchain_id, cell state_init) {
-    ;; addr_std$10 anycast:(Maybe Anycast) workchain_id:int8 address:bits256  = MsgAddressInt;
+    // addr_std$10 anycast:(Maybe Anycast) workchain_id:int8 address:bits256  = MsgAddressInt;
 
     return begin_cell()
-        .store_uint(2, 2) ;; addr_std$10
-        .store_uint(0, 1) ;; anycast nothing
-        .store_int(workchain_id, 8) ;; workchain_id: -1
+        .store_uint(2, 2) // addr_std$10
+        .store_uint(0, 1) // anycast nothing
+        .store_int(workchain_id, 8) // workchain_id: -1
         .store_uint(cell_hash(state_init), 256)
     .end_cell().begin_parse();
 }
 
 () main () {
     slice deploy_address = generate_internal_address(workchain(), state_init);
-    ;; then we can deploy new contract
+    // then we can deploy new contract
 }
 ```
 
@@ -1025,12 +1024,12 @@ We use the TL-B scheme from [block.tlb](https://github.com/ton-blockchain/ton/bl
 (int) ubitsize (int a) asm "UBITSIZE";
 
 slice generate_external_address (int address) {
-    ;; addr_extern$01 len:(## 9) external_address:(bits len) = MsgAddressExt;
+    // addr_extern$01 len:(## 9) external_address:(bits len) = MsgAddressExt;
     
     int address_length = ubitsize(address);
     
     return begin_cell()
-        .store_uint(1, 2) ;; addr_extern$01
+        .store_uint(1, 2) // addr_extern$01
         .store_uint(address_length, 9)
         .store_uint(address, address_length)
     .end_cell().begin_parse();
@@ -1079,14 +1078,14 @@ The usual way for us to send tons with a comment is actually a simple message. T
 
 ```func
 cell msg = begin_cell()
-    .store_uint(0x18, 6) ;; flags
-    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
-    .store_coins(100) ;; amount of nanoTons to send
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
-    .store_uint(0, 32) ;; zero opcode - means simple transfer message with comment
-    .store_slice("Hello from FunC!") ;; comment
+    .store_uint(0x18, 6) // flags
+    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) // destination address
+    .store_coins(100) // amount of nanoTons to send
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // default message headers (see sending messages page)
+    .store_uint(0, 32) // zero opcode - means simple transfer message with comment
+    .store_slice("Hello from FunC!") // comment
 .end_cell();
-send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
+send_raw_message(msg, 3); // mode 3 - pay fees separately, ignore errors
 ```
 
 > 💡 Useful links
@@ -1099,20 +1098,20 @@ The contract example below is useful to us if we need to perform any actions bet
 
 ```func
 () recv_internal (slice in_msg_body) {
-    {-
+    /*
         This is a simple example of a proxy-contract.
         It will expect in_msg_body to contain message mode, body and destination address to be sent to.
-    -}
+    */
 
-    int mode = in_msg_body~load_uint(8); ;; first byte will contain msg mode
-    slice addr = in_msg_body~load_msg_addr(); ;; then we parse the destination address
-    slice body = in_msg_body; ;; everything that is left in in_msg_body will be our new message's body
+    int mode = in_msg_body~load_uint(8); // first byte will contain msg mode
+    slice addr = in_msg_body~load_msg_addr(); // then we parse the destination address
+    slice body = in_msg_body; // everything that is left in in_msg_body will be our new message's body
 
     cell msg = begin_cell()
         .store_uint(0x18, 6)
         .store_slice(addr)
-        .store_coins(100) ;; just for example
-        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
+        .store_coins(100) // just for example
+        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // default message headers (see sending messages page)
         .store_slice(body)
     .end_cell();
     send_raw_message(msg, mode);
@@ -1131,14 +1130,14 @@ If we need to send the entire balance of the smart contract, then, in this case,
 
 ```func
 cell msg = begin_cell()
-    .store_uint(0x18, 6) ;; flags
-    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
-    .store_coins(0) ;; we don't care about this value right now
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
-    .store_uint(0, 32) ;; zero opcode - means simple transfer message with comment
-    .store_slice("Hello from FunC!") ;; comment
+    .store_uint(0x18, 6) // flags
+    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) // destination address
+    .store_coins(0) // we don't care about this value right now
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // default message headers (see sending messages page)
+    .store_uint(0, 32) // zero opcode - means simple transfer message with comment
+    .store_slice("Hello from FunC!") // comment
 .end_cell();
-send_raw_message(msg, 128); ;; mode = 128 is used for messages that are to carry all the remaining balance of the current smart contract
+send_raw_message(msg, 128); // mode = 128 is used for messages that are to carry all the remaining balance of the current smart contract
 ```
 
 > 💡 Useful links
@@ -1152,14 +1151,14 @@ send_raw_message(msg, 128); ;; mode = 128 is used for messages that are to carry
 As we know, only 127 characters can fit into a single `cell` (<1023 bits). In case we need more - we need to organize a snake cells.
 
 ```func
-{-
+/*
     If we want to send a message with really long comment, we should split the comment to several slices.
     Each slice should have <1023 bits of data (127 chars).
     Each slice should have a reference to the next one, forming a snake-like structure.
--}
+*/
 
 cell body = begin_cell()
-    .store_uint(0, 32) ;; zero opcode - simple message with comment
+    .store_uint(0, 32) // zero opcode - simple message with comment
     .store_slice("long long long message...")
     .store_ref(begin_cell()
         .store_slice(" you can store string of almost any length here.")
@@ -1170,15 +1169,15 @@ cell body = begin_cell()
 .end_cell();
 
 cell msg = begin_cell()
-    .store_uint(0x18, 6) ;; flags
-    ;; We use literal `a` to get valid address inside slice from string containing address 
-    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
-    .store_coins(100) ;; amount of nanoTons to send
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) ;; default message headers (see sending messages page)
-    .store_uint(1, 1) ;; we want to store body as a ref
+    .store_uint(0x18, 6) // flags
+    // We use literal `a` to get valid address inside slice from string containing address 
+    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) // destination address
+    .store_coins(100) // amount of nanoTons to send
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) // default message headers (see sending messages page)
+    .store_uint(1, 1) // we want to store body as a ref
     .store_ref(body)
 .end_cell();
-send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
+send_raw_message(msg, 3); // mode 3 - pay fees separately, ignore errors
 ```
 
 > 💡 Useful links
@@ -1192,8 +1191,8 @@ If we are not interested in `refs` inside the `slice`, then we can get a separat
 ```func
 slice s = begin_cell()
     .store_slice("Some data bits...")
-    .store_ref(begin_cell().end_cell()) ;; some references
-    .store_ref(begin_cell().end_cell()) ;; some references
+    .store_ref(begin_cell().end_cell()) // some references
+    .store_ref(begin_cell().end_cell()) // some references
 .end_cell().begin_parse();
 
 slice s_only_data = s.preload_bits(s.slice_bits());
@@ -1213,9 +1212,9 @@ Modifying methods allow data to be modified within the same variable. This can b
 
 ```func
 (slice, (int)) load_digit (slice s) {
-    int x = s~load_uint(8); ;; load 8 bits (one char) from slice
-    x -= 48; ;; char '0' has code of 48, so we substract it to get the digit as a number
-    return (s, (x)); ;; return our modified slice and loaded digit
+    int x = s~load_uint(8); // load 8 bits (one char) from slice
+    x -= 48; // char '0' has code of 48, so we substract it to get the digit as a number
+    return (s, (x)); // return our modified slice and loaded digit
 }
 
 () main () {
@@ -1223,7 +1222,7 @@ Modifying methods allow data to be modified within the same variable. This can b
     int c1 = s~load_digit();
     int c2 = s~load_digit();
     int c3 = s~load_digit();
-    ;; here s is equal to "", and c1 = 2, c2 = 5, c3 = 8
+    // here s is equal to "", and c1 = 2, c2 = 5, c3 = 8
 }
 ```
 
@@ -1234,7 +1233,7 @@ Modifying methods allow data to be modified within the same variable. This can b
 ### How to raise number to the power of n
 
 ```func
-;; Unoptimized variant
+// Unoptimized variant
 int pow (int a, int n) {
     int i = 0;
     int value = a;
@@ -1245,7 +1244,7 @@ int pow (int a, int n) {
     return a;
 }
 
-;; Optimized variant
+// Optimized variant
 (int) binpow (int n, int e) {
     if (e == 0) {
         return 1;
@@ -1263,7 +1262,7 @@ int pow (int a, int n) {
 
 () main () {
     int num = binpow(2, 3);
-    ~dump(num); ;; 8
+    ~dump(num); // 8
 }
 ```
 
@@ -1275,7 +1274,7 @@ int number = 0;
 
 while (~ string_number.slice_empty?()) {
     int char = string_number~load_uint(8);
-    number = (number * 10) + (char - 48); ;; we use ASCII table
+    number = (number * 10) + (char - 48); // we use ASCII table
 }
 
 ~dump(number);
@@ -1310,10 +1309,10 @@ d~udict_set(256, 1, "value 1");
 d~udict_set(256, 5, "value 2");
 d~udict_set(256, 12, "value 3");
 
-;; iterate keys from small to big
+// iterate keys from small to big
 (int key, slice val, int flag) = d.udict_get_min?(256);
 while (flag) {
-    ;; do something with pair key->val
+    // do something with pair key->val
     
     (key, val, flag) = d.udict_get_next?(256, key);
 }
@@ -1341,7 +1340,7 @@ names~udict_set(256, 25, "Bob");
 names~udict_delete?(256, 27);
 
 (slice val, int key) = names.udict_get?(256, 27);
-~dump(val); ;; null() -> means that key was not found in a dictionary
+~dump(val); // null() -> means that key was not found in a dictionary
 ```
 
 ### How to iterate cell tree recursively
@@ -1354,7 +1353,7 @@ forall X -> (tuple, ()) push_back (tuple tail, X head) asm "CONS";
 forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 
 () main () {
-    ;; just some cell for example
+    // just some cell for example
     cell c = begin_cell()
         .store_uint(1, 16)
         .store_ref(begin_cell()
@@ -1371,18 +1370,18 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
         .end_cell())
     .end_cell();
 
-    ;; creating tuple with no data, which plays the role of stack
+    // creating tuple with no data, which plays the role of stack
     tuple stack = null();
-    ;; bring the main cell into the stack to process it in the loop
+    // bring the main cell into the stack to process it in the loop
     stack~push_back(c);
-    ;; do it until stack is not null
+    // do it until stack is not null
     while (~ stack.is_null()) {
-        ;; get the cell from the stack and convert it to a slice to be able to process it
+        // get the cell from the stack and convert it to a slice to be able to process it
         slice s = stack~pop_back().begin_parse();
 
-        ;; do something with s data
+        // do something with s data
 
-        ;; if the current slice has any refs, add them to stack
+        // if the current slice has any refs, add them to stack
         repeat (s.slice_refs()) {
             stack~push_back(s~load_ref());
         }
@@ -1408,18 +1407,18 @@ forall X -> (tuple, ()) push_back (tuple tail, X head) asm "CONS";
 forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 
 () main () {
-    ;; some example list
+    // some example list
     tuple l = null();
     l~push_back(1);
     l~push_back(2);
     l~push_back(3);
 
-    ;; iterating through elements
-    ;; note that this iteration is in reversed order
+    // iterating through elements
+    // note that this iteration is in reversed order
     while (~ l.is_null()) {
         var x = l~pop_back();
 
-        ;; do something with x
+        // do something with x
     }
 }
 ```
@@ -1436,25 +1435,25 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 () deploy_with_stateinit(cell message_header, cell state_init) impure {
   var msg = begin_cell()
     .store_slice(begin_parse(msg_header))
-    .store_uint(2 + 1, 2) ;; init:(Maybe (Either StateInit ^StateInit))
-    .store_uint(0, 1) ;; body:(Either X ^X)
+    .store_uint(2 + 1, 2) // init:(Maybe (Either StateInit ^StateInit))
+    .store_uint(0, 1) // body:(Either X ^X)
     .store_ref(state_init)
     .end_cell();
 
-  ;; mode 64 - carry the remaining value in the new message
+  // mode 64 - carry the remaining value in the new message
   send_raw_message(msg, 64); 
 }
 
 () deploy_with_stateinit_body(cell message_header, cell state_init, cell body) impure {
   var msg = begin_cell()
     .store_slice(begin_parse(msg_header))
-    .store_uint(2 + 1, 2) ;; init:(Maybe (Either StateInit ^StateInit))
-    .store_uint(1, 1) ;; body:(Either X ^X)
+    .store_uint(2 + 1, 2) // init:(Maybe (Either StateInit ^StateInit))
+    .store_uint(1, 1) // body:(Either X ^X)
     .store_ref(state_init)
     .store_ref(body)
     .end_cell();
 
-  ;; mode 64 - carry the remaining value in the new message
+  // mode 64 - carry the remaining value in the new message
   send_raw_message(msg, 64); 
 }
 ```
@@ -1464,11 +1463,11 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 ```func
 () build_stateinit(cell init_code, cell init_data) {
   var state_init = begin_cell()
-    .store_uint(0, 1) ;; split_depth:(Maybe (## 5))
-    .store_uint(0, 1) ;; special:(Maybe TickTock)
-    .store_uint(1, 1) ;; (Maybe ^Cell)
-    .store_uint(1, 1) ;; (Maybe ^Cell)
-    .store_uint(0, 1) ;; (HashmapE 256 SimpleLib)
+    .store_uint(0, 1) // split_depth:(Maybe (## 5))
+    .store_uint(0, 1) // special:(Maybe TickTock)
+    .store_uint(1, 1) // (Maybe ^Cell)
+    .store_uint(1, 1) // (Maybe ^Cell)
+    .store_uint(0, 1) // (HashmapE 256 SimpleLib)
     .store_ref(init_code)
     .store_ref(init_data)
     .end_cell();
@@ -1480,10 +1479,10 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 ```func
 () calc_address(cell state_init) {
   var future_address = begin_cell() 
-    .store_uint(2, 2) ;; addr_std$10
-    .store_uint(0, 1) ;; anycast:(Maybe Anycast)
-    .store_uint(0, 8) ;; workchain_id:int8
-    .store_uint(cell_hash(state_init), 256) ;; address:bits256
+    .store_uint(2, 2) // addr_std$10
+    .store_uint(0, 1) // anycast:(Maybe Anycast)
+    .store_uint(0, 8) // workchain_id:int8
+    .store_uint(cell_hash(state_init), 256) // address:bits256
     .end_cell();
 }
 ```

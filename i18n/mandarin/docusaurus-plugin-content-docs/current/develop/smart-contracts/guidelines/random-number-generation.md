@@ -20,7 +20,7 @@
 
 ```func
 randomize_lt();
-int x = random(); ;; 用户无法预测这个数字
+int x = random(); // 用户无法预测这个数字
 ```
 
 然而，你应该注意验证者或协作者仍然可能影响随机数的结果，因为他们决定了当前区块的seed。
@@ -40,55 +40,55 @@ int x = random(); ;; 用户无法预测这个数字
 让我们以一个简单的彩票合约为例。用户将向它发送1 TON，有50%的机会会得到2 TON回报。
 
 ```func
-;; 设置回声合约地址
+// 设置回声合约地址
 const echo_address = "Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s"a;
 
 () recv_internal (int msg_value, cell in_msg_full, slice in_msg_body) impure {
     var cs = in_msg_full.begin_parse();
     var flags = cs~load_uint(4);
-    if (flags & 1) { ;; 忽略弹回的消息
+    if (flags & 1) { // 忽略弹回的消息
         return ();
     }
     slice sender = cs~load_msg_addr();
 
     int op = in_msg_body~load_uint(32);
-    if ((op == 0) & equal_slice_bits(in_msg_body, "bet")) { ;; 用户下注
-        throw_unless(501, msg_value == 1000000000); ;; 1 TON
+    if ((op == 0) & equal_slice_bits(in_msg_body, "bet")) { // 用户下注
+        throw_unless(501, msg_value == 1000000000); // 1 TON
 
         send_raw_message(
             begin_cell()
                 .store_uint(0x18, 6)
                 .store_slice(echo_address)
                 .store_coins(0)
-                .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 默认消息头部（见发送消息页面）
+                .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // 默认消息头部（见发送消息页面）
 
 
-                .store_uint(1, 32) ;; 让1成为我们合约中的回声操作码
-                .store_slice(sender) ;; 转发用户地址
+                .store_uint(1, 32) // 让1成为我们合约中的回声操作码
+                .store_slice(sender) // 转发用户地址
             .end_cell(),
-            64 ;; 发送剩余的消息值
+            64 // 发送剩余的消息值
         );
     }
-    elseif (op == 1) { ;; 回声
-        throw_unless(502, equal_slice_bits(sender, echo_address)); ;; 只接受我们回声合约的回声
+    elseif (op == 1) { // 回声
+        throw_unless(502, equal_slice_bits(sender, echo_address)); // 只接受我们回声合约的回声
 
         slice user = in_msg_body~load_msg_addr();
 
-        {-
+        /*
             此时我们已经跳过了1+个区块
             因此让我们生成随机数
-        -}
+        */
         randomize_lt();
-        int x = rand(2); ;; 生成一个随机数（0或1）
-        if (x == 1) { ;; 用户赢了
+        int x = rand(2); // 生成一个随机数（0或1）
+        if (x == 1) { // 用户赢了
             send_raw_message(
                 begin_cell()
                     .store_uint(0x18, 6)
                     .store_slice(user)
-                    .store_coins(2000000000) ;; 2 TON
-                    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 默认消息头部（见发送消息页面）
+                    .store_coins(2000000000) // 2 TON
+                    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // 默认消息头部（见发送消息页面）
                 .end_cell(),
-                3 ;; 忽略错误并单独支付费用
+                3 // 忽略错误并单独支付费用
             );
         }
     }

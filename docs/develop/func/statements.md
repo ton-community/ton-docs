@@ -36,10 +36,10 @@ int x = 0;
 int i = 0;
 while (i < 10) {
   (int, int) x = (i, i + 1);
-  ;; here x is a variable of type (int, int)
+  // here x is a variable of type (int, int)
   i += 1;
 }
-;; here x is a (different) variable of type int
+// here x is a (different) variable of type int
 ```
 But as mentioned in the global variables [section](/develop/func/global_variables.md), a global variable cannot be redeclared.
 
@@ -56,7 +56,7 @@ Underscore `_` is used when a value is not needed. For example, suppose a functi
 ### Function application
 A call of a function looks like as such in a conventional language. The arguments of the function call are listed after the function name, separated by commas.
 ```func
-;; suppose foo has type (int, int, int) -> int
+// suppose foo has type (int, int, int) -> int
 int x = foo(1, 2, 3);
 ```
 
@@ -72,12 +72,12 @@ int x = foo(a, b, c);
 
 Also Haskell-style calls are possible, but not always (to be fixed later):
 ```func
-;; suppose foo has type int -> int -> int -> int
-;; i.e. it's carried
+// suppose foo has type int -> int -> int -> int
+// i.e. it's carried
 (int a, int b, int c) = (1, 2, 3);
-int x = foo a b c; ;; ok
-;; int y = foo 1 2 3; wouldn't compile
-int y = foo (1) (2) (3); ;; ok
+int x = foo a b c; // ok
+// int y = foo 1 2 3; wouldn't compile
+int y = foo (1) (2) (3); // ok
 ```
 ### Lambda expressions
 Lambda expressions are not supported yet.
@@ -223,21 +223,21 @@ int x = 1;
 repeat(10) {
   x *= 2;
 }
-;; x = 1024
+// x = 1024
 ```
 ```func
 int x = 1, y = 10;
 repeat(y + 6) {
   x *= 2;
 }
-;; x = 65536
+// x = 65536
 ```
 ```func
 int x = 1;
 repeat(-1) {
   x *= 2;
 }
-;; x = 1
+// x = 1
 ```
 If the number of times is less than `-2^31` or greater than `2^31 - 1`, range check exception is thrown.
 ### While loop
@@ -247,7 +247,7 @@ int x = 2;
 while (x < 100) {
   x = x * x;
 }
-;; x = 256
+// x = 256
 ```
 Note that the truth value of condition `x < 100` is of type `int` (cf. [absence of boolean type](/develop/func/types#absence-of-boolean-type)).
 
@@ -258,24 +258,24 @@ int x = 0;
 do {
   x += 3;
 } until (x % 17 == 0);
-;; x = 51
+// x = 51
 ```
 ## If statements
 Examples:
 ```func
-;; usual if
+// usual if
 if (flag) {
   do_something();
 }
 ```
 ```func
-;; equivalent to if (~ flag)
+// equivalent to if (~ flag)
 ifnot (flag) {
   do_something();
 }
 ```
 ```func
-;; usual if-else
+// usual if-else
 if (flag) {
   do_something();
 }
@@ -284,7 +284,7 @@ else {
 }
 ```
 ```func
-;; Some specific features
+// Some specific features
 if (flag1) {
   do_something1();
 } else {
@@ -321,7 +321,7 @@ try {
   throw_arg(-1, 100);
 } catch (x, n) {
   x.cast_to_int();
-  ;; x = -1, n = 100
+  // x = -1, n = 100
   return x + 1;
 }
 ```
@@ -332,7 +332,7 @@ try {
   throw(100);
 } catch (_, _) {
 }
-;; x = 0 (not 1)
+// x = 0 (not 1)
 ```
 
 ## Block statements

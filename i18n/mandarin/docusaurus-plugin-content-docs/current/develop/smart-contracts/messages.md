@@ -63,21 +63,21 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
 消息的直接序列化如下所示：
 ```func
   var msg = begin_cell()
-    .store_uint(0, 1) ;; tag
-    .store_uint(1, 1) ;; ihr_disabled
-    .store_uint(1, 1) ;; allow bounces
-    .store_uint(0, 1) ;; not bounced itself
+    .store_uint(0, 1) // tag
+    .store_uint(1, 1) // ihr_disabled
+    .store_uint(1, 1) // allow bounces
+    .store_uint(0, 1) // not bounced itself
     .store_slice(source)
     .store_slice(destination)
-    ;; serialize CurrencyCollection (see below)
+    // serialize CurrencyCollection (see below)
     .store_coins(amount)
     .store_dict(extra_currencies)
-    .store_coins(0) ;; ihr_fee
-    .store_coins(fwd_value) ;; fwd_fee 
-    .store_uint(cur_lt(), 64) ;; lt of transaction
-    .store_uint(now(), 32) ;; unixtime of transaction
-    .store_uint(0,  1) ;; no init-field flag (Maybe)
-    .store_uint(0,  1) ;; inplace message body flag (Either)
+    .store_coins(0) // ihr_fee
+    .store_coins(fwd_value) // fwd_fee 
+    .store_uint(cur_lt(), 64) // lt of transaction
+    .store_uint(now(), 32) // unixtime of transaction
+    .store_uint(0,  1) // no init-field flag (Maybe)
+    .store_uint(0,  1) // inplace message body flag (Either)
     .store_slice(msg_body)
   .end_cell();
 ```
@@ -85,7 +85,7 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
 然而，开发者通常使用快捷方式而不是逐步序列化所有字段。因此，让我们考虑如何使用[elector-code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/elector-code.fc#L153)中的示例从智能合约发送消息。
 ```func
 () send_message_back(addr, ans_tag, query_id, body, grams, mode) impure inline_ref {
-  ;; int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool src:MsgAddress -> 011000
+  // int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool src:MsgAddress -> 011000
   var msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)

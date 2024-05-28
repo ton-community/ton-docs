@@ -36,10 +36,10 @@ int x = 0;
 int i = 0;
 while (i < 10) {
   (int, int) x = (i, i + 1);
-  ;; 这里 x 是类型为 (int, int) 的变量
+  // 这里 x 是类型为 (int, int) 的变量
   i += 1;
 }
-;; 这里 x 是类型为 int 的（不同）变量
+// 这里 x 是类型为 int 的（不同）变量
 ```
 但如在全局变量[章节](/develop/func/global_variables.md)中提到的，不允许重新声明全局变量。
 
@@ -56,7 +56,7 @@ int y = (int x = 3) + 1;
 ### 函数应用
 函数调用看起来像在常规语言中那样。函数调用的参数在函数名之后列出，用逗号分隔。
 ```func
-;; 假设 foo 的类型为 (int, int, int) -> int
+// 假设 foo 的类型为 (int, int, int) -> int
 int x = foo(1, 2, 3);
 ```
 
@@ -74,12 +74,12 @@ int x =
 
 也可以进行 Haskell 类型的调用，但不总是可行（稍后修复）：
 ```func
-;; 假设 foo 的类型为 int -> int -> int -> int
-;; 即它是柯里化的
+// 假设 foo 的类型为 int -> int -> int -> int
+// 即它是柯里化的
 (int a, int b, int c) = (1, 2, 3);
-int x = foo a b c; ;; ok
-;; int y = foo 1 2 3; 不会编译
-int y = foo (1) (2) (3); ;; ok
+int x = foo a b c; // ok
+// int y = foo 1 2 3; 不会编译
+int y = foo (1) (2) (3); // ok
 ```
 ### Lambda 表达式
 暂不支持 Lambda 表达式。
@@ -225,21 +225,21 @@ int x = 1;
 repeat(10) {
   x *= 2;
 }
-;; x = 1024
+// x = 1024
 ```
 ```func
 int x = 1, y = 10;
 repeat(y + 6) {
   x *= 2;
 }
-;; x = 65536
+// x = 65536
 ```
 ```func
 int x = 1;
 repeat(-1) {
   x *= 2;
 }
-;; x = 1
+// x = 1
 ```
 如果次数小于 `-2^31` 或大于 `2^31 - 1`，将抛出范围检查异常。
 ### While 循环
@@ -249,7 +249,7 @@ int x = 2;
 while (x < 100) {
   x = x * x;
 }
-;; x = 256
+// x = 256
 ```
 请注意，条件 `x < 100` 的真值是类型为 `int` 的（参见[没有布尔类型](/develop/func/types#absence-of-boolean-type)）。
 
@@ -260,24 +260,24 @@ int x = 0;
 do {
   x += 3;
 } until (x % 17 == 0);
-;; x = 51
+// x = 51
 ```
 ## If 语句
 示例：
 ```func
-;; 通常的 if
+// 通常的 if
 if (flag) {
   do_something();
 }
 ```
 ```func
-;; 等同于 if (~ flag)
+// 等同于 if (~ flag)
 ifnot (flag) {
   do_something();
 }
 ```
 ```func
-;; 通常的 if-else
+// 通常的 if-else
 if (flag) {
   do_something();
 }
@@ -286,7 +286,7 @@ else {
 }
 ```
 ```func
-;; 一些特定功能
+// 一些特定功能
 if (flag1) {
   do_something1();
 } else {
@@ -323,7 +323,7 @@ try {
   throw_arg(-1, 100);
 } catch (x, n) {
   x.cast_to_int();
-  ;; x = -1, n = 100
+  // x = -1, n = 100
   return x + 1;
 }
 ```
@@ -334,7 +334,7 @@ try {
   throw(100);
 } catch (_, _) {
 }
-;; x = 0（而非 1）
+// x = 0（而非 1）
 ```
 
 ## 区块语句

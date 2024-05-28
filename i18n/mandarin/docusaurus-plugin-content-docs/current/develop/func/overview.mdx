@@ -10,7 +10,7 @@ FunC 是一种领域特定的、类 C 语言的、静态类型语言。
 ```func
 () send_money(slice address, int amount) impure inline {
     var msg = begin_cell()
-        .store_uint(0x10, 6) ;; nobounce
+        .store_uint(0x10, 6) // nobounce
         .store_slice(address)
         .store_coins(amount)
         .end_cell();

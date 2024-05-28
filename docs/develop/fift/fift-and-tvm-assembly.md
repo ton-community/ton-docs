@@ -6,7 +6,7 @@ Fift is stack-based programming language that has TON-specific features and ther
 
 Fift is executed **at compile-time** - when your compiler builds smart-contract code BOC, after FunC code is processed. Fift can look differently:
 
-```
+```fift
 // tuple primitives
 x{6F0} @Defop(4u) TUPLE
 x{6F00} @Defop NIL
@@ -15,7 +15,7 @@ x{6F02} dup @Defop PAIR @Defop CONS
 ```
 > TVM opcode definitions in Asm.fif
 
-```
+```fift
 "Asm.fif" include
 <{ SETCP0 DUP IFNOTRET // return if recv_internal
    DUP 85143 INT EQUAL OVER 78748 INT EQUAL OR IFJMP:<{ // "seqno" and "get_public_key" get-methods
@@ -66,12 +66,12 @@ contract:
 ```
 
 Put the BOC in `fift/blob.boc`, then add the following code to `fift/blob.fif`:
-```
+```fift
 <b 8 4 u, 8 4 u, "fift/blob.boc" file>B B>boc ref, b> <s @Defop LDBLOB
 ```
 
 Now, you're able to extract this blob from smart contract:
-```
+```func
 cell load_blob() asm "LDBLOB";
 
 () recv_internal() {
@@ -82,11 +82,11 @@ cell load_blob() asm "LDBLOB";
 ### [TVM assembly] - Converting integer to string
 
 "Sadly", int-to-string conversion attempt using Fift primitives fails.
-```
+```func
 slice int_to_string(int x) asm "(.) $>s PUSHSLICE";
 ```
 The reason is obvious: Fift is doing calculations in compile-time, where no `x` is yet available for conversion. To convert non-constant integer to string slice, you need TVM assembly. For example, this is code by one of TON Smart Challenge 3 participants':
-```
+```func
 tuple digitize_number(int value)
   asm "NIL WHILE:<{ OVER }>DO<{ SWAP TEN DIVMOD s1 s2 XCHG TPUSH }> NIP";
 
@@ -106,16 +106,16 @@ builder store_signed(builder msg, int v) inline_ref {
 
 ### [TVM assembly] - Cheap modulo multiplication
 
-```
-int mul_mod(int a, int b, int m) inline_ref {               ;; 1232 gas units
+```func
+int mul_mod(int a, int b, int m) inline_ref {               // 1232 gas units
   (_, int r) = muldivmod(a % m, b % m, m);
   return r;
 }
-int mul_mod_better(int a, int b, int m) inline_ref {        ;; 1110 gas units
+int mul_mod_better(int a, int b, int m) inline_ref {        // 1110 gas units
   (_, int r) = muldivmod(a, b, m);
   return r;
 }
-int mul_mod_best(int a, int b, int m) asm "x{A988} s,";     ;; 65 gas units
+int mul_mod_best(int a, int b, int m) asm "x{A988} s,";     // 65 gas units
 ```
 
 `x{A988}` is opcode formatted according to [5.2 Division](/learn/tvm-instructions/instructions#52-division): division with pre-multiplication, where the only returned result is remainder modulo third argument. But opcode needs to get into smart-contract code - that's what `s,` does: it stores slice on top of stack into builder slightly below.

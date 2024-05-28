@@ -48,8 +48,8 @@ TON Hack挑战赛于10月23日举行。在TON主网上部署了几个带有人�
   from_votes -= amount;
   to_votes += amount;
 
-  ;; No need to check that result from_votes is positive: set_voting_power will throw for negative votes
-  ;; throw_unless(998, from_votes > 0);
+  // No need to check that result from_votes is positive: set_voting_power will throw for negative votes
+  // throw_unless(998, from_votes > 0);
 
   votes~set_voting_power(from, from_votes);
   votes~set_voting_power(to, to_votes);
@@ -75,7 +75,7 @@ if(in_msg_body.slice_bits() > 0) {
 set_seed(seed);
 var balance = get_balance().pair_first();
 if(balance > 5000 * 1000000000) {
-    ;; 禁止过大的奖池
+    // 禁止过大的奖池
     raw_reserve( balance - 5000 * 1000000000, 0);
 }
 if(rand(10000) == 7777) { ...send reward... }
@@ -102,11 +102,11 @@ if(rand(10000) == 7777) { ...send reward... }
 ```func
 int mode = null();
 if (op == op_not_winner) {
-    mode = 64; ;; 退还剩余的支票TON
-               ;; addr_hash 对应于支票请求者
+    mode = 64; // 退还剩余的支票TON
+               // addr_hash 对应于支票请求者
 } else {
-     mode = 128; ;; 颁发奖金
-                 ;; addr_hash 对应于中奖条目中的取款地址
+     mode = 128; // 颁发奖金
+                 // addr_hash 对应于中奖条目中的取款地址
 }
 ```
 
@@ -134,9 +134,9 @@ slice safe_execute(int image, (int -> slice) dehasher) inline {
 
   slice preimage = try_execute(image, dehasher);
 
-  ;; 如果dehasher破坏了它，恢复c4
+  // 如果dehasher破坏了它，恢复c4
   set_data(c4);
-  ;; 如果dehasher破坏了它们，清除操作
+  // 如果dehasher破坏了它们，清除操作
   set_c5(begin_cell().end_cell());
 
   return preimage;

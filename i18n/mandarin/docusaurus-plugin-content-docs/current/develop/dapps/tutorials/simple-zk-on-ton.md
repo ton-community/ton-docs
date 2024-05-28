@@ -303,7 +303,7 @@ load_data 和 save_data 函数仅用于加载和保存证明验证结果（仅�
             pi_c, vk_delta_2,
             vk_alpha_1, vk_beta_2,
             4);
-    ;; ctx_res = a;
+    // ctx_res = a;
     if (a == 0) {
         ctx_res = 0;
     } else {

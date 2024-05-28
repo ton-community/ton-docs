@@ -32,26 +32,26 @@ Some repeated parts are omitted.
   int subdomain_bits = slice_bits(subdomain);
   throw_unless(70, (subdomain_bits % 8) == 0);
   
-  int starts_with_zero_byte = subdomain.preload_int(8) == 0;  ;; assuming that 'subdomain' is not empty
+  int starts_with_zero_byte = subdomain.preload_int(8) == 0;  // assuming that 'subdomain' is not empty
   if (starts_with_zero_byte) {
     subdomain~load_uint(8);
-    if (subdomain.slice_bits() == 0) {   ;; current contract has no DNS records by itself
+    if (subdomain.slice_bits() == 0) {   // current contract has no DNS records by itself
       return (8, null());
     }
   }
   
-  ;; we are loading some subdomain
-  ;; supported subdomains are "ton\\0", "me\\0t\\0" and "address\\0"
+  // we are loading some subdomain
+  // supported subdomains are "ton\\0", "me\\0t\\0" and "address\\0"
   
   slice subdomain_sfx = null();
   builder domain_nft_address = null();
   
   if (subdomain.starts_with("746F6E00"s)) {
-    ;; we're resolving
-    ;; "ton" \\0 <subdomain> \\0 [subdomain_sfx]
+    // we're resolving
+    // "ton" \\0 <subdomain> \\0 [subdomain_sfx]
     subdomain~skip_bits(32);
     
-    ;; reading domain name
+    // reading domain name
     subdomain_sfx = subdomain;
     while (subdomain_sfx~load_uint(8)) { }
     
@@ -72,17 +72,17 @@ Some repeated parts are omitted.
   }
   
   if (slice_empty?(subdomain_sfx)) {
-    ;; example of domain being resolved:
-    ;; [initial, not accessible in this contract] "ton\\0resolve-contract\\0ton\\0ratelance\\0"
-    ;; [what is accessible by this contract]      "ton\\0ratelance\\0"
-    ;; subdomain          "ratelance"
-    ;; subdomain_sfx      ""
+    // example of domain being resolved:
+    // [initial, not accessible in this contract] "ton\\0resolve-contract\\0ton\\0ratelance\\0"
+    // [what is accessible by this contract]      "ton\\0ratelance\\0"
+    // subdomain          "ratelance"
+    // subdomain_sfx      ""
     
-    ;; we want the resolve result to point at contract of 'ratelance.ton', not its owner
-    ;; so we must answer that resolution is complete + "wallet"H is address of 'ratelance.ton' contract
+    // we want the resolve result to point at contract of 'ratelance.ton', not its owner
+    // so we must answer that resolution is complete + "wallet"H is address of 'ratelance.ton' contract
     
-    ;; dns_smc_address#9fd3 smc_addr:MsgAddressInt flags:(## 8) { flags <= 1 } cap_list:flags . 0?SmcCapList = DNSRecord;
-    ;; _ (HashmapE 256 ^DNSRecord) = DNS_RecordSet;
+    // dns_smc_address#9fd3 smc_addr:MsgAddressInt flags:(## 8) { flags <= 1 } cap_list:flags . 0?SmcCapList = DNSRecord;
+    // _ (HashmapE 256 ^DNSRecord) = DNS_RecordSet;
     
     cell wallet_record = begin_cell().store_uint(0x9fd3, 16).store_builder(domain_nft_address).store_uint(0, 8).end_cell();
     
@@ -96,12 +96,12 @@ Some repeated parts are omitted.
       return (subdomain_bits, null());
     }
   } else {
-    ;; subdomain          "resolve-contract"
-    ;; subdomain_sfx      "ton\\0ratelance\\0"
-    ;; we want to pass \\0 further, so that next resolver has opportunity to process only one byte
+    // subdomain          "resolve-contract"
+    // subdomain_sfx      "ton\\0ratelance\\0"
+    // we want to pass \\0 further, so that next resolver has opportunity to process only one byte
     
-    ;; next resolver is contract of 'resolve-contract<.ton>'
-    ;; dns_next_resolver#ba93 resolver:MsgAddressInt = DNSRecord;
+    // next resolver is contract of 'resolve-contract<.ton>'
+    // dns_next_resolver#ba93 resolver:MsgAddressInt = DNSRecord;
     cell resolver_record = begin_cell().store_uint(0xba93, 16).store_builder(domain_nft_address).end_cell();
     return (subdomain_bits - slice_bits(subdomain_sfx) - 8, resolver_record);
   }
@@ -179,14 +179,14 @@ global cell domains;
 
 ```func
 const int op::update_record = 0x537a3491;
-;; op::update_record#537a3491 domain_name:^Cell record_key:uint256
-;;     value:(Maybe ^Cell) = InMsgBody;
+// op::update_record#537a3491 domain_name:^Cell record_key:uint256
+//     value:(Maybe ^Cell) = InMsgBody;
 
 () recv_internal(cell in_msg, slice in_msg_body) {
-  if (in_msg_body.slice_empty?()) { return (); }   ;; simple money transfer
+  if (in_msg_body.slice_empty?()) { return (); }   // simple money transfer
 
   slice in_msg_full = in_msg.begin_parse();
-  if (in_msg_full~load_uint(4) & 1) { return (); } ;; bounced message
+  if (in_msg_full~load_uint(4) & 1) { return (); } // bounced message
 
   slice sender = in_msg_full~load_msg_addr();
   load_data();
@@ -198,7 +198,7 @@ const int op::update_record = 0x537a3491;
     (cell records, _) = domains.udict_get_ref?(256, string_hash(domain));
 
     int key = in_msg_body~load_uint(256);
-    throw_if(502, key == 0);  ;; cannot update "all records" record
+    throw_if(502, key == 0);  // cannot update "all records" record
 
     if (in_msg_body~load_uint(1) == 1) {
       cell value = in_msg_body~load_ref();
@@ -223,9 +223,9 @@ After that, we update the record for the specified domain and save new data into
 
 ```func
 (slice, slice) ~parse_sd(slice subdomain) {
-  ;; "test\0qwerty\0" -> "test" "qwerty\0"
+  // "test\0qwerty\0" -> "test" "qwerty\0"
   slice subdomain_sfx = subdomain;
-  while (subdomain_sfx~load_uint(8)) { }  ;; searching zero byte
+  while (subdomain_sfx~load_uint(8)) { }  // searching zero byte
   subdomain~skip_last_bits(slice_bits(subdomain_sfx));
   return (subdomain, subdomain_sfx);
 }
@@ -235,19 +235,19 @@ After that, we update the record for the specified domain and save new data into
   throw_unless(70, subdomain_bits % 8 == 0);
   if (subdomain.preload_uint(8) == 0) { subdomain~skip_bits(8); }
   
-  slice subdomain_suffix = subdomain~parse_sd();  ;; "test\0" -> "test" ""
+  slice subdomain_suffix = subdomain~parse_sd();  // "test\0" -> "test" ""
   int subdomain_suffix_bits = slice_bits(subdomain_suffix);
 
   load_data();
   (cell records, _) = domains.udict_get_ref?(256, string_hash(subdomain));
 
-  if (subdomain_suffix_bits > 0) { ;; more than "<SUBDOMAIN>\0" requested
+  if (subdomain_suffix_bits > 0) { // more than "<SUBDOMAIN>\0" requested
     category = "dns_next_resolver"H;
   }
 
   int resolved = subdomain_bits - subdomain_suffix_bits;
 
-  if (category == 0) { ;; all categories are requested
+  if (category == 0) { // all categories are requested
     return (resolved, records);
   }
 
@@ -349,26 +349,26 @@ slice decode_base64_address(slice readable) method_id {
 
   throw_unless(70, (subdomain_bits % 8) == 0);
   
-  int starts_with_zero_byte = subdomain.preload_int(8) == 0;  ;; assuming that 'subdomain' is not empty
+  int starts_with_zero_byte = subdomain.preload_int(8) == 0;  // assuming that 'subdomain' is not empty
   if (starts_with_zero_byte) {
     subdomain~load_uint(8);
-    if (subdomain.slice_bits() == 0) {   ;; current contract has no DNS records by itself
+    if (subdomain.slice_bits() == 0) {   // current contract has no DNS records by itself
       return (8, null());
     }
   }
   
-  ;; we are loading some subdomain
-  ;; supported subdomains are "ton\\0", "me\\0t\\0" and "address\\0"
+  // we are loading some subdomain
+  // supported subdomains are "ton\\0", "me\\0t\\0" and "address\\0"
   
   slice subdomain_sfx = null();
   builder domain_nft_address = null();
   
   if (subdomain.starts_with("746F6E00"s)) {
-    ;; we're resolving
-    ;; "ton" \\0 <subdomain> \\0 [subdomain_sfx]
+    // we're resolving
+    // "ton" \\0 <subdomain> \\0 [subdomain_sfx]
     subdomain~skip_bits(32);
     
-    ;; reading domain name
+    // reading domain name
     subdomain_sfx = subdomain;
     while (subdomain_sfx~load_uint(8)) { }
     
@@ -376,10 +376,10 @@ slice decode_base64_address(slice readable) method_id {
     
     domain_nft_address = get_ton_dns_nft_address_by_index(slice_hash(subdomain));
   } elseif (subdomain.starts_with("6D65007400"s)) {
-    ;; "t" \\0 "me" \\0 <subdomain> \\0 [subdomain_sfx]
+    // "t" \\0 "me" \\0 <subdomain> \\0 [subdomain_sfx]
     subdomain~skip_bits(40);
     
-    ;; reading domain name
+    // reading domain name
     subdomain_sfx = subdomain;
     while (subdomain_sfx~load_uint(8)) { }
     
@@ -400,17 +400,17 @@ slice decode_base64_address(slice readable) method_id {
   }
   
   if (slice_empty?(subdomain_sfx)) {
-    ;; example of domain being resolved:
-    ;; [initial, not accessible in this contract] "ton\\0resolve-contract\\0ton\\0ratelance\\0"
-    ;; [what is accessible by this contract]      "ton\\0ratelance\\0"
-    ;; subdomain          "ratelance"
-    ;; subdomain_sfx      ""
+    // example of domain being resolved:
+    // [initial, not accessible in this contract] "ton\\0resolve-contract\\0ton\\0ratelance\\0"
+    // [what is accessible by this contract]      "ton\\0ratelance\\0"
+    // subdomain          "ratelance"
+    // subdomain_sfx      ""
     
-    ;; we want the resolve result to point at contract of 'ratelance.ton', not its owner
-    ;; so we must answer that resolution is complete + "wallet"H is address of 'ratelance.ton' contract
+    // we want the resolve result to point at contract of 'ratelance.ton', not its owner
+    // so we must answer that resolution is complete + "wallet"H is address of 'ratelance.ton' contract
     
-    ;; dns_smc_address#9fd3 smc_addr:MsgAddressInt flags:(## 8) { flags <= 1 } cap_list:flags . 0?SmcCapList = DNSRecord;
-    ;; _ (HashmapE 256 ^DNSRecord) = DNS_RecordSet;
+    // dns_smc_address#9fd3 smc_addr:MsgAddressInt flags:(## 8) { flags <= 1 } cap_list:flags . 0?SmcCapList = DNSRecord;
+    // _ (HashmapE 256 ^DNSRecord) = DNS_RecordSet;
     
     cell wallet_record = begin_cell().store_uint(0x9fd3, 16).store_builder(domain_nft_address).store_uint(0, 8).end_cell();
     
@@ -424,15 +424,15 @@ slice decode_base64_address(slice readable) method_id {
       return (subdomain_bits, null());
     }
   } else {
-    ;; example of domain being resolved:
-    ;; [initial, not accessible in this contract] "ton\\0resolve-contract\\0ton\\0resolve-contract\\0ton\\0ratelance\\0"
-    ;; [what is accessible by this contract]      "ton\\0resolve-contract\\0ton\\0ratelance\\0"
-    ;; subdomain          "resolve-contract"
-    ;; subdomain_sfx      "ton\\0ratelance\\0"
-    ;; and we want to pass \\0 further, so that next resolver has opportunity to process only one byte
+    // example of domain being resolved:
+    // [initial, not accessible in this contract] "ton\\0resolve-contract\\0ton\\0resolve-contract\\0ton\\0ratelance\\0"
+    // [what is accessible by this contract]      "ton\\0resolve-contract\\0ton\\0ratelance\\0"
+    // subdomain          "resolve-contract"
+    // subdomain_sfx      "ton\\0ratelance\\0"
+    // and we want to pass \\0 further, so that next resolver has opportunity to process only one byte
     
-    ;; next resolver is contract of 'resolve-contract<.ton>'
-    ;; dns_next_resolver#ba93 resolver:MsgAddressInt = DNSRecord;
+    // next resolver is contract of 'resolve-contract<.ton>'
+    // dns_next_resolver#ba93 resolver:MsgAddressInt = DNSRecord;
     cell resolver_record = begin_cell().store_uint(0xba93, 16).store_builder(domain_nft_address).end_cell();
     return (subdomain_bits - slice_bits(subdomain_sfx) - 8, resolver_record);
   }

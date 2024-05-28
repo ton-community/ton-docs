@@ -190,7 +190,7 @@ cell get_nft_content(int index, cell individual_nft_content) method_id {
     cs~load_ref();
     slice common_content = cs~load_ref().begin_parse();
     return (begin_cell()
-            .store_uint(1, 8) ;; offchain tag
+            .store_uint(1, 8) // offchain tag
             .store_slice(common_content)
             .store_ref(individual_nft_content)
             .end_cell());
@@ -226,7 +226,7 @@ Let's say there is some contract with a following get method:
 
 ```func
 (int) get_total() method_id {
-    return get_data().begin_parse().preload_uint(32); ;; load and return the 32-bit number from the data
+    return get_data().begin_parse().preload_uint(32); // load and return the 32-bit number from the data
 }
 ```
 
@@ -326,23 +326,23 @@ int get_total() method_id {
     cs~skip_bits(4);
     slice sender = cs~load_msg_addr();
 
-    int op = in_msg_body~load_uint(32); ;; load the operation code
+    int op = in_msg_body~load_uint(32); // load the operation code
 
-    if (op == 1) { ;; increase and update the number
+    if (op == 1) { // increase and update the number
         int number = in_msg_body~load_uint(32);
         int total = get_total();
         total += number;
         set_data(begin_cell().store_uint(total, 32).end_cell());
     }
-    elseif (op == 2) { ;; query the number
+    elseif (op == 2) { // query the number
         int total = get_total();
         send_raw_message(begin_cell()
             .store_uint(0x18, 6)
             .store_slice(sender)
             .store_coins(0)
-            .store_uint(0, 107) ;; default message headers (see sending messages page)
-            .store_uint(3, 32) ;; response operation code
-            .store_uint(total, 32) ;; the requested number
+            .store_uint(0, 107) // default message headers (see sending messages page)
+            .store_uint(3, 32) // response operation code
+            .store_uint(total, 32) // the requested number
         .end_cell(), 64);
     }
 }

@@ -10,13 +10,13 @@
 假设我们想检查某个事件是否相关。为此，我们使用标志变量。记住在 FunC 中 `true` 是 `-1` 而 `false` 是 `0`。
 
 ```func
-int flag = 0; ;; false
+int flag = 0; // false
 
 if (flag) { 
-    ;; 做一些事情
+    // 做一些事情
 }
 else {
-    ;; 拒绝交易
+    // 拒绝交易
 }
 ```
 
@@ -52,19 +52,19 @@ repeat(degree - 1) {
 当我们不知道要执行特定操作多少次时，while 循环很有用。例如，取一个 `cell`，我们知道它可以存储最多四个对其他 cell 的引用。
 
 ```func
-cell inner_cell = begin_cell() ;; 创建一个新的空构建器
-        .store_uint(123, 16) ;; 存储值为 123 且长度为 16 位的 uint
-        .end_cell(); ;; 将构建器转换为 cell
+cell inner_cell = begin_cell() // 创建一个新的空构建器
+        .store_uint(123, 16) // 存储值为 123 且长度为 16 位的 uint
+        .end_cell(); // 将构建器转换为 cell
 
 cell message = begin_cell()
-        .store_ref(inner_cell) ;; 将 cell 作为引用存储
+        .store_ref(inner_cell) // 将 cell 作为引用存储
         .store_ref(inner_cell)
         .end_cell();
 
-slice msg = message.begin_parse(); ;; 将 cell 转换为 slice
-while (msg.slice_refs_empty?() != -1) { ;; 我们应该记住 -1 是 true
-    cell inner_cell = msg~load_ref(); ;; 从 slice msg 中加载 cell
-    ;; 做一些事情
+slice msg = message.begin_parse(); // 将 cell 转换为 slice
+while (msg.slice_refs_empty?() != -1) { // 我们应该记住 -1 是 true
+    cell inner_cell = msg~load_ref(); // 从 slice msg 中加载 cell
+    // 做一些事情
 }
 ```
 
@@ -92,8 +92,8 @@ while (msg.slice_refs_empty?() != -1) { ;; 我们应该记住 -1 是 true
 int flag = 0;
 
 do {
-    ;; 即使 flag 是 false (0) 也做一些事情
-} until (flag == -1); ;; -1 是 true
+    // 即使 flag 是 false (0) 也做一些事情
+} until (flag == -1); // -1 是 true
 ```
 
 > 💡 有用的链接
@@ -105,31 +105,31 @@ do {
 在处理 `slice` 之前，需要检查它是否有数据以便正确处理。我们可以使用 `slice_empty?()` 来做到这一点，但我们必须考虑到，如果有至少一个 `bit` 的数据或一个 `ref`，它将返回 `-1`（`true`）。
 
 ```func
-;; 创建空 slice
+// 创建空 slice
 slice empty_slice = "";
-;; `slice_empty?()` 返回 `true`，因为 slice 没有任何 `bits` 和 `refs`
+// `slice_empty?()` 返回 `true`，因为 slice 没有任何 `bits` 和 `refs`
 empty_slice.slice_empty?();
 
-;; 创建仅包含 bits 的 slice
+// 创建仅包含 bits 的 slice
 slice slice_with_bits_only = "Hello, world!";
-;; `slice_empty?()` 返回 `false`，因为 slice 有 `bits`
+// `slice_empty?()` 返回 `false`，因为 slice 有 `bits`
 slice_with_bits_only.slice_empty?();
 
-;; 创建仅包含 refs 的 slice
+// 创建仅包含 refs 的 slice
 slice slice_with_refs_only = begin_cell()
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_empty?()` 返回 `false`，因为 slice 有 `refs`
+// `slice_empty?()` 返回 `false`，因为 slice 有 `refs`
 slice_with_refs_only.slice_empty?();
 
-;; 创建包含 bits 和 refs 的 slice
+// 创建包含 bits 和 refs 的 slice
 slice slice_with_bits_and_refs = begin_cell()
     .store_slice("Hello, world!")
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_empty?()` 返回 `false`，因为 slice 有 `bits` 和 `refs`
+// `slice_empty?()` 返回 `false`，因为 slice 有 `bits` 和 `refs`
 slice_with_bits_and_refs.slice_empty?();
 ```
 > 💡 有用的链接
@@ -152,31 +152,31 @@ slice_with_bits_and_refs.slice_empty?();
 如果我们只需要检查 `bits`，不关心 `slice` 中是否有任何 `refs`，那么我们应该使用 `slice_data_empty?()`。
 
 ```func 
-;; 创建空 slice
+// 创建空 slice
 slice empty_slice = "";
-;; `slice_data_empty?()` 返回 `true`，因为 slice 没有任何 `bits`
+// `slice_data_empty?()` 返回 `true`，因为 slice 没有任何 `bits`
 empty_slice.slice_data_empty?();
 
-;; 创建仅包含 bits 的 slice
+// 创建仅包含 bits 的 slice
 slice slice_with_bits_only = "Hello, world!";
-;; `slice_data_empty?()` 返回 `false`，因为 slice 有 `bits`
+// `slice_data_empty?()` 返回 `false`，因为 slice 有 `bits`
 slice_with_bits_only.slice_data_empty?();
 
-;; 创建仅包含 refs 的 slice
+// 创建仅包含 refs 的 slice
 slice slice_with_refs_only = begin_cell()
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_data_empty?()` 返回 `true`，因为 slice 没有 `bits`
+// `slice_data_empty?()` 返回 `true`，因为 slice 没有 `bits`
 slice_with_refs_only.slice_data_empty?();
 
-;; 创建包含 bits 和 refs 的 slice
+// 创建包含 bits 和 refs 的 slice
 slice slice_with_bits_and_refs = begin_cell()
     .store_slice("Hello, world!")
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_data_empty?()` 返回 `false`，因为 slice 有 `bits`
+// `slice_data_empty?()` 返回 `false`，因为 slice 有 `bits`
 slice_with_bits_and_refs.slice_data_empty?();
 ```
 
@@ -199,31 +199,31 @@ slice_with_bits_and_refs.slice_data_empty?();
 如果我们只对 `refs` 感兴趣，我们应该使用 `slice_refs_empty?()` 来检查它们的存在。
 
 ```func 
-;; 创建空 slice
+// 创建空 slice
 slice empty_slice = "";
-;; `slice_refs_empty?()` 返回 `true`，因为 slice 没有任何 `refs`
+// `slice_refs_empty?()` 返回 `true`，因为 slice 没有任何 `refs`
 empty_slice.slice_refs_empty?();
 
-;; 创建只包含 bits 的 slice
+// 创建只包含 bits 的 slice
 slice slice_with_bits_only = "Hello, world!";
-;; `slice_refs_empty?()` 返回 `true`，因为 slice 没有任何 `refs`
+// `slice_refs_empty?()` 返回 `true`，因为 slice 没有任何 `refs`
 slice_with_bits_only.slice_refs_empty?();
 
-;; 创建只包含 refs 的 slice
+// 创建只包含 refs 的 slice
 slice slice_with_refs_only = begin_cell()
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_refs_empty?()` 返回 `false`，因为 slice 有 `refs`
+// `slice_refs_empty?()` 返回 `false`，因为 slice 有 `refs`
 slice_with_refs_only.slice_refs_empty?();
 
-;; 创建包含 bits 和 refs 的 slice
+// 创建包含 bits 和 refs 的 slice
 slice slice_with_bits_and_refs = begin_cell()
     .store_slice("Hello, world!")
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_refs_empty?()` 返回 `false`，因为 slice 有 `refs`
+// `slice_refs_empty?()` 返回 `false`，因为 slice 有 `refs`
 slice_with_bits_and_refs.slice_refs_empty?();
 ```
 
@@ -251,15 +251,15 @@ cell cell_with_bits_and_refs = begin_cell()
     .store_ref(null())
     .end_cell();
 
-;; 将 `cell` 类型更改为 slice，使用 `begin_parse()`
+// 将 `cell` 类型更改为 slice，使用 `begin_parse()`
 slice cs = cell_with_bits_and_refs.begin_parse();
 
-;; 确定 slice 是否为空
+// 确定 slice 是否为空
 if (cs.slice_empty?()) {
-    ;; cell 为空
+    // cell 为空
 }
 else {
-    ;; cell 不为空
+    // cell 不为空
 }
 ```
 
@@ -284,11 +284,11 @@ cell d = new_dict();
 d~udict_set(256, 0, "hello");
 d~udict_set(256, 1, "world");
 
-if (d.dict_empty?()) { ;; 确定 dict 是否为空
-    ;; dict 为空
+if (d.dict_empty?()) { // 确定 dict 是否为空
+    // dict 为空
 }
 else {
-    ;; dict 不为空
+    // dict 不为空
 }
 ```
 
@@ -307,7 +307,7 @@ func/stdlib/#dict_set) 为 dict d 添加一些元素，所以它不为空
 在处理 `tuples` 时，始终知道内部是否有值以供提取是很重要的。如果我们尝试从空的 `tuple` 中提取值，将会得到一个错误：“not a tuple of valid size”，exit code 7。
 
 ```func
-;; 声明 tlen 函数，因为它在 stdlib 中没有提供
+// 声明 tlen 函数，因为它在 stdlib 中没有提供
 (int) tlen (tuple t) asm "TLEN";
 
 () main () {
@@ -316,10 +316,10 @@ func/stdlib/#dict_set) 为 dict d 添加一些元素，所以它不为空
     t~tpush(37);
 
     if (t.tlen() == 0) {
-        ;; tuple 为空
+        // tuple 为空
     }
     else {
-        ;; tuple 不为空
+        // tuple 不为空
     }
 }
 ```
@@ -343,9 +343,9 @@ tuple numbers = null();
 numbers = cons(100, numbers);
 
 if (numbers.null?()) {
-    ;; Lisp 类型的列表为空
+    // Lisp 类型的列表为空
 } else {
-    ;; Lisp 类型的列表不为空
+    // Lisp 类型的列表不为空
 }
 ```
 
@@ -356,19 +356,19 @@ if (numbers.null?()) {
 假设我们有一个 `counter`，用于存储交易次数。在智能合约状态的第一次交易中，这个变量不可用，因为状态为空，因此需要处理这种情况。如果状态为空，我们创建一个变量 `counter` 并保存它。
 
 ```func
-;; `get_data()` 将从合约状态返回数据 cell
+// `get_data()` 将从合约状态返回数据 cell
 cell contract_data = get_data();
 slice cs = contract_data.begin_parse();
 
 if (cs.slice_empty?()) {
-    ;; 合约数据为空，所以我们创建 counter 并保存
+    // 合约数据为空，所以我们创建 counter 并保存
     int counter = 1;
-    ;; 创建 cell，添加 counter 并保存在合约状态中
+    // 创建 cell，添加 counter 并保存在合约状态中
     set_data(begin_cell().store_uint(counter, 32).end_cell());
 }
 else {
-    ;; 合约数据不为空，所以我们获取我们的 counter，增加它并保存
-    ;; 我们应该指定 counter 的正确的位长度
+    // 合约数据不为空，所以我们获取我们的 counter，增加它并保存
+    // 我们应该指定 counter 的正确的位长度
     int counter = cs~load_uint(32) + 1;
     set_data(begin_cell().store_uint(counter, 32).end_cell());
 }
@@ -393,20 +393,20 @@ else {
 如果我们希望合约发送一个内部消息，我们应该首先正确地创建它为一个 cell，指定技术标志位、接收地址和其余数据。
 
 ```func
-;; 我们使用字面量 `a` 从包含地址的字符串中获取有效地址的 slice
+// 我们使用字面量 `a` 从包含地址的字符串中获取有效地址的 slice
 slice addr = "EQArzP5prfRJtDM5WrMNWyr9yUTAi0c9o6PfR4hkWy9UQXHx"a;
 int amount = 1000000000;
-;; 我们使用 `op` 来识别操作
+// 我们使用 `op` 来识别操作
 int op = 0;
 cell msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)
     .store_coins(amount)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 默认消息 header 部（参见发送消息页面）
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // 默认消息 header 部（参见发送消息页面）
     .store_uint(op, 32)
 .end_cell();
 
-send_raw_message(msg, 3); ;; 模式 3 - 分别支付费用并忽略错误
+send_raw_message(msg, 3); // 模式 3 - 分别支付费用并忽略错误
 ```
 
 > 💡 注意
@@ -438,11 +438,11 @@ send_raw_message(msg, 3); ;; 模式 3 - 分别支付费用并忽略错误
 如果我们确信有足够的空间，我们也可以在与 header 相同的 `cell` 中发送消息体。在这种情况下，我们需要将位设置为 `0`。
 
 ```func
-;; 我们使用字面量 `a` 从包含地址的字符串中获取有效地址的 slice 
+// 我们使用字面量 `a` 从包含地址的字符串中获取有效地址的 slice 
 slice addr = "EQArzP5prfRJtDM5WrMNWyr9yUTAi0c9o6PfR4hkWy9UQXHx"a;
 int amount = 1000000000;
 int op = 0;
-cell message_body = begin_cell() ;; 创建包含消息的 cell
+cell message_body = begin_cell() // 创建包含消息的 cell
     .store_uint(op, 32)
     .store_slice("❤")
 .end_cell();
@@ -451,12 +451,12 @@ cell msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)
     .store_coins(amount)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) ;; 默认消息 header 部（参见发送消息页面）
-    .store_uint(1, 1) ;; 设置位为 1，表明 cell 将继续传输
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) // 默认消息 header 部（参见发送消息页面）
+    .store_uint(1, 1) // 设置位为 1，表明 cell 将继续传输
     .store_ref(message_body)
 .end_cell();
 
-send_raw_message(msg, 3); ;; mode 3 - 分别支付费用并忽略错误 
+send_raw_message(msg, 3); // mode 3 - 分别支付费用并忽略错误 
 ```
 
 > 💡 注意
@@ -490,7 +490,7 @@ send_raw_message(msg, 3); ;; mode 3 - 分别支付费用并忽略错误
 发送消息时，消息体可以作为 `cell` 或 `slice` 发送。在这个例子中，我们将消息体放在 `slice` 内部发送。
 
 ```func 
-;; 我们使用字面量 `a` 从包含地址的字符串中获取有效地址的 slice 
+// 我们使用字面量 `a` 从包含地址的字符串中获取有效地址的 slice 
 slice addr = "EQArzP5prfRJtDM5WrMNWyr9yUTAi0c9o6PfR4hkWy9UQXHx"a;
 int amount = 1000000000;
 int op = 0;
@@ -500,12 +500,12 @@ cell msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)
     .store_coins(amount)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 默认消息 header 部（参见发送消息页面）
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // 默认消息 header 部（参见发送消息页面）
     .store_uint(op, 32)
     .store_slice(message_body)
 .end_cell();
 
-send_raw_message(msg, 3); ;;
+send_raw_message(msg, 3); //
 
  mode 3 - 分别支付费用并忽略错误 
 ```
@@ -537,14 +537,14 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
     int i = 0;
     while (i < len) {
         int x = t.at(i);
-        ;; 使用 x 做一些事情
+        // 使用 x 做一些事情
         i = i + 1;
     }
 
     i = len - 1;
     while (i >= 0) {
         int x = t.at(i);
-        ;; 使用 x 做一些事情
+        // 使用 x 做一些事情
         i = i - 1;
     }
 }
@@ -562,7 +562,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
 例如，我们有 `tpush` 方法，它可以向 `tuple` 中添加元素，但没有 `tpop`。在这种情况下，我们应该这样做：
 ```func
-;; ~ 表示它是修改方法
+// ~ 表示它是修改方法
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP"; 
 ```
 
@@ -600,7 +600,7 @@ forall X -> tuple cast_to_tuple (X x)
 forall X -> int cast_to_int (X x) asm "NOP";
 forall X -> (tuple) to_tuple (X x) asm "NOP";
 
-;; 定义全局变量
+// 定义全局变量
 global int max_value;
 
 () iterate_tuple (tuple t) impure {
@@ -621,9 +621,9 @@ global int max_value;
 () main () {
     tuple t = to_tuple([[2,6], [1, [3, [3, 5]]], 3]);
     int len = t.tuple_length();
-    max_value = 0; ;; 重置 max_value;
-    iterate_tuple(t); ;; 迭代 tuple 并找到最大值
-    ~dump(max_value); ;; 6
+    max_value = 0; // 重置 max_value;
+    iterate_tuple(t); // 迭代 tuple 并找到最大值
+    ~dump(max_value); // 6
 }
 ```
 
@@ -642,25 +642,25 @@ global int max_value;
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
 () main () {
-    ;; 创建一个空的 tuple
+    // 创建一个空的 tuple
     tuple names = empty_tuple(); 
     
-    ;; 添加新项目
+    // 添加新项目
     names~tpush("Naito Narihira");
     names~tpush("Shiraki Shinichi");
     names~tpush("Akamatsu Hachemon");
     names~tpush("Takaki Yuichi");
     
-    ;; 弹出最后一项
+    // 弹出最后一项
     slice last_name = names~tpop();
 
-    ;; 获取第一项
+    // 获取第一项
     slice first_name = names.first();
 
-    ;; 按索引获取项
+    // 按索引获取项
     slice best_name = names.at(2);
 
-    ;; 获取列表长度
+    // 获取列表长度
     int number_names = names.tlen();
 }
 ```
@@ -682,36 +682,36 @@ forall X -> tuple cast_to_tuple (X x) asm "NOP";
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
 forall X -> () resolve_type (X value) impure {
-    ;; value 是类型 X，由于我们不知道确切的值是什么 - 我们需要检查值然后转换它
+    // value 是类型 X，由于我们不知道确切的值是什么 - 我们需要检查值然后转换它
     
     if (is_null(value)) {
-        ;; 对 null 做一些事情
+        // 对 null 做一些事情
     }
     elseif (is_int(value)) {
         int valueAsInt = cast_to_int(value);
-        ;; 对 int 做一些事情
+        // 对 int 做一些事情
     }
     elseif (is_slice(value)) {
         slice valueAsSlice = cast_to_slice(value);
-        ;; 对 slice 做一些事情
+        // 对 slice 做一些事情
     }
     elseif (is_cell(value)) {
         cell valueAsCell = cast_to_cell(value);
-        ;; 对 cell 做一些事情
+        // 对 cell 做一些事情
     }
     elseif (is_tuple(value)) {
         tuple valueAsTuple = cast_to_tuple(value);
-        ;; 对 tuple 做一些事情
+        // 对 tuple 做一些事情
     }
 }
 
 () main () {
-    ;; 创建一个空的 tuple
+    // 创建一个空的 tuple
     tuple stack = empty_tuple();
-    ;; 假设我们有一个 tuple 并且不知道它们的确切类型
+    // 假设我们有一个 tuple 并且不知道它们的确切类型
     stack~tpush("Some text");
     stack~tpush(4);
-    ;; 我们使用 var 因为我们不知道值的类型
+    // 我们使用 var 因为我们不知道值的类型
     var value = stack~tpop();
     resolve_type(value);
 }
@@ -728,7 +728,7 @@ forall X -> () resolve_type (X value) impure {
 int current_time = now();
   
 if (current_time > 1672080143) {
-    ;; 做一些事情 
+    // 做一些事情 
 }
 ```
 
@@ -741,7 +741,7 @@ if (current_time > 1672080143) {
 :::
 
 ```func
-randomize_lt(); ;; 只需做一次
+randomize_lt(); // 只需做一次
 
 int a = rand(10);
 int b = rand(1000000);
@@ -754,12 +754,12 @@ int c = random();
 
 ```func
 (int) modulo_operations (int xp, int zp) {  
-   ;; 2^255 - 19 是蒙哥马利曲线的素数，意味着所有操作都应该对其素数进行
+   // 2^255 - 19 是蒙哥马利曲线的素数，意味着所有操作都应该对其素数进行
    int prime = 57896044618658097711785492504343953926634992332820282019728792003956564819949; 
 
-   ;; muldivmod 自身处理以下两行
-   ;; int xp+zp = (xp + zp) % prime;
-   ;; int xp-zp = (xp - zp + prime) % prime;
+   // muldivmod 自身处理以下两行
+   // int xp+zp = (xp + zp) % prime;
+   // int xp-zp = (xp - zp + prime) % prime;
    (_, int xp+zp*xp-zp) = muldivmod(xp + zp, xp - zp, prime);
    return xp+zp*xp-zp;
 }
@@ -775,11 +775,11 @@ int c = random();
 ```func
 int number = 198;
 
-throw_if(35, number > 50); ;; 只有当数字大于 50 时才会触发错误
+throw_if(35, number > 50); // 只有当数字大于 50 时才会触发错误
 
-throw_unless(39, number == 198); ;; 只有当数字不等于 198 时才会触发错误
+throw_unless(39, number == 198); // 只有当数字不等于 198 时才会触发错误
 
-throw(36); ;; 无论如何都会触发错误
+throw(36); // 无论如何都会触发错误
 ```
 
 [标准 TVM 异常代码](/learn/tvm-instructions/tvm-exit-codes.md)
@@ -805,7 +805,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 () main () {
     tuple t = to_tuple([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     tuple reversed_t = reverse_tuple(t);
-    ~dump(reversed_t); ;; [10 9 8 7 6 5 4 3 2 1]
+    ~dump(reversed_t); // [10 9 8 7 6 5 4 3 2 1]
 }
 ```
 
@@ -840,11 +840,11 @@ int tlen (tuple t) asm "TLEN";
     numbers~tpush(999);
     numbers~tpush(54);
 
-    ~dump(numbers); ;; [19 999 54]
+    ~dump(numbers); // [19 999 54]
 
     numbers~remove_item(1); 
 
-    ~dump(numbers); ;; [19 54]
+    ~dump(numbers); // [19 54]
 }
 
 ### 判断切片是否相等
@@ -861,12 +861,12 @@ int are_slices_equal_2? (slice a, slice b) asm "SDEQ";
 () main () {
     slice a = "Some text";
     slice b = "Some text";
-    ~dump(are_slices_equal_1?(a, b)); ;; -1 = true
+    ~dump(are_slices_equal_1?(a, b)); // -1 = true
 
     a = "Text";
-    ;; 我们使用字面量 `a` 来从包含地址的字符串中获取切片的有效地址
+    // 我们使用字面量 `a` 来从包含地址的字符串中获取切片的有效地址
     b = "EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF"a;
-    ~dump(are_slices_equal_2?(a, b)); ;; 0 = false
+    ~dump(are_slices_equal_2?(a, b)); // 0 = false
 }
 ```
 
@@ -893,7 +893,7 @@ int are_cells_equal? (cell a, cell b) {
             .store_uint(123, 16)
             .end_cell();
 
-    ~dump(are_cells_equal?(a, b)); ;; -1 = true
+    ~dump(are_cells_equal?(a, b)); // -1 = true
 }
 ```
 
@@ -924,10 +924,10 @@ int are_cells_equal? (cell a, cell b) {
 }
 
 (int) are_tuples_equal? (tuple t1, tuple t2) {
-    int equal? = -1; ;; 初始值为 true
+    int equal? = -1; // 初始值为 true
     
     if (t1.tuple_length() != t2.tuple_length()) {
-        ;; 如果元组长度不同，它们就不能相等
+        // 如果元组长度不同，它们就不能相等
         return 0;
     }
 
@@ -938,7 +938,7 @@ int are_cells_equal? (cell a, cell b) {
         var v2 = t2~tpop();
         
         if (is_null(t1) & is_null(t2)) {
-            ;; nulls are always equal
+            // nulls are always equal
         }
         elseif (is_int(v1) & is_int(v2)) {
             if (cast_to_int(v1) != cast_to_int(v2)) {
@@ -958,7 +958,7 @@ int are_cells_equal? (cell a, cell b) {
             }
         }
         elseif (is_tuple(v1) & is_tuple(v2)) {
-            ;; 递归地判断嵌套元组
+            // 递归地判断嵌套元组
             if (~ are_tuples_equal?(cast_to_tuple(v1), cast_to_tuple(v2))) {
                 equal? = 0;
             }
@@ -977,7 +977,7 @@ int are_cells_equal? (cell a, cell b) {
     tuple t1 = cast_to_tuple([[2, 6], [1, [3, [3, 5]]], 3]);
     tuple t2 = cast_to_tuple([[2, 6], [1, [3, [3, 5]]], 3]);
 
-    ~dump(are_tuples_equal?(t1, t2)); ;; -1 
+    ~dump(are_tuples_equal?(t1, t2)); // -1 
 }
 ```
 
@@ -995,19 +995,19 @@ int are_cells_equal? (cell a, cell b) {
 
 ```func
 (slice) generate_internal_address (int workchain_id, cell state_init) {
-    ;; addr_std$10 anycast:(Maybe Anycast) workchain_id:int8 address:bits256  = MsgAddressInt;
+    // addr_std$10 anycast:(Maybe Anycast) workchain_id:int8 address:bits256  = MsgAddressInt;
 
     return begin_cell()
-        .store_uint(2, 2) ;; addr_std$10
-        .store_uint(0, 1) ;; anycast nothing
-        .store_int(workchain_id, 8) ;; workchain_id: -1
+        .store_uint(2, 2) // addr_std$10
+        .store_uint(0, 1) // anycast nothing
+        .store_int(workchain_id, 8) // workchain_id: -1
         .store_uint(cell_hash(state_init), 256)
     .end_cell().begin_parse();
 }
 
 () main () {
     slice deploy_address = generate_internal_address(workchain(), state_init);
-    ;; then we can deploy new contract
+    // then we can deploy new contract
 }
 ```
 
@@ -1027,12 +1027,12 @@ int are_cells_equal? (cell a, cell b) {
 (int) ubitsize (int a) asm "UBITSIZE";
 
 slice generate_external_address (int address) {
-    ;; addr_extern$01 len:(## 9) external_address:(bits len) = MsgAddressExt;
+    // addr_extern$01 len:(## 9) external_address:(bits len) = MsgAddressExt;
     
     int address_length = ubitsize(address);
     
     return begin_cell()
-        .store_uint(1, 2) ;; addr_extern$01
+        .store_uint(1, 2) // addr_extern$01
         .store_uint(address_length, 9)
         .store_uint(address, address_length)
     .end_cell().begin_parse();
@@ -1082,14 +1082,14 @@ set_data(begin_cell().store_dict(dictionary_cell).end_cell());
 
 ```func
 cell msg = begin_cell()
-    .store_uint(0x18, 6) ;; 标志位
-    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; 目的地址
-    .store_coins(100) ;; 发送的nanoTons数量
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 默认消息header（参见发送消息页面）
-    .store_uint(0, 32) ;; 零操作码 - 表示带评论的简单转账消息
-    .store_slice("Hello from FunC!") ;; 评论
+    .store_uint(0x18, 6) // 标志位
+    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) // 目的地址
+    .store_coins(100) // 发送的nanoTons数量
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // 默认消息header（参见发送消息页面）
+    .store_uint(0, 32) // 零操作码 - 表示带评论的简单转账消息
+    .store_slice("Hello from FunC!") // 评论
 .end_cell();
-send_raw_message(msg, 3); ;; mode 3 - 分开支付费用，忽略错误
+send_raw_message(msg, 3); // mode 3 - 分开支付费用，忽略错误
 ```
 
 > 💡 有用的链接
@@ -1102,20 +1102,20 @@ send_raw_message(msg, 3); ;; mode 3 - 分开支付费用，忽略错误
 
 ```func
 () recv_internal (slice in_msg_body) {
-    {-
+    /*
         这是一个代理合约的简单示例。
         它将期望 in_msg_body 包含消息 mode、body 和要发送到的目的地址。
-    -}
+    */
 
-    int mode = in_msg_body~load_uint(8); ;; 第一个字节将包含消息 mode
-    slice addr = in_msg_body~load_msg_addr(); ;; 然后我们解析目的地址
-    slice body = in_msg_body; ;; in_msg_body 中剩余的所有内容将是我们新消息的 body
+    int mode = in_msg_body~load_uint(8); // 第一个字节将包含消息 mode
+    slice addr = in_msg_body~load_msg_addr(); // 然后我们解析目的地址
+    slice body = in_msg_body; // in_msg_body 中剩余的所有内容将是我们新消息的 body
 
     cell msg = begin_cell()
         .store_uint(0x18, 6)
         .store_slice(addr)
-        .store_coins(100) ;; 仅作示例
-        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 默认消息 header （参见发送消息页面）
+        .store_coins(100) // 仅作示例
+        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // 默认消息 header （参见发送消息页面）
         .store_slice(body)
     .end_cell();
     send_raw_message(msg, mode);
@@ -1134,14 +1134,14 @@ send_raw_message(msg, 3); ;; mode 3 - 分开支付费用，忽略错误
 
 ```func
 cell msg = begin_cell()
-    .store_uint(0x18, 6) ;; 标志位
-    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; 目的地址
-    .store_coins(0) ;; 我们现在不关心这个值
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 默认消息 header （参见发送消息页面）
-    .store_uint(0, 32) ;; 零操作码 - 表示带评论的简单转账消息
-    .store_slice("Hello from FunC!") ;; 评论
+    .store_uint(0x18, 6) // 标志位
+    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) // 目的地址
+    .store_coins(0) // 我们现在不关心这个值
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // 默认消息 header （参见发送消息页面）
+    .store_uint(0, 32) // 零操作码 - 表示带评论的简单转账消息
+    .store_slice("Hello from FunC!") // 评论
 .end_cell();
-send_raw_message(msg, 128); ;; 模式=128 用于携带当前智能合约剩余全部余额的消息
+send_raw_message(msg, 128); // 模式=128 用于携带当前智能合约剩余全部余额的消息
 ```
 
 > 💡 有用的链接
@@ -1155,14 +1155,14 @@ send_raw_message(msg, 128); ;; 模式=128 用于携带当前智能合约剩余�
 我们知道，单个 `cell` (<1023 bits) 中只能容纳 127 个字符。如果我们需要更多 - 我们需要组织蛇形cell。
 
 ```func
-{-
+/*
     如果我们想发送带有非常长的评论的消息，我们应该将评论分成几个片段。
     每个片段应包含 <1023 位数据（127个字符）。
     每个片段应该有一个引用指向下一个，形成蛇形结构。
--}
+*/
 
 cell body = begin_cell()
-    .store_uint(0, 32) ;; 零操作码 - 带评论的简单消息
+    .store_uint(0, 32) // 零操作码 - 带评论的简单消息
     .store_slice("long long long message...")
     .store_ref(begin_cell()
         .store_slice(" you can store string of almost any length here.")
@@ -1173,15 +1173,15 @@ cell body = begin_cell()
 .end_cell();
 
 cell msg = begin_cell()
-    .store_uint(0x18, 6) ;; 标志位
-    ;; 我们使用字面量 `a` 从包含地址的字符串中获取片段内的有效地址
-    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; 目的地址
-    .store_coins(100) ;; 发送的nanoTons数量
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) ;; 默认消息 header （参见发送消息页面）
-    .store_uint(1, 1) ;; 我们希望将 body 存储为引用
+    .store_uint(0x18, 6) // 标志位
+    // 我们使用字面量 `a` 从包含地址的字符串中获取片段内的有效地址
+    .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) // 目的地址
+    .store_coins(100) // 发送的nanoTons数量
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) // 默认消息 header （参见发送消息页面）
+    .store_uint(1, 1) // 我们希望将 body 存储为引用
     .store_ref(body)
 .end_cell();
-send_raw_message(msg, 3); ;; mode 3 - 分开支付费用，忽略错误
+send_raw_message(msg, 3); // mode 3 - 分开支付费用，忽略错误
 ```
 
 > 💡 有用的链接
@@ -1195,8 +1195,8 @@ send_raw_message(msg, 3); ;; mode 3 - 分开支付费用，忽略错误
 ```func
 slice s = begin_cell()
     .store_slice("Some data bits...")
-    .store_ref(begin_cell().end_cell()) ;; 一些引用
-    .store_ref(begin_cell().end_cell()) ;; 一些引用
+    .store_ref(begin_cell().end_cell()) // 一些引用
+    .store_ref(begin_cell().end_cell()) // 一些引用
 .end_cell().begin_parse();
 
 slice s_only_data = s.preload_bits(s.slice_bits());
@@ -1216,9 +1216,9 @@ slice s_only_data = s.preload_bits(s.slice_bits());
 
 ```func
 (slice, (int)) load_digit (slice s) {
-    int x = s~load_uint(8); ;; 从片段中加载 8 位（一个字符）
-    x -= 48; ;; 字符 '0' 的代码为 48，所以我们减去它以得到数字
-    return (s, (x)); ;; 返回我们修改的片段和加载的数字
+    int x = s~load_uint(8); // 从片段中加载 8 位（一个字符）
+    x -= 48; // 字符 '0' 的代码为 48，所以我们减去它以得到数字
+    return (s, (x)); // 返回我们修改的片段和加载的数字
 }
 
 () main () {
@@ -1226,7 +1226,7 @@ slice s_only_data = s.preload_bits(s.slice_bits());
     int c1 = s~load_digit();
     int c2 = s~load_digit();
     int c3 = s~load_digit();
-    ;; 这里 s 等于 ""，c1 = 2，c2 = 5，c3 = 8
+    // 这里 s 等于 ""，c1 = 2，c2 = 5，c3 = 8
 }
 ```
 
@@ -1237,7 +1237,7 @@ slice s_only_data = s.preload_bits(s.slice_bits());
 ### 如何计算 n 的幂
 
 ```func
-;; 未优化版本
+// 未优化版本
 int pow (int a, int n) {
     int i = 0;
     int value = a;
@@ -1250,7 +1250,7 @@ int pow (int a, int n) {
 ;
 }
 
-;; 优化版本
+// 优化版本
 (int) binpow (int n, int e) {
     if (e == 0) {
         return 1;
@@ -1268,7 +1268,7 @@ int pow (int a, int n) {
 
 () main () {
     int num = binpow(2, 3);
-    ~dump(num); ;; 8
+    ~dump(num); // 8
 }
 ```
 
@@ -1280,7 +1280,7 @@ int number = 0;
 
 while (~ string_number.slice_empty?()) {
     int char = string_number~load_uint(8);
-    number = (number * 10) + (char - 48); ;; 我们使用 ASCII 表
+    number = (number * 10) + (char - 48); // 我们使用 ASCII 表
 }
 
 ~dump(number);
@@ -1315,10 +1315,10 @@ d~udict_set(256, 1, "value 1");
 d~udict_set(256, 5, "value 2");
 d~udict_set(256, 12, "value 3");
 
-;; 从小到大遍历键
+// 从小到大遍历键
 (int key, slice val, int flag) = d.udict_get_min?(256);
 while (flag) {
-    ;; 使用 key->val 对，做某些事情
+    // 使用 key->val 对，做某些事情
     
     (key, val, flag) = d.udict_get_next?(256, key);
 }
@@ -1346,7 +1346,7 @@ names~udict_set(256, 25, "Bob");
 names~udict_delete?(256, 27);
 
 (slice val, int key) = names.udict_get?(256, 27);
-~dump(val); ;; null() -> 表示在字典中未找到该键
+~dump(val); // null() -> 表示在字典中未找到该键
 ```
 
 ### 如何递归遍历cell树
@@ -1359,7 +1359,7 @@ forall X -> (tuple, ()) push_back (tuple tail, X head) asm "CONS";
 forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 
 () main () {
-    ;; 仅作为示例的一些cell
+    // 仅作为示例的一些cell
     cell c = begin_cell()
         .store_uint(1, 16)
         .store_ref(begin_cell()
@@ -1376,18 +1376,18 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
         .end_cell())
     .end_cell();
 
-    ;; 创建一个没有数据的元组，充当栈的角色
+    // 创建一个没有数据的元组，充当栈的角色
     tuple stack = null();
-    ;; 将主cell放入栈中以便在循环中处理
+    // 将主cell放入栈中以便在循环中处理
     stack~push_back(c);
-    ;; 在栈不为空时执行
+    // 在栈不为空时执行
     while (~ stack.is_null()) {
-        ;; 从栈中获取cell，并将其转换为 slice 以便处理
+        // 从栈中获取cell，并将其转换为 slice 以便处理
         slice s = stack~pop_back().begin_parse();
 
-        ;; 对 s 数据做一些操作
+        // 对 s 数据做一些操作
 
-        ;; 如果当前 slice 有任何 refs，将它们添加到栈中
+        // 如果当前 slice 有任何 refs，将它们添加到栈中
         repeat (s.slice_refs()) {
             stack~push_back(s~load_ref());
         }
@@ -1415,18 +1415,18 @@ forall X -> (tuple, ()) push_back (tuple tail, X head) asm "CONS";
 forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 
 () main () {
-    ;; 一些示例列表
+    // 一些示例列表
     tuple l = null();
     l~push_back(1);
     l~push_back(2);
     l~push_back(3);
 
-    ;; 遍历元素
-    ;; 注意这种迭代是倒序的
+    // 遍历元素
+    // 注意这种迭代是倒序的
     while (~ l.is_null()) {
         var x = l~pop_back();
 
-        ;; 对 x 做一些操作
+        // 对 x 做一些操作
     }
 }
 ```
@@ -1443,25 +1443,25 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 () deploy_with_stateinit(cell message_header, cell state_init) impure {
   var msg = begin_cell()
     .store_slice(begin_parse(msg_header))
-    .store_uint(2 + 1, 2) ;; init:(Maybe (Either StateInit ^StateInit))
-    .store_uint(0, 1) ;; body:(Either X ^X)
+    .store_uint(2 + 1, 2) // init:(Maybe (Either StateInit ^StateInit))
+    .store_uint(0, 1) // body:(Either X ^X)
     .store_ref(state_init)
     .end_cell();
 
-  ;; mode 64 - 在新消息中携带剩余值
+  // mode 64 - 在新消息中携带剩余值
   send_raw_message(msg, 64); 
 }
 
 () deploy_with_stateinit_body(cell message_header, cell state_init, cell body) impure {
   var msg = begin_cell()
     .store_slice(begin_parse(msg_header))
-    .store_uint(2 + 1, 2) ;; init:(Maybe (Either StateInit ^StateInit))
-    .store_uint(1, 1) ;; body:(Either X ^X)
+    .store_uint(2 + 1, 2) // init:(Maybe (Either StateInit ^StateInit))
+    .store_uint(1, 1) // body:(Either X ^X)
     .store_ref(state_init)
     .store_ref(body)
     .end_cell();
 
-  ;; mode 64 - 在新消息中携带剩余值
+  // mode 64 - 在新消息中携带剩余值
   send_raw_message(msg, 64); 
 }
 ```
@@ -1471,11 +1471,11 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 ```func
 () build_stateinit(cell init_code, cell init_data) {
   var state_init = begin_cell()
-    .store_uint(0, 1) ;; split_depth:(Maybe (## 5))
-    .store_uint(0, 1) ;; special:(Maybe TickTock)
-    .store_uint(1, 1) ;; (Maybe ^Cell)
-    .store_uint(1, 1) ;; (Maybe ^Cell)
-    .store_uint(0, 1) ;; (HashmapE 256 SimpleLib)
+    .store_uint(0, 1) // split_depth:(Maybe (## 5))
+    .store_uint(0, 1) // special:(Maybe TickTock)
+    .store_uint(1, 1) // (Maybe ^Cell)
+    .store_uint(1, 1) // (Maybe ^Cell)
+    .store_uint(0, 1) // (HashmapE 256 SimpleLib)
     .store_ref(init_code)
     .store_ref(init_data)
     .end_cell();
@@ -1487,9 +1487,9 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 ```func
 () calc_address(cell state_init) {
   var future_address = begin_cell() 
-    .store_uint(2, 2) ;; addr_std$10
-    .store_uint(0, 1) ;; anycast:(Maybe Anycast)
-    .store_uint(0, 8) ;; workchain_id:int8
-    .store_uint(cell_hash(state_init), 256) ;; address:bits256
+    .store_uint(2, 2) // addr_std$10
+    .store_uint(0, 1) // anycast:(Maybe Anycast)
+    .store_uint(0, 8) // workchain_id:int8
+    .store_uint(cell_hash(state_init), 256) // address:bits256
     .end_cell();
 }

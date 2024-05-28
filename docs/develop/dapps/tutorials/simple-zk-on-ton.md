@@ -306,7 +306,7 @@ And the last part is the groth16Verify function which is required to check the v
             pi_c, vk_delta_2,
             vk_alpha_1, vk_beta_2,
             4);
-    ;; ctx_res = a;
+    // ctx_res = a;
     if (a == 0) {
         ctx_res = 0;
     } else {

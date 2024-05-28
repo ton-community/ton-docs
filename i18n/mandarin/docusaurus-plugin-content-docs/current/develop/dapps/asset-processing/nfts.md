@@ -17,7 +17,7 @@ Open Network (TON) 区块链设计考虑了高性能，并包括了一个功能�
 ### NFT 集合
 NFT 集合是一个用于索引和存储 NFT 内容的合约，并应包含以下接口：
 #### 获取方法 `get_collection_data`
-```
+```func
 (int next_item_index, cell collection_content, slice owner_address) get_collection_data()
 ```
 获取关于集合的一般信息，表示如下：
@@ -26,13 +26,13 @@ NFT 集合是一个用于索引和存储 NFT 内容的合约，并应包含以�
   3. `owner_address` - 包含集合所有者地址的 slice（此值也可以为空）。
 
 #### 获取方法 `get_nft_address_by_index`
-```
+```func
 (slice nft_address) get_nft_address_by_index(int index)
 ```
 此方法可用于验证 NFT 的真实性，并确认它是否确实属于特定集合。它还使用户能够通过提供其在集合中的索引来检索 NFT 地址。该方法应返回包含与提供的索引对应的 NFT 地址的 slice。
 
 #### 获取方法 `get_nft_content`
-```
+```func
 (cell full_content) get_nft_content(int index, cell individual_content)
 ```
 由于集合充当 NFT 的公共数据存储，因此需要此方法来完善 NFT 内容。要使用此方法，首先需要通过调用相应的 `get_nft_data()` 方法获取 NFT 的 `individual_content`。获取 `individual_content` 后，可以使用 NFT 索引和 `individual_content` cell 调用 `get_nft_content()` 方法。该方法应返回一个包含 NFT 全部内容的 TEP-64 cell。
@@ -41,12 +41,12 @@ NFT 集合是一个用于索引和存储 NFT 内容的合约，并应包含以�
 基本 NFT 应实现：
 
 #### 获取方法 `get_nft_data()`
-```
+```func
 (int init?, int index, slice collection_address, slice owner_address, cell individual_content) get_nft_data()
 ```
 
 #### 内联消息处理器 `transfer`
-```
+```tlb
 transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody
 ```
 让我们看一下您需要在消息中填充的每个参数：
@@ -179,19 +179,19 @@ curl -X 'POST' \
 
 在这个例子中，NFT 转移信息位于 [第 67 行](https://www.google.com/url?q=https://github.com/ton-blockchain/token-contract/blob/1ad314a98d20b41241d5329e1786fc894ad811de/nft/nft-sale.fc%23L67&sa=D&source=docs&ust=1685436161341866&usg=AOvVaw1yuoIzcbEuvqMS4xQMqfXE):
 
-```
+```func
 var nft_msg = begin_cell()
   .store_uint(0x18, 6)
   .store_slice(nft_address)
   .store_coins(0)
-  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 默认消息头（见发送消息页面）
+  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // 默认消息头（见发送消息页面）
   .store_uint(op::transfer(), 32)
   .store_uint(query_id, 64)
-  .store_slice(sender_address) ;; new_owner_address
-  .store_slice(sender_address) ;; response_address
-  .store_int(0, 1) ;; 空的自定义有效载荷
-  .store_coins(0) ;; 向 new_owner_address 转发金额
-  .store_int(0, 1); ;; 空的转发有效载荷
+  .store_slice(sender_address) // new_owner_address
+  .store_slice(sender_address) // response_address
+  .store_int(0, 1) // 空的自定义有效载荷
+  .store_coins(0) // 向 new_owner_address 转发金额
+  .store_int(0, 1); // 空的转发有效载荷
 
 
 send_raw_message(nft_msg.end_cell(), 128 + 32);
@@ -203,8 +203,8 @@ send_raw_message(nft_msg.end_cell(), 128 + 32);
 - `store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)` - 剩余构成消息头的部分被留空。
 - `store_uint(op::transfer(), 32)` - 这是 msg_body 的开始。在这里，我们首先使用 transfer OP 代码，以便接收者理解其转移所有权消息。
 - `store_uint(query_id, 64)` - 存储查询 ID。
-- `store_slice(sender_address) ;; new_owner_address` - 第一个存储的地址是用于转移 NFTs 和发送通知的地址。
-- `store_slice(sender_address) ;; response_address` - 第二个存储的地址是响应地址。
+- `store_slice(sender_address) // new_owner_address` - 第一个存储的地址是用于转移 NFTs 和发送通知的地址。
+- `store_slice(sender_address) // response_address` - 第二个存储的地址是响应地址。
 - `store_int(0, 1)` - 自定义有效载荷标志设置为 0，表示不需要自定义有效载荷。
 - `store_coins(0)` - 随消息转发的 TON 数量。在这个例子中设置为 0，但是，建议将此值设置为更高的金额（如至少 0.01 TON），以便创建转发消息并通知新所有者他们已经收到了 NFT。金额应足以覆盖任何相关费用和成本。
 - `.store_int(0, 1)` - 自定义有效载荷标志。如果您的服务应该作为 ref 传递有效载荷，则必须将其设置为 `1`。
@@ -212,11 +212,11 @@ send_raw_message(nft_msg.end_cell(), 128 + 32);
 ### 接收 NFTs
 一旦我们发送了 NFT，就至关重要的是确定新所有者何时收到了它。一个好的例子可以在同一个 NFT 销售智能合约中找到：
 
-```
+```func
 slice cs = in_msg_full.begin_parse();
 int flags = cs~load_uint(4);
 
-if (flags & 1) {  ;; 忽略所有弹回消息
+if (flags & 1) {  // 忽略所有弹回消息
     return ();
 }
 slice sender_address = cs~load_msg_addr();
@@ -230,7 +230,7 @@ slice prev_owner_address = in_msg_body~load_msg_addr();
 
 - `slice cs = in_msg_full.begin_parse();` - 用于解析传入消息。
 - `int flags = cs~load_uint(4);` - 用于从消息的前 4 位加载标志。
-- `if (flags & 1) { return (); } ;; 忽略所有弹回消息` - 用于验证消息是否没有被弹回。对于所有您的传入消息，如果没有理由反之，就很重要进行此过程。弹回的消息是那些在尝试接收交易时遇到错误并被退回给发件人的消息。
+- `if (flags & 1) { return (); } // 忽略所有弹回消息` - 用于验证消息是否没有被弹回。对于所有您的传入消息，如果没有理由反之，就很重要进行此过程。弹回的消息是那些在尝试接收交易时遇到错误并被退回给发件人的消息。
 - `slice sender_address = cs~load_msg_addr();` - 接下来加载消息发送者。在这种特殊情况下，通过使用 NFT 地址完成。
 - `throw_unless(500, equal_slices(sender_address, nft_address));` - 用于验证发送者确实是应该通过合约转移的 NFT。从智能合约解析 NFT 数据相当困难，因此在大多数情况下，NFT 地址在合约创建时预定义。
 - `int op = in_msg_body~load_uint(32);` - 加载消息 OP 代码。

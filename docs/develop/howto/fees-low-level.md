@@ -155,7 +155,7 @@ Just an example of how proper cell work may substantially decrease gas costs.
 
 Let's imagine that you want to add some encoded payload to the outgoing message. Straightforward implementation will be as follows:
 
-```cpp
+```func
 slice payload_encoding(int a, int b, int c) {
   return
     begin_cell().store_uint(a,8)
@@ -170,9 +170,9 @@ slice payload_encoding(int a, int b, int c) {
     .store_uint(0x18, 6)
     .store_slice(destination)
     .store_coins(0)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
-    .store_uint(0x33bbff77, 32) ;; op-code (see smart-contract guidelines)
-    .store_uint(cur_lt(), 64)  ;; query_id (see smart-contract guidelines)
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // default message headers (see sending messages page)
+    .store_uint(0x33bbff77, 32) // op-code (see smart-contract guidelines)
+    .store_uint(cur_lt(), 64)  // query_id (see smart-contract guidelines)
     .store_slice(payload)
   .end_cell();
   send_raw_message(msg, 64);
@@ -181,8 +181,8 @@ slice payload_encoding(int a, int b, int c) {
 
 What is the problem with this code? `payload_encoding` to generate a slice bit-string, first create a cell via `end_cell()` (+500 gas units). Then parse it `begin_parse()` (+100 gas units). The same code can be written without those unnecessary operations by changing some commonly used types:
 
-```cpp
-;; we add asm for function which stores one builder to the another, which is absent from stdlib
+```func
+// we add asm for function which stores one builder to the another, which is absent from stdlib
 builder store_builder(builder to, builder what) asm(what to) "STB";
 
 builder payload_encoding(int a, int b, int c) {
@@ -198,9 +198,9 @@ builder payload_encoding(int a, int b, int c) {
     .store_uint(0x18, 6)
     .store_slice(destination)
     .store_coins(0)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
-    .store_uint(0x33bbff77, 32) ;; op-code (see smart-contract guidelines)
-    .store_uint(cur_lt(), 64)  ;; query_id (see smart-contract guidelines)
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // default message headers (see sending messages page)
+    .store_uint(0x33bbff77, 32) // op-code (see smart-contract guidelines)
+    .store_uint(cur_lt(), 64)  // query_id (see smart-contract guidelines)
     .store_builder(payload)
   .end_cell();
   send_raw_message(msg, 64);
@@ -224,7 +224,7 @@ Dictionaries on TON are introduced as trees (DAGs to be precise) of cells. That 
 
 Note that FunC manipulates stack entries under the hood. That means that the code:
 
-```cpp
+```func
 (int a, int b, int c) = some_f();
 return (c, b, a);
 ```

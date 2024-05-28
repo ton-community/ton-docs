@@ -20,7 +20,7 @@ Just add the `randomize_lt()` call before generating random numbers, and your ra
 
 ```func
 randomize_lt();
-int x = random(); ;; users can't predict this number
+int x = random(); // users can't predict this number
 ```
 
 However, you should note that validators or collators may still affect the result of the random number, as they determine the seed of the current block.
@@ -40,53 +40,53 @@ Do not use this example contract in real projects, write your own instead.
 Let's write a simple lottery contract as an example. A user will send 1 TON to it, and with a 50% chance, will get 2 TON back.
 
 ```func
-;; set the echo-contract address
+// set the echo-contract address
 const echo_address = "Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s"a;
 
 () recv_internal (int msg_value, cell in_msg_full, slice in_msg_body) impure {
     var cs = in_msg_full.begin_parse();
     var flags = cs~load_uint(4);
-    if (flags & 1) { ;; ignore bounced messages
+    if (flags & 1) { // ignore bounced messages
         return ();
     }
     slice sender = cs~load_msg_addr();
 
     int op = in_msg_body~load_uint(32);
-    if ((op == 0) & equal_slice_bits(in_msg_body, "bet")) { ;; bet from user
-        throw_unless(501, msg_value == 1000000000); ;; 1 TON
+    if ((op == 0) & equal_slice_bits(in_msg_body, "bet")) { // bet from user
+        throw_unless(501, msg_value == 1000000000); // 1 TON
 
         send_raw_message(
             begin_cell()
                 .store_uint(0x18, 6)
                 .store_slice(echo_address)
                 .store_coins(0)
-                .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
-                .store_uint(1, 32) ;; let 1 be echo opcode in our contract
-                .store_slice(sender) ;; forward user address
+                .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // default message headers (see sending messages page)
+                .store_uint(1, 32) // let 1 be echo opcode in our contract
+                .store_slice(sender) // forward user address
             .end_cell(),
-            64 ;; send the remaining value of an incoming msg
+            64 // send the remaining value of an incoming msg
         );
     }
-    elseif (op == 1) { ;; echo
-        throw_unless(502, equal_slice_bits(sender, echo_address)); ;; only accept echoes from our echo-contract
+    elseif (op == 1) { // echo
+        throw_unless(502, equal_slice_bits(sender, echo_address)); // only accept echoes from our echo-contract
 
         slice user = in_msg_body~load_msg_addr();
 
-        {-
+        /*
             at this point we have skipped 1+ blocks
             so let's just generate the random number
-        -}
+        */
         randomize_lt();
-        int x = rand(2); ;; generate a random number (either 0 or 1)
-        if (x == 1) { ;; user won
+        int x = rand(2); // generate a random number (either 0 or 1)
+        if (x == 1) { // user won
             send_raw_message(
                 begin_cell()
                     .store_uint(0x18, 6)
                     .store_slice(user)
-                    .store_coins(2000000000) ;; 2 TON
-                    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
+                    .store_coins(2000000000) // 2 TON
+                    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // default message headers (see sending messages page)
                 .end_cell(),
-                3 ;; ignore errors & pay fees separately
+                3 // ignore errors & pay fees separately
             );
         }
     }

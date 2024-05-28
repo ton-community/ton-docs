@@ -50,11 +50,11 @@ Basically you need to put tag and hash to the builder and then "close builder as
 
 It can be done in Fift-asm construction like [this](https://github.com/ton-blockchain/multisig-contract-v2/blob/master/contracts/auto/order_code.func), example of compilation some contract directly to library cell [here](https://github.com/ton-blockchain/multisig-contract-v2/blob/master/wrappers/Order.compile.ts).
 
-```fift
-;; https://docs.ton.org/tvm.pdf, page 30
-;; Library reference cell — Always has level 0, and contains 8+256 data bits, including its 8-bit type integer 2 
-;; and the representation hash Hash(c) of the library cell being referred to. When loaded, a library
-;; reference cell may be transparently replaced by the cell it refers to, if found in the current library context.
+```func
+// https://docs.ton.org/tvm.pdf, page 30
+// Library reference cell — Always has level 0, and contains 8+256 data bits, including its 8-bit type integer 2 
+// and the representation hash Hash(c) of the library cell being referred to. When loaded, a library
+// reference cell may be transparently replaced by the cell it refers to, if found in the current library context.
 
 cell order_code() asm "<b 2 8 u, 0x6305a8061c856c2ccf05dcb0df5815c71475870567cab5f049e340bcf59251f3 256 u, b>spec PUSHREF";
 ```

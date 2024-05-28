@@ -32,26 +32,26 @@ TON DNS 是一个强大的工具。它不仅允许将 TON 网站/存储包分配
   int subdomain_bits = slice_bits(subdomain);
   throw_unless(70, (subdomain_bits % 8) == 0);
   
-  int starts_with_zero_byte = subdomain.preload_int(8) == 0;  ;; 假设 'subdomain' 不为空
+  int starts_with_zero_byte = subdomain.preload_int(8) == 0;  // 假设 'subdomain' 不为空
   if (starts_with_zero_byte) {
     subdomain~load_uint(8);
-    if (subdomain.slice_bits() == 0) {   ;; 当前合约没有自己的 DNS 记录
+    if (subdomain.slice_bits() == 0) {   // 当前合约没有自己的 DNS 记录
       return (8, null());
     }
   }
   
-  ;; 我们正在加载某个子域名
-  ;; 支持的子域名是 "ton\\0", "me\\0t\\0" 和 "address\\0"
+  // 我们正在加载某个子域名
+  // 支持的子域名是 "ton\\0", "me\\0t\\0" 和 "address\\0"
   
   slice subdomain_sfx = null();
   builder domain_nft_address = null();
   
   if (subdomain.starts_with("746F6E00"s)) {
-    ;; 我们正在解析
-    ;; "ton" \\0 <subdomain> \\0 [subdomain_sfx]
+    // 我们正在解析
+    // "ton" \\0 <subdomain> \\0 [subdomain_sfx]
     subdomain~skip_bits(32);
     
-    ;; 读取域名
+    // 读取域名
     subdomain_sfx = subdomain;
     while (subdomain_sfx~load_uint(8)) { }
     
@@ -74,17 +74,17 @@ _bits(subdomain_sfx));
   }
   
   if (slice_empty?(subdomain_sfx)) {
-    ;; 解析域名的示例：
-    ;; [初始，此合约不可访问] "ton\\0resolve-contract\\0ton\\0ratelance\\0"
-    ;; [此合约可以访问]      "ton\\0ratelance\\0"
-    ;; subdomain          "ratelance"
-    ;; subdomain_sfx      ""
+    // 解析域名的示例：
+    // [初始，此合约不可访问] "ton\\0resolve-contract\\0ton\\0ratelance\\0"
+    // [此合约可以访问]      "ton\\0ratelance\\0"
+    // subdomain          "ratelance"
+    // subdomain_sfx      ""
     
-    ;; 我们希望解析结果指向 'ratelance.ton' 合约，而不是其所有者
-    ;; 因此我们必须回答解析已完成 + "wallet"H 是 'ratelance.ton' 合约的地址
+    // 我们希望解析结果指向 'ratelance.ton' 合约，而不是其所有者
+    // 因此我们必须回答解析已完成 + "wallet"H 是 'ratelance.ton' 合约的地址
     
-    ;; dns_smc_address#9fd3 smc_addr:MsgAddressInt flags:(## 8) { flags <= 1 } cap_list:flags . 0?SmcCapList = DNSRecord;
-    ;; _ (HashmapE 256 ^DNSRecord) = DNS_RecordSet;
+    // dns_smc_address#9fd3 smc_addr:MsgAddressInt flags:(## 8) { flags <= 1 } cap_list:flags . 0?SmcCapList = DNSRecord;
+    // _ (HashmapE 256 ^DNSRecord) = DNS_RecordSet;
     
     cell wallet_record = begin_cell().store_uint(0x9fd3, 16).store_builder(domain_nft_address).store_uint(0, 8).end_cell();
     
@@ -98,12 +98,12 @@ _bits(subdomain_sfx));
       return (subdomain_bits, null());
     }
   } else {
-    ;; subdomain          "resolve-contract"
-    ;; subdomain_sfx      "ton\\0ratelance\\0"
-    ;; 我们希望将 \\0 传递给下一个解析器，以便下一个解析器只处理一个字节
+    // subdomain          "resolve-contract"
+    // subdomain_sfx      "ton\\0ratelance\\0"
+    // 我们希望将 \\0 传递给下一个解析器，以便下一个解析器只处理一个字节
     
-    ;; 下一个解析器是 'resolve-contract<.ton>' 的合约
-    ;; dns_next_resolver#ba93 resolver:MsgAddressInt = DNSRecord;
+    // 下一个解析器是 'resolve-contract<.ton>' 的合约
+    // dns_next_resolver#ba93 resolver:MsgAddressInt = DNSRecord;
     cell resolver_record = begin_cell().store_uint(0xba93, 16).store_builder(domain_nft_address).end_cell();
     return (subdomain_bits - slice_bits(subdomain_sfx) - 8, resolver_record);
   }
@@ -181,16 +181,16 @@ global cell domains;
 
 ```func
 const int op::update_record = 0x537a3491;
-;; op::update_record#537a3491 domain_name:^Cell record_key:uint256
-;;     value:(Maybe ^Cell) = InMsgBody;
+// op::update_record#537a3491 domain_name:^Cell record_key:uint256
+//     value:(Maybe ^Cell) = InMsgBody;
 
 () recv_internal(cell in_msg, slice in_msg_body) {
-  if (in_msg_body.slice_empty?()) { return (); }   ;; 简单的资金转移
+  if (in_msg_body.slice_empty?()) { return (); }   // 简单的资金转移
 
   slice in_msg_full = in_msg.begin_parse();
   if (in
 
-_msg_full~load_uint(4) & 1) { return (); } ;; 弹回消息
+_msg_full~load_uint(4) & 1) { return (); } // 弹回消息
 
   slice sender = in_msg_full~load_msg_addr();
   load_data();
@@ -202,7 +202,7 @@ _msg_full~load_uint(4) & 1) { return (); } ;; 弹回消息
     (cell records, _) = domains.udict_get_ref?(256, string_hash(domain));
 
     int key = in_msg_body~load_uint(256);
-    throw_if(502, key == 0);  ;; 不能更新“所有记录”的记录
+    throw_if(502, key == 0);  // 不能更新“所有记录”的记录
 
     if (in_msg_body~load_uint(1) == 1) {
       cell value = in_msg_body~load_ref();
@@ -227,9 +227,9 @@ _msg_full~load_uint(4) & 1) { return (); } ;; 弹回消息
 
 ```func
 (slice, slice) ~parse_sd(slice subdomain) {
-  ;; "test\0qwerty\0" -> "test" "qwerty\0"
+  // "test\0qwerty\0" -> "test" "qwerty\0"
   slice subdomain_sfx = subdomain;
-  while (subdomain_sfx~load_uint(8)) { }  ;; 搜索零字节
+  while (subdomain_sfx~load_uint(8)) { }  // 搜索零字节
   subdomain~skip_last_bits(slice_bits(subdomain_sfx));
   return (subdomain, subdomain_sfx);
 }
@@ -239,19 +239,19 @@ _msg_full~load_uint(4) & 1) { return (); } ;; 弹回消息
   throw_unless(70, subdomain_bits % 8 == 0);
   if (subdomain.preload_uint(8) == 0) { subdomain~skip_bits(8); }
   
-  slice subdomain_suffix = subdomain~parse_sd();  ;; "test\0" -> "test" ""
+  slice subdomain_suffix = subdomain~parse_sd();  // "test\0" -> "test" ""
   int subdomain_suffix_bits = slice_bits(subdomain_suffix);
 
   load_data();
   (cell records, _) = domains.udict_get_ref?(256, string_hash(subdomain));
 
-  if (subdomain_suffix_bits > 0) { ;; 请求的内容超过 "<SUBDOMAIN>\0"
+  if (subdomain_suffix_bits > 0) { // 请求的内容超过 "<SUBDOMAIN>\0"
     category = "dns_next_resolver"H;
   }
 
   int resolved = subdomain_bits - subdomain_suffix_bits;
 
-  if (category == 0) { ;; 请求所有类别
+  if (category == 0) { // 请求所有类别
     return (resolved, records);
   }
 
@@ -355,26 +355,26 @@ slice decode_base64_address(slice readable) method_id {
 
   throw_unless(70, (subdomain_bits % 8) == 0);
   
-  int starts_with_zero_byte = subdomain.preload_int(8) == 0;  ;; 假设 'subdomain' 不为空
+  int starts_with_zero_byte = subdomain.preload_int(8) == 0;  // 假设 'subdomain' 不为空
   if (starts_with_zero_byte) {
     subdomain~load_uint(8);
-    if (subdomain.slice_bits() == 0) {   ;; 当前合约没有自己的 DNS 记录
+    if (subdomain.slice_bits() == 0) {   // 当前合约没有自己的 DNS 记录
       return (8, null());
     }
   }
   
-  ;; 我们正在加载某个子域名
-  ;; 支持的子域名是 "ton\\0", "me\\0t\\0" 和 "address\\0"
+  // 我们正在加载某个子域名
+  // 支持的子域名是 "ton\\0", "me\\0t\\0" 和 "address\\0"
   
   slice subdomain_sfx = null();
   builder domain_nft_address = null();
   
   if (subdomain.starts_with("746F6E00"s)) {
-    ;; 我们正在解析
-    ;; "ton" \\0 <subdomain> \\0 [subdomain_sfx]
+    // 我们正在解析
+    // "ton" \\0 <subdomain> \\0 [subdomain_sfx]
     subdomain~skip_bits(32);
     
-    ;; 读取域名
+    // 读取域名
     subdomain_sfx = subdomain;
     while (subdomain_sfx~load_uint(8)) { }
     
@@ -382,10 +382,10 @@ slice decode_base64_address(slice readable) method_id {
     
     domain_nft_address = get_ton_dns_nft_address_by_index(slice_hash(subdomain));
   } elseif (subdomain.starts_with("6D65007400"s)) {
-    ;; "t" \\0 "me" \\0 <subdomain> \\0 [subdomain_sfx]
+    // "t" \\0 "me" \\0 <subdomain> \\0 [subdomain_sfx]
     subdomain~skip_bits(40);
     
-    ;; 读取域名
+    // 读取域名
     subdomain_sfx = subdomain;
     while (subdomain_sfx~load_uint(8)) { }
     
@@ -406,19 +406,19 @@ slice decode_base64_address(slice readable) method_id {
   }
   
   if (slice_empty?(subdomain_sfx)) {
-    ;; 解析域名的示例：
-    ;; [初始，此合约不可访问] "ton\\0resolve-contract\\0ton\\0ratelance\\0"
-    ;; [此合约可以访问]      "ton\\0ratelance\\0"
-    ;; subdomain          "ratelance"
-    ;; subdomain_sfx     
+    // 解析域名的示例：
+    // [初始，此合约不可访问] "ton\\0resolve-contract\\0ton\\0ratelance\\0"
+    // [此合约可以访问]      "ton\\0ratelance\\0"
+    // subdomain          "ratelance"
+    // subdomain_sfx     
 
  ""
     
-    ;; 我们希望解析结果指向 'ratelance.ton' 合约，而不是其所有者
-    ;; 因此我们必须回答解析已完成 + "wallet"H 是 'ratelance.ton' 合约的地址
+    // 我们希望解析结果指向 'ratelance.ton' 合约，而不是其所有者
+    // 因此我们必须回答解析已完成 + "wallet"H 是 'ratelance.ton' 合约的地址
     
-    ;; dns_smc_address#9fd3 smc_addr:MsgAddressInt flags:(## 8) { flags <= 1 } cap_list:flags . 0?SmcCapList = DNSRecord;
-    ;; _ (HashmapE 256 ^DNSRecord) = DNS_RecordSet;
+    // dns_smc_address#9fd3 smc_addr:MsgAddressInt flags:(## 8) { flags <= 1 } cap_list:flags . 0?SmcCapList = DNSRecord;
+    // _ (HashmapE 256 ^DNSRecord) = DNS_RecordSet;
     
     cell wallet_record = begin_cell().store_uint(0x9fd3, 16).store_builder(domain_nft_address).store_uint(0, 8).end_cell();
     
@@ -432,15 +432,15 @@ slice decode_base64_address(slice readable) method_id {
       return (subdomain_bits, null());
     }
   } else {
-    ;; 解析域名的示例：
-    ;; [初始，此合约不可访问] "ton\\0resolve-contract\\0ton\\0resolve-contract\\0ton\\0ratelance\\0"
-    ;; [此合约可以访问]      "ton\\0resolve-contract\\0ton\\0ratelance\\0"
-    ;; subdomain          "resolve-contract"
-    ;; subdomain_sfx      "ton\\0ratelance\\0"
-    ;; 我们希望将 \\0 传递给下一个解析器，以便下一个解析器只处理一个字节
+    // 解析域名的示例：
+    // [初始，此合约不可访问] "ton\\0resolve-contract\\0ton\\0resolve-contract\\0ton\\0ratelance\\0"
+    // [此合约可以访问]      "ton\\0resolve-contract\\0ton\\0ratelance\\0"
+    // subdomain          "resolve-contract"
+    // subdomain_sfx      "ton\\0ratelance\\0"
+    // 我们希望将 \\0 传递给下一个解析器，以便下一个解析器只处理一个字节
     
-    ;; 下一个解析器是 'resolve-contract<.ton>' 的合约
-    ;; dns_next_resolver#ba93 resolver:MsgAddressInt = DNSRecord;
+    // 下一个解析器是 'resolve-contract<.ton>' 的合约
+    // dns_next_resolver#ba93 resolver:MsgAddressInt = DNSRecord;
     cell resolver_record = begin_cell().store_uint(0xba93, 16).store_builder(domain_nft_address).end_cell();
     return (subdomain_bits - slice_bits(subdomain_sfx) - 8, resolver_record);
   }

@@ -19,7 +19,7 @@ Because each NFT makes use of its own smart contract, it is not possible to obta
 ### NFT Collections
 NFT Collection is a contract that serves to index and store NFT content and should contain the following interfaces:
 #### Get method `get_collection_data`
-```
+```func
 (int next_item_index, cell collection_content, slice owner_address) get_collection_data()
 ```
 Retrieves general information about collection, which represented with the following:
@@ -28,13 +28,13 @@ Retrieves general information about collection, which represented with the follo
   3. `owner_address` - a slice that contains the collection owner's address (this value can also be empty).
 
 #### Get method `get_nft_address_by_index`
-```
+```func
 (slice nft_address) get_nft_address_by_index(int index)
 ```
 This method can be used to verify the authenticity of an NFT and confirm whether it truly belongs to a specific collection. It also enables users to retrieve the address of an NFT by providing its index in the collection. The method should return a slice containing the address of the NFT that corresponds to the provided index.
 
 #### Get method `get_nft_content`
-```
+```func
 (cell full_content) get_nft_content(int index, cell individual_content)
 ```
 Since the collection serves as a common data storage for NFTs, this method is necessary to complete the NFT content. To use this method, first, it’s necessary to obtain the NFT’s `individual_content` by calling the corresponding `get_nft_data()` method. After obtaining the `individual_content`, it’s possible to call the `get_nft_content()` method with the NFT index and the `individual_content` cell. The method should return a TEP-64 cell containing the full content of the NFT.
@@ -43,12 +43,12 @@ Since the collection serves as a common data storage for NFTs, this method is ne
 Basic NFTs should implement:
 
 #### Get method `get_nft_data()`
-```
+```func
 (int init?, int index, slice collection_address, slice owner_address, cell individual_content) get_nft_data()
 ```
 
 #### Inline message handler for `transfer`
-```
+```tlb
 transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody
 ```
 Let's look at each parameter you need to fill in your message:
@@ -182,19 +182,19 @@ Now that we’ve covered the basics of sending and receiving NFTs, let’s explo
 
 In this example, the NFT transfer message is found on [line 67](https://www.google.com/url?q=https://github.com/ton-blockchain/token-contract/blob/1ad314a98d20b41241d5329e1786fc894ad811de/nft/nft-sale.fc%23L67&sa=D&source=docs&ust=1685436161341866&usg=AOvVaw1yuoIzcbEuvqMS4xQMqfXE):
 
-```
+```func
 var nft_msg = begin_cell()
   .store_uint(0x18, 6)
   .store_slice(nft_address)
   .store_coins(0)
-  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
+  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // default message headers (see sending messages page)
   .store_uint(op::transfer(), 32)
   .store_uint(query_id, 64)
-  .store_slice(sender_address) ;; new_owner_address
-  .store_slice(sender_address) ;; response_address
-  .store_int(0, 1) ;; empty custom_payload
-  .store_coins(0) ;; forward amount to new_owner_address
-  .store_int(0, 1); ;; empty forward_payload
+  .store_slice(sender_address) // new_owner_address
+  .store_slice(sender_address) // response_address
+  .store_int(0, 1) // empty custom_payload
+  .store_coins(0) // forward amount to new_owner_address
+  .store_int(0, 1); // empty forward_payload
 
 
 send_raw_message(nft_msg.end_cell(), 128 + 32);
@@ -206,8 +206,8 @@ Let's examine each line of code:
 - `store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)`  -  the remaining components that make up the message header are left empty.
 - `store_uint(op::transfer(), 32)` - this is the start of the msg_body. Here we start by using the transfer OP code so the receiver understands its transfer ownership message.
 - `store_uint(query_id, 64)` - store query_id
-- `store_slice(sender_address) ;; new_owner_address` - the first stored address is the address used for transferring NFTs and sending notifications.
-- `store_slice(sender_address) ;; response_address` - the second stored address is a response address.
+- `store_slice(sender_address) // new_owner_address` - the first stored address is the address used for transferring NFTs and sending notifications.
+- `store_slice(sender_address) // response_address` - the second stored address is a response address.
 - `store_int(0, 1)` - the custom payload flag is set to 0, indicating there is no custom payload required.
 - `store_coins(0)` - amount of TON to be forwarded with the message. In this example it’s set to 0, however, it is recommended to set this value to a higher amount (such as at least 0.01 TON) in order to create a forward message and notify the new owner that they have received the NFT. The amount should be sufficient to cover any associated fees and costs.
 - `.store_int(0, 1)` - custom payload flag. It's necessary to set up to `1` if your service should pass payload as a ref.
@@ -215,11 +215,11 @@ Let's examine each line of code:
 ### Receiving NFTs
 Once we've sent the NFT, it is critical to determine when it has been received by the new owner. A good example of how to do this can be found in the same NFT sale smart contract:
 
-```
+```func
 slice cs = in_msg_full.begin_parse();
 int flags = cs~load_uint(4);
 
-if (flags & 1) {  ;; ignore all bounced messages
+if (flags & 1) {  // ignore all bounced messages
     return ();
 }
 slice sender_address = cs~load_msg_addr();
@@ -233,7 +233,7 @@ Let's again examine each line of code:
 
 - `slice cs = in_msg_full.begin_parse();` - used to parse the incoming message.
 - `int flags = cs~load_uint(4);` - used to load flags from the first 4 bits of the message.
-- `if (flags & 1) { return (); } ;; ignore all bounced messages` - used to verify that the message has not bounced. It’s important to carry out this process for all your incoming messages if there is no reason to do otherwise. Bounced messages are messages that encountered errors while trying to receive a transaction and were returned to the sender.
+- `if (flags & 1) { return (); } // ignore all bounced messages` - used to verify that the message has not bounced. It’s important to carry out this process for all your incoming messages if there is no reason to do otherwise. Bounced messages are messages that encountered errors while trying to receive a transaction and were returned to the sender.
 - `slice sender_address = cs~load_msg_addr();` - next the message sender is loaded. In this case specifically by using an NFT address.
 - `throw_unless(500, equal_slices(sender_address, nft_address));` - used to verify that the sender is indeed an NFT that should have been transferred via a contract. It's quite difficult to parse NFT data from smart contracts, so in most cases the NFT address is predefined at contract creation.
 - `int op = in_msg_body~load_uint(32);` - loads message OP code.

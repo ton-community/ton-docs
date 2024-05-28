@@ -51,9 +51,9 @@ Extracts the head and tail of a lisp-style list. Can be used as a [(non-)modifyi
 
 ```func
 () foo(tuple xs) {
-    (_, int x) = xs.list_next(); ;; get the first element, `_` means do not use tail list
-    int y = xs~list_next(); ;; pop the first element
-    int z = xs~list_next(); ;; pop the second element
+    (_, int x) = xs.list_next(); // get the first element, `_` means do not use tail list
+    int y = xs~list_next(); // pop the first element
+    int z = xs~list_next(); // pop the second element
 }
 ```
 
@@ -720,7 +720,7 @@ Preloads the first reference from a slice.
 #### load_int
 
 ```func
-;; (slice, int) ~load_int(slice s, int len) asm(s len -> 1 0) "LDIX";
+// (slice, int) ~load_int(slice s, int len) asm(s len -> 1 0) "LDIX";
 ```
 
 Loads a signed `len`-bit integer from a slice.
@@ -728,7 +728,7 @@ Loads a signed `len`-bit integer from a slice.
 #### load_uint
 
 ```func
-;; (slice, int) ~load_uint(slice s, int len) asm( -> 1 0) "LDUX";
+// (slice, int) ~load_uint(slice s, int len) asm( -> 1 0) "LDUX";
 ```
 
 Loads an unsigned `len`-bit integer from a slice.
@@ -736,7 +736,7 @@ Loads an unsigned `len`-bit integer from a slice.
 #### preload_int
 
 ```func
-;; int preload_int(slice s, int len) asm "PLDIX";
+// int preload_int(slice s, int len) asm "PLDIX";
 ```
 
 Preloads a signed `len`-bit integer from a slice.
@@ -744,7 +744,7 @@ Preloads a signed `len`-bit integer from a slice.
 #### preload_uint
 
 ```func
-;; int preload_uint(slice s, int len) asm "PLDUX";
+// int preload_uint(slice s, int len) asm "PLDUX";
 ```
 
 Preloads an unsigned `len`-bit integer from a slice.
@@ -752,7 +752,7 @@ Preloads an unsigned `len`-bit integer from a slice.
 #### load_bits
 
 ```func
-;; (slice, slice) load_bits(slice s, int len) asm(s len -> 1 0) "LDSLICEX";
+// (slice, slice) load_bits(slice s, int len) asm(s len -> 1 0) "LDSLICEX";
 ```
 
 Loads the first `0 ≤ len ≤ 1023` bits from slice `s` into a separate slice `s''`.
@@ -760,7 +760,7 @@ Loads the first `0 ≤ len ≤ 1023` bits from slice `s` into a separate slice `
 #### preload_bits
 
 ```func
-;; slice preload_bits(slice s, int len) asm "PLDSLICEX";
+// slice preload_bits(slice s, int len) asm "PLDSLICEX";
 ```
 
 Preloads the first `0 ≤ len ≤ 1023` bits from slice `s` into a separate slice `s''`.

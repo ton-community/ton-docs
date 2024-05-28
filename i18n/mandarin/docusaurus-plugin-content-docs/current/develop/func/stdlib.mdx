@@ -39,9 +39,9 @@ forall X -> (tuple, X) list_next(tuple list) asm( -> 1 0) "UNCONS";
 提取 Lisp 类型列表的头和尾。可用作 [(非)修改方法](/develop/func/statements#methods-calls)。
 ```func
 () foo(tuple xs) {
-    (_, int x) = xs.list_next(); ;; 获取第一个元素，`_` 表示不使用尾列表
-    int y = xs~list_next(); ;; 弹出第一个元素
-    int z = xs~list_next(); ;; 弹出第二个元素
+    (_, int x) = xs.list_next(); // 获取第一个元素，`_` 表示不使用尾列表
+    int y = xs~list_next(); // 弹出第一个元素
+    int z = xs~list_next(); // 弹出第二个元素
 }
 ```
 #### car
@@ -486,27 +486,27 @@ cell preload_ref(slice s) asm "PLDREF";
 从切片中预加载第一个引用。
 #### load_int
 ```func
-;; (slice, int) ~load_int(slice s, int len) asm(s len -> 1 0) "LDIX";
+// (slice, int) ~load_int(slice s, int len) asm(s len -> 1 0) "LDIX";
 ```
 从切片中加载一个有符号的 `len` 位整数。
 #### load_uint
 ```func
-;; (slice, int) ~load_uint(slice s, int len) asm( -> 1 0) "LDUX";
+// (slice, int) ~load_uint(slice s, int len) asm( -> 1 0) "LDUX";
 ```
 从切片中加载一个无符号的 `len` 位整数。
 #### preload_int
 ```func
-;; int preload_int(slice s, int len) asm "PLDIX";
+// int preload_int(slice s, int len) asm "PLDIX";
 ```
 从切片中预加载一个有符号的 `len` 位整数。
 #### preload_uint
 ```func
-;; int preload_uint(slice s, int len) asm "PLDUX";
+// int preload_uint(slice s, int len) asm "PLDUX";
 ```
 从切片中预加载一个无符号的 `len` 位整数。
 #### load_bits
 ```func
-;; (slice, slice) load_bits(slice s, int len) asm(s len ->
+// (slice, slice) load_bits(slice s, int len) asm(s len ->
 
  1 0) "LDSLICEX";
 ```
@@ -514,7 +514,7 @@ cell preload_ref(slice s) asm "PLDREF";
 
 #### preload_bits
 ```func
-;; slice preload_bits(slice s, int len) asm "PLDSLICEX";
+// slice preload_bits(slice s, int len) asm "PLDSLICEX";
 ```
 从切片 `s` 中预加载前 `0 ≤ len ≤ 1023` 位到一个单独的切片 `s''`。
 

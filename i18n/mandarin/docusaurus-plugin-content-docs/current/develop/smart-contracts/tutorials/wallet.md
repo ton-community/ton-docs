@@ -166,7 +166,7 @@ func main() {
 
 ```func
 () recv_external(slice in_msg) impure {
-    ;; 一些代码
+    // 一些代码
 }
 ```
 
@@ -174,13 +174,13 @@ func main() {
 
 ```func
 () recv_external(slice in_msg) impure {
-  var signature = in_msg~load_bits(512); ;; 从消息体中获取签名
+  var signature = in_msg~load_bits(512); // 从消息体中获取签名
   var cs = in_msg;
-  var (subwallet_id, valid_until, msg_seqno) = (cs~load_uint(32), cs~load_uint(32), cs~load_uint(32));  ;; 从消息体中获取其他值
-  throw_if(35, valid_until <= now()); ;; 检查交易的有效性
-  var ds = get_data().begin_parse(); ;; 从存储获取数据并将其转换为可读取值的切片
-  var (stored_seqno, stored_subwallet, public_key) = (ds~load_uint(32), ds~load_uint(32), ds~load_uint(256)); ;; 从存储中读取值
-  ds.end_parse(); ;; 确保变量 ds 中没有任何数据
+  var (subwallet_id, valid_until, msg_seqno) = (cs~load_uint(32), cs~load_uint(32), cs~load_uint(32));  // 从消息体中获取其他值
+  throw_if(35, valid_until <= now()); // 检查交易的有效性
+  var ds = get_data().begin_parse(); // 从存储获取数据并将其转换为可读取值的切片
+  var (stored_seqno, stored_subwallet, public_key) = (ds~load_uint(32), ds~load_uint(32), ds~load_uint(256)); // 从存储中读取值
+  ds.end_parse(); // 确保变量 ds 中没有任何数据
   throw_unless(33, msg_seqno == stored_seqno);
   throw_unless(34, subwallet_id == stored_subwallet);
   throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
@@ -268,8 +268,8 @@ throw_if(35, valid_until <= now());
 ```func
 cs~touch();
 while (cs.slice_refs()) {
-    var mode = cs~load_uint(8); ;; 加载交易模式
-    send_raw_message(cs~load_ref(), mode); ;; 使用 load_ref() 将每一个新的内部消息作为一个带有 load_ref() 的cell，并发送它
+    var mode = cs~load_uint(8); // 加载交易模式
+    send_raw_message(cs~load_ref(), mode); // 使用 load_ref() 将每一个新的内部消息作为一个带有 load_ref() 的cell，并发送它
 }
 ```
 
@@ -333,26 +333,26 @@ while (cs.slice_refs()) {
 
 ```func
 var msg = begin_cell()
-  .store_uint(0x18, 6) ;; 或者 0x10 代表不可弹回
+  .store_uint(0x18, 6) // 或者 0x10 代表不可弹回
   .store_slice(to_address)
   .store_coins(amount)
-  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 默认的消息头（请参阅发送消息页面）
-  ;; 作为存储体
+  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // 默认的消息头（请参阅发送消息页面）
+  // 作为存储体
 ```
 
 让我们首先考虑 `0x18` 和 `0x10`（x - 16 进制），这些十六进制数是按以下方式排列的（考虑到我们分配了 6 个位）：`011000` 和 `010000`。这意味着，可以将上述代码重写为以下内容：
 
 ```func
 var msg = begin_cell()
-  .store_uint(0, 1) ;; 这个位表示我们发送了一个内部消息，与 int_msg_info$0 对应
-  .store_uint(1, 1) ;; IHR 禁用
-  .store_uint(1, 1) ;; 或者 .store_uint(0, 1) 对于 0x10 | 退回
-  .store_uint(0, 1) ;; 退回
-  .store_uint(0, 2) ;; src -> 两个零位代表 addr_none
+  .store_uint(0, 1) // 这个位表示我们发送了一个内部消息，与 int_msg_info$0 对应
+  .store_uint(1, 1) // IHR 禁用
+  .store_uint(1, 1) // 或者 .store_uint(0, 1) 对于 0x10 | 退回
+  .store_uint(0, 1) // 退回
+  .store_uint(0, 2) // src -> 两个零位代表 addr_none
   .store_slice(to_address)
   .store_coins(amount)
-  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 默认的消息头（请参阅发送消息页面）
-  ;; 作为存储体
+  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // 默认的消息头（请参阅发送消息页面）
+  // 作为存储体
 ```
 
 现在我们来详细解释每个选项：
@@ -376,14 +376,14 @@ Src | Src 是发送者地址。在这种情况下，写入了两个零位以指�
 
 ```func
 ...
-  .store_uint(0, 1) ;; Extra currency
-  .store_uint(0, 4) ;; IHR fee
-  .store_uint(0, 4) ;; Forwarding fee
-  .store_uint(0, 64) ;; Logical time of creation
-  .store_uint(0, 32) ;; UNIX time of creation
-  .store_uint(0, 1) ;; State Init
-  .store_uint(0, 1) ;; Message body
-  ;; 作为存储体
+  .store_uint(0, 1) // Extra currency
+  .store_uint(0, 4) // IHR fee
+  .store_uint(0, 4) // Forwarding fee
+  .store_uint(0, 64) // Logical time of creation
+  .store_uint(0, 32) // UNIX time of creation
+  .store_uint(0, 1) // State Init
+  .store_uint(0, 1) // Message body
+  // 作为存储体
 ```
 选项 | 说明
 :---: | :---:
@@ -2097,20 +2097,20 @@ if err != nil {
 
 ```func
 () recv_external(slice in_msg) impure {
-  var signature = in_msg~load_bits(512); ;; 从消息体中获取签名
+  var signature = in_msg~load_bits(512); // 从消息体中获取签名
   var cs = in_msg;
-  var (subwallet_id, query_id) = (cs~load_uint(32), cs~load_uint(64)); ;; 从消息体中获取其余值
-  var bound = (now() << 32); ;; 位左移操作
-  throw_if(35, query_id < bound); ;; 如果交易已过期则抛出错误
+  var (subwallet_id, query_id) = (cs~load_uint(32), cs~load_uint(64)); // 从消息体中获取其余值
+  var bound = (now() << 32); // 位左移操作
+  throw_if(35, query_id < bound); // 如果交易已过期则抛出错误
   var ds = get_data().begin_parse();
-  var (stored_subwallet, last_cleaned, public_key, old_queries) = (ds~load_uint(32), ds~load_uint(64), ds~load_uint(256), ds~load_dict()); ;; 从存储中读取值
-  ds.end_parse(); ;; 确保 ds 中没有任何东西
-  (_, var found?) = old_queries.udict_get?(64, query_id); ;; 检查是否已经存在此类请求
-  throw_if(32, found?); ;; 如果是则抛出错误
+  var (stored_subwallet, last_cleaned, public_key, old_queries) = (ds~load_uint(32), ds~load_uint(64), ds~load_uint(256), ds~load_dict()); // 从存储中读取值
+  ds.end_parse(); // 确保 ds 中没有任何东西
+  (_, var found?) = old_queries.udict_get?(64, query_id); // 检查是否已经存在此类请求
+  throw_if(32, found?); // 如果是则抛出错误
   throw_unless(34, subwallet_id == stored_subwallet);
   throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
-  var dict = cs~load_dict(); ;; 获取包含消息的字典
-  cs.end_parse(); ;; 确保 cs 中没有任何东西
+  var dict = cs~load_dict(); // 获取包含消息的字典
+  cs.end_parse(); // 确保 cs 中没有任何东西
   accept_message();
 ```
 
@@ -2132,10 +2132,10 @@ if err != nil {
 如果相同的交易请求已经存在，合约将不会接受它，因为它已经被处理过了：
 
 ```func
-var (stored_subwallet, last_cleaned, public_key, old_queries) = (ds~load_uint(32), ds~load_uint(64), ds~load_uint(256), ds~load_dict()); ;; 从存储中读取值
-ds.end_parse(); ;; 确保 ds 中没有任何东西
-(_, var found?) = old_queries.udict_get?(64, query_id); ;; 检查是否已经存在此类请求
-throw_if(32, found?); ;; 如果是则抛出错误
+var (stored_subwallet, last_cleaned, public_key, old_queries) = (ds~load_uint(32), ds~load_uint(64), ds~load_uint(256), ds~load_dict()); // 从存储中读取值
+ds.end_parse(); // 确保 ds 中没有任何东西
+(_, var found?) = old_queries.udict_get?(64, query_id); // 检查是否已经存在此类请求
+throw_if(32, found?); // 如果是则抛出错误
 ```
 
 通过这种方式，我们**被保护免受重复交易的影响**，这是普通钱包中 seqno 的作用。
@@ -2145,14 +2145,14 @@ throw_if(32, found?); ;; 如果是则抛出错误
 合约接受外部消息后，将开始循环，在循环中取出存储在字典中的 `slices`。这些切片存储了交易模式和交易本身。发送新交易一直进行，直到字典为空。
 
 ```func
-int i = -1; ;; 我们写 -1 是因为它将是所有字典键中的最小值
+int i = -1; // 我们写 -1 是因为它将是所有字典键中的最小值
 do {
-  (i, var cs, var f) = dict.idict_get_next?(16, i); ;; 获取键及其对应的最小键值，这个键值大于 i
-  if (f) { ;; 检查是否找到了任何值
-    var mode = cs~load_uint(8); ;; 加载交易模式
-    send_raw_message(cs~load_ref(), mode); ;; 加载交易本身并发送
+  (i, var cs, var f) = dict.idict_get_next?(16, i); // 获取键及其对应的最小键值，这个键值大于 i
+  if (f) { // 检查是否找到了任何值
+    var mode = cs~load_uint(8); // 加载交易模式
+    send_raw_message(cs~load_ref(), mode); // 加载交易本身并发送
   }
-} until (~ f); ;; 如果找到任何值则继续
+} until (~ f); // 如果找到任何值则继续
 ```
 
 > 💡 有用的链接：
@@ -2166,18 +2166,18 @@ do {
 通常情况下，[TON上的智能合约需要为自己的存储付费](/develop/smart-contracts/fees#storage-fee)。这意味着智能合约可以存储的数据量是有限的，以防止高网络交易费用。为了让系统更高效，超过 64 秒的交易将从存储中移除。按照以下方式进行：
 
 ```func
-bound -= (64 << 32);   ;; 清除记录，这些记录超过 64 秒前已过期
-old_queries~udict_set_builder(64, query_id, begin_cell()); ;; 将当前查询添加到字典中
-var queries = old_queries; ;; 将字典复制到另一个变量中
+bound -= (64 << 32);   // 清除记录，这些记录超过 64 秒前已过期
+old_queries~udict_set_builder(64, query_id, begin_cell()); // 将当前查询添加到字典中
+var queries = old_queries; // 将字典复制到另一个变量中
 do {
   var (old_queries', i, _, f) = old_queries.udict_delete_get_min(64);
   f~touch();
-  if (f) { ;; 检查是否找到了任何值
-    f = (i < bound); ;; 检查是否超过 64 秒后过期
+  if (f) { // 检查是否找到了任何值
+    f = (i < bound); // 检查是否超过 64 秒后过期
   }
   if (f) { 
-    old_queries = old_queries'; ;; 如果是，则在我们的字典中保存更改
-    last_cleaned = i; ;; 保存最后移除的查询
+    old_queries = old_queries'; // 如果是，则在我们的字典中保存更改
+    last_cleaned = i; // 保存最后移除的查询
   }
 } until (~ f);
 ```
@@ -2193,7 +2193,7 @@ do {
 如果您之前没有使用过位运算，那么这个部分可能会显得有些复杂。在智能合约代码中可以看到以下代码行：
 
 ```func
-var bound = (now() << 32); ;; 位左移操作
+var bound = (now() << 32); // 位左移操作
 ```
 结果，在右侧的数字上添加了 32 位。这意味着 **现有值向左移动 32 位**。举例来说，让我们考虑数字 3 并将其翻译成二进制形式，结果是 11。应用 `3 << 2` 操作，11 移动了 2 位。这意味着在字符串的右侧添加了两位。最后，我们得到了 1100，即 12。
 
@@ -2202,14 +2202,14 @@ var bound = (now() << 32); ;; 位左移操作
 接下来，让我们考虑以下代码行：
 
 ```func
-bound -= (64 << 32); ;; 清除超过 64 秒之前过期的记录
+bound -= (64 << 32); // 清除超过 64 秒之前过期的记录
 ```
 
 在上面，我们执行了一个操作，将数字 64 向左移动 32 位，以**减去 64 秒**的时间戳。这样我们就可以比较过去的 query_ids，看看它们是否小于接收到的值。如果是这样，它们就超过了 64 秒：
 
 ```func
-if (f) { ;; 检查是否找到了任何值
-  f = (i < bound); ;; 检查是否超过 64 秒后过期
+if (f) { // 检查是否找到了任何值
+  f = (i < bound); // 检查是否超过 64 秒后过期
 }
 ```
 为了更好地理解，让我们使用 `1625918400` 作为时间戳的示例。它的二进制表示（左侧添加零以得到 32 位）是 01100000111010011000101111000000。执行 32 位位左移操作后，我们数字的二进制表示末尾会出现 32 个零。
