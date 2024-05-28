@@ -200,25 +200,16 @@ In summary, when a function with the name `foo` is called as a non-modifying or 
 
 
 ### Specifiers
-There are three types of specifiers: `impure`, `inline`/`inline_ref`, and `method_id`. One, several, or none of them can be put in a function declaration but currently they must be presented in the right order. For example, it is not allowed to put `impure` after `inline`.
-#### Impure specifier
-`impure` specifier means that the function can have some side effects which can't be ignored. For example, we should put `impure` specifier if the function can modify contract storage, send messages, or throw an exception when some data is invalid and the function is intended to validate this data.
+There are several specifiers that can be placed at function declaration.
 
-If `impure` is not specified and the result of the function call is not used, then the FunC compiler may and will delete this function call.
+#### `inline` specifier
+If a function is `inline`, its code is substituted into every place where the function is called. 
+It goes without saying that recursive calls to inlined functions are not possible.
 
-For example, in the [stdlib.fc](/develop/func/stdlib) function
-```func
-int random() impure asm "RANDU256";
-```
-is defined. `impure` is used because `RANDU256` changes the internal state of the random number generator.
-
-#### Inline specifier
-If a function has `inline` specifier, its code is actually substituted in every place where the function is called. It goes without saying that recursive calls to inlined functions are not possible.
-
-For example, you can using `inline` like this way in this example: [ICO-Minter.fc](https://github.com/ton-blockchain/token-contract/blob/f2253cb0f0e1ae0974d7dc0cef3a62cb6e19f806/ft/jetton-minter-ICO.fc#L16)
+Here is an example from [ICO-Minter.fc](https://github.com/ton-blockchain/token-contract/blob/f2253cb0f0e1ae0974d7dc0cef3a62cb6e19f806/ft/jetton-minter-ICO.fc#L16):
 
 ```func
-() save_data(int total_supply, slice admin_address, cell content, cell jetton_wallet_code) impure inline {
+() save_data(int total_supply, slice admin_address, cell content, cell jetton_wallet_code) inline {
   set_data(begin_cell()
             .store_coins(total_supply)
             .store_slice(admin_address)
@@ -229,20 +220,67 @@ For example, you can using `inline` like this way in this example: [ICO-Minter.f
 }
 ```
 
+#### `inline_ref` specifier
+The code of `inline_ref` function is put into a separate cell, and calling a function is done via `CALLREF` TVM command. 
+So it's similar to `inline`, but because a cell can be reused in several places without duplicating it, 
+it's almost always more efficient in terms of code size to use `inline_ref` specifier instead of `inline` 
+unless the function is called exactly once. 
+Recursive calls of `inline_ref`'ed functions are still impossible because there are no cyclic references in the TVM cells.
 
-#### Inline_ref specifier
-The code of a function with the `inline_ref` specifier is put into a separate cell, and every time when the function is called, a `CALLREF` command is executed by TVM. So it's similar to `inline`, but because a cell can be reused in several places without duplicating it, it is almost always more efficient in terms of code size to use `inline_ref` specifier instead of `inline` unless the function is called exactly once. Recursive calls of `inline_ref`'ed functions are still impossible because there are no cyclic references in the TVM cells.
-#### method_id
-Every function in TVM program has an internal integer id by which it can be called. Ordinary functions are usually numbered by subsequent integers starting from 1, but get-methods of the contract are numbered by crc16 hashes of their names. `method_id(<some_number>)` specifier allows to set the id of a function to specified value, and `method_id` uses the default value `(crc16(<function_name>) & 0xffff) | 0x10000`. If a function has `method_id` specifier, then it can be called in lite-client or ton-explorer as a get-method by its name.
-
-For example,
+#### `pure` specifier
+:::caution
+Before FunC v0.5.0, there was an `impure` specifier.  
+Now, all functions are impure by default, but many standard functions are `pure`.
+:::
+When a result of a `pure` function is not used, FunC will delete this function call. For example,
 ```func
-(int, int) get_n_k() method_id {
+int main() {
+    cell c = begin_cell().end_cell();
+    return 0;
+}
+```
+will be just compiled to `0 PUSHINT`, since `c` is not used anywhere, and two calls are just dropped off.
+
+Impure functions, by their nature, have side effects (change TVM state or globals). 
+For example, `set_data()` changes the `c4` register, and is therefore impure. 
+Or `random()` changes the internal state of number generator. 
+Throwing functions are also impure.
+
+All functions are impure by default, so FunC will never strip calls to your functions unless you manually declare them as `pure`.
+
+### GET methods
+:::caution
+Before FunC v0.5.0, there was a `method_id` specifier.  
+Now it's deprecated as obscure, use `get` as explained below.
+:::
+If a function is marked `get`, it becomes a "get-method" and can be called in lite-client / ton-explorer / func-js by its name. 
+
+```func
+get int balance() {
+  var [balance, _] = calculate_balance();
+  return balance;
+}
+
+get (int, int) primary_state() {
   (_, int n, int k, _, _, _, _) = unpack_state();
   return (n, k);
 }
 ```
-is a get-method of multisig contract.
+
+Get methods are regular functions, they may also accept any parameters. 
+They are also impure (to be able to call custom, impure by default, functions), 
+but an attempt to change state (save data, for instance) won't do anything.
+
+**How does calling by name work?** Actually, function names are not stored in bytecode. 
+Instead, a hash = `(crc16(<name>) & 0xffff) | 0x10000` is saved. When calling by name, a client calculates the same hash, actually.
+This hash is called **method_id** in TL and other low-level articles.
+
+:::danger
+Don't confuse with Solidity "getters". In TON, one contract can't call a get method of another. 
+Contracts are asynchronous, they can only send messages to each other.
+GET methods are what you expose not to other contracts, but to front-end of your dapp, for example. 
+Moreover, they are executed offchain.
+:::
 
 ### Polymorphism with forall
 Before any function declaration or definition, there can be `forall` type variables declarator. It has the following syntax:
