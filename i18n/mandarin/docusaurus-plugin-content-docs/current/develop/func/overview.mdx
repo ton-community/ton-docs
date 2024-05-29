@@ -8,7 +8,7 @@ FunC 是一种领域特定的、类 C 语言的、静态类型语言。
 这是一个用 FunC 编写的发送资金的简单示例方法：
 
 ```func
-() send_money(slice address, int amount) impure inline {
+() send_money(slice address, int amount) inline {
     var msg = begin_cell()
         .store_uint(0x10, 6) // nobounce
         .store_slice(address)

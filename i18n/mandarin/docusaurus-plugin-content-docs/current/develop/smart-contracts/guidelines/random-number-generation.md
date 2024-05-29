@@ -43,7 +43,7 @@ int x = random(); // 用户无法预测这个数字
 // 设置回声合约地址
 const echo_address = "Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s"a;
 
-() recv_internal (int msg_value, cell in_msg_full, slice in_msg_body) impure {
+() recv_internal (int msg_value, cell in_msg_full, slice in_msg_body) {
     var cs = in_msg_full.begin_parse();
     var flags = cs~load_uint(4);
     if (flags & 1) { // 忽略弹回的消息

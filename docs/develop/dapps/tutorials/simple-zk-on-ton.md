@@ -246,7 +246,7 @@ The above lines are the new [TVM opcodes](https://docs.ton.org/learn/tvm-instruc
 The load_data and save_data functions are simply used to load and save the proof verification results (only for test purposes).
 
 ```func
-() load_data() impure {
+() load_data() {
 
     var ds = get_data().begin_parse();
 
@@ -255,7 +255,7 @@ The load_data and save_data functions are simply used to load and save the proof
     ds.end_parse();
 }
 
-() save_data() impure {
+() save_data() {
     set_data(
             begin_cell()
                     .store_uint(ctx_res, 32)
@@ -266,15 +266,15 @@ The load_data and save_data functions are simply used to load and save the proof
 
 Next there are several simple util functions that are used to load the proof data sent to the contract:
 ```func
-(slice, slice) load_p1(slice body) impure {
+(slice, slice) load_p1(slice body) {
     ...
 }
 
-(slice, slice) load_p2(slice body) impure {
+(slice, slice) load_p2(slice body) {
     ...
 }
 
-(slice, int) load_newint(slice body) impure {
+(slice, int) load_newint(slice body) {
     ...
 }
 ```
@@ -288,7 +288,7 @@ And the last part is the groth16Verify function which is required to check the v
 
         int pubInput0
 
-) impure {
+) {
 
     slice cpub = bls_g1_multiexp(
 

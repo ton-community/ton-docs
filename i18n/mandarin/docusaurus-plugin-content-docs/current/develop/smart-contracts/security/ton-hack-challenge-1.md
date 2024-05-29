@@ -41,7 +41,7 @@ TON Hack挑战赛于10月23日举行。在TON主网上部署了几个带有人�
 投票权在消息中以整数形式存储。所以攻击者可以在转移投票权时发送一个负值，并获得无限投票权。
 
 ```func
-(cell,()) transfer_voting_power (cell votes, slice from, slice to, int amount) impure {
+(cell,()) transfer_voting_power (cell votes, slice from, slice to, int amount) {
   int from_votes = get_voting_power(votes, from);
   int to_votes = get_voting_power(votes, to);
 

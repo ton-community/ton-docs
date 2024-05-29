@@ -84,7 +84,7 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
 
 然而，开发者通常使用快捷方式而不是逐步序列化所有字段。因此，让我们考虑如何使用[elector-code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/elector-code.fc#L153)中的示例从智能合约发送消息。
 ```func
-() send_message_back(addr, ans_tag, query_id, body, grams, mode) impure inline_ref {
+() send_message_back(addr, ans_tag, query_id, body, grams, mode) inline_ref {
   // int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool src:MsgAddress -> 011000
   var msg = begin_cell()
     .store_uint(0x18, 6)

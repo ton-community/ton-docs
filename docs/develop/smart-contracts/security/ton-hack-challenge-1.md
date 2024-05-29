@@ -9,17 +9,12 @@ Source code and contest rules were hosted on GitHub [here](https://github.com/to
 
 ### 1. Mutual fund
 
-:::note SECURITY RULE
-Always check functions for [`impure`](/develop/func/functions#impure-specifier) modifier.
+:::note Doesn't make sense starting from FunC v0.5.0.
+Before v0.5.0, there was an `impure` specifier. If it was absent, FunC could delete a function call. 
+The attack was able because an author forgot `impure`.
 :::
 
-The first task was very simple. The attacker could find that `authorize` function was not `impure`. The absence of this modifier allows a compiler to skip calls to that function if it returns nothing or the return value is unused.
-
-```func
-() authorize (sender) inline {
-  throw_unless(187, equal_slice_bits(sender, addr1) | equal_slice_bits(sender, addr2));
-}
-```
+Now all functions are impure by default, because old behavior was too unexpected.
 
 ### 2. Bank
 
@@ -42,7 +37,7 @@ Use signed integers if you really need it.
 Voting power was stored in message as an integer. So the attacker could send a negative value during power transfer and get infinite voting power.
 
 ```func
-(cell,()) transfer_voting_power (cell votes, slice from, slice to, int amount) impure {
+(cell,()) transfer_voting_power (cell votes, slice from, slice to, int amount) {
   int from_votes = get_voting_power(votes, from);
   int to_votes = get_voting_power(votes, to);
 

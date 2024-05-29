@@ -38,16 +38,16 @@ In particular, it deduplicates data: if there are several equivalent sub-cells r
 Each contract has its balance. You can calculate how many TONs your contract requires to remain valid for a specified `seconds` time using the function:
 
 ```func
-int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells bits seconds workchain) "GETSTORAGEFEE";
+int get_storage_fee(int workchain, int seconds, int bits, int cells) pure asm(cells bits seconds workchain) "GETSTORAGEFEE";
 ```
 
 You can then hardcode that value into the contract and calculate the current storage fee using:
 
 ```func
 // functions from func stdlib (not presented on mainnet)
-() raw_reserve(int amount, int mode) impure asm "RAWRESERVE";
-int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells bits seconds workchain) "GETSTORAGEFEE";
-int my_storage_due() asm "DUEPAYMENT";
+() raw_reserve(int amount, int mode) asm "RAWRESERVE";
+int get_storage_fee(int workchain, int seconds, int bits, int cells) pure asm(cells bits seconds workchain) "GETSTORAGEFEE";
+int my_storage_due() pure asm "DUEPAYMENT";
 
 // constants from stdlib
 /// Creates an output action which would reserve exactly x nanograms (if y = 0).
@@ -81,7 +81,7 @@ In most cases use the `GETGASFEE` opcode with the following parameters:
 ### Calculation Flow
 
 ```func
-int get_compute_fee(int workchain, int gas_used) asm(gas_used workchain) "GETGASFEE";
+int get_compute_fee(int workchain, int gas_used) pure asm(gas_used workchain) "GETGASFEE";
 ```
 
 But how do you get `gas_used`? Through tests!
@@ -218,8 +218,8 @@ Modes affect the fee calculation as follows:
 It creates an output action and returns a fee for creating a message. However, it uses an unpredictable amount of gas, which can't be calculated using formulas, so how can it be calculated? Use `GASCONSUMED`:
 
 ```func
-int send_message(cell msg, int mode) impure asm "SENDMSG";
-int gas_consumed() asm "GASCONSUMED";
+int send_message(cell msg, int mode) asm "SENDMSG";
+int gas_consumed() pure asm "GASCONSUMED";
 // ... some code ...
 
 () calculate_forward_fee(cell msg, int mode) inline {

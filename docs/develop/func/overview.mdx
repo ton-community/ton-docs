@@ -8,7 +8,7 @@ FunC is a domain-specific, C-like, statically typed language.
 Here is a simple example method for sending money written in FunC:
 
 ```func
-() send_money(slice address, int amount) impure inline {
+() send_money(slice address, int amount) inline {
     var msg = begin_cell()
         .store_uint(0x10, 6) // nobounce
         .store_slice(address)

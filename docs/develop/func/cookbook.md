@@ -599,7 +599,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 // define global variable
 global int max_value;
 
-() iterate_tuple (tuple t) impure {
+() iterate_tuple (tuple t) {
     repeat (t.tuple_length()) {
         var value = t~tpop();
         if (is_tuple(value)) {
@@ -678,7 +678,7 @@ forall X -> slice cast_to_slice (X x) asm "NOP";
 forall X -> tuple cast_to_tuple (X x) asm "NOP";
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
-forall X -> () resolve_type (X value) impure {
+forall X -> () resolve_type (X value) {
     // value here is of type X, since we dont know what is the exact value - we would need to check what is the value and then cast it
     
     if (is_null(value)) {
@@ -1432,7 +1432,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 ### How to send a deploy message (with stateInit only, with stateInit and body)
 
 ```func
-() deploy_with_stateinit(cell message_header, cell state_init) impure {
+() deploy_with_stateinit(cell message_header, cell state_init) {
   var msg = begin_cell()
     .store_slice(begin_parse(msg_header))
     .store_uint(2 + 1, 2) // init:(Maybe (Either StateInit ^StateInit))
@@ -1444,7 +1444,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
   send_raw_message(msg, 64); 
 }
 
-() deploy_with_stateinit_body(cell message_header, cell state_init, cell body) impure {
+() deploy_with_stateinit_body(cell message_header, cell state_init, cell body) {
   var msg = begin_cell()
     .store_slice(begin_parse(msg_header))
     .store_uint(2 + 1, 2) // init:(Maybe (Either StateInit ^StateInit))

@@ -165,12 +165,12 @@ We need to store owner's address and the *domain*->*record hash*->*record value*
 global slice owner;
 global cell domains;
 
-() load_data() impure {
+() load_data() {
   slice ds = get_data().begin_parse();
   owner = ds~load_msg_addr();
   domains = ds~load_dict();
 }
-() save_data() impure {
+() save_data() {
   set_data(begin_cell().store_slice(owner).store_dict(domains).end_cell());
 }
 ```

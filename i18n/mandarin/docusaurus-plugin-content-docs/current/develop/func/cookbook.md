@@ -603,7 +603,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 // 定义全局变量
 global int max_value;
 
-() iterate_tuple (tuple t) impure {
+() iterate_tuple (tuple t) {
     repeat (t.tuple_length()) {
         var value = t~tpop();
         if (is_tuple(value)) {
@@ -681,7 +681,7 @@ forall X -> slice cast_to_slice (X x) asm "NOP";
 forall X -> tuple cast_to_tuple (X x) asm "NOP";
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
-forall X -> () resolve_type (X value) impure {
+forall X -> () resolve_type (X value) {
     // value 是类型 X，由于我们不知道确切的值是什么 - 我们需要检查值然后转换它
     
     if (is_null(value)) {
@@ -1440,7 +1440,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 ### 如何发送部署消息（仅使用 stateInit 或使用 stateInit 和 body）
 
 ```func
-() deploy_with_stateinit(cell message_header, cell state_init) impure {
+() deploy_with_stateinit(cell message_header, cell state_init) {
   var msg = begin_cell()
     .store_slice(begin_parse(msg_header))
     .store_uint(2 + 1, 2) // init:(Maybe (Either StateInit ^StateInit))
@@ -1452,7 +1452,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
   send_raw_message(msg, 64); 
 }
 
-() deploy_with_stateinit_body(cell message_header, cell state_init, cell body) impure {
+() deploy_with_stateinit_body(cell message_header, cell state_init, cell body) {
   var msg = begin_cell()
     .store_slice(begin_parse(msg_header))
     .store_uint(2 + 1, 2) // init:(Maybe (Either StateInit ^StateInit))

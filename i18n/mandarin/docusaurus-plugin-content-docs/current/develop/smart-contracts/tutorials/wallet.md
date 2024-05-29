@@ -165,7 +165,7 @@ func main() {
 通常，在 TON 区块链上有两种交易类型：`internal` 和 `external`。外部交易允许从外部世界向区块链发送消息，从而与接受此类交易的智能合约进行通信。负责执行此过程的函数如下：
 
 ```func
-() recv_external(slice in_msg) impure {
+() recv_external(slice in_msg) {
     // 一些代码
 }
 ```
@@ -173,7 +173,7 @@ func main() {
 在我们深入研究钱包之前，让我们先看看钱包如何接受外部交易。在 TON 上，所有钱包都持有所有者的 `公钥`、`seqno` 和 `subwallet_id`。接收到外部交易时，钱包使用 `get_data()` 方法从钱包的存储部分中检索数据。然后进行多个验证流程，并决定是否接受此交易。这个过程的完成如下：
 
 ```func
-() recv_external(slice in_msg) impure {
+() recv_external(slice in_msg) {
   var signature = in_msg~load_bits(512); // 从消息体中获取签名
   var cs = in_msg;
   var (subwallet_id, valid_until, msg_seqno) = (cs~load_uint(32), cs~load_uint(32), cs~load_uint(32));  // 从消息体中获取其他值
@@ -847,7 +847,7 @@ npm i --save @ton-community/func-js
 ```
 
 :::info
-如果您的IDE插件与`stdlib.fc`文件中的`() set_seed(int) impure asm "SETRAND";`冲突，这没关系。
+如果您的IDE插件与`stdlib.fc`文件中的`() set_seed(int) asm "SETRAND";`冲突，这没关系。
 :::
 
 请记住，在`wallet_v3.fc`文件的开头添加以下行，以指示将在下面使用stdlib中的函数：
@@ -2096,7 +2096,7 @@ if err != nil {
 首先，让我们查看[高负载钱包智能合约的代码结构](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc)：
 
 ```func
-() recv_external(slice in_msg) impure {
+() recv_external(slice in_msg) {
   var signature = in_msg~load_bits(512); // 从消息体中获取签名
   var cs = in_msg;
   var (subwallet_id, query_id) = (cs~load_uint(32), cs~load_uint(64)); // 从消息体中获取其余值

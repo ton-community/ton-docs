@@ -70,7 +70,7 @@ int __test_example() {
 Since we will need to frequently update the `c4` register due to a large number of tests, so we will create a helper function that will write `c4` to zero
 
 ```js
-() set_default_initial_data() impure {
+() set_default_initial_data() {
   set_data(begin_cell().store_uint(0, 64).end_cell());
 }
 ```
@@ -80,8 +80,6 @@ Since we will need to frequently update the `c4` register due to a large number 
 * `end_cell()`- create Cell 
 * `set_data()` - writes the cell to register c4
 
-`impure` is a keyword that indicates that the function changes the smart contract data.
-
 We got a function that we will use in the body of our testing function
 
 **Result:**
@@ -89,7 +87,6 @@ We got a function that we will use in the body of our testing function
 ```js
 int __test_example() {
 	set_default_initial_data();
-
 }
 ```
 

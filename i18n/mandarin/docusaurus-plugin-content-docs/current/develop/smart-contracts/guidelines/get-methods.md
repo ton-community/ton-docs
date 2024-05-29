@@ -317,7 +317,7 @@ int get_total() method_id {
     return get_data().begin_parse().preload_uint(32);
 }
 
-() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) {
     if (in_msg_body.slice_bits() < 32) {
         return ();
     }

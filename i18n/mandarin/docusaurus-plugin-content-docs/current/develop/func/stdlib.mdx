@@ -24,17 +24,17 @@ toc_max_heading_level: 6
 列表可以表示为嵌套的 2 元组。空列表通常表示为 TVM `null` 值（可以通过调用 `null()` 获得）。例如，元组 `(1, (2, (3, null)))` 表示列表 `[1, 2, 3]`。列表的元素可以是不同类型。
 #### cons
 ```func
-forall X -> tuple cons(X head, tuple tail) asm "CONS";
+forall X -> tuple cons(X head, tuple tail) pure asm "CONS";
 ```
 在 Lisp 类型列表的开头添加一个元素。
 #### uncons
 ```func
-forall X -> (X, tuple) uncons(tuple list) asm "UNCONS";
+forall X -> (X, tuple) uncons(tuple list) pure asm "UNCONS";
 ```
 提取 Lisp 类型列表的头和尾。
 #### list_next
 ```func
-forall X -> (tuple, X) list_next(tuple list) asm( -> 1 0) "UNCONS";
+forall X -> (tuple, X) list_next(tuple list) pure asm( -> 1 0) "UNCONS";
 ```
 提取 Lisp 类型列表的头和尾。可用作 [(非)修改方法](/develop/func/statements#methods-calls)。
 ```func
@@ -46,121 +46,121 @@ forall X -> (tuple, X) list_next(tuple list) asm( -> 1 0) "UNCONS";
 ```
 #### car
 ```func
-forall X -> X car(tuple list) asm "CAR";
+forall X -> X car(tuple list) pure asm "CAR";
 ```
 返回 Lisp 类型列表的头部。
 #### cdr
 ```func
-tuple cdr(tuple list) asm "CDR";
+tuple cdr(tuple list) pure asm "CDR";
 ```
 返回 Lisp 类型列表的尾部。
 ### 其他元组原语
 #### empty_tuple
 ```func
-tuple empty_tuple() asm "NIL";
+tuple empty_tuple() pure asm "NIL";
 ```
 创建 0 元素元组。
 #### tpush
 ```func
-forall X -> tuple tpush(tuple t, X value) asm "TPUSH";
-forall X -> (tuple, ()) ~tpush(tuple t, X value) asm "TPUSH";
+forall X -> tuple tpush(tuple t, X value) pure asm "TPUSH";
+forall X -> (tuple, ()) ~tpush(tuple t, X value) pure asm "TPUSH";
 ```
 将值 `x` 追加到 `Tuple t = (x1, ..., xn)`，但只有在结果 `Tuple t' = (x1, ..., xn, x)` 不超过 255 个字符时才有效。否则，会抛出类型检查异常。
 #### single
 ```func
-forall X -> [X] single(X x) asm "SINGLE";
+forall X -> [X] single(X x) pure asm "SINGLE";
 ```
 创建单例，即长度为一的元组。
 #### unsingle
 ```func
-forall X -> X unsingle([X] t) asm "UNSINGLE";
+forall X -> X unsingle([X] t) pure asm "UNSINGLE";
 ```
 解包单例。
 #### pair
 ```func
-forall X, Y -> [X, Y] pair(X x, Y y) asm "PAIR";
+forall X, Y -> [X, Y] pair(X x, Y y) pure asm "PAIR";
 ```
 创建一对。
 #### unpair
 ```func
-forall X, Y -> (X, Y) unpair([X, Y] t) asm "UNPAIR";
+forall X, Y -> (X, Y) unpair([X, Y] t) pure asm "UNPAIR";
 ```
 解包一对。
 #### triple
 ```func
-forall X, Y, Z -> [X, Y, Z] triple(X x, Y y, Z z) asm "TRIPLE";
+forall X, Y, Z -> [X, Y, Z] triple(X x, Y y, Z z) pure asm "TRIPLE";
 ```
 创建三元组。
 
 #### untriple
 ```func
-forall X, Y, Z -> (X, Y, Z) untriple([X, Y, Z] t) asm "UNTRIPLE";
+forall X, Y, Z -> (X, Y, Z) untriple([X, Y, Z] t) pure asm "UNTRIPLE";
 ```
 解包三元组。
 
 #### tuple4
 ```func
-forall X, Y, Z, W -> [X, Y, Z, W] tuple4(X x, Y y, Z z, W w) asm "4 TUPLE";
+forall X, Y, Z, W -> [X, Y, Z, W] tuple4(X x, Y y, Z z, W w) pure asm "4 TUPLE";
 ```
 创建四元组。
 
 #### untuple4
 ```func
-forall X, Y, Z, W -> (X, Y, Z, W) untuple4([X, Y, Z, W] t) asm "4 UNTUPLE";
+forall X, Y, Z, W -> (X, Y, Z, W) untuple4([X, Y, Z, W] t) pure asm "4 UNTUPLE";
 ```
 解包四元组。
 
 #### first
 ```func
-forall X -> X first(tuple t) asm "FIRST";
+forall X -> X first(tuple t) pure asm "FIRST";
 ```
 返回元组的第一个元素。
 
 #### second
 ```func
-forall X -> X second(tuple t) asm "SECOND";
+forall X -> X second(tuple t) pure asm "SECOND";
 ```
 返回元组的第二个元素。
 
 #### third
 ```func
-forall X -> X third(tuple t) asm "THIRD";
+forall X -> X third(tuple t) pure asm "THIRD";
 ```
 返回元组的第三个元素。
 
 #### fourth
 ```func
-forall X -> X fourth(tuple t) asm "3 INDEX";
+forall X -> X fourth(tuple t) pure asm "3 INDEX";
 ```
 返回元组的第四个元素。
 
 #### pair_first
 ```func
-forall X, Y -> X pair_first([X, Y] p) asm "FIRST";
+forall X, Y -> X pair_first([X, Y] p) pure asm "FIRST";
 ```
 返回一对的第一个元素。
 
 #### pair_second
 ```func
-forall X, Y -> Y pair_second([X, Y] p) asm "SECOND";
+forall X, Y -> Y pair_second([X, Y] p) pure asm "SECOND";
 ```
 返回一对的第二个元素。
 
 #### triple_first
 ```func
-forall X, Y, Z -> X triple_first([X, Y, Z] p) asm "FIRST";
+forall X, Y, Z -> X triple_first([X, Y, Z] p) pure asm "FIRST";
 ```
 返回三元组的第一个元素。
 
 #### triple_second
 ```func
-forall X, Y, Z -> Y triple_second([X, Y, Z] p) asm "SECOND";
+forall X, Y, Z -> Y triple_second([X, Y, Z] p) pure asm "SECOND";
 ```
 返回三元组的第二个元素。
 
 #### triple_third
 ```func
-forall X, Y, Z -> Z triple_third([X, Y, Z] p) asm "THIRD";
+forall X, Y, Z -> Z triple_third([X, Y, Z] p) pure asm "THIRD";
 ```
 返回三元组的第三个元素。
 
@@ -169,61 +169,61 @@ forall X, Y, Z -> Z triple_third([X, Y, Z] p) asm "THIRD";
 关于智能合约调用的一些有用信息可以在 [c7 特殊寄存器](/learn/tvm-instructions/tvm-overview#control-registers)中找到。这些原语用于方便地提取数据。
 #### now
 ```func
-int now() asm "NOW";
+int now() pure asm "NOW";
 ```
 返回当前 Unix 时间作为整数。
 #### my_address
 ```func
-slice my_address() asm "MYADDR";
+slice my_address() pure asm "MYADDR";
 ```
 以 Slice 形式返回当前智能合约的内部地址，其中包含 `MsgAddressInt`。如果需要，可以进一步使用诸如 `parse_std_addr` 之类的原语进行解析。
 #### get_balance
 ```func
-[int, cell] get_balance() asm "BALANCE";
+[int, cell] get_balance() pure asm "BALANCE";
 ```
 以 `tuple` 形式返回智能合约的剩余余额，其中包括 `int`（剩余余额，以nanoton计）和 `cell`（一个包含 32 位键的字典，代表“额外代币”的余额）。注意，RAW 原语（如 `send_raw_message`）不会更新此字段。
 #### cur_lt
 ```func
-int cur_lt() asm "LTIME";
+int cur_lt() pure asm "LTIME";
 ```
 返回当前交易的逻辑时间。
 #### block_lt
 ```func
-int block_lt() asm "BLOCKLT";
+int block_lt() pure asm "BLOCKLT";
 ```
 返回当前区块的起始逻辑时间。
 #### config_param
 ```func
-cell config_param(int x) asm "CONFIGOPTPARAM";
+cell config_param(int x) pure asm "CONFIGOPTPARAM";
 ```
 以 `cell` 或 `null` 值的形式返回全局配置参数的值，其中整数索引为 `i`。
 
 ### 哈希
 #### cell_hash
 ```func
-int cell_hash(cell c) asm "HASHCU";
+int cell_hash(cell c) pure asm "HASHCU";
 ```
 计算`cell c`的 representation hash ，并将其作为一个256位无符号整数`x`返回。用于签名和检查由cell树表示的任意实体的签名。
 #### slice_hash
 ```func
-int slice_hash(slice s) asm "HASHSU";
+int slice_hash(slice s) pure asm "HASHSU";
 ```
 计算`slice s`的哈希，并将其作为一个256位无符号整数`x`返回。结果与创建一个只包含`s`的数据和引用的普通cell，并通过`cell_hash`计算其哈希的情况相同。
 #### string_hash
 ```func
-int string_hash(slice s) asm "SHA256U";
+int string_hash(slice s) pure asm "SHA256U";
 ```
 计算`slice s`数据位的sha256。如果`s`的位长度不能被八整除，则抛出一个cell下溢异常。哈希值作为一个256位无符号整数`x`返回。
 
 ### 签名检查
 #### check_signature
 ```func
-int check_signature(int hash, slice signature, int public_key) asm "CHKSIGNU";
+int check_signature(int hash, slice signature, int public_key) pure asm "CHKSIGNU";
 ```
 使用`public_key`（也表示为一个256位无符号整数）检查`hash`（通常作为某些数据的哈希计算得出的256位无符号整数）的Ed25519 `signature`。签名必须包含至少512个数据位；只使用前512位。如果签名有效，结果为`-1`；否则，为`0`。请注意，`CHKSIGNU`创建一个包含哈希的256位切片，并调用`CHKSIGNS`。也就是说，如果`hash`是作为某些数据的哈希计算的，这些数据会被_两次_哈希，第二次哈希发生在`CHKSIGNS`内部。
 #### check_data_signature
 ```func
-int check_data_signature(slice data, slice signature, int public_key) asm "CHKSIGNS";
+int check_data_signature(slice data, slice signature, int public_key) pure asm "CHKSIGNS";
 ```
 检查`signature`是否是使用`public_key`的`slice data`数据部分的有效Ed25519签名，类似于`check_signature`。如果`data`的位长度不能被八整除，则抛出一个cell下溢异常。Ed25519签名的验证是标准的，使用sha256将`data`简化为实际签名的256位数字。
 
@@ -231,76 +231,76 @@ int check_data_signature(slice data, slice signature, int public_key) asm "CHKSI
 下面的原语可能对于计算用户提供数据的存储费用有用。
 #### compute_data_size?
 ```func
-(int, int, int, int) compute_data_size?(cell c, int max_cells) asm "CDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT";
+(int, int, int, int) compute_data_size?(cell c, int max_cells) pure asm "CDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT";
 ```
 返回`(x, y, z, -1)`或`(null, null, null, 0)`。递归地计算以`cell c`为根的DAG中不同cell的数量`x`、数据位`y`和cell引用`z`，有效地返回此DAG使用的总存储量，同时考虑到相等cell的识别。`x`、`y`和`z`的值通过对此DAG进行深度优先遍历来计算，并使用访问过的cell哈希的哈希表来防止已访问cell的重复访问。访问的cell总数`x`不能超过非负的`max_cells`；否则，在访问第`(max_cells + 1)`个cell之前，计算将被中止，并返回零标志以指示失败。如果`c`为`null`，则返回`x = y = z = 0`。
 #### slice_compute_data_size?
 ```func
-(int, int, int, int) slice_compute_data_size?(slice s, int max_cells) asm "SDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT";
+(int, int, int, int) slice_compute_data_size?(slice s, int max_cells) pure asm "SDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT";
 ```
 类似于`compute_data_size?`，但接受的是`slice s`而不是`cell`。返回的`x`值不考
 虑包含切片`s`本身的cell；然而，`s`的数据位和cell引用在`y`和`z`中要被考虑。
 #### compute_data_size
 ```func
-(int, int, int) compute_data_size(cell c, int max_cells) impure asm "CDATASIZE";
+(int, int, int) compute_data_size(cell c, int max_cells) asm "CDATASIZE";
 ```
 `compute_data_size?`的非静默版本，失败时抛出cell溢出异常（8）。
 #### slice_compute_data_size
 ```func
-(int, int, int) slice_compute_data_size(slice s, int max_cells) impure asm "SDATASIZE";
+(int, int, int) slice_compute_data_size(slice s, int max_cells) asm "SDATASIZE";
 ```
 `slice_compute_data_size?`的非静默版本，失败时抛出cell溢出异常（8）。
 ### 持久存储保存和加载
 #### get_data
 ```func
-cell get_data() asm "c4 PUSH";
+cell get_data() pure asm "c4 PUSH";
 ```
 返回持久化合约存储cell。稍后可以使用切片和构建器原语对其进行解析或修改。
 #### set_data
 ```func
-() set_data(cell c) impure asm "c4 POP";
+() set_data(cell c) asm "c4 POP";
 ```
 将cell`c`设置为持久化合约数据。您可以使用这个原语更新持久化合约存储。
 ### Continuation 原语
 #### get_c3
 ```func
-cont get_c3() impure asm "c3 PUSH";
+cont get_c3() pure asm "c3 PUSH";
 ```
 通常`c3`有一个由合约的整个代码初始化的continuation。它用于函数调用。原语返回`c3`的当前值。
 #### set_c3
 ```func
-() set_c3(cont c) impure asm "c3 POP";
+() set_c3(cont c) asm "c3 POP";
 ```
 更新`c3`的当前值。通常，它用于实时更新智能合约代码。请注意，在执行此原语之后，当前代码（以及递归函数调用堆栈）不会改变，但任何其他函数调用将使用新代码中的函数。
 #### bless
 ```func
-cont bless(slice s) impure asm "BLESS";
+cont bless(slice s) pure asm "BLESS";
 ```
 将`slice s`转换为一个简单的普通 continuation `c`，其中`c.code = s`，堆栈和保存列表为空。
 
 ### 与 gas 相关的原语
 #### accept_message
 ```func
-() accept_message() impure asm "ACCEPT";
+() accept_message() asm "ACCEPT";
 ```
 将当前 gas 限制`gl`设置为其允许的最大值`gm`，并将 gas 信用`gc`重置为零，同时减少`gr`的值`gc`。换句话说，当前智能合约同意购买一些 gas 以完成当前交易。这个动作是处理不携带价值（因此不含 gas ）的外部消息所必需的。
 
 有关更多详细信息，请查看[accept_message effects](/develop/smart-contracts/guidelines/accept)
 #### set_gas_limit
 ```func
-() set_gas_limit(int limit) impure asm "SETGASLIMIT";
+() set_gas_limit(int limit) asm "SETGASLIMIT";
 ```
 将当前 gas 限制`gl`设置为`limit`和`gm`的最小值，并将 gas 信用`gc`重置为零。此时，如果消耗的 gas 量（包括当前指令）超过`gl`的结果值，则在设置新 gas 限制之前会抛出（未处理的） gas 不足异常。请注意，带有`limit ≥ 2^63 − 1`参数的`set_gas_limit`等同于`accept_message`。
 
 有关更多详细信息，请查看[accept_message effects](/develop/smart-contracts/guidelines/accept)
 #### commit
 ```func
-() commit() impure asm "COMMIT";
+() commit() asm "COMMIT";
 ```
 提交寄存器`c4`（“持久数据”）和`c5`（“动作”）的当前状态，以便即使稍后抛出异常，当前执行也被视为“成功”，并保存这些值。
 #### buy_gas
 ```func
-() buy_gas(int gram) impure asm "BUYGAS";
+() buy_gas(int gram) asm "BUYGAS";
 ```
 :::caution
 `BUYGAS`操作码目前尚未实现
@@ -311,17 +311,17 @@ cont bless(slice s) impure asm "BLESS";
 ### 动作原语
 #### raw_reserve
 ```func
-() raw_reserve(int amount, int mode) impure asm "RAWRESERVE";
+() raw_reserve(int amount, int mode) asm "RAWRESERVE";
 ```
 创建一个输出动作，该动作将准确地预留`amount` nanoton 币（如果`mode = 0`），最多`amount` nanoton 币（如果`mode = 2`），或除`amount` nanoton 币以外的所有 nanoton 币（如果`mode = 1`或`mode = 3`）从账户的剩余余额中。它大致等同于创建一个携带`amount` nanoton 币（或`b − amount` nanoton 币，其中`b`是剩余余额）的出站消息发送给自己，这样随后的输出动作就不会花费超过剩余部分的金额。`mode`中的+2位意味着外部动作在无法预留指定金额时不会失败；相反，将预留所有剩余余额。`mode`中的+8位意味着`amount <- -amount`在进行任何进一步的动作之前。`mode`中的+4位意味着在进行任何其他检查和动作之前，`amount`会增加当前账户的原始余额（在 Compute Phase 之前），包括所有额外代币。目前，`amount`必须是非负整数，`mode`必须在`0..15`范围内。
 #### raw_reserve_extra
 ```func
-() raw_reserve_extra(int amount, cell extra_amount, int mode) impure asm "RAWRESERVEX";
+() raw_reserve_extra(int amount, cell extra_amount, int mode) asm "RAWRESERVEX";
 ```
 类似于`raw_reserve`，但还接受一个由`cell`或`null`表示的额外代币字典`extra_amount`。这样，除了Toncoin以外的其他代币也可以被预留。
 #### send_raw_message
 ```func
-() send_raw_message(cell msg, int mode) impure asm "SENDRAWMSG";
+() send_raw_message(cell msg, int mode) asm "SENDRAWMSG";
 ```
 发送包含在`msg`中的原始消息，它应该包含一个正确序列化的消息对象X，唯一的例外是源地址可以有一个虚拟值`addr_none`（自动替换为当前智能合约地址），以及`ihr_fee`、`fwd_fee`、`created_lt`和`created_at`字段可以有任意值（在当前交易的 Action Phase 期间用正确的值重写）。整数参数`mode`包含标志。
 
@@ -346,7 +346,7 @@ cont bless(slice s) impure asm "BLESS";
 
 #### set_code
 ```func
-() set_code(cell new_code) impure asm "SETCODE";
+() set_code(cell new_code) asm "SETCODE";
 ```
 创建一个输出动作，该动作将更改此智能合约的代码为cell`new_code`给出的代码。请注意，此更改仅在当前智能合约的当前运行成功终止后才生效。（参见[set_c3](/develop/func/stdlib#set_c3.））
 
@@ -359,41 +359,41 @@ cont bless(slice s) impure asm "BLESS";
 :::
 #### random
 ```func
-int random() impure asm "RANDU256";
+int random() asm "RANDU256";
 ```
 生成一个新的伪随机无符号256位整数`x`。算法如下：如果`r`是旧的随机种子值，被视为一个32字节的数组（通过构造一个无符号256位整数的大端表示），那么计算其`sha512(r)`；这个哈希的前32字节被存储为随机种子的新值`r'`，剩余的32字节作为下一个随机值`x`返回。
 #### rand
 ```func
-int rand(int range) impure asm "RAND";
+int rand(int range) asm "RAND";
 ```
 在范围`0..range−1`（或`range..−1`，如果`range < 0`）内生成一个新的伪随机整数`z`。更准确地说，生成一个无符号随机值`x`，如`random`中一样；然后计算`z := x * range / 2^256`。
 
 #### get_seed
 ```func
-int get_seed() impure asm "RANDSEED";
+int get_seed() pure asm "RANDSEED";
 ```
 以一个无符号的256位整数返回当前随机种子。
 #### set_seed
 ```func
-int set_seed(int seed) impure asm "SETRAND";
+int set_seed(int seed) asm "SETRAND";
 ```
 将随机种子设置为一个无符号的256位`seed`。
 
 #### randomize
 ```func
-() randomize(int x) impure asm "ADDRAND";
+() randomize(int x) asm "ADDRAND";
 ```
 通过将随机种子设置为两个32字节字符串的串联的sha256来将一个无符号的256位整数`x`混合到随机种子`r`中，这两个32字节字符串：第一个包含旧种子`r`的大端表示，第二个包含`x`的大端表示。
 
 #### randomize_lt
 ```func
-() randomize_lt() impure asm "LTIME" "ADDRAND";
+() randomize_lt() asm "LTIME" "ADDRAND";
 ```
 相当于`randomize(cur_lt());`。
 
 ### 地址操作原语
 下面列出的地址操作原语根据以下TL-B方案序列化和反序列化值。
-```func
+```tlb
 addr_none$00 = MsgAddressExt;
 
 addr_extern$01 len:(## 8) external_address:(bits len)
@@ -428,23 +428,23 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
 
 #### load_msg_addr
 ```func
-(slice, slice) load_msg_addr(slice s) asm( -> 1 0) "LDMSGADDR";
+(slice, slice) load_msg_addr(slice s) pure asm( -> 1 0) "LDMSGADDR";
 ```
 从 `slice s` 加载唯一有效的 `MsgAddress` 前缀，并返回此前缀 `s'` 及 `s` 的其余部分 `s''` 作为切片。
 #### parse_addr
 ```func
-tuple parse_addr(slice s) asm "PARSEMSGADDR";
+tuple parse_addr(slice s) pure asm "PARSEMSGADDR";
 ```
 将包含有效 `MsgAddress` 的 `slice s` 分解为 `tuple t`，并包含此 `MsgAddress` 的独立字段。如果 `s` 不是有效的 `MsgAddress`，则抛出 cell 反序列化异常。
 
 #### parse_std_addr
 ```func
-(int, int) parse_std_addr(slice s) asm "REWRITESTDADDR";
+(int, int) parse_std_addr(slice s) pure asm "REWRITESTDADDR";
 ```
 解析包含有效 `MsgAddressInt`（通常为 `msg_addr_std`）的切片 `s`，将重写 `anycast`（如果存在）应用到地址相同长度前缀，并返回工作链和256位地址作为整数。如果地址不是256位，或者 `s` 不是 `MsgAddressInt` 的有效序列化，抛出cell `deserialization` 异常。
 #### parse_var_addr
 ```func
-(int, slice) parse_var_addr(slice s) asm "REWRITEVARADDR";
+(int, slice) parse_var_addr(slice s) pure asm "REWRITEVARADDR";
 ```
 `parse_std_addr` 的变体，即使地址不是正好256位长（由 `msg_addr_var` 表示），也以切片 `s` 返回（重写后的）地址。
 
@@ -452,7 +452,7 @@ tuple parse_addr(slice s) asm "PARSEMSGADDR";
 目前，只有一个函数可用。
 #### dump_stack
 ```func
-() dump_stack() impure asm "DUMPSTK";
+() dump_stack() asm "DUMPSTK";
 ```
 转储堆栈（最多前255个值）并显示总堆栈深度。
 
@@ -464,49 +464,49 @@ tuple parse_addr(slice s) asm "PARSEMSGADDR";
 除非另有说明，加载和预加载原语从切片的前缀读取数据。
 #### begin_parse
 ```func
-slice begin_parse(cell c) asm "CTOS";
+slice begin_parse(cell c) pure asm "CTOS";
 ```
 
 将 `cell` 转换为 `slice`。注意，`c` 必须是普通cell或特殊cell（见 [TVM.pdf](https://ton.org/tvm.pdf), 3.1.2），自动加载以产生普通cell `c'`，然后转换为 `slice`。
 
 #### end_parse
 ```func
-() end_parse(slice s) impure asm "ENDS";
+() end_parse(slice s) asm "ENDS";
 ```
 检查 `s` 是否为空。如果不是，则抛出异常。
 #### load_ref
 ```func
-(slice, cell) load_ref(slice s) asm( -> 1 0) "LDREF";
+(slice, cell) load_ref(slice s) pure asm( -> 1 0) "LDREF";
 ```
 从切片中加载第一个引用。
 #### preload_ref
 ```func
-cell preload_ref(slice s) asm "PLDREF";
+cell preload_ref(slice s) pure asm "PLDREF";
 ```
 从切片中预加载第一个引用。
 #### load_int
 ```func
-// (slice, int) ~load_int(slice s, int len) asm(s len -> 1 0) "LDIX";
+// (slice, int) ~load_int(slice s, int len) pure asm(s len -> 1 0) "LDIX";
 ```
 从切片中加载一个有符号的 `len` 位整数。
 #### load_uint
 ```func
-// (slice, int) ~load_uint(slice s, int len) asm( -> 1 0) "LDUX";
+// (slice, int) ~load_uint(slice s, int len) pure asm( -> 1 0) "LDUX";
 ```
 从切片中加载一个无符号的 `len` 位整数。
 #### preload_int
 ```func
-// int preload_int(slice s, int len) asm "PLDIX";
+// int preload_int(slice s, int len) pure asm "PLDIX";
 ```
 从切片中预加载一个有符号的 `len` 位整数。
 #### preload_uint
 ```func
-// int preload_uint(slice s, int len) asm "PLDUX";
+// int preload_uint(slice s, int len) pure asm "PLDUX";
 ```
 从切片中预加载一个无符号的 `len` 位整数。
 #### load_bits
 ```func
-// (slice, slice) load_bits(slice s, int len) asm(s len ->
+// (slice, slice) load_bits(slice s, int len) pure asm(s len ->
 
  1 0) "LDSLICEX";
 ```
@@ -514,87 +514,87 @@ cell preload_ref(slice s) asm "PLDREF";
 
 #### preload_bits
 ```func
-// slice preload_bits(slice s, int len) asm "PLDSLICEX";
+// slice preload_bits(slice s, int len) pure asm "PLDSLICEX";
 ```
 从切片 `s` 中预加载前 `0 ≤ len ≤ 1023` 位到一个单独的切片 `s''`。
 
 #### load_coins
 ```func
-(slice, int) load_coins(slice s) asm( -> 1 0) "LDGRAMS";
+(slice, int) load_coins(slice s) pure asm( -> 1 0) "LDGRAMS";
 ```
 加载序列化的 Toncoins 数量（任何最高为 `2^120 - 1` 的无符号整数）。
 
 #### skip_bits
 ```func
-slice skip_bits(slice s, int len) asm "SDSKIPFIRST";
-(slice, ()) ~skip_bits(slice s, int len) asm "SDSKIPFIRST";
+slice skip_bits(slice s, int len) pure asm "SDSKIPFIRST";
+(slice, ()) ~skip_bits(slice s, int len) pure asm "SDSKIPFIRST";
 ```
 返回 `s` 的前 `0 ≤ len ≤ 1023` 位以外的所有值。
 #### first_bits
 ```func
-slice first_bits(slice s, int len) asm "SDCUTFIRST";
+slice first_bits(slice s, int len) pure asm "SDCUTFIRST";
 ```
 返回 `s` 的前 `0 ≤ len ≤ 1023` 位。
 #### skip_last_bits
 ```func
-slice skip_last_bits(slice s, int len) asm "SDSKIPLAST";
-(slice, ()) ~skip_last_bits(slice s, int len) asm "SDSKIPLAST";
+slice skip_last_bits(slice s, int len) pure asm "SDSKIPLAST";
+(slice, ()) ~skip_last_bits(slice s, int len) pure asm "SDSKIPLAST";
 ```
 返回 `s` 中除最后 `0 ≤ len ≤ 1023` 位之外的所有值。
 #### slice_last
 ```func
-slice slice_last(slice s, int len) asm "SDCUTLAST";
+slice slice_last(slice s, int len) pure asm "SDCUTLAST";
 ```
 返回 `s` 的最后 `0 ≤ len ≤ 1023` 位。
 #### load_dict
 ```func
-(slice, cell) load_dict(slice s) asm( -> 1 0) "LDDICT";
+(slice, cell) load_dict(slice s) pure asm( -> 1 0) "LDDICT";
 ```
 从切片 `s` 中加载字典 `D`。可应用于字典或任意 `Maybe ^Y` 类型的值（如果使用 `nothing` 构造器，则返回 `null`）。
 #### preload_dict
 ```func
-cell preload_dict(slice s) asm "PLDDICT";
+cell preload_dict(slice s) pure asm "PLDDICT";
 ```
 从切片 `s` 中预加载字典 `D`。
 #### skip_dict
 ```func
-slice skip_dict(slice s) asm "SKIPDICT";
+slice skip_dict(slice s) pure asm "SKIPDICT";
 ```
 像 `load_dict` 一样加载字典，但只返回切片的其余部分。
 ### 切片大小原语
 #### slice_refs
 ```func
-int slice_refs(slice s) asm "SREFS";
+int slice_refs(slice s) pure asm "SREFS";
 ```
 返回切片 `s` 中的引用数量。
 #### slice_bits
 ```func
-int slice_bits(slice s) asm "SBITS";
+int slice_bits(slice s) pure asm "SBITS";
 ```
 返回切片 `s` 中的数据位数。
 #### slice_bits_refs
 ```func
-(int, int) slice_bits_refs(slice s) asm "SBITREFS";
+(int, int) slice_bits_refs(slice s) pure asm "SBITREFS";
 ```
 返回 `s` 中的数据位数和引用数量。
 #### slice_empty?
 ```func
-int slice_empty?(slice s) asm "SEMPTY";
+int slice_empty?(slice s) pure asm "SEMPTY";
 ```
 检查切片 `s` 是否为空（即，不包含数据位和 cell 引用）。
 #### slice_data_empty?
 ```func
-int slice_data_empty?(slice s) asm "SDEMPTY";
+int slice_data_empty?(slice s) pure asm "SDEMPTY";
 ```
 检查切片 `s` 是否没有数据位。
 #### slice_refs_empty?
 ```func
-int slice_refs_empty?(slice s) asm "SREMPTY";
+int slice_refs_empty?(slice s) pure asm "SREMPTY";
 ```
 检查切片 `s` 是否没有引用。
 #### slice_depth
 ```func
-int slice_depth(slice s) asm "SDEPTH";
+int slice_depth(slice s) pure asm "SDEPTH";
 ```
 返回切片 `s` 的深度。如果 `s` 没有引用，则返回 `0`；否则，返回值是 `s` 中引用的 cell 的深度最大值加一。
 
@@ -604,41 +604,41 @@ int slice_depth(slice s) asm "SDEPTH";
 下面列出的所有原语首先检查构建器中是否有足够的空间，然后是被序列化值的范围。
 #### begin_cell
 ```func
-builder begin_cell() asm "NEWC";
+builder begin_cell() pure asm "NEWC";
 ```
 创建一个新的空 `builder`。
 #### end_cell
 ```func
-cell end_cell(builder b) asm "ENDC";
+cell end_cell(builder b) pure asm "ENDC";
 ```
 将 `builder` 转换为普通的 `cell`。
 #### store_ref
 ```func
-builder store_ref(builder b, cell c) asm(c b) "STREF";
+builder store_ref(builder b, cell c) pure asm(c b) "STREF";
 ```
 将对 cell  `c` 的引用存储到构建器 `b` 中。
 #### store_uint
 ```func
-builder store_uint(builder b, int x, int len) asm(x b len) "STUX";
+builder store_uint(builder b, int x, int len) pure asm(x b len) "STUX";
 ```
 将无符号的 `len` 位整数 `x` 存储到 `b` 中，`0 ≤ len ≤ 256`。
 #### store_int
 ```func
-builder store_int(builder b, int x, int len) asm(x b len) "STIX";
+builder store_int(builder b, int x, int len) pure asm(x b len) "STIX";
 ```
 将有符号的 `len` 位整数 `x` 存储到 `b` 中，`0 ≤ len ≤ 257`。
 #### store_slice
 ```func
-builder store_slice(builder b, slice s) asm "STSLICER";
+builder store_slice(builder b, slice s) pure asm "STSLICER";
 ```
 将切片 `s` 存储到构建器 `b` 中。
 #### store_grams
 ```func
-builder store_grams(builder b, int x) asm "STGRAMS";
+builder store_grams(builder b, int x) pure asm "STGRAMS";
 ```
 #### store_coins
 ```func
-builder store_coins(builder b, int x) asm "STGRAMS";
+builder store_coins(builder b, int x) pure asm "STGRAMS";
 ```
 将范围 `0..2^120 − 1` 内的整数 `x` 存储（序列化）到构建器 `b` 中。`x` 的序列化包含一个4位无符号大端整数 `l`，它是最小的整数 `l ≥ 0`，使得 `x < 2^8l`，后跟 `8l` 位无符号大端表示的 `x`。如果 `x` 不属于支持范围，则抛出范围检查异常。
 
@@ -646,41 +646,41 @@ builder store_coins(builder b, int x) asm "STGRAMS";
 
 #### store_dict
 ```func
-builder store_dict(builder b, cell c) asm(c b) "STDICT";
+builder store_dict(builder b, cell c) pure asm(c b) "STDICT";
 ```
 将由 cell `c` 或 `null` 表示的字典 `D` 存储到构建器 `b` 中。换句话说，如果 `c` 不是 `null`，则存储1位和对 `c` 的引用；否则存储0位。
 #### store_maybe_ref
 ```func
-builder store_maybe_ref(builder b, cell c) asm(c b) "STOPTREF";
+builder store_maybe_ref(builder b, cell c) pure asm(c b) "STOPTREF";
 ```
 等同于 `store_dict`。
 
 ### 构建器大小原语
 #### builder_refs
 ```func
-int builder_refs(builder b) asm "BREFS";
+int builder_refs(builder b) pure asm "BREFS";
 ```
 返回已经存储在构建器 `b` 中的 cell 引用数量。
 #### builder_bits
 ```func
-int builder_bits(builder b) asm "BBITS";
+int builder_bits(builder b) pure asm "BBITS";
 ```
 返回已经存储在构建器 `b` 中的数据位数。
 #### builder_depth
 ```func
-int builder_depth(builder b) asm "BDEPTH";
+int builder_depth(builder b) pure asm "BDEPTH";
 ```
 返回构建器 `b` 的深度。如果 `b` 中没有存储任何 cell 引用，则返回 `0`；否则，返回值是从 `b` 中引用的 cell 的最大深度加一。
 
 ## Cell原语
 #### cell_depth
 ```func
-int cell_depth(cell c) asm "CDEPTH";
+int cell_depth(cell c) pure asm "CDEPTH";
 ```
 返回 cell  `c` 的深度。如果 `c` 没有引用，则返回 `0`；否则，返回值是从 `c` 中引用的 cell 的最大深度加一。如果 `c` 是 `null`而不是 cell ，则返回零。
 #### cell_null?
 ```func
-int cell_null?(cell c) asm "ISNULL";
+int cell_null?(cell c) pure asm "ISNULL";
 ```
 检查 `c` 是否为 `null`。通常 `null`-cell 表示一个空字典。FunC 也有多态的 `null?` 内置函数。（见 [内置函数](/develop/func/builtins#other-primitives)。）
 
@@ -713,106 +713,106 @@ int cell_null?(cell c) asm "ISNULL";
 
 #### dict_set
 ```func
-cell udict_set(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTUSET";
-cell idict_set(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTISET";
-cell dict_set(cell dict, int key_len, slice index, slice value) asm(value index dict key_len) "DICTSET";
-(cell, ()) ~udict_set(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTUSET";
-(cell, ()) ~idict_set(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTISET";
-(cell, ()) ~dict_set(cell dict, int key_len, slice index, slice value) asm(value index dict key_len) "DICTSET";
+cell udict_set(cell dict, int key_len, int index, slice value) pure asm(value index dict key_len) "DICTUSET";
+cell idict_set(cell dict, int key_len, int index, slice value) pure asm(value index dict key_len) "DICTISET";
+cell dict_set(cell dict, int key_len, slice index, slice value) pure asm(value index dict key_len) "DICTSET";
+(cell, ()) ~udict_set(cell dict, int key_len, int index, slice value) pure asm(value index dict key_len) "DICTUSET";
+(cell, ()) ~idict_set(cell dict, int key_len, int index, slice value) pure asm(value index dict key_len) "DICTISET";
+(cell, ()) ~dict_set(cell dict, int key_len, slice index, slice value) pure asm(value index dict key_len) "DICTSET";
 ```
 在字典 `dict` 中设置与 `key_len` 位键 `index` 关联的值 `value`（一个切片），并返回结果字典。
 #### dict_set_ref
 ```func
-cell idict_set_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTISETREF";
-cell udict_set_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTUSETREF";
-(cell, ()) ~idict_set_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTISETREF";
-(cell, ()) ~udict_set_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTUSETREF";
+cell idict_set_ref(cell dict, int key_len, int index, cell value) pure asm(value index dict key_len) "DICTISETREF";
+cell udict_set_ref(cell dict, int key_len, int index, cell value) pure asm(value index dict key_len) "DICTUSETREF";
+(cell, ()) ~idict_set_ref(cell dict, int key_len, int index, cell value) pure asm(value index dict key_len) "DICTISETREF";
+(cell, ()) ~udict_set_ref(cell dict, int key_len, int index, cell value) pure asm(value index dict key_len) "DICTUSETREF";
 ```
 类似于 `dict_set`，但值设置为对 cell  `value` 的引用。
 #### dict_get?
 ```func
-(slice, int) idict_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIGET" "NULLSWAPIFNOT";
-(slice, int) udict_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUGET" "NULLSWAPIFNOT";
+(slice, int) idict_get?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTIGET" "NULLSWAPIFNOT";
+(slice, int) udict_get?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTUGET" "NULLSWAPIFNOT";
 ```
 在字典 `dict` 中查找 `key_len` 位键 `index`。成功时，返回找到的值作为切片以及表示成功的 `-1` 标志位。如果失败，则返回 `(null, 0)`。
 #### dict_get_ref?
 ```func
-(cell, int) idict_get_ref?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIGETREF";
-(cell, int) udict_get_ref?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUGETREF";
+(cell, int) idict_get_ref?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTIGETREF";
+(cell, int) udict_get_ref?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTUGETREF";
 ```
 类似于 `dict_get?`，但返回找到的值的第一个引用。
 #### dict_get_ref
 ```func
-cell idict_get_ref(cell dict, int key_len, int index) asm(index dict key_len) "DICTIGETOPTREF";
+cell idict_get_ref(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTIGETOPTREF";
 ```
 `dict_get_ref?` 的变体，如果键 `index` 不在字典 `dict` 中，则返回 `null` 而不是值。
 
 #### dict_set_get_ref
 ```func
-(cell, cell) idict_set_get_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTISETGETOPTREF";
-(cell, cell) udict_set_get_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTUSETGETOPTREF";
+(cell, cell) idict_set_get_ref(cell dict, int key_len, int index, cell value) pure asm(value index dict key_len) "DICTISETGETOPTREF";
+(cell, cell) udict_set_get_ref(cell dict, int key_len, int index, cell value) pure asm(value index dict key_len) "DICTUSETGETOPTREF";
 ```
 将与 `index` 关联的值设置为 `value`（如果 `value` 为 `null`，则删除键），并返回旧值（如果值不存在，则为 `null`）。
 #### dict_delete?
 ```func
-(cell, int) idict_delete?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIDEL";
-(cell, int) udict_delete?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUDEL";
+(cell, int) idict_delete?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTIDEL";
+(cell, int) udict_delete?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTUDEL";
 ```
 从字典 `dict` 中删除 `key_len` 位键 `index`。如果键存在，则返回修改后的字典 `dict'` 和成功标志位 `−1`。否则，返回原始字典 `dict` 和 `0`。
 #### dict_delete_get?
 ```func
 (cell, slice, int) idict_delete
 
-_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIDELGET" "NULLSWAPIFNOT";
-(cell, slice, int) udict_delete_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUDELGET" "NULLSWAPIFNOT";
-(cell, (slice, int)) ~idict_delete_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIDELGET" "NULLSWAPIFNOT";
-(cell, (slice, int)) ~udict_delete_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUDELGET" "NULLSWAPIFNOT";
+_get?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTIDELGET" "NULLSWAPIFNOT";
+(cell, slice, int) udict_delete_get?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTUDELGET" "NULLSWAPIFNOT";
+(cell, (slice, int)) ~idict_delete_get?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTIDELGET" "NULLSWAPIFNOT";
+(cell, (slice, int)) ~udict_delete_get?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTUDELGET" "NULLSWAPIFNOT";
 ```
 从字典 `dict` 中删除 `key_len` 位键 `index`。如果键存在，则返回修改后的字典 `dict'`、与键 k 关联的原始值 `x`（由一个切片表示），以及成功标志位 `−1`。否则，返回 `(dict, null, 0)`。
 #### dict_add?
 ```func
-(cell, int) udict_add?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTUADD";
-(cell, int) idict_add?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTIADD";
+(cell, int) udict_add?(cell dict, int key_len, int index, slice value) pure asm(value index dict key_len) "DICTUADD";
+(cell, int) idict_add?(cell dict, int key_len, int index, slice value) pure asm(value index dict key_len) "DICTIADD";
 ```
 `dict_set` 的 `add` 对应项，将字典 `dict` 中与键 `index` 关联的值设置为 `value`，但仅当它尚未出现在 `D` 中时。返回修改后的字典和 `-1` 标志位或 `(dict, 0)`。
 #### dict_replace?
 ```func
-(cell, int) udict_replace?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTUREPLACE";
-(cell, int) idict_replace?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTIREPLACE";
+(cell, int) udict_replace?(cell dict, int key_len, int index, slice value) pure asm(value index dict key_len) "DICTUREPLACE";
+(cell, int) idict_replace?(cell dict, int key_len, int index, slice value) pure asm(value index dict key_len) "DICTIREPLACE";
 ```
 类似于 `dict_set` 的 `replace` 操作，但只有在键 `index` 已经出现在 `dict` 中时才将字典 `dict` 中键 `index` 的值设置为 `value`。返回修改后的字典和 `-1` 标志位或 `(dict, 0)`。
 ### 构建器对应项
 下面的原语接受新值作为构建器而不是切片，如果需要从堆栈中计算的几个组件序列化值，这通常更方便。其效果大致相当于将 b 转换为切片并执行上面列出的相应原语。
 #### dict_set_builder
 ```func
-cell udict_set_builder(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTUSETB";
-cell idict_set_builder(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTISETB";
-cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(value index dict key_len) "DICTSETB";
-(cell, ()) ~idict_set_builder(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTISETB";
-(cell, ()) ~udict_set_builder(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTUSETB";
-(cell, ()) ~dict_set_builder(cell dict, int key_len, slice index, builder value) asm(value index dict key_len) "DICTSETB";
+cell udict_set_builder(cell dict, int key_len, int index, builder value) pure asm(value index dict key_len) "DICTUSETB";
+cell idict_set_builder(cell dict, int key_len, int index, builder value) pure asm(value index dict key_len) "DICTISETB";
+cell dict_set_builder(cell dict, int key_len, slice index, builder value) pure asm(value index dict key_len) "DICTSETB";
+(cell, ()) ~idict_set_builder(cell dict, int key_len, int index, builder value) pure asm(value index dict key_len) "DICTISETB";
+(cell, ()) ~udict_set_builder(cell dict, int key_len, int index, builder value) pure asm(value index dict key_len) "DICTUSETB";
+(cell, ()) ~dict_set_builder(cell dict, int key_len, slice index, builder value) pure asm(value index dict key_len) "DICTSETB";
 ```
 类似于 `dict_set`，但接受构建器。
 #### dict_add_builder?
 ```func
-(cell, int) udict_add_builder?(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTUADDB";
-(cell, int) idict_add_builder?(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTIADDB";
+(cell, int) udict_add_builder?(cell dict, int key_len, int index, builder value) pure asm(value index dict key_len) "DICTUADDB";
+(cell, int) idict_add_builder?(cell dict, int key_len, int index, builder value) pure asm(value index dict key_len) "DICTIADDB";
 ```
 类似于 `dict_add?`，但接受构建器。
 #### dict_replace_builder?
 ```func
-(cell, int) udict_replace_builder?(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTUREPLACEB";
-(cell, int) idict_replace_builder?(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTIREPLACEB";
+(cell, int) udict_replace_builder?(cell dict, int key_len, int index, builder value) pure asm(value index dict key_len) "DICTUREPLACEB";
+(cell, int) idict_replace_builder?(cell dict, int key_len, int index, builder value) pure asm(value index dict key_len) "DICTIREPLACEB";
 ```
 类似于 `dict_replace?`，但接受构建器。
 #### dict_delete_get_min
 ```func
-(cell, int, slice, int) udict_delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTUREMMIN" "NULLSWAPIFNOT2";
-(cell, int, slice, int) idict_delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTIREMMIN" "NULLSWAPIFNOT2";
-(cell, slice, slice, int) dict_delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTREMMIN" "NULLSWAPIFNOT2";
-(cell, (int, slice, int)) ~idict::delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTIREMMIN" "NULLSWAPIFNOT2";
-(cell, (int, slice, int)) ~udict::delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTUREMMIN" "NULLSWAPIFNOT2";
-(cell, (slice, slice, int)) ~dict::delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTREMMIN" "NULLSWAPIFNOT2";
+(cell, int, slice, int) udict_delete_get_min(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTUREMMIN" "NULLSWAPIFNOT2";
+(cell, int, slice, int) idict_delete_get_min(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTIREMMIN" "NULLSWAPIFNOT2";
+(cell, slice, slice, int) dict_delete_get_min(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTREMMIN" "NULLSWAPIFNOT2";
+(cell, (int, slice, int)) ~idict::delete_get_min(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTIREMMIN" "NULLSWAPIFNOT2";
+(cell, (int, slice, int)) ~udict::delete_get_min(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTUREMMIN" "NULLSWAPIFNOT2";
+(cell, (slice, slice, int)) ~dict::delete_get_min(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTREMMIN" "NULLSWAPIFNOT2";
 ```
 计算字典 `dict` 中的最小键 `k`，将其移除，并返回 `(dict', k, x, -1)`，其中 `dict'` 是修改后的 `dict`，`x` 是与 `k` 关联的值。如果字典为空，则返回 `(dict, null, null, 0)`。
 
@@ -820,71 +820,71 @@ cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(va
 
 #### dict_delete_get_max
 ```func
-(cell, int, slice, int) udict_delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTUREMMAX" "NULLSWAPIFNOT2";
-(cell, int, slice, int) idict_delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTIREMMAX" "NULLSWAPIFNOT2";
-(cell, slice, slice, int) dict_delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTREMMAX" "NULLSWAPIFNOT2";
-(cell, (int, slice, int)) ~udict::delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTUREMMAX" "NULLSWAPIFNOT2";
-(cell, (int, slice, int)) ~idict::delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTIREMMAX" "NULLSWAPIFNOT2";
-(cell, (slice, slice, int)) ~dict::delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTREMMAX" "NULLSWAPIFNOT2";
+(cell, int, slice, int) udict_delete_get_max(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTUREMMAX" "NULLSWAPIFNOT2";
+(cell, int, slice, int) idict_delete_get_max(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTIREMMAX" "NULLSWAPIFNOT2";
+(cell, slice, slice, int) dict_delete_get_max(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTREMMAX" "NULLSWAPIFNOT2";
+(cell, (int, slice, int)) ~udict::delete_get_max(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTUREMMAX" "NULLSWAPIFNOT2";
+(cell, (int, slice, int)) ~idict::delete_get_max(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTIREMMAX" "NULLSWAPIFNOT2";
+(cell, (slice, slice, int)) ~dict::delete_get_max(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTREMMAX" "NULLSWAPIFNOT2";
 ```
 计算字典 `dict` 中的最大键 `k`，将其移除，并返回 `(dict', k, x, -1)`，其中 `dict'` 是修改后的 `dict`，`x` 是与 `k` 关联的值。如果字典为空，则返回 `(dict, null, null, 0)`。
 
 #### dict_get_min?
 ```func
-(int, slice, int) udict_get_min?(cell dict, int key_len) asm (-> 1 0 2) "DICTUMIN" "NULLSWAPIFNOT2";
-(int, slice, int) idict_get_min?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMIN" "NULLSWAPIFNOT2";
+(int, slice, int) udict_get_min?(cell dict, int key_len) pure asm (-> 1 0 2) "DICTUMIN" "NULLSWAPIFNOT2";
+(int, slice, int) idict_get_min?(cell dict, int key_len) pure asm (-> 1 0 2) "DICTIMIN" "NULLSWAPIFNOT2";
 ```
 计算字典 `dict` 中的最小键 `k` 及其关联值 `x`，并返回 `(k, x, -1)`。如果字典为空，则返回 `(null, null, 0)`。
 #### dict_get_max?
 ```func
-(int, slice, int) udict_get_max?(cell dict, int key_len) asm (-> 1 0 2) "DICTUMAX" "NULLSWAPIFNOT2";
-(int, slice, int) idict_get_max?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMAX" "NULLSWAPIFNOT2";
+(int, slice, int) udict_get_max?(cell dict, int key_len) pure asm (-> 1 0 2) "DICTUMAX" "NULLSWAPIFNOT2";
+(int, slice, int) idict_get_max?(cell dict, int key_len) pure asm (-> 1 0 2) "DICTIMAX" "NULLSWAPIFNOT2";
 ```
 计算字典 `dict` 中的最大键 `k` 及其关联值 `x`，并返回 `(k, x, -1)`。如果字典为空，则返回 `(null, null, 0)`。
 #### dict_get_min_ref?
 ```func
-(int, cell, int) udict_get_min_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTUMINREF" "NULLSWAPIFNOT2";
-(int, cell, int) idict_get_min_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMINREF" "NULLSWAPIFNOT2";
+(int, cell, int) udict_get_min_ref?(cell dict, int key_len) pure asm (-> 1 0 2) "DICTUMINREF" "NULLSWAPIFNOT2";
+(int, cell, int) idict_get_min_ref?(cell dict, int key_len) pure asm (-> 1 0 2) "DICTIMINREF" "NULLSWAPIFNOT2";
 ```
 类似于 `dict_get_min?`，但返回值中唯一的引用作为引用。
 #### dict_get_max_ref?
 ```func
-(int, cell, int) udict_get_max_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTUMAXREF" "NULLSWAPIFNOT2";
-(int, cell, int) idict_get_max_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMAXREF" "NULLSWAPIFNOT2";
+(int, cell, int) udict_get_max_ref?(cell dict, int key_len) pure asm (-> 1 0 2) "DICTUMAXREF" "NULLSWAPIFNOT2";
+(int, cell, int) idict_get_max_ref?(cell dict, int key_len) pure asm (-> 1 0 2) "DICTIMAXREF" "NULLSWAPIFNOT2";
 ```
 类似于 `dict_get_max?`，但返回值中唯一的引用作为引用。
 #### dict_get_next?
 ```func
-(int, slice, int) udict_get_next?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTUGETNEXT" "NULLSWAPIFNOT2";
-(int, slice, int) idict_get_next?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETNEXT" "NULLSWAPIFNOT2";
+(int, slice, int) udict_get_next?(cell dict, int key_len, int pivot) pure asm(pivot dict key_len -> 1 0 2) "DICTUGETNEXT" "NULLSWAPIFNOT2";
+(int, slice, int) idict_get_next?(cell dict, int key_len, int pivot) pure asm(pivot dict key_len -> 1 0 2) "DICTIGETNEXT" "NULLSWAPIFNOT2";
 ```
 计算字典 `dict` 中大于 `pivot` 的最小键 `k`；返回 `k`、关联值和表示成功的标志位。如果字典为空，则返回 `(null, null, 0)`。
 #### dict_get_nexteq?
 ```func
-(int, slice, int) udict_get_nexteq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTUGETNEXTEQ" "NULLSWAPIFNOT2";
-(int, slice, int) idict_get_nexteq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETNEXTEQ" "NULLSWAPIFNOT2";
+(int, slice, int) udict_get_nexteq?(cell dict, int key_len, int pivot) pure asm(pivot dict key_len -> 1 0 2) "DICTUGETNEXTEQ" "NULLSWAPIFNOT2";
+(int, slice, int) idict_get_nexteq?(cell dict, int key_len, int pivot) pure asm(pivot dict key_len -> 1 0 2) "DICTIGETNEXTEQ" "NULLSWAPIFNOT2";
 ```
 类似于 `dict_get_next?`，但计算大于或等于 `pivot` 的最小键 `k`。
 #### dict_get_prev?
 ```func
-(int, slice, int) udict_get_prev?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTUGETPREV" "NULLSWAPIFNOT2";
-(int, slice, int) idict_get_prev?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETPREV" "NULLSWAPIFNOT2";
+(int, slice, int) udict_get_prev?(cell dict, int key_len, int pivot) pure asm(pivot dict key_len -> 1 0 2) "DICTUGETPREV" "NULLSWAPIFNOT2";
+(int, slice, int) idict_get_prev?(cell dict, int key_len, int pivot) pure asm(pivot dict key_len -> 1 0 2) "DICTIGETPREV" "NULLSWAPIFNOT2";
 ```
 类似于 `dict_get_next?`，但计算小于 `pivot` 的最大键 `k`。
 #### dict_get_preveq?
 ```func
-(int, slice, int) udict_get_preveq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTUGETPREVEQ" "NULLSWAPIFNOT2";
-(int, slice, int) idict_get_preveq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETPREVEQ" "NULLSWAPIFNOT2";
+(int, slice, int) udict_get_preveq?(cell dict, int key_len, int pivot) pure asm(pivot dict key_len -> 1 0 2) "DICTUGETPREVEQ" "NULLSWAPIFNOT2";
+(int, slice, int) idict_get_preveq?(cell dict, int key_len, int pivot) pure asm(pivot dict key_len -> 1 0 2) "DICTIGETPREVEQ" "NULLSWAPIFNOT2";
 ```
 类似于 `dict_get_prev?`，但计算小于或等于 `pivot` 的最大键 `k`。
 #### new_dict
 ```func
-cell new_dict() asm "NEWDICT";
+cell new_dict() pure asm "NEWDICT";
 ```
 创建一个空字典，实际上是一个 `null` 值。`null()` 的特例。
 #### dict_empty?
 ```func
-int dict_empty?(cell c) asm "DICTEMPTY";
+int dict_empty?(cell c) pure asm "DICTEMPTY";
 ```
 检查字典是否为空。等同于 `cell_null?`。
 
@@ -893,50 +893,50 @@ TVM 还支持具有非固定长度键的字典，这些键形成前缀码（即�
 
 #### pfxdict_get?
 ```func
-(slice, slice, slice, int) pfxdict_get?(cell dict, int key_len, slice key) asm(key dict key_len) "PFXDICTGETQ" "NULLSWAPIFNOT2";
+(slice, slice, slice, int) pfxdict_get?(cell dict, int key_len, slice key) pure asm(key dict key_len) "PFXDICTGETQ" "NULLSWAPIFNOT2";
 ```
 返回 `(s', x, s'', -1)` 或 `(null, null, s, 0)`。在前缀码字典 `dict` 中查找切片 `key` 的唯一前缀。如果找到，返回 `s` 的前缀作为 `s'` 和相应的值（也是切片）作为 `x`。`s` 的剩余部分作为切片 `s''` 返回。如果 `s` 的任何前缀都不是前缀码字典 `dict` 中的键，则返回未更改的 `s` 和零标志位以表示失败。
 #### pfxdict_set?
 ```func
-(cell, int) pfxdict_set?(cell dict, int key_len, slice key, slice value) asm(value key dict key_len) "PFXDICTSET";
+(cell, int) pfxdict_set?(cell dict, int key_len, slice key, slice value) pure asm(value key dict key_len) "PFXDICTSET";
 ```
 类似于 `dict_set`，但如果键是字典中另一个键的前缀，则可能失败。表示成功，返回一个标志位。
 #### pfxdict_delete?
 ```func
-(cell, int) pfxdict_delete?(cell dict, int key_len, slice key) asm(key dict key_len) "PFXDICTDEL";
+(cell, int) pfxdict_delete?(cell dict, int key_len, slice key) pure asm(key dict key_len) "PFXDICTDEL";
 ```
 类似于 `dict_delete?`。
 
 ## 特殊原语
 #### null
 ```func
-forall X -> X null() asm "PUSHNULL";
+forall X -> X null() pure asm "PUSHNULL";
 ```
 通过 TVM 类型 `Null`，FunC 表示某些原子类型的值的缺失。因此 `null` 实际上可以具有任何原子类型。
 #### ~impure_touch
 ```func
-forall X -> (X, ()) ~impure_touch(X x) impure asm "NOP";
+forall X -> (X, ()) ~impure_touch(X x) asm "NOP";
 ```
 标记一个变量为已使用，以便即使它不是非纯的(impure)，产生它的代码也不会被删除。（参见 [非纯修饰符](/develop/func/functions#impure-specifier)）
 
 ## 其他原语
 #### min
 ```func
-int min(int x, int y) asm "MIN";
+int min(int x, int y) pure asm "MIN";
 ```
 计算两个整数 `x` 和 `y` 的最小值。
 #### max
 ```func
-int max(int x, int y) asm "MAX";
+int max(int x, int y) pure asm "MAX";
 ```
 计算两个整数 `x` 和 `y` 的最大值。
 #### minmax
 ```func
-(int, int) minmax(int x, int y) asm "MINMAX";
+(int, int) minmax(int x, int y) pure asm "MINMAX";
 ```
 对两个整数进行排序。
 #### abs
 ```func
-int abs(int x) asm "ABS";
+int abs(int x) pure asm "ABS";
 ```
 计算整数 `x` 的绝对值。

@@ -87,7 +87,7 @@ Straight-forward serialization of the message would be as follows:
 
 However, instead of step-by-step serialization of all fields, usually developers use shortcuts. Thus, let's consider how messages can be sent from the smart contract using an example from [elector-code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/elector-code.fc#L153).
 ```func
-() send_message_back(addr, ans_tag, query_id, body, grams, mode) impure inline_ref {
+() send_message_back(addr, ans_tag, query_id, body, grams, mode) inline_ref {
   // int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool src:MsgAddress -> 011000
   var msg = begin_cell()
     .store_uint(0x18, 6)

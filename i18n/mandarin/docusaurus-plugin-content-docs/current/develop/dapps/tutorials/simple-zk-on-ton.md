@@ -243,7 +243,7 @@ int bls_pairing(slice x1, slice y1, slice x2, slice y2, slice x3, slice y3, slic
 load_data 和 save_data 函数仅用于加载和保存证明验证结果（仅用于测试目的）。
 
 ```func
-() load_data() impure {
+() load_data() {
 
     var ds = get_data().begin_parse();
 
@@ -252,7 +252,7 @@ load_data 和 save_data 函数仅用于加载和保存证明验证结果（仅�
     ds.end_parse();
 }
 
-() save_data() impure {
+() save_data() {
     set_data(
             begin_cell()
                     .store_uint(ctx_res, 32)
@@ -263,15 +263,15 @@ load_data 和 save_data 函数仅用于加载和保存证明验证结果（仅�
 
 接下来，有几个简单的实用函数，用于加载发送到合约的证明数据：
 ```func
-(slice, slice) load_p1(slice body) impure {
+(slice, slice) load_p1(slice body) {
     ...
 }
 
-(slice, slice) load_p2(slice body) impure {
+(slice, slice) load_p2(slice body) {
     ...
 }
 
-(slice, int) load_newint(slice body) impure {
+(slice, int) load_newint(slice body) {
     ...
 }
 ```
@@ -285,7 +285,7 @@ load_data 和 save_data 函数仅用于加载和保存证明验证结果（仅�
 
         int pubInput0
 
-) impure {
+) {
 
     slice cpub = bls_g1_multiexp(
 

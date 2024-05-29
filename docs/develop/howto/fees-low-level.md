@@ -164,7 +164,7 @@ slice payload_encoding(int a, int b, int c) {
     .end_cell().begin_parse();
 }
 
-() send_message(slice destination) impure {
+() send_message(slice destination) {
   slice payload = payload_encoding(1, 7, 12);
   var msg = begin_cell()
     .store_uint(0x18, 6)
@@ -192,7 +192,7 @@ builder payload_encoding(int a, int b, int c) {
                 .store_uint(c,8);
 }
 
-() send_message(slice destination) impure {
+() send_message(slice destination) {
   builder payload = payload_encoding(1, 7, 12);
   var msg = begin_cell()
     .store_uint(0x18, 6)

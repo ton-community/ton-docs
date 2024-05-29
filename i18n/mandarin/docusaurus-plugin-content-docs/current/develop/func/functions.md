@@ -205,7 +205,7 @@ int z = x.inc();
 
 例如，在 [stdlib.fc](/develop/func/stdlib) 函数中
 ```func
-int random() impure asm "RANDU256";
+int random() asm "RANDU256";
 ```
 被定义。使用 `impure` 是因为 `RANDU256` 改变了随机数生成器的内部状态。
 
@@ -215,7 +215,7 @@ int random() impure asm "RANDU256";
 例如，您可以在此示例中像这样使用 `inline`：[ICO-Minter.fc](https://github.com/ton-blockchain/token-contract/blob/f2253cb0f0e1ae0974d7dc0cef3a62cb6e19f806/ft/jetton-minter-ICO.fc#L16)
 
 ```func
-() save_data(int total_supply, slice admin_address, cell content, cell jetton_wallet_code) impure inline {
+() save_data(int total_supply, slice admin_address, cell content, cell jetton_wallet_code) inline {
   set_data(begin_cell()
             .store_coins(total_supply)
             .store_slice(admin_address)

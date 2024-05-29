@@ -168,14 +168,14 @@ On TON wallet smart contracts help the platform communicate with other smart con
 Generally, there are two transaction types on TON Blockchain: `internal` and `external`. External transactions allow for the ability to send messages to the blockchain from the outside world, thus allowing for the communication with smart contracts that accept such transactions. The function responsible for carrying out this process is as follows:
 
 ```func
-() recv_external(slice in_msg) impure {
+() recv_external(slice in_msg) {
     // some code
 }
 ```
 Before we dive into more details concerning wallets, let’s look at how wallets accept external transactions. On TON, all wallets hold the owner’s `public key`, `seqno`, and `subwallet_id`. When receiving an external transaction, the wallet uses the `get_data()` method to retrieve data from the storage portion of the wallet. It then conducts several verification procedures and decides whether to accept the transaction or not. This process is conducted as follows:
 
 ```func
-() recv_external(slice in_msg) impure {
+() recv_external(slice in_msg) {
   var signature = in_msg~load_bits(512); // get signature from the message body
   var cs = in_msg;
   var (subwallet_id, valid_until, msg_seqno) = (cs~load_uint(32), cs~load_uint(32), cs~load_uint(32));  // get rest values from the message body
@@ -856,7 +856,7 @@ Now we have the following structure for the project we are creating:
 ```
 
 :::info
-It’s fine if your IDE plugin conflicts with the `() set_seed(int) impure asm "SETRAND";` in the `stdlib.fc` file.
+It’s fine if your IDE plugin conflicts with the `() set_seed(int) asm "SETRAND";` in the `stdlib.fc` file.
 :::
 
 Remember to add the following line to the beginning of the `wallet_v3.fc` file to indicate that the functions from the stdlib will be used below:
@@ -2109,7 +2109,7 @@ Exchanges are probably the best example of where high-load wallets are used on a
 First, let’s examine [the code structure of high-load wallet smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc): 
 
 ```func
-() recv_external(slice in_msg) impure {
+() recv_external(slice in_msg) {
   var signature = in_msg~load_bits(512); // get signature from the message body
   var cs = in_msg;
   var (subwallet_id, query_id) = (cs~load_uint(32), cs~load_uint(64)); // get rest values from the message body

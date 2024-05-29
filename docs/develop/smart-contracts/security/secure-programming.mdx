@@ -56,7 +56,7 @@ TON cannot automatically calculate the gas. The complete execution of the transa
 A typical message handler in TON follows this approach:
 
 ```func
-() handle_something(...) impure {
+() handle_something(...) {
     (int total_supply, <a lot of vars>) = load_data();
     ... // do something, change data
     save_data(total_supply, <a lot of vars>);
@@ -121,7 +121,7 @@ Many contracts also process bounced messages just in case.
 For example, in TON Jetton, if the recipient's wallet cannot accept any tokens (it depends on the logic for receiving), then the sender's wallet will process the bounced message and return the tokens to its own balance.
 
 ```func
-() on_bounce (slice in_msg_body) impure {
+() on_bounce (slice in_msg_body) {
     in_msg_body~skip_bits(32);  //0xFFFFFFFF
 
     (int balance, slice owner_address, slice jetton_master_address, cell jetton_wallet_code) = load_data();
@@ -181,7 +181,7 @@ If something does not meet the expectations of your contract, the Jettons must b
 We found an example of this vulnerable implementation in a recent audit.
 
 ```func
-() handle_transfer_notification(...) impure {
+() handle_transfer_notification(...) {
 ...
     int jetton_amount = in_msg_body~load_coins();
     slice from_address = in_msg_body~load_msg_addr();
@@ -223,7 +223,7 @@ TON has a useful mechanism: `SEND_MODE_CARRY_ALL_REMAINING_MESSAGE_VALUE = 64`. 
 1. If there are no other non-linear handlers in your contract. storage_fee is deducted from the balance of the contract, and not from the incoming gas. This means that over time, storage_fee can eat up the entire balance because everything that comes in has to go out;
 1. If your contract emits events, i.e. sends a message to an external address. The cost of this action is deducted from the balance of the contract, and not from msg_value.
 ```func
-() emit_log_simple (int event_id, int query_id) impure inline {
+() emit_log_simple (int event_id, int query_id) inline {
     var msg = begin_cell()
         .store_uint (12, 4)             // ext_out_msg_info$11 addr$00
         .store_uint (1, 2)              // addr_extern$01
@@ -267,7 +267,7 @@ Remember, if the value of the contract balance runs out, the transaction will be
 We recommend the following storage organization approach:
 
 ```func
-() handle_something(...) impure {
+() handle_something(...) {
     (slice swap_data, cell liquidity_data, cell mining_data, cell discovery_data) = load_data();
     (int total_supply, int swap_fee, int min_amount, int is_stopped) = swap_data.parse_swap_data();
     …
@@ -293,14 +293,14 @@ global int var1;
 global cell var2;
 global slice var3;
 
-() load_data() impure {
+() load_data() {
     var cs = get_data().begin_parse();
     var1 = cs~load_coins();
     var2 = cs~load_ref();
     var3 = cs~load_bits(512);
 }
 
-() save_data() impure {
+() save_data() {
     set_data(
         begin_cell()
             .store_coins(var1)
@@ -357,7 +357,7 @@ builder store_body_header(builder b, int op, int query_id) inline {
     return b.store_uint(op, 32).store_uint(query_id, 64);
 }
 
-() mint_tokens(slice to_address, cell jetton_wallet_code, int amount, cell master_msg) impure {
+() mint_tokens(slice to_address, cell jetton_wallet_code, int amount, cell master_msg) {
     cell state_init = calculate_jetton_wallet_state_init(to_address, my_address(), jetton_wallet_code);
     slice to_wallet_address = calculate_address_by_state_init(state_init);
     

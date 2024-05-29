@@ -43,7 +43,7 @@ Let's write a simple lottery contract as an example. A user will send 1 TON to i
 // set the echo-contract address
 const echo_address = "Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s"a;
 
-() recv_internal (int msg_value, cell in_msg_full, slice in_msg_body) impure {
+() recv_internal (int msg_value, cell in_msg_full, slice in_msg_body) {
     var cs = in_msg_full.begin_parse();
     var flags = cs~load_uint(4);
     if (flags & 1) { // ignore bounced messages

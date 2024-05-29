@@ -28,7 +28,7 @@ Lists can be represented as nested 2-element tuples. Empty list is conventionall
 #### cons
 
 ```func
-forall X -> tuple cons(X head, tuple tail) asm "CONS";
+forall X -> tuple cons(X head, tuple tail) pure asm "CONS";
 ```
 
 Adds an element to the beginning of a lisp-style list.
@@ -36,7 +36,7 @@ Adds an element to the beginning of a lisp-style list.
 #### uncons
 
 ```func
-forall X -> (X, tuple) uncons(tuple list) asm "UNCONS";
+forall X -> (X, tuple) uncons(tuple list) pure asm "UNCONS";
 ```
 
 Extracts the head and the tail of lisp-style list.
@@ -44,7 +44,7 @@ Extracts the head and the tail of lisp-style list.
 #### list_next
 
 ```func
-forall X -> (tuple, X) list_next(tuple list) asm( -> 1 0) "UNCONS";
+forall X -> (tuple, X) list_next(tuple list) pure asm( -> 1 0) "UNCONS";
 ```
 
 Extracts the head and tail of a lisp-style list. Can be used as a [(non-)modifying method](/develop/func/statements#methods-calls).
@@ -60,7 +60,7 @@ Extracts the head and tail of a lisp-style list. Can be used as a [(non-)modifyi
 #### car
 
 ```func
-forall X -> X car(tuple list) asm "CAR";
+forall X -> X car(tuple list) pure asm "CAR";
 ```
 
 Returns the head of a lisp-style list.
@@ -68,7 +68,7 @@ Returns the head of a lisp-style list.
 #### cdr
 
 ```func
-tuple cdr(tuple list) asm "CDR";
+tuple cdr(tuple list) pure asm "CDR";
 ```
 
 Returns the tail of a lisp-style list.
@@ -78,7 +78,7 @@ Returns the tail of a lisp-style list.
 #### empty_tuple
 
 ```func
-tuple empty_tuple() asm "NIL";
+tuple empty_tuple() pure asm "NIL";
 ```
 
 Creates 0-element tuple.
@@ -86,8 +86,8 @@ Creates 0-element tuple.
 #### tpush
 
 ```func
-forall X -> tuple tpush(tuple t, X value) asm "TPUSH";
-forall X -> (tuple, ()) ~tpush(tuple t, X value) asm "TPUSH";
+forall X -> tuple tpush(tuple t, X value) pure asm "TPUSH";
+forall X -> (tuple, ()) ~tpush(tuple t, X value) pure asm "TPUSH";
 ```
 
 Appends the value `x` to the `Tuple t = (x1, ..., xn)` but only if the resulting `Tuple t' = (x1, ..., xn, x)` is no longer than 255 characters. Otherwise, a type check exception is thrown.
@@ -95,7 +95,7 @@ Appends the value `x` to the `Tuple t = (x1, ..., xn)` but only if the resulting
 #### single
 
 ```func
-forall X -> [X] single(X x) asm "SINGLE";
+forall X -> [X] single(X x) pure asm "SINGLE";
 ```
 
 Creates a singleton, i.e., a tuple of length one.
@@ -103,7 +103,7 @@ Creates a singleton, i.e., a tuple of length one.
 #### unsingle
 
 ```func
-forall X -> X unsingle([X] t) asm "UNSINGLE";
+forall X -> X unsingle([X] t) pure asm "UNSINGLE";
 ```
 
 Unpacks a singleton.
@@ -111,7 +111,7 @@ Unpacks a singleton.
 #### pair
 
 ```func
-forall X, Y -> [X, Y] pair(X x, Y y) asm "PAIR";
+forall X, Y -> [X, Y] pair(X x, Y y) pure asm "PAIR";
 ```
 
 Creates a pair.
@@ -119,7 +119,7 @@ Creates a pair.
 #### unpair
 
 ```func
-forall X, Y -> (X, Y) unpair([X, Y] t) asm "UNPAIR";
+forall X, Y -> (X, Y) unpair([X, Y] t) pure asm "UNPAIR";
 ```
 
 Unpacks a pair.
@@ -127,7 +127,7 @@ Unpacks a pair.
 #### triple
 
 ```func
-forall X, Y, Z -> [X, Y, Z] triple(X x, Y y, Z z) asm "TRIPLE";
+forall X, Y, Z -> [X, Y, Z] triple(X x, Y y, Z z) pure asm "TRIPLE";
 ```
 
 Creates a triple.
@@ -135,7 +135,7 @@ Creates a triple.
 #### untriple
 
 ```func
-forall X, Y, Z -> (X, Y, Z) untriple([X, Y, Z] t) asm "UNTRIPLE";
+forall X, Y, Z -> (X, Y, Z) untriple([X, Y, Z] t) pure asm "UNTRIPLE";
 ```
 
 Unpacks a triple.
@@ -143,7 +143,7 @@ Unpacks a triple.
 #### tuple4
 
 ```func
-forall X, Y, Z, W -> [X, Y, Z, W] tuple4(X x, Y y, Z z, W w) asm "4 TUPLE";
+forall X, Y, Z, W -> [X, Y, Z, W] tuple4(X x, Y y, Z z, W w) pure asm "4 TUPLE";
 ```
 
 Creates 4-element tuple.
@@ -151,7 +151,7 @@ Creates 4-element tuple.
 #### untuple4
 
 ```func
-forall X, Y, Z, W -> (X, Y, Z, W) untuple4([X, Y, Z, W] t) asm "4 UNTUPLE";
+forall X, Y, Z, W -> (X, Y, Z, W) untuple4([X, Y, Z, W] t) pure asm "4 UNTUPLE";
 ```
 
 Unpacks 4-element tuple.
@@ -159,7 +159,7 @@ Unpacks 4-element tuple.
 #### first
 
 ```func
-forall X -> X first(tuple t) asm "FIRST";
+forall X -> X first(tuple t) pure asm "FIRST";
 ```
 
 Returns the first element of a tuple.
@@ -167,7 +167,7 @@ Returns the first element of a tuple.
 #### second
 
 ```func
-forall X -> X second(tuple t) asm "SECOND";
+forall X -> X second(tuple t) pure asm "SECOND";
 ```
 
 Returns the second element of a tuple.
@@ -175,7 +175,7 @@ Returns the second element of a tuple.
 #### third
 
 ```func
-forall X -> X third(tuple t) asm "THIRD";
+forall X -> X third(tuple t) pure asm "THIRD";
 ```
 
 Returns the third element of a tuple.
@@ -183,7 +183,7 @@ Returns the third element of a tuple.
 #### fourth
 
 ```func
-forall X -> X fourth(tuple t) asm "3 INDEX";
+forall X -> X fourth(tuple t) pure asm "3 INDEX";
 ```
 
 Returns the fourth element of a tuple.
@@ -191,7 +191,7 @@ Returns the fourth element of a tuple.
 #### pair_first
 
 ```func
-forall X, Y -> X pair_first([X, Y] p) asm "FIRST";
+forall X, Y -> X pair_first([X, Y] p) pure asm "FIRST";
 ```
 
 Returns the first element of a pair.
@@ -199,7 +199,7 @@ Returns the first element of a pair.
 #### pair_second
 
 ```func
-forall X, Y -> Y pair_second([X, Y] p) asm "SECOND";
+forall X, Y -> Y pair_second([X, Y] p) pure asm "SECOND";
 ```
 
 Returns the second element of a pair.
@@ -207,7 +207,7 @@ Returns the second element of a pair.
 #### triple_first
 
 ```func
-forall X, Y, Z -> X triple_first([X, Y, Z] p) asm "FIRST";
+forall X, Y, Z -> X triple_first([X, Y, Z] p) pure asm "FIRST";
 ```
 
 Returns the first element of a triple.
@@ -215,7 +215,7 @@ Returns the first element of a triple.
 #### triple_second
 
 ```func
-forall X, Y, Z -> Y triple_second([X, Y, Z] p) asm "SECOND";
+forall X, Y, Z -> Y triple_second([X, Y, Z] p) pure asm "SECOND";
 ```
 
 Returns the second element of a triple.
@@ -223,7 +223,7 @@ Returns the second element of a triple.
 #### triple_third
 
 ```func
-forall X, Y, Z -> Z triple_third([X, Y, Z] p) asm "THIRD";
+forall X, Y, Z -> Z triple_third([X, Y, Z] p) pure asm "THIRD";
 ```
 
 Returns the third element of a triple.
@@ -237,7 +237,7 @@ Some useful information regarding smart contract invocation can be found in the 
 #### now
 
 ```func
-int now() asm "NOW";
+int now() pure asm "NOW";
 ```
 
 Returns the current Unix time as an Integer
@@ -245,7 +245,7 @@ Returns the current Unix time as an Integer
 #### my_address
 
 ```func
-slice my_address() asm "MYADDR";
+slice my_address() pure asm "MYADDR";
 ```
 
 Returns the internal address of the current smart contract as a Slice with `MsgAddressInt`. If necessary, it can be parsed further using primitives such as `parse_std_addr`.
@@ -253,7 +253,7 @@ Returns the internal address of the current smart contract as a Slice with `MsgA
 #### get_balance
 
 ```func
-[int, cell] get_balance() asm "BALANCE";
+[int, cell] get_balance() pure asm "BALANCE";
 ```
 
 Returns the remaining balance of the smart contract as `tuple` consisting of `int` (the remaining balance in nanotoncoins) and `cell` (a dictionary with 32-bit keys representing the balance of “extra currencies”). Note that RAW primitives such as `send_raw_message` do not update this field.
@@ -261,7 +261,7 @@ Returns the remaining balance of the smart contract as `tuple` consisting of `in
 #### cur_lt
 
 ```func
-int cur_lt() asm "LTIME";
+int cur_lt() pure asm "LTIME";
 ```
 
 Returns the logical time of the current transaction.
@@ -269,7 +269,7 @@ Returns the logical time of the current transaction.
 #### block_lt
 
 ```func
-int block_lt() asm "BLOCKLT";
+int block_lt() pure asm "BLOCKLT";
 ```
 
 Returns the starting logical time of the current
@@ -278,7 +278,7 @@ block.
 #### config_param
 
 ```func
-cell config_param(int x) asm "CONFIGOPTPARAM";
+cell config_param(int x) pure asm "CONFIGOPTPARAM";
 ```
 
 Returns the value of the global configuration parameter with integer index `i` as `cell` or `null` value.
@@ -288,7 +288,7 @@ Returns the value of the global configuration parameter with integer index `i` a
 #### cell_hash
 
 ```func
-int cell_hash(cell c) asm "HASHCU";
+int cell_hash(cell c) pure asm "HASHCU";
 ```
 
 Computes the representation hash of `cell c` and returns it as a 256-bit unsigned integer `x`. Useful for signing and checking signatures of arbitrary entities represented by a tree of cells.
@@ -296,7 +296,7 @@ Computes the representation hash of `cell c` and returns it as a 256-bit unsigne
 #### slice_hash
 
 ```func
-int slice_hash(slice s) asm "HASHSU";
+int slice_hash(slice s) pure asm "HASHSU";
 ```
 
 Computes the hash of `slice s` and returns it as a 256-bit unsigned integer `x`. The result is the same as if an ordinary cell containing only data and references from `s` had been created and its hash computed by `cell_hash`.
@@ -304,7 +304,7 @@ Computes the hash of `slice s` and returns it as a 256-bit unsigned integer `x`.
 #### string_hash
 
 ```func
-int string_hash(slice s) asm "SHA256U";
+int string_hash(slice s) pure asm "SHA256U";
 ```
 
 Computes sha256 of the data bits of `slice s`. If the bit length of `s` is not divisible by eight, it throws a cell underflow exception. The hash value is returned as a 256-bit unsigned integer `x`.
@@ -314,7 +314,7 @@ Computes sha256 of the data bits of `slice s`. If the bit length of `s` is not d
 #### check_signature
 
 ```func
-int check_signature(int hash, slice signature, int public_key) asm "CHKSIGNU";
+int check_signature(int hash, slice signature, int public_key) pure asm "CHKSIGNU";
 ```
 
 Checks the Ed25519 `signature` of `hash` (a 256-bit unsigned integer, usually computed as the hash of some data) using `public_key` (also represented by a 256-bit unsigned integer). The signature must contain at least 512 data bits; only the first 512 bits are used. If the signature is valid, the result is `-1`; otherwise, it is `0`. Note that `CHKSIGNU` creates a 256-bit slice with the hash and calls `CHKSIGNS`. That is, if `hash` is computed as the hash of some data, this data is hashed _twice_, the second hashing occurring inside `CHKSIGNS`.
@@ -322,7 +322,7 @@ Checks the Ed25519 `signature` of `hash` (a 256-bit unsigned integer, usually co
 #### check_data_signature
 
 ```func
-int check_data_signature(slice data, slice signature, int public_key) asm "CHKSIGNS";
+int check_data_signature(slice data, slice signature, int public_key) pure asm "CHKSIGNS";
 ```
 
 Checks whether `signature` is a valid Ed25519 signature of the data portion of `slice data` using `public_key`, similarly to `check_signature`. If the bit length of `data` is not divisible by eight, it throws a cell underflow exception. The verification of Ed25519 signatures is a standard one, with sha256 used to reduce `data` to the 256-bit number that is actually signed.
@@ -334,7 +334,7 @@ The primitives below may be useful for computing storage fees for user-provided 
 #### compute_data_size?
 
 ```func
-(int, int, int, int) compute_data_size?(cell c, int max_cells) asm "CDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT";
+(int, int, int, int) compute_data_size?(cell c, int max_cells) pure asm "CDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT";
 ```
 
 Returns `(x, y, z, -1)` or `(null, null, null, 0)`. Recursively computes the count of distinct cells `x`, data bits `y`, and cell references `z` in the DAG rooted at `cell c`, effectively returning the total storage used by this DAG taking into account the identification of equal cells. The values of `x`, `y`, and `z` are computed by a depth-first traversal of this DAG with a hash table of visited cell hashes used to prevent visits of already-visited cells. The total count of visited cells `x` cannot exceed non-negative `max_cells`; otherwise, the computation is aborted before visiting the `(max_cells + 1)`-st cell and a zero flag is returned to indicate failure. If `c` is `null`, it returns `x = y = z = 0`.
@@ -342,7 +342,7 @@ Returns `(x, y, z, -1)` or `(null, null, null, 0)`. Recursively computes the cou
 #### slice_compute_data_size?
 
 ```func
-(int, int, int, int) slice_compute_data_size?(slice s, int max_cells) asm "SDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT";
+(int, int, int, int) slice_compute_data_size?(slice s, int max_cells) pure asm "SDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT";
 ```
 
 Similar to `compute_data_size?` but accepting `slice s` instead of `cell`. The returned value of `x` does not take into account the cell that contains the slice `s` itself; however, the data bits and the cell references of `s` are accounted for in `y` and `z`.
@@ -350,7 +350,7 @@ Similar to `compute_data_size?` but accepting `slice s` instead of `cell`. The r
 #### compute_data_size
 
 ```func
-(int, int, int) compute_data_size(cell c, int max_cells) impure asm "CDATASIZE";
+(int, int, int) compute_data_size(cell c, int max_cells) asm "CDATASIZE";
 ```
 
 A non-quiet version of `compute_data_size?` that throws a cell overflow exception (8) on failure.
@@ -358,7 +358,7 @@ A non-quiet version of `compute_data_size?` that throws a cell overflow exceptio
 #### slice_compute_data_size
 
 ```func
-(int, int, int) slice_compute_data_size(slice s, int max_cells) impure asm "SDATASIZE";
+(int, int, int) slice_compute_data_size(slice s, int max_cells) asm "SDATASIZE";
 ```
 
 A non-quiet version of `slice_compute_data_size?` that throws a cell overflow exception (8) on failure.
@@ -368,7 +368,7 @@ A non-quiet version of `slice_compute_data_size?` that throws a cell overflow ex
 #### get_data
 
 ```func
-cell get_data() asm "c4 PUSH";
+cell get_data() pure asm "c4 PUSH";
 ```
 
 Returns the persistent contract storage cell. It can be parsed or modified with slice and builder primitives later.
@@ -376,7 +376,7 @@ Returns the persistent contract storage cell. It can be parsed or modified with 
 #### set_data
 
 ```func
-() set_data(cell c) impure asm "c4 POP";
+() set_data(cell c) asm "c4 POP";
 ```
 
 Sets cell `c` as persistent contract data. You can update the persistent contract storage with this primitive.
@@ -386,7 +386,7 @@ Sets cell `c` as persistent contract data. You can update the persistent contrac
 #### get_c3
 
 ```func
-cont get_c3() impure asm "c3 PUSH";
+cont get_c3() pure asm "c3 PUSH";
 ```
 
 Usually `c3` has a continuation initialized by the whole code of the contract. It is used for function calls. The primitive returns the current value of `c3`.
@@ -394,7 +394,7 @@ Usually `c3` has a continuation initialized by the whole code of the contract. I
 #### set_c3
 
 ```func
-() set_c3(cont c) impure asm "c3 POP";
+() set_c3(cont c) asm "c3 POP";
 ```
 
 Updates the current value of `c3`. Usually, it is used for updating smart contract code in runtime. Note that after execution of this primitive, the current code (and the stack of recursive function calls) won't change, but any other function call will use a function from the new code.
@@ -402,7 +402,7 @@ Updates the current value of `c3`. Usually, it is used for updating smart contra
 #### bless
 
 ```func
-cont bless(slice s) impure asm "BLESS";
+cont bless(slice s) pure asm "BLESS";
 ```
 
 Transforms `slice s` into a simple ordinary continuation `c` with `c.code = s`, and an empty stack, and savelist.
@@ -412,7 +412,7 @@ Transforms `slice s` into a simple ordinary continuation `c` with `c.code = s`, 
 #### accept_message
 
 ```func
-() accept_message() impure asm "ACCEPT";
+() accept_message() asm "ACCEPT";
 ```
 
 Sets the current gas limit `gl` to its maximum allowed value `gm` and resets the gas credit `gc` to zero, decreasing the value of `gr` by `gc` in the process. In other words, the current smart contract agrees to buy some gas to finish the current transaction. This action is required to process external messages that carry no value (hence no gas).
@@ -422,7 +422,7 @@ For more details check [accept_message effects](/develop/smart-contracts/guideli
 #### set_gas_limit
 
 ```func
-() set_gas_limit(int limit) impure asm "SETGASLIMIT";
+() set_gas_limit(int limit) asm "SETGASLIMIT";
 ```
 
 Sets the current gas limit `gl` to the minimum of `limit` and `gm`, and resets the gas credit `gc` to zero. At that point, if the amount of consumed gas (including the present instruction) exceeds the resulting value of `gl`, an (unhandled) out of gas exception is thrown before setting new gas limits. Notice that `set_gas_limit` with an argument `limit ≥ 2^63 − 1` is equivalent to `accept_message`.
@@ -432,7 +432,7 @@ For more details check [accept_message effects](/develop/smart-contracts/guideli
 #### commit
 
 ```func
-() commit() impure asm "COMMIT";
+() commit() asm "COMMIT";
 ```
 
 Commits the current state of registers `c4` (“persistent data”) and `c5` (“actions”) so that the current execution is considered “successful” with the saved values even if an exception is thrown later.
@@ -440,7 +440,7 @@ Commits the current state of registers `c4` (“persistent data”) and `c5` (�
 #### buy_gas
 
 ```func
-() buy_gas(int gram) impure asm "BUYGAS";
+() buy_gas(int gram) asm "BUYGAS";
 ```
 
 :::caution
@@ -454,7 +454,7 @@ Computes the amount of gas that can be bought for `gram` nanotoncoins and sets `
 #### raw_reserve
 
 ```func
-() raw_reserve(int amount, int mode) impure asm "RAWRESERVE";
+() raw_reserve(int amount, int mode) asm "RAWRESERVE";
 ```
 
 Creates an output action which would reserve exactly `amount` nanotoncoins (if `mode = 0`), at most `amount` nanotoncoins (if `mode = 2`), or all but `amount` nanotoncoins (if `mode = 1` or `mode = 3`) from the remaining balance of the account. It is roughly equivalent to creating an outbound message carrying `amount` nanotoncoins (or `b − amount` nanotoncoins, where `b` is the remaining balance) to oneself, so that the subsequent output actions would not be able to spend more money than the remainder. Bit +2 in `mode` means that the external action does not fail if the specified amount cannot be reserved; instead, all the remaining balance is reserved. Bit +8 in `mode` means `amount <- -amount` before performing any further actions. Bit +4 in `mode` means that `amount` is increased by the original balance of the current account (before the compute phase), including all extra currencies before performing any other checks and actions. Currently, `amount` must be a non-negative integer, and `mode` must be in the range `0..15`.
@@ -462,7 +462,7 @@ Creates an output action which would reserve exactly `amount` nanotoncoins (if `
 #### raw_reserve_extra
 
 ```func
-() raw_reserve_extra(int amount, cell extra_amount, int mode) impure asm "RAWRESERVEX";
+() raw_reserve_extra(int amount, cell extra_amount, int mode) asm "RAWRESERVEX";
 ```
 
 Similar to `raw_reserve` but also accepts a dictionary `extra_amount` (represented by `cell` or `null`) with extra currencies. In this way, currencies other than Toncoin can be reserved.
@@ -470,7 +470,7 @@ Similar to `raw_reserve` but also accepts a dictionary `extra_amount` (represent
 #### send_raw_message
 
 ```func
-() send_raw_message(cell msg, int mode) impure asm "SENDRAWMSG";
+() send_raw_message(cell msg, int mode) asm "SENDRAWMSG";
 ```
 
 Sends a raw message contained in `msg`, which should contain a correctly serialized object Message X, with the only exception that the source address is allowed to have a dummy value `addr_none` (to be automatically replaced with the current smart contract address), and `ihr_fee`, `fwd_fee`, `created_lt` and `created_at` fields can have arbitrary values (to be rewritten with correct values during the action phase of the current transaction). The integer parameter `mode` contains the flags.
@@ -513,7 +513,7 @@ For example, if you want to send a regular message and pay transfer fees separat
 #### set_code
 
 ```func
-() set_code(cell new_code) impure asm "SETCODE";
+() set_code(cell new_code) asm "SETCODE";
 ```
 
 Creates an output action that would change this smart contract code to that given by cell `new_code`. Notice that this change will take effect only after the successful termination of the current run of the smart contract. (Cf. [set_c3](/develop/func/stdlib#set_c3.))
@@ -532,7 +532,7 @@ Keep in mind that random numbers generated by the functions below can be predict
 #### random
 
 ```func
-int random() impure asm "RANDU256";
+int random() asm "RANDU256";
 ```
 
 Generates a new pseudo-random unsigned 256-bit integer `x`. The algorithm is as follows: if `r` is the old value of the random seed considered a 32-byte array (by constructing the big-endian representation of an unsigned 256-bit integer), then its `sha512(r)` is computed; the first 32 bytes of this hash are stored as the new value `r'` of the random seed, and the remaining 32 bytes are returned as the next random value `x`.
@@ -540,7 +540,7 @@ Generates a new pseudo-random unsigned 256-bit integer `x`. The algorithm is as 
 #### rand
 
 ```func
-int rand(int range) impure asm "RAND";
+int rand(int range) asm "RAND";
 ```
 
 Generates a new pseudo-random integer `z` in the range `0..range−1` (or `range..−1` if `range < 0`). More precisely, an unsigned random value `x` is generated as in `random`; then `z := x * range / 2^256` is
@@ -549,7 +549,7 @@ computed.
 #### get_seed
 
 ```func
-int get_seed() impure asm "RANDSEED";
+int get_seed() pure asm "RANDSEED";
 ```
 
 Returns the current random seed as an unsigned 256-bit integer.
@@ -557,7 +557,7 @@ Returns the current random seed as an unsigned 256-bit integer.
 #### set_seed
 
 ```func
-int set_seed(int seed) impure asm "SETRAND";
+int set_seed(int seed) asm "SETRAND";
 ```
 
 Sets a random seed to an unsigned 256-bit `seed`.
@@ -565,7 +565,7 @@ Sets a random seed to an unsigned 256-bit `seed`.
 #### randomize
 
 ```func
-() randomize(int x) impure asm "ADDRAND";
+() randomize(int x) asm "ADDRAND";
 ```
 
 Mixes an unsigned 256-bit integer `x` into a random seed `r` by setting the random seed to sha256 of the concatenation of two 32-byte strings: the first with a big-endian representation of the old seed `r`, and the second with a big-endian representation of `x`.
@@ -573,7 +573,7 @@ Mixes an unsigned 256-bit integer `x` into a random seed `r` by setting the rand
 #### randomize_lt
 
 ```func
-() randomize_lt() impure asm "LTIME" "ADDRAND";
+() randomize_lt() asm "LTIME" "ADDRAND";
 ```
 
 Equivalent to `randomize(cur_lt());`.
@@ -582,7 +582,7 @@ Equivalent to `randomize(cur_lt());`.
 
 The address manipulation primitives listed below serialize and deserialize values according to the following TL-B scheme.
 
-```func
+```tlb
 addr_none$00 = MsgAddressExt;
 
 addr_extern$01 len:(## 8) external_address:(bits len)
@@ -620,7 +620,7 @@ A deserialized `MsgAddress` is represented by the tuple `t` as follows:
 #### load_msg_addr
 
 ```func
-(slice, slice) load_msg_addr(slice s) asm( -> 1 0) "LDMSGADDR";
+(slice, slice) load_msg_addr(slice s) pure asm( -> 1 0) "LDMSGADDR";
 ```
 
 Loads from `slice s` the only prefix that is a valid `MsgAddress` and returns both this prefix `s'` and the remainder `s''` of `s` as slices.
@@ -628,7 +628,7 @@ Loads from `slice s` the only prefix that is a valid `MsgAddress` and returns bo
 #### parse_addr
 
 ```func
-tuple parse_addr(slice s) asm "PARSEMSGADDR";
+tuple parse_addr(slice s) pure asm "PARSEMSGADDR";
 ```
 
 Decomposes `slice s` containing a valid `MsgAddress` into `tuple t` with separate fields of this `MsgAddress`. If `s` is not a valid `MsgAddress`, a cell deserialization exception is thrown.
@@ -636,7 +636,7 @@ Decomposes `slice s` containing a valid `MsgAddress` into `tuple t` with separat
 #### parse_std_addr
 
 ```func
-(int, int) parse_std_addr(slice s) asm "REWRITESTDADDR";
+(int, int) parse_std_addr(slice s) pure asm "REWRITESTDADDR";
 ```
 
 Parses slice `s` containing a valid `MsgAddressInt` (usually `msg_addr_std`), applies rewriting from the `anycast` (if present) to the same-length prefix of the address, and returns both the workchain and the 256-bit address as integers. If the address is not 256-bit or if `s` is not a valid serialization of `MsgAddressInt`, throws a cell `deserialization` exception.
@@ -644,7 +644,7 @@ Parses slice `s` containing a valid `MsgAddressInt` (usually `msg_addr_std`), ap
 #### parse_var_addr
 
 ```func
-(int, slice) parse_var_addr(slice s) asm "REWRITEVARADDR";
+(int, slice) parse_var_addr(slice s) pure asm "REWRITEVARADDR";
 ```
 
 A variant of `parse_std_addr` that returns the (rewritten) address as a slice `s`, even if it is not exactly 256 bit long (represented by `msg_addr_var`).
@@ -672,7 +672,7 @@ Dumps a string. Slice parameter bit length must be divisible by 8.
 #### dump_stack
 
 ```func
-() dump_stack() impure asm "DUMPSTK";
+() dump_stack() asm "DUMPSTK";
 ```
 
 Dumps the stack (at most the top 255 values) and shows the total stack depth.
@@ -688,7 +688,7 @@ Unless otherwise stated, loading and preloading primitives read data from a pref
 #### begin_parse
 
 ```func
-slice begin_parse(cell c) asm "CTOS";
+slice begin_parse(cell c) pure asm "CTOS";
 ```
 
 Converts `cell` into `slice`. Notice that `c` must be either an ordinary cell or an exotic cell (see [TVM.pdf](https://ton.org/tvm.pdf), 3.1.2) which is automatically loaded to yield an ordinary cell `c'`converted into `slice` afterwards.
@@ -696,7 +696,7 @@ Converts `cell` into `slice`. Notice that `c` must be either an ordinary cell or
 #### end_parse
 
 ```func
-() end_parse(slice s) impure asm "ENDS";
+() end_parse(slice s) asm "ENDS";
 ```
 
 Checks if `s` is empty. If not, throws an exception.
@@ -704,7 +704,7 @@ Checks if `s` is empty. If not, throws an exception.
 #### load_ref
 
 ```func
-(slice, cell) load_ref(slice s) asm( -> 1 0) "LDREF";
+(slice, cell) load_ref(slice s) pure asm( -> 1 0) "LDREF";
 ```
 
 Loads the first reference from a slice.
@@ -712,7 +712,7 @@ Loads the first reference from a slice.
 #### preload_ref
 
 ```func
-cell preload_ref(slice s) asm "PLDREF";
+cell preload_ref(slice s) pure asm "PLDREF";
 ```
 
 Preloads the first reference from a slice.
@@ -720,7 +720,7 @@ Preloads the first reference from a slice.
 #### load_int
 
 ```func
-// (slice, int) ~load_int(slice s, int len) asm(s len -> 1 0) "LDIX";
+// (slice, int) ~load_int(slice s, int len) pure asm(s len -> 1 0) "LDIX";
 ```
 
 Loads a signed `len`-bit integer from a slice.
@@ -728,7 +728,7 @@ Loads a signed `len`-bit integer from a slice.
 #### load_uint
 
 ```func
-// (slice, int) ~load_uint(slice s, int len) asm( -> 1 0) "LDUX";
+// (slice, int) ~load_uint(slice s, int len) pure asm( -> 1 0) "LDUX";
 ```
 
 Loads an unsigned `len`-bit integer from a slice.
@@ -736,7 +736,7 @@ Loads an unsigned `len`-bit integer from a slice.
 #### preload_int
 
 ```func
-// int preload_int(slice s, int len) asm "PLDIX";
+// int preload_int(slice s, int len) pure asm "PLDIX";
 ```
 
 Preloads a signed `len`-bit integer from a slice.
@@ -744,7 +744,7 @@ Preloads a signed `len`-bit integer from a slice.
 #### preload_uint
 
 ```func
-// int preload_uint(slice s, int len) asm "PLDUX";
+// int preload_uint(slice s, int len) pure asm "PLDUX";
 ```
 
 Preloads an unsigned `len`-bit integer from a slice.
@@ -752,7 +752,7 @@ Preloads an unsigned `len`-bit integer from a slice.
 #### load_bits
 
 ```func
-// (slice, slice) load_bits(slice s, int len) asm(s len -> 1 0) "LDSLICEX";
+// (slice, slice) load_bits(slice s, int len) pure asm(s len -> 1 0) "LDSLICEX";
 ```
 
 Loads the first `0 ≤ len ≤ 1023` bits from slice `s` into a separate slice `s''`.
@@ -760,7 +760,7 @@ Loads the first `0 ≤ len ≤ 1023` bits from slice `s` into a separate slice `
 #### preload_bits
 
 ```func
-// slice preload_bits(slice s, int len) asm "PLDSLICEX";
+// slice preload_bits(slice s, int len) pure asm "PLDSLICEX";
 ```
 
 Preloads the first `0 ≤ len ≤ 1023` bits from slice `s` into a separate slice `s''`.
@@ -768,7 +768,7 @@ Preloads the first `0 ≤ len ≤ 1023` bits from slice `s` into a separate slic
 #### load_coins
 
 ```func
-(slice, int) load_coins(slice s) asm( -> 1 0) "LDGRAMS";
+(slice, int) load_coins(slice s) pure asm( -> 1 0) "LDGRAMS";
 ```
 
 Loads serialized amount of Toncoins (any unsigned integer up to `2^120 - 1`).
@@ -776,8 +776,8 @@ Loads serialized amount of Toncoins (any unsigned integer up to `2^120 - 1`).
 #### skip_bits
 
 ```func
-slice skip_bits(slice s, int len) asm "SDSKIPFIRST";
-(slice, ()) ~skip_bits(slice s, int len) asm "SDSKIPFIRST";
+slice skip_bits(slice s, int len) pure asm "SDSKIPFIRST";
+(slice, ()) ~skip_bits(slice s, int len) pure asm "SDSKIPFIRST";
 ```
 
 Returns all but the first `0 ≤ len ≤ 1023` bits of `s`.
@@ -785,7 +785,7 @@ Returns all but the first `0 ≤ len ≤ 1023` bits of `s`.
 #### first_bits
 
 ```func
-slice first_bits(slice s, int len) asm "SDCUTFIRST";
+slice first_bits(slice s, int len) pure asm "SDCUTFIRST";
 ```
 
 Returns the first `0 ≤ len ≤ 1023` bits of `s`.
@@ -793,8 +793,8 @@ Returns the first `0 ≤ len ≤ 1023` bits of `s`.
 #### skip_last_bits
 
 ```func
-slice skip_last_bits(slice s, int len) asm "SDSKIPLAST";
-(slice, ()) ~skip_last_bits(slice s, int len) asm "SDSKIPLAST";
+slice skip_last_bits(slice s, int len) pure asm "SDSKIPLAST";
+(slice, ()) ~skip_last_bits(slice s, int len) pure asm "SDSKIPLAST";
 ```
 
 Returns all but the last `0 ≤ len ≤ 1023` bits of `s`.
@@ -802,7 +802,7 @@ Returns all but the last `0 ≤ len ≤ 1023` bits of `s`.
 #### slice_last
 
 ```func
-slice slice_last(slice s, int len) asm "SDCUTLAST";
+slice slice_last(slice s, int len) pure asm "SDCUTLAST";
 ```
 
 Returns the last `0 ≤ len ≤ 1023` bits of `s`.
@@ -810,7 +810,7 @@ Returns the last `0 ≤ len ≤ 1023` bits of `s`.
 #### load_dict
 
 ```func
-(slice, cell) load_dict(slice s) asm( -> 1 0) "LDDICT";
+(slice, cell) load_dict(slice s) pure asm( -> 1 0) "LDDICT";
 ```
 
 Loads a dictionary `D` from slice `s`. May be applied to dictionaries or to values of arbitrary `Maybe ^Y` types (returns `null` if `nothing` constructor is used).
@@ -818,7 +818,7 @@ Loads a dictionary `D` from slice `s`. May be applied to dictionaries or to valu
 #### preload_dict
 
 ```func
-cell preload_dict(slice s) asm "PLDDICT";
+cell preload_dict(slice s) pure asm "PLDDICT";
 ```
 
 Preloads a dictionary `D` from slice `s`.
@@ -826,7 +826,7 @@ Preloads a dictionary `D` from slice `s`.
 #### skip_dict
 
 ```func
-slice skip_dict(slice s) asm "SKIPDICT";
+slice skip_dict(slice s) pure asm "SKIPDICT";
 ```
 
 Loads a dictionary as `load_dict` but returns only the remainder of the slice.
@@ -836,7 +836,7 @@ Loads a dictionary as `load_dict` but returns only the remainder of the slice.
 #### slice_refs
 
 ```func
-int slice_refs(slice s) asm "SREFS";
+int slice_refs(slice s) pure asm "SREFS";
 ```
 
 Returns the number of references in slice `s`.
@@ -844,7 +844,7 @@ Returns the number of references in slice `s`.
 #### slice_bits
 
 ```func
-int slice_bits(slice s) asm "SBITS";
+int slice_bits(slice s) pure asm "SBITS";
 ```
 
 Returns the number of data bits in slice `s`.
@@ -852,7 +852,7 @@ Returns the number of data bits in slice `s`.
 #### slice_bits_refs
 
 ```func
-(int, int) slice_bits_refs(slice s) asm "SBITREFS";
+(int, int) slice_bits_refs(slice s) pure asm "SBITREFS";
 ```
 
 Returns both the number of data bits and the number of references in `s`.
@@ -860,7 +860,7 @@ Returns both the number of data bits and the number of references in `s`.
 #### slice_empty?
 
 ```func
-int slice_empty?(slice s) asm "SEMPTY";
+int slice_empty?(slice s) pure asm "SEMPTY";
 ```
 
 Checks whether slice `s` is empty (i.e., contains no bits of data and no cell references).
@@ -868,7 +868,7 @@ Checks whether slice `s` is empty (i.e., contains no bits of data and no cell re
 #### slice_data_empty?
 
 ```func
-int slice_data_empty?(slice s) asm "SDEMPTY";
+int slice_data_empty?(slice s) pure asm "SDEMPTY";
 ```
 
 Checks whether slice `s` has no bits of data.
@@ -876,7 +876,7 @@ Checks whether slice `s` has no bits of data.
 #### slice_refs_empty?
 
 ```func
-int slice_refs_empty?(slice s) asm "SREMPTY";
+int slice_refs_empty?(slice s) pure asm "SREMPTY";
 ```
 
 Checks whether slice `s` has no references.
@@ -884,7 +884,7 @@ Checks whether slice `s` has no references.
 #### slice_depth
 
 ```func
-int slice_depth(slice s) asm "SDEPTH";
+int slice_depth(slice s) pure asm "SDEPTH";
 ```
 
 Returns the depth of slice `s`. If `s` has no references, then returns `0`; otherwise, the returned value is one plus the maximum of depths of cells referred to from `s`.
@@ -898,7 +898,7 @@ All of the primitives listed below verify whether there is enough space in the `
 #### begin_cell
 
 ```func
-builder begin_cell() asm "NEWC";
+builder begin_cell() pure asm "NEWC";
 ```
 
 Creates a new empty `builder`.
@@ -906,7 +906,7 @@ Creates a new empty `builder`.
 #### end_cell
 
 ```func
-cell end_cell(builder b) asm "ENDC";
+cell end_cell(builder b) pure asm "ENDC";
 ```
 
 Converts `builder` into an ordinary `cell`.
@@ -914,7 +914,7 @@ Converts `builder` into an ordinary `cell`.
 #### store_ref
 
 ```func
-builder store_ref(builder b, cell c) asm(c b) "STREF";
+builder store_ref(builder b, cell c) pure asm(c b) "STREF";
 ```
 
 Stores a reference to cell `c` into builder `b`.
@@ -922,7 +922,7 @@ Stores a reference to cell `c` into builder `b`.
 #### store_uint
 
 ```func
-builder store_uint(builder b, int x, int len) asm(x b len) "STUX";
+builder store_uint(builder b, int x, int len) pure asm(x b len) "STUX";
 ```
 
 Stores an unsigned `len`-bit integer `x` into `b` for `0 ≤ len ≤ 256`.
@@ -930,7 +930,7 @@ Stores an unsigned `len`-bit integer `x` into `b` for `0 ≤ len ≤ 256`.
 #### store_int
 
 ```func
-builder store_int(builder b, int x, int len) asm(x b len) "STIX";
+builder store_int(builder b, int x, int len) pure asm(x b len) "STIX";
 ```
 
 Stores a signed `len`-bit integer `x` into `b` for `0 ≤ len ≤ 257`.
@@ -938,7 +938,7 @@ Stores a signed `len`-bit integer `x` into `b` for `0 ≤ len ≤ 257`.
 #### store_slice
 
 ```func
-builder store_slice(builder b, slice s) asm "STSLICER";
+builder store_slice(builder b, slice s) pure asm "STSLICER";
 ```
 
 Stores slice `s` into builder `b`.
@@ -946,13 +946,13 @@ Stores slice `s` into builder `b`.
 #### store_grams
 
 ```func
-builder store_grams(builder b, int x) asm "STGRAMS";
+builder store_grams(builder b, int x) pure asm "STGRAMS";
 ```
 
 #### store_coins
 
 ```func
-builder store_coins(builder b, int x) asm "STGRAMS";
+builder store_coins(builder b, int x) pure asm "STGRAMS";
 ```
 
 Stores (serializes) an integer `x` in the range `0..2^120 − 1` into builder `b`. The serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, which is the smallest integer `l ≥ 0`, such that `x < 2^8l`, followed by an `8l`-bit unsigned big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.
@@ -962,7 +962,7 @@ It is the most common way of storing Toncoins.
 #### store_dict
 
 ```func
-builder store_dict(builder b, cell c) asm(c b) "STDICT";
+builder store_dict(builder b, cell c) pure asm(c b) "STDICT";
 ```
 
 Stores dictionary `D` represented by cell `c` or `null` into builder `b`. In other words, stores `1`-bit and a reference to `c` if `c` is not `null` and `0`-bit otherwise.
@@ -970,7 +970,7 @@ Stores dictionary `D` represented by cell `c` or `null` into builder `b`. In oth
 #### store_maybe_ref
 
 ```func
-builder store_maybe_ref(builder b, cell c) asm(c b) "STOPTREF";
+builder store_maybe_ref(builder b, cell c) pure asm(c b) "STOPTREF";
 ```
 
 Equivalent to `store_dict`.
@@ -980,7 +980,7 @@ Equivalent to `store_dict`.
 #### builder_refs
 
 ```func
-int builder_refs(builder b) asm "BREFS";
+int builder_refs(builder b) pure asm "BREFS";
 ```
 
 Returns the number of cell references already stored in builder `b`.
@@ -988,7 +988,7 @@ Returns the number of cell references already stored in builder `b`.
 #### builder_bits
 
 ```func
-int builder_bits(builder b) asm "BBITS";
+int builder_bits(builder b) pure asm "BBITS";
 ```
 
 Returns the number of data bits already stored in builder `b`.
@@ -996,7 +996,7 @@ Returns the number of data bits already stored in builder `b`.
 #### builder_depth
 
 ```func
-int builder_depth(builder b) asm "BDEPTH";
+int builder_depth(builder b) pure asm "BDEPTH";
 ```
 
 Returns the depth of builder `b`. If no cell references are stored in `b`, then returns `0`; otherwise, the returned value is one plus the maximum of depths of cells referred to from `b`.
@@ -1006,7 +1006,7 @@ Returns the depth of builder `b`. If no cell references are stored in `b`, then 
 #### cell_depth
 
 ```func
-int cell_depth(cell c) asm "CDEPTH";
+int cell_depth(cell c) pure asm "CDEPTH";
 ```
 
 Returns the depth of cell `c`. If `c` has no references, then return `0`; otherwise, the returned value is one plus the maximum of depths of cells referred to from `c`. If `c` is a `null` instead of a cell, it returns zero.
@@ -1014,7 +1014,7 @@ Returns the depth of cell `c`. If `c` has no references, then return `0`; otherw
 #### cell_null?
 
 ```func
-int cell_null?(cell c) asm "ISNULL";
+int cell_null?(cell c) pure asm "ISNULL";
 ```
 
 Checks whether `c` is a `null`. Usually a `null`-cell represents an empty dictionary. FunC also has polymorphic `null?` built-in. (See [built-ins](/develop/func/builtins#other-primitives).)
@@ -1053,12 +1053,12 @@ Values within a dictionary can be stored either as a subslice within an inner di
 #### dict_set
 
 ```func
-cell udict_set(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTUSET";
-cell idict_set(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTISET";
-cell dict_set(cell dict, int key_len, slice index, slice value) asm(value index dict key_len) "DICTSET";
-(cell, ()) ~udict_set(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTUSET";
-(cell, ()) ~idict_set(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTISET";
-(cell, ()) ~dict_set(cell dict, int key_len, slice index, slice value) asm(value index dict key_len) "DICTSET";
+cell udict_set(cell dict, int key_len, int index, slice value) pure asm(value index dict key_len) "DICTUSET";
+cell idict_set(cell dict, int key_len, int index, slice value) pure asm(value index dict key_len) "DICTISET";
+cell dict_set(cell dict, int key_len, slice index, slice value) pure asm(value index dict key_len) "DICTSET";
+(cell, ()) ~udict_set(cell dict, int key_len, int index, slice value) pure asm(value index dict key_len) "DICTUSET";
+(cell, ()) ~idict_set(cell dict, int key_len, int index, slice value) pure asm(value index dict key_len) "DICTISET";
+(cell, ()) ~dict_set(cell dict, int key_len, slice index, slice value) pure asm(value index dict key_len) "DICTSET";
 ```
 
 Sets the value associated with `key_len`-bit key `index` in dictionary `dict` to `value` (a slice) and returns the resulting dictionary.
@@ -1066,10 +1066,10 @@ Sets the value associated with `key_len`-bit key `index` in dictionary `dict` to
 #### dict_set_ref
 
 ```func
-cell idict_set_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTISETREF";
-cell udict_set_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTUSETREF";
-(cell, ()) ~idict_set_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTISETREF";
-(cell, ()) ~udict_set_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTUSETREF";
+cell idict_set_ref(cell dict, int key_len, int index, cell value) pure asm(value index dict key_len) "DICTISETREF";
+cell udict_set_ref(cell dict, int key_len, int index, cell value) pure asm(value index dict key_len) "DICTUSETREF";
+(cell, ()) ~idict_set_ref(cell dict, int key_len, int index, cell value) pure asm(value index dict key_len) "DICTISETREF";
+(cell, ()) ~udict_set_ref(cell dict, int key_len, int index, cell value) pure asm(value index dict key_len) "DICTUSETREF";
 ```
 
 Similar to `dict_set` but with the value set to a reference to cell `value`.
@@ -1077,8 +1077,8 @@ Similar to `dict_set` but with the value set to a reference to cell `value`.
 #### dict_get?
 
 ```func
-(slice, int) idict_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIGET" "NULLSWAPIFNOT";
-(slice, int) udict_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUGET" "NULLSWAPIFNOT";
+(slice, int) idict_get?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTIGET" "NULLSWAPIFNOT";
+(slice, int) udict_get?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTUGET" "NULLSWAPIFNOT";
 ```
 
 Searches for the key `index` within the `dict` dictionary, which uses keys of `key_len` bits. If successful, it retrieves the associated value as a `slice` and returns a flag value of `-1` to indicate **success**. If the search fails, it returns `(null, 0)​​`.
@@ -1086,8 +1086,8 @@ Searches for the key `index` within the `dict` dictionary, which uses keys of `k
 #### dict_get_ref?
 
 ```func
-(cell, int) idict_get_ref?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIGETREF";
-(cell, int) udict_get_ref?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUGETREF";
+(cell, int) idict_get_ref?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTIGETREF";
+(cell, int) udict_get_ref?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTUGETREF";
 ```
 
 Similar to `dict_get?` but returns the first reference of the found value.
@@ -1095,7 +1095,7 @@ Similar to `dict_get?` but returns the first reference of the found value.
 #### dict_get_ref
 
 ```func
-cell idict_get_ref(cell dict, int key_len, int index) asm(index dict key_len) "DICTIGETOPTREF";
+cell idict_get_ref(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTIGETOPTREF";
 ```
 
 A variant of `dict_get_ref?` that returns `null` instead of the value if the key `index` is absent from the dictionary `dict`.
@@ -1103,8 +1103,8 @@ A variant of `dict_get_ref?` that returns `null` instead of the value if the key
 #### dict_set_get_ref
 
 ```func
-(cell, cell) idict_set_get_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTISETGETOPTREF";
-(cell, cell) udict_set_get_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTUSETGETOPTREF";
+(cell, cell) idict_set_get_ref(cell dict, int key_len, int index, cell value) pure asm(value index dict key_len) "DICTISETGETOPTREF";
+(cell, cell) udict_set_get_ref(cell dict, int key_len, int index, cell value) pure asm(value index dict key_len) "DICTUSETGETOPTREF";
 ```
 
 Sets the value associated with `index` to `value` (if `value` is `null`, then the key is deleted instead) and returns the old value (or `null` if the value was absent).
@@ -1112,8 +1112,8 @@ Sets the value associated with `index` to `value` (if `value` is `null`, then th
 #### dict_delete?
 
 ```func
-(cell, int) idict_delete?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIDEL";
-(cell, int) udict_delete?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUDEL";
+(cell, int) idict_delete?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTIDEL";
+(cell, int) udict_delete?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTUDEL";
 ```
 
 Deletes `key_len`-bit key `index` from the dictionary `dict`. If the key is present, returns the modified dictionary `dict'` and the success flag `−1`. Otherwise, returns the original dictionary `dict` and `0`.
@@ -1121,10 +1121,10 @@ Deletes `key_len`-bit key `index` from the dictionary `dict`. If the key is pres
 #### dict_delete_get?
 
 ```func
-(cell, slice, int) idict_delete_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIDELGET" "NULLSWAPIFNOT";
-(cell, slice, int) udict_delete_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUDELGET" "NULLSWAPIFNOT";
-(cell, (slice, int)) ~idict_delete_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIDELGET" "NULLSWAPIFNOT";
-(cell, (slice, int)) ~udict_delete_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUDELGET" "NULLSWAPIFNOT";
+(cell, slice, int) idict_delete_get?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTIDELGET" "NULLSWAPIFNOT";
+(cell, slice, int) udict_delete_get?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTUDELGET" "NULLSWAPIFNOT";
+(cell, (slice, int)) ~idict_delete_get?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTIDELGET" "NULLSWAPIFNOT";
+(cell, (slice, int)) ~udict_delete_get?(cell dict, int key_len, int index) pure asm(index dict key_len) "DICTUDELGET" "NULLSWAPIFNOT";
 ```
 
 Deletes `key_len`-bit key `index` from dictionary `dict`. If the key is present, returns the modified dictionary `dict'`, the original value `x` associated with the key k (represented by a Slice), and the success flag `−1`. Otherwise, returns `(dict, null, 0)`.
@@ -1132,8 +1132,8 @@ Deletes `key_len`-bit key `index` from dictionary `dict`. If the key is present,
 #### dict_add?
 
 ```func
-(cell, int) udict_add?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTUADD";
-(cell, int) idict_add?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTIADD";
+(cell, int) udict_add?(cell dict, int key_len, int index, slice value) pure asm(value index dict key_len) "DICTUADD";
+(cell, int) idict_add?(cell dict, int key_len, int index, slice value) pure asm(value index dict key_len) "DICTIADD";
 ```
 
 An `add` counterpart of `dict_set` sets the value associated with key `index` in dictionary `dict` to `value` but only if it is not already present in `D`. Returns either modified version of the dictionary and `-1` flag or `(dict, 0)`.
@@ -1141,8 +1141,8 @@ An `add` counterpart of `dict_set` sets the value associated with key `index` in
 #### dict_replace?
 
 ```func
-(cell, int) udict_replace?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTUREPLACE";
-(cell, int) idict_replace?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTIREPLACE";
+(cell, int) udict_replace?(cell dict, int key_len, int index, slice value) pure asm(value index dict key_len) "DICTUREPLACE";
+(cell, int) idict_replace?(cell dict, int key_len, int index, slice value) pure asm(value index dict key_len) "DICTIREPLACE";
 ```
 
 A `replace` operation similar to `dict_set` but which sets the value of key `index` in dictionary `dict` to `value` only if the key was already present in `dict`. Returns either modified version of the dictionary and `-1` flag or `(dict, 0)`.
@@ -1154,12 +1154,12 @@ The following primitives accept the new value as a builder instead of a slice, w
 #### dict_set_builder
 
 ```func
-cell udict_set_builder(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTUSETB";
-cell idict_set_builder(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTISETB";
-cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(value index dict key_len) "DICTSETB";
-(cell, ()) ~idict_set_builder(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTISETB";
-(cell, ()) ~udict_set_builder(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTUSETB";
-(cell, ()) ~dict_set_builder(cell dict, int key_len, slice index, builder value) asm(value index dict key_len) "DICTSETB";
+cell udict_set_builder(cell dict, int key_len, int index, builder value) pure asm(value index dict key_len) "DICTUSETB";
+cell idict_set_builder(cell dict, int key_len, int index, builder value) pure asm(value index dict key_len) "DICTISETB";
+cell dict_set_builder(cell dict, int key_len, slice index, builder value) pure asm(value index dict key_len) "DICTSETB";
+(cell, ()) ~idict_set_builder(cell dict, int key_len, int index, builder value) pure asm(value index dict key_len) "DICTISETB";
+(cell, ()) ~udict_set_builder(cell dict, int key_len, int index, builder value) pure asm(value index dict key_len) "DICTUSETB";
+(cell, ()) ~dict_set_builder(cell dict, int key_len, slice index, builder value) pure asm(value index dict key_len) "DICTSETB";
 ```
 
 Similar to `dict_set` but accepts a builder.
@@ -1167,8 +1167,8 @@ Similar to `dict_set` but accepts a builder.
 #### dict_add_builder?
 
 ```func
-(cell, int) udict_add_builder?(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTUADDB";
-(cell, int) idict_add_builder?(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTIADDB";
+(cell, int) udict_add_builder?(cell dict, int key_len, int index, builder value) pure asm(value index dict key_len) "DICTUADDB";
+(cell, int) idict_add_builder?(cell dict, int key_len, int index, builder value) pure asm(value index dict key_len) "DICTIADDB";
 ```
 
 Similar to `dict_add?` but accepts a builder.
@@ -1176,8 +1176,8 @@ Similar to `dict_add?` but accepts a builder.
 #### dict_replace_builder?
 
 ```func
-(cell, int) udict_replace_builder?(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTUREPLACEB";
-(cell, int) idict_replace_builder?(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTIREPLACEB";
+(cell, int) udict_replace_builder?(cell dict, int key_len, int index, builder value) pure asm(value index dict key_len) "DICTUREPLACEB";
+(cell, int) idict_replace_builder?(cell dict, int key_len, int index, builder value) pure asm(value index dict key_len) "DICTIREPLACEB";
 ```
 
 Similar to `dict_replace?` but accepts a builder.
@@ -1185,12 +1185,12 @@ Similar to `dict_replace?` but accepts a builder.
 #### dict_delete_get_min
 
 ```func
-(cell, int, slice, int) udict_delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTUREMMIN" "NULLSWAPIFNOT2";
-(cell, int, slice, int) idict_delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTIREMMIN" "NULLSWAPIFNOT2";
-(cell, slice, slice, int) dict_delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTREMMIN" "NULLSWAPIFNOT2";
-(cell, (int, slice, int)) ~idict::delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTIREMMIN" "NULLSWAPIFNOT2";
-(cell, (int, slice, int)) ~udict::delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTUREMMIN" "NULLSWAPIFNOT2";
-(cell, (slice, slice, int)) ~dict::delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTREMMIN" "NULLSWAPIFNOT2";
+(cell, int, slice, int) udict_delete_get_min(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTUREMMIN" "NULLSWAPIFNOT2";
+(cell, int, slice, int) idict_delete_get_min(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTIREMMIN" "NULLSWAPIFNOT2";
+(cell, slice, slice, int) dict_delete_get_min(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTREMMIN" "NULLSWAPIFNOT2";
+(cell, (int, slice, int)) ~idict::delete_get_min(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTIREMMIN" "NULLSWAPIFNOT2";
+(cell, (int, slice, int)) ~udict::delete_get_min(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTUREMMIN" "NULLSWAPIFNOT2";
+(cell, (slice, slice, int)) ~dict::delete_get_min(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTREMMIN" "NULLSWAPIFNOT2";
 ```
 
 Computes the minimum key `k` in dictionary `dict`, removes it, and returns `(dict', k, x, -1)`, where `dict'` is the modified version of `dict` and `x` is the value associated with `k`. If the dict is empty, returns `(dict, null, null, 0)`.
@@ -1200,12 +1200,12 @@ Note that the key returned by `idict_delete_get_min` may differ from the key ret
 #### dict_delete_get_max
 
 ```func
-(cell, int, slice, int) udict_delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTUREMMAX" "NULLSWAPIFNOT2";
-(cell, int, slice, int) idict_delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTIREMMAX" "NULLSWAPIFNOT2";
-(cell, slice, slice, int) dict_delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTREMMAX" "NULLSWAPIFNOT2";
-(cell, (int, slice, int)) ~udict::delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTUREMMAX" "NULLSWAPIFNOT2";
-(cell, (int, slice, int)) ~idict::delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTIREMMAX" "NULLSWAPIFNOT2";
-(cell, (slice, slice, int)) ~dict::delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTREMMAX" "NULLSWAPIFNOT2";
+(cell, int, slice, int) udict_delete_get_max(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTUREMMAX" "NULLSWAPIFNOT2";
+(cell, int, slice, int) idict_delete_get_max(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTIREMMAX" "NULLSWAPIFNOT2";
+(cell, slice, slice, int) dict_delete_get_max(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTREMMAX" "NULLSWAPIFNOT2";
+(cell, (int, slice, int)) ~udict::delete_get_max(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTUREMMAX" "NULLSWAPIFNOT2";
+(cell, (int, slice, int)) ~idict::delete_get_max(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTIREMMAX" "NULLSWAPIFNOT2";
+(cell, (slice, slice, int)) ~dict::delete_get_max(cell dict, int key_len) pure asm(-> 0 2 1 3) "DICTREMMAX" "NULLSWAPIFNOT2";
 ```
 
 Computes the maximum key `k` in dictionary `dict`, removes it, and returns `(dict', k, x, -1)`, where `dict'` is the modified version of `dict` and `x` is the value associated with `k`. If the dict is empty, returns `(dict, null, null, 0)`.
@@ -1213,8 +1213,8 @@ Computes the maximum key `k` in dictionary `dict`, removes it, and returns `(dic
 #### dict_get_min?
 
 ```func
-(int, slice, int) udict_get_min?(cell dict, int key_len) asm (-> 1 0 2) "DICTUMIN" "NULLSWAPIFNOT2";
-(int, slice, int) idict_get_min?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMIN" "NULLSWAPIFNOT2";
+(int, slice, int) udict_get_min?(cell dict, int key_len) pure asm (-> 1 0 2) "DICTUMIN" "NULLSWAPIFNOT2";
+(int, slice, int) idict_get_min?(cell dict, int key_len) pure asm (-> 1 0 2) "DICTIMIN" "NULLSWAPIFNOT2";
 ```
 
 Computes the minimum key `k` in dictionary `dict`, the associated value `x`, and returns `(k, x, -1)`. If the dictionary is empty, returns `(null, null, 0)`.
@@ -1222,8 +1222,8 @@ Computes the minimum key `k` in dictionary `dict`, the associated value `x`, and
 #### dict_get_max?
 
 ```func
-(int, slice, int) udict_get_max?(cell dict, int key_len) asm (-> 1 0 2) "DICTUMAX" "NULLSWAPIFNOT2";
-(int, slice, int) idict_get_max?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMAX" "NULLSWAPIFNOT2";
+(int, slice, int) udict_get_max?(cell dict, int key_len) pure asm (-> 1 0 2) "DICTUMAX" "NULLSWAPIFNOT2";
+(int, slice, int) idict_get_max?(cell dict, int key_len) pure asm (-> 1 0 2) "DICTIMAX" "NULLSWAPIFNOT2";
 ```
 
 Computes the maximum key `k` in dictionary `dict`, the associated value `x`, and returns `(k, x, -1)`. If the dictionary is empty, returns `(null, null, 0)`.
@@ -1231,8 +1231,8 @@ Computes the maximum key `k` in dictionary `dict`, the associated value `x`, and
 #### dict_get_min_ref?
 
 ```func
-(int, cell, int) udict_get_min_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTUMINREF" "NULLSWAPIFNOT2";
-(int, cell, int) idict_get_min_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMINREF" "NULLSWAPIFNOT2";
+(int, cell, int) udict_get_min_ref?(cell dict, int key_len) pure asm (-> 1 0 2) "DICTUMINREF" "NULLSWAPIFNOT2";
+(int, cell, int) idict_get_min_ref?(cell dict, int key_len) pure asm (-> 1 0 2) "DICTIMINREF" "NULLSWAPIFNOT2";
 ```
 
 Similar to `dict_get_min?` but returns the only reference in the value as a reference.
@@ -1240,8 +1240,8 @@ Similar to `dict_get_min?` but returns the only reference in the value as a refe
 #### dict_get_max_ref?
 
 ```func
-(int, cell, int) udict_get_max_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTUMAXREF" "NULLSWAPIFNOT2";
-(int, cell, int) idict_get_max_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMAXREF" "NULLSWAPIFNOT2";
+(int, cell, int) udict_get_max_ref?(cell dict, int key_len) pure asm (-> 1 0 2) "DICTUMAXREF" "NULLSWAPIFNOT2";
+(int, cell, int) idict_get_max_ref?(cell dict, int key_len) pure asm (-> 1 0 2) "DICTIMAXREF" "NULLSWAPIFNOT2";
 ```
 
 Similar to `dict_get_max?` but returns the only reference in the value as a reference.
@@ -1249,8 +1249,8 @@ Similar to `dict_get_max?` but returns the only reference in the value as a refe
 #### dict_get_next?
 
 ```func
-(int, slice, int) udict_get_next?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTUGETNEXT" "NULLSWAPIFNOT2";
-(int, slice, int) idict_get_next?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETNEXT" "NULLSWAPIFNOT2";
+(int, slice, int) udict_get_next?(cell dict, int key_len, int pivot) pure asm(pivot dict key_len -> 1 0 2) "DICTUGETNEXT" "NULLSWAPIFNOT2";
+(int, slice, int) idict_get_next?(cell dict, int key_len, int pivot) pure asm(pivot dict key_len -> 1 0 2) "DICTIGETNEXT" "NULLSWAPIFNOT2";
 ```
 
 Computes the minimum key `k` in dictionary `dict` that is greater than `pivot`; returns `k`, associated value, and a flag indicating success. If the dictionary is empty, returns `(null, null, 0)`.
@@ -1258,8 +1258,8 @@ Computes the minimum key `k` in dictionary `dict` that is greater than `pivot`; 
 #### dict_get_nexteq?
 
 ```func
-(int, slice, int) udict_get_nexteq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTUGETNEXTEQ" "NULLSWAPIFNOT2";
-(int, slice, int) idict_get_nexteq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETNEXTEQ" "NULLSWAPIFNOT2";
+(int, slice, int) udict_get_nexteq?(cell dict, int key_len, int pivot) pure asm(pivot dict key_len -> 1 0 2) "DICTUGETNEXTEQ" "NULLSWAPIFNOT2";
+(int, slice, int) idict_get_nexteq?(cell dict, int key_len, int pivot) pure asm(pivot dict key_len -> 1 0 2) "DICTIGETNEXTEQ" "NULLSWAPIFNOT2";
 ```
 
 Similar to `dict_get_next?` but computes the minimum key `k` that is greater than or equal to `pivot`.
@@ -1267,8 +1267,8 @@ Similar to `dict_get_next?` but computes the minimum key `k` that is greater tha
 #### dict_get_prev?
 
 ```func
-(int, slice, int) udict_get_prev?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTUGETPREV" "NULLSWAPIFNOT2";
-(int, slice, int) idict_get_prev?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETPREV" "NULLSWAPIFNOT2";
+(int, slice, int) udict_get_prev?(cell dict, int key_len, int pivot) pure asm(pivot dict key_len -> 1 0 2) "DICTUGETPREV" "NULLSWAPIFNOT2";
+(int, slice, int) idict_get_prev?(cell dict, int key_len, int pivot) pure asm(pivot dict key_len -> 1 0 2) "DICTIGETPREV" "NULLSWAPIFNOT2";
 ```
 
 Similar to `dict_get_next?` but computes the maximum key `k` smaller than `pivot`.
@@ -1276,8 +1276,8 @@ Similar to `dict_get_next?` but computes the maximum key `k` smaller than `pivot
 #### dict_get_preveq?
 
 ```func
-(int, slice, int) udict_get_preveq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTUGETPREVEQ" "NULLSWAPIFNOT2";
-(int, slice, int) idict_get_preveq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETPREVEQ" "NULLSWAPIFNOT2";
+(int, slice, int) udict_get_preveq?(cell dict, int key_len, int pivot) pure asm(pivot dict key_len -> 1 0 2) "DICTUGETPREVEQ" "NULLSWAPIFNOT2";
+(int, slice, int) idict_get_preveq?(cell dict, int key_len, int pivot) pure asm(pivot dict key_len -> 1 0 2) "DICTIGETPREVEQ" "NULLSWAPIFNOT2";
 ```
 
 Similar to `dict_get_prev?` but computes the maximum key `k` smaller than or equal to `pivot`.
@@ -1285,7 +1285,7 @@ Similar to `dict_get_prev?` but computes the maximum key `k` smaller than or equ
 #### new_dict
 
 ```func
-cell new_dict() asm "NEWDICT";
+cell new_dict() pure asm "NEWDICT";
 ```
 
 Creates an empty dictionary, which is actually a `null` value. Special case of `null()`.
@@ -1293,7 +1293,7 @@ Creates an empty dictionary, which is actually a `null` value. Special case of `
 #### dict_empty?
 
 ```func
-int dict_empty?(cell c) asm "DICTEMPTY";
+int dict_empty?(cell c) pure asm "DICTEMPTY";
 ```
 
 Checks whether a dictionary is empty. Equivalent to `cell_null?`.
@@ -1305,7 +1305,7 @@ TVM also supports dictionaries with non-fixed length keys which form a prefix co
 #### pfxdict_get?
 
 ```func
-(slice, slice, slice, int) pfxdict_get?(cell dict, int key_len, slice key) asm(key dict key_len) "PFXDICTGETQ" "NULLSWAPIFNOT2";
+(slice, slice, slice, int) pfxdict_get?(cell dict, int key_len, slice key) pure asm(key dict key_len) "PFXDICTGETQ" "NULLSWAPIFNOT2";
 ```
 
 Returns `(s', x, s'', -1)` or `(null, null, s, 0)`.
@@ -1314,7 +1314,7 @@ Looks up the unique prefix of slice `key` present in the prefix code dictionary 
 #### pfxdict_set?
 
 ```func
-(cell, int) pfxdict_set?(cell dict, int key_len, slice key, slice value) asm(value key dict key_len) "PFXDICTSET";
+(cell, int) pfxdict_set?(cell dict, int key_len, slice key, slice value) pure asm(value key dict key_len) "PFXDICTSET";
 ```
 
 Similar to `dict_set` but may fail if the key is a prefix of another key presented in the dictionary. Indicating success, returns a flag.
@@ -1322,7 +1322,7 @@ Similar to `dict_set` but may fail if the key is a prefix of another key present
 #### pfxdict_delete?
 
 ```func
-(cell, int) pfxdict_delete?(cell dict, int key_len, slice key) asm(key dict key_len) "PFXDICTDEL";
+(cell, int) pfxdict_delete?(cell dict, int key_len, slice key) pure asm(key dict key_len) "PFXDICTDEL";
 ```
 
 Similar to `dict_delete?`.
@@ -1332,7 +1332,7 @@ Similar to `dict_delete?`.
 #### null
 
 ```func
-forall X -> X null() asm "PUSHNULL";
+forall X -> X null() pure asm "PUSHNULL";
 ```
 
 By the TVM type `Null`, FunC represents the absence of a value of some atomic type. So `null` can actually have any atomic type.
@@ -1340,7 +1340,7 @@ By the TVM type `Null`, FunC represents the absence of a value of some atomic ty
 #### ~impure_touch
 
 ```func
-forall X -> (X, ()) ~impure_touch(X x) impure asm "NOP";
+forall X -> (X, ()) ~impure_touch(X x) asm "NOP";
 ```
 
 Mark a variable as used, such that the code which produced it won't be deleted even if it is not impure. (c.f. [impure specifier](/develop/func/functions#impure-specifier))
@@ -1350,7 +1350,7 @@ Mark a variable as used, such that the code which produced it won't be deleted e
 #### min
 
 ```func
-int min(int x, int y) asm "MIN";
+int min(int x, int y) pure asm "MIN";
 ```
 
 Computes the minimum of two integers `x` and `y`.
@@ -1358,7 +1358,7 @@ Computes the minimum of two integers `x` and `y`.
 #### max
 
 ```func
-int max(int x, int y) asm "MAX";
+int max(int x, int y) pure asm "MAX";
 ```
 
 Computes the maximum of two integers `x` and `y`.
@@ -1366,7 +1366,7 @@ Computes the maximum of two integers `x` and `y`.
 #### minmax
 
 ```func
-(int, int) minmax(int x, int y) asm "MINMAX";
+(int, int) minmax(int x, int y) pure asm "MINMAX";
 ```
 
 Sorts two integers.
@@ -1374,7 +1374,7 @@ Sorts two integers.
 #### abs
 
 ```func
-int abs(int x) asm "ABS";
+int abs(int x) pure asm "ABS";
 ```
 
 Computes the absolute value of the integer `x`.
