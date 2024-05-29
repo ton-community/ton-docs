@@ -2242,7 +2242,7 @@ int get_public_key() | 检索公钥。我们之前已经讨论过这个方法。
 让我们仔细看看 `int processed?(int query_id)` 方法，以帮助我们了解为什么我们需要使用 last_cleaned：
 
 ```func
-int processed?(int query_id) method_id {
+get int processed?(int query_id) {
   var ds = get_data().begin_parse();
   var (_, last_cleaned, _, old_queries) = (ds~load_uint(32), ds~load_uint(64), ds~load_uint(256), ds~load_dict());
   ds.end_parse();

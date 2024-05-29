@@ -60,7 +60,7 @@ See [TON RedStone payload packing](#-ton-redstone-payload-packing) section below
 #### get_prices
 
 ```func   
-(cell) get_prices_v2(cell data_feed_ids, cell payload) method_id;
+get (cell) get_prices_v2(cell data_feed_ids, cell payload);
 ```
 
 The function process on-chain the `payload` passed as an argument
@@ -68,7 +68,7 @@ and returns a `cell` of aggregated values of each feed passed as an identifier i
 
 Due to HTTP GET method length limitation in TON API v4, the function is written for TON API v2.
 
-That are just a `method_id` functions - they don't modify the contract's storage and don't consume TONs.
+That are just `get` functions - they don't modify the contract's storage and don't consume TONs.
 
 #### OP_REDSTONE_WRITE_PRICES
 
@@ -100,7 +100,7 @@ See how it works on: https://ton-showroom.redstone.finance/
 #### read_prices
 
 ```func   
-(tuple) read_prices(tuple data_feed_ids) method_id;
+get (tuple) read_prices(tuple data_feed_ids);
 ```
 
 The function reads the values persisting in the contract's storage and returns a tuple corresponding to the
@@ -108,17 +108,17 @@ passed `feed_ids`.
 The function doesn't modify the storage and can read only aggregated values of the `feed_ids` saved by
 using `write_prices` function.
 
-That's just a `method_id` function - it doesn't modify the contract's storage and don't consume TONs.
+That's just a `get` function - it doesn't modify the contract's storage and don't consume TONs.
 
 #### read_timestamp
 
 ```func
-(int) read_timestamp() method_id;
+get (int) read_timestamp();
 ```
 
 Returns the timestamp of data last saved/written to the contract's storage by using `OP_REDSTONE_WRITE_PRICES` message.
 
-That's just a `method_id` function - it doesn't modify the contract's storage and don't consume TONs.
+That's just a `get` function - it doesn't modify the contract's storage and don't consume TONs.
 
 ### price_feed.fc
 
@@ -179,12 +179,12 @@ That's an internal message - it consumes GAS and modifies the contract's storage
 #### get_price_and_timestamp
 
 ```func
-(int, int) get_price_and_timestamp() method_id;
+get (int, int) get_price_and_timestamp();
 ```
 
 Returns the value and timestamp of the last saved/written data to the adapter's storage by sending `OP_REDSTONE_FETCH_DATA` message and fetching the returned value of the `OP_REDSTONE_DATA_FETCHED` message.
 
-That's just a `method_id` function - it doesn't modify the contract's storage and don't consume TONs.
+That's just a `get` function - it doesn't modify the contract's storage and don't consume TONs.
 
 ### single_feed_man.fc
 
@@ -211,7 +211,7 @@ the single feed only, to omit the communication needs between feed and manager c
 #### get_price
 
 ```func
-(int, int) get_price(cell payload) method_id;
+get (int, int) get_price(cell payload);
 ```
 
 Similar to `get_prices`, but omitting the first (`data_feed_ids`) argument as have it configured during
@@ -220,7 +220,7 @@ the initialization. Returns also the min timestamp of the passed data packages.
 #### read_price_and_timestamp
 
 ```func
-(int, int) read_price_and_timestamp() method_id;
+get (int, int) read_price_and_timestamp();
 ```
 
 Works as the `get_price_and_timestamp` function.

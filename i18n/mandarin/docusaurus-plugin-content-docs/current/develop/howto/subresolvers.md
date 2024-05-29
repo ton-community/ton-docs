@@ -28,7 +28,7 @@ TON DNS 是一个强大的工具。它不仅允许将 TON 网站/存储包分配
 部分重复部分已省略。
 
 ```func
-(int, cell) dnsresolve(slice subdomain, int category) method_id {
+get (int, cell) dnsresolve(slice subdomain, int category) {
   int subdomain_bits = slice_bits(subdomain);
   throw_unless(70, (subdomain_bits % 8) == 0);
   
@@ -234,7 +234,7 @@ _msg_full~load_uint(4) & 1) { return (); } // 弹回消息
   return (subdomain, subdomain_sfx);
 }
 
-(int, cell) dnsresolve(slice subdomain, int category) method_id {
+get (int, cell) dnsresolve(slice subdomain, int category) {
   int subdomain_bits = slice_bits(subdomain);
   throw_unless(70, subdomain_bits % 8 == 0);
   if (subdomain.preload_uint(8) == 0) { subdomain~skip_bits(8); }
@@ -345,12 +345,12 @@ builder get_tme_nft_address_by_index(int index) inline {
   return (readable, target);
 }
 
-slice decode_base64_address(slice readable) method_id {
+get slice decode_base64_address(slice readable) {
   (slice _remaining, builder addr) = decode_base64_address_to(readable, begin_cell());
   return addr.end_cell().begin_parse();
 }
 
-(int, cell) dnsresolve(slice subdomain, int category) method_id {
+get (int, cell) dnsresolve(slice subdomain, int category) {
   int subdomain_bits = slice_bits(subdomain);
 
   throw_unless(70, (subdomain_bits % 8) == 0);

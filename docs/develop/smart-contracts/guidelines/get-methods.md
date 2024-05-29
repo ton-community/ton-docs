@@ -6,7 +6,7 @@ Before proceeding, it is recommended that readers have a basic understanding of 
 
 ## Introduction
 
-Get methods are special functions in smart contracts that are made for querying specific data from them. Their execution doesn't cost any fees and happens outside of the blockchain.
+Get methods are special functions in smart contracts that are made for querying specific data from them. Their execution doesn't cost any fees and happens outside the blockchain.
 
 These functions are very common for most smart contracts. For example, the default [Wallet contract](/participate/wallets/contracts) has several get methods, such as `seqno()`, `get_subwallet_id()` and `get_public_key()`. They are used by wallets, SDKs and APIs to fetch data about wallets.
 
@@ -19,7 +19,7 @@ These functions are very common for most smart contracts. For example, the defau
     Example:
 
     ```func
-    int get_balance() method_id {
+    get int balance() {
         return get_data().begin_parse().preload_uint(64);
     }
     ```
@@ -29,7 +29,7 @@ These functions are very common for most smart contracts. For example, the defau
     Example:
 
     ```func
-    (int, slice, slice, cell) get_wallet_data() method_id {
+    get (int, slice, slice, cell) wallet_data() {
         return load_data();
     }
     ```
@@ -41,7 +41,7 @@ These functions are very common for most smart contracts. For example, the defau
     Example:
 
     ```func
-    slice get_wallet_address(slice owner_address) method_id {
+    get slice wallet_address(slice owner_address) {
         (int total_supply, slice admin_address, cell content, cell jetton_wallet_code) = load_data();
         return calculate_user_jetton_wallet_address(owner_address, my_address(), jetton_wallet_code);
     }
@@ -52,7 +52,7 @@ These functions are very common for most smart contracts. For example, the defau
     Example:
 
     ```func
-    (int) get_ready_to_be_used() method_id {
+    get (int) ready_to_be_used() {
         int ready? = now() >= 1686459600;
         return ready?;
     }
@@ -65,7 +65,7 @@ These functions are very common for most smart contracts. For example, the defau
 #### seqno()
 
 ```func
-int seqno() method_id {
+get int seqno() {
     return get_data().begin_parse().preload_uint(32);
 }
 ```
@@ -75,7 +75,7 @@ Returns the sequence number of the transaction within a specific wallet. This me
 #### get_subwallet_id()
 
 ```func
-int get_subwallet_id() method_id {
+get int get_subwallet_id() {
     return get_data().begin_parse().skip_bits(32).preload_uint(32);
 }
 ```
@@ -85,7 +85,7 @@ int get_subwallet_id() method_id {
 #### get_public_key()
 
 ```func
-int get_public_key() method_id {
+get int get_public_key() {
     var cs = get_data().begin_parse().skip_bits(64);
     return cs.preload_uint(256);
 }
@@ -98,7 +98,7 @@ Retrieves the public key associated with the wallet.
 #### get_wallet_data()
 
 ```func
-(int, slice, slice, cell) get_wallet_data() method_id {
+get (int, slice, slice, cell) get_wallet_data() {
     return load_data();
 }
 ```
@@ -113,7 +113,7 @@ This method returns the complete set of data associated with a jetton wallet:
 #### get_jetton_data()
 
 ```func
-(int, int, slice, cell, cell) get_jetton_data() method_id {
+get (int, int, slice, cell, cell) get_jetton_data() {
     (int total_supply, slice admin_address, cell content, cell jetton_wallet_code) = load_data();
     return (total_supply, -1, admin_address, content, jetton_wallet_code);
 }
@@ -124,7 +124,7 @@ Returns data of a jetton master, including its total supply, the address of its 
 #### get_wallet_address(slice owner_address)
 
 ```func
-slice get_wallet_address(slice owner_address) method_id {
+get slice get_wallet_address(slice owner_address) {
     (int total_supply, slice admin_address, cell content, cell jetton_wallet_code) = load_data();
     return calculate_user_jetton_wallet_address(owner_address, my_address(), jetton_wallet_code);
 }
@@ -137,7 +137,7 @@ Given the address of the owner, this method calculates and returns the address f
 #### get_nft_data()
 
 ```func
-(int, int, slice, slice, cell) get_nft_data() method_id {
+get (int, int, slice, slice, cell) get_nft_data() {
     (int init?, int index, slice collection_address, slice owner_address, cell content) = load_data();
     return (init?, index, collection_address, owner_address, content);
 }
@@ -148,7 +148,7 @@ Returns the data associated with a non-fungible token, including whether it has 
 #### get_collection_data()
 
 ```func
-(int, cell, slice) get_collection_data() method_id {
+get (int, cell, slice) get_collection_data() {
     var (owner_address, next_item_index, content, _, _) = load_data();
     slice cs = content.begin_parse();
     return (next_item_index, cs~load_ref(), owner_address);
@@ -160,7 +160,7 @@ Returns the data of a NFT collection, including the index of the next item to mi
 #### get_nft_address_by_index(int index)
 
 ```func
-slice get_nft_address_by_index(int index) method_id {
+get slice get_nft_address_by_index(int index) {
     var (_, _, _, nft_item_code, _) = load_data();
     cell state_init = calculate_nft_item_state_init(index, nft_item_code);
     return calculate_nft_item_address(workchain(), state_init);
@@ -172,7 +172,7 @@ Given an index, this method calculates and returns the address of the correspond
 #### royalty_params()
 
 ```func
-(int, int, slice) royalty_params() method_id {
+get (int, int, slice) royalty_params() {
     var (_, _, _, _, royalty) = load_data();
     slice rs = royalty.begin_parse();
     return (rs~load_uint(16), rs~load_uint(16), rs~load_msg_addr());
@@ -184,7 +184,7 @@ Fetches the royalty parameters for an NFT. These parameters include the royalty 
 #### get_nft_content(int index, cell individual_nft_content)
 
 ```func
-cell get_nft_content(int index, cell individual_nft_content) method_id {
+get cell get_nft_content(int index, cell individual_nft_content) {
     var (_, _, content, _, _) = load_data();
     slice cs = content.begin_parse();
     cs~load_ref();
@@ -225,7 +225,7 @@ We will use Javascript libraries and tools for the examples below:
 Let's say there is some contract with a following get method:
 
 ```func
-(int) get_total() method_id {
+get (int) total() {
     return get_data().begin_parse().preload_uint(32); // load and return the 32-bit number from the data
 }
 ```
@@ -246,7 +246,7 @@ async function main() {
     // Call get method
     const result = await client.runMethod(
         Address.parse('EQD4eA1SdQOivBbTczzElFmfiKu4SXNL4S29TReQwzzr_70k'),
-        'get_total'
+        'total'
     );
     const total = result.stack.readNumber();
     console.log('Total:', total);
@@ -265,7 +265,7 @@ At first, you need to add a special method in contract wrapper that will execute
 
 ```ts
 async getTotal(provider: ContractProvider) {
-    const result = (await provider.get('get_total', [])).stack;
+    const result = (await provider.get('total', [])).stack;
     return result.readNumber();
 }
 ```
@@ -313,7 +313,7 @@ Let's consider a simple example:
 ```func
 #include "imports/stdlib.fc";
 
-int get_total() method_id {
+get int get_total() {
     return get_data().begin_parse().preload_uint(32);
 }
 

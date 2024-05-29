@@ -28,7 +28,7 @@ You can attempt to see the resolver code by going to `resolve-contract.ton.resol
 Some repeated parts are omitted.
 
 ```func
-(int, cell) dnsresolve(slice subdomain, int category) method_id {
+get (int, cell) dnsresolve(slice subdomain, int category) {
   int subdomain_bits = slice_bits(subdomain);
   throw_unless(70, (subdomain_bits % 8) == 0);
   
@@ -230,7 +230,7 @@ After that, we update the record for the specified domain and save new data into
   return (subdomain, subdomain_sfx);
 }
 
-(int, cell) dnsresolve(slice subdomain, int category) method_id {
+get (int, cell) dnsresolve(slice subdomain, int category) {
   int subdomain_bits = slice_bits(subdomain);
   throw_unless(70, subdomain_bits % 8 == 0);
   if (subdomain.preload_uint(8) == 0) { subdomain~skip_bits(8); }
@@ -339,12 +339,12 @@ builder get_tme_nft_address_by_index(int index) inline {
   return (readable, target);
 }
 
-slice decode_base64_address(slice readable) method_id {
+get slice decode_base64_address(slice readable) {
   (slice _remaining, builder addr) = decode_base64_address_to(readable, begin_cell());
   return addr.end_cell().begin_parse();
 }
 
-(int, cell) dnsresolve(slice subdomain, int category) method_id {
+get (int, cell) dnsresolve(slice subdomain, int category) {
   int subdomain_bits = slice_bits(subdomain);
 
   throw_unless(70, (subdomain_bits % 8) == 0);

@@ -235,7 +235,7 @@ TVM 程序中的每个函数都有一个内部整数 id，可以通过该 id 调
 
 例如，
 ```func
-(int, int) get_n_k() method_id {
+get (int, int) get_n_k() {
   (_, int n, int k, _, _, _, _) = unpack_state();
   return (n, k);
 }

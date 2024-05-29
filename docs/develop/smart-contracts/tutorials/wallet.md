@@ -2256,7 +2256,7 @@ int get_public_key() | Rerive a public key. We have considered this method befor
 Let’s look at the `int processed?(int query_id)` method closely to help us to understand why we need to make use of the last_cleaned:
 
 ```func
-int processed?(int query_id) method_id {
+get int processed?(int query_id) {
   var ds = get_data().begin_parse();
   var (_, last_cleaned, _, old_queries) = (ds~load_uint(32), ds~load_uint(64), ds~load_uint(256), ds~load_dict());
   ds.end_parse();

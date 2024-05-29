@@ -34,7 +34,7 @@ Function name can be any [identifier](/develop/func/literals_identifiers#identif
 For example, `udict_add_builder?`, `dict_set` and `~dict_set` are valid and different function names. (They are defined in [stdlib.fc](/develop/func/stdlib).)
 
 #### Special function names
-FunC (actually Fift assembler) has several reserved function names with predefined [ids](/develop/func/functions#method_id).
+FunC (actually Fift assembler) has several reserved function names with predefined ids.
 - `main` and `recv_internal` have id = 0
 - `recv_external` has id = -1
 - `run_ticktock` has id = -2
