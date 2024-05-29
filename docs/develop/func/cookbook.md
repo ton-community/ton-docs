@@ -627,7 +627,7 @@ global int max_value;
 >
 > ["Global variables" in docs](/develop/func/global_variables)
 >
-> ["~dump" in docs](/develop/func/builtins#dump-variable)
+> ["~dump" in docs](/develop/func/stdlib#debug-primitives)
 >
 > ["TVM instructions" in docs](/learn/tvm-instructions/instructions) 
 

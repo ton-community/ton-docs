@@ -16,7 +16,7 @@ When writing and inspecting a Func code, Linter should be used.
 
 Each time the TVM execution stops normally, it stops with exit codes `0` or `1`. Although it is done automatically, TVM execution can be interrupted directly in an unexpected way if exit codes `0` and `1` are thrown directly by either `throw(0)` or `throw(1)` command.
 
-- [How to handle errors](/develop/func/builtins#throwing-exceptions)
+- [How to handle errors](/develop/func/stdlib#throwing-exceptions)
 - [TVM exit codes](/learn/tvm-instructions/tvm-exit-codes)
 
 ### 3. Func is a strictly typed language with data structures holding exactly what they are supposed to store

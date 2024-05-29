@@ -631,7 +631,7 @@ global int max_value;
 >
 > [文档中的“Global variables”](/develop/func/global_variables)
 >
-> [文档中的“~dump”](/develop/func/builtins#dump-variable)
+> [文档中的“~dump”](/develop/func/stdlib#debug-primitives)
 >
 > [文档中的“TVM instructions”](/learn/tvm-instructions/instructions) 
 

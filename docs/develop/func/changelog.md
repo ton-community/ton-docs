@@ -41,7 +41,7 @@ Released in [01.2023 update](https://github.com/ton-blockchain/ton/releases/tag/
 
 In this version were added:
 - [try/catch statements](/develop/func/statements#try-catch-statements)
-- [throw_arg functions](/develop/func/builtins#throwing-exceptions)
+- [throw_arg functions](/develop/func/stdlib#throwing-exceptions)
 - allowed in-place modification and mass-assignments of global variables: `a~inc()` and `(a, b) = (3, 5)`, where `a` is global
 
 Fixed:

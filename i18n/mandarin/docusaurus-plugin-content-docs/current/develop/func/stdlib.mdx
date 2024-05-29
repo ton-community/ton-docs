@@ -486,35 +486,33 @@ cell preload_ref(slice s) pure asm "PLDREF";
 从切片中预加载第一个引用。
 #### load_int
 ```func
-// (slice, int) ~load_int(slice s, int len) pure asm(s len -> 1 0) "LDIX";
+(slice, int) ~load_int(slice s, int len) pure builtin;
 ```
 从切片中加载一个有符号的 `len` 位整数。
 #### load_uint
 ```func
-// (slice, int) ~load_uint(slice s, int len) pure asm( -> 1 0) "LDUX";
+(slice, int) ~load_uint(slice s, int len) pure builtin;
 ```
 从切片中加载一个无符号的 `len` 位整数。
 #### preload_int
 ```func
-// int preload_int(slice s, int len) pure asm "PLDIX";
+int preload_int(slice s, int len) pure builtin;
 ```
 从切片中预加载一个有符号的 `len` 位整数。
 #### preload_uint
 ```func
-// int preload_uint(slice s, int len) pure asm "PLDUX";
+int preload_uint(slice s, int len) pure builtin;
 ```
 从切片中预加载一个无符号的 `len` 位整数。
 #### load_bits
 ```func
-// (slice, slice) load_bits(slice s, int len) pure asm(s len ->
-
- 1 0) "LDSLICEX";
+(slice, slice) load_bits(slice s, int len) pure builtin;
 ```
 从切片 `s` 中加载前 `0 ≤ len ≤ 1023` 位到一个单独的切片 `s''`。
 
 #### preload_bits
 ```func
-// slice preload_bits(slice s, int len) pure asm "PLDSLICEX";
+slice preload_bits(slice s, int len) pure builtin;
 ```
 从切片 `s` 中预加载前 `0 ≤ len ≤ 1023` 位到一个单独的切片 `s''`。
 
@@ -619,12 +617,12 @@ builder store_ref(builder b, cell c) pure asm(c b) "STREF";
 将对 cell  `c` 的引用存储到构建器 `b` 中。
 #### store_uint
 ```func
-builder store_uint(builder b, int x, int len) pure asm(x b len) "STUX";
+builder store_uint(builder b, int x, int len) pure builtin;
 ```
 将无符号的 `len` 位整数 `x` 存储到 `b` 中，`0 ≤ len ≤ 256`。
 #### store_int
 ```func
-builder store_int(builder b, int x, int len) pure asm(x b len) "STIX";
+builder store_int(builder b, int x, int len) pure builtin;
 ```
 将有符号的 `len` 位整数 `x` 存储到 `b` 中，`0 ≤ len ≤ 257`。
 #### store_slice
@@ -682,7 +680,7 @@ int cell_depth(cell c) pure asm "CDEPTH";
 ```func
 int cell_null?(cell c) pure asm "ISNULL";
 ```
-检查 `c` 是否为 `null`。通常 `null`-cell 表示一个空字典。FunC 也有多态的 `null?` 内置函数。（见 [内置函数](/develop/func/builtins#other-primitives)。）
+检查 `c` 是否为 `null`。通常 `null`-cell 表示一个空字典。FunC 也有多态的 `null?` 内置函数。
 
 ## 字典原语
 

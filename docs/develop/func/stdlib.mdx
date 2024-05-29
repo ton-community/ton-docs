@@ -9,11 +9,30 @@ toc_max_heading_level: 6
 This section discusses the [stdlib.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) library with standard functions used in FunC.
 :::
 
-Currently, the library is just a wrapper for the most common assembler of the TVM commands which are not built-in. Each TVM command description used in the library can be found in the [TVM documentation](/learn/tvm-instructions/tvm-overview) section. Some descriptions were borrowed for this document.
-
-Some functions are commented out in the file. It means that they have already become built-ins for optimization purposes. However, the type signature and semantics remain the same.
+Currently, the library is just a wrapper for the most common assembler of the TVM commands. It also lists functions that are built-in for optimization purposes. Each TVM command description used in the library can be found in the [TVM documentation](/learn/tvm-instructions/tvm-overview) section. Some descriptions were borrowed for this document.
 
 Note that some less common commands are not presented in the stdlib. Someday they will also be added.
+
+## Booleans
+
+- `true` is alias for `-1`
+- `false` is alias for `0`
+
+## Throwing exceptions
+
+Exceptions can be thrown by conditional primitives `throw_if`, and `throw_unless`, and by unconditional `throw`.
+The first argument is the error code; the second is the condition.
+These primitives have parametrized versions `throw_arg_if`, `throw_arg_unless`, and `throw_arg`, where the first argument is the exception parameter of any type.
+
+```func
+() throw(int excno) builtin;
+() throw_if(int excno, int cond) builtin;
+() throw_unless(int excno, int cond) builtin;
+
+forall X -> () throw_arg(X x, int excno) builtin;
+forall X -> () throw_arg_if(X x, int excno, int cond) builtin;
+forall X -> () throw_arg_unless(X x, int excno, int cond) builtin;
+```
 
 ## Tuple manipulation primitives
 
@@ -187,6 +206,14 @@ forall X -> X fourth(tuple t) pure asm "3 INDEX";
 ```
 
 Returns the fourth element of a tuple.
+
+#### at
+
+```func
+forall X -> X at(tuple t, int index) pure builtin;
+```
+
+Returns the `index`-th element of a tuple.
 
 #### pair_first
 
@@ -656,7 +683,7 @@ Debug primitives can be used for inspecting state of various variables while run
 #### ~dump
 
 ```func
-forall X -> () ~dump(X value) impure asm "s0 DUMP";
+forall X -> (X, ()) ~dump(X x) builtin;
 ```
 
 Outputs a value. Several values can be dumped as a tuple, e.g. `~dump([v1, v2, v3])`.
@@ -664,7 +691,7 @@ Outputs a value. Several values can be dumped as a tuple, e.g. `~dump([v1, v2, v
 #### ~strdump
 
 ```func
-() ~strdump(slice str) impure asm "STRDUMP";
+forall X -> (X, ()) ~strdump(X x) builtin;
 ```
 
 Dumps a string. Slice parameter bit length must be divisible by 8.
@@ -720,7 +747,7 @@ Preloads the first reference from a slice.
 #### load_int
 
 ```func
-// (slice, int) ~load_int(slice s, int len) pure asm(s len -> 1 0) "LDIX";
+(slice, int) load_int(slice s, int len) pure builtin;
 ```
 
 Loads a signed `len`-bit integer from a slice.
@@ -728,7 +755,7 @@ Loads a signed `len`-bit integer from a slice.
 #### load_uint
 
 ```func
-// (slice, int) ~load_uint(slice s, int len) pure asm( -> 1 0) "LDUX";
+(slice, int) load_uint(slice s, int len) pure builtin;
 ```
 
 Loads an unsigned `len`-bit integer from a slice.
@@ -736,7 +763,7 @@ Loads an unsigned `len`-bit integer from a slice.
 #### preload_int
 
 ```func
-// int preload_int(slice s, int len) pure asm "PLDIX";
+int preload_int(slice s, int len) pure builtin;
 ```
 
 Preloads a signed `len`-bit integer from a slice.
@@ -744,7 +771,7 @@ Preloads a signed `len`-bit integer from a slice.
 #### preload_uint
 
 ```func
-// int preload_uint(slice s, int len) pure asm "PLDUX";
+int preload_uint(slice s, int len) pure builtin;
 ```
 
 Preloads an unsigned `len`-bit integer from a slice.
@@ -752,7 +779,7 @@ Preloads an unsigned `len`-bit integer from a slice.
 #### load_bits
 
 ```func
-// (slice, slice) load_bits(slice s, int len) pure asm(s len -> 1 0) "LDSLICEX";
+(slice, slice) load_bits(slice s, int len) pure builtin;
 ```
 
 Loads the first `0 ≤ len ≤ 1023` bits from slice `s` into a separate slice `s''`.
@@ -760,7 +787,7 @@ Loads the first `0 ≤ len ≤ 1023` bits from slice `s` into a separate slice `
 #### preload_bits
 
 ```func
-// slice preload_bits(slice s, int len) pure asm "PLDSLICEX";
+slice preload_bits(slice s, int len) pure builtin;
 ```
 
 Preloads the first `0 ≤ len ≤ 1023` bits from slice `s` into a separate slice `s''`.
@@ -922,7 +949,7 @@ Stores a reference to cell `c` into builder `b`.
 #### store_uint
 
 ```func
-builder store_uint(builder b, int x, int len) pure asm(x b len) "STUX";
+builder store_uint(builder b, int x, int len) pure builtin;
 ```
 
 Stores an unsigned `len`-bit integer `x` into `b` for `0 ≤ len ≤ 256`.
@@ -930,7 +957,7 @@ Stores an unsigned `len`-bit integer `x` into `b` for `0 ≤ len ≤ 256`.
 #### store_int
 
 ```func
-builder store_int(builder b, int x, int len) pure asm(x b len) "STIX";
+builder store_int(builder b, int x, int len) pure builtin;
 ```
 
 Stores a signed `len`-bit integer `x` into `b` for `0 ≤ len ≤ 257`.
@@ -1017,7 +1044,7 @@ Returns the depth of cell `c`. If `c` has no references, then return `0`; otherw
 int cell_null?(cell c) pure asm "ISNULL";
 ```
 
-Checks whether `c` is a `null`. Usually a `null`-cell represents an empty dictionary. FunC also has polymorphic `null?` built-in. (See [built-ins](/develop/func/builtins#other-primitives).)
+Checks whether `c` is a `null`. Usually a `null`-cell represents an empty dictionary. FunC also has polymorphic `null?` built-in, see above.
 
 ## Dictionaries primitives
 
@@ -1337,15 +1364,32 @@ forall X -> X null() pure asm "PUSHNULL";
 
 By the TVM type `Null`, FunC represents the absence of a value of some atomic type. So `null` can actually have any atomic type.
 
+#### null?
+
+```func
+forall X -> int null?(X x) pure builtin;
+```
+
+Checks whether the argument is null.
+
+#### touch
+
+```func
+forall X -> X touch(X x) pure builtin;
+forall X -> (X, ()) ~touch(X x) pure builtin;
+```
+
+Moves a variable `x` to the top of the stack.
+
 #### ~impure_touch
 
 ```func
 forall X -> (X, ()) ~impure_touch(X x) asm "NOP";
 ```
 
-Mark a variable as used, such that the code which produced it won't be deleted even if it is not impure. (c.f. [impure specifier](/develop/func/functions#impure-specifier))
+Mark a variable as used, such that the code which produced it won't be deleted even if it is not impure. (c.f. [pure specifier](/develop/func/functions#pure-specifier))
 
-## Other primitives
+## Integer operations
 
 #### min
 
@@ -1378,3 +1422,38 @@ int abs(int x) pure asm "ABS";
 ```
 
 Computes the absolute value of the integer `x`.
+
+#### divmod
+
+```func
+(int, int) divmod(int x, int y) pure builtin;
+```
+
+Computes the quotient and remainder of `x / y`. Example: `divmod(112,3) = (37,1)`.
+
+#### moddiv
+
+```func
+(int, int) moddiv(int x, int y) pure builtin;
+```
+
+Computes the remainder and quotient of `x / y`. Example: `moddiv(112,3) = (1,37)`.
+
+#### muldiv
+
+```func
+int muldiv(int x, int y, int z) pure builtin;
+int muldivr(int x, int y, int z) pure builtin;
+int muldivc(int x, int y, int z) pure builtin;
+```
+
+Computes multiple-then-divide: `floor(x * y / z)`, `round(x * y / z)`, `ceil(x * y / z).
+The intermediate result is stored in 513-bit integer, so it won't overflow if the actual result fits into a 257-bit integer.
+
+#### muldivmod
+
+```func
+(int, int) muldivmod(int x, int y, int z) pure builtin;
+```
+
+Computes the quotient and remainder of `x * y / z`.
