@@ -20,32 +20,34 @@ import Player from '@site/src/components/player'
 
 以下是一些TON区块链的非托管钱包：
 
-* [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) — TON生态系统的多平台（iOS、Android、macOS、Linux、Windows）经典钱包，由TON基金会开发。
-* [Tonkeeper](https://tonkeeper.com/) — 一个开源的多平台（iOS、Android、Firefox、Chrome）钱包，拥有庞大的用户基础。
-* [Tonhub](https://tonhub.com/) — 一个开源（iOS、Android）的手机钱包替代品，具有先进功能（TON Whales Staking UI）。
-* [OpenMask](https://www.openmask.app/) — 一个带有生物认证的开源Chrome扩展钱包。
-* [MyTonWallet](https://mytonwallet.io/) — 一个开源的浏览器Web钱包和TON的浏览器扩展钱包。
+- [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) — TON生态系统的多平台（iOS、Android、macOS、Linux、Windows）经典钱包，由TON基金会开发。
+- [Tonkeeper](https://tonkeeper.com/) — 一个开源的多平台（iOS、Android、Firefox、Chrome）钱包，拥有庞大的用户基础。
+- [Tonhub](https://tonhub.com/) — 一个开源（iOS、Android）的手机钱包替代品，具有先进功能（TON Whales Staking UI）。
+- [OpenMask](https://www.openmask.app/) — 一个带有生物认证的开源Chrome扩展钱包。
+- [MyTonWallet](https://mytonwallet.io/) — 一个开源的浏览器Web钱包和TON的浏览器扩展钱包。
 
 ### 基本特性
-| 钱包       | Jetton & NFT转账 | Ton Connect 2.0                                                         | 授权                                                       | 钱包合约                                                                                                   |
-|------------|------------------|------------------------------------------------------------------------|------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
-| TON Wallet | 未实现           | -                                                                      | -                                                          | [wallet v3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)           |
-| Tonkeeper  | 支持             | [支持](https://github.com/ton-society/ton-footsteps/issues/161)        | [TON Connect 2.0](/develop/dapps/ton-connect)             | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)|
-| Tonhub     | 支持*            | [支持](https://github.com/ton-society/ton-footsteps/issues/108 )       | [TON Connect 2.0](/develop/dapps/ton-connect)             | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)|
-| OpenMask   | 支持             | [支持](https://github.com/ton-society/ton-footsteps/issues/107)        | [TON Connect 2.0](/develop/dapps/ton-connect)             | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)|
-| MyTonWallet| 支持             | [支持](https://github.com/ton-society/ton-footsteps/issues/149)        | [TON Connect 2.0](/develop/dapps/ton-connect)             | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f)|
 
-> *Tonhub扩展打开了一个内置浏览器，允许NFT市场布局。Jetton完全支持。
+| 钱包          | Jetton & NFT转账  | Ton Connect 2.0                                                         | 授权                                                        | 钱包合约                                                                                                         |
+| ----------- | --------------- | ----------------------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| TON Wallet  | 未实现             | -                                                                       | -                                                         | [wallet v3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)              |
+| Tonkeeper   | 支持              | [支持](https://github.com/ton-society/ton-footsteps/issues/161)           | [TON Connect 2.0](/develop/dapps/ton-connect)             | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f) |
+| Tonhub      | 支持\*            | [支持](https://github.com/ton-society/ton-footsteps/issues/108)           | [TON Connect 2.0](/develop/dapps/ton-connect)             | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f) |
+| OpenMask    | 支持              | [支持](https://github.com/ton-society/ton-footsteps/issues/107)           | [TON Connect 2.0](/develop/dapps/ton-connect)             | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f) |
+| MyTonWallet | 支持              | [支持](https://github.com/ton-society/ton-footsteps/issues/149)           | [TON Connect 2.0](/develop/dapps/ton-connect)             | [wallet v4](https://github.com/ton-blockchain/wallet-contract/tree/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f) |
+
+> \*Tonhub扩展打开了一个内置浏览器，允许NFT市场布局。Jetton完全支持。
 
 ### TON Wallet
 
 TON Wallet是面向普通用户的大规模采用区块链技术的第一步。它展示了钱包在TON区块链上应如何工作。
 
-|                                            |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![TON wallet](/img/docs/wallet-apps/TonWallet.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | 
+|                                                                                                           |
+| --------------------------------------------------------------------------------------------------------- |
+|               ![TON wallet](/img/docs/wallet-apps/TonWallet.png?raw=true)                                 |
 
 #### 优点和缺点
+
 - ✅ TON基金会开发的原始钱包。TON Wallet根据TON区块链核心开发者的愿景运作。
 - ✅ 多平台架构支持。它在Linux、Windows、macOS、iOS、Android上运行，也可以作为Chrome插件使用。
 - ✅ [漏洞赏金计划](https://github.com/ton-blockchain/bug-bounty)
@@ -57,19 +59,21 @@ TON Wallet是面向普通用户的大规模采用区块链技术的第一步。�
 要将TON经典钱包切换到测试环境，您应该在浏览器中打开带有testnet参数的地址：
 
 #### 链接
-- [GitHub*](https://github.com/ton-blockchain/wallet-ios)
 
-  > *每个支持的操作系统的TON Wallet客户端都放在附近的库中。
+- [GitHub\*](https://github.com/ton-blockchain/wallet-ios)
+
+  > \*每个支持的操作系统的TON Wallet客户端都放在附近的库中。
 
 ### Tonkeeper
 
 [Tonkeeper](https://tonkeeper.com/) - 是最受欢迎的钱包，由Tonkeeper团队开发，并得到用户和开发者的积极支持。
 
-|                                               |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![Tonkeeper](/img/docs/wallet-apps/Tonkeeper.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | 
+|                                                                                                          |
+| -------------------------------------------------------------------------------------------------------- |
+|               ![Tonkeeper](/img/docs/wallet-apps/Tonkeeper.png?raw=true)                                 |
 
 #### 优点和缺点
+
 - ✅ 这个应用在用户中最受欢迎。
 - ✅ 支持所有最新功能，包括用户钱包之间的原生NFT转移。
 - ✅ 支持所有主要平台，如iOS和Android，也在Firefox或Chrome等流行浏览器中运行。
@@ -79,11 +83,12 @@ TON Wallet是面向普通用户的大规模采用区块链技术的第一步。�
 
 要在Mainnet和Testnet之间切换Tonkeeper应用：在设置中，点击底部Tonkeeper图标5次，然后在开发者菜单中切换网络。在开发者菜单中点击`Switch to Testnet`或`Switch to Mainnet`，根据您需要的网络。
 
-|                                                      |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![TestMode](/img/docs/wallet-apps/Tonkeeper-testnet.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | 
+|                                                                                                                 |
+| --------------------------------------------------------------------------------------------------------------- |
+|               ![TestMode](/img/docs/wallet-apps/Tonkeeper-testnet.png?raw=true)                                 |
 
 #### 链接
+
 - [GitHub](https://github.com/tonkeeper/wallet)
 - [Tonkeeper Wallet API](https://github.com/tonkeeper/wallet-api)
 
@@ -91,11 +96,12 @@ TON Wallet是面向普通用户的大规模采用区块链技术的第一步。�
 
 [Tonhub](https://tonhub.com/) - 是另一个完整的TON钱包，支持基本的最新功能。Ton Whales正在迅速提升钱包的能力。
 
-|                                    |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![Tonhub](/img/docs/wallet-apps/Tonhub.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | 
+|                                                                                                    |
+| -------------------------------------------------------------------------------------------------- |
+|               ![Tonhub](/img/docs/wallet-apps/Tonhub.png?raw=true)                                 |
 
 #### 优点和缺点
+
 - ✅ 拥有自己定制的[Ton Nominator](https://github.com/tonwhales/ton-nominators)合约，由Tonhub UI支持。
 - ✅ 从一开始就是开源钱包。
 - ✅ [漏洞赏金计划](https://tonwhales.com/bounty)。
@@ -103,9 +109,11 @@ TON Wallet是面向普通用户的大规模采用区块链技术的第一步。�
 - ❌ 要为其源代码做出贡献需要高级技能。
 
 #### Tonhub测试环境
+
 您需要下载单独的应用程序才能连接到Testnet。
 
 #### 链接
+
 - [GitHub](https://github.com/tonwhales/wallet)
 - [Sandbox iOS](https://apps.apple.com/app/ton-development-wallet/id1607857373)
 - [Sandbox Android](https://play.google.com/store/apps/details?id=com.tonhub.wallet.testnet)
@@ -114,20 +122,23 @@ TON Wallet是面向普通用户的大规模采用区块链技术的第一步。�
 
 [OpenMask](https://www.openmask.app/) - 作为浏览器扩展，是一款开创性的工具，使用户在Web3中的交互和体验成为可能。
 
-|                                                                |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![OpenMask](/img/docs/wallet-apps/OpenMask.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+|                                                                                                        |
+| ------------------------------------------------------------------------------------------------------ |
+|               ![OpenMask](/img/docs/wallet-apps/OpenMask.png?raw=true)                                 |
 
-#### 优点和缺点 
+#### 优点和缺点
+
 - ✅ 对开发者来说，通过桌面学习和创建dApps而无需移动设备很方便。
 - ✅ 独特的功能，如多钱包，以及其文档中的详细描述和示例。
 - ❌ 目前几乎没有与dApps的集成。
 - ❌ 仅支持浏览器扩展平台。
 
 #### OpenMask测试环境
+
 要在Mainnet和Testnet之间切换OpenMask：您需要点击OpenMask主屏幕顶部的“mainnet/testnet”按钮，然后选择您需要的网络。
 
 #### 链接
+
 - [GitHub](https://github.com/OpenProduct/openmask-extension)
 - [文档](https://www.openmask.app/docs/introduction)
 
@@ -135,20 +146,23 @@ TON Wallet是面向普通用户的大规模采用区块链技术的第一步。�
 
 [MyTonWallet](https://mytonwallet.io/) - 是TON最功能丰富的Web钱包和浏览器扩展 - 支持代币、NFT、TON DNS、TON站点、TON代理和TON魔法。
 
-|                                                                                                                                                                                                                                   |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![MyTonWallet](/img/docs/wallet-apps/MyTonWallet.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+|                                                                                                              |
+| ------------------------------------------------------------------------------------------------------------ |
+|               ![MyTonWallet](/img/docs/wallet-apps/MyTonWallet.png?raw=true)                                 |
 
 #### 优点和缺点
+
 - ✅ 已实现所有基本功能。
 - ✅ 独特功能 - 从钱包UI管理官方[Nominator Pool合约](https://github.com/ton-blockchain/nominator-pool)。
 - ✅ 支持所有主要平台（如macOS、Linux和Windows），也可以作为Chrome扩展运行。
 - ❌ 不支持Firefox作为扩展。
 
 #### MyTonWallet测试环境
+
 要将MyTonWallet切换到Testnet：打开设置，点击应用版本5次，打开网络切换器。
 
 #### 链接
+
 - [GitHub](https://github.com/mytonwalletorg/mytonwallet)
 - [MyTonWallet Telegram](https://t.me/MyTonWalletRu)
 
@@ -163,6 +177,7 @@ TON Wallet是面向普通用户的大规模采用区块链技术的第一步。�
 [Ledger](https://www.ledger.com/)硬件钱包与Ledger Live应用程序。
 
 #### 链接
+
 - [Ledger TON博客文章](https://blog.ton.org/ton-is-coming-to-ledger-hardware-wallets) Ledger钱包中TON的用户手册。
 - [Ledger](https://www.ledger.com/)官方网站。
 
@@ -171,6 +186,7 @@ TON Wallet是面向普通用户的大规模采用区块链技术的第一步。�
 [SafePal](https://www.safepal.com/en/)是您进入快速扩张的去中心化应用程序银河系的门户。
 
 #### 链接
+
 - [SafePal](https://www.safepal.com/en/)官方网站
 
 ## 托管钱包
@@ -183,30 +199,32 @@ TON Wallet是面向普通用户的大规模采用区块链技术的第一步。�
 
 [@wallet](https://t.me/wallet) — 一个用于在Telegram中发送、接收或使用P2P交易TON换取真钱的机器人。支持Telegram Mini App UI。
 
-|                                                                                                                                                                                                                            |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![wallet](/img/docs/wallet-apps/Wallet.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+|                                                                                                    |
+| -------------------------------------------------------------------------------------------------- |
+|               ![wallet](/img/docs/wallet-apps/Wallet.png?raw=true)                                 |
 
 ### @cryptobot
 
 [@cryptobot](https://t.me/cryptobot) — 一个用于存储、发送和交换TON的Telegram机器人钱包。
 
-|                                                                                                                                                                                                                                 |
-|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![CryptoBot](/img/docs/wallet-apps/CryptoBot.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+|                                                                                                          |
+| -------------------------------------------------------------------------------------------------------- |
+|               ![CryptoBot](/img/docs/wallet-apps/CryptoBot.png?raw=true)                                 |
 
 #### 第三方集成链接
+
 - [Crypto Pay API](https://help.crypt.bot/crypto-pay-api)
 
 ### @tonRocketBot
 
 [@tonRocketBot](https://t.me/tonRocketBot) - 一个用于存储、发送和交换TON的Telegram机器人钱包。支持Jetton交易。
 
-|                                                                                                                                                                                                                                        |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![tonrocketbot](/img/docs/wallet-apps/tonrocketbot.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+|                                                                                                                |
+| -------------------------------------------------------------------------------------------------------------- |
+|               ![tonrocketbot](/img/docs/wallet-apps/tonrocketbot.png?raw=true)                                 |
 
 #### 第三方集成链接
+
 - [Rocket exchange](https://trade.ton-rocket.com/api/)
 - [Rocket pay docs](https://pay.ton-rocket.com/api/)
 
@@ -217,6 +235,7 @@ TON Wallet是面向普通用户的大规模采用区块链技术的第一步。�
 Tonkey是一个先进的项目，为TON区块链引入了多重签名功能。
 
 ### 链接
+
 - https://tonkey.app/
 - [GitHub](https://github.com/tonkey-app)
 

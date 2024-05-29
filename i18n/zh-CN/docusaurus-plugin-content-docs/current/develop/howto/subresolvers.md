@@ -7,18 +7,18 @@ TON DNS 是一个强大的工具。它不仅允许将 TON 网站/存储包分配
 ## 相关链接
 
 1. [TON 智能合约地址系统](/learn/overviews/addresses)
-1. [TEP-0081 - TON DNS 标准](https://github.com/ton-blockchain/TEPs/blob/master/text/0081-dns-standard.md)
-1. [.ton DNS 集合的源代码](https://tonscan.org/address/EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz#source)
-1. [.t.me DNS 集合的源代码](https://tonscan.org/address/EQCA14o1-VWhS2efqoh_9M1b_A9DtKTuoqfmkn83AbJzwnPi#source)
-1. [域名合约搜索器](https://tonscan.org/address/EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH_Zp#source)
-1. [简单子域名管理器代码](https://github.com/Gusarich/simple-subdomain/blob/198485bbc9f7f6632165b7ab943902d4e125d81a/contracts/subdomain-manager.fc)
+2. [TEP-0081 - TON DNS 标准](https://github.com/ton-blockchain/TEPs/blob/master/text/0081-dns-standard.md)
+3. [.ton DNS 集合的源代码](https://tonscan.org/address/EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz#source)
+4. [.t.me DNS 集合的源代码](https://tonscan.org/address/EQCA14o1-VWhS2efqoh_9M1b_A9DtKTuoqfmkn83AbJzwnPi#source)
+5. [域名合约搜索器](https://tonscan.org/address/EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH_Zp#source)
+6. [简单子域名管理器代码](https://github.com/Gusarich/simple-subdomain/blob/198485bbc9f7f6632165b7ab943902d4e125d81a/contracts/subdomain-manager.fc)
 
 ## 域名合约搜索器
 
 子域名具有实际用途。例如，区块链浏览器目前没有提供通过名称查找域名合约的方法。让我们探索如何创建一个合约，提供查找这类域名的机会。
 
 :::info
-此合约部署在 [EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH_Zp](https://tonscan.org/address/EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH_Zp#source)，并链接到 `resolve-contract.ton`。要测试它，您可以在您喜欢的 TON 浏览器的地址栏中输入 `<your-domain.ton>.resolve-contract.ton`，进入 TON DNS 域名合约的页面。子域名和 .t.me 域名也得到支持。
+This contract is deployed at [EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH\_Zp](https://tonscan.org/address/EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH_Zp#source) and linked to `resolve-contract.ton`. To test it, you may write `<your-domain.ton>.resolve-contract.ton` in the address bar of your favourite TON explorer and get to the page of TON DNS domain contract. Subdomains and .t.me domains are supported as well.
 
 您可以尝试通过访问 `resolve-contract.ton.resolve-contract.ton` 来查看解析器代码。不幸的是，这将不会显示子解析器（那是不同的智能合约），您将看到域名合约本身的页面。
 :::
@@ -32,32 +32,30 @@ TON DNS 是一个强大的工具。它不仅允许将 TON 网站/存储包分配
   int subdomain_bits = slice_bits(subdomain);
   throw_unless(70, (subdomain_bits % 8) == 0);
   
-  int starts_with_zero_byte = subdomain.preload_int(8) == 0;  ;; 假设 'subdomain' 不为空
+  int starts_with_zero_byte = subdomain.preload_int(8) == 0;  ;; assuming that 'subdomain' is not empty
   if (starts_with_zero_byte) {
     subdomain~load_uint(8);
-    if (subdomain.slice_bits() == 0) {   ;; 当前合约没有自己的 DNS 记录
+    if (subdomain.slice_bits() == 0) {   ;; current contract has no DNS records by itself
       return (8, null());
     }
   }
   
-  ;; 我们正在加载某个子域名
-  ;; 支持的子域名是 "ton\\0", "me\\0t\\0" 和 "address\\0"
+  ;; we are loading some subdomain
+  ;; supported subdomains are "ton\0", "me\0t\0" and "address\0"
   
   slice subdomain_sfx = null();
   builder domain_nft_address = null();
   
   if (subdomain.starts_with("746F6E00"s)) {
-    ;; 我们正在解析
-    ;; "ton" \\0 <subdomain> \\0 [subdomain_sfx]
+    ;; we're resolving
+    ;; "ton" \0 <subdomain> \0 [subdomain_sfx]
     subdomain~skip_bits(32);
     
-    ;; 读取域名
+    ;; reading domain name
     subdomain_sfx = subdomain;
     while (subdomain_sfx~load_uint(8)) { }
     
-    subdomain~skip_last_bits(8 + slice
-
-_bits(subdomain_sfx));
+    subdomain~skip_last_bits(8 + slice_bits(subdomain_sfx));
     
     domain_nft_address = get_ton_dns_nft_address_by_index(slice_hash(subdomain));
   } elseif (subdomain.starts_with("6164647265737300"s)) {
@@ -74,14 +72,14 @@ _bits(subdomain_sfx));
   }
   
   if (slice_empty?(subdomain_sfx)) {
-    ;; 解析域名的示例：
-    ;; [初始，此合约不可访问] "ton\\0resolve-contract\\0ton\\0ratelance\\0"
-    ;; [此合约可以访问]      "ton\\0ratelance\\0"
+    ;; example of domain being resolved:
+    ;; [initial, not accessible in this contract] "ton\0resolve-contract\0ton\0ratelance\0"
+    ;; [what is accessible by this contract]      "ton\0ratelance\0"
     ;; subdomain          "ratelance"
     ;; subdomain_sfx      ""
     
-    ;; 我们希望解析结果指向 'ratelance.ton' 合约，而不是其所有者
-    ;; 因此我们必须回答解析已完成 + "wallet"H 是 'ratelance.ton' 合约的地址
+    ;; we want the resolve result to point at contract of 'ratelance.ton', not its owner
+    ;; so we must answer that resolution is complete + "wallet"H is address of 'ratelance.ton' contract
     
     ;; dns_smc_address#9fd3 smc_addr:MsgAddressInt flags:(## 8) { flags <= 1 } cap_list:flags . 0?SmcCapList = DNSRecord;
     ;; _ (HashmapE 256 ^DNSRecord) = DNS_RecordSet;
@@ -99,10 +97,10 @@ _bits(subdomain_sfx));
     }
   } else {
     ;; subdomain          "resolve-contract"
-    ;; subdomain_sfx      "ton\\0ratelance\\0"
-    ;; 我们希望将 \\0 传递给下一个解析器，以便下一个解析器只处理一个字节
+    ;; subdomain_sfx      "ton\0ratelance\0"
+    ;; we want to pass \0 further, so that next resolver has opportunity to process only one byte
     
-    ;; 下一个解析器是 'resolve-contract<.ton>' 的合约
+    ;; next resolver is contract of 'resolve-contract<.ton>'
     ;; dns_next_resolver#ba93 resolver:MsgAddressInt = DNSRecord;
     cell resolver_record = begin_cell().store_uint(0xba93, 16).store_builder(domain_nft_address).end_cell();
     return (subdomain_bits - slice_bits(subdomain_sfx) - 8, resolver_record);
@@ -123,21 +121,21 @@ _bits(subdomain_sfx));
 1. 它将子域名和类别作为输入。
 2. 如果开头有零字节，则跳过。
 3. 检查子域名是否以 `"ton\0"` 开头。如果是，
-    1. 跳过前32位（子域名 = `"resolve-contract\0"`）
-    2. 设置 `subdomain_sfx` 的值为 `subdomain`，并读取直到零字节的字节
-    3. （子域名 = `"resolve-contract\0"`，subdomain_sfx = `""`）
-    4. 从子域名切片的末尾裁剪零字节和 subdomain_sfx（子域名 = `"resolve-contract"`）
-    5. 使用 slice_hash 和 get_ton_dns_nft_address_by_index 函数将域名转换为合约地址。您可以在 [[Subresolvers#Appendix 1. resolve-contract.ton 的代码|附录 1]] 中看到它们。
+   1. 跳过前32位（子域名 = `"resolve-contract\0"`）
+   2. 设置 `subdomain_sfx` 的值为 `subdomain`，并读取直到零字节的字节
+   3. （子域名 = `"resolve-contract\0"`，subdomain_sfx = `""`）
+   4. 从子域名切片的末尾裁剪零字节和 subdomain_sfx（子域名 = `"resolve-contract"`）
+   5. 使用 slice_hash 和 get_ton_dns_nft_address_by_index 函数将域名转换为合约地址。您可以在 [[Subresolvers#Appendix 1. resolve-contract.ton 的代码|附录 1]] 中看到它们。
 4. 否则，dnsresolve() 检查子域名是否以 `"address\0"` 开头。如果是，它跳过该前缀并读取 base64 地址。
 5. 如果提供的用于解析的子域名与这些前缀都不匹配，函数通过返回 `(0, null())`（零字节前缀解析无 DNS 条目）表示失败。
 6. 然后检查子域名后缀是否为空。空后缀表示请求已完全满足。如果后缀为空：
-    1. dnsresolve() 为域名的 "wallet" 子部分创建一个 DNS 记录，使用它检索到的 TON 域名合约地址。
-    2. 如果请求类别 0（所有 DNS 条目），则将记录包装在字典中并返回。
-    3. 如果请求类别为 "wallet"H，则按原样返回记录。
-    4. 否则，指定类别没有 DNS 条目，因此函数表示解析成功但未找到任何结果。
+   1. dnsresolve() 为域名的 "wallet" 子部分创建一个 DNS 记录，使用它检索到的 TON 域名合约地址。
+   2. 如果请求类别 0（所有 DNS 条目），则将记录包装在字典中并返回。
+   3. 如果请求类别为 "wallet"H，则按原样返回记录。
+   4. 否则，指定类别没有 DNS 条目，因此函数表示解析成功但未找到任何结果。
 7. 如果后缀不为空：
-    1. 之前获得的合约地址用作下一个解析器。函数构建指向它的下一个解析器记录。
-    2. `"\0ton\0stabletimer\0"` 被传递给该合约：处理的位是子域名的位。
+   1. 之前获得的合约地址用作下一个解析器。函数构建指向它的下一个解析器记录。
+   2. `"\0ton\0stabletimer\0"` 被传递给该合约：处理的位是子域名的位。
 
 总结来说，dnsresolve() 要么：
 
@@ -185,12 +183,10 @@ const int op::update_record = 0x537a3491;
 ;;     value:(Maybe ^Cell) = InMsgBody;
 
 () recv_internal(cell in_msg, slice in_msg_body) {
-  if (in_msg_body.slice_empty?()) { return (); }   ;; 简单的资金转移
+  if (in_msg_body.slice_empty?()) { return (); }   ;; simple money transfer
 
   slice in_msg_full = in_msg.begin_parse();
-  if (in
-
-_msg_full~load_uint(4) & 1) { return (); } ;; 弹回消息
+  if (in_msg_full~load_uint(4) & 1) { return (); } ;; bounced message
 
   slice sender = in_msg_full~load_msg_addr();
   load_data();
@@ -202,7 +198,7 @@ _msg_full~load_uint(4) & 1) { return (); } ;; 弹回消息
     (cell records, _) = domains.udict_get_ref?(256, string_hash(domain));
 
     int key = in_msg_body~load_uint(256);
-    throw_if(502, key == 0);  ;; 不能更新“所有记录”的记录
+    throw_if(502, key == 0);  ;; cannot update "all records" record
 
     if (in_msg_body~load_uint(1) == 1) {
       cell value = in_msg_body~load_ref();
@@ -229,7 +225,7 @@ _msg_full~load_uint(4) & 1) { return (); } ;; 弹回消息
 (slice, slice) ~parse_sd(slice subdomain) {
   ;; "test\0qwerty\0" -> "test" "qwerty\0"
   slice subdomain_sfx = subdomain;
-  while (subdomain_sfx~load_uint(8)) { }  ;; 搜索零字节
+  while (subdomain_sfx~load_uint(8)) { }  ;; searching zero byte
   subdomain~skip_last_bits(slice_bits(subdomain_sfx));
   return (subdomain, subdomain_sfx);
 }
@@ -245,13 +241,13 @@ _msg_full~load_uint(4) & 1) { return (); } ;; 弹回消息
   load_data();
   (cell records, _) = domains.udict_get_ref?(256, string_hash(subdomain));
 
-  if (subdomain_suffix_bits > 0) { ;; 请求的内容超过 "<SUBDOMAIN>\0"
+  if (subdomain_suffix_bits > 0) { ;; more than "<SUBDOMAIN>\0" requested
     category = "dns_next_resolver"H;
   }
 
   int resolved = subdomain_bits - subdomain_suffix_bits;
 
-  if (category == 0) { ;; 请求所有类别
+  if (category == 0) { ;; all categories are requested
     return (resolved, records);
   }
 
@@ -269,7 +265,6 @@ _msg_full~load_uint(4) & 1) { return (); } ;; 弹回消息
 ## 附录 1. resolve-contract.ton 的代码
 
 <details>
-<summary>subresolver.fc</summary>
 
 ```func showLineNumbers
 (builder, ()) ~store_slice(builder to, slice s) asm "STSLICER";
@@ -277,14 +272,14 @@ int starts_with(slice a, slice b) asm "SDPFXREV";
 
 const slice ton_dns_minter = "EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz"a;
 cell ton_dns_domain_code() asm """
-  B{<TON DNS NFT 代码的十六进制格式>}
+  B{<TON DNS NFT code in HEX format>}
   B>boc
   PUSHREF
 """;
 
 const slice tme_minter = "EQCA14o1-VWhS2efqoh_9M1b_A9DtKTuoqfmkn83AbJzwnPi"a;
 cell tme_domain_code() asm """
-  B{<T.ME NFT 代码的十六进制格式>}
+  B{<T.ME NFT code in HEX format>}
   B>boc
   PUSHREF
 """;
@@ -307,9 +302,7 @@ builder calculate_nft_item_address(int wc, cell state_init) inline {
       .store_uint(cell_hash(state_init), 256);
 }
 
-builder get_ton_dns_nft_address_by_index(int index
-
-) inline {
+builder get_ton_dns_nft_address_by_index(int index) inline {
   cell state_init = calculate_ton_dns_nft_item_state_init(index);
   return calculate_nft_item_address(0, state_init);
 }
@@ -355,26 +348,26 @@ slice decode_base64_address(slice readable) method_id {
 
   throw_unless(70, (subdomain_bits % 8) == 0);
   
-  int starts_with_zero_byte = subdomain.preload_int(8) == 0;  ;; 假设 'subdomain' 不为空
+  int starts_with_zero_byte = subdomain.preload_int(8) == 0;  ;; assuming that 'subdomain' is not empty
   if (starts_with_zero_byte) {
     subdomain~load_uint(8);
-    if (subdomain.slice_bits() == 0) {   ;; 当前合约没有自己的 DNS 记录
+    if (subdomain.slice_bits() == 0) {   ;; current contract has no DNS records by itself
       return (8, null());
     }
   }
   
-  ;; 我们正在加载某个子域名
-  ;; 支持的子域名是 "ton\\0", "me\\0t\\0" 和 "address\\0"
+  ;; we are loading some subdomain
+  ;; supported subdomains are "ton\0", "me\0t\0" and "address\0"
   
   slice subdomain_sfx = null();
   builder domain_nft_address = null();
   
   if (subdomain.starts_with("746F6E00"s)) {
-    ;; 我们正在解析
-    ;; "ton" \\0 <subdomain> \\0 [subdomain_sfx]
+    ;; we're resolving
+    ;; "ton" \0 <subdomain> \0 [subdomain_sfx]
     subdomain~skip_bits(32);
     
-    ;; 读取域名
+    ;; reading domain name
     subdomain_sfx = subdomain;
     while (subdomain_sfx~load_uint(8)) { }
     
@@ -382,10 +375,10 @@ slice decode_base64_address(slice readable) method_id {
     
     domain_nft_address = get_ton_dns_nft_address_by_index(slice_hash(subdomain));
   } elseif (subdomain.starts_with("6D65007400"s)) {
-    ;; "t" \\0 "me" \\0 <subdomain> \\0 [subdomain_sfx]
+    ;; "t" \0 "me" \0 <subdomain> \0 [subdomain_sfx]
     subdomain~skip_bits(40);
     
-    ;; 读取域名
+    ;; reading domain name
     subdomain_sfx = subdomain;
     while (subdomain_sfx~load_uint(8)) { }
     
@@ -406,16 +399,14 @@ slice decode_base64_address(slice readable) method_id {
   }
   
   if (slice_empty?(subdomain_sfx)) {
-    ;; 解析域名的示例：
-    ;; [初始，此合约不可访问] "ton\\0resolve-contract\\0ton\\0ratelance\\0"
-    ;; [此合约可以访问]      "ton\\0ratelance\\0"
+    ;; example of domain being resolved:
+    ;; [initial, not accessible in this contract] "ton\0resolve-contract\0ton\0ratelance\0"
+    ;; [what is accessible by this contract]      "ton\0ratelance\0"
     ;; subdomain          "ratelance"
-    ;; subdomain_sfx     
-
- ""
+    ;; subdomain_sfx      ""
     
-    ;; 我们希望解析结果指向 'ratelance.ton' 合约，而不是其所有者
-    ;; 因此我们必须回答解析已完成 + "wallet"H 是 'ratelance.ton' 合约的地址
+    ;; we want the resolve result to point at contract of 'ratelance.ton', not its owner
+    ;; so we must answer that resolution is complete + "wallet"H is address of 'ratelance.ton' contract
     
     ;; dns_smc_address#9fd3 smc_addr:MsgAddressInt flags:(## 8) { flags <= 1 } cap_list:flags . 0?SmcCapList = DNSRecord;
     ;; _ (HashmapE 256 ^DNSRecord) = DNS_RecordSet;
@@ -432,14 +423,14 @@ slice decode_base64_address(slice readable) method_id {
       return (subdomain_bits, null());
     }
   } else {
-    ;; 解析域名的示例：
-    ;; [初始，此合约不可访问] "ton\\0resolve-contract\\0ton\\0resolve-contract\\0ton\\0ratelance\\0"
-    ;; [此合约可以访问]      "ton\\0resolve-contract\\0ton\\0ratelance\\0"
+    ;; example of domain being resolved:
+    ;; [initial, not accessible in this contract] "ton\0resolve-contract\0ton\0resolve-contract\0ton\0ratelance\0"
+    ;; [what is accessible by this contract]      "ton\0resolve-contract\0ton\0ratelance\0"
     ;; subdomain          "resolve-contract"
-    ;; subdomain_sfx      "ton\\0ratelance\\0"
-    ;; 我们希望将 \\0 传递给下一个解析器，以便下一个解析器只处理一个字节
+    ;; subdomain_sfx      "ton\0ratelance\0"
+    ;; and we want to pass \0 further, so that next resolver has opportunity to process only one byte
     
-    ;; 下一个解析器是 'resolve-contract<.ton>' 的合约
+    ;; next resolver is contract of 'resolve-contract<.ton>'
     ;; dns_next_resolver#ba93 resolver:MsgAddressInt = DNSRecord;
     cell resolver_record = begin_cell().store_uint(0xba93, 16).store_builder(domain_nft_address).end_cell();
     return (subdomain_bits - slice_bits(subdomain_sfx) - 8, resolver_record);

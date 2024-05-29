@@ -1,4 +1,3 @@
-
 # IDE 插件
 
 ## IntelliJ IDEs 插件
@@ -11,6 +10,7 @@
 :::
 
 有几种安装插件的方法：
+
 - 在 IDE 插件部分直接搜索带有 "**TON**" 关键词的插件
 - [Marketplace 链接](https://plugins.jetbrains.com/plugin/23382-ton)
 - [GitHub 代码库](https://github.com/ton-blockchain/intellij-ton)

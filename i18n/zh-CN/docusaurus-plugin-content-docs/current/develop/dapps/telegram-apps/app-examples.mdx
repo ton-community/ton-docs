@@ -5,35 +5,43 @@ import Button from '@site/src/components/button'
 查看下面的示例，了解如何创建您自己的 Telegram 小程序。
 
 ## 基础 TMA 示例
-````mdx-code-block
+
+```mdx-code-block
 <p align="center">
   <br />
-    <img width="240" src="/img/docs/telegram-apps/tapps.png" alt="telegram 小程序的 logo" />
+    <img width="240" src="/img/docs/telegram-apps/tapps.png" alt="logo of telegram mini apps" />
       <br />
 </p>
-````
+```
+
 这是一个使用纯 JavaScript、HTML 和 CSS 实现的基础且直接的 Telegram 小程序（TMA）。该项目旨在提供一个创建简单 TMA 并在 Telegram 内启动它的最简化示例，无需依赖复杂的构建工具或前沿库。
 
 - 可通过直接链接访问应用：[t.me/simple_telegram_mini_app_bot/app](https://t.me/simple_telegram_mini_app_bot/app)
 - 或者您可以通过机器人菜单按钮启动应用：[t.me/simple_telegram_mini_app_bot](https://t.me/simple_telegram_mini_app_bot)
-- 部署 URL：[https://telegram-mini-apps-dev.github.io/vanilla-js-boilerplate/](https://telegram-mini-apps-dev.github.io/vanilla-js-boilerplate/)
+- 部署 URL：<https://telegram-mini-apps-dev.github.io/vanilla-js-boilerplate/>
 
-````mdx-code-block 
+```mdx-code-block
 <Button href="https://t.me/simple_telegram_mini_app_bot/app" colorType={'primary'} sizeType={'sm'}>
-````
+```
+
 打开演示
-````mdx-code-block 
+
+```mdx-code-block
 </Button>
-````
-````mdx-code-block 
+```
+
+```mdx-code-block
 <Button href="https://github.com/Telegram-Mini-Apps-Dev/vanilla-js-boilerplate.git" colorType={'secondary'} sizeType={'sm'}>
-````
+```
+
 GitHub
-````mdx-code-block 
+
+```mdx-code-block
 </Button>
-````
+```
 
 ### 特点
+
 - 极简用户界面。
 - 未使用外部库或框架。
 - 易于理解和修改。
@@ -61,6 +69,7 @@ cd vanilla-js-boilerplate
 在您偏好的代码编辑器或 IDE 中打开 index.html。
 
 ### 使用
+
 1. 在您偏好的代码编辑器或 IDE 中打开 index.html。
 2. 做出您的改动
 3. 创建您自己的 GitHub 库，提交并推送您的更新。
@@ -72,7 +81,7 @@ cd vanilla-js-boilerplate
 
 Vite（在法语中意味着“快”）是一个前端构建工具和开发服务器，旨在为现代 web 项目提供更快、更精简的开发体验。我们将利用 Vite 创建 Telegram 小程序示例。
 
-您可以在这里找到示例项目 [https://github.com/Telegram-Mini-Apps-Dev/vite-boilerplate](https://github.com/Telegram-Mini-Apps-Dev/vite-boilerplate) 或者您可以按照以下说明操作。
+您可以在这里找到示例项目 <https://github.com/Telegram-Mini-Apps-Dev/vite-boilerplate> 或者您可以按照以下说明操作。
 
 ### 必要条件
 
@@ -95,13 +104,13 @@ $ yarn create vite
 或者您可以直接运行以下命令创建带有 TypeScript 支持的 React 项目：
 
 ```bash
-# npm 7+, 需要额外的双破折号：
+# npm 7+, extra double-dash is needed:
 npm create vite my-react-telegram-web-app -- --template react-ts
 
-# 或 yarn
+# or yarn
 yarn create vite my-react-telegram-web-app --template react-ts
 
-# 这将会改变目录到最近创建的项目
+# this will change the directory to recently created project
 cd my-react-telegram-web-app
 ```
 
@@ -114,7 +123,7 @@ cd my-react-telegram-web-app
 npm install
 npm run dev --host
 
-# 或 yarn
+# or yarn
 yarn
 yarn dev --host
 ```
@@ -144,7 +153,7 @@ export default defineConfig({
 您可以使用 `ngrok` 将您的本地服务器暴露给互联网并附加 SSL 证书。您将能够在所有 Telegram 平台上使用热模块替换进行开发。打开新的终端窗口并运行：
 
 ```bash
-# 其中 5173 是来自 npm/yarn dev --host 的端口号
+# where 5173 is the port number from npm/yarn dev --host
 ngrok http 5173
 ```
 
@@ -163,7 +172,7 @@ export default defineConfig({
 我们将使用 GitHub Actions 部署脚本，该脚本将在针对 master 分支的推送上运行。从您的项目根目录开始：
 
 ```bash
-# 我们将创建 GitHub Actions 配置以进行部署
+# we are going to create GitHub Actions config for deployment
 mkdir .github
 cd .github
 mkdir workflows
@@ -174,30 +183,30 @@ touch static.yml
 现在将此配置添加到 `static.yml`：
 
 ```yaml
-# 将静态内容部署到 GitHub Pages 的简单工作流
-name: 将静态内容部署到页面
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy static content to Pages
 
 on:
-  # 针对默认分支的推送上运行
+  # Runs on pushes targeting the default branch
   push:
     branches: ['master']
 
-  # 允许您从操作选项卡手动运行此工作流
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# 设置 GITHUB_TOKEN 权限以允许部署到 GitHub Pages
+# Sets the GITHUB_TOKEN permissions to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 允许一个并行部署
+# Allow one concurrent deployment
 concurrency:
-  group: '页面'
+  group: 'pages'
   cancel-in-progress: true
 
 jobs:
-  # 由于我们只是部署，因此单个部署作业
+  # Single deploy job since we're just deploying
   deploy:
     environment:
       name: github-pages
@@ -206,24 +215,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: 设置 Node
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'npm'
           cache-dependency-path: './'
-      - name: 安装依赖
+      - name: Install dependencies
         run: npm install
-      - name: 构建
+      - name: Build
         run: npm run build
-      - name: 设置页面
+      - name: Setup Pages
         uses: actions/configure-pages@v3
-      - name: 上传构件
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          # 上传 dist 库
+          # Upload dist repository
           path: './docs'
-      - name: 部署到 GitHub Pages
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
 ```
@@ -276,13 +285,13 @@ function App() {
       <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
-          计数是 {count}
+          count is {count}
         </button>
       </div>
-		{/* 在此处添加带有警告回调的按钮 */}
+		{/* Here we add our button with alert callback */}
       <div className="card">
         <button onClick={() => WebApp.showAlert(`Hello World! Current count is ${count}`)}>
-            显示警告
+            Show Alert
         </button>
       </div>
     </>
@@ -292,19 +301,21 @@ function App() {
 export default App
 ```
 
-现在我们需要创建 Telegram 机器人，这样我们就可以在信使应用程序中启动 Telegram 小程序。
+现在我们需要创建 Telegram 机器人，这样我们就可以在Telegram应用程序中启动 Telegram 小程序。
 
 ### 为应用设置机器人
 
 要将您的小程序连接到 Telegram，您需要创建一个机器人并为其设置小程序。按照以下步骤设置新的 Telegram 机器人：
 
-````mdx-code-block 
+```mdx-code-block
 <Button href="/develop/dapps/telegram-apps/step-by-step-guide#setting-up-a-bot-for-the-app" colorType={'primary'} sizeType={'sm'}>
-````
+```
+
 设置机器人
-````mdx-code-block 
+
+```mdx-code-block
 </Button>
-````
+```
 
 ### 提示
 

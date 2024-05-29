@@ -1,18 +1,19 @@
 # Fift 和 TVM 汇编
 
-Fift 是一种基于堆栈的编程语言，它具有 TON 特有的功能，因此可以处理cell。TVM 汇编同样是一种基于堆栈的、特定于 TON 的编程语言，它也可以处理cell。那么它们之间的区别是什么呢？
+Fift 是一种基于堆栈的汇编编程语言，它具有 TON 特有的功能，因此可以处理cell。TVM 汇编同样是一种基于堆栈的、特定于 TON 的编程语言，它也可以处理cell。那么它们之间的区别是什么呢？
 
 ## 区别
 
 Fift 在**编译时**执行 - FunC 代码被处理后，您的编译器构建智能合约代码 BOC 。Fift 可以有不同的形式：
 
-```fift
-// 元组原语
+```
+// tuple primitives
 x{6F0} @Defop(4u) TUPLE
 x{6F00} @Defop NIL
 x{6F01} @Defop SINGLE
 x{6F02} dup @Defop PAIR @Defop CONS
 ```
+
 > Asm.fif 中的 TVM 操作码定义
 
 ```
@@ -41,6 +42,7 @@ x{6F02} dup @Defop PAIR @Defop CONS
    NEWC 32 STU 32 STU 256 STU ENDC c4 POP
 }>c
 ```
+
 > wallet_v3_r2.fif
 
 最后一段代码看起来像是 TVM 汇编，而且大部分确实是！这是怎么发生的？
@@ -57,7 +59,8 @@ x{6F02} dup @Defop PAIR @Defop CONS
 
 如果你使用的是 `toncli`，这是可能的。如果你使用其他编译器构建合约，可能还有其他方法来包含大型 BOC。
 编辑 `project.yaml`，使得构建智能合约代码时包含 `fift/blob.fif`：
-```yaml
+
+```
 contract:
   fift:
     - fift/blob.fif
@@ -66,12 +69,14 @@ contract:
 ```
 
 将 BOC 放入 `fift/blob.boc`，然后将以下代码添加到 `fift/blob.fif`：
-```fift
+
+```
 <b 8 4 u, 8 4 u, "fift/blob.boc" file>B B>boc ref, b> <s @Defop LDBLOB
 ```
 
 现在，你可以从智能合约中提取这个 blob：
-```fift
+
+```
 cell load_blob() asm "LDBLOB";
 
 () recv_internal() {
@@ -82,11 +87,14 @@ cell load_blob() asm "LDBLOB";
 ### [TVM 汇编] - 将整数转换为字符串
 
 遗憾的是，尝试使用 Fift 原语进行 int-to-string 转换失败。
-```fift
+
+```
 slice int_to_string(int x) asm "(.) $>s PUSHSLICE";
 ```
-原因很明显：Fift 在编译时进行计算，那时还没有 `x` 可供转换。要将非常量整数转换为字符串切片，你需要 TVM 汇编。例如，这是 TON 智能挑战 3 参赛者之一的代码：
-```fift
+
+原因很明显：Fift 在编译时进行计算，那时还没有 `x` 可供转换。要将非常量整数转换为字符串切片，你需要 TVM 汇编。例如，这是 TON 智能挑战 3位 参赛者之一的代码：
+
+```
 tuple digitize_number(int value)
   asm "NIL WHILE:<{ OVER }>DO<{ SWAP TEN DIVMOD s1 s2 XCHG TPUSH }> NIP";
 
@@ -106,16 +114,16 @@ builder store_signed(builder msg, int v) inline_ref {
 
 ### [TVM 汇编] - 低成本的模乘
 
-```fift
-int mul_mod(int a, int b, int m) inline_ref {               ;; 1232 gas 单位
+```
+int mul_mod(int a, int b, int m) inline_ref {               ;; 1232 gas units
   (_, int r) = muldivmod(a % m, b % m, m);
   return r;
 }
-int mul_mod_better(int a, int b, int m) inline_ref {        ;; 1110 gas 单位
+int mul_mod_better(int a, int b, int m) inline_ref {        ;; 1110 gas units
   (_, int r) = muldivmod(a, b, m);
   return r;
 }
-int mul_mod_best(int a, int b, int m) asm "x{A988} s,";     ;; 65 gas 单位
+int mul_mod_best(int a, int b, int m) asm "x{A988} s,";     ;; 65 gas units
 ```
 
 `x{A988}` 是根据 [5.2 Division](/learn/tvm-instructions/instructions#52-division) 格式化的操作码：带有预乘法的除法，唯一返回的结果是第三个参数的余数。但操作码需要进入智能合约代码 - 这就是 `s,` 的作用：它将栈顶的切片存储到稍低的构建器中。

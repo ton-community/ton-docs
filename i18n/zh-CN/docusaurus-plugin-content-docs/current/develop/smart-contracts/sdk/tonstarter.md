@@ -1,10 +1,10 @@
 # 使用TypeScript
 
-## 蓝图
+## Blueprint
 
 测试工具包（通常是沙盒）已包含在名为Blueprint的TypeScript SDK中。
 
-- [了解更多关于Blueprint](/develop/smart-contracts/sdk/javascript)
+- [了解有关 Blueprint 的更多信息](/develop/smart-contracts/sdk/javascript)
 
 使用以下命令一行运行测试：
 
@@ -38,4 +38,4 @@ npm test
 
 首先阅读这篇文章，以了解TON上所有测试方法：
 
-* [TON Hello World第4部分：测试您的第一个智能合约的逐步指南](https://ton-community.github.io/tutorials/04-testing/)
+- [TON Hello World第4部分：测试您的第一个智能合约的逐步指南](https://ton-community.github.io/tutorials/04-testing/)

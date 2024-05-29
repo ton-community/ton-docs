@@ -9,6 +9,7 @@ description: 本教程结束时，您将在TON区块链上部署了多签合约�
 本教程将帮助您学习如何部署您的多签合约。回想一下，(n, k)多签合约是一个有n个私钥持有者的多签钱包，如果请求（又称订单、查询）至少收集到持有者的k个签名，则接受发送消息的请求。
 
 基于akifoq对原始多签合约代码的更新：
+
 - [原始TON区块链多签代码.multisig-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/multisig-code.fc)
 - [akifoq/multisig](https://github.com/akifoq/multisig)，带有fift库以使用多签。
 
@@ -28,11 +29,11 @@ description: 本教程结束时，您将在TON区块链上部署了多签合约�
 
 - 从[安装](/develop/smart-contracts/environment/installation)部分中安装`func`、`fift`、`lite-client`二进制文件和`fiftlib`。
 - 克隆[库](https://github.com/akifoq/multisig)并在CLI中打开其目录。
+
 ```cpp
 https://github.com/akifoq/multisig.git
 cd ~/multisig
-``` 
-
+```
 
 ## 🚀 开始吧！
 
@@ -50,6 +51,7 @@ func -o multisig-code.fif -SPA stdlib.fc multisig-code.fc
 ```
 
 ### 准备多签所有者密钥
+
 #### 创建参与者密钥
 
 要创建一个密钥，您需要运行：
@@ -58,7 +60,7 @@ func -o multisig-code.fif -SPA stdlib.fc multisig-code.fc
 fift -s new-key.fif $KEY_NAME$
 ```
 
-* 其中`KEY_NAME`是将写入私钥的文件的名称。
+- 其中`KEY_NAME`是将写入私钥的文件的名称。
 
 例如：
 
@@ -95,13 +97,12 @@ PubH821csswh8R1uO9rLYyP1laCpYWxhNkx+epOkqwdWXgzY4
 
 之后，您需要运行：
 
-
 ```cpp
 fift -s new-multisig.fif 0 $WALLET_ID$ wallet $KEYS_COUNT$ ./keys.txt
 ```
 
-* `$WALLET_ID$` - 分配给当前密钥的钱包号。对于每个使用相同密钥的新钱包，建议使用唯一的`$WALLET_ID$`。
-* `$KEYS_COUNT$` - 确认所需的密钥数量，通常等于公钥数量
+- `$WALLET_ID$` - 分配给当前密钥的钱包号。对于每个使用相同密钥的新钱包，建议使用唯一的`$WALLET_ID$`。
+- `$KEYS_COUNT$` - 确认所需的密钥数量，通常等于公钥数量
 
 :::info wallet_id 解释
 使用相同的密钥（Alice密钥，Bob密钥）可以创建许多钱包。如果Alice和Bob已经有treasure怎么办？这就是为什么`$WALLET_ID$`在这里至关重要。
@@ -112,16 +113,16 @@ fift -s new-multisig.fif 0 $WALLET_ID$ wallet $KEYS_COUNT$ ./keys.txt
 ```bash
 new wallet address = 0:4bbb2660097db5c72dd5e9086115010f0f8c8501e0b8fef1fe318d9de5d0e501
 
-(将地址保存到wallet.addr文件中)
+(Saving address to file wallet.addr)
 
-不可弹回地址（用于初始化）：0QBLuyZgCX21xy3V6QhhFQEPD4yFAeC4_vH-MY2d5dDlAbel
+Non-bounceable address (for init): 0QBLuyZgCX21xy3V6QhhFQEPD4yFAeC4_vH-MY2d5dDlAbel
 
-可弹回地址（用于后续访问）：kQBLuyZgCX21xy3V6QhhFQEPD4yFAeC4_vH-MY2d5dDlAepg
+Bounceable address (for later access): kQBLuyZgCX21xy3V6QhhFQEPD4yFAeC4_vH-MY2d5dDlAepg
 
-(将创建钱包的查询保存到wallet-create.boc文件中)
+(Saved wallet creating query to file wallet-create.boc)
 ```
 
-:::info 
+:::info
 如果您遇到“公钥必须为48个字符长”的错误，请确保您的`keys.txt`具有unix类型的换行符 - LF。例如，可以通过Sublime文本编辑器更改换行符。
 :::
 
@@ -159,7 +160,6 @@ sendfile ./wallet-create.boc
 
 之后，钱包将在一分钟内准备好可供使用。
 
-
 ### 与多签钱包进行交互
 
 #### 创建请求
@@ -170,9 +170,9 @@ sendfile ./wallet-create.boc
 fift -s create-msg.fif $ADDRESS$ $AMOUNT$ $MESSAGE$
 ```
 
-* `$ADDRESS$` - 发送代币的地址
-* `$AMOUNT$` - 代币的数量
-* `$MESSAGE$` - 被编译消息的文件名。
+- `$ADDRESS$` - 发送代币的地址
+- `$AMOUNT$` - 代币的数量
+- `$MESSAGE$` - 被编译消息的文件名。
 
 例如：
 
@@ -191,16 +191,19 @@ fift -s create-msg.fif EQApAj3rEnJJSxEjEHVKrH3QZgto_MQMOmk8l72azaXlY1zB 0.1 mess
 ```
 fift -s create-order.fif $WALLET_ID$ $MESSAGE$ -t $AWAIT_TIME$
 ```
+
 其中
-* `$WALLET_ID$` — 是由此多签合约支持的钱包的ID。
-* `$AWAIT_TIME$` — 智能合约将等待多签钱包所有者对请求签名的时间（以秒为单位）。
-* `$MESSAGE$` — 上一步中创建的消息boc文件的名称。
+
+- `$WALLET_ID$` — 是由此多签合约支持的钱包的ID。
+- `$AWAIT_TIME$` — 智能合约将等待多签钱包所有者对请求签名的时间（以秒为单位）。
+- `$MESSAGE$` — 上一步中创建的消息boc文件的名称。
 
 :::info
 如果在请求得到签名之前，时间等于`$AWAIT_TIME$`这样的条件已经过去了，请求将过期。通常，$AWAIT_TIME$等于几个小时（7200秒）
 :::
 
 例如：
+
 ```
 fift -s create-order.fif 0 message -t 7200
 ```
@@ -219,8 +222,8 @@ fift -s create-order.fif 0 message -t 7200
 fift -s add-signature.fif $KEY$ $KEY_INDEX$
 ```
 
-* `$KEY$` - 包含签名私钥的文件的名称，不带扩展名。
-* `$KEY_INDEX$` - `keys.txt`中给定密钥的索引（从零开始）
+- `$KEY$` - 包含签名私钥的文件的名称，不带扩展名。
+- `$KEY_INDEX$` - `keys.txt`中给定密钥的索引（从零开始）
 
 例如，对于我们的`multisig_key.pk`文件：
 
@@ -231,12 +234,15 @@ fift -s add-signature.fif multisig_key 0
 #### 创建消息
 
 在每个人都签署了订单后，需要将其转换为钱包的消息，并再次使用以下命令进行签名：
+
 ```
 fift -s create-external-message.fif wallet $KEY$ $KEY_INDEX$
 ```
+
 在这种情况下，只需要钱包所有者的一个签名即可。这样做的想法是，您无法使用无效签名攻击合约。
 
 例如：
+
 ```
 fift -s create-external-message.fif wallet multisig_key 0
 ```

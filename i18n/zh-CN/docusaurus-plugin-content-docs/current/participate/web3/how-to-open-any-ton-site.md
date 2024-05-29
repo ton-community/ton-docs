@@ -14,9 +14,9 @@
 
 对于偶尔浏览TON网站或进行一些检查，这种方法可能适合，但不适合常规使用，因为它也有缺点：
 
--   您信任您的互联网流量给**ton.run**
--   它可能随时离线或出故障
--   它可能被您的互联网提供商封锁
+- 您信任您的互联网流量给**ton.run**
+- 它可能随时离线或出故障
+- 它可能被您的互联网提供商封锁
 
 ### TON Wallet 和 MyTonWallet 扩展
 
@@ -32,7 +32,7 @@
 
 此方法在此处描述：
 
--   [通过TON代理连接](/participate/web3/setting-proxy/)
+- [通过TON代理连接](/participate/web3/setting-proxy/)
 
 ## 🤓 高级方法
 
@@ -43,4 +43,5 @@
 1. 从[这里](https://github.com/xssnick/Tonutils-Proxy#download-precompiled-version)下载最新版本
 
 2. 启动它并按“启动网关”
+
 3. 完成！

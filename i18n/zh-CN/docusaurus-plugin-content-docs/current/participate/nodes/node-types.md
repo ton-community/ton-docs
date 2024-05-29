@@ -10,14 +10,16 @@ TON中的**全节点**是与区块链保持同步的节点。
 
 它保留了区块链的_当前状态_，可以包含整个区块历史或其部分。这使其成为TON区块链的支柱，促进网络的去中心化和安全。
 
-````mdx-code-block 
+```mdx-code-block
 <Button href="/participate/run-nodes/full-node"
 colorType="primary" sizeType={'sm'}>
-````
+```
+
 运行全节点
-````mdx-code-block 
+
+```mdx-code-block
 </Button>
-````
+```
 
 ## 验证者节点
 
@@ -50,11 +52,9 @@ TON基金会提供了几个公共Liteservers，集成到全局配置中，可供
 
 在您的应用程序中使用下载的`config.json`文件与TON SDK。
 
-[选择TON SDK](/develop/dapps/apis/sdk)
-
 #### 故障排除
 
-##### 3秒后超时
+##### 故障排除
 
 如果您看到此错误，这意味着您尝试连接的liteserver不可用。解决公共liteservers问题的正确方法如下：
 
@@ -66,20 +66,18 @@ wget https://api.tontech.io/ton/wallet-mainnet.autoconf.json -O /usr/bin/ton/glo
 
 它会从配置文件中移除响应慢的liteservers。
 
-2. 在您的应用程序中使用下载的config.json文件与TON SDK。
-
-[选择TON SDK](/develop/dapps/apis/sdk)
+2. 在您的应用程序中使用下载的`config.json`文件与TON SDK(/participate/nodes/node-types#lite-clients-the-sdks-to-interact-with-ton)。
 
 ### 作为 Liteserver 运行全节点
 
-如果您的项目需要高级别的_安全性_，您可以运行自己的Liteserver。要作为Liteserver运行全节点，只需在节点的配置文件中启用Liteserver模式：
+如果你的项目需要高度_安全_，你可以运行自己的 Liteserver。要将完整节点作为 Liteserver 运行，只需在节点配置文件中启用 Liteserver 模式即可：
 
-[在节点中启用Liteserver](/participate/run-nodes/full-node#enable-liteserver-mode)
+[在节点中启用 Liteserver](/participate/run-nodes/full-node#enable-liteserver-mode)
 
 ## 归档节点
 
-**归档节点**本质上是存档整个区块历史的全节点。
+[在节点中启用Liteserver](/participate/run-nodes/full-node#enable-liteserver-mode)
 
 这种节点对于创建需要完整区块链历史的区块链浏览器或其他工具至关重要。
 
-  [运行归档节点](/participate/run-nodes/archive-node)
+**归档节点**本质上是存档整个区块历史的全节点。

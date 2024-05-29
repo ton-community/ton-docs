@@ -48,7 +48,7 @@ dns_storage_address#7473 bag_id:uint256 = DNSRecord;
 
 [创建](/participate/ton-storage/storage-daemon#creating-a-bag-of-files)一个文件夹的包，其中包含网站文件，将其上传到网络并获取Bag ID。文件夹必须包含`index.html`文件。
 
-您需要将以下值分配给TON域的sha256("site") DNS记录：
+您需要将以下值分配给您TON域的 sha256("site") DNS 记录：
 
 ```
 dns_storage_address#7473 bag_id:uint256 = DNSRecord;

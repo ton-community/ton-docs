@@ -49,11 +49,11 @@ telegram-bot
 
 ```json
 {
-  "BOT_TOKEN": "你的机器人令牌",
-  "MAINNET_API_TOKEN": "你的主网api令牌",
-  "TESTNET_API_TOKEN": "你的测试网api令牌",
-  "MAINNET_WALLET": "你的主网钱包",
-  "TESTNET_WALLET": "你的测试网钱包",
+  "BOT_TOKEN": "Your bot token",
+  "MAINNET_API_TOKEN": "Your mainnet api token",
+  "TESTNET_API_TOKEN": "Your testnet api token",
+  "MAINNET_WALLET": "Your mainnet wallet",
+  "TESTNET_WALLET": "Your testnet wallet",
   "WORK_MODE": "testnet"
 }
 ```
@@ -250,7 +250,7 @@ def get_user_payments(user_id):
 
 ## API
 
-_我们有能力使用一些网络成员提供的第三方 API 与区块链进行交互。通过这些服务，开发者可以跳过运行自己的节点和自定义 API 的步骤。_
+*我们有能力使用一些网络成员提供的第三方 API 与区块链进行交互。通过这些服务，开发者可以跳过运行自己的节点和自定义 API 的步骤。*
 
 ### 需要的请求
 
@@ -269,7 +269,7 @@ _我们有能力使用一些网络成员提供的第三方 API 与区块链进�
 
 例如，测试网络中有一个钱包 `EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5`，它有一些交易：
 
-使用[查询](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5&limit=2&to_lt=0&archival=true) 我们将得到包含两笔交易的响应（现在不需要的一些信息已经被隐藏，完整答案可以在上面的链接中看到）。
+使用[查询](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5\&limit=2\&to_lt=0\&archival=true) 我们将得到包含两笔交易的响应（现在不需要的一些信息已经被隐藏，完整答案可以在上面的链接中看到）。
 
 ```json
 {
@@ -277,7 +277,9 @@ _我们有能力使用一些网络成员提供的第三方 API 与区块链进�
   "result": [
     {
       "transaction_id": {
+        // highlight-next-line
         "lt": "1944556000003",
+        // highlight-next-line
         "hash": "swpaG6pTBXwYI2024NAisIFp59Fw3k1DRQ5fa5SuKAE="
       },
       "in_msg": {
@@ -291,7 +293,9 @@ _我们有能力使用一些网络成员提供的第三方 API 与区块链进�
     },
     {
       "transaction_id": {
+        // highlight-next-line
         "lt": "1943166000003",
+        // highlight-next-line
         "hash": "hxIQqn7lYD/c/fNS7W/iVsg2kx0p/kNIGF6Ld0QEIxk="
       },
       "in_msg": {
@@ -345,7 +349,7 @@ _我们有能力使用一些网络成员提供的第三方 API 与区块链进�
 }
 ```
 
-请求将看起来像[这样。](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5&limit=2&lt=1943166000003&hash=hxIQqn7lYD%2Fc%2FfNS7W%2FiVsg2kx0p%2FkNIGF6Ld0QEIxk%3D&to_lt=0&archival=true)
+请求将看起来像[这样。](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5\&limit=2\&lt=1943166000003\&hash=hxIQqn7lYD%2Fc%2FfNS7W%2FiVsg2kx0p%2FkNIGF6Ld0QEIxk%3D\&to_lt=0\&archival=true)
 
 我们还需要一个方法 `detectAddress`。
 
@@ -360,6 +364,7 @@ _我们有能力使用一些网络成员提供的第三方 API 与区块链进�
     "raw_form": "0:b3409241010f85ac415cbf13b9b0dc6157d09a39d2bd0827eadb20819f067868",
     "bounceable": {
       "b64": "EQCzQJJBAQ+FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R",
+      // highlight-next-line
       "b64url": "EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R"
     },
     "non_bounceable": {
@@ -385,7 +390,8 @@ _我们有能力使用一些网络成员提供的第三方 API 与区块链进�
 ```python
 import requests
 import json
-# 我们导入我们的 db 模块，因为这样添加交易到数据库会很方便
+# We import our db module, as it will be convenient to add from here
+# transactions to the database
 import db
 ```
 
@@ -396,7 +402,7 @@ import db
 让我们创建两个变量来存储请求的开头。
 
 ```python
-# 这是我们请求的开始
+# This is the beginning of our requests
 MAINNET_API_BASE = "https://toncenter.com/api/v2/"
 TESTNET_API_BASE = "https://testnet.toncenter.com/api/v2/"
 ```
@@ -404,7 +410,7 @@ TESTNET_API_BASE = "https://testnet.toncenter.com/api/v2/"
 从 config.json 文件中获取所有 API 令牌和钱包。
 
 ```python
-# 弄清楚我们在哪个网络上工作
+# Find out which network we are working on
 with open('config.json', 'r') as f:
     config_json = json.load(f)
     MAINNET_API_TOKEN = config_json['MAINNET_API_TOKEN']
@@ -464,30 +470,30 @@ def get_address_transactions():
 
 ```python
 def find_transaction(user_wallet, value, comment):
-		# 获取最后 30 次交易
+		# Get the last 30 transactions
     transactions = get_address_transactions()
     for transaction in transactions:
-				# 选择进来的 "message" - 交易
+				# Select the incoming "message" - transaction
         msg = transaction['in_msg']
         if msg['source'] == user_wallet and msg['value'] == value and msg['message'] == comment:
-						# 如果所有数据匹配，我们检查这个交易
-						# 我们之前没有验证过
+						# If all the data match, we check that this transaction
+						# we have not verified before
             t = db.check_transaction(msg['body_hash'])
             if t == False:
-								# 如果没有，我们在表中写入已验证
-								# 并返回 True
+								# If not, we write in the table to the verified
+								# and return True
                 db.add_v_transaction(
                     msg['source'], msg['body_hash'], msg['value'], msg['message'])
                 print("find transaction")
                 print(
                     f"transaction from: {msg['source']} \nValue: {msg['value']} \nComment: {msg['message']}")
                 return True
-						# 如果这笔交易已经经过验证，我们检查剩余部分，可能会找到正确的
+						# If this transaction is already verified, we check the rest, we can find the right one
             else:
                 pass
-		# 如果最后 30 次交易不含所需的一笔，返回 False
-		# 这里你可以添加代码以查看接下来的 29 个交易
-		# 然而，在示例的范围内，这将是多余的。
+		# If the last 30 transactions do not contain the required one, return False
+		# Here you can add code to see the next 29 transactions
+		# However, within the scope of the Example, this would be redundant.
     return False
 ```
 
@@ -537,11 +543,11 @@ import api
 
 ```json
 {
-  "BOT_TOKEN": "你的机器人令牌",
-  "MAINNET_API_TOKEN": "你的主网api令牌",
-  "TESTNET_API_TOKEN": "你的测试网api令牌",
-  "MAINNET_WALLET": "你的主网钱包",
-  "TESTNET_WALLET": "你的测试网钱包",
+  "BOT_TOKEN": "Your bot token",
+  "MAINNET_API_TOKEN": "Your mainnet api token",
+  "TESTNET_API_TOKEN": "Your testnet api token",
+  "MAINNET_WALLET": "Your mainnet wallet",
+  "TESTNET_WALLET": "Your testnet wallet",
   "WORK_MODE": "testnet"
 }
 ```
@@ -570,8 +576,9 @@ import api
 ```python
 with open('config.json', 'r') as f:
     config_json = json.load(f)
+    # highlight-next-line
     BOT_TOKEN = config_json['BOT_TOKEN']
-		# 在这里放置接收付款的钱包
+		# put wallets here to receive payments
     MAINNET_WALLET = config_json['MAINNET_WALLET']
     TESTNET_WALLET = config_json['TESTNET_WALLET']
     WORK_MODE = config_json['WORK_MODE']
@@ -579,7 +586,7 @@ with open('config.json', 'r') as f:
 if WORK_MODE == "mainnet":
     WALLET = MAINNET_WALLET
 else:
-		# 默认情况下，机器人将在测试网上运行
+		# By default, the bot will run on the testnet
     WALLET = TESTNET_WALLET
 ```
 
@@ -632,10 +639,10 @@ class DataInput (StatesGroup):
 @dp.message_handler(commands=['start'], state='*')
 async def cmd_start(message: types.Message):
     await message.answer(f"WORKMODE: {WORK_MODE}")
-    # 检查用户是否在数据库中。如果不在，添加他
+    # check if user is in database. if not, add him
     isOld = db.check_user(
         message.from_user.id, message.from_user.username, message.from_user.first_name)
-    # 如果用户已经在数据库中，我们可以不同地对待他
+    # if user already in database, we can address him differently
     if isOld == False:
         await message.answer(f"You are new here, {message.from_user.first_name}!")
         await message.answer(f"to buy air send /buy")
@@ -666,10 +673,10 @@ async def cmd_cancel(message: types.Message):
 当然还有 `/buy` 命令处理器。在这个示例中我们将出售不同类型的空气。我们将使用reply keyboard来选择air types。
 
 ```python
-# /buy 命令处理器
+# /buy command handler
 @dp.message_handler(commands=['buy'], state=DataInput.firstState)
 async def cmd_buy(message: types.Message):
-    # 带有air types的reply keyboard
+    # reply keyboard with air types
     keyboard = types.ReplyKeyboardMarkup(
         resize_keyboard=True, one_time_keyboard=True)
     keyboard.add(types.KeyboardButton('Just pure 🌫'))
@@ -687,7 +694,7 @@ async def cmd_buy(message: types.Message):
 FSMContext 用于在机器人的内存中存储数据。我们可以在其中存储任何数据，但这个内存不是持久的，所以如果机器人重启，数据将会丢失。但它很适合存储临时数据。
 
 ```python
-# 处理air type
+# handle air type
 @dp.message_handler(state=DataInput.secondState)
 async def air_type(message: types.Message, state: FSMContext):
     if message.text == "Just pure 🌫":
@@ -746,7 +753,7 @@ async def user_wallet(message: types.Message, state: FSMContext):
         else:
             user_data = await state.get_data()
             air_type = user_data['air_type']
-            # inline button "检查交易"
+            # inline button "check transaction"
             keyboard2 = types.InlineKeyboardMarkup(row_width=1)
             keyboard2.add(types.InlineKeyboardButton(
                 text="Check transaction", callback_data="check"))
@@ -773,17 +780,17 @@ async def user_wallet(message: types.Message, state: FSMContext):
 我们需要的最后一个消息处理器是 `/me` 命令。它显示用户的支付信息。
 
 ```python
-# /me 命令处理器
+# /me command handler
 @dp.message_handler(commands=['me'], state="*")
 async def cmd_me(message: types.Message):
     await message.answer(f"Your transactions")
-    # db.get_user_payments 返回用户的交易列表
+    # db.get_user_payments returns list of transactions for user
     transactions = db.get_user_payments(message.from_user.id)
     if transactions == False:
         await message.answer(f"You have no transactions")
     else:
         for transaction in transactions:
-            # 我们需要记住区块链中的值存储为nanotons。在区块链中，1 toncoin = 1000000000
+            # we need to remember that blockchain stores value in nanotons. 1 toncoin = 1000000000 in blockchain
             await message.answer(f"{int(transaction['value'])/1000000000} - {transaction['comment']}")
 ```
 
@@ -796,7 +803,7 @@ async def cmd_me(message: types.Message):
 ```python
 @dp.callback_query_handler(lambda call: call.data == "check", state=DataInput.PayState)
 async def check_transaction(call: types.CallbackQuery, state: FSMContext):
-    # 发送通知
+    # send notification
     user_data = await state.get_data()
     source = user_data['wallet']
     value = user_data['value_nano']

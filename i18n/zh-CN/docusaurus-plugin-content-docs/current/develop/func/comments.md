@@ -1,13 +1,16 @@
 # 注释
+
 FunC 有单行注释，以 `;;`（双分号）开始。例如：
+
 ```func
-int x = 1; ;; 给 x 赋值 1
+int x = 1; ;; assign 1 to x
 ```
 
 它还有多行注释，以 `{-` 开始并以 `-}` 结束。请注意，与许多其他语言不同的是，FunC 的多行注释可以嵌套。例如：
+
 ```func
-{- 这是一个多行注释
-    {- 这是注释中的注释 -}
+{- This is a multi-line comment
+    {- this is a comment in the comment -}
 -}
 ```
 
@@ -15,14 +18,14 @@ int x = 1; ;; 给 x 赋值 1
 
 ```func
 {-
-  注释开始
+  Start of the comment
 
-;; 这个注释的结束本身被注释掉了 -> -}
+;; this comment ending is itself commented -> -}
 
 const a = 10;
-;; 这个注释的开始本身被注释掉了 -> {-
+;; this comment begining is itself commented -> {-
 
-  注释结束
+  End of the comment
 -}
 ```
 

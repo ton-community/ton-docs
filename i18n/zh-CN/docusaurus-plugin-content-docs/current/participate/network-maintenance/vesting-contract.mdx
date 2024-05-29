@@ -26,7 +26,7 @@
 
 ```
 vesting_total_duration > 0
-vesting_total_duration <= 135年（2^32秒）
+vesting_total_duration <= 135 years (2^32 seconds)
 unlock_period > 0
 unlock_period <= vesting_total_duration
 cliff_duration >= 0
@@ -43,7 +43,7 @@ cliff_duration mod unlock_period == 0
 
 从`vesting_start_time`开始，金额开始按比例解锁。
 
-例如，如果`vesting_total_duration`为10个月，`unlock_period`为1个月，且`vesting_total_amount`为500 TON，则每月将解锁500*(10/100)=50 TON，10个月后将解锁全部500 TON。
+例如，如果`vesting_total_duration`为10个月，`unlock_period`为1个月，且`vesting_total_amount`为500 TON，则每月将解锁500\*(10/100)=50 TON，10个月后将解锁全部500 TON。
 
 如果有悬崖期，在此悬崖期内不解锁任何金额，过了悬崖期后，按上述公式解锁。
 
@@ -125,13 +125,12 @@ Get方法`seqno()`、`get_subwallet_id()`和`get_public_key()`可用。
 
 发送未锁定的 Toncoin 时不适用任何限制，即使我们发送到白名单`vesting_sender_address`。
 
-
 ## 项目结构
 
--   `contracts` - 项目所有智能合约及其依赖的源代码。
--   `wrappers` - 合约的封装类（实现ton-core的`Contract`），包括任何[解]序列化原语和编译函数。
--   `tests` - 合约的测试。
--   `scripts` - 项目使用的脚本，主要是部署脚本。
+- `contracts` - 项目所有智能合约及其依赖的源代码。
+- `wrappers` - 合约的封装类（实现ton-core的`Contract`），包括任何[解]序列化原语和编译函数。
+- `tests` - 合约的测试。
+- `scripts` - 项目使用的脚本，主要是部署脚本。
 
 ## 如何使用
 
@@ -153,5 +152,5 @@ Get方法`seqno()`、`get_subwallet_id()`和`get_public_key()`可用。
 
 ## 参阅
 
-* [单一提名者](/participate/network-maintenance/single-nominator)
-* [归属合约](https://github.com/ton-blockchain/vesting-contract)
+- [单一提名者](/participate/network-maintenance/single-nominator)
+- [归属合约](https://github.com/ton-blockchain/vesting-contract)

@@ -24,8 +24,8 @@ Hacktoberfest 活动是一年中获得社区支持的最佳时机！
 
 作为TON生态系统中的代码库维护者，你将能够获得两种类型的奖励：
 
-1. [Hacktoberfest 奖励套件](https://hacktoberfest.com/participation/#maintainers)（_见维护者奖励_）
-2. [限量版Hack-TON-berfest NFT](/contribute/hacktoberfest/#what-the-rewards)（_请在[@toncontests_bot](https://t.me/toncontests_bot)中注册钱包地址_）
+1. [Hacktoberfest 奖励套件](https://hacktoberfest.com/participation/#maintainers)（*见维护者奖励*）
+2. [限量版Hack-TON-berfest NFT](/contribute/hacktoberfest/#what-the-rewards)（*请在[@toncontests_bot](https://t.me/toncontests_bot)中注册钱包地址*）
 
 ## 如何加入并被列入列表？
 
