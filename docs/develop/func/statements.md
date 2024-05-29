@@ -2,7 +2,7 @@
 This section briefly discusses FunC statements, constituting the code of ordinary function bodies.
 
 ## Expression statements
-The most common type of a statement is the expression statement. It's an expression followed by `;`. Expression's description would be quite complicated, so only a sketch is presented here. As a rule all sub-expressions are computed left to right with one exception of [asm stack rearrangement](functions#rearranging-stack-entries) which may define order manually.
+The most common type of a statement is the expression statement. It's an expression followed by `;`. Expression's description would be quite complicated, so only a sketch is presented here. As a rule, all sub-expressions are computed left to right.
 
 ### Variable declaration
 It is not possible to declare a local variable without defining its initial value.
