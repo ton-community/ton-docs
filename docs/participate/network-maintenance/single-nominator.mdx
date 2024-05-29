@@ -3,9 +3,7 @@ import TabItem from '@theme/TabItem';
 
 # Single Nominator Pool
 
-[Single Nominator](https://github.com/orbs-network/single-nominator) is a new TON smart contract that enables secure validation for TON blockchain via an air gapped cold wallet.The contract is designed for TON validators that have enough self stake to validate by themselves without relying on third-party nominators.
-
-The contract provides an alternative simplified implementation for the core team’s Nominator Pool smart contract that supports a single nominator only. The benefit of this implementation is that it's more secure since the attack surface is considerably smaller. This is due to a massive reduction in complexity of the Nominator Pool that has to support multiple third-party nominators.
+[Single Nominator](https://github.com/orbs-network/single-nominator) is a TON smart contract that enables secure validation for TON blockchain. The contract is designed for TON validators that have enough self stake to validate by themselves without relying on third-party nominators stakes. The contract provides an alternative simplified implementation for the Nominator Pool smart contract that supports a single nominator only.
 
 ## Start using mytonctrl
 
@@ -237,7 +235,7 @@ or
 MyTonCtrl> deposit_to_pool <pool-addr> <amount>
 ```
 
-which deposits pool from validation wallet.
+which deposits pool from validator wallet.
 
 **MyTonCtrl** will automatically join the elections. You can set the stake amount that mytonctrl sends to [Elector contract](/develop/smart-contracts/governance#elector) ~ every 18 hours.
 
@@ -247,6 +245,8 @@ MyTonCtrl> set stake 50000
 Minimal stake amount could be found using `status` command.
 
 ![](/img/docs/single-nominator/tetsnet-conf.png)
+
+Or you can set `stake` as `null` and it will be calculated according to the `stakePercent` value (could be checked with `status_settings` command).
 
 ## Stop participating (withdraw)
 
@@ -318,9 +318,10 @@ func WithdrawSingleNominatorMessage(single_nominator_address string, query_id, a
 
 </Tabs>
 
-## Check status
 
-To check a Single Nominator Pool status use the following command:
+## Election process
+
+1. Check that election has been already started:
 
 ```bash
 MyTonCtrl> status
@@ -332,7 +333,46 @@ and for Testnet:
 MyTonCtrl> status fast
 ```
 
-![](/img/docs/single-nominator/testnet-status.png)
+As example:
+
+```sh
+MyTonCtrl> status fast
+===[ TON network status ]===
+Network name: testnet
+Number of validators: 14(15)
+Number of shardchains: 4
+Number of offers: 0(0)
+Number of complaints: 0(0)
+Election status: closed
+```
+
+2. If the election has been started and Single Nominator Pool is activated, validator should **automatically** send **ElectorNewStake** message to Elector contract.
+
+Check validator wallet:
+
+```sh
+MyTonCtrl> wl
+Name                  Status  Balance           Ver  Wch  Address                                           
+validator_wallet_001  active  995.828585374     v1   -1   kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct  
+```
+
+Then check it transaction history:
+
+```sh
+MyTonCtrl> vas kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
+Address                                           Status  Balance        Version  
+kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct  active  995.828585374  v1r3     
+
+Code hash                                                         
+c3b9bb03936742cfbb9dcdd3a5e1f3204837f613ef141f273952aa41235d289e  
+
+Time                 Coins   From/To                                           
+39 minutes ago  >>>  1.3     kf_hz3BIXrn5npis1cPX5gE9msp1nMTYKZ3l4obzc8phrBfF  
+```
+
+This **ElectorNewStake** transaction in Single Nominator contract history in Tonviewer:
+
+![](/img/docs/single-nominator/new-stake.png)
 
 ## Delete pool
 
