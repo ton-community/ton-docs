@@ -6,9 +6,9 @@ In this article, we will review and discuss the elements to consider for those w
 
 ### 1. Name collisions
 
-Func variables and functions may contain almost any legit character. I.e. `var++`, `~bits`, `foo-bar+baz` including commas are valid variables and functions names.
+FunC variables and functions may contain almost any legit character. I.e. `var++`, `~bits`, `foo-bar+baz` including commas are valid variables and functions names.
 
-When writing and inspecting a Func code, Linter should be used.
+When writing and inspecting a FunC code, Linter should be used.
 
 - [IDE plugins](/develop/smart-contracts/environment/ide-plugins/)
 
@@ -19,7 +19,7 @@ Each time the TVM execution stops normally, it stops with exit codes `0` or `1`.
 - [How to handle errors](/develop/func/stdlib#throwing-exceptions)
 - [TVM exit codes](/learn/tvm-instructions/tvm-exit-codes)
 
-### 3. Func is a strictly typed language with data structures holding exactly what they are supposed to store
+### 3. FunC is a strictly typed language with data structures holding exactly what they are supposed to store
 
 It is crucial to keep track of what the code does and what it may return. Keep in mind that the compiler cares only about the code and only in its initial state. After certain operations stored values of some variables can change.
 
@@ -67,7 +67,7 @@ A full representation can either be "raw" (`workchain:address`) or "user-friendl
 
 ### 12. Keep track of the flaws in code execution
 
-Unlike Solidity where it's up to you to set methods visibility, in the case of Func, the visibility is restricted in a more intricate way either by showing errors or by `if` statements.
+Unlike Solidity where it's up to you to set methods visibility, in the case of FunC, the visibility is restricted in a more intricate way either by showing errors or by `if` statements.
 
 ### 13. Keep an eye on gas before sending bounced messages
 

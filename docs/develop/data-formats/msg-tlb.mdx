@@ -340,7 +340,7 @@ var_int$_ {n:#} len:(#< n) value:(int (len * 8))
 
 ## Message example
 
-### Regular func internal message
+### Regular FunC internal message
 
 ```func
   var msg = begin_cell()
@@ -362,7 +362,7 @@ var_int$_ {n:#} len:(#< n) value:(int (len * 8))
     .store_slice(msg_body)
   .end_cell();
 ```
-### Regular func message in short form
+### Regular FunC message in short form
 
 Message parts that are always overwritten by validators could be skipped(fill with zero bits). Message's sender here skipped too, serialized as `addr_none$00`.
 

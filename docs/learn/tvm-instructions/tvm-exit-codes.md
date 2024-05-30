@@ -36,7 +36,7 @@ The list of standard exit codes contains all universal TVM exit codes defined fo
 | `40`      | Action Phase  | Not enough funds to process a message. This error is thrown when there is only enough gas to cover part of the message, but does not cover it completely.                                                                                                                             |
 | `43`      | Action Phase  | The maximum number of cells in the library is exceeded or the maximum depth of the Merkle tree is exceeded.                                                                                                                                                                           |
 
-<sup>1</sup> If you encounter such exception in a func contract it probably means a type error in asm declarations.
+<sup>1</sup> If you encounter such exception in a FunC contract it probably means a type error in asm declarations.
 
 :::info
 Often you can see the exit code `0xffff` (65535 in decimal form). This usually means that the received opcode is unknown to the contract. When writing contracts, this code is set by the developer himself.
