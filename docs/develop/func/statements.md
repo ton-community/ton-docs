@@ -152,6 +152,14 @@ In summary, when a function with the name `foo` is called as a non-modifying or 
 
 ### Operators
 Note that currently all of the unary and binary operators are integer operators. Logical operators are represented as bitwise integer operators  (cf. [absence of boolean type](/develop/func/types#absence-of-boolean-type)).
+
+:::info Mind about spaces
+- `x + y` is ok
+- `x+y` is not ok (it's a single identifier)
+- `~ x` is ok (expression "not x")
+- `~x` is a modifier method
+:::
+
 #### Unary operators
 There are two unary operators:
 - `~` is bitwise not (priority 75)
@@ -171,13 +179,10 @@ With priority 30 (left-associative):
 - `~%` is integer reduction by modulo (round)
 - `^%` is integer reduction by modulo (ceil)
 - `/%` returns the quotient and the remainder
-- `&` is bitwise AND
 
 With priority 20 (left-associative):
 - `+` is integer addition
 - `-` is integer subtraction
-- `|` is bitwise OR
-- `^` is bitwise XOR
 
 With priority 17 (left-associative):
 - `<<` is bitwise left shift
@@ -194,9 +199,15 @@ With priority 15 (left-associative):
 - `>=` is integer comparison
 - `<=>` is integer comparison (returns -1, 0 or 1)
 
-They also should be separated from the argument:
-- `x + y` is ok
-- `x+y` is not ok (it's a single identifier)
+With priority 14 (left-associative):
+- `&` is bitwise AND
+- `|` is bitwise OR
+- `^` is bitwise XOR
+
+:::caution `& | ^` priority changed in FunC v0.5.0
+Before v0.5.0, they had higher priority, leading to errors hard to find out.  
+Now they are more intuitive: `if (op == 2 & val)` works as expected.
+:::
 
 #### Conditional operator
 It has the usual syntax.
