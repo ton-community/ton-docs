@@ -3,7 +3,7 @@ import TabItem from '@theme/TabItem';
 
 # Single Nominator Pool
 
-[Single Nominator](https://github.com/orbs-network/single-nominator) is a TON smart contract that enables secure validation for TON blockchain. The contract is designed for TON validators that have enough self stake to validate by themselves without relying on third-party nominators stakes. The contract provides an alternative simplified implementation for the Nominator Pool smart contract that supports a single nominator only.
+[Single Nominator](https://github.com/orbs-network/single-nominator) is a TON smart contract that enables secure validation for TON blockchain. The contract is designed for TON validators that have enough self stake to validate by themselves without relying on third-party nominators stakes. The contract provides an alternative simplified implementation for the Nominator Pool smart contract that supports a Single Nominator only.
 
 ## Start using mytonctrl
 
@@ -27,7 +27,7 @@ sudo bash ./install.sh -b mytonctrl2
 
 ### Set up single-nominator
 
-After you have [created](/participate/run-nodes/full-node#import-existed-account) and [activated](/participate/run-nodes/full-node#activate-the-wallets) validator's wallet, follow these steps:
+After you have [created](/participate/run-nodes/full-node#import-existed-account) and [activated](/participate/run-nodes/full-node#activate-the-wallets) the validator's wallet, follow these steps:
 
 1. Enable single nominator mode
 
@@ -213,17 +213,7 @@ d. Open deeplink on the owner's phone
 
 ## Deposit pool
 
-1. Go to the pool’s page https://tonscan.org/nominator/<pool_address>.
-
-2. Make sure that the information about the pool is fully displayed, if the pool has the wrong smart contract, there will be no information.
-
-3. Press the `ADD STAKE` button or scan the QR-code using Tonkeeper or any other TON Wallet.
-
-4. After you are transferred to the wallet, please, enter the amount of TON and then send the transaction. After that TON coins will be added to staking.
-
-If the wallet does not open automatically, you can send the transaction manually by copying the pool address. Send it through any TON wallet. From the sent transaction, 1 TON will be debited as a commission for processing the deposit.
-
-You can also make a deposit using mytonctrl, using the following commands:
+You can make a deposit using **MyTonCtrl**, using the following commands:
 
 ```sh
 MyTonCtrl> mg <from-wallet-name> <pool-account-addr> <amount>
@@ -237,20 +227,22 @@ MyTonCtrl> deposit_to_pool <pool-addr> <amount>
 
 which deposits pool from validator wallet.
 
-**MyTonCtrl** will automatically join the elections. You can set the stake amount that mytonctrl sends to [Elector contract](/develop/smart-contracts/governance#elector) ~ every 18 hours.
+Or use the following steps:
 
-```sh
-MyTonCtrl> set stake 50000
-```
-Minimal stake amount could be found using `status` command.
+1. Go to the pool’s page https://tonscan.org/nominator/<pool_address>.
 
-![](/img/docs/single-nominator/tetsnet-conf.png)
+2. Make sure that the information about the pool is fully displayed, if the pool has the wrong smart contract, there will be no information.
 
-Or you can set `stake` as `null` and it will be calculated according to the `stakePercent` value (could be checked with `status_settings` command).
+3. Press the `ADD STAKE` button or scan the QR-code using Tonkeeper or any other TON Wallet.
 
-## Stop participating (withdraw)
+4. After you are transferred to the wallet, please, enter the amount of TON and then send the transaction. After that TON coins will be added to staking.
 
-If user doesn't want to take part in validating anymore it's possible to withdraw all funds from the Single Nominator contract to validators personal wallet. To get coins back after staking, send 1 TON to the pool’s address, add a comment **w** (small letter) to the transaction. This 1 TON minus commission will be returned, and a smart-contract will understand that you want to bring the coins back and it will send them back right after the end of the validator’s work cycle. It usually takes up to 18 hours.
+If the wallet does not open automatically, you can send the transaction manually by copying the pool address. Send it through any TON wallet. From the sent transaction, 1 TON will be debited as a commission for processing the deposit.
+
+
+## Withdraw funds
+
+To get coins back after staking, send 1 TON to the pool’s address, add a comment **w** (small letter) to the transaction. This 1 TON minus commission will be returned, and a smart-contract will understand that you want to bring the coins back and it will send them back right after the end of the validator’s work cycle. It usually takes up to 18 hours on Mainnet and 2 hours on Testnet.
 
 You can also withdraw funds using the following command:
 
@@ -321,7 +313,27 @@ func WithdrawSingleNominatorMessage(single_nominator_address string, query_id, a
 
 ## Election process
 
-1. Check that election has been already started:
+### Set up a Single Nominator Pool
+
+Configure the Single Nominator Pool contract using the [following]((/participate/network-maintenance/single-nominator#set-up-single-nominator)) instructions.
+
+### Join the elections
+
+[Deposit](/participate/network-maintenance/single-nominator#deposit-pool) minimum stake amount to the Single Nominator Pool.
+
+**MyTonCtrl** will automatically join the elections. You can set the stake amount that mytonctrl sends to the [Elector contract](/develop/smart-contracts/governance#elector) ~ every 18 hours on Mainnet and 2 hours on Testnet.
+
+```sh
+MyTonCtrl> set stake 90000
+```
+
+**Minimum stake** amount could be found using `status` command.
+
+![](/img/docs/single-nominator/tetsnet-conf.png)
+
+You can set `stake` as `null` and it will be calculated according to the `stakePercent` value (could be checked with `status_settings` command).
+
+It's possible to check is election has already been started:
 
 ```bash
 MyTonCtrl> status
@@ -335,18 +347,10 @@ MyTonCtrl> status fast
 
 As example:
 
-```sh
-MyTonCtrl> status fast
-===[ TON network status ]===
-Network name: testnet
-Number of validators: 14(15)
-Number of shardchains: 4
-Number of offers: 0(0)
-Number of complaints: 0(0)
-Election status: closed
-```
+![](/img/docs/single-nominator/election-status.png)
 
-2. If the election has been started and Single Nominator Pool is activated, validator should **automatically** send **ElectorNewStake** message to Elector contract.
+
+If the election has been started and Single Nominator Pool is activated, validator should **automatically** send **ElectorNewStake** message to the Elector contract at the beginning of the next round.
 
 Check validator wallet:
 
@@ -374,17 +378,48 @@ This **ElectorNewStake** transaction in Single Nominator contract history in Ton
 
 ![](/img/docs/single-nominator/new-stake.png)
 
-## Delete pool
+On the above example **MyTonCtrl** automatically stake `90000` Toncoins on the Elector contract.
 
-It's also possible to delete local pool:
+### Checking Validator Status
+
+At the beginning of the next round check **MyTonCtrl** validator status with `status` command (`status fast` on Testnet).
+
+![](/img/docs/single-nominator/status-validator.png)
+
+You can confirm if your node has become a full validator by checking the following conditions:
+
+1. **Validator Efficiency** - An efficiency of the local validator should be green and not `n/a`.
+2. **Validator Index** - The validator index should be greater than -1.
+
+Find your node as potential validator under **Validator Index** by checking the Validators List with `vl` command:
+
+![](/img/docs/single-nominator/vl-activated.png)
+
+### Checking profit
+
+At the end of the round **MyTonCtrl** sends **ElectorRecoverStakeRequest** message to the Elector contract. It responses with `stake + profit` amount of Toncoins to your Single Nominator Pool.
+
+![](/img/docs/single-nominator/validator-profit.png)
+
+You can also check transactions history of your pool with `vas` command:
+
+![](/img/docs/single-nominator/validator-profit-vas.png)
+
+### Stop participating
+
+If user doesn't want to take part in validating anymore:
+
+1. Set stake to zero:
 
 ```bash
-MyTonCtrl> delete_pool <pool-name>
+MyTonCtrl> set stake 0
 ```
+
+2. [Withdraw](/participate/network-maintenance/single-nominator#withdraw-funds) all funds from the Single Nominator contract to the owner wallet.
 
 ## Transitioning a Regular Validator to Nominator Pool Mode
 
-1. Input set stake 0 to discontinue election participation.
+1. Set stake 0 to discontinue election participation.
 2. Await the return of both your stakes from the elector.
 3. Proceed with the following [steps](/participate/network-maintenance/single-nominator#set-up-single-nominator).
 
