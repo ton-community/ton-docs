@@ -89,12 +89,12 @@ We are looking for the [TL schema we need](https://github.com/ton-blockchain/ton
 * 32 bytes nonce -> random 32 bytes
 * 4 bytes of ID ADNLQuery schema -> **7af98bb4**
 * 32 bytes `query_id:int256` -> random 32 bytes
-* * 1 byte array size -> **12**
-* * 4 byte of ID LiteQuery schema -> **df068c79**
-* * * 1 byte array size -> **4**
-* * * 4 bytes of ID getMasterchainInfo schema -> **2ee6b589**
-* * * 3 zero bytes of padding (alignment to 8)
-* * 3 zero bytes of padding (alignment to 16)
+  * 1 byte array size -> **12**
+  * 4 byte of ID LiteQuery schema -> **df068c79**
+    * 1 byte array size -> **4**
+    * 4 bytes of ID getMasterchainInfo schema -> **2ee6b589**
+    * 3 zero bytes of padding (alignment to 8)
+  * 3 zero bytes of padding (alignment to 16)
 * 32 bytes of checksum SHA256 from nonce and payload
 
 Packet example in hex:
