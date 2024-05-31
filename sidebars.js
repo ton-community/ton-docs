@@ -663,6 +663,7 @@ const sidebars = {
       label: 'Blockchain Nodes',
       items: [
         'participate/nodes/node-types',
+        'participate/run-nodes/mytonctrl',
         'participate/run-nodes/full-node',
         'participate/run-nodes/enable-liteserver-node',
         'participate/run-nodes/become-validator',
@@ -672,6 +673,7 @@ const sidebars = {
         //'participate/nodes/nodes-faq',
         'participate/nodes/node-maintenance-and-security',
         'participate/run-nodes/local-ton',
+        'participate/run-nodes/faq',
       ],
     },
     {
