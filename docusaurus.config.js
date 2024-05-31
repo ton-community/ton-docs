@@ -362,6 +362,10 @@ const config = {
             label: 'Nodes',
             items: [
               {
+                to: '/participate/run-nodes/mytonctrl',
+                label: 'MyTonCtrl',
+              },
+              {
                 to: '/participate/nodes/node-types',
                 label: 'Node Types',
               },
@@ -392,6 +396,10 @@ const config = {
               {
                 to: '/participate/network-maintenance/vesting-contract',
                 label: 'Vesting Contract',
+              },
+              {
+                to: '/participate/run-nodes/faq',
+                label: 'FAQ',
               },
             ],
           },

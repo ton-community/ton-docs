@@ -51,6 +51,16 @@ mytonctrl
 ```
 :::
 
+###Running MyTonCtrl as Different User
+
+Running MyTonCtrl as a different user may trigger the following error:
+
+```bash
+Error: expected str, bytes or os.PathLike object, not NoneType
+```
+
+To resolve this, you should run MyTonCtrl as the user who installed it.
+
 ## What does "block is not applied" mean?
 
 __Q:__ Sometimes we get `block is not applied` or `block is not ready` for various requests - is this normal?
@@ -146,3 +156,7 @@ The best way (while the penalty for temporary non-validation is small, it can be
 ```bash
 cp var/ton-work/db/config.json var/ton-work/db/config.json.backup
 ```
+
+## See Also
+
+* [MyTonCtrl FAQ](/participate/run-nodes/faq)
