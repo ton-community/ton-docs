@@ -679,6 +679,7 @@ const sidebars = {
       items: [
         'participate/network-maintenance/staking-incentives',
         'participate/network-maintenance/single-nominator',
+        'participate/network-maintenance/nominator-pool',
         'participate/network-maintenance/vesting-contract',
         'participate/network-maintenance/nominators',
         'participate/network-maintenance/persistent-states',

@@ -394,6 +394,10 @@ const config = {
                 label: 'Single Nominator Pool',
               },
               {
+                to: '/participate/network-maintenance/nominator-pool',
+                label: 'Nominator Pool',
+              },
+              {
                 to: '/participate/network-maintenance/vesting-contract',
                 label: 'Vesting Contract',
               },
