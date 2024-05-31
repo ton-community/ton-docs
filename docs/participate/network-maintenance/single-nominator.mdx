@@ -79,6 +79,10 @@ test-pool  active  0.99389  spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjA
 
 Now you can work with this pool via mytonctrl like with a standard nominator pool.
 
+:::info
+If the pool's balance is enough to participate in both rounds (`balance > min_stake_amount * 2`) then MyTonCtrl will automatically participate in both rounds using `stake = balance / 2`, unless user sets stake manually using command `set stake`. This behaviour is different from using a nominator pool but similar to staking using validator wallet.
+:::
+
 ## Start without mytonctrl
 
 #### Prepare launched Validator
