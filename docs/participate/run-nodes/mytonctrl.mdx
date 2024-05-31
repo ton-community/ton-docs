@@ -132,6 +132,107 @@ MyTonCtrl> dw <wallet-name>
 ![](/img/docs/mytonctrl/dw.png)
 
 
+## Account and Transaction commands
+
+### Account status
+
+To check account status and its transaction history use the following command:
+
+```bash
+MyTonCtrl> vas <account-addr>
+```
+
+![](/img/docs/mytonctrl/vas.png)
+
+### Account history
+
+To check account transaction history use the following command using the number of listed operations as `limit`:
+
+```bash
+MyTonCtrl> vah <account-addr> <limit>
+```
+
+![](/img/docs/mytonctrl/vah.png)
+
+### Transfer coins
+
+Transfer coins from local wallet to an account:
+
+```bash
+MyTonCtrl> mg <wallet-name> <account-addr | bookmark-name> <amount>
+```
+
+:::caution
+Wallet version 'v4' is not supported for the transfering
+:::
+
+### Transfer coins through a proxy
+
+Transfer coins from local wallet to an account through a proxy:
+
+```bash
+MyTonCtrl> mgtp <wallet-name> <account-addr | bookmark-name> <amount>
+```
+
+## General Pools Commands
+
+There are two types of pools in **MyTonCtrl2**:
+
+1. [Nominator Pool](/participate/network-maintenance/nominator-pool)
+2. [Single Nominator Pool](/participate/network-maintenance/single-nominator)
+
+All of them are managed by the following set of commands:
+
+### List of pools
+
+```bash
+MyTonCtrl> pools_list
+```
+
+![](/img/docs/mytonctrl/test-pools-list.png)
+
+### Delete a pool
+
+```bash
+MyTonCtrl> delete_pool <pool-name>
+```
+
+### Importing a pool
+
+You can create already created pool to the list of local pools:
+
+```bash
+MyTonCtrl> import_pool <pool-name> <pool-addr>
+```
+
+## Bookmarks
+
+You can create an alias (bookmark) for an account address to simplify it usage.
+
+### Create a new bookmark
+
+```bash
+MyTonCtrl> nb <bookmark-name> <account-addr | domain-name>
+```
+
+![](/img/docs/mytonctrl/nb.png)
+
+### Show the list of bookmarks
+
+```bash
+MyTonCtrl> bl
+```
+
+![](/img/docs/mytonctrl/bl.png)
+
+### Delete a bookmark
+
+```bash
+MyTonCtrl> db <bookmark-name> <bookmark-type>
+```
+
+![](/img/docs/mytonctrl/db.png)
+
 ## See Also
 
 * [FAQ](/participate/run-nodes/faq)
