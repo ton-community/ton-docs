@@ -668,6 +668,7 @@ const sidebars = {
         //'participate/nodes/nodes-faq',
         'participate/nodes/node-maintenance-and-security',
         'participate/run-nodes/local-ton',
+        'participate/run-nodes/run-docker',
       ],
     },
     {
