@@ -409,12 +409,10 @@ You can also check transactions history of your pool with `vas` command:
 
 If user doesn't want to take part in validating anymore:
 
-1. Set stake to zero:
+1. Disable validator mode:
 
 ```bash
-MyTonCtrl> set stake 0
-```
-
+MyTonCtrl> disable_mode validator
 2. [Withdraw](/participate/network-maintenance/single-nominator#withdraw-funds) all funds from the Single Nominator contract to the owner wallet.
 
 ## Transitioning a Regular Validator to Nominator Pool Mode
