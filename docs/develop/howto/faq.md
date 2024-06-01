@@ -20,6 +20,14 @@ This section covers the most popular questions about TON Blockchain.
 
 - [Testnet](/develop/smart-contracts/environment/testnet)
 
+## MEV
+
+### Is front running possible in TON?
+
+In the TON blockchain, deterministic transaction order plays a key role in preventing frontrunning. This means that the order of transactions within a blockchain is predetermined and deterministic. No participant can change this order once transactions have entered the pool. This system eliminates the possibility of manipulating the order of transactions for profit, which differentiates TON from other blockchains such as Ethereum, where validators can change the order of transactions within a block, creating opportunities for MEV (maximum extractable value).
+
+In addition, the current TON architecture lacks a market-based mechanism for determining transaction fees. Commissions are fixed and not subject to change depending on transaction priorities, which makes frontrunning less attractive. Because of the fixed fees and deterministic order of transactions, it is non-trivial to do frontrunning in TON.
+
 ## Block
 
 ### What is the RPC method used to retrieve block information?
