@@ -279,6 +279,11 @@ to the specified centralized address with the obligatory memo in the comment.
 
 **Cons of this method:** this method requires that all users attach a comment to the transfer which can lead to a greater number of deposit mistakes (forgotten memos, incorrect memos, etc.), meaning a higher workload for support staff.
 
+Tonweb examples:
+
+1. [Accepting Jetton deposits to an individual HOT wallet with comments (memo)](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
+2. [Jettons withdrawals example](https://github.com/toncenter/examples/blob/main/withdrawals-jettons.js)
+
 #### Preparations
 
 1. [Prepare a list of accepted Jettons](/develop/dapps/asset-processing/jettons#adding-new-jettons-for-asset-processing-and-initial-verification) (Jetton master addresses).
