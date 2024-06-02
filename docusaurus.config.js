@@ -462,7 +462,7 @@ const config = {
                 value: '<hr style="margin: 0.3rem 0;">',
               },
               {
-                href: "/localization-program-guideline",
+                href: "/contribute/localization-program/localization-program-guideline",
                 label: 'Help Us Translate',
               },
             ],

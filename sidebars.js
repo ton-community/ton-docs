@@ -771,6 +771,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          label: 'How It Worked',
+          id: 'contribute/localization-program/how-it-worked',
+        },
+        {
+          type: 'doc',
           label: 'Localization Program Guideline',
           id: 'contribute/localization-program/localization-program-guideline',
         },
