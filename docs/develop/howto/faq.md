@@ -34,6 +34,14 @@ Workchains in TON, offer a number of advantages over traditional L1 and L2 layer
 
 At any transaction cost, there will always be applications that cannot sustain such a fee but can function at a much lower cost. Similarly, regardless of the latency achieved, there will always be applications that require even lower latency. Therefore, it is conceivable that there might eventually be a need for L2 solutions on the TON platform to cater to these specific requirements.
 
+## MEV
+
+### Is front running possible in TON?
+
+In the TON blockchain, deterministic transaction order plays a key role in preventing frontrunning. This means that the order of transactions within a blockchain is predetermined and deterministic. No participant can change this order once transactions have entered the pool. This system eliminates the possibility of manipulating the order of transactions for profit, which differentiates TON from other blockchains such as Ethereum, where validators can change the order of transactions within a block, creating opportunities for MEV (maximum extractable value).
+
+In addition, the current TON architecture lacks a market-based mechanism for determining transaction fees. Commissions are fixed and not subject to change depending on transaction priorities, which makes frontrunning less attractive. Because of the fixed fees and deterministic order of transactions, it is non-trivial to do frontrunning in TON.
+
 ## Block
 
 ### What is the RPC method used to retrieve block information?
@@ -207,6 +215,23 @@ To protect message chains from being halted at non-existing contracts TON use "b
 
 - [Deploying wallet via TonLib](https://ton.org/docs/develop/dapps/asset-processing/#deploying-wallet)
 - [Paying for processing queries and sending responses](https://ton.org/docs/develop/smart-contracts/guidelines/processing)
+
+### Does the upgradability of a smart-contract pose a threat to its users?
+
+Currently, the ability to update smart contracts is a normal practice and is widely used in most modern protocols. This is because updatability allows for bug fixes, adding new features and improving security.
+
+How to mitigate the risks:
+
+1. Pay attention to projects with a good reputation and well-known development teams.
+2. Reputable projects always conduct independent code audits to make sure the code is safe and reliable. Look for projects that have several completed audits from reputable auditing firms.
+3. An active community and positive feedback can serve as an additional indicator of a project's reliability.
+4. Examine exactly how the project implements the update process. The more transparent and decentralized the process, the less risk to users.
+
+### How can users be sure that the contract owner will not change certain conditions (via an update)?
+
+The contract must be verified, this allows you to check the source code and ensure that there is no update logic to ensure it remains unchanged. If the contract does indeed lack mechanisms to change the code, the terms of the contract will remain unchanged after deployment.
+
+Sometimes the logic for updating may exist, but the rights to change the code may be moved to an "empty" address, which also precludes changes.
 
 ### Is it possible to re-deploy code to an existing address or does it have to be deployed as a new contract?
 

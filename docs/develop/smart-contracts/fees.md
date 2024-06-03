@@ -51,7 +51,9 @@ Fees on TON are difficult to calculate in advance, as their amount depends on tr
 That is why even NFT marketplaces usually take an extra amount of TON (_~1 TON_) and return (_`1 - transaction_fee`_) later.
 
 :::info
-Please use [new TVM opcodes](/learn/tvm-instructions/fee-calculation-instructions#opcodes-to-process-config-parameters) in your smart contracts to dynamically calculate fees and do not hardcode fees in Toncoins in the smart contract code
+Each contract should check incoming messages for the amount of TONs attached to ensure they are enough to cover the fees.
+
+Check the [low-level fees overview](/develop/howto/fees-low-level) to learn more about the formulas for calculating commissions and [fees calculation](/develop/smart-contracts/fee-calculation) to learn how to calculate fees in FunC contracts using the new TVM opcodes.
 :::
 
 However, let's read more about how fees are supposed to function on TON.
