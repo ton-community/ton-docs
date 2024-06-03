@@ -32,7 +32,7 @@ Workchains in TON, offer a number of advantages over traditional L1 and L2 layer
 
 ### Is there a need for L2 on the TON?
 
-At any transaction cost, there will always be applications that cannot sustain such a fee, but can function at a much lower cost. It follows that someday there may be a need for L2 solutions on the TON platform.
+At any transaction cost, there will always be applications that cannot sustain such a fee but can function at a much lower cost. Similarly, regardless of the latency achieved, there will always be applications that require even lower latency. Therefore, it is conceivable that there might eventually be a need for L2 solutions on the TON platform to cater to these specific requirements.
 
 ## Block
 
