@@ -447,12 +447,12 @@ MyTonCtrl> db <bookmark-name> <bookmark-type>
 
 Show offers list
 
-| Format name        | Format                                      | Example                                    | Description                                                                                        |
-|--------------------|---------------------------------------------|--------------------------------------------|----------------------------------------------------------------------------------------------------|
-| No arguments       | `[]`                                        | `PrintOffersList(ton, [])`                 | Prints the table with the hashes reduced.                                                          |
-| JSON output        | `["--json"]`                                | `PrintOffersList(ton, ["--json"])`         | Prints the JSON representation of `data`.                                                          |
-| Full hash output   | `["hash"]`                                  | `PrintOffersList(ton, ["hash"])`           | Prints the table with full hashes.                                                                 |
-| JSON with full hash| `["--json", "hash"]`                        | `PrintOffersList(ton, ["--json", "hash"])` | Prints the JSON representation of `data`. The `"hash"` argument has no effect in this case.        |
+| Format name        | Format           | Description                                                                                        |
+|--------------------|------------------|----------------------------------------------------------------------------------------------------|
+| No arguments       | `ol`             | Prints the table with the hashes reduced.                                                          |
+| JSON output        | `ol --json`      | Prints the JSON representation of `data`.                                                          |
+| Full hash output   | `ol hash`        | Prints the table with full hashes.                                                                 |
+| JSON with full hash| `ol --json hash` | Prints the JSON representation of `data`. The `"hash"` argument has no effect in this case.        |
 
 ### od
 
@@ -466,10 +466,10 @@ MyTonCtrl> od [offer-hash]
 
 Show election entries list
 
-| Format name                       | Format                                           | Description                                                                    |
-|-----------------------------------|--------------------------------------------------|--------------------------------------------------------------------------------|
-| No arguments                      | `[]`                                             | Prints the table with ADNL, Pubkey, and Wallet reduced.                        |
-| Any combination of following args | `["--json", "adnl", "pubkey", "wallet", "past"]` | Full ADNL, Pubkey, Wallet, and past election entries in JSON representation.   |
+| Format name                       | Format                              | Description                                                                    |
+|-----------------------------------|-------------------------------------|--------------------------------------------------------------------------------|
+| No arguments                      | `el`                                | Prints the table with ADNL, Pubkey, and Wallet reduced.                        |
+| Any combination of following args | `el --json adnl pubkey wallet past` | Full ADNL, Pubkey, Wallet, and past election entries in JSON representation.   |
 
 Descriptions for each arg:
 - --json: Prints the JSON representation of data.
@@ -482,10 +482,10 @@ Descriptions for each arg:
 
 Show active validators
 
-| Format name                        | Format                                           | Description                                                                    |
-|------------------------------------|--------------------------------------------------|--------------------------------------------------------------------------------|
-| No arguments                       | `[]`                                             | Prints the table with ADNL, Pubkey, and Wallet reduced.                        |
-| Any combination of following args  | `["--json", "adnl", "pubkey", "wallet", "past"]` | Full ADNL, Pubkey, Wallet, and past validator entries in JSON representation.  |
+| Format name                        | Format                                 | Description                                                                    |
+|------------------------------------|----------------------------------------|--------------------------------------------------------------------------------|
+| No arguments                       | `vl`                                   | Prints the table with ADNL, Pubkey, and Wallet reduced.                        |
+| Any combination of following args  | `vl --json adnl pubkey wallet past`    | Full ADNL, Pubkey, Wallet, and past validator entries in JSON representation.  |
 
 Descriptions for each arg:
 - --json: Prints the JSON representation of data.
@@ -499,10 +499,10 @@ Descriptions for each arg:
 
 Show complaints list
 
-| Format name                       | Format                                     | Description                                                                                                      |
-|-----------------------------------|--------------------------------------------|------------------------------------------------------------------------------------------------------------------|
-| No arguments                      | `[]`                                       | Prints the table with ADNL reduced.                                                                              |
-| Any combination of following args | `["--json", "adnl", "past"]`               | Full ADNL with past complaints in JSON representation.                                                           |
+| Format name                       | Format                | Description                                                                                                      |
+|-----------------------------------|-----------------------|------------------------------------------------------------------------------------------------------------------|
+| No arguments                      | `cl`                  | Prints the table with ADNL reduced.                                                                              |
+| Any combination of following args | `cl --json adnl past` | Full ADNL with past complaints in JSON representation.                                                           |
 
 Descriptions for each parameter:
 - --json: Prints the JSON representation of data.
