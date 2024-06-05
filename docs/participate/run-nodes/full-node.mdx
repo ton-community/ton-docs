@@ -33,6 +33,16 @@ You shouldn't run any type of node on your personal local machine for long, even
 Typically you'll need at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
 :::
 
+### Port Forwarding
+
+All types of nodes require a static external IP address, one UDP port to be forwarded for incoming connections and all outgoing connections to be open - the node uses random ports for new outgoing connections. It's necessarily for the node to be visible to the outside world over the NAT.
+
+It can be done with your network provider or [rent a server](/participate/run-nodes/full-node#recommended-providers) to run a node.
+
+:::info
+It's possible to find out which UDP port is opened from the `netstat -tulpn` command.
+:::
+
 ### Recommended Providers
 
 The TON Foundation recommends the following providers for running a Validator:
