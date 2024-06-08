@@ -2,30 +2,65 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Создано Microsoft Visio, экспорт SVG ecosystem_messages_layout_1.svg Страница-1 -->
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
-		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="7.74779in" height="3.16523in"
-		viewBox="0 0 557.841 227.897" xml:space="preserve" color-interpolation-filters="sRGB" class="st2">
-	<v:documentProperties v:langID="1033" v:metric="true" v:viewMarkup="false">
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="11.6929in" height="8.26772in"
+		viewBox="0 0 841.889 595.276" xml:space="preserve" color-interpolation-filters="sRGB" class="st15">
+	<v:documentProperties v:langID="1033">
 		<v:userDefs>
+			<v:ud v:nameU="msvNoAutoConnect" v:val="VT0(0):26"/>
 			<v:ud v:nameU="msvConvertTheme"/>
+			<v:ud v:nameU="visV14CFF" v:prompt="" v:val="VT0(1):26"/>
+			<v:ud v:nameU="visFlowchartType" v:prompt="" v:val="VT4(CrossFunctional)"/>
 		</v:userDefs>
 	</v:documentProperties>
 
 	<style type="text/css">
 	<![CDATA[
-		.st1 {fill:#ffffff;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.25}
-		.st2 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+		.st1 {fill:none;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.25}
+		.st2 {visibility:visible}
+		.st3 {fill:#000000;fill-opacity:0.4;filter:url(#filter_2.6666667461395);stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.4}
+		.st4 {fill:#ffffff;stroke:#bfbfbf;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.749999}
+		.st5 {fill:#0c0c0c;font-family:Inter;font-size:0.916672em}
+		.st6 {font-size:1em}
+		.st7 {fill:#ffffff;stroke:#058dd2;stroke-linecap:butt;stroke-width:1.5}
+		.st8 {fill:#000000;font-family:Inter;font-size:1.16666em}
+		.st9 {fill:#000000;font-family:Inter;font-size:0.916672em}
+		.st10 {fill:none}
+		.st11 {stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.999999}
+		.st12 {marker-end:url(#mrkr13-34);stroke:#232328;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.999999}
+		.st13 {fill:#232328;fill-opacity:1;stroke:#232328;stroke-opacity:1;stroke-width:0.28409061919554}
+		.st14 {fill:none;stroke:none;stroke-linecap:butt;stroke-width:0.749999}
+		.st15 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
 	]]>
 	</style>
 
+	<defs id="Markers">
+		<g id="lend13">
+			<path d="M 3 1 L 0 0 L 3 -1 L 3 1 " style="stroke:none"/>
+		</g>
+		<marker id="mrkr13-34" class="st13" v:arrowType="13" v:arrowSize="2" v:setback="0" refX="-0" orient="auto"
+				markerUnits="strokeWidth" overflow="visible">
+			<use xlink:href="#lend13" transform="scale(-3.5200035919233,-3.5200035919233) "/>
+		</marker>
+	</defs>
+	<defs id="Filters">
+		<filter id="filter_2.6666667461395">
+			<feGaussianBlur stdDeviation="2.6666667461395"/>
+		</filter>
+	</defs>
 	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
 		<v:userDefs>
+			<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
+			<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
+			<v:ud v:nameU="msvThemeOrder" v:val="VT0(0):26"/>
 			<v:ud v:nameU="visNavType" v:val="VT0(1):26"/>
 		</v:userDefs>
 		<title>Страница-1</title>
 		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50393"
 				v:shadowOffsetY="-8.50393"/>
-		<v:layer v:name="Контейнер" v:index="0"/>
-		<g id="group1-1" transform="translate(1.125,2.84217E-14)" v:mID="1" v:groupContext="group" v:layerMember="0">
+		<v:layer v:name="Соединительная линия" v:index="0"/>
+		<v:layer v:name="Блок-схема" v:index="1"/>
+		<v:layer v:name="Контейнер" v:index="2"/>
+		<g id="group1-1" transform="translate(28.3465,-340.157)" v:mID="1" v:groupContext="group" v:layerMember="2">
 			<v:userDefs>
 				<v:ud v:nameU="msvShapeCategories" v:prompt="" v:val="VT4(ContainerStyleDefaults)"/>
 				<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(Container)"/>
@@ -61,7 +96,7 @@
 				<v:ud v:nameU="visNavOrder" v:prompt="" v:val="VT0(1000):26"/>
 			</v:userDefs>
 			<title>Обычный.2</title>
-			<g id="group2-2" transform="translate(-3.23749E-06,-11.3386)" v:mID="2" v:groupContext="group" v:layerMember="0">
+			<g id="group2-2" transform="translate(-3.23749E-06,-11.3384)" v:mID="2" v:groupContext="group" v:layerMember="2">
 				<v:userDefs>
 					<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT0(0):26"/>
 					<v:ud v:nameU="CStyle" v:prompt="" v:val="VT0(0):26"/>
@@ -82,10 +117,172 @@
 					<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
 				</v:userDefs>
 				<title>Лист.22</title>
-				<g id="shape2-3" v:mID="2" v:groupContext="groupContent" v:layerMember="0">
-					<path d="M0 227.9 L277.8 227.9 L555.59 227.9 L555.59 12.46 L277.8 12.46 L0 12.46 L0 227.9 Z" class="st1"/>
+				<g id="shape2-3" v:mID="2" v:groupContext="groupContent" v:layerMember="2">
+					<path d="M0 595.28 L277.8 595.28 L555.59 595.28 L555.59 379.85 L277.8 379.85 L0 379.85 L0 595.28 Z" class="st1"/>
 				</g>
 			</g>
+		</g>
+		<g id="shape5-5" v:mID="5" v:groupContext="shape" v:layerMember="1" transform="translate(107.008,-439.37)">
+			<title>Процесс</title>
+			<desc>External Signed Message</desc>
+			<v:custProps>
+				<v:cp v:nameU="Cost" v:lbl="Стоимость" v:prompt="" v:type="7" v:format="@" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="1049" v:cal="0"/>
+				<v:cp v:nameU="ProcessNumber" v:lbl="Номер процесса" v:prompt="" v:type="2" v:format="" v:sortKey=""
+						v:invis="false" v:ask="false" v:langID="1049" v:cal="0"/>
+				<v:cp v:nameU="Owner" v:lbl="Владелец" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="1049" v:cal="0"/>
+				<v:cp v:nameU="Function" v:lbl="Функция" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="1049" v:cal="0" v:val="VT4()"/>
+				<v:cp v:nameU="StartDate" v:lbl="Дата начала" v:prompt="" v:type="5" v:format="" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="1049" v:cal="0"/>
+				<v:cp v:nameU="EndDate" v:lbl="Дата окончания" v:prompt="" v:type="5" v:format="" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="1049" v:cal="0"/>
+				<v:cp v:nameU="Status" v:lbl="Состояние" v:prompt="" v:type="4"
+						v:format=";Не начато;Выполняется;Завершено;Отложено;Ожидается ввод" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="1049" v:cal="0" v:val="VT4()"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(14):26"/>
+				<v:ud v:nameU="DefaultWidth" v:prompt="" v:val="VT0(0.98425196850394):24"/>
+				<v:ud v:nameU="DefaultHeight" v:prompt="" v:val="VT0(0.59055118110236):24"/>
+				<v:ud v:nameU="ResizeTxtHeight" v:prompt="" v:val="VT0(0.59055118110236):24"/>
+				<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
+				<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
+				<v:ud v:nameU="visNavOrder" v:prompt="" v:val="VT0(2000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5196"/>
+			<v:textRect cx="45.3542" cy="572.598" width="90.71" height="45.3542"/>
+			<g id="shadow5-6" v:groupContext="shadow" v:shadowOffsetX="-2.12132" v:shadowOffsetY="-2.12132" v:shadowType="1"
+					transform="matrix(1,0,0,1,-2.12132,2.12132)" class="st2">
+				<path d="M-0 589.61 A5.66941 5.66941 -180 0 0 5.67 595.28 L85.04 595.28 A5.66941 5.66941 -180 0 0 90.71 589.61 L90.71
+							 555.59 A5.66941 5.66941 -180 0 0 85.04 549.92 L5.67 549.92 A5.66941 5.66941 -180 0 0 0 555.59 L0 589.61
+							 Z" class="st3"/>
+			</g>
+			<path d="M-0 589.61 A5.66941 5.66941 -180 0 0 5.67 595.28 L85.04 595.28 A5.66941 5.66941 -180 0 0 90.71 589.61 L90.71
+						 555.59 A5.66941 5.66941 -180 0 0 85.04 549.92 L5.67 549.92 A5.66941 5.66941 -180 0 0 0 555.59 L0 589.61
+						 Z" class="st4"/>
+			<text x="4.61" y="569.3" class="st5" v:langID="1049"><v:paragraph v:horizAlign="1"/><v:tabList/>External Signed <tspan
+						x="21.73" dy="1.2em" class="st6">Message</tspan></text>		</g>
+		<g id="shape6-12" v:mID="6" v:groupContext="shape" v:layerMember="0;1" transform="translate(230.079,-427.727)">
+			<title>Ссылка на текущую страницу.3</title>
+			<desc>Wallet</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(14):26"/>
+				<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
+				<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
+				<v:ud v:nameU="visNavOrder" v:prompt="" v:val="VT0(3000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5196"/>
+			<v:textRect cx="34.0171" cy="560.962" width="68.05" height="68.0314"/>
+			<path d="M0 560.96 A34.0171 34.0157 0 0 1 68.03 560.96 A34.0171 34.0157 0 1 1 -0 560.96 Z" class="st7"/>
+			<text x="13.48" y="565.16" class="st8" v:langID="1049"><v:paragraph v:horizAlign="1"/><v:tabList/>Wallet</text>		</g>
+		<g id="shape7-15" v:mID="7" v:groupContext="shape" v:layerMember="1" transform="translate(338.032,-439.37)">
+			<title>Процесс.4</title>
+			<desc>Internal Message</desc>
+			<v:custProps>
+				<v:cp v:nameU="Cost" v:lbl="Стоимость" v:prompt="" v:type="7" v:format="@" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="1049" v:cal="0"/>
+				<v:cp v:nameU="ProcessNumber" v:lbl="Номер процесса" v:prompt="" v:type="2" v:format="" v:sortKey=""
+						v:invis="false" v:ask="false" v:langID="1049" v:cal="0"/>
+				<v:cp v:nameU="Owner" v:lbl="Владелец" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="1049" v:cal="0"/>
+				<v:cp v:nameU="Function" v:lbl="Функция" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="1049" v:cal="0" v:val="VT4()"/>
+				<v:cp v:nameU="StartDate" v:lbl="Дата начала" v:prompt="" v:type="5" v:format="" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="1049" v:cal="0"/>
+				<v:cp v:nameU="EndDate" v:lbl="Дата окончания" v:prompt="" v:type="5" v:format="" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="1049" v:cal="0"/>
+				<v:cp v:nameU="Status" v:lbl="Состояние" v:prompt="" v:type="4"
+						v:format=";Не начато;Выполняется;Завершено;Отложено;Ожидается ввод" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="1049" v:cal="0" v:val="VT4()"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(14):26"/>
+				<v:ud v:nameU="DefaultWidth" v:prompt="" v:val="VT0(0.98425196850394):24"/>
+				<v:ud v:nameU="DefaultHeight" v:prompt="" v:val="VT0(0.59055118110236):24"/>
+				<v:ud v:nameU="ResizeTxtHeight" v:prompt="" v:val="VT0(0.59055118110236):24"/>
+				<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
+				<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
+				<v:ud v:nameU="visNavOrder" v:prompt="" v:val="VT0(4000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5196"/>
+			<v:textRect cx="45.3542" cy="572.598" width="90.71" height="45.3542"/>
+			<g id="shadow7-16" v:groupContext="shadow" v:shadowOffsetX="-2.12132" v:shadowOffsetY="-2.12132" v:shadowType="1"
+					transform="matrix(1,0,0,1,-2.12132,2.12132)" class="st2">
+				<path d="M-0 589.61 A5.66941 5.66941 -180 0 0 5.67 595.28 L85.04 595.28 A5.66941 5.66941 -180 0 0 90.71 589.61 L90.71
+							 555.59 A5.66941 5.66941 -180 0 0 85.04 549.92 L5.67 549.92 A5.66941 5.66941 -180 0 0 0 555.59 L0 589.61
+							 Z" class="st3"/>
+			</g>
+			<path d="M-0 589.61 A5.66941 5.66941 -180 0 0 5.67 595.28 L85.04 595.28 A5.66941 5.66941 -180 0 0 90.71 589.61 L90.71
+						 555.59 A5.66941 5.66941 -180 0 0 85.04 549.92 L5.67 549.92 A5.66941 5.66941 -180 0 0 0 555.59 L0 589.61
+						 Z" class="st4"/>
+			<text x="25.74" y="569.3" class="st5" v:langID="1049"><v:paragraph v:horizAlign="1"/><v:tabList/>Internal <tspan
+						x="21.73" dy="1.2em" class="st6">Message</tspan></text>		</g>
+		<g id="shape8-22" v:mID="8" v:groupContext="shape" v:layerMember="0;1" transform="translate(471.305,-427.622)">
+			<title>Ссылка на текущую страницу.5</title>
+			<desc>Destination contract</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(14):26"/>
+				<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
+				<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
+				<v:ud v:nameU="visNavOrder" v:prompt="" v:val="VT0(5000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5196"/>
+			<v:textRect cx="34.0164" cy="561.042" width="68.05" height="68.0314"/>
+			<path d="M0 561.04 A34.0164 34.0157 0 0 1 68.03 561.04 A34.0164 34.0157 0 1 1 0 561.04 Z" class="st7"/>
+			<text x="4.56" y="557.74" class="st9" v:langID="1049"><v:paragraph v:horizAlign="1"/><v:tabList/>Destination<v:newlineChar/><tspan
+						x="12.16" dy="1.2em" class="st6">contract</tspan></text>		</g>
+		<g id="shape9-26" v:mID="9" v:groupContext="shape" v:layerMember="0" transform="translate(197.717,-462.047)">
+			<title>Динамическая соединительная линия.55</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(2000):26"/>
+				<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
+				<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
+			</v:userDefs>
+			<path d="M0 595.28 L32.6 595.28 L0 595.28 Z" class="st10"/>
+			<path d="M0 595.28 L32.6 595.28" class="st11"/>
+		</g>
+		<g id="shape10-29" v:mID="10" v:groupContext="shape" v:layerMember="0" transform="translate(297.878,-462.05)">
+			<title>Динамическая соединительная линия.56</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(3000):26"/>
+				<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
+				<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
+			</v:userDefs>
+			<path d="M0 595.28 L29.59 595.28 L40.15 595.28" class="st12"/>
+		</g>
+		<g id="shape11-35" v:mID="11" v:groupContext="shape" v:layerMember="0" transform="translate(428.739,-461.868)">
+			<title>Динамическая соединительная линия.86</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(10000):26"/>
+				<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
+				<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
+			</v:userDefs>
+			<path d="M0 595.1 L21.26 595.1 L21.26 595.28 L32.01 595.28 L42.57 595.28" class="st12"/>
+		</g>
+		<g id="shape12-40" v:mID="12" v:groupContext="shape" transform="translate(65.9054,-425.197)">
+			<title>Лист.87</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(11000):26"/>
+			</v:userDefs>
+			<rect v:rectContext="foreign" x="0" y="536.741" width="24.8032" height="58.5353" class="st14"/>
+			<image x="0" y="536.741" width="24.8032" height="58.5353" preserveAspectRatio="none" xlink:href="data:image/png;base64,
+						iVBORw0KGgoAAAANSUhEUgAAAC4AAAB9CAYAAADdo1FuAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7D
+						AcdvqGQAAAPXSURBVHhe7ZvvS1NRGMf3y+FvRJ1rSqkvRlCghhC4TIYEIwgE+wd8ob1xkuKgQMihKASDQnzjuxg0oRdJ6F8ggvoiA4VF
+						9MMielVb+3FnudVuz9k5odhVz67b2V08H3jg3u3e7/NhOzv3XC/qcoitpKRkory8fBe25aampmhDQ0OcbMNr700m033YtpIDtYQbSh4e
+						Hk6trKzIkUhE/ks4HJaXl5floaGhlMFg2Ifj7mTOKDBlIPPCarVKGxsbTPV4VldX5bq6urjRaFyCc0tpRGF41NPTE00kEkztdOLxuOxw
+						OKJwro9GiOdaZWWlFAqFmBI/5BwY93uQcZVGiaMUfohfYDz/Zi5ZEwgEfpnN5k+QZaaRYrhtsVhizEE1NTU1EmTdopFieNDX13cwdajE
+						5XJ9h6x7NFIAMCc/X1hYYO3VMzc3l4ZZ6SmLzT/wo/y4s7PD2qtna2tLhqw3LDb/VFVV7QaDQdZePdvb23J1dfU7Fpt/KioqlhYXF1l7
+						9fj9fjItPmOxQvCMjY3ts/6qGRkZSULWXRophhtdXV1nnlU6OzvJFfQ6jRSDCebgD+THpZbNzU0yj7+FLCONFMcVWLZGJUliKvzEYrHM
+						YgsyLtEowcB8/ri3tzeW7SKru7s7Buc+ZDEFoQyWqIH6+vro+vo6UzuetbU18klHhV50TqEfFl3R8fFxKZVKMc0Dksmk7Ha7JTiGXOL7
+						6SnaoQzqZmNjo7+5ufm13W7/1traGmppaQnabLYn8J4LqqA3D7xcgDpHN5H/E/IVOzVWxOlELsLt1Pf29vZIR0eHJqqtrS0Cs1EY3OxU
+						8V/OwwFf5+fnz7x4yjXEibgRR6p6APkr1Gefz/eTHas5pqenfxBHcLVQZZ2uFl7Y9Xg8e+wYzQJL6T1wJQuzWh2M6VeDg4PZr5QKxMDA
+						QAKcX5JPnL1UPBBnnV6vZ7vFAzinUVwkKC4aFBcNiosGxUWD4qJBcdGguGgy4jx3QKOjo2wr//D04roDSqfTssFgYHv5h2cEcA0VFOcE
+						xVGcExTXrDjPBYjnmKOQ55lqHt7y+uRNfGZmRp6dnWV7/HCL52uoeL3eTGUL91BB8SOguAIorgSKK1Dc4mQyV3qie7jUXICmpqYylS28
+						PkTcAaX0/PxwsVh+ziJ+pLdSXYY6Ffhm9GmWy43aoQL9MsMgF6A4D9APxVGcB+iH4ijOA/RDcRTnAfqhOIrzAP1QHMV5gH4ojuI8QD8U
+						R3EeoB+KF604QZ6cnMyqnE5nppTeO6lIL9oyN0xAeQWVuP/TRxAEQRAEQRAEQRAEQRAE0QY63R84GrakFeXWKgAAAABJRU5ErkJggg=="/>
+			<rect v:rectContext="foreign" x="0" y="536.741" width="24.8032" height="58.5353" class="st14"/>
 		</g>
 	</g>
 </svg>
