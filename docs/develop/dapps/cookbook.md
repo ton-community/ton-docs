@@ -819,7 +819,7 @@ async def main():
                     .store_address(DESTINATION_ADDRESS) # Destination address
                     .store_address(USER_ADDRESS)        # Response address
                     .store_bit(0)                       # Custom payload is None
-                    .store_coins(1)                      # Ton forward amount in nanoton
+                    .store_coins(1)                     # Ton forward amount in nanoton
                     .store_bit(1)                       # Store forward_payload as a reference
                     .store_ref(forward_payload)         # Forward payload
                     .end_cell())
