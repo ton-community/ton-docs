@@ -34,7 +34,7 @@ Released in [10.2022 update](https://github.com/ton-blockchain/ton/releases/tag/
 In this version were added:
 - [Multiline asms](/develop/func/functions#multiline-asms)
 - Duplication of identical definition for constants and asms became allowed
-- Bitwise operations for constants for constants became allowed
+- Bitwise operations for constants became allowed
 
 # Version 0.4.0
 Released in [01.2023 update](https://github.com/ton-blockchain/ton/releases/tag/v2023.01).
@@ -48,3 +48,22 @@ Fixed:
 - forbidden ambiguous modification of local variables after it's usage in the same expression: `var x = (ds, ds~load_uint(32), ds~load_unit(64));` are forbidden, while `var x = (ds~load_uint(32), ds~load_unit(64), ds);` are not
 - Allowed empty inline functions
 - fix rare `while` optimization bug
+
+# Version 0.5.0
+Released in June 2024.
+
+This update was focused on syntax changes and additions.
+1. Traditional comment syntax `//` and `/*` is now supported (and preferred), block comments are no longer nested
+2. All functions are impure by default. Keyword `impure` has become deprecated, but its antonym keyword `pure` is introduced
+3. Keyword `method_id` is deprecated, also. It was replaced as too obscure. Now there is `get`, written on the left: `get int seqno() { ... }`
+4. Pragmas `compute-asm-ltr` and `allow-post-modification` are deprecated (always on)
+5. FunC compiler auto-inlines simple function wrappers, it's a kernel for potential camelCase and stdlib renamings
+6. FunC compiler can drop unused functions from Fift output, activated by `#pragma remove-unused-functions`
+7. Changed priorities of operators `& | ^` to more intuitive ones
+8. Built-in functions are also placed into stdlib
+9. Tremendously enhanced internal framework for testing FunC, a basis for future more radical language improvements
+10. Some bug fixes, for wasm/Tact in particular
+11. IDE plugin for JetBrains has been updated, it supports new syntax and introduces a setting "FunC language level", encoupled with inspections to remove `impure`, replace `method_id` with `get`, etc.
+12. IDE plugin for VS Code has also been updated in the same manner: it supports new syntax, has the "FunC language level" setting and related diagnostics/quickfixes
+
+See [migration guide](/develop/func/migration-guide).
