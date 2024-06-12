@@ -3,7 +3,7 @@
 <!-- Создано Microsoft Visio, экспорт SVG ecosystem_messages_layout_4.svg Page-1 -->
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
 		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="11.6929in" height="8.26772in"
-		viewBox="0 0 841.89 595.276" xml:space="preserve" color-interpolation-filters="sRGB" class="st15">
+		viewBox="70 70 512.1391 362.1191" xml:space="preserve" color-interpolation-filters="sRGB" class="st15">
 	<v:documentProperties v:langID="1049" v:metric="true" v:viewMarkup="false">
 		<v:userDefs>
 			<v:ud v:nameU="msvNoAutoConnect" v:val="VT0(0):26"/>
@@ -21,7 +21,7 @@
 		.st4 {visibility:visible}
 		.st5 {fill:#000000;fill-opacity:0.4;filter:url(#filter_2.6666667461395);stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.4}
 		.st6 {fill:#ffffff;stroke:#bfbfbf;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
-		.st7 {fill:#0c0c0c;font-family:Inter;font-size:0.833336em}
+		.st7 {fill:#0c0c0c;font-family:Inter;font-size:1.00001em}
 		.st8 {font-size:1em}
 		.st9 {stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
 		.st10 {marker-end:url(#mrkr13-40);stroke:#232328;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
@@ -216,8 +216,8 @@
 					<rect x="0" y="548.079" width="90.7087" height="47.1969" rx="5.66929" ry="5.66929" class="st5"/>
 				</g>
 				<rect x="0" y="548.079" width="90.7087" height="47.1969" rx="5.66929" ry="5.66929" class="st6"/>
-				<text x="11.18" y="568.68" class="st7" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>provide_wallet<v:newlineChar/><tspan
-							x="24.01" dy="1.2em" class="st8">_address</tspan></text>			</g>
+				<text x="4.34" y="568.08" class="st7" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>provide_wallet<v:newlineChar/><tspan
+							x="19.74" dy="1.2em" class="st8">_address</tspan></text>			</g>
 			<g id="shape3-18" v:mID="3" v:groupContext="shape" v:layerMember="0;1" transform="translate(239.528,-67.0394)">
 				<title>Ссылка на текущую страницу.3</title>
 				<desc>Jetton Master</desc>
@@ -268,8 +268,8 @@
 					<rect x="0" y="548.079" width="90.7087" height="47.1969" rx="5.66929" ry="5.66929" class="st5"/>
 				</g>
 				<rect x="0" y="548.079" width="90.7087" height="47.1969" rx="5.66929" ry="5.66929" class="st6"/>
-				<text x="18.84" y="568.68" class="st7" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>take_wallet<v:newlineChar/><tspan
-							x="24.01" dy="1.2em" class="st8">_address</tspan></text>			</g>
+				<text x="13.54" y="568.08" class="st7" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>take_wallet<v:newlineChar/><tspan
+							x="19.74" dy="1.2em" class="st8">_address</tspan></text>			</g>
 			<g id="shape55-29" v:mID="55" v:groupContext="shape" v:layerMember="0" transform="translate(198.425,-108.142)">
 				<title>Динамическая соединительная линия.55</title>
 				<v:userDefs>

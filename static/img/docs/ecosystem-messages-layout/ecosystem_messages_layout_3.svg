@@ -3,7 +3,7 @@
 <!-- Создано Microsoft Visio, экспорт SVG ecosystem_messages_layout_3.svg Page-1 -->
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
 		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="11.6929in" height="8.26772in"
-		viewBox="0 0 841.89 595.276" xml:space="preserve" color-interpolation-filters="sRGB" class="st19">
+		viewBox="70 70 512.1391 362.1191" xml:space="preserve" color-interpolation-filters="sRGB" class="st19">
 	<v:documentProperties v:langID="1049" v:metric="true" v:viewMarkup="false">
 		<v:userDefs>
 			<v:ud v:nameU="msvNoAutoConnect" v:val="VT0(0):26"/>
@@ -371,7 +371,7 @@
 			</v:userDefs>
 			<path d="M0 595.28 L0 642.05 L52.04 642.05" class="st14"/>
 		</g>
-		<g id="shape89-67" v:mID="89" v:groupContext="shape" v:layerMember="0;1" transform="translate(495.292,-375.106)">
+		<g id="shape89-67" v:mID="89" v:groupContext="shape" v:layerMember="0;1" transform="translate(495.341,-371.339)">
 			<title>Ссылка на текущую страницу.103</title>
 			<desc>Response Destination</desc>
 			<v:userDefs>
@@ -385,14 +385,14 @@
 			<path d="M0 561.26 A34.0157 34.0157 0 0 1 68.03 561.26 A34.0157 34.0157 0 1 1 0 561.26 Z" class="st17"/>
 			<text x="8.49" y="557.96" class="st18" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>Response<v:newlineChar/><tspan
 						x="4.55" dy="1.2em" class="st8">Destination</tspan></text>		</g>
-		<g id="shape90-71" v:mID="90" v:groupContext="shape" v:layerMember="0" transform="translate(471.097,-414.173)">
+		<g id="shape90-71" v:mID="90" v:groupContext="shape" v:layerMember="0" transform="translate(471.097,-398.268)">
 			<title>Динамическая соединительная линия.90</title>
 			<v:userDefs>
 				<v:ud v:nameU="visNavOrder" v:val="VT0(14000):26"/>
 				<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
 				<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
 			</v:userDefs>
-			<path d="M0 602.33 L10.63 602.33 L10.63 602.39 L25.61 602.39" class="st16"/>
+			<path d="M0 588.19 L24.24 588.19" class="st16"/>
 		</g>
 	</g>
 </svg>
