@@ -224,6 +224,17 @@ Wait until `Local validator out of sync` becomes less than 20 seconds.
 
 ## Become a Validator
 
+### Import existed account
+
+It is possible to import existed account to **MyTonCtrl** using `iw` command:
+
+```sh
+iw <wallet-addr> <wallet-secret-key>
+```
+
+During the execution, the wallet_001 wallet is created:
+
+![](\img\docs\full-node\import-acc.png)
 
 ### View the List of Wallets
 
@@ -689,6 +700,15 @@ If validatorWalletName is null then execute the following:
 mytonctrl> set validatorWalletName validator_wallet_001
 ```
 
+### Status error on Testnet
+
+![](\img\docs\full-node\status-error.jpg)
+
+This error could be seen on Testnet network on `status` command. Use the following instead:
+
+```bash
+mytonctrl> status fast
+```
 
 ### Transfer a Validator on the new Server
 

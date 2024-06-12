@@ -210,6 +210,7 @@ const sidebars = {
               items: [
                 'develop/smart-contracts/fees',
                 'develop/howto/fees-low-level',
+                'develop/smart-contracts/fee-calculation',
                 'develop/smart-contracts/guidelines/accept',
                 'develop/smart-contracts/guidelines/processing',
               ],
@@ -353,10 +354,10 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Advanced Asset Holding',
+          label: 'Advanced Asset Processing',
           items: [
+            'develop/dapps/asset-processing/overview',
             'develop/dapps/asset-processing/README',
-            'develop/dapps/asset-processing/address-verification',
             'develop/dapps/asset-processing/jettons',
             'develop/dapps/asset-processing/usdt',
             'develop/dapps/asset-processing/nfts',

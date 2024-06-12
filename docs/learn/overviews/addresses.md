@@ -163,6 +163,7 @@ The resulting 36-byte sequence is converted into a 48-character base64 or base64
 The simplest way to convert user-friendly and raw addresses is to use one of several TON APIs and other tools, including:
 
 * [ton.org/address](https://ton.org/address)
+* [dton.io API method](https://dton.io/api/address/0:867ac2b47d1955de6c8e23f57994fad507ea3bcfe2a7d76ff38f29ec46729627)
 * [toncenter API methods in mainnet](https://toncenter.com/api/v2/#/accounts/pack_address_packAddress_get)
 * [toncenter API methods in testnet](https://testnet.toncenter.com/api/v2/#/accounts/pack_address_packAddress_get)
 

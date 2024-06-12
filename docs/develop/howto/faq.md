@@ -20,6 +20,28 @@ This section covers the most popular questions about TON Blockchain.
 
 - [Testnet](/develop/smart-contracts/environment/testnet)
 
+## TON and L2
+
+### Why is workchains better than L1 → L2?
+
+Workchains in TON, offer a number of advantages over traditional L1 and L2 layer architecture.
+
+1. One of the key advantages of a blockchain is the instantaneous processing of transactions. In traditional L2 solutions, there can be delays in moving assets between layers. Workchains eliminate this problem by providing seamless and instantaneous transactions between different parts of the network. This is especially important for applications requiring high speed and low latency.
+2. Workchains support cross-shard activity, which means that users can interact between different shardchains or workchains within the same network. In current L2 solutions, cross-shard operations are often complex and require additional bridges or interoperability solutions. In TON, for example, users can easily exchange tokens or perform other transactions between different shardchains without complex procedures.
+3. Scalability is one of the main challenges for modern blockchain systems. In traditional L2 solutions, scalability is limited by the capacity of the sequencer. If the TPS (transactions per second) on L2 exceeds the sequencer's capacity, it can lead to problems. In workchains in TON, this problem is solved by dividing the shard. When the load on a shard exceeds its capacity, the shard is automatically divided into two or more shards, allowing the system to scale almost without limit.
+
+### Is there a need for L2 on the TON?
+
+At any transaction cost, there will always be applications that cannot sustain such a fee but can function at a much lower cost. Similarly, regardless of the latency achieved, there will always be applications that require even lower latency. Therefore, it is conceivable that there might eventually be a need for L2 solutions on the TON platform to cater to these specific requirements.
+
+## MEV
+
+### Is front running possible in TON?
+
+In the TON blockchain, deterministic transaction order plays a key role in preventing frontrunning. This means that the order of transactions within a blockchain is predetermined and deterministic. No participant can change this order once transactions have entered the pool. This system eliminates the possibility of manipulating the order of transactions for profit, which differentiates TON from other blockchains such as Ethereum, where validators can change the order of transactions within a block, creating opportunities for MEV (maximum extractable value).
+
+In addition, the current TON architecture lacks a market-based mechanism for determining transaction fees. Commissions are fixed and not subject to change depending on transaction priorities, which makes frontrunning less attractive. Because of the fixed fees and deterministic order of transactions, it is non-trivial to do frontrunning in TON.
+
 ## Block
 
 ### What is the RPC method used to retrieve block information?

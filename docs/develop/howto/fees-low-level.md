@@ -4,6 +4,12 @@
 This section describes instructions and manuals for interacting with TON at a low level.
 :::
 
+:::caution
+Here you will find the **raw formulas** for calculating commissions and fees on TON.
+
+However, most of them are **already implemented through opcodes**! So, you **use them instead of manual calculations**.
+:::
+
 This document provides a general idea of transaction fees on TON and particularly computation fees for the FunC code. There is also a [detailed specification in the TVM whitepaper](https://ton.org/tvm.pdf).
 
 ## Transactions and phases
@@ -17,13 +23,7 @@ TON validators collect storage fees from smart contracts.
 Storage fees are collected from the smart contract balance at the **Storage phase** of any transaction due storage payments for the account state
 (including smart-contract code and data, if present) up to the present time. The smart contract may be frozen as a result.
 
-It’s important to keep in mind that on TON you pay for both the execution of a smart contract and for the **used storage**, according to the [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22):
-
-```cpp
-bytes * second
-```
-
-It means you have to pay a storage fee for having TON Wallet (even if it's very-very small).
+It’s important to keep in mind that on TON you pay for both the execution of a smart contract and for the **used storage** (check [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22)). `storage fee` depends on you contract size: number of cells and sum of number of bits from that cells. **Only unique hash cells are counted for storage and fwd fees i.e. 3 identical hash cells are counted as one**. It means you have to pay a storage fee for having TON Wallet (even if it's very-very small).
 
 If you have not used your TON Wallet for a significant period of time (1 year), _you will have to pay a significantly larger commission than usual because the wallet pays commission on sending and receiving transactions_.
 
@@ -143,7 +143,7 @@ Apart from those basic fees, the following fees appear:
 
 ### FunC constructions gas fees
 
-Almost all functions used in FunC are defined in [stdlib.func](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) which maps FunC functions to Fift assembler instructions. In turn, Fift assembler instructions are mapped to bit-sequence instructions in [asm.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/fift/lib/Asm.fif). So if you want to understand how much exactly the instruction call will cost you, you need to find `asm` representation in `stdlib.func`, then find bit-sequence in `asm.fif` and calculate instruction length in bits.
+Almost all FunC functions used in this article are defined in [stablecoin stdlib.fc contract](https://github.com/ton-blockchain/stablecoin-contract) (actually, stdlib.fc with new opcodes is currently **under development** and **not yet presented on the mainnet repos**, but you can use `stdlib.fc` from [stablecoin](https://github.com/ton-blockchain/ton) source code as reference) which maps FunC functions to Fift assembler instructions. In turn, Fift assembler instructions are mapped to bit-sequence instructions in [asm.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/fift/lib/Asm.fif). So if you want to understand how much exactly the instruction call will cost you, you need to find `asm` representation in `stdlib.fc`, then find bit-sequence in `asm.fif` and calculate instruction length in bits.
 
 However, generally, fees related to bit-lengths are minor in comparison with fees related to cell parsing and creation, as well as jumps and just number of executed instructions.
 
@@ -273,7 +273,7 @@ Only unique hash cells are counted for storage and fwd fees i.e. 3 identical has
 In particular, it deduplicates data: if there are several equivalent sub-cells referenced in different branches, their content is only stored once.
 
 Read more about [deduplication](/develop/data-formats/library-cells).
-:::
+::: 
 
 // bits in the root cell of a message are not included in msg.bits (lump_price pays for them)
 
@@ -307,3 +307,4 @@ For educational purposes [example of the old one](https://explorer.toncoin.org/c
 
 * [TON Fees overview](/develop/smart-contracts/fees)
 * [Transactions and Phases](/learn/tvm-instructions/tvm-overview#transactions-and-phases)
+* [Fees calculation](/develop/smart-contracts/fee-calculation)
