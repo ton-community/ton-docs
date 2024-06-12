@@ -15,7 +15,7 @@ Join the TON community to collaborate on translations, ask questions, share fe
 Start translating(opens in a new tab)
 
 ## About the Localization Program
-![how it worked](/img/localizationProgramGuideline/localization-program.png)
+![how it works](/img/localizationProgramGuideline/localization-program.png)
 :::tip TON X TownSquare localization program
 This system **TON X TownSquare localization program** was designed by :            
 [**TownSquare**](https://github.com/TownSquareXYZ) one of the closest partners of **TON**. 

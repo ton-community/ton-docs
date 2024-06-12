@@ -1,6 +1,6 @@
-# How It Worked
+# How It Works
 
-![how it worked](/img/localizationProgramGuideline/localization-program.png)
+![how it Works](/img/localizationProgramGuideline/localization-program.png)
 
 There are a few important parts in **TownSquareXYZ Localization Program**, in this chapter, you'll know how this **TownSquareXYZ Localization Program** worked in general, by getting into this deep, you can learn how to use it better.
 

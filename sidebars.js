@@ -771,8 +771,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          label: 'How It Worked',
-          id: 'contribute/localization-program/how-it-worked',
+          label: 'How It Works',
+          id: 'contribute/localization-program/how-it-works',
         },
         {
           type: 'doc',
