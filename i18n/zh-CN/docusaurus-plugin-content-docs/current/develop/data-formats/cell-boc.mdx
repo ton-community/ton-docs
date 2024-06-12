@@ -139,17 +139,17 @@ sources={{
 
 ```golang
 func (c *Cell) descriptors() []byte {
-ceilBytes := c.bitsSz / 8
-if c.bitsSz%8 ! = 0 {
-ceilBytes++
-}
+  ceilBytes := c.bitsSz / 8
+  if c.bitsSz%8 ! = 0 {
+    ceilBytes++
+  }
 
 	// calc size
-	ln := ceilBytes + c.bitsSz/8
+	ln := ceilBytes + c.bitsSz / 8
 
 	specBit := byte(0)
 	if c.special {
-		specBit = 8
+	  specBit = 8
 	}
 
 	return []byte{byte(len(c.refs)) + specBit + c.level*32, byte(ln)}
