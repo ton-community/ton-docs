@@ -287,7 +287,7 @@ Tonweb examples:
 #### Preparations
 
 1. [Prepare a list of accepted Jettons](/develop/dapps/asset-processing/jettons#adding-new-jettons-for-asset-processing-and-initial-verification) (Jetton master addresses).
-2. Deploy hot wallet (using v3R2 if no Jetton withdrawals are expected; highload v2 - if Jetton withdrawals are expected). [Wallet deployment](/develop/dapps/asset-processing/#wallet-deployment).
+2. Deploy hot wallet (using v3R2 if no Jetton withdrawals are expected; highload v3 - if Jetton withdrawals are expected). [Wallet deployment](/develop/dapps/asset-processing/#wallet-deployment).
 3. Perform a test Jetton transfer using the hot wallet address to initialize the wallet.
 
 #### Processing incoming Jettons
