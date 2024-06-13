@@ -20,23 +20,11 @@ Each shardchain, or more precisely, each shardchain block, is identified by a co
 
 Before deciding whether to split or merge, it is necessary to assess the current state of the block. This includes an assessment of the block size, gas consumption and logical block time difference (lt_delta).
 
-The `estimate_block_size` formula calculates the total block size based on various state parameters and statistics. Let's understand this formula in detail and translate it into an understandable language.
-
-```cpp
-td::uint64 BlockLimitStatus::estimate_block_size(const vm::NewCellStorageStat::Stat* extra) const {
-  auto sum = st_stat.get_total_stat();
-  if (extra) {
-    sum += *extra;
-  }
-  return 2000 + (sum.bits >> 3) + sum.cells * 12 + sum.internal_refs * 3 + sum.external_refs * 40 + accounts * 200 +
-         transactions * 200 + (extra ? 200 : 0) + extra_out_msgs * 300 + public_library_diff * 700;
-}
-```
 ### 2. Block classification
 
-Using the estimation results, we categorise the block into three parameters and their limits: size, gas, and lt_delta.
+Using the estimation results, we classify the block into three parameters and their limits: size, gas, and lt_delta.
 
-There are three main classification classes for different block parameters and their limits: 
+There are three main classification classes for different block parameters and their limits:
 - underload (0) - is a state where a shard understands that there is no load, and is inclined to merge if the neighbouring shard wishes to do so.
 - soft limit (2) - when this limit is reached, internal messages are no longer processed.
 - hard limit (4) - that's the absolute maximum size.
@@ -77,8 +65,8 @@ After classifying the block, we check its overload or underload condition.
 
 Using the history of overloading and underloading, decide whether a split or merge is needed.
 
-- If the overload condition is `overload` and the message queue size is between `FORCE_SPLIT_QUEUE_SIZE = 4096` and `SPLIT_MAX_QUEUE_SIZE = 100000`, the `want_split` status is set.
-- If the overload condition is `underloaded`и the message queue size ≤ `MERGE_MAX_QUEUE_SIZE = 2047`, the `want_merge` status is set.
+- If the overload history is `overload` and the message queue size is between `FORCE_SPLIT_QUEUE_SIZE = 4096` and `SPLIT_MAX_QUEUE_SIZE = 100000`, the `want_split` status is set.
+- If the overload condition is `underloaded` and the message queue size ≤ `MERGE_MAX_QUEUE_SIZE = 2047`, the `want_merge` status is set.
 
 ### 5. Checking the manual settings of the collator
 
