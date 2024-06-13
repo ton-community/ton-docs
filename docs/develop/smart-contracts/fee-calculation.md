@@ -8,10 +8,6 @@ This document describes how to calculate fees in FunC contracts using the new TV
 For a comprehensive list of TVM opcodes, including those mentioned below, check the [TVM instruction page](/learn/tvm-instructions/instructions).
 :::
 
-:::info
-Almost all FunC functions used in this article are defined in [stablecoin stdlib.fc contract](https://github.com/ton-blockchain/stablecoin-contract). Actually, stdlib.fc with new opcodes is currently **under development** and **not yet presented on the mainnet repos**, but you can use `stdlib.fc` from [stablecoin](https://github.com/ton-blockchain/ton) source code as reference.
-:::
-
 ## Storage Fee
 
 ### Overview
