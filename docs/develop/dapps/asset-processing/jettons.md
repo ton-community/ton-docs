@@ -340,7 +340,7 @@ const wallet = new WalletClass(tonweb.provider, {
 #### Preparation
 
 1. [Prepare a list of accepted Jettons](#adding-new-jettons-for-asset-processing-and-initial-verification).
-2. Deploy hot wallet (using v3R2 if no Jetton withdrawals are expected; highload v2 - if Jetton withdrawals are expected). [Wallet deployment](/develop/dapps/asset-processing/#wallet-deployment).
+2. Deploy hot wallet (using v3R2 if no Jetton withdrawals are expected; highload v3 - if Jetton withdrawals are expected). [Wallet deployment](/develop/dapps/asset-processing/#wallet-deployment).
 
 #### Creating deposits
 
@@ -431,7 +431,7 @@ See: [Jetton contracts message layouts](#jetton-contract-message-layouts)
 #### Preparation
 
 1. Prepare a list of Jettons for withdrawals: [Adding new Jettons for processing and initial verification](#adding-new-jettons-for-asset-processing-and-initial-verification)
-2. Hot wallet deployment is initiated. Highload v2 is recommended. [Wallet Deployment](/develop/dapps/asset-processing/#wallet-deployment)
+2. Hot wallet deployment is initiated. Highload v3 is recommended. [Wallet Deployment](/develop/dapps/asset-processing/#wallet-deployment)
 3. Carry out a Jetton transfer using a hot wallet address to initialize the Jetton wallet and replenish its balance.
 
 #### Processing withdrawals
