@@ -52,7 +52,7 @@ In time, throughout this documentation, we'll dive deeper into the technical spe
 
 Each address can be in one of possible states:
 
-- `nonexist` - there were no transactions on this address, so it doesn't have any data (it was either never used or the contract was deleted). We can say that initially all 2<sup>256</sup> address are in this state.
+- `nonexist` - there were no accepted transactions on this address, so it doesn't have any data (or the contract was deleted). We can say that initially all 2<sup>256</sup> address are in this state.
 - `uninit` - address has some data, which contains balance and meta info. At this state address doesn't have any smart contract code/persistent data yet. An address enters this state, for example, when it was nonexist and some other address sent some tokens to it.
 - `active` - address has smart contract code, persistent data and balance. At this state it can perform some logic during the transaction and change its persistent data. An address enters this state when it was `uninit` and there was an incoming message with state_init param (note, that to be able to deploy this address, hash of `state_init` and `code` must be equal to address).
 - `frozen` - address cannot perform any operations, this state contains only two hashes of the previous state (code and state cells respectively). When an address's storage charge exceeds its balance, it goes into this state. To unfreeze it, you can send an internal message with `state_init` and `code` which store the hashes described earlier and some Toncoin. It can be difficult to recover it, so you should not allow this situation. There is a project to unfreeze the address, which you can find [here](https://unfreezer.ton.org/).
@@ -193,25 +193,25 @@ When interacting with the TON blockchain, it's crucial to understand the implica
 
 ### What happens when you transfer Toncoin to an uninit address?
 
-#### Transaction with `init_state` included
+#### Transaction with `state_init` included
 
-If you include the `init_state` (which consists of the wallet or smart contract's code and data) with your transaction. The smart contract is deployed first using the provided `init_state`. After deployment, the incoming message is processed, similar to sending to an already initialized account.
+If you include the `state_init` (which consists of the wallet or smart contract's code and data) with your transaction. The smart contract is deployed first using the provided `state_init`. After deployment, the incoming message is processed, similar to sending to an already initialized account.
 
-#### Transaction without `init_state` and `bounce` flag set
+#### Transaction without `state_init` and `bounce` flag set
 
 The message cannot be delivered to the `uninit` smart contract, and it will be bounced back to the sender. After deducting the consumed gas fees, the remaining amount is returned to the sender's address.
 
-#### Transaction without `init_state` and `bounce` flag unset
+#### Transaction without `state_init` and `bounce` flag unset
 
 The message cannot be delivered, but it will not bounce back to the sender. Instead, the sent amount will be credited to the receiving address, increasing its balance even though the wallet is not yet initialized. They will be stored there until the address holder deploys a smart wallet contract and then they can access the balance.
 
 #### How to do it right
 
-The best way to deploy a wallet is to send some TON to its address (which is not yet initialised) with the `bounce` flag cleared. After this step, the owner can deploy and initialise the wallet using funds at the current uninitialised address. This step usually occurs on the first wallet operation.
+The best way to deploy a wallet is to send some TON to its address (which is not yet initialized) with the `bounce` flag cleared. After this step, the owner can deploy and initialize the wallet using funds at the current uninitialized address. This step usually occurs on the first wallet operation.
 
 ### The TON blockchain implements protection against erroneous transactions
 
-In the TON blockchain, standard wallets and apps automatically manage the complexities of transactions to uninitialized addresses by using bounceable and non-bounceable address, which are described [here](#bounceable-vs-non-bounceable-addresses). It is common practice for wallets, when sending coins to non-initialised addresses, to send coins to both bounceable and non-bounceable addresses without return.
+In the TON blockchain, standard wallets and apps automatically manage the complexities of transactions to uninitialized addresses by using bounceable and non-bounceable address, which are described [here](#bounceable-vs-non-bounceable-addresses). It is common practice for wallets, when sending coins to non-initialized addresses, to send coins to both bounceable and non-bounceable addresses without return.
 
 If there is a need to quickly get an address in bounceable/non-bounceable form this can be done [here](https://ton.org/address/).
 
