@@ -834,6 +834,16 @@ asyncio.run(main())
 
 </Tabs>
 
+Some field explanations:
+- `query_id` - arbitrary request number.
+- `amount` - amount of TONs for GAS, any remaining gas will be returned to response_destination.
+- `jetton_amount` - amount of transferred jettons in elementary units.
+- `destination` - address of the new owner of the jettons.
+- `response_destination` - address where to send a response with confirmation of a successful transfer and the rest of the incoming message Toncoins.
+- `custom_payload` - optional custom data (which is used by either sender or receiver jetton wallet for inner logic).
+- `forward_ton_amount` - the amount of nanotons to be sent to the destination address. To send payload it must be at least one nanoton.
+- `forward_payload` - optional custom data that should be sent to the destination address.
+
 If `forward_amount` is nonzero, a notification regarding jetton reception is sent to destination contract, as can be seen in the scheme in the top of this section. If `response_destination` address is not null, toncoins left (they're called "excesses") are sent to that address.
 
 :::tip
@@ -1163,7 +1173,7 @@ Additionally, we need to include royalty information in our message, as they als
 ### How to send a swap message to DEX (DeDust)?
 
 DEXs use different protocols for their work. In this example we will interact with **DeDust**.
- * [DeDust documentation](https://docs.dedust.io/).
+* [DeDust documentation](https://docs.dedust.io/).
 
 DeDust has two exchange paths: jetton <-> jetton or TON <-> jetton. Each has a different scheme. To swap, you need to send jettons (or toncoin) to a specific **vault** and provide a special payload. Here is the scheme for swapping jetton to jetton or jetton to toncoin:
 
@@ -1516,8 +1526,8 @@ asyncio.run(main())
 ### How to parse transactions of an account (Transfers, Jettons, NFTs)?
 
 The list of transactions on an account can be fetched through `getTransactions` API method. It returns an array of `Transaction` objects, with each item having lots of attributes. However, the fields that are the most commonly used are:
- - Sender, Body and Value of the message that initiated this transaction
- - Transaction's hash and logical time (LT)
+- Sender, Body and Value of the message that initiated this transaction
+- Transaction's hash and logical time (LT)
 
 _Sender_ and _Body_ fields may be used to determine the type of message (regular transfer, jetton transfer, nft transfer etc).
 
@@ -1815,7 +1825,7 @@ export async function retry<T>(fn: () => Promise<T>, options: { retries: number,
 
 ```
 
-Create listener function which will assert specific transaction on certain account with specific incoming external message, equal to body message in boc: 
+Create listener function which will assert specific transaction on certain account with specific incoming external message, equal to body message in boc:
 
 <Tabs>
 <TabItem value="ts" label="@ton/ton">
