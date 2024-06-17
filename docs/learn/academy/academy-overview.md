@@ -6,7 +6,7 @@
 
 ### Courses
 
-* [Blockchain Basics with TON](https://stepik.org/course/201294/promo) - 
+* [Blockchain Basics with TON](https://stepik.org/course/201294/promo) ([RU version](https://stepik.org/course/202221/), [CHN version](https://stepik.org/course/200976/)) - 
 This course introduces blockchain basics, with a special focus on practical skills in the TON ecosystem. You will understand how blockchain functions and its diverse applications.
 
 ## See Also
