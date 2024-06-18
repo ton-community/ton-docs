@@ -1,43 +1,26 @@
-# Localization Program Guideline
+# How To Contribute
 
 In the process of **letting TON become the most successful Blockchain**, how to let TON docs be more understandable to people around the world is also an important issue to resolve, that's why we need localization, and we're **glad** you're here ready to participate in.
 
-<br />
+## Preparatory work
+The **TownSquare Labs Localization Program** is open and anyone can contribute! 
 
-:::tip TON X TownSquare localization program
-This system **TON X TownSquare localization program** was designed by :            
-[**TownSquare**](https://github.com/TownSquareXYZ) one of the closest partners of **TON**. 
+And there are **few works you need to do** before you start contribute:
 
-We commit ourselves to making an open infrastructure for multilingual community collaboration to **make TON get into a better phrase**, which includes:
-  1. **Suitable for multilingual communities**
-  2. **Automate development, integration, and deployment**
-  3. **Decoupling the roles of developer, translator, and verifier**
-  4. **Community contribution incentive**
-    
-    **...**
-
-It's not just some project for only one language user, our goal is **for the global developer ecosystem**.
-:::
-
-## How to add support for a new language
-For now, we have all languages we wanted in Crowdin, if you are a community manager, you just need:
-1. Add a new branch named your `[lang]_localization`(like if you're korean community manager use `ko_localization`), on [TownSquareXYZ/ton-docs](https://github.com/TownSquareXYZ/ton-docs).
-2. **Contact vercel owner of this repo**, let him know what language you wanna show in menu.
-3. create a pr request to dev branch. **Never merge it to dev**, it just for preview.
-
-That's all! now you can see the preview of your language in the pr request. 
-![ko preview](/img/localizationProgramGuideline/ko_preview.png)
-
-When your lang is ready to show on TON docs, create an issue, we'll set your lang into prod env.
-
-
+1. You will need to log in to your [**Crowdin**](https://crowdin.com) account or sign up.
+2. Select the language you want to contribute to.
+3. Before starting, please check out the How to translate guide to learn [**how to use Crowdin**](/contribute/localization-program/how-to-contribute), and the [**Translation Style Guide**](/contribute/localization-program/translation-style-guide) for tips and best practices.
+4. Machine translations can help but don't rely on it too much.
+5. All translations can be reviewed online after one hour once they have passed proofreading.
 
 ## Roles
 
 Here are the **roles** you can be in the system :
 
-- **Proofreader**
-- **Translator** ( in-house or community )
+- **Language Coordinator** – can manage certain features of a project only within languages they have access to.
+- **Developer** – сan upload files, edit translatable text, connect integrations, and use the API.
+- **Proofreader** - can translate and approve strings.
+- **Translator** ( in-house or community ) - can translate strings and vote for translations added by other members.
 
 Next, we'll have some specific guides about roles you wanna get into.
 
@@ -52,6 +35,24 @@ Before you start contributing, **read the guidelines below**! They will help you
 All these works are based on **side-by-side** mode in Crowdin Editor, if you don't know how to get into this, click a file you wanna start work, on the top right of the page, you can see Editor view button, we choose **side-by-side** mode, which will make editor more clear. 
 ![side-by-side mode](/img/localizationProgramGuideline/side-by-side.png)
 :::
+
+### Language Coordinator
+ - **translate and approve strings**
+ - **pre-translate the project content**
+ - **manage project members and join requests**
+  ![manage-members](/img/localizationProgramGuideline/manage-members.png)
+ - **generate project reports**
+  ![generate-reports](/img/localizationProgramGuideline/generate-reports.png)
+ - **create tasks**
+  ![create-tasks](/img/localizationProgramGuideline/create-tasks.png)
+
+### Developer
+  - **upload files**
+  - **edit translatable text**
+  - **connect integrations** (e.g. add github integration)
+  ![install-github-integration](/img/localizationProgramGuideline/howItWorked/install-github-integration.png)
+  - **use** [**the crowdin API**](https://developer.crowdin.com/api/v2/)
+  
 
 ### Proofreader
 
@@ -125,3 +126,14 @@ Again, after you get into the editor, make sure you're in [**side by side mode**
 
 4. Congrats, now you know how to work like a translator, if you wanna go to the next file in the editor, just **click the file name** on the top, and it will have a pop-up window, click the file name you will be transported to that file, enjoy it!
 ![to next](/img/localizationProgramGuideline/redirect-to-next.png)
+
+## How to add support for a new language
+For now, we have all languages we wanted in Crowdin, if you are a community manager, you just need:
+1. Add a new branch named your `[lang]_localization`(like if you're korean community manager use `ko_localization`), on [TownSquareXYZ/ton-docs](https://github.com/TownSquareXYZ/ton-docs).
+2. **Contact vercel owner of this repo**, let him know what language you wanna show in menu.
+3. create a pr request to dev branch. **Never merge it to dev**, it just for preview.
+
+That's all! now you can see the preview of your language in the pr request. 
+![ko preview](/img/localizationProgramGuideline/ko_preview.png)
+
+When your lang is ready to show on TON docs, create an issue, we'll set your lang into prod env.

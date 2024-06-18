@@ -776,13 +776,13 @@ const sidebars = {
         },
         {
           type: 'doc',
-          label: 'Localization Program Guideline',
-          id: 'contribute/localization-program/localization-program-guideline',
+          label: 'How To Contribute',
+          id: 'contribute/localization-program/how-to-contribute',
         },
         {
           type: 'doc',
-          label: 'Translators Guide',
-          id: 'contribute/localization-program/translators-guide',
+          label: 'Translation Style Guide',
+          id: 'contribute/localization-program/translation-style-guide',
         },
       ],
     },

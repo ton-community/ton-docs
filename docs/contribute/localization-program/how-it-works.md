@@ -2,7 +2,7 @@
 
 ![how it Works](/img/localizationProgramGuideline/localization-program.png)
 
-There are a few important parts in **TownSquareXYZ Localization Program**, in this chapter, you'll know how this **TownSquareXYZ Localization Program** worked in general, by getting into this deep, you can learn how to use it better.
+There are a few important parts in **TownSquare Labs Localization Program**, in this chapter, you'll know how this **TownSquare Labs Localization Program** worked in general, by getting into this deep, you can learn how to use it better.
 
 In this whole system, we contain several applications, how do we combine them, use their benefit, and make them work like they are just one program naturally:
 
@@ -12,7 +12,7 @@ In this whole system, we contain several applications, how do we combine them, u
 - **Customization glossary** - it will let translators know how to translate words and also make AI generate proper translates based on the project, and anyone can upload their glossary if needed.
 
 :::info
-We won't talk about how to finish the whole thing in this, but we want you to know those important and make this TownSquareXYZ Localization Program unique parts, that you can try TownSquareXYZ Localization Program yourself.
+We won't talk about how to finish the whole thing in this, but we want you to know those important and make this TownSquare Labs Localization Program unique parts, that you can try TownSquare Labs Localization Program yourself.
 :::
 
 ## How to set up a new crowdin project?
