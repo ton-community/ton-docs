@@ -70,7 +70,7 @@ int __test_example() {
 由于我们将进行大量测试，需要频繁更新`c4`寄存器，因此我们将创建一个辅助函数，它将将`c4`写为零
 
 ```js
-() set_default_initial_data() impure {
+() set_default_initial_data() {
   set_data(begin_cell().store_uint(0, 64).end_cell());
 }
 ```
@@ -79,8 +79,6 @@ int __test_example() {
 * `store_uint()` - 写入总量的值
 * `end_cell()`- 创建cell
 * `set_data()` - 将cell写入寄存器c4
-
-`impure`是一个关键词，表示该函数更改了智能合约数据。
 
 我们得
 

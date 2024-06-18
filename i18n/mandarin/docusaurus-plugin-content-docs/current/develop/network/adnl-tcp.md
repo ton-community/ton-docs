@@ -172,7 +172,7 @@ liteServer.runMethodResult mode:# id:tonNode.blockIdExt shardblk:tonNode.blockId
 
 FunC中的方法代码：
 ```func
-(cell, cell) a2() method_id {
+get (cell, cell) a2() {
   cell a = begin_cell().store_uint(0xAABBCC8, 32).end_cell();
   cell b = begin_cell().store_uint(0xCCFFCC1, 32).end_cell();
   return (a, b);

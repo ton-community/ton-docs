@@ -6,9 +6,9 @@ In this article, we will review and discuss the elements to consider for those w
 
 ### 1. Name collisions
 
-Func variables and functions may contain almost any legit character. I.e. `var++`, `~bits`, `foo-bar+baz` including commas are valid variables and functions names.
+FunC variables and functions may contain almost any legit character. I.e. `var++`, `~bits`, `foo-bar+baz` including commas are valid variables and functions names.
 
-When writing and inspecting a Func code, Linter should be used.
+When writing and inspecting a FunC code, Linter should be used.
 
 - [IDE plugins](/develop/smart-contracts/environment/ide-plugins/)
 
@@ -16,10 +16,10 @@ When writing and inspecting a Func code, Linter should be used.
 
 Each time the TVM execution stops normally, it stops with exit codes `0` or `1`. Although it is done automatically, TVM execution can be interrupted directly in an unexpected way if exit codes `0` and `1` are thrown directly by either `throw(0)` or `throw(1)` command.
 
-- [How to handle errors](/develop/func/builtins#throwing-exceptions)
+- [How to handle errors](/develop/func/stdlib#throwing-exceptions)
 - [TVM exit codes](/learn/tvm-instructions/tvm-exit-codes)
 
-### 3. Func is a strictly typed language with data structures holding exactly what they are supposed to store
+### 3. FunC is a strictly typed language with data structures holding exactly what they are supposed to store
 
 It is crucial to keep track of what the code does and what it may return. Keep in mind that the compiler cares only about the code and only in its initial state. After certain operations stored values of some variables can change.
 
@@ -50,9 +50,9 @@ Contracts in the blockchain can reside in separate shards, processed by other se
 
 It is helpful to think through the roadmap of exit codes for the code flow (and have it documented) before starting programming your TON smart contract.
 
-### 9. Func functions that have medhod_id identifiers have method IDs
+### 9. FunC functions declared as `get` have method ID
 
-They can be either set explicitly `"method_id(5)"`, or implicitly by a func compiler. In this case, they can be found among methods declarations in the .fift assembly file. Two of them are predefined: one for receiving messages inside of blockchain `(0)`, commonly named `recv_internal`, and one for receiving messages from outside `(-1)`, `recv_external`.
+For get methods, FunC calculated an ID that is saved into Fift bytecode (such functions can be called by name, but actually, a client calculated the same hash). Two IDs are predefined: one for receiving messages inside of blockchain `(0)`, commonly named `recv_internal`, and one for receiving messages from outside `(-1)`, `recv_external`.
 
 ### 10. TON Crypto address may not have any coins or code
 
@@ -67,7 +67,7 @@ A full representation can either be "raw" (`workchain:address`) or "user-friendl
 
 ### 12. Keep track of the flaws in code execution
 
-Unlike Solidity where it's up to you to set methods visibility, in the case of Func, the visibility is restricted in a more intricate way either by showing errors or by `if` statements.
+Unlike Solidity where it's up to you to set methods visibility, in the case of FunC, the visibility is restricted in a more intricate way either by showing errors or by `if` statements.
 
 ### 13. Keep an eye on gas before sending bounced messages
 

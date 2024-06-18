@@ -28,18 +28,18 @@
 
     'comment': [
       {
-        pattern: /;;.*/,
+        pattern: /\/\/.*/,
         lookbehind: true,
         greedy: true
       },
       {
-        pattern: /\{-[\s\S]*?(?:-\}|$)/,
+        pattern: /\/\*[\s\S]*?\*\//,
         lookbehind: true,
         greedy: true
       },
     ],
 
-    'keyword': /\b(?:_(?=\s*:)|asm|const|do|else|elseif|elseifnot|forall|global|if|ifnot|impure|inline|inline_ref|method_id|repeat|return|until|while)\b/,
+    'keyword': /\b(?:_(?=\s*:)|asm|const|do|else|elseif|elseifnot|forall|global|if|ifnot|impure|pure|builtin|get|inline|inline_ref|method_id|repeat|return|until|while|try|catch)\b/,
     'boolean': /\b(?:false|true)\b/,
     'builtin': /\b(?:_|builder|cell|cont|int|slice|tuple|var)\b/,
 

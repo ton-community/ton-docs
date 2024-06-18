@@ -63,7 +63,7 @@ Any technology that needs to be installed **prior** to starting the tutorial and
     - \```javascript *or* ```js can be used for any JavaScript code.
     - \```typescript or ```ts can be used for any TypeScript code.
     - \```jsx is for ReactJS code.
-    - \```cpp is for Func code.
+    - \```func is for FunC code.
     - Use \```graphql when highlighting GraphQL syntax.
     - Use \```json when highlighting valid JSON. (For invalid JSON examples use \```text instead.)
     - \```bash should *only* be used in code blocks where you need to have # style comments. This must be done carefully because in many situations the # character will render as a markdown heading. Typically, the Table of Contents will be affected if this occurs.

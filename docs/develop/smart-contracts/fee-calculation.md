@@ -34,29 +34,29 @@ In particular, it deduplicates data: if there are several equivalent sub-cells r
 Each contract has its balance. You can calculate how many TONs your contract requires to remain valid for a specified `seconds` time using the function:
 
 ```func
-int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells bits seconds workchain) "GETSTORAGEFEE";
+int get_storage_fee(int workchain, int seconds, int bits, int cells) pure asm(cells bits seconds workchain) "GETSTORAGEFEE";
 ```
 
 You can then hardcode that value into the contract and calculate the current storage fee using:
 
 ```func
-;; functions from func stdlib (not presented on mainnet)
-() raw_reserve(int amount, int mode) impure asm "RAWRESERVE";
-int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells bits seconds workchain) "GETSTORAGEFEE";
-int my_storage_due() asm "DUEPAYMENT";
+// functions from func stdlib (not presented on mainnet)
+() raw_reserve(int amount, int mode) asm "RAWRESERVE";
+int get_storage_fee(int workchain, int seconds, int bits, int cells) pure asm(cells bits seconds workchain) "GETSTORAGEFEE";
+int my_storage_due() pure asm "DUEPAYMENT";
 
-;; constants from stdlib
-;;; Creates an output action which would reserve exactly x nanograms (if y = 0).
+// constants from stdlib
+/// Creates an output action which would reserve exactly x nanograms (if y = 0).
 const int RESERVE_REGULAR = 0;
-;;; Creates an output action which would reserve at most x nanograms (if y = 2).
-;;; Bit +2 in y means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved.
+/// Creates an output action which would reserve at most x nanograms (if y = 2).
+/// Bit +2 in y means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved.
 const int RESERVE_AT_MOST = 2;
-;;; in the case of action fail - bounce transaction. No effect if RESERVE_AT_MOST (+2) is used. TVM UPGRADE 2023-07. https://docs.ton.org/learn/tvm-instructions/tvm-upgrade-2023-07#sending-messages
+/// in the case of action fail - bounce transaction. No effect if RESERVE_AT_MOST (+2) is used. TVM UPGRADE 2023-07. https://docs.ton.org/learn/tvm-instructions/tvm-upgrade-2023-07#sending-messages
 const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;
 
 () calculate_and_reserve_storage_fee(int balance, int msg_value, int workchain, int seconds, int bits, int cells) inline {
     int to_leave_on_balance = my_ton_balance - msg_value + my_storage_due();
-    int min_storage_fee = get_storage_fee(workchain, seconds, bits, cells); ;; can be hardcoded IF CODE OF THE CONTRACT WILL NOT BE UPDATED
+    int min_storage_fee = get_storage_fee(workchain, seconds, bits, cells); // can be hardcoded IF CODE OF THE CONTRACT WILL NOT BE UPDATED
     raw_reserve(max(to_leave_on_balance, min_storage_fee), RESERVE_AT_MOST);
 }
 ```
@@ -77,7 +77,7 @@ In most cases use the `GETGASFEE` opcode with the following parameters:
 ### Calculation Flow
 
 ```func
-int get_compute_fee(int workchain, int gas_used) asm(gas_used workchain) "GETGASFEE";
+int get_compute_fee(int workchain, int gas_used) pure asm(gas_used workchain) "GETGASFEE";
 ```
 
 But how do you get `gas_used`? Through tests!
@@ -214,17 +214,17 @@ Modes affect the fee calculation as follows:
 It creates an output action and returns a fee for creating a message. However, it uses an unpredictable amount of gas, which can't be calculated using formulas, so how can it be calculated? Use `GASCONSUMED`:
 
 ```func
-int send_message(cell msg, int mode) impure asm "SENDMSG";
-int gas_consumed() asm "GASCONSUMED";
-;; ... some code ...
+int send_message(cell msg, int mode) asm "SENDMSG";
+int gas_consumed() pure asm "GASCONSUMED";
+// ... some code ...
 
 () calculate_forward_fee(cell msg, int mode) inline {
   int gas_before = gas_consumed();
   int forward_fee = send_message(msg, mode);
   int gas_usage = gas_consumed() - gas_before;
   
-  ;; forward fee -- fee value
-  ;; gas_usage -- amount of gas, used to send msg
+  // forward fee -- fee value
+  // gas_usage -- amount of gas, used to send msg
 }
 ```
 

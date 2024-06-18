@@ -81,7 +81,7 @@ B) "用户友好"形式，首先生成：
 :::info
 请注意，在此及以后的代码、注释和/或文档中可能包含“gram”、“nanogram”等参数、方法和定义。这是原始TON代码的遗留问题，由Telegram开发。Gram加密货币从未发行。TON的货币是Toncoin，TON测试网的货币是Test Toncoin。
 :::
-```cpp
+```
 got account state for -1 : FCB91A3A3816D0F7B8C2C76108B8A9BC5A6B7A55BD79F8AB101C52DB29232260 with respect to blocks (-1,8000000000000000,2075):BFE876CE2085274FEDAF1BD80F3ACE50F42B5A027DF230AD66DCED1F09FB39A7:522C027A721FABCB32574E3A809ABFBEE6A71DE929C1FA2B1CD0DDECF3056505
 account state is (account
   addr:(addr_std
@@ -141,7 +141,7 @@ last transaction lt = 2310000001 hash = 73F89C6F8910F598AD84504A777E5945C798AC8C
 
 考虑文件`new-wallet.fif`（通常位于构建目录相对的`crypto/smartcont/new-wallet.fif`），其中包含一个简单钱包智能合约的源代码：
 
-```cpp
+```fift
 #!/usr/bin/env fift -s
 "TonUtil.fif" include
 "Asm.fif" include
@@ -228,7 +228,7 @@ $ fift -s new-wallet.fif 0 my_wallet_name
 
 如果一切顺利，您将看到类似这样的内容：
 
-```cpp
+```
 Creating new wallet in workchain 0 
 Saved new private key to file my_wallet_name.pk
 StateInit: x{34_}
@@ -295,7 +295,7 @@ B5EE9C724104030100000000E50002CF88005DD369FA9E0EF93644650186AEC7BF3DB5616835841A
 
 生成正确的值 39445 = 0x9A15：
 
-```cpp
+```
 got account state for -1 : FCB91A3A3816D0F7B8C2C76108B8A9BC5A6B7A55BD79F8AB101C52DB29232260 with respect to blocks (-1,8000000000000000,2240):18E6DA7707191E76C71EABBC5277650666B7E2CFA2AEF2CE607EAFE8657A3820:4EFA2540C5D1E4A1BA2B529EE0B65415DF46BFFBD27A8EB74C4C0E17770D03B1
 creating VM
 starting VM to run method `seqno` (85143) of smart contract -1:FCB91A3A3816D0F7B8C2C76108B8A9BC5A6B7A55BD79F8AB101C52DB29232260
@@ -306,7 +306,7 @@ result:  [ 39445 ]
 
 接下来，您创建一个外部消息给测试赠予者，要求它发送另一个消息给您的（未初始化的）智能合约，携带指定数量的测试Toncoin。有一个特殊的Fift脚本用于生成这个外部消息，位于`crypto/smartcont/testgiver.fif`：
 
-```cpp
+```fift
 #!/usr/bin/env fift -s
 "TonUtil.fif" include
 
@@ -370,7 +370,7 @@ $ fift -s testgiver.fif 0QAu6bT9Twd8myIygMNXY9-e2rC0GsINNvQAlnfflcOv4uVb 0x9A15 
 
 外部消息被序列化并保存到文件`wallet-query.boc`中。过程中生成了一些输出：
 
-```cpp
+```
 Test giver address = -1:fcb91a3a3816d0f7b8c2c76108b8a9bc5a6b7a55bd79f8ab101c52db29232260 
 kf_8uRo6OBbQ97jCx2EIuKm8Wmt6Vb15-KsQHFLbKSMiYIny
 Requesting GR$6.666 to account 0QAu6bT9Twd8myIygMNXY9-e2rC0GsINNvQAlnfflcOv4uVb = 0:2ee9b4fd4f077c9b223280c35763df9edab0b41ac20d36f4009677df95c3afe2 seqno=0x9a15 bounce=0 
@@ -407,7 +407,7 @@ B5EE9C7241040201000000006600014F89FF02ACEEB6F264BCBAC5CE85B372D8616CA2B4B9A5E3EC
 
 （如果您忘记输入`last`，您可能会看到测试赠予者智能合约的未更改状态。）结果输出将是：
 
-```cpp
+```
 got account state for -1 : FCB91A3A3816D0F7B8C2C76108B8A9BC5A6B7A55BD79F8AB101C52DB29232260 with respect to blocks (-1,8000000000000000,2240):18E6DA7707191E76C71EABBC5277650666B7E2CFA2AEF2CE607EAFE8657A3820:4EFA2540C5D1E4A1BA2B529EE0B65415DF46BFFBD27A8EB74C4C0E17770D03B1
 account state is (account
   addr:(addr_std
@@ -448,7 +448,7 @@ x{CFF8156775B79325E5D62E742D9B96C30B6515A5CD2F1F64C5DA4B193C03F070E0D2068086C000
 
 现在我们可以检查我们新智能合约的状态：
 
-```cpp
+```
 > getaccount 0QAu6bT9Twd8myIygMNXY9-e2rC0GsINNvQAlnfflcOv4uVb
 或
 > getaccount 0:2ee9b4fd4f077c9b223280c35763df9edab0b41ac20d36f4009677df95c3afe2
@@ -456,7 +456,7 @@ x{CFF8156775B79325E5D62E742D9B96C30B6515A5CD2F1F64C5DA4B193C03F070E0D2068086C000
 
 现在我们看到：
 
-```cpp
+```
 got account state for 0:2EE9B4FD4F077C9B223280C35763DF9EDAB0B41AC20D36F4009677DF95C3AFE2 with respect to blocks (-1,8000000000000000,16481):890F4D549428B2929F5D5E0C5719FBCDA60B308BA4B907797C9E846E644ADF26:22387176928F7BCEF654411CA820D858D57A10BBF1A0E153E1F77DE2EFB2A3FB and (-1,8000000000000000,16481):890F4D549428B2929F5D5E0C5719FBCDA60B308BA4B907797C9E846E644ADF26:22387176928F7BCEF654411CA820D858D57A10BBF1A0E153E1F77DE2EFB2A3FB
 account state is (account
   addr:(addr_std
@@ -483,7 +483,7 @@ x{CFF60C04141C6A7B96D68615E7A91D265AD0F3A9A922E9AE9C901D4FA83F5D3C0D02025BC2E4A0
 
 现在，您终于可以上传包含新智能合约的代码和数据的`StateInit`外部消息了：
 
-```cpp
+```
 > sendfile my_wallet_name-query.boc
 ... external message status is 1
 > last
@@ -534,7 +534,7 @@ x{CFF60C04141C6A7B96D68615E7A91D265AD0F3A9A922E9AE9C901D4FA83F5D3C0D020680F0C2E4
 
 以下是您如何使用这个智能合约的示例，提供在文件`crypto/smartcont/wallet.fif`中：
 
-```cpp
+```fift
 #!/usr/bin/env fift -s
 "TonUtil.fif" include
 

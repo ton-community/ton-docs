@@ -2,7 +2,7 @@
 This section briefly discusses FunC statements, constituting the code of ordinary function bodies.
 
 ## Expression statements
-The most common type of a statement is the expression statement. It's an expression followed by `;`. Expression's description would be quite complicated, so only a sketch is presented here. As a rule all sub-expressions are computed left to right with one exception of [asm stack rearrangement](functions#rearranging-stack-entries) which may define order manually.
+The most common type of a statement is the expression statement. It's an expression followed by `;`. Expression's description would be quite complicated, so only a sketch is presented here. As a rule, all sub-expressions are computed left to right.
 
 ### Variable declaration
 It is not possible to declare a local variable without defining its initial value.
@@ -36,10 +36,10 @@ int x = 0;
 int i = 0;
 while (i < 10) {
   (int, int) x = (i, i + 1);
-  ;; here x is a variable of type (int, int)
+  // here x is a variable of type (int, int)
   i += 1;
 }
-;; here x is a (different) variable of type int
+// here x is a (different) variable of type int
 ```
 But as mentioned in the global variables [section](/develop/func/global_variables.md), a global variable cannot be redeclared.
 
@@ -56,7 +56,7 @@ Underscore `_` is used when a value is not needed. For example, suppose a functi
 ### Function application
 A call of a function looks like as such in a conventional language. The arguments of the function call are listed after the function name, separated by commas.
 ```func
-;; suppose foo has type (int, int, int) -> int
+// suppose foo has type (int, int, int) -> int
 int x = foo(1, 2, 3);
 ```
 
@@ -72,12 +72,12 @@ int x = foo(a, b, c);
 
 Also Haskell-style calls are possible, but not always (to be fixed later):
 ```func
-;; suppose foo has type int -> int -> int -> int
-;; i.e. it's carried
+// suppose foo has type int -> int -> int -> int
+// i.e. it's carried
 (int a, int b, int c) = (1, 2, 3);
-int x = foo a b c; ;; ok
-;; int y = foo 1 2 3; wouldn't compile
-int y = foo (1) (2) (3); ;; ok
+int x = foo a b c; // ok
+// int y = foo 1 2 3; wouldn't compile
+int y = foo (1) (2) (3); // ok
 ```
 ### Lambda expressions
 Lambda expressions are not supported yet.
@@ -152,6 +152,14 @@ In summary, when a function with the name `foo` is called as a non-modifying or 
 
 ### Operators
 Note that currently all of the unary and binary operators are integer operators. Logical operators are represented as bitwise integer operators  (cf. [absence of boolean type](/develop/func/types#absence-of-boolean-type)).
+
+:::info Mind about spaces
+- `x + y` is ok
+- `x+y` is not ok (it's a single identifier)
+- `~ x` is ok (expression "not x")
+- `~x` is a modifier method
+:::
+
 #### Unary operators
 There are two unary operators:
 - `~` is bitwise not (priority 75)
@@ -171,13 +179,10 @@ With priority 30 (left-associative):
 - `~%` is integer reduction by modulo (round)
 - `^%` is integer reduction by modulo (ceil)
 - `/%` returns the quotient and the remainder
-- `&` is bitwise AND
 
 With priority 20 (left-associative):
 - `+` is integer addition
 - `-` is integer subtraction
-- `|` is bitwise OR
-- `^` is bitwise XOR
 
 With priority 17 (left-associative):
 - `<<` is bitwise left shift
@@ -194,9 +199,15 @@ With priority 15 (left-associative):
 - `>=` is integer comparison
 - `<=>` is integer comparison (returns -1, 0 or 1)
 
-They also should be separated from the argument:
-- `x + y` is ok
-- `x+y` is not ok (it's a single identifier)
+With priority 14 (left-associative):
+- `&` is bitwise AND
+- `|` is bitwise OR
+- `^` is bitwise XOR
+
+:::caution `& | ^` priority changed in FunC v0.5.0
+Before v0.5.0, they had higher priority, leading to errors hard to find out.  
+Now they are more intuitive: `if (op == 2 & val)` works as expected.
+:::
 
 #### Conditional operator
 It has the usual syntax.
@@ -223,21 +234,21 @@ int x = 1;
 repeat(10) {
   x *= 2;
 }
-;; x = 1024
+// x = 1024
 ```
 ```func
 int x = 1, y = 10;
 repeat(y + 6) {
   x *= 2;
 }
-;; x = 65536
+// x = 65536
 ```
 ```func
 int x = 1;
 repeat(-1) {
   x *= 2;
 }
-;; x = 1
+// x = 1
 ```
 If the number of times is less than `-2^31` or greater than `2^31 - 1`, range check exception is thrown.
 ### While loop
@@ -247,7 +258,7 @@ int x = 2;
 while (x < 100) {
   x = x * x;
 }
-;; x = 256
+// x = 256
 ```
 Note that the truth value of condition `x < 100` is of type `int` (cf. [absence of boolean type](/develop/func/types#absence-of-boolean-type)).
 
@@ -258,24 +269,24 @@ int x = 0;
 do {
   x += 3;
 } until (x % 17 == 0);
-;; x = 51
+// x = 51
 ```
 ## If statements
 Examples:
 ```func
-;; usual if
+// usual if
 if (flag) {
   do_something();
 }
 ```
 ```func
-;; equivalent to if (~ flag)
+// equivalent to if (~ flag)
 ifnot (flag) {
   do_something();
 }
 ```
 ```func
-;; usual if-else
+// usual if-else
 if (flag) {
   do_something();
 }
@@ -284,7 +295,7 @@ else {
 }
 ```
 ```func
-;; Some specific features
+// Some specific features
 if (flag1) {
   do_something1();
 } else {
@@ -298,13 +309,13 @@ if (flag1)
 ```
 
 ## Try-Catch statements
-*Available in func since v0.4.0*
+*Available since FunC v0.4.0*
 
 Executes the code in `try` block. If it fails, completely rolls back changes made in `try` block and executes `catch` block instead; `catch` receives two arguments: the exception parameter of any type (`x`) and the error code (`n`, integer).
 
 Unlike many other languages in the FunC try-catch statement, the changes made in the try block, in particular the modification of local and global variables, all registers' changes (i.e. `c4` storage register, `c5` action/message register, `c7` context register and others) **are discarded** if there is an error in the try block and consequently all contract storage updates and message sending will be reverted. It is important to note that some TVM state parameters such as _codepage_ and gas counters will not be rolled back. This means, in particular, that all gas spent in the try block will be taken into account, and the effects of OPs that change the gas limit (`accept_message` and `set_gas_limit`) will be preserved.
 
-Note that exception parameter can be of any type (possibly different in case of different exceptions) and thus funC can not predict it on compile time. That means that developer need to "help" compiler by casting exception parameter to some type (see Example 2 below):
+Note that exception parameter can be of any type (possibly different in case of different exceptions) and thus FunC can not predict it on compile time. That means that developer need to "help" compiler by casting exception parameter to some type (see Example 2 below):
 
 Examples:
 ```func
@@ -321,7 +332,7 @@ try {
   throw_arg(-1, 100);
 } catch (x, n) {
   x.cast_to_int();
-  ;; x = -1, n = 100
+  // x = -1, n = 100
   return x + 1;
 }
 ```
@@ -332,7 +343,7 @@ try {
   throw(100);
 } catch (_, _) {
 }
-;; x = 0 (not 1)
+// x = 0 (not 1)
 ```
 
 ## Block statements

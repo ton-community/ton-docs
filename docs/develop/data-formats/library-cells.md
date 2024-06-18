@@ -26,7 +26,7 @@ You can consider library cell as C++ pointer: one small cell that points to larg
 
 Library cell is [exotic cell](/develop/data-formats/exotic-cells) that contains a reference to some other static cell. In particular it contains 256 bit of hash of referenced cell. 
 
-For TVM, library cells works as follows: whenever TVM receives a command to open a cell to a slice (TVM Instruction: `CTOS`, funC method: `.begin_parse()`), it searches cell with the corresponding hash from library cell in the Masterchain library context. If found it, it opens referenced cell and returns its slice. 
+For TVM, library cells works as follows: whenever TVM receives a command to open a cell to a slice (TVM Instruction: `CTOS`, FunC method: `.begin_parse()`), it searches cell with the corresponding hash from library cell in the Masterchain library context. If found it, it opens referenced cell and returns its slice. 
 
 Opening library cell costs the same as opening ordinar cell, so it can be used as transparent replacement for static cells that however occupy much less space (and thus costs less fees for storage and sending).
 
@@ -50,11 +50,11 @@ Basically you need to put tag and hash to the builder and then "close builder as
 
 It can be done in Fift-asm construction like [this](https://github.com/ton-blockchain/multisig-contract-v2/blob/master/contracts/auto/order_code.func), example of compilation some contract directly to library cell [here](https://github.com/ton-blockchain/multisig-contract-v2/blob/master/wrappers/Order.compile.ts).
 
-```fift
-;; https://docs.ton.org/tvm.pdf, page 30
-;; Library reference cell — Always has level 0, and contains 8+256 data bits, including its 8-bit type integer 2 
-;; and the representation hash Hash(c) of the library cell being referred to. When loaded, a library
-;; reference cell may be transparently replaced by the cell it refers to, if found in the current library context.
+```func
+// https://docs.ton.org/tvm.pdf, page 30
+// Library reference cell — Always has level 0, and contains 8+256 data bits, including its 8-bit type integer 2 
+// and the representation hash Hash(c) of the library cell being referred to. When loaded, a library
+// reference cell may be transparently replaced by the cell it refers to, if found in the current library context.
 
 cell order_code() asm "<b 2 8 u, 0x6305a8061c856c2ccf05dcb0df5815c71475870567cab5f049e340bcf59251f3 256 u, b>spec PUSHREF";
 ```

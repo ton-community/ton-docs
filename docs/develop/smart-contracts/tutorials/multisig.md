@@ -29,7 +29,7 @@ Before we begin our journey, check and prepare your environment.
 
 - Install `func`, `fift`, `lite-client` binaries and `fiftlib` from the [Installation](/develop/smart-contracts/environment/installation) section.
 - Clone [repository](https://github.com/akifoq/multisig) and open its directory in CLI.
-```cpp
+```
 https://github.com/akifoq/multisig.git
 cd ~/multisig
 ``` 
@@ -47,7 +47,7 @@ cd ~/multisig
 
 Compile the contract to Fift with:
 
-```cpp
+```bash
 func -o multisig-code.fif -SPA stdlib.fc multisig-code.fc
 ```
 
@@ -57,7 +57,7 @@ func -o multisig-code.fif -SPA stdlib.fc multisig-code.fc
 
 To create a key you need to run:
 
-```cpp
+```bash
 fift -s new-key.fif $KEY_NAME$
 ```
 
@@ -65,7 +65,7 @@ fift -s new-key.fif $KEY_NAME$
 
 For example:
 
-```cpp
+```bash
 fift -s new-key.fif multisig_key
 ```
 
@@ -98,7 +98,7 @@ PubH821csswh8R1uO9rLYyP1laCpYWxhNkx+epOkqwdWXgzY4
 
 After that, you need to run:
 
-```cpp
+```bash
 fift -s new-multisig.fif 0 $WALLET_ID$ wallet $KEYS_COUNT$ ./keys.txt
 ```
 
@@ -168,7 +168,7 @@ After that, the wallet will be ready to work within a minute.
 
 First you need to create a message request:
 
-```cpp
+```bash
 fift -s create-msg.fif $ADDRESS$ $AMOUNT$ $MESSAGE$
 ```
 
@@ -178,7 +178,7 @@ fift -s create-msg.fif $ADDRESS$ $AMOUNT$ $MESSAGE$
 
 For example:
 
-```cpp
+```bash
 fift -s create-msg.fif EQApAj3rEnJJSxEjEHVKrH3QZgto_MQMOmk8l72azaXlY1zB 0.1 message
 ```
 

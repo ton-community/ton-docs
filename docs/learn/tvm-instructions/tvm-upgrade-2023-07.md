@@ -24,7 +24,7 @@ Using **10** for code is compatible to Everscale update of tvm.
 
 **11** Currently value of the incoming message is presented on stack after TVM initiation, so if needed during execution,
 one either need to store it to global variable or pass through local variables
-(at funC level it looks like additional `msg_value` argument in all functions).
+(at FunC level it looks like additional `msg_value` argument in all functions).
 By putting it to **11** element we will repeat behavior of contract balance: it is presented both on stack and in c7.
 
 **12** Currently the only way to calculate storage fees is to store balance in the previous transaction,

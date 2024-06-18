@@ -19,7 +19,7 @@ Get方法是智能合约中用于查询特定数据的特殊函数。它们的�
    示例：
 
    ```func
-    int get_balance() method_id {
+    get int balance() {
         return get_data().begin_parse().preload_uint(64);
     }
     ```
@@ -29,7 +29,7 @@ Get方法是智能合约中用于查询特定数据的特殊函数。它们的�
    示例：
 
     ```func
-    (int, slice, slice, cell) get_wallet_data() method_id {
+    get (int, slice, slice, cell) wallet_data() {
         return load_data();
     }
     ```
@@ -41,7 +41,7 @@ Get方法是智能合约中用于查询特定数据的特殊函数。它们的�
    示例：
 
     ```func
-    slice get_wallet_address(slice owner_address) method_id {
+    get slice wallet_address(slice owner_address) {
         (int total_supply, slice admin_address, cell content, cell jetton_wallet_code) = load_data();
         return calculate_user_jetton_wallet_address(owner_address, my_address(), jetton_wallet_code);
     }
@@ -52,7 +52,7 @@ Get方法是智能合约中用于查询特定数据的特殊函数。它们的�
    示例：
 
     ```func
-    (int) get_ready_to_be_used() method_id {
+    get (int) ready_to_be_used() {
         int ready? = now() >= 1686459600;
         return ready?;
     }
@@ -65,7 +65,7 @@ Get方法是智能合约中用于查询特定数据的特殊函数。它们的�
 #### seqno()
 
 ```func
-int seqno() method_id {
+get int seqno() {
     return get_data().begin_parse().preload_uint(32);
 }
 ```
@@ -75,7 +75,7 @@ int seqno() method_id {
 #### get_subwallet_id()
 
 ```func
-int get_subwallet_id() method_id {
+get int get_subwallet_id() {
     return get_data().begin_parse().skip_bits(32).preload_uint(32);
 }
 ```
@@ -85,7 +85,7 @@ int get_subwallet_id() method_id {
 #### get_public_key()
 
 ```func
-int get_public_key() method_id {
+get int get_public_key() {
     var cs = get_data().begin_parse().skip_bits(64);
     return cs.preload_uint(256);
 }
@@ -98,7 +98,7 @@ int get_public_key() method_id {
 #### get_wallet_data()
 
 ```func
-(int, slice, slice, cell) get_wallet_data() method_id {
+get (int, slice, slice, cell) get_wallet_data() {
     return load_data();
 }
 ```
@@ -113,7 +113,7 @@ int get_public_key() method_id {
 #### get_jetton_data()
 
 ```func
-(int, int, slice, cell, cell) get_jetton_data() method_id {
+get (int, int, slice, cell, cell) get_jetton_data() {
     (int total_supply, slice admin_address, cell content, cell jetton_wallet_code) = load_data();
     return (total_supply, -1, admin_address, content, jetton_wallet_code);
 }
@@ -124,7 +124,7 @@ int get_public_key() method_id {
 #### get_wallet_address(slice owner_address)
 
 ```func
-slice get_wallet_address(slice owner_address) method_id {
+get slice get_wallet_address(slice owner_address) {
     (int total_supply, slice admin_address, cell content, cell jetton_wallet_code) = load_data();
     return calculate_user_jetton_wallet_address(owner_address, my_address(), jetton_wallet_code);
 }
@@ -137,7 +137,7 @@ slice get_wallet_address(slice owner_address) method_id {
 #### get_nft_data()
 
 ```func
-(int, int, slice, slice, cell) get_nft_data() method_id {
+get (int, int, slice, slice, cell) get_nft_data() {
     (int init?, int index, slice collection_address, slice owner_address, cell content) = load_data();
     return (init?, index, collection_address, owner_address, content);
 }
@@ -148,7 +148,7 @@ slice get_wallet_address(slice owner_address) method_id {
 #### get_collection_data()
 
 ```func
-(int, cell, slice) get_collection_data() method_id {
+get (int, cell, slice) get_collection_data() {
     var (owner_address, next_item_index, content, _, _) = load_data();
     slice cs = content.begin_parse();
     return (next_item_index, cs~load_ref(), owner_address);
@@ -160,7 +160,7 @@ slice get_wallet_address(slice owner_address) method_id {
 #### get_nft_address_by_index(int index)
 
 ```func
-slice get_nft_address_by_index(int index) method_id {
+get slice get_nft_address_by_index(int index) {
     var (_, _, _, nft_item_code, _) = load_data();
     cell state_init = calculate_nft_item_state_init(index, nft_item_code);
     return calculate_nft_item_address(workchain(), state_init);
@@ -172,7 +172,7 @@ slice get_nft_address_by_index(int index) method_id {
 #### royalty_params()
 
 ```func
-(int, int, slice) royalty_params() method_id {
+get (int, int, slice) royalty_params() {
     var (_, _, _, _, royalty) = load_data();
     slice rs = royalty.begin_parse();
     return (rs~load_uint(16), rs~load_uint(16), rs~load_msg_addr());
@@ -184,13 +184,13 @@ slice get_nft_address_by_index(int index) method_id {
 #### get_nft_content(int index, cell individual_nft_content)
 
 ```func
-cell get_nft_content(int index, cell individual_nft_content) method_id {
+get cell get_nft_content(int index, cell individual_nft_content) {
     var (_, _, content, _, _) = load_data();
     slice cs = content.begin_parse();
     cs~load_ref();
     slice common_content = cs~load_ref().begin_parse();
     return (begin_cell()
-            .store_uint(1, 8) ;; 离线标签
+            .store_uint(1, 8) // 离线标签
             .store_slice(common_content)
             .store_ref(individual_nft_content)
             .end_cell());
@@ -225,8 +225,8 @@ cell get_nft_content(int index, cell individual_nft_content) method_id {
 假设有一个合约，其中有以下get方法：
 
 ```func
-(int) get_total() method_id {
-    return get_data().begin_parse().preload_uint(32); ;; load and return the 32-bit number from the data
+get (int) get_total() {
+    return get_data().begin_parse().preload_uint(32); // load and return the 32-bit number from the data
 }
 ```
 
@@ -313,11 +313,11 @@ it('应该从get方法返回正确的数字', async () => {
 ```func
 #include "imports/stdlib.fc";
 
-int get_total() method_id {
+get int get_total() {
     return get_data().begin_parse().preload_uint(32);
 }
 
-() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) {
     if (in_msg_body.slice_bits() < 32) {
         return ();
     }
@@ -326,23 +326,23 @@ int get_total() method_id {
     cs~skip_bits(4);
     slice sender = cs~load_msg_addr();
 
-    int op = in_msg_body~load_uint(32); ;; load the operation code
+    int op = in_msg_body~load_uint(32); // load the operation code
 
-    if (op == 1) { ;; increase and update the number
+    if (op == 1) { // increase and update the number
         int number = in_msg_body~load_uint(32);
         int total = get_total();
         total += number;
         set_data(begin_cell().store_uint(total, 32).end_cell());
     }
-    elseif (op == 2) { ;; query the number
+    elseif (op == 2) { // query the number
         int total = get_total();
         send_raw_message(begin_cell()
             .store_uint(0x18, 6)
             .store_slice(sender)
             .store_coins(0)
-            .store_uint(0, 107) ;; default message headers (see sending messages page)
-            .store_uint(3, 32) ;; response operation code
-            .store_uint(total, 32) ;; the requested number
+            .store_uint(0, 107) // default message headers (see sending messages page)
+            .store_uint(3, 32) // response operation code
+            .store_uint(total, 32) // the requested number
         .end_cell(), 64);
     }
 }

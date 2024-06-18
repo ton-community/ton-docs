@@ -40,7 +40,7 @@
 
 在这个版本中增加了：
 - [try/catch 语句](/develop/func/statements#try-catch-statements)
-- [throw_arg 函数](/develop/func/builtins#throwing-exceptions)
+- [throw_arg 函数](/develop/func/stdlib#throwing-exceptions)
 - 允许就地修改和批量赋值全局变量：`a~inc()` 和 `(a, b) = (3, 5)`，其中 `a` 是全局变量
 
 修复：

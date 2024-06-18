@@ -28,7 +28,7 @@ description: 本教程结束时，您将在TON区块链上部署了多签合约�
 
 - 从[安装](/develop/smart-contracts/environment/installation)部分中安装`func`、`fift`、`lite-client`二进制文件和`fiftlib`。
 - 克隆[库](https://github.com/akifoq/multisig)并在CLI中打开其目录。
-```cpp
+```
 https://github.com/akifoq/multisig.git
 cd ~/multisig
 ``` 
@@ -45,7 +45,7 @@ cd ~/multisig
 
 使用以下命令将合约编译为Fift：
 
-```cpp
+```bash
 func -o multisig-code.fif -SPA stdlib.fc multisig-code.fc
 ```
 
@@ -54,7 +54,7 @@ func -o multisig-code.fif -SPA stdlib.fc multisig-code.fc
 
 要创建一个密钥，您需要运行：
 
-```cpp
+```bash
 fift -s new-key.fif $KEY_NAME$
 ```
 
@@ -62,7 +62,7 @@ fift -s new-key.fif $KEY_NAME$
 
 例如：
 
-```cpp
+```bash
 fift -s new-key.fif multisig_key
 ```
 
@@ -96,7 +96,7 @@ PubH821csswh8R1uO9rLYyP1laCpYWxhNkx+epOkqwdWXgzY4
 之后，您需要运行：
 
 
-```cpp
+```bash
 fift -s new-multisig.fif 0 $WALLET_ID$ wallet $KEYS_COUNT$ ./keys.txt
 ```
 
@@ -166,7 +166,7 @@ sendfile ./wallet-create.boc
 
 首先，您需要创建一个消息请求：
 
-```cpp
+```bash
 fift -s create-msg.fif $ADDRESS$ $AMOUNT$ $MESSAGE$
 ```
 
@@ -176,7 +176,7 @@ fift -s create-msg.fif $ADDRESS$ $AMOUNT$ $MESSAGE$
 
 例如：
 
-```cpp
+```bash
 fift -s create-msg.fif EQApAj3rEnJJSxEjEHVKrH3QZgto_MQMOmk8l72azaXlY1zB 0.1 message
 ```
 

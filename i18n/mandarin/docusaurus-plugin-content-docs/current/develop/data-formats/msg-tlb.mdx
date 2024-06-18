@@ -336,21 +336,21 @@ var_int$_ {n:#} len:(#< n) value:(int (len * 8))
 
 ```func
   var msg = begin_cell()
-    .store_uint(0, 1) ;; 标记
-    .store_uint(1, 1) ;; ihr_disabled
-    .store_uint(1, 1) ;; 允许弹回
-    .store_uint(0, 1) ;; 本身不是弹回
+    .store_uint(0, 1) // 标记
+    .store_uint(1, 1) // ihr_disabled
+    .store_uint(1, 1) // 允许弹回
+    .store_uint(0, 1) // 本身不是弹回
     .store_slice(source)
     .store_slice(destination)
-    ;; 序列化 CurrencyCollection（见下文）
+    // 序列化 CurrencyCollection（见下文）
     .store_coins(amount)
     .store_dict(extra_currencies)
-    .store_coins(0) ;; ihr_fee
-    .store_coins(fwd_value) ;; fwd_fee
-    .store_uint(cur_lt(), 64) ;; 交易的 lt
-    .store_uint(now(), 32) ;; 交易的 unixtime
-    .store_uint(0,  1) ;; 没有 init-field 标志位（Maybe）
-    .store_uint(0,  1) ;; 原位消息体标志位（Either）
+    .store_coins(0) // ihr_fee
+    .store_coins(fwd_value) // fwd_fee
+    .store_uint(cur_lt(), 64) // 交易的 lt
+    .store_uint(now(), 32) // 交易的 unixtime
+    .store_uint(0,  1) // 没有 init-field 标志位（Maybe）
+    .store_uint(0,  1) // 原位消息体标志位（Either）
     .store_slice(msg_body)
   .end_cell();
 ```

@@ -1,29 +1,16 @@
 # Comments
-FunC has single-line comments which start with `;;` (double `;`). For example:
+
+FunC has traditional comments: `//` for single-line and `/* ... */` for multi-line:
 ```func
-int x = 1; ;; assign 1 to x
+/*
+  Just an assignment
+*/
+int x = 1; // assign 1 to x
 ```
 
-It also has multi-line comments which start with `{-` and end with `-}`. Note that unlike in many other languages, FunC multi-line comments can be nested. For example:
-```func
-{- This is a multi-line comment
-    {- this is a comment in the comment -}
--}
-```
+They are not nested, like in C, JavaScript, and many other languages.
 
-Moreover, there can be one-line comments inside multi-line ones, and one-line comments `;;` are "stronger" than multiline `{- -}`. In other words in the following example:
-
-```func
-{-
-  Start of the comment
-
-;; this comment ending is itself commented -> -}
-
-const a = 10;
-;; this comment begining is itself commented -> {-
-
-  End of the comment
--}
-```
-
-`const a = 10;` is inside multiline comment and is commented out.
+:::caution
+Before v0.5.0, FunC had Lisp-style comments (`;;` and `{- ... -}`).  
+Although they are still supported, they might be removed in future versions.
+:::

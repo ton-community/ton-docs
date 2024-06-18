@@ -79,7 +79,7 @@ You will see something like this:
 :::info
 Please note here and further that the code, comments, and/or documentation may contain parameters, methods, and definitions such as “gram”, “nanogram”, etc. That is a legacy of the original TON code, developed by Telegram. Gram cryptocurrency was never issued. The currency of TON is Toncoin and the currency of TON testnet is Test Toncoin.
 :::
-```cpp
+```
 got account state for -1 : FCB91A3A3816D0F7B8C2C76108B8A9BC5A6B7A55BD79F8AB101C52DB29232260 with respect to blocks (-1,8000000000000000,2075):BFE876CE2085274FEDAF1BD80F3ACE50F42B5A027DF230AD66DCED1F09FB39A7:522C027A721FABCB32574E3A809ABFBEE6A71DE929C1FA2B1CD0DDECF3056505
 account state is (account
   addr:(addr_std
@@ -139,7 +139,7 @@ One such tool is the Fift interpreter, which is included in this distribution an
 
 Consider the file `new-wallet.fif` (usually located at `crypto/smartcont/new-wallet.fif` with respect to the source directory) containing the source of a simple wallet smart contract:
 
-```cpp
+```fift
 #!/usr/bin/env fift -s
 "TonUtil.fif" include
 "Asm.fif" include
@@ -224,7 +224,7 @@ instead of indicating the complete search paths in the command line.
 
 If everything worked, you'll see something like this:
 
-```cpp
+```
 Creating new wallet in workchain 0 
 Saved new private key to file my_wallet_name.pk
 StateInit: x{34_}
@@ -291,7 +291,7 @@ as explained above in Section 2. The only number you need from the output is the
 
 producing the correct value 39445 = 0x9A15:
 
-```cpp
+```
 got account state for -1 : FCB91A3A3816D0F7B8C2C76108B8A9BC5A6B7A55BD79F8AB101C52DB29232260 with respect to blocks (-1,8000000000000000,2240):18E6DA7707191E76C71EABBC5277650666B7E2CFA2AEF2CE607EAFE8657A3820:4EFA2540C5D1E4A1BA2B529EE0B65415DF46BFFBD27A8EB74C4C0E17770D03B1
 creating VM
 starting VM to run method `seqno` (85143) of smart contract -1:FCB91A3A3816D0F7B8C2C76108B8A9BC5A6B7A55BD79F8AB101C52DB29232260
@@ -302,7 +302,7 @@ result:  [ 39445 ]
 
 Next, you create an external message to the test giver asking it to send another message to your (uninitialized) smart contract carrying a specified amount of test Toncoin. There is a special Fift script for generating this external message located at `crypto/smartcont/testgiver.fif`:
 
-```cpp
+```fift
 #!/usr/bin/env fift -s
 "TonUtil.fif" include
 
@@ -366,7 +366,7 @@ This Fift code creates an internal message from the test giver smart contract to
 
 The external message is serialized and saved into the file `wallet-query.boc`. Some output is generated in the process:
 
-```cpp
+```
 Test giver address = -1:fcb91a3a3816d0f7b8c2c76108b8a9bc5a6b7a55bd79f8ab101c52db29232260 
 kf_8uRo6OBbQ97jCx2EIuKm8Wmt6Vb15-KsQHFLbKSMiYIny
 Requesting GR$6.666 to account 0QAu6bT9Twd8myIygMNXY9-e2rC0GsINNvQAlnfflcOv4uVb = 0:2ee9b4fd4f077c9b223280c35763df9edab0b41ac20d36f4009677df95c3afe2 seqno=0x9a15 bounce=0 
@@ -403,7 +403,7 @@ which means that the external message has been delivered to the collator pool. A
 
 (If you forget to type `last`, you are likely to see the unchanged state of the test giver smart contract.) The resulting output will be:
 
-```cpp
+```
 got account state for -1 : FCB91A3A3816D0F7B8C2C76108B8A9BC5A6B7A55BD79F8AB101C52DB29232260 with respect to blocks (-1,8000000000000000,2240):18E6DA7707191E76C71EABBC5277650666B7E2CFA2AEF2CE607EAFE8657A3820:4EFA2540C5D1E4A1BA2B529EE0B65415DF46BFFBD27A8EB74C4C0E17770D03B1
 account state is (account
   addr:(addr_std
@@ -444,7 +444,7 @@ You may notice that the sequence number stored in the persistent data has change
 
 Now we can inspect the state of our new smart contract:
 
-```cpp
+```
 > getaccount 0QAu6bT9Twd8myIygMNXY9-e2rC0GsINNvQAlnfflcOv4uVb
 or
 > getaccount 0:2ee9b4fd4f077c9b223280c35763df9edab0b41ac20d36f4009677df95c3afe2
@@ -452,7 +452,7 @@ or
 
 Now we see:
 
-```cpp
+```
 got account state for 0:2EE9B4FD4F077C9B223280C35763DF9EDAB0B41AC20D36F4009677DF95C3AFE2 with respect to blocks (-1,8000000000000000,16481):890F4D549428B2929F5D5E0C5719FBCDA60B308BA4B907797C9E846E644ADF26:22387176928F7BCEF654411CA820D858D57A10BBF1A0E153E1F77DE2EFB2A3FB and (-1,8000000000000000,16481):890F4D549428B2929F5D5E0C5719FBCDA60B308BA4B907797C9E846E644ADF26:22387176928F7BCEF654411CA820D858D57A10BBF1A0E153E1F77DE2EFB2A3FB
 account state is (account
   addr:(addr_std
@@ -479,7 +479,7 @@ Our new smart contract has some positive balance (of 6.666 test Toncoin) but has
 
 Now you can finally upload the external message with the `StateInit` of the new smart contract which contains its code and data:
 
-```cpp
+```
 > sendfile my_wallet_name-query.boc
 ... external message status is 1
 > last
@@ -530,7 +530,7 @@ Actually, the simple wallet smart contract used in this example can be used to t
 
 An example of how you might use this smart contract is provided in the sample file `crypto/smartcont/wallet.fif` :
 
-```cpp
+```fift
 #!/usr/bin/env fift -s
 "TonUtil.fif" include
 

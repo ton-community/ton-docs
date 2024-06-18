@@ -502,7 +502,6 @@ const sidebars = {
             'develop/func/global_variables',
             'develop/func/compiler_directives',
             'develop/func/statements',
-            'develop/func/builtins',
             'develop/func/dictionaries',
             'develop/func/stdlib',
           ],

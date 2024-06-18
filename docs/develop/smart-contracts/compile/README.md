@@ -69,7 +69,7 @@ npm install ton-compiler
 
 This packages adds `ton-compiler` binary to a project.
 
-FunC compilation is a multi-stage process. One is compiling Func to Fift code that is then compiled to a binary representation. Fift compiler already has Asm.fif bundled.
+FunC compilation is a multi-stage process. One is compiling FunC to Fift code that is then compiled to a binary representation. Fift compiler already has Asm.fif bundled.
 
 FunC stdlib is bundled but could be disabled at runtime.
 

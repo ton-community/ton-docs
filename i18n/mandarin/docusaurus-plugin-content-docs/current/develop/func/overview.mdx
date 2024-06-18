@@ -8,9 +8,9 @@ FunC 是一种领域特定的、类 C 语言的、静态类型语言。
 这是一个用 FunC 编写的发送资金的简单示例方法：
 
 ```func
-() send_money(slice address, int amount) impure inline {
+() send_money(slice address, int amount) inline {
     var msg = begin_cell()
-        .store_uint(0x10, 6) ;; nobounce
+        .store_uint(0x10, 6) // nobounce
         .store_slice(address)
         .store_coins(amount)
         .end_cell();
@@ -71,7 +71,7 @@ npm create ton@latest
   - [🚩 挑战 6：分析 Getgems 市场上的 NFT 销售](https://github.com
 
 /romanovichim/TONQuest6)
-* [Func & Blueprint](https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa) 由 **@MarcoDaTr0p0je** 提供
+* [FunC & Blueprint](https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa) 由 **@MarcoDaTr0p0je** 提供
 * [Learn FunC in Y Minutes](https://learnxinyminutes.com/docs/func/) 由 **@romanovichim** 提供
 * [TON Hello World：编写您的第一个智能合约的逐步指南](https://ton-community.github.io/tutorials/02-contract/)
 * [TON Hello World：测试您的第一个智能合约的逐步指南](https://ton-community.github.io/tutorials/04-testing/)
