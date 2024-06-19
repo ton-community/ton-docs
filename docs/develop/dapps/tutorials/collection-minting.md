@@ -199,7 +199,7 @@ Seqno used to prevent Replay Attacks. When a transaction is sent to a wallet sma
 
 ## 🖼 Prepare metadata
 
-Metadata - is just a simple information that will describe our NFT or collection. For example it's name, it's description, etc. 
+To create your NFT collection, you'll need both **metadata** files and **images**. Metadata includes details like the name, description, and attributes of each NFT. You can prepare these manually or use a tool like [NFT Art Generator(https://nft-generator.art)] to streamline the process.
 
 Firstly, we need to store images of our NFT's in `/data/images` with name `0.png`, `1.png`, ... for photo of items, and `logo.png` for avatar of our collection. You can easily [download pack](/img/tutorials/nft/ducks.zip) with ducks images or put your images into that folder. And also we will store all our metadata files in `/data/metadata/` folder. 
 
