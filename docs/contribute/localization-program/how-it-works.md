@@ -1,31 +1,32 @@
 # How It Works
 
-![how it Works](/img/localizationProgramGuideline/localization-program.png)
+![how it works](/img/localizationProgramGuideline/localization-program.png)
 
-There are a few important parts in **TownSquare Labs Localization Program**, in this chapter, you'll know how this **TownSquare Labs Localization Program** worked in general, by getting into this deep, you can learn how to use it better.
+The **TownSquare Labs Localization Program** comprises several key components. This chapter will provide an overview of how the program operates, helping you understand its workings and how to use it effectively.
 
-In this whole system, we contain several applications, how do we combine them, use their benefit, and make them work like they are just one program naturally:
+Within this system, we integrate several applications to function seamlessly as a unified program:
 
-- **GitHub** - the docs are stored in here.
-- **Crowdin** - here is the translation system part, we do translate, read proof, language setting...   
-- **AI systems** - we are using an advanced AI to help translators finish their jobs smoothly.
-- **Customization glossary** - it will let translators know how to translate words and also make AI generate proper translates based on the project, and anyone can upload their glossary if needed.
+- **GitHub**: Stores the documentation.
+- **Crowdin**: Manages translation processes, including translating, proofreading, and setting language preferences.
+- **AI Systems**: Utilizes advanced AI to assist translators, ensuring smooth workflow.
+- **Customized Glossary**: Guides translators and ensures AI generates accurate translations based on the project’s context. Users can also upload their glossaries as needed.
 
 :::info
-We won't talk about how to finish the whole thing in this, but we want you to know those important and make this TownSquare Labs Localization Program unique parts, that you can try TownSquare Labs Localization Program yourself.
+This guide won't cover the entire process in detail, but it will highlight the key components that make the TownSquare Labs Localization Program unique. You can explore the program further on your own.
 :::
 
-## How to set up a new crowdin project?
-1. Login your [**crowdin account**](https://accounts.crowdin.com/login).
+## How to Set Up a New Crowdin Project
+
+1. Log in to your [**Crowdin account**](https://accounts.crowdin.com/login).
 2. Click `Create new project` in the menu.
 ![Create new project](/img/localizationProgramGuideline/howItWorked/create-new-project.png)
-3. set your Project name and Target languages, languages can be changed in settings, so feel free to set what you want now.
+3. Set your Project name and Target languages. You can change the languages in the settings later.
 ![Create project setting](/img/localizationProgramGuideline/howItWorked/create-project-setting.png)
-4. go to the project you just created, select integrations tab, click `Add Integration` button, search `github`, and install.
+4. Go to the project you just created, select the Integrations tab, click the `Add Integration` button, search for `GitHub`, and install it.
 ![install-github-integration](/img/localizationProgramGuideline/howItWorked/install-github-integration.png)
-5. before we start setting github integrations on crowdin, we need to let crowdin know which files we wanna upload to crowdin to translate, otherwise the integrations will upload all files into crowdin, and it will be a disaster.
+5. Before configuring GitHub integrations on Crowdin, specify which files to upload to Crowdin to avoid uploading unnecessary files:
 
-    1. create a file called **crowdin.yml** in the root of **your github repo**, input the most fundamental configuration:
+    1. Create a **crowdin.yml** file in the root of **your GitHub repo** with the basic configuration:
 
       ```yml
       project_id: <Your project id>
@@ -35,94 +36,83 @@ We won't talk about how to finish the whole thing in this, but we want you to kn
           translation: <Path of your translated files>
       ```
 
-    2. let's see how to get correct config value 
-        -  **project_id** - back to your crowdin project, click tools tab, choose API item, and you get **project_id** there! 
+    2. Get the correct configuration values:
+        - **project_id**: In your Crowdin project, go to the Tools tab, select API, and find the **project_id** there.
         ![select-api-tool](/img/localizationProgramGuideline/howItWorked/select-api-tool.png)
         ![projectId](/img/localizationProgramGuideline/howItWorked/projectId.png)
-        - **preserve_hierarchy** - means let uploaded files keep their github Directory Structure on crowdin Server, no need to change it.
-        - **source and translation** - there are two most important parts we need config in the files attribute, **source** means the path we wanna upload to crowdin, and **translation** means which path we wanna translate files output, we config it flexible, you can check [**our official config file**](https://github.com/TownSquareXYZ/ton-docs/blob/localization/crowdin.yml) as example.
-        - more detail about [**crowdin configuration**](https://developer.crowdin.com/configuration-file/) 
+        - **preserve_hierarchy**: Maintains the GitHub directory structure on the Crowdin server.
+        - **source** and **translation**: Specify the paths for the files to upload to Crowdin and where the translated files should be output.   
 
-6. Okay, now we can back to crowdin setting integration to let crowdin connect to our github repo:
-    1. click Add Repository select `Source and translation files mode`
+          Refer to [**our official config file**](https://github.com/TownSquareXYZ/ton-docs/blob/localization/crowdin.yml) for an example.   
+          More details can be found in the [**Crowdin configuration documentation**](https://developer.crowdin.com/configuration-file/).
+
+6. Configure Crowdin to connect to your GitHub repo:
+    1. Click `Add Repository` and select `Source and translation files mode`.
     ![select-integration-mode](/img/localizationProgramGuideline/howItWorked/select-integration-mode.png)
-    2. it will connect GitHub account you current login, 
-        - then you can search for the repo of the document you wanna translate
-        ![search-repo](/img/localizationProgramGuideline/howItWorked/search-repo.png)
-        - select branch on the left, it will automatically generate a new branch where crowdin will post the translation to there
-        ![setting-branch](/img/localizationProgramGuideline/howItWorked/setting-branch.png)
-        - choose the frequency of how often you wanna crowdin update translations to your github branch.
-        - other config we can just keep it as default, then click save to enable this integration.
-        ![frequency-save](/img/localizationProgramGuideline/howItWorked/frequency-save.png)
-        
-      see more details about [**github integration**](https://support.crowdin.com/github-integration/) 			 
-      
-7. and we finally did it, you can click `Sync Now` button to Sync repo and translations any time you want 
-		
-	 
+    2. Connect your GitHub account and search for the repo you want to translate.
+    ![search-repo](/img/localizationProgramGuideline/howItWorked/search-repo.png)
+    3. Select the branch on the left, which will generate a new branch where Crowdin will post the translations.
+    ![setting-branch](/img/localizationProgramGuideline/howItWorked/setting-branch.png)
+    4. Choose the frequency for updating translations to your GitHub branch. Default settings can be kept for other configurations, then click save to enable the integration.
+    ![frequency-save](/img/localizationProgramGuideline/howItWorked/frequency-save.png)
+
+Refer to the [**GitHub integration documentation**](https://support.crowdin.com/github-integration/) for more details.
+
+7. Finally, you can click the `Sync Now` button to sync the repo and translations whenever needed.
+
 ## Glossary
 
-### What’s glossary?
+### What is a Glossary?
 
-it's very often, that when we use AI translators they can't recognize some words that shouldn't be translated. 
+Sometimes, AI translators can't recognize specific terms that shouldn't be translated. For instance, we don't want "Rust" translated when referring to the programming language. To prevent such mistakes, we use a glossary to guide translations.
 
-for example, we don't want them to translate **Rust** when we talk about it as **a programming language**, sometimes even human translators will make similar mistakes, we don't wanna see such things keep happening, and we can make it better that's why we need **glossary** to manners their translation.
+A **glossary** allows you to create, store, and manage project-specific terminology in one place, ensuring terms are translated correctly and consistently.
 
-With a **glossary**, you can create, store, and manage all the project terminology in one place. The main aim of terminology is to explain some specific terms or the ones often used in the project to be translated properly and consistently.
-
-You can check our [**ton-i18n-glossary**](https://github.com/TownSquareXYZ/ton-i18n-glossary) to see how we made it.
+You can check our [**ton-i18n-glossary**](https://github.com/TownSquareXYZ/ton-i18n-glossary) for reference.
 ![ton-i18n-glossary](/img/localizationProgramGuideline/howItWorked/ton-i18n-glossary.png)
 
-### How to set up glossary for a new language?
+### How to Set Up a Glossary for a New Language?
 
-Luckily, most translators support glossary. 
-
-in crowdin, after we set glossary, each glossary term is displayed as an underlined word in the Editor. Hover over the underlined term to highlight it and see its translation, part of speech, and definition (if they are provided).
+Most translation platforms support glossaries. In Crowdin, after setting up a glossary, each term appears as an underlined word in the Editor. Hover over the term to see its translation, part of speech, and definition (if provided).
 ![github-glossary](/img/localizationProgramGuideline/howItWorked/github-glossary.png)
 ![crowdin-glossary](/img/localizationProgramGuideline/howItWorked/crowdin-glossary.png)
 
+In DeepL, simply upload your glossary, and it will be used automatically during AI translation.
 
-In deepl, we just need to upload our glossary, and then deepl will use it in AI translate automatically.
+We have created [**a program for glossary**](https://github.com/TownSquareXYZ/ton-i18n-glossary) that auto-uploads updates.
 
-We already made [**a program for glossary**](https://github.com/TownSquareXYZ/ton-i18n-glossary) and will auto-upload them every time after we update glossary.
+To add a term to the glossary:
+1. If the English term already exists in the glossary, find the corresponding line and column for the language you want to translate, input the translation, and upload it.
+2. To upload a new glossary, clone the project and run:
 
-You just need to know how to set your term into glossary that's all.
+    - `npm i`
+    - `npm run generate -- <glossary name you want>`
 
-  1. if there is an English term already exists in glossary, you can go find that line of the term, find the column of the language you wanna translate, input your translate then upload it, that's all, new glossary will be ready in a few mins
-  2. if you wanna upload a new glossary, clone project run: 
-  
-      - `npm i` 
-    
-      - `npm run generate -- <glossary name you want>`, 
-    
-    then repeat step 1.
+Repeat step 1 to add the new term.
 
-  **simple and efficient, isn't it?**
+**Simple and efficient, isn’t it?**
 
-## How to take advantage of AI translation copilot?
+## How to Take Advantage of AI Translation Copilot?
 
-AI translation copilot can be a real asset for breaking down language barriers. You will find out these advantages gradually by using it more and more:
-- **Enhanced Consistency** - due to AI translation are based on the information from the newest internet, which will give you the most correct and updated translations you want.
-- **Speed and Efficiency** - AI translation can be done instantaneously, handling large volumes of content in real-time. With just a few seconds, it can translate text or speech into another language.
-- **Robust Scalability** - AI translation systems continuously learn and improve. As training data expands and algorithms are optimized, translation quality keeps getting better. With glossary we provided, AI translation can be customized to cater to the unique needs of different repo.
+AI translation copilot helps break down language barriers with several advantages:
 
-Just need a few steps, we can use AI translation in crowdin, in our project we use deepl: 
-1. select Machine Translation in our crowdin menu, in deepl line click edit
-![select-deepl](/img/localizationProgramGuideline/howItWorked/select-deepl.png) 
-2. enable deepl support, and input DeepL Translator API key. 
-    > [how to get DeepL Translator API key](https://www.deepl.com/pro-api?cta=header-pro-api)
-    
-![config-crowdin-deepl](/img/localizationProgramGuideline/howItWorked/config-crowdin-deepl.png) 
-3. our deepl already used customized glossary, again, you can check [**ton i18n glossary**](https://github.com/TownSquareXYZ/ton-i18n-glossary) to see how we upload that.  
-4. back to repo, click Pre-translation select via Machine Translation, 
-![pre-translation](/img/localizationProgramGuideline/howItWorked/pre-translation.png) 
-5. use our deepl as Translation Engine, choose the target languages you wanna translate, and select files, 
-![pre-translate-config](/img/localizationProgramGuideline/howItWorked/pre-translate-config.png) 
+- **Enhanced Consistency**: AI translations are based on up-to-date information, providing the most accurate and current translations.
+- **Speed and Efficiency**: AI translation is instantaneous, handling large volumes of content in real-time.
+- **Robust Scalability**: AI systems continuously learn and improve, enhancing translation quality over time. With the provided glossary, AI translations can be tailored to the specific needs of different repositories.
 
-that's all, now you can take a break and wait for pre-translation done.
+To use AI translation in Crowdin (we use DeepL in our project):
+1. Select Machine Translation in the Crowdin menu and click edit on the DeepL line.
+![select-deepl](/img/localizationProgramGuideline/howItWorked/select-deepl.png)
+2. Enable DeepL support and input the DeepL Translator API key.
+      > [How to get DeepL Translator API key](https://www.deepl.com/pro-api?cta=header-pro-api)
 
+![config-crowdin-deepl](/img/localizationProgramGuideline/howItWorked/config-crowdin-deepl.png)
 
+3. Our DeepL setup uses a customized glossary. Check [**ton-i18n-glossary**](https://github.com/TownSquareXYZ/ton-i18n-glossary) for details on uploading the glossary.
 
+4. In the repo, click Pre-translation and select via Machine Translation.
+![pre-translation](/img/localizationProgramGuideline/howItWorked/pre-translation.png)
+5. Choose DeepL as the Translation Engine, select the target languages, and select the files to translate.
+![pre-translate-config](/img/localizationProgramGuideline/howItWorked/pre-translate-config.png)
 
-
-
+That's it! Now you can take a break and wait for the pre-translation to complete.
