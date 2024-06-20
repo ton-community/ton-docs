@@ -35,7 +35,7 @@ Ethereum Virtual Machine (EVM) and TON Virtual Machine (TVM) are both stack-base
 
 ### TON Virtual Machine (TVM)
 
-- TVM also functions as a stack-based machine but with a key distinction: it supports both 64-bit integers and references to cells.
+- TVM also functions as a stack-based machine but with a key distinction: it supports both 257-bit integers and references to cells.
 - This allows TVM to push and pop these two distinct types of data onto/from the stack, providing enhanced flexibility in direct data manipulation.
 
 ## Arithmetic operations
@@ -76,7 +76,7 @@ Ethereum Virtual Machine (EVM) and TON Virtual Machine (TVM) are both stack-base
 
 ### TON Virtual Machine (TVM)
 
-- TVM uses FunC as a high-level language designed for writing TON smart contracts. It is a functional language with static types and support for algebraic data types. FunC compiles to Fift, which in turn compiles to TVM bytecode.
+- TVM uses FunC as a high-level language designed for writing TON smart contracts. It is a procedural language with static types and support for algebraic data types. FunC compiles to Fift, which in turn compiles to TVM bytecode.
 
 ## Conclusion
 
