@@ -54,10 +54,10 @@ go get github.com/xssnick/tonutils-go/address
 
 ## ⚙ Set Your Environment
 
-In order to create a TypeScript project its necessary to conduct the following steps in order:
+In order to create a TypeScript project it's necessary to conduct the following steps in order:
 1. Create an empty folder (which we’ll name WalletsTutorial).
 2. Open the project folder using the CLI.
-3. Use the followings commands to set up your project:
+3. Use the following commands to set up your project:
 ```bash
 npm init -y
 npm install typescript @types/node ts-node nodemon --save-dev
