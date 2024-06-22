@@ -197,6 +197,7 @@ const sidebars = {
               type: 'category',
               label: 'Message Management',
               items: [
+                'develop/smart-contracts/guidelines/ecosystem-messages-layout',
                 'develop/smart-contracts/guidelines/message-delivery-guarantees',
                 'develop/smart-contracts/messages',
                 'develop/smart-contracts/guidelines/internal-messages',
