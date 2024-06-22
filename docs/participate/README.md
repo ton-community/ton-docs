@@ -25,6 +25,7 @@ It is also meant to offer essential frameworks (explorers, wallets, TEPs) that a
 * [Discover Node Types in TON](/participate/nodes/node-types)
 * [Run your Full Node or Validator](/participate/run-nodes/full-node)
 * [TON Validator maintenance & security](/participate/nodes/node-maintenance-and-security)
+* [Run MyTonCtrl in Docker](/participate/run-nodes/run-docker)
 
 ## Participate in TON Web3
 
