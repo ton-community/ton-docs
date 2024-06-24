@@ -80,6 +80,18 @@ console.log('URI to off-chain metadata:', data.jettonContentUri);
 </TabItem>
 </Tabs>
 
+### Jetton minter
+
+As it mentioned before jettons can be mintable or not mintable. 
+
+If it is not mintable, logic becomes easy - there is no way to mint additional tokens. To mint jettons first time refer [Mint your first jetton](/develop/dapps/tutorials/jetton-minter) page.
+
+Else, if jetton is mintable, there is special function to mint additional jettons in [minter contract](https://github.com/ton-blockchain/minter-contract/blob/main/contracts/jetton-minter.fc). It can be called through sending internal message with specified opcode from admin address.
+
+If jetton admin wants to restrict jetton creation, there are two ways to do it:
+1. In default contract admin need to transfer ownership from current admin to zero address. There will be no valid admin that can control contract, so no one will have abilities to mint jettons. But there will be no way to, for example, change jetton metadata too.
+2. In custom contract (with modified by yourself code) you can add restrictions directly into the code, or create method, that will set flag to abort any mint process after it calling and add that flag checking statement into mint function.
+
 ## Jetton wallet smart contract
 `Jetton wallet` contracts are used to **send**, **receive**, and **burn** jettons. Each _jetton wallet contract_ stores wallet balance information for specific users.
 In specific instances, jetton wallets are used for individual jetton holders for each jetton type.
