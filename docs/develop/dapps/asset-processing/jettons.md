@@ -82,15 +82,17 @@ console.log('URI to off-chain metadata:', data.jettonContentUri);
 
 ### Jetton minter
 
-As it mentioned before jettons can be mintable or not mintable. 
+As mentioned before, jettons can be either `mintable` or `non-mintable`.
 
-If it is not mintable, logic becomes easy - there is no way to mint additional tokens. To mint jettons first time refer [Mint your first jetton](/develop/dapps/tutorials/jetton-minter) page.
+If they are non-mintable, the logic becomes simple—there is no way to mint additional tokens. To mint jettons for the first time, refer to the [Mint your first jetton](/develop/dapps/tutorials/jetton-minter) page.
 
-Else, if jetton is mintable, there is special function to mint additional jettons in [minter contract](https://github.com/ton-blockchain/minter-contract/blob/main/contracts/jetton-minter.fc). It can be called through sending internal message with specified opcode from admin address.
+If the jettons are mintable, there is a special function in the [minter contract](https://github.com/ton-blockchain/minter-contract/blob/main/contracts/jetton-minter.fc) to mint additional jettons. This function can be called by sending an `internal message` with a specified opcode from the admin address.
 
-If jetton admin wants to restrict jetton creation, there are two ways to do it:
-1. In default contract admin need to transfer ownership from current admin to zero address. There will be no valid admin that can control contract, so no one will have abilities to mint jettons. But there will be no way to, for example, change jetton metadata too.
-2. In custom contract (with modified by yourself code) you can add restrictions directly into the code, or create method, that will set flag to abort any mint process after it calling and add that flag checking statement into mint function.
+If the jetton admin wants to restrict jetton creation, there are three ways to do it:
+
+1. If you can't or do not want to update the contract's code, the admin needs to transfer ownership from the current admin to the zero address. This will leave the contract without a valid admin, thus preventing anyone from minting jettons. However, it will also prevent any changes to the jetton metadata.
+2. If you have access to source code and can change it, you can create a method in the contract that sets a flag to abort any minting process after it is called, and add a statement to check this flag in the mint function.
+3. If you can update contract's code, you can add restrictions by updating the code of the already deployed contract.
 
 ## Jetton wallet smart contract
 `Jetton wallet` contracts are used to **send**, **receive**, and **burn** jettons. Each _jetton wallet contract_ stores wallet balance information for specific users.
