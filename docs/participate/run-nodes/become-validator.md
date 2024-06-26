@@ -16,7 +16,7 @@ wl
 
 During the installation of **mytonctrl**, the **validator_wallet_001** wallet is created:
 
-![wallet list](/docs/participate/run-nodes/images/manual-ubuntu_mytonctrl-wl_ru.png)
+![wallet list](/img/docs/nodes-validator/manual-ubuntu_mytonctrl-wl_ru.png)
 
 
 ## Activate the Wallets
@@ -41,7 +41,7 @@ During the installation of **mytonctrl**, the **validator_wallet_001** wallet is
     aw [wallet name]
     ```
 
-![account history](/docs/participate/run-nodes/images/manual-ubuntu_mytonctrl-vas-aw_ru.png)
+![account history](/img/docs/nodes-validator/manual-ubuntu_mytonctrl-vas-aw_ru.png)
 
 ## Your Validator is Now Ready
 
@@ -53,4 +53,4 @@ set stake 50000
 
 `set stake 50000` — this sets the stake size to 50k coins. If the bet is accepted and our node becomes a validator, the bet can only be withdrawn in the second election (according to the rules of the electorate).
 
-![setting stake](/docs/participate/run-nodes/images/manual-ubuntu_mytonctrl-set_ru.png)
+![setting stake](/img/docs/nodes-validator/manual-ubuntu_mytonctrl-set_ru.png)
