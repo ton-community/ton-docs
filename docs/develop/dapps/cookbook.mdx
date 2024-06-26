@@ -1,5 +1,8 @@
+import Button from '@site/src/components/button';
+import ThemedImage from '@theme/ThemedImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+
 
 # TON Cookbook
 
@@ -9,9 +12,45 @@ This document is created to gather the best practices from all developers and sh
 
 ## Standard operations
 
-<!-- TODO: zoom on click (lightbox?) -->
+Communication between Jetton wallets and TON wallets occurs through the following communication sequence:
 
-<img src="/img/interaction-schemes/ecosystem.svg" alt="Full ecosystem scheme"></img>
+![](/img/docs/asset-processing/jetton_transfer.svg)
+
+`Sender -> sender' jetton wallet` means the _transfer_ message body contains the following data:
+
+| Name                 | Type    |
+|----------------------|---------|
+| `query_id `            | uint64  |
+| `amount  `             | coins   |
+| `destination  `        | address |
+| `response_destination` | address |
+| `custom_payload  `     | cell    |
+| `forward_ton_amount`   | coins   |
+| `forward_payload`      | cell    |
+
+`payee' jetton wallet -> payee`  means the message notification body contains the following data:
+
+| Name            | Type    |
+|-----------------|---------|
+| query_id    `    | uint64  |
+| amount   `       | coins   |
+| sender  `        | address |
+| forward_payload` | cell    |
+
+`payee' jetton wallet -> Sender` means the excess message body contains the following data:
+
+| Name                 | Type           |
+|----------------------|----------------|
+| `query_id`             | uint64         |
+
+A detailed description of the jetton wallet contract fields can be found in the [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) Jetton standard interface description.
+
+Messages using the `Transfer notification` and `Excesses` parameters are optional and depend on the amount of TON attached 
+to the `Transfer` message and the value of the `forward_ton_amount` field.
+
+The `query_id` identifier allows applications to link three messaging types `Transfer`, `Transfer notification` and `Excesses` to each other. 
+For this process to be carried out correctly it is recommended to always use a unique query id.
+
 
 ## Working with contracts' addresses
 
@@ -317,7 +356,31 @@ try {
 
 ### How to transfer TON? How to send a text message to other wallet?
 
-<img src="/img/interaction-schemes/wallets.svg" alt="Wallet operations scheme"></img>
+#### Sending messages
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1.svg?raw=true',
+    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
+
+#### Deploying a contract
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_2.svg?raw=true',
+    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_2.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
 
 Most SDKs provide the following process for sending messages from your wallet:
 - You create wallet wrapper (object in your program) of a correct version (in most cases, v3r2; see also [wallet versions](/participate/wallets/contracts)), using secret key and workchain (usually 0, which stands for [basechain](/learn/overviews/ton-blockchain#workchain-blockchain-with-your-own-rules)).
@@ -677,6 +740,19 @@ Most major tokens do not have a different storage structure because they use [a 
 
 To understand how to construct a message for token transfer, we use [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which describes the token standard.
 
+#### Transfer jettons
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_5.svg?raw=true',
+    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_5.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
+
 :::warning
 When displayed, token doesn't usually show count of indivisible units user has; rather, amount is divided by `10 ^ decimals`. This value is commonly set to `9`, and this allows us to use `toNano` function. If decimals were different, we would **need to multiply by a different value** (for instance, if decimals are 6, then we would end up transferring thousand times the amount we wanted).
 
@@ -857,6 +933,22 @@ Reminder: all methods about NFT below are not bound by TEP-62 to work. Before tr
 ### How to use NFT batch deploy?
 
 Smart contracts for collections allow deploying up to 250 NFTs in a single transaction. However, it's essential to consider that, in practice, this maximum is around 100-130 NFTs due to the computation fee limit of 1 ton. To achieve this, we need to store information about the new NFTs in a dictionary.
+
+#### Batch mint NFT
+:::info
+Does not specified by NFT standard for /ton-blockchain /token-contract
+:::   
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_10.svg?raw=true',
+    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_10.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
