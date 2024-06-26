@@ -69,7 +69,7 @@ __A:__ This is normal, typically this means you tried to retrieve block, which d
 
 __Q:__ If comparative frequency appears, does it mean there is a problem somewhere?
 
-__A:__ No. You need to check "Local validator out of sync" value in mytonctrl. If it's less than 60 seconds, then everything is fine.
+__A:__ No. You need to check "Local validator out of sync" value in mytonctrl. If it's less than 20 seconds, then everything is fine.
 
 But you need to keep in mind that the node is constantly synchronizing. Sometimes, you may try to receive a block that has not reached the node you requested.
 

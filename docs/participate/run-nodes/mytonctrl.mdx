@@ -6,7 +6,7 @@ To install and manage your own node, use the **MyTonCtrl** open-source tool deve
 
 [MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) is a console application that is a convenient wrapper for fift, lite-client, and validator-engine-console. It has been specifically developed to streamline wallet, domain, and validator management tasks on the Linux operating system.
 
-Actually, there is [MyTonCtrl2](https://github.com/ton-blockchain/mytonctrl/tree/mytonctrl2) with a lot of improvements ([single nominator pool](/participate/network-maintenance/single-nominator), more checks, etc.). But now it is under development and can be unstable.
+Actually, there is [MyTonCtrl2](https://github.com/ton-blockchain/mytonctrl/tree/mytonctrl2) with a lot of improvements ([single nominator pool](/participate/network-maintenance/single-nominator), more checks, etc.).
 
 We are actively seeking feedback about the installation process. If you have any questions or suggestions, please [contact us](https://t.me/Alexgton).
 
@@ -101,7 +101,7 @@ MyTonCtrl> setting <setting_name>
 
 ### set
 
-Set the specified value of a specified setting. Skip setting existence if `--force` enabled
+Set the specified value of a specified setting. Skip setting existence checking if `--force` enabled
 
 ```bash
 MyTonCtrl> set <setting> <value> [--force]
@@ -116,7 +116,7 @@ No args, rollback to mytonctrl 1.0.
 Retrieves and prints the JSON representation of the configuration specified by `<config-id>`
 
 ```bash
-MyTonCtrl> get <config_id>
+MyTonCtrl> getconfig <config_id>
 ```
 
 ### get_pool_data
@@ -196,10 +196,6 @@ No args, cleanup validator database
 ### benchmark
 
 No args, prints table with several tests
-
-### activate_ton_storage_provider
-
-No args, activates "provider_wallet_001" wallet and sends some amount of tons
 
 ## Single pool
 
@@ -533,6 +529,18 @@ prints Services status (of Full node, Mytoncore, V.console, Liteserver) and node
 |--------------------|---------------------------------------------|----------------------------------------------------------------------------------------------------|
 | Add or replace arg | `set_node_argument [-ARG_NAME] [ARG_VALUE]` | Add argument or replace it value if it exists. `-ARG_NAME` must have `-` or `--` at the beginning  |
 | Delete arg         | `set_node_argument [-ARG_NAME] -d`          | Delete argument from list.                                                                         |
+
+Possible arguments:
+
+| Node argument name | Description                             | Default value                                                                        |
+|--------------------|-----------------------------------------|--------------------------------------------------------------------------------------|
+| `threads`          | count of threads                        | `cpus count - 1`                                                                     |
+| `daemonize`        |                                         | No value                                                                             |
+| `global-config`    | path to global config                   | `/usr/bin/ton/global.config.json`                                                    |
+| `db`               | path to database                        | `/var/ton-work/db/`                                                                  |
+| `logname`          | path to logs                            | `/var/ton-work/log`                                                                  |
+| `state-ttl`        | ttl of blockchain states that node keep | 604800                                                                               |
+| `archive-ttl`      | ttl of blocks node stores               | 2592000 if lightserver mode was enabled during installation process, otherwise 86400 |
 
 ### enable
 

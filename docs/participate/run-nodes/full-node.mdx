@@ -3,10 +3,6 @@ import TabItem from '@theme/TabItem';
 
 # Full Node
 
-:::caution [MyTonCtrl](/participate/run-nodes/mytonctrl) requires terminal restarting after some operations
-If you get an error without visible reason, ***like [Validator is not settings](/participate/run-nodes/nodes-troubleshooting#validator-console-is-not-settings) even from owner***, try to restart terminal
-:::
-
 ## OS requirements
 
 We highly recommend installing MyTonCtrl using the supported operating systems:
@@ -88,10 +84,10 @@ sudo adduser <username>
 sudo usermod -aG sudo <username>
 ```
 
-3. Log into the new user
+3. Log into the new user (if you are using ssh, you will need to stop current session and reconnect with correct user)
 
 ```bash
-su - username
+ssh <username>@<server-ip-address>
 ```
 
 ### Install the MyTonCtrl
@@ -103,7 +99,7 @@ Download and run the installation script from the **non-root** user account with
 
   ```bash
   wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-  sudo bash install.sh -m full -d
+  sudo bash install.sh -d
   ```
 
   </TabItem>
@@ -111,19 +107,17 @@ Download and run the installation script from the **non-root** user account with
 
   ```bash
   wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-  su root -c 'bash install.sh -m full -d'
+  su root -c 'bash install.sh -d'
   ```
 
   </TabItem>
 </Tabs>
 
-* `-m full` - Full node installation mode.
 * `-d` - **mytonctrl** will download a [dump](https://dump.ton.org/) of the latest blockchain state.
 This will reduce synchronization time by several times.
 * `-c <path>` - If you want to use not public liteservers for synchronization. _(not required)_
 * `-i` - Ignore minimum requirements, use it only if you want to check compilation process without real node usage.
-
-There are two installation modes: lite and full. They both compile and install TON components. However the lite version does not configure or run the node/validator.
+* `-m` - Mode, can be `validator` or `liteserver`, 
 
 ### Run the mytonctrl
 
@@ -144,11 +138,11 @@ The following statuses should be displayed:
 
 * **mytoncore status**: Should be in green.
 * **local validator status**: Should also be in green.
-* **local validator out of sync**: Initially, a large number is displayed. As soon as the newly created validator connects with other validators, the number will be around 250k. As synchronization progresses, this number decreases. When it falls below 20, the validator is synchronized.
+* **local validator out of sync**: Initially, a `n/a` string is displayed. As soon as the newly created validator connects with other validators, the number will be around 250k. As synchronization progresses, this number decreases. When it falls below 20, the validator is synchronized.
 
 Example of the **status** command output:
 
-![status](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/mytonctrl-status.png)
+![status](/docs/participate/run-nodes/images/mytonctrl-status.png)
 
 :::caution Make sure you have same output for status
 For all nodes type **Local Validator status** section should appear.
@@ -162,8 +156,7 @@ Wait until `Local validator out of sync` becomes less than 20 seconds.
 Download script and run it:
 
 ```bash
-wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/uninstall.sh
-sudo bash uninstall
+sudo bash /usr/src/mytonctrl/uninstall.sh
 ```
 
 ### Check mytonctrl owner
@@ -186,7 +179,7 @@ ls -lh /var/ton-work/keys/
 
 - To check **mytonctrl** logs, open `~/.local/share/mytoncore/mytoncore.log` for a local user or `/usr/local/bin/mytoncore/mytoncore.log` for Root.
 
-![logs](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytoncore-log.png)
+![logs](/docs/participate/run-nodes/images/manual-ubuntu_mytoncore-log.png)
 
 ### Check the node logs
 

@@ -31,29 +31,32 @@ Hetzner and OVH are forbidden to run a validator, but you can use them to run a 
 
 ## Installation of liteserver
 
-1. Complete the previous steps to install [MyTonCtrl](/participate/run-nodes/full-node#run-a-node-text).
+If you don't have mytonctrl, install it with `-m lightserver` flag:
 
-2. Create a config file
+<Tabs groupId="operating-systems">
+  <TabItem value="ubuntu" label="Ubuntu">
+
+  ```bash
+  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/blob/mytonctrl2_dev/scripts/install.sh
+  sudo bash install.sh -m lightserver -d
+  ```
+
+  </TabItem>
+  <TabItem value={'debian'} label={'Debian'}>
+
+  ```bash
+  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/blob/mytonctrl2_dev/scripts/install.sh
+  su root -c 'bash install.sh -m lightserver -d'
+  ```
+
+  </TabItem>
+</Tabs>
+
+If you already have mytonctrl installed, run:
 
 ```bash
-MyTonCtrl> installer
-MyTonInstaller> clcf
-
-Local config file created: /usr/bin/ton/local.config.json
-```
-
-3. This file will help you to connect to your liteserver. Copy the config file located on the specified path to your home to save it.
-
-```bash
-cp /usr/bin/ton/local.config.json ~/config.json
-```
-
-4. Create an empty `config.json` file on your local machine.
-
-5. Copy the content from the console to your local machine `config.json` file.
-
-```bash
-cat ~/config.json
+user@system:~# mytonctrl
+MyTonCtrl> enable_mode liteserver
 ```
 
 ## Check the firewall settings
@@ -116,7 +119,7 @@ This way, you can open the port in the firewall settings of your server.
 
 ## Interaction with Liteserver (Lightclient)
 
-0. Create an empty project on your machine and paste `config.js` in the project directory.
+0. Create an empty project on your machine and paste `config.json` in the project directory.
 
 1. Install libraries.
 
@@ -199,35 +202,27 @@ Create `index.js` file with the following content:
   <TabItem value="python" label="Python">
 
   ```python
-    import asyncio
-    from pytonlib import TonlibClient
-    from pathlib import Path
-    import json
+    from pytoniq import LiteClient
 
+    async def main():
+        client = LiteClient.from_mainnet_config(  # choose mainnet, testnet or custom config dict
+            ls_i=0,  # index of liteserver from config
+            trust_level=2,  # trust level to liteserver
+            timeout=15  # timeout not includes key blocks synchronization as it works in pytonlib
+        )
+    
+        await client.connect()
+    
+        await client.get_masterchain_info()
+    
+        await client.reconnect()  # can reconnect to an exising object if had any errors
+    
+        await client.close()
+    
+        """ or use it with context manager: """
+        async with LiteClient.from_mainnet_config(ls_i=0, trust_level=2, timeout=15) as client:
+            await client.get_masterchain_info()
 
-    async def get_client() -> TonlibClient:
-    with open('config.json', 'r') as f:
-    config = json.loads(f.read())
-
-    keystore_dir = '/tmp/ton_keystore'
-    Path(keystore_dir).mkdir(parents=True, exist_ok=True)
-
-    client = TonlibClient(ls_index=0, config=config, keystore=keystore_dir, tonlib_timeout=10)
-    await client.init()
-
-    return client
-
-
-    async def test_client():
-    client = await get_client()
-
-    print(await client.get_masterchain_info())
-
-    await client.close()
-
-
-    if __name__ == '__main__':
-    asyncio.run(test_client())
   ```
 
   </TabItem>

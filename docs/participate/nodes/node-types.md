@@ -45,14 +45,14 @@ Running a Validator Node
 
 `Liteservers` enable swift communication with Lite Clients, facilitating tasks like retrieving balance or submitting transactions without necessitating the full block history.
 
-Actually, there are two public `Liteservers`, that already have been provided by the TON Foundation. They are accessible for universal use.
+Actually, there are two public `Liteservers` configs both for mainnet and testnet, that already have been provided by the TON Foundation. They are accessible for universal use. But it's not recommended to use public `Liteservers` in production since they are not stable because of permanent high load.
 
 - [Public Liteserver Configurations - mainnet](https://ton.org/global-config.json)
 - [Public Liteserver Configurations - testnet](https://ton.org/testnet-global.config.json)
 
 These endpoints, such as those used by standard wallets, ensure that even without setting up a personal liteserver, interaction with the TON Blockchain remains possible.
 
-If your project requires a high level of _security_, you can run your own `Liteserver`. To run a `full node` as a `Liteserver`, simply enable the `Liteserver` mode in your node's configuration file.
+If you want to have more stable _connection_, you can run your own `Liteserver`. To run a `full node` as a `Liteserver`, simply enable the `Liteserver` mode in your node's configuration file.
 
 <Button href="/participate/run-nodes/full-node#enable-liteserver-mode"
 colorType="primary" sizeType={'sm'}>
