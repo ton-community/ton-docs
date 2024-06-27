@@ -3,7 +3,7 @@ hide_table_of_contents: true
 wrapperClassName: bootstrap-wrapper
 ---
 
-import { InstructionGroups } from '@site/src/components/Instructions';
+import { InstructionSearch } from '@site/src/components/Instructions';
 import { cp0 } from '@site/src/data/opcodes';
 
 # TVM Instructions
@@ -58,6 +58,6 @@ On this page, however, the search covers all existing opcodes, providing a compr
 
 Feel free to use the search field below to find a specific instruction:
 
-<InstructionGroups instructions={cp0.instructions}/>
+<InstructionSearch instructions={cp0.instructions} aliases={cp0.aliases}/>
 
 * [Exit From TVM Instruction Full Screen Mode](/learn/tvm-instructions/tvm-overview)
