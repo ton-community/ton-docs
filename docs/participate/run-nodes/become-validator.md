@@ -4,7 +4,7 @@
 Read about [Full Node](/participate/run-nodes/full-node) before this article
 :::
 
-Check that validator mode is enabled using `status_modes` command. If it's not, refer [mytonctrl enable_mode command](https://google.com).
+Check that validator mode is enabled using `status_modes` command. If it's not, refer [mytonctrl enable_mode command](/participate/run-nodes/mytonctrl#enable_mode).
 
 ## View the List of Wallets
 
