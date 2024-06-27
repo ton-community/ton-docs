@@ -31,22 +31,22 @@ Hetzner and OVH are forbidden to run a validator, but you can use them to run a 
 
 ## Installation of liteserver
 
-If you don't have mytonctrl, install it with `-m lightserver` flag:
+If you don't have mytonctrl, install it with `-m liteserver` flag:
 
 <Tabs groupId="operating-systems">
   <TabItem value="ubuntu" label="Ubuntu">
 
   ```bash
-  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/blob/mytonctrl2_dev/scripts/install.sh
-  sudo bash install.sh -m lightserver -d
+  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/mytonctrl2/scripts/install.sh
+  sudo bash install.sh -m liteserver -d
   ```
 
   </TabItem>
   <TabItem value={'debian'} label={'Debian'}>
 
   ```bash
-  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/blob/mytonctrl2_dev/scripts/install.sh
-  su root -c 'bash install.sh -m lightserver -d'
+  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/mytonctrl2/scripts/install.sh
+  su root -c 'bash install.sh -m liteserver -d'
   ```
 
   </TabItem>
