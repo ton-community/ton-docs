@@ -663,12 +663,17 @@ const sidebars = {
       label: 'Blockchain Nodes',
       items: [
         'participate/nodes/node-types',
+        'participate/run-nodes/mytonctrl',
         'participate/run-nodes/full-node',
+        'participate/run-nodes/enable-liteserver-node',
+        'participate/run-nodes/become-validator',
         'participate/run-nodes/archive-node',
+        'participate/run-nodes/nodes-troubleshooting',
         //'participate/run-nodes/liteserver',
         //'participate/nodes/nodes-faq',
         'participate/nodes/node-maintenance-and-security',
         'participate/run-nodes/local-ton',
+        'participate/run-nodes/faq',
       ],
     },
     {
@@ -677,6 +682,7 @@ const sidebars = {
       items: [
         'participate/network-maintenance/staking-incentives',
         'participate/network-maintenance/single-nominator',
+        'participate/network-maintenance/nominator-pool',
         'participate/network-maintenance/vesting-contract',
         'participate/network-maintenance/nominators',
         'participate/network-maintenance/persistent-states',
