@@ -328,6 +328,7 @@ const sidebars = {
           label: 'Telegram Mini Apps',
           items: [
             'develop/dapps/telegram-apps/README',
+            'develop/dapps/telegram-apps/notcoin',
             'develop/dapps/telegram-apps/grants',
             {
               type: 'category',
