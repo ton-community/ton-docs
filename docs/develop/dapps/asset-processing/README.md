@@ -217,7 +217,7 @@ Learn More
 ### Invoices with ton:// link
 
 :::warning
-Ton link is deprecated, avoid using it
+Ton link is deprecated, avoid using this
 :::
 
 If you need an easy integration for a simple user flow, it is suitable to use the ton:// link.
@@ -474,7 +474,6 @@ if __name__ == "__main__":
 ```
 
 </TabItem>
-</Tabs>
 </Tabs>
 
 ### Toncoin Withdrawals (Send toncoins)
