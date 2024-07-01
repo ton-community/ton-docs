@@ -508,7 +508,12 @@ However, it does not ignore errors in the following scenarios:
 4. The external message is not ordinary or includes +16 or +32 flag or both.
 :::
 
-For example, if you want to send a regular message and pay transfer fees separately, use the Mode `0` and Flag `+1` to get `mode = 1`. If you want to send the whole contract balance and destroy it immidiately, use the Mode `128` and Flag `+32` to get `mode = 160`.
+:::warning
+1. **+16 flag** - do not use in external messages (e.g. to wallets), because there is no sender to receive the bounced message.
+2. **+2 flag** - important in external messages (e.g. to wallets).
+:::
+
+You can see a detailed example [here](/develop/smart-contracts/messages#example-with-use-cases).
 
 #### set_code
 
