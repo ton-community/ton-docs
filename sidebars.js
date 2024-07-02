@@ -157,6 +157,16 @@ const sidebars = {
       id: 'develop/get-started-with-ton',
     },
     {
+      type: 'category',
+      label: 'Transition from Ethereum to TON',
+      items: [
+        'develop/ethereum-to-ton/difference-of-blockchains',
+        'develop/ethereum-to-ton/tvm-vs-evm',
+        'develop/ethereum-to-ton/solidity-vs-func',
+        'develop/ethereum-to-ton/blockchain-services',
+      ],
+    },
+    {
       'type': 'html',
       'value': '<hr/>',
     },
