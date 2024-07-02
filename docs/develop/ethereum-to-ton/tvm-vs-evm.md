@@ -38,6 +38,41 @@ Ethereum Virtual Machine (EVM) and TON Virtual Machine (TVM) are both stack-base
 - TVM also functions as a stack-based machine but with a key distinction: it supports both 257-bit integers and references to cells.
 - This allows TVM to push and pop these two distinct types of data onto/from the stack, providing enhanced flexibility in direct data manipulation.
 
+### Example of stack operations
+
+Suppose we want to add two numbers (2 and 2) in EVM. The process would involve pushing the numbers onto the stack and then calling the `ADD` instruction. The result (4) would be left on the top of the stack.
+
+We can do this operation in the same way in TVM. But let’s look at another example with more complex data structures, such as hashmaps and cell reference. Suppose we have a hashmap that stores key-value pairs, where keys are integers and values are either integers or cell references. Let’s say our hashmap contains the following entries:
+
+```js
+{
+    1: 10
+    2: cell_a (which contains 10)
+}
+```
+
+We want to add the values associated with keys 1 and 2 and store the result with key 3. Let’s look at stack operations:
+
+1. Push key 1 onto the stack: `stack` = (1)
+2. Call `DICTGET` for key 1 (retrieves the value associated with the key at the top of the stack): Retrieves value 10. `stack` = (10)
+3. Push key 2 onto the stack: `stack` = (10, 2)
+4. Call `DICTGET` for key 2: Retrieves reference to Cell_A. `stack` = (10, Cell_A)
+5. Load value from Cell_A: An instruction to load the value from the cell reference is executed. `stack` = (10, 10)
+6. Call the `ADD` instruction: When the `ADD` instruction is executed, the TVM will pop the top two elements from the stack, add them together, and push the result back onto the stack. In this case, the top two elements are 10 and 10. After the addition, the stack will contain the result: `stack` = (20)
+7. Push key 3 onto the stack: `stack` = (20, 3)
+8. Call `DICTSET`: Stores 20 with key 3. Updated hashmap:
+
+```js
+{
+    1: 10,
+    2: cell_a,
+    3: 20
+}
+```
+
+To do the same in EVM, we need to define a mapping that stores key-value pairs and the function where we work directly with 256-bit integers stored in the mapping.
+It’s essential to note that the EVM supports complex data structures by leveraging Solidity, but these structures are built on top of the EVM’s simpler data model, which is fundamentally different from the more expressive data model of the TVM
+
 ## Arithmetic operations
 
 ### Ethereum Virtual Machine (EVM)
