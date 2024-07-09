@@ -6,7 +6,7 @@ The **TownSquare Labs Localization Program** comprises several key components. T
 
 Within this system, we integrate several applications to function seamlessly as a unified program:
 
-- **GitHub**: Stores the documentation.
+- **GitHub**: Hosts the documentation, synchronizes docs from the upstream repository, and syncs translations to specific branches.
 - **Crowdin**: Manages translation processes, including translating, proofreading, and setting language preferences.
 - **AI Systems**: Utilizes advanced AI to assist translators, ensuring smooth workflow.
 - **Customized Glossary**: Guides translators and ensures AI generates accurate translations based on the project’s context. Users can also upload their glossaries as needed.
@@ -14,6 +14,29 @@ Within this system, we integrate several applications to function seamlessly as 
 :::info
 This guide won't cover the entire process in detail, but it will highlight the key components that make the TownSquare Labs Localization Program unique. You can explore the program further on your own.
 :::
+
+# GitHub Synchronization for Documentation and Translations
+
+Our repository utilizes several branches for managing documentation and translations. Below is a detailed explanation of the purpose and function of each special branch:
+
+### Branches Overview
+
+#### 1. `dev`
+The `dev` branch runs GitHub Actions to handle synchronization tasks. You can find the workflow configurations in the [**`.github/workflows`**](https://github.com/TownSquareXYZ/ton-docs/tree/dev/.github/workflows) directory:
+
+- **`sync-fork.yml`**: This workflow synchronizes documentation from the upstream repository. It runs daily at 00:00.
+- **`sync-translations.yml`**: This workflow synchronizes updated translations to the respective language branches for preview purposes on the corresponding language websites.
+
+#### 2. `localization`
+This branch stays in sync with the upstream repository through GitHub Actions running on the `dev` branch. It is also used for updating certain codes that we intend to propose to the original repository.
+
+#### 3. `l10n_localization`
+This branch includes all changes from the `localization` branch and translations from Crowdin. All modifications in this branch are committed to the upstream repository.
+
+#### 4. `[lang]_localization`
+These branches are designated for specific language previews, such as `ko_localization` for Korean and `ja_localization` for Japanese. They allow us to preview the website in different languages.
+
+By maintaining these branches and using GitHub Actions, we efficiently manage the synchronization of our documentation and translation updates, ensuring that our multilingual content is always up to date.
 
 ## How to Set Up a New Crowdin Project
 
