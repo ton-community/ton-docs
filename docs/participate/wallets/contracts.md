@@ -95,6 +95,8 @@ The v5 wallet smart contract allows the processing of internal messages signed b
     2. Transfer of a small amount of USDt in favor of the Service.
 2. This signed message is sent off-chain by HTTPS to the Service backend. The Service backend sends it to the TON blockchain, paying Toncoins for network fees.
 
+Beta version of the gasless backend API is available on [tonapi.io/api-v2](https://tonapi.io/api-v2). If you are developing any wallet app and have feedback about these methods please share it ton [@tonapitech](https://t.me/tonapitech) chat.
+
 Wallet source code:
  * [tonkeeper/w5](https://github.com/tonkeeper/w5)
 

@@ -1,32 +1,22 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Running a Full Node
+# Full Node
 
-
-:::caution System Administrator Required
-For running nodes basic knowledge of Linux/Ubuntu system administration is required.
-:::
-
-To install and manage your own node, use the **MyTonCtrl** open-source tool developed by the TON Foundation. The majority of TON Nodes are reliable and tested by **MyTonCtrl**.
-
-[MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) is a console application that is a convenient wrapper for fift, lite-client, and validator-engine-console. It has been specifically developed to streamline wallet, domain, and validator management tasks on the Linux operating system.
-
-We are actively seeking feedback about the installation process. If you have any questions or suggestions, please [contact us](https://t.me/Alexgton).
-
-## Prerequisites
-
+## OS requirements
 
 We highly recommend installing MyTonCtrl using the supported operating systems:
 * Ubuntu 20.04
 * Ubuntu 22.04
 * Debian 11
 
-Please, [non-root user with sudo privileges](/participate/run-nodes/full-node#prerequisites-1) to install and run MyTonCtrl.
-
 ## Hardware requirements
 
-These requirements are for a **full node with a validator**. If you want to run a full node without a validator (e.g. [liteserver](/participate/run-nodes/full-node#hardware-requirements-1)), you can use a less powerful machine.
+:::caution Node usage on personal local machine
+You shouldn't run any type of node on your personal local machine for long, even if it is satisfy the requirements. Nodes actively use disks and can damage them fast.
+:::
+
+### With validator
 
 - 16 cores CPU
 - 128 GB RAM
@@ -35,13 +25,13 @@ These requirements are for a **full node with a validator**. If you want to run 
 - public IP address (_fixed IP address_)
 - 16 TB/month traffic on peak load
 
-You need a machine with a **fixed IP address** and a **high-bandwidth network connection** to run a TON Blockchain Full Node.
-
-Typically you'll need a sufficiently powerful server in a data center with good network connectivity, using at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
+:::info Be ready for peak loads
+Typically you'll need at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
+:::
 
 ### Port Forwarding
 
-All types of nodes require a static external IP address, one UDP port to be forwarded for incoming connections and all outgoing connections to be open - the node uses random ports for new outgoing connections. It's necessarily for the node to be visible to the outside world over the NAT. 
+All types of nodes require a static external IP address, one UDP port to be forwarded for incoming connections and all outgoing connections to be open - the node uses random ports for new outgoing connections. It's necessarily for the node to be visible to the outside world over the NAT.
 
 It can be done with your network provider or [rent a server](/participate/run-nodes/full-node#recommended-providers) to run a node.
 
@@ -53,71 +43,20 @@ It's possible to find out which UDP port is opened from the `netstat -tulpn` com
 
 The TON Foundation recommends the following providers for running a Validator:
 
-#### GCP (Google Cloud Platform)
-
-- **Machine Type:** `n2-standard-16`
-- **CPU:** `32 vCPUs`
-- **RAM:** `128 GB`
-- **Storage:** `1 TB NVMe SSD persistent disk`
-- **Network:** `16 Gbps`
-- **Public IP:** `Reserve a static external IP address.`
-- **Traffic:** `16 TB/month`
-
-#### Alibaba Cloud
-
-- **Instance Type:** `ecs.g6.4xlarge`
-- **CPU:** `32 vCPUs`
-- **RAM:** `128 GB`
-- **Storage:** `1 TB NVMe SSD disk`
-- **Network:** `Up to 10 Gbps`
-- **Public IP:** `Bind an Elastic IP for a fixed IP address.`
-- **Traffic:** `16 TB/month`
-
-#### Tencent Cloud
-
-- **Instance Type:** `M5.4XLARGE`
-- **CPU:** `32 vCPUs`
-- **RAM:** `128 GB`
-- **Storage:** `1 TB NVMe SSD cloud disk`
-- **Network:** `Up to 10 Gbps`
-- **Public IP:** `Associate an Elastic IP for a fixed IP address.`
-- **Traffic:** `16 TB/month`
-
-#### Vultr
-
-- **Instance Type:** `bare metal Intel E-2388G`
-- **CPU:** `16 Cores / 32 Threads`
-- **RAM:** `128 GB`
-- **Storage:** `1.92TB NVMe SSD`
-- **Network:** `10 Gbps`
-- **Public IP:** `Fixed IP address included with instance.`
-- **Traffic:** `16 TB/month`
-
-#### DigitalOcean
-
-- **Instance Type:** `general purpose premium Intel`
-- **CPU:** `32 vCPUs`
-- **RAM:** `128 GB`
-- **Storage:** `1TB NVMe SSD`
-- **Network:** `10 Gbps`
-- **Public IP:** `Fixed IP address included with instance.`
-- **Traffic:** `16 TB/month`
-
-#### Latitude
-
-- **Instance Type:** `c3.medium.x86`
-- **CPU:** `16 Cores / 32 Threads`
-- **RAM:** `128 GB`
-- **Storage:** `1.9TB NVMe SSD`
-- **Network:** `10 Gbps`
-- **Public IP:** `Fixed IP address included with instance.`
-- **Traffic:** `16 TB/month`
+| Cloud Provider   | Instance Type         | CPU            | RAM    | Storage           | Network      | Public IP                         | Traffic       |
+|------------------|-----------------------|----------------|--------|-------------------|--------------|-----------------------------------|---------------|
+| GCP              | `n2-standard-16`      | `32 vCPUs`     | `128GB`| `1TB NVMe SSD`    | `16 Gbps`    | Reserve a static external IP      | `16 TB/month`|
+| Alibaba Cloud    | `ecs.g6.4xlarge`      | `32 vCPUs`     | `128GB`| `1TB NVMe SSD`    | `Up to 10 Gbps` | Bind an Elastic IP           | `16 TB/month`|
+| Tencent Cloud    | `M5.4XLARGE`          | `32 vCPUs`     | `128GB`| `1TB NVMe SSD`    | `Up to 10 Gbps` | Associate an Elastic IP       | `16 TB/month`|
+| Vultr            | `bare metal Intel E-2388G` | `16 Cores / 32 Threads` | `128GB` | `1.92TB NVMe SSD` | `10 Gbps` | Fixed IP address included with instance | `16 TB/month`|
+| DigitalOcean     | `general purpose premium Intel` | `32 vCPUs` | `128GB` | `1TB NVMe SSD` | `10 Gbps` | Fixed IP address included with instance | `16 TB/month`|
+| Latitude         | `c3.medium.x86`       | `16 Cores / 32 Threads` | `128GB` | `1.9TB NVMe SSD` | `10 Gbps` | Fixed IP address included with instance | `16 TB/month`|
 
 :::info
 **Note:** Prices, configurations, and availability may vary. It is advisable to always check the official documentation and pricing pages of the respective cloud provider before making any decisions.
 :::
 
-## How to run a Node? (video)
+## Run a Node (video)
 
 [//]: # (<ReactPlayer controls={true} style={{borderRadius:'10pt', margin:'15pt auto', maxWidth: '100%'}} url='/docs/files/setup_validator.mp4' />)
 
@@ -127,18 +66,12 @@ Please, check this video step-by-step tutorial to start promptly:
     <source src="/files/setup_validator.mp4" type="video/mp4" />
 </video>
 ````
-## Step-by-step instructions
 
-### Prerequisites
+## Run a Node (text)
 
+### Switch to non-root user
 
-#### Login with non-root sudo user
-
-Login to your server as a **non-root** user with **sudo** privileges.
-
-#### Create and login non-root sudo user
-
-If you don't have **non-root** user, you can create this with the following steps steps.
+If you don't have **non-root** user, you can create this with the following steps (otherwise skip first two steps and go to the third).
 
 1. Login as root and create new user:
 
@@ -152,25 +85,22 @@ sudo adduser <username>
 sudo usermod -aG sudo <username>
 ```
 
-3. Log into the server as a new user using ssh
+3. Log into the new user (if you are using ssh, you will need to stop current session and reconnect with correct user)
 
 ```bash
 ssh <username>@<server-ip-address>
 ```
 
-
 ### Install the MyTonCtrl
 
-Download and run the installation script from the **non-root** user account with **sudo** privileges. Choose your Linux distributive:
-
-
+Download and run the installation script from the **non-root** user account with **sudo** privileges:
 
 <Tabs groupId="operating-systems">
   <TabItem value="ubuntu" label="Ubuntu">
 
   ```bash
   wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-  sudo bash install.sh -m full -d
+  sudo bash install.sh -d
   ```
 
   </TabItem>
@@ -178,27 +108,27 @@ Download and run the installation script from the **non-root** user account with
 
   ```bash
   wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-  su root -c 'bash install.sh -m full -d'
+  su root -c 'bash install.sh -d'
   ```
 
   </TabItem>
 </Tabs>
 
-* `-m full` - Full node installation mode.
 * `-d` - **mytonctrl** will download a [dump](https://dump.ton.org/) of the latest blockchain state.
 This will reduce synchronization time by several times.
 * `-c <path>` - If you want to use not public liteservers for synchronization. _(not required)_
-
+* `-i` - Ignore minimum requirements, use it only if you want to check compilation process without real node usage.
+* `-m` - Mode, can be `validator` or `liteserver`, 
 
 ### Run the mytonctrl
 
-1. Run **MyTonCtrl** console from the local user account used for installation in [step 1](/participate/run-nodes/full-node#prerequisites-1):
+1. Run `MyTonCtrl` console **from the local user account used for installation**:
 
- ```sh
-mytonctrl
+  ```sh
+  mytonctrl
   ```
 
-2. Check the MyTonCtrl status using the `status` command:
+2. Check the `MyTonCtrl` status using the `status` command:
 
   ```sh
   status
@@ -208,12 +138,12 @@ mytonctrl
 The following statuses should be displayed:
 
 * **mytoncore status**: Should be in green.
-* **Local validator status**: Should also be in green.
-* **Local validator out of sync**: Initially, a large number is displayed. As soon as the newly created validator connects with other validators, the number will be around 250k. As synchronization progresses, this number decreases. When it falls below 20, the validator is synchronized.
+* **local validator status**: Should also be in green.
+* **local validator out of sync**: Initially, a `n/a` string is displayed. As soon as the newly created validator connects with other validators, the number will be around 250k. As synchronization progresses, this number decreases. When it falls below 20, the validator is synchronized.
 
 Example of the **status** command output:
 
-![status](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/mytonctrl-status.png)
+![status](/img/docs/nodes-validator/mytonctrl-status.png)
 
 :::caution Make sure you have same output for status
 For all nodes type **Local Validator status** section should appear.
@@ -222,352 +152,21 @@ Otherwise, [check troubleshooting section](/participate/run-nodes/full-node#stat
 
 Wait until `Local validator out of sync` becomes less than 20 seconds.
 
-## Become a Validator
+### Uninstall mytonctrl
 
-### Import existed account
-
-It is possible to import existed account to **MyTonCtrl** using `iw` command:
-
-```sh
-iw <wallet-addr> <wallet-secret-key>
-```
-
-During the execution, the wallet_001 wallet is created:
-
-![](\img\docs\full-node\import-acc.png)
-
-### View the List of Wallets
-
-Check out the list of available wallets in the **MyTonCtrl** console using the `wl` command:
-
-```sh
-wl
-```
-
-During the installation of **mytonctrl**, the **validator_wallet_001** wallet is created:
-
-![wallet list](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-wl_ru.png)
-
-
-### Activate the Wallets
-
-1. Send the necessary number of coins to the wallet and activate it.
-
-Recently (_at the end of 2023_), the approximate figures have been a minimum stake of around __340K TON__ and a maximum of about __1M TON__.
-
-Check current stakes with [tonscan.com](https://tonscan.com/validation) to understand necessary amount of coins.
-
-Read more [how maximum and minimum stakes calculated](/participate/network-maintenance/staking-incentives#values-of-stakes-max-effective-stake).
-
-2. Use the `vas` command to display the history of transfers:
-
-```sh
-vas
-```
-
-3. Activate the wallet using the `aw` command
-
-```sh
-aw [wallet name]
-```
-
-![account history](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-vas-aw_ru.png)
-
-### Your Validator is Now Ready
-
-**mytoncore** will automatically join the elections. It divides the wallet balance into two parts and uses them as a stake to participate in the elections. You can also manually set the stake size:
-
-```sh
-set stake 50000
-```
-
-`set stake 50000` — this sets the stake size to 50k coins. If the bet is accepted and our node becomes a validator, the bet can only be withdrawn in the second election (according to the rules of the electorate).
-
-![setting stake](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-set_ru.png)
-
-
-## Enable Liteserver mode
-
-When an endpoint is activated in a full node, the node assumes the role of a **Liteserver**. This node type can field and respond to requests from Lite Clients, allowing for seamless interaction with the TON Blockchain.
-
-### Hardware requirements
-
-Compared to a [validator](/participate/run-nodes/full-node#hardware-requirements), a liteserver mode requires less resources. However, it is still recommended to use a powerful machine to run a liteserver.
-
-- at least 16 cores CPU
-- at least 128 GB RAM
-- at least 1TB GB NVMe SSD _OR_ Provisioned 32+k IOPS storage
-- 1 Gbit/s network connectivity
-- 16 TB/month traffic on peak load
-- public IP address (_fixed IP address_)
-
-#### Recommended Providers
-
-Feel free to use cloud providers listed in the [Recommended Providers](/participate/run-nodes/full-node#recommended-providers) section.
-
-Hetzner and OVH are forbidden to run a validator, but you can use them to run a liteserver:
-
-- __Hetzner__: EX101, AX102
-- __OVH__: RISE-4
-
-### Installation of liteserver
-
-1. Complete the previous steps to install [MyTonCtrl](/participate/run-nodes/full-node#step-by-step-instructions).
-
-2. Create a config file
+Download script and run it:
 
 ```bash
-MyTonCtrl> installer
-MyTonInstaller> clcf
-
-Local config file created: /usr/bin/ton/local.config.json
+sudo bash /usr/src/mytonctrl/uninstall.sh
 ```
 
-3. This file will help you to connect to your liteserver. Copy the config file located on the specified path to your home to save it.
+### Check mytonctrl owner
+
+Run:
 
 ```bash
-cp /usr/bin/ton/local.config.json ~/config.json
+ls -lh /var/ton-work/keys/
 ```
-
-4. Create an empty `config.json` file on your local machine.
-
-5. Copy the content from the console to your local machine `config.json` file.
-
-```bash
-cat ~/config.json
-```
-
-### Check the firewall settings
-
-First, verify the Liteserver port specified in your `config.json` file. This port changes with each new installation of `MyTonCtrl`. It is located in the `port` field:
-
-```json
-{
-  ...
-  "liteservers": [
-    {
-      "ip": 1605600994,
-      "port": LITESERVER_PORT
-      ...
-    }
-  ]
-}
-```
-
-If you are using a cloud provider, you need to open this port in the firewall settings. For example, if you are using AWS, you need to open the port in the [security group](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-security-groups.html).
-
-Below is an example of opening a port in the bare metal server firewall.
-
-#### Opening a port in the firewall
-
-We will use the `ufw` utility ([cheatsheet](https://www.cyberciti.biz/faq/ufw-allow-incoming-ssh-connections-from-a-specific-ip-address-subnet-on-ubuntu-debian/)). You can use the one you prefer.
-
-1. Install `ufw` if it is not installed:
-
-```bash
-sudo apt update
-sudo apt install ufw
-```
-
-2. Allow ssh connections:
-
-```bash
-sudo ufw allow ssh
-```
-
-3. Allow the port specified in the `config.json` file:
-
-```bash
-sudo ufw allow <port>
-```
-
-4. Check the firewall status. After running this command, you can verify that the rules have been added successfully by checking the UFW status:
-
-```bash
-sudo ufw status
-```
-
-5. Enable the firewall:
-
-```bash
-sudo ufw enable
-```
-
-This way, you can open the port in the firewall settings of your server.
-
-### Interaction with Liteserver
-
-0. Create an empty project on your machine and paste `config.js` in the project directory.
-
-1. Install libraries.
-
-<Tabs groupId="code-examples">
-  <TabItem value="js" label="JavaScript">
-
-  ```bash
-  npm i --save ton-core ton-lite-client
-  ```
-
-  </TabItem>
-  <TabItem value="python" label="Python">
-
-  ```bash
-  pip install pytonlib
-  ```
-
-  </TabItem>
-  <TabItem value="go" label="Golang">
-
-  ```bash
-  go get github.com/xssnick/tonutils-go
-  go get github.com/xssnick/tonutils-go/liteclient
-  go get github.com/xssnick/tonutils-go/ton
-  ```
-  </TabItem>
-</Tabs>
-
-2. Initialize a client and request masterchain info to ensure the liteserver is running.
-
-<Tabs groupId="code-examples">
-  <TabItem value="js" label="JavaScript">
-
-  Change project type to `module` in your `package.json` file:
-
-  ```json
-  {
-      "type": "module"
-  }
-  ```
-
-  Create `index.js` file with the following content:
-  ```js
-  import { LiteSingleEngine } from 'ton-lite-client/dist/engines/single.js'
-  import { LiteRoundRobinEngine } from 'ton-lite-client/dist/engines/roundRobin.js'
-  import { LiteClient } from 'ton-lite-client/dist/client.js'
-  import config from './config.json' assert {type: 'json'};
-
-
-  function intToIP(int ) {
-      var part1 = int & 255;
-      var part2 = ((int >> 8) & 255);
-      var part3 = ((int >> 16) & 255);
-      var part4 = ((int >> 24) & 255);
-
-      return part4 + "." + part3 + "." + part2 + "." + part1;
-  }
-
-  let server = config.liteservers[0];
-
-  async function main() {
-      const engines = [];
-      engines.push(new LiteSingleEngine({
-          host: `tcp://${intToIP(server.ip)}:${server.port}`,
-          publicKey: Buffer.from(server.id.key, 'base64'),
-      }));
-
-      const engine = new LiteRoundRobinEngine(engines);
-      const client = new LiteClient({ engine });
-      const master = await client.getMasterchainInfo()
-      console.log('master', master)
-
-  }
-
-  main()
-
-  ```
-
-  </TabItem>
-  <TabItem value="python" label="Python">
-
-  ```python
-    import asyncio
-    from pytonlib import TonlibClient
-    from pathlib import Path
-    import json
-
-
-    async def get_client() -> TonlibClient:
-    with open('config.json', 'r') as f:
-    config = json.loads(f.read())
-
-    keystore_dir = '/tmp/ton_keystore'
-    Path(keystore_dir).mkdir(parents=True, exist_ok=True)
-
-    client = TonlibClient(ls_index=0, config=config, keystore=keystore_dir, tonlib_timeout=10)
-    await client.init()
-
-    return client
-
-
-    async def test_client():
-    client = await get_client()
-
-    print(await client.get_masterchain_info())
-
-    await client.close()
-
-
-    if __name__ == '__main__':
-    asyncio.run(test_client())
-  ```
-
-  </TabItem>
-  <TabItem value="go" label="Golang">
-
-  ```go
-  package main
-
-  import (
-      "context"
-      "encoding/json"
-      "io/ioutil"
-      "log"
-      "github.com/xssnick/tonutils-go/liteclient"
-      "github.com/xssnick/tonutils-go/ton"
-  )
-
-  func main() {
-      client := liteclient.NewConnectionPool()
-
-      content, err := ioutil.ReadFile("./config.json")
-      if err != nil {
-          log.Fatal("Error when opening file: ", err)
-      }
-
-      config := liteclient.GlobalConfig{}
-      err = json.Unmarshal(content, &config)
-      if err != nil {
-          log.Fatal("Error during Unmarshal(): ", err)
-      }
-
-      err = client.AddConnectionsFromConfig(context.Background(), &config)
-      if err != nil {
-          log.Fatalln("connection err: ", err.Error())
-          return
-      }
-
-      // initialize ton API lite connection wrapper
-      api := ton.NewAPIClient(client)
-
-      master, err := api.GetMasterchainInfo(context.Background())
-      if err != nil {
-          log.Fatalln("get masterchain info err: ", err.Error())
-          return
-      }
-
-      log.Println(master)
-}
-
-  ```
-  </TabItem>
-</Tabs>
-
-3. Now you can interact with your own liteserver.
-
-### See also
-
-* [[YouTube]Tutorial how to launch liteserver](https://youtu.be/p5zPMkSZzPc)
-
 
 ## Tips & Tricks
 
@@ -579,9 +178,9 @@ This way, you can open the port in the firewall settings of your server.
 
 ### Check the mytonctrl logs
 
-- To check **mytoncrl** logs, open `~/.local/share/mytoncore/mytoncore.log` for a local user or `/usr/local/bin/mytoncore/mytoncore.log` for Root.
+- To check **mytonctrl** logs, open `~/.local/share/mytoncore/mytoncore.log` for a local user or `/usr/local/bin/mytoncore/mytoncore.log` for Root.
 
-![logs](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytoncore-log.png)
+![logs](/img/docs/nodes-validator/manual-ubuntu_mytoncore-log.png)
 
 ### Check the node logs
 
@@ -589,163 +188,4 @@ Check the node logs upon failure:
 
 ```bash
 tail -f /var/ton-work/log.thread*
-```
-
-
-## Troubleshooting
-
-This section contains answers to the most frequently asked questions about running nodes.
-
-
-### Failed to get account state
-
-```
-Failed to get account state
-```
-
-This error means that there are issues during search for this account in shard state.
-Most probably it means that liteserver node is syncing too slow, in particular the Masterchain synchronisation overtook shardchains (Basechain) synchronisation. In this case node knows the recent Masterchain block but can not check account state in recent shardchain block and returns Failed to get account state.
-
-
-### Failed to unpack account state
-
-```
-Failed to unpack account state
-```
-This error means that requested account doesn't exist in current state. That means that this account is simultaneously is not deployed AND has zero balance
-
-### Cannot apply external message to current state : External message was not accepted
-
-```
-Cannot apply external message to current state : External message was not accepted
-```
-This error means that contract didn't accepted external message. You need to find exitcode in trace. -13 means that account doesn't have enough TON to accept message (or it requires more than gas_credit). In case of wallet contracts exitcode=33 means wrong seqno (probably seqno data you use is outdatd), exitcode=34 means wrong subwallet_id (for old wallets v1/v2 it means wrong signature), exitcode=35 means that either message is expired (wallets v1-v3) or signature is wrong (v4r2), exitcode=36 means message is expired (usually it means that system time is incorrect).
-
-### What does Error 651 mean?
-
-`[Error : 651 : no nodes]` indicates that your node cannot locate another node within the TON Blockchain.
-
-Sometimes, this process can take up to 24 hours. However, if you've been receiving this error for several days, that means that your node cannot synchronize via a current network connection.
-
-:::tip Solution
-You need to check the firewall settings, including any [NAT](/participate/run-nodes/full-node#port-forwarding) settings if they exist.
-
-It should allow incoming connections on one specific port and outgoing connections from any port.
-:::
-
-### Validator console is not settings
-
-If you encounter the `Validator console is not settings` error, it indicates that you are running `MyTonCtrl` from a user other than the one you used for the installation.
-
-:::tip Solution
-Run `MyTonCtrl` from [the user you've installed](/participate/run-nodes/full-node#prerequisites-1) it (non-root sudo user).
-
-```bash
-mytonctrl
-```
-:::
-
-### What does "block is not applied" mean?
-
-__Q:__ Sometimes we get `block is not applied` or `block is not ready` for various requests - is this normal?
-
-__A:__ This is normal, typically this means you tried to retrieve block, which does not reach the node you asked.
-
-__Q:__ If comparative frequency appears, does it mean there is a problem somewhere?
-
-__A:__ No. You need to check "Local validator out of sync" value in mytonctrl. If it's less than 60 seconds, then everything is fine.
-
-But you need to keep in mind that the node is constantly synchronizing. Sometimes, you may try to receive a block that has not reached the node you requested.
-
-You need to repeat the request with a slight delay.
-
-### Out of Sync Issue with -d Flag
-
-If you encounter an issue where the `out of sync` equals the timestamp after downloading `MyTonCtrl` with the `-d` flag, it's possible that the dump wasn't installed correctly (or it's already outdated).
-
-:::tip Solution
-The recommended solution is to reinstall `MyTonCtrl` again with the new dump.
-:::
-
-If syncing takes an unusually long time, there may have been issues with the dump. Please [contact us](https://t.me/SwiftAdviser) for assistance.
-
-Please, run `mytonctrl` from the user you've installed it.
-
-
-### Error command<...> timed out after 3 seconds
-
-This error means that the local node is not yet synchronized(out of sync lesser then 20 sec) and public nodes are being used.
-Public nodes do not always respond and end up with a timeout error.
-
-:::tip Solution
-The solution to the problem is to wait for the local node to synchronize or execute the same command several times before execution.
-:::
-
-### Status command displays without local node section
-
-![](\img\docs\full-node\local-validator-status-absent.png)
-
-If there is no local node section in the node status, typically this means, something went wrong during installation and the step of creating/assigning a validator wallet was skipped.
-Also check that the validator wallet is specified.
-
-Check directly the following:
-
-```bash
-mytonctrl> get validatorWalletName
-```
-
-If validatorWalletName is null then execute the following:
-
-```bash
-mytonctrl> set validatorWalletName validator_wallet_001
-```
-
-### Status error on Testnet
-
-![](\img\docs\full-node\status-error.jpg)
-
-This error could be seen on Testnet network on `status` command. Use the following instead:
-
-```bash
-mytonctrl> status fast
-```
-
-### Transfer a Validator on the new Server
-
-:::info
-Transfer all keys and configs from the old to the working node and start it. In case something goes wrong on the new one, there is still the source where everything is set up.
-:::
-
-The best way (while the penalty for temporary non-validation is small, it can be done without interruption):
-
-1. Perform a clean installation on the new server using `mytonctrl`, and wait until everything is synchronized.
-
-2. Stop the `mytoncore` and validator `services` on both machines, make backups on the source and on the new one:
-
-- 2.1 `/usr/local/bin/mytoncore/...`
-- 2.2 `/home/${user}/.local/share/mytoncore/...`
-- 2.3 `/var/ton-work/db/config.json`
-- 2.4 `/var/ton-work/db/config.json.backup`
-- 2.5 `/var/ton-work/db/keyring`
-- 2.6 `/var/ton-work/keys`
-
-
-3. Transfer from the source to the new one (replace the contents):
-
-- 3.1 `/usr/local/bin/mytoncore/...`
-- 3.2 `/home/${user}/.local/share/mytoncore/...`
-- 3.3 `/var/ton-work/db/config.json`
-- 3.4 `/var/ton-work/db/keyring`
-- 3.5 `/var/ton-work/keys`
-
-4. In `/var/ton-work/db/config.json` edit `addrs[0].ip` to the current one, which was after installation (can be seen in the backup `/ton-work/db/config.json.backup`)
-
-5. Check the permissions on all replaced files
-
-6. On the new one, start the `mytoncore` and `validator` services, check that the node synchronizes and then validates
-
-7. On the new one, make a backup:
-
-```bash
-cp var/ton-work/db/config.json var/ton-work/db/config.json.backup
 ```

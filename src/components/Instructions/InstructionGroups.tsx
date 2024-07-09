@@ -1,13 +1,13 @@
-import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { Instruction } from './types';
+import React, { useMemo } from 'react';
+import { Alias, Instruction } from './types';
 import { InstructionTable } from './InstructionTable';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import styles from './InstructionGroups.module.css';
-import { useDebounce } from '@site/src/hooks';
 
 type InstructionGroupsProps = {
   instructions: Instruction[];
+  aliases?: Alias[];
+  search?: string;
 }
 
 const sections = [
@@ -39,63 +39,62 @@ const sections = [
     value: 'app',
   },
   { label: 'Miscellaneous', types: ['debug', 'codepage'], value: 'miscellaneous' },
+  { label: 'Aliases', types: null, value: 'alias' },
 ];
 
-export function InstructionGroups({ instructions }: InstructionGroupsProps) {
-  const timeout = useRef<NodeJS.Timeout | null>(null);
+export const InstructionGroups = React.memo(({ instructions, aliases, search }: InstructionGroupsProps) => {
+  const aliasesWithInstructions = useMemo(() => {
+    const instructionsByMnemonic = instructions.reduce((acc, instruction) => {
+      acc[instruction.mnemonic] = instruction;
+      return acc;
+    }, {});
+    return aliases.map((alias) => ({ ...alias, instruction: instructionsByMnemonic[alias.alias_of] }));
+  }, [instructions]);
 
-  const [inputValue, setInputValue] = useState('');
-  const debouncedValue = useDebounce(inputValue, 500);
-  const [filteredInstructions, setFilteredInstructions] = useState(instructions);
+  const searchValue = search.toLowerCase();
 
-  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-  }, []);
+  const filteredInstructions = useMemo(() => instructions.filter(
+    (item) =>
+      item.doc?.opcode?.toLowerCase()?.includes(searchValue) ||
+      item.doc?.fift?.toLowerCase()?.includes(searchValue) ||
+      item?.doc?.description?.toLowerCase()?.includes(searchValue),
+  ), [searchValue]);
 
-  const handleKeyUp = useCallback((event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      event.currentTarget.blur();
+  const filteredAliases = useMemo(() => aliasesWithInstructions.filter(
+    (item) =>
+      item.mnemonic?.toLowerCase()?.includes(searchValue) ||
+      item.description?.toLowerCase()?.includes(searchValue) ||
+      item.doc_fift?.toLowerCase()?.includes(searchValue),
+  ), [searchValue]);
+
+  return <Tabs>
+    {
+      sections.map(({ label, types, value }) => {
+        if (value === 'alias') {
+          return filteredAliases?.length ? <TabItem label={label} value={value} key={value}>
+            <InstructionTable instructions={filteredAliases.map((alias) => ({
+              opcode: alias.instruction?.doc?.opcode,
+              fift: alias.doc_fift,
+              gas: alias.instruction?.doc?.gas,
+              description: alias.description,
+              stack: alias.doc_stack,
+            }))}/>
+          </TabItem> : null;
+        }
+
+        const tabInstructions = types ? filteredInstructions.filter(instruction => types.includes(instruction.doc.category)) : filteredInstructions;
+        return (tabInstructions?.length ?
+          <TabItem label={label} value={value} key={value}>
+            <InstructionTable
+              instructions={tabInstructions.map(instruction => ({
+                opcode: instruction.doc?.opcode,
+                fift: instruction.doc?.fift,
+                gas: instruction.doc?.gas,
+                description: instruction?.doc.description,
+                stack: instruction.doc?.stack,
+              }))}/>
+          </TabItem> : null);
+      })
     }
-  }, []);
-
-  useEffect(() => {
-    const searchValue = debouncedValue.toLowerCase();
-
-    const dataByValues = instructions.filter(
-      (item) =>
-        item.doc?.opcode?.toLowerCase()?.includes(searchValue) ||
-        item.doc?.fift?.toLowerCase()?.includes(searchValue) ||
-        item?.doc?.description?.toLowerCase()?.includes(searchValue),
-    );
-
-    setFilteredInstructions(dataByValues);
-  }, [instructions, debouncedValue]);
-
-  useEffect(() => () => {
-    clearTimeout(timeout.current);
-  }, [timeout.current]);
-
-  return (
-    <div style={{ margin: '0 calc((105% - 100vw)/2)' }}>
-      <input
-        className={styles.searchField}
-        onChange={handleChange}
-        onKeyUp={handleKeyUp}
-        value={inputValue}
-        type="text"
-        placeholder={'Search'}
-      />
-      <Tabs>
-        {sections.map(({ label, types, value }) => {
-          const tabInstructions = types ? filteredInstructions.filter(instruction => types.includes(instruction.doc.category)) : filteredInstructions;
-          return (tabInstructions?.length ?
-            <TabItem label={label} value={value} key={value}>
-              <InstructionTable
-                instructions={tabInstructions}/>
-            </TabItem> : null);
-        },
-        )}
-      </Tabs>
-    </div>
-  );
-}
+  </Tabs>;
+});

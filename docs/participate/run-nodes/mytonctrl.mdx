@@ -1,0 +1,606 @@
+# MyTonCtrl
+
+## Overview
+
+To install and manage your own node, use the **MyTonCtrl** open-source tool developed by the TON Foundation. The majority of TON Nodes are reliable and tested by **MyTonCtrl**.
+
+[MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) is a console application that is a convenient wrapper for fift, lite-client, and validator-engine-console. It has been specifically developed to streamline wallet, domain, and validator management tasks on the Linux operating system.
+
+Actually, there is [MyTonCtrl2](https://github.com/ton-blockchain/mytonctrl/tree/mytonctrl2) with a lot of improvements ([single nominator pool](/participate/network-maintenance/single-nominator), more checks, etc.).
+
+We are actively seeking feedback about the installation process. If you have any questions or suggestions, please [contact us](https://t.me/Alexgton).
+
+## General Commands
+
+### help
+
+No args, print help text
+
+### clear
+
+No args, clear console
+
+### exit
+
+No args, exit from console.
+
+### update
+
+Update mytonctrl. Param combinations:
+
+| Format name            | Format                                                                     | Example                                                                     | Description                                                             |
+  |:-----------------------|:---------------------------------------------------------------------------|:----------------------------------------------------------------------------|-------------------------------------------------------------------------|
+| No args                | `update`                                                                   | `update`                                                                    | Update from current repo                                                |
+| URL format             | `update [https://github.com/author/repo/tree/branch]`                      | `update https://github.com/ton-blockchain/mytonctrl/tree/mytonctrl2`        | Update from specified URL                                               |
+| Branch Only format     | `update [BRANCH]`                                                          | `update mytonctrl2`                                                         | Update from specified branch of current repo                            |
+| Branch Override format | `update [https://github.com/authorName/repoName/tree/branchName] [BRANCH]` | `update https://github.com/ton-blockchain/mytonctrl/tree/master mytonctrl2` | Update from branch specified by second argument of specified repository |                       
+
+### upgrade
+
+Update node. Param combinations:
+
+| Format name            | Format                                                                      | Example                                                             | Description                                                              |
+  |:-----------------------|:----------------------------------------------------------------------------|:--------------------------------------------------------------------|--------------------------------------------------------------------------|
+| No args                | `upgrade`                                                                   | `upgrade`                                                           | Upgrade from current repo                                                |
+| URL format             | `upgrade [https://github.com/author/repo/tree/branch]`                      | `upgrade https://github.com/ton-blockchain/ton/tree/master`         | Upgrade from specified URL                                               |
+| Branch Only format     | `upgrade [BRANCH]`                                                          | `upgrade master`                                                    | Upgrade from specified branch of current repo                            |
+| Branch Override format | `upgrade [https://github.com/authorName/repoName/tree/branchName] [BRANCH]` | `upgrade https://github.com/ton-blockchain/ton/tree/master testnet` | Upgrade from branch specified by second argument of specified repository |
+
+### status
+
+Get current mytonctrl and node status. Param combinations:
+
+| Format name | Format        | Example       | Description                                                                                      |
+|-------------|---------------|---------------|--------------------------------------------------------------------------------------------------|
+| No args     | `status`      | `status`      | Full status report including validator efficiency and online validators.                         |
+| Fast        | `status fast` | `status fast` | Must be used on TestNet. Status report without validator efficiency and online validators count. |
+
+### installer
+
+No args, run the installer of TON modules (script /usr/src/mytonctrl/mytoninstaller.py)
+
+### status_modes
+
+No args, show MTC modes.
+
+### status_settings
+
+No args, show all available settings with their description and values.
+
+### enable_mode
+
+Enable a specific mode.
+
+```bash
+MyTonCtrl> enable_mode <mode_name>
+```
+
+### disable_mode
+
+Disable a specific mode.
+
+```bash
+MyTonCtrl> disable_mode <mode_name>
+```
+
+### about
+
+Provide a description of the specified mode
+
+```bash
+MyTonCtrl> about <mode_name>
+```
+
+### get
+
+Get the value of a specific setting in JSON format
+
+```bash
+MyTonCtrl> setting <setting_name>
+```
+
+### set
+
+Set the specified value of a specified setting. Skip setting existence checking if `--force` enabled
+
+```bash
+MyTonCtrl> set <setting> <value> [--force]
+```
+
+### rollback
+
+No args, rollback to mytonctrl 1.0.
+
+### getconfig
+
+Retrieves and prints the JSON representation of the configuration specified by `<config-id>`
+
+```bash
+MyTonCtrl> getconfig <config_id>
+```
+
+### get_pool_data
+
+Retrieves and prints the JSON representation of the pool data specified by `<pool-name>` or `<pool-addr>`.
+
+```bash
+MyTonCtrl> get_pool_data <<pool-name> | <pool-addr>>
+```
+
+## Overlays
+
+### add_custom_overlay
+
+Adds a custom overlay with the given `<name>` using the configuration specified by `<path_to_config>`
+
+```bash
+MyTonCtrl> add_custom_overlay <name> <path_to_config>
+```
+
+### list_custom_overlays
+
+No args, prints custom overlays
+
+### delete_custom_overlay
+
+Deletes the custom overlay with the specified `<name>`
+
+```bash
+MyTonCtrl> delete_custom_overlay <name>
+```
+
+## Validator
+
+### vo
+
+Votes for the offer specified by `<offer-hash>`
+
+```bash
+MyTonCtrl> vo <offer-hash>
+```
+
+### ve
+
+No args, vote for election
+
+### vc
+
+Votes for the complaint specified by `<complaint-hash>` in the election specified by `<election-id>`
+
+```bash
+MyTonCtrl> vc <<election-id>, <complaint-hash>>
+```
+
+## Pool commands
+
+### deposit_to_pool
+
+Deposits the specified `<amount>` to the pool specified by `<pool-addr>`
+
+```bash
+MyTonCtrl> deposit_to_pool <pool-addr> <amount>
+```
+
+### withdraw_from_pool
+
+Withdraws the specified `<amount>` from the pool specified by `<pool-addr>`
+
+```bash
+MyTonCtrl> withdraw_from_pool <pool-addr> <amount>
+```
+
+### cleanup
+
+No args, cleanup validator database
+
+### benchmark
+
+No args, prints table with several tests
+
+## Single pool
+
+### new_single_pool
+
+Creates a new single pool with the specified `<pool-name>` and `<owner-address>`
+
+```bash
+MyTonCtrl> new_single_pool <pool-name> <owner-address>
+```
+
+### activate_single_pool
+
+Activates the single pool specified by `<pool-name>`
+
+```bash
+MyTonCtrl> activate_single_pool <pool-name>
+```
+
+## Wallet management
+
+### Importing a wallet
+
+MyTonCtrl2 supports various types of wallet-like contracts, including wallet-v1, wallet-v3, [lockup-wallet](https://github.com/ton-blockchain/lockup-wallet-contract/tree/main/universal), and others. Often, it provides a straightforward way to interact with these contracts.
+
+#### Importing Using a Private Key
+
+If you have access to a private key, you can easily import a wallet:
+
+```bash
+MyTonCtrl> iw <wallet-addr> <wallet-secret-key>
+```
+
+Here, `<wallet-secret-key>` is your private key in base64 format.
+
+#### Importing Using a Mnemonic Phrase
+
+If you have a mnemonic phrase (a sequence of 24 words like `tattoo during ...`), follow these steps:
+
+1. Install Node.js.
+2. Clone and install [mnemonic2key](https://github.com/ton-blockchain/mnemonic2key):
+    ```
+    git clone https://github.com/ton-blockchain/mnemonic2key.git
+    cd mnemonic2key
+    npm install
+    ```
+3. Run the following command, replacing `word1`, `word2`... with your mnemonic phrase and `address` with the address of your wallet contract:
+    ```
+    node index.js word1 word2 ... word24 [address]
+    ```
+4. The script will generate `wallet.pk` and `wallet.addr`. Rename them to `imported_wallet.pk` and `imported_wallet.addr`.
+5. Copy both files to the `~/.local/share/mytoncore/wallets/` directory.
+6. Open the mytonctrl console and list the wallets using the `wl` command.
+7. Verify that the wallet has been imported and displays the correct balance.
+8. You can now send funds using the `mg` command. Enter `mg` to view the help documentation.
+   Remember to replace placeholders (words inside `< >`) with your actual values when running commands.
+
+### Show the list of wallets
+
+```bash
+MyTonCtrl> wl
+```
+
+![](/img/docs/mytonctrl/wl.png)
+
+
+### Create a new local wallet
+
+Also you can create new empty wallet:
+
+```bash
+MyTonCtrl> nw <workchain-id> <wallet-name> [<version> <subwallet>]
+```
+
+### Activate a local wallet
+
+If you want to use wallet it have to be activated:
+
+```bash
+MyTonCtrl> aw <wallet-name>
+```
+
+But before activating, send 1 Toncoin to wallet:
+
+```bash
+MyTonCtrl> wl 
+Name                  Status  Balance           Ver  Wch  Address                                           
+validator_wallet_001  active  994.776032511     v1   -1   kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct  
+wallet_004            uninit  0.0               v1   0    0QBxnZJq4oHVFs4ban3kJ5qllM1IQo57lIx8QP69Ue9A6Kbs  
+
+MyTonCtrl> mg validator_wallet_001 0QBxnZJq4oHVFs4ban3kJ5qllM1IQo57lIx8QP69Ue9A6Kbs 1
+```
+
+Then activate it:
+
+```bash
+MyTonCtrl> aw wallet_004
+ActivateWallet - OK
+
+MyTonCtrl> wl 
+Name                  Status  Balance           Ver  Wch  Address                                           
+validator_wallet_001  active  994.776032511     v1   -1   kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct  
+wallet_004            active  0.998256399       v1   0    kQBxnZJq4oHVFs4ban3kJ5qllM1IQo57lIx8QP69Ue9A6Psp
+```
+
+### Get the sequence number of the wallet
+
+```bash
+MyTonCtrl> seqno <wallet-name>
+```
+
+![](/img/docs/mytonctrl/nw.png)
+
+### Set a wallet version
+
+This command is needed when a modified wallet with interaction methods similar to a regular one is used.
+
+```bash
+MyTonCtrl> swv <wallet-addr> <wallet-version>
+```
+
+### Export a wallet
+
+It's possible to get a certain wallet address and secret key.
+
+```bash
+MyTonCtrl> ew <wallet-name>
+```
+
+![](/img/docs/mytonctrl/ew.png)
+
+### Delete a local wallet
+
+```bash
+MyTonCtrl> dw <wallet-name>
+```
+
+![](/img/docs/mytonctrl/dw.png)
+
+
+## Account and Transaction commands
+
+### Account status
+
+To check account status and its transaction history use the following command:
+
+```bash
+MyTonCtrl> vas <account-addr>
+```
+
+![](/img/docs/mytonctrl/vas.png)
+
+### Account history
+
+To check account transaction history use the following command using the number of listed operations as `limit`:
+
+```bash
+MyTonCtrl> vah <account-addr> <limit>
+```
+
+![](/img/docs/mytonctrl/vah.png)
+
+### Transfer coins
+
+Transfer coins from local wallet to an account:
+
+```bash
+MyTonCtrl> mg <wallet-name> <account-addr | bookmark-name> <amount>
+```
+
+:::caution
+Wallet version 'v4' is not supported for the transfering
+:::
+
+### Transfer coins through a proxy
+
+Transfer coins from local wallet to an account through a proxy:
+
+```bash
+MyTonCtrl> mgtp <wallet-name> <account-addr | bookmark-name> <amount>
+```
+
+## General Pools Commands
+
+There are two types of pools in **MyTonCtrl2**:
+
+1. [Nominator Pool](/participate/network-maintenance/nominator-pool)
+2. [Single Nominator Pool](/participate/network-maintenance/single-nominator)
+
+All of them are managed by the following set of commands:
+
+### List of pools
+
+```bash
+MyTonCtrl> pools_list
+```
+
+![](/img/docs/mytonctrl/test-pools-list.png)
+
+### Delete a pool
+
+```bash
+MyTonCtrl> delete_pool <pool-name>
+```
+
+### Importing a pool
+
+You can create already created pool to the list of local pools:
+
+```bash
+MyTonCtrl> import_pool <pool-name> <pool-addr>
+```
+
+## Bookmarks
+
+You can create an alias (bookmark) for an account address to simplify it usage.
+
+### Create a new bookmark
+
+```bash
+MyTonCtrl> nb <bookmark-name> <account-addr | domain-name>
+```
+
+![](/img/docs/mytonctrl/nb.png)
+
+### Show the list of bookmarks
+
+```bash
+MyTonCtrl> bl
+```
+
+![](/img/docs/mytonctrl/bl.png)
+
+### Delete a bookmark
+
+```bash
+MyTonCtrl> db <bookmark-name> <bookmark-type>
+```
+
+![](/img/docs/mytonctrl/db.png)
+
+## Other mytonctrl commands
+
+### ol
+
+Show offers list
+
+| Format name        | Format           | Description                                                                                        |
+|--------------------|------------------|----------------------------------------------------------------------------------------------------|
+| No arguments       | `ol`             | Prints the table with the hashes reduced.                                                          |
+| JSON output        | `ol --json`      | Prints the JSON representation of `data`.                                                          |
+| Full hash output   | `ol hash`        | Prints the table with full hashes.                                                                 |
+| JSON with full hash| `ol --json hash` | Prints the JSON representation of `data`. The `"hash"` argument has no effect in this case.        |
+
+### od
+
+Retrieves the offer diff
+
+```bash
+MyTonCtrl> od [offer-hash]
+```
+
+### el
+
+Show election entries list
+
+| Format name                       | Format                              | Description                                                                    |
+|-----------------------------------|-------------------------------------|--------------------------------------------------------------------------------|
+| No arguments                      | `el`                                | Prints the table with ADNL, Pubkey, and Wallet reduced.                        |
+| Any combination of following args | `el --json adnl pubkey wallet past` | Full ADNL, Pubkey, Wallet, and past election entries in JSON representation.   |
+
+Descriptions for each arg:
+- --json: Prints the JSON representation of data.
+- past: Includes past election entries.
+- adnl: Prints full ADNL.
+- pubkey: Prints full Pubkey.
+- wallet: Prints full Wallet.
+
+### vl
+
+Show active validators
+
+| Format name                        | Format                                 | Description                                                                    |
+|------------------------------------|----------------------------------------|--------------------------------------------------------------------------------|
+| No arguments                       | `vl`                                   | Prints the table with ADNL, Pubkey, and Wallet reduced.                        |
+| Any combination of following args  | `vl --json adnl pubkey wallet past`    | Full ADNL, Pubkey, Wallet, and past validator entries in JSON representation.  |
+
+Descriptions for each arg:
+- --json: Prints the JSON representation of data.
+- past: Includes past validator entries.
+- adnl: Prints full ADNL.
+- pubkey: Prints full Pubkey.
+- wallet: Prints full Wallet.
+- offline: Excludes online validators.
+
+### cl
+
+Show complaints list
+
+| Format name                       | Format                | Description                                                                                                      |
+|-----------------------------------|-----------------------|------------------------------------------------------------------------------------------------------------------|
+| No arguments                      | `cl`                  | Prints the table with ADNL reduced.                                                                              |
+| Any combination of following args | `cl --json adnl past` | Full ADNL with past complaints in JSON representation.                                                           |
+
+Descriptions for each parameter:
+- --json: Prints the JSON representation of data.
+- past: Includes past complaints.
+- adnl: Prints full ADNL.
+
+## Installer
+
+### help
+
+prints all available commands
+
+### clear
+
+clear terminal
+
+### exit
+
+exit from mytoninstaller terminal
+
+### status
+
+prints Services status (of Full node, Mytoncore, V.console, Liteserver) and node arguments
+
+### set_node_argument
+
+| Format name        | Format                                      | Description                                                                                        |
+|--------------------|---------------------------------------------|----------------------------------------------------------------------------------------------------|
+| Add or replace arg | `set_node_argument [-ARG_NAME] [ARG_VALUE]` | Add argument or replace it value if it exists. `-ARG_NAME` must have `-` or `--` at the beginning  |
+| Delete arg         | `set_node_argument [-ARG_NAME] -d`          | Delete argument from list.                                                                         |
+
+Possible arguments:
+
+| Node argument name | Description                             | Default value                                                                       |
+|--------------------|-----------------------------------------|-------------------------------------------------------------------------------------|
+| `threads`          | count of threads                        | `cpus count - 1`                                                                    |
+| `daemonize`        |                                         | No value                                                                            |
+| `global-config`    | path to global config                   | `/usr/bin/ton/global.config.json`                                                   |
+| `db`               | path to database                        | `/var/ton-work/db/`                                                                 |
+| `logname`          | path to logs                            | `/var/ton-work/log`                                                                 |
+| `state-ttl`        | ttl of blockchain states that node keep | 3600                                                                                |
+| `archive-ttl`      | ttl of blocks node stores               | 2592000 if liteserver mode was enabled during installation process, otherwise 86400 |
+
+### enable
+
+Enable one of the modes, for `ton-http-api` creates config
+
+```bash
+MyTonInstaller> enable <MODE_NAME>
+```
+
+Modes can have following names:
+- FN - Full Node
+- VC - Validator Console
+- LS - Lite Server
+- DS - DHT Server
+- JR - Jsonrpc
+- THA - TON HTTP API
+- LSP - ls proxy
+- TSP - TON storage + TON storage provider
+
+### update
+
+Same as `enable` of mytoninstaller
+
+### plsc
+
+Print liteserver config
+
+Example:
+```json
+{
+    "ip": 1111111111,
+    "port": 11111,
+    "id": {
+        "@type": "pub.ed25519",
+        "key": "UURGaaZZjsBbKHvnrBqslHerXYbMCVDKdswKNJvAHkc="
+    }
+}
+```
+
+### clcf
+
+Create local config file
+
+### print_ls_proxy_config
+
+Print ls proxy config
+
+### create_ls_proxy_config_file
+
+Do nothing for now, on development stage
+
+### drvcf
+
+Dangerous recovery validator config file
+
+### setwebpass
+
+Set a password for the web admin interface, runs `python3 /usr/src/mtc-jsonrpc/mtc-jsonrpc.py -p`.
+
+## See Also
+
+* [FAQ](/participate/run-nodes/faq)
+* [Troubleshooting](/participate/run-nodes/nodes-troubleshooting)

@@ -201,7 +201,7 @@ su - <username>
 
 **status**命令输出的示例：
 
-![status](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/mytonctrl-status.png)
+![status](/img/docs/nodes-validator/mytonctrl-status.png)
 
 :::caution 确保状态输出相同
 对于所有类型的节点，**Local Validator status**部分应该显示。
@@ -222,7 +222,7 @@ wl
 
 在安装**mytonctrl**期间，将创建**validator_wallet_001**钱包：
 
-![wallet list](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-wl_ru.png)
+![wallet list](/img/docs/nodes-validator/manual-ubuntu_mytonctrl-wl_ru.png)
 
 
 ### 激活钱包
@@ -247,7 +247,7 @@ vas
 aw [wallet name]
 ```
 
-![account history](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-vas-aw_ru.png)
+![account history](/img/docs/nodes-validator/manual-ubuntu_mytonctrl-vas-aw_ru.png)
 
 ### 您的验证者现已准备就绪
 
@@ -259,7 +259,7 @@ set stake 50000
 
 `set stake 50000` — 这将质押代币大小设置为50k coins。如果质押代币被接受并且我们的节点成为验证者，那么质押代币只能在第二次选举中提取（根据选民的规则）。
 
-![setting stake](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytonctrl-set_ru.png)
+![setting stake](/img/docs/nodes-validator/manual-ubuntu_mytonctrl-set_ru.png)
 
 ## 启用Liteserver模式
 
@@ -292,8 +292,7 @@ Hetzner和OVH被禁止运行验证者，但您可以使用它们运行liteserver
 2. 创建配置文件
 
 ```bash
-MyTonCtrl> installer
-MyTonInstaller> clcf
+MyTonCtrl> installer clcf
 
 本地配置文件已创建：/usr/bin/ton/local.config.json
 ```
@@ -550,7 +549,7 @@ sudo ufw enable
 
 - 要检查**mytoncrl**日志，请打开本地用户的`~/.local/share/mytoncore/mytoncore.log`，或者Root的`/usr/local/bin/mytoncore/mytoncore.log`。
 
-![logs](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/manual-ubuntu_mytoncore-log.png)
+![logs](/img/docs/nodes-validator/manual-ubuntu_mytoncore-log.png)
 
 
 ## 故障排除
