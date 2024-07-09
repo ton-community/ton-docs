@@ -5,20 +5,25 @@ import Button from '@site/src/components/button'
 在本教程中，我们将创建一个示例 Telegram 机器人，该机器人支持使用 Python TON Connect SDK [pytonconnect](https://github.com/XaBbl4/pytonconnect) 的 TON Connect 2.0 认证。
 我们将分析连接钱包、发送交易、获取有关已连接钱包的数据以及断开钱包的连接。
 
-````mdx-code-block 
+```mdx-code-block
 <Button href="https://t.me/test_tonconnect_bot" colorType={'primary'} sizeType={'sm'}>
-````
+```
+
 打开演示机器人
-````mdx-code-block 
+
+```mdx-code-block
 </Button>
-````
-````mdx-code-block 
+```
+
+```mdx-code-block
 <Button href="https://github.com/yungwine/ton-connect-bot" colorType={'secondary'} sizeType={'sm'}>
-````
+```
+
 查看 GitHub
-````mdx-code-block 
+
+```mdx-code-block
 </Button>
-````
+```
 
 ## 准备工作
 
@@ -35,12 +40,13 @@ pip install pytonconnect
 ```
 
 ### 设置配置
+
 在 `.env` 文件中指定 [机器人令牌](https://t.me/BotFather) 和 TON Connect [清单文件](https://github.com/ton-connect/sdk/tree/main/packages/sdk#add-the-tonconnect-manifest) 的链接。之后在 `config.py` 中加载它们：
 
 ```dotenv
 # .env
 
-TOKEN='1111111111:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'  # 在此处填写您的机器人令牌
+TOKEN='1111111111:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'  # your bot token here
 MANIFEST_URL='https://raw.githubusercontent.com/XaBbl4/pytonconnect/main/pytonconnect-manifest.json'
 ```
 
@@ -147,6 +153,7 @@ def get_connector(chat_id: int):
     return TonConnect(config.MANIFEST_URL, storage=TcStorage(chat_id))
 
 ```
+
 其次，让我们在 `command_start_handler()` 中添加连接处理器：
 
 ```python
@@ -313,7 +320,6 @@ async def send_transaction(message: Message):
         await message.answer(text=f'Unknown error: {e}')
 ```
 
-
 ## 添加断开连接处理器
 
 这个函数的实现非常简单：
@@ -337,6 +343,7 @@ async def disconnect_wallet(message: Message):
 ├── messages.py
 └── tc_storage.py
 ```
+
 `main.py` 的内容如下：
 
 <details>
@@ -493,10 +500,10 @@ if __name__ == "__main__":
     asyncio.run(main())
 
 ```
+
 </details>
 
 ## 改进
-
 
 ### 添加持久存储 - Redis
 
@@ -568,9 +575,11 @@ async def connect_wallet(message: Message, wallet_name: str):
 ## 总结
 
 接下来可以做什么？
+
 - 您可以在机器人中添加更好的错误处理。
 - 您可以添加启动文本和类似 `/connect_wallet` 的命令。
 
 ## 参阅
+
 - [完整的机器人代码](https://github.com/yungwine/ton-connect-bot)
 - [准备消息](/develop/dapps/ton-connect/message-builders)

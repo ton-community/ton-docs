@@ -9,14 +9,16 @@ Telegram Mini Apps（TMA）是在 Telegram 消息传递应用程序内运行的 
 ```html
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 ```
+
 :::tip
-在 HTML 中关闭缓存是更好的选择。为了确保你的缓存关闭，请根据下面的内容在你的请求中指定头部信息：
+It's preferable to switch off cache in the HTML. To ensure your cache is switched off, specify headers in your request according to the following:
 
 ```curl
 Cache-Control: no-store, must-revalidate
 Pragma: no-cache
 Expires: 0
 ```
+
 :::
 
 2. 脚本连接后，一个 **[window.Telegram.WebApp](https://core.telegram.org/bots/webapps#initializing-web-apps)** 对象就变得可用。你可以在此阅读更多有关利用 [`telegram-web-app.js`](https://docs.ton.org/develop/dapps/telegram-apps/app-examples#basic-twa-example) 创建小程序的信息。
@@ -38,7 +40,7 @@ npm i @twa-dev/sdk
 ### 1. 与 BotFather 启动对话
 
 - 打开 Telegram 应用程序或网页版本。
-- 在搜索栏中搜索 `@BotFather` 或跟随链接 [https://t.me/BotFather](https://t.me/BotFather)。
+- 在搜索栏中搜索 `@BotFather` 或跟随链接 <https://t.me/BotFather>。
 - 通过点击 `START` 按钮来开始与 BotFather 的聊天。
 
 ### 2. 创建一个新机器人

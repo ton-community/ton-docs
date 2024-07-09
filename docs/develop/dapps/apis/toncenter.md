@@ -18,6 +18,12 @@ There are different ways to connect to blockchain:
 - ❌ Simplified. It's not possible to receive information where you need an indexed TON API.
 - ❌ HTTP-Middleware. You can't fully trust server responses, unless server augments blockchain data with [Merkle proofs](/develop/data-formats/proofs) to allow validation that it is genuine.
 
+## Monitoring
+
+* [status.toncenter](https://status.toncenter.com/) - shows all full network nodes and validators that were active during the last hour, as well as various statistics on them.
+* [Tonstat.us](https://tonstat.us/) - provides a real-time Grafana-based dashboard that shows the status of all TON-related APIs, where data is updated every 5 minutes.
+* [tonqueues.vladimirlebe.dev](https://tonqueues.vladimirlebe.dev/) - provides a real-time Grafana-based dashboard showing various statistics (such TPS, etc.).
+
 ## RPC Nodes
 
 * [GetBlock Nodes](https://getblock.io/nodes/ton/) — connect and test your dApps using GetBlocks Nodes
@@ -36,6 +42,14 @@ Indexers allow to list jetton wallets, NFTs, transactions by certain filters, no
 
 - Public TON Index can be used: tests and development are for free, [premium](https://t.me/tonapibot) for production - [toncenter.com/api/v3/](https://toncenter.com/api/v3/).
 - Run your own TON Index with [Worker](https://github.com/toncenter/ton-index-worker/tree/36134e7376986c5517ee65e6a1ddd54b1c76cdba) and [TON Index API wrapper](https://github.com/toncenter/ton-indexer).
+
+### Anton
+
+Written in Go, Anton is an open source The Open Network blockchain indexer available under the Apache Licence 2.0. Anton is designed to provide a scalable and flexible solution for developers to access and analyze blockchain data. Our goal is to help developers and users understand how the blockchain is being used, as well as make it possible for developers to add their own contracts with their own message schemas to our explorer.
+
+* [Project GitHub](https://github.com/tonindexer/anton) - to run your own indexer
+* [Swagger API documentation](https://github.com/tonindexer/anton), [API Query Examples](https://github.com/tonindexer/anton/blob/main/docs/API.md) - to use, study the documentation and examples
+* [Apache Superset](https://github.com/tonindexer/anton) - use to view data
 
 ### GraphQL Nodes
 

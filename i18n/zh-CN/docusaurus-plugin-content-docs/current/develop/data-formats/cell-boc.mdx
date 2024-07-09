@@ -3,8 +3,10 @@ import ThemedImage from '@theme/ThemedImage';
 # cell与cell包 (BoC)
 
 ## cell
+
 cell是TON区块链上的一种数据结构。cell能够存储多达1023位，并且可以拥有最多4个对其他cell的引用。
-````mdx-code-block
+
+```mdx-code-block
 <br></br>
 <ThemedImage
 alt=""
@@ -14,13 +16,13 @@ sources={{
 }}
 />
 <br></br>
-````
+```
 
 ## cell包
 
 cell包 (BoC) 是一种将cell序列化为字节数组的格式，这一格式在 [TL-B schema](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25) 中有进一步描述。
 
-````mdx-code-block
+```mdx-code-block
 <br></br>
 <ThemedImage
 alt=""
@@ -30,10 +32,11 @@ sources={{
 }}
 />
 <br></br>
-````
+```
+
 在TON上，所有东西都由cell构成，包括合约代码、存储的数据、区块等，实现了过程中的流线型和强大的灵活性。
 
-````mdx-code-block
+```mdx-code-block
 <br></br>
 <ThemedImage
 alt=""
@@ -43,11 +46,13 @@ sources={{
 }}
 />
 <br></br>
-````
+```
+
 ### cell序列化
+
 让我们分析我们的第一个cell包示例：
 
-````mdx-code-block
+```mdx-code-block
 <br></br>
 <ThemedImage
 alt=""
@@ -57,7 +62,8 @@ sources={{
 }}
 />
 <br></br>
-````
+```
+
 ```json
 1[8_] -> {
   24[0AAAAA],
@@ -66,22 +72,25 @@ sources={{
   }
 }
 ```
+
 在此示例中，我们有一个1位大小的根cell，它有2个链接：第一个指向一个24位cell，第二个指向一个7位cell，后者又有一个链接指向一个24位cell。
 
 为了使此框架按预期工作，需要将cell转换为单一的字节序列。为此，首先，我们只利用唯一的cell类型，下面3个中的2个如下所示：
+
 ```json
 1[8_]
 24[0AAAAA]
 7[FE]
 ```
+
 :::note
 为了只留下唯一的cell，需要进行比较。为此，我们需要比较cell的[哈希](#cell-hash)。
 :::
-现在，让我们将它们排列成这样一个顺序：父cell不会向后指。被其余cell指向的cell必须在指向它的那些cell之后出现在列表中。我们得到：
+
 ```json
-1[8_]      -> 索引 0 (根cell)
-7[FE]      -> 索引 1
-24[0AAAAA] -> 索引 2
+1[8_]      -> index 0 (root cell)
+7[FE]      -> index 1
+24[0AAAAA] -> index 2
 ```
 
 现在，让我们计算上述3个cell的描述。这些描述由2个字节组成，存储了有关数据长度和数据链接数量的标志信息。
@@ -93,27 +102,29 @@ sources={{
 结果是：
 
 ```json
-1[8_]      -> 0201 -> 2个引用，长度1
-7[FE]      -> 0101 -> 1个引用，长度1
-24[0AAAAA] -> 0006 -> 0个引用，长度6
+1[8_]      -> 0201 -> 2 refs, length 1
+7[FE]      -> 0101 -> 1 ref, length 1
+24[0AAAAA] -> 0006 -> 0 refs, length 6
 ```
-对于不完整的4位组的数据，在序列的末尾添加1位。这意味着它表示组的结束位，并用于确定不完整组的真实大小。让我们添加以下位：
 
+对于不完整的4位组的数据，在序列的末尾添加1位。这意味着它表示组的结束位，并用于确定不完整组的真实大小。让我们添加以下位：
 
 ```json
 1[8_]      -> C0     -> 0b10000000->0b11000000
 7[FE]      -> FF     -> 0b11111110->0b11111111
-24[0AAAAA] -> 0AAAAA -> 不变（完整组）
+24[0AAAAA] -> 0AAAAA -> do not change (full groups)
 ```
 
 现在让我们添加引用索引：
+
 ```json
-0 1[8_]      -> 0201 -> 指向索引为2的cell
-1 7[FE]      -> 02 -> 指向索引为2的cell
-2 24[0AAAAA] -> 无引用
+0 1[8_]      -> 0201 -> refers to 2 cells with such indexes
+1 7[FE]      -> 02 -> refers to cells with index 2
+2 24[0AAAAA] -> no refs
 ```
 
 并将其全部组合在一起：
+
 ```json
 0201 C0     0201  
 0101 FF     02
@@ -122,7 +133,6 @@ sources={{
 
 并通过将相应的字符串连接成一个单一的字节数组来拼接它们：
 `0201c002010101ff0200060aaaaa`，大小14字节。
-
 
 <details>
   <summary><b>显示示例</b></summary>
@@ -145,28 +155,30 @@ ceilBytes++
 	return []byte{byte(len(c.refs)) + specBit + c.level*32, byte(ln)}
 }
 ```
+
 [来源](https://github.com/xssnick/tonutils-go/blob/3d9ee052689376061bf7e4a22037ff131183afad/tvm/cell/serialize.go#L205)
 
 </details>
 
 ### 打包cell包
+
 让我们打包上一节直接提到的cell。我们已经将其序列化为一个扁平的14字节数组。
 
 因此，我们根据其[架构](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25)构建header。
 
 ```
-b5ee9c72                      -> BoC结构的tl-b ID
-01                            -> 标志和大小:(## 3)，在我们的案例中所有标志都是0，
-                                 以及存储cell数量所需的字节数为1。
-                                 我们得到 - 0b0_0_0_00_001
-01                            -> 存储序列化cell大小的字节数
-03                            -> cell数量，1字节（由头部的3位大小:(## 3)定义），等于3。
-01                            -> 根cell的数量 - 1
-00                            -> 不存在，当前实现中始终为0
-0e                            -> 序列化cell的大小，1字节（上面定义的大小），等于14
-00                            -> 根cell索引，大小1（由头部的3大小：(## 3)位确定），
-                                 始终为0
-0201c002010101ff0200060aaaaa  -> 序列化cell
+b5ee9c72                      -> id tl-b of the BoC structure
+01                            -> flags and size:(## 3), in our case the flags are all 0,
+                                 and the number of bytes needed to store the number of cells is 1.
+                                 we get - 0b0_0_0_00_001
+01                            -> number of bytes to store the size of the serialized cells
+03                            -> number of cells, 1 byte (defined by 3 bits size:(## 3), equal to 3.
+01                            -> number of root cells - 1
+00                            -> absent, always 0 (in current implementations)
+0e                            -> size of serialized cells, 1 byte (size defined above), equal to 14
+00                            -> root cell index, size 1 (determined by 3 size:(## 3) bits from header),
+                                 always 0
+0201c002010101ff0200060aaaaa  -> serialized cells
 ```
 
 接下来，我们将上述所有内容连接成一个字节数组，得到我们最终的BoC：
@@ -187,6 +199,7 @@ cell包实现示例：[序列化](https://github.com/xssnick/tonutils-go/blob/ma
 ### 普通cell层级
 
 普通cell的层级始终等于其所有引用的层级的最大值：
+
 ```cpp
 Lvl(c) = max(Lvl(r_0), ..., Lvl(r_i), ..., Lvl(r_e))
 ```
@@ -196,14 +209,17 @@ Lvl(c) = max(Lvl(r_0), ..., Lvl(r_i), ..., Lvl(r_e))
 _没有引用的普通cell层级为零_
 
 ### 特殊cell层级
+
 特殊cell对其层级的设置有不同的规则，这些规则在[此文](/develop/data-formats/exotic-cells)中有描述。
 
 ## cell哈希
+
 在大多数情况下，用户使用的是层级为0的普通cell，它们只有一个哈希，称为 representation hash（或 hash infinity）。
 
 层级为`Lvl(c) = l`的cell`c`，其中`1 ≤ l ≤ 3`，除了 representation hash 外，还有`l`个**"更高"**的哈希。
 
 ### 标准cell representation hash 计算
+
 首先，我们需要计算cell表示（类似于上面描述的cell序列化）
 
 1. 计算描述符字节
@@ -215,9 +231,11 @@ _没有引用的普通cell层级为零_
 让我们分析以下示例：
 
 #### 无引用的cell
+
 ```json
 32[0000000F]
 ```
+
 1. 描述符计算
 
 引用描述符等于 `r+8s+32l = 0 + 0 + 0 = 0 = 00`
@@ -243,6 +261,7 @@ _没有引用的普通cell层级为零_
 连接前面步骤的字节，我们得到 `00080000000f`，其SHA256为 `57b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f9` - 这就是cell representation hash 。
 
 #### 带有引用的cell
+
 ```json
 24[00000B] -> {
 	32[0000000F],
@@ -268,12 +287,12 @@ _没有引用的普通cell层级为零_
 
 4. 引用哈希
 
-对于每个引用，我们添加其哈希（我们上面计算过），所以结果是 `57b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f957b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f9`
+对于每个引用，我们添加其哈希（我们上面计算过），所以结果是 \`57b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f957b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f9
 
 5. SHA256计算
 
 连接前面步骤的字节，我们得到 `020600000b0000000057b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f957b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f9`
-，其SHA256为 `f345277cc6cfa747f001367e1e873dcfa8a936b8492431248b7a3eeafa8030e7` - 这就是cell representation hash 。
+，其SHA256为 `f345277cc6cfa747f001367e1e873dcfa8a936b8492431248b7a3eeafa8030e7` - 这就是cell representation hash 
 
 ### 更高哈希的计算
 
@@ -281,9 +300,9 @@ _没有引用的普通cell层级为零_
 
 特殊cell有其自己的计算更高哈希的规则，这些规则在[此文](/develop/data-formats/exotic-cells)中有描述。
 
-
 ## 参阅
 
-[//]: # (* [原文RU]&#40;https://github.com/xssnick/ton-deep-doc/blob/master/Cells-BoC.md&#41;)
-* [特殊cell](/develop/data-formats/exotic-cells)
-* [默克尔证明验证](/develop/data-formats/proofs)
+[//]: # "* [原文RU](https://github.com/xssnick/ton-deep-doc/blob/master/Cells-BoC.md)"
+
+- [特殊cell](/develop/data-formats/exotic-cells)
+- [默克尔证明验证](/develop/data-formats/proofs)

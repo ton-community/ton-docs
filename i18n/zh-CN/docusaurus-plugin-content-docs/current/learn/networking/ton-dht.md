@@ -1,8 +1,9 @@
 # TON 分布式哈希表（DHT）服务
 
 实现：
-* https://github.com/ton-blockchain/ton/tree/master/dht
-* https://github.com/ton-blockchain/ton/tree/master/dht-server
+
+- https://github.com/ton-blockchain/ton/tree/master/dht
+- https://github.com/ton-blockchain/ton/tree/master/dht-server
 
 ## 概览
 

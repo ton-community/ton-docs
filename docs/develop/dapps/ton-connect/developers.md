@@ -156,17 +156,12 @@ If you experience any additional issues, or would like to present a proposal on 
 
 ## TON Connect Unity
 
-:::danger
-This library is outdated at the moment. 
-
-Please, use [@ton-connect/ui](https://www.npmjs.com/package/@tonconnect/ui) for your Unity applications.
-:::
-
 Unity asset for TON Connect 2.0. Uses `continuation-team/TonSdk.NET/tree/main/TonSDK.Connect`.
 
 Use it to integrate TonConnect protocol with your game.
 
 * [GitHub](https://github.com/continuation-team/unity-ton-connect)
+* [Docs](https://docs.tonsdk.net/user-manual/unity-tonconnect-2.0/getting-started)
 
 ## See Also
 

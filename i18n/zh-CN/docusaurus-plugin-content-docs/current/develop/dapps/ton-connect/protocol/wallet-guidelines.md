@@ -55,6 +55,6 @@ DApps应在`SendTransaction`请求中明确指示`network`字段。
 
 ## 参阅
 
-* [TON Connect概览](/dapps/ton-connect/overview)
-* [协议规范](/dapps/ton-connect/protocol/)
-* [连接钱包](/dapps/ton-connect/wallet)
+- [TON Connect概览](/dapps/ton-connect/overview)
+- [协议规范](/dapps/ton-connect/protocol/)
+- [连接钱包](/dapps/ton-connect/wallet)

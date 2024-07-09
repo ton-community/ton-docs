@@ -7,6 +7,7 @@
 :::
 
 如果你决定编写教程，你可以因杰出的贡献而获得奖励：
+
 - **Special TON Footsteps NFT: 对 TON 最有价值的贡献**
 - **TON 奖励: 作为报酬提供给被批准的高质量的贡献（如教程）**
 
@@ -15,20 +16,23 @@
 ## 决定你想写什么
 
 找到或编写你想描述的材料。
+
 1. 检查带有 `tutorial` 标签的 [TON Docs GitHub 上的问题列表](https://github.com/ton-community/ton-docs/issues)。
-2. _或者_ 在 TON Docs GitHub 上用 [教程模板](https://github.com/ton-community/ton-docs/issues/new?assignees=&labels=feature+%3Asparkles%3A%2Ccontent+%3Afountain_pen%3A&template=suggest_tutorial.yaml&title=Suggest+a+tutorial)写下你自己的想法。
+2. *或者* 在 TON Docs GitHub 上用 [教程模板](https://github.com/ton-community/ton-docs/issues/new?assignees=\&labels=feature+%3Asparkles%3A%2Ccontent+%3Afountain_pen%3A\&template=suggest_tutorial.yaml\&title=Suggest+a+tutorial)写下你自己的想法。
 
 ## 描述问题以获得奖励
 
-编写 _ton-footstep_ 来获得你的贡献资金。
+编写 *ton-footstep* 来获得你的贡献资金。
+
 1. 更详细地了解 [TON Footsteps](https://github.com/ton-society/ton-footsteps) 计划。
-    1. **简而言之**：使用 [“探索者”封面文章](https://github.com/ton-society/ton-footsteps/issues/61) 作为示例。
+   1. **简而言之**：使用 [“探索者”封面文章](https://github.com/ton-society/ton-footsteps/issues/61) 作为示例。
 2. 编写[你自己的footstep](https://github.com/ton-society/ton-footsteps/issues/new/choose)来参与并等待批准。
 3. 在收到 `approved` 标签后开始编写你的教程。
 
 ## 编写教程
 
 **准备工作**。尽量减少将来被要求更改的次数，从而_节省你的时间_：
+
 1. 遵循 [教程指南](/contribute/guidelines) 并使用 [示例教程结构](/contribute/sample-tutorial) 来检查。
 2. 阅读 [优秀教程原则](/contribute/principles-of-a-good-tutorial) 来编写出色的教程 :)
 3. 可以从源代码中以 [铸造你的第一个 Jetton](/develop/dapps/tutorials/jetton-minter) 作为示例来找到灵感。

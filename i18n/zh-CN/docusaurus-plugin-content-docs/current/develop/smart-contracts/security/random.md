@@ -22,7 +22,7 @@
 
 ```cpp
   {
-    // 生成随机seed
+    // generate rand seed
     prng::rand_gen().strong_rand_bytes(rand_seed->data(), 32);
     LOG(DEBUG) << "block random seed set to " << rand_seed->to_hex();
   }
@@ -46,9 +46,9 @@
 
 ```cpp
 bool Transaction::prepare_rand_seed(td::BitArray<256>& rand_seed, const ComputePhaseConfig& cfg) const {
-  // 我们可能使用 SHA256(block_rand_seed . addr . trans_lt)
-  // 但实际上，我们使用 SHA256(block_rand_seed . addr)
-  // 如果智能合约想进一步随机化，它可以使用 RANDOMIZE 指令
+  // we might use SHA256(block_rand_seed . addr . trans_lt)
+  // instead, we use SHA256(block_rand_seed . addr)
+  // if the smart contract wants to randomize further, it can use RANDOMIZE instruction
   td::BitArray<256 + 256> data;
   data.bits().copy_from(cfg.block_rand_seed.cbits(), 256);
   (data.bits() + 256).copy_from(account.addr_rewrite.cbits(), 256);
@@ -60,7 +60,7 @@ bool Transaction::prepare_rand_seed(td::BitArray<256>& rand_seed, const ComputeP
 
 然后，伪随机数是使用 [TVM指令](/learn/tvm-instructions/instructions#112-pseudo-random-number-generator-primitives) 页面上描述的过程生成的：
 
-> **x{F810} RANDU256**  
+> **x{F810} RANDU256**\
 > 生成一个新的伪随机无符号256位整数x。算法如下：如果r是随机seed的旧值，被视为一个32字节的数组（通过构造无符号256位整数的大端表示），那么计算它的sha512(r)；这个哈希的前32字节被存储为随机seed的新值r'，剩余的32字节作为下一个随机值x返回。
 
 我们可以通过查看 [准备c7合约](https://github.com/ton-blockchain/ton/blob/master/crypto/block/transaction.cpp#L903) 的代码（c7是存储临时数据的元组，存储合约地址、起始余额、随机seed等）和 [随机值本身的生成](https://github.com/ton-blockchain/ton/blob/master/crypto/vm/tonops.cpp#L217-L268) 来确认这一点。
@@ -71,6 +71,6 @@ TON中没有随机是完全安全的，就不可预测性而言。这意味着**
 
 PRNG的典型用途可能包括`randomize_lt()`，但是可以通过选择正确的区块向它发送消息来欺骗这样的合约。提出的解决方案是向其他工作链发送消息，接收回答，从而跳过区块等...但这只是推迟了威胁。事实上，任何验证者（即TON区块链的1/250）都可以在正确的时间选择发送请求给彩票合约，以便来自其他工作链的回复在他生成的区块中到达，然后他可以选择他希望的任何区块seed。一旦协作者出现在主网，危险将会增加，因为他们永远不会因为标准投诉而被罚款，因为他们不会向Elector合约注入任何资金。
 
-<!-- TODO: 找到一个使用随机而没有任何添加的示例合约，展示如何知道区块随机seed找到RANDU256的结果（意味着dton.io上的链接来显示生成的值） -->
+<!-- TODO: find an example contract using random without any additions, show how to find result of RANDU256 knowing block random seed (implies link on dton.io to show generated value) -->
 
-<!-- TODO: 下一篇文章。"让我们继续编写利用这一点的工具。它将附加到验证者上，并将提议的外部消息放在满足某些条件的区块中 - 前提是支付了一些费用。" -->
+<!-- TODO: next article. "Let's proceed to writing tool that will exploit this. It will be attached to validator and put proposed external messages in blocks satisfying some conditions - provided some fee is paid." -->

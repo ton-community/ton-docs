@@ -1,5 +1,6 @@
 # 非弹回消息
-````mdx-code-block 
+
+```mdx-code-block
 export const Highlight = ({children, color}) => (
 <span
 style={{
@@ -11,7 +12,8 @@ padding: '0.2rem',
 {children}
 </span>
 );
-````
+```
+
 几乎所有在智能合约之间发送的内部消息都应该是可弹回的，即应该设置它们的“bounce”位。然后，如果目标智能合约不存在，或者在处理此消息时抛出未处理的异常，消息将被“bounced”，携带原始值的剩余部分（减去所有消息传输和gas费用）。弹回消息的主体将包含32位的`0xffffffff`，紧接着是原始消息的256位，但是“bounce”标志位被清除，“bounced”标志位被设置。因此，所有智能合约都应检查所有入站消息的“bounced”标志，并且要么默默接受它们（通过立即以exit code 0终止），要么执行一些特殊处理来检测哪个出站查询失败了。弹回消息主体中包含的查询永远不应执行。
 
 :::info

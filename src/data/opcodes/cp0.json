@@ -1,4 +1,5 @@
 {
+  "$schema": "./schema.json",
   "instructions": [
     {
       "mnemonic": "NOP",
@@ -14498,7 +14499,7 @@
         "category": "cell_build",
         "description": "If `x!=0`, creates a _special_ or _exotic_ cell from _Builder_ `b`.\nThe type of the exotic cell must be stored in the first 8 bits of `b`.\nIf `x=0`, it is equivalent to `ENDC`. Otherwise some validity checks on the data and references of `b` are performed before creating the exotic cell.",
         "gas": "526",
-        "fift": "",
+        "fift": "ENDXC",
         "fift_examples": [],
         "opcode": "CF23",
         "stack": "b x - c"
@@ -17203,7 +17204,7 @@
         "category": "cell_parse",
         "description": "Transforms an ordinary or exotic cell into a _Slice_, as if it were an ordinary cell. A flag is returned indicating whether `c` is exotic. If that be the case, its type can later be deserialized from the first eight bits of `s`.",
         "gas": "",
-        "fift": "",
+        "fift": "XCTOS",
         "fift_examples": [],
         "opcode": "D739",
         "stack": "c - s ?"
@@ -17231,7 +17232,7 @@
         "category": "cell_parse",
         "description": "Loads an exotic cell `c` and returns an ordinary cell `c'`. If `c` is already ordinary, does nothing. If `c` cannot be loaded, throws an exception.",
         "gas": "",
-        "fift": "",
+        "fift": "XLOAD",
         "fift_examples": [],
         "opcode": "D73A",
         "stack": "c - c'"
@@ -17258,7 +17259,7 @@
         "category": "cell_parse",
         "description": "Loads an exotic cell `c` and returns an ordinary cell `c'`. If `c` is already ordinary, does nothing. If `c` cannot be loaded, returns 0.",
         "gas": "",
-        "fift": "",
+        "fift": "XLOADQ",
         "fift_examples": [],
         "opcode": "D73B",
         "stack": "c - c' -1 or c 0"

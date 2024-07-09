@@ -5,7 +5,7 @@
 如果您仍然想自己编译源代码，请按照以下说明操作。
 
 :::caution
-这是一个简化的快速构建指南。
+This is a simplified quick build guide.
 
 如果您是为生产而不是家庭使用而构建，最好使用[自动构建脚本](https://github.com/ton-blockchain/ton/tree/master/.github/workflows)。
 :::
@@ -14,13 +14,14 @@
 
 该软件可能在大多数Linux系统上都能正确编译和工作。它应该适用于macOS甚至Windows。
 
-1) 在GitHub库 https://github.com/ton-blockchain/ton/ 下载TON区块链源代码的最新版本：
+1. 在GitHub库 https://github.com/ton-blockchain/ton/ 下载TON区块链源代码的最新版本：
 
 ```bash
 git clone --recurse-submodules https://github.com/ton-blockchain/ton.git
 ```
 
-2) 安装最新版本的：
+2. 安装最新版本的：
+
    - `make`
    - `cmake` 版本 3.0.2 或更高
    - `g++` 或 `clang`（或适用于您的操作系统的另一种C++14兼容编译器）。
@@ -34,7 +35,7 @@ apt update
 sudo apt install build-essential cmake clang openssl libssl-dev zlib1g-dev gperf libreadline-dev ccache libmicrohttpd-dev pkg-config libsodium-dev libsecp256k1-dev
 ```
 
-3) 假设您已将源代码树获取到目录`~/ton`，其中`~`是您的主目录，并且您已创建一个空目录`~/ton-build`：
+3. 假设您已将源代码树获取到目录`~/ton`，其中`~`是您的主目录，并且您已创建一个空目录`~/ton-build`：
 
 ```bash
 mkdir ton-build
@@ -50,7 +51,7 @@ cmake -DCMAKE_BUILD_TYPE=Release ../ton && cmake --build . -j$(nproc)
 ```
 
 :::warning
-在MacOS Intel上进行下一步之前，我们可能需要使用`brew`安装`openssl@3`，或者只是链接该库：
+On MacOS Intel before next step we need maybe install `openssl@3` with `brew` or just link the lib:
 
 ```zsh
 brew install openssl@3 ninja libmicrohttpd pkg-config
@@ -205,14 +206,14 @@ TON版本发布：https://github.com/ton-blockchain/ton/tags
 ```bash
 git clone https://github.com/ton-blockchain/ton.git
 cd ton
-# git checkout <TAG> 例如 checkout func-0.2.0
+# git checkout <TAG> for example checkout func-0.2.0
 git checkout func-0.2.0
 git submodule update --init --recursive 
 cd ..
 mkdir ton-build
 cd ton-build
 cmake ../ton
-# 构建 func 0.2.0
+# build func 0.2.0
 cmake --build . --target func
 ```
 
@@ -220,7 +221,7 @@ cmake --build . --target func
 
 TON从2022年6月11日开始支持Apple M1（[添加apple m1支持 (#401)](https://github.com/ton-blockchain/ton/commit/c00302ced4bc4bf1ee0efd672e7c91e457652430)提交）。
 
-要在Apple M1上编译旧版本的TON修订版：
+在 Apple M1 上编译 TON 旧版本：
 
 1. 将RocksDb子模块更新到6.27.3
    ```bash

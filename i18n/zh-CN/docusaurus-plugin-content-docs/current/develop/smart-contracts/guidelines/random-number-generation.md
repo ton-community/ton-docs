@@ -8,7 +8,7 @@
 
 这些算法通常要求你提供一个_seed_值，该值将被用来生成一系列_伪随机_数。因此，如果你多次运行相同的程序并使用相同的_seed_，你将始终得到相同的结果。在TON中，每个区块的_seed_是不同的。
 
--   [区块随机seed的生成](/develop/smart-contracts/security/random)
+- [区块随机seed的生成](/develop/smart-contracts/security/random)
 
 因此，要预测智能合约中`random()`函数的结果，你只需要知道当前区块的`seed`，如果你不是验证者，这是不可能的。
 
@@ -20,7 +20,7 @@
 
 ```func
 randomize_lt();
-int x = random(); ;; 用户无法预测这个数字
+int x = random(); ;; users can't predict this number
 ```
 
 然而，你应该注意验证者或协作者仍然可能影响随机数的结果，因为他们决定了当前区块的seed。
@@ -40,19 +40,19 @@ int x = random(); ;; 用户无法预测这个数字
 让我们以一个简单的彩票合约为例。用户将向它发送1 TON，有50%的机会会得到2 TON回报。
 
 ```func
-;; 设置回声合约地址
+;; set the echo-contract address
 const echo_address = "Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s"a;
 
 () recv_internal (int msg_value, cell in_msg_full, slice in_msg_body) impure {
     var cs = in_msg_full.begin_parse();
     var flags = cs~load_uint(4);
-    if (flags & 1) { ;; 忽略弹回的消息
+    if (flags & 1) { ;; ignore bounced messages
         return ();
     }
     slice sender = cs~load_msg_addr();
 
     int op = in_msg_body~load_uint(32);
-    if ((op == 0) & equal_slice_bits(in_msg_body, "bet")) { ;; 用户下注
+    if ((op == 0) & equal_slice_bits(in_msg_body, "bet")) { ;; bet from user
         throw_unless(501, msg_value == 1000000000); ;; 1 TON
 
         send_raw_message(
@@ -60,35 +60,33 @@ const echo_address = "Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s"a;
                 .store_uint(0x18, 6)
                 .store_slice(echo_address)
                 .store_coins(0)
-                .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 默认消息头部（见发送消息页面）
-
-
-                .store_uint(1, 32) ;; 让1成为我们合约中的回声操作码
-                .store_slice(sender) ;; 转发用户地址
+                .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
+                .store_uint(1, 32) ;; let 1 be echo opcode in our contract
+                .store_slice(sender) ;; forward user address
             .end_cell(),
-            64 ;; 发送剩余的消息值
+            64 ;; send the remaining value of an incoming msg
         );
     }
-    elseif (op == 1) { ;; 回声
-        throw_unless(502, equal_slice_bits(sender, echo_address)); ;; 只接受我们回声合约的回声
+    elseif (op == 1) { ;; echo
+        throw_unless(502, equal_slice_bits(sender, echo_address)); ;; only accept echoes from our echo-contract
 
         slice user = in_msg_body~load_msg_addr();
 
         {-
-            此时我们已经跳过了1+个区块
-            因此让我们生成随机数
+            at this point we have skipped 1+ blocks
+            so let's just generate the random number
         -}
         randomize_lt();
-        int x = rand(2); ;; 生成一个随机数（0或1）
-        if (x == 1) { ;; 用户赢了
+        int x = rand(2); ;; generate a random number (either 0 or 1)
+        if (x == 1) { ;; user won
             send_raw_message(
                 begin_cell()
                     .store_uint(0x18, 6)
                     .store_slice(user)
                     .store_coins(2000000000) ;; 2 TON
-                    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 默认消息头部（见发送消息页面）
+                    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
                 .end_cell(),
-                3 ;; 忽略错误并单独支付费用
+                3 ;; ignore errors & pay fees separately
             );
         }
     }

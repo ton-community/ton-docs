@@ -15,41 +15,55 @@ Open Network (TON) 区块链设计考虑了高性能，并包括了一个功能�
 因为每个 NFT 都使用自己的智能合约，所以使用单个合约无法获取 NFT 集合中每个个体化 NFT 的信息。为了检索整个集合以及集合中每个 NFT 的信息，需要分别查询集合合约和每个个体 NFT 合约。出于同样的原因，要跟踪 NFT 转移，需要跟踪特定集合中每个个体化 NFT 的所有交易。
 
 ### NFT 集合
+
 NFT 集合是一个用于索引和存储 NFT 内容的合约，并应包含以下接口：
+
 #### 获取方法 `get_collection_data`
+
 ```
 (int next_item_index, cell collection_content, slice owner_address) get_collection_data()
 ```
+
 获取关于集合的一般信息，表示如下：
-  1. `next_item_index` - 如果集合是有序的，此分类指示集合中 NFT 的总数，以及用于铸造的下一个索引。对于无序的集合，`next_item_index` 的值是 -1，意味着集合使用独特机制来跟踪 NFT（例如，TON DNS 域的哈希）。
-  2. `collection_content` - 一个以 TEP-64 兼容格式表示集合内容的 cell。
-  3. `owner_address` - 包含集合所有者地址的 slice（此值也可以为空）。
+
+1. `next_item_index` - 如果集合是有序的，此分类指示集合中 NFT 的总数，以及用于铸造的下一个索引。对于无序的集合，`next_item_index` 的值是 -1，意味着集合使用独特机制来跟踪 NFT（例如，TON DNS 域的哈希）。
+2. `collection_content` - 一个以 TEP-64 兼容格式表示集合内容的 cell。
+3. `owner_address` - 包含集合所有者地址的 slice（此值也可以为空）。
 
 #### 获取方法 `get_nft_address_by_index`
+
 ```
 (slice nft_address) get_nft_address_by_index(int index)
 ```
+
 此方法可用于验证 NFT 的真实性，并确认它是否确实属于特定集合。它还使用户能够通过提供其在集合中的索引来检索 NFT 地址。该方法应返回包含与提供的索引对应的 NFT 地址的 slice。
 
 #### 获取方法 `get_nft_content`
+
 ```
 (cell full_content) get_nft_content(int index, cell individual_content)
 ```
+
 由于集合充当 NFT 的公共数据存储，因此需要此方法来完善 NFT 内容。要使用此方法，首先需要通过调用相应的 `get_nft_data()` 方法获取 NFT 的 `individual_content`。获取 `individual_content` 后，可以使用 NFT 索引和 `individual_content` cell 调用 `get_nft_content()` 方法。该方法应返回一个包含 NFT 全部内容的 TEP-64 cell。
 
 ### NFT 项
+
 基本 NFT 应实现：
 
 #### 获取方法 `get_nft_data()`
+
 ```
 (int init?, int index, slice collection_address, slice owner_address, cell individual_content) get_nft_data()
 ```
 
 #### 内联消息处理器 `transfer`
+
 ```
 transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody
 ```
+
 让我们看一下您需要在消息中填充的每个参数：
+
 1. `OP` - `0x5fcc3d14` - 由 TEP-62 标准在转移消息中定义的常量。
 2. `queryId` - `uint64` - 用于跟踪消息的 uint64 数字。
 3. `newOwnerAddress` - `MsgAddress` - 用于将 NFT 转移至的合约地址。
@@ -70,18 +84,21 @@ transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgA
 要接收 NFT 数据，需要使用 `get_nft_data()` 检索机制。例如，我们必须验证以下 NFT 项地址 `EQB43-VCmf17O7YMd51fAvOjcMkCw46N_3JMCoegH_ZDo40e`(也称为 [foundation.ton](https://tonscan.org/address/EQB43-VCmf17O7YMd51fAvOjcMkCw46N_3JMCoegH_ZDo40e) 域)。
 
 首先需要按照如下方式使用 toncenter.com API 执行 get 方法。:
+
 ```
 curl -X 'POST' \
   'https://toncenter.com/api/v2/runGetMethod' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-  "address": "EQB43-VCmf17O7YMd51fAvOjcMkCw46N_3JMCoегH_ZDo40e",
+  "address": "EQB43-VCmf17O7YMd51fAvOjcMkCw46N_3JMCoegH_ZDo40e",
   "method": "get_nft_data",
   "stack": []
 }'
 ```
+
 响应通常类似于如下内容：
+
 ```json
 {
   "ok": true,
@@ -98,14 +115,16 @@ curl -X 'POST' \
       // owner_address
       [ "cell", { "bytes": "te6cckEBAQEAJAAAQ4ATtS415xpeB1e+YRq/IsbVL8tFYPTNhzrjr5dcdgZdu5BlgvLe" } ],
       // content
-      [ "cell", { "bytes": "te6cckEBCQEA7AABAwDAAQIBIAIDAUO/5NEvz/d9f/ZWh+aYYobkmY5/xar2cp73sULgTwvzeuvABAIBbgUGAER0c3/qevIyXwpbaQiTnJ1y+S20wMpSzKjOLEi7Jwi/GIVBAUG/I1EBQhz26hlqnwXCrTM5k2Qg5o03P1s9x0U4CBUQ7G4HAUG/LrgQbAsQe0P2KTvsDm8еA3Wr0ofDEIPQlYa5wXdpD/oIAEmf04AQe/qqXMblNo5fl5kYi9eYzSLgSrFtHY6k/DdIB0HmNQAQAEatAVFmGM9svpAE9og+dCyaLjylPtAuPjb0zvYqmO4eRJF0AIDBvlU=" } ]
+      [ "cell", { "bytes": "te6cckEBCQEA7AABAwDAAQIBIAIDAUO/5NEvz/d9f/ZWh+aYYobkmY5/xar2cp73sULgTwvzeuvABAIBbgUGAER0c3/qevIyXwpbaQiTnJ1y+S20wMpSzKjOLEi7Jwi/GIVBAUG/I1EBQhz26hlqnwXCrTM5k2Qg5o03P1s9x0U4CBUQ7G4HAUG/LrgQbAsQe0P2KTvsDm8eA3Wr0ofDEIPQlYa5wXdpD/oIAEmf04AQe/qqXMblNo5fl5kYi9eYzSLgSrFtHY6k/DdIB0HmNQAQAEatAVFmGM9svpAE9og+dCyaLjylPtAuPjb0zvYqmO4eRJF0AIDBvlU=" } ]
     ],
     "exit_code": 0,
     "@extra": "1679535187.3836682:8:0.06118075068995321"
   }
 }
 ```
+
 返回参数：
+
 - `init` - `boolean` - -1 表示 NFT 已初始化并可使用
 - `index` - `uint256` - 集合中 NFT 的索引。可以是顺序的或以其他方式派生。例如，这可以表示使用 TON DNS 合约的 NFT 域哈希，而集合应该只在给定索引内拥有唯一的 NFT。
 - `collection_address` - `Cell` - 包含 NFT 集合地址的 cell（可以为空）。
@@ -113,10 +132,13 @@ curl -X 'POST' \
 - `content` - `Cell` - 包含 NFT 项内容的 cell（如果需要解析，需要参考 TEP-64 标准）。
 
 ## 检索集合内的所有 NFT
+
 检索集合内所有 NFT 的过程取决于集合是否有序。我们在下面概述了两种过程。
 
 ### 有序集合
+
 检索有序集合中的所有 NFT 相对简单，因为已经知道了检索所需的 NFT 数量，且可以轻松获取它们的地址。为了完成这一过程，应按顺序执行以下步骤：
+
 1. 使用 TonCenter API 调用集合合约中的 `get_collection_data` 方法，并从响应中检索 `next_item_index` 值。
 2. 使用 `get_nft_address_by_index` 方法，传入索引值 `i`（最初设置为 0），以检索集合中第一个 NFT 的地址。
 3. 使用上一步获得的地址检索 NFT 项数据。接下来，验证初始 NFT Collection 智能合约是否与 NFT 项本身报告的 NFT Collection 智能合约一致（以确保集合没有挪用其他用户的 NFT 智能合约）。
@@ -125,6 +147,7 @@ curl -X 'POST' \
 6. 此时，您将拥有来自集合及其各个项目所需的信息。
 
 ### 无序集合
+
 检索无序集合中的 NFT 列表更为困难，因为没有固有的方式来获取属于集合的 NFT 的地址。因此，需要解析集合合约中的所有交易并检查所有发出的消息以识别属于集合的 NFT 对应的消息。
 
 为此，必须检索 NFT 数据，并在集合中使用 NFT 返回的 ID 调用 `get_nft_address_by_index` 方法。如果 NFT 合约地址与 `get_nft_address_by_index` 方法返回的地址匹配，这表明该 NFT 属于当前集合。但是，解析集合到所有消息可能是一个漫长的过程，并且可能需要归档节点。
@@ -141,11 +164,13 @@ curl -X 'POST' \
 `ton://transfer/{nft_address}?amount={message_value}&bin={base_64_url(transfer_message)}`
 
 ### 接收 NFTs
-跟踪发送到某个智能合约地址（即用户的钱包）的 NFTs 的过程类似于跟踪支付的机制。这是通过监听钱包中的所有新交易并解析它们来完成的。
+
+跟踪发送到某个智能合约地址（即用户的钱包）的 NFT 的过程类似于跟踪支付的机制。这是通过监听钱包中的所有新交易并解析它们来完成的。
 
 下一步可能会根据具体情况而有所不同。让我们下面看几个不同的场景。
 
 #### 等待已知 NFT 地址转移的服务:
+
 - 验证从 NFT 项目智能合约地址发送的新交易。
 - 读取消息体的前 32 位作为使用 `uint` 类型，并验证它是否等于 `op::ownership_assigned()`(`0x05138d91`)
 - 从消息体中读取接下来的 64 位作为 `query_id`。
@@ -153,6 +178,7 @@ curl -X 'POST' \
 - 现在可以管理您的新 NFT 了。
 
 #### 监听所有类型的 NFT 转移的服务:
+
 - 检查所有新交易，忽略那些消息体长度小于 363 位（OP - 32，QueryID - 64，地址 - 267）的交易。
 - 重复上面列表中详细介绍的步骤。
 - 如果流程工作正常，则需要通过解析 NFT 及其所属的集合来验证 NFT 的真实性。接下来，需要确保 NFT 属于指定的集合。有关此过程的更多信息可以在 `获取所有集合 NFTs` 部分找到。可以通过使用 NFT 或集合的白名单来简化此过程。
@@ -163,6 +189,7 @@ curl -X 'POST' \
 当接收到这种类型的交易时，需要重复前面列表中的步骤。完成此过程后，可以通过在读取 `prev_owner_address` 值之后从消息体中读取一个 uint32 来检索 `RANDOM_ID` 参数。
 
 #### 未发送通知信息的 NFT 发送:
+
 以上概述的所有策略都依赖于服务在 NFT 转移时正确创建转发消息。如果他们不这样做，我们不会知道他们是否已经将 NFT 转移到我们这边。但是，有一些可能的解决方法：
 
 以上概述的所有策略都依赖于服务正确在 NFT 转移中创建转发消息。如果不执行此过程，就无法清楚 NFT 是否已转移到正确的一方。但是，在这种情况下有几种可能的解决方案：
@@ -177,26 +204,28 @@ curl -X 'POST' \
 
 ### 发送 NFTs
 
-在这个例子中，NFT 转移信息位于 [第 67 行](https://www.google.com/url?q=https://github.com/ton-blockchain/token-contract/blob/1ad314a98d20b41241d5329e1786fc894ad811de/nft/nft-sale.fc%23L67&sa=D&source=docs&ust=1685436161341866&usg=AOvVaw1yuoIzcbEuvqMS4xQMqfXE):
+在这个例子中，NFT 转移信息位于 [第 67 行](https://www.google.com/url?q=https://github.com/ton-blockchain/token-contract/blob/1ad314a98d20b41241d5329e1786fc894ad811de/nft/nft-sale.fc%23L67\&sa=D\&source=docs\&ust=1685436161341866\&usg=AOvVaw1yuoIzcbEuvqMS4xQMqfXE):
 
 ```
 var nft_msg = begin_cell()
   .store_uint(0x18, 6)
   .store_slice(nft_address)
   .store_coins(0)
-  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 默认消息头（见发送消息页面）
+  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
   .store_uint(op::transfer(), 32)
   .store_uint(query_id, 64)
   .store_slice(sender_address) ;; new_owner_address
   .store_slice(sender_address) ;; response_address
-  .store_int(0, 1) ;; 空的自定义有效载荷
-  .store_coins(0) ;; 向 new_owner_address 转发金额
-  .store_int(0, 1); ;; 空的转发有效载荷
+  .store_int(0, 1) ;; empty custom_payload
+  .store_coins(0) ;; forward amount to new_owner_address
+  .store_int(0, 1); ;; empty forward_payload
 
 
 send_raw_message(nft_msg.end_cell(), 128 + 32);
 ```
+
 让我们仔细检查每行代码：
+
 - `store_uint(0x18, 6)` - 存储消息标志。
 - `store_slice(nft_address)` - 存储消息目标（NFT 地址）。
 - `store_coins(0)` - 发送随消息发送的 TON 数量设置为 0，因为使用 `128` [消息模式](/develop/smart-contracts/messages#message-modes) 以其余余额发送消息。要发送非用户全部余额的金额，必须更改此数字。请注意，它应足够大以支付gas费以及任何转发金额。
@@ -210,13 +239,14 @@ send_raw_message(nft_msg.end_cell(), 128 + 32);
 - `.store_int(0, 1)` - 自定义有效载荷标志。如果您的服务应该作为 ref 传递有效载荷，则必须将其设置为 `1`。
 
 ### 接收 NFTs
+
 一旦我们发送了 NFT，就至关重要的是确定新所有者何时收到了它。一个好的例子可以在同一个 NFT 销售智能合约中找到：
 
 ```
 slice cs = in_msg_full.begin_parse();
 int flags = cs~load_uint(4);
 
-if (flags & 1) {  ;; 忽略所有弹回消息
+if (flags & 1) {  ;; ignore all bounced messages
     return ();
 }
 slice sender_address = cs~load_msg_addr();
@@ -226,6 +256,7 @@ throw_unless(501, op == op::ownership_assigned());
 int query_id = in_msg_body~load_uint(64);
 slice prev_owner_address = in_msg_body~load_msg_addr();
 ```
+
 让我们再次检查每行代码：
 
 - `slice cs = in_msg_full.begin_parse();` - 用于解析传入消息。

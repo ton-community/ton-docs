@@ -2,8 +2,8 @@
 
 在本页面上，您可以找到TON区块链的活跃网络配置：
 
--   主网：https://ton.org/global-config.json
--   测试网：https://ton.org/testnet-global.config.json
+- 主网：https://ton.org/global-config.json
+- 测试网：https://ton.org/testnet-global.config.json
 
 ## 参阅
 

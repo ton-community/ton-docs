@@ -10,12 +10,12 @@ CRC32 IEEE版本用于TL-B方案。通过查看此[NFT操作码](https://github.
 
 ### 在线计算器
 
-* [在线计算器示例](https://emn178.github.io/online-tools/crc32.html)
-* [Tonwhales Introspection ID 生成器](https://tonwhales.com/tools/introspection-id)
+- [在线计算器示例](https://emn178.github.io/online-tools/crc32.html)
+- [Tonwhales Introspection ID 生成器](https://tonwhales.com/tools/introspection-id)
 
 ### VS Code扩展
 
-* [crc32-opcode-helper](https://marketplace.visualstudio.com/items?itemName=Gusarich.crc32-opcode-helper)
+- [crc32-opcode-helper](https://marketplace.visualstudio.com/items?itemName=Gusarich.crc32-opcode-helper)
 
 ### Python
 
@@ -44,6 +44,7 @@ func main() {
 ```
 
 ### TypeScript
+
 ```typescript
 import * as crc32 from 'crc-32';
 
