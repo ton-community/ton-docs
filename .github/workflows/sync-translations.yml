@@ -1,0 +1,34 @@
+name: Sync Translations
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # every day at 00:00.
+  workflow_dispatch: # on button click
+
+jobs:
+  sync-branches:
+    runs-on: ubuntu-latest
+    name: Syncing branches
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: Opening pull request to ja_localization
+        id: pull_ja
+        uses: tretuna/sync-branches@main
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          FROM_BRANCH: "l10n_localization"
+          TO_BRANCH: "ja_localization"
+          PULL_REQUEST_AUTO_MERGE_METHOD: "merge"
+      - name: Opening pull request to ko_localization
+        id: pull_ko
+        uses: tretuna/sync-branches@main
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          FROM_BRANCH: "l10n_localization"
+          TO_BRANCH: "ko_localization"
+          PULL_REQUEST_AUTO_MERGE_METHOD: "merge"
