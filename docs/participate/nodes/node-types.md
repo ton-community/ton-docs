@@ -2,11 +2,13 @@ import Button from '@site/src/components/button'
 
 # TON Node Types
 
+In *simplified terms*, a blockchain `node` is **one of the computers** that **collectively run the blockchain's software**. It enables the blockchain to search and optionally validate transactions and keep the network secure ensuring that the network remains **decentralized**.
+
 When diving into the world of The Open Network (TON), understanding the distinct node types and their functionalities is crucial. This article breaks down each node type to provide clarity for developers wishing to engage with the TON blockchain.
 
 ## Full Node
 
-A **Full Node** in TON is a node that maintains synchronization with the blockchain.
+A `Full Node` in TON is a node that **maintains synchronization** with the blockchain.
 
 It retains the _current state_ of the blockchain and can house either the entire block history or parts of it. This makes it the backbone of the TON blockchain, facilitating the network's decentralization and security.
 
@@ -19,41 +21,64 @@ Running a Full Node
 </Button>
 ````
 
+## Archive Node
+
+If `Full node` archives the **entire block history** it's called `Archive Node`.
+
+Such nodes are indispensable for creating blockchain explorers or other tools that necessitate a full blockchain history.
+
+<Button href="/participate/run-nodes/archive-node"
+colorType="primary" sizeType={'sm'}>
+Running an Archive Node
+</Button>
+
 ## Validator Node
 
-A **Validator Node** is activated when it holds a necessary amount of Toncoin as a stake. Validator nodes are vital for the network's operability, participating in the validation of new network blocks.
+TON operates on a **Proof-of-Stake** mechanism, where `validators` are pivotal in maintaining network functionality. `Validators` are [rewarded in Toncoin](/participate/network-maintenance/staking-incentives) for their contributions, incentivizing network participation and ensuring network security.
 
-TON operates on a Proof-of-Stake mechanism, where validators are pivotal in maintaining network functionality. Validators are [rewarded in Toncoin](/participate/network-maintenance/staking-incentives) for their contributions, incentivizing network participation and ensuring network security.
+If `full node` holds a **necessary amount of Toncoin** as a **stake**, it can be used as `Validator Node`.
 
-[Running a Full Node as a Validator](/participate/run-nodes/full-node#become-a-validator)
+<Button href="/participate/run-nodes/enable-liteserver-node"
+colorType="primary" sizeType={'sm'}>
+Running a Validator Node
+</Button>
 
+## Liteserver
 
-## Full Node + Liteserver
+`Full Node` can be used as `Liteserver`. This node type can field and respond to requests from `Lite Clients`, allowing to seamlessly interact with the TON Blockchain.
 
-When an endpoint is activated on a full node, the node assumes the role of a **Liteserver**. This node type can field and respond to requests from Lite Clients, allowing to seamlessly interract with the TON Blockchain.
+`Liteservers` enable swift communication with Lite Clients, facilitating tasks like retrieving balance or submitting transactions without necessitating the full block history.
 
-### Lite Clients: the SDKs to interact with TON
-
-Liteservers enable swift communication with Lite Clients, facilitating tasks like retrieving balance or submitting transactions without necessitating the full block history.
-
-Each SDK which supports ADNL protocol can be used as a Lite Client with `config.json` file. The `config.json` file contains a list of endpoints that can be used to connect to the TON Blockchain.
-
-[Choose a TON SDK](/develop/dapps/apis/sdk)
-
-Each SDK without ADNL support usually uses HTTP middleware to connect to the TON Blockchain. It's less secure and slower than ADNL, but it's easier to use.
-
-### Interaction with TON: Public Liteservers (endpoints)
-
-The TON Foundation provides several public Liteservers, integrated into the global config, which are accessible for universal use. These endpoints, such as those used by standard wallets, ensure that even without setting up a personal liteserver, interaction with the TON Blockchain remains possible.
+Actually, there are two public `Liteservers` configs both for mainnet and testnet, that already have been provided by the TON Foundation. They are accessible for universal use. But it's not recommended to use public `Liteservers` in production since they are not stable because of permanent high load.
 
 - [Public Liteserver Configurations - mainnet](https://ton.org/global-config.json)
 - [Public Liteserver Configurations - testnet](https://ton.org/testnet-global.config.json)
 
-Use the downloaded `config.json` file in your application with [TON SDK](/participate/nodes/node-types#lite-clients-the-sdks-to-interact-with-ton).
+These endpoints, such as those used by standard wallets, ensure that even without setting up a personal liteserver, interaction with the TON Blockchain remains possible.
 
-#### Troubleshooting
+If you want to have more stable _connection_, you can run your own `Liteserver`. To run a `full node` as a `Liteserver`, simply enable the `Liteserver` mode in your node's configuration file.
 
-##### Timed out after 3 seconds
+<Button href="/participate/run-nodes/full-node#enable-liteserver-mode"
+colorType="primary" sizeType={'sm'}>
+Enable Liteserver in your Node
+</Button>
+
+## Lite Clients: the SDKs to interact with TON
+
+Each SDK which supports ADNL protocol can be used as a `Lite Client` with `config.json` file (find how to download it [here](/participate/nodes/node-types#troubleshooting)). The `config.json` file contains a list of endpoints that can be used to connect to the TON Blockchain.
+
+Each SDK without ADNL support usually uses HTTP middleware to connect to the TON Blockchain. It's less secure and slower than ADNL, but it's easier to use.
+
+<Button href="/develop/dapps/apis/sdk"
+colorType="primary" sizeType={'sm'}>
+Choose a TON SDK
+</Button>
+
+### Troubleshooting
+
+Below you can find approaches how to fix common nowed issues with `light clients`
+
+### Timed out after 3 seconds
 
 If you see this error this means that the liteserver you are trying to connect to is not available. The correct way to solve this issue for public liteservers is as follows:
 
@@ -65,21 +90,4 @@ wget https://api.tontech.io/ton/wallet-mainnet.autoconf.json -O /usr/bin/ton/glo
 
 It removes slow liteservers from the configuration file.
 
-2. Use the downloaded config.json file in your application with [TON SDK](/participate/nodes/node-types#lite-clients-the-sdks-to-interact-with-ton).
-
-
-### Running a Full Node as a Liteserver
-
-If your project requires a high level of _security_, you can run your own Liteserver. To run a full node as a Liteserver, simply enable the Liteserver mode in your node's configuration file:
-
-[Enable Liteserver in your Node](/participate/run-nodes/full-node#enable-liteserver-mode)
-
-
-## Archive Node
-
-An **Archive Node** is essentially a full node that archives the entire block history.
-
-Such nodes are indispensable for creating blockchain explorers or other tools that necessitate a full blockchain history.
-
-  [Running an Archive Node](/participate/run-nodes/archive-node)
-
+2. Use the downloaded config.json file in your application with [TON SDK](/develop/dapps/apis/sdk).

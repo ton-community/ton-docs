@@ -80,6 +80,20 @@ console.log('URI to off-chain metadata:', data.jettonContentUri);
 </TabItem>
 </Tabs>
 
+### Jetton minter
+
+As mentioned before, jettons can be either `mintable` or `non-mintable`.
+
+If they are non-mintable, the logic becomes simple—there is no way to mint additional tokens. To mint jettons for the first time, refer to the [Mint your first jetton](/develop/dapps/tutorials/jetton-minter) page.
+
+If the jettons are mintable, there is a special function in the [minter contract](https://github.com/ton-blockchain/minter-contract/blob/main/contracts/jetton-minter.fc) to mint additional jettons. This function can be called by sending an `internal message` with a specified opcode from the admin address.
+
+If the jetton admin wants to restrict jetton creation, there are three ways to do it:
+
+1. If you can't or do not want to update the contract's code, the admin needs to transfer ownership from the current admin to the zero address. This will leave the contract without a valid admin, thus preventing anyone from minting jettons. However, it will also prevent any changes to the jetton metadata.
+2. If you have access to source code and can change it, you can create a method in the contract that sets a flag to abort any minting process after it is called, and add a statement to check this flag in the mint function.
+3. If you can update contract's code, you can add restrictions by updating the code of the already deployed contract.
+
 ## Jetton wallet smart contract
 `Jetton wallet` contracts are used to **send**, **receive**, and **burn** jettons. Each _jetton wallet contract_ stores wallet balance information for specific users.
 In specific instances, jetton wallets are used for individual jetton holders for each jetton type.
@@ -287,7 +301,7 @@ Tonweb examples:
 #### Preparations
 
 1. [Prepare a list of accepted Jettons](/develop/dapps/asset-processing/jettons#adding-new-jettons-for-asset-processing-and-initial-verification) (Jetton master addresses).
-2. Deploy hot wallet (using v3R2 if no Jetton withdrawals are expected; highload v2 - if Jetton withdrawals are expected). [Wallet deployment](/develop/dapps/asset-processing/#wallet-deployment).
+2. Deploy hot wallet (using v3R2 if no Jetton withdrawals are expected; highload v3 - if Jetton withdrawals are expected). [Wallet deployment](/develop/dapps/asset-processing/#wallet-deployment).
 3. Perform a test Jetton transfer using the hot wallet address to initialize the wallet.
 
 #### Processing incoming Jettons
@@ -340,7 +354,7 @@ const wallet = new WalletClass(tonweb.provider, {
 #### Preparation
 
 1. [Prepare a list of accepted Jettons](#adding-new-jettons-for-asset-processing-and-initial-verification).
-2. Deploy hot wallet (using v3R2 if no Jetton withdrawals are expected; highload v2 - if Jetton withdrawals are expected). [Wallet deployment](/develop/dapps/asset-processing/#wallet-deployment).
+2. Deploy hot wallet (using v3R2 if no Jetton withdrawals are expected; highload v3 - if Jetton withdrawals are expected). [Wallet deployment](/develop/dapps/asset-processing/#wallet-deployment).
 
 #### Creating deposits
 
@@ -431,7 +445,7 @@ See: [Jetton contracts message layouts](#jetton-contract-message-layouts)
 #### Preparation
 
 1. Prepare a list of Jettons for withdrawals: [Adding new Jettons for processing and initial verification](#adding-new-jettons-for-asset-processing-and-initial-verification)
-2. Hot wallet deployment is initiated. Highload v2 is recommended. [Wallet Deployment](/develop/dapps/asset-processing/#wallet-deployment)
+2. Hot wallet deployment is initiated. Highload v3 is recommended. [Wallet Deployment](/develop/dapps/asset-processing/#wallet-deployment)
 3. Carry out a Jetton transfer using a hot wallet address to initialize the Jetton wallet and replenish its balance.
 
 #### Processing withdrawals
