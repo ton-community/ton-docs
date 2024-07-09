@@ -225,6 +225,20 @@ For example,
 
 as the `add` function is marked with the `inline` specifier. The compiler will try to replace calls to `add` with the actual code `a + b`, avoiding the function call overhead.
 
+Here is another example of how you can use inline, taken from [ICO-Minter.fc](https://github.com/ton-blockchain/token-contract/blob/f2253cb0f0e1ae0974d7dc0cef3a62cb6e19f806/ft/jetton-minter-ICO.fc#L16):
+
+```func
+() save_data(int total_supply, slice admin_address, cell content, cell jetton_wallet_code) impure inline {
+  set_data(begin_cell()
+            .store_coins(total_supply)
+            .store_slice(admin_address)
+            .store_ref(content)
+            .store_ref(jetton_wallet_code)
+           .end_cell()
+          );
+}
+```
+
 
 
 #### Inline_ref specifier
