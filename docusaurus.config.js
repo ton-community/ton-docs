@@ -139,7 +139,6 @@ const config = {
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
   i18n: getEnvLangConfig(),
-
   presets: [
     [
       'classic',
@@ -486,6 +485,16 @@ const config = {
           {
             type: 'localeDropdown',
             position: 'right',
+            dropdownItemsAfter: [
+              {
+                type: 'html',
+                value: '<hr style="margin: 0.3rem 0;">',
+              },
+              {
+                href: "/contribute/localization-program/overview",
+                label: 'Help Us Translate',
+              },
+            ],
           },
         ],
       },
