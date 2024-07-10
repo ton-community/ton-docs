@@ -4,7 +4,7 @@
 
 ## 一切皆为智能合约
 
-在TON上，智能合约是使用[Actor模型](/learn/overviews/ton-blockchain#single-actor)构建的。实际上，在TON中的actor在技术上是以智能合约的形式表示的。这意味着，即使您的钱包也是一个简单的actor（以及一个智能合约）。
+在TON上，智能合约是使用[Actor模型](/learn/overviews/ton-blockchain#single-actor)构建的。实际上，在TON中的actor在技术上是以智能合约的形式表示的。这意味着，甚至您的钱包也是一个简单的actor（以及一个智能合约）。
 
 通常，actor处理传入消息，改变其内部状态，并生成传出消息。这就是为什么TON区块链上的每一个actor（即智能合约）都必须有一个地址，以便能够从其他actor接收消息。
 
