@@ -39,12 +39,12 @@ Add the `TonConnectButton`. The TonConnect Button is a universal UI component fo
 
 ```tsx
 export const Header = () => {
-    return (
-        <header>
-            <span>My App with React UI</span>
-            <TonConnectButton />
-        </header>
-    );
+  return (
+    <header>
+      <span>My App with React UI</span>
+      <TonConnectButton />
+    </header>
+  );
 };
 ```
 
@@ -53,7 +53,29 @@ You can add className and style props to the button as well. Note that you canno
 <TonConnectButton className="my-button-class" style={{ float: "right" }}/>
 ```
 
-Moreover, you always can initiate the connection manually, using `useTonConnectUI` hook and [connectWallet](https://github.com/ton-connect/sdk/tree/main/packages/ui#call-connect) method.
+Moreover, you always can initiate the connection manually, using `useTonConnectUI` hook and `openModal` method (❗ Note that `connectWallet` method is deprecated ❗).
+
+```tsx
+export const Header = () => {
+  const [tonConnectUI, setOptions] = useTonConnectUI();
+  return (
+    <header>
+      <span>My App with React UI</span>
+      <button onClick={() => tonConnectUI.openModal()}>
+        Connect Wallet
+      </button>
+    </header>
+  );
+};
+```
+
+You can connect to a specific wallet using the `openSingleWalletModal` method:
+
+```tsx
+<button onClick={() => tonConnectUI.openSingleWalletModal('tonwallet)}>
+  Connect Wallet
+</button>
+```
 
 ### 4) Redirects
 
@@ -85,23 +107,23 @@ If you want to use some low-level TON Connect UI SDK features in your React app,
 
 ### useTonAddress
 
-Use it to get user's current ton wallet address. Pass boolean parameter isUserFriendly to choose format of the address. If wallet is not connected hook will return empty string.
+Use it to get user's current ton wallet address. Pass the boolean parameter `isUserFriendly` (default is `true`) to choose the format of the address. If the wallet is not connected, the hook will return an empty string.
 
 ```tsx
 import { useTonAddress } from '@tonconnect/ui-react';
 
 export const Address = () => {
-    const userFriendlyAddress = useTonAddress();
-    const rawAddress = useTonAddress(false);
+  const userFriendlyAddress = useTonAddress();
+  const rawAddress = useTonAddress(false);
 
-    return (
-        userFriendlyAddress && (
-            <div>
-                <span>User-friendly address: {userFriendlyAddress}</span>
-                <span>Raw address: {rawAddress}</span>
-            </div>
-        )
-    );
+  return (
+    userFriendlyAddress && (
+      <div>
+        <span>User-friendly address: {userFriendlyAddress}</span>
+        <span>Raw address: {rawAddress}</span>
+      </div>
+    )
+  );
 };
 ```
 
@@ -109,26 +131,29 @@ export const Address = () => {
 
 Use it to get user's current ton wallet. If wallet is not connected hook will return null.
 
-See all wallet's properties
+See all wallet's properties:
 
 [Wallet interface](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html)
+
 [WalletInfo interface](https://ton-connect.github.io/sdk/types/_tonconnect_sdk.WalletInfo.html)
 
 ```tsx
 import { useTonWallet } from '@tonconnect/ui-react';
 
 export const Wallet = () => {
-    const wallet = useTonWallet();
+  const wallet = useTonWallet();
 
-    return (
-        wallet && (
-            <div>
-                <span>Connected wallet: {wallet.name}</span>
-                <span>Device: {wallet.device.appName}</span>
-            </div>
-        )
-    );
+  return (
+    wallet && (
+      <div>
+        <span>Connected wallet address: {wallet.account.address}</span>
+        <span>Device: {wallet.device.appName}</span>
+        <span>Connected via: {wallet.provider}</span>
+      </div>
+    )
+  );
 };
+
 ```
 
 ### useTonConnectUI
@@ -144,27 +169,21 @@ Use it to get access to the `TonConnectUI` instance and UI options updating func
 import { Locales, useTonConnectUI } from '@tonconnect/ui-react';
 
 export const Settings = () => {
-    const [tonConnectUI, setOptions] = useTonConnectUI();
+  const [tonConnectUI, setOptions] = useTonConnectUI();
 
-    const onLanguageChange = (lang: string) => {
-        setOptions({ language: lang as Locales });
-    };
+  const onLanguageChange = (language: Locales) => {
+    setOptions({ language });
+  };
 
-    return (
-        <div>
-            <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
-                Send transaction
-            </button>
-
-            <div>
-                <label>language</label>
-                <select onChange={e => onLanguageChange(e.target.value)}>
-                    <option value="en">en</option>
-                    <option value="ru">ru</option>
-                </select>
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      <label>language</label>
+      <select onChange={(e) => onLanguageChange(e.target.value as Locales)}>
+        <option value="en">en</option>
+        <option value="ru">ru</option>
+      </select>
+    </div>
+  );
 };
 ```
 
@@ -176,13 +195,13 @@ You can use it to detect when connection restoring process if finished.
 import { useIsConnectionRestored } from '@tonconnect/ui-react';
 
 export const EntrypointPage = () => {
-    const connectionRestored = useIsConnectionRestored();
+  const connectionRestored = useIsConnectionRestored();
 
-    if (!connectionRestored) {
-        return <Loader>Please wait...</Loader>;
-    }
+  if (!connectionRestored) {
+    return <Loader>Please wait...</Loader>;
+  }
 
-    return <MainPage />;
+  return <MainPage />;
 };
 ```
 
@@ -197,27 +216,29 @@ Send TON coins (in nanotons) to a specific address:
 ```js
 import { useTonConnectUI } from '@tonconnect/ui-react';
 
-const transaction = {
-    messages: [
-        {
-            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
-            amount: "20000000" //Toncoin in nanotons
-        }
-    ]
-
-}
+const transaction: SendTransactionRequest = {
+  validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes
+  messages: [
+    {
+      address:
+        "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+      amount: "20000000", // Toncoin in nanotons
+    },
+  ],
+};
 
 export const Settings = () => {
-    const [tonConnectUI, setOptions] = useTonConnectUI();
+  const [tonConnectUI, setOptions] = useTonConnectUI();
 
-    return (
-        <div>
-            <button onClick={() => tonConnectUI.sendTransaction(transaction)}>
-                Send transaction
-            </button>
-        </div>
-    );
+  return (
+    <div>
+      <button onClick={() => tonConnectUI.sendTransaction(transaction)}>
+        Send transaction
+      </button>
+    </div>
+  );
 };
+
 ```
 
 - Get more examples here: [Preparing Messages](/develop/dapps/ton-connect/message-builders)
@@ -232,91 +253,78 @@ The principle located in Payment Processing (using tonweb). [See more](/develop/
 Understand how to sign and verify messages: [Signing and Verification](/develop/dapps/ton-connect/sign)
 :::
 
-Use `tonConnectUI.setConnectRequestParameters` function to pass your connect request parameters.
+To ensure that the user truly owns the declared address, you can use `ton_proof`.
 
-This function takes one parameter:
-
-Set state to 'loading' while you are waiting for the response from your backend. If user opens connect wallet modal at this moment, he will see a loader.
-```ts
-const [tonConnectUI] = useTonConnectUI();
-
-tonConnectUI.setConnectRequestParameters({
-    state: 'loading'
-});
-```
-
-or
-
-Set state to 'ready' and define `tonProof` value. Passed parameter will be applied to the connect request (QR and universal link).
-```ts
-const [tonConnectUI] = useTonConnectUI();
-
-tonConnectUI.setConnectRequestParameters({
-    state: 'ready',
-    value: {
-        tonProof: '<your-proof-payload>'
-    }
-});
-```
-
-or
-
-Remove loader if it was enabled via `state: 'loading'` (e.g. you received an error instead of a response from your backend). Connect request will be created without any additional parameters.
-```ts
-const [tonConnectUI] = useTonConnectUI();
-
-tonConnectUI.setConnectRequestParameters(null);
-```
-
-
-You can call `tonConnectUI.setConnectRequestParameters` multiple times if your tonProof payload has bounded lifetime (e.g. you can refresh connect request parameters every 10 minutes).
-
+Use the `tonConnectUI.setConnectRequestParameters` function to set up your connection request parameters. You can use it for:
+- Loading State: Show a loading state while waiting for a response from your backend.
+- Ready State with tonProof: Set the state to 'ready' and include the tonProof value.
+- If an error occurs, remove the loader and create the connect request without additional parameters.
 
 ```ts
 const [tonConnectUI] = useTonConnectUI();
 
-// enable ui loader
-tonConnectUI.setConnectRequestParameters({ state: 'loading' });
+// Set loading state
+tonConnectUI.setConnectRequestParameters({ state: "loading" });
 
-// fetch you tonProofPayload from the backend
-const tonProofPayload: string | null = await fetchTonProofPayloadFromBackend();
+// Fetch tonProofPayload from backend
+const tonProofPayload: string | null =
+  await fetchTonProofPayloadFromBackend();
 
-if (!tonProofPayload) {
-    // remove loader, connect request will be without any additional parameters
-    tonConnectUI.setConnectRequestParameters(null);
+if (tonProofPayload) {
+  // Set ready state with tonProof
+  tonConnectUI.setConnectRequestParameters({
+    state: "ready",
+    value: { tonProof: tonProofPayload },
+  });
 } else {
-    // add tonProof to the connect request
-    tonConnectUI.setConnectRequestParameters({
-        state: "ready",
-        value: { tonProof: tonProofPayload }
-    });
+  // Remove loader
+  tonConnectUI.setConnectRequestParameters(null);
 }
-
 ```
 
+#### Handling ton_proof Result
 
-You can find `ton_proof` result in the `wallet` object when wallet will be connected:
+You can find `ton_proof` result in the `wallet` object when the wallet is connected:
 
 ```ts
-import {useTonConnectUI} from "@tonconnect/ui-react";
-
-const [tonConnectUI] = useTonConnectUI();
-
-useEffect(() =>
-    tonConnectUI.onStatusChange(wallet => {
-        if (wallet.connectItems?.tonProof && 'proof' in wallet.connectItems.tonProof) {
-            checkProofInYourBackend(wallet.connectItems.tonProof.proof, wallet.account);
-        }
-    }), []);
+useEffect(() => {
+    tonConnectUI.onStatusChange((wallet) => {
+      if (
+        wallet.connectItems?.tonProof &&
+        "proof" in wallet.connectItems.tonProof
+      ) {
+        checkProofInYourBackend(
+          wallet.connectItems.tonProof.proof,
+          wallet.account.address
+        );
+      }
+    });
+  }, []);
 ```
 
+#### Structure of ton_proof
+
+```ts
+type TonProofItemReplySuccess = {
+  name: "ton_proof";
+  proof: {
+    timestamp: string; // Unix epoch time (seconds)
+    domain: {
+      lengthBytes: number; // Domain length
+      value: string;  // Domain name
+    };
+    signature: string; // Base64-encoded signature
+    payload: string; // Payload from the request
+  }
+}
+```
+
+You can find an example of authentication on this [page](/develop/dapps/ton-connect/sign#react-example)
 
 ### Wallet Disconnection
 
 Call to disconnect the wallet:
 ```js
-import { useTonConnectUI } from '@tonconnect/ui-react';
-
 const [tonConnectUI] = useTonConnectUI();
 
 await tonConnectUI.disconnect();
