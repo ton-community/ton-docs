@@ -18,7 +18,7 @@ npm test
 
 This package allows you to emulate arbitrary TON smart contracts, send messages to them and run get methods on them as if they were deployed on a real network.
 
-The key difference of this package from ton-contract-executor is the fact that the latter only emulates the compute phase of the contract - it does not know about any other phases and thus does not know anything about fees and balances (in a sense that it does not know whether a contract's balance will be enough to process all the out messages that it produces).
+The key difference between this package and ton-contract-executor is the fact that the latter only emulates the compute phase of the contract - it does not know about any other phases and thus does not know anything about fees and balances (in a sense that it does not know whether a contract's balance will be enough to process all the out messages that it produces).
 
 On the other hand, this package emulates all the phases of a contract, and as a result, the emulation is much closer to what would happen in a real network.
 
