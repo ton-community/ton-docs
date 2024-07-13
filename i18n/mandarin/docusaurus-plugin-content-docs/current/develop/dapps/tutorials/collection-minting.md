@@ -282,7 +282,7 @@ export async function uploadFolderToIPFS(folderPath: string): Promise<string> {
 export async function updateMetadataFiles(metadataFolderPath: string, imagesIpfsHash: string): Promise<void> {
   const files = readdirSync(metadataFolderPath);
 
-  files.forEach(async (filename, index) => {
+  await Promise.all(files.map(async (filename, index) => {
     const filePath = path.join(metadataFolderPath, filename)
     const file = await readFile(filePath);
     
@@ -293,7 +293,7 @@ export async function updateMetadataFiles(metadataFolderPath: string, imagesIpfs
         : `ipfs://${imagesIpfsHash}/logo.jpg`;
     
     await writeFile(filePath, JSON.stringify(metadata));
-  });
+  }));
 }
 ```
 这里我们首先读取指定文件夹中的所有文件：
