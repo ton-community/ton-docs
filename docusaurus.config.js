@@ -8,7 +8,7 @@ const getEnvLangConfig = () => {
 
   const langArray = process.env.TARGET_LANGS
     ? process.env.TARGET_LANGS.split(",")
-    : ["mandarin", "ru", "ko", "pl", "uk"];
+    : ["mandarin", "ru", "ko", "pl", "uk", "ja"];
 
   const locales = Array.from(new Set([defaultLocale, ...langArray]));
 
@@ -139,7 +139,6 @@ const config = {
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
   i18n: getEnvLangConfig(),
-
   presets: [
     [
       'classic',
@@ -469,9 +468,19 @@ const config = {
             'aria-label': 'GitHub repository',
           },
           {
-          type: 'localeDropdown',
-          position: 'right',
-        },
+            type: 'localeDropdown',
+            position: 'right',
+            dropdownItemsAfter: [
+              {
+                type: 'html',
+                value: '<hr style="margin: 0.3rem 0;">',
+              },
+              {
+                href: "/contribute/localization-program/overview",
+                label: 'Help Us Translate',
+              },
+            ],
+          },
         ],
       },
       footer: {
