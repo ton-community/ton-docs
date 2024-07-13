@@ -306,5 +306,26 @@
   "sidebar.contribute.category.Hacktoberfest 2022": {
     "message": "Hacktoberfest 2022",
     "description": "The label for category Hacktoberfest 2022 in sidebar contribute"
+  },
+  "sidebar.contribute.category.Localization Program": {
+    "message": "本地化系统",
+    "description": "The label for category Localization Program in sidebar contribute"
+  },
+  "sidebar.contribute.doc.Overview": {
+    "message": "概览",
+    "description": "The label for the doc item Overview in sidebar contribute, linking to the doc contribute/localization-program/overview"
+  },
+  "sidebar.contribute.doc.How It Works": {
+    "message": "工作原理",
+    "description": "The label for the doc item How It Works in sidebar contribute, linking to the doc contribute/localization-program/how-it-works"
+  },
+  "sidebar.contribute.doc.How To Contribute": {
+    "message": "如何参与贡献",
+    "description": "The label for the doc item How To Contribute in sidebar contribute, linking to the doc contribute/localization-program/how-to-contribute"
+  },
+  "sidebar.contribute.doc.Translation Style Guide": {
+    "message": "翻译风格指南",
+    "description": "The label for the doc item Translation Style Guide in sidebar contribute, linking to the doc contribute/localization-program/translation-style-guide"
   }
+  
 }
