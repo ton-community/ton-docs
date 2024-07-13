@@ -8,10 +8,6 @@ This document describes how to calculate fees in FunC contracts using the new TV
 For a comprehensive list of TVM opcodes, including those mentioned below, check the [TVM instruction page](/learn/tvm-instructions/instructions).
 :::
 
-:::info
-Almost all FunC functions used in this article are defined in [stablecoin stdlib.fc contract](https://github.com/ton-blockchain/stablecoin-contract). Actually, stdlib.fc with new opcodes is currently **under development** and **not yet presented on the mainnet repos**, but you can use `stdlib.fc` from [stablecoin](https://github.com/ton-blockchain/ton) source code as reference.
-:::
-
 ## Storage Fee
 
 ### Overview
@@ -58,10 +54,10 @@ const int RESERVE_AT_MOST = 2;
 ;;; in the case of action fail - bounce transaction. No effect if RESERVE_AT_MOST (+2) is used. TVM UPGRADE 2023-07. https://docs.ton.org/learn/tvm-instructions/tvm-upgrade-2023-07#sending-messages
 const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;
 
-() calculate_and_reserve_storage_fee(int balance, int msg_value, int workchain, int seconds, int bits, int cells) inline {
-    int to_leave_on_balance = my_ton_balance - msg_value + my_storage_due();
+() calculate_and_reserve_at_most_storage_fee(int balance, int msg_value, int workchain, int seconds, int bits, int cells) inline {
+    int on_balance_before_msg = my_ton_balance - msg_value;
     int min_storage_fee = get_storage_fee(workchain, seconds, bits, cells); ;; can be hardcoded IF CODE OF THE CONTRACT WILL NOT BE UPDATED
-    raw_reserve(max(to_leave_on_balance, min_storage_fee), RESERVE_AT_MOST);
+    raw_reserve(max(on_balance_before_msg, min_storage_fee + my_storage_due()), RESERVE_AT_MOST);
 }
 ```
 

@@ -59,6 +59,47 @@ This is a very customizable feature which is unique to TON Blockchain.
 Wallet source code:
  * [ton-blockchain/wallet-contract](https://github.com/ton-blockchain/wallet-contract)
 
+### Wallet V5
+
+:::warning
+This is an experimental version that is in public beta testing.
+The TON Core team started to audit and test this v5-beta smart contract. The smart contract code will change in the course of this work, but will try to keep its interface intact. The TON Core team plans to complete this work by June 20. We ask all wallets in the TON ecosystem to support the final smart contract after the audit.
+:::
+
+This is an extensible wallet specification developed by the Tonkeeper team, aimed at replacing V4 and allowing arbitrary extensions.
+
+The W5 wallet standard offers many benefits that improve the experience for both users and merchants. W5 supports gas-free transactions, account delegation and recovery, subscription payments using tokens and Toncoin, and low-cost multi-transfers.
+
+Users will have access to a 25% reduction in blockchain fees, a new flexible plugin interface for developers, and an internal message signature that enables delegation of gas payments.
+
+In addition to retaining the previous functionality (v4), the new contract allows you to send up to 255 messages at a time, as well as to make full-fledged gasless transactions (e.g., payment of network fees when transferring USDt in USDt itself) and other features. We believe it will enhance the usability and capabilities for TON users.
+
+:::tip
+In the final version of this technology, users wallets will allow transactions to be initiated by the user but paid for by another contract. Consequently, there will be services (such as [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)) that provide this functionality: they pay the transaction fees in TONs on behalf of the user, but charge a fee in tokens. This means they cover the TON fees only for transactions that include a payment to the service.
+:::
+
+#### UI Preparation and Beta Testing
+
+- <b>UI</b>: Already now, wallet teams can start UI preparations. You can use the v5-beta smart contract as a test smart contract, but keep in mind that it will can change. UI suggestion: wallets that have multi-accounts could support the new v5 smart contract as a separate account in the UI. Provide a “Transfer funds between your accounts” functionality.
+- <b>Beta</b>: If you build v5 functionality into public versions of your products, please mark it as “beta” and do not use the v5 contract by default, but only when explicitly enabled in the settings. Please observe this rule to prevent too wide distribution of the non-final beta version of the v5 smart contract.
+- <b>Release</b>: The final smart contract will be ready around June 20, after which wallets can enable v5 by default using the final smart contract. It will be written about here.
+
+#### Preparing for Gasless Transactions
+
+The v5 wallet smart contract allows the processing of internal messages signed by the owner. This also allows you to make gasless transactions, e.g., payment of network fees when transferring USDt in USDt itself.
+
+#### Flow
+
+1. When sending USDt, the user signs one message containing two outgoing USDt transfers:
+    1. USDt transfer to the recipient's address.
+    2. Transfer of a small amount of USDt in favor of the Service.
+2. This signed message is sent off-chain by HTTPS to the Service backend. The Service backend sends it to the TON blockchain, paying Toncoins for network fees.
+
+Beta version of the gasless backend API is available on [tonapi.io/api-v2](https://tonapi.io/api-v2). If you are developing any wallet app and have feedback about these methods please share it ton [@tonapitech](https://t.me/tonapitech) chat.
+
+Wallet source code:
+ * [tonkeeper/w5](https://github.com/tonkeeper/w5)
+
 ## Special wallets
 
 Sometimes the functionality of basic wallets isn't enough. That's why there are several types of specialized wallet: `high-load`, `lockup` and `restricted`.

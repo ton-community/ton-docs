@@ -157,6 +157,16 @@ const sidebars = {
       id: 'develop/get-started-with-ton',
     },
     {
+      type: 'category',
+      label: 'Transition from Ethereum to TON',
+      items: [
+        'develop/ethereum-to-ton/difference-of-blockchains',
+        'develop/ethereum-to-ton/tvm-vs-evm',
+        'develop/ethereum-to-ton/solidity-vs-func',
+        'develop/ethereum-to-ton/blockchain-services',
+      ],
+    },
+    {
       'type': 'html',
       'value': '<hr/>',
     },
@@ -328,6 +338,7 @@ const sidebars = {
           label: 'Telegram Mini Apps',
           items: [
             'develop/dapps/telegram-apps/README',
+            'develop/dapps/telegram-apps/notcoin',
             'develop/dapps/telegram-apps/grants',
             {
               type: 'category',
@@ -663,12 +674,17 @@ const sidebars = {
       label: 'Blockchain Nodes',
       items: [
         'participate/nodes/node-types',
+        'participate/run-nodes/mytonctrl',
         'participate/run-nodes/full-node',
+        'participate/run-nodes/enable-liteserver-node',
+        'participate/run-nodes/become-validator',
         'participate/run-nodes/archive-node',
+        'participate/run-nodes/nodes-troubleshooting',
         //'participate/run-nodes/liteserver',
         //'participate/nodes/nodes-faq',
         'participate/nodes/node-maintenance-and-security',
         'participate/run-nodes/local-ton',
+        'participate/run-nodes/faq',
       ],
     },
     {
@@ -677,6 +693,7 @@ const sidebars = {
       items: [
         'participate/network-maintenance/staking-incentives',
         'participate/network-maintenance/single-nominator',
+        'participate/network-maintenance/nominator-pool',
         'participate/network-maintenance/vesting-contract',
         'participate/network-maintenance/nominators',
         'participate/network-maintenance/persistent-states',
@@ -762,6 +779,32 @@ const sidebars = {
             'contribute/archive/hacktoberfest-2022/as-contributor',
             'contribute/archive/hacktoberfest-2022/as-maintainer',
           ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Localization Program',
+      items: [
+        {
+          type: 'doc',
+          label: 'Overview',
+          id: 'contribute/localization-program/overview',
+        },
+        {
+          type: 'doc',
+          label: 'How It Works',
+          id: 'contribute/localization-program/how-it-works',
+        },
+        {
+          type: 'doc',
+          label: 'How To Contribute',
+          id: 'contribute/localization-program/how-to-contribute',
+        },
+        {
+          type: 'doc',
+          label: 'Translation Style Guide',
+          id: 'contribute/localization-program/translation-style-guide',
         },
       ],
     },

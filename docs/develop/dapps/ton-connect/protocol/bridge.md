@@ -191,7 +191,7 @@ Otherwise returns `ConnectEventError` with error code 100 (Unknown app).
 ### send()
 
 Sends a [message](/develop/dapps/ton-connect/protocol/requests-responses#messages) to the bridge, excluding the ConnectRequest (that goes into QR code when using HTTP bridge and into connect when using JS Bridge).
-Directly returns promise with WalletResponse, do you don't need to wait for responses with `listen`;
+Directly returns promise with WalletResponse, so you don't need to wait for responses with `listen`;
 
 ### listen()
 

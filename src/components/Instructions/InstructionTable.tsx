@@ -1,10 +1,10 @@
 import React from 'react';
 import { InstructionHead } from './InstructionHead';
 import { InstructionRow } from './InstructionRow';
-import { Instruction } from './types';
+import { DisplayableInstruction } from './DisplayableInstruction';
 
 type InstructionTableProps = {
-  instructions: Instruction[];
+  instructions: DisplayableInstruction[];
 }
 
 export function InstructionTable({ instructions }: InstructionTableProps) {
@@ -14,7 +14,7 @@ export function InstructionTable({ instructions }: InstructionTableProps) {
         <InstructionHead/>
       </thead>
       <tbody>
-        {instructions.map(instruction => <InstructionRow instruction={instruction}/>)}
+        {instructions.map(instruction => <InstructionRow instruction={instruction} key={instruction.opcode + instruction.fift}/>)}
       </tbody>
     </table>
   );

@@ -1,1 +1,1 @@
-export * from './InstructionGroups';
+export * from './InstructionSearch';

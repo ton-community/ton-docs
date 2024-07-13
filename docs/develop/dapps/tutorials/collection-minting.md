@@ -36,7 +36,7 @@ The implementation of the NFT in ETH is extremely simple - there is 1 main contr
 
 ### Problems that can occur with such implementation in TON
 
-The problems of such an implementation in the context of TON are perfectly described by the [NFT standart](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) in TON:
+The problems of such an implementation in the context of TON are perfectly described by the [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) in TON:
 
 * Unpredictable gas consumption. In TON, gas consumption for dictionary operations depends on exact set of keys. Also, TON is an asynchronous blockchain. This means that if you send a message to a smart contract, then you do not know how many messages from other users will reach the smart contract before your message. Thus, you do not know what the size of the dictionary will be at the moment when your message reaches the smart contract. This is OK with a simple wallet -> NFT smart contract interaction, but not acceptable with smart contract chains, e.g. wallet -> NFT smart contract -> auction -> NFT smart contract. If we cannot predict gas consumption, then a situation may occur like that the owner has changed on the NFT smart contract, but there were no enough Toncoins for the auction operation. Using smart contracts without dictionaries gives deterministic gas consumption.
 
@@ -51,7 +51,7 @@ In TON we have 1 master contract - smart-contract of our collection, that store 
 ![](/img/tutorials/nft/ton-collection.png)
 
 :::info
-You can check [NFT processing on TON](/develop/dapps/asset-processing/nfts) article or read [NFT standart](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) if you want to dive deeper into this topic
+You can check [NFT processing on TON](/develop/dapps/asset-processing/nfts) article or read [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) if you want to dive deeper into this topic
 :::
 
 ## ⚙ Setup development environment
@@ -1120,7 +1120,7 @@ Today you have learned a lot of new things about TON and even created your own b
 ## References
 
 - [GetGems NFT-contracts](https://github.com/getgems-io/nft-contracts)
-- [NFT Standart](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
+- [NFT Standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
 
 ## About the author 
 - Coalus on [Telegram](https://t.me/coalus) or [GitHub](https://github.com/coalus)

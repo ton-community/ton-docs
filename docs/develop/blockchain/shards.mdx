@@ -54,7 +54,7 @@ Masterchain block contains information about shards in its header. After the blo
 
 An actual example:
 * Masterchain block `seqno=34607821` has 2 shards: `(0,4000000000000000,40485798)` and `(0,c000000000000000,40485843)` (https://toncenter.com/api/v2/shards?seqno=34607821).
-* Shard `shard=4000000000000000` was splitted into `shard=2000000000000000` and `shard=6000000000000000`, and the masterchain block `seqno=34607822` obtains 3 shards: `(0,2000000000000000,40485799)` and `(0,6000000000000000,40485799)`. Note that both new shards have the same seqnos but different shard IDs (https://toncenter.com/api/v2/shards?seqno=34607822).
+* Shard `shard=4000000000000000` was splitted into `shard=2000000000000000` and `shard=6000000000000000`, and the masterchain block `seqno=34607822` obtains 3 shards: `(0,c000000000000000,40485844)`, `(0,2000000000000000,40485799)` and `(0,6000000000000000,40485799)`. Note that both new shards have the same seqnos but different shard IDs (https://toncenter.com/api/v2/shards?seqno=34607822).
 * New shards go independently and after 100 masterchain blocks (in masterchain block `seqno=34607921`) one shard has the last block `(0,2000000000000000,40485901)` and another one has `(0,6000000000000000,40485897)` (https://toncenter.com/api/v2/shards?seqno=34607921).
 
 ## Merging

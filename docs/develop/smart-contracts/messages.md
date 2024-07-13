@@ -58,7 +58,7 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
 ```
 
 Let's focus on `int_msg_info` for now.
-It starts with 1bit prefix `0`, then there are three 1-bit flags, namely whether Instant Hypercube Routing disabled (currently always true), whether message should be bounced if there are errors during it's processing, whether message itself is result of bounce. Then source and destination addresss are serialized, followed by the value of the message and four integers related to message forwarding fees and time.
+It starts with 1bit prefix `0`, then there are three 1-bit flags, namely whether Instant Hypercube Routing disabled (currently always true), whether message should be bounced if there are errors during it's processing, whether message itself is result of bounce. Then source and destination addresses are serialized, followed by the value of the message and four integers related to message forwarding fees and time.
 
 If a message is sent from the smart contract, some of those fields will be rewritten to the correct values. In particular, validator will rewrite `bounced`, `src`, `ihr_fee`, `fwd_fee`, `created_lt` and `created_at`. That means two things: first, another smart-contract during handling message may trust those fields (sender may not forge source address, `bounced` flag, etc); and second, that during serialization we may put to those fields any valid values (anyway those values will be overwritten).
 
@@ -163,7 +163,12 @@ More configuration parameters and there values can be found [here](/develop/howt
 
 ## Message modes
 
-As you might've noticed, we send messages with `send_raw_message` which, apart from consuming the message itself, also accepts the mode. To figure out the mode that best suits your needs, take a look at the following table:
+As you might've noticed, we send messages with `send_raw_message` which, apart from consuming the message itself, also accepts the mode. This mode is used to determine the mode for sending messages, including whether to pay for fuel separately and how to handle errors. When the TON Virtual Machine (TVM) analyses and processes messages, it performs differentiated processing depending on the mode value. Easily confused is that the value of the mode parameter has two variables, namely mode and flag. Mode and flag have different functions:
+
+- mode : defines the basic behaviour when sending a message, e.g. whether to carry a balance, whether to wait for message processing results, etc. Different mode values represent different sending characteristics, and different values can be combined to meet specific sending requirements.
+- flag : as an addition to the mode, it is used to configure specific message behaviour, such as paying transfer fees separately or ignoring processing errors. The flag is added to the mode to create the final message sending mode.
+
+When using the `send_raw_message` function, it is important to select the appropriate mode and flag combination for your needs. To figure out the mode that best suits your needs, take a look at the following table:
 
 | Mode | Description |
 |:-|:-|
@@ -204,4 +209,29 @@ Otherwise, it will process `credit` phase **before** `storage` phase.
 Check [source code with checks for `bounce-enable` flag](https://github.com/ton-blockchain/ton/blob/master/validator/impl/collator.cpp#L2810).
 :::
 
-To build a mode for the `send_raw_message`, you just have to combine modes and flags by adding them together. For example, if you want to send a regular message and pay transfer fees separately, use the Mode `0` and Flag `+1` to get `mode = 1`. If you want to send the whole contract balance and destroy it immidiately, use the Mode `128` and Flag `+32` to get `mode = 160`.
+:::warning
+1. **+16 flag** - do not use in external messages (e.g. to wallets), because there is no sender to receive the bounced message.
+2. **+2 flag** - important in external messages (e.g. to wallets).
+:::
+
+### Example with use cases
+
+Let's look at an example to make it clearer. Let's imagine a situation where we have 100 Toncoin on our smart contract balance and we receive an internal message with 50 Toncoin and send a message with 20 Toncoin, the total fee is 3 Toncoin.
+
+`IMPORTANT`: The result of the error cases is described when the error occurred.
+
+| Case | Mode and Flags | Code | Result |
+|:-|:-|:-|:-|
+| Send a regular message | `mode` = 0, no `flag` | `send_raw_message(msg, 0)` | `balance` - 100 + 50 - 20 = 130, `send` - 20 - 3 = 7
+| Send a regular message, if there was an error in processing the action, don't rollback the transaction and ignore it | `mode` = 0, `flag` = 2 | `send_raw_message(msg, 2)` | `balance` - 100 + 50, `send` - 0
+| Send a regular message, if there was an error in processing the action - bounce the message in addition to rolling back the transaction | `mode` = 0, `flag` = 16 | `send_raw_message(msg, 16)` | `balance` - 100 + 50 = 167 + 17 (bounced), `send` - 20 - 3 = `bounce` message with 17
+| Send a regular message and pay transfer fees separately |  `mode` = 0, `flag` = 1 | `send_raw_message(msg, 1)` | `balance` - 100 + 50 - 20 - 3 = 127, `send` - 20
+| Send a regular message and pay transfer fees separately, if there was an error in processing the action - bounce the message in addition to rolling back the transaction  |  `mode` = 0, `flags` = 1 + 16 | `send_raw_message(msg, 17)` | `balance` - 100 + 50 - 20 - 3 = 127 + `20 (bounced)`, `send` - 20 = `bounce` message with 20
+| Carry all the remaining value of the inbound message in addition to the value initially indicated in the new message | `mode` = 64, `flag` = 0 | `send_raw_message(msg, 64)` | `balance` - 100 - 20 = 80, `send` - 20 + 50 - 3 = 67
+| Carry all the remaining value of the inbound message in addition to the value initially indicated in the new message and pay transfer fees separately | `mode` = 64, `flag` = 1 | `send_raw_message(msg, 65)` | `balance` - 100 - 20 - 3 = 77, `send` - 20 + 50 = 70
+| Carry all the remaining value of the inbound message in addition to the value initially indicated in the new message and pay transfer fees separately, if there was an error in processing the action - bounce the message in addition to rolling back the transaction | `mode` = 64, `flags` = 1 + 16 | `send_raw_message(msg, 81)` | `balance` - 100 - 20 - 3 = 77 + `70 (bounced)`, `send` - 20 + 50 = `bounce` message with 70
+| Send all received tokens together with the contract balance | `mode` = 128, `flag` = 0 | `send_raw_message(msg, 128)` | `balance` - 0, `send` - 100 + 50 - 3 = 147
+| Send all received tokens together with the contract balance, if there was an error in processing the action - bounce the message in addition to rolling back the transaction  | `mode` = 128, `flag` = 16 | `send_raw_message(msg, 144)` | `balance` - 0 + `147 (bounced)`, `send` - 100 + 50 - 3 = `bounce` message with 147
+| Send all received tokens together with the contract balance and destroy smart-contract | `mode` = 128, `flag` = 32 | `send_raw_message(msg, 160)` | `balance` - 0, `send` - 100 + 50 - 3 = 147
+| Send all received tokens together with the contract balance and destroy smart-contract, if there was an error in processing the action - bounce the message in addition to rolling back the transaction. `IMPORTANT: Avoid this behaviour because the refunds will go to an already deleted contract.`  | `mode` = 128, `flag` = 32 + 16 | `send_raw_message(msg, 176)` | `balance` - 0 + `147 (bounced)`, `send` - 100 + 50 - 3 = `bounce` message with 147
+
