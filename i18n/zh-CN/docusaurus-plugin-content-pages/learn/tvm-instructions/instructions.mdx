@@ -3,7 +3,7 @@ hide_table_of_contents: true
 wrapperClassName: bootstrap-wrapper
 ---
 
-import { InstructionGroups } from '@site/src/components/Instructions';
+import { InstructionSearch } from '@site/src/components/Instructions';
 import { cp0 } from '@site/src/data/opcodes';
 
 # TVM 指令
@@ -57,6 +57,6 @@ TVM Instructions 的每个部分都包含一个内置搜索组件，用于查找
 
 请随时使用下面的搜索字段来查找特定的指令：
 
-<InstructionGroups instructions={cp0.instructions}/>
+<InstructionSearch instructions={cp0.instructions} aliases={cp0.aliases}/>
 
 - [退出 TVM 指令全屏模式](/learn/tvm-instructions/tvm-overview)
