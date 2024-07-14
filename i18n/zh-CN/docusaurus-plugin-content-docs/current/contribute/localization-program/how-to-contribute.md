@@ -1,12 +1,12 @@
 # 如何参与贡献
 
-在我们努力使**TON 成为最成功的区块链**的过程中，确保 TON 文档让全世界的人们都能理解至关重要。本地化是关键，我们**激动**的是您能加入我们的努力。
+在我们努力使**TON 成为最成功的区块链**的过程中，使 TON 文档让全世界的人们都理解这一点至关重要。而本地化正是关键，我们很高兴**你**能加入这个旅程，并朝着相同的目标一起努力。
 
 ## 预备流程
 
-**TownSquare Labs 本地化系统**向所有人开放！在开始贡献之前，您需要采取以下几个步骤：
+**TownSquare Labs 本地化系统**向所有人开放！在开始贡献之前，您需要知晓：
 
-1. 登录您的 [**Crowdin**](https://crowdin.com) 账户或注册。
+1. 登录或注册您的 [**Crowdin**](https://crowdin.com) 账户。
 2. 选择您要贡献的语言。
 3. 请熟悉[**如何使用 Crowdin**](/contribute/localization-program/how-to-contribute)指南和[**翻译风格指南**](/contribute/localization-program/translation-style-guide)，了解使用技巧和最佳实践。
 4. 使用机器翻译辅助工作，但不要完全依赖机器翻译。
@@ -30,7 +30,7 @@ Before you start contributing, **read the guidelines below** to ensure standardi
 
 在 Crowdin 编辑器中，所有任务都以**side-by-side**模式执行。要启用此功能，请单击要处理的文件。在页面右上方，点击**Editor view**按钮，选择**side-by-side**模式，以获得更清晰的编辑器视图。\
 ![并排模式](/img/localizationProgramGuideline/side-by-side.png)
-::：
+:::
 
 ### 语言协调员(Language Coordinator)
 
@@ -59,7 +59,7 @@ Before you start contributing, **read the guidelines below** to ensure standardi
 
 #### 让我们开始贡献吧
 
-1. 确保您处于 [\*\* side-by-side 模式\*\*]（#side-by-side-mode）。通过**未批准**翻译过滤，查看需要校对的字符串。
+1. 确保您处于 [**side-by-side 模式**](#side-by-side-mode)。通过**未批准**翻译过滤，查看需要校对的字符串。
    ![校对过滤器](/img/localizationProgramGuideline/proofread-filter.png)
 
 2. 请遵守这些规则：
@@ -75,7 +75,7 @@ You can also review approved lines:
 1. 按**批准**筛选。
 
 2. 如果已批准的行有问题，请单击 ☑️ 按钮将其还原为需要校对。
-   ::：
+   :::
 
 3. 要移动到下一个文件，请单击顶部的文件名，从弹出窗口中选择新文件，然后继续校对。
    ![转到下一个](/img/localizationProgramGuideline/redirect-to-next.png)
@@ -96,8 +96,8 @@ You can also review approved lines:
 1. 选择尚未达到 100% 翻译的文件。
    ![翻译选择](/img/localizationProgramGuideline/translator-select.png)
 
-2. 确保您处于 [\*\* 并排模式\*\*]（#side-by-side-mode）。通过**未翻译**字符串进行过滤。
-   翻译过滤器](/img/localizationProgramGuideline/translator-filter.png)
+2. 确保您处于 [**side-by-side 模式**](#side-by-side-mode)。通过**Untranslated**字符串进行过滤。
+   ![翻译过滤器](/img/localizationProgramGuideline/translator-filter.png)
 
 3. 您的工作区有四个部分：
    - **左上：** 根据源字符串输入您的翻译。
