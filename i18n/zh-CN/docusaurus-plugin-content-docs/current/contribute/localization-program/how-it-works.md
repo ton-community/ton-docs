@@ -83,7 +83,7 @@
    2. 连接 GitHub 账户并搜索要翻译的 repo。
       ![search-repo](/img/localizationProgramGuideline/howItWorked/search-repo.png)
    3. 选择左侧的分支，这将生成一个新的分支，Crowdin 将在该分支中发布翻译。
-      [设置分支](/img/localizationProgramGuideline/howItWorked/setting-branch.png)
+      ![设置分支](/img/localizationProgramGuideline/howItWorked/setting-branch.png)
    4. 选择将翻译更新到 GitHub 分支的频率。其他配置可保留默认设置，然后点击保存启用集成。
       ![频率-保存](/img/localizationProgramGuideline/howItWorked/frequency-save.png)
 
@@ -95,7 +95,7 @@
 
 ### 什么是术语表？
 
-有时，人工智能译员无法识别不应翻译的特定术语。例如，当提到编程语言时，我们不希望翻译成 "Rust"。为了避免此类错误，我们使用词汇表来指导翻译。
+有时，人工智能译员无法识别不应翻译的特定术语。例如，当提到编程语言时，我们不希望词汇 "Rust" 变成其他意思。为了避免此类错误，我们使用词汇表来指导翻译。
 
 通过**术语表**，您可以在一个地方创建、存储和管理项目特定术语，确保术语翻译的正确性和一致性。
 
