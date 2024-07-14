@@ -59,7 +59,7 @@ Before you start contributing, **read the guidelines below** to ensure standardi
 
 #### 让我们开始贡献吧
 
-1. 确保您处于 [**side-by-side 模式**](#side-by-side-mode)。通过**未批准**翻译过滤，查看需要校对的字符串。
+1. 确保您处于 [**side-by-side 模式**](#side-by-side-mode)。启用**Not Approved**过滤，查看需要校对的字符串。
    ![校对过滤器](/img/localizationProgramGuideline/proofread-filter.png)
 
 2. 请遵守这些规则：
@@ -72,9 +72,9 @@ Before you start contributing, **read the guidelines below** to ensure standardi
 :::info
 You can also review approved lines:
 
-1. 按**批准**筛选。
+1. 使用**Approved**过滤选项。
 
-2. 如果已批准的行有问题，请单击 ☑️ 按钮将其还原为需要校对。
+2. 如果已批准的翻译有问题，请单击 ☑️ 按钮将其还原为需要校对的状态。
    :::
 
 3. 要移动到下一个文件，请单击顶部的文件名，从弹出窗口中选择新文件，然后继续校对。
