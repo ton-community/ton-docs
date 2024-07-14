@@ -38,7 +38,7 @@ If you don't have mytonctrl, install it with `-m liteserver` flag:
 
   ```bash
   wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-  sudo bash install.sh -m liteserver -d
+  sudo bash install.sh -m liteserver
   ```
 
   </TabItem>
@@ -46,11 +46,21 @@ If you don't have mytonctrl, install it with `-m liteserver` flag:
 
   ```bash
   wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-  su root -c 'bash install.sh -m liteserver -d'
+  su root -c 'bash install.sh -m liteserver'
   ```
 
   </TabItem>
 </Tabs>
+
+* `-d` - **mytonctrl** will download a [dump](https://dump.ton.org/) of the latest blockchain state.
+  This will reduce synchronization time by several times.
+* `-c <path>` - If you want to use not public liteservers for synchronization. _(not required)_
+* `-i` - Ignore minimum requirements, use it only if you want to check compilation process without real node usage.
+* `-m` - Mode, can be `validator` or `liteserver`.
+
+**To use testnet**, `-c` flag should be provided with `https://ton.org/testnet-global.config.json` value.
+
+Default `-c` flag value is `https://ton-blockchain.github.io/global.config.json`, which is default mainnet config.
 
 If you already have mytonctrl installed, run:
 
