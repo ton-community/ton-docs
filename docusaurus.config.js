@@ -8,7 +8,8 @@ const getEnvLangConfig = () => {
 
   const langArray = process.env.TARGET_LANGS
     ? process.env.TARGET_LANGS.split(",")
-    : ["mandarin", "ru", "ko", "pl", "uk", "ja"];
+    : ["mandarin"];
+    // : ["mandarin", "ru", "ko", "pl", "uk", "ja"];
 
   const locales = Array.from(new Set([defaultLocale, ...langArray]));
 
