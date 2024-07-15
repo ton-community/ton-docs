@@ -3,11 +3,6 @@ This translation style guide contains some of the most important guidelines, ins
 
 This document serves as a general guide and is not specific to any one language.
 
-## Using Crowdin
-You can find basic instructions on how to join the project in Crowdin and how to use the Crowdin online editor on the Translation Program page.
-
-If you would like to learn more about Crowdin and using some of its advanced feature, the Crowdin knowledge base(opens in a new tab) contains a lot of in-depth guides and overviews of all Crowdin functionality.
-
 ## Capturing the essence of the message
 When translating TON docs content, avoid literal translations.
 
@@ -188,4 +183,4 @@ Some examples of what to be particularly mindful of:
 
 When translating, try not to rush. Take it easy and have fun!
 
-Thank you for being involved with the Translation Program and helping us make the website accessible to a wider audience. The Ethereum community is global, and we are happy you are a part of it!
+Thank you for being involved with the Translation Program and helping us make the website accessible to a wider audience. The TON community is global, and we are happy you are a part of it!
