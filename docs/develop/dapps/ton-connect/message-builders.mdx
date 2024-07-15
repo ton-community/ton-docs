@@ -23,7 +23,6 @@ Examples created based on @tonconnect/sdk and @tonconnect/ui:
 
 ```js
 import { useTonConnectUI } from '@tonconnect/ui-react';
-const [tonConnectUI] = useTonConnectUI();
 
 const transaction = {
     //transaction body
@@ -268,6 +267,14 @@ await connector.sendTransaction({
 
 The `body` for Jetton Transfers is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
 
+:::info
+You can use `assets-sdk` library with the methods out of the box (even with `ton-connect`)
+:::
+
+
+<Tabs groupId="Jetton Transfer">
+<TabItem value="@ton/ton" label="@ton/ton">
+
 ```js
     import { beginCell, toNano, Address } from '@ton/ton'
     // transfer#0f8a7ea5 query_id:uint64 amount:(VarUInteger 16) destination:MsgAddress
@@ -286,6 +293,7 @@ The `body` for Jetton Transfers is based on the ([TEP-74](https://github.com/ton
         .storeUint(0,1)                           // forward_payload:(Either Cell ^Cell)
         .endCell();
 ```
+
 
 Next, sending the transaction with this body to sender's jettonWalletContract executed:
 
@@ -415,11 +423,47 @@ async function main() {
 ```
 
 </details>
+</TabItem>
+<TabItem value="assets/sdk" label="assets/sdk">
 
+:::tip
+Note: For the browser, you need to set a polyfill for `Buffer`.
+:::
+For more examples check [documentation](https://github.com/ton-community/assets-sdk)
 
+```js
+const NETWORK = "testnet";
+const api = await createApi(NETWORK);
+
+// https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
+const provider = new TonConnectUI();
+const sender = new TonConnectProvider(provider);
+
+const storage: PinataStorageParams = {
+  pinataApiKey: process.env.PINATA_API_KEY!,
+  pinataSecretKey: process.env.PINATA_SECRET!,
+};
+
+const sdk = AssetsSDK.create({
+  api,
+  storage,
+  sender,
+});
+
+const jetton = sdk.openJettonWallet(Address.parse("JETTON_ADDRESS"));
+const RECEIVER_ADDRESS = Address.parse("RECIEVER_ADDRESS");
+
+jetton.send(sender, RECEIVER_ADDRESS, toNano(10));
+```
+
+</TabItem>
+</Tabs>
 
 
 ### Jetton Transfer with Comment
+
+<Tabs groupId="Jetton Transfer with Comment">
+<TabItem value="@ton/ton" label="@ton/ton">
 
 The `messageBody` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) with comment we should additionally to the regular transfer `body` serialize comment and pack this in the `forwardPayload`. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
 
@@ -582,11 +626,54 @@ Next, sending the transaction with this body to sender's jettonWalletContract ex
 ```
 
 </details>
+</TabItem>
+<TabItem value="assets/sdk" label="assets/sdk">
 
+:::tip
+Note: For the browser, you need to set a polyfill for `Buffer`.
+:::
+For more examples check [documentation](https://github.com/ton-community/assets-sdk)
+
+```js
+const NETWORK = "testnet";
+const api = await createApi(NETWORK);
+
+// https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
+const provider = new TonConnectUI();
+const sender = new TonConnectProvider(provider);
+
+const storage: PinataStorageParams = {
+  pinataApiKey: process.env.PINATA_API_KEY!,
+  pinataSecretKey: process.env.PINATA_SECRET!,
+};
+
+const sdk = AssetsSDK.create({
+  api,
+  storage,
+  sender,
+});
+
+const jetton = sdk.openJettonWallet(Address.parse("JETTON_ADDRESS"));
+
+const forwardPayload = beginCell()
+        .storeUint(0, 32) // 0 opcode means we have a comment
+        .storeStringTail('Hello, TON!')
+        .endCell();
+
+jetton.send(sender, RECEIVER_ADDRESS, toNano(10), { notify: { payload: forwardPayload } });
+```
+
+</TabItem>
+</Tabs>
 
 ### Jetton Burn
 
+
+<Tabs groupId="Jetton Burn">
+<TabItem value="@ton/ton" label="@ton/ton">
+
 The `body` for Jetton Burn is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
+
 
 ```js
     import { beginCell, Address } from '@ton/ton'
@@ -684,8 +771,45 @@ await connector.sendTransaction({
 - `amount` - Integer, amount of Toncoin for gas payments in nanotons.
 - `body` - payload for the jetton wallet with the `burn#595f07bc` op code
 
+</TabItem>
+<TabItem value="assets/sdk" label="assets/sdk">
+
+:::tip
+Note: For the browser, you need to set a polyfill for `Buffer`.
+:::
+For more examples check [documentation](https://github.com/ton-community/assets-sdk)
+
+```js
+const NETWORK = "testnet";
+const api = await createApi(NETWORK);
+
+// https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
+const provider = new TonConnectUI();
+const sender = new TonConnectProvider(provider);
+
+const storage: PinataStorageParams = {
+  pinataApiKey: process.env.PINATA_API_KEY!,
+  pinataSecretKey: process.env.PINATA_SECRET!,
+};
+
+const sdk = AssetsSDK.create({
+  api,
+  storage,
+  sender,
+});
+
+const jetton = sdk.openJettonWallet(Address.parse("JETTON_ADDRESS"));
+
+jetton.sendBurn(sender, RECEIVER_ADDRESS, toNano(10));
+```
+
+</TabItem>
+</Tabs>
+
 ### NFT Transfer
 
+<Tabs groupId="NFT Transfer">
+<TabItem value="@ton/ton" label="@ton/ton">
 The `body` message typically should be done according the following way:
 
 ```js
@@ -784,6 +908,43 @@ await connector.sendTransaction({
 - `NFTitem` - Address - The address of NFT item smart contract which we want transfer to a new owner `NEW_OWNER_WALLET`.
 - `balance` - Integer, amount of Toncoin for gas payments in nanotons.
 - `body` - payload for the NFT contract
+
+</TabItem>
+
+<TabItem value="assets/sdk" label="assets/sdk">
+
+:::tip
+Note: For the browser, you need to set a polyfill for `Buffer`.
+:::
+For more examples check [documentation](https://github.com/ton-community/assets-sdk)
+
+```js
+const NETWORK = "testnet";
+const api = await createApi(NETWORK);
+
+// https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
+const provider = new TonConnectUI();
+const sender = new TonConnectProvider(provider);
+
+const storage: PinataStorageParams = {
+  pinataApiKey: process.env.PINATA_API_KEY!,
+  pinataSecretKey: process.env.PINATA_SECRET!,
+};
+
+const sdk = AssetsSDK.create({
+  api,
+  storage,
+  sender,
+});
+
+const nft = sdk.openNftItem(Address.parse("NFT_ADDRESS"));
+const RECEIVER_ADDRESS = Address.parse("RECIEVER_ADDRESS");
+
+nft.send(sender, RECEIVER_ADDRESS);
+```
+
+</TabItem>
+</Tabs>
 
 ### NFT Sale (GetGems)
 
@@ -958,9 +1119,10 @@ await connector.sendTransaction({
 
 ### NFT Buy (GetGems)
 
-The process of buy NFT for [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) sale contract could be carry out with regular transfer without payload, the only important thing is accurate TON amount, that calculates as follows:
-`buyAmount = Nftprice TON + 1.0 TON`.
+<Tabs groupId="NFT Buy tabs">
+<TabItem value="@ton/ton" label="@ton/ton">
 
+The process of buy NFT for [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) sale contract could be carry out with regular transfer without payload, the only important thing is accurate TON amount, that calculates as follows:
 
 <Tabs groupId="NFT Buy">
 <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
@@ -1027,6 +1189,22 @@ messages: [
     }
 ]
 })
+```
+
+</TabItem>
+</Tabs>
+
+</TabItem>
+<TabItem value="assets/sdk" label="assets/sdk">
+
+:::tip
+Note: For the browser, you need to set a polyfill for `Buffer`.
+:::
+For more examples check [documentation](https://github.com/ton-community/assets-sdk)
+
+```js
+const nft = sdk.openNftSale(Address.parse("NFT_ADDRESS"));
+nft.sendBuy(sdk.sender!, { queryId: BigInt(1) })
 ```
 
 </TabItem>
