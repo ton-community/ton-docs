@@ -15,7 +15,7 @@ Within this system, we integrate several applications to function seamlessly as 
 This guide won't cover the entire process in detail, but it will highlight the key components that make the TownSquare Labs Localization Program unique. You can explore the program further on your own.
 :::
 
-# GitHub Synchronization for Documentation and Translations
+## GitHub Synchronization for Documentation and Translations
 
 Our repository utilizes several branches for managing documentation and translations. Below is a detailed explanation of the purpose and function of each special branch:
 
