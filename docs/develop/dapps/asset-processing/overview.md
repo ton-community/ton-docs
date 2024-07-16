@@ -8,7 +8,7 @@ Here you can find a **short overview** on [how TON transfers work](/develop/dapp
 
 ## Overview on messages and transactions
 
-Embodying a fully asynchronous approach, TON Blockchain involves a few concepts which are uncommon to traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred [messages](/develop/smart-contracts/guidelines/message-delivery-guarantees) between smart contracts and/or the external world. Each transaction consists of one incoming message and up to 512 outgoing messages.
+Embodying a fully asynchronous approach, TON Blockchain involves a few concepts which are uncommon to traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred [messages](/develop/smart-contracts/guidelines/message-delivery-guarantees) between smart contracts and/or the external world. Each transaction consists of one incoming message and up to 255 outgoing messages.
 
 There are 3 types of messages, that are fully described [here](/develop/smart-contracts/messages#types-of-messages). To put it briefly:
 * [external message](/develop/smart-contracts/guidelines/external-messages):
