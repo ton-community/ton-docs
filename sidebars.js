@@ -580,7 +580,7 @@ const sidebars = {
             'develop/data-formats/transaction-layout',
             'develop/data-formats/crc32',
             'develop/data-formats/tlb-ide',
-            'develop/data-formats/tlb-parsers',
+            'develop/data-formats/tlb-tools',
           ],
         },
         'develop/data-formats/tl',
