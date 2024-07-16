@@ -63,7 +63,7 @@ Read more in the [Explorers in TON](/participate/explorers) section of our docum
 _2-5s_
 
 :::info
-Compare TON's on-chain metrics, including block time and time-to-finality, to Solana and Ethereum by reading our analysis at [ton.org/analysis](https://ton.org/analysis).
+Compare TON's on-chain metrics, including block time and time-to-finality, to Solana and Ethereum by reading our analysis at [analysis page](/learn/overviews/blockchain-comparison).
 :::
 
 ### Time-to-finality
@@ -71,7 +71,7 @@ Compare TON's on-chain metrics, including block time and time-to-finality, to So
 _Under 6 sec._
 
 :::info
-Compare TON's on-chain metrics, including block time and time-to-finality, to Solana and Ethereum by reading our analysis at [ton.org/analysis](https://ton.org/analysis).
+Compare TON's on-chain metrics, including block time and time-to-finality, to Solana and Ethereum by reading our analysis at [analysis page](/learn/overviews/blockchain-comparison).
 :::
 
 ### Average block size
