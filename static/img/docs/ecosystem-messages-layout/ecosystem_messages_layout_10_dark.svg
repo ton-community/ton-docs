@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Создано Microsoft Visio, экспорт SVG ecosystem_messages_layout_10.svg Page-1 -->
+<!-- Создано Microsoft Visio, экспорт SVG ecosystem_messages_layout_10_dark.svg Page-1 -->
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
 		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="7.24003in" height="4.70066in"
 		viewBox="0 0 521.283 338.448" xml:space="preserve" color-interpolation-filters="sRGB" class="st8">
@@ -16,12 +16,12 @@
 	<style type="text/css">
 	<![CDATA[
 		.st1 {fill:none;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.25}
-		.st2 {fill:none;stroke:#058dd2;stroke-linecap:butt;stroke-width:1.5}
-		.st3 {fill:#000000;font-family:Inter;font-size:1.00001em}
+		.st2 {fill:none;stroke:#0088cc;stroke-linecap:butt;stroke-width:2.25}
+		.st3 {fill:#e3e3e3;font-family:Inter;font-size:1.00001em}
 		.st4 {font-size:1em}
-		.st5 {marker-end:url(#mrkr5-21);stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
-		.st6 {fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:0.28409090909091}
-		.st7 {fill:#ffffff;stroke:none;stroke-linecap:butt;stroke-width:7.2}
+		.st5 {marker-end:url(#mrkr5-21);stroke:#e3e3e3;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
+		.st6 {fill:#e3e3e3;fill-opacity:1;stroke:#e3e3e3;stroke-opacity:1;stroke-width:0.28409090909091}
+		.st7 {fill:#232328;stroke:none;stroke-linecap:butt;stroke-width:7.2}
 		.st8 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
 	]]>
 	</style>
@@ -234,11 +234,11 @@
 				<v:ud v:nameU="msvThemeColors" v:val="VT0(36):26"/>
 				<v:ud v:nameU="msvThemeEffects" v:val="VT0(16):26"/>
 			</v:userDefs>
-			<v:textBlock v:margins="rect(4,4,4,6)" v:tabSpace="42.5197"/>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
 			<v:textRect cx="57.9644" cy="338.448" width="115.93" height="0"/>
 			<path d="M0 338.45 L109.77 338.45" class="st5"/>
-			<rect v:rectContext="textBkgnd" x="45.1063" y="331.248" width="27.716" height="14.4001" class="st7"/>
-			<text x="45.11" y="342.05" class="st3" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>init 2</text>		</g>
+			<rect v:rectContext="textBkgnd" x="45.5238" y="331.248" width="27.716" height="14.4001" class="st7"/>
+			<text x="45.52" y="342.05" class="st3" v:langID="1033"><v:paragraph v:indentLeft="2.83" v:horizAlign="1"/><v:tabList/>init 2</text>		</g>
 		<g id="shape150-44" v:mID="150" v:groupContext="shape" v:layerMember="0" transform="translate(263.622,-203.727)">
 			<title>Динамическая соединительная линия.150</title>
 			<desc>init 1</desc>
