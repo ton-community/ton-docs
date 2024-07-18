@@ -77,12 +77,7 @@ const sidebars = {
             'learn/networking/ton-dht',
           ],
         },
-
-        {
-          type: 'link',
-          label: 'TON Compared to Other L1s',
-          href: 'https://ton.org/analysis',
-        },
+        'learn/overviews/blockchain-comparison',
         {
           type: 'link',
           label: 'Open-Source and Decentralization in TON',
