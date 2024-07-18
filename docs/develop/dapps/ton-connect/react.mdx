@@ -330,6 +330,257 @@ const [tonConnectUI] = useTonConnectUI();
 await tonConnectUI.disconnect();
 ```
 
+## Wrappers
+
+Wrappers are classes that simplify interaction with the contract, allowing you to work without concerning yourself with the underlying details.
+
+- When developing a contract in `funC`, you need to write the wrapper yourself.
+- When using the `Tact` language, wrappers are automatically generated for you.
+
+:::tip
+Check out [blueprint](https://github.com/ton-org/blueprint) documentation how to develop and deploy contracts
+:::
+
+Let's take a look at the default `Blueprint` Counter wrapper example and how we can use it:
+
+<details>
+<summary>Wrapper usage</summary>
+Counter wrapper class:
+
+```ts
+import { Address, beginCell, Cell, Contract, contractAddress, ContractProvider, Sender, SendMode } from '@ton/core';
+
+export type CounterConfig = {
+    id: number;
+    counter: number;
+};
+
+export function counterConfigToCell(config: CounterConfig): Cell {
+    return beginCell().storeUint(config.id, 32).storeUint(config.counter, 32).endCell();
+}
+
+export const Opcodes = {
+    increase: 0x7e8764ef,
+};
+
+export class Counter implements Contract {
+    constructor(
+        readonly address: Address,
+        readonly init?: { code: Cell; data: Cell },
+    ) {}
+
+    static createFromAddress(address: Address) {
+        return new Counter(address);
+    }
+
+    static createFromConfig(config: CounterConfig, code: Cell, workchain = 0) {
+        const data = counterConfigToCell(config);
+        const init = { code, data };
+        return new Counter(contractAddress(workchain, init), init);
+    }
+
+    async sendDeploy(provider: ContractProvider, via: Sender, value: bigint) {
+        await provider.internal(via, {
+            value,
+            sendMode: SendMode.PAY_GAS_SEPARATELY,
+            body: beginCell().endCell(),
+        });
+    }
+
+    async sendIncrease(
+        provider: ContractProvider,
+        via: Sender,
+        opts: {
+            increaseBy: number;
+            value: bigint;
+            queryID?: number;
+        },
+    ) {
+        await provider.internal(via, {
+            value: opts.value,
+            sendMode: SendMode.PAY_GAS_SEPARATELY,
+            body: beginCell()
+                .storeUint(Opcodes.increase, 32)
+                .storeUint(opts.queryID ?? 0, 64)
+                .storeUint(opts.increaseBy, 32)
+                .endCell(),
+        });
+    }
+
+    async getCounter(provider: ContractProvider) {
+        const result = await provider.get('get_counter', []);
+        return result.stack.readNumber();
+    }
+
+    async getID(provider: ContractProvider) {
+        const result = await provider.get('get_id', []);
+        return result.stack.readNumber();
+    }
+}
+
+```
+
+Then you can use this class in your react component:
+
+```ts
+
+import "buffer";
+import {
+  TonConnectUI,
+  useTonConnectUI,
+  useTonWallet,
+} from "@tonconnect/ui-react";
+import {
+  Address,
+  beginCell,
+  Sender,
+  SenderArguments,
+  storeStateInit,
+  toNano,
+  TonClient,
+} from "@ton/ton";
+
+class TonConnectProvider implements Sender {
+  /**
+   * The TonConnect UI instance.
+   * @private
+   */
+  private readonly provider: TonConnectUI;
+
+  /**
+   * The address of the current account.
+   */
+  public get address(): Address | undefined {
+    const address = this.provider.account?.address;
+    return address ? Address.parse(address) : undefined;
+  }
+
+  /**
+   * Creates a new TonConnectProvider.
+   * @param provider
+   */
+  public constructor(provider: TonConnectUI) {
+    this.provider = provider;
+  }
+
+  /**
+   * Sends a message using the TonConnect UI.
+   * @param args
+   */
+  public async send(args: SenderArguments): Promise<void> {
+    // The transaction is valid for 10 minutes.
+    const validUntil = Math.floor(Date.now() / 1000) + 600;
+
+    // The address of the recipient, should be in bounceable format for all smart contracts.
+    const address = args.to.toString({ urlSafe: true, bounceable: true });
+
+    // The address of the sender, if available.
+    const from = this.address?.toRawString();
+
+    // The amount to send in nano tokens.
+    const amount = args.value.toString();
+
+    // The state init cell for the contract.
+    let stateInit: string | undefined;
+    if (args.init) {
+      // State init cell for the contract.
+      const stateInitCell = beginCell()
+        .store(storeStateInit(args.init))
+        .endCell();
+      // Convert the state init cell to boc base64.
+      stateInit = stateInitCell.toBoc().toString("base64");
+    }
+
+    // The payload for the message.
+    let payload: string | undefined;
+    if (args.body) {
+      // Convert the message body to boc base64.
+      payload = args.body.toBoc().toString("base64");
+    }
+
+    // Send the message using the TonConnect UI and wait for the message to be sent.
+    await this.provider.sendTransaction({
+      validUntil: validUntil,
+      from: from,
+      messages: [
+        {
+          address: address,
+          amount: amount,
+          stateInit: stateInit,
+          payload: payload,
+        },
+      ],
+    });
+  }
+}
+
+const CONTRACT_ADDRESS = "EQAYLhGmznkBlPxpnOaGXda41eEkliJCTPF6BHtz8KXieLSc";
+
+const getCounterInstance = async () => {
+  const client = new TonClient({
+    endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
+  });
+
+  // OR you can use createApi from @ton-community/assets-sdk
+  // import {
+  //   createApi,
+  // } from "@ton-community/assets-sdk";
+    
+  // const NETWORK = "testnet";
+  // const client = await createApi(NETWORK);
+
+
+  const address = Address.parse(CONTRACT_ADDRESS);
+  const counterInstance = client.open(Counter.createFromAddress(address));
+
+  return counterInstance;
+};
+
+export const Header = () => {
+  const [tonConnectUI, setOptions] = useTonConnectUI();
+  const wallet = useTonWallet();
+
+  const increaseCount = async () => {
+    const counterInstance = await getCounterInstance();
+    const sender = new TonConnectProvider(tonConnectUI);
+
+    await counterInstance.sendIncrease(sender, {
+      increaseBy: 1,
+      value: toNano("0.05"),
+    });
+  };
+
+  const getCount = async () => {
+    const counterInstance = await getCounterInstance();
+
+    const count = await counterInstance.getCounter();
+    console.log("count", count);
+  };
+
+  return (
+    <main>
+      {!wallet && (
+        <button onClick={() => tonConnectUI.openModal()}>Connect Wallet</button>
+      )}
+      {wallet && (
+        <>
+          <button onClick={increaseCount}>Increase count</button>
+          <button onClick={getCount}>Get count</button>
+        </>
+      )}
+    </main>
+  );
+};
+
+```
+</details>
+
+
+### Wrappers for Jettons and NFTs
+
+To interact with jettons or NFTs you can use [assets-sdk](https://github.com/ton-community/assets-sdk).
+This SDK provides wrappers that simplify interaction with these assets. For practical examples, please check our [examples](https://github.com/ton-community/assets-sdk/tree/main/examples) section.
+
 ## API Documentation
 
 [Latest API documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui_react.html)
