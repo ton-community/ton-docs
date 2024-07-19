@@ -24,7 +24,7 @@
 我们的本地化项目托管在 [Crowdin](https://crowdin.com/project/ton-docs) 上。
 
 :::info
-在开始贡献之前，**请阅读以下指南**，以确保标准化和质量，从而加快审核过程。
+Before you start contributing, **read the guidelines below** to ensure standardization and quality, making the review process much faster.
 
 ## Side-by-Side Mode
 
@@ -70,12 +70,12 @@
 ![校对通过](/img/localizationProgramGuideline/proofread-approved.png)
 
 :::info
-你还可以再次检查已经通过校对的翻译：
+You can also review approved lines:
 
 1. 使用**Approved**过滤选项。
 
 2. 如果已批准的翻译有问题，请单击 ☑️ 按钮将其还原为需要校对的状态。
-:::
+   :::
 
 3. 要移动到下一个文件，请单击顶部的文件名，从弹出窗口中选择新文件，然后继续校对。
    ![转到下一个](/img/localizationProgramGuideline/redirect-to-next.png)
