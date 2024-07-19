@@ -18,7 +18,7 @@ jobs:
           node-version: 16
       - name: Opening pull request to ja_localization
         id: pull_ja
-        uses: tretuna/sync-branches@main
+        uses: sansx/sync-branches@v1.0.1
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           FROM_BRANCH: "l10n_localization"
@@ -26,9 +26,17 @@ jobs:
           PULL_REQUEST_AUTO_MERGE_METHOD: "merge"
       - name: Opening pull request to ko_localization
         id: pull_ko
-        uses: tretuna/sync-branches@main
+        uses: sansx/sync-branches@v1.0.1
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           FROM_BRANCH: "l10n_localization"
           TO_BRANCH: "ko_localization"
+          PULL_REQUEST_AUTO_MERGE_METHOD: "merge"
+      - name: Opening pull request to mandarin_localization
+        id: pull_mandarin
+        uses: sansx/sync-branches@v1.0.1
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          FROM_BRANCH: "l10n_localization"
+          TO_BRANCH: "mandarin_localization"
           PULL_REQUEST_AUTO_MERGE_METHOD: "merge"
