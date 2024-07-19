@@ -79,7 +79,7 @@ function App() {
 }
 ```
 
-2. Implement authentication on backend:
+2. Implement authentication on the frontend with backend integration:
 
 <details>
 <summary>Example</summary>
@@ -152,6 +152,12 @@ export function useBackendAuth() {
 }
 ```
 </details>
+
+## Backend Example
+
+You can review our [example](https://github.com/ton-connect/demo-dapp-with-react-ui/tree/master/src/server) showcasing the key methods:
+- [generatePayload](https://github.com/ton-connect/demo-dapp-with-react-ui/blob/master/src/server/api/generate-payload.ts): Generates a payload for ton proof
+- [checkProof](https://github.com/ton-connect/demo-dapp-with-react-ui/blob/master/src/server/api/check-proof.ts): Checks the proof and returns an access token.
 
 ## Concept Explanation
 
