@@ -4,6 +4,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 ## Cell
 A cell represents a data structure on TON Blockchain. Cells are able to store up to 1023 bits and possess up to 4 references to other cells.
+````mdx-code-block
 <br></br>
 <ThemedImage
 alt=""
@@ -13,12 +14,13 @@ sources={{
 }}
 />
 <br></br>
-
+````
 
 ## Bag of Cells
 
 Bag of Cells (BoC) is a format for serializing cells into byte arrays, which is further described in the [TL-B schema](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25).
 
+````mdx-code-block
 <br></br>
 <ThemedImage
 alt=""
@@ -28,9 +30,10 @@ sources={{
 }}
 />
 <br></br>
-
+````
 On TON, everything consists of cells, including contract code, stored data, blocks, achieving streamline and robust flexibility in the process.
 
+````mdx-code-block
 <br></br>
 <ThemedImage
 alt=""
@@ -40,10 +43,11 @@ sources={{
 }}
 />
 <br></br>
-
+````
 ### Cell serialization
 Let's analyze our first example of a Bag of Cells :
 
+````mdx-code-block
 <br></br>
 <ThemedImage
 alt=""
@@ -53,7 +57,7 @@ sources={{
 }}
 />
 <br></br>
-
+````
 ```json
 1[8_] -> {
   24[0AAAAA],

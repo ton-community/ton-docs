@@ -782,6 +782,32 @@ const sidebars = {
         },
       ],
     },
+    {
+      type: 'category',
+      label: 'Localization Program',
+      items: [
+        {
+          type: 'doc',
+          label: 'Overview',
+          id: 'contribute/localization-program/overview',
+        },
+        {
+          type: 'doc',
+          label: 'How It Works',
+          id: 'contribute/localization-program/how-it-works',
+        },
+        {
+          type: 'doc',
+          label: 'How To Contribute',
+          id: 'contribute/localization-program/how-to-contribute',
+        },
+        {
+          type: 'doc',
+          label: 'Translation Style Guide',
+          id: 'contribute/localization-program/translation-style-guide',
+        },
+      ],
+    },
   ],
 
 }
