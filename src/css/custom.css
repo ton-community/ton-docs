@@ -1807,6 +1807,11 @@ a img,button img {
   margin-right: 10px;
 }
 
+.button--primary > p,
+.button--secondary > p {
+  margin-bottom: 0;
+}
+
 .button--primary{
 
 }
