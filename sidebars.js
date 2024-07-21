@@ -357,7 +357,6 @@ const sidebars = {
           label: 'Advanced Asset Holding',
           items: [
             'develop/dapps/asset-processing/README',
-            'develop/dapps/asset-processing/address-verification',
             'develop/dapps/asset-processing/jettons',
             'develop/dapps/asset-processing/nfts',
             'develop/dapps/asset-processing/metadata',
