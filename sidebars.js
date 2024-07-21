@@ -157,16 +157,6 @@ const sidebars = {
       id: 'develop/get-started-with-ton',
     },
     {
-      type: 'category',
-      label: 'Transition from Ethereum to TON',
-      items: [
-        'develop/ethereum-to-ton/difference-of-blockchains',
-        'develop/ethereum-to-ton/tvm-vs-evm',
-        'develop/ethereum-to-ton/solidity-vs-func',
-        'develop/ethereum-to-ton/blockchain-services',
-      ],
-    },
-    {
       'type': 'html',
       'value': '<hr/>',
     },
@@ -207,6 +197,7 @@ const sidebars = {
               type: 'category',
               label: 'Message Management',
               items: [
+                'develop/smart-contracts/guidelines/ecosystem-messages-layout',
                 'develop/smart-contracts/guidelines/message-delivery-guarantees',
                 'develop/smart-contracts/messages',
                 'develop/smart-contracts/guidelines/internal-messages',
@@ -220,7 +211,6 @@ const sidebars = {
               items: [
                 'develop/smart-contracts/fees',
                 'develop/howto/fees-low-level',
-                'develop/smart-contracts/fee-calculation',
                 'develop/smart-contracts/guidelines/accept',
                 'develop/smart-contracts/guidelines/processing',
               ],
@@ -338,7 +328,6 @@ const sidebars = {
           label: 'Telegram Mini Apps',
           items: [
             'develop/dapps/telegram-apps/README',
-            'develop/dapps/telegram-apps/notcoin',
             'develop/dapps/telegram-apps/grants',
             {
               type: 'category',
@@ -365,12 +354,11 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Advanced Asset Processing',
+          label: 'Advanced Asset Holding',
           items: [
-            'develop/dapps/asset-processing/overview',
             'develop/dapps/asset-processing/README',
+            'develop/dapps/asset-processing/address-verification',
             'develop/dapps/asset-processing/jettons',
-            'develop/dapps/asset-processing/usdt',
             'develop/dapps/asset-processing/nfts',
             'develop/dapps/asset-processing/metadata',
           ],
@@ -514,7 +502,6 @@ const sidebars = {
             'develop/func/compiler_directives',
             'develop/func/statements',
             'develop/func/builtins',
-            'develop/func/dictionaries',
             'develop/func/stdlib',
           ],
         },
@@ -674,17 +661,12 @@ const sidebars = {
       label: 'Blockchain Nodes',
       items: [
         'participate/nodes/node-types',
-        'participate/run-nodes/mytonctrl',
         'participate/run-nodes/full-node',
-        'participate/run-nodes/enable-liteserver-node',
-        'participate/run-nodes/become-validator',
         'participate/run-nodes/archive-node',
-        'participate/run-nodes/nodes-troubleshooting',
         //'participate/run-nodes/liteserver',
         //'participate/nodes/nodes-faq',
         'participate/nodes/node-maintenance-and-security',
         'participate/run-nodes/local-ton',
-        'participate/run-nodes/faq',
       ],
     },
     {
@@ -693,7 +675,6 @@ const sidebars = {
       items: [
         'participate/network-maintenance/staking-incentives',
         'participate/network-maintenance/single-nominator',
-        'participate/network-maintenance/nominator-pool',
         'participate/network-maintenance/vesting-contract',
         'participate/network-maintenance/nominators',
         'participate/network-maintenance/persistent-states',
