@@ -152,6 +152,8 @@ Otherwise, [check troubleshooting section](/participate/run-nodes/full-node#stat
 
 Wait until `Local validator out of sync` becomes less than 20 seconds.
 
+When new node have been started, even from dump, **it's needed to wait up to 3 hours before out of sync number starts to go down**. This is due to the fact that node still needs to establish it’s place in network, propagate it’s addresses via DHT tables etc.
+
 ### Uninstall mytonctrl
 
 Download script and run it:
