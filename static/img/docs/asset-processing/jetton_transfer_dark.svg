@@ -42,7 +42,7 @@
 		.st28 {fill:url(#ptrn2-106);shape-rendering:crispEdges;stroke:#e3e3e3;stroke-dasharray:9,9;stroke-linecap:round;stroke-linejoin:round;stroke-width:3}
 		.st29 {fill:url(#ptrn2-20);shape-rendering:crispEdges;stroke:#e3e3e3;stroke-dasharray:9,9;stroke-linecap:round;stroke-linejoin:round;stroke-width:3}
 		.st30 {fill:#ffffff;stroke:#000000;stroke-dasharray:2.25,2.25;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
-		.st31 {fill:#333337;stroke:#e3e3e3;stroke-dasharray:2.25,2.25;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st31 {fill:#333337;stroke:#e3e3e3;stroke-dasharray:6,6;stroke-linecap:round;stroke-linejoin:round;stroke-width:2}
 		.st32 {fill:none;stroke:#e3e3e3;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.24}
 		.st33 {stroke:#e3e3e3;stroke-dasharray:6,6;stroke-linecap:round;stroke-linejoin:round;stroke-width:2}
 		.st34 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
