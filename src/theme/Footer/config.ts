@@ -193,3 +193,11 @@ export const FOOTER_COLUMN_LINKS_CN = [
     ],
   },
 ];
+
+export function footerLinkExporter(lang?: string) {
+  const footerLinkObject = {
+    mandarin: FOOTER_COLUMN_LINKS_CN,
+  };
+
+  return footerLinkObject?.[lang] ?? FOOTER_COLUMN_LINKS_EN;
+}
