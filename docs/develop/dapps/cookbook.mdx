@@ -547,8 +547,6 @@ Don't forget that comment message has 32 zero bits (one may say, that its opcode
 
 ## TEP-74 (Jettons Standard)
 
-<img src="/img/interaction-schemes/jettons.svg" alt="Jetton operations scheme"></img>
-
 ### How to calculate user's Jetton wallet address (offchain)?
 
 To calculate the user's jetton wallet address, we need to call the "get_wallet_address" get-method of the jetton master contract with user address actually. For this task we can easily use getWalletAddress method from JettonMaster or call master contract by ourselves.
@@ -932,8 +930,6 @@ Jetton transfers need careful consideration for fees and amounts behind outgoing
 :::
 
 ## TEP-62 (NFT Standard)
-
-<img src="/img/interaction-schemes/nft.svg" alt="NFT ecosystem scheme"></img>
 
 NFT collections are very different. Actually, NFT contract on TON can be defined as "contract that has appropriate get-method and returns valid metadata". Transfer operation is standardized and quite analogous to [jetton's one](/develop/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment), so we will not dive into it and rather see additional capabilities provided by most collections you may meet!
 
