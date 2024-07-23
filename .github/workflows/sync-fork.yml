@@ -14,6 +14,6 @@ jobs:
       - uses: tgymnich/fork-sync@v1.8
         with:
           owner: TownSquareXYZ
-          base: localization 
+          base: main
           head: main
           pr_title: 'Fork Sync: Update from ton-community/ton-docs'

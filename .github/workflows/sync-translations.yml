@@ -16,27 +16,27 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16
-      - name: Opening pull request to ja_localization
+      - name: Opening pull request to ja_main
         id: pull_ja
         uses: sansx/sync-branches@v1.0.1
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          FROM_BRANCH: "l10n_localization"
-          TO_BRANCH: "ja_localization"
+          FROM_BRANCH: "l10n_main"
+          TO_BRANCH: "ja_main"
           PULL_REQUEST_AUTO_MERGE_METHOD: "merge"
-      - name: Opening pull request to ko_localization
+      - name: Opening pull request to ko_main
         id: pull_ko
         uses: sansx/sync-branches@v1.0.1
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          FROM_BRANCH: "l10n_localization"
-          TO_BRANCH: "ko_localization"
+          FROM_BRANCH: "l10n_main"
+          TO_BRANCH: "ko_main"
           PULL_REQUEST_AUTO_MERGE_METHOD: "merge"
-      - name: Opening pull request to mandarin_localization
+      - name: Opening pull request to mandarin_main
         id: pull_mandarin
         uses: sansx/sync-branches@v1.0.1
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          FROM_BRANCH: "l10n_localization"
-          TO_BRANCH: "mandarin_localization"
+          FROM_BRANCH: "l10n_main"
+          TO_BRANCH: "mandarin_main"
           PULL_REQUEST_AUTO_MERGE_METHOD: "merge"
