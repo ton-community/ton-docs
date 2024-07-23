@@ -43,6 +43,12 @@ All tasks are performed in **side-by-side** mode in the Crowdin Editor. To enabl
   ![create-tasks](/img/localizationProgramGuideline/create-tasks.png)
 
 ### Developer
+- **Update footer config for your language**
+  1. fork this repo
+  2. go to [**file**](https://github.com/TownSquareXYZ/ton-docs/blob/main/src/theme/Footer/config.ts)
+  3. copy variable `FOOTER_COLUMN_LINKS_EN` to `FOOTER_COLUMN_LINKS_[YOUR LANG]`
+  4. translate value of key `headerLangKey` and `langKey` to your language
+  5. make a pr
 - **Upload files**
 - **Edit translatable text**
 - **Connect integrations** (e.g., add GitHub integration)
