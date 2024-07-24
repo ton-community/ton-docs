@@ -1,5 +1,7 @@
+import ThemedImage from '@theme/ThemedImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+
 
 # TON Cookbook
 
@@ -9,9 +11,55 @@ This document is created to gather the best practices from all developers and sh
 
 ## Standard operations
 
-<!-- TODO: zoom on click (lightbox?) -->
+Communication between Jetton wallets and TON wallets occurs through the following communication sequence:
 
-<img src="/img/interaction-schemes/ecosystem.svg" alt="Full ecosystem scheme"></img>
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/asset-processing/jetton_transfer.svg?raw=true',
+    dark: '/img/docs/asset-processing/jetton_transfer_dark.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
+
+`Sender -> sender' jetton wallet` means the _transfer_ message body contains the following data:
+
+| Name                 | Type    |
+|----------------------|---------|
+| `query_id `            | uint64  |
+| `amount  `             | coins   |
+| `destination  `        | address |
+| `response_destination` | address |
+| `custom_payload  `     | cell    |
+| `forward_ton_amount`   | coins   |
+| `forward_payload`      | cell    |
+
+`payee' jetton wallet -> payee`  means the message notification body contains the following data:
+
+| Name            | Type    |
+|-----------------|---------|
+| query_id    `    | uint64  |
+| amount   `       | coins   |
+| sender  `        | address |
+| forward_payload` | cell    |
+
+`payee' jetton wallet -> Sender` means the excess message body contains the following data:
+
+| Name                 | Type           |
+|----------------------|----------------|
+| `query_id`             | uint64         |
+
+A detailed description of the jetton wallet contract fields can be found in the [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) Jetton standard interface description.
+
+Messages using the `Transfer notification` and `Excesses` parameters are optional and depend on the amount of TON attached 
+to the `Transfer` message and the value of the `forward_ton_amount` field.
+
+The `query_id` identifier allows applications to link three messaging types `Transfer`, `Transfer notification` and `Excesses` to each other. 
+For this process to be carried out correctly it is recommended to always use a unique query id.
+
 
 ## Working with contracts' addresses
 
@@ -317,7 +365,33 @@ try {
 
 ### How to transfer TON? How to send a text message to other wallet?
 
-<img src="/img/interaction-schemes/wallets.svg" alt="Wallet operations scheme"></img>
+#### Sending messages
+
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1.svg?raw=true',
+    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1_dark.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
+
+#### Deploying a contract
+
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_2.svg?raw=true',
+    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_2_dark.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
 
 Most SDKs provide the following process for sending messages from your wallet:
 - You create wallet wrapper (object in your program) of a correct version (in most cases, v3r2; see also [wallet versions](/participate/wallets/contracts)), using secret key and workchain (usually 0, which stands for [basechain](/learn/overviews/ton-blockchain#workchain-blockchain-with-your-own-rules)).
@@ -472,8 +546,6 @@ Many SDKs already have functions responsible for parsing and storing long string
 Don't forget that comment message has 32 zero bits (one may say, that its opcode is 0)!
 
 ## TEP-74 (Jettons Standard)
-
-<img src="/img/interaction-schemes/jettons.svg" alt="Jetton operations scheme"></img>
 
 ### How to calculate user's Jetton wallet address (offchain)?
 
@@ -677,6 +749,19 @@ Most major tokens do not have a different storage structure because they use [a 
 
 To understand how to construct a message for token transfer, we use [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which describes the token standard.
 
+#### Transfer jettons
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_5.svg?raw=true',
+    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_5_dark.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
+
 :::warning
 When displayed, token doesn't usually show count of indivisible units user has; rather, amount is divided by `10 ^ decimals`. This value is commonly set to `9`, and this allows us to use `toNano` function. If decimals were different, we would **need to multiply by a different value** (for instance, if decimals are 6, then we would end up transferring thousand times the amount we wanted).
 
@@ -834,16 +919,6 @@ asyncio.run(main())
 
 </Tabs>
 
-Some field explanations:
-- `query_id` - arbitrary request number.
-- `amount` - amount of TONs for GAS, any remaining gas will be returned to response_destination.
-- `jetton_amount` - amount of transferred jettons in elementary units.
-- `destination` - address of the new owner of the jettons.
-- `response_destination` - address where to send a response with confirmation of a successful transfer and the rest of the incoming message Toncoins.
-- `custom_payload` - optional custom data (which is used by either sender or receiver jetton wallet for inner logic).
-- `forward_ton_amount` - the amount of nanotons to be sent to the destination address. To send payload it must be at least one nanoton.
-- `forward_payload` - optional custom data that should be sent to the destination address.
-
 If `forward_amount` is nonzero, a notification regarding jetton reception is sent to destination contract, as can be seen in the scheme in the top of this section. If `response_destination` address is not null, toncoins left (they're called "excesses") are sent to that address.
 
 :::tip
@@ -856,8 +931,6 @@ Jetton transfers need careful consideration for fees and amounts behind outgoing
 
 ## TEP-62 (NFT Standard)
 
-<img src="/img/interaction-schemes/nft.svg" alt="NFT ecosystem scheme"></img>
-
 NFT collections are very different. Actually, NFT contract on TON can be defined as "contract that has appropriate get-method and returns valid metadata". Transfer operation is standardized and quite analogous to [jetton's one](/develop/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment), so we will not dive into it and rather see additional capabilities provided by most collections you may meet!
 
 :::warning
@@ -867,6 +940,22 @@ Reminder: all methods about NFT below are not bound by TEP-62 to work. Before tr
 ### How to use NFT batch deploy?
 
 Smart contracts for collections allow deploying up to 250 NFTs in a single transaction. However, it's essential to consider that, in practice, this maximum is around 100-130 NFTs due to the computation fee limit of 1 ton. To achieve this, we need to store information about the new NFTs in a dictionary.
+
+#### Batch mint NFT
+:::info
+Does not specified by NFT standard for /ton-blockchain /token-contract
+:::   
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_10.svg?raw=true',
+    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_10_dark.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -1173,7 +1262,7 @@ Additionally, we need to include royalty information in our message, as they als
 ### How to send a swap message to DEX (DeDust)?
 
 DEXs use different protocols for their work. In this example we will interact with **DeDust**.
-* [DeDust documentation](https://docs.dedust.io/).
+ * [DeDust documentation](https://docs.dedust.io/).
 
 DeDust has two exchange paths: jetton <-> jetton or TON <-> jetton. Each has a different scheme. To swap, you need to send jettons (or toncoin) to a specific **vault** and provide a special payload. Here is the scheme for swapping jetton to jetton or jetton to toncoin:
 
@@ -1526,8 +1615,8 @@ asyncio.run(main())
 ### How to parse transactions of an account (Transfers, Jettons, NFTs)?
 
 The list of transactions on an account can be fetched through `getTransactions` API method. It returns an array of `Transaction` objects, with each item having lots of attributes. However, the fields that are the most commonly used are:
-- Sender, Body and Value of the message that initiated this transaction
-- Transaction's hash and logical time (LT)
+ - Sender, Body and Value of the message that initiated this transaction
+ - Transaction's hash and logical time (LT)
 
 _Sender_ and _Body_ fields may be used to determine the type of message (regular transfer, jetton transfer, nft transfer etc).
 
@@ -1825,7 +1914,7 @@ export async function retry<T>(fn: () => Promise<T>, options: { retries: number,
 
 ```
 
-Create listener function which will assert specific transaction on certain account with specific incoming external message, equal to body message in boc:
+Create listener function which will assert specific transaction on certain account with specific incoming external message, equal to body message in boc: 
 
 <Tabs>
 <TabItem value="ts" label="@ton/ton">
