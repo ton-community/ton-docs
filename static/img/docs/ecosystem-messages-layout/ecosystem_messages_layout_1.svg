@@ -3,7 +3,7 @@
 <!-- Создано Microsoft Visio, экспорт SVG ecosystem_messages_layout_1.svg Page-1 -->
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
 		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="6.89739in" height="2.41401in"
-		viewBox="0 0 496.612 173.809" xml:space="preserve" color-interpolation-filters="sRGB" class="st14">
+		viewBox="0 0 496.612 173.809" xml:space="preserve" color-interpolation-filters="sRGB" class="st13">
 	<v:documentProperties v:langID="1033" v:metric="true" v:viewMarkup="false">
 		<v:userDefs>
 			<v:ud v:nameU="msvNoAutoConnect" v:val="VT0(1):26"/>
@@ -24,8 +24,7 @@
 		.st10 {fill:none;stroke:none;stroke-linecap:butt;stroke-width:0.749999}
 		.st11 {fill:none;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.25}
 		.st12 {fill:#000000;font-family:Calibri;font-size:1.00001em}
-		.st13 {fill:#ffffff;stroke:none;stroke-linecap:butt}
-		.st14 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+		.st13 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
 	]]>
 	</style>
 
@@ -196,7 +195,7 @@
 			<v:textBlock v:margins="rect(0,0,0,0)"/>
 			<v:textRect cx="63.0709" cy="173.809" width="126.15" height="0"/>
 			<path d="M0 173.81 L92.96 173.81 L119.98 173.81" class="st6"/>
-			<rect v:rectContext="textBkgnd" x="35.869" y="161.809" width="54.4037" height="24.0002" class="st13"/>
+			<rect v:rectContext="textBkgnd" x="35.869" y="161.809" width="54.4037" height="24.0002" class="st8"/>
 			<text x="43.88" y="170.81" class="st9" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>external<v:newlineChar/><tspan
 						x="35.87" dy="1.2em" class="st5">signed msg</tspan></text>		</g>
 	</g>
