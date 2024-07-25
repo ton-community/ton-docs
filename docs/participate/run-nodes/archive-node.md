@@ -19,7 +19,7 @@ We highly recommend install mytonctrl using the supported operating systems:
 
 * 16 x Cores CPU 
 * 128GB ECC Memory 
-* 4TB SSD _OR_ Provisioned 32+k IOPS storage
+* 8TB SSD _OR_ Provisioned 64+k IOPS storage
 * 1 Gbit/s network connectivity
 * 16 TB/month traffic on peak load
 * a public IP address (fixed IP address)
