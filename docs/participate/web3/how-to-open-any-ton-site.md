@@ -26,14 +26,6 @@ Currently, TON Proxy is already available in [MyTonWallet](https://mytonwallet.i
 
 This method is also pretty easy, but you need to install an extension in your browser to make it work. It will be suitable for most users.
 
-### Connect to a public proxy
-
-If you don't want to install any extensions or if you are using mobile device, you can use this method. You'll have to configure something on your device to connect to the proxy.
-
-This method is described here:
-
--   [Connect with TON Proxy](/participate/web3/setting-proxy/)
-
 ## 🤓 Advanced methods
 
 ### Using Tonutils-Proxy
