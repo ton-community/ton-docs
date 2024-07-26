@@ -4,7 +4,7 @@ The aim of this document is to provide a gentle introduction into TON Sites, whi
 
 From the technical perspective, TON Sites are very much like standard websites, but they are accessed through the [TON Network](/learn/networking/overview) (which is an overlay network inside the Internet) instead of the Internet. More specifically, they have an [ADNL](/learn/networking/adnl) Address (instead of a more customary IPv4 or IPv6 address) and they accept HTTP queries via a [RLDP](/learn/networking/rldp) protocol (which is a higher-level RPC protocol built upon ADNL, the main protocol of TON Network) instead of the usual TCP/IP. All encryption is handled by ADNL, so there is no need to use HTTPS (i.e. TLS) in case the entry proxy is hosted locally on the user's device.
 
-In order to access existing sites and create new TON, Sites one needs special gateways between the "ordinary" internet and the TON Network. Essentially, TON Sites are accessed with the aid of a HTTP->RLDP proxy running locally on the client's machine and they are created by means of a reverse RLDP->HTTP proxy running on a remote web server.
+In order to access existing sites and create new TON Sites one needs special gateways between the "ordinary" internet and the TON Network. Essentially, TON Sites are accessed with the aid of a HTTP->RLDP proxy running locally on the client's machine and they are created by means of a reverse RLDP->HTTP proxy running on a remote web server.
 
 [Read more about TON Sites, WWW, and Proxy](https://blog.ton.org/ton-sites)
 
