@@ -725,7 +725,6 @@ const sidebars = {
       'items': [
         'participate/web3/setting-proxy',
         'participate/web3/how-to-open-any-ton-site',
-        'participate/web3/sites-and-proxy',
         'develop/dapps/tutorials/how-to-run-ton-site',
         'participate/web3/site-management',
       ],
