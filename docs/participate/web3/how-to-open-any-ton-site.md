@@ -36,3 +36,7 @@ This is the most secure way of accessing TON Sites.
 
 2. Launch it and press "Start Gateway"
 3. Done!
+
+
+## See Also
+* [Run C++ Implementation](/participate/web3/sites-and-proxy)
