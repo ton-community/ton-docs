@@ -723,9 +723,10 @@ const sidebars = {
       'type': 'category',
       'label': 'TON Proxy & Sites',
       'items': [
+        'develop/dapps/tutorials/how-to-run-ton-site',
+        'participate/web3/app-sites',
         'participate/web3/setting-proxy',
         'participate/web3/how-to-open-any-ton-site',
-        'develop/dapps/tutorials/how-to-run-ton-site',
         'participate/web3/site-management',
       ],
     },
