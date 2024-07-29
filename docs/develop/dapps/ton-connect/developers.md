@@ -23,7 +23,7 @@ This page contents the list of useful libraries for TON Connect.
 
 TonConnect UI React is a React UI kit for TonConnect SDK. Use it to connect your app to TON wallets via TonConnect protocol in React apps.
 
-* Example of a DAppwith `@tonconnect/ui-react`: [GitHub](https://github.com/ton-connect/demo-dapp-with-react-ui)
+* Example of a DApp with `@tonconnect/ui-react`: [GitHub](https://github.com/ton-connect/demo-dapp-with-react-ui)
 * Example of deployed `demo-dapp-with-react-ui`: [GitHub](https://ton-connect.github.io/demo-dapp-with-react-ui/)
 
 ```bash
@@ -87,7 +87,7 @@ This package contains protocol requests, protocol responses, event models and en
 
 TonConnect UI Vue is a Vue UI kit for TonConnect SDK. Use it to connect your app to TON wallets via TonConnect protocol in Vue apps.
 
-* Example of a DAppwith `@townsquarelabs/ui-vue`: [GitHub](https://github.com/TownSquareXYZ/demo-dapp-with-vue-ui)
+* Example of a DApp with `@townsquarelabs/ui-vue`: [GitHub](https://github.com/TownSquareXYZ/demo-dapp-with-vue-ui)
 * Example of deployed `demo-dapp-with-vue-ui`: [GitHub](https://townsquarexyz.github.io/demo-dapp-with-vue-ui/)
 
 ```bash
