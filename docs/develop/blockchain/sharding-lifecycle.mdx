@@ -16,66 +16,72 @@ Each shardchain, or more precisely, each shardchain block, is identified by a co
 
 ## Algorithm for deciding whether to split or merge
 
+Validators decide whether to split or merge shards in the following way:
+1. For each block, block size, gas consumption and lt delta are calculated.
+2. Using these values, blocks can be considered overloaded or underloaded.
+3. Each shard keeps underload and overload history. If enough recent blocks were underloaded or overloaded, `want_merge` or `want_split` flag is set.
+4. Validators merge or split shards using these flags.
+
 ### 1. Assessment of the current state of the block
 
-Before deciding whether to split or merge, it is necessary to assess the current state of the block. This includes an assessment of the block size, gas consumption and logical block time difference (lt_delta).
+Each block has the following parameters. They are used to determine overload and underload.
+1. *Block size estimation* - not an actual block size, but an estimation calculated during collation.
+2. *Gas consumption* - total gas consumed in all transactions (excluding ticktock and mint/recover special transactions).
+3. *Lt delta* - difference between start and end lt of the block.
 
-### 2. Block classification
+### 2. Block limits and classification
 
-Using the estimation results, we classify the block into three parameters and their limits: size, gas, and lt_delta.
+Block limits are loaded from the [configuration parameters 22 and 23](/develop/howto/blockchain-configs#param-22-and-23).
+Each of the three parameters has three limits: underload, soft, hard:
+1. *Block size*: `128/256/512 KiB`.
+2. *Gas consumption*: `2M/10M/20M` in basechain, `200K/1M/2.5M` in masterchain.
+3. *Lt delta*: `1000/5000/10000`.
+Also, there is a medium limit, which is equal to `(soft + hard) / 2`.
 
-There are three main classification classes for different block parameters and their limits:
-- underload (0) - is a state where a shard understands that there is no load, and is inclined to merge if the neighbouring shard wishes to do so.
-- soft limit (2) - when this limit is reached, internal messages are no longer processed.
-- hard limit (4) - that's the absolute maximum size.
+We classify the three parameters (size, gas, and lt delta) into categories:
+- `0` - underload limit is not reached.
+- `1` - underload limit is exceeded.
+- `2` - soft limit is exceeded.
+- `3` - medium limit is exceeded.
+- `4` - hard limit is exceeded.
 
-Block limits are loaded from the contract config - [23](/develop/howto/blockchain-configs#param-22-and-23).
+Block classification is max(`Classification of size`, `Classification of gas`, `Classification of lt delta`). For example: if classification of size is 2, classification of gas is 3, classification of lt delta is 1, then the final block classification is 3.
 
-At the moment, the classification of blocks is as follows:
+- When classification of the block is 0 (underload), the block is inclined to merge with its sibling.
+- When classification of the block is 2 (soft limit reached), collator stops processing internal messages. The block is inclined to split.
+- When classification of the block is 3 (medium limit reached), collator stops processing external messages.
 
-#### Classification of Block size
-- 0 - if block size < 131,072 bytes
-- 2 - if 131,072 ≤ block size ≤ 524,288 bytes
-- 4 - if block size = 524,288 bytes
+### 3. Determination of overload or underload
 
-#### Classification of Block gas
-- 0 - if block gas < 2000000 gas
-- 2 - if 2000000 ≤ block gas ≤ 10000000 gas
-- 4 - if block gas = 20000000 gas
-
-#### Classification of Block lt_delta
-- 0 - if block lt_delta < 1000 lt_delta
-- 2 - if 5000 ≤ block lt_delta ≤ 10000 lt_delta
-- 4 - if block lt_delta = 10000 lt_delta
-
-#### Final block classification:
-
-Classification of block limit =  max(`Classification of Block size`, `Classification of Block gas`, `Classification of Block lt_delta`)
-
-For example: if classification of Block size - 2, classification of Block gas - 2, classification of Block lt_delta - 4, then the final block classification is `hard(4)`.
-
-### 3. Determination of overload or underload condition
-
-After classifying the block, we check its overload or underload condition.
-
-- If the block class by limits ≤ `underload(0)` and message queue ≤ `MERGE_MAX_QUEUE_SIZE = 2047`, set the status to `underloaded`.
-- If the block class by limits ≥ `soft(2)` и message queue ≤ `SPLIT_MAX_QUEUE_SIZE = 100000`, set the status to `overloaded`.
+After classifying the block, collator checks overload and underload conditions.
+Size of the outbound message queue and status of dispatch queue processing is also taken into consideration.
+- If the block class is ≥ `2` (soft) and message queue size ≤ `SPLIT_MAX_QUEUE_SIZE = 100000` then the block is overloaded.
+- If limit for total processed messages from dispatch queue was reached and message queue size ≤ `SPLIT_MAX_QUEUE_SIZE = 100000` then the block is overloaded.
+- If the block class is `0` (underload) and message queue size ≤ `MERGE_MAX_QUEUE_SIZE = 2047` then the block is underloaded.
+- If message queue size is ≥ `FORCE_SPLIT_QUEUE_SIZE = 4096` and ≤ `SPLIT_MAX_QUEUE_SIZE = 100000` then the block is overloaded.
 
 ### 4. Deciding whether to split or merge
 
-Using the history of overloading and underloading, decide whether a split or merge is needed.
+Each block keeps underload and overload history - it is a 64-bit mask of the underload/overload status of the last 64 blocks.
+It is used to decide whether to split or merge.
 
-- If the overload history is `overload` and the message queue size is between `FORCE_SPLIT_QUEUE_SIZE = 4096` and `SPLIT_MAX_QUEUE_SIZE = 100000`, the `want_split` status is set.
-- If the overload condition is `underloaded` and the message queue size ≤ `MERGE_MAX_QUEUE_SIZE = 2047`, the `want_merge` status is set.
+Underload and overload history has a weight, which is calculated as follows:
+`one_bits(mask & 0xffff) * 3 + one_bits(mask & 0xffff0000) * 2 + one_bits(mask & 0xffff00000000) - (3 + 2 + 1) * 16 * 2 / 3`
+(here `one_bits` is the number of `1`-bits in a mask, and the lower bits correspond to the most recent blocks).
 
-### 5. Checking the manual settings of the collator
+When underload or overload history has a non-negative weight, the flag `want_merge` or `want_split` is set.
 
-- If `want_split` is set in the collator settings, a split will be made.
-- If `want_merge` is set in the collator settings, a merge will be made.
+### 5. Final decision
 
-### 6. Final decision
+Validators decide to split or merge shards using `want_split` and `want_merge` flags and [workchain configuration parameters](/develop/howto/blockchain-configs#param-12).
 
-The final decision to split or merge is based on `want_split` and `want_merge` values.
+- If the shard has depth < `min_split` then it will split.
+- If the shard has depth > `max_split` then it will merge.
+- Shards with depth `min_split` cannot merge, shards with depth `max_split` cannot split.
+- If the block has `want_split` flag, the shard will split.
+- If the block and its sibling have `want_merge` flag, the shards will merge.
+
+Shards split and merge in `split_merge_delay = 100` seconds after the decision is made.
 
 ## Messages and Instant Hypercube Routing (Instant Hypercube Routing)
 
