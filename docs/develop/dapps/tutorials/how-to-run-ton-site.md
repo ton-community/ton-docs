@@ -12,7 +12,7 @@ Install [Tonutils Reverse Proxy](https://github.com/tonutils/reverse-proxy) to u
 
 ##### Download
 ```bash
-wget https://github.com/ton-utils/reverse-proxy/releases/download/v0.2.0/tonutils-reverse-proxy-linux-amd64
+wget https://github.com/ton-utils/reverse-proxy/releases/download/v0.3.2/tonutils-reverse-proxy-linux-amd64
 chmod 777 tonutils-reverse-proxy-linux-amd64
 ```
 
