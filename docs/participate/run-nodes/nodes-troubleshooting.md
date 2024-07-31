@@ -157,6 +157,18 @@ The best way (while the penalty for temporary non-validation is small, it can be
 cp var/ton-work/db/config.json var/ton-work/db/config.json.backup
 ```
 
+## Error parsing dependencies of distro-info: Invalid version
+
+There are two known cases when this error appears:
+
+### Error After Updating MytonCtrl
+
+Please, delete the file `/usr/local/bin/mytonctrl/VERSION`.
+
+### Error During MytonCtrl Installation
+
+`MytonCtrl` may open, but the node will not work properly. Please remove `MytonCtrl` from your computer and reinstall it, ensuring to address any errors that were previously encountered.
+
 ## See Also
 
 * [MyTonCtrl FAQ](/participate/run-nodes/faq)
