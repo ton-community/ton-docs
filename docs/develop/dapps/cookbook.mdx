@@ -9,58 +9,6 @@ During product development, various questions often arise regarding interactions
 
 This document is created to gather the best practices from all developers and share them with everyone.
 
-## Standard operations
-
-Communication between Jetton wallets and TON wallets occurs through the following communication sequence:
-
-<br></br>
-<div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/asset-processing/jetton_transfer.svg?raw=true',
-    dark: '/img/docs/asset-processing/jetton_transfer_dark.svg?raw=true',
-  }}
-/>
-</div>
-<br></br>
-
-`Sender -> sender' jetton wallet` means the _transfer_ message body contains the following data:
-
-| Name                 | Type    |
-|----------------------|---------|
-| `query_id `            | uint64  |
-| `amount  `             | coins   |
-| `destination  `        | address |
-| `response_destination` | address |
-| `custom_payload  `     | cell    |
-| `forward_ton_amount`   | coins   |
-| `forward_payload`      | cell    |
-
-`payee' jetton wallet -> payee`  means the message notification body contains the following data:
-
-| Name            | Type    |
-|-----------------|---------|
-| query_id    `    | uint64  |
-| amount   `       | coins   |
-| sender  `        | address |
-| forward_payload` | cell    |
-
-`payee' jetton wallet -> Sender` means the excess message body contains the following data:
-
-| Name                 | Type           |
-|----------------------|----------------|
-| `query_id`             | uint64         |
-
-A detailed description of the jetton wallet contract fields can be found in the [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) Jetton standard interface description.
-
-Messages using the `Transfer notification` and `Excesses` parameters are optional and depend on the amount of TON attached 
-to the `Transfer` message and the value of the `forward_ton_amount` field.
-
-The `query_id` identifier allows applications to link three messaging types `Transfer`, `Transfer notification` and `Excesses` to each other. 
-For this process to be carried out correctly it is recommended to always use a unique query id.
-
-
 ## Working with contracts' addresses
 
 ### How to convert (user friendly <-> raw), assemble, and extract addresses from strings?
