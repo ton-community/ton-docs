@@ -110,7 +110,7 @@ The TON Community created an excellent tool for automating all development proce
 **OPTIONAL: ** When using Golang, follow these instructions::
 
 1. Install the GoLand IDE.
-2. Create a project folder and `go.mod` file using the following content (the **version of Go** may need to be changed to conduct this process if the current version being used is outdated):
+2. Create a project folder and `go.mod` file using the following content (the **version of Go** may need to be changed to conduct this process if the current version being used it outdated):
 ```
 module main
 
@@ -397,7 +397,7 @@ Extra currency | This is a native implementation of existing jettons and is not 
 IHR fee | As mentioned, the IHR is not currently in use, so this fee is always zero. More can be read about this in the [tblkch.pdf](https://ton.org/tblkch.pdf) (3.1.8).
 Forwarding fee | A forwarding message fee. More can be read about this in the [fees documentation](/develop/howto/fees-low-level#transactions-and-phases).
 Logical time of creation | The time used to create the correct transaction queue. 
-UNIX time of creation | The time the transaction was created in UNIX.
+UNIX tome of creation | The time the transaction was created in UNIX.
 State Init | Code and source data for deploying a smart contract. If the bit is set to `0`, it means that we do not have a State Init. But if it is set to `1`, then another bit needs to be written which indicates whether the State Init is stored in the same cell (0) or written as a reference (1).
 Message body | This part defines how the message body is stored. At times the message body is too large to fit into the message itself. In this case, it should be stored as a **reference** whereby the bit is set to `1` to show that the body is used as a reference. If the bit is `0`, the body is in the same cell as the message.
 
@@ -2472,7 +2472,7 @@ import (
 )
 
 var internalMessages []*cell.Cell
-walletAddress := address.MustParseAddr("put your wallet address from which you deployed high-load wallet")
+wallletAddress := address.MustParseAddr("put your wallet address from which you deployed high-load wallet")
 
 for i := 0; i < 12; i++ {
   comment := fmt.Sprintf("Hello, TON! #%d", i)
@@ -2483,7 +2483,7 @@ for i := 0; i < 12; i++ {
 
   internalMessage := cell.BeginCell().
     MustStoreUInt(0x18, 6). // bounce
-    MustStoreAddr(walletAddress).
+    MustStoreAddr(wallletAddress).
     MustStoreBigCoins(tlb.MustFromTON("0.001").NanoTON()).
     MustStoreUInt(0, 1+4+4+64+32).
     MustStoreBoolBit(false). // We do not have State Init
