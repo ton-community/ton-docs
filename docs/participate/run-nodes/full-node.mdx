@@ -72,6 +72,10 @@ Please, check this video step-by-step tutorial to start promptly:
 
 ### Switch to non-root user
 
+:::warning
+This step is **required** to successfully install and use mytonctrl, don't ignore **non-root user creation**. Without this step there will be no errors during installation, but mytonctrl will not work properly.
+:::
+
 If you don't have **non-root** user, you can create this with the following steps (otherwise skip first two steps and go to the third).
 
 1. Login as root and create new user:
@@ -86,7 +90,7 @@ sudo adduser <username>
 sudo usermod -aG sudo <username>
 ```
 
-3. Log into the new user (if you are using ssh, you will need to stop current session and reconnect with correct user)
+3. Log into the new user (if you are using ssh, **you will need to stop current session and reconnect with correct user**)
 
 ```bash
 ssh <username>@<server-ip-address>
