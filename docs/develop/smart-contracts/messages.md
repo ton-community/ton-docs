@@ -222,7 +222,7 @@ Let's look at an example to make it clearer. Let's imagine a situation where we 
 
 | Case | Mode and Flags | Code | Result |
 |:-|:-|:-|:-|
-| Send a regular message | `mode` = 0, no `flag` | `send_raw_message(msg, 0)` | `balance` - 100 + 50 - 20 = 130, `send` - 20 - 3 = 7
+| Send a regular message | `mode` = 0, no `flag` | `send_raw_message(msg, 0)` | `balance` - 100 + 50 - 20 = 130, `send` - 20 - 3 = 17
 | Send a regular message, if there was an error in processing the action, don't rollback the transaction and ignore it | `mode` = 0, `flag` = 2 | `send_raw_message(msg, 2)` | `balance` - 100 + 50, `send` - 0
 | Send a regular message, if there was an error in processing the action - bounce the message in addition to rolling back the transaction | `mode` = 0, `flag` = 16 | `send_raw_message(msg, 16)` | `balance` - 100 + 50 = 167 + 17 (bounced), `send` - 20 - 3 = `bounce` message with 17
 | Send a regular message and pay transfer fees separately |  `mode` = 0, `flag` = 1 | `send_raw_message(msg, 1)` | `balance` - 100 + 50 - 20 - 3 = 127, `send` - 20
