@@ -215,7 +215,17 @@ is defined. `impure` is used because `RANDU256` changes the internal state of th
 #### Inline specifier
 If a function has `inline` specifier, its code is actually substituted in every place where the function is called. It goes without saying that recursive calls to inlined functions are not possible.
 
-For example, you can using `inline` like this way in this example: [ICO-Minter.fc](https://github.com/ton-blockchain/token-contract/blob/f2253cb0f0e1ae0974d7dc0cef3a62cb6e19f806/ft/jetton-minter-ICO.fc#L16)
+For example,
+
+```func
+(int) add(int a, int b) inline {
+    return a + b;
+}
+```
+
+as the `add` function is marked with the `inline` specifier. The compiler will try to replace calls to `add` with the actual code `a + b`, avoiding the function call overhead.
+
+Here is another example of how you can use inline, taken from [ICO-Minter.fc](https://github.com/ton-blockchain/token-contract/blob/f2253cb0f0e1ae0974d7dc0cef3a62cb6e19f806/ft/jetton-minter-ICO.fc#L16):
 
 ```func
 () save_data(int total_supply, slice admin_address, cell content, cell jetton_wallet_code) impure inline {
@@ -228,6 +238,7 @@ For example, you can using `inline` like this way in this example: [ICO-Minter.f
           );
 }
 ```
+
 
 
 #### Inline_ref specifier
