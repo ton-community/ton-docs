@@ -279,7 +279,7 @@ else {
 
 ### How to determine if dict is empty
 
-There is a method of `dict_empty?()` to check the date presence in dict. This method is the equivalent of `cell_null?()` because usually a `null`-cell is an empty dictionary.
+There is a method of `dict_empty?()` to check the data presence in dict. This method is the equivalent of `cell_null?()` because usually a `null`-cell is an empty dictionary.
 
 ```func
 cell d = new_dict();
