@@ -2,6 +2,10 @@ import Button from '@site/src/components/button'
 
 # TON Connect for Telegram Bots
 
+:::warning deprecated
+This tutorial describes an outdated approach to integrating TON Connect with Telegram bots. We strongly recommend using [Telegram Mini Apps](/develop/dapps/telegram-apps) for a more modern and secure integration.
+:::
+
 In this tutorial, we’ll create a sample telegram bot that supports TON Connect 2.0 authentication using Javascript TON Connect SDK.
 We will analyze connecting a wallet, sending a transaction, getting data about the connected wallet, and disconnecting a wallet.
 
@@ -206,7 +210,7 @@ import { IStorage } from '@tonconnect/sdk';
 const storage = new Map<string, string>(); // temporary storage implementation. We will replace it with the redis later
 
 export class TonConnectStorage implements IStorage {
-  constructor(private readonly chatId: number) {} // we need to have different stores for different users 
+  constructor(private readonly chatId: number) {} // we need to have different stores for different users
 
   private getKey(key: string): string {
     return this.chatId.toString() + key; // we will simply have different keys prefixes for different users
@@ -269,7 +273,7 @@ Let's analyze what we are doing here. Firstly we fetch the wallets list and crea
 After that we subscribe to wallet change. When user connects a wallet, bot will send a message `${wallet.device.appName} wallet connected!`.
 Next we find the Tonkeeper wallet and create connection link. In the end we generate a QR code with the link and send it as a photo to the user.
 
-Now you can run the bot (`npm run compile` and `npm run start` then) and send `/connect` message to the bot. Bot should reply with the QR. Scan it with the Tonkeeper wallet. You will see a message `Tonkeeper wallet connected!` in the chat. 
+Now you can run the bot (`npm run compile` and `npm run start` then) and send `/connect` message to the bot. Bot should reply with the QR. Scan it with the Tonkeeper wallet. You will see a message `Tonkeeper wallet connected!` in the chat.
 
 
 We will use connector in many places, so let's move connector creating code to a separate file:
@@ -351,17 +355,17 @@ We will implement following UX for wallet connection:
 ```text
 First screen:
 <Unified QR>
-<Open @wallet>, <Choose a wallet button (opens second screen)>, <Open wallet unified link> 
+<Open @wallet>, <Choose a wallet button (opens second screen)>, <Open wallet unified link>
 
 Second screen:
 <Unified QR>
 <Back (opens first screen)>
-<@wallet button (opens third screen)>, <Tonkeeper button (opens third screen)>, <Tonhub button (opens third screen)>, <...> 
+<@wallet button (opens third screen)>, <Tonkeeper button (opens third screen)>, <Tonhub button (opens third screen)>, <...>
 
 Third screen:
 <Selected wallet QR>
 <Back (opens second screen)>
-<Open selected wallet link> 
+<Open selected wallet link>
 ```
 
 Let's start with adding inline keyboard to the `/connect` command handler in the `main.ts`
@@ -408,7 +412,7 @@ bot.onText(/\/connect/, async msg => {
 We need to wrap TonConnect deeplink as https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(link)} because only `http` links are allowed in the Telegram inline keyboard.
 Website https://ton-connect.github.io/open-tc just redirects user to link passed in the `connect` query param, so it's only workaround to open `tc://` link in the Telegram.
 
-Note that we replaced `connector.connect` call arguments. Now we are generating a unified link for all wallets. 
+Note that we replaced `connector.connect` call arguments. Now we are generating a unified link for all wallets.
 
 Next we tell Telegram to call `callback_query` handler with `{ "method": "chose_wallet" }` value when user clicks to the `Choose a Wallet` button.
 
@@ -461,7 +465,7 @@ export const walletMenuCallbacks = { // Define buttons callbacks
     chose_wallet: onChooseWalletClick
 };
 
-bot.on('callback_query', query => { // Parse callback data and execute corresponing function 
+bot.on('callback_query', query => { // Parse callback data and execute corresponing function
     if (!query.data) {
         return;
     }
@@ -485,14 +489,14 @@ bot.on('callback_query', query => { // Parse callback data and execute correspon
 async function onChooseWalletClick ...
 ```
 
-Here we define buttons handlers list and `callback_query` parser. Unfortunately callback data is always string, so we have to pass JSON to the `callback_data` and parse it later in the `callback_query` handler. 
+Here we define buttons handlers list and `callback_query` parser. Unfortunately callback data is always string, so we have to pass JSON to the `callback_data` and parse it later in the `callback_query` handler.
 Then we are looking for the requested method and call it with passed parameters.
 
 Now we should add `conenct-wallet-menu.ts` import to the `main.ts`
 ```ts
 // src/main.ts
 
-// ... other imports 
+// ... other imports
 
 import './connect-wallet-menu';
 
@@ -675,7 +679,7 @@ export const walletMenuCallbacks = {
     universal_qr: onOpenUniversalQRClick
 };
 
-bot.on('callback_query', query => { // Parse callback data and execute corresponing function 
+bot.on('callback_query', query => { // Parse callback data and execute corresponing function
     if (!query.data) {
         return;
     }
@@ -830,7 +834,7 @@ async function editQR(message: TelegramBot.Message, link: string): Promise<void>
 
 Compile and run the bot to check how wallet connection works now.
 
-You may note that we haven't considered QR code expiration and stopping connectors yet. We will handle it later. 
+You may note that we haven't considered QR code expiration and stopping connectors yet. We will handle it later.
 
 
 At the moment we have the following files structure:
@@ -951,7 +955,7 @@ export const walletMenuCallbacks = {
 };
 
 async function onChooseWalletClick(query: CallbackQuery, _: string): Promise<void> {
-    
+
 // ... other code
 ```
 
@@ -1121,8 +1125,8 @@ bot.onText(/\/my_wallet/, handleShowMyWalletCommand);
 Compile and run the bot to check that commands above works correctly.
 
 ## Optimisation
-We've done all basic commands. But it is important to keep in mind that each connector keeps SSE connection opened until it is paused. 
-Also, we didn't handle case when user calls `/connect` multiple times, or calls `/connect` or `/send_tx` and doesn't scan the QR. We should set a timeout and close the connection to save server resources. 
+We've done all basic commands. But it is important to keep in mind that each connector keeps SSE connection opened until it is paused.
+Also, we didn't handle case when user calls `/connect` multiple times, or calls `/connect` or `/send_tx` and doesn't scan the QR. We should set a timeout and close the connection to save server resources.
 Then we should notify user that QR / transaction request is expired.
 
 ### Send transaction optimisation
@@ -1339,10 +1343,10 @@ export function getConnector(
 
 </details>
 
-This code may look a little tricky, but here we go. 
+This code may look a little tricky, but here we go.
 Here we store a connector, it's cleaning timeout and list of callback that should be executed after the timeout for each user.
 
-When `getConnector` is called we check if there is an existing connector for this `chatId` (user) it the cache. If it exists we reset the cleaning timeout and return the connector. 
+When `getConnector` is called we check if there is an existing connector for this `chatId` (user) it the cache. If it exists we reset the cleaning timeout and return the connector.
 That allows keep active users connectors in cache. It there is no connector in the cache we create a new one, register a timeout clean function and return this connector.
 
 To make it works we have to add a new parameter to the `.env`
@@ -1396,7 +1400,7 @@ export async function handleConnectCommand(msg: TelegramBot.Message): Promise<vo
         const connectedName =
             (await getWalletInfo(connector.wallet!.device.appName))?.name ||
             connector.wallet!.device.appName;
-        
+
         await bot.sendMessage(
             chatId,
             `You have already connect ${connectedName} wallet\nYour address: ${toUserFriendlyAddress(
@@ -1465,9 +1469,9 @@ export async function handleConnectCommand(msg: TelegramBot.Message): Promise<vo
 
 </details>
 
-We defined `newConnectRequestListenersMap` to store cleanup callback for the last connect request for each user. 
-If user calls `/connect` multiple times, bot will delete previous message with QR. 
-Also, we subscribed to the connector expiration timeout to delete the QR-code message when it is expired.  
+We defined `newConnectRequestListenersMap` to store cleanup callback for the last connect request for each user.
+If user calls `/connect` multiple times, bot will delete previous message with QR.
+Also, we subscribed to the connector expiration timeout to delete the QR-code message when it is expired.
 
 
 Now we should remove `connector.onStatusChange` subscription from the `connect-wallet-menu.ts` functions,
@@ -1641,7 +1645,7 @@ export async function buildUniversalKeyboard(
 }
 ```
 
-Here we are adding separate button for @wallet to the First screen (Universal QR screen). All that remains is to use this function in 
+Here we are adding separate button for @wallet to the First screen (Universal QR screen). All that remains is to use this function in
 connect-wallet-menu and command-handlers:
 
 
@@ -1825,7 +1829,7 @@ async function onWalletClick(query: CallbackQuery, data: string): Promise<void> 
 
 </details>
 
-Note that we place different links to the QR and button-link (`qrLink` and `buttonLink`), 
+Note that we place different links to the QR and button-link (`qrLink` and `buttonLink`),
 because we don't need redirection when user scans QR by @wallet, and at the same time we need redirect back to the bot when user connects @wallet using button-link.
 
 
@@ -1917,7 +1921,7 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
 
 </details>
 
-That is it. Now user is able to connect @wallet using special button on the main screen, also we have provided proper return strategy for TG links. 
+That is it. Now user is able to connect @wallet using special button on the main screen, also we have provided proper return strategy for TG links.
 
 ## Add a permanent storage
 At this moment we store TonConnect sessions in the Map object. But you may want to store it to the database or other permanent storage to save the sessions when you restart the server.
