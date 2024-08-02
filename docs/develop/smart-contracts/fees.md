@@ -101,6 +101,10 @@ Average fee for minting one NFT is 0.08 TON.
 
 Saving 1 MB of data for one year on TON will cost you 6.01 TON. Note that you don't usually need to store big amounts of data on-chain. Consider [TON Storage](/participate/ton-storage/storage-daemon) if you need decentralized storage.
 
+### Is it possible to send a gasless transaction?
+
+At present, this opportunity is not available. We are actively working on its development. Please stay tuned for updates.
+
 ### How to calculate fees in FunC?
 
 * [Smart contract function to calculate forward fees in FunC](https://github.com/ton-blockchain/token-contract/blob/main/misc/forward-fee-calc.fc)
