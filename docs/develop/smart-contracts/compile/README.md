@@ -79,7 +79,7 @@ FunC stdlib is bundled but could be disabled at runtime.
 # Compile to binary form (for contract creation)
 ton-compiler --input ./wallet.fc --output ./wallet.cell
 
-# Compile to fift (useful for debuging)
+# Compile to fift (useful for debugging)
 ton-compiler --input ./wallet.fc --output-fift ./wallet.fif
 
 # Compile to binary form and fift
