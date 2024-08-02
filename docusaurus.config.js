@@ -1,6 +1,33 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
+require("dotenv").config();
+
+const getEnvLangConfig = () => {
+  const defaultLocale = process.env.DEFAULT_LOCALE || "en";
+
+  const langArray = process.env.TARGET_LANGS
+    ? process.env.TARGET_LANGS.split(",")
+    : ["mandarin"];
+    // : ["mandarin", "ru", "ko", "pl", "uk", "ja"];
+
+  const locales = Array.from(new Set([defaultLocale, ...langArray]));
+
+  return {
+    defaultLocale,
+    locales,
+    localeConfigs: {
+      en: {
+        label: "English",
+      },
+      'mandarin': {
+        label: '简体中文',
+        path: "zh-CN",
+      },
+    },
+  };
+};
+
 // function to get current year
 function getCurrentYear () {
   const now = new Date()
@@ -112,19 +139,7 @@ const config = {
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
-  i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'mandarin'],
-    localeConfigs: {
-      en: {
-        label: 'English',
-      },
-      mandarin: {
-        label: '简体中文',
-      },
-    },
-  },
-
+  i18n: getEnvLangConfig(),
   presets: [
     [
       'classic',
@@ -471,6 +486,16 @@ const config = {
           {
             type: 'localeDropdown',
             position: 'right',
+            dropdownItemsAfter: [
+              {
+                type: 'html',
+                value: '<hr style="margin: 0.3rem 0;">',
+              },
+              {
+                href: "/contribute/localization-program/overview",
+                label: 'Help Us Translate',
+              },
+            ],
           },
         ],
       },

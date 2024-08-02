@@ -208,11 +208,14 @@ Best suited for dApps that need to sign multiple payments/transactions within a 
 - ❌ If you only need to send one payment, the user needs to take two actions: connect the wallet and confirm the transaction
 - ❌ Integration is more complex than the ton:// link
 
-
+````mdx-code-block
 <Button href="/develop/dapps/ton-connect/"
 colorType="primary" sizeType={'lg'}>
+````
 Learn More
+````mdx-code-block
 </Button>
+````
 
 ### Invoices with ton:// link
 

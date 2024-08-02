@@ -207,6 +207,7 @@ const sidebars = {
               type: 'category',
               label: 'Message Management',
               items: [
+                'develop/smart-contracts/guidelines/ecosystem-messages-layout',
                 'develop/smart-contracts/guidelines/message-delivery-guarantees',
                 'develop/smart-contracts/messages',
                 'develop/smart-contracts/guidelines/internal-messages',
@@ -722,10 +723,10 @@ const sidebars = {
       'type': 'category',
       'label': 'TON Proxy & Sites',
       'items': [
+        'develop/dapps/tutorials/how-to-run-ton-site',
+        'participate/web3/app-sites',
         'participate/web3/setting-proxy',
         'participate/web3/how-to-open-any-ton-site',
-        'participate/web3/sites-and-proxy',
-        'develop/dapps/tutorials/how-to-run-ton-site',
         'participate/web3/site-management',
       ],
     },
@@ -779,6 +780,32 @@ const sidebars = {
             'contribute/archive/hacktoberfest-2022/as-contributor',
             'contribute/archive/hacktoberfest-2022/as-maintainer',
           ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Localization Program',
+      items: [
+        {
+          type: 'doc',
+          label: 'Overview',
+          id: 'contribute/localization-program/overview',
+        },
+        {
+          type: 'doc',
+          label: 'How It Works',
+          id: 'contribute/localization-program/how-it-works',
+        },
+        {
+          type: 'doc',
+          label: 'How To Contribute',
+          id: 'contribute/localization-program/how-to-contribute',
+        },
+        {
+          type: 'doc',
+          label: 'Translation Style Guide',
+          id: 'contribute/localization-program/translation-style-guide',
         },
       ],
     },

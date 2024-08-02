@@ -28,14 +28,16 @@ In this tutorial, you'll learn how to easily make blockchain transactions using 
  _You're going to mine an NFT rocket achievement!!!_
 
 As the first miners on TON, you will go through the Proof-of-Work smart contract and finally mine a secret reward for your TON wallet. Check it out:
-
+````mdx-code-block
 <div style={{width: '100%', maxWidth:'250pt',  textAlign: 'center', margin: '0 auto' }}>
   <video width={'300'} style={{width: '100%', maxWidth:'250pt',  borderRadius: '10pt', margin: '15pt auto' }} muted={true} autoPlay={true} loop={true}>
     <source src="/files/onboarding-nft.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
+````
+Your browser does not support the video tag.
+````mdx-code-block 
   </video>
 </div>
-
+````
 Our goal for today is to mine an NFT! This achievement will stay with you *forever*.
 
 Finally, you are able to mine this NFT achievement even in mainnet. (_it costs only 0,05 TON!_)
@@ -56,15 +58,17 @@ Though the PoW Giver smart contract framework that defined the initial mining pr
 
 
 Now, let’s focus on the first steps to becoming a **TVM Developer** and learn how to mine an NFT on TON! Provided below is an example of what we're aiming to create.
-
+````mdx-code-block
 <div style={{ width: '100%', textAlign: 'center', margin: '0 auto' }}>
   <video style={{ width: '100%', borderRadius: '10pt', margin: '15pt auto', maxWidth: '90%' }} muted={true} autoPlay={true}
          loop={true}>
     <source src="/files/onboarding.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
+````
+Your browser does not support the video tag.
+````mdx-code-block
   </video>
 </div>
-
+````
 It’s possible to create a miner in about half an hour if we keep focused on the task at hand.
 
 ## 🦄 Getting started
@@ -100,6 +104,7 @@ Note, you'll need to [sign in](https://github.com/login) to GitHub for further w
 
 Please, use the [ton-onboarding-challenge](https://github.com/ton-community/ton-onboarding-challenge) template to create your project by clicking on the “Use this template” button and selecting the “Create a new repository” tab as shown below:
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -109,7 +114,7 @@ Please, use the [ton-onboarding-challenge](https://github.com/ton-community/ton-
     }}
 />
 <br></br>
-
+````
 After completing this step, you’ll have access to a highly performant repository that can be used as your miner's core. Congratulations! ✨
 
 ### Development Environments
@@ -120,6 +125,7 @@ The next step is to choose which developer environment is best suited to your ne
 Make sure you have opened the repository in your GitHub profile that was generated from the template in the previous step.
 :::
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -129,7 +135,7 @@ Make sure you have opened the repository in your GitHub profile that was generat
     }}
 />
 <br></br>
-
+````
 #### Local and Cloud Development Environments
 
 * For users who are not familiar with JavaScript, it can be challenging to use a JavaScript IDE, especially if your computer and tooling systems are not configured for this purpose.
@@ -140,6 +146,7 @@ Make sure you have opened the repository in your GitHub profile that was generat
 
 If you choose the cloud development environment it's easy to get started by first selecting the _Code_ tab and then by clicking on the _Create codespace on master_ button within the GitHub repository like shown below:
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -149,7 +156,7 @@ If you choose the cloud development environment it's easy to get started by firs
     }}
 />
 <br></br>
-
+````
 After completing this step, GitHub will create a special cloud workspace that allows you to access the VSCode Online IDE (Visual Code Online Integrated Development Environment).
 
 Once access is granted (the codespace typically starts in about 30 seconds), you'll have everything required to begin without the need to install Git, Node.js, or other developer tools.
@@ -171,6 +178,7 @@ In this guide, you'll need to run TypeScript scripts. All commands, such as runn
 
 For example, in the Cloud Codespaces, you should open the Terminal workspace (if it is not already open):
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -180,9 +188,10 @@ For example, in the Cloud Codespaces, you should open the Terminal workspace (if
     }}
 />
 <br></br><br></br>
-
+````
 Enter commands in this window and execute them with _Enter_:
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -192,7 +201,7 @@ Enter commands in this window and execute them with _Enter_:
     }}
 />
 <br></br><br></br>
-
+````
 The Terminal is also available as a separate application. Please choose the appropriate version based on your IDE and OS.
 
 Great! After these steps you're ready to get deeper into TON Blockchain secrets. 👀
@@ -252,6 +261,7 @@ The simplest way to learn how it works is by using @orbs-network/ton-access.
 Remember, if you are adding new modules with `import`, that you may need to install them by executing the command `npm i @orbs-network/ton-access` in the [terminal](/develop/get-started-with-ton#running-scripts).
 :::
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -261,7 +271,7 @@ Remember, if you are adding new modules with `import`, that you may need to inst
     }}
 />
 <br></br>
-
+````
 
 We are adding `client` and `endpoint` in the `index.ts` script using _TonClient_ and _getHttpEndpoint_ from `@orbs-network/ton-access`:
 
@@ -537,6 +547,7 @@ Just check it out! Let’s execute the command:
 npm run start
 ```
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -546,7 +557,7 @@ npm run start
     }}
 />
 <br></br>
-
+````
 _Cool, isn't it?_ 😏
 
 After these commands are executed correctly, we’ll have a visually appealing NFT miner. In the next section, we’ll focus on connecting a wallet to the miner to create a payment channel that can accept and receive transactions from TON Blockchain.
@@ -691,14 +702,16 @@ Because there may be other developers carrying out the same process in an attemp
 :::
 
 After some time, you will have __mined your NFT__ and become a TVM Developer in TON Blockchain. The ritual is complete. Look at your NFT in Tonkeeper.
-
+````mdx-code-block
 <div style={{ width: '100%', textAlign: 'center', margin: '0 auto' }}>
   <video width={'300'} style={{ width: '100%', borderRadius: '10pt', margin: '15pt auto' }} muted={true} autoPlay={true} loop={true}>
     <source src="/files/onboarding-nft.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
+````
+Your browser does not support the video tag.
+````mdx-code-block
   </video>
 </div>
-
+````
 Welcome aboard, __a TVM Developer__! You did it. 🛳
 
 

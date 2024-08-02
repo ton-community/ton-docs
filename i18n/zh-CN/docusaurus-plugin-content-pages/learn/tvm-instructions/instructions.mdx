@@ -1,0 +1,62 @@
+---
+hide_table_of_contents: true
+wrapperClassName: bootstrap-wrapper
+---
+
+import { InstructionSearch } from '@site/src/components/Instructions';
+import { cp0 } from '@site/src/data/opcodes';
+
+# TVM 指令
+
+:::caution 高级模式
+因 Docusaurus 的限制，单页版本已移至[此处](/learn/archive/tvm-instructions)。
+:::
+
+- [退出 TVM 指令全屏模式](/learn/tvm-instructions/tvm-overview)
+
+## 引言
+
+本文档提供了一份TVM指令以及它们的操作码和助记符列表。
+
+:::info
+TON 虚拟机 (TVM) 的概念文档 [**TVM.pdf**](https://ton.org/tvm.pdf)（可能包含过时信息）。
+:::
+
+Fift 是一种基于堆栈的编程语言，旨在管理 TON 智能合约。Fift 汇编器是一个 Fift 库，可将 TVM 指令的助记符转换为二进制表示法。
+
+Fift 是一种基于栈的编程语言，旨在管理 TON 智能合约。Fift 汇编器是一个能够将 TVM 指令的助记符转换为它们的二进制表示形式的 Fift 库。
+
+关于 Fift 的描述，包括介绍 Fift 汇编器，可在[此处](https://github.com/Piterden/TON-docs/blob/master/Fift.%20A%20Brief%20Introduction.md)找到。
+
+本文档为每个指令指定了对应的助记符。
+
+1. Fift 是一种基于堆栈的语言，因此任何指令的所有参数都写在指令之前（例如 [`5 PUSHINT`](#instr-pushint-4), [`s0 s4 XCHG`](#instr-xchg-ij)).
+2. 堆栈寄存器用 `s0, s1, ..., s15` 表示。其他堆栈寄存器（最多 255 个）用 `i s()` 表示（如 `100 s()`）。
+3. 控制寄存器由 `c0, c1, ..., c15` 表示。
+
+### Gas 价格
+
+本文档中指定了每个指令的 gas 价格。一个指令的基本 gas 价格是 `10 + b`，其中 `b` 是指令长度（以位为单位）。某些操作有附加费用：
+
+1. _解析cell_：将一个cell转换成一个片段的成本是 **100 gas 单位**，如果是在同一交易中首次加载该cell，则为 **25**。对于此类指令，会指定两个 gas 价格（例如，[`CTOS`](#instr-ctos): `118/43`）。
+2. _cell创建_：**500 gas 单位**。
+3. _抛出异常_：**50 gas 单位**。在本文档中，仅对其主要用途为抛出异常的指令指定异常费（例如，[`THROWIF`](#instr-throwif-short)，[`FITS`](#instr-fits)）。如果指令在某些情况下只抛出异常，则会指定两个 gas 价格（例如，[`FITS`](#instr-fits): `26/76`）。
+4. _元组创建_：每个元组元素 **1 gas 单位**。
+5. _隐式跳转_：对于一个隐式跳转，**10 gas 单位**；对于隐式后跳，**5 gas 单位**。这项费用不属于任何指令的一部分。
+6. _在continuations之间移动栈元素_：每个元素 **1 gas 单位**，但是移动前32个元素是免费的。
+
+### 快速搜索
+
+:::info
+完整的机器可读 TVM 指令列表 [此处](https://github.com/ton-community/ton-docs/blob/main/docs/learn/tvm-instructions/instructions.csv)。
+:::
+
+TVM Instructions 的每个部分都包含一个内置搜索组件，用于查找该部分的特定操作码。
+
+但在这个页面，搜索涵盖所有现有的opcodes，提供了一个在整个opcode 范围内的全面搜索选项。
+
+请随时使用下面的搜索字段来查找特定的指令：
+
+<InstructionSearch instructions={cp0.instructions} aliases={cp0.aliases}/>
+
+- [退出 TVM 指令全屏模式](/learn/tvm-instructions/tvm-overview)

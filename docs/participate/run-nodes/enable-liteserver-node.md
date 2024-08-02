@@ -15,7 +15,7 @@ Compared to a [validator](/participate/run-nodes/full-node#hardware-requirements
 
 - at least 16 cores CPU
 - at least 128 GB RAM
-- at least 1TB GB NVMe SSD _OR_ Provisioned 32+k IOPS storage
+- at least 1TB GB NVMe SSD _OR_ Provisioned 64+k IOPS storage
 - 1 Gbit/s network connectivity
 - 16 TB/month traffic on peak load
 - public IP address (_fixed IP address_)
