@@ -68,60 +68,23 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/xssnick/tonutils-go/address"
 )
 
-// Here, we will need to manually implement the handling of raw addresses since they are not supported by the library.
-
 func main() {
 	address1 := address.MustParseAddr("EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF")
-	address2 := mustParseRawAddr("0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e", true, false)
+	address2 := address.MustParseRawAddr("0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e")
 
 	fmt.Println(address1.String()) // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
-	fmt.Println(printRawAddr(address1)) // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+	fmt.Println(rawAddr(address1)) // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
 
 	fmt.Println(address2.String()) // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
-	fmt.Println(printRawAddr(address2)) // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+	fmt.Println(rawAddr(address2)) // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
 }
 
-func mustParseRawAddr(s string, bounceable bool, testnet bool) *address.Address {
-	addr, err := parseRawAddr(s, bounceable, testnet)
-	if err != nil {
-		panic(err)
-	}
-	return addr
-}
-
-func parseRawAddr(s string, bounceable bool, testnet bool) (*address.Address, error) {
-	var (
-		workchain int32
-		data      []byte
-	)
-	_, err := fmt.Sscanf(s, "%d:%x", &workchain, &data)
-	if err != nil {
-		return nil, err
-	}
-	if len(data) != 32 {
-		return nil, fmt.Errorf("address len must be 32 bytes")
-	}
-
-	var flags byte = 0b00010001
-	if !bounceable {
-		setBit(&flags, 6)
-	}
-	if testnet {
-		setBit(&flags, 7)
-	}
-
-	return address.NewAddress(flags, byte(workchain), data), nil
-}
-
-func printRawAddr(addr *address.Address) string {
-	return fmt.Sprintf("%v:%x", addr.Workchain, addr.Data())
-}
-
-func setBit(n *byte, pos uint) {
-	*n |= 1 << pos
+func rawAddr(addr *address.Address) string {
+	return fmt.Sprintf("%v:%x", addr.Workchain(), addr.Data())
 }
 ```
 
