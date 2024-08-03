@@ -58,7 +58,7 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
 ```
 
 Let's focus on `int_msg_info` for now.
-It starts with 1bit prefix `0`, then there are three 1-bit flags, namely whether Instant Hypercube Routing disabled (currently always true), whether message should be bounced if there are errors during it's processing, whether message itself is result of bounce. Then source and destination addresses are serialized, followed by the value of the message and four integers related to message forwarding fees and time.
+It starts with 1bit prefix `0`, then there are three 1-bit flags, namely whether Instant Hypercube Routing disabled (currently always true), whether message should be bounced if there are errors during its processing, whether message itself is result of bounce. Then source and destination addresses are serialized, followed by the value of the message and four integers related to message forwarding fees and time.
 
 If a message is sent from the smart contract, some of those fields will be rewritten to the correct values. In particular, validator will rewrite `bounced`, `src`, `ihr_fee`, `fwd_fee`, `created_lt` and `created_at`. That means two things: first, another smart-contract during handling message may trust those fields (sender may not forge source address, `bounced` flag, etc); and second, that during serialization we may put to those fields any valid values (anyway those values will be overwritten).
 
