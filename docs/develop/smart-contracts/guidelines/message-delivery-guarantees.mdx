@@ -58,6 +58,15 @@ To achieve the infinite sharding paradigm, it is necessary to ensure full parall
 More detailed and accurate description on the [Transaction Layout](/develop/data-formats/transaction-layout) page.
 :::
 
+### Transaction outcome
+
+There is a [TVM exit code](/learn/tvm-instructions/tvm-exit-codes) for transaction which had compute phase, 
+if it is >1 then [there was an error](https://testnet.tonviewer.com/transaction/5889803bb1e0f58fdee381382fe1e38f74f3ea002a700441f8a21d52f7234ef8). 
+Also [TVM compute phase may be skipped](/learn/tvm-instructions/tvm-overview#compute-phase-skipped) for some reasons like 
+[absence of funds](https://testnet.tonviewer.com/transaction/a1612cde7fd66139a7d04b30f38db192bdb743a8b12054feba3c16061a4cb9a6) 
+or [state](https://testnet.tonviewer.com/transaction/7e78394d082882375a5d21affa6397dec60fc5a3ecbea87f401b0e460fb5c80c).
+If compute phase is skipped, [transaction is successful like Jetton Notify message](https://testnet.tonscan.org/tx/ypgh2Z4wI9_o8R8gy9Ng_XL9QbKoL3kFRXDHAlp7byo=).
+
 ## What is a Logical time?
 
 In such a system with asynchronous and parallel smart contract calls, it can be hard to define the order of actions to process. That's why each message in TON has its _Logical time_ or _Lamport time_ (later just _lt_). It is used to understand which event caused another and what a validator needs to process first.

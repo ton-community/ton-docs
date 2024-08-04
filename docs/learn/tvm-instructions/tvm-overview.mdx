@@ -59,6 +59,22 @@ Each transaction consists of up to 5 phases:
 ## Compute phase
 In this phase, the TVM execution occurs.
 
+:::tip
+* TVM 4.3.5 — [**TVM implementation paper**](https://ton.org/tvm.pdf)
+:::
+
+### Compute phase skipped
+
+The computing phase consists in invoking TVM with correct inputs. On some occasions, TVM cannot be invoked at all (e.g., if the account is absent, not initialized, or frozen, and the inbound message being processed has no code or data fields or these fields have an incorrect hash)
+
+This is reflected by corresponding [constructors](https://github.com/ton-blockchain/ton/blob/5c392e0f2d946877bb79a09ed35068f7b0bd333a/crypto/block/block.tlb#L314):
+
+cskip_no_state$00 - The absence of a state (i.e., smart-contract code and data) in both the account (non-existing, uninitialized, or frozen) and the message.
+
+cskip_bad_state$01 - An invalid state passed in the message (i.e., the state's hash differs from the expected value) to a frozen or uninitialized account.
+
+cskip_no_gas$10 - The absence of funds to buy gas. (About < 0.00004 TON by [08.2024](https://testnet.tonviewer.com/transaction/9789306d7b29318c90477aa3df6599ee4a897031162ad41a24decb87db65402b))
+
 ### TVM state
 At any given moment, the TVM state is fully determined by 6 properties:
 * Stack (see below)
