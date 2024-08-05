@@ -27,7 +27,9 @@ sudo bash ./install.sh -b mytonctrl2
 
 ### Set up single-nominator
 
-After you have [created](/participate/run-nodes/full-node#import-existed-account) and [activated](/participate/run-nodes/full-node#activate-the-wallets) the validator's wallet, follow these steps:
+:::caution
+Before start make sure you have [created](/participate/run-nodes/full-node#import-existed-account) and [activated](/participate/run-nodes/full-node#activate-the-wallets) validator's wallet.
+:::
 
 1. Enable single nominator mode
 
@@ -63,13 +65,13 @@ Name       Status  Balance  Version   Address
 test-pool  empty   0.0      spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX  
 ```
 
-5. Send 1 TON to the pool and activate it
+5. Activate the pool
 
 ```bash
 MyTonCtrl> activate_single_pool <pool-name>
 ```
 
-After successfully activated wallet:
+After successfully activated pool:
 
 ```bash
 MyTonCtrl> pools_list
