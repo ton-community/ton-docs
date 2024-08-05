@@ -434,10 +434,10 @@ For more examples check [documentation](https://github.com/ton-community/assets-
 ```js
 const NETWORK = "testnet";
 const api = await createApi(NETWORK);
+const provider = new TonConnectUI(); // OR you can use tonConnectUI as a provider from @tonconnect/ui-react
 
 // https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
-const provider = new TonConnectUI();
-const sender = new TonConnectProvider(provider);
+const sender = new TonConnectSender(provider);
 
 const storage: PinataStorageParams = {
   pinataApiKey: process.env.PINATA_API_KEY!,
@@ -637,10 +637,10 @@ For more examples check [documentation](https://github.com/ton-community/assets-
 ```js
 const NETWORK = "testnet";
 const api = await createApi(NETWORK);
+const provider = new TonConnectUI(); // OR you can use tonConnectUI as a provider from @tonconnect/ui-react
 
 // https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
-const provider = new TonConnectUI();
-const sender = new TonConnectProvider(provider);
+const sender = new TonConnectSender(provider);
 
 const storage: PinataStorageParams = {
   pinataApiKey: process.env.PINATA_API_KEY!,
@@ -782,10 +782,10 @@ For more examples check [documentation](https://github.com/ton-community/assets-
 ```js
 const NETWORK = "testnet";
 const api = await createApi(NETWORK);
+const provider = new TonConnectUI(); // OR you can use tonConnectUI as a provider from @tonconnect/ui-react
 
 // https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
-const provider = new TonConnectUI();
-const sender = new TonConnectProvider(provider);
+const sender = new TonConnectSender(provider);
 
 const storage: PinataStorageParams = {
   pinataApiKey: process.env.PINATA_API_KEY!,
@@ -800,7 +800,7 @@ const sdk = AssetsSDK.create({
 
 const jetton = sdk.openJettonWallet(Address.parse("JETTON_ADDRESS"));
 
-jetton.sendBurn(sender, RECEIVER_ADDRESS, toNano(10));
+jetton.sendBurn(sender, toNano(10));
 ```
 
 </TabItem>
@@ -921,10 +921,10 @@ For more examples check [documentation](https://github.com/ton-community/assets-
 ```js
 const NETWORK = "testnet";
 const api = await createApi(NETWORK);
+const provider = new TonConnectUI(); // OR you can use tonConnectUI as a provider from @tonconnect/ui-react
 
 // https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
-const provider = new TonConnectUI();
-const sender = new TonConnectProvider(provider);
+const sender = new TonConnectSender(provider);
 
 const storage: PinataStorageParams = {
   pinataApiKey: process.env.PINATA_API_KEY!,
@@ -1123,6 +1123,7 @@ await connector.sendTransaction({
 <TabItem value="@ton/ton" label="@ton/ton">
 
 The process of buy NFT for [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) sale contract could be carry out with regular transfer without payload, the only important thing is accurate TON amount, that calculates as follows:
+`buyAmount = Nftprice TON + 1.0 TON`.
 
 <Tabs groupId="NFT Buy">
 <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
