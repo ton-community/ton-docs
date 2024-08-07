@@ -20,6 +20,16 @@ Failed to unpack account state
 ```
 This error means that requested account doesn't exist in current state. That means that this account is simultaneously is not deployed AND has zero balance
 
+
+## About no progress in node synchronization within 3 hours
+
+Try to perform following checks:
+
+1. Is process running without crashes? (Check systemd process status)
+2. Is there a firewall between node and internet, if so, will it pass incoming UDP traffic to port specified in field `addrs[0].port` of `/var/ton-work/db/config.json` file?
+3. Is there NAT between the machine and the internet? If so, ensure that the IP address defined in the `addrs[0].ip` field of the `/var/ton-work/db/config.json` file corresponds to the real public IP of the machine. Note that the value of this field is specified as a signed INT. The `ip2dec` and `dec2ip` scripts located in [ton-tools/node](https://github.com/sonofmom/ton-tools/tree/master/node) can be used to perform conversions.
+
+
 ## Cannot apply external message to current state : External message was not accepted
 
 ```
@@ -168,6 +178,23 @@ Please, delete the file `/usr/local/bin/mytonctrl/VERSION`.
 ### Error During MytonCtrl Installation
 
 `MytonCtrl` may open, but the node will not work properly. Please remove `MytonCtrl` from your computer and reinstall it, ensuring to address any errors that were previously encountered.
+
+
+## Mytonctrl was installed by another user. Probably you need to launch mtc with `ubuntu` user
+
+Additionally `mytonctr` may not work properly with this error. For example, the `status` command may return empty result.
+
+Check `mytonctrl` owner:
+
+```bash
+ls -lh /var/ton-work/keys/
+```
+
+If the owner is the `root` user, [uninstall](/participate/run-nodes/full-node#uninstall-mytonctrl) `mytonctrl` and [install](/participate/run-nodes/full-node#run-a-node-text) it again **using non-root user**.
+
+Else, log out from the current user (if ssh connection is used, break it) and log in as the correct user.
+
+The message must disappear.
 
 ## See Also
 

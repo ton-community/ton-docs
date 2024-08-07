@@ -60,7 +60,7 @@ More detailed and accurate description on the [Transaction Layout](/develop/data
 
 ## What is a Logical time?
 
-In such a system with asynchronous and parallel smart contract calls, it can be hard to define the order of actions to process. That's why each message in TON has it's _Logical time_ or _Lamport time_ (later just _lt_). It is used to understand which event caused another and what a validator needs to process first.
+In such a system with asynchronous and parallel smart contract calls, it can be hard to define the order of actions to process. That's why each message in TON has its _Logical time_ or _Lamport time_ (later just _lt_). It is used to understand which event caused another and what a validator needs to process first.
 
 It is strictly guaranteed that the transaction resulting from a message will have a _lt_ greater than the _lt_ of the message. Likewise, the _lt_ of a message sent in some transaction is strictly greater than the _lt_ of the transaction that caused it. As well as this, messages that were sent from one account and transactions which happened on one account are strictly ordered as well.
 
@@ -119,8 +119,8 @@ But this is just a simple case when we only have two contracts. How does our sys
 
 Suppose that we have three contracts - _A_, _B_ and _C_. In a transaction, _A_ sends two internal messages _1_ and _2_: one to _B_ and another to _C_. Even though they were created in an exact order (_1_, then _2_), we can't be sure that _1_ will be processed before _2_. This is the case because routes from _A_ to _B_ and from _A_ to _C_ can differ in length and validator sets. If these contracts are in different shard chains, one of the messages may require several blocks to reach the destination contract.
 
-For better clearness suppose our contracts send back messages `msg1'` and `msg2'` after `msg1` and `msg2` executed by `B` and `C` contracts. As a result it will be apply `tx2'` and `tx1'` on the contract `A`.
-We have two possible trace for these transaction,
+For better clearness suppose our contracts send back messages `msg1'` and `msg2'` after `msg1` and `msg2` executed by `B` and `C` contracts. As a result it will apply `tx2'` and `tx1'` on the contract `A`.
+We have two possible traces for these transaction,
 
 1. The first possible order is `tx1'_lt < tx2'_lt`:
 ````mdx-code-block

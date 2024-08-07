@@ -2,6 +2,10 @@ import Button from '@site/src/components/button'
 
 # TON Connect for Telegram Bots - Python
 
+:::warning deprecated
+This tutorial describes an outdated approach to integrating TON Connect with Telegram bots. We strongly recommend using [Telegram Mini Apps](/develop/dapps/telegram-apps) for a more modern and secure integration.
+:::
+
 In this tutorial, we’ll create a sample telegram bot that supports TON Connect 2.0 authentication using Python TON Connect SDK [pytonconnect](https://github.com/XaBbl4/pytonconnect).
 We will analyze connecting a wallet, sending a transaction, getting data about the connected wallet, and disconnecting a wallet.
 

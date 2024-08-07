@@ -72,6 +72,10 @@ Please, check this video step-by-step tutorial to start promptly:
 
 ### Switch to non-root user
 
+:::warning
+This step is **required** to successfully install and use mytonctrl, don't ignore **non-root user creation**. Without this step there will be no errors during installation, but mytonctrl will not work properly.
+:::
+
 If you don't have **non-root** user, you can create this with the following steps (otherwise skip first two steps and go to the third).
 
 1. Login as root and create new user:
@@ -86,7 +90,7 @@ sudo adduser <username>
 sudo usermod -aG sudo <username>
 ```
 
-3. Log into the new user (if you are using ssh, you will need to stop current session and reconnect with correct user)
+3. Log into the new user (if you are using ssh, **you will need to stop current session and reconnect with correct user**)
 
 ```bash
 ssh <username>@<server-ip-address>
@@ -100,16 +104,16 @@ Download and run the installation script from the **non-root** user account with
   <TabItem value="ubuntu" label="Ubuntu">
 
   ```bash
-  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-  sudo bash install.sh -d
+  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/mytonctrl2/scripts/install.sh
+  sudo bash ./install.sh -b mytonctrl2 -d -c <CONFIG_URL>
   ```
 
   </TabItem>
   <TabItem value={'debian'} label={'Debian'}>
 
   ```bash
-  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-  su root -c 'bash install.sh -d'
+  https://raw.githubusercontent.com/ton-blockchain/mytonctrl/mytonctrl2/scripts/install.sh
+  su root -c 'bash ./install.sh -b mytonctrl2 -d -c <CONFIG_URL>'
   ```
 
   </TabItem>
@@ -119,7 +123,11 @@ Download and run the installation script from the **non-root** user account with
 This will reduce synchronization time by several times.
 * `-c <path>` - If you want to use not public liteservers for synchronization. _(not required)_
 * `-i` - Ignore minimum requirements, use it only if you want to check compilation process without real node usage.
-* `-m` - Mode, can be `validator` or `liteserver`, 
+* `-m` - Mode, can be `validator` or `liteserver`.
+
+**To use testnet**, `-c` flag should be provided with `https://ton.org/testnet-global.config.json` value.
+
+Default `-c` flag value is `https://ton-blockchain.github.io/global.config.json`, which is default mainnet config.
 
 ### Run the mytonctrl
 
@@ -134,6 +142,9 @@ This will reduce synchronization time by several times.
   ```sh
   status
   ```
+
+
+**In testnet** `status fast` command must be used instead of `status`.
 
 
 The following statuses should be displayed:
@@ -152,6 +163,8 @@ Otherwise, [check troubleshooting section](/participate/run-nodes/full-node#stat
 :::
 
 Wait until `Local validator out of sync` becomes less than 20 seconds.
+
+When new node have been started, even from dump, **it's needed to wait up to 3 hours before out of sync number starts to go down**. This is due to the fact that node still needs to establish it’s place in network, propagate it’s addresses via DHT tables etc.
 
 ### Uninstall mytonctrl
 
