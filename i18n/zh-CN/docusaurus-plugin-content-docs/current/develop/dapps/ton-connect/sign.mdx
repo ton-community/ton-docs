@@ -36,7 +36,7 @@ type TonProofItemReply = TonProofItemReplySuccess | TonProofItemReplyError;
 type TonProofItemReplySuccess = {
   name: "ton_proof";
   proof: {
-    timestamp: string; // 64位unix时代签名操作的时间（秒）
+    timestamp: number; // 64位unix时代签名操作的时间（秒）
     domain: {
       lengthBytes: number; // AppDomain 长度
       value: string;  // app 域名（作为url部分，无编码）
