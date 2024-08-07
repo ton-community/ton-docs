@@ -179,6 +179,7 @@ Please, delete the file `/usr/local/bin/mytonctrl/VERSION`.
 
 `MytonCtrl` may open, but the node will not work properly. Please remove `MytonCtrl` from your computer and reinstall it, ensuring to address any errors that were previously encountered.
 
+
 ## Mytonctrl was installed by another user. Probably you need to launch mtc with `ubuntu` user
 
 Additionally `mytonctr` may not work properly with this error. For example, the `status` command may return empty result.
