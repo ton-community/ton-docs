@@ -435,6 +435,7 @@ const sidebars = {
               label: 'Wallets List',
               href: 'https://github.com/ton-blockchain/wallets-list',
             },
+            'develop/dapps/ton-connect/protocol/integrating-wallet',
           ],
         },
         {
