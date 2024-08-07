@@ -167,22 +167,9 @@ The best way (while the penalty for temporary non-validation is small, it can be
 cp var/ton-work/db/config.json var/ton-work/db/config.json.backup
 ```
 
-## Error parsing dependencies of distro-info: Invalid version
-
-There are two known cases when this error appears:
-
-### Error After Updating MytonCtrl
-
-Please, delete the file `/usr/local/bin/mytonctrl/VERSION`.
-
-### Error During MytonCtrl Installation
-
-`MytonCtrl` may open, but the node will not work properly. Please remove `MytonCtrl` from your computer and reinstall it, ensuring to address any errors that were previously encountered.
-
-
 ## Mytonctrl was installed by another user. Probably you need to launch mtc with `ubuntu` user
 
-Additionally `mytonctr` may not work properly with this error. For example, the `status` command may return empty result.
+Additionally `mytonctrl` may not work properly with this error. For example, the `status` command may return empty result.
 
 Check `mytonctrl` owner:
 
@@ -196,13 +183,14 @@ Else, log out from the current user (if ssh connection is used, break it) and lo
 
 The message must disappear.
 
-## Error parsing dependencies of distro-info: Invalid version
+## MyTonCtrl's console launch breaks after message "Found new version of mytonctrl! Migrating!"
 
 There are two known cases when this error appears:
 
 ### Error After Updating MytonCtrl
 
-Please, delete the file `/usr/local/bin/mytonctrl/VERSION`.
+* If MyTonCtrl was installed by root user: delete file `/usr/local/bin/mytonctrl/VERSION`.
+* If MyTonCtrl was installed by non root user: delete file `~/.local/share/mytonctrl/VERSION`.
 
 ### Error During MytonCtrl Installation
 
