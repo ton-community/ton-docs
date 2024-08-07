@@ -196,6 +196,19 @@ Else, log out from the current user (if ssh connection is used, break it) and lo
 
 The message must disappear.
 
+## Error parsing dependencies of distro-info: Invalid version
+
+There are two known cases when this error appears:
+
+### Error After Updating MytonCtrl
+
+Please, delete the file `/usr/local/bin/mytonctrl/VERSION`.
+
+### Error During MytonCtrl Installation
+
+`MytonCtrl` may open, but the node will not work properly. Please remove `MytonCtrl` from your computer and reinstall it, ensuring to address any errors that were previously encountered.
+
+
 ## See Also
 
 * [MyTonCtrl FAQ](/participate/run-nodes/faq)
