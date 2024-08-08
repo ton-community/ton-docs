@@ -112,7 +112,7 @@ type TonProofItemReply = TonProofItemReplySuccess | TonProofItemReplyError;
 type TonProofItemReplySuccess = {
   name: "ton_proof";
   proof: {
-    timestamp: string; // 64-bit unix epoch time of the signing operation (seconds)
+    timestamp: number; // 64-bit unix epoch time of the signing operation (seconds)
     domain: {
       lengthBytes: number; // AppDomain Length
       value: string;  // app domain name (as url part, without encoding) 
