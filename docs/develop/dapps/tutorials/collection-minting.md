@@ -284,7 +284,7 @@ This is really inconvenient and wrong, so let's write a function that will do th
 export async function updateMetadataFiles(metadataFolderPath: string, imagesIpfsHash: string): Promise<void> {
   const files = readdirSync(metadataFolderPath);
 
-  files.forEach(async (filename, index) => {
+  await Promise.all(files.map(async (filename, index) => {
     const filePath = path.join(metadataFolderPath, filename)
     const file = await readFile(filePath);
     
@@ -295,7 +295,7 @@ export async function updateMetadataFiles(metadataFolderPath: string, imagesIpfs
         : `ipfs://${imagesIpfsHash}/logo.jpg`;
     
     await writeFile(filePath, JSON.stringify(metadata));
-  });
+  }));
 }
 ```
 Here we firstly read all of the files in specified folder:
