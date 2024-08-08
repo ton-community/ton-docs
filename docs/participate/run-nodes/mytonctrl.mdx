@@ -6,8 +6,6 @@ To install and manage your own node, use the **MyTonCtrl** open-source tool deve
 
 [MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) is a console application that is a convenient wrapper for fift, lite-client, and validator-engine-console. It has been specifically developed to streamline wallet, domain, and validator management tasks on the Linux operating system.
 
-Actually, there is [MyTonCtrl2](https://github.com/ton-blockchain/mytonctrl/tree/mytonctrl2) with a lot of improvements ([single nominator pool](/participate/network-maintenance/single-nominator), more checks, etc.).
-
 We are actively seeking feedback about the installation process. If you have any questions or suggestions, please [contact us](https://t.me/Alexgton).
 
 ## General Commands
@@ -28,12 +26,12 @@ No args, exit from console.
 
 Update mytonctrl. Param combinations:
 
-| Format name            | Format                                                                     | Example                                                                     | Description                                                             |
-  |:-----------------------|:---------------------------------------------------------------------------|:----------------------------------------------------------------------------|-------------------------------------------------------------------------|
-| No args                | `update`                                                                   | `update`                                                                    | Update from current repo                                                |
-| URL format             | `update [https://github.com/author/repo/tree/branch]`                      | `update https://github.com/ton-blockchain/mytonctrl/tree/mytonctrl2`        | Update from specified URL                                               |
-| Branch Only format     | `update [BRANCH]`                                                          | `update mytonctrl2`                                                         | Update from specified branch of current repo                            |
-| Branch Override format | `update [https://github.com/authorName/repoName/tree/branchName] [BRANCH]` | `update https://github.com/ton-blockchain/mytonctrl/tree/master mytonctrl2` | Update from branch specified by second argument of specified repository |                       
+| Format name            | Format                                                                     | Example                                                               | Description                                                             |
+  |:-----------------------|:---------------------------------------------------------------------------|:----------------------------------------------------------------------|-------------------------------------------------------------------------|
+| No args                | `update`                                                                   | `update`                                                              | Update from current repo                                                |
+| URL format             | `update [https://github.com/author/repo/tree/branch]`                      | `update https://github.com/ton-blockchain/mytonctrl/tree/test`        | Update from specified URL                                               |
+| Branch Only format     | `update [BRANCH]`                                                          | `update test`                                                         | Update from specified branch of current repo                            |
+| Branch Override format | `update [https://github.com/authorName/repoName/tree/branchName] [BRANCH]` | `update https://github.com/ton-blockchain/mytonctrl/tree/master test` | Update from branch specified by second argument of specified repository |
 
 ### upgrade
 
@@ -219,7 +217,7 @@ MyTonCtrl> activate_single_pool <pool-name>
 
 ### Importing a wallet
 
-MyTonCtrl2 supports various types of wallet-like contracts, including wallet-v1, wallet-v3, [lockup-wallet](https://github.com/ton-blockchain/lockup-wallet-contract/tree/main/universal), and others. Often, it provides a straightforward way to interact with these contracts.
+MyTonCtrl supports various types of wallet-like contracts, including wallet-v1, wallet-v3, [lockup-wallet](https://github.com/ton-blockchain/lockup-wallet-contract/tree/main/universal), and others. Often, it provides a straightforward way to interact with these contracts.
 
 #### Importing Using a Private Key
 
@@ -380,7 +378,7 @@ MyTonCtrl> mgtp <wallet-name> <account-addr | bookmark-name> <amount>
 
 ## General Pools Commands
 
-There are two types of pools in **MyTonCtrl2**:
+There are two types of pools in **MyTonCtrl**:
 
 1. [Nominator Pool](/participate/network-maintenance/nominator-pool)
 2. [Single Nominator Pool](/participate/network-maintenance/single-nominator)
