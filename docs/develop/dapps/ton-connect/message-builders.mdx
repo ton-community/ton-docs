@@ -701,7 +701,7 @@ import { beginCell, toNano } from '@ton/ton'
         .storeAddress(Address.parse(NEW_OWNER_WALLET)) // new_owner:MsgAddress
         .storeAddress(Address.parse(Wallet_DST))       // response_destination:MsgAddress
         .storeUint(0, 1)                         // custom_payload:(Maybe ^Cell)
-        .storeCoins(toNano("0.01"))              // forward_amount:(VarUInteger 16)
+        .storeCoins(1)                           // forward_amount:(VarUInteger 16) (1 nanoTon = toNano("0.000000001")) 
         .storeUint(0,1)                          // forward_payload:(Either Cell ^Cell)
         .endCell();
 ```
@@ -1222,7 +1222,7 @@ def get_nft_transfer_message(nft_address: str, recipient_address: str, transfer_
             .store_address(recipient_address)  # new owner
             .store_address(response_address or recipient_address)  # address send excess to
             .store_uint(0, 1)  # custom payload
-            .store_coins(0.01 * 10 ** 9)  # forward amount
+            .store_coins(1)  # forward amount (0.000000001 * 10 ** 9) = 1 nanoTon
             .store_uint(0, 1)  # forward payload
             .end_cell()  # end cell
             .to_boc()  # convert it to boc
