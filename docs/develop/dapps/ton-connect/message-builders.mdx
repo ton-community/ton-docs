@@ -266,7 +266,7 @@ await connector.sendTransaction({
 
 ### Jetton Transfer
 
-The `body` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) typically should be done according the following way:
+The `body` for Jetton Transfers is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
 
 ```js
     import { beginCell, toNano, Address } from '@ton/ton'
@@ -278,7 +278,7 @@ The `body` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/b
     const body = beginCell()
         .storeUint(0xf8a7ea5, 32)                 // jetton transfer op code
         .storeUint(0, 64)                         // query_id:uint64
-        .storeCoins(1000000)                      // amount:(VarUInteger 16) -  Jetton amount for transfer (decimals = 6 - jUSDT, 9 - default)
+        .storeCoins(toNano("0.001"))              // amount:(VarUInteger 16) -  Jetton amount for transfer (decimals = 6 - USDT, 9 - default). Function toNano use decimals = 9 (remember it)
         .storeAddress(Address.parse(Wallet_DST))  // destination:MsgAddress
         .storeAddress(Address.parse(Wallet_SRC))  // response_destination:MsgAddress
         .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell)
@@ -421,7 +421,7 @@ async function main() {
 
 ### Jetton Transfer with Comment
 
-The `messageBody` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) with comment we should additionally to the regular transfer `body` serialize comment and pack this in the `forwardPayload`:
+The `messageBody` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) with comment we should additionally to the regular transfer `body` serialize comment and pack this in the `forwardPayload`. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
 
 ```js
     import { beginCell, toNano, Address } from '@ton/ton'
@@ -440,7 +440,7 @@ The `messageBody` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain
     const body = beginCell()
         .storeUint(0xf8a7ea5, 32) // opcode for jetton transfer
         .storeUint(0, 64) // query id
-        .storeCoins(toNano("5")) // jetton amount, amount * 10^9
+        .storeCoins(toNano("5")) // Jetton amount for transfer (decimals = 6 - USDT, 9 - default). Function toNano use decimals = 9 (remember it)
         .storeAddress(destinationAddress) // TON wallet destination address
         .storeAddress(destinationAddress) // response excess destination
         .storeBit(0) // no custom payload
@@ -586,8 +586,7 @@ Next, sending the transaction with this body to sender's jettonWalletContract ex
 
 ### Jetton Burn
 
-The `body` for Jetton Burn([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#2-burn)) typically should be done according the following way:
-
+The `body` for Jetton Burn is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
 
 ```js
     import { beginCell, Address } from '@ton/ton'
@@ -598,7 +597,7 @@ The `body` for Jetton Burn([TEP-74](https://github.com/ton-blockchain/TEPs/blob/
     const body = beginCell()
         .storeUint(0x595f07bc, 32)                // jetton burn op code
         .storeUint(0, 64)                         // query_id:uint64
-        .storeCoins(toNano("0.001"))                      // amount:(VarUInteger 16) -  Jetton amount in decimal
+        .storeCoins(toNano("0.001"))              // amount:(VarUInteger 16) - Jetton amount in decimal (decimals = 6 - USDT, 9 - default). Function toNano use decimals = 9 (remember it)
         .storeAddress(Address.parse(Wallet_SRC))  // response_destination:MsgAddress - owner's wallet
         .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell) - w/o payload typically
         .endCell();
@@ -1109,7 +1108,7 @@ Learn more about [TON Smart Contract Addresses](/learn/overviews/addresses).
 
 ### Jetton Transfer
 
-Example of function for building jetton transfer transaction:
+Example of function for building jetton transfer transaction. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
 
 ```python
 from pytoniq_core import begin_cell
@@ -1123,7 +1122,7 @@ def get_jetton_transfer_message(jetton_wallet_address: str, recipient_address: s
         begin_cell()
         .store_uint(0xf8a7ea5, 32)  # op code for jetton transfer message
         .store_uint(0, 64)  # query_id
-        .store_coins(jettons_amount)
+        .store_coins(jettons_amount) # Jetton amount for transfer (decimals = 6 - USDT, 9 - default). Exapmple: 1 USDT = 1 * 10**6 and 1 TON = 1 * 10**9
         .store_address(recipient_address)  # destination address
         .store_address(response_address or recipient_address)  # address send excess to
         .store_uint(0, 1)  # custom payload
@@ -1149,7 +1148,7 @@ transaction = {
         jetton_wallet_address='EQCXsVvdxTVmSIvYv4tTQoQ-0Yq9mERGTKfbsIhedbN5vTVV',
         recipient_address='0:0000000000000000000000000000000000000000000000000000000000000000',
         transfer_fee=int(0.07 * 10**9),
-        jettons_amount=int(0.01 * 10**9),  # replace 9 for jetton decimal. For example for jUSDT it should be (amount * 10**6)
+        jettons_amount=int(0.01 * 10**9),  # replace 9 for jetton decimal. For example for USDT it should be (amount * 10**6)
         response_address=wallet_address
         ),
     ]
@@ -1160,7 +1159,7 @@ transaction = {
 
 ### Jetton Burn
 
-Example of function for building jetton burn transaction:
+Example of function for building jetton burn transaction. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
 
 ```python
 from pytoniq_core import begin_cell
@@ -1174,7 +1173,7 @@ def get_jetton_burn_message(jetton_wallet_address: str, transfer_fee: int, jetto
             begin_cell()
             .store_uint(0x595f07bc, 32)  # op code for jetton burn message
             .store_uint(0, 64)  # query_id
-            .store_coins(jettons_amount)
+            .store_coins(jettons_amount) # Jetton amount in decimal (decimals = 6 - USDT, 9 - default)
             .store_address(response_address)  # address send excess to
             .end_cell()  # end cell
             .to_boc()  # convert it to boc
@@ -1478,7 +1477,7 @@ if err != nil {
 
 ### Jetton Transfer
 
-Example of function for jetton transfer message:
+Example of function for jetton transfer message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
 
 ```go
 import (
@@ -1495,7 +1494,7 @@ func JettonTransferMessage(jetton_wallet_address string, amount uint64,
 	payload, _ := cell.BeginCell().
 		MustStoreUInt(0xf8a7ea5, 32). // op code for jetton transfer message (op::transfer)
 		MustStoreUInt(0, 64).         // query_id
-		MustStoreCoins(jettons_amount).
+		MustStoreCoins(jettons_amount). // Jetton amount for transfer (decimals = 6 - USDT, 9 - default). Exapmple: 1 USDT = 1 * 10**6 and 1 TON = 1 * 10**9
 		MustStoreAddr(address.MustParseAddr(recipient_address)). // address send excess to
 		MustStoreAddr(address.MustParseAddr(response_address)).
 		MustStoreUInt(0, 1).        // custom payload
@@ -1540,7 +1539,7 @@ if err != nil {
 
 ### Jetton Burn
 
-Example of function for jetton burn message:
+Example of function for jetton burn message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
 
 ```go
 import (
@@ -1557,7 +1556,7 @@ func JettonBurnMessage(jetton_wallet_address string, amount uint64,
 	payload, _ := cell.BeginCell().
 		MustStoreUInt(0xf8a7ea5, 32).                           // op code for jetton burn message (op::burn)
 		MustStoreUInt(0, 64).                                   // query_id
-		MustStoreCoins(jettons_amount).                         // jetton amount to burn
+		MustStoreCoins(jettons_amount).                         // Jetton amount in decimal (decimals = 6 - USDT, 9 - default)
 		MustStoreAddr(address.MustParseAddr(response_address)). // address send excess to
 		EndCell().MarshalJSON()
 
