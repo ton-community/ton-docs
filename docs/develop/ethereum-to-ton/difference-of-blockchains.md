@@ -15,7 +15,7 @@ Ethereum, by inheriting and extending the foundational principles of Bitcoin, ha
 In response to these challenges, TON offers an alternative approach aimed at improving scalability and performance. Designed with the ambition to provide developers with maximum flexibility to create a variety of applications, TON uses the concept of shards and masterchain to optimize the block creation process. In each TON shardchain and masterchain, a new block is generated on average every 5 seconds, ensuring fast transaction execution. Unlike Ethereum, where state updates are synchronous, TON implements asynchronous messaging between smart contracts, allowing each transaction to be processed independently and in parallel, significantly speeding up transaction processing on the network. Sections and articles to familiarize yourself with:
 
 * [Shards](/develop/blockchain/shards)
-* [Comparison of Blockchains](https://ton.org/analysis)
+* [Comparison of Blockchains](https://ton.org/comparison_of_blockchains.pdf)
 
 In conclusion, by comparing the architecture and technological underpinnings of TON and Ethereum, it is clear that TON offers significant advantages. With its innovative approach to asynchronous transaction processing and unique shard and masterchain architecture, TON demonstrates the potential to support millions of transactions per second without compromising security or centralization. This provides the platform with outstanding flexibility and efficiency, making it ideal for a wide range of applications.
 
