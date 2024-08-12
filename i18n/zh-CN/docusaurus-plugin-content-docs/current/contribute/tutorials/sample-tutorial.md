@@ -56,27 +56,27 @@
 - 添加所有相关的代码块：
   - ## Markdown语法的代码块由代码块开始和结束时的三个反引号组成。同时，请确保在所有代码块的反引号前后都有一个新行。*例如*：
     \`js  
-          const testVariable = 'some string';  
-          someFunctionCall();  
-          \`
+    const testVariable = 'some string';  
+    someFunctionCall();  
+    \`
 
-  - 所有代码块***必须***有语法高亮类型。如果不确定，使用\\`\`\`text。
+  - 所有代码块***必须***有语法高亮类型。如果不确定，使用\\`\`\\`text。
 
-  - \\`\`\`text用于终端输出、终端命令和纯文本。
+  - \\`\`\\`text用于终端输出、终端命令和纯文本。
 
   - \`javascript *或* `js可用于任何JavaScript代码。
 
   - \`typescript或`ts可用于任何TypeScript代码。
 
-  - \\`\`\`jsx用于ReactJS代码。
+  - \\`\`\\`jsx用于ReactJS代码。
 
-  - \\`\`\`cpp用于Func代码。
+  - \\`\`\\`cpp用于Func代码。
 
-  - 使用\\`\`\`graphql突出显示GraphQL语法。
+  - 使用\\`\`\\`graphql突出显示GraphQL语法。
 
   - 使用\`json突出显示有效的JSON。（对于无效的JSON示例，请使用\`text。）
 
-  - \\`\`\`bash应*仅*用于需要#样式注释的代码块。这必须小心进行，因为在许多情况下，#字符将呈现为markdown标题。如果发生这种情况，通常目录会受到影响。
+  - \\`\`\\`bash应*仅*用于需要#样式注释的代码块。这必须小心进行，因为在许多情况下，#字符将呈现为markdown标题。如果发生这种情况，通常目录会受到影响。
 
 - 不要使用`预格式化文本`来强调；而是只使用**粗体**或*斜体*文本。
 
