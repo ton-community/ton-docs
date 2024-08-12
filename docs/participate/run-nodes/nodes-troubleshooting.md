@@ -167,7 +167,17 @@ The best way (while the penalty for temporary non-validation is small, it can be
 cp var/ton-work/db/config.json var/ton-work/db/config.json.backup
 ```
 
-## Mytonctrl was installed by another user. Probably you need to launch mtc with `ubuntu` user
+## Mytonctrl was installed by another user. Probably you need to launch mtc with ... user
+
+Run MyTonCtrl with user that used to install it. 
+
+For example, the most common case is when one tries to run MyTonCtrl as root user, even though it was installed under a different user. In this case, you need to log in to the user who installed MyTonCtrl and run MyTonCtrl from that user.
+
+### Mytonctrl was installed by another user. Probably you need to launch mtc with `validator` user
+
+Run command `sudo chown <user_name>:<user_name> /var/ton-work/keys/*` where `<user_name>` is user which installed mytonctrl.
+
+### Mytonctrl was installed by another user. Probably you need to launch mtc with `ubuntu` user
 
 Additionally `mytonctrl` may not work properly with this error. For example, the `status` command may return empty result.
 
