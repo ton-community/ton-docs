@@ -29,7 +29,7 @@ TON 支付是微支付通道的平台。
 
 - [grejwood/Hack-a-TON](https://github.com/Grejwood/Hack-a-TON) - OnlyTONs 支付项目（[网站](https://main.d3puvu1kvbh8ti.amplifyapp.com/)，[视频](https://www.youtube.com/watch?v=38JpX1vRNTk)）
 - [nns2009/Hack-a-TON-1_Tonario](https://github.com/nns2009/Hack-a-TON-1_Tonario) - OnlyGrams 支付项目（[网站](https://onlygrams.io/)，[视频](https://www.youtube.com/watch?v=gm5-FPWn1XM)）
-- [sevenzing/hack-a-ton](https://github.com/sevenzing/hack-a-ton) - TON 中的按需求支付 API 使用（[视频](https://www.youtube.com/watch?v=7lAnbyJdpOA\&feature=youtu.be)）
+- [sevenzing/hack-a-ton](https://github.com/sevenzing/hack-a-ton) - TON 中的按需求支付 API 使用（[视频](https://www.youtube.com/watch?v=7lAnbyJdpOA\\&feature=youtu.be)）
 - [illright/diamonds](https://github.com/illright/diamonds) - 按分钟支付学习平台（[网站](https://diamonds-ton.vercel.app/)，[视频](https://www.youtube.com/watch?v=g9wmdOjAv1s)）
 
 ## 参阅
