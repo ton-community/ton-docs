@@ -27,7 +27,7 @@ No args, exit from console.
 Update mytonctrl. Param combinations:
 
 | Format name            | Format                                                                     | Example                                                               | Description                                                             |
-  |:-----------------------|:---------------------------------------------------------------------------|:----------------------------------------------------------------------|-------------------------------------------------------------------------|
+|:-----------------------|:---------------------------------------------------------------------------|:----------------------------------------------------------------------|-------------------------------------------------------------------------|
 | No args                | `update`                                                                   | `update`                                                              | Update from current repo                                                |
 | URL format             | `update [https://github.com/author/repo/tree/branch]`                      | `update https://github.com/ton-blockchain/mytonctrl/tree/test`        | Update from specified URL                                               |
 | Branch Only format     | `update [BRANCH]`                                                          | `update test`                                                         | Update from specified branch of current repo                            |
@@ -504,6 +504,23 @@ Descriptions for each parameter:
 - adnl: Prints full ADNL.
 
 ## Installer
+
+This section describes `installer` sub-console, that can be opened by command
+
+```bash
+MyTonCtrl> installer
+```
+
+Example:
+
+![img.png](/img/docs/mytonctrl/installer.png)
+
+All commands can be called directly from MyTonCtrl console
+
+```bash
+MyTonCtrl> installer [command] [args]
+```
+
 
 ### help
 
