@@ -530,15 +530,15 @@ prints Services status (of Full node, Mytoncore, V.console, Liteserver) and node
 
 Possible arguments:
 
-| Node argument name | Description                             | Default value                                                                       |
-|--------------------|-----------------------------------------|-------------------------------------------------------------------------------------|
-| `threads`          | count of threads                        | `cpus count - 1`                                                                    |
-| `daemonize`        |                                         | No value                                                                            |
-| `global-config`    | path to global config                   | `/usr/bin/ton/global.config.json`                                                   |
-| `db`               | path to database                        | `/var/ton-work/db/`                                                                 |
-| `logname`          | path to logs                            | `/var/ton-work/log`                                                                 |
-| `state-ttl`        | ttl of blockchain states that node keep | 3600                                                                                |
-| `archive-ttl`      | ttl of blocks node stores               | 2592000 if liteserver mode was enabled during installation process, otherwise 86400 |
+| Node argument name | Description                                                                                  | Default value                                                                       |
+|--------------------|----------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
+| `threads`          | count of threads                                                                             | `cpus count - 1`                                                                    |
+| `daemonize`        |                                                                                              | No value                                                                            |
+| `global-config`    | path to global config                                                                        | `/usr/bin/ton/global.config.json`                                                   |
+| `db`               | path to database                                                                             | `/var/ton-work/db/`                                                                 |
+| `logname`          | path to logs                                                                                 | `/var/ton-work/log`                                                                 |
+| `state-ttl`        | ttl of blockchain states that node keep                                                      | 3600                                                                                |
+| `archive-ttl`      | ttl of blocks node stores. _To force node not to store archive blocks use the value `86400`_ | 2592000 if liteserver mode was enabled during installation process, otherwise 86400 |
 
 ### enable
 
