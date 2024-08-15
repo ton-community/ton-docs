@@ -210,6 +210,7 @@ const sidebars = {
                 'develop/smart-contracts/guidelines/ecosystem-messages-layout',
                 'develop/smart-contracts/guidelines/message-delivery-guarantees',
                 'develop/smart-contracts/messages',
+                'develop/smart-contracts/guidelines/message-modes-cookbook',
                 'develop/smart-contracts/guidelines/internal-messages',
                 'develop/smart-contracts/guidelines/external-messages',
                 'develop/smart-contracts/guidelines/non-bouncable-messages',
