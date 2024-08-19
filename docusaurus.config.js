@@ -417,6 +417,10 @@ const config = {
                 label: 'Vesting Contract',
               },
               {
+                to: '/participate/run-nodes/mytonctrl-status',
+                label: 'MyTonCtrl Status',
+              },
+              {
                 to: '/participate/run-nodes/faq',
                 label: 'FAQ',
               },
