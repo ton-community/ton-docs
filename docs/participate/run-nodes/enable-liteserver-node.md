@@ -61,7 +61,7 @@ MyTonCtrl> enable_mode liteserver
 
 ## Check the firewall settings
 
-First, verify the Liteserver port specified in your `config.json` file. This port changes with each new installation of `MyTonCtrl`. It is located in the `port` field:
+First, verify the Liteserver port specified in your `/var/ton-work/db/config.json` file. This port changes with each new installation of `MyTonCtrl`. It is located in the `port` field:
 
 ```json
 {
@@ -119,7 +119,13 @@ This way, you can open the port in the firewall settings of your server.
 
 ## Interaction with Liteserver (Lightclient)
 
-0. Create an empty project on your machine and paste `config.json` in the project directory.
+0. Create an empty project on your machine and paste `config.json` in the project directory. This config can be obtained by following command:
+
+```bash
+installer clcf # in mytonctrl
+```
+
+It will create `/usr/bin/ton/local.config.json` on your machine where mytonctrl is installed. Check [mytonctrl documentation for more](/participate/run-nodes/mytonctrl#clcf).
 
 1. Install libraries.
 
