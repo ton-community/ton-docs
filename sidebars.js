@@ -398,6 +398,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'develop/dapps/ton-connect/vue',
+              label: 'Vue Apps',
+            },
+            {
+              type: 'doc',
               id: 'develop/dapps/ton-connect/web',
               label: 'HTML/JS Apps',
             },
