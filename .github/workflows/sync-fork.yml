@@ -16,4 +16,5 @@ jobs:
           owner: TownSquareXYZ
           base: main
           head: main
+          merge_method: rebase
           pr_title: 'Fork Sync: Update from ton-community/ton-docs'
