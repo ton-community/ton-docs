@@ -69,10 +69,11 @@ export const Header = () => {
 };
 ```
 
-You can connect to a specific wallet using the `openSingleWalletModal` method:
+#### Connect with a specific wallet
+To open a modal window for a specific wallet, use the `openSingleWalletModal()` method. This method takes the wallet's `app_name` as a parameter (refer to the [wallets-list.json]('https://github.com/ton-blockchain/wallets-list/blob/main/wallets-v2.json') file) and opens the corresponding wallet modal. It returns a promise that resolves once the modal window has successfully opened.
 
 ```tsx
-<button onClick={() => tonConnectUI.openSingleWalletModal('tonwallet)}>
+<button onClick={() => tonConnectUI.openSingleWalletModal('tonwallet')}>
   Connect Wallet
 </button>
 ```
@@ -127,15 +128,32 @@ export const Address = () => {
 };
 ```
 
+### useTonConnectModal
+Use this hook to access the functions for opening and closing the modal window. The hook returns an object with the current modal state and methods to open and close the modal.
+
+```tsx
+import { useTonConnectModal } from '@tonconnect/ui-react';
+
+export const ModalControl = () => {
+    const { state, open, close } = useTonConnectModal();
+
+    return (
+      <div>
+          <div>Modal state: {state?.status}</div>
+          <button onClick={open}>Open modal</button>
+          <button onClick={close}>Close modal</button>
+      </div>
+    );
+};
+```
+
 ### useTonWallet
 
-Use it to get user's current ton wallet. If wallet is not connected hook will return null.
+Use this hook to retrieve the user's current TON wallet.
+If the wallet is not connected, the hook will return `null`. The `wallet` object provides common data such as the user's address, provider, [TON proof](/develop/dapps/ton-connect/sign), and other attributes (see the [Wallet interface](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html)).
 
-See all wallet's properties:
+Additionally, you can access more specific details about the connected wallet, such as its name, image, and other attributes (refer to the [WalletInfo interface](https://ton-connect.github.io/sdk/types/_tonconnect_sdk.WalletInfo.html)).
 
-[Wallet interface](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html)
-
-[WalletInfo interface](https://ton-connect.github.io/sdk/types/_tonconnect_sdk.WalletInfo.html)
 
 ```tsx
 import { useTonWallet } from '@tonconnect/ui-react';
@@ -149,6 +167,12 @@ export const Wallet = () => {
         <span>Connected wallet address: {wallet.account.address}</span>
         <span>Device: {wallet.device.appName}</span>
         <span>Connected via: {wallet.provider}</span>
+        {wallet.connectItems?.tonProof?.proof && <span>Ton proof: {wallet.connectItems.tonProof.proof}</span>}
+
+        <div>Connected wallet info:</div>
+        <div>
+          {wallet.name} <img src={wallet.imageUrl} />
+        </div>
       </div>
     )
   );
@@ -299,7 +323,7 @@ useEffect(() => {
         );
       }
     });
-  }, []);
+  }, [tonConnectUI]);
 ```
 
 #### Structure of ton_proof
