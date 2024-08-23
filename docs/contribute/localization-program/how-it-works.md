@@ -33,8 +33,8 @@ This branch stays in sync with the upstream repository through GitHub Actions ru
 #### 3. `l10n_main`
 This branch includes all changes from the `main` branch and translations from Crowdin. All modifications in this branch are periodically committed to the upstream repository by using a new sub-branch named `l10n_main_[some data]`.
 
-#### 4. `i18n_feat` or `i18n_feat_[specific functions]`
-This branch will have all the changes about codes and new docs, after all content is confirmed all changes in this branch will merge to `l10_main`.
+#### 4. `l10n_feat` or `l10n_feat_[specific functions]`
+This branch will include changes to code or documentation related to the translation system. Once all content is finalized, the changes in this branch will be merged into `l10_main`.
 
 #### 5. `[lang]_preview`
 These branches are designated for specific language previews, such as `ko_preview` for Korean and `ja_preview` for Japanese. They allow us to preview the website in different languages.
