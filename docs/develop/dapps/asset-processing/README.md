@@ -178,6 +178,10 @@ main();
 7. Service should regularly poll the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method for the `wallet` contract. Matching confirmed transactions with the outgoing payments by (`destination_address`, `value`, `comment`) allows to mark payments as finished; detect and show the user the corresponding transaction hash and lt (logical time).
 8. Requests to `v3` of `high-load` wallets have an expiration time equal to 60 seconds by default. After that time unprocessed requests can be safely resent to the network (see steps 3-6).
 
+:::caution
+If `value` attached is too small transaction can get aborted with error `cskip_no_gas`. In this case Toncoins will be transferred successfully but no logic on other side will be executed (TVM won't even launch). About gas limits you can read more [here](/develop/howto/blockchain-configs#param-20-and-21). 
+:::
+
 ### Get transaction id
 
 It can be unclear that to get more information on transaction user must scan blockchain through [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) function.
