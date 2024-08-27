@@ -113,6 +113,6 @@ MyTonCtrl> update mytonctrl2
 ```
 ## Change of data storage path:
 
-By default Ton and Mytoncore works are stored in **/var/lib/docker/volumes/**
+By default TON and Mytoncore works are stored in **/var/lib/docker/volumes/**
 
 You can change it in the file docker-compose.yml, by indicating the required route in **volumes** section
