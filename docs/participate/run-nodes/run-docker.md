@@ -41,7 +41,7 @@ git clone https://github.com/ton-community/ton-docker-ctrl.git
 ```bash
 cd ./ton-docker-ctrl
 ```
-3. Indicate necessary values in the file .env
+3. Indicate the necessary values in the .env file
 ```bash
 vi .env
 ```
