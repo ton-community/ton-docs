@@ -35,7 +35,7 @@ Variable **IGNORE_MINIMAL_REQS=true** turns off requirements verification of CPU
 
 1. Clone the last version of the repository
 ```bash
-git clone https://github.com/pixelplex/ton-docker-ctrl.git
+git clone https://github.com/ton-community/ton-docker-ctrl.git
 ```
 2. Go to directory
 ```bash
