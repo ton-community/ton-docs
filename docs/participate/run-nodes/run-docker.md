@@ -101,7 +101,7 @@ To get the last versions of TON validator and MyTonCtrl, it is necessary to go t
 cd ./ton-docker-ctrl
 docker compose build ton-node
 ```
-When over start docker compose again
+Once finished, start Docker Compose again
 ```bash
 docker compose up -d
 ```
