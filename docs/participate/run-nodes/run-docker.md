@@ -6,7 +6,7 @@
 * 128 GB RAM
 * 1TB NVME SSD OR Provisioned 64+k IOPS storage
 * 1 Gbit/s network connectivity
-* public IP address (fixed IP address)
+* Public IP address (fixed IP address)
 * 16 TB/month traffic on peak load
 
 **_Not recommended!_** **_For testing purposes only!_**
