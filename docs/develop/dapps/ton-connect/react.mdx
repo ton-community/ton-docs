@@ -354,6 +354,41 @@ const [tonConnectUI] = useTonConnectUI();
 await tonConnectUI.disconnect();
 ```
 
+#### Deploying contract
+
+Deploying contract using TonConnect is pretty straightforward. You just need to obtain contract code and state init, store it as a cell and send transaction with `stateInit` field provided.
+
+Note, that `CONTRACT_CODE` and `CONTRACT_INIT_DATA` may be found in wrappers.
+
+```typescript
+import { beginCell, Cell, contractAddress, StateInit, storeStateInit } from '@ton/core';
+
+const [tonConnectUI] = useTonConnectUI();
+
+const init = {
+    code: Cell.fromBase64('<CONTRACT_CODE>'),
+    data: Cell.fromBase64('<CONTRACT_INIT_DATA>')
+} satisfies StateInit;
+
+const stateInit = beginCell()
+    .store(storeStateInit(init))
+    .endCell();
+
+const address = contractAddress(0, init);
+
+await tonConnectUI.sendTransaction({
+    validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes
+    messages: [
+        {
+            address: address.toRawString(),
+            amount: '5000000',
+            stateInit: stateInit.toBoc().toString('base64')
+        }
+    ]
+});
+
+```
+
 ## Wrappers
 
 Wrappers are classes that simplify interaction with the contract, allowing you to work without concerning yourself with the underlying details.
@@ -549,7 +584,7 @@ const getCounterInstance = async () => {
   // import {
   //   createApi,
   // } from "@ton-community/assets-sdk";
-    
+
   // const NETWORK = "testnet";
   // const client = await createApi(NETWORK);
 
