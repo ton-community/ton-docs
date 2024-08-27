@@ -107,7 +107,7 @@ docker compose up -d
 ```
 When connected to MyTonCtrl, an automatic verification for updates is performed. If any updates are detected, a message is displayed"_MyTonCtrl update available. Please update it with `update` command._"
 
-Update is done by means of the command update by indication of a necessary branch
+Update is done using the update command by specifying the necessary branch
 ```bash
 MyTonCtrl> update mytonctrl2
 ```
