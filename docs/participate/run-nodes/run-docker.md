@@ -94,7 +94,7 @@ MyTonCtrl> help
 ```bash
 docker compose logs
 ```
-## Updates of MyTonCtrl and Ton:
+## Updates of MyTonCtrl and TON:
 
 To get the last versions of TON validator and MyTonCtrl, it is necessary to go to catalogue with  docker-compose.yml and make assembling
 ```bash
