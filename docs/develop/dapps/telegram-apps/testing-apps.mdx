@@ -29,11 +29,37 @@ Use these tools to find app-specific issues in your Mini App:
 - Choose *Enable WebView Debug* in the Debug Settings.
 - Connect your phone to your computer and open chrome://inspect/#devices in Chrome – you will see your Mini App there when you launch it on your phone.
 
-### Telegram Desktop on Windows and Linux
+### iOS
 
-- Download and launch the [Beta Version](https://desktop.telegram.org/changelog#beta-version) of Telegram Desktop on **Windows** or **Linux** (not supported on Telegram Desktop for macOS yet).
+iOS webview debugging requires Safari desktop browser and therefore macOS.
+
+**On iOS device:**
+- Go to *Settings*.
+- Find Safari icon and press on it.
+- Scroll down and press *Advanced*.
+- Enable *Web Inspector* option.
+
+**On macOS:**
+- Open Safari browser.
+- Open *Settings* (⌘ + ,).
+- Select *Advanced* tab.
+- Check *Show features for web developers* option at the bottom.
+
+**Next steps:**
+- Connect iOS device to Mac via cable.
+- Open Mini App inside iOS Telegram client.
+- Open *Develop* tab in the menu bar in Safari on macOS.
+- Select connected iPhone.
+- Optional: select *Connect via network* and disconnect the cable.
+- Select opened webview URL under *Telegram* block.
+
+### Telegram Desktop on Windows, Linux and macOS
+
+- Download and launch the latest version of Telegram Desktop on **Windows**, **Linux** or **macOS** (as the writing of this version 5.0.1 is available)
 - Go to *Settings > Advanced > Experimental settings > Enable webview inspection*.
-- Right click in the WebView and choose *Inspect*.
+- on Windows and Linux, right-click in the WebView and choose *Inspect*.
+- On macOS, you need to access the Inspect through [Safari Developer menu](https://support.apple.com/en-gb/guide/safari/sfri20948/mac)
+  and Inspect is not available through the right-click context menu
 
 ### Telegram macOS
 
@@ -87,6 +113,7 @@ eruda.init()
 ### Step 3: Launch Eruda
 
 Deploy your Mini App, launch it and just press Eruda icon to start debugging!
-
+````mdx-code-block
 <ConceptImage style={{maxWidth:'200pt', margin: '10pt 20pt 0 0', display: 'flex-box'}} src="/img/docs/telegram-apps/eruda-2.png" />
 <ConceptImage style={{maxWidth:'200pt', margin: '10pt 20pt', display: 'flex-box'}}  src="/img/docs/telegram-apps/eruda-3.png" />
+````

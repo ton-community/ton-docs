@@ -1,27 +1,25 @@
-# Running an Archive Node
+# Archive Node
+
+:::info
+Read about [Full Node](/participate/run-nodes/full-node) before this article
+:::
 
 ## Overview
 
-:::caution System Administrator Required
-For running nodes basic knowledge of Linux/Ubuntu system administration is required.
-:::
+An Archive Node is a type of Full Node that stores extended historical data of a blockchain. If you are creating a blockchain explorer or a similar application that requires access to historical data, using an Archive Node as an indexer is recommended.
 
-An Archive Node is a type of [Full Node](/participate/run-nodes/full-node) that stores extended historical data of a blockchain. If you are creating a blockchain explorer or a similar application that requires access to historical data, using an Archive Node as an indexer is recommended.
-
-## Prerequisites
+## OS requirements
 
 We highly recommend install mytonctrl using the supported operating systems:
 * Ubuntu 20.04
 * Ubuntu 22.04
 * Debian 11
 
-Please, use a [non-root user with sudo privileges](/participate/run-nodes/full-node#prerequisites-1) to install and run mytonctrl.
-
 ## Hardware requirements 
 
 * 16 x Cores CPU 
 * 128GB ECC Memory 
-* 4TB SSD _OR_ Provisioned 32+k IOPS storage
+* 8TB SSD _OR_ Provisioned 64+k IOPS storage
 * 1 Gbit/s network connectivity
 * 16 TB/month traffic on peak load
 * a public IP address (fixed IP address)
@@ -30,15 +28,6 @@ Please, use a [non-root user with sudo privileges](/participate/run-nodes/full-n
 __Note__: 4TB assumes usage of zfs volume with compression enabled
 
 ## Installation
-
-In general, you need the following steps to run an Archive Node:
-
-1. Install ZFS and Prepare Volume
-2. Install MyTonCtrl
-3. Run a Full Node on your server and stop validator process
-4. Download and restore dump data from https://archival-dump.ton.org
-5. Run Full Node with Configuring DB specs for Archive Node
-
 
 ### Install ZFS and Prepare Volume
 
@@ -63,7 +52,7 @@ sudo zfs set compression=lz4 data
 
 ### Install MyTonCtrl
 
-Please, use a [Running Full Node](/participate/run-nodes/full-node) to install mytonctrl.
+Please, use a [Running Full Node](/participate/run-nodes/full-node) to **install** and **run** mytonctrl.
 
 ### Run an Archive Node
 
@@ -82,10 +71,16 @@ mv /var/ton-work /var/ton-work.bak
 #### Download the dump
 
 1. Request `user` and `password` credentials to gain access for downloading dumps in the [@TONBaseChatEn](https://t.me/TONBaseChatEn) Telegram chat.
-2. Here is an example command to download & restore the dump from the ton.org server:
+2. Here is an example command to download & restore the **mainnet** dump from the ton.org server:
 
 ```shell
 wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
+```
+
+To install **testnet** dump use:
+
+```shell
+wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest_testnet.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
 ```
 
 Size of the dump is __~1.5TB__, so it will take some time to download and restore it.
@@ -176,7 +171,7 @@ systemctl start validator.service
 ## Troubleshooting and backups
 If for some reason something does not work / breaks you can always [roll back](https://docs.oracle.com/cd/E23824_01/html/821-1448/gbciq.html#gbcxk) to @archstate snapshot on your ZFS filesystem, this is the original state from dump. 
 
-1. Stop validator process (Never skip this!)
+1. Stop validator process (**Never skip this!**)
 ```shell
 sudo -s
 systemctl stop validator.service

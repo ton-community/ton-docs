@@ -8,9 +8,9 @@ we will start with the simplest methods and finish with the most advanced ones.
 
 ## 😄 Easy methods
 
-### Browse through the ton.run
+### Browse through the ton.run or tonp.io
 
-The simplest way to open a TON Site is through [ton.run](https://ton.run). You don't need to install or set up anything on your device - just open the **ton.run** and you're ready to explore TON Sites.
+The simplest way to open a TON Site is through sites like [ton.run](https://ton.run) or [tonp.io](https://tonp.io). You don't need to install or set up anything on your device - just open the **ton.run** or **tonp.io** and you're ready to explore TON Sites.
 
 This method may be suitable for casual browsing of TON Sites or for some checks, but not for regular use, because it also has its drawbacks:
 
@@ -26,14 +26,6 @@ Currently, TON Proxy is already available in [MyTonWallet](https://mytonwallet.i
 
 This method is also pretty easy, but you need to install an extension in your browser to make it work. It will be suitable for most users.
 
-### Connect to a public proxy
-
-If you don't want to install any extensions or if you are using mobile device, you can use this method. You'll have to configure something on your device to connect to the proxy.
-
-This method is described here:
-
--   [Connect with TON Proxy](/participate/web3/setting-proxy/)
-
 ## 🤓 Advanced methods
 
 ### Using Tonutils-Proxy
@@ -44,3 +36,7 @@ This is the most secure way of accessing TON Sites.
 
 2. Launch it and press "Start Gateway"
 3. Done!
+
+
+## See Also
+* [Run C++ Implementation](/participate/web3/sites-and-proxy)

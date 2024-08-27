@@ -27,7 +27,7 @@ Current settings in masterchain are as follows: 1 unit of gas costs 10000 nanoto
 Even if TON price increases 100 times, transactions will remain ultra-cheap; less than $0.01. Moreover, validators may lower this value if they see commissions have become expensive [read why they're interested](#gas-changing-voting-process).
 
 :::info
-The current gas amount is written in the Network Config [param 20](https://tonviewer.com/config#20) and [param 21](https://tonviewer.com/config#21) for masterchain and basechain respectivly.
+The current gas amount is written in the Network Config [param 20](https://tonviewer.com/config#20) and [param 21](https://tonviewer.com/config#21) for masterchain and basechain respectively.
 :::
 
 ### Gas changing voting process
@@ -51,7 +51,9 @@ Fees on TON are difficult to calculate in advance, as their amount depends on tr
 That is why even NFT marketplaces usually take an extra amount of TON (_~1 TON_) and return (_`1 - transaction_fee`_) later.
 
 :::info
-Please use [new TVM opcodes](/learn/tvm-instructions/fee-calculation-instructions#opcodes-to-process-config-parameters) in your smart contracts to dynamically calculate fees and do not hardcode fees in Toncoins in the smart contract code
+Each contract should check incoming messages for the amount of TONs attached to ensure they are enough to cover the fees.
+
+Check the [low-level fees overview](/develop/howto/fees-low-level) to learn more about the formulas for calculating commissions and [fees calculation](/develop/smart-contracts/fee-calculation) to learn how to calculate fees in FunC contracts using the new TVM opcodes.
 :::
 
 However, let's read more about how fees are supposed to function on TON.
@@ -98,6 +100,10 @@ Average fee for minting one NFT is 0.08 TON.
 ### Cost of saving data in TON?
 
 Saving 1 MB of data for one year on TON will cost you 6.01 TON. Note that you don't usually need to store big amounts of data on-chain. Consider [TON Storage](/participate/ton-storage/storage-daemon) if you need decentralized storage.
+
+### Is it possible to send a gasless transaction?
+
+At present, this opportunity is not available. We are actively working on its development. Please stay tuned for updates.
 
 ### How to calculate fees in FunC?
 

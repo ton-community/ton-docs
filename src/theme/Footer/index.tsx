@@ -59,7 +59,7 @@ function Footer() {
 
 
   useEffect(() => {
-    if (i18n.currentLocale === "mandarin") {
+    if (i18n.currentLocale === "zh-CN") {
       setFOOTER_COLUMN_LINKS(FOOTER_COLUMN_LINKS_CN);
     }
   }, [i18n.currentLocale]);

@@ -1,0 +1,155 @@
+import Player from '@site/src/components/player'
+
+# TON 中的 Explorers
+
+在这篇文章中，我们将考虑TONExplorers，他们的能力和特点，从开发者的角度出发。
+
+## 什么是 Explorers？
+
+Explorer是一个网站，允许您查看区块链中的信息，如账户余额、交易历史、区块等。
+
+<Player url="https://www.youtube.com/watch?v=i5en19kzX6M" />
+
+## 哪些 Explorers 存在？
+
+在TON Explorers中，您可以区分几个类别：
+
+- 日常使用
+- 为开发者提供扩展信息
+- 专业化
+
+这种分类大体上是有条件的，一个Explorer可以同时属于几个类别。所以我们不要过多地关注这个。
+
+## Explorers 中的地址别名
+
+通过使用地址别名使您的服务地址更加用户友好。根据提供的指南创建拉取请求（PR）：
+
+- [tonkeeper/ton-assets](https://github.com/tonkeeper/ton-assets) - Tonviewer.com别名
+- [catchain/address-book](https://github.com/catchain/address-book)- Tonscan.org别名
+
+## 通用功能
+
+让我们从所有Explorers中都存在的通用功能开始。
+
+几乎所有的Explorers都能查找关于余额、交易历史和智能合约的信息，如果部署在地址上的话。
+
+接下来，我们将考虑几个可以归为这些类别的Explorers。
+
+## TON Scan.org
+
+适合日常使用的好Explorer。它提供了TON区块链的全面视图，允许用户搜索交易、地址、区块等。任何搜索都是针对公共[地址簿](https://github.com/catchain/tonscan/blob/master/src/addrbook.json)（TON基金会，OKX等）进行的。
+
+### 特点
+
+- **适合日常使用**
+- 对开发者方便
+- TON DNS支持
+- 合约类型
+- 合约反汇编器
+
+### 链接
+
+- 网址：https://tonscan.org/
+- 测试网网址：https://testnet.tonscan.org/
+
+## TON Scan.com
+
+### 特点
+
+- 交易聚合分析
+- 交易追踪
+
+### 链接
+
+- 网址：https://tonscan.com/
+
+## Ton Whales Explorer
+
+这个Explorer比普通用户更倾向于开发者。
+
+### 特点
+
+- **对开发者方便**
+- 合约类型
+- 合约反汇编器
+
+### 链接
+
+- 网址：https://tonwhales.com/explorer
+
+## Tonviewer Explorer
+
+这个Explorer是最新的，有自己独特的特点。
+例如，追踪。这个功能允许您看到智能合约之间的整个交易序列，即使后续交易不包含您的地址。
+
+交易信息不如TON Whales那样详细。
+
+### 特点
+
+- 对开发者方便
+- 适合日常使用
+- Jetton交易历史
+- **追踪**
+- TON DNS支持
+
+### 链接
+
+- 网址：https://tonviewer.com/
+- 测试网网址：https://testnet.tonviewer.com/
+
+## TON NFT Explorer
+
+这个Explorer专注于NFT，但也可以作为常规Explorer使用。
+
+查看钱包地址时，您可以找出它存储了哪些NFT，并在查看NFT时，您可以找出元数据、集合地址、所有者和交易历史。
+
+### 特点
+
+- 对开发者方便
+- 合约类型
+- **专注于NFT**
+
+### 链接
+
+- 网址：https://explorer.tonnft.tools/
+- 测试网网址：https://testnet.explorer.tonnft.tools/
+
+## DTON
+
+DTON是另一个面向开发者的Explorer。它以方便的形式提供了大量的交易信息。
+
+此外，它有一个功能，允许您逐步查看交易的 Compute Phase 。
+
+### 特点
+
+- 对开发者方便
+- 关于 Compute Phase 的扩展信息
+- 合约类型
+- 合约反汇编器
+
+### 链接
+
+- 网址：https://dton.io/
+
+## TON NFTscan
+
+这个Explorer专为TON区块链上的非同质化代币（NFT）设计。它允许用户探索、跟踪和验证NFT交易、合约和元数据。
+
+### 特点
+
+- 对普通用户方便
+- 对交易者有用的信息，如日交易量
+- NFT集合排名
+
+### 链接
+
+- 网址：https://ton.nftscan.com/
+
+## 想在这个列表中吗？
+
+请给其中一个[维护者](/docs/contribute/maintainers.md)写信。
+
+## 参考资料
+
+- [ton.app/explorers](https://ton.app/explorers)
+- [非常棒的TON库](https://github.com/ton-community/awesome-ton)

@@ -1,5 +1,5 @@
 # Non-bounceable messages
-
+````mdx-code-block 
 export const Highlight = ({children, color}) => (
 <span
 style={{
@@ -11,7 +11,7 @@ padding: '0.2rem',
 {children}
 </span>
 );
-
+````
 Almost all internal messages sent between smart contracts should be bounceable, i.e., should have their "bounce" bit set. Then, if the destination smart contract does not exist, or if it throws an unhandled exception while processing this message, the message will be "bounced" back carrying the remainder of the original value (minus all message transfer and gas fees). The body of the bounced message will contain 32 bit `0xffffffff` followed by 256 bit from original message, but with the "bounce" flag cleared and the "bounced" flag set. Therefore, all smart contracts should check the "bounced" flag of all inbound messages and either silently accept them (by immediately terminating with a zero exit code) or perform some special processing to detect which outbound query has failed. The query contained in the body of a bounced message should never be executed.
 
 :::info

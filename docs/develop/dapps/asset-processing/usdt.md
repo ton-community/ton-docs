@@ -15,6 +15,8 @@ To integrate Tether’s USD₮ Token on TON Blockchain use the contract address:
 
 <Button href="https://github.com/ton-community/assets-sdk" colorType="primary" sizeType={'sm'}>Assets SDK</Button>
 <Button href="https://docs.ton.org/develop/dapps/asset-processing/jettons" colorType={'secondary'} sizeType={'sm'}>Jetton Processing</Button>
+<Button href="https://github.com/ton-community/tma-usdt-payments-demo?tab=readme-ov-file#tma-usdt-payments-demo" colorType={'secondary'} sizeType={'sm'}>TMA USDT payments demo</Button>
+
 
 ## Advantages of USD₮ on TON
 

@@ -157,6 +157,16 @@ const sidebars = {
       id: 'develop/get-started-with-ton',
     },
     {
+      type: 'category',
+      label: 'Transition from Ethereum to TON',
+      items: [
+        'develop/ethereum-to-ton/difference-of-blockchains',
+        'develop/ethereum-to-ton/tvm-vs-evm',
+        'develop/ethereum-to-ton/solidity-vs-func',
+        'develop/ethereum-to-ton/blockchain-services',
+      ],
+    },
+    {
       'type': 'html',
       'value': '<hr/>',
     },
@@ -197,6 +207,7 @@ const sidebars = {
               type: 'category',
               label: 'Message Management',
               items: [
+                'develop/smart-contracts/guidelines/ecosystem-messages-layout',
                 'develop/smart-contracts/guidelines/message-delivery-guarantees',
                 'develop/smart-contracts/messages',
                 'develop/smart-contracts/guidelines/internal-messages',
@@ -210,6 +221,7 @@ const sidebars = {
               items: [
                 'develop/smart-contracts/fees',
                 'develop/howto/fees-low-level',
+                'develop/smart-contracts/fee-calculation',
                 'develop/smart-contracts/guidelines/accept',
                 'develop/smart-contracts/guidelines/processing',
               ],
@@ -327,6 +339,7 @@ const sidebars = {
           label: 'Telegram Mini Apps',
           items: [
             'develop/dapps/telegram-apps/README',
+            'develop/dapps/telegram-apps/notcoin',
             'develop/dapps/telegram-apps/grants',
             {
               type: 'category',
@@ -353,10 +366,10 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Advanced Asset Holding',
+          label: 'Advanced Asset Processing',
           items: [
+            'develop/dapps/asset-processing/overview',
             'develop/dapps/asset-processing/README',
-            'develop/dapps/asset-processing/address-verification',
             'develop/dapps/asset-processing/jettons',
             'develop/dapps/asset-processing/usdt',
             'develop/dapps/asset-processing/nfts',
@@ -387,16 +400,6 @@ const sidebars = {
               type: 'doc',
               id: 'develop/dapps/ton-connect/web',
               label: 'HTML/JS Apps',
-            },
-            {
-              type: 'doc',
-              id: 'develop/dapps/ton-connect/tg-bot-integration',
-              label: 'Telegram Bots JS',
-            },
-            {
-              type: 'doc',
-              id: 'develop/dapps/ton-connect/tg-bot-integration-py',
-              label: 'Telegram Bots Python',
             },
           ],
         },
@@ -568,6 +571,7 @@ const sidebars = {
             'develop/data-formats/transaction-layout',
             'develop/data-formats/crc32',
             'develop/data-formats/tlb-ide',
+            'develop/data-formats/tlb-tools',
           ],
         },
         'develop/data-formats/tl',
@@ -607,6 +611,8 @@ const sidebars = {
       items: [
         'develop/archive/pow-givers',
         'develop/archive/mining',
+        'develop/archive/tg-bot-integration',
+        'develop/archive/tg-bot-integration-py',
         'develop/smart-contracts/compile/README',
         'develop/smart-contracts/environment/installation',
       ],
@@ -662,13 +668,17 @@ const sidebars = {
       label: 'Blockchain Nodes',
       items: [
         'participate/nodes/node-types',
+        'participate/run-nodes/mytonctrl',
+        'participate/run-nodes/run-docker',
         'participate/run-nodes/full-node',
+        'participate/run-nodes/enable-liteserver-node',
+        'participate/run-nodes/become-validator',
         'participate/run-nodes/archive-node',
-        //'participate/run-nodes/liteserver',
-        //'participate/nodes/nodes-faq',
+        'participate/run-nodes/nodes-troubleshooting',
         'participate/nodes/node-maintenance-and-security',
         'participate/run-nodes/local-ton',
-        'participate/run-nodes/run-docker',
+        'participate/run-nodes/faq',
+
       ],
     },
     {
@@ -677,6 +687,7 @@ const sidebars = {
       items: [
         'participate/network-maintenance/staking-incentives',
         'participate/network-maintenance/single-nominator',
+        'participate/network-maintenance/nominator-pool',
         'participate/network-maintenance/vesting-contract',
         'participate/network-maintenance/nominators',
         'participate/network-maintenance/persistent-states',
@@ -705,10 +716,10 @@ const sidebars = {
       'type': 'category',
       'label': 'TON Proxy & Sites',
       'items': [
+        'develop/dapps/tutorials/how-to-run-ton-site',
+        'participate/web3/app-sites',
         'participate/web3/setting-proxy',
         'participate/web3/how-to-open-any-ton-site',
-        'participate/web3/sites-and-proxy',
-        'develop/dapps/tutorials/how-to-run-ton-site',
         'participate/web3/site-management',
       ],
     },
@@ -762,6 +773,32 @@ const sidebars = {
             'contribute/archive/hacktoberfest-2022/as-contributor',
             'contribute/archive/hacktoberfest-2022/as-maintainer',
           ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Localization Program',
+      items: [
+        {
+          type: 'doc',
+          label: 'Overview',
+          id: 'contribute/localization-program/overview',
+        },
+        {
+          type: 'doc',
+          label: 'How It Works',
+          id: 'contribute/localization-program/how-it-works',
+        },
+        {
+          type: 'doc',
+          label: 'How To Contribute',
+          id: 'contribute/localization-program/how-to-contribute',
+        },
+        {
+          type: 'doc',
+          label: 'Translation Style Guide',
+          id: 'contribute/localization-program/translation-style-guide',
         },
       ],
     },
