@@ -105,7 +105,7 @@ Once finished, start Docker Compose again
 ```bash
 docker compose up -d
 ```
-When connected to MyTonCtrl an auto verification in terms of  updates is done. In case any detected there is a message displayed "_MyTonCtrl update available. Please update it with `update` command._"
+When connected to MyTonCtrl, an automatic verification for updates is performed. If any updates are detected, a message is displayed"_MyTonCtrl update available. Please update it with `update` command._"
 
 Update is done by means of the command update by indication of a necessary branch
 ```bash
