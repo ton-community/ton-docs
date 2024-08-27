@@ -45,7 +45,7 @@ cd ./ton-docker-ctrl
 ```bash
 vi .env
 ```
-4. Initiate assembling of docker image. There is done a compilation of the last version fift, validator-engine, lite-client, etc. Installation and initial setting of MyTonCtrl.
+4. Initiate assembling of docker image. This step involves the compilation of the latest versions of fift, validator-engine, lite-client, etc., as well as the installation and initial setup of MyTonCtrl.
 ```bash
 docker compose build ton-node
 ```
