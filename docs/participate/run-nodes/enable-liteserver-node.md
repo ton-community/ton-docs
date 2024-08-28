@@ -37,16 +37,16 @@ If you don't have mytonctrl, install it with `-m liteserver` flag:
   <TabItem value="ubuntu" label="Ubuntu">
 
   ```bash
-  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/mytonctrl2/scripts/install.sh
-  sudo bash ./install.sh -b mytonctrl2 -d -m liteserver -с <CONFIG_URL>
+  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+  sudo bash ./install.sh -m liteserver
   ```
 
   </TabItem>
   <TabItem value={'debian'} label={'Debian'}>
 
   ```bash
-  https://raw.githubusercontent.com/ton-blockchain/mytonctrl/mytonctrl2/scripts/install.sh
-  su root -c 'bash ./install.sh -b mytonctrl2 -d -m liteserver -c <CONFIG_URL>'
+  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+  su root -c 'bash ./install.sh -m liteserver'
   ```
 
   </TabItem>
