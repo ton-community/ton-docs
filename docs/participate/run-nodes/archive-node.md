@@ -83,7 +83,7 @@ To install **testnet** dump use:
 wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest_testnet.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
 ```
 
-Size of the dump is __~1.5TB__, so it will take some time to download and restore it.
+The size of the dump is approximately __4TB__, so it may take several days (up to 4 days) to download and restore. The dump size can increase as the network grows.
 
 Prepare and run the command:
 1. Install the tools if necessary (`pv`, `plzip`)
@@ -131,7 +131,17 @@ nano /etc/systemd/system/validator.service
 ```
 
 :::info
-Please be patient once you start the node and observe the logs. Dumps come without DHT caches, so it will take your node some time to find other nodes and then sync with them. Depending on the age of the snapshot, your node might take from a few hours to several days to catch up with the network. This is normal.
+Please be patient once you start the node and observe the logs.
+Dumps come without DHT caches, so it will take some time for your node to find other nodes and sync with them.
+Depending on the age of the snapshot and your internet connection speed,
+it might take your node anywhere **from a few hours to several days** to catch up with the network.
+**On a minimum setup, this process can take up to 5 days.**
+This is normal.
+:::
+
+:::caution
+If the node sync process has already taken 5 days, but the node is still out of sync, you should check the
+[troubleshooting section](/participate/run-nodes/nodes-troubleshooting#archive-node-is-out-of-sync-even-after-5-days-of-the-syncing-process).
 :::
 
 #### Start the node

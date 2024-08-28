@@ -210,6 +210,7 @@ const sidebars = {
                 'develop/smart-contracts/guidelines/ecosystem-messages-layout',
                 'develop/smart-contracts/guidelines/message-delivery-guarantees',
                 'develop/smart-contracts/messages',
+                'develop/smart-contracts/guidelines/message-modes-cookbook',
                 'develop/smart-contracts/guidelines/internal-messages',
                 'develop/smart-contracts/guidelines/external-messages',
                 'develop/smart-contracts/guidelines/non-bouncable-messages',
@@ -669,16 +670,16 @@ const sidebars = {
       items: [
         'participate/nodes/node-types',
         'participate/run-nodes/mytonctrl',
+        'participate/run-nodes/run-docker',
         'participate/run-nodes/full-node',
         'participate/run-nodes/enable-liteserver-node',
         'participate/run-nodes/become-validator',
         'participate/run-nodes/archive-node',
         'participate/run-nodes/nodes-troubleshooting',
-        //'participate/run-nodes/liteserver',
-        //'participate/nodes/nodes-faq',
         'participate/nodes/node-maintenance-and-security',
         'participate/run-nodes/local-ton',
         'participate/run-nodes/faq',
+
       ],
     },
     {

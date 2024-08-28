@@ -59,5 +59,4 @@ We recommend wallets provide the ability to disconnect session with a specified 
 ## See Also
 
 * [TON Connect Overview](/dapps/ton-connect/overview)
-* [Protocol specifications](/dapps/ton-connect/protocol/)
 * [Connect a Wallet](/dapps/ton-connect/wallet)

@@ -1,6 +1,6 @@
 # 发送消息
 
-消息的组成、解析和发送位于[TL-B schemas](/develop/data-formats/tl-b-language)、[交易阶段和TVM](/learn/tvm-instructions/tvm-overview.md)的交汇处。
+消息的组成、解析和发送位于[TL-B schemas](/develop/data-formats/tl-b-language)、[交易阶段和TVM](/learn/tvm-instructions/tvm-overview)的交汇处。
 
 事实上，FunC有[send_raw_message](/develop/func/stdlib#send_raw_message)函数，该函数期望一个序列化消息作为参数。
 
