@@ -256,6 +256,10 @@ To generate a transaction link in the explorer, the service needs to get the lt 
 
 `https://explorer.toncoin.org/transaction?account={account address}&lt={lt as int}&hash={txhash as base64url}`
 
+Note that tonviewer and tonscan supports external-in msg hash instead of transaction hash for link in explorer. 
+That can become useful when you generate external message and want instant link generation.
+More about transactions and messages hashes [here](/develop/dapps/cookbook#how-to-find-transaction-or-message-hash)
+ 
 ## Best Practices
 
 ### Wallet creation

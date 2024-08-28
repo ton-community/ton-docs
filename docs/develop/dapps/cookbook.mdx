@@ -855,7 +855,7 @@ Smart contracts for collections allow deploying up to 250 NFTs in a single trans
 #### Batch mint NFT
 :::info
 Does not specified by NFT standard for /ton-blockchain /token-contract
-:::   
+:::
 <br></br>
 <div class="text--center">
 <ThemedImage
@@ -1490,7 +1490,7 @@ async def main():
         stack=[pool_type, asset_native, asset_jetton]
     )
     pool_address = stack[0].load_address()
-    
+
     swap_params = (begin_cell()
                   .store_uint(int(time.time() + 60 * 5), 32) # Deadline
                   .store_address(wallet.address) # Recipient address
@@ -1512,7 +1512,7 @@ async def main():
     await wallet.transfer(destination=DEDUST_NATIVE_VAULT,
                           amount=TON_AMOUNT + GAS_AMOUNT, # swap amount + gas
                           body=swap_body)
-    
+
     await provider.close_all()
 
 asyncio.run(main())
@@ -1521,7 +1521,7 @@ asyncio.run(main())
 </TabItem>
 </Tabs>
 
-## Basics of incoming message processing
+## Basics of message processing
 
 ### How to parse transactions of an account (Transfers, Jettons, NFTs)?
 
@@ -1703,17 +1703,17 @@ async def parse_transactions(transactions):
         value = transaction.in_msg.info.value_coins
         if value != 0:
             value = value / 1e9
-        
+
         if len(transaction.in_msg.body.bits) < 32:
             print(f"TON transfer from {sender} with value {value} TON")
         else:
             body_slice = transaction.in_msg.body.begin_parse()
             op_code = body_slice.load_uint(32)
-            
+
             # TextComment
             if op_code == 0:
                 print(f"TON transfer from {sender} with value {value} TON and comment: {body_slice.load_snake_string()}")
-            
+
             # Jetton Transfer Notification
             elif op_code == 0x7362d09c:
                 body_slice.load_bits(64) # skip query_id
@@ -1723,7 +1723,7 @@ async def parse_transactions(transactions):
                     forward_payload = body_slice.load_ref().begin_parse()
                 else:
                     forward_payload = body_slice
-                
+
                 jetton_master = (await provider.run_get_method(address=sender, method="get_wallet_data", stack=[]))[2].load_address()
                 jetton_wallet = (await provider.run_get_method(address=jetton_master, method="get_wallet_address",
                                                                stack=[
@@ -1733,7 +1733,7 @@ async def parse_transactions(transactions):
                 if jetton_wallet != sender:
                     print("FAKE Jetton Transfer")
                     continue
-                
+
                 if len(forward_payload.bits) < 32:
                     print(f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton")
                 else:
@@ -1742,7 +1742,7 @@ async def parse_transactions(transactions):
                         print(f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton and comment: {forward_payload.load_snake_string()}")
                     else:
                         print(f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton and unknown payload: {forward_payload} ")
-            
+
             # NFT Transfer Notification
             elif op_code == 0x05138d91:
                 body_slice.load_bits(64) # skip query_id
@@ -1825,7 +1825,7 @@ export async function retry<T>(fn: () => Promise<T>, options: { retries: number,
 
 ```
 
-Create listener function which will assert specific transaction on certain account with specific incoming external message, equal to body message in boc: 
+Create listener function which will assert specific transaction on certain account with specific incoming external message, equal to body message in boc:
 
 <Tabs>
 <TabItem value="ts" label="@ton/ton">
@@ -1883,10 +1883,83 @@ export async function getTxByBOC(exBoc: string): Promise<string> {
 
  txRes = getTxByBOC(exBOC);
  console.log(txRes);
-  
-
 ```
 
 </TabItem>
+
+</Tabs>
+
+### How to find transaction or message hash?
+
+:::info
+Be careful with the hash definition. It can be either a transaction hash or a message hash. These are different things.
+:::
+
+To get transaction hash you need to use `hash` method of a transaction. To get external message hash you need
+to build message cell using `storeMessage` method and then use `hash` method of this cell.
+
+<Tabs>
+  <TabItem value="ts" label="@ton/ton">
+
+```typescript
+import { storeMessage, TonClient } from '@ton/ton';
+import { Address, beginCell } from '@ton/core';
+
+const tonClient = new TonClient({ endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC' });
+
+const transactions = await tonClient.getTransactions(Address.parse('[ADDRESS]'), { limit: 10 });
+for (const transaction of transactions) {
+  // ful transaction hash
+  const transactionHash = transaction.hash();
+
+  const inMessage = transaction.inMessage;
+  if (inMessage?.info.type === 'external-in') {
+    const inMessageCell = beginCell().store(storeMessage(inMessage)).endCell();
+    // external-in message hash
+    const inMessageHash = inMessageCell.hash();
+  }
+
+  // also you can get hash of out messages if needed
+  for (const outMessage of transaction.outMessages.values()) {
+    const outMessageCell = beginCell().store(storeMessage(outMessage)).endCell();
+    const outMessageHash = outMessageCell.hash();
+  }
+}
+```
+
+  </TabItem>
+
+</Tabs>
+
+Also you can get hash of message when building it. Note, this is the same hash as the hash of the message sent to initiate transaction
+like in previous example.
+
+<Tabs>
+  <TabItem value="ts" label="@ton/ton">
+
+```typescript
+import { mnemonicNew, mnemonicToPrivateKey } from '@ton/crypto';
+import { internal, TonClient, WalletContractV4 } from '@ton/ton';
+import { toNano } from '@ton/core';
+
+const tonClient = new TonClient({ endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC' });
+
+const mnemonic = await mnemonicNew();
+const keyPair = await mnemonicToPrivateKey(mnemonic);
+const wallet = tonClient.open(WalletContractV4.create({ publicKey: keyPair.publicKey, workchain: 0 }));
+const transfer = await wallet.createTransfer({
+  secretKey: keyPair.secretKey,
+  seqno: 0,
+  messages: [
+    internal({
+      to: wallet.address,
+      value: toNano(1)
+    })
+  ]
+});
+const inMessageHash = transfer.hash();
+```
+
+  </TabItem>
 
 </Tabs>
