@@ -222,7 +222,7 @@ We will use Javascript libraries and tools for the examples below:
 -   [ton](https://github.com/ton-core/ton) library
 -   [Blueprint](/develop/smart-contracts/sdk/javascript) SDK
 
-Let's say there is some contract with a following get method:
+Let's say there is some contract with the following get method:
 
 ```func
 (int) get_total() method_id {

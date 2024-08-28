@@ -151,7 +151,7 @@ Make sure you have thoroughly tested contracts before using them in a production
 
 ## Add Reference
 
-If you want share new example smart contract, make your PR for this [page](https://github.com/ton-community/ton-docs/tree/main/docs/develop/smart-contracts/examples.md).
+If you want to share a new example smart contract, make your PR for this [page](https://github.com/ton-community/ton-docs/tree/main/docs/develop/smart-contracts/examples.md).
 
 ## See Also
 

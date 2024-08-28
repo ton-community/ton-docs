@@ -27,7 +27,7 @@ Current settings in masterchain are as follows: 1 unit of gas costs 10000 nanoto
 Even if TON price increases 100 times, transactions will remain ultra-cheap; less than $0.01. Moreover, validators may lower this value if they see commissions have become expensive [read why they're interested](#gas-changing-voting-process).
 
 :::info
-The current gas amount is written in the Network Config [param 20](https://tonviewer.com/config#20) and [param 21](https://tonviewer.com/config#21) for masterchain and basechain respectivly.
+The current gas amount is written in the Network Config [param 20](https://tonviewer.com/config#20) and [param 21](https://tonviewer.com/config#21) for masterchain and basechain respectively.
 :::
 
 ### Gas changing voting process
@@ -100,6 +100,10 @@ Average fee for minting one NFT is 0.08 TON.
 ### Cost of saving data in TON?
 
 Saving 1 MB of data for one year on TON will cost you 6.01 TON. Note that you don't usually need to store big amounts of data on-chain. Consider [TON Storage](/participate/ton-storage/storage-daemon) if you need decentralized storage.
+
+### Is it possible to send a gasless transaction?
+
+At present, this opportunity is not available. We are actively working on its development. Please stay tuned for updates.
 
 ### How to calculate fees in FunC?
 

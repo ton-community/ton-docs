@@ -33,7 +33,7 @@ The message body typically begins with the following fields:
 
 If `op` is zero, then the message is a "simple transfer message with comment". The comment is contained in the remainder of the message body (without any `query_id` field, i.e., starting from the fifth byte). If it does not begin with the byte `0xff`, the comment is a text one; it can be displayed "as is" to the end user of a wallet (after filtering out invalid and control characters and checking that it is a valid UTF-8 string). 
 
-   When comment is long enough that it doesn't fit in a cell, non-fitting end of the line is put to the first reference of the cell. This process continues recursively to describe comments that doesn't fit in two or more cells:   
+   When comment is long enough that it doesn't fit in a cell, non-fitting end of the line is put to the first reference of the cell. This process continues recursively to describe comments that don't fit in two or more cells:   
 ```
 root_cell("0x00000000" - 32 bit, "string" up to 123 bytes)
          ↳1st_ref("string continuation" up to 127 bytes)

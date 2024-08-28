@@ -5,29 +5,11 @@ import TabItem from '@theme/TabItem';
 
 [Single Nominator](https://github.com/orbs-network/single-nominator) is a TON smart contract that enables secure validation for TON blockchain. The contract is designed for TON validators that have enough self stake to validate by themselves without relying on third-party nominators stakes. The contract provides an alternative simplified implementation for the Nominator Pool smart contract that supports a Single Nominator only.
 
-## Start using mytonctrl
-
-Currently [mytonctrl](https://github.com/ton-blockchain/mytonctrl) supports `single_nominator` contracts, but firstly you need to install mytonctrl 2.0.
-
-### Launch mytonctrl 2.0
-
-If you already have installed mytonctrl just use command `update mytonctrl2`. If you have no mytonctrl installed, follow these steps:
-
-1. Download installation script:
-
-```bash
-wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/mytonctrl2/scripts/install.sh
-```
-
-2. Run installation script:
-
-```bash
-sudo bash ./install.sh -b mytonctrl2
-```
-
 ### Set up single-nominator
 
-After you have [created](/participate/run-nodes/full-node#import-existed-account) and [activated](/participate/run-nodes/full-node#activate-the-wallets) the validator's wallet, follow these steps:
+:::caution
+Before start make sure you have topped up and [activated](/participate/run-nodes/become-validator#activate-the-wallets) validator's wallet.
+:::
 
 1. Enable single nominator mode
 
@@ -63,13 +45,13 @@ Name       Status  Balance  Version   Address
 test-pool  empty   0.0      spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX  
 ```
 
-5. Send 1 TON to the pool and activate it
+5. Activate the pool
 
 ```bash
 MyTonCtrl> activate_single_pool <pool-name>
 ```
 
-After successfully activated wallet:
+After successfully activated pool:
 
 ```bash
 MyTonCtrl> pools_list
@@ -245,8 +227,6 @@ If the wallet does not open automatically, you can send the transaction manually
 
 
 ## Withdraw funds
-
-To get coins back after staking, send 1 TON to the pool’s address, add a comment **w** (small letter) to the transaction. This 1 TON minus commission will be returned, and a smart-contract will understand that you want to bring the coins back and it will send them back right after the end of the validator’s work cycle. It usually takes up to 18 hours on Mainnet and 2 hours on Testnet.
 
 You can also withdraw funds using the following command:
 

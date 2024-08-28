@@ -202,6 +202,7 @@ const sidebars = {
               type: 'category',
               label: 'Message Management',
               items: [
+                'develop/smart-contracts/guidelines/ecosystem-messages-layout',
                 'develop/smart-contracts/guidelines/message-delivery-guarantees',
                 'develop/smart-contracts/messages',
                 'develop/smart-contracts/guidelines/internal-messages',
@@ -395,16 +396,6 @@ const sidebars = {
               id: 'develop/dapps/ton-connect/web',
               label: 'HTML/JS Apps',
             },
-            {
-              type: 'doc',
-              id: 'develop/dapps/ton-connect/tg-bot-integration',
-              label: 'Telegram Bots JS',
-            },
-            {
-              type: 'doc',
-              id: 'develop/dapps/ton-connect/tg-bot-integration-py',
-              label: 'Telegram Bots Python',
-            },
           ],
         },
         {
@@ -575,6 +566,7 @@ const sidebars = {
             'develop/data-formats/transaction-layout',
             'develop/data-formats/crc32',
             'develop/data-formats/tlb-ide',
+            'develop/data-formats/tlb-tools',
           ],
         },
         'develop/data-formats/tl',
@@ -614,6 +606,8 @@ const sidebars = {
       items: [
         'develop/archive/pow-givers',
         'develop/archive/mining',
+        'develop/archive/tg-bot-integration',
+        'develop/archive/tg-bot-integration-py',
         'develop/smart-contracts/compile/README',
         'develop/smart-contracts/environment/installation',
       ],
@@ -670,16 +664,16 @@ const sidebars = {
       items: [
         'participate/nodes/node-types',
         'participate/run-nodes/mytonctrl',
+        'participate/run-nodes/run-docker',
         'participate/run-nodes/full-node',
         'participate/run-nodes/enable-liteserver-node',
         'participate/run-nodes/become-validator',
         'participate/run-nodes/archive-node',
         'participate/run-nodes/nodes-troubleshooting',
-        //'participate/run-nodes/liteserver',
-        //'participate/nodes/nodes-faq',
         'participate/nodes/node-maintenance-and-security',
         'participate/run-nodes/local-ton',
         'participate/run-nodes/faq',
+
       ],
     },
     {
@@ -717,10 +711,10 @@ const sidebars = {
       'type': 'category',
       'label': 'TON Proxy & Sites',
       'items': [
+        'develop/dapps/tutorials/how-to-run-ton-site',
+        'participate/web3/app-sites',
         'participate/web3/setting-proxy',
         'participate/web3/how-to-open-any-ton-site',
-        'participate/web3/sites-and-proxy',
-        'develop/dapps/tutorials/how-to-run-ton-site',
         'participate/web3/site-management',
       ],
     },
@@ -774,6 +768,32 @@ const sidebars = {
             'contribute/archive/hacktoberfest-2022/as-contributor',
             'contribute/archive/hacktoberfest-2022/as-maintainer',
           ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Localization Program',
+      items: [
+        {
+          type: 'doc',
+          label: 'Overview',
+          id: 'contribute/localization-program/overview',
+        },
+        {
+          type: 'doc',
+          label: 'How It Works',
+          id: 'contribute/localization-program/how-it-works',
+        },
+        {
+          type: 'doc',
+          label: 'How To Contribute',
+          id: 'contribute/localization-program/how-to-contribute',
+        },
+        {
+          type: 'doc',
+          label: 'Translation Style Guide',
+          id: 'contribute/localization-program/translation-style-guide',
         },
       ],
     },

@@ -58,7 +58,7 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
 ```
 
 Let's focus on `int_msg_info` for now.
-It starts with 1bit prefix `0`, then there are three 1-bit flags, namely whether Instant Hypercube Routing disabled (currently always true), whether message should be bounced if there are errors during it's processing, whether message itself is result of bounce. Then source and destination addresses are serialized, followed by the value of the message and four integers related to message forwarding fees and time.
+It starts with 1bit prefix `0`, then there are three 1-bit flags, namely whether Instant Hypercube Routing disabled (currently always true), whether message should be bounced if there are errors during its processing, whether message itself is result of bounce. Then source and destination addresses are serialized, followed by the value of the message and four integers related to message forwarding fees and time.
 
 If a message is sent from the smart contract, some of those fields will be rewritten to the correct values. In particular, validator will rewrite `bounced`, `src`, `ihr_fee`, `fwd_fee`, `created_lt` and `created_at`. That means two things: first, another smart-contract during handling message may trust those fields (sender may not forge source address, `bounced` flag, etc); and second, that during serialization we may put to those fields any valid values (anyway those values will be overwritten).
 
@@ -222,7 +222,7 @@ Let's look at an example to make it clearer. Let's imagine a situation where we 
 
 | Case | Mode and Flags | Code | Result |
 |:-|:-|:-|:-|
-| Send a regular message | `mode` = 0, no `flag` | `send_raw_message(msg, 0)` | `balance` - 100 + 50 - 20 = 130, `send` - 20 - 3 = 7
+| Send a regular message | `mode` = 0, no `flag` | `send_raw_message(msg, 0)` | `balance` - 100 + 50 - 20 = 130, `send` - 20 - 3 = 17
 | Send a regular message, if there was an error in processing the action, don't rollback the transaction and ignore it | `mode` = 0, `flag` = 2 | `send_raw_message(msg, 2)` | `balance` - 100 + 50, `send` - 0
 | Send a regular message, if there was an error in processing the action - bounce the message in addition to rolling back the transaction | `mode` = 0, `flag` = 16 | `send_raw_message(msg, 16)` | `balance` - 100 + 50 = 167 + 17 (bounced), `send` - 20 - 3 = `bounce` message with 17
 | Send a regular message and pay transfer fees separately |  `mode` = 0, `flag` = 1 | `send_raw_message(msg, 1)` | `balance` - 100 + 50 - 20 - 3 = 127, `send` - 20

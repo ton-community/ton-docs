@@ -20,6 +20,16 @@ Failed to unpack account state
 ```
 This error means that requested account doesn't exist in current state. That means that this account is simultaneously is not deployed AND has zero balance
 
+
+## About no progress in node synchronization within 3 hours
+
+Try to perform following checks:
+
+1. Is process running without crashes? (Check systemd process status)
+2. Is there a firewall between node and internet, if so, will it pass incoming UDP traffic to port specified in field `addrs[0].port` of `/var/ton-work/db/config.json` file?
+3. Is there NAT between the machine and the internet? If so, ensure that the IP address defined in the `addrs[0].ip` field of the `/var/ton-work/db/config.json` file corresponds to the real public IP of the machine. Note that the value of this field is specified as a signed INT. The `ip2dec` and `dec2ip` scripts located in [ton-tools/node](https://github.com/sonofmom/ton-tools/tree/master/node) can be used to perform conversions.
+
+
 ## Cannot apply external message to current state : External message was not accepted
 
 ```
@@ -156,6 +166,46 @@ The best way (while the penalty for temporary non-validation is small, it can be
 ```bash
 cp var/ton-work/db/config.json var/ton-work/db/config.json.backup
 ```
+
+## Mytonctrl was installed by another user. Probably you need to launch mtc with ... user
+
+Run MyTonCtrl with user that used to install it. 
+
+For example, the most common case is when one tries to run MyTonCtrl as root user, even though it was installed under a different user. In this case, you need to log in to the user who installed MyTonCtrl and run MyTonCtrl from that user.
+
+### Mytonctrl was installed by another user. Probably you need to launch mtc with `validator` user
+
+Run command `sudo chown <user_name>:<user_name> /var/ton-work/keys/*` where `<user_name>` is user which installed mytonctrl.
+
+### Mytonctrl was installed by another user. Probably you need to launch mtc with `ubuntu` user
+
+Additionally `mytonctrl` may not work properly with this error. For example, the `status` command may return empty result.
+
+Check `mytonctrl` owner:
+
+```bash
+ls -lh /var/ton-work/keys/
+```
+
+If the owner is the `root` user, [uninstall](/participate/run-nodes/full-node#uninstall-mytonctrl) `mytonctrl` and [install](/participate/run-nodes/full-node#run-a-node-text) it again **using non-root user**.
+
+Else, log out from the current user (if ssh connection is used, break it) and log in as the correct user.
+
+The message must disappear.
+
+## MyTonCtrl's console launch breaks after message "Found new version of mytonctrl! Migrating!"
+
+There are two known cases when this error appears:
+
+### Error After Updating MytonCtrl
+
+* If MyTonCtrl was installed by root user: delete file `/usr/local/bin/mytonctrl/VERSION`.
+* If MyTonCtrl was installed by non root user: delete file `~/.local/share/mytonctrl/VERSION`.
+
+### Error During MytonCtrl Installation
+
+`MytonCtrl` may open, but the node will not work properly. Please remove `MytonCtrl` from your computer and reinstall it, ensuring to address any errors that were previously encountered.
+
 
 ## See Also
 

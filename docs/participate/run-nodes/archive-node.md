@@ -19,7 +19,7 @@ We highly recommend install mytonctrl using the supported operating systems:
 
 * 16 x Cores CPU 
 * 128GB ECC Memory 
-* 4TB SSD _OR_ Provisioned 32+k IOPS storage
+* 8TB SSD _OR_ Provisioned 64+k IOPS storage
 * 1 Gbit/s network connectivity
 * 16 TB/month traffic on peak load
 * a public IP address (fixed IP address)
@@ -71,10 +71,16 @@ mv /var/ton-work /var/ton-work.bak
 #### Download the dump
 
 1. Request `user` and `password` credentials to gain access for downloading dumps in the [@TONBaseChatEn](https://t.me/TONBaseChatEn) Telegram chat.
-2. Here is an example command to download & restore the dump from the ton.org server:
+2. Here is an example command to download & restore the **mainnet** dump from the ton.org server:
 
 ```shell
 wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
+```
+
+To install **testnet** dump use:
+
+```shell
+wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest_testnet.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
 ```
 
 Size of the dump is __~1.5TB__, so it will take some time to download and restore it.

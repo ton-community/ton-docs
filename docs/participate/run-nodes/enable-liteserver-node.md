@@ -15,7 +15,7 @@ Compared to a [validator](/participate/run-nodes/full-node#hardware-requirements
 
 - at least 16 cores CPU
 - at least 128 GB RAM
-- at least 1TB GB NVMe SSD _OR_ Provisioned 32+k IOPS storage
+- at least 1TB GB NVMe SSD _OR_ Provisioned 64+k IOPS storage
 - 1 Gbit/s network connectivity
 - 16 TB/month traffic on peak load
 - public IP address (_fixed IP address_)
@@ -37,16 +37,16 @@ If you don't have mytonctrl, install it with `-m liteserver` flag:
   <TabItem value="ubuntu" label="Ubuntu">
 
   ```bash
-  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/mytonctrl2/scripts/install.sh
-  sudo bash install.sh -m liteserver -b mytonctrl2 -d
+  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+  sudo bash install.sh -m liteserver -d
   ```
 
   </TabItem>
   <TabItem value={'debian'} label={'Debian'}>
 
   ```bash
-  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/mytonctrl2/scripts/install.sh
-  su root -c 'bash install.sh -m liteserver -b mytonctrl2 -d'
+  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+  su root -c 'bash install.sh -m liteserver -d'
   ```
 
   </TabItem>
