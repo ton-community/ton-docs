@@ -30,6 +30,11 @@ Try to perform following checks:
 3. Is there NAT between the machine and the internet? If so, ensure that the IP address defined in the `addrs[0].ip` field of the `/var/ton-work/db/config.json` file corresponds to the real public IP of the machine. Note that the value of this field is specified as a signed INT. The `ip2dec` and `dec2ip` scripts located in [ton-tools/node](https://github.com/sonofmom/ton-tools/tree/master/node) can be used to perform conversions.
 
 
+## Archive node is out of sync even after 5 days of the syncing process
+
+Go through the checklist [from this section](/participate/run-nodes/nodes-troubleshooting#about-no-progress-in-node-synchronization-within-3-hours).
+
+
 ## Cannot apply external message to current state : External message was not accepted
 
 ```
