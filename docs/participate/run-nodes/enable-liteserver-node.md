@@ -38,7 +38,7 @@ If you don't have mytonctrl, install it with `-m liteserver` flag:
 
   ```bash
   wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-  sudo bash install.sh -m liteserver
+  sudo bash ./install.sh -m liteserver
   ```
 
   </TabItem>
@@ -46,7 +46,7 @@ If you don't have mytonctrl, install it with `-m liteserver` flag:
 
   ```bash
   wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-  su root -c 'bash install.sh -m liteserver'
+  su root -c 'bash ./install.sh -m liteserver'
   ```
 
   </TabItem>
