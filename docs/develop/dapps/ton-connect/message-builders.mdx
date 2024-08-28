@@ -199,7 +199,7 @@ const myTransaction = {
     messages: [
         {
             address: destination,
-            amount: toNano(0.05).toString(),
+            amount: toNano("0.05").toString(),
             payload: body.toBoc().toString("base64") // payload with comment in body
         }
     ]
@@ -230,7 +230,7 @@ const transaction = {
     messages: [
         {
             address: destination,
-            amount: toNano(0.05).toString(),
+            amount: toNano("0.05").toString(),
             payload: body.toBoc().toString("base64") // payload with comment in body
         }
     ]
@@ -254,7 +254,7 @@ await connector.sendTransaction({
   messages: [
     {
       address: destination,
-      amount: toNano(0.05).toString(),
+      amount: toNano("0.05").toString(),
       payload: body.toBoc().toString("base64") // payload with comment in body
     }
   ]
@@ -266,7 +266,7 @@ await connector.sendTransaction({
 
 ### Jetton Transfer
 
-The `body` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) typically should be done according the following way:
+The `body` for Jetton Transfers is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
 
 ```js
     import { beginCell, toNano, Address } from '@ton/ton'
@@ -278,11 +278,11 @@ The `body` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/b
     const body = beginCell()
         .storeUint(0xf8a7ea5, 32)                 // jetton transfer op code
         .storeUint(0, 64)                         // query_id:uint64
-        .storeCoins(1000000)                      // amount:(VarUInteger 16) -  Jetton amount for transfer (decimals = 6 - jUSDT, 9 - default)
+        .storeCoins(toNano("0.001"))              // amount:(VarUInteger 16) -  Jetton amount for transfer (decimals = 6 - USDT, 9 - default). Function toNano use decimals = 9 (remember it)
         .storeAddress(Address.parse(Wallet_DST))  // destination:MsgAddress
         .storeAddress(Address.parse(Wallet_SRC))  // response_destination:MsgAddress
         .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell)
-        .storeCoins(toNano(0.05))                 // forward_ton_amount:(VarUInteger 16) - if >0, will send notification message
+        .storeCoins(toNano("0.05"))                 // forward_ton_amount:(VarUInteger 16) - if >0, will send notification message
         .storeUint(0,1)                           // forward_payload:(Either Cell ^Cell)
         .endCell();
 ```
@@ -301,7 +301,7 @@ const myTransaction = {
     messages: [
         {
             address: jettonWalletContract, // sender jetton wallet
-            amount: toNano(0.05).toString(), // for commission fees, excess will be returned
+            amount: toNano("0.05").toString(), // for commission fees, excess will be returned
             payload: body.toBoc().toString("base64") // payload with jetton transfer body
         }
     ]
@@ -334,7 +334,7 @@ const transaction = {
     messages: [
         {
             address: jettonWalletContract,  // sender jetton wallet
-            amount: toNano(0.05).toString(),         // for commission fees, excess will be returned
+            amount: toNano("0.05").toString(),         // for commission fees, excess will be returned
             payload: body.toBoc().toString("base64") // payload with jetton transfer body
         }
     ]
@@ -358,7 +358,7 @@ await connector.sendTransaction({
   messages: [
     {
       address: jettonWalletContract,            // sender jetton wallet
-      amount: toNano(0.05).toString(),                   // for commission fees, excess will be returned
+      amount: toNano("0.05").toString(),                   // for commission fees, excess will be returned
       payload: body.toBoc().toString("base64")  // payload with jetton transfer body
     }
   ]
@@ -421,7 +421,7 @@ async function main() {
 
 ### Jetton Transfer with Comment
 
-The `messageBody` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) with comment we should additionally to the regular transfer `body` serialize comment and pack this in the `forwardPayload`:
+The `messageBody` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) with comment we should additionally to the regular transfer `body` serialize comment and pack this in the `forwardPayload`. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
 
 ```js
     import { beginCell, toNano, Address } from '@ton/ton'
@@ -440,11 +440,11 @@ The `messageBody` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain
     const body = beginCell()
         .storeUint(0xf8a7ea5, 32) // opcode for jetton transfer
         .storeUint(0, 64) // query id
-        .storeCoins(toNano(5)) // jetton amount, amount * 10^9
+        .storeCoins(toNano("5")) // Jetton amount for transfer (decimals = 6 - USDT, 9 - default). Function toNano use decimals = 9 (remember it)
         .storeAddress(destinationAddress) // TON wallet destination address
         .storeAddress(destinationAddress) // response excess destination
         .storeBit(0) // no custom payload
-        .storeCoins(toNano(0.02).toString()) // forward amount (if >0, will send notification message)
+        .storeCoins(toNano("0.02")) // forward amount (if >0, will send notification message)
         .storeBit(1) // we store forwardPayload as a reference
         .storeRef(forwardPayload)
         .endCell();
@@ -468,7 +468,7 @@ Next, sending the transaction with this body to sender's jettonWalletContract ex
     messages: [
   {
     address: jettonWalletContract, // sender jetton wallet
-    amount: toNano(0.05).toString(), // for commission fees, excess will be returned
+    amount: toNano("0.05").toString(), // for commission fees, excess will be returned
     payload: body.toBoc().toString("base64") // payload with jetton transfer and comment body
   }
     ]
@@ -501,7 +501,7 @@ Next, sending the transaction with this body to sender's jettonWalletContract ex
   messages: [
 {
   address: jettonWalletContract,  // sender jetton wallet
-  amount: toNano(0.05).toString(),         // for commission fees, excess will be returned
+  amount: toNano("0.05").toString(),         // for commission fees, excess will be returned
   payload: body.toBoc().toString("base64") // payload with jetton transfer and comment body
 }
   ]
@@ -525,7 +525,7 @@ Next, sending the transaction with this body to sender's jettonWalletContract ex
   messages: [
 {
   address: jettonWalletContract,            // sender jetton wallet
-  amount: toNano(0.05).toString(),                   // for commission fees, excess will be returned
+  amount: toNano("0.05").toString(),                   // for commission fees, excess will be returned
   payload: body.toBoc().toString("base64")  // payload with jetton transfer and comment body
 }
   ]
@@ -586,8 +586,7 @@ Next, sending the transaction with this body to sender's jettonWalletContract ex
 
 ### Jetton Burn
 
-The `body` for Jetton Burn([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#2-burn)) typically should be done according the following way:
-
+The `body` for Jetton Burn is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
 
 ```js
     import { beginCell, Address } from '@ton/ton'
@@ -598,7 +597,7 @@ The `body` for Jetton Burn([TEP-74](https://github.com/ton-blockchain/TEPs/blob/
     const body = beginCell()
         .storeUint(0x595f07bc, 32)                // jetton burn op code
         .storeUint(0, 64)                         // query_id:uint64
-        .storeCoins(1000000)                      // amount:(VarUInteger 16) -  Jetton amount in decimal
+        .storeCoins(toNano("0.001"))              // amount:(VarUInteger 16) - Jetton amount in decimal (decimals = 6 - USDT, 9 - default). Function toNano use decimals = 9 (remember it)
         .storeAddress(Address.parse(Wallet_SRC))  // response_destination:MsgAddress - owner's wallet
         .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell) - w/o payload typically
         .endCell();
@@ -619,7 +618,7 @@ const myTransaction = {
     messages: [
         {
             address: jettonWalletContract, // owner's jetton wallet
-            amount: toNano(0.05).toString(),  // for commission fees, excess will be returned
+            amount: toNano("0.05").toString(),  // for commission fees, excess will be returned
             payload: body.toBoc().toString("base64") // payload with a jetton burn body
         }
     ]
@@ -652,7 +651,7 @@ const transaction = {
     messages: [
         {
             address: jettonWalletContract,  // owner's jetton wallet
-            amount: toNano(0.05).toString(),         // for commission fees, excess will be returned
+            amount: toNano("0.05").toString(),         // for commission fees, excess will be returned
             payload: body.toBoc().toString("base64") // payload with a jetton burn body
         }
     ]
@@ -671,7 +670,7 @@ await connector.sendTransaction({
   messages: [
     {
       address: jettonWalletContract, // owner's jetton wallet
-      amount: toNano(0.05).toString(), // for commission fees, excess will be returned
+      amount: toNano("0.05").toString(), // for commission fees, excess will be returned
       payload: body.toBoc().toString("base64") // payload with a jetton burn body
     }
   ]
@@ -701,7 +700,7 @@ import { beginCell, toNano } from '@ton/ton'
         .storeAddress(Address.parse(NEW_OWNER_WALLET)) // new_owner:MsgAddress
         .storeAddress(Address.parse(Wallet_DST))       // response_destination:MsgAddress
         .storeUint(0, 1)                         // custom_payload:(Maybe ^Cell)
-        .storeCoins(toNano(0.000000001).toString())       // forward_amount:(VarUInteger 16)
+        .storeCoins(1)                           // forward_amount:(VarUInteger 16) (1 nanoTon = toNano("0.000000001")) 
         .storeUint(0,1)                          // forward_payload:(Either Cell ^Cell)
         .endCell();
 ```
@@ -721,7 +720,7 @@ const myTransaction = {
     messages: [
         {
             address: jettonWalletContract, // NFT Item address, which will be transferred
-            amount: toNano(0.05).toString(),  // for commission fees, excess will be returned
+            amount: toNano("0.05").toString(),  // for commission fees, excess will be returned
             payload: body.toBoc().toString("base64") // payload with a NFT transfer body
         }
     ]
@@ -754,7 +753,7 @@ const transaction = {
     messages: [
         {
             address: NFTitem,  // NFT Item address, which will be transferred
-            amount: toNano(0.05).toString(),  // for commission fees, excess will be returned
+            amount: toNano("0.05").toString(),  // for commission fees, excess will be returned
             payload: body.toBoc().toString("base64") // payload with a NFT transfer body
         }
     ]
@@ -773,7 +772,7 @@ await connector.sendTransaction({
   messages: [
     {
       address: NFTitem, // NFT Item address, which will be transferred
-      amount: toNano(0.05).toString(),  // for commission fees, excess will be returned
+      amount: toNano("0.05").toString(),  // for commission fees, excess will be returned
       payload: body.toBoc().toString("base64") // payload with a NFT transfer body
     }
   ]
@@ -788,7 +787,7 @@ await connector.sendTransaction({
 
 ### NFT Sale (GetGems)
 
-Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc).
+Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
 
 To place NFT on GetGems Sale Contract, we should prepare special message body `transferNftBody` that will be transfer NFT to special NFT Sale Contract.
 ```js
@@ -798,7 +797,7 @@ To place NFT on GetGems Sale Contract, we should prepare special message body `t
         .storeAddress(Address.parse(destinationAddress)) // new_owner - GetGems sale contracts deployer, should never change for this operation
         .storeAddress(Address.parse(walletAddress)) // response_destination for excesses
         .storeBit(0) // we do not have custom_payload
-        .storeCoins(toNano(1).toString()) // forward_amount
+        .storeCoins(toNano("0.2")) // forward_amount
         .storeBit(0) // we store forward_payload is this cell
         .storeUint(0x0fe0ede, 31) // not 32, because previous 0 will be read as do_sale opcode in deployer
         .storeRef(stateInitCell)
@@ -815,7 +814,10 @@ Because message requires a lot of steps, the entire algorithm huge and could be 
 import { Address, beginCell, StateInit, storeStateInit, toNano, Cell } from '@ton/ton'
 
 async function main() {
-    const fixPriceV3R2Code = Cell.fromBase64('te6cckECCwEAArkAART/APSkE/S88sgLAQIBIAIDAgFIBAUAfvIw7UTQ0wDTH/pA+kD6QPoA1NMAMMABjh34AHAHyMsAFssfUATPFljPFgHPFgH6AszLAMntVOBfB4IA//7y8AICzQYHAFegOFnaiaGmAaY/9IH0gfSB9AGppgBgYaH0gfQB9IH0AGEEIIySsKAVgAKrAQH30A6GmBgLjYSS+CcH0gGHaiaGmAaY/9IH0gfSB9AGppgBgYOCmE44BgAEqYhOmPhW8Q4YBKGATpn8cIxbMbC3MbK2QV44LJOZlvKAVxFWAAyS+G8BJrpOEBFcCBFd0VYACRWdjYKdxjgthOjq+G6hhoaYPqGAD9gHAU4ADAgB92YIQO5rKAFJgoFIwvvLhwiTQ+kD6APpA+gAwU5KhIaFQh6EWoFKQcIAQyMsFUAPPFgH6AstqyXH7ACXCACXXScICsI4XUEVwgBDIywVQA88WAfoCy2rJcfsAECOSNDTiWnCAEMjLBVADzxYB+gLLaslx+wBwIIIQX8w9FIKAejy0ZSzjkIxMzk5U1LHBZJfCeBRUccF8uH0ghAFE42RFrry4fUD+kAwRlAQNFlwB8jLABbLH1AEzxZYzxYBzxYB+gLMywDJ7VTgMDcowAPjAijAAJw2NxA4R2UUQzBw8AXgCMACmFVEECQQI/AF4F8KhA/y8AkA1Dg5ghA7msoAGL7y4clTRscFUVLHBRWx8uHKcCCCEF/MPRQhgBDIywUozxYh+gLLassfFcs/J88WJ88WFMoAI/oCE8oAyYMG+wBxUGZFFQRwB8jLABbLH1AEzxZYzxYBzxYB+gLMywDJ7VQAlsjLHxPLPyPPFlADzxbKAIIJycOA+gLKAMlxgBjIywUmzxZw+gLLaszJgwb7AHFVUHAHyMsAFssfUATPFljPFgHPFgH6AszLAMntVNZeZYk=');
+    // func:0.4.4 src:op-codes.fc, imports/stdlib.fc, nft-fixprice-sale-v3r3.fc
+    // If GetGems updates its sale smart contract, you will need to obtain the new smart contract from https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/nft-fixprice-sale-v3/NftFixpriceSaleV3.source.ts.
+    const NftFixPriceSaleV3R3CodeBoc = 'te6ccgECDwEAA5MAART/APSkE/S88sgLAQIBYgIDAgLNBAUCASANDgL30A6GmBgLjYSS+CcH0gGHaiaGmAaY/9IH0gfSB9AGppj+mfmBg4KYVjgGAASpiFaY+F7xDhgEoYBWmfxwjFsxsLcxsrZBZjgsk5mW8oBfEV4ADJL4dwEuuk4QEWQIEV3RXgAJFZ2Ngp5OOC2HGBFWAA+WjKFkEINjYQQF1AYHAdFmCEAX14QBSYKBSML7y4cIk0PpA+gD6QPoAMFOSoSGhUIehFqBSkCH6RFtwgBDIywVQA88WAfoCy2rJcfsAJcIAJddJwgKwjhtQRSH6RFtwgBDIywVQA88WAfoCy2rJcfsAECOSNDTiWoMAGQwMWyy1DDQ0wchgCCw8tGVIsMAjhSBAlj4I1NBobwE+CMCoLkTsPLRlpEy4gHUMAH7AATwU8fHBbCOXRNfAzI3Nzc3BPoA+gD6ADBTIaEhocEB8tGYBdD6QPoA+kD6ADAwyDICzxZY+gIBzxZQBPoCyXAgEEgQNxBFEDQIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVOCz4wIwMTcowAPjAijAAOMCCMACCAkKCwCGNTs7U3THBZJfC+BRc8cF8uH0ghAFE42RGLry4fX6QDAQSBA3VTIIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVADiODmCEAX14QAYvvLhyVNGxwVRUscFFbHy4cpwIIIQX8w9FCGAEMjLBSjPFiH6Astqyx8Vyz8nzxYnzxYUygAj+gITygDJgwb7AHFwVBcAXjMQNBAjCMjLABfLH1AFzxZQA88WAc8WAfoCzMsfyz/J7VQAGDY3EDhHZRRDMHDwBQAgmFVEECQQI/AF4F8KhA/y8ADsIfpEW3CAEMjLBVADzxYB+gLLaslx+wBwIIIQX8w9FMjLH1Iwyz8kzxZQBM8WE8oAggnJw4D6AhLKAMlxgBjIywUnzxZw+gLLaswl+kRbyYMG+wBxVWD4IwEIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVACHvOFnaiaGmAaY/9IH0gfSB9AGppj+mfmC3ofSB9AH0gfQAYKaFQkNDggPlozJP9Ii2TfSItkf0iLcEIIySsKAVgAKrAQAgb7l72omhpgGmP/SB9IH0gfQBqaY/pn5gBaH0gfQB9IH0AGCmxUJDQ4ID5aM0U/SItlH0iLZH9Ii2F4ACFiBqqiU'
+    const NftFixPriceSaleV3R3CodeCell = Cell.fromBoc(Buffer.from(NftFixPriceSaleV3R3CodeBoc, 'base64'))[0] 
 
     const marketplaceAddress = Address.parse('EQBYTuYbLf8INxFtD8tQeNk5ZLy-nAX9ahQbG_yl1qQ-GEMS'); // GetGems Address
     const marketplaceFeeAddress = Address.parse('EQCjk1hh952vWaE9bRguFkAhDAL5jj3xj9p0uPWrFBq_GEMS'); // GetGems Address for Fees
@@ -824,7 +826,7 @@ async function main() {
     const walletAddress = Address.parse('EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162');
     const royaltyAddress = Address.parse('EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162');
     const nftAddress = Address.parse('EQCUWoe7hLlklVxH8gduCf45vPNocsjRP4wbX42UJ0Ja0S2f');
-    const price = toNano(5).toString(); // 5 TON
+    const price = toNano("5"); // 5 TON
 
     const feesData = beginCell()
         .storeAddress(marketplaceFeeAddress)
@@ -843,11 +845,12 @@ async function main() {
         .storeAddress(walletAddress) // previous_owner_address
         .storeCoins(price) // full price in nanotons
         .storeRef(feesData) // fees_cell
-        .storeBit(0) // can_be_deployed_externally
+        .storeUint(0, 32) // sold_at
+        .storeUint(0, 64) // query_id
         .endCell();
 
     const stateInit: StateInit = {
-        code: fixPriceV3R2Code,
+        code: NftFixPriceSaleV3R3CodeCell,
         data: saleData
     };
     const stateInitCell = beginCell()
@@ -868,10 +871,9 @@ async function main() {
         .storeAddress(destinationAddress) // new_owner
         .storeAddress(walletAddress) // response_destination for excesses
         .storeBit(0) // we do not have custom_payload
-        .storeCoins(toNano(1).toString()) // forward_amount
+        .storeCoins(toNano("0.2")) // forward_amount
         .storeBit(0) // we store forward_payload is this cell
-        // not 32, because we stored 0 bit before | do_sale opcode for deployer
-        .storeUint(0x0fe0ede, 31)
+        .storeUint(0x0fe0ede, 31) // not 32, because we stored 0 bit before | do_sale opcode for deployer
         .storeRef(stateInitCell)
         .storeRef(saleBody)
         .endCell();
@@ -894,7 +896,7 @@ const myTransaction = {
     messages: [
         {
             address: NFTitem, //address of the NFT Item contract, that should be placed on market
-            amount: toNano(1.08).toString(), // amount that will require on gas fees, excess will be return
+            amount: toNano("0.3").toString(), // amount that will require on gas fees, excess will be return
             payload: transferNftBody.toBoc().toString("base64") // payload with the transferNftBody message
         }
     ]
@@ -926,7 +928,7 @@ const transaction = {
     messages: [
         {
             address: NFTitem, //address of NFT Item contract, that should be placed on market
-            amount: toNano(1.08).toString(), // amount that will require on gas fees, excess will be return
+            amount: toNano("0.3").toString(), // amount that will require on gas fees, excess will be return
             payload: transferNftBody.toBoc().toString("base64") // payload with the transferNftBody message
         }
     ]
@@ -945,7 +947,7 @@ await connector.sendTransaction({
   messages: [
     {
       address: NFTitem, //address of NFT Item contract, that should be placed on market
-      amount: toNano(1.08).toString(), // amount that will require on gas fees, excess will be return
+      amount: toNano("0.3").toString(), // amount that will require on gas fees, excess will be return
       payload: transferNftBody.toBoc().toString("base64") // payload with the transferNftBody message
     }
   ]
@@ -956,7 +958,7 @@ await connector.sendTransaction({
 
 ### NFT Buy (GetGems)
 
-The process of buy NFT for [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc) sale contract could be carry out with regular transfer without payload, the only important thing is accurate TON amount, that calculates as follows:
+The process of buy NFT for [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) sale contract could be carry out with regular transfer without payload, the only important thing is accurate TON amount, that calculates as follows:
 `buyAmount = Nftprice TON + 1.0 TON`.
 
 
@@ -972,7 +974,7 @@ const myTransaction = {
     messages: [
         {
             address: nftSaleContract,  // NFT Sale contract, that is current desired NFT Item
-            amount: toNano(buyAmount), // NFT Price + exactly 1 TON, excess will be returned
+            amount: toNano(buyAmount).toString(), // NFT Price + exactly 1 TON, excess will be returned
         }
     ]
 }
@@ -1004,7 +1006,7 @@ const transaction = {
     messages: [
         {
             address: nftSaleContract,  // NFT Sale contract, that is current desired NFT Item
-            amount: toNano(buyAmount), // NFT Price + exactly 1 TON, excess will be returned
+            amount: toNano(buyAmount).toString(), // NFT Price + exactly 1 TON, excess will be returned
         }
     ]
 }
@@ -1021,7 +1023,7 @@ validUntil: Math.floor(Date.now() / 1000) + 360,
 messages: [
     {
         address: nftSaleContract,  // NFT Sale contract, that is current desired NFT Item
-        amount: toNano(buyAmount), // NFT Price + exactly 1 TON, excess will be returned
+        amount: toNano(buyAmount).toString(), // NFT Price + exactly 1 TON, excess will be returned
     }
 ]
 })
@@ -1106,7 +1108,7 @@ Learn more about [TON Smart Contract Addresses](/learn/overviews/addresses).
 
 ### Jetton Transfer
 
-Example of function for building jetton transfer transaction:
+Example of function for building jetton transfer transaction. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
 
 ```python
 from pytoniq_core import begin_cell
@@ -1120,7 +1122,7 @@ def get_jetton_transfer_message(jetton_wallet_address: str, recipient_address: s
         begin_cell()
         .store_uint(0xf8a7ea5, 32)  # op code for jetton transfer message
         .store_uint(0, 64)  # query_id
-        .store_coins(jettons_amount)
+        .store_coins(jettons_amount) # Jetton amount for transfer (decimals = 6 - USDT, 9 - default). Exapmple: 1 USDT = 1 * 10**6 and 1 TON = 1 * 10**9
         .store_address(recipient_address)  # destination address
         .store_address(response_address or recipient_address)  # address send excess to
         .store_uint(0, 1)  # custom payload
@@ -1146,7 +1148,7 @@ transaction = {
         jetton_wallet_address='EQCXsVvdxTVmSIvYv4tTQoQ-0Yq9mERGTKfbsIhedbN5vTVV',
         recipient_address='0:0000000000000000000000000000000000000000000000000000000000000000',
         transfer_fee=int(0.07 * 10**9),
-        jettons_amount=int(0.01 * 10**9),  # replace 9 for jetton decimal. For example for jUSDT it should be (amount * 10**6)
+        jettons_amount=int(0.01 * 10**9),  # replace 9 for jetton decimal. For example for USDT it should be (amount * 10**6)
         response_address=wallet_address
         ),
     ]
@@ -1157,7 +1159,7 @@ transaction = {
 
 ### Jetton Burn
 
-Example of function for building jetton burn transaction:
+Example of function for building jetton burn transaction. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
 
 ```python
 from pytoniq_core import begin_cell
@@ -1171,7 +1173,7 @@ def get_jetton_burn_message(jetton_wallet_address: str, transfer_fee: int, jetto
             begin_cell()
             .store_uint(0x595f07bc, 32)  # op code for jetton burn message
             .store_uint(0, 64)  # query_id
-            .store_coins(jettons_amount)
+            .store_coins(jettons_amount) # Jetton amount in decimal (decimals = 6 - USDT, 9 - default)
             .store_address(response_address)  # address send excess to
             .end_cell()  # end cell
             .to_boc()  # convert it to boc
@@ -1219,7 +1221,7 @@ def get_nft_transfer_message(nft_address: str, recipient_address: str, transfer_
             .store_address(recipient_address)  # new owner
             .store_address(response_address or recipient_address)  # address send excess to
             .store_uint(0, 1)  # custom payload
-            .store_coins(1)  # forward amount
+            .store_coins(1)  # forward amount (0.000000001 * 10 ** 9) = 1 nanoTon
             .store_uint(0, 1)  # forward payload
             .end_cell()  # end cell
             .to_boc()  # convert it to boc
@@ -1250,7 +1252,7 @@ transaction = {
 ### NFT Sale (GetGems)
 
 
-Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc).
+Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
 
 To place NFT on GetGems Sale Contract, we should prepare special message body `transferNftBody` that will be transfer NFT to special NFT Sale Contract.
 
@@ -1267,9 +1269,9 @@ from pytoniq_core.tlb import StateInit
 
 
 def get_sale_body(wallet_address: str, royalty_address: str, nft_address: str, price: int, amount: int):
-
-    # contract code
-    nft_sale_code_cell = Cell.one_from_boc('te6cckECCwEAArkAART/APSkE/S88sgLAQIBIAIDAgFIBAUAfvIw7UTQ0wDTH/pA+kD6QPoA1NMAMMABjh34AHAHyMsAFssfUATPFljPFgHPFgH6AszLAMntVOBfB4IA//7y8AICzQYHAFegOFnaiaGmAaY/9IH0gfSB9AGppgBgYaH0gfQB9IH0AGEEIIySsKAVgAKrAQH30A6GmBgLjYSS+CcH0gGHaiaGmAaY/9IH0gfSB9AGppgBgYOCmE44BgAEqYhOmPhW8Q4YBKGATpn8cIxbMbC3MbK2QV44LJOZlvKAVxFWAAyS+G8BJrpOEBFcCBFd0VYACRWdjYKdxjgthOjq+G6hhoaYPqGAD9gHAU4ADAgB92YIQO5rKAFJgoFIwvvLhwiTQ+kD6APpA+gAwU5KhIaFQh6EWoFKQcIAQyMsFUAPPFgH6AstqyXH7ACXCACXXScICsI4XUEVwgBDIywVQA88WAfoCy2rJcfsAECOSNDTiWnCAEMjLBVADzxYB+gLLaslx+wBwIIIQX8w9FIKAejy0ZSzjkIxMzk5U1LHBZJfCeBRUccF8uH0ghAFE42RFrry4fUD+kAwRlAQNFlwB8jLABbLH1AEzxZYzxYBzxYB+gLMywDJ7VTgMDcowAPjAijAAJw2NxA4R2UUQzBw8AXgCMACmFVEECQQI/AF4F8KhA/y8AkA1Dg5ghA7msoAGL7y4clTRscFUVLHBRWx8uHKcCCCEF/MPRQhgBDIywUozxYh+gLLassfFcs/J88WJ88WFMoAI/oCE8oAyYMG+wBxUGZFFQRwB8jLABbLH1AEzxZYzxYBzxYB+gLMywDJ7VQAlsjLHxPLPyPPFlADzxbKAIIJycOA+gLKAMlxgBjIywUmzxZw+gLLaszJgwb7AHFVUHAHyMsAFssfUATPFljPFgHPFgH6AszLAMntVNZeZYk=')
+    # func:0.4.4 src:op-codes.fc, imports/stdlib.fc, nft-fixprice-sale-v3r3.fc
+    # If GetGems updates its sale smart contract, you will need to obtain the new smart contract from https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/nft-fixprice-sale-v3/NftFixpriceSaleV3.source.ts.
+    nft_sale_code_cell = Cell.one_from_boc('te6ccgECDwEAA5MAART/APSkE/S88sgLAQIBYgIDAgLNBAUCASANDgL30A6GmBgLjYSS+CcH0gGHaiaGmAaY/9IH0gfSB9AGppj+mfmBg4KYVjgGAASpiFaY+F7xDhgEoYBWmfxwjFsxsLcxsrZBZjgsk5mW8oBfEV4ADJL4dwEuuk4QEWQIEV3RXgAJFZ2Ngp5OOC2HGBFWAA+WjKFkEINjYQQF1AYHAdFmCEAX14QBSYKBSML7y4cIk0PpA+gD6QPoAMFOSoSGhUIehFqBSkCH6RFtwgBDIywVQA88WAfoCy2rJcfsAJcIAJddJwgKwjhtQRSH6RFtwgBDIywVQA88WAfoCy2rJcfsAECOSNDTiWoMAGQwMWyy1DDQ0wchgCCw8tGVIsMAjhSBAlj4I1NBobwE+CMCoLkTsPLRlpEy4gHUMAH7AATwU8fHBbCOXRNfAzI3Nzc3BPoA+gD6ADBTIaEhocEB8tGYBdD6QPoA+kD6ADAwyDICzxZY+gIBzxZQBPoCyXAgEEgQNxBFEDQIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVOCz4wIwMTcowAPjAijAAOMCCMACCAkKCwCGNTs7U3THBZJfC+BRc8cF8uH0ghAFE42RGLry4fX6QDAQSBA3VTIIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVADiODmCEAX14QAYvvLhyVNGxwVRUscFFbHy4cpwIIIQX8w9FCGAEMjLBSjPFiH6Astqyx8Vyz8nzxYnzxYUygAj+gITygDJgwb7AHFwVBcAXjMQNBAjCMjLABfLH1AFzxZQA88WAc8WAfoCzMsfyz/J7VQAGDY3EDhHZRRDMHDwBQAgmFVEECQQI/AF4F8KhA/y8ADsIfpEW3CAEMjLBVADzxYB+gLLaslx+wBwIIIQX8w9FMjLH1Iwyz8kzxZQBM8WE8oAggnJw4D6AhLKAMlxgBjIywUnzxZw+gLLaswl+kRbyYMG+wBxVWD4IwEIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVACHvOFnaiaGmAaY/9IH0gfSB9AGppj+mfmC3ofSB9AH0gfQAYKaFQkNDggPlozJP9Ii2TfSItkf0iLcEIIySsKAVgAKrAQAgb7l72omhpgGmP/SB9IH0gfQBqaY/pn5gBaH0gfQB9IH0AGCmxUJDQ4ID5aM0U/SItlH0iLZH9Ii2F4ACFiBqqiU')
 
     # fees cell
 
@@ -1293,32 +1295,34 @@ def get_sale_body(wallet_address: str, royalty_address: str, nft_address: str, p
 
 
     sale_data_cell = (begin_cell()
-                      .store_bit_int(0)
-                      .store_uint(int(time.time()), 32)
+                      .store_bit_int(0) # is_complete
+                      .store_uint(int(time.time()), 32) # created_at
                       .store_address(marketplace_address)
                       .store_address(nft_address)
                       .store_address(wallet_address)
                       .store_coins(price)
                       .store_ref(fees_data_cell)
-                      .store_bit_int(0)
+                      .store_uint(0, 32) # sold_at
+                      .store_uint(0, 64) # query_id
                       .end_cell())
 
+    # not needed, just for example
     state_init_cell = StateInit(code=nft_sale_code_cell, data=sale_data_cell).serialize()
 
     sale_body = (begin_cell()
-                 .store_uint(1, 32)
+                 .store_uint(1, 32) # just accept coins on deploy
                  .store_uint(0, 64)
                  .end_cell())
 
     transfer_nft_body = (begin_cell()
-                         .store_uint(0x5fcc3d14, 32)
-                         .store_uint(0, 64)
+                         .store_uint(0x5fcc3d14, 32) # Opcode for NFT transfer
+                         .store_uint(0, 64) # query_id
                          .store_address(destination_address)
                          .store_address(wallet_address)
-                         .store_bit_int(0)
-                         .store_coins(int(1 * 10**9))
-                         .store_bit_int(0)
-                         .store_uint(0x0fe0ede, 31)
+                         .store_bit_int(0) # we do not have custom_payload
+                         .store_coins(int(0.2 * 10**9)) # forward_amount
+                         .store_bit_int(0) # we store forward_payload is this cell
+                         .store_uint(0x0fe0ede, 31) # not 32, because we stored 0 bit before | do_sale opcode for deployer
                          .store_ref(state_init_cell)
                          .store_ref(sale_body)
                          .end_cell())
@@ -1345,7 +1349,7 @@ transaction = {
             wallet_address='0:0000000000000000000000000000000000000000000000000000000000000000',
             royalty_address='0:0000000000000000000000000000000000000000000000000000000000000000',
             price=int(5 * 10**9),
-            amount=int(1.08 * 10**9)
+            amount=int(0.3 * 10**9)
         ),
     ]
 }
@@ -1353,7 +1357,7 @@ transaction = {
 
 ### NFT Buy (GetGems)
 
-The process of buy NFT for [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc) sale contract could be carry out with regular transfer without payload, the only important thing is accurate TON amount, that calculates as follows:
+The process of buy NFT for [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) sale contract could be carry out with regular transfer without payload, the only important thing is accurate TON amount, that calculates as follows:
 `buyAmount = Nftprice TON + 1.0 TON`.
 
 
@@ -1473,7 +1477,7 @@ if err != nil {
 
 ### Jetton Transfer
 
-Example of function for jetton transfer message:
+Example of function for jetton transfer message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
 
 ```go
 import (
@@ -1490,7 +1494,7 @@ func JettonTransferMessage(jetton_wallet_address string, amount uint64,
 	payload, _ := cell.BeginCell().
 		MustStoreUInt(0xf8a7ea5, 32). // op code for jetton transfer message (op::transfer)
 		MustStoreUInt(0, 64).         // query_id
-		MustStoreCoins(jettons_amount).
+		MustStoreCoins(jettons_amount). // Jetton amount for transfer (decimals = 6 - USDT, 9 - default). Exapmple: 1 USDT = 1 * 10**6 and 1 TON = 1 * 10**9
 		MustStoreAddr(address.MustParseAddr(recipient_address)). // address send excess to
 		MustStoreAddr(address.MustParseAddr(response_address)).
 		MustStoreUInt(0, 1).        // custom payload
@@ -1535,7 +1539,7 @@ if err != nil {
 
 ### Jetton Burn
 
-Example of function for jetton burn message:
+Example of function for jetton burn message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
 
 ```go
 import (
@@ -1552,7 +1556,7 @@ func JettonBurnMessage(jetton_wallet_address string, amount uint64,
 	payload, _ := cell.BeginCell().
 		MustStoreUInt(0xf8a7ea5, 32).                           // op code for jetton burn message (op::burn)
 		MustStoreUInt(0, 64).                                   // query_id
-		MustStoreCoins(jettons_amount).                         // jetton amount to burn
+		MustStoreCoins(jettons_amount).                         // Jetton amount in decimal (decimals = 6 - USDT, 9 - default)
 		MustStoreAddr(address.MustParseAddr(response_address)). // address send excess to
 		EndCell().MarshalJSON()
 
@@ -1651,7 +1655,7 @@ if err != nil {
 
 ### NFT Sale (GetGems)
 
-Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc).
+Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
 
 To place NFT on GetGems Sale Contract, we should prepare special message body `transferNftBody` that will be transfer NFT to special NFT Sale Contract.
 ```go
@@ -1661,7 +1665,7 @@ transferNftBody := cell.BeginCell().
     MustStoreAddress(destinationAddress). // new_owner - GetGems sale contracts deployer, should never change for this operation
     MustStoreAddress(walletAddress).      // response_destination for excesses
     MustStoreUInt(0, 1).                  // we do not have custom_payload
-    MustStoreCoins(1.08*math.Pow(10, 9)). // forward_amount
+    MustStoreCoins(0.2*math.Pow(10, 9)).  // forward_amount
     MustStoreUInt(0, 1).                  // we store forward_payload is this cell
     MustStoreUInt(0x0fe0ede, 31).         // not 32, because previous 0 will be read as do_sale opcode in deployer (op::do_sale)
     MustStoreRef(stateInitCell).
@@ -1686,8 +1690,10 @@ import (
 )
 
 func NftSaleMessage(wallet, royalty, nft string, amount, price uint64) (*tonconnect.Message, error) {
-	fixPriceV3R2Code := new(cell.Cell)
-	fixPriceV3R2Code.UnmarshalJSON([]byte("te6cckECCwEAArkAART/APSkE/S88sgLAQIBIAIDAgFIBAUAfvIw7UTQ0wDTH/pA+kD6QPoA1NMAMMABjh34AHAHyMsAFssfUATPFljPFgHPFgH6AszLAMntVOBfB4IA//7y8AICzQYHAFegOFnaiaGmAaY/9IH0gfSB9AGppgBgYaH0gfQB9IH0AGEEIIySsKAVgAKrAQH30A6GmBgLjYSS+CcH0gGHaiaGmAaY/9IH0gfSB9AGppgBgYOCmE44BgAEqYhOmPhW8Q4YBKGATpn8cIxbMbC3MbK2QV44LJOZlvKAVxFWAAyS+G8BJrpOEBFcCBFd0VYACRWdjYKdxjgthOjq+G6hhoaYPqGAD9gHAU4ADAgB92YIQO5rKAFJgoFIwvvLhwiTQ+kD6APpA+gAwU5KhIaFQh6EWoFKQcIAQyMsFUAPPFgH6AstqyXH7ACXCACXXScICsI4XUEVwgBDIywVQA88WAfoCy2rJcfsAECOSNDTiWnCAEMjLBVADzxYB+gLLaslx+wBwIIIQX8w9FIKAejy0ZSzjkIxMzk5U1LHBZJfCeBRUccF8uH0ghAFE42RFrry4fUD+kAwRlAQNFlwB8jLABbLH1AEzxZYzxYBzxYB+gLMywDJ7VTgMDcowAPjAijAAJw2NxA4R2UUQzBw8AXgCMACmFVEECQQI/AF4F8KhA/y8AkA1Dg5ghA7msoAGL7y4clTRscFUVLHBRWx8uHKcCCCEF/MPRQhgBDIywUozxYh+gLLassfFcs/J88WJ88WFMoAI/oCE8oAyYMG+wBxUGZFFQRwB8jLABbLH1AEzxZYzxYBzxYB"))
+    // func:0.4.4 src:op-codes.fc, imports/stdlib.fc, nft-fixprice-sale-v3r3.fc
+    // If GetGems updates its sale smart contract, you will need to obtain the new smart contract from https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/nft-fixprice-sale-v3/NftFixpriceSaleV3.source.ts.
+	fixPriceV3R3Code := new(cell.Cell)
+	fixPriceV3R3Code.UnmarshalJSON([]byte("te6ccgECDwEAA5MAART/APSkE/S88sgLAQIBYgIDAgLNBAUCASANDgL30A6GmBgLjYSS+CcH0gGHaiaGmAaY/9IH0gfSB9AGppj+mfmBg4KYVjgGAASpiFaY+F7xDhgEoYBWmfxwjFsxsLcxsrZBZjgsk5mW8oBfEV4ADJL4dwEuuk4QEWQIEV3RXgAJFZ2Ngp5OOC2HGBFWAA+WjKFkEINjYQQF1AYHAdFmCEAX14QBSYKBSML7y4cIk0PpA+gD6QPoAMFOSoSGhUIehFqBSkCH6RFtwgBDIywVQA88WAfoCy2rJcfsAJcIAJddJwgKwjhtQRSH6RFtwgBDIywVQA88WAfoCy2rJcfsAECOSNDTiWoMAGQwMWyy1DDQ0wchgCCw8tGVIsMAjhSBAlj4I1NBobwE+CMCoLkTsPLRlpEy4gHUMAH7AATwU8fHBbCOXRNfAzI3Nzc3BPoA+gD6ADBTIaEhocEB8tGYBdD6QPoA+kD6ADAwyDICzxZY+gIBzxZQBPoCyXAgEEgQNxBFEDQIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVOCz4wIwMTcowAPjAijAAOMCCMACCAkKCwCGNTs7U3THBZJfC+BRc8cF8uH0ghAFE42RGLry4fX6QDAQSBA3VTIIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVADiODmCEAX14QAYvvLhyVNGxwVRUscFFbHy4cpwIIIQX8w9FCGAEMjLBSjPFiH6Astqyx8Vyz8nzxYnzxYUygAj+gITygDJgwb7AHFwVBcAXjMQNBAjCMjLABfLH1AFzxZQA88WAc8WAfoCzMsfyz/J7VQAGDY3EDhHZRRDMHDwBQAgmFVEECQQI/AF4F8KhA/y8ADsIfpEW3CAEMjLBVADzxYB+gLLaslx+wBwIIIQX8w9FMjLH1Iwyz8kzxZQBM8WE8oAggnJw4D6AhLKAMlxgBjIywUnzxZw+gLLaswl+kRbyYMG+wBxVWD4IwEIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVACHvOFnaiaGmAaY/9IH0gfSB9AGppj+mfmC3ofSB9AH0gfQAYKaFQkNDggPlozJP9Ii2TfSItkf0iLcEIIySsKAVgAKrAQAgb7l72omhpgGmP/SB9IH0gfQBqaY/pn5gBaH0gfQB9IH0AGCmxUJDQ4ID5aM0U/SItlH0iLZH9Ii2F4ACFiBqqiU"))
 
 	marketplaceAddress := address.MustParseAddr("EQBYTuYbLf8INxFtD8tQeNk5ZLy-nAX9ahQbG_yl1qQ-GEMS")    // GetGems Address
 	marketplaceFeeAddress := address.MustParseAddr("EQCjk1hh952vWaE9bRguFkAhDAL5jj3xj9p0uPWrFBq_GEMS") // GetGems Address for Fees
@@ -1714,12 +1720,13 @@ func NftSaleMessage(wallet, royalty, nft string, amount, price uint64) (*tonconn
 		MustStoreAddr(walletAddress).                       // previous_owner_address
 		MustStoreCoins(price).                              // full price in nanotons
 		MustStoreRef(feesData).                             // fees_cell
-		MustStoreUInt(0, 1).                                // can_be_deployed_externally
+		MustStoreUInt(0, 32).                               // sold_at
+        MustStoreUInt(0, 64).                               // query_id
 		EndCell()
 
 	stateInit := &tlb.StateInit{
 		Data: saleData,
-		Code: fixPriceV3R2Code,
+		Code: fixPriceV3R3Code,
 	}
 
 	stateInitCell, err := tlb.ToCell(stateInit)
@@ -1741,7 +1748,7 @@ func NftSaleMessage(wallet, royalty, nft string, amount, price uint64) (*tonconn
 		MustStoreAddr(destinationAddress).         // new_owner - GetGems sale contracts deployer, should never change for this operation
 		MustStoreAddr(walletAddress).              // response_destination for excesses
 		MustStoreUInt(0, 1).                       // we do not have custom_payload
-		MustStoreCoins(uint64(1*math.Pow(10, 9))). // forward_amount
+		MustStoreCoins(uint64(0.2*math.Pow(10, 9))). // forward_amount
 		MustStoreUInt(0, 1).                       // we store forward_payload is this cell
 		MustStoreUInt(0x0fe0ede, 31).              // not 32, because previous 0 will be read as do_sale opcode in deployer (op::do_sale)
 		MustStoreRef(stateInitCell).
@@ -1771,7 +1778,7 @@ The final transaction body:
 msg, err := NftSaleMessage("EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162",
                             "EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162",
                             "EQCUWoe7hLlklVxH8gduCf45vPNocsjRP4wbX42UJ0Ja0S2f",
-                            uint64(1.08*math.Pow(10, 9)), uint64(5*math.Pow(10, 9)))
+                            uint64(0.3*math.Pow(10, 9)), uint64(5*math.Pow(10, 9)))
 if err != nil {
     log.Fatal(err)
 }
@@ -1789,7 +1796,7 @@ if err != nil {
 
 ### NFT Buy (GetGems)
 
-The process of buy NFT for [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc) sale contract could be carry out with regular transfer without payload, the only important thing is accurate TON amount, that calculates as follows:
+The process of buy NFT for [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) sale contract could be carry out with regular transfer without payload, the only important thing is accurate TON amount, that calculates as follows:
 `buyAmount = Nftprice TON + 1.0 TON`.
 
 ```go

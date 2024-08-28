@@ -30,6 +30,11 @@ Try to perform following checks:
 3. Is there NAT between the machine and the internet? If so, ensure that the IP address defined in the `addrs[0].ip` field of the `/var/ton-work/db/config.json` file corresponds to the real public IP of the machine. Note that the value of this field is specified as a signed INT. The `ip2dec` and `dec2ip` scripts located in [ton-tools/node](https://github.com/sonofmom/ton-tools/tree/master/node) can be used to perform conversions.
 
 
+## Archive node is out of sync even after 5 days of the syncing process
+
+Go through the checklist [from this section](/participate/run-nodes/nodes-troubleshooting#about-no-progress-in-node-synchronization-within-3-hours).
+
+
 ## Cannot apply external message to current state : External message was not accepted
 
 ```
@@ -167,21 +172,19 @@ The best way (while the penalty for temporary non-validation is small, it can be
 cp var/ton-work/db/config.json var/ton-work/db/config.json.backup
 ```
 
-## Error parsing dependencies of distro-info: Invalid version
+## Mytonctrl was installed by another user. Probably you need to launch mtc with ... user
 
-There are two known cases when this error appears:
+Run MyTonCtrl with user that used to install it. 
 
-### Error After Updating MytonCtrl
+For example, the most common case is when one tries to run MyTonCtrl as root user, even though it was installed under a different user. In this case, you need to log in to the user who installed MyTonCtrl and run MyTonCtrl from that user.
 
-Please, delete the file `/usr/local/bin/mytonctrl/VERSION`.
+### Mytonctrl was installed by another user. Probably you need to launch mtc with `validator` user
 
-### Error During MytonCtrl Installation
+Run command `sudo chown <user_name>:<user_name> /var/ton-work/keys/*` where `<user_name>` is user which installed mytonctrl.
 
-`MytonCtrl` may open, but the node will not work properly. Please remove `MytonCtrl` from your computer and reinstall it, ensuring to address any errors that were previously encountered.
+### Mytonctrl was installed by another user. Probably you need to launch mtc with `ubuntu` user
 
-## Mytonctrl was installed by another user. Probably you need to launch mtc with `ubuntu` user
-
-Additionally `mytonctr` may not work properly with this error. For example, the `status` command may return empty result.
+Additionally `mytonctrl` may not work properly with this error. For example, the `status` command may return empty result.
 
 Check `mytonctrl` owner:
 
@@ -194,6 +197,20 @@ If the owner is the `root` user, [uninstall](/participate/run-nodes/full-node#un
 Else, log out from the current user (if ssh connection is used, break it) and log in as the correct user.
 
 The message must disappear.
+
+## MyTonCtrl's console launch breaks after message "Found new version of mytonctrl! Migrating!"
+
+There are two known cases when this error appears:
+
+### Error After Updating MytonCtrl
+
+* If MyTonCtrl was installed by root user: delete file `/usr/local/bin/mytonctrl/VERSION`.
+* If MyTonCtrl was installed by non root user: delete file `~/.local/share/mytonctrl/VERSION`.
+
+### Error During MytonCtrl Installation
+
+`MytonCtrl` may open, but the node will not work properly. Please remove `MytonCtrl` from your computer and reinstall it, ensuring to address any errors that were previously encountered.
+
 
 ## See Also
 
