@@ -1,3 +1,5 @@
+import Button from '@site/src/components/button'
+
 # Educational Resources
 
 ### TON Speedrun
