@@ -26,6 +26,7 @@ There are different ways to connect to blockchain:
 
 ## RPC Nodes
 
+* [Tatum](https://docs.tatum.io/reference/rpc-ton) — Access TON RPC nodes and powerful developer tools in one simple-to-use platform.
 * [GetBlock Nodes](https://getblock.io/nodes/ton/) — connect and test your dApps using GetBlocks Nodes
 * [TON Access](https://www.orbs.com/ton-access/) - HTTP API for The Open Network (TON).
 * [Toncenter](https://toncenter.com/api/v2/) — community-hosted project for Quick Start with API. (Get an API key [@tonapibot](https://t.me/tonapibot))

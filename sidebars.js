@@ -678,6 +678,7 @@ const sidebars = {
         'participate/run-nodes/nodes-troubleshooting',
         'participate/nodes/node-maintenance-and-security',
         'participate/run-nodes/local-ton',
+        'participate/run-nodes/mytonctrl-status',
         'participate/run-nodes/faq',
 
       ],
