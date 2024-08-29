@@ -38,7 +38,7 @@ TON operates on a **Proof-of-Stake** mechanism, where `validators` are pivotal i
 
 If `full node` holds a **necessary amount of Toncoin** as a **stake**, it can be used as `Validator Node`.
 
-<Button href="/participate/run-nodes/enable-liteserver-node"
+<Button href="/participate/run-nodes/become-validator"
 colorType="primary" sizeType={'sm'}>
 Running a Validator Node
 </Button>
