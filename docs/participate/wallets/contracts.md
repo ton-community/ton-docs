@@ -98,7 +98,7 @@ The v5 wallet smart contract allows the processing of internal messages signed b
 Beta version of the gasless backend API is available on [tonapi.io/api-v2](https://tonapi.io/api-v2). If you are developing any wallet app and have feedback about these methods please share it ton [@tonapitech](https://t.me/tonapitech) chat.
 
 Wallet source code:
- * [tonkeeper/w5](https://github.com/tonkeeper/w5)
+ * [ton-blockchain/wallet-contract-v5](https://github.com/ton-blockchain/wallet-contract-v5)
 
 ## Special wallets
 
