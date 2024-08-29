@@ -116,7 +116,7 @@ the `Jetton master contract` provides the get method `get_wallet_address(slice o
 <Tabs groupId="retrieve-wallet-address">
 <TabItem value="api" label="API">
 
-> Run `get_wallet_address(slice owner_address)` through `/runGetMethod` method from the [Toncenter API](https://toncenter.com/api/v3/#/default/run_get_method_api_v3_runGetMethod_post).
+> Run `get_wallet_address(slice owner_address)` through `/runGetMethod` method from the [Toncenter API](https://toncenter.com/api/v3/#/default/run_get_method_api_v3_runGetMethod_post). In real cases (not test ones) it is important to always check that wallet indeed is attributed to desired Jetton Master. Check code example for more.
 
 </TabItem>
 <TabItem value="js" label="js">
