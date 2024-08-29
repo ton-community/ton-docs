@@ -60,10 +60,10 @@ More detailed and accurate description on the [Transaction Layout](/develop/data
 
 ### Transaction outcome
 
-There is a [TVM exit code](/learn/tvm-instructions/tvm-exit-codes) for transaction which had compute phase, if it is >1 then there was an error. 
+There is a [TVM exit code](/learn/tvm-instructions/tvm-exit-codes) for transaction which had compute phase, if it is not 0 or 1 then there was an error. 
 Also TVM [compute phase may be skipped](/learn/tvm-instructions/tvm-overview#compute-phase-skipped) for some reasons like absence of funds or state.
 
-:::info
+:::info for toncenter api v3
 To determine successful transaction one should use tx.description.action.success && tx.description.compute_ph.success:
 :::
 ```json
@@ -87,8 +87,12 @@ To determine successful transaction one should use tx.description.action.success
 Transaction may have one of three results:
 
 - Success, exit code 0 or 1
-- Fail, `aborted: true`
-- Fail, [exit code >= 2 ](https://testnet.tonviewer.com/transaction/5889803bb1e0f58fdee381382fe1e38f74f3ea002a700441f8a21d52f7234ef8), `aborted: true`
+- Fail, `aborted: true` without execution
+- Fail, [exit code](/learn/tvm-instructions/tvm-exit-codes), `aborted: true`
+
+:::info for toncenter api v3
+`aborted: true` is a toncenter field, transaction has no such field
+:::
 
 ## What is a Logical time?
 
