@@ -5,7 +5,7 @@ Recommended SDK for React Apps is a [UI React SDK](/develop/dapps/ton-connect/de
 
 ## Implementation
 
-### 1) Installation
+### Installation
 
 To start integrating TON Connect into your DApp, you need to install the `@tonconnect/ui-react` package. You can use npm or yarn for this purpose:
 
@@ -13,7 +13,7 @@ To start integrating TON Connect into your DApp, you need to install the `@tonco
 npm i @tonconnect/ui-react
 ```
 
-### 2) TON Connect Initiation
+### TON Connect Initiation
 
 
 After installing the package, you should create a `manifest.json` file for your application. More information on how to create a manifest.json file can be found [here](/develop/dapps/ton-connect/manifest).
@@ -33,7 +33,7 @@ export function App() {
 
 ```
 
-### 3) Connect to the Wallet
+### Connect to the Wallet
 
 Add the `TonConnectButton`. The TonConnect Button is a universal UI component for initializing a connection. After the wallet is connected, it transforms into a wallet menu. It is recommended to place it in the top right corner of your app.
 
@@ -55,7 +55,7 @@ You can add className and style props to the button as well. Note that you canno
 
 Moreover, you always can initiate the connection manually, using `useTonConnectUI` hook and [connectWallet](https://github.com/ton-connect/sdk/tree/main/packages/ui#call-connect) method.
 
-### 4) Redirects
+### Redirects
 
 If you want to redirect user to a specific page after wallet connection, you can use `useTonConnectUI` hook and [customize your return strategy](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy).
 
@@ -75,7 +75,7 @@ If you want to redirect user to a [Telegram Mini App](/develop/dapps/telegram-ap
 
 [Open example on GitHub](https://github.com/ton-connect/demo-dapp-with-wallet/blob/master/src/App.tsx)
 
-### 5) UI customization
+### UI customization
 
 To [customize UI](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation) of the modal you can use `useTonConnectUI` hook and `setOptions` function. See more about useTonConnectUI hook in [Hooks](#hooks) section.
 
@@ -330,7 +330,7 @@ await tonConnectUI.disconnect();
 ## Examples
 
 * Step-by-step [TON Hello World guide](https://ton-community.github.io/tutorials/03-client/) to create a simple DAppwith React UI.
-* [Demo dApp](https://github.com/ton-connect/demo-dapp-with-react-ui) - Example of a DAppwith `@tonconnect/ui-react`.
+* [Demo dApp](https://github.com/ton-connect/demo-dapp-with-react-ui) - Example of a DApp with `@tonconnect/ui-react`.
 * [ton.vote](https://github.com/orbs-network/ton-vote) - Example of React website with TON Connect implementation.
 
 
