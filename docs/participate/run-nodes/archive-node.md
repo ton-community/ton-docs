@@ -202,6 +202,16 @@ Have question or need help? Please ask in the [TON dev chat](https://t.me/tondev
 :::
 
 
+## Tips & Tricks
+
+### Force archive node not to store blocks
+
+To force node not to store archive blocks use the value 86400. Check [set_node_argument section](/participate/run-nodes/mytonctrl#set_node_argument) for more.
+
+```bash
+installer set_node_argument --archive-ttl 86400
+```
+
 ## See Also
 
 * [TON Node Types](/participate/nodes/node-types)
