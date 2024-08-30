@@ -27,14 +27,17 @@ The `dev` branch runs GitHub Actions to handle synchronization tasks. You can fi
 - **`sync-fork.yml`**: This workflow synchronizes documentation from the upstream repository. It runs daily at 00:00.
 - **`sync-translations.yml`**: This workflow synchronizes updated translations to the respective language branches for preview purposes on the corresponding language websites.
 
-#### 2. `localization`
+#### 2. `main`
 This branch stays in sync with the upstream repository through GitHub Actions running on the `dev` branch. It is also used for updating certain codes that we intend to propose to the original repository.
 
-#### 3. `l10n_localization`
-This branch includes all changes from the `localization` branch and translations from Crowdin. All modifications in this branch are committed to the upstream repository.
+#### 3. `l10n_main`
+This branch includes all changes from the `main` branch and translations from Crowdin. All modifications in this branch are periodically committed to the upstream repository by using a new sub-branch named `l10n_main_[some data]`.
 
-#### 4. `[lang]_localization`
-These branches are designated for specific language previews, such as `ko_localization` for Korean and `ja_localization` for Japanese. They allow us to preview the website in different languages.
+#### 4. `l10n_feat` or `l10n_feat_[specific functions]`
+This branch will include changes to code or documentation related to the translation system. Once all content is finalized, the changes in this branch will be merged into `l10_main`.
+
+#### 5. `[lang]_preview`
+These branches are designated for specific language previews, such as `ko_preview` for Korean and `ja_preview` for Japanese. They allow us to preview the website in different languages.
 
 By maintaining these branches and using GitHub Actions, we efficiently manage the synchronization of our documentation and translation updates, ensuring that our multilingual content is always up to date.
 

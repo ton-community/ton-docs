@@ -193,3 +193,13 @@ export const FOOTER_COLUMN_LINKS_CN = [
     ],
   },
 ];
+
+export function footerLinkExporter(lang?: string) {
+  const FOOTER_LINKS_TRANSLATIONS = {
+    mandarin: FOOTER_COLUMN_LINKS_CN,
+  };
+
+  return (
+    FOOTER_LINKS_TRANSLATIONS?.[lang?.toLowerCase()] ?? FOOTER_COLUMN_LINKS_EN
+  );
+}
