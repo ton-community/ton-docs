@@ -20,6 +20,7 @@ For convenience, almost the entire infrastructure of the mainnet (wallets, API, 
 * Testnet TON Center API: https://testnet.toncenter.com
 * Testnet HTTP API: https://testnet.tonapi.io/
 * Testnet bridge: https://bridge.ton.org/?testnet=true
+* Testent dTON GraphQL: https://testnet.dton.io/
 
 ## Some third parties
 
