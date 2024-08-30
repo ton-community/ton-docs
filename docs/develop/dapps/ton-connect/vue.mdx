@@ -4,7 +4,7 @@ Recommended SDK for Vue Apps is a [UI Vue SDK](/develop/dapps/ton-connect/develo
 
 ## Implementation
 
-### 1) Installation
+### Installation
 
 To start integrating TON Connect into your DApp, you need to install the `@townsquarelabs/ui-vue` package. You can use npm or yarn for this purpose:
 
@@ -12,7 +12,7 @@ To start integrating TON Connect into your DApp, you need to install the `@towns
 npm i @townsquarelabs/ui-vue
 ```
 
-### 2) TON Connect Initiation
+### TON Connect Initiation
 
 Add TonConnectUIProvider to the root of the app. You can specify UI options using props.
 <!-- [See all available options](https://github.com/TownSquareXYZ/tonconnect-ui-vue/blob/aa7439073dae5f7ccda3ab10291fc4658f5d3588/src/utils/UIProvider.ts#L11) -->
@@ -45,7 +45,7 @@ export default {
 </script>
 ```
 
-### 3) Connect to the Wallet
+### Connect to the Wallet
 TonConnect Button is universal UI component for initializing connection. After wallet is connected it transforms to a wallet menu.
 It is recommended to place it in the top right corner of your app.
 
@@ -71,7 +71,7 @@ export default {
 You can add `class` and `:style` props to the button as well. Note that you cannot pass child to the TonConnectButton. 
 `<TonConnectButton class="my-button-class" :style="{ float: 'right' }"/>`
 
-### 4) Redirects
+### Redirects
 
 If you want to redirect user to a specific page after wallet connection, you can use `useTonConnectUI` hook and [customize your return strategy](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy).
 
@@ -107,7 +107,7 @@ export default {
 
 [Read more in SDK documentation](https://github.com/ton-connect/sdk/tree/main/packages/ui#use-inside-twa-telegram-web-app)
 
-### 5) UI customization
+### UI customization
 
 To [customize UI](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation) of the modal you can use `useTonConnectUI` hook and `setOptions` function. See more about useTonConnectUI hook in [Hooks](#usetonconnectui) section.
 
