@@ -298,6 +298,7 @@ const sidebars = {
             'develop/dapps/apis/README',
             'develop/dapps/apis/toncenter',
             'develop/dapps/apis/adnl',
+            'develop/dapps/apis/api-key'
           ],
         },
         {
