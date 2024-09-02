@@ -39,7 +39,7 @@
 _2-5秒_
 
 :::info
-通过阅读我们在[ton.org/analysis](https://ton.org/analysis)上的分析，比较TON的链上指标，包括区块时间和最终确定时间。
+通过阅读我们在[analysis page](https://ton.org/comparison_of_blockchains.pdf)上的分析，比较TON的链上指标，包括区块时间和最终确定时间。
 :::
 
 ### 最终确定时间
@@ -47,7 +47,7 @@ _2-5秒_
 _小于6秒_
 
 :::info
-通过阅读我们在[ton.org/analysis](https://ton.org/analysis)上的分析，比较TON的链上指标，包括区块时间和最终确定时间。
+通过阅读我们在[analysis page](https://ton.org/comparison_of_blockchains.pdf)上的分析，比较TON的链上指标，包括区块时间和最终确定时间。
 :::
 
 ### 平均区块大小
