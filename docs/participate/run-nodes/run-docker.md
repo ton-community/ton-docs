@@ -31,7 +31,13 @@ Variable **IGNORE_MINIMAL_REQS=true** turns off requirements verification of CPU
 * Debian 11
 * Debian 12
 
-## Installation and start MyTonCtrl:
+## Run MyTonCtrl v2 using official docker image:
+* Pull the image and run the node with MyTonCtrl 
+```bash
+docker run -d --name ton-node -v <YOUR_LOCAL_FOLDER>:/var/ton-work -it ghcr.io/ton-community/ton-docker-ctrl:latest
+````
+
+## Install and start MyTonCtrl from sources:
 
 1. Clone the last version of the repository
 ```bash
@@ -53,6 +59,20 @@ docker compose build ton-node
 ```bash
 docker compose up -d
 ```
+
+## Migrate non-Docker fullnode or validator to a dockerized MyTonCtrl v2
+
+Specify paths to TON binaries and sources, as well as to TON work directory, but most importantly to MyTonCtrl settings and wallets.
+
+```bash
+docker run -d --name ton-node --restart always \
+-v <EXISTING_TON_WORK_FOLDER>:/var/ton-work \
+-v /usr/bin/ton:/usr/bin/ton \
+-v /usr/src/ton:/usr/src/ton \
+-v /home/<USER>/.local/share:/usr/local/bin \
+ghcr.io/ton-community/ton-docker-ctrl:latest
+```
+
 ## Variables setting:
 
 Variables indicated in the file .env
