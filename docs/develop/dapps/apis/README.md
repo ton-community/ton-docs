@@ -22,7 +22,7 @@
 
 ### Toncoin rate APIs
 
-* https://tonapi.io/v2/rates?tokens=ton&currencies=ton%2Cusd%2Crub
+* https://docs.tonconsole.com/tonapi/rest-api/rates
 * https://coinmarketcap.com/api/documentation/v1/ 
 * https://apiguide.coingecko.com/getting-started
 

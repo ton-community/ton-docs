@@ -77,12 +77,7 @@ const sidebars = {
             'learn/networking/ton-dht',
           ],
         },
-
-        {
-          type: 'link',
-          label: 'TON Compared to Other L1s',
-          href: 'https://ton.org/analysis',
-        },
+        'learn/overviews/blockchain-comparison',
         {
           type: 'link',
           label: 'Open-Source and Decentralization in TON',
@@ -298,6 +293,7 @@ const sidebars = {
             'develop/dapps/apis/README',
             'develop/dapps/apis/toncenter',
             'develop/dapps/apis/adnl',
+            'develop/dapps/apis/api-key'
           ],
         },
         {
@@ -396,6 +392,11 @@ const sidebars = {
               type: 'doc',
               id: 'develop/dapps/ton-connect/react',
               label: 'React Apps',
+            },
+            {
+              type: 'doc',
+              id: 'develop/dapps/ton-connect/vue',
+              label: 'Vue Apps',
             },
             {
               type: 'doc',
@@ -680,6 +681,7 @@ const sidebars = {
         'participate/run-nodes/local-ton',
         'participate/run-nodes/mytonctrl-status',
         'participate/run-nodes/faq',
+        'participate/run-nodes/node-comands',
 
       ],
     },

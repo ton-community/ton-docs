@@ -122,20 +122,21 @@ the `Jetton master contract` provides the get method `get_wallet_address(slice o
 <TabItem value="js" label="js">
 
 ```js
-import TonWeb from "tonweb";
+import TonWeb from 'tonweb';
 const tonweb = new TonWeb();
-const jettonMinter = new TonWeb.token.jetton.JettonMinter(tonweb.provider, {address: "<JETTON_MASTER_ADDRESS>"});
-const address = await jettonMinter.getJettonWalletAddress(new TonWeb.utils.Address("<OWNER_WALLET_ADDRESS>"));
+const jettonMinter = new TonWeb.token.jetton.JettonMinter(tonweb.provider, { address: '<JETTON_MASTER_ADDRESS>' });
+const jettonWalletAddress = await jettonMinter.getJettonWalletAddress(new TonWeb.utils.Address('<OWNER_WALLET_ADDRESS>'));
+
 // It is important to always check that wallet indeed is attributed to desired Jetton Master:
 const jettonWallet = new TonWeb.token.jetton.JettonWallet(tonweb.provider, {
   address: jettonWalletAddress
 });
 const jettonData = await jettonWallet.getData();
-if (jettonData.jettonMinterAddress.toString(false) !== new TonWeb.utils.Address(info.address).toString(false)) {
+if (jettonData.jettonMinterAddress.toString(false) !== jettonMinter.address.toString(false)) {
   throw new Error('jetton minter address from jetton wallet doesnt match config');
 }
 
-console.log('Jetton wallet address:', address.toString(true, true, true));
+console.log('Jetton wallet address:', jettonWalletAddress.toString(true, true, true));
 ```
 
 </TabItem>
@@ -238,6 +239,8 @@ To send **comment** you need setup `forward payload`. Set **first 32 bits to 0x0
 
 Finally, to retrieve `Excess` message you must set up `response destination`.
 
+Sometimes you may encounter a `709` error when sending jetton. It says that the value of the toncoin attached to the message is not enough to send it. Make sure that `Toncoin > to_nano(TRANSFER_CONSUMPTION) + forward_ton_amount`. `TRANSFER_CONSUMPTION` in most cases may be 0.037 if the `forward_payload` is not too large. Also don't forget to attach enough `forward_ton_amount` or you can encounter a `cskip_no_gas` error if attached value too small.
+ 
 
 :::tip
 Check [best practices](/develop/dapps/asset-processing/jettons#best-practices) for _"send jettons with comments"_ example.

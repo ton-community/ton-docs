@@ -222,5 +222,253 @@
   "sidebar.contribute.category.Hacktoberfest 2022": {
     "message": "Hacktoberfest 2022",
     "description": "The label for category Hacktoberfest 2022 in sidebar contribute"
+  },
+  "sidebar.contribute.category.Archive": {
+    "message": "아카이브",
+    "description": "The label for category Archive in sidebar contribute"
+  },
+  "sidebar.contribute.category.Common Rules": {
+    "message": "일반 규칙",
+    "description": "The label for category Common Rules in sidebar contribute"
+  },
+  "sidebar.contribute.category.Documentation": {
+    "message": "문서",
+    "description": "The label for category Documentation in sidebar contribute"
+  },
+  "sidebar.contribute.category.Localization Program": {
+    "message": "현지화 프로그램",
+    "description": "The label for category Localization Program in sidebar contribute"
+  },
+  "sidebar.contribute.category.Tutorials": {
+    "message": "튜토리얼",
+    "description": "The label for category Tutorials in sidebar contribute"
+  },
+  "sidebar.contribute.doc.How It Works": {
+    "message": "작동 원리",
+    "description": "The label for the doc item How It Works in sidebar contribute, linking to the doc contribute/localization-program/how-it-works"
+  },
+  "sidebar.contribute.doc.How To Contribute": {
+    "message": "기여 방법",
+    "description": "The label for the doc item How To Contribute in sidebar contribute, linking to the doc contribute/localization-program/how-to-contribute"
+  },
+  "sidebar.contribute.doc.Overview": {
+    "message": "개요",
+    "description": "The label for the doc item Overview in sidebar contribute, linking to the doc contribute/localization-program/overview"
+  },
+  "sidebar.contribute.doc.Translation Style Guide": {
+    "message": "번역 스타일 가이드",
+    "description": "The label for the doc item Translation Style Guide in sidebar contribute, linking to the doc contribute/localization-program/translation-style-guide"
+  },
+  "sidebar.develop.category.APIs and SDKs": {
+    "message": "APIs 및 SDKs",
+    "description": "The label for category APIs and SDKs in sidebar develop"
+  },
+  "sidebar.develop.category.Advanced": {
+    "message": "고급",
+    "description": "The label for category Advanced in sidebar develop"
+  },
+  "sidebar.develop.category.Archived": {
+    "message": "보관됨",
+    "description": "The label for category Archived in sidebar develop"
+  },
+  "sidebar.develop.category.Blockchain Fundamentals": {
+    "message": "블록체인 기초",
+    "description": "The label for category Blockchain Fundamentals in sidebar develop"
+  },
+  "sidebar.develop.category.Business": {
+    "message": "비즈니스",
+    "description": "The label for category Business in sidebar develop"
+  },
+  "sidebar.develop.category.Core Contracts": {
+    "message": "코어 계약",
+    "description": "The label for category Core Contracts in sidebar develop"
+  },
+  "sidebar.develop.category.DApps Development": {
+    "message": "DApps 개발",
+    "description": "The label for category DApps Development in sidebar develop"
+  },
+  "sidebar.develop.category.Data Formats": {
+    "message": "데이터 형식",
+    "description": "The label for category Data Formats in sidebar develop"
+  },
+  "sidebar.develop.category.Development Guidelines": {
+    "message": "개발 가이드라인",
+    "description": "The label for category Development Guidelines in sidebar develop"
+  },
+  "sidebar.develop.category.Fift language": {
+    "message": "Fift 언어",
+    "description": "The label for category Fift language in sidebar develop"
+  },
+  "sidebar.develop.category.Frameworks": {
+    "message": "프레임워크",
+    "description": "The label for category Frameworks in sidebar develop"
+  },
+  "sidebar.develop.category.Getting Started": {
+    "message": "시작하기",
+    "description": "The label for category Getting Started in sidebar develop"
+  },
+  "sidebar.develop.category.Guidelines": {
+    "message": "가이드라인",
+    "description": "The label for category Guidelines in sidebar develop"
+  },
+  "sidebar.develop.category.Integrate with TON": {
+    "message": "TON과 통합",
+    "description": "The label for category Integrate with TON in sidebar develop"
+  },
+  "sidebar.develop.category.Message Management": {
+    "message": "메시지 관리",
+    "description": "The label for category Message Management in sidebar develop"
+  },
+  "sidebar.develop.category.Network Configurations": {
+    "message": "네트워크 구성",
+    "description": "The label for category Network Configurations in sidebar develop"
+  },
+  "sidebar.develop.category.Network Protocols": {
+    "message": "네트워크 프로토콜",
+    "description": "The label for category Network Protocols in sidebar develop"
+  },
+  "sidebar.develop.category.Security Measures": {
+    "message": "보안 조치",
+    "description": "The label for category Security Measures in sidebar develop"
+  },
+  "sidebar.develop.category.Smart Contracts": {
+    "message": "스마트 계약",
+    "description": "The label for category Smart Contracts in sidebar develop"
+  },
+  "sidebar.develop.category.TL-B": {
+    "message": "TL-B",
+    "description": "The label for category TL-B in sidebar develop"
+  },
+  "sidebar.develop.category.TON Hello World series": {
+    "message": "TON Hello World 시리즈",
+    "description": "The label for category TON Hello World series in sidebar develop"
+  },
+  "sidebar.develop.category.TON Virtual Machine (TVM)": {
+    "message": "TON 가상 머신(TVM)",
+    "description": "The label for category TON Virtual Machine (TVM) in sidebar develop"
+  },
+  "sidebar.develop.category.Telegram Bot Examples": {
+    "message": "Telegram 봇 예제",
+    "description": "The label for category Telegram Bot Examples in sidebar develop"
+  },
+  "sidebar.develop.category.Telegram Mini Apps": {
+    "message": "Telegram 미니 앱",
+    "description": "The label for category Telegram Mini Apps in sidebar develop"
+  },
+  "sidebar.develop.category.Testing and Debugging": {
+    "message": "테스트 및 디버깅",
+    "description": "The label for category Testing and Debugging in sidebar develop"
+  },
+  "sidebar.develop.category.Transaction Fees": {
+    "message": "거래 수수료",
+    "description": "The label for category Transaction Fees in sidebar develop"
+  },
+  "sidebar.develop.category.Tutorials & Examples": {
+    "message": "튜토리얼 및 예제",
+    "description": "The label for category Tutorials & Examples in sidebar develop"
+  },
+  "sidebar.develop.doc.Get Started with TON": {
+    "message": "TON 시작하기",
+    "description": "The label for the doc item Get Started with TON in sidebar develop, linking to the doc develop/get-started-with-ton"
+  },
+  "sidebar.develop.doc.HTML/JS Apps": {
+    "message": "HTML/JS 애플리케이션",
+    "description": "The label for the doc item HTML/JS Apps in sidebar develop, linking to the doc develop/dapps/ton-connect/web"
+  },
+  "sidebar.develop.doc.Mint Your First Token": {
+    "message": "첫 토큰 발행하기",
+    "description": "The label for the doc item Mint Your First Token in sidebar develop, linking to the doc develop/dapps/tutorials/jetton-minter"
+  },
+  "sidebar.develop.doc.NFT Minting Guide": {
+    "message": "NFT 발행 가이드",
+    "description": "The label for the doc item NFT Minting Guide in sidebar develop, linking to the doc develop/dapps/tutorials/collection-minting"
+  },
+  "sidebar.develop.doc.NFT Use Cases in TON": {
+    "message": "TON의 NFT 사용 사례",
+    "description": "The label for the doc item NFT Use Cases in TON in sidebar develop, linking to the doc participate/nft"
+  },
+  "sidebar.develop.doc.React Apps": {
+    "message": "React 애플리케이션",
+    "description": "The label for the doc item React Apps in sidebar develop, linking to the doc develop/dapps/ton-connect/react"
+  },
+  "sidebar.develop.doc.TON Connect Protocol": {
+    "message": "TON Connect 프로토콜",
+    "description": "The label for the doc item TON Connect Protocol in sidebar develop, linking to the doc develop/dapps/ton-connect/protocol/README"
+  },
+  "sidebar.develop.doc.Telegram Bots JS": {
+    "message": "Telegram 봇(JS)",
+    "description": "The label for the doc item Telegram Bots JS in sidebar develop, linking to the doc develop/dapps/ton-connect/tg-bot-integration"
+  },
+  "sidebar.develop.doc.Telegram Bots Python": {
+    "message": "Telegram 봇(Python)",
+    "description": "The label for the doc item Telegram Bots Python in sidebar develop, linking to the doc develop/dapps/ton-connect/tg-bot-integration-py"
+  },
+  "sidebar.develop.doc.Web3 Game Example": {
+    "message": "Web3 게임 예제",
+    "description": "The label for the doc item Web3 Game Example in sidebar develop, linking to the doc develop/dapps/tutorials/building-web3-game"
+  },
+  "sidebar.develop.doc.Zero-Knowledge Proofs": {
+    "message": "영지식 증명",
+    "description": "The label for the doc item Zero-Knowledge Proofs in sidebar develop, linking to the doc develop/dapps/tutorials/simple-zk-on-ton"
+  },
+  "sidebar.develop.link.Building first web client": {
+    "message": "첫 번째 웹 클라이언트 구축",
+    "description": "The label for link Building first web client in sidebar develop, linking to https://ton-community.github.io/tutorials/03-client"
+  },
+  "sidebar.develop.link.TVM Instructions": {
+    "message": "TVM 지침",
+    "description": "The label for link TVM Instructions in sidebar develop, linking to /learn/tvm-instructions/instructions"
+  },
+  "sidebar.develop.link.Testing your smart contract": {
+    "message": "스마트 계약 테스트",
+    "description": "The label for link Testing your smart contract in sidebar develop, linking to https://ton-community.github.io/tutorials/04-testing"
+  },
+  "sidebar.develop.link.Wallets List": {
+    "message": "지갑 목록",
+    "description": "The label for link Wallets List in sidebar develop, linking to https://github.com/ton-blockchain/wallets-list"
+  },
+  "sidebar.develop.link.Working with your wallet": {
+    "message": "지갑 사용하기",
+    "description": "The label for link Working with your wallet in sidebar develop, linking to https://ton-community.github.io/tutorials/01-wallet"
+  },
+  "sidebar.develop.link.Writing first smart contract": {
+    "message": "첫 번째 스마트 계약 작성",
+    "description": "The label for link Writing first smart contract in sidebar develop, linking to https://ton-community.github.io/tutorials/02-contract"
+  },
+  "sidebar.participate.category.Blockchain Nodes": {
+    "message": "블록체인 노드",
+    "description": "The label for category Blockchain Nodes in sidebar participate"
+  },
+  "sidebar.participate.category.Cross-chain Bridges": {
+    "message": "크로스체인 브리지",
+    "description": "The label for category Cross-chain Bridges in sidebar participate"
+  },
+  "sidebar.participate.category.Network Infrastructure": {
+    "message": "네트워크 인프라",
+    "description": "The label for category Network Infrastructure in sidebar participate"
+  },
+  "sidebar.participate.category.TON DNS": {
+    "message": "TON DNS",
+    "description": "The label for category TON DNS in sidebar participate"
+  },
+  "sidebar.participate.category.TON Proxy & Sites": {
+    "message": "TON 프록시 및 사이트",
+    "description": "The label for category TON Proxy & Sites in sidebar participate"
+  },
+  "sidebar.participate.category.TON Storage": {
+    "message": "TON 스토리지",
+    "description": "The label for category TON Storage in sidebar participate"
+  },
+  "sidebar.participate.category.Wallets in TON": {
+    "message": "TON 지갑",
+    "description": "The label for category Wallets in TON in sidebar participate"
+  },
+  "sidebar.participate.doc.Bridges Addresses": {
+    "message": "브리지 주소",
+    "description": "The label for the doc item Bridges Addresses in sidebar participate, linking to the doc participate/crosschain/bridge-addresses"
+  },
+  "sidebar.participate.doc.Overview": {
+    "message": "개요",
+    "description": "The label for the doc item Overview in sidebar participate, linking to the doc participate/crosschain/overview"
   }
 }

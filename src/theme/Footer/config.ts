@@ -35,7 +35,7 @@ const PAGE_VALIDATOR = "https://ton.org/validator";
 const PAGE_MINING = "https://ton.org/mining";
 const PAGE_COMMUNITY = "https://ton.org/community";
 const PAGE_ROADMAP = "https://ton.org/roadmap";
-const PAGE_ANALYSIS = "https://ton.org/analysis";
+const PAGE_ANALYSIS = "https://ton.org/comparison_of_blockchains.pdf";
 const PAGE_BRAND_ASSETS = "https://ton.org/brand-assets";
 const PAGE_GRANTS = "https://ton.org/grants";
 const PAGE_BUY_TONCOIN = "https://ton.org/buy-toncoin";
@@ -193,3 +193,13 @@ export const FOOTER_COLUMN_LINKS_CN = [
     ],
   },
 ];
+
+export function footerLinkExporter(lang?: string) {
+  const FOOTER_LINKS_TRANSLATIONS = {
+    mandarin: FOOTER_COLUMN_LINKS_CN,
+  };
+
+  return (
+    FOOTER_LINKS_TRANSLATIONS?.[lang?.toLowerCase()] ?? FOOTER_COLUMN_LINKS_EN
+  );
+}
