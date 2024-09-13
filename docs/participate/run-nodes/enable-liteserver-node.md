@@ -127,7 +127,7 @@ sudo ufw status
 
 This way, you can open the port in the firewall settings of your server.
 
-## Interaction with Liteserver (Lightclient)
+## Interaction with Liteserver (lite-client)
 
 0. Create an empty project on your machine and paste `config.json` in the project directory. This config can be obtained by following command:
 
@@ -143,7 +143,7 @@ It will create `/usr/bin/ton/local.config.json` on your machine where mytonctrl 
   <TabItem value="js" label="JavaScript">
 
   ```bash
-  npm i --save ton-core ton-lite-client
+  npm i --save ton-core ton-lite-
   ```
 
   </TabItem>
@@ -158,13 +158,13 @@ It will create `/usr/bin/ton/local.config.json` on your machine where mytonctrl 
 
   ```bash
   go get github.com/xssnick/tonutils-go
-  go get github.com/xssnick/tonutils-go/liteclient
+  go get github.com/xssnick/tonutils-go/lite
   go get github.com/xssnick/tonutils-go/ton
   ```
   </TabItem>
 </Tabs>
 
-2. Initialize a client and request masterchain info to ensure the liteserver is running.
+2. Initialize a  and request masterchain info to ensure the liteserver is running.
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
@@ -179,9 +179,9 @@ Change project type to `module` in your `package.json` file:
 
 Create `index.js` file with the following content:
   ```js
-  import { LiteSingleEngine } from 'ton-lite-client/dist/engines/single.js'
-  import { LiteRoundRobinEngine } from 'ton-lite-client/dist/engines/roundRobin.js'
-  import { LiteClient } from 'ton-lite-client/dist/client.js'
+  import { LiteSingleEngine } from 'ton-lite-/dist/engines/single.js'
+  import { LiteRoundRobinEngine } from 'ton-lite-/dist/engines/roundRobin.js'
+  import { Lite } from 'ton-lite-/dist/.js'
   import config from './config.json' assert {type: 'json'};
 
 
@@ -204,8 +204,8 @@ Create `index.js` file with the following content:
       }));
 
       const engine = new LiteRoundRobinEngine(engines);
-      const client = new LiteClient({ engine });
-      const master = await client.getMasterchainInfo()
+      const  = new Lite({ engine });
+      const master = await .getMasterchainInfo()
       console.log('master', master)
 
   }
