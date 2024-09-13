@@ -121,6 +121,44 @@ const config = {
         ],
       },
     ],
+    async function askCookbookPlugin() {
+      return {
+        name: "askCookbook",
+        injectHtmlTags() {
+          const COOKBOOK_PUBLIC_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NmJlNDQyMjZkMjk4YjBkZjY5OTZmN2UiLCJpYXQiOjE3MjM3NDUzMTQsImV4cCI6MjAzOTMyMTMxNH0.UFhdsZKJh_VwthtiRzYjIbg6i61cR3Cd9HBTvSnqc7w";
+
+          return {
+            postBodyTags: [
+              {
+                tagName: "div",
+                attributes: {
+                  id: "__cookbook",
+                  "data-api-key": COOKBOOK_PUBLIC_API_KEY,
+                },
+              },
+              `
+                <script>
+                    window.addEventListener('load', function() {
+                    try {
+                      if (window.__cookbook_script) {
+                        window.__cookbook_script.remove();
+                      }
+                      const script = document.createElement('script');
+                      script.src = 'https://cdn.jsdelivr.net/npm/@cookbookdev/docsbot/dist/standalone/index.cjs.js';
+                      script.defer = true;
+                      document.body.appendChild(script);
+                      window.__cookbook_script = script;
+                    } catch (e) {
+                      console.error("Error while initializing Cookbook:", e);
+                    }
+                  });
+                </script>
+              `,
+            ],
+          };
+        },
+      };
+    },
   ],
   stylesheets: [
     'https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Inter:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap',
