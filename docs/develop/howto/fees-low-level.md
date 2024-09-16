@@ -23,7 +23,7 @@ TON validators collect storage fees from smart contracts.
 Storage fees are collected from the smart contract balance at the **Storage phase** of any transaction due storage payments for the account state
 (including smart-contract code and data, if present) up to the present time. The smart contract may be frozen as a result.
 
-It’s important to keep in mind that on TON you pay for both the execution of a smart contract and for the **used storage** (check [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22)). `storage fee` depends on you contract size: number of cells and sum of number of bits from that cells. **Only unique hash cells are counted for storage and fwd fees i.e. 3 identical hash cells are counted as one**. It means you have to pay a storage fee for having TON Wallet (even if it's very-very small).
+It’s important to keep in mind that on TON you pay for both the execution of a smart contract and for the **used storage** (check [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22)). `storage fee` depends on your contract size: number of cells and sum of number of bits from that cells. **Only unique hash cells are counted for storage and fwd fees i.e. 3 identical hash cells are counted as one**. It means you have to pay a storage fee for having TON Wallet (even if it's very-very small).
 
 If you have not used your TON Wallet for a significant period of time (1 year), _you will have to pay a significantly larger commission than usual because the wallet pays commission on sending and receiving transactions_.
 
