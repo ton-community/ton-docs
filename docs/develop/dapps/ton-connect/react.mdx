@@ -53,7 +53,7 @@ You can add className and style props to the button as well. Note that you canno
 <TonConnectButton className="my-button-class" style={{ float: "right" }}/>
 ```
 
-Moreover, you always can initiate the connection manually, using `useTonConnectUI` hook and `openModal` method (❗ Note that `connectWallet` method is deprecated ❗).
+Moreover, you always can initiate the connection manually, using `useTonConnectUI` hook and [openModal](https://github.com/ton-connect/sdk/tree/main/packages/ui#open-connect-modal) method.
 
 ```tsx
 export const Header = () => {
@@ -245,7 +245,7 @@ const transaction: SendTransactionRequest = {
   messages: [
     {
       address:
-        "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+        "0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-", // message destination in user-friendly format
       amount: "20000000", // Toncoin in nanotons
     },
   ],

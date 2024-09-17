@@ -422,15 +422,10 @@ const sidebars = {
           label: 'Advanced',
           items: [
             {
-              type: 'doc',
-              label: 'TON Connect Protocol',
-              id: 'develop/dapps/ton-connect/protocol/README',
+              type: 'link',
+              label: 'Protocol specification',
+              href: 'https://github.com/ton-blockchain/ton-connect',
             },
-            'develop/dapps/ton-connect/protocol/workflow',
-            'develop/dapps/ton-connect/protocol/bridge',
-            'develop/dapps/ton-connect/protocol/session',
-            'develop/dapps/ton-connect/protocol/requests-responses',
-            'develop/dapps/ton-connect/protocol/wallet-guidelines',
             {
               type: 'link',
               label: 'Wallets List',
