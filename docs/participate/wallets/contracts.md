@@ -135,8 +135,6 @@ Highload v3 will never execute multiple externals containing the same `query_id`
 When iterating (incrementing) query ID, it is cheaper (in terms of TON spent on fees) to iterate through bit number first, and then the shift, like when incrementing a regular number. After you've reached the last query ID (remember about the emergency query ID - see above), you can reset query ID to 0, but if highload's timeout period has not passed yet, then the replay protection dictionary will be full and you will have to wait for the timeout period to pass.
 
 
-
-
 ### Highload wallet v2
 
 :::danger
@@ -184,6 +182,42 @@ This wallet's function is to act like a regular wallet, but restrict transfers t
 
 Wallet source code:
  * [EmelyanenkoK/nomination-contract/restricted-wallet](https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet)
+
+## Known op codes
+
+:::info
+Also op-code, op::code and operational code
+:::
+
+
+| Contract type   | Hex code        | OP::Code                 |
+|-----------------|-----------------|--------------------------|
+| Global          | 0x00000000      | Text Comment             |
+| Global          | 0xffffffff      | Bounce                   |
+| Global          | 0x2167da4b      | [Encrypted Comment](https://docs.ton.org/develop/smart-contracts/guidelines/internal-messages#messages-with-encrypted-comments) |
+| Global          | 0xd53276db      | Excesses                 |
+| Elector         | 0x4e73744b      | New Stake                |
+| Elector         | 0xf374484c      | New Stake Confirmation   |
+| Elector         | 0x47657424      | Recover Stake Request    |
+| Elector         | 0x47657424      | Recover Stake Responce   |
+| Wallet          | 0x0f8a7ea5      | Jetton Transfer          |
+| Jetton          | 0x178d4519      | Jetton Internal Transfer |
+| Jetton          | 0x7362d09c      | Jetton Notify            |
+| Jetton          | 0x595f07bc      | Jetton Burn              |
+| Jetton          | 0x7bdd97de      | Jetton Burn Notification |
+| Jetton          | 0xeed236d3      | Jetton Set Status        |
+| Jetton-Minter   | 0x642b7d07      | Jetton Mint              |
+| Jetton-Minter   | 0x6501f354      | Jetton Change Admin      |
+| Jetton-Minter   | 0xfb88e119      | Jetton Claim Admin       |
+| Jetton-Minter   | 0x7431f221      | Jetton Drop Admin        |
+| Jetton-Minter   | 0xcb862902      | Jetton Change Metadata   |
+| Jetton-Minter   | 0x2508d66a      | Jetton Upgrade           |
+| Jetton          | 0x235caf52      | Jetton Call to           |
+| Jetton          | 0xd372158c      | Top Up                   |
+| Vesting         | 0x7258a69b      | Add Whitelist            |
+| Vesting         | 0xf258a69b      | Add Whitelist Response   |
+| Vesting         | 0xa7733acd      | Send                     |
+| Vesting         | 0xf7733acd      | Send Response            |
 
 ## Conclusion
 
