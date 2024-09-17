@@ -201,6 +201,7 @@ Also op-code, op::code and operational code
 | Elector         | 0x47657424      | Recover Stake Request    |
 | Elector         | 0x47657424      | Recover Stake Responce   |
 | Wallet          | 0x0f8a7ea5      | Jetton Transfer          |
+| Wallet          | 0x235caf52      | [Jetton Call To](https://testnet.tonviewer.com/transaction/1567b14ad43be6416e37de56af198ced5b1201bb652f02bc302911174e826ef7) |
 | Jetton          | 0x178d4519      | Jetton Internal Transfer |
 | Jetton          | 0x7362d09c      | Jetton Notify            |
 | Jetton          | 0x595f07bc      | Jetton Burn              |
@@ -212,8 +213,7 @@ Also op-code, op::code and operational code
 | Jetton-Minter   | 0x7431f221      | Jetton Drop Admin        |
 | Jetton-Minter   | 0xcb862902      | Jetton Change Metadata   |
 | Jetton-Minter   | 0x2508d66a      | Jetton Upgrade           |
-| Jetton          | 0x235caf52      | Jetton Call to           |
-| Jetton          | 0xd372158c      | Top Up                   |
+| Vesting         | 0xd372158c      | [Top Up](https://github.com/ton-blockchain/liquid-staking-contract/blob/be2ee6d1e746bd2bb0f13f7b21537fb30ef0bc3b/PoolConstants.ts#L28) |
 | Vesting         | 0x7258a69b      | Add Whitelist            |
 | Vesting         | 0xf258a69b      | Add Whitelist Response   |
 | Vesting         | 0xa7733acd      | Send                     |
