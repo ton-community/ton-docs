@@ -317,6 +317,48 @@ if __name__ == "__main__":
 
 </Tabs>
 
+
+### Wallet Creation for Different Shards
+
+Once the TON Blockchain is flooded with millions of transactions due to a massive influx of users, the blockchain splits into several [shardchains](/develop/blockchain/shards). This may increase the processing time for even the simplest operation due additional messaging between shards. 
+
+Due to such peak loads, services may seek to achieve the highest stability in message delivery. One potential drawback is the necessity of setting up a wallet contract for the specific each shard to avoid cross-shard message delivery. To create a wallet in a specific shard for you user, you need to do the following:
+
+1. Obtain the user's shard ID from the first 4 bits of their address hash.
+2. Generate mnemonics until the first four bits of a wallet with such mnemonics match the desired shard ID.
+
+```javascript
+
+import { NetworkProvider, sleep } from '@ton/blueprint';
+import { Address, toNano } from "@ton/core";
+import {mnemonicNew, mnemonicToPrivateKey} from '@ton/crypto';
+import { WalletContractV3R2 } from '@ton/ton';
+
+export async function run(provider?: NetworkProvider) {
+  if(!process.env.SHARD_INDEX) {
+    throw new Error("Shard index is not specified");
+  }
+
+    const shardIdx = Number(process.env.SHARD_INDEX);
+    let testWallet: WalletContractV3R2;
+    let mnemonic:  string[];
+    do {
+        mnemonic   = await mnemonicNew(24);
+        const keyPair = await mnemonicToPrivateKey(mnemonic);
+        testWallet = WalletContractV3R2.create({workchain: 0, publicKey: keyPair.publicKey});
+    } while(testWallet.address.hash[0] >> 4 !== shardIdx);
+
+    console.log("Mnemonic for shard found:", mnemonic);
+    console.log("Wallet address:",testWallet.address.toRawString());
+}
+
+if(require.main === module) {
+run();
+}
+
+```
+
+
 ### Toncoin Deposits (Get toncoins)
 
 <Tabs groupId="example-toncoin_deposit">
@@ -510,9 +552,6 @@ if __name__ == "__main__":
 
 <TabItem value="Python" label="Python">
 
-- **psylopunk/pythonlib:**
-  - [Withdraw Toncoins from a wallet](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
-
 - **yungwine/pytoniq:**
 
 ```python
@@ -565,9 +604,6 @@ if __name__ == "__main__":
 
 <TabItem value="Python" label="Python">
 
-- **psylopunk/pythonlib:**
-  - [Get transactions](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
-  
 - **yungwine/pytoniq:**
   - [Get transactions](https://github.com/yungwine/pytoniq/blob/master/examples/transactions.py)
 
