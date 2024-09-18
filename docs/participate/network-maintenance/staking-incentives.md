@@ -102,9 +102,10 @@ The TON is supplied with the [lite-client](https://github.com/newton-blockchain/
 This command analyses how many blocks the validator should have processed, and how many it actually processed in a given period of time.
 
 If the validator processed less than 90% of the expected number of blocks during a validation round, it is considered to be performing poorly and should be penalised.
-Technical description of the process: https://github.com/ton-blockchain/TIPs/issues/13#issuecomment-786627474
-
-### Complains Rules
+:::info
+Learn more about technical description of the process [here](https://github.com/ton-blockchain/TIPs/issues/13#issuecomment-786627474)
+:::
+### Complain Workflow
 
 - Anyone can make complain and get reward on right complain.
 - Validation of complain maintain by Validators and fully decentralized.
@@ -113,8 +114,6 @@ Technical description of the process: https://github.com/ton-blockchain/TIPs/iss
 
 After each validation round (~18 hours), the validator stakes of validators that participated in that round are on the Elector smart contract for another ~9 hours.
 During this time, anyone can send a complaint against a validator who performed poorly in said round. This happens on-chain on the Elector smart contract.
-
-There is no requirement for every validator to send or approve this complaint.
 
 #### Validation of Complaint
 
@@ -132,7 +131,7 @@ There is no way for anyone to single-handedly fine anyone.
 
 The amount of the fine is fixed and equals 101 TON(Network Parameter `ConfigParam40:MisbehaviourPunishmentConfig`), which is roughly equal to the validator's income per round.
 
-Value of fine May Due the audience and the number of transactions in TON is growing rapidly and it is vital that the quality of work is at its best.
+Value of fine may change, due the audience and the number of transactions in TON is growing rapidly and it is vital that the quality of work is at its best.
 
 ### Fine Distribution 
 
@@ -140,7 +139,7 @@ The fine is distributed among the validators minus network costs and a small rew
 
 ### Validator Guidelines
 
-To prevent your Validator node from fine, it makes sense to set up hardware, monitoring and validator work properly.
+To prevent your Validator node from being fined, it is advisable to ensure that the hardware, monitoring, and validator operations are set up properly.
 Please make sure you're complying with the [validator maintain guidelines](/participate/run-nodes/become-validator#maintain-guidelines).
 If you don't want to do this please consider using staking services https://ton.org/stake.
 

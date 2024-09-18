@@ -272,7 +272,7 @@ More about transactions and messages hashes [here](/develop/dapps/cookbook#how-t
  
 ## Best Practices
 
-### Wallet creation
+### Wallet Creation
 
 <Tabs groupId="example-create_wallet">
 <TabItem value="JS" label="JS">
@@ -326,12 +326,14 @@ if __name__ == "__main__":
 
 ### Wallet Creation for Different Shards
 
-Once the TON Blockchain is flooded with millions of transactions due to a massive influx of users, the blockchain splits into several [shardchains](/develop/blockchain/shards). This may increase the processing time for even the simplest operation due additional messaging between shards. 
+When under heavy load, the TON blockchain may split into [shards](/develop/blockchain/shards). A simple analogy for a shard in the Web3 world would be a network segment.
 
-Due to such peak loads, services may seek to achieve the highest stability in message delivery. One potential drawback is the necessity of setting up a wallet contract for the specific each shard to avoid cross-shard message delivery. To create a wallet in a specific shard for you user, you need to do the following:
+Just as we distribute service infrastructure in the Web2 world to be as close as possible to the end user, in TON, we can deploy contracts to be in the same shard as the user's wallet or any other contract that interacts with it.
 
-1. Obtain the user's shard ID from the first 4 bits of their address hash.
-2. Generate mnemonics until the first four bits of a wallet with such mnemonics match the desired shard ID.
+For instance, a DApp that collects fees from users for a future airdrop service might prepare separate wallets for each shard to enhance the user experience on peak load days. To achieve the highest processing speed, you will need to deploy one collector wallet per shard.
+
+Shard prefix `SHARD_INDEX` of a contract is defined by the first 4 bits of it's address hash.
+In order to deploy wallet into specific shard, one may use logic based on the following code snippet:
 
 ```javascript
 
@@ -363,6 +365,16 @@ run();
 }
 
 ```
+In case of wallet contract, one may use `subwalletId` instead of mnemonic, however `subwalletId` is not supported by [wallet applications](https://ton.org/wallets).
+
+Once deployment have completed, you can process with the following algorithm:
+
+1. User arrives at DApp page and requests action.
+2. DApp picks the closest wallet to the user(matching by 4 bit prefix)
+3. DApp provides user payload sending his fee to the picked wallet.
+
+That way you will be able to provide the best possible user experience regardless current network load.
+
 
 
 ### Toncoin Deposits (Get toncoins)

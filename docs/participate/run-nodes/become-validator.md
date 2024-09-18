@@ -102,14 +102,14 @@ As a TON Validators, make sure you are follow these crucial steps to ensure netw
 
 Essential Actions:
 
-1. Follow the @tonstatus turn on notifications and be ready to apply urgent updates if necessary.
-2. Ensure your hardware meets or exceeds [system requirements](/participate/run-nodes/become-validator#minimal-hardware-requirements).
+1. Follow the [@tonstatus](https://t.me/tonstatus) turn on notifications and be ready to apply urgent updates if necessary.
+2. Ensure your hardware meets or exceeds [minimal system requirements](/participate/run-nodes/become-validator#minimal-hardware-requirements).
 3. We imperatively request you to use [mytonctrl](https://github.com/ton-blockchain/mytonctrl).
-In `mytonctrl` keep update due the notification and enable telemetry: `set sendTelemetry true`
+   - In `mytonctrl` keep update due the notification and enable telemetry: `set sendTelemetry true`
 4. Set up monitoring dashboards for RAM, Disk, Network, and CPU usage. For technical assistance, contact @mytonctrl_help_bot.
 5. Monitor the efficiency of your validator with dashboards. 
-- Check with `mytonctrl` via `check_ef`.
-- [Build dashboard with APIs](/participate/run-nodes/become-validator#validation-and-effectiveness-apis).
+   - Check with `mytonctrl` via `check_ef`.
+   - [Build dashboard with APIs](/participate/run-nodes/become-validator#validation-and-effectiveness-apis).
 
 :::info
 `mytonctrl` allows to check effectiveness of validators via command `check_ef` which outputs your validator efficiency data for the last round and for current round.
@@ -124,32 +124,47 @@ In case of low efficiency - take action to fix the problem. Contact technical su
 
 ## Validation and Effectiveness APIs
 
-1. https://elections.toncenter.com/docs - use this API to get information about current and past validation rounds (cycles) - time of rounds, which validators participated in them, their stakes, etc.
+:::info
+Please set up dashboards to monitor your validators using these APIs.
+:::
+
+#### Validation API
+https://elections.toncenter.com/docs - use this API to get information about current and past validation rounds (cycles) - time of rounds, which validators participated in them, their stakes, etc.
 
 Information on current and past elections (for the validation round) is also available.
 
-3. https://toncenter.com/api/qos/index.html#/ - use this API to get information on the efficiency of validators over time.
+#### Effieciency API
+
+https://toncenter.com/api/qos/index.html#/ - use this API to get information on the efficiency of validators over time.
 
 This API analyses the information from the catchain and builds an estimate of the validator's efficiency. This API does not use the checkloadall utility, but is its alternative.
 Unlike `checkloadall` which works only on validation rounds, in this API you can set any time interval to analyse the validator's efficiency.
 
-How to use:
+Workflow:
 
-- pass ADNL address of your validator and time interval (from_ts, to_ts) to API. For accurate result it makes sense to take a sufficient interval, for example from  18 hours ago the current moment.
+1. Pass ADNL address of your validator and time interval (`from_ts`, `to_ts`) to API. For accurate result it makes sense to take a sufficient interval, for example from  18 hours ago the current moment.
 
-- get the result. If your efficiency percentage field is less than 80%, your validator is not working properly.
+2. Retrieve the result. If your efficiency percentage field is less than 80%, your validator is not working properly.
 
-- It is important that your validator participates in validation and has the same ADNL address throughout the specified time period.
+3. It is important that your validator participates in validation and has the same ADNL address throughout the specified time period.
 
 For example, if a validator participates in validation every second round - then you need to specify only those intervals when he participated in validation. Otherwise, you will get an incorrect underestimate.
 
-- this works not only for masterchain validators (with index < 100) but also for other validators (with index > 100).
+It works not only for Masterchain validators (with index < 100) but also for other validators (with index > 100).
 
- Please set up dashboards to monitor your validators using these APIs.
+
 
 
 ## Support 
 
-Contact technical support [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot).
-This  bot for validators only. If you have a regular node, then contact the group: [@mytonctrl_help](https://t.me/mytonctrl_help).
+Contact technical support [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot). This bot for validators only and will not assist on questions for regular nodes. 
+
+If you have a regular node, then contact the group: [@mytonctrl_help](https://t.me/mytonctrl_help).
+
+
+## See Also
+
+* [Run a Full Node](/participate/run-nodes/full-node)
+* [Troubleshooting](/participate/run-nodes/nodes-troubleshooting)
+* [Staking Incentives](/participate/network-maintenance/staking-incentives)
 
