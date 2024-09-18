@@ -368,6 +368,8 @@ const sidebars = {
             'develop/dapps/asset-processing/overview',
             'develop/dapps/asset-processing/README',
             'develop/dapps/asset-processing/jettons',
+            'develop/dapps/asset-processing/mintless-jettons',
+            'develop/dapps/asset-processing/mass-mint-tools',
             'develop/dapps/asset-processing/usdt',
             'develop/dapps/asset-processing/nfts',
             'develop/dapps/asset-processing/metadata',

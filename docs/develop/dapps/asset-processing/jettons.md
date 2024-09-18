@@ -2,13 +2,13 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Button from '@site/src/components/button';
 
-# TON Jetton processing
+# Jetton Processing
 
 :::info
 For clear understanding, the reader should be familiar with the basic principles of asset processing described in [payments processing section](/develop/dapps/asset-processing/) of our documentation.
 :::
 
-Jettons are tokens on TON Blockchain - one can consider them similarly to ERC-20 tokens on Ethereum.
+Jettons are tokens on TON Blockchain - one can consider them similarly to ERC-20 tokens on Ethereum was set in TON with [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md).
 
 In this analysis, we take a deeper dive into the formal standards detailing jetton [behavior](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) and [metadata](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
 A less formal sharding-focused overview of jetton architecture can be found in our

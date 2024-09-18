@@ -212,6 +212,11 @@ To force node not to store archive blocks use the value 86400. Check [set_node_a
 installer set_node_argument --archive-ttl 86400
 ```
 
+
+## Support 
+
+Contact technical support with [@mytonctrl_help](https://t.me/mytonctrl_help).
+
 ## See Also
 
 * [TON Node Types](/participate/nodes/node-types)
