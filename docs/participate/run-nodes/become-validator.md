@@ -128,6 +128,10 @@ In case of low efficiency - take action to fix the problem. Contact technical su
 Please set up dashboards to monitor your validators using these APIs.
 :::
 
+#### Penalised Validators Tracker
+
+You can track penalised validators on each round with [@tonstatus_notifications](https://t.me/tonstatus_notifications).
+
 #### Validation API
 https://elections.toncenter.com/docs - use this API to get information about current and past validation rounds (cycles) - time of rounds, which validators participated in them, their stakes, etc.
 
@@ -151,6 +155,7 @@ Workflow:
 For example, if a validator participates in validation every second round - then you need to specify only those intervals when he participated in validation. Otherwise, you will get an incorrect underestimate.
 
 It works not only for Masterchain validators (with index < 100) but also for other validators (with index > 100).
+
 
 
 
