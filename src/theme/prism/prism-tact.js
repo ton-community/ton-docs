@@ -1,24 +1,33 @@
-(function (Prism) {
+/**
+ * @file Prism.js definition for Tact
+ * @link https://tact-lang.org
+ * @version 1.5.0
+ * @author Novus Nota (https://github.com/novusnota)
+ * @license MIT
+ */
+(function(Prism) {
   Prism.languages.tact = {
     // reserved keywords
     'keyword': [
       {
-        pattern: /\b(?:abstract|as|const|contract(?!:)|do|else|extend|extends|fun|get|if|import|initOf|inline|let|message(?!:)|mutates|native|override|primitive|public|repeat|return|self|struct(?!:)|trait(?!:)|until|virtual|while|with)\b/,
-      },
-      { // keyword after as
-        pattern: /(\bas\s+)\w+/,
-        lookbehind: true,
-        greedy: true,
+        pattern: /\b(?:abstract|asm|as|catch|const|contract(?!:)|do|else|extend|extends|foreach|fun|get|if|in|import|initOf|inline|let|message(?!:)|mutates|native|override|primitive|public|repeat|return|self|struct(?!:)|trait(?!:)|try|until|virtual|while|with)\b/,
       },
       { // reserved function names
-        pattern: /\b(?:bounced|external|init|receive)\b/
+        pattern: /\b(?:bounced|external|init|receive)\b(?=\()/
       },
     ],
 
     // built-in types
-    'builtin': {
-      pattern: /\b(?:Address|Bool|Builder|Cell|Int|Slice|String|StringBuilder)\b/,
-    },
+    'builtin': [
+      {
+        pattern: /\b(?:Address|Bool|Builder|Cell|Int|Slice|String|StringBuilder)\b/,
+      },
+      { // keyword after as, see: https://prismjs.com/extending.html#object-notation
+        pattern: /(\bas\s+)(?:coins|remaining|bytes32|bytes64|int257|u?int(?:2[0-5][0-6]|1[0-9][0-9]|[1-9][0-9]?))\b/,
+        lookbehind: true,
+        greedy: true,
+      },
+    ],
 
     // SCREAMING_SNAKE_CASE for null values and names of constants
     'constant': [
@@ -93,11 +102,19 @@
         pattern: /(^|[^\\])\/\*[\s\S]*?(?:\*\/|$)/,
         lookbehind: true,
         greedy: true,
+      },
+      {
+        // unused variable identifier
+        pattern: /\b_\b/
       }
     ],
 
     'operator': {
-      'pattern': /![!=]?|[+\-*/%=]=?|[<>]=|<<?|>>?|\|\|?|&&?/,
+      'pattern': /![!=]?|->|[+\-*/%=]=?|[<>]=|<<?|>>?|~|\|[\|=]?|&[&=]?|\^=?/,
+    },
+
+    'variable': {
+      'pattern': /\b[a-zA-Z_]\w*\b/,
     },
 
   };
@@ -108,6 +125,20 @@
       pattern: /(?:(")(?:\\.|(?!\1)[^\\\r\n])*\1(?!\1))/,
       greedy: true,
       inside: {
+        'regex': [
+          { // \\ \" \n \r \t \v \b \f
+            pattern: /\\[\\"nrtvbf]/,
+          },
+          { // hexEscape, \x00 through \xFF
+            pattern: /\\x[0-9a-fA-F]{2}/,
+          },
+          { // unicodeEscape, \u0000 through \uFFFF
+            pattern: /\\u[0-9a-fA-F]{4}/,
+          },
+          { // unicodeCodePoint, \u{0} through \u{FFFFFF}
+            pattern: /\\u\{[0-9a-fA-F]{1,6}\}/,
+          },
+        ],
         'string': {
           pattern: /[\s\S]+/,
         },
@@ -122,7 +153,7 @@
       greedy: true,
       inside: {
         'builtin': [
-          Prism.languages['tact']['builtin'],
+          ...Prism.languages['tact']['builtin'],
           {
             pattern: /\b(?:bounced(?=<)|map(?=<))\b/
           },
@@ -131,16 +162,9 @@
         'punctuation': {
           pattern: /[<>(),.?]/,
         },
-        'keyword': [
-          {
-            pattern: /\bas\b/,
-          },
-          {
-            pattern: /(\bas\s+)\w+/,
-            lookbehind: true,
-            greedy: true,
-          },
-        ],
+        'keyword': {
+          pattern: /\bas\b/,
+        },
       },
     },
   });
