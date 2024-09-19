@@ -456,6 +456,41 @@ const RECEIVER_ADDRESS = Address.parse("RECIEVER_ADDRESS");
 jetton.send(sender, RECEIVER_ADDRESS, toNano(10));
 ```
 
+OR you can use Jetton Contract with built in methods:
+
+```ts
+const provider = tonConnectUi;
+
+// https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
+const sender = new TonConnectSender(provider);
+
+const client = new TonClient({
+  endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
+});
+
+const jettonMaster = client.open(
+  JettonMinter.createFromAddress(
+    Address.parse("[JETTON_WALLET]"),
+    new DefaultContentResolver()
+  )
+);
+
+const jettonWalletAddress = await jettonMaster.getWalletAddress(
+  sender.address!
+);
+const jettonContent = await jettonMaster.getContent();
+const jettonDecimals = jettonContent.decimals ?? 9;
+
+const jetton = client.open(JettonWallet.createFromAddress(jettonWalletAddress));
+
+await jetton.send(
+  sender,
+  Address.parse("[SENDER_WALLET]"),
+  BigInt(1 * 10 ** jettonDecimals)
+);
+
+```
+
 </TabItem>
 </Tabs>
 
@@ -803,6 +838,41 @@ const jetton = sdk.openJettonWallet(Address.parse("JETTON_ADDRESS"));
 jetton.sendBurn(sender, toNano(10));
 ```
 
+OR you can use Jetton Contract with built in methods:
+
+```ts
+const provider = tonConnectUi;
+
+// https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
+const sender = new TonConnectSender(provider);
+
+const client = new TonClient({
+  endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
+});
+
+const jettonMaster = client.open(
+  JettonMinter.createFromAddress(
+    Address.parse("[JETTON_WALLET]"),
+    new DefaultContentResolver()
+  )
+);
+
+const jettonWalletAddress = await jettonMaster.getWalletAddress(
+  sender.address!
+);
+const jettonContent = await jettonMaster.getContent();
+const jettonDecimals = jettonContent.decimals ?? 9;
+
+const jetton = client.open(JettonWallet.createFromAddress(jettonWalletAddress));
+
+await jetton.sendBurn(
+  sender,
+  BigInt(1 * 10 ** jettonDecimals)
+);
+
+```
+
+
 </TabItem>
 </Tabs>
 
@@ -941,6 +1011,28 @@ const nft = sdk.openNftItem(Address.parse("NFT_ADDRESS"));
 const RECEIVER_ADDRESS = Address.parse("RECIEVER_ADDRESS");
 
 nft.send(sender, RECEIVER_ADDRESS);
+```
+
+OR you can use NFT Contract with built in methods:
+
+```ts
+const client = new TonClient({
+  endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
+});
+const provider = tonConnectUi;
+const nftItem = client.open(
+  NftItem.createFromAddress(Address.parse("[NFT_WALLET]"))
+);
+
+// https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
+const sender = new TonConnectSender(provider);
+await nftItem.send(sender, Address.parse("[SENDER_WALLET]"));
+
+// TIP: NFTs can include royalties, allowing creators to earn a percentage from each sale.
+// Here is an example of how to get it.
+const royalty = await nftItem.getRoyaltyParams();
+const royaltyPercent =
+  Number(royalty.numerator) / Number(royalty.denominator);
 ```
 
 </TabItem>
