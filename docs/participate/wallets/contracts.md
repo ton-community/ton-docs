@@ -61,11 +61,6 @@ Wallet source code:
 
 ### Wallet V5
 
-:::warning
-This is an experimental version that is in public beta testing.
-The TON Core team started to audit and test this v5-beta smart contract. The smart contract code will change in the course of this work, but will try to keep its interface intact. The TON Core team plans to complete this work by June 20. We ask all wallets in the TON ecosystem to support the final smart contract after the audit.
-:::
-
 This is an extensible wallet specification developed by the Tonkeeper team, aimed at replacing V4 and allowing arbitrary extensions.
 
 The W5 wallet standard offers many benefits that improve the experience for both users and merchants. W5 supports gas-free transactions, account delegation and recovery, subscription payments using tokens and Toncoin, and low-cost multi-transfers.
@@ -75,7 +70,7 @@ Users will have access to a 25% reduction in blockchain fees, a new flexible plu
 In addition to retaining the previous functionality (v4), the new contract allows you to send up to 255 messages at a time, as well as to make full-fledged gasless transactions (e.g., payment of network fees when transferring USDt in USDt itself) and other features. We believe it will enhance the usability and capabilities for TON users.
 
 :::tip
-In the final version of this technology, users wallets will allow transactions to be initiated by the user but paid for by another contract. Consequently, there will be services (such as [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)) that provide this functionality: they pay the transaction fees in TONs on behalf of the user, but charge a fee in tokens. This means they cover the TON fees only for transactions that include a payment to the service.
+Wallet V5 wallets allow transactions to be initiated by the user but paid for by another contract. Consequently, there will be services (such as [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)) that provide this functionality: they pay the transaction fees in TONs on behalf of the user, but charge a fee in tokens.
 :::
 
 #### UI Preparation and Beta Testing
