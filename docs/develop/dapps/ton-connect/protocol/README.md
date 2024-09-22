@@ -48,7 +48,7 @@ Keep in mind that the wallet’s side of the bridge API is not mandated.
 
 For a quick start you can use the common TON Connect bridge [github.com/ton-connect/bridge2](https://github.com/ton-connect/bridge2).
 
-#### I make a wallet, how do I add it to the list of wallets?
+#### I made a wallet, how do I add it to the list of wallets?
 
 Submit a pull request for the [wallets-list](https://github.com/ton-blockchain/wallets-list) repository and fill our all the necessary metadata.
 
