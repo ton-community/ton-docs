@@ -213,6 +213,17 @@ Also op-code, op::code and operational code
 | Vesting         | 0xf258a69b      | Add Whitelist Response   |
 | Vesting         | 0xa7733acd      | Send                     |
 | Vesting         | 0xf7733acd      | Send Response            |
+| Dedust          | 0x9c610de3      | Dedust Swap ExtOut       |
+| Dedust          | 0xe3a0d482      | Dedust Swap Jetton       |
+| Dedust          | 0xea06185d      | Dedust Swap Internal     |
+| Dedust          | 0x61ee542d      | Swap External            |
+| Dedust          | 0x72aca8aa      | Swap Peer                |
+| StonFi          | 0x25938561      | Swap Internal            |
+| StonFi          | 0xf93bb43f      | Payment Request          |
+| StonFi          | 0xfcf9e58f      | Provide Liquidity        |
+| StonFi          | 0xc64370e5      | Swap Success             |
+| StonFi          | 0x45078540      | Swap Success ref         |
+
 
 ## Conclusion
 
