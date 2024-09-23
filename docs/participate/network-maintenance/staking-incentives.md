@@ -90,8 +90,61 @@ On TON, slashing penalties (fines given to validators) allow any network partici
 Upon reaching 66% validator approval (measured by an equal voting weight), a slashing penalty is deducted from the validator and withdrawn from the validator’s total stake. The validation process for penalization and complaint resolution is typically conducted automatically using the MyTonCtrl.
 
 
+## Decentralized System of Penalties
+
+:::info
+The following system of penalising poorly performing validators fully operational September 9, 2024.
+:::
+
+### Determination of Poor Work
+
+The TON is supplied with the [lite-client](https://github.com/newton-blockchain/ton/tree/master/lite-client) utility. In lite-client there is a `checkloadall` command.
+This command analyses how many blocks the validator should have processed, and how many it actually processed in a given period of time.
+
+If the validator processed less than 90% of the expected number of blocks during a validation round, it is considered to be performing poorly and should be penalised.
+:::info
+Learn more about technical description of the process [here](https://github.com/ton-blockchain/TIPs/issues/13#issuecomment-786627474)
+:::
+### Complain Workflow
+
+- Anyone can make complain and get reward on right complain.
+- Validation of complain maintain by Validators and fully decentralized.
+
+#### Make Complain
+
+After each validation round (~18 hours), the validator stakes of validators that participated in that round are on the Elector smart contract for another ~9 hours.
+During this time, anyone can send a complaint against a validator who performed poorly in said round. This happens on-chain on the Elector smart contract.
+
+#### Validation of Complaint
+
+After each validation round, validators receive a list of complaints from the Elector smart contract and double-check them by calling `checkloadall`.
+In case the complaint is validated, they on-chain vote in favour of that complaint.
+
+These actions are built into `mytonctrl` and happen automatically.
+If the complaint has 66% of the validators' votes (by their weight), a penalty is taken off from the validator's stake.
+There is no way for anyone to single-handedly fine anyone.
+
+[@tonstatus_notifications](https://t.me/tonstatus_notifications) - list of penalised validators each round.
+
+
+### Fine Value
+
+The amount of the fine is fixed and equals 101 TON(Network Parameter `ConfigParam40:MisbehaviourPunishmentConfig`), which is roughly equal to the validator's income per round.
+
+Value of fine may change, due the audience and the number of transactions in TON is growing rapidly and it is vital that the quality of work is at its best.
+
+### Fine Distribution 
+
+The fine is distributed among the validators minus network costs and a small reward (~8 TON) to the first complainer who sent the correct complaint to the Elector.
+
+### Validator Guidelines
+
+To prevent your Validator node from being fined, it is advisable to ensure that the hardware, monitoring, and validator operations are set up properly.
+Please make sure you're complying with the [validator maintain guidelines](/participate/run-nodes/become-validator#maintain-guidelines).
+If you don't want to do this please consider using staking services https://ton.org/stake.
+
 ## See Also
 
-* [Running a Full Node (Validator)](/participate/run-nodes/full-node)
+* [Running a Validator](/participate/run-nodes/become-validator)
 * [Transaction Fees](/develop/smart-contracts/fees)
 * [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)
