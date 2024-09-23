@@ -235,12 +235,13 @@ This transfer require some ton coins for **fees** and, optionally, **transfer no
 
 To send **comment** you need setup `forward payload`. Set **first 32 bits to 0x0** and append **your text**.
 
-`forward payload` is sent in `transfer notification` internal message. It will be generated only if `forward amount` > 0.
+`forward payload` is sent in `transfer notification` internal message. It will be generated only if `forward_ton_amount` > 0. Recommended `forward_ton_amount` for jetton transfer with comment is 1 nanoton.
 
 Finally, to retrieve `Excess` message you must set up `response destination`.
 
-Sometimes you may encounter a `709` error when sending jetton. It says that the value of the toncoin attached to the message is not enough to send it. Make sure that `Toncoin > to_nano(TRANSFER_CONSUMPTION) + forward_ton_amount`. `TRANSFER_CONSUMPTION` in most cases may be 0.037 if the `forward_payload` is not too large. Also don't forget to attach enough `forward_ton_amount` or you can encounter a `cskip_no_gas` error if attached value too small.
- 
+Sometimes you may encounter a `709` error when sending jetton. It says that the value of the toncoin attached to the message is not enough to send it. Make sure that `Toncoin > to_nano(TRANSFER_CONSUMPTION) + forward_ton_amount`. `TRANSFER_CONSUMPTION` in most cases may be 0.037 if the `forward_payload` is not too large. 
+
+You may also encounter the error `cskip_no_gas`, which indicates that the jettons were successfully transferred, but no other calculations were performed. This is a common situation when the value of `forward_ton_amount` is equal to 1 nanoton.
 
 :::tip
 Check [best practices](/develop/dapps/asset-processing/jettons#best-practices) for _"send jettons with comments"_ example.
