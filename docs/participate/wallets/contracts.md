@@ -235,8 +235,9 @@ Also op-code, op::code and operational code
 | StonFi          | 0x45078540      | Swap Success ref           |
 
 :::info
-DeDust docs: https://docs.dedust.io/docs/swaps
-StonFi docs: https://docs.ston.fi/docs/developer-section/architecture#calls-descriptions
+[DeDust docs](https://docs.dedust.io/docs/swaps)
+
+[StonFi docs](https://docs.ston.fi/docs/developer-section/architecture#calls-descriptions)
 :::
 
 ## Conclusion
