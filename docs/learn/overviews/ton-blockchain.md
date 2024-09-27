@@ -63,7 +63,7 @@ If you want to customize rules of the group of Shardchains, you could create a *
 
 Theoretically, everyone in community can create own workchain. In fact, it's pretty complicated task to build it, after that to pay (expensive) price of creating it and receive 2/3 of votes from validators to approve creation of your Workchain.
 
-TON allows creating up to `2^30` workchains, each subdivided to up to `2^60` shards.
+TON allows creating up to `2^32` workchains, each subdivided to up to `2^60` shards.
 
 Nowadays, there are only 2 workchains in TON: MasterChain and BaseChain.
 

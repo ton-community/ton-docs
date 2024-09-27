@@ -1,4 +1,4 @@
-# TON Metadata Parsing
+# Metadata Parsing
 
 The metadata standard, which covers NFTs, NFT Collections, and Jettons, is outlined in TON Enhancement Proposal 64 [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
 
@@ -152,7 +152,7 @@ export function ParseChunkDict(cell: Slice): Buffer {
 
 > `amount_style` parameters:
 * _n_ - number of jettons (default value). If the user has 100 tokens with 0 decimals, then it displays that the user has 100 tokens.
-* _n-of-total_ - the number of jettons out of the total number of issued jettons. For example, if the totalSupply of Jettons is 1000 and a user has 100 jettons in their wallet, it must be displayed in the user's wallet as 100 of 1000 or in another textual or graphical way to demonstrate the ratio of user tokens to the the total amount of tokens available.
+* _n-of-total_ - the number of jettons out of the total number of issued jettons. For example, if the totalSupply of Jettons is 1000 and a user has 100 jettons in their wallet, it must be displayed in the user's wallet as 100 of 1000 or in another textual or graphical way to demonstrate the ratio of user tokens to the total amount of tokens available.
 * _%_ - the percentage of jettons from the total number of jettons issued. For example, if the totalSupply of Jettons is 1000, if a user holds 100 jettons, the percentage should be displayed as 10% of the user’s wallet balance (100 ÷ 1000 = 0.1 or 10%).
 
 > `render_type` parameters:

@@ -1,0 +1,35 @@
+@import "../../styles/all";
+
+.Caption {
+  @include font-inter;
+  font-size: $font-size-small-xs;
+  line-height: $line-height-small-s;
+
+  p {
+    overflow: visible;
+  }
+
+  @include media-breakpoint-tablet-m {
+    font-size: $font-size-small-s;
+  }
+
+  &--weight-medium {
+    font-weight: $font-weight-medium;
+  }
+
+  &--scheme-light {
+    &.Caption--color {
+      &-tertiary {
+        color: var(--text-tertiary-light);
+      }
+    }
+
+    &--scheme-dark {
+      &.Caption--color {
+        &-tertiary {
+          color: var(--text-tertiary-dark);
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-# TON Validator node maintenance and security
+# Maintenance and Security
 
 ## <a id="introduction"></a>Introduction
 This guide provides some basic information on maintaining and securing TON Validator nodes. 
@@ -9,7 +9,9 @@ This document assumes that a validator is installed using the configuration and 
 ### <a id="database-grooming"></a>Database grooming
 TON Node/Validator keeps it's database within the path specified by `--db` flag of `validator-engine`, usually `/var/ton-work/db`, this directory is created and managed by the node but it is recommended to perform a database grooming/cleanup task once a month to remove some artefacts.
 
-**Important**: You **must** stop the validator process before performing the steps outlined below, failure to do that will likely cause database corruption.
+:::caution Do not forget to stop validator process
+You **must** stop the validator process before performing the steps outlined below, failure to do that will likely cause database corruption.
+:::
 
 The procedure takes ~5 minutes to complete and will not cause major service disruption.
 
@@ -28,7 +30,6 @@ systemctl status validator
 #### Perform database cleanup
 ```sh
 find /var/ton-work/db -name 'LOG.old*' -exec rm {} +
-rm -r /var/ton-work/db/files/packages/temp.archive.*
 ```
 #### Start validator service
 ```sh

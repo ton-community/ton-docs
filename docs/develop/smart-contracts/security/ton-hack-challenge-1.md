@@ -3,7 +3,7 @@
 The TON Hack Challenge was held on October 23.
 There were several smart contracts deployed to the TON mainnet with synthetic security breaches. Every contract had a balance of 3000 or 5000 TON, allowing participant to hack it and get rewards immediately.
 
-Source code and contest rules were hosted on Github [here](https://github.com/ton-blockchain/hack-challenge-1).
+Source code and contest rules were hosted on GitHub [here](https://github.com/ton-blockchain/hack-challenge-1).
 
 ## Contracts
 
@@ -157,5 +157,5 @@ Hope this article has shed some light on the non-obvious rules for FunC develope
 
 Originally written by Dan Volkov
 
-- [dvlkv on Github](https://github.com/dvlkv)
+- [dvlkv on GitHub](https://github.com/dvlkv)
 - [Original article](https://dev.to/dvlkv/drawing-conclusions-from-ton-hack-challenge-1aep)

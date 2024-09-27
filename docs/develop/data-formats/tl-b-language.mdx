@@ -13,6 +13,7 @@ We refer to any set of TL-B constructs as TL-B documents. A TL-B document usuall
 i.e. their constructors) and functional combinators. The declaration of each combinator ends with a semicolon (`;`).
 
 Here is an example of a possible combinator declaration:
+````mdx-code-block
 <br></br>
 <ThemedImage
   alt=""
@@ -22,12 +23,13 @@ Here is an example of a possible combinator declaration:
   }}
 />
 <br></br>
-
+````
 ## Constructors
 
 The left-hand side of each equation describes the way to define, or serialize, a value of the type indicated on the
 right-hand side. Such a description begins with the name of a constructor.
 
+````mdx-code-block
 <br></br>
 <ThemedImage
   alt=""
@@ -37,7 +39,7 @@ right-hand side. Such a description begins with the name of a constructor.
   }}
 />
 <br></br>
-
+````
 Constructors are used to specify the type of combinator, including the state at serialization. For example, constructors
 can also be used when you want to specify an `op`(operation code) in query to a smart contract in TON.
 
@@ -107,7 +109,7 @@ tag_a$10 val:(## 32) = A;
 tag_b$00 val(## 64) = A;
 ```
 
-If we parse `1000000000000000000000000000000001` (1 and 33 zeroes and 1) in TLB type `A` - firstly we need to get first
+If we parse `1000000000000000000000000000000001` (1 and 32 zeroes and 1) in TLB type `A` - firstly we need to get first
 two bits to define tag. In this example `10` is two first bits and they represent `tag_a`. So now we know that next 32
 bits are `val` variable, `1` in our example. Some "parsed" pseudocode variables may look like:
 
@@ -200,7 +202,7 @@ form `ident:type-expr`, where ident is an identifier with the name of the field 
 anonymous fields), and type-expr is the field’s type. The type provided here is a type expression, which may include
 simple types, parametrized types with suitable parameters or complex expressions.
 
-<b>In sum ap all fields defined in type must not be greater than Cell (`1023` bits and `4` refs)</b>
+<b>In sum up all fields defined in type must not be greater than Cell (`1023` bits and `4` refs)</b>
 
 ### Simple types
 
@@ -639,12 +641,6 @@ a comment
 
 // This is one line comment
 ```
-
-## IDE Support
-
-The [intellij-ton](https://github.com/andreypfau/intellij-ton) plugin supports Fift, FunC and also TL-B.  
-The TL-B grammar is described in
-the [TlbParser.bnf](https://github.com/andreypfau/intellij-ton/blob/main/src/main/grammars/TlbParser.bnf) file.
 
 ## Useful sources
 

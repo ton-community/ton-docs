@@ -25,13 +25,13 @@ git clone --recurse-submodules https://github.com/ton-blockchain/ton.git
    - `cmake` version 3.0.2 or later
    - `g++` or `clang` (or another C++14-compatible compiler as appropriate for your operating system).
    - OpenSSL (including C header files) version 1.1.1 or later
-   - `build-essential`, `zlib1g-dev`, `gperf`, `libreadline-dev`, `ccache`, `libmicrohttpd-dev`, `pkg-config`
+   - `build-essential`, `zlib1g-dev`, `gperf`, `libreadline-dev`, `ccache`, `libmicrohttpd-dev`, `pkg-config`, `libsodium-dev`, `libsecp256k1-dev`
 
-   On Ubuntu:
+### On Ubuntu
 
 ```bash
 apt update
-sudo apt install build-essential cmake clang openssl libssl-dev zlib1g-dev gperf libreadline-dev ccache libmicrohttpd-dev pkg-config
+sudo apt install build-essential cmake clang openssl libssl-dev zlib1g-dev gperf libreadline-dev ccache libmicrohttpd-dev pkg-config libsodium-dev libsecp256k1-dev
 ```
 
 
@@ -50,23 +50,58 @@ export CXX=clang++
 cmake -DCMAKE_BUILD_TYPE=Release ../ton && cmake --build . -j$(nproc)
 ```
 
-:::warning
-On MacOS Intel before next step we need maybe install `openssl@3` with `brew` or just link the lib:
+### On MacOS
 
+Prepare the system by installing required system packages
 ```zsh
-brew install openssl@3 ninja libmicrohttpd pkg-config
+brew install ninja libsodium libmicrohttpd pkg-config automake libtool autoconf gnutls
+brew install llvm@16
 ```
 
-Then need to inspect `/usr/local/opt`:
-
+Use newly installed clang. 
 ```zsh
-ls /usr/local/opt
+  export CC=/opt/homebrew/opt/llvm@16/bin/clang
+  export CXX=/opt/homebrew/opt/llvm@16/bin/clang++
 ```
 
-Find `openssl@3` lib and export local variable:
+Compile secp256k1
+```zsh
+  git clone https://github.com/bitcoin-core/secp256k1.git
+  cd secp256k1
+  secp256k1Path=`pwd`
+  git checkout v0.3.2
+  ./autogen.sh
+  ./configure --enable-module-recovery --enable-static --disable-tests --disable-benchmark
+  make -j12
+```
+and lz4:
 
 ```zsh
-export OPENSSL_ROOT_DIR=/usr/local/opt/openssl@3
+  git clone https://github.com/lz4/lz4
+  cd lz4
+  lz4Path=`pwd`
+  git checkout v1.9.4
+  make -j12
+```
+and relink OpenSSL 3.0
+
+```zsh
+brew unlink openssl@1.1
+brew install openssl@3
+brew unlink openssl@3 &&  brew link --overwrite openssl@3
+```
+
+Now you can compile TON
+
+```zsh
+cmake -GNinja -DCMAKE_BUILD_TYPE=Release .. \
+-DCMAKE_CXX_FLAGS="-stdlib=libc++" \
+-DSECP256K1_FOUND=1 \
+-DSECP256K1_INCLUDE_DIR=$secp256k1Path/include \
+-DSECP256K1_LIBRARY=$secp256k1Path/.libs/libsecp256k1.a \
+-DLZ4_FOUND=1 \
+-DLZ4_LIBRARIES=$lz4Path/lib/liblz4.a \
+-DLZ4_INCLUDE_DIRS=$lz4Path/lib
 ```
 
 :::

@@ -1,0 +1,255 @@
+---
+hide_table_of_contents: true
+wrapperClassName: bootstrap-wrapper
+---
+
+import { SearchField } from '@site/src/components/SearchField';
+import { dictionaryManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
+
+# 字典操作原语
+
+大部分字典操作的Gas消耗不是固定的，它依赖于给定字典的内容。
+
+<SearchField
+  data={opcodes}
+  searchBy="doc_fift"
+  placeholder="搜索操作码"
+  showKeys={[
+    { key: 'doc_opcode', name: '操作码', isGrouped: true },
+    { key: 'doc_fift', name: 'Fift 语法', isGrouped: true },
+    { key: 'doc_stack', name: '堆栈', isGrouped: true },
+    { key: 'doc_gas', name: 'Gas', isGrouped: true },
+    { key: 'doc_description', name: '描述' },
+  ]}
+/>
+
+### TVM 指令内容列表
+
+* [概览](/learn/tvm-instructions/instructions)
+* [栈操作](/learn/tvm-instructions/instructions/stack-manipulation)
+* [元组、列表和空值](/learn/tvm-instructions/instructions/tuple-list-null)
+* [常量和字面量](/learn/tvm-instructions/instructions/constant)
+* [算术操作](/learn/tvm-instructions/instructions/arithmetic)
+* [数据比较](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [异常生成和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [应用特定的原语](/learn/tvm-instructions/instructions/app-specific)
+* [杂项](/learn/tvm-instructions/instructions/miscellaneous)
+
+## 字典操作原语
+
+### 字典创建
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`6D`** | `NEWDICT` | _` - D`_ | 返回一个新的空字典。<br/>它是 [`PUSHNULL`](#instr-null) 的另一种助记符。 | `18` |
+| **`6E`** | `DICTEMPTY` | _`D - ?`_ | 检查字典 `D` 是否为空，并相应地返回 `-1` 或 `0`。<br/>它是 [`ISNULL`](#instr-isnull) 的另一种助记符。 | `18` |
+
+### 字典序列化与反序列化
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`CE`** | `STDICTS`<br/>`` | _`s b - b'`_ | 将以_切片_表示的字典 `s` 存储进_构建器_ `b`中。<br/>实际上，这是 [`STSLICE`](#instr-stslice) 的同义词。 | `18` |
+| **`F400`** | `STDICT`<br/>`STOPTREF` | _`D b - b'`_ | 将字典 `D` 存入_构建器_ `b`，返回结果 _构建器_ `b'`。<br/>换言之，如果 `D` 是一个cell，执行 [`STONE`](#instr-stone) 和 [`STREF`](#instr-stref)；如果 `D` 是 _Null_，执行 [`NIP`](#instr-nip) 和 [`STZERO`](#instr-stzero)；否则抛出类型检查异常。 | `26` |
+| **`F401`** | `SKIPDICT`<br/>`SKIPOPTREF` | _`s - s'`_ | 相当于 [`LDDICT`](#instr-lddict) [`NIP`](#instr-nip)。 | `26` |
+| **`F402`** | `LDDICTS` | _`s - s' s''`_ | 从_切片_ `s`中加载（解析）以_切片_表示的字典 `s'`，并将 `s`的剩余部分作为 `s''` 返回。<br/>这是所有 `HashmapE(n,X)` 类型字典的“分裂函数”。 | `26` |
+| **`F403`** | `PLDDICTS` | _`s - s'`_ | 从_切片_ `s`中预加载以_切片_表示的字典 `s'`。<br/>大致相当于 [`LDDICTS`](#instr-lddicts) [`DROP`](#instr-drop)。 | `26` |
+| **`F404`** | `LDDICT`<br/>`LDOPTREF` | _`s - D s'`_ | 从_切片_ `s`中加载（解析）字典 `D`，并将 `s`的剩余部分作为 `s'` 返回。可应用于字典或任意 `(^Y)?` 类型的值。 | `26` |
+| **`F405`** | `PLDDICT`<br/>`PLDOPTREF` | _`s - D`_ | 从_切片_ `s`中预加载字典 `D`。<br/>大致相当于 [`LDDICT`](#instr-lddict) [`DROP`](#instr-drop)。 | `26` |
+| **`F406`** | `LDDICTQ` | _`s - D s' -1或 s 0`_ | [`LDDICT`](#instr-lddict) 的静默版本。 | `26` |
+| **`F407`** | `PLDDICTQ` | _`s - D -1或0`_ | [`PLDDICT`](#instr-plddict) 的静默版本。 | `26` |
+
+### 获取字典操作
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`F40A`** | `DICTGET` | _`k D n - x -1或0`_ | 在类型为 `HashmapE(n,X)` 且拥有 `n`-位键的字典 `D` 中查找键 `k`（由_切片_表示，其前 `0 <= n <= 1023` 数据位被用作键）。<br/>成功时，以_切片_ `x` 的形式返回找到的值。 |  |
+| **`F40B`** | `DICTGETREF` | _`k D n - c -1或0`_ | 与 [`DICTGET`](#instr-dictget) 类似，但在成功时对 `x` 应用 [`LDREF`](#instr-ldref) [`ENDS`](#instr-ends)。<br/>此操作对于类型为 `HashmapE(n,^Y)` 的字典很有用。 |  |
+| **`F40C`** | `DICTIGET` | _`i D n - x -1或0`_ | 与 [`DICTGET`](#instr-dictget) 类似，但使用带符号的（大端）`n`-位 _整型_ `i` 作为键。如果 `i` 不能放入 `n` 位，则返回 `0`。如果 `i` 是 `NaN`，抛出整数溢出异常。 |  |
+| **`F40D`** | `DICTIGETREF` | _`i D n - c -1或0`_ | 组合 [`DICTIGET`](#instr-dictiget) 与 [`DICTGETREF`](#instr-dictgetref)：它使用带符号的 `n`-位 _整型_ `i` 作为键，并在成功时返回 _cell_ 而不是_切片_。 |  |
+| **`F40E`** | `DICTUGET` | _`i D n - x -1或0`_ | 与 [`DICTIGET`](#instr-dictiget) 类似，但使用_无符号_的（大端）`n`-位 _整型_ `i` 作为键。 |  |
+| **`F40F`** | `DICTUGETREF` | _`i D n - c -1或0`_ | 与 [`DICTIGETREF`](#instr-dictigetref) 类似，但使用一个无符号 `n`-位 _整型_ 键 `i`。 |  |
+
+### 设置/替换/添加字典操作
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`F412`** | `DICTSET` | _`x k D n - D'`_ | 在字典 `D`（同样用_切片_表示）中设置 `n`-位键 `k`（如 [`DICTGET`](#instr-dictget) 中用_切片_表示）关联的值为 `x`（再次是_切片_），并返回结果字典 `D'`。 |  |
+| **`F413`** | `DICTSETREF` | _`c k D n - D'`_ | 类似于 [`DICTSET`](#instr-dictset)，但设置的值为对_cell_ `c` 的引用。 |  |
+| **`F414`** | `DICTISET` | _`x i D n - D'`_ | 类似于 [`DICTSET`](#instr-dictset)，但键由（大端）有符号 `n`-位整数 `i` 表示。如果 `i` 不能放入 `n` 位，则生成范围检查异常。 |  |
+| **`F415`** | `DICTISETREF` | _`c i D n - D'`_ | 类似于 [`DICTSETREF`](#instr-dictsetref)，但键由 [`DICTISET`](#instr-dictiset) 中的有符号 `n`-位整数表示。 |  |
+| **`F416`** | `DICTUSET` | _`x i D n - D'`_ | 类似于 [`DICTISET`](#instr-dictiset)，但 `i` 为 _无符号_ `n`-位整数。 |  |
+| **`F417`** | `DICTUSETREF` | _`c i D n - D'`_ | 类似于 [`DICTISETREF`](#instr-dictisetref)，但 `i` 为无符号。 |  |
+| **`F41A`** | `DICTSETGET` | _`x k D n - D' y -1或 D' 0`_ | 结合 [`DICTSET`](#instr-dictset) 和 [`DICTGET`](#instr-dictget)：它将键 `k` 对应的值设置为 `x`，但也返回该键原有的旧值 `y`（如果存在）。 |  |
+| **`F41B`** | `DICTSETGETREF` | _`c k D n - D' c' -1或 D' 0`_ | 类似于 [`DICTSETGET`](#instr-dictsetget) 的 [`DICTSETREF`](#instr-dictsetref) 与 [`DICTGETREF`](#instr-dictgetref) 的组合。 |  |
+| **`F41C`** | `DICTISETGET` | _`x i D n - D' y -1或 D' 0`_ | [`DICTISETGET`](#instr-dictisetget)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F41D`** | `DICTISETGETREF` | _`c i D n - D' c' -1或 D' 0`_ | [`DICTISETGETREF`](#instr-dictisetgetref)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F41E`** | `DICTUSETGET` | _`x i D n - D' y -1或 D' 0`_ | [`DICTISETGET`](#instr-dictisetget)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F41F`** | `DICTUSETGETREF` | _`c i D n - D' c' -1或 D' 0`_ | [`DICTISETGETREF`](#instr-dictisetgetref)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F422`** | `DICTREPLACE` | _`x k D n - D' -1或 D 0`_ | 一个 _替换_ 操作，类似于 [`DICTSET`](#instr-dictset)，但只有当键 `k` 已经存在于 `D` 中时才会将 `D` 中键 `k` 的值设置为 `x`。 |  |
+| **`F423`** | `DICTREPLACEREF` | _`c k D n - D' -1或 D 0`_ | [`DICTSETREF`](#instr-dictsetref) 的 _替换_ 对应操作。 |  |
+| **`F424`** | `DICTIREPLACE` | _`x i D n - D' -1或 D 0`_ | [`DICTREPLACE`](#instr-dictreplace)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F425`** | `DICTIREPLACEREF` | _`c i D n - D' -1或 D 0`_ | [`DICTREPLACEREF`](#instr-dictreplaceref)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F426`** | `DICTUREPLACE` | _`x i D n - D' -1或 D 0`_ | [`DICTREPLACE`](#instr-dictreplace)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F427`** | `DICTUREPLACEREF` | _`c i D n - D' -1或 D 0`_ | [`DICTREPLACEREF`](#instr-dictreplaceref)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F42A`** | `DICTREPLACEGET` | _`x k D n - D' y -1或 D 0`_ | [`DICTSETGET`](#instr-dictsetget) 的 _替换_ 对应操作：成功时，还会返回与该键相关的旧值。 |  |
+| **`F42B`** | `DICTREPLACEGETREF` | _`c k D n - D' c' -1或 D 0`_ | [`DICTSETGETREF`](#instr-dictsetgetref) 的 _替换_ 对应操作。 |  |
+| **`F42C`** | `DICTIREPLACEGET` | _`x i D n - D' y -1或 D 0`_ | [`DICTREPLACEGET`](#instr-dictreplaceget)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F42D`** | `DICTIREPLACEGETREF` | _`c i D n - D' c' -1或 D 0`_ | [`DICTREPLACEGETREF`](#instr-dictreplacegetref)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F42E`** | `DICTUREPLACEGET` | _`x i D n - D' y -1或 D 0`_ | [`DICTREPLACEGET`](#instr-dictreplaceget)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F42F`** | `DICTUREPLACEGETREF` | _`c i D n - D' c' -1或 D 0`_ | [`DICTREPLACEGETREF`](#instr-dictreplacegetref)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F432`** | `DICTADD` | _`x k D n - D' -1或 D 0`_ | [`DICTSET`](#instr-dictset) 的 _添加_ 对应操作：在字典 `D` 中将与键 `k` 关联的值设置为 `x`，但只有当它还未在 `D` 中存在时。 |  |
+| **`F433`** | `DICTADDREF` | _`c k D n - D' -1或 D 0`_ | [`DICTSETREF`](#instr-dictsetref) 的 _添加_ 对应操作。 |  |
+| **`F434`** | `DICTIADD` | _`x i D n - D' -1或 D 0`_ | [`DICTADD`](#instr-dictadd)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F435`** | `DICTIADDREF` | _`c i D n - D' -1或 D 0`_ | [`DICTADDREF`](#instr-dictaddref)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F436`** | `DICTUADD` | _`x i D n - D' -1或 D 0`_ | [`DICTADD`](#instr-dictadd)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F437`** | `DICTUADDREF` | _`c i D n - D' -1或 D 0`_ | [`DICTADDREF`](#instr-dictaddref)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F43A`** | `DICTADDGET` | _`x k D n - D' -1或 D y 0`_ | [`DICTSETGET`](#instr-dictsetget) 的 _添加_ 对应操作：在字典 `D` 中将与键 `k` 关联的值设置为 `x`，但只有当键 `k` 还未在 `D` 中存在时。否则，仅返回旧值 `y`，不更改字典。 |  |
+| **`F43B`** | `DICTADDGETREF` | _`c k D n - D' -1或 D c' 0`_ | [`DICTSETGETREF`](#instr-dictsetgetref) 的 _添加_ 对应操作。 |  |
+| **`F43C`** | `DICTIADDGET` | _`x i D n - D' -1或 D y 0`_ | [`DICTADDGET`](#instr-dictaddget)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F43D`** | `DICTIADDGETREF` | _`c i D n - D' -1或 D c' 0`_ | [`DICTADDGETREF`](#instr-dictaddgetref)，但 `i` 为有符号 `n`-位整数。 |  |
+| **`F43E`** | `DICTUADDGET` | _`x i D n - D' -1或 D y 0`_ | [`DICTADDGET`](#instr-dictaddget)，但 `i` 为无符号 `n`-位整数。 |  |
+| **`F43F`** | `DICTUADDGETREF` | _`c i D n - D' -1或 D c' 0`_ | [`DICTADDGETREF`](#instr-dictaddgetref)，但 `i` 为无符号 `n`-位整数。 |  |
+
+### 接受构建器的字典设置操作变体
+以下操作接受新值作为_构建器_ `b`，而不是_切片_ `x`。
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`F441`** | `DICTSETB` | _`b k D n - D'`_ |  |  |
+| **`F442`** | `DICTISETB` | _`b i D n - D'`_ |  |  |
+| **`F443`** | `DICTUSETB` | _`b i D n - D'`_ |  |  |
+| **`F445`** | `DICTSETGETB` | _`b k D n - D' y -1或 D' 0`_ |  |  |
+| **`F446`** | `DICTISETGETB` | _`b i D n - D' y -1或 D' 0`_ |  |  |
+| **`F447`** | `DICTUSETGETB` | _`b i D n - D' y -1或 D' 0`_ |  |  |
+| **`F449`** | `DICTREPLACEB` | _`b k D n - D' -1或 D 0`_ |  |  |
+| **`F44A`** | `DICTIREPLACEB` | _`b i D n - D' -1或 D 0`_ |  |  |
+| **`F44B`** | `DICTUREPLACEB` | _`b i D n - D' -1或 D 0`_ |  |  |
+| **`F44D`** | `DICTREPLACEGETB` | _`b k D n - D' y -1或 D 0`_ |  |  |
+| **`F44E`** | `DICTIREPLACEGETB` | _`b i D n - D' y -1或 D 0`_ |  |  |
+| **`F44F`** | `DICTUREPLACEGETB` | _`b i D n - D' y -1或 D 0`_ |  |  |
+| **`F451`** | `DICTADDB` | _`b k D n - D' -1或 D 0`_ |  |  |
+| **`F452`** | `DICTIADDB` | _`b i D n - D' -1或 D 0`_ |  |  |
+| **`F453`** | `DICTUADDB` | _`b i D n - D' -1或 D 0`_ |  |  |
+| **`F455`** | `DICTADDGETB` | _`b k D n - D' -1或 D y 0`_ |  |  |
+| **`F456`** | `DICTIADDGETB` | _`b i D n - D' -1或 D y 0`_ |  |  |
+| **`F457`** | `DICTUADDGETB` | _`b i D n - D' -1或 D y 0`_ |  |  |
+
+### 删除字典操作
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`F459`** | `DICTDEL` | _`k D n - D' -1或 D 0`_ | 从字典 `D` 中删除由_切片_ `k` 表示的 `n`-位键。如果键存在，返回修改后的字典 `D'` 和成功标志位 `-1`。否则，返回原始字典 `D` 和 `0`。 |  |
+| **`F45A`** | `DICTIDEL` | _`i D n - D' ?`_ | [`DICTDEL`](#instr-dictdel) 的一个版本，键由有符号的 `n`-位 _整数_ `i` 表示。如果 `i` 不能放入 `n` 位，简单地返回 `D` `0`（“键未找到，字典未修改”）。 |  |
+| **`F45B`** | `DICTUDEL` | _`i D n - D' ?`_ | 类似于 [`DICTIDEL`](#instr-dictidel)，但 `i` 为无符号的 `n`-位整数。 |  |
+| **`F462`** | `DICTDELGET` | _`k D n - D' x -1或 D 0`_ | 从字典 `D` 中删除由_切片_ `k` 表示的 `n`-位键。如果键存在，返回修改后的字典 `D'`、与键 `k` 关联的原始值 `x`（由_切片_表示），和成功标志位 `-1`。否则，返回原始字典 `D` 和 `0`。 |  |
+| **`F463`** | `DICTDELGETREF` | _`k D n - D' c -1或 D 0`_ | 类似于 [`DICTDELGET`](#instr-dictdelget)，但成功时对 `x` 应用 [`LDREF`](#instr-ldref) [`ENDS`](#instr-ends)，以便返回的值 `c` 是一个_cell_。 |  |
+| **`F464`** | `DICTIDELGET` | _`i D n - D' x -1或 D 0`_ | [`DICTDELGET`](#instr-dictdelget)，但 `i` 为有符号的 `n`-位整数。 |  |
+| **`F465`** | `DICTIDELGETREF` | _`i D n - D' c -1或 D 0`_ | [`DICTDELGETREF`](#instr-dictdelgetref)，但 `i` 为有符号的 `n`-位整数。 |  |
+| **`F466`** | `DICTUDELGET` | _`i D n - D' x -1或 D 0`_ | [`DICTDELGET`](#instr-dictdelget)，但 `i` 为无符号的 `n`-位整数。 |  |
+| **`F467`** | `DICTUDELGETREF` | _`i D n - D' c -1或 D 0`_ | [`DICTDELGETREF`](#instr-dictdelgetref)，但 `i` 为无符号的 `n`-位整数。 |  |
+
+### “可能是引用”的字典操作
+以下操作假设使用字典存储类型为_可能是cell（Maybe Cell）_的值 `c?`。表示如下：如果 `c?` 是一个_cell_，它作为一个没有数据位且恰好有一个对这个_cell_的引用的值存储。如果 `c?` 是_Null_，则对应的键必须从字典中缺失。
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`F469`** | `DICTGETOPTREF` | _`k D n - c^?`_ | [`DICTGETREF`](#instr-dictgetref) 的一个变体，如果键 `k` 不存在于字典 `D` 中，则返回 _Null_ 而不是值 `c^?`。 |  |
+| **`F46A`** | `DICTIGETOPTREF` | _`i D n - c^?`_ | [`DICTGETOPTREF`](#instr-dictgetoptref) 的版本，但 `i` 为有符号的 `n`-位整数。如果键 `i` 超出范围，也返回 _Null_。 |  |
+| **`F46B`** | `DICTUGETOPTREF` | _`i D n - c^?`_ | [`DICTGETOPTREF`](#instr-dictgetoptref) 的版本，但 `i` 为无符号的 `n`-位整数。如果键 `i` 超出范围，也返回 _Null_。 |  |
+| **`F46D`** | `DICTSETGETOPTREF` | _`c^? k D n - D' ~c^?`_ | [`DICTGETOPTREF`](#instr-dictgetoptref) 和 [`DICTSETGETREF`](#instr-dictsetgetref) 的一个变体，将字典 `D` 中键 `k` 对应的值设置为 `c^?`（如果 `c^?` 是_Null_，则删除该键），并返回旧值 `~c^?`（如果键 `k` 之前缺失，返回_Null_）。 |  |
+| **`F46E`** | `DICTISETGETOPTREF` | _`c^? i D n - D' ~c^?`_ | 类似于 [`DICTSETGETOPTREF`](#instr-dictsetgetoptref) 的原语，但使用有符号的 `n`-位 _整数_ `i` 作为键。如果 `i` 不能放入 `n` 位，抛出范围检查异常。 |  |
+| **`F46F`** | `DICTUSETGETOPTREF` | _`c^? i D n - D' ~c^?`_ | 类似于 [`DICTSETGETOPTREF`](#instr-dictsetgetoptref) 的原语，但使用无符号的 `n`-位 _整数_ `i` 作为键。 |  |
+
+### 前缀码字典操作
+构建前缀码字典的一些基本操作。
+这些原语与它们非前缀码（[`DICTSET`](#instr-dictset) 等）的对应操作完全相同，不过在前缀码字典中，即使是 _Set_ 也可能失败，因此 [`PFXDICTSET`](#instr-pfxdictset) 也必须返回成功标志位。
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`F470`** | `PFXDICTSET` | _`x k D n - D' -1或 D 0`_ |  |  |
+| **`F471`** | `PFXDICTREPLACE` | _`x k D n - D' -1或 D 0`_ |  |  |
+| **`F472`** | `PFXDICTADD` | _`x k D n - D' -1或 D 0`_ |  |  |
+| **`F473`** | `PFXDICTDEL` | _`k D n - D' -1或 D 0`_ |  |  |
+
+### GetNext 和 GetPrev 操作的变体
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`F474`** | `DICTGETNEXT` | _`k D n - x' k' -1或 0`_ | 计算字典 `D` 中字典序大于 `k` 的最小键 `k'`，并返回 `k'`（由_切片_表示）及其关联的值 `x'`（也由_切片_表示）。 |  |
+| **`F475`** | `DICTGETNEXTEQ` | _`k D n - x' k' -1或 0`_ | 类似于 [`DICTGETNEXT`](#instr-dictgetnext)，但计算字典序大于或等于 `k` 的最小键 `k'`。 |  |
+| **`F476`** | `DICTGETPREV` | _`k D n - x' k' -1或 0`_ | 类似于 [`DICTGETNEXT`](#instr-dictgetnext)，但计算字典序小于 `k` 的最大键 `k'`。 |  |
+| **`F477`** | `DICTGETPREVEQ` | _`k D n - x' k' -1或 0`_ | 类似于 [`DICTGETPREV`](#instr-dictgetprev)，但计算字典序小于或等于 `k` 的最大键 `k'`。 |  |
+| **`F478`** | `DICTIGETNEXT` | _`i D n - x' i' -1或 0`_ | 类似于 [`DICTGETNEXT`](#instr-dictgetnext)，但将字典 `D` 中的所有键解释为大端有符号的 `n`-位整数，并计算大于整数 `i` 的最小键 `i'`（`i` 不一定能放入 `n` 位）。 |  |
+| **`F479`** | `DICTIGETNEXTEQ` | _`i D n - x' i' -1或 0`_ | 类似于 [`DICTGETNEXTEQ`](#instr-dictgetnexteq)，但将键解释为有符号的 `n`-位整数。 |  |
+| **`F47A`** | `DICTIGETPREV` | _`i D n - x' i' -1或 0`_ | 类似于 [`DICTGETPREV`](#instr-dictgetprev)，但将键解释为有符号的 `n`-位整数。 |  |
+| **`F47B`** | `DICTIGETPREVEQ` | _`i D n - x' i' -1或 0`_ | 类似于 [`DICTGETPREVEQ`](#instr-dictgetpreveq)，但将键解释为有符号的 `n`-位整数。 |  |
+| **`F47C`** | `DICTUGETNEXT` | _`i D n - x' i' -1或 0`_ | 类似于 [`DICTGETNEXT`](#instr-dictgetnext)，但将字典 `D` 中的所有键解释为大端无符号的 `n`-位整数，并计算大于整数 `i` 的最小键 `i'`（`i` 不一定能放入 `n` 位，也不一定是非负的）。 |  |
+| **`F47D`** | `DICTUGETNEXTEQ` | _`i D n - x' i' -1或 0`_ | 类似于 [`DICTGETNEXTEQ`](#instr-dictgetnexteq)，但将键解释为无符号的 `n`-位整数。 |  |
+| **`F47E`** | `DICTUGETPREV` | _`i D n - x' i' -1或 0`_ | 类似于 [`DICTGETPREV`](#instr-dictgetprev)，但将键解释为无符号的 `n`-位整数。 |  |
+| **`F47F`** | `DICTUGETPREVEQ` | _`i D n - x' i' -1或 0`_ | 类似于 [`DICTGETPREVEQ`](#instr-dictgetpreveq)，但将键解释为无符号的 `n`-位整数。 |  |
+
+### GetMin, GetMax, RemoveMin, RemoveMax 操作
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`F482`** | `DICTMIN` | _`D n - x k -1或 0`_ | 计算字典 `D` 中的最小键 `k`（由拥有 `n` 数据位的_切片_表示），并返回 `k` 及其关联的值 `x`。 |  |
+| **`F483`** | `DICTMINREF` | _`D n - c k -1或 0`_ | 类似于 [`DICTMIN`](#instr-dictmin)，但返回值中唯一的引用作为_cell_ `c`。 |  |
+| **`F484`** | `DICTIMIN` | _`D n - x i -1或 0`_ | 类似于 [`DICTMIN`](#instr-dictmin)，但在假设所有键为大端有符号的 `n`-位整数的情况下计算最小键 `i`。注意，返回的键和值可能与 [`DICTMIN`](#instr-dictmin) 和 [`DICTUMIN`](#instr-dictumin) 计算出的不同。 |  |
+| **`F485`** | `DICTIMINREF` | _`D n - c i -1或 0`_ | 类似于 [`DICTIMIN`](#instr-dictimin)，但返回值中唯一的引用。 |  |
+| **`F486`** | `DICTUMIN` | _`D n - x i -1或 0`_ | 类似于 [`DICTMIN`](#instr-dictmin)，但以无符号 `n`-位 _整数_ `i` 的形式返回键。 |  |
+| **`F487`** | `DICTUMINREF` | _`D n - c i -1或 0`_ | 类似于 [`DICTUMIN`](#instr-dictumin)，但返回值中唯一的引用。 |  |
+| **`F48A`** | `DICTMAX` | _`D n - x k -1或 0`_ | 计算字典 `D` 中的最大键 `k`（由拥有 `n` 数据位的_切片_表示），并返回 `k` 及其关联的值 `x`。 |  |
+| **`F48B`** | `DICTMAXREF` | _`D n - c k -1或 0`_ | 类似于 [`DICTMAX`](#instr-dictmax)，但返回值中唯一的引用。 |  |
+| **`F48C`** | `DICTIMAX` | _`D n - x i -1或 0`_ | 类似于 [`DICTMAX`](#instr-dictmax)，但在假设所有键为大端有符号的 `n`-位整数的情况下计算最大键 `i`。注意，返回的键和值可能与 [`DICTMAX`](#instr-dictmax) 和 [`DICTUMAX`](#instr-dictumax) 计算出的不同。 |  |
+| **`F48D`** | `DICTIMAXREF` | _`D n - c i -1或 0`_ | 类似于 [`DICTIMAX`](#instr-dictimax)，但返回值中唯一的引用。 |  |
+| **`F48E`** | `DICTUMAX` | _`D n - x i -1或 0`_ | 类似于 [`DICTMAX`](#instr-dictmax)，但以无符号 `n`-位 _整数_ `i` 的形式返回键。 |  |
+| **`F48F`** | `DICTUMAXREF` | _`D n - c i -1或 0`_ | 类似于 [`DICTUMAX`](#instr-dictumax)，但返回值中唯一的引用。 |  |
+| **`F492`** | `DICTREMMIN` | _`D n - D' x k -1或D 0`_ | 计算字典 `D` 中的最小键 `k`（以_n_数据位的_切片_形式表示），从字典中移除 `k`，并返回 `k` 及其关联的值 `x` 和修改后的字典 `D'`。 |  |
+| **`F493`** | `DICTREMMINREF` | _`D n - D' c k -1或D 0`_ | 类似于 [`DICTREMMIN`](#instr-dictremmin)，但返回值中唯一的引用作为_cell_ `c`。 |  |
+| **`F494`** | `DICTIREMMIN` | _`D n - D' x i -1或D 0`_ | 类似于 [`DICTREMMIN`](#instr-dictremmin)，但计算最小键 `i`，假设所有键都是大端有符号的_n_-位整数。请注意，返回的键和值可能与[`DICTREMMIN`](#instr-dictremmin) 和 [`DICTUREMMIN`](#instr-dicturemmin)计算的不同。 |  |
+| **`F495`** | `DICTIREMMINREF` | _`D n - D' c i -1或D 0`_ | 类似于 [`DICTIREMMIN`](#instr-dictiremmin)，但返回值中唯一的引用。 |  |
+| **`F496`** | `DICTUREMMIN` | _`D n - D' x i -1或D 0`_ | 类似于 [`DICTREMMIN`](#instr-dictremmin)，但以无符号_n_-位_整数_ `i` 形式返回键。 |  |
+| **`F497`** | `DICTUREMMINREF` | _`D n - D' c i -1或D 0`_ | 类似于 [`DICTUREMMIN`](#instr-dicturemmin)，但返回值中唯一的引用。 |  |
+| **`F49A`** | `DICTREMMAX` | _`D n - D' x k -1或D 0`_ | 计算字典 `D` 中的最大键 `k`（以_n_数据位的_切片_形式表示），从字典中移除 `k`，并返回 `k` 及其关联的值 `x` 和修改后的字典 `D'`。 |  |
+| **`F49B`** | `DICTREMMAXREF` | _`D n - D' c k -1或D 0`_ | 类似于 [`DICTREMMAX`](#instr-dictremmax)，但返回值中唯一的引用作为_cell_ `c`。 |  |
+| **`F49C`** | `DICTIREMMAX` | _`D n - D' x i -1或D 0`_ | 类似于 [`DICTREMMAX`](#instr-dictremmax)，但计算最大键 `i`，假设所有键都是大端有符号的_n_-位整数。请注意，返回的键和值可能与[`DICTREMMAX`](#instr-dictremmax) 和 [`DICTUREMMAX`](#instr-dicturemmax)计算的不同。 |  |
+| **`F49D`** | `DICTIREMMAXREF` | _`D n - D' c i -1或D 0`_ | 类似于 [`DICTIREMMAX`](#instr-dictiremmax)，但返回值中唯一的引用。 |  |
+| **`F49E`** | `DICTUREMMAX` | _`D n - D' x i -1或D 0`_ | 类似于 [`DICTREMMAX`](#instr-dictremmax)，但以无符号_n_-位_整数_ `i` 形式返回键。 |  |
+| **`F49F`** | `DICTUREMMAXREF` | _`D n - D' c i -1或D 0`_ | 类似于 [`DICTUREMMAX`](#instr-dicturemmax)，但返回值中唯一的引用。 |  |
+
+### 特殊的获取字典和前缀码字典操作以及常量字典
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`F4A0`** | `DICTIGETJMP` | _`i D n - `_ | 类似于 [`DICTIGET`](#instr-dictiget)，但在成功时将 `x` [`BLESS`](#instr-bless) 成一个continuation，并随后执行对其的 [`JMPX`](#instr-jmpx)。失败时不执行任何操作。这对于实现 `switch`/`case` 结构很有用。 |  |
+| **`F4A1`** | `DICTUGETJMP` | _`i D n - `_ | 类似于 [`DICTIGETJMP`](#instr-dictigetjmp)，但执行 [`DICTUGET`](#instr-dictuget) 而非 [`DICTIGET`](#instr-dictiget)。 |  |
+| **`F4A2`** | `DICTIGETEXEC` | _`i D n - `_ | 类似于 [`DICTIGETJMP`](#instr-dictigetjmp)，但使用 [`EXECUTE`](#instr-execute) 而非 [`JMPX`](#instr-jmpx)。 |  |
+| **`F4A3`** | `DICTUGETEXEC` | _`i D n - `_ | 类似于 [`DICTUGETJMP`](#instr-dictugetjmp)，但使用 [`EXECUTE`](#instr-execute) 而非 [`JMPX`](#instr-jmpx)。 |  |
+| **`F4A6_n`** | `[ref] [n] DICTPUSHCONST` | _` - D n`_ | 推送非空常量字典 `D`（作为`Cell^?`）和其键长 `0 <= n <= 1023`，存储为指令的一部分。字典本身是从当前continuation的剩余引用中的第一个创建的。通过这种方式，完整的 [`DICTPUSHCONST`](#instr-dictpushconst) 指令可以通过首先序列化 `xF4A4_`，然后是非空字典本身（一个 `1` 位和一个cell引用），然后是无符号的 10 位整数 `n`（仿佛通过 `STU 10` 指令）获得。空字典可以通过 [`NEWDICT`](#instr-newdict) 原语推送。 | `34` |
+| **`F4A8`** | `PFXDICTGETQ` | _`s D n - s' x s'' -1或s 0`_ | 在前缀码字典中查找切片 `s` 的唯一前缀，该字典由 `Cell^?` `D` 和 `0 <= n <= 1023` 表示。如果找到，作为 `s'` 返回 `s` 的前缀，并作为切片 `x` 返回相应的值。`s` 的剩余部分作为切片 `s''` 返回。如果 `s` 的任何前缀不是前缀码字典 `D` 中的键，则返回未更改的 `s` 和零标志位以表示失败。 |  |
+| **`F4A9`** | `PFXDICTGET` | _`s D n - s' x s''`_ | 类似于 [`PFXDICTGET`](#instr-pfxdictget)，但在失败时抛出cell反序列化失败异常。 |  |
+| **`F4AA`** | `PFXDICTGETJMP` | _`s D n - s' s''或s`_ | 类似于 [`PFXDICTGETQ`](#instr-pfxdictgetq)，但成功时将值 `x` [`BLESS`](#instr-bless) 成一个_continuation_，并像执行 [`JMPX`](#instr-jmpx) 一样转移控制权。失败时，返回未改变的 `s` 并继续执行。 |  |
+| **`F4AB`** | `PFXDICTGETEXEC` | _`s D n - s' s''`_ | 类似于 [`PFXDICTGETJMP`](#instr-pfxdictgetjmp)，但执行找到的continuation而非跳转它。失败时，抛出cell反序列化异常。 |  |
+| **`F4AE_n`** | `[ref] [n] PFXDICTCONSTGETJMP`<br/>`[ref] [n] PFXDICTSWITCH` | _`s - s' s''或s`_ | 将 [`[n] DICTPUSHCONST`](#instr-dictpushconst) 和 [`PFXDICTGETJMP`](#instr-pfxdictgetjmp) 结合起来，用于 `0 <= n <= 1023`。 |  |
+| **`F4BC`** | `DICTIGETJMPZ` | _`i D n - i或nothing`_ | [`DICTIGETJMP`](#instr-dictigetjmp) 的一个变种，在失败时返回索引 `i`。 |  |
+| **`F4BD`** | `DICTUGETJMPZ` | _`i D n - i或nothing`_ | [`DICTUGETJMP`](#instr-dictugetjmp) 的一个变种，在失败时返回索引 `i`。 |  |
+| **`F4BE`** | `DICTIGETEXECZ` | _`i D n - i或nothing`_ | [`DICTIGETEXEC`](#instr-dictigetexec) 的一个变种，在失败时返回索引 `i`。 |  |
+| **`F4BF`** | `DICTUGETEXECZ` | _`i D n - i或nothing`_ | [`DICTUGETEXEC`](#instr-dictugetexec) 的一个变种，在失败时返回索引 `i`。 |  |
+
+### SubDict 字典操作
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`F4B1`** | `SUBDICTGET` | _`k l D n - D'`_ | 构建一个由所有以前缀 `k`（由一个_切片_表示，其前 `0 <= l <= n <= 1023` 个数据位用作键）为前缀的字典 `D` 中的键组成的子字典。这里的 `D` 是类型为 `HashmapE(n,X)` 的字典，拥有 `n` 位的键。成功时，返回同类型 `HashmapE(n,X)` 的新子字典作为一个_切片_ `D'`。 |  |
+| **`F4B2`** | `SUBDICTIGET` | _`x l D n - D'`_ | [`SUBDICTGET`](#instr-subdictget) 的变体，前缀由有符号的大端 `l`-位_整数_ `x` 表示，必须满足 `l <= 257`。 |  |
+| **`F4B3`** | `SUBDICTUGET` | _`x l D n - D'`_ | [`SUBDICTGET`](#instr-subdictget) 的变体，前缀由无符号的大端 `l`-位_整数_ `x` 表示，必须满足 `l <= 256`。 |  |
+| **`F4B5`** | `SUBDICTRPGET` | _`k l D n - D'`_ | 类似于 [`SUBDICTGET`](#instr-subdictget)，但从新字典 `D'` 的所有键中移除公共前缀 `k`，它变为 `HashmapE(n-l,X)` 类型。 |  |
+| **`F4B6`** | `SUBDICTIRPGET` | _`x l D n - D'`_ | [`SUBDICTRPGET`](#instr-subdictrpget) 的变体，前缀由有符号的大端 `l`-位_整数_ `x` 表示，必须满足 `l <= 257`。 |  |
+| **`F4B7`** | `SUBDICTURPGET` | _`x l D n - D'`_ | [`SUBDICTRPGET`](#instr-subdictrpget) 的变体，前缀由无符号的大端 `l`-位_整数_ `x` 表示，必须满足 `l <= 256`。 |  |
+
+
+### TVM 指令内容列表
+
+* [概览](/learn/tvm-instructions/instructions)
+* [栈操作](/learn/tvm-instructions/instructions/stack-manipulation)
+* [元组、列表和空值](/learn/tvm-instructions/instructions/tuple-list-null)
+* [常量和字面值](/learn/tvm-instructions/instructions/constant)
+* [算术操作](/learn/tvm-instructions/instructions/arithmetic)
+* [数据比较](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [异常生成和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [应用特定的原语](/learn/tvm-instructions/instructions/app-specific)
+* [杂项](/learn/tvm-instructions/instructions/miscellaneous)

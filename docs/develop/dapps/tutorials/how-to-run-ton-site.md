@@ -12,8 +12,8 @@ Install [Tonutils Reverse Proxy](https://github.com/tonutils/reverse-proxy) to u
 
 ##### Download
 ```bash
-wget https://github.com/ton-utils/reverse-proxy/releases/download/v0.2.0/tonutils-reverse-proxy-linux-amd64
-chmod 777 tonutils-reverse-proxy-linux-amd64
+wget https://github.com/ton-utils/reverse-proxy/releases/latest/download/tonutils-reverse-proxy-linux-amd64
+chmod +x tonutils-reverse-proxy-linux-amd64
 ```
 
 ##### Run
@@ -54,4 +54,8 @@ You can check the availability of the site by opening this address with the doma
 
  * [TON Sites, TON WWW and TON Proxy](https://blog.ton.org/ton-sites)
  * [Tonutils Reverse Proxy](https://github.com/tonutils/reverse-proxy)
- * Authors: [Andrew Burnosov](https://github.com/AndreyBurnosov) (TG: [@AndrewBurnosov](https://t.me/AndreyBurnosov)), [Daniil Sedov](https://gusarich.com) (TG: [@sedov](https://t.me/sedov)), [George Imedashvili](https://github.com/drforse) 
+ * Authors: [Andrew Burnosov](https://github.com/AndreyBurnosov) (TG: [@AndrewBurnosov](https://t.me/AndreyBurnosov)), [Daniil Sedov](https://gusarich.com) (TG: [@sedov](https://t.me/sedov)), [George Imedashvili](https://github.com/drforse)
+
+
+## See Also
+* [Run C++ Implementation](/participate/web3/sites-and-proxy)

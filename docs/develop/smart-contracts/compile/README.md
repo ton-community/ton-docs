@@ -1,6 +1,10 @@
-# Build and Compile
+# Compile and Build smart contracts on TON
 
 Here is a list of libraries and repos to build your smart contract.
+
+**TLDR:**
+- In most cases, it's enough to use Blueprint SDK.
+- If you need more low-level approach, you can use ton-compiler or func-js.
 
 ## Blueprint
 
@@ -75,7 +79,7 @@ FunC stdlib is bundled but could be disabled at runtime.
 # Compile to binary form (for contract creation)
 ton-compiler --input ./wallet.fc --output ./wallet.cell
 
-# Compile to fift (useful for debuging)
+# Compile to fift (useful for debugging)
 ton-compiler --input ./wallet.fc --output-fift ./wallet.fif
 
 # Compile to binary form and fift

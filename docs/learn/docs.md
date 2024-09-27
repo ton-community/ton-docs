@@ -14,7 +14,7 @@ Please note that here and later the code, comments and/or documentation may cont
 
 * [TON Virtual Machine](https://docs.ton.org/tvm.pdf)
 
-  TON Virtual Machine description.
+  TON Virtual Machine description(may include outdated information on OP Codes, actual list in [TVM Instruction](https://docs.ton.org/learn/tvm-instructions/tvm-overview) section).
 
 * [TON Blockchain](https://docs.ton.org/tblkch.pdf)
 
@@ -31,4 +31,5 @@ Please note that here and later the code, comments and/or documentation may cont
 ## Translations
 
 * **\[RU]** [korolyow/ton_docs_ru](https://github.com/Korolyow/TON_docs_ru) — TON Whitepapers in Russian. (_this version made by community, TON Foundation can't guarantee quality of translation_)
-* **\[CN]** [awesome-doge/the-open-network-whitepaper](https://github.com/awesome-doge/TON_Paper/blob/main/zh_ton.pdf) — TON Whitepapers in Chinese. (_made by community, TON Foundation can't guarantee quality of translation_)
+* **\[Traditional CN]** [awesome-doge/the-open-network-whitepaper](https://github.com/awesome-doge/TON_Paper/blob/main/zh_ton.pdf) — TON Whitepapers in Traditional Chinese. (_made by community, TON Foundation can't guarantee quality of translation_)
+* **\[Simplified CN]** [kojhliang/Ton_White_Paper_SC](https://github.com/kojhliang/Ton_White_Paper_SC/blob/main/Ton%E5%8C%BA%E5%9D%97%E9%93%BE%E7%99%BD%E7%9A%AE%E4%B9%A6_%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E7%89%88.pdf) — TON Whitepapers in Simplified Chinese. (_made by community, TON Foundation can't guarantee quality of translation_)  

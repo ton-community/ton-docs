@@ -1,4 +1,4 @@
-# Paying for processing queries and sending responses
+# Forward Fees
 
 In general, if a smart contract wants to send a query to another smart contract, it should pay for sending the internal message to the destination smart contract (message forwarding fees), processing this message at the destination (gas fees), and sending back the answer if required (message forwarding fees).
 

@@ -1,6 +1,8 @@
-# Blockchain Config
+# Config Parameters
 
-#### The Russian version of this article can be found [here](https://github.com/delovoyhomie/description-config-for-TON-Blockchain/blob/main/Russian-version.md).
+:::info
+Read live values via [tonviewer](https://tonviewer.com/config)
+:::
 
 ## 👋 Introduction
 
@@ -108,7 +110,7 @@ This parameter indicates under what conditions proposals to change the TON confi
 
 This parameter represents the configuration of a workchain in the TON Blockchain. Workchains in the TON Blockchain are designed as independent blockchains that can operate in parallel, allowing TON to scale and process a very large number of transactions and smart contracts.
 
-## Workchain configuration parameters:
+## Workchain configuration parameters
 
 -   `enabled_since`: a UNIX timestamp of the moment this workchain was enabled;
 
@@ -147,7 +149,7 @@ This parameter contains the duration of different stages of elections and valida
 For each validation period, there is an `election_id` equal to the UNIX-format time at the start of the validation.
 You can get the current `election_id` (if elections are ongoing) or the past one by invoking the Elector contract's respective get-methods `active_election_id` and `past_election_ids`.
 
-## Workchain configuration parameters:
+## Workchain configuration parameters
 
 -   `validators_elected_for`: the number of seconds the elected set of validators perform their role (one round).
 
@@ -167,7 +169,7 @@ In the TON Blockchain, it is customary to conventionally divide validation perio
 
 #### Mainnet
 
-##### Current values:
+Current values:
 
 ```python
 constants = {
@@ -178,7 +180,7 @@ constants = {
 }
 ```
 
-##### Scheme
+Scheme:
 
 ![image](/img/docs/blockchain-configs/config15-mainnet.png)
 
@@ -482,6 +484,18 @@ This parameter defines the list of suspended addresses, which cannot be initiali
 The stabilization of the tokenomics is further described in the [official report](https://t.me/tonblockchain/178) of the "The Open Network" Telegram channel.
 :::
 
+## Param 45
+
+The list of precompiled contracts is stored in the masterchain config:
+
+```
+precompiled_smc#b0 gas_usage:uint64 = PrecompiledSmc;
+precompiled_contracts_config#c0 list:(HashmapE 256 PrecompiledSmc) = PrecompiledContractsConfig;
+_ PrecompiledContractsConfig = ConfigParam 45;
+```
+
+More details about precompiled contracts on [this page](/develop/smart-contracts/core-contracts/precompiled).
+
 ## Param 71 - 73
 
 This parameter pertains to bridges for wrapping TON in other networks:
@@ -540,3 +554,4 @@ On this page, you can find active network configurations of the TON Blockchain:
 
 -   Mainnet: https://ton.org/global-config.json
 -   Testnet: https://ton.org/testnet-global.config.json
+-   [Russian Version](https://github.com/delovoyhomie/description-config-for-TON-Blockchain/blob/main/Russian-version.md).

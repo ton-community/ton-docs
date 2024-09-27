@@ -1,18 +1,28 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Button from '@site/src/components/button'
 
-# Installation
 
-## Javascript SDK
+# Precompiled binaries
 
-You no longer need to manually install binaries.
+:::caution important
+You no longer need to manually install binaries with Blueprint SDK.
+:::
 
-All binaries for development and testing are provided with the packages:
+All binaries for development and testing are provided with the Blueprint SDK.
 
-* [Choose your Javascript SDK](/develop/smart-contracts/sdk/javascript)
-
+````mdx-code-block 
+<Button href="/develop/smart-contracts/sdk/javascript"
+colorType="primary" sizeType={'sm'}>
+````
+Migrate to Blueprint SDK
+````mdx-code-block 
+</Button>
+````
 
 ## Precompiled binaries
+
+If you don't use Blueprint SDK for smart contracts development, you can use precompiled binaries for your operating system and tool of choice.
 
 ### Prerequisites
 
@@ -34,7 +44,7 @@ Download the binaries from the table below.  Make sure to select the correct ver
 | Linux  arm64   | [download](https://github.com/ton-blockchain/ton/releases/latest/download/ton-linux-arm64.zip)  | |                                                                                             |  | `sudo apt install libatomic1 libssl-dev`                                             |
 
 ### 2. Setup your binaries
-
+````mdx-code-block 
 export const Highlight = ({children, color}) => (
 <span
 style={{
@@ -46,7 +56,7 @@ padding: '0.2rem',
 {children}
 </span>
 );
-
+````
 <Tabs groupId="operating-systems">
   <TabItem value="win" label="Windows">
 

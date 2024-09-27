@@ -1,0 +1,108 @@
+@use "sass:map";
+@import "../base/breakpoints";
+
+// less than 360px
+@mixin media-breakpoint-custom-mobile {
+  @media (max-width: 359px) {
+    @content;
+  }
+}
+
+// less than 414px
+@mixin media-breakpoint-xs {
+  @media (max-width: #{map.get($grid-breakpoints, "xs")}) {
+    @content;
+  }
+}
+
+// less than 569px
+@mixin media-breakpoint-pre-s {
+  @media (max-width: #{map.get($grid-breakpoints, "pre-s")}) {
+    @content;
+  }
+}
+
+// less than 734px
+@mixin media-breakpoint-s {
+  @media (max-width: #{map.get($grid-breakpoints, "s")}) {
+    @content;
+  }
+}
+
+// less than 834px
+@mixin media-breakpoint-m {
+  @media (max-width: #{map.get($grid-breakpoints, "m")}) {
+    @content;
+  }
+}
+
+// less than 1024px
+@mixin media-breakpoint-l {
+  @media (max-width: #{map.get($grid-breakpoints, "l")}) {
+    @content;
+  }
+}
+
+// less than 1280px
+@mixin media-breakpoint-xl {
+  @media (max-width: #{map.get($grid-breakpoints, "xl")}) {
+    @content;
+  }
+}
+
+// less than 1440px
+@mixin media-breakpoint-xxl {
+  @media (max-width: #{map.get($grid-breakpoints, "xxl")}) {
+    @content;
+  }
+}
+
+
+// more than 0px
+
+@mixin media-breakpoint-mobile {
+  @media (min-width: #{map.get($grid-breakpoints, "xxxs")}) {
+    @content;
+  }
+}
+
+// more than 734px
+
+@mixin media-breakpoint-tablet-s {
+  @media (min-width: #{map.get($grid-breakpoints, "s")}) {
+    @content;
+  }
+}
+
+// more than 1024px
+
+@mixin media-breakpoint-tablet-m {
+  @media (min-width: #{map.get($grid-breakpoints, "l")}) {
+    @content;
+  }
+}
+
+// more than 1280px
+
+@mixin media-breakpoint-desktop {
+  @media (min-width: #{map.get($grid-breakpoints, "xl")}) {
+    @content;
+  }
+}
+
+// more than 1440px
+
+@mixin media-breakpoint-desktop-large {
+  @media (min-width: #{map.get($grid-breakpoints, "xxl")}) {
+    @content;
+  }
+}
+
+/* only Safari 10.1+ */
+
+@mixin media-only-safari($selector) {
+  _::-webkit-full-page-media, _:future, :root #{$selector} {
+    @content;
+  }
+}
+

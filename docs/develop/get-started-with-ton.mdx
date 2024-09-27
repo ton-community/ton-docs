@@ -16,7 +16,7 @@ This learning path contains __5 modules__ and should take you around __45 minute
 
 ## 🛳 What you will learn
 
-In this tutorial, you'll learn how to easily make blockchain transactions using JavaScript. You could learn to do it without this tutorial, but this way is cool and accessible.
+In this tutorial, you'll learn how to easily make blockchain transactions using JavaScript. You could learn to do it without this tutorial, but this approach is convenient and user-friendly.
 
 1. You will make your own TON Wallet with Tonkeeper
 2. You will use a Testnet faucet to topup your wallet for testing
@@ -28,14 +28,16 @@ In this tutorial, you'll learn how to easily make blockchain transactions using 
  _You're going to mine an NFT rocket achievement!!!_
 
 As the first miners on TON, you will go through the Proof-of-Work smart contract and finally mine a secret reward for your TON wallet. Check it out:
-
-<div style={{ textAlign: 'center', margin: '0 auto' }}>
-  <video width={'300'} style={{ borderRadius: '10pt', margin: '15pt auto' }} muted={true} autoPlay={true} loop={true}>
+````mdx-code-block
+<div style={{width: '100%', maxWidth:'250pt',  textAlign: 'center', margin: '0 auto' }}>
+  <video width={'300'} style={{width: '100%', maxWidth:'250pt',  borderRadius: '10pt', margin: '15pt auto' }} muted={true} autoPlay={true} loop={true}>
     <source src="/files/onboarding-nft.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
+````
+Your browser does not support the video tag.
+````mdx-code-block 
   </video>
 </div>
-
+````
 Our goal for today is to mine an NFT! This achievement will stay with you *forever*.
 
 Finally, you are able to mine this NFT achievement even in mainnet. (_it costs only 0,05 TON!_)
@@ -56,15 +58,17 @@ Though the PoW Giver smart contract framework that defined the initial mining pr
 
 
 Now, let’s focus on the first steps to becoming a **TVM Developer** and learn how to mine an NFT on TON! Provided below is an example of what we're aiming to create.
-
-<div style={{ textAlign: 'center', margin: '0 auto' }}>
-  <video style={{ borderRadius: '10pt', margin: '15pt auto', maxWidth: '90%' }} muted={true} autoPlay={true}
+````mdx-code-block
+<div style={{ width: '100%', textAlign: 'center', margin: '0 auto' }}>
+  <video style={{ width: '100%', borderRadius: '10pt', margin: '15pt auto', maxWidth: '90%' }} muted={true} autoPlay={true}
          loop={true}>
     <source src="/files/onboarding.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
+````
+Your browser does not support the video tag.
+````mdx-code-block
   </video>
 </div>
-
+````
 It’s possible to create a miner in about half an hour if we keep focused on the task at hand.
 
 ## 🦄 Getting started
@@ -80,13 +84,13 @@ To get started, all developers will make use of the following components:
 To start off, you’ll need a non-custodial wallet that will allow you to receive and store your TON; for this purpose in this guide we are using Tonkeeper. You’ll need to enable Testnet mode within the wallet to be able to receive Testnet Toncoins. These tokens will be used later on to send a final minting transaction to the smart contract.
 
 :::info
-With a non-custodial wallet, the user owns the wallet and holds its private key by themself.
+With a non-custodial wallet, the user owns the wallet and holds its private key by themselves.
 :::
 
 To download and create a TON wallet follow these simple steps:
 
-1. Install the Tonkeeper app on your smartphone. It can be downloaded [here](https://tonkeeper.com/).
-2. Next, you’ll need to [enable test mode](/participate/wallets/apps#tonkeeper-test-environment) within the Tonkeeper.
+1. Install the Tonkeeper app on your smartphone. It can be downloaded [here](https://Tonkeeper.com/).
+2. Next, you’ll need to [enable test mode](/participate/wallets/apps#Tonkeeper-test-environment) within Tonkeeper.
 
 Easy! Let's go to the development now.
 
@@ -95,11 +99,12 @@ Easy! Let's go to the development now.
 To make your life easier and skip routine low-level stuff, we will use a boilerplate.
 
 :::tip
-Note, you need to [sign in](https://github.com/login) to GitHub for further work.
+Note, you'll need to [sign in](https://github.com/login) to GitHub for further work.
 :::
 
 Please, use the [ton-onboarding-challenge](https://github.com/ton-community/ton-onboarding-challenge) template to create your project by clicking on the “Use this template” button and selecting the “Create a new repository” tab as shown below:
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -109,7 +114,7 @@ Please, use the [ton-onboarding-challenge](https://github.com/ton-community/ton-
     }}
 />
 <br></br>
-
+````
 After completing this step, you’ll have access to a highly performant repository that can be used as your miner's core. Congratulations! ✨
 
 ### Development Environments
@@ -120,6 +125,7 @@ The next step is to choose which developer environment is best suited to your ne
 Make sure you have opened the repository in your GitHub profile that was generated from the template in the previous step.
 :::
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -129,10 +135,10 @@ Make sure you have opened the repository in your GitHub profile that was generat
     }}
 />
 <br></br>
-
+````
 #### Local and Cloud Development Environments
 
-* For users unfamiliar with JavaScript, it is not usually possible to leverage a JavaScript IDE, especially if your computer and tooling systems are not tailored to using such an approach. It is often faster and more efficient to use a **cloud environment** for development. Cloud environments are often free and readily available on GitHub for anyone to use with a few simple clicks.
+* For users who are not familiar with JavaScript, it can be challenging to use a JavaScript IDE, especially if your computer and tooling systems are not configured for this purpose.
 
 * However, if you're familiar with NodeJS and Git and know how to work with `npm`, it may be more comfortable for you to use a **local environment**.
 
@@ -140,6 +146,7 @@ Make sure you have opened the repository in your GitHub profile that was generat
 
 If you choose the cloud development environment it's easy to get started by first selecting the _Code_ tab and then by clicking on the _Create codespace on master_ button within the GitHub repository like shown below:
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -149,28 +156,29 @@ If you choose the cloud development environment it's easy to get started by firs
     }}
 />
 <br></br>
-
+````
 After completing this step, GitHub will create a special cloud workspace that allows you to access the VSCode Online IDE (Visual Code Online Integrated Development Environment).
 
-After this access is granted (it takes about 30  seconds for the terminal to install) you'll have everything you need to get started without needing to install Git, Node.js, or other developer tools.
+Once access is granted (the codespace typically starts in about 30 seconds), you'll have everything required to begin without the need to install Git, Node.js, or other developer tools.
 
 #### Local Development Environments
 
-To begin using a local development environment you’ll need access to 3 main tools. These include:
+To set up a local development environment, you'll require access to these three essential tools:
 
 - **Git**: Git is an essential tool that every developer needs to work with repositories. It can be downloaded [here](https://git-scm.com/downloads).
 - **NodeJS**: Node.js is the JavaScript and TypeScript runtime environment typically used for application development on TON. It can be downloaded [here](https://nodejs.org/en/download/).
 - **JavaScript IDE**. JavaScript IDE’s are typically used for development within local development environments. An example of this case is Visual Studio Code ([VSCode](https://code.visualstudio.com/download)).
 
-To get started you’ll clone your GitHub repository boilerplate and open the correct repository in your Integrated Development Environment (IDE).
+To get started, you’ll need to clone your GitHub repository boilerplate and open the correct repository in your Integrated Development Environment (IDE).
 
 
 #### Running Scripts
 
-In this guide, you will need to run a TypeScript script. All commands, such as running a script or installing a module, are inputted via the command line, which is located in the special workspace of IDE called _Terminal_. This workspace is usually located at the bottom of the IDE.
+In this guide, you'll need to run TypeScript scripts. All commands, such as running scripts or installing modules, are executed through the command line, which is located in the IDE's Terminal workspace. This workspace is typically found at the bottom of the IDE.
 
 For example, in the Cloud Codespaces, you should open the Terminal workspace (if it is not already open):
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -180,9 +188,10 @@ For example, in the Cloud Codespaces, you should open the Terminal workspace (if
     }}
 />
 <br></br><br></br>
+````
+Enter commands in this window and execute them with _Enter_:
 
-Input commands in this window and execute them with _Enter_:
-
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -192,7 +201,7 @@ Input commands in this window and execute them with _Enter_:
     }}
 />
 <br></br><br></br>
-
+````
 The Terminal is also available as a separate application. Please choose the appropriate version based on your IDE and OS.
 
 Great! After these steps you're ready to get deeper into TON Blockchain secrets. 👀
@@ -203,16 +212,16 @@ Okay, what do you need to connect to TON Blockchain?
 
 * __Smart contract address__ as a point of destination. Our goal is to mine an NFT from the _proof-of-work smart contract_, so we need an address to get current mining complexity.
 * __API provider__ to make requests to TON Blockchain. TON has multiple [API types](/develop/dapps/apis/) for different purposes. We will use the testnet version of [toncenter.com](https://toncenter.com/) API.
-* __JavaScript SDK__: A JavaScript SDK (recall that an SDK is a software development kit) is needed to parse the smart contract address being used and prepare it to create an API request. To better understand TON addresses and why they need to be parsed to carry out this process, please see this [resource](/learn/overviews/addresses) to understand why we should parse it. To carry out this procedure the [ton.js](https://github.com/ton-core/ton) will be used.
+* __JavaScript SDK__: A JavaScript SDK (recall that an SDK is a Software Development Kit) is needed to parse the smart contract address being used and prepare it to create an API request. To better understand TON addresses and why they need to be parsed to carry out this process, please see this [resource](/learn/overviews/addresses) to understand why should we parse it. To carry out this procedure, we'll use [ton.js](https://github.com/ton-core/ton).
 
-In the next section we’ll describe how users send their initial requests to TON Blockchain using the toncenter API and ton.js to receive data from the PoW smart contract.
+In the next section we’ll describe how users send their initial requests to TON Blockchain using the TONCenter API and ton.js to receive data from the PoW smart contract.
 
 ### Smart Contract Addresses
 
 For the miner to work correctly, we need to add two different smart contract address types. These include:
 
-1. __Wallet address__: A wallet address is required because it is necessary for the miner to receive their mining reward (in this case, we must use the [Tonkeeper Testnet mode](/participate/wallets/apps#tonkeeper-test-environment)).
-2. __Collection address__: A collection address is required to act as a smart contract to correctly mine an NFT (to carry out this process copy the NFT collection address, under the TON unboarding challenge collection name from the [Getgems website](https://testnet.getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX)).
+1. __Wallet address__: A wallet address is required,  because it is necessary for the miner to receive their mining reward (in this case, we must use the [Tonkeeper Testnet mode](/participate/wallets/apps#Tonkeeper-test-environment)).
+2. __Collection address__: A collection address is required to act as a smart contract to correctly mine an NFT (to carry out this process copy the NFT collection address, under the TON onboarding challenge collection name from the [Getgems website](https://testnet.getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX)).
 
 Next, we’ll open the `index.ts` file in your miner and create a main function composed of initial constants as follows:
 
@@ -244,14 +253,15 @@ The `Address.parse()` command found in the `ton.js` SDK allows the developer to 
 
 ### Connect to an API Provider
 
-In this step, we'll connect with TON via toncenter (which is hosted on toncenter.com) API provider using specific commands in the script.
+In this step, we'll connect with TON via TONCenter (which is hosted on toncenter.com) API provider using specific commands in the script.
 
 The simplest way to learn how it works is by using @orbs-network/ton-access.
 
 :::tip
-Remember, if you are adding new modules with `import`, that You may need to install them by executing the command `npm i @orbs-network/ton-access` in the [terminal](/develop/get-started-with-ton#running-scripts).
+Remember, if you are adding new modules with `import`, that you may need to install them by executing the command `npm i @orbs-network/ton-access` in the [terminal](/develop/get-started-with-ton#running-scripts).
 :::
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -261,7 +271,7 @@ Remember, if you are adding new modules with `import`, that You may need to inst
     }}
 />
 <br></br>
-
+````
 
 We are adding `client` and `endpoint` in the `index.ts` script using _TonClient_ and _getHttpEndpoint_ from `@orbs-network/ton-access`:
 
@@ -282,7 +292,7 @@ import {getHttpEndpoint} from "@orbs-network/ton-access";
 ```
 
 :::info what to do in production?
-It's better to use an RPC node provider or to run your own ton-http-api instance for that. Read more at the [TonCenter API page](/develop/dapps/apis/toncenter).
+It's better to use an RPC node provider, or to run your own ton-http-api instance for that. Read more at the [TonCenter API page](/develop/dapps/apis/toncenter).
 :::
 
 ### Receiving Mining Data From TON Blockchain
@@ -329,7 +339,7 @@ npm run start
 To avoid unexpected issues, make sure you have finalized all previous steps, including inputting contract addresses.
 :::
 
-Good! As long as the above processes were executed correctly, successful connection to the API will be achieved and the necessary data will be received within the console. The correct console output should be initiated as follows:
+Good! As long as the above processes were executed correctly, successful connection to the API will be achieved and the necessary data will be displayed in the console. The correct console output should be initiated as follows:
 
 ```bash
 {
@@ -348,13 +358,13 @@ Good! As long as the above processes were executed correctly, successful connect
 }
 ```
 
-Above it displays the gas amount used to execute the process as well as the sum of numerical (_num_) values in hex format. At this time, this data is not too critical because it is necessary to convert the hex output data into something that can be used more easily.
+Above it displays the gas amount used to execute the process, as well as the sum of numerical (_num_) values in hex format. At this time, this data is not too critical because it is necessary to convert the hex output data into something that can be used more easily.
 
 We need to convert the hex output to something _useful_.
 
 :::info GAS PARAMETERS ON TON:
 __Warning__: Though this information is highly complex and __not necessary for this tutorial__, if you’re interested in understanding the complex technical aspects of TON consider using these resources:
-1. To obtain a better understanding of how TON Virtual Machine (TVM) operates and _how transactions on TON work_, check out [TVM overview section](/learn/tvm-instructions/tvm-overview).
+1. To obtain a better understanding of how TON Virtual Machine (TVM) operates and _how does TON process transactions_, check out [TVM overview section](/learn/tvm-instructions/tvm-overview).
 2. Secondly, if you are interested in learning more about how transaction and gas fees work on TON, consider diving into [this section](/develop/smart-contracts/fees) of our documentation.
 3. Finally, to get a better understanding of the exact gas values needed to carry out TVM instructions see [this section](/learn/tvm-instructions/instructions#gas-prices) of our documentation.
 :::
@@ -363,9 +373,9 @@ Now, let's return to the tutorial!
 
 #### Numerical Mining Data in a User-Friendly Format
 
-In the section above where we discuss gas amounts and numerical (_num_) values in hex format needed to receive mining data, we note that the hex numbers present within the strings of code must be converted into a more easily understood and usable format.
+In the section above where we discuss gas amounts and numerical (_num_) values in hex format needed to receive mining data, we note that the hex numbers present within the strings of code must be converted into a more easily understandable and usable format.
 
-As is clear when examining the given output, hex numbers can be quite substantial in size. It's not possible to move them to the variable and make use of them, because of specific [JavaScript limitations](https://stackoverflow.com/questions/307179/what-is-javascripts-highest-integer-value-that-a-number-can-go-to-without-losin#:~:text=Note%20that%20the%20bitwise%20operators,31%2D1%2C%20or%202%2C147%2C483%2C647.) that are outlined here.
+As it is clear when examining the given output, hex numbers can be quite substantial in size. It's not possible to make a variable and make use of them, because of specific [JavaScript limitations](https://stackoverflow.com/a/307200) that are outlined here.
 
 We need a way to translate this, that’s where the `bn.js` (the big number implementation in JavaScript) library comes in. Bn.js is a library developers use to work with large numbers that are larger than the maximum JavaScript integer values. Let’s use this example to get a better idea of the _Mining Data_ required for this process:
 
@@ -414,7 +424,7 @@ max_cpl 252
 Let's cover the Mining Data command that is used to translate different data parameters when programming mining data into TON Blockchain. These include:
 
 * `complexity` is the most important number for miners. It's a Proof-of-Work complexity for the values. You're successful _if the final hash is less than complexity_.
-* `last_success` is a [unix time](https://www.unixtimestamp.com/) date and time representation that keeps track of the last mining transaction on TON. Each time the last_success metric changes, it's necessary to run the miner again because the seed also changes during this process.
+* `last_success` is a [unix timestamp](https://www.unixtimestamp.com/) date and time representation that keeps track of the last mining transaction on TON. Each time the last_success metric changes, it's necessary to run the miner again because the seed also changes during this process.
 * `seed` denotes a unique value generated by a smart contract to calculate the desired hash. To better understand this process and learn more about how the seed changes and why, have a look at the project files folder by using the ctx_seed keyword(Ctrl+F with keyword "ctx_seed").
 * `target_delta`, `min_cpl` and `max_cpl` won't be used in our tutorial. But you can always read more about how they are used in smart contracts to calculate proof-of-work complexity in the source files of the collection in your project.
 
@@ -422,7 +432,7 @@ Now that we understand the different parameters discussed above, we have the val
 
 ## 🛠 Prepare a NFT Miner
 
-Hey, you did a great job!
+Hey, you're doing a great job!
 
 After connecting to TON and retrieving the necessary mining data from the blockchain to create an NFT Miner, let’s focus on the next steps in this process to achieve our goal.
 
@@ -432,15 +442,15 @@ That is what a miner is! Simple, isn't it?
 
 ### Preparing Mining Messages
 
-Next, we must prepare a mining message by ensuring the correct parameters to ensure the validity and data legitimacy of this process.
+First, we must prepare a mining message by ensuring the correct parameters to ensure the validity and data integrity of this process.
 
 Thankfully, the [README file](https://github.com/ton-community/ton-onboarding-challenge#mining-process-advanced) allows us to retrieve the correct guidelines needed to achieve this goal. As you can see, the above README file comprises a table with certain fields and Cell types (titled “Layout of Proof of Work Cell’) to help achieve our desired result.
 
 :::info WHAT ARE CELLS?
-Cells are data storage structures on TON that fulfill numerous purposes including increasing network scalable and smart contract transaction speeds. We won’t get into specifics here, but if you’re interested in understanding the complexity of cells and how they work, consider diving into [this](/learn/overviews/cells) section of our documentation.
+Cells are data storage structures on TON that fulfill numerous purposes, including increasing network scalable and smart contract transaction speeds. We won’t get into specifics here, but if you’re interested in understanding the complexity of cells and how they work, consider diving into [this](/learn/overviews/cells) section of our documentation.
 :::
 
-Luckily, all data structures used in this process have already been written with TypeScript for this tutorial. Use a `MineMessageParams` object from _NftGiver.data.ts_ to build a transaction with _Queries_:
+Fortunately, all the data structures used in this tutorial are already written in TypeScript. Use the `MineMessageParams` object from _NftGiver.data.ts_ to build a transaction with _Queries_:
 
 ```ts title="ton-onboarding-challenge/index.ts"
   import {unixNow} from "./src/lib/utils";
@@ -458,7 +468,7 @@ Luckily, all data structures used in this process have already been written with
   let msg = Queries.mine(mineParams); // transaction builder
 ```
 
-Probably, you have a question: where is the _op_ and _data2_ from the [table](https://github.com/ton-community/ton-onboarding-challenge#mining-process-advanced)?
+Probably, you have a question: where are the _op_ and _data2_ from the [table](https://github.com/ton-community/ton-onboarding-challenge#mining-process-advanced)?
 * In the table, the numerical value of data1 must be equal to that of data2. In order to omit filling the data2 value, the transaction builder performs a low-level process (see Queries.mine() sources).
 * Because the `op` classification is always constant, it is already implemented in transaction builder _Queries_ and in _OperationCodes_. You can find the op code by going to the source code of `mine()` method.
 
@@ -476,7 +486,7 @@ let msg = Queries.mine(mineParams);
 
 Above we compiled a `msg` value. The idea of mining is to find a hash `msg.hash()` that will be less than `complexity` from the last received _get_mining_data()_. We can increment `data1` as many times as we need.
 
-The pure miner will continue to run infinitely as long as the `msg.hash() > complexity` (message hash is larger than PoW mining complexity).
+The pure miner will continue to run indefinitely, as long as `msg.hash()` is bigger than `complexity` (message hash is larger than PoW mining complexity).
 
 Here is an example of the code running as it relates to BigNumbers in TypeScript:
 
@@ -497,11 +507,11 @@ A few important considerations regarding Big Number (_BN_) functions:
 * `gt()`: denotes _greater than a variable_ for comparing _BigNumbers_.
 * `iaddn(1)`: denotes an incremented value.
 
-Though the miner will work properly after the completion of the above steps, it will appear very poor visually (try `npm run start`). Therefore, we must address this issue. Let’s jump in.
+Though the miner will work properly after the completion of the above steps, it will have a visually unappealing appearance (try `npm run start`). Therefore, we must address this issue. Let’s jump in.
 
 #### Improving TON Miner Appearance ✨
 
-We want to make the miner sexy now! How do we do it?
+We want to make the miner look sexy now! How do we do it?
 
 Just follow me, my friend, follow me.
 
@@ -537,6 +547,7 @@ Just check it out! Let’s execute the command:
 npm run start
 ```
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -546,23 +557,23 @@ npm run start
     }}
 />
 <br></br>
-
+````
 _Cool, isn't it?_ 😏
 
-After these commands are executed correctly, we’ll have a visually appealing NFT miner. In the next section, we’ll focus on connecting a wallet with the miner to create a payment channel that can accept and receive transactions from TON Blockchain.
+After these commands are executed correctly, we’ll have a visually appealing NFT miner. In the next section, we’ll focus on connecting a wallet to the miner to create a payment channel that can accept and receive transactions from TON Blockchain.
 
 
 ## 🎨 Prepare a Transaction
 
-Next we’ll outline the steps to compile a message and send it to the blockchain with your [Tonkeeper wallet](https://tonkeeper.com/).
-The upcoming steps will help complete the process of __mining an NFT__ on TON.
+Next, we’ll outline the steps to compile a message and send it to the blockchain with your [Tonkeeper wallet](https://Tonkeeper.com/).
+The upcoming steps will guide you in completing the process of __mining an NFT__ on TON.
 
 
 ### Creating a Payment Link
 
-In order to ensure that the NFT mining process is carried out correctly and that the user can store their NFT properly, we must create a payment link that is able to simultaneously interact with TON Blockchain and the Tonkeeper wallet.
+In order to ensure that the NFT mining process is carried out correctly, and that the user can store their NFT properly, we must create a payment link that is able to simultaneously interact with TON Blockchain and the Tonkeeper wallet.
 
-To achieve this goal, we’ll initiate the creation of a payment url (a payment link) using the `ton://transfer/<address>` format that can be customized using different parameters. This will work perfectly because we want to create a message and send it to the smart contract within our Tonkeeper wallet:
+To achieve this goal, we’ll initiate the creation of a payment URL (a payment link) using the `ton://transfer/<address>` format that can be customized using different parameters. This will work perfectly because we want to create a message, and send it to the smart contract using our Tonkeeper wallet:
 
 ```ts title="ton-onboarding-challenge/index.ts"
 import {toNano} from "ton"
@@ -570,8 +581,8 @@ import {toNano} from "ton"
 // ... previous code
 
   console.log(' ');
-  console.log("💣 WARNING! As soon as you find the hash, you should quickly make a transaction.");
-  console.log("If someone else makes a transaction, the seed changes, and you have to find a hash again!");
+  console.log("💣 WARNING! As soon as you find the hash, you should quickly send the transaction.");
+  console.log("If someone else sends a transaction before you, the seed changes, and you'll have to find the hash again!");
   console.log(' ');
 
   // flags work only in user-friendly address form
@@ -584,7 +595,7 @@ import {toNano} from "ton"
  // BOC means Bag Of Cells here
   const preparedBodyCell = msg.toBoc().toString('base64url')
 
-  // final method to build a payment url
+  // final method to build a payment URL
   const tonDeepLink = (address: string, amount: string, body: string) => {
     return `ton://transfer/${address}?amount=${amount}&bin=${body}`;
   };
@@ -595,11 +606,11 @@ import {toNano} from "ton"
   console.log(link);
 ```
 
-Let’s run the above script to launch the newly created payment link. Now it’s time to make the payment link running on your PC smart phone compatible. Let’s get started.
+Let’s run the above script to launch the newly created payment link. Now it’s time to make the payment link running on your PC smartphone compatible. Let’s get started.
 
 ### Creating A Smartphone Compatible Payment Link
 
-As a solution, the most brilliant minds in the world created a QR code generator specifically for use in terminal. With this tool, you can simply scan the payment link from your Tonkeeper wallet to complete a transaction.
+As a solution, the most brilliant minds in the world created a QR code generator specifically for use in terminal. With this tool, you can simply scan the payment link from your Tonkeeper wallet to send a transaction.
 
 ```bash
 npm install qrcode-terminal
@@ -620,7 +631,7 @@ Finally, we’ll need to encode the payment link(`link`) into the QR code and pr
 
 Do you sense the _experience_ in the air? That's you, on your way to becoming a TVM developer.
 
-Now that we have successfully encoded the QR code generator and payment link, we'll need to acquire some Testnet Toncoins to send our first transaction. This is accomplished by making use of a TON  [token faucet](https://coinmarketcap.com/alexandria/glossary/faucet) (a Telegram Bot that shares Testnet Toncoins) on TON Blockchain so we are in possession of some tokens that can be sent to the Tonkeeper wallet we created.
+Now that we have successfully encoded the QR code generator and payment link, we'll need to acquire some Testnet Toncoins to send our first transaction. This is accomplished by making use of a TON [token faucet](https://coinmarketcap.com/alexandria/glossary/faucet) (a Telegram Bot that shares Testnet Toncoins) on TON Blockchain, so we are in possession of some tokens that can be sent to the Tonkeeper wallet we created.
 
 
 ## ⛏  Mine an NFT With a Wallet
@@ -634,11 +645,11 @@ There are two main ways to mine an NFT on TON:
 
 Below are the steps needed to initiate your first Testnet transaction to mine your NFT:
 
-1. Activate [Testnet mode within your Tonkeeper wallet](/participate/wallets/apps#tonkeeper-test-environment)
+1. Activate [Testnet mode within your Tonkeeper wallet](/participate/wallets/apps#Tonkeeper-test-environment)
 2. Input our testnet wallet address from Tonkeeper into `wallet` variable in the `index.ts`
 3. Input address of the [NFT collection from Testnet](https://testnet.getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX) into `collection` variable in the `index.ts`
 
-#### Top Up Wallet Balance via a Token Faucet
+#### Top Up Wallet Balance via the Token Faucet
 
 To proceed to the next step, we need to acquire some TON testnet tokens. This can be achieved by making use of the testnet [faucet found here](https://t.me/testgiver_ton_bot).
 
@@ -646,7 +657,7 @@ To proceed to the next step, we need to acquire some TON testnet tokens. This ca
 
 In order to successfully mine an NFT rocket on Testnet, it is necessary to follow these steps:
 
-1. _Open_ Open the Tonkeeper wallet on your smartphone (it should hold some newly received TON Testnet tokens).
+1. _Open_ Open the Tonkeeper wallet on your phone (it should hold some newly received TON Testnet tokens).
 2. _Select_ scan mode in the wallet to scan the QR code.
 3. _Run_ your miner to acquire the correct hash (this process takes between 30 and 60 seconds).
 4. _Scan_ the generated QR code from the miner.
@@ -681,7 +692,7 @@ const endpoint = await getHttpEndpoint();
 
 Like we outlined in the testnet NFT rocket mining process, in order to successfully mine an NFT rocket on mainnet, it is necessary to follow these steps:
 
-1. _Open_ the Tonkeeper wallet on your smartphone (remember, it should hold some TON tokens).
+1. _Open_ the Tonkeeper wallet on your phone (remember, it should hold some TON tokens).
 2. _Select_ scan mode in the wallet to scan the QR code.
 3. _Run_ your miner to acquire the correct hash (this process takes between 30 and 60 seconds).
 4. _Scan_ the generated QR code from the miner.
@@ -691,14 +702,16 @@ Because there may be other developers carrying out the same process in an attemp
 :::
 
 After some time, you will have __mined your NFT__ and become a TVM Developer in TON Blockchain. The ritual is complete. Look at your NFT in Tonkeeper.
-
-<div style={{ textAlign: 'center', margin: '0 auto' }}>
-  <video width={'300'} style={{ borderRadius: '10pt', margin: '15pt auto' }} muted={true} autoPlay={true} loop={true}>
+````mdx-code-block
+<div style={{ width: '100%', textAlign: 'center', margin: '0 auto' }}>
+  <video width={'300'} style={{ width: '100%', borderRadius: '10pt', margin: '15pt auto' }} muted={true} autoPlay={true} loop={true}>
     <source src="/files/onboarding-nft.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
+````
+Your browser does not support the video tag.
+````mdx-code-block
   </video>
 </div>
-
+````
 Welcome aboard, __a TVM Developer__! You did it. 🛳
 
 

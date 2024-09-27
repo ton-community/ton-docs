@@ -1,10 +1,10 @@
-# Governance contracts
+# Governance Contracts
 
 In TON, consensus parameters of node operation related to TVM, catchain, fees, and chain topology (as well as how those parameters are stored and updated) are controlled by a set of special smart contracts (in contrast to the old-fashioned and inflexible ways of hardcoding those parameters adopted by blockchains of previous generations). That way, TON implements comprehensive and transparent on-chain governance. The set of special contracts itself is governed by parameters and currently includes the Elector, Config, and DNS contracts and in future will be extended by extra-currency Minter and others.
 
 ## Elector
 
-The Elector smart contract controls the way how rounds of validation change each other, who gets the duty to validate the blockchain, and how rewards for validation would be distributed. If you want to become a validator and interact with Elector, check [validator instrucitons](https://ton.org/validator).
+The Elector smart contract controls the way how rounds of validation change each other, who gets the duty to validate the blockchain, and how rewards for validation would be distributed. If you want to become a validator and interact with Elector, check [validator instructions](https://ton.org/validator).
 
 Elector stores data of Toncoin that is not withdrawn in `credits` hashmap, new applications in `elect` hashmap, and information about previous elections in _past\_elections_ hashmap (the latter is stored inside _complaints_ about validator misbehavior and _frozen_-stakes of validator for already finished rounds, which are withheld for `stake_held_for`(ConfigParam 15)). The Elector contract has three purposes:
  - Process applications for the election of validators
@@ -43,7 +43,8 @@ Each validator, from time to time, is randomly assigned to create a new block (i
 ### Distribution of validation rewards
 The same way as with checking whether it is time to conduct new elections, the Elector in each block checks whether it is time to release funds from `frozen` for stored `past_elections`. At the corresponding block, the Elector distributes accumulated earnings from corresponding validation rounds (gas fees and block creation rewards) to validators of that round proportional to validator weights. After that, stakes with rewards are added to the `credits` table, and the election gets removed from `past_elections` table.
 
-
+### Current state of Elector
+You can check current state in the [dapp](https://1ixi1.github.io/elector/), which allows to see elections participans, locked stakes, ready to withdraw funds, complaints and so on.
 ## Config
 Config smart contract controls TON configuration parameters. Its logic determines who and under what conditions has permission to change some of those parameters. It also implements a proposal/voting mechanism and validator set rolling updates.
 
@@ -65,3 +66,9 @@ Validators indeed voted to assign that key to TON Foundation in July 2021 (maste
 History of emergency updates:
  - On April 17, 2022, the number of applications for the election grew big enough that the election could not be conducted under gas limits at that moment. In particular, elections required more than 10 million of gas, while the block `soft_limit` and `hard_limit` were set to `10m` and `20m`  (ConfigParam 22), `special_gas_limit` and `block_gas_limit` were set to `10m` and `10m`, respectively (ConfigParam 20). That way, new validators cannot be set, and due to reaching the block gas limit, transactions that process internal messages on the masterchain could not be included in the block. In turn, that leads to the inability to vote for configuration updates (it was impossible to win the required number of rounds since the current round was unable to finish). An emergency key was used to update ConfigParam 22 `soft_limit` to 22m and `hard_limit` to 25m (in block `19880281`) and ConfigParam 20 `special_gas_limit` to 20m and `block_gas_limit` to 22m (in block `19880300`). As a result, the election was successfully conducted, the next block consumed `10 001 444` gas. The total postponement of elections was about 6 hours, and the functionality of the base chain was unaffected.
  - On March 2, 2023, the number of applications for the election grew big enough that even `20m` were not enough to conduct election. However, this time masterchain continue to process external messages due to higher `hard_limit`. An emergency key was used to update ConfigParam 20 `special_gas_limit` to 25m and `block_gas_limit` to 27m (in block `27747086`). As a result, the election was successfully conducted in next block. The total postponement of elections was about 6 hours, besides elections, functionality of the both master chain and base chain was unaffected.
+ - On November 22, 2023, key was used to [renounce itself](https://t.me/tonblockchain/221) (in block `34312810`). As a result, public key was replaced with 32 zero bytes.
+ - Due to switch to OpenSSL implementation of Ed25519 signature verification, check for special case [all bytes of public key are the same](https://github.com/ton-blockchain/ton/blob/7fcf26771748338038aec4e9ec543dc69afeb1fa/crypto/ellcurve/Ed25519.cpp#L57C1-L57C1) was disabled. As a result, check against zero public key stopped work as intended. Using this issue, emergency key was [updated on December 9](https://t.me/tonstatus/80) yet another time (in block `34665437`, [tx](https://tonscan.org/tx/MU%2FNmSFkC0pJiCi730Fmt6PszBooRZkzgiQMv0sExfY=)) to nothing-in-my-sleeve byte-sequence `82b17caadb303d53c3286c06a6e1affc517d1bc1d3ef2e4489d18b873f5d7cd1` that is `sha256("Not a valid curve point")`. Now, the only way to update network configuration parameters is through validator consensus.
+
+
+## See Also
+- [Precompiled Contracts](/develop/smart-contracts/core-contracts/precompiled)

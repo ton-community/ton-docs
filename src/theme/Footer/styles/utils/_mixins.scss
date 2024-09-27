@@ -1,0 +1,219 @@
+@import "media_queries";
+@import "typography";
+@import "../base/vars";
+
+
+@mixin untilMedia($display-width: 1000) {
+  @media (max-width: calc(#{$display-width} * 1px)) {
+    @content;
+  }
+}
+
+@mixin upMedia($display-width: 1000) {
+  @media (min-width: calc(#{$display-width} * 1px)) {
+    @content;
+  }
+}
+
+@mixin hover-state($withCustomTransition: false, $cursor: true) {
+  @if not $withCustomTransition {
+    @include with-transition(color, background-color, opacity);
+  }
+  cursor: pointer;
+
+  @if not $cursor {
+    cursor: default;
+  }
+
+  @media screen and (min-width: 1000px) {
+    @content;
+  }
+}
+
+@mixin text-ellipsis($max-width: 100%) {
+  overflow: hidden;
+  max-width: $max-width;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-ellipsis-multiline($lines-count: 3) {
+  overflow: hidden;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: $lines-count;
+  -webkit-box-orient: vertical;
+}
+
+@mixin property-with-safe-area($property, $value, $part) {
+  #{$property}: $value;
+
+  @supports ($property: constant(safe-area-inset-#{$part})) {
+    #{$property}: calc(#{$value} + constant(safe-area-inset-#{$part}));
+  }
+
+  @supports ($property: env(safe-area-inset-#{$part})) {
+    #{$property}: calc(#{$value} + env(safe-area-inset-#{$part}));
+  }
+}
+
+@mixin property-subtract-ios-address-bar($property, $value) {
+  #{$property}: $value;
+  @supports (-webkit-touch-callout: none) {
+    #{$property}: calc(#{$value} - 80px);
+  }
+}
+
+@mixin with-transition($prop, $prop2: false, $prop3: false) {
+  @if $prop3 {
+    transition: $prop $transition-duration $transition-timing-function, $prop2 $transition-duration $transition-timing-function, $prop3 $transition-duration $transition-timing-function;
+  } @else if $prop2 {
+    transition: $prop $transition-duration $transition-timing-function, $prop2 $transition-duration $transition-timing-function;
+  } @else {
+    transition: $prop $transition-duration $transition-timing-function;
+  }
+}
+
+@mixin with-transition-default-f($prop, $prop2: false, $prop3: false) {
+  @if $prop3 {
+    transition: $prop $transition-duration $transition-timing-function, $prop2 $transition-duration $transition-timing-function, $prop3 $transition-duration;
+  } @else if $prop2 {
+    transition: $prop $transition-duration $transition-timing-function, $prop2 $transition-duration;
+  } @else {
+    transition: $prop $transition-duration;
+  }
+}
+
+@mixin placeholder-color() {
+  &::-moz-placeholder {
+    @content;
+  }
+  &::-webkit-input-placeholder {
+    @content;
+  }
+  &:-ms-input-placeholder {
+    @content;
+  }
+  &::-ms-input-placeholder {
+    @content;
+  }
+  &::placeholder {
+    @content;
+  }
+}
+
+@mixin overlay-border($border-color, $border-radius: 20px, $isHalfOfPixel: true) {
+  position: relative;
+
+  &:before {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
+    transform-origin: top left;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+
+    @if $isHalfOfPixel {
+      @media (min-resolution: 2dppx) {
+        width: 200%;
+        height: 200%;
+        border-radius: $border-radius * 2;
+        transform: scale(0.5);
+      }
+    }
+  }
+}
+
+@mixin background-large-blur {
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+}
+
+@mixin loading($time: 3s, $background: var(--background_loading_gradient_light)) {
+  background-image: none;
+  transform: translateZ(0);
+  background: $background;
+  animation: $time linear infinite alternate shine-lines;
+}
+
+@keyframes shine-lines {
+  0% {
+    background-position: -400px
+  }
+
+  100% {
+    background-position: 440px
+  }
+}
+
+@keyframes inAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@mixin white-block-hover {
+  opacity: 0.72;
+  background-color: var(--basic-white-hover);
+}
+
+@mixin fade_in_animation($animation-duration: 0.3s) {
+  transition: opacity $animation-duration ease-in-out;
+}
+
+@mixin custom-scrollbar($margin-bottom: 0) {
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  &::-webkit-scrollbar-track {
+    margin-bottom: $margin-bottom;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--icon-tertiary-light);
+    border-radius: 100px;
+  }
+}
+
+@mixin hide-scrollbar() {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@mixin blurFilter ($length: 3px) {
+  backdrop-filter: blur($length);
+}
+
+@mixin background-blur {
+  @include blurFilter(16px);
+}
+
+@keyframes shineAnimation {
+  to {
+    background-position: 200% 0, center;
+  }
+}
+
+@mixin column-flex-gap-s($desktopGap: 0, $mobileGap: false) {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $desktopGap;
+  
+  @if $mobileGap {
+      @include media-breakpoint-s {
+          gap: $mobileGap;
+      }
+  }
+}

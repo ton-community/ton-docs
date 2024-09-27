@@ -636,7 +636,7 @@ c4 POP",x -,26,"Sets the “global data root'' cell reference, thus allowing mod
 SETCONTCTR,,#ED6 i:uint4,cont_registers,ED6i,"c[i] SETCONT
 c[i] SETCONTCTR",x c - c',26,"Stores `x` into the savelist of continuation `c` as `c(i)`, and returns the resulting continuation `c'`. Almost all operations with continuations may be expressed in terms of `SETCONTCTR`, `POPCTR`, and `PUSHCTR`."
 SETRETCTR,,#ED7 i:uint4,cont_registers,ED7i,c[i] SETRETCTR,x - ,26,Equivalent to `c0 PUSHCTR` `c[i] SETCONTCTR` `c0 POPCTR`.
-SETALTCTR,,#ED8 i:uint4,cont_registers,ED8i,c[i] SETALTCTR,x - ,26,Equivalent to `c1 PUSHCTR` `c[i] SETCONTCTR` `c0 POPCTR`.
+SETALTCTR,,#ED8 i:uint4,cont_registers,ED8i,c[i] SETALTCTR,x - ,26,Equivalent to `c1 PUSHCTR` `c[i] SETCONTCTR` `c1 POPCTR`.
 POPSAVE,,#ED9 i:uint4,cont_registers,ED9i,"c[i] POPSAVE
 c[i] POPCTRSAVE",x -,26,"Similar to `c[i] POPCTR`, but also saves the old value of `c[i]` into continuation `c0`.
 Equivalent (up to exceptions) to `c[i] SAVECTR` `c[i] POPCTR`."
@@ -645,7 +645,7 @@ c[i] SAVECTR",,26,"Saves the current value of `c(i)` into the savelist of contin
 SAVEALT,,#EDB i:uint4,cont_registers,EDBi,"c[i] SAVEALT
 c[i] SAVEALTCTR",,26,"Similar to `c[i] SAVE`, but saves the current value of `c[i]` into the savelist of `c1`, not `c0`."
 SAVEBOTH,,#EDC i:uint4,cont_registers,EDCi,"c[i] SAVEBOTH
-c[i] SAVEBOTHCTR",,26,Equivalent to `DUP` `c[i] SAVE` `c[i] SAVEALT`.
+c[i] SAVEBOTHCTR",,26,Equivalent to `c[i] SAVE` `c[i] SAVEALT`.
 PUSHCTRX,,#EDE0,cont_registers,EDE0,PUSHCTRX,i - x,26,"Similar to `c[i] PUSHCTR`, but with `i`, `0 <= i <= 255`, taken from the stack.
 Notice that this primitive is one of the few “exotic'' primitives, which are not polymorphic like stack manipulation primitives, and at the same time do not have well-defined types of parameters and return values, because the type of `x` depends on `i`."
 POPCTRX,,#EDE1,cont_registers,EDE1,POPCTRX,x i - ,26,"Similar to `c[i] POPCTR`, but with `0 <= i <= 255` from the stack."
@@ -935,7 +935,7 @@ SENDRAWMSG,,#FB00,app_actions,FB00,SENDRAWMSG,c x - ,526,"Sends a raw message co
 RAWRESERVE,,#FB02,app_actions,FB02,RAWRESERVE,x y - ,526,"Creates an output action which would reserve exactly `x` nanograms (if `y=0`), at most `x` nanograms (if `y=2`), or all but `x` nanograms (if `y=1` or `y=3`), from the remaining balance of the account. It is roughly equivalent to creating an outbound message carrying `x` nanograms (or `b-x` nanograms, where `b` is the remaining balance) to oneself, so that the subsequent output actions would not be able to spend more money than the remainder. Bit `+2` in `y` means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved. Bit `+8` in `y` means `x:=-x` before performing any further actions. Bit `+4` in `y` means that `x` is increased by the original balance of the current account (before the compute phase), including all extra currencies, before performing any other checks and actions. Currently `x` must be a non-negative integer, and `y` must be in the range `0...15`."
 RAWRESERVEX,,#FB03,app_actions,FB03,RAWRESERVEX,x D y - ,526,"Similar to `RAWRESERVE`, but also accepts a dictionary `D` (represented by a _Cell_ or _Null_) with extra currencies. In this way currencies other than Grams can be reserved."
 SETCODE,,#FB04,app_actions,FB04,SETCODE,c - ,526,Creates an output action that would change this smart contract code to that given by _Cell_ `c`. Notice that this change will take effect only after the successful termination of the current run of the smart contract.
-SETLIBCODE,,#FB06,app_actions,FB06,SETLIBCODE,c x - ,526,"Creates an output action that would modify the collection of this smart contract libraries by adding or removing library with code given in _Cell_ `c`. If `x=0`, the library is actually removed if it was previously present in the collection (if not, this action does nothing). If `x=1`, the library is added as a private library, and if `x=2`, the library is added as a public library (and becomes available to all smart contracts if the current smart contract resides in the masterchain); if the library was present in the collection before, its public/private status is changed according to `x`. Values of `x` other than `0...2` are invalid."
+SETLIBCODE,,#FB06,app_actions,FB06,SETLIBCODE,c x - ,526,"Creates an output action that would modify the collection of this smart contract libraries by adding or removing library with code given in _Cell_ `c`. If `x=0`, the library is actually removed if it was previously present in the collection (if not, this action does nothing). If `x=1`, the library is added as a private library, and if `x=2`, the library is added as a public library (and becomes available to all smart contracts if the current smart contract resides in the masterchain); if the library was present in the collection before, its public/private status is changed according to `x`. Also, `16` can be added to `x` to enable bounce transaction on failure. Values of `x` other than `0...2 (+16 possible)` are invalid."
 CHANGELIB,,#FB07,app_actions,FB07,CHANGELIB,h x - ,526,"Creates an output action similarly to `SETLIBCODE`, but instead of the library code accepts its hash as an unsigned 256-bit integer `h`. If `x!=0` and the library with hash `h` is absent from the library collection of this smart contract, this output action will fail."
 DEBUG,,#FE nn:(#<= 239),debug,FEnn,{nn} DEBUG,-,26,`0 <= nn < 240`
 DEBUGSTR,,#FEF n:(## 4) ssss:((n * 8 + 8) * Bit),debug,FEFnssss,"{string} DEBUGSTR
@@ -949,3 +949,78 @@ SETCP,,#FF nn:(#<= 239),codepage,FFnn,[nn] SETCP,-,26,"Selects TVM codepage `0 <
 SETCP0,SETCP,#FF00,codepage,FF00,SETCP0,-,26,Selects TVM (test) codepage zero as described in this document.
 SETCP_SPECIAL,,#FFF z:(## 4) {1 <= z},codepage,FFFz,[z-16] SETCP,-,26,"Selects TVM codepage `z-16` for `1 <= z <= 15`. Negative codepages `-13...-1` are reserved for restricted versions of TVM needed to validate runs of TVM in other codepages. Negative codepage `-14` is reserved for experimental codepages, not necessarily compatible between different TVM implementations, and should be disabled in the production versions of TVM."
 SETCPX,,#FFF0,codepage,FFF0,SETCPX,c - ,26,Selects codepage `c` with `-2^15 <= c < 2^15` passed in the top of the stack.
+MYCODE,,#F8210,app_config,F8210,MYCODE,- c,26,Retrieves code of smart-contract from c7. Equivalent to `10 GETPARAM`.
+INCOMINGVALUE,,#F8211,app_config,F8211,INCOMINGVALUE,- t,26,Retrieves value of incoming message from c7. Equivalent to `11 GETPARAM`.
+STORAGEFEES,,#F8212,app_config,F8212,STORAGEFEES,- i,26,Retrieves value of storage phase fees from c7. Equivalent to `12 GETPARAM`.
+PREVBLOCKSINFOTUPLE,,#F8213,app_config,F8213,PREVBLOCKSINFOTUPLE,- t,26,Retrives PrevBlocksInfo: `[last_mc_blocks, prev_key_block]` from c7. Equivalent to `13 GETPARAM`.
+PREVMCBLOCKS,,#F83400,app_config,F83400,PREVMCBLOCKS,- t,34,Retrives `last_mc_blocks` part of PrevBlocksInfo from c7 (parameter 13).
+PREVKEYBLOCK,,#F83401,app_config,F83401,PREVKEYBLOCK,- t,34,Retrives `prev_key_block` part of PrevBlocksInfo from c7 (parameter 13).
+GLOBALID,,#F835,app_config,F835,GLOBALID,- i,26,Retrieves global_id from 19 network config.
+GASCONSUMED,,#F807,app_gas,F807,GASCONSUMED,- g_c,26,Returns gas consumed by VM so far (including this instruction).
+MULADDDIVMOD,,#A980,arithm_div,A980,MULADDDIVMOD,x y w z - q=floor((xy+w)/z) r=(xy+w)-zq,26,Performs multiplication, addition, division, and modulo in one step. Calculates q as floor((xy+w)/z) and r as (xy+w)-zq.
+MULADDDIVMODR,,#A981,arithm_div,A981,MULADDDIVMODR,x y w z - q=round((xy+w)/z) r=(xy+w)-zq,26,Similar to MULADDDIVMOD but calculates q as round((xy+w)/z).
+MULADDDIVMODC,,#A982,arithm_div,A982,MULADDDIVMODC,x y w z - q=ceil((xy+w)/z) r=(xy+w)-zq,26,Similar to MULADDDIVMOD but calculates q as ceil((xy+w)/z).
+ADDDIVMOD,,#A900,arithm_div,A900,ADDDIVMOD,x w z - q=floor((x+w)/z) r=(x+w)-zq,26,Performs addition, division, and modulo in one step. Calculates q as floor((x+w)/z) and r as (x+w)-zq.
+ADDDIVMODR,,#A901,arithm_div,A901,ADDDIVMODR,x w z - q=round((x+w)/z) r=(x+w)-zq,26,Similar to ADDDIVMOD but calculates q as round((x+w)/z).
+ADDDIVMODC,,#A902,arithm_div,A902,ADDDIVMODC,x w y - q=ceil((x+w)/z) r=(x+w)-zq,26,Similar to ADDDIVMOD but calculates q as ceil((x+w)/z). Incorrect stack description in the provided data; assumed typo for 'z' instead of 'y' in the input stack.
+ADDRSHIFTMOD,,#A920,arithm_div,A920,ADDRSHIFTMOD,x w z - q=floor((x+w)/2^z) r=(x+w)-q*2^z,26,Performs addition, right shift, and modulo in one step. Calculates q as floor((x+w)/2^z) and r as (x+w)-q*2^z.
+ADDRSHIFTMODR,,#A921,arithm_div,A921,ADDRSHIFTMODR,x w z - q=round((x+w)/2^z) r=(x+w)-q*2^z,26,Similar to ADDRSHIFTMOD but calculates q as round((x+w)/2^z).
+ADDRSHIFTMODC,,#A922,arithm_div,A922,ADDRSHIFTMODC,x w z - q=ceil((x+w)/2^z) r=(x+w)-q*2^z,26,Similar to ADDRSHIFTMOD but calculates q as ceil((x+w)/2^z).
+MULADDRSHIFTMOD,,#A9A0,arithm_div,A9A0,MULADDRSHIFTMOD,x y w z - q=floor((xy+w)/2^z) r=(xy+w)-q*2^z,26,Combines multiplication, addition, right shift, and modulo. Calculates q as floor((xy+w)/2^z) and r as (xy+w)-q*2^z.
+MULADDRSHIFTRMOD,,#A9A1,arithm_div,A9A1,MULADDRSHIFTRMOD,x y w z - q=round((xy+w)/2^z) r=(xy+w)-q*2^z,26,Similar to MULADDRSHIFTMOD but calculates q as round((xy+w)/2^z).
+MULADDRSHIFTCMOD,,#A9A2,arithm_div,A9A2,MULADDRSHIFTCMOD,x y w z - q=ceil((xy+w)/2^z) r=(xy+w)-q*2^z,26,Similar to MULADDRSHIFTMOD but calculates q as ceil((xy+w)/2^z).
+LSHIFTADDDIVMOD,,#A9D0 tt:uint8,arithm_div,A9D0tt,[tt+1] LSHIFT#ADDDIVMOD,x w z - q=floor((x*2^y+w)/z) r=(x*2^y+w)-zq,34,Performs left shift on x, adds w, then divides by z, rounding down for q and calculates remainder r.
+LSHIFTADDDIVMODR,,#A9D1 tt:uint8,arithm_div,A9D1tt,[tt+1] LSHIFT#ADDDIVMODR,x w z - q=round((x*2^y+w)/z) r=(x*2^y+w)-zq,34,Similar to LSHIFTADDDIVMOD but rounds q to the nearest integer.
+LSHIFTADDDIVMODC,,#A9D2 tt:uint8,arithm_div,A9D2tt,[tt+1] LSHIFT#ADDDIVMODC,x w z - q=ceil((x*2^y+w)/z) r=(x*2^y+w)-zq,34,Similar to LSHIFTADDDIVMOD but rounds q up to the nearest integer.
+HASHEXT_SHA256,,#F90400,app_crypto,F90400,HASHEXT_SHA256,s_1 ... s_n n - h,1/33 gas per byte,Calculates and returns hash of the concatenation of slices (or builders) `s_1...s_n`.
+HASHEXT_SHA512,,#F90401,app_crypto,F90401,HASHEXT_SHA512,s_1 ... s_n n - h,1/16 gas per byte,Calculates and returns hash of the concatenation of slices (or builders) `s_1...s_n`.
+HASHEXT_BLAKE2B,,#F90402,app_crypto,F90402,HASHEXT_BLAKE2B,s_1 ... s_n n - h,1/19 gas per byte,Calculates and returns hash of the concatenation of slices (or builders) `s_1...s_n`.
+HASHEXT_KECCAK256,,#F90403,app_crypto,F90403,HASHEXT_KECCAK256,s_1 ... s_n n - h,1/11 gas per byte,Calculates and returns hash of the concatenation of slices (or builders) `s_1...s_n`.
+HASHEXT_KECCAK512,,#F90404,app_crypto,F90404,HASHEXT_KECCAK512,s_1 ... s_n n - h,1/19 gas per byte,Calculates and returns hash of the concatenation of slices (or builders) `s_1...s_n`.
+HASHEXTR_SHA256,,#F90500,app_crypto,F90500,HASHEXTR_SHA256,s_n ... s_1 n - h,1/33 gas per byte,Same as `HASHEXT_`, but arguments are given in reverse order.
+HASHEXTR_SHA512,,#F90501,app_crypto,F90501,HASHEXTR_SHA512,s_n ... s_1 n - h,1/16 gas per byte,Same as `HASHEXT_`, but arguments are given in reverse order.
+HASHEXTR_BLAKE2B,,#F90502,app_crypto,F90502,HASHEXTR_BLAKE2B,s_n ... s_1 n - h,1/19 gas per byte,Same as `HASHEXT_`, but arguments are given in reverse order.
+HASHEXTR_KECCAK256,,#F90503,app_crypto,F90503,HASHEXTR_SHA256,s_n ... s_1 n - h,1/11 gas per byte,Same as `HASHEXT_`, but arguments are given in reverse order.
+HASHEXTR_KECCAK512,,#F90504,app_crypto,F90504,HASHEXTR_KECCAK512,s_n ... s_1 n - h,1/19 gas per byte,Same as `HASHEXT_`, but arguments are given in reverse order.
+HASHEXTA_SHA256,,#F90600,app_crypto,F90600,HASHEXTA_SHA256,b s_1 ... s_n n - b',1/33 gas per byte,Appends the resulting hash to a builder `b` instead of pushing it to the stack.
+HASHEXTA_SHA512,,#F90601,app_crypto,F90601,HASHEXTA_SHA512,b s_1 ... s_n n - b',1/16 gas per byte,Appends the resulting hash to a builder `b` instead of pushing it to the stack.
+HASHEXTA_BLAKE2B,,#F90602,app_crypto,F90602,HASHEXTA_BLAKE2B,b s_1 ... s_n n - b',1/19 gas per byte,Appends the resulting hash to a builder `b` instead of pushing it to the stack.
+HASHEXTA_KECCAK256,,#F90603,app_crypto,F90603,HASHEXTA_KECCAK256,b s_1 ... s_n n - b',1/11 gas per byte,Appends the resulting hash to a builder `b` instead of pushing it to the stack.
+HASHEXTA_KECCAK512,,#F90604,app_crypto,F90604,HASHEXTA_KECCAK512,b s_1 ... s_n n - b',1/6 gas per byte,Appends the resulting hash to a builder `b` instead of pushing it to the stack.
+HASHEXTAR_SHA256,,#F90700,app_crypto,F90700,HASHEXTAR_SHA256,b s_n ... s_1 n - b',1/33 gas per byte,Arguments are given in reverse order, appends hash to builder.
+HASHEXTAR_SHA512,,#F90701,app_crypto,F90701,HASHEXTAR_SHA512,b s_n ... s_1 n - b',1/16 gas per byte,Arguments are given in reverse order, appends hash to builder.
+HASHEXTAR_BLAKE2B,,#F90702,app_crypto,F90702,HASHEXTAR_BLAKE2B,b s_n ... s_1 n - b',1/19 gas per byte,Arguments are given in reverse order, appends hash to builder.
+HASHEXTAR_KECCAK256,,#F90703,app_crypto,F90703,HASHEXTAR_KECCAK256,b s_n ... s_1 n - b',1/11 gas per byte,Arguments are given in reverse order, appends hash to builder.
+HASHEXTAR_KECCAK512,,#F90704,app_crypto,F90704,HASHEXTAR_KECCAK512,b s_n ... s_1 n - b',1/6 gas per byte,Arguments are given in reverse order, appends hash to builder.
+ECRECOVER,,#F912,app_crypto,F912,ECRECOVER,hash v r s - 0 or h x1 x2 -1,1526,Recovers public key from signature, identical to Bitcoin/Ethereum operations.
+P256_CHKSIGNS,,#F915,app_crypto,F915,P256_CHKSIGNS,d sig k - ?,3526,Checks seck256r1-signature `sig` of data portion of slice `d` and public key `k`. Returns -1 on success, 0 on failure.
+P256_CHKSIGNU,,#F914,app_crypto,F914,P256_CHKSIGNU,h sig k - ?,3526,Same as P256_CHKSIGNS, but the signed data is 32-byte encoding of 256-bit unsigned integer h.
+RIST255_FROMHASH,,#F920,app_crypto,F920,RIST255_FROMHASH,h1 h2 - x,626,Deterministically generates a valid point `x` from a 512-bit hash (given as two 256-bit integers).
+RIST255_VALIDATE,,#F921,app_crypto,F921,RIST255_VALIDATE,x - ,226,Checks that integer `x` is a valid representation of some curve point. Throws `range_chk` on error.
+RIST255_ADD,,#F922,app_crypto,F922,RIST255_ADD,x y - x+y,626,Addition of two points on a curve.
+RIST255_SUB,,#F923,app_crypto,F923,RIST255_SUB,x y - x-y,626,Subtraction of two points on curve.
+RIST255_MUL,,#F924,app_crypto,F924,RIST255_MUL,x n - x*n,2026,Multiplies point `x` by a scalar `n`. Any `n` is valid, including negative.
+RIST255_MULBASE,,#F925,app_crypto,F925,RIST255_MULBASE,n - g*n,776,Multiplies the generator point `g` by a scalar `n`. Any `n` is valid, including negative.
+RIST255_PUSHL,,#F926,app_crypto,F926,RIST255_PUSHL,- l,26,Pushes integer `l=2^252+27742317777372353535851937790883648493`, which is the order of the group.
+RIST255_QVALIDATE,,#B7F921,app_crypto,B7F921,RIST255_QVALIDATE,x - 0 or -1,234,Quiet version of `RIST255_VALIDATE`.
+RIST255_QADD,,#B7F922,app_crypto,B7F922,RIST255_QADD,x y - 0 or x+y -1,634,Quiet version of `RIST255_ADD`.
+RIST255_QSUB,,#B7F923,app_crypto,B7F923,RIST255_QSUB,x y - 0 or x-y -1,634,Quiet version of `RIST255_SUB`.
+RIST255_QMUL,,#B7F924,app_crypto,B7F924,RIST255_QMUL,x n - 0 or x*n -1,2034,Quiet version of `RIST255_MUL`.
+RIST255_QMULBASE,,#B7F925,app_crypto,B7F925,RIST255_QMULBASE,n - 0 or g*n -1,784,Quiet version of `RIST255_MULBASE`
+RUNVM,,#DB4 flags:(## 12),cont_basic,DB4fff,RUNVM,x_1 ... x_n n code [r] [c4] [c7] [g_l] [g_m] - x'_1 ... x'_m exitcode [data'] [c4'] [c5] [g_c],66+x,Runs child VM with code `code` and stack `x_1...x_n`. Returns the resulting stack `x'_1...x'_m` and exitcode. Other arguments and return values are enabled by flags.
+RUNVMX,,#DB50,cont_basic,DB50,RUNVMX,x_1 ... x_n n code [r] [c4] [c7] [g_l] [g_m] flags - x'_1 ... x'_m exitcode [data'] [c4'] [c5] [g_c],66+x,Same as `RUNVM`, but pops flags from stack.
+GETGASFEE,,#F836,app_config,F836,GETGASFEE,gas_used is_mc - price,,Calculates gas fee
+GETSTORAGEFEE,,#F837,app_config,F837,GETSTORAGEFEE,cells bits seconds is_mc - price,,Calculates storage fees in nanotons for contract based on current storage prices. `cells` and `bits` are the size of the [AccountState](https://github.com/ton-blockchain/ton/blob/8a9ff339927b22b72819c5125428b70c406da631/crypto/block/block.tlb#L247) (with deduplication, including root cell).
+GETFORWARDFEE,,#F838,app_config,F838,GETFORWARDFEE,cells bits is_mc - price,,Calculates forward fees in nanotons for outgoing message. `is_mc` is true if the source or the destination is in masterchain, false if both are in basechain. Note, cells and bits in Message should be counted with account for deduplication and root-is-not-counted rules.
+GETPRECOMPILEDGAS,,#F839,app_config,F839,GETPRECOMPILEDGAS,- x,,reserved, currently returns null. Will return cost of contract execution in gas units if this contract is precompiled
+GETORIGINALFWDFEE,,#F83A,app_config,F83A,GETORIGINALFWDFEE,fwd_fee is_mc - orig_fwd_fee,,calculate `fwd_fee * 2^16 / first_frac`. Can be used to get the original `fwd_fee` of the message (as replacement for hardcoded values like [this](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/jetton-wallet.fc#L224C17-L224C46)) from `fwd_fee` parsed from incoming message. `is_mc` is true if the source or the destination is in masterchain, false if both are in basechain.
+GETGASFEESIMPLE,,#F83B,app_config,F83B,GETGASFEESIMPLE,gas_used is_mc - price,,Same as `GETGASFEE`, but without flat price (just `(gas_used * price) / 2^16)`.
+GETFORWARDFEESIMPLE,,#F83C,app_config,F83C,GETFORWARDFEESIMPLE,cells bits is_mc - price,,Calculates additional forward cost in nanotons for message that contains additional `cells` and `bits`. In other words, same as `GETFORWARDFEE`, but without lump price (just `(bits*bit_price + cells*cell_price) / 2^16)`.
+UNPACKEDCONFIGTUPLE,,#F82E,app_config,F82E,UNPACKEDCONFIGTUPLE,- c,26,Retrieves tuple of configs slices from c7
+DUEPAYMENT,,#F82F,app_config,F82F,DUEPAYMENT,- i,26,Retrieves value of due payment from c7
+GLOBALID,,#F835,app_config,F835,GLOBALID,- i,26,Now retrieves `ConfigParam 19` from from c7, ton form config dict.
+SENDMSG,,#FB08,app_config,FB08,SENDMSG,msg mode - i,,Now retrieves `ConfigParam 24/25` (message prices) and `ConfigParam 43` (`max_msg_cells`) from c7, not from config dict.
+CLEVEL,,#D766,cell_parse,D766,CLEVEL,cell - level,26,Returns level of the cell
+CLEVELMASK,,#D767,cell_parse,D767,CLEVELMASK,cell - level_mask,26,Returns level mask of the cell
+CHASHIX,,#D770,cell_parse,D770,CHASHIX,cell i - depth,26,Returns ith hash of the cell (i is in range 0..3)
+CDEPTHIX,,#D771,cell_parse,D771,CDEPTHIX,cell i - depth,26,Returns ith depth of the cell (i is in range 0..3)

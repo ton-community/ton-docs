@@ -1,6 +1,6 @@
-# "accept_message" effects
+# Accept Message Effects
 
-`accept_message` and `set_gas_limit` may cause not that straightforward effects when doing exactly what it's said in the [stdlib reference](/develop/func/stdlib#accept_message).
+`accept_message` and `set_gas_limit` may cause not that straightforward effects when doing exactly what is said in the [stdlib reference](/develop/func/stdlib#accept_message).
 
 ## External messages
 

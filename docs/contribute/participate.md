@@ -8,7 +8,7 @@ You're lucky! It's a good opportunity to improve TON Ecosystem here.
 :::
 
 If you decide to write tutorial, you can get some reward for outstanding materials:
-- **Special TON Footsteps NFT** for the most valuable contributing to TON
+- **Special TON Bounty NFT** for the most valuable contributing to TON
 - **Reward in TON** as payment for approved high-quality contribution like tutorial
 
 Let's see how you can participate in contributing process.
@@ -22,9 +22,9 @@ Find or write a material which you want to describe.
 ## Describe a problem to get a reward
 
 Write a _ton-footstep_ to receive a funding for your contributing.
-1. Read about [TON Footsteps](https://github.com/ton-society/ton-footsteps) program more detailed.
-    1. **TLDR:** Use [Cover "Explorers" article](https://github.com/ton-society/ton-footsteps/issues/61) as an example.
-2. Write [your own footstep](https://github.com/ton-society/ton-footsteps/issues/new/choose) to participate and wait for approve.
+1. Read about [TON Bounties](https://github.com/ton-society/grants-and-bounties/blob/main/bounties/BOUNTIES_PROGRAM_GUIDELINES.md) program more detailed.
+    1. **TLDR:** Use [Improve TVM Instructions article](https://github.com/ton-society/grants-and-bounties/issues/361) as an example.
+2. Write [your own bounty](https://github.com/ton-society/grants-and-bounties/issues/new/choose) to participate and wait for approve. [TON Bounties Creator Bot](https://t.me/footsteps_helper_bot) will help you.
 3. After received `approved` label start to write your tutorial.
 
 ## Writing a tutorial
@@ -41,6 +41,6 @@ Write a _ton-footstep_ to receive a funding for your contributing.
 ## Receiving a reward
 
 1. After your PR in TON Docs got merged, please write in your ton-footsteps task.
-2. Follow a guide [How to complete ton-footstep?](https://github.com/ton-society/ton-footsteps#how-to-complete-something-from-the-list) to complete footstep and get reward.
+2. Follow a guide [How to complete ton-bounty?](https://github.com/ton-society/grants-and-bounties/blob/main/bounties/BOUNTIES_PROGRAM_GUIDELINES.md#got-assigned-submit-a-questbook-proposal) to complete bounty and get reward.
 3. In your task, you will be asked for a wallet to send a reward.
 4. Get rewarded!

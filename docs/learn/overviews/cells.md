@@ -28,7 +28,7 @@ For more on exotic cells see: [**TVM Whitepaper, Section 3**](https://ton.org/tv
 
 A cell is an opaque object optimized for compact storage.
 
-In particular, it deduplicates data: if there are several eqivalent sub-cells referenced in different branches, their content is only stored once. However, opaqueness means that a cell cannot be modified or read directly. Thus, there are 2 additional flavors of the cells:
+In particular, it deduplicates data: if there are several  equivalent sub-cells referenced in different branches, their content is only stored once. However, opaqueness means that a cell cannot be modified or read directly. Thus, there are 2 additional flavors of the cells:
 * _Builder_ for partially constructed cells, for which fast operations for appending bitstrings, integers, other cells and references to other cells can be defined.
 * _Slice_ for 'dissected' cells representing either the remainder of a partially parsed cell or a value (subcell) residing inside such a cell and extracted from it via a parsing instruction.
 

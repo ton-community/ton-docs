@@ -5,7 +5,7 @@
 This is the official repository for The Open Network documentation.
 
 Latest documentation release: [docs.ton.org](https://docs.ton.org)
-
+ 
 The mission of this documentation is to collect all available information and knowledge that can help TON developers.
 
 You can improve the documentation by following steps below.
@@ -21,7 +21,7 @@ TON is an actively growing ecosystem, and every day many devs contribute to its 
 You can participate in TON by helping organize knowledge, making Pull Requests and creating tutorials to help other developers. 
 Feedback, lectures, technical articles, tutorials, and examples. All this can help the developers community grow even faster!
 
-Join TON Docs Club chat in Telegram and get the latest tasks from maintainers:
+Join TON Docs Club chat in Telegram to join contributors party:
 * https://t.me/+c-0fVO4XHQsyOWM8
 
 ---
@@ -30,12 +30,11 @@ Join TON Docs Club chat in Telegram and get the latest tasks from maintainers:
 
 ## How to Contribute? 🦄
 
-As said before, it's up to you.
-
 If you are a developer and faced some difficulties, successfully overcoming them - share this knowledge with future developers!
 
-— Have an idea? [Submit an issue](https://github.com/ton-community/ton-docs/issues/new/choose).  
-— Want to validate changes? [Setup your environment](https://github.com/ton-community/ton-docs#set-up-your-environment-%EF%B8%8F).
+— Have an issue? [Prepare a solution with TON Docs Wizard](https://t.me/ton_docs_bot).  
+— Have an idea? [Submit a Feature Request](https://github.com/ton-community/ton-docs/issues/new/choose).  
+— Want to contribute? [Setup your environment](https://github.com/ton-community/ton-docs#set-up-your-environment-%EF%B8%8F).
 
 Contributing best practices:  [docs/contribute](https://ton.org/docs/contribute)
 
@@ -68,9 +67,25 @@ Use Gitpod (a free, online VS code-like IDE) for contributing. It will launch a 
     ```
     npm run start
     ```
+6. Build with multiple locales and run it locally
+
+    ```
+    npm run build
+    npm run serve
+    ```
 
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
+## Contributors Wall
+<a href="https://github.com/ton-community/ton-docs/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=ton-community/ton-docs&max=204" />
+</a>
+
+<p align="right" style="font-size: 14px; color: #555; margin-top: 20px;">
+  <a href="#readme-top" style="text-decoration: none; color: blue; font-weight: bold;">
+    ↑ Back to Top ↑
+  </a>
+</p>
 ## License
 
 [GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/)

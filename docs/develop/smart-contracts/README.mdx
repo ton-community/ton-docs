@@ -1,162 +1,205 @@
 import Button from '@site/src/components/button'
 
 # Introduction
+
 Smart contract creation, development, and deployment on TON Blockchain leverages the [FunC programming language](/develop/smart-contracts/#func-language) and [TON Virtual Machine (TVM)](/develop/smart-contracts/#ton-virtual-machine).
-## Quick Start
 
-Write and deploy your first smart contract with either *Blueprint* or *toncli* frameworks.
+## Quick Start: Your First Smart Contract
 
-### Blueprint
+Write and deploy your first smart contract with the *Blueprint* framework.
 
-Blueprint — is a development environment for writing, testing, and deploying smart contracts.
+Blueprint is a development environment for writing, testing, and deploying smart contracts.
 To create a new demo project use the following command:
 
 ```bash
 npm create ton@latest
 ```
-<Button href="https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa" colorType={'primary'} sizeType={'sm'}>Learn Through Videos</Button>
-<Button href="/develop/smart-contracts/sdk/javascript"
-        colorType="secondary" sizeType={'sm'}>
-  Learn More
+
+````mdx-code-block 
+<Button href="/develop/smart-contracts/sdk/javascript" colorType="primary" sizeType={'sm'}>
+````
+Read more
+````mdx-code-block 
 </Button>
-
-### toncli
-
-Toncli — is a TON cross-platform smart contract command line interface. Install this and run test project via following command:
-
-```bash
-toncli start wallet
-```
-<Button href="/develop/smart-contracts/sdk/toncli"
-        colorType="secondary" sizeType={'sm'}>
-  Learn More
+````
+````mdx-code-block 
+<Button href="https://stepik.org/course/176754/" colorType={'secondary'} sizeType={'sm'}>
+````
+TON Blockchain Course
+````mdx-code-block 
 </Button>
+````
+````mdx-code-block 
+<Button href="https://tonspeedrun.com/" colorType={'secondary'} sizeType={'sm'}>
+````
+TON Speed Run Tutorials
+````mdx-code-block 
+</Button>
+````
 
 
 ## Getting Started
 
-### Fast Track Tutorials
+### Fun and Easy Tutorials
 
-TON Hello World guide is _the easiest way_ to start with smart contracts development:
+Kickstart your journey with our beginner-friendly guide:
 * [TON Hello World: Step-by-step guide for writing your first smart contract](https://ton-community.github.io/tutorials/02-contract/)
+* [TON Speed Run tutorials](https://tonspeedrun.com/)
+  - [🚩 Challenge 1: Simple NFT Deploy](https://github.com/romanovichim/TONQuest1)
+  - [🚩 Challenge 2: Chatbot Contract](https://github.com/romanovichim/TONQuest2)
+  - [🚩 Challenge 3: Jetton Vending Machine](https://github.com/romanovichim/TONQuest3)
+  - [🚩 Challenge 4: Lottery/Raffle](https://github.com/romanovichim/TONQuest4)
+  - [🚩 Challenge 5: Create UI to interact with the contract in 5 minutes](https://github.com/romanovichim/TONQuest5)
+  - [🚩 Challenge 6: Analyzing NFT sales on the Getgems marketplace](https://github.com/romanovichim/TONQuest6)
 
-### Comprehensive and Detailed Tutorials
+### TON Course
 
-Detailed and cautionary explanations of smart contract basics:
+:::tip
+Before starting the course, make sure you have a good understanding of the basics of blockchain technology. If you have gaps in your knowledge, we recommend taking the [Blockchain Basics with TON](https://stepik.org/course/201294/promo) ([RU version](https://stepik.org/course/202221/), [CHN version](https://stepik.org/course/200976/)) course.
+:::
+
+We're proud to present the __TON Blockchain Course__, which is a comprehensive guide to the TON Blockchain. The course is designed for developers who want to learn how to create smart contracts and decentralized applications on the TON Blockchain.
+
+It consists of __9 modules__ and covers the basics of the TON Blockchain, smart contract development lifecycle, the FunC programming, and the TON Virtual Machine (TVM).
+
+````mdx-code-block 
+<Button href="https://stepik.org/course/176754/promo" 
+        colorType={'primary'} sizeType={'sm'}>
+````
+Check TON Course
+````mdx-code-block 
+</Button>
+````
+````mdx-code-block 
+<Button href="https://stepik.org/course/201638/promo" 
+        colorType={'secondary'} sizeType={'sm'}>
+````
+CHN
+````mdx-code-block 
+</Button>
+````
+````mdx-code-block 
+<Button href="https://stepik.org/course/201855/promo" 
+        colorType={'secondary'} sizeType={'sm'}>
+````
+RU
+````mdx-code-block 
+</Button>
+````
+
+### Comprehensive Guides
+
+For those who prefer detail and nuance, visit:
+
 * [How to work with wallet smart contracts](/develop/smart-contracts/tutorials/wallet)
 
 
-## Smart Contract Guidelines
 
-Learn principals of designing and architecture of TON.
+## Examples of Smart Contracts
 
-TON’s systemized smart contract development allows engineers to build smart contracts for many uses. That said, to unlock the full capabilities of smart contract iteration on TON, it's necessary to follow our predetermined smart contract guidelines to ensure their correct composition.
+Explore ready-made smart contract examples and tools provided by the TON community.
+
+:::info little tip
+Feel free to focus on smart contracts written using _FunC_. Focusing on smart contracts written using FunC (*.fc) instead of the lower-level Fift (*.fif) language is often better.
+:::
+
+Standard examples of smart contracts on TON include wallets, electors (which manage validation on TON), and multi-signature wallets, which can be a reference when studying.
+
+````mdx-code-block 
+<Button href="/develop/smart-contracts/examples" colorType={'primary'} sizeType={'sm'}>
+````
+Open Examples
+````mdx-code-block 
+</Button>
+````
+
+
+## Smart Contract Best Practices
+
+TON offers endless possibilities. Learn how to get the most out of them while adhering to recommended guidelines.
+
 * [Smart contract guidelines](/develop/smart-contracts/guidelines)
 
-## TON Virtual Machine
+## TON Virtual Machine (TVM)
 
-TON smart contracts are executed on TON Virtual Machine (TVM).
-The TVM is a stack-based virtual machine that employs many qualities that make it efficient and easy to implement.
+Discover the engine that runs your smart contracts.
 
-To get a better understanding of how the TVM works, consider reading the TVM Overview section of our documentation.
+- [TVM Overview](/learn/tvm-instructions/tvm-overview)
 
-<Button href="/learn/tvm-instructions/tvm-overview" colorType={'primary'} sizeType={'sm'}>TVM Overview</Button>
 
 
 ## Programming Languages
 
+### 📘 FunC
 
-### FunC Language
+The tailor-made language for TON smart contracts.
 
-FunC is TON’s high-level programming language used to program smart contracts on TON Blockchain. The proprietary in-house language is a domain-specific statically typed framework which exhibits many characteristics simply not found in competing language types.
+````mdx-code-block 
+<Button href="/develop/func/overview" colorType={'primary'} sizeType={'sm'}>
+````
+FunC Overview
+````mdx-code-block 
+</Button>
+````
 
-<Button href="/develop/func/overview" colorType={'primary'} sizeType={'sm'}>FunC Overview</Button>
+### 📒 Tact
 
-### Fift language
-
-:::caution advanced level
-This information is **very low level** and may be challenging for newcomers to understand. Therefore, we suggest that you read about it later at your convenience.
-:::
-
-Messages to smart contracts are binary data. To construct such messages, you can use one of the SDKs **or** the special programming language Fift.
-
-<Button href="/develop/fift/overview" colorType={'primary'} sizeType={'sm'}>Fift Overview</Button>
-
-### Tact language
-
+The high-level language for TON smart contracts similar to TypeScript and Rust.
 
 :::caution
-The Tact language is developed by independent developers. Use at your own risk.
+Developed by the community. Use with caution.
 :::
 
-<Button href="https://docs.tact-lang.org/" colorType={'primary'} sizeType={'sm'}>Official Site</Button>
+````mdx-code-block 
+<Button href="https://docs.tact-lang.org/" colorType={'primary'} sizeType={'sm'}>
+````
+Tact Official Site
+````mdx-code-block 
+</Button>
+````
+````mdx-code-block 
 <Button href="https://tact-by-example.org/"
         colorType="secondary" sizeType={'sm'}>
-  Tact Hello World
+````
+Tact Hello World
+````mdx-code-block 
 </Button>
+````
 
 
+### 📕 Fift (advanced)
 
-
-
-## Smart Contract Examples
-
-:::info little tip
-Feel free to focus on smart contracts written using _FunC_. it's often better to focus on smart contracts written using FunC (*.fc) instead of the lower-level Fift (*.fif) language.
+:::caution advanced level
+Only for the brave!
 :::
 
-Standard examples of smart contracts on TON include wallets, electors (which manage validation on TON), multi-signature wallets can be a reference when studying.
+````mdx-code-block 
+<Button href="/develop/fift/overview" colorType={'primary'} sizeType={'sm'}>
+````
+Fift Overview
+````mdx-code-block 
+</Button>
+````
 
-If you're familiar with smart contracts, consider discover the following list:
-
-- [Fungible (Jettons), Non-Fungible (NFT), Semi-Fungible Tokens smart contracts](https://github.com/ton-blockchain/token-contract/tree/main)
-- [Getgems NFT, sale, auctions smart contracts (FunC)](https://github.com/getgems-io/nft-contracts)
-- [Wallet V4 smart contract example](https://github.com/ton-blockchain/wallet-contract)
-- [Standard smart contracts examples](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
-- [Super Simple Chatbot: doge.fc](https://github.com/LaDoger/doge.fc)
-
-Learn more examples on the [Examples of Smart Contracts](/develop/smart-contracts/examples) page.
-
-Additionally, discover more [FunC libraries and SDK](/develop/smart-contracts/libraries) in the FunC section of our documentation.
-
-
-## Environment
-
-The installation process for Local Environments may require more knowledge and time, but they are better suited for everyday use and eliminate the need for internet dependency.
-These include IDE plugins, various SDKs, binaries, syntax highlighting, and more. Check out [our local environment installation guide](/develop/smart-contracts/environment/installation) to learn more.
-
-## Development Toolkit
-
-Development toolkits play a pivotal role in the development of smart contracts on TON Blockchain. To begin developing, testing, and debugging smart contracts on TON, we’ll make use of these products and services:
-
-### SDKs
-
-* [Blueprint](/develop/smart-contracts/sdk/javascript) - JS SDK for development and testing Smart Contracts.
-* [SDKs](/develop/dapps/apis/sdk) - The Open Network SDKs list for applications.
-
-### Other Tools
+## Community Tools
 
 * [disintar/toncli](/develop/smart-contracts/sdk/toncli) — The toncli is the command line interface used to build, deploy, and test FunC contracts.
 * [MyLocalTON](/participate/run-nodes/local-ton) — MyLocalTON is used to run a private TON Blockchain in your local environment.
-* [tonwhales.com/tools/boc](https://tonwhales.com/tools/boc) — BOC parser.
-* [tonwhales.com/tools/introspection-id](https://tonwhales.com/tools/introspection-id) — crc32 generator.
-* [@orbs-network/ton-access](https://www.orbs.com/ton-access/) — decentralized API gateway.
+* [tonwhales.com/tools/boc](https://tonwhales.com/tools/boc) — BOC parser
+* [tonwhales.com/tools/introspection-id](https://tonwhales.com/tools/introspection-id) — crc32 generator
+* [@orbs-network/ton-access](https://www.orbs.com/ton-access/) — decentralized API gateway
 
 
-## References
+## Further Reading
 
-Educational content from the TON community:
+Enhance your skillset with these community-driven educational resources.
 
-* [TON Learn FunC journey: 10 zero-to-hero lessons](https://blog.ton.org/func-journey) ([Ru version](https://github.com/romanovichim/TonFunClessons_ru))
-* [[YouTube] TON Dev Study [EN]](https://www.youtube.com/@TONDevStudy)
-* [[YouTube] TON Dev Study [RU]](https://www.youtube.com/@WikiMar)
-* [Introduction to FunC: how to start developing on TON?](https://dev.to/dvlkv/introduction-in-func-how-to-start-developing-in-ton-50hp)
-* [TON Hello World part 4: Step by step guide for testing your first smart contract](https://ton-community.github.io/tutorials/04-testing/)
+* [TON FunC Learning Path](https://blog.ton.org/func-journey) ([RU version](https://github.com/romanovichim/TonFunClessons_ru))
+* [YouTube Tutorials](https://www.youtube.com/@TONDevStudy) [[RU version]](https://www.youtube.com/@WikiMar)
 
 
-## See Also
+## Additional Resources
 
 * [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)
-* [Payments processing](/develop/dapps/asset-processing)
-* [Transaction Fees](/develop/smart-contracts/fees#how-to-calculate-fees)
+* [Understanding Transaction Fees](/develop/smart-contracts/fees#how-to-calculate-fees)
 

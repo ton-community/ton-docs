@@ -2,9 +2,10 @@
 
 The core reason for creating the FunC Cookbook is to collect all the experience from FunC developers in one place so that future developers will use it!
 
-Compared to the FunC Documentation, this article is more focused on everyday tasks every FunC developer resolve during the development of smart contracts.
+Compared to the [FunC Documentation](/develop/func/types), this article is more focused on everyday tasks every FunC developer resolve during the development of smart contracts.
 
 ## Basics
+
 ### How to write an if statement
 
 Let's say we want to check if any event is relevant. To do this, we use the flag variable. Remember that in FunC `true` is `-1` and `false` is `0`.
@@ -107,7 +108,7 @@ Before working with `slice`, it is necessary to check whether it has any data to
 ```func
 ;; creating empty slice
 slice empty_slice = "";
-;; `slice_empty?()` returns `true`, because slice dosen't have any `bits` and `refs`
+;; `slice_empty?()` returns `true`, because slice doesn't have any `bits` and `refs`
 empty_slice.slice_empty?();
 
 ;; creating slice which contains bits only
@@ -147,14 +148,14 @@ slice_with_bits_and_refs.slice_empty?();
 > ["begin_parse()" in docs](/develop/func/stdlib#begin_parse)
 
 
-### How to determine if slice is empty (dosen't have any bits, but may have refs)
+### How to determine if slice is empty (doesn't have any bits, but may have refs)
 
 If we need to check only the `bits` and it does not matter if there are any `refs` in `slice`, then we should use `slice_data_empty?()`.
 
 ```func 
 ;; creating empty slice
 slice empty_slice = "";
-;; `slice_data_empty?()` returns `true`, because slice dosen't have any `bits`
+;; `slice_data_empty?()` returns `true`, because slice doesn't have any `bits`
 empty_slice.slice_data_empty?();
 
 ;; creating slice which contains bits only
@@ -167,7 +168,7 @@ slice slice_with_refs_only = begin_cell()
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_data_empty?()` returns `true`, because slice dosen't have any `bits`
+;; `slice_data_empty?()` returns `true`, because slice doesn't have any `bits`
 slice_with_refs_only.slice_data_empty?();
 
 ;; creating slice which contains bits and refs
@@ -195,19 +196,19 @@ slice_with_bits_and_refs.slice_data_empty?();
 > ["begin_parse()" in docs](/develop/func/stdlib#begin_parse)
 
 
-### How to determine if slice is empty (dosen't have any refs, but may have bits)
+### How to determine if slice is empty (doesn't have any refs, but may have bits)
 
 In case we are only interested in `refs`, we should check their presence using `slice_refs_empty?()`.
 
 ```func 
 ;; creating empty slice
 slice empty_slice = "";
-;; `slice_refs_empty?()` returns `true`, because slice dosen't have any `refs`
+;; `slice_refs_empty?()` returns `true`, because slice doesn't have any `refs`
 empty_slice.slice_refs_empty?();
 
 ;; creating slice which contains bits only
 slice slice_with_bits_only = "Hello, world!";
-;; `slice_refs_empty?()` returns `true`, because slice dosen't have any `refs`
+;; `slice_refs_empty?()` returns `true`, because slice doesn't have any `refs`
 slice_with_bits_only.slice_refs_empty?();
 
 ;; creating slice which contains refs only
@@ -244,7 +245,7 @@ slice_with_bits_and_refs.slice_refs_empty?();
 
 ### How to determine if cell is empty
 
-To check if there is any data in a `cell`, we should first convert it to `slice`. If we are only interested in having `bits`, we should use `slice_data_empty?()`, if only `refs` - `slice_data_refs?()`. In case we want to check the presence of any data regardless of whether it is a `bit` or `ref`, we need to use `slice_empty?()`.
+To check if there is any data in a `cell`, we should first convert it to `slice`. If we are only interested in having `bits`, we should use `slice_data_empty?()`, if only `refs` - `slice_refs_empty?()`. In case we want to check the presence of any data regardless of whether it is a `bit` or `ref`, we need to use `slice_empty?()`.
 
 ```func
 cell cell_with_bits_and_refs = begin_cell()
@@ -278,7 +279,7 @@ else {
 
 ### How to determine if dict is empty
 
-There is a method of `dict_empty?()` to check the date presence in dict. This method is the equivalent of `cell_null?()` because usually a `null`-cell is an empty dictionary.
+There is a method of `dict_empty?()` to check the data presence in dict. This method is the equivalent of `cell_null?()` because usually a `null`-cell is an empty dictionary.
 
 ```func
 cell d = new_dict();
@@ -402,7 +403,7 @@ cell msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)
     .store_coins(amount)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
     .store_uint(op, 32)
 .end_cell();
 
@@ -451,7 +452,7 @@ cell msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)
     .store_coins(amount)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) 
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) ;; default message headers (see sending messages page)
     .store_uint(1, 1) ;; set bit to 1 to indicate that the cell will go on
     .store_ref(message_body)
 .end_cell();
@@ -500,7 +501,7 @@ cell msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)
     .store_coins(amount)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
     .store_uint(op, 32)
     .store_slice(message_body)
 .end_cell();
@@ -734,7 +735,7 @@ if (current_time > 1672080143) {
 :::caution draft
 Please note that this method of generating random numbers isn't safe.
 
-TODO: add link to an article about generating random numbers
+Checkout [Random Number Generation](https://docs.ton.org/develop/smart-contracts/guidelines/random-number-generation) for more information.
 :::
 
 ```func
@@ -1081,7 +1082,7 @@ cell msg = begin_cell()
     .store_uint(0x18, 6) ;; flags
     .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
     .store_coins(100) ;; amount of nanoTons to send
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 107 zero-bits
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
     .store_uint(0, 32) ;; zero opcode - means simple transfer message with comment
     .store_slice("Hello from FunC!") ;; comment
 .end_cell();
@@ -1111,7 +1112,7 @@ The contract example below is useful to us if we need to perform any actions bet
         .store_uint(0x18, 6)
         .store_slice(addr)
         .store_coins(100) ;; just for example
-        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
         .store_slice(body)
     .end_cell();
     send_raw_message(msg, mode);
@@ -1133,7 +1134,7 @@ cell msg = begin_cell()
     .store_uint(0x18, 6) ;; flags
     .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
     .store_coins(0) ;; we don't care about this value right now
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; 107 zero-bits
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
     .store_uint(0, 32) ;; zero opcode - means simple transfer message with comment
     .store_slice("Hello from FunC!") ;; comment
 .end_cell();
@@ -1173,7 +1174,7 @@ cell msg = begin_cell()
     ;; We use literal `a` to get valid address inside slice from string containing address 
     .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
     .store_coins(100) ;; amount of nanoTons to send
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) ;; 106 zero-bits, necessary for internal messages
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) ;; default message headers (see sending messages page)
     .store_uint(1, 1) ;; we want to store body as a ref
     .store_ref(body)
 .end_cell();
@@ -1486,3 +1487,74 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
     .end_cell();
 }
 ```
+
+### How to update the smart contract logic
+
+Below is a simple `СounterV1` smart-contract that has the functionality to increment the counter and update the smart-contract logic. 
+
+```func
+() recv_internal (slice in_msg_body) {
+    int op = in_msg_body~load_uint(32);
+    
+    if (op == op::increase) {
+        int increase_by = in_msg_body~load_uint(32);
+        ctx_counter += increase_by;
+        save_data();
+        return ();
+    }
+
+    if (op == op::upgrade) {
+        cell code = in_msg_body~load_ref();
+        set_code(code);
+        return ();
+    }
+}
+```
+
+After operating the smart-contract, you realize that you are missing the meter reduction feature. You must copy the code of the smart-contract `CounterV1` and next to the `increase` function, add a new `decrease` function. Now your code looks like this:
+
+```func
+() recv_internal (slice in_msg_body) {
+    int op = in_msg_body~load_uint(32);
+    
+    if (op == op::increase) {
+        int increase_by = in_msg_body~load_uint(32);
+        ctx_counter += increase_by;
+        save_data();
+        return ();
+    }
+
+    if (op == op::decrease) {
+        int decrease_by = in_msg_body~load_uint(32);
+        ctx_counter -= increase_by;
+        save_data();
+        return ();
+    }
+
+    if (op == op::upgrade) {
+        cell code = in_msg_body~load_ref();
+        set_code(code);
+        return ();
+    }
+}
+```
+
+Once the smart-contract `CounterV2` is ready, you must compile it off-chain into a `cell` and send an upgrade message to the `CounterV1` smart-contract.
+
+```javascript
+await contractV1.sendUpgrade(provider.sender(), {
+    code: await compile('ContractV2'),
+    value: toNano('0.05'),
+});
+```
+
+> 💡 Useful links
+> 
+> [Is it possible to re-deploy code to an existing address or does it have to be deployed as a new contract?](/develop/howto/faq#is-it-possible-to-re-deploy-code-to-an-existing-address-or-does-it-have-to-be-deployed-as-a-new-contract)
+>
+> ["set_code()" in docs](/develop/func/stdlib#set_code)
+
+
+
+
+

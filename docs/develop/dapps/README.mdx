@@ -1,92 +1,145 @@
 import Button from '@site/src/components/button'
 
-# Overview
+# Getting Started
+Before diving into DApps, make sure you understand the underlying blockchain principles. You might find our [The Open Network](/learn/introduction) and [Blockchain of Blockchains](/learn/overviews/ton-blockchain) articles useful.
 
-To start with DApps on TON, you need to understand the basics of the blockchain and the TON architecture. You can find this information in the [Concepts](/learn/introduction) section.
+TON DApps are applications without backend, which interact with the blockchain. In most cases, they interact with custom [smart contracts](/develop/smart-contracts/); this documentation provides ways to process standard assets available in TON, both as an example and for quicker DApps development.
 
-Comparing to the pure [Smart Contracts](/develop/smart-contracts/) development, DApps development is more complex. You need to understand [how to work with APIs](/develop/dapps/apis/), how to use authenticate user using [TON Connect](/develop/dapps/ton-connect/overview) and how to use [SDKs](/develop/dapps/apis/sdk) to work with the blockchain.
+DApps generally can be written in any programming language having SDK for TON. Actually, the most frequent choice is a website, followed by Telegram mini-apps.
 
-<Button href="/develop/dapps/telegram-apps/" colorType={'primary'} sizeType={'sm'}>Build a Web App</Button>
-<Button href="/develop/dapps/apis/sdk"
-colorType="secondary" sizeType={'sm'}>
-Choose an SDK
+````mdx-code-block 
+<Button href="/develop/dapps/telegram-apps/" colorType={'primary'} sizeType={'sm'}>
+````
+Build a TMA
+````mdx-code-block 
 </Button>
-
-## Basic tools
-
-Here you can see links to the most important resources for you to get started with TON:
-
-- [Wallet Apps for Developers](/participate/wallets/apps) — to create and manage wallets.
-- [List of Explorers](/participate/explorers) — to view the state of the blockchain.
-- [API Types](/develop/dapps/apis/) — different ways to interact with the blockchain.
-- [List of SDKs](/develop/dapps/apis/sdk) — list of SDKs for different languages and APIs.
-- [Testnet and how to use it](/develop/smart-contracts/environment/testnet) — to test your contracts.
-- [TON Unfreezer](https://unfreezer.ton.org/) - to unfreeze contracts that ran out of gas for rent.
-
-## Asset processing
-
-* [Payment processing](/develop/dapps/asset-processing/)
-* [NFT processing](/develop/dapps/asset-processing/nft)
-* [Metadata parsing](/develop/dapps/asset-processing/metadata)
-
-## Introduction to DeFi
-
-* [Toncoin processing](/develop/dapps/defi/coins)
-* [Tokens on TON (Jettons & NFTs)](/develop/dapps/defi/tokens)
-* [TON Payments](/develop/dapps/defi/ton-payments)
-* [Subscriptions on TON](/develop/dapps/defi/subscriptions)
-
-## Tutorials and examples
-
-### Basics
-
-* Jettons (Tokens): [Mint your first Jetton](/develop/dapps/tutorials/jetton-minter)
-* NFTs: [Step by step NFT collection minting](/develop/dapps/tutorials/collection-minting)
+````
+````mdx-code-block 
+<Button href="/develop/dapps/apis/sdk" colorType="secondary" sizeType={'sm'}>
+````
+Choose an SDK
+````mdx-code-block 
+</Button>
+````
 
 
-### JavaScript
+## TON Course: DApps
 
-* Payment processing using JavaScript:
-  * [Create a key pair and a wallet](https://github.com/toncenter/examples/blob/main/common.js) (tonweb)
-  * [Accepting deposits to a single wallet](https://github.com/toncenter/examples/blob/main/deposits-single-wallet.js) (tonweb)
-  * [Accepting deposits to multiple wallets](https://github.com/toncenter/examples/blob/main/deposits.js) (tonweb)
-  * [Withdrawal process](https://github.com/toncenter/examples/blob/main/withdrawals.js) (tonweb)
-  * [Payment channel example](https://github.com/toncenter/payment-channels-example/blob/main/index.js) (tonweb)
-* [TON Bridge front-end](https://github.com/ton-blockchain/bridge) (Vue.js, no comments)
-* [Web Wallet source code](https://github.com/toncenter/ton-wallet) (tonweb, no comments)
-* [Bot for sales of dumplings](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js)
+:::tip
+Before starting the course, make sure you have a good understanding of the basics of blockchain technology. If you have gaps in your knowledge, we recommend taking the [Blockchain Basics with TON](https://stepik.org/course/201294/promo) ([RU version](https://stepik.org/course/202221/), [CHN version](https://stepik.org/course/200976/)) course.
+Module 3 covers the basic knowledge of Dapp.
+:::
 
+The [TON Blockchain Course](https://stepik.org/course/176754/) is a comprehensive guide to TON Blockchain development.
 
-### Python
+Module 5 and 6 completely covers DApps development. You'll learn how to create a DApp, how to work with TON Connect, how to use SDKs and how to work with the blockchain.
 
-- [psylopank/pytonlib examples](https://github.com/psylopunk/pytonlib/tree/main/examples)
-- [Transfer NFT & Jettons by creating a transfer message from the owner wallet](https://github.com/tonfactory/tonsdk#transfer-nft--jettons-by-creating-a-transfer-message-from-an-owner-wallet)
-- [Create mnemonic, init wallet class, create an external message to deploy the wallet](https://github.com/tonfactory/tonsdk#create-mnemonic-init-wallet-class-create-external-message-to-deploy-the-wallet)
-- [Storefront bot with payments in TON](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot)
-- [Bot with own balance](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2)
+````mdx-code-block 
+<Button href="https://stepik.org/course/176754/promo" 
+        colorType={'primary'} sizeType={'sm'}>
+````
+Check TON Blockchain Course
+````mdx-code-block 
+</Button>
+````
+````mdx-code-block 
+<Button href="https://stepik.org/course/201638/promo" 
+        colorType={'secondary'} sizeType={'sm'}>
+````
+CHN
+````mdx-code-block 
+</Button>
+````
+````mdx-code-block 
+<Button href="https://stepik.org/course/201855/promo" 
+        colorType={'secondary'} sizeType={'sm'}>
+````
+RU
+````mdx-code-block 
+</Button>
+````
 
-### Go
+## Basic Tools and Resources
 
-- [10+ examples from xssnick/tonutils-go](https://github.com/xssnick/tonutils-go/tree/master/example)
-- [7+ examples from tonkeeper/tongo](https://github.com/tonkeeper/tongo/tree/master/example)
+Here are some key resources that you'll need throughout your DApp development journey:
 
-### ZK
+1. [Developer Wallets](/participate/wallets/apps)
+2. [Blockchain Explorers](/participate/explorers)
+3. [API Documentation](/develop/dapps/apis/)
+4. [SDKs for Various Languages](/develop/dapps/apis/sdk)
+5. [Using the Testnet](/develop/smart-contracts/environment/testnet)
+6. [TON Unfreezer](https://unfreezer.ton.org/)
 
-* [Simple ZK on TON](/develop/dapps/tutorials/simple-zk-on-ton)
+### Asset Management
 
-### Wallets examples
+Working with assets? These guides cover the essentials:
+
+- [Payments Processing](/develop/dapps/asset-processing/)
+- [Token (Jetton) Processing](/develop/dapps/asset-processing/jettons)
+- [Handling NFTs](/develop/dapps/asset-processing/nft)
+- [Parsing Metadata](/develop/dapps/asset-processing/metadata)
+
+### Introduction to DeFi
+
+Interested in decentralized finance (DeFi)? Here's how to handle different types of assets:
+
+- [Understanding Toncoin](/develop/dapps/defi/coins)
+- [Tokens: Jettons & NFTs](/develop/dapps/defi/tokens)
+- [TON Payments](/develop/dapps/defi/ton-payments)
+- [Setting up Subscriptions](/develop/dapps/defi/subscriptions)
+
+## Tutorials and Examples
+
+### DeFi Basics
+
+- Create Your First Token: [Mint Your First Jetton](/develop/dapps/tutorials/jetton-minter)
+- Step by Step: [NFT Collection Minting](/develop/dapps/tutorials/collection-minting)
+
+### Language-Specific Guides
+
+#### JavaScript
+
+- [Payment Process](https://github.com/toncenter/examples)
+- [TON Bridge](https://github.com/ton-blockchain/bridge)
+- [Web Wallet](https://github.com/toncenter/ton-wallet)
+- [Dumpling Sales Bot](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js)
+
+#### Python
+
+- [Example Projects](https://github.com/psylopunk/pytonlib/tree/main/examples)
+- [Storefront Bot](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot)
+
+#### Go
+
+- [Examples](https://github.com/xssnick/tonutils-go/tree/master/example)
+
+### Advanced Topics
+
+- [Zero-Knowledge Proofs](/develop/dapps/tutorials/simple-zk-on-ton)
+
+### Wallets Examples
 
 - [Desktop standard wallet (C++ and Qt)](https://github.com/ton-blockchain/wallet-desktop)
 - [Android standard wallet (Java)](https://github.com/ton-blockchain/wallet-android)
 - [iOS standard wallet (Swift)](https://github.com/ton-blockchain/wallet-ios)
 - [TonLib CLI (C++)](https://github.com/ton-blockchain/ton/blob/master/tonlib/tonlib/tonlib-cli.cpp)
 
-### No necessary material?
+## 👨‍💻 Contribution
 
-You have 2 ways here: write tutorial by you own or describe the problem for the community.
+Missing some crucial material? You can either write a tutorial yourself or describe the problem for the community.
 
-<Button href="/contribute/participate"
-        colorType="primary" sizeType={'sm'}>
-  Contribute
+````mdx-code-block 
+<Button href="/contribute/participate" colorType="primary" sizeType={'sm'}>
+````
+Contribute
+````mdx-code-block 
 </Button>
-<Button href="https://github.com/ton-community/ton-docs/issues/new?assignees=&labels=feature+%3Asparkles%3A%2Ccontent+%3Afountain_pen%3A&template=suggest_tutorial.yaml&title=Suggest+a+tutorial" colorType={'secondary'} sizeType={'sm'}>Describe your idea</Button>
+````
+  ````mdx-code-block 
+<Button href="https://github.com/ton-community/ton-docs/issues/new?assignees=&labels=feature+%3Asparkles%3A%2Ccontent+%3Afountain_pen%3A&template=suggest_tutorial.yaml&title=Suggest+a+tutorial" colorType={'secondary'} sizeType={'sm'}>
+````
+Suggest a Tutorial
+````mdx-code-block 
+</Button>
+````
+

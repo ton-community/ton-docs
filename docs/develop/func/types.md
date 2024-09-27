@@ -1,5 +1,13 @@
 # Types
+
+:::info
+
+FunC documentation was initially written by [@akifoq](https://github.com/akifoq).
+
+:::
+
 FunC has the following built-in types.
+
 
 ## Atomic types
 - `int` is the type of 257-bit signed integers. By default, overflow checks are enabled and lead to integer overflow exceptions.

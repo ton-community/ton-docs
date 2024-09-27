@@ -4,11 +4,23 @@ import ThemedImage from '@theme/ThemedImage';
 
 # Monetization
 
-## Get users wallets with TON Connect
 
-TON Connect is a communication protocol between **wallets** and **apps** in TON.
+## Wallet Pay
+<br></br>
+<img src="https://storage.googleapis.com/ton-strapi/reason_Card5_19eeac1401/reason_Card5_19eeac1401.png" alt="Wallet Pay illustration"/>
+<br></br>
+Wallet Pay is the primary payment system for Telegram Mini Apps, supporting both crypto and fiat transactions. Monitor your order statistics and easily withdraw funds.
+Embedded within the Wallet ecosystem, Wallet Pay facilitates seamless financial exchanges between merchants and their customers.
+
+Useful links:
+- [Wallet Pay Business Support](https://t.me/WalletPay_supportbot) is a Telegram bot for reaching out the Wallet Pay Support Team.
+- [Demo Store Bot](https://t.me/PineAppleDemoWPStoreBot) is a Telegram bot for Wallet Pay functionality introduction. (Attention: all payments are carried out in real assets)
+- [Merchant Community](https://t.me/+6TReWBEyZxI5Njli) is a Telegram group for sharing an experience and solutions between group members.
 
 
+
+## TON Connect
+````mdx-code-block
 <br></br>
 <ThemedImage
   alt=""
@@ -18,8 +30,8 @@ TON Connect is a communication protocol between **wallets** and **apps** in TON.
   }}
 />
 <br></br>
-
-### Bird's eye view
+````
+TON Connect is a communication protocol between **wallets** and **apps** in TON.
 
 **Apps** built on TON provide rich functionality and high performance and are designed to protect user funds via smart contracts. Because apps are built using decentralized technologies such as Blockchain, they are typically called decentralized applications (dApps).
 
@@ -27,13 +39,25 @@ TON Connect is a communication protocol between **wallets** and **apps** in TON.
 
 TON Connect aims to offer a seamless user experience between wallets and apps.
 
-<Button href="/develop/dapps/ton-connect/overview" colorType={'primary'} sizeType={'sm'}>Discover TON Connect</Button>
+````mdx-code-block 
+<Button href="/develop/dapps/ton-connect/overview" colorType={'primary'} sizeType={'sm'}>
+````
+Discover TON Connect
+````mdx-code-block 
+</Button>
+````
 
 ## Integrate Tokens
 
 You can create your own token on TON Blockchain and integrate it into your app. You can also integrate existing tokens into your app.
 
-<Button href="/develop/dapps/defi/tokens" colorType={'primary'} sizeType={'sm'}>Understand DeFi</Button>
+````mdx-code-block 
+<Button href="/develop/dapps/defi/tokens" colorType={'primary'} sizeType={'sm'}>
+````
+Understand DeFi
+````mdx-code-block 
+</Button>
+````
 
 ## Subscriptions on TON
 
@@ -42,31 +66,10 @@ Due to the fact that transactions in TON Blockchain are fast and the network fee
 For example, users can subscribe to digital content (or anything else) and be charged a monthly fee of 1 TON.
 
 
-
-<Button href="/develop/dapps/defi/subscriptions" colorType={'primary'} sizeType={'sm'}>Read more</Button>
-
-### TON Payments
-
-TON Payments is the platform for micropayment channels. It allows instant payments without the need to commit all transactions to the blockchain, pay the associated transaction fees (e.g., for the gas consumed), and wait five seconds until the block containing the transactions in question is confirmed.
-
-Because the overall expense of such instant payments is so minimal, they can be used for micropayments in games, APIs, and off-chain apps. [See examples](https://docs.ton.org/develop/dapps/defi/ton-payments#examples).
-
-<Button href="https://docs.ton.org/develop/dapps/defi/ton-payments" colorType={'primary'} sizeType={'sm'}>Discover TON Payments</Button>
-
-## Telegram Payments 2.0
-
-<div style={{textAlign:'center', margin: '15pt auto'}}>
-  <video style={{maxWidth: '300px', borderRadius: '10pt'}} muted={true} autoPlay={true} loop={true}>
-    <source src="/files/tg-payments.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
-</div>
-
-You create a bot that offers goods and services to Telegram users. Merchant bots can send specially formatted invoice messages to users, groups or channels. If your bot supports inline mode, users can also send invoices to other chats via the bot, including to one-on-one chats with other users.
-
-Invoice messages feature a photo and description of the product along with a prominent Pay button. Tapping this button opens a special payment interface in the Telegram app. In this interface, users can choose a tip amount (if allowed by the merchant) and enter additional details like shipping info, phone number, or email address.
-
-The bot can offer several shipping options for physical goods based on the delivery address. When ready, users enter their credit card info or choose a saved card — and pay for the product. Telegram also supports Apple Pay and Google Pay. Once the transaction is done, the merchant bot can send a receipt message with payment details, shipping and delivery information.
-
-
-<Button href="https://core.telegram.org/bots/payments" colorType={'primary'} sizeType={'sm'}>Discover Telegram Payments 2.0</Button>
+````mdx-code-block 
+<Button href="/develop/dapps/defi/subscriptions" colorType={'primary'} sizeType={'sm'}>
+````
+Read more
+````mdx-code-block 
+</Button>
+````

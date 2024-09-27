@@ -1,0 +1,119 @@
+---
+hide_table_of_contents: true
+wrapperClassName: bootstrap-wrapper
+---
+
+import { SearchField } from '@site/src/components/SearchField';
+import { stackManipulationOpcodes as opcodes } from '@site/src/data/opcodes';
+
+# 堆栈操作
+
+这里 `0 <= i,j,k <= 15`，除非另有说明。
+
+<SearchField
+  data={opcodes}
+  searchBy="doc_fift"
+  placeholder="搜索操作码"
+  showKeys={[
+    { key: 'doc_opcode', name: '操作码', isGrouped: true },
+    { key: 'doc_fift', name: 'Fift 语法', isGrouped: true },
+    { key: 'doc_stack', name: '堆栈', isGrouped: true },
+    { key: 'doc_gas', name: 'Gas', isGrouped: true },
+    { key: 'doc_description', name: '描述' },
+  ]}
+/>
+
+### TVM 指令内容列表
+
+* [概览](/learn/tvm-instructions/instructions)
+* [堆栈操作](/learn/tvm-instructions/instructions/stack-manipulation)
+* [元组、列表和空值](/learn/tvm-instructions/instructions/tuple-list-null)
+* [常量和字面量](/learn/tvm-instructions/instructions/constant)
+* [算术操作](/learn/tvm-instructions/instructions/arithmetic)
+* [数据比较](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [异常产生和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [应用特定原语](/learn/tvm-instructions/instructions/app-specific)
+* [杂项](/learn/tvm-instructions/instructions/miscellaneous)
+
+
+### 基本堆栈操作原语
+
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`00`** | `NOP` | _`-`_ | 无操作。 | `18` |
+| **`01`** | `SWAP` | _`x y - y x`_ | 等同于 [`s1 XCHG0`](#instr-xchg-0i)。 | `18` |
+| **`0i`** | `s[i] XCHG0` |  | 交换 `s0` 与 `s[i]`，`1 <= i <= 15`。 | `18` |
+| **`10ij`** | `s[i] s[j] XCHG` |  | 交换 `s[i]` 与 `s[j]`，`1 <= i < j <= 15`。 | `26` |
+| **`11ii`** | `s0 [ii] s() XCHG` |  | 交换 `s0` 与 `s[ii]`，`0 <= ii <= 255`。 | `26` |
+| **`1i`** | `s1 s[i] XCHG` |  | 交换 `s1` 与 `s[i]`，`2 <= i <= 15`。 | `18` |
+| **`2i`** | `s[i] PUSH` |  | 将旧的 `s[i]` 的一个副本推入堆栈。 | `18` |
+| **`20`** | `DUP` | _`x - x x`_ | 等同于 [`s0 PUSH`](#instr-push)。 | `18` |
+| **`21`** | `OVER` | _`x y - x y x`_ | 等同于 [`s1 PUSH`](#instr-push)。 | `18` |
+| **`3i`** | `s[i] POP` |  | 将旧的 `s0` 值弹出到旧的 `s[i]` 中。等同于 [`s[i] XCHG0`](#instr-xchg-0i) [`DROP`](#instr-drop) | `18` |
+| **`30`** | `DROP` | _`x -`_ | 等同于 [`s0 POP`](#instr-pop)，丢弃堆栈顶部值。 | `18` |
+| **`31`** | `NIP` | _`x y - y`_ | 等同于 [`s1 POP`](#instr-pop)。 | `18` |
+
+### 复杂堆栈操作原语
+
+| xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
+|:-|:-|:-|:-|:-|
+| **`4ijk`** | `s[i] s[j] s[k] XCHG3` |  | 等同于 [`s2 s[i] XCHG`](#instr-xchg-ij) [`s1 s[j] XCHG`](#instr-xchg-ij) [`s[k] XCHG0`](#instr-xchg-0i)。 | `26` |
+| **`50ij`** | `s[i] s[j] XCHG2` |  | 等同于 [`s1 s[i] XCHG`](#instr-xchg-ij) [`s[j] XCHG0`](#instr-xchg-0i)。 | `26` |
+| **`51ij`** | `s[i] s[j] XCPU` |  | 等同于 [`s[i] XCHG0`](#instr-xchg-0i) [`s[j] PUSH`](#instr-push)。 | `26` |
+| **`52ij`** | `s[i] s[j-1] PUXC` |  | 等同于 [`s[i] PUSH`](#instr-push) [`SWAP`](#instr-swap) [`s[j] XCHG0`](#instr-xchg-0i)。 | `26` |
+| **`53ij`** | `s[i] s[j] PUSH2` |  | 等同于 [`s[i] PUSH`](#instr-push) [`s[j+1] PUSH`](#instr-push)。 | `26` |
+| **`540ijk`** | `s[i] s[j] s[k] XCHG3_l` |  | [`XCHG3`](#instr-xchg3) 的长格式。 | `34` |
+| 541ijk | `s[i] s[j] s[k] XC2PU` |  | 等同于 [`s[i] s[j] XCHG2`](#instr-xchg2) [`s[k] PUSH`](#instr-push)。 | `34` |
+| **`542ijk`** | `s[i] s[j] s[k-1] XCPUXC` |  | 等同于 [`s1 s[i] XCHG`](#instr-xchg-ij) [`s[j] s[k-1] PUXC`](#instr-puxc)。 | `34` |
+| **`543ijk`** | `s[i] s[j] s[k] XCPU2` |  | 等同于 [`s[i] XCHG0`](#instr-xchg-0i) [`s[j] s[k] PUSH2`](#instr-push2)。 | `34` |
+| **`544ijk`** | `s[i] s[j-1] s[k-1] PUXC2` |  | 等同于 [`s[i] PUSH`](#instr-push) [`s2 XCHG0`](#instr-xchg-0i) [`s[j] s[k] XCHG2`](#instr-xchg2)。 | `34` |
+| **`545ijk`** | `s[i] s[j-1] s[k-1] PUXCPU` |  | 等同于 [`s[i] s[j-1] PUXC`](#instr-puxc) [`s[k] PUSH`](#instr-push)。 | `34` |
+| **`546ijk`** | `s[i] s[j-1] s[k-2] PU2XC` |  | 等同于 [`s[i] PUSH`](#instr-push) [`SWAP`](#instr-swap) [`s[j] s[k-1] PUXC`](#instr-puxc)。 | `34` |
+| **`547ijk`** | `s[i] s[j] s[k] PUSH3` |  | 等同于 [`s[i] PUSH`](#instr-push) [`s[j+1] s[k+1] PUSH2`](#instr-push2)。 | `34` |
+| **`55ij`** | `[i+1] [j+1] BLKSWAP` |  | 交换两个块 `s[j+i+1] … s[j+1]` 和 `s[j] … s0`。<br/> `0 <= i,j <= 15`<br/>等同于 [`[i+1] [j+1] REVERSE`](#instr-reverse) [`[j+1] 0 REVERSE`](#instr-reverse) [`[i+j+2] 0 REVERSE`](#instr-reverse)。 | `26` |
+| **`5513`** | `ROT2`<br/>`2ROT` | _`a b c d e f - c d e f a b`_ | 旋转三对堆栈最顶部的条目。 | `26` |
+| **`550i`** | `[i+1] ROLL` |  | 旋转顶部 `i+1` 个堆栈条目。<br/>等同于 [`1 [i+1] BLKSWAP`](#instr-blkswap)。 | `26` |
+| **`55i0`** | `[i+1] -ROLL`<br/>`[i+1] ROLLREV` |  | 以相反方向旋转顶部 `i+1` 个堆栈条目。<br/>等同于 [`[i+1] 1 BLKSWAP`](#instr-blkswap)。 | `26` |
+| **`56ii`** | `[ii] s() PUSH` |  | 将旧的 `s[ii]` 的一个副本推入堆栈。<br/>`0 <= ii <= 255` | `26` |
+| **`57ii`** | `[ii] s() POP` |  | 将旧的 `s0` 值弹出到旧的 `s[ii]` 中。<br/>`0 <= ii <= 255` | `26` |
+| **`58`** | `ROT` | _`a b c - b c a`_ | 等同于 [`1 2 BLKSWAP`](#instr-blkswap) 或 [`s2 s1 XCHG2`](#instr-xchg2)。 | `18` |
+| **`59`** | `ROTREV`<br/>`-ROT` | _`a b c - c a b`_ | 等同于 [`2 1 BLKSWAP`](#instr-blkswap) 或 [`s2 s2 XCHG2`](#instr-xchg2)。 | `18` |
+| **`5A`** | `SWAP2`<br/>`2SWAP` | _`a b c d - c d a b`_ | 等同于 [`2 2 BLKSWAP`](#instr-blkswap) 或 [`s3 s2 XCHG2`](#instr-xchg2)。 | `18` |
+| **`5B`** | `DROP2`<br/>`2DROP` | _`a b - `_ | 等同于两次执行 [`DROP`](#instr-drop)。 | `18` |
+| **`5C`** | `DUP2`<br/>`2DUP` | _`a b - a b a b`_ | 等同于 [`s1 s0 PUSH2`](#instr-push2)。 | `18` |
+| **`5D`** | `OVER2`<br/>`2OVER` | _`a b c d - a b c d a b`_ | 等同于 [`s3 s2 PUSH2`](#instr-push2)。 | `18` |
+| **`5Eij`** | `[i+2] [j] REVERSE` |  | 反转 `s[j+i+1] … s[j]` 的顺序。 | `26` |
+| **`5F0i`** | `[i] BLKDROP` |  | 执行 `i` 次 [`DROP`](#instr-drop)。 | `26` |
+| **`5Fij`** | `[i] [j] BLKPUSH` |  | 执行 `i` 次 `PUSH s(j)`。<br/>`1 <= i <= 15`, `0 <= j <= 15`。 | `26` |
+| **`60`** | `PICK`<br/>`PUSHX` |  | 从堆栈弹出整数 `i`，然后执行 [`s[i] PUSH`](#instr-push)。 | `18` |
+| **`61`** | `ROLLX` |  | 从堆栈弹出整数 `i`，然后执行 [`1 [i] BLKSWAP`](#instr-blkswap)。 | `18` |
+| **`62`** | `-ROLLX`<br/>`ROLLREVX` |  | 从堆栈弹出整数 `i`，然后执行 [`[i] 1 BLKSWAP`](#instr-blkswap)。 | `18` |
+| **`63`** | `BLKSWX` |  | 从堆栈弹出整数 `i`、`j`，然后执行 [`[i] [j] BLKSWAP`](#instr-blkswap)。 | `18` |
+| **`64`** | `REVX` |  | 从堆栈弹出整数 `i`、`j`，然后执行 [`[i] [j] REVERSE`](#instr-reverse)。 | `18` |
+| **`65`** | `DROPX` |  | 从堆栈弹出整数 `i`，然后执行 [`[i] BLKDROP`](#instr-blkdrop)。 | `18` |
+| **`66`** | `TUCK` | _`a b - b a b`_ | 等同于 [`SWAP`](#instr-swap) [`OVER`](#instr-over) 或 [`s1 s1 XCPU`](#instr-xcpu)。 | `18` |
+| **`67`** | `XCHGX` |  | 从堆栈弹出整数 `i`，然后执行 [`s[i] XCHG`](#instr-xchg-ij)。 | `18` |
+| **`68`** | `DEPTH` | _`- depth`_ | 推入当前堆栈深度。 | `18` |
+| **`69`** | `CHKDEPTH` | _`i -`_ | 从堆栈弹出整数 `i`，然后检查是否至少有 `i` 个元素，否则生成堆栈下溢异常。 | `18/58` |
+| **`6A`** | `ONLYTOPX` |  | 从堆栈弹出整数 `i`，然后移除除顶部 `i` 个元素之外的所有元素。 | `18` |
+| **`6B`** | `ONLYX` |  | 从堆栈弹出整数 `i`，然后仅保留底部 `i` 个元素。大致等同于 [`DEPTH`](#instr-depth) [`SWAP`](#instr-swap) [`SUB`](#instr-sub) [`DROPX`](#instr-dropx)。 | `18` |
+| **`6Cij`** | `[i] [j] BLKDROP2` |  | 在顶部 `j` 个元素下方丢弃 `i` 个堆栈元素。<br/>`1 <= i <= 15`, `0 <= j <= 15`<br/>等同于 [`[i+j] 0 REVERSE`](#instr-reverse) [`[i] BLKDROP`](#instr-blkdrop) [`[j] 0 REVERSE`](#instr-reverse)。 | `26` |
+
+
+### TVM 指令内容列表
+
+* [概览](/learn/tvm-instructions/instructions)
+* [堆栈操作](/learn/tvm-instructions/instructions/stack-manipulation)
+* [元组、列表和空值](/learn/tvm-instructions/instructions/tuple-list-null)
+* [常量和字面量](/learn/tvm-instructions/instructions/constant)
+* [算术操作](/learn/tvm-instructions/instructions/arithmetic)
+* [数据比较](/learn/tvm-instructions/instructions/data-comparison)
+* [Cell操作](/learn/tvm-instructions/instructions/cell-manipulation)
+* [Continuation 和控制流](/learn/tvm-instructions/instructions/control-flow)
+* [异常产生和处理](/learn/tvm-instructions/instructions/exception-gen-and-handling)
+* [字典操作](/learn/tvm-instructions/instructions/dictionary-manipulation)
+* [应用特定原语](/learn/tvm-instructions/instructions/app-specific)
+* [杂项](/learn/tvm-instructions/instructions/miscellaneous)

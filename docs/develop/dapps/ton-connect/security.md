@@ -8,5 +8,5 @@ TON Connect ensures that users have explicit control over the data they share, m
 - Through TON Connect, security parameters are put in place to allow users data to be directly authenticated with their wallet address. This allows users to make use of multiple wallets and choose which one is used within a particular app.
 - The TON Connect protocol allows for personal data item sharing (such as contact details and KYC info etc.) meaning the user explicitly confirms the sharing of such data.
 
-Specific details and related code examples pertaining to TON Connect and its underlying security-focused design can be found via [TON Connect Github](https://github.com/ton-connect/).
+Specific details and related code examples pertaining to TON Connect and its underlying security-focused design can be found via [TON Connect GitHub](https://github.com/ton-connect/).
 
