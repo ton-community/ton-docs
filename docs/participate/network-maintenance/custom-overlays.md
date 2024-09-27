@@ -17,7 +17,7 @@ If you have multiple node under your control it is expedient to unite them into 
 
 Mytonctrl uses default custom overlays available at https://ton-blockchain.github.io/fallback_custom_overlays.json. This overlay is not used most of the time and intended for emergency use in case of problems with public overlay connectivity.
 To stop participation in default custom overlays run commands
-```bash
+
 MyTonCtrl> set useDefaultCustomOverlays false
 MyTonCtrl> delete_custom_overlay default
 ```
@@ -43,7 +43,6 @@ Create a config file in format:
     "adnl_address_hex_2": {
         "msg_sender": false
     },
-
     "adnl_address_hex_2": {
         "block_sender": true
     },

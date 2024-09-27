@@ -80,18 +80,13 @@ Because of a permanent high load on public Liteservers, the majority of them is 
 This may drive to instability of your your lite client application.
 :::
 
-<Button href="/participate/run-nodes/full-node#enable-liteserver-mode"
-colorType="primary" sizeType={'sm'}>
-Enable Liteserver in your Node
-</Button>
-
 To interact with Liteservers, you can use following tools:
 
 - TON [ADNL API](/develop/dapps/apis/adnl) as the most low-level way to communicate with the blockchain;
 - TON [SDKs](/develop/dapps/apis/sdk) provided for various programming languages;
-- TON [HTTP-based APIs](/develop/dapps/toncenter) providing the REST API middleware between your application and a Liteserver.
+- TON [HTTP-based APIs](/develop/dapps/apis/toncenter) providing the REST API middleware between your application and a Liteserver.
 
-<Button href="/develop/dapps/apis/sdk"
+<Button href="/participate/run-nodes/enable-liteserver-node"
 colorType="primary" sizeType={'sm'}>
-Choose a TON SDK
+Enable Liteserver in your Node
 </Button>
