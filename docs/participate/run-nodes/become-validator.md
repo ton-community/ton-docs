@@ -8,7 +8,7 @@
 - 1TB NVME SSD _OR_ Provisioned 64+k IOPS storage
 - 1 Gbit/s network connectivity
 - public IP address (_fixed IP address_)
-- 16 TB/month traffic on peak load
+- 100 TB/month traffic on peak load
 
 > Typically you'll need at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
 
