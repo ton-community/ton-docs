@@ -6,8 +6,14 @@ export const firstRow = [
     description: "Learn about the basics of blockchain and TON and how to get started."
   },
   {
-    title: "Develop",
+    title: "Documents",
     linkUrl: "/develop/overview",
+    imageUrl: "img/mainPageCards/developer.svg",
+    description: "Learn all the technical aspects of TON."
+  },
+  {
+    title: "Guidelines",
+    linkUrl: "/guidelines",
     imageUrl: "img/mainPageCards/developer.svg",
     description: "Build smart contracts, web applications or bots using TON."
   },
