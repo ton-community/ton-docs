@@ -373,7 +373,7 @@ let seqno: number = await contract.getSeqno();
 await contract.sendTransfer({
   secretKey: keyPair.secretKey, 
   seqno,
-  sendMode: SendMode.PAY_GAS_SEPARATELY,
+  sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS,
   messages: [
     internal({
       to: 'EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N',
