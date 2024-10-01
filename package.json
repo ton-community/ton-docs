@@ -33,13 +33,10 @@
     "docusaurus-plugin-sass": "^0.2.5",
     "dotenv": "^16.4.5",
     "markdown-to-jsx": "^7.5.0",
-    "mermaid": "^11.2.1",
     "prism-react-renderer": "^2.4.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-live": "^4.1.7",
     "react-player": "^2.16.0",
-    "remark-emoji": "^5.0.1",
     "sass": "^1.79.4",
     "url": "^0.11.4"
   },

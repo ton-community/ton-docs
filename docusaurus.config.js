@@ -67,58 +67,7 @@ const config = {
     [
       '@docusaurus/plugin-client-redirects',
       {
-        redirects: [
-          // CamelCase to kebab-case
-          {
-            to: '/learn/tvm-instructions/tvm-exit-codes',
-            from: '/learn/tvm-instructions/tvm_exit_codes',
-          },
-          {
-            to: '/develop/dapps/telegram-apps',
-            from: '/develop/dapps/twa',
-          },
-          {
-            to: '/learn/tvm-instructions/tvm-overview',
-            from: '/learn/tvm-instructions/tvm_overview',
-          },
-          {
-            to: '/learn/overviews/ton-blockchain',
-            from: '/learn/overviews/TON_Blockchain_overview',
-          },
-          {
-            to: '/learn/networking/low-level-adnl',
-            from: '/learn/overviews/adnl',
-          },
-
-          {
-            to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
-            from: '/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot',
-          },
-          {
-            to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
-            from: '/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot-2',
-          },
-          {
-            to: '/develop/get-started-with-ton',
-            from: '/develop/onboarding-challenge',
-          },
-          {
-            to: '/develop/overview',
-            from: '/develop/getting-started',
-          },
-          {
-            to: '/develop/data-formats/tl-b-language',
-            from: '/develop/data-formats/tl-b',
-          },
-          {
-            to: '/learn/tvm-instructions/tvm-upgrade-2023-07',
-            from: '/learn/tvm-instructions/tvm-upgrade',
-          },
-          {
-            to: '/develop/smart-contracts/testing/overview',
-            from: '/develop/smart-contracts/testing/tonstarter',
-          }
-        ],
+        redirects: require('./redirects'),
       },
     ],
   ],
@@ -197,30 +146,6 @@ const config = {
   themeConfig:
   /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      algolia: {
-        // The application ID provided by Algolia
-        appId: 'AIQ3FM6W39',
-
-        // Public API key: it is safe to commit it
-        apiKey: 'ab02d1c08f877a738f59233af7f5ed6b',
-
-        indexName: 'ton',
-
-        // Optional: see doc section below
-        contextualSearch: true,
-
-        // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
-        // externalUrlRegex: 'external\\.com|domain\\.com',
-
-        // Optional: Algolia search parameters
-        searchParameters: {},
-
-        // Optional: path for search page that enabled by default (`false` to disable it)
-        searchPagePath: 'search',
-
-        //... other Algolia params
-      },
-
       // announcementBar: {
       //   // id: 'contribute/hacktoberfest',
       //   content: '<a rel="noopener noreferrer" target="_blank" href="https://society.ton.org/hack-ton-berfest-2023?utm_source=tondocs&utm_medium=top_banner&utm_campaign=promo"><span>The <b>HACK-TON-BERFEST 2023</b> event is near! Double-merch, NFT rewards and more!</span> <span class="mobile-view">Double-merch, NFT reward and more!</span></a>',
