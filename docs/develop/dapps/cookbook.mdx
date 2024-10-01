@@ -11,7 +11,7 @@ This document is created to gather the best practices from all developers and sh
 
 ## Working with contracts' addresses
 
-### How to convert (user friendly <-> raw), assemble, and extract addresses from strings?
+### How to convert (user friendly \<-\> raw), assemble, and extract addresses from strings?
 
 TON address uniquely identifies contract in blockchain, indicating its workchain and original state hash. [Two common formats](/learn/overviews/addresses#raw-and-user-friendly-addresses) are used: **raw** (workchain and HEX-encoded hash separated with ":" character) and **user-friendly** (base64-encoded with certain flags).
 
@@ -363,7 +363,7 @@ let keyPair = await mnemonicToPrivateKey(mnemonics);
 
 // Create wallet contract
 let wallet = WalletContractV5R1.create({
-  publicKey: keyPair.publicKey, 
+  publicKey: keyPair.publicKey,
   workChain: 0, // Usually you need a workchain 0
 });
 let contract = client.open(wallet);
@@ -371,7 +371,7 @@ let contract = client.open(wallet);
 // Create a transfer
 let seqno: number = await contract.getSeqno();
 await contract.sendTransfer({
-  secretKey: keyPair.secretKey, 
+  secretKey: keyPair.secretKey,
   seqno,
   sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS,
   messages: [
@@ -1216,7 +1216,7 @@ Additionally, we need to include royalty information in our message, as they als
 DEXs use different protocols for their work. In this example we will interact with **DeDust**.
  * [DeDust documentation](https://docs.dedust.io/).
 
-DeDust has two exchange paths: jetton <-> jetton or TON <-> jetton. Each has a different scheme. To swap, you need to send jettons (or toncoin) to a specific **vault** and provide a special payload. Here is the scheme for swapping jetton to jetton or jetton to toncoin:
+DeDust has two exchange paths: jetton \<-> jetton or TON \<-> jetton. Each has a different scheme. To swap, you need to send jettons (or toncoin) to a specific **vault** and provide a special payload. Here is the scheme for swapping jetton to jetton or jetton to toncoin:
 
 ```tlb
 swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;

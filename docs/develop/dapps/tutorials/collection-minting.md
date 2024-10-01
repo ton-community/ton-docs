@@ -1111,7 +1111,7 @@ Now we can launch our project and enjoy the process!
 ```
 yarn start
 ```
-Go to https://testnet.getgems.io/collection/<YOUR_COLLECTION_ADDRESS_HERE> and look to this perfect ducks!
+Go to https://testnet.getgems.io/collection/{YOUR_COLLECTION_ADDRESS_HERE} and look to this perfect ducks!
 
 ## Conclusion 
 

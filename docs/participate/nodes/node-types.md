@@ -22,14 +22,14 @@ Full nodes _prune_ the state of the TON blockchain kept by them - that means, ea
 
 To allow client applications to look for blocks and transactions, as well as to send new transactions into the TON blockchain, full nodes are equipped with the liteserver functionality: see [Interacting with TON nodes](#interacting-with-ton-nodes) below.
 
-````mdx-code-block 
+ 
 <Button href="/participate/run-nodes/full-node"
 colorType="primary" sizeType={'sm'}>
-````
+
 Running a Full Node
-````mdx-code-block 
+ 
 </Button>
-````
+
 
 ## Archive Node
 

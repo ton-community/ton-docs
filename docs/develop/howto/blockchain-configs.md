@@ -465,12 +465,12 @@ If absent, the default parameters are taken:
 
 -   `max_size` = 65535
 -   `max_depth` = 512
--   `max_msg_bits` = 1 << 21
--   `max_msg_cells` = 1 << 13
+-   `max_msg_bits` = 1 \<\< 21
+-   `max_msg_cells` = 1 \<\< 13
 -   `max_library_cells` = 1000
 -   `max_vm_data_depth` = 512
--   `max_acc_state_cells` = 1 << 16
--   `max_acc_state_bits` = (1 << 16) \* 1023
+-   `max_acc_state_cells` = 1 \<\< 16
+-   `max_acc_state_bits` = (1 \<\< 16) \* 1023
 
 :::info
 You can view more details about the standard parameters [here](https://github.com/ton-blockchain/ton/blob/fc9542f5e223140fcca833c189f77b1a5ae2e184/crypto/block/mc-config.h#L379) in the source code.

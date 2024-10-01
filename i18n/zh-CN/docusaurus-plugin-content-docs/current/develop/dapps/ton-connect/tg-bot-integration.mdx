@@ -5,25 +5,17 @@ import Button from '@site/src/components/button'
 在本教程中，我们将创建一个示例 Telegram 机器人，使用 Javascript TON Connect SDK 支持 TON Connect 2.0 认证。
 我们将分析连接钱包、发送交易、获取关于已连接钱包的数据以及断开钱包连接。
 
-```mdx-code-block
 <Button href="https://t.me/ton_connect_example_bot" colorType={'primary'} sizeType={'sm'}>
-```
 
 打开演示机器人
 
-```mdx-code-block
 </Button>
-```
 
-```mdx-code-block
 <Button href="https://github.com/ton-connect/demo-telegram-bot" colorType={'secondary'} sizeType={'sm'}>
-```
 
 查看 GitHub
 
-```mdx-code-block
 </Button>
-```
 
 ## 文档链接
 
@@ -218,7 +210,7 @@ import { IStorage } from '@tonconnect/sdk';
 const storage = new Map<string, string>(); // temporary storage implementation. We will replace it with the redis later
 
 export class TonConnectStorage implements IStorage {
-  constructor(private readonly chatId: number) {} // we need to have different stores for different users 
+  constructor(private readonly chatId: number) {} // we need to have different stores for different users
 
   private getKey(key: string): string {
     return this.chatId.toString() + key; // we will simply have different keys prefixes for different users
@@ -368,17 +360,17 @@ bot-demo
 ```text
 First screen:
 <Unified QR>
-<Open @wallet>, <Choose a wallet button (opens second screen)>, <Open wallet unified link> 
+<Open @wallet>, <Choose a wallet button (opens second screen)>, <Open wallet unified link>
 
 Second screen:
 <Unified QR>
 <Back (opens first screen)>
-<@wallet button (opens third screen)>, <Tonkeeper button (opens third screen)>, <Tonhub button (opens third screen)>, <...> 
+<@wallet button (opens third screen)>, <Tonkeeper button (opens third screen)>, <Tonhub button (opens third screen)>, <...>
 
 Third screen:
 <Selected wallet QR>
 <Back (opens second screen)>
-<Open selected wallet link> 
+<Open selected wallet link>
 ```
 
 让我们开始在 `src/main.ts` 中的 `/connect` 命令处理程序中添加内联键盘
@@ -481,7 +473,7 @@ export const walletMenuCallbacks = { // Define buttons callbacks
     chose_wallet: onChooseWalletClick
 };
 
-bot.on('callback_query', query => { // Parse callback data and execute corresponing function 
+bot.on('callback_query', query => { // Parse callback data and execute corresponing function
     if (!query.data) {
         return;
     }
@@ -513,7 +505,7 @@ async function onChooseWalletClick ...
 ```ts
 // src/main.ts
 
-// ... other imports 
+// ... other imports
 
 import './connect-wallet-menu';
 
@@ -697,7 +689,7 @@ export const walletMenuCallbacks = {
     universal_qr: onOpenUniversalQRClick
 };
 
-bot.on('callback_query', query => { // Parse callback data and execute corresponing function 
+bot.on('callback_query', query => { // Parse callback data and execute corresponing function
     if (!query.data) {
         return;
     }
@@ -975,7 +967,7 @@ export const walletMenuCallbacks = {
 };
 
 async function onChooseWalletClick(query: CallbackQuery, _: string): Promise<void> {
-    
+
 // ... other code
 ```
 
@@ -1427,7 +1419,7 @@ export async function handleConnectCommand(msg: TelegramBot.Message): Promise<vo
         const connectedName =
             (await getWalletInfo(connector.wallet!.device.appName))?.name ||
             connector.wallet!.device.appName;
-        
+
         await bot.sendMessage(
             chatId,
             `You have already connect ${connectedName} wallet\nYour address: ${toUserFriendlyAddress(

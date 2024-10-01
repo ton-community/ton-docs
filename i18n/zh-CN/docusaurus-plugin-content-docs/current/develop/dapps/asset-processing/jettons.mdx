@@ -33,21 +33,21 @@ import Button from '@site/src/components/button';
 
 快速跳转到 jetton 处理的核心描述：
 
-````mdx-code-block 
+
 <Button href="/develop/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>
-````
+
 集中处理
-````mdx-code-block 
+
 </Button>
-````
-````mdx-code-block 
+
+
 <Button href="/develop/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses"
         colorType="secondary" sizeType={'sm'}>
-````
+
 链上处理
-````mdx-code-block 
+
 </Button>
-````
+
 
 <br></br><br></br>
 
@@ -64,13 +64,13 @@ TON 区块链及其底层生态系统将可替代代币（FTs）分类为 jetton
 TON 上的标准化代币使用一组智能合约来实现，包括：
 * [Jetton 主智能合约](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-minter.fc)
 * [Jetton 钱包智能合约](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc)
-````mdx-code-block
+
 <p align="center">
   <br />
     <img width="420" src="/img/docs/asset-processing/jetton_contracts.svg" alt="contracts scheme" />
       <br />
 </p>
-````
+
 ## Jetton 主智能合约
 Jetton 主智能合约存储了有关 jetton 的常见信息（包括总供应量、元数据链接或元数据本身）。
 
@@ -286,7 +286,7 @@ TON交易在仅一次确认后就不可逆转。为了最佳用户体验，建�
 1. 要找到正确的智能合约代币主地址，请参见以下来源：[如何找到正确的Jetton master合约](#jetton-master-smart-contract)
 2. 此外，要检索特定Jetton的元数据，请参见以下来源：[如何接收Jetton元数据](#retrieving-jetton-data)。
    为了正确向用户展示新的Jettons，需要正确的 `decimals` 和 `symbol`。
-   
+
 为了确保所有用户的安全，至关重要的是避免可能被伪造（假冒）的Jettons。例如，`symbol`==`TON` 的Jettons或那些包含系统通知消息的Jettons，例如：`ERROR`、`SYSTEM` 等。务必确保jettons以这样的方式在你的界面中显示，以便它们不能与TON转账、系统通知等混淆。有时，即使`symbol`、`name`和`image`被设计得几乎与原始的一模一样，也是只是希望误导用户的。
 
 ### 在收到转账通知消息时识别未知的 Jetton
@@ -297,7 +297,7 @@ TON交易在仅一次确认后就不可逆转。为了最佳用户体验，建�
    要执行此过程，需要 `jetton` 参数，即Jetton master合约的地址。
 4. 使用Jetton master合约检索你的钱包地址（作为拥有者）的Jetton钱包地址：[如何检索特定用户的Jetton钱包地址](#retrieving-jetton-wallet-addresses-for-a-given-user)
 5. 将master合约返回的地址与钱包代币的实际地址进行比较。如果它们匹配，那是理想的。如果不匹配，那么你可能收到了一个假冒的欺诈代币。
-6. 检索Jetton元数据：[如何接收Jetton元数据](#retrieving-jetton-data)。 
+6. 检索Jetton元数据：[如何接收Jetton元数据](#retrieving-jetton-data)。
 7. 检查 `symbol` 和 `name` 字段是否为欺诈的迹象。如有必要，警告用户。[为处理和初步检查添加新的Jettons](#adding-new-jettons-for-asset-processing-and-initial-verification)。
 
 
@@ -326,8 +326,8 @@ Tonweb示例：
 3. 为每个Jetton钱包检索Jetton master地址：[如何检索特定Jetton钱包的信息](#retrieving-data-for-a-specific-jetton-wallet)。
    要执行此过程，需要 `jetton` 参数（实际上是Jetton master合约的地址）。
 4. 比较步骤1和步骤3（直接上方）中的Jetton master合约地址。如果地址不匹配，则必须报告Jetton地址验证错误。
-5. 使用热钱包帐户检索最近未处理的交易列表，并对其进行迭代（逐一排序每个交易）。参见：[检查合约的交易](https://docs.ton.org/develop/dapps/asset-processing/#checking-contracts-transactions)， 
-或使用 [Tonweb示例](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-single-wallet.js#L43) 
+5. 使用热钱包帐户检索最近未处理的交易列表，并对其进行迭代（逐一排序每个交易）。参见：[检查合约的交易](https://docs.ton.org/develop/dapps/asset-processing/#checking-contracts-transactions)，
+或使用 [Tonweb示例](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-single-wallet.js#L43)
 或使用Toncenter API `/getTransactions` 方法。
 6. 检查交易中的输入消息（in_msg）并从输入消息中检索源地址。[Tonweb示例](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L84)
 7. 如果源地址与Jetton钱包内的地址匹配，则需要继续处理交易。如果不是，则跳过处理该交易并检查下一个交易。
@@ -367,7 +367,7 @@ const wallet = new WalletClass(tonweb.provider, {
 1. 接受为用户创建新存款的请求。
 2. 根据热钱包种子生成一个新的子钱包（v3R2）地址。[在Tonweb中创建子钱包](#creating-a-subwallet-in-tonweb)
 3. 接收地址可以给用户当做用于Jetton存款的地址（这是存款Jetton钱包的所有者地址）。钱包初始化不是必需的，这可以在从存款中提取Jettons时完成。
-4. 对于此地址，需要通过Jetton master合约计算Jetton钱包的地址。[如何检索特定用户的Jetton钱包地址](#retrieving-jetton-wallet-addresses-for-a-given-user)。 
+4. 对于此地址，需要通过Jetton master合约计算Jetton钱包的地址。[如何检索特定用户的Jetton钱包地址](#retrieving-jetton-wallet-addresses-for-a-given-user)。
 5. 将Jetton钱包地址添加到交易监控的地址池中，并保存子钱包地址。
 
 #### 处理交易
@@ -441,7 +441,7 @@ TON交易在仅一次确认后就不可逆转。为了最佳用户体验，建�
 7. 使用Jetton `transfer`正文生成消息，并填写所需字段，包括：query_id，发出的金额，
    目的地（收件人的非Jetton钱包地址），response_destination（建议指定用户的热钱包），
    forward_ton_amount（建议将其设置为至少0.05 TON以调用`transfer notification`），`forward_payload`
-   （可选，如果需要发送评论）。[Jetton合约消息布局](#jetton-合约消息布局)， 
+   （可选，如果需要发送评论）。[Jetton合约消息布局](#jetton-合约消息布局)，
    [Tonweb示例](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/jettons-withdrawals.js#L69)
    为了检查交易的成功验证，每条消息的`query_id`必须分配一个唯一值。
 8. 当使用高负载钱包时，建议收集一批消息，并一次性发送一批以优化费用。
@@ -449,7 +449,7 @@ TON交易在仅一次确认后就不可逆转。为了最佳用户体验，建�
    处理消息的时间，在此之后，钱包将不再接受该消息）
 10. 发送单条消息或多条消息（批量消息）。
 11. 检索热钱包帐户中最新未处理的交易列表，并迭代它。
-    了解更多：[检查合约的交易](/develop/dapps/asset-processing/#checking-contracts-transactions)， 
+    了解更多：[检查合约的交易](/develop/dapps/asset-processing/#checking-contracts-transactions)，
     [Tonweb示例](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-single-wallet.js#L43) 或
     使用Toncenter API `/getTransactions`方法。
 12. 查看帐户中的外部消息。
@@ -587,10 +587,10 @@ log.Println("交易确认，哈希：", base64.StdEncoding.EncodeToString(tx.Has
 my_wallet = Wallet(provider=client, mnemonics=my_wallet_mnemonics, version='v4r2')
 
 # 对于TonCenterClient和LsClient
-await my_wallet.transfer_jetton(destination_address='address', jetton_master_address=jetton.address, jettons_amount=1000, fee=0.15) 
+await my_wallet.transfer_jetton(destination_address='address', jetton_master_address=jetton.address, jettons_amount=1000, fee=0.15)
 
 # 对于所有客户端
-await my_wallet.transfer_jetton_by_jetton_wallet(destination_address='address', jetton_wallet='your jetton wallet address', jettons_amount=1000, fee=0.1)  
+await my_wallet.transfer_jetton_by_jetton_wallet(destination_address='address', jetton_wallet='your jetton wallet address', jettons_amount=1000, fee=0.1)
 ```
 
 </TabItem>

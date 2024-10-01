@@ -42,7 +42,7 @@ To follow the original node's bag of cells serialization you should:
 ## Denotes
 
   * The special cell does not have weight (it's 0)
-  * Make sure weight on import is fitting into 8 bits (weight <= 255)
+  * Make sure weight on import is fitting into 8 bits (weight \<= 255)
     
   * Internal hashes count is the sum of hash counts of all special root nodes
   * The top hashes count is the sum of hash counts of all other (not special) root nodes

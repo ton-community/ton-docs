@@ -13,7 +13,7 @@ We refer to any set of TL-B constructs as TL-B documents. A TL-B document usuall
 i.e. their constructors) and functional combinators. The declaration of each combinator ends with a semicolon (`;`).
 
 Here is an example of a possible combinator declaration:
-````mdx-code-block
+
 <br></br>
 <ThemedImage
   alt=""
@@ -23,13 +23,13 @@ Here is an example of a possible combinator declaration:
   }}
 />
 <br></br>
-````
+
 ## Constructors
 
 The left-hand side of each equation describes the way to define, or serialize, a value of the type indicated on the
 right-hand side. Such a description begins with the name of a constructor.
 
-````mdx-code-block
+
 <br></br>
 <ThemedImage
   alt=""
@@ -39,7 +39,7 @@ right-hand side. Such a description begins with the name of a constructor.
   }}
 />
 <br></br>
-````
+
 Constructors are used to specify the type of combinator, including the state at serialization. For example, constructors
 can also be used when you want to specify an `op`(operation code) in query to a smart contract in TON.
 
@@ -252,7 +252,7 @@ _ a:(IntWithObj uint32) = IntWithUint32;
 - Conditional fields (only for `Nat`) (`E?T` means if expression `E` is True than field has type `T`)
    ```tlb
    _ a:(## 1) b:a?(## 32) = Example;
-   ``` 
+   ```
   In `Example` type variable `b` serialized only if `a` is `1`
 
 
@@ -270,7 +270,7 @@ _ a:(IntWithObj uint32) = IntWithUint32;
 - Bit selection (only for `Nat`) (`E . B` means take bit `B` of `Nat` `E`)
    ```tlb
    _ a:(## 2) b:(a . 1)?(## 32) = Example;
-   ``` 
+   ```
   In `Example` type variable `b` serialized only if second bit `a` is `1`
 
 
@@ -362,7 +362,7 @@ Usage example of such parametrized type can be:
 ```tlb
 _ bit:(## 1) = Bit;
 _ 32intwbit:(A Bit) = 32IntWithBit;
-``` 
+```
 
 In this example we pass type `Bit` to `A` as parameter.
 
@@ -370,7 +370,7 @@ If you don't want to define type, but want to deserialize by this scheme you may
 
 ```tlb
 _ my_val:(A Any) = Example;
-``` 
+```
 
 Means that if we deserialize `Example` type we will fetch 32-bit integer and then rest of cell (bits&refs) to `my_val`.
 
@@ -542,7 +542,7 @@ Example:
 ```tlb
 !merkle_update#02 {X:Type} old_hash:bits256 new_hash:bits256
   old:^X new:^X = MERKLE_UPDATE X;
-  
+
 !merkle_proof#03 {X:Type} virtual_hash:bits256 depth:uint16 virtual_root:^X = MERKLE_PROOF X;
 ```
 
@@ -634,9 +634,9 @@ c$11 {X:#} {Y:#} = A X Y;
 Comments are the same as in C++
 
 ```tlb
-/* 
+/*
 This is
-a comment 
+a comment
 */
 
 // This is one line comment

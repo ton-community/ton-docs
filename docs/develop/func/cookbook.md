@@ -1149,7 +1149,7 @@ send_raw_message(msg, 128); ;; mode = 128 is used for messages that are to carry
 
 ### How to send a message with a long text comment
 
-As we know, only 127 characters can fit into a single `cell` (<1023 bits). In case we need more - we need to organize a snake cells.
+As we know, only 127 characters can fit into a single `cell` (< 1023 bits). In case we need more - we need to organize a snake cells.
 
 ```func
 {-

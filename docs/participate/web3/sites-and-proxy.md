@@ -188,7 +188,7 @@ Example:
 rldp-http-proxy/rldp-http-proxy -a 777.777.777.777:3333 -R '*'@333.333.333.333:80 -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3 -d -l tonsite.log
 ```
 
-In this case your regular webserver should be available on http://333.333.333.333:80 (this IP will not be exposed to the outside).
+In this case your regular webserver should be available on `http://333.333.333.333:80` (this IP will not be exposed to the outside).
 
 ### Recommendations
 

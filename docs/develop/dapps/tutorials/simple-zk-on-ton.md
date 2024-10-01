@@ -437,7 +437,7 @@ import * as snarkjs from "snarkjs";
 import path from "path";
 import {buildBls12381, utils} from "ffjavascript";
 const {unstringifyBigInts} = utils;
-````
+
 * If you run the test, the result will be a TypeScript error, because we don't have a declaration file for the module 'snarkjs' & ffjavascript. This can be addressed by editing the `tsconfig.json` file in the root of the `simple-zk` folder. We'll need to change the _**strict**_ option to **_false_** in that file
 * 
 We'll also need to import the `circuit.wasm` and `circuit_final.zkey` files which will be used to generate the proof to send to the contract. 
