@@ -6,7 +6,6 @@ import ThemedImage from '@theme/ThemedImage';
 
 cell是TON区块链上的一种数据结构。cell能够存储多达1023位，并且可以拥有最多4个对其他cell的引用。
 
-```mdx-code-block
 <br></br>
 <ThemedImage
 alt=""
@@ -16,13 +15,11 @@ sources={{
 }}
 />
 <br></br>
-```
 
 ## cell包
 
 cell包 (BoC) 是一种将cell序列化为字节数组的格式，这一格式在 [TL-B schema](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25) 中有进一步描述。
 
-```mdx-code-block
 <br></br>
 <ThemedImage
 alt=""
@@ -32,11 +29,9 @@ sources={{
 }}
 />
 <br></br>
-```
 
 在TON上，所有东西都由cell构成，包括合约代码、存储的数据、区块等，实现了过程中的流线型和强大的灵活性。
 
-```mdx-code-block
 <br></br>
 <ThemedImage
 alt=""
@@ -46,13 +41,11 @@ sources={{
 }}
 />
 <br></br>
-```
 
 ### cell序列化
 
 让我们分析我们的第一个cell包示例：
 
-```mdx-code-block
 <br></br>
 <ThemedImage
 alt=""
@@ -62,7 +55,6 @@ sources={{
 }}
 />
 <br></br>
-```
 
 ```json
 1[8_] -> {
@@ -126,9 +118,9 @@ sources={{
 并将其全部组合在一起：
 
 ```json
-0201 C0     0201  
+0201 C0     0201
 0101 FF     02
-0006 0AAAAA 
+0006 0AAAAA
 ```
 
 并通过将相应的字符串连接成一个单一的字节数组来拼接它们：
@@ -225,7 +217,7 @@ _没有引用的普通cell层级为零_
 1. 计算描述符字节
 2. 添加序列化cell数据
 3. 对于每个cell的引用，添加其深度
-4. 对于每个cell的引用，添加其 representation hash 
+4. 对于每个cell的引用，添加其 representation hash
 5. 计算结果的SHA256哈希
 
 让我们分析以下示例：
@@ -292,7 +284,7 @@ _没有引用的普通cell层级为零_
 5. SHA256计算
 
 连接前面步骤的字节，我们得到 `020600000b0000000057b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f957b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f9`
-，其SHA256为 `f345277cc6cfa747f001367e1e873dcfa8a936b8492431248b7a3eeafa8030e7` - 这就是cell representation hash 
+，其SHA256为 `f345277cc6cfa747f001367e1e873dcfa8a936b8492431248b7a3eeafa8030e7` - 这就是cell representation hash
 
 ### 更高哈希的计算
 

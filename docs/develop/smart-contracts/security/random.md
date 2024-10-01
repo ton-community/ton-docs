@@ -60,7 +60,7 @@ bool Transaction::prepare_rand_seed(td::BitArray<256>& rand_seed, const ComputeP
 
 Then pseudorandom numbers are generated with procedure described on [TVM instructions](/learn/tvm-instructions/instructions#112-pseudo-random-number-generator-primitives) page:
 
-> **x{F810} RANDU256**  
+> **x\{F810} RANDU256**  
 > Generates a new pseudo-random unsigned 256-bit Integer x. The algorithm is as follows: if r is the old value of the random seed, considered as a 32-byte array (by constructing the big-endian representation of an unsigned 256-bit integer), then its sha512(r) is computed; the first 32 bytes of this hash are stored as the new value r' of the random seed, and the remaining 32 bytes are returned as the next random value x.
 
 We can confirm this by looking into code of [preparation of contract's c7](https://github.com/ton-blockchain/ton/blob/master/crypto/block/transaction.cpp#L903) (c7 is tuple for temporary data, that stores contract address, start balance, random seed, etc) and [generation of random values themselves](https://github.com/ton-blockchain/ton/blob/master/crypto/vm/tonops.cpp#L217-L268).

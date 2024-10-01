@@ -60,7 +60,7 @@ bool Transaction::prepare_rand_seed(td::BitArray<256>& rand_seed, const ComputeP
 
 然后，伪随机数是使用 [TVM指令](/learn/tvm-instructions/instructions#112-pseudo-random-number-generator-primitives) 页面上描述的过程生成的：
 
-> **x{F810} RANDU256**\
+> **x\{F810} RANDU256**\
 > 生成一个新的伪随机无符号256位整数x。算法如下：如果r是随机seed的旧值，被视为一个32字节的数组（通过构造无符号256位整数的大端表示），那么计算它的sha512(r)；这个哈希的前32字节被存储为随机seed的新值r'，剩余的32字节作为下一个随机值x返回。
 
 我们可以通过查看 [准备c7合约](https://github.com/ton-blockchain/ton/blob/master/crypto/block/transaction.cpp#L903) 的代码（c7是存储临时数据的元组，存储合约地址、起始余额、随机seed等）和 [随机值本身的生成](https://github.com/ton-blockchain/ton/blob/master/crypto/vm/tonops.cpp#L217-L268) 来确认这一点。

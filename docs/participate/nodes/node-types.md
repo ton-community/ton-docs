@@ -12,14 +12,14 @@ A `Full Node` in TON is a node that **maintains synchronization** with the block
 
 It retains the _current state_ of the blockchain and can house either the entire block history or parts of it. This makes it the backbone of the TON blockchain, facilitating the network's decentralization and security.
 
-````mdx-code-block 
+ 
 <Button href="/participate/run-nodes/full-node"
 colorType="primary" sizeType={'sm'}>
-````
+
 Running a Full Node
-````mdx-code-block 
+ 
 </Button>
-````
+
 
 ## Archive Node
 

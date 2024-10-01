@@ -9,7 +9,6 @@ TON 是一个异步区块链，其结构与其他区块链非常不同。因此�
 
 消息是在actor（用户、应用程序、智能合约）之间发送的数据包。它通常包含指导接收方执行某种操作的信息，如更新存储或发送新消息。
 
-```mdx-code-block
 <br></br>
 <div class="text--center">
 <ThemedImage
@@ -21,7 +20,6 @@ TON 是一个异步区块链，其结构与其他区块链非常不同。因此�
 />
 </div>
 <br></br>
-```
 
 这种通信方式让人想起将卫星发射到太空。我们知道我们构成的消息，但在发射后，需要进行单独的观察来找出我们将获得什么结果。
 
@@ -37,7 +35,6 @@ TON 中的一笔交易包括以下内容：
 >
 > 并非每笔交易都会导致传出消息或对合约存储的更新——这取决于合约代码所定义的操作。
 
-```mdx-code-block
 <br></br>
 <ThemedImage
   alt=""
@@ -47,7 +44,6 @@ TON 中的一笔交易包括以下内容：
   }}
 />
 <br></br>
-```
 
 如果我们看以太坊或几乎任何其他同步区块链，每笔交易可以包含几个智能合约调用。例如，如果选定的交易对没有流动性，DEX可以在一笔交易中执行多次交换。
 
@@ -65,7 +61,6 @@ TON 中的一笔交易包括以下内容：
 
 严格保证由消息产生的交易将具有大于消息的 _lt_ 的 _lt_。同样，某笔交易中发送的消息的 _lt_ 严格大于引起它的交易的 _lt_。此外，从一个账户发送的消息和在一个账户上发生的交易也是严格有序的。
 
-```mdx-code-block
 <br></br>
 <ThemedImage
   alt=""
@@ -75,7 +70,6 @@ TON 中的一笔交易包括以下内容：
   }}
 />
 <br></br>
-```
 
 对于图像中的情况，结果是：`in_msg_lt < tx0_lt < out_msg_lt`
 
@@ -85,7 +79,6 @@ TON 中的一笔交易包括以下内容：
 
 如果 `msg1_lt < msg2_lt` => `tx1_lt < tx2_lt`。
 
-```mdx-code-block
 <br></br>
 <div class="text--center">
 <ThemedImage
@@ -97,7 +90,6 @@ TON 中的一笔交易包括以下内容：
 />
 </div>
 <br></br>
-```
 
 否则，尝试同步交付将需要在处理一个分片之前知道所有其他的状态，从而破坏了并行并破坏有效的分片。
 
@@ -113,9 +105,7 @@ TON 中的一笔交易包括以下内容：
 
 假设有两个合约 - _A_ 和 _B_。_A_ 收到一个外部消息，触发它向 _B_ 发送两个内部消息，我们称这些消息为 _1_ 和 _2_。在这个简单的情况下，我们可以 100% 确定 _1_ 将在 _2_ 之前被 _B_ 处理，因为它具有较低的 _lt_。
 
-```mdx-code-block
 <ConceptImage src="/img/docs/msg-delivery-1.png" />
-```
 
 但这只是一个简单的案例，当我们只有两个合约时。我们的系统在更复杂的情况下是如何工作的？
 
@@ -127,7 +117,6 @@ TON 中的一笔交易包括以下内容：
 
 1. 第一种可能的顺序是 `tx1'_lt < tx2'_lt`：
 
-```mdx-code-block
 <br></br>
 <div class="text--center">
 <ThemedImage
@@ -139,11 +128,9 @@ TON 中的一笔交易包括以下内容：
 />
 </div>
 <br></br>
-```
 
 2. 第二种可能的顺序是 `tx2'_lt < tx1'_lt`：
 
-```mdx-code-block
 <br></br>
 <div class="text--center">
 <ThemedImage
@@ -155,21 +142,16 @@ TON 中的一笔交易包括以下内容：
 />
 </div>
 <br></br>
-```
 
 同样，当两个合约 _B_ 和 _C_ 向一个合约 _A_ 发送消息时，情况也是如此。即使 `B -> A` 的消息在 `C -> A` 之前发送，我们也无法知道哪一个将先被送达。`B -> A` 的路由可能需要更多的分片链转运。
 
-```mdx-code-block
 <ConceptImage src="/img/docs/msg-delivery-3.png" />
-```
 
 在多个智能合约互动的许多可能的场景中，消息传递顺序可能是任意的。唯一的保证是，来自任何合约 _A_ 到任何合约 _B_ 的消息将按照它们的逻辑时间顺序处理。下面是一些示例。
 
-```mdx-code-block
 <ConceptImage src="/img/docs/msg-delivery-4.png" />
 <ConceptImage src="/img/docs/msg-delivery-5.png" />
 <ConceptImage src="/img/docs/msg-delivery-6.png" />
-```
 
 ## 结论
 

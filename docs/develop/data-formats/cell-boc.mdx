@@ -4,7 +4,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 ## Cell
 A cell represents a data structure on TON Blockchain. Cells are able to store up to 1023 bits and possess up to 4 references to other cells.
-````mdx-code-block
+
 <br></br>
 <ThemedImage
 alt=""
@@ -14,13 +14,13 @@ sources={{
 }}
 />
 <br></br>
-````
+
 
 ## Bag of Cells
 
 Bag of Cells (BoC) is a format for serializing cells into byte arrays, which is further described in the [TL-B schema](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25).
 
-````mdx-code-block
+
 <br></br>
 <ThemedImage
 alt=""
@@ -30,10 +30,10 @@ sources={{
 }}
 />
 <br></br>
-````
+
 On TON, everything consists of cells, including contract code, stored data, blocks, achieving streamline and robust flexibility in the process.
 
-````mdx-code-block
+
 <br></br>
 <ThemedImage
 alt=""
@@ -43,11 +43,11 @@ sources={{
 }}
 />
 <br></br>
-````
+
 ### Cell serialization
 Let's analyze our first example of a Bag of Cells :
 
-````mdx-code-block
+
 <br></br>
 <ThemedImage
 alt=""
@@ -57,7 +57,7 @@ sources={{
 }}
 />
 <br></br>
-````
+
 ```json
 1[8_] -> {
   24[0AAAAA],
@@ -84,7 +84,7 @@ Now let's arrange them in such an order that the parent cells do not point backw
 24[0AAAAA] -> index 2
 ```
 
-Now, let's calculate descriptions for each of the 3 cells touched on above. These descriptions are made up of 2 bytes that store flags composed of information about the length of the data and the number of data linkages. 
+Now, let's calculate descriptions for each of the 3 cells touched on above. These descriptions are made up of 2 bytes that store flags composed of information about the length of the data and the number of data linkages.
 
 The first byte - **refs descriptor** - is calculated as `r+8s+32l`, where `0 ≤ r ≤ 4` is amount of the Cell references (links), `0 ≤ s ≤ 1` is 1 for [exotic](#special-exotic-cells) cells and 0 for ordinary ones, and `0 ≤ l ≤ 3` is the [level](#cell-level) of the Cell.
 
@@ -115,12 +115,12 @@ Now let's add the refs indexes:
 
 And put it all together:
 ```json
-0201 C0     0201  
+0201 C0     0201
 0101 FF     02
-0006 0AAAAA 
+0006 0AAAAA
 ```
 
-And concat it by joining the corresponding strings into a single array of bytes: 
+And concat it by joining the corresponding strings into a single array of bytes:
 `0201c002010101ff0200060aaaaa`, size 14 bytes.
 
 
@@ -177,7 +177,7 @@ Bag of Cells Implementation Examples: [Serialization](https://github.com/xssnick
 
 ## Special (Exotic) Cells
 
-Generally, cells operating on TON are divided into two main types: ordinary cells and special cells. Most of the cells that the users work with are ordinary cells responsible for carrying information. 
+Generally, cells operating on TON are divided into two main types: ordinary cells and special cells. Most of the cells that the users work with are ordinary cells responsible for carrying information.
 
 Nevertheless, to realize internal functionality of the network, special cells are sometimes needed and are used for a diverse range of purposes, depending on their subtype.
 

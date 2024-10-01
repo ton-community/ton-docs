@@ -9,20 +9,20 @@ This tutorial describes an outdated approach to integrating TON Connect with Tel
 In this tutorial, we’ll create a sample telegram bot that supports TON Connect 2.0 authentication using Python TON Connect SDK [pytonconnect](https://github.com/XaBbl4/pytonconnect).
 We will analyze connecting a wallet, sending a transaction, getting data about the connected wallet, and disconnecting a wallet.
 
-````mdx-code-block 
+ 
 <Button href="https://t.me/test_tonconnect_bot" colorType={'primary'} sizeType={'sm'}>
-````
+
 Open Demo Bot
-````mdx-code-block 
+ 
 </Button>
-````
-````mdx-code-block 
+
+ 
 <Button href="https://github.com/yungwine/ton-connect-bot" colorType={'secondary'} sizeType={'sm'}>
-````
+
 Check out GitHub
-````mdx-code-block 
+ 
 </Button>
-````
+
 
 ## Preparing
 

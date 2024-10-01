@@ -103,7 +103,7 @@ If syncing takes an unusually long time, there may have been issues with the dum
 Please, run `mytonctrl` from the user you've installed it.
 
 
-## Error command<...> timed out after 3 seconds
+## Error command... timed out after 3 seconds
 
 This error means that the local node is not yet synchronized(out of sync lesser then 20 sec) and public nodes are being used.
 Public nodes do not always respond and end up with a timeout error.

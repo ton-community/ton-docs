@@ -60,8 +60,11 @@ Note that there are **critical** and **ordinary** configuration proposals. A cri
 
 In order to create a new configuration proposal, one first has to generate a BoC (bag-of-cells) file containing the proposed new value. The exact way of doing this depends on the configuration parameter being changed. For instance, if we want to create a parameter `-239` containing UTF-8 string "TEST" (i.e., `0x54455354`), we could create `config-param-239.boc` as follows: invoke Fift and then type
 
-    <b "TEST" $, b> 2 boc+>B "config-param-239.boc" B>file
-    bye
+```
+<b "TEST" $, b> 2 boc+>B "config-param-239.boc" B>file
+bye
+```
+    
 
 As a result, a 21-byte file `config-param-239.boc` will be created, containing the serialization of the required value.
 
@@ -69,8 +72,11 @@ For more sophisticated cases, and especially for configuration parameters with n
 
 Consider, for instance, configuration parameter `#8`, which contains the currently-enabled global blockchain version and capabilities:
 
-    capabilities#c4 version:uint32 capabilities:uint64 = GlobalVersion;
-    _ GlobalVersion = ConfigParam 8;
+```
+capabilities#c4 version:uint32 capabilities:uint64 = GlobalVersion;
+_ GlobalVersion = ConfigParam 8;
+```
+
 
 We can inspect its current value by running the lite client and typing `getconfig 8`:
 
@@ -84,25 +90,31 @@ x{C4000000010000000000000006}
 ```
 
 Now suppose that we want to enable the capability represented by bit `#3` (`+8`), which is `capReportVersion` (when enabled, this capability forces all collators to report their supported versions and capabilities in the block headers of the blocks they generate). Therefore, we want to have `version=1` and `capabilities=14`. In this example, we can still guess the correct serialization and create the BoC file directly by typing in Fift.
-
-    x{C400000001000000000000000E} s>c 2 boc+>B "config-param8.boc" B>file
+```
+x{C400000001000000000000000E} s>c 2 boc+>B "config-param8.boc" B>file
+```
 
 (A 30-byte file `config-param8.boc` containing the desired value is created as a result.)
 
 However, in more complicated cases this might not be an option, so let's do this example differently. Namely, we can inspect the source files `crypto/smartcont/gen-zerostate.fif` and `crypto/smartcont/CreateState.fif` for relevant portions.
 
-    // version capabilities --
-    { <b x{c4} s, rot 32 u, swap 64 u, b> 8 config! } : config.version!
-    1 constant capIhr
-    2 constant capCreateStats
-    4 constant capBounceMsgBody
-    8 constant capReportVersion
-    16 constant capSplitMergeTransactions
-
+```
+// version capabilities --
+{ <b x{c4} s, rot 32 u, swap 64 u, b> 8 config! } : config.version!
+1 constant capIhr
+2 constant capCreateStats
+4 constant capBounceMsgBody
+8 constant capReportVersion
+16 constant capSplitMergeTransactions
+```
+    
 and
 
-    // version capabilities
-    1 capCreateStats capBounceMsgBody or capReportVersion or config.version!
+```
+// version capabilities
+1 capCreateStats capBounceMsgBody or capReportVersion or config.version!
+```
+
 
 We see that `config.version!` without the last `8 config!` essentially does what we need, so we can create a temporary Fift script, for example, `create-param8.fif`:
 ```
@@ -129,8 +141,10 @@ dup ."Serialized value = " <s csr.
 
 Now if we run `fift -s create-param8.fif config-param8.boc` or, even better, `crypto/create-state -s create-param8.fif config-param8.boc` (from the build directory) we see the following output:
 
-    Serialized value = x{C400000001000000000000000E}
-    (Saved into file config-param8.boc)
+```
+Serialized value = x{C400000001000000000000000E}
+(Saved into file config-param8.boc)
+```
 
 and we obtain a 30-byte file `config-param8.boc` with the same content as before.
 

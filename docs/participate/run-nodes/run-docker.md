@@ -35,7 +35,7 @@ Variable **IGNORE_MINIMAL_REQS=true** turns off requirements verification of CPU
 * Pull the image and run the node with MyTonCtrl 
 ```bash
 docker run -d --name ton-node -v <YOUR_LOCAL_FOLDER>:/var/ton-work -it ghcr.io/ton-community/ton-docker-ctrl:latest
-````
+
 
 ## Install and start MyTonCtrl from sources:
 

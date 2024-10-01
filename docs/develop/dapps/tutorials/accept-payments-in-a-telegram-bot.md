@@ -466,7 +466,7 @@ This function returns the last 30 transactions to our `WALLET`.
 
 Here you can see `archival=true`. It is needed so that we only take transactions from a node with a complete history of the blockchain.
 
-At the output, we get a list of transactions—[{0},{1},{…},{29}]. List of dictionaries in short.
+At the output, we get a list of transactions—[{0},{1},...,{29}]. List of dictionaries in short.
 
 And finally the last function:
 

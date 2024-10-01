@@ -67,7 +67,7 @@ Recall how `Maybe` and `Either` works, we can serialize different cases:
 
 * `[CommonMsgInfo][10][StateInit][0][X]` - `Message X` in the one cell
 
-````mdx-code-block
+
 <br></br>
 <ThemedImage
 alt=""
@@ -77,10 +77,10 @@ dark: '/img/docs/data-formats/tl-b-docs-9-dark.png?raw=true',
 }}
 />
 <br></br>
-````
+
 * `[CommonMsgInfo][11][^StateInit][1][^X]` - `Message X` with references
 
-````mdx-code-block
+
 <br></br>
 <ThemedImage
 alt=""
@@ -90,7 +90,7 @@ dark: '/img/docs/data-formats/tl-b-docs-8-dark.png?raw=true',
 }}
 />
 <br></br>
-````
+
 
 
 
@@ -104,14 +104,14 @@ dark: '/img/docs/data-formats/tl-b-docs-8-dark.png?raw=true',
 ```tlb
 //internal message
 int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
-  src:MsgAddressInt dest:MsgAddressInt 
+  src:MsgAddressInt dest:MsgAddressInt
   value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
   created_lt:uint64 created_at:uint32 = CommonMsgInfo;
-  
-//external incoming message  
-ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt 
+
+//external incoming message
+ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt
   import_fee:Grams = CommonMsgInfo;
-  
+
 //external outgoing message
 ext_out_msg_info$11 src:MsgAddressInt dest:MsgAddressExt
   created_lt:uint64 created_at:uint32 = CommonMsgInfo;
@@ -127,7 +127,7 @@ Use case - ordinary cross contract messages.
 nanograms$_ amount:(VarUInteger 16) = Grams;
 //internal message
 int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
-  src:MsgAddressInt dest:MsgAddressInt 
+  src:MsgAddressInt dest:MsgAddressInt
   value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
   created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 ```
@@ -137,7 +137,7 @@ int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
 | int_msg_info$0 | Constructor                                | Required | $0 tag means, that in serialization CommonMsgInfo started with 0 bit describes a internal message.                  |
 | ihr_disabled   | Bool                                       | Required | Hyper cube routing flag.                                                                                            |
 | bounce         | Bool                                       | Required | Message should be bounced if there are errors during processing. If message's flat bounce = 1, it calls bounceable. |
-| bounced        | Bool                                       | Required | Flag that describes, that message itself is a result of bounce.                                                     |       
+| bounced        | Bool                                       | Required | Flag that describes, that message itself is a result of bounce.                                                     |
 | src            | [MsgAddressInt](#msgaddressint-tl-b)       | Required | Address of smart contract sender of message.                                                                        |
 | dest           | [MsgAddressInt](#msgaddressint-tl-b)       | Required | Address of smart contract destination of message.                                                                   |
 | value          | [CurrencyCollection](#currencycollection)  | Required | Structure which describes currency information including total funds transferred in message.                        |
@@ -156,8 +156,8 @@ Use case - wallet application request to wallet contract.
 
 ```tlb
 nanograms$_ amount:(VarUInteger 16) = Grams;
-//external incoming message  
-ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt 
+//external incoming message
+ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt
   import_fee:Grams = CommonMsgInfo;
 ```
 
@@ -207,7 +207,7 @@ _ split_depth:(Maybe (## 5)) special:(Maybe TickTock)
 | split_depth | (## 5)                  | Optional | Parameter for the highload contracts, defines behaviour of splitting into multiple instances in different shards. Currently StateInit used without it. |
 | special     | TickTock*               | Optional | Used for invoking smart contracts in every new block of the blockchain. Available only in the masterchain. Regular user's contracts used without it.   |
 | code        | Cell                    | Optional | Contract's serialized code.                                                                                                                            |
-| data        | Cell                    | Optional | Contract initial data.                                                                                                                                 |       
+| data        | Cell                    | Optional | Contract initial data.                                                                                                                                 |
 | library     | HashmapE 256 SimpleLib* | Optional | Currently used StateInit without libs                                                                                                                  |
 
 

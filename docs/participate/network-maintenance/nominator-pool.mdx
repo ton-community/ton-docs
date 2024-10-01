@@ -23,12 +23,12 @@
 5. Activate pool mode:
 
     ```bash
-    enable_mode nominator-pool 
+    enable_mode nominator-pool
     set stake null
     ```
 
 6. Create two pools (for even and odd validation rounds):
-   
+
    ```bash
    new_pool p1 0 1 1000 300000
    new_pool p2 0 1 1001 300000
@@ -37,7 +37,7 @@
    where:
     * `p1` is the pool name;
     * `0` % is the validator's reward share (e.g., use 40 for 40%);
-    * `1` is the maximum number of nominators in the pool (should be <= 40);
+    * `1` is the maximum number of nominators in the pool (should be \<= 40);
     * `1000` TON is the minimum validator stake (should be >= 1K TON);
     * `300000` TON is the minimum nominator stake (should be >= 10K TON);
 
@@ -72,7 +72,7 @@
    p2    active  0.731199806  kf9qtmnzs2-PumMisKDmv6KNjNfOMDQG70mQdp-BcAhnV8UO
    ```
 
-10. Open each pool via the link "https://tonscan.org/nominator/<address_of_pool>" and verify pool configurations.
+10. Open each pool via the link "https://tonscan.org/nominator/{address_of_pool}" and verify pool configurations.
 
 11. Proceed with the validator deposit to each pool:
 
@@ -85,7 +85,7 @@
 
 12. Proceed with the nominator deposit to each pool:
 
-    Visit the pool link (from **Step 9**) and click **ADD STAKE**. 
+    Visit the pool link (from **Step 9**) and click **ADD STAKE**.
     You can also make a deposit using **mytonctrl**, using the following commands:
 
     ```bash
