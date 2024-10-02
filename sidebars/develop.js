@@ -32,7 +32,7 @@ module.exports = [
       'develop/smart-contracts/guidelines/message-modes-cookbook',
       'develop/smart-contracts/guidelines/internal-messages',
       'develop/smart-contracts/guidelines/external-messages',
-      'develop/smart-contracts/guidelines/non-bouncable-messages',
+      'develop/smart-contracts/guidelines/non-bounceable-messages',
     ],
   },
   {

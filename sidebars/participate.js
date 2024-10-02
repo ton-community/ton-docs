@@ -44,8 +44,7 @@ module.exports = [
       'participate/run-nodes/local-ton',
       'participate/run-nodes/mytonctrl-status',
       'participate/run-nodes/faq',
-      'participate/run-nodes/node-comands',
-
+      'participate/run-nodes/node-commands',
     ],
   },
   {

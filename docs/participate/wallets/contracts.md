@@ -194,7 +194,7 @@ Also op-code, op::code and operational code
 | Elector         | 0x4e73744b      | New Stake                  |
 | Elector         | 0xf374484c      | New Stake Confirmation     |
 | Elector         | 0x47657424      | Recover Stake Request      |
-| Elector         | 0x47657424      | Recover Stake Responce     |
+| Elector         | 0x47657424      | Recover Stake Response     |
 | Wallet          | 0x0f8a7ea5      | Jetton Transfer            |
 | Wallet          | 0x235caf52      | [Jetton Call To](https://testnet.tonviewer.com/transaction/1567b14ad43be6416e37de56af198ced5b1201bb652f02bc302911174e826ef7) |
 | Jetton          | 0x178d4519      | Jetton Internal Transfer   |
