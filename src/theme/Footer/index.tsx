@@ -4,7 +4,7 @@ import { NetworkIcon } from "./NetworkIcon";
 import { Caption, Text } from "./Typography";
 import { Logo } from "./Logo";
 import { Separator } from "./Separator";
-import { FOOTER_COLUMN_LINKS_EN, FOOTER_COLUMN_LINKS_CN, NETWORKS } from "./config";
+import { FOOTER_COLUMN_LINKS_EN, footerLinkExporter, NETWORKS } from "./config";
 import { NewRow, NewCol } from "./GridSystem";
 import { useThemeConfig } from "@docusaurus/theme-common";
 import { useColorMode } from "@docusaurus/theme-common";
@@ -24,7 +24,11 @@ const FooterColumnContent: FC<IFooterColumnContentProps> = ({
       <Text className="CustomFooter__colHeader">{column.headerLangKey}</Text>
       <div className="CustomFooter__colLinks">
         {column.links.map((link) => (
-          <a className="CustomFooter__colLink" href={link.url} key={link.langKey}>
+          <a
+            className="CustomFooter__colLink"
+            href={link.url}
+            key={link.langKey}
+          >
             <Caption scheme={scheme}>{link.langKey}</Caption>
           </a>
         ))}
@@ -53,21 +57,17 @@ function Footer() {
   const { colorMode } = useColorMode();
   const [style, setStyle] = useState<typeof colorMode>("dark");
   const [FOOTER_COLUMN_LINKS, setFOOTER_COLUMN_LINKS] = useState(
-    FOOTER_COLUMN_LINKS_EN
+    footerLinkExporter()
   );
   const { siteConfig, i18n } = useDocusaurusContext();
 
-
   useEffect(() => {
-    if (i18n.currentLocale === "zh-CN") {
-      setFOOTER_COLUMN_LINKS(FOOTER_COLUMN_LINKS_CN);
-    }
+    setFOOTER_COLUMN_LINKS(footerLinkExporter(i18n.currentLocale));
   }, [i18n.currentLocale]);
-  
+
   if (!footer) {
     return null;
   }
-
 
   useEffect(() => {
     const docColorMode = document.documentElement.getAttribute(
@@ -84,7 +84,9 @@ function Footer() {
   }, [colorMode]);
 
   return (
-    <footer className={`CustomFooter CustomFooter--m-scheme-${style} bootstrap-wrapper`}>
+    <footer
+      className={`CustomFooter CustomFooter--m-scheme-${style} bootstrap-wrapper`}
+    >
       <div className="container">
         <div className="CustomFooter__links">
           <NewRow

@@ -3,7 +3,7 @@ import Button from '@site/src/components/button'
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Payments processing
+# Payments Processing
 
 This page **explains how to process** (send and accept) `digital assets` on the TON blockchain.
 It **mostly** describes how to work with `TON coins`, but **theoretical part** is **important** even if you want to process only `jettons`.
@@ -169,6 +169,10 @@ main();
 
 ### Send payments
 
+:::tip
+Learn on basic example of payments processing from [TMA USDT Payments demo](https://github.com/ton-community/tma-usdt-payments-demo)
+:::
+
 1. Service should deploy a `wallet` and keep it funded to prevent contract destruction due to storage fees. Note that storage fees are generally less than 1 Toncoin per year.
 2. Service should get from the user `destination_address` and optional `comment`. Note that for the meantime, we recommend either prohibiting unfinished outgoing payments with the same (`destination_address`, `value`, `comment`) set or proper scheduling of those payments; that way, the next payment is initiated only after the previous one is confirmed.
 3. Form [msg.dataText](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L103) with `comment` as text.
@@ -177,6 +181,10 @@ main();
 6. Use [createQuery](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L292) and [sendQuery](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L300) queries to send outgoing payments.
 7. Service should regularly poll the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method for the `wallet` contract. Matching confirmed transactions with the outgoing payments by (`destination_address`, `value`, `comment`) allows to mark payments as finished; detect and show the user the corresponding transaction hash and lt (logical time).
 8. Requests to `v3` of `high-load` wallets have an expiration time equal to 60 seconds by default. After that time unprocessed requests can be safely resent to the network (see steps 3-6).
+
+:::caution
+If `value` attached is too small transaction can get aborted with error `cskip_no_gas`. In this case Toncoins will be transferred successfully but no logic on other side will be executed (TVM won't even launch). About gas limits you can read more [here](/develop/howto/blockchain-configs#param-20-and-21). 
+:::
 
 ### Get transaction id
 
@@ -195,6 +203,8 @@ To accept payments based on attached comments, the service should
 To calculate the **incoming message value** that the message brings to the contract, one needs to parse the transaction. It happens when the message hits the contract. A transaction can be obtained using [getTransactions](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L268). For an incoming wallet transaction, the correct data consists of one incoming message and zero outgoing messages. Otherwise, either an external message is sent to the wallet, in which case the owner spends Toncoin, or the wallet is not deployed and the incoming transaction bounces back.
 
 Anyway, in general, the amount that a message brings to the contract can be calculated as the value of the incoming message minus the sum of the values of the outgoing messages minus the fee: `value_{in_msg} - SUM(value_{out_msg}) - fee`. Technically, transaction representation contains three different fields with `fee` in name: `fee`, `storage_fee`, and `other_fee`, that is, a total fee, a part of the fee related to storage costs, and a part of the fee related to transaction processing. Only the first one should be used.
+
+
 
 ### Invoices with TON Connect
 
@@ -262,7 +272,7 @@ More about transactions and messages hashes [here](/develop/dapps/cookbook#how-t
  
 ## Best Practices
 
-### Wallet creation
+### Wallet Creation
 
 <Tabs groupId="example-create_wallet">
 <TabItem value="JS" label="JS">
@@ -312,6 +322,60 @@ if __name__ == "__main__":
 </TabItem>
 
 </Tabs>
+
+
+### Wallet Creation for Different Shards
+
+When under heavy load, the TON blockchain may split into [shards](/develop/blockchain/shards). A simple analogy for a shard in the Web3 world would be a network segment.
+
+Just as we distribute service infrastructure in the Web2 world to be as close as possible to the end user, in TON, we can deploy contracts to be in the same shard as the user's wallet or any other contract that interacts with it.
+
+For instance, a DApp that collects fees from users for a future airdrop service might prepare separate wallets for each shard to enhance the user experience on peak load days. To achieve the highest processing speed, you will need to deploy one collector wallet per shard.
+
+Shard prefix `SHARD_INDEX` of a contract is defined by the first 4 bits of it's address hash.
+In order to deploy wallet into specific shard, one may use logic based on the following code snippet:
+
+```javascript
+
+import { NetworkProvider, sleep } from '@ton/blueprint';
+import { Address, toNano } from "@ton/core";
+import {mnemonicNew, mnemonicToPrivateKey} from '@ton/crypto';
+import { WalletContractV3R2 } from '@ton/ton';
+
+export async function run(provider?: NetworkProvider) {
+  if(!process.env.SHARD_INDEX) {
+    throw new Error("Shard index is not specified");
+  }
+
+    const shardIdx = Number(process.env.SHARD_INDEX);
+    let testWallet: WalletContractV3R2;
+    let mnemonic:  string[];
+    do {
+        mnemonic   = await mnemonicNew(24);
+        const keyPair = await mnemonicToPrivateKey(mnemonic);
+        testWallet = WalletContractV3R2.create({workchain: 0, publicKey: keyPair.publicKey});
+    } while(testWallet.address.hash[0] >> 4 !== shardIdx);
+
+    console.log("Mnemonic for shard found:", mnemonic);
+    console.log("Wallet address:",testWallet.address.toRawString());
+}
+
+if(require.main === module) {
+run();
+}
+
+```
+In case of wallet contract, one may use `subwalletId` instead of mnemonic, however `subwalletId` is not supported by [wallet applications](https://ton.org/wallets).
+
+Once deployment have completed, you can process with the following algorithm:
+
+1. User arrives at DApp page and requests action.
+2. DApp picks the closest wallet to the user(matching by 4 bit prefix)
+3. DApp provides user payload sending his fee to the picked wallet.
+
+That way you will be able to provide the best possible user experience regardless current network load.
+
+
 
 ### Toncoin Deposits (Get toncoins)
 
@@ -506,9 +570,6 @@ if __name__ == "__main__":
 
 <TabItem value="Python" label="Python">
 
-- **psylopunk/pythonlib:**
-  - [Withdraw Toncoins from a wallet](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
-
 - **yungwine/pytoniq:**
 
 ```python
@@ -561,9 +622,6 @@ if __name__ == "__main__":
 
 <TabItem value="Python" label="Python">
 
-- **psylopunk/pythonlib:**
-  - [Get transactions](https://github.com/psylopunk/pytonlib/blob/main/examples/transactions.py)
-  
 - **yungwine/pytoniq:**
   - [Get transactions](https://github.com/yungwine/pytoniq/blob/master/examples/transactions.py)
 

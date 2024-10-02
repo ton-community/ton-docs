@@ -311,7 +311,7 @@ Most SDKs provide the following process for sending messages from your wallet:
 - After that, you can form messages you want and send them. You can also send up to 4 messages per request, as described in an [advanced manual](/develop/smart-contracts/tutorials/wallet#sending-multiple-messages-simultaneously).
 
 <Tabs groupId="code-examples">
-<TabItem value="js-ton" label="JS (@ton)">
+<TabItem value="js-ton-v4" label="JS (@ton) for Wallet V4">
 
 ```js
 import { TonClient, WalletContractV4, internal } from "@ton/ton";
@@ -319,6 +319,7 @@ import { mnemonicNew, mnemonicToPrivateKey } from "@ton/crypto";
 
 const client = new TonClient({
   endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+  apiKey: 'your-api-key', // Optional, but note that without api-key you need to send requests once per second, and with 0.25 seconds
 });
 
 // Convert mnemonics to private key
@@ -340,6 +341,46 @@ await contract.sendTransfer({
     to: 'EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N',
     body: 'Example transfer body',
   })]
+});
+```
+
+</TabItem>
+
+<TabItem value="js-ton-v5" label="JS (@ton) for Wallet V5">
+
+```js
+import { TonClient, WalletContractV5R1, internal, SendMode } from "@ton/ton";
+import { mnemonicToPrivateKey } from "@ton/crypto";
+
+const client = new TonClient({
+  endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+  apiKey: 'your-api-key', // Optional, but note that without api-key you need to send requests once per second, and with 0.25 seconds
+});
+
+// Convert mnemonics to private key
+let mnemonics = "word1 word2 ...".split(" ");
+let keyPair = await mnemonicToPrivateKey(mnemonics);
+
+// Create wallet contract
+let wallet = WalletContractV5R1.create({
+  publicKey: keyPair.publicKey, 
+  workChain: 0, // Usually you need a workchain 0
+});
+let contract = client.open(wallet);
+
+// Create a transfer
+let seqno: number = await contract.getSeqno();
+await contract.sendTransfer({
+  secretKey: keyPair.secretKey, 
+  seqno,
+  sendMode: SendMode.PAY_GAS_SEPARATELY,
+  messages: [
+    internal({
+      to: 'EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N',
+      value: '0.05',
+      body: 'Example transfer body',
+    }),
+  ],
 });
 ```
 

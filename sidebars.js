@@ -77,12 +77,7 @@ const sidebars = {
             'learn/networking/ton-dht',
           ],
         },
-
-        {
-          type: 'link',
-          label: 'TON Compared to Other L1s',
-          href: 'https://ton.org/analysis',
-        },
+        'learn/overviews/blockchain-comparison',
         {
           type: 'link',
           label: 'Open-Source and Decentralization in TON',
@@ -298,6 +293,7 @@ const sidebars = {
             'develop/dapps/apis/README',
             'develop/dapps/apis/toncenter',
             'develop/dapps/apis/adnl',
+            'develop/dapps/apis/api-key'
           ],
         },
         {
@@ -372,6 +368,8 @@ const sidebars = {
             'develop/dapps/asset-processing/overview',
             'develop/dapps/asset-processing/README',
             'develop/dapps/asset-processing/jettons',
+            'develop/dapps/asset-processing/mintless-jettons',
+            'develop/dapps/asset-processing/mass-mint-tools',
             'develop/dapps/asset-processing/usdt',
             'develop/dapps/asset-processing/nfts',
             'develop/dapps/asset-processing/metadata',
@@ -396,6 +394,11 @@ const sidebars = {
               type: 'doc',
               id: 'develop/dapps/ton-connect/react',
               label: 'React Apps',
+            },
+            {
+              type: 'doc',
+              id: 'develop/dapps/ton-connect/vue',
+              label: 'Vue Apps',
             },
             {
               type: 'doc',
@@ -673,7 +676,9 @@ const sidebars = {
         'participate/run-nodes/nodes-troubleshooting',
         'participate/nodes/node-maintenance-and-security',
         'participate/run-nodes/local-ton',
+        'participate/run-nodes/mytonctrl-status',
         'participate/run-nodes/faq',
+        'participate/run-nodes/node-comands',
 
       ],
     },

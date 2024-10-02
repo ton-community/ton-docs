@@ -38,7 +38,7 @@ If you don't have mytonctrl, install it with `-m liteserver` flag:
 
   ```bash
   wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-  sudo bash install.sh -m liteserver -d
+  sudo bash ./install.sh -m liteserver
   ```
 
   </TabItem>
@@ -46,11 +46,21 @@ If you don't have mytonctrl, install it with `-m liteserver` flag:
 
   ```bash
   wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-  su root -c 'bash install.sh -m liteserver -d'
+  su root -c 'bash ./install.sh -m liteserver'
   ```
 
   </TabItem>
 </Tabs>
+
+* `-d` - **mytonctrl** will download a [dump](https://dump.ton.org/) of the latest blockchain state.
+  This will reduce synchronization time by several times.
+* `-c <path>` - If you want to use not public liteservers for synchronization. _(not required)_
+* `-i` - Ignore minimum requirements, use it only if you want to check compilation process without real node usage.
+* `-m` - Mode, can be `validator` or `liteserver`.
+
+**To use testnet**, `-c` flag should be provided with `https://ton.org/testnet-global.config.json` value.
+
+Default `-c` flag value is `https://ton-blockchain.github.io/global.config.json`, which is default mainnet config.
 
 If you already have mytonctrl installed, run:
 
@@ -61,7 +71,7 @@ MyTonCtrl> enable_mode liteserver
 
 ## Check the firewall settings
 
-First, verify the Liteserver port specified in your `config.json` file. This port changes with each new installation of `MyTonCtrl`. It is located in the `port` field:
+First, verify the Liteserver port specified in your `/var/ton-work/db/config.json` file. This port changes with each new installation of `MyTonCtrl`. It is located in the `port` field:
 
 ```json
 {
@@ -117,9 +127,15 @@ sudo ufw status
 
 This way, you can open the port in the firewall settings of your server.
 
-## Interaction with Liteserver (Lightclient)
+## Interaction with Liteserver (lite-client)
 
-0. Create an empty project on your machine and paste `config.json` in the project directory.
+0. Create an empty project on your machine and paste `config.json` in the project directory. This config can be obtained by following command:
+
+```bash
+installer clcf # in mytonctrl
+```
+
+It will create `/usr/bin/ton/local.config.json` on your machine where mytonctrl is installed. Check [mytonctrl documentation for more](/participate/run-nodes/mytonctrl#clcf).
 
 1. Install libraries.
 
@@ -127,7 +143,7 @@ This way, you can open the port in the firewall settings of your server.
   <TabItem value="js" label="JavaScript">
 
   ```bash
-  npm i --save ton-core ton-lite-client
+  npm i --save ton-core ton-lite-
   ```
 
   </TabItem>
@@ -142,13 +158,13 @@ This way, you can open the port in the firewall settings of your server.
 
   ```bash
   go get github.com/xssnick/tonutils-go
-  go get github.com/xssnick/tonutils-go/liteclient
+  go get github.com/xssnick/tonutils-go/lite
   go get github.com/xssnick/tonutils-go/ton
   ```
   </TabItem>
 </Tabs>
 
-2. Initialize a client and request masterchain info to ensure the liteserver is running.
+2. Initialize a  and request masterchain info to ensure the liteserver is running.
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
@@ -163,9 +179,9 @@ Change project type to `module` in your `package.json` file:
 
 Create `index.js` file with the following content:
   ```js
-  import { LiteSingleEngine } from 'ton-lite-client/dist/engines/single.js'
-  import { LiteRoundRobinEngine } from 'ton-lite-client/dist/engines/roundRobin.js'
-  import { LiteClient } from 'ton-lite-client/dist/client.js'
+  import { LiteSingleEngine } from 'ton-lite-/dist/engines/single.js'
+  import { LiteRoundRobinEngine } from 'ton-lite-/dist/engines/roundRobin.js'
+  import { Lite } from 'ton-lite-/dist/.js'
   import config from './config.json' assert {type: 'json'};
 
 
@@ -188,8 +204,8 @@ Create `index.js` file with the following content:
       }));
 
       const engine = new LiteRoundRobinEngine(engines);
-      const client = new LiteClient({ engine });
-      const master = await client.getMasterchainInfo()
+      const  = new Lite({ engine });
+      const master = await .getMasterchainInfo()
       console.log('master', master)
 
   }
