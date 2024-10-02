@@ -7,9 +7,12 @@ This guide will help you integrate TON Connect into your Javascript application 
 
 If you use React for your DApp, take a look at [TON Connect UI React SDK](/develop/dapps/ton-connect/react).
 
+And if you use Vue for your DApp, take a look at [TON Connect UI Vue SDK](/develop/dapps/ton-connect/vue).
+
+
 ## Implementation
 
-### 1) Installation
+### Installation
 
 <Tabs groupId="Installation">
   <TabItem value="CDN" label="CDN">
@@ -31,7 +34,7 @@ npm i @tonconnect/ui
   </TabItem>
 </Tabs>
 
-### 2) TON Connect Initiation
+### TON Connect Initiation
 
 After installing the package, you should create a `manifest.json` file for your application. More information on how to create a manifest.json file can be found [here](/develop/dapps/ton-connect/manifest).
 
@@ -52,7 +55,7 @@ Add a button with `ton-connect` id to connect to the wallet:
 </script>
 ```
 
-### 3) Connect to the Wallet
+### Connect to the Wallet
 
 "Connect" button (which is added at `buttonRootId`) automatically handles clicks.
 
@@ -73,7 +76,7 @@ But you can open "connect modal" programmatically, e.g. after click on custom bu
 </script>
 ```
 
-### 4) Redirects
+### Redirects
 
 #### Customizing return strategy
 
@@ -91,7 +94,7 @@ tonConnectUI.uiOptions = {
 
 [Read more in SDK documentation](https://github.com/ton-connect/sdk/tree/main/packages/ui#use-inside-twa-telegram-web-app)
 
-### 5) UI customization
+### UI customization
 
 TonConnect UI provides an interface that should be familiar and recognizable to the user when using various apps. However, the app developer can make changes to this interface to keep it consistent with the app interface.
 

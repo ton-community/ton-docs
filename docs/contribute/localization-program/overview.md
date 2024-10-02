@@ -9,19 +9,19 @@ The localization program is **launched** and **actively maintained** by [**TownS
 
 We are committed to creating an open infrastructure for multilingual community collaboration to **advance TON to a better phase**, which includes:
 
-1. **Suitable for multilingual communities**  
+* **Suitable for multilingual communities**   
    The program supports multiple languages, ensuring inclusivity and ease of access for users from diverse linguistic backgrounds.
 
-2. **Automate development, integration, and deployment**  
+* **Automate development, integration, and deployment**  
    By leveraging automation tools, the program streamlines the processes of development, integration, and deployment, reducing manual efforts and enhancing efficiency and consistency across all localization efforts.
 
-3. **Decoupling the roles of developer, translator, and verifier**  
+* **Decoupling the roles of developer, translator, and verifier**  
    Our approach separates the responsibilities of developers, translators, and verifiers, allowing each role to focus on their specific tasks. This ensures high-quality translations and smooth collaboration without overlap or conflict of duties.
 
-4. **Community contribution incentive**  
+* **Community contribution incentive**  
    We provide incentives for community members who contribute to the localization process. This encourages active participation and rewards those who help improve the program, fostering a sense of ownership and community spirit.
 
-5. **Integration of advanced AI systems**  
+* **Integration of advanced AI systems**  
    Advanced AI systems enhance translation accuracy and efficiency by providing intelligent suggestions and automating repetitive tasks, ensuring high-quality results with less effort.
 
 This project is not just for speakers of a single language; our goal is **to serve the global developer ecosystem**.

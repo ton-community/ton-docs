@@ -1,0 +1,474 @@
+{
+  "version.label": {
+    "message": "次",
+    "description": "The label for version current"
+  },
+  "sidebar.learn.category.TON Blockchain": {
+    "message": "TON ブロックチェーン",
+    "description": "The label for category TON Blockchain in sidebar learn"
+  },
+  "sidebar.learn.category.TON Virtual Machine (TVM)": {
+    "message": "TON バーチャルマシン (TVM)",
+    "description": "The label for category TON Virtual Machine (TVM) in sidebar learn"
+  },
+  "sidebar.learn.category.TL-B Language": {
+    "message": "TL-B 言語",
+    "description": "The label for category TL-B Language in sidebar learn"
+  },
+  "sidebar.learn.category.TON Networking": {
+    "message": "TON ネットワーキング",
+    "description": "The label for category TON Networking in sidebar learn"
+  },
+  "sidebar.learn.category.ADNL Protocol": {
+    "message": "ADNL プロトコル",
+    "description": "The label for category ADNL Protocol in sidebar learn"
+  },
+  "sidebar.learn.category.TON Services": {
+    "message": "TON サービス",
+    "description": "The label for category TON Services in sidebar learn"
+  },
+  "sidebar.learn.category.TON Whitepapers": {
+    "message": "TON ホワイトペーパー",
+    "description": "The label for category TON Whitepapers in sidebar learn"
+  },
+  "sidebar.learn.link.TON Compared to Other L1s": {
+    "message": "他の L1 と比較した TON",
+    "description": "The label for link TON Compared to Other L1s in sidebar learn, linking to https://ton-org/analysis"
+  },
+  "sidebar.learn.link.Open-Source and Decentralization in TON": {
+    "message": "TON におけるオープンソースと分散化",
+    "description": "The label for link Open-Source and Decentralization in TON in sidebar learn, linking to https://defi-org/ton/"
+  },
+  "sidebar.learn.link.TON": {
+    "message": "TON",
+    "description": "The label for link TON in sidebar learn, linking to https://ton-org/ton-pdf"
+  },
+  "sidebar.learn.link.TON Virtual Machine": {
+    "message": "TON バーチャルマシン",
+    "description": "The label for link TON Virtual Machine in sidebar learn, linking to https://ton-org/tvm-pdf"
+  },
+  "sidebar.learn.link.TON Blockchain": {
+    "message": "TON ブロックチェーン",
+    "description": "The label for link TON Blockchain in sidebar learn, linking to https://ton-org/tblkch-pdf"
+  },
+  "sidebar.learn.link.Catchain Consensus Protocol": {
+    "message": "Catchain コンセンサスプロトコル",
+    "description": "The label for link Catchain Consensus Protocol in sidebar learn, linking to https://ton-org/catchain-pdf"
+  },
+  "sidebar.learn.doc.Overview": {
+    "message": "概要",
+    "description": "The label for the doc item Overview in sidebar learn, linking to the doc learn/docs"
+  },
+  "sidebar.learn.doc.TON DNS": {
+    "message": "TON DNS",
+    "description": "The label for the doc item TON DNS in sidebar learn, linking to the doc learn/services/dns"
+  },
+  "sidebar.learn.doc.TON Sites, WWW, and Proxy": {
+    "message": "TON サイト、WWW、およびプロキシ",
+    "description": "The label for the doc item TON Sites, WWW, and Proxy in sidebar learn, linking to the doc learn/services/sites-www-proxy"
+  },
+  "sidebar.develop.category.Develop Smart Contracts": {
+    "message": "スマートコントラクトの開発",
+    "description": "The label for category Develop Smart Contracts in sidebar develop"
+  },
+  "sidebar.develop.category.Environment": {
+    "message": "環境",
+    "description": "The label for category Environment in sidebar develop"
+  },
+  "sidebar.develop.category.Choose Your SDK": {
+    "message": "SDK の選択",
+    "description": "The label for category Choose Your SDK in sidebar develop"
+  },
+  "sidebar.develop.category.Testing & Debugging": {
+    "message": "テストとデバッグ",
+    "description": "The label for category Testing & Debugging in sidebar develop"
+  },
+  "sidebar.develop.category.Deploying Contract": {
+    "message": "コントラクトのデプロイ",
+    "description": "The label for category Deploying Contract in sidebar develop"
+  },
+  "sidebar.develop.category.Best Practices": {
+    "message": "ベストプラクティス",
+    "description": "The label for category Best Practices in sidebar develop"
+  },
+  "sidebar.develop.category.Develop dApps & Bots": {
+    "message": "dApps & ボットの開発",
+    "description": "The label for category Develop dApps & Bots in sidebar develop"
+  },
+  "sidebar.develop.category.API Types": {
+    "message": "API タイプ",
+    "description": "The label for category API Types in sidebar develop"
+  },
+  "sidebar.develop.category.DeFi Development": {
+    "message": "DeFi 開発",
+    "description": "The label for category DeFi Development in sidebar develop"
+  },
+  "sidebar.develop.category.Telegram bots": {
+    "message": "Telegram ボット",
+    "description": "The label for category Telegram bots in sidebar develop"
+  },
+  "sidebar.develop.category.FunC language": {
+    "message": "FunC 言語",
+    "description": "The label for category FunC language in sidebar develop"
+  },
+  "sidebar.develop.category.Documentation": {
+    "message": "ドキュメンテーション",
+    "description": "The label for category Documentation in sidebar develop"
+  },
+  "sidebar.develop.category.Network Configs": {
+    "message": "ネットワーク設定",
+    "description": "The label for category Network Configs in sidebar develop"
+  },
+  "sidebar.develop.category.Low Level Internals": {
+    "message": "低レベルの内部",
+    "description": "The label for category Low Level Internals in sidebar develop"
+  },
+  "sidebar.develop.category.Compile from Sources": {
+    "message": "ソースからのコンパイル",
+    "description": "The label for category Compile from Sources in sidebar develop"
+  },
+  "sidebar.develop.link.TON Hello World": {
+    "message": "TON ハローワールド",
+    "description": "The label for link TON Hello World in sidebar develop, linking to https://blog-ton-org/step-by-step-guide-for-writing-your-first-smart-contract-in-func"
+  },
+  "sidebar.develop.link.Using tonstarter-contracts": {
+    "message": "tonstarter-contracts の使用",
+    "description": "The label for link Using tonstarter-contracts in sidebar develop, linking to https://github-com/ton-defi-org/tonstarter-contracts"
+  },
+  "sidebar.develop.link.Using Online IDE": {
+    "message": "オンライン IDE の使用",
+    "description": "The label for link Using Online IDE in sidebar develop, linking to https://glitch-com/edit/#!/remix/clone-from-repo?&REPO_URL=https%3A%2F%2Fgithub-com%2Fton-defi-org%2Ftonstarter-contracts-git"
+  },
+  "sidebar.develop.link.Using toncli": {
+    "message": "toncli の使用",
+    "description": "The label for link Using toncli in sidebar develop, linking to https://github-com/disintar/toncli"
+  },
+  "sidebar.develop.link.Coming from Solidity": {
+    "message": "Solidity からの移行",
+    "description": "The label for link Coming from Solidity in sidebar develop, linking to /learn/introduction#ethereum-to-ton"
+  },
+  "sidebar.develop.link.How to shard your TON smart contract and why": {
+    "message": "TON スマートコントラクトをシャードする方法とその理由",
+    "description": "The label for link How to shard your TON smart contract and why in sidebar develop, linking to https://blog-ton-org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons"
+  },
+  "sidebar.develop.link.TON Concepts": {
+    "message": "TON コンセプト",
+    "description": "The label for link TON Concepts in sidebar develop, linking to /learn/introduction"
+  },
+  "sidebar.develop.link.TON Services": {
+    "message": "TON サービス",
+    "description": "The label for link TON Services in sidebar develop, linking to /learn/services/payments"
+  },
+  "sidebar.develop.link.TON Whitepapers": {
+    "message": "TON ホワイトペーパー",
+    "description": "The label for link TON Whitepapers in sidebar develop, linking to /learn/docs"
+  },
+  "sidebar.develop.link.Mainnet config": {
+    "message": "メインネット設定",
+    "description": "The label for link Mainnet config in sidebar develop, linking to https://ton-org/global-config-json"
+  },
+  "sidebar.develop.link.Testnet config": {
+    "message": "テストネット設定",
+    "description": "The label for link Testnet config in sidebar develop, linking to https://ton-org/testnet-global-config-json"
+  },
+  "sidebar.develop.doc.Compilation Instructions": {
+    "message": "コンパイル手順",
+    "description": "The label for the doc item Compilation Instructions in sidebar develop, linking to the doc develop/howto/compile"
+  },
+  "sidebar.develop.doc.Instructions for low-memory machines": {
+    "message": "低メモリマシンのための手順",
+    "description": "The label for the doc item Instructions for low-memory machines in sidebar develop, linking to the doc develop/howto/compile-swap"
+  },
+  "sidebar.participate.category.Setup Your Wallet": {
+    "message": "ウォレットの設定",
+    "description": "The label for category Setup Your Wallet in sidebar participate"
+  },
+  "sidebar.participate.category.Run a Node": {
+    "message": "ノードを実行",
+    "description": "The label for category Run a Node in sidebar participate"
+  },
+  "sidebar.participate.category.Use TON Proxy": {
+    "message": "TON プロキシの使用",
+    "description": "The label for category Use TON Proxy in sidebar participate"
+  },
+  "sidebar.participate.link.Wallet Contract Versions": {
+    "message": "ウォレットコントラクトのバージョン",
+    "description": "The label for link Wallet Contract Versions in sidebar participate, linking to https://github-com/toncenter/tonweb/blob/master/src/contract/wallet/WalletSources-md"
+  },
+  "sidebar.participate.link.Run a Validator Node": {
+    "message": "バリデーターノードの実行",
+    "description": "The label for link Run a Validator Node in sidebar participate, linking to https://ton-org/validator"
+  },
+  "sidebar.participate.link.Standards Discussion (TEPs)": {
+    "message": "標準ディスカッション (TEPs)",
+    "description": "The label for link Standards Discussion (TEPs) in sidebar participate, linking to https://github-com/ton-blockchain/TEPs"
+  },
+  "sidebar.participate.link.Ask a Question about TON": {
+    "message": "TON に関する質問をする",
+    "description": "The label for link Ask a Question about TON in sidebar participate, linking to https://answers-ton-org/"
+  },
+  "sidebar.participate.doc.Use Cross-chain Bridges": {
+    "message": "クロスチェーンブリッジの使用",
+    "description": "The label for the doc item Use Cross-chain Bridges in sidebar participate, linking to the doc participate/crosschain-bridges"
+  },
+  "sidebar.participate.doc.Stake with Nominator Pools": {
+    "message": "ノミネータープールとステーク",
+    "description": "The label for the doc item Stake with Nominator Pools in sidebar participate, linking to the doc participate/nominators"
+  },
+  "sidebar.contribute.category.Become a Contributor": {
+    "message": "コントリビューターになる",
+    "description": "The label for category Become a Contributor in sidebar contribute"
+  },
+  "sidebar.contribute.category.Hacktoberfest 2022": {
+    "message": "Hacktoberfest 2022",
+    "description": "The label for category Hacktoberfest 2022 in sidebar contribute"
+  },
+  "sidebar.contribute.category.Archive": {
+    "message": "アーカイブ",
+    "description": "The label for category Archive in sidebar contribute"
+  },
+  "sidebar.contribute.category.Common Rules": {
+    "message": "一般規則",
+    "description": "The label for category Common Rules in sidebar contribute"
+  },
+  "sidebar.contribute.category.Documentation": {
+    "message": "ドキュメント",
+    "description": "The label for category Documentation in sidebar contribute"
+  },
+  "sidebar.contribute.category.Localization Program": {
+    "message": "ローカライゼーションシステム",
+    "description": "The label for category Localization Program in sidebar contribute"
+  },
+  "sidebar.contribute.category.Tutorials": {
+    "message": "チュートリアル",
+    "description": "The label for category Tutorials in sidebar contribute"
+  },
+  "sidebar.contribute.doc.How It Works": {
+    "message": "仕組み",
+    "description": "The label for the doc item How It Works in sidebar contribute, linking to the doc contribute/localization-program/how-it-works"
+  },
+  "sidebar.contribute.doc.How To Contribute": {
+    "message": "寄稿方法",
+    "description": "The label for the doc item How To Contribute in sidebar contribute, linking to the doc contribute/localization-program/how-to-contribute"
+  },
+  "sidebar.contribute.doc.Overview": {
+    "message": "概要",
+    "description": "The label for the doc item Overview in sidebar contribute, linking to the doc contribute/localization-program/overview"
+  },
+  "sidebar.contribute.doc.Translation Style Guide": {
+    "message": "翻訳スタイルガイド",
+    "description": "The label for the doc item Translation Style Guide in sidebar contribute, linking to the doc contribute/localization-program/translation-style-guide"
+  },
+  "sidebar.develop.category.APIs and SDKs": {
+    "message": "API と SDK",
+    "description": "The label for category APIs and SDKs in sidebar develop"
+  },
+  "sidebar.develop.category.Advanced": {
+    "message": "高度",
+    "description": "The label for category Advanced in sidebar develop"
+  },
+  "sidebar.develop.category.Archived": {
+    "message": "アーカイブ済み",
+    "description": "The label for category Archived in sidebar develop"
+  },
+  "sidebar.develop.category.Blockchain Fundamentals": {
+    "message": "ブロックチェーン基礎",
+    "description": "The label for category Blockchain Fundamentals in sidebar develop"
+  },
+  "sidebar.develop.category.Business": {
+    "message": "ビジネス",
+    "description": "The label for category Business in sidebar develop"
+  },
+  "sidebar.develop.category.Core Contracts": {
+    "message": "コアコントラクト",
+    "description": "The label for category Core Contracts in sidebar develop"
+  },
+  "sidebar.develop.category.DApps Development": {
+    "message": "分散型アプリケーション開発",
+    "description": "The label for category DApps Development in sidebar develop"
+  },
+  "sidebar.develop.category.Data Formats": {
+    "message": "データ形式",
+    "description": "The label for category Data Formats in sidebar develop"
+  },
+  "sidebar.develop.category.Development Guidelines": {
+    "message": "開発ガイドライン",
+    "description": "The label for category Development Guidelines in sidebar develop"
+  },
+  "sidebar.develop.category.Fift language": {
+    "message": "Fift 言語",
+    "description": "The label for category Fift language in sidebar develop"
+  },
+  "sidebar.develop.category.Frameworks": {
+    "message": "フレームワーク",
+    "description": "The label for category Frameworks in sidebar develop"
+  },
+  "sidebar.develop.category.Getting Started": {
+    "message": "はじめに",
+    "description": "The label for category Getting Started in sidebar develop"
+  },
+  "sidebar.develop.category.Guidelines": {
+    "message": "ガイドライン",
+    "description": "The label for category Guidelines in sidebar develop"
+  },
+  "sidebar.develop.category.Integrate with TON": {
+    "message": "TONとの統合",
+    "description": "The label for category Integrate with TON in sidebar develop"
+  },
+  "sidebar.develop.category.Message Management": {
+    "message": "メッセージ管理",
+    "description": "The label for category Message Management in sidebar develop"
+  },
+  "sidebar.develop.category.Network Configurations": {
+    "message": "ネットワーク構成",
+    "description": "The label for category Network Configurations in sidebar develop"
+  },
+  "sidebar.develop.category.Network Protocols": {
+    "message": "ネットワークプロトコル",
+    "description": "The label for category Network Protocols in sidebar develop"
+  },
+  "sidebar.develop.category.Security Measures": {
+    "message": "セキュリティ対策",
+    "description": "The label for category Security Measures in sidebar develop"
+  },
+  "sidebar.develop.category.Smart Contracts": {
+    "message": "スマートコントラクト",
+    "description": "The label for category Smart Contracts in sidebar develop"
+  },
+  "sidebar.develop.category.TL-B": {
+    "message": "TL-B",
+    "description": "The label for category TL-B in sidebar develop"
+  },
+  "sidebar.develop.category.TON Hello World series": {
+    "message": "TON Hello World シリーズ",
+    "description": "The label for category TON Hello World series in sidebar develop"
+  },
+  "sidebar.develop.category.TON Virtual Machine (TVM)": {
+    "message": "TON 仮想マシン(TVM)",
+    "description": "The label for category TON Virtual Machine (TVM) in sidebar develop"
+  },
+  "sidebar.develop.category.Telegram Bot Examples": {
+    "message": "Telegram ボットの例",
+    "description": "The label for category Telegram Bot Examples in sidebar develop"
+  },
+  "sidebar.develop.category.Telegram Mini Apps": {
+    "message": "Telegram ミニアプリ",
+    "description": "The label for category Telegram Mini Apps in sidebar develop"
+  },
+  "sidebar.develop.category.Testing and Debugging": {
+    "message": "テストとデバッグ",
+    "description": "The label for category Testing and Debugging in sidebar develop"
+  },
+  "sidebar.develop.category.Transaction Fees": {
+    "message": "取引手数料",
+    "description": "The label for category Transaction Fees in sidebar develop"
+  },
+  "sidebar.develop.category.Tutorials & Examples": {
+    "message": "チュートリアルと例",
+    "description": "The label for category Tutorials & Examples in sidebar develop"
+  },
+  "sidebar.develop.doc.Get Started with TON": {
+    "message": "TONを始める",
+    "description": "The label for the doc item Get Started with TON in sidebar develop, linking to the doc develop/get-started-with-ton"
+  },
+  "sidebar.develop.doc.HTML/JS Apps": {
+    "message": "HTML/JS アプリケーション",
+    "description": "The label for the doc item HTML/JS Apps in sidebar develop, linking to the doc develop/dapps/ton-connect/web"
+  },
+  "sidebar.develop.doc.Mint Your First Token": {
+    "message": "最初のトークンを発行する",
+    "description": "The label for the doc item Mint Your First Token in sidebar develop, linking to the doc develop/dapps/tutorials/jetton-minter"
+  },
+  "sidebar.develop.doc.NFT Minting Guide": {
+    "message": "NFT 発行ガイド",
+    "description": "The label for the doc item NFT Minting Guide in sidebar develop, linking to the doc develop/dapps/tutorials/collection-minting"
+  },
+  "sidebar.develop.doc.NFT Use Cases in TON": {
+    "message": "TON における NFT の使用例",
+    "description": "The label for the doc item NFT Use Cases in TON in sidebar develop, linking to the doc participate/nft"
+  },
+  "sidebar.develop.doc.React Apps": {
+    "message": "React アプリケーション",
+    "description": "The label for the doc item React Apps in sidebar develop, linking to the doc develop/dapps/ton-connect/react"
+  },
+  "sidebar.develop.doc.TON Connect Protocol": {
+    "message": "TON Connect プロトコル",
+    "description": "The label for the doc item TON Connect Protocol in sidebar develop, linking to the doc develop/dapps/ton-connect/protocol/README"
+  },
+  "sidebar.develop.doc.Telegram Bots JS": {
+    "message": "Telegram ボット(JS)",
+    "description": "The label for the doc item Telegram Bots JS in sidebar develop, linking to the doc develop/dapps/ton-connect/tg-bot-integration"
+  },
+  "sidebar.develop.doc.Telegram Bots Python": {
+    "message": "Telegram ボット(Python)",
+    "description": "The label for the doc item Telegram Bots Python in sidebar develop, linking to the doc develop/dapps/ton-connect/tg-bot-integration-py"
+  },
+  "sidebar.develop.doc.Web3 Game Example": {
+    "message": "Web3 ゲーム例",
+    "description": "The label for the doc item Web3 Game Example in sidebar develop, linking to the doc develop/dapps/tutorials/building-web3-game"
+  },
+  "sidebar.develop.doc.Zero-Knowledge Proofs": {
+    "message": "ゼロ知識証明",
+    "description": "The label for the doc item Zero-Knowledge Proofs in sidebar develop, linking to the doc develop/dapps/tutorials/simple-zk-on-ton"
+  },
+  "sidebar.develop.link.Building first web client": {
+    "message": "最初のWebクライアントの構築",
+    "description": "The label for link Building first web client in sidebar develop, linking to https://ton-community.github.io/tutorials/03-client"
+  },
+  "sidebar.develop.link.TVM Instructions": {
+    "message": "TVM 命令",
+    "description": "The label for link TVM Instructions in sidebar develop, linking to /learn/tvm-instructions/instructions"
+  },
+  "sidebar.develop.link.Testing your smart contract": {
+    "message": "スマートコントラクトのテスト",
+    "description": "The label for link Testing your smart contract in sidebar develop, linking to https://ton-community.github.io/tutorials/04-testing"
+  },
+  "sidebar.develop.link.Wallets List": {
+    "message": "ウォレットリスト",
+    "description": "The label for link Wallets List in sidebar develop, linking to https://github.com/ton-blockchain/wallets-list"
+  },
+  "sidebar.develop.link.Working with your wallet": {
+    "message": "ウォレットの使用",
+    "description": "The label for link Working with your wallet in sidebar develop, linking to https://ton-community.github.io/tutorials/01-wallet"
+  },
+  "sidebar.develop.link.Writing first smart contract": {
+    "message": "最初のスマートコントラクトの作成",
+    "description": "The label for link Writing first smart contract in sidebar develop, linking to https://ton-community.github.io/tutorials/02-contract"
+  },
+  "sidebar.participate.category.Blockchain Nodes": {
+    "message": "ブロックチェーンノード",
+    "description": "The label for category Blockchain Nodes in sidebar participate"
+  },
+  "sidebar.participate.category.Cross-chain Bridges": {
+    "message": "クロスチェーンブリッジ",
+    "description": "The label for category Cross-chain Bridges in sidebar participate"
+  },
+  "sidebar.participate.category.Network Infrastructure": {
+    "message": "ネットワークインフラ",
+    "description": "The label for category Network Infrastructure in sidebar participate"
+  },
+  "sidebar.participate.category.TON DNS": {
+    "message": "TON DNS",
+    "description": "The label for category TON DNS in sidebar participate"
+  },
+  "sidebar.participate.category.TON Proxy & Sites": {
+    "message": "TON プロキシとサイト",
+    "description": "The label for category TON Proxy & Sites in sidebar participate"
+  },
+  "sidebar.participate.category.TON Storage": {
+    "message": "TON ストレージ",
+    "description": "The label for category TON Storage in sidebar participate"
+  },
+  "sidebar.participate.category.Wallets in TON": {
+    "message": "TON ウォレット",
+    "description": "The label for category Wallets in TON in sidebar participate"
+  },
+  "sidebar.participate.doc.Bridges Addresses": {
+    "message": "ブリッジアドレス",
+    "description": "The label for the doc item Bridges Addresses in sidebar participate, linking to the doc participate/crosschain/bridge-addresses"
+  },
+  "sidebar.participate.doc.Overview": {
+    "message": "概要",
+    "description": "The label for the doc item Overview in sidebar participate, linking to the doc participate/crosschain/overview"
+  }
+}

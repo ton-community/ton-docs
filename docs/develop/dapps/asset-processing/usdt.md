@@ -4,7 +4,7 @@ import Button from '@site/src/components/button'
 
 ## Tether
 
-Stablecoins are a type of cryptocurrency whose value is 1:1 pegged to another asset, such as a fiat currency or gold, to maintain a stable price. Until recently, there was a jUSDT token, which is a wrapped ERC-20 from the Ethereum token bridged with [bridge.ton.org](bridge.ton.org). But on [18.04.2023](https://t.me/toncoin/824) the public launch of **native** USD₮ token issued by the company [Tether](https://tether.to/en/) was happened. After launching USD₮, the jUSDT has moved to the second priority token but is still used in services as an alternative or addition to USD₮.
+Stablecoins are a type of cryptocurrency whose value is 1:1 pegged to another asset, such as a fiat currency or gold, to maintain a stable price. Until recently, there was a jUSDT token, which is a wrapped ERC-20 from the Ethereum token bridged with <a href="https://bridge.ton.org" target="_blank">bridge.ton.org</a>. But on [18.04.2023](https://t.me/toncoin/824) the public launch of **native** USD₮ token issued by the company <a href="https://tether.to/en/" target="_blank">Tether</a> was happened. After launching USD₮, the jUSDT has moved to the second priority token but is still used in services as an alternative or addition to USD₮.
 
 In TON Blockchain USD₮ supported as a [Jetton Asset](/develop/dapps/asset-processing/jettons).
 

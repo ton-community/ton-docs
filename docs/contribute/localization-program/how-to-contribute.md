@@ -43,6 +43,17 @@ All tasks are performed in **side-by-side** mode in the Crowdin Editor. To enabl
   ![create-tasks](/img/localizationProgramGuideline/create-tasks.png)
 
 ### Developer
+- **Update Footer Configuration for Your Language :**
+  1. Fork our [**repository**](https://github.com/TownSquareXYZ/ton-docs/tree/i18n_feat).
+  2. Locate the file [**`src/theme/Footer/config.ts`**](https://github.com/TownSquareXYZ/ton-docs/blob/main/src/theme/Footer/config.ts).
+  3. Copy the value of the variable **`FOOTER_COLUMN_LINKS_EN`** to **`FOOTER_COLUMN_LINKS_[YOUR_LANG]`**.
+  4. Translate the values of the keys **`headerLangKey`** and **`langKey`** to your language, as we did for Mandarin in **`FOOTER_COLUMN_LINKS_CN`**.
+  5. Add a new property to **`FOOTER_LINKS_TRANSLATIONS`**:
+      - Set **the key** as your [**ISO language code**](https://www.andiamo.co.uk/resources/iso-language-codes/) (**two letters**, **lowercase**).
+      - **The value** should be the new variable you just created for your language.
+  6. Run the command **`yarn start:local [YOUR_IOS_LANG_CODE]`** to preview the new footer in your language.   
+        (e.g., **`yarn start:local ru`** for a preview of the **Russian** footer)
+  7. If everything looks good, create a pull request to the **`i18n_feat`** branch.
 - **Upload files**
 - **Edit translatable text**
 - **Connect integrations** (e.g., add GitHub integration)

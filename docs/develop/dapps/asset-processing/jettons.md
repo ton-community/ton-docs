@@ -2,13 +2,13 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Button from '@site/src/components/button';
 
-# TON Jetton processing
+# Jetton Processing
 
 :::info
 For clear understanding, the reader should be familiar with the basic principles of asset processing described in [payments processing section](/develop/dapps/asset-processing/) of our documentation.
 :::
 
-Jettons are tokens on TON Blockchain - one can consider them similarly to ERC-20 tokens on Ethereum.
+Jettons are tokens on TON Blockchain - one can consider them similarly to ERC-20 tokens on Ethereum was set in TON with [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md).
 
 In this analysis, we take a deeper dive into the formal standards detailing jetton [behavior](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) and [metadata](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
 A less formal sharding-focused overview of jetton architecture can be found in our
@@ -116,26 +116,27 @@ the `Jetton master contract` provides the get method `get_wallet_address(slice o
 <Tabs groupId="retrieve-wallet-address">
 <TabItem value="api" label="API">
 
-> Run `get_wallet_address(slice owner_address)` through `/runGetMethod` method from the [Toncenter API](https://toncenter.com/api/v3/#/default/run_get_method_api_v3_runGetMethod_post).
+> Run `get_wallet_address(slice owner_address)` through `/runGetMethod` method from the [Toncenter API](https://toncenter.com/api/v3/#/default/run_get_method_api_v3_runGetMethod_post). In real cases (not test ones) it is important to always check that wallet indeed is attributed to desired Jetton Master. Check code example for more.
 
 </TabItem>
 <TabItem value="js" label="js">
 
 ```js
-import TonWeb from "tonweb";
+import TonWeb from 'tonweb';
 const tonweb = new TonWeb();
-const jettonMinter = new TonWeb.token.jetton.JettonMinter(tonweb.provider, {address: "<JETTON_MASTER_ADDRESS>"});
-const address = await jettonMinter.getJettonWalletAddress(new TonWeb.utils.Address("<OWNER_WALLET_ADDRESS>"));
+const jettonMinter = new TonWeb.token.jetton.JettonMinter(tonweb.provider, { address: '<JETTON_MASTER_ADDRESS>' });
+const jettonWalletAddress = await jettonMinter.getJettonWalletAddress(new TonWeb.utils.Address('<OWNER_WALLET_ADDRESS>'));
+
 // It is important to always check that wallet indeed is attributed to desired Jetton Master:
 const jettonWallet = new TonWeb.token.jetton.JettonWallet(tonweb.provider, {
   address: jettonWalletAddress
 });
 const jettonData = await jettonWallet.getData();
-if (jettonData.jettonMinterAddress.toString(false) !== new TonWeb.utils.Address(info.address).toString(false)) {
+if (jettonData.jettonMinterAddress.toString(false) !== jettonMinter.address.toString(false)) {
   throw new Error('jetton minter address from jetton wallet doesnt match config');
 }
 
-console.log('Jetton wallet address:', address.toString(true, true, true));
+console.log('Jetton wallet address:', jettonWalletAddress.toString(true, true, true));
 ```
 
 </TabItem>
@@ -234,10 +235,13 @@ This transfer require some ton coins for **fees** and, optionally, **transfer no
 
 To send **comment** you need setup `forward payload`. Set **first 32 bits to 0x0** and append **your text**.
 
-`forward payload` is sent in `transfer notification` internal message. It will be generated only if `forward amount` > 0.
+`forward payload` is sent in `transfer notification` internal message. It will be generated only if `forward_ton_amount` > 0. Recommended `forward_ton_amount` for jetton transfer with comment is 1 nanoton.
 
 Finally, to retrieve `Excess` message you must set up `response destination`.
 
+Sometimes you may encounter a `709` error when sending jetton. It says that the value of the toncoin attached to the message is not enough to send it. Make sure that `Toncoin > to_nano(TRANSFER_CONSUMPTION) + forward_ton_amount`. `TRANSFER_CONSUMPTION` in most cases may be 0.037 if the `forward_payload` is not too large. 
+
+You may also encounter the error `cskip_no_gas`, which indicates that the jettons were successfully transferred, but no other calculations were performed. This is a common situation when the value of `forward_ton_amount` is equal to 1 nanoton.
 
 :::tip
 Check [best practices](/develop/dapps/asset-processing/jettons#best-practices) for _"send jettons with comments"_ example.

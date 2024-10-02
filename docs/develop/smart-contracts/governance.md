@@ -43,7 +43,8 @@ Each validator, from time to time, is randomly assigned to create a new block (i
 ### Distribution of validation rewards
 The same way as with checking whether it is time to conduct new elections, the Elector in each block checks whether it is time to release funds from `frozen` for stored `past_elections`. At the corresponding block, the Elector distributes accumulated earnings from corresponding validation rounds (gas fees and block creation rewards) to validators of that round proportional to validator weights. After that, stakes with rewards are added to the `credits` table, and the election gets removed from `past_elections` table.
 
-
+### Current state of Elector
+You can check current state in the [dapp](https://1ixi1.github.io/elector/), which allows to see elections participans, locked stakes, ready to withdraw funds, complaints and so on.
 ## Config
 Config smart contract controls TON configuration parameters. Its logic determines who and under what conditions has permission to change some of those parameters. It also implements a proposal/voting mechanism and validator set rolling updates.
 

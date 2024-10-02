@@ -61,11 +61,6 @@ Wallet source code:
 
 ### Wallet V5
 
-:::warning
-This is an experimental version that is in public beta testing.
-The TON Core team started to audit and test this v5-beta smart contract. The smart contract code will change in the course of this work, but will try to keep its interface intact. The TON Core team plans to complete this work by June 20. We ask all wallets in the TON ecosystem to support the final smart contract after the audit.
-:::
-
 This is an extensible wallet specification developed by the Tonkeeper team, aimed at replacing V4 and allowing arbitrary extensions.
 
 The W5 wallet standard offers many benefits that improve the experience for both users and merchants. W5 supports gas-free transactions, account delegation and recovery, subscription payments using tokens and Toncoin, and low-cost multi-transfers.
@@ -75,7 +70,7 @@ Users will have access to a 25% reduction in blockchain fees, a new flexible plu
 In addition to retaining the previous functionality (v4), the new contract allows you to send up to 255 messages at a time, as well as to make full-fledged gasless transactions (e.g., payment of network fees when transferring USDt in USDt itself) and other features. We believe it will enhance the usability and capabilities for TON users.
 
 :::tip
-In the final version of this technology, users wallets will allow transactions to be initiated by the user but paid for by another contract. Consequently, there will be services (such as [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)) that provide this functionality: they pay the transaction fees in TONs on behalf of the user, but charge a fee in tokens. This means they cover the TON fees only for transactions that include a payment to the service.
+Wallet V5 wallets allow transactions to be initiated by the user but paid for by another contract. Consequently, there will be services (such as [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)) that provide this functionality: they pay the transaction fees in TONs on behalf of the user, but charge a fee in tokens.
 :::
 
 #### UI Preparation and Beta Testing
@@ -98,7 +93,7 @@ The v5 wallet smart contract allows the processing of internal messages signed b
 Beta version of the gasless backend API is available on [tonapi.io/api-v2](https://tonapi.io/api-v2). If you are developing any wallet app and have feedback about these methods please share it ton [@tonapitech](https://t.me/tonapitech) chat.
 
 Wallet source code:
- * [tonkeeper/w5](https://github.com/tonkeeper/w5)
+ * [ton-blockchain/wallet-contract-v5](https://github.com/ton-blockchain/wallet-contract-v5)
 
 ## Special wallets
 
@@ -133,8 +128,6 @@ Highload v3 will always store the query ID (replay protection) once all the chec
 Highload v3 will never execute multiple externals containing the same `query_id` **and** `created_at` - by the time it forgets any given `query_id`, the `created_at` condition will prevent such a message from executing. This effectively makes `query_id` **and** `created_at` together the "primary key" of a transfer request for highload v3.
 
 When iterating (incrementing) query ID, it is cheaper (in terms of TON spent on fees) to iterate through bit number first, and then the shift, like when incrementing a regular number. After you've reached the last query ID (remember about the emergency query ID - see above), you can reset query ID to 0, but if highload's timeout period has not passed yet, then the replay protection dictionary will be full and you will have to wait for the timeout period to pass.
-
-
 
 
 ### Highload wallet v2
@@ -184,6 +177,68 @@ This wallet's function is to act like a regular wallet, but restrict transfers t
 
 Wallet source code:
  * [EmelyanenkoK/nomination-contract/restricted-wallet](https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet)
+
+## Known op codes
+
+:::info
+Also op-code, op::code and operational code
+:::
+
+
+| Contract type   | Hex code        | OP::Code                   |
+|-----------------|-----------------|----------------------------|
+| Global          | 0x00000000      | Text Comment               |
+| Global          | 0xffffffff      | Bounce                     |
+| Global          | 0x2167da4b      | [Encrypted Comment](https://docs.ton.org/develop/smart-contracts/guidelines/internal-messages#messages-with-encrypted-comments) |
+| Global          | 0xd53276db      | Excesses                   |
+| Elector         | 0x4e73744b      | New Stake                  |
+| Elector         | 0xf374484c      | New Stake Confirmation     |
+| Elector         | 0x47657424      | Recover Stake Request      |
+| Elector         | 0x47657424      | Recover Stake Responce     |
+| Wallet          | 0x0f8a7ea5      | Jetton Transfer            |
+| Wallet          | 0x235caf52      | [Jetton Call To](https://testnet.tonviewer.com/transaction/1567b14ad43be6416e37de56af198ced5b1201bb652f02bc302911174e826ef7) |
+| Jetton          | 0x178d4519      | Jetton Internal Transfer   |
+| Jetton          | 0x7362d09c      | Jetton Notify              |
+| Jetton          | 0x595f07bc      | Jetton Burn                |
+| Jetton          | 0x7bdd97de      | Jetton Burn Notification   |
+| Jetton          | 0xeed236d3      | Jetton Set Status          |
+| Jetton-Minter   | 0x642b7d07      | Jetton Mint                |
+| Jetton-Minter   | 0x6501f354      | Jetton Change Admin        |
+| Jetton-Minter   | 0xfb88e119      | Jetton Claim Admin         |
+| Jetton-Minter   | 0x7431f221      | Jetton Drop Admin          |
+| Jetton-Minter   | 0xcb862902      | Jetton Change Metadata     |
+| Jetton-Minter   | 0x2508d66a      | Jetton Upgrade             |
+| Vesting         | 0xd372158c      | [Top Up](https://github.com/ton-blockchain/liquid-staking-contract/blob/be2ee6d1e746bd2bb0f13f7b21537fb30ef0bc3b/PoolConstants.ts#L28) |
+| Vesting         | 0x7258a69b      | Add Whitelist              |
+| Vesting         | 0xf258a69b      | Add Whitelist Response     |
+| Vesting         | 0xa7733acd      | Send                       |
+| Vesting         | 0xf7733acd      | Send Response              |
+| Dedust          | 0x9c610de3      | Dedust Swap ExtOut         |
+| Dedust          | 0xe3a0d482      | Dedust Swap Jetton         |
+| Dedust          | 0xea06185d      | Dedust Swap Internal       |
+| Dedust          | 0x61ee542d      | Swap External              |
+| Dedust          | 0x72aca8aa      | Swap Peer                  |
+| Dedust          | 0xd55e4686      | Deposit Liquidity Internal |
+| Dedust          | 0x40e108d6      | Deposit Liquidity Jetton   |
+| Dedust          | 0xb56b9598      | Deposit Liquidity all      |
+| Dedust          | 0xad4eb6f5      | Pay Out From Pool          |
+| Dedust          | 0x474а86са      | Payout                     |
+| Dedust          | 0xb544f4a4      | Deposit                    |
+| Dedust          | 0x3aa870a6      | Withdrawal                 |
+| Dedust          | 0x21cfe02b      | Create Vault               |
+| Dedust          | 0x97d51f2f      | Create Volatile Pool       |
+| Dedust          | 0x166cedee      | Cancel Deposit             |
+| StonFi          | 0x25938561      | Swap Internal              |
+| StonFi          | 0xf93bb43f      | Payment Request            |
+| StonFi          | 0xfcf9e58f      | Provide Liquidity          |
+| StonFi          | 0xc64370e5      | Swap Success               |
+| StonFi          | 0x45078540      | Swap Success ref           |
+
+:::info
+[DeDust docs](https://docs.dedust.io/docs/swaps)
+
+[StonFi docs](https://docs.ston.fi/docs/developer-section/architecture#calls-descriptions)
+:::
 
 ## Conclusion
 

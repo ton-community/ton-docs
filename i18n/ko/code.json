@@ -287,5 +287,129 @@
   "theme.tags.tagsPageTitle": {
     "message": "태그",
     "description": "The title of the tag list page"
+  },
+  "theme.NavBar.navAriaLabel": {
+    "message": "주 내비게이션",
+    "description": "The ARIA label for the main navigation"
+  },
+  "theme.SearchModal.errorScreen.helpText": {
+    "message": "네트워크 연결을 확인해야 할 수도 있습니다.",
+    "description": "The help text for error screen of search modal"
+  },
+  "theme.SearchModal.errorScreen.titleText": {
+    "message": "결과를 가져올 수 없습니다",
+    "description": "The title for error screen of search modal"
+  },
+  "theme.SearchModal.footer.closeKeyAriaLabel": {
+    "message": "Esc 키",
+    "description": "The ARIA label for the Escape key button that close the modal"
+  },
+  "theme.SearchModal.footer.closeText": {
+    "message": "닫기",
+    "description": "The explanatory text of the action for Escape key"
+  },
+  "theme.SearchModal.footer.navigateDownKeyAriaLabel": {
+    "message": "아래 화살표 키",
+    "description": "The ARIA label for the Arrow down key button that makes the navigation"
+  },
+  "theme.SearchModal.footer.navigateText": {
+    "message": "탐색",
+    "description": "The explanatory text of the action for the Arrow up and Arrow down key"
+  },
+  "theme.SearchModal.footer.navigateUpKeyAriaLabel": {
+    "message": "위 화살표 키",
+    "description": "The ARIA label for the Arrow up key button that makes the navigation"
+  },
+  "theme.SearchModal.footer.searchByText": {
+    "message": "검색 제공",
+    "description": "The text explain that the search is making by Algolia"
+  },
+  "theme.SearchModal.footer.selectKeyAriaLabel": {
+    "message": "Enter 키",
+    "description": "The ARIA label for the Enter key button that makes the selection"
+  },
+  "theme.SearchModal.footer.selectText": {
+    "message": "선택",
+    "description": "The explanatory text of the action for the enter key"
+  },
+  "theme.SearchModal.noResultsScreen.noResultsText": {
+    "message": "결과가 없습니다:",
+    "description": "The text explains that there are no results for the following search"
+  },
+  "theme.SearchModal.noResultsScreen.reportMissingResultsLinkText": {
+    "message": "알려주세요.",
+    "description": "The text for the link to report missing results"
+  },
+  "theme.SearchModal.noResultsScreen.reportMissingResultsText": {
+    "message": "이 쿼리에 결과가 있어야 한다고 생각하십니까?",
+    "description": "The text for the question where the user thinks there are missing results"
+  },
+  "theme.SearchModal.noResultsScreen.suggestedQueryText": {
+    "message": "검색해 보세요",
+    "description": "The text for the suggested query when no results are found for the following search"
+  },
+  "theme.SearchModal.placeholder": {
+    "message": "문서 검색",
+    "description": "The placeholder of the input of the DocSearch pop-up modal"
+  },
+  "theme.SearchModal.searchBox.cancelButtonText": {
+    "message": "취소",
+    "description": "The label and ARIA label for search box cancel button"
+  },
+  "theme.SearchModal.searchBox.resetButtonTitle": {
+    "message": "쿼리 지우기",
+    "description": "The label and ARIA label for search box reset button"
+  },
+  "theme.SearchModal.startScreen.favoriteSearchesTitle": {
+    "message": "즐겨찾기",
+    "description": "The title for favorite searches"
+  },
+  "theme.SearchModal.startScreen.noRecentSearchesText": {
+    "message": "최근 검색 없음",
+    "description": "The text when no recent searches"
+  },
+  "theme.SearchModal.startScreen.recentSearchesTitle": {
+    "message": "최근 검색",
+    "description": "The title for recent searches"
+  },
+  "theme.SearchModal.startScreen.removeFavoriteSearchButtonTitle": {
+    "message": "즐겨찾기 목록에서 이 검색 삭제",
+    "description": "The label for remove favorite search button"
+  },
+  "theme.SearchModal.startScreen.removeRecentSearchButtonTitle": {
+    "message": "기록에서 이 검색 삭제",
+    "description": "The label for remove recent search button"
+  },
+  "theme.SearchModal.startScreen.saveRecentSearchButtonTitle": {
+    "message": "이 검색 저장",
+    "description": "The label for save recent search button"
+  },
+  "theme.SearchPage.algoliaLabel": {
+    "message": "Algolia로 검색",
+    "description": "The ARIA label for Algolia mention"
+  },
+  "theme.SearchPage.fetchingNewResults": {
+    "message": "새 검색 결과를 가져오는 중...",
+    "description": "The paragraph for fetching new search results"
+  },
+  "theme.SearchPage.inputLabel": {
+    "message": "검색",
+    "description": "The ARIA label for search page input"
+  },
+  "theme.SearchPage.inputPlaceholder": {
+    "message": "여기에 검색어 입력",
+    "description": "The placeholder for search page input"
+  },
+  "theme.docs.sidebar.closeSidebarButtonAriaLabel": {
+    "message": "네비게이션 바 닫기",
+    "description": "The ARIA label for close button of mobile sidebar"
+  },
+  "theme.docs.sidebar.navAriaLabel": {
+    "message": "문서 사이드바",
+    "description": "The ARIA label for the sidebar navigation"
+  },
+  "theme.docs.sidebar.toggleSidebarButtonAriaLabel": {
+    "message": "네비게이션 바 전환",
+    "description": "The ARIA label for hamburger menu button of mobile navigation"
   }
 }
