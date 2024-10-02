@@ -116,7 +116,7 @@ No, all miners take different roads to find the solution. A faster machine has a
 #### <a id="faq-hw-machine"></a>How much income will my machine generate?
 Please see [Income estimates](#hardware-estimates).
 #### <a id="faq-hw-asic"></a>Can I use my BTC/ETH rig to mine TON?
-No, TON uses a single SHA256 hashing method which is different from BTC, ETH, and others. ASICS or FPGAs wbich are built for mining other cryptos will not help. 
+No, TON uses a single SHA256 hashing method which is different from BTC, ETH, and others. ASICS or FPGAs which are built for mining other cryptos will not help. 
 #### <a id="faq-hw-svsm"></a>What is better, a single fast machine or several slow ones?
 This is controversial. See: miner software launches threads for each core on the system, and each core gets its own set of keys to process, so if you have one machine capable to run 64 threads and 4 x machines capable to run 16 threads each, then they will be exactly as successful assuming that the speed of each thread is the same.
 

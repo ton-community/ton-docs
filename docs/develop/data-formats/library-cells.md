@@ -3,7 +3,7 @@
 ## Introduction 
 One of the native feature of how TON stores data in Cells is deduplication: in storage, messages, blocks, transactions and so on duplicate cells are stored only once. This tremendously decrease size of serialized data, and allows efficient storage of step-wise updated data.
 
-For the same reason many structures in TON are simultaneously rich, convinient and efficient: block structure contains the same copy of each message in many places: in Message queue, in list of Transaction, in Merkle updates and so on: since duplication has no overhead we can store data multiple times where we need it without worring about efficiency.
+For the same reason many structures in TON are simultaneously rich, convenient and efficient: block structure contains the same copy of each message in many places: in Message queue, in list of Transaction, in Merkle updates and so on: since duplication has no overhead we can store data multiple times where we need it without warring about efficiency.
 
 Library cells employ a deduplication mechanism on-chain, allowing the integration of this technology into custom smart contracts.
 :::info
@@ -14,7 +14,7 @@ If you store jetton-wallet code as library cell (1 cell and 256+8 bits, instead 
 
 Lets consider basechain step from block 1'000'000 to block 1'000'001. While each block contains small amount of data (usually less than 1000 transactions), the whole Basechain state contains millions of accounts and since blockchain need to keep integrity of the data (in particular to commit merkle root hash of whole state to the block) whole tree of the state need to be updated. 
 
-For the blockchains of previous generations this means that generally you keep track of only recent states because storing separate chain states for each block will require too much space. But in TON Blockchain due to deduplication, for each block you only add to storage new cells. This not only make processing faster but also allows you to efficiently work with history: check balances, states and even run getmethods for any point in history without much overhead!
+For the blockchains of previous generations this means that generally you keep track of only recent states because storing separate chain states for each block will require too much space. But in TON Blockchain due to deduplication, for each block you only add to storage new cells. This not only make processing faster but also allows you to efficiently work with history: check balances, states and even run get methods for any point in history without much overhead!
 
 For the case when we have a family of similar contracts (for instance jetton-wallets), node stores duplicating data (the same code of each jetton-wallet) only once. Library Cells allows to utilize deduplication mechanism for such contracts to decrease storage and forward fees. 
 
@@ -28,11 +28,11 @@ Library cell is [exotic cell](/develop/data-formats/exotic-cells) that contains 
 
 For TVM, library cells works as follows: whenever TVM receives a command to open a cell to a slice (TVM Instruction: `CTOS`, funC method: `.begin_parse()`), it searches cell with the corresponding hash from library cell in the Masterchain library context. If found it, it opens referenced cell and returns its slice. 
 
-Opening library cell costs the same as opening ordinar cell, so it can be used as transparent replacement for static cells that however occupy much less space (and thus costs less fees for storage and sending).
+Opening library cell costs the same as opening ordinary cell, so it can be used as transparent replacement for static cells that however occupy much less space (and thus costs less fees for storage and sending).
 
 Note that it is possible to create a library cell that references another library cell, which in turn references another, and so on. For such case `.begin_parse()` will raise exception. Such library however can be unwrapped step-wise with `XLOAD` opcode.
 
-Another important peculiarities of Library Cell is that since it contains hash of referenced cell it is ultimatively reference to some satic data. You can not change data to which this library cell is referenced.
+Another important peculiarities of Library Cell is that since it contains hash of referenced cell it is ultimately reference to some static data. You can not change data to which this library cell is referenced.
 
 To be found in the Masterchain library context and thus referenced by a Library Cell, a source Cell needs to be published in the Masterchain.  This means that a smart contract existing in the Masterchain needs to add this cell to its state with the `public=true` flag. This can be accomplished using the `SETLIBCODE` opcode. 
 

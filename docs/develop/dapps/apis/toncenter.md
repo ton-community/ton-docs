@@ -47,7 +47,7 @@ Indexers allow to list jetton wallets, NFTs, transactions by certain filters, no
 
 ### Anton
 
-Written in Go, Anton is an open source The Open Network blockchain indexer available under the Apache Licence 2.0. Anton is designed to provide a scalable and flexible solution for developers to access and analyze blockchain data. Our goal is to help developers and users understand how the blockchain is being used, as well as make it possible for developers to add their own contracts with their own message schemas to our explorer.
+Written in Go, Anton is an open source The Open Network blockchain indexer available under the Apache License 2.0. Anton is designed to provide a scalable and flexible solution for developers to access and analyze blockchain data. Our goal is to help developers and users understand how the blockchain is being used, as well as make it possible for developers to add their own contracts with their own message schemas to our explorer.
 
 * [Project GitHub](https://github.com/tonindexer/anton) - to run your own indexer
 * [Swagger API documentation](https://github.com/tonindexer/anton), [API Query Examples](https://github.com/tonindexer/anton/blob/main/docs/API.md) - to use, study the documentation and examples

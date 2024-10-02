@@ -4,7 +4,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 ## How RedStone oracles work with TON
 
-RedStone oracles use an alternative design of providing oracle data to smart contracts. Instead of constantly persisting data on the contract's storage (by data providers), the information is brought on-chain only when needed (by end users). Until that moment data remains in the decentralised cache layer, which is powered by RedStone light cache gateways and
+RedStone oracles use an alternative design of providing oracle data to smart contracts. Instead of constantly persisting data on the contract's storage (by data providers), the information is brought on-chain only when needed (by end users). Until that moment data remains in the decentralized cache layer, which is powered by RedStone light cache gateways and
 streams data broadcasting protocol. Data is transferred to the contract by end users, who should attach signed data
 packages to their function invocations. The information integrity is verified on-chain through signature checking.
 

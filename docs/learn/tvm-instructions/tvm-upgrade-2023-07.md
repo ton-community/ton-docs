@@ -17,7 +17,7 @@ This upgrade launched [run](https://t.me/tonblockchain/223) on the Mainnet from 
 * **13**: `tuple` with information about previous blocks.
 
 **10** Currently code of the smart contract is presented on TVM level only as executable continuation
-and can not be transformed to cell. This code is often used to authorize a neighbour contract
+and can not be transformed to cell. This code is often used to authorize a neighbor contract
 of the same kind, for instance jetton-wallet authorizes jetton-wallet. For now we need
 to explicitly store code cell in storage which make storage and init_wrapper more cumbersome than it could be.
 Using **10** for code is compatible to Everscale update of tvm.
@@ -33,7 +33,7 @@ Meanwhile, is often desired to account storage fees.
 
 **13** Currently there is no way to retrieve data on previous blocks. One of the kill features of TON is that every structure
 is a Merkle-proof friendly bag (tree) of cells, moreover TVM is cell and merkle-proof friendly as well.
-That way, if we include information on the blocks to TVM context it will be possible to make many trustless scenarios: contract A may check transactions on contract B (without B's cooperation), it is possible to recover broken chains of messages (when recover-contract gets and cheks proofs that some transaction occured but reverted), knowing masterchain block hashes is also required to make some validation fisherman functions onchain.
+That way, if we include information on the blocks to TVM context it will be possible to make many trustless scenarios: contract A may check transactions on contract B (without B's cooperation), it is possible to recover broken chains of messages (when recover-contract gets and checks proofs that some transaction occurred but reverted), knowing masterchain block hashes is also required to make some validation fisherman functions onchain.
 
 Block ids are presented in the following format:
 ```
@@ -56,7 +56,7 @@ Rule of thumb when choosing gas cost on new opcodes is that it should not be les
 | `MYCODE` | _`- c`_ | Retrieves code of smart-contract from c7                            |
 | `INCOMINGVALUE` | _`- t`_ | Retrieves value of incoming message from c7                         |
 | `STORAGEFEES` | _`- i`_ | Retrieves value of storage phase fees from c7                       |
-| `PREVBLOCKSINFOTUPLE` | _`- t`_ | Retrives PrevBlocksInfo: `[last_mc_blocks, prev_key_block]` from c7 |
+| `PREVBLOCKSINFOTUPLE` | _`- t`_ | Retrieves PrevBlocksInfo: `[last_mc_blocks, prev_key_block]` from c7 |
 | `PREVMCBLOCKS` | _`- t`_ | Retrieves only `last_mc_blocks`                                     |
 | `PREVKEYBLOCK` | _`- t`_ | Retrieves only `prev_key_block`                                     |
 | `GLOBALID` | _`- i`_ | Retrieves `global_id` from 19 network config                        |
@@ -108,7 +108,7 @@ Gas cost is equal to 10 plus opcode length: 26 for most opcodes, +8 for `LSHIFT#
 Currently arguments of all stack operations are bounded by 256.
 That means that if stack become deeper than 256 it becomes difficult to manage deep stack elements.
 In most cases there are no safety reasons for that limit, i.e. arguments are not limited to prevent too expensive operations.
-For some mass stack operations, such as `ROLLREV` (where computation time lineary depends on argument value) gas cost also lineary depends on argument value.
+For some mass stack operations, such as `ROLLREV` (where computation time linearly depends on argument value) gas cost also linearly depends on argument value.
 - Arguments of `PICK`, `ROLL`, `ROLLREV`, `BLKSWX`, `REVX`, `DROPX`, `XCHGX`, `CHKDEPTH`, `ONLYTOPX`, `ONLYX` are now unlimited.
 - `ROLL`, `ROLLREV`, `REVX`, `ONLYTOPX` consume more gas when arguments are big: additional gas cost is `max(arg-255,0)` (for argument less than 256 the gas consumption is constant and corresponds to the current behavior)
 - For `BLKSWX`, additional cost is `max(arg1+arg2-255,0)` (this does not correspond to the current behavior, since currently both `arg1` and `arg2` are limited to 255).
@@ -275,5 +275,5 @@ Gas cost:
 ## Sending messages
 Currently it is difficult to calculate cost of sending message in contract (which leads to some approximations like in [jettons](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc#L94)) and impossible to bounce request back if action phase is incorrect. It is also impossible to accurately subtract from incoming message sum of "constant fee for contract logic" and "gas expenses".
 
-- `SENDMSG` takes a cell and mode as input. Creates an output action and returns a fee for creating a message. Mode has the same effect as in the case of SENDRAWMSG. Additionally `+1024` means - do not create an action, only estimate fee. Other modes affect the fee calculation as follows: `+64` substitutes the entire balance of the incoming message as an outcoming value (slightly inaccurate, gas expenses that cannot be estimated before the computation is completed are not taken into account), `+128` substitutes the value of the entire balance of the contract before the start of the computation phase (slightly inaccurate, since gas expenses that cannot be estimated before the completion of the computation phase are not taken into account).
+- `SENDMSG` takes a cell and mode as input. Creates an output action and returns a fee for creating a message. Mode has the same effect as in the case of SENDRAWMSG. Additionally `+1024` means - do not create an action, only estimate fee. Other modes affect the fee calculation as follows: `+64` substitutes the entire balance of the incoming message as an outgoing value (slightly inaccurate, gas expenses that cannot be estimated before the computation is completed are not taken into account), `+128` substitutes the value of the entire balance of the contract before the start of the computation phase (slightly inaccurate, since gas expenses that cannot be estimated before the completion of the computation phase are not taken into account).
 - `SENDRAWMSG`, `RAWRESERVE`, `SETLIBCODE`, `CHANGELIB` - `+16` flag is added, that means in the case of action fail - bounce transaction. No effect if `+2` is used.

@@ -28,11 +28,19 @@ Please take the [JS SDK](/develop/dapps/ton-connect/developers) as a reference a
 
 #### How do you detect whether the app is embedded in the wallet?
 
-JS SDK does that for you; just get wallets list `connector.getWallets()` and check `embedded` property of the corresponding list item. If you build your own SDK you should check `window.[targetWalletJsBridgeKey].tonconnect.isWalletBrowser`.
+JS SDK does that for you; just get wallets list
+```js
+`connector.getWallets()`
+``` 
+and check `embedded` property of the corresponding list item. If you build your own SDK you should check `window.[targetWalletJsBridgeKey].tonconnect.isWalletBrowser`.
 
 #### How do you detect if the wallet is a browser extension?
 
-Like with embedded apps (see above), JS SDK detects it for you via `injected` property of the corresponding `connector.getWallets()` list item. If you build your own SDK you should check that `window.[targetWalletJsBridgeKey].tonconnect` exists.
+Like with embedded apps (see above), JS SDK detects it for you via `injected` property of the corresponding
+```js
+`connector.getWallets()`
+```  
+list item. If you build your own SDK you should check that `window.[targetWalletJsBridgeKey].tonconnect` exists.
 
 #### How to implement backend authorization with tonconnect?
 

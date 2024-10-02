@@ -156,7 +156,13 @@ After we have filled in `tonNode.shardPublicOverlayId`, we serialize it and get 
 
 We need to use the resulting key ID as `name` to fill in the `pub.overlay name:bytes = PublicKey` structure, wrapping it in TL bytes array. Next, we serialize it, and we get the key ID now from it.
 
-The resulting id will be the key to use in `dht.findValue`, and the `name` field's value will be the word `nodes`. We repeat the process from the previous section, everything is the same as last time, but `updateRule` will be [dht.updateRule.overlayNodes](#dhtupdateruleoverlaynodes).
+The resulting id will be the key to use in
+
+```bash
+dht.findValue
+```
+
+, and the `name` field's value will be the word `nodes`. We repeat the process from the previous section, everything is the same as last time, but `updateRule` will be [dht.updateRule.overlayNodes](#dhtupdateruleoverlaynodes).
 
 After validation - we will get the public keys (`id`) of the nodes that have information about our workchain and shard. To get the ADNL addresses of the nodes, we need to make IDs from the keys (using the hashing method) and repeat the procedure described above for each of the ADNL addresses, as with the ADNL address of the `foundation.ton` domain.
 

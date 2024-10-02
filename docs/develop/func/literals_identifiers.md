@@ -54,11 +54,11 @@ These are invalid identifiers:
 - `_`
 
 Some more uncommon examples of valid identifiers:
-- `123validname`
+- `123valid`
 - `2+2=2*2`
-- `-alsovalidname`
-- `0xefefefhahaha`
-- `{hehehe}`
+- `-valid`
+- `0xdead`
+- `{valid}`
 - ``pa{--}in"`aaa`"``
 
 These are also invalid identifiers:

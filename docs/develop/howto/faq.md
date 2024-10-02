@@ -46,7 +46,7 @@ In addition, the current TON architecture lacks a market-based mechanism for det
 
 ### What is the RPC method used to retrieve block information?
 
-Blocks produced by Validators. Existing blocks available via Liteservers. Liteservers accessible via Lite Сlients. On top of Lite Сlient built 3rd-party tools like wallets, explorers, dapps, etc.
+Blocks produced by Validators. Existing blocks available via Liteservers. Liteservers accessible via Lite Clients. On top of Lite Client built 3rd-party tools like wallets, explorers, dapps, etc.
 
 - To access the Lite Client core check out this section of our GitHub:  [ton-blockchain/tonlib](https://github.com/ton-blockchain/ton/tree/master/tonlib)
 
@@ -222,7 +222,7 @@ To protect message chains from being halted at non-existing contracts TON use "b
 
 ### Does the upgradability of a smart-contract pose a threat to its users?
 
-Currently, the ability to update smart contracts is a normal practice and is widely used in most modern protocols. This is because updatability allows for bug fixes, adding new features and improving security.
+Currently, the ability to update smart contracts is a normal practice and is widely used in most modern protocols. This is because upgradability allows for bug fixes, adding new features and improving security.
 
 How to mitigate the risks:
 

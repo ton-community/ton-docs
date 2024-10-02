@@ -26,7 +26,7 @@ we get: `[0xFE, 0x8C, 0x01, 0x00, array bytes]`, 396+4 = 400, which is a multipl
 
 ## Non-obvious serialization rules
 
-Often, a 4-byte prefix is written before the schema itself - its ID. The schema ID is a CRC32 with an IEEEE table from the schema text, while symbols such as `;` and brackets `()` are previously removed from the text. The serialization of a schema with an ID prefix is called **boxed**, this allows the parser to determine which schema comes before it if there are multiple options.
+Often, a 4-byte prefix is written before the schema itself - its ID. The schema ID is a CRC32 with an IEEE table from the schema text, while symbols such as `;` and brackets `()` are previously removed from the text. The serialization of a schema with an ID prefix is called **boxed**, this allows the parser to determine which schema comes before it if there are multiple options.
 
 How to determine whether to serialize as boxed or not? If our schema is part of another schema, then we need to look at how the field type is specified, if it is specified explicitly, then we serialize without a prefix, if not explicitly (there are many such types), then we need to serialize as boxed. Example:
 ```tlb

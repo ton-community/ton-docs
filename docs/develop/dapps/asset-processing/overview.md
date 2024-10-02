@@ -23,7 +23,7 @@ For example:
 ![](/img/docs/asset-processing/alicemsgDAG.svg)
 
 * `Alice` use e.g [Tonkeeper](https://tonkeeper.com/) to send an `external message` to her wallet.
-* `external message` is the input message for `wallet A v4` contract with empty soure (a message from nowhere, such as [Tonkeeper](https://tonkeeper.com/)).
+* `external message` is the input message for `wallet A v4` contract with empty source (a message from nowhere, such as [Tonkeeper](https://tonkeeper.com/)).
 * `outgoing message` is the output message for `wallet A v4` contract and input message for `wallet B v4` contract with `wallet A v4` source and `wallet B v4` destination.
 
 As a result there are 2 transactions with their set of input and output messages.

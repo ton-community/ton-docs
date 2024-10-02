@@ -10,7 +10,7 @@ Documentations pages is primarily intended for documentation purposes and not as
 To make it easier for readers to navigate through the documentation, it is important to use a consistent format throughout the document. Use headings, subheadings, bullet points, and numbered lists to break up the text and make it easier to read.
 
 ## Provide examples in special section
-Providing examples can help readers better understand the content and how to apply it. If you are writing documentation page and need refer several exmaples, please create special section Examples right before References and See Also sections. Do not mix description and examples in documentation pages. 
+Providing examples can help readers better understand the content and how to apply it. If you are writing documentation page and need refer several examples, please create special section Examples right before References and See Also sections. Do not mix description and examples in documentation pages. 
 Use code snippets, screenshots, or diagrams to illustrate your points and make the documentation more engaging.
 
 ## Keep it up to date
