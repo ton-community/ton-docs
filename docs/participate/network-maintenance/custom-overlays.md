@@ -9,7 +9,7 @@ Currently these overlays can be used for two purposes:
 
 Participation in custom overlays allow to avoid uncertainty of public overlays and improve delivery reliability and delays.
 
-Each custom overlay has stricty determined list of participants with predefined permissions, in particular permission to send external messages and blocks. Config of the overlay should be the same on all participating nodes.
+Each custom overlay has strictly determined list of participants with predefined permissions, in particular permission to send external messages and blocks. Config of the overlay should be the same on all participating nodes.
 
 If you have multiple node under your control it is expedient to unite them into custom overlay, where all validators will be able to send block candidates and all LS will be able to send external messages. That way LS will synchronize faster while simultaneously external message delivery rate will be higher (and delivery more robust in general). Note, that additional overlay causes additional network traffic.
 

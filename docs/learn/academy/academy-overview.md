@@ -37,7 +37,7 @@ RU
 </Button>
 
 
-#### TON & Telegram Blockchain Сourse
+#### TON & Telegram Blockchain Course
 
 We're proud to present the __TON Blockchain Course__, which is a comprehensive guide to the TON Blockchain. The course is designed for developers who want to learn how to create smart contracts and decentralized applications on the TON Blockchain in engaging and interactive ways.
 

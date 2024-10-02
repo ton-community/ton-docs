@@ -3,11 +3,11 @@ import Button from '@site/src/components/button'
 # TON Node Types
 
 **Blockchain node** is a device, usually a computer, that runs the TON blockchain's software - and therefore, participates in the blockchain operation.
-In general, nodes ensure decentralisation of the TON network.
+In general, nodes ensure decentralization of the TON network.
 
 Nodes perform different functions within the TON protocol:
 
-- **Full** and **archive nodes** maintain the blockchain block and transaction history, enable users and client applications to look for blocks and transactions, as well as to send new transations into the blockchain;
+- **Full** and **archive nodes** maintain the blockchain block and transaction history, enable users and client applications to look for blocks and transactions, as well as to send new transactions into the blockchain;
 - **Validator nodes** verify transactions ensuring the blockchain security.
 
 Below, you will find more detailed information about each of these node types, as well as about interaction of full and archive nodes with client applications.
@@ -34,8 +34,8 @@ Running a Full Node
 ## Archive Node
 
 **Archive node** is a full node that keeps the entire block history of the TON blockchain.
-Such nodes act as the decentralised point of truth in terms of ensuring consistency of the whole blockchain history.
-They serve as a backend for blockchain explorers and other applicaitons relying on deep transaction history.
+Such nodes act as the decentralized point of truth in terms of ensuring consistency of the whole blockchain history.
+They serve as a backend for blockchain explorers and other applications relying on deep transaction history.
 
 Archive nodes do not prune the blockchain state which elevates their system requirements, especially in terms of storage.
 According to the latest estimations, while full nodes and validator nodes require about 1 TB disk space, archive nodes would require about 8 TB to store the complete block history.
@@ -66,7 +66,7 @@ Running a Validator Node
 TON nodes are equipped with a _Liteserver_ functionality allowing external applications (in other words, _lite clients_) to interact with the TON blockchain via them.
 As a rule, the liteserver mode is used with full and archive nodes while validator nodes do not enable it to increase validation performance.
 
-The liteserver mode allows lite clients to send transactoins via TON nodes, as well as to retrieve information about blocks and transactions with them - for instance, to fetch and update wallet balances.
+The liteserver mode allows lite clients to send transactions via TON nodes, as well as to retrieve information about blocks and transactions with them - for instance, to fetch and update wallet balances.
 
 You have two options to allow your lite client application to interact with the TON blockchain:
 
