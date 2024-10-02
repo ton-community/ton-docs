@@ -131,7 +131,7 @@ Indeed, in the elector code above we serialize coins' amounts via `.store_coins(
 * First bit stands for empty extra-currencies dictionary.
 * Then we have two 4-bit long fields. They encode 0 as `VarUInteger 16`. In fact, since `ihr_fee` and `fwd_fee` will be overwritten, we may as well put there zeroes.
 * Then we put zero to `created_lt` and `created_at` fields. Those fields will be overwritten as well; however, in contrast to fees, these fields have a fixed length and are thus encoded as 64- and 32-bit long strings.
-* _(we had alredy serialized the message header and passed to init/body at that moment)_
+* _(we had already serialized the message header and passed to init/body at that moment)_
 * Next zero-bit means that there is no `init` field.
 * The last zero-bit means that msg_body will be serialized in-place.
 * After that, message body (with arbitrary layout) is encoded.
@@ -165,8 +165,8 @@ More configuration parameters and there values can be found [here](/develop/howt
 
 As you might've noticed, we send messages with `send_raw_message` which, apart from consuming the message itself, also accepts the mode. This mode is used to determine the mode for sending messages, including whether to pay for fuel separately and how to handle errors. When the TON Virtual Machine (TVM) analyses and processes messages, it performs differentiated processing depending on the mode value. Easily confused is that the value of the mode parameter has two variables, namely mode and flag. Mode and flag have different functions:
 
-- mode : defines the basic behaviour when sending a message, e.g. whether to carry a balance, whether to wait for message processing results, etc. Different mode values represent different sending characteristics, and different values can be combined to meet specific sending requirements.
-- flag : as an addition to the mode, it is used to configure specific message behaviour, such as paying transfer fees separately or ignoring processing errors. The flag is added to the mode to create the final message sending mode.
+- mode : defines the basic behavior when sending a message, e.g. whether to carry a balance, whether to wait for message processing results, etc. Different mode values represent different sending characteristics, and different values can be combined to meet specific sending requirements.
+- flag : as an addition to the mode, it is used to configure specific message behavior, such as paying transfer fees separately or ignoring processing errors. The flag is added to the mode to create the final message sending mode.
 
 When using the `send_raw_message` function, it is important to select the appropriate mode and flag combination for your needs. To figure out the mode that best suits your needs, take a look at the following table:
 
@@ -233,5 +233,5 @@ Let's look at an example to make it clearer. Let's imagine a situation where we 
 | Send all received tokens together with the contract balance | `mode` = 128, `flag` = 0 | `send_raw_message(msg, 128)` | `balance` - 0, `send` - 100 + 50 - 3 = 147
 | Send all received tokens together with the contract balance, if there was an error in processing the action - bounce the message in addition to rolling back the transaction  | `mode` = 128, `flag` = 16 | `send_raw_message(msg, 144)` | `balance` - 0 + `147 (bounced)`, `send` - 100 + 50 - 3 = `bounce` message with 147
 | Send all received tokens together with the contract balance and destroy smart-contract | `mode` = 128, `flag` = 32 | `send_raw_message(msg, 160)` | `balance` - 0, `send` - 100 + 50 - 3 = 147
-| Send all received tokens together with the contract balance and destroy smart-contract, if there was an error in processing the action - bounce the message in addition to rolling back the transaction. `IMPORTANT: Avoid this behaviour because the refunds will go to an already deleted contract.`  | `mode` = 128, `flag` = 32 + 16 | `send_raw_message(msg, 176)` | `balance` - 0 + `147 (bounced)`, `send` - 100 + 50 - 3 = `bounce` message with 147
+| Send all received tokens together with the contract balance and destroy smart-contract, if there was an error in processing the action - bounce the message in addition to rolling back the transaction. `IMPORTANT: Avoid this behavior because the refunds will go to an already deleted contract.`  | `mode` = 128, `flag` = 32 + 16 | `send_raw_message(msg, 176)` | `balance` - 0 + `147 (bounced)`, `send` - 100 + 50 - 3 = `bounce` message with 147
 

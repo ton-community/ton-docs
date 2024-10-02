@@ -83,7 +83,7 @@ Learn current TON Blockchain stats [here](https://tontech.io/stats/).
 
 On TON Blockchain, there are generally two ways validators can be penalized for misbehaving: idle and malicious misbehaving; both of which are prohibited and may result in being fined (in a process called slashing) for their actions.
 
-If a validator does not participate in block creation and transaction signing for a significant amount of time during a validation round, it is potentially fined using the _Standard fine_ parameter. As of April 2023, the Standard fine accrued is 101 TON (Network Parameter `ConfigParam40:MisbehaviourPunishmentConfig`).
+If a validator does not participate in block creation and transaction signing for a significant amount of time during a validation round, it is potentially fined using the _Standard fine_ parameter. As of April 2023, the Standard fine accrued is 101 TON (Network Parameter `ConfigParam40:MisbehaviorPunishmentConfig`).
 
 On TON, slashing penalties (fines given to validators) allow any network participant to file a complaint if they believe a validator is misbehaving. During this process, the participant issuing the complaint must attach cryptographic proofs of misbehavior for Elector submission. During the `stake_held_for` dispute resolution period, all validators operating on the network check the validity of complaints and vote whether they will pursue the complaint collectively (while determining the legitimacy of misbehaving proofs and fine allotment).  
 

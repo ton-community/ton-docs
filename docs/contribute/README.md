@@ -30,10 +30,9 @@ You can use Gitpod (a free, online, VS code-like IDE) for contributing. It will 
 
 - **Most important**: look around. Match the overall style of the project. This includes formatting, naming files, naming objects in code, naming things in documentation, and so on.
 - **For documentation**: When editing documentation, do not wrap lines at 80 characters; instead, configure your editor to soft-wrap.
+- **Grammar**: `cpell` will check the spelling and suggest corrections in case of mistakes automatically before creating new commit. Feel free to add specific `words` to `cspell.json` config to include them in the verification dictionary.
 
 Don't worry too much about styles in general; the maintainers will help you fix them as they review your code.
-
-
 
 ### Pull Requests
 

@@ -28,7 +28,7 @@ A new instance of TVM is initialized prior to the execution of a smart contract 
 
 - Control register **c3** (code dictionary) is initialized by the cell with the smart contract code like **cc** (current continuation) described above.
 
-- Control register **c4** (root of persistent data) is initialized by the persistent data of the smart contract, stored in its `data` section. In case of a frozen or uninitialized state of the account, the data must be supplied in the `init` field of the incoming message. Notice, that the persistent data of the smart contract does not need to be loaded in its entirery for this to occur. The root is loaded instead, and TVM may load other cells by their references from the root only when they are accessed, thus providing a form of virtual memory.
+- Control register **c4** (root of persistent data) is initialized by the persistent data of the smart contract, stored in its `data` section. In case of a frozen or uninitialized state of the account, the data must be supplied in the `init` field of the incoming message. Notice, that the persistent data of the smart contract does not need to be loaded in its entirely for this to occur. The root is loaded instead, and TVM may load other cells by their references from the root only when they are accessed, thus providing a form of virtual memory.
 
 - Control register **c5** (root of actions) is initialized by an empty cell. The "output action" primitives of TVM, such as `SENDMSG`, accumulate _output actions_ (e.g., outbound messages) in this register, to be performed upon successful termination of the smart contract. The TL-B scheme for its serialization is [described below](#control-register-c5)
 

@@ -7,7 +7,7 @@ This document assumes that a validator is installed using the configuration and 
 
 ## <a id="maintenance"></a>Maintenance
 ### <a id="database-grooming"></a>Database grooming
-TON Node/Validator keeps it's database within the path specified by `--db` flag of `validator-engine`, usually `/var/ton-work/db`, this directory is created and managed by the node but it is recommended to perform a database grooming/cleanup task once a month to remove some artefacts.
+TON Node/Validator keeps it's database within the path specified by `--db` flag of `validator-engine`, usually `/var/ton-work/db`, this directory is created and managed by the node but it is recommended to perform a database grooming/cleanup task once a month to remove some artifacts.
 
 :::caution Do not forget to stop validator process
 You **must** stop the validator process before performing the steps outlined below, failure to do that will likely cause database corruption.
