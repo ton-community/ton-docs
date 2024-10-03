@@ -217,7 +217,7 @@ module.exports = [
           'participate/run-nodes/mytonctrl-status',
         ],
       },
-      'participate/run-nodes/node-commands', // TODO: need to refactor
+      'participate/run-nodes/node-commands',
       { 
         type: 'category',
         label: 'Validation',
