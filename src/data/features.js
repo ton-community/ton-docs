@@ -14,15 +14,15 @@ export const firstRow = [
   {
     title: "Guidelines",
     linkUrl: "/guidelines",
-    imageUrl: "img/mainPageCards/developer.svg",
+    imageUrl: "img/mainPageCards/participate.svg",
     description: "Build smart contracts, web applications or bots using TON."
   },
-  {
-    title: "Participate",
-    linkUrl: "/participate/",
-    imageUrl: "img/mainPageCards/participate.svg",
-    description: "Take part in TON by staking, running node or even become a Validator!"
-  },
+  // {
+  //   title: "Participate",
+  //   linkUrl: "/participate/",
+  //   imageUrl: "img/mainPageCards/participate.svg",
+  //   description: "Take part in TON by staking, running node or even become a Validator!"
+  // },
   // {
   //   title: "Integrator",
   //   status: "Intermediate",
