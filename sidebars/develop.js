@@ -200,6 +200,7 @@ module.exports = [
     type: 'category',
     label: 'Network Protocols',
     items: [
+      'learn/networking/low-level-adnl', // TODO: MERGE ADNL
       'develop/network/adnl-tcp',
       'develop/network/adnl-udp',
       'develop/network/dht',
