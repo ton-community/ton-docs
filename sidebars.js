@@ -16,7 +16,6 @@ const sidebars = {
   learn: require('./sidebars/learn'),
   develop: require('./sidebars/develop'),
   guidelines: require('./sidebars/guidelines'),
-  participate: require('./sidebars/participate'),
   contribute: require('./sidebars/contribute'),
 };
 

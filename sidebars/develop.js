@@ -157,11 +157,11 @@ module.exports = [
     label: 'Assets',
     items: [
       'develop/dapps/asset-processing/overview',
-      'develop/dapps/asset-processing/README', // divide
-      'develop/dapps/asset-processing/jettons', // divide
-      'develop/dapps/asset-processing/mintless-jettons', // divide
+      'develop/dapps/asset-processing/README', // TODO: divide
+      'develop/dapps/asset-processing/jettons', // TODO: divide
+      'develop/dapps/asset-processing/mintless-jettons', // TODO: divide
       'develop/dapps/asset-processing/usdt',
-      'develop/dapps/asset-processing/nfts', // divide
+      'develop/dapps/asset-processing/nfts', // TODO: divide
     ],
   },
   {
@@ -175,6 +175,61 @@ module.exports = [
         label: 'Oracles in TON',
         items: [
           'develop/oracles/red_stone',
+        ],
+      },
+    ],
+  },
+  {
+    'type': 'html',
+    'value': '<hr/>',
+  },
+  {
+    'type': 'html',
+    'value': '<span class=\'menu__link\'><b><small> Infrastructure </small></b></span>',
+  },
+  'participate/explorers',
+  {
+    type: 'category',
+    label: 'Cross-chain Bridges',
+    items: [
+      {
+        type: 'doc',
+        label: 'Overview',
+        id: 'participate/crosschain/overview',
+      },
+      {
+        type: 'doc',
+        label: 'Bridges Addresses',
+        id: 'participate/crosschain/bridge-addresses',
+      },
+    ],
+  },
+  {
+    type: 'category',
+    label: 'Blockchain Nodes',
+    items: [
+      'participate/nodes/node-types',
+      {
+        type: 'category',
+        label: 'MyTonCtrl',
+        items: [
+          'participate/run-nodes/mytonctrl',
+          'participate/run-nodes/mytonctrl-status',
+        ],
+      },
+      'participate/run-nodes/node-commands', // TODO: need to refactor
+      { 
+        type: 'category',
+        label: 'Validation',
+        items: [
+          {
+            type: 'doc',
+            label: 'Proof of Stake',
+            id: 'participate/network-maintenance/staking-incentives',
+          },
+          'participate/network-maintenance/nominator-pool',
+          'participate/network-maintenance/single-nominator',
+          'participate/nodes/collators',
         ],
       },
     ],
