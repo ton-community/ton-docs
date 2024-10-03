@@ -2,7 +2,7 @@
  * @type {import('@docusaurus/plugin-content-docs').SidebarConfig}
  */
 module.exports = [
-  'learn/introduction',
+  'learn/introduction', // TODO: Change to
   'learn/glossary',
   {
     'type': 'html',
@@ -10,54 +10,45 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Introduction </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Dive into TON </small></b></span>',
   },
+  'learn/introduction',
   {
     type: 'category',
-    label: 'What is Blockchain?',
+    label: 'TON Blockchain',
     items: [
+      'learn/overviews/ton-blockchain',
+      'learn/overviews/addresses',
+      'learn/overviews/cells',
       {
         type: 'category',
-        label: 'TON Blockchain',
+        label: 'TON Networking',
         items: [
-          'learn/overviews/ton-blockchain',
-          'learn/overviews/addresses',
-          'learn/overviews/cells',
           {
-            type: 'category',
-            label: 'TON Networking',
-            items: [
-              {
-                type: 'doc',
-                label: 'Overview',
-                id: 'learn/networking/overview',
-              },
-              {
-                type: 'category',
-                label: 'ADNL Protocol',
-                items: [
-                  {
-                    type: 'doc',
-                    label: 'Overview',
-                    id: 'learn/networking/adnl',
-                  },
-                  'learn/networking/low-level-adnl',
-                ],
-              },
-              'learn/networking/overlay-subnetworks',
-              'learn/networking/rldp',
-              'learn/networking/ton-dht',
-            ],
+            type: 'doc',
+            label: 'Overview',
+            id: 'learn/networking/overview',
           },
-          'learn/overviews/blockchain-comparison',
           {
-            type: 'link',
-            label: 'Open-Source and Decentralization in TON',
-            href: 'https://defi.org/ton/',
+            type: 'doc',
+            label: 'ADNL Protocol',
+            id: 'learn/networking/adnl',
           },
+          'learn/networking/overlay-subnetworks',
+          'learn/networking/rldp',
+          'learn/networking/ton-dht',
+
         ],
       },
-    ]
+      'develop/blockchain/shards',
+      'develop/blockchain/sharding-lifecycle',
+      'learn/overviews/blockchain-comparison',
+      {
+        type: 'link',
+        label: 'Open-Source and Decentralization in TON',
+        href: 'https://defi.org/ton/',
+      },
+    ],
   },
   {
     type: 'category',
@@ -68,22 +59,6 @@ module.exports = [
       'develop/ethereum-to-ton/solidity-vs-func',
       'develop/ethereum-to-ton/blockchain-services',
     ]
-  },
-  {
-    'type': 'html',
-    'value': '<hr/>',
-  },
-  {
-    'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Dive into TON </small></b></span>',
-  },
-  {
-    type: 'category',
-    label: 'Blockchain Fundamentals',
-    items: [
-      'develop/blockchain/shards',
-      'develop/blockchain/sharding-lifecycle',
-    ],
   },
   'learn/academy/academy-overview',
 ];
