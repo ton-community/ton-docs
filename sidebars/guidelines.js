@@ -162,20 +162,47 @@ module.exports = [
     type: 'category',
     label: 'Advanced Asset Processing',
     items: [
-      'develop/dapps/asset-processing/README', // divide
-      'develop/dapps/asset-processing/jettons', // divide
-      'develop/dapps/asset-processing/mintless-jettons', // divide
+      'develop/dapps/asset-processing/README', // TODO: divide
+      'develop/dapps/asset-processing/jettons', // TODO: divide
+      'develop/dapps/asset-processing/mintless-jettons', // TODO: divide
       'develop/dapps/asset-processing/mass-mint-tools',
       {
         type: 'category',
         label: 'NFT Processing',
         items: [
-          'develop/dapps/asset-processing/nfts', // divide
+          'develop/dapps/asset-processing/nfts', // TODO: divide
           'develop/dapps/asset-processing/metadata',
         ],
       },
     ],
   },
+  {
+    'type': 'html',
+    'value': '<hr/>',
+  },
+  {
+    'type': 'html',
+    'value': '<span class=\'menu__link\'><b><small> MyTonCtrl & Blockchain Nodes </small></b></span>',
+  },
+  {
+    type: 'category',
+    label: 'Running Nodes',
+    items: [
+      'participate/run-nodes/archive-node',
+      'participate/run-nodes/full-node',
+      'participate/run-nodes/become-validator',
+      'participate/network-maintenance/nominators',
+      'participate/run-nodes/enable-liteserver-node',
+      'participate/run-nodes/run-docker',
+      'participate/run-nodes/local-ton',
+      'participate/run-nodes/secure-guidelines',
+    ],
+  },
+  'participate/network-maintenance/custom-overlays',
+  'participate/run-nodes/nodes-troubleshooting',
+  'participate/nodes/node-maintenance-and-security',
+  'participate/network-maintenance/persistent-states',
+  'participate/run-nodes/faq',
   {
     'type': 'html',
     'value': '<hr/>',
@@ -246,6 +273,43 @@ module.exports = [
       'develop/dapps/ton-connect/business',
       'develop/dapps/ton-connect/security',
       'develop/dapps/ton-connect/comparison',
+    ],
+  },
+  {
+    'type': 'html',
+    'value': '<hr/>',
+  },
+  {
+    'type': 'html',
+    'value': '<span class=\'menu__link\'><b><small> Web3 </small></b></span>',
+  },
+  'participate/web3/overview',
+  {
+    'type': 'category',
+    'label': 'TON DNS',
+    'items': [
+      'participate/web3/dns',
+      'develop/howto/subresolvers',
+    ],
+  },
+  {
+    'type': 'category',
+    'label': 'TON Proxy & Sites',
+    'items': [
+      'develop/dapps/tutorials/how-to-run-ton-site',
+      'participate/web3/app-sites',
+      'participate/web3/setting-proxy',
+      'participate/web3/how-to-open-any-ton-site',
+      'participate/web3/site-management',
+    ],
+  },
+  {
+    'type': 'category',
+    'label': 'TON Storage',
+    'items': [
+      'participate/ton-storage/storage-daemon',
+      'participate/ton-storage/storage-provider',
+      'participate/ton-storage/storage-faq',
     ],
   },
 ];
