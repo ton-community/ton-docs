@@ -79,6 +79,8 @@ module.exports = [
       },
       'develop/smart-contracts/tutorials/multisig',
       'develop/smart-contracts/tutorials/multisig-js',
+      'develop/smart-contracts/tutorials/airdrop-claim-best-practice',
+      'develop/smart-contracts/tutorials/shard-optimization',
       'develop/smart-contracts/tutorials/wallet',
       'develop/smart-contracts/examples',
       {
