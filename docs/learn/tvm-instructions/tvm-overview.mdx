@@ -21,30 +21,30 @@ The [TON Blockchain Course](https://stepik.org/course/176754/) is a comprehensiv
 
 Module 2 completely covers __TVM__, transactions, scalability and business cases.
 
-````mdx-code-block 
-<Button href="https://stepik.org/course/176754/promo" 
+
+<Button href="https://stepik.org/course/176754/promo"
         colorType={'primary'} sizeType={'sm'}>
-````
+
 Check TON Blockchain Course
-````mdx-code-block 
+
 </Button>
-````
-````mdx-code-block 
-<Button href="https://stepik.org/course/201638/promo" 
+
+
+<Button href="https://stepik.org/course/201638/promo"
         colorType={'secondary'} sizeType={'sm'}>
-````
+
 CHN
-````mdx-code-block 
+
 </Button>
-````
-````mdx-code-block 
-<Button href="https://stepik.org/course/201855/promo" 
+
+
+<Button href="https://stepik.org/course/201855/promo"
         colorType={'secondary'} sizeType={'sm'}>
-````
+
 RU
-````mdx-code-block 
+
 </Button>
-````
+
 
 ## Transactions and phases
 When some event happens on the account in one of the TON chains, it causes a **transaction**. The most common event is the "arrival of some message", but generally speaking there could be `tick-tock`, `merge`, `split` and other events.
@@ -82,7 +82,7 @@ At any given moment, the TVM state is fully determined by 6 properties:
 * Current continuation - object which describes a currently executed sequence of instructions
 * Current codepage - in simple terms, this means the version of TVM which is currently running
 * Gas limits - a set of 4 integer values; the current gas limit g<sub>l</sub>, the maximal gas limit g<sub>m</sub>, the remaining gas g<sub>r</sub> and the gas credit g<sub>c</sub>
-* Library context - the hashmap of libraries which can be called by TVM 
+* Library context - the hashmap of libraries which can be called by TVM
 
 ### TVM is a stack machine
 TVM is a last-input-first-output stack machine. In total, there are 7 types of variables which may be stored in stack — three non-cell types:
@@ -98,9 +98,9 @@ And four distinct flavours of cells:
 
 ### Control registers
 * `c0` — Contains the next continuation or return continuation (similar to the subroutine return address in conventional designs). This value must be a Continuation.
-* `c1` — Contains the alternative (return) continuation; this value must be a Continuation. 
+* `c1` — Contains the alternative (return) continuation; this value must be a Continuation.
 * `c2` — Contains the exception handler. This value is a Continuation, invoked whenever an exception is triggered.
-* `c3` — Supporting register, contains the current dictionary, essentially a hashmap containing the code of all functions used in the program. This value must be a Continuation. 
+* `c3` — Supporting register, contains the current dictionary, essentially a hashmap containing the code of all functions used in the program. This value must be a Continuation.
 * `c4` — Contains the root of persistent data, or simply the `data` section of the contract. This value is a Cell.
 * `c5` — Contains the output actions. This value is a Cell.
 * `c7` — Contains the root of temporary data. It is a Tuple.

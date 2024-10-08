@@ -6,17 +6,23 @@ export const firstRow = [
     description: "Learn about the basics of blockchain and TON and how to get started."
   },
   {
-    title: "Develop",
+    title: "Documents",
     linkUrl: "/develop/overview",
     imageUrl: "img/mainPageCards/developer.svg",
-    description: "Build smart contracts, web applications or bots using TON."
+    description: "Learn all the technical aspects of TON."
   },
   {
-    title: "Participate",
-    linkUrl: "/participate/",
+    title: "Guidelines",
+    linkUrl: "/guidelines",
     imageUrl: "img/mainPageCards/participate.svg",
-    description: "Take part in TON by staking, running node or even become a Validator!"
+    description: "Build smart contracts, web applications or bots using TON."
   },
+  // {
+  //   title: "Participate",
+  //   linkUrl: "/participate/",
+  //   imageUrl: "img/mainPageCards/participate.svg",
+  //   description: "Take part in TON by staking, running node or even become a Validator!"
+  // },
   // {
   //   title: "Integrator",
   //   status: "Intermediate",

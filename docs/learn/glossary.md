@@ -282,7 +282,7 @@ __________
 
 ### Metaverse
 
-**Metaverse** — a digital universe similar to a videogame where users create avatars and interact with the digital representations of other people or users.
+**Metaverse** — a digital universe similar to a video game where users create avatars and interact with the digital representations of other people or users.
 
 ### Moon
 
@@ -443,7 +443,7 @@ ________
 
 ### TVL
 
-**TVL** (Total Value Locked) — Тotal value locked represents the number of assets currently being staked in a specific protocol.
+**TVL** (Total Value Locked) — Total value locked represents the number of assets currently being staked in a specific protocol.
 
 ### TVM
 
@@ -487,7 +487,7 @@ ___________
 
 ### Watchlist
 
-**Wаtchlist** — a customizable list of cryptocurrencies whose price action an investor wishes to follow.
+**Watchlist** — a customizable list of cryptocurrencies whose price action an investor wishes to follow.
 
 ### Workchain
 

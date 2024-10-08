@@ -61,7 +61,7 @@ During installation, on the first screen, you need to click the `Add Python to P
 
 3)  Open the terminal as an administrator and `pip install toncli` by installing `toncli`
 
-4) Unzip the downloaded archive and add [libcrypto-1_1-x64.dll](https://disk.yandex.ru/d/BJk7WPwr_JT0fw) to unziped files
+4) Unzip the downloaded archive and add [libcrypto-1_1-x64.dll](https://disk.yandex.ru/d/BJk7WPwr_JT0fw) to unzipped files
 
 5) Open the folder in the console for windows users: 
 

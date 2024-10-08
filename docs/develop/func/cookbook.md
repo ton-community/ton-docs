@@ -103,7 +103,7 @@ do {
 
 ### How to determine if slice is empty
 
-Before working with `slice`, it is necessary to check whether it has any data to process it correctly. We can use `slice_empty?()` to do this, but we have to consider that it will return `-1` (`true`) if there is at least one `bit` of data or one `ref`.
+Before working with `slice`, it is necessary to check whether it has any data to process it correctly. We can use `slice_empty?()` to do this, but we have to consider that it will return `0` (`false`) if there is at least one `bit` of data or one `ref`.
 
 ```func
 ;; creating empty slice
@@ -1149,7 +1149,7 @@ send_raw_message(msg, 128); ;; mode = 128 is used for messages that are to carry
 
 ### How to send a message with a long text comment
 
-As we know, only 127 characters can fit into a single `cell` (<1023 bits). In case we need more - we need to organize a snake cells.
+As we know, only 127 characters can fit into a single `cell` (< 1023 bits). In case we need more - we need to organize a snake cells.
 
 ```func
 {-

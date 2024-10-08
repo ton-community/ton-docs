@@ -6,17 +6,17 @@ This feature is testnet only right now! Participate on your own risk.
 
 The key feature of TON blockchain is the ability to distribute transaction processing over network nodes, and switching from "everybody checks all transactions" to "every transaction is checked by secure validator subset". This ability to infinitely horizontally scale throughput over shards when one workchain splits to required number of *shardchains* distinguishes TON from other L1 networks.
 
-However it is necessary to regularly rotate validator subsets which process one or another shard to prevent collusion. At the same time to process transactions validators obiviously should know state of the shard prior transaction. The simplest approach is to require all validators to know state of all shards.
+However it is necessary to regularly rotate validator subsets which process one or another shard to prevent collusion. At the same time to process transactions validators obviously should know state of the shard prior transaction. The simplest approach is to require all validators to know state of all shards.
 
 This approach works well while number of TON users is within range of a few millions and TPS (transactions per second) is under hundred. However, in the future, when TON will process many thousands transactions per second and server hundred millions or billions of people, no single server would be able to keep actual state of whole network. Fortunately, TON was designed with such loads in mind and supports sharding both throughput and state update.
 
-This is achieived through separation of two roles:
+This is achieved through separation of two roles:
 * *Collator* - actor which watch for only part of the network, know actual state and *collate* (generate) next blocks
 * *Validator* - actor which gets new blocks from *Collator*, checks it's validity and signs it effectively guaranteeing correctness at the risk of losing the stake.
 
-At the same time architecture of TON allows *Validator* effectively validate new blocks without actually storing state of blockchain, by cheking specially crafted proofs.
+At the same time architecture of TON allows *Validator* effectively validate new blocks without actually storing state of blockchain, by checking specially crafted proofs.
 
-That way, when throughput of TON will be to heavy to be processed by single machine, network will consist of subnetwork of collators each of which will process only part of the chains it is capable to process and subnetwork of validators which will form many secure sets for commiting new transactions.
+That way, when throughput of TON will be to heavy to be processed by single machine, network will consist of subnetwork of collators each of which will process only part of the chains it is capable to process and subnetwork of validators which will form many secure sets for committing new transactions.
 
 Currently, TON testnet is used for testing this *Validator*/*Collator* separation, where some validators works as usual, and some validators do not collate blocks for themselves and receive them from collators.
 
@@ -97,7 +97,7 @@ Global config should contain at least one of two secions: `liteservers` and `lit
 ]
 ```
 
-Lite Client and Tonlib support this config and can choose a suitable Liteserver for each query. Note that each Liteserver monitors masterchain by default, and each server in `liteservers_v2` is implicitly configured to accept queries about masterchain. Shard `wc:shard_pfx` in the config means that the server accepts queries about shard `wc:shard_pfx`, its ancestors and its descendsnts (just like configuration of collators).
+Lite Client and Tonlib support this config and can choose a suitable Liteserver for each query. Note that each Liteserver monitors masterchain by default, and each server in `liteservers_v2` is implicitly configured to accept queries about masterchain. Shard `wc:shard_pfx` in the config means that the server accepts queries about shard `wc:shard_pfx`, its ancestors and its descendants (just like configuration of collators).
 
 ## Full collated data
 By default validators proposing new block in validator set do not attach data that proves "prior to block" state. This data should be obtained by other validators from locally stored state. That way old (from master branch) and new nodes may reach consensus, but new validators should keep eye on all network state.
@@ -108,7 +108,7 @@ Upgrade to new protocol when validators will share blocks with collated data att
 
 # Next steps
 
-The practical ability to separate *Validator* and *Collator* roles is the main milestone on the road to limitless throughput, but to create truly decentralised and censorship-resistant network it necessary to
+The practical ability to separate *Validator* and *Collator* roles is the main milestone on the road to limitless throughput, but to create truly decentralized and censorship-resistant network it necessary to
 - ensure independence and redundancy of *Collators*
 - ensure stable and secure way to interaction of Validators and Collators
 - ensure suitable financial model for Collators which incentivize durable collation of new blocks

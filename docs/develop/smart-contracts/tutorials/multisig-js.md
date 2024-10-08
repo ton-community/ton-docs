@@ -152,7 +152,7 @@ And of course you can get public properties from `MultisigWallet`, `MultisigOrde
 
  * MultisigOrderBuilder
     - `messages` - array of `MessageWithMode` to be added to the order
-    - `querryId` - golbal time until which the order is valid
+    - `queryId` - global time until which the order is valid
 
  * MultisigOrder
     - `payload` - `Cell` with order payload

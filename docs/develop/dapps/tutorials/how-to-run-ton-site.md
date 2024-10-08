@@ -44,7 +44,7 @@ Build it from sources using `./build.sh`, and run as in the step 2 for linux. Go
 
 ## 👀 Further steps
 
-### 🔍 Сhecking availability of the site
+### 🔍 Checking availability of the site
 
 After completing all the steps of the method you selected, the TON Proxy should have started. If everything was successful, your site will be available at the ADNL address received at the corresponding step. 
 

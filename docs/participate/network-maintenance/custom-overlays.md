@@ -1,14 +1,22 @@
 # Custom overlays
 
-TON `v2024.04` update introduces the ability to use custom overlays.  
-Currently they can be used only for broadcasting external messages. The main idea is to create private overlay with 
-sender nodes and validators. Only sender nodes can create broadcasts with external messages which will be (hopefully) 
-received by block collator and get into the block.
+TON nodes communicate each other by forming subnets called _Overlays_. There are few common overlays nodes participate in such as: public overlays for each shard, validators also participate in general validators overlay and overlays for specific validators sets.
+
+Nodes also can be configured to join custom overlays.
+Currently these overlays can be used for two purposes:
+- broadcasting external messages
+- broadcasting block candidates.
+
+Participation in custom overlays allow to avoid uncertainty of public overlays and improve delivery reliability and delays.
+
+Each custom overlay has strictly determined list of participants with predefined permissions, in particular permission to send external messages and blocks. Config of the overlay should be the same on all participating nodes.
+
+If you have multiple node under your control it is expedient to unite them into custom overlay, where all validators will be able to send block candidates and all LS will be able to send external messages. That way LS will synchronize faster while simultaneously external message delivery rate will be higher (and delivery more robust in general). Note, that additional overlay causes additional network traffic.
 
 ## Default custom overlays
 
-Mytonctrl uses default custom overlays available at https://ton-blockchain.github.io/fallback_custom_overlays.json. To 
-stop participation in default custom overlays run commands
+Mytonctrl uses default custom overlays available at https://ton-blockchain.github.io/fallback_custom_overlays.json. This overlay is not used most of the time and intended for emergency use in case of problems with public overlay connectivity.
+To stop participation in default custom overlays run commands
 ```bash
 MyTonCtrl> set useDefaultCustomOverlays false
 MyTonCtrl> delete_custom_overlay default
@@ -34,6 +42,10 @@ Create a config file in format:
     },
     "adnl_address_hex_2": {
         "msg_sender": false
+    },
+
+    "adnl_address_hex_2": {
+        "block_sender": true
     },
   ...
 }

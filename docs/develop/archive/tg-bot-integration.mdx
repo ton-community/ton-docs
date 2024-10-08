@@ -9,20 +9,20 @@ This tutorial describes an outdated approach to integrating TON Connect with Tel
 In this tutorial, we’ll create a sample telegram bot that supports TON Connect 2.0 authentication using Javascript TON Connect SDK.
 We will analyze connecting a wallet, sending a transaction, getting data about the connected wallet, and disconnecting a wallet.
 
-````mdx-code-block 
+
 <Button href="https://t.me/ton_connect_example_bot" colorType={'primary'} sizeType={'sm'}>
-````
+
 Open Demo Bot
-````mdx-code-block 
+
 </Button>
-````
-````mdx-code-block 
+
+
 <Button href="https://github.com/ton-connect/demo-telegram-bot" colorType={'secondary'} sizeType={'sm'}>
-````
+
 Check out GitHub
-````mdx-code-block 
+
 </Button>
-````
+
 
 ## Documentation links
 
@@ -278,7 +278,7 @@ Now you can run the bot (`npm run compile` and `npm run start` then) and send `/
 
 We will use connector in many places, so let's move connector creating code to a separate file:
 ```ts
-// src/ton-connect/conenctor.ts
+// src/ton-connect/connector.ts
 
 import TonConnect from '@tonconnect/sdk';
 import { TonConnectStorage } from './storage';
@@ -492,7 +492,7 @@ async function onChooseWalletClick ...
 Here we define buttons handlers list and `callback_query` parser. Unfortunately callback data is always string, so we have to pass JSON to the `callback_data` and parse it later in the `callback_query` handler.
 Then we are looking for the requested method and call it with passed parameters.
 
-Now we should add `conenct-wallet-menu.ts` import to the `main.ts`
+Now we should add `connect-wallet-menu.ts` import to the `main.ts`
 ```ts
 // src/main.ts
 

@@ -20,11 +20,11 @@ One of the key advantages of TON Proxy is its ability to bypass blockades impose
 
 In addition, TON Proxy helps to speed up Internet connection speeds. It automatically selects the servers with the lowest load, which improves the quality of connection and the speed of Internet access. 
 
-## Decentralised storage
+## Decentralized storage
 
 Ethereum is not suitable for storing large amounts of data. Therefore, decentralized storage on Ethereum typically involves using distributed file systems to store and retrieve data in a decentralized and secure manner. One popular approach to decentralized storage on Ethereum is the  InterPlanetary File System (IPFS), which is a peer-to-peer file system that allows users to store and retrieve files from a network of distributed nodes.
 
-TON network has its own decentralised storage service, that is used by the TON Blockchain to store archive copies of blocks and status data (snapshots), but also available for storing users’ files or other services running on the platform, with torrent-like access technology. The most popular use case is to store NFT metadata directly on TON storage, not using additional distributed file storage services like IPFS.
+TON network has its own decentralized storage service, that is used by the TON Blockchain to store archive copies of blocks and status data (snapshots), but also available for storing users’ files or other services running on the platform, with torrent-like access technology. The most popular use case is to store NFT metadata directly on TON storage, not using additional distributed file storage services like IPFS.
 
 ## Payment services
 

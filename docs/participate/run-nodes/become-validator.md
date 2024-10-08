@@ -128,21 +128,21 @@ In case of low efficiency - take action to fix the problem. Contact technical su
 Please set up dashboards to monitor your validators using these APIs.
 :::
 
-#### Penalised Validators Tracker
+#### Penalized Validators Tracker
 
-You can track penalised validators on each round with [@tonstatus_notifications](https://t.me/tonstatus_notifications).
+You can track penalized validators on each round with [@tonstatus_notifications](https://t.me/tonstatus_notifications).
 
 #### Validation API
 https://elections.toncenter.com/docs - use this API to get information about current and past validation rounds (cycles) - time of rounds, which validators participated in them, their stakes, etc.
 
 Information on current and past elections (for the validation round) is also available.
 
-#### Effieciency API
+#### Efficiency API
 
 https://toncenter.com/api/qos/index.html#/ - use this API to get information on the efficiency of validators over time.
 
 This API analyses the information from the catchain and builds an estimate of the validator's efficiency. This API does not use the checkloadall utility, but is its alternative.
-Unlike `checkloadall` which works only on validation rounds, in this API you can set any time interval to analyse the validator's efficiency.
+Unlike `checkloadall` which works only on validation rounds, in this API you can set any time interval to analyze the validator's efficiency.
 
 Workflow:
 

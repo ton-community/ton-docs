@@ -481,7 +481,11 @@ verify_key.verify(hashlib.sha256(signed).digest(), base64.b64decode(signature))
 # b'\x0eT\xd6\xb5\xd5\xe8HvH\x0b\x10\xdc\x8d\xfc\xd3#n\x93\xa8\xe9\xb9\x00\xaaH%\xb5O\xac:\xbd\xcaM'
 ```
 
-After implementing the above parameters, if an attacker tries to impersonate a user and doesn't provide a valid signature, the following error will be displayed: `nacl.exceptions.BadSignatureError: Signature was forged or corrupt`.
+After implementing the above parameters, if an attacker tries to impersonate a user and doesn't provide a valid signature, the following error will be displayed:
+
+```bash
+nacl.exceptions.BadSignatureError: Signature was forged or corrupt.
+```
 
 ## Next steps
 

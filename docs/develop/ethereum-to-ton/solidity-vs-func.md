@@ -5,13 +5,13 @@ Solidity is an object-oriented, high-level, strictly-typed language influenced b
 
 FunC is also a high-level language, used to program smart contracts on TON Blockchain, being a domain-specific, C-like, statically-typed language.
 
-In the sections below will be analysed briefly the following aspects of these languages, i.e. data types, storage, functions, flow control structures and dictionaries (hashmaps).
+In the sections below will be analyzed briefly the following aspects of these languages, i.e. data types, storage, functions, flow control structures and dictionaries (hashmaps).
 
 ## Storage layout
 
 Solidity provides a flat storage model, which means that all state variables are stored in a single, continuous block of memory called the storage. The storage is a key-value store where each key is a 256-bit (32-byte) integer that represents the storage slot number, and each value is the 256-bit word stored at that slot. The slots are numbered sequentially starting from zero, and each slot can store a single word. Solidity allows the programmer to specify the storage layout by using the storage keyword to define state variables. The order in which the variables are defined determines their position in the storage.
 
-Permanent storage data in TON Blockchain is stored as a cell. Cells play the role of memory in the stack-based TVM. A cell can be transformed into a slice, and then the data bits and references to other cells from the cell can be obtained by loading them from the slice. Data bits and references to other cells can be stored into a builder, and then the builder can be finalised into a new cell.
+Permanent storage data in TON Blockchain is stored as a cell. Cells play the role of memory in the stack-based TVM. A cell can be transformed into a slice, and then the data bits and references to other cells from the cell can be obtained by loading them from the slice. Data bits and references to other cells can be stored into a builder, and then the builder can be finalized into a new cell.
 
 ## Data types
 

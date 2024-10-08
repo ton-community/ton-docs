@@ -32,7 +32,7 @@ These oracles are developed individually for certain smart contracts and may not
 
 ### Crosschain oracles
 	
-These oracles are used to transfer data between different blockchains and are a critical component of bridges. They are used for decentralized applications that use cross-chain transactions, such as cross-chain transfer of cryptoassets from one network to another.
+These oracles are used to transfer data between different blockchains and are a critical component of bridges. They are used for decentralized applications that use cross-chain transactions, such as cross-chain transfer of crypto assets from one network to another.
 
 ## Application of blockchain oracles
 	

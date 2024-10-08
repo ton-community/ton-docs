@@ -21,8 +21,8 @@ MyTonCtrl> enable_mode single-nominator
 
 ```bash
 MyTonCtrl> status_modes
-Name              Status             Description                                                                                                                                                                                                                                     
-single-nominator  enabled   Orbs's single nominator pools.                                                                                                            
+Name              Status             Description
+single-nominator  enabled   Orbs's single nominator pools.
 ```
 
 3. Create pool
@@ -41,8 +41,8 @@ MyTonCtrl> import_pool <pool-name> <pool-addr>
 
 ```bash
 MyTonCtrl> pools_list
-Name       Status  Balance  Version   Address                                           
-test-pool  empty   0.0      spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX  
+Name       Status  Balance  Version   Address
+test-pool  empty   0.0      spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX
 ```
 
 5. Activate the pool
@@ -55,8 +55,8 @@ After successfully activated pool:
 
 ```bash
 MyTonCtrl> pools_list
-Name       Status  Balance  Version   Address                                           
-test-pool  active  0.99389  spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX  
+Name       Status  Balance  Version   Address
+test-pool  active  0.99389  spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX
 ```
 
 Now you can work with this pool via mytonctrl like with a standard nominator pool.
@@ -215,7 +215,7 @@ which deposits pool from validator wallet.
 
 Or use the following steps:
 
-1. Go to the pool’s page https://tonscan.org/nominator/<pool_address>.
+1. Go to the pool’s page https://tonscan.org/nominator/{pool_address}.
 
 2. Make sure that the information about the pool is fully displayed, if the pool has the wrong smart contract, there will be no information.
 
@@ -340,22 +340,22 @@ Check validator wallet:
 
 ```sh
 MyTonCtrl> wl
-Name                  Status  Balance           Ver  Wch  Address                                           
-validator_wallet_001  active  995.828585374     v1   -1   kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct  
+Name                  Status  Balance           Ver  Wch  Address
+validator_wallet_001  active  995.828585374     v1   -1   kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
 ```
 
 Then check it transaction history:
 
 ```sh
 MyTonCtrl> vas kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
-Address                                           Status  Balance        Version  
-kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct  active  995.828585374  v1r3     
+Address                                           Status  Balance        Version
+kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct  active  995.828585374  v1r3
 
-Code hash                                                         
-c3b9bb03936742cfbb9dcdd3a5e1f3204837f613ef141f273952aa41235d289e  
+Code hash
+c3b9bb03936742cfbb9dcdd3a5e1f3204837f613ef141f273952aa41235d289e
 
-Time                 Coins   From/To                                           
-39 minutes ago  >>>  1.3     kf_hz3BIXrn5npis1cPX5gE9msp1nMTYKZ3l4obzc8phrBfF  
+Time                 Coins   From/To
+39 minutes ago  >>>  1.3     kf_hz3BIXrn5npis1cPX5gE9msp1nMTYKZ3l4obzc8phrBfF
 ```
 
 This **ElectorNewStake** transaction in Single Nominator contract history in Tonviewer:

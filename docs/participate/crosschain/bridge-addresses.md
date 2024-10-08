@@ -82,7 +82,7 @@ Governance Address - [kf83VnnXuaqQV1Ts2qvUr6agacM0ydOux5NNa1mcU-cEO693](https://
 
     TON Address - [Ef8jPzrhTYloKgTCsGgEFNx7OdH-sJ98etJnwrIVSsFxH9mu](https://testnet.tonscan.org/address/Ef8jPzrhTYloKgTCsGgEFNx7OdH-sJ98etJnwrIVSsFxH9mu)
 
-    EVM Addresss - 0xeb05E1B6AC0d574eF2CF29FDf01cC0bA3D8F9Bf1
+    EVM Address - 0xeb05E1B6AC0d574eF2CF29FDf01cC0bA3D8F9Bf1
 
 * Oracle 2
 
@@ -203,7 +203,7 @@ Governance Address - [kf9NLH8CsGUkEKGYzCxaLd9Th6T5YkO-MXsCEU9Rw1fiRhf9](https://
 
   TON Address - [Ef8jPzrhTYloKgTCsGgEFNx7OdH-sJ98etJnwrIVSsFxH9mu](https://testnet.tonscan.org/address/Ef8jPzrhTYloKgTCsGgEFNx7OdH-sJ98etJnwrIVSsFxH9mu)
 
-  EVM Addresss - 0xeb05E1B6AC0d574eF2CF29FDf01cC0bA3D8F9Bf1
+  EVM Address - 0xeb05E1B6AC0d574eF2CF29FDf01cC0bA3D8F9Bf1
 
 * Oracle 2
 
