@@ -33,22 +33,42 @@ module.exports = {
           to: '/learn/networking/overview',
           label: 'TON Networking',
         },
-        {
-          to: '/learn/docs',
-          label: 'Whitepapers',
-        },
-
       ],
     },
+    // TODO: extract tutorials page!!!
+    // {
+    //   type: 'dropdown',
+    //   to: '/develop/overview',
+    //   position: 'left',
+    //   label: 'Get Started',
+    //   items: [
+    //     {
+    //       to: '/develop/overview',
+    //       label: 'Start with Onboarding Tutorials',
+    //     },
+    //   ],
+    // },
     {
       type: 'dropdown',
-      to: '/develop/overview',
+      to: 'develop/dapps',
       position: 'left',
-      label: 'Get Started',
+      label: 'DApps',
       items: [
         {
-          to: '/develop/overview',
-          label: 'Start with Onboarding Tutorials',
+          to: '/develop/dapps/telegram-apps/',
+          label: 'Telegram Mini Apps (TMAs)',
+        },
+        {
+          to: 'develop/dapps/apis/sdk',
+          label: 'APIs and SDKs',
+        },
+        {
+          to: 'develop/dapps/asset-processing',
+          label: 'Payment Processing',
+        },
+        {
+          to: 'develop/dapps/asset-processing/jettons',
+          label: 'Jetton Processing',
         },
         {
           to: '/develop/dapps/tutorials/jetton-minter',
@@ -59,56 +79,20 @@ module.exports = {
           label: 'Mint your NFTs',
         },
         {
-          to: '/develop/dapps/telegram-apps/',
-          label: 'Build your first Mini App',
-        },
-        {
-          to: '/develop/dapps',
-          label: 'Dive into DApps Development',
-        },
-      ],
-    },
-    {
-      type: 'dropdown',
-      to: 'develop/dapps',
-      position: 'left',
-      label: 'DApps',
-      items: [
-        {
-          to: 'develop/dapps/apis/sdk',
-          label: 'APIs and SDKs',
-        },
-        {
-          to: 'develop/dapps/asset-processing',
-          label: 'Asset Processing',
-        },
-        {
-          to: 'develop/dapps/asset-processing/jettons',
-          label: 'Jetton Processing',
-        },
-        {
           to: '/develop/dapps/cookbook',
           label: 'Cookbook',
         },
-        {
-          to: '/develop/dapps/telegram-apps/',
-          label: 'TMA Development',
-        },
       ],
     },
     {
       type: 'dropdown',
-      to: 'develop/overview',
+      to: 'develop/smart-contracts/',
       position: 'left',
       label: 'Smart Contracts',
       items: [
         {
-          to: '/develop/smart-contracts/tutorials/wallet',
-          label: 'Understanding Wallets',
-        },
-        {
-          to: 'develop/smart-contracts',
-          label: 'Write Smart Contracts',
+          to: '/participate/wallets/contracts',
+          label: 'Wallets',
         },
         {
           to: '/develop/smart-contracts/messages',
@@ -117,10 +101,6 @@ module.exports = {
         {
           to: 'develop/smart-contracts/fees',
           label: 'Transaction Fees',
-        },
-        {
-          to: 'develop/smart-contracts/guidelines',
-          label: 'Best Practices for Contracts',
         },
         {
           to: 'develop/func/overview',
@@ -138,6 +118,10 @@ module.exports = {
           to: 'learn/tvm-instructions/tvm-overview',
           label: 'TON Virtual Machine (TVM)',
         },
+        {
+          to: 'develop/smart-contracts/guidelines',
+          label: 'Best Practices for Contracts',
+        },
       ],
     },
     {
@@ -148,27 +132,7 @@ module.exports = {
       items: [
         {
           to: '/participate/run-nodes/mytonctrl',
-          label: 'MyTonCtrl',
-        },
-        {
-          to: '/participate/nodes/node-types',
-          label: 'Node Types',
-        },
-        {
-          to: '/participate/run-nodes/full-node',
-          label: 'Full Node',
-        },
-        {
-          to: '/participate/run-nodes/enable-liteserver-node',
-          label: 'Liteserver Node',
-        },
-        {
-          to: '/participate/run-nodes/become-validator',
-          label: 'Validator Node',
-        },
-        {
-          to: '/participate/run-nodes/archive-node',
-          label: 'Archive Node',
+          label: 'MyTonCtrl', // TODO: refactor status
         },
         {
           to: '/participate/run-nodes/nodes-troubleshooting',
@@ -183,12 +147,8 @@ module.exports = {
           label: 'Nominator Pool',
         },
         {
-          to: '/participate/network-maintenance/vesting-contract',
-          label: 'Vesting Contract',
-        },
-        {
-          to: '/participate/run-nodes/mytonctrl-status',
-          label: 'MyTonCtrl Status',
+          to: '/participate/run-nodes/archive-node', // TODO: add article
+          label: 'Running Nodes',
         },
         {
           to: '/participate/run-nodes/faq',
@@ -223,6 +183,38 @@ module.exports = {
           label: 'Build a Storage Provider',
         },
       ],
+    },
+    {
+      type: 'dropdown',
+      to: '/develop/overview',
+      label: 'Documentation',
+      position: 'left',
+      items: [
+        {
+          to: 'develop/smart-contracts/',
+          label: 'Smart Contracts',
+        },
+        {
+          to: 'learn/tvm-instructions/tvm-overview',
+          label: 'TON Virtual Machine (TVM)',
+        },
+        {
+          to: 'participate/nodes/node-types',
+          label: 'Nodes'
+        },
+        {
+          to: 'develop/dapps/defi/coins', // TODO: add page
+          label: 'DApps',
+        },
+        {
+          to: 'learn/networking/low-level-adnl',
+          label: 'Networking'
+        },
+        {
+          to: 'learn/docs',
+          label: 'Whitepapers',
+        },
+      ]
     },
     {
       type: 'dropdown',
@@ -272,4 +264,4 @@ module.exports = {
       ],
     },
   ],
-}
+};
