@@ -1,0 +1,198 @@
+{
+  "item.label.Concepts": {
+    "message": "概念",
+    "description": "Navbar item with label Concepts"
+  },
+  "item.label.Introduction to TON": {
+    "message": "TONの紹介",
+    "description": "Navbar item with label Introduction to TON"
+  },
+  "item.label.Blockchain of Blockchains": {
+    "message": "ブロックチェーンのブロックチェーン",
+    "description": "Navbar item with label Blockchain of Blockchains"
+  },
+  "item.label.Smart Contract Addresses": {
+    "message": "スマートコントラクトアドレス",
+    "description": "Navbar item with label Smart Contract Addresses"
+  },
+  "item.label.Cells as a Data Structure": {
+    "message": "データ構造としてのセル",
+    "description": "Navbar item with label Cells as a Data Structure"
+  },
+  "item.label.TON Networking": {
+    "message": "TONネットワーク",
+    "description": "Navbar item with label TON Networking"
+  },
+  "item.label.Whitepapers": {
+    "message": "ホワイトペーパー",
+    "description": "Navbar item with label Whitepapers"
+  },
+  "item.label.Get Started": {
+    "message": "始める",
+    "description": "Navbar item with label Get Started"
+  },
+  "item.label.Start with Onboarding Tutorials": {
+    "message": "オンボーディングチュートリアルから始める",
+    "description": "Navbar item with label Start with Onboarding Tutorials"
+  },
+  "item.label.Build your first Mini App": {
+    "message": "最初のミニアプリを作成する",
+    "description": "Navbar item with label Build your first Mini App"
+  },
+  "item.label.Dive into DApps Development": {
+    "message": "DApps開発に飛び込む",
+    "description": "Navbar item with label Dive into DApps Development"
+  },
+  "item.label.Mint your first Token (Jetton)": {
+    "message": "最初のトークン（Jetton）を発行する",
+    "description": "Navbar item with label Mint your first Token (Jetton)"
+  },
+  "item.label.TMA Development": {
+    "message": "Telegramミニアプリ開発",
+    "description": "Navbar item with label TMA Development"
+  },
+  "item.label.Transaction Processing": {
+    "message": "取引処理",
+    "description": "Navbar item with label Transaction Processing"
+  },
+  "item.label.TON Cookbook": {
+    "message": "TONクックブック",
+    "description": "Navbar item with label TON Cookbook"
+  },
+  "item.label.DApps": {
+    "message": "分散型アプリケーション",
+    "description": "Navbar item with label DApps"
+  },
+  "item.label.Smart Contracts": {
+    "message": "スマートコントラクト",
+    "description": "Navbar item with label Smart Contracts"
+  },
+  "item.label.Understanding Wallets": {
+    "message": "ウォレットの理解",
+    "description": "Navbar item with label Understanding Wallets"
+  },
+  "item.label.Write Smart Contracts": {
+    "message": "スマートコントラクトを書く",
+    "description": "Navbar item with label Write Smart Contracts"
+  },
+  "item.label.Sending Messages": {
+    "message": "メッセージを送信する",
+    "description": "Navbar item with label Sending Messages"
+  },
+  "item.label.Transaction Fees": {
+    "message": "取引手数料",
+    "description": "Navbar item with label Transaction Fees"
+  },
+  "item.label.Best Practices for Contracts": {
+    "message": "契約のベストプラクティス",
+    "description": "Navbar item with label Best Practices for Contracts"
+  },
+  "item.label.FunC Development Language": {
+    "message": "FunC開発言語",
+    "description": "Navbar item with label FunC Development Language"
+  },
+  "item.label.FunC Cookbook": {
+    "message": "FunCクックブック",
+    "description": "Navbar item with label FunC Cookbook"
+  },
+  "item.label.Data formats": {
+    "message": "データフォーマット",
+    "description": "Navbar item with label Data formats"
+  },
+  "item.label.TON Virtual Machine (TVM)": {
+    "message": "TON仮想マシン（TVM）",
+    "description": "Navbar item with label TON Virtual Machine (TVM)"
+  },
+  "item.label.Nodes": {
+    "message": "ノード",
+    "description": "Navbar item with label Nodes"
+  },
+  "item.label.Node Types": {
+    "message": "ノードタイプ",
+    "description": "Navbar item with label Node Types"
+  },
+  "item.label.Become a Validator": {
+    "message": "バリデーターになる",
+    "description": "Navbar item with label Become a Validator"
+  },
+  "item.label.Run a Full Node": {
+    "message": "フルノードを運営する",
+    "description": "Navbar item with label Run a Full Node"
+  },
+  "item.label.Enable Liteserver": {
+    "message": "Liteserverを有効にする",
+    "description": "Navbar item with label Enable Liteserver"
+  },
+  "item.label.Run an Archive Node": {
+    "message": "アーカイブノードを運営する",
+    "description": "Navbar item with label Run an Archive Node"
+  },
+  "item.label.Single Nominator Pool": {
+    "message": "シングルノミネータープール",
+    "description": "Navbar item with label Single Nominator Pool"
+  },
+  "item.label.Vesting Contract": {
+    "message": "ベスティング契約",
+    "description": "Navbar item with label Vesting Contract"
+  },
+  "item.label.Web3": {
+    "message": "Web3",
+    "description": "Navbar item with label Web3"
+  },
+  "item.label.TON DNS & Domains": {
+    "message": "TON DNS & ドメイン",
+    "description": "Navbar item with label TON DNS & Domains"
+  },
+  "item.label.Open TON Sites": {
+    "message": "オープンTONサイト",
+    "description": "Navbar item with label Open TON Sites"
+  },
+  "item.label.Run TON Sites": {
+    "message": "TONサイトを運営する",
+    "description": "Navbar item with label Run TON Sites"
+  },
+  "item.label.Run a Storage Daemon": {
+    "message": "ストレージデーモンを運営する",
+    "description": "Navbar item with label Run a Storage Daemon"
+  },
+  "item.label.Build a Storage Provider": {
+    "message": "ストレージプロバイダーを構築する",
+    "description": "Navbar item with label Build a Storage Provider"
+  },
+  "item.label.Community": {
+    "message": "コミュニティ",
+    "description": "Navbar item with label Community"
+  },
+  "item.label.TON Answers": {
+    "message": "TON Q&A",
+    "description": "Navbar item with label TON Answers"
+  },
+  "item.label.TON Developers Kit": {
+    "message": "TON開発者キット",
+    "description": "Navbar item with label TON Developers Kit"
+  },
+  "item.label.AI TON Support Agent": {
+    "message": "TON AIサポートエージェント",
+    "description": "Navbar item with label AI TON Support Agent"
+  },
+  "item.label.Standards Discussion (TEPs)": {
+    "message": "標準議論（TEPs）",
+    "description": "Navbar item with label Standards Discussion (TEPs)"
+  },
+  "item.label.Contribute to Docs": {
+    "message": "ドキュメントに貢献する",
+    "description": "Navbar item with label Contribute to Docs"
+  },
+  "logo.alt": {
+    "message": "TON",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.APIs": {
+    "message": "APIs",
+    "description": "Navbar item with label APIs"
+  },
+  "item.label.SDKs": {
+    "message": "SDKs",
+    "description": "Navbar item with label SDKs"
+  }
+}
