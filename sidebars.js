@@ -670,6 +670,7 @@ const sidebars = {
       items: [
         'participate/nodes/node-types',
         'participate/run-nodes/mytonctrl',
+        'participate/run-nodes/alerting',
         'participate/run-nodes/run-docker',
         'participate/run-nodes/full-node',
         'participate/run-nodes/enable-liteserver-node',
