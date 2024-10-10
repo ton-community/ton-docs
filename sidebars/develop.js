@@ -214,6 +214,7 @@ module.exports = [
         label: 'MyTonCtrl',
         items: [
           'participate/run-nodes/mytonctrl',
+          'participate/run-nodes/alerting',
           'participate/run-nodes/mytonctrl-status',
         ],
       },
