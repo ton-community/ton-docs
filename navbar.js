@@ -218,7 +218,7 @@ module.exports = {
     },
     {
       type: 'dropdown',
-      label: 'Community',
+      label: 'External',
       position: 'left',
       items: [
         {
@@ -237,11 +237,13 @@ module.exports = {
           to: 'https://github.com/ton-blockchain/TEPs',
           label: 'Standards Discussion (TEPs)',
         },
-        {
-          to: 'contribute',
-          label: 'Contribute to Docs',
-        },
       ],
+    },
+    {
+      to: 'contribute',
+      position: 'right',
+      className: 'header-contribute-link',
+      'aria-label': 'Contribute',
     },
     {
       href: 'https://github.com/ton-community/ton-docs',
