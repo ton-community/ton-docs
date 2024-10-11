@@ -102,6 +102,17 @@ module.exports = [
   'develop/dapps/cookbook',
   {
     type: 'category',
+    label: 'APIs and SDKs',
+    items: [
+      'develop/dapps/apis/sdk',
+      'develop/dapps/apis/README',
+      'develop/dapps/apis/toncenter',
+      'develop/dapps/apis/adnl',
+      'develop/dapps/apis/api-key'
+    ],
+  },
+  {
+    type: 'category',
     label: 'Tutorials & Examples',
     items: [
       {
@@ -139,6 +150,7 @@ module.exports = [
     type: 'category',
     label: 'Telegram Mini Apps',
     items: [
+      'develop/dapps/telegram-apps/README',
       {
         type: 'category',
         label: 'Guidelines',
@@ -158,6 +170,8 @@ module.exports = [
           'develop/dapps/telegram-apps/design-guidelines',
         ],
       },
+      'develop/dapps/telegram-apps/notcoin',
+      'develop/dapps/telegram-apps/grants',
     ],
   },
   {
@@ -192,9 +206,9 @@ module.exports = [
     items: [
       'participate/run-nodes/archive-node',
       'participate/run-nodes/full-node',
+      'participate/run-nodes/enable-liteserver-node',
       'participate/run-nodes/become-validator',
       'participate/network-maintenance/nominators',
-      'participate/run-nodes/enable-liteserver-node',
       'participate/run-nodes/run-docker',
       'participate/run-nodes/local-ton',
       'participate/run-nodes/secure-guidelines',

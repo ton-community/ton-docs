@@ -134,26 +134,6 @@ module.exports = [
   },
   {
     type: 'category',
-    label: 'APIs and SDKs',
-    items: [
-      'develop/dapps/apis/sdk',
-      'develop/dapps/apis/README',
-      'develop/dapps/apis/toncenter',
-      'develop/dapps/apis/adnl',
-      'develop/dapps/apis/api-key'
-    ],
-  },
-  {
-    type: 'category',
-    label: 'Telegram Mini Apps',
-    items: [
-      'develop/dapps/telegram-apps/README',
-      'develop/dapps/telegram-apps/notcoin',
-      'develop/dapps/telegram-apps/grants',
-    ]
-  },
-  {
-    type: 'category',
     label: 'Assets',
     items: [
       'develop/dapps/asset-processing/overview',
@@ -219,7 +199,7 @@ module.exports = [
         ],
       },
       'participate/run-nodes/node-commands',
-      { 
+      {
         type: 'category',
         label: 'Validation',
         items: [
@@ -367,10 +347,22 @@ module.exports = [
     'type': 'html',
     'value': '<span class=\'menu__link\'><b><small> Archived </small></b></span>',
   },
-  'develop/archive/pow-givers',
-  'develop/archive/mining',
-  'develop/archive/tg-bot-integration',
-  'develop/archive/tg-bot-integration-py',
-  'develop/smart-contracts/compile/README',
-  'develop/smart-contracts/environment/installation',
+  {
+    type: 'category',
+    label: 'Archived',
+    link: {
+      type: 'generated-index',
+      title: 'Archive',
+      slug: '/develop/archive',
+      keywords: ['archive'],
+    },
+    items: [
+      'develop/archive/pow-givers',
+      'develop/archive/mining',
+      'develop/archive/tg-bot-integration',
+      'develop/archive/tg-bot-integration-py',
+      'develop/smart-contracts/compile/README',
+      'develop/smart-contracts/environment/installation',
+    ]
+  }
 ];
