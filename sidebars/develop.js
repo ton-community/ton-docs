@@ -194,6 +194,7 @@ module.exports = [
         label: 'MyTonCtrl',
         items: [
           'participate/run-nodes/mytonctrl',
+          'participate/run-nodes/alerting',
           'participate/run-nodes/mytonctrl-status',
         ],
       },
@@ -301,6 +302,16 @@ module.exports = [
   },
   {
     'type': 'html',
+    'value': '<span class=\'menu__link\'><b><small> Quality Assurance & Outsource</small></b></span>',
+  },
+  'develop/companies/auditors',
+  'develop/companies/outsource',
+  {
+    'type': 'html',
+    'value': '<hr/>',
+  },
+  {
+    'type': 'html',
     'value': '<span class=\'menu__link\'><b><small> TON Whitepapers </small></b></span>',
   },
   {
@@ -328,16 +339,6 @@ module.exports = [
     label: 'Catchain Consensus Protocol',
     href: 'https://docs.ton.org/catchain.pdf',
   },
-  {
-    'type': 'html',
-    'value': '<hr/>',
-  },
-  {
-    'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Quality Assurance & Outsource</small></b></span>',
-  },
-  'develop/companies/auditors',
-  'develop/companies/outsource',
   {
     'type': 'html',
     'value': '<hr/>',
