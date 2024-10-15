@@ -107,6 +107,61 @@ print(address2.to_str(is_user_friendly=False))  # 0:ca6e321c7cce9ecedf0a8ca2492e
 ```
 
 </TabItem>
+<TabItem value="dart" label="Dart">
+
+Install package with:
+```sh
+dart pub get tonutils
+```
+
+```dart
+import 'package:tonutils/tonutils.dart' show InternalAddress;
+
+  InternalAddress address1 =
+      InternalAddress.parse('EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF');
+  InternalAddress address2 = InternalAddress.parse(
+      '0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e');
+
+  // user friendly
+  print(address1.toString(
+    isBounceable: true,
+    isUrlSafe: true,
+  )); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+  // user friendly
+  print(address1.toString(
+    isUrlSafe: false,
+  )); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff+W72r5gqPrHF
+  // HEX
+  print(
+    address1.toRawString(),
+  ); // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+
+  // user friendly
+  print(address2.toString(
+      isBounceable: true,
+      isUrlSafe: true,
+  )); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+  // HEX
+  print(
+    address2.toRawString(),
+  ); // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+
+  const bool IS_TESTNET_ONLY = true;
+  // user friendly
+  print(address1.toString(
+    isBounceable: true,
+    isUrlSafe: true,
+    isTestOnly: IS_TESTNET_ONLY,
+  )); // kQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPgpP
+  // user friendly
+  print(address1.toString(
+    isBounceable: false,
+    isUrlSafe: true,
+    isTestOnly: IS_TESTNET_ONLY,
+  )); // 0QDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPleK
+```
+
+</TabItem>
 </Tabs>
 
 ### What flags are there in user-friendly addresses?
