@@ -12,6 +12,7 @@ import Button from '@site/src/components/button'
 
 This course introduces blockchain basics, with a special focus on practical skills in the TON ecosystem. You will understand how blockchain functions and its diverse applications.
 
+Who this course is for: junior developers, new in crypto, non-tech people in IT, curious about blockchains.
  
 <Button href="https://stepik.org/course/201294/promo" 
         colorType={'primary'} sizeType={'sm'}>
@@ -43,6 +44,7 @@ We're proud to present the __TON Blockchain Course__, which is a comprehensive g
 
 It consists of __9 modules__ and covers the basics of the TON Blockchain, the FunC programming language, and the TON Virtual Machine (TVM).
 
+Who this course is for: Software Engineers, Junior-Senior Developers, Smart Contract Architects
  
 <Button href="https://stepik.org/course/176754/promo" 
         colorType={'primary'} sizeType={'sm'}>
