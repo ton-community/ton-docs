@@ -61,13 +61,6 @@ module.exports = [
       'develop/smart-contracts/core-contracts/precompiled',
       'develop/research-and-development/minter-flow',
       'develop/smart-contracts/examples',
-      {
-        type: 'category',
-        label: 'Wallets in TON',
-        items: [
-          'participate/wallets/apps',
-        ],
-      },
     ],
   },
   {
