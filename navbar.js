@@ -22,7 +22,7 @@ module.exports = {
           label: 'Blockchain of Blockchains',
         },
         {
-          to: '/learn/overviews/addresses',
+          to: '/v3/concepts/ton-blockchain/smart-contract-addresses',
           label: 'Smart Contract Addresses',
         },
         {

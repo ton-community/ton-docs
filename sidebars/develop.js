@@ -13,6 +13,9 @@ module.exports = [
     'value': '<span class=\'menu__link\'><b><small> Smart Contracts Documentation </small></b></span>',
   },
   'develop/smart-contracts/README',
+  'learn/overviews/addresses',
+  'develop/blockchain/shards',
+  'develop/blockchain/sharding-lifecycle',
   {
     type: 'category',
     label: 'Getting Started',
@@ -147,7 +150,6 @@ module.exports = [
     label: 'Oracles',
     items: [
       'develop/oracles/about_blockchain_oracles',
-
       {
         type: 'category',
         label: 'Oracles in TON',
@@ -156,6 +158,11 @@ module.exports = [
         ],
       },
     ],
+  },
+  {
+    type: 'link',
+    label: 'Open-Source and Decentralization in TON',
+    href: 'https://defi.org/ton/',
   },
   {
     'type': 'html',
@@ -232,10 +239,32 @@ module.exports = [
     type: 'category',
     label: 'Network Protocols',
     items: [
-      'learn/networking/low-level-adnl', // TODO: MERGE ADNL
-      'develop/network/adnl-tcp',
-      'develop/network/adnl-udp',
-      'develop/network/dht',
+      {
+        type: 'category',
+        label: 'ADNL',
+        items: [
+          {
+            type: 'doc',
+            label: 'Overview',
+            id: 'learn/networking/adnl',
+          },
+          'learn/networking/low-level-adnl', // TODO: MERGE ADNL
+          'develop/network/adnl-tcp',
+          'develop/network/adnl-udp',
+        ],
+      },
+      {
+        type: 'category',
+        label: 'DHT',
+        items: [
+          {
+            type: 'doc',
+            label: 'Overview',
+            id: 'learn/networking/ton-dht',
+          },
+          'develop/network/dht',
+        ]
+      },
       'develop/network/rldp',
       'develop/network/overlay',
     ],

@@ -224,7 +224,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> TON Integration Guidelines </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Integrate TON </small></b></span>',
   },
   'develop/dapps/ton-connect/overview',
   {

@@ -1,5 +1,10 @@
 # Overlay subnetworks
 
+Implementation:
+* https://github.com/ton-blockchain/ton/tree/master/overlay
+
+## Overview
+
 The architecture of TON is built in such a way that a lot of chains can exist simultaneously and independently in it - they can be both private or public.
 Nodes have the ability to choose which shards and chains they store and process.
 At the same time, the communication protocol remains unchanged due to its universality. Protocols such as DHT, RLDP and Overlays allow this to be achieved.
@@ -10,6 +15,21 @@ Overlays are responsible for dividing a single network into additional subnetwor
 All chains in TON, including the masterchain, communicate using their own overlay.
 To join it, you need to find the nodes that are already in it, and start exchanging data with them.
 For the public overlays you can find nodes using DHT.
+
+## ADNL vs Overlay networks
+
+In contrast to ADNL, the TON overlay networks usually do not support
+sending datagrams to other arbitrary nodes. Instead, some “semi-permanent
+links” are established between certain nodes (called “neighbors” with respect to
+the overlay network under consideration) and messages are usually forwarded
+along these links (i.e. from a node to one of its neighbors).
+
+Each overlay subnetwork has a 256-bit network identifier usually equal
+to a SHA256 of the description of the overlay network—a TL-serialized object.
+
+Overlay subnetworks can be public or private.
+
+Overlay subnetworks work according to a special [gossip](https://en.wikipedia.org/wiki/Gossip_protocol) protocol.
 
 ## Interaction with overlay nodes
 
