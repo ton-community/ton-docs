@@ -47,26 +47,24 @@ module.exports = [
   },
   {
     type: 'category',
-    label: 'Ready-to-use contracts',
+    label: 'Contracts Specification',
     items: [
-      {
-        type: 'category',
-        label: 'Core Contracts',
-        items: [
-          'develop/smart-contracts/core-contracts/precompiled',
-          'develop/smart-contracts/governance',
-          'develop/research-and-development/minter-flow',
-        ],
-      },
+      'participate/wallets/contracts',
+      'participate/wallets/highload',
+      'participate/network-maintenance/vesting-contract',
+      'develop/smart-contracts/governance',
+      'participate/network-maintenance/nominator-pool',
+      'participate/network-maintenance/single-nominator',
+      'develop/smart-contracts/core-contracts/precompiled',
+      'develop/research-and-development/minter-flow',
+      'develop/smart-contracts/examples',
       {
         type: 'category',
         label: 'Wallets in TON',
         items: [
           'participate/wallets/apps',
-          'participate/wallets/contracts',
         ],
       },
-      'participate/network-maintenance/vesting-contract',
     ],
   },
   {
@@ -208,8 +206,6 @@ module.exports = [
             label: 'Proof of Stake',
             id: 'participate/network-maintenance/staking-incentives',
           },
-          'participate/network-maintenance/nominator-pool',
-          'participate/network-maintenance/single-nominator',
           'participate/nodes/collators',
         ],
       },
