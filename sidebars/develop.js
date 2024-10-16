@@ -10,7 +10,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Smart Contracts </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Smart Contracts Documentation </small></b></span>',
   },
   'develop/smart-contracts/README',
   {
@@ -113,7 +113,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> DApps </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> DApps Documentation </small></b></span>',
   },
   {
     type: 'category',
@@ -163,7 +163,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Infrastructure </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Infrastructure Documentation </small></b></span>',
   },
   'participate/explorers',
   {
@@ -217,7 +217,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Networking </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Networking Documentation </small></b></span>',
   },
   {
     type: 'category',
@@ -246,7 +246,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Data Formats </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Data Formats Documentation </small></b></span>',
   },
   {
     type: 'category',
@@ -274,7 +274,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> TON Virtual Machine (TVM) </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> TON Virtual Machine (TVM) Documentation </small></b></span>',
   },
   'learn/tvm-instructions/tvm-overview',
   'learn/tvm-instructions/tvm-initialization',
@@ -298,7 +298,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Quality Assurance & Outsource</small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Quality Assurance & Outsource </small></b></span>',
   },
   'develop/companies/auditors',
   'develop/companies/outsource',

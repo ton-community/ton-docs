@@ -36,7 +36,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Smart Contracts </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Smart Contracts Guidelines </small></b></span>',
   },
   'develop/smart-contracts/guidelines',
   'develop/smart-contracts/guidelines/get-methods',
@@ -95,7 +95,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> DApps </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> DApps Guidelines </small></b></span>',
   },
   'develop/dapps/README',
   'develop/dapps/cookbook',
@@ -197,7 +197,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> MyTonCtrl & Blockchain Nodes </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> MyTonCtrl & Blockchain Nodes Guidelines </small></b></span>',
   },
   {
     type: 'category',
@@ -224,7 +224,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Integrate with TON </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> TON Integration Guidelines </small></b></span>',
   },
   'develop/dapps/ton-connect/overview',
   {
@@ -296,7 +296,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Web3 </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Web3 Guidelines </small></b></span>',
   },
   'participate/web3/overview',
   {
