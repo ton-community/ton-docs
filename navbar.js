@@ -132,7 +132,7 @@ module.exports = {
       items: [
         {
           to: '/participate/run-nodes/mytonctrl',
-          label: 'MyTonCtrl', // TODO: refactor status
+          label: 'Manage Blockchain Nodes',
         },
         {
           to: '/participate/run-nodes/nodes-troubleshooting',
