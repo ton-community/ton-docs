@@ -158,34 +158,6 @@ module.exports = {
     },
     {
       type: 'dropdown',
-      to: 'participate',
-      position: 'left',
-      label: 'Web3',
-      items: [
-        {
-          to: 'participate/web3/dns',
-          label: 'TON DNS & Domains',
-        },
-        {
-          to: 'participate/web3/how-to-open-any-ton-site',
-          label: 'Open TON Sites',
-        },
-        {
-          to: 'develop/dapps/tutorials/how-to-run-ton-site',
-          label: 'Run TON Sites',
-        },
-        {
-          to: 'participate/ton-storage/storage-daemon',
-          label: 'Run a Storage Daemon',
-        },
-        {
-          to: 'participate/ton-storage/storage-provider',
-          label: 'Build a Storage Provider',
-        },
-      ],
-    },
-    {
-      type: 'dropdown',
       to: '/develop/overview',
       label: 'Documentation',
       position: 'left',
