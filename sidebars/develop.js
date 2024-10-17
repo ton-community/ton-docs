@@ -131,11 +131,11 @@ module.exports = [
     label: 'Assets',
     items: [
       'develop/dapps/asset-processing/overview',
-      'develop/dapps/asset-processing/README', // TODO: divide
-      'develop/dapps/asset-processing/jettons', // TODO: divide
-      'develop/dapps/asset-processing/mintless-jettons', // TODO: divide
+      // 'develop/dapps/asset-processing/README', // TODO: divide
+      // 'develop/dapps/asset-processing/jettons', // TODO: divide
+      // 'develop/dapps/asset-processing/mintless-jettons', // TODO: divide
       'develop/dapps/asset-processing/usdt',
-      'develop/dapps/asset-processing/nfts', // TODO: divide
+      // 'develop/dapps/asset-processing/nfts', // TODO: divide
     ],
   },
   {
