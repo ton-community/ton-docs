@@ -39,13 +39,13 @@ If you want to receive messages in a group, add the bot to the group, and it wil
     ```bash
    $ sudo systemctl restart mytoncore
     ```
-
 5. Check that the bot is able to send messages by running the command
 
     ```bash
     MyTonCtrl> test_alert
     ``` 
     You should receive a message from the bot in your Telegram account or chat.
+
 
 ## Supported Alerts
 

@@ -1,5 +1,12 @@
 # RLDP
 
+Implementation:
+* https://github.com/ton-blockchain/ton/tree/master/rldp
+* https://github.com/ton-blockchain/ton/tree/master/rldp2
+* https://github.com/ton-blockchain/ton/tree/master/rldp-http-proxy
+
+## Overview
+
 RLDP - Reliable Large Datagram Protocol - is a protocol that runs on top of ADNL UDP, which is used to transfer large data blocks and
 includes Forward Error Correction (FEC) algorithms as a replacement of acknowledgment packets on the other side. 
 This makes it possible to transfer data between network components more efficiently, but with more traffic consumption.

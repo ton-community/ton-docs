@@ -10,9 +10,12 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Smart Contracts </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Smart Contracts Documentation </small></b></span>',
   },
   'develop/smart-contracts/README',
+  'learn/overviews/addresses',
+  'develop/blockchain/shards',
+  'develop/blockchain/sharding-lifecycle',
   {
     type: 'category',
     label: 'Getting Started',
@@ -47,26 +50,17 @@ module.exports = [
   },
   {
     type: 'category',
-    label: 'Ready-to-use contracts',
+    label: 'Contracts Specification',
     items: [
-      {
-        type: 'category',
-        label: 'Core Contracts',
-        items: [
-          'develop/smart-contracts/core-contracts/precompiled',
-          'develop/smart-contracts/governance',
-          'develop/research-and-development/minter-flow',
-        ],
-      },
-      {
-        type: 'category',
-        label: 'Wallets in TON',
-        items: [
-          'participate/wallets/apps',
-          'participate/wallets/contracts',
-        ],
-      },
+      'participate/wallets/contracts',
+      'participate/wallets/highload',
       'participate/network-maintenance/vesting-contract',
+      'develop/smart-contracts/governance',
+      'participate/network-maintenance/nominator-pool',
+      'participate/network-maintenance/single-nominator',
+      'develop/smart-contracts/core-contracts/precompiled',
+      'develop/research-and-development/minter-flow',
+      'develop/smart-contracts/examples',
     ],
   },
   {
@@ -115,7 +109,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> DApps </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> DApps Documentation </small></b></span>',
   },
   {
     type: 'category',
@@ -134,34 +128,14 @@ module.exports = [
   },
   {
     type: 'category',
-    label: 'APIs and SDKs',
-    items: [
-      'develop/dapps/apis/sdk',
-      'develop/dapps/apis/README',
-      'develop/dapps/apis/toncenter',
-      'develop/dapps/apis/adnl',
-      'develop/dapps/apis/api-key'
-    ],
-  },
-  {
-    type: 'category',
-    label: 'Telegram Mini Apps',
-    items: [
-      'develop/dapps/telegram-apps/README',
-      'develop/dapps/telegram-apps/notcoin',
-      'develop/dapps/telegram-apps/grants',
-    ]
-  },
-  {
-    type: 'category',
     label: 'Assets',
     items: [
       'develop/dapps/asset-processing/overview',
-      'develop/dapps/asset-processing/README', // TODO: divide
-      'develop/dapps/asset-processing/jettons', // TODO: divide
-      'develop/dapps/asset-processing/mintless-jettons', // TODO: divide
+      // 'develop/dapps/asset-processing/README', // TODO: divide
+      // 'develop/dapps/asset-processing/jettons', // TODO: divide
+      // 'develop/dapps/asset-processing/mintless-jettons', // TODO: divide
       'develop/dapps/asset-processing/usdt',
-      'develop/dapps/asset-processing/nfts', // TODO: divide
+      // 'develop/dapps/asset-processing/nfts', // TODO: divide
     ],
   },
   {
@@ -169,7 +143,6 @@ module.exports = [
     label: 'Oracles',
     items: [
       'develop/oracles/about_blockchain_oracles',
-
       {
         type: 'category',
         label: 'Oracles in TON',
@@ -180,12 +153,17 @@ module.exports = [
     ],
   },
   {
+    type: 'link',
+    label: 'Open-Source and Decentralization in TON',
+    href: 'https://defi.org/ton/',
+  },
+  {
     'type': 'html',
     'value': '<hr/>',
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Infrastructure </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Infrastructure Documentation </small></b></span>',
   },
   'participate/explorers',
   {
@@ -219,7 +197,7 @@ module.exports = [
         ],
       },
       'participate/run-nodes/node-commands',
-      { 
+      {
         type: 'category',
         label: 'Validation',
         items: [
@@ -228,8 +206,6 @@ module.exports = [
             label: 'Proof of Stake',
             id: 'participate/network-maintenance/staking-incentives',
           },
-          'participate/network-maintenance/nominator-pool',
-          'participate/network-maintenance/single-nominator',
           'participate/nodes/collators',
         ],
       },
@@ -241,7 +217,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Networking </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Networking Documentation </small></b></span>',
   },
   {
     type: 'category',
@@ -256,10 +232,32 @@ module.exports = [
     type: 'category',
     label: 'Network Protocols',
     items: [
-      'learn/networking/low-level-adnl', // TODO: MERGE ADNL
-      'develop/network/adnl-tcp',
-      'develop/network/adnl-udp',
-      'develop/network/dht',
+      {
+        type: 'category',
+        label: 'ADNL',
+        items: [
+          {
+            type: 'doc',
+            label: 'Overview',
+            id: 'learn/networking/adnl',
+          },
+          'learn/networking/low-level-adnl', // TODO: MERGE ADNL
+          'develop/network/adnl-tcp',
+          'develop/network/adnl-udp',
+        ],
+      },
+      {
+        type: 'category',
+        label: 'DHT',
+        items: [
+          {
+            type: 'doc',
+            label: 'Overview',
+            id: 'learn/networking/ton-dht',
+          },
+          'develop/network/dht',
+        ]
+      },
       'develop/network/rldp',
       'develop/network/overlay',
     ],
@@ -270,7 +268,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Data Formats </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Data Formats Documentation </small></b></span>',
   },
   {
     type: 'category',
@@ -298,7 +296,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> TON Virtual Machine (TVM) </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> TON Virtual Machine (TVM) Documentation </small></b></span>',
   },
   'learn/tvm-instructions/tvm-overview',
   'learn/tvm-instructions/tvm-initialization',
@@ -322,7 +320,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Quality Assurance & Outsource</small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Quality Assurance & Outsource </small></b></span>',
   },
   'develop/companies/auditors',
   'develop/companies/outsource',
@@ -367,10 +365,22 @@ module.exports = [
     'type': 'html',
     'value': '<span class=\'menu__link\'><b><small> Archived </small></b></span>',
   },
-  'develop/archive/pow-givers',
-  'develop/archive/mining',
-  'develop/archive/tg-bot-integration',
-  'develop/archive/tg-bot-integration-py',
-  'develop/smart-contracts/compile/README',
-  'develop/smart-contracts/environment/installation',
+  {
+    type: 'category',
+    label: 'Archived',
+    link: {
+      type: 'generated-index',
+      title: 'Archive',
+      slug: '/develop/archive',
+      keywords: ['archive'],
+    },
+    items: [
+      'develop/archive/pow-givers',
+      'develop/archive/mining',
+      'develop/archive/tg-bot-integration',
+      'develop/archive/tg-bot-integration-py',
+      'develop/smart-contracts/compile/README',
+      'develop/smart-contracts/environment/installation',
+    ]
+  }
 ];

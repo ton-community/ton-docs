@@ -1,0 +1,10 @@
+[
+    {
+        "from": "/develop/overview",
+        "to": "/v3/overview"
+    },
+    {
+        "from": "/v3/overview",
+        "to": "/develop/overview"
+    }
+]

@@ -2,7 +2,7 @@
  * @type {import('@docusaurus/plugin-content-docs').SidebarConfig}
  */
 module.exports = [
-  'guidelines/README',
+  'v3/guidelines/overview',
   'develop/get-started-with-ton',
   {
     type: 'category',
@@ -36,7 +36,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Smart Contracts </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Smart Contracts Guidelines </small></b></span>',
   },
   'develop/smart-contracts/guidelines',
   'develop/smart-contracts/guidelines/get-methods',
@@ -82,7 +82,6 @@ module.exports = [
       'develop/smart-contracts/tutorials/airdrop-claim-best-practice',
       'develop/smart-contracts/tutorials/shard-optimization',
       'develop/smart-contracts/tutorials/wallet',
-      'develop/smart-contracts/examples',
       {
         type: 'link',
         label: 'How to shard your TON smart contract and why',
@@ -96,10 +95,21 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> DApps </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> DApps Guidelines </small></b></span>',
   },
   'develop/dapps/README',
   'develop/dapps/cookbook',
+  {
+    type: 'category',
+    label: 'APIs and SDKs',
+    items: [
+      'develop/dapps/apis/sdk',
+      'develop/dapps/apis/README',
+      'develop/dapps/apis/toncenter',
+      'develop/dapps/apis/adnl',
+      'develop/dapps/apis/api-key'
+    ],
+  },
   {
     type: 'category',
     label: 'Tutorials & Examples',
@@ -139,6 +149,7 @@ module.exports = [
     type: 'category',
     label: 'Telegram Mini Apps',
     items: [
+      'develop/dapps/telegram-apps/README',
       {
         type: 'category',
         label: 'Guidelines',
@@ -158,6 +169,8 @@ module.exports = [
           'develop/dapps/telegram-apps/design-guidelines',
         ],
       },
+      'develop/dapps/telegram-apps/notcoin',
+      'develop/dapps/telegram-apps/grants',
     ],
   },
   {
@@ -184,17 +197,18 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> MyTonCtrl & Blockchain Nodes </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> MyTonCtrl & Blockchain Nodes Guidelines </small></b></span>',
   },
+  'v3/guidelines/nodes/overview',
   {
     type: 'category',
     label: 'Running Nodes',
     items: [
       'participate/run-nodes/archive-node',
       'participate/run-nodes/full-node',
+      'participate/run-nodes/enable-liteserver-node',
       'participate/run-nodes/become-validator',
       'participate/network-maintenance/nominators',
-      'participate/run-nodes/enable-liteserver-node',
       'participate/run-nodes/run-docker',
       'participate/run-nodes/local-ton',
       'participate/run-nodes/secure-guidelines',
@@ -283,7 +297,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Web3 </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Web3 Guidelines </small></b></span>',
   },
   'participate/web3/overview',
   {
