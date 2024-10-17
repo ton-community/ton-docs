@@ -2105,7 +2105,7 @@ When working with many messages in a short period, there is a need for special w
 
 :::note
 We will work [with a slightly modified version of Wrapper](https://github.com/aSpite/highload-wallet-contract-v3/blob/main/wrappers/HighloadWalletV3.ts) for the contract, as it protects against some non-obvious mistakes.
-:::note
+:::
 
 
 ### Storage Structure

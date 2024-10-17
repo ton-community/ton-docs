@@ -18,36 +18,11 @@ module.exports = [
     label: 'TON Blockchain',
     items: [
       'learn/overviews/ton-blockchain',
-      'learn/overviews/addresses',
+      'v3/concepts/ton-blockchain/smart-contract-addresses',
+      'participate/wallets/apps',
       'learn/overviews/cells',
-      {
-        type: 'category',
-        label: 'TON Networking',
-        items: [
-          {
-            type: 'doc',
-            label: 'Overview',
-            id: 'learn/networking/overview',
-          },
-          {
-            type: 'doc',
-            label: 'ADNL Protocol',
-            id: 'learn/networking/adnl',
-          },
-          'learn/networking/overlay-subnetworks',
-          'learn/networking/rldp',
-          'learn/networking/ton-dht',
-
-        ],
-      },
-      'develop/blockchain/shards',
-      'develop/blockchain/sharding-lifecycle',
+      'learn/networking/overview',
       'learn/overviews/blockchain-comparison',
-      {
-        type: 'link',
-        label: 'Open-Source and Decentralization in TON',
-        href: 'https://defi.org/ton/',
-      },
     ],
   },
   {
