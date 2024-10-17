@@ -2,7 +2,7 @@
  * @type {import('@docusaurus/plugin-content-docs').SidebarConfig}
  */
 module.exports = [
-  'guidelines/README',
+  'v3/guidelines/overview',
   'develop/get-started-with-ton',
   {
     type: 'category',
@@ -199,6 +199,7 @@ module.exports = [
     'type': 'html',
     'value': '<span class=\'menu__link\'><b><small> MyTonCtrl & Blockchain Nodes Guidelines </small></b></span>',
   },
+  'v3/guidelines/nodes/overview',
   {
     type: 'category',
     label: 'Running Nodes',
@@ -224,7 +225,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Integrate TON </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Integrate with TON </small></b></span>',
   },
   'develop/dapps/ton-connect/overview',
   {

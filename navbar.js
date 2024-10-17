@@ -158,6 +158,34 @@ module.exports = {
     },
     {
       type: 'dropdown',
+      to: 'v3/guidelines/overview',
+      label: 'Guidelines',
+      position: 'left',
+      items: [
+        {
+          to: '/develop/smart-contracts/guidelines',
+          label: 'Smart Contracts',
+        },
+        {
+          to: '/develop/dapps/',
+          label: 'DApps',
+        },
+        {
+          to: 'v3/guidelines/nodes/overview',
+          label: 'Nodes'
+        },
+        {
+          to: 'develop/dapps/ton-connect/overview',
+          label: 'Integrate with TON'
+        },
+        {
+          to: 'participate/web3/overview',
+          label: 'Web3',
+        },
+      ]
+    },
+    {
+      type: 'dropdown',
       to: '/develop/overview',
       label: 'Documentation',
       position: 'left',
@@ -179,6 +207,14 @@ module.exports = {
           label: 'DApps',
         },
         {
+          to: 'participate/explorers',
+          label: 'Infrastructure'
+        },
+        {
+          to: '/develop/data-formats/cell-boc',
+          label: 'Data Formats',
+        },
+        {
           to: 'learn/networking/low-level-adnl',
           label: 'Networking'
         },
@@ -190,7 +226,7 @@ module.exports = {
     },
     {
       type: 'dropdown',
-      label: 'External',
+      label: 'Resources',
       position: 'left',
       items: [
         {
@@ -200,10 +236,6 @@ module.exports = {
         {
           to: 'https://t.me/addlist/1r5Vcb8eljk5Yzcy',
           label: 'TON Developers Kit',
-        },
-        {
-          to: 'https://t.me/tonsupport_aibot',
-          label: 'AI TON Support Agent',
         },
         {
           to: 'https://github.com/ton-blockchain/TEPs',
