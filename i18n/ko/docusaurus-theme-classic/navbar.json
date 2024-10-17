@@ -1,0 +1,198 @@
+{
+  "item.label.Concepts": {
+    "message": "개념",
+    "description": "Navbar item with label Concepts"
+  },
+  "item.label.Introduction to TON": {
+    "message": "TON 소개",
+    "description": "Navbar item with label Introduction to TON"
+  },
+  "item.label.Blockchain of Blockchains": {
+    "message": "블록체인의 블록체인",
+    "description": "Navbar item with label Blockchain of Blockchains"
+  },
+  "item.label.Smart Contract Addresses": {
+    "message": "스마트 계약 주소",
+    "description": "Navbar item with label Smart Contract Addresses"
+  },
+  "item.label.Cells as a Data Structure": {
+    "message": "데이터 구조로서의 셀",
+    "description": "Navbar item with label Cells as a Data Structure"
+  },
+  "item.label.TON Networking": {
+    "message": "TON 네트워킹",
+    "description": "Navbar item with label TON Networking"
+  },
+  "item.label.Whitepapers": {
+    "message": "백서",
+    "description": "Navbar item with label Whitepapers"
+  },
+  "item.label.Get Started": {
+    "message": "시작하기",
+    "description": "Navbar item with label Get Started"
+  },
+  "item.label.Start with Onboarding Tutorials": {
+    "message": "온보딩 튜토리얼 시작하기",
+    "description": "Navbar item with label Start with Onboarding Tutorials"
+  },
+  "item.label.Build your first Mini App": {
+    "message": "첫 번째 미니 앱 만들기",
+    "description": "Navbar item with label Build your first Mini App"
+  },
+  "item.label.Dive into DApps Development": {
+    "message": "DApps 개발 깊이 파기",
+    "description": "Navbar item with label Dive into DApps Development"
+  },
+  "item.label.Mint your first Token (Jetton)": {
+    "message": "첫 번째 토큰(제톤) 발행하기",
+    "description": "Navbar item with label Mint your first Token (Jetton)"
+  },
+  "item.label.TMA Development": {
+    "message": "텔레그램 미니앱 개발",
+    "description": "Navbar item with label TMA Development"
+  },
+  "item.label.Transaction Processing": {
+    "message": "거래 처리",
+    "description": "Navbar item with label Transaction Processing"
+  },
+  "item.label.TON Cookbook": {
+    "message": "TON 요리책",
+    "description": "Navbar item with label TON Cookbook"
+  },
+  "item.label.DApps": {
+    "message": "분산 애플리케이션",
+    "description": "Navbar item with label DApps"
+  },
+  "item.label.Smart Contracts": {
+    "message": "스마트 계약",
+    "description": "Navbar item with label Smart Contracts"
+  },
+  "item.label.Understanding Wallets": {
+    "message": "지갑 이해하기",
+    "description": "Navbar item with label Understanding Wallets"
+  },
+  "item.label.Write Smart Contracts": {
+    "message": "스마트 계약 작성하기",
+    "description": "Navbar item with label Write Smart Contracts"
+  },
+  "item.label.Sending Messages": {
+    "message": "메시지 전송하기",
+    "description": "Navbar item with label Sending Messages"
+  },
+  "item.label.Transaction Fees": {
+    "message": "거래 수수료",
+    "description": "Navbar item with label Transaction Fees"
+  },
+  "item.label.Best Practices for Contracts": {
+    "message": "계약을 위한 모범 사례",
+    "description": "Navbar item with label Best Practices for Contracts"
+  },
+  "item.label.FunC Development Language": {
+    "message": "FunC 개발 언어",
+    "description": "Navbar item with label FunC Development Language"
+  },
+  "item.label.FunC Cookbook": {
+    "message": "FunC 요리책",
+    "description": "Navbar item with label FunC Cookbook"
+  },
+  "item.label.Data formats": {
+    "message": "데이터 형식",
+    "description": "Navbar item with label Data formats"
+  },
+  "item.label.TON Virtual Machine (TVM)": {
+    "message": "TON 가상 머신 (TVM)",
+    "description": "Navbar item with label TON Virtual Machine (TVM)"
+  },
+  "item.label.Nodes": {
+    "message": "노드",
+    "description": "Navbar item with label Nodes"
+  },
+  "item.label.Node Types": {
+    "message": "노드 유형",
+    "description": "Navbar item with label Node Types"
+  },
+  "item.label.Become a Validator": {
+    "message": "검증자 되기",
+    "description": "Navbar item with label Become a Validator"
+  },
+  "item.label.Run a Full Node": {
+    "message": "풀 노드 실행하기",
+    "description": "Navbar item with label Run a Full Node"
+  },
+  "item.label.Enable Liteserver": {
+    "message": "라이트 서버 활성화하기",
+    "description": "Navbar item with label Enable Liteserver"
+  },
+  "item.label.Run an Archive Node": {
+    "message": "아카이브 노드 실행하기",
+    "description": "Navbar item with label Run an Archive Node"
+  },
+  "item.label.Single Nominator Pool": {
+    "message": "단일 지명자 풀",
+    "description": "Navbar item with label Single Nominator Pool"
+  },
+  "item.label.Vesting Contract": {
+    "message": "분배 계약",
+    "description": "Navbar item with label Vesting Contract"
+  },
+  "item.label.Web3": {
+    "message": "Web3",
+    "description": "Navbar item with label Web3"
+  },
+  "item.label.TON DNS & Domains": {
+    "message": "TON DNS 및 도메인",
+    "description": "Navbar item with label TON DNS & Domains"
+  },
+  "item.label.Open TON Sites": {
+    "message": "TON 사이트 열기",
+    "description": "Navbar item with label Open TON Sites"
+  },
+  "item.label.Run TON Sites": {
+    "message": "TON 사이트 실행하기",
+    "description": "Navbar item with label Run TON Sites"
+  },
+  "item.label.Run a Storage Daemon": {
+    "message": "스토리지 데몬 실행하기",
+    "description": "Navbar item with label Run a Storage Daemon"
+  },
+  "item.label.Build a Storage Provider": {
+    "message": "스토리지 제공업체 구축하기",
+    "description": "Navbar item with label Build a Storage Provider"
+  },
+  "item.label.Community": {
+    "message": "커뮤니티",
+    "description": "Navbar item with label Community"
+  },
+  "item.label.TON Answers": {
+    "message": "TON 질문과 답변",
+    "description": "Navbar item with label TON Answers"
+  },
+  "item.label.TON Developers Kit": {
+    "message": "TON 개발자 키트",
+    "description": "Navbar item with label TON Developers Kit"
+  },
+  "item.label.AI TON Support Agent": {
+    "message": "TON AI 고객 지원 봇",
+    "description": "Navbar item with label AI TON Support Agent"
+  },
+  "item.label.Standards Discussion (TEPs)": {
+    "message": "표준 논의 (TEPs)",
+    "description": "Navbar item with label Standards Discussion (TEPs)"
+  },
+  "item.label.Contribute to Docs": {
+    "message": "문서 기여하기",
+    "description": "Navbar item with label Contribute to Docs"
+  },
+  "logo.alt": {
+    "message": "TON",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.APIs": {
+    "message": "APIs",
+    "description": "Navbar item with label APIs"
+  },
+  "item.label.SDKs": {
+    "message": "SDKs",
+    "description": "Navbar item with label SDKs"
+  }
+}
