@@ -22,7 +22,7 @@ module.exports = {
           label: 'Blockchain of Blockchains',
         },
         {
-          to: '/learn/overviews/addresses',
+          to: '/v3/concepts/ton-blockchain/smart-contract-addresses',
           label: 'Smart Contract Addresses',
         },
         {
@@ -132,7 +132,7 @@ module.exports = {
       items: [
         {
           to: '/participate/run-nodes/mytonctrl',
-          label: 'MyTonCtrl', // TODO: refactor status
+          label: 'Manage Blockchain Nodes',
         },
         {
           to: '/participate/run-nodes/nodes-troubleshooting',
@@ -158,31 +158,31 @@ module.exports = {
     },
     {
       type: 'dropdown',
-      to: 'participate',
+      to: 'v3/guidelines/overview',
+      label: 'Guidelines',
       position: 'left',
-      label: 'Web3',
       items: [
         {
-          to: 'participate/web3/dns',
-          label: 'TON DNS & Domains',
+          to: '/develop/smart-contracts/guidelines',
+          label: 'Smart Contracts',
         },
         {
-          to: 'participate/web3/how-to-open-any-ton-site',
-          label: 'Open TON Sites',
+          to: '/develop/dapps/',
+          label: 'DApps',
         },
         {
-          to: 'develop/dapps/tutorials/how-to-run-ton-site',
-          label: 'Run TON Sites',
+          to: 'v3/guidelines/nodes/overview',
+          label: 'Nodes'
         },
         {
-          to: 'participate/ton-storage/storage-daemon',
-          label: 'Run a Storage Daemon',
+          to: 'develop/dapps/ton-connect/overview',
+          label: 'Integrate with TON'
         },
         {
-          to: 'participate/ton-storage/storage-provider',
-          label: 'Build a Storage Provider',
+          to: 'participate/web3/overview',
+          label: 'Web3',
         },
-      ],
+      ]
     },
     {
       type: 'dropdown',
@@ -207,6 +207,14 @@ module.exports = {
           label: 'DApps',
         },
         {
+          to: 'participate/explorers',
+          label: 'Infrastructure'
+        },
+        {
+          to: '/develop/data-formats/cell-boc',
+          label: 'Data Formats',
+        },
+        {
           to: 'learn/networking/low-level-adnl',
           label: 'Networking'
         },
@@ -218,7 +226,7 @@ module.exports = {
     },
     {
       type: 'dropdown',
-      label: 'External',
+      label: 'Resources',
       position: 'left',
       items: [
         {
@@ -228,10 +236,6 @@ module.exports = {
         {
           to: 'https://t.me/addlist/1r5Vcb8eljk5Yzcy',
           label: 'TON Developers Kit',
-        },
-        {
-          to: 'https://t.me/tonsupport_aibot',
-          label: 'AI TON Support Agent',
         },
         {
           to: 'https://github.com/ton-blockchain/TEPs',

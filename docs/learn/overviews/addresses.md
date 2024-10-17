@@ -1,4 +1,4 @@
-# Smart Contract Addresses
+# Smart Contract Addresses Documentation
 
 This section will describe the specifics of smart contract addresses on TON Blockchain. It will also explain how actors are synonymous with smart contracts on TON.
 
