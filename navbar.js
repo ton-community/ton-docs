@@ -126,7 +126,7 @@ module.exports = {
     },
     {
       type: 'dropdown',
-      to: 'participate',
+      to: 'participate/nodes/node-types',
       position: 'left',
       label: 'Nodes',
       items: [
@@ -205,10 +205,6 @@ module.exports = {
         {
           to: 'develop/dapps/defi/coins', // TODO: add page
           label: 'DApps',
-        },
-        {
-          to: 'participate/explorers',
-          label: 'Infrastructure'
         },
         {
           to: '/develop/data-formats/cell-boc',

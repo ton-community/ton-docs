@@ -20,6 +20,7 @@ module.exports = [
       'learn/overviews/ton-blockchain',
       'v3/concepts/ton-blockchain/smart-contract-addresses',
       'participate/wallets/apps',
+      'participate/explorers',
       'learn/overviews/cells',
       'learn/networking/overview',
       'learn/overviews/blockchain-comparison',

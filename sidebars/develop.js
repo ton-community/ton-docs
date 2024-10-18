@@ -165,7 +165,6 @@ module.exports = [
     'type': 'html',
     'value': '<span class=\'menu__link\'><b><small> Infrastructure Documentation </small></b></span>',
   },
-  'participate/explorers',
   {
     type: 'category',
     label: 'Cross-chain Bridges',
