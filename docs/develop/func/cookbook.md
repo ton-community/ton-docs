@@ -73,7 +73,7 @@ while (msg.slice_refs_empty?() != -1) { ;; we should remind that -1 is true
 > 
 > ["While loop" in docs](/develop/func/statements#while-loop)
 >
-> ["Cell" in docs](/learn/overviews/cells)
+> ["Cell" in docs](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage)
 >
 > ["slice_refs_empty?()" in docs](/develop/func/stdlib#slice_refs_empty)
 >

@@ -5,8 +5,8 @@ It is also meant to offer essential frameworks (explorers, wallets, TEPs) that a
 
 ## Participate in TON Ecosystem
 
-* [TON Explorers](/participate/explorers)
-* [Wallet Apps (for Developers)](/participate/wallets/apps)
+* [TON Explorers](/v3/concepts/dive-into-ton/ton-blockchain/explorers-in-ton)
+* [Wallet Apps (for Developers)](/v3/concepts/dive-into-ton/ton-blockchain/wallet-apps)
 * [Types of Wallet Contracts](/participate/wallets/contracts)
 
 ### Join TON Community

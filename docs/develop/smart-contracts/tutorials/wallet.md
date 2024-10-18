@@ -15,7 +15,7 @@ In this section we’ll learn to create operations without using pre-configured 
 
 ## 💡 Prerequisites
 
-This tutorial requires basic knowledge of Javascript and Typescript or Golang. It is also necessary to hold at least 3 TON (which can be stored in an exchange account, a non-custodial wallet, or by using the telegram bot wallet). It is necessary to have a basic understanding of [cell](/learn/overviews/cells), [addresses in TON](/learn/overviews/addresses), [blockchain of blockchains](/learn/overviews/ton-blockchain) to understand this tutorial.
+This tutorial requires basic knowledge of Javascript and Typescript or Golang. It is also necessary to hold at least 3 TON (which can be stored in an exchange account, a non-custodial wallet, or by using the telegram bot wallet). It is necessary to have a basic understanding of [cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage), [addresses in TON](/learn/overviews/addresses), [blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains) to understand this tutorial.
 
 :::info MAINNET DEVELOPMENT IS ESSENTIAL   
 Working with the TON Testnet often leads to deployment errors, difficulty tracking transactions, and unstable network functionality. Therefore, it could be beneficial to complete most development on the TON Mainnet to potentially avoid these issues, which might be necessary to reduce the number of transactions and thereby possibly minimize fees.
@@ -297,7 +297,7 @@ Since a **maximum of 4 references** can be stored in one cell, we can send a max
 In this section, we’ll learn more about `internal` and `external` messages and we’ll create messages and send them to the network to minimize the use of pre-cooked functions.
 
 To carry out this process it is necessary to make use of a ready-made wallet to make the task easier. To accomplish this:
-1. Install the [wallet app](/participate/wallets/apps) (e.g., Tonkeeper is used by the author)  
+1. Install the [wallet app](/v3/concepts/dive-into-ton/ton-blockchain/wallet-apps) (e.g., Tonkeeper is used by the author)  
 2. Switch wallet app to v3r2 address version
 3. Deposit 1 TON into the wallet 
 4. Send the message to another address (you can send to yourself, to the same wallet). 
@@ -364,7 +364,7 @@ Now let’s go through each option in detail:
 
 Option | Explanation
 :---: | :---:
-IHR Disabled | Currently, this option is disabled (which means we store 1) because Instant Hypercube Routing is not fully implemented. In addition, this will be needed when a large number of [Shardchains](/learn/overviews/ton-blockchain#many-accountchains-shards) are live on the network. More can be read about the IHR Disabled option in the [tblkch.pdf](https://ton.org/tblkch.pdf) (chapter 2).
+IHR Disabled | Currently, this option is disabled (which means we store 1) because Instant Hypercube Routing is not fully implemented. In addition, this will be needed when a large number of [Shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards) are live on the network. More can be read about the IHR Disabled option in the [tblkch.pdf](https://ton.org/tblkch.pdf) (chapter 2).
 Bounce | While sending messages, a variety of errors can occur during smart contract processing. To avoid losing TON, it is necessary to set the Bounce option to 1 (true). In this case, if any contract errors occur during transaction processing, the message will be returned to the sender, and the same amount of TON will be received minus fees. More can be read about non-bounceable messages [here](/develop/smart-contracts/guidelines/non-bouncable-messages).
 Bounced | Bounced messages are messages that are returned to the sender because an error occurred while processing the transaction with a smart contract. This option tells you whether the message received is bounced or not.
 Src | The Src is the sender address. In this case, two zero bits are written to indicate the `addr_none` address.
@@ -940,11 +940,11 @@ Before building a message it is important to understand what a State Init is. Fi
 
 Option | Explanation
 :---: | :---:
-split_depth | This option is intended for highly loaded smart contracts that can be split and located on several [shardchains](/learn/overviews/ton-blockchain#many-accountchains-shards).  More information detailing how this works can be found in the [tblkch.pdf](https://ton.org/tblkch.pdf) (4.1.6).  Only a `0` bit is stored since it is being used only within a wallet smart contract.
+split_depth | This option is intended for highly loaded smart contracts that can be split and located on several [shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards).  More information detailing how this works can be found in the [tblkch.pdf](https://ton.org/tblkch.pdf) (4.1.6).  Only a `0` bit is stored since it is being used only within a wallet smart contract.
 special | Used for TicTok. These smart contracts are automatically called for each block and are not needed for regular smart contracts. Information about this can be found in [this section](/develop/data-formats/transaction-layout#tick-tock) or in [tblkch.pdf](https://ton.org/tblkch.pdf) (4.1.6). Only a `0` bit is stored within this specification because we do not need such a function.
 code | `1` bit means the presence of the smart contract code as a reference.
 data | `1` bit means the presence of the smart contract data as a reference.
-library | A library that operates on the [masterchain](/learn/overviews/ton-blockchain#masterchain-blockchain-of-blockchains)  and can be used by different smart contracts. This will not be used for wallet, so its bit is set to `0`. Information about this can be found in [tblkch.pdf](https://ton.org/tblkch.pdf) (1.8.4).
+library | A library that operates on the [masterchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains)  and can be used by different smart contracts. This will not be used for wallet, so its bit is set to `0`. Information about this can be found in [tblkch.pdf](https://ton.org/tblkch.pdf) (1.8.4).
 
 Next we’ll prepare the `initial data`, which will be present in our contract’s storage immediately after deployment:
 
@@ -1663,7 +1663,7 @@ Now let’s move to the methods that only the V4 wallet makes use of:
 Method | Explanation
 :---: | :---:
 int get_subwallet_id() | Earlier in the tutorial we considered this. This method allows you to retrive subwallet_id.
-int is_plugin_installed(int wc, int addr_hash) | Let’s us know if the plugin has been installed. To call this method it’s necessary to pass the  [workchain](/learn/overviews/ton-blockchain#workchain-blockchain-with-your-own-rules) and the plugin address hash.
+int is_plugin_installed(int wc, int addr_hash) | Let’s us know if the plugin has been installed. To call this method it’s necessary to pass the  [workchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules) and the plugin address hash.
 tuple get_plugin_list() | This method returns the address of the plugins that are installed.
 
 Let’s consider the `get_public_key` and the `is_plugin_installed` methods. These two methods were chosen because at first we would have to get a public key from 256 bits of data, and after that we would have to learn how to pass a slice and different types of data to GET methods. This is very useful to help us learn how to properly make use of these methods.
@@ -3145,7 +3145,7 @@ Official documentation:
   
   - [TL-B](/develop/data-formats/tl-b-language)
 
-  - [Blockchain of Blockchains](https://docs.ton.org/learn/overviews/ton-blockchain)
+  - [Blockchain of Blockchains](https://docs.ton.org/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)
 
 External references:
 

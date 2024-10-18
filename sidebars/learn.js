@@ -3,7 +3,7 @@
  */
 module.exports = [
   'learn/introduction', // TODO: Change to
-  'learn/glossary',
+  'v3/concepts/glossary',
   {
     'type': 'html',
     'value': '<hr/>',
@@ -17,26 +17,27 @@ module.exports = [
     type: 'category',
     label: 'TON Blockchain',
     items: [
-      'learn/overviews/ton-blockchain',
-      'v3/concepts/ton-blockchain/smart-contract-addresses',
-      'participate/wallets/apps',
-      'participate/explorers',
-      'learn/overviews/cells',
-      'learn/networking/overview',
-      'learn/overviews/blockchain-comparison',
+      'v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains',
+      'v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses',
+      'v3/concepts/dive-into-ton/ton-blockchain/wallet-apps',
+      'v3/concepts/dive-into-ton/ton-blockchain/explorers-in-ton',
+      'v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage',
+      'v3/concepts/dive-into-ton/ton-blockchain/ton-networking',
+      'v3/concepts/dive-into-ton/ton-blockchain/sharding',
+      'v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison',
     ],
   },
   {
     type: 'category',
     label: 'Go from Ethereum?',
     items: [
-      'develop/ethereum-to-ton/difference-of-blockchains',
-      'develop/ethereum-to-ton/tvm-vs-evm',
-      'develop/ethereum-to-ton/solidity-vs-func',
-      'develop/ethereum-to-ton/blockchain-services',
+      'v3/concepts/dive-into-ton/go-from-ethereum/difference-of-blockchains',
+      'v3/concepts/dive-into-ton/go-from-ethereum/tvm-vs-evm',
+      'v3/concepts/dive-into-ton/go-from-ethereum/solidity-vs-func',
+      'v3/concepts/dive-into-ton/go-from-ethereum/blockchain-services',
     ]
   },
-  'learn/academy/academy-overview',
+  'v3/concepts/educational-resources',
   {
     'type': 'html',
     'value': '<hr/>',
@@ -45,6 +46,6 @@ module.exports = [
     'type': 'html',
     'value': '<span class=\'menu__link\'><b><small> Quality Assurance & Outsource </small></b></span>',
   },
-  'develop/companies/auditors',
-  'develop/companies/outsource',
+  'v3/concepts/qa-outsource/auditors',
+  'v3/concepts/qa-outsource/outsource',
 ];

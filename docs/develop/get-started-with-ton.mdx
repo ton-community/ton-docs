@@ -88,7 +88,7 @@ With a non-custodial wallet, the user owns the wallet and holds its private key 
 To download and create a TON wallet follow these simple steps:
 
 1. Install the Tonkeeper app on your smartphone. It can be downloaded [here](https://Tonkeeper.com/).
-2. Next, you’ll need to [enable test mode](/participate/wallets/apps#Tonkeeper-test-environment) within Tonkeeper.
+2. Next, you’ll need to [enable test mode](/v3/concepts/dive-into-ton/ton-blockchain/wallet-apps#Tonkeeper-test-environment) within Tonkeeper.
 
 Easy! Let's go to the development now.
 
@@ -218,7 +218,7 @@ In the next section we’ll describe how users send their initial requests to TO
 
 For the miner to work correctly, we need to add two different smart contract address types. These include:
 
-1. __Wallet address__: A wallet address is required,  because it is necessary for the miner to receive their mining reward (in this case, we must use the [Tonkeeper Testnet mode](/participate/wallets/apps#Tonkeeper-test-environment)).
+1. __Wallet address__: A wallet address is required,  because it is necessary for the miner to receive their mining reward (in this case, we must use the [Tonkeeper Testnet mode](/v3/concepts/dive-into-ton/ton-blockchain/wallet-apps#Tonkeeper-test-environment)).
 2. __Collection address__: A collection address is required to act as a smart contract to correctly mine an NFT (to carry out this process copy the NFT collection address, under the TON onboarding challenge collection name from the [Getgems website](https://testnet.getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX)).
 
 Next, we’ll open the `index.ts` file in your miner and create a main function composed of initial constants as follows:
@@ -445,7 +445,7 @@ First, we must prepare a mining message by ensuring the correct parameters to en
 Thankfully, the [README file](https://github.com/ton-community/ton-onboarding-challenge#mining-process-advanced) allows us to retrieve the correct guidelines needed to achieve this goal. As you can see, the above README file comprises a table with certain fields and Cell types (titled “Layout of Proof of Work Cell’) to help achieve our desired result.
 
 :::info WHAT ARE CELLS?
-Cells are data storage structures on TON that fulfill numerous purposes, including increasing network scalable and smart contract transaction speeds. We won’t get into specifics here, but if you’re interested in understanding the complexity of cells and how they work, consider diving into [this](/learn/overviews/cells) section of our documentation.
+Cells are data storage structures on TON that fulfill numerous purposes, including increasing network scalable and smart contract transaction speeds. We won’t get into specifics here, but if you’re interested in understanding the complexity of cells and how they work, consider diving into [this](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) section of our documentation.
 :::
 
 Fortunately, all the data structures used in this tutorial are already written in TypeScript. Use the `MineMessageParams` object from _NftGiver.data.ts_ to build a transaction with _Queries_:
@@ -643,7 +643,7 @@ There are two main ways to mine an NFT on TON:
 
 Below are the steps needed to initiate your first Testnet transaction to mine your NFT:
 
-1. Activate [Testnet mode within your Tonkeeper wallet](/participate/wallets/apps#Tonkeeper-test-environment)
+1. Activate [Testnet mode within your Tonkeeper wallet](/v3/concepts/dive-into-ton/ton-blockchain/wallet-apps#Tonkeeper-test-environment)
 2. Input our testnet wallet address from Tonkeeper into `wallet` variable in the `index.ts`
 3. Input address of the [NFT collection from Testnet](https://testnet.getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX) into `collection` variable in the `index.ts`
 

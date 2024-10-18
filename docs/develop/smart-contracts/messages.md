@@ -144,7 +144,7 @@ Full scheme of message layout and the layout of all constituting fields (as well
 ## Message size
 
 :::info cell size
-Note that any [Cell](/learn/overviews/cells) may contain up to `1023` bits. If you need to store more data, you should split it into chunks and store in reference cells.
+Note that any [Cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) may contain up to `1023` bits. If you need to store more data, you should split it into chunks and store in reference cells.
 :::
 
 If, for instance, your message body size is 900 bits long, you can not store it in the same cell as the message header.

@@ -12,7 +12,7 @@ TON has a complex configuration with many technical parameters: some are used by
 ## 💡 Prerequisites
 
 This material is intended to be read alongside the parameter list.
-You can view the parameter values in the [current configuration](https://explorer.toncoin.org/config), and the way they are written into [cells](/learn/overviews/cells) is described in the [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb) file in [TL-B](/develop/data-formats/tl-b-language) format.
+You can view the parameter values in the [current configuration](https://explorer.toncoin.org/config), and the way they are written into [cells](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) is described in the [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb) file in [TL-B](/develop/data-formats/tl-b-language) format.
 
 :::info
 The binary encoding at the end of the TON Blockchain parameter is a serialized binary representation of its configuration, enabling efficient storage or transmission of the configuration. The precise details of serialization depend on the specific encoding scheme used by the TON Blockchain.
@@ -27,7 +27,7 @@ All parameters are in order, and you won't get lost. For your convenience, use t
 This parameter is the address of a special smart contract that stores the blockchain's configuration. The configuration is stored in the contract to simplify its loading and modification during validator voting.
 
 :::info
-In the configuration parameter, only the hash portion of the address is recorded, as the contract always resides in the [masterchain](/learn/overviews/ton-blockchain#masterchain-blockchain-of-blockchains) (workchain -1). Therefore, the full address of the contract will be written as `-1:<value of the configuration parameter>`.
+In the configuration parameter, only the hash portion of the address is recorded, as the contract always resides in the [masterchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains) (workchain -1). Therefore, the full address of the contract will be written as `-1:<value of the configuration parameter>`.
 :::
 
 ## Param 1

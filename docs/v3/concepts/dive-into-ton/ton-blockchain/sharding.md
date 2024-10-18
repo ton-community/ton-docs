@@ -1,4 +1,4 @@
-# Overview: Sharding and Split Merge in the TON Blockchain
+# Sharding in the TON Blockchain
 
 [//]: # (TODO, this is from gpt)
 

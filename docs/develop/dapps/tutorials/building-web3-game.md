@@ -6,7 +6,7 @@ In this tutorial we will consider how to add the TON blockchain to a game. For o
 ![Flappy Bird game without GameFi features](/img/tutorials/gamefi-flappy/no-gamefi-yet.png)
 
 We are going to implement the following:
-- Achievements. Let’s reward our users with [SBTs](https://docs.ton.org/learn/glossary#sbt). The achievement system is a great tool to increase user engagement.
+- Achievements. Let’s reward our users with [SBTs](https://docs.ton.org/v3/concepts/glossary#sbt). The achievement system is a great tool to increase user engagement.
 - Game currency. In TON blockchain it’s easy to launch your own token (jetton). The token can be used to create an in-game economy. Our users will be able to earn the game coins to spend them later.
 - Game shop. We will provide users with the possibility to purchase in-game items using either in-game currency or the TON coin itself.
 

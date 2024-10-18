@@ -1,10 +1,62 @@
 [
     {
-        "from": "/develop/overview",
-        "to": "/v3/overview"
+        "from": "/learn/glossary",
+        "to": "/v3/concepts/glossary"
     },
     {
-        "from": "/v3/overview",
-        "to": "/develop/overview"
+        "from": "/learn/overviews/ton-blockchain",
+        "to": "/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains"
+    },
+    {
+        "from": "/participate/wallets/apps",
+        "to": "/v3/concepts/dive-into-ton/ton-blockchain/wallet-apps"
+    },
+    {
+        "from": "/participate/explorers",
+        "to": "/v3/concepts/dive-into-ton/ton-blockchain/explorers-in-ton"
+    },
+    {
+        "from": "/learn/overviews/cells",
+        "to": "/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage"
+    },
+    {
+        "from": "/v3/concepts/dive-into-ton/ton-blockchain/shards",
+        "to": "/v3/concepts/dive-into-ton/ton-blockchain/sharding"
+    },
+    {
+        "from": "/learn/networking/overview",
+        "to": "/v3/concepts/dive-into-ton/ton-blockchain/ton-networking"
+    },
+    {
+        "from": "/learn/overviews/blockchain-comparison",
+        "to": "/v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison"
+    },
+    {
+        "from": "/develop/ethereum-to-ton/blockchain-services",
+        "to": "/v3/concepts/dive-into-ton/go-from-ethereum/blockchain-services"
+    },
+    {
+        "from": "/develop/ethereum-to-ton/difference-of-blockchains",
+        "to": "/v3/concepts/dive-into-ton/go-from-ethereum/difference-of-blockchains"
+    },
+    {
+        "from": "/develop/ethereum-to-ton/solidity-vs-func",
+        "to": "/v3/concepts/dive-into-ton/go-from-ethereum/solidity-vs-func"
+    },
+    {
+        "from": "/develop/ethereum-to-ton/tvm-vs-evm",
+        "to": "/v3/concepts/dive-into-ton/go-from-ethereum/tvm-vs-evm"
+    },
+    {
+        "from": "/learn/academy/academy-overview",
+        "to": "/v3/concepts/educational-resources"
+    },
+    {
+        "from": "/develop/companies/auditors",
+        "to": "/v3/concepts/qa-outsource/auditors"
+    },
+    {
+        "from": "/develop/companies/outsource",
+        "to": "/v3/concepts/qa-outsource/outsource"
     }
 ]

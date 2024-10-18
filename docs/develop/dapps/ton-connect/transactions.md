@@ -79,7 +79,7 @@ The function will exit, and the output from the blockchain will be printed:
 }
 ```
 
-BOC is [Bag of Cells](/learn/overviews/cells), the way of how is data stored in TON. Now we can decode it.
+BOC is [Bag of Cells](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage), the way of how is data stored in TON. Now we can decode it.
 
 Decode this BOC in the tool of your choice, and you'll get the following tree of cells:
 

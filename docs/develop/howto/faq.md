@@ -56,7 +56,7 @@ Additionally, here are three high-level third-party block explorers:
 - https://toncenter.com/
 - https://tonwhales.com/explorer
 
-Read more in the [Explorers in TON](/participate/explorers) section of our documentation.
+Read more in the [Explorers in TON](/v3/concepts/dive-into-ton/ton-blockchain/explorers-in-ton) section of our documentation.
 
 ### Block time
 
@@ -65,7 +65,7 @@ _2-5s_
 :::info
 Compare TON's on-chain metrics, including block time and time-to-finality, to Solana and Ethereum by reading our analysis at:
 * [Comparison of Blockchains document](https://ton.org/comparison_of_blockchains.pdf)
-* [Comparison of Blockchains table (much less informative than the document, but more visual)](/learn/overviews/blockchain-comparison)
+* [Comparison of Blockchains table (much less informative than the document, but more visual)](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison)
   :::
 
 ### Time-to-finality
@@ -75,7 +75,7 @@ _Under 6 sec._
 :::info
 Compare TON's on-chain metrics, including block time and time-to-finality, to Solana and Ethereum by reading our analysis at:
 * [Comparison of Blockchains document](https://ton.org/comparison_of_blockchains.pdf)
-* [Comparison of Blockchains table (much less informative than the document, but more visual)](/learn/overviews/blockchain-comparison)
+* [Comparison of Blockchains table (much less informative than the document, but more visual)](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison)
   :::
 
 ### Average block size
@@ -198,7 +198,7 @@ For a **Jettons** contract must implement [standard's interface](https://github.
 There is a special master blockchain inside a TON called Masterchain. It consists of network-wide contracts with network configuration, validator-related contracts, etc:
 
 :::info
-Read more about masterchain, workchains and shardchains in TON Blockchain overview article: [Blockchain of Blockchains](/learn/overviews/ton-blockchain).
+Read more about masterchain, workchains and shardchains in TON Blockchain overview article: [Blockchain of Blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains).
 :::
 
 Good example is smart governance contract, which is a part of masterchain:

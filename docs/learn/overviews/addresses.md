@@ -4,7 +4,7 @@ This section will describe the specifics of smart contract addresses on TON Bloc
 
 ## Everything is a Smart Contract
 
-On TON, smart contracts are built using the [Actor model](/learn/overviews/ton-blockchain#single-actor). In fact, actors in TON are technically represented as smart contracts. This means that even your wallet is a simple actor (and a smart contract).
+On TON, smart contracts are built using the [Actor model](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor). In fact, actors in TON are technically represented as smart contracts. This means that even your wallet is a simple actor (and a smart contract).
 
 Typically, actors process incoming messages, change their internal state, and generate outbound messages as a result. That's why every actor (i.e., smart contract) on TON Blockchain must have an address, so it is able to receive messages from other actors.
 
@@ -26,7 +26,7 @@ In the raw address overview section of this documentation, we'll discuss how  **
 
 #### Workchain ID
 
-[As we've seen before](/learn/overviews/ton-blockchain#workchain-blockchain-with-your-own-rules), it is possible to create as many as `2^32` workchains operating on TON Blockchain. We also noted how 32-bit prefix smart contract addresses identify and are linked to smart contract addresses within different workchains. This allows smart contracts to send and receive messages to and from different workchains on TON Blockchain.
+[As we've seen before](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules), it is possible to create as many as `2^32` workchains operating on TON Blockchain. We also noted how 32-bit prefix smart contract addresses identify and are linked to smart contract addresses within different workchains. This allows smart contracts to send and receive messages to and from different workchains on TON Blockchain.
 
 Nowadays, only the Masterchain (workchain_id=-1) and occasionally the basic workchain (workchain_id=0) are running in TON Blockchain.
 
