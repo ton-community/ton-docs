@@ -24,11 +24,11 @@ module.exports = [
     from: '/learn/overviews/adnl',
   },
   {
-    to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
+    to: '/v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot',
     from: '/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot',
   },
   {
-    to: '/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
+    to: '/v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-2',
     from: '/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot-2',
   },
   {

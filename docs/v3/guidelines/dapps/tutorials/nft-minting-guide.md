@@ -51,7 +51,7 @@ In TON we have 1 master contract - smart-contract of our collection, that store 
 ![](/img/tutorials/nft/ton-collection.png)
 
 :::info
-You can check [NFT processing on TON](/develop/dapps/asset-processing/nfts) article or read [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) if you want to dive deeper into this topic
+You can check [NFT processing on TON](/v3/guidelines/dapps/asset-processing/nft-processing/nfts) article or read [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) if you want to dive deeper into this topic
 :::
 
 ## ⚙ Setup development environment

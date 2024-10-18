@@ -44,7 +44,7 @@ Smart contracts pay several types of [fees](/develop/smart-contracts/fees) for t
 
 TON has three types of digital assets.
 - Toncoin, the main token of the network. It is used for all basic operations on the blockchain, for example, paying gas fees or staking for validation.
-- Contract assets, such as tokens and NFTs, which are analogous to the ERC-20/ERC-721 standards and are managed by arbitrary contracts and thus can require custom rules for processing. You can find more info on it's processing in [process NFTs](/develop/dapps/asset-processing/nfts) and [process Jettons](/develop/dapps/asset-processing/jettons) articles.
+- Contract assets, such as tokens and NFTs, which are analogous to the ERC-20/ERC-721 standards and are managed by arbitrary contracts and thus can require custom rules for processing. You can find more info on it's processing in [process NFTs](/v3/guidelines/dapps/asset-processing/nft-processing/nfts) and [process Jettons](/develop/dapps/asset-processing/jettons) articles.
 - Native token, which is special kind of assets that can be attached to any message on the network. But these asset is currently not in use since the functionality for issuing new native tokens is closed.
 
 ## Interaction with TON blockchain
@@ -53,6 +53,6 @@ Basic operations on TON Blockchain can be carried out via TonLib. It is a shared
 ## Read next
 
 After reading this article you can check:
-1. [Payments processing](/develop/dapps/asset-processing/) to get how to work with `TON coins`
+1. [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing) to get how to work with `TON coins`
 2. [Jetton processing](/develop/dapps/asset-processing/jettons) to get how to work with `jettons` (sometime called `tokens`)
-3. [NFT processing](/develop/dapps/asset-processing/nfts) to get how to work with `NFT` (that is the special type of `jetton`)
+3. [NFT processing](/v3/guidelines/dapps/asset-processing/nft-processing/nfts) to get how to work with `NFT` (that is the special type of `jetton`)

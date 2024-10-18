@@ -12,7 +12,7 @@ To learn more about RedStone oracles design go to the [RedStone docs](https://do
 
 ## Documentation links
 
-* [Redstone TON Connector](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector) 
+* [Redstone TON Connector](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector)
 
 ## Smart Contracts
 
@@ -31,7 +31,7 @@ passed.
 Due to the architecture of TON contracts, the initial data must convene with the contract's storage structure,
 which is constructed as below:
 
-```ts   
+```ts
   begin_cell()
     .store_uint(signer_count_threshold, 8)  /// number as passed below
     .store_uint(timestamp, TIMESTAMP_BITS)  /// initially 0 representing the epoch 0
@@ -59,7 +59,7 @@ See [TON RedStone payload packing](#-ton-redstone-payload-packing) section below
 
 #### get_prices
 
-```func   
+```func
 (cell) get_prices_v2(cell data_feed_ids, cell payload) method_id;
 ```
 
@@ -99,7 +99,7 @@ See how it works on: https://ton-showroom.redstone.finance/
 
 #### read_prices
 
-```func   
+```func
 (tuple) read_prices(tuple data_feed_ids) method_id;
 ```
 
@@ -192,7 +192,7 @@ That's just a `method_id` function - it doesn't modify the contract's storage an
 
 Similar to the `prices` and `price_feed` initial data. Due to the architecture of TON contracts, the initial data must convene with the contract's storage structure, which is constructed as below:
 
-```ts   
+```ts
 beginCell()
   .storeUint(BigInt(hexlify(toUtf8Bytes(this.feedId))), consts.DATA_FEED_ID_BS * 8)
   .storeUint(this.signerCountThreshold, SIGNER_COUNT_THRESHOLD_BITS)
@@ -248,7 +248,7 @@ The `price_feed` to be called needs to be passed.
 
 Similar to the `price_feed` initial data. Due to the architecture of TON contracts, the initial data must convene with the contract's storage structure, which is constructed as below:
 
-```ts   
+```ts
 beginCell()
   .storeAddress(Address.parse(this.feedAddress))
   .endCell();
@@ -303,15 +303,15 @@ the data should be passed as a Cell built as follows.
 
 1. The main *payload* `cell` consists of:
     1. the metadata in the **data-level bits** consisting of the parts as on the image:
-    
+
       ![payload-metadata.png](../../../static/img/docs/oracles/red-stone/payload-metadata.png)
     1. a **ref** containing a `udict` indexed by consecutive natural numbers (beginning from 0) containing the list of **data_package** `cell`s.
 1. Each *data-package* `cell` consists of:
     1. the data package's signature in the **data-level bits**:
-    
+
       ![payload-metadata.png](../../../static/img/docs/oracles/red-stone/payload-metadata.png)
     1. one **ref** to a `cell` containing the data of the rest of the data package on its **data-level**:
-    
+
       ![payload-metadata.png](../../../static/img/docs/oracles/red-stone/data-package-data.png)
 
 #### Current implementation limitations

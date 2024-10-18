@@ -63,7 +63,7 @@ module.exports = {
           label: 'APIs and SDKs',
         },
         {
-          to: 'develop/dapps/asset-processing',
+          to: '/v3/guidelines/dapps/asset-processing/payments-processing',
           label: 'Payment Processing',
         },
         {
@@ -71,11 +71,11 @@ module.exports = {
           label: 'Jetton Processing',
         },
         {
-          to: '/develop/dapps/tutorials/jetton-minter',
+          to: '/v3/guidelines/dapps/tutorials/mint-your-first-token',
           label: 'Mint your Tokens',
         },
         {
-          to: '/develop/dapps/tutorials/collection-minting',
+          to: '/v3/guidelines/dapps/tutorials/nft-minting-guide',
           label: 'Mint your NFTs',
         },
         {

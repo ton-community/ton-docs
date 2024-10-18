@@ -5,10 +5,10 @@ import Button from '@site/src/components/button';
 # Jetton Processing
 
 :::info
-For clear understanding, the reader should be familiar with the basic principles of asset processing described in [payments processing section](/develop/dapps/asset-processing/) of our documentation.
+For clear understanding, the reader should be familiar with the basic principles of asset processing described in [payments processing section](/v3/guidelines/dapps/asset-processing/payments-processing) of our documentation.
 :::
 
-Jettons are tokens on TON Blockchain - one can consider them similarly to ERC-20 tokens on Ethereum was set in TON with [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md).
+Jettons are tokens on TORN Blockchain - one can consider them similarly to ERC-20 tokens on Ethereum was set in TON with [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md).
 
 In this analysis, we take a deeper dive into the formal standards detailing jetton [behavior](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) and [metadata](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
 A less formal sharding-focused overview of jetton architecture can be found in our
@@ -55,7 +55,7 @@ This method returns the following data:
 | `total_supply`       | `int`  | the total number of issued jettons measured in indivisible units.                                                                                                                                               |
 | `mintable`          | `int`   | details whether new jettons can be minted or not. This value is either -1 (can be minted) or 0 (cannot be minted).                                                                                              |
 | `admin_address`      | `slice` |                                                                                                                                                                                                                 |
-| `jetton_content`     | `cell` | data in accordance with [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md), check [jetton metadata parsing page](/develop/dapps/asset-processing/metadata) for more. |
+| `jetton_content`     | `cell` | data in accordance with [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md), check [jetton metadata parsing page](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing) for more. |
 | `jetton_wallet_code` | `cell`  |                                                                                                                                                                                                                 |
 
 You can call it via [Toncenter API](https://toncenter.com/api/v3/#/default/get_jetton_masters_api_v3_jetton_masters_get) or one of the [SDKs](https://docs.ton.org/develop/dapps/apis/sdk).
@@ -84,7 +84,7 @@ console.log('URI to off-chain metadata:', data.jettonContentUri);
 
 As mentioned before, jettons can be either `mintable` or `non-mintable`.
 
-If they are non-mintable, the logic becomes simple—there is no way to mint additional tokens. To mint jettons for the first time, refer to the [Mint your first jetton](/develop/dapps/tutorials/jetton-minter) page.
+If they are non-mintable, the logic becomes simple—there is no way to mint additional tokens. To mint jettons for the first time, refer to the [Mint your first jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token) page.
 
 If the jettons are mintable, there is a special function in the [minter contract](https://github.com/ton-blockchain/minter-contract/blob/main/contracts/jetton-minter.fc) to mint additional jettons. This function can be called by sending an `internal message` with a specified opcode from the admin address.
 
@@ -1201,6 +1201,6 @@ You can find a list of SDKs for various languages (js, python, golang, C#, Rust,
 
 ## See Also
 
-* [Payments Processing](/develop/dapps/asset-processing/)
-* [NFT processing on TON](/develop/dapps/asset-processing/nfts)
-* [Metadata parsing on TON](/develop/dapps/asset-processing/metadata)
+* [Payments Processing](/v3/guidelines/dapps/asset-processing/payments-processing)
+* [NFT processing on TON](/v3/guidelines/dapps/asset-processing/nft-processing/nfts)
+* [Metadata parsing on TON](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing)

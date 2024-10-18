@@ -116,31 +116,31 @@ module.exports = [
     items: [
       {
         type: 'doc',
-        id: 'develop/dapps/tutorials/collection-minting',
+        id: 'v3/guidelines/dapps/tutorials/nft-minting-guide',
         label: 'NFT Minting Guide',
       },
       {
         type: 'doc',
-        id: 'develop/dapps/tutorials/jetton-minter',
+        id: 'v3/guidelines/dapps/tutorials/mint-your-first-token',
         label: 'Mint Your First Token',
       },
       {
         type: 'doc',
-        id: 'develop/dapps/tutorials/simple-zk-on-ton',
+        id: 'v3/guidelines/dapps/tutorials/zero-knowledge-proofs',
         label: 'Zero-Knowledge Proofs',
       },
       {
         type: 'doc',
-        id: 'develop/dapps/tutorials/building-web3-game',
+        id: 'v3/guidelines/dapps/tutorials/web3-game-example',
         label: 'Web3 Game Example',
       },
       {
         type: 'category',
         label: 'Telegram Bot Examples',
         items: [
-          'develop/dapps/tutorials/accept-payments-in-a-telegram-bot',
-          'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2',
-          'develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js',
+          'v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot',
+          'v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-2',
+          'v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-js',
         ],
       },
     ],
@@ -154,10 +154,10 @@ module.exports = [
         type: 'category',
         label: 'Guidelines',
         items: [
-          'develop/dapps/telegram-apps/testing-apps',
-          'develop/dapps/telegram-apps/publishing',
-          'develop/dapps/telegram-apps/monetization',
-          'develop/dapps/telegram-apps/tips-and-tricks',
+          'v3/guidelines/dapps/tma/guidelines/testing-apps',
+          'v3/guidelines/dapps/tma/guidelines/publishing',
+          'v3/guidelines/dapps/tma/guidelines/monetization',
+          'v3/guidelines/dapps/tma/guidelines/tips-and-tricks',
         ],
       },
       {
@@ -165,28 +165,28 @@ module.exports = [
         label: 'Tutorials & Examples',
         items: [
           'develop/dapps/telegram-apps/step-by-step-guide',
-          'develop/dapps/telegram-apps/app-examples',
-          'develop/dapps/telegram-apps/design-guidelines',
+          'v3/guidelines/dapps/tma/tutorials/app-examples',
+          'v3/guidelines/dapps/tma/tutorials/design-guidelines',
         ],
       },
-      'develop/dapps/telegram-apps/notcoin',
-      'develop/dapps/telegram-apps/grants',
+      'v3/guidelines/dapps/tma/notcoin',
+      'v3/guidelines/dapps/tma/grants',
     ],
   },
   {
     type: 'category',
     label: 'Advanced Asset Processing',
     items: [
-      'develop/dapps/asset-processing/README', // TODO: divide
+      'v3/guidelines/dapps/asset-processing/payments-processing', // TODO: divide
       'develop/dapps/asset-processing/jettons', // TODO: divide
-      'develop/dapps/asset-processing/mintless-jettons', // TODO: divide
-      'develop/dapps/asset-processing/mass-mint-tools',
+      'v3/guidelines/dapps/asset-processing/mintless-jettons', // TODO: divide
+      'v3/guidelines/dapps/asset-processing/mass-mint-tools',
       {
         type: 'category',
         label: 'NFT Processing',
         items: [
-          'develop/dapps/asset-processing/nfts', // TODO: divide
-          'develop/dapps/asset-processing/metadata',
+          'v3/guidelines/dapps/asset-processing/nft-processing/nfts', // TODO: divide
+          'v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing',
         ],
       },
     ],

@@ -120,8 +120,8 @@ Example for Wallet contract transfer (low-level):
 
 To learn more about transaction verification, please see the following examples:
 - Go: [Wallet example](https://github.com/xssnick/tonutils-go/blob/master/example/wallet/main.go)
-- Python: [Storefront bot with payments in TON](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot)
-- JavaScript: [Bot being used for dumpling sales](/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js)
+- Python: [Storefront bot with payments in TON](/v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot)
+- JavaScript: [Bot being used for dumpling sales](/v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-js)
 
 ### What is the layout of a transaction in TON?
 
@@ -171,7 +171,7 @@ However, certain indexed APIs allow you to view all messages sent to or from a c
 
 - https://tonapi.io/swagger-ui
 
-To better understand how this process works, please refer [Payments Processing](/develop/dapps/asset-processing/) section.
+To better understand how this process works, please refer [Payments Processing](/v3/guidelines/dapps/asset-processing/payments-processing) section.
 
 
 ## Account Structure

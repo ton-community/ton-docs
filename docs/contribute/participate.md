@@ -32,7 +32,7 @@ Write a _ton-footstep_ to receive a funding for your contributing.
 **Preparations**. Minimize future amount of requested changes, _save your time_:
 1. Follow [Tutorial Guidelines](/contribute/guidelines) and check them with [Sample Tutorial Structure](/contribute/sample-tutorial)
 2. Read [Principles of a Good Tutorial](/contribute/principles-of-a-good-tutorial) to write amazing tutorial :)
-3. Inspire with [Mint your first Jetton](/develop/dapps/tutorials/jetton-minter) example in sources.
+3. Inspire with [Mint your first Jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token) example in sources.
 4. **Setup environment**. [Check the tutorial](/contribute#online-one-click-contribution-setup) running your fork locally or using Gitpod.
 5. **Write tutorial**. Using the environment, see how tutorial looks like on your fork.
 6. **Make a Pull Request**. Open PR to get some feedback from maintainers.

@@ -214,5 +214,85 @@
     {
         "from": "/develop/dapps/apis/api-key",
         "to": "/v3/guidelines/dapps/apis-sdks/api-keys"
+    },
+    {
+        "from": "/develop/dapps/tutorials/building-web3-game",
+        "to": "/v3/guidelines/dapps/tutorials/web3-game-example"
+    },
+    {
+        "from": "/develop/dapps/tutorials/collection-minting",
+        "to": "/v3/guidelines/dapps/tutorials/nft-minting-guide"
+    },
+    {
+        "from": "/develop/dapps/tutorials/jetton-minter",
+        "to": "/v3/guidelines/dapps/tutorials/mint-your-first-token"
+    },
+    {
+        "from": "/develop/dapps/tutorials/simple-zk-on-ton",
+        "to": "/v3/guidelines/dapps/tutorials/zero-knowledge-proofs"
+    },
+    {
+        "from": "/develop/dapps/tutorials/accept-payments-in-a-telegram-bot",
+        "to": "/v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot"
+    },
+    {
+        "from": "/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-2",
+        "to": "/v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-2"
+    },
+    {
+        "from": "/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js",
+        "to": "/v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-js"
+    },
+    {
+        "from": "/develop/dapps/telegram-apps/testing-apps",
+        "to": "/v3/guidelines/dapps/tma/guidelines/testing-apps"
+    },
+    {
+        "from": "/develop/dapps/telegram-apps/publishing",
+        "to": "/v3/guidelines/dapps/tma/guidelines/publishing"
+    },
+    {
+        "from": "/develop/dapps/telegram-apps/monetization",
+        "to": "/v3/guidelines/dapps/tma/guidelines/monetization"
+    },
+    {
+        "from": "/develop/dapps/telegram-apps/tips-and-tricks",
+        "to": "/v3/guidelines/dapps/tma/guidelines/tips-and-tricks"
+    },
+    {
+        "from": "/develop/dapps/telegram-apps/app-examples",
+        "to": "/v3/guidelines/dapps/tma/tutorials/app-examples"
+    },
+    {
+        "from": "/develop/dapps/telegram-apps/design-guidelines",
+        "to": "/v3/guidelines/dapps/tma/tutorials/design-guidelines"
+    },
+    {
+        "from": "/develop/dapps/telegram-apps/notcoin",
+        "to": "/v3/guidelines/dapps/tma/notcoin"
+    },
+    {
+        "from": "/develop/dapps/telegram-apps/grants",
+        "to": "/v3/guidelines/dapps/tma/grants"
+    },
+    {
+        "from": "/develop/dapps/asset-processing/",
+        "to": "/v3/guidelines/dapps/asset-processing/payments-processing"
+    },
+    {
+        "from": "/develop/dapps/asset-processing/mintless-jettons",
+        "to": "/v3/guidelines/dapps/asset-processing/mintless-jettons"
+    },
+    {
+        "from": "/develop/dapps/asset-processing/mass-mint-tools",
+        "to": "/v3/guidelines/dapps/asset-processing/mass-mint-tools"
+    },
+    {
+        "from": "/develop/dapps/asset-processing/metadata",
+        "to": "/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing"
+    },
+    {
+        "from": "/develop/dapps/asset-processing/nfts",
+        "to": "/v3/guidelines/dapps/asset-processing/nft-processing/nfts"
     }
 ]

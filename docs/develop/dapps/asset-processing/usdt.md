@@ -51,4 +51,4 @@ See important [recommendations](/develop/dapps/asset-processing/jettons#jetton-w
 
 ## See Also
 
-* [Payments Processing](/develop/dapps/asset-processing/)
+* [Payments Processing](/v3/guidelines/dapps/asset-processing/payments-processing)
