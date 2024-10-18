@@ -37,4 +37,14 @@ module.exports = [
     ]
   },
   'learn/academy/academy-overview',
+  {
+    'type': 'html',
+    'value': '<hr/>',
+  },
+  {
+    'type': 'html',
+    'value': '<span class=\'menu__link\'><b><small> Quality Assurance & Outsource </small></b></span>',
+  },
+  'develop/companies/auditors',
+  'develop/companies/outsource',
 ];

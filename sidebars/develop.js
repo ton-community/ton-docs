@@ -319,16 +319,6 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Quality Assurance & Outsource </small></b></span>',
-  },
-  'develop/companies/auditors',
-  'develop/companies/outsource',
-  {
-    'type': 'html',
-    'value': '<hr/>',
-  },
-  {
-    'type': 'html',
     'value': '<span class=\'menu__link\'><b><small> TON Whitepapers </small></b></span>',
   },
   {
