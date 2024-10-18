@@ -39,4 +39,4 @@ This is the most secure way of accessing TON Sites.
 
 
 ## See Also
-* [Run C++ Implementation](/participate/web3/sites-and-proxy)
+* [Run C++ Implementation](/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy)

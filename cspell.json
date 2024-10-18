@@ -132,6 +132,7 @@
     "celldb",
     "cheatsheet",
     "cheatsheets",
+    "checkloadall",
     "chksgn",
     "ciphertexts",
     "codomain",
@@ -209,6 +210,8 @@
     "nextra",
     "nonexist",
     "nonfinal",
+    "penalising",
+    "penalised",
     "precomplied",
     "preimage",
     "prer",
@@ -268,7 +271,7 @@
     "xtwitter",
     "yourname",
     "zerostate",
-  ], 
+  ],
   "ignoreRegExpList": [
     "\\(#.*\\)",
     "^\\[.+\\]: .+",       // link declarations like [foo]: /ref/stdlib-ownable#bar

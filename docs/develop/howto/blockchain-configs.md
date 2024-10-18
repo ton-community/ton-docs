@@ -55,7 +55,7 @@ If parameter 3 is missing (as is the case at the time of writing), transaction f
 This parameter is the address of the root DNS contract of the TON network.
 
 :::info
-More detailed information can be found in the [TON DNS & Domains](/participate/web3/dns) article and in a more detailed original description [here](https://github.com/ton-blockchain/TEPs/blob/master/text/0081-dns-standard.md).
+More detailed information can be found in the [TON DNS & Domains](/v3/guidelines/web3/ton-dns/dns) article and in a more detailed original description [here](https://github.com/ton-blockchain/TEPs/blob/master/text/0081-dns-standard.md).
 This contract is not responsible for selling .ton domains.
 :::
 

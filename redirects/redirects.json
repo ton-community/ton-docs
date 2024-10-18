@@ -58,5 +58,161 @@
     {
         "from": "/develop/companies/outsource",
         "to": "/v3/concepts/qa-outsource/outsource"
+    },
+    {
+        "from": "/participate/web3/overview",
+        "to": "/v3/guidelines/web3/overview"
+    },
+    {
+        "from": "/participate/web3/dns",
+        "to": "/v3/guidelines/web3/ton-dns/dns"
+    },
+    {
+        "from": "/develop/howto/subresolvers",
+        "to": "/v3/guidelines/web3/ton-dns/subresolvers"
+    },
+    {
+        "from": "/participate/web3/app-sites",
+        "to": "/v3/guidelines/web3/ton-proxy-sites/ton-sites-for-applications"
+    },
+    {
+        "from": "/participate/web3/setting-proxy",
+        "to": "/v3/guidelines/web3/ton-proxy-sites/connect-with-ton-proxy"
+    },
+    {
+        "from": "/participate/web3/how-to-open-any-ton-site",
+        "to": "/v3/guidelines/web3/ton-proxy-sites/how-to-open-any-ton-site"
+    },
+    {
+        "from": "/participate/web3/site-management",
+        "to": "/v3/guidelines/web3/ton-proxy-sites/site-and-domain-management"
+    },
+    {
+        "from": "/participate/ton-storage",
+        "to": "/v3/guidelines/web3/ton-storage"
+    },
+    {
+        "from": "/participate/ton-storage/storage-daemon",
+        "to": "/v3/guidelines/web3/ton-storage/storage-daemon"
+    },
+    {
+        "from": "/participate/ton-storage/storage-faq",
+        "to": "/v3/guidelines/web3/ton-storage/storage-faq"
+    },
+    {
+        "from": "/participate/ton-storage/storage-provider",
+        "to": "/v3/guidelines/web3/ton-storage/storage-provider"
+    },
+    {
+        "from": "/v3/guidelines/web3/proxy-sites",
+        "to": "/v3/guidelines/web3/ton-proxy-sites"
+    },
+    {
+        "from": "/v3/guidelines/web3/dns",
+        "to": "/v3/guidelines/web3/ton-dns"
+    },
+    {
+        "from": "/participate/web3/sites-and-proxy",
+        "to": "/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy"
+    },
+    {
+        "from": "/develop/dapps/ton-connect/vue",
+        "to": "/v3/guidelines/ton-connect/frameworks/vue"
+    },
+    {
+        "from": "/develop/dapps/ton-connect",
+        "to": "/v3/guidelines/ton-connect/guidelines/how-ton-connect-works"
+    },
+    {
+        "from": "/develop/dapps/ton-connect/manifest",
+        "to": "/v3/guidelines/ton-connect/guidelines/creating-manifest"
+    },
+    {
+        "from": "/develop/dapps/ton-connect/message-builders",
+        "to": "/v3/guidelines/ton-connect/guidelines/preparing-messages"
+    },
+    {
+        "from": "/develop/dapps/ton-connect/transactions",
+        "to": "/v3/guidelines/ton-connect/guidelines/sending-messages"
+    },
+    {
+        "from": "/develop/dapps/ton-connect/sign",
+        "to": "/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users"
+    },
+    {
+        "from": "/develop/dapps/ton-connect/integration",
+        "to": "/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk"
+    },
+    {
+        "from": "/develop/dapps/ton-connect/comparison",
+        "to": "/v3/guidelines/ton-connect/business/ton-connect-comparison"
+    },
+    {
+        "from": "/develop/dapps/ton-connect/business",
+        "to": "/v3/guidelines/ton-connect/business/ton-connect-for-business"
+    },
+    {
+        "from": "/develop/dapps/ton-connect/security",
+        "to": "/v3/guidelines/ton-connect/business/ton-connect-for-security"
+    },
+    {
+        "from": "/participate/run-nodes/archive-node",
+        "to": "/v3/guidelines/nodes/running-nodes/archive-node"
+    },
+    {
+        "from": "/participate/run-nodes/enable-liteserver-node",
+        "to": "/v3/guidelines/nodes/running-nodes/liteserver-node"
+    },
+    {
+        "from": "/participate/run-nodes/become-validator",
+        "to": "/v3/guidelines/nodes/running-nodes/validator-node"
+    },
+    {
+        "from": "/participate/network-maintenance/nominators",
+        "to": "/v3/guidelines/nodes/running-nodes/staking-with-nominator-pools"
+    },
+    {
+        "from": "/participate/run-nodes/run-docker",
+        "to": "/v3/guidelines/nodes/running-nodes/run-mytonctrl-docker"
+    },
+    {
+        "from": "/participate/run-nodes/local-ton",
+        "to": "/v3/guidelines/nodes/running-nodes/running-a-local-ton"
+    },
+    {
+        "from": "/participate/run-nodes/secure-guidelines",
+        "to": "/v3/guidelines/nodes/running-nodes/secure-guidelines"
+    },
+    {
+        "from": "/participate/network-maintenance/custom-overlays",
+        "to": "/v3/guidelines/nodes/custom-overlays"
+    },
+    {
+        "from": "/participate/run-nodes/nodes-troubleshooting",
+        "to": "/v3/guidelines/nodes/nodes-troubleshooting"
+    },
+    {
+        "from": "/participate/nodes/node-maintenance-and-security",
+        "to": "/v3/guidelines/nodes/node-maintenance-and-security"
+    },
+    {
+        "from": "/participate/network-maintenance/persistent-states",
+        "to": "/v3/guidelines/nodes/persistent-states"
+    },
+    {
+        "from": "/participate/run-nodes/faq",
+        "to": "/v3/guidelines/nodes/faq"
+    },
+    {
+        "from": "/develop/dapps/apis/toncenter",
+        "to": "/v3/guidelines/dapps/apis-sdks/ton-http-apis"
+    },
+    {
+        "from": "/develop/dapps/apis/adnl",
+        "to": "/v3/guidelines/dapps/apis-sdks/ton-adnl-apis"
+    },
+    {
+        "from": "/develop/dapps/apis/api-key",
+        "to": "/v3/guidelines/dapps/apis-sdks/api-keys"
     }
 ]

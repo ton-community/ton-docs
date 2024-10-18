@@ -141,7 +141,7 @@ This is normal.
 
 :::caution
 If the node sync process has already taken 5 days, but the node is still out of sync, you should check the
-[troubleshooting section](/participate/run-nodes/nodes-troubleshooting#archive-node-is-out-of-sync-even-after-5-days-of-the-syncing-process).
+[troubleshooting section](/v3/guidelines/nodes/nodes-troubleshooting#archive-node-is-out-of-sync-even-after-5-days-of-the-syncing-process).
 :::
 
 #### Start the node

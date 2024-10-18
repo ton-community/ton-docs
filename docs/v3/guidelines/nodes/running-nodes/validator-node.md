@@ -103,13 +103,13 @@ As a TON Validators, make sure you are follow these crucial steps to ensure netw
 Essential Actions:
 
 1. Follow the [@tonstatus](https://t.me/tonstatus) turn on notifications and be ready to apply urgent updates if necessary.
-2. Ensure your hardware meets or exceeds [minimal system requirements](/participate/run-nodes/become-validator#minimal-hardware-requirements).
+2. Ensure your hardware meets or exceeds [minimal system requirements](/v3/guidelines/nodes/running-nodes/validator-node#minimal-hardware-requirements).
 3. We imperatively request you to use [mytonctrl](https://github.com/ton-blockchain/mytonctrl).
    - In `mytonctrl` keep update due the notification and enable telemetry: `set sendTelemetry true`
 4. Set up monitoring dashboards for RAM, Disk, Network, and CPU usage. For technical assistance, contact @mytonctrl_help_bot.
 5. Monitor the efficiency of your validator with dashboards. 
    - Check with `mytonctrl` via `check_ef`.
-   - [Build dashboard with APIs](/participate/run-nodes/become-validator#validation-and-effectiveness-apis).
+   - [Build dashboard with APIs](/v3/guidelines/nodes/running-nodes/validator-node#validation-and-effectiveness-apis).
 
 :::info
 `mytonctrl` allows to check effectiveness of validators via command `check_ef` which outputs your validator efficiency data for the last round and for current round.
@@ -170,6 +170,6 @@ If you have a regular node, then contact the group: [@mytonctrl_help](https://t.
 ## See Also
 
 * [Run a Full Node](/participate/run-nodes/full-node)
-* [Troubleshooting](/participate/run-nodes/nodes-troubleshooting)
+* [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
 * [Staking Incentives](/participate/network-maintenance/staking-incentives)
 

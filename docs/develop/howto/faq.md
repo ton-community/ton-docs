@@ -183,7 +183,7 @@ To better understand how this process works, please refer [Payments Processing](
 ### Is it possible to have a named account similar to ENS
 
 Yes, use TON DNS:
-- [TON DNS & Domains](/participate/web3/dns)
+- [TON DNS & Domains](/v3/guidelines/web3/ton-dns/dns)
 
 ### How to distinguish between a normal account and a smart contract?
 

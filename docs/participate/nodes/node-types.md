@@ -40,7 +40,7 @@ They serve as a backend for blockchain explorers and other applications relying 
 Archive nodes do not prune the blockchain state which elevates their system requirements, especially in terms of storage.
 According to the latest estimations, while full nodes and validator nodes require about 1 TB disk space, archive nodes would require about 8 TB to store the complete block history.
 
-<Button href="/participate/run-nodes/archive-node"
+<Button href="/v3/guidelines/nodes/running-nodes/archive-node"
 colorType="primary" sizeType={'sm'}>
 Running an Archive Node
 </Button>
@@ -56,7 +56,7 @@ To be entitled to propose and validate blocks, validators are elected by other p
 As a rule, validator operators motivate other TON holders to stake with them to get passive income from resulting rewards.
 In this way, validators ensure network stability, security and contribute to its growth.
 
-<Button href="/participate/run-nodes/become-validator"
+<Button href="/v3/guidelines/nodes/running-nodes/validator-node"
 colorType="primary" sizeType={'sm'}>
 Running a Validator Node
 </Button>
@@ -87,7 +87,7 @@ Enable Liteserver in your Node
 
 To interact with Liteservers, you can use following tools:
 
-- TON [ADNL API](/develop/dapps/apis/adnl) as the most low-level way to communicate with the blockchain;
+- TON [ADNL API](/v3/guidelines/dapps/apis-sdks/ton-adnl-apis) as the most low-level way to communicate with the blockchain;
 - TON [SDKs](/develop/dapps/apis/sdk) provided for various programming languages;
 - TON [HTTP-based APIs](/develop/dapps/toncenter) providing the REST API middleware between your application and a Liteserver.
 

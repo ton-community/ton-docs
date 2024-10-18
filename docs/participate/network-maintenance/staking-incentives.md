@@ -140,11 +140,11 @@ The fine is distributed among the validators minus network costs and a small rew
 ### Validator Guidelines
 
 To prevent your Validator node from being fined, it is advisable to ensure that the hardware, monitoring, and validator operations are set up properly.
-Please make sure you're complying with the [validator maintain guidelines](/participate/run-nodes/become-validator#maintain-guidelines).
+Please make sure you're complying with the [validator maintain guidelines](/v3/guidelines/nodes/running-nodes/validator-node#maintain-guidelines).
 If you don't want to do this please consider using staking services https://ton.org/stake.
 
 ## See Also
 
-* [Running a Validator](/participate/run-nodes/become-validator)
+* [Running a Validator](/v3/guidelines/nodes/running-nodes/validator-node)
 * [Transaction Fees](/develop/smart-contracts/fees)
 * [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)

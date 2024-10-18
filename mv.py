@@ -61,6 +61,9 @@ def replace_word_in_file(file_path, target, replacement):
     with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
 
+    target = target.split("README")[0]
+    replacement = replacement.split("README")[0]
+
     if target[0] == "/" and replacement[0] == "/":
         target = target[1:]
         replacement = replacement[1:]

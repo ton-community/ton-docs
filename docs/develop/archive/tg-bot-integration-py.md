@@ -239,7 +239,7 @@ Bot gives user 3 minutes to connect a wallet, after which it reports a timeout e
 
 ## Implement Transaction requesting
 
-Let's take one of examples from the [Message builders](/develop/dapps/ton-connect/message-builders) article:
+Let's take one of examples from the [Message builders](/v3/guidelines/ton-connect/guidelines/preparing-messages) article:
 
 ```python
 # messages.py
@@ -576,4 +576,4 @@ What is next?
 
 ## See Also
 - [Full bot code](https://github.com/yungwine/ton-connect-bot)
-- [Preparing messages](/develop/dapps/ton-connect/message-builders)
+- [Preparing messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)

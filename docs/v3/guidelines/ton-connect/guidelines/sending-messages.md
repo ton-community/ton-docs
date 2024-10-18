@@ -177,7 +177,7 @@ console.log(await connector.sendTransaction({
 ```
 
 :::info
-Get more examples in [Preparing Messages](/develop/dapps/ton-connect/message-builders) page for Transfer NFT and Jettons.
+Get more examples in [Preparing Messages](/v3/guidelines/ton-connect/guidelines/preparing-messages) page for Transfer NFT and Jettons.
 :::
 
 After confirmation, we may see our transaction complete at [tonscan.org](https://tonscan.org/tx/pCA8LzWlCRTBc33E2y-MYC7rhUiXkhODIobrZVVGORg=).
@@ -190,4 +190,4 @@ When a user clicks "Cancel" in the popup in the wallet application, an exception
 
 ## See Also
 
-* [Preparing Messages](/develop/dapps/ton-connect/message-builders)
+* [Preparing Messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)

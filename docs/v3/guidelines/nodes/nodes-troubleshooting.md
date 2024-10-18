@@ -32,7 +32,7 @@ Try to perform following checks:
 
 ## Archive node is out of sync even after 5 days of the syncing process
 
-Go through the checklist [from this section](/participate/run-nodes/nodes-troubleshooting#about-no-progress-in-node-synchronization-within-3-hours).
+Go through the checklist [from this section](/v3/guidelines/nodes/nodes-troubleshooting#about-no-progress-in-node-synchronization-within-3-hours).
 
 
 ## Cannot apply external message to current state : External message was not accepted
@@ -214,4 +214,4 @@ There are two known cases when this error appears:
 
 ## See Also
 
-* [MyTonCtrl FAQ](/participate/run-nodes/faq)
+* [MyTonCtrl FAQ](/v3/guidelines/nodes/faq)

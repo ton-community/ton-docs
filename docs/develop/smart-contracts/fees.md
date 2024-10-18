@@ -99,7 +99,7 @@ Average fee for minting one NFT is 0.08 TON.
 
 ### Cost of saving data in TON?
 
-Saving 1 MB of data for one year on TON will cost you 6.01 TON. Note that you don't usually need to store big amounts of data on-chain. Consider [TON Storage](/participate/ton-storage/storage-daemon) if you need decentralized storage.
+Saving 1 MB of data for one year on TON will cost you 6.01 TON. Note that you don't usually need to store big amounts of data on-chain. Consider [TON Storage](/v3/guidelines/web3/ton-storage/storage-daemon) if you need decentralized storage.
 
 ### Is it possible to send a gasless transaction?
 

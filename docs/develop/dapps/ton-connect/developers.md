@@ -182,5 +182,5 @@ Use it to integrate TonConnect protocol with your game.
 * [Step by step guide for building your first web client](https://ton-community.github.io/tutorials/03-client/)
 * [[YouTube] TON Smart Contracts | 10 | Telegram DApp[EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU&t=254s&ab_channel=AlefmanVladimir%5BEN%5D)
 * [Ton Connect Getting started](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
-* [Integration Manual](/develop/dapps/ton-connect/integration)
+* [Integration Manual](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk)
 * [[YouTube] TON Dev Study TON Connect Protocol [RU]](https://www.youtube.com/playlist?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_)

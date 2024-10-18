@@ -2,8 +2,8 @@
 
 **High availability blockchain APIs are the core element of secure, convenient and fast development of useful applications on TON.**
 
-- [TON HTTP API](/develop/dapps/apis/toncenter) — API that allows to work with the _indexed blockchain information_.
-- [TON ADNL API](/develop/dapps/apis/adnl) — secure API to communicate with TON, based on ADNL protocol.
+- [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis) — API that allows to work with the _indexed blockchain information_.
+- [TON ADNL API](/v3/guidelines/dapps/apis-sdks/ton-adnl-apis) — secure API to communicate with TON, based on ADNL protocol.
 
 ## Toncenter APIs
 - [TON Index](https://toncenter.com/api/v3/) - TON Index collects data from a full node to PostgreSQL database and provides convenient API to an indexed blockchain.
@@ -76,6 +76,6 @@ Response body
 
 
 ## See Also
-* [TON HTTP API](/develop/dapps/apis/toncenter)
+* [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis)
 * [List of SDKs](/develop/dapps/apis/sdk)
 * [TON Cookbook](/develop/dapps/cookbook)

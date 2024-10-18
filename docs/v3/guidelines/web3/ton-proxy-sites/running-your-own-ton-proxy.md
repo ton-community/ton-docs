@@ -179,7 +179,7 @@ If all works properly, the RLDP-HTTP proxy will accept incoming HTTP queries fro
 
 You can visit TON Site `http://<your-adnl-address>.adnl` (`http://vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3.adnl` in this example) from a browser running on a client machine as explained in the "Accessing TON Sites" Section and check whether your TON Site is actually available to the public.
 
-If you want to, you can [register](/participate/web3/site-management) a TON DNS domain, such as 'example.ton', and create a `site` record for this domain pointing to the persistent ADNL Address of your TON Site. Then the RLDP-HTTP proxies running in client mode would resolve http://example.ton as pointing to your ADNL Address and will access your TON Site.
+If you want to, you can [register](/v3/guidelines/web3/ton-proxy-sites/site-and-domain-management) a TON DNS domain, such as 'example.ton', and create a `site` record for this domain pointing to the persistent ADNL Address of your TON Site. Then the RLDP-HTTP proxies running in client mode would resolve http://example.ton as pointing to your ADNL Address and will access your TON Site.
 
 You can also run a reverse proxy on a separate server and set your webserver as a remote address. In this case use `-R '*'@<YOUR_WEB_SERVER_HTTP_IP>:<YOUR_WEB_SERVER_HTTP_PORT>` instead of `-L '*'`.
 

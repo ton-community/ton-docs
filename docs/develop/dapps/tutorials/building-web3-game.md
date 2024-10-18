@@ -116,7 +116,7 @@ const gameFi = await GameFi.create({
 ```
 > To learn more about initialization options please read the [library documentation](https://github.com/ton-org/game-engines-sdk).
 
-> To learn what `tonconnect-manifest.json` is please check ton-connect [manifest description](https://docs.ton.org/develop/dapps/ton-connect/manifest).
+> To learn what `tonconnect-manifest.json` is please check ton-connect [manifest description](https://docs.ton.org/v3/guidelines/ton-connect/guidelines/creating-manifest).
 
 Now we are ready to create a wallet connect button. Let’s create a UI scene in Phaser which will contain the connect button:
 ```typescript

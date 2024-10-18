@@ -16,7 +16,7 @@ npm i @tonconnect/ui-react
 ### TON Connect Initiation
 
 
-After installing the package, you should create a `manifest.json` file for your application. More information on how to create a manifest.json file can be found [here](/develop/dapps/ton-connect/manifest).
+After installing the package, you should create a `manifest.json` file for your application. More information on how to create a manifest.json file can be found [here](/v3/guidelines/ton-connect/guidelines/creating-manifest).
 
 After creating the manifest file, import TonConnectUIProvider to the root of your Mini App and pass the manifest URL:
 
@@ -150,7 +150,7 @@ export const ModalControl = () => {
 ### useTonWallet
 
 Use this hook to retrieve the user's current TON wallet.
-If the wallet is not connected, the hook will return `null`. The `wallet` object provides common data such as the user's address, provider, [TON proof](/develop/dapps/ton-connect/sign), and other attributes (see the [Wallet interface](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html)).
+If the wallet is not connected, the hook will return `null`. The `wallet` object provides common data such as the user's address, provider, [TON proof](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users), and other attributes (see the [Wallet interface](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html)).
 
 Additionally, you can access more specific details about the connected wallet, such as its name, image, and other attributes (refer to the [WalletInfo interface](https://ton-connect.github.io/sdk/types/_tonconnect_sdk.WalletInfo.html)).
 
@@ -265,7 +265,7 @@ export const Settings = () => {
 
 ```
 
-- Get more examples here: [Preparing Messages](/develop/dapps/ton-connect/message-builders)
+- Get more examples here: [Preparing Messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
 
 ### Understanding Transaction Status by Hash
 
@@ -274,7 +274,7 @@ The principle located in Payment Processing (using tonweb). [See more](/develop/
 ### Optional Check (ton_proof) on the Backend
 
 :::tip
-Understand how to sign and verify messages: [Signing and Verification](/develop/dapps/ton-connect/sign)
+Understand how to sign and verify messages: [Signing and Verification](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
 :::
 
 To ensure that the user truly owns the declared address, you can use `ton_proof`.
@@ -343,7 +343,7 @@ type TonProofItemReplySuccess = {
 }
 ```
 
-You can find an example of authentication on this [page](/develop/dapps/ton-connect/sign#react-example)
+You can find an example of authentication on this [page](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users#react-example)
 
 ### Wallet Disconnection
 

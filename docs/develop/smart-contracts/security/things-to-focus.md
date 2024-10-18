@@ -44,7 +44,7 @@ The computational phase executes the code of smart contracts and only then the a
 Contracts in the blockchain can reside in separate shards, processed by other set of validators, meaning that developer cannot pull data from other contracts on demand. Thus, any communication is asynchronous and done by sending messages.
 
 - [Sending messages from smart-contract](/develop/smart-contracts/messages)
-- [Sending messages from DApp](/develop/dapps/ton-connect/transactions)
+- [Sending messages from DApp](/v3/guidelines/ton-connect/guidelines/sending-messages)
 
 ### 8. Unlike other blockchains, TON does not contain revert messages, only exit codes
 

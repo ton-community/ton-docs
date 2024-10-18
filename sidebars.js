@@ -13,7 +13,7 @@
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
-  learn: require('./sidebars/learn'),
+  learn: require('./sidebars/concepts'),
   develop: require('./sidebars/develop'),
   guidelines: require('./sidebars/guidelines'),
   contribute: require('./sidebars/contribute'),

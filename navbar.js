@@ -135,7 +135,7 @@ module.exports = {
           label: 'Manage Blockchain Nodes',
         },
         {
-          to: '/participate/run-nodes/nodes-troubleshooting',
+          to: '/v3/guidelines/nodes/nodes-troubleshooting',
           label: 'Troubleshooting the Node',
         },
         {
@@ -147,11 +147,11 @@ module.exports = {
           label: 'Nominator Pool',
         },
         {
-          to: '/participate/run-nodes/archive-node', // TODO: add article
+          to: '/v3/guidelines/nodes/running-nodes/archive-node', // TODO: add article
           label: 'Running Nodes',
         },
         {
-          to: '/participate/run-nodes/faq',
+          to: '/v3/guidelines/nodes/faq',
           label: 'FAQ',
         },
       ],
@@ -179,7 +179,7 @@ module.exports = {
           label: 'Integrate with TON'
         },
         {
-          to: 'participate/web3/overview',
+          to: 'v3/guidelines/web3/overview',
           label: 'Web3',
         },
       ]

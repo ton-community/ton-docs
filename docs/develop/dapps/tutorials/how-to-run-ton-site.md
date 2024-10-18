@@ -58,4 +58,4 @@ You can check the availability of the site by opening this address with the doma
 
 
 ## See Also
-* [Run C++ Implementation](/participate/web3/sites-and-proxy)
+* [Run C++ Implementation](/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy)
