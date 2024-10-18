@@ -59,7 +59,6 @@ module.exports = [
       'participate/network-maintenance/nominator-pool',
       'participate/network-maintenance/single-nominator',
       'develop/smart-contracts/core-contracts/precompiled',
-      'develop/research-and-development/minter-flow',
       'develop/smart-contracts/examples',
     ],
   },
@@ -165,6 +164,7 @@ module.exports = [
     'type': 'html',
     'value': '<span class=\'menu__link\'><b><small> Infrastructure Documentation </small></b></span>',
   },
+  'develop/research-and-development/minter-flow',
   {
     type: 'category',
     label: 'Cross-chain Bridges',
