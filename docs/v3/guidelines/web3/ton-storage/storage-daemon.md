@@ -17,7 +17,7 @@ You can download `storage-daemon` and `storage-daemon-cli` for Linux/Windows/Mac
 
 ## Compile from sources
 
-You can compile `storage-daemon` and `storage-damon-cli` from sources using this [instruction](/develop/howto/compile#storage-daemon).
+You can compile `storage-daemon` and `storage-damon-cli` from sources using this [instruction](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#storage-daemon).
 
 ## Key concepts
 * *Bag of files* or *Bag* - a collection of files distributed through TON Storage
@@ -42,7 +42,7 @@ You can compile `storage-daemon` and `storage-damon-cli` from sources using this
 ```storage-daemon -v 3 -C global.config.json -I <ip>:3333 -p 5555 -D storage-db```
 
 * `-v` - verbosity level (INFO)
-* `-C` - global network config ([download global config](/develop/howto/compile#download-global-config))
+* `-C` - global network config ([download global config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config))
 * `-I` - IP address and port for adnl
 * `-p` - TCP port for console interface
 * `-D` - directory for the storage daemon database

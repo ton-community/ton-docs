@@ -8,7 +8,7 @@ You can download `storage-daemon` and `storage-daemon-cli` for Linux/Windows/Mac
 
 ## Compile from sources
 
-You can compile `storage-daemon` and `storage-damon-cli` from sources using this [instruction](/develop/howto/compile#storage-daemon).
+You can compile `storage-daemon` and `storage-damon-cli` from sources using this [instruction](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#storage-daemon).
 
 ## Key concepts
 It consists of a smart contract that accepts storage requests and manages payment from clients, and an application that uploads and serves the files to clients. Here's how it works:

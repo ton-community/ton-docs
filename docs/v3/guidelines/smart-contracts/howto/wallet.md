@@ -140,7 +140,7 @@ It is also possible to use another IDE since GoLand isn’t free, but it is pref
 :::
 
 :::warning IMPORTANT
-All coding components should be added to the `main` function that was created in the [⚙ Set Your Environment](/develop/smart-contracts/tutorials/wallet#-set-your-environment) section.
+All coding components should be added to the `main` function that was created in the [⚙ Set Your Environment](/v3/guidelines/smart-contracts/howto/wallet#-set-your-environment) section.
 
 Additionally, only the imports required for a specific code section will be specified in each new section and new imports will need to be added and combined with old ones.  
 :::
@@ -1354,7 +1354,7 @@ for i := 0; i < len(internalMessagesAmount); i++ {
 </TabItem>
 </Tabs>
 
-Now let's use our knowledge from [chapter two](/develop/smart-contracts/tutorials/wallet#-deploying-our-wallet) to build a message for our wallet that can send 4 messages simultaneously:
+Now let's use our knowledge from [chapter two](/v3/guidelines/smart-contracts/howto/wallet#-deploying-our-wallet) to build a message for our wallet that can send 4 messages simultaneously:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1643,13 +1643,13 @@ internalMessage := cell.BeginCell().
 </Tabs>
 
 The NFT transfer opcode comes from [the same standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema).
-Now let's complete the message, as is laid out in the previous sections of this tutorial. The correct code needed to complete the message is found in the [GitHub repository](/develop/smart-contracts/tutorials/wallet#source-code).
+Now let's complete the message, as is laid out in the previous sections of this tutorial. The correct code needed to complete the message is found in the [GitHub repository](/v3/guidelines/smart-contracts/howto/wallet#source-code).
 
 The same procedure can be completed with Jettons. To conduct this process, read the TL-B [standart](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) for jettons transfer. To this point specifically, a small difference between NFT and Jettons transfers exists.
 
 ### Wallet v3 and Wallet v4 Get Methods
 
-Smart contracts often make use of [GET methods](/develop/smart-contracts/guidelines/get-methods), however, they don’t run inside the blockchain but instead on the client side. GET methods have many uses and provide accessibility to different data types for smart contracts. For example, the [get_nft_data() method in NFT smart contracts](https://github.com/ton-blockchain/token-contract/blob/991bdb4925653c51b0b53ab212c53143f71f5476/nft/nft-item.fc#L142-L145) allows users to retrieve specific content, owner, and NFT collection information.
+Smart contracts often make use of [GET methods](/v3/guidelines/smart-contracts/get-methods), however, they don’t run inside the blockchain but instead on the client side. GET methods have many uses and provide accessibility to different data types for smart contracts. For example, the [get_nft_data() method in NFT smart contracts](https://github.com/ton-blockchain/token-contract/blob/991bdb4925653c51b0b53ab212c53143f71f5476/nft/nft-item.fc#L142-L145) allows users to retrieve specific content, owner, and NFT collection information.
 
 Below we’ll learn more about the basics of GET methods used with [V3](https://github.com/ton-blockchain/ton/blob/e37583e5e6e8cd0aebf5142ef7d8db282f10692b/crypto/smartcont/wallet3-code.fc#L31-L41) and [V4](https://github.com/ton-blockchain/wallet-contract/blob/4111fd9e3313ec17d99ca9b5b1656445b5b49d8f/func/wallet-v4-code.fc#L164-L198). Let’s start with the methods that are the same for both wallet versions:
 
@@ -1821,7 +1821,7 @@ The response must be `-1`, meaning the result is true. It is also possible to se
 
 In chapter three, we deployed a wallet. To accomplish this, we initially sent some TON and then a message from the wallet to deploy a smart contract. However, this process is not broadly used with external messages and is often primarily used for wallets only. While developing contracts, the deployment process is initialized by sending internal messages.
 
-To accomplish this, will use the V3R2 wallet smart contract that was used in [the third chapter](/develop/smart-contracts/tutorials/wallet#compiling-our-wallet-code).
+To accomplish this, will use the V3R2 wallet smart contract that was used in [the third chapter](/v3/guidelines/smart-contracts/howto/wallet#compiling-our-wallet-code).
 In this case, we’ll set the `subwallet_id` to `3` or any other number needed to retrieve another address when using the same private key (it's changeable):
 
 <Tabs groupId="code-examples">
@@ -2690,7 +2690,7 @@ This means that if the query_id passed to the method is smaller than the last la
 
 In order to deploy a high-load wallet it is necessary to generate a mnemonic key in advance, which will be used by the user. It is possible to use the same key that was used in previous sections of this tutorial.
 
-To begin the process required to deploy a high-load wallet it's necessary to copy [the code of the smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc) to the same directory where the stdlib.fc and wallet_v3 are located and remember to add `#include "stdlib.fc";` to the beginning of the code. Next we’ll compile the high-load wallet code like we did in [section three](/develop/smart-contracts/tutorials/wallet#compiling-wallet-code):
+To begin the process required to deploy a high-load wallet it's necessary to copy [the code of the smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc) to the same directory where the stdlib.fc and wallet_v3 are located and remember to add `#include "stdlib.fc";` to the beginning of the code. Next we’ll compile the high-load wallet code like we did in [section three](/v3/guidelines/smart-contracts/howto/wallet#compiling-wallet-code):
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -2836,7 +2836,7 @@ log.Println("Contract address:", contractAddress.String())    // Output contract
 </Tabs> 
 
 :::caution
-Everything we have detailed above follows the same steps as the contract [deployment via wallet](/develop/smart-contracts/tutorials/wallet#contract-deployment-via-wallet) section. To better understanding, read the entire [GitHub source code]((https://github.com/aSpite/wallet-tutorial)).
+Everything we have detailed above follows the same steps as the contract [deployment via wallet](/v3/guidelines/smart-contracts/howto/wallet#contract-deployment-via-wallet) section. To better understanding, read the entire [GitHub source code]((https://github.com/aSpite/wallet-tutorial)).
 :::
 
 ### Sending High-Load Wallet V2 Messages

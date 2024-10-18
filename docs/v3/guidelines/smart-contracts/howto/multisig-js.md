@@ -5,7 +5,7 @@ description: At the end of this guide you will deploy multisig wallet and send s
 # Interact with multisig wallets using TypeScript
 
 ## Introduction
-If you don't know what is multisig wallet in TON, you can check it out [here](/develop/smart-contracts/tutorials/multisig)
+If you don't know what is multisig wallet in TON, you can check it out [here](/v3/guidelines/smart-contracts/howto/multisig)
 
 Following this steps you will learn how to:
  * Create and deploy multisig wallet
@@ -159,6 +159,6 @@ And of course you can get public properties from `MultisigWallet`, `MultisigOrde
     - `signatures` - `Dictionary<number, Buffer>` of signatures *ownerId => signature*
 
 ## References
- * [Low-level multisig guide](/develop/smart-contracts/tutorials/multisig)
+ * [Low-level multisig guide](/v3/guidelines/smart-contracts/howto/multisig)
  * [ton.js Documentation](https://ton-community.github.io/ton/)
  * [Multisig contract sources](https://github.com/ton-blockchain/multisig-contract)

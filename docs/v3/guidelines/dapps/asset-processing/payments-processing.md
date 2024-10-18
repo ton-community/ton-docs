@@ -35,7 +35,7 @@ To deploy a wallet via TonLib one needs to:
 6. Check the contract in a few seconds with [getAccountState](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L288) method.
 
 :::tip
-Read more in the [Wallet Tutorial](/develop/smart-contracts/tutorials/wallet#-deploying-a-wallet)
+Read more in the [Wallet Tutorial](/v3/guidelines/smart-contracts/howto/wallet#-deploying-a-wallet)
 :::
 
 ### Check the validity of wallet address

@@ -135,7 +135,7 @@ Remember to set the [environment variable](https://stackoverflow.com/questions/1
 
 ## Build from source
 
-If you don't want to rely on pre-compiled binaries and prefer to compile the binaries yourself, you can follow the [official instructions](/develop/howto/compile).
+If you don't want to rely on pre-compiled binaries and prefer to compile the binaries yourself, you can follow the [official instructions](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions).
 
 The ready-to-use gist instructions are provided below:
 

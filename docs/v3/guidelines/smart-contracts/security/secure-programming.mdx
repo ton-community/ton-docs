@@ -1,6 +1,6 @@
 import ThemedImage from '@theme/ThemedImage';
 
-# Secure Smart Contract Programming 
+# Secure Smart Contract Programming
 
 In this section, we'll look at a few of the most interesting features of the TON blockchain, and then walk through a list of best practices for developers programming smart contracts on FunC.
 
@@ -25,7 +25,7 @@ A new unique property appears in the logic of your contract: partial execution o
 
 For example, consider the message flow of a standard TON Jetton:
 
-![smart1.png](../../../../static/img/docs/security-measures/secure-programming/smart1.png)
+![smart1.png](/img/docs/security-measures/secure-programming/smart1.png)
 
 As follows from the diagram:
 1. sender sends an `op::transfer` message to its wallet (`sender_wallet`);
@@ -67,11 +67,11 @@ Unfortunately, we are noticing a trend: `<a lot of vars>` is a real enumeration 
 
 ```func
 (
-    int total_supply, int swap_fee, int min_amount, int is_stopped, int user_count, int max_user_count, 
-    slice admin_address, slice router_address, slice jettonA_address, slice jettonA_wallet_address, 
-    int jettonA_balance, int jettonA_pending_balance, slice jettonB_address, slice jettonB_wallet_address, 
-    int jettonB_balance, int jettonB_pending_balance, int mining_amount, int datetime_amount, int minable_time, 
-    int half_life, int last_index, int last_mined, cell mining_rate_cell, cell user_info_dict, cell operation_gas, 
+    int total_supply, int swap_fee, int min_amount, int is_stopped, int user_count, int max_user_count,
+    slice admin_address, slice router_address, slice jettonA_address, slice jettonA_wallet_address,
+    int jettonA_balance, int jettonA_pending_balance, slice jettonB_address, slice jettonB_wallet_address,
+    int jettonB_balance, int jettonB_pending_balance, int mining_amount, int datetime_amount, int minable_time,
+    int half_life, int last_index, int last_mined, cell mining_rate_cell, cell user_info_dict, cell operation_gas,
     cell content, cell lp_wallet_code
 ) = load_data();
 ```
@@ -104,7 +104,7 @@ And finally, parsing the entire storage and packing it back on every call to eve
 
 Even in a simple contract like a TON Jetton, there are already quite a few messages, senders, receivers, and pieces of data contained in messages. Now imagine how it looks when you’re developing something a little more complex, like a decentralized exchange (DEX) where the number of messages in one workflow can exceed ten.
 
-![smart2.png](../../../../static/img/docs/security-measures/secure-programming/smart2.png)
+![smart2.png](/img/docs/security-measures/secure-programming/smart2.png)
 
 At CertiK, we use the [DOT](https://en.wikipedia.org/wiki/DOT_(graph_description_language)) language to describe and update such diagrams during the course of the audit. Our auditors find that this helps them visualize and understand the complex interactions within and between contracts.
 
@@ -157,7 +157,7 @@ In the same TON Jetton, this is demonstrated: `sender_wallet` subtracts the bala
 And here is an example of incorrect implementation. Why can't you find out your Jetton balance on-chain? Because such a question does not fit the pattern. By the time the response to the `op::get_balance` message reaches the requester, this balance could already have been spent by someone.
 
 In this case, you can implement an alternative:
-![smart3.png](../../../../static/img/docs/security-measures/secure-programming/smart3.png)
+![smart3.png](/img/docs/security-measures/secure-programming/smart3.png)
 
 1. master sends a message `op::provide_balance` to the wallet;
 1. wallet zeroes its balance and sends back `op::take_balance`;
@@ -232,7 +232,7 @@ TON has a useful mechanism: `SEND_MODE_CARRY_ALL_REMAINING_MESSAGE_VALUE = 64`. 
         .store_uint(0, 64 + 32 + 1 + 1) ;; lt, at, init, body
         .store_query_id(query_id)
         .end_cell();
-    
+
     send_raw_message(msg, SEND_MODE_REGULAR);
 }
 ```
@@ -335,7 +335,7 @@ var msg = begin_cell()
     .store_uint(0x4e565354, 32)
     .store_uint(query_id, 64)
     .store_ref(vset);
-    
+
 send_raw_message(msg.end_cell(), 1);
 ```
 
@@ -360,7 +360,7 @@ builder store_body_header(builder b, int op, int query_id) inline {
 () mint_tokens(slice to_address, cell jetton_wallet_code, int amount, cell master_msg) impure {
     cell state_init = calculate_jetton_wallet_state_init(to_address, my_address(), jetton_wallet_code);
     slice to_wallet_address = calculate_address_by_state_init(state_init);
-    
+
     var msg = begin_cell()
         .store_msg_flags(BOUNCEABLE)
         .store_slice(to_wallet_address)

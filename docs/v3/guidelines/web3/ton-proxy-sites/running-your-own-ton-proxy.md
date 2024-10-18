@@ -14,9 +14,9 @@ In order to access existing TON Sites, you need to run a RLDP-HTTP Proxy on your
 
 1. Download **rldp-http-proxy** from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
-   Or you can compile the **rldp-http-proxy** yourself by following these [instructions](/develop/howto/compile#rldp-http-proxy).
+   Or you can compile the **rldp-http-proxy** yourself by following these [instructions](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#rldp-http-proxy).
 
-2. [Download](/develop/howto/compile#download-global-config) TON global config.
+2. [Download](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config) TON global config.
 
 3. Run **rldp-http-proxy**
 
@@ -34,13 +34,13 @@ Your entry proxy will be available by HTTP on `localhost` port `8080`.
 
 1. Download **rldp-http-proxy** from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
-   Or you can compile the **rldp-http-proxy** yourself by following these [instructions](/develop/howto/compile#rldp-http-proxy).
+   Or you can compile the **rldp-http-proxy** yourself by following these [instructions](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#rldp-http-proxy).
 
-2. [Download](/develop/howto/compile#download-global-config) TON global config.
+2. [Download](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config) TON global config.
 
 3. Download **generate-random-id** from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
-   Or you can compile the **generate-random-id** yourself by following these [instructions](/develop/howto/compile#generate-random-id).
+   Or you can compile the **generate-random-id** yourself by following these [instructions](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#generate-random-id).
 
 4. Generate a persistent ANDL Address for your entry proxy
 
@@ -128,13 +128,13 @@ We suppose that you know already how to set up an ordinary website, and that you
 
 1. Download **rldp-http-proxy** from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
-   Or you can compile the **rldp-http-proxy** yourself by this [instruction](/develop/howto/compile#rldp-http-proxy).
+   Or you can compile the **rldp-http-proxy** yourself by this [instruction](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#rldp-http-proxy).
 
-2. [Download](/develop/howto/compile#download-global-config) TON global config.
+2. [Download](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config) TON global config.
 
 3. Download **generate-random-id** from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
-   Or you can compile the **generate-random-id** yourself by following these [instructions](/develop/howto/compile#generate-random-id).
+   Or you can compile the **generate-random-id** yourself by following these [instructions](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#generate-random-id).
 
 4. Generate a persistent ANDL Address for your server
 

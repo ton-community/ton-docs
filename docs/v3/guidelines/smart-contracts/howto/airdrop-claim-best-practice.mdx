@@ -41,7 +41,7 @@ Any kind of wallet contract
 
 ### V1
 
-First desing that comes to mind is something like this:
+First design that comes to mind is something like this:
 - User sends proof to the distributor
 - Distributor checks proof and deploys `double spend` contract
 - Distributor passes message to the double spend.
@@ -56,12 +56,12 @@ Looks like a loop is redundant here.
 
 ### V2
 
-Linear desing is much better:
+Linear design is much better:
 - User deploys the `double spend` and it proxies proof to the distributor
 - Distributor checks the sending `double spend` address by state init `(distributor_address, user_address?)`
 - Distributor checks proof, in this case user index should be part of the proof and releases jettons.
 - Distributor sends fee to the fee wallet
-**MOAR NAIVE ART**
+**MORE NAIVE ART**
 
 ## Shard optimizations
 
@@ -154,7 +154,7 @@ Should be good to go now!
 - Distributor sends fee to the fee wallet
 - Distributor checks proof, in this case user index should be part of the proof and releases jettons via jetton wallet in same shard.
 
-**MOAR NAIVE ART**
+**MORE NAIVE ART**
 Is there anything wrong with that? Let's take a good look.
 ....
 Damn right! There is only one fee wallet, and fees are queueing up to a single shard. That could have been a disaster! (Wondering if it ever happened for real?).
@@ -163,7 +163,7 @@ Damn right! There is only one fee wallet, and fees are queueing up to a single s
 - Same as V3 but 16 wallets now, each in same shard as it's *distributor*.
 - Going to have to make *fee wallet* address updatable
 
-**Bit moar art**
+**Bit more art**
 
 How about now? LGTM.
 

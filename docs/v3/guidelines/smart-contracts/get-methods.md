@@ -70,7 +70,7 @@ int seqno() method_id {
 }
 ```
 
-Returns the sequence number of the transaction within a specific wallet. This method is primarily used for [replay protection](/develop/smart-contracts/tutorials/wallet#replay-protection---seqno).
+Returns the sequence number of the transaction within a specific wallet. This method is primarily used for [replay protection](/v3/guidelines/smart-contracts/howto/wallet#replay-protection---seqno).
 
 #### get_subwallet_id()
 
@@ -80,7 +80,7 @@ int get_subwallet_id() method_id {
 }
 ```
 
--   [What is Subwallet ID?](/develop/smart-contracts/tutorials/wallet#what-is-subwallet-id)
+-   [What is Subwallet ID?](/v3/guidelines/smart-contracts/howto/wallet#what-is-subwallet-id)
 
 #### get_public_key()
 

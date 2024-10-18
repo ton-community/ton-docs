@@ -107,7 +107,7 @@ cmake -GNinja -DCMAKE_BUILD_TYPE=Release .. \
 :::
 
 :::tip
-If you are compiling on a computer with low memory (e.g., 1 Gb), don't forget to [create a swap partitions](/develop/howto/compile-swap).
+If you are compiling on a computer with low memory (e.g., 1 Gb), don't forget to [create a swap partitions](/v3/guidelines/smart-contracts/howto/compile/instructions-low-memory).
 :::
 
 ## Download Global Config
@@ -128,7 +128,7 @@ wget https://ton-blockchain.github.io/testnet-global.config.json
 
 ## Lite Client
 
-To build a lite client, do [common part](/develop/howto/compile#common), [download the config](/develop/howto/compile#download-global-config), and then do:
+To build a lite client, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common), [download the config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config), and then do:
 
 ```bash
 cmake --build . --target lite-client
@@ -152,7 +152,7 @@ Basic help info can be obtained by typing `help` into the Lite Client. Type `qui
 
 ## FunC
 
-To build FunC compiler from source code, do [common part](/develop/howto/compile#common) described above and then:
+To build FunC compiler from source code, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common) described above and then:
 
 ```bash
 cmake --build . --target func
@@ -166,7 +166,7 @@ func -o output.fif -SPA source0.fc source1.fc ...
 
 ## Fift
 
-To build Fift compiler from source code, do [common part](/develop/howto/compile#common) described above and then:
+To build Fift compiler from source code, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common) described above and then:
 
 ```bash
 cmake --build . --target fift
@@ -180,7 +180,7 @@ fift -s script.fif script_param0 script_param1 ..
 
 ## Tonlib-cli
 
-To build tonlib-cli, do [common part](/develop/howto/compile#common), [download the config](/develop/howto/compile#download-global-config) and then do:
+To build tonlib-cli, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common), [download the config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config) and then do:
 
 ```bash
 cmake --build . --target tonlib-cli
@@ -196,7 +196,7 @@ Basic help info can be obtained by typing `help` into the tonlib-cli. Type `quit
 
 ## RLDP-HTTP-Proxy
 
-To build rldp-http-proxy, do [common part](/develop/howto/compile#common), [download the config](/develop/howto/compile#download-global-config) and then do:
+To build rldp-http-proxy, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common), [download the config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config) and then do:
 
 ```bash
 cmake --build . --target rldp-http-proxy
@@ -210,7 +210,7 @@ rldp-http-proxy/rldp-http-proxy
 
 ## generate-random-id
 
-To build generate-random-id, do [common part](/develop/howto/compile#common) and then do:
+To build generate-random-id, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common) and then do:
 
 ```bash
 cmake --build . --target generate-random-id
@@ -224,7 +224,7 @@ utils/generate-random-id
 
 ## storage-daemon
 
-To build storage-daemon and storage-daemon-cli, do [common part](/develop/howto/compile#common) and then do:
+To build storage-daemon and storage-daemon-cli, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common) and then do:
 
 ```bash
 cmake --build . --target storage-daemon storage-daemon-cli

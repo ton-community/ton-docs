@@ -187,6 +187,8 @@
     "keystream",
     "leaderboard",
     "leaderboards",
+    "libmicrohttpd",
+    "libatomic",
     "liteserver",
     "liteservers",
     "logname",
@@ -270,7 +272,7 @@
     "xlarge",
     "xtwitter",
     "yourname",
-    "zerostate",
+    "zerostate"
   ],
   "ignoreRegExpList": [
     "\\(#.*\\)",

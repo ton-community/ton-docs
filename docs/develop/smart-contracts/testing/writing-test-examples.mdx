@@ -554,7 +554,7 @@ This exit code is responsible for most of the errors when working with actions: 
 
 ### Action Phase | exit code = 35
 
-During the building of the [CommonMsgInfo](/develop/smart-contracts/tutorials/wallet#commonmsginfo) part of the message, you must specify the correct source address. It must be equal to either [addr_none](/develop/data-formats/msg-tlb#addr_none00) or the address of the account that sends the message.
+During the building of the [CommonMsgInfo](/v3/guidelines/smart-contracts/howto/wallet#commonmsginfo) part of the message, you must specify the correct source address. It must be equal to either [addr_none](/develop/data-formats/msg-tlb#addr_none00) or the address of the account that sends the message.
 
 In the blockchain code, this is handled by the [check_replace_src_addr](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1985).
 

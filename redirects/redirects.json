@@ -294,5 +294,65 @@
     {
         "from": "/develop/dapps/asset-processing/nfts",
         "to": "/v3/guidelines/dapps/asset-processing/nft-processing/nfts"
+    },
+    {
+        "from": "/develop/smart-contracts/guidelines/get-methods",
+        "to": "/v3/guidelines/smart-contracts/get-methods"
+    },
+    {
+        "from": "/develop/smart-contracts/security/secure-programming",
+        "to": "/v3/guidelines/smart-contracts/security/secure-programming"
+    },
+    {
+        "from": "/develop/smart-contracts/security/random",
+        "to": "/v3/guidelines/smart-contracts/security/random"
+    },
+    {
+        "from": "/develop/smart-contracts/security/things-to-focus",
+        "to": "/v3/guidelines/smart-contracts/security/things-to-focus"
+    },
+    {
+        "from": "/develop/smart-contracts/security/ton-hack-challenge-1",
+        "to": "/v3/guidelines/smart-contracts/security/ton-hack-challenge-1"
+    },
+    {
+        "from": "/develop/smart-contracts/guidelines/random-number-generation",
+        "to": "/v3/guidelines/smart-contracts/security/random-number-generation"
+    },
+    {
+        "from": "/v3/guidelines/smart-contracts/howto",
+        "to": "/v3/guidelines/smart-contracts/howto"
+    },
+    {
+        "from": "/v3/guidelines/smart-contracts/how-to/compile",
+        "to": "/v3/guidelines/smart-contracts/howto/compile"
+    },
+    {
+        "from": "/develop/howto/compile",
+        "to": "/v3/guidelines/smart-contracts/howto/compile/compilation-instructions"
+    },
+    {
+        "from": "/develop/howto/compile-swap",
+        "to": "/v3/guidelines/smart-contracts/howto/compile/instructions-low-memory"
+    },
+    {
+        "from": "/develop/smart-contracts/tutorials/multisig",
+        "to": "/v3/guidelines/smart-contracts/howto/multisig"
+    },
+    {
+        "from": "/develop/smart-contracts/tutorials/multisig-js",
+        "to": "/v3/guidelines/smart-contracts/howto/multisig-js"
+    },
+    {
+        "from": "/develop/smart-contracts/tutorials/airdrop-claim-best-practice",
+        "to": "/v3/guidelines/smart-contracts/howto/airdrop-claim-best-practice"
+    },
+    {
+        "from": "/develop/smart-contracts/tutorials/shard-optimization",
+        "to": "/v3/guidelines/smart-contracts/howto/shard-optimization"
+    },
+    {
+        "from": "/develop/smart-contracts/tutorials/wallet",
+        "to": "/v3/guidelines/smart-contracts/howto/wallet"
     }
 ]

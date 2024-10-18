@@ -8,7 +8,7 @@ Computers are terrible at generating random information because all they do is f
 
 These algorithms typically require you to provide a _seed_ value that will be used to generate a sequence of _pseudo-random_ numbers. So, if you run the same program with the same _seed_ multiple times, you'll consistently get the same result. In TON, the _seed_ is different for each block.
 
--   [Generation of block random seed](/develop/smart-contracts/security/random)
+-   [Generation of block random seed](/v3/guidelines/smart-contracts/security/random)
 
 Therefore, to predict the result of the `random()` function in a smart contract, you just need to know the current `seed` of the block, which isn't possible if you're not a validator.
 
@@ -97,7 +97,7 @@ Deploy this contract in any workchain you need (probably Basechain) and you're d
 
 ## Is this method 100% secure?
 
-While it certainly helps, there's still a chance of manipulation if an intruder has control over several validators simultaneously. In this case, they might, with some probability, [affect](/develop/smart-contracts/security/random#conclusion) the _seed_, which the random number depends on. Even if this probability is extremely small, it's still worth considering.
+While it certainly helps, there's still a chance of manipulation if an intruder has control over several validators simultaneously. In this case, they might, with some probability, [affect](/v3/guidelines/smart-contracts/security/random#conclusion) the _seed_, which the random number depends on. Even if this probability is extremely small, it's still worth considering.
 
 With the latest TVM upgrade, the introduction of new values to the `c7` register can further boost the security of random number generation. Specifically, the upgrade adds information about the last 16 masterchain blocks to the `c7` register.
 
