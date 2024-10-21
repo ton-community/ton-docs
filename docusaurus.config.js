@@ -8,7 +8,7 @@ const getEnvLangConfig = () => {
 
   const langArray = process.env.TARGET_LANGS
     ? process.env.TARGET_LANGS.split(",")
-    : ["mandarin"];
+    : ["mandarin", "fa"];
     // : ["mandarin", "ru", "ko", "pl", "uk", "ja"];
 
   const locales = Array.from(new Set([defaultLocale, ...langArray]));
@@ -23,6 +23,11 @@ const getEnvLangConfig = () => {
       'mandarin': {
         label: '简体中文',
         path: "zh-CN",
+      },
+      fa: {
+        label: 'فارسی',
+        path: "fa",
+        direction: 'rtl',
       },
     },
   };
