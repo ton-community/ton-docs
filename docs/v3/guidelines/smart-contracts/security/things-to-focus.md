@@ -17,7 +17,7 @@ When writing and inspecting a Func code, Linter should be used.
 Each time the TVM execution stops normally, it stops with exit codes `0` or `1`. Although it is done automatically, TVM execution can be interrupted directly in an unexpected way if exit codes `0` and `1` are thrown directly by either `throw(0)` or `throw(1)` command.
 
 - [How to handle errors](/v3/documentation/smart-contracts/func/docs/builtins#throwing-exceptions)
-- [TVM exit codes](/learn/tvm-instructions/tvm-exit-codes)
+- [TVM exit codes](/v3/documentation/tvm/tvm-exit-codes)
 
 ### 3. Func is a strictly typed language with data structures holding exactly what they are supposed to store
 
@@ -37,7 +37,7 @@ It means the code of the contract can be changed. It can either be changed perma
 
 The computational phase executes the code of smart contracts and only then the actions are performed (sending messages, code modification, changing libraries, and others). So, unlike on Ethereum-based blockchains, you won't see the computational phase exit code if you expected the sent message to fail, as it was performed not in the computational phase, but later, during the action phase.
 
-- [Transactions and phases](/learn/tvm-instructions/tvm-overview#transactions-and-phases)
+- [Transactions and phases](/v3/documentation/tvm/tvm-overview#transactions-and-phases)
 
 ### 7. TON contracts are autonomous
 

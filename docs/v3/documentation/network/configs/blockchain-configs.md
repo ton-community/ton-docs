@@ -12,7 +12,7 @@ TON has a complex configuration with many technical parameters: some are used by
 ## 💡 Prerequisites
 
 This material is intended to be read alongside the parameter list.
-You can view the parameter values in the [current configuration](https://explorer.toncoin.org/config), and the way they are written into [cells](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) is described in the [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb) file in [TL-B](/develop/data-formats/tl-b-language) format.
+You can view the parameter values in the [current configuration](https://explorer.toncoin.org/config), and the way they are written into [cells](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) is described in the [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb) file in [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) format.
 
 :::info
 The binary encoding at the end of the TON Blockchain parameter is a serialized binary representation of its configuration, enabling efficient storage or transmission of the configuration. The precise details of serialization depend on the specific encoding scheme used by the TON Blockchain.
@@ -71,7 +71,7 @@ You can learn more about the issues and prospects in the [relevant article](/v3/
 
 ## Param 7
 
-This parameter stores the volume of each of the additional currencies in circulation. Data is stored in the form of a [dictionary](/develop/data-formats/tl-b-types#hashmap-parsing-example) (binary tree; probably during TON's development this structure was mistakenly named hashmap) `extracurrency_id -> amount`, the amount is presented as `VarUint 32` - an integer from `0` to `2^248`.
+This parameter stores the volume of each of the additional currencies in circulation. Data is stored in the form of a [dictionary](/v3/documentation/data-formats/tlb/tl-b-types#hashmap-parsing-example) (binary tree; probably during TON's development this structure was mistakenly named hashmap) `extracurrency_id -> amount`, the amount is presented as `VarUint 32` - an integer from `0` to `2^248`.
 
 ## Param 8
 

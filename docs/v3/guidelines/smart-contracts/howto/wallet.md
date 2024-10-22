@@ -315,7 +315,7 @@ As noted, everything in TON Blockchain is a smart contract consisting of cells. 
 In this section, we’ll examine [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb). This file will be very useful during future development, as it describes how different cells should be assembled. In our case specifically, it details the intricacies of internal and external messages.
 
 :::info
-Basic information will be provided within this guide. For further details, please refer to our TL-B [documentation](/develop/data-formats/tl-b-language) to learn more about TL-B.
+Basic information will be provided within this guide. For further details, please refer to our TL-B [documentation](/v3/documentation/data-formats/tlb/tl-b-language) to learn more about TL-B.
 :::
 
 ### CommonMsgInfo
@@ -681,7 +681,7 @@ Message Body | The message that must be sent to the contract for processing.
 0b10 (b - binary) denotes a binary record. In this process, two bits are stored: `1` and `0`. Thus we specify that it's `ext_in_msg_info$10`.
 :::
 
-Now we have a completed message that is ready to be sent to our contract. To accomplish this, it should first be serialized to a `BOC` ([Bag of Cells](/develop/data-formats/cell-boc#bag-of-cells)), then be sent using the following code:
+Now we have a completed message that is ready to be sent to our contract. To accomplish this, it should first be serialized to a `BOC` ([Bag of Cells](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells)), then be sent using the following code:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -717,7 +717,7 @@ if err != nil {
 
 > 💡 Useful link:
 >
-> [More about Bag of Cells](/develop/data-formats/cell-boc#bag-of-cells)
+> [More about Bag of Cells](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells)
 
 As a result, we got the output of our BOC in the console and the message sent to our wallet. By copying the base64 encoded string, it is possible to [manually send our message and retrieve the hash using toncenter](https://toncenter.com/api/v2/#/send/send_boc_return_hash_sendBocReturnHash_post).
 
@@ -941,7 +941,7 @@ Before building a message it is important to understand what a State Init is. Fi
 Option | Explanation
 :---: | :---:
 split_depth | This option is intended for highly loaded smart contracts that can be split and located on several [shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards).  More information detailing how this works can be found in the [tblkch.pdf](https://ton.org/tblkch.pdf) (4.1.6).  Only a `0` bit is stored since it is being used only within a wallet smart contract.
-special | Used for TicTok. These smart contracts are automatically called for each block and are not needed for regular smart contracts. Information about this can be found in [this section](/develop/data-formats/transaction-layout#tick-tock) or in [tblkch.pdf](https://ton.org/tblkch.pdf) (4.1.6). Only a `0` bit is stored within this specification because we do not need such a function.
+special | Used for TicTok. These smart contracts are automatically called for each block and are not needed for regular smart contracts. Information about this can be found in [this section](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock) or in [tblkch.pdf](https://ton.org/tblkch.pdf) (4.1.6). Only a `0` bit is stored within this specification because we do not need such a function.
 code | `1` bit means the presence of the smart contract code as a reference.
 data | `1` bit means the presence of the smart contract data as a reference.
 library | A library that operates on the [masterchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains)  and can be used by different smart contracts. This will not be used for wallet, so its bit is set to `0`. Information about this can be found in [tblkch.pdf](https://ton.org/tblkch.pdf) (1.8.4).
@@ -1204,7 +1204,7 @@ After completing the first half of this tutorial we’re now much more familiar 
 
 ### Sending Multiple Messages Simultaneously
 
-As you may already know, [one cell can store up to 1023 bits of data and up to 4 references](/develop/data-formats/cell-boc#cell) to other cells. In the first section of this tutorial we detailed how internal messages are delivered in a ‘whole’ loop as a link and sent. This means it is possible to **store up to 4 internal messages inside the external** message. This allows four messages to be sent at the same time.
+As you may already know, [one cell can store up to 1023 bits of data and up to 4 references](/v3/documentation/data-formats/tlb/cell-boc#cell) to other cells. In the first section of this tutorial we detailed how internal messages are delivered in a ‘whole’ loop as a link and sent. This means it is possible to **store up to 4 internal messages inside the external** message. This allows four messages to be sent at the same time.
 
 To accomplish this, it is necessary to create 4 different internal messages. We can do this manually or through a `loop`. We need to define 3 arrays: array of TON amount, array of comments, array of messages. For messages, we need to prepare another one array - internalMessages.
 
@@ -2119,7 +2119,7 @@ storage$_ public_key:bits256 subwallet_id:uint32 old_queries:(HashmapE 14 ^Cell)
 ```
 
 :::tip TL-B
-You can read more about TL-B [here](/develop/data-formats/tl-b-language).
+You can read more about TL-B [here](/v3/documentation/data-formats/tlb/tl-b-language).
 :::
 
 In the contract storage, we can find the following fields:
@@ -2183,7 +2183,7 @@ if (found) {
 ```
 
 :::note
-If you [familiarize yourself](https://docs.ton.org/learn/tvm-instructions/instructions) with the operation of the `LDSLICEX` opcode (the load_bits function uses this opcode), you will notice that the read data is returned first (head) and only then the remaining data (tail), but they are in reverse order in the contract code.
+If you [familiarize yourself](https://docs.ton.org/v3/documentation/tvm/instructions) with the operation of the `LDSLICEX` opcode (the load_bits function uses this opcode), you will notice that the read data is returned first (head) and only then the remaining data (tail), but they are in reverse order in the contract code.
 
 In fact, they go in reverse order, because in stdlib in the function signature, the returned data [go in reverse order](https://github.com/ton-blockchain/highload-wallet-contract-v3/blob/d58c31e82315c34b4db55942851dd8d4153975c5/contracts/imports/stdlib.fc#L321): `(slice, slice) load_bits(slice s, int len) asm(s len -> 1 0) "LDSLICEX";`. Here `-> 1 0` means to return the argument with index 1 (tail) first, and then 0 (head).
 :::
@@ -2518,7 +2518,7 @@ queryHandler.getNext();
 
 ## 🔥 High-Load Wallet V2 (Outdated)
 
-In some situations, sending a large number of messages per transaction may be necessary. As previously mentioned, ordinary wallets support sending up to 4 messages at a time by storing [a maximum of 4 references](/develop/data-formats/cell-boc#cell) in a single cell. High-load wallets only allow 255 messages to be sent at once. This restriction exists because the maximum number of outgoing messages (actions) in the blockchain’s config settings is set to 255.
+In some situations, sending a large number of messages per transaction may be necessary. As previously mentioned, ordinary wallets support sending up to 4 messages at a time by storing [a maximum of 4 references](/v3/documentation/data-formats/tlb/cell-boc#cell) in a single cell. High-load wallets only allow 255 messages to be sent at once. This restriction exists because the maximum number of outgoing messages (actions) in the blockchain’s config settings is set to 255.
 
 Exchanges are probably the best example of where high-load wallets are used on a large scale. Established exchanges like Binance and others have extremely large user bases, this means that a large number of withdrawals messages are processed in short time periods. High-load wallets help address these withdrawal requests.
 
@@ -2618,7 +2618,7 @@ do {
 >
 > ["udict_delete_get_min()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_delete_get_min)
 
-Note that it is necessary to interact with the `f` variable several times. Since the [TVM is a stack machine](/learn/tvm-instructions/tvm-overview#tvm-is-a-stack-machine), during each interaction with the `f` variable it is necessary to pop all values to get the desired variable. The `f~touch()` operation places the f  variable at the top of the stack to optimize code execution.
+Note that it is necessary to interact with the `f` variable several times. Since the [TVM is a stack machine](/v3/documentation/tvm/tvm-overview#tvm-is-a-stack-machine), during each interaction with the `f` variable it is necessary to pop all values to get the desired variable. The `f~touch()` operation places the f  variable at the top of the stack to optimize code execution.
 
 ### Bitwise Operations
 
@@ -3143,7 +3143,7 @@ Official documentation:
 
   - [Types of Wallet Contracts](/participate/wallets/contracts#wallet-v4)
   
-  - [TL-B](/develop/data-formats/tl-b-language)
+  - [TL-B](/v3/documentation/data-formats/tlb/tl-b-language)
 
   - [Blockchain of Blockchains](https://docs.ton.org/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)
 

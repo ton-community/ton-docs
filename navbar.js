@@ -111,11 +111,11 @@ module.exports = {
           label: 'FunC Cookbook',
         },
         {
-          to: '/develop/data-formats/cell-boc',
+          to: '/v3/documentation/data-formats/tlb/cell-boc',
           label: 'Data formats',
         },
         {
-          to: 'learn/tvm-instructions/tvm-overview',
+          to: 'v3/documentation/tvm/tvm-overview',
           label: 'TON Virtual Machine (TVM)',
         },
         {
@@ -195,7 +195,7 @@ module.exports = {
           label: 'Smart Contracts',
         },
         {
-          to: 'learn/tvm-instructions/tvm-overview',
+          to: 'v3/documentation/tvm/tvm-overview',
           label: 'TON Virtual Machine (TVM)',
         },
         {
@@ -207,7 +207,7 @@ module.exports = {
           label: 'DApps',
         },
         {
-          to: '/develop/data-formats/cell-boc',
+          to: '/v3/documentation/data-formats/tlb/cell-boc',
           label: 'Data Formats',
         },
         {

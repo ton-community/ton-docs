@@ -16,7 +16,7 @@ There are different ways to connect to blockchain:
 - ✅ Web-oriented. Perfect to load data of TON smart contracts from Web, also allows to send messages there.
 
 - ❌ Simplified. It's not possible to receive information where you need an indexed TON API.
-- ❌ HTTP-Middleware. You can't fully trust server responses, unless server augments blockchain data with [Merkle proofs](/develop/data-formats/proofs) to allow validation that it is genuine.
+- ❌ HTTP-Middleware. You can't fully trust server responses, unless server augments blockchain data with [Merkle proofs](/v3/documentation/data-formats/tlb/proofs) to allow validation that it is genuine.
 
 ## Monitoring
 

@@ -1,7 +1,7 @@
 # Block layout
 
 :::info
-To maximize your comprehension of this page, familiarizing yourself with the [TL-B language](/develop/data-formats/cell-boc) is highly recommended.
+To maximize your comprehension of this page, familiarizing yourself with the [TL-B language](/v3/documentation/data-formats/tlb/cell-boc) is highly recommended.
 :::
 
 A block in the blockchain is a record of new transactions that, once completed, is added to the blockchain as a permanent and immutable part of this decentralized ledger. Each block contains information such as transaction data, time, and a reference to the previous block, thereby forming a chain of blocks.
@@ -99,15 +99,15 @@ value_flow#b8e48dfb ^[ from_prev_blk:CurrencyCollection
 
 | Field            | Type                                                                   | Description                                                                      |
 | ---------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `from_prev_blk`  | [CurrencyCollection](/develop/data-formats/msg-tlb#currencycollection) | Represents the flow of currencies from the previous block.                       |
-| `to_next_blk`    | [CurrencyCollection](/develop/data-formats/msg-tlb#currencycollection) | Represents the flow of currencies to the next block.                             |
-| `imported`       | [CurrencyCollection](/develop/data-formats/msg-tlb#currencycollection) | Represents the flow of currencies imported to the block.                         |
-| `exported`       | [CurrencyCollection](/develop/data-formats/msg-tlb#currencycollection) | Represents the flow of currencies exported from the block.                       |
-| `fees_collected` | [CurrencyCollection](/develop/data-formats/msg-tlb#currencycollection) | The total amount of fees collected in the block.                                 |
-| `fees_imported`  | [CurrencyCollection](/develop/data-formats/msg-tlb#currencycollection) | The amount of fees imported into the block. Non-zero only in masterchain.        |
-| `recovered`      | [CurrencyCollection](/develop/data-formats/msg-tlb#currencycollection) | The amount of currencies recovered in the block. Non-zero only in masterchain.   |
-| `created`        | [CurrencyCollection](/develop/data-formats/msg-tlb#currencycollection) | The amount of new currencies created in the block. Non-zero only in masterchain. |
-| `minted`         | [CurrencyCollection](/develop/data-formats/msg-tlb#currencycollection) | The amount of currencies minted in the block. Non-zero only in masterchain.      |
+| `from_prev_blk`  | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Represents the flow of currencies from the previous block.                       |
+| `to_next_blk`    | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Represents the flow of currencies to the next block.                             |
+| `imported`       | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Represents the flow of currencies imported to the block.                         |
+| `exported`       | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Represents the flow of currencies exported from the block.                       |
+| `fees_collected` | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | The total amount of fees collected in the block.                                 |
+| `fees_imported`  | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | The amount of fees imported into the block. Non-zero only in masterchain.        |
+| `recovered`      | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | The amount of currencies recovered in the block. Non-zero only in masterchain.   |
+| `created`        | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | The amount of new currencies created in the block. Non-zero only in masterchain. |
+| `minted`         | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | The amount of currencies minted in the block. Non-zero only in masterchain.      |
 
 ## state_update:^(MERKLE_UPDATE ShardState)
 
@@ -168,8 +168,8 @@ shard_state#9023afe2 global_id:int32
 | `accounts`             | ShardAccounts                                                          | Yes      | The state of accounts in the shard. Stored in a reference.                                                                                                  |
 | `overload_history`     | uint64                                                                 | Yes      | History of overload events for the shard. Used for load balancing through sharding.                                                                         |
 | `underload_history`    | uint64                                                                 | Yes      | History of underload events for the shard. Used for load balancing through sharding.                                                                        |
-| `total_balance`        | [CurrencyCollection](/develop/data-formats/msg-tlb#currencycollection) | Yes      | Total balance for the shard.                                                                                                                                |
-| `total_validator_fees` | [CurrencyCollection](/develop/data-formats/msg-tlb#currencycollection) | Yes      | Total validator fees for the shard.                                                                                                                         |
+| `total_balance`        | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Yes      | Total balance for the shard.                                                                                                                                |
+| `total_validator_fees` | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Yes      | Total validator fees for the shard.                                                                                                                         |
 | `libraries`            | HashmapE 256 LibDescr                                                  | Yes      | A hashmap of library descriptions in this shard. Currently, non-empty only in the masterchain.                                                              |
 | `master_ref`           | BlkMasterInfo                                                          | No       | A reference to the master block info.                                                                                                                       |
 | `custom`               | McStateExtra                                                           | No       | Custom extra data for the shard state. This field is present only in the masterchain and contains all the masterchain-specific data. Stored in a reference. |

@@ -5,7 +5,7 @@ Smart contracts can make use of dictionaries - ordered key-value mappings. They 
 :::warning
 Working with potentially large trees of cells creates a couple of considerations:
 
-1. Every update operation builds a notable amount of cells (and each built cell costs 500 gas, as may be found on [TVM Instructions](/learn/tvm-instructions/instructions#gas-prices) page), meaning that those operations may run out of gas if used without care.
+1. Every update operation builds a notable amount of cells (and each built cell costs 500 gas, as may be found on [TVM Instructions](/v3/documentation/tvm/instructions#gas-prices) page), meaning that those operations may run out of gas if used without care.
     - In particular, Wallet bot has run into such a problem once, when using highload-v2 wallet. The unbounded loop combined with expensive dictionary updates on each iteration led to gas running out and eventually to repeated transactions like [fd78228f352f582a544ab7ad7eb716610668b23b88dae48e4f4dbd4404b5d7f6](https://tonviewer.com/transaction/fd78228f352f582a544ab7ad7eb716610668b23b88dae48e4f4dbd4404b5d7f6) draining its balance.
 2. The binary tree for N key-value pairs contains N-1 forks, and thus at least 2N-1 cells in total. Smart contract storage is limited to 65536 unique cells, so maximum number of entries in dictionary is 32768 or slightly more if there are repeated cells.
 :::
@@ -14,7 +14,7 @@ Working with potentially large trees of cells creates a couple of considerations
 
 ### "Hash"map
 
-Evidently, the most known and used kind of dictionaries in TON is hashmap. It has a whole section worth of TVM opcodes ([TVM Instructions](/learn/tvm-instructions/instructions#quick-search) - Dictionary Manipulation) and is commonly used in smart contracts.
+Evidently, the most known and used kind of dictionaries in TON is hashmap. It has a whole section worth of TVM opcodes ([TVM Instructions](/v3/documentation/tvm/instructions#quick-search) - Dictionary Manipulation) and is commonly used in smart contracts.
 
 Those dictionaries are mappings of same-length keys (said length is provided as argument to all functions) to value slices. Contrary to "hash" in name, entries there are ordered and offer cheap extraction of element by key, previous or next key-value pair. Values are placed in the same cell as internal node tags and possibly key parts, so they can't use all 1023 bits; `~udict_set_ref` is commonly used in such a situation.
 
@@ -68,7 +68,7 @@ The structure is binary tree, even a balanced one if we overlook the root cell.
 }
 ```
 
-There are [more examples on hashmap parsing](/develop/data-formats/tl-b-types#hashmap-parsing-example) in documentation.
+There are [more examples on hashmap parsing](/v3/documentation/data-formats/tlb/tl-b-types#hashmap-parsing-example) in documentation.
 
 ### Augmented maps (with additional data in each node)
 

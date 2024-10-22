@@ -93,7 +93,7 @@ Find more actual params in [Network Configs](/v3/documentation/network/configs/n
 
 Detailed explanations on each field of the layout:
 
-- [Block layout](/develop/data-formats/block-layout)
+- [Block layout](/v3/documentation/data-formats/tlb/block-layout)
 
 ## Transactions
 
@@ -126,7 +126,7 @@ To learn more about transaction verification, please see the following examples:
 ### What is the layout of a transaction in TON?
 
 Detailed explanations on each field of the layout:
-- [Transaction layout](/develop/data-formats/transaction-layout)
+- [Transaction layout](/v3/documentation/data-formats/tlb/transaction-layout)
 
 ### Is transaction batching possible?
 

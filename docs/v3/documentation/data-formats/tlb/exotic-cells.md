@@ -34,7 +34,7 @@ Library reference cells are used for using libraries in smart contracts.
 
 They always have level 0, and contain `8 + 256` bits.
 
-First byte is always `02` - Cell type. Next 32 bytes are [Representation hash](/develop/data-formats/cell-boc#standard-cell-representation-hash-calculation) of the library cell being referred to.
+First byte is always `02` - Cell type. Next 32 bytes are [Representation hash](/v3/documentation/data-formats/tlb/cell-boc#standard-cell-representation-hash-calculation) of the library cell being referred to.
 
 ### Merkle Proof
 
@@ -129,4 +129,4 @@ Such proofs repeatedly reduce the computational load and the amount of data that
 
 ## See Also
 
-* [Advanced Proofs verifying examples](/develop/data-formats/proofs)
+* [Advanced Proofs verifying examples](/v3/documentation/data-formats/tlb/proofs)

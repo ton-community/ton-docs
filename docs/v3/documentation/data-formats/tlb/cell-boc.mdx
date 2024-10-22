@@ -197,7 +197,7 @@ Where `i` is a `c` reference index, `e` is a `c` reference amount.
 _Ordinary Cell without refs level is zero_
 
 ### Exotic cells level
-Exotic cells have different rules for setting their level, which are described in [this](/develop/data-formats/exotic-cells) article.
+Exotic cells have different rules for setting their level, which are described in [this](/v3/documentation/data-formats/tlb/exotic-cells) article.
 
 ## Cell hash
 In most cases users work with ordinary cells with level 0 which have only one hash, called representation hash (or hash infinity).
@@ -281,11 +281,11 @@ and the SHA256 from this bytestring is `f345277cc6cfa747f001367e1e873dcfa8a936b8
 Higher hashes of an Ordinary Cell `c` are computed similarly to its representation hash,
 but using the higher hashes of its references instead of their representation hashes.
 
-Exotic cells have their own rules for computing their higher hashes, which are described in [this](/develop/data-formats/exotic-cells) article.
+Exotic cells have their own rules for computing their higher hashes, which are described in [this](/v3/documentation/data-formats/tlb/exotic-cells) article.
 
 
 ## See Also
 
 [//]: # (* [Original article on RU]&#40;https://github.com/xssnick/ton-deep-doc/blob/master/Cells-BoC.md&#41;)
-* [Exotic (Special) Cells](/develop/data-formats/exotic-cells)
-* [Merkle Proofs verifying](/develop/data-formats/proofs)
+* [Exotic (Special) Cells](/v3/documentation/data-formats/tlb/exotic-cells)
+* [Merkle Proofs verifying](/v3/documentation/data-formats/tlb/proofs)

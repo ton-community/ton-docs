@@ -326,7 +326,7 @@ When working with `tuples`, it is important always to know if any values are ins
 
 > 💡 Noted
 > 
-> We are declaring tlen assembly function. You can read more [here](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) and see [list of all assembler commands](/learn/tvm-instructions/instructions).
+> We are declaring tlen assembly function. You can read more [here](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) and see [list of all assembler commands](/v3/documentation/tvm/instructions).
 
 > 💡 Useful links
 >
@@ -334,7 +334,7 @@ When working with `tuples`, it is important always to know if any values are ins
 >
 > ["tpush()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#tpush)
 >
-> ["Exit codes" in docs](/learn/tvm-instructions/tvm-exit-codes)
+> ["Exit codes" in docs](/v3/documentation/tvm/tvm-exit-codes)
 
 ### How to determine if lisp-style list is empty
 
@@ -551,7 +551,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
 > 💡 Noted
 >
-> We are declaring `tlen` assembly function. You can read more [here](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) and see [list of all assembler commands](/learn/tvm-instructions/instructions).
+> We are declaring `tlen` assembly function. You can read more [here](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) and see [list of all assembler commands](/v3/documentation/tvm/instructions).
 >
 > Also we declaring `to_tuple` function. It just changes data type of any input to tuple, so be careful while using it.
 
@@ -583,7 +583,7 @@ cell end_cell(builder b) asm "ENDC";
 >
 > ["stdlib" in docs](/v3/documentation/smart-contracts/func/docs/stdlib)
 >
-> ["TVM instructions" in docs](/learn/tvm-instructions/instructions)
+> ["TVM instructions" in docs](/v3/documentation/tvm/instructions)
 
 ### Iterating n-nested tuples
 
@@ -630,7 +630,7 @@ global int max_value;
 >
 > ["~dump" in docs](/v3/documentation/smart-contracts/func/docs/builtins#dump-variable)
 >
-> ["TVM instructions" in docs](/learn/tvm-instructions/instructions) 
+> ["TVM instructions" in docs](/v3/documentation/tvm/instructions) 
 
 
 ### Basic operations with tuples
@@ -717,7 +717,7 @@ forall X -> () resolve_type (X value) impure {
 
 > 💡 Useful links
 >
-> ["TVM instructions" in docs](/learn/tvm-instructions/instructions) 
+> ["TVM instructions" in docs](/v3/documentation/tvm/instructions) 
 
 
 ### How to get current time
@@ -766,7 +766,7 @@ Note that xp+zp is a valid variable name ( without spaces between ).
 
 > 💡 Useful links
 >
-> ["muldivmod" in docs](/learn/tvm-instructions/instructions#52-division)
+> ["muldivmod" in docs](/v3/documentation/tvm/instructions#52-division)
 
 
 ### How to throw errors
@@ -781,7 +781,7 @@ throw_unless(39, number == 198); ;; the error will be triggered only if the numb
 throw(36); ;; the error will be triggered anyway
 ```
 
-[Standard tvm exception codes](/learn/tvm-instructions/tvm-exit-codes.md)
+[Standard tvm exception codes](/v3/documentation/tvm/tvm-exit-codes.md)
 
 ### Reversing tuples
 
@@ -873,7 +873,7 @@ int are_slices_equal_2? (slice a, slice b) asm "SDEQ";
 #### 💡 Useful links
 
  * ["slice_hash()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_hash)
- * ["SDEQ" in docs](/learn/tvm-instructions/instructions#62-other-comparison)
+ * ["SDEQ" in docs](/v3/documentation/tvm/instructions#62-other-comparison)
 
 ### Determine if cells are equal 
 
@@ -983,7 +983,7 @@ int are_cells_equal? (cell a, cell b) {
 >
 > ["cell_hash()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
 >
-> ["TVM instructions" in docs](/learn/tvm-instructions/instructions)
+> ["TVM instructions" in docs](/v3/documentation/tvm/instructions)
 
 ### Generate internal address
 
@@ -1041,7 +1041,7 @@ Since we need to determine the number of bits occupied by the address, it is als
 
 > 💡 Useful links
 >
-> ["TVM Instructions" in docs](/learn/tvm-instructions/instructions#53-shifts-logical-operations)
+> ["TVM Instructions" in docs](/v3/documentation/tvm/instructions#53-shifts-logical-operations)
 
 ### How to store and load dictionary in local storage
 

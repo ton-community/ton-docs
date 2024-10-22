@@ -241,7 +241,7 @@ slice bls_g1_multiexp(
 ) asm "BLS_G1_MULTIEXP";
 int bls_pairing(slice x1, slice y1, slice x2, slice y2, slice x3, slice y3, slice x4, slice y4, int n) asm "BLS_PAIRING";
 ```
-The above lines are the new [TVM opcodes](https://docs.ton.org/learn/tvm-instructions/tvm-upgrade-2023-07#bls12-381) (BLS12-381) that allow pairing checks to be conducted on the TON Blockchain.
+The above lines are the new [TVM opcodes](https://docs.ton.org/v3/documentation/tvm/changelog/tvm-upgrade-2023-07#bls12-381) (BLS12-381) that allow pairing checks to be conducted on the TON Blockchain.
 
 The load_data and save_data functions are simply used to load and save the proof verification results (only for test purposes).
 

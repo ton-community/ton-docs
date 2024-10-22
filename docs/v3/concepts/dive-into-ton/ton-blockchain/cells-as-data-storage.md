@@ -34,7 +34,7 @@ In particular, it deduplicates data: if there are several  equivalent sub-cells 
 
 Another special cell flavor is used in TVM:
 
-* _Continuation_  for cells containing op-codes (instructions) for TON Virtual Machine, see [TVM bird's-eye overview](/learn/tvm-instructions/tvm-overview).
+* _Continuation_  for cells containing op-codes (instructions) for TON Virtual Machine, see [TVM bird's-eye overview](/v3/documentation/tvm/tvm-overview).
 
 ## Serialization of data to cells
 
@@ -43,8 +43,8 @@ Any object in TON (message, message queue, block, whole blockchain state, contra
 The process of serialization is described by a TL-B scheme: a formal description of how this object can be serialized into _Builder_ or how to parse an object of a given type from the _Slice_.
 TL-B for cells is the same as TL or ProtoBuf for byte-streams.
 
-If you want to know more details about cell (de)serialization, you could read [Cell & Bag of Cells](/develop/data-formats/cell-boc) article.
+If you want to know more details about cell (de)serialization, you could read [Cell & Bag of Cells](/v3/documentation/data-formats/tlb/cell-boc) article.
 
 ## See Also
 
-* [TL-B Language](/develop/data-formats/tl-b-language)
+* [TL-B Language](/v3/documentation/data-formats/tlb/tl-b-language)

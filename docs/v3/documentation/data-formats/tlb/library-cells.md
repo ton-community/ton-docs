@@ -24,7 +24,7 @@ You can consider library cell as C++ pointer: one small cell that points to larg
 
 ## Structure of Library Cells
 
-Library cell is [exotic cell](/develop/data-formats/exotic-cells) that contains a reference to some other static cell. In particular it contains 256 bit of hash of referenced cell. 
+Library cell is [exotic cell](/v3/documentation/data-formats/tlb/exotic-cells) that contains a reference to some other static cell. In particular it contains 256 bit of hash of referenced cell. 
 
 For TVM, library cells works as follows: whenever TVM receives a command to open a cell to a slice (TVM Instruction: `CTOS`, funC method: `.begin_parse()`), it searches cell with the corresponding hash from library cell in the Masterchain library context. If found it, it opens referenced cell and returns its slice. 
 
@@ -131,7 +131,7 @@ as well as list of libraries for specific masterchain block:
 
 ## See Also
 
-* [Exotic Cells](/develop/data-formats/exotic-cells) 
-* [TVM Instructions](/learn/tvm-instructions/instructions)
+* [Exotic Cells](/v3/documentation/data-formats/tlb/exotic-cells) 
+* [TVM Instructions](/v3/documentation/tvm/instructions)
 
 

@@ -5,7 +5,7 @@ When your contract starts processing an incoming message, you should check the a
 This document describes how to calculate fees in FunC contracts using the new TVM opcodes.
 
 :::info More information on opcodes
-For a comprehensive list of TVM opcodes, including those mentioned below, check the [TVM instruction page](/learn/tvm-instructions/instructions).
+For a comprehensive list of TVM opcodes, including those mentioned below, check the [TVM instruction page](/v3/documentation/tvm/instructions).
 :::
 
 ## Storage Fee
@@ -26,7 +26,7 @@ Use the `GETSTORAGEFEE` opcode with the following parameters:
 
 In particular, it deduplicates data: if there are several equivalent sub-cells referenced in different branches, their content is only stored once.
 
-[Read more about deduplication](/develop/data-formats/library-cells).
+[Read more about deduplication](/v3/documentation/data-formats/tlb/library-cells).
 :::
 
 ### Calculation Flow
@@ -51,7 +51,7 @@ const int RESERVE_REGULAR = 0;
 ;;; Creates an output action which would reserve at most x nanograms (if y = 2).
 ;;; Bit +2 in y means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved.
 const int RESERVE_AT_MOST = 2;
-;;; in the case of action fail - bounce transaction. No effect if RESERVE_AT_MOST (+2) is used. TVM UPGRADE 2023-07. https://docs.ton.org/learn/tvm-instructions/tvm-upgrade-2023-07#sending-messages
+;;; in the case of action fail - bounce transaction. No effect if RESERVE_AT_MOST (+2) is used. TVM UPGRADE 2023-07. https://docs.ton.org/v3/documentation/tvm/changelog/tvm-upgrade-2023-07#sending-messages
 const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;
 
 () calculate_and_reserve_at_most_storage_fee(int balance, int msg_value, int workchain, int seconds, int bits, int cells) inline {
@@ -180,7 +180,7 @@ If the message structure is deterministic, use the `GETFORWARDFEE` opcode with t
 
 In particular, it deduplicates data: if there are several equivalent sub-cells referenced in different branches, their content is only stored once.
 
-[Read more about deduplication](/develop/data-formats/library-cells).
+[Read more about deduplication](/v3/documentation/data-formats/tlb/library-cells).
 :::
 
 However, sometimes the outgoing message depends significantly on the incoming structure, and in that case, you can't fully predict the fee. Try to use the `GETORIGINALFWDFEE` opcode with the following parameters:

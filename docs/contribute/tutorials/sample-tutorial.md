@@ -11,7 +11,7 @@ This section is for you to explain the context of this tutorial and why it is im
 
 *For example:*
 
->A smart contract is just a computer program that runs on TON Blockchain, or more specifically on its [TVM](/learn/tvm-instructions/tvm-overview) (_TON Virtual Machine_). The contract is made of code (_compiled TVM instructions_) and data (_persistent state_) that are stored at some address on TON.
+>A smart contract is just a computer program that runs on TON Blockchain, or more specifically on its [TVM](/v3/documentation/tvm/tvm-overview) (_TON Virtual Machine_). The contract is made of code (_compiled TVM instructions_) and data (_persistent state_) that are stored at some address on TON.
 
 ## Prerequisites
 

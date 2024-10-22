@@ -14,7 +14,7 @@ This document provides a general idea of transaction fees on TON and particularl
 
 ## Transactions and phases
 
-As was described in the [TVM overview](/learn/tvm-instructions/tvm-overview), transaction execution consists of a few phases. During those phases, the corresponding fees may be deducted. There is a [high-level fees overview](/develop/smart-contracts/fees).
+As was described in the [TVM overview](/v3/documentation/tvm/tvm-overview), transaction execution consists of a few phases. During those phases, the corresponding fees may be deducted. There is a [high-level fees overview](/develop/smart-contracts/fees).
 
 ## Storage fee
 
@@ -272,7 +272,7 @@ Only unique hash cells are counted for storage and fwd fees i.e. 3 identical has
 
 In particular, it deduplicates data: if there are several equivalent sub-cells referenced in different branches, their content is only stored once.
 
-Read more about [deduplication](/develop/data-formats/library-cells).
+Read more about [deduplication](/v3/documentation/data-formats/tlb/library-cells).
 ::: 
 
 // bits in the root cell of a message are not included in msg.bits (lump_price pays for them)
@@ -306,5 +306,5 @@ For educational purposes [example of the old one](https://explorer.toncoin.org/c
 ## See Also
 
 * [TON Fees overview](/develop/smart-contracts/fees)
-* [Transactions and Phases](/learn/tvm-instructions/tvm-overview#transactions-and-phases)
+* [Transactions and Phases](/v3/documentation/tvm/tvm-overview#transactions-and-phases)
 * [Fees calculation](/develop/smart-contracts/fee-calculation)

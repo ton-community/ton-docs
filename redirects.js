@@ -4,7 +4,7 @@
 module.exports = [
   // CamelCase to kebab-case
   {
-    to: '/learn/tvm-instructions/tvm-exit-codes',
+    to: '/v3/documentation/tvm/tvm-exit-codes',
     from: '/learn/tvm-instructions/tvm_exit_codes',
   },
   {
@@ -12,7 +12,7 @@ module.exports = [
     from: '/develop/dapps/twa',
   },
   {
-    to: '/learn/tvm-instructions/tvm-overview',
+    to: '/v3/documentation/tvm/tvm-overview',
     from: '/learn/tvm-instructions/tvm_overview',
   },
   {
@@ -40,11 +40,11 @@ module.exports = [
     from: '/develop/getting-started',
   },
   {
-    to: '/develop/data-formats/tl-b-language',
-    from: '/develop/data-formats/tl-b',
+    to: '/v3/documentation/data-formats/tlb/tl-b-language',
+    from: '/v3/documentation/data-formats/tl-b',
   },
   {
-    to: '/learn/tvm-instructions/tvm-upgrade-2023-07',
+    to: '/v3/documentation/tvm/changelog/tvm-upgrade-2023-07',
     from: '/learn/tvm-instructions/tvm-upgrade',
   },
   {

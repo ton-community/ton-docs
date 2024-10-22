@@ -69,7 +69,7 @@ Next, since this is a higher level request of the DHT protocol, we need to first
 ```tlb
 adnl.message.query query_id:int256 query:bytes = adnl.Message
 ```
-As `query_id` we generate random 32 bytes, as `query` we use our main request, [wrapped as an array of bytes](/develop/data-formats/tl#encoding-bytes-array).
+As `query_id` we generate random 32 bytes, as `query` we use our main request, [wrapped as an array of bytes](/v3/documentation/data-formats/tl#encoding-bytes-array).
 We will get:
 ```
 7af98bb4                                                         -- TL ID adnl.message.query

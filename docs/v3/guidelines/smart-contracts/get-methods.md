@@ -356,7 +356,7 @@ In this example, the contract receives and processes internal messages by interp
 
 For the simplicity, we used just simple little numbers 1, 2 and 3 for the operation codes. But for real projects, consider setting them according to the standard:
 
--   [CRC32 Hashes for op-codes](/develop/data-formats/crc32)
+-   [CRC32 Hashes for op-codes](/v3/documentation/data-formats/tlb/crc32)
 
 ## Common pitfalls and how to avoid them
 

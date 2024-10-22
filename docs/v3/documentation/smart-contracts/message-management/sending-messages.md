@@ -1,6 +1,6 @@
 # Sending messages
 
-Composition, parsing, and sending messages lie at the intersection of [TL-B schemas](/develop/data-formats/tl-b-language), [transaction phases and TVM](/learn/tvm-instructions/tvm-overview).
+Composition, parsing, and sending messages lie at the intersection of [TL-B schemas](/v3/documentation/data-formats/tlb/tl-b-language), [transaction phases and TVM](/v3/documentation/tvm/tvm-overview).
 
 Indeed, FunC exposes [send_raw_message](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) function which expects a serialized message as an argument.
 

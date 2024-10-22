@@ -32,7 +32,7 @@ A transaction in TON consists of the following:
 - contract actions caused by the incoming message, such as an update to the contract's storage (optional)
 - outgoing generated messages that are sent to other actors (optional)
 
->Technically, a contract can be triggered through special functions such as [Tick-Tock](/develop/data-formats/transaction-layout#tick-tock), but this function more used for internal TON Blockchain core contracts.
+>Technically, a contract can be triggered through special functions such as [Tick-Tock](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock), but this function more used for internal TON Blockchain core contracts.
 
 >Not every transaction results in outgoing messages or updates to the contract's storage — this depends on the actions defined by the contract's code.
 
@@ -55,13 +55,13 @@ In an asynchronous system you can't get a response from the destination smart co
 To achieve the infinite sharding paradigm, it is necessary to ensure full parallelization, which means that the execution of each transactions is independent of every other. Therefore, instead of transactions which affect and change the state of many contracts at one time, each transaction in TON is only executed on a single smart contract and smart contracts communicate through messages. That way, smart contracts can only interact with each other by calling their functions with special messages and getting a response to them via other messages later.
 
 :::info
-More detailed and accurate description on the [Transaction Layout](/develop/data-formats/transaction-layout) page.
+More detailed and accurate description on the [Transaction Layout](/v3/documentation/data-formats/tlb/transaction-layout) page.
 :::
 
 ### Transaction outcome
 
-There is a [TVM exit code](/learn/tvm-instructions/tvm-exit-codes) for transaction which had compute phase, if it is not 0 or 1 then there was an error.
-Also TVM [compute phase may be skipped](/learn/tvm-instructions/tvm-overview#compute-phase-skipped) for some reasons like absence of funds or state.
+There is a [TVM exit code](/v3/documentation/tvm/tvm-exit-codes) for transaction which had compute phase, if it is not 0 or 1 then there was an error.
+Also TVM [compute phase may be skipped](/v3/documentation/tvm/tvm-overview#compute-phase-skipped) for some reasons like absence of funds or state.
 
 :::info for toncenter api v3
 To determine successful transaction one should use tx.description.action.success && tx.description.compute_ph.success:
@@ -88,7 +88,7 @@ Transaction may have one of three results:
 
 - Success, exit code 0 or 1
 - Fail, `aborted: true` without execution
-- Fail, [exit code](/learn/tvm-instructions/tvm-exit-codes), `aborted: true`
+- Fail, [exit code](/v3/documentation/tvm/tvm-exit-codes), `aborted: true`
 
 :::info for toncenter api v3
 `aborted: true` is a toncenter field, transaction has no such field

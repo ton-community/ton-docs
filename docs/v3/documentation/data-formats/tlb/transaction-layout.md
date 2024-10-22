@@ -1,7 +1,7 @@
 # Transaction layout
 
 :::info
-To maximize your comprehension of this page, familiarizing yourself with the [TL-B language](/develop/data-formats/cell-boc) is highly recommended.
+To maximize your comprehension of this page, familiarizing yourself with the [TL-B language](/v3/documentation/data-formats/tlb/cell-boc) is highly recommended.
 :::
 
 The TON Blockchain operates using three key parts: accounts, messages, and transactions. This page describes the structure and layout of transactions.
@@ -32,7 +32,7 @@ transaction$0111 account_addr:bits256 lt:uint64
 | `end_status`      | [AccountStatus](#accountstatus)                                        | Yes      | The status of this account after executing the transaction.                                                                                                                                                           |
 | `in_msg`          | (Message Any)                                                          | No       | The incoming message that triggered the execution of the transaction. Stored in a reference.                                                                                                                          |
 | `out_msgs`        | HashmapE 15 ^(Message Any)                                             | Yes      | The dictionary that contains the list of outgoing messages that were created while executing this transaction.                                                                                                        |
-| `total_fees`      | [CurrencyCollection](/develop/data-formats/msg-tlb#currencycollection) | Yes      | The total amount of fees that were collected while executing this transaction. It consists of a _Toncoin_ value and possibly some [Extra-currencies](https://docs.ton.org/v3/documentation/dapps/defi/coins#extra-currencies). |
+| `total_fees`      | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Yes      | The total amount of fees that were collected while executing this transaction. It consists of a _Toncoin_ value and possibly some [Extra-currencies](https://docs.ton.org/v3/documentation/dapps/defi/coins#extra-currencies). |
 | `state_update`    | [HASH_UPDATE](#hash_update) Account                                    | Yes      | The `HASH_UPDATE` structure. Stored in a reference.                                                                                                                                                                   |
 | `description`     | [TransactionDescr](#transactiondescr-types)                            | Yes      | A detailed description of the transaction execution process. Stored in a reference.                                                                                                                                   |
 
@@ -89,10 +89,10 @@ trans_ord$0000 credit_first:Bool
 | Field          | Type           | Required | Description                                                                                                                                                                               |
 | -------------- | -------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `credit_first` | Bool           | Yes      | A flag that correlates with `bounce` flag of an incoming message. `credit_first = !bounce`                                                                                                |
-| `storage_ph`   | TrStoragePhase | No       | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)                        |
-| `credit_ph`    | TrCreditPhase  | No       | Contains information about credit phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)                         |
-| `compute_ph`   | TrComputePhase | Yes      | Contains information about compute phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)                        |
-| `action`       | TrActionPhase  | No       | Contains information about action phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases). Stored in a reference. |
+| `storage_ph`   | TrStoragePhase | No       | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
+| `credit_ph`    | TrCreditPhase  | No       | Contains information about credit phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases)                         |
+| `compute_ph`   | TrComputePhase | Yes      | Contains information about compute phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
+| `action`       | TrActionPhase  | No       | Contains information about action phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases). Stored in a reference. |
 | `aborted`      | Bool           | Yes      | Indicates whether the transaction execution was aborted.                                                                                                                                  |
 | `bounce`       | TrBouncePhase  | No       | Contains information about bounce phase of a transaction execution. [More Info](https://docs.ton.org/develop/smart-contracts/guidelines/non-bouncable-messages)                           |
 | `destroyed`    | Bool           | Yes      | Indicates whether the account was destroyed during the execution.                                                                                                                         |
@@ -108,7 +108,7 @@ trans_storage$0001 storage_ph:TrStoragePhase
 
 | Field        | Type           | Description                                                                                                                                                        |
 | ------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `storage_ph` | TrStoragePhase | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases) |
+| `storage_ph` | TrStoragePhase | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases) |
 
 ## Tick-tock
 
@@ -123,9 +123,9 @@ trans_tick_tock$001 is_tock:Bool storage_ph:TrStoragePhase
 | Field        | Type           | Required | Description                                                                                                                                                                               |
 | ------------ | -------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `is_tock`    | Bool           | Yes      | A flag indicating the type of transaction. Used to separate `Tick` and `Tock` transactions                                                                                                |
-| `storage_ph` | TrStoragePhase | Yes      | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)                        |
-| `compute_ph` | TrComputePhase | Yes      | Contains information about compute phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)                        |
-| `action`     | TrActionPhase  | No       | Contains information about action phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases). Stored in a reference. |
+| `storage_ph` | TrStoragePhase | Yes      | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
+| `compute_ph` | TrComputePhase | Yes      | Contains information about compute phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
+| `action`     | TrActionPhase  | No       | Contains information about action phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases). Stored in a reference. |
 | `aborted`    | Bool           | Yes      | Indicates whether the transaction execution was aborted.                                                                                                                                  |
 | `destroyed`  | Bool           | Yes      | Indicates whether the account was destroyed during the execution.                                                                                                                         |
 
@@ -150,9 +150,9 @@ trans_split_prepare$0100 split_info:SplitMergeInfo
 | Field        | Type           | Required | Description                                                                                                                                                                               |
 | ------------ | -------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `split_info` | SplitMergeInfo | Yes      | Information about split process.                                                                                                                                                          |
-| `storage_ph` | TrStoragePhase | No       | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)                        |
-| `compute_ph` | TrComputePhase | Yes      | Contains information about compute phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)                        |
-| `action`     | TrActionPhase  | No       | Contains information about action phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases). Stored in a reference. |
+| `storage_ph` | TrStoragePhase | No       | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
+| `compute_ph` | TrComputePhase | Yes      | Contains information about compute phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
+| `action`     | TrActionPhase  | No       | Contains information about action phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases). Stored in a reference. |
 | `aborted`    | Bool           | Yes      | Indicates whether the transaction execution was aborted.                                                                                                                                  |
 | `destroyed`  | Bool           | Yes      | Indicates whether the account was destroyed during the execution.                                                                                                                         |
 
@@ -195,7 +195,7 @@ trans_merge_prepare$0110 split_info:SplitMergeInfo
 | Field        | Type           | Description                                                                                                                                                        |
 | ------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `split_info` | SplitMergeInfo | Information about merge process.                                                                                                                                   |
-| `storage_ph` | TrStoragePhase | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases) |
+| `storage_ph` | TrStoragePhase | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases) |
 | `aborted`    | Bool           | Indicates whether the transaction execution was aborted.                                                                                                           |
 
 ## Merge install
@@ -220,10 +220,10 @@ trans_merge_install$0111 split_info:SplitMergeInfo
 | --------------------- | --------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `split_info`          | SplitMergeInfo              | Yes      | Information about merge process.                                                                                                                                                          |
 | `prepare_transaction` | [Transaction](#transaction) | Yes      | Information about the [transaction prepared](#merge-prepare) for the merge operation. Stored in a reference.                                                                              |
-| `storage_ph`          | TrStoragePhase              | No       | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)                        |
-| `credit_ph`           | TrCreditPhase               | No       | Contains information about credit phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)                         |
-| `compute_ph`          | TrComputePhase              | Yes      | Contains information about compute phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases)                        |
-| `action`              | TrActionPhase               | No       | Contains information about action phase of a transaction execution. [More Info](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases). Stored in a reference. |
+| `storage_ph`          | TrStoragePhase              | No       | Contains information about storage phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
+| `credit_ph`           | TrCreditPhase               | No       | Contains information about credit phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases)                         |
+| `compute_ph`          | TrComputePhase              | Yes      | Contains information about compute phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
+| `action`              | TrActionPhase               | No       | Contains information about action phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases). Stored in a reference. |
 | `aborted`             | Bool                        | Yes      | Indicates whether the transaction execution was aborted.                                                                                                                                  |
 | `destroyed`           | Bool                        | Yes      | Indicates whether the account was destroyed during the execution.                                                                                                                         |
 

@@ -2,7 +2,7 @@
 
 ## TL-B Parsers
 
-TL-B parsers help carry out the serialization of basic [TL-B types](/develop/data-formats/tl-b-types). Each of which
+TL-B parsers help carry out the serialization of basic [TL-B types](/v3/documentation/data-formats/tlb/tl-b-types). Each of which
 implements TL-B types as an object, and returns serialized binary data.
 
 | Language   | SDK                                                                                                      | Social                 |

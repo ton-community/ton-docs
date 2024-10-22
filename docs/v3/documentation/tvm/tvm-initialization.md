@@ -1,7 +1,7 @@
 # TVM Initialization
 
 :::info
-To maximize your comprehension of this page, familiarizing yourself with the [TL-B language](/develop/data-formats/cell-boc) is highly recommended.
+To maximize your comprehension of this page, familiarizing yourself with the [TL-B language](/v3/documentation/data-formats/tlb/cell-boc) is highly recommended.
 :::
 
 TVM is invoked during the computing phase of ordinary and/or other transactions.
@@ -177,11 +177,11 @@ First component of this tuple is an _Integer_ value, which is always equal to 0x
 | `block_lt` | uint64 | Represents _logical time_ of the previous block of this account. [More about logical time](https://docs.ton.org/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-logical-time) |
 | `trans_lt` | uint64 | Represents _logical time_ of the previous transaction of this account |
 | `rand_seed` | bits256 | Initialized deterministically starting from `rand_seed` of the block, the account address, the hash of the incoming message being processed (if any), and the transaction logical time `trans_lt` |
-| `balance_remaining` | [CurrencyCollection](/develop/data-formats/msg-tlb#currencycollection) | Remaining balance of the smart contract |
-| `myself` | [MsgAddressInt](/develop/data-formats/msg-tlb#msgaddressint-tl-b) | Address of this smart contract |
+| `balance_remaining` | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Remaining balance of the smart contract |
+| `myself` | [MsgAddressInt](/v3/documentation/data-formats/tlb/msg-tlb#msgaddressint-tl-b) | Address of this smart contract |
 | `global_config` | (Maybe Cell) | Contains information about the global config |
 
-Notice, that in the upcoming upgrade to the TVM, the **c7** tuple was extended from 10 to 14 elements. Read more about it [here](/learn/tvm-instructions/tvm-upgrade-2023-07).
+Notice, that in the upcoming upgrade to the TVM, the **c7** tuple was extended from 10 to 14 elements. Read more about it [here](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07).
 
 ## See also
 
