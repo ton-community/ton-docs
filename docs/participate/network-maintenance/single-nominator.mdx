@@ -405,6 +405,48 @@ MyTonCtrl> disable_mode validator
 3. Proceed with the following [steps](/participate/network-maintenance/single-nominator#set-up-single-nominator).
 
 
+## Run Single Nominator Pool with Vesting Contract
+From the beginning, owner of Vesting Contract can manage it with his Wallet Contract.
+In this scheme we will manage interaction of several contracts.
+|Contracts|Interface for Managing|
+|---|---|
+|`validator_wallet` |Mytonctrl|
+|`vesting` | [vesting.ton.org](https://vesting.ton.org/) |
+|`owner_wallet`| app e.g.:Tonkeeper, MyTonWallet |
+|`single_nominator_pool` |MyTonctrl|
+*  `owner_wallet` - TON Wallet who own the `vesting`.
+:::caution
+Make Sure you have completely done back up for Vesting  `owner_wallet`'s recovery parse. Once  `owner_wallet` access lost, the access to managing `vesting` funds also lost and can't be recovered.
+:::
+1. Run a Full Node, wait sync node.
+2. Enable Validator mode, get the wallet_v1 address was created due installation - retrieve this via `Mytonctrl wl`.
+3. Send 200 TON(monthly expenses) to the `validator_wallet`.
+4. Create `single_nominator_pool`:
+```bash
+MyTonCtrl> new_single_pool <pool-name> <vesting>
+```
+Example:
+```
+MyTonCtrl> new_single_pool my_s_pool EQD...lme-D
+```
+5. Activate `single_nominator_pool`:
+```bash
+MyTonCtrl> activate_single_pool <pool-name>
+```
+Example:
+```
+MyTonCtrl> activate_single_pool my_s_pool
+```
+6. After receiving the `single_nominator_pool` address on-chain, request to whitelist your `single_nominator_pool` person who send you Vesting contract.
+7. Once your `single_nominator_pool` whitelisted, you will be able to send locked tokens from `vesting` contract to `single_nominator_pool` with [vesting.ton.org](https://vesting.ton.org/).
+ - a.Connect with `owner_wallet` on [vesting.ton.org](https://vesting.ton.org/).
+ - b.Make test deposit from `vesting` Send 10 TON to the `single_nominator_pool`.
+ - c. Return remains(~8 TON) funds  back to `vesting` with message [amount 0, comment `w`] from [vesting.ton.org](https://vesting.ton.org/) interface.
+ - d. Make sure you received remains on `vesting`.
+8. Transfer the required amount of TON from the `vesting` contract to the `single_nominator_pool` for both cycles.
+9. Wait for the validators’ voting.
+
+
 ## See Also
 
 * [Single Nominator Pool contract](https://github.com/orbs-network/single-nominator)
