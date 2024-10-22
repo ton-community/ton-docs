@@ -718,5 +718,29 @@
     {
         "from": "/learn/docs",
         "to": "/v3/documentation/whitepapers/overview"
+    },
+    {
+        "from": "/develop/archive/mining",
+        "to": "/v3/documentation/archive/mining"
+    },
+    {
+        "from": "/develop/archive/pow-givers",
+        "to": "/v3/documentation/archive/pow-givers"
+    },
+    {
+        "from": "/develop/archive/tg-bot-integration",
+        "to": "/v3/documentation/archive/tg-bot-integration"
+    },
+    {
+        "from": "/develop/archive/tg-bot-integration-py",
+        "to": "/v3/documentation/archive/tg-bot-integration-py"
+    },
+    {
+        "from": "/develop/smart-contracts/compile",
+        "to": "/v3/documentation/archive/compile"
+    },
+    {
+        "from": "/develop/smart-contracts/environment/installation",
+        "to": "/v3/documentation/archive/precompiled-binaries"
     }
 ]

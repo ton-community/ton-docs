@@ -1,6 +1,6 @@
 # Compile from Sources
 
-You can download prebuilt binaries [here](/develop/smart-contracts/environment/installation#1-download).
+You can download prebuilt binaries [here](/v3/documentation/archive/precompiled-binaries#1-download).
 
 If you still want to compile sources yourself, follow the instructions below.
 

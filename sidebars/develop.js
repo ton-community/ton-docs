@@ -364,12 +364,12 @@ module.exports = [
       keywords: ['archive'],
     },
     items: [
-      'develop/archive/pow-givers',
-      'develop/archive/mining',
-      'develop/archive/tg-bot-integration',
-      'develop/archive/tg-bot-integration-py',
-      'develop/smart-contracts/compile/README',
-      'develop/smart-contracts/environment/installation',
+      'v3/documentation/archive/compilepow-givers',
+      'v3/documentation/archive/compilemining',
+      'v3/documentation/archive/compiletg-bot-integration',
+      'v3/documentation/archive/compiletg-bot-integration-py',
+      'v3/documentation/archive/compileREADME',
+      'v3/documentation/archive/precompiled-binaries',
     ]
   }
 ];

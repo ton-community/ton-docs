@@ -27,7 +27,7 @@ For anyone new with multisig: [What is Multisig Technology? (video)](https://www
 
 Before we begin our journey, check and prepare your environment.
 
-- Install `func`, `fift`, `lite-client` binaries and `fiftlib` from the [Installation](/develop/smart-contracts/environment/installation) section.
+- Install `func`, `fift`, `lite-client` binaries and `fiftlib` from the [Installation](/v3/documentation/archive/precompiled-binaries) section.
 - Clone [repository](https://github.com/akifoq/multisig) and open its directory in CLI.
 ```cpp
 https://github.com/akifoq/multisig.git
