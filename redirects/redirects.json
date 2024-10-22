@@ -590,5 +590,49 @@
     {
         "from": "/participate/nodes/collators",
         "to": "/v3/documentation/infra/nodes/validation/collators"
+    },
+    {
+        "from": "/develop/howto/network-configs",
+        "to": "/v3/documentation/network/configs/network-configs"
+    },
+    {
+        "from": "/develop/howto/config-params",
+        "to": "/v3/documentation/network/configs/config-params"
+    },
+    {
+        "from": "/develop/howto/blockchain-configs",
+        "to": "/v3/documentation/network/configs/blockchain-configs"
+    },
+    {
+        "from": "/learn/networking/adnl",
+        "to": "/v3/documentation/network/protocols/adnl/overview"
+    },
+    {
+        "from": "/learn/networking/low-level-adnl",
+        "to": "/v3/documentation/network/protocols/adnl/low-level-adnl"
+    },
+    {
+        "from": "/develop/network/adnl-tcp",
+        "to": "/v3/documentation/network/protocols/adnl/adnl-tcp"
+    },
+    {
+        "from": "/develop/network/adnl-udp",
+        "to": "/v3/documentation/network/protocols/adnl/adnl-udp"
+    },
+    {
+        "from": "/learn/networking/ton-dht",
+        "to": "/v3/documentation/network/protocols/dht/ton-dht"
+    },
+    {
+        "from": "/develop/network/dht",
+        "to": "/v3/documentation/network/protocols/dht/dht-deep-dive"
+    },
+    {
+        "from": "/develop/network/overlay",
+        "to": "/v3/documentation/network/protocols/overlay"
+    },
+    {
+        "from": "/develop/network/rldp",
+        "to": "/v3/documentation/network/protocols/rldp"
     }
 ]

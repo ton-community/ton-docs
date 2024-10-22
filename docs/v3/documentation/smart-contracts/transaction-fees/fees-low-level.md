@@ -44,7 +44,7 @@ Let's examine each value more closely:
 * `cell_price`—price of single cell
 * `bit_price`—price of single bit
 
-Both `cell_price` and `bit_price` could be obtained from Network Config [param 18](/develop/howto/blockchain-configs#param-18).
+Both `cell_price` and `bit_price` could be obtained from Network Config [param 18](/v3/documentation/network/configs/blockchain-configs#param-18).
 
 Current values are:
 
@@ -116,7 +116,7 @@ ap.total_fwd_fees += fees_total;
 
 ### Gas
 
-All computation costs are nominated in gas units. The price of gas units is determined by this [chain config](/develop/howto/blockchain-configs#param-20) (Config 20 for masterchain and Config 21 for basechain) and may be changed only by consensus of validators. Note that unlike in other systems, the user cannot set his own gas price, and there is no fee market.
+All computation costs are nominated in gas units. The price of gas units is determined by this [chain config](/v3/documentation/network/configs/blockchain-configs#param-20) (Config 20 for masterchain and Config 21 for basechain) and may be changed only by consensus of validators. Note that unlike in other systems, the user cannot set his own gas price, and there is no fee market.
 
 Current settings in basechain are as follows: 1 unit of gas costs 400 nanotons.
 

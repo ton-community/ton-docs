@@ -8,4 +8,4 @@ On this page you can find active network configs of TON Blockchain:
 ## See Also
 
 - [Node Types](https://docs.ton.org/v3/documentation/infra/nodes/node-types)
-- [Blockchain Params Config](/develop/howto/blockchain-configs)
+- [Blockchain Params Config](/v3/documentation/network/configs/blockchain-configs)

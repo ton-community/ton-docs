@@ -158,7 +158,7 @@ For instance, `MsgAddress` may be represented by four constructors: `addr_none`,
 Note that message has general size limits and cell count limits too,
 e.g.: maximum message size must not exceed `max_msg_bits`, the number of cells per message must not exceed `max_msg_cells`...
 
-More configuration parameters and there values can be found [here](/develop/howto/blockchain-configs#param-43).
+More configuration parameters and there values can be found [here](/v3/documentation/network/configs/blockchain-configs#param-43).
 :::
 
 ## Message modes

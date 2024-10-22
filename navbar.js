@@ -211,7 +211,7 @@ module.exports = {
           label: 'Data Formats',
         },
         {
-          to: 'learn/networking/low-level-adnl',
+          to: 'v3/documentation/network/protocols/adnl/low-level-adnl',
           label: 'Networking'
         },
         {

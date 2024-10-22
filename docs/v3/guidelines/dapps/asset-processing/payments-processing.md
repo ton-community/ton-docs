@@ -183,7 +183,7 @@ Learn on basic example of payments processing from [TMA USDT Payments demo](http
 8. Requests to `v3` of `high-load` wallets have an expiration time equal to 60 seconds by default. After that time unprocessed requests can be safely resent to the network (see steps 3-6).
 
 :::caution
-If `value` attached is too small transaction can get aborted with error `cskip_no_gas`. In this case Toncoins will be transferred successfully but no logic on other side will be executed (TVM won't even launch). About gas limits you can read more [here](/develop/howto/blockchain-configs#param-20-and-21). 
+If `value` attached is too small transaction can get aborted with error `cskip_no_gas`. In this case Toncoins will be transferred successfully but no logic on other side will be executed (TVM won't even launch). About gas limits you can read more [here](/v3/documentation/network/configs/blockchain-configs#param-20-and-21). 
 :::
 
 ### Get transaction id

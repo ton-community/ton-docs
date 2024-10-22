@@ -31,7 +31,7 @@ Each block has the following parameters. They are used to determine overload and
 
 ### 2. Block limits and classification
 
-Block limits are loaded from the [configuration parameters 22 and 23](/develop/howto/blockchain-configs#param-22-and-23).
+Block limits are loaded from the [configuration parameters 22 and 23](/v3/documentation/network/configs/blockchain-configs#param-22-and-23).
 Each of the three parameters has three limits: underload, soft, hard:
 1. *Block size*: `128/256/512 KiB`.
 2. *Gas consumption*: `2M/10M/20M` in basechain, `200K/1M/2.5M` in masterchain.
@@ -73,7 +73,7 @@ When underload or overload history has a non-negative weight, the flag `want_mer
 
 ### 5. Final decision
 
-Validators decide to split or merge shards using `want_split` and `want_merge` flags and [workchain configuration parameters](/develop/howto/blockchain-configs#param-12).
+Validators decide to split or merge shards using `want_split` and `want_merge` flags and [workchain configuration parameters](/v3/documentation/network/configs/blockchain-configs#param-12).
 
 - If the shard has depth < `min_split` then it will split.
 - If the shard has depth > `max_split` then it will merge.

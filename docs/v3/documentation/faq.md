@@ -86,7 +86,7 @@ max_block_bytes:2097152
 ```
 
 :::info
-Find more actual params in [Network Configs](/develop/howto/network-configs).
+Find more actual params in [Network Configs](/v3/documentation/network/configs/network-configs).
 :::
 
 ### What is the layout of blocks on TON?
@@ -287,5 +287,5 @@ TON directory with projects from TON Community:
 
 ###  Provided below are two main resources used to obtain information related to public node endpoints on TON Blockchain (for both TON Mainnet and TON Testnet).
 
-- [Network Configs](/develop/howto/network-configs)
+- [Network Configs](/v3/documentation/network/configs/network-configs)
 - [Examples and tutorials](/develop/dapps/#examples)

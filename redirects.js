@@ -20,7 +20,7 @@ module.exports = [
     from: '/learn/overviews/TON_Blockchain_overview',
   },
   {
-    to: '/learn/networking/low-level-adnl',
+    to: '/v3/documentation/network/protocols/adnl/low-level-adnl',
     from: '/learn/overviews/adnl',
   },
   {

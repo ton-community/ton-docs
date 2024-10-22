@@ -222,9 +222,9 @@ module.exports = [
     type: 'category',
     label: 'Network Configurations',
     items: [
-      'develop/howto/network-configs',
-      'develop/howto/blockchain-configs',
-      'develop/howto/config-params',
+      'v3/documentation/network/configs/network-configs',
+      'v3/documentation/network/configs/blockchain-configs',
+      'v3/documentation/network/configs/config-params',
     ],
   },
   {
@@ -238,11 +238,11 @@ module.exports = [
           {
             type: 'doc',
             label: 'Overview',
-            id: 'learn/networking/adnl',
+            id: 'v3/documentation/network/protocols/adnl/overview',
           },
-          'learn/networking/low-level-adnl', // TODO: MERGE ADNL
-          'develop/network/adnl-tcp',
-          'develop/network/adnl-udp',
+          'v3/documentation/network/protocols/adnl/low-level-adnl', // TODO: MERGE ADNL
+          'v3/documentation/network/protocols/adnl/adnl-tcp',
+          'v3/documentation/network/protocols/adnl/adnl-udp',
         ],
       },
       {
@@ -252,13 +252,13 @@ module.exports = [
           {
             type: 'doc',
             label: 'Overview',
-            id: 'learn/networking/ton-dht',
+            id: 'v3/documentation/network/protocols/dht/ton-dht',
           },
-          'develop/network/dht',
+          'v3/documentation/network/protocols/dht/dht-deep-dive',
         ]
       },
-      'develop/network/rldp',
-      'develop/network/overlay',
+      'v3/documentation/network/protocols/rldp',
+      'v3/documentation/network/protocols/overlay',
     ],
   },
   {
