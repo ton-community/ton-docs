@@ -2,46 +2,31 @@
  * @type {import('@docusaurus/plugin-content-docs').SidebarConfig}
  */
 module.exports = [
-  'contribute/README',
+  'v3/contribute/README',
   {
     'type': 'category',
     'label': 'Common Rules',
     'items': [
-      'contribute/contribution-rules',
-      'contribute/participate',
-      'contribute/maintainers',
+      'v3/contribute/contribution-rules',
+      'v3/contribute/participate',
+      'v3/contribute/maintainers',
     ],
   },
   {
     'type': 'category',
     'label': 'Documentation',
     'items': [
-      'contribute/docs/guidelines',
-      'contribute/docs/schemes-guidelines',
+      'v3/contribute/docs/guidelines',
+      'v3/contribute/docs/schemes-guidelines',
     ],
   },
   {
     'type': 'category',
     'label': 'Tutorials',
     'items': [
-      'contribute/tutorials/guidelines',
-      'contribute/tutorials/principles-of-a-good-tutorial',
-      'contribute/tutorials/sample-tutorial',
-    ],
-  },
-  {
-    'type': 'category',
-    'label': 'Archive',
-    'items': [
-      {
-        'type': 'category',
-        'label': 'Hacktoberfest 2022',
-        'items': [
-          'contribute/archive/hacktoberfest-2022/README',
-          'contribute/archive/hacktoberfest-2022/as-contributor',
-          'contribute/archive/hacktoberfest-2022/as-maintainer',
-        ],
-      },
+      'v3/contribute/tutorials/guidelines',
+      'v3/contribute/tutorials/principles-of-a-good-tutorial',
+      'v3/contribute/tutorials/sample-tutorial',
     ],
   },
   {
@@ -51,22 +36,22 @@ module.exports = [
       {
         type: 'doc',
         label: 'Overview',
-        id: 'contribute/localization-program/overview',
+        id: 'v3/contribute/localization-program/overview',
       },
       {
         type: 'doc',
         label: 'How It Works',
-        id: 'contribute/localization-program/how-it-works',
+        id: 'v3/contribute/localization-program/how-it-works',
       },
       {
         type: 'doc',
         label: 'How To Contribute',
-        id: 'contribute/localization-program/how-to-contribute',
+        id: 'v3/contribute/localization-program/how-to-contribute',
       },
       {
         type: 'doc',
         label: 'Translation Style Guide',
-        id: 'contribute/localization-program/translation-style-guide',
+        id: 'v3/contribute/localization-program/translation-style-guide',
       },
     ],
   },

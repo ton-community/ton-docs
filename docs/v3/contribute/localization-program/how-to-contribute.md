@@ -8,7 +8,7 @@ The **TownSquare Labs Localization Program** is open to everyone! Here are a few
 
 1. Log in to your [**Crowdin**](https://crowdin.com) account or sign up.
 2. Select the language you want to contribute to.
-3. Familiarize yourself with the [**How to Use Crowdin**](/contribute/localization-program/how-to-contribute) guide and the [**Translation Style Guide**](/contribute/localization-program/translation-style-guide) for tips and best practices.
+3. Familiarize yourself with the [**How to Use Crowdin**](/v3/contribute/localization-program/how-to-contribute) guide and the [**Translation Style Guide**](/v3/contribute/localization-program/translation-style-guide) for tips and best practices.
 4. Use machine translations to aid your work but do not rely solely on them.
 5. All translation results can be previewed on the website one hour after they have been proofread.
 

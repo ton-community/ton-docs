@@ -364,12 +364,21 @@ module.exports = [
       keywords: ['archive'],
     },
     items: [
-      'v3/documentation/archive/compilepow-givers',
-      'v3/documentation/archive/compilemining',
-      'v3/documentation/archive/compiletg-bot-integration',
-      'v3/documentation/archive/compiletg-bot-integration-py',
-      'v3/documentation/archive/compileREADME',
+      'v3/documentation/archive/pow-givers',
+      'v3/documentation/archive/mining',
+      'v3/documentation/archive/tg-bot-integration',
+      'v3/documentation/archive/tg-bot-integration-py',
+      'v3/documentation/archive/compile',
       'v3/documentation/archive/precompiled-binaries',
+      {
+        'type': 'category',
+        'label': 'Hacktoberfest 2022',
+        'items': [
+          'v3/documentation/archive/hacktoberfest-2022/README',
+          'v3/documentation/archive/hacktoberfest-2022/as-contributor',
+          'v3/documentation/archive/hacktoberfest-2022/as-maintainer',
+        ],
+      },
     ]
   }
 ];

@@ -742,5 +742,85 @@
     {
         "from": "/develop/smart-contracts/environment/installation",
         "to": "/v3/documentation/archive/precompiled-binaries"
+    },
+    {
+        "from": "/contribute/archive/hacktoberfest-2022",
+        "to": "/v3/documentation/archive/hacktoberfest-2022"
+    },
+    {
+        "from": "/contribute/archive/hacktoberfest-2022/README",
+        "to": "/v3/documentation/archive/hacktoberfest-2022/README"
+    },
+    {
+        "from": "/contribute/archive/hacktoberfest-2022/as-contributor",
+        "to": "/v3/documentation/archive/hacktoberfest-2022/as-contributor"
+    },
+    {
+        "from": "/contribute/archive/hacktoberfest-2022/as-maintainer",
+        "to": "/v3/documentation/archive/hacktoberfest-2022/as-maintainer"
+    },
+    {
+        "from": "/contribute/docs",
+        "to": "/v3/contribute/docs"
+    },
+    {
+        "from": "/contribute/docs/guidelines",
+        "to": "/v3/contribute/docs/guidelines"
+    },
+    {
+        "from": "/contribute/docs/schemes-guidelines",
+        "to": "/v3/contribute/docs/schemes-guidelines"
+    },
+    {
+        "from": "/contribute/localization-program",
+        "to": "/v3/contribute/localization-program"
+    },
+    {
+        "from": "/contribute/localization-program/translation-style-guide",
+        "to": "/v3/contribute/localization-program/translation-style-guide"
+    },
+    {
+        "from": "/contribute/localization-program/how-to-contribute",
+        "to": "/v3/contribute/localization-program/how-to-contribute"
+    },
+    {
+        "from": "/contribute/localization-program/overview",
+        "to": "/v3/contribute/localization-program/overview"
+    },
+    {
+        "from": "/contribute/localization-program/how-it-works",
+        "to": "/v3/contribute/localization-program/how-it-works"
+    },
+    {
+        "from": "/contribute/tutorials",
+        "to": "/v3/contribute/tutorials"
+    },
+    {
+        "from": "/contribute/tutorials/sample-tutorial",
+        "to": "/v3/contribute/tutorials/sample-tutorial"
+    },
+    {
+        "from": "/contribute/tutorials/principles-of-a-good-tutorial",
+        "to": "/v3/contribute/tutorials/principles-of-a-good-tutorial"
+    },
+    {
+        "from": "/contribute/tutorials/guidelines",
+        "to": "/v3/contribute/tutorials/guidelines"
+    },
+    {
+        "from": "/contribute/contribution-rules",
+        "to": "/v3/contribute/contribution-rules"
+    },
+    {
+        "from": "/contribute/maintainers",
+        "to": "/v3/contribute/maintainers"
+    },
+    {
+        "from": "/contribute/participate",
+        "to": "/v3/contribute/participate"
+    },
+    {
+        "from": "/contribute",
+        "to": "/v3/contribute"
     }
 ]

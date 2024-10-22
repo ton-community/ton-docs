@@ -240,7 +240,7 @@ module.exports = {
       ],
     },
     {
-      to: 'contribute',
+      to: 'v3/contribute',
       position: 'right',
       className: 'header-contribute-link',
       'aria-label': 'Contribute',
@@ -260,7 +260,7 @@ module.exports = {
           value: '<hr style="margin: 0.3rem 0;">',
         },
         {
-          href: "/contribute/localization-program/overview",
+          href: "/v3/contribute/localization-program/overview",
           label: 'Help Us Translate',
         },
       ],

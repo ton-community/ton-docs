@@ -26,8 +26,8 @@ Every page in TON documentation should be finished with See Also section. Place 
 :::info
 ```
 ## See Also
-* [TON Contribution Guidelines](/contribute/contribution-rules)
-* [Tutorial Styling Guidelines](/contribute/tutorials/guidelines)
+* [TON Contribution Guidelines](/v3/contribute/contribution-rules)
+* [Tutorial Styling Guidelines](/v3/contribute/tutorials/guidelines)
 ```
 :::
 
@@ -40,5 +40,5 @@ The TON Ecosystem is being built for the entire world, so it's crucial that it's
 
 ## See Also
 
-* [TON Contribution Guidelines](/contribute/contribution-rules)
-* [Tutorial Styling Guidelines](/contribute/tutorials/guidelines)
+* [TON Contribution Guidelines](/v3/contribute/contribution-rules)
+* [Tutorial Styling Guidelines](/v3/contribute/tutorials/guidelines)
