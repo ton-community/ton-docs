@@ -714,5 +714,9 @@
     {
         "from": "/learn/tvm-instructions/instructions",
         "to": "/v3/documentation/tvm/instructions"
+    },
+    {
+        "from": "/learn/docs",
+        "to": "/v3/documentation/whitepapers/overview"
     }
 ]

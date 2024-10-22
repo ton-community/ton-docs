@@ -215,7 +215,7 @@ module.exports = {
           label: 'Networking'
         },
         {
-          to: 'learn/docs',
+          to: 'v3/documentation/whitepapers/overview',
           label: 'Whitepapers',
         },
       ]

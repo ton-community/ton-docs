@@ -324,7 +324,7 @@ module.exports = [
   {
     type: 'doc',
     label: 'Overview',
-    id: 'learn/docs',
+    id: 'v3/documentation/whitepapers/overview',
   },
   {
     type: 'link',

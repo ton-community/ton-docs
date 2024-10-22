@@ -8,7 +8,7 @@ This section covers the most popular questions about TON Blockchain.
 
 - [Introduction to The Open Network](/learn/introduction)
 - [The TON Blockchain is based on PoS consensus](https://blog.ton.org/the-ton-blockchain-is-based-on-pos-consensus)
-- [TON Whitepapers](/learn/docs)
+- [TON Whitepapers](/v3/documentation/whitepapers/overview)
 
 ### What are some of the main similarities and differences to EVM blockchains?
 
