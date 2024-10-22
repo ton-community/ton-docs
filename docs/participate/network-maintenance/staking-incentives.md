@@ -6,7 +6,7 @@
 TON Blockchain makes use of the Proof of Stake (PoS) consensus algorithm which means, like all PoS networks, that the network’s security and stability is maintained by a set of network validators. In particular, validators propose candidates for new blocks (made up of transaction batches), while other validators _validate_ and approve them via digital signatures.
 
 
-Validators are chosen using special [Elector governance contract](/develop/smart-contracts/governance#elector). During each consensus round, validator candidates send an application for election along with their stake and desired _max_factor_ (a parameter which regulates the amount of maintenance the validator performs per consensus round).
+Validators are chosen using special [Elector governance contract](/v3/documentation/smart-contracts/contracts-specs/governance#elector). During each consensus round, validator candidates send an application for election along with their stake and desired _max_factor_ (a parameter which regulates the amount of maintenance the validator performs per consensus round).
 
 During the validator election process, the governance smart contract chooses the next round of validators and assigns a voting weight to each validator to maximize their total stake, while also taking into consideration the validator’s stake and _max_factor_. In this respect, the higher the stake and _max_factor_, the higher the voting weight of the validator and vice versa.
 
@@ -26,7 +26,7 @@ The formula with the config parameters:
 
 ### (Simplified) Selection Algorithm
 
-This algorithm, run by the [Elector smart contract](/develop/smart-contracts/governance#elector), selects the best validator candidates based on the stake they have committed. Here's a breakdown of how it works:
+This algorithm, run by the [Elector smart contract](/v3/documentation/smart-contracts/contracts-specs/governance#elector), selects the best validator candidates based on the stake they have committed. Here's a breakdown of how it works:
 
 1. **Initial Selection**: Elector considers all candidates who have staked more than a set minimum amount (300K, as specified in the [configuration](https://tonviewer.com/config#17)).
 

@@ -32,7 +32,7 @@ In the configuration parameter, only the hash portion of the address is recorded
 
 ## Param 1
 
-This parameter is the address of the [Elector](/develop/smart-contracts/governance#elector) smart contract, responsible for appointing validators, distributing rewards, and voting on changes to blockchain parameters.
+This parameter is the address of the [Elector](/v3/documentation/smart-contracts/contracts-specs/governance#elector) smart contract, responsible for appointing validators, distributing rewards, and voting on changes to blockchain parameters.
 
 ## Param 2
 
@@ -136,7 +136,7 @@ This parameter represents the configuration of a workchain in the TON Blockchain
 
 ## Param 13
 
-This parameter defines the cost of filing complaints about incorrect operation of validators in the [Elector](/develop/smart-contracts/governance#elector) contract.
+This parameter defines the cost of filing complaints about incorrect operation of validators in the [Elector](/v3/documentation/smart-contracts/contracts-specs/governance#elector) contract.
 
 ## Param 14
 
@@ -299,7 +299,7 @@ These parameters define the cost of computations in the TON network. The complex
 -   `freeze_due_limit` and `delete_due_limit`: Limits of accumulated storage fees (in nanoTON) at which a contract is frozen and deleted, respectively.
 
 :::info
-More about `gas_credit` and other parameters in the section with external messages [here](/develop/smart-contracts/guidelines/accept#external-messages).
+More about `gas_credit` and other parameters in the section with external messages [here](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects#external-messages).
 :::
 
 ## Param 22 and 23
@@ -494,7 +494,7 @@ precompiled_contracts_config#c0 list:(HashmapE 256 PrecompiledSmc) = Precompiled
 _ PrecompiledContractsConfig = ConfigParam 45;
 ```
 
-More details about precompiled contracts on [this page](/develop/smart-contracts/core-contracts/precompiled).
+More details about precompiled contracts on [this page](/v3/documentation/smart-contracts/contracts-specs/precompiled-contracts).
 
 ## Param 71 - 73
 

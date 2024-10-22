@@ -21,7 +21,7 @@ This section is for you to explain any prior knowledge needed or any existing tu
 
 *For example:*
 
->In this tutorial, we're going to mint Jetton on testnet. Before we continue, make sure that your [testnet](/develop/smart-contracts/environment/testnet) wallet has sufficient balance. 
+>In this tutorial, we're going to mint Jetton on testnet. Before we continue, make sure that your [testnet](/v3/documentation/smart-contracts/getting-started/testnet) wallet has sufficient balance. 
 
 ## Requirements
 

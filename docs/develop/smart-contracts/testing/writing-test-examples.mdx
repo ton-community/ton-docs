@@ -504,7 +504,7 @@ If you try to read more data from a slice (when reading data from a cell, it mus
 
 ### Compute Phase | exit code = 10
 
-This error is thrown when working with [dictionaries](/develop/func/stdlib/#dictionaries-primitives). As an example, the case when the value that belongs to the key [is stored in another cell](https://github.com/ton-community/fireworks-func/blob/ef49b4da12d287a8f6c2b6f0c19d65814c1578fc/contracts/fireworks.fc#L100-L110) as a reference. In this case, you need to use the `.udict_get_ref()` function to get such a value.
+This error is thrown when working with [dictionaries](/v3/documentation/smart-contracts/func/docs/stdlib/#dictionaries-primitives). As an example, the case when the value that belongs to the key [is stored in another cell](https://github.com/ton-community/fireworks-func/blob/ef49b4da12d287a8f6c2b6f0c19d65814c1578fc/contracts/fireworks.fc#L100-L110) as a reference. In this case, you need to use the `.udict_get_ref()` function to get such a value.
 
 However, the link to another cell [should be only 1](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/dict.cpp#L454) and not 2, as in our example:
 

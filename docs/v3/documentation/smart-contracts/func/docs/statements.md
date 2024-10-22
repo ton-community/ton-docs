@@ -41,7 +41,7 @@ while (i < 10) {
 }
 ;; here x is a (different) variable of type int
 ```
-But as mentioned in the global variables [section](/develop/func/global_variables.md), a global variable cannot be redeclared.
+But as mentioned in the global variables [section](/v3/documentation/smart-contracts/func/docs/global_variables.md), a global variable cannot be redeclared.
 
 Note that a variable declaration **is** an expression statement, so actually constructions like `int x = 2` are full-fledged expressions. For example, this is a correct code:
 ```func
@@ -151,7 +151,7 @@ The first call will modify x; the second and third won't.
 In summary, when a function with the name `foo` is called as a non-modifying or modifying method (i.e. with `.foo` or `~foo` syntax), the FunC compiler uses the definition of `.foo` or `~foo` correspondingly if such a definition is presented, and if not, it uses the definition of `foo`.
 
 ### Operators
-Note that currently all of the unary and binary operators are integer operators. Logical operators are represented as bitwise integer operators  (cf. [absence of boolean type](/develop/func/types#absence-of-boolean-type)).
+Note that currently all of the unary and binary operators are integer operators. Logical operators are represented as bitwise integer operators  (cf. [absence of boolean type](/v3/documentation/smart-contracts/func/docs/types#absence-of-boolean-type)).
 #### Unary operators
 There are two unary operators:
 - `~` is bitwise not (priority 75)
@@ -249,7 +249,7 @@ while (x < 100) {
 }
 ;; x = 256
 ```
-Note that the truth value of condition `x < 100` is of type `int` (cf. [absence of boolean type](/develop/func/types#absence-of-boolean-type)).
+Note that the truth value of condition `x < 100` is of type `int` (cf. [absence of boolean type](/v3/documentation/smart-contracts/func/docs/types#absence-of-boolean-type)).
 
 ### Until loop
 Has the following syntax:

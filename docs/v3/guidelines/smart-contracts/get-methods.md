@@ -1,7 +1,7 @@
 # Get Methods
 
 :::note
-Before proceeding, it is recommended that readers have a basic understanding of the [FunC programming language](/develop/func/overview) and [smart contract development](/develop/smart-contracts) on TON Blockchain. This will help you grasp the information provided here more effectively.
+Before proceeding, it is recommended that readers have a basic understanding of the [FunC programming language](/v3/documentation/smart-contracts/func/overview) and [smart contract development](/develop/smart-contracts) on TON Blockchain. This will help you grasp the information provided here more effectively.
 :::
 
 ## Introduction
@@ -220,7 +220,7 @@ You can call get methods on the "Get methods" tab.
 We will use Javascript libraries and tools for the examples below:
 
 -   [ton](https://github.com/ton-core/ton) library
--   [Blueprint](/develop/smart-contracts/sdk/javascript) SDK
+-   [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript) SDK
 
 Let's say there is some contract with the following get method:
 
@@ -300,7 +300,7 @@ These limitations imply that one contract cannot directly access the state of an
 
 ### Solutions and Workarounds
 
-In the TON Blockchain, smart contracts communicate via messages, instead of directly invoking methods from another contract. A message requesting execution of a specific method can be sent to a targeted contract. These requests typically start with special [operation codes](/develop/smart-contracts/guidelines/internal-messages).
+In the TON Blockchain, smart contracts communicate via messages, instead of directly invoking methods from another contract. A message requesting execution of a specific method can be sent to a targeted contract. These requests typically start with special [operation codes](/v3/documentation/smart-contracts/message-management/internal-messages).
 
 A contract designed to accept these requests will execute the desired method and send the results back in a separate message. While this might seem complex, it actually streamlines communication between contracts, and enhances the blockchain network's scalability and performance.
 

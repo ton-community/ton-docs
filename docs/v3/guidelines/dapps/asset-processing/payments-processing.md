@@ -326,7 +326,7 @@ if __name__ == "__main__":
 
 ### Wallet Creation for Different Shards
 
-When under heavy load, the TON blockchain may split into [shards](/develop/blockchain/shards). A simple analogy for a shard in the Web3 world would be a network segment.
+When under heavy load, the TON blockchain may split into [shards](/v3/documentation/smart-contracts/shards). A simple analogy for a shard in the Web3 world would be a network segment.
 
 Just as we distribute service infrastructure in the Web2 world to be as close as possible to the end user, in TON, we can deploy contracts to be in the same shard as the user's wallet or any other contract that interacts with it.
 

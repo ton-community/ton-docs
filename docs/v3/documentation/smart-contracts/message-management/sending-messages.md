@@ -2,7 +2,7 @@
 
 Composition, parsing, and sending messages lie at the intersection of [TL-B schemas](/develop/data-formats/tl-b-language), [transaction phases and TVM](/learn/tvm-instructions/tvm-overview).
 
-Indeed, FunC exposes [send_raw_message](/develop/func/stdlib#send_raw_message) function which expects a serialized message as an argument.
+Indeed, FunC exposes [send_raw_message](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) function which expects a serialized message as an argument.
 
 Since TON is a comprehensive system with wide functionality, messages which need to be able to support all of this functionality may look quite complicated. Still, most of that functionality is not used in common scenarios, and message serialization in most cases may be reduced to:
 ```func
@@ -191,7 +191,7 @@ Note that `+2` flag ignore only following errors arising while processing messag
     - Not enough value attached to the message to pay forwarding fees.
     - Not enough extra currency to send with the message.
     - Not enough funds to pay for an outbound external message.
-2. Message is too large (check [Message size](messages#message-size) for more).
+2. Message is too large (check [Message size](sending-messages#message-size) for more).
 3. The message has too big Merkle depth.
 
 However, it does not ignore errors in the following scenarios:

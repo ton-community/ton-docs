@@ -65,7 +65,7 @@ is a polymorphic function which takes a (single stack entry) value and returns t
 
 In this example, `X` is a type variable.
 
-See more info on this topic in the [functions](/develop/func/functions#polymorphism-with-forall) section.
+See more info on this topic in the [functions](/v3/documentation/smart-contracts/func/docs/functions#polymorphism-with-forall) section.
 
 ## User-defined types
 Currently, FunC has no support for defining types except for the type constructions described above.

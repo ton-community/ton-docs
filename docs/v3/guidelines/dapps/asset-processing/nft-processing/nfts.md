@@ -202,7 +202,7 @@ send_raw_message(nft_msg.end_cell(), 128 + 32);
 Let's examine each line of code:
 - `store_uint(0x18, 6)` - stores message flags.
 - `store_slice(nft_address)` - stores message destinations (NFT addresses).
-- `store_coins(0)` -  the amount of TON to send with the message is set to 0 because the `128` [message mode](/develop/smart-contracts/messages#message-modes) is used to send the message with its remaining balance. To send an amount other than the user’s entire balance, the number must be changed. Note that it should be large enough to pay for gas fees as well as any forwarding amount.
+- `store_coins(0)` -  the amount of TON to send with the message is set to 0 because the `128` [message mode](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes) is used to send the message with its remaining balance. To send an amount other than the user’s entire balance, the number must be changed. Note that it should be large enough to pay for gas fees as well as any forwarding amount.
 - `store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)`  -  the remaining components that make up the message header are left empty.
 - `store_uint(op::transfer(), 32)` - this is the start of the msg_body. Here we start by using the transfer OP code so the receiver understands its transfer ownership message.
 - `store_uint(query_id, 64)` - store query_id

@@ -191,23 +191,23 @@ Before we dive into more details concerning wallets, let’s look at how wallets
 
 > 💡 Useful links:
 >
-> ["load_bits()" in docs](/develop/func/stdlib/#load_bits)
+> ["load_bits()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#load_bits)
 >
-> ["get_data()" in docs](/develop/func/stdlib/#load_bits)
+> ["get_data()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#load_bits)
 >
-> ["begin_parse()" in docs](/develop/func/stdlib/#load_bits)
+> ["begin_parse()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#load_bits)
 >
-> ["end_parse()" in docs](/develop/func/stdlib/#end_parse)
+> ["end_parse()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#end_parse)
 >
-> ["load_int()" in docs](/develop/func/stdlib/#load_int)
+> ["load_int()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#load_int)
 >
-> ["load_uint()" in docs](/develop/func/stdlib/#load_int)
+> ["load_uint()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#load_int)
 >
-> ["check_signature()" in docs](/develop/func/stdlib/#check_signature)
+> ["check_signature()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#check_signature)
 >
-> ["slice_hash()" in docs](/develop/func/stdlib/#slice_hash)
+> ["slice_hash()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_hash)
 >
-> ["accept_message()" in docs](/develop/smart-contracts/guidelines/accept)
+> ["accept_message()" in docs](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects)
 
 Now let’s take a closer look.
 
@@ -245,7 +245,7 @@ accept_message();
 ```
 
 :::info accept_message()
-Because the message comes from the outside world, it does not contain the Toncoin required to pay the transaction fee. When sending TON using the accept_message() function, a gas_credit (at the time of writing its value is 10,000 gas units) is applied which allows the necessary calculations to be carried out for free if the gas does not exceed the gas_credit value. After the accept_message() function is used, all the gas spent (in TON) is taken from the balance of the smart contract. More can be read about this process [here](/develop/smart-contracts/guidelines/accept).
+Because the message comes from the outside world, it does not contain the Toncoin required to pay the transaction fee. When sending TON using the accept_message() function, a gas_credit (at the time of writing its value is 10,000 gas units) is applied which allows the necessary calculations to be carried out for free if the gas does not exceed the gas_credit value. After the accept_message() function is used, all the gas spent (in TON) is taken from the balance of the smart contract. More can be read about this process [here](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects).
 :::
 
 ### Transaction Expiration
@@ -286,11 +286,11 @@ Since a **maximum of 4 references** can be stored in one cell, we can send a max
 
 > 💡 Useful links:
 >
-> ["slice_refs()" in docs](/develop/func/stdlib/#slice_refs)
+> ["slice_refs()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_refs)
 >
-> ["send_raw_message() and message modes" in docs](/develop/func/stdlib/#send_raw_message)
+> ["send_raw_message() and message modes" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
 >
-> ["load_ref()" in docs](/develop/func/stdlib/#load_ref)
+> ["load_ref()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#load_ref)
 
 ## 📬  External and Internal Messages
 
@@ -395,7 +395,7 @@ Option | Explanation
 :---: | :---:
 Extra currency | This is a native implementation of existing jettons and is not currently in use.
 IHR fee | As mentioned, the IHR is not currently in use, so this fee is always zero. More can be read about this in the [tblkch.pdf](https://ton.org/tblkch.pdf) (3.1.8).
-Forwarding fee | A forwarding message fee. More can be read about this in the [fees documentation](/develop/howto/fees-low-level#transactions-and-phases).
+Forwarding fee | A forwarding message fee. More can be read about this in the [fees documentation](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#transactions-and-phases).
 Logical time of creation | The time used to create the correct messages queue. 
 UNIX time of creation | The time the message was created in UNIX.
 State Init | Code and source data for deploying a smart contract. If the bit is set to `0`, it means that we do not have a State Init. But if it is set to `1`, then another bit needs to be written which indicates whether the State Init is stored in the same cell (0) or written as a reference (1).
@@ -408,7 +408,7 @@ If the number value fits within fewer bits than is specified, then the missing z
 :::
 
 Next, we’ll begin preparing a message, which will be sent Toncoins to another wallet v3.
-First, let’s say a user wants to send 0.5 TON to themselves with the text "**Hello, TON!**", refer to this section of our documentation to learn ([How to send message with a comment](/develop/func/cookbook#how-to-send-a-simple-message)).
+First, let’s say a user wants to send 0.5 TON to themselves with the text "**Hello, TON!**", refer to this section of our documentation to learn ([How to send message with a comment](/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-simple-message)).
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -439,7 +439,7 @@ internalMessageBody := cell.BeginCell().
 </TabItem>
 </Tabs>
 
-Above we created an `InternalMessageBody` in which the body of our message is stored. Note that when storing text that does not fit into a single Cell (1023 bits), it is necessary **to split the data into several cells** according to [the following documentation](/develop/smart-contracts/guidelines/internal-messages). However, in this case the high-level libraries creates cells according to requirements, so at this stage there is no need to worry about it.
+Above we created an `InternalMessageBody` in which the body of our message is stored. Note that when storing text that does not fit into a single Cell (1023 bits), it is necessary **to split the data into several cells** according to [the following documentation](/v3/documentation/smart-contracts/message-management/internal-messages). However, in this case the high-level libraries creates cells according to requirements, so at this stage there is no need to worry about it.
 
 Next, the `InternalMessage` is created according to the information we have studied earlier as follows:
 
@@ -577,7 +577,7 @@ privateKey := ed25519.NewKeyFromSeed(k)
 </TabItem>
 </Tabs>
 
-Therefore, the `seqno`, `keys`, and `internal message` need to be sent. Now we need to create a [message](/develop/smart-contracts/messages) for our wallet and store the data in this message in the sequence used at the beginning of the tutorial. This is accomplished as follows:
+Therefore, the `seqno`, `keys`, and `internal message` need to be sent. Now we need to create a [message](/v3/documentation/smart-contracts/message-management/sending-messages) for our wallet and store the data in this message in the sequence used at the beginning of the tutorial. This is accomplished as follows:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1259,7 +1259,7 @@ var internalMessages [len(internalMessagesAmount)]*cell.Cell // array for our in
 </TabItem>
 </Tabs>
 
-[Sending mode](/develop/smart-contracts/messages#message-modes) for all messages is set to `mode 3`.  However, if different modes are required an array can be created to fulfill different purposes.
+[Sending mode](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes) for all messages is set to `mode 3`.  However, if different modes are required an array can be created to fulfill different purposes.
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -2547,11 +2547,11 @@ First, let’s examine [the code structure of high-load wallet smart contract](h
 
 > 💡 Useful links:
 >
-> ["Bitwise operations" in docs](/develop/func/stdlib/#dict_get)
+> ["Bitwise operations" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get)
 >
-> ["load_dict()" in docs](/develop/func/stdlib/#load_dict)
+> ["load_dict()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#load_dict)
 >
-> ["udict_get?()" in docs](/develop/func/stdlib/#dict_get)
+> ["udict_get?()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get)
 
 You notice some differences from ordinary wallets. Now let’s take a closer look at more details of how high-load wallets work on TON (except subwallets as we have gone over this previously).
 
@@ -2588,13 +2588,13 @@ do {
 
 > 💡 Useful link:
 >
-> ["idict_get_next()" in docs](/develop/func/stdlib/#dict_get_next)
+> ["idict_get_next()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_next)
 
 Note that if a value is found, `f` is always equal to -1 (true). The `~ -1` operation (bitwise not) will always return a value of 0, meaning that the loop should be continued. At the same time, when a dictionary is filled with messages, it is necessary to start calculating those **with a value greater than -1** (e.g., 0) and continue increasing the value by 1 with each message. This structure allows messages to be sent in the correct sequential order.
 
 ### Removing Expired Queries
 
-Typically, [smart contracts on TON pay for their own storage](/develop/howto/fees-low-level#storage-fee). This means that the amount of data smart contracts can store is limited to prevent high network loading. To allow the system to be more efficient, messages that are more than 64 seconds old are removed from the storage. This is conducted as follows:
+Typically, [smart contracts on TON pay for their own storage](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee). This means that the amount of data smart contracts can store is limited to prevent high network loading. To allow the system to be more efficient, messages that are more than 64 seconds old are removed from the storage. This is conducted as follows:
 
 
 ```func
@@ -2616,7 +2616,7 @@ do {
 
 > 💡 Useful link:
 >
-> ["udict_delete_get_min()" in docs](/develop/func/stdlib/#dict_delete_get_min)
+> ["udict_delete_get_min()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_delete_get_min)
 
 Note that it is necessary to interact with the `f` variable several times. Since the [TVM is a stack machine](/learn/tvm-instructions/tvm-overview#tvm-is-a-stack-machine), during each interaction with the `f` variable it is necessary to pop all values to get the desired variable. The `f~touch()` operation places the f  variable at the top of the stack to optimize code execution.
 
@@ -3114,7 +3114,7 @@ This helps us to be independent of using libraries and to understand the structu
 
 ## 🧩 Next Steps
 
-Reading the documentation provided above is a complex undertaking and it’s difficult to understand the entirety of the TON platform. However, it is a good exercise for those passionate about building on the TON. Another suggestion is to begin learning about how to write smart contracts on TON by consulting the following resources: [FunC Overview](https://docs.ton.org/develop/func/overview), [Best Practices](https://docs.ton.org/develop/smart-contracts/guidelines), [Examples of Smart Contracts](https://docs.ton.org/develop/smart-contracts/examples), [FunC Cookbook](https://docs.ton.org/develop/func/cookbook)
+Reading the documentation provided above is a complex undertaking and it’s difficult to understand the entirety of the TON platform. However, it is a good exercise for those passionate about building on the TON. Another suggestion is to begin learning about how to write smart contracts on TON by consulting the following resources: [FunC Overview](https://docs.ton.org/v3/documentation/smart-contracts/func/overview), [Best Practices](https://docs.ton.org/develop/smart-contracts/guidelines), [Examples of Smart Contracts](https://docs.ton.org/v3/documentation/smart-contracts/contracts-specs/examples), [FunC Cookbook](https://docs.ton.org/v3/documentation/smart-contracts/func/cookbook)
 
 Additionally, it is recommended that readers familiarize themselves with the following documents in more detail: [ton.pdf](https://docs.ton.org/ton.pdf) and [tblkch.pdf](https://ton.org/tblkch.pdf) documents.
 
@@ -3137,9 +3137,9 @@ The main sources of code:
 
 Official documentation:
 
-  - [Internal messages](/develop/smart-contracts/guidelines/internal-messages)
+  - [Internal messages](/v3/documentation/smart-contracts/message-management/internal-messages)
 
-  - [External messages](/develop/smart-contracts/guidelines/external-messages)
+  - [External messages](/v3/documentation/smart-contracts/message-management/external-messages)
 
   - [Types of Wallet Contracts](/participate/wallets/contracts#wallet-v4)
   

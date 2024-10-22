@@ -285,7 +285,7 @@ action_fees = sum(out_ext_msg_fwd_fee) + sum(int_msg_mine_fee)
 
 ## Fee's config file
 
-All  fees are nominated in nanotons or nanotons multiplied by 2^16 to [maintain accuracy while using integer](/develop/howto/fees-low-level#forward-fees) and may be changed. The config file represents the current fee cost.
+All  fees are nominated in nanotons or nanotons multiplied by 2^16 to [maintain accuracy while using integer](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#forward-fees) and may be changed. The config file represents the current fee cost.
 
 * storage_fees = [p18](https://tonviewer.com/config#18)
 * in_fwd_fees = [p24](https://tonviewer.com/config#24), [p25](https://tonviewer.com/config#25)

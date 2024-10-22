@@ -94,7 +94,7 @@ Secondly, there is "namespace pollution". Let's explain what the problem is with
 int min_amount = in_msg_body~load_coins();
 ```
 
-That is, there was a shadowing of the storage field by a local variable, and at the end of the function, this replaced value was stored in storage. The attacker had the opportunity to overwrite the state of the contract. The situation is aggravated by the fact that FunC allows the [redeclaration of variables](https://docs.ton.org/develop/func/statements#variable-declaration): “This is not a declaration, but just a compile-time insurance that min_amount has type int.”
+That is, there was a shadowing of the storage field by a local variable, and at the end of the function, this replaced value was stored in storage. The attacker had the opportunity to overwrite the state of the contract. The situation is aggravated by the fact that FunC allows the [redeclaration of variables](https://docs.ton.org/v3/documentation/smart-contracts/func/docs/statements#variable-declaration): “This is not a declaration, but just a compile-time insurance that min_amount has type int.”
 
 And finally, parsing the entire storage and packing it back on every call to every function increases the gas cost.
 
@@ -174,7 +174,7 @@ For example, a typical flow start (see TON Jetton message flow):
 1. `your_contract_wallet` sends an `op::transfer_notification` message to `your_contract`, delivering `forward_ton_amount`, `forward_payload`, and the `sender_address` and `jetton_amount`;
 1. And here in your contract in `handle_transfer_notification()` the flow begins.
 
-There you need to figure out what kind of request it was, whether there is enough gas to complete it, and whether everything is correct in the payload. At this stage, you should not use `throw_if()/throw_unless()`, because then the Jettons will simply be lost, and the request will not be executed. It's worth using the try-catch statements [available starting from FunC v0.4.0](https://docs.ton.org/develop/func/statements#try-catch-statements).
+There you need to figure out what kind of request it was, whether there is enough gas to complete it, and whether everything is correct in the payload. At this stage, you should not use `throw_if()/throw_unless()`, because then the Jettons will simply be lost, and the request will not be executed. It's worth using the try-catch statements [available starting from FunC v0.4.0](https://docs.ton.org/v3/documentation/smart-contracts/func/docs/statements#try-catch-statements).
 
 If something does not meet the expectations of your contract, the Jettons must be returned.
 

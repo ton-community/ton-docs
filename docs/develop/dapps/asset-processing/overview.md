@@ -8,13 +8,13 @@ Here you can find a **short overview** on [how TON transfers work](/develop/dapp
 
 ## Overview on messages and transactions
 
-Embodying a fully asynchronous approach, TON Blockchain involves a few concepts which are uncommon to traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred [messages](/develop/smart-contracts/guidelines/message-delivery-guarantees) between smart contracts and/or the external world. Each transaction consists of one incoming message and up to 255 outgoing messages.
+Embodying a fully asynchronous approach, TON Blockchain involves a few concepts which are uncommon to traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred [messages](/v3/documentation/smart-contracts/message-management/messages-and-transactions) between smart contracts and/or the external world. Each transaction consists of one incoming message and up to 255 outgoing messages.
 
-There are 3 types of messages, that are fully described [here](/develop/smart-contracts/messages#types-of-messages). To put it briefly:
-* [external message](/develop/smart-contracts/guidelines/external-messages):
+There are 3 types of messages, that are fully described [here](/v3/documentation/smart-contracts/message-management/sending-messages#types-of-messages). To put it briefly:
+* [external message](/v3/documentation/smart-contracts/message-management/external-messages):
   *  `external in message` (sometimes called just `external message`) is message that is sent from *outside* of the blockchain to a smart contract *inside* the blockchain.
   *  `external out message` (usually called `logs message`) is sent from a *blockchain entity* to the *outer world*.
-* [internal message](/develop/smart-contracts/guidelines/internal-messages) is sent from one *blockchain entity* to *another*, can carry some amount of digital assets and arbitrary portion of data.
+* [internal message](/v3/documentation/smart-contracts/message-management/internal-messages) is sent from one *blockchain entity* to *another*, can carry some amount of digital assets and arbitrary portion of data.
 
 The common path of any interaction starts with an external message sent to a `wallet` smart contract, which authenticates the message sender using public-key cryptography, takes charge of fee payment, and sends internal blockchain messages. That messages queue form directional acyclic graph, or a tree.
 
@@ -28,7 +28,7 @@ For example:
 
 As a result there are 2 transactions with their set of input and output messages.
 
-Each action, when contract take message as input (triggered by it), process it and generate or not generate outgoing messages as output, called `transaction`. Read more about transactions [here](/develop/smart-contracts/guidelines/message-delivery-guarantees#what-is-a-transaction).
+Each action, when contract take message as input (triggered by it), process it and generate or not generate outgoing messages as output, called `transaction`. Read more about transactions [here](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-transaction).
 
 That `transactions` can span a **prolonged period** of time. Technically, transactions with queues of messages are aggregated into blocks processed by validators. The asynchronous nature of the TON Blockchain **does not allow to predict the hash and lt (logical time) of a transaction** at the stage of sending a message.
 
@@ -38,7 +38,7 @@ The `transaction` accepted to the block is final and cannot be modified.
 TON transactions are irreversible after just one confirmation. For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
 :::
 
-Smart contracts pay several types of [fees](/develop/smart-contracts/fees) for transactions (usually from the balance of an incoming message, behavior depends on [message mode](/develop/smart-contracts/messages#message-modes)). Amount of fees depends on workchain configs with maximal fees on `masterchain` and substantially lower fees on `basechain`.
+Smart contracts pay several types of [fees](/develop/smart-contracts/fees) for transactions (usually from the balance of an incoming message, behavior depends on [message mode](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes)). Amount of fees depends on workchain configs with maximal fees on `masterchain` and substantially lower fees on `basechain`.
 
 ## Digital asset types on TON
 

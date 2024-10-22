@@ -95,7 +95,7 @@ module.exports = {
           label: 'Wallets',
         },
         {
-          to: '/develop/smart-contracts/messages',
+          to: '/v3/documentation/smart-contracts/message-management/sending-messages',
           label: 'Sending Messages',
         },
         {
@@ -103,11 +103,11 @@ module.exports = {
           label: 'Transaction Fees',
         },
         {
-          to: 'develop/func/overview',
+          to: 'v3/documentation/smart-contracts/func/overview',
           label: 'FunC Development Language',
         },
         {
-          to: 'develop/func/cookbook',
+          to: 'v3/documentation/smart-contracts/func/cookbook',
           label: 'FunC Cookbook',
         },
         {
@@ -139,11 +139,11 @@ module.exports = {
           label: 'Troubleshooting the Node',
         },
         {
-          to: '/participate/network-maintenance/single-nominator',
+          to: '/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool',
           label: 'Single Nominator Pool',
         },
         {
-          to: '/participate/network-maintenance/nominator-pool',
+          to: '/v3/documentation/smart-contracts/contracts-specs/nominator-pool',
           label: 'Nominator Pool',
         },
         {

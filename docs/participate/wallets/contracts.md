@@ -103,7 +103,7 @@ Let's have a look at them.
 
 ### Highload Wallets
 
-When working with many messages in a short period, there is a need for special wallet called Highload Wallet. Read [the article](/participate/wallets/highload) for more information.
+When working with many messages in a short period, there is a need for special wallet called Highload Wallet. Read [the article](/v3/documentation/smart-contracts/contracts-specs/highload-wallet) for more information.
 
 ### Lockup wallet
 
@@ -134,7 +134,7 @@ Also op-code, op::code and operational code
 |-----------------|-----------------|----------------------------|
 | Global          | 0x00000000      | Text Comment               |
 | Global          | 0xffffffff      | Bounce                     |
-| Global          | 0x2167da4b      | [Encrypted Comment](https://docs.ton.org/develop/smart-contracts/guidelines/internal-messages#messages-with-encrypted-comments) |
+| Global          | 0x2167da4b      | [Encrypted Comment](https://docs.ton.org/v3/documentation/smart-contracts/message-management/internal-messages#messages-with-encrypted-comments) |
 | Global          | 0xd53276db      | Excesses                   |
 | Elector         | 0x4e73744b      | New Stake                  |
 | Elector         | 0xf374484c      | New Stake Confirmation     |

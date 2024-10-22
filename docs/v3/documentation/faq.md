@@ -18,7 +18,7 @@ This section covers the most popular questions about TON Blockchain.
 
 ### Does TON have a test environment?
 
-- [Testnet](/develop/smart-contracts/environment/testnet)
+- [Testnet](/v3/documentation/smart-contracts/getting-started/testnet)
 
 ## TON and L2
 
@@ -99,7 +99,7 @@ Detailed explanations on each field of the layout:
 
 ### RPC method to get transactions data
 
-- [see answer above](/develop/howto/faq#are-there-any-standardized-protocols-for-minting-burning-and-transferring-fungible-and-non-fungible-tokens-in-transactions)
+- [see answer above](/v3/documentation/faq#are-there-any-standardized-protocols-for-minting-burning-and-transferring-fungible-and-non-fungible-tokens-in-transactions)
 
 ### Is TON transaction asynchronous or synchronous? Is it possible to access documentation that show how this system works?
 
@@ -202,7 +202,7 @@ Read more about masterchain, workchains and shardchains in TON Blockchain overvi
 :::
 
 Good example is smart governance contract, which is a part of masterchain:
-- [Governance contracts](/develop/smart-contracts/governance)
+- [Governance contracts](/v3/documentation/smart-contracts/contracts-specs/governance)
 
 ## Smart Contracts
 
@@ -218,7 +218,7 @@ Smart contract can exist in uninitialized state, meaning that its state is not a
 To protect message chains from being halted at non-existing contracts TON use "bounce" feature. Read more in these articles:
 
 - [Deploying wallet via TonLib](https://ton.org/docs/develop/dapps/asset-processing/#deploying-wallet)
-- [Paying for processing queries and sending responses](https://ton.org/docs/develop/smart-contracts/guidelines/processing)
+- [Paying for processing queries and sending responses](https://ton.org/docs/v3/documentation/smart-contracts/transaction-fees/forward-fees)
 
 ### Does the upgradability of a smart-contract pose a threat to its users?
 
@@ -245,7 +245,7 @@ If the contract cannot initially execute `set_code()` (via its code or execution
 
 ### Can smart contract be deleted?
 
-Yes, either as a result of storage fee accumulation (contract needs to reach -1 TON balance to be deleted) or by sending a message with [mode 160](https://docs.ton.org/develop/smart-contracts/messages#message-modes).
+Yes, either as a result of storage fee accumulation (contract needs to reach -1 TON balance to be deleted) or by sending a message with [mode 160](https://docs.ton.org/v3/documentation/smart-contracts/message-management/sending-messages#message-modes).
 
 ### Are smart contract addresses case sensitive?
 

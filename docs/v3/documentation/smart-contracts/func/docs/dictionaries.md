@@ -24,7 +24,7 @@ Possible operations for hashmaps:
 - load from slice, store to builder
 - get/set/delete value by key
 - replace value (set new value if key was already present) / add one (if key was not present)
-- move to next/previous key-value pair, in order of keys (this can be used to [iterate over dictionaries](https://docs.ton.org/develop/func/cookbook#how-to-iterate-dictionaries) if gas limit is not a concern)
+- move to next/previous key-value pair, in order of keys (this can be used to [iterate over dictionaries](https://docs.ton.org/v3/documentation/smart-contracts/func/cookbook#how-to-iterate-dictionaries) if gas limit is not a concern)
 - retrieve minimal/maximal key with its value
 - get function (continuation) by key and immediately execute it
 

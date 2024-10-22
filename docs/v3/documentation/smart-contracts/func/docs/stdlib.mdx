@@ -17,7 +17,7 @@ Note that some less common commands are not presented in the stdlib. Someday the
 
 ## Tuple manipulation primitives
 
-The names and the types are mostly self-explaining. See [polymorhism with forall](/develop/func/functions#polymorphism-with-forall) for more info on the polymorphic functions.
+The names and the types are mostly self-explaining. See [polymorhism with forall](/v3/documentation/smart-contracts/func/docs/functions#polymorphism-with-forall) for more info on the polymorphic functions.
 
 Note that currently values of atomic type `tuple` cannot be cast into composite tuple types (e.g. `[int, cell]`) and vise versa.
 
@@ -47,7 +47,7 @@ Extracts the head and the tail of lisp-style list.
 forall X -> (tuple, X) list_next(tuple list) asm( -> 1 0) "UNCONS";
 ```
 
-Extracts the head and tail of a lisp-style list. Can be used as a [(non-)modifying method](/develop/func/statements#methods-calls).
+Extracts the head and tail of a lisp-style list. Can be used as a [(non-)modifying method](/v3/documentation/smart-contracts/func/docs/statements#methods-calls).
 
 ```func
 () foo(tuple xs) {
@@ -417,7 +417,7 @@ Transforms `slice s` into a simple ordinary continuation `c` with `c.code = s`, 
 
 Sets the current gas limit `gl` to its maximum allowed value `gm` and resets the gas credit `gc` to zero, decreasing the value of `gr` by `gc` in the process. In other words, the current smart contract agrees to buy some gas to finish the current transaction. This action is required to process external messages that carry no value (hence no gas).
 
-For more details check [accept_message effects](/develop/smart-contracts/guidelines/accept)
+For more details check [accept_message effects](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects)
 
 #### set_gas_limit
 
@@ -427,7 +427,7 @@ For more details check [accept_message effects](/develop/smart-contracts/guideli
 
 Sets the current gas limit `gl` to the minimum of `limit` and `gm`, and resets the gas credit `gc` to zero. At that point, if the amount of consumed gas (including the present instruction) exceeds the resulting value of `gl`, an (unhandled) out of gas exception is thrown before setting new gas limits. Notice that `set_gas_limit` with an argument `limit ≥ 2^63 − 1` is equivalent to `accept_message`.
 
-For more details check [accept_message effects](/develop/smart-contracts/guidelines/accept)
+For more details check [accept_message effects](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects)
 
 #### commit
 
@@ -498,7 +498,7 @@ Note that `+2` flag ignore only following errors arising while processing messag
     - Not enough value attached to the message to pay forwarding fees.
     - Not enough extra currency to send with the message.
     - Not enough funds to pay for an outbound external message.
-2. Message is too large (check [Message size](/develop/smart-contracts/messages#message-size) for more).
+2. Message is too large (check [Message size](/v3/documentation/smart-contracts/message-management/sending-messages#message-size) for more).
 3. The message has too big Merkle depth.
 
 However, it does not ignore errors in the following scenarios:
@@ -513,7 +513,7 @@ However, it does not ignore errors in the following scenarios:
 2. **+2 flag** - important in external messages (e.g. to wallets).
 :::
 
-You can see a detailed example [here](/develop/smart-contracts/messages#example-with-use-cases).
+You can see a detailed example [here](/v3/documentation/smart-contracts/message-management/sending-messages#example-with-use-cases).
 
 #### set_code
 
@@ -521,7 +521,7 @@ You can see a detailed example [here](/develop/smart-contracts/messages#example-
 () set_code(cell new_code) impure asm "SETCODE";
 ```
 
-Creates an output action that would change this smart contract code to that given by cell `new_code`. Notice that this change will take effect only after the successful termination of the current run of the smart contract. (Cf. [set_c3](/develop/func/stdlib#set_c3.))
+Creates an output action that would change this smart contract code to that given by cell `new_code`. Notice that this change will take effect only after the successful termination of the current run of the smart contract. (Cf. [set_c3](/v3/documentation/smart-contracts/func/docs/stdlib#set_c3.))
 
 ### Random number generator primitives
 
@@ -684,9 +684,9 @@ Dumps the stack (at most the top 255 values) and shows the total stack depth.
 
 ## Slice primitives
 
-It is said that a primitive _loads_ some data if it returns the data and the remainder of the slice (so it can also be used as a [modifying method](/develop/func/statements#modifying-methods)).
+It is said that a primitive _loads_ some data if it returns the data and the remainder of the slice (so it can also be used as a [modifying method](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods)).
 
-It is said that a primitive _preloads_ some data if it returns only the data (it can be used as a [non-modifying method](/develop/func/statements#non-modifying-methods)).
+It is said that a primitive _preloads_ some data if it returns only the data (it can be used as a [non-modifying method](/v3/documentation/smart-contracts/func/docs/statements#non-modifying-methods)).
 
 Unless otherwise stated, loading and preloading primitives read data from a prefix of the slice.
 
@@ -896,7 +896,7 @@ Returns the depth of slice `s`. If `s` has no references, then returns `0`; othe
 
 ## Builder primitives
 
-It is said that a primitive _stores_ a value `x` into a builder `b` if it returns a modified version of the builder `b'` with the value `x` stored at the end of it. It can be used as a [non-modifying method](/develop/func/statements#non-modifying-methods).
+It is said that a primitive _stores_ a value `x` into a builder `b` if it returns a modified version of the builder `b'` with the value `x` stored at the end of it. It can be used as a [non-modifying method](/v3/documentation/smart-contracts/func/docs/statements#non-modifying-methods).
 
 All of the primitives listed below verify whether there is enough space in the `builder`first, and then the range of the value being serialized.
 
@@ -1022,7 +1022,7 @@ Returns the depth of cell `c`. If `c` has no references, then return `0`; otherw
 int cell_null?(cell c) asm "ISNULL";
 ```
 
-Checks whether `c` is a `null`. Usually a `null`-cell represents an empty dictionary. FunC also has polymorphic `null?` built-in. (See [built-ins](/develop/func/builtins#other-primitives).)
+Checks whether `c` is a `null`. Usually a `null`-cell represents an empty dictionary. FunC also has polymorphic `null?` built-in. (See [built-ins](/v3/documentation/smart-contracts/func/docs/builtins#other-primitives).)
 
 ## Dictionaries primitives
 
@@ -1035,7 +1035,7 @@ As said in [TVM.pdf](https://ton.org/tvm.pdf):
 > Dictionaries admit two different representations as TVM stack values:
 >
 > - A slice `s` with a serialization of a TL-B value of type `HashmapE(n, X)`. In other words, `s` consists either of one bit equal to zero (if the dictionary is empty) or of one bit equal to one and a reference to a cell containing the root of the binary tree, i.e., a serialized value of type `Hashmap(n, X)`.
-> - A “Maybe cell” `c^?`, i.e., a value that is either a cell (containing a serialized value of type `Hashmap(n, X)` as before) or a `null` (corresponding to an empty dictionary, cf. [null values](/develop/func/types#null-values)). When a “Maybe cell” `c^?` is used to represent a dictionary, we usually denote it by `D`.
+> - A “Maybe cell” `c^?`, i.e., a value that is either a cell (containing a serialized value of type `Hashmap(n, X)` as before) or a `null` (corresponding to an empty dictionary, cf. [null values](/v3/documentation/smart-contracts/func/docs/types#null-values)). When a “Maybe cell” `c^?` is used to represent a dictionary, we usually denote it by `D`.
 >
 > Most of the dictionary primitives listed below accept and return dictionaries in the second form, which is more convenient for stack manipulation. However, serialized dictionaries inside larger TL-B objects use the first representation.
 
@@ -1049,7 +1049,7 @@ For example, `udict_set` is a set-by-key function for dictionaries with unsigned
 
 An empty prefix is used in the titles.
 
-Also, some of the primitives have their counterparts prefixed with `~`. It makes it possible to use them as [modifying methods](/develop/func/statements#modifying-methods).
+Also, some of the primitives have their counterparts prefixed with `~`. It makes it possible to use them as [modifying methods](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods).
 
 ### Dictionary's values
 
@@ -1348,7 +1348,7 @@ By the TVM type `Null`, FunC represents the absence of a value of some atomic ty
 forall X -> (X, ()) ~impure_touch(X x) impure asm "NOP";
 ```
 
-Mark a variable as used, such that the code which produced it won't be deleted even if it is not impure. (c.f. [impure specifier](/develop/func/functions#impure-specifier))
+Mark a variable as used, such that the code which produced it won't be deleted even if it is not impure. (c.f. [impure specifier](/v3/documentation/smart-contracts/func/docs/functions#impure-specifier))
 
 ## Other primitives
 

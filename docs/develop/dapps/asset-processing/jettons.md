@@ -413,7 +413,7 @@ transfer worthwhile (and thus deposit).
 By default, wallet owners of Jetton deposit wallets are not initialized. This is because there is no predetermined
 requirement to pay storage fees. Jetton deposit wallets can be deployed when sending messages with a
 `transfer`  body which can then be destroyed immediately. To do this, the engineer must use a special
-mechanism for sending messages: [128 + 32](/develop/smart-contracts/messages#message-modes).
+mechanism for sending messages: [128 + 32](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes).
 
 
 1. Retrieve a list of deposits marked for withdrawal to a hot wallet

@@ -12,7 +12,7 @@ You no longer need to manually install binaries with Blueprint SDK.
 All binaries for development and testing are provided with the Blueprint SDK.
 
  
-<Button href="/develop/smart-contracts/sdk/javascript"
+<Button href="/v3/documentation/smart-contracts/getting-started/javascript"
 colorType="primary" sizeType={'sm'}>
 
 Migrate to Blueprint SDK

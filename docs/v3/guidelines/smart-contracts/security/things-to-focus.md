@@ -10,13 +10,13 @@ Func variables and functions may contain almost any legit character. I.e. `var++
 
 When writing and inspecting a Func code, Linter should be used.
 
-- [IDE plugins](/develop/smart-contracts/environment/ide-plugins/)
+- [IDE plugins](/v3/documentation/smart-contracts/getting-started/ide-plugins/)
 
 ### 2. Check the throw values
 
 Each time the TVM execution stops normally, it stops with exit codes `0` or `1`. Although it is done automatically, TVM execution can be interrupted directly in an unexpected way if exit codes `0` and `1` are thrown directly by either `throw(0)` or `throw(1)` command.
 
-- [How to handle errors](/develop/func/builtins#throwing-exceptions)
+- [How to handle errors](/v3/documentation/smart-contracts/func/docs/builtins#throwing-exceptions)
 - [TVM exit codes](/learn/tvm-instructions/tvm-exit-codes)
 
 ### 3. Func is a strictly typed language with data structures holding exactly what they are supposed to store
@@ -27,11 +27,11 @@ Reading unexpected variables values and calling methods on data types that are n
 
 ### 4. Messages have modes
 
-It is essential to check the message mode, in particular its interaction with previous messages sent and fees. A possible failure is not accounting for storage fees, in which case contract may run out of TON leading to unexpected failures when sending outgoing messages. You can view the message modes [here](/develop/smart-contracts/messages#message-modes).
+It is essential to check the message mode, in particular its interaction with previous messages sent and fees. A possible failure is not accounting for storage fees, in which case contract may run out of TON leading to unexpected failures when sending outgoing messages. You can view the message modes [here](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes).
 
 ### 5. TON fully implements the actor model
 
-It means the code of the contract can be changed. It can either be changed permanently, using [`SETCODE`](/develop/func/stdlib#set_code) TVM directive, or in runtime, setting the TVM code registry to a new cell value until the end of execution.
+It means the code of the contract can be changed. It can either be changed permanently, using [`SETCODE`](/v3/documentation/smart-contracts/func/docs/stdlib#set_code) TVM directive, or in runtime, setting the TVM code registry to a new cell value until the end of execution.
 
 ### 6. TON Blockchain has several transaction phases: computational phase, actions phase, and a bounce phase among them
 
@@ -43,7 +43,7 @@ The computational phase executes the code of smart contracts and only then the a
 
 Contracts in the blockchain can reside in separate shards, processed by other set of validators, meaning that developer cannot pull data from other contracts on demand. Thus, any communication is asynchronous and done by sending messages.
 
-- [Sending messages from smart-contract](/develop/smart-contracts/messages)
+- [Sending messages from smart-contract](/v3/documentation/smart-contracts/message-management/sending-messages)
 - [Sending messages from DApp](/v3/guidelines/ton-connect/guidelines/sending-messages)
 
 ### 8. Unlike other blockchains, TON does not contain revert messages, only exit codes
@@ -81,7 +81,7 @@ TON blockchain is asynchronous. That means the messages do not have to arrive su
 
 You may receive bounced messages (error notifications), which should be handled.
 
-- [Handling of Standard Response Messages](/develop/smart-contracts/guidelines/internal-messages#handling-of-standard-response-messages)
+- [Handling of Standard Response Messages](/v3/documentation/smart-contracts/message-management/internal-messages#handling-of-standard-response-messages)
 
 ### 16. Write replay protection for external messages:
 

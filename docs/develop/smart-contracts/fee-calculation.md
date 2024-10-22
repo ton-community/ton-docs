@@ -209,7 +209,7 @@ Modes affect the fee calculation as follows:
 - `+1024` do not create action, only estimate fee. Other modes will send a message in action phase.
 - `+128` substitutes the value of the entire balance of the contract before the start of the computation phase (slightly inaccurate, since gas expenses that cannot be estimated before the completion of the computation phase are not taken into account).
 - `+64` substitutes the entire balance of the incoming message as an outcoming value (slightly inaccurate, gas expenses that cannot be estimated before the computation is completed are not taken into account).
-- Other modes can be found [on message modes page](https://docs.ton.org/develop/smart-contracts/messages#message-modes).
+- Other modes can be found [on message modes page](https://docs.ton.org/v3/documentation/smart-contracts/message-management/sending-messages#message-modes).
 
 It creates an output action and returns a fee for creating a message. However, it uses an unpredictable amount of gas, which can't be calculated using formulas, so how can it be calculated? Use `GASCONSUMED`:
 

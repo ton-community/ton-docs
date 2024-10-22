@@ -4,7 +4,7 @@ Every TON user should keep in mind that _commission depends on many factors_.
 
 ## Gas
 
-All [computation costs](/develop/howto/fees-low-level#computation-fees) are nominated in gas units and fixed in a certain gas amount.
+All [computation costs](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#computation-fees) are nominated in gas units and fixed in a certain gas amount.
 
 The price of gas units is determined by the [chain config](https://tonviewer.com/config#20) and may be changed only by consensus of validators. Note that unlike in other systems, the user cannot set his own gas price, and there is no fee market.
 
@@ -53,7 +53,7 @@ That is why even NFT marketplaces usually take an extra amount of TON (_~1 TON_)
 :::info
 Each contract should check incoming messages for the amount of TONs attached to ensure they are enough to cover the fees.
 
-Check the [low-level fees overview](/develop/howto/fees-low-level) to learn more about the formulas for calculating commissions and [fees calculation](/develop/smart-contracts/fee-calculation) to learn how to calculate fees in FunC contracts using the new TVM opcodes.
+Check the [low-level fees overview](/v3/documentation/smart-contracts/transaction-fees/fees-low-level) to learn more about the formulas for calculating commissions and [fees calculation](/develop/smart-contracts/fee-calculation) to learn how to calculate fees in FunC contracts using the new TVM opcodes.
 :::
 
 However, let's read more about how fees are supposed to function on TON.
@@ -73,7 +73,7 @@ transaction_fee = storage_fees
 ## Elements of transaction fee
 
 * `storage_fees` is the amount you pay for storing a smart contract in the blockchain. In fact, you pay for every second the smart contract is stored on the blockchain.
-  * _Example_: your TON Wallet is also a smart contract, and it pays a storage fee every time you receive or send a transaction. Read more about [how storage fees are calculated](/develop/howto/fees-low-level#storage-fee).
+  * _Example_: your TON Wallet is also a smart contract, and it pays a storage fee every time you receive or send a transaction. Read more about [how storage fees are calculated](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee).
 * `in_fwd_fees` is a charge for importing messages only from outside the blockchain, e.g. `external` messages. Every time you make a transaction, it must be delivered to the validators who will process it. For ordinary messages from contract to contract this fee is not applicable. Read [the TON Blockchain paper](https://docs.ton.org/tblkch.pdf) to learn more about inbound messages.
   * _Example_: each transaction you make with your wallet app (like Tonkeeper) requires first to be distributed among validation nodes.
 * `computation_fees` is the amount you pay for executing code in the virtual machine. The larger the code, the more fees must be paid.
@@ -115,4 +115,4 @@ At present, this opportunity is not available. We are actively working on its de
 
 ## See Also
 
-* ["Low-level fees overview"](/develop/howto/fees-low-level)—read about the formulas for calculating commissions.
+* ["Low-level fees overview"](/v3/documentation/smart-contracts/transaction-fees/fees-low-level)—read about the formulas for calculating commissions.

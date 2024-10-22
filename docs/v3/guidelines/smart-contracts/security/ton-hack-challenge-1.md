@@ -10,7 +10,7 @@ Source code and contest rules were hosted on GitHub [here](https://github.com/to
 ### 1. Mutual fund
 
 :::note SECURITY RULE
-Always check functions for [`impure`](/develop/func/functions#impure-specifier) modifier.
+Always check functions for [`impure`](/v3/documentation/smart-contracts/func/docs/functions#impure-specifier) modifier.
 :::
 
 The first task was very simple. The attacker could find that `authorize` function was not `impure`. The absence of this modifier allows a compiler to skip calls to that function if it returns nothing or the return value is unused.
@@ -24,7 +24,7 @@ The first task was very simple. The attacker could find that `authorize` functio
 ### 2. Bank
 
 :::note SECURITY RULE
-Always check for [modifying/non-modifying](/develop/func/statements#methods-calls) methods.
+Always check for [modifying/non-modifying](/v3/documentation/smart-contracts/func/docs/statements#methods-calls) methods.
 :::
 
 `udict_delete_get?` was called with `.` instead `~`, so the real dict was untouched.
@@ -61,7 +61,7 @@ Voting power was stored in message as an integer. So the attacker could send a n
 ### 4. Lottery
 
 :::note SECURITY RULE
-Always randomize seed before doing [`rand()`](/develop/func/stdlib#rand)
+Always randomize seed before doing [`rand()`](/v3/documentation/smart-contracts/func/docs/stdlib#rand)
 :::
 
 Seed was brought from logical time of the transaction, and a hacker can win by bruteforcing the logical time in the current block (cause lt is sequential in the borders of one block).
@@ -94,7 +94,7 @@ The wallet was protected with password, it's hash was stored in contract data. H
 
 :::note SECURITY RULE
 Always check for [bounced](/develop/smart-contracts/guidelines/non-bouncable-messages) messages.
-Don't forget about errors caused by [standard](/develop/func/stdlib/) functions.
+Don't forget about errors caused by [standard](/v3/documentation/smart-contracts/func/docs/stdlib/) functions.
 Make your conditions as strict as possible.
 :::
 
@@ -111,13 +111,13 @@ if (op == op_not_winner) {
 }
 ```
 
-Vault does not have a bounce handler or proxy message to the database if the user sends “check”. In the database we can set `msg_addr_none` as an award address because `load_msg_address` allows it. We are requesting a check from the vault, database tries to parse `msg_addr_none` using [`parse_std_addr`](/develop/func/stdlib#parse_std_addr), and fails. Message bounces to the vault from the database and op is not `op_not_winner`.
+Vault does not have a bounce handler or proxy message to the database if the user sends “check”. In the database we can set `msg_addr_none` as an award address because `load_msg_address` allows it. We are requesting a check from the vault, database tries to parse `msg_addr_none` using [`parse_std_addr`](/v3/documentation/smart-contracts/func/docs/stdlib#parse_std_addr), and fails. Message bounces to the vault from the database and op is not `op_not_winner`.
 
 ### 7. Better bank
 
 :::note SECURITY RULE
 Never destroy account for fun.
-Make [`raw_reserve`](/develop/func/stdlib#raw_reserve) instead of sending money to yourself.
+Make [`raw_reserve`](/v3/documentation/smart-contracts/func/docs/stdlib#raw_reserve) instead of sending money to yourself.
 Think about possible race conditions.
 Be careful with hashmap gas consumption.
 :::

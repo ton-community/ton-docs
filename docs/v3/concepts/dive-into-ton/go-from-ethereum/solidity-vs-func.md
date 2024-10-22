@@ -39,7 +39,7 @@ Currently, FunC has no support for defining custom types.
 
 ### See Also
 
-- [Statements](/develop/func/statements)
+- [Statements](/v3/documentation/smart-contracts/func/docs/statements)
 
 ## Declaring and using variables
 
@@ -60,7 +60,7 @@ var z = x + y; // Dynamic variable declaration
 
 ### See Also
 
-- [Statements](/develop/func/statements)
+- [Statements](/v3/documentation/smart-contracts/func/docs/statements)
 
 ## Loops
 
@@ -90,7 +90,7 @@ repeat(10) {
 
 ### See Also
 
-- [Statements](/develop/func/statements)
+- [Statements](/v3/documentation/smart-contracts/func/docs/statements)
 
 ## Functions
 
@@ -116,7 +116,7 @@ Transitioning to FunC, FunC program is essentially a list of function declaratio
 
 ### See Also 
 
-- [Functions](/develop/func/functions)
+- [Functions](/v3/documentation/smart-contracts/func/docs/functions)
 
 ## Flow control structures
 
@@ -126,7 +126,7 @@ FunC supports classic `if-else` statements, as well as `ifnot`, `repeat`, `while
 
 ### See Also
 
-- [Statements](/develop/func/statements)
+- [Statements](/v3/documentation/smart-contracts/func/docs/statements)
 
 ## Dictionaries
 
@@ -140,7 +140,7 @@ An analogy of mappings in FunC are dictionaries, or TON hashmaps. In the context
 
 ### See Also 
 
-- [Dictionaries in TON](/develop/func/dictionaries)
+- [Dictionaries in TON](/v3/documentation/smart-contracts/func/docs/dictionaries)
 
 ## Smart-contract communication
 
@@ -208,7 +208,7 @@ var msg = begin_cell()
 send_raw_message(msg, mode);
 ```
 Let's discuss in more detail what it looks like for our smart contract to send a message to our recipient:
-1. Initially, we need to build our message. The full structure of the send can be found [here](develop/smart-contracts/messages). We won't go into detail on how to assemble it here, you can read about that at the link.
+1. Initially, we need to build our message. The full structure of the send can be found [here](v3/documentation/smart-contracts/message-management/sending-messages). We won't go into detail on how to assemble it here, you can read about that at the link.
 2. The body of the message represents a cell. In `msg_body_cell` we do: `begin_cell()` - creates `Builder` for the future cell, first `store_uint` - stores the first uint into `Builder` (1 - this is our `op`), second `store_uint` - stores the second uint into `Builder` (num - this is our number that we will manipulate in the receiving contract), `end_cell()` - creates the cell.
 3. To attach the body that will come in `recv_internal` in the message,  we reference the collected cell in the message itself with `store_ref`.
 4. Sending a message.
@@ -217,6 +217,6 @@ This example presented how smart contracts can communicate with each other.
 
 ### See Also 
 
-- [Internal Messages](/develop/smart-contracts/guidelines/internal-messages)
-- [Sending Messages](/develop/smart-contracts/messages)
+- [Internal Messages](/v3/documentation/smart-contracts/message-management/internal-messages)
+- [Sending Messages](/v3/documentation/smart-contracts/message-management/sending-messages)
 - [Non-bouncable messages](develop/smart-contracts/guidelines/non-bouncable-messages)

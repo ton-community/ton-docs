@@ -1,7 +1,7 @@
 # Shard Optimizations on TON
 
 ## Architecture Basics
-TON is designed to process myriads of transactions in parallel. This capability is built on the [infinite sharding paradigm](https://docs.ton.org/develop/blockchain/sharding-lifecycle), which means that once the load on a group of validators approaches their throughput limit, it is split (sharded). Two groups of validators then process this load independently and in parallel. These splits occur deterministically, and whether a transaction is processed by a specific group depends on the contract address associated with the transaction. Addresses that are close to each other (sharing the same prefix) will be processed in the same shard.
+TON is designed to process myriads of transactions in parallel. This capability is built on the [infinite sharding paradigm](https://docs.ton.org/v3/documentation/smart-contracts/infinity-sharding-paradigm), which means that once the load on a group of validators approaches their throughput limit, it is split (sharded). Two groups of validators then process this load independently and in parallel. These splits occur deterministically, and whether a transaction is processed by a specific group depends on the contract address associated with the transaction. Addresses that are close to each other (sharing the same prefix) will be processed in the same shard.
 
 When a message is sent from one contract to another, there are two possibilities: either both contracts reside in the same shard, or they are in different shards. In the former case, the current group already has all necessary data and can process the message immediately. In the latter case, the message must be routed from one group to another. To avoid message loss or double-processing, proper accounting is needed. This is done by registering a queue of outgoing messages from the sender's shard in a masterchain block, and then the receiver's shard must explicitly confirm that it has processed this queue. Such overhead makes cross-shard message delivery slower; there needs to be at least one masterchain block between the block where the message was sent and the block where it was consumed. This delay is usually about 12-13 seconds.
 
@@ -114,7 +114,7 @@ So, contract address shard prefix is a part of a contract address that identifie
 From networking perspective, it's clear that request on the same network segment will get to processing faster than the one that is routed elsewhere, right?
 It's kind of like one uses CDN to host content closer to the end users, in TON we deploy contract closer to the end users.
 
-If load on the shard exceeds [certain level](https://docs.ton.org/develop/blockchain/sharding-lifecycle#algorithm-for-deciding-whether-to-split-or-merge) shard splits. And the goal is to provide dedicated computational resources to the contract under load and isolate it's impact on the whole network.
+If load on the shard exceeds [certain level](https://docs.ton.org/v3/documentation/smart-contracts/infinity-sharding-paradigm#algorithm-for-deciding-whether-to-split-or-merge) shard splits. And the goal is to provide dedicated computational resources to the contract under load and isolate it's impact on the whole network.
 Current maximum shard prefix length is just 4 bits, so blockchain can split in 16 shards max from prefix 0 to 15.
 
 ### Problems during shard optimizations

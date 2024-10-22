@@ -71,4 +71,4 @@ History of emergency updates:
 
 
 ## See Also
-- [Precompiled Contracts](/develop/smart-contracts/core-contracts/precompiled)
+- [Precompiled Contracts](/v3/documentation/smart-contracts/contracts-specs/precompiled-contracts)

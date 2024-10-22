@@ -354,5 +354,161 @@
     {
         "from": "/develop/smart-contracts/tutorials/wallet",
         "to": "/v3/guidelines/smart-contracts/howto/wallet"
+    },
+    {
+        "from": "/develop/howto/faq",
+        "to": "/v3/documentation/faq"
+    },
+    {
+        "from": "/develop/blockchain/sharding-lifecycle",
+        "to": "/v3/documentation/smart-contracts/infinity-sharding-paradigm"
+    },
+    {
+        "from": "/develop/blockchain/shards",
+        "to": "/v3/documentation/smart-contracts/shards"
+    },
+    {
+        "from": "/develop/smart-contracts/environment/testnet",
+        "to": "/v3/documentation/smart-contracts/getting-started/testnet"
+    },
+    {
+        "from": "/develop/smart-contracts/environment/ide-plugins",
+        "to": "/v3/documentation/smart-contracts/getting-started/ide-plugins"
+    },
+    {
+        "from": "/develop/smart-contracts/sdk/javascript",
+        "to": "/v3/documentation/smart-contracts/getting-started/javascript"
+    },
+    {
+        "from": "/develop/smart-contracts/guidelines/message-delivery-guarantees",
+        "to": "/v3/documentation/smart-contracts/message-management/messages-and-transactions"
+    },
+    {
+        "from": "/develop/smart-contracts/guidelines/ecosystem-messages-layout",
+        "to": "/v3/documentation/smart-contracts/message-management/ecosystem-messages-layout"
+    },
+    {
+        "from": "/develop/smart-contracts/messages",
+        "to": "/v3/documentation/smart-contracts/message-management/sending-messages"
+    },
+    {
+        "from": "/develop/smart-contracts/guidelines/message-modes-cookbook",
+        "to": "/v3/documentation/smart-contracts/message-management/message-modes-cookbook"
+    },
+    {
+        "from": "/develop/smart-contracts/guidelines/external-messages",
+        "to": "/v3/documentation/smart-contracts/message-management/external-messages"
+    },
+    {
+        "from": "/develop/smart-contracts/guidelines/internal-messages",
+        "to": "/v3/documentation/smart-contracts/message-management/internal-messages"
+    },
+    {
+        "from": "/develop/smart-contracts/guidelines/non-bounceable-messages",
+        "to": "/v3/documentation/smart-contracts/message-management/non-bounceable-messages"
+    },
+    {
+        "from": "/develop/howto/fees-low-level",
+        "to": "/v3/documentation/smart-contracts/transaction-fees/fees-low-level"
+    },
+    {
+        "from": "/develop/smart-contracts/guidelines/accept",
+        "to": "/v3/documentation/smart-contracts/transaction-fees/accept-message-effects"
+    },
+    {
+        "from": "/develop/smart-contracts/guidelines/processing",
+        "to": "/v3/documentation/smart-contracts/transaction-fees/forward-fees"
+    },
+    {
+        "from": "/participate/wallets/highload",
+        "to": "/v3/documentation/smart-contracts/contracts-specs/highload-wallet"
+    },
+    {
+        "from": "/participate/network-maintenance/vesting-contract",
+        "to": "/v3/documentation/smart-contracts/contracts-specs/vesting-contract"
+    },
+    {
+        "from": "/participate/network-maintenance/single-nominator",
+        "to": "/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool"
+    },
+    {
+        "from": "/participate/network-maintenance/nominator-pool",
+        "to": "/v3/documentation/smart-contracts/contracts-specs/nominator-pool"
+    },
+    {
+        "from": "/develop/smart-contracts/governance",
+        "to": "/v3/documentation/smart-contracts/contracts-specs/governance"
+    },
+    {
+        "from": "/develop/smart-contracts/core-contracts/precompiled",
+        "to": "/v3/documentation/smart-contracts/contracts-specs/precompiled-contracts"
+    },
+    {
+        "from": "/develop/smart-contracts/examples",
+        "to": "/v3/documentation/smart-contracts/contracts-specs/examples"
+    },
+    {
+        "from": "/develop/func/overview",
+        "to": "/v3/documentation/smart-contracts/func/overview"
+    },
+    {
+        "from": "/develop/func/cookbook",
+        "to": "/v3/documentation/smart-contracts/func/cookbook"
+    },
+    {
+        "from": "/develop/smart-contracts/libraries",
+        "to": "/v3/documentation/smart-contracts/func/libraries"
+    },
+    {
+        "from": "/develop/func/types",
+        "to": "/v3/documentation/smart-contracts/func/docs/types"
+    },
+    {
+        "from": "/develop/func/stdlib",
+        "to": "/v3/documentation/smart-contracts/func/docs/stdlib"
+    },
+    {
+        "from": "/develop/func/statements",
+        "to": "/v3/documentation/smart-contracts/func/docs/statements"
+    },
+    {
+        "from": "/develop/func/literals_identifiers",
+        "to": "/v3/documentation/smart-contracts/func/docs/literals_identifiers"
+    },
+    {
+        "from": "/develop/func/global_variables",
+        "to": "/v3/documentation/smart-contracts/func/docs/global_variables"
+    },
+    {
+        "from": "/develop/func/functions",
+        "to": "/v3/documentation/smart-contracts/func/docs/functions"
+    },
+    {
+        "from": "/develop/func/dictionaries",
+        "to": "/v3/documentation/smart-contracts/func/docs/dictionaries"
+    },
+    {
+        "from": "/develop/func/compiler_directives",
+        "to": "/v3/documentation/smart-contracts/func/docs/compiler_directives"
+    },
+    {
+        "from": "/develop/func/comments",
+        "to": "/v3/documentation/smart-contracts/func/docs/comments"
+    },
+    {
+        "from": "/develop/func/builtins",
+        "to": "/v3/documentation/smart-contracts/func/docs/builtins"
+    },
+    {
+        "from": "/develop/fift/fift-and-tvm-assembly",
+        "to": "/v3/documentation/smart-contracts/fift/fift-and-tvm-assembly"
+    },
+    {
+        "from": "/develop/fift/fift-deep-dive",
+        "to": "/v3/documentation/smart-contracts/fift/fift-deep-dive"
+    },
+    {
+        "from": "/develop/fift/overview",
+        "to": "/v3/documentation/smart-contracts/fift/overview"
     }
 ]

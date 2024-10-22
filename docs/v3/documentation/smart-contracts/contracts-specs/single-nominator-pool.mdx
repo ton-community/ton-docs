@@ -299,13 +299,13 @@ func WithdrawSingleNominatorMessage(single_nominator_address string, query_id, a
 
 ### Set up a Single Nominator Pool
 
-Configure the Single Nominator Pool contract using the [following]((/participate/network-maintenance/single-nominator#set-up-single-nominator)) instructions.
+Configure the Single Nominator Pool contract using the [following]((/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool#set-up-single-nominator)) instructions.
 
 ### Join the elections
 
-[Deposit](/participate/network-maintenance/single-nominator#deposit-pool) minimum stake amount to the Single Nominator Pool.
+[Deposit](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool#deposit-pool) minimum stake amount to the Single Nominator Pool.
 
-**MyTonCtrl** will automatically join the elections. You can set the stake amount that mytonctrl sends to the [Elector contract](/develop/smart-contracts/governance#elector) ~ every 18 hours on Mainnet and 2 hours on Testnet.
+**MyTonCtrl** will automatically join the elections. You can set the stake amount that mytonctrl sends to the [Elector contract](/v3/documentation/smart-contracts/contracts-specs/governance#elector) ~ every 18 hours on Mainnet and 2 hours on Testnet.
 
 ```sh
 MyTonCtrl> set stake 90000
@@ -396,19 +396,19 @@ If user doesn't want to take part in validating anymore:
 MyTonCtrl> disable_mode validator
 ```
 
-2. [Withdraw](/participate/network-maintenance/single-nominator#withdraw-funds) all funds from the Single Nominator contract to the owner wallet.
+2. [Withdraw](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool#withdraw-funds) all funds from the Single Nominator contract to the owner wallet.
 
 ## Transitioning a Regular Validator to Nominator Pool Mode
 
 1. Disable `validator` mode to discontinue election participation.
 2. Await the return of both your stakes from the elector.
-3. Proceed with the following [steps](/participate/network-maintenance/single-nominator#set-up-single-nominator).
+3. Proceed with the following [steps](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool#set-up-single-nominator).
 
 
 ## See Also
 
 * [Single Nominator Pool contract](https://github.com/orbs-network/single-nominator)
-* [Vesting Contract](/participate/network-maintenance/vesting-contract)
+* [Vesting Contract](/v3/documentation/smart-contracts/contracts-specs/vesting-contract)
 * [single-nominator-quick-how-to-09-25](https://telegra.ph/single-nominator-quick-how-to-09-25)
 
 

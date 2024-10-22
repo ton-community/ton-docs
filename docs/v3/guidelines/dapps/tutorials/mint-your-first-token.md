@@ -114,7 +114,7 @@ Then go to **your token**, set the **amount** to send, and enter the **recipient
 
  ## ✏️ Jetton (token) customization
 
-With [FunC](/develop/func/overview) language you can change the behavior of the token in your favor.
+With [FunC](/v3/documentation/smart-contracts/func/overview) language you can change the behavior of the token in your favor.
 
 To make any changes, begin here:
 

@@ -60,4 +60,4 @@ int main() {
   return C;
 }
 ```
-but here `int C = 3;` is equivalent to `C = 3;`, i.e., that is an assignment to global variable `C`, not a declaration of local variable `C` (you can find an explanation of this effect in [statements](/develop/func/statements#variable-declaration)).
+but here `int C = 3;` is equivalent to `C = 3;`, i.e., that is an assignment to global variable `C`, not a declaration of local variable `C` (you can find an explanation of this effect in [statements](/v3/documentation/smart-contracts/func/docs/statements#variable-declaration)).
