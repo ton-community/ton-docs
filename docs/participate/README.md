@@ -17,12 +17,12 @@ It is also meant to offer essential frameworks (explorers, wallets, TEPs) that a
 
 ### Bridges
 
-* [Bridges Overview](/participate/crosschain/overview)
-* [Bridge Addresses](/participate/crosschain/bridge-addresses)
+* [Bridges Overview](/v3/documentation/infra/crosschain/overview)
+* [Bridge Addresses](/v3/documentation/infra/crosschain/bridge-addresses)
 
 ### Run a Node
 
-* [Discover Node Types in TON](/participate/nodes/node-types)
+* [Discover Node Types in TON](/v3/documentation/infra/nodes/node-types)
 * [Run your Full Node or Validator](/participate/run-nodes/full-node)
 * [TON Validator maintenance & security](/v3/guidelines/nodes/node-maintenance-and-security)
 * [Run MyTonCtrl in Docker](/v3/guidelines/nodes/running-nodes/run-mytonctrl-docker)

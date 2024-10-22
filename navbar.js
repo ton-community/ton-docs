@@ -126,12 +126,12 @@ module.exports = {
     },
     {
       type: 'dropdown',
-      to: 'participate/nodes/node-types',
+      to: 'v3/documentation/infra/nodes/node-types',
       position: 'left',
       label: 'Nodes',
       items: [
         {
-          to: '/participate/run-nodes/mytonctrl',
+          to: '/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview',
           label: 'Manage Blockchain Nodes',
         },
         {
@@ -199,7 +199,7 @@ module.exports = {
           label: 'TON Virtual Machine (TVM)',
         },
         {
-          to: 'participate/nodes/node-types',
+          to: 'v3/documentation/infra/nodes/node-types',
           label: 'Nodes'
         },
         {

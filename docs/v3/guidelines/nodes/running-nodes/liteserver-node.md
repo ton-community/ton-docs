@@ -135,7 +135,7 @@ This way, you can open the port in the firewall settings of your server.
 installer clcf # in mytonctrl
 ```
 
-It will create `/usr/bin/ton/local.config.json` on your machine where mytonctrl is installed. Check [mytonctrl documentation for more](/participate/run-nodes/mytonctrl#clcf).
+It will create `/usr/bin/ton/local.config.json` on your machine where mytonctrl is installed. Check [mytonctrl documentation for more](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#clcf).
 
 1. Install libraries.
 

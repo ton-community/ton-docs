@@ -1,7 +1,7 @@
 # Bridges Addresses
 
 :::caution
-To accurately get the current addresses of bridge smart contracts, see them directly in the [blockchain config](/participate/crosschain/overview#blockchain-configs). It's the most secure way.
+To accurately get the current addresses of bridge smart contracts, see them directly in the [blockchain config](/v3/documentation/infra/crosschain/overview#blockchain-configs). It's the most secure way.
 :::
 
 ## Toncoin Mainnet

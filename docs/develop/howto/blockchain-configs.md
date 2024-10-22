@@ -66,7 +66,7 @@ This parameter is responsible for minting fees of new currencies.
 :::info
 Currently, minting additional currency is not implemented and does not work. The implementation and launch of the minter are planned.
 
-You can learn more about the issues and prospects in the [relevant article](/develop/research-and-development/minter-flow).
+You can learn more about the issues and prospects in the [relevant article](/v3/documentation/infra/minter-flow).
 :::
 
 ## Param 7

@@ -164,7 +164,7 @@ module.exports = [
     'type': 'html',
     'value': '<span class=\'menu__link\'><b><small> Infrastructure Documentation </small></b></span>',
   },
-  'develop/research-and-development/minter-flow',
+  'v3/documentation/infra/minter-flow',
   {
     type: 'category',
     label: 'Cross-chain Bridges',
@@ -172,12 +172,12 @@ module.exports = [
       {
         type: 'doc',
         label: 'Overview',
-        id: 'participate/crosschain/overview',
+        id: 'v3/documentation/infra/crosschain/overview',
       },
       {
         type: 'doc',
         label: 'Bridges Addresses',
-        id: 'participate/crosschain/bridge-addresses',
+        id: 'v3/documentation/infra/crosschain/bridge-addresses',
       },
     ],
   },
@@ -185,17 +185,17 @@ module.exports = [
     type: 'category',
     label: 'Blockchain Nodes',
     items: [
-      'participate/nodes/node-types',
+      'v3/documentation/infra/nodes/node-types',
       {
         type: 'category',
         label: 'MyTonCtrl',
         items: [
-          'participate/run-nodes/mytonctrl',
-          'participate/run-nodes/alerting',
-          'participate/run-nodes/mytonctrl-status',
+          'v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview',
+          'v3/documentation/infra/nodes/mytonctrl/mytonctrl-alerting',
+          'v3/documentation/infra/nodes/mytonctrl/mytonctrl-status',
         ],
       },
-      'participate/run-nodes/node-commands',
+      'v3/documentation/infra/nodes/node-commands',
       {
         type: 'category',
         label: 'Validation',
@@ -203,9 +203,9 @@ module.exports = [
           {
             type: 'doc',
             label: 'Proof of Stake',
-            id: 'participate/network-maintenance/staking-incentives',
+            id: 'v3/documentation/infra/nodes/validation/staking-incentives',
           },
-          'participate/nodes/collators',
+          'v3/documentation/infra/nodes/validation/collators',
         ],
       },
     ],

@@ -546,5 +546,49 @@
     {
         "from": "/develop/oracles/red_stone",
         "to": "/v3/documentation/dapps/oracles/red_stone"
+    },
+    {
+        "from": "/develop/research-and-development/minter-flow",
+        "to": "/v3/documentation/infra/minter-flow"
+    },
+    {
+        "from": "/participate/crosschain",
+        "to": "/v3/documentation/infra/crosschain"
+    },
+    {
+        "from": "/participate/crosschain/bridge-addresses",
+        "to": "/v3/documentation/infra/crosschain/bridge-addresses"
+    },
+    {
+        "from": "/participate/crosschain/overview",
+        "to": "/v3/documentation/infra/crosschain/overview"
+    },
+    {
+        "from": "/participate/nodes/node-types",
+        "to": "/v3/documentation/infra/nodes/node-types"
+    },
+    {
+        "from": "/participate/run-nodes/mytonctrl",
+        "to": "/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview"
+    },
+    {
+        "from": "/participate/run-nodes/mytonctrl-status",
+        "to": "/v3/documentation/infra/nodes/mytonctrl/mytonctrl-status"
+    },
+    {
+        "from": "/participate/run-nodes/alerting",
+        "to": "/v3/documentation/infra/nodes/mytonctrl/mytonctrl-alerting"
+    },
+    {
+        "from": "/participate/run-nodes/node-commands",
+        "to": "/v3/documentation/infra/nodes/node-commands"
+    },
+    {
+        "from": "/participate/network-maintenance/staking-incentives",
+        "to": "/v3/documentation/infra/nodes/validation/staking-incentives"
+    },
+    {
+        "from": "/participate/nodes/collators",
+        "to": "/v3/documentation/infra/nodes/validation/collators"
     }
 ]

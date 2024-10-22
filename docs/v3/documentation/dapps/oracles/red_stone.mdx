@@ -304,15 +304,15 @@ the data should be passed as a Cell built as follows.
 1. The main *payload* `cell` consists of:
     1. the metadata in the **data-level bits** consisting of the parts as on the image:
 
-      ![payload-metadata.png](../../../static/img/docs/oracles/red-stone/payload-metadata.png)
+      ![payload-metadata.png](/img/docs/oracles/red-stone/payload-metadata.png)
     1. a **ref** containing a `udict` indexed by consecutive natural numbers (beginning from 0) containing the list of **data_package** `cell`s.
 1. Each *data-package* `cell` consists of:
     1. the data package's signature in the **data-level bits**:
 
-      ![payload-metadata.png](../../../static/img/docs/oracles/red-stone/payload-metadata.png)
+      ![payload-metadata.png](/img/docs/oracles/red-stone/payload-metadata.png)
     1. one **ref** to a `cell` containing the data of the rest of the data package on its **data-level**:
 
-      ![payload-metadata.png](../../../static/img/docs/oracles/red-stone/data-package-data.png)
+      ![payload-metadata.png](/img/docs/oracles/red-stone/data-package-data.png)
 
 #### Current implementation limitations
 
@@ -328,7 +328,7 @@ checks the limitations and prepares the data to be sent to the contract as descr
 #### Sample serialization
 
 The image below contains data for `2` feeds times `2` unique signers:
-![payload-metadata.png](../../../static/img/docs/oracles/red-stone/sample-serialization.png)
+![payload-metadata.png](/img/docs/oracles/red-stone/sample-serialization.png)
 
 ## Possible transaction failures
 

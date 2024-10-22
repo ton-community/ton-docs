@@ -53,7 +53,7 @@ Get current mytonctrl and node status. Param combinations:
 | No args     | `status`      | `status`      | Full status report including validator efficiency and online validators.                         |
 | Fast        | `status fast` | `status fast` | Must be used on TestNet. Status report without validator efficiency and online validators count. |
 
-[See more about status output](/participate/run-nodes/mytonctrl-status)
+[See more about status output](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-status)
 
 ### installer
 
@@ -235,13 +235,13 @@ Outputs validator efficiency data for the current and previous rounds.
 
 Based on the `validator index` (can be received by `status` command), there are three possible scenarios:
 
-- **Validator index is in the range [0, `max_main_validators`)**:  
+- **Validator index is in the range [0, `max_main_validators`)**:
   The `validator efficiency` must be above 90% (number can be changed in future based on statistics) for the entire round; otherwise, a penalty (fine) may be imposed.
 
-- **Validator index is in the range [`max_main_validators`, `max_validators`)**:  
+- **Validator index is in the range [`max_main_validators`, `max_validators`)**:
   The `validator efficiency` should still be above 90% (number can be changed in future based on statistics) for the full round. Currently, no penalty will be applied, but this may change in future updates.
 
-- **The user is not a validator**:  
+- **The user is not a validator**:
   No penalties apply, but the user is not eligible for rewards either. No `validator efficiency` to check. This can be caused by a low stake or incorrect node configuration. Additionally, ensure that `mytonctrl` is running continuously.
 
 Read more about `max_validators` and `max_main_validators` [on config parameters page](https://docs.ton.org/develop/howto/blockchain-configs#configuration-parameters-for-the-number-of-validators-for-elections). Get the actual values [for mainnet](https://tonviewer.com/config#16) and [for testnet](https://testnet.tonviewer.com/config#16).
@@ -389,10 +389,10 @@ MyTonCtrl> aw <wallet-name>
 But before activating, send 1 Toncoin to wallet:
 
 ```bash
-MyTonCtrl> wl 
-Name                  Status  Balance           Ver  Wch  Address                                           
-validator_wallet_001  active  994.776032511     v1   -1   kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct  
-wallet_004            uninit  0.0               v1   0    0QBxnZJq4oHVFs4ban3kJ5qllM1IQo57lIx8QP69Ue9A6Kbs  
+MyTonCtrl> wl
+Name                  Status  Balance           Ver  Wch  Address
+validator_wallet_001  active  994.776032511     v1   -1   kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
+wallet_004            uninit  0.0               v1   0    0QBxnZJq4oHVFs4ban3kJ5qllM1IQo57lIx8QP69Ue9A6Kbs
 
 MyTonCtrl> mg validator_wallet_001 0QBxnZJq4oHVFs4ban3kJ5qllM1IQo57lIx8QP69Ue9A6Kbs 1
 ```
@@ -403,9 +403,9 @@ Then activate it:
 MyTonCtrl> aw wallet_004
 ActivateWallet - OK
 
-MyTonCtrl> wl 
-Name                  Status  Balance           Ver  Wch  Address                                           
-validator_wallet_001  active  994.776032511     v1   -1   kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct  
+MyTonCtrl> wl
+Name                  Status  Balance           Ver  Wch  Address
+validator_wallet_001  active  994.776032511     v1   -1   kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
 wallet_004            active  0.998256399       v1   0    kQBxnZJq4oHVFs4ban3kJ5qllM1IQo57lIx8QP69Ue9A6Psp
 ```
 
