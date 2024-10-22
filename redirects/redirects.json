@@ -510,5 +510,41 @@
     {
         "from": "/develop/fift/overview",
         "to": "/v3/documentation/smart-contracts/fift/overview"
+    },
+    {
+        "from": "/develop/dapps/defi/coins",
+        "to": "/v3/documentation/dapps/defi/coins"
+    },
+    {
+        "from": "/develop/dapps/defi/nft",
+        "to": "/v3/documentation/dapps/defi/nft"
+    },
+    {
+        "from": "/develop/dapps/defi/subscriptions",
+        "to": "/v3/documentation/dapps/defi/subscriptions"
+    },
+    {
+        "from": "/develop/dapps/defi/tokens",
+        "to": "/v3/documentation/dapps/defi/tokens"
+    },
+    {
+        "from": "/develop/dapps/defi/ton-payments",
+        "to": "/v3/documentation/dapps/defi/ton-payments"
+    },
+    {
+        "from": "/develop/dapps/asset-processing/overview",
+        "to": "/v3/documentation/dapps/assets/overview"
+    },
+    {
+        "from": "/develop/dapps/asset-processing/usdt",
+        "to": "/v3/documentation/dapps/assets/usdt"
+    },
+    {
+        "from": "/develop/oracles/about_blockchain_oracles",
+        "to": "/v3/documentation/dapps/oracles/about_blockchain_oracles"
+    },
+    {
+        "from": "/develop/oracles/red_stone",
+        "to": "/v3/documentation/dapps/oracles/red_stone"
     }
 ]

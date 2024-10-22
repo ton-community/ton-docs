@@ -203,7 +203,7 @@ module.exports = {
           label: 'Nodes'
         },
         {
-          to: 'develop/dapps/defi/coins', // TODO: add page
+          to: 'v3/documentation/dapps/defi/coins', // TODO: add page
           label: 'DApps',
         },
         {

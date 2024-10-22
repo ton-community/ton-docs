@@ -114,26 +114,26 @@ module.exports = [
     type: 'category',
     label: 'DeFi Principles',
     items: [
-      'develop/dapps/defi/coins',
-      'develop/dapps/defi/tokens',
+      'v3/documentation/dapps/defi/coins',
+      'v3/documentation/dapps/defi/tokens',
       {
         type: 'doc',
         label: 'NFT Use Cases in TON',
-        id: 'develop/dapps/defi/nft',
+        id: 'v3/documentation/dapps/defi/nft',
       },
-      'develop/dapps/defi/subscriptions',
-      'develop/dapps/defi/ton-payments',
+      'v3/documentation/dapps/defi/subscriptions',
+      'v3/documentation/dapps/defi/ton-payments',
     ],
   },
   {
     type: 'category',
     label: 'Assets',
     items: [
-      'develop/dapps/asset-processing/overview',
+      'v3/documentation/dapps/assets/overview',
       // 'develop/dapps/asset-processing/README', // TODO: divide
       // 'develop/dapps/asset-processing/jettons', // TODO: divide
       // 'v3/guidelines/dapps/asset-processing/mintless-jettons', // TODO: divide
-      'develop/dapps/asset-processing/usdt',
+      'v3/documentation/dapps/assets/usdt',
       // 'v3/guidelines/dapps/asset-processing/nft-processing/nfts', // TODO: divide
     ],
   },
@@ -141,12 +141,12 @@ module.exports = [
     type: 'category',
     label: 'Oracles',
     items: [
-      'develop/oracles/about_blockchain_oracles',
+      'v3/documentation/dapps/oracles/about_blockchain_oracles',
       {
         type: 'category',
         label: 'Oracles in TON',
         items: [
-          'develop/oracles/red_stone',
+          'v3/documentation/dapps/oracles/red_stone',
         ],
       },
     ],

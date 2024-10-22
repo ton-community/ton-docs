@@ -153,12 +153,12 @@ Number of decimal places supported by Mainnet : 9 digits.
 
 Non-fungible tokens (NFTs):
 - [TEP-62: NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
-- [NFT documentation](/develop/dapps/defi/tokens#nft)
+- [NFT documentation](/v3/documentation/dapps/defi/tokens#nft)
 
 Jettons (tokens):
 - [TEP-74: Jettons standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)
 - [Distributed tokens overview](https://telegra.ph/Scalable-DeFi-in-TON-03-30)
-- [Fungible token documentation(Jettons)](/develop/dapps/defi/tokens#jettons)
+- [Fungible token documentation(Jettons)](/v3/documentation/dapps/defi/tokens#jettons)
 
 Other Standards:
 - https://github.com/ton-blockchain/TEPs
