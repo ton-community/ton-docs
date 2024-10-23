@@ -23,6 +23,7 @@ module.exports = [
       'v3/concepts/dive-into-ton/ton-blockchain/explorers-in-ton',
       'v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage',
       'v3/concepts/dive-into-ton/ton-blockchain/ton-networking',
+      'v3/concepts/dive-into-ton/ton-blockchain/nft',
       'v3/concepts/dive-into-ton/ton-blockchain/sharding',
       'v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison',
     ],

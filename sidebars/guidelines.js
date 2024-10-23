@@ -107,7 +107,8 @@ module.exports = [
       'v3/guidelines/dapps/apis-sdks/api-types',
       'v3/guidelines/dapps/apis-sdks/ton-http-apis',
       'v3/guidelines/dapps/apis-sdks/ton-adnl-apis',
-      'v3/guidelines/dapps/apis-sdks/api-keys'
+      'v3/guidelines/dapps/apis-sdks/api-keys',
+      'v3/guidelines/dapps/apis-sdks/getblock-ton-api'
     ],
   },
   {

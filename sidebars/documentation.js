@@ -91,6 +91,7 @@ module.exports = [
         ],
       },
       'v3/documentation/smart-contracts/func/libraries',
+      'v3/documentation/smart-contracts/func/changelog',
     ],
   },
   {

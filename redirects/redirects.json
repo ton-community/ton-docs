@@ -20,10 +20,6 @@
         "to": "/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage"
     },
     {
-        "from": "/v3/concepts/dive-into-ton/ton-blockchain/shards",
-        "to": "/v3/concepts/dive-into-ton/ton-blockchain/sharding"
-    },
-    {
         "from": "/learn/networking/overview",
         "to": "/v3/concepts/dive-into-ton/ton-blockchain/ton-networking"
     },
@@ -88,10 +84,6 @@
         "to": "/v3/guidelines/web3/ton-proxy-sites/site-and-domain-management"
     },
     {
-        "from": "/participate/ton-storage",
-        "to": "/v3/guidelines/web3/ton-storage"
-    },
-    {
         "from": "/participate/ton-storage/storage-daemon",
         "to": "/v3/guidelines/web3/ton-storage/storage-daemon"
     },
@@ -102,14 +94,6 @@
     {
         "from": "/participate/ton-storage/storage-provider",
         "to": "/v3/guidelines/web3/ton-storage/storage-provider"
-    },
-    {
-        "from": "/v3/guidelines/web3/proxy-sites",
-        "to": "/v3/guidelines/web3/ton-proxy-sites"
-    },
-    {
-        "from": "/v3/guidelines/web3/dns",
-        "to": "/v3/guidelines/web3/ton-dns"
     },
     {
         "from": "/participate/web3/sites-and-proxy",
@@ -318,14 +302,6 @@
     {
         "from": "/develop/smart-contracts/guidelines/random-number-generation",
         "to": "/v3/guidelines/smart-contracts/security/random-number-generation"
-    },
-    {
-        "from": "/v3/guidelines/smart-contracts/howto",
-        "to": "/v3/guidelines/smart-contracts/howto"
-    },
-    {
-        "from": "/v3/guidelines/smart-contracts/how-to/compile",
-        "to": "/v3/guidelines/smart-contracts/howto/compile"
     },
     {
         "from": "/develop/howto/compile",
@@ -552,10 +528,6 @@
         "to": "/v3/documentation/infra/minter-flow"
     },
     {
-        "from": "/participate/crosschain",
-        "to": "/v3/documentation/infra/crosschain"
-    },
-    {
         "from": "/participate/crosschain/bridge-addresses",
         "to": "/v3/documentation/infra/crosschain/bridge-addresses"
     },
@@ -748,10 +720,6 @@
         "to": "/v3/documentation/archive/hacktoberfest-2022"
     },
     {
-        "from": "/contribute/archive/hacktoberfest-2022/README",
-        "to": "/v3/documentation/archive/hacktoberfest-2022/README"
-    },
-    {
         "from": "/contribute/archive/hacktoberfest-2022/as-contributor",
         "to": "/v3/documentation/archive/hacktoberfest-2022/as-contributor"
     },
@@ -760,20 +728,12 @@
         "to": "/v3/documentation/archive/hacktoberfest-2022/as-maintainer"
     },
     {
-        "from": "/contribute/docs",
-        "to": "/v3/contribute/docs"
-    },
-    {
         "from": "/contribute/docs/guidelines",
         "to": "/v3/contribute/docs/guidelines"
     },
     {
         "from": "/contribute/docs/schemes-guidelines",
         "to": "/v3/contribute/docs/schemes-guidelines"
-    },
-    {
-        "from": "/contribute/localization-program",
-        "to": "/v3/contribute/localization-program"
     },
     {
         "from": "/contribute/localization-program/translation-style-guide",
@@ -790,10 +750,6 @@
     {
         "from": "/contribute/localization-program/how-it-works",
         "to": "/v3/contribute/localization-program/how-it-works"
-    },
-    {
-        "from": "/contribute/tutorials",
-        "to": "/v3/contribute/tutorials"
     },
     {
         "from": "/contribute/tutorials/sample-tutorial",
@@ -822,5 +778,17 @@
     {
         "from": "/contribute",
         "to": "/v3/contribute"
+    },
+    {
+        "from": "/develop/dapps/apis/getblock-ton-api",
+        "to": "/v3/guidelines/dapps/apis-sdks/getblock-ton-api"
+    },
+    {
+        "from": "/develop/func/changelog",
+        "to": "/v3/documentation/smart-contracts/func/changelog"
+    },
+    {
+        "from": "/participate/nft",
+        "to": "/v3/concepts/dive-into-ton/ton-blockchain/nft"
     }
 ]

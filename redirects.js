@@ -1,3 +1,7 @@
+const fs = require("node:fs");
+
+const v3Redirects = JSON.parse(fs.readFileSync(require.resolve('./redirects/redirects.json'), 'utf8'));
+
 /**
  * @type {Array<{from: string, to: string}>}
  */
@@ -50,5 +54,6 @@ module.exports = [
   {
     to: '/develop/smart-contracts/testing/overview',
     from: '/develop/smart-contracts/testing/tonstarter',
-  }
+  },
+  ...v3Redirects,
 ];
