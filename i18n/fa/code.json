@@ -1,0 +1,415 @@
+{
+    "theme.ErrorPageContent.title": {
+        "message": "صفحه کرش کرد",
+        "description": "The title of the fallback page when the page crashed"
+    },
+    "theme.NotFound.title": {
+        "message": "صفحه پیدا نشد",
+        "description": "The title of the 404 page"
+    },
+    "theme.NotFound.p1": {
+        "message": "صفحه مورد نظر یافت نشد.",
+        "description": "The first paragraph of the 404 page"
+    },
+    "theme.NotFound.p2": {
+        "message": "لطفا با مدیر سایت مبدا تماس بگیرید و اطلاع دهید که لینک خراب است.",
+        "description": "The 2nd paragraph of the 404 page"
+    },
+    "theme.admonition.note": {
+        "message": "یادداشت",
+        "description": "The default label used for the Note admonition (:::note)"
+    },
+    "theme.admonition.tip": {
+        "message": "نکته",
+        "description": "The default label used for the Tip admonition (:::tip)"
+    },
+    "theme.admonition.danger": {
+        "message": "خطر",
+        "description": "The default label used for the Danger admonition (:::danger)"
+    },
+    "theme.admonition.info": {
+        "message": "اطلاعات",
+        "description": "The default label used for the Info admonition (:::info)"
+    },
+    "theme.admonition.caution": {
+        "message": "احتیاط",
+        "description": "The default label used for the Caution admonition (:::caution)"
+    },
+    "theme.BackToTopButton.buttonAriaLabel": {
+        "message": "بازگشت به بالا",
+        "description": "The ARIA label for the back to top button"
+    },
+    "theme.blog.archive.title": {
+        "message": "مطالب قدیمی بلاگ",
+        "description": "The page & hero title of the blog archive page"
+    },
+    "theme.blog.archive.description": {
+        "message": "مطالب قدیمی بلاگ",
+        "description": "The page & hero description of the blog archive page"
+    },
+    "theme.blog.paginator.navAriaLabel": {
+        "message": "ناوبری صفحات مطالب بلاگ",
+        "description": "The ARIA label for the blog pagination"
+    },
+    "theme.blog.paginator.newerEntries": {
+        "message": "مطالب جدیدتر",
+        "description": "The label used to navigate to the newer blog posts page (previous page)"
+    },
+    "theme.blog.paginator.olderEntries": {
+        "message": "مطالب قدیمی‌تر",
+        "description": "The label used to navigate to the older blog posts page (next page)"
+    },
+    "theme.blog.post.paginator.navAriaLabel": {
+        "message": "ناوبری صفحات مطالب بلاگ",
+        "description": "The ARIA label for the blog posts pagination"
+    },
+    "theme.blog.post.paginator.newerPost": {
+        "message": "مطلب جدیدتر",
+        "description": "The blog post button label to navigate to the newer/previous post"
+    },
+    "theme.blog.post.paginator.olderPost": {
+        "message": "مطلب قدیمی‌تر",
+        "description": "The blog post button label to navigate to the older/next post"
+    },
+    "theme.colorToggle.ariaLabel": {
+        "message": "تغییر حالت روشنایی/تاریکی (در حال حاضر {mode})",
+        "description": "The ARIA label for the navbar color mode toggle"
+    },
+    "theme.colorToggle.ariaLabel.mode.dark": {
+        "message": "حالت تاریک",
+        "description": "The name for the dark color mode"
+    },
+    "theme.colorToggle.ariaLabel.mode.light": {
+        "message": "حالت روشن",
+        "description": "The name for the light color mode"
+    },
+    "theme.blog.post.plurals": {
+        "message": "{count} مطلب بلاگ",
+        "description": "Pluralized label for \"{count} posts\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+    },
+    "theme.blog.tagTitle": {
+        "message": "شامل {nPosts} مطلب با برچسب «{tagName}»",
+        "description": "The title of the page for a blog tag"
+    },
+    "theme.tags.tagsPageLink": {
+        "message": "مشاهده همه برچسب‌ها",
+        "description": "The label of the link targeting the tag list page"
+    },
+    "theme.docs.breadcrumbs.navAriaLabel": {
+        "message": "مسیر صفحه",
+        "description": "The ARIA label for the breadcrumbs"
+    },
+    "theme.docs.DocCard.categoryDescription": {
+        "message": "{count} مورد",
+        "description": "The default description for a category card in the generated index about how many items this category includes"
+    },
+    "theme.docs.paginator.navAriaLabel": {
+        "message": "تب مستندات",
+        "description": "The ARIA label for the docs pagination"
+    },
+    "theme.docs.paginator.previous": {
+        "message": "صفحه قبلی",
+        "description": "The label used to navigate to the previous doc"
+    },
+    "theme.docs.paginator.next": {
+        "message": "صفحه بعدی",
+        "description": "The label used to navigate to the next doc"
+    },
+    "theme.docs.tagDocListPageTitle.nDocsTagged": {
+        "message": "{count} مستند با برچسب",
+        "description": "Pluralized label for \"{count} docs tagged\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+    },
+    "theme.docs.tagDocListPageTitle": {
+        "message": "«{tagName}» شامل {nDocsTagged} مستند",
+        "description": "The title of the page for a docs tag"
+    },
+    "theme.docs.versionBadge.label": {
+        "message": "نسخه: {versionLabel}"
+    },
+    "theme.common.editThisPage": {
+        "message": "ویرایش این صفحه",
+        "description": "The link label to edit the current page"
+    },
+    "theme.common.headingLinkTitle": {
+        "message": "لینک مستقیم به {heading}",
+        "description": "Title for link to heading"
+    },
+    "theme.docs.versions.unreleasedVersionLabel": {
+        "message": "این یک مستند غیررسمی از {siteTitle} نسخه {versionLabel} است.",
+        "description": "The label used to tell the user that he's browsing an unreleased doc version"
+    },
+    "theme.docs.versions.unmaintainedVersionLabel": {
+        "message": "این یک مستند از {siteTitle} نسخه {versionLabel} است و در حال حاضر به طور فعال نگهداری نمی‌شود.",
+        "description": "The label used to tell the user that he's browsing an unmaintained doc version"
+    },
+    "theme.docs.versions.latestVersionSuggestionLabel": {
+        "message": "آخرین مستند را در {latestVersionLink} ({versionLabel}) بررسی کنید.",
+        "description": "The label used to tell the user to check the latest version"
+    },
+    "theme.docs.versions.latestVersionLinkLabel": {
+        "message": "آخرین نسخه",
+        "description": "The label used for the latest version suggestion link label"
+    },
+    "theme.lastUpdated.atDate": {
+        "message": "در تاریخ {date}",
+        "description": "The words used to describe on which date a page has been last updated"
+    },
+    "theme.lastUpdated.byUser": {
+        "message": "توسط {user}",
+        "description": "The words used to describe by who the page has been last updated"
+    },
+    "theme.lastUpdated.lastUpdatedAtBy": {
+        "message": "آخرین بروزرسانی توسط {byUser} در {atDate}",
+        "description": "The sentence used to display when a page has been last updated, and by who"
+    },
+    "theme.navbar.mobileVersionsDropdown.label": {
+        "message": "انتخاب نسخه",
+        "description": "The label for the navbar versions dropdown on mobile view"
+    },
+    "theme.tags.tagsListLabel": {
+        "message": "برچسب‌ها:",
+        "description": "The label alongside a tag list"
+    },
+    "theme.AnnouncementBar.closeButtonAriaLabel": {
+        "message": "بستن",
+        "description": "The ARIA label for close button of announcement bar"
+    },
+    "theme.blog.sidebar.navAriaLabel": {
+        "message": "ناوبری مطالب اخیر بلاگ",
+        "description": "The ARIA label for recent posts in the blog sidebar"
+    },
+    "theme.CodeBlock.copied": {
+        "message": "کپی شد",
+        "description": "The copied button label on code blocks"
+    },
+    "theme.CodeBlock.copyButtonAriaLabel": {
+        "message": "کد را به کلیپ‌بورد کپی کنید",
+        "description": "The ARIA label for copy code blocks button"
+    },
+    "theme.CodeBlock.copy": {
+        "message": "کپی",
+        "description": "The copy button label on code blocks"
+    },
+    "theme.CodeBlock.wordWrapToggle": {
+        "message": "تغییر حالت پیچیدگی",
+        "description": "The title attribute for toggle word wrapping button of code block lines"
+    },
+    "theme.DocSidebarItem.toggleCollapsedCategoryAriaLabel": {
+        "message": "باز و بسته کردن منوی نوار کناری «{label}»",
+        "description": "The ARIA label to toggle the collapsible sidebar category"
+    },
+    "theme.NavBar.navAriaLabel": {
+        "message": "ناوبری اصلی",
+        "description": "The ARIA label for the main navigation"
+    },
+    "theme.blog.post.readMore": {
+        "message": "ادامه مطلب",
+        "description": "The label used in blog post item excerpts to link to full blog posts"
+    },
+    "theme.blog.post.readMoreLabel": {
+        "message": "مشاهده کامل مطلب {title}",
+        "description": "The ARIA label for the link to full blog posts from excerpts"
+    },
+    "theme.TOCCollapsible.toggleButtonLabel": {
+        "message": "خلاصه این صفحه",
+        "description": "The label used by the button on the collapsible TOC component"
+    },
+    "theme.navbar.mobileLanguageDropdown.label": {
+        "message": "انتخاب زبان",
+        "description": "The label for the mobile language switcher dropdown"
+    },
+    "theme.blog.post.readingTime.plurals": {
+        "message": "می‌توانید در {readingTime} دقیقه بخوانید",
+        "description": "Pluralized label for \"{readingTime} min read\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+    },
+    "theme.docs.breadcrumbs.home": {
+        "message": "صفحه اصلی",
+        "description": "The ARIA label for the home page in the breadcrumbs"
+    },
+    "theme.docs.sidebar.collapseButtonTitle": {
+        "message": "بستن نوار کناری",
+        "description": "The title attribute for collapse button of doc sidebar"
+    },
+    "theme.docs.sidebar.collapseButtonAriaLabel": {
+        "message": "بستن نوار کناری",
+        "description": "The title attribute for collapse button of doc sidebar"
+    },
+    "theme.docs.sidebar.navAriaLabel": {
+        "message": "نوار کناری مستندات",
+        "description": "The ARIA label for the sidebar navigation"
+    },
+    "theme.docs.sidebar.closeSidebarButtonAriaLabel": {
+        "message": "بستن نوار کناری",
+        "description": "The ARIA label for close button of mobile sidebar"
+    },
+    "theme.navbar.mobileSidebarSecondaryMenu.backButtonLabel": {
+        "message": "← بازگشت به منوی اصلی",
+        "description": "The label of the back button to return to main menu, inside the mobile navbar sidebar (notably used to display the docs sidebar)"
+    },
+    "theme.docs.sidebar.toggleSidebarButtonAriaLabel": {
+        "message": "تغییر نوار کناری",
+        "description": "The ARIA label for hamburger menu button of mobile navigation"
+    },
+    "theme.docs.sidebar.expandButtonTitle": {
+        "message": "باز کردن نوار کناری",
+        "description": "The ARIA label and title attribute for expand button of doc sidebar"
+    },
+    "theme.docs.sidebar.expandButtonAriaLabel": {
+        "message": "باز کردن نوار کناری",
+        "description": "The ARIA label and title attribute for expand button of doc sidebar"
+    },
+    "theme.SearchBar.seeAll": {
+        "message": "مشاهده همه نتایج"
+    },
+    "theme.SearchPage.documentsFound.plurals": {
+        "message": "مجموع {count} مستند یافت شد",
+        "description": "Pluralized label for \"{count} documents found\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+    },
+    "theme.SearchPage.existingResultsTitle": {
+        "message": "نتایج جستجو برای «{query}»",
+        "description": "The search page title for non-empty query"
+    },
+    "theme.SearchPage.emptyResultsTitle": {
+        "message": "جستجو در مستندات",
+        "description": "The search page title for empty query"
+    },
+    "theme.SearchPage.inputPlaceholder": {
+        "message": "کلمه‌ی جستجو را اینجا وارد کنید",
+        "description": "The placeholder for search page input"
+    },
+    "theme.SearchPage.inputLabel": {
+        "message": "جستجو",
+        "description": "The ARIA label for search page input"
+    },
+    "theme.SearchPage.algoliaLabel": {
+        "message": "جستجو با Algolia",
+        "description": "The ARIA label for Algolia mention"
+    },
+    "theme.SearchPage.noResultsText": {
+        "message": "مستندی یافت نشد",
+        "description": "The paragraph for empty search result"
+    },
+    "theme.SearchPage.fetchingNewResults": {
+        "message": "در حال دریافت نتایج جدید...",
+        "description": "The paragraph for fetching new search results"
+    },
+    "theme.SearchBar.label": {
+        "message": "جستجو",
+        "description": "The ARIA label and placeholder for search button"
+    },
+    "theme.SearchModal.searchBox.resetButtonTitle": {
+        "message": "پاک کردن کوئری",
+        "description": "The label and ARIA label for search box reset button"
+    },
+    "theme.SearchModal.searchBox.cancelButtonText": {
+        "message": "لغو",
+        "description": "The label and ARIA label for search box cancel button"
+    },
+    "theme.SearchModal.startScreen.recentSearchesTitle": {
+        "message": "جستجوهای اخیر",
+        "description": "The title for recent searches"
+    },
+    "theme.SearchModal.startScreen.noRecentSearchesText": {
+        "message": "هیچ جستجوی اخیری وجود ندارد",
+        "description": "The text when no recent searches"
+    },
+    "theme.SearchModal.startScreen.saveRecentSearchButtonTitle": {
+        "message": "ذخیره این جستجو",
+        "description": "The label for save recent search button"
+    },
+    "theme.SearchModal.startScreen.removeRecentSearchButtonTitle": {
+        "message": "حذف این جستجو از تاریخچه",
+        "description": "The label for remove recent search button"
+    },
+    "theme.SearchModal.startScreen.favoriteSearchesTitle": {
+        "message": "جستجوهای مورد علاقه",
+        "description": "The title for favorite searches"
+    },
+    "theme.SearchModal.startScreen.removeFavoriteSearchButtonTitle": {
+        "message": "این جستجو را از لیست مورد علاقه حذف کنید",
+        "description": "The label for remove favorite search button"
+    },
+    "theme.SearchModal.errorScreen.titleText": {
+        "message": "نتایج را نمی‌توان دریافت کرد",
+        "description": "The title for error screen of search modal"
+    },
+    "theme.SearchModal.errorScreen.helpText": {
+        "message": "ممکن است لازم باشد اتصال شبکه خود را بررسی کنید.",
+        "description": "The help text for error screen of search modal"
+    },
+    "theme.SearchModal.footer.selectText": {
+        "message": "انتخاب",
+        "description": "The explanatory text of the action for the enter key"
+    },
+    "theme.SearchModal.footer.selectKeyAriaLabel": {
+        "message": "کلید Enter",
+        "description": "The ARIA label for the Enter key button that makes the selection"
+    },
+    "theme.SearchModal.footer.navigateText": {
+        "message": "ناوبری",
+        "description": "The explanatory text of the action for the Arrow up and Arrow down key"
+    },
+    "theme.SearchModal.footer.navigateUpKeyAriaLabel": {
+        "message": "کلید فلش بالا",
+        "description": "The ARIA label for the Arrow up key button that makes the navigation"
+    },
+    "theme.SearchModal.footer.navigateDownKeyAriaLabel": {
+        "message": "کلید فلش پایین",
+        "description": "The ARIA label for the Arrow down key button that makes the navigation"
+    },
+    "theme.SearchModal.footer.closeText": {
+        "message": "بستن",
+        "description": "The explanatory text of the action for Escape key"
+    },
+    "theme.SearchModal.footer.closeKeyAriaLabel": {
+        "message": "کلید Esc",
+        "description": "The ARIA label for the Escape key button that close the modal"
+    },
+    "theme.SearchModal.footer.searchByText": {
+        "message": "جستجو توسط Algolia",
+        "description": "The text explain that the search is making by Algolia"
+    },
+    "theme.SearchModal.noResultsScreen.noResultsText": {
+        "message": "نتایج یافت نشد:",
+        "description": "The text explains that there are no results for the following search"
+    },
+    "theme.SearchModal.noResultsScreen.suggestedQueryText": {
+        "message": "لطفا جستجو را امتحان کنید",
+        "description": "The text for the suggested query when no results are found for the following search"
+    },
+    "theme.SearchModal.noResultsScreen.reportMissingResultsText": {
+        "message": "آیا فکر می‌کنید برای این کوئری نتایج باید وجود داشته باشد؟",
+        "description": "The text for the question where the user thinks there are missing results"
+    },
+    "theme.SearchModal.noResultsScreen.reportMissingResultsLinkText": {
+        "message": "گزارش دهید.",
+        "description": "The text for the link to report missing results"
+    },
+    "theme.SearchModal.placeholder": {
+        "message": "مستندات را جستجو کنید",
+        "description": "The placeholder of the input of the DocSearch pop-up modal"
+    },
+    "theme.Playground.result": {
+        "message": "نتایج",
+        "description": "The result label of the live codeblocks"
+    },
+    "theme.Playground.liveEditor": {
+        "message": "ویرایشگر زنده",
+        "description": "The live editor label of the live codeblocks"
+    },
+    "theme.SearchBar.noResultsText": {
+        "message": "مستندی یافت نشد"
+    },
+    "theme.ErrorPageContent.tryAgain": {
+        "message": "دوباره امتحان کنید",
+        "description": "The label of the button to try again rendering when the React error boundary captures an error"
+    },
+    "theme.common.skipToMainContent": {
+        "message": "به محتوای اصلی بروید",
+        "description": "The skip to content label used for accessibility, allowing to rapidly navigate to main content with keyboard tab/enter navigation"
+    },
+    "theme.tags.tagsPageTitle": {
+        "message": "برچسب‌ها",
+        "description": "The title of the tag list page"
+    }
+}

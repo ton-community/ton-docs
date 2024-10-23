@@ -194,9 +194,70 @@ export const FOOTER_COLUMN_LINKS_CN = [
   },
 ];
 
+export const FOOTER_COLUMN_LINKS_FA = [
+  {
+    headerLangKey: "استفاده",
+    links: [
+      { langKey: "دریافت کیف‌پول", url: PAGE_WALLETS },
+      { langKey: "خرید و فروش تن‌کوین", url: PAGE_BUY_TONCOIN },
+      { langKey: "استیک کنید", url: PAGE_STAKE },
+      { langKey: "اپلیکیشن‌ها و سرویس‌ها", url: FOOTER_APP_AND_DAPPS_URL },
+      { langKey: "پل", url: FOOTER_BRIDGE_URL },
+      { langKey: "دامنه‌ها", url: FOOTER_DNS_URL },
+    ],
+  },
+  {
+    headerLangKey: "یادگیری",
+    links: [
+      { langKey: "مفهوم تن", url: FOOTER_TON_CONCEPT_URL },
+      { langKey: "نقشه راه", url: PAGE_ROADMAP },
+      { langKey: "آمار تن", url: TONSTAT_URL },
+      { langKey: "تاریخچه استخراج", url: PAGE_MINING },
+      { langKey: "تن‌کوین", url: PAGE_TON_COIN },
+      { langKey: "تاییدکنندگان", url: PAGE_VALIDATOR },
+      { langKey: "مقایسه بلاکچین", url: PAGE_ANALYSIS },
+      { langKey: "سفیدنامه", url: FOOTER_WHITEPAPER_URL },
+    ],
+  },
+  {
+    headerLangKey: "ساخت",
+    links: [
+      { langKey: "شروع کنید", url: PAGE_DEV },
+      { langKey: "مستندات", url: FOOTER_DOCUMENTATION_URL },
+      { langKey: "سرریز تن", url: FOOTER_TON_OVERFLOW_URL },
+      { langKey: "جامعه توسعه‌دهندگان", url: FOOTER_DEV_COMMUNITY_URL },
+      { langKey: "مالیات", url: PAGE_GRANTS },
+      { langKey: "برنامه نقدینگی", url: PAGE_LIQUIDITY_PROGRAM },
+      { langKey: "گام‌های تن", url: FOOTER_TON_FOOTSTEPS_URL },
+      { langKey: "جایزه باگ", url: FOOTER_BUG_BOUNTY_URL },
+    ],
+  },
+  {
+    headerLangKey: "جامعه",
+    links: [
+      { langKey: "جامعه‌ها", url: PAGE_COMMUNITY },
+      { langKey: "بنیاد تن", url: TON_FOUNDATION_URL },
+      { langKey: "رویدادها", url: PAGE_EVENTS },
+      { langKey: "همکاری", url: PAGE_COLLABORATE },
+      { langKey: "بلاگ", url: TON_BLOG_URL },
+      { langKey: "اطلاعیه‌های مطبوعاتی", url: FOOTER_PRESS_RELEASES_URL },
+      { langKey: "شغل‌ها", url: FOOTER_CAREERS_URL },
+    ],
+  },
+  {
+    headerLangKey: "دیگر",
+    links: [
+      { langKey: "پشتیبانی و بازخورد", url: FOOTER_SUPPORT_AND_FEEDBACK },
+      { langKey: "دارایی‌های برند", url: PAGE_BRAND_ASSETS },
+      { langKey: "تماس با ما", url: PAGE_CONTACT_US },
+    ],
+  },
+];
+
 export function footerLinkExporter(lang?: string) {
   const FOOTER_LINKS_TRANSLATIONS = {
     mandarin: FOOTER_COLUMN_LINKS_CN,
+    fa: FOOTER_COLUMN_LINKS_FA,
   };
 
   return (
