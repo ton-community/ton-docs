@@ -37,4 +37,4 @@ Find examples of using payment channels in the [Hack-a-TON #1](https://ton.org/h
 ## See Also
 
 * [Payments Processing](/develop/dapps/asset-processing)
-* [TON Connect](/develop/dapps/ton-connect/overview) 
+* [TON Connect](/v3/guidelines/ton-connect/overview) 

@@ -236,10 +236,10 @@ module.exports = [
     'type': 'html',
     'value': '<span class=\'menu__link\'><b><small> Integrate with TON </small></b></span>',
   },
-  'develop/dapps/ton-connect/overview',
+  'v3/guidelines/ton-connect/overview',
   {
     type: 'doc',
-    id: 'develop/dapps/ton-connect/wallet',
+    id: 'v3/guidelines/ton-connect/wallet',
   },
   {
     type: 'category',
@@ -247,7 +247,7 @@ module.exports = [
     items: [
       {
         type: 'doc',
-        id: 'develop/dapps/ton-connect/react',
+        id: 'v3/guidelines/ton-connect/frameworks/react',
         label: 'React Apps',
       },
       {
@@ -257,7 +257,7 @@ module.exports = [
       },
       {
         type: 'doc',
-        id: 'develop/dapps/ton-connect/web',
+        id: 'v3/guidelines/ton-connect/frameworks/web',
         label: 'HTML/JS Apps',
       },
     ],
@@ -267,7 +267,7 @@ module.exports = [
     label: 'Guidelines',
     items: [
       'v3/guidelines/ton-connect/guidelines/how-ton-connect-works',
-      'develop/dapps/ton-connect/developers',
+      'v3/guidelines/ton-connect/guidelines/developers',
       'v3/guidelines/ton-connect/guidelines/creating-manifest',
       'v3/guidelines/ton-connect/guidelines/preparing-messages',
       'v3/guidelines/ton-connect/guidelines/sending-messages',

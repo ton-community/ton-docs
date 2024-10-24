@@ -175,7 +175,7 @@ module.exports = {
           label: 'Nodes'
         },
         {
-          to: 'develop/dapps/ton-connect/overview',
+          to: 'v3/guidelines/ton-connect/overview',
           label: 'Integrate with TON'
         },
         {
