@@ -8,7 +8,7 @@ However, there is "native staking" in TON Blockchain - you can lend Toncoin to v
 
 The one who lends to validator is called the **nominator**.
 
-A smart contract, called a **nominator pool**, provides the ability for one or more nominators to lend Toncoin in a validator stake, and ensures that the validator can use that Toncoin only for validation. Also, the smart contract guarantees the distribution of the reward.
+A smart contract, called a [**nominator pool**](v3/documentation/smart-contracts/contracts-specs/nominator-pool), provides the ability for one or more nominators to lend Toncoin in a validator stake, and ensures that the validator can use that Toncoin only for validation. Also, the smart contract guarantees the distribution of the reward.
 
 
 ## Validators vs Nominators

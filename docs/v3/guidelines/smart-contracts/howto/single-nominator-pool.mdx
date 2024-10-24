@@ -1,9 +1,11 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Single Nominator Pool
+# How to use Single Nominator Pool
 
-[Single Nominator](https://github.com/orbs-network/single-nominator) is a TON smart contract that enables secure validation for TON blockchain. The contract is designed for TON validators that have enough self stake to validate by themselves without relying on third-party nominators stakes. The contract provides an alternative simplified implementation for the Nominator Pool smart contract that supports a Single Nominator only.
+:::tip
+It's recommended to get acquainted with [Single Nominator Pool Specification](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool) before reading this tutorial.
+:::
 
 ### Set up single-nominator
 
@@ -404,13 +406,8 @@ MyTonCtrl> disable_mode validator
 2. Await the return of both your stakes from the elector.
 3. Proceed with the following [steps](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool#set-up-single-nominator).
 
+## Single Nominator Pool client
 
-## See Also
-
-* [Single Nominator Pool contract](https://github.com/orbs-network/single-nominator)
-* [Vesting Contract](/v3/documentation/smart-contracts/contracts-specs/vesting-contract)
-* [single-nominator-quick-how-to-09-25](https://telegra.ph/single-nominator-quick-how-to-09-25)
-
-
-
+* There is a simple open-source client to deploy and interact with the contract - https://github.com/orbs-network/single-nominator-client
+* If you run into trouble, you can ask the team for support on [Telegram](https://t.me/single_nominator)
 

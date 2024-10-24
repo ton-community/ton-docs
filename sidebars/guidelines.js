@@ -90,6 +90,8 @@ module.exports = [
       'v3/guidelines/smart-contracts/howto/airdrop-claim-best-practice',
       'v3/guidelines/smart-contracts/howto/shard-optimization',
       'v3/guidelines/smart-contracts/howto/wallet',
+      'v3/guidelines/smart-contracts/howto/nominator-pool',
+      'v3/guidelines/smart-contracts/howto/single-nominator-pool',
       {
         type: 'link',
         label: 'How to shard your TON smart contract and why',

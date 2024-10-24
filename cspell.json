@@ -269,6 +269,7 @@
     "unixtime",
     "visio",
     "Visio",
+    "votings",
     "workchain",
     "workchains",
     "xguard",
@@ -308,6 +309,7 @@
     "docs/learn/tvm-instructions/instructions.csv",
     "docs/learn/tvm-instructions/generate_md.py",
     "sidebars.js",
+    "sidebars",
     "i18n",
     ".husky",
   ]
