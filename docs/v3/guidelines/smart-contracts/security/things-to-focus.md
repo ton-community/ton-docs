@@ -63,7 +63,7 @@ Smart contracts addresses in TON blockchain are deterministic and can be precomp
 TON addresses may have three representations.
 A full representation can either be "raw" (`workchain:address`) or "user-friendly". The last one is the one users encounter most often. It contains a tag byte, indicating whether the address is `bounceable` or `not bounceable`, and a workchain id byte. This information should be noted.
 
-- [Raw and User-Friendly Addresses](https://docs.ton.org/learn/overviews/addresses#raw-and-user-friendly-addresses)
+- [Raw and User-Friendly Addresses](https://docs.ton.org/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses)
 
 ### 12. Keep track of the flaws in code execution
 

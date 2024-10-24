@@ -80,7 +80,7 @@ When contract is in the same network segment, messages get processed without rou
 
 We are in full control of the distributor data, so we must be able to to put it in whatever shard.
 How to?
-Remember, the contract address is [defined by it's state](https://docs.ton.org/learn/overviews/addresses#account-id).
+Remember, the contract address is [defined by it's state](https://docs.ton.org/v3/documentation/smart-contracts/addresses#account-id).
 We should use some of the contract's data field as nonce and keep on trying until we get the desired result.
 Example of a good nonce in real contracts can (subwalletId/publicKey) for a wallet contract.
 Any field that can be either modified after deployment or does not impact contract logic(like subwalletId) will fit the bill.

@@ -94,7 +94,7 @@ Most SDKs force you to verify address (most verify it during wallet creation or 
 </Tabs>
 
 :::tip
-Full Address description on the [Smart Contract Addresses](/learn/overviews/addresses) page.
+Full Address description on the [Smart Contract Addresses](/v3/documentation/smart-contracts/addresses) page.
 :::
 
 
@@ -631,4 +631,4 @@ if __name__ == "__main__":
 
 ## SDKs
 
-You can find a list of SDKs for various languages (JS, Python, Golang, C#, Rust, etc.) list [here](/develop/dapps/apis/sdk).
+You can find a list of SDKs for various languages (JS, Python, Golang, C#, Rust, etc.) list [here](/v3/guidelines/dapps/apis-sdks/sdk).

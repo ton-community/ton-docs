@@ -1011,7 +1011,7 @@ Creates an internal address for the corresponding MsgAddressInt TLB.
 
 > 💡 Noted
 > 
-> In this example, we use `workchain()` to get id of workchain. You can find more about Workchain ID in [docs](/learn/overviews/addresses#workchain-id).
+> In this example, we use `workchain()` to get id of workchain. You can find more about Workchain ID in [docs](/v3/documentation/smart-contracts/addresses#workchain-id).
 
 > 💡 Useful links
 >

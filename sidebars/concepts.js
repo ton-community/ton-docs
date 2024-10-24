@@ -2,7 +2,7 @@
  * @type {import('@docusaurus/plugin-content-docs').SidebarConfig}
  */
 module.exports = [
-  'learn/introduction', // TODO: Change to
+  'v3/concepts/dive-into-ton/introduction', // TODO: Change
   'v3/concepts/glossary',
   {
     'type': 'html',
@@ -12,7 +12,7 @@ module.exports = [
     'type': 'html',
     'value': '<span class=\'menu__link\'><b><small> Dive into TON </small></b></span>',
   },
-  'learn/introduction',
+  'v3/concepts/dive-into-ton/introduction',
   {
     type: 'category',
     label: 'TON Blockchain',

@@ -210,7 +210,7 @@ Okay, what do you need to connect to TON Blockchain?
 
 * __Smart contract address__ as a point of destination. Our goal is to mine an NFT from the _proof-of-work smart contract_, so we need an address to get current mining complexity.
 * __API provider__ to make requests to TON Blockchain. TON has multiple [API types](/develop/dapps/apis/) for different purposes. We will use the testnet version of [toncenter.com](https://toncenter.com/) API.
-* __JavaScript SDK__: A JavaScript SDK (recall that an SDK is a Software Development Kit) is needed to parse the smart contract address being used and prepare it to create an API request. To better understand TON addresses and why they need to be parsed to carry out this process, please see this [resource](/learn/overviews/addresses) to understand why should we parse it. To carry out this procedure, we'll use [ton.js](https://github.com/ton-core/ton).
+* __JavaScript SDK__: A JavaScript SDK (recall that an SDK is a Software Development Kit) is needed to parse the smart contract address being used and prepare it to create an API request. To better understand TON addresses and why they need to be parsed to carry out this process, please see this [resource](/v3/documentation/smart-contracts/addresses) to understand why should we parse it. To carry out this procedure, we'll use [ton.js](https://github.com/ton-core/ton).
 
 In the next section we’ll describe how users send their initial requests to TON Blockchain using the TONCenter API and ton.js to receive data from the PoW smart contract.
 
@@ -243,7 +243,7 @@ Later in the process of creating a TON NFT Miner, several requests will be execu
 
 #### Address Parsing
 
-On TON, smart contract addresses come in different forms that employ the use of numerous flag types. In this context specifically, we’ll make use of the _user-friendly address form_. That said, if you are curious to learn more about the different smart contract address types, feel free to check out this additional [resource](https://ton.org/docs/learn/overviews/addresses) in our documentation.
+On TON, smart contract addresses come in different forms that employ the use of numerous flag types. In this context specifically, we’ll make use of the _user-friendly address form_. That said, if you are curious to learn more about the different smart contract address types, feel free to check out this additional [resource](https://ton.org/docs/v3/documentation/smart-contracts/addresses) in our documentation.
 
 For the miner to work correctly, we need to add two different smart contract address types. These include:
 

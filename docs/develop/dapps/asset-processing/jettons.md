@@ -58,7 +58,7 @@ This method returns the following data:
 | `jetton_content`     | `cell` | data in accordance with [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md), check [jetton metadata parsing page](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing) for more. |
 | `jetton_wallet_code` | `cell`  |                                                                                                                                                                                                                 |
 
-You can call it via [Toncenter API](https://toncenter.com/api/v3/#/default/get_jetton_masters_api_v3_jetton_masters_get) or one of the [SDKs](https://docs.ton.org/develop/dapps/apis/sdk).
+You can call it via [Toncenter API](https://toncenter.com/api/v3/#/default/get_jetton_masters_api_v3_jetton_masters_get) or one of the [SDKs](https://docs.ton.org/v3/guidelines/dapps/apis-sdks/sdk).
 
 <Tabs groupId="get-jetton_data">
 <TabItem value="API" label="API">
@@ -1197,7 +1197,7 @@ if __name__ == "__main__":
 </Tabs>
 
 ## SDKs
-You can find a list of SDKs for various languages (js, python, golang, C#, Rust, etc.) list [here](/develop/dapps/apis/sdk).
+You can find a list of SDKs for various languages (js, python, golang, C#, Rust, etc.) list [here](/v3/guidelines/dapps/apis-sdks/sdk).
 
 ## See Also
 

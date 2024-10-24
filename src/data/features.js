@@ -1,13 +1,13 @@
 export const firstRow = [
   {
     title: "What is TON?",
-    linkUrl: "/learn/introduction",
+    linkUrl: "/v3/concepts/dive-into-ton/introduction",
     imageUrl: "img/mainPageCards/what_is_ton.svg",
     description: "Learn about the basics of blockchain and TON and how to get started."
   },
   {
     title: "Documents",
-    linkUrl: "/develop/overview",
+    linkUrl: "/v3/documentation/ton-documentation",
     imageUrl: "img/mainPageCards/developer.svg",
     description: "Learn all the technical aspects of TON."
   },

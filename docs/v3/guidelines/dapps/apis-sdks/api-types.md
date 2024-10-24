@@ -31,7 +31,7 @@
 
 
 :::info
-It is preferable to convert address via local algorithm, read more in the [Addresses](/learn/overviews/addresses) section of documentation.
+It is preferable to convert address via local algorithm, read more in the [Addresses](/v3/documentation/smart-contracts/addresses) section of documentation.
 :::
 
 
@@ -77,5 +77,5 @@ Response body
 
 ## See Also
 * [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis)
-* [List of SDKs](/develop/dapps/apis/sdk)
+* [List of SDKs](/v3/guidelines/dapps/apis-sdks/sdk)
 * [TON Cookbook](/develop/dapps/cookbook)

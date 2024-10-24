@@ -141,7 +141,7 @@ You will see `0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe
 Now we know, that USDT minter is located in shard `b`(hex) or `11`(decimal) if you will.
 
 ### How to deploy contract to a certain shard
-In order to understand how this works, one should understand how contract address [depends](https://docs.ton.org/learn/overviews/addresses#account-id) on it's code and data.
+In order to understand how this works, one should understand how contract address [depends](https://docs.ton.org/v3/documentation/smart-contracts/addresses#account-id) on it's code and data.
 Essentially it's a SHA256 has of code and data at deployment time.
 Knowing that, the only way to deploy contract with the same code in a different shard is to manipulate initial data.
 Data field, that is used to manipulate resulting contract address is called *nonce*.

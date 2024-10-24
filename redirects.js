@@ -40,7 +40,7 @@ module.exports = [
     from: '/develop/onboarding-challenge',
   },
   {
-    to: '/develop/overview',
+    to: '/v3/documentation/ton-documentation',
     from: '/develop/getting-started',
   },
   {

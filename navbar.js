@@ -9,12 +9,12 @@ module.exports = {
   items: [
     {
       type: 'dropdown',
-      to: '/learn/introduction',
+      to: '/v3/concepts/dive-into-ton/introduction',
       position: 'left',
       label: 'Concepts',
       items: [
         {
-          to: '/learn/introduction',
+          to: '/v3/concepts/dive-into-ton/introduction',
           label: 'Introduction to TON',
         },
         {
@@ -38,12 +38,12 @@ module.exports = {
     // TODO: extract tutorials page!!!
     // {
     //   type: 'dropdown',
-    //   to: '/develop/overview',
+    //   to: '/v3/documentation/ton-documentation',
     //   position: 'left',
     //   label: 'Get Started',
     //   items: [
     //     {
-    //       to: '/develop/overview',
+    //       to: '/v3/documentation/ton-documentation',
     //       label: 'Start with Onboarding Tutorials',
     //     },
     //   ],
@@ -59,7 +59,7 @@ module.exports = {
           label: 'Telegram Mini Apps (TMAs)',
         },
         {
-          to: 'develop/dapps/apis/sdk',
+          to: 'v3/guidelines/dapps/apis-sdks/sdk',
           label: 'APIs and SDKs',
         },
         {
@@ -186,7 +186,7 @@ module.exports = {
     },
     {
       type: 'dropdown',
-      to: '/develop/overview',
+      to: '/v3/documentation/ton-documentation',
       label: 'Documentation',
       position: 'left',
       items: [

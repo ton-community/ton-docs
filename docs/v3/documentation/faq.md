@@ -6,13 +6,13 @@ This section covers the most popular questions about TON Blockchain.
 
 ### Could you share a brief overview of TON?
 
-- [Introduction to The Open Network](/learn/introduction)
+- [Introduction to The Open Network](/v3/concepts/dive-into-ton/introduction)
 - [The TON Blockchain is based on PoS consensus](https://blog.ton.org/the-ton-blockchain-is-based-on-pos-consensus)
 - [TON Whitepapers](/v3/documentation/whitepapers/overview)
 
 ### What are some of the main similarities and differences to EVM blockchains?
 
-- [Ethereum to TON](/learn/introduction#ethereum-to-ton)
+- [Ethereum to TON](/v3/concepts/dive-into-ton/introduction#ethereum-to-ton)
 - [Comparison of TON, Solana and Ethereum 2.0](https://ton.org/comparison_of_blockchains.pdf)
 
 
@@ -178,7 +178,7 @@ To better understand how this process works, please refer [Payments Processing](
 
 ### What is the address format?
 
-- [Smart Contract Address](/learn/overviews/addresses)
+- [Smart Contract Address](/v3/documentation/smart-contracts/addresses)
 
 ### Is it possible to have a named account similar to ENS
 
@@ -187,7 +187,7 @@ Yes, use TON DNS:
 
 ### How to distinguish between a normal account and a smart contract?
 
-- [Everything is a smart contract](/learn/overviews/addresses#everything-is-a-smart-contract)
+- [Everything is a smart contract](/v3/documentation/smart-contracts/addresses#everything-is-a-smart-contract)
 
 ### How to tell if the address is a token address?
 
@@ -208,7 +208,7 @@ Good example is smart governance contract, which is a part of masterchain:
 
 ### Is it possible to detect contract deployment events on TON?
 
-[Everything in TON is a smart contract](/learn/overviews/addresses#everything-is-a-smart-contract).
+[Everything in TON is a smart contract](/v3/documentation/smart-contracts/addresses#everything-is-a-smart-contract).
 
 Account address is generated deterministically from its _initial state_, which includes _initial code_ and _initial data_ (for wallets, initial data includes public key among other parameters).
 When any component changes, the address changes accordingly.
@@ -249,7 +249,7 @@ Yes, either as a result of storage fee accumulation (contract needs to reach -1 
 
 ### Are smart contract addresses case sensitive?
 
-Yes, smart contract addresses are case sensitive because they are generated using the [base64 algorithm](https://en.wikipedia.org/wiki/Base64).  You can learn more about smart contract addresses [here](/learn/overviews/addresses).
+Yes, smart contract addresses are case sensitive because they are generated using the [base64 algorithm](https://en.wikipedia.org/wiki/Base64).  You can learn more about smart contract addresses [here](/v3/documentation/smart-contracts/addresses).
 
 
 ### Is the Ton Virtual Machine (TVM) EVM-compatible?

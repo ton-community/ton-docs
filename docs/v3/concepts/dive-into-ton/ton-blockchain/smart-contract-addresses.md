@@ -48,8 +48,8 @@ Each address on TON can be in one of the following states:
 
 To convert between raw and user-friendly addresses, you can use TON APIs or developer tools like [ton.org/address](https://ton.org/address). These utilities allow seamless conversion and ensure proper formatting before sending transactions.
 
-For more details on how to handle these addresses, including encoding examples and transaction security, you can refer to the full guide in [Addresses Documentation](/learn/overviews/addresses).
+For more details on how to handle these addresses, including encoding examples and transaction security, you can refer to the full guide in [Addresses Documentation](/v3/documentation/smart-contracts/addresses).
 
 ## See Also
 
-* [Smart Contracts Addresses Documentation](/learn/overviews/addresses)
+* [Smart Contracts Addresses Documentation](/v3/documentation/smart-contracts/addresses)

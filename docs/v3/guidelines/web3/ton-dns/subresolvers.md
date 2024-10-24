@@ -6,7 +6,7 @@ TON DNS is a powerful tool. It allows not only to assign TON Sites/Storage bags 
 
 ## Relevant links
 
-1. [TON smart-contract address system](/learn/overviews/addresses)
+1. [TON smart-contract address system](/v3/documentation/smart-contracts/addresses)
 1. [TEP-0081 - TON DNS Standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0081-dns-standard.md)
 1. [Source code of .ton DNS collection](https://tonscan.org/address/EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz#source)
 1. [Source code of .t.me DNS collection](https://tonscan.org/address/EQCA14o1-VWhS2efqoh_9M1b_A9DtKTuoqfmkn83AbJzwnPi#source)

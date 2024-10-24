@@ -2,7 +2,7 @@
  * @type {import('@docusaurus/plugin-content-docs').SidebarConfig}
  */
 module.exports = [
-  'develop/overview',
+  'v3/documentation/ton-documentation',
   'v3/documentation/faq',
   {
     'type': 'html',
@@ -13,7 +13,7 @@ module.exports = [
     'value': '<span class=\'menu__link\'><b><small> Smart Contracts Documentation </small></b></span>',
   },
   'develop/smart-contracts/README',
-  'learn/overviews/addresses',
+  'v3/documentation/smart-contracts/addresses',
   'v3/documentation/smart-contracts/shards',
   'v3/documentation/smart-contracts/infinity-sharding-paradigm',
   {
