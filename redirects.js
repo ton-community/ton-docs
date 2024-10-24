@@ -52,8 +52,8 @@ module.exports = [
     from: '/learn/tvm-instructions/tvm-upgrade',
   },
   {
-    to: '/develop/smart-contracts/testing/overview',
-    from: '/develop/smart-contracts/testing/tonstarter',
+    to: '/v3/guidelines/smart-contracts/testing/overview',
+    from: '/v3/guidelines/smart-contracts/testing/tonstarter',
   },
   ...v3Redirects,
 ];

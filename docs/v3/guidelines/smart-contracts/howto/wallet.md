@@ -365,7 +365,7 @@ Now let’s go through each option in detail:
 Option | Explanation
 :---: | :---:
 IHR Disabled | Currently, this option is disabled (which means we store 1) because Instant Hypercube Routing is not fully implemented. In addition, this will be needed when a large number of [Shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards) are live on the network. More can be read about the IHR Disabled option in the [tblkch.pdf](https://ton.org/tblkch.pdf) (chapter 2).
-Bounce | While sending messages, a variety of errors can occur during smart contract processing. To avoid losing TON, it is necessary to set the Bounce option to 1 (true). In this case, if any contract errors occur during transaction processing, the message will be returned to the sender, and the same amount of TON will be received minus fees. More can be read about non-bounceable messages [here](/develop/smart-contracts/guidelines/non-bouncable-messages).
+Bounce | While sending messages, a variety of errors can occur during smart contract processing. To avoid losing TON, it is necessary to set the Bounce option to 1 (true). In this case, if any contract errors occur during transaction processing, the message will be returned to the sender, and the same amount of TON will be received minus fees. More can be read about non-bounceable messages [here](/v3/guidelines/smart-contracts/guidelines/non-bouncable-messages).
 Bounced | Bounced messages are messages that are returned to the sender because an error occurred while processing the transaction with a smart contract. This option tells you whether the message received is bounced or not.
 Src | The Src is the sender address. In this case, two zero bits are written to indicate the `addr_none` address.
 
@@ -3114,7 +3114,7 @@ This helps us to be independent of using libraries and to understand the structu
 
 ## 🧩 Next Steps
 
-Reading the documentation provided above is a complex undertaking and it’s difficult to understand the entirety of the TON platform. However, it is a good exercise for those passionate about building on the TON. Another suggestion is to begin learning about how to write smart contracts on TON by consulting the following resources: [FunC Overview](https://docs.ton.org/v3/documentation/smart-contracts/func/overview), [Best Practices](https://docs.ton.org/develop/smart-contracts/guidelines), [Examples of Smart Contracts](https://docs.ton.org/v3/documentation/smart-contracts/contracts-specs/examples), [FunC Cookbook](https://docs.ton.org/v3/documentation/smart-contracts/func/cookbook)
+Reading the documentation provided above is a complex undertaking and it’s difficult to understand the entirety of the TON platform. However, it is a good exercise for those passionate about building on the TON. Another suggestion is to begin learning about how to write smart contracts on TON by consulting the following resources: [FunC Overview](https://docs.ton.org/v3/documentation/smart-contracts/func/overview), [Best Practices](https://docs.ton.org/v3/guidelines/smart-contracts/guidelines), [Examples of Smart Contracts](https://docs.ton.org/v3/documentation/smart-contracts/contracts-specs/examples), [FunC Cookbook](https://docs.ton.org/v3/documentation/smart-contracts/func/cookbook)
 
 Additionally, it is recommended that readers familiarize themselves with the following documents in more detail: [ton.pdf](https://docs.ton.org/ton.pdf) and [tblkch.pdf](https://ton.org/tblkch.pdf) documents.
 

@@ -93,7 +93,7 @@ The wallet was protected with password, it's hash was stored in contract data. H
 ### 6. Vault
 
 :::note SECURITY RULE
-Always check for [bounced](/develop/smart-contracts/guidelines/non-bouncable-messages) messages.
+Always check for [bounced](/v3/guidelines/smart-contracts/guidelines/non-bouncable-messages) messages.
 Don't forget about errors caused by [standard](/v3/documentation/smart-contracts/func/docs/stdlib/) functions.
 Make your conditions as strict as possible.
 :::

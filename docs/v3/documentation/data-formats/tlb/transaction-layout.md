@@ -94,7 +94,7 @@ trans_ord$0000 credit_first:Bool
 | `compute_ph`   | TrComputePhase | Yes      | Contains information about compute phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
 | `action`       | TrActionPhase  | No       | Contains information about action phase of a transaction execution. [More Info](https://docs.ton.org/v3/documentation/tvm/tvm-overview#transactions-and-phases). Stored in a reference. |
 | `aborted`      | Bool           | Yes      | Indicates whether the transaction execution was aborted.                                                                                                                                  |
-| `bounce`       | TrBouncePhase  | No       | Contains information about bounce phase of a transaction execution. [More Info](https://docs.ton.org/develop/smart-contracts/guidelines/non-bouncable-messages)                           |
+| `bounce`       | TrBouncePhase  | No       | Contains information about bounce phase of a transaction execution. [More Info](https://docs.ton.org/v3/guidelines/smart-contracts/guidelines/non-bouncable-messages)                           |
 | `destroyed`    | Bool           | Yes      | Indicates whether the account was destroyed during the execution.                                                                                                                         |
 
 ## Storage

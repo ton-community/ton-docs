@@ -121,7 +121,7 @@ Two flags are defined: **bounceable**/**non-bounceable** and **testnet**/**any-n
 |        0...       |  110100.01  |     no     |   yes        |
 
 :::tip
-Testnet-only flag doesn't have representation in blockchain at all. Non-bounceable flag makes difference only when used as destination address for a transfer: in this case, it [disallows bounce](/develop/smart-contracts/guidelines/non-bouncable-messages) for a message sent; address in blockchain, again, does not contain this flag.
+Testnet-only flag doesn't have representation in blockchain at all. Non-bounceable flag makes difference only when used as destination address for a transfer: in this case, it [disallows bounce](/v3/guidelines/smart-contracts/guidelines/non-bouncable-messages) for a message sent; address in blockchain, again, does not contain this flag.
 :::
 
 Also, in some libraries, you may notice a serialization parameter called `urlSafe`. The thing is, the base64 format is not URL safe, which means that some of characters (namely, `+` and `/`) can cause issues when transmitting address in a link. When `urlSafe = true`, all `+` symbols are replaced with `-`, and all `/` symbols are replaced with `_`. You can obtain these address formats using the following code:

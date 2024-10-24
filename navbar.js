@@ -119,7 +119,7 @@ module.exports = {
           label: 'TON Virtual Machine (TVM)',
         },
         {
-          to: 'develop/smart-contracts/guidelines',
+          to: 'v3/guidelines/smart-contracts/guidelines',
           label: 'Best Practices for Contracts',
         },
       ],
@@ -163,7 +163,7 @@ module.exports = {
       position: 'left',
       items: [
         {
-          to: '/develop/smart-contracts/guidelines',
+          to: '/v3/guidelines/smart-contracts/guidelines',
           label: 'Smart Contracts',
         },
         {

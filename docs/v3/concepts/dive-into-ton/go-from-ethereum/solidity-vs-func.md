@@ -219,4 +219,4 @@ This example presented how smart contracts can communicate with each other.
 
 - [Internal Messages](/v3/documentation/smart-contracts/message-management/internal-messages)
 - [Sending Messages](/v3/documentation/smart-contracts/message-management/sending-messages)
-- [Non-bouncable messages](develop/smart-contracts/guidelines/non-bouncable-messages)
+- [Non-bouncable messages](v3/guidelines/smart-contracts/guidelines/non-bouncable-messages)

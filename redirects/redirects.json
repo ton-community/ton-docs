@@ -794,5 +794,25 @@
     {
         "from": "/develop/smart-contracts/fee-calculation",
         "to": "/v3/guidelines/smart-contracts/fee-calculation"
+    },
+    {
+        "from": "/develop/smart-contracts/testing",
+        "to": "/v3/guidelines/smart-contracts/testing"
+    },
+    {
+        "from": "/develop/smart-contracts/testing/writing-test-examples",
+        "to": "/v3/guidelines/smart-contracts/testing/writing-test-examples"
+    },
+    {
+        "from": "/develop/smart-contracts/testing/overview",
+        "to": "/v3/guidelines/smart-contracts/testing/overview"
+    },
+    {
+        "from": "/develop/smart-contracts/guidelines",
+        "to": "/v3/guidelines/smart-contracts/guidelines"
+    },
+    {
+        "from": "/develop/smart-contracts/security/README",
+        "to": "/v3/guidelines/smart-contracts/security/overview"
     }
 ]

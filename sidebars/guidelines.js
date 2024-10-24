@@ -38,7 +38,7 @@ module.exports = [
     'type': 'html',
     'value': '<span class=\'menu__link\'><b><small> Smart Contracts Guidelines </small></b></span>',
   },
-  'develop/smart-contracts/guidelines',
+  'v3/guidelines/smart-contracts/guidelines',
   'v3/guidelines/smart-contracts/get-methods',
   {
     type: 'doc',
@@ -47,9 +47,17 @@ module.exports = [
   },
   {
     type: 'category',
+    label: 'Testing',
+    items: [
+      'v3/guidelines/smart-contracts/testing/overview',
+      'v3/guidelines/smart-contracts/testing/writing-test-examples',
+    ],
+  },
+  {
+    type: 'category',
     label: 'Security Measures',
     items: [
-      'develop/smart-contracts/security/README',
+      'v3/guidelines/smart-contracts/security/overview',
       'v3/guidelines/smart-contracts/security/secure-programming',
       'v3/guidelines/smart-contracts/security/things-to-focus',
       'v3/guidelines/smart-contracts/security/ton-hack-challenge-1',

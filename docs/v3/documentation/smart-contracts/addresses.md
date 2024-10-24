@@ -150,7 +150,7 @@ In relation to bounceable addresses specifically:
 1. The **bounceable=false** flag generally means the receiver is a wallet.
 2. The **bounceable=true** flag typically denotes a custom smart contract with its own application logic (for example, a DEX). In this example, non-bounceable messages should not be sent because of security reasons.
 
-Feel free to read more on this topic in our documentation to gain a better understanding of [non-bounceable messages](/develop/smart-contracts/guidelines/non-bouncable-messages).
+Feel free to read more on this topic in our documentation to gain a better understanding of [non-bounceable messages](/v3/guidelines/smart-contracts/guidelines/non-bouncable-messages).
 
 #### Armored base64 Representations
 
