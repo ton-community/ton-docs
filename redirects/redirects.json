@@ -814,25 +814,5 @@
     {
         "from": "/develop/smart-contracts/README",
         "to": "/v3/documentation/smart-contracts/overview"
-    },
-    {
-        "from": "/develop/dapps/ton-connect/overview",
-        "to": "/v3/guidelines/ton-connect/overview"
-    },
-    {
-        "from": "/develop/dapps/ton-connect/react",
-        "to": "/v3/guidelines/ton-connect/frameworks/react"
-    },
-    {
-        "from": "/develop/dapps/ton-connect/web",
-        "to": "/v3/guidelines/ton-connect/frameworks/web"
-    },
-    {
-        "from": "/develop/dapps/ton-connect/wallet",
-        "to": "/v3/guidelines/ton-connect/wallet"
-    },
-    {
-        "from": "/develop/dapps/ton-connect/developers",
-        "to": "/v3/guidelines/ton-connect/guidelines/developers"
     }
 ]

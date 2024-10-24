@@ -206,5 +206,5 @@ Example of an on-chain NFT parser: [stackblitz/ton-onchain-nft-parser](https://s
 
 ## See Also
 * [TON NFT processing](/v3/guidelines/dapps/asset-processing/nft-processing/nfts)
-* [TON Jetton processing](/develop/dapps/asset-processing/jettons)
+* [TON Jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
 * [Mint your first Jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token)

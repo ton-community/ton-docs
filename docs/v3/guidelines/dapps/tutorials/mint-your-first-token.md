@@ -213,4 +213,4 @@ If you want to go deeper, read this article by Tal Kol:
 
  - Project: https://github.com/ton-blockchain/minter-contract
  - By Slava ([Telegram @delovoyslava](https://t.me/delovoyslava), [delovoyhomie on GitHub](https://github.com/delovoyhomie))
- - [Jetton processing](/develop/dapps/asset-processing/jettons)
+ - [Jetton processing](/v3/guidelines/dapps/asset-processing/jettons)

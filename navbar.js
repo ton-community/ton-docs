@@ -67,7 +67,7 @@ module.exports = {
           label: 'Payment Processing',
         },
         {
-          to: 'develop/dapps/asset-processing/jettons',
+          to: 'v3/guidelines/dapps/asset-processing/jettons',
           label: 'Jetton Processing',
         },
         {

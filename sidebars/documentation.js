@@ -132,7 +132,7 @@ module.exports = [
     items: [
       'v3/documentation/dapps/assets/overview',
       // 'develop/dapps/asset-processing/README', // TODO: divide
-      // 'develop/dapps/asset-processing/jettons', // TODO: divide
+      // 'v3/guidelines/dapps/asset-processing/jettons', // TODO: divide
       // 'v3/guidelines/dapps/asset-processing/mintless-jettons', // TODO: divide
       'v3/documentation/dapps/assets/usdt',
       // 'v3/guidelines/dapps/asset-processing/nft-processing/nfts', // TODO: divide

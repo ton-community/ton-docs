@@ -187,7 +187,7 @@ module.exports = [
     label: 'Advanced Asset Processing',
     items: [
       'v3/guidelines/dapps/asset-processing/payments-processing', // TODO: divide
-      'develop/dapps/asset-processing/jettons', // TODO: divide
+      'v3/guidelines/dapps/asset-processing/jettons', // TODO: divide
       'v3/guidelines/dapps/asset-processing/mintless-jettons', // TODO: divide
       'v3/guidelines/dapps/asset-processing/mass-mint-tools',
       {
