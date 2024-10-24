@@ -1,7 +1,7 @@
 # Archive Node
 
 :::info
-Read about [Full Node](/participate/run-nodes/full-node) before this article
+Read about [Full Node](/v3/guidelines/nodes/running-nodes/full-node) before this article
 :::
 
 ## Overview
@@ -52,7 +52,7 @@ sudo zfs set compression=lz4 data
 
 ### Install MyTonCtrl
 
-Please, use a [Running Full Node](/participate/run-nodes/full-node) to **install** and **run** mytonctrl.
+Please, use a [Running Full Node](/v3/guidelines/nodes/running-nodes/full-node) to **install** and **run** mytonctrl.
 
 ### Run an Archive Node
 
@@ -220,4 +220,4 @@ Contact technical support with [@mytonctrl_help](https://t.me/mytonctrl_help).
 ## See Also
 
 * [TON Node Types](/v3/documentation/infra/nodes/node-types)
-* [Run a Full Node](/participate/run-nodes/full-node)
+* [Run a Full Node](/v3/guidelines/nodes/running-nodes/full-node)

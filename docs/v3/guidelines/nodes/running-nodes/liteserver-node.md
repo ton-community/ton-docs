@@ -4,14 +4,14 @@ import TabItem from '@theme/TabItem';
 # Liteserver Node
 
 :::info
-Read about [Full Node](/participate/run-nodes/full-node) before this article
+Read about [Full Node](/v3/guidelines/nodes/running-nodes/full-node) before this article
 :::
 
 When an endpoint is activated in a full node, the node assumes the role of a **Liteserver**. This node type can field and respond to requests from Lite Clients, allowing for seamless interaction with the TON Blockchain.
 
 ## Hardware requirements
 
-Compared to a [validator](/participate/run-nodes/full-node#hardware-requirements), a liteserver mode requires less resources. However, it is still recommended to use a powerful machine to run a liteserver.
+Compared to a [validator](/v3/guidelines/nodes/running-nodes/full-node#hardware-requirements), a liteserver mode requires less resources. However, it is still recommended to use a powerful machine to run a liteserver.
 
 - at least 16 cores CPU
 - at least 128 GB RAM
@@ -22,7 +22,7 @@ Compared to a [validator](/participate/run-nodes/full-node#hardware-requirements
 
 ### Recommended Providers
 
-Feel free to use cloud providers listed in the [Recommended Providers](/participate/run-nodes/full-node#recommended-providers) section.
+Feel free to use cloud providers listed in the [Recommended Providers](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) section.
 
 Hetzner and OVH are forbidden to run a validator, but you can use them to run a liteserver:
 

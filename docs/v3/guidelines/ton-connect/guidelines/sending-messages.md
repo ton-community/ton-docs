@@ -41,7 +41,7 @@ Feel free to copy-paste it into your browser console and run it.
 We will send two separate messages in one transaction: one to your own address, carrying 0.2 TON, and one to the other wallet address carrying 0.1 TON.
 
 By the way, there is a limit of messages sent in one transaction:
-- standard ([v3](/participate/wallets/contracts#wallet-v3)/[v4](/participate/wallets/contracts#wallet-v4)) wallets: 4 outgoing messages;
+- standard ([v3](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v3)/[v4](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4)) wallets: 4 outgoing messages;
 - highload wallets: 255 outgoing messages (close to blockchain limitations).
 
 ### 2) Sending the messages

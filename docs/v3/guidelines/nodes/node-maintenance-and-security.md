@@ -3,7 +3,7 @@
 ## <a id="introduction"></a>Introduction
 This guide provides some basic information on maintaining and securing TON Validator nodes. 
 
-This document assumes that a validator is installed using the configuration and tools **[recommended by TON Foundation](/participate/run-nodes/full-node)**  but general concepts apply to other scenarios as well and can be useful for savvy sysadmins.
+This document assumes that a validator is installed using the configuration and tools **[recommended by TON Foundation](/v3/guidelines/nodes/running-nodes/full-node)**  but general concepts apply to other scenarios as well and can be useful for savvy sysadmins.
 
 ## <a id="maintenance"></a>Maintenance
 ### <a id="database-grooming"></a>Database grooming

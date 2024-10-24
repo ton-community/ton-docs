@@ -3,7 +3,7 @@
  */
 module.exports = [
   'v3/guidelines/overview',
-  'develop/get-started-with-ton',
+  'v3/guidelines/get-started-with-ton',
   {
     type: 'category',
     label: 'TON Hello World series',
@@ -43,7 +43,7 @@ module.exports = [
   {
     type: 'doc',
     label: 'Transaction fees calculation',
-    id: 'develop/smart-contracts/fee-calculation',
+    id: 'v3/guidelines/smart-contracts/fee-calculation',
   },
   {
     type: 'category',
@@ -165,7 +165,7 @@ module.exports = [
         type: 'category',
         label: 'Tutorials & Examples',
         items: [
-          'develop/dapps/telegram-apps/step-by-step-guide',
+          'v3/guidelines/dapps/tma/tutorials/step-by-step-guide',
           'v3/guidelines/dapps/tma/tutorials/app-examples',
           'v3/guidelines/dapps/tma/tutorials/design-guidelines',
         ],
@@ -206,7 +206,7 @@ module.exports = [
     label: 'Running Nodes',
     items: [
       'v3/guidelines/nodes/running-nodes/archive-node',
-      'participate/run-nodes/full-node',
+      'v3/guidelines/nodes/running-nodes/full-node',
       'v3/guidelines/nodes/running-nodes/liteserver-node',
       'v3/guidelines/nodes/running-nodes/validator-node',
       'v3/guidelines/nodes/running-nodes/staking-with-nominator-pools',

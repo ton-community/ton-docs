@@ -36,7 +36,7 @@ module.exports = [
     from: '/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot-2',
   },
   {
-    to: '/develop/get-started-with-ton',
+    to: '/v3/guidelines/get-started-with-ton',
     from: '/develop/onboarding-challenge',
   },
   {

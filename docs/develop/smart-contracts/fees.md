@@ -53,7 +53,7 @@ That is why even NFT marketplaces usually take an extra amount of TON (_~1 TON_)
 :::info
 Each contract should check incoming messages for the amount of TONs attached to ensure they are enough to cover the fees.
 
-Check the [low-level fees overview](/v3/documentation/smart-contracts/transaction-fees/fees-low-level) to learn more about the formulas for calculating commissions and [fees calculation](/develop/smart-contracts/fee-calculation) to learn how to calculate fees in FunC contracts using the new TVM opcodes.
+Check the [low-level fees overview](/v3/documentation/smart-contracts/transaction-fees/fees-low-level) to learn more about the formulas for calculating commissions and [fees calculation](/v3/guidelines/smart-contracts/fee-calculation) to learn how to calculate fees in FunC contracts using the new TVM opcodes.
 :::
 
 However, let's read more about how fees are supposed to function on TON.

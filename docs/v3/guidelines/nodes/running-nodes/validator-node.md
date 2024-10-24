@@ -18,7 +18,7 @@
 
 All types of nodes require a static external IP address, one UDP port to be forwarded for incoming connections and all outgoing connections to be open - the node uses random ports for new outgoing connections. It's necessarily for the node to be visible to the outside world over the NAT.
 
-It can be done with your network provider or [rent a server](/participate/run-nodes/full-node#recommended-providers) to run a node.
+It can be done with your network provider or [rent a server](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) to run a node.
 
 :::info
 It's possible to find out which UDP port is opened from the `netstat -tulpn` command.
@@ -34,7 +34,7 @@ Read more about [slashing policy](/v3/documentation/infra/nodes/validation/staki
 
 
 ### Run a Fullnode
-Launch [Full Node](/participate/run-nodes/full-node) before follow this article.
+Launch [Full Node](/v3/guidelines/nodes/running-nodes/full-node) before follow this article.
 
 
 
@@ -169,7 +169,7 @@ If you have a regular node, then contact the group: [@mytonctrl_help](https://t.
 
 ## See Also
 
-* [Run a Full Node](/participate/run-nodes/full-node)
+* [Run a Full Node](/v3/guidelines/nodes/running-nodes/full-node)
 * [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
 * [Staking Incentives](/v3/documentation/infra/nodes/validation/staking-incentives)
 

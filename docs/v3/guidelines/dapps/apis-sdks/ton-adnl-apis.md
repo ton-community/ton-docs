@@ -23,7 +23,7 @@ Read more about [Merkle proofs](/v3/documentation/data-formats/tlb/proofs) at [T
 Public liteservers (from the global config) exist to get you started with TON quickly. It can be used for learning to program in TON, or for applications and scripts that do not require 100% uptime. 
 
 For building production infrastructure - it is suggested use well prepared infrastructure:
-- [set up own liteserver](https://docs.ton.org/participate/run-nodes/full-node#enable-liteserver-mode), 
+- [set up own liteserver](https://docs.ton.org/v3/guidelines/nodes/running-nodes/full-node#enable-liteserver-mode), 
 - use Liteserver premium providers [@liteserver_bot](https://t.me/liteserver_bot)
 
 ## Pros & Cons

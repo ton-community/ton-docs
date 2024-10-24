@@ -3141,7 +3141,7 @@ Official documentation:
 
   - [External messages](/v3/documentation/smart-contracts/message-management/external-messages)
 
-  - [Types of Wallet Contracts](/participate/wallets/contracts#wallet-v4)
+  - [Types of Wallet Contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4)
   
   - [TL-B](/v3/documentation/data-formats/tlb/tl-b-language)
 

@@ -91,7 +91,7 @@ module.exports = {
       label: 'Smart Contracts',
       items: [
         {
-          to: '/participate/wallets/contracts',
+          to: '/v3/documentation/smart-contracts/contracts-specs/wallet-contracts',
           label: 'Wallets',
         },
         {

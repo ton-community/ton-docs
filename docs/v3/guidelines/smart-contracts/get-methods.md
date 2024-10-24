@@ -8,7 +8,7 @@ Before proceeding, it is recommended that readers have a basic understanding of 
 
 Get methods are special functions in smart contracts that are made for querying specific data from them. Their execution doesn't cost any fees and happens outside of the blockchain.
 
-These functions are very common for most smart contracts. For example, the default [Wallet contract](/participate/wallets/contracts) has several get methods, such as `seqno()`, `get_subwallet_id()` and `get_public_key()`. They are used by wallets, SDKs and APIs to fetch data about wallets.
+These functions are very common for most smart contracts. For example, the default [Wallet contract](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) has several get methods, such as `seqno()`, `get_subwallet_id()` and `get_public_key()`. They are used by wallets, SDKs and APIs to fetch data about wallets.
 
 ## Design patterns for get methods
 

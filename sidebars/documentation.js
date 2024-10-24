@@ -52,7 +52,7 @@ module.exports = [
     type: 'category',
     label: 'Contracts Specification',
     items: [
-      'participate/wallets/contracts',
+      'v3/documentation/smart-contracts/contracts-specs/wallet-contracts',
       'v3/documentation/smart-contracts/contracts-specs/highload-wallet',
       'v3/documentation/smart-contracts/contracts-specs/vesting-contract',
       'v3/documentation/smart-contracts/contracts-specs/governance',

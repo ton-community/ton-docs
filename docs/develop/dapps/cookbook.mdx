@@ -305,7 +305,7 @@ try {
 <br></br>
 
 Most SDKs provide the following process for sending messages from your wallet:
-- You create wallet wrapper (object in your program) of a correct version (in most cases, v3r2; see also [wallet versions](/participate/wallets/contracts)), using secret key and workchain (usually 0, which stands for [basechain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules)).
+- You create wallet wrapper (object in your program) of a correct version (in most cases, v3r2; see also [wallet versions](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts)), using secret key and workchain (usually 0, which stands for [basechain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules)).
 - You also create blockchain wrapper, or "client" - object that will route requests to API or liteservers, whichever you choose.
 - Then, you *open* contract in the blockchain wrapper. This means contract object is no longer abstract and represents actual account in either TON mainnet or testnet.
 - After that, you can form messages you want and send them. You can also send up to 4 messages per request, as described in an [advanced manual](/v3/guidelines/smart-contracts/howto/wallet#sending-multiple-messages-simultaneously).
