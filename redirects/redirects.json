@@ -244,10 +244,6 @@
         "to": "/v3/guidelines/dapps/tma/guidelines/tips-and-tricks"
     },
     {
-        "from": "/develop/dapps/telegram-apps/app-examples",
-        "to": "/v3/guidelines/dapps/tma/tutorials/app-examples"
-    },
-    {
         "from": "/develop/dapps/telegram-apps/design-guidelines",
         "to": "/v3/guidelines/dapps/tma/tutorials/design-guidelines"
     },

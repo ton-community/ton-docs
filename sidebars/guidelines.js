@@ -106,7 +106,7 @@ module.exports = [
     'value': '<span class=\'menu__link\'><b><small> DApps Guidelines </small></b></span>',
   },
   'develop/dapps/README',
-  'develop/dapps/cookbook',
+  'v3/guidelines/dapps/cookbook',
   {
     type: 'category',
     label: 'APIs and SDKs',
@@ -158,7 +158,7 @@ module.exports = [
     type: 'category',
     label: 'Telegram Mini Apps',
     items: [
-      'develop/dapps/telegram-apps/README',
+      'v3/guidelines/dapps/tma/overview',
       {
         type: 'category',
         label: 'Guidelines',
@@ -321,7 +321,7 @@ module.exports = [
     'type': 'category',
     'label': 'TON Proxy & Sites',
     'items': [
-      'develop/dapps/tutorials/how-to-run-ton-site',
+      'v3/guidelines/web3/ton-proxy-sites/how-to-run-ton-site',
       'v3/guidelines/web3/ton-proxy-sites/ton-sites-for-applications',
       'v3/guidelines/web3/ton-proxy-sites/connect-with-ton-proxy',
       'v3/guidelines/web3/ton-proxy-sites/how-to-open-any-ton-site',

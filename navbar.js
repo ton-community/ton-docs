@@ -55,7 +55,7 @@ module.exports = {
       label: 'DApps',
       items: [
         {
-          to: '/develop/dapps/telegram-apps/',
+          to: '/v3/guidelines/dapps/tma/overview',
           label: 'Telegram Mini Apps (TMAs)',
         },
         {
@@ -79,7 +79,7 @@ module.exports = {
           label: 'Mint your NFTs',
         },
         {
-          to: '/develop/dapps/cookbook',
+          to: '/v3/guidelines/dapps/cookbook',
           label: 'Cookbook',
         },
       ],

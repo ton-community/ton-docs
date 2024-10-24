@@ -36,7 +36,7 @@ NFT Telegram usernames from Fragment can also be used in TON DNS; `yourname.t.me
 ### Use cases of TON Domains
 
 1. You can set domain to resolve to your wallet address, so a person unfamiliar with crypto can transfer money not to `EQDyo...zuDf` but to easily readable `mystore.ton`.
-2. You can attach a [TON Site](/develop/dapps/tutorials/how-to-run-ton-site) to the domain; then, it will be accessible in TON Web3 network under a convenient name.
+2. You can attach a [TON Site](/v3/guidelines/web3/ton-proxy-sites/how-to-run-ton-site) to the domain; then, it will be accessible in TON Web3 network under a convenient name.
 
 ## Ticket as an NFT
 

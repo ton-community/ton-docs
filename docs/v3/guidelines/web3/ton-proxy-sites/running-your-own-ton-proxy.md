@@ -119,7 +119,7 @@ Once you have set up `localhost:8080` as the HTTP proxy to be used in your brows
 ## Running TON Site
 
 :::tip tutorial found!
-Hey! Don't want to start from beginner-friendly tutorial [How to run TON Site?](/develop/dapps/tutorials/how-to-run-ton-site)
+Hey! Don't want to start from beginner-friendly tutorial [How to run TON Site?](/v3/guidelines/web3/ton-proxy-sites/how-to-run-ton-site)
 :::
 
 Most people will need just to access existing TON Sites, not to create new ones. However, if you want to create one, you'll need to run RLDP-HTTP Proxy on your server, along with the usual web server software such as Apache or Nginx.

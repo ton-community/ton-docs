@@ -185,7 +185,7 @@ It's also possible to make use of similar mechanisms using [SDKs](/v3/guidelines
 
 ### Address Examples
 
-Learn more examples on TON Addresses in the [TON Cookbook](/develop/dapps/cookbook#working-with-contracts-addresses).
+Learn more examples on TON Addresses in the [TON Cookbook](/v3/guidelines/dapps/cookbook#working-with-contracts-addresses).
 
 ## Possible problems
 

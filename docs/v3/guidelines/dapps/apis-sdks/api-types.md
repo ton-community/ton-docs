@@ -78,4 +78,4 @@ Response body
 ## See Also
 * [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis)
 * [List of SDKs](/v3/guidelines/dapps/apis-sdks/sdk)
-* [TON Cookbook](/develop/dapps/cookbook)
+* [TON Cookbook](/v3/guidelines/dapps/cookbook)
