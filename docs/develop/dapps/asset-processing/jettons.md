@@ -4,19 +4,92 @@ import Button from '@site/src/components/button';
 
 # Jetton Processing
 
-:::info
-For clear understanding, the reader should be familiar with the basic principles of asset processing described in [payments processing section](/develop/dapps/asset-processing/) of our documentation.
+## Best Practices on Jettons Processing
+
+Jettons are tokens on TON Blockchain - one can consider them similarly to ERC-20 tokens on Ethereum.
+
+:::info Transaction Confirmation
+TON transactions are irreversible after just one confirmation. For the best UX/UI avoid additional waiting. 
 :::
 
-Jettons are tokens on TON Blockchain - one can consider them similarly to ERC-20 tokens on Ethereum was set in TON with [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md).
+#### Withdrawal
+
+[Highload Wallet v3](/participate/wallets/contracts#highload-wallet-v3) - this is TON Blockchain latest solution which is the gold standard for jetton withdrawals. It allows you to take advantage of batched withdrawals.
+
+[Batched withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload-batch.js) - Meaning that multiple withdrawals are sent in batches, allowing for quick and cheap withdrawals.
+
+#### Deposits
+:::info
+It is suggested to set several MEMO deposit wallets for better performance.
+:::
+
+[Memo Deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js) - This allows you to keep one deposit wallet, and users add a memo in order to be identified by your system. This means that you don’t need to scan the entire blockchain, but is slightly less easy for users.
+
+[Memo-less deposits](https://github.com/gobicycle/bicycle) - This solution also exists, but is more difficult to integrate. However, we can assist with this, if you would prefer to take this route. Please notify us before deciding to implement this approach.
+
+### Additional Info
+
+:::caution Transaction Notification
+It is expected that every service in the Ecosystem will set the `forward_ton_amount` to 0.000000001 TON (1 nanoton) when a jetton withdrawal is made in order to send a Jetton Notify upon [successful transfer](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), otherwise the transfer will not be standard compliant and will not be able to be processed by other CEXes and services.
+:::
+
+- Please find the JS lib example - [tonweb](https://github.com/toncenter/tonweb) - which is the official JS library from the TON Foundation. 
+
+- If you want to use Java, you can look into [ton4j](https://github.com/neodix42/ton4j/tree/main). 
+
+- For Go, one should consider [tonutils-go](https://github.com/xssnick/tonutils-go). At the moment, we recommend the JS lib.
+
+
+## Content List
+
+
+:::tip
+In following docs offers details about Jettons architecture generally, as well as core concepts of TON which may be different from EVM-like and other blockchains. This is crucial reading in order for one to grasp a good understanding of TON, and will greatly help you.
+:::
+
+This document describes the following in order:
+1. Overview 
+2. Architecture
+2. Jetton Master Contract (Token Minter)
+3. Jetton Wallet Contract (User Wallet)
+4. Message Layouts
+4. Jetton Processing (off-chain)
+5. Jetton Processing (on-chain)
+6. Wallet processing
+7. Best Practices
+
+## Overview
+
+:::info
+TON transactions are irreversible after just one confirmation.
+For clear understanding, the reader should be familiar with the basic principles of asset processing described in [this section of our documentation](/develop/dapps/asset-processing/). In particular, it is important to be familiar with [contracts](/learn/overviews/addresses#everything-is-a-smart-contract), [wallets](/develop/smart-contracts/tutorials/wallet), [messages](/develop/smart-contracts/guidelines/message-delivery-guarantees) and deployment process.
+:::
+
+:::Info
+For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
+:::
+
+Quick jump to the core description of jetton processing:
+
+<Button href="/develop/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>Centralized Proccessing</Button>
+<Button href="/develop/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses"
+        colorType="secondary" sizeType={'sm'}>
+  On-Chain Processing
+</Button>
+
+<br></br><br></br>
+
+
+TON Blockchain and its underlying ecosystem classifies fungible tokens (FTs) as jettons. Because sharding is applied on TON Blockchain, our implementation of fungible tokens is unique when compared to similar blockchain models.
 
 In this analysis, we take a deeper dive into the formal standards detailing jetton [behavior](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) and [metadata](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
 A less formal sharding-focused overview of jetton architecture can be found in our
 [anatomy of jettons blog post](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons).
 
-Also, you should keep in mind that there are two approaches to working with jetton withdraws:
-- [Memo Deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js) - This allows you to keep one deposit wallet, and users add a memo in order to be identified by your system. This means that you don’t need to scan the entire blockchain, but is slightly less easy for users.
-- [Memo-less deposits](https://github.com/gobicycle/bicycle) - This solution also exists, but is more difficult to integrate. However, we can assist with this, if you would prefer to take this route. Please notify us before deciding to implement this approach.
+We have also provided specific details discussing our third-party open-source TON Payment Processor ([bicycle](https://github.com/gobicycle/bicycle)) which allows users to deposit and withdraw both Toncoin and jettons using a separate deposit address without using a text memo.
+
+
+
 
 ## Jetton Architecture
 
@@ -50,23 +123,18 @@ To retrieve more specific Jetton data use contract's _get_ method `get_jetton_da
 
 This method returns the following data:
 
-| Name               | Type  | Description                                                                                                                                                                                                     |
-|--------------------|-------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `total_supply`       | `int`  | the total number of issued jettons measured in indivisible units.                                                                                                                                               |
-| `mintable`          | `int`   | details whether new jettons can be minted or not. This value is either -1 (can be minted) or 0 (cannot be minted).                                                                                              |
-| `admin_address`      | `slice` |                                                                                                                                                                                                                 |
+| Name               | Type  | Description |
+|--------------------|-------|-------------------- |
+| `total_supply`       | `int`  | the total number of issued jettons measured in indivisible units. |
+| `mintable`          | `int`   | details whether new jettons can be minted or not. This value is either -1 (can be minted) or 0 (cannot be minted). |
+| `admin_address`      | `slice` |   |
 | `jetton_content`     | `cell` | data in accordance with [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md), check [jetton metadata parsing page](/develop/dapps/asset-processing/metadata) for more. |
-| `jetton_wallet_code` | `cell`  |                                                                                                                                                                                                                 |
+| `jetton_wallet_code` | `cell`  |  |
 
-You can call it via [Toncenter API](https://toncenter.com/api/v3/#/default/get_jetton_masters_api_v3_jetton_masters_get) or one of the [SDKs](https://docs.ton.org/develop/dapps/apis/sdk).
 
-<Tabs groupId="get-jetton_data">
-<TabItem value="API" label="API">
+It is also possible to use the method `/jetton/masters` from the [Toncenter API](https://toncenter.com/api/v3/#/default/get_jetton_masters_api_v3_jetton_masters_get) to retrieve the already decoded Jetton data and metadata. We have also developed methods for (js) [tonweb](https://github.com/toncenter/tonweb/blob/master/src/contract/token/ft/JettonMinter.js#L85) and (js) [ton-core/ton](https://github.com/ton-core/ton/blob/master/src/jetton/JettonMaster.ts#L28), (go) [tongo](https://github.com/tonkeeper/tongo/blob/master/liteapi/jetton.go#L48) and (go) [tonutils-go](https://github.com/xssnick/tonutils-go/blob/33fd62d754d3a01329ed5c904db542ab4a11017b/ton/jetton/jetton.go#L79), (python) [pytonlib](https://github.com/toncenter/pytonlib/blob/d96276ec8a46546638cb939dea23612876a62881/pytonlib/client.py#L742) and many other [SDKs](https://docs.ton.org/develop/dapps/apis/sdk).
 
-> Run `jetton/masters` method from the [Toncenter API](https://toncenter.com/api/v3/#/default/get_jetton_masters_api_v3_jetton_masters_get)
-
-</TabItem>
-<TabItem value="js" label="js">
+Example of using [Tonweb](https://github.com/toncenter/tonweb) to run a get method and get url for off-chain metadata:
 
 ```js
 import TonWeb from "tonweb";
@@ -76,9 +144,6 @@ const data = await jettonMinter.getJettonData();
 console.log('Total supply:', data.totalSupply.toString());
 console.log('URI to off-chain metadata:', data.jettonContentUri);
 ```
-
-</TabItem>
-</Tabs>
 
 ### Jetton minter
 
@@ -142,6 +207,11 @@ console.log('Jetton wallet address:', jettonWalletAddress.toString(true, true, t
 </TabItem>
 </Tabs>
 
+:::tip
+For more examples read the [TON Cookbook](/develop/dapps/cookbook#tep-74-jettons-standard).
+:::
+
+
 ### Retrieving data for a specific Jetton wallet
 
 To retrieve the wallet’s account balance, owner identification information, and other info related to a specific jetton wallet contract use the `get_wallet_data()` get method within the jetton wallet contract.
@@ -186,7 +256,11 @@ console.log('Jetton master address:', data.jettonMinterAddress.toString(true, tr
 </TabItem>
 </Tabs>
 
-## Jetton wallets communication overview
+## Message Layouts
+
+:::tip Messages
+Read more about Messages [here](/develop/smart-contracts/guidelines/message-delivery-guarantees).
+:::
 
 Communication between Jetton wallets and TON wallets occurs through the following communication sequence:
 
@@ -223,25 +297,27 @@ Here `sender` address is an address of Alice's `Jetton wallet`.
 
 | Name                 | Type           |
 |----------------------|----------------|
-| `query_id`             | uint64         |
+| `query_id`           | uint64         |
 
 :::tip Jettons standard
 A detailed description of the jetton wallet contract fields can be found in the [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) `Jetton standard` interface description.
 :::
 
-## Send Jettons with comments
+## How to send Jetton transfers with comments and notifications
 
-This transfer require some ton coins for **fees** and, optionally, **transfer notification message** (check forward amount field).
+This transfer require some ton coins for **fees** and **transfer notification message**.
 
-To send **comment** you need setup `forward payload`. Set **first 32 bits to 0x0** and append **your text**.
+To send **comment** you need to set up `forward payload`. Set **first 32 bits to 0x0** and append **your text**, `forward payload` is sent in `jetton notify 0x7362d09c` internal message. It will be generated only if `forward_ton_amount` > 0. 
+:::info
+Recommended `forward_ton_amount` for jetton transfer with comment is 1 nanoton.
+:::
 
-`forward payload` is sent in `transfer notification` internal message. It will be generated only if `forward_ton_amount` > 0. Recommended `forward_ton_amount` for jetton transfer with comment is 1 nanoton.
+Finally, to retrieve `Excess 0xd53276db` message you must set up `response destination`.
 
-Finally, to retrieve `Excess` message you must set up `response destination`.
+Sometimes, you may encounter an error `709` when sending a jetton. This error indicates that the amount of Toncoin attached to the message is not sufficient to send it. Make sure that `Toncoin > to_nano(TRANSFER_CONSUMPTION) + forward_ton_amount`, which is typically >0.04 unless the forward payload is very large. The commission depends on various factors, including the Jetton code details and whether a new Jetton wallet needs to be deployed for the recipient.
+It is recommended to add a margin of Toncoin to the message and set your address as the  `response_destination` to retrieve `Excess 0xd53276db` messages. For instance, you can add 0.05 TON to the message, while setting the `forward_ton_amount` to 1 nanoton (this amount of TON will be attached to the `jetton notify 0x7362d09c` message).
 
-Sometimes you may encounter a `709` error when sending jetton. It says that the value of the toncoin attached to the message is not enough to send it. Make sure that `Toncoin > to_nano(TRANSFER_CONSUMPTION) + forward_ton_amount`. `TRANSFER_CONSUMPTION` in most cases may be 0.037 if the `forward_payload` is not too large. 
-
-You may also encounter the error `cskip_no_gas`, which indicates that the jettons were successfully transferred, but no other calculations were performed. This is a common situation when the value of `forward_ton_amount` is equal to 1 nanoton.
+You may also encounter the error [`cskip_no_gas`](/learn/tvm-instructions/tvm-overview#compute-phase-skipped), which indicates that the jettons were successfully transferred, but no other calculations were performed. This is a common situation when the value of `forward_ton_amount` is equal to 1 nanoton.
 
 :::tip
 Check [best practices](/develop/dapps/asset-processing/jettons#best-practices) for _"send jettons with comments"_ example.
@@ -287,6 +363,10 @@ It should not to be confused with the `sender` field in the `Transfer notificati
 
 :::info
 To prevent a bottleneck in incoming transactions to a single wallet, it is suggested to accept deposits across multiple wallets and to expand the number of these wallets as needed.
+:::
+
+:::caution Transaction Notification
+It is expected that every service in the Ecosystem will set the `forward_ton_amount` to 0.000000001 TON (1 nanoton) when a jetton withdrawal is made in order to send a Jetton Notify upon [successful transfer](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), otherwise the transfer will not be standard compliant and will not be able to be processed by other CEXes and services.
 :::
 
 In this scenario, the payment service creates a unique memo identifier for each sender disclosing
@@ -442,7 +522,7 @@ Below you'll find step-by-step guide how to process jetton withdrawals.
 :::
 
 To withdraw Jettons, the wallet sends messages with the `transfer` body to its corresponding Jetton wallet.
-The Jetton wallet then sends the Jettons to the recipient. In good faith, it is important to attach some TON
+The Jetton wallet then sends the Jettons to the recipient. It is important to attach some TON (1 nanoTON at least)
 as the  `forward_ton_amount` (and optional comment to `forward_payload`) to trigger a `transfer notification`.
 See: [Jetton contracts message layouts](#jetton-contract-message-layouts)
 
@@ -477,7 +557,7 @@ See: [Jetton contracts message layouts](#jetton-contract-message-layouts)
     the expiration time and the outgoing message with the given `query_id`
     is not found, then the request should (this is optional) be marked as expired and should be safely resent.
 15. Look for incoming messages in the account.
-16. If a message that uses the `excesses` op code exists, the message should be decoded and the `query_id`
+16. If a message that uses the `Excess 0xd53276db` op code exists, the message should be decoded and the `query_id`
     value should be retrieved. A found `query_id` must be marked as successfully delivered.
 17. Go to step 5. Expired requests that have not been successfully sent should be pushed back to the withdrawal list.
 
