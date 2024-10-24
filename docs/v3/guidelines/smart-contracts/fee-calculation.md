@@ -1,6 +1,6 @@
 # Fees Calculation
 
-When your contract starts processing an incoming message, you should check the amount of TONs attached to the message to ensure they are enough to cover [all types of fees](/develop/smart-contracts/fees#elements-of-transaction-fee). To do this, you need to calculate (or predict) the fee for the current transaction.
+When your contract starts processing an incoming message, you should check the amount of TONs attached to the message to ensure they are enough to cover [all types of fees](/v3/documentation/smart-contracts/transaction-fees/fees#elements-of-transaction-fee). To do this, you need to calculate (or predict) the fee for the current transaction.
 
 This document describes how to calculate fees in FunC contracts using the new TVM opcodes.
 

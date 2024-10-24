@@ -86,7 +86,7 @@ module.exports = {
     },
     {
       type: 'dropdown',
-      to: 'develop/smart-contracts/',
+      to: 'v3/documentation/smart-contracts/overview',
       position: 'left',
       label: 'Smart Contracts',
       items: [
@@ -99,7 +99,7 @@ module.exports = {
           label: 'Sending Messages',
         },
         {
-          to: 'develop/smart-contracts/fees',
+          to: 'v3/documentation/smart-contracts/transaction-fees/fees',
           label: 'Transaction Fees',
         },
         {
@@ -191,7 +191,7 @@ module.exports = {
       position: 'left',
       items: [
         {
-          to: 'develop/smart-contracts/',
+          to: 'v3/documentation/smart-contracts/overview',
           label: 'Smart Contracts',
         },
         {

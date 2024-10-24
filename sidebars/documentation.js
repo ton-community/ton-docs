@@ -12,7 +12,7 @@ module.exports = [
     'type': 'html',
     'value': '<span class=\'menu__link\'><b><small> Smart Contracts Documentation </small></b></span>',
   },
-  'develop/smart-contracts/README',
+  'develop/smart-contracts/overview',
   'v3/documentation/smart-contracts/addresses',
   'v3/documentation/smart-contracts/shards',
   'v3/documentation/smart-contracts/infinity-sharding-paradigm',
@@ -42,7 +42,7 @@ module.exports = [
     type: 'category',
     label: 'Transaction Fees',
     items: [
-      'develop/smart-contracts/fees',
+      'v3/documentation/smart-contracts/transaction-fees/fees',
       'v3/documentation/smart-contracts/transaction-fees/fees-low-level',
       'v3/documentation/smart-contracts/transaction-fees/accept-message-effects',
       'v3/documentation/smart-contracts/transaction-fees/forward-fees',

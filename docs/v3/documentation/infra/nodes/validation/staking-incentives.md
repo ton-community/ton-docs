@@ -146,5 +146,5 @@ If you don't want to do this please consider using staking services https://ton.
 ## See Also
 
 * [Running a Validator](/v3/guidelines/nodes/running-nodes/validator-node)
-* [Transaction Fees](/develop/smart-contracts/fees)
+* [Transaction Fees](/v3/documentation/smart-contracts/transaction-fees/fees)
 * [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)

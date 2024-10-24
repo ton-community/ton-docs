@@ -50,7 +50,7 @@ RU
 When some event happens on the account in one of the TON chains, it causes a **transaction**. The most common event is the "arrival of some message", but generally speaking there could be `tick-tock`, `merge`, `split` and other events.
 
 Each transaction consists of up to 5 phases:
-1. **Storage phase** - in this phase, storage fees accumulated by the contract due to the occupation of some space in the chain state are calculated. Read more in [Storage Fees](/develop/smart-contracts/fees#storage-fee).
+1. **Storage phase** - in this phase, storage fees accumulated by the contract due to the occupation of some space in the chain state are calculated. Read more in [Storage Fees](/v3/documentation/smart-contracts/transaction-fees/fees#storage-fee).
 2. **Credit phase** - in this phase, the balance of the contract with respect to a (possible) incoming message value and collected storage fee are calculated.
 3. **Compute phase** - in this phase, TVM is executing the contract (see below) and the result of the contract execution is an aggregation of `exit_code`, `actions` (serialized list of actions), `gas_details`, `new_storage` and some others.
 4. **Action phase** - if the compute phase was successful, in this phase, `actions` from the compute phase are processed. In particular, actions may include sending messages, updating the smart contract code, updating the libraries, etc. Note that some actions may fail during processing (for instance, if we try to send message with more TON than the contract has), in that case the whole transaction may revert or this action may be skipped (it depends on the mode of the actions, in other words, the contract may send a `send-or-revert` or  `try-send-if-no-ignore` type of message).

@@ -35,7 +35,7 @@ transaction_fee = gas_used * gas_price
 * `gas_used` is the amount of gas was used during transaction execution.
 * `gas_price` price on 1 unit of gas in Gwei, calculated dynamically
 
-On the other hand average fee for sending any amount of USD₮ in TON Blockchain is about 0.0145 TON nowadays. Even if TON price increases 100 times, transactions will [remain ultra-cheap](/develop/smart-contracts/fees#average-transaction-cost). The core TON development team has optimized Tether’s smart contract to make it three times cheaper than any other Jetton.
+On the other hand average fee for sending any amount of USD₮ in TON Blockchain is about 0.0145 TON nowadays. Even if TON price increases 100 times, transactions will [remain ultra-cheap](/v3/documentation/smart-contracts/transaction-fees/fees#average-transaction-cost). The core TON development team has optimized Tether’s smart contract to make it three times cheaper than any other Jetton.
 
 ### Faster and scalable
 

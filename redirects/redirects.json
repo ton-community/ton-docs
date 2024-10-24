@@ -814,5 +814,9 @@
     {
         "from": "/develop/smart-contracts/security/README",
         "to": "/v3/guidelines/smart-contracts/security/overview"
+    },
+    {
+        "from": "/develop/smart-contracts/README",
+        "to": "/v3/documentation/smart-contracts/overview"
     }
 ]

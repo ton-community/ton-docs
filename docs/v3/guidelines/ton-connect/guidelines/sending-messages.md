@@ -139,7 +139,7 @@ console.log(payload);
 
 ### Smart contract deployment
 
-And we'll deploy an instance of super simple [chatbot Doge](https://github.com/LaDoger/doge.fc), mentioned as one of [smart contract examples](/develop/smart-contracts/#smart-contract-examples). First of all, we load its code and store something unique in data, so that we receive our very own instance that has not been deployed by someone other. Then we combine code and data into stateInit.
+And we'll deploy an instance of super simple [chatbot Doge](https://github.com/LaDoger/doge.fc), mentioned as one of [smart contract examples](/v3/documentation/smart-contracts/overview#smart-contract-examples). First of all, we load its code and store something unique in data, so that we receive our very own instance that has not been deployed by someone other. Then we combine code and data into stateInit.
 
 ```js
 let code = TonWeb.boc.Cell.oneFromBoc(TonWeb.utils.base64ToBytes('te6cckEBAgEARAABFP8A9KQT9LzyyAsBAGrTMAGCCGlJILmRMODQ0wMx+kAwi0ZG9nZYcCCAGMjLBVAEzxaARfoCE8tqEssfAc8WyXP7AN4uuM8='));
