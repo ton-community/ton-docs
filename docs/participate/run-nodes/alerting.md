@@ -34,12 +34,8 @@ If you want to receive messages in a group, add the bot to the group, and it wil
     ```bash
     MyTonCtrl> set ChatId <ChatId>
     ```
-4. Restart `mytoncore` service using command 
 
-    ```bash
-   $ sudo systemctl restart mytoncore
-    ```
-5. Check that the bot is able to send messages by running the command
+4. Check that the bot is able to send messages by running the command
 
     ```bash
     MyTonCtrl> test_alert
@@ -67,4 +63,4 @@ To enable or disable alerts, use the following commands:
 
 * To enable an alert, use the command `enable_alert <alert-name>`.
 * To disable an alert, use the command `disable_alert <alert-name>`.
-* To check the status of alerts, use the command `alerts_list`.
+* To check the status of alerts, use the command `list_alerts`.
