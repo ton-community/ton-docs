@@ -18,11 +18,11 @@ In this article, you'll learn how to:
 
 ## 📌 Prepare before you start
 
-1. First you need to have the [Tonhub](https://ton.app/wallets/tonhub-wallet) / [Tonkeeper](https://ton.app/wallets/tonkeeper) wallet or [Chrome extension](https://ton.app/wallets/chrome-plugin) or any other supported on the service.
-2. You must have on your balance more than 0.25 Toncoin + funds to cover the blockchain commission. 
+1. First you need to have the [Tonhub](https://ton.app/wallets/tonhub-wallet) / [Tonkeeper](https://ton.app/wallets/tonkeeper) wallet, [Chrome extension](https://ton.app/wallets/chrome-plugin) or any other supported on the service.
+2. You must have more than 0.25 Toncoin on your balance plus additional funds to cover the blockchain commission.
 
 :::tip Starter tip
- ~0.5 TON is definitely enough for this tutorial.
+ ~0.5 TON should be enough for this tutorial.
 :::
  
 
@@ -53,7 +53,7 @@ Click the `Connect Wallet` button to connect your [Tonhub](https://ton.app/walle
 
 ![image](/img/tutorials/jetton/jetton-token-logo.png)
 
-If you want to have an attractive Jetton token, you need a beautiful logo hosted somewhere.  For example:
+If you want to have an attractive Jetton token, you need to host a beautiful logo somewhere. For example:
 
 * https://bitcoincash-example.github.io/website/logo.png
 
@@ -77,7 +77,7 @@ If you want to have an attractive Jetton token, you need a beautiful logo hosted
  
 
  ## 💸 Send Jettons
- On the right side of the screen, you can **send tokens** to multi-currency wallets like [Tonkeeper](https://tonkeeper.com/) or [Tonhub](https://ton.app/wallets/tonhub-wallet).
+On the right side of the screen, you can **send tokens** to multi-currency wallets such as [Tonkeeper](https://tonkeeper.com/) or [Tonhub](https://ton.app/wallets/tonhub-wallet).
 
 ![image](/img/tutorials/jetton/jetton-send-tokens.png)
 
@@ -96,14 +96,14 @@ Prerequisites:
 
 #### Step-by-step guide
 
-Then go to **your token**, set the **amount** to send, and enter the **recipient address.**
+Then, go to **your token**, set the **amount** to send, and enter the **recipient address.**
 
 ![image](/img/tutorials/jetton/jetton-send-tutorial.png)
 
 
  ## 📚 Using the token on the site
 
- You can access the **search field** at the top of the site by entering the address of the token to use the owner's rights to manage.
+You can access the **search field** at the top of the site by entering the token's address to manage it as the owner.
  
 :::info
  The address can be found on the right side if you are already in the owner panel, or you can find the token address when receiving an airdrop.
@@ -114,7 +114,7 @@ Then go to **your token**, set the **amount** to send, and enter the **recipient
 
  ## ✏️ Jetton (token) customization
 
-With [FunC](/v3/documentation/smart-contracts/func/overview) language you can change the behavior of the token in your favor.
+With the [FunC](/v3/documentation/smart-contracts/func/overview) language you can change the behavior of the token in your favor.
 
 To make any changes, begin here:
 

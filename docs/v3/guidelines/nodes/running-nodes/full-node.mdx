@@ -13,7 +13,7 @@ We highly recommend installing MyTonCtrl using the supported operating systems:
 ## Hardware requirements
 
 :::caution Node usage on personal local machine
-You shouldn't run any type of node on your personal local machine for long, even if it is satisfy the requirements. Nodes actively use disks and can damage them fast.
+You shouldn't run any type of node on your personal local machine for long, even if it satisfies the requirements. Nodes actively use disks and can damage them quickly.
 :::
 
 ### With validator
@@ -22,7 +22,7 @@ You shouldn't run any type of node on your personal local machine for long, even
 - 128 GB RAM
 - 1TB NVME SSD _OR_ Provisioned 64+k IOPS storage
 - 1 Gbit/s network connectivity
-- public IP address (_fixed IP address_)
+- Public IP address (_fixed IP address_)
 - 64 TB/month traffic (100 TB/month on peak load)
 
 :::info Be ready for peak loads
@@ -31,12 +31,12 @@ Typically you'll need at least a 1 Gbit/s connection to reliably accommodate pea
 
 ### Port Forwarding
 
-All types of nodes require a static external IP address, one UDP port to be forwarded for incoming connections and all outgoing connections to be open - the node uses random ports for new outgoing connections. It's necessarily for the node to be visible to the outside world over the NAT.
+All types of nodes require a static external IP address, one UDP port to be forwarded for incoming connections and all outgoing connections to be open - the node uses random ports for new outgoing connections. It is necessarily for the node to be visible to the outside world over the NAT.
 
-It can be done with your network provider or [rent a server](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) to run a node.
+This can be done with your network provider or by [renting a server](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) to run a node.
 
 :::info
-It's possible to find out which UDP port is opened from the `netstat -tulpn` command.
+You can find out which UDP port is open using the `netstat -tulpn` command.
 :::
 
 ### Recommended Providers
@@ -73,10 +73,10 @@ Please, check this video step-by-step tutorial to start promptly:
 ### Switch to non-root user
 
 :::warning
-This step is **required** to successfully install and use mytonctrl, don't ignore **non-root user creation**. Without this step there will be no errors during installation, but mytonctrl will not work properly.
+This step is **required** to successfully install and use mytonctrl — don't ignore **non-root user creation**. Without this step, there will be no errors during installation, but mytonctrl will not work properly.
 :::
 
-If you don't have **non-root** user, you can create this with the following steps (otherwise skip first two steps and go to the third).
+If you don't have **non-root** user, you can create one with the following steps (otherwise skip first two steps and go to the third).
 
 1. Login as root and create new user:
 
@@ -165,7 +165,7 @@ Otherwise, [check troubleshooting section](/v3/guidelines/nodes/running-nodes/fu
 
 Wait until `Local validator out of sync` becomes less than 20 seconds.
 
-When new node have been started, even from dump, **it's needed to wait up to 3 hours before out of sync number starts to go down**. This is due to the fact that node still needs to establish it’s place in network, propagate it’s addresses via DHT tables etc.
+When a new node have been started, even from dump, **it's needed to wait up to 3 hours before out of sync number starts to decrease**. This is because the node still needs to establish its place in the network, propagate its addresses via DHT tables, etc.
 
 ### Uninstall mytonctrl
 
@@ -199,7 +199,7 @@ ls -lh /var/ton-work/keys/
 
 ### Check the node logs
 
-Check the node logs upon failure:
+Check the node logs in case of failure:
 
 ```bash
 tail -f /var/ton-work/log.thread*

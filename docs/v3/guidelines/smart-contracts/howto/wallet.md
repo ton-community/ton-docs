@@ -19,7 +19,7 @@ In this section we’ll learn to create operations without using pre-configured 
 
 ## 💡 Prerequisites
 
-This tutorial requires basic knowledge of Javascript and Typescript or Golang. It is also necessary to hold at least 3 TON (which can be stored in an exchange account, a non-custodial wallet, or by using the telegram bot wallet). It is necessary to have a basic understanding of [cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage), [addresses in TON](/v3/documentation/smart-contracts/addresses), [blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains) to understand this tutorial.
+This tutorial requires basic knowledge of JavaScript and TypeScript or Golang. It is also necessary to hold at least 3 TON (which can be stored in an exchange account, a non-custodial wallet, or by using the Telegram bot wallet). It is necessary to have a basic understanding of [cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage), [addresses in TON](/v3/documentation/smart-contracts/addresses), [blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains) to understand this tutorial.
 
 :::info MAINNET DEVELOPMENT IS ESSENTIAL   
 Working with the TON Testnet often leads to deployment errors, difficulty tracking transactions, and unstable network functionality. Therefore, it could be beneficial to complete most development on the TON Mainnet to potentially avoid these issues, which might be necessary to reduce the number of transactions and thereby possibly minimize fees.
@@ -34,7 +34,7 @@ All code examples used in this tutorial can be found in the following [GitHub re
 - Ensure NodeJS is installed.
 - Specific Ton libraries are required and include: @ton/ton 13.5.1+, @ton/core 0.49.2+ and @ton/crypto 3.2.0+.
 
-**OPTIONAL**: If you prefer to use GO instead JS, it is  necessary to install the [tonutils-go](https://github.com/xssnick/tonutils-go) library and the GoLand IDE to conduct development on TON. This library will be used in this tutorial for the GO version.
+**OPTIONAL**: If you prefer to use Go instead of JS, it is necessary to install the  [tonutils-go](https://github.com/xssnick/tonutils-go) library and the GoLand IDE to conduct development on TON. This library will be used in this tutorial for the GO version.
 
 
 <Tabs groupId="code-examples">
@@ -733,7 +733,7 @@ In this section we’ll go over how to create a wallet (wallet v3) from scratch.
 
 ### Generating a Mnemonic
 
-The first thing needed to correctly create a wallet is to retrieve a `private` and `public` key. To accomplish this task it is necessary to generate a mnemonic seed phrase and then extract private and public keys using cryptographic libraries. 
+The first thing needed to correctly create a wallet is to retrieve a `private` and `public` key. To accomplish this task, it is necessary to generate a mnemonic seed phrase and then extract private and public keys using cryptographic libraries.
 
 This is accomplished as follows:
 
@@ -3118,7 +3118,7 @@ This helps us to be independent of using libraries and to understand the structu
 
 ## 🧩 Next Steps
 
-Reading the documentation provided above is a complex undertaking and it’s difficult to understand the entirety of the TON platform. However, it is a good exercise for those passionate about building on the TON. Another suggestion is to begin learning about how to write smart contracts on TON by consulting the following resources: [FunC Overview](https://docs.ton.org/v3/documentation/smart-contracts/func/overview), [Best Practices](https://docs.ton.org/v3/guidelines/smart-contracts/guidelines), [Examples of Smart Contracts](https://docs.ton.org/v3/documentation/smart-contracts/contracts-specs/examples), [FunC Cookbook](https://docs.ton.org/v3/documentation/smart-contracts/func/cookbook)
+Reading the documentation provided above is a complex undertaking and it’s difficult to understand the entirety of the TON platform. However, it is a good exercise for those passionate about building on the TON. Another suggestion is to begin learning how to write smart contracts on TON by consulting the following resources: [FunC Overview](https://docs.ton.org/v3/documentation/smart-contracts/func/overview), [Best Practices](https://docs.ton.org/v3/guidelines/smart-contracts/guidelines), [Examples of Smart Contracts](https://docs.ton.org/v3/documentation/smart-contracts/contracts-specs/examples), [FunC Cookbook](https://docs.ton.org/v3/documentation/smart-contracts/func/cookbook)
 
 Additionally, it is recommended that readers familiarize themselves with the following documents in more detail: [ton.pdf](https://docs.ton.org/ton.pdf) and [tblkch.pdf](https://ton.org/tblkch.pdf) documents.
 

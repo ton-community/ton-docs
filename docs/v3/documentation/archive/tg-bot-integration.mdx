@@ -3,12 +3,11 @@ import Button from '@site/src/components/button'
 # TON Connect for Telegram Bots
 
 :::warning deprecated
-This tutorial describes an outdated approach to integrating TON Connect with Telegram bots. We strongly recommend using [Telegram Mini Apps](/develop/dapps/telegram-apps) for a more modern and secure integration.
+This guide explains an outdated method of integrating TON Connect with Telegram bots. For a more secure and modern approach, consider using [Telegram Mini Apps](/develop/dapps/telegram-apps) for a more modern and secure integration.
 :::
 
-In this tutorial, we’ll create a sample telegram bot that supports TON Connect 2.0 authentication using Javascript TON Connect SDK.
-We will analyze connecting a wallet, sending a transaction, getting data about the connected wallet, and disconnecting a wallet.
-
+In this tutorial, we will develop a sample Telegram bot using the JavaScript TON Connect SDK, supporting TON Connect 2.0 authentication.
+This guide covers wallet connections, sending transactions, retrieving wallet information, and disconnecting wallets.
 
 <Button href="https://t.me/ton_connect_example_bot" colorType={'primary'} sizeType={'sm'}>
 
@@ -37,8 +36,8 @@ Check out GitHub
 
 ## Creating project
 
-### Set up dependencies
-Firstly we have to create a Node JS project. We will use TypeScript and [node-telegram-bot-api](https://www.npmjs.com/package/node-telegram-bot-api) library (you can choose any other suitable for you library as well). Also, we will use [qrcode](https://www.npmjs.com/package/qrcode) library for QR codes generation, but you can replace it with any other same library.
+### Setting up dependencies
+Start by creating a Node.js project. We will use TypeScript and the [node-telegram-bot-api](https://www.npmjs.com/package/node-telegram-bot-api) library, though you can choose an alternative library if preferred. Also, we will use [qrcode](https://www.npmjs.com/package/qrcode) library for QR codes generation, but you can replace it with any other same library.
 
 Let's create a directory `ton-connect-bot`. Add the following package.json file there:
 ```json
@@ -171,7 +170,7 @@ ton-connect-bot
 ```
 
 ## Connecting a wallet
-We've already installed the `@tonconnect/sdk`, so we can just import it to get started.
+After installing the  `@tonconnect/sdk`, we can begin by importing it to initialize wallet connections.
 
 We will start with getting wallets list. We need only http-bridge-compatible wallets. Create a folder `ton-connect` into `src` and add `wallets.ts` file there:
 We also define function `getWalletInfo` that queries detailed wallet info by its `appName`.

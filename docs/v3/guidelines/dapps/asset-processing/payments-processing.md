@@ -14,27 +14,28 @@ It's recommended to get acquainted with [Asset Processing Overview](/v3/document
 
 ## Wallet smart contract
 
-Wallet smart contracts are contracts on the TON Network which serve the task of allowing actors outside the blockchain to interact with blockchain entities. Generally, it solves three challenges:
-* authenticates owner: Rejects to process and pay fees for non-owners' requests.
-* replays protection: Prohibits the repetitive execution of one request, for instance sending assets to some other smart contract.
-* initiates arbitrary interaction with other smart contracts.
+Wallet smart contracts on the TON Network allow external actors to interact with blockchain entities.
+* Authenticates the owner: Rejects requests that attempt to process or pay fees on behalf of non-owners.
+* Provides replay protection: Prevents the repeated execution of the same request, such as sending assets to another smart contract.
+* Initiates arbitrary interactions with other smart contracts.
 
 Standard solution for the first challenge is public-key cryptography: `wallet` stores the public key and checks that an incoming message with a request is signed by the corresponding private key which is known only by the owner.
 
-The solution to the third challenge is common as well; generally, a request contains a fully formed inner message `wallet` sends to the network. However, for replay protection, there are a few different approaches.
+The solution to the third challenge is also common; generally, a request contains a fully formed inner message that the `wallet` sends to the network. However, for replay protection, there are a few different approaches.
 
 ### Seqno-based wallets
-Seqno-based wallets follow the most simple approach to sequencing messages. Each message has a special `seqno` integer that must coincide with the counter stored in the `wallet` smart contract. `wallet` updates its counter on each request, thus ensuring that one request will not be processed twice. There are a few `wallet` versions that differ in publicly available methods: the ability to limit requests by expiration time, and the ability to have multiple wallets with the same public key. However, an inherent requirement of that approach is to send requests one by one, since any gap in `seqno` sequence will result in the inability to process all subsequent requests.
+Seqno-based wallets use the simplest approach to sequencing messages. Each message has a special `seqno` integer that must coincide with the counter stored in the `wallet` smart contract. `wallet` updates its counter on each request, thus ensuring that one request will not be processed twice. There are a few `wallet` versions that differ in publicly available methods: the ability to limit requests by expiration time, and the ability to have multiple wallets with the same public key. However, an inherent requirement of that approach is to send requests one by one, since any gap in `seqno` sequence will result in the inability to process all subsequent requests.
 
 ### High-load wallets
-This `wallet` type follows an approach based on storing the identifier of the non-expired processed requests in smart-contract storage. In this approach, any request is checked for being a duplicate of an already processed request and, if a replay is detected, dropped. Due to expiration, the contract may not store all requests forever, but it will remove those that cannot be processed due to the expiration limit. Requests to this `wallet` may be sent in parallel without interfering with each other; however, this approach requires more sophisticated monitoring of request processing.
+This `wallet` type follows an approach based on storing the identifier of the non-expired processed requests in smart-contract storage. In this approach, any request is checked for being a duplicate of an already processed request and, if a replay is detected, dropped. Due to expiration, the contract may not store all requests forever, but it will remove those that cannot be processed due to the expiration limit. Requests to this `wallet` can be sent in parallel without interference, but this approach requires more sophisticated monitoring of request processing.
+
 
 ### Wallet deployment
-To deploy a wallet via TonLib one needs to:
+To deploy a wallet via TonLib, one needs to:
 1. Generate a private/public key pair via [createNewKey](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L244) or its wrapper functions (example in [tonlib-go](https://github.com/mercuryoio/tonlib-go/tree/master/v2#create-new-private-key)). Note that the private key is generated locally and does not leave the host machine.
 2. Form [InitialAccountWallet](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L62) structure corresponding to one of the enabled `wallets`. Currently `wallet.v3`, `wallet.v4`, `wallet.highload.v1`, `wallet.highload.v2` are available.
 3. Calculate the address of a new `wallet` smart contract via the [getAccountAddress](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L283) method. We recommend using a default revision `0` and also deploying wallets in the basechain `workchain=0` for lower processing and storage fees.
-4. Send some Toncoin to the calculated address. Note that you need to send them in `non-bounce` mode since this address has no code yet and thus cannot process incoming messages. `non-bounce` flag indicates that even if processing fails, money should not be returned with a bounce message. We do not recommend using the `non-bounce` flag for other transactions, especially when carrying large sums, since the bounce mechanism provides some degree of protection against mistakes.
+4. Send some Toncoin to the calculated address. Note that you need to send them in `non-bounce` mode, as this address has no code yet and cannot process incoming messages. `non-bounce` flag indicates that even if processing fails, money should not be returned with a bounce message. We do not recommend using the `non-bounce` flag for other transactions, especially when carrying large sums, since the bounce mechanism provides some degree of protection against mistakes.
 5. Form the desired [action](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L154), for instance `actionNoop` for deploy only. Then use [createQuery](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L292) and [sendQuery](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L300) to initiate interactions with the blockchain.
 6. Check the contract in a few seconds with [getAccountState](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L288) method.
 
@@ -111,7 +112,7 @@ A contract's transactions can be obtained using [getTransactions](https://toncen
 3. Process transactions with not empty source in incoming message and destination equals to account address.
 4. The next 10 transactions should be loaded and steps 2,3,4,5 should be repeated until you processed all incoming transactions.
 
-### Get incoming/outgoing transactions
+### Retrieve Incoming/Outgoing Transactions
 It's possible to track messages flow during transaction processing. Since the message flow is a DAG it's enough to get current transaction using [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method and find incoming transaction by `out_msg` with [tryLocateResultTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_result_tx_tryLocateResultTx_get) or outgoing transactions by `in_msg` with [tryLocateSourceTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_source_tx_tryLocateSourceTx_get).
 
 <Tabs groupId="example-outgoing-transaction">
@@ -635,4 +636,4 @@ if __name__ == "__main__":
 
 ## SDKs
 
-You can find a list of SDKs for various languages (JS, Python, Golang, C#, Rust, etc.) list [here](/v3/guidelines/dapps/apis-sdks/sdk).
+A full list of SDKs for various programming languages (JS, Python, Golang, etc.) is available [here](/v3/guidelines/dapps/apis-sdks/sdk).

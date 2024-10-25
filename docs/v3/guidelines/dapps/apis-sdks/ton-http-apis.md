@@ -4,24 +4,24 @@
 
 There are different ways to connect to blockchain:
 1. **RPC data provider or another API**: in most cases, you have to *rely* on its stability and security.
-2. ADNL connection: you're connecting to a [liteserver](/participate/run-nodes/liteserver). They might be inaccessible, but with a certain level of validation (implemented in the library), cannot lie.
-3. Tonlib binary: you're connecting to liteserver as well, so all benefits and downsides apply, but your application also contains a dynamic-loading library compiled outside.
-4. Offchain-only. Such SDKs allow to create and serialize cells, which you can then send to APIs.
+2. ADNL connection: you're connecting to a [liteserver](/participate/run-nodes/liteserver). It may be inaccessible, but with a certain level of validation (implemented in the library), it cannot lie.
+3. Tonlib binary: you're also connecting to a liteserver, so all benefits and downsides apply, but your application includes a dynamically-loaded library compiled externally.
+4. Offchain-only. Such SDKs allow the creation and serialization of cells, which can then be sent to APIs.
 
 :::
 
 ## Pros & Cons
 
 - ✅ Habitual and suitable for a quick start, this is perfect for every newcomer looking to play with TON.
-- ✅ Web-oriented. Perfect to load data of TON smart contracts from Web, also allows to send messages there.
+- ✅ Web-oriented. Perfect for loading data from TON smart contracts via the Web, and also allows sending messages.
 
 - ❌ Simplified. It's not possible to receive information where you need an indexed TON API.
-- ❌ HTTP-Middleware. You can't fully trust server responses, unless server augments blockchain data with [Merkle proofs](/v3/documentation/data-formats/tlb/proofs) to allow validation that it is genuine.
+- ❌ HTTP-Middleware.  You can't fully trust server responses unless the server augments blockchain data with [Merkle proofs](/v3/documentation/data-formats/tlb/proofs) to validate its authenticity.
 
 ## Monitoring
 
-* [status.toncenter](https://status.toncenter.com/) - shows all full network nodes and validators that were active during the last hour, as well as various statistics on them.
-* [Tonstat.us](https://tonstat.us/) - provides a real-time Grafana-based dashboard that shows the status of all TON-related APIs, where data is updated every 5 minutes.
+* [status.toncenter](https://status.toncenter.com/) - shows all full network nodes and validators active during the last hour, along with various statistics.
+* [Tonstat.us](https://tonstat.us/) - provides a real-time Grafana-based dashboard displaying the status of all TON-related APIs, with data updated every 5 minutes.
 * [tonqueues.vladimirlebe.dev](https://tonqueues.vladimirlebe.dev/) - provides a real-time Grafana-based dashboard showing various statistics (such TPS, etc.).
 
 ## RPC Nodes
@@ -47,7 +47,7 @@ Indexers allow to list jetton wallets, NFTs, transactions by certain filters, no
 
 ### Anton
 
-Written in Go, Anton is an open source The Open Network blockchain indexer available under the Apache License 2.0. Anton is designed to provide a scalable and flexible solution for developers to access and analyze blockchain data. Our goal is to help developers and users understand how the blockchain is being used, as well as make it possible for developers to add their own contracts with their own message schemas to our explorer.
+Written in Go, Anton is an open source The Open Network blockchain indexer available under the Apache License 2.0. Anton is designed to provide a scalable, flexible solution for developers to access and analyze blockchain data. Our goal is to help developers and users understand how the blockchain is being used, and to make it possible for developers to add their own contracts with custom message schemas to our explorer.
 
 * [Project GitHub](https://github.com/tonindexer/anton) - to run your own indexer
 * [Swagger API documentation](https://github.com/tonindexer/anton), [API Query Examples](https://github.com/tonindexer/anton/blob/main/docs/API.md) - to use, study the documentation and examples

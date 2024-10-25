@@ -1,7 +1,7 @@
 # TON mining guide
 
 :::warning deprecated
-This information may be out of date and no longer useful. Feel free to omit it.
+This information may be outdated and no longer relevant. You can skip it.
 :::
 
 
@@ -23,14 +23,14 @@ To start mining right away:
 10. Wait to get lucky; the output of step 4 should have told you approximately what your chances are to mine a block.
 
 ## <a id="basics"></a>Basics
-Toncoin are distributed by so-called `PoW Givers` which are smart contracts with certain amounts of TONs assigned to them. Currently, there are 10 active PoW givers on the TON Network. Givers hand out coins in blocks of 100 TON each. In order to receive such a block, your computer needs to solve a complex mathematical challenge issued by a giver and do that as fast as possible; you will compete against other miners for the reward of 100 TON. If someone manages to solve the problem before you, all the work your machine has done is in vain, and a new round/race begins.
+Toncoin is distributed by `PoW Givers`, which are smart contracts with specific amounts of Toncoin assigned to them. Currently, there are 10 active PoW givers on the TON Network. Each giver distributes coins in blocks of 100 TON. To earn one of these blocks, your computer must solve a complex mathematical challenge faster than other miners. If another miner solves the problem before you, your machine's work is discarded, and a new round begins.
 
-It is important to understand that profits from mining do not "trickle in" as your machine does the works, they come in batches of 100 TON for every successful solution of giver challenge. This means that if your machine has a 10% chance to calculate a block within 24 hours (see step 4 of [Quick start](#quickStart)) then you will probably need to wait for ~10 days before you will get a 100 TON reward.
+Mining profits are not gradual; they come in batches of 100 TON for each successfully solved giver challenge. This means that if your machine has a 10% chance to calculate a block within 24 hours (see step 4 of [Quick start](#quickStart)) then you will probably need to wait for ~10 days before you will get a 100 TON reward.
 
 The process of mining is largely automated by `mytonctrl`. Detailed information about the mining process can be found in [PoW givers](https://www.ton.org/#/howto/pow-givers) document.
 
 ## <a id="advanced"></a>Advanced
-If you are serious about mining and wish to operate more than one machine/mining farm, then you really need to learn TON and how mining works; please see the [HOWTO](https://ton.org/#/howto/) section for in-depth information. Here is some general advice:
+If you're serious about mining and want to operate multiple machines or a mining farm, it's essential to learn about TON and how mining works. Refer to the [HOWTO](https://ton.org/#/howto/) section for detailed information. Here is some general advice:
 
 * **DO** run your own node / lite server on a separate machine; this will ensure that your mining farm does not depend on external lite servers that can go down or not process your queries in a timely fashion.
 * **DO NOT** bombard public lite servers with `get_pow_params` queries, if you have custom scripts that poll givers status in high frequency you **must** use your own lite server. Clients that violate this rule risk having their IPs blacklisted on public lite servers.
@@ -40,7 +40,7 @@ If you are serious about mining and wish to operate more than one machine/mining
 The total network hashrate of TON mining is very high; miners need high-performance machines if they wish to succeed. Mining on standard home computers and notebooks is futile, and we advise against such attempts.
 
 #### CPU
-Modern CPU that supports [Intel SHA Extension](https://en.wikipedia.org/wiki/Intel_SHA_extensions) is a **must**. Most miners use AMD EPYC or Threadripper-based machines with at least 32 cores and 64 threads.
+A modern CPU with [Intel SHA Extension](https://en.wikipedia.org/wiki/Intel_SHA_extensions) support is **essential**. Most miners use AMD EPYC or Threadripper machines with at least 32 cores and 64 threads.
 
 #### GPU
 Yes! You can mine TON using GPU. There is a version of a PoW miner that is capable to use both Nvidia and AMD GPUs; you can find the code and instructions on how to use it in the [POW Miner GPU](https://github.com/tontechio/pow-miner-gpu/blob/main/crypto/util/pow-miner-howto.md) repository.
@@ -53,7 +53,7 @@ Almost the entire mining process happens in the L2 cache of the CPU. That means 
 Please do note that this applies to the plain mining process **only**, if your machine also runs full node or other processes, then things change! But this is outside the scope of this guide.
 
 #### Storage
-Plain miner run in lite mode uses minimum space and does not store any data in storage.
+A miner running in lite mode uses minimal storage space and does not store data.
 
 #### Network
 Plain miner needs the ability to open outgoing connections to the Internet.
@@ -65,7 +65,7 @@ See [can I use FPGA / ASICs?](#faq-hw-asic)
 Many people mine using AWS or Google compute cloud machines. As outlined in the specs above, what really matters is CPU. Therefore, we advise AWS [c5a.24xlarge](https://aws.amazon.com/ec2/instance-types/c5/) or Google [n2d-highcpu-224](https://cloud.google.com/compute/vm-instance-pricing) instances.
 
 ### <a id="hardware-estimates"></a>Income estimates
-The formula for calculating the income is quite simple: `($total_bleed / $total_hashrate) * $your_hashrate`. This will give you **current** estimate. You can find out the variables on [ton.org/mining](https://ton.org/mining) or use the estimated mining income calculator (`emi` command) in `mytonctrl`. Here is sample output made on August 7th, 2021 using i5-11400F CPU:
+The formula for calculating the income is quite simple: `($total_bleed / $total_hashrate) * $your_hashrate`. This will give you a **current** estimate. You can find out the variables on [ton.org/mining](https://ton.org/mining) or use the estimated mining income calculator (`emi` command) in `mytonctrl`. Here is sample output made on August 7th, 2021 using i5-11400F CPU:
 ```
 Mining income estimations
 -----------------------------------------------------------------
@@ -82,7 +82,7 @@ Est. monthly income:                437.7 TON
 ## <a id="faq"></a>FAQ
 ### <a id="faq-general"></a>General
 #### <a id="faq-general-posorpow"></a>Is TON PoS or PoW network?
-TON Blockchain uses the Proof-of-Stake consensus. Mining is not required to generate new blocks.
+TON Blockchain operates on a Proof-of-Stake (PoS) consensus. Mining is not required to create new blocks.
 #### <a id="faq-general-pow"></a>So how come TON is Proof-of-Work?
 Well, the reason is that the initial issue of 5 billion Toncoins were transferred to ad hoc Proof-of-Work Giver smart contracts.
 Mining is used to obtain Toncoins from this smart contract.
@@ -91,7 +91,7 @@ The most actual information is available on [ton.org/mining](https://ton.org/min
 #### <a id="faq-general-mined"></a>How many coins have been mined already?
 As of August 2021, about 4.9BN Toncoins have been mined.
 #### <a id="faq-general-whomined"></a>Who has mined those coins?
-Coins have been mined to over 70'000 wallets, owners of those wallets are not known.
+Coins have been mined to over 70,000 wallets. The owners of these wallets remain unknown.
 #### <a id="faq-general-elite"></a>Is it difficult to start mining?
 Not at all. All you need is [adequate hardware](#hardware) and to follow the steps outlined in the [quick start](#quickStart) section.
 #### <a id="faq-general-pissed"></a>Is there another way to mine?
@@ -102,7 +102,7 @@ Yes, there is a third-party app—[TON Miner Bot](https://t.me/TonMinerBot).
 We cannot say this. All we know is the total hashrate of all miners on the network. However, there are graphs on [ton.org/mining](https://ton.org/mining) that attempt to estimate quantity of machines of certain type needed to provide approximate total hashrate.
 #### <a id="faq-general-noincome"></a>Do I need Toncoin to start mining?
 No, you do not. Anyone can start mining without owning a single Toncoin.
-#### <a id="faq-mining-noincome"></a>I mine for hours, why my wallet total does not increase, not even by 1 TON?
+#### <a id="faq-mining-noincome"></a>Why does my wallet balance not increase, even after hours of mining?
 TON are mined in blocks of 100, you either guess a block and receive 100 TON or receive nothing. Please see [basics](#basics).
 #### <a id="faq-mining-noblocks"></a>I've been mining for days and I see no results, why?
 Did you check your current [Income estimates](#hardware-estimates)? If field `Est. 24h chance to mine a block` is less than 100%, then you need to be patient. Also, please note that a 50% chance to mine a block within 24 hours does not automatically mean that you will mine one within 2 days; 50% applies to each day separately.

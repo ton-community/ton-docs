@@ -1,8 +1,8 @@
 # Step by step NFT collection minting 
 
 ## 👋 Introduction
-Non-fungible tokens, or NFTs, have become one of the hottest topics in the world of digital art and collectibles. NFTs are unique digital assets that use blockchain technology to verify ownership and authenticity. They have opened up new possibilities for creators and collectors to monetize and trade digital art, music, videos, and other forms of digital content. In recent 
-years, the NFT market has exploded, with some high-profile sales reaching millions of dollars. In this article, we will build our NFT collection on TON step by step.
+Non-fungible tokens (NFTs) have become one of the hottest topics in the world of digital art and collectibles. NFTs are unique digital assets that use blockchain technology to verify ownership and authenticity. They have opened up new possibilities for creators and collectors to monetize and trade digital art, music, videos, and other forms of digital content. In recent 
+years, the NFT market has exploded, with some high-profile sales reaching millions of dollars. In this article, we will build an NFT collection on TON step by step.
 
 **This is the beautiful collection of ducks you will create by the end of this tutorial:**
 
@@ -10,27 +10,27 @@ years, the NFT market has exploded, with some high-profile sales reaching millio
 
 
 ## 🦄 What you will learn
-1. You will mint NFT collection on TON
-2. You will understand how NFT's on TON works
-3. You will put NFT on sale
-4. You will upload metadata to [pinata.cloud](https://pinata.cloud)
+1. You will mint NFT collection on TON.
+2. You will understand how NFTs on TON works.
+3. You will put NFT on sale.
+4. You will upload metadata to [pinata.cloud](https://pinata.cloud).
 
 ## 💡 Prerequisites
-You must already have a testnet wallet with at least 2 TON on it. It's possible to get testnet coins from [@testgiver_ton_bot](https://t.me/testgiver_ton_bot).
+You must already have a testnet wallet with at least 2 TON in it. You can get testnet coins from [@testgiver_ton_bot](https://t.me/testgiver_ton_bot).
 
 :::info How to open testnet version of my Tonkeeper wallet?  
-To open testnet network on tonkeeper go to the settings and click 5 times on the tonkeeper logo located in the bottom, after that choose testnet instead of mainnet.
+To open the testnet network on Tonkeeper, go to settings and click 5 times on the Tonkeeper logo located at the bottom. Then choose "testnet" instead of "mainnet."
 :::
 
-We will use Pinata as our IPFS storage system, so you also need to create an account on [pinata.cloud](https://pinata.cloud) and get api_key & api_secreat. Official Pinata [documentation tutorial](https://docs.pinata.cloud/pinata-api/authentication) can help with that. As long as you get these api tokens, I'll be waiting for you here!!!
+We will use Pinata as our IPFS storage system, so you also need to create an account on [pinata.cloud](https://pinata.cloud) and get api_key & api_secreat. Official Pinata [documentation tutorial](https://docs.pinata.cloud/pinata-api/authentication) can help with that. Once you have these API tokens, I’ll be waiting for you here!
 
 ## 💎 What is it NFT on TON?
 
-Before start of main part of our tutorial, we need to understand, how actually NFT works on TON in general terms. And unexpectedly, but we will start with an explanation of how NFT works in ETH, in order to understand what is the peculiarity of the implementation of NFT in TON, compared to the usual blockchains in the industry.
+Before starting the main part of our tutorial, we need to understand how NFTs work on TON in general terms. Unexpectedly, we will start with an explanation of how NFTs work on Ethereum (ETH), to understand the uniqueness of NFT implementation on TON compared to other blockchains in the industry.
 
 ### NFT implementation on ETH 
 
-The implementation of the NFT in ETH is extremely simple - there is 1 main contract of the collection, which stores a simple hashmap, which in turn stores the data of the NFT from this collection. All requests related to this collection(if any user wants to transfer the NFT, put it up for sale, etc.) are sent specifically to this 1 contract of the collection.
+The implementation of the NFT in ETH is extremely simple - there is 1 main contract of the collection, which stores a simple hashmap, which in turn stores the data of the NFT from this collection. All requests related to this collection (if any user wants to transfer the NFT, put it up for sale, etc.) are sent specifically to this single contract of the collection.
 
 ![](/img/tutorials/nft/eth-collection.png)
 
@@ -46,7 +46,7 @@ The problems of such an implementation in the context of TON are perfectly descr
 
 ### TON NFT implementation
 
-In TON we have 1 master contract - smart-contract of our collection, that store it's metadata and address of it's owner and the main thing - that if we want to create("mint") new NFT Item - we just need to send message to this collection contract. And this collection contract will deploy contract of new NFT item for us, with the data we provided.
+On TON, we have on master contract - smart-contract of our collection, that store it's metadata and address of it's owner and the main thing - that if we want to create("mint") new NFT Item - we just need to send message to this collection contract. This collection contract will then deploy a new NFT item contract for us, using the data we provide.
 
 ![](/img/tutorials/nft/ton-collection.png)
 
@@ -205,7 +205,7 @@ Firstly, we need to store images of our NFT's in `/data/images` with name `0.png
 
 ### NFT specifications
 
-Most of the products on TON supports such metatadata specifications to store information about NFT collection:
+Most products on TON supports such metatadata specifications to store information about NFT collection:
 
 Name | Explanation 
 ---|---
@@ -217,7 +217,7 @@ social_links | List of links to the project’s social media profiles. Use no mo
 
 ![image](/img/tutorials/nft/collection-metadata.png)
 
-Based on this info, let's create our own metadata file `collection.json`, that will describe metadata of our collection!
+Based on this info, let's create our own metadata file `collection.json`, that will describe the metadata of our collection!
 ```json
 {
   "name": "Ducks on TON",

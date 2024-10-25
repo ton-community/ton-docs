@@ -7,13 +7,13 @@ import TabItem from '@theme/TabItem';
 
 During product development, various questions often arise regarding interactions with different contracts on TON.
 
-This document is created to gather the best practices from all developers and share them with everyone.
+This document was created to gather the best practices from all developers and share them with everyone.
 
 ## Working with contracts' addresses
 
 ### How to convert (user friendly \<-\> raw), assemble, and extract addresses from strings?
 
-TON address uniquely identifies contract in blockchain, indicating its workchain and original state hash. [Two common formats](/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses) are used: **raw** (workchain and HEX-encoded hash separated with ":" character) and **user-friendly** (base64-encoded with certain flags).
+A TON address uniquely identifies contract in blockchain, indicating its workchain and original state hash. [Two common formats](/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses) are used: **raw** (workchain and HEX-encoded hash separated by the ":" character) and **user-friendly** (base64-encoded with certain flags).
 
 ```
 User-friendly: EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
@@ -124,7 +124,7 @@ Two flags are defined: **bounceable**/**non-bounceable** and **testnet**/**any-n
 Testnet-only flag doesn't have representation in blockchain at all. Non-bounceable flag makes difference only when used as destination address for a transfer: in this case, it [disallows bounce](/v3/guidelines/smart-contracts/guidelines/non-bouncable-messages) for a message sent; address in blockchain, again, does not contain this flag.
 :::
 
-Also, in some libraries, you may notice a serialization parameter called `urlSafe`. The thing is, the base64 format is not URL safe, which means that some of characters (namely, `+` and `/`) can cause issues when transmitting address in a link. When `urlSafe = true`, all `+` symbols are replaced with `-`, and all `/` symbols are replaced with `_`. You can obtain these address formats using the following code:
+Also, in some libraries, you may notice a serialization parameter called `urlSafe`. he base64 format is not URL safe, which means that some characters (namely,`+` and `/`) can cause issues when transmitting an address in a link. When `urlSafe = true`, all `+` symbols are replaced with `-`, and all `/` symbols are replaced with `_`. You can obtain these address formats using the following code:
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -274,7 +274,7 @@ try {
 
 ## Standard wallets in TON ecosystem
 
-### How to transfer TON? How to send a text message to other wallet?
+### How to transfer TON? How to send a text message to another wallet?
 
 #### Sending messages
 
@@ -453,7 +453,7 @@ asyncio.run(main())
 
 ### Writing comments: long strings in snake format
 
-Some times it's necessary to store long strings (or other large information) while cells can hold **maximum 1023 bits**. In this case, we can use snake cells. Snake cells are cells that contain a reference to another cell, which, in turn, contains a reference to another cell, and so on.
+Sometimes it's necessary to store long strings (or other large information) while cells can hold **maximum 1023 bits**. In this case, we can use snake cells. Snake cells are cells that contain a reference to another cell, which, in turn, contains a reference to another cell, and so on.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-tonweb" label="JS (tonweb)">
@@ -699,7 +699,7 @@ Most major tokens do not have a different storage structure because they use [a 
 
 ### How to construct a message for a jetton transfer with a comment?
 
-To understand how to construct a message for token transfer, we use [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which describes the token standard.
+To understand how to construct a message for a token transfer, we use  [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which describes the token standard.
 
 #### Transfer jettons
 <br></br>
@@ -874,7 +874,7 @@ asyncio.run(main())
 If `forward_amount` is nonzero, a notification regarding jetton reception is sent to destination contract, as can be seen in the scheme in the top of this section. If `response_destination` address is not null, toncoins left (they're called "excesses") are sent to that address.
 
 :::tip
-Explorers support comments in jetton notifications as well as in common TON transfers. Their format is 32 zero bits and then text, preferably UTF-8.
+Explorers support comments in jetton notifications, as well as in common TON transfers. Their format is 32 zero bits and then text, preferably UTF-8.
 :::
 
 :::tip
@@ -940,7 +940,7 @@ async function main() {
 </TabItem>
 </Tabs>
 
-To begin with, let's assume that the minimum amount of TON for the storage fee is `0.05`. This means that after deploying an NFT, the smart contract of the collection will send this much TON to its balance. Next, we obtain arrays with the owners of the new NFTs and their content. Afterward, we get the `next_item_index` using the GET method `get_collection_data`.
+To begin with, let's assume that the minimum amount of TON for the storage fee is `0.05`. This means that after deploying an NFT, the collection's smart contract will send this much TON to its balance. Next, we obtain arrays with the owners of the new NFTs and their content. Afterward, we get the `next_item_index` using the GET method `get_collection_data`.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -1001,7 +1001,7 @@ main().finally(() => console.log("Exiting..."));
 </TabItem>
 </Tabs>
 
-Next, we need to correctly calculate the total transaction cost. The value of `0.015` was obtained through testing, but it can vary for each case. This mainly depends on the content of the NFT, as an increase in content size results in a higher **forward fee** (the fee for delivery).
+Next, we need to correctly calculate the total transaction cost. The value of `0.015` was obtained through testing, but it can vary for each scenario. This mainly depends on the content of the NFT, as an increase in content size results in a higher **forward fee** (the fee for delivery).
 
 ### How to change the owner of a collection's smart contract?
 
@@ -1083,7 +1083,7 @@ main().finally(() => console.log("Exiting..."));
 </Tabs>
 
 
-### How to change the content in a collection's smart contract?
+### How to change the content of a collection's smart contract?
 
 To change the content of a smart contract's collection, we need to understand how it is stored. The collection stores all the content in a single cell, inside of which there are two cells: **collection content** and **NFT common content**. The first cell contains the collection's metadata, while the second one contains the base URL for the NFT metadata.
 
@@ -1346,7 +1346,7 @@ if ((await tonVault.getReadinessStatus()) !== ReadinessStatus.READY) {
 }
 ```
 
-After that, we can send transfer messages with the amount of TON
+After that, we can send transfer messages with the amount of TON.
 
 ```typescript
 import { toNano } from "@ton/core";

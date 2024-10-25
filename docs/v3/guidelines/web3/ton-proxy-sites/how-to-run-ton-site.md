@@ -2,7 +2,7 @@
 
 ## 👋 Introduction
 
-[TON Sites](https://blog.ton.org/ton-sites) work almost like regular sites except for their installation. A number of additional actions are required to launch them. In this tutorial I will show you how to do it.
+[TON Sites](https://blog.ton.org/ton-sites) work almost like regular sites except for their installation. Several additional actions are required to launch them. In this tutorial, I will show you how to do it.
 
 ## 🖥 Running TON Site
 Install [Tonutils Reverse Proxy](https://github.com/tonutils/reverse-proxy) to use TON Proxy for your website.
@@ -18,29 +18,29 @@ chmod +x tonutils-reverse-proxy-linux-amd64
 
 ##### Run
 
-Run with domain configuration, and follow the steps:
+Run with domain configuration and follow the steps:
 ```
 ./tonutils-reverse-proxy-linux-amd64 --domain your-domain.ton 
 ```
 Scan QR code from your terminal using Tonkeeper, Tonhub or any other wallet, execute transaction. Your domain will be linked to your site.
 
 ###### Run without domain
-Alternatively, you can run in simple mode, with .adnl domain, if you don't have .ton or .t.me domain:
+Alternatively, you can run in simple mode with an .adnl domain, if you don't have a .ton or .t.me domain:
 ```
 ./tonutils-reverse-proxy-linux-amd64
 ```
 
 ##### Use
-Now anyone can access your TON Site! Using ADNL address or domain. 
+Now anyone can access your TON Site using the ADNL address or domain.
 
-If you want to change some settings, like proxy pass url - open `config.json` file, edit and restart proxy. Default proxy pass url is `http://127.0.0.1:80/`
+If you want to change some settings, like the proxy pass URL, open the `config.json` file, edit and restart the proxy. Default proxy pass url is `http://127.0.0.1:80/`
 
-Proxy adds additional headers:
-`X-Adnl-Ip` - ip of client, and `X-Adnl-Id` - adnl id of client
+The proxy adds additional headers:
+`X-Adnl-Ip` - ip of the client, and `X-Adnl-Id` - adnl id of the client
 
 ### Installation on any other OS
 
-Build it from sources using `./build.sh`, and run as in the step 2 for linux. Go environment is required to build.
+Build it from sources using `./build.sh`, and run it as in step 2 for linux. Go environment is required to build.
 
 ## 👀 Further steps
 

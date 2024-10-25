@@ -5,10 +5,10 @@ import Player from '@site/src/components/player'
 # Get Started with TON
 
 
-Set up your first application on TON Blockchain from scratch and discover its speed, reliability and essential concepts of asynchronous way of thinking.
+Set up your first application on TON Blockchain from scratch and discover its speed, reliability, and essential concepts of asynchronous thinking.
 
 :::tip newcomer-friendly guide
-If you are completely new with programming, this guide is the best choice for you.
+If you are completely new to programming, this guide is the best choice for you.
 :::
 
 This learning path contains __5 modules__ and should take you around __45 minutes__.
@@ -16,10 +16,10 @@ This learning path contains __5 modules__ and should take you around __45 minute
 
 ## 🛳 What you will learn
 
-In this tutorial, you'll learn how to easily make blockchain transactions using JavaScript. You could learn to do it without this tutorial, but this approach is convenient and user-friendly.
+In this tutorial, you'll learn how to easily make blockchain transactions using JavaScript. While you could learn to do it without this tutorial, this approach is convenient and user-friendly.
 
 1. You will make your own TON Wallet with Tonkeeper
-2. You will use a Testnet faucet to top up your wallet for testing
+2. You will use a Testnet faucet to top up your wallet for testing.
 3. You will understand essential concepts of TON smart contracts (Addresses, Cells)
 4. You will learn how to interact with TON using TypeScript SDK and API provider
 5. You will compile your first transaction using NFT Miner console application
@@ -38,11 +38,11 @@ Your browser does not support the video tag.
 
 Our goal for today is to mine an NFT! This achievement will stay with you *forever*.
 
-Finally, you are able to mine this NFT achievement even in mainnet. (_it costs only 0,05 TON!_)
+Finally, you are able to mine this NFT achievement even in mainnet. (_it costs only 0,05 TON!_).
 
 ### Video tutorial
 
-Check out this awesome video tutorial created by a member of TON developer community! With this helpful guide, you can complete the tutorial with ease:
+Check out this awesome video tutorial created by a member of the TON developer community! With this helpful guide, you can complete the tutorial with ease:
 
 <Player url="https://youtu.be/wEEQLwQy30Q" />
 
@@ -50,12 +50,12 @@ Check out this awesome video tutorial created by a member of TON developer commu
 
 Today, we are going to teach our prospective builders how to mine on TON Blockchain. This experience will allow all of you to understand the significance of mining and why Bitcoin mining helped revolutionize the industry.
 
-Though the PoW Giver smart contract framework that defined the initial mining process that helped lay the foundation for TON was completed at launch, the last TON was mined in June of 2022 to culminate TON’s Proof of Work (PoW) token distribution mechanism. That said, with our recent transition to Proof of Stake (PoS), the era of staking on TON has just begun.
+Although the PoW Giver smart contract framework, which defined the initial mining process that laid the foundation for TON, was completed at launch, the last TON was mined in June 2022 to conclude TON’s Proof of Work (PoW) token distribution mechanism. That said, with our recent transition to Proof of Stake (PoS), the era of staking on TON has just begun.
 
 * [Dive deeper into our economic model and mining on TON](https://ton.org/mining)
 
 
-Now, let’s focus on the first steps to becoming a **TVM Developer** and learn how to mine an NFT on TON! Provided below is an example of what we're aiming to create.
+Now, let’s focus on the first steps to becoming a **TVM Developer** and learn how to mine an NFT on TON! Below is an example of what we're aiming to create.
 
 <div style={{ width: '100%', textAlign: 'center', margin: '0 auto' }}>
   <video style={{ width: '100%', borderRadius: '10pt', margin: '15pt auto', maxWidth: '90%' }} muted={true} autoPlay={true}
@@ -73,16 +73,16 @@ It’s possible to create a miner in about half an hour if we keep focused on th
 
 To get started, all developers will make use of the following components:
 
-* __Wallet__: You need a non-custodial wallet to store an NFT in testnet mode.
+* __Wallet__: You need a non-custodial wallet to store an NFT in Testnet mode.
 * __Repository__:  We’ll use a ready-made template designed specifically for you.
 * __Developer Environment__:  Developers will need to determine whether they want to mine using a local or cloud environment.
 
 ### Download and Create a Wallet
 
-To start off, you’ll need a non-custodial wallet that will allow you to receive and store your TON; for this purpose in this guide we are using Tonkeeper. You’ll need to enable Testnet mode within the wallet to be able to receive Testnet Toncoins. These tokens will be used later on to send a final minting transaction to the smart contract.
+To start, you’ll need a non-custodial wallet that allows you to receive and store your TON. For this guide, we are using Tonkeeper. You’ll need to enable Testnet mode within the wallet to be able to receive Testnet Toncoins. These tokens will be used later on to send a final minting transaction to the smart contract.
 
 :::info
-With a non-custodial wallet, the user owns the wallet and holds its private key by themselves.
+With a non-custodial wallet, the user owns the wallet and holds the private key themselves.
 :::
 
 To download and create a TON wallet follow these simple steps:
@@ -94,13 +94,13 @@ Easy! Let's go to the development now.
 
 ### Project setup
 
-To make your life easier and skip routine low-level stuff, we will use a boilerplate.
+To make your life easier and skip routine low-level tasks, we will use a boilerplate.
 
 :::tip
 Note, you'll need to [sign in](https://github.com/login) to GitHub for further work.
 :::
 
-Please, use the [ton-onboarding-challenge](https://github.com/ton-community/ton-onboarding-challenge) template to create your project by clicking on the “Use this template” button and selecting the “Create a new repository” tab as shown below:
+Please use the [ton-onboarding-challenge](https://github.com/ton-community/ton-onboarding-challenge) template to create your project by clicking the “Use this template” button and selecting the “Create a new repository” tab as shown below:
 
 
 <br></br>
@@ -113,7 +113,7 @@ Please, use the [ton-onboarding-challenge](https://github.com/ton-community/ton-
 />
 <br></br>
 
-After completing this step, you’ll have access to a highly performant repository that can be used as your miner's core. Congratulations! ✨
+After completing this step, you’ll have access to a highly performant repository that can serve as your miner's core. Congratulations! ✨
 
 ### Development Environments
 
@@ -136,9 +136,9 @@ Make sure you have opened the repository in your GitHub profile that was generat
 
 #### Local and Cloud Development Environments
 
-* For users who are not familiar with JavaScript, it can be challenging to use a JavaScript IDE, especially if your computer and tooling systems are not configured for this purpose.
+* For users unfamiliar with JavaScript, it can be challenging to use a JavaScript IDE, especially if your computer and tooling systems are not configured for this purpose.
 
-* However, if you're familiar with NodeJS and Git and know how to work with `npm`, it may be more comfortable for you to use a **local environment**.
+* However, if you're familiar with NodeJS and Git and know how to work with `npm`, you may find it more comfortable to use a **local environment**.
 
 #### Cloud Codespaces
 
@@ -155,7 +155,7 @@ If you choose the cloud development environment it's easy to get started by firs
 />
 <br></br>
 
-After completing this step, GitHub will create a special cloud workspace that allows you to access the VSCode Online IDE (Visual Code Online Integrated Development Environment).
+After completing this step, GitHub will create a special cloud workspace that allows you to access the VSCode Online IDE (Visual Studio Code Online Integrated Development Environment).
 
 Once access is granted (the codespace typically starts in about 30 seconds), you'll have everything required to begin without the need to install Git, Node.js, or other developer tools.
 
@@ -362,7 +362,7 @@ We need to convert the hex output to something _useful_.
 
 :::info GAS PARAMETERS ON TON:
 __Warning__: Though this information is highly complex and __not necessary for this tutorial__, if you’re interested in understanding the complex technical aspects of TON consider using these resources:
-1. To obtain a better understanding of how TON Virtual Machine (TVM) operates and _how does TON process transactions_, check out [TVM overview section](/v3/documentation/tvm/tvm-overview).
+1. To better understand how TON Virtual Machine (TVM) operates and _how does TON process transactions_, check out [TVM overview section](/v3/documentation/tvm/tvm-overview).
 2. Secondly, if you are interested in learning more about how transaction and gas fees work on TON, consider diving into [this section](/v3/documentation/smart-contracts/transaction-fees/fees) of our documentation.
 3. Finally, to get a better understanding of the exact gas values needed to carry out TVM instructions see [this section](/v3/documentation/tvm/instructions#gas-prices) of our documentation.
 :::
@@ -375,7 +375,7 @@ In the section above where we discuss gas amounts and numerical (_num_) values i
 
 As it is clear when examining the given output, hex numbers can be quite substantial in size. It's not possible to make a variable and make use of them, because of specific [JavaScript limitations](https://stackoverflow.com/a/307200) that are outlined here.
 
-We need a way to translate this, that’s where the `bn.js` (the big number implementation in JavaScript) library comes in. Bn.js is a library developers use to work with large numbers that are larger than the maximum JavaScript integer values. Let’s use this example to get a better idea of the _Mining Data_ required for this process:
+We need a way to translate this, and that’s where the `bn.js` (the big number implementation in JavaScript) library comes in. Bn.js is a library developers use to work with large numbers that are larger than the maximum JavaScript integer values. Let’s use this example to get a better idea of the _Mining Data_ required for this process:
 
 
 ```ts title="ton-onboarding-challenge/index.ts"
@@ -580,7 +580,7 @@ import {toNano} from "ton"
 
   console.log(' ');
   console.log("💣 WARNING! As soon as you find the hash, you should quickly send the transaction.");
-  console.log("If someone else sends a transaction before you, the seed changes, and you'll have to find the hash again!");
+  console.log("If someone else sends a transaction before you, the seed will change, and you'll have to find the hash again!");
   console.log(' ');
 
   // flags work only in user-friendly address form
@@ -608,7 +608,7 @@ Let’s run the above script to launch the newly created payment link. Now it’
 
 ### Creating A Smartphone Compatible Payment Link
 
-As a solution, the most brilliant minds in the world created a QR code generator specifically for use in terminal. With this tool, you can simply scan the payment link from your Tonkeeper wallet to send a transaction.
+As a solution, the most brilliant minds in the world created a QR code generator specifically for use in terminal. With this tool, you can easily scan the payment link from your Tonkeeper wallet to send a transaction.
 
 ```bash
 npm install qrcode-terminal
@@ -661,7 +661,7 @@ In order to successfully mine an NFT rocket on Testnet, it is necessary to follo
 4. _Scan_ the generated QR code from the miner.
 
 :::tip final tip
-Because there may be other developers carrying out the same process in an attempt to mine their own NFT, you may have to try the process a couple times to be successful (as another user could mine the next NFT available right before you).
+Because other developers may be carrying out the same process in an attempt to mine their own NFT, you may need to try the process a couple of times to succeed (as another user could mine the next NFT available right before you).
 :::
 
 Soon after initiating this process, you will have successfully mined your very first NFT on TON (it should appear in your Tonkeeper wallet).

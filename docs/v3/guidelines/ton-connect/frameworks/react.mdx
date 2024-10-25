@@ -1,7 +1,7 @@
 
 # TON Connect for React
 
-Recommended SDK for React Apps is a [UI React SDK](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-react). It is a React component that provides a high-level way to interact with TON Connect.
+The recommended SDK for React Apps is a [UI React SDK](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-react). It is a React component that provides a high-level way to interact with TON Connect.
 
 ## Implementation
 
@@ -53,7 +53,7 @@ You can add className and style props to the button as well. Note that you canno
 <TonConnectButton className="my-button-class" style={{ float: "right" }}/>
 ```
 
-Moreover, you always can initiate the connection manually, using `useTonConnectUI` hook and [openModal](https://github.com/ton-connect/sdk/tree/main/packages/ui#open-connect-modal) method.
+Moreover, you can always initiate the connection manually using the  `useTonConnectUI` hook and [openModal](https://github.com/ton-connect/sdk/tree/main/packages/ui#open-connect-modal) method.
 
 ```tsx
 export const Header = () => {
@@ -80,11 +80,11 @@ To open a modal window for a specific wallet, use the `openSingleWalletModal()` 
 
 ### Redirects
 
-If you want to redirect user to a specific page after wallet connection, you can use `useTonConnectUI` hook and [customize your return strategy](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy).
+If you want to redirect the user to a specific page after wallet connection, you can use `useTonConnectUI` hook and [customize your return strategy](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy).
 
 #### Telegram Mini Apps
 
-If you want to redirect user to a [Telegram Mini App](/v3/guidelines/dapps/tma/overview) after wallet connection, you can customize the `TonConnectUIProvider` element:
+If you want to redirect the user to a [Telegram Mini App](/v3/guidelines/dapps/tma/overview) after wallet connection, you can customize the `TonConnectUIProvider` element:
 
 ```tsx
       <TonConnectUIProvider
@@ -100,11 +100,11 @@ If you want to redirect user to a [Telegram Mini App](/v3/guidelines/dapps/tma/o
 
 ### UI customization
 
-To [customize UI](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation) of the modal you can use `useTonConnectUI` hook and `setOptions` function. See more about useTonConnectUI hook in [Hooks](#hooks) section.
+To [customize UI](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation) of the modal you can use the `useTonConnectUI` hook and the `setOptions` function. See more about useTonConnectUI hook in [Hooks](#hooks) section.
 
 ## Hooks
 
-If you want to use some low-level TON Connect UI SDK features in your React app, you can use hooks from `@tonconnect/ui-react` package.
+If you want to use some low-level TON Connect UI SDK features in your React app, you can use hooks from the `@tonconnect/ui-react` package.
 
 ### useTonAddress
 
@@ -269,7 +269,7 @@ export const Settings = () => {
 
 ### Understanding Transaction Status by Hash
 
-The principle located in Payment Processing (using tonweb). [See more](/develop/dapps/asset-processing/#checking-contracts-transactions)
+The principle is located in Payment Processing (using tonweb). [See more](/develop/dapps/asset-processing/#checking-contracts-transactions)
 
 ### Optional Check (ton_proof) on the Backend
 
@@ -308,7 +308,7 @@ if (tonProofPayload) {
 
 #### Handling ton_proof Result
 
-You can find `ton_proof` result in the `wallet` object when the wallet is connected:
+You can find the `ton_proof` result in the `wallet` object when the wallet is connected:
 
 ```ts
 useEffect(() => {
@@ -397,7 +397,7 @@ Wrappers are classes that simplify interaction with the contract, allowing you t
 - When using the `Tact` language, wrappers are automatically generated for you.
 
 :::tip
-Check out [blueprint](https://github.com/ton-org/blueprint) documentation how to develop and deploy contracts
+Check out the [blueprint](https://github.com/ton-org/blueprint) documentation how to develop and deploy contracts
 :::
 
 Let's take a look at the default `Blueprint` Counter wrapper example and how we can use it:

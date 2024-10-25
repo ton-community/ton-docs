@@ -1,18 +1,18 @@
 # Understanding Testnet
 
-Use the TON test network for development and testing purpose.
+Use the TON test network for development and testing purposes.
 
-:::info 
-Coins in test network have no value, the test network can be reset.
+:::info
+Coins in the test network have no value, and the network can be reset at any time.
 :::
 
-* Testnet global config: https://ton.org/testnet-global.config.json
-* You can get free test coins in the [@test_giver_ton_bot](https://t.me/testgiver_ton_bot)
-* Check the testnet status in this Telegram channel: [@testnetstatus](https://t.me/testnetstatus)
+* Testnet global configuration: https://ton.org/testnet-global.config.json
+* Get free test coins from the [@test_giver_ton_bot](https://t.me/testgiver_ton_bot)
+* Check the testnet status in the Telegram channel: [@testnetstatus](https://t.me/testnetstatus)
 
 ## Services
 
-For convenience, almost the entire infrastructure of the mainnet (wallets, API, bridges, etc.) has been recreated in the test network.
+For convenience, nearly the entire mainnet infrastructure (wallets, APIs, bridges, etc.) has been replicated in the test network.
 
 * Explorer: https://testnet.tonscan.org
 * Web wallet: https://wallet.ton.org?testnet=true

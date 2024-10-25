@@ -1,14 +1,14 @@
 # Types of Wallet Contracts
 
-You have probably heard somewhere about different versions of wallets in TON Blockchain. But what do these versions really mean and how do they differ?
+You may have heard about different versions of wallets on the TON Blockchain. But what do these versions actually mean, and how do they differ?
 
-In this article, we'll look at all versions and modifications of TON wallets.
+In this article, we’ll explore the various versions and modifications of TON wallets.
 
 ## How can wallets be different?
 
-Before we start, we need to understand how wallets can differ at all.
+Before diving in, let’s understand how wallets on TON can differ.
 
-If we look at Ethereum, Solana or almost any other blockchain, there are not different types or versions of wallets. But why do they exist in TON? It's because wallets in TON are made by smart contracts. Basically, any wallet (even yours) is a smart contract running on TON Blockchain which can accept and send transactions to other wallets which are also smart contracts.
+In blockchains like Ethereum, Solana, and others, there are no distinct types or versions of wallets. So why are there different wallet versions in TON? It’s because, in TON, wallets are implemented as smart contracts.
 
 These smart contracts can be set up in different ways and can have different features. That's why there are several versions of wallets in TON.
 
@@ -22,8 +22,8 @@ This version isn't even used in regular apps because it has some major issues:
  - No easy way to retrieve the seqno and public key from the contract
  - No `valid_until` check, so you can't be sure that the transaction won't be confirmed too late.
 
-The first issue is fixed in `V1R2` and `V1R3`. That `R` letter means `revision`. Usually revisions are just small updates which only add get-methods which allows you to retrieve seqno and public key from the contract.
-But this version also has a second issue, which is fixed in the next version.
+The first issue is fixed in `V1R2` and `V1R3`. That `R` stands for `revision`. Usually revisions are just small updates which only add get-methods which allows you to retrieve seqno and public key from the contract.
+However, the second issue is fixed in the next version.
 
 Wallet source code:
  * [ton/crypto/smartcont/wallet-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-code.fc) 
@@ -41,7 +41,7 @@ Wallet source code:
 
 This version introduces the `subwallet_id` parameter, which allows you to create multiple wallets using the same public key (so you can have only one seed phrase and lots of wallets). And, as before, `V3R2` only adds the get-method for public key.
 
-Basically, `subwallet_id` is just a number which is added to the contract state when it is deployed. And since the contract address in TON is a hash of its state and code, the wallet address will change with a different `subwallet_id`.
+Basically, `subwallet_id` is just a number added to the contract state when it is deployed. And since the contract address in TON is a hash of its state and code, the wallet address will change with a different `subwallet_id`.
 
 This version is the most used right now. It covers most use-cases and remains clean and simple.
 
@@ -52,7 +52,7 @@ Wallet source code:
 
 It is the most modern wallet version at the moment. It still has all the functionality of the previous versions, but also introduces something very powerful — `plugins`.
 
-This feature allows developers to implement complex logic that will work in tandem with a user's wallet. For example, some DApp may require a user to pay a small amount of coins every day to use some features, so the user will need to install the plugin on their wallet by signing a transaction. This plugin will send coins to the destination address every day when it will be requested by an external message.
+This feature allows developers to implement complex logic that will work in tandem with a user's wallet. For example, some DApp may require a user to pay a small amount of coins every day to use some features, so the user would need to install the plugin on their wallet by signing a transaction. This plugin would send coins to the destination address daily when requested by an external message.
 
 This is a very customizable feature which is unique to TON Blockchain.
 
@@ -77,7 +77,7 @@ Wallet V5 wallets allow transactions to be initiated by the user but paid for by
 
 - <b>UI</b>: Already now, wallet teams can start UI preparations. You can use the v5-beta smart contract as a test smart contract, but keep in mind that it will can change. UI suggestion: wallets that have multi-accounts could support the new v5 smart contract as a separate account in the UI. Provide a “Transfer funds between your accounts” functionality.
 - <b>Beta</b>: If you build v5 functionality into public versions of your products, please mark it as “beta” and do not use the v5 contract by default, but only when explicitly enabled in the settings. Please observe this rule to prevent too wide distribution of the non-final beta version of the v5 smart contract.
-- <b>Release</b>: The final smart contract will be ready around June 20, after which wallets can enable v5 by default using the final smart contract. It will be written about here.
+- <b>Release</b>: The final smart contract will be ready around June 20, after which wallets can enable v5 by default using the final smart contract. It will be updated here.
 
 #### Preparing for Gasless Transactions
 

@@ -1,7 +1,7 @@
 
 # Creating manifest.json
 
-Every app needs to have its manifest to pass meta information to the wallet. Manifest is a JSON file named as `tonconnect-manifest.json` following format:
+Every app needs a manifest to pass meta information to the wallet. The manifest is a JSON file named as `tonconnect-manifest.json` following format:
 
 ```json
 {
@@ -26,8 +26,8 @@ You can find an example of the manifest below:
 ```
 ## Best practices
 
-- Best practice is to place the manifest in the root of your app and repository, e.g. `https://myapp.com/tonconnect-manifest.json`. It allows the wallet to handle your app better and improve the UX connected to your app.
-- Make sure that `manifest.json` file is available to GET by its URL.
+- The best practice is to place the manifest in the root of your app and repository, e.g. `https://myapp.com/tonconnect-manifest.json`. It allows the wallet to handle your app better and improve the UX connected to your app.
+- Ensure that the `manifest.json` file is accessible via a GET request at its URL
 
 ## Fields description
 |Field|Requirement|Description|

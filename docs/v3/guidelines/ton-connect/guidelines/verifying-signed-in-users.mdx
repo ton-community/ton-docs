@@ -27,7 +27,7 @@ It is useful if you want to verify a user to provide them with their personal in
 
 ## Structure of ton_proof
 
-We will be using the TonProof entity, implemented inside connector.
+We will use the TonProof entity, implemented inside connector.
 
 ```js
 type TonProofItemReply = TonProofItemReplySuccess | TonProofItemReplyError;
@@ -61,7 +61,7 @@ type TonProofItemReplySuccess = {
 - 6b:
     - Obtain the wallet `public_key` via the wallet contract [get method](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc#L174).
     - If the contract is not active, or if it lacks the get_method found in older wallet versions (v1-v3), then obtaining the key in this manner will be impossible. Instead, you will need to parse the walletStateInit provided by the frontend. Ensure that TonAddressItemReply.walletStateInit.hash() is equal to TonAddressItemReply.address.hash(), indicating a BoC hash.
-7. Verify that the `signature` from the frontend actually signs the assembled message and corresponds to the `public_key` of the address.
+7. Verify that the `signature` from the frontend properly signs the assembled message and matches the `public_key` of the address.
 
 ## React Example
 
@@ -240,7 +240,7 @@ where:
 
 Note: payload is variable-length untrusted data. We put it last to avoid using unnecessary length prefixes.
 
-The signature must be verified by public key:
+The signature must be verified using public key:
 
 1. First, try to obtain public key via `get_public_key` get-method on smart contract deployed at `Address`.
 
