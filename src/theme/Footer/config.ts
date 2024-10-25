@@ -60,6 +60,10 @@ const TON_BLOG_PRESS_RELEASES_URL = "https://blog.ton.org/category/news";
 const TONSTAT_URL = "https://www.tonstat.com/";
 const TON_BLOG_URL = "https://blog.ton.org";
 const TON_FOUNDATION_URL = "https://ton.foundation/";
+const TON_THE_OPEN_LEAGUE = "https://ton.org/open-league";
+const TON_USDT_ON_TON = "https://ton.org/borderless";
+const TON_ACCEPT_PAYMENT = "https://ton.org/payments";
+const FOOTER_DECENTRALIZED_NETWORK = "https://ton.org/decentralized-network";
 const FOOTER_APP_AND_DAPPS_URL = APP_AND_DAPPS_URL;
 const FOOTER_WHITEPAPER_URL = WHITEPAPER_URL;
 const FOOTER_DOCUMENTATION_URL = TON_DOCUMENTATION_URL;
@@ -81,15 +85,19 @@ export const FOOTER_COLUMN_LINKS_EN = [
       { langKey: "Get a wallet", url: PAGE_WALLETS },
       { langKey: "Get or sell Toncoin", url: PAGE_BUY_TONCOIN },
       { langKey: "Stake", url: PAGE_STAKE },
+      { langKey: "Accept Payments", url: TON_ACCEPT_PAYMENT },
       { langKey: "Apps & Servies", url: FOOTER_APP_AND_DAPPS_URL },
       { langKey: "Bridge", url: FOOTER_BRIDGE_URL },
       { langKey: "Domains", url: FOOTER_DNS_URL },
+      { langKey: "The Open League", url: TON_THE_OPEN_LEAGUE },
+      { langKey: "USDT on TON", url: TON_USDT_ON_TON },
     ],
   },
   {
     headerLangKey: "Learn",
     links: [
-      { langKey: "TON Concept", url: FOOTER_TON_CONCEPT_URL },
+      { langKey: "TON Concept", url: FOOTER_TON_CONCEPT_URL }, // it doesn't work, cause we use updated doc URL 
+      { langKey: "Decentralized Network", url: FOOTER_DECENTRALIZED_NETWORK },
       { langKey: "Roadmap", url: PAGE_ROADMAP },
       { langKey: "TonStat", url: TONSTAT_URL },
       { langKey: "History of mining", url: PAGE_MINING },
@@ -100,7 +108,7 @@ export const FOOTER_COLUMN_LINKS_EN = [
     ],
   },
   {
-    headerLangKey: "Build",
+    headerLangKey: "For Developers",
     links: [
       { langKey: "Getting started", url: PAGE_DEV },
       { langKey: "Documentation", url: FOOTER_DOCUMENTATION_URL },
