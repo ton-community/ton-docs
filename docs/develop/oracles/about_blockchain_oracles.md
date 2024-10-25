@@ -56,5 +56,6 @@ It is difficult to generate random numbers in smart contracts because all operat
 
 ## List of oracles in TON
 
+* [Pyth Network](/develop/oracles/pyth_network)
 * [RedStone Oracles](/develop/oracles/red_stone)
 
