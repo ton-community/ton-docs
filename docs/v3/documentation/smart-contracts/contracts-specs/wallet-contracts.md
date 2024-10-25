@@ -190,7 +190,7 @@ Also op-code, op::code and operational code
 As you see, there are many different versions of wallets in TON. But in most cases, you only need `V3R2` or `V4R2`. You can also use one of the special wallets if you want to have some additional functionality like a periodic unlocking of funds.
 
 ## See Also
-
+ - [Working With Wallet Smart Contracts](/v3/guidelines/smart-contracts/howto/wallet)
  - [Sources of basic wallets](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
  - [More technical description of versions](https://github.com/toncenter/tonweb/blob/master/src/contract/wallet/WalletSources.md)
  - [Wallet V4 sources and detailed description](https://github.com/ton-blockchain/wallet-contract)

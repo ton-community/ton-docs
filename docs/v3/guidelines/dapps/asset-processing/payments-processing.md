@@ -8,6 +8,10 @@ import TabItem from '@theme/TabItem';
 This page **explains how to process** (send and accept) `digital assets` on the TON blockchain.
 It **mostly** describes how to work with `TON coins`, but **theoretical part** is **important** even if you want to process only `jettons`.
 
+:::tip
+It's recommended to get acquainted with [Asset Processing Overview](/v3/documentation/dapps/assets/overview) before reading this tutorial.
+:::
+
 ## Wallet smart contract
 
 Wallet smart contracts are contracts on the TON Network which serve the task of allowing actors outside the blockchain to interact with blockchain entities. Generally, it solves three challenges:

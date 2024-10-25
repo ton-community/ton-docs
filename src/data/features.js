@@ -13,7 +13,7 @@ export const firstRow = [
   },
   {
     title: "Guidelines",
-    linkUrl: "/v3/guidelines/overview",
+    linkUrl: "/v3/guidelines/get-started-with-ton",
     imageUrl: "img/mainPageCards/participate.svg",
     description: "Build smart contracts, web applications or bots using TON."
   },

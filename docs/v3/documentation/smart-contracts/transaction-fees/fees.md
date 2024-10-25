@@ -105,9 +105,9 @@ Saving 1 MB of data for one year on TON will cost you 6.01 TON. Note that you do
 
 At present, this opportunity is not available. We are actively working on its development. Please stay tuned for updates.
 
-### How to calculate fees in FunC?
+### How to calculation?
 
-* [Smart contract function to calculate forward fees in FunC](https://github.com/ton-blockchain/token-contract/blob/main/misc/forward-fee-calc.fc)
+There is an article about [fee calculation](/v3/guidelines/smart-contracts/fee-calculation) in TON Blockchain.
 
 ## References
 
@@ -116,3 +116,4 @@ At present, this opportunity is not available. We are actively working on its de
 ## See Also
 
 * ["Low-level fees overview"](/v3/documentation/smart-contracts/transaction-fees/fees-low-level)—read about the formulas for calculating commissions.
+* [Smart contract function to calculate forward fees in FunC](https://github.com/ton-blockchain/token-contract/blob/main/misc/forward-fee-calc.fc)

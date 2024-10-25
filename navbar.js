@@ -158,7 +158,7 @@ module.exports = {
     },
     {
       type: 'dropdown',
-      to: 'v3/guidelines/overview',
+      to: 'v3/guidelines/get-started-with-ton',
       label: 'Guidelines',
       position: 'left',
       items: [

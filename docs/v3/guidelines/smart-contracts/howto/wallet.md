@@ -11,6 +11,10 @@ import TabItem from '@theme/TabItem';
 
 Learning how wallets and transactions work on TON before beginning smart contracts development is essential. This knowledge will help developers understand the interaction between wallets, messages, and smart contracts to implement specific development tasks.
 
+:::tip
+It's recommended to get acquainted with [Types of Wallet Contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) article before reading this tutorial.
+:::
+
 In this section we’ll learn to create operations without using pre-configured functions to understand development workflows. All references necessary for the analysis of this tutorial are located in the references chapter.
 
 ## 💡 Prerequisites

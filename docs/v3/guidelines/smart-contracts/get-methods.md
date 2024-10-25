@@ -1,7 +1,7 @@
 # Get Methods
 
 :::note
-Before proceeding, it is recommended that readers have a basic understanding of the [FunC programming language](/v3/documentation/smart-contracts/func/overview) and [smart contract development](/develop/smart-contracts) on TON Blockchain. This will help you grasp the information provided here more effectively.
+Before proceeding, it is recommended that readers have a basic understanding of the [FunC programming language](/v3/documentation/smart-contracts/func/overview) on TON Blockchain. This will help you grasp the information provided here more effectively.
 :::
 
 ## Introduction

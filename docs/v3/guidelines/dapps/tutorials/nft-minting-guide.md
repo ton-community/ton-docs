@@ -1124,3 +1124,6 @@ Today you have learned a lot of new things about TON and even created your own b
 
 ## About the author 
 - Coalus on [Telegram](https://t.me/coalus) or [GitHub](https://github.com/coalus)
+
+## See Also
+ - [NFT Use Cases](/v3/documentation/dapps/defi/nft)

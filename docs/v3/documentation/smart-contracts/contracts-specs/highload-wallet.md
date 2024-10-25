@@ -58,7 +58,9 @@ number of queries during expiration time span should not exceed 1000.
 
 Also, number of expired queries cleaned in one transaction should be below 100.
 
+## How To
 
+You can also read [Highload Wallet Tutorials](/v3/guidelines/smart-contracts/howto/wallet#-high-load-wallet-v3) article.
 
 Wallet source code:
  * [ton/crypto/smartcont/Highload-wallet-v2-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/Highload-wallet-v2-code.fc)

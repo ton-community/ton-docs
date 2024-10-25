@@ -2,7 +2,6 @@
  * @type {import('@docusaurus/plugin-content-docs').SidebarConfig}
  */
 module.exports = [
-  'v3/guidelines/overview',
   'v3/guidelines/get-started-with-ton',
   {
     type: 'category',
@@ -208,7 +207,7 @@ module.exports = [
   },
   {
     'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> MyTonCtrl & Blockchain Nodes Guidelines </small></b></span>',
+    'value': '<span class=\'menu__link\'><b><small> Blockchain Nodes Guidelines </small></b></span>',
   },
   'v3/guidelines/nodes/overview',
   {

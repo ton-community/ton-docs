@@ -4,8 +4,8 @@
 
 In this section of our documentation we’ll provide readers with a better understanding of NFTs. This will teach the reader how to interact with NFTs, and how to accept NFTs via transactions sent on TON Blockchain. 
 
-The information provided below assumes the reader has already taken a deep dive into our previous.
-[section detailing Toncoin payment processing](/develop/dapps/asset-processing), while also assuming that they possess a basic understanding of how to interact with wallet smart contracts programmatically.
+The information provided below assumes the reader has already taken a deep dive into our previous
+[section detailing Toncoin payment processing](/v3/guidelines/dapps/asset-processing/payments-processing), while also assuming that they possess a basic understanding of how to interact with wallet smart contracts programmatically.
 
 
 ## Understanding the Basics of NFTs
