@@ -50,7 +50,7 @@ Contracts in the blockchain can reside in separate shards, processed by other se
 
 It is helpful to think through the roadmap of exit codes for the code flow (and have it documented) before starting programming your TON smart contract.
 
-### 9. Func functions that have medhod_id identifiers have method IDs
+### 9. Func functions that have method_id identifiers have method IDs
 
 They can be either set explicitly `"method_id(5)"`, or implicitly by a func compiler. In this case, they can be found among methods declarations in the .fift assembly file. Two of them are predefined: one for receiving messages inside of blockchain `(0)`, commonly named `recv_internal`, and one for receiving messages from outside `(-1)`, `recv_external`.
 
