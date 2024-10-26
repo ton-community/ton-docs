@@ -46,21 +46,6 @@ const config = {
   baseUrl: '/',
   themes: [
     '@docusaurus/theme-live-codeblock',
-    [
-      require.resolve('@easyops-cn/docusaurus-search-local'),
-      {
-        // ... Your options.
-        // `hashed` is recommended as long-term-cache of index file is possible.
-        hashed: true,
-        indexPages: true,
-        indexBlog: false,
-        searchBarShortcutHint: false,
-        // For Docs using Chinese, The `language` is recommended to set to:
-        // ```
-        language: ["en", "zh"],
-        // ```
-      },
-    ],
   ],
   plugins: [
     ['docusaurus-plugin-sass', {}],
