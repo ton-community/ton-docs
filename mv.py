@@ -56,7 +56,6 @@ def find_markdown_links(text):
 
     return matches
 
-
 def replace_word_in_file(file_path, target, replacement):
     with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
@@ -105,7 +104,6 @@ def replace_in_repo(repo_path, target, replacement, file_extensions=None):
             file_path = os.path.join(root, file_name)
             replace_word_in_file(file_path, target, replacement)
 
-
 def get_redirect(path, repo):
     res = os.path.splitext(path)
     res = res[0]
@@ -113,7 +111,6 @@ def get_redirect(path, repo):
     res = spl[1].split('/docs', 1)
     res = res[1]
     return res
-
 
 def redirect(json_file, from_r, to_r):
     obj = {

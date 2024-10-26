@@ -19,13 +19,15 @@ We highly recommend install mytonctrl using the supported operating systems:
 
 * 16 x Cores CPU 
 * 128GB ECC Memory 
-* 8TB SSD _OR_ Provisioned 64+k IOPS storage
+* 9TB SSD _OR_ Provisioned 64+k IOPS storage
 * 1 Gbit/s network connectivity
 * 16 TB/month traffic on peak load
 * a public IP address (fixed IP address)
 
-
-__Note__: 4TB assumes usage of zfs volume with compression enabled
+:::info Data Compression
+It requires 9TB for the uncompressed data. 6TB is based on using a ZFS volume with compression enabled.
+The data volume increases by approximately 0.5TB and 0.25TB each month, with the latest update in November 2024.
+:::
 
 ## Installation
 
