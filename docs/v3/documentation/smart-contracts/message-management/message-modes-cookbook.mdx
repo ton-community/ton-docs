@@ -1,0 +1,140 @@
+# Message Modes Cookbook
+
+Understanding the different modes and flags available for sending messages is important to ensure that your smart contracts behave correctly. 
+While [Message-modes](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes) section provided detailed descriptions of these modes and flags, in this section we will illustrate their practical application with concrete examples.
+
+:::info IMPORTANT
+The result of the error cases is described when the error occurred.
+
+__Note__: The transaction fees used in these examples (e.g., 3 Toncoin) are hypothetical and are used for illustrative purposes only. Actual transaction fees will vary depending on network conditions and other factors.
+:::
+
+## 1. Send a regular message
+
+We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin, we send a regular message with 20 Toncoin, the transaction fee is 3 Toncoin and will be deducted from the message.
+
+![](/img/docs/message-modes-cookbook/send_regular_message.svg)
+
+| Mode and Flags | Code |
+|:-|:-|
+| `mode` = 0, no `flag` | `send_raw_message(msg, 0)` |
+
+## 2. Send a regular message, no bounce the message on error and ignore it
+
+We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin, we send a regular message with 20 Toncoin, the transaction fee is 3 Toncoin and will be deducted from the message.
+In case of an error during transaction processing, the message will not bounce and will be ignored.
+
+![](/img/docs/message-modes-cookbook/send_regular_message_and_ignore_errors.svg)
+
+| Mode and Flags | Code |
+|:-|:-|
+| `mode` = 0, `flag` = 2 | `send_raw_message(msg, 2)` |
+
+## 3. Send a regular message and bounce the message on error
+
+We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin, we send a regular message with 20 Toncoin, the transaction fee is 3 Toncoin and will be deducted from the message, 
+if an error occurs during action processing - bounce the message in addition to rolling back the transaction.
+
+![](/img/docs/message-modes-cookbook/send_regular_message_and_bounce_if_error.svg)
+
+| Mode and Flags | Code |
+|:-|:-|
+| `mode` = 0, `flag` = 16 | `send_raw_message(msg, 16)` |
+
+## 4. Send a regular message with separate fees
+
+We have 100 Toncoin on our smart contract balance, we receive an internal message with 50 Toncoin and send a regular message with 20 Toncoin, the total fee is 3 Toncoin and we pay the transfer fee separately (from the contract balance).
+
+![](/img/docs/message-modes-cookbook/send_regular_and_pay_fees_separately.svg)
+
+| Mode and Flags | Code |
+|:-|:-|
+| `mode` = 0, `flag` = 1 | `send_raw_message(msg, 1)` |
+
+## 5. Send a regular message with separate fees and bounce the message on error
+
+We have 100 Toncoin on our smart contract balance and we receive an internal message with 50 Toncoin and send a regular message with 20 Toncoin, the total fee is 3 Toncoin and we pay the transfer fee separately (from the contract balance), 
+if an error occurs during action processing - bounce the message in addition to rolling back the transaction.
+
+![](/img/docs/message-modes-cookbook/send_regular_message_pay_fee_separately_bounce_if_error.svg)
+
+| Mode and Flags | Code |
+|:-|:-|
+| `mode` = 0, `flag` = 1 + 16 = 17 | `send_raw_message(msg, 17)` |
+
+## 6. Carry remaining value with new message
+
+We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin we carry all the remaining value of the inbound message in addition to the value initially indicated in the new message,
+the transaction fee is 3 Toncoin and will be deducted from the message.
+
+![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value.svg)
+
+| Mode and Flags | Code |
+|:-|:-|
+| `mode` = 64, no `flag` | `send_raw_message(msg, 64)` |
+
+## 7. Carry remaining value with new message with separate fees
+
+We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin we carry all the remaining value of the inbound message in addition to the value initially indicated in the new message,
+the transaction fee is 3 Toncoin and will be paid separately (from the smart contract balance).
+
+![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value_and_pay_fees_separately.svg)
+
+| Mode and Flags | Code |
+|:-|:-|
+| `mode` = 64, `flag` = 1 | `send_raw_message(msg, 65)` |
+
+## 8. Carry remaining value and bounce the message on error
+
+We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin we carry all the remaining value of the inbound message in addition to the value initially indicated in the new message,
+the transaction fee is 3 Toncoin and will be deducted from the message, if an error occurs during action processing - bounce the message in addition to rolling back the transaction.
+
+![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value_and_if_error_bounce.svg)
+
+| Mode and Flags | Code |
+|:-|:-|
+| `mode` = 64, `flag` = 16 | `send_raw_message(msg, 80)` |
+
+## 9. Carry remaining value with new message with separate fees and bounce the message on error
+
+We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin we send a message, we transfer the entire contract balance in addition to the original amount received,  the transaction fee is 3 Toncoin and will be paid separately (from the smart contract balance),
+if an error occurs during action processing - bounce the message in addition to rolling back the transaction.
+
+![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value_and_pay_fees_separately_and_if_error_bounce.svg)
+
+| Mode and Flags | Code |
+|:-|:-|
+| `mode` = 64, `flag` = 16 + 1 | `send_raw_message(msg, 81)` |
+
+## 10. Send all received tokens together with the contract balance
+
+We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin we send a message, we transfer the entire contract balance in addition to the original amount received, 
+the transaction fee is 3 Toncoin and will be deducted from the message.
+
+![](/img/docs/message-modes-cookbook/send_all_received_tokens_with_balance.svg)
+
+| Mode and Flags | Code |
+|:-|:-|
+| `mode` = 128, no `flag` | `send_raw_message(msg, 128)` |
+
+## 11. Send all received tokens together with the contract balance and bounce the message on error
+
+We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin we send a message, we transfer the entire contract balance in addition to the original amount received, the transaction fee is 3 Toncoin and will be deducted from the message, 
+if there was an error in processing the action - bounce the message in addition to rolling back the transaction.
+
+![](/img/docs/message-modes-cookbook/send_all_received_tokens_with_balance_and_if_error_bounce.svg)
+
+| Mode and Flags | Code |
+|:-|:-|
+| `mode` = 128, `flag` = 16 | `send_raw_message(msg, 144)` |
+
+## 12. Send all received tokens together with the contract balance and destroy smart-contract
+
+We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin, we send a message to transfer the entire contract balance in addition to the original amount received and destroy the contract,
+the transaction fee is 3 Toncoin and will be deducted from the message.
+
+![](/img/docs/message-modes-cookbook/send_all_received_tokens_with_balance_and_destroy_sc.svg)
+
+| Mode and Flags | Code |
+|:-|:-|
+| `mode` = 128, `flag` = 32 | `send_raw_message(msg, 160)` |

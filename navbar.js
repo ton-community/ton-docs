@@ -9,28 +9,28 @@ module.exports = {
   items: [
     {
       type: 'dropdown',
-      to: '/learn/introduction',
+      to: '/v3/concepts/dive-into-ton/introduction',
       position: 'left',
       label: 'Concepts',
       items: [
         {
-          to: '/learn/introduction',
+          to: '/v3/concepts/dive-into-ton/introduction',
           label: 'Introduction to TON',
         },
         {
-          to: '/learn/overviews/ton-blockchain',
+          to: '/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains',
           label: 'Blockchain of Blockchains',
         },
         {
-          to: '/v3/concepts/ton-blockchain/smart-contract-addresses',
+          to: '/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses',
           label: 'Smart Contract Addresses',
         },
         {
-          to: '/learn/overviews/cells',
+          to: '/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage',
           label: 'Cells as a Data Structure',
         },
         {
-          to: '/learn/networking/overview',
+          to: '/v3/concepts/dive-into-ton/ton-blockchain/ton-networking',
           label: 'TON Networking',
         },
       ],
@@ -38,12 +38,12 @@ module.exports = {
     // TODO: extract tutorials page!!!
     // {
     //   type: 'dropdown',
-    //   to: '/develop/overview',
+    //   to: '/v3/documentation/ton-documentation',
     //   position: 'left',
     //   label: 'Get Started',
     //   items: [
     //     {
-    //       to: '/develop/overview',
+    //       to: '/v3/documentation/ton-documentation',
     //       label: 'Start with Onboarding Tutorials',
     //     },
     //   ],
@@ -55,115 +55,115 @@ module.exports = {
       label: 'DApps',
       items: [
         {
-          to: '/develop/dapps/telegram-apps/',
+          to: '/v3/guidelines/dapps/tma/overview',
           label: 'Telegram Mini Apps (TMAs)',
         },
         {
-          to: 'develop/dapps/apis/sdk',
+          to: 'v3/guidelines/dapps/apis-sdks/sdk',
           label: 'APIs and SDKs',
         },
         {
-          to: 'develop/dapps/asset-processing',
+          to: '/v3/guidelines/dapps/asset-processing/payments-processing',
           label: 'Payment Processing',
         },
         {
-          to: 'develop/dapps/asset-processing/jettons',
+          to: 'v3/guidelines/dapps/asset-processing/jettons',
           label: 'Jetton Processing',
         },
         {
-          to: '/develop/dapps/tutorials/jetton-minter',
+          to: '/v3/guidelines/dapps/tutorials/mint-your-first-token',
           label: 'Mint your Tokens',
         },
         {
-          to: '/develop/dapps/tutorials/collection-minting',
+          to: '/v3/guidelines/dapps/tutorials/nft-minting-guide',
           label: 'Mint your NFTs',
         },
         {
-          to: '/develop/dapps/cookbook',
+          to: '/v3/guidelines/dapps/cookbook',
           label: 'Cookbook',
         },
       ],
     },
     {
       type: 'dropdown',
-      to: 'develop/smart-contracts/',
+      to: 'v3/documentation/smart-contracts/overview',
       position: 'left',
       label: 'Smart Contracts',
       items: [
         {
-          to: '/participate/wallets/contracts',
+          to: '/v3/documentation/smart-contracts/contracts-specs/wallet-contracts',
           label: 'Wallets',
         },
         {
-          to: '/develop/smart-contracts/messages',
+          to: '/v3/documentation/smart-contracts/message-management/sending-messages',
           label: 'Sending Messages',
         },
         {
-          to: 'develop/smart-contracts/fees',
+          to: 'v3/documentation/smart-contracts/transaction-fees/fees',
           label: 'Transaction Fees',
         },
         {
-          to: 'develop/func/overview',
+          to: 'v3/documentation/smart-contracts/func/overview',
           label: 'FunC Development Language',
         },
         {
-          to: 'develop/func/cookbook',
+          to: 'v3/documentation/smart-contracts/func/cookbook',
           label: 'FunC Cookbook',
         },
         {
-          to: '/develop/data-formats/cell-boc',
+          to: '/v3/documentation/data-formats/tlb/cell-boc',
           label: 'Data formats',
         },
         {
-          to: 'learn/tvm-instructions/tvm-overview',
+          to: 'v3/documentation/tvm/tvm-overview',
           label: 'TON Virtual Machine (TVM)',
         },
         {
-          to: 'develop/smart-contracts/guidelines',
+          to: 'v3/guidelines/smart-contracts/guidelines',
           label: 'Best Practices for Contracts',
         },
       ],
     },
     {
       type: 'dropdown',
-      to: 'participate',
+      to: 'v3/documentation/infra/nodes/node-types',
       position: 'left',
       label: 'Nodes',
       items: [
         {
-          to: '/participate/run-nodes/mytonctrl',
+          to: '/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview',
           label: 'Manage Blockchain Nodes',
         },
         {
-          to: '/participate/run-nodes/nodes-troubleshooting',
+          to: '/v3/guidelines/nodes/nodes-troubleshooting',
           label: 'Troubleshooting the Node',
         },
         {
-          to: '/participate/network-maintenance/single-nominator',
+          to: '/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool',
           label: 'Single Nominator Pool',
         },
         {
-          to: '/participate/network-maintenance/nominator-pool',
+          to: '/v3/documentation/smart-contracts/contracts-specs/nominator-pool',
           label: 'Nominator Pool',
         },
         {
-          to: '/participate/run-nodes/archive-node', // TODO: add article
+          to: '/v3/guidelines/nodes/running-nodes/archive-node', // TODO: add article
           label: 'Running Nodes',
         },
         {
-          to: '/participate/run-nodes/faq',
+          to: '/v3/guidelines/nodes/faq',
           label: 'FAQ',
         },
       ],
     },
     {
       type: 'dropdown',
-      to: 'v3/guidelines/overview',
+      to: 'v3/guidelines/get-started-with-ton',
       label: 'Guidelines',
       position: 'left',
       items: [
         {
-          to: '/develop/smart-contracts/guidelines',
+          to: '/v3/guidelines/smart-contracts/guidelines',
           label: 'Smart Contracts',
         },
         {
@@ -175,51 +175,47 @@ module.exports = {
           label: 'Nodes'
         },
         {
-          to: 'develop/dapps/ton-connect/overview',
+          to: 'v3/guidelines/ton-connect/overview',
           label: 'Integrate with TON'
         },
         {
-          to: 'participate/web3/overview',
+          to: 'v3/guidelines/web3/overview',
           label: 'Web3',
         },
       ]
     },
     {
       type: 'dropdown',
-      to: '/develop/overview',
+      to: '/v3/documentation/ton-documentation',
       label: 'Documentation',
       position: 'left',
       items: [
         {
-          to: 'develop/smart-contracts/',
+          to: 'v3/documentation/smart-contracts/overview',
           label: 'Smart Contracts',
         },
         {
-          to: 'learn/tvm-instructions/tvm-overview',
+          to: 'v3/documentation/tvm/tvm-overview',
           label: 'TON Virtual Machine (TVM)',
         },
         {
-          to: 'participate/nodes/node-types',
+          to: 'v3/documentation/infra/nodes/node-types',
           label: 'Nodes'
         },
         {
-          to: 'develop/dapps/defi/coins', // TODO: add page
+          to: 'v3/documentation/dapps/defi/coins', // TODO: add page
           label: 'DApps',
         },
         {
-          to: 'participate/explorers',
-          label: 'Infrastructure'
-        },
-        {
-          to: '/develop/data-formats/cell-boc',
+          to: '/v3/documentation/data-formats/tlb/cell-boc',
           label: 'Data Formats',
         },
         {
-          to: 'learn/networking/low-level-adnl',
+          to: 'v3/documentation/network/protocols/adnl/low-level-adnl',
           label: 'Networking'
         },
         {
-          to: 'learn/docs',
+          to: 'v3/documentation/whitepapers/overview',
           label: 'Whitepapers',
         },
       ]
@@ -244,7 +240,7 @@ module.exports = {
       ],
     },
     {
-      to: 'contribute',
+      to: 'v3/contribute',
       position: 'right',
       className: 'header-contribute-link',
       'aria-label': 'Contribute',
@@ -264,7 +260,7 @@ module.exports = {
           value: '<hr style="margin: 0.3rem 0;">',
         },
         {
-          href: "/contribute/localization-program/overview",
+          href: "/v3/contribute/localization-program/overview",
           label: 'Help Us Translate',
         },
       ],

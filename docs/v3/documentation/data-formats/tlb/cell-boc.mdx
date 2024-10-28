@@ -1,0 +1,291 @@
+import ThemedImage from '@theme/ThemedImage';
+
+# Cell & Bag of Cells (BoC)
+
+## Cell
+A cell represents a data structure on TON Blockchain. Cells are able to store up to 1023 bits and possess up to 4 references to other cells.
+
+<br></br>
+<ThemedImage
+alt=""
+sources={{
+    light: '/img/docs/data-formats/tl-b-docs-5.png?raw=true',
+    dark: '/img/docs/data-formats/tl-b-docs-5-dark.png?raw=true',
+}}
+/>
+<br></br>
+
+
+## Bag of Cells
+
+Bag of Cells (BoC) is a format for serializing cells into byte arrays, which is further described in the [TL-B schema](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25).
+
+
+<br></br>
+<ThemedImage
+alt=""
+sources={{
+    light: '/img/docs/data-formats/tl-b-docs-6.png?raw=true',
+    dark: '/img/docs/data-formats/tl-b-docs-6-dark.png?raw=true',
+}}
+/>
+<br></br>
+
+On TON, everything consists of cells, including contract code, stored data, blocks, achieving streamline and robust flexibility in the process.
+
+
+<br></br>
+<ThemedImage
+alt=""
+sources={{
+    light: '/img/docs/data-formats/tl-b-docs-4.png?raw=true',
+    dark: '/img/docs/data-formats/tl-b-docs-4-dark.png?raw=true',
+}}
+/>
+<br></br>
+
+### Cell serialization
+Let's analyze our first example of a Bag of Cells :
+
+
+<br></br>
+<ThemedImage
+alt=""
+sources={{
+    light: '/img/docs/data-formats/tl-b-docs-7.png?raw=true',
+    dark: '/img/docs/data-formats/tl-b-docs-7-dark.png?raw=true',
+}}
+/>
+<br></br>
+
+```json
+1[8_] -> {
+  24[0AAAAA],
+  7[FE] -> {
+    24[0AAAAA]
+  }
+}
+```
+In this example we have a 1-bit size root cell that has 2 links: the first to a 24-bit cell and the second to a 7-bit cell which possesses 1 link to a 24-bit cell.
+
+For this framework to work as intended, it’s necessary to turn the cells into a single sequence of bytes. To accomplish this, first, we leverage only unique cell types, below 3 out of 4 are presented as follows:
+```json
+1[8_]
+24[0AAAAA]
+7[FE]
+```
+:::note
+In order to leave only unique cells they need to be compared. To do this, we need to compare the [hashes](#cell-hash) of the cells.
+:::
+Now let's arrange them in such an order that the parent cells do not point backwards. The cell pointed to by the rest must be in the list after the ones that point to it. We get:
+```json
+1[8_]      -> index 0 (root cell)
+7[FE]      -> index 1
+24[0AAAAA] -> index 2
+```
+
+Now, let's calculate descriptions for each of the 3 cells touched on above. These descriptions are made up of 2 bytes that store flags composed of information about the length of the data and the number of data linkages.
+
+The first byte - **refs descriptor** - is calculated as `r+8s+32l`, where `0 ≤ r ≤ 4` is amount of the Cell references (links), `0 ≤ s ≤ 1` is 1 for [exotic](#special-exotic-cells) cells and 0 for ordinary ones, and `0 ≤ l ≤ 3` is the [level](#cell-level) of the Cell.
+
+The second one - **bits descriptor** - is equals `floor(b / 8) + ceil (b / 8)` where `0 <= b <= 1023` is number of bits in the Cell. This descriptor represents the length of the full 4-bit groups of the Cell data (but at least 1 if it isn’t empty).
+
+The result is:
+
+```json
+1[8_]      -> 0201 -> 2 refs, length 1
+7[FE]      -> 0101 -> 1 ref, length 1
+24[0AAAAA] -> 0006 -> 0 refs, length 6
+```
+For data with incomplete 4-bit groups, 1 bit is added to the end of the sequence. This means it denotes the end bit of the group and is used to determine the true size of incomplete groups. Let's add the bits below:
+
+
+```json
+1[8_]      -> C0     -> 0b10000000->0b11000000
+7[FE]      -> FF     -> 0b11111110->0b11111111
+24[0AAAAA] -> 0AAAAA -> do not change (full groups)
+```
+
+Now let's add the refs indexes:
+```json
+0 1[8_]      -> 0201 -> refers to 2 cells with such indexes
+1 7[FE]      -> 02 -> refers to cells with index 2
+2 24[0AAAAA] -> no refs
+```
+
+And put it all together:
+```json
+0201 C0     0201
+0101 FF     02
+0006 0AAAAA
+```
+
+And concat it by joining the corresponding strings into a single array of bytes:
+`0201c002010101ff0200060aaaaa`, size 14 bytes.
+
+
+<details>
+  <summary><b>Show example</b></summary>
+
+```golang
+func (c *Cell) descriptors() []byte {
+  ceilBytes := c.bitsSz / 8
+  if c.bitsSz%8 ! = 0 {
+    ceilBytes++
+  }
+
+	// calc size
+	ln := ceilBytes + c.bitsSz / 8
+
+	specBit := byte(0)
+	if c.special {
+	  specBit = 8
+	}
+
+	return []byte{byte(len(c.refs)) + specBit + c.level*32, byte(ln)}
+}
+```
+[Source](https://github.com/xssnick/tonutils-go/blob/3d9ee052689376061bf7e4a22037ff131183afad/tvm/cell/serialize.go#L205)
+
+</details>
+
+
+### Packing a Bag of Cells
+Let's pack the cell from the section directly above. We have already serialized it into a flat 14 byte array.
+
+Therefore, we build the header according to its [schema](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25).
+
+```
+b5ee9c72                      -> id tl-b of the BoC structure
+01                            -> flags and size:(## 3), in our case the flags are all 0,
+                                 and the number of bytes needed to store the number of cells is 1.
+                                 we get - 0b0_0_0_00_001
+01                            -> number of bytes to store the size of the serialized cells
+03                            -> number of cells, 1 byte (defined by 3 bits size:(## 3), equal to 3.
+01                            -> number of root cells - 1
+00                            -> absent, always 0 (in current implementations)
+0e                            -> size of serialized cells, 1 byte (size defined above), equal to 14
+00                            -> root cell index, size 1 (determined by 3 size:(## 3) bits from header),
+                                 always 0
+0201c002010101ff0200060aaaaa  -> serialized cells
+```
+
+Next, we concat everything above into an array of bytes into our final BoC:
+`b5ee9c7201010301000e000201c002010101ff0200060aaaaa`
+
+Bag of Cells Implementation Examples: [Serialization](https://github.com/xssnick/tonutils-go/blob/master/tvm/cell/serialize.go), [Deserialization](https://github.com/xssnick/tonutils-go/blob/master/tvm/cell/parse.go)
+
+## Special (Exotic) Cells
+
+Generally, cells operating on TON are divided into two main types: ordinary cells and special cells. Most of the cells that the users work with are ordinary cells responsible for carrying information.
+
+Nevertheless, to realize internal functionality of the network, special cells are sometimes needed and are used for a diverse range of purposes, depending on their subtype.
+
+## Cell Level
+
+Every Cell has an attribute called `Level`, which is represented by an integer from 0 to 3.
+
+### Ordinary cells level
+
+The Level of an ordinary Cell is always equal to the maximum of the levels of all its references:
+```cpp
+Lvl(c) = max(Lvl(r_0), ..., Lvl(r_i), ..., Lvl(r_e))
+```
+
+Where `i` is a `c` reference index, `e` is a `c` reference amount.
+
+_Ordinary Cell without refs level is zero_
+
+### Exotic cells level
+Exotic cells have different rules for setting their level, which are described in [this](/v3/documentation/data-formats/tlb/exotic-cells) article.
+
+## Cell hash
+In most cases users work with ordinary cells with level 0 which have only one hash, called representation hash (or hash infinity).
+
+Cell `c` with level `Lvl(c) = l`, where `1 ≤ l ≤ 3` has representation hash and `l` **"higher"** hashes.
+
+### Standard Cell representation hash calculation
+First, we need to calculate Cell representation (which is similar to Cell serialization described above)
+
+1. Compute descriptors bytes
+2. Add serialized Cell data
+3. For every Cell's refs add its depth
+4. For every Cell's refs add its representation hash
+5. Compute SHA256 hash of the result
+
+Let's analyze the following examples:
+
+#### Cell without references
+```json
+32[0000000F]
+```
+1. Descriptors computation
+
+The reference descriptor is equals to `r+8s+32l = 0 + 0 + 0 = 0 = 00`
+
+The bits descriptor is equals to `floor(b / 8) + ceil (b / 8) = 8 = 08`
+
+Concatenating these bytes we get `0008`
+
+2. Cell data serialization
+
+In this case we have complete 4-bit groups, so we don't have to add any bits to the Cell data. The result is `0000000f`
+
+3. Refs depth
+
+We skip this part, because our Cell doesn't have any refs
+
+4. Refs hashes
+
+We skip this part, because our Cell doesn't have any refs
+
+5. SHA256 computation
+
+Concatenating bytes from the previous steps we get `00080000000f` and the SHA256 from this bytestring is `57b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f9` - that's the Cell representation hash.
+
+#### Cell with references
+```json
+24[00000B] -> {
+	32[0000000F],
+	32[0000000F]
+}
+```
+
+1. Descriptors computation
+
+The reference descriptor is equals to `r+8s+32l = 2 + 0 + 0 = 0 = 02`
+
+The bits descriptor is equals to `floor(b / 8) + ceil (b / 8) = 6 = 06`
+
+Concatenating these bytes we get `0206`
+
+2. Cell data serialization
+
+In this case we have complete 4-bit groups, so we don't have to add any bits to the Cell data. The result is `00000b`
+
+3. Refs depth
+
+The depth is represented by 2 bytes. Our Cell has 2 refs and depth of each is zero so the result of this step is `00000000`.
+
+4. Refs hashes
+
+For every reference we add its hash (we computed above), so the result is `57b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f957b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f9`
+
+5. SHA256 computation
+
+Concatenating bytes from the previous steps we get `020600000b0000000057b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f957b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f9`
+and the SHA256 from this bytestring is `f345277cc6cfa747f001367e1e873dcfa8a936b8492431248b7a3eeafa8030e7` - that's the Cell representation hash.
+
+### Higher hashes calculation
+
+Higher hashes of an Ordinary Cell `c` are computed similarly to its representation hash,
+but using the higher hashes of its references instead of their representation hashes.
+
+Exotic cells have their own rules for computing their higher hashes, which are described in [this](/v3/documentation/data-formats/tlb/exotic-cells) article.
+
+
+## See Also
+
+[//]: # (* [Original article on RU]&#40;https://github.com/xssnick/ton-deep-doc/blob/master/Cells-BoC.md&#41;)
+* [Exotic (Special) Cells](/v3/documentation/data-formats/tlb/exotic-cells)
+* [Merkle Proofs verifying](/v3/documentation/data-formats/tlb/proofs)

@@ -5,11 +5,10 @@ import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-redirect_data = []
 
 class MoveEventHandler(FileSystemEventHandler):
     def on_moved(self, event):
-        if '.git' in event.src_path or '.git' in event.dest_path:
+        if ('.git' in event.src_path) or ('.git' in event.dest_path) or ('node_modules' in event.src_path) or ('node_modules' in event.dest_path) or ('.docusaurus' in event.src_path) or ('.docusaurus' in event.dest_path):
             return
 
         if event.is_directory:
@@ -49,8 +48,10 @@ def start_monitoring(path):
 
     observer.join()
 
+
 def find_markdown_links(text):
     md_link_pattern = r'\[([^\]]+)\]\(([^#)]+)([^)]*)\)'
+    print(md_link_pattern)
     matches = re.findall(md_link_pattern, text)
 
     return matches
@@ -59,22 +60,23 @@ def replace_word_in_file(file_path, target, replacement):
     with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
 
+    target = target.split("README")[0]
+    replacement = replacement.split("README")[0]
 
-    links = find_markdown_links(content)
+    if target[0] == "/" and replacement[0] == "/":
+        target = target[1:]
+        replacement = replacement[1:]
 
-    content_replaced = ''
-    for _, url, _ in links:
-        if url == target:
-            content_replaced = content.replace(url, replacement)
-
+    content_replaced = content.replace(target, replacement)
     if content_replaced != '' and content != content_replaced:
         with open(file_path, 'w', encoding='utf-8') as file:
             file.write(content_replaced)
         print(f"Replaced in file: {file_path}")
 
+
 def replace_in_repo(repo_path, target, replacement, file_extensions=None):
     for root, dirs, files in os.walk(repo_path):
-        if '.git' in root or 'i18n' in root:
+        if ('.git' in root) or ('i18n' in root) or ('node_modules') in root or ('.docusaurus') in root:
             continue
 
         if root == repo_path:
@@ -119,7 +121,12 @@ def redirect(json_file, from_r, to_r):
     with open(json_file, 'r') as file:
         data = json.load(file)
 
-    data.append(obj)
+    prev = next((x for x in data if x["to"] == obj["from"]), None)
+
+    if prev:
+        prev["to"] = obj["to"]
+    else:
+        data.append(obj)
 
     with open(json_file, 'w') as file:
         json.dump(data, file, indent=4)
