@@ -15,15 +15,21 @@ module.exports = [
   'v3/concepts/dive-into-ton/introduction',
   {
     type: 'category',
+    label: 'TON Ecosystem',
+    items: [
+      'v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps',
+      'v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton',
+      'v3/concepts/dive-into-ton/ton-ecosystem/nft',
+    ],
+  },
+  {
+    type: 'category',
     label: 'TON Blockchain',
     items: [
       'v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains',
       'v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses',
-      'v3/concepts/dive-into-ton/ton-blockchain/wallet-apps',
-      'v3/concepts/dive-into-ton/ton-blockchain/explorers-in-ton',
       'v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage',
       'v3/concepts/dive-into-ton/ton-blockchain/ton-networking',
-      'v3/concepts/dive-into-ton/ton-blockchain/nft',
       'v3/concepts/dive-into-ton/ton-blockchain/sharding',
       'v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison',
     ],
