@@ -5,4 +5,4 @@
 
 ### Thank you for your interest in contributing!
 
-Please see [our contributing guide on documentation](https://docs.ton.org/contribute/) for the latest information on how to contribute!
+Please see [our contributing guide on documentation](/v3/contribute/) for the latest information on how to contribute!

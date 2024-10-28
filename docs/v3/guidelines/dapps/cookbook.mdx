@@ -121,7 +121,7 @@ Two flags are defined: **bounceable**/**non-bounceable** and **testnet**/**any-n
 |        0...       |  110100.01  |     no     |   yes        |
 
 :::tip
-Testnet-only flag doesn't have representation in blockchain at all. Non-bounceable flag makes difference only when used as destination address for a transfer: in this case, it [disallows bounce](/v3/guidelines/smart-contracts/guidelines/non-bouncable-messages) for a message sent; address in blockchain, again, does not contain this flag.
+Testnet-only flag doesn't have representation in blockchain at all. Non-bounceable flag makes difference only when used as destination address for a transfer: in this case, it [disallows bounce](/v3/documentation/smart-contracts/message-management/non-bounceable-messages) for a message sent; address in blockchain, again, does not contain this flag.
 :::
 
 Also, in some libraries, you may notice a serialization parameter called `urlSafe`. he base64 format is not URL safe, which means that some characters (namely,`+` and `/`) can cause issues when transmitting an address in a link. When `urlSafe = true`, all `+` symbols are replaced with `-`, and all `/` symbols are replaced with `_`. You can obtain these address formats using the following code:
@@ -1836,7 +1836,7 @@ Note that this example covers only the simplest case with incoming messages, whe
 * [Message Overview](/v3/documentation/smart-contracts/message-management/messages-and-transactions)
 * [Internal messages](/v3/documentation/smart-contracts/message-management/internal-messages)
 
-This topic is explored in more depth in [Payments Processing](/develop/dapps/asset-processing) article.
+This topic is explored in more depth in [Payments Processing](/v3/guidelines/dapps/asset-processing/payments-processing) article.
 
 ### How to find transaction for a certain TON Connect result?
 

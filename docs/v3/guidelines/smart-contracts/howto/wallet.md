@@ -301,7 +301,7 @@ Since a **maximum of 4 references** can be stored in one cell, we can send a max
 In this section, we’ll learn more about `internal` and `external` messages and we’ll create messages and send them to the network to minimize the use of pre-cooked functions.
 
 To carry out this process it is necessary to make use of a ready-made wallet to make the task easier. To accomplish this:
-1. Install the [wallet app](/v3/concepts/dive-into-ton/ton-blockchain/wallet-apps) (e.g., Tonkeeper is used by the author)  
+1. Install the [wallet app](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps) (e.g., Tonkeeper is used by the author)  
 2. Switch wallet app to v3r2 address version
 3. Deposit 1 TON into the wallet 
 4. Send the message to another address (you can send to yourself, to the same wallet). 
@@ -369,7 +369,7 @@ Now let’s go through each option in detail:
 Option | Explanation
 :---: | :---:
 IHR Disabled | Currently, this option is disabled (which means we store 1) because Instant Hypercube Routing is not fully implemented. In addition, this will be needed when a large number of [Shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards) are live on the network. More can be read about the IHR Disabled option in the [tblkch.pdf](https://ton.org/tblkch.pdf) (chapter 2).
-Bounce | While sending messages, a variety of errors can occur during smart contract processing. To avoid losing TON, it is necessary to set the Bounce option to 1 (true). In this case, if any contract errors occur during transaction processing, the message will be returned to the sender, and the same amount of TON will be received minus fees. More can be read about non-bounceable messages [here](/v3/guidelines/smart-contracts/guidelines/non-bouncable-messages).
+Bounce | While sending messages, a variety of errors can occur during smart contract processing. To avoid losing TON, it is necessary to set the Bounce option to 1 (true). In this case, if any contract errors occur during transaction processing, the message will be returned to the sender, and the same amount of TON will be received minus fees. More can be read about non-bounceable messages [here](/v3/documentation/smart-contracts/message-management/non-bounceable-messages).
 Bounced | Bounced messages are messages that are returned to the sender because an error occurred while processing the transaction with a smart contract. This option tells you whether the message received is bounced or not.
 Src | The Src is the sender address. In this case, two zero bits are written to indicate the `addr_none` address.
 
@@ -2187,7 +2187,7 @@ if (found) {
 ```
 
 :::note
-If you [familiarize yourself](https://docs.ton.org/v3/documentation/tvm/instructions) with the operation of the `LDSLICEX` opcode (the load_bits function uses this opcode), you will notice that the read data is returned first (head) and only then the remaining data (tail), but they are in reverse order in the contract code.
+If you [familiarize yourself](v3/documentation/tvm/instructions) with the operation of the `LDSLICEX` opcode (the load_bits function uses this opcode), you will notice that the read data is returned first (head) and only then the remaining data (tail), but they are in reverse order in the contract code.
 
 In fact, they go in reverse order, because in stdlib in the function signature, the returned data [go in reverse order](https://github.com/ton-blockchain/highload-wallet-contract-v3/blob/d58c31e82315c34b4db55942851dd8d4153975c5/contracts/imports/stdlib.fc#L321): `(slice, slice) load_bits(slice s, int len) asm(s len -> 1 0) "LDSLICEX";`. Here `-> 1 0` means to return the argument with index 1 (tail) first, and then 0 (head).
 :::
@@ -3118,7 +3118,7 @@ This helps us to be independent of using libraries and to understand the structu
 
 ## 🧩 Next Steps
 
-Reading the documentation provided above is a complex undertaking and it’s difficult to understand the entirety of the TON platform. However, it is a good exercise for those passionate about building on the TON. Another suggestion is to begin learning how to write smart contracts on TON by consulting the following resources: [FunC Overview](https://docs.ton.org/v3/documentation/smart-contracts/func/overview), [Best Practices](https://docs.ton.org/v3/guidelines/smart-contracts/guidelines), [Examples of Smart Contracts](https://docs.ton.org/v3/documentation/smart-contracts/contracts-specs/examples), [FunC Cookbook](https://docs.ton.org/v3/documentation/smart-contracts/func/cookbook)
+Reading the documentation provided above is a complex undertaking and it’s difficult to understand the entirety of the TON platform. However, it is a good exercise for those passionate about building on the TON. Another suggestion is to begin learning how to write smart contracts on TON by consulting the following resources: [FunC Overview](v3/documentation/smart-contracts/func/overview), [Best Practices](v3/guidelines/smart-contracts/guidelines), [Examples of Smart Contracts](v3/documentation/smart-contracts/contracts-specs/examples), [FunC Cookbook](v3/documentation/smart-contracts/func/cookbook)
 
 Additionally, it is recommended that readers familiarize themselves with the following documents in more detail: [ton.pdf](https://docs.ton.org/ton.pdf) and [tblkch.pdf](https://ton.org/tblkch.pdf) documents.
 
@@ -3149,7 +3149,7 @@ Official documentation:
   
   - [TL-B](/v3/documentation/data-formats/tlb/tl-b-language)
 
-  - [Blockchain of Blockchains](https://docs.ton.org/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)
+  - [Blockchain of Blockchains](v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)
 
 External references:
 

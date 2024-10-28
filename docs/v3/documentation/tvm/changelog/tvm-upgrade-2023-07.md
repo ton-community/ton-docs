@@ -68,7 +68,7 @@ Rule of thumb when choosing gas cost on new opcodes is that it should not be les
 | `GASCONSUMED` | _`- g_c`_ | Returns gas consumed by VM so far (including this instruction).<br/>_26 gas_ |
 
 ## Arithmetics
-New variants of [the division opcode](https://docs.ton.org/v3/documentation/tvm/instructions#52-division) (`A9mscdf`) are added:
+New variants of [the division opcode](v3/documentation/tvm/instructions#52-division) (`A9mscdf`) are added:
 `d=0` takes one additional integer from stack and adds it to the intermediate value before division/rshift. These operations return both the quotient and the remainder (just like `d=3`).
 
 Quiet variants are also available (e.g. `QMULADDDIVMOD` or `QUIET MULADDDIVMOD`).

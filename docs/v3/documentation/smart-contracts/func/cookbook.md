@@ -735,7 +735,7 @@ if (current_time > 1672080143) {
 :::caution draft
 Please note that this method of generating random numbers isn't safe.
 
-Checkout [Random Number Generation](https://docs.ton.org/v3/guidelines/smart-contracts/securier-generation) for more information.
+Checkout [Random Number Generation](v3/guidelines/smart-contracts/securier-generation) for more information.
 :::,.
 
 ```func

@@ -4,7 +4,7 @@
 
 There are different ways to connect to blockchain:
 1. **RPC data provider or another API**: in most cases, you have to *rely* on its stability and security.
-2. ADNL connection: you're connecting to a [liteserver](/participate/run-nodes/liteserver). It may be inaccessible, but with a certain level of validation (implemented in the library), it cannot lie.
+2. ADNL connection: you're connecting to a [liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node). It may be inaccessible, but with a certain level of validation (implemented in the library), it cannot lie.
 3. Tonlib binary: you're also connecting to a liteserver, so all benefits and downsides apply, but your application includes a dynamically-loaded library compiled externally.
 4. Offchain-only. Such SDKs allow the creation and serialization of cells, which can then be sent to APIs.
 

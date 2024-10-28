@@ -31,9 +31,11 @@
     "@easyops-cn/docusaurus-search-local": "^0.44.5",
     "@mdx-js/react": "^3.0.1",
     "@saucelabs/theme-github-codeblock": "^0.1.1",
+    "axios": "^1.7.7",
     "clsx": "^2.1.1",
     "docusaurus-plugin-sass": "^0.2.5",
     "dotenv": "^16.4.5",
+    "markdown-link-extractor": "^4.0.2",
     "markdown-to-jsx": "^7.5.0",
     "prism-react-renderer": "^2.4.0",
     "react": "^18.3.1",
@@ -49,8 +51,8 @@
     "@typescript-eslint/parser": "^6.19.0",
     "cspell": "^8.14.2",
     "eslint": "^8.56.0",
-    "typescript": "^5.6.2",
-    "husky": "^9.1.6"
+    "husky": "^9.1.6",
+    "typescript": "^5.6.2"
   },
   "browserslist": {
     "production": [

@@ -51,7 +51,7 @@ const int RESERVE_REGULAR = 0;
 ;;; Creates an output action which would reserve at most x nanograms (if y = 2).
 ;;; Bit +2 in y means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved.
 const int RESERVE_AT_MOST = 2;
-;;; in the case of action fail - bounce transaction. No effect if RESERVE_AT_MOST (+2) is used. TVM UPGRADE 2023-07. https://docs.ton.org/v3/documentation/tvm/changelog/tvm-upgrade-2023-07#sending-messages
+;;; in the case of action fail - bounce transaction. No effect if RESERVE_AT_MOST (+2) is used. TVM UPGRADE 2023-07. v3/documentation/tvm/changelog/tvm-upgrade-2023-07#sending-messages
 const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;
 
 () calculate_and_reserve_at_most_storage_fee(int balance, int msg_value, int workchain, int seconds, int bits, int cells) inline {
@@ -209,7 +209,7 @@ Modes affect the fee calculation as follows:
 - `+1024` do not create action, only estimate fee. Other modes will send a message in action phase.
 - `+128` substitutes the value of the entire balance of the contract before the start of the computation phase (slightly inaccurate, since gas expenses that cannot be estimated before the completion of the computation phase are not taken into account).
 - `+64` substitutes the entire balance of the incoming message as an outcoming value (slightly inaccurate, gas expenses that cannot be estimated before the computation is completed are not taken into account).
-- Other modes can be found [on message modes page](https://docs.ton.org/v3/documentation/smart-contracts/message-management/sending-messages#message-modes).
+- Other modes can be found [on message modes page](v3/documentation/smart-contracts/message-management/sending-messages#message-modes).
 
 It creates an output action and returns a fee for creating a message. However, it uses an unpredictable amount of gas, which can't be calculated using formulas, so how can it be calculated? Use `GASCONSUMED`:
 
