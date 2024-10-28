@@ -792,10 +792,6 @@
         "to": "/v3/guidelines/smart-contracts/fee-calculation"
     },
     {
-        "from": "/develop/smart-contracts/testing",
-        "to": "/v3/guidelines/smart-contracts/testing"
-    },
-    {
         "from": "/develop/smart-contracts/testing/writing-test-examples",
         "to": "/v3/guidelines/smart-contracts/testing/writing-test-examples"
     },
