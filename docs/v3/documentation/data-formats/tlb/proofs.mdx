@@ -5,13 +5,13 @@ import ThemedImage from '@theme/ThemedImage';
 ## Overview
 :::caution
 This section describes instructions and manuals for interacting with TON at a low level.
-it is assumed that you have already become familiar with [exotic cells](/v3/documentation/data-formats/tlb/exotic-cells), [TL-B language](/v3/documentation/data-formats/tl-b-language) and
+it is assumed that you have already become familiar with [exotic cells](/v3/documentation/data-formats/tlb/exotic-cells), [TL-B language](/v3/documentation/data-formats/tlb/tl-b-language) and
 understand the [simple proof verifying](/v3/documentation/data-formats/tlb/exotic-cells#simple-proof-verifying-example) example.
 :::
 
-This article describes advanced examples of verifying proofs from Liteservers. 
+This article describes advanced examples of verifying proofs from Liteservers.
 
-It's important to check any data you receive from a node for trustless interaction with the blockchain. 
+It's important to check any data you receive from a node for trustless interaction with the blockchain.
 However, the article covers only part of trustless communication with Liteserver,
 because its assumed that you verified the Block hash you received from a Liteserver (or from anyone else).
 Block hash verifying is more advanced, because you need to sync key blocks and (or) check block signatures,
@@ -21,7 +21,7 @@ you're decreasing probability that Liteserver will send you the wrong data that 
 
 ## Block Header
 
-Let's say we know a Block ID: 
+Let's say we know a Block ID:
 ```json
 <TL BlockIdExt [wc=-1, shard=-9223372036854775808, seqno=31220993, root_hash=51ed3b9e728e7c548b15a5e5ce988b4a74984c3f8374f3f1a52c7b1f46c26406, file_hash=d4fcdc692de1a252deb379cd25774842b733e6a96525adf82b8ffc41da667bf5] >
 ```
@@ -278,8 +278,6 @@ Now, let's deserialize the second Cell:
 ```
 
 Since we trust this Cell we can trust the Shard Block data (`ShardStateUnsplit` -> `custom` -> `shard_hashes` -> `0 (shrdblk wc)` -> `leaf`).
-
-_Checking Proof Examples:_ [Python](https://github.com/yungwine/pytoniq/blob/master/pytoniq/proof/check_proof.py#L43), [C++](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/check-proof.cpp#L104)
 
 ## Account State
 
@@ -563,8 +561,6 @@ And deserialize it according to the [Account](https://github.com/ton-blockchain/
 ```
 
 Now we can trust this account state data.
-
-_Checking Proof Examples:_ [Python](https://github.com/yungwine/pytoniq/blob/master/pytoniq/proof/check_proof.py#L87), [Kotlin](https://github.com/andreypfau/ton-kotlin/blob/b1edc4b134e89ccf252149f27c85fd530377cebe/ton-kotlin-liteclient/src/commonMain/kotlin/CheckProofUtils.kt#L37), [C++](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/check-proof.cpp#L161)
 
 ## Account transactions
 

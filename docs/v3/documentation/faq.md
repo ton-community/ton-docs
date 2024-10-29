@@ -169,7 +169,7 @@ On TON, all data is transmitted as boc-messages. This means that using NFTs in t
 
 However, certain indexed APIs allow you to view all messages sent to or from a contract, and filter them based on your specific requirements.
 
-- https://tonapi.io/swagger-ui
+- https://docs.tonconsole.com/tonapi/rest-api
 
 To better understand how this process works, please refer [Payments Processing](/v3/guidelines/dapps/asset-processing/payments-processing) section.
 
@@ -217,8 +217,8 @@ Smart contract can exist in uninitialized state, meaning that its state is not a
 
 To protect message chains from being halted at non-existing contracts TON use "bounce" feature. Read more in these articles:
 
-- [Deploying wallet via TonLib](https://ton.org/docs/v3/guidelines/dapps/asset-processing/payments-processing/#deploying-wallet)
-- [Paying for processing queries and sending responses](https://ton.org/docs/v3/documentation/smart-contracts/transaction-fees/forward-fees)
+- [Deploying wallet via TonLib](/v3/guidelines/dapps/asset-processing/payments-processing/#deploying-wallet)
+- [Paying for processing queries and sending responses](/v3/documentation/smart-contracts/transaction-fees/forward-fees)
 
 ### Does the upgradability of a smart-contract pose a threat to its users?
 
@@ -288,4 +288,4 @@ TON directory with projects from TON Community:
 ###  Provided below are two main resources used to obtain information related to public node endpoints on TON Blockchain (for both TON Mainnet and TON Testnet).
 
 - [Network Configs](/v3/documentation/network/configs/network-configs)
-- [Examples and tutorials](/develop/dapps/#examples)
+- [Examples and tutorials](/v3/guidelines/dapps/overview#tutorials-and-examples)

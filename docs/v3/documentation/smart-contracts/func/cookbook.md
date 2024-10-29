@@ -781,7 +781,7 @@ throw_unless(39, number == 198); ;; the error will be triggered only if the numb
 throw(36); ;; the error will be triggered anyway
 ```
 
-[Standard tvm exception codes](/v3/documentation/tvm/tvm-exit-codes.md)
+[Standard tvm exception codes](/v3/documentation/tvm/tvm-exit-codes)
 
 ### Reversing tuples
 

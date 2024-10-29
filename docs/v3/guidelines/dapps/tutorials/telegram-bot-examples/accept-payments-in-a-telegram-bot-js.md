@@ -301,7 +301,7 @@ export default async function handleStart(ctx) {
   const menu = new InlineKeyboard()
     .text("Buy dumplings🥟", "buy")
     .row()
-    .url("Article with a detailed explanation of the bot's work", "/develop/dapps/payment-processing/accept-payments-in-a-telegram-bot-js/");
+    .url("Article with a detailed explanation of the bot's work", "docs.ton.org/v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-js");
 
   await ctx.reply(
     `Hello stranger!

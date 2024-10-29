@@ -22,7 +22,6 @@ There are different ways to connect to blockchain:
 
 * [status.toncenter](https://status.toncenter.com/) - shows all full network nodes and validators active during the last hour, along with various statistics.
 * [Tonstat.us](https://tonstat.us/) - provides a real-time Grafana-based dashboard displaying the status of all TON-related APIs, with data updated every 5 minutes.
-* [tonqueues.vladimirlebe.dev](https://tonqueues.vladimirlebe.dev/) - provides a real-time Grafana-based dashboard showing various statistics (such TPS, etc.).
 
 ## RPC Nodes
 
@@ -57,9 +56,8 @@ Written in Go, Anton is an open source The Open Network blockchain indexer avail
 
 GraphQL nodes act as indexers as well.
 
-* [tvmlabs.io](https://ton-testnet.tvmlabs.dev/graphql) (for TON, testnet only at the moment of writing) - has wide variety of transaction/block data, ways to filter it, etc.
 * [dton.io](https://dton.io/graphql) - as well as providing contracts data augmented with parsed "is jetton", "is NFT" flags, allows emulating transactions and receiving execution traces.
 
 ## Other APIs
 
-* [TonAPI](https://docs.tonconsole.com/tonapi/api-v2) - API that is designed to provide users with a streamlined experience, not worrying about low-level details of smart contracts.
+* [TonAPI](https://docs.tonconsole.com/tonapi) - API that is designed to provide users with a streamlined experience, not worrying about low-level details of smart contracts.

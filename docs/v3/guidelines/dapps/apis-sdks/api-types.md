@@ -10,11 +10,10 @@
 - [toncenter/v2](https://toncenter.com/) - This API enables HTTP access to TON blockchain - getting accounts and wallets information, looking up blocks and transactions, sending messages to the blockchain, calling get methods of smart contracts, and more.
 
 ## Third party APIs
-- [tonapi.io](https://docs.tonconsole.com/tonapi/api-v2) - fast indexed API which provides basic data about accounts, transactions, blocks, application-specific data about NFT, Auctions, Jettons, TON DNS, Subscriptions. It also provides annotated data on transaction chains.
+- [tonapi.io](https://docs.tonconsole.com/tonapi) - fast indexed API which provides basic data about accounts, transactions, blocks, application-specific data about NFT, Auctions, Jettons, TON DNS, Subscriptions. It also provides annotated data on transaction chains.
 - [dton.io](https://dton.io/graphql/) - GraphQL API with that can provide data about accounts, transactions and blocks, as well as application-specific data about NFT, Auctions, Jettons and TON DNS.
 - [ton-api-v4](https://mainnet-v4.tonhubapi.com) - another lite-api focused on speed via aggressive cashing in CDN.
 - [docs.nftscan.com](https://docs.nftscan.com/reference/ton/model/asset-model) - NFT APIs for TON blockchain.
-- [evercloud.dev](https://ton-mainnet.evercloud.dev/graphql) - GraphQL API for basic queries in TON.
 - [everspace.center](https://everspace.center/toncoin) - Simple RPC API for accessing TON Blockchain.
 
 

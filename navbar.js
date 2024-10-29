@@ -50,7 +50,7 @@ module.exports = {
     // },
     {
       type: 'dropdown',
-      to: 'develop/dapps',
+      to: '/v3/guidelines/dapps/overview',
       position: 'left',
       label: 'DApps',
       items: [
@@ -167,7 +167,7 @@ module.exports = {
           label: 'Smart Contracts',
         },
         {
-          to: '/develop/dapps/',
+          to: '/v3/guidelines/dapps/overview',
           label: 'DApps',
         },
         {

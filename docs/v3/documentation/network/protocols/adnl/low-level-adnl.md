@@ -10,7 +10,7 @@ Each peer must have at least one identity, it is possible but not necessary to u
 |------------|---------------------|
 | 0x4813b4c6 | ed25519<sup>1</sup> |
 
-_1. To perform x25519, the keypair must be generated in x25519 format. However, the public key is transmitted over the network in ed25519 format, so you have to convert the public key from x25519 to ed25519, examples of such conversions can be found [here](https://github.com/tonstack/adnl-rs/blob/master/src/integrations/dalek.rs#L10) for Rust and [here](https://github.com/andreypfau/curve25519-kotlin/blob/f008dbc2c0ebc3ed6ca5d3251ffb7cf48edc91e2/src/commonMain/kotlin/curve25519/MontgomeryPoint.kt#L39) for Kotlin._
+_1. To perform x25519, the keypair must be generated in x25519 format. However, the public key is transmitted over the network in ed25519 format, so you have to convert the public key from x25519 to ed25519, examples of such conversions can be found [here](https://github.com/andreypfau/curve25519-kotlin/blob/f008dbc2c0ebc3ed6ca5d3251ffb7cf48edc91e2/src/commonMain/kotlin/curve25519/MontgomeryPoint.kt#L39) for Kotlin._
 
 ## Client-server protocol (ADNL over TCP)
 The client connects to the server using TCP and sends an ADNL handshake packet, which contains a server abstract address, a client public key and encrypted AES-CTR session parameters, which are determined by the client.

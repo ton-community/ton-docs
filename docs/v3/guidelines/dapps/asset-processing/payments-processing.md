@@ -224,7 +224,7 @@ Best suited for dApps that need to sign multiple payments/transactions within a 
 - ❌ Integration is more complex than the ton:// link
 
 
-<Button href="/develop/dapps/ton-connect/"
+<Button href="/v3/guidelines/ton-connect/overview/"
 colorType="primary" sizeType={'lg'}>
 
 Learn More

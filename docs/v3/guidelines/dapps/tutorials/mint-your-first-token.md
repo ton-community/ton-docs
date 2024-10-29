@@ -18,7 +18,7 @@ In this article, you'll learn how to:
 
 ## 📌 Prepare before you start
 
-1. First you need to have the [Tonhub](https://ton.app/wallets/tonhub-wallet) / [Tonkeeper](https://ton.app/wallets/tonkeeper) wallet, [Chrome extension](https://ton.app/wallets/chrome-plugin) or any other supported on the service.
+1. First you need to have the [Tonhub](https://ton.app/wallets/tonhub-wallet) / [Tonkeeper](https://ton.app/wallets/tonkeeper) wallet or any other supported on the service.
 2. You must have more than 0.25 Toncoin on your balance plus additional funds to cover the blockchain commission.
 
 :::tip Starter tip
@@ -36,11 +36,11 @@ Use your web browser to open the service [TON Minter](https://minter.ton.org/).
 
 #### Connect Wallet
 
-Click the `Connect Wallet` button to connect your [Tonhub](https://ton.app/wallets/tonhub-wallet) wallet or a [Chrome extension](https://ton.app/wallets/chrome-plugin) or another wallet from the ones below.
+Click the `Connect Wallet` button to connect your [Tonhub](https://ton.app/wallets/tonhub-wallet) wallet or another wallet from the ones below.
 
 #### ![image](/img/tutorials/jetton/jetton-connect-wallet.png)
 
-**Scan the QR-code** in a [Mobile wallet (Tonhub e.g.)](https://ton.app/wallets/tonhub-wallet) or **sign in** to the wallet via the [Chrome extension](https://ton.app/wallets/chrome-plugin).
+**Scan the QR-code** in a [Mobile wallet (Tonhub e.g.)](https://ton.app/wallets/tonhub-wallet)
 
 #### Fill in the blanks with relevant information
 

@@ -46,15 +46,3 @@ TON-Polygon: [#73](https://github.com/ton-blockchain/ton/blob/35d17249e6b54d67a5
 ### Cross-chain roadmap
 
 * https://t.me/tonblockchain/146
-
-## Tonana Bridge
-
-### How to participate?
-
-:::caution draft   
-This is a concept article. We're still looking for someone experienced to write it.
-:::
-
-You can find the front-end here: https://tonana.org/
-
-The source code is here: https://github.com/tonanadao

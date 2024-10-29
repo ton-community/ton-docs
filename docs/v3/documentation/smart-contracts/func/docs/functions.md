@@ -65,7 +65,7 @@ So each of the following `recv_internal` declarations is correct, but those with
 `recv_external` is for inbound external messages.
 
 ### Return type
-Return type can be any atomic or composite type as described in the [types](/v3/documentation/smart-contracts/func/docs/types.md) section. For example,
+Return type can be any atomic or composite type as described in the [types](/v3/documentation/smart-contracts/func/docs/types) section. For example,
 ```func
 int foo();
 (int, int) foo'();
@@ -299,7 +299,7 @@ The list of assembler commands can be found here: [TVM instructions](/v3/documen
 In some cases, we want to pass arguments to the assembler function in a different order than the assembler command requires, or/and take the result in a different stack entry order than the command returns. We could manually rearrange the stack by adding corresponding stack primitives, but FunC can do it automatically.
 
 :::info
-Note, that in case of manual rearranging, arguments will be computed in the rearranged order. To overwrite this behavior use `#pragma compute-asm-ltr`: [compute-asm-ltr](compiler_directives#pragma-compute-asm-ltr)
+Note, that in case of manual rearranging, arguments will be computed in the rearranged order. To overwrite this behavior use `#pragma compute-asm-ltr`: [compute-asm-ltr](/v3/documentation/smart-contracts/func/docs/compiler_directives#pragma-compute-asm-ltr)
 :::
 
 For example, suppose that the assembler command STUXQ takes an integer, builder, and integer; then it returns the builder, along with the integer flag, indicating the success or failure of the operation.

@@ -785,7 +785,7 @@
     },
     {
         "from": "/participate/nft",
-        "to": "/v3/concepts/dive-into-ton/ton-blockchain/nft"
+        "to": "/v3/concepts/dive-into-ton/ton-ecosystem/nft"
     },
     {
         "from": "/develop/smart-contracts/fee-calculation",
@@ -810,5 +810,9 @@
     {
         "from": "/develop/smart-contracts/README",
         "to": "/v3/documentation/smart-contracts/overview"
+    },
+    {
+        "from": "/develop/dapps/README",
+        "to": "/v3/guidelines/dapps/overview"
     }
 ]

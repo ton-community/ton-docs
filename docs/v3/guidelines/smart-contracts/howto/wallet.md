@@ -1755,7 +1755,7 @@ log.Println(publicKey)
 </Tabs>
 
 After the call is successfully completed the end result is an extremely large 256 bit number which must be translated into a hex string. The resulting hex string for the wallet address we provided above is as follows: `430db39b13cf3cb76bfa818b6b13417b82be2c6c389170fbe06795c71996b1f8`.
-Next, we leverage the [TonAPI](https://tonapi.io/swagger-ui) (/v1/wallet/findByPubkey method), by inputting the obtained hex string into the system and it is immediately clear that the first element in the array within the answer will identify my wallet.
+Next, we leverage the [TonAPI](https://docs.tonconsole.com/tonapi/rest-api) (/v1/wallet/findByPubkey method), by inputting the obtained hex string into the system and it is immediately clear that the first element in the array within the answer will identify my wallet.
 
 Then we switch to the `is_plugin_installed` method. As an example, we’ll again use the wallet we used earlier ([EQAM7M--HGyfxlErAIUODrxBA3yj5roBeYiTuy6BHgJ3Sx8k](https://tonscan.org/address/EQAM7M--HGyfxlErAIUODrxBA3yj5roBeYiTuy6BHgJ3Sx8k)) and the plugin ([EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_N9qwOTSAy3sQSZ](https://tonscan.org/address/EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_N9qwOTSAy3sQSZ)):
 
@@ -2528,7 +2528,7 @@ Exchanges are probably the best example of where high-load wallets are used on a
 
 ### High-load wallet FunC code
 
-First, let’s examine [the code structure of high-load wallet smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc): 
+First, let’s examine [the code structure of high-load wallet smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-highload-wallet-v2.fif): 
 
 ```func
 () recv_external(slice in_msg) impure {
@@ -2694,7 +2694,7 @@ This means that if the query_id passed to the method is smaller than the last la
 
 In order to deploy a high-load wallet it is necessary to generate a mnemonic key in advance, which will be used by the user. It is possible to use the same key that was used in previous sections of this tutorial.
 
-To begin the process required to deploy a high-load wallet it's necessary to copy [the code of the smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc) to the same directory where the stdlib.fc and wallet_v3 are located and remember to add `#include "stdlib.fc";` to the beginning of the code. Next we’ll compile the high-load wallet code like we did in [section three](/v3/guidelines/smart-contracts/howto/wallet#compiling-wallet-code):
+To begin the process required to deploy a high-load wallet it's necessary to copy [the code of the smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-highload-wallet-v2.fif) to the same directory where the stdlib.fc and wallet_v3 are located and remember to add `#include "stdlib.fc";` to the beginning of the code. Next we’ll compile the high-load wallet code like we did in [section three](/v3/guidelines/smart-contracts/howto/wallet#compiling-wallet-code):
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -3128,7 +3128,7 @@ If you have any questions, comments, or suggestions please reach out to the auth
 
 ## 📖 See Also
 
-- Wallets' source code: [V3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc), [V4](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc), [High-load](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/highload-wallet-v2-code.fc)
+- Wallets' source code: [V3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc), [V4](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc), [High-load](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-highload-wallet-v2.fif)
 
 - Useful concept documents(may include outdated information): [ton.pdf](https://docs.ton.org/ton.pdf), [tblkch.pdf](https://ton.org/tblkch.pdf), [tvm.pdf](https://ton.org/tvm.pdf)
 

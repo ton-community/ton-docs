@@ -229,4 +229,4 @@ trans_merge_install$0111 split_info:SplitMergeInfo
 
 ## See also
 
--   Original description of [Transaction layout](https://ton.org/docs/tblkch.pdf#page=75&zoom=100,148,290) from whitepaper
+-   Original description of [Transaction layout](/tblkch.pdf#page=75&zoom=100,148,290) from whitepaper

@@ -141,7 +141,7 @@ After decoding the response, we get a packet of the form:
 
 ### runSmcMethod
 We already know how to get the masterchain block, so now we can call any lite server methods.
-Let's analyze **runSmcMethod** - this is a method that calls a function from a smart contract and returns a result. Here we need to understand some new data types such as [TL-B](/v3/documentation/data-formats/tl-b), [Cell](/v3/documentation/data-formats/tlb/cell-boc#cell) and [BoC](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells).
+Let's analyze **runSmcMethod** - this is a method that calls a function from a smart contract and returns a result. Here we need to understand some new data types such as [TL-B](/v3/documentation/data-formats/tlb/tl-b-language), [Cell](/v3/documentation/data-formats/tlb/cell-boc#cell) and [BoC](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells).
 
 To execute the smart contract method, we need to build and send a request using the TL schema:
 ```tlb
@@ -181,7 +181,7 @@ Method code in FunC:
 Fill out our request:
 * `mode` = 4, we only need the result -> `04000000`
 * `id` = result of execution getMasterchainInfo
-* `account` = workchain 0 (4 bytes `00000000`), and int256 [obtained from our contract address](/v3/documentation/data-formats/tl-b#addresses), i.e. 32 bytes `4bdbfde5322cb2c14d7b83ea2bf0deeff610e63c2a6db7304f1368ac176193ce`
+* `account` = workchain 0 (4 bytes `00000000`), and int256 [obtained from our contract address](/v3/documentation/data-formats/tlb/tl-b-language#addresses), i.e. 32 bytes `4bdbfde5322cb2c14d7b83ea2bf0deeff610e63c2a6db7304f1368ac176193ce`
 * `method_id` = [computed](https://github.com/xssnick/tonutils-go/blob/88f83bc3554ca78453dd1a42e9e9ea82554e3dd2/ton/runmethod.go#L16) id from `a2` -> `0a2e010000000000`
 * `params:bytes` = Our method does not accept input parameters, so we need to pass it an empty stack (`000000`, cell 3 bytes - stack depth 0) serialized in [BoC](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells) -> `b5ee9c72010101010005000006000000` -> serialize in bytes and get `10b5ee9c72410101010005000006000000000000` 0x10 - size, 3 bytes in the end - padding.
 
