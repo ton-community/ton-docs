@@ -9,11 +9,11 @@
     },
     {
         "from": "/participate/wallets/apps",
-        "to": "/v3/concepts/dive-into-ton/ton-blockchain/wallet-apps"
+        "to": "/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps"
     },
     {
         "from": "/participate/explorers",
-        "to": "/v3/concepts/dive-into-ton/ton-blockchain/explorers-in-ton"
+        "to": "/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton"
     },
     {
         "from": "/learn/overviews/cells",
@@ -785,7 +785,7 @@
     },
     {
         "from": "/participate/nft",
-        "to": "/v3/concepts/dive-into-ton/ton-blockchain/nft"
+        "to": "/v3/concepts/dive-into-ton/ton-ecosystem/nft"
     },
     {
         "from": "/develop/smart-contracts/fee-calculation",
