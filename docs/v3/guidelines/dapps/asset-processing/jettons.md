@@ -58,7 +58,7 @@ This method returns the following data:
 | `jetton_content`     | `cell` | data in accordance with [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md), check [jetton metadata parsing page](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing) for more. |
 | `jetton_wallet_code` | `cell`  |                                                                                                                                                                                                                 |
 
-You can call it via [Toncenter API](https://toncenter.com/api/v3/#/default/get_jetton_masters_api_v3_jetton_masters_get) or one of the [SDKs](https://docs.ton.org/v3/guidelines/dapps/apis-sdks/sdk).
+You can call it via [Toncenter API](https://toncenter.com/api/v3/#/default/get_jetton_masters_api_v3_jetton_masters_get) or one of the [SDKs](/v3/guidelines/dapps/apis-sdks/sdk).
 
 <Tabs groupId="get-jetton_data">
 <TabItem value="API" label="API">
@@ -305,7 +305,7 @@ Tonweb examples:
 #### Preparations
 
 1. [Prepare a list of accepted Jettons](/v3/guidelines/dapps/asset-processing/jettons#adding-new-jettons-for-asset-processing-and-initial-verification) (Jetton master addresses).
-2. Deploy hot wallet (using v3R2 if no Jetton withdrawals are expected; highload v3 - if Jetton withdrawals are expected). [Wallet deployment](/develop/dapps/asset-processing/#wallet-deployment).
+2. Deploy hot wallet (using v3R2 if no Jetton withdrawals are expected; highload v3 - if Jetton withdrawals are expected). [Wallet deployment](/v3/guidelines/dapps/asset-processing/payments-processing/#wallet-deployment).
 3. Perform a test Jetton transfer using the hot wallet address to initialize the wallet.
 
 #### Processing incoming Jettons
@@ -315,7 +315,7 @@ Tonweb examples:
 4. Compare the addresses of the Jetton master contracts from step 1. and step 3 (directly above).
    If the addresses do not match, a Jetton address verification error must be reported.
 5. Retrieve a list of the most recent unprocessed transactions using a hot wallet account and
-   iterate it (by sorting through each transaction one by one). See:  [Checking contract's transactions](https://docs.ton.org/develop/dapps/asset-processing/#checking-contracts-transactions).
+   iterate it (by sorting through each transaction one by one). See:  [Checking contract's transactions](v3/guidelines/dapps/asset-processing/payments-processing/#checking-contracts-transactions).
 6. Check the input message (in_msg) for transactions and retrieve the source address from the input message. [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L84)
 7. If the source address matches the address within a Jetton wallet, then it is necessary to continue processing the transaction.
    If not, then skip processing the transaction and check the next transaction.
@@ -358,7 +358,7 @@ const wallet = new WalletClass(tonweb.provider, {
 #### Preparation
 
 1. [Prepare a list of accepted Jettons](#adding-new-jettons-for-asset-processing-and-initial-verification).
-2. Deploy hot wallet (using v3R2 if no Jetton withdrawals are expected; highload v3 - if Jetton withdrawals are expected). [Wallet deployment](/develop/dapps/asset-processing/#wallet-deployment).
+2. Deploy hot wallet (using v3R2 if no Jetton withdrawals are expected; highload v3 - if Jetton withdrawals are expected). [Wallet deployment](/v3/guidelines/dapps/asset-processing/payments-processing/#wallet-deployment).
 
 #### Creating deposits
 
@@ -449,7 +449,7 @@ See: [Jetton contracts message layouts](#jetton-contract-message-layouts)
 #### Preparation
 
 1. Prepare a list of Jettons for withdrawals: [Adding new Jettons for processing and initial verification](#adding-new-jettons-for-asset-processing-and-initial-verification)
-2. Hot wallet deployment is initiated. Highload v3 is recommended. [Wallet Deployment](/develop/dapps/asset-processing/#wallet-deployment)
+2. Hot wallet deployment is initiated. Highload v3 is recommended. [Wallet Deployment](/v3/guidelines/dapps/asset-processing/payments-processing/#wallet-deployment)
 3. Carry out a Jetton transfer using a hot wallet address to initialize the Jetton wallet and replenish its balance.
 
 #### Processing withdrawals
@@ -467,7 +467,7 @@ See: [Jetton contracts message layouts](#jetton-contract-message-layouts)
    processes the message, after this is completed, the wallet will no longer accept the message).
 10. Send a single message or more than one message (batch messaging).
 11. Retrieve the list of the latest unprocessed transactions within the hot wallet account and iterate it.
-    Learn more here: [Checking contract's transactions](/develop/dapps/asset-processing/#checking-contracts-transactions),
+    Learn more here: [Checking contract's transactions](/v3/guidelines/dapps/asset-processing/payments-processing/#checking-contracts-transactions),
     [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-single-wallet.js#L43) or
     use the Toncenter API `/getTransactions` method.
 12. Look at outgoing messages in the account.

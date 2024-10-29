@@ -4,7 +4,7 @@
 
 There are different ways to connect to blockchain:
 1. RPC data provider or another API: in most cases, you have to *rely* on its stability and security.
-2. **ADNL connection**: you're connecting to a [liteserver](/participate/run-nodes/liteserver). They might be inaccessible, but with a certain level of validation (implemented in the library), cannot lie.
+2. **ADNL connection**: you're connecting to a [liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node). They might be inaccessible, but with a certain level of validation (implemented in the library), cannot lie.
 3. Tonlib binary: you're connecting to liteserver as well, so all benefits and downsides apply, but your application also contains a dynamic-loading library compiled outside.
 4. Offchain-only. Such SDKs allow to create and serialize cells, which you can then send to APIs.
 
@@ -23,7 +23,7 @@ Read more about [Merkle proofs](/v3/documentation/data-formats/tlb/proofs) at [T
 Public liteservers (from the global config) exist to get you started with TON quickly. It can be used for learning to program in TON, or for applications and scripts that do not require 100% uptime. 
 
 For building production infrastructure - it is suggested use well prepared infrastructure:
-- [set up own liteserver](https://docs.ton.org/v3/guidelines/nodes/running-nodes/full-node#enable-liteserver-mode), 
+- [set up own liteserver](v3/guidelines/nodes/running-nodes/full-node#enable-liteserver-mode), 
 - use Liteserver premium providers [@liteserver_bot](https://t.me/liteserver_bot)
 
 ## Pros & Cons

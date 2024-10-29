@@ -54,7 +54,7 @@ const DNS_URL = "https://dns.ton.org/";
 const CAREERS_URL = "https://jobs.ton.org/jobs";
 const BUG_BOUNTY_URL = "https://github.com/ton-blockchain/bug-bounty";
 const TON_OVERFLOW_URL = "https://tonresear.ch";
-const TON_CONCEPT_URL = "https://docs.ton.org/v3/concepts/dive-into-ton/introduction";
+const TON_CONCEPT_URL = "v3/concepts/dive-into-ton/introduction";
 const TON_FOOTSTEPS = "https://github.com/ton-society/ton-footsteps";
 const TON_BLOG_PRESS_RELEASES_URL = "https://blog.ton.org/category/news";
 const TONSTAT_URL = "https://www.tonstat.com/";
@@ -96,7 +96,7 @@ export const FOOTER_COLUMN_LINKS_EN = [
   {
     headerLangKey: "Learn",
     links: [
-      { langKey: "TON Concept", url: FOOTER_TON_CONCEPT_URL }, // it doesn't work, cause we use updated doc URL 
+      { langKey: "TON Concept", url: FOOTER_TON_CONCEPT_URL }, // it doesn't work, cause we use updated doc URL
       { langKey: "Decentralized Network", url: FOOTER_DECENTRALIZED_NETWORK },
       { langKey: "Roadmap", url: PAGE_ROADMAP },
       { langKey: "TonStat", url: TONSTAT_URL },

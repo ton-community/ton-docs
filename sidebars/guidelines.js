@@ -106,7 +106,7 @@ module.exports = [
     'type': 'html',
     'value': '<span class=\'menu__link\'><b><small> DApps Guidelines </small></b></span>',
   },
-  'develop/dapps/README',
+  'v3/guidelines/dapps/overview',
   'v3/guidelines/dapps/cookbook',
   {
     type: 'category',

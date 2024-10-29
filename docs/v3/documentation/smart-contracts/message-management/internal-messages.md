@@ -59,7 +59,7 @@ If `op` is `0x2167da4b`, then the message is a "transfer message with encrypted 
    Encryption algo is as follows:
    
    1. Calculate `shared_secret` using `priv_1` and `pub_2`.
-   2. Let `salt` be the [bas64url representation](https://docs.ton.org/v3/documentation/smart-contracts/addresses#user-friendly-address) of the sender wallet address with `isBounceable=1` and `isTestnetOnly=0`.
+   2. Let `salt` be the [bas64url representation](v3/documentation/smart-contracts/addresses#user-friendly-address) of the sender wallet address with `isBounceable=1` and `isTestnetOnly=0`.
    3. Select byte string `prefix` of length between 16 and 31 such that `len(prefix+msg)` is divisible by 16. The first byte of `prefix` is equal to `len(prefix)`, other bytes are random. Let `data = prefix + msg`.
    4. Let `msg_key` be the first 16 bytes of `hmac_sha512(salt, data)`.
    5. Calculate `x = hmac_sha512(shared_secret, msg_key)`. Let `key=x[0:32]` and `iv=x[32:48]`.

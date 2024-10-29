@@ -4,7 +4,7 @@
 
 There are different ways to connect to blockchain:
 1. **RPC data provider or another API**: in most cases, you have to *rely* on its stability and security.
-2. ADNL connection: you're connecting to a [liteserver](/participate/run-nodes/liteserver). It may be inaccessible, but with a certain level of validation (implemented in the library), it cannot lie.
+2. ADNL connection: you're connecting to a [liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node). It may be inaccessible, but with a certain level of validation (implemented in the library), it cannot lie.
 3. Tonlib binary: you're also connecting to a liteserver, so all benefits and downsides apply, but your application includes a dynamically-loaded library compiled externally.
 4. Offchain-only. Such SDKs allow the creation and serialization of cells, which can then be sent to APIs.
 
@@ -22,7 +22,6 @@ There are different ways to connect to blockchain:
 
 * [status.toncenter](https://status.toncenter.com/) - shows all full network nodes and validators active during the last hour, along with various statistics.
 * [Tonstat.us](https://tonstat.us/) - provides a real-time Grafana-based dashboard displaying the status of all TON-related APIs, with data updated every 5 minutes.
-* [tonqueues.vladimirlebe.dev](https://tonqueues.vladimirlebe.dev/) - provides a real-time Grafana-based dashboard showing various statistics (such TPS, etc.).
 
 ## RPC Nodes
 
@@ -57,9 +56,8 @@ Written in Go, Anton is an open source The Open Network blockchain indexer avail
 
 GraphQL nodes act as indexers as well.
 
-* [tvmlabs.io](https://ton-testnet.tvmlabs.dev/graphql) (for TON, testnet only at the moment of writing) - has wide variety of transaction/block data, ways to filter it, etc.
 * [dton.io](https://dton.io/graphql) - as well as providing contracts data augmented with parsed "is jetton", "is NFT" flags, allows emulating transactions and receiving execution traces.
 
 ## Other APIs
 
-* [TonAPI](https://docs.tonconsole.com/tonapi/api-v2) - API that is designed to provide users with a streamlined experience, not worrying about low-level details of smart contracts.
+* [TonAPI](https://docs.tonconsole.com/tonapi) - API that is designed to provide users with a streamlined experience, not worrying about low-level details of smart contracts.

@@ -63,4 +63,4 @@ Also, number of expired queries cleaned in one transaction should be below 100.
 You can also read [Highload Wallet Tutorials](/v3/guidelines/smart-contracts/howto/wallet#-high-load-wallet-v3) article.
 
 Wallet source code:
- * [ton/crypto/smartcont/Highload-wallet-v2-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/Highload-wallet-v2-code.fc)
+ * [ton/crypto/smartcont/Highload-wallet-v2-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-highload-wallet-v2.fif)

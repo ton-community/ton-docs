@@ -22,6 +22,6 @@ blockchain itself, thus providing more possibilities and flexibility for creatin
 ## See Also
 
 * [ADNL Protocol](/v3/documentation/network/protocols/adnl/overview)
-* [Overlay Subnetworks](/learn/networking/overlay-subnetworks)
-* [RLDP Protocol](/learn/networking/rldp)
+* [Overlay Subnetworks](/v3/documentation/network/protocols/overlay)
+* [RLDP Protocol](/v3/documentation/network/protocols/rldp)
 * [TON DHT Service](/v3/documentation/network/protocols/dht/ton-dht)

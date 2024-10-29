@@ -21,5 +21,5 @@ In addition to the dynamic creation of shards, TON uses **Split Merge** function
 
 ## See Also
 
-* [Shards Dive In](/develop/blockchain/shards)
-* [# Infinity Sharding Paradigm](/develop/blockchain/sharding-lifecycle)
+* [Shards Dive In](/v3/documentation/smart-contracts/shards)
+* [# Infinity Sharding Paradigm](/v3/documentation/smart-contracts/infinity-sharding-paradigm)

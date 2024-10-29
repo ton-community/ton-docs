@@ -5,7 +5,7 @@ import ThemedImage from '@theme/ThemedImage';
 TL-B (Type Language - Binary) serves to describe the type system, constructors and existing functions. For example, we
 can use TL-B schemes to build binary structures associated with TON Blockchain. Special TL-B parsers can read schemes to
 deserialize binary data into different objects. TL-B describes data schemes for `Cell` objects. If you not familiar
-with `Cells`, please read [Cell & Bag of Cells(BOC)](https://docs.ton.org/v3/documentation/data-formats/tlb/cell-boc#cell) article.
+with `Cells`, please read [Cell & Bag of Cells(BOC)](v3/documentation/data-formats/tlb/cell-boc#cell) article.
 
 ## Overview
 
@@ -516,7 +516,7 @@ unary_succ$1 {n:#} x:(Unary ~n) = Unary ~(n + 1);
 _ u:(Unary Any) = UnaryChain;
 ```
 
-This is example has good explanation in [TL-B Types](https://docs.ton.org/v3/documentation/data-formats/tlb/tl-b-types#unary)
+This is example has good explanation in [TL-B Types](v3/documentation/data-formats/tlb/tl-b-types#unary)
 article. The main idea here is that `UnaryChain` will recursively deserialize until reach of `unary_zero$0` (because we
 know last element of `Unary X` type by definition `unary_zero$0 = Unary ~0;` and `X` is calculated in runtime
 due `Unary ~(n + 1)` definition).

@@ -810,5 +810,9 @@
     {
         "from": "/develop/smart-contracts/README",
         "to": "/v3/documentation/smart-contracts/overview"
+    },
+    {
+        "from": "/develop/dapps/README",
+        "to": "/v3/guidelines/dapps/overview"
     }
 ]

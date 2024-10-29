@@ -735,7 +735,7 @@ if (current_time > 1672080143) {
 :::caution draft
 Please note that this method of generating random numbers isn't safe.
 
-Checkout [Random Number Generation](https://docs.ton.org/v3/guidelines/smart-contracts/securier-generation) for more information.
+Checkout [Random Number Generation](v3/guidelines/smart-contracts/securier-generation) for more information.
 :::,.
 
 ```func
@@ -781,7 +781,7 @@ throw_unless(39, number == 198); ;; the error will be triggered only if the numb
 throw(36); ;; the error will be triggered anyway
 ```
 
-[Standard tvm exception codes](/v3/documentation/tvm/tvm-exit-codes.md)
+[Standard tvm exception codes](/v3/documentation/tvm/tvm-exit-codes)
 
 ### Reversing tuples
 

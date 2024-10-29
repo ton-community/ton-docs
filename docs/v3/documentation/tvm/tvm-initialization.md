@@ -174,7 +174,7 @@ First component of this tuple is an _Integer_ value, which is always equal to 0x
 | `actions` | uint16 | Originally initialized by 0, but incremented by one whenever an output action is installed by a non-RAW output action primitive |
 | `msgs_sent` | uint16 | Number of messages sent |
 | `unixtime` | uint32 | Unix timestamp in seconds |
-| `block_lt` | uint64 | Represents _logical time_ of the previous block of this account. [More about logical time](https://docs.ton.org/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-logical-time) |
+| `block_lt` | uint64 | Represents _logical time_ of the previous block of this account. [More about logical time](v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-logical-time) |
 | `trans_lt` | uint64 | Represents _logical time_ of the previous transaction of this account |
 | `rand_seed` | bits256 | Initialized deterministically starting from `rand_seed` of the block, the account address, the hash of the incoming message being processed (if any), and the transaction logical time `trans_lt` |
 | `balance_remaining` | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Remaining balance of the smart contract |

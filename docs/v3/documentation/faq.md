@@ -56,7 +56,7 @@ Additionally, here are three high-level third-party block explorers:
 - https://toncenter.com/
 - https://tonwhales.com/explorer
 
-Read more in the [Explorers in TON](/v3/concepts/dive-into-ton/ton-blockchain/explorers-in-ton) section of our documentation.
+Read more in the [Explorers in TON](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton) section of our documentation.
 
 ### Block time
 
@@ -169,7 +169,7 @@ On TON, all data is transmitted as boc-messages. This means that using NFTs in t
 
 However, certain indexed APIs allow you to view all messages sent to or from a contract, and filter them based on your specific requirements.
 
-- https://tonapi.io/swagger-ui
+- https://docs.tonconsole.com/tonapi/rest-api
 
 To better understand how this process works, please refer [Payments Processing](/v3/guidelines/dapps/asset-processing/payments-processing) section.
 
@@ -217,8 +217,8 @@ Smart contract can exist in uninitialized state, meaning that its state is not a
 
 To protect message chains from being halted at non-existing contracts TON use "bounce" feature. Read more in these articles:
 
-- [Deploying wallet via TonLib](https://ton.org/docs/develop/dapps/asset-processing/#deploying-wallet)
-- [Paying for processing queries and sending responses](https://ton.org/docs/v3/documentation/smart-contracts/transaction-fees/forward-fees)
+- [Deploying wallet via TonLib](/v3/guidelines/dapps/asset-processing/payments-processing/#deploying-wallet)
+- [Paying for processing queries and sending responses](/v3/documentation/smart-contracts/transaction-fees/forward-fees)
 
 ### Does the upgradability of a smart-contract pose a threat to its users?
 
@@ -245,7 +245,7 @@ If the contract cannot initially execute `set_code()` (via its code or execution
 
 ### Can smart contract be deleted?
 
-Yes, either as a result of storage fee accumulation (contract needs to reach -1 TON balance to be deleted) or by sending a message with [mode 160](https://docs.ton.org/v3/documentation/smart-contracts/message-management/sending-messages#message-modes).
+Yes, either as a result of storage fee accumulation (contract needs to reach -1 TON balance to be deleted) or by sending a message with [mode 160](v3/documentation/smart-contracts/message-management/sending-messages#message-modes).
 
 ### Are smart contract addresses case sensitive?
 
@@ -270,7 +270,7 @@ Yes, smart contract addresses are case sensitive because they are generated usin
 ### Recommended node providers for data extraction include:
 
 API types:
-- Read more about different [API Types](/develop/dapps/apis/) (Indexed, HTTP, and ADNL)
+- Read more about different [API Types](/v3/guidelines/dapps/apis-sdks/api-types) (Indexed, HTTP, and ADNL)
 
 Node providers partners:
 
@@ -288,4 +288,4 @@ TON directory with projects from TON Community:
 ###  Provided below are two main resources used to obtain information related to public node endpoints on TON Blockchain (for both TON Mainnet and TON Testnet).
 
 - [Network Configs](/v3/documentation/network/configs/network-configs)
-- [Examples and tutorials](/develop/dapps/#examples)
+- [Examples and tutorials](/v3/guidelines/dapps/overview#tutorials-and-examples)

@@ -2,7 +2,7 @@
 This section briefly discusses FunC statements, constituting the code of ordinary function bodies.
 
 ## Expression statements
-The most common type of a statement is the expression statement. It's an expression followed by `;`. Expression's description would be quite complicated, so only a sketch is presented here. As a rule all sub-expressions are computed left to right with one exception of [asm stack rearrangement](functions#rearranging-stack-entries) which may define order manually.
+The most common type of a statement is the expression statement. It's an expression followed by `;`. Expression's description would be quite complicated, so only a sketch is presented here. As a rule all sub-expressions are computed left to right with one exception of [asm stack rearrangement](/v3/documentation/smart-contracts/func/docs/functions#rearranging-stack-entries) which may define order manually.
 
 ### Variable declaration
 It is not possible to declare a local variable without defining its initial value.
@@ -41,7 +41,7 @@ while (i < 10) {
 }
 ;; here x is a (different) variable of type int
 ```
-But as mentioned in the global variables [section](/v3/documentation/smart-contracts/func/docs/global_variables.md), a global variable cannot be redeclared.
+But as mentioned in the global variables [section](/v3/documentation/smart-contracts/func/docs/global_variables), a global variable cannot be redeclared.
 
 Note that a variable declaration **is** an expression statement, so actually constructions like `int x = 2` are full-fledged expressions. For example, this is a correct code:
 ```func

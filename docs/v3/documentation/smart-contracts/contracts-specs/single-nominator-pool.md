@@ -3,7 +3,7 @@ import TabItem from '@theme/TabItem';
 
 # Single Nominator Pool
 
-[Single Nominator](https://github.com/orbs-network/single-nominator) is a simple firewall TON smart contract that enables secure validation for TON blockchain via cold wallet. The contract is designed for TON validators that have enough self stake to validate by themselves without relying on third-party nominators stakes. The contract provides an alternative simplified implementation for the [Nominator Pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool.mdx) smart contract that supports a Single Nominator only. The benefit of this implementation is that it's more secure since the attack surface is considerably smaller. This is due to massive reduction in complexity of Nominator Pool that has to support multiple third-party nominators.
+[Single Nominator](https://github.com/orbs-network/single-nominator) is a simple firewall TON smart contract that enables secure validation for TON blockchain via cold wallet. The contract is designed for TON validators that have enough self stake to validate by themselves without relying on third-party nominators stakes. The contract provides an alternative simplified implementation for the [Nominator Pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool) smart contract that supports a Single Nominator only. The benefit of this implementation is that it's more secure since the attack surface is considerably smaller. This is due to massive reduction in complexity of Nominator Pool that has to support multiple third-party nominators.
 
 ## The go-to solution for validators
 
@@ -123,7 +123,7 @@ Command line: `ts-node scripts/ts/withdraw-deeplink.ts single-nominator-addr wit
 * withdraw-amount is the amount to withdraw. The nominator contract will leave 1 TON in the contract so the actual amount that will be sent to the owner address will be the minimum between the requested amount and the contract balance - 1. <br/>
 The owner should run the deeplink from a phone with the tonkeeper wallet. <br/>
 
-In case the owner is using a **cold wallet** (recommended), [withdraw.fif](https://github.com/orbs-network/single-nominator/blob/main/scripts/fif/withdraw.fif) can be used to generate a boc body which includes withdraw opcode and the amount to withdraw. <br/>
+In case the owner is using a **cold wallet** (recommended), [withdraw.fif](https://github.com/orbs-network/single-nominator/blob/main/scripts/fift/withdraw.fif) can be used to generate a boc body which includes withdraw opcode and the amount to withdraw. <br/>
 Command line: `fift -s scripts/fif/withdraw.fif withdraw-amount` where withdraw-amount is the amount to withdraw from the nominator contract to the owner's wallet. As described above the nominator contract will leave at least 1 TON in the contract. <br/>
 This script will generate a boc body (named withdraw.boc) that should be signed and send from the owner's wallet. <br/>
 From the black computer the owner should run:
@@ -139,7 +139,7 @@ Command line: `ts-node scripts/ts/change-validator-deeplink.ts single-nominator-
 * new-validator-address (defaults to ZERO address) is the address of the new validator. If you want to immediately disable the validator and only later set a new validator it might be convenient to set the validator address to the ZERO address.
 The owner should run the deeplink from a phone with tonkeeper wallet. <br/>
 
-In case the owner is using a **cold wallet** (recommended), [change-validator.fif](https://github.com/orbs-network/single-nominator/blob/main/scripts/fif/change-validator.fif) can be used to generate a boc body which includes change-validator opcode and the new validator address. <br/>
+In case the owner is using a **cold wallet** (recommended), [change-validator.fif](https://github.com/orbs-network/single-nominator/blob/main/scripts/fift/change-validator.fif) can be used to generate a boc body which includes change-validator opcode and the new validator address. <br/>
 Command line: `fift -s scripts/fif/change-validator.fif new-validator-address`.
 This script will generate a boc body (named change-validator.boc) that should be signed and send from the owner's wallet. <br/>
 From the black computer the owner should run:
@@ -160,7 +160,7 @@ The message body should include: opcode=0x9903 (32 bits), query_id (64 bits), re
 ## See Also
 
 * [Single Nominator Pool contract](https://github.com/orbs-network/single-nominator)
-* [How to use Single Nominator Pool](/v3/guidelines/smart-contracts/howto/single-nominator-pool.mdx)
+* [How to use Single Nominator Pool](/v3/guidelines/smart-contracts/howto/single-nominator-pool)
 
 
 

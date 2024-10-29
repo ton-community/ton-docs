@@ -56,7 +56,7 @@ type TonProofItemReplySuccess = {
 5. Assemble a message according to the [message scheme](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users#concept-explanation).
 6. Retrieve `public_key` either from API (a) or via back-end logic (b)
 - 6a:
-    - Retrieve `{public_key, address}` from the `walletStateInit` with [TON API](https://docs.tonconsole.com/tonapi/api-v2#:~:text=/v2/-,tonconnect,-/stateinit) method `POST /v2/tonconnect/stateinit`.
+    - Retrieve `{public_key, address}` from the `walletStateInit` with [TON API](https://docs.tonconsole.com/tonapi#:~:text=/v2/-,tonconnect,-/stateinit) method `POST /v2/tonconnect/stateinit`.
     - Check that the `address` extracted from `walletStateInit` corresponds to wallet `address` declared by user.
 - 6b:
     - Obtain the wallet `public_key` via the wallet contract [get method](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc#L174).

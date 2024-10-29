@@ -195,7 +195,7 @@ If `value` attached is too small transaction can get aborted with error `cskip_n
 
 It can be unclear that to get more information on transaction user must scan blockchain through [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) function.
 It is impossible to retrieve the transaction ID immediately after sending a message, as the transaction must first be confirmed by the blockchain network.
-To understand required pipeline read [Send payments](https://docs.ton.org/develop/dapps/asset-processing/#send-payments) carefully, especially 7th point.
+To understand required pipeline read [Send payments](v3/guidelines/dapps/asset-processing/payments-processing/#send-payments) carefully, especially 7th point.
 
 ## Invoice-based approach
 To accept payments based on attached comments, the service should
@@ -224,7 +224,7 @@ Best suited for dApps that need to sign multiple payments/transactions within a 
 - ❌ Integration is more complex than the ton:// link
 
 
-<Button href="/develop/dapps/ton-connect/"
+<Button href="/v3/guidelines/ton-connect/overview/"
 colorType="primary" sizeType={'lg'}>
 
 Learn More

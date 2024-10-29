@@ -191,7 +191,7 @@ Note that `+2` flag ignore only following errors arising while processing messag
     - Not enough value attached to the message to pay forwarding fees.
     - Not enough extra currency to send with the message.
     - Not enough funds to pay for an outbound external message.
-2. Message is too large (check [Message size](sending-messages#message-size) for more).
+2. Message is too large (check [Message size](#message-size) for more).
 3. The message has too big Merkle depth.
 
 However, it does not ignore errors in the following scenarios:

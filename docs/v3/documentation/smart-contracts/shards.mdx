@@ -1,7 +1,7 @@
 # Shards
 
-Sharding is a mature concept originating in [database design](https://en.wikipedia.org/wiki/Shard_(database_architecture)). It involves splitting and distributing one logical data set across multiple databases that share nothing and can be deployed across multiple servers. 
-Simply put, sharding allows horizontal scalability - splitting data to distinct, independent pieces that can be processed in parallel. This is a key concept in the world's transition from data to [big data](https://en.wikipedia.org/wiki/Big_data). 
+Sharding is a mature concept originating in [database design](https://en.wikipedia.org/wiki/Shard_(database_architecture)). It involves splitting and distributing one logical data set across multiple databases that share nothing and can be deployed across multiple servers.
+Simply put, sharding allows horizontal scalability - splitting data to distinct, independent pieces that can be processed in parallel. This is a key concept in the world's transition from data to [big data](https://en.wikipedia.org/wiki/Big_data).
 When data sets are becoming too big to be handled by traditional means, there's no other way to scale other than to break them down into smaller pieces.
 
 The Sharding mechanism in the TON blockchain, allows a large number of transactions to be processed.
@@ -10,7 +10,7 @@ The main idea of sharding in TON is that when account A sends a message to accou
 
 By default in the Basechain (`workchain=0`) there is only one shard with a shard number `0x8000000000000000` (or `1000000000000000000000000000000000000000000000000000000000000000` in binary representation). The masterchain (`workchain=-1`) always has one and only one shard.
 
-## Masterchain 
+## Masterchain
 
 The Masterchain is the primary chain that stores the network configuration and the final state of all workchains. You can understand this as the masterchain being the core directory, a single source of truth for all the shards in the ecosystem.
 
@@ -22,13 +22,13 @@ The Masterchain splits into individual chains called Workchains. Workchains are 
 
 ## Uniqueness
 
-In designing the TON blockchain, two key decisions were made that make it unique among other blockchains that utilize sharding. 
+In designing the TON blockchain, two key decisions were made that make it unique among other blockchains that utilize sharding.
 
-First, TON provides for dynamic segmentation of the blockchain depending on the network load. When the number of transactions increases to a critical level, the blockchain is automatically split into two separate shardchains. 
-If the load on one of the parts continues to grow, it is split in half again, and this process continues as needed. If the number of transactions decreases, the shards can merge again. 
+First, TON provides for dynamic segmentation of the blockchain depending on the network load. When the number of transactions increases to a critical level, the blockchain is automatically split into two separate shardchains.
+If the load on one of the parts continues to grow, it is split in half again, and this process continues as needed. If the number of transactions decreases, the shards can merge again.
 This adaptive model allows for the creation of as many shards as needed at a given time.
 
-The second solution that distinguishes TON is the principle of a non-fixed number of shards. Unlike systems like Ethereum 2.0, which supports a fixed number of shards (64 shards), TON allows adding more and more shards depending on the needs of the network, with a theoretical limit of 2<sup>60</sup> shards per worker chain. 
+The second solution that distinguishes TON is the principle of a non-fixed number of shards. Unlike systems like Ethereum 2.0, which supports a fixed number of shards (64 shards), TON allows adding more and more shards depending on the needs of the network, with a theoretical limit of 2<sup>60</sup> shards per worker chain.
 This number is so large as to be virtually limitless, and allows over 100 million shards to be provided to every person on Earth and still have a supply left over. This approach is the only way to meet dynamic scaling requirements that are difficult to predict in advance.
 
 ![](/img/docs/blockchain-fundamentals/scheme.png)
@@ -36,7 +36,7 @@ This number is so large as to be virtually limitless, and allows over 100 millio
 ## Splitting
 
 In TON Blockchain, a sequence of transactions of a single account (e.g. `Tx1 -> Tx2 -> Tx3 -> ...`) is called an account transaction chain or <b>AccountChain</b>. This emphasizes that it is a sequence of transactions associated with a single account.
-Several such <b>AccountChains</b> combined within a single shard form a <b>ShardChain</b>. The <b>ShardChain</b> (hereinafter referred to as the shard) is responsible for storing and processing all transactions within a shard, where each transaction chain is defined by a specific account group. 
+Several such <b>AccountChains</b> combined within a single shard form a <b>ShardChain</b>. The <b>ShardChain</b> (hereinafter referred to as the shard) is responsible for storing and processing all transactions within a shard, where each transaction chain is defined by a specific account group.
 
 These groups of accounts are denoted by a common binary prefix, which serves as a criterion for clustering them in the same shard.
 This prefix appears in shard id which presented by a 64-bit integer and has the following structure: `<binary prefix>100000...`. For example, shard with id `1011100000...` contains all accounts started with prefix `1011`.
@@ -65,5 +65,5 @@ An actual example:
 
 ## See Also
 
-* [Infinity Sharding Paradigm](sharding-lifecycle)
+* [Infinity Sharding Paradigm](/v3/documentation/smart-contracts/infinity-sharding-paradigm)
 * [Whitepapers](/v3/documentation/whitepapers/overview)

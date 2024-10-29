@@ -63,7 +63,7 @@ Smart contracts addresses in TON blockchain are deterministic and can be precomp
 TON addresses may have three representations.
 A full representation can either be "raw" (`workchain:address`) or "user-friendly". The last one is the one users encounter most often. It contains a tag byte, indicating whether the address is `bounceable` or `not bounceable`, and a workchain id byte. This information should be noted.
 
-- [Raw and User-Friendly Addresses](https://docs.ton.org/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses)
+- [Raw and User-Friendly Addresses](v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses)
 
 ### 12. Keep track of the flaws in code execution
 
@@ -87,8 +87,8 @@ You may receive bounced messages (error notifications), which should be handled.
 
 There are two custom solutions for wallets (smart contracts, storing users money): `seqno-based` (check the counter not to process message twice) and `high-load` (storing processes identifiers and its expirations).
 
-- [Seqno-based wallets](/develop/dapps/asset-processing/#seqno-based-wallets)
-- [High-load wallets](/develop/dapps/asset-processing/#high-load-wallets)
+- [Seqno-based wallets](/v3/guidelines/dapps/asset-processing/payments-processing/#seqno-based-wallets)
+- [High-load wallets](/v3/guidelines/dapps/asset-processing/payments-processing/#high-load-wallets)
 
 ## References
 

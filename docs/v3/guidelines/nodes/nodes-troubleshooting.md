@@ -114,7 +114,7 @@ The solution to the problem is to wait for the local node to synchronize or exec
 
 ## Status command displays without local node section
 
-![](\img\docs\full-node\local-validator-status-absent.png)
+![](/img/docs/full-node/local-validator-status-absent.png)
 
 If there is no local node section in the node status, typically this means, something went wrong during installation and the step of creating/assigning a validator wallet was skipped.
 Also check that the validator wallet is specified.
