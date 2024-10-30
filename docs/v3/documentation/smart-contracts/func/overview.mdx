@@ -2,10 +2,10 @@ import Button from '@site/src/components/button'
 
 # Overview
 
-A high-level language FunC is used to program smart contracts on TON.
+__FunC__, a high-level language, is used to program smart contracts on TON.
 
 FunC is a domain-specific, C-like, statically typed language.
-Here is a simple example method for sending money written in FunC:
+Here is a simple example of a method for sending money written in FunC:
 
 ```func
 () send_money(slice address, int amount) impure inline {
@@ -19,9 +19,9 @@ Here is a simple example method for sending money written in FunC:
 }
 ```
 
-FunC programs are compiled into Fift assembler code, which generates corresponding bytecode for the [TON Virtual Machine](/v3/documentation/tvm/tvm-overview).
+FunC programs are compiled into Fift assembler code, which generates the corresponding bytecode for the [TON Virtual Machine](/v3/documentation/tvm/tvm-overview).
 
-Further this bytecode (actually a [tree of cells](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage), like any other data in TON Blockchain) can be used for creating smart contracts in the blockchain or can be run on a local instance of TVM.
+his bytecode (essentially a [tree of cells](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage), like any other data in the TON Blockchain) can then be used to create smart contracts on the blockchain or can be run on a local instance of the TVM.
 
 
 <Button href="/v3/documentation/smart-contracts/func/cookbook" colorType={'primary'} sizeType={'sm'}>
@@ -42,7 +42,7 @@ FunC Documentation
 
 ### Compile with JS
 
-Most convenient and quick way to begin develop and compile smart contracts is using Blueprint framework. Read more in [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript) section.
+The most convenient and quickest way to begin developing and compiling smart contracts is by using the Blueprint framework. Read more in the [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript) section.
 
 ```bash
 npm create ton@latest
@@ -50,12 +50,11 @@ npm create ton@latest
 
 ### Compile with original binaries
 
-If you want to use native TON compiler FunC locally you need binaries setup on your machine. FunC compiler binaries for Windows, MacOS (Intel/M1), and Ubuntu can be downloaded from:
+If you want to use the native TON compiler, FunC, locally, you need to set up the binaries on your machine. FunC compiler binaries for Windows, macOS (Intel/M1), and Ubuntu can be downloaded from:
 * [Environment Setup Page](/v3/documentation/archive/precompiled-binaries)
 
 :::info
-At the same time you can always make binaries from sources like:
-[FunC compiler source code](https://github.com/ton-blockchain/ton/tree/master/crypto/func) (read [how to compile](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#func) a FunC compiler from sources).
+Alternatively, you can create binaries from source code, such as the [FunC compiler source code](https://github.com/ton-blockchain/ton/tree/master/crypto/func) (read [how to compile](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#func) a FunC compiler from sources).
 :::
 
 ## TON Course: FunC
@@ -95,7 +94,7 @@ RU
 The best place to start to develop using FunC: [INTRODUCTION](/v3/documentation/smart-contracts/overview)
 :::
 
-Other materials gracefully provided by the experts from the community:
+Additional materials graciously provided by experts from the community:
 
 - [TON Speed Run series](https://tonspeedrun.com/)
   - [🚩 Challenge 1: Simple NFT Deploy](https://github.com/romanovichim/TONQuest1)
@@ -130,7 +129,7 @@ You can also study previous competitions for learning purposes.
 
 ## Smart contract examples
 
-Standard basic smart contracts like wallets, electors (manages validation on TON), multi-signature wallets, etc. can be a reference when studying.
+Standard basic smart contracts, like wallets, electors (which manage validation on TON), multi-signature wallets, etc., can serve as references when studying.
 
 * [Smart contract examples](/v3/documentation/smart-contracts/contracts-specs/examples)
 
