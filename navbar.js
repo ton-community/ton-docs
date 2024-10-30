@@ -15,23 +15,19 @@ module.exports = {
       items: [
         {
           to: '/v3/concepts/dive-into-ton/introduction',
-          label: 'Introduction to TON',
+          label: 'Introduction',
+        },
+        {
+          to: '/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps',
+          label: 'Wallets',
+        },
+        {
+          to: '/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton',
+          label: 'Explorers',
         },
         {
           to: '/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains',
-          label: 'Blockchain of Blockchains',
-        },
-        {
-          to: '/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses',
-          label: 'Smart Contract Addresses',
-        },
-        {
-          to: '/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage',
-          label: 'Cells as a Data Structure',
-        },
-        {
-          to: '/v3/concepts/dive-into-ton/ton-blockchain/ton-networking',
-          label: 'TON Networking',
+          label: 'Blockchain',
         },
       ],
     },
@@ -63,6 +59,18 @@ module.exports = {
           label: 'APIs and SDKs',
         },
         {
+          to: '/v3/guidelines/dapps/cookbook',
+          label: 'Cookbook',
+        },
+      ],
+    },
+    {
+      type: 'dropdown',
+      to: '/v3/documentation/dapps/assets/overview',
+      position: 'left',
+      label: 'Assets',
+      items: [
+        {
           to: '/v3/guidelines/dapps/asset-processing/payments-processing',
           label: 'Payment Processing',
         },
@@ -71,16 +79,20 @@ module.exports = {
           label: 'Jetton Processing',
         },
         {
+          to: '/v3/documentation/dapps/assets/usdt',
+          label: 'USDT Processing',
+        },
+        {
+          to: 'v3/guidelines/dapps/asset-processing/mintless-jettons',
+          label: 'Mintless Jetton Processing',
+        },
+        {
           to: '/v3/guidelines/dapps/tutorials/mint-your-first-token',
           label: 'Mint your Tokens',
         },
         {
           to: '/v3/guidelines/dapps/tutorials/nft-minting-guide',
           label: 'Mint your NFTs',
-        },
-        {
-          to: '/v3/guidelines/dapps/cookbook',
-          label: 'Cookbook',
         },
       ],
     },
@@ -92,35 +104,60 @@ module.exports = {
       items: [
         {
           to: '/v3/documentation/smart-contracts/contracts-specs/wallet-contracts',
-          label: 'Wallets',
+          label: 'Contracts Specification',
         },
         {
-          to: '/v3/documentation/smart-contracts/message-management/sending-messages',
-          label: 'Sending Messages',
+          to: '/v3/documentation/smart-contracts/addresses',
+          label: 'Address Specification',
+        },
+        {
+          to: 'v3/documentation/smart-contracts/message-management/messages-and-transactions',
+          label: 'Messages and Transactions',
         },
         {
           to: 'v3/documentation/smart-contracts/transaction-fees/fees',
           label: 'Transaction Fees',
         },
         {
+          to: '/v3/guidelines/smart-contracts/security/things-to-focus',
+          label: 'Best Practices',
+        },
+        {
+          to: 'v3/documentation/tvm/tvm-overview',
+          label: 'TON Virtual Machine (TVM)',
+        },
+      ],
+    },
+
+    {
+      type: 'dropdown',
+      to: 'v3/documentation/smart-contracts/overview',
+      position: 'left',
+      label: 'Program Languages',
+      items: [
+        {
           to: 'v3/documentation/smart-contracts/func/overview',
-          label: 'FunC Development Language',
+          label: 'FunC',
+        },
+        {
+          to: '/v3/documentation/tvm/instructions',
+          label: 'TVM Instruction',
         },
         {
           to: 'v3/documentation/smart-contracts/func/cookbook',
           label: 'FunC Cookbook',
         },
         {
-          to: '/v3/documentation/data-formats/tlb/cell-boc',
-          label: 'Data formats',
+          to: 'https://docs.tact-lang.org/',
+          label: 'Tact',
         },
         {
-          to: 'v3/documentation/tvm/tvm-overview',
-          label: 'TON Virtual Machine (TVM)',
+          to: '/v3/documentation/smart-contracts/fift/overview',
+          label: 'Fift',
         },
         {
-          to: 'v3/guidelines/smart-contracts/guidelines',
-          label: 'Best Practices for Contracts',
+          to: '/v3/documentation/data-formats/tlb/tl-b-language',
+          label: 'TL-B',
         },
       ],
     },
@@ -132,23 +169,27 @@ module.exports = {
       items: [
         {
           to: '/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview',
-          label: 'Manage Blockchain Nodes',
+          label: 'Software (Mytonctrl)',
         },
         {
-          to: '/v3/guidelines/nodes/nodes-troubleshooting',
-          label: 'Troubleshooting the Node',
+          to: '/v3/guidelines/nodes/running-nodes/liteserver-node',
+          label: 'Liteserver',
         },
         {
-          to: '/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool',
+          to: '/v3/guidelines/nodes/running-nodes/validator-node',
+          label: 'Validator',
+        },
+        {
+          to: '/v3/guidelines/smart-contracts/howto/single-nominator-pool',
           label: 'Single Nominator Pool',
         },
+        // {
+        //   to: '/v3/guidelines/nodes/running-nodes/archive-node', // TODO: add article
+        //   label: 'Running Nodes',
+        // },
         {
-          to: '/v3/documentation/smart-contracts/contracts-specs/nominator-pool',
-          label: 'Nominator Pool',
-        },
-        {
-          to: '/v3/guidelines/nodes/running-nodes/archive-node', // TODO: add article
-          label: 'Running Nodes',
+          to: '/v3/guidelines/nodes/nodes-troubleshooting',
+          label: 'Troubleshooting',
         },
         {
           to: '/v3/guidelines/nodes/faq',

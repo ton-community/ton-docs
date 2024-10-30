@@ -1,4 +1,4 @@
-# The difference of blockchains
+# The Difference of Blockchains
 
 In this chapter, we will examine the key differences between the Ethereum blockchain compared to the TON blockchain. The analysis will include an overview of the network architectures, highlight their unique features, and evaluate the advantages and disadvantages of each.
 

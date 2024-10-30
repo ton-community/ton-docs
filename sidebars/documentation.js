@@ -14,8 +14,6 @@ module.exports = [
   },
   'v3/documentation/smart-contracts/overview',
   'v3/documentation/smart-contracts/addresses',
-  'v3/documentation/smart-contracts/shards',
-  'v3/documentation/smart-contracts/infinity-sharding-paradigm',
   {
     type: 'category',
     label: 'Getting Started',
@@ -23,29 +21,6 @@ module.exports = [
       'v3/documentation/smart-contracts/getting-started/javascript',
       'v3/documentation/smart-contracts/getting-started/ide-plugins',
       'v3/documentation/smart-contracts/getting-started/testnet',
-    ],
-  },
-  {
-    type: 'category',
-    label: 'Message Management',
-    items: [
-      'v3/documentation/smart-contracts/message-management/ecosystem-messages-layout',
-      'v3/documentation/smart-contracts/message-management/messages-and-transactions',
-      'v3/documentation/smart-contracts/message-management/sending-messages',
-      'v3/documentation/smart-contracts/message-management/message-modes-cookbook',
-      'v3/documentation/smart-contracts/message-management/internal-messages',
-      'v3/documentation/smart-contracts/message-management/external-messages',
-      'v3/documentation/smart-contracts/message-management/non-bounceable-messages',
-    ],
-  },
-  {
-    type: 'category',
-    label: 'Transaction Fees',
-    items: [
-      'v3/documentation/smart-contracts/transaction-fees/fees',
-      'v3/documentation/smart-contracts/transaction-fees/fees-low-level',
-      'v3/documentation/smart-contracts/transaction-fees/accept-message-effects',
-      'v3/documentation/smart-contracts/transaction-fees/forward-fees',
     ],
   },
   {
@@ -60,6 +35,37 @@ module.exports = [
       'v3/documentation/smart-contracts/contracts-specs/single-nominator-pool',
       'v3/documentation/smart-contracts/contracts-specs/precompiled-contracts',
       'v3/documentation/smart-contracts/contracts-specs/examples',
+    ],
+  },
+  {
+    type: 'category',
+    label: 'Message Management',
+    items: [
+      'v3/documentation/smart-contracts/message-management/messages-and-transactions',
+      'v3/documentation/smart-contracts/message-management/sending-messages',
+      'v3/documentation/smart-contracts/message-management/internal-messages',
+      'v3/documentation/smart-contracts/message-management/external-messages',
+      'v3/documentation/smart-contracts/message-management/non-bounceable-messages',
+      'v3/documentation/smart-contracts/message-management/message-modes-cookbook',
+      'v3/documentation/smart-contracts/message-management/ecosystem-messages-layout',
+    ],
+  },
+  {
+    type: 'category',
+    label: 'Transaction Fees',
+    items: [
+      'v3/documentation/smart-contracts/transaction-fees/fees',
+      'v3/documentation/smart-contracts/transaction-fees/fees-low-level',
+      'v3/documentation/smart-contracts/transaction-fees/accept-message-effects',
+      'v3/documentation/smart-contracts/transaction-fees/forward-fees',
+    ],
+  },
+  {
+    type: 'category',
+    label: 'Sharding',
+    items: [
+      'v3/documentation/smart-contracts/shards/shards-intro',
+      'v3/documentation/smart-contracts/shards/infinity-sharding-paradigm',
     ],
   },
   {
@@ -274,11 +280,11 @@ module.exports = [
     type: 'category',
     label: 'TL-B',
     items: [
+      'v3/documentation/data-formats/tlb/tl-b-language',
       'v3/documentation/data-formats/tlb/cell-boc',
       'v3/documentation/data-formats/tlb/exotic-cells',
       'v3/documentation/data-formats/tlb/library-cells',
       'v3/documentation/data-formats/tlb/proofs',
-      'v3/documentation/data-formats/tlb/tl-b-language',
       'v3/documentation/data-formats/tlb/tl-b-types',
       'v3/documentation/data-formats/tlb/canonical-cell-serialization',
       'v3/documentation/data-formats/tlb/msg-tlb',

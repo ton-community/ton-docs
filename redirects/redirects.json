@@ -333,11 +333,11 @@
     },
     {
         "from": "/develop/blockchain/sharding-lifecycle",
-        "to": "/v3/documentation/smart-contracts/infinity-sharding-paradigm"
+        "to": "/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm"
     },
     {
-        "from": "/develop/blockchain/shards",
-        "to": "/v3/documentation/smart-contracts/shards"
+      "from": "/develop/blockchain/shards",
+      "to": "/v3/documentation/smart-contracts/shards/shards-intro"
     },
     {
         "from": "/develop/smart-contracts/environment/testnet",

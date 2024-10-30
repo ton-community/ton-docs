@@ -36,7 +36,7 @@ module.exports = [
   },
   {
     type: 'category',
-    label: 'Go from Ethereum?',
+    label: 'Newcomers from Ethereum',
     items: [
       'v3/concepts/dive-into-ton/go-from-ethereum/difference-of-blockchains',
       'v3/concepts/dive-into-ton/go-from-ethereum/tvm-vs-evm',
