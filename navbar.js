@@ -18,20 +18,16 @@ module.exports = {
           label: 'Introduction to TON',
         },
         {
+          to: '/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps',
+          label: 'Wallets',
+        },
+        {
+          to: '/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton',
+          label: 'Explorers',
+        },
+        {
           to: '/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains',
-          label: 'Blockchain of Blockchains',
-        },
-        {
-          to: '/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses',
-          label: 'Smart Contract Addresses',
-        },
-        {
-          to: '/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage',
-          label: 'Cells as a Data Structure',
-        },
-        {
-          to: '/v3/concepts/dive-into-ton/ton-blockchain/ton-networking',
-          label: 'TON Networking',
+          label: 'Blockchain',
         },
       ],
     },

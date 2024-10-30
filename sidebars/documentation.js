@@ -14,8 +14,6 @@ module.exports = [
   },
   'v3/documentation/smart-contracts/overview',
   'v3/documentation/smart-contracts/addresses',
-  'v3/documentation/smart-contracts/shards',
-  'v3/documentation/smart-contracts/infinity-sharding-paradigm',
   {
     type: 'category',
     label: 'Getting Started',
@@ -29,13 +27,13 @@ module.exports = [
     type: 'category',
     label: 'Message Management',
     items: [
-      'v3/documentation/smart-contracts/message-management/ecosystem-messages-layout',
       'v3/documentation/smart-contracts/message-management/messages-and-transactions',
       'v3/documentation/smart-contracts/message-management/sending-messages',
-      'v3/documentation/smart-contracts/message-management/message-modes-cookbook',
       'v3/documentation/smart-contracts/message-management/internal-messages',
       'v3/documentation/smart-contracts/message-management/external-messages',
       'v3/documentation/smart-contracts/message-management/non-bounceable-messages',
+      'v3/documentation/smart-contracts/message-management/message-modes-cookbook',
+      'v3/documentation/smart-contracts/message-management/ecosystem-messages-layout',
     ],
   },
   {
@@ -46,6 +44,14 @@ module.exports = [
       'v3/documentation/smart-contracts/transaction-fees/fees-low-level',
       'v3/documentation/smart-contracts/transaction-fees/accept-message-effects',
       'v3/documentation/smart-contracts/transaction-fees/forward-fees',
+    ],
+  },
+  {
+    type: 'category',
+    label: 'Sharding',
+    items: [
+      'v3/documentation/smart-contracts/shards/shards-intro',
+      'v3/documentation/smart-contracts/shards/infinity-sharding-paradigm',
     ],
   },
   {
