@@ -40,6 +40,10 @@ Launch [Full Node](/v3/guidelines/nodes/running-nodes/full-node) before follow t
 
 Check that validator mode is enabled using `status_modes` command. If it's not, refer [mytonctrl enable_mode command](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#enable_mode).
 
+## Architecture
+
+![image](/img/nominator-pool/hot-wallet.png)
+
 ## View the List of Wallets
 
 Check out the list of available wallets in the **MyTonCtrl** console using the `wl` command:

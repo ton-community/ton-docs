@@ -8,7 +8,7 @@ However, there is "native staking" in TON Blockchain - you can lend Toncoin to v
 
 The one who lends to validator is called the **nominator**.
 
-A smart contract, called a [**nominator pool**](v3/documentation/smart-contracts/contracts-specs/nominator-pool), provides the ability for one or more nominators to lend Toncoin in a validator stake, and ensures that the validator can use that Toncoin only for validation. Also, the smart contract guarantees the distribution of the reward.
+A smart contract, called a [**nominator pool**](/v3/documentation/smart-contracts/contracts-specs/nominator-pool), provides the ability for one or more nominators to lend Toncoin in a validator stake, and ensures that the validator can use that Toncoin only for validation. Also, the smart contract guarantees the distribution of the reward.
 
 
 ## Validators vs Nominators
@@ -32,6 +32,12 @@ It's evident that not everyone can afford to have 100,000s of Toncoin on their b
 Some time ago, Ton Whales ran the first staking pool on TON with a minimum deposit of 50 TON. Later, TON Foundation launched the first open nominator pool. Now, users may stake Toncoin in a fully-decentralized way, starting with **10,000 TON**.
 
 _From [TON Community post](https://t.me/toncoin/543)._
+
+There should always be **10 TON** on the pool balance - this is the minimum balance for the network storage fee.
+
+## Cost per month
+
+Since validation round lasts ~18 hours, takes about **5 TON** per validation round and 1 Nominator Pool takes part in even and odd validation rounds it will take **~105 TON per month** to operate the Pool.
 
 ## How to participate?
 
