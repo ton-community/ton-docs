@@ -25,6 +25,20 @@ module.exports = [
   },
   {
     type: 'category',
+    label: 'Contracts Specification',
+    items: [
+      'v3/documentation/smart-contracts/contracts-specs/wallet-contracts',
+      'v3/documentation/smart-contracts/contracts-specs/highload-wallet',
+      'v3/documentation/smart-contracts/contracts-specs/vesting-contract',
+      'v3/documentation/smart-contracts/contracts-specs/governance',
+      'v3/documentation/smart-contracts/contracts-specs/nominator-pool',
+      'v3/documentation/smart-contracts/contracts-specs/single-nominator-pool',
+      'v3/documentation/smart-contracts/contracts-specs/precompiled-contracts',
+      'v3/documentation/smart-contracts/contracts-specs/examples',
+    ],
+  },
+  {
+    type: 'category',
     label: 'Message Management',
     items: [
       'v3/documentation/smart-contracts/message-management/messages-and-transactions',
@@ -52,20 +66,6 @@ module.exports = [
     items: [
       'v3/documentation/smart-contracts/shards/shards-intro',
       'v3/documentation/smart-contracts/shards/infinity-sharding-paradigm',
-    ],
-  },
-  {
-    type: 'category',
-    label: 'Contracts Specification',
-    items: [
-      'v3/documentation/smart-contracts/contracts-specs/wallet-contracts',
-      'v3/documentation/smart-contracts/contracts-specs/highload-wallet',
-      'v3/documentation/smart-contracts/contracts-specs/vesting-contract',
-      'v3/documentation/smart-contracts/contracts-specs/governance',
-      'v3/documentation/smart-contracts/contracts-specs/nominator-pool',
-      'v3/documentation/smart-contracts/contracts-specs/single-nominator-pool',
-      'v3/documentation/smart-contracts/contracts-specs/precompiled-contracts',
-      'v3/documentation/smart-contracts/contracts-specs/examples',
     ],
   },
   {
@@ -280,11 +280,11 @@ module.exports = [
     type: 'category',
     label: 'TL-B',
     items: [
+      'v3/documentation/data-formats/tlb/tl-b-language',
       'v3/documentation/data-formats/tlb/cell-boc',
       'v3/documentation/data-formats/tlb/exotic-cells',
       'v3/documentation/data-formats/tlb/library-cells',
       'v3/documentation/data-formats/tlb/proofs',
-      'v3/documentation/data-formats/tlb/tl-b-language',
       'v3/documentation/data-formats/tlb/tl-b-types',
       'v3/documentation/data-formats/tlb/canonical-cell-serialization',
       'v3/documentation/data-formats/tlb/msg-tlb',
