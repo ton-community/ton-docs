@@ -25,6 +25,7 @@ There are different ways to connect to blockchain:
 
 ## RPC Nodes
 
+* [QuickNode](https://www.quicknode.com/chains/ton?utm_source=ton-docs) - Leading blockchain node provider offering the fastest access with smart DNS routing for optimized global reach and load-balanced scalability.
 * [Chainstack](https://chainstack.com/build-better-with-ton/) — RPC nodes and indexer in multiple regions with geo and load balancing.
 * [Tatum](https://docs.tatum.io/reference/rpc-ton) — Access TON RPC nodes and powerful developer tools in one simple-to-use platform.
 * [GetBlock Nodes](https://getblock.io/nodes/ton/) — connect and test your dApps using GetBlocks Nodes
