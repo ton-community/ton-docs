@@ -184,7 +184,7 @@ order2b.clearSignatures();
 
 - MultisigOrderBuilder
   - `messages` - 要添加到订单的`MessageWithMode`数组
-  - `querryId` - 订单有效的全局时间
+  - `queryId` - 订单有效的全局时间
 
 - MultisigOrder
   - `payload` - 带有订单有效载荷的`Cell`

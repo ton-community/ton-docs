@@ -5,7 +5,7 @@
 Lite Client is a native software that allows you to read information from TON Blockchain.
 Clients, such as wallets, do not store the full state of the blockchain but instead request only the necessary information from full nodes.
 
-Lite Client is a standalone utility that can run without any dependencies. It can be downloaded from [precompiled binaries](/develop/smart-contracts/environment/installation#1-download) or [compiled from sources](/develop/howto/compile#lite-client).
+Lite Client is a standalone utility that can run without any dependencies. It can be downloaded from [precompiled binaries](/v3/documentation/archive/precompiled-binaries#1-download) or [compiled from sources](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#lite-client).
 
 ## Hardware requirements
 

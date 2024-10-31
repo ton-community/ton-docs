@@ -1,0 +1,119 @@
+import Button from '@site/src/components/button'
+
+
+# Publishing Mini Apps
+
+As developers, it's important to understand the ecosystem in which we operate. Telegram provides a unique opportunity for Mini App developers, thanks to its robust platform and expansive user base. This article will guide you through the available channels for publishing your Mini Apps on Telegram.
+
+## tApps Center
+
+**What is tApps Center?** The TON Foundation has introduced the Telegram Apps Center to create a centralized repository for Telegram Bots and Mini Apps (TMAs). This platform aims to enhance the user experience by offering an interface similar to the well-known app stores you're already familiar with.
+
+**Broad Ecosystem Support**. The Telegram Apps Center doesn't solely focus on the TON ecosystem; it also welcomes apps from other blockchains. You don't even need web3 integration to be part of this catalog. This inclusive approach aims to establish Telegram as an "Everything Super App," similar to platforms like WeChat, where users can access a variety of services within a single interface.
+
+
+<Button href="https://www.tapps.center/" colorType={'primary'} sizeType={'sm'}>
+
+Open tApps Center
+
+</Button>
+
+
+### Why Publish on tApps Center?
+
+**Greater Visibility**. The Telegram Apps Center offers a golden opportunity for developers to showcase their projects to a wide audience, making it easier to attract users and investors.
+
+**Community Spirit**. The platform embraces a community-centric approach, encouraging collaborations and the sharing of resources and knowledge.
+
+
+<Button href="https://blog.ton.org/ton-ecosystem-evolved-introducing-telegram-apps-center-t-apps-center" colorType={'secondary'} sizeType={'sm'}>
+
+Read more in TON Blog
+
+</Button>
+
+
+## Launch within Telegram
+
+Telegram currently supports six different ways of launching Mini Apps: from a [keyboard button](https://core.telegram.org/bots/webapps#keyboard-button-web-apps), from an [inline button](https://core.telegram.org/bots/webapps#inline-button-web-apps), from the [bot menu button](https://core.telegram.org/bots/webapps#launching-web-apps-from-the-menu-button), via [inline mode](https://core.telegram.org/bots/webapps#inline-mode-web-apps), from a [direct link](https://core.telegram.org/bots/webapps#direct-link-web-apps) – and even from the [attachment menu](https://core.telegram.org/bots/webapps#launching-web-apps-from-the-attachment-menu).
+
+![](/img/docs/telegram-apps/publish-tg-1.jpeg)
+
+### Keyboard Button Mini Apps
+
+**TL;DR:** Mini Apps launched from a **web_app** type [keyboard button](https://core.telegram.org/bots/api#keyboardbutton) can send data back to the bot in a *service message* using [Telegram.WebApp.sendData](https://core.telegram.org/bots/webapps#initializing-web-apps). This makes it possible for the bot to produce a response without communicating with any external servers.
+
+Users can interact with bots using [custom keyboards](https://core.telegram.org/bots#keyboards), [buttons under bot messages](https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating), as well as by sending freeform **text messages** or any of the **attachment types** supported by Telegram: photos and videos, files, locations, contacts and polls. For even more flexibility, bots can utilize the full power of **HTML5** to create user-friendly input interfaces.
+
+You can send a **web_app** type [KeyboardButton](https://core.telegram.org/bots/api#keyboardbutton) that opens a Mini App from the specified URL.
+
+To transmit data from the user back to the bot, the Mini App can call the [Telegram.WebApp.sendData](https://core.telegram.org/bots/webapps#initializing-web-apps) method. Data will be transmitted to the bot as a String in a service message. The bot can continue communicating with the user after receiving it.
+
+**Good for:**
+
+- **Custom data input interfaces** (a personalized calendar for selecting dates; selecting data from a list with advanced search options; a randomizer that lets the user “spin a wheel” and chooses one of the available options, etc.)
+- **Reusable components** that do not depend on a particular bot.
+
+### Inline Button Mini Apps
+
+**TL;DR:** For more interactive Mini Apps like [@DurgerKingBot](https://t.me/durgerkingbot), use a **web_app** type [Inline KeyboardButton](https://core.telegram.org/bots/api#inlinekeyboardbutton), which gets basic user information and can be used to send a message on behalf of the user to the chat with the bot.
+
+If receiving text data alone is insufficient or you need a more advanced and personalized interface, you can open a Mini App using a **web_app** type [Inline KeyboardButton](https://core.telegram.org/bots/api#inlinekeyboardbutton).
+
+From the button, a Mini App will open with the URL specified in the button. In addition to the user's [theme settings](https://core.telegram.org/bots/webapps#color-schemes), it will receive basic user information (ID, name, username, language_code) and a unique identifier for the session, **query_id**, which allows messages on behalf of the user to be sent back to the bot.
+
+The bot can call the Bot API method [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery) to send an inline message from the user back to the bot and close the Mini App. After receiving the message, the bot can continue communicating with the user.
+
+**Good for:**
+
+- Fully-fledged web services and integrations of any kind.
+- The use cases are effectively **unlimited**.
+
+### Launching Mini Apps from the Menu Button
+
+**TL;DR:** Mini Apps can be launched from a customized menu button. This simply offers a quicker way to access the app and is otherwise **identical** to [launching a Mini App from an inline button](https://core.telegram.org/bots/webapps#inline-button-web-apps).
+
+By default, chats with bots always show a convenient **menu button** that provides quick access to all listed [commands](https://core.telegram.org/bots#commands). With [Bot API 6.0](https://core.telegram.org/bots/api-changelog#april-16-2022), this button can be used to **launch a Mini App** instead.
+
+To configure the menu button, you must specify the text it should show and the Mini App URL. There are two ways to set these parameters:
+
+- To customize the button for **all users**, use [@BotFather](https://t.me/botfather) (the /setmenubutton command or *Bot Settings > Menu Button*).
+- To customize the button for both **all users** and **specific users**, use the [setChatMenuButton](https://core.telegram.org/bots/api#setchatmenubutton) method in the Bot API. For example, change the button text according to the user's language, or show links to different Web Apps based on a user's settings in your bot.
+
+Apart from this, Web Apps opened via the menu button work in the exact same way as when [using inline buttons](https://core.telegram.org/bots/webapps#inline-button-web-apps).
+
+[@DurgerKingBot](https://t.me/durgerkingbot) allows launching its Mini App both from an inline button and from the menu button.
+
+### Inline Mode Mini Apps
+
+**TL;DR:** Mini Apps launched via **web_app** type [InlineQueryResultsButton](https://core.telegram.org/bots/api#inlinequeryresultsbutton) can be used anywhere in inline mode. Users can create content in a web interface and then seamlessly send it to the current chat via inline mode.
+
+NEW You can use the *button* parameter in the [answerInlineQuery](https://core.telegram.org/bots/api#answerinlinequery) method to display a special 'Switch to Mini App' button either above or in place of the inline results. This button will **open a Mini App** from the specified URL. Once done, you can call the [Telegram.WebApp.switchInlineQuery](https://core.telegram.org/bots/webapps#initializing-web-apps) method to send the user back to inline mode.
+
+Inline Mini Apps have **no access** to the chat – they can't read messages or send new ones on behalf of the user. To send messages, the user must be redirected to **inline mode** and actively pick a result.
+
+**Good for:**
+
+- Fully-fledged web services and integrations in inline mode.
+
+### Direct Link Mini Apps
+
+**TL;DR:** Mini App Bots can be launched from a direct link in any chat. They support a *startapp* parameter and are aware of the current chat context.
+
+NEW You can use direct links to **open a Mini App** directly in the current chat. If a non-empty *startapp* parameter is included in the link, it will be passed to the Mini App in the *start_param* field and in the GET parameter *tgWebAppStartParam*.
+
+In this mode, Mini Apps can use the *chat_type* and *chat_instance* parameters to keep track of the current chat context. This introduces support for **concurrent** and **shared** usage by multiple chat members – to create live whiteboards, group orders, multiplayer games and similar apps.
+
+Mini Apps opened from a direct link have **no access** to the chat – they can't read messages or send new ones on behalf of the user. To send messages, the user must be redirected to **inline mode** and actively pick a result.
+
+**Examples**
+
+- https://t.me/botusername/appname
+- https://t.me/botusername/appname?startapp=command
+
+**Good for:**
+
+- Fully-fledged web services and integrations that any user can open in one tap.
+- Cooperative, multiplayer or teamwork-oriented services within a chat context.
+
+The use cases are effectively **unlimited**.
