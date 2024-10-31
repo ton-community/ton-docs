@@ -1,0 +1,120 @@
+import Button from '@site/src/components/button'
+
+# Tokens (FT, NFT)
+
+[Distributed TON tokens overview](https://telegra.ph/Scalable-DeFi-in-TON-03-30)
+
+> TON-powered tokens and NFTs do not have a single center and do not create bottlenecks.
+>
+> Each NFT in a given collection is a separate smart contract. The token balance for each user is stored in a separate user wallet.
+>
+> Smart contracts interact with one another directly, spreading the load on the whole network.
+>
+> With the growth in user and transaction count, the load will still be even, allowing the network to scale.
+
+## TON Course: Jettons & NFTs
+
+:::tip
+Before starting the course, make sure you have a good understanding of the basics of blockchain technology. If you have gaps in your knowledge, we recommend taking the [Blockchain Basics with TON](https://stepik.org/course/201294/promo) ([RU version](https://stepik.org/course/202221/), [CHN version](https://stepik.org/course/200976/)) course.
+Module 4 covers the basic knowledge of NFT & Jettons.
+:::
+
+The [TON Blockchain Course](https://stepik.org/course/176754/) is a comprehensive guide to TON Blockchain development.
+
+Module 7 completely covers __NFT & Jettons__ development.
+
+
+<Button href="https://stepik.org/course/176754/promo"
+        colorType={'primary'} sizeType={'sm'}>
+
+Check TON Blockchain Course
+
+</Button>
+
+
+<Button href="https://stepik.org/course/201638/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+CHN
+
+</Button>
+
+
+<Button href="https://stepik.org/course/201855/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+RU
+
+</Button>
+
+
+## Tutorials
+* [Web3 Game Tutorial](/v3/guidelines/dapps/tutorials/web3-game-example) - Learn how to build a Web3 game with TON Blockchain.
+* [Mint your first Jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token/) — Learn how to deploy and customize your first Jetton
+* [[YouTube] TON Keeper founders Oleg Andreev and Oleg Illarionov on TON jettons](https://www.youtube.com/watch?v=oEO29KmOpv4)
+
+### TON Speed Run
+
+Check out the [TON Speed Run](https://tonspeedrun.com/) series, which includes NFT and Jetton development:
+
+  - [🚩 Challenge 1: Simple NFT Deploy](https://github.com/romanovichim/TONQuest1)
+  - [🚩 Challenge 2: Chatbot Contract](https://github.com/romanovichim/TONQuest2)
+  - [🚩 Challenge 3: Jetton Vending Machine](https://github.com/romanovichim/TONQuest3)
+  - [🚩 Challenge 4: Lottery/Raffle](https://github.com/romanovichim/TONQuest4)
+  - [🚩 Challenge 5: Create UI to interact with the contract in 5 minutes](https://github.com/romanovichim/TONQuest5)
+  - [🚩 Challenge 6: Analyzing NFT sales on the Getgems marketplace](https://github.com/romanovichim/TONQuest6)
+
+
+## Jettons (Fungible Tokens)
+
+### Guides
+* [TON Jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
+* [TON Metadata Parsing](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing)
+
+### Standards
+
+* [Jettons standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)
+
+### Smart contracts
+
+* [Smart contracts implementation (FunC)](https://github.com/ton-blockchain/token-contract/)
+
+### Jetton Deployer
+
+Jettons are custom fungible tokens on TON Blockchain. You can create your own token on TON Blockchain using the Jetton Deployer example below:
+
+* **[TON Minter](https://minter.ton.org/)** — open-source Jetton Deployer dApp
+* [Jetton Deployer — contracts](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)
+* [Jetton Deployer — WebClient](https://github.com/ton-defi-org/jetton-deployer-webclient) (React, TypeScript)
+
+### Tools to work with Jettons
+
+* [NFT Jetton Sale Contract](https://github.com/dvlkv/nft-jetton-sale-smc) - NFT Sale contract with jetton support
+* [Scaleton](http://scaleton.io)—see your custom token balance
+* [@tegro/ton3-client](https://github.com/TegroTON/ton3-client#jettons-example)—SDK to query information about Jettons
+
+## NFT
+
+### Standards
+
+* [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
+* [SBT (Soulbound NFT) standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0085-sbt-standard.md)
+* [NFTRoyalty standard extension](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md)
+
+
+### Smart Contracts
+
+* [Smart contracts implementation (FunC)](https://github.com/ton-blockchain/token-contract/)
+* [Getgems NFT, sale, auctions smart contracts (FunC)](https://github.com/getgems-io/nft-contracts)
+
+### NFT minters
+
+* [NFT Deployer](https://github.com/tondiamonds/ton-nft-deployer) by TON Diamonds (TypeScript, no comments)
+* [NFT Minter example](https://github.com/ton-foundation/token-contract/tree/main/nft/web-example) (JavaScript, with comments)
+* [NFT Minter using React](https://github.com/tonbuilders/tonbuilders-minter) (React, no comments)
+* [NFT Deployer](https://github.com/anomaly-guard/nft-deployer) (Python, with comments)
+* [NFT Minter using Golang](https://github.com/xssnick/tonutils-go#nft) (Golang library, with comments and full examples)
+
+### Tools to work with NFTs
+
+* [LiberMall/tnt](https://github.com/LiberMall/tnt)—TNT is an all-in-one command-line tool to query, edit, and mint new Non-Fungible Tokens on The Open Network.

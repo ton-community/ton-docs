@@ -193,7 +193,7 @@ rldp-http-proxy/rldp-http-proxy -a 777.777.777.777:3333 -L '*' -C global.config.
 rldp-http-proxy/rldp-http-proxy -a 777.777.777.777:3333 -R '*'@333.333.333.333:80 -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3 -d -l tonsite.log
 ```
 
-在这种情况下，你的常规Web服务器应该在http://333.333.333.333:80上可用（这个IP不会对外暴露）。
+在这种情况下，你的常规Web服务器应该在 `http://333.333.333.333:80` 上可用（这个IP不会对外暴露）。
 
 ### 建议
 

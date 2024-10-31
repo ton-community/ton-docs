@@ -1,0 +1,104 @@
+import Button from '@site/src/components/button'
+
+# About TON Connect
+
+TON Connect is a powerful open-source toolkit that serves as a universal application authorization standard within the [TON](/v3/concepts/dive-into-ton/introduction) ecosystem, enabling users to securely and conveniently log into applications and services using their TON wallets instead of traditional logins and passwords.
+
+<div style={{width: '100%', textAlign:'center', margin: '10pt auto'}}>
+  <video style={{width: '100%',maxWidth: '600px', borderRadius: '10pt'}} muted={true} autoPlay={true} loop={true}>
+    <source src="/files/TonConnect.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+</div>
+
+Feel free to use one of the following flows for integration of your application:
+
+<Button href="/v3/guidelines/ton-connect/frameworks/react" colorType={'primary'} sizeType={'sm'}>
+React Apps
+</Button>
+<Button href="/v3/guidelines/ton-connect/frameworks/web"
+        colorType="secondary" sizeType={'sm'}>
+HTML/JS Apps
+</Button>
+<Button href="https://github.com/ton-community/tma-usdt-payments-demo"
+        colorType="secondary" sizeType={'sm'}>
+TMA USDT Payments Demo
+</Button>
+
+## Overview
+
+TonConnect enhances the TON ecosystem by allowing users to interact with various dApps using their wallets effortlessly. This protocol aims to provide a secure, user-friendly, and efficient connection method, fostering greater adoption of TON-based applications and services.
+
+### Key Features of TonConnect:
+
+* **Seamless Integration**. TonConnect is designed to integrate smoothly with TON wallets and dApps. It allows users to connect their wallets to dApps with just a few clicks, offering a frictionless experience.
+
+* **Enhanced Security**. Security is a paramount concern in the TON ecosystem. TonConnect employs robust encryption and secure communication methods to ensure that user data and transactions remain protected at all times.
+
+* **User-Friendly Experience**. With a focus on simplicity, TonConnect makes it easy for users to interact with dApps without needing extensive technical knowledge. The protocol's intuitive interface ensures a smooth user journey from connection to transaction completion.
+
+* **Cross-Platform Compatibility**. TonConnect supports various platforms, including web, mobile, and desktop applications. This wide compatibility ensures that users can connect their wallets to dApps regardless of their preferred device.
+
+* **Developer-Friendly Tools**. TonConnect provides developers with a suite of tools and APIs to integrate the protocol into their dApps seamlessly. These resources enable developers to offer a consistent and secure connection experience across different applications.
+
+* **Community-Driven Development**. The TON ecosystem benefits from a vibrant developer community. TonConnect leverages this community-driven approach, encouraging developers to contribute and share their innovations, thereby enriching the overall ecosystem.
+
+## Use Cases For Your DApp
+
+Explore these deliverables that the TON Ecosystem provides for superior DApp integration.
+
+- **Traffic**. Drive additional user visits via crypto wallets that support TON Connect.
+- **Authenticity**. Leverage TON user's wallets as ready-made accounts, removing the need for additional authentication steps and thus, boosting user experience.
+- **Payments**. Process transactions swiftly and securely through TON Blockchain using Toncoin or USD₮.
+- **Retention**. Enhance user retention through the in-app list-saving feature which allows users to keep track of recently opened and favorite apps.
+
+## For Wallet Developers
+
+If you are a wallet developer, you can connect your wallet to TON Connect and enable your users to interact with TON apps in a secure and convenient way, read how to [integrate TON Connect into your wallet](/v3/guidelines/ton-connect/wallet/).
+
+## Success Stories
+
+- [GetGems — The Open Network Marketplace](https://getgems.io/)
+- [STON.fi — AMM DEX for TON blockchain](https://ston.fi/)
+- [Tonstarter](http://tonstarter.com/)
+
+<details>
+  <summary><b>Show the entire list</b></summary>
+
+  * [getgems.io](https://getgems.io/)
+  * [fragment.com](https://fragment.com/) (Ton Connect v.1)
+  * [ston.fi](https://ston.fi/)
+  * [ton.diamonds](https://ton.diamonds/)
+  * [tegro.finance](https://tegro.finance/liquidity)
+  * [minter.ton.org](https://minter.ton.org/)
+  * [libermall.com](https://libermall.com/)
+  * [dedust.io](https://dedust.io/swap)
+  * [toncap.net](https://toncap.net/)
+  * [cryptomus.com](https://cryptomus.com/)
+  * [avanchange.com](https://avanchange.com/)
+  * [wton.dev](https://wton.dev/)
+  * [vk.com/vk_nft_hub](https://vk.com/vk_nft_hub)
+  * [tonverifier.live](https://verifier.ton.org/)
+  * [tonstarter.com](https://tonstarter.com/)
+  * [megaton.fi](https://megaton.fi/)
+  * [dns.ton.org](https://dns.ton.org/)
+  * [coinpaymaster.com](https://coinpaymaster.com/)
+  * [daolama.co](https://daolama.co/)
+  * [ton.vote](https://ton.vote/)
+  * [business.thetonpay.app](https://business.thetonpay.app/)
+  * [bridge.orbitchain.io](https://bridge.orbitchain.io/)
+  * [app.fanz.ee/staking](https://app.fanz.ee/staking)
+  * [testnet.pton.fi](https://testnet.pton.fi/)
+  * [cardify.casino](https://cardify.casino/)
+  * [soquest.xyz](https://soquest.xyz/)
+  * [app.evaa.finance](https://app.evaa.finance/)
+
+</details>
+
+
+## Join the TON Ecosystem
+To connect your service with the TON Ecosystem, you need to implement the following:
+
+- **TON Connect**. Incorporate the TON Connect protocol within your application.
+- **Transactions**. Create specified transaction messages using TON libraries. Dive into the process of [sending messages](/v3/guidelines/ton-connect/guidelines/preparing-messages) with our comprehensive guide.
+- **Payments**. Process payments via the public API ([tonapi](https://tonapi.io/)) or your own indexer, for instance, [gobycicle](http://github.com/gobicycle/bicycle). Learn more from our extensive guide on [asset processing](/v3/guidelines/dapps/asset-processing/payments-processing).

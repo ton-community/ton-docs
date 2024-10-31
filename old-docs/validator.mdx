@@ -8,18 +8,18 @@ import Button from '@site/src/components/button'
 This section describes instructions and manuals for interacting with TON at a low level.
 :::
 
-The aim of this document is to provide step-by-step instructions for setting up a full node for TON Blockchain as a validator. We assume that a TON Blockchain Full Node is already up and running as explained in [Running a Full Node](/participate/run-nodes/full-node). We also assume some familiarity with the TON Blockchain Lite Client.
+The aim of this document is to provide step-by-step instructions for setting up a full node for TON Blockchain as a validator. We assume that a TON Blockchain Full Node is already up and running as explained in [Running a Full Node](/v3/guidelines/nodes/running-nodes/full-node). We also assume some familiarity with the TON Blockchain Lite Client.
 
 Note that a validator must be run on a dedicated high-performance server with high network bandwidth installed in a reliable data center, and that you'll need a large amount of TON (test TON, if you want to run a validator in the "testnet") as stakes for your validator. If your validator works incorrectly or is not available for prolonged periods of time, you may lose part or all of your stake, so it makes sense to use high-performance, reliable servers.
 
-````mdx-code-block 
-<Button href="/participate/run-nodes/full-node"
+
+<Button href="/v3/guidelines/nodes/running-nodes/full-node"
         colorType="primary" sizeType={'lg'}>
-````
+
 Running a Full Node (video)
-````mdx-code-block 
+
 </Button>
-````
+
 
 
 ## 0. Downloading and compiling
@@ -52,7 +52,7 @@ Once you run this script, the address of the new smart contract is displayed:
 
 ```
 ...
-new wallet address = -1:af17db43f40b6aa24e7203a9f8c8652310c88c125062d1129fe883eaa1bd6763 
+new wallet address = -1:af17db43f40b6aa24e7203a9f8c8652310c88c125062d1129fe883eaa1bd6763
 (Saving address to file my_wallet_id.addr)
 Non-bounceable address (for init): 0f-vF9tD9Atqok5yA6n4yGUjEMiMElBi0RKf6IPqob1nYzqK
 Bounceable address (for later access): kf-vF9tD9Atqok5yA6n4yGUjEMiMElBi0RKf6IPqob1nY2dP
@@ -91,8 +91,8 @@ The elector smart contract has several uses. Most importantly, you can participa
 ```sh
 > runmethod -1:A4C2C7C05B093D470DE2316DBA089FA0DD775FD9B1EBFC9DC9D04B498D3A2DDA active_election_id
 ...
-arguments:  [ 86535 ] 
-result:  [ 1567633899 ] 
+arguments:  [ 86535 ]
+result:  [ 1567633899 ]
 ```
 
 (or `lite-client -C <global-config> -c "runmethod -1:<elector-addr> active_election_id"` in batch mode) will return the identifier of the currently active elections (a non-zero integer, typically the Unix time of the start of the service term of the validator group being elected) or `0` if no elections are currently active. In this example, the identifier of the active elections is `1567633899`.
@@ -156,7 +156,7 @@ or if you have created the controlling wallet by means of `new-wallet.fif` you c
 ```
 $ fift -s validator-elect-req.fif @my_wallet_id.addr 1567633899 2.7 C5C2B94529405FB07D1DDFB4C42BFB07727E7BA07006B2DB569FBF23060B9E5C
 
-Creating a request to participate in validator elections at time 1567633899 from smart contract Uf+vF9tD9Atqok5yA6n4yGUjEMiMElBi0RKf6IPqob1nY4EA = -1:af17db43f40b6aa24e7203a9f8c8652310c88c125062d1129fe883eaa1bd6763  with maximal stake factor with respect to the minimal stake 176947/65536 and validator ADNL address c5c2b94529405fb07d1ddfb4c42bfb07727e7ba07006b2db569fbf23060b9e5c 
+Creating a request to participate in validator elections at time 1567633899 from smart contract Uf+vF9tD9Atqok5yA6n4yGUjEMiMElBi0RKf6IPqob1nY4EA = -1:af17db43f40b6aa24e7203a9f8c8652310c88c125062d1129fe883eaa1bd6763  with maximal stake factor with respect to the minimal stake 176947/65536 and validator ADNL address c5c2b94529405fb07d1ddfb4c42bfb07727e7ba07006b2db569fbf23060b9e5c
 654C50745D7031EB0002B333AF17DB43F40B6AA24E7203A9F8C8652310C88C125062D1129FE883EAA1BD6763C5C2B94529405FB07D1DDFB4C42BFB07727E7BA07006B2DB569FBF23060B9E5C
 ZUxQdF1wMesAArMzrxfbQ_QLaqJOcgOp-MhlIxDIjBJQYtESn-iD6qG9Z2PFwrlFKUBfsH0d37TEK_sHcn57oHAGsttWn78jBgueXA==
 ```
@@ -176,10 +176,10 @@ Now you have to run another script `validator-elect-signed.fif` which also requi
 
 ```
 $ fift -s validator-elect-signed.fif @my_wallet_id.addr 1567633899 2.7 C5C2B94529405FB07D1DDFB4C42BFB07727E7BA07006B2DB569FBF23060B9E5C xrQTSIQEsqZkWnoADMiBnyBFRUUweXTvzRQFqb5nHd5xmeE6 ovf9cmr2J/speJEtMU+tZm6zH/GBEyZCPpaukqL3mmNH9Wipyoys63VFh0yR386bARHKMPpfKAYBYslOjdSjCQ==
-Creating a request to participate in validator elections at time 1567633899 from smart contract Uf+vF9tD9Atqok5yA6n4yGUjEMiMElBi0RKf6IPqob1nY4EA = -1:af17db43f40b6aa24e7203a9f8c8652310c88c125062d1129fe883eaa1bd6763  with maximal stake factor with respect to the minimal stake 176947/65536 and validator ADNL address c5c2b94529405fb07d1ddfb4c42bfb07727e7ba07006b2db569fbf23060b9e5c 
+Creating a request to participate in validator elections at time 1567633899 from smart contract Uf+vF9tD9Atqok5yA6n4yGUjEMiMElBi0RKf6IPqob1nY4EA = -1:af17db43f40b6aa24e7203a9f8c8652310c88c125062d1129fe883eaa1bd6763  with maximal stake factor with respect to the minimal stake 176947/65536 and validator ADNL address c5c2b94529405fb07d1ddfb4c42bfb07727e7ba07006b2db569fbf23060b9e5c
 String to sign is: 654C50745D7031EB0002B333AF17DB43F40B6AA24E7203A9F8C8652310C88C125062D1129FE883EAA1BD6763C5C2B94529405FB07D1DDFB4C42BFB07727E7BA07006B2DB569FBF23060B9E5C
 Provided a valid Ed25519 signature A2F7FD726AF627FB2978912D314FAD666EB31FF1811326423E96AE92A2F79A6347F568A9CA8CACEB7545874C91DFCE9B0111CA30FA5F28060162C94E8DD4A309 with validator public key 8404B2A6645A7A000CC8819F20454545307974EFCD1405A9BE671DDE7199E13A
-query_id set to 1567632790 
+query_id set to 1567632790
 
 Message body is x{4E73744B000000005D702D968404B2A6645A7A000CC8819F20454545307974EFCD1405A9BE671DDE7199E13A5D7031EB0002B333C5C2B94529405FB07D1DDFB4C42BFB07727E7BA07006B2DB569FBF23060B9E5C}
  x{A2F7FD726AF627FB2978912D314FAD666EB31FF1811326423E96AE92A2F79A6347F568A9CA8CACEB7545874C91DFCE9B0111CA30FA5F28060162C94E8DD4A309}
@@ -192,11 +192,11 @@ Alternatively, if you are running `validator-engine-console` on the same machine
 Now you have a message body containing your election participation request. You must send it from the controlling smart contract, carrying the stake as its value (plus one extra TON for sending confirmation). If you use the simple wallet smart contract, this can be done by using the `-B` command-line argument to `wallet.fif`:
 
 ```
-$ fift -s wallet.fif my_wallet_id -1:A4C2C7C05B093D470DE2316DBA089FA0DD775FD9B1EBFC9DC9D04B498D3A2DDA 1 100001. -B validator-query.boc 
-Source wallet address = -1:af17db43f40b6aa24e7203a9f8c8652310c88c125062d1129fe883eaa1bd6763 
+$ fift -s wallet.fif my_wallet_id -1:A4C2C7C05B093D470DE2316DBA089FA0DD775FD9B1EBFC9DC9D04B498D3A2DDA 1 100001. -B validator-query.boc
+Source wallet address = -1:af17db43f40b6aa24e7203a9f8c8652310c88c125062d1129fe883eaa1bd6763
 kf-vF9tD9Atqok5yA6n4yGUjEMiMElBi0RKf6IPqob1nY2dP
 Loading private key from file my_wallet_id.pk
-Transferring GR$100001. to account kf-kwsfAWwk9Rw3iMW26CJ-g3Xdf2bHr_J3J0EtJjTot2lHQ = -1:a4c2c7c05b093d470de2316dba089fa0dd775fd9b1ebfc9dc9d04b498d3a2dda seqno=0x1 bounce=-1 
+Transferring GR$100001. to account kf-kwsfAWwk9Rw3iMW26CJ-g3Xdf2bHr_J3J0EtJjTot2lHQ = -1:a4c2c7c05b093d470de2316dba089fa0dd775fd9b1ebfc9dc9d04b498d3a2dda seqno=0x1 bounce=-1
 Body of transfer message is x{4E73744B000000005D702D968404B2A6645A7A000CC8819F20454545307974EFCD1405A9BE671DDE7199E13A5D7031EB0002B333C5C2B94529405FB07D1DDFB4C42BFB07727E7BA07006B2DB569FBF23060B9E5C}
  x{A2F7FD726AF627FB2978912D314FAD666EB31FF1811326423E96AE92A2F79A6347F568A9CA8CACEB7545874C91DFCE9B0111CA30FA5F28060162C94E8DD4A309}
 
@@ -244,7 +244,7 @@ If the result is zero, nothing is due to you. Otherwise, you'll see a part or al
 
 ```
 $ fift -s recover-stake.fif
-query_id for stake recovery message is set to 1567634299 
+query_id for stake recovery message is set to 1567634299
 
 Message body is x{47657424000000005D70337B}
 
@@ -260,7 +260,7 @@ $ fift -s wallet.fif my_wallet_id <dest-addr> <my-wallet-seqno> <coin-amount> -B
 For example:
 
 ```
-$ fift -s wallet.fif my_wallet_id -1:A4C2C7C05B093D470DE2316DBA089FA0DD775FD9B1EBFC9DC9D04B498D3A2DDA 2 1. -B recover-query.boc 
+$ fift -s wallet.fif my_wallet_id -1:A4C2C7C05B093D470DE2316DBA089FA0DD775FD9B1EBFC9DC9D04B498D3A2DDA 2 1. -B recover-query.boc
 ...
 (Saved to file wallet-query.boc)
 ```
@@ -282,6 +282,6 @@ Notice that even before the term of the validator group containing your elected 
 
 ## See Also
 
-* [TON Validators and staking-incentives](/participate/network-maintenance/staking-incentives)
+* [TON Validators and staking-incentives](/v3/documentation/infra/nodes/validation/staking-incentives)
 * [Nominator Pools](/participate/network-maintenance/nominators)
-* [TON Node Types](/participate/nodes/node-types)
+* [TON Node Types](/v3/documentation/infra/nodes/node-types)

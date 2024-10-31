@@ -60,7 +60,7 @@ right$1 {X:Type} {Y:Type} value:Y = Either X Y;
 
 * `[CommonMsgInfo][10][StateInit][0][X]` - `Message X` 在一个cell中
 
-````mdx-code-block
+
 <br></br>
 <ThemedImage
 alt=""
@@ -70,10 +70,10 @@ dark: '/img/docs/data-formats/tl-b-docs-9-dark.png?raw=true',
 }}
 />
 <br></br>
-````
+
 * `[CommonMsgInfo][11][^StateInit][1][^X]` - `Message X` 带引用
 
-````mdx-code-block
+
 <br></br>
 <ThemedImage
 alt=""
@@ -83,7 +83,7 @@ dark: '/img/docs/data-formats/tl-b-docs-8-dark.png?raw=true',
 }}
 />
 <br></br>
-````
+
 
 ## CommonMsgInfo TL-B
 
@@ -94,14 +94,14 @@ dark: '/img/docs/data-formats/tl-b-docs-8-dark.png?raw=true',
 ```tlb
 //内部消息
 int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
-  src:MsgAddressInt dest:MsgAddressInt 
+  src:MsgAddressInt dest:MsgAddressInt
   value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
   created_lt:uint64 created_at:uint32 = CommonMsgInfo;
-  
-//外部传入消息  
-ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt 
+
+//外部传入消息
+ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt
   import_fee:Grams = CommonMsgInfo;
-  
+
 //外部传出消息
 ext_out_msg_info$11 src:MsgAddressInt dest:MsgAddressExt
   created_lt:uint64 created_at:uint32 = CommonMsgInfo;
@@ -117,7 +117,7 @@ ext_out_msg_info$11 src:MsgAddressInt dest:MsgAddressExt
 nanograms$_ amount:(VarUInteger 16) = Grams;
 //内部消息
 int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
-  src:MsgAddressInt dest:MsgAddressInt 
+  src:MsgAddressInt dest:MsgAddressInt
   value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
   created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 ```
@@ -127,7 +127,7 @@ int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
 | int_msg_info$0 | 构造函数                                  | 必需     | $0 标记意味着序列化 CommonMsgInfo 以 0 位开始描述内部消息。                                                           |
 | ihr_disabled   | 布尔                                      | 必需     | 超立方体路由标志位。                                                                                                    |
 | bounce         | 布尔                                      | 必需     | 如果处理过程中出现错误，消息应该被弹回。如果消息的 flat bounce = 1，它被称为可弹回。                                 |
-| bounced        | 布尔                                      | 必需     | 描述消息本身是弹回结果的标志位。                                                                                        |       
+| bounced        | 布尔                                      | 必需     | 描述消息本身是弹回结果的标志位。                                                                                        |
 | src            | [MsgAddressInt](#msgaddressint-tl-b)     | 必需     | 消息发送者智能合约的地址。                                                                                            |
 | dest           | [MsgAddressInt](#msgaddressint-tl-b)     | 必需     | 消息目的地智能合约的地址。                                                                                            |
 | value          | [CurrencyCollection](#currencycollection)| 必需     | 描述货币信息的结构，包括消息中转移的总资金。                                                                         |
@@ -146,8 +146,8 @@ int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
 
 ```tlb
 nanograms$_ amount:(VarUInteger 16) = Grams;
-//外部传入消息  
-ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt 
+//外部传入消息
+ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt
   import_fee:Grams = CommonMsgInfo;
 ```
 
@@ -197,7 +197,7 @@ _ split_depth:(Maybe (## 5)) special:(Maybe TickTock)
 | split_depth | (## 5)                  | 可选     | 用于高负载合约的参数，定义了在不同分片中分裂为多个实例的行为。目前 StateInit 没有使用它。                                        |
 | special     | TickTock*               | 可选     | 用于在区块链的每个新区块中调用智能合约。仅在主链中可用。普通用户合约没有使用它。                                                   |
 | code        | Cell                    | 可选     | 合约的序列化代码。                                                                                                                |
-| data        | Cell                    | 可选     | 合约初始数据。                                                                                                                    |       
+| data        | Cell                    | 可选     | 合约初始数据。                                                                                                                    |
 | library     | HashmapE 256 SimpleLib* | 可选     | 目前使用的 StateInit 没有库                                                                                                        |
 
 [哈希映射的一般详细解释](../data-formats/tl-b#hashmap)
@@ -238,7 +238,7 @@ addr_extern$01 len:(## 9) external_address:(bits len)
 
 | 结构              | 类型       | 必需      | 描述                                                                                                          |
 |-------------------|------------|----------|--------------------------------------------------------------------------------------------------------------|
-| addr_extern$01   
+| addr_extern$01
 
  | 构造函数   | 必需     | `$01` 标记意味着序列化 MsgAddressExt 以 `01` 位开始描述外部地址。                                             |
 | len               | ## 9       | 必需     | 与 uintN 相同 - 表示无符号 N 位数字                                                                           |

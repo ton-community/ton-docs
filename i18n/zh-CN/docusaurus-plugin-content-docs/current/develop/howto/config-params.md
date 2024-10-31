@@ -11,7 +11,9 @@
 
 所有配置参数组合成一个**配置字典** - 一个带有有符号32位键（配置参数索引）和值（由一个cell引用组成）的哈希映射。换句话说，配置字典是TL-B类型的值（`HashmapE 32 ^Cell`）。实际上，所有配置参数的集合作为TL-B类型`ConfigParams`的值存储在主链状态中：
 
-    _ config_addr:bits256 config:^(Hashmap 32 ^Cell) = ConfigParams;
+```   
+_ config_addr:bits256 config:^(Hashmap 32 ^Cell) = ConfigParams;
+```
 
 我们看到，除了配置字典外，`ConfigParams`还包含`config_addr` - 主链上配置智能合约的256位地址。稍后将提供有关配置智能合约的更多细节。
 
@@ -21,12 +23,14 @@
 
 因此，此类参数的结构在源文件`crypto/block/block.tlb`中定义，其中为不同的`i`值定义了（`ConfigParam i`）。例如，
 
-    _ config_addr:bits256 = ConfigParam 0;
-    _ elector_addr:bits256 = ConfigParam 1;
-    _ dns_root_addr:bits256 = ConfigParam 4;  // root TON DNS resolver
+```
+_ config_addr:bits256 = ConfigParam 0;
+_ elector_addr:bits256 = ConfigParam 1;
+_ dns_root_addr:bits256 = ConfigParam 4;  // root TON DNS resolver
 
-    capabilities#c4 version:uint32 capabilities:uint64 = GlobalVersion;
-    _ GlobalVersion = ConfigParam 8;  // all zero if absent
+capabilities#c4 version:uint32 capabilities:uint64 = GlobalVersion;
+_ GlobalVersion = ConfigParam 8;  // all zero if absent
+```
 
 我们看到配置参数`#8`包含一个没有引用且恰好有104个数据位的cell。前四位必须是`11000100`，然后存储32位当前启用的“全局版本”，随后是对应当前启用能力的64位整数标志。所有配置参数的更详细描述将在TON区块链文档的附录中提供；目前，可以检查`crypto/block/block.tlb`中的TL-B方案并检查验证者源代码中不同参数的使用方式。
 
@@ -60,8 +64,11 @@
 
 为了创建新的配置提案，首先必须生成一个包含提议的新值的BoC（cell包）文件。这样做的确切方式取决于要更改的配置参数。例如，如果我们想创建包含UTF-8字符串"TEST"（即`0x54455354`）的参数`-239`，我们可以如下创建`config-param-239.boc`：调用Fift，然后输入
 
-    <b "TEST" $, b> 2 boc+>B "config-param-239.boc" B>file
-    bye
+```
+<b "TEST" $, b> 2 boc+>B "config-param-239.boc" B>file
+bye
+```
+
 
 结果，将创建一个21字节的文件`config-param-239.boc`，包含所需值的序列化。
 
@@ -69,8 +76,10 @@
 
 例如，考虑配置参数`#8`，其中包含当前启用的全局区块链版本和能力：
 
-    capabilities#c4 version:uint32 capabilities:uint64 = GlobalVersion;
-    _ GlobalVersion = ConfigParam 8;
+```
+capabilities#c4 version:uint32 capabilities:uint64 = GlobalVersion;
+_ GlobalVersion = ConfigParam 8;
+```
 
 我们可以通过运行轻客户端并输入`getconfig 8`来检查其当前值：
 
@@ -85,24 +94,30 @@ x{C4000000010000000000000006}
 
 现在假设我们想要启用位`#3`（`+8`）表示的能力，即`capReportVersion`（启用时，此能力会迫使所有 collator 在其生成的块头中报告其支持的版本和能力）。因此，我们想要`version=1`和`capabilities=14`。在这个例子中，我们仍然可以猜测正确的序列化并直接通过Fift创建BoC文件。
 
-    x{C400000001000000000000000E} s>c 2 boc+>B "config-param8.boc" B>file
+```
+x{C400000001000000000000000E} s>c 2 boc+>B "config-param8.boc" B>file
+```
 
 （结果创建了一个包含所需值的30字节文件`config-param8.boc`。）
 
 然而，在更复杂的情况下，这可能不是一个选项，所以让我们以不同的方式做这个例子。也就是说，我们可以检查源文件`crypto/smartcont/gen-zerostate.fif`和`crypto/smartcont/CreateState.fif`中的相关部分。
 
-    // version capabilities --
-    { <b x{c4} s, rot 32 u, swap 64 u, b> 8 config! } : config.version!
-    1 constant capIhr
-    2 constant capCreateStats
-    4 constant capBounceMsgBody
-    8 constant capReportVersion
-    16 constant capSplitMergeTransactions
+```
+// version capabilities --
+{ <b x{c4} s, rot 32 u, swap 64 u, b> 8 config! } : config.version!
+1 constant capIhr
+2 constant capCreateStats
+4 constant capBounceMsgBody
+8 constant capReportVersion
+16 constant capSplitMergeTransactions
+```
 
 和
 
-    // version capabilities
-    1 capCreateStats capBounceMsgBody or capReportVersion or config.version!
+```
+// version capabilities
+1 capCreateStats capBounceMsgBody or capReportVersion or config.version!
+```
 
 我们看到，`config.version!`没有最后的`8 config!`实际上就是我们需要的，所以我们可以创建一个临时Fift脚本，例如，`create-param8.fif`：
 ```
@@ -129,8 +144,10 @@ dup ."Serialized value = " <s csr.
 
 现在，如果我们运行`fift -s create-param8.fif config-param8.boc`或者更好地从构建目录运行`crypto/create-state -s create-param8.fif config-param8.boc`，我们看到以下输出：
 
-    Serialized value = x{C400000001000000000000000E}
-    (Saved into file config-param8.boc)
+```
+Serialized value = x{C400000001000000000000000E}
+(Saved into file config-param8.boc)
+```
 
 我们获得与之前相同内容的30字节文件`config-param8.boc`。
 
@@ -198,9 +215,11 @@ B5EE9C724101040100CB0001CF89FE00000000000000000000000000000000000000000000000000
 
 现在我们通过轻客户端发送外部消息`wallet-query.boc`。
 
-    > sendfile wallet-query.boc
-    ....
-    external message status is 1
+```
+> sendfile wallet-query.boc
+....
+external message status is 1
+```
 
 等待一段时间后，我们可以检查我们钱包的传入消息以检查来自配置智能合约的响应消息，
 

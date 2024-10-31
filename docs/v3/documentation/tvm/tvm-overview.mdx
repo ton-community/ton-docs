@@ -1,0 +1,131 @@
+import Button from '@site/src/components/button'
+
+# TVM Overview
+
+All TON Smart Contracts are executed on their own TON Virtual Machine (TVM). TVM is built on the _stack principle_, which makes it efficient and easy to implement.
+
+This document provides a bird's-eye view of how TVM executes transactions.
+
+:::tip
+* TVM Source — [**TVM C++ implementation**](https://github.com/ton-blockchain/ton/tree/master/crypto/vm)
+:::
+
+
+## TON Course: TVM
+
+:::tip
+Before starting the course, make sure you have a good understanding of the basics of blockchain technology. If you have gaps in your knowledge, we recommend taking the [Blockchain Basics with TON](https://stepik.org/course/201294/promo) ([RU version](https://stepik.org/course/202221/), [CHN version](https://stepik.org/course/200976/)) course.
+:::
+
+The [TON Blockchain Course](https://stepik.org/course/176754/) is a comprehensive guide to TON Blockchain development.
+
+Module 2 completely covers __TVM__, transactions, scalability and business cases.
+
+
+<Button href="https://stepik.org/course/176754/promo"
+        colorType={'primary'} sizeType={'sm'}>
+
+Check TON Blockchain Course
+
+</Button>
+
+
+<Button href="https://stepik.org/course/201638/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+CHN
+
+</Button>
+
+
+<Button href="https://stepik.org/course/201855/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+RU
+
+</Button>
+
+
+## Transactions and phases
+When some event happens on the account in one of the TON chains, it causes a **transaction**. The most common event is the "arrival of some message", but generally speaking there could be `tick-tock`, `merge`, `split` and other events.
+
+Each transaction consists of up to 5 phases:
+1. **Storage phase** - in this phase, storage fees accumulated by the contract due to the occupation of some space in the chain state are calculated. Read more in [Storage Fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee).
+2. **Credit phase** - in this phase, the balance of the contract with respect to a (possible) incoming message value and collected storage fee are calculated.
+3. **Compute phase** - in this phase, TVM is executing the contract (see below) and the result of the contract execution is an aggregation of `exit_code`, `actions` (serialized list of actions), `gas_details`, `new_storage` and some others.
+4. **Action phase** - if the compute phase was successful, in this phase, `actions` from the compute phase are processed. In particular, actions may include sending messages, updating the smart contract code, updating the libraries, etc. Note that some actions may fail during processing (for instance, if we try to send message with more TON than the contract has), in that case the whole transaction may revert or this action may be skipped (it depends on the mode of the actions, in other words, the contract may send a `send-or-revert` or  `try-send-if-no-ignore` type of message).
+5. **Bounce phase** - if the compute phase failed (it returned `exit_code >= 2`), in this phase, the _bounce message_ is formed for the transactions initiated by an incoming message.
+
+## Compute phase
+In this phase, the TVM execution occurs.
+
+:::tip
+* TVM 4.3.5 — [**TON Blockchain paper**](https://docs.ton.org/assets/files/tblkch-6aaf006b94ee2843a982ebf21d7c1247.pdf)
+:::
+
+### Compute phase skipped
+
+The computing phase consists in invoking TVM with correct inputs. On some occasions, TVM cannot be invoked at all (e.g., if the account is absent, not initialized, or frozen, and the inbound message being processed has no code or data fields or these fields have an incorrect hash)
+
+This is reflected by corresponding [constructors](https://github.com/ton-blockchain/ton/blob/5c392e0f2d946877bb79a09ed35068f7b0bd333a/crypto/block/block.tlb#L314):
+
+- `cskip_no_state$00` - The [absence of a state](https://testnet.tonviewer.com/transaction/7e78394d082882375a5d21affa6397dec60fc5a3ecbea87f401b0e460fb5c80c) (i.e., smart-contract code and data) in both the account (non-existing, uninitialized, or frozen) and the message.
+
+- `cskip_bad_state$01` - An invalid state passed in the message (i.e., the state's hash differs from the expected value) to a frozen or uninitialized account.
+
+- `cskip_no_gas$10` - The [absence of funds](https://testnet.tonviewer.com/transaction/a1612cde7fd66139a7d04b30f38db192bdb743a8b12054feba3c16061a4cb9a6) to buy gas. (About < 0.00004 TON by [08.2024](https://testnet.tonviewer.com/transaction/9789306d7b29318c90477aa3df6599ee4a897031162ad41a24decb87db65402b))
+
+### TVM state
+At any given moment, the TVM state is fully determined by 6 properties:
+* Stack (see below)
+* Control registers - (see below) to put it simply, this means up to 16 variables which may be directly set and read during execution
+* Current continuation - object which describes a currently executed sequence of instructions
+* Current codepage - in simple terms, this means the version of TVM which is currently running
+* Gas limits - a set of 4 integer values; the current gas limit g<sub>l</sub>, the maximal gas limit g<sub>m</sub>, the remaining gas g<sub>r</sub> and the gas credit g<sub>c</sub>
+* Library context - the hashmap of libraries which can be called by TVM
+
+### TVM is a stack machine
+TVM is a last-input-first-output stack machine. In total, there are 7 types of variables which may be stored in stack — three non-cell types:
+* Integer - signed 257-bit integers
+* Tuple - ordered collection of up to 255 elements having arbitrary value types, possibly distinct.
+* Null
+
+And four distinct flavours of cells:
+* Cell - basic (possibly nested) opaque structure used by TON Blockchain for storing all data
+* Slice - a special object which allows you to read from a cell
+* Builder - a special object which allows you to create new cells
+* Continuation - a special object which allows you to use a cell as source of TVM instructions
+
+### Control registers
+* `c0` — Contains the next continuation or return continuation (similar to the subroutine return address in conventional designs). This value must be a Continuation.
+* `c1` — Contains the alternative (return) continuation; this value must be a Continuation.
+* `c2` — Contains the exception handler. This value is a Continuation, invoked whenever an exception is triggered.
+* `c3` — Supporting register, contains the current dictionary, essentially a hashmap containing the code of all functions used in the program. This value must be a Continuation.
+* `c4` — Contains the root of persistent data, or simply the `data` section of the contract. This value is a Cell.
+* `c5` — Contains the output actions. This value is a Cell.
+* `c7` — Contains the root of temporary data. It is a Tuple.
+
+### Initialization of TVM
+
+TVM initializes when transaction execution gets to the Computation phase, and then executes commands (opcodes) from _Current continuation_ until there are no more commands to execute (and no continuation for return jumps).
+
+Detailed description of the initialization process can be found here: [TVM Initialization](/v3/documentation/tvm/tvm-initialization)
+
+## TVM instructions
+
+The list of TVM instructions can be found here: [TVM instructions](/v3/documentation/tvm/instructions).
+
+### Result of TVM execution
+Besides exit_code and consumed gas data, TVM indirectly outputs the following data:
+* c4 register - the cell which will be stored as new `data` of the smart-contract (if execution will not be reverted on this or later phases)
+* c5 register - (list of output actions) the cell with last action in the list and reference to the cell with prev action (recursively)
+
+All other register values will be neglected.
+
+Note, that since there is a limit on max cell-depth `<1024`, and particularly the limit on c4 and c5 depth `<=512`, there will be a limit on the number of output actions in one tx `<=255`. If a contract needs to send more than that, it may send a message with the request `continue_sending` to itself and send all necessary messages in subsequent transactions.
+
+
+## See Also
+
+- [TVM Instructions](/v3/documentation/tvm/instructions)
+- [TON TVM](https://ton.org/tvm.pdf) TVM Concepts(may include outdated information)

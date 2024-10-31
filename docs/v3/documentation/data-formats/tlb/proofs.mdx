@@ -1,0 +1,917 @@
+import ThemedImage from '@theme/ThemedImage';
+
+# Proofs verifying (low-level)
+
+## Overview
+:::caution
+This section describes instructions and manuals for interacting with TON at a low level.
+it is assumed that you have already become familiar with [exotic cells](/v3/documentation/data-formats/tlb/exotic-cells), [TL-B language](/v3/documentation/data-formats/tlb/tl-b-language) and
+understand the [simple proof verifying](/v3/documentation/data-formats/tlb/exotic-cells#simple-proof-verifying-example) example.
+:::
+
+This article describes advanced examples of verifying proofs from Liteservers.
+
+It's important to check any data you receive from a node for trustless interaction with the blockchain.
+However, the article covers only part of trustless communication with Liteserver,
+because its assumed that you verified the Block hash you received from a Liteserver (or from anyone else).
+Block hash verifying is more advanced, because you need to sync key blocks and (or) check block signatures,
+and will be described in the other article in the future. But anyway even using only these examples
+you're decreasing probability that Liteserver will send you the wrong data that you will believe.
+
+
+## Block Header
+
+Let's say we know a Block ID:
+```json
+<TL BlockIdExt [wc=-1, shard=-9223372036854775808, seqno=31220993, root_hash=51ed3b9e728e7c548b15a5e5ce988b4a74984c3f8374f3f1a52c7b1f46c26406, file_hash=d4fcdc692de1a252deb379cd25774842b733e6a96525adf82b8ffc41da667bf5] >
+```
+And we ask a Liteserver for a Header for this block. Liteserver [response](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/tl/generate/scheme/lite_api.tl#L35)
+contains a `header_proof` boc.
+
+<details>
+
+  <summary><b>Show boc</b></summary>
+
+```boc
+
+b5ee9c72010207010001470009460351ed3b9e728e7c548b15a5e5ce988b4a74984c3f8374f3f1a52c7b1f46c26406001601241011ef55aaffffff110204050601a09bc7a98700000000040101dc65010000000100ffffffff000000000000000064b6c356000023d38ba64000000023d38ba64004886d00960007028101dc64fd01dc42bec400000003000000000000002e030098000023d38b96fdc401dc650048a3971c46472b85c8d761060a6e7ae9f13a90cdda815915a89597cfecb393a6b568807adfb3c1c5efc920907225175db61ca384e4f8b313799e3cbb8b7b4085284801018c6053c1185700c0fe4311d5cf8fa533ea0382e361a7b76d0cf299b75ac0356c000328480101741100d622b0d5264bcdb86a14e36fc8c349b82ae49e037002eb07079ead8b060015284801015720b6aefcbf406209522895faa6c0d10cc3315d90bcaf09791b19f595e86f8f0007
+
+```
+</details>
+
+After boc deserialization, we got Cell:
+
+```json
+280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> {
+	64[11EF55AAFFFFFF11] -> {
+		640[9BC7A98700000000040101DC65010000000100FFFFFFFF000000000000000064B6C356000023D38BA64000000023D38BA64004886D00960007028101DC64FD01DC42BEC400000003000000000000002E] -> {
+			608[000023D38B96FDC401DC650048A3971C46472B85C8D761060A6E7AE9F13A90CDDA815915A89597CFECB393A6B568807ADFB3C1C5EFC920907225175DB61CA384E4F8B313799E3CBB8B7B4085]
+		},
+		288[01018C6053C1185700C0FE4311D5CF8FA533EA0382E361A7B76D0CF299B75AC0356C0003],
+		288[0101741100D622B0D5264BCDB86A14E36FC8C349B82AE49E037002EB07079EAD8B060015],
+		288[01015720B6AEFCBF406209522895FAA6C0D10CC3315D90BCAF09791B19F595E86F8F0007]
+	}
+}
+```
+that we should deserialize according to the Block [Tlb scheme](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L442):
+
+```python
+{
+  'global_id': -239,
+  'info':
+    {
+      'version': 0,
+      'not_master': 0,
+      'after_merge': 0,
+      'before_split': 0,
+      'after_split': 0,
+      'want_split': False,
+      'want_merge': True,
+      'key_block': False,
+      'vert_seqno_incr': 0,
+      'flags': 1,
+      'seqno': 31220993,
+      'vert_seqno': 1,
+      'shard': {'shard_pfx_bits': 0, 'workchain_id': -1, 'shard_prefix': 0},
+      'gen_utime': 1689699158,
+      'start_lt': 39391488000000,
+      'end_lt': 39391488000004,
+      'gen_validator_list_hash_short': 2288844950,
+      'gen_catchain_seqno': 459393,
+      'min_ref_mc_seqno': 31220989,
+      'prev_key_block_seqno': 31212222,
+      'gen_software': {'version': 3, 'capabilities': 46},
+      'master_ref': None,
+      'prev_ref': {'type_': 'prev_blk_info', 'prev': {'end_lt': 39391487000004, 'seqno': 31220992, 'root_hash': b'H\xa3\x97\x1cFG+\x85\xc8\xd7a\x06\nnz\xe9\xf1:\x90\xcd\xda\x81Y\x15\xa8\x95\x97\xcf\xec\xb3\x93\xa6', 'file_hash': b'\xb5h\x80z\xdf\xb3\xc1\xc5\xef\xc9 \x90r%\x17]\xb6\x1c\xa3\x84\xe4\xf8\xb3\x13y\x9e<\xbb\x8b{@\x85'}},
+      'prev_vert_ref': None
+    },
+  'value_flow': None,
+  'state_update': None,
+  'extra': None
+}
+```
+
+Now, we should check that `seqno` in deserialized block matches to block `seqno` we know, and then compute hash_1 of the only
+Merkle Proof reference and compare it to block hash we know:
+```python
+assert h_proof.refs[0].get_hash(0) == block_id.root_hash
+```
+Now, we can trust all other data, this Cell contains
+
+_Checking Proof Examples:_ [Python](https://github.com/yungwine/pytoniq-core/blob/873a96aa2256db33b8f35fbe2ab8fe8cf8ae49c7/pytoniq_core/proof/check_proof.py#L19), [Kotlin](https://github.com/andreypfau/ton-kotlin/blob/b1edc4b134e89ccf252149f27c85fd530377cebe/ton-kotlin-liteclient/src/commonMain/kotlin/CheckProofUtils.kt#L15), [C++](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/check-proof.cpp#L34)
+
+## Full Block
+
+For `liteserver.getBlock` method the proof verifying is the same as described above, however it contains full Cells instead of Pruned Branches for [Value Flow](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L464), [State Update](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413) and [Block Extra](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L452) schemas.
+
+## Shard Block
+
+Shard proofs are proofs that shard reference is actually stored in the masterchain block we provided to Liteserver. We need to check such proofs when we call `liteServer.getShardInfo`, `liteServer.getAccountState` and `liteServer.runSmcMethod` methods.
+
+Let's ask a Liteserver for a Shard info for masterchain block we mentioned in above:
+```python
+await client.raw_get_shard_info(master, wc=0)
+```
+
+Liteserver response contains BlockIdExt of the shard block:
+```json
+<TL BlockIdExt [wc=0, shard=-9223372036854775808, seqno=36908135, root_hash=39e5cbca5bf69750b5d9897872c3a0d7a3e614e521c53e4de728fafed38dce27, file_hash=f1f0e5cdc4b8a12cf2438dcab60f4712d1dc04f3792b1d72f2500cbf640948b7] >
+```
+Shard Proof boc:
+
+<details>
+
+  <summary><b>Show boc</b></summary>
+
+```boc
+
+b5ee9c72010219020004b9010009460332bf3592969931ca4fbc7715494b50597f1884c0d847456029d8cf0e526e6046016f0209460351ed3b9e728e7c548b15a5e5ce988b4a74984c3f8374f3f1a52c7b1f46c26406001611245b9023afe2ffffff1100ffffffff000000000000000001dc65010000000164b6c356000023d38ba6400401dc64fd600304050628480101affe84cdd73951bce07eeaad120d00400295220d6f66f1163b5fa8668202d72b000128480101faed0dd3ca110ada3d22980e3795d2bdf15450e9159892bbf330cdfd13a3b880016e22330000000000000000ffffffffffffffff820ce9d9c3929379c82807082455cc26aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac23519b11eddc69b7e090a0b0c28480101a5a7d24057d8643b2527709d986cda3846adcb3eddc32d28ec21f69e17dbaaef000128480101deab5a5aaf79c5e24f8dcbbe51747d6804104f75f58ed5bed4702c353545c6ac00110103d0400d284801015394592e3a3f1e3bc2d4249e993d0ec1e33ca18f49533991274ebc65276cd9a5001122bf0001aaa0161d000702816000047a7172dfb88800011e8b625908200ee215f71061846393a08c682e87bc3a12aff2d246eb97a09164f5657f96f9a252ef71580fe5309a823f73f3c4c3f8ab73f5a85bbf204bfd22e68d36d0efab1818e7b428be0f1028480101b20e36a3b36a4cdee601106c642e90718b0a58daf200753dbb3189f956b494b6000101db50119963380ee3280800011e9c5cb7ee0000011e9c5cb7ee29cf2e5e52dfb4ba85aecc4bc3961d06bd1f30a7290e29f26f3947d7f69c6e713f8f872e6e25c50967921c6e55b07a38968ee0279bc958eb97928065fb204a45b88000381abc00000000000000000ee327eb25b61a8a0e001343c9b67a721dcd6500202848010150fcc05bd9723571b83316a5f650be31edb131d05fdc78d271486e5d4ef077e1001928480101e5be728200b172cf7e2356cba2ae1c6e2c790be7c03cd7814c6e6fe3080b944b0011241011ef55aaffffff111213141501a09bc7a98700000000040101dc65010000000100ffffffff000000000000000064b6c356000023d38ba64000000023d38ba64004886d00960007028101dc64fd01dc42bec400000003000000000000002e16284801018c6053c1185700c0fe4311d5cf8fa533ea0382e361a7b76d0cf299b75ac0356c00032a8a0478e0f0e601ba1161ecc1395e9a0475c4f80aadbd6c483f210e96e29cf36789e432bf3592969931ca4fbc7715494b50597f1884c0d847456029d8cf0e526e6046016f016f1718284801015720b6aefcbf406209522895faa6c0d10cc3315d90bcaf09791b19f595e86f8f00070098000023d38b96fdc401dc650048a3971c46472b85c8d761060a6e7ae9f13a90cdda815915a89597cfecb393a6b568807adfb3c1c5efc920907225175db61ca384e4f8b313799e3cbb8b7b4085688c010378e0f0e601ba1161ecc1395e9a0475c4f80aadbd6c483f210e96e29cf36789e46492304dfb6ef9149781871464af686056a9627f882f60e3b24f8c944a75ebaf016f0014688c010332bf3592969931ca4fbc7715494b50597f1884c0d847456029d8cf0e526e6046da58493ccb5da3876129b0190f3c375e69e59c3ad9ff550be708999dad1f6f39016f0014
+
+```
+</details>
+
+And `shard_descr` boc which we can use as a result if we trust Liteserver.
+
+<details>
+
+  <summary><b>Show boc</b></summary>
+
+```boc
+
+b5ee9c7201010201007d0001db50119963380ee3280800011e9c5cb7ee0000011e9c5cb7ee29cf2e5e52dfb4ba85aecc4bc3961d06bd1f30a7290e29f26f3947d7f69c6e713f8f872e6e25c50967921c6e55b07a38968ee0279bc958eb97928065fb204a45b88000381abc00000000000000000ee327eb25b61a8a01001343c9b67a721dcd650020
+
+```
+</details>
+
+After the shard proof boc deserialization we got 2 roots:
+```json
+[<Cell 280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> 1 refs>, <Cell 280[0332BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046016F] -> 1 refs>]
+```
+
+The first one is a Masterchain block Merkle Proof which we should check (using `check_block_header` function):
+```json
+280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> {
+	64[11EF55AAFFFFFF11] -> {
+		640[9BC7A98700000000040101DC65010000000100FFFFFFFF000000000000000064B6C356000023D38BA64000000023D38BA64004886D00960007028101DC64FD01DC42BEC400000003000000000000002E] -> {
+			608[000023D38B96FDC401DC650048A3971C46472B85C8D761060A6E7AE9F13A90CDDA815915A89597CFECB393A6B568807ADFB3C1C5EFC920907225175DB61CA384E4F8B313799E3CBB8B7B4085]
+		},
+		288[01018C6053C1185700C0FE4311D5CF8FA533EA0382E361A7B76D0CF299B75AC0356C0003],
+		552[0478E0F0E601BA1161ECC1395E9A0475C4F80AADBD6C483F210E96E29CF36789E432BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046016F016F] -> {
+			560[010378E0F0E601BA1161ECC1395E9A0475C4F80AADBD6C483F210E96E29CF36789E46492304DFB6EF9149781871464AF686056A9627F882F60E3B24F8C944A75EBAF016F0014],
+			560[010332BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046DA58493CCB5DA3876129B0190F3C375E69E59C3AD9FF550BE708999DAD1F6F39016F0014]
+		},
+		288[01015720B6AEFCBF406209522895FAA6C0D10CC3315D90BCAF09791B19F595E86F8F0007]
+	}
+}
+```
+
+The Cell
+```json
+552[0478E0F0E601BA1161ECC1395E9A0475C4F80AADBD6C483F210E96E29CF36789E432BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046016F016F] -> {
+    560[010378E0F0E601BA1161ECC1395E9A0475C4F80AADBD6C483F210E96E29CF36789E46492304DFB6EF9149781871464AF686056A9627F882F60E3B24F8C944A75EBAF016F0014],
+    560[010332BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046DA58493CCB5DA3876129B0190F3C375E69E59C3AD9FF550BE708999DAD1F6F39016F0014]
+}
+```
+
+Is a Merkle Update of [ShardState](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413) TLB scheme, so we need to remember the new hash.
+
+After we've made sure that the only Merkle Proof Cell reference Hash_1 is matching with the block hash we know, and remembered the new ShardState hash, we check the second `shard proof` Cell:
+
+```json
+280[0332BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046016F] -> {
+	362[9023AFE2FFFFFF1100FFFFFFFF000000000000000001DC65010000000164B6C356000023D38BA6400401DC64FD40] -> {
+		288[0101AFFE84CDD73951BCE07EEAAD120D00400295220D6F66F1163B5FA8668202D72B0001],
+		288[0101FAED0DD3CA110ADA3D22980E3795D2BDF15450E9159892BBF330CDFD13A3B880016E],
+		204[0000000000000000FFFFFFFFFFFFFFFF820CE9D9C3929379C820] -> {
+			288[0101A5A7D24057D8643B2527709D986CDA3846ADCB3EDDC32D28EC21F69E17DBAAEF0001],
+			288[0101DEAB5A5AAF79C5E24F8DCBBE51747D6804104F75F58ED5BED4702C353545C6AC0011]
+		},
+		342[CC26AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC23519B11EDDC69B7C] -> {
+			9[D000] -> {
+				878[50119963380EE3280800011E9C5CB7EE0000011E9C5CB7EE29CF2E5E52DFB4BA85AECC4BC3961D06BD1F30A7290E29F26F3947D7F69C6E713F8F872E6E25C50967921C6E55B07A38968EE0279BC958EB97928065FB204A45B88000381ABC00000000000000000EE327EB25B61A88] -> {
+					74[43C9B67A721DCD650000]
+				}
+			},
+			288[01015394592E3A3F1E3BC2D4249E993D0EC1E33CA18F49533991274EBC65276CD9A50011],
+			766[0001AAA0161D000702816000047A7172DFB88800011E8B625908200EE215F71061846393A08C682E87BC3A12AFF2D246EB97A09164F5657F96F9A252EF71580FE5309A823F73F3C4C3F8AB73F5A85BBF204BFD22E68D36D0EFAB1818E7B428BC] -> {
+				288[010150FCC05BD9723571B83316A5F650BE31EDB131D05FDC78D271486E5D4EF077E10019],
+				288[0101E5BE728200B172CF7E2356CBA2AE1C6E2C790BE7C03CD7814C6E6FE3080B944B0011]
+			},
+			288[0101B20E36A3B36A4CDEE601106C642E90718B0A58DAF200753DBB3189F956B494B60001]
+		}
+	}
+}
+```
+
+As we can see the only Merkle Proof reference has prefix `9023AFE2` which is [ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410)
+TLB Scheme prefix, so we need to compare this reference Hash_1 with the one we remembered in the previous step:
+
+```python
+"""
+Here mc_block_cell is a first shard proof root and mc_state_root is the second one.
+The check_block_header_proof function returns new hash of the ShardState Merkle Update.
+"""
+
+mc_state_hash = mc_state_root[0].get_hash(0)
+state_hash = check_block_header_proof(mc_block_cell[0], blk.root_hash, True)
+
+if mc_state_hash != state_hash:
+    raise ProofError('mc state hashes mismatch')
+```
+
+* _Why?_ - because we've checked the block header proof and that means, that we can trust other Cell data. So now we trust the new hash of ShardState Merkle Update, and to trust the second Cell data we need to check if hashes are match.
+
+Now, let's deserialize the second Cell:
+
+```python
+{
+    'global_id': -239,
+    'shard_id': {'shard_pfx_bits': 0, 'workchain_id': -1, 'shard_prefix': 0},
+    'seq_no': 31220993,
+    'vert_seq_no': 1,
+    'gen_utime': 1689699158,
+    'gen_lt': 39391488000004,
+    'min_ref_mc_seqno': 31220989,
+    'out_msg_queue_info': <Cell 288[0101AFFE84CDD73951BCE07EEAAD120D00400295220D6F66F1163B5FA8668202D72B0001] -> 0 refs>,
+    'before_split': 0,
+    'accounts': <Cell 288[0101FAED0DD3CA110ADA3D22980E3795D2BDF15450E9159892BBF330CDFD13A3B880016E] -> 0 refs>,
+    'overload_history': 0,
+    'underload_history': 18446744073709551615,
+    'total_balance': {'grams': 2364000148715550620, 'other': None},
+    'total_validator_fees': {'grams': 0, 'other': None},
+    'libraries': None,
+    'master_ref': None,
+    'custom': {
+        'shard_hashes': {
+            0: {'list': [{
+                    'seq_no': 36908135,
+                    'reg_mc_seqno': 31220993,
+                    'start_lt': 39391487000000,
+                    'end_lt': 39391487000005,
+                    'root_hash': b"9\xe5\xcb\xca[\xf6\x97P\xb5\xd9\x89xr\xc3\xa0\xd7\xa3\xe6\x14\xe5!\xc5>M\xe7(\xfa\xfe\xd3\x8d\xce'",
+                    'file_hash': b'\xf1\xf0\xe5\xcd\xc4\xb8\xa1,\xf2C\x8d\xca\xb6\x0fG\x12\xd1\xdc\x04\xf3y+\x1dr\xf2P\x0c\xbfd\tH\xb7',
+                    'before_split': False,
+                    'before_merge': False,
+                    'want_split': False,
+                    'want_merge': True,
+                    'nx_cc_updated': False,
+                    'flags': 0,
+                    'next_catchain_seqno': 459607,
+                    'next_validator_shard': 9223372036854775808,
+                    'min_ref_mc_seqno': 31220989,
+                    'gen_utime': 1689699153,
+                    'split_merge_at': None,
+                    'fees_collected': {'grams': 1016817575, 'other': None}, 'funds_created': {'grams': 1000000000, 'other': None}
+                }]
+            }
+        },
+        'config': {'config_addr': '5555555555555555555555555555555555555555555555555555555555555555', 'config': None},
+        'flags': 1,
+        'validator_info': {'validator_list_hash_short': 2862618141, 'catchain_seqno': 459393, 'nx_cc_updated': False},
+        'prev_blocks': None,
+        'after_key_block': True,
+        'last_key_block': {'end_lt': 39382372000004, 'seqno': 31212222, 'root_hash': b'\xe2\x0c0\x8crt\x11\x8d\x05\xd0\xf7\x87BU\xfeZH\xddr\xf4\x12,\x9e\xac\xaf\xf2\xdf4J]\xee+', 'file_hash': b'\x01\xfc\xa6\x13PG\xee~x\x98\x7f\x15n~\xb5\x0bw\xe4\t\x7f\xa4\\\xd1\xa6\xda\x1d\xf5c\x03\x1c\xf6\x85'},
+        'block_create_stats': {'type_': 'block_create_stats', 'counters': None},
+        'global_balance': {'grams': 5089971531496870767, 'other': None}
+    }
+}
+```
+
+Since we trust this Cell we can trust the Shard Block data (`ShardStateUnsplit` -> `custom` -> `shard_hashes` -> `0 (shrdblk wc)` -> `leaf`).
+
+## Account State
+
+Let's prove state of account `EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG` for the same Masterchain block we started with in the article beginning.
+
+Liteserver [response](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/tl/generate/scheme/lite_api.tl#L37) contains masterchain block id _(must be the same we sent to ls)_, shard block id and `shard_proof` boc which we should check as described above,
+`proof` boc, and `state` boc.
+
+
+<details>
+
+  <summary><b>Show bocs</b></summary>
+
+```boc
+Proof boc:
+    b5ee9c7201023d020008480100094603f93fe5eda41a6ce9ecb353fd589842bd3f5d5e73b846cb898525293fc742fd6902190209460339e5cbca5bf69750b5d9897872c3a0d7a3e614e521c53e4de728fafed38dce27001d34235b9023afe2ffffff110000000000000000000000000002332c670000000164b6c351000023d38b96fdc501dc64fd200304052848010138f8d1c6e9f798a477d13aa26cb4d6cfe1a17949ac276b2f1e0ce037a521b9bc0001221382097522af06ffaff1f0063321d90000000000000000ffffffffffffffff825d48abc1bfebfc7bc2df8993c189361000023d38b69370401dc64fd2fa78ec529bcf9931e14f9d8b27ec1469290c0baef8256d657ce573b9679c5997431fcda6bf2d0be39344a9336cfe0ae9c844a88d2bd8022102e4012a760d4db83323130104ba9157837fd7f8f8070833231301032030fdc45f2d3838090a0b284801013e38e2548c5236a9652c45e553ced677f76550097b94138a4576f122443944d400692848010159e1a18ee4e5670306b5203912c87dffc17898f0999bd128a6965027d53b6fa40215231301013fa38088aaea2b780c0d10284801016f315f25b4a39ac12c85fea4ecfe7a83e5e59d1f059783fa0c3ef2797308806100002848010188d5f8a73382aea73dede03fc3bcda2634a717ef50e7428d5a4a44c771b014b90066231301005ecd9e51e5d22a380e0f1023130100303b3b607d7ffc781112132848010182eb0e24c842092ec2705486cbbe98de8016d55f5cff4ea910471a4c3a7a1cf1003b28480101ed7e26bd36efa6d5d9b4f6aaab9813af0742a84244977f74fd4074c9c98908be000028480101ca85960e3fc3dfb6d26e83ae87a837ae5c2faf7c8d43ea177393c602fadaa0300039221100e0f41ada252e2f08141528480101d7acbb602338c86d610f35cfb362fd76fc18b1812476b6fca99a0678e665fcf50000284801014fae109c41f3d5e2be0a3ff00a007f2e50a796797700d18a7aa663e531c37180002d221100e05c33225b78bce8161728480101545b5925b3ab2a8df2470fe22a5a3c9cc64e3cb24407c26167e0fbb476e05309002c221100e03480847f372168181928480101844a14c99695506e920635d18e76d9e685adee74e5fba6f6d3b371ca77e348130029220f00d0b1cce62aecc81a1b220f00c625c7e90dfc681c1d284801019ca2157c92d49b9d051388de45d07072c78a3aa65a5b05547d94e0369aa6bdee002a284801010326812b62712345473070d679bc38cdbbce58b7a2bf6c5c6f091fc8d36e81cd001f220f00c279d628dbf2081e1f220f00c0b8f29f9d04e82021284801019143abf2a72662054eda4f4949d010c897aff4383b514b387cff790408231c6c001a28480101de5072f46a0e0ecab2bbfc2cfc62a3fe200f12d5d457df833a46eb747fa004e30059220f00c03fa2ec9ad848222328480101baee90fd11a130d6d2e2ded21ae4a7b86553116015b7e7ebfc52369534d298b20017220f00c02e722bded7282425220d00ab138e7f18482627284801017f1df311101e472b1d443334d2426fd339539f558694c60e3428221dcb1a5478001628480101e1fc242c29e519f9740ca2570d85779aed0c593cc36b59119852945988e186960015220d00a21324d3ff2828292848010199fe288fdce2606d39f9b6af72f9c2643ef06e6bacc15dd72cfa84d63c9e44a40013220d00a1e877ec8ba82a2b284801019e019e92be76a5ae7aee239299f561682afbe445dc42ee57ccc31ecb427fdf42000e220d00a1db848431a82c2d284801012345b80e66c025fb62c41261b5d230616303ec47f3bb7a255872fada62a1e8bf0010220d00a1d633bc10682e2f220d00a02ca3ddc468303128480101654781e5d466ec4ca50cb2983b20170bb5d90e2e6ab83ed7d42a829651a5eec1000a219abb19e61b8190c2587677c010ce49a93364b965f7762a9810d916b082f45e080a02bc35ebaa649b46ac72e6e4d4c1293b66d58d9ed7a54902beefd97f5bff7977dd85998b3d000023c5643934413228480101edced2278013ea497dd2e286f495b4f7f8df6ea73e08e85414fc43a611c17797000b284801018282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488000828480101b3e9649d10ccb379368e81a3a7e8e49c8eb53f6acc69b0ba2ffa80082f70ee390001241011ef55aaffffff113536373802a09bc7a98700000000840102332c67000000010000000000000000000000000064b6c351000023d38b96fdc0000023d38b96fdc5d41c6e3c0007035701dc64fd01dc42bec400000003000000000000002e393a28480101cb54530ac857df730e82ee239b2150528c6e5f6ed3678eab6e1e789f0e3c7a5300032a8a04f2ad1ede336a68623ddabf36cb8fa405dbe70a38c453f711000f9a9f92592db0f93fe5eda41a6ce9ecb353fd589842bd3f5d5e73b846cb898525293fc742fd69021902193b3c28480101d0cf03a1058c2fd6029288951051a0d82733953c1e9181a67c502ce59b180200000b0098000023d38b69370401dc64fd2fa78ec529bcf9931e14f9d8b27ec1469290c0baef8256d657ce573b9679c5997431fcda6bf2d0be39344a9336cfe0ae9c844a88d2bd8022102e4012a760d4db0098000023d38b87bb8402332c662b4e96320f9d0afb02e5d55b6b42c3349e33540620ecc07b399211fd56e4de3e2555617cdde457cd65a0ad033aafc0c6c25df716b04e455f49179668a46300db688c0103f2ad1ede336a68623ddabf36cb8fa405dbe70a38c453f711000f9a9f92592db04a4ff9713b206e420baaee4dd21febbeb426fcd9ce158db2a56dce9188fc313e0219001b688c0103f93fe5eda41a6ce9ecb353fd589842bd3f5d5e73b846cb898525293fc742fd6987d796744ca386906016c56921370d01f72cb004a1d7c294752afe4446da07bb0219001b
+State boc:
+    b5ee9c720102160100033c000271c006f5bc67986e06430961d9df00433926a4cd92e597ddd8aa6043645ac20bd178222c859043259e0d9000008f1590e4d10d405786bd75534001020114ff00f4a413f4bcf2c80b030051000000e929a9a317c1b3226ce226d6d818bafe82d3633aa0f06a6c677272d1f9b760ff0d0dcf56d8400201200405020148060704f8f28308d71820d31fd31fd31f02f823bbf264ed44d0d31fd31fd3fff404d15143baf2a15151baf2a205f901541064f910f2a3f80024a4c8cb1f5240cb1f5230cbff5210f400c9ed54f80f01d30721c0009f6c519320d74a96d307d402fb00e830e021c001e30021c002e30001c0039130e30d03a4c8cb1f12cb1fcbff1213141502e6d001d0d3032171b0925f04e022d749c120925f04e002d31f218210706c7567bd22821064737472bdb0925f05e003fa403020fa4401c8ca07cbffc9d0ed44d0810140d721f404305c810108f40a6fa131b3925f07e005d33fc8258210706c7567ba923830e30d03821064737472ba925f06e30d08090201200a0b007801fa00f40430f8276f2230500aa121bef2e0508210706c7567831eb17080185004cb0526cf1658fa0219f400cb6917cb1f5260cb3f20c98040fb0006008a5004810108f45930ed44d0810140d720c801cf16f400c9ed540172b08e23821064737472831eb17080185005cb055003cf1623fa0213cb6acb1fcb3fc98040fb00925f03e20201200c0d0059bd242b6f6a2684080a06b90fa0218470d4080847a4937d29910ce6903e9ff9837812801b7810148987159f31840201580e0f0011b8c97ed44d0d70b1f8003db29dfb513420405035c87d010c00b23281f2fff274006040423d029be84c6002012010110019adce76a26840206b90eb85ffc00019af1df6a26840106b90eb858fc0006ed207fa00d4d422f90005c8ca0715cbffc9d077748018c8cb05cb0222cf165005fa0214cb6b12ccccc973fb00c84014810108f451f2a7020070810108d718fa00d33fc8542047810108f451f2a782106e6f746570748018c8cb05cb025006cf165004fa0214cb6a12cb1fcb3fc973fb0002006c810108d718fa00d33f305224810108f459f2a782106473747270748018c8cb05cb025005cf165003fa0213cb6acb1f12cb3fc973fb00000af400c9ed54
+```
+</details>
+
+When we've checked the `Shard Proof`, we need to deserialize both `proof` and `state` cells. First, `proof` proof cell must have exactly 2 roots:
+
+```json
+
+[<Cell 280[0339E5CBCA5BF69750B5D9897872C3A0D7A3E614E521C53E4DE728FAFED38DCE27001D] -> 1 refs>, <Cell 280[03F93FE5EDA41A6CE9ECB353FD589842BD3F5D5E73B846CB898525293FC742FD690219] -> 1 refs>]
+
+```
+
+The first root is a Merkle Proof for shard block (we already proved and trust it hash):
+
+```json
+280[0339E5CBCA5BF69750B5D9897872C3A0D7A3E614E521C53E4DE728FAFED38DCE27001D] -> {
+	64[11EF55AAFFFFFF11] -> {
+		640[9BC7A98700000000840102332C67000000010000000000000000000000000064B6C351000023D38B96FDC0000023D38B96FDC5D41C6E3C0007035701DC64FD01DC42BEC400000003000000000000002E] -> {
+			608[000023D38B69370401DC64FD2FA78EC529BCF9931E14F9D8B27EC1469290C0BAEF8256D657CE573B9679C5997431FCDA6BF2D0BE39344A9336CFE0AE9C844A88D2BD8022102E4012A760D4DB],
+			608[000023D38B87BB8402332C662B4E96320F9D0AFB02E5D55B6B42C3349E33540620ECC07B399211FD56E4DE3E2555617CDDE457CD65A0AD033AAFC0C6C25DF716B04E455F49179668A46300DB]
+		},
+		288[0101CB54530AC857DF730E82EE239B2150528C6E5F6ED3678EAB6E1E789F0E3C7A530003],
+		552[04F2AD1EDE336A68623DDABF36CB8FA405DBE70A38C453F711000F9A9F92592DB0F93FE5EDA41A6CE9ECB353FD589842BD3F5D5E73B846CB898525293FC742FD6902190219] -> {
+			560[0103F2AD1EDE336A68623DDABF36CB8FA405DBE70A38C453F711000F9A9F92592DB04A4FF9713B206E420BAAEE4DD21FEBBEB426FCD9CE158DB2A56DCE9188FC313E0219001B],
+			560[0103F93FE5EDA41A6CE9ECB353FD589842BD3F5D5E73B846CB898525293FC742FD6987D796744CA386906016C56921370D01F72CB004A1D7C294752AFE4446DA07BB0219001B]
+		},
+		288[0101D0CF03A1058C2FD6029288951051A0D82733953C1E9181A67C502CE59B180200000B]
+	}
+}
+```
+
+As we did in the `Shard Proof` verifying we need to use function `check_block_header`: check if Block Cell is valid and remember the new `StateUpdate` hash.
+
+Then we deserialize the second root (let's call it `state_cell`) and check if its Hash_1 matches the hash we remembered:
+```python
+proof_cells = Cell.from_boc(proof)
+if len(proof_cells) != 2:
+    raise ProofError('expected 2 root cells in account state proof')
+
+state_cell = proof_cells[1]
+
+state_hash = check_block_header_proof(proof_cells[0][0], shrd_blk.root_hash, True)
+
+if state_cell[0].get_hash(0) != state_hash:
+    raise ProofError('state hashes mismatch')
+```
+
+Now we can trust the `state_cell` which looks like this:
+
+<details>
+
+  <summary><b>Show Cell</b></summary>
+
+```json
+280[03F93FE5EDA41A6CE9ECB353FD589842BD3F5D5E73B846CB898525293FC742FD690219] -> {
+	362[9023AFE2FFFFFF110000000000000000000000000002332C670000000164B6C351000023D38B96FDC501DC64FD00] -> {
+		288[010138F8D1C6E9F798A477D13AA26CB4D6CFE1A17949AC276B2F1E0CE037A521B9BC0001],
+		75[82097522AF06FFAFF1E0] -> {
+			76[0104BA9157837FD7F8F0] -> {
+				76[01032030FDC45F2D3830] -> {
+					288[010159E1A18EE4E5670306B5203912C87DFFC17898F0999BD128A6965027D53B6FA40215],
+					76[01013FA38088AAEA2B70] -> {
+						288[010188D5F8A73382AEA73DEDE03FC3BCDA2634A717EF50E7428D5A4A44C771B014B90066],
+						76[01005ECD9E51E5D22A30] -> {
+							76[0100303B3B607D7FFC70] -> {
+								288[0101CA85960E3FC3DFB6D26E83AE87A837AE5C2FAF7C8D43EA177393C602FADAA0300039],
+								68[00E0F41ADA252E2F00] -> {
+									288[01014FAE109C41F3D5E2BE0A3FF00A007F2E50A796797700D18A7AA663E531C37180002D],
+									68[00E05C33225B78BCE0] -> {
+										288[0101545B5925B3AB2A8DF2470FE22A5A3C9CC64E3CB24407C26167E0FBB476E05309002C],
+										68[00E03480847F372160] -> {
+											288[0101844A14C99695506E920635D18E76D9E685ADEE74E5FBA6F6D3B371CA77E348130029],
+											60[00D0B1CCE62AECC0] -> {
+												60[00C625C7E90DFC60] -> {
+													288[01010326812B62712345473070D679BC38CDBBCE58B7A2BF6C5C6F091FC8D36E81CD001F],
+													60[00C279D628DBF200] -> {
+														60[00C0B8F29F9D04E0] -> {
+															288[0101DE5072F46A0E0ECAB2BBFC2CFC62A3FE200F12D5D457DF833A46EB747FA004E30059],
+															60[00C03FA2EC9AD840] -> {
+																288[0101BAEE90FD11A130D6D2E2DED21AE4A7B86553116015B7E7EBFC52369534D298B20017],
+																60[00C02E722BDED720] -> {
+																	52[00AB138E7F1840] -> {
+																		288[0101E1FC242C29E519F9740CA2570D85779AED0C593CC36B59119852945988E186960015],
+																		52[00A21324D3FF20] -> {
+																			288[010199FE288FDCE2606D39F9B6AF72F9C2643EF06E6BACC15DD72CFA84D63C9E44A40013],
+																			52[00A1E877EC8BA0] -> {
+																				288[01019E019E92BE76A5AE7AEE239299F561682AFBE445DC42EE57CCC31ECB427FDF42000E],
+																				52[00A1DB848431A0] -> {
+																					288[01012345B80E66C025FB62C41261B5D230616303EC47F3BB7A255872FADA62A1E8BF0010],
+																					52[00A1D633BC1060] -> {
+																						52[00A02CA3DDC460] -> {
+																							616[BB19E61B8190C2587677C010CE49A93364B965F7762A9810D916B082F45E080A02BC35EBAA649B46AC72E6E4D4C1293B66D58D9ED7A54902BEEFD97F5BFF7977DD85998B3D000023C564393441] -> {
+																								288[01018282D13BF66B9ACE1FBF5D3ABD1C59CC46D61AF1D47AF1665D3013D8F9E474880008]
+																							},
+																							288[0101EDCED2278013EA497DD2E286F495B4F7F8DF6EA73E08E85414FC43A611C17797000B]
+																						},
+																						288[0101654781E5D466EC4CA50CB2983B20170BB5D90E2E6AB83ED7D42A829651A5EEC1000A]
+																					}
+																				}
+																			}
+																		}
+																	},
+																	288[01017F1DF311101E472B1D443334D2426FD339539F558694C60E3428221DCB1A54780016]
+																}
+															}
+														},
+														288[01019143ABF2A72662054EDA4F4949D010C897AFF4383B514B387CFF790408231C6C001A]
+													}
+												},
+												288[01019CA2157C92D49B9D051388DE45D07072C78A3AA65A5B05547D94E0369AA6BDEE002A]
+											}
+										}
+									}
+								},
+								288[0101D7ACBB602338C86D610F35CFB362FD76FC18B1812476B6FCA99A0678E665FCF50000]
+							},
+							288[010182EB0E24C842092EC2705486CBBE98DE8016D55F5CFF4EA910471A4C3A7A1CF1003B],
+							288[0101ED7E26BD36EFA6D5D9B4F6AAAB9813AF0742A84244977F74FD4074C9C98908BE0000]
+						},
+						288[0101ED7E26BD36EFA6D5D9B4F6AAAB9813AF0742A84244977F74FD4074C9C98908BE0000]
+					},
+					288[01016F315F25B4A39AC12C85FEA4ECFE7A83E5E59D1F059783FA0C3EF279730880610000]
+				},
+				288[01013E38E2548C5236A9652C45E553CED677F76550097B94138A4576F122443944D40069],
+				288[0101B3E9649D10CCB379368E81A3A7E8E49C8EB53F6ACC69B0BA2FFA80082F70EE390001]
+			},
+			288[0101B3E9649D10CCB379368E81A3A7E8E49C8EB53F6ACC69B0BA2FFA80082F70EE390001]
+		},
+		868[0000000000000000FFFFFFFFFFFFFFFF825D48ABC1BFEBFC7BC2DF8993C189361000023D38B69370401DC64FD2FA78EC529BCF9931E14F9D8B27EC1469290C0BAEF8256D657CE573B9679C5997431FCDA6BF2D0BE39344A9336CFE0AE9C844A88D2BD8022102E4012A760D4DB0] -> {
+			288[0101B3E9649D10CCB379368E81A3A7E8E49C8EB53F6ACC69B0BA2FFA80082F70EE390001]
+		}
+	}
+}
+```
+
+</details>
+
+Again, the only Merkle Proof reference has prefix `9023AFE2` which is [ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410)
+TLB Scheme prefix, so we're gonna deserialize it according to the TLB Scheme:
+
+```python
+{
+    'global_id': -239,
+    'shard_id': {'shard_pfx_bits': 0, 'workchain_id': 0, 'shard_prefix': 0},
+    'seq_no': 36908135,
+    'vert_seq_no': 1,
+    'gen_utime': 1689699153,
+    'gen_lt': 39391487000005,
+    'min_ref_mc_seqno': 31220989,
+    'out_msg_queue_info': <Cell 288[010138F8D1C6E9F798A477D13AA26CB4D6CFE1A17949AC276B2F1E0CE037A521B9BC0001] -> 0 refs>,
+    'before_split': 0,
+    'accounts': (
+        {
+            50368879097771769677871174881221998657607998794347754829932074327482686052226: {
+                'account': None,
+                'last_trans_hash': b'd\x9bF\xacr\xe6\xe4\xd4\xc1);f\xd5\x8d\x9e\xd7\xa5I\x02\xbe\xef\xd9\x7f[\xffyw\xdd\x85\x99\x8b=',
+                'last_trans_lt': 39330697000001,
+                'cell': <Cell 320[649B46AC72E6E4D4C1293B66D58D9ED7A54902BEEFD97F5BFF7977DD85998B3D000023C564393441] -> 1 refs>
+            }
+        },
+        [
+            {'split_depth': 0, 'balance': {'grams': 5873792469, 'other': None}},
+            {'split_depth': 0, 'balance': {'grams': 5991493155, 'other': None}},
+            {'split_depth': 0, 'balance': {'grams': 63109456003, 'other': None}},
+            {'split_depth': 0, 'balance': {'grams': 63822897549, 'other': None}},
+            ...
+            {'split_depth': 0, 'balance': {'grams': 21778458402704, 'other': None}},
+            {'split_depth': 0, 'balance': {'grams': 54074699968483, 'other': None}},
+            {'split_depth': 0, 'balance': {'grams': 2725956214994157511, 'other': None}}
+        ]
+    ),
+    'overload_history': 0,
+    'underload_history': 18446744073709551615,
+    'total_balance': {'grams': 2725956214994157511, 'other': None},
+    'total_validator_fees': {'grams': 37646260890702444, 'other': None},
+    'libraries': None,
+    'master_ref': {'master': {'end_lt': 39391484000004, 'seqno': 31220989, 'root_hash': b'/\xa7\x8e\xc5)\xbc\xf9\x93\x1e\x14\xf9\xd8\xb2~\xc1F\x92\x90\xc0\xba\xef\x82V\xd6W\xceW;\x96y\xc5\x99', 'file_hash': b't1\xfc\xdak\xf2\xd0\xbe94J\x936\xcf\xe0\xae\x9c\x84J\x88\xd2\xbd\x80"\x10.@\x12\xa7`\xd4\xdb'}},
+    'custom': None
+}
+```
+
+Here we need the `account` field which has [ShardAccounts](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L261) type.
+`ShardAccounts` is a HashmapAugE where key is an address hash_part, value has `ShardAccount` type and extra has `DeepBalanceInfo` type.
+
+Parsing the address `EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG` we get the hash_part is equals to `50368879097771769677871174881221998657607998794347754829932074327482686052226`, so we need to
+get from Hashmap value of this key:
+
+```python
+{
+    50368879097771769677871174881221998657607998794347754829932074327482686052226: {
+        'account': None,
+        'last_trans_hash': b'd\x9bF\xacr\xe6\xe4\xd4\xc1);f\xd5\x8d\x9e\xd7\xa5I\x02\xbe\xef\xd9\x7f[\xffyw\xdd\x85\x99\x8b=',
+        'last_trans_lt': 39330697000001,
+        'cell': <Cell 320[649B46AC72E6E4D4C1293B66D58D9ED7A54902BEEFD97F5BFF7977DD85998B3D000023C564393441] -> 1 refs>
+    }
+}
+```
+
+We need to remember `last_trans_hash` and `last_trans_lt`, because we can use them to get account transactions and let's check the whole Cell of this data:
+
+```json
+320[649B46AC72E6E4D4C1293B66D58D9ED7A54902BEEFD97F5BFF7977DD85998B3D000023C564393441] -> {
+	288[01018282D13BF66B9ACE1FBF5D3ABD1C59CC46D61AF1D47AF1665D3013D8F9E474880008]
+}
+```
+
+As we can see the Cell is an ordinary Cell with level 1, which has only one reference - the pruned account data, so let's compute the Hash_1 of this pruned branch -
+this is the account state hash we can trust: `8282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488`.
+
+Now the last step is to deserialize the `state` boc:
+
+```json
+449[C006F5BC67986E06430961D9DF00433926A4CD92E597DDD8AA6043645AC20BD178222C859043259E0D9000008F1590E4D10D405786BD755300] -> {
+	80[FF00F4A413F4BCF2C80B] -> {
+		2[00] -> {
+			4[40] -> {
+				920[D001D0D3032171B0925F04E022D749C120925F04E002D31F218210706C7567BD22821064737472BDB0925F05E003FA403020FA4401C8CA07CBFFC9D0ED44D0810140D721F404305C810108F40A6FA131B3925F07E005D33FC8258210706C7567BA923830E30D03821064737472BA925F06E30D] -> {
+					480[01FA00F40430F8276F2230500AA121BEF2E0508210706C7567831EB17080185004CB0526CF1658FA0219F400CB6917CB1F5260CB3F20C98040FB0006],
+					552[5004810108F45930ED44D0810140D720C801CF16F400C9ED540172B08E23821064737472831EB17080185005CB055003CF1623FA0213CB6ACB1FCB3FC98040FB00925F03E2]
+				},
+				2[00] -> {
+					2[00] -> {
+						4[50] -> {
+							242[B29DFB513420405035C87D010C00B23281F2FFF274006040423D029BE84C40],
+							2[00] -> {
+								97[ADCE76A26840206B90EB85FF80],
+								97[AF1DF6A26840106B90EB858F80]
+							}
+						},
+						68[B8C97ED44D0D70B1F0]
+					},
+					357[BD242B6F6A2684080A06B90FA0218470D4080847A4937D29910CE6903E9FF9837812801B7810148987159F3180]
+				}
+			},
+			992[F28308D71820D31FD31FD31F02F823BBF264ED44D0D31FD31FD3FFF404D15143BAF2A15151BAF2A205F901541064F910F2A3F80024A4C8CB1F5240CB1F5230CBFF5210F400C9ED54F80F01D30721C0009F6C519320D74A96D307D402FB00E830E021C001E30021C002E30001C0039130E30D03A4C8CB1F12CB1FCBFF] -> {
+				440[D207FA00D4D422F90005C8CA0715CBFFC9D077748018C8CB05CB0222CF165005FA0214CB6B12CCCCC973FB00C84014810108F451F2A702],
+				448[810108D718FA00D33FC8542047810108F451F2A782106E6F746570748018C8CB05CB025006CF165004FA0214CB6A12CB1FCB3FC973FB0002],
+				432[810108D718FA00D33F305224810108F459F2A782106473747270748018C8CB05CB025005CF165003FA0213CB6ACB1F12CB3FC973FB00],
+				40[F400C9ED54]
+			}
+		}
+	},
+	321[000000E929A9A317C1B3226CE226D6D818BAFE82D3633AA0F06A6C677272D1F9B760FF0D0DCF56D800]
+}
+```
+
+Compute its representation hash and make sure that it matches to the one we got from the Pruned: `8282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488`.
+
+And deserialize it according to the [Account](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L231-L233) TLB Scheme:
+
+```python
+{
+    'addr': Address<EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG>,
+    'storage_stat': {'used': {'cells': 22, 'bits': 5697, 'public_cells': None}, 'last_paid': 1689502130, 'due_payment': None},
+    'storage': {
+        'last_trans_lt': 39330697000003,
+        'balance': {'grams': 5873792469, 'other': None},
+        'state': {
+            'type_': 'account_active',
+            'state_init': {'split_depth': None, 'special': None, 'code': <Cell 80[FF00F4A413F4BCF2C80B] -> 1 refs>, 'data': <Cell 321[000000E929A9A317C1B3226CE226D6D818BAFE82D3633AA0F06A6C677272D1F9B760FF0D0DCF56D800] -> 0 refs>, 'library': None}
+        }
+    }
+}
+```
+
+Now we can trust this account state data.
+
+## Account transactions
+
+For [liteServer.getTransactions](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/tl/generate/scheme/lite_api.tl#L71) request we must provide `lt` and `hash` of the transaction to start from.
+If we want to get last account transactions we can get them from `ShardAccount` (described above) and trust these `lt` and `hash`.
+
+When we receive transactions from the Liteserver we get boc with amount of transactions we asked roots. Each root is a Cell, which we should deserialize according to the [Transaction](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L263-L269) TLB Scheme.
+For the first transaction cell we should check that its hash matches with `last_trans_hash` we got from account state. Then we remember value of `prev_trans_hash` field and compare it to the hash of the second root and so on.
+
+## Block transactions
+
+Let's ask a Liteserver for transactions belong to the block we started with in the article beginning.
+LiteServer [response](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L46) contains `ids` field with transactions and `proof` boc. First, let's deserialize the `proof`:
+
+```json
+280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> {
+	64[11EF55AAFFFFFF11] -> {
+		288[0101F8039FE65901BE422094ED29FA05DD4A9406708D7C54EBF7F6010F2E8A9DCBB10001],
+		288[01018C6053C1185700C0FE4311D5CF8FA533EA0382E361A7B76D0CF299B75AC0356C0003],
+		288[0101741100D622B0D5264BCDB86A14E36FC8C349B82AE49E037002EB07079EAD8B060015],
+		545[4A33F6FD11224E018A0801116DBA929FAA60F8B9DFB39286C07FDE613D4F158E4031612597E23F312DA061732C2DB7C7C7F0BCA6295EF25D04F46FA21A055CF213A1270A80] -> {
+			288[0101E057F7AA0545EF9E6BF187542A5141298303A33BA7C9CE26C71FFD9C7D2050600004],
+			6[00],
+			6[80] -> {
+				9[4000] -> {
+					605[BFB333333333333333333333333333333333333333333333333333333333333333029999999999999999999999999999999999999999999999999999999999999999CF800008F4E2E9900000] -> {
+						9[5000] -> {
+							288[01015EF0532AF460BCF3BECF1A94597C1EC04879E0F26BF58269D319121376AAD4730002]
+						},
+						9[4000] -> {
+							288[0101B1E091FCB9DF53917EAA0CAE05041B3D0956242871E3CA8D6909D0AA31FF36040002]
+						},
+						520[7239A4AED4308E2E6AC11C880CCB29DFEE407A3E94FC1EDBDD4D29AF3B5DFEEE58A9B07203A0F457150A2BF7972DA7E2A79642DEBE792E919DE5E2FC284D2B158A]
+					},
+					607[BF955555555555555555555555555555555555555555555555555555555555555502AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD0000008F4E2E99000C0] -> {
+						288[0101924B5992DF95114196994A6D449D89E1C002CB96C14D11C4A667F843A3FAF4410002],
+						520[72899B3A210DDD28D905C583FF8559BCF73D0CF0C05C11210BD7059BAB2AB453E03524184B116C9E39D9D5293179588F4B7D8F5D8192FEFE66B9FE40A71518DBC7]
+					}
+				}
+			},
+			288[01010FC5CF36DC84BC46E7175768AB3EC0F94988D454F2C496DC1AC32E638CD3C23D0005]
+		}
+	}
+}
+```
+
+Now we should check the Block Header Proof (to trust this Cell data) and deserialize it according to the Block TLB Scheme:
+
+```python
+{
+    'global_id': -239,
+    'info': None,
+    'value_flow': None,
+    'state_update': None,
+    'extra': {
+        'in_msg_descr': <Cell 288[0101E057F7AA0545EF9E6BF187542A5141298303A33BA7C9CE26C71FFD9C7D2050600004] -> 0 refs>,
+        'out_msg_descr': ({}, [<Slice 5[00] -> 0 refs>]),
+        'account_blocks': (
+            {
+                23158417847463239084714197001737581570653996933128112807891516801582625927987:  {
+                    'account_addr': '3333333333333333333333333333333333333333333333333333333333333333',
+                    'transactions': (
+                        {
+                            39391488000001: <Cell 288[01015EF0532AF460BCF3BECF1A94597C1EC04879E0F26BF58269D319121376AAD4730002] -> 0 refs>,
+                            39391488000002: <Cell 288[0101B1E091FCB9DF53917EAA0CAE05041B3D0956242871E3CA8D6909D0AA31FF36040002] -> 0 refs>
+                        },
+                        [{'grams': 0, 'other': None}, {'grams': 0, 'other': None}, {'grams': 0, 'other': None}]
+                    ),
+                    'state_update': {'old_hash': b'9\xa4\xae\xd40\x8e.j\xc1\x1c\x88\x0c\xcb)\xdf\xee@z>\x94\xfc\x1e\xdb\xddM)\xaf;]\xfe\xeeX', 'new_hash': b'\xa9\xb0r\x03\xa0\xf4W\x15\n+\xf7\x97-\xa7\xe2\xa7\x96B\xde\xbey.\x91\x9d\xe5\xe2\xfc(M+\x15\x8a'}
+                },
+                38597363079105398474523661669562635951089994888546854679819194669304376546645: {
+                    'account_addr': '5555555555555555555555555555555555555555555555555555555555555555',
+                    'transactions': (
+                        {
+                            39391488000003: <Cell 288[0101924B5992DF95114196994A6D449D89E1C002CB96C14D11C4A667F843A3FAF4410002] -> 0 refs>
+                        },
+                    [{'grams': 0, 'other': None}]
+                    ),
+                    'state_update': {'old_hash': b'\x89\x9b:!\r\xdd(\xd9\x05\xc5\x83\xff\x85Y\xbc\xf7=\x0c\xf0\xc0\\\x11!\x0b\xd7\x05\x9b\xab*\xb4S\xe0', 'new_hash': b'5$\x18K\x11l\x9e9\xd9\xd5)1yX\x8fK}\x8f]\x81\x92\xfe\xfef\xb9\xfe@\xa7\x15\x18\xdb\xc7'}
+                }
+            },
+            [{'grams': 0, 'other': None}, {'grams': 0, 'other': None}, {'grams': 0, 'other': None}]
+        ),
+        'rand_seed': b'\x11"N\x01\x8a\x08\x01\x11m\xba\x92\x9f\xaa`\xf8\xb9\xdf\xb3\x92\x86\xc0\x7f\xdea=O\x15\x8e@1a%',
+        'created_by': b"\x97\xe2?1-\xa0as,-\xb7\xc7\xc7\xf0\xbc\xa6)^\xf2]\x04\xf4o\xa2\x1a\x05\\\xf2\x13\xa1'\n",
+        'custom': None
+    }
+}
+```
+
+In this case we should remember field `block` -> `extra` -> `account_blocks`, which has type of [ShardAccountBlocks](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L282),
+which is HashmapAugE where key is an address hash_part, value has [AccountBlock](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L277-L280) type and extra has `CurrencyCollection` type:
+
+```python
+{
+    23158417847463239084714197001737581570653996933128112807891516801582625927987:  {
+        'account_addr': '3333333333333333333333333333333333333333333333333333333333333333',
+        'transactions': (
+            {
+                39391488000001: <Cell 288[01015EF0532AF460BCF3BECF1A94597C1EC04879E0F26BF58269D319121376AAD4730002] -> 0 refs>,
+                39391488000002: <Cell 288[0101B1E091FCB9DF53917EAA0CAE05041B3D0956242871E3CA8D6909D0AA31FF36040002] -> 0 refs>
+            },
+            [{'grams': 0, 'other': None}, {'grams': 0, 'other': None}, {'grams': 0, 'other': None}]
+        ),
+        'state_update': {'old_hash': b'9\xa4\xae\xd40\x8e.j\xc1\x1c\x88\x0c\xcb)\xdf\xee@z>\x94\xfc\x1e\xdb\xddM)\xaf;]\xfe\xeeX', 'new_hash': b'\xa9\xb0r\x03\xa0\xf4W\x15\n+\xf7\x97-\xa7\xe2\xa7\x96B\xde\xbey.\x91\x9d\xe5\xe2\xfc(M+\x15\x8a'}
+    },
+    38597363079105398474523661669562635951089994888546854679819194669304376546645: {
+        'account_addr': '5555555555555555555555555555555555555555555555555555555555555555',
+        'transactions': (
+            {
+                39391488000003: <Cell 288[0101924B5992DF95114196994A6D449D89E1C002CB96C14D11C4A667F843A3FAF4410002] -> 0 refs>
+            },
+        [{'grams': 0, 'other': None}]
+        ),
+        'state_update': {'old_hash': b'\x89\x9b:!\r\xdd(\xd9\x05\xc5\x83\xff\x85Y\xbc\xf7=\x0c\xf0\xc0\\\x11!\x0b\xd7\x05\x9b\xab*\xb4S\xe0', 'new_hash': b'5$\x18K\x11l\x9e9\xd9\xd5)1yX\x8fK}\x8f]\x81\x92\xfe\xfef\xb9\xfe@\xa7\x15\x18\xdb\xc7'}
+    }
+}
+```
+
+Now lets check the `ids`:
+
+```python
+[
+    {'mode': 39, 'account': '3333333333333333333333333333333333333333333333333333333333333333', 'lt': 39391488000001, 'hash': '5ef0532af460bcf3becf1a94597c1ec04879e0f26bf58269d319121376aad473'},
+    {'mode': 39, 'account': '3333333333333333333333333333333333333333333333333333333333333333', 'lt': 39391488000002, 'hash': 'b1e091fcb9df53917eaa0cae05041b3d0956242871e3ca8d6909d0aa31ff3604'},
+    {'mode': 39, 'account': '5555555555555555555555555555555555555555555555555555555555555555', 'lt': 39391488000003, 'hash': '924b5992df95114196994a6d449d89e1c002cb96c14d11c4a667f843a3faf441'}
+]
+```
+
+For every transaction here we need to find it in the `account_block` we remembered and compare hashes:
+
+```python
+block_trs: dict = acc_block.get(int(tr['account'], 16)).transactions[0]
+block_tr: Cell = block_trs.get(tr['lt'])
+assert block_tr.get_hash(0) == tr['hash']
+```
+
+:::note
+
+In this example it was unnecessary to check `ids` field, we could just take transactions from the account block.
+But when you request the [liteServer.listBlockTransactionsExt](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L80) method
+you check proofs similar but in that case you really need to compare hashes.
+
+:::
+
+## Config
+
+Let's ask a Liteserver for 1, 4, 5, 7, 8 and 15 [Config params](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L83) (for [liteServer.getConfigAll](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L82) where you get all params, the proof verifying is the same).
+The [response](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L53) contains `state_proof` and `config_proof`.
+
+First, let's deserialize the `state_proof` Cell:
+
+```json
+280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> {
+	64[11EF55AAFFFFFF11] -> {
+		640[9BC7A98700000000040101DC65010000000100FFFFFFFF000000000000000064B6C356000023D38BA64000000023D38BA64004886D00960007028101DC64FD01DC42BEC400000003000000000000002E] -> {
+			608[000023D38B96FDC401DC650048A3971C46472B85C8D761060A6E7AE9F13A90CDDA815915A89597CFECB393A6B568807ADFB3C1C5EFC920907225175DB61CA384E4F8B313799E3CBB8B7B4085]
+		},
+		288[01018C6053C1185700C0FE4311D5CF8FA533EA0382E361A7B76D0CF299B75AC0356C0003],
+		552[0478E0F0E601BA1161ECC1395E9A0475C4F80AADBD6C483F210E96E29CF36789E432BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046016F016F] -> {
+			560[010378E0F0E601BA1161ECC1395E9A0475C4F80AADBD6C483F210E96E29CF36789E46492304DFB6EF9149781871464AF686056A9627F882F60E3B24F8C944A75EBAF016F0014],
+			560[010332BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046DA58493CCB5DA3876129B0190F3C375E69E59C3AD9FF550BE708999DAD1F6F39016F0014]
+		},
+		288[01015720B6AEFCBF406209522895FAA6C0D10CC3315D90BCAF09791B19F595E86F8F0007]
+	}
+}
+```
+
+For it, we should check Block Header proof and remember the `StateUpdate` new hash.
+
+Now, let's deserialize the `config_proof` Cell:
+
+<details>
+
+  <summary><b>Show Cell</b></summary>
+
+```json
+280[0332BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046016F] -> {
+	362[9023AFE2FFFFFF1100FFFFFFFF000000000000000001DC65010000000164B6C356000023D38BA6400401DC64FD40] -> {
+		288[0101AFFE84CDD73951BCE07EEAAD120D00400295220D6F66F1163B5FA8668202D72B0001],
+		288[0101FAED0DD3CA110ADA3D22980E3795D2BDF15450E9159892BBF330CDFD13A3B880016E],
+		204[0000000000000000FFFFFFFFFFFFFFFF820CE9D9C3929379C820] -> {
+			288[0101A5A7D24057D8643B2527709D986CDA3846ADCB3EDDC32D28EC21F69E17DBAAEF0001],
+			288[0101DEAB5A5AAF79C5E24F8DCBBE51747D6804104F75F58ED5BED4702C353545C6AC0011]
+		},
+		342[CC26AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC23519B11EDDC69B7C] -> {
+			288[0101C7DAE90A1FCEAD235CACC318A048986B2E12D0F68C136845669E02C4E28F018D0002],
+			2[00] -> {
+				8[D8] -> {
+					2[00] -> {
+						2[00] -> {
+							2[00] -> {
+								2[00] -> {
+									2[00] -> {
+										2[00] -> {
+											288[0101F89085ED347F5F928A0DF7B1271F906F6E1EF43D89B5912774C8B42D0E24AB120001],
+											2[00] -> {
+												256[3333333333333333333333333333333333333333333333333333333333333333]
+											}
+										},
+										4[40] -> {
+											256[0000000000000000000000000000000000000000000000000000000000000000]
+										}
+									},
+									2[00] -> {
+										2[00] -> {
+											2[00] -> {
+												256[E56754F83426F69B09267BD876AC97C44821345B7E266BD956A7BFBFB98DF35C]
+											},
+											2[00] -> {
+												329[01FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF800000008000000100]
+											}
+										},
+										4[50] -> {
+											1[80] -> {
+												2[00] -> {
+													83[BE000003BCB3670DC15540],
+													83[BFFFFFFFBCBD1A94A20000]
+												}
+											}
+										}
+									}
+								},
+								2[00] -> {
+									2[00] -> {
+										2[00] -> {
+											2[00] -> {
+												104[C400000002000000000000002E]
+											},
+											288[0101C1F3C2ADA12BD901BBA1552C0C090CC3989649807C2B764D02548C1F664C20890007]
+										},
+										288[010187DADFBB3AE954E7F5472C46A729ED80AD087C5D9CEBB8D644D16DD73F88DF390009]
+									},
+									2[00] -> {
+										288[01017CF937AF64AED1AB2CDD1435F8FF79F86E521320CC7B0CB30C9AAE81748124090002],
+										2[00] -> {
+											288[0101BEE8EB75C37500A75962E4FD99AFC62B3C9245948D2AC56061B0E21DDD6E9E840001],
+											2[00] -> {
+												128[00010000000080000000200000008000]
+											}
+										}
+									}
+								}
+							},
+							288[0101289F7704162F68EF3CC5B4865BD72067277E25B21514AB741396C54BD92294FA0009]
+						},
+						288[0101EF6962F43C1C86B216773B443F61829550DD9E956EE54EA3AC5C60E127DADD51000E]
+					},
+					288[0101112A0556A091DC4F72BD31FF2790783FB3238CE2AA41E1C137424D279664D7E3000A]
+				},
+				288[010124D21CF7AE96B1C55A1230E823DB0317CE24EC33E3BF2585C79605684304FAF20007]
+			},
+			766[0001AAA0161D000702816000047A7172DFB88800011E8B625908200EE215F71061846393A08C682E87BC3A12AFF2D246EB97A09164F5657F96F9A252EF71580FE5309A823F73F3C4C3F8AB73F5A85BBF204BFD22E68D36D0EFAB1818E7B428BC] -> {
+				288[010150FCC05BD9723571B83316A5F650BE31EDB131D05FDC78D271486E5D4EF077E10019],
+				288[0101E5BE728200B172CF7E2356CBA2AE1C6E2C790BE7C03CD7814C6E6FE3080B944B0011]
+			},
+			2[00] -> {
+				83[BE000003BCB3670DC15540],
+				83[BFFFFFFFBCBD1A94A20000]
+			}
+		}
+	}
+}
+```
+
+</details>
+
+We need to compare Hash_1 of this Merkle Proof only reference with the hash we got from `check_block_header` function above, so we can trust this Cell:
+
+```python
+state_hash = check_block_header_proof(state_proof[0], block.root_hash, True)
+if config_proof[0].get_hash(0) != state_hash:
+    raise LiteClientError('hashes mismach')
+```
+
+Now, let's deserialize the Cell according to the `ShardStateUnsplit` scheme:
+
+```python
+{
+    'global_id': -239,
+    'shard_id': {'shard_pfx_bits': 0, 'workchain_id': -1, 'shard_prefix': 0},
+    'seq_no': 31220993,
+    'vert_seq_no': 1,
+    'gen_utime': 1689699158,
+    'gen_lt': 39391488000004,
+    'min_ref_mc_seqno': 31220989,
+    'out_msg_queue_info': <Cell 288[0101AFFE84CDD73951BCE07EEAAD120D00400295220D6F66F1163B5FA8668202D72B0001] -> 0 refs>,
+    'before_split': 0,
+    'accounts': <Cell 288[0101FAED0DD3CA110ADA3D22980E3795D2BDF15450E9159892BBF330CDFD13A3B880016E] -> 0 refs>,
+    'overload_history': 0,
+    'underload_history': 18446744073709551615,
+    'total_balance': {'grams': 2364000148715550620, 'other': None},
+    'total_validator_fees': {'grams': 0, 'other': None},
+    'libraries': None,
+    'master_ref': None,
+    'custom': {
+        'shard_hashes': None,
+        'config': {
+            'config_addr': '5555555555555555555555555555555555555555555555555555555555555555',
+            'config': {
+                1: <Slice 256[3333333333333333333333333333333333333333333333333333333333333333] -> 0 refs>,
+                4: <Slice 256[E56754F83426F69B09267BD876AC97C44821345B7E266BD956A7BFBFB98DF35C] -> 0 refs>,
+                5: <Slice 329[01FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF800000008000000100] -> 0 refs>,
+                7: <Slice 1[80] -> 1 refs>,
+                8: <Slice 104[C400000002000000000000002E] -> 0 refs>,
+                15: <Slice 128[00010000000080000000200000008000] -> 0 refs>}
+            },
+            'flags': 1,
+            'validator_info': {'validator_list_hash_short': 2862618141, 'catchain_seqno': 459393, 'nx_cc_updated': False},
+            'prev_blocks': None,
+            'after_key_block': True,
+            'last_key_block': {'end_lt': 39382372000004, 'seqno': 31212222, 'root_hash': b'\xe2\x0c0\x8crt\x11\x8d\x05\xd0\xf7\x87BU\xfeZH\xddr\xf4\x12,\x9e\xac\xaf\xf2\xdf4J]\xee+', 'file_hash': b'\x01\xfc\xa6\x13PG\xee~x\x98\x7f\x15n~\xb5\x0bw\xe4\t\x7f\xa4\\\xd1\xa6\xda\x1d\xf5c\x03\x1c\xf6\x85'},
+            'block_create_stats': {'type_': 'block_create_stats', 'counters': None},
+            'global_balance': {'grams': 5089971531496870767, 'other': {239: 666666666666, 4294967279: 1000000000000}}
+    }
+}
+```
+
+And take the `ShardStateUnsplit` -> `custom` -> `config` -> `config` field, which is a Hashmap where key is a ConfigParam number and value is a Cell with parameter value.
+
+After deserialization of all params we got:
+
+```python
+{
+    1: {
+        'elector_addr': b'33333333333333333333333333333333',
+    },
+    4: {
+        'dns_root_addr': b'\xe5gT\xf84&\xf6\x9b\t&{\xd8v\xac\x97\xc4H!4[~&k\xd9V\xa7\xbf\xbf\xb9\x8d\xf3\\',
+    },
+    5: {
+        'blackhole_addr': b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff',
+        'fee_burn_nom': 1,
+        'fee_burn_denom': 2
+    },
+    7: {
+        'to_mint': {'dict': {239: 666666666666, 4294967279: 1000000000000}}
+    },
+    8: {
+        'version': 2,
+        'capabilities': 46
+    },
+    15: {
+        'validators_elected_for': 65536,
+        'elections_start_before': 32768,
+        'elections_end_before': 8192,
+        'stake_held_for': 32768
+    }
+}
+```
+
+## See Also
+
+* [Exotic Cells](/v3/documentation/data-formats/tlb/exotic-cells)

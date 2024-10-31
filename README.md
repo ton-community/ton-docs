@@ -36,7 +36,7 @@ If you are a developer and faced some difficulties, successfully overcoming them
 — Have an idea? [Submit a Feature Request](https://github.com/ton-community/ton-docs/issues/new/choose).  
 — Want to contribute? [Setup your environment](https://github.com/ton-community/ton-docs#set-up-your-environment-%EF%B8%8F).
 
-Contributing best practices:  [docs/contribute](https://ton.org/docs/contribute)
+Contributing best practices:  [docs/contribute](/v3/contribute)
 
 ---
 

@@ -1,0 +1,2266 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Preparing Messages
+
+While using TON Connect, you should construct the Message Body for the Payload used in various transactions. On this page you can find the most relevant examples of payload for use with the TON Connect SDKs.
+
+:::info
+It is expected that you learn the basics of creating a TON Connect connection. Learn more with the [integration manual](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk).
+:::
+
+## Cells and Message Serialization
+
+Before diving into building messages, let's introduce the concept of cells, which message bodies are made from.
+
+### What is a Cell?
+
+A cell is a basic data structure in the TON Blockchain. It can store up to `1023` bits and hold up to `4` references to other cells, which allows you to store more complex data structures.
+Libraries like `@ton/core` and `@ton-community/assets-sdk` provide efficient ways to handle cells.
+
+You can read more about cells [here](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage).
+
+### Creating a Cell
+
+To build a cell, you use the `beginCell()` function. While the cell is "open" you can store various data types with `store...()` functions.
+When you're done, you close the cell with the `endCell()` function.
+
+```ts
+import { Address, beginCell } from "@ton/ton";
+
+const cell = beginCell()
+  .storeUint(99, 64) // Stores uint 99 in 64 bits
+  .storeAddress(Address.parse('[SOME_ADDR]')) // Stores an address
+  .storeCoins(123) // Stores 123 as coins
+  .endCell() // Closes the cell
+```
+
+### Parsing a Cell
+
+To read or parse data from a cell, the `beginParse()` function is called. You read data in the same order it was stored using similar `load...()` functions:
+
+```ts
+const slice = cell.beginParse();
+const uint = slice.loadUint(64);
+const address = slice.loadAddress();
+const coins = slice.loadCoins();
+```
+
+### Larger amounts of data
+
+Each cell has a 1023-bit limit. If you exceed this, an error occurs:
+
+```ts
+// This will fail due to overflow
+const cell = beginCell()
+  .storeUint(1, 256)
+  .storeUint(2, 256)
+  .storeUint(3, 256)
+  .storeUint(4, 256) // Exceeds 1023-bit limit (256 + 256 + 256 + 256 = 1024)
+  .endCell()
+```
+
+To store more data, cells can reference other cells. You can use the storeRef() function to create nested cells:
+
+```ts
+const cell = beginCell()
+  .storeUint(1, 256)
+  .storeUint(2, 256)
+  .storeRef(beginCell()
+    .storeUint(3, 256)
+    .storeUint(4, 256)
+    .endCell())
+  .endCell()
+```
+
+To load a referenced (nested) cell, use `loadRef()`:
+
+```ts
+const slice = cell.beginParse();
+const uint1 = slice.loadUint(256);
+const uint2 = slice.loadUint(256);
+const innerSlice = slice.loadRef().beginParse(); // Load and parse nested cell
+const uint3 = innerSlice.loadUint(256);
+const uint4 = innerSlice.loadUint(256);
+```
+
+### Optional References and Values
+
+Cells can store optional values (which may be null). These are stored using the `storeMaybe...()` functions:
+
+```ts
+const cell = beginCell()
+  .storeMaybeInt(null, 64) // Optionally stores an int
+  .storeMaybeInt(1, 64)
+  .storeMaybeRef(null) // Optionally stores a reference
+  .storeMaybeRef(beginCell()
+    .storeCoins(123)
+    .endCell());
+```
+
+You can parse optional values using the corresponding loadMaybe...() functions. Returned values are nullable so do not forget to check them for null!
+
+```ts
+const slice = cell.beginParse();
+const maybeInt = slice.loadMaybeUint(64);
+const maybeInt1 = slice.loadMaybeUint(64);
+const maybeRef = slice.loadMaybeRef();
+const maybeRef1 = slice.loadMaybeRef();
+if (maybeRef1) {
+  const coins = maybeRef1.beginParse().loadCoins();
+}
+```
+
+### Using assets sdk for simpler serialization and deserialization
+
+Manually handling cells can be tedious, so the `@ton-community/assets-sdk` provides convenient methods for serializing and deserializing messages.
+
+Using `@ton-community/assets-sdk` is more readable and less error-prone.
+
+<Tabs groupId="Serialization/Deserialization">
+
+  <TabItem value="@ton-community/assets-sdk" label="@ton-community/assets-sdk">
+
+```ts
+import {Address, beginCell} from "@ton/core";
+import {storeJettonTransferMessage, loadJettonTransferMessage} from "@ton-community/assets-sdk";
+
+// serialization
+const cell = beginCell()
+  .store(storeJettonTransferMessage({
+    queryId: 42n,
+    amount: 100n,
+    destination: Address.parse('[DESTINATION]'),
+    responseDestination: Address.parse('[RESPONSE_DESTINATION]'),
+    customPayload: null,
+    forwardAmount: 1n,
+    forwardPayload: null,
+  }))
+  .endCell()
+
+// deserialization
+const transferMessage = loadJettonTransferMessage(cell.beginParse());
+```
+
+  </TabItem>
+
+  <TabItem value="@ton/ton" label="@ton/ton">
+
+```ts
+import {Address, beginCell} from "@ton/core";
+
+// serialization
+const cell = beginCell()
+  .storeUint(260734629, 32)
+  .storeUint(42, 64)
+  .storeCoins(100)
+  .storeAddress(Address.parse('[DESTINATION]'))
+  .storeAddress(Address.parse('[RESPONSE_DESTINATION]'))
+  .storeMaybeRef(null)
+  .storeCoins(1)
+  .storeMaybeRef(null)
+  .endCell();
+
+// deserialization
+const slice = cell.beginParse();
+const op = slice.loadUint(32);
+const queryId = slice.loadUint(64);
+const amount = slice.loadCoins();
+const destination = slice.loadAddress();
+const responseDestination = slice.loadAddress();
+const customPayload = slice.loadMaybeRef();
+const fwdAmount = slice.loadCoins();
+const fwdPayload = slice.loadMaybeRef();
+
+const transferMessage = { op, queryId, amount, destination, responseDestination, customPayload, fwdAmount, fwdPayload };
+```
+
+  </TabItem>
+</Tabs>
+
+## TON Connect JS SDK Examples
+
+### Transaction Template
+
+No matter what level of task a developer is solving, it is typically necessary to use the connector entity from `@tonconnect/sdk` or `@tonconnect/ui`.
+Examples created based on `@tonconnect/sdk` and `@tonconnect/ui`:
+
+<Tabs groupId="TON Connect template">
+
+<TabItem value="tonconnect-react" label="@tonconnect/ui-react">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+
+const transaction = {
+    //transaction body
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(transaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
+</TabItem>
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnectUI from '@tonconnect/ui';
+
+const tonConnectUI = new TonConnectUI({ //connect application
+    manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+    buttonRootId: '<YOUR_CONNECT_BUTTON_ANCHOR_ID>'
+});
+
+const transaction = {
+    //transaction body
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+
+```
+
+</TabItem>
+<TabItem value="tonconnect-js" label="@tonconnect/sdk">
+
+```js
+import TonConnect from '@tonconnect/sdk';
+const connector = new TonConnect();
+
+await connector.sendTransaction({
+    //transaction body
+})
+
+```
+
+</TabItem>
+
+</Tabs>
+
+### Regular TON Transfer
+
+TON Connect SDKs include wrappers for sending messages, making it easy to prepare regular transfers of Toncoins between two wallets as default transaction without payload.
+
+A regular TON transfer using the TON Connect JS SDKs can be executed as follows:
+
+
+<Tabs groupId="Regular Transfer">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+const [tonConnectUI] = useTonConnectUI();
+
+const transaction = {
+    messages: [
+        {
+            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            amount: "20000000" //Toncoin in nanotons
+        }
+    ]
+
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(transaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnectUI from '@tonconnect/ui';
+
+const tonConnectUI = new TonConnectUI({ //connect application
+    manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+    buttonRootId: '<YOUR_CONNECT_BUTTON_ANCHOR_ID>'
+});
+
+const transaction = {
+    messages: [
+        {
+            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            amount: "20000000" //Toncoin in nanotons
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
+
+```js
+import TonConnect from '@tonconnect/sdk';
+const connector = new TonConnect();
+
+await connector.sendTransaction({
+    messages: [
+        {
+            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            amount: "20000000" //Toncoin in nanotons
+        }
+    ]
+})
+
+```
+</TabItem>
+</Tabs>
+
+:::tip
+Learn more about [TON Smart Contract Addresses](/v3/documentation/smart-contracts/addresses).
+:::
+
+For specific custom transaction, a certain payload must be defined.
+
+
+
+
+### Transfer With a Comment
+
+The simplest example involves adding a payload with a comment. See more details on [this page](/v3/documentation/smart-contracts/message-management/internal-messages#simple-message-with-comment).
+Before transaction, it is necessary prepare a `body` [cell](/v3/documentation/data-formats/tlb/cell-boc) via the [@ton/ton](https://github.com/ton-org/ton) JavaScript library.
+
+```js
+import { beginCell } from '@ton/ton'
+
+const body = beginCell()
+  .storeUint(0, 32) // write 32 zero bits to indicate that a text comment will follow
+  .storeStringTail("Hello, TON!") // write our text comment
+  .endCell();
+```
+
+The transaction body is created by the following:
+
+<Tabs groupId="Transfer With a Comment">
+
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+import { toNano } from '@ton/ton'
+
+const myTransaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: destination,
+            amount: toNano("0.05").toString(),
+            payload: body.toBoc().toString("base64") // payload with comment in body
+        }
+    ]
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnectUI from '@tonconnect/ui'
+import { toNano } from '@ton/ton'
+
+const transaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: destination,
+            amount: toNano("0.05").toString(),
+            payload: body.toBoc().toString("base64") // payload with comment in body
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
+```js
+import TonConnect from '@tonconnect/sdk';
+import { toNano } from '@ton/ton'
+
+const connector = new TonConnect();
+
+await connector.sendTransaction({
+  validUntil: Math.floor(Date.now() / 1000) + 360,
+  messages: [
+    {
+      address: destination,
+      amount: toNano("0.05").toString(),
+      payload: body.toBoc().toString("base64") // payload with comment in body
+    }
+  ]
+})
+```
+</TabItem>
+</Tabs>
+
+
+### Jetton Transfer
+
+The `body` for Jetton Transfers is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
+
+:::info
+You can use `assets-sdk` library with the methods out of the box (even with `ton-connect`)
+:::
+
+
+<Tabs groupId="Jetton Transfer">
+<TabItem value="@ton/ton" label="@ton/ton">
+
+```js
+    import { beginCell, toNano, Address } from '@ton/ton'
+    // transfer#0f8a7ea5 query_id:uint64 amount:(VarUInteger 16) destination:MsgAddress
+    // response_destination:MsgAddress custom_payload:(Maybe ^Cell)
+    // forward_ton_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)
+    // = InternalMsgBody;
+
+    const body = beginCell()
+        .storeUint(0xf8a7ea5, 32)                 // jetton transfer op code
+        .storeUint(0, 64)                         // query_id:uint64
+        .storeCoins(toNano("0.001"))              // amount:(VarUInteger 16) -  Jetton amount for transfer (decimals = 6 - USDT, 9 - default). Function toNano use decimals = 9 (remember it)
+        .storeAddress(Address.parse(Wallet_DST))  // destination:MsgAddress
+        .storeAddress(Address.parse(Wallet_SRC))  // response_destination:MsgAddress
+        .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell)
+        .storeCoins(toNano("0.05"))                 // forward_ton_amount:(VarUInteger 16) - if >0, will send notification message
+        .storeUint(0,1)                           // forward_payload:(Either Cell ^Cell)
+        .endCell();
+```
+
+
+Next, sending the transaction with this body to sender's jettonWalletContract executed:
+
+<Tabs groupId="Jetton Transfer">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+import { toNano } from '@ton/ton'
+
+const myTransaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: jettonWalletContract, // sender jetton wallet
+            amount: toNano("0.05").toString(), // for commission fees, excess will be returned
+            payload: body.toBoc().toString("base64") // payload with jetton transfer body
+        }
+    ]
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
+
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnectUI from '@tonconnect/ui'
+import { toNano } from '@ton/ton'
+
+const transaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: jettonWalletContract,  // sender jetton wallet
+            amount: toNano("0.05").toString(),         // for commission fees, excess will be returned
+            payload: body.toBoc().toString("base64") // payload with jetton transfer body
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
+```js
+import TonConnect from '@tonconnect/sdk';
+import { toNano } from '@ton/ton'
+
+const connector = new TonConnect();
+//...
+await connector.sendTransaction({
+  validUntil: Math.floor(Date.now() / 1000) + 360,
+  messages: [
+    {
+      address: jettonWalletContract,            // sender jetton wallet
+      amount: toNano("0.05").toString(),                   // for commission fees, excess will be returned
+      payload: body.toBoc().toString("base64")  // payload with jetton transfer body
+    }
+  ]
+})
+```
+
+</TabItem>
+</Tabs>
+
+
+- `validUntil` - UNIX-time until message valid
+- `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts
+- `balance` - Integer, amount of Toncoin for gas payments in nanotons.
+- `body` - payload for the jettonContract
+
+
+<details>
+    <summary>Jetton Wallet State Init and Address preparation example</summary>
+
+
+```js
+import { Address, TonClient, beginCell, StateInit, storeStateInit } from '@ton/ton'
+
+async function main() {
+    const client = new TonClient({
+        endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+        apiKey: 'put your api key'
+    })
+
+    const jettonWalletAddress = Address.parse('Sender_Jetton_Wallet');
+    let jettonWalletDataResult = await client.runMethod(jettonWalletAddress, 'get_wallet_data');
+    jettonWalletDataResult.stack.readNumber();
+    const ownerAddress = jettonWalletDataResult.stack.readAddress();
+    const jettonMasterAddress = jettonWalletDataResult.stack.readAddress();
+    const jettonCode = jettonWalletDataResult.stack.readCell();
+    const jettonData = beginCell()
+        .storeCoins(0)
+        .storeAddress(ownerAddress)
+        .storeAddress(jettonMasterAddress)
+        .storeRef(jettonCode)
+        .endCell();
+
+    const stateInit: StateInit = {
+        code: jettonCode,
+        data: jettonData
+    }
+
+    const stateInitCell = beginCell()
+        .store(storeStateInit(stateInit))
+        .endCell();
+
+    console.log(new Address(0, stateInitCell.hash()));
+}
+```
+
+</details>
+</TabItem>
+<TabItem value="assets/sdk" label="assets/sdk">
+
+:::tip
+Note: For the browser, you need to set a polyfill for `Buffer`.
+:::
+For more examples check [documentation](https://github.com/ton-community/assets-sdk)
+
+```js
+const NETWORK = "testnet";
+const api = await createApi(NETWORK);
+const provider = new TonConnectUI(); // OR you can use tonConnectUI as a provider from @tonconnect/ui-react
+
+// https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
+const sender = new TonConnectSender(provider);
+
+const storage: PinataStorageParams = {
+  pinataApiKey: process.env.PINATA_API_KEY!,
+  pinataSecretKey: process.env.PINATA_SECRET!,
+};
+
+const sdk = AssetsSDK.create({
+  api,
+  storage,
+  sender,
+});
+
+const jetton = sdk.openJettonWallet(Address.parse("JETTON_ADDRESS"));
+const RECEIVER_ADDRESS = Address.parse("RECIEVER_ADDRESS");
+
+jetton.send(sender, RECEIVER_ADDRESS, toNano(10));
+```
+
+OR you can use Jetton Contract with built in methods:
+
+```ts
+const provider = tonConnectUi;
+
+// https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
+const sender = new TonConnectSender(provider);
+
+const client = new TonClient({
+  endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
+});
+
+const jettonMaster = client.open(
+  JettonMinter.createFromAddress(
+    Address.parse("[JETTON_WALLET]"),
+    new DefaultContentResolver()
+  )
+);
+
+const jettonWalletAddress = await jettonMaster.getWalletAddress(
+  sender.address!
+);
+const jettonContent = await jettonMaster.getContent();
+const jettonDecimals = jettonContent.decimals ?? 9;
+
+const jetton = client.open(JettonWallet.createFromAddress(jettonWalletAddress));
+
+await jetton.send(
+  sender,
+  Address.parse("[SENDER_WALLET]"),
+  BigInt(1 * 10 ** jettonDecimals)
+);
+
+```
+
+</TabItem>
+</Tabs>
+
+
+### Jetton Transfer with Comment
+
+<Tabs groupId="Jetton Transfer with Comment">
+<TabItem value="@ton/ton" label="@ton/ton">
+
+The `messageBody` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) with comment we should additionally to the regular transfer `body` serialize comment and pack this in the `forwardPayload`. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
+
+```js
+    import { beginCell, toNano, Address } from '@ton/ton'
+    // transfer#0f8a7ea5 query_id:uint64 amount:(VarUInteger 16) destination:MsgAddress
+    // response_destination:MsgAddress custom_payload:(Maybe ^Cell)
+    // forward_ton_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)
+    // = InternalMsgBody;
+
+    const destinationAddress = Address.parse('put destination wallet address');
+
+    const forwardPayload = beginCell()
+        .storeUint(0, 32) // 0 opcode means we have a comment
+        .storeStringTail('Hello, TON!')
+        .endCell();
+
+    const body = beginCell()
+        .storeUint(0xf8a7ea5, 32) // opcode for jetton transfer
+        .storeUint(0, 64) // query id
+        .storeCoins(toNano("5")) // Jetton amount for transfer (decimals = 6 - USDT, 9 - default). Function toNano use decimals = 9 (remember it)
+        .storeAddress(destinationAddress) // TON wallet destination address
+        .storeAddress(destinationAddress) // response excess destination
+        .storeBit(0) // no custom payload
+        .storeCoins(toNano("0.02")) // forward amount (if >0, will send notification message)
+        .storeBit(1) // we store forwardPayload as a reference
+        .storeRef(forwardPayload)
+        .endCell();
+
+```
+
+Next, sending the transaction with this body to sender's jettonWalletContract executed:
+
+<Tabs groupId="Jetton Transfer">
+  <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+    import { useTonConnectUI } from '@tonconnect/ui-react';
+	import { toNano } from '@ton/ton'
+
+
+    const jettonWalletContract = Address.parse('put your jetton wallet address');
+
+    const myTransaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+  {
+    address: jettonWalletContract, // sender jetton wallet
+    amount: toNano("0.05").toString(), // for commission fees, excess will be returned
+    payload: body.toBoc().toString("base64") // payload with jetton transfer and comment body
+  }
+    ]
+  }
+
+    export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+    <div>
+    <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+    Send transaction
+  </button>
+</div>
+);
+};
+```
+
+
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+  import TonConnectUI from '@tonconnect/ui'
+  import { toNano } from '@ton/ton'
+
+  const transaction = {
+  validUntil: Math.floor(Date.now() / 1000) + 360,
+  messages: [
+{
+  address: jettonWalletContract,  // sender jetton wallet
+  amount: toNano("0.05").toString(),         // for commission fees, excess will be returned
+  payload: body.toBoc().toString("base64") // payload with jetton transfer and comment body
+}
+  ]
+}
+
+  const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
+```js
+  import TonConnect from '@tonconnect/sdk';
+  import { toNano } from '@ton/ton'
+
+  const connector = new TonConnect();
+  //...
+  await connector.sendTransaction({
+  validUntil: Math.floor(Date.now() / 1000) + 360,
+  messages: [
+{
+  address: jettonWalletContract,            // sender jetton wallet
+  amount: toNano("0.05").toString(),                   // for commission fees, excess will be returned
+  payload: body.toBoc().toString("base64")  // payload with jetton transfer and comment body
+}
+  ]
+})
+```
+
+</TabItem>
+</Tabs>
+
+
+- `validUntil` - UNIX-time until message valid
+- `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts
+- `balance` - Integer, amount of Toncoin for gas payments in nanotons.
+- `body` - payload for the jettonContract
+
+
+<details>
+  <summary>Jetton Wallet State Init and Address preparation example</summary>
+
+
+```js
+  import { Address, TonClient, beginCell, StateInit, storeStateInit } from '@ton/ton'
+
+  async function main() {
+  const client = new TonClient({
+  endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+  apiKey: 'put your api key'
+})
+
+  const jettonWalletAddress = Address.parse('Sender_Jetton_Wallet');
+  let jettonWalletDataResult = await client.runMethod(jettonWalletAddress, 'get_wallet_data');
+  jettonWalletDataResult.stack.readNumber();
+  const ownerAddress = jettonWalletDataResult.stack.readAddress();
+  const jettonMasterAddress = jettonWalletDataResult.stack.readAddress();
+  const jettonCode = jettonWalletDataResult.stack.readCell();
+  const jettonData = beginCell()
+  .storeCoins(0)
+  .storeAddress(ownerAddress)
+  .storeAddress(jettonMasterAddress)
+  .storeRef(jettonCode)
+  .endCell();
+
+  const stateInit: StateInit = {
+  code: jettonCode,
+  data: jettonData
+}
+
+  const stateInitCell = beginCell()
+  .store(storeStateInit(stateInit))
+  .endCell();
+
+  console.log(new Address(0, stateInitCell.hash()));
+}
+```
+
+</details>
+</TabItem>
+<TabItem value="assets/sdk" label="assets/sdk">
+
+:::tip
+Note: For the browser, you need to set a polyfill for `Buffer`.
+:::
+For more examples check [documentation](https://github.com/ton-community/assets-sdk)
+
+```js
+const NETWORK = "testnet";
+const api = await createApi(NETWORK);
+const provider = new TonConnectUI(); // OR you can use tonConnectUI as a provider from @tonconnect/ui-react
+
+// https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
+const sender = new TonConnectSender(provider);
+
+const storage: PinataStorageParams = {
+  pinataApiKey: process.env.PINATA_API_KEY!,
+  pinataSecretKey: process.env.PINATA_SECRET!,
+};
+
+const sdk = AssetsSDK.create({
+  api,
+  storage,
+  sender,
+});
+
+const jetton = sdk.openJettonWallet(Address.parse("JETTON_ADDRESS"));
+
+const forwardPayload = beginCell()
+        .storeUint(0, 32) // 0 opcode means we have a comment
+        .storeStringTail('Hello, TON!')
+        .endCell();
+
+jetton.send(sender, RECEIVER_ADDRESS, toNano(10), { notify: { payload: forwardPayload } });
+```
+
+</TabItem>
+</Tabs>
+
+### Jetton Burn
+
+
+<Tabs groupId="Jetton Burn">
+<TabItem value="@ton/ton" label="@ton/ton">
+
+The `body` for Jetton Burn is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
+
+
+```js
+    import { beginCell, Address } from '@ton/ton'
+// burn#595f07bc query_id:uint64 amount:(VarUInteger 16)
+//               response_destination:MsgAddress custom_payload:(Maybe ^Cell)
+//               = InternalMsgBody;
+
+    const body = beginCell()
+        .storeUint(0x595f07bc, 32)                // jetton burn op code
+        .storeUint(0, 64)                         // query_id:uint64
+        .storeCoins(toNano("0.001"))              // amount:(VarUInteger 16) - Jetton amount in decimal (decimals = 6 - USDT, 9 - default). Function toNano use decimals = 9 (remember it)
+        .storeAddress(Address.parse(Wallet_SRC))  // response_destination:MsgAddress - owner's wallet
+        .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell) - w/o payload typically
+        .endCell();
+```
+
+Message places into the following request:
+
+
+<Tabs groupId="Jetton Burn">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+import { toNano } from '@ton/ton'
+
+const myTransaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: jettonWalletContract, // owner's jetton wallet
+            amount: toNano("0.05").toString(),  // for commission fees, excess will be returned
+            payload: body.toBoc().toString("base64") // payload with a jetton burn body
+        }
+    ]
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
+
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnectUI from '@tonconnect/ui'
+import { toNano } from '@ton/ton'
+
+const transaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: jettonWalletContract,  // owner's jetton wallet
+            amount: toNano("0.05").toString(),         // for commission fees, excess will be returned
+            payload: body.toBoc().toString("base64") // payload with a jetton burn body
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
+```js
+await connector.sendTransaction({
+  validUntil: Math.floor(Date.now() / 1000) + 360,
+  messages: [
+    {
+      address: jettonWalletContract, // owner's jetton wallet
+      amount: toNano("0.05").toString(), // for commission fees, excess will be returned
+      payload: body.toBoc().toString("base64") // payload with a jetton burn body
+    }
+  ]
+})
+```
+
+</TabItem>
+</Tabs>
+
+- `jettonWalletAddress` - Jetton Wallet contract address, that defined based on JettonMaser and Wallet contracts
+- `amount` - Integer, amount of Toncoin for gas payments in nanotons.
+- `body` - payload for the jetton wallet with the `burn#595f07bc` op code
+
+</TabItem>
+<TabItem value="assets/sdk" label="assets/sdk">
+
+:::tip
+Note: For the browser, you need to set a polyfill for `Buffer`.
+:::
+For more examples check [documentation](https://github.com/ton-community/assets-sdk)
+
+```js
+const NETWORK = "testnet";
+const api = await createApi(NETWORK);
+const provider = new TonConnectUI(); // OR you can use tonConnectUI as a provider from @tonconnect/ui-react
+
+// https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
+const sender = new TonConnectSender(provider);
+
+const storage: PinataStorageParams = {
+  pinataApiKey: process.env.PINATA_API_KEY!,
+  pinataSecretKey: process.env.PINATA_SECRET!,
+};
+
+const sdk = AssetsSDK.create({
+  api,
+  storage,
+  sender,
+});
+
+const jetton = sdk.openJettonWallet(Address.parse("JETTON_ADDRESS"));
+
+jetton.sendBurn(sender, toNano(10));
+```
+
+OR you can use Jetton Contract with built in methods:
+
+```ts
+const provider = tonConnectUi;
+
+// https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
+const sender = new TonConnectSender(provider);
+
+const client = new TonClient({
+  endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
+});
+
+const jettonMaster = client.open(
+  JettonMinter.createFromAddress(
+    Address.parse("[JETTON_WALLET]"),
+    new DefaultContentResolver()
+  )
+);
+
+const jettonWalletAddress = await jettonMaster.getWalletAddress(
+  sender.address!
+);
+const jettonContent = await jettonMaster.getContent();
+const jettonDecimals = jettonContent.decimals ?? 9;
+
+const jetton = client.open(JettonWallet.createFromAddress(jettonWalletAddress));
+
+await jetton.sendBurn(
+  sender,
+  BigInt(1 * 10 ** jettonDecimals)
+);
+
+```
+
+
+</TabItem>
+</Tabs>
+
+### NFT Transfer
+
+<Tabs groupId="NFT Transfer">
+<TabItem value="@ton/ton" label="@ton/ton">
+The `body` message typically should be done according the following way:
+
+```js
+import { beginCell, toNano } from '@ton/ton'
+
+//  transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress custom_payload:(Maybe ^Cell)
+//   forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;
+
+    const body = beginCell()
+        .storeUint(0x5fcc3d14, 32)               // NFT transfer op code 0x5fcc3d14
+        .storeUint(0, 64)                        // query_id:uint64
+        .storeAddress(Address.parse(NEW_OWNER_WALLET)) // new_owner:MsgAddress
+        .storeAddress(Address.parse(Wallet_DST))       // response_destination:MsgAddress
+        .storeUint(0, 1)                         // custom_payload:(Maybe ^Cell)
+        .storeCoins(1)                           // forward_amount:(VarUInteger 16) (1 nanoTon = toNano("0.000000001"))
+        .storeUint(0,1)                          // forward_payload:(Either Cell ^Cell)
+        .endCell();
+```
+
+`WALLET_DST` - Address - The address of the initial NFT owner for the receiving excess
+Transfer the `NFTitem` to a new owner `NEW_OWNER_WALLET`.
+
+<Tabs groupId="NFT Transfer">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+import { toNano } from '@ton/ton'
+
+const myTransaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: jettonWalletContract, // NFT Item address, which will be transferred
+            amount: toNano("0.05").toString(),  // for commission fees, excess will be returned
+            payload: body.toBoc().toString("base64") // payload with a NFT transfer body
+        }
+    ]
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
+
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnectUI from '@tonconnect/ui'
+import { toNano } from '@ton/ton'
+
+const transaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: NFTitem,  // NFT Item address, which will be transferred
+            amount: toNano("0.05").toString(),  // for commission fees, excess will be returned
+            payload: body.toBoc().toString("base64") // payload with a NFT transfer body
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
+```js
+await connector.sendTransaction({
+  validUntil: Math.floor(Date.now() / 1000) + 360,
+  messages: [
+    {
+      address: NFTitem, // NFT Item address, which will be transferred
+      amount: toNano("0.05").toString(),  // for commission fees, excess will be returned
+      payload: body.toBoc().toString("base64") // payload with a NFT transfer body
+    }
+  ]
+})
+```
+</TabItem>
+</Tabs>
+
+- `NFTitem` - Address - The address of NFT item smart contract which we want transfer to a new owner `NEW_OWNER_WALLET`.
+- `balance` - Integer, amount of Toncoin for gas payments in nanotons.
+- `body` - payload for the NFT contract
+
+</TabItem>
+
+<TabItem value="assets/sdk" label="assets/sdk">
+
+:::tip
+Note: For the browser, you need to set a polyfill for `Buffer`.
+:::
+For more examples check [documentation](https://github.com/ton-community/assets-sdk)
+
+```js
+const NETWORK = "testnet";
+const api = await createApi(NETWORK);
+const provider = new TonConnectUI(); // OR you can use tonConnectUI as a provider from @tonconnect/ui-react
+
+// https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
+const sender = new TonConnectSender(provider);
+
+const storage: PinataStorageParams = {
+  pinataApiKey: process.env.PINATA_API_KEY!,
+  pinataSecretKey: process.env.PINATA_SECRET!,
+};
+
+const sdk = AssetsSDK.create({
+  api,
+  storage,
+  sender,
+});
+
+const nft = sdk.openNftItem(Address.parse("NFT_ADDRESS"));
+const RECEIVER_ADDRESS = Address.parse("RECIEVER_ADDRESS");
+
+nft.send(sender, RECEIVER_ADDRESS);
+```
+
+OR you can use NFT Contract with built in methods:
+
+```ts
+const client = new TonClient({
+  endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
+});
+const provider = tonConnectUi;
+const nftItem = client.open(
+  NftItem.createFromAddress(Address.parse("[NFT_WALLET]"))
+);
+
+// https://github.com/ton-community/assets-sdk/blob/main/examples/use-tonconnect.ts
+const sender = new TonConnectSender(provider);
+await nftItem.send(sender, Address.parse("[SENDER_WALLET]"));
+
+// TIP: NFTs can include royalties, allowing creators to earn a percentage from each sale.
+// Here is an example of how to get it.
+const royalty = await nftItem.getRoyaltyParams();
+const royaltyPercent =
+  Number(royalty.numerator) / Number(royalty.denominator);
+```
+
+</TabItem>
+</Tabs>
+
+### NFT Sale (GetGems)
+
+Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
+
+To place NFT on GetGems Sale Contract, we should prepare special message body `transferNftBody` that will be transfer NFT to special NFT Sale Contract.
+```js
+    const transferNftBody = beginCell()
+        .storeUint(0x5fcc3d14, 32) // Opcode for NFT transfer
+        .storeUint(0, 64) // query_id
+        .storeAddress(Address.parse(destinationAddress)) // new_owner - GetGems sale contracts deployer, should never change for this operation
+        .storeAddress(Address.parse(walletAddress)) // response_destination for excesses
+        .storeBit(0) // we do not have custom_payload
+        .storeCoins(toNano("0.2")) // forward_amount
+        .storeBit(0) // we store forward_payload is this cell
+        .storeUint(0x0fe0ede, 31) // not 32, because previous 0 will be read as do_sale opcode in deployer
+        .storeRef(stateInitCell)
+        .storeRef(saleBody)
+        .endCell();
+```
+
+Because message requires a lot of steps, the entire algorithm huge and could be found here:
+<details>
+    <summary>Show entire algorithm for the creating NFT Sale message body</summary>
+
+
+```js
+import { Address, beginCell, StateInit, storeStateInit, toNano, Cell } from '@ton/ton'
+
+async function main() {
+    // func:0.4.4 src:op-codes.fc, imports/stdlib.fc, nft-fixprice-sale-v3r3.fc
+    // If GetGems updates its sale smart contract, you will need to obtain the new smart contract from https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/nft-fixprice-sale-v3/NftFixpriceSaleV3.source.ts.
+    const NftFixPriceSaleV3R3CodeBoc = 'te6ccgECDwEAA5MAART/APSkE/S88sgLAQIBYgIDAgLNBAUCASANDgL30A6GmBgLjYSS+CcH0gGHaiaGmAaY/9IH0gfSB9AGppj+mfmBg4KYVjgGAASpiFaY+F7xDhgEoYBWmfxwjFsxsLcxsrZBZjgsk5mW8oBfEV4ADJL4dwEuuk4QEWQIEV3RXgAJFZ2Ngp5OOC2HGBFWAA+WjKFkEINjYQQF1AYHAdFmCEAX14QBSYKBSML7y4cIk0PpA+gD6QPoAMFOSoSGhUIehFqBSkCH6RFtwgBDIywVQA88WAfoCy2rJcfsAJcIAJddJwgKwjhtQRSH6RFtwgBDIywVQA88WAfoCy2rJcfsAECOSNDTiWoMAGQwMWyy1DDQ0wchgCCw8tGVIsMAjhSBAlj4I1NBobwE+CMCoLkTsPLRlpEy4gHUMAH7AATwU8fHBbCOXRNfAzI3Nzc3BPoA+gD6ADBTIaEhocEB8tGYBdD6QPoA+kD6ADAwyDICzxZY+gIBzxZQBPoCyXAgEEgQNxBFEDQIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVOCz4wIwMTcowAPjAijAAOMCCMACCAkKCwCGNTs7U3THBZJfC+BRc8cF8uH0ghAFE42RGLry4fX6QDAQSBA3VTIIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVADiODmCEAX14QAYvvLhyVNGxwVRUscFFbHy4cpwIIIQX8w9FCGAEMjLBSjPFiH6Astqyx8Vyz8nzxYnzxYUygAj+gITygDJgwb7AHFwVBcAXjMQNBAjCMjLABfLH1AFzxZQA88WAc8WAfoCzMsfyz/J7VQAGDY3EDhHZRRDMHDwBQAgmFVEECQQI/AF4F8KhA/y8ADsIfpEW3CAEMjLBVADzxYB+gLLaslx+wBwIIIQX8w9FMjLH1Iwyz8kzxZQBM8WE8oAggnJw4D6AhLKAMlxgBjIywUnzxZw+gLLaswl+kRbyYMG+wBxVWD4IwEIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVACHvOFnaiaGmAaY/9IH0gfSB9AGppj+mfmC3ofSB9AH0gfQAYKaFQkNDggPlozJP9Ii2TfSItkf0iLcEIIySsKAVgAKrAQAgb7l72omhpgGmP/SB9IH0gfQBqaY/pn5gBaH0gfQB9IH0AGCmxUJDQ4ID5aM0U/SItlH0iLZH9Ii2F4ACFiBqqiU'
+    const NftFixPriceSaleV3R3CodeCell = Cell.fromBoc(Buffer.from(NftFixPriceSaleV3R3CodeBoc, 'base64'))[0]
+
+    const marketplaceAddress = Address.parse('EQBYTuYbLf8INxFtD8tQeNk5ZLy-nAX9ahQbG_yl1qQ-GEMS'); // GetGems Address
+    const marketplaceFeeAddress = Address.parse('EQCjk1hh952vWaE9bRguFkAhDAL5jj3xj9p0uPWrFBq_GEMS'); // GetGems Address for Fees
+    const destinationAddress = Address.parse("EQAIFunALREOeQ99syMbO6sSzM_Fa1RsPD5TBoS0qVeKQ-AR"); // GetGems sale contracts deployer
+
+    const walletAddress = Address.parse('EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162');
+    const royaltyAddress = Address.parse('EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162');
+    const nftAddress = Address.parse('EQCUWoe7hLlklVxH8gduCf45vPNocsjRP4wbX42UJ0Ja0S2f');
+    const price = toNano("5"); // 5 TON
+
+    const feesData = beginCell()
+        .storeAddress(marketplaceFeeAddress)
+        // 5% - GetGems fee
+        .storeCoins(price / BigInt(100) * BigInt(5))
+        .storeAddress(royaltyAddress)
+        // 5% - Royalty, can be changed
+        .storeCoins(price / BigInt(100) * BigInt(5))
+        .endCell();
+
+    const saleData = beginCell()
+        .storeBit(0) // is_complete
+        .storeUint(Math.round(Date.now() / 1000), 32) // created_at
+        .storeAddress(marketplaceAddress) // marketplace_address
+        .storeAddress(nftAddress) // nft_address
+        .storeAddress(walletAddress) // previous_owner_address
+        .storeCoins(price) // full price in nanotons
+        .storeRef(feesData) // fees_cell
+        .storeUint(0, 32) // sold_at
+        .storeUint(0, 64) // query_id
+        .endCell();
+
+    const stateInit: StateInit = {
+        code: NftFixPriceSaleV3R3CodeCell,
+        data: saleData
+    };
+    const stateInitCell = beginCell()
+        .store(storeStateInit(stateInit))
+        .endCell();
+
+    // not needed, just for example
+    const saleContractAddress = new Address(0, stateInitCell.hash());
+
+    const saleBody = beginCell()
+        .storeUint(1, 32) // just accept coins on deploy
+        .storeUint(0, 64)
+        .endCell();
+
+    const transferNftBody = beginCell()
+        .storeUint(0x5fcc3d14, 32) // Opcode for NFT transfer
+        .storeUint(0, 64) // query_id
+        .storeAddress(destinationAddress) // new_owner
+        .storeAddress(walletAddress) // response_destination for excesses
+        .storeBit(0) // we do not have custom_payload
+        .storeCoins(toNano("0.2")) // forward_amount
+        .storeBit(0) // we store forward_payload is this cell
+        .storeUint(0x0fe0ede, 31) // not 32, because we stored 0 bit before | do_sale opcode for deployer
+        .storeRef(stateInitCell)
+        .storeRef(saleBody)
+        .endCell();
+}
+```
+
+</details>
+
+Prepared `transferNftBody` should be sent to the NFT Item Contract with at least `1.08` TON, that expected for success processing. Excess will be returned to a sender's wallet.
+
+<Tabs groupId="NFT Sale Fix Price">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+import { toNano } from '@ton/ton'
+
+const myTransaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: NFTitem, //address of the NFT Item contract, that should be placed on market
+            amount: toNano("0.3").toString(), // amount that will require on gas fees, excess will be return
+            payload: transferNftBody.toBoc().toString("base64") // payload with the transferNftBody message
+        }
+    ]
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnectUI from '@tonconnect/ui'
+import { toNano } from '@ton/ton'
+
+const transaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: NFTitem, //address of NFT Item contract, that should be placed on market
+            amount: toNano("0.3").toString(), // amount that will require on gas fees, excess will be return
+            payload: transferNftBody.toBoc().toString("base64") // payload with the transferNftBody message
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
+```js
+await connector.sendTransaction({
+  validUntil: Math.floor(Date.now() / 1000) + 360,
+  messages: [
+    {
+      address: NFTitem, //address of NFT Item contract, that should be placed on market
+      amount: toNano("0.3").toString(), // amount that will require on gas fees, excess will be return
+      payload: transferNftBody.toBoc().toString("base64") // payload with the transferNftBody message
+    }
+  ]
+})
+```
+</TabItem>
+</Tabs>
+
+### NFT Buy (GetGems)
+
+<Tabs groupId="NFT Buy tabs">
+<TabItem value="@ton/ton" label="@ton/ton">
+
+The process of buy NFT for [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) sale contract could be carry out with regular transfer without payload, the only important thing is accurate TON amount, that calculates as follows:
+`buyAmount = Nftprice TON + 1.0 TON`.
+
+<Tabs groupId="NFT Buy">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+import { toNano } from '@ton/ton'
+
+const myTransaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: nftSaleContract,  // NFT Sale contract, that is current desired NFT Item
+            amount: toNano(buyAmount).toString(), // NFT Price + exactly 1 TON, excess will be returned
+        }
+    ]
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
+
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnectUI from '@tonconnect/ui'
+import { toNano } from '@ton/ton'
+
+const transaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: nftSaleContract,  // NFT Sale contract, that is current desired NFT Item
+            amount: toNano(buyAmount).toString(), // NFT Price + exactly 1 TON, excess will be returned
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+</TabItem>
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
+```js
+await connector.sendTransaction({
+validUntil: Math.floor(Date.now() / 1000) + 360,
+messages: [
+    {
+        address: nftSaleContract,  // NFT Sale contract, that is current desired NFT Item
+        amount: toNano(buyAmount).toString(), // NFT Price + exactly 1 TON, excess will be returned
+    }
+]
+})
+```
+
+</TabItem>
+</Tabs>
+
+</TabItem>
+<TabItem value="assets/sdk" label="assets/sdk">
+
+:::tip
+Note: For the browser, you need to set a polyfill for `Buffer`.
+:::
+For more examples check [documentation](https://github.com/ton-community/assets-sdk)
+
+```js
+const nft = sdk.openNftSale(Address.parse("NFT_ADDRESS"));
+nft.sendBuy(sdk.sender!, { queryId: BigInt(1) })
+```
+
+</TabItem>
+</Tabs>
+
+## TON Connect Python SDK
+
+Python examples are using [PyTonConnect](https://github.com/XaBbl4/pytonconnect) and [pytoniq](https://github.com/yungwine/pytoniq).
+
+```python
+    from pytoniq_core import Address
+    from pytonconnect import TonConnect
+```
+
+:::tip
+Read examples [source](https://github.com/yungwine/ton-connect-examples/blob/master/main.py).
+:::
+
+### Regular TON Transfer
+
+
+```python
+connector = TonConnect(
+    manifest_url='https://raw.githubusercontent.com/XaBbl4/pytonconnect/main/pytonconnect-manifest.json')
+is_connected = await connector.restore_connection()
+
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        {
+            'address' :'0:0000000000000000000000000000000000000000000000000000000000000000', # destination address
+            'amount' : 1000000000,  # amount should be specified in nanocoins, 1 TON
+        }
+    ]
+}
+```
+
+
+### Transfer With Comment
+
+At first order, implement a message with comment via the following function:
+
+```python
+    def get_comment_message(destination_address: str, amount: int, comment: str) -> dict:
+
+        data = {
+            'address': destination_address,
+            'amount': str(amount),
+            'payload': urlsafe_b64encode(
+                begin_cell()
+                .store_uint(0, 32)  # op code for comment message
+                .store_string(comment)  # store comment
+                .end_cell()  # end cell
+                .to_boc()  # convert it to boc
+            )
+            .decode()  # encode it to urlsafe base64
+        }
+
+        return data
+```
+
+Final transaction body for transfer with comment:
+
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        get_comment_message(
+            destination_address='0:0000000000000000000000000000000000000000000000000000000000000000',
+            amount=int(0.01 * 10**9),  # amount should be specified in nanocoins
+            comment='hello world!'
+        )
+    ]
+}
+```
+:::tip
+Learn more about [TON Smart Contract Addresses](/v3/documentation/smart-contracts/addresses).
+:::
+
+### Jetton Transfer
+
+Example of function for building jetton transfer transaction. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
+
+```python
+from pytoniq_core import begin_cell
+from base64 import urlsafe_b64encode
+
+def get_jetton_transfer_message(jetton_wallet_address: str, recipient_address: str, transfer_fee: int, jettons_amount: int, response_address: str = None) -> dict:
+    data = {
+        'address': jetton_wallet_address,
+        'amount': str(transfer_fee),
+        'payload': urlsafe_b64encode(
+        begin_cell()
+        .store_uint(0xf8a7ea5, 32)  # op code for jetton transfer message
+        .store_uint(0, 64)  # query_id
+        .store_coins(jettons_amount) # Jetton amount for transfer (decimals = 6 - USDT, 9 - default). Exapmple: 1 USDT = 1 * 10**6 and 1 TON = 1 * 10**9
+        .store_address(recipient_address)  # destination address
+        .store_address(response_address or recipient_address)  # address send excess to
+        .store_uint(0, 1)  # custom payload
+        .store_coins(1)  # forward amount
+        .store_uint(0, 1)  # forward payload
+        .end_cell()  # end cell
+        .to_boc()  # convert it to boc
+        )
+        .decode()  # encode it to urlsafe base64
+    }
+
+    return data
+```
+
+Final transaction body:
+
+
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        get_jetton_transfer_message(
+        jetton_wallet_address='EQCXsVvdxTVmSIvYv4tTQoQ-0Yq9mERGTKfbsIhedbN5vTVV',
+        recipient_address='0:0000000000000000000000000000000000000000000000000000000000000000',
+        transfer_fee=int(0.07 * 10**9),
+        jettons_amount=int(0.01 * 10**9),  # replace 9 for jetton decimal. For example for USDT it should be (amount * 10**6)
+        response_address=wallet_address
+        ),
+    ]
+}
+
+```
+
+
+### Jetton Burn
+
+Example of function for building jetton burn transaction. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
+
+```python
+from pytoniq_core import begin_cell
+from base64 import urlsafe_b64encode
+
+def get_jetton_burn_message(jetton_wallet_address: str, transfer_fee: int, jettons_amount: int, response_address: str = None) -> dict:
+    data = {
+        'address': jetton_wallet_address,
+        'amount': str(transfer_fee),
+        'payload': urlsafe_b64encode(
+            begin_cell()
+            .store_uint(0x595f07bc, 32)  # op code for jetton burn message
+            .store_uint(0, 64)  # query_id
+            .store_coins(jettons_amount) # Jetton amount in decimal (decimals = 6 - USDT, 9 - default)
+            .store_address(response_address)  # address send excess to
+            .end_cell()  # end cell
+            .to_boc()  # convert it to boc
+        )
+        .decode()  # encode it to urlsafe base64
+    }
+    return data
+```
+
+The final transaction body:
+
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        get_jetton_burn_message(
+            jetton_wallet_address='EQCXsVvdxTVmSIvYv4tTQoQ-0Yq9mERGTKfbsIhedbN5vTVV',
+            transfer_fee=int(0.07 * 10 ** 9),
+            jettons_amount=int(0.01 * 10 ** 9),  # replace 9 for jetton decimal. For example for jUSDT it should be (amount * 10**6)
+            response_address=wallet_address
+        ),
+    ]
+}
+```
+
+
+### NFT Transfer
+
+Example of function for a NFT transfer transaction:
+
+
+```python
+from pytoniq_core import begin_cell
+from base64 import urlsafe_b64encode
+
+
+def get_nft_transfer_message(nft_address: str, recipient_address: str, transfer_fee: int, response_address: str = None) -> dict:
+    data = {
+        'address': nft_address,
+        'amount': str(transfer_fee),
+        'payload': urlsafe_b64encode(
+            begin_cell()
+            .store_uint(0x5fcc3d14, 32)  # op code for nft transfer message
+            .store_uint(0, 64)  # query_id
+            .store_address(recipient_address)  # new owner
+            .store_address(response_address or recipient_address)  # address send excess to
+            .store_uint(0, 1)  # custom payload
+            .store_coins(1)  # forward amount (0.000000001 * 10 ** 9) = 1 nanoTon
+            .store_uint(0, 1)  # forward payload
+            .end_cell()  # end cell
+            .to_boc()  # convert it to boc
+        )
+        .decode()  # encode it to urlsafe base64
+    }
+    return data
+
+```
+
+The final transaction body:
+
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        get_nft_transfer_message(
+            nft_address='EQDrA-3zsJXTfGo_Vdzg8d07Da4vSdHZllc6W9qvoNoMstF-',
+            recipient_address='0:0000000000000000000000000000000000000000000000000000000000000000',
+            transfer_fee=int(0.07 * 10**9),
+            response_address=wallet_address
+        ),
+    ]
+}
+```
+
+
+### NFT Sale (GetGems)
+
+
+Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
+
+To place NFT on GetGems Sale Contract, we should prepare special message body `transferNftBody` that will be transfer NFT to special NFT Sale Contract.
+
+
+<details>
+<summary>Example of creating NFT Sale Body</summary>
+
+```python
+import time
+from base64 import urlsafe_b64encode
+
+from pytoniq_core.boc import Cell, begin_cell, Address
+from pytoniq_core.tlb import StateInit
+
+
+def get_sale_body(wallet_address: str, royalty_address: str, nft_address: str, price: int, amount: int):
+    # func:0.4.4 src:op-codes.fc, imports/stdlib.fc, nft-fixprice-sale-v3r3.fc
+    # If GetGems updates its sale smart contract, you will need to obtain the new smart contract from https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/nft-fixprice-sale-v3/NftFixpriceSaleV3.source.ts.
+    nft_sale_code_cell = Cell.one_from_boc('te6ccgECDwEAA5MAART/APSkE/S88sgLAQIBYgIDAgLNBAUCASANDgL30A6GmBgLjYSS+CcH0gGHaiaGmAaY/9IH0gfSB9AGppj+mfmBg4KYVjgGAASpiFaY+F7xDhgEoYBWmfxwjFsxsLcxsrZBZjgsk5mW8oBfEV4ADJL4dwEuuk4QEWQIEV3RXgAJFZ2Ngp5OOC2HGBFWAA+WjKFkEINjYQQF1AYHAdFmCEAX14QBSYKBSML7y4cIk0PpA+gD6QPoAMFOSoSGhUIehFqBSkCH6RFtwgBDIywVQA88WAfoCy2rJcfsAJcIAJddJwgKwjhtQRSH6RFtwgBDIywVQA88WAfoCy2rJcfsAECOSNDTiWoMAGQwMWyy1DDQ0wchgCCw8tGVIsMAjhSBAlj4I1NBobwE+CMCoLkTsPLRlpEy4gHUMAH7AATwU8fHBbCOXRNfAzI3Nzc3BPoA+gD6ADBTIaEhocEB8tGYBdD6QPoA+kD6ADAwyDICzxZY+gIBzxZQBPoCyXAgEEgQNxBFEDQIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVOCz4wIwMTcowAPjAijAAOMCCMACCAkKCwCGNTs7U3THBZJfC+BRc8cF8uH0ghAFE42RGLry4fX6QDAQSBA3VTIIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVADiODmCEAX14QAYvvLhyVNGxwVRUscFFbHy4cpwIIIQX8w9FCGAEMjLBSjPFiH6Astqyx8Vyz8nzxYnzxYUygAj+gITygDJgwb7AHFwVBcAXjMQNBAjCMjLABfLH1AFzxZQA88WAc8WAfoCzMsfyz/J7VQAGDY3EDhHZRRDMHDwBQAgmFVEECQQI/AF4F8KhA/y8ADsIfpEW3CAEMjLBVADzxYB+gLLaslx+wBwIIIQX8w9FMjLH1Iwyz8kzxZQBM8WE8oAggnJw4D6AhLKAMlxgBjIywUnzxZw+gLLaswl+kRbyYMG+wBxVWD4IwEIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVACHvOFnaiaGmAaY/9IH0gfSB9AGppj+mfmC3ofSB9AH0gfQAYKaFQkNDggPlozJP9Ii2TfSItkf0iLcEIIySsKAVgAKrAQAgb7l72omhpgGmP/SB9IH0gfQBqaY/pn5gBaH0gfQB9IH0AGCmxUJDQ4ID5aM0U/SItlH0iLZH9Ii2F4ACFiBqqiU')
+
+    # fees cell
+
+    marketplace_address = Address('EQBYTuYbLf8INxFtD8tQeNk5ZLy-nAX9ahQbG_yl1qQ-GEMS')
+    marketplace_fee_address = Address('EQCjk1hh952vWaE9bRguFkAhDAL5jj3xj9p0uPWrFBq_GEMS')
+    destination_address = Address('EQAIFunALREOeQ99syMbO6sSzM_Fa1RsPD5TBoS0qVeKQ-AR')
+
+    wallet_address = Address(wallet_address)
+    royalty_address = Address(royalty_address)
+    nft_address = Address(nft_address)
+
+    marketplace_fee = int(price * 5 / 100)  # 5%
+    royalty_fee = int(price * 5 / 100)  # 5%
+
+    fees_data_cell = (begin_cell()
+                      .store_address(marketplace_fee_address)
+                      .store_coins(marketplace_fee)
+                      .store_address(royalty_address)
+                      .store_coins(royalty_fee)
+                      .end_cell())
+
+
+    sale_data_cell = (begin_cell()
+                      .store_bit_int(0) # is_complete
+                      .store_uint(int(time.time()), 32) # created_at
+                      .store_address(marketplace_address)
+                      .store_address(nft_address)
+                      .store_address(wallet_address)
+                      .store_coins(price)
+                      .store_ref(fees_data_cell)
+                      .store_uint(0, 32) # sold_at
+                      .store_uint(0, 64) # query_id
+                      .end_cell())
+
+    # not needed, just for example
+    state_init_cell = StateInit(code=nft_sale_code_cell, data=sale_data_cell).serialize()
+
+    sale_body = (begin_cell()
+                 .store_uint(1, 32) # just accept coins on deploy
+                 .store_uint(0, 64)
+                 .end_cell())
+
+    transfer_nft_body = (begin_cell()
+                         .store_uint(0x5fcc3d14, 32) # Opcode for NFT transfer
+                         .store_uint(0, 64) # query_id
+                         .store_address(destination_address)
+                         .store_address(wallet_address)
+                         .store_bit_int(0) # we do not have custom_payload
+                         .store_coins(int(0.2 * 10**9)) # forward_amount
+                         .store_bit_int(0) # we store forward_payload is this cell
+                         .store_uint(0x0fe0ede, 31) # not 32, because we stored 0 bit before | do_sale opcode for deployer
+                         .store_ref(state_init_cell)
+                         .store_ref(sale_body)
+                         .end_cell())
+
+    data = {
+        'address': nft_address.to_str(),
+        'amount': str(amount),
+        'payload': urlsafe_b64encode(transfer_nft_body.to_boc()).decode()
+    }
+
+    return data
+```
+
+</details>
+
+The final transaction body:
+
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        get_sale_body(
+            nft_address='EQDrA-3zsJXTfGo_Vdzg8d07Da4vSdHZllc6W9qvoNoMstF-',
+            wallet_address='0:0000000000000000000000000000000000000000000000000000000000000000',
+            royalty_address='0:0000000000000000000000000000000000000000000000000000000000000000',
+            price=int(5 * 10**9),
+            amount=int(0.3 * 10**9)
+        ),
+    ]
+}
+```
+
+### NFT Buy (GetGems)
+
+The process of buy NFT for [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) sale contract could be carry out with regular transfer without payload, the only important thing is accurate TON amount, that calculates as follows:
+`buyAmount = Nftprice TON + 1.0 TON`.
+
+
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        {
+            'address': nft_address,
+            'amount': buyAmount,
+        }
+    ]
+}
+```
+
+## TON Connect Go SDK
+
+Go examples are using [tonconnect](https://github.com/cameo-engineering/tonconnect) and [tonutils-go](https://github.com/xssnick/tonutils-go).
+
+```go
+import "github.com/cameo-engineering/tonconnect"
+import "github.com/xssnick/tonutils-go/address"
+```
+
+:::tip
+Read [tonconnect](https://github.com/cameo-engineering/tonconnect/blob/master/examples/basic/main.go) and [tonutils-go](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#how-to-use) examples.
+:::
+
+There you can find how to create tonconnect session and send transaction constructed with messages.
+
+```go
+s, _ := tonconnect.NewSession()
+// create ton links
+// ...
+// create new message msg and transaction
+boc, _ := s.SendTransaction(ctx, *tx)
+```
+
+In further examples only messages and transactions will be created.
+
+### Regular TON Transfer
+
+Example of function for building regular TON transfer message:
+
+```go
+import (
+	"fmt"
+
+	"github.com/cameo-engineering/tonconnect"
+)
+
+func Transfer(dest string, amount uint64) (*tonconnect.Message, error) {
+	msg, err := tonconnect.NewMessage(
+		dest,
+		fmt.Sprintf("%d", amount), // nanocoins to transfer/compute message
+	)
+	return msg, err
+}
+```
+Final transaction body:
+
+```go
+msg, err := Transfer("0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbLZ", uint64(math.Pow(10, 9)))
+if err != nil {
+    log.Fatal(err)
+}
+tx, err := tonconnect.NewTransaction(
+    tonconnect.WithTimeout(10*time.Minute),
+    tonconnect.WithTestnet(),
+    tonconnect.WithMessage(*msg),
+)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+### Transfer with Comment
+
+Example of function for building transfer with comment message:
+
+```go
+import (
+	"fmt"
+
+	"github.com/cameo-engineering/tonconnect"
+	"github.com/xssnick/tonutils-go/tvm/cell"
+)
+
+func TransferWithComment(dest string, amount uint64, comment string) (*tonconnect.Message, error) {
+	payload, _ := cell.BeginCell().
+		MustStoreUInt(0, 32).
+		MustStoreStringSnake(comment).
+		EndCell().MarshalJSON()
+	msg, err := tonconnect.NewMessage(
+		dest,
+		fmt.Sprintf("%d", amount), // nanocoins to transfer/compute message
+		tonconnect.WithPayload(payload))
+	return msg, err
+}
+```
+Final transaction body:
+
+```go
+msg, err := TransferWithComment("0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbLZ", uint64(math.Pow(10, 9)), "new comment")
+if err != nil {
+    log.Fatal(err)
+}
+tx, err := tonconnect.NewTransaction(
+    tonconnect.WithTimeout(10*time.Minute),
+    tonconnect.WithTestnet(),
+    tonconnect.WithMessage(*msg),
+)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+### Jetton Transfer
+
+Example of function for jetton transfer message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
+
+```go
+import (
+	"fmt"
+
+	"github.com/cameo-engineering/tonconnect"
+	"github.com/xssnick/tonutils-go/address"
+	"github.com/xssnick/tonutils-go/tvm/cell"
+)
+
+func JettonTransferMessage(jetton_wallet_address string, amount uint64,
+	jettons_amount uint64, recipient_address, response_address string,
+	fwd_amount uint64, fwd_payload *cell.Cell) (*tonconnect.Message, error) {
+	payload, _ := cell.BeginCell().
+		MustStoreUInt(0xf8a7ea5, 32). // op code for jetton transfer message (op::transfer)
+		MustStoreUInt(0, 64).         // query_id
+		MustStoreCoins(jettons_amount). // Jetton amount for transfer (decimals = 6 - USDT, 9 - default). Exapmple: 1 USDT = 1 * 10**6 and 1 TON = 1 * 10**9
+		MustStoreAddr(address.MustParseAddr(recipient_address)). // address send excess to
+		MustStoreAddr(address.MustParseAddr(response_address)).
+		MustStoreUInt(0, 1).        // custom payload
+		MustStoreCoins(fwd_amount). // set 0 if don't want transfer notification
+		MustStoreMaybeRef(fwd_payload).
+		EndCell().MarshalJSON()
+
+	msg, err := tonconnect.NewMessage(
+		jetton_wallet_address,
+		fmt.Sprintf("%d", amount), // nanocoins to transfer/compute message
+		tonconnect.WithPayload(payload))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return msg, nil
+}
+```
+
+Final transaction body:
+
+```go
+msg, err := JettonTransferMessage("kQA8Q7m_pSNPr6FcqRYxllpAZv-0ieXy_KYER2iP195hBXiX",
+                                    uint64(math.Pow(10, 9)),
+                                    uint64(10),
+                                    "0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbL2",
+                                    "EQBuObr2M7glm08w6cBGjIuuCbmvBFGwuVs6qb3AQpac9XpX",
+                                    uint64(0), nil)
+if err != nil {
+    log.Fatal(err)
+}
+tx, err := tonconnect.NewTransaction(
+    tonconnect.WithTimeout(10*time.Minute),
+    tonconnect.WithTestnet(),
+    tonconnect.WithMessage(*msg),
+)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+### Jetton Burn
+
+Example of function for jetton burn message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 * 10**9), while TON uses 9 decimals(1 TON = 1 * 10**9).
+
+```go
+import (
+	"fmt"
+
+	"github.com/cameo-engineering/tonconnect"
+	"github.com/xssnick/tonutils-go/address"
+	"github.com/xssnick/tonutils-go/tvm/cell"
+)
+
+func JettonBurnMessage(jetton_wallet_address string, amount uint64,
+	jettons_amount uint64, response_address string) (*tonconnect.Message, error) {
+
+	payload, _ := cell.BeginCell().
+		MustStoreUInt(0xf8a7ea5, 32).                           // op code for jetton burn message (op::burn)
+		MustStoreUInt(0, 64).                                   // query_id
+		MustStoreCoins(jettons_amount).                         // Jetton amount in decimal (decimals = 6 - USDT, 9 - default)
+		MustStoreAddr(address.MustParseAddr(response_address)). // address send excess to
+		EndCell().MarshalJSON()
+
+	msg, err := tonconnect.NewMessage(
+		jetton_wallet_address,
+		fmt.Sprintf("%d", amount), // nanocoins to transfer/compute message
+		tonconnect.WithPayload(payload))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return msg, nil
+}
+```
+
+Final transaction body:
+
+```go
+msg, err := JettonBurnMessage("kQA8Q7m_pSNPr6FcqRYxllpAZv-0ieXy_KYER2iP195hBXiX",
+                                uint64(math.Pow(10, 9)),
+                                uint64(10),
+                                "EQBuObr2M7glm08w6cBGjIuuCbmvBFGwuVs6qb3AQpac9XpX")
+if err != nil {
+    log.Fatal(err)
+}
+tx, err := tonconnect.NewTransaction(
+    tonconnect.WithTimeout(10*time.Minute),
+    tonconnect.WithTestnet(),
+    tonconnect.WithMessage(*msg),
+)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+### NFT Transfer
+
+Example of function for NFT transfer message:
+
+```go
+import (
+	"fmt"
+
+	"github.com/cameo-engineering/tonconnect"
+	"github.com/xssnick/tonutils-go/address"
+	"github.com/xssnick/tonutils-go/tvm/cell"
+)
+
+func NftTransferMessage(nft_address string, amount uint64, recipient_address, response_address string,
+	fwd_amount uint64, fwd_payload *cell.Cell) (*tonconnect.Message, error) {
+
+	payload, _ := cell.BeginCell().
+		MustStoreUInt(0x5fcc3d14, 32).                           // op code for nft transfer message (op::transfer())
+		MustStoreUInt(0, 64).                                    // query_id
+		MustStoreAddr(address.MustParseAddr(recipient_address)). // new owner
+		MustStoreAddr(address.MustParseAddr(response_address)).  // address send excess to
+		MustStoreUInt(0, 1).                                     // custom payload
+		MustStoreCoins(fwd_amount).                              // set 0 if don't want transfer notification
+		MustStoreMaybeRef(fwd_payload).
+		EndCell().MarshalJSON()
+
+	msg, err := tonconnect.NewMessage(
+		nft_address,
+		fmt.Sprintf("%d", amount), // nanocoins to transfer/compute message
+		tonconnect.WithPayload(payload))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return msg, nil
+}
+```
+
+Final transaction body:
+
+```go
+msg, err := NftTransferMessage("EQDrA-3zsJXTfGo_Vdzg8d07Da4vSdHZllc6W9qvoNoMstF-",
+                                uint64(math.Pow(10, 9)),
+                                "0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbL2",
+                                "0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbL2",
+                                uint64(0), nil)
+if err != nil {
+    log.Fatal(err)
+}
+tx, err := tonconnect.NewTransaction(
+    tonconnect.WithTimeout(10*time.Minute),
+    tonconnect.WithTestnet(),
+    tonconnect.WithMessage(*msg),
+)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+### NFT Sale (GetGems)
+
+Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
+
+To place NFT on GetGems Sale Contract, we should prepare special message body `transferNftBody` that will be transfer NFT to special NFT Sale Contract.
+```go
+transferNftBody := cell.BeginCell().
+    MustStoreUInt(0x5fcc3d14, 32).        // opcode for NFT transfer
+    MustStoreUInt(0, 64).                 // query_id
+    MustStoreAddress(destinationAddress). // new_owner - GetGems sale contracts deployer, should never change for this operation
+    MustStoreAddress(walletAddress).      // response_destination for excesses
+    MustStoreUInt(0, 1).                  // we do not have custom_payload
+    MustStoreCoins(0.2*math.Pow(10, 9)).  // forward_amount
+    MustStoreUInt(0, 1).                  // we store forward_payload is this cell
+    MustStoreUInt(0x0fe0ede, 31).         // not 32, because previous 0 will be read as do_sale opcode in deployer (op::do_sale)
+    MustStoreRef(stateInitCell).
+    MustStoreRef(saleBody).
+    EndCell()
+```
+
+Because message requires a lot of steps, the entire algorithm huge and could be found here:
+<details>
+    <summary>Show entire algorithm for the creating NFT Sale message body</summary>
+
+```go
+import (
+	"fmt"
+	"math"
+	"time"
+
+	"github.com/cameo-engineering/tonconnect"
+	"github.com/xssnick/tonutils-go/address"
+	"github.com/xssnick/tonutils-go/tlb"
+	"github.com/xssnick/tonutils-go/tvm/cell"
+)
+
+func NftSaleMessage(wallet, royalty, nft string, amount, price uint64) (*tonconnect.Message, error) {
+    // func:0.4.4 src:op-codes.fc, imports/stdlib.fc, nft-fixprice-sale-v3r3.fc
+    // If GetGems updates its sale smart contract, you will need to obtain the new smart contract from https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/nft-fixprice-sale-v3/NftFixpriceSaleV3.source.ts.
+	fixPriceV3R3Code := new(cell.Cell)
+	fixPriceV3R3Code.UnmarshalJSON([]byte("te6ccgECDwEAA5MAART/APSkE/S88sgLAQIBYgIDAgLNBAUCASANDgL30A6GmBgLjYSS+CcH0gGHaiaGmAaY/9IH0gfSB9AGppj+mfmBg4KYVjgGAASpiFaY+F7xDhgEoYBWmfxwjFsxsLcxsrZBZjgsk5mW8oBfEV4ADJL4dwEuuk4QEWQIEV3RXgAJFZ2Ngp5OOC2HGBFWAA+WjKFkEINjYQQF1AYHAdFmCEAX14QBSYKBSML7y4cIk0PpA+gD6QPoAMFOSoSGhUIehFqBSkCH6RFtwgBDIywVQA88WAfoCy2rJcfsAJcIAJddJwgKwjhtQRSH6RFtwgBDIywVQA88WAfoCy2rJcfsAECOSNDTiWoMAGQwMWyy1DDQ0wchgCCw8tGVIsMAjhSBAlj4I1NBobwE+CMCoLkTsPLRlpEy4gHUMAH7AATwU8fHBbCOXRNfAzI3Nzc3BPoA+gD6ADBTIaEhocEB8tGYBdD6QPoA+kD6ADAwyDICzxZY+gIBzxZQBPoCyXAgEEgQNxBFEDQIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVOCz4wIwMTcowAPjAijAAOMCCMACCAkKCwCGNTs7U3THBZJfC+BRc8cF8uH0ghAFE42RGLry4fX6QDAQSBA3VTIIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVADiODmCEAX14QAYvvLhyVNGxwVRUscFFbHy4cpwIIIQX8w9FCGAEMjLBSjPFiH6Astqyx8Vyz8nzxYnzxYUygAj+gITygDJgwb7AHFwVBcAXjMQNBAjCMjLABfLH1AFzxZQA88WAc8WAfoCzMsfyz/J7VQAGDY3EDhHZRRDMHDwBQAgmFVEECQQI/AF4F8KhA/y8ADsIfpEW3CAEMjLBVADzxYB+gLLaslx+wBwIIIQX8w9FMjLH1Iwyz8kzxZQBM8WE8oAggnJw4D6AhLKAMlxgBjIywUnzxZw+gLLaswl+kRbyYMG+wBxVWD4IwEIyMsAF8sfUAXPFlADzxYBzxYB+gLMyx/LP8ntVACHvOFnaiaGmAaY/9IH0gfSB9AGppj+mfmC3ofSB9AH0gfQAYKaFQkNDggPlozJP9Ii2TfSItkf0iLcEIIySsKAVgAKrAQAgb7l72omhpgGmP/SB9IH0gfQBqaY/pn5gBaH0gfQB9IH0AGCmxUJDQ4ID5aM0U/SItlH0iLZH9Ii2F4ACFiBqqiU"))
+
+	marketplaceAddress := address.MustParseAddr("EQBYTuYbLf8INxFtD8tQeNk5ZLy-nAX9ahQbG_yl1qQ-GEMS")    // GetGems Address
+	marketplaceFeeAddress := address.MustParseAddr("EQCjk1hh952vWaE9bRguFkAhDAL5jj3xj9p0uPWrFBq_GEMS") // GetGems Address for Fees
+	destinationAddress := address.MustParseAddr("EQAIFunALREOeQ99syMbO6sSzM_Fa1RsPD5TBoS0qVeKQ-AR")    // GetGems sale contracts deployer
+
+	walletAddress := address.MustParseAddr(wallet)
+	royaltyAddress := address.MustParseAddr(royalty)
+	nftAddress := address.MustParseAddr(nft)
+
+	feesData := cell.BeginCell().
+		MustStoreAddr(marketplaceFeeAddress).
+		// 5% - GetGems fee
+		MustStoreCoins(price * 100 * 5).
+		MustStoreAddr(royaltyAddress).
+		// 5% - Royalty, can be changed
+		MustStoreCoins(price / 100 * 5).
+		EndCell()
+
+	saleData := cell.BeginCell().
+		MustStoreUInt(0, 1).                                // is_complete
+		MustStoreUInt(uint64(time.Now().UTC().Unix()), 32). // created_at
+		MustStoreAddr(marketplaceAddress).                  // marketplace_address
+		MustStoreAddr(nftAddress).                          // nft_address
+		MustStoreAddr(walletAddress).                       // previous_owner_address
+		MustStoreCoins(price).                              // full price in nanotons
+		MustStoreRef(feesData).                             // fees_cell
+		MustStoreUInt(0, 32).                               // sold_at
+        MustStoreUInt(0, 64).                               // query_id
+		EndCell()
+
+	stateInit := &tlb.StateInit{
+		Data: saleData,
+		Code: fixPriceV3R3Code,
+	}
+
+	stateInitCell, err := tlb.ToCell(stateInit)
+	if err != nil {
+		return nil, err
+	}
+
+	// not needed, just for example
+	// saleContractAddress := address.NewAddress(0, 0, stateInitCell.Hash())
+
+	saleBody := cell.BeginCell().
+		MustStoreUInt(1, 32). // just accept coins on deploy
+		MustStoreUInt(0, 64).
+		EndCell()
+
+	transferNftBody, err := cell.BeginCell().
+		MustStoreUInt(0x5fcc3d14, 32).             // opcode for NFT transfer
+		MustStoreUInt(0, 64).                      // query_id
+		MustStoreAddr(destinationAddress).         // new_owner - GetGems sale contracts deployer, should never change for this operation
+		MustStoreAddr(walletAddress).              // response_destination for excesses
+		MustStoreUInt(0, 1).                       // we do not have custom_payload
+		MustStoreCoins(uint64(0.2*math.Pow(10, 9))). // forward_amount
+		MustStoreUInt(0, 1).                       // we store forward_payload is this cell
+		MustStoreUInt(0x0fe0ede, 31).              // not 32, because previous 0 will be read as do_sale opcode in deployer (op::do_sale)
+		MustStoreRef(stateInitCell).
+		MustStoreRef(saleBody).
+		EndCell().MarshalJSON()
+
+	if err != nil {
+		return nil, err
+	}
+
+	msg, err := tonconnect.NewMessage(
+		nftAddress.String(),
+		fmt.Sprintf("%d", amount),
+		tonconnect.WithPayload(transferNftBody))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return msg, nil
+}
+```
+
+The final transaction body:
+
+```go
+msg, err := NftSaleMessage("EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162",
+                            "EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162",
+                            "EQCUWoe7hLlklVxH8gduCf45vPNocsjRP4wbX42UJ0Ja0S2f",
+                            uint64(0.3*math.Pow(10, 9)), uint64(5*math.Pow(10, 9)))
+if err != nil {
+    log.Fatal(err)
+}
+tx, err := tonconnect.NewTransaction(
+    tonconnect.WithTimeout(10*time.Minute),
+    tonconnect.WithTestnet(),
+    tonconnect.WithMessage(*msg),
+)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+</details>
+
+### NFT Buy (GetGems)
+
+The process of buy NFT for [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) sale contract could be carry out with regular transfer without payload, the only important thing is accurate TON amount, that calculates as follows:
+`buyAmount = Nftprice TON + 1.0 TON`.
+
+```go
+msg, err := tonconnect.NewMessage(nftAddress, buyAmount)
+if err != nil {
+    log.Fatal(err)
+}
+tx, err := tonconnect.NewTransaction(
+    tonconnect.WithTimeout(10*time.Minute),
+    tonconnect.WithTestnet(),
+    tonconnect.WithMessage(*msg),
+)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+## Authors
+- JavaScript examples provided by [@aSpite](https://t.me/aspite)
+- Python examples provided by [@yunwine](https://t.me/yungwine)
+- Go examples provided by [@gleb498](https://t.me/gleb498)
+
+## See Also
+* [TON Connect SDKs](/v3/guidelines/ton-connect/guidelines/developers)
+* [TON Connect - Sending Messages](/v3/guidelines/ton-connect/guidelines/sending-messages)
+* [Smart Contract Developmet - Sending Messages (Low Level)](/v3/documentation/smart-contracts/message-management/sending-messages)
+* [TON Jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
+* [NFT processing on TON](/v3/guidelines/dapps/asset-processing/nft-processing/nfts)
