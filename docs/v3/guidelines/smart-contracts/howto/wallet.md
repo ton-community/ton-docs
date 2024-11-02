@@ -2499,9 +2499,8 @@ await wallet.sendBatch(
     subwalletId,
     queryHandler,
     timeout,
+    createdAt,
     internalMessageValue,
-    SendMode.PAY_GAS_SEPARATELY,
-    createdAt
 );
 ```
 
