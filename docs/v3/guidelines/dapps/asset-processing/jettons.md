@@ -123,13 +123,13 @@ To retrieve more specific Jetton data use contract's _get_ method `get_jetton_da
 
 This method returns the following data:
 
-| Name               | Type  | Description |
-|--------------------|-------|-------------------- |
-| `total_supply`       | `int`  | the total number of issued jettons measured in indivisible units. |
-| `mintable`          | `int`   | details whether new jettons can be minted or not. This value is either -1 (can be minted) or 0 (cannot be minted). |
-| `admin_address`      | `slice` |   |
-| `jetton_content`     | `cell` | data in accordance with [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md), check [jetton metadata parsing page](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing) for more. |
-| `jetton_wallet_code` | `cell`  |  |
+| Name                 | Type    | Description          |
+|----------------------|---------|----------------------|
+| `total_supply`       | `int`   | the total number of issued jettons measured in indivisible units. |
+| `mintable`           | `int`   | details whether new jettons can be minted or not. This value is either -1 (can be minted) or 0 (cannot be minted). |
+| `admin_address`      | `slice` |                      |
+| `jetton_content`     | `cell`  | data in accordance with [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md), check [jetton metadata parsing page](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing) for more. |
+| `jetton_wallet_code` | `cell`  |                      |
 
 
 It is also possible to use the method `/jetton/masters` from the [Toncenter API](https://toncenter.com/api/v3/#/default/get_jetton_masters_api_v3_jetton_masters_get) to retrieve the already decoded Jetton data and metadata. We have also developed methods for (js) [tonweb](https://github.com/toncenter/tonweb/blob/master/src/contract/token/ft/JettonMinter.js#L85) and (js) [ton-core/ton](https://github.com/ton-core/ton/blob/master/src/jetton/JettonMaster.ts#L28), (go) [tongo](https://github.com/tonkeeper/tongo/blob/master/liteapi/jetton.go#L48) and (go) [tonutils-go](https://github.com/xssnick/tonutils-go/blob/33fd62d754d3a01329ed5c904db542ab4a11017b/ton/jetton/jetton.go#L79), (python) [pytonlib](https://github.com/toncenter/pytonlib/blob/d96276ec8a46546638cb939dea23612876a62881/pytonlib/client.py#L742) and many other [SDKs](/v3/guidelines/dapps/apis-sdks/sdk).
@@ -269,15 +269,15 @@ Communication between Jetton wallets and TON wallets occurs through the followin
 #### Message 0
 `Sender -> sender's jetton wallet`. _Transfer_ message contains the following data:
 
-| Name                   | Type       | Description                                                                                                                                                                                                            |
-|------------------------|------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Name                   | Type       | Description                                                                                                                                                                                                             |
+|------------------------|------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `query_id`             | uint64     | Allows applications to link three messaging types `Transfer`, `Transfer notification` and `Excesses` to each other. For this process to be carried out correctly it is recommended to **always use a unique query id**. |
 | `amount`               | coins      | Total `ton coin` amount, that will be send with message.                                                                                                                                                                |
-| `destination`          | address    | Address of the new owner of the jettons                                                                                                                                                                                |
-| `response_destination` | address    | Wallet address used to return remained ton coins with excesses message.                                                                                                                                                |
-| `custom_payload`       | maybe cell | Size always is >= 1 bit. Custom data (which is used by either sender or receiver jetton wallet for inner logic).                                                                                                       |
-| `forward_ton_amount`   | coins      | Must be > 0 if you want to send `transfer notification message` with `forward payload`. It's a **part of `amount` value** and **must be lesser than `amount`**                                                         |
-| `forward_payload`      | maybe cell | Size always is >= 1 bit. If first 32 bits = 0x0 it's just a simple message.                                                                                                                                            |
+| `destination`          | address    | Address of the new owner of the jettons                                                                                                                                                                                 |
+| `response_destination` | address    | Wallet address used to return remained ton coins with excesses message.                                                                                                                                                 |
+| `custom_payload`       | maybe cell | Size always is >= 1 bit. Custom data (which is used by either sender or receiver jetton wallet for inner logic).                                                                                                        |
+| `forward_ton_amount`   | coins      | Must be > 0 if you want to send `transfer notification message` with `forward payload`. It's a **part of `amount` value** and **must be lesser than `amount`**                                                          |
+| `forward_payload`      | maybe cell | Size always is >= 1 bit. If first 32 bits = 0x0 it's just a simple message.                                                                                                                                             |
 
 
 #### Message 2'
