@@ -133,11 +133,15 @@ module.exports = {
       type: 'dropdown',
       to: 'v3/documentation/smart-contracts/overview',
       position: 'left',
-      label: 'Program Languages',
+      label: 'Languages',
       items: [
         {
           to: 'v3/documentation/smart-contracts/func/overview',
           label: 'FunC',
+        },
+        {
+          to: 'v3/documentation/smart-contracts/tolk/overview',
+          label: 'Tolk',
         },
         {
           to: '/v3/documentation/tvm/instructions',
