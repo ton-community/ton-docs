@@ -171,23 +171,6 @@ module.exports = [
     'type': 'html',
     'value': '<span class=\'menu__link\'><b><small> Infrastructure Documentation </small></b></span>',
   },
-  'v3/documentation/infra/minter-flow',
-  {
-    type: 'category',
-    label: 'Cross-chain Bridges',
-    items: [
-      {
-        type: 'doc',
-        label: 'Overview',
-        id: 'v3/documentation/infra/crosschain/overview',
-      },
-      {
-        type: 'doc',
-        label: 'Bridges Addresses',
-        id: 'v3/documentation/infra/crosschain/bridge-addresses',
-      },
-    ],
-  },
   {
     type: 'category',
     label: 'Blockchain Nodes',
@@ -200,6 +183,7 @@ module.exports = [
           'v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview',
           'v3/documentation/infra/nodes/mytonctrl/mytonctrl-alerting',
           'v3/documentation/infra/nodes/mytonctrl/mytonctrl-status',
+          'v3/documentation/infra/nodes/mytonctrl/mytonctrl-errors',
         ],
       },
       'v3/documentation/infra/nodes/node-commands',
@@ -214,6 +198,23 @@ module.exports = [
           },
           'v3/documentation/infra/nodes/validation/collators',
         ],
+      },
+    ],
+  },
+  'v3/documentation/infra/minter-flow',
+  {
+    type: 'category',
+    label: 'Cross-chain Bridges',
+    items: [
+      {
+        type: 'doc',
+        label: 'Overview',
+        id: 'v3/documentation/infra/crosschain/overview',
+      },
+      {
+        type: 'doc',
+        label: 'Bridges Addresses',
+        id: 'v3/documentation/infra/crosschain/bridge-addresses',
       },
     ],
   },

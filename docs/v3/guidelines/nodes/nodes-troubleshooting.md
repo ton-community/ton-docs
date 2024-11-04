@@ -220,3 +220,4 @@ There are two known cases when this error appears:
 ## See Also
 
 * [MyTonCtrl FAQ](/v3/guidelines/nodes/faq)
+* [MyTonCtrl errors](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-errors)
