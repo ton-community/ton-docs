@@ -14,7 +14,7 @@ To start mining right away:
 1. Get a [computer suitable for mining](#hardware).
 2. Install [Ubuntu](https://ubuntu.com) 20.04 desktop or server distribution.
 3. Install [mytonctrl](https://github.com/igroman787/mytonctrl#installation-ubuntu) in `lite` mode.
-4. Check your hardware and [expected mining income](#faq-emi) by running `emi` command within `mytonctrl`.
+4. Check your hardware and [expected mining income](/v3/documentation/archive/mining#income-estimates) by running `emi` command within `mytonctrl`.
 5. If you do not yet have one, create `wallet address` using one of the [wallets](https://www.ton.org/wallets).
 6. Define your `wallet address` as a mining target by executing `set minerAddr "..."` in `mytonctrl`.
 7. Chose a giver contract from the list available on [ton.org/mining](https://ton.org/mining) and set your miner to mine it by executing `set powAddr "..."` in `mytonctrl`.
@@ -25,7 +25,7 @@ To start mining right away:
 ## <a id="basics"></a>Basics
 Toncoin is distributed by `PoW Givers`, which are smart contracts with specific amounts of Toncoin assigned to them. Currently, there are 10 active PoW givers on the TON Network. Each giver distributes coins in blocks of 100 TON. To earn one of these blocks, your computer must solve a complex mathematical challenge faster than other miners. If another miner solves the problem before you, your machine's work is discarded, and a new round begins.
 
-Mining profits are not gradual; they come in batches of 100 TON for each successfully solved giver challenge. This means that if your machine has a 10% chance to calculate a block within 24 hours (see step 4 of [Quick start](#quickStart)) then you will probably need to wait for ~10 days before you will get a 100 TON reward.
+Mining profits are not gradual; they come in batches of 100 TON for each successfully solved giver challenge. This means that if your machine has a 10% chance to calculate a block within 24 hours (see step 4 of [Quick start](/v3/documentation/archive/mining#quick-start)) then you will probably need to wait for ~10 days before you will get a 100 TON reward.
 
 The process of mining is largely automated by `mytonctrl`. Detailed information about the mining process can be found in [PoW givers](https://www.ton.org/#/howto/pow-givers) document.
 
@@ -59,7 +59,7 @@ A miner running in lite mode uses minimal storage space and does not store data.
 Plain miner needs the ability to open outgoing connections to the Internet.
 
 #### FPGA / ASIC
-See [can I use FPGA / ASICs?](#faq-hw-asic)
+See [can I use FPGA / ASICs?](/v3/documentation/archive/mining#can-i-use-my-btceth-rig-to-mine-ton)
 
 ### <a id="hardware-cloud"></a>Cloud machines
 Many people mine using AWS or Google compute cloud machines. As outlined in the specs above, what really matters is CPU. Therefore, we advise AWS [c5a.24xlarge](https://aws.amazon.com/ec2/instance-types/c5/) or Google [n2d-highcpu-224](https://cloud.google.com/compute/vm-instance-pricing) instances.
@@ -105,7 +105,7 @@ No, you do not. Anyone can start mining without owning a single Toncoin.
 #### <a id="faq-mining-noincome"></a>Why does my wallet balance not increase, even after hours of mining?
 TON are mined in blocks of 100, you either guess a block and receive 100 TON or receive nothing. Please see [basics](#basics).
 #### <a id="faq-mining-noblocks"></a>I've been mining for days and I see no results, why?
-Did you check your current [Income estimates](#hardware-estimates)? If field `Est. 24h chance to mine a block` is less than 100%, then you need to be patient. Also, please note that a 50% chance to mine a block within 24 hours does not automatically mean that you will mine one within 2 days; 50% applies to each day separately.
+Did you check your current [Income estimates](/v3/documentation/archive/mining#income-estimates)? If field `Est. 24h chance to mine a block` is less than 100%, then you need to be patient. Also, please note that a 50% chance to mine a block within 24 hours does not automatically mean that you will mine one within 2 days; 50% applies to each day separately.
 #### <a id="faq-mining-pools"></a>Are there mining pools?
 No, as of now there are no implementations of mining pools, everyone mines for themselves.
 #### <a id="faq-mining-giver"></a>Which giver should I mine?
@@ -114,7 +114,7 @@ It does not really matter which giver you choose. The difficulty tends to fluctu
 #### <a id="faq-hw-machine"></a>Will a faster machine always win?
 No, all miners take different roads to find the solution. A faster machine has a higher probability of success, but it doesn't guarantee victory!
 #### <a id="faq-hw-machine"></a>How much income will my machine generate?
-Please see [Income estimates](#hardware-estimates).
+Please see [Income estimates](/v3/documentation/archive/mining#income-estimates).
 #### <a id="faq-hw-asic"></a>Can I use my BTC/ETH rig to mine TON?
 No, TON uses a single SHA256 hashing method which is different from BTC, ETH, and others. ASICS or FPGAs which are built for mining other cryptos will not help. 
 #### <a id="faq-hw-svsm"></a>What is better, a single fast machine or several slow ones?
