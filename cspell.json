@@ -4,7 +4,7 @@
   "language": "en",
   "files": [
     "**/*.md",
-    "**/*.mdx",
+    "**/*.mdx"
   ],
   "dictionaries": ["tvm-instructions", "names", "commands"],
   "dictionaryDefinitions": [
@@ -19,7 +19,7 @@
     {
       "name":"commands",
       "path":"./src/grammar/commands-dictionary.txt"
-    },
+    }
   ],
   "words": [
     "ADNL",
@@ -307,6 +307,7 @@
   ],
   "flagWords": [],
   "ignorePaths": [
+    "scripts",
     "static",
     "node_modules",
     "package.json",
@@ -320,6 +321,6 @@
     "sidebars.js",
     "sidebars",
     "i18n",
-    ".husky",
+    ".husky"
   ]
 }

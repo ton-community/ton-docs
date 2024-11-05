@@ -14,7 +14,7 @@ TON transactions are irreversible after just one confirmation. For the best UX/U
 
 #### Withdrawal
 
-[Highload Wallet v3](v3/documentation/smart-contracts/contracts-specs/highload-wallet#highload-wallet-v3) - this is TON Blockchain latest solution which is the gold standard for jetton withdrawals. It allows you to take advantage of batched withdrawals.
+[Highload Wallet v3](/v3/documentation/smart-contracts/contracts-specs/highload-wallet#highload-wallet-v3) - this is TON Blockchain latest solution which is the gold standard for jetton withdrawals. It allows you to take advantage of batched withdrawals.
 
 [Batched withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload-batch.js) - Meaning that multiple withdrawals are sent in batches, allowing for quick and cheap withdrawals.
 
@@ -71,7 +71,7 @@ For the best user experience, it is suggested to avoid waiting on additional blo
 
 Quick jump to the core description of jetton processing:
 
-<Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>Centralized Proccessing</Button>
+<Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>Centralized Processing</Button>
 <Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses"
         colorType="secondary" sizeType={'sm'}>
   On-Chain Processing
@@ -443,7 +443,7 @@ const wallet = new WalletClass(tonweb.provider, {
 #### Creating deposits
 
 1. Accept a request to create a new deposit for the user.
-2. Generate a new subwallet (v3R2) address based on the hot wallet seed. [Creating a subwallet in Tonweb](#creating-a-subwallet-in-tonweb)
+2. Generate a new subwallet (/v3R2) address based on the hot wallet seed. [Creating a subwallet in Tonweb](#creating-a-subwallet-in-tonweb)
 3. The receiving address can be given to the user as the address used for Jetton deposits (this is the address of
    the owner of the deposit Jetton wallet). Wallet initialization is not required, this can be
    accomplished when withdrawing Jettons from the deposit.
@@ -493,7 +493,7 @@ transfer worthwhile (and thus deposit).
 By default, wallet owners of Jetton deposit wallets are not initialized. This is because there is no predetermined
 requirement to pay storage fees. Jetton deposit wallets can be deployed when sending messages with a
 `transfer`  body which can then be destroyed immediately. To do this, the engineer must use a special
-mechanism for sending messages: [128 + 32](/develop/smart-contracts/messages#message-modes).
+mechanism for sending messages: [128 + 32](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes).
 
 
 1. Retrieve a list of deposits marked for withdrawal to a hot wallet

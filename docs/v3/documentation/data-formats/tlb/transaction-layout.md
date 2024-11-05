@@ -22,8 +22,8 @@ transaction$0111 account_addr:bits256 lt:uint64
 
 | Field             | Type                                                                   | Required | Description                                                                                                                                                                                                           |
 | ----------------- | ---------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `account_addr`    | bits256                                                                | Yes      | The hash part of the address on which the transaction was executed. [More about addresses](v3/documentation/smart-contracts/addresses#address-of-smart-contract)                                                  |
-| `lt`              | uint64                                                                 | Yes      | Represents _Logical time_. [More about logical time](v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-logical-time)                                                      |
+| `account_addr`    | bits256                                                                | Yes      | The hash part of the address on which the transaction was executed. [More about addresses](/v3/documentation/smart-contracts/addresses#address-of-smart-contract)                                                  |
+| `lt`              | uint64                                                                 | Yes      | Represents _Logical time_. [More about logical time](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-logical-time)                                                      |
 | `prev_trans_hash` | bits256                                                                | Yes      | The hash of the previous transaction on this account.                                                                                                                                                                 |
 | `prev_trans_lt`   | uint64                                                                 | Yes      | The `lt` of the previous transaction on this account.                                                                                                                                                                 |
 | `now`             | uint32                                                                 | Yes      | The `now` value that was set when executing this transaction. It's a Unix timestamp in seconds.                                                                                                                       |
@@ -32,7 +32,7 @@ transaction$0111 account_addr:bits256 lt:uint64
 | `end_status`      | [AccountStatus](#accountstatus)                                        | Yes      | The status of this account after executing the transaction.                                                                                                                                                           |
 | `in_msg`          | (Message Any)                                                          | No       | The incoming message that triggered the execution of the transaction. Stored in a reference.                                                                                                                          |
 | `out_msgs`        | HashmapE 15 ^(Message Any)                                             | Yes      | The dictionary that contains the list of outgoing messages that were created while executing this transaction.                                                                                                        |
-| `total_fees`      | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Yes      | The total amount of fees that were collected while executing this transaction. It consists of a _Toncoin_ value and possibly some [Extra-currencies](v3/documentation/dapps/defi/coins#extra-currencies). |
+| `total_fees`      | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Yes      | The total amount of fees that were collected while executing this transaction. It consists of a _Toncoin_ value and possibly some [Extra-currencies](/v3/documentation/dapps/defi/coins#extra-currencies). |
 | `state_update`    | [HASH_UPDATE](#hash_update) Account                                    | Yes      | The `HASH_UPDATE` structure. Stored in a reference.                                                                                                                                                                   |
 | `description`     | [TransactionDescr](#transactiondescr-types)                            | Yes      | A detailed description of the transaction execution process. Stored in a reference.                                                                                                                                   |
 
@@ -89,12 +89,12 @@ trans_ord$0000 credit_first:Bool
 | Field          | Type           | Required | Description                                                                                                                                                                               |
 | -------------- | -------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `credit_first` | Bool           | Yes      | A flag that correlates with `bounce` flag of an incoming message. `credit_first = !bounce`                                                                                                |
-| `storage_ph`   | TrStoragePhase | No       | Contains information about storage phase of a transaction execution. [More Info](v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
-| `credit_ph`    | TrCreditPhase  | No       | Contains information about credit phase of a transaction execution. [More Info](v3/documentation/tvm/tvm-overview#transactions-and-phases)                         |
-| `compute_ph`   | TrComputePhase | Yes      | Contains information about compute phase of a transaction execution. [More Info](v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
-| `action`       | TrActionPhase  | No       | Contains information about action phase of a transaction execution. [More Info](v3/documentation/tvm/tvm-overview#transactions-and-phases). Stored in a reference. |
+| `storage_ph`   | TrStoragePhase | No       | Contains information about storage phase of a transaction execution. [More Info](/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
+| `credit_ph`    | TrCreditPhase  | No       | Contains information about credit phase of a transaction execution. [More Info](/v3/documentation/tvm/tvm-overview#transactions-and-phases)                         |
+| `compute_ph`   | TrComputePhase | Yes      | Contains information about compute phase of a transaction execution. [More Info](/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
+| `action`       | TrActionPhase  | No       | Contains information about action phase of a transaction execution. [More Info](/v3/documentation/tvm/tvm-overview#transactions-and-phases). Stored in a reference. |
 | `aborted`      | Bool           | Yes      | Indicates whether the transaction execution was aborted.                                                                                                                                  |
-| `bounce`       | TrBouncePhase  | No       | Contains information about bounce phase of a transaction execution. [More Info](v3/documentation/smart-contracts/message-management/non-bounceable-messages)                           |
+| `bounce`       | TrBouncePhase  | No       | Contains information about bounce phase of a transaction execution. [More Info](/v3/documentation/smart-contracts/message-management/non-bounceable-messages)                           |
 | `destroyed`    | Bool           | Yes      | Indicates whether the account was destroyed during the execution.                                                                                                                         |
 
 ## Storage
@@ -108,7 +108,7 @@ trans_storage$0001 storage_ph:TrStoragePhase
 
 | Field        | Type           | Description                                                                                                                                                        |
 | ------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `storage_ph` | TrStoragePhase | Contains information about storage phase of a transaction execution. [More Info](v3/documentation/tvm/tvm-overview#transactions-and-phases) |
+| `storage_ph` | TrStoragePhase | Contains information about storage phase of a transaction execution. [More Info](/v3/documentation/tvm/tvm-overview#transactions-and-phases) |
 
 ## Tick-tock
 
@@ -123,9 +123,9 @@ trans_tick_tock$001 is_tock:Bool storage_ph:TrStoragePhase
 | Field        | Type           | Required | Description                                                                                                                                                                               |
 | ------------ | -------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `is_tock`    | Bool           | Yes      | A flag indicating the type of transaction. Used to separate `Tick` and `Tock` transactions                                                                                                |
-| `storage_ph` | TrStoragePhase | Yes      | Contains information about storage phase of a transaction execution. [More Info](v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
-| `compute_ph` | TrComputePhase | Yes      | Contains information about compute phase of a transaction execution. [More Info](v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
-| `action`     | TrActionPhase  | No       | Contains information about action phase of a transaction execution. [More Info](v3/documentation/tvm/tvm-overview#transactions-and-phases). Stored in a reference. |
+| `storage_ph` | TrStoragePhase | Yes      | Contains information about storage phase of a transaction execution. [More Info](/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
+| `compute_ph` | TrComputePhase | Yes      | Contains information about compute phase of a transaction execution. [More Info](/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
+| `action`     | TrActionPhase  | No       | Contains information about action phase of a transaction execution. [More Info](/v3/documentation/tvm/tvm-overview#transactions-and-phases). Stored in a reference. |
 | `aborted`    | Bool           | Yes      | Indicates whether the transaction execution was aborted.                                                                                                                                  |
 | `destroyed`  | Bool           | Yes      | Indicates whether the account was destroyed during the execution.                                                                                                                         |
 
@@ -150,9 +150,9 @@ trans_split_prepare$0100 split_info:SplitMergeInfo
 | Field        | Type           | Required | Description                                                                                                                                                                               |
 | ------------ | -------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `split_info` | SplitMergeInfo | Yes      | Information about split process.                                                                                                                                                          |
-| `storage_ph` | TrStoragePhase | No       | Contains information about storage phase of a transaction execution. [More Info](v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
-| `compute_ph` | TrComputePhase | Yes      | Contains information about compute phase of a transaction execution. [More Info](v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
-| `action`     | TrActionPhase  | No       | Contains information about action phase of a transaction execution. [More Info](v3/documentation/tvm/tvm-overview#transactions-and-phases). Stored in a reference. |
+| `storage_ph` | TrStoragePhase | No       | Contains information about storage phase of a transaction execution. [More Info](/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
+| `compute_ph` | TrComputePhase | Yes      | Contains information about compute phase of a transaction execution. [More Info](/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
+| `action`     | TrActionPhase  | No       | Contains information about action phase of a transaction execution. [More Info](/v3/documentation/tvm/tvm-overview#transactions-and-phases). Stored in a reference. |
 | `aborted`    | Bool           | Yes      | Indicates whether the transaction execution was aborted.                                                                                                                                  |
 | `destroyed`  | Bool           | Yes      | Indicates whether the account was destroyed during the execution.                                                                                                                         |
 
@@ -195,7 +195,7 @@ trans_merge_prepare$0110 split_info:SplitMergeInfo
 | Field        | Type           | Description                                                                                                                                                        |
 | ------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `split_info` | SplitMergeInfo | Information about merge process.                                                                                                                                   |
-| `storage_ph` | TrStoragePhase | Contains information about storage phase of a transaction execution. [More Info](v3/documentation/tvm/tvm-overview#transactions-and-phases) |
+| `storage_ph` | TrStoragePhase | Contains information about storage phase of a transaction execution. [More Info](/v3/documentation/tvm/tvm-overview#transactions-and-phases) |
 | `aborted`    | Bool           | Indicates whether the transaction execution was aborted.                                                                                                           |
 
 ## Merge install
@@ -220,10 +220,10 @@ trans_merge_install$0111 split_info:SplitMergeInfo
 | --------------------- | --------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `split_info`          | SplitMergeInfo              | Yes      | Information about merge process.                                                                                                                                                          |
 | `prepare_transaction` | [Transaction](#transaction) | Yes      | Information about the [transaction prepared](#merge-prepare) for the merge operation. Stored in a reference.                                                                              |
-| `storage_ph`          | TrStoragePhase              | No       | Contains information about storage phase of a transaction execution. [More Info](v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
-| `credit_ph`           | TrCreditPhase               | No       | Contains information about credit phase of a transaction execution. [More Info](v3/documentation/tvm/tvm-overview#transactions-and-phases)                         |
-| `compute_ph`          | TrComputePhase              | Yes      | Contains information about compute phase of a transaction execution. [More Info](v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
-| `action`              | TrActionPhase               | No       | Contains information about action phase of a transaction execution. [More Info](v3/documentation/tvm/tvm-overview#transactions-and-phases). Stored in a reference. |
+| `storage_ph`          | TrStoragePhase              | No       | Contains information about storage phase of a transaction execution. [More Info](/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
+| `credit_ph`           | TrCreditPhase               | No       | Contains information about credit phase of a transaction execution. [More Info](/v3/documentation/tvm/tvm-overview#transactions-and-phases)                         |
+| `compute_ph`          | TrComputePhase              | Yes      | Contains information about compute phase of a transaction execution. [More Info](/v3/documentation/tvm/tvm-overview#transactions-and-phases)                        |
+| `action`              | TrActionPhase               | No       | Contains information about action phase of a transaction execution. [More Info](/v3/documentation/tvm/tvm-overview#transactions-and-phases). Stored in a reference. |
 | `aborted`             | Bool                        | Yes      | Indicates whether the transaction execution was aborted.                                                                                                                                  |
 | `destroyed`           | Bool                        | Yes      | Indicates whether the account was destroyed during the execution.                                                                                                                         |
 

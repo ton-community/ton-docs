@@ -134,7 +134,7 @@ Also op-code, op::code and operational code
 |-----------------|-----------------|----------------------------|
 | Global          | 0x00000000      | Text Comment               |
 | Global          | 0xffffffff      | Bounce                     |
-| Global          | 0x2167da4b      | [Encrypted Comment](v3/documentation/smart-contracts/message-management/internal-messages#messages-with-encrypted-comments) |
+| Global          | 0x2167da4b      | [Encrypted Comment](/v3/documentation/smart-contracts/message-management/internal-messages#messages-with-encrypted-comments) |
 | Global          | 0xd53276db      | Excesses                   |
 | Elector         | 0x4e73744b      | New Stake                  |
 | Elector         | 0xf374484c      | New Stake Confirmation     |
