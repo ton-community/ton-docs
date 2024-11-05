@@ -19,7 +19,7 @@ This page contains the list of useful libraries for TON Connect.
 
 ## TON Connect React
 
-- [@tonconnect/ui-react](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-ui-react) - TON Connect User Interface (UI) for React applications
+- [@tonconnect/ui-react](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-react) - TON Connect User Interface (UI) for React applications
 
 TonConnect UI React is a React UI kit for the TonConnect SDK. Use it to connect your app to TON wallets via TonConnect protocol in React apps.
 

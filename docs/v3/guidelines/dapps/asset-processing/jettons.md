@@ -65,7 +65,7 @@ TON transactions are irreversible after just one confirmation.
 For clear understanding, the reader should be familiar with the basic principles of asset processing described in [this section of our documentation](/v3/documentation/dapps/assets/overview). In particular, it is important to be familiar with [contracts](/v3/documentation/smart-contracts/addresses#everything-is-a-smart-contract), [wallets](/v3/guidelines/smart-contracts/howto/wallet), [messages](/v3/documentation/smart-contracts/message-management/messages-and-transactions) and deployment process.
 :::
 
-:::Info
+:::info
 For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
 :::
 
@@ -349,7 +349,7 @@ If a transfer notification message is received within your wallet regarding an u
 has been created to hold the specific Jetton.
 
 The sender address of the internal message containing the `Transfer notification` body is the address of the new Jetton wallet.
-It should not to be confused with the `sender` field in the `Transfer notification` [body](/v3/guidelines/dapps/asset-processing/jettons#jetton-wallets-communication-overview).
+It should not to be confused with the `sender` field in the `Transfer notification` [body](/v3/guidelines/dapps/asset-processing/jettons#message-2).
 
 1. Retrieve the Jetton master address for the new Jetton wallet by [getting wallet data](/v3/guidelines/dapps/asset-processing/jettons#retrieving-data-for-a-specific-jetton-wallet).
 2. Retrieve the Jetton wallet address for your wallet address (as an owner) using the Jetton master contract: [How to retrieve Jetton wallet address for a given user](#retrieving-jetton-wallet-addresses-for-a-given-user)
@@ -395,7 +395,7 @@ Tonweb examples:
 4. Compare the addresses of the Jetton master contracts from step 1. and step 3 (directly above).
    If the addresses do not match, a Jetton address verification error must be reported.
 5. Retrieve a list of the most recent unprocessed transactions using a hot wallet account and
-   iterate it (by sorting through each transaction one by one). See:  [Checking contract's transactions](https://docs.ton.org/develop/dapps/asset-processing/#checking-contracts-transactions).
+   iterate it (by sorting through each transaction one by one). See:  [Checking contract's transactions](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions).
 6. Check the input message (in_msg) for transactions and retrieve the source address from the input message. [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L84)
 7. If the source address matches the address within a Jetton wallet, then it is necessary to continue processing the transaction.
    If not, then skip processing the transaction and check the next transaction.
@@ -403,7 +403,7 @@ Tonweb examples:
    [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L91)
    If the message body is empty or the op code is invalid - skip the transaction.
 9. Read the message body’s other data, including the `query_id`, `amount`, `sender`, `forward_payload`.
-   [Jetton contracts message layouts](#jetton-contract-message-layouts), [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L105)
+   [Jetton contracts message layouts](/v3/guidelines/dapps/asset-processing/jettons#message-layouts), [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L105)
 10. Try to retrieve text comments from the `forward_payload` data. The first 32 bits must match
     the text comment op code `0x00000000` and the remaining - UTF-8 encoded text.
     [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L110)
@@ -547,7 +547,7 @@ See: [Jetton contracts message layouts](#jetton-contract-message-layouts)
    processes the message, after this is completed, the wallet will no longer accept the message)
 10. Send a single message or more than one message (batch messaging).
 11. Retrieve the list of the latest unprocessed transactions within the hot wallet account and iterate it.
-    Learn more here: [Checking contract's transactions](/develop/dapps/asset-processing/#checking-contracts-transactions),
+    Learn more here: [Checking contract's transactions](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions),
     [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-single-wallet.js#L43) or
     use the Toncenter API `/getTransactions` method.
 12. Look at outgoing messages in the account.

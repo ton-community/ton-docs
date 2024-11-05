@@ -1,0 +1,333 @@
+[WARNING] Docusaurus found broken anchors!
+
+Please check the pages of your site in the list below, and make sure you don't reference any anchor that does not exist.
+Note: it's possible to ignore broken anchors with the 'onBrokenAnchors' Docusaurus configuration, and let the build pass.
+
+Exhaustive list of all broken anchors found:
+- Broken anchor on source page path = /v3/documentation/tvm/instructions:
+   -> linking to #instr-pushint-4 (resolved as: /v3/documentation/tvm/instructions#instr-pushint-4)
+   -> linking to #instr-xchg-ij (resolved as: /v3/documentation/tvm/instructions#instr-xchg-ij)
+   -> linking to #instr-ctos (resolved as: /v3/documentation/tvm/instructions#instr-ctos)
+   -> linking to #instr-throwif-short (resolved as: /v3/documentation/tvm/instructions#instr-throwif-short)
+   -> linking to #instr-fits (resolved as: /v3/documentation/tvm/instructions#instr-fits)
+
+
+
+
+- Broken anchor on source page path = /v3/concepts/qa-outsource/outsource:
+   -> linking to #Serokell (resolved as: /v3/concepts/qa-outsource/outsource#Serokell)
+- Broken anchor on source page path = /v3/documentation/archive/compile:
+   -> linking to /v3/documentation/smart-contracts/getting-started/javascript#ton-compiler
+   -> linking to /v3/documentation/smart-contracts/getting-started/javascript#func-js
+- Broken anchor on source page path = /v3/documentation/archive/hacktoberfest-2022/:
+   -> linking to #what-the-rewards (resolved as: /v3/documentation/archive/hacktoberfest-2022/#what-the-rewards)
+- Broken anchor on source page path = /v3/documentation/archive/hacktoberfest-2022/as-contributor:
+   -> linking to /v3/documentation/archive/hacktoberfest-2022/#what-the-rewards
+- Broken anchor on source page path = /v3/documentation/archive/hacktoberfest-2022/as-maintainer:
+   -> linking to /v3/documentation/archive/hacktoberfest-2022/#what-the-rewards
+- Broken anchor on source page path = /v3/documentation/archive/mining:
+   -> linking to #faq-emi (resolved as: /v3/documentation/archive/mining#faq-emi)
+   -> linking to #quickStart (resolved as: /v3/documentation/archive/mining#quickStart)
+   -> linking to #faq-hw-asic (resolved as: /v3/documentation/archive/mining#faq-hw-asic)
+   -> linking to #hardware-estimates (resolved as: /v3/documentation/archive/mining#hardware-estimates)
+- Broken anchor on source page path = /v3/documentation/dapps/assets/overview:
+   -> linking to /v3/guidelines/dapps/asset-processing/payments-processing/#repositories
+- Broken anchor on source page path = /v3/documentation/dapps/assets/usdt:
+   -> linking to /v3/guidelines/dapps/asset-processing/jettons#jetton-wallet-processing
+- Broken anchor on source page path = /v3/documentation/dapps/defi/coins:
+   -> linking to /v3/documentation/dapps/defi/tokens#jettons
+- Broken anchor on source page path = /v3/documentation/dapps/oracles/red_stone:
+   -> linking to #-ton-redstone-payload-packing (resolved as: /v3/documentation/dapps/oracles/red_stone#-ton-redstone-payload-packing)
+- Broken anchor on source page path = /v3/documentation/faq:
+   -> linking to /v3/concepts/dive-into-ton/introduction#ethereum-to-ton
+   -> linking to /v3/documentation/dapps/defi/tokens#jettons
+   -> linking to /v3/guidelines/dapps/asset-processing/payments-processing/#deploying-wallet
+- Broken anchor on source page path = /v3/documentation/infra/nodes/node-types:
+   -> linking to /v3/guidelines/nodes/running-nodes/full-node#enable-liteserver-mode
+- Broken anchor on source page path = /v3/documentation/network/protocols/adnl/adnl-tcp:
+   -> linking to ## (resolved as: /v3/documentation/network/protocols/adnl/adnl-tcp##)
+   -> linking to /v3/documentation/data-formats/tlb/tl-b-language#addresses
+- Broken anchor on source page path = /v3/documentation/smart-contracts/contracts-specs/nominator-pool:
+   -> linking to /#/smart-contracts/governance?id=proposalvoting-mechanism (resolved as: /?#/smart-contracts/governance?id=proposalvoting-mechanism)
+- Broken anchor on source page path = /v3/documentation/smart-contracts/fift/fift-and-tvm-assembly:
+   -> linking to /v3/documentation/tvm/instructions#52-division
+- Broken anchor on source page path = /v3/documentation/smart-contracts/func/cookbook:
+   -> linking to /v3/documentation/tvm/instructions#52-division
+   -> linking to /v3/documentation/tvm/instructions#62-other-comparison
+   -> linking to /v3/documentation/tvm/instructions#53-shifts-logical-operations
+- Broken anchor on source page path = /v3/documentation/smart-contracts/func/docs/stdlib:
+   -> linking to /v3/documentation/smart-contracts/func/docs/stdlib#set_c3.
+- Broken anchor on source page path = /v3/documentation/smart-contracts/overview:
+   -> linking to /v3/documentation/smart-contracts/overview#func-language
+   -> linking to /v3/documentation/smart-contracts/overview#ton-virtual-machine
+   -> linking to /v3/documentation/smart-contracts/transaction-fees/fees#how-to-calculate-fees
+- Broken anchor on source page path = /v3/documentation/smart-contracts/transaction-fees/fees-low-level:
+   -> linking to /v3/documentation/network/configs/blockchain-configs#param-20
+- Broken anchor on source page path = /v3/documentation/tvm/changelog/tvm-upgrade-2023-07:
+   -> linking to /v3/documentation/tvm/instructions#52-division
+- Broken anchor on source page path = /v3/guidelines/dapps/apis-sdks/ton-adnl-apis:
+   -> linking to /v3/guidelines/dapps/apis-sdks/sdk#adnl-based-sdks
+   -> linking to /v3/guidelines/nodes/running-nodes/full-node#enable-liteserver-mode
+- Broken anchor on source page path = /v3/guidelines/dapps/asset-processing/jettons:
+   -> linking to /v3/guidelines/dapps/asset-processing/jettons#jetton-wallets-communication-overview
+   -> linking to #jetton-contract-message-layouts (resolved as: /v3/guidelines/dapps/asset-processing/jettons#jetton-contract-message-layouts)
+- Broken anchor on source page path = /v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing:
+   -> linking to /v3/guidelines/dapps/asset-processing/nft-processing/nfts#getting-nft-data
+- Broken anchor on source page path = /v3/guidelines/get-started-with-ton:
+   -> linking to /v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps#Tonkeeper-test-environment
+   -> linking to /v3/guidelines/get-started-with-ton#simple-mine-in-testnet
+   -> linking to /v3/guidelines/get-started-with-ton#genuine-mine-in-mainnet
+- Broken anchor on source page path = /v3/guidelines/nodes/node-maintenance-and-security:
+   -> linking to #set-node-ip (resolved as: /v3/guidelines/nodes/node-maintenance-and-security#set-node-ip)
+- Broken anchor on source page path = /v3/guidelines/nodes/nodes-troubleshooting:
+   -> linking to /v3/guidelines/nodes/running-nodes/full-node#prerequisites-1
+- Broken anchor on source page path = /v3/guidelines/nodes/running-nodes/full-node:
+   -> linking to /v3/guidelines/nodes/running-nodes/full-node#status-command-displays-without-local-node-section
+- Broken anchor on source page path = /v3/guidelines/smart-contracts/get-methods:
+   -> linking to /v3/guidelines/smart-contracts/howto/wallet#what-is-subwallet-id
+- Broken anchor on source page path = /v3/guidelines/smart-contracts/howto/nominator-pool:
+   -> linking to /participate/run-nodes/full-node#how-to-run-a-node-video
+   -> linking to /#/nodes/run-node
+- Broken anchor on source page path = /v3/guidelines/smart-contracts/howto/wallet:
+   -> linking to /v3/guidelines/smart-contracts/howto/wallet#-deploying-our-wallet
+   -> linking to /v3/guidelines/smart-contracts/howto/wallet#source-code
+   -> linking to /v3/guidelines/smart-contracts/howto/wallet#compiling-our-wallet-code
+- Broken anchor on source page path = /v3/guidelines/smart-contracts/security/random:
+   -> linking to /v3/documentation/tvm/instructions#112-pseudo-random-number-generator-primitives
+- Broken anchor on source page path = /v3/guidelines/smart-contracts/security/ton-hack-challenge-1:
+   -> linking to /v3/documentation/tvm/instructions#11-application-specific-primitives
+- Broken anchor on source page path = /v3/guidelines/ton-connect/guidelines/developers:
+   -> linking to /v3/guidelines/ton-connect/guidelines/developers#ton-connect-ui-react
+- Broken anchor on source page path = /v3/guidelines/ton-connect/guidelines/sending-messages:
+   -> linking to /v3/documentation/smart-contracts/overview#smart-contract-examples
+- Broken anchor on source page path = /v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy:
+   -> linking to #running-entry-proxy (resolved as: /v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy#running-entry-proxy)
+
+[WARNING] Docusaurus found broken links!
+
+Please check the pages of your site in the list below, and make sure you don't reference any path that does not exist.
+Note: it's possible to ignore broken links with the 'onBrokenLinks' Docusaurus configuration, and let the build pass.
+
+Exhaustive list of all broken links found:
+- Broken link on source page path = /mandarin/hacktonberfest:
+   -> linking to /mandarin/contribute/hacktoberfest
+   -> linking to /mandarin/contribute/hacktoberfest/as-contributor
+   -> linking to /mandarin/contribute/hacktoberfest/as-maintainer
+- Broken link on source page path = /mandarin/:
+   -> linking to /mandarin/participate/
+- Broken link on source page path = /mandarin/develop/dapps/apis/sdk:
+   -> linking to /mandarin/develop/network/adnl-tcp
+- Broken link on source page path = /mandarin/develop/dapps/asset-processing/jettons:
+   -> linking to /mandarin/develop/dapps/asset-processing/#checking-contracts-transactions
+- Broken link on source page path = /mandarin/develop/dapps/ton-connect/developers:
+   -> linking to /mandarin/develop/dapps/ton-connect/integration
+- Broken link on source page path = /mandarin/develop/dapps/ton-connect/overview:
+   -> linking to /mandarin/develop/dapps/ton-connect/tg-bot-integration
+   -> linking to /mandarin/develop/dapps/ton-connect/message-builders
+   -> linking to /mandarin/develop/dapps/asset-processing
+- Broken link on source page path = /mandarin/develop/dapps/ton-connect/react:
+   -> linking to /mandarin/develop/dapps/ton-connect/manifest
+   -> linking to /mandarin/develop/dapps/ton-connect/message-builders
+   -> linking to /mandarin/develop/dapps/asset-processing/#checking-contracts-transactions
+   -> linking to /mandarin/develop/dapps/ton-connect/sign
+- Broken link on source page path = /mandarin/develop/dapps/ton-connect/web:
+   -> linking to /mandarin/develop/dapps/ton-connect/manifest
+   -> linking to /mandarin/develop/dapps/ton-connect/message-builders
+   -> linking to /mandarin/develop/dapps/asset-processing/#checking-contracts-transactions
+   -> linking to /mandarin/develop/dapps/ton-connect/sign
+- Broken link on source page path = /mandarin/develop/get-started-with-ton:
+   -> linking to /mandarin/participate/wallets/apps#Tonkeeper-test-environment
+   -> linking to /mandarin/develop/dapps/apis/
+   -> linking to /mandarin/develop/dapps/apis/toncenter
+   -> linking to /mandarin/learn/tvm-instructions/tvm-overview
+   -> linking to /mandarin/learn/tvm-instructions/instructions#gas-prices
+   -> linking to /mandarin/learn/overviews/cells
+   -> linking to /mandarin/develop/smart-contracts/
+   -> linking to /mandarin/develop/smart-contracts/tutorials/wallet
+   -> linking to /mandarin/develop/dapps/tutorials/accept-payments-in-a-telegram-bot-js
+   -> linking to /mandarin/develop/dapps/tutorials/jetton-minter
+   -> linking to /mandarin/develop/dapps/tutorials/collection-minting
+- Broken link on source page path = /mandarin/develop/overview:
+   -> linking to /mandarin/contribute
+   -> linking to /mandarin/learn/overviews/ton-blockchain
+   -> linking to /mandarin/learn/overviews/cells
+   -> linking to /mandarin/learn/networking/overview
+   -> linking to /mandarin/learn/tvm-instructions/tvm-overview
+   -> linking to /mandarin/learn/tvm-instructions/tvm-overview#transactions-and-phases
+   -> linking to /mandarin/participate/nodes/node-types
+   -> linking to /mandarin/participate/web3/dns
+   -> linking to /mandarin/participate/ton-storage/storage-daemon
+   -> linking to /mandarin/develop/howto/faq
+   -> linking to /mandarin/develop/func/overview
+   -> linking to /mandarin/develop/fift/overview
+   -> linking to /mandarin/develop/smart-contracts/
+   -> linking to /mandarin/develop/smart-contracts/sdk/javascript
+   -> linking to /mandarin/develop/smart-contracts/tutorials/wallet
+   -> linking to /mandarin/develop/smart-contracts/examples
+   -> linking to /mandarin/develop/dapps/
+   -> linking to /mandarin/develop/dapps/asset-processing
+   -> linking to /mandarin/develop/dapps/defi/tokens
+   -> linking to /mandarin/develop/dapps/ton-connect/tg-bot-integration
+- Broken link on source page path = /mandarin/develop/smart-contracts/fees:
+   -> linking to /mandarin/develop/howto/fees-low-level#computation-fees
+   -> linking to /mandarin/develop/howto/fees-low-level
+   -> linking to /mandarin/learn/tvm-instructions/tvm-overview#transactions-and-phases
+   -> linking to /mandarin/participate/ton-storage/storage-daemon
+   -> linking to /mandarin/develop/howto/fees-low-level#fees-calculation-formulas
+- Broken link on source page path = /mandarin/learn/introduction:
+   -> linking to /mandarin/participate/
+   -> linking to /mandarin/learn/overviews/ton-blockchain
+- Broken link on source page path = /mandarin/learn/overviews/addresses:
+   -> linking to /mandarin/learn/overviews/ton-blockchain#single-actor
+   -> linking to /mandarin/learn/overviews/ton-blockchain#workchain-blockchain-with-your-own-rules
+   -> linking to /mandarin/learn/tvm-instructions/tvm-overview
+   -> linking to /mandarin/develop/smart-contracts/guidelines/non-bouncable-messages
+- Broken link on source page path = /mandarin/participate/run-nodes/full-node:
+   -> linking to /mandarin/participate/network-maintenance/staking-incentives#values-of-stakes-max-effective-stake
+- Broken link on source page path = /mandarin/v3/concepts/qa-outsource/auditors:
+   -> linking to certik.com (resolved as: /mandarin/v3/concepts/qa-outsource/certik.com)
+- Broken link on source page path = /mandarin/v3/contribute/docs/schemes-guidelines:
+   -> linking to /mandarin/schemes-visio/message-processing.vsdx
+- Broken link on source page path = /mandarin/v3/documentation/dapps/assets/usdt:
+   -> linking to v3/guidelines/dapps/asset-processing/jettons (resolved as: /mandarin/v3/documentation/dapps/assets/v3/guidelines/dapps/asset-processing/jettons)
+- Broken link on source page path = /mandarin/v3/documentation/faq:
+   -> linking to v3/documentation/smart-contracts/message-management/sending-messages#message-modes (resolved as: /mandarin/v3/documentation/v3/documentation/smart-contracts/message-management/sending-messages#message-modes)
+- Broken link on source page path = /mandarin/v3/guidelines/dapps/asset-processing/jettons:
+   -> linking to /mandarin/develop/dapps/asset-processing/#checking-contracts-transactions
+- Broken link on source page path = /mandarin/v3/guidelines/smart-contracts/howto/wallet:
+   -> linking to (https://tonscan.org/address/Ef8zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM0vF) (resolved as: /mandarin/v3/guidelines/smart-contracts/howto/(https://tonscan.org/address/Ef8zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM0vF))
+   -> linking to (https://github.com/aSpite/wallet-tutorial) (resolved as: /mandarin/v3/guidelines/smart-contracts/howto/(https://github.com/aSpite/wallet-tutorial))
+- Broken link on source page path = /mandarin/v3/guidelines/ton-connect/frameworks/react:
+   -> linking to 'https://github.com/ton-blockchain/wallets-list/blob/main/wallets-v2.json' (resolved as: /mandarin/v3/guidelines/ton-connect/frameworks/'https://github.com/ton-blockchain/wallets-list/blob/main/wallets-v2.json')
+
+[WARNING] Docusaurus found broken anchors!
+
+Please check the pages of your site in the list below, and make sure you don't reference any anchor that does not exist.
+Note: it's possible to ignore broken anchors with the 'onBrokenAnchors' Docusaurus configuration, and let the build pass.
+
+Exhaustive list of all broken anchors found:
+- Broken anchor on source page path = /mandarin/v3/documentation/tvm/instructions:
+   -> linking to #instr-pushint-4 (resolved as: /mandarin/v3/documentation/tvm/instructions#instr-pushint-4)
+   -> linking to #instr-xchg-ij (resolved as: /mandarin/v3/documentation/tvm/instructions#instr-xchg-ij)
+   -> linking to #instr-ctos (resolved as: /mandarin/v3/documentation/tvm/instructions#instr-ctos)
+   -> linking to #instr-throwif-short (resolved as: /mandarin/v3/documentation/tvm/instructions#instr-throwif-short)
+   -> linking to #instr-fits (resolved as: /mandarin/v3/documentation/tvm/instructions#instr-fits)
+- Broken anchor on source page path = /mandarin/develop/dapps/asset-processing/jettons:
+   -> linking to /mandarin/v3/guidelines/dapps/asset-processing/jettons#jetton-wallets-communication-overview
+   -> linking to #jetton-contract-message-layouts (resolved as: /mandarin/develop/dapps/asset-processing/jettons#jetton-contract-message-layouts)
+- Broken anchor on source page path = /mandarin/develop/dapps/telegram-apps/app-examples:
+   -> linking to /mandarin/develop/dapps/telegram-apps/step-by-step-guide#setting-up-a-bot-for-the-app
+- Broken anchor on source page path = /mandarin/develop/dapps/ton-connect/developers:
+   -> linking to /mandarin/develop/dapps/ton-connect/developers#ton-connect-ui-react
+   -> linking to /mandarin/develop/dapps/ton-connect/developers#ton-connect-protocol-models
+- Broken anchor on source page path = /mandarin/develop/get-started-with-ton:
+   -> linking to /mandarin/develop/get-started-with-ton#running-scripts
+   -> linking to /mandarin/develop/get-started-with-ton#simple-mine-in-testnet
+   -> linking to /mandarin/develop/get-started-with-ton#genuine-mine-in-mainnet
+- Broken anchor on source page path = /mandarin/develop/smart-contracts/fees:
+   -> linking to #gas-changing-voting-process (resolved as: /mandarin/develop/smart-contracts/fees#gas-changing-voting-process)
+   -> linking to /mandarin/develop/smart-contracts/fees#storage-fee
+- Broken anchor on source page path = /mandarin/participate/run-nodes/full-node:
+   -> linking to /mandarin/participate/run-nodes/full-node#hardware-requirements-1
+   -> linking to /mandarin/participate/run-nodes/full-node#status-command-displays-without-local-node-section
+   -> linking to /mandarin/participate/run-nodes/full-node#check-the-node-logs
+   -> linking to /mandarin/participate/run-nodes/full-node#hardware-requirements
+   -> linking to /mandarin/participate/run-nodes/full-node#recommended-providers
+   -> linking to /mandarin/participate/run-nodes/full-node#step-by-step-instructions
+- Broken anchor on source page path = /mandarin/v3/concepts/qa-outsource/outsource:
+   -> linking to #Serokell (resolved as: /mandarin/v3/concepts/qa-outsource/outsource#Serokell)
+- Broken anchor on source page path = /mandarin/v3/documentation/archive/compile:
+   -> linking to /mandarin/v3/documentation/smart-contracts/getting-started/javascript#ton-compiler
+   -> linking to /mandarin/v3/documentation/smart-contracts/getting-started/javascript#func-js
+- Broken anchor on source page path = /mandarin/v3/documentation/archive/hacktoberfest-2022/:
+   -> linking to #what-the-rewards (resolved as: /mandarin/v3/documentation/archive/hacktoberfest-2022/#what-the-rewards)
+- Broken anchor on source page path = /mandarin/v3/documentation/archive/hacktoberfest-2022/as-contributor:
+   -> linking to /mandarin/v3/documentation/archive/hacktoberfest-2022/#what-the-rewards
+- Broken anchor on source page path = /mandarin/v3/documentation/archive/hacktoberfest-2022/as-maintainer:
+   -> linking to /mandarin/v3/documentation/archive/hacktoberfest-2022/#what-the-rewards
+- Broken anchor on source page path = /mandarin/v3/documentation/archive/mining:
+   -> linking to #faq-emi (resolved as: /mandarin/v3/documentation/archive/mining#faq-emi)
+   -> linking to #quickStart (resolved as: /mandarin/v3/documentation/archive/mining#quickStart)
+   -> linking to #faq-hw-asic (resolved as: /mandarin/v3/documentation/archive/mining#faq-hw-asic)
+   -> linking to #hardware-estimates (resolved as: /mandarin/v3/documentation/archive/mining#hardware-estimates)
+- Broken anchor on source page path = /mandarin/v3/documentation/dapps/assets/overview:
+   -> linking to /mandarin/v3/guidelines/dapps/asset-processing/payments-processing/#repositories
+- Broken anchor on source page path = /mandarin/v3/documentation/dapps/assets/usdt:
+   -> linking to /mandarin/v3/guidelines/dapps/asset-processing/jettons#jetton-wallet-processing
+- Broken anchor on source page path = /mandarin/v3/documentation/dapps/defi/coins:
+   -> linking to /mandarin/v3/documentation/dapps/defi/tokens#jettons
+- Broken anchor on source page path = /mandarin/v3/documentation/dapps/oracles/red_stone:
+   -> linking to #-ton-redstone-payload-packing (resolved as: /mandarin/v3/documentation/dapps/oracles/red_stone#-ton-redstone-payload-packing)
+- Broken anchor on source page path = /mandarin/v3/documentation/faq:
+   -> linking to /mandarin/v3/concepts/dive-into-ton/introduction#ethereum-to-ton
+   -> linking to /mandarin/v3/documentation/dapps/defi/tokens#jettons
+   -> linking to /mandarin/v3/guidelines/dapps/asset-processing/payments-processing/#deploying-wallet
+- Broken anchor on source page path = /mandarin/v3/documentation/infra/nodes/node-types:
+   -> linking to /mandarin/v3/guidelines/nodes/running-nodes/full-node#enable-liteserver-mode
+- Broken anchor on source page path = /mandarin/v3/documentation/network/protocols/adnl/adnl-tcp:
+   -> linking to ## (resolved as: /mandarin/v3/documentation/network/protocols/adnl/adnl-tcp##)
+   -> linking to /mandarin/v3/documentation/data-formats/tlb/tl-b-language#addresses
+- Broken anchor on source page path = /mandarin/v3/documentation/smart-contracts/contracts-specs/nominator-pool:
+   -> linking to /mandarin/#/smart-contracts/governance?id=proposalvoting-mechanism (resolved as: /mandarin/?#/smart-contracts/governance?id=proposalvoting-mechanism)
+- Broken anchor on source page path = /mandarin/v3/documentation/smart-contracts/fift/fift-and-tvm-assembly:
+   -> linking to /mandarin/v3/documentation/tvm/instructions#52-division
+- Broken anchor on source page path = /mandarin/v3/documentation/smart-contracts/func/cookbook:
+   -> linking to /mandarin/v3/documentation/tvm/instructions#52-division
+   -> linking to /mandarin/v3/documentation/tvm/instructions#62-other-comparison
+   -> linking to /mandarin/v3/documentation/tvm/instructions#53-shifts-logical-operations
+- Broken anchor on source page path = /mandarin/v3/documentation/smart-contracts/func/docs/stdlib:
+   -> linking to /mandarin/v3/documentation/smart-contracts/func/docs/stdlib#set_c3.
+- Broken anchor on source page path = /mandarin/v3/documentation/smart-contracts/overview:
+   -> linking to /mandarin/v3/documentation/smart-contracts/overview#func-language
+   -> linking to /mandarin/v3/documentation/smart-contracts/overview#ton-virtual-machine
+   -> linking to /mandarin/v3/documentation/smart-contracts/transaction-fees/fees#how-to-calculate-fees
+- Broken anchor on source page path = /mandarin/v3/documentation/smart-contracts/transaction-fees/fees-low-level:
+   -> linking to /mandarin/v3/documentation/network/configs/blockchain-configs#param-20
+- Broken anchor on source page path = /mandarin/v3/documentation/tvm/changelog/tvm-upgrade-2023-07:
+   -> linking to /mandarin/v3/documentation/tvm/instructions#52-division
+- Broken anchor on source page path = /mandarin/v3/guidelines/dapps/apis-sdks/ton-adnl-apis:
+   -> linking to /mandarin/v3/guidelines/dapps/apis-sdks/sdk#adnl-based-sdks
+   -> linking to /mandarin/v3/guidelines/nodes/running-nodes/full-node#enable-liteserver-mode
+- Broken anchor on source page path = /mandarin/v3/guidelines/dapps/asset-processing/jettons:
+   -> linking to /mandarin/v3/guidelines/dapps/asset-processing/jettons#jetton-wallets-communication-overview
+   -> linking to #jetton-contract-message-layouts (resolved as: /mandarin/v3/guidelines/dapps/asset-processing/jettons#jetton-contract-message-layouts)
+- Broken anchor on source page path = /mandarin/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing:
+   -> linking to /mandarin/v3/guidelines/dapps/asset-processing/nft-processing/nfts#getting-nft-data
+- Broken anchor on source page path = /mandarin/v3/guidelines/dapps/tma/tutorials/step-by-step-guide:
+   -> linking to /mandarin/v3/guidelines/dapps/tma/tutorials/app-examples#basic-twa-example
+   -> linking to /mandarin/v3/guidelines/dapps/tma/tutorials/app-examples#modern-twa-example
+- Broken anchor on source page path = /mandarin/v3/guidelines/get-started-with-ton:
+   -> linking to /mandarin/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps#Tonkeeper-test-environment
+   -> linking to /mandarin/v3/guidelines/get-started-with-ton#simple-mine-in-testnet
+   -> linking to /mandarin/v3/guidelines/get-started-with-ton#genuine-mine-in-mainnet
+- Broken anchor on source page path = /mandarin/v3/guidelines/nodes/node-maintenance-and-security:
+   -> linking to #set-node-ip (resolved as: /mandarin/v3/guidelines/nodes/node-maintenance-and-security#set-node-ip)
+- Broken anchor on source page path = /mandarin/v3/guidelines/nodes/nodes-troubleshooting:
+   -> linking to /mandarin/v3/guidelines/nodes/running-nodes/full-node#prerequisites-1
+- Broken anchor on source page path = /mandarin/v3/guidelines/nodes/running-nodes/full-node:
+   -> linking to /mandarin/v3/guidelines/nodes/running-nodes/full-node#status-command-displays-without-local-node-section
+- Broken anchor on source page path = /mandarin/v3/guidelines/smart-contracts/get-methods:
+   -> linking to /mandarin/v3/guidelines/smart-contracts/howto/wallet#what-is-subwallet-id
+- Broken anchor on source page path = /mandarin/v3/guidelines/smart-contracts/howto/nominator-pool:
+   -> linking to /mandarin/participate/run-nodes/full-node#how-to-run-a-node-video
+   -> linking to /mandarin/#/nodes/run-node
+- Broken anchor on source page path = /mandarin/v3/guidelines/smart-contracts/howto/wallet:
+   -> linking to /mandarin/v3/guidelines/smart-contracts/howto/wallet#-deploying-our-wallet
+   -> linking to /mandarin/v3/guidelines/smart-contracts/howto/wallet#source-code
+   -> linking to /mandarin/v3/guidelines/smart-contracts/howto/wallet#compiling-our-wallet-code
+- Broken anchor on source page path = /mandarin/v3/guidelines/smart-contracts/security/random:
+   -> linking to /mandarin/v3/documentation/tvm/instructions#112-pseudo-random-number-generator-primitives
+- Broken anchor on source page path = /mandarin/v3/guidelines/smart-contracts/security/ton-hack-challenge-1:
+   -> linking to /mandarin/v3/documentation/tvm/instructions#11-application-specific-primitives
+- Broken anchor on source page path = /mandarin/v3/guidelines/ton-connect/frameworks/react:
+   -> linking to /mandarin/v3/guidelines/dapps/asset-processing/payments-processing/#checking-contracts-transactions
+- Broken anchor on source page path = /mandarin/v3/guidelines/ton-connect/frameworks/vue:
+   -> linking to /mandarin/v3/guidelines/dapps/asset-processing/payments-processing/#checking-contracts-transactions
+- Broken anchor on source page path = /mandarin/v3/guidelines/ton-connect/frameworks/web:
+   -> linking to /mandarin/v3/guidelines/dapps/asset-processing/payments-processing/#checking-contracts-transactions
+- Broken anchor on source page path = /mandarin/v3/guidelines/ton-connect/guidelines/developers:
+   -> linking to /mandarin/v3/guidelines/ton-connect/guidelines/developers#ton-connect-ui-react
+- Broken anchor on source page path = /mandarin/v3/guidelines/ton-connect/guidelines/sending-messages:
+   -> linking to /mandarin/v3/documentation/smart-contracts/overview#smart-contract-examples
+- Broken anchor on source page path = /mandarin/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy:
+   -> linking to #running-entry-proxy (resolved as: /mandarin/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy#running-entry-proxy)
