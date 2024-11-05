@@ -9,17 +9,16 @@ Before we start, there is some amount of therminology and concepts, that you sho
 
  - Message managment, because this is main functionality of the wallets.
  - Func language, because we will heavely relly on implementations made by it.
-
 :::
 
 ## Basic concept
 
-To break the tension, at first we should understand that wallets is not some specific entity in ToN ecosystem, it is still just a smart-contract consist of code and data, and, in that sence, is equal to any other actor(i.e. smart-contract) in ToN. 
+To break the tension, at first we should understand that wallets is not some specific entity in TON ecosystem, it is still just a smart-contract consist of code and data, and, in that sence, is equal to any other actor(i.e. smart-contract) in TON. 
 
 As your own custom smart-contract, or any other one, it can recieve external and internal messages, send internal messages and logs, provide get methods.
 So the question is how they doing that and what functionality they providing, which is differs between versions.
 
-You can consider each wallet version as smart-contract implementation, providing standart external interface, allowing different external clients to interact with the wallets in the same way. You can find those implementation in FunC and Fift languages in main ToN monorepo:
+You can consider each wallet version as smart-contract implementation, providing standart external interface, allowing different external clients to interact with the wallets in the same way. You can find those implementation in FunC and Fift languages in main TON monorepo:
 
  * [ton/crypto/smartcont/](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/) 
 
@@ -53,7 +52,7 @@ Nevertheless, because each subsequent version inherits the functionality of the 
     - <b>(0-4)mode</b>: up to four 8-bit long integer's defining sending mode for each message.
 2. Up to 4 references to cells containing messages.
 
-As you can see main functionality of the wallet is to provide safe way for communicating with ToN blockchain from the outside world. `secno` mechanism is protecting from reply attacks, `Ed25519 signature` provides authorized access to wallet functionality and `valid-until` provide time-point limit after those message shoudn't be accepted. We will not dwell in detail on each of these mechanisms, because they are described in detail in the [external message](/v3/documentation/smart-contracts/message-management/external-messages) documentation page and they are quite common among smart-contracts recieving external messages. Payload data is up to 4 references to cells and corresponding number of modes that will be directly transfered to [send_raw_message(cell msg, int mode)](https://docs.ton.org/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) method.
+As you can see main functionality of the wallet is to provide safe way for communicating with TON blockchain from the outside world. `secno` mechanism is protecting from reply attacks, `Ed25519 signature` provides authorized access to wallet functionality and `valid-until` provide time-point limit after those message shoudn't be accepted. We will not dwell in detail on each of these mechanisms, because they are described in detail in the [external message](/v3/documentation/smart-contracts/message-management/external-messages) documentation page and they are quite common among smart-contracts recieving external messages. Payload data is up to 4 references to cells and corresponding number of modes that will be directly transfered to [send_raw_message(cell msg, int mode)](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) method.
 
 :::caution
 Note that wallet doesn't provide any validation of internal messages you sending through it, so this is programmers(i.e. external client) responsibility to serialize data corresponding to [internal message layout](http://localhost:3000/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
@@ -68,7 +67,7 @@ Note that wallet doesn't provide any validation of internal messages you sending
 | 0x0            | Standard successful execution exit code.                          |
 
 :::info
-Note that [TVM](https://docs.ton.org/v3/documentation/tvm/tvm-overview) has [standart exit codes](https://docs.ton.org/v3/documentation/tvm/tvm-exit-codes) (`0x0` - is one of them), so you can get one of them too, for example, if you run out of [gas](https://docs.ton.org/develop/smart-contracts/fees) you will get `0xD` code.
+Note that [TVM](/v3/documentation/tvm/tvm-overview) has [standart exit codes](/v3/documentation/tvm/tvm-exit-codes) (`0x0` - is one of them), so you can get one of them too, for example, if you run out of [gas](https://docs.ton.org/develop/smart-contracts/fees) you will get `0xD` code.
 :::
 
 #### Get methods
@@ -124,7 +123,7 @@ This feature allows developers to implement complex logic that will work in tand
 
 #### Plugins
 
-Plugins are basically just other smart-contracts in TON that developers are free to realize the way they wanted to. In relation to wallet they are just addresses of smart-contracts stored in [dictionary](https://docs.ton.org/v3/documentation/smart-contracts/func/docs/dictionaries) in wallet persisten memory, that are allowed to request funds and remove themselves from "allowed list" through sending internal messages to wallet.
+Plugins are basically just other smart-contracts in TON that developers are free to realize the way they wanted to. In relation to wallet they are just addresses of smart-contracts stored in [dictionary](/v3/documentation/smart-contracts/func/docs/dictionaries) in wallet persisten memory, that are allowed to request funds and remove themselves from "allowed list" through sending internal messages to wallet.
 
 #### Persistend memory layout
  - <b>seqno</b>: 32-bit long sequence number.
@@ -167,9 +166,9 @@ As you can see fourth version still provide standart functionality though `0x0` 
 
 :::tip
 If `state_init` name doesn't tell you much by itself take a look at those references:
- * [addresses-in-ton-blockchain](https://docs.ton.org/v3/documentation/smart-contracts/addresses#workchain-id-and-account-id)
- * [send-a-deploy-message](https://docs.ton.org/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-deploy-message-with-stateinit-only-with-stateinit-and-body)
- * [internal-message-layout](https://docs.ton.org/v3/documentation/smart-contracts/message-management/sending-messages#message-layout)
+ * [addresses-in-ton-blockchain](/v3/documentation/smart-contracts/addresses#workchain-id-and-account-id)
+ * [send-a-deploy-message](/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-deploy-message-with-stateinit-only-with-stateinit-and-body)
+ * [internal-message-layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout)
 :::
 
 #### Exit codes
@@ -194,11 +193,54 @@ If `state_init` name doesn't tell you much by itself take a look at those refere
 
 This is an extensible wallet specification developed by the Tonkeeper team, aimed at replacing V4 and allowing arbitrary extensions.
 
-The W5 wallet standard offers many benefits that improve the experience for both users and merchants. W5 supports gas-free transactions, account delegation and recovery, subscription payments using tokens and Toncoin, and low-cost multi-transfers.
+The V5 wallet standard offers many benefits that improve the experience for both users and merchants. V5 supports gas-free transactions, account delegation and recovery, subscription payments using tokens and Toncoin, and low-cost multi-transfers. In addition to retaining the previous functionality (v4), the new contract allows you to send up to 255 messages at a time. 
 
-Users will have access to a 25% reduction in blockchain fees, a new flexible plugin interface for developers, and an internal message signature that enables delegation of gas payments.
+Wallet source code:
+ * [ton-blockchain/wallet-contract-v5](https://github.com/ton-blockchain/wallet-contract-v5)
 
-In addition to retaining the previous functionality (v4), the new contract allows you to send up to 255 messages at a time, as well as to make full-fledged gasless transactions (e.g., payment of network fees when transferring USDt in USDt itself) and other features. We believe it will enhance the usability and capabilities for TON users.
+TL-B schemes:
+ * [ton-blockchain/wallet-contract-v5/types.tlb] (https://github.com/ton-blockchain/wallet-contract-v5/blob/main/types.tlb)
+ * [ton/crypto/block/block.tlb] (https://github.com/ton-blockchain/ton/blob/5c392e0f2d946877bb79a09ed35068f7b0bd333a/crypto/block/block.tlb#L380)
+
+:::caution
+In contrast to previous wallet versions specification we will relly on [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) schemes, due to relative complexity of this wallet version interfaces realization, we will provide some description for each of those, nethertheless basic understanding is still required.
+:::
+
+#### Persistend memory layout
+
+```
+contract_state$_ 
+    is_signature_allowed:(## 1) 
+    seqno:# 
+    wallet_id:(## 32) 
+    public_key:(## 256) 
+    extensions_dict:(HashmapE 256 int1) = ContractState;
+```
+As you can see `ContractState` compare to previous versions hasn't undergone big changes. Main difference is new `is_signature_allowed` 1-bit flag, that restricts or allow access through signature and stored public key. We will describe importance of that change in later topics.
+
+#### Authentification process
+
+```
+signed_request$_             // 32 (opcode from outer)
+  wallet_id:    #            // 32
+  valid_until:  #            // 32
+  msg_seqno:    #            // 32
+  inner:        InnerRequest //
+  signature:    bits512      // 512
+= SignedRequest;             // Total: 688 .. 976 + ^Cell
+
+internal_signed#73696e74 signed:SignedRequest = InternalMsgBody;
+
+internal_extension#6578746e 
+    query_id:(## 64) 
+    inner:InnerRequest = InternalMsgBody;
+
+external_signed#7369676e signed:SignedRequest = ExternalMsgBody;
+```
+
+Before we get to actual payload of our messages - `InnerRequest`, lets see how 5 version differs from previous at authentification process. `InternalMsgBody` combinator describes two ways to get access to wallet actions through internal messages. First one is that we are already familiar with from 4 version - authentificate as previously registered extension, address of which is stored in `extensions_dict`. Second one is authentification through stored public key and signature same as for external requests. At first it might seen as unnecessary feature, but it actually allows to proceed your request through external services(smart-contracts) which are not a part of your wallet extensions infrastructure, key feature of 5 version, gas-free transactions, relays on that functionality.
+
+
 
 :::tip
 Wallet V5 wallets allow transactions to be initiated by the user but paid for by another contract. Consequently, there will be services (such as [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)) that provide this functionality: they pay the transaction fees in TONs on behalf of the user, but charge a fee in tokens.
