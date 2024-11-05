@@ -6,7 +6,7 @@
     "**/*.md",
     "**/*.mdx"
   ],
-  "dictionaries": ["tvm-instructions", "names", "commands"],
+  "dictionaries": ["tvm-instructions", "names", "commands", "examples"],
   "dictionaryDefinitions": [
     {
       "name":"tvm-instructions",
@@ -19,7 +19,11 @@
     {
       "name":"commands",
       "path":"./src/grammar/commands-dictionary.txt"
-    }
+    },
+    {
+      "name":"examples",
+      "path":"./src/grammar/examples-dictionary.txt"
+    },
   ],
   "words": [
     "ADNL",
