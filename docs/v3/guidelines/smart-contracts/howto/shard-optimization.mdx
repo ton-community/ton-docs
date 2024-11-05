@@ -1,7 +1,7 @@
 # Shard Optimizations on TON
 
 ## Architecture Basics
-TON is designed to process myriads of transactions in parallel. This capability is built on the [infinite sharding paradigm](v3/documentation/smart-contracts/infinity-sharding-paradigm), which means that once the load on a group of validators approaches their throughput limit, it is split (sharded). Two groups of validators then process this load independently and in parallel. These splits occur deterministically, and whether a transaction is processed by a specific group depends on the contract address associated with the transaction. Addresses that are close to each other (sharing the same prefix) will be processed in the same shard.
+TON is designed to process myriads of transactions in parallel. This capability is built on the [infinite sharding paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm), which means that once the load on a group of validators approaches their throughput limit, it is split (sharded). Two groups of validators then process this load independently and in parallel. These splits occur deterministically, and whether a transaction is processed by a specific group depends on the contract address associated with the transaction. Addresses that are close to each other (sharing the same prefix) will be processed in the same shard.
 
 When a message is sent from one contract to another, there are two possibilities: either both contracts reside in the same shard, or they are in different shards. In the former case, the current group already has all necessary data and can process the message immediately. In the latter case, the message must be routed from one group to another. To avoid message loss or double-processing, proper accounting is needed. This is done by registering a queue of outgoing messages from the sender's shard in a masterchain block, and then the receiver's shard must explicitly confirm that it has processed this queue. Such overhead makes cross-shard message delivery slower; there needs to be at least one masterchain block between the block where the message was sent and the block where it was consumed. This delay is usually about 12-13 seconds.
 
@@ -114,7 +114,7 @@ So, contract address shard prefix is a part of a contract address that identifie
 From networking perspective, it's clear that request on the same network segment will get to processing faster than the one that is routed elsewhere, right?
 It's kind of like one uses CDN to host content closer to the end users, in TON we deploy contract closer to the end users.
 
-If load on the shard exceeds [certain level](v3/documentation/smart-contracts/infinity-sharding-paradigm#algorithm-for-deciding-whether-to-split-or-merge) shard splits. And the goal is to provide dedicated computational resources to the contract under load and isolate it's impact on the whole network.
+If load on the shard exceeds [certain level](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#algorithm-for-deciding-whether-to-split-or-merge) shard splits. And the goal is to provide dedicated computational resources to the contract under load and isolate it's impact on the whole network.
 Current maximum shard prefix length is just 4 bits, so blockchain can split in 16 shards max from prefix 0 to 15.
 
 ### Problems during shard optimizations
@@ -141,7 +141,7 @@ You will see `0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe
 Now we know, that USDT minter is located in shard `b`(hex) or `11`(decimal) if you will.
 
 ### How to deploy contract to a certain shard
-In order to understand how this works, one should understand how contract address [depends](v3/documentation/smart-contracts/addresses#account-id) on it's code and data.
+In order to understand how this works, one should understand how contract address [depends](/v3/documentation/smart-contracts/addresses#account-id) on it's code and data.
 Essentially it's a SHA256 has of code and data at deployment time.
 Knowing that, the only way to deploy contract with the same code in a different shard is to manipulate initial data.
 Data field, that is used to manipulate resulting contract address is called *nonce*.
@@ -150,11 +150,11 @@ One of very first know contracts, that used this principle is [vanity contract](
 It has `salt` data field, the only purpose of which is to *brute-force* the value of it, that results in the desired address pattern.
 Putting the contract into specific shard is done in exactly same way, except the prefix one needs to match is way shorter.
 One of the simplest examples to start from would be the wallet contract.
-- [Wallet creation for different shard](v3/guidelines/dapps/asset-processing/payments-processing/#wallet-creation-for-different-shards) article illustrates case where public key is used as nonce to put wallet in a specific shard.
+- [Wallet creation for different shard](/v3/guidelines/dapps/asset-processing/payments-processing/#wallet-creation-for-different-shards) article illustrates case where public key is used as nonce to put wallet in a specific shard.
 - The other examples is [turbo-wallet](https://github.com/Trinketer22/turbo-wallet/blob/d239c1a1ac31c7f5545c2ef3ddc909d6cbdafe24/src/lib/contracts/HighloadWalletV3.ts#L44) using subwalletId for [same](https://github.com/Trinketer22/turbo-wallet/blob/d239c1a1ac31c7f5545c2ef3ddc909d6cbdafe24/src/lib/turboWallet.ts#L80) purposes.
 You can pretty quickly extend [ShardedContract](https://github.com/Trinketer22/turbo-wallet/blob/main/src/lib/ShardedContract.ts) interface using your contract constructor to make it *sharded* too.
 ## Mass Jetton Distribution solutions
-If you need to distribute jettons among tens/hundreds of thousands or millions of users, check this [post](v3/guidelines/dapps/asset-processing/mintless-jettons). We suggest you consider existing battle-tested services. A few are deeply optimized and will not only be shard-optimized but also cheaper than handmade solutions:
+If you need to distribute jettons among tens/hundreds of thousands or millions of users, check this [post](/v3/guidelines/dapps/asset-processing/mintless-jettons). We suggest you consider existing battle-tested services. A few are deeply optimized and will not only be shard-optimized but also cheaper than handmade solutions:
 - **Mintless Jettons:** When you need to distribute jettons during a Token Generation Event (TGE), you can allow users to claim a predefined airdrop directly from the jetton-wallets contract. It is cheap, does not require an additional transaction, and is available on demand (only users who need to spend jettons now will claim them). [LINK]
 - **Tonapi Solution for Jetton Mass Sending:** Allows for the distribution of existing jettons via direct sending to user wallets. Battle-tested by Notcoin and DOGS (a few million transfers each), optimized to decrease latency, throughput, and costs. [Mass jetton sending](https://docs.tonconsole.com/tonconsole/jettons/mass-sending)
 - **TokenTable Solution for Decentralized Claim:** Allows users to claim jettons from specific claim transactions (users pay for fees). Battle-tested by Avacoin and DOGS (a few million transfers), optimized to increase throughput and costs. [Introduction](https://docs.tokentable.xyz/for-tvm-developers/introduction)

@@ -4,7 +4,7 @@
   "language": "en",
   "files": [
     "**/*.md",
-    "**/*.mdx",
+    "**/*.mdx"
   ],
   "dictionaries": ["tvm-instructions", "names", "commands", "examples"],
   "dictionaryDefinitions": [
@@ -311,6 +311,7 @@
   ],
   "flagWords": [],
   "ignorePaths": [
+    "scripts",
     "static",
     "node_modules",
     "package.json",
@@ -324,6 +325,6 @@
     "sidebars.js",
     "sidebars",
     "i18n",
-    ".husky",
+    ".husky"
   ]
 }

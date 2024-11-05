@@ -2187,7 +2187,7 @@ if (found) {
 ```
 
 :::note
-If you [familiarize yourself](v3/documentation/tvm/instructions) with the operation of the `LDSLICEX` opcode (the load_bits function uses this opcode), you will notice that the read data is returned first (head) and only then the remaining data (tail), but they are in reverse order in the contract code.
+If you [familiarize yourself](/v3/documentation/tvm/instructions) with the operation of the `LDSLICEX` opcode (the load_bits function uses this opcode), you will notice that the read data is returned first (head) and only then the remaining data (tail), but they are in reverse order in the contract code.
 
 In fact, they go in reverse order, because in stdlib in the function signature, the returned data [go in reverse order](https://github.com/ton-blockchain/highload-wallet-contract-v3/blob/d58c31e82315c34b4db55942851dd8d4153975c5/contracts/imports/stdlib.fc#L321): `(slice, slice) load_bits(slice s, int len) asm(s len -> 1 0) "LDSLICEX";`. Here `-> 1 0` means to return the argument with index 1 (tail) first, and then 0 (head).
 :::
@@ -3118,7 +3118,7 @@ This helps us to be independent of using libraries and to understand the structu
 
 ## 🧩 Next Steps
 
-Reading the documentation provided above is a complex undertaking and it’s difficult to understand the entirety of the TON platform. However, it is a good exercise for those passionate about building on the TON. Another suggestion is to begin learning how to write smart contracts on TON by consulting the following resources: [FunC Overview](v3/documentation/smart-contracts/func/overview), [Best Practices](v3/guidelines/smart-contracts/guidelines), [Examples of Smart Contracts](v3/documentation/smart-contracts/contracts-specs/examples), [FunC Cookbook](v3/documentation/smart-contracts/func/cookbook)
+Reading the documentation provided above is a complex undertaking and it’s difficult to understand the entirety of the TON platform. However, it is a good exercise for those passionate about building on the TON. Another suggestion is to begin learning how to write smart contracts on TON by consulting the following resources: [FunC Overview](/v3/documentation/smart-contracts/func/overview), [Best Practices](/v3/guidelines/smart-contracts/guidelines), [Examples of Smart Contracts](/v3/documentation/smart-contracts/contracts-specs/examples), [FunC Cookbook](/v3/documentation/smart-contracts/func/cookbook)
 
 Additionally, it is recommended that readers familiarize themselves with the following documents in more detail: [ton.pdf](https://docs.ton.org/ton.pdf) and [tblkch.pdf](https://ton.org/tblkch.pdf) documents.
 
@@ -3149,7 +3149,7 @@ Official documentation:
   
   - [TL-B](/v3/documentation/data-formats/tlb/tl-b-language)
 
-  - [Blockchain of Blockchains](v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)
+  - [Blockchain of Blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)
 
 External references:
 

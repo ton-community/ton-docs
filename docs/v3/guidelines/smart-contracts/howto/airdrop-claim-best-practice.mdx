@@ -13,7 +13,7 @@ Let's think about it.
 
 User send some kind of proof, that he is eligible for the claim
 solution checks it and sends jettons back.
-In current case `proof` means [merkle proof](v3/documentation/data-formats/tlb/exotic-cells#merkle-proof) but it could very well be signed data or whatever else authorization method one could come up with.
+In current case `proof` means [merkle proof](/v3/documentation/data-formats/tlb/exotic-cells#merkle-proof) but it could very well be signed data or whatever else authorization method one could come up with.
 Sending jettons, - so there would be a jetton wallet and minter.
 And we got to make sure that these sneaky users can't claim twice - double spend protection contract.
 Oh, and we probably want to make some money, do we?
@@ -69,7 +69,7 @@ Ok, we got something going, but what about shard optimizations?
 
 ### What are these?
 
-In order to get some very basic grasp of understanding, please take a look at [Wallet Creation for Different shards](v3/guidelines/dapps/asset-processing/payments-processing/#wallet-creation-for-different-shards)
+In order to get some very basic grasp of understanding, please take a look at [Wallet Creation for Different shards](/v3/guidelines/dapps/asset-processing/payments-processing/#wallet-creation-for-different-shards)
 Long story short - shard is a 4 bit address prefix. Kind of like in networking.
 When contract is in the same network segment, messages get processed without routing and therefore - much faster.
 
@@ -80,7 +80,7 @@ When contract is in the same network segment, messages get processed without rou
 
 We are in full control of the distributor data, so we must be able to to put it in whatever shard.
 How to?
-Remember, the contract address is [defined by it's state](v3/documentation/smart-contracts/addresses#account-id).
+Remember, the contract address is [defined by it's state](/v3/documentation/smart-contracts/addresses#account-id).
 We should use some of the contract's data field as nonce and keep on trying until we get the desired result.
 Example of a good nonce in real contracts can (subwalletId/publicKey) for a wallet contract.
 Any field that can be either modified after deployment or does not impact contract logic(like subwalletId) will fit the bill.
