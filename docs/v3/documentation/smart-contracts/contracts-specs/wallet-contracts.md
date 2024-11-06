@@ -59,7 +59,7 @@ Note that wallet doesn't provide any validation of internal messages you sending
 :::
 
 #### Exit codes
-| Exit code      | Meaning                                                           |
+| Exit code      | Discription                                                       |
 |----------------|-------------------------------------------------------------------|
 | 0x23           | `valid_until` check failed, transaction confirmation try too late |
 | 0x21           | `seqno` check failed, reply protection accured                    |
@@ -87,7 +87,7 @@ This version introduces the `subwallet_id` parameter, which allows you to create
 Wallet source code:
  * [ton/crypto/smartcont/wallet3-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)
 
-Basically, `subwallet_id` is just a number added to the contract state when it is deployed. And since the contract address in TON is a hash of its state and code, the wallet address will change with a different `subwallet_id`. This version is the most used right now. It covers most use-cases and remains clean, simple and mostly same as previous versions. All get methods remains the same.
+Basically, `subwallet_id` is just a number added to the contract state when it's deployed. And since the contract address in TON is a hash of its state and code, the wallet address will change with a different `subwallet_id`. This version is the most used right now. It covers most use-cases and remains clean, simple and mostly same as previous versions. All get methods remains the same.
 
 #### Persistend memory layout
  - <b>seqno</b>: 32-bit long sequence number.
@@ -104,7 +104,7 @@ Basically, `subwallet_id` is just a number added to the contract state when it i
 2. Up to 4 references to cells containing messages.
 
 #### Exit codes
-| Exit code      | Meaning                                                           |
+| Exit code      | Discription                                                       |
 |----------------|-------------------------------------------------------------------|
 | 0x23           | `valid_until` check failed, transaction confirmation try too late |
 | 0x23           | `Ed25519 signature` check failed                                  |
@@ -172,7 +172,7 @@ If `state_init` name doesn't tell you much by itself take a look at those refere
 :::
 
 #### Exit codes
-| Exit code      | Meaning                                                                  |
+| Exit code      | Discription                                                              |
 |----------------|--------------------------------------------------------------------------|
 | 0x24           | `valid_until` check failed, transaction confirmation try too late        |
 | 0x23           | `Ed25519 signature` check failed                                         |
@@ -203,7 +203,7 @@ TL-B schemes:
  * [ton/crypto/block/block.tlb] (https://github.com/ton-blockchain/ton/blob/5c392e0f2d946877bb79a09ed35068f7b0bd333a/crypto/block/block.tlb#L380)
 
 :::caution
-In contrast to previous wallet versions specification we will relly on [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) schemes, due to relative complexity of this wallet version interfaces realization, we will provide some description for each of those, nethertheless basic understanding is still required.
+In contrast to previous wallet versions specification we will relly on [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) schemes, due to relative complexity of this wallet version interfaces realization, we will provide some description for each of those, nethertheless basic understanding is still required. In combination with wallet source code it should be enouth.
 :::
 
 #### Persistend memory layout
@@ -240,21 +240,70 @@ external_signed#7369676e signed:SignedRequest = ExternalMsgBody;
 
 Before we get to actual payload of our messages - `InnerRequest`, lets see how 5 version differs from previous at authentification process. `InternalMsgBody` combinator describes two ways to get access to wallet actions through internal messages. First one is that we are already familiar with from 4 version - authentificate as previously registered extension, address of which is stored in `extensions_dict`. Second one is authentification through stored public key and signature same as for external requests. At first it might seen as unnecessary feature, but it actually allows to proceed your request through external services(smart-contracts) which are not a part of your wallet extensions infrastructure, key feature of 5 version, gas-free transactions, relays on that functionality.
 
+Note that just recieving funds is still an option, practically any recieved internal message which doesn't pass authentification process will be considered as so.
 
+#### Actions
+
+First thing that we should notice is `InnerRequest` that we already seen in authentification process, in contrast to previuos version both external and internal messages have access to same functionality, except changing signature mode(.e. `is_signature_allowed` flag), differs by authentification process.
+
+```
+out_list_empty$_ = OutList 0;
+out_list$_ {n:#} 
+    prev:^(OutList n) 
+    action:OutAction = OutList (n + 1);
+
+action_send_msg#0ec3c86d mode:(## 8) out_msg:^(MessageRelaxed Any) = OutAction;
+
+// Extended actions in V5:
+action_list_basic$_ {n:#} actions:^(OutList n) = ActionList n 0;
+action_list_extended$_ {m:#} {n:#} action:ExtendedAction prev:^(ActionList n m) = ActionList n (m+1);
+
+action_add_ext#02 addr:MsgAddressInt = ExtendedAction;
+action_delete_ext#03 addr:MsgAddressInt = ExtendedAction;
+action_set_signature_auth_allowed#04 allowed:(## 1) = ExtendedAction;
+
+actions$_ out_actions:(Maybe OutList) has_other_actions:(## 1) {m:#} {n:#} other_actions:(ActionList n m) = InnerRequest;
+```
+
+We can consider `InnerRequest` as two lists of actions: first `OutList` is optional chain of cell references each of those containing send message request led by message `mode`, second one `ActionList` led by one-bit flag `has_other_actions`, marking presence of extended actions, starting from first cell and continuing as chain of cell references. We are already familliar with first two extended actions `action_add_ext` and `action_delete_ext` followed by internal address that we want to add/delete from extensions dictionary. Third one `action_set_signature_auth_allowed` restricts or allows authentification through public key, leaving the only way to interact with wallet through extensions, this functionality might be extreamly important in case of lost or compromised private key.
+
+:::info
+Note that maximum number of actions is 255, this is a consequnce of realization through [c5](/v3/documentation/tvm/tvm-overview#result-of-tvm-execution) TVM register, technically you can make a request with empty `OutAction` and `ExtendedAction`, but in that way it will be similar to just recieving funds.
+:::
+
+#### Exit codes
+| Exit code      | Discription                                                                  |
+|----------------|------------------------------------------------------------------------------|
+| 0x84           | authentification try through signature while its disabled                    |
+| 0x85           | `seqno` check failed, reply protection accured                               |
+| 0x86           | `walled-id` not correspond to the stored one                                 |
+| 0x87           | `Ed25519 signature` check failed                                             |
+| 0x88           | `valid-untile` check failed                                                  |
+| 0x89           | enforce that send_mode has +2 bit (ignore errors) set for external message.  |
+| 0x8A           | `external-signed` prefix doesnt correspond to recieved one                   |
+| 0x8B           | add extension operation wasnt sucessfull                                     |
+| 0x8C           | remove extension operation wasnt sucessfull                                  |
+| 0x8D           | unsopported extended message prefix                                          |
+| 0x8E           | try to disable auth by signature while extension dictionary is empty         |
+| 0x8F           | setting signature try to already setted state                                |
+| 0x90           | try to remove last extension when signature is disabled                      |
+| 0x91           | extension wrong workchain                                                    |
+| 0x92           | try to change signature mode through external message                        |
+| 0x93           | Invalid c5, `action_send_msg` verification failed                            |
+| 0x0            | Standard successful execution exit code.                                     |
+
+:::danger
+Note that `0x8E`, `0x90`, `0x92` wallet exit codes tries to prevent you from lost access to wallet functionality, nethertheless you still should remember that wallet doesnt check that stored extension addresses actually exzist in TON, also you still can deploy wallet with initial data consist of empty extensions dictionary and restricted signature mode, in that case you still we be able to get access through public key until you add your first extension, so be carefull with that moments.
+:::
+
+#### Preparing for Gasless Transactions
+
+The v5 wallet smart contract allows the processing of internal messages signed by the owner. This also allows you to make gasless transactions, e.g., payment of network fees when transferring USDt in USDt itself.
 
 :::tip
 Wallet V5 wallets allow transactions to be initiated by the user but paid for by another contract. Consequently, there will be services (such as [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)) that provide this functionality: they pay the transaction fees in TONs on behalf of the user, but charge a fee in tokens.
 :::
 
-#### UI Preparation and Beta Testing
-
-- <b>UI</b>: Already now, wallet teams can start UI preparations. You can use the v5-beta smart contract as a test smart contract, but keep in mind that it will can change. UI suggestion: wallets that have multi-accounts could support the new v5 smart contract as a separate account in the UI. Provide a “Transfer funds between your accounts” functionality.
-- <b>Beta</b>: If you build v5 functionality into public versions of your products, please mark it as “beta” and do not use the v5 contract by default, but only when explicitly enabled in the settings. Please observe this rule to prevent too wide distribution of the non-final beta version of the v5 smart contract.
-- <b>Release</b>: The final smart contract will be ready around June 20, after which wallets can enable v5 by default using the final smart contract. It will be updated here.
-
-#### Preparing for Gasless Transactions
-
-The v5 wallet smart contract allows the processing of internal messages signed by the owner. This also allows you to make gasless transactions, e.g., payment of network fees when transferring USDt in USDt itself.
 
 #### Flow
 
