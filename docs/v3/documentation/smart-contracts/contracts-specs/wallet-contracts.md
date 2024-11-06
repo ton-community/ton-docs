@@ -249,7 +249,6 @@ internal_extension#6578746e
 external_signed#7369676e signed:SignedRequest = ExternalMsgBody;
 ```
 
-
 Before we get to the actual payload of our messages — `InnerRequest` — let's first look at how version 5 differs from previous versions in the authentication process. The `InternalMsgBody` combinator describes two ways to access wallet actions through internal messages. The first method is one we are already familiar with from version 4: authentication as a previously registered extension, the address of which is stored in `extensions_dict`. The second method is authentication through the stored public key and signature, similar to external requests.
 
 At first, this might seem like an unnecessary feature, but it actually enables requests to be processed through external services (smart contracts) that are not part of your wallet's extension infrastructure—a key feature of V5. Gas-free transactions rely on this functionality.
@@ -311,14 +310,21 @@ Note that the maximum number of actions is 255; this is a consequence of the rea
 Note that the `0x8E`, `0x90`, and `0x92` wallet exit codes are designed to prevent you from losing access to wallet functionality. Nevertheless, you should still remember that the wallet doesn't check whether the stored extension addresses actually exist in TON. You can also deploy a wallet with initial data consisting of an empty extensions dictionary and restricted signature mode. In that case, you will still be able to access the wallet through the public key until you add your first extension. So, be careful with these scenarios.
 :::
 
+#### Get methods
+1. int is_signature_allowed() returns stored `is_signature_allowed` flag.
+2. int seqno() returns current stored seqno.
+3. int get_subwallet_id() returns current subwallet ID.
+4. int get_public_key() returns current stored public key.
+5. cell get_extensions() returns extensions dictionary.
+
 #### Preparing for Gasless Transactions
 
 As was sad before v5 wallet smart contract allows the processing of internal messages signed by the owner. This also allows you to make gasless transactions, e.g., payment of network fees when transferring USDt in USDt itself. Common scheme looks like that:
 
-![image](/img/gasless.png)
+![image](/img/gasless.jpg)
 
 :::tip
-Wallet V5 wallets allow transactions to be initiated by the user but paid for by another contract. Consequently, there will be services (such as [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)) that provide this functionality: they pay the transaction fees in TONs on behalf of the user, but charge a fee in tokens.
+Consequently, there will be services (such as [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)) that provide this functionality: they pay the transaction fees in TONs on behalf of the user, but charge a fee in tokens.
 :::
 
 #### Flow
