@@ -94,7 +94,7 @@ To make your life easier and skip routine low-level tasks, we will use a boilerp
 Note, you'll need to [sign in](https://github.com/login) to GitHub for further work.
 :::
 
-Please use the [get-started-with-ton](https://github.com/a-bahdanau/get-started-with-ton) template to create your project by clicking the “Use this template” button and selecting the “Create a new repository” tab as shown below:
+Please use the [ton-onboarding-challenge](https://github.com/ton-community/ton-onboarding-challenge) template to create your project by clicking the “Use this template” button and selecting the “Create a new repository” tab as shown below:
 
 
 <br></br>
@@ -283,7 +283,7 @@ It's better to use an RPC node provider, or to run your own ton-http-api instanc
 
 Finally, the next step in the process is to retrieve specific mining data from TON Blockchain.
 
-By consulting the [README file](https://github.com/a-bahdanau/get-started-with-ton#mining-process-deep-dive) needed to complete the TON onboarding challenge, the latest TON mining data is obtained by running the `get_mining_data` method. Once initiated, the result will be as follows:
+By consulting the [README file](https://github.com/ton-community/ton-onboarding-challenge#mining-process-deep-dive) needed to complete the TON onboarding challenge, the latest TON mining data is obtained by running the `get_mining_data` method. Once initiated, the result will be as follows:
 
 As a result we should receive an array with these fields:
 
@@ -418,7 +418,7 @@ That is what a miner is! Simple, isn't it?
 
 First, we must prepare a mining message by ensuring the correct parameters to ensure the validity and data integrity of this process.
 
-Thankfully, the [README file](https://github.com/a-bahdanau/get-started-with-ton#mining-process-deep-dive) allows us to retrieve the correct guidelines needed to achieve this goal. As you can see, the above README file comprises a table with certain fields and Cell types (titled “Layout of Proof of Work Cell’) to help achieve our desired result.
+Thankfully, the [README file](https://github.com/ton-community/ton-onboarding-challenge#mining-process-deep-dive) allows us to retrieve the correct guidelines needed to achieve this goal. As you can see, the above README file comprises a table with certain fields and Cell types (titled “Layout of Proof of Work Cell’) to help achieve our desired result.
 
 :::info What are cells?
 Cells are data storage structures on TON that fulfill numerous purposes, including increasing network scalable and smart contract transaction speeds. We won’t get into specifics here, but if you’re interested in understanding the complexity of cells and how they work, consider diving into [this](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) section of our documentation.
@@ -442,12 +442,12 @@ const mineParams: MineMessageParams = {
 let msg = Queries.mine(mineParams); // transaction builder
 ```
 
-Probably, you have a question: where are the _op_ and _data2_ from the [table](https://github.com/a-bahdanau/get-started-with-ton#mining-process-deep-dive)?
+Probably, you have a question: where are the _op_ and _data2_ from the [table](https://github.com/ton-community/ton-onboarding-challenge#mining-process-deep-dive)?
 
 * In the table, the numerical value of data1 must be equal to that of data2. In order to omit filling the data2 value, the transaction builder performs a low-level process (see Queries.mine() sources).
 * Because the `op` classification is always constant, it is already implemented in transaction builder _Queries_ and in _OpCodes_. You can find the op code by going to the source code of `mine()` method.
 
-:::tiphttps://github.com/a-bahdanau/get-started-with-ton#mining-process-deep-dive
+:::tip
 Though it may be interesting to check out the source code (`../wrappers/NftGiver.ts`), it is not necessary.
 :::
 
