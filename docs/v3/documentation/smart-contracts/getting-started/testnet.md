@@ -20,7 +20,7 @@ For convenience, nearly the entire mainnet infrastructure (wallets, APIs, bridge
 * Testnet TON Center API: https://testnet.toncenter.com
 * Testnet TONX Faucet: https://faucet.tonxapi.com
 * Testnet TONX API:  https://testnet-rpc.tonxapi.com
-* Testnet HTTP API: https://testnet.tonapi.io/
+* Testnet TONAPI: https://testnet.tonapi.io/
 * Testnet bridge: https://bridge.ton.org/?testnet=true
 * Testnet dTON GraphQL: https://testnet.dton.io/
 
