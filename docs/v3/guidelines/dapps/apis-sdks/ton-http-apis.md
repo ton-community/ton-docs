@@ -62,4 +62,5 @@ GraphQL nodes act as indexers as well.
 
 ## Other APIs
 
+* [TONX API](https://docs.tonxapi.com/reference/build-your-first-dapp) — Your go-to API for accessing data on accounts, transactions, blocks, NFTs, and Jettons with 99.99% uptime.
 * [TonAPI](https://docs.tonconsole.com/tonapi) - API that is designed to provide users with a streamlined experience, not worrying about low-level details of smart contracts.
