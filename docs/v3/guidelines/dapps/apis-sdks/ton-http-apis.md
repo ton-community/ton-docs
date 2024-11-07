@@ -25,6 +25,7 @@ There are different ways to connect to blockchain:
 
 ## RPC Nodes
 
+* [TONX API](https://docs.tonxapi.com/reference/direct-apis) — TONX supernode providing unparalleled stability and low latency to enable TON DApps worldwide.
 * [Chainstack](https://chainstack.com/build-better-with-ton/) — RPC nodes and indexer in multiple regions with geo and load balancing.
 * [Tatum](https://docs.tatum.io/reference/rpc-ton) — Access TON RPC nodes and powerful developer tools in one simple-to-use platform.
 * [GetBlock Nodes](https://getblock.io/nodes/ton/) — connect and test your dApps using GetBlocks Nodes
