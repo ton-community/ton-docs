@@ -10,8 +10,8 @@
 - [toncenter/v2](https://toncenter.com/) - This API enables HTTP access to TON blockchain - getting accounts and wallets information, looking up blocks and transactions, sending messages to the blockchain, calling get methods of smart contracts, and more.
 
 ## Third party APIs
-- [TONX API](https://docs.tonxapi.com/reference/build-your-first-dapp) — Your go-to API for accessing data on accounts, transactions, blocks, NFTs, and Jettons with 99.99% uptime—just like TonKey and TonStake did.
 - [tonapi.io](https://docs.tonconsole.com/tonapi) — Fast indexed API providing basic data about accounts, transactions, blocks, and application-specific data about NFTs, Auctions, Jettons, TON DNS, and Subscriptions. It also provides annotated data on transaction chains.
+- [TONX API](https://docs.tonxapi.com/reference/build-your-first-dapp) — Your go-to API for accessing data on accounts, transactions, blocks, NFTs, and Jettons with 99.99% uptime—just like TonKey and TonStake did.
 - [dton.io](https://dton.io/graphql/) — GraphQL API that can provide data about accounts, transactions, and blocks, as well as application-specific data about NFTs, Auctions, Jettons, and TON DNS.
 - [ton-api-v4](https://mainnet-v4.tonhubapi.com) — A lite API focused on speed via aggressive caching in CDN.
 - [docs.nftscan.com](https://docs.nftscan.com/reference/ton/model/asset-model) — NFT APIs for the TON blockchain.
