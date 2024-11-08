@@ -10,12 +10,12 @@
 - [toncenter/v2](https://toncenter.com/) - This API enables HTTP access to TON blockchain - getting accounts and wallets information, looking up blocks and transactions, sending messages to the blockchain, calling get methods of smart contracts, and more.
 
 ## Third party APIs
-- [TONX API](https://docs.tonxapi.com/) - an API specifically designed for seamless Dapp development, enabling easy access to a variety of tools and data.
-- [tonapi.io](https://docs.tonconsole.com/tonapi) - fast indexed API which provides basic data about accounts, transactions, blocks, application-specific data about NFT, Auctions, Jettons, TON DNS, Subscriptions. It also provides annotated data on transaction chains.
-- [dton.io](https://dton.io/graphql/) - GraphQL API with that can provide data about accounts, transactions and blocks, as well as application-specific data about NFT, Auctions, Jettons and TON DNS.
-- [ton-api-v4](https://mainnet-v4.tonhubapi.com) - another lite-api focused on speed via aggressive cashing in CDN.
-- [docs.nftscan.com](https://docs.nftscan.com/reference/ton/model/asset-model) - NFT APIs for TON blockchain.
-- [everspace.center](https://everspace.center/toncoin) - Simple RPC API for accessing TON Blockchain.
+- [tonapi.io](https://docs.tonconsole.com/tonapi) — Fast indexed API providing basic data about accounts, transactions, blocks, and application-specific data about NFTs, Auctions, Jettons, TON DNS, and Subscriptions. It also provides annotated data on transaction chains.
+- [TONX API](https://docs.tonxapi.com/reference/build-your-first-dapp) — Your go-to API for accessing data on accounts, transactions, blocks, NFTs, and Jettons with 99.99% uptime—just like TonKey and TonStake did.
+- [dton.io](https://dton.io/graphql/) — GraphQL API that can provide data about accounts, transactions, and blocks, as well as application-specific data about NFTs, Auctions, Jettons, and TON DNS.
+- [ton-api-v4](https://mainnet-v4.tonhubapi.com) — A lite API focused on speed via aggressive caching in CDN.
+- [docs.nftscan.com](https://docs.nftscan.com/reference/ton/model/asset-model) — NFT APIs for the TON blockchain.
+- [everspace.center](https://everspace.center/toncoin) — Simple RPC API for accessing the TON blockchain.
 
 
 ## Additional APIs

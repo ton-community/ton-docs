@@ -274,12 +274,13 @@ API types:
 
 Node providers partners:
 
-- https://toncenter.com/api/v2/
-- [getblock.io](https://getblock.io/)
-- https://www.orbs.com/ton-access/
-- [toncenter/ton-http-api](https://github.com/toncenter/ton-http-api) 
-- [nownodes.io](https://nownodes.io/nodes)
-- https://dton.io/graphql
+- [Toncenter](https://toncenter.com/api/v2/) — Reliable access to TON RPC services.
+- [TONX API](https://docs.tonxapi.com/reference/direct-apis) — Direct access with robust stability and low latency for TON-based applications.
+- [GetBlock](https://getblock.io/) — Blockchain nodes provider for dApp development.
+- [TON Access](https://www.orbs.com/ton-access/) — HTTP API for secure, high-performance TON access.
+- [Toncenter/Ton HTTP API](https://github.com/toncenter/ton-http-api) — Self-hosted RPC node solution.
+- [NOWNodes](https://nownodes.io/nodes) — Full nodes and explorers accessible via API.
+- [Dton](https://dton.io/graphql) — GraphQL API endpoint for TON.
 
 TON directory with projects from TON Community:
 
