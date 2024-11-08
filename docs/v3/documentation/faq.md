@@ -274,8 +274,8 @@ API types:
 
 Node providers partners:
 
-- [TONX API](https://docs.tonxapi.com/reference/direct-apis) — Direct access with robust stability and low latency for TON-based applications.
 - [Toncenter](https://toncenter.com/api/v2/) — Reliable access to TON RPC services.
+- [TONX API](https://docs.tonxapi.com/reference/direct-apis) — Direct access with robust stability and low latency for TON-based applications.
 - [GetBlock](https://getblock.io/) — Blockchain nodes provider for dApp development.
 - [TON Access](https://www.orbs.com/ton-access/) — HTTP API for secure, high-performance TON access.
 - [Toncenter/Ton HTTP API](https://github.com/toncenter/ton-http-api) — Self-hosted RPC node solution.
