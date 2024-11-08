@@ -290,7 +290,7 @@ Communication between Jetton wallets and TON wallets occurs through the followin
 | `sender`          | address |
 | `forward_payload` | cell    |
 
-Here `sender` address is an address of Alice's `Jetton wallet`.
+Here `sender` address is an address of the previous owner of transferred jettons which is the Bob's wallet.
 
 #### Message 2''
 `payee's jetton wallet -> Sender`. Excess message body. **Only sent if any ton coins are left after paying the fees**. Contains the following data:
