@@ -25,16 +25,16 @@ There are different ways to connect to blockchain:
 
 ## RPC Nodes
 
-* [TONX API](https://docs.tonxapi.com/reference/direct-apis) — TONX supernode providing unparalleled stability and low latency to enable TON DApps worldwide.
-* [Chainstack](https://chainstack.com/build-better-with-ton/) — RPC nodes and indexer in multiple regions with geo and load balancing.
-* [Tatum](https://docs.tatum.io/reference/rpc-ton) — Access TON RPC nodes and powerful developer tools in one simple-to-use platform.
-* [GetBlock Nodes](https://getblock.io/nodes/ton/) — connect and test your dApps using GetBlocks Nodes
-* [TON Access](https://www.orbs.com/ton-access/) - HTTP API for The Open Network (TON).
-* [Toncenter](https://toncenter.com/api/v2/) — community-hosted project for Quick Start with API. (Get an API key [@tonapibot](https://t.me/tonapibot))
-* [ton-node-docker](https://github.com/fmira21/ton-node-docker) - Docker Full Node and Toncenter API.
-* [toncenter/ton-http-api](https://github.com/toncenter/ton-http-api) — run your own RPC node. 
-* [nownodes.io](https://nownodes.io/nodes) — NOWNodes full Nodes and blockbook Explorers via API.
-* [Chainbase](https://chainbase.com/chainNetwork/TON) — Node API and data infrastructure for The Open Network.
+- [Toncenter](https://toncenter.com/api/v2/) — Community-hosted project for quick start with TON API. (Get an API key from [@tonapibot](https://t.me/tonapibot))
+- [toncenter/ton-http-api](https://github.com/toncenter/ton-http-api) — Run your own RPC node.
+- [TONX API](https://docs.tonxapi.com/reference/direct-apis) — Supernode offering unparalleled stability and low latency, enabling TON DApps worldwide.
+- [Chainstack](https://chainstack.com/build-better-with-ton/) — RPC nodes and indexers across multiple regions, with geo and load balancing.
+- [Tatum](https://docs.tatum.io/reference/rpc-ton) — Access to TON RPC nodes and a suite of developer tools on a single platform.
+- [GetBlock Nodes](https://getblock.io/nodes/ton/) — Connect and test your dApps using GetBlock’s TON nodes.
+- [TON Access](https://www.orbs.com/ton-access/) — HTTP API for The Open Network (TON).
+- [ton-node-docker](https://github.com/fmira21/ton-node-docker) — Docker Full Node and Toncenter API setup.
+- [NOWNodes.io](https://nownodes.io/nodes) — Full nodes and Blockbook explorers via API.
+- [Chainbase](https://chainbase.com/chainNetwork/TON) — Node API and data infrastructure for The Open Network (TON).
 
 ## Indexer
 
