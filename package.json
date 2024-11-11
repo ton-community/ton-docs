@@ -22,12 +22,12 @@
     "postinstall": "husky"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.5.2",
-    "@docusaurus/plugin-client-redirects": "^3.5.2",
-    "@docusaurus/plugin-google-gtag": "^3.5.2",
-    "@docusaurus/preset-classic": "^3.5.2",
-    "@docusaurus/remark-plugin-npm2yarn": "^3.5.2",
-    "@docusaurus/theme-live-codeblock": "^3.5.2",
+    "@docusaurus/core": "^3.6.1",
+    "@docusaurus/plugin-client-redirects": "^3.6.1",
+    "@docusaurus/plugin-google-gtag": "^3.6.1",
+    "@docusaurus/preset-classic": "^3.6.1",
+    "@docusaurus/remark-plugin-npm2yarn": "^3.6.1",
+    "@docusaurus/theme-live-codeblock": "^3.6.1",
     "@easyops-cn/docusaurus-search-local": "^0.44.5",
     "@mdx-js/react": "^3.0.1",
     "@saucelabs/theme-github-codeblock": "^0.1.1",
@@ -45,8 +45,8 @@
     "url": "^0.11.4"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.5.2",
-    "@docusaurus/tsconfig": "^3.5.2",
+    "@docusaurus/module-type-aliases": "^3.6.1",
+    "@docusaurus/tsconfig": "^3.6.1",
     "@types/react": "^18.3.10",
     "@typescript-eslint/parser": "^6.19.0",
     "cspell": "^8.14.2",

@@ -46,16 +46,6 @@ const config = {
   baseUrl: '/',
   themes: [
     '@docusaurus/theme-live-codeblock',
-        [
-      require.resolve('@easyops-cn/docusaurus-search-local'),
-      {
-        hashed: true,
-        indexPages: true,
-        indexBlog: false,
-        searchBarShortcutHint: false,
-        language: ["en", "zh"],
-      },
-    ],
   ],
   plugins: [
     ['docusaurus-plugin-sass', {}],
@@ -147,7 +137,18 @@ const config = {
       //   textColor: '#F3F3F7',
       //   isCloseable: false,
       // },
+      algolia: {
+        // The application ID provided by Algolia
+        appId: 'NU3MYFFH6U',
+        // Public API key: it is safe to commit it
+        apiKey: '17a77a6334f21a184e928c65d7bf5054',
+        indexName: 'crawler_Test Ton docs',
+        // Optional: see doc section below
+        contextualSearch: true,
 
+        // Optional: path for search page that enabled by default (`false` to disable it)
+        searchPagePath: 'search',
+      },
       image: 'img/snippet.png',
       navbar: require('./navbar'),
       footer: {
