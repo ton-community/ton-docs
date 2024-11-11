@@ -766,7 +766,7 @@ Note that xp+zp is a valid variable name ( without spaces between ).
 
 > 💡 Useful links
 >
-> ["muldivmod" in docs](/v3/documentation/tvm/instructions#52-division)
+> ["muldivmod" in docs](/v3/documentation/tvm/instructions#A98C)
 
 
 ### How to throw errors
@@ -873,7 +873,7 @@ int are_slices_equal_2? (slice a, slice b) asm "SDEQ";
 #### 💡 Useful links
 
  * ["slice_hash()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_hash)
- * ["SDEQ" in docs](/v3/documentation/tvm/instructions#62-other-comparison)
+ * ["SDEQ" in docs](/v3/documentation/tvm/instructions#C705)
 
 ### Determine if cells are equal 
 
@@ -1041,7 +1041,7 @@ Since we need to determine the number of bits occupied by the address, it is als
 
 > 💡 Useful links
 >
-> ["TVM Instructions" in docs](/v3/documentation/tvm/instructions#53-shifts-logical-operations)
+> ["TVM Instructions" in docs](/v3/documentation/tvm/instructions#B603)
 
 ### How to store and load dictionary in local storage
 
