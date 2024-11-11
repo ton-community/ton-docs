@@ -93,7 +93,7 @@ As of August 2021, about 4.9BN Toncoins have been mined.
 #### <a id="faq-general-whomined"></a>Who has mined those coins?
 Coins have been mined to over 70,000 wallets. The owners of these wallets remain unknown.
 #### <a id="faq-general-elite"></a>Is it difficult to start mining?
-Not at all. All you need is [adequate hardware](#hardware) and to follow the steps outlined in the [quick start](#quickStart) section.
+Not at all. All you need is [adequate hardware](#hardware) and to follow the steps outlined in the [quick start](#quick-start) section.
 #### <a id="faq-general-pissed"></a>Is there another way to mine?
 Yes, there is a third-party app—[TON Miner Bot](https://t.me/TonMinerBot).
 #### <a id="faq-general-stats"></a>Where can I see mining statistics?

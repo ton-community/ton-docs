@@ -516,7 +516,7 @@ mechanism for sending messages: [128 + 32](/v3/documentation/smart-contracts/mes
 ### Jetton withdrawals
 
 :::info Important
-It's **recommended** to read and **understand** [how does jetton transfer work](/v3/guidelines/dapps/asset-processing/jettons#jetton-wallets-communication-overview) and [how to send jettons with comment](/v3/guidelines/dapps/asset-processing/jettons#jetton-off-chain-processing) articles before reading this section.
+It's **recommended** to read and **understand** [how does jetton transfer work](/v3/guidelines/dapps/asset-processing/jettons#overview) and [how to send jettons with comment](/v3/guidelines/dapps/asset-processing/jettons#jetton-off-chain-processing) articles before reading this section.
 
 Below you'll find step-by-step guide how to process jetton withdrawals.
 :::
@@ -524,7 +524,7 @@ Below you'll find step-by-step guide how to process jetton withdrawals.
 To withdraw Jettons, the wallet sends messages with the `transfer` body to its corresponding Jetton wallet.
 The Jetton wallet then sends the Jettons to the recipient. It is important to attach some TON (1 nanoTON at least)
 as the  `forward_ton_amount` (and optional comment to `forward_payload`) to trigger a `transfer notification`.
-See: [Jetton contracts message layouts](#jetton-contract-message-layouts)
+See: [Jetton contracts message layouts](/v3/guidelines/dapps/asset-processing/jettons#message-layouts)
 
 #### Preparation
 

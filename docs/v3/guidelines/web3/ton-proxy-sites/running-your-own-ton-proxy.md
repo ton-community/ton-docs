@@ -82,7 +82,7 @@ Your entry proxy will be available by HTTP on `<your_public_ip>` port `8080`.
 
 ## Accessing TON Sites
 
-Now suppose that you have a running instance of the RLDP-HTTP Proxy running on your computer and listening on `localhost:8080` for inbound TCP connections, as explained [above](#running-entry-proxy).
+Now suppose that you have a running instance of the RLDP-HTTP Proxy running on your computer and listening on `localhost:8080` for inbound TCP connections, as explained [above](#running-an-entry-proxy-on-a-remote-computer).
 
 A simple test that everything is working properly may be performed using programs such as `curl` or `wget`. For example,
 
