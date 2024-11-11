@@ -70,7 +70,7 @@ export const Header = () => {
 ```
 
 #### Connect with a specific wallet
-To open a modal window for a specific wallet, use the `openSingleWalletModal()` method. This method takes the wallet's `app_name` as a parameter (refer to the [wallets-list.json]('https://github.com/ton-blockchain/wallets-list/blob/main/wallets-v2.json') file) and opens the corresponding wallet modal. It returns a promise that resolves once the modal window has successfully opened.
+To open a modal window for a specific wallet, use the `openSingleWalletModal()` method. This method takes the wallet's `app_name` as a parameter (refer to the [wallets-list.json](https://github.com/ton-blockchain/wallets-list/blob/main/wallets-v2.json) file) and opens the corresponding wallet modal. It returns a promise that resolves once the modal window has successfully opened.
 
 ```tsx
 <button onClick={() => tonConnectUI.openSingleWalletModal('tonwallet')}>
