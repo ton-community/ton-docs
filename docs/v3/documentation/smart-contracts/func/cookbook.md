@@ -736,7 +736,7 @@ if (current_time > 1672080143) {
 Please note that this method of generating random numbers isn't safe.
 
 Checkout [Random Number Generation](/v3/guidelines/smart-contracts/security/random-number-generation) for more information.
-:::,.
+:::
 
 ```func
 randomize_lt(); ;; do this once
