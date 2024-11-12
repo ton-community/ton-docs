@@ -245,7 +245,7 @@ If the contract cannot initially execute `set_code()` (via its code or execution
 
 ### Can smart contract be deleted?
 
-Yes, either as a result of storage fee accumulation (contract needs to reach -1 TON balance to be deleted) or by sending a message with [mode 160](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes).
+Yes, either as a result of storage fee accumulation (contract needs to reach -1 TON balance to be deleted) or by sending a message with [mode 160](v3/documentation/smart-contracts/message-management/sending-messages#message-modes).
 
 ### Are smart contract addresses case sensitive?
 
@@ -274,13 +274,12 @@ API types:
 
 Node providers partners:
 
-- [Toncenter](https://toncenter.com/api/v2/) — Reliable access to TON RPC services.
-- [TONX API](https://docs.tonxapi.com/reference/direct-apis) — Direct access with robust stability and low latency for TON-based applications.
-- [GetBlock](https://getblock.io/) — Blockchain nodes provider for dApp development.
-- [TON Access](https://www.orbs.com/ton-access/) — HTTP API for secure, high-performance TON access.
-- [Toncenter/Ton HTTP API](https://github.com/toncenter/ton-http-api) — Self-hosted RPC node solution.
-- [NOWNodes](https://nownodes.io/nodes) — Full nodes and explorers accessible via API.
-- [Dton](https://dton.io/graphql) — GraphQL API endpoint for TON.
+- https://toncenter.com/api/v2/
+- [getblock.io](https://getblock.io/)
+- https://www.orbs.com/ton-access/
+- [toncenter/ton-http-api](https://github.com/toncenter/ton-http-api) 
+- [nownodes.io](https://nownodes.io/nodes)
+- https://dton.io/graphql
 
 TON directory with projects from TON Community:
 

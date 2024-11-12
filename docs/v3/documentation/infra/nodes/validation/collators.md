@@ -22,7 +22,7 @@ Currently, TON testnet is used for testing this *Validator*/*Collator* separatio
 
 # Join with "lite validator"
 
-New node software is available in [block-generation](https://github.com/SpyCheese/ton/tree/block-generation) branch.
+New node software is available in [accelerator](https://github.com/ton-blockchain/ton/tree/accelerator) branch.
 
 ## Collator
 To create new collator you need to setup TON node; you can use flag `-M` to force node not to keep eye on shardchains it doesn't process.
@@ -104,7 +104,7 @@ By default validators proposing new block in validator set do not attach data th
 
 Upgrade to new protocol when validators will share blocks with collated data attached can be done by
 - Upgrading all validators to new node version
-- Setting [full_collated_data](https://github.com/spycheese/ton/blob/block-generation/crypto/block/block.tlb#L737) to true
+- Setting [full_collated_data](https://github.com/ton-blockchain/ton/tree/accelerator/crypto/block/block.tlb#L858) to true
 
 # Next steps
 

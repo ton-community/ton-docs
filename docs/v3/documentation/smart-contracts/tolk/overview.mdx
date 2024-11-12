@@ -1,0 +1,158 @@
+---
+title: Overview
+---
+
+import Button from '@site/src/components/button'
+
+# Tolk Language: overview
+
+**Tolk** is a new language for writing smart contracts in TON. Think of Tolk as the "**next‑generation FunC**".
+Tolk compiler is literally a fork of FunC compiler, introducing familiar syntax similar to TypeScript,
+but leaving all low-level optimizations untouched.
+
+```tolk
+import "storage.tolk"
+
+fun loadData() {
+    ctxCounter = getContractData().beginParse().loadUint(32);
+}
+
+fun onInternalMessage(msgValue: int, msgFull: cell, msgBody: slice) {
+    var cs = msgFull.beginParse();
+    var flags = cs.loadMessageFlags();
+    if (isMessageBounced(flags)) {
+        return;
+    }
+    ...
+}
+
+get currentCounter(): int {
+    loadData(); // fills global variables
+    return ctxCounter;
+}
+```
+
+<details>
+  <summary><b>See same logic implemented with FunC</b></summary>
+
+```func
+#include "storage.fc";
+
+() load_data() impure {
+  slice cs = get_data().begin_parse();
+  ctx_counter = cs~load_uint(32);
+}
+
+() recv_internal(int msg_value, cell msg_full, slice msg_body) impure {
+  slice cs = msg_full.begin_parse();
+  int flags = cs.load_uint(4);
+  if (flags & 1) {
+    return ();
+  }
+  ...
+}
+
+int currentCounter() method_id {
+  load_data(); ;; fills global variables
+  return ctx_counter;
+}
+```
+</details>
+
+<Button href="https://github.com/ton-blockchain/convert-func-to-tolk" colorType={'primary'} sizeType={'sm'}>
+  Try a FunC → Tolk converter
+</Button>
+<Button href="/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short" colorType={'secondary'} sizeType={'sm'}>
+  Read "Tolk vs FunC differences"
+</Button>
+<div style={{height: '2em'}}></div>
+
+
+## Motivation behind Tolk
+
+FunC is awesome.
+It is really low-level and encourages a programmer to think about compiler internals.
+It gives full control over TVM assembler, allowing a programmer to make his contract as effective as possible.
+If you get used to it, you love it.
+
+But there is a problem.
+FunC is "functional C", and it's for ninja.
+If you are keen on Lisp and Haskell, you'll be happy.
+But if you are a JavaScript / Go / Kotlin developer, its syntax is peculiar for you, leading to occasional mistakes.
+A struggle with syntax may decrease your motivation for digging into TON.
+
+Imagine, what if there was a language, also smart, also low-level, but not functional and not like C?
+Leaving all beauty and complexity inside, what if it would be more similar to popular languages at first glance?
+
+That's what Tolk is about.
+
+
+## Migrating from FunC to Tolk
+
+If you know FunC and want to try a new syntax, your way is:
+1. Read [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short).
+2. With blueprint, create a new Tolk contract (for example, a counter) and experiment around. Remember, that almost all stdlib functions are renamed to ~~verbose~~ clear names. Here is [a mapping](/v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib).
+3. Try a [converter](https://github.com/ton-blockchain/convert-func-to-tolk) for your existing contracts or one from [FunC Contracts](/v3/documentation/smart-contracts/contracts-specs/examples). Keep in mind that contracts written in Tolk from scratch would definitely look nicer than being auto-converted. For instance, using logical operators instead of bitwise tremendously increases code readability.
+
+## How to try Tolk if you don't know FunC
+
+:::tip Currently, this documentation assumes that you know FunC
+The documentation describes "Tolk vs FunC" differences.
+Later it will be adapted to land newcomers. Moreover, FunC will eventually become deprecated,
+and all code snippets throughout the whole documentation will be rewritten to Tolk.
+:::
+
+If you are new to TON, your way is:
+1. Dig into [this documentation](/v3/documentation/smart-contracts/overview) to acquire basic on development in TON. No matter what language you'll use, you need to be aware of cells, slices, TON asynchronous nature after all.
+2. Facing FunC snippets, you can still use FunC, or try to express the same in Tolk. If FunC syntax is peculiar for you, don't worry: the goal of Tolk is exactly to fix this issue.
+3. Once you gain some understanding of what's going on, try using Tolk with [blueprint](https://github.com/ton-org/blueprint).
+
+
+## Tooling around Tolk Language
+
+Sources of the Tolk compiler are a part of the `ton-blockchain` [repo](https://github.com/ton-blockchain/ton).
+Besides the compiler, we have:
+
+1. [tolk-js](https://github.com/ton-blockchain/tolk-js) — a WASM wrapper for Tolk compiler.
+2. [JetBrains IDE plugin](https://github.com/ton-blockchain/intellij-ton) supports Tolk besides FunC, Fift, TL/B, and Tact.
+3. [VS Code Extension](https://github.com/ton-blockchain/tolk-vscode) enabling Tolk Language support.
+4. [Converter from FunC to Tolk](https://github.com/ton-blockchain/convert-func-to-tolk) — convert a `.fc` file to a `.tolk` file with a single `npx` command.
+5. Tolk Language is available in [blueprint](https://github.com/ton-org/blueprint).
+
+
+## Is Tolk production-ready?
+
+The Tolk compiler, a fork of the FunC compiler, is deemed production-ready, albeit somewhat experimental at the moment.
+
+Undiscovered bugs may exist, potentially inherited from FunC or attributable to TVM characteristics.
+Anyway, no matter what language you use, you should cover your contracts with tests to reach high reliability.
+
+
+## Roadmap
+
+The first released version of Tolk is v0.6, emphasizing [missing](/v3/documentation/smart-contracts/tolk/changelog#how-tolk-was-born) FunC v0.5.
+
+Here are some (yet not all and not ordered in any way) points to be investigated:
+- type system improvements: boolean type, nullability, dictionaries
+- structures, with auto-packing to/from cells, probably integrated with message handlers
+- structures with methods, probably generalized to cover built-in types
+- some integrations with TL scheme, either syntactical or via code generation
+- human-readable compiler errors
+- easier messages sending
+- better experience for common use-cases (jettons, nft, etc.)
+- gas and stack optimizations, AST inlining
+- extending and maintaining stdlib
+- think about some kind of ABI (how explorers "see" bytecode)
+- think about gas and fee management in general
+
+Note, that most of the points above are a challenge to implement.
+At first, FunC kernel must be fully refactored to "interbreed" with abilities it was not designed for.
+
+Also, I see Tolk evolution partially guided by community needs.
+It would be nice to talk to developers who have created interconnected FunC contracts,
+to absorb their pain points and discuss how things could be done differently.
+
+
+## Issues and Contacts
+
+If you face issue, connect to developer society on [TON Dev Chats](https://t.me/addlist/1r5Vcb8eljk5Yzcy) or create GitHub issues.

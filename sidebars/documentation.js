@@ -70,7 +70,7 @@ module.exports = [
   },
   {
     type: 'category',
-    label: 'FunC language',
+    label: 'FunC Language',
     items: [
       {
         type: 'doc',
@@ -102,7 +102,19 @@ module.exports = [
   },
   {
     type: 'category',
-    label: 'Fift language',
+    label: 'Tolk Language',
+    items: [
+      'v3/documentation/smart-contracts/tolk/overview',
+      'v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short',
+      'v3/documentation/smart-contracts/tolk/tolk-vs-func/in-detail',
+      'v3/documentation/smart-contracts/tolk/tolk-vs-func/mutability',
+      'v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib',
+      'v3/documentation/smart-contracts/tolk/changelog',
+    ],
+  },
+  {
+    type: 'category',
+    label: 'Fift Language',
     items: [
       'v3/documentation/smart-contracts/fift/overview',
       'v3/documentation/smart-contracts/fift/fift-and-tvm-assembly',

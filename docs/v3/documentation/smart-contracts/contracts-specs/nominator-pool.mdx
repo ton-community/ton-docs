@@ -2,6 +2,10 @@
 
 A smart contract, called a Nominator Pool, provides the ability for one or more nominators to lend Toncoin in a validator stake, and ensures that the validator can use that Toncoin only for validation. Also, the smart contract guarantees the distribution of the reward.
 
+## Architecture
+
+![image](/img/nominator-pool/nominator-pool.png)
+
 ## Limits
 
 This pool is designed for large amounts of coins.
@@ -16,9 +20,13 @@ The number of nominators above 40 has not been tested and we strongly advise aga
 
 ## Fees
 
-Since the pool is located in the masterchain where the fees are high, it will take about 5 TON per validation round to operate the pool.
+Since the pool is located in the masterchain where the fees are high, it will take about **5 TON** per validation round to operate the pool.
 
 Operational fees are paid by the validator.
+
+:::info
+Note that there should always be **10 TON** on the pool balance - this is the minimum balance for the network storage fee. 10 TON can not be withdrawn.
+:::
 
 ## Reward distribution
 
@@ -38,6 +46,8 @@ nominators_reward = reward - validator_reward;
 Nominators share the remaining reward according to the size of their stakes.
 
 For example, if there are two nominators in the pool with stakes of 100k and 300k TON, then the first one will take 25% and the second 75% of the `nominators_reward`.
+
+### Nominator Pool Slashing
 
 In case of a large validation fine, when the amount received is less than the amount sent, the loss is debited from the validator's funds.
 
@@ -94,8 +104,6 @@ The nominator can only withdraw all of his funds at once. Partial withdrawal not
 ## Validator withdraw
 
 The validator can withdraw from the pool all the Toncoins that does not belong to the nominators.
-
-Note that there should always be 10 TON on the pool balance - this is the minimum balance for the network storage fee. 10 TON can not be withdrawn.
 
 ## Participants must keep their private keys
 

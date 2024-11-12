@@ -6,16 +6,16 @@ import TabItem from '@theme/TabItem';
 While using TON Connect, you should construct the Message Body for the Payload used in various transactions. On this page you can find the most relevant examples of payload for use with the TON Connect SDKs.
 
 :::info
-It is expected, that you learn basics on the creating TON Connect connection. Learn more with the [integration manual](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk).
+It is expected that you learn the basics of creating a TON Connect connection. Learn more with the [integration manual](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk).
 :::
 
 ## Cells and Message Serialization
 
-Before diving into building messages lets introduce concept cells what message bodies are made from.
+Before diving into building messages, let's introduce the concept of cells, which message bodies are made from.
 
 ### What is a Cell?
 
-A cell is a basic data structure in the TON Blockchain. It can store up to 1023 bits and hold up to 4 references to other cells, which allows you to store more complex data structures.
+A cell is a basic data structure in the TON Blockchain. It can store up to `1023` bits and hold up to `4` references to other cells, which allows you to store more complex data structures.
 Libraries like `@ton/core` and `@ton-community/assets-sdk` provide efficient ways to handle cells.
 
 You can read more about cells [here](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage).
@@ -46,7 +46,7 @@ const address = slice.loadAddress();
 const coins = slice.loadCoins();
 ```
 
-### Larger amount of data
+### Larger amounts of data
 
 Each cell has a 1023-bit limit. If you exceed this, an error occurs:
 
@@ -111,11 +111,11 @@ if (maybeRef1) {
 }
 ```
 
-### Using assets sdk for simpler serialization/deserialization
+### Using assets sdk for simpler serialization and deserialization
 
-Manually handling cells can be tedious, so the `@ton-community/assets-sdk` provides convenient methods for serializing/deserializing messages.
+Manually handling cells can be tedious, so the `@ton-community/assets-sdk` provides convenient methods for serializing and deserializing messages.
 
-Using `@ton-community/assets-sdk` and is more readable and less error-prone.
+Using `@ton-community/assets-sdk` is more readable and less error-prone.
 
 <Tabs groupId="Serialization/Deserialization">
 
@@ -182,8 +182,8 @@ const transferMessage = { op, queryId, amount, destination, responseDestination,
 
 ### Transaction Template
 
-No matter what level of the task developer are solving, typically it is necessary to use connector entity from @tonconnect/sdk or @tonconnect/ui.
-Examples created based on @tonconnect/sdk and @tonconnect/ui:
+No matter what level of task a developer is solving, it is typically necessary to use the connector entity from `@tonconnect/sdk` or `@tonconnect/ui`.
+Examples created based on `@tonconnect/sdk` and `@tonconnect/ui`:
 
 <Tabs groupId="TON Connect template">
 
@@ -339,7 +339,7 @@ For specific custom transaction, a certain payload must be defined.
 
 ### Transfer With a Comment
 
-The simplest example is adding a payload with a comment. See more details on [this page](/v3/documentation/smart-contracts/message-management/internal-messages#simple-message-with-comment).
+The simplest example involves adding a payload with a comment. See more details on [this page](/v3/documentation/smart-contracts/message-management/internal-messages#simple-message-with-comment).
 Before transaction, it is necessary prepare a `body` [cell](/v3/documentation/data-formats/tlb/cell-boc) via the [@ton/ton](https://github.com/ton-org/ton) JavaScript library.
 
 ```js

@@ -7,5 +7,5 @@ On this page you can find active network configs of TON Blockchain:
 
 ## See Also
 
-- [Node Types](v3/documentation/infra/nodes/node-types)
+- [Node Types](/v3/documentation/infra/nodes/node-types)
 - [Blockchain Params Config](/v3/documentation/network/configs/blockchain-configs)
