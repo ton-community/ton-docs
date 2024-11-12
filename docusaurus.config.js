@@ -41,7 +41,7 @@ const currentYear = getCurrentYear();
 const config = {
   title: 'The Open Network',
   tagline: 'Mass adoption. Massive distribution',
-  url: 'https://docs.ton.org',
+  url: 'https://stg-docs.toncoin.org',
   staticDirectories: ['public', 'static'],
   baseUrl: '/',
   themes: [
