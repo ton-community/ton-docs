@@ -139,10 +139,10 @@ const config = {
       // },
       algolia: {
         // The application ID provided by Algolia
-        appId: 'NU3MYFFH6U',
+        appId: '6W1716R07C',
         // Public API key: it is safe to commit it
         apiKey: '17a77a6334f21a184e928c65d7bf5054',
-        indexName: 'crawler_Test Ton docs',
+        indexName: 'stage_TON_DOCS',
         // Optional: see doc section below
         contextualSearch: true,
 
