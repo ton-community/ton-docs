@@ -1,0 +1,213 @@
+import ThemedImage from '@theme/ThemedImage';
+
+# 签名与验证
+
+## 使用案例
+
+请注意，并非所有DApps都需要 ton_proof 验证。
+这对于后端的授权是必要的，以确保用户确实拥有声明的地址，因此可以推断出用户有权访问其在后端的数据。
+
+如果您想验证用户以便从后端提供其个人信息，这将是有用的。
+
+## ton_proof 如何工作？
+
+- 向客户端发送DAppid。通常，DAppid嵌入在二维码中。
+- 检索带有 ton_proof 实体的已签名交易
+- 在后端验证 ton_proof
+
+
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/ton-connect/ton_proof_scheme.svg?raw=true',
+        dark: '/img/docs/ton-connect/ton_proof_scheme-dark.svg?raw=true',
+    }}
+/>
+<br></br>
+
+## ton_proof 的结构
+
+ton_proof 在 TON Connect 中与特殊的 `TonProof` 实体一起工作，该实体在连接器内部实现。
+
+```js
+type TonProofItemReply = TonProofItemReplySuccess | TonProofItemReplyError;
+
+type TonProofItemReplySuccess = {
+  name: "ton_proof";
+  proof: {
+    timestamp: string; // 64位unix时代签名操作的时间（秒）
+    domain: {
+      lengthBytes: number; // AppDomain 长度
+      value: string;  // app 域名（作为url部分，无编码）
+    };
+    signature: string; // base64编码的签名
+    payload: string; // 来自请求的有效载荷
+  }
+}
+
+```
+
+## 在服务器端检查 ton_proof
+
+1. 从用户处检索 `TonProofItemReply`。
+2. 验证接收到的域是否对应于应用程序的域。
+3. 检查 `TonProofItemReply.payload` 是否被原始服务器允许且仍然有效。
+4. 检查 `timestamp` 在当前是否真实。
+5. 根据[消息方案](/develop/dapps/ton-connect/sign#concept-explanation)组装消息。
+6. 通过API (a) 或 (b) 在后端实现的逻辑获取 `public_key`
+- 6a:
+    - 通过 [TON API](https://docs.tonconsole.com/tonapi/api-v2#:~:text=/v2/-,tonconnect,-/stateinit) 方法 `POST /v2/tonconnect/stateinit` 从 `walletStateInit` 中检索 `{public_key, address}`。
+    - 验证从 `walletStateInit` 提取的 `address` 或对应于用户声明的钱包 `address`。
+- 6b:
+    - 通过钱包合约的 [get 方法](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc#L174) 获得钱包的 `public_key`。
+    - 如果合约未激活，或者缺少在旧钱包版本（v1-v3）中发现的 get_method，则以这种方式获取密钥将是不可能的。相反，您将需要解析前端提供的 walletStateInit。确保 TonAddressItemReply.walletStateInit.hash() 等于 TonAddressItemReply.address.hash()，表示一个BoC哈希。
+7. 验证前端的 `signature` 实际上签署了组装的消息，并且对应于地址的 `public_key`。
+
+## React 示例
+
+1. 将token提供器添加到应用的根部：
+
+```tsx
+function App() {
+    const [token, setToken] = useState<string | null>(null);
+
+  return (
+      <BackendTokenContext.Provider value={{token, setToken}}>
+            { /* Your app */ }
+      </BackendTokenContext.Provider>
+  )
+}
+```
+
+2. 描述后端认证：
+
+<details>
+<summary>示例</summary>
+
+```tsx
+import {useContext, useEffect, useRef} from "react";
+import {BackendTokenContext} from "./BackendTokenContext";
+import {useIsConnectionRestored, useTonConnectUI, useTonWallet} from "@tonconnect/ui-react";
+import {backendAuth} from "./backend-auth";
+
+const localStorageKey = 'my-dapp-auth-token';
+const payloadTTLMS = 1000 * 60 * 20;
+
+export function useBackendAuth() {
+    const { setToken } = useContext(BackendTokenContext);
+    const isConnectionRestored = useIsConnectionRestored();
+    const wallet = useTonWallet();
+    const [tonConnectUI] = useTonConnectUI();
+    const interval = useRef<ReturnType<typeof setInterval> | undefined>();
+
+    useEffect(() => {
+        if (!isConnectionRestored || !setToken) {
+            return;
+        }
+
+        clearInterval(interval.current);
+
+        if (!wallet) {
+            localStorage.removeItem(localStorageKey);
+            setToken(null);
+
+            const refreshPayload = async () => {
+                tonConnectUI.setConnectRequestParameters({ state: 'loading' });
+
+                const value = await backendAuth.generatePayload();
+                if (!value) {
+                    tonConnectUI.setConnectRequestParameters(null);
+                } else {
+                    tonConnectUI.setConnectRequestParameters({state: 'ready', value});
+                }
+            }
+
+            refreshPayload();
+            setInterval(refreshPayload, payloadTTLMS);
+            return;
+        }
+
+        const token = localStorage.getItem(localStorageKey);
+        if (token) {
+            setToken(token);
+            return;
+        }
+
+        if (wallet.connectItems?.tonProof && !('error' in wallet.connectItems.tonProof)) {
+            backendAuth.checkProof(wallet.connectItems.tonProof.proof, wallet.account).then(result => {
+                if (result) {
+                    setToken(result);
+                    localStorage.setItem(localStorageKey, result);
+                } else {
+                    alert('Please try another wallet');
+                    tonConnectUI.disconnect();
+                }
+            })
+        } else {
+            alert('Please try another wallet');
+            tonConnectUI.disconnect();
+        }
+
+    }, [wallet, isConnectionRestored, setToken])
+}
+```
+</details>
+
+## 概念解释
+
+如果请求了 `TonProofItem`，钱包证明了账户所选密钥的所有权。签名消息绑定到：
+
+- 独特的前缀，以将消息与链上消息分开。（`ton-connect`）
+- 钱包地址
+- App域
+- 签名时间戳
+- 应用的自定义有效载荷（服务器可能在其中放置其随机数、cookie id、过期时间）
+
+```
+message = utf8_encode("ton-proof-item-v2/") ++
+          Address ++
+          AppDomain ++
+          Timestamp ++
+          Payload
+
+signature = Ed25519Sign(privkey, sha256(0xffff ++ utf8_encode("ton-connect") ++ sha256(message)))
+```
+
+其中：
+
+* `Address` 是钱包地址编码为一系列：
+ * `workchain`：32位有符号整数大端；
+ * `hash`：256位无符号整数大端；
+* `AppDomain` 是长度 ++ 编码的域名
+- `长度` 是utf-8编码的应用域名长度的32位值（以字节为单位）
+- `编码的域名` 是长度字节的utf-8编码的应用域名
+* `Timestamp` 是签名操作的64位unix时代时间
+* `Payload` 是一个可变长度的二进制字符串。
+
+注意：有效载荷是可变长度的不受信任数据。为避免使用不必要的长度前缀，我们将其放在消息的最后。
+
+公钥必须验证签名：
+
+1. 首先，尝试通过在 `Address` 部署的智能合约上的 `get_public_key` get-method 获得公钥。
+
+2. 如果智能合约尚未部署，或缺少get-method，您需要：
+
+    1. 解析 `TonAddressItemReply.walletStateInit` 并从stateInit获取公钥。您可以将 `walletStateInit.code` 与标准钱包合约的代码进行比较，并根据找到的钱包版本解析数据。
+
+    2. 检查 `TonAddressItemReply.publicKey` 是否等于获得的公钥。
+
+    3. 检查 `TonAddressItemReply.walletStateInit.hash()` 是否等于 `TonAddressItemReply.address`。`.hash()` 意味着BoC哈希。
+
+
+### TON Proof 验证示例
+
+* [GO 演示应用](https://github.com/ton-connect/demo-dapp-backend/blob/master/proof.go)
+* [TS 示例](https://gist.github.com/TrueCarry/cac00bfae051f7028085aa018c2a05c6)
+* [Python 示例](https://github.com/XaBbl4/pytonconnect/blob/main/examples/check_proof.py)
+
+## 参阅
+
+* [[YouTube] 为 @tonconnect/react-ui 检查 ton_proof [RU]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=2971)
+* [准备消息](/develop/dapps/ton-connect/message-builders)
+* [发送消息](/develop/dapps/ton-connect/transactions)
