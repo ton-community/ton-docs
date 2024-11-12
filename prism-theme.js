@@ -27,6 +27,19 @@ const theme = {
       },
     },
     {
+      types: ["self"],
+      style: {
+        color: "rgb(191, 199, 213)",
+        fontWeight: 'bold',
+      },
+    },
+    {
+      types: ["type-hint"],
+      style: {
+        color: "rgb(243,63,148)",
+      },
+    },
+    {
       types: ["builtin", "function"],
       style: {
         color: "rgb(130, 170, 255)",

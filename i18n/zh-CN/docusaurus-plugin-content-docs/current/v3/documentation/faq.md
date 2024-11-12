@@ -245,7 +245,7 @@ If the contract cannot initially execute `set_code()` (via its code or execution
 
 ### Can smart contract be deleted?
 
-Yes, either as a result of storage fee accumulation (contract needs to reach -1 TON balance to be deleted) or by sending a message with [mode 160](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes).
+Yes, either as a result of storage fee accumulation (contract needs to reach -1 TON balance to be deleted) or by sending a message with [mode 160](v3/documentation/smart-contracts/message-management/sending-messages#message-modes).
 
 ### Are smart contract addresses case sensitive?
 

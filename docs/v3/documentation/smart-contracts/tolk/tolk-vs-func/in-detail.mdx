@@ -1,0 +1,849 @@
+# Tolk vs FunC: in detail
+
+A very huge list below. Will anyone have enough patience to read it up to the end?..
+
+:::tip There is a compact version
+Here: [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short)
+:::
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Traditional comments :)
+</h3>
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{';; comment'}</code></td>
+    <td><code>{'// comment'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'{- multiline comment -}'}</code></td>
+    <td><code>{'/* multiline comment */'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ `2+2` is 4, not an identifier. Identifiers can only be alpha-numeric
+</h3>
+
+In FunC, almost any character can be a part of identifier.
+For example, `2+2` (without a space) is an identifier.
+You can even declare a variable with such a name.
+
+In Tolk, spaces are not mandatory. `2+2` is 4, as expected. `3+~x` is `3 + (~ x)`, and so on.
+
+<table className="cmp-func-tolk-table different-col-widths">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'return 2+2;  ;; undefined function `2+2`'}</code></td>
+    <td><code>{'return 2+2;  // 4'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+More precisely, an identifier can start from <code style={{display: 'inline-block'}}>{'[a-zA-Z$_]'}</code>
+and be continued with <code style={{display: 'inline-block'}}>{'[a-zA-Z0-9$_]'}</code>. Note, that `?`, `:`, and others are not valid symbols, `found?` and `op::increase` are not valid identifiers.
+
+You can use backticks to surround an identifier, and then it can contain any symbols (similar to Kotlin and some other langs). Its potential usage is to allow keywords be used as identifiers, in case of code generation by a scheme, for example.
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'const op::increase = 0x1234;'}</code></td>
+    <td><code>{'const OP_INCREASE = 0x1234;'}</code></td>
+  </tr>
+  <tr>
+    <td><code dangerouslySetInnerHTML={{__html: ';; even 2%&!2 is valid<br>int 2+2 = 5;'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: '// don\'t do like this :)<br>var \`2+2\` = 5;'}}></code></td>
+  </tr>
+  </tbody>
+</table>
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Impure by default, compiler won't drop user function calls
+</h3>
+
+FunC has an `impure` function specifier. When absent, a function is treated as pure. If its result is unused, its call was deleted by the compiler.
+
+Though this behavior is documented, it is very unexpected to newcomers.
+For instance, various functions that don't return anything (throw an exception on mismatch, for example),
+are silently deleted. This situation is spoilt by the fact that FunC doesn't check and validate function body,
+allowing impure operations inside pure functions.
+
+In Tolk, all functions are impure by default. You can mark a function pure with annotation,
+and then impure operations are forbidden in its body (exceptions, globals modification, calling non-pure functions, etc.).
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ New functions syntax: `fun` keyword, `@` attributes, types on the right (like in TypeScript, Kotlin, Python, etc.)
+</h3>
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'cell parse_data(slice cs) { }'}</code></td>
+    <td><code>{'fun parse_data(cs: slice): cell { }'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'(cell, int) load_storage() { }'}</code></td>
+    <td><code>{'fun load_storage(): (cell, int) { }'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'() main() { ... }'}</code></td>
+    <td><code>{'fun main() { ... }'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+Types of variables — also to the right:
+
+<table className="cmp-func-tolk-table different-col-widths">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'slice cs = ...;'}</code></td>
+    <td><code>{'var cs: slice = ...;'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'(cell c, int n) = parse_data(cs);'}</code></td>
+    <td><code>{'var (c: cell, n: int) = parse_data(cs);'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'global int stake_at;'}</code></td>
+    <td><code>{'global stake_at: int;'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+Modifiers `inline` and others — with annotations:
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code dangerouslySetInnerHTML={{__html: '<br>int f(cell s) inline {'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: '@inline<br>fun f(s: cell): int {'}}></code></td>
+  </tr>
+  <tr>
+    <td><code dangerouslySetInnerHTML={{__html: '<br>() load_data() impure inline_ref {'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: '@inline_ref<br>fun load_data() {'}}></code></td>
+  </tr>
+  <tr>
+    <td><code>{'global int stake_at;'}</code></td>
+    <td><code>{'global stake_at: int;'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+`forall` — this way:
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'forall X -> tuple cons(X head, tuple tail)'}</code></td>
+    <td><code dangerouslySetInnerHTML={{__html: 'fun cons&lt;X&gt;(head: X, tail: tuple): tuple'}}></code></td>
+  </tr>
+  </tbody>
+</table>
+
+`asm` implementation — like in FunC, but being properly aligned, it looks nicer:
+```tolk
+@pure
+fun third<X>(t: tuple): X
+    asm "THIRD";
+
+@pure
+fun iDictDeleteGet(dict: cell, keyLen: int, index: int): (cell, slice, int)
+    asm(index dict keyLen) "DICTIDELGET NULLSWAPIFNOT";
+
+@pure
+fun mulDivFloor(x: int, y: int, z: int): int
+    builtin;
+```
+
+There is also a `@deprecated` attribute, not affecting compilation, but for a human and IDE.
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ `get` instead of `method_id`
+</h3>
+
+In FunC, `method_id` (without arguments) actually declared a get method. In Tolk, you use a straightforward syntax:
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'int seqno() method_id { ... }'}</code></td>
+    <td><code>{'get seqno(): int { ... }'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+Both `get methodName()` and `get fun methodName()` are acceptable.
+
+For `method_id(xxx)` (uncommon in practice, but valid), there is an attribute:
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code dangerouslySetInnerHTML={{__html: '<br>() after_code_upgrade(cont old_code) impure method_id(1666)'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: '@method_id(1666)<br>fun afterCodeUpgrade(oldCode: continuation)'}}></code></td>
+  </tr>
+  </tbody>
+</table>
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ It's essential to declare types of parameters (though optional for locals)
+</h3>
+
+```tolk
+// not allowed
+fun do_smth(c, n)
+// types are mandatory
+fun do_smth(c: cell, n: int)
+```
+
+There is an `auto` type, so `fun f(a: auto)` is valid, though not recommended.
+
+If parameter types are mandatory, return type is not (it's often obvious of verbose). If omitted, it means `auto`:
+```tolk
+fun x() { ... }  // auto infer return
+```
+
+For local variables, types are also optional:
+```tolk
+var i = 10;                      // ok, int
+var b = beginCell();             // ok, builder
+var (i, b) = (10, beginCell());  // ok, two variables, int and builder
+
+// types can be specified manually, of course:
+var b: builder = beginCell();
+var (i: int, b: builder) = (10, beginCell());
+```
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Variables are not allowed to be redeclared in the same scope
+</h3>
+
+```tolk
+var a = 10;
+...
+var a = 20;  // error, correct is just `a = 20`
+if (1) {
+    var a = 30;  // it's okay, it's another scope
+}
+```
+
+As a consequence, partial reassignment is not allowed:
+```tolk
+var a = 10;
+...
+var (a, b) = (20, 30);  // error, releclaration of a
+```
+
+Note, that it's not a problem for `loadUint()` and other methods. In FunC, they returned a modified object, so a pattern `var (cs, int value) = cs.load_int(32)` was quite common. In Tolk, such methods mutate an object: `var value = cs.loadInt(32)`, so redeclaration is unlikely to be needed.
+
+```tolk
+fun send(msg: cell) {
+    var msg = ...;  // error, redeclaration of msg
+
+    // solution 1: intruduce a new variable
+    var msgWrapped = ...;
+    // solution 2: use `redef`, though not recommended
+    var msg redef = ...;
+```
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Changes in the type system
+</h3>
+
+Type system in the first Tolk release is the same as in FunC, with the following modifications:
+- `void` is effectively an empty tensor (more canonical to be named `unit`, but `void` is more reliable); btw, `return` (without expression) is actually `return ()`, a convenient way to return from void functions
+```tolk
+fun setContractData(c: cell): void
+    asm "c4 POP";
+```
+- `auto` mean "auto infer"; in FunC, `_` was used for that purpose; note, that if a function doesn't specify return type, it's `auto`, not `void`
+- `self`, to make chainable methods, described below; actually it's not a type, it can only occur instead of return type of a function
+- `cont` renamed to `continuation`
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Another naming for recv_internal / recv_external
+</h3>
+
+```tolk
+fun onInternalMessage
+fun onExternalMessage
+fun onTickTock
+fun onSplitPrepare
+fun onSplitInstall
+```
+
+All parameter types and their order rename the same, only naming is changed. `fun main` is also available.
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ #include → import. Strict imports
+</h3>
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'#include "another.fc";'}</code></td>
+    <td><code>{'import "another.tolk"'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+In Tolk, you can not used a symbol from `a.tolk` without importing this file. In other words, "import what you use".
+
+All stdlib functions are available out of the box, downloading stdlib and `#include "stdlib.fc"` is not needed. See below about embedded stdlib.
+
+There is still a global scope of naming. If `f` is declared in two different files, it's an error. We "import" a whole file, no per-file visibility and `export` keyword is now supported, but probably will be in the future.
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ #pragma → compiler options
+</h3>
+
+In FunC, "experimental" features like `allow-post-modifications` were turned on by a pragma in .fc files (leading to problems when some files contain it, some don't). Indeed, it's not a pragma for a file, it's a compilation option.
+
+In Tolk, all pragmas were removed. `allow-post-modification` and `compute-asm-ltr` were merged into Tolk sources (as if they were always on in FunC). Instead of pragmas, there is now an ability to pass experimental options.
+
+As for now, there is one experimental option introduced — `remove-unused-functions`, which doesn't include unused symbols to Fift output.
+
+`#pragma version xxx` was replaced by `tolk xxx` (no >=, just a strict version). It's good practice to annotate compiler version you are using. If it doesn't match, Tolk will show a warning.
+```tolk
+tolk 0.6
+```
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Late symbols resolving. AST representation
+</h3>
+
+In FunC (like in С) you can not access a function declared below:
+```func
+int b() { a(); }   ;; error
+int a() { ... }    ;; since it's declared below
+```
+
+To avoid an error, a programmer should create a forward declaration at first. The reason is that symbols resolving is performed right at the time of parsing.
+
+Tolk compiler separates these two steps. At first it does parsing, and then it does symbol resolving. Hence, a snippet above would not be erroneous.
+
+Sounds simple, but internally, it's a very huge job. To make this available, I've introduced an intermediate AST representation, completely missed in FunC. That's an essential point of future modifications and performing semantic code analisys.
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ `null` keyword
+</h3>
+
+Creating null values and checking variables on null looks very pretty now.
+
+<table className="cmp-func-tolk-table different-col-widths">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'a = null()'}</code></td>
+    <td><code>{'a = null'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'if (null?(a))'}</code></td>
+    <td><code>{'if (a == null)'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'if (~ null?(b))'}</code></td>
+    <td><code>{'if (b != null)'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'if (~ cell_null?(c))'}</code></td>
+    <td><code>{'if (c != null)'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+Note, that it does NOT mean that Tolk language has nullability. No, you can still assign `null` to an integer variable — like in FunC, just syntactically pleasant. A true nullability will be available someday, after hard work on the type system.
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ `throw` and `assert` keywords
+</h3>
+
+Tolk greatly simplifies working with exceptions.
+
+If FunC has `throw()`, `throw_if()`, `throw_arg_if()`, and the same for unless, Tolk has only two primitives: `throw` and `assert`.
+
+<table className="cmp-func-tolk-table different-col-widths">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'throw(excNo)'}</code></td>
+    <td><code>{'throw excNo'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'throw_arg(arg, excNo)'}</code></td>
+    <td><code>{'throw (excNo, arg)'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'throw_unless(excNo, condition)'}</code></td>
+    <td><code>{'assert(condition, excNo)'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'throw_if(excNo, condition)'}</code></td>
+    <td><code>{'assert(!condition, excNo)'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+Note, that `!condition` is possible since logical NOT is available, see below.
+
+There is a long (verbose) syntax of `assert(condition, excNo)`:
+```tolk
+assert(condition) throw excNo;
+// with possibility to include arg to throw
+```
+
+Also, Tolk swaps `catch` arguments: it's `catch (excNo, arg)`, both optional (since arg is most likely empty).
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'try { } catch (_, _) { }'}</code></td>
+    <td><code>{'try { } catch { }'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'try { } catch (_, excNo) { }'}</code></td>
+    <td><code>{'try { } catch(excNo) { }'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'try { } catch (arg, excNo) { }'}</code></td>
+    <td><code>{'try { } catch(excNo, arg) { }'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ `do ... until` → `do ... while`
+</h3>
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'do { ... } until (~ condition);'}</code></td>
+    <td><code>{'do { ... } while (condition);'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'do { ... } until (condition);'}</code></td>
+    <td><code>{'do { ... } while (!condition);'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+Note, that `!condition` is possible since logical NOT is available, see below.
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Operator precedence became identical to C++ / JavaScript
+</h3>
+
+In FunC, such code `if (slices_equal() & status == 1)` is parsed as `if( (slices_equal()&status) == 1 )`. This is a reason of various errors in real-world contracts.
+
+In Tolk, `&` has lower priority, identical to C++ and JavaScript.
+
+Moreover, Tolk fires errors on potentially wrong operators usage to completely eliminate such errors:
+```tolk
+if (flags & 0xFF != 0)
+```
+
+will lead to a compilation error (similar to gcc/clang):
+```
+& has lower precedence than ==, probably this code won't work as you expected.  Use parenthesis: either (... & ...) to evaluate it first, or (... == ...) to suppress this error.
+```
+
+Hence, the code should be rewritten:
+```tolk
+// either to evaluate it first (our case)
+if ((flags & 0xFF) != 0)
+// or to emphasize the behavior (not our case here)
+if (flags & (0xFF != 0))
+```
+
+I've also added a diagnostic for a common mistake in bitshift operators: `a << 8 + 1` is equivalent to `a << 9`, probably unexpected.
+
+```
+int result = a << 8 + low_mask;
+
+error: << has lower precedence than +, probably this code won't work as you expected.  Use parenthesis: either (... << ...) to evaluate it first, or (... + ...) to suppress this error.
+```
+
+Operators `~% ^% /% ~/= ^/= ~%= ^%= ~>>= ^>>=` no longer exist.
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Immutable variables, declared via `val`
+</h3>
+
+Like in Kotlin: `var` for mutable, `val` for immutable, optionally followed by a type. FunC has no analogue of `val`.
+```tolk
+val flags = msgBody.loadMessageFlags();
+flags &= 1;         // error, modifying an immutable variable
+
+val cs: slice = c.beginParse();
+cs.loadInt(32);     // error, since loadInt() mutates an object
+cs.preloadInt(32);  // ok, it's a read-only method
+```
+
+Parameters of a function are mutable, but since they are copied by value, called arguments aren't changed. Exactly like in FunC, just to clarify.
+```tolk
+fun some(x: int) {
+    x += 1;
+}
+
+val origX = 0;
+some(origX);      // origX remains 0
+
+fun processOpIncrease(msgBody: slice) {
+    val flags = msgBody.loadInt(32);
+    ...
+}
+
+processOpIncrease(msgBody);  // by value, not modified
+```
+
+In Tolk, a function can declare `mutate` parameters. It's a generalization of FunC `~` tilda functions, read below.
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Deprecated command-line options removed
+</h3>
+
+Command-line flags `-A`, `-P`, and others, were removed. Default behavior
+```
+/path/to/tolk {inputFile}
+```
+is more than enough. Use `-v` to print version and exit. Use `-h` for all available command-line flags.
+
+Only one input file can be passed, others should be `import`'ed.
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ stdlib functions renamed to ~~verbose~~ clear names, camelCase style
+</h3>
+
+All naming in standard library was reconsidered. Now, functions are named using longer, but clear names.
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code dangerouslySetInnerHTML={{__html: 'cur_lt()<br>car(l)<br>get_balance().pair_first()<br>raw_reserve(count)<br>dict~idict_add?(...)<br>dict~udict::delete_get_max()<br>t~tpush(triple(x, y, z))<br>s.slice_bits()<br>~dump(x)<br>...'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: 'getLogicalTime()<br>listGetHead(l)<br>getMyOriginalBalance()<br>reserveToncoinsOnBalance(count)<br>dict.iDictSetIfNotExists(...)<br>dict.uDictDeleteLastAndGet()<br>t.tuplePush([x, y, z])<br>s.getRemainingBitsCount()<br>debugPrint(x)<br>...'}}></code></td>
+  </tr>
+  </tbody>
+</table>
+
+A former "stdlib.fc" was split into multiple files: common.tolk, tvm-dicts.tolk, and others.
+
+Continue here: [Tolk vs FunC: standard library](/v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib).
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ stdlib is now embedded, not downloaded from GitHub
+</h3>
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>
+      <ol style={{margin: 0}}>
+        <li>Download stdlib.fc from GitHub</li>
+        <li>Save into your project</li>
+        <li>`#include "stdlib.fc";`</li>
+        <li>Use standard functions</li>
+      </ol>
+    </td>
+    <td>
+      <ol style={{margin: 0}}>
+        <li>Use standard functions</li>
+      </ol>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+In Tolk, stdlib a part of distribution. Standard library is inseparable, since keeping a triple "language, compiler, stdlib" together is the only correct way to maintain release cycle.
+
+It works in such a way. Tolk compiler knows how to locate a standard library. If a user has installed an apt package, stdlib sources were also downloaded and exist on a hard disk, so the compiler locates them by system paths. If a user uses a WASM wrapper, they are provided by tolk-js. And so on.
+
+Standard library is split into multiple files: `common.tolk` (most common functions), `gas-payments.tolk` (calculating gas fees), `tvm-dicts.tolk`, and others. Functions from `common.tolk` are available always (a compiler implicitly imports it). Other files are needed to be explicitly imported:
+```tolk
+import "@stdlib/tvm-dicts"   // ".tolk" optional
+
+...
+var dict = createEmptyDict();
+dict.iDictSet(...);
+```
+
+Mind the rule "import what you use", it's applied to `@stdlib/...` files also (with the only exception of "common.tolk").
+
+JetBrains IDE plugin automatically discovers stdlib folder and inserts necessary imports as you type.
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Logical operators `&& ||`, logical not `!`
+</h3>
+
+In FunC, there are only bitwise operators `~ & | ^`. Developers making first steps, thinking "okay, no logical, I'll use bitwise in the same manner", often do errors, since operator behavior is completely different:
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>`a & b`</th>
+    <th>`a && b`</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr><td colSpan={2}>sometimes, identical:</td></tr>
+  <tr>
+    <td><code>{'0 & X = 0'}</code></td>
+    <td><code>{'0 & X = 0'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'-1 & X = -1'}</code></td>
+    <td><code>{'-1 & X = -1'}</code></td>
+  </tr>
+  <tr><td colSpan={2}>but generally, not:</td></tr>
+  <tr>
+    <td><code>{'1 & 2 = 0'}</code></td>
+    <td><code>{'1 && 2 = -1 (true)'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+<table className="cmp-func-tolk-table different-col-widths">
+  <thead>
+  <tr>
+    <th>`~ found`</th>
+    <th>`!found`</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr><td colSpan={2}>sometimes, identical:</td></tr>
+  <tr>
+    <td><code>{'true (-1) → false (0)'}</code></td>
+    <td><code>{'-1 → 0'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'false (0) → true (-1)'}</code></td>
+    <td><code>{'0 → -1'}</code></td>
+  </tr>
+  <tr><td colSpan={2}>but generally, not:</td></tr>
+  <tr>
+    <td><code>{'1 → -2'}</code></td>
+    <td><code>{'1 → 0 (false)'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+<table className="cmp-func-tolk-table different-col-widths">
+  <thead>
+  <tr>
+    <th><code>condition & f()</code></th>
+    <th><code>condition && f()</code></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code className="inline">f()</code> is called always</td>
+    <td><code className="inline">f()</code> is called only if <code className="inline">condition</code></td>
+  </tr>
+  </tbody>
+</table>
+
+<table className="cmp-func-tolk-table different-col-widths">
+  <thead>
+  <tr>
+    <th><code>condition | f()</code></th>
+    <th><code>condition || f()</code></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code className="inline">f()</code> is called always</td>
+    <td><code className="inline">f()</code> is called only if <code className="inline">condition</code> is false</td>
+  </tr>
+  </tbody>
+</table>
+
+Tolk supports logical operators. They behave exactly as you get used to (right column). For now, `&&` and `||` sometimes produce not optimal Fift code, but in the future, Tolk compiler will become smarter in this case. It's negligible, just use them like in other languages.
+
+<table className="cmp-func-tolk-table different-col-widths">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'if (~ found?)'}</code></td>
+    <td><code>{'if (!found)'}</code></td>
+  </tr>
+  <tr>
+    <td><code dangerouslySetInnerHTML={{__html: 'if (~ found?) {<br>    if (cs~load_int(32) == 0) {<br>        ...<br>    }<br>}'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: 'if (!found && cs.loadInt(32) == 0) {<br>    ...<br>}'}}></code></td>
+  </tr>
+  <tr>
+    <td><code>{'ifnot (cell_null?(signatures))'}</code></td>
+    <td><code>{'if (signatures != null)'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'elseifnot (eq_checksum)'}</code></td>
+    <td><code>{'else if (!eqChecksum)'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+Keywords `ifnot` and `elseifnot` were removed, since now we have logical not (for optimization, Tolk compiler generates `IFNOTJMP`, btw). Keyword `elseif` was replaced by traditional `else if`.
+
+Note, that it does NOT mean that Tolk language has `bool` type. No, comparison operators still return an integer. A `bool` type support will be available someday, after hard work on the type system.
+
+Remember, that `true` is -1, not 1. Both in FunC and Tolk. It's a TVM representation.
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ No tilda `~` methods, `mutate` keyword instead
+</h3>
+
+This change is so huge that it's described on a separate page: [Tolk mutability](/v3/documentation/smart-contracts/tolk/tolk-vs-func/mutability).
+
+
+<hr />
+
+<h3>Tolk vs FunC gas consumption</h3>
+
+:::caution TLDR
+Tolk gas consumption could be a bit higher, because it fixes unexpected arguments shuffling in FunC. It's negligible in practice.  
+In the future, Tolk compiler will become smart enough to reorder arguments targeting less stack manipulations,
+but still avoiding a shuffling problem.
+:::
+
+FunC compiler could unexpectedly shuffle arguments when calling an assembly function:
+```
+some_asm_function(f1(), f2());
+```
+
+Sometimes, `f2()` could be called before `f1()`, and it's unexpected.
+To fix this behavior, one could specify `#pragma compute-asm-ltr`, forcing arguments to be always evaluated in ltr-order.
+This was experimental, and therefore turned off by default.
+
+This pragma reorders arguments on a stack, often leading to more stack manipulations than without it.
+In other words, in fixes unexpected behavior, but increases gas consumption.
+
+Tolk puts arguments onto a stack exactly the same as if this pragma turned on.
+So, its gas consumption is sometimes higher than in FunC if you didn't use this pragma.
+Of course, there is no shuffling problem in Tolk.
+
+In the future, Tolk compiler will become smart enough to reorder arguments targeting less stack manipulations,
+but still avoiding a shuffling problem.

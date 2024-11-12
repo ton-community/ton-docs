@@ -208,7 +208,7 @@ var msg = begin_cell()
 send_raw_message(msg, mode);
 ```
 Let's discuss in more detail what it looks like for our smart contract to send a message to our recipient:
-1. Initially, we need to build our message. The full structure of the send can be found [here](v3/documentation/smart-contracts/message-management/sending-messages). We won't go into detail on how to assemble it here, you can read about that at the link.
+1. Initially, we need to build our message. The full structure of the send can be found [here](/v3/documentation/smart-contracts/message-management/sending-messages). We won't go into detail on how to assemble it here, you can read about that at the link.
 2. The body of the message represents a cell. In `msg_body_cell` we do: `begin_cell()` - creates `Builder` for the future cell, first `store_uint` - stores the first uint into `Builder` (1 - this is our `op`), second `store_uint` - stores the second uint into `Builder` (num - this is our number that we will manipulate in the receiving contract), `end_cell()` - creates the cell.
 3. To attach the body that will come in `recv_internal` in the message,  we reference the collected cell in the message itself with `store_ref`.
 4. Sending a message.
