@@ -9,7 +9,7 @@ In the TCP version of ADNL, network nodes use public keys ed25519 as addresses a
 ## Packet Structure
 Each ADNL TCP packet, except for the handshake, has the following structure:
 * 4 bytes of packet size in little endian (N)
-* 32 bytes nonce [[?]](## "Random bytes to protect against checksum attacks")
+* 32 bytes nonce (random bytes to protect against checksum attacks)
 * (N - 64) payload bytes
 * 32 bytes SHA256 checksum from nonce and payload
 
@@ -181,7 +181,7 @@ Method code in FunC:
 Fill out our request:
 * `mode` = 4, we only need the result -> `04000000`
 * `id` = result of execution getMasterchainInfo
-* `account` = workchain 0 (4 bytes `00000000`), and int256 [obtained from our contract address](/v3/documentation/data-formats/tlb/tl-b-language#addresses), i.e. 32 bytes `4bdbfde5322cb2c14d7b83ea2bf0deeff610e63c2a6db7304f1368ac176193ce`
+* `account` = workchain 0 (4 bytes `00000000`), and int256 [obtained from our contract address](/v3/documentation/data-formats/tlb/tl-b-types#addresses), i.e. 32 bytes `4bdbfde5322cb2c14d7b83ea2bf0deeff610e63c2a6db7304f1368ac176193ce`
 * `method_id` = [computed](https://github.com/xssnick/tonutils-go/blob/88f83bc3554ca78453dd1a42e9e9ea82554e3dd2/ton/runmethod.go#L16) id from `a2` -> `0a2e010000000000`
 * `params:bytes` = Our method does not accept input parameters, so we need to pass it an empty stack (`000000`, cell 3 bytes - stack depth 0) serialized in [BoC](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells) -> `b5ee9c72010101010005000006000000` -> serialize in bytes and get `10b5ee9c72410101010005000006000000000000` 0x10 - size, 3 bytes in the end - padding.
 

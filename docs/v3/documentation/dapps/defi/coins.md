@@ -24,6 +24,6 @@ Note that if there are a large number of extra currencies created, the accounts 
 
 Thus, extra currencies are best used for well-known decentralized currencies (for example, Wrapped Bitcoin or Ether), and creating such an extra currency should be quite expensive.
 
-[Jettons](/v3/documentation/dapps/defi/tokens#jettons) are suitable for other tasks.
+[Jettons](/v3/documentation/dapps/defi/tokens#jettons-fungible-tokens) are suitable for other tasks.
 
 At the moment, no extra currency has been created on TON Blockchain. TON Blockchain has full support for extra currencies by accounts and messages, but the minter system contract for their creation has not yet been created. 

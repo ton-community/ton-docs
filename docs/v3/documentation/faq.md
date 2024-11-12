@@ -12,7 +12,7 @@ This section covers the most popular questions about TON Blockchain.
 
 ### What are some of the main similarities and differences to EVM blockchains?
 
-- [Ethereum to TON](/v3/concepts/dive-into-ton/introduction#ethereum-to-ton)
+- [Ethereum to TON](/v3/concepts/dive-into-ton/go-from-ethereum/tvm-vs-evm)
 - [Comparison of TON, Solana and Ethereum 2.0](https://ton.org/comparison_of_blockchains.pdf)
 
 
@@ -158,7 +158,7 @@ Non-fungible tokens (NFTs):
 Jettons (tokens):
 - [TEP-74: Jettons standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)
 - [Distributed tokens overview](https://telegra.ph/Scalable-DeFi-in-TON-03-30)
-- [Fungible token documentation(Jettons)](/v3/documentation/dapps/defi/tokens#jettons)
+- [Fungible token documentation(Jettons)](/v3/documentation/dapps/defi/tokens#jettons-fungible-tokens)
 
 Other Standards:
 - https://github.com/ton-blockchain/TEPs
@@ -217,7 +217,7 @@ Smart contract can exist in uninitialized state, meaning that its state is not a
 
 To protect message chains from being halted at non-existing contracts TON use "bounce" feature. Read more in these articles:
 
-- [Deploying wallet via TonLib](/v3/guidelines/dapps/asset-processing/payments-processing/#deploying-wallet)
+- [Deploying wallet via TonLib](/v3/guidelines/dapps/asset-processing/payments-processing#wallet-deployment)
 - [Paying for processing queries and sending responses](/v3/documentation/smart-contracts/transaction-fees/forward-fees)
 
 ### Does the upgradability of a smart-contract pose a threat to its users?

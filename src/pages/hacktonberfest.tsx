@@ -10,21 +10,21 @@ const content = [
   {
     title: "What is Hacktoberfest?",
     status: "Everyone curious about TON",
-    linkUrl: "/contribute/hacktoberfest",
+    linkUrl: "/v3/documentation/archive/hacktoberfest-2022",
     imageUrl: "img/ton_symbol_old.svg",
     description: "Read more about the event and why it's so cool to start right now!"
   },
   {
     title: "Contribute to TON",
     status: "Open-source Developer",
-    linkUrl: "/contribute/hacktoberfest/as-contributor",
+    linkUrl: "/v3/documentation/archive/hacktoberfest-2022/as-contributor",
     imageUrl: "img/ton_symbol_old.svg",
     description: "Participate in open-source and receive cool rewards from TON."
   },
   {
     title: "Prepare Repository",
     status: "Open-source Maintainer",
-    linkUrl: "/contribute/hacktoberfest/as-maintainer",
+    linkUrl: "/v3/documentation/archive/hacktoberfest-2022/as-maintainer",
     imageUrl: "img/ton_symbol_old.svg",
     description: "Improve your open-source project with help of active TON community."
   },

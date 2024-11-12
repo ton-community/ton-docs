@@ -325,6 +325,7 @@
     "sidebars.js",
     "sidebars",
     "i18n",
-    ".husky"
+    ".husky",
+    "warnings.txt"
   ]
 }

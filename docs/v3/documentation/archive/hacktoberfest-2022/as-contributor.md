@@ -8,7 +8,7 @@ To become a contributor who receives a limited *Hack-TON-berfest NFT*, please se
 2. Please provide your wallet address to the [@toncontests_bot](https://t.me/toncontests_bot) in Telegram.
 3. Validate your GitHub account in the same bot.
 
-After these steps you are ready to contribute and receive a [limited Hack-TON-berfest NFT](/v3/documentation/archive/hacktoberfest-2022/#what-the-rewards).
+After these steps you are ready to contribute and receive a [limited Hack-TON-berfest NFT](/v3/documentation/archive/hacktoberfest-2022#what-are-the-rewards).
 
 Welcome to the club, this is just the beginning!
 
