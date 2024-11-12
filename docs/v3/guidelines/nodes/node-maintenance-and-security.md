@@ -164,4 +164,4 @@ See this excellent **[ufw tutorial](https://www.digitalocean.com/community/tutor
 ### <a id="ip-switch"></a>IP Switch
 If you believe that your node is under attack then you should consider switching IP Address. The way to achieve the switch depends on your hosting provider; you might pre-order a second address, clone your **stopped** VM into another instance or setup a new instance by performing a **[disaster recovery](#disaster-recovery)** process.
 
-In any case, please do make sure that you **[set your new IP Address](#set-node-ip)** in the node configuration file!
+In any case, please do make sure that you **[set your new IP Address](/v3/guidelines/nodes/node-maintenance-and-security#-set-node-ip-address)** in the node configuration file!
