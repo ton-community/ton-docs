@@ -326,6 +326,13 @@ module.exports = [
   },
   {
     type: 'category',
+    label: 'TVM Specification',
+    items: [
+      'v3/documentation/tvm/specification/runvm',
+    ],
+  },
+  {
+    type: 'category',
     label: 'TVM Changelog',
     items: [
       'v3/documentation/tvm/changelog/tvm-upgrade-2024-04',
