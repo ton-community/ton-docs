@@ -265,7 +265,11 @@ Flags are similar to `runvmx` in fift:
 - `+32`: return final value of `c5` (actions)
 - `+64`: pop hard gas limit (enabled by ACCEPT) `g_m` from stack
 - `+128`: "isolated gas consumption". Child VM will have a separate set of visited cells and a separate chksgn counter.
-- `+256`: pop integer `r`, return exactly `r` values from the top of the stack (only if `exitcode=0 or 1`; if not enough then `exitcode=stk_und`)
+- `+256`: pop integer `r`, return exactly `r` values from the top:
+      - If RUNVM call successful and r is set, it returns r elements. If r not set - returns all;
+      - if RUNVM successful but there is not enough elements on stack (stack depth less than r) it is considered as exception in child VM, with exit_code=-3 and exit_arg=0 (so 0 is returned as only stack element);
+      - if RUNVM fails with exception - only one element is returned - exit arg (not to be mistaken with exit_code);
+      - in case of OOG, exit_code = -14 and exit_arg is amount of gas.
 
 Gas cost:
 - 66 gas
