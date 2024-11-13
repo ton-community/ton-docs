@@ -121,7 +121,7 @@ module.exports = {
           label: 'Telegram Mini Apps (TMAs)',
         },
         {
-          to: 'v3/guidelines/dapps/apis-sdks/sdk',
+          to: 'v3/guidelines/dapps/apis-sdks/overview',
           label: 'APIs and SDKs',
         },
         {
