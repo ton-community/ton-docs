@@ -21,7 +21,7 @@ For anyone new with multisig: [What is Multisig Technology? (video)](https://www
 
 - How to create and customize a simple multisig wallet.
 - How to deploy multisig wallet using lite-client.
-- How to sign request and send it in message to blockchain.
+- How to sign request and send it in message to the blockchain.
 
 ## ⚙ Set your environment
 
@@ -29,8 +29,9 @@ Before we begin our journey, check and prepare your environment.
 
 - Install `func`, `fift`, `lite-client` binaries and `fiftlib` from the [Installation](/v3/documentation/archive/precompiled-binaries) section.
 - Clone [repository](https://github.com/akifoq/multisig) and open its directory in CLI.
-```cpp
-https://github.com/akifoq/multisig.git
+
+```bash
+git clone https://github.com/akifoq/multisig.git
 cd ~/multisig
 ``` 
 
