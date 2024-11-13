@@ -141,7 +141,7 @@ const config = {
         // The application ID provided by Algolia
         appId: '6W1716R07C',
         // Public API key: it is safe to commit it
-        apiKey: '17a77a6334f21a184e928c65d7bf5054',
+        apiKey: 'e45cdbf03f119aeda15900011e05259f',
         indexName: 'stage_TON_DOCS',
         // Optional: see doc section below
         contextualSearch: true,
