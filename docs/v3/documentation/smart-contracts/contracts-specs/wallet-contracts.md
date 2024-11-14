@@ -5,10 +5,9 @@ You may have heard about different versions of wallets on the TON Blockchain. Bu
 In this article, we’ll explore the various versions and modifications of TON wallets.
 
 :::info
-Before we start, there are some terms and concepts that you should be familiar with to fully understand the article, such as
-
- - Message management, because this is the main functionality of the wallets.
- - FunC language, because we will heavily rely on implementations made using it.
+Before we start, there are some terms and concepts that you should be familiar with to fully understand the article:
+ - [Message management](/v3/documentation/smart-contracts/message-management/messages-and-transactions), because this is the main functionality of the wallets.
+ - [FunC language](/v3/documentation/smart-contracts/func/overview), because we will heavily rely on implementations made using it.
 :::
 
 ## Common concept
@@ -30,7 +29,7 @@ You can consider each wallet version as a smart-contract implementation providin
 This is the simplest one. It only allows you to send four transactions at a time and doesn't check anything besides your signature and seqno.
 
 Wallet source code:
- * [ton/crypto/smartcont/wallet-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-wallet.fif) 
+ * [ton/crypto/smartcont/wallet-code.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-wallet.fif) 
 
 This version isn’t even used in regular apps because it has some major issues:
  - No easy way to retrieve the seqno and public key from the contract.
