@@ -58,15 +58,37 @@ You can check [NFT processing on TON](/v3/guidelines/dapps/asset-processing/nft-
 Let's start by creating an empty project:
 
 1. Create new folder
-`mkdir MintyTON`
-2. Open this folder
-`cd MintyTON`
-3. Init our project `yarn init -y`
-4. Install typescript
+
+```bash
+mkdir MintyTON
 ```
+
+2. Open this folder
+
+```bash
+cd MintyTON
+```
+
+3. Init our project
+
+```bash
+yarn init -y
+```
+
+4. Install typescript
+
+```bash
 yarn add typescript @types/node -D
 ```
-5. Copy this config to tsconfig.json
+
+5. Init TypeScript project
+
+```bash
+tsc --init
+```
+
+6. Copy this config to tsconfig.json
+
 ```json
 {
     "compilerOptions": {
@@ -86,18 +108,21 @@ yarn add typescript @types/node -D
     "include": ["src/**/*"]
 }
 ```
-6. Add script to build & start our app to package.json
+
+7. Add script to build & start our app to `package.json`
+
 ```json
 "scripts": {
     "start": "tsc --skipLibCheck && node dist/app.js"
   },
 ```
 
-7. Install required libraries
+8. Install required libraries
 ```
 yarn add @pinata/sdk dotenv ton ton-core ton-crypto
 ```
-8. Create `.env` file and add your own data based on this template
+
+9. Create `.env` file and add your own data based on this template
 ```
 PINATA_API_KEY=your_api_key
 PINATA_API_SECRET=your_secret_api_key
@@ -110,7 +135,7 @@ Great! Now we are ready to start writing code for our project.
 
 ### Write helper functions
 
-Firstly let's create function in `src/utils.ts`, that will open our wallet by mnemonic and return publicKey/secretKey of it. 
+Firstly let's create function `openWallet` in `src/utils.ts`, that will open our wallet by mnemonic and return publicKey/secretKey of it. 
 
 We get a pair of keys based on 24 words(seed phrase):
 ```ts
@@ -130,30 +155,30 @@ export type OpenedWallet = {
 
 export async function openWallet(mnemonic: string[], testnet: boolean) {
   const keyPair = await mnemonicToPrivateKey(mnemonic);
-}
 ```
 
 Create a class instance to interact with toncenter:
 ```ts
-const toncenterBaseEndpoint: string = testnet
-  ? "https://testnet.toncenter.com"
-  : "https://toncenter.com";
+  const toncenterBaseEndpoint: string = testnet
+    ? "https://testnet.toncenter.com"
+    : "https://toncenter.com";
 
-const client = new TonClient({
-  endpoint: `${toncenterBaseEndpoint}/api/v2/jsonRPC`,
-  apiKey: process.env.TONCENTER_API_KEY,
-});
+  const client = new TonClient({
+    endpoint: `${toncenterBaseEndpoint}/api/v2/jsonRPC`,
+    apiKey: process.env.TONCENTER_API_KEY,
+  });
 ```  
 
 And finally open our wallet:
 ```ts
-const wallet = WalletContractV4.create({
-    workchain: 0,
-    publicKey: keyPair.publicKey,
-  });
+  const wallet = WalletContractV4.create({
+      workchain: 0,
+      publicKey: keyPair.publicKey,
+    });
 
-const contract = client.open(wallet);
-return { contract, keyPair };
+  const contract = client.open(wallet);
+  return { contract, keyPair };
+}
 ```
 
 Nice, after that we will create main entrypoint for our project - `app.ts`. 
@@ -162,7 +187,7 @@ Thats enough for now.
 ```ts
 import * as dotenv from "dotenv";
 
-import { openWallet } from "./utils";
+import { openWallet } from "./src/utils";
 import { readdir } from "fs/promises";
 
 dotenv.config();
@@ -174,9 +199,9 @@ async function init() {
 void init();
 ```
 
-And by the end, let's create `delay.ts` file, in which we will create function to wait until `seqno` increases. 
+And by the end, let's create `delay.ts` file in `src` directory, in which we will create function to wait until `seqno` increases. 
 ```ts
-import { OpenedWallet } from "utils";
+import { OpenedWallet } from "./utils";
 
 export async function waitSeqno(seqno: number, wallet: OpenedWallet) {
   for (let attempt = 0; attempt < 10; attempt++) {
@@ -256,7 +281,7 @@ After that, you can create as many files of NFT item with their metadata as you 
 
 ### Upload metadata
 
-Now let's write some code, that will upload our metadata files to IPFS. Create `metadata.ts` file and add all needed imports:
+Now let's write some code, that will upload our metadata files to IPFS. Create `metadata.ts` file in `src` directory and add all needed imports:
 ```ts
 import pinataSDK from "@pinata/sdk";
 import { readdirSync } from "fs";
@@ -351,7 +376,7 @@ export async function updateMetadataFiles(metadataFolderPath: string, imagesIpfs
 Great, let's call this methods in our app.ts file.
 Add imports of our functions:
 ```ts
-import { updateMetadataFiles, uploadFolderToIPFS } from "./metadata";
+import { updateMetadataFiles, uploadFolderToIPFS } from "./src/metadata";
 ```
 
 Save variables with path to the metadata/images folder and call our functions to upload metadata.
@@ -384,7 +409,8 @@ After that you can run `yarn start` and see link to your deployed metadata!
 How will link to our metadata files stored in smart contract? This question can be fully answered by the [Token Data Standart](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md). 
 In some cases, it will not be enough to simply provide the desired flag and provide the link as ASCII characters, which is why let's consider an option in which it will be necessary to split our link into several parts using the snake format.
 
-Firstly create function, that will convert our buffer into chunks: 
+Firstly create function in `./src/utils.ts`, that will convert our buffer into chunks:
+
 ```ts
 function bufferToChunks(buff: Buffer, chunkSize: number) {
   const chunks: Buffer[] = [];
@@ -495,7 +521,7 @@ export class NftCollection {
 In this code, we just read Cell from base64 representation of collection smart contract.
 
 Okey, remained only cell with init data of our collection.
-Basicly, we just need to store data from collectionData in correct way. Firstly we need to create an empty cell and store there collection owner address and index of next item that will be minted.
+Basicly, we just need to store data from collectionData in correct way. Firstly we need to create an empty cell and store there collection owner address and index of next item that will be minted. Let's write next private method:
 
 ```ts
 private createDataCell(): Cell {
@@ -507,6 +533,7 @@ private createDataCell(): Cell {
 ```
 
 Next after that, we creating an empty cell that will store content of our collection, and after that store ref to the cell with encoded content of our collection. And right after that store ref to contentCell in our main data cell.
+
 ```ts
 const contentCell = beginCell();
 
@@ -617,7 +644,15 @@ public async topUpBalance(
   }
 ```
 
-Perfect, let's now add few lines to our `app.ts` to deploy new collection:
+Perfect, let's now add few include to our `app.ts`:
+
+```ts
+import { waitSeqno } from "./src/delay";
+import { NftCollection } from "./src/contracts/NftCollection";
+```
+
+And add few lines to the end of `init()` function to deploy new collection:
+
 ```ts
 console.log("Start deploy of nft collection...");
 const collectionData = {
