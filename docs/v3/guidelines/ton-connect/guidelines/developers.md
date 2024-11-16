@@ -177,6 +177,17 @@ Use it to integrate the TonConnect protocol with your game.
 * [GitHub](https://github.com/continuation-team/unity-ton-connect)
 * [Docs](https://docs.tonsdk.net/user-manual/unity-tonconnect-2.0/getting-started)
 
+Unity SDK with frendly API for TON Connect 2.0. Uses `MrVeit/Veittech-UnitonConnect`
+
+Use it to embed the TonConnect protocol into your game as natively as possible.
+
+* [GitHub](https://github.com/MrVeit/Veittech-UnitonConnect)
+* [Docs](https://github.com/MrVeit/Veittech-UnitonConnect/blob/main/README.MD)
+
+Example of a deployed `MrVeit/Veittech-UnitonConnect`:
+* [TMA](https://t.me/UnitonConnect_bot/dAppStart)
+* [Web App](https://mrveit.github.io/Veittech-UnitonConnect/)
+
 ## See Also
 
 * [Step by step guide for building your first web client](https://ton-community.github.io/tutorials/03-client/)
