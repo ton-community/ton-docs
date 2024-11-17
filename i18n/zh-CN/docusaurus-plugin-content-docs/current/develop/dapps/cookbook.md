@@ -330,7 +330,7 @@ async def main():
 
 
     await wallet.transfer(destination=DESTINATION_ADDRESS, amount=int(0.05*1e9), body="转账示例内容")
-	await client.close_all()
+	await provider.close_all()
 
 asyncio.run(main())
 ```
@@ -597,7 +597,7 @@ async def main():
                     .end_cell())
 
     await wallet.transfer(destination=USER_JETTON_WALLET, amount=int(0.05*1e9), body=transfer_cell)
-	await client.close_all()
+	await provider.close_all()
 
 asyncio.run(main())
 ```

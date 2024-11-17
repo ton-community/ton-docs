@@ -442,7 +442,7 @@ async def main():
     }
 
     await wallet.transfer(**transfer)
-	await client.close_all()
+	await provider.close_all()
 
 asyncio.run(main())
 ```
