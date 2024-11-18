@@ -22,7 +22,7 @@ You must already have a testnet wallet with at least 2 TON in it. You can get te
 To open the testnet network on Tonkeeper, go to settings and click 5 times on the Tonkeeper logo located at the bottom. Then choose "testnet" instead of "mainnet."
 :::
 
-We will use Pinata as our IPFS storage system, so you also need to create an account on [pinata.cloud](https://pinata.cloud) and get api_key & api_secreat. Official Pinata [documentation tutorial](https://docs.pinata.cloud/pinata-api/authentication) can help with that. Once you have these API tokens, I’ll be waiting for you here!
+We will use Pinata as our IPFS storage system, so you also need to create an account on [pinata.cloud](https://pinata.cloud) and get api_key & api_secreat. Official Pinata [documentation tutorial](https://docs.pinata.cloud/account-management/api-keys) can help with that. Once you have these API tokens, I’ll be waiting for you here!
 
 ## 💎 What is it NFT on TON?
 
@@ -177,13 +177,13 @@ And finally open our wallet:
 }
 ```
 
-Nice, after that we will create main entrypoint for our project - `app.ts`. 
+Nice, after that we will create main entrypoint for our project - `src/app.ts`. 
 Here will use just created function `openWallet` and call our main function `init`.
 Thats enough for now.
 ```ts
 import * as dotenv from "dotenv";
 
-import { openWallet } from "./src/utils";
+import { openWallet } from "./utils";
 import { readdir } from "fs/promises";
 
 dotenv.config();
@@ -643,8 +643,8 @@ public async topUpBalance(
 Perfect, let's now add few include to our `app.ts`:
 
 ```ts
-import { waitSeqno } from "./src/delay";
-import { NftCollection } from "./src/contracts/NftCollection";
+import { waitSeqno } from "./delay";
+import { NftCollection } from "./contracts/NftCollection";
 ```
 
 And add few lines to the end of `init()` function to deploy new collection:
@@ -789,7 +789,7 @@ Then we will call get-method of collection, that will return address of NFT in t
 Now let's add some code in `app.ts`, to automate the minting process of each NFT:
 
 ```ts
-  import { NftItem } from "./src/contracts/NftItem";
+  import { NftItem } from "./contracts/NftItem";
   import { toNano } from '@ton/core';
 ```
 
@@ -913,7 +913,7 @@ As you can see, this code does not differ from the deployment of other smart con
 By the end, let's add few lines of code to our `app.ts` file, to deploy our marketplace:
 
 ```ts
-import { NftMarketplace } from "./src/contracts/NftMarketplace";
+import { NftMarketplace } from "./contracts/NftMarketplace";
 ```
 
 And then
@@ -1139,7 +1139,7 @@ Create variable, that will store information about our sale.
 Add to the beggining of the `app.ts`:
 
 ```ts
-import { GetGemsSaleData, NftSale } from "./src/contracts/NftSale";
+import { GetGemsSaleData, NftSale } from "./contracts/NftSale";
 ```
 
 And then:
