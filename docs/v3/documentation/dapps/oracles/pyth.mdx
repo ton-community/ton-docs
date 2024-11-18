@@ -1,10 +1,8 @@
 import ThemedImage from '@theme/ThemedImage';
 
----
-description: Consume Pyth Network prices in TON applications
----
+# Pyth Oracles
 
-# How to Use Real-Time Data in TON Contracts
+## How to Use Real-Time Data in TON Contracts
 
 Pyth price feeds on TON are managed through the main TON Pyth smart
 contract, enabling seamless interaction with on-chain data. In TON,
@@ -14,33 +12,29 @@ price feeds, handling the retrieval and updating of price data.
 
 ## Install the Pyth SDK
 
-Install the Pyth TON SDK and other necessary dependencies using npm:
+Install the Pyth TON SDK and other necessary dependencies using npm or yarn:
 
-<Tabs items={["npm", "yarn"]}>
-  <Tabs.Tab>
-    ```sh copy
-    npm install @pythnetwork/pyth-ton-js @pythnetwork/hermes-client
-    @ton/core @ton/ton @ton/crypto
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```sh copy
-    yarn add @pythnetwork/pyth-ton-js @pythnetwork/hermes-client
-    @ton/core @ton/ton @ton/crypto
-    ```
-  </Tabs.Tab>
-</Tabs>
+   ```ts
+      npm install @pythnetwork/pyth-ton-js @pythnetwork/hermes-client
+      @ton/core @ton/ton @ton/crypto
+   ```
+   or
+   ```ts
+      yarn add @pythnetwork/pyth-ton-js @pythnetwork/hermes-client
+      @ton/core @ton/ton @ton/crypto
+   ```
+    
 
 ## Write Client Code
 
 The following code snippet demonstrates how to fetch price updates, interact with the Pyth contract on TON, and update price feeds:
 
-TON Mainnet: [EQBU6k8HH6yX4Jf3d18swWbnYr31D3PJI7PgjXT-flsKHqql](https://docs.pyth.network/price-feeds/contract-addresses/ton)
-TON Testnet: [EQB4ZnrI5qsP_IUJgVJNwEGKLzZWsQOFhiaqDbD7pTt_f9oU](https://docs.pyth.network/price-feeds/contract-addresses/ton)
+- TON Mainnet: [EQBU6k8HH6yX4Jf3d18swWbnYr31D3PJI7PgjXT-flsKHqql](https://docs.pyth.network/price-feeds/contract-addresses/ton)
+- TON Testnet: [EQB4ZnrI5qsP_IUJgVJNwEGKLzZWsQOFhiaqDbD7pTt_f9oU](https://docs.pyth.network/price-feeds/contract-addresses/ton)
 
 The following example uses testnet contract. For mainnet usage, change the `PYTH_CONTRACT_ADDRESS_TESTNET` to `PYTH_CONTRACT_ADDRESS_MAINNET` accordingly. 
 
-```typescript copy
+```ts
 import { TonClient, Address, WalletContractV4 } from "@ton/ton";
 import { toNano } from "@ton/core";
 import { mnemonicToPrivateKey } from "@ton/crypto";
