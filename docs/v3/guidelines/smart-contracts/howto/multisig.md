@@ -2,7 +2,11 @@
 description: At the end of the tutorial, you will have deployed multisig contract in TON Blockchain.
 ---
 
-# How to make a simple multisig contract
+# Make a simple multisig contract with fift
+
+:::caution advanced level
+This information is **very low-level**. Could be hard to understand for newcomers and designed for advanced people who want to understand [fift](/v3/documentation/smart-contracts/fift/overview). The use of fift is not required in everyday tasks.
+:::
 
 ## 💡 Overview
 
@@ -134,7 +138,7 @@ Bounceable address is better to keep - this is the address of the wallet.
 
 #### Activate your contract
 
-You need to send some TON to our newly generated _treasure_. For example 0.5 TON.
+You need to send some TON to our newly generated _treasure_. For example 0.5 TON. You can send testnet coins via [@testgiver_ton_bot](https://t.me/testgiver_ton_bot).
 
 After that, you need to run lite-client:
 
