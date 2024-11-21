@@ -186,8 +186,8 @@ Note that all FunC source file contents used in your project should be passed to
 
 ### Validated by TON Community
 
-* [ton-community/ton-compiler](/v3/documentation/smart-contracts/getting-started/javascript#ton-compiler) — ready-to-use FunC compiler for TON smart contracts.
-* [ton-community/func-js](/v3/documentation/smart-contracts/getting-started/javascript#func-js) — cross-platform bindings for the TON FunC compiler.
+* [ton-community/ton-compiler](https://github.com/ton-community/ton-compiler) — ready-to-use FunC compiler for TON smart contracts.
+* [ton-community/func-js](https://github.com/ton-community/func-js) — cross-platform bindings for the TON FunC compiler.
 
 ### Third-party contributors
 

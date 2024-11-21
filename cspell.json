@@ -4,9 +4,9 @@
   "language": "en",
   "files": [
     "**/*.md",
-    "**/*.mdx",
+    "**/*.mdx"
   ],
-  "dictionaries": ["tvm-instructions", "names", "commands"],
+  "dictionaries": ["tvm-instructions", "names", "commands", "examples"],
   "dictionaryDefinitions": [
     {
       "name":"tvm-instructions",
@@ -19,6 +19,10 @@
     {
       "name":"commands",
       "path":"./src/grammar/commands-dictionary.txt"
+    },
+    {
+      "name":"examples",
+      "path":"./src/grammar/examples-dictionary.txt"
     },
   ],
   "words": [
@@ -103,6 +107,7 @@
     "Threadripper",
     "Threadripper-based",
     "Timeouted",
+    "Tolk",
     "Toncoin",
     "Toncoins",
     "Underload",
@@ -152,6 +157,7 @@
     "deeplink",
     "dnsresolve",
     "dracones",
+    "dstat",
     "ed25519_chksign",
     "exitcode",
     "extracurrencies",
@@ -175,10 +181,14 @@
     "hmac",
     "howto",
     "HOWTO",
+    "htop",
+    "idict",
+    "iftop",
     "inclusivity",
     "inplace",
     "int",
     "ints",
+    "iotop",
     "ipfs",
     "janvier",
     "jetton",
@@ -196,12 +206,14 @@
     "liteservers",
     "logname",
     "long",
+    "lowlevel",
     "masterchain",
     "mathrm",
     "mintless",
     "micropayment",
     "micropayments",
     "mintable",
+    "moddiv",
     "multichain",
     "multisignature",
     "mystore",
@@ -213,10 +225,12 @@
     "nanotons",
     "newkeypair",
     "nextra",
+    "nmon",
     "nonexist",
     "nonfinal",
     "penalising",
     "penalised",
+    "pfxdict",
     "precomplied",
     "preimage",
     "prer",
@@ -259,6 +273,7 @@
     "sunt",
     "superserver",
     "tick-tock",
+    "tilda",
     "timeouted",
     "tock",
     "tokenomics",
@@ -266,6 +281,7 @@
     "udict",
     "uint",
     "unbounceable",
+    "uncons",
     "underload",
     "underloaded",
     "unixtime",
@@ -300,6 +316,7 @@
   ],
   "flagWords": [],
   "ignorePaths": [
+    "scripts",
     "static",
     "node_modules",
     "package.json",
@@ -314,5 +331,6 @@
     "sidebars",
     "i18n",
     ".husky",
+    "warnings.txt"
   ]
 }

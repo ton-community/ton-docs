@@ -161,7 +161,7 @@ cmake --build . --target func
 To compile FunC smart contract:
 
 ```bash
-func -o output.fif -SPA source0.fc source1.fc ...
+./crypto/func -o output.fif -SPA source0.fc source1.fc ...
 ```
 
 ## Fift
@@ -175,7 +175,7 @@ cmake --build . --target fift
 To run Fift script:
 
 ```bash
-fift -s script.fif script_param0 script_param1 ..
+./crypto/fift -s script.fif script_param0 script_param1 ..
 ```
 
 ## Tonlib-cli
@@ -205,7 +205,7 @@ cmake --build . --target rldp-http-proxy
 The Proxy binary will be located as:
 
 ```bash
-rldp-http-proxy/rldp-http-proxy
+./rldp-http-proxy/rldp-http-proxy
 ```
 
 ## generate-random-id
@@ -219,7 +219,7 @@ cmake --build . --target generate-random-id
 The binary will be located as:
 
 ```bash
-utils/generate-random-id
+./utils/generate-random-id
 ```
 
 ## storage-daemon
@@ -233,7 +233,7 @@ cmake --build . --target storage-daemon storage-daemon-cli
 The binary will be located at:
 
 ```bash
-storage/storage-daemon/
+./storage/storage-daemon/
 ```
 
 # Compile old TON versions

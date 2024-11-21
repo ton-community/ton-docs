@@ -80,7 +80,7 @@ int get_subwallet_id() method_id {
 }
 ```
 
--   [What is Subwallet ID?](/v3/guidelines/smart-contracts/howto/wallet#what-is-subwallet-id)
+-   [What is Subwallet ID?](/v3/guidelines/smart-contracts/howto/wallet#subwallet-ids)
 
 #### get_public_key()
 

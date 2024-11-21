@@ -46,6 +46,16 @@ const config = {
   baseUrl: '/',
   themes: [
     '@docusaurus/theme-live-codeblock',
+        [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      {
+        hashed: true,
+        indexPages: true,
+        indexBlog: false,
+        searchBarShortcutHint: false,
+        language: ["en", "zh"],
+      },
+    ],
   ],
   plugins: [
     ['docusaurus-plugin-sass', {}],

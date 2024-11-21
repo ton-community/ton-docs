@@ -62,7 +62,7 @@ It should allow incoming connections on one specific port and outgoing connectio
 If you encounter the `Validator console is not settings` error, it indicates that you are running `MyTonCtrl` from a user other than the one you used for the installation.
 
 :::tip Solution
-Run `MyTonCtrl` from [the user you've installed](/v3/guidelines/nodes/running-nodes/full-node#prerequisites-1) it (non-root sudo user).
+Run `MyTonCtrl` from [the user you've installed](/v3/guidelines/nodes/running-nodes/full-node#switch-to-non-root-user) it (non-root sudo user).
 
 ```bash
 mytonctrl
