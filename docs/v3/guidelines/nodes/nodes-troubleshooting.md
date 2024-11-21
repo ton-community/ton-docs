@@ -36,9 +36,7 @@ Go through the checklist [from this section](/v3/guidelines/nodes/nodes-troubles
 
 ## Slow sync potential reasons
 
-1. The disk is relatively weak. It's advisable to check the IOPS of the disk (though sometimes hosting providers exaggerate these numbers).
-2. Updates coincided with network congestion. However, the slow synchronization is due to the load, not the updates. The full node cannot catch up with the network because there were about 100 million transactions.
-3. Since the default value of keep history for a Full Node state has been reduced to one day, there are fewer Full Nodes in the network that can provide older states, may cause making it harder to sync with such a delay.
+The disk is relatively weak. It's advisable to check the IOPS of the disk (though sometimes hosting providers exaggerate these numbers).
 
 ## Cannot apply external message to current state : External message was not accepted
 
