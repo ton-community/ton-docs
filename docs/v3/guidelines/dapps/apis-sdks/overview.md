@@ -5,11 +5,11 @@ The purpose of this article is to help you choose the right tools for applicatio
 ## TMA development
 
 * Use [Mini Apps SDKs](/v3/guidelines/dapps/tma/overview#mini-apps-sdks) for [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview) development.
-* If your application interacts with TON blockchain you need to choose [JS/TS-based SDK](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript).
+* Choose [JS/TS-based SDK](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript) for interacting with TON blockchain.
 
 ## DApps development
 
-* Use [FunC](/v3/documentation/smart-contracts/func/overview) language for TON blockchain smart contracts development for your [DApp](/v3/guidelines/dapps/overview) if needed.
+* Use Tolk, FunC or Tact [programming languages](/v3/documentation/smart-contracts/overview#programming-languages) for TON blockchain smart contracts development for your [DApp](/v3/guidelines/dapps/overview) if needed.
 * To interacts with TON blockchain and process its data choose listed [SDK](/v3/guidelines/dapps/apis-sdks/sdk). One of the most popular languages for this purpose are:
     * [JS/TS](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript)
     * [Go](/v3/guidelines/dapps/apis-sdks/sdk#go)
