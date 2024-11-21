@@ -2,14 +2,15 @@ import ThemedImage from '@theme/ThemedImage';
 
 # Verifying signed in users on backend
 
-This page describes a way for backend to ensure that the user truly owns the declared address.
-Please note that the user verification is not required for all DApps.
+This page describes a method for the backend to ensure that the user truly owns the declared address.
 
-It is useful if you want to verify a user to provide them with their personal information from the back end.
+Note that user verification is not required for all DApps.
+
+It is useful if you want to verify a user in order to provide them with their personal information from the backend.
 
 ## How does it work?
 
-- User initiates sign in process.
+- User initiates the sign-in process.
 - Backend generates a ton_proof entity and sends it to frontend.
 - Frontend signs in to wallet using ton_proof and receives back a signed ton_proof.
 - Frontend sends signed ton_proof to backend for verification.
@@ -57,11 +58,11 @@ type TonProofItemReplySuccess = {
 6. Retrieve `public_key` either from API (a) or via back-end logic (b)
 - 6a:
     - Retrieve `{public_key, address}` from the `walletStateInit` with [TON API](https://docs.tonconsole.com/tonapi#:~:text=/v2/-,tonconnect,-/stateinit) method `POST /v2/tonconnect/stateinit`.
-    - Check that the `address` extracted from `walletStateInit` corresponds to wallet `address` declared by user.
+    - Verify that the address extracted from `walletStateInit` to the wallet `address` declared by the user.
 - 6b:
     - Obtain the wallet `public_key` via the wallet contract [get method](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc#L174).
-    - If the contract is not active, or if it lacks the get_method found in older wallet versions (v1-v3), then obtaining the key in this manner will be impossible. Instead, you will need to parse the walletStateInit provided by the frontend. Ensure that TonAddressItemReply.walletStateInit.hash() is equal to TonAddressItemReply.address.hash(), indicating a BoC hash.
-7. Verify that the `signature` from the frontend properly signs the assembled message and matches the `public_key` of the address.
+    - If the contract is not active, or lacks the get_method found in older wallet versions (v1-v3), then obtaining the key in this manner will be impossible. Instead, you will need to parse the walletStateInit provided by the frontend. Ensure that TonAddressItemReply.walletStateInit.hash() is equal to TonAddressItemReply.address.hash(), indicating a BoC hash.
+7. Verify that the `signature` from the frontend correctly signs the assembled message and matches the `public_key` of the address.
 
 ## React Example
 
