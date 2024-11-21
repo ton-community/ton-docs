@@ -170,6 +170,7 @@ module.exports = [
         type: 'category',
         label: 'Oracles in TON',
         items: [
+          'v3/documentation/dapps/oracles/pyth',
           'v3/documentation/dapps/oracles/red_stone',
         ],
       },
