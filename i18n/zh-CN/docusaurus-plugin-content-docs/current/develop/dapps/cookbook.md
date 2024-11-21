@@ -330,7 +330,7 @@ async def main():
 
 
     await wallet.transfer(destination=DESTINATION_ADDRESS, amount=int(0.05*1e9), body="转账示例内容")
-	await client.close_all()
+    await provider.close_all()
 
 asyncio.run(main())
 ```
@@ -444,7 +444,7 @@ async def main():
                                                    stack=[begin_cell().store_address(USER_ADDRESS).end_cell().begin_parse()])
     jetton_wallet = result_stack[0].load_address()
     print(f"用户{USER_ADDRESS}的Jetton钱包地址: {jetton_wallet.to_str(1, 1, 1)}")
-	await provider.close_all()
+    await provider.close_all()
 
 asyncio.run(main())
 ```
@@ -597,7 +597,7 @@ async def main():
                     .end_cell())
 
     await wallet.transfer(destination=USER_JETTON_WALLET, amount=int(0.05*1e9), body=transfer_cell)
-	await client.close_all()
+    await provider.close_all()
 
 asyncio.run(main())
 ```
