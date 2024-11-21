@@ -109,7 +109,7 @@ TON blockchain as any other blockchain is a network, so it makes sense to try to
 In general networking the endpoint is a pysical device, in blockchain endpoint is a smart contract.
 
 #### Shards
-In that logic, shard is nothing more than a subnet. Only difference from tht perspective is that ipv4 has 32 bit addressing scheme and TON has 256 bit.
+In that logic, shard is nothing more than a subnet. Only difference from that perspective is that ipv4 has 32 bit addressing scheme and TON has 256 bit.
 So, contract address shard prefix is a part of a contract address that identifies the group of validators that will compute it's incomming message result.
 From networking perspective, it's clear that request on the same network segment will get to processing faster than the one that is routed elsewhere, right?
 It's kind of like one uses CDN to host content closer to the end users, in TON we deploy contract closer to the end users.
@@ -134,7 +134,7 @@ if((addressA.hash[0] >> 4) == (addressb.hash[0] >> 4)) {
   console.log("Nope");
 }
 ```
-From the human perspective easiest way to check the address shard is to look at the address [raw form](https://docs.ton.org/develop/howto/step-by-step#1-smart-contract-addresses).
+From the human perspective easiest way to check the address shard is to look at the address [raw form](/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses#raw-address).
 One could use [address page](https://ton.org/address/) for it.
 Let's test in on the USDT address for example:`EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs`.
 You will see `0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe` as a raw representation and the first 4 bits is essentially first hexadecimal symbol - `b`.
