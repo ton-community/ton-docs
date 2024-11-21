@@ -234,7 +234,7 @@ total_fwd_fees = msg_fwd_fees + ihr_fwd_fees; // ihr_fwd_fees - is 0 for externa
 The action fee is deducted from the balance of the source account during the processing of the action list, which occurs after the Computing phase. Practically, the only action for which you pay an action fee is `SENDRAWMSG`. Other actions, such as `RAWRESERVE` or `SETCODE`, do not incur any fee during the action phase.
 
 ```cpp
-action_fee = ceil((msg_fwd_fees * first_frac)/ 2^16);  //internal
+action_fee = floor((msg_fwd_fees * first_frac)/ 2^16);  //internal
 
 action_fee = msg_fwd_fees;  //external
 ```
