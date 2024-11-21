@@ -22,7 +22,7 @@ You must already have a testnet wallet with at least 2 TON in it. You can get te
 To open the testnet network on Tonkeeper, go to settings and click 5 times on the Tonkeeper logo located at the bottom. Then choose "testnet" instead of "mainnet."
 :::
 
-We will use Pinata as our IPFS storage system, so you also need to create an account on [pinata.cloud](https://pinata.cloud) and get api_key & api_secreat. Official Pinata [documentation tutorial](https://docs.pinata.cloud/pinata-api/authentication) can help with that. Once you have these API tokens, I’ll be waiting for you here!
+We will use Pinata as our IPFS storage system, so you also need to create an account on [pinata.cloud](https://pinata.cloud) and get api_key & api_secreat. Official Pinata [documentation tutorial](https://docs.pinata.cloud/account-management/api-keys) can help with that. Once you have these API tokens, I’ll be waiting for you here!
 
 ## 💎 What is it NFT on TON?
 
@@ -46,7 +46,7 @@ The problems of such an implementation in the context of TON are perfectly descr
 
 ### TON NFT implementation
 
-On TON, we have on master contract - smart-contract of our collection, that store it's metadata and address of it's owner and the main thing - that if we want to create("mint") new NFT Item - we just need to send message to this collection contract. This collection contract will then deploy a new NFT item contract for us, using the data we provide.
+On TON, we have on master contract - smart contract of our collection, that store it's metadata and address of it's owner and the main thing - that if we want to create("mint") new NFT Item - we just need to send message to this collection contract. This collection contract will then deploy a new NFT item contract for us, using the data we provide.
 
 ![](/img/tutorials/nft/ton-collection.png)
 
@@ -58,15 +58,37 @@ You can check [NFT processing on TON](/v3/guidelines/dapps/asset-processing/nft-
 Let's start by creating an empty project:
 
 1. Create new folder
-`mkdir MintyTON`
-2. Open this folder
-`cd MintyTON`
-3. Init our project `yarn init -y`
-4. Install typescript
+
+```bash
+mkdir MintyTON
 ```
+
+2. Open this folder
+
+```bash
+cd MintyTON
+```
+
+3. Init our project
+
+```bash
+yarn init -y
+```
+
+4. Install typescript
+
+```bash
 yarn add typescript @types/node -D
 ```
-5. Copy this config to tsconfig.json
+
+5. Init TypeScript project
+
+```bash
+tsc --init
+```
+
+6. Copy this config to tsconfig.json
+
 ```json
 {
     "compilerOptions": {
@@ -86,18 +108,22 @@ yarn add typescript @types/node -D
     "include": ["src/**/*"]
 }
 ```
-6. Add script to build & start our app to package.json
+
+7. Add script to build & start our app to `package.json`
+
 ```json
 "scripts": {
     "start": "tsc --skipLibCheck && node dist/app.js"
   },
 ```
 
-7. Install required libraries
+8. Install required libraries
+
+```bash
+yarn add @pinata/sdk dotenv @ton/ton @ton/crypto @ton/core buffer
 ```
-yarn add @pinata/sdk dotenv ton ton-core ton-crypto
-```
-8. Create `.env` file and add your own data based on this template
+
+9. Create `.env` file and add your own data based on this template
 ```
 PINATA_API_KEY=your_api_key
 PINATA_API_SECRET=your_secret_api_key
@@ -110,18 +136,13 @@ Great! Now we are ready to start writing code for our project.
 
 ### Write helper functions
 
-Firstly let's create function in `src/utils.ts`, that will open our wallet by mnemonic and return publicKey/secretKey of it. 
+Firstly let's create function `openWallet` in `src/utils.ts`, that will open our wallet by mnemonic and return publicKey/secretKey of it. 
 
 We get a pair of keys based on 24 words(seed phrase):
 ```ts
-import { KeyPair, mnemonicToPrivateKey } from "ton-crypto";
-import {
-  beginCell,
-  Cell,
-  OpenedContract,
-  TonClient,
-  WalletContractV4,
-} from "ton";
+import { KeyPair, mnemonicToPrivateKey } from "@ton/crypto";
+import { beginCell, Cell, OpenedContract} from "@ton/core";
+import { TonClient, WalletContractV4 } from "@ton/ton";
 
 export type OpenedWallet = {
   contract: OpenedContract<WalletContractV4>;
@@ -130,33 +151,33 @@ export type OpenedWallet = {
 
 export async function openWallet(mnemonic: string[], testnet: boolean) {
   const keyPair = await mnemonicToPrivateKey(mnemonic);
-}
 ```
 
 Create a class instance to interact with toncenter:
 ```ts
-const toncenterBaseEndpoint: string = testnet
-  ? "https://testnet.toncenter.com"
-  : "https://toncenter.com";
+  const toncenterBaseEndpoint: string = testnet
+    ? "https://testnet.toncenter.com"
+    : "https://toncenter.com";
 
-const client = new TonClient({
-  endpoint: `${toncenterBaseEndpoint}/api/v2/jsonRPC`,
-  apiKey: process.env.TONCENTER_API_KEY,
-});
+  const client = new TonClient({
+    endpoint: `${toncenterBaseEndpoint}/api/v2/jsonRPC`,
+    apiKey: process.env.TONCENTER_API_KEY,
+  });
 ```  
 
 And finally open our wallet:
 ```ts
-const wallet = WalletContractV4.create({
-    workchain: 0,
-    publicKey: keyPair.publicKey,
-  });
+  const wallet = WalletContractV4.create({
+      workchain: 0,
+      publicKey: keyPair.publicKey,
+    });
 
-const contract = client.open(wallet);
-return { contract, keyPair };
+  const contract = client.open(wallet);
+  return { contract, keyPair };
+}
 ```
 
-Nice, after that we will create main entrypoint for our project - `app.ts`. 
+Nice, after that we will create main entrypoint for our project - `src/app.ts`. 
 Here will use just created function `openWallet` and call our main function `init`.
 Thats enough for now.
 ```ts
@@ -174,9 +195,9 @@ async function init() {
 void init();
 ```
 
-And by the end, let's create `delay.ts` file, in which we will create function to wait until `seqno` increases. 
+And by the end, let's create `delay.ts` file in `src` directory, in which we will create function to wait until `seqno` increases. 
 ```ts
-import { OpenedWallet } from "utils";
+import { OpenedWallet } from "./utils";
 
 export async function waitSeqno(seqno: number, wallet: OpenedWallet) {
   for (let attempt = 0; attempt < 10; attempt++) {
@@ -256,7 +277,7 @@ After that, you can create as many files of NFT item with their metadata as you 
 
 ### Upload metadata
 
-Now let's write some code, that will upload our metadata files to IPFS. Create `metadata.ts` file and add all needed imports:
+Now let's write some code, that will upload our metadata files to IPFS. Create `metadata.ts` file in `src` directory and add all needed imports:
 ```ts
 import pinataSDK from "@pinata/sdk";
 import { readdirSync } from "fs";
@@ -351,7 +372,7 @@ export async function updateMetadataFiles(metadataFolderPath: string, imagesIpfs
 Great, let's call this methods in our app.ts file.
 Add imports of our functions:
 ```ts
-import { updateMetadataFiles, uploadFolderToIPFS } from "./metadata";
+import { updateMetadataFiles, uploadFolderToIPFS } from "./src/metadata";
 ```
 
 Save variables with path to the metadata/images folder and call our functions to upload metadata.
@@ -384,7 +405,8 @@ After that you can run `yarn start` and see link to your deployed metadata!
 How will link to our metadata files stored in smart contract? This question can be fully answered by the [Token Data Standart](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md). 
 In some cases, it will not be enough to simply provide the desired flag and provide the link as ASCII characters, which is why let's consider an option in which it will be necessary to split our link into several parts using the snake format.
 
-Firstly create function, that will convert our buffer into chunks: 
+Firstly create function in `./src/utils.ts`, that will convert our buffer into chunks:
+
 ```ts
 function bufferToChunks(buff: Buffer, chunkSize: number) {
   const chunks: Buffer[] = [];
@@ -450,7 +472,7 @@ import {
   contractAddress,
   StateInit,
   SendMode,
-} from "ton-core";
+} from "@ton/core";
 import { encodeOffChainContent, OpenedWallet } from "../utils";
 ```
 
@@ -495,7 +517,7 @@ export class NftCollection {
 In this code, we just read Cell from base64 representation of collection smart contract.
 
 Okey, remained only cell with init data of our collection.
-Basicly, we just need to store data from collectionData in correct way. Firstly we need to create an empty cell and store there collection owner address and index of next item that will be minted.
+Basicly, we just need to store data from collectionData in correct way. Firstly we need to create an empty cell and store there collection owner address and index of next item that will be minted. Let's write next private method:
 
 ```ts
 private createDataCell(): Cell {
@@ -507,6 +529,7 @@ private createDataCell(): Cell {
 ```
 
 Next after that, we creating an empty cell that will store content of our collection, and after that store ref to the cell with encoded content of our collection. And right after that store ref to contentCell in our main data cell.
+
 ```ts
 const contentCell = beginCell();
 
@@ -529,7 +552,7 @@ const NftItemCodeCell = Cell.fromBase64(
 dataCell.storeRef(NftItemCodeCell);
 ```
 
-Royalty params stored in smart-contract by royaltyFactor, royaltyBase, royaltyAddress. Percentage of royalty can be calculated with the formula `(royaltyFactor / royaltyBase) * 100%`. So if we know royaltyPercent it's not a problem to get royaltyFactor.
+Royalty params stored in smart contract by royaltyFactor, royaltyBase, royaltyAddress. Percentage of royalty can be calculated with the formula `(royaltyFactor / royaltyBase) * 100%`. So if we know royaltyPercent it's not a problem to get royaltyFactor.
 
 ```ts
 const royaltyBase = 1000;
@@ -560,7 +583,7 @@ public get stateInit(): StateInit {
 }
 ```
 
-And getter, that will calculate Address of our collection(address of smart-contract in TON is just hash of it's StateInit)
+And getter, that will calculate Address of our collection(address of smart contract in TON is just hash of it's StateInit)
 ```ts
 public get address(): Address {
     return contractAddress(0, this.stateInit);
@@ -590,7 +613,7 @@ public async deploy(wallet: OpenedWallet) {
 ```
 Deploy of new smart contract in our case - it's just sending a message from our wallet to the collection address(which one we can calculate if we have StateInit), with its StateInit!
 
-When owner mint a new NFT, the collection accepts the owner's message and sends a new message to the created NFT smart-contract(which requires paying a fee), so let's write a method that will replenish the balance of the collection based on the number of nfts for a mint:
+When owner mint a new NFT, the collection accepts the owner's message and sends a new message to the created NFT smart contract(which requires paying a fee), so let's write a method that will replenish the balance of the collection based on the number of nfts for a mint:
 ```ts
 public async topUpBalance(
     wallet: OpenedWallet,
@@ -617,7 +640,15 @@ public async topUpBalance(
   }
 ```
 
-Perfect, let's now add few lines to our `app.ts` to deploy new collection:
+Perfect, let's now add few include to our `app.ts`:
+
+```ts
+import { waitSeqno } from "./delay";
+import { NftCollection } from "./contracts/NftCollection";
+```
+
+And add few lines to the end of `init()` function to deploy new collection:
+
 ```ts
 console.log("Start deploy of nft collection...");
 const collectionData = {
@@ -666,7 +697,6 @@ public createMintBody(params: mintParams): Cell {
     body.storeUint(params.queryId || 0, 64);
     body.storeUint(params.itemIndex, 64);
     body.storeCoins(params.amount);
-  }
 ```
 
 Later on create an empty cell and store owner address of this NFT:
@@ -677,23 +707,25 @@ Later on create an empty cell and store owner address of this NFT:
 
 And store ref in this cell(with NFT Item content) ref to the metadata of this item:
 ```ts
-const uriContent = beginCell();
-uriContent.storeBuffer(Buffer.from(params.commonContentUrl));
-nftItemContent.storeRef(uriContent.endCell());
+    const uriContent = beginCell();
+    uriContent.storeBuffer(Buffer.from(params.commonContentUrl));
+    nftItemContent.storeRef(uriContent.endCell());
 ```
 
 Store ref to cell with item content in our body cell:
 ```ts
-body.storeRef(nftItemContent.endCell());
-return body.endCell();
+    body.storeRef(nftItemContent.endCell());
+    return body.endCell();
+}
 ```
 
 Great! Now we can comeback to `NftItem.ts`. All we have to do is just send message to our collection contract with body of our NFT.
 
 ```ts
-import { internal, SendMode } from "ton-core";
+import { internal, SendMode, Address, beginCell, Cell, toNano } from "@ton/core";
 import { OpenedWallet } from "utils";
 import { NftCollection, mintParams } from "./NftCollection";
+import { TonClient } from "@ton/ton";
 
 export class NftItem {
   private collection: NftCollection;
@@ -736,25 +768,33 @@ static async getAddressByIndex(
     endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
     apiKey: process.env.TONCENTER_API_KEY,
   });
-}
 ```
 
 Then we will call get-method of collection, that will return address of NFT in this collection with such index
 ```ts
-const response = await client.runMethod(
-  collectionAddress,
-  "get_nft_address_by_index",
-  [{ type: "int", value: BigInt(itemIndex) }]
-);
+  const response = await client.runMethod(
+    collectionAddress,
+    "get_nft_address_by_index",
+    [{ type: "int", value: BigInt(itemIndex) }]
+  );
 ```
 
 ... and parse this address!
 ```ts
-return response.stack.readAddress();
+    return response.stack.readAddress();
+}
 ```
 
 
-Now let's add some code in `app.ts`, to automate the minting process of each NFT. Firstly read all of the files in folder with our metadata:
+Now let's add some code in `app.ts`, to automate the minting process of each NFT:
+
+```ts
+  import { NftItem } from "./contracts/NftItem";
+  import { toNano } from '@ton/core';
+```
+
+Firstly read all of the files in folder with our metadata:
+
 ```ts
 const files = await readdir(metadataFolderPath);
 files.pop();
@@ -796,7 +836,7 @@ In order to put the nft for sale, we need two smart contracts.
 - Sale contract, which is responsible for the logic of buying/cancelling a sale
 
 ### Deploy marketplace
-Create new file in `/contracts/NftMarketplace.ts`. As usual create basic class, which will accept address of owner of this marketplace and create cell with code(we will use [basic version of NFT-Marketplace smart-contract](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-marketplace.fc)) of this smart contract & initial data. 
+Create new file in `/contracts/NftMarketplace.ts`. As usual create basic class, which will accept address of owner of this marketplace and create cell with code(we will use [basic version of NFT-Marketplace smart contract](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-marketplace.fc)) of this smart contract & initial data. 
 
 ```ts
 import {
@@ -807,8 +847,8 @@ import {
   internal,
   SendMode,
   StateInit,
-} from "ton-core";
-import { OpenedWallet } from "utils";
+} from "@ton/core";
+import { OpenedWallet } from "../utils";
 
 export class NftMarketplace {
   public ownerAddress: Address;
@@ -871,6 +911,13 @@ public async deploy(wallet: OpenedWallet): Promise<number> {
 As you can see, this code does not differ from the deployment of other smart contracts (nft-item smart contract, from the deployment of a new collection). The only thing is that you can see that we initially replenish our marketplace not by 0.05 TON, but by 0.5. What is the reason for this?  When a new smart sales contract is deployed, the marketplace accepts the request, processes it, and sends a message to the new contract (yes, the situation is similar to the situation with the NFT collection). Which is why we need a little extra tone to pay fees.
 
 By the end, let's add few lines of code to our `app.ts` file, to deploy our marketplace:
+
+```ts
+import { NftMarketplace } from "./contracts/NftMarketplace";
+```
+
+And then
+
 ```ts
 console.log("Start deploy of new marketplace  ");
 const marketplace = new NftMarketplace(wallet.contract.address);
@@ -883,7 +930,8 @@ console.log("Successfully deployed new marketplace");
 
 Great! Right now we can already deploy smart contract of our NFT sale. How it will works? We need to deploy new contract, and after that "transfer" our nft to sale contract(in other words, we just need to change owner of our NFT to sale contract in item data). In this tutorial we will use [nft-fixprice-sale-v2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v2.fc) sale smart contract.
 
-First of all let's declare new type, that will describe data of our sale smart-contract:
+Create new file in `/contracts/NftSale.ts`. First of all let's declare new type, that will describe data of our sale smart contract:
+
 ```ts
 import {
   Address,
@@ -895,7 +943,7 @@ import {
   StateInit,
   storeStateInit,
   toNano,
-} from "ton-core";
+} from "@ton/core";
 import { OpenedWallet } from "utils";
 
 export type GetGemsSaleData = {
@@ -912,9 +960,8 @@ export type GetGemsSaleData = {
 };
 ```
 
-And now let's create class, and basic method, that will create init data cell for our smart-contract.
+And now let's create class, and basic method, that will create init data cell for our smart contract.
 
-We will begin with creation of cell with the fees information. We need to store address that will receive fee's for marketplace, amount of TON to send to the marketplace as fee. Store address that will receive royalty from the sell and royalty amount.
 ```ts
 export class NftSale {
   private data: GetGemsSaleData;
@@ -922,36 +969,41 @@ export class NftSale {
   constructor(data: GetGemsSaleData) {
     this.data = data;
   }
-
-  private createDataCell(): Cell {
-    const saleData = this.data;
-
-    const feesCell = beginCell();
-
-    feesCell.storeAddress(saleData.marketplaceFeeAddress);
-    feesCell.storeCoins(saleData.marketplaceFee);
-    feesCell.storeAddress(saleData.royaltyAddress);
-    feesCell.storeCoins(saleData.royaltyAmount);
-  }
 }
+```
+
+We will begin with creation of cell with the fees information. We need to store address that will receive fee's for marketplace, amount of TON to send to the marketplace as fee. Store address that will receive royalty from the sell and royalty amount.
+
+```ts
+private createDataCell(): Cell {
+  const saleData = this.data;
+
+  const feesCell = beginCell();
+
+  feesCell.storeAddress(saleData.marketplaceFeeAddress);
+  feesCell.storeCoins(saleData.marketplaceFee);
+  feesCell.storeAddress(saleData.royaltyAddress);
+  feesCell.storeCoins(saleData.royaltyAmount);
 ```
 
 Following that we can create an empty cell and just store in it information from saleData in correct order and right after that store ref to the cell with the fees information:
 ```ts
-const dataCell = beginCell();
+  const dataCell = beginCell();
 
-dataCell.storeUint(saleData.isComplete ? 1 : 0, 1);
-dataCell.storeUint(saleData.createdAt, 32);
-dataCell.storeAddress(saleData.marketplaceAddress);
-dataCell.storeAddress(saleData.nftAddress);
-dataCell.storeAddress(saleData.nftOwnerAddress);
-dataCell.storeCoins(saleData.fullPrice);
-dataCell.storeRef(feesCell.endCell());
+  dataCell.storeUint(saleData.isComplete ? 1 : 0, 1);
+  dataCell.storeUint(saleData.createdAt, 32);
+  dataCell.storeAddress(saleData.marketplaceAddress);
+  dataCell.storeAddress(saleData.nftAddress);
+  dataCell.storeAddress(saleData.nftOwnerAddress);
+  dataCell.storeCoins(saleData.fullPrice);
+  dataCell.storeRef(feesCell.endCell());
 
-return dataCell.endCell();
+  return dataCell.endCell();
+}
 ```
 
-And as always add method's to get stateInit, init code cell and address of our smart contract.
+And as always add methods to get stateInit, init code cell and address of our smart contract.
+
 ```ts
 public get address(): Address {
   return contractAddress(0, this.stateInit);
@@ -975,49 +1027,53 @@ private createCodeCell(): Cell {
 It remains only to form a message that we will send to our marketplace to deploy sale contract and actually send this message
 
 Firstly, we will create an cell, that will store StateInit of our new sale contract
+
 ```ts
 public async deploy(wallet: OpenedWallet): Promise<number> {
     const stateInit = beginCell()
       .store(storeStateInit(this.stateInit))
       .endCell();
-}
 ```
 
-Create cell with the body for our message. Firstly we need to set op-code to 1(to indicate marketplace, that we want to deploy new sale smart-contract). After that we need to store coins, that will be sent to our new sale smart-contract. And last of all we need to store 2 ref to stateInit of new smart-contract, and a body, that will be sent to this new smart-contract.
+Create cell with the body for our message. Firstly we need to set op-code to 1(to indicate marketplace, that we want to deploy new sale smart contract). After that we need to store coins, that will be sent to our new sale smart contract. And last of all we need to store 2 ref to stateInit of new smart contract, and a body, that will be sent to this new smart contract.
+
 ```ts
-const payload = beginCell();
-payload.storeUint(1, 32);
-payload.storeCoins(toNano("0.05"));
-payload.storeRef(stateInit);
-payload.storeRef(new Cell());
+  const payload = beginCell();
+  payload.storeUint(1, 32);
+  payload.storeCoins(toNano("0.05"));
+  payload.storeRef(stateInit);
+  payload.storeRef(new Cell());
 ```
 
 And at the end let's send our message:
+
 ```ts
-const seqno = await wallet.contract.getSeqno();
-await wallet.contract.sendTransfer({
-  seqno,
-  secretKey: wallet.keyPair.secretKey,
-  messages: [
-    internal({
-      value: "0.05",
-      to: this.data.marketplaceAddress,
-      body: payload.endCell(),
-    }),
-  ],
-  sendMode: SendMode.IGNORE_ERRORS + SendMode.PAY_GAS_SEPARATELY,
-});
-return seqno;
+  const seqno = await wallet.contract.getSeqno();
+  await wallet.contract.sendTransfer({
+    seqno,
+    secretKey: wallet.keyPair.secretKey,
+    messages: [
+      internal({
+        value: "0.05",
+        to: this.data.marketplaceAddress,
+        body: payload.endCell(),
+      }),
+    ],
+    sendMode: SendMode.IGNORE_ERRORS + SendMode.PAY_GAS_SEPARATELY,
+  });
+  return seqno;
+}
 ```
 
-Perfect, when sale smart-contract is deployed all that's left is to change owner of our NFT Item to address of this sale. 
+Perfect, when sale smart contract is deployed all that's left is to change owner of our NFT Item to address of this sale. 
 
 ### Transfer item
 What does it mean to transfer an item? Simply send a message from the owner's wallet to the smart contract with information about who the new owner of the item is.
 
 Go to `NftItem.ts` and create new static method in NftItem class, that will create body for such message:
 
-Just create an empty cell and fill the data. 
+Just create an empty cell and fill the data.
+
 ```ts
 static createTransferBody(params: {
     newOwner: Address;
@@ -1028,19 +1084,18 @@ static createTransferBody(params: {
     msgBody.storeUint(0x5fcc3d14, 32); // op-code 
     msgBody.storeUint(0, 64); // query-id
     msgBody.storeAddress(params.newOwner);
-
-  }
 ```
 
 In addition to the op-code, query-id and address of the new owner, we must also store the address where to send a response with confirmation of a successful transfer and the rest of the incoming message coins. The amount of TON that will come to the new owner and whether he will receive a text payload.
 
 ```ts
-msgBody.storeAddress(params.responseTo || null);
-msgBody.storeBit(false); // no custom payload
-msgBody.storeCoins(params.forwardAmount || 0);
-msgBody.storeBit(0); // no forward_payload 
+  msgBody.storeAddress(params.responseTo || null);
+  msgBody.storeBit(false); // no custom payload
+  msgBody.storeCoins(params.forwardAmount || 0);
+  msgBody.storeBit(0); // no forward_payload 
 
-return msgBody.endCell();
+  return msgBody.endCell();
+}
 ```
 
 And create a transfer function to transfer the NFT.
@@ -1074,11 +1129,21 @@ static async transfer(
 ```
 
 Nice, now we can we are already very close to the end. Back to the `app.ts` and let's get address of our nft, that we want to put on sale:
+
 ```ts
 const nftToSaleAddress = await NftItem.getAddressByIndex(collection.address, 0);
 ```
 
-Create variable, that will store information about our sale:
+Create variable, that will store information about our sale.
+
+Add to the beggining of the `app.ts`:
+
+```ts
+import { GetGemsSaleData, NftSale } from "./contracts/NftSale";
+```
+
+And then:
+
 ```ts
 const saleData: GetGemsSaleData = {
   isComplete: false,
@@ -1093,9 +1158,11 @@ const saleData: GetGemsSaleData = {
   royaltyAmount: toNano("0.5"),
 };
 ```
-Note, that we set nftOwnerAddress to null, because if we will do so, our sale contract would just accept our coins on deploy.
+
+Note, that we set `nftOwnerAddress` to null, because if we will do so, our sale contract would just accept our coins on deploy.
 
 Deploy our sale:
+
 ```ts
 const nftSaleContract = new NftSale(saleData);
 seqno = await nftSaleContract.deploy(wallet);
@@ -1108,9 +1175,11 @@ await NftItem.transfer(wallet, nftToSaleAddress, nftSaleContract.address);
 ```
 
 Now we can launch our project and enjoy the process!
+
 ```
 yarn start
 ```
+
 Go to https://testnet.getgems.io/collection/{YOUR_COLLECTION_ADDRESS_HERE} and look to this perfect ducks!
 
 ## Conclusion 

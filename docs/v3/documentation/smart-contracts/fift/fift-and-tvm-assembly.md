@@ -118,4 +118,4 @@ int mul_mod_better(int a, int b, int m) inline_ref {        ;; 1110 gas units
 int mul_mod_best(int a, int b, int m) asm "x{A988} s,";     ;; 65 gas units
 ```
 
-`x{A988}` is opcode formatted according to [5.2 Division](/v3/documentation/tvm/instructions#52-division): division with pre-multiplication, where the only returned result is remainder modulo third argument. But opcode needs to get into smart-contract code - that's what `s,` does: it stores slice on top of stack into builder slightly below.
+`x{A988}` is opcode formatted according to [5.2 Division](/v3/documentation/tvm/instructions#A988): division with pre-multiplication, where the only returned result is remainder modulo third argument. But opcode needs to get into smart-contract code - that's what `s,` does: it stores slice on top of stack into builder slightly below.

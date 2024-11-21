@@ -228,6 +228,7 @@ module.exports = [
   'v3/guidelines/nodes/custom-overlays',
   'v3/guidelines/nodes/nodes-troubleshooting',
   'v3/guidelines/nodes/node-maintenance-and-security',
+  'v3/guidelines/nodes/monitoring/performance-monitoring',
   'v3/guidelines/nodes/persistent-states',
   'v3/guidelines/nodes/faq',
   {

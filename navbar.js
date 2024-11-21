@@ -202,24 +202,24 @@ module.exports = {
       label: 'Languages',
       items: [
         {
-          to: 'v3/documentation/smart-contracts/func/overview',
-          label: 'FunC',
+          to: 'https://docs.tact-lang.org/',
+          label: 'Tact',
         },
         {
           to: 'v3/documentation/smart-contracts/tolk/overview',
           label: 'Tolk',
         },
         {
-          to: '/v3/documentation/tvm/instructions',
-          label: 'TVM Instruction',
+          to: 'v3/documentation/smart-contracts/func/overview',
+          label: 'FunC',
         },
         {
           to: 'v3/documentation/smart-contracts/func/cookbook',
           label: 'FunC Cookbook',
         },
         {
-          to: 'https://docs.tact-lang.org/',
-          label: 'Tact',
+          to: '/v3/documentation/tvm/instructions',
+          label: 'TVM Instruction',
         },
         {
           to: '/v3/documentation/smart-contracts/fift/overview',
