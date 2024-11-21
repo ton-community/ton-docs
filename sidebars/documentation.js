@@ -69,6 +69,23 @@ module.exports = [
     ],
   },
   {
+    type: 'link',
+    label: 'Tact Language',
+    href: 'https://docs.tact-lang.org',
+  },
+  {
+    type: 'category',
+    label: 'Tolk Language',
+    items: [
+      'v3/documentation/smart-contracts/tolk/overview',
+      'v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short',
+      'v3/documentation/smart-contracts/tolk/tolk-vs-func/in-detail',
+      'v3/documentation/smart-contracts/tolk/tolk-vs-func/mutability',
+      'v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib',
+      'v3/documentation/smart-contracts/tolk/changelog',
+    ],
+  },
+  {
     type: 'category',
     label: 'FunC Language',
     items: [
@@ -98,18 +115,6 @@ module.exports = [
       },
       'v3/documentation/smart-contracts/func/libraries',
       'v3/documentation/smart-contracts/func/changelog',
-    ],
-  },
-  {
-    type: 'category',
-    label: 'Tolk Language',
-    items: [
-      'v3/documentation/smart-contracts/tolk/overview',
-      'v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short',
-      'v3/documentation/smart-contracts/tolk/tolk-vs-func/in-detail',
-      'v3/documentation/smart-contracts/tolk/tolk-vs-func/mutability',
-      'v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib',
-      'v3/documentation/smart-contracts/tolk/changelog',
     ],
   },
   {
@@ -323,6 +328,13 @@ module.exports = [
     type: 'link',
     label: 'TVM Instructions',
     href: '/v3/documentation/tvm/instructions',
+  },
+  {
+    type: 'category',
+    label: 'TVM Specification',
+    items: [
+      'v3/documentation/tvm/specification/runvm',
+    ],
   },
   {
     type: 'category',

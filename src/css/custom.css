@@ -162,9 +162,17 @@ body {
 }
 
 
-@media (max-width: 1200px){
+.navbar__item {
+  flex-shrink: 0;
+}
+
+@media (max-width: 1560px){
   .navbar__item {
     display: none;
+  }
+
+  .navbar__toggle {
+    display: flex;
   }
 }
 

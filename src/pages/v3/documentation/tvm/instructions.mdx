@@ -30,16 +30,16 @@ This document specifies the corresponding mnemonic for each instruction.
 
 Note the following:
 
-1. Fift is a stack-based language, therefore all the arguments of any instruction are written before it (e.g. [`5 PUSHINT`](#instr-pushint-4), [`s0 s4 XCHG`](#instr-xchg-ij)).
+1. Fift is a stack-based language, therefore all the arguments of any instruction are written before it (e.g. [`5 PUSHINT`](/v3/documentation/tvm/instructions#7i), [`s0 s4 XCHG`](/v3/documentation/tvm/instructions#10ij)).
 2. Stack registers are denoted by `s0, s1, ..., s15`. Other stack registers (up to 255) are denoted by `i s()` (e.g. `100 s()`).
 3. Control registers are denoted by `c0, c1, ..., c15`.
 
 ### Gas prices
 
 The gas price of each instruction is specified in this document. The basic gas price of an instruction is `10 + b`, where `b` is the instruction length in bits. Some operations have additional fees:
-1. _Parsing cells_: Transforming a cell into a slice costs **100 gas units** if the cell is loading for the first time and **25** for subsequent loads during the same transaction. For such instructions, two gas prices are specified (e.g. [`CTOS`](#instr-ctos): `118/43`).
+1. _Parsing cells_: Transforming a cell into a slice costs **100 gas units** if the cell is loading for the first time and **25** for subsequent loads during the same transaction. For such instructions, two gas prices are specified (e.g. [`CTOS`](/v3/documentation/tvm/instructions#D0): `118/43`).
 2. _Cell creation_: **500 gas units**.
-3. _Throwing exceptions_: **50 gas units**. In this document the exception fee is only specified for an instruction if its primary purpose is to throw (e.g. [`THROWIF`](#instr-throwif-short), [`FITS`](#instr-fits)). If the instruction only throws in some cases, two gas prices are specified (e.g. [`FITS`](#instr-fits): `26/76`).
+3. _Throwing exceptions_: **50 gas units**. In this document the exception fee is only specified for an instruction if its primary purpose is to throw (e.g. [`THROWIF`](/v3/documentation/tvm/instructions#F26_n), [`FITS`](/v3/documentation/tvm/instructions#B4cc)). If the instruction only throws in some cases, two gas prices are specified (e.g. [`FITS`](/v3/documentation/tvm/instructions#B4cc): `26/76`).
 4. _Tuple creation_: **1 gas unit** for every tuple element.
 5. _Implicit jumps_: **10 gas units** for an implicit jump, **5 gas units** for an implicit back jump. This fee is not a part of any instruction.
 6. _Moving stack elements between continuations_: **1 gas unit** per element, however moving the first 32 elements is free.

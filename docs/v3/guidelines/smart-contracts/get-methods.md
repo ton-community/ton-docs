@@ -80,7 +80,7 @@ int get_subwallet_id() method_id {
 }
 ```
 
--   [What is Subwallet ID?](/v3/guidelines/smart-contracts/howto/wallet#what-is-subwallet-id)
+-   [What is Subwallet ID?](/v3/guidelines/smart-contracts/howto/wallet#subwallet-ids)
 
 #### get_public_key()
 
@@ -207,7 +207,7 @@ Given an index and [individual NFT content](#get_nft_data), this method fetches 
 
 You can call get methods on the bottom of the page in the "Methods" tab.
 
--   https://tonviewer.com/EQAWrNGl875lXA6Fff7nIOwTIYuwiJMq0SmtJ5Txhgnz4tXI?section=Methods
+-   https://tonviewer.com/EQAWrNGl875lXA6Fff7nIOwTIYuwiJMq0SmtJ5Txhgnz4tXI?section=method
 
 #### Ton.cx
 
@@ -219,7 +219,7 @@ You can call get methods on the "Get methods" tab.
 
 We will use Javascript libraries and tools for the examples below:
 
--   [ton](https://github.com/ton-core/ton) library
+-   [ton](https://github.com/ton-org/ton) library
 -   [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript) SDK
 
 Let's say there is some contract with the following get method:
@@ -235,7 +235,8 @@ This method returns a single number loaded from the contract data.
 The code snippet below can be used to call this get method on some contract deployed at the known address:
 
 ```ts
-import { Address, TonClient } from 'ton';
+import { TonClient } from '@ton/ton';
+import { Address } from '@ton/core';
 
 async function main() {
     // Create Client

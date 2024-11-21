@@ -1,10 +1,11 @@
 # Sending messages
 
-Composition, parsing, and sending messages lie at the intersection of [TL-B schemas](/v3/documentation/data-formats/tlb/tl-b-language), [transaction phases and TVM](/v3/documentation/tvm/tvm-overview).
+Composition, parsing, and sending messages lie at the intersection of [TL-B schemas](/v3/documentation/data-formats/tlb/tl-b-language), [transaction phases, and TVM](/v3/documentation/tvm/tvm-overview).
 
-Indeed, FunC exposes [send_raw_message](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) function which expects a serialized message as an argument.
+Indeed, FunC exposes the [send_raw_message](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) function which expects a serialized message as an argument.
 
-Since TON is a comprehensive system with wide functionality, messages which need to be able to support all of this functionality may look quite complicated. Still, most of that functionality is not used in common scenarios, and message serialization in most cases may be reduced to:
+Since TON is a comprehensive system with wide functionality, messages that need to support all of this functionality may appear quite complicated. However, most of that functionality is not used in common scenarios, and message serialization, in most cases, can be simplified to:
+
 ```func
   cell msg = begin_cell()
     .store_uint(0x18, 6)
@@ -15,17 +16,17 @@ Since TON is a comprehensive system with wide functionality, messages which need
   .end_cell();
 ```
 
-Therefore, the developer should not be afraid, and if something in this document seems incomprehensible on first reading, it's okay. Just grasp the general idea.
+Therefore, the developer should not worry; if something in this document seems incomprehensible on first reading, that's okay. Just grasp the general idea.
 
-Sometimes the word **'gram'** may be mentioned in the documentation, mostly in code examples, it's just an outdated name for **toncoin**.
+Sometimes the word **'gram'** may appear in the documentation, primarily in code examples; it is simply an outdated name for **toncoin**.
 
 Let's dive in!
 
 ## Types of messages
 There are three types of messages:
- * external—messages that are sent from outside of the blockchain to a smart contract inside the blockchain. Such messages should be explicitly accepted by smart contracts during so called `credit_gas`. If the message is not accepted, the node should not accept it into a block or relay it to other nodes.
- * internal—messages that are sent from one blockchain entity to another. Such messages (in contrast to external) may carry some TON and pay for themselves. Thus, smart contracts that receive such messages may not accept it. In this case, gas will be deducted from the message value.
- * logs—messages that are sent from a blockchain entity to the outer world. Generally speaking, there is no mechanism for sending such messages out of the blockchain. In fact, while all nodes in the network have consensus on whether a message was created or not, there are no rules on how to process them. Logs may be directly sent to `/dev/null`, logged to disk, saved an indexed database, or even sent by non-blockchain means (email/telegram/sms), all of these are at the sole discretion of the given node.
+ * external—messages sent from outside of the blockchain to a smart contract inside the blockchain. Such messages should be explicitly accepted by smart contracts during the so-called `credit_gas`. If the message is not accepted, the node should not accept it into a block or relay it to other nodes.
+ * internal—messages sent from one blockchain entity to another. Such messages, in contrast to external ones, may carry some TON and pay for themselves. Thus, smart contracts that receive such messages may not accept it. In this case, gas will be deducted from the message value.
+ * logs—messages sent from a blockchain entity to the outer world. Generally, there is no mechanism for sending such messages out of the blockchain. In fact, while all nodes in the network have consensus on whether a message was created or not, there are no rules on how to process them. Logs may be directly sent to `/dev/null`, logged to disk, saved an indexed database, or even sent by non-blockchain means (email/telegram/sms), all of these are at the sole discretion of the given node.
 
 ## Message layout
 

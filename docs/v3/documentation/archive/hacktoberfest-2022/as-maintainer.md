@@ -25,7 +25,7 @@ After that, feel free to add your repository to the list.
 As a repository maintainer in the TON Ecosystem, you will be able to receive two types of rewards:
 
 1. [Hacktoberfest Reward Kit](https://hacktoberfest.com/participation/#maintainers) (_see REWARD FOR MAINTAINERS_)
-2. [Limited Hack-TON-berfest NFT](/v3/documentation/archive/hacktoberfest-2022/#what-the-rewards) (_please, register the wallet address in the [@toncontests_bot](https://t.me/toncontests_bot)_)
+2. [Limited Hack-TON-berfest NFT](/v3/documentation/archive/hacktoberfest-2022#what-are-the-rewards) (_please, register the wallet address in the [@toncontests_bot](https://t.me/toncontests_bot)_)
 
 ## How to join and be listed?
 

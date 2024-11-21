@@ -1,0 +1,184 @@
+# 单一提名者池
+
+## 使用 mytonctrl
+
+目前 [mytonctrl](https://github.com/ton-blockchain/mytonctrl) 支持 `single_nominator` 合约，但首先需要安装 mytonctrl 2.0。
+
+### 准备验证者
+
+如果已经安装了 mytonctrl，只需使用 "更新 mytonctrl2 "命令。如果没有安装 mytonctrl，请按照以下步骤操作：
+
+1. 下载安装脚本：
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/mytonctrl2/scripts/install.sh
+```
+
+2. 运行安装脚本：
+
+```bash
+sudo bash ./install.sh -b mytonctrl2
+```
+
+### 设置单一提名人
+
+创建并激活验证器钱包后，请按以下步骤操作：
+
+1. 启用单一提名模式
+
+```bash
+MyTonCtrl> enable_mode single-nominator
+```
+
+2. 创建池
+
+```bash
+MyTonCtrl> new_single_pool <pool-name> <owner_address>
+```
+
+3. 输入 `pools_list` 以显示池地址
+
+4. 发送1个TON到池子并激活它
+
+```bash
+MyTonCtrl> activate_single_pool <pool-name>
+```
+
+现在，你可以通过 mytonctrl 像使用标准提名池一样使用这个提名池。
+
+## 没有 mytonctrl
+
+#### 准备已启动的验证者
+
+  如果您已安装 mytonctrl 并正在运行验证者：
+
+1. 停止验证并提取所有资金。
+
+#### 从一开始就做好准备
+
+  如果之前没有验证器，请执行以下操作：
+
+1. [运行验证器](/participate/run-nodes/full-node)并确保同步。
+2. 停止验证并提取所有资金。
+
+## 准备single_nominator
+
+1. 安装 [nodejs](https://nodejs.org/en) v.16 及更高版本和 npm ( [详细说明](https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions))
+2. 安装 `ts-node` 和 `arg` 模块
+
+```bash
+$ sudo apt install ts-node
+$ sudo npm i arg -g
+```
+
+4. 创建符号链接：
+
+```bash
+$ sudo ln -s /usr/bin/ton/crypto/fift /usr/local/bin/fift
+$ sudo ln -s /usr/bin/ton/crypto/func /usr/local/bin/func
+```
+
+5. 运行测试，确保一切设置正确：
+
+```bash
+$ npm run test
+```
+
+6. 替换 mytonctrl 提名者池脚本：https://raw.githubusercontent.com/orbs-network/single-nominator/main/mytonctrl-scripts/install-pool-scripts.sh
+
+## 创建single_nominator池
+
+1. 从 Telegram [@tonapibot] 获取 Toncenter API 密钥(https://t.me/tonapibot)
+2. 设置环境变量：
+
+```bash
+export OWNER_ADDRESS=<owner_address>
+export VALIDATOR_ADDRESS=<validator_wallet_address>
+export TON_ENDPOINT=https://toncenter.com/api/v2/jsonRPC
+export TON_API_KEY=<toncenter api key>
+```
+
+2. 创建部署者地址：
+
+```bash
+$ npm run init-deploy-wallet
+Insufficient Deployer [EQAo5U...yGgbvR] funds 0
+```
+
+3. 为部署者地址充值2.1 TON
+4. 部署池合同，您将获得池地址：Ef-kC0...\_WLqgs\`：
+
+```
+$ npm run deploy
+```
+
+5. 将地址转换为 .addr：
+
+```
+$ fift -s ./scripts/fift/str-to-addr.fif Ef-kC0..._WLqgs
+```
+
+(将地址保存到文件 single-nominator.addr 中）
+
+6. 备份部署器私钥"./build/deploy.config.json "和 "single-nominator.addr "文件
+7. 将 "single-nominator.addr "复制到 "mytoncore/spool/single-nominator-1.addr"。
+8. 将木桩从所有者地址发送至单一提名人地址
+
+## 从单一提名者提款
+
+使用钱包从single_nominator提取
+Fift:
+
+1. 创建包含金额的 "withdraw.boc "申请：
+
+```bash
+$ fift -s ./scripts/fift/withdraw.fif <withdraw_amount>
+```
+
+2. 从所有者的钱包创建和签署请求：
+
+```bash
+$ fift -s wallet-v3.fif <my-wallet> <single_nominator_address> <sub_wallet_id> <seqno> <amount=1> -B withdraw.boc
+```
+
+3. 广播查询：
+
+```bash
+$ lite-client -C global.config.json -c 'sendfile wallet-query.boc'
+tons
+```
+
+1. 创建包含金额的 "withdraw.boc "申请：
+
+```bash
+$ fift -s ./scripts/fift/withdraw.fif <withdraw_amount>
+```
+
+2. 将申请发送至单一提名人地址：
+
+a.
+
+```bash
+$ tons wallet transfer <my-wallet> <single_nominator_address> <amount=1> --body withdraw.boc
+tonkeeper
+```
+
+b.
+
+```
+npm link typescript
+```
+
+c.
+
+```
+npx ts-node scripts/ts/withdraw-deeplink.ts <single-nominator-addr> <withdraw-amount>
+```
+
+d.打开机主手机上的 deeplink
+
+## 参阅
+
+- [单一提名者池合约](https://github.com/orbs-network/single-nominator)
+- [归属合约](/participate/network-maintenance/vesting-contract)
+- [single-nominator-quick-how-to-09-25](https://telegra.ph/single-nominator-quick-how-to-09-25)
