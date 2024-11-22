@@ -122,7 +122,7 @@ In case the complaint is validated, they on-chain vote in favour of that complai
 
 These actions are built into `mytonctrl` and happen automatically.
 If the complaint has 66% of the validators' votes (by their weight), a penalty is taken off from the validator's stake.
-There is no way for anyone to single-handedly fine anyone.
+There is no way for anyone to single-handedly fine anyone. All validators do not need to send a complaint.
 
 [@tonstatus_notifications](https://t.me/tonstatus_notifications) - list of penalised validators each round.
 
