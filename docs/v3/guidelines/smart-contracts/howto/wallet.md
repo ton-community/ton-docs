@@ -519,7 +519,7 @@ import { TonClient } from '@ton/ton';
 import { mnemonicToWalletKey } from '@ton/crypto';
 
 const client = new TonClient({
-  endpoint: "https://toncenter.com/api/v2/jsonRPC",
+  endpoint: "https://toncenter.com/api/v2/jsonRPC", // you can replace it on https://testnet.toncenter.com/api/v2/jsonRPC for testnet
   apiKey: "put your api key" // you can get an api key from @tonapibot bot in Telegram
 });
 
@@ -1026,7 +1026,13 @@ log.Println("Contract address:", contractAddress.String()) // Output contract ad
 </TabItem>
 </Tabs>
 
-Using the State Init, we can now build the message and send it to the blockchain. To carry out this process **a minimum wallet balance of 0.1 TON** (the balance can be less, but this amount is guaranteed to be sufficient) is required. To accomplish this, we’ll need to run the code mentioned earlier in the tutorial, get the correct wallet address and send 0.1 TON to this address.
+Using the State Init, we can now build the message and send it to the blockchain.
+
+:::warning
+  To carry out this process, **a minimum wallet balance of 0.1 TON** is required (the balance can be less, but this amount is guaranteed to be sufficient). To accomplish this, we’ll need to run the code mentioned earlier in the tutorial, obtain the correct wallet address, and send 0.1 TON to this address. Alternatively, you can send this sum manually via your wallet app before sending the deployment message itself.
+
+  Deployment by external messages is presented here mostly for educational purposes; in practice, it's much more convenient to [deploy smart contracts via Wallets](/v3/guidelines/smart-contracts/howto/wallet#contract-deployment-via-wallet), which will be described later.
+:::
 
 Let’s start with building the message similar to the one we built **in the previous section**:
 
