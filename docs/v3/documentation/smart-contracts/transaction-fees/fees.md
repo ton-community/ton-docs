@@ -103,7 +103,7 @@ Saving 1 MB of data for one year on TON will cost 6.01 TON. Note that you usuall
 
 ### Is it possible to send a gasless transaction?
 
-At present, this opportunity is not available. We are actively working on its development. Please stay tuned for updates.
+In TON, gasless transactions are possible using [wallet v5](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#preparing-for-gasless-transactions) a relayer that pays the gas fee for transaction. 
 
 ### How to calculation?
 
