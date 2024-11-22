@@ -335,6 +335,6 @@
     "sidebars",
     "i18n",
     ".husky",
-    "warnings.txt"
+    "3rd/*"
   ]
 }

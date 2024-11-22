@@ -1,0 +1,3 @@
+[submodule "3rd/tvm-spec"]
+	path = 3rd/tvm-spec
+	url = https://github.com/ton-community/tvm-spec.git
