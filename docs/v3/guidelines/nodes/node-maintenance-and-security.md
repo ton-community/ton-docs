@@ -7,35 +7,30 @@ This document assumes that a validator is installed using the configuration and 
 
 ## <a id="maintenance"></a>Maintenance
 ### <a id="database-grooming"></a>Database grooming
-TON Node/Validator keeps it's database within the path specified by `--db` flag of `validator-engine`, usually `/var/ton-work/db`, this directory is created and managed by the node but it is recommended to perform a database grooming/cleanup task once a month to remove some artifacts.
+TON Node keeps its database within the path specified by `--db` flag of `validator-engine`, usually `/var/ton-work/db`. To reduce the database size, you can decrease the TTL (time-to-live) of some stored data.
 
-:::caution Do not forget to stop validator process
-You **must** stop the validator process before performing the steps outlined below, failure to do that will likely cause database corruption.
-:::
+Current TTL values can be found in the node service file (default path is `/etc/systemd/system/validator.service`). If you use MyTonCtrl you can use command `installer status`. If some of the values are not set, then the default values are used.
 
-The procedure takes ~5 minutes to complete and will not cause major service disruption.
+### archive-ttl
 
-#### Switch to root
-```sh
-sudo -s
+`archive-ttl` is a parameter that defines the time-to-live for the blocks. The default value is 604800 seconds (7 days). You can decrease this value to reduce the database size.
+
+```bash
+MyTonCtrl> installer set_node_argument --archive-ttl <value>
 ```
-#### Stop validator service
-```sh
-systemctl stop validator
+
+If you don't use MyTonCtrl then you can edit the node service file.
+
+### state-ttl
+
+`state-ttl` is a parameter that defines the time-to-live for the blocks states. The default value is 86400 seconds (24 hours). You can decrease this value to reduce the database size, but for validators it's highly recommended to use the default value (keep the flag unset).
+Also, this value should be more than length of the validation period (the value can be found in [15th config param](https://docs.ton.org/v3/documentation/network/configs/blockchain-configs#param-15)).
+
+```bash
+MyTonCtrl> installer set_node_argument --state-ttl <value>
 ```
-#### Verify that validator is not running
-```sh
-systemctl status validator
-```
-#### Perform database cleanup
-```sh
-find /var/ton-work/db -name 'LOG.old*' -exec rm {} +
-```
-#### Start validator service
-```sh
-systemctl start validator
-```
-Verify that the validator process is running by analysing the processes and log. Validator should re-sync with the network within a few minutes.
+
+If you don't use MyTonCtrl then you can edit the node service file.
 
 ### <a id="backups"></a>Backups
 The easiest and most efficient way to backup the validator is to copy crucial node configuration files, keys and mytonctrl settings:
