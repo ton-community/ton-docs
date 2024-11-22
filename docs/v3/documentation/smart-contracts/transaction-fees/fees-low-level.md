@@ -2,9 +2,7 @@
 
 :::caution
 This section describes instructions and manuals for interacting with TON at a low level.
-:::
 
-:::caution
 Here you will find the **raw formulas** for calculating commissions and fees on TON.
 
 However, most of them are **already implemented through opcodes**! So, you **use them instead of manual calculations**.
@@ -217,6 +215,12 @@ When the number of stack entries is substantial (10+), and they are actively use
 ## Forward fees
 
 Internal messages define an `ihr_fee` in Toncoins, which is subtracted from the value attached to the message and awarded to the validators of the destination shardchain if they include the message through the IHR mechanism. The `fwd_fee` is the original total forwarding fee paid for using the HR mechanism; it is automatically computed from the [24 and 25 configuration parameters](/v3/documentation/network/configs/blockchain-configs#param-24-and-25) and the size of the message at the time the message is generated. Note that the total value carried by a newly created internal outbound message equals the sum of the value, `ihr_fee`, and `fwd_fee`. This sum is deducted from the balance of the source account. Of these components, only the value is always credited to the destination account upon message delivery. The `fwd_fee` is collected by the validators on the HR path from the source to the destination, and the `ihr_fee` is either collected by the validators of the destination shardchain (if the message is delivered via IHR) or credited to the destination account.
+
+:::tip
+
+At this moment (November 2024), [IHR](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#messages-and-instant-hypercube-routing-instant-hypercube-routing) is not implemented, and if you set the `ihr_fee` to a non-zero value, it will always be added to the message value upon receipt. For now, there are no practical reasons to do this.
+
+:::
 
 ```cpp
 msg_fwd_fees = (lump_price
