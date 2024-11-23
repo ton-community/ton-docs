@@ -2,7 +2,7 @@
 
 The core reason for creating the FunC Cookbook is to collect all the experience from FunC developers in one place so that future developers will use it!
 
-Compared to the [FunC Documentation](/v3/documentation/smart-contracts/func/docs/types), this article is more focused on everyday tasks every FunC developer resolve during the development of smart contracts.
+Compared to the [FunC Documentation](/v3/documentation/smart-contracts/func/docs/types), this article is more focused on the everyday tasks of every FunC developer to resolve during the development of smart contracts.
 
 ## Basics
 
