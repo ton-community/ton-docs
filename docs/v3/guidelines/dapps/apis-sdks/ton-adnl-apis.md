@@ -16,14 +16,14 @@ The client downloads keyblocks, the current state of the account, and their **Me
 
 Read operations (like get-method calls) are made by launching a local TVM with a downloaded and verified state. It's worth noting that there is no need to download the full state of the blockchain, the client downloads only what is needed for the operation.
 
-You can connect to public liteservers from the global config ([Mainnet](https://ton.org/global-config.json) or [Testnet](https://ton.org/testnet-global.config.json)) or run your own [Liteserver](/v3/documentation/infra/nodes/node-types) and handle this with [ADNL SDKs](/v3/guidelines/dapps/apis-sdks/sdk#adnl-based-sdks).
+You can connect to public liteservers from the global config ([Mainnet](https://ton.org/global-config.json) or [Testnet](https://ton.org/testnet-global.config.json)) or run your own [Liteserver](/v3/documentation/infra/nodes/node-types) and handle this with [ADNL SDKs](/v3/guidelines/dapps/apis-sdks/sdk#overview).
 
 Read more about [Merkle proofs](/v3/documentation/data-formats/tlb/proofs) at [TON Whitepaper](https://ton.org/ton.pdf) 2.3.10, 2.3.11.
 
 Public liteservers (from the global config) exist to get you started with TON quickly. It can be used for learning to program in TON, or for applications and scripts that do not require 100% uptime. 
 
 For building production infrastructure - it is suggested use well prepared infrastructure:
-- [set up own liteserver](v3/guidelines/nodes/running-nodes/full-node#enable-liteserver-mode), 
+- [set up own liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node), 
 - use Liteserver premium providers [@liteserver_bot](https://t.me/liteserver_bot)
 
 ## Pros & Cons

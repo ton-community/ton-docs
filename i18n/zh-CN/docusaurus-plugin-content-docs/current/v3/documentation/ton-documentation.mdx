@@ -1,0 +1,142 @@
+import Button from '@site/src/components/button'
+import Player from '@site/src/components/player'
+
+# TON 文档
+
+欢迎来到官方TON区块链开发文档！
+
+这个资源旨在为您提供在TON区块链上构建、测试和部署应用程序所需的所有必要信息。
+
+这是一个协作的开源计划，我们始终欢迎贡献。所有文档都可以通过GitHub进行编辑，只需[遵循这些指示](/contribute)。
+
+- _TON Hello World_ 系列提供了钱包、智能合约、小型应用程序以及在TON上测试和调试智能合约的详细逐步指南。
+- _开始使用TON_ 是一个逐步指导与TON区块链互动的指南。（包括视频教程）
+
+<Button href="https://ton-community.github.io/tutorials/01-wallet/"
+        colorType="primary" sizeType={'sm'}>
+
+TON Hello World
+
+</Button>
+
+<Button href="/develop/get-started-with-ton" colorType={'secondary'} sizeType={'sm'}>
+
+开始使用TON
+
+</Button>
+
+### TON 课程
+
+我们自豪地推出 **TON 区块链课程**，这是一个全面的TON区块链指南。该课程是为希望学习如何在TON区块链上创建智能合约和去中心化应用程序的开发者设计的，课程以有趣和互动的方式进行。
+
+它包含**9个模块**，涵盖了TON区块链的基础知识、FunC编程语言和TON虚拟机（TVM）。
+
+
+<Button href="https://stepik.org/course/201638/promo"
+        colorType={'primary'} sizeType={'sm'}>
+
+探索TON课程
+
+</Button>
+
+
+<Button href="https://stepik.org/course/176754/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+EN
+
+</Button>
+
+
+<Button href="https://stepik.org/course/201855/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+RU
+
+</Button>
+
+
+## 开发模块
+
+如果您刚开始接触TON区块链开发，建议您从头开始，并逐步学习这些主题。
+
+### 基础概念
+
+- [开放网络](/learn/introduction) - TON区块链的高层级概述。
+- [区块链之链](/learn/overviews/ton-blockchain) - 对TON区块链的深入浅出解释。
+- [智能合约地址](/learn/overviews/addresses) - 地址的详细解释。
+- [作为数据结构的cell](/learn/overviews/cells) - 数据结构的高层级解释。
+- [TON网络](/learn/networking/overview) - TON点对点协议的高层级概述。
+- [TON虚拟机（TVM）](/learn/tvm-instructions/tvm-overview) - TON虚拟机的高层级概述。
+- [交易和阶段](/learn/tvm-instructions/tvm-overview#transactions-and-phases) - 交易和阶段的详细解释。
+- [交易费用](/develop/smart-contracts/fees) - 交易费用的高层级解释。
+
+### 基础设施
+
+- [节点类型](/participate/nodes/node-types) - 节点类型的详细解释。
+- [运行完整节点](/participate/run-nodes/full-node) - 如何运行节点的详细解释。
+- [TON DNS和网站](/participate/web3/dns) - TON DNS和网站的详细解释。
+- [TON存储](/participate/ton-storage/storage-daemon) - TON存储的详细解释。
+
+### 额外资源
+
+- [**常见问题解答**](/develop/howto/faq) - 常见问题
+- [FunC文档](/develop/func/overview)
+- [Fift文档](/develop/fift/overview)
+
+## 智能合约开发
+
+智能合约是TON区块链上去中心化应用程序（DApps）的构建模块。如果您希望开发自己的dApps，那么了解智能合约的运作方式至关重要。
+
+<Button href="/develop/smart-contracts/"
+        colorType="primary" sizeType={'sm'}>
+
+开始
+
+</Button>
+
+<Button href="/develop/smart-contracts/sdk/javascript" colorType={'secondary'} sizeType={'sm'}>
+
+使用Blueprint
+
+</Button>
+
+<br></br><br></br>
+
+以下资源为TON智能合约开发提供了宝贵信息：
+
+- [TON Hello World: 逐步指导编写您的第一个智能合约](https://ton-community.github.io/tutorials/02-contract/) - 使用JS的基础的简易解释。
+- [如何使用钱包智能合约](/develop/smart-contracts/tutorials/wallet) - 使用JS和GO详细解释智能合约的基础知识。
+- [通过示例学习智能合约](/develop/smart-contracts/examples)(FunC，Fift)
+- [速成TON](/develop/smart-contracts/examples) - 6个互动挑战以及逐步教程，帮助学习智能合约开发。
+
+## DApp 开发
+
+去中心化应用程序（DApps）是在点对点计算机网络上运行的应用程序，而不是单台计算机（TON区块链）。它们类似于传统的网络应用程序，但它们是建立在区块链网络之上的。这意味着DApps是去中心化的，即没有单一实体控制它们。
+
+<Button href="/develop/dapps/" colorType={'primary'} sizeType={'sm'}>
+
+开始
+
+</Button>
+
+### DeFi 开发
+
+- [TON Connect](/develop/dapps/ton-connect/overview) — DApps的集成和认证。
+- [链下支付处理](/develop/dapps/asset-processing) — 支付处理的示例和概念。
+- [TON Jetton处理](/develop/dapps/asset-processing/jettons) — Jettons处理的示例和概念。
+- [可替代（FT）/ 不可替代（NFT）代币](/develop/dapps/defi/tokens) — 相应的智能合约、示例和工具
+
+通过全面的DApps构建指南迈出DApps开发的第一步：
+
+- [TON Hello World: 逐步指导构建您的第一个网络客户端](https://ton-community.github.io/tutorials/03-client/)
+- [通过TON Connect集成Telegram机器人](/develop/dapps/ton-connect/tg-bot-integration)
+
+### API 和 SDK
+
+- [API](/v3/guidelines/dapps/apis-sdks/api-types)
+- [SDK](/develop/dapps/apis/sdk)
+
+## 常见问题解答
+
+转到[常见问题解答](/develop/howto/faq)部分。

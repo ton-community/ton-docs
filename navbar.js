@@ -31,6 +31,72 @@ module.exports = {
         },
       ],
     },
+
+    {
+      type: 'dropdown',
+      to: '/v3/documentation/ton-documentation',
+      label: 'Documentation',
+      position: 'left',
+      items: [
+        {
+          to: 'v3/documentation/smart-contracts/overview',
+          label: 'Smart Contracts',
+        },
+        {
+          to: 'v3/documentation/tvm/tvm-overview',
+          label: 'TON Virtual Machine (TVM)',
+        },
+        {
+          to: 'v3/documentation/infra/nodes/node-types',
+          label: 'Nodes'
+        },
+        {
+          to: 'v3/documentation/dapps/defi/coins', // TODO: add page
+          label: 'DApps',
+        },
+        {
+          to: '/v3/documentation/data-formats/tlb/cell-boc',
+          label: 'Data Formats',
+        },
+        {
+          to: 'v3/documentation/network/protocols/adnl/low-level-adnl',
+          label: 'Networking'
+        },
+        {
+          to: 'v3/documentation/whitepapers/overview',
+          label: 'Whitepapers',
+        },
+      ]
+    },
+
+    {
+      type: 'dropdown',
+      to: 'v3/guidelines/get-started-with-ton',
+      label: 'Guidelines',
+      position: 'left',
+      items: [
+        {
+          to: '/v3/guidelines/smart-contracts/guidelines',
+          label: 'Smart Contracts',
+        },
+        {
+          to: '/v3/guidelines/dapps/overview',
+          label: 'DApps',
+        },
+        {
+          to: 'v3/guidelines/nodes/overview',
+          label: 'Nodes'
+        },
+        {
+          to: 'v3/guidelines/ton-connect/overview',
+          label: 'Integrate with TON'
+        },
+        {
+          to: 'v3/guidelines/web3/overview',
+          label: 'Web3',
+        },
+      ]
+    },
     // TODO: extract tutorials page!!!
     // {
     //   type: 'dropdown',
@@ -55,7 +121,7 @@ module.exports = {
           label: 'Telegram Mini Apps (TMAs)',
         },
         {
-          to: 'v3/guidelines/dapps/apis-sdks/sdk',
+          to: 'v3/guidelines/dapps/apis-sdks/overview',
           label: 'APIs and SDKs',
         },
         {
@@ -100,7 +166,7 @@ module.exports = {
       type: 'dropdown',
       to: 'v3/documentation/smart-contracts/overview',
       position: 'left',
-      label: 'Smart Contracts',
+      label: 'Contracts',
       items: [
         {
           to: '/v3/documentation/smart-contracts/contracts-specs/wallet-contracts',
@@ -133,23 +199,27 @@ module.exports = {
       type: 'dropdown',
       to: 'v3/documentation/smart-contracts/overview',
       position: 'left',
-      label: 'Program Languages',
+      label: 'Languages',
       items: [
+        {
+          to: 'https://docs.tact-lang.org/',
+          label: 'Tact',
+        },
+        {
+          to: 'v3/documentation/smart-contracts/tolk/overview',
+          label: 'Tolk',
+        },
         {
           to: 'v3/documentation/smart-contracts/func/overview',
           label: 'FunC',
-        },
-        {
-          to: '/v3/documentation/tvm/instructions',
-          label: 'TVM Instruction',
         },
         {
           to: 'v3/documentation/smart-contracts/func/cookbook',
           label: 'FunC Cookbook',
         },
         {
-          to: 'https://docs.tact-lang.org/',
-          label: 'Tact',
+          to: '/v3/documentation/tvm/instructions',
+          label: 'TVM Instruction',
         },
         {
           to: '/v3/documentation/smart-contracts/fift/overview',
@@ -197,89 +267,26 @@ module.exports = {
         },
       ],
     },
-    {
-      type: 'dropdown',
-      to: 'v3/guidelines/get-started-with-ton',
-      label: 'Guidelines',
-      position: 'left',
-      items: [
-        {
-          to: '/v3/guidelines/smart-contracts/guidelines',
-          label: 'Smart Contracts',
-        },
-        {
-          to: '/v3/guidelines/dapps/overview',
-          label: 'DApps',
-        },
-        {
-          to: 'v3/guidelines/nodes/overview',
-          label: 'Nodes'
-        },
-        {
-          to: 'v3/guidelines/ton-connect/overview',
-          label: 'Integrate with TON'
-        },
-        {
-          to: 'v3/guidelines/web3/overview',
-          label: 'Web3',
-        },
-      ]
-    },
-    {
-      type: 'dropdown',
-      to: '/v3/documentation/ton-documentation',
-      label: 'Documentation',
-      position: 'left',
-      items: [
-        {
-          to: 'v3/documentation/smart-contracts/overview',
-          label: 'Smart Contracts',
-        },
-        {
-          to: 'v3/documentation/tvm/tvm-overview',
-          label: 'TON Virtual Machine (TVM)',
-        },
-        {
-          to: 'v3/documentation/infra/nodes/node-types',
-          label: 'Nodes'
-        },
-        {
-          to: 'v3/documentation/dapps/defi/coins', // TODO: add page
-          label: 'DApps',
-        },
-        {
-          to: '/v3/documentation/data-formats/tlb/cell-boc',
-          label: 'Data Formats',
-        },
-        {
-          to: 'v3/documentation/network/protocols/adnl/low-level-adnl',
-          label: 'Networking'
-        },
-        {
-          to: 'v3/documentation/whitepapers/overview',
-          label: 'Whitepapers',
-        },
-      ]
-    },
-    {
-      type: 'dropdown',
-      label: 'Resources',
-      position: 'left',
-      items: [
-        {
-          to: 'https://tonresear.ch/',
-          label: 'TON Research',
-        },
-        {
-          to: 'https://t.me/addlist/1r5Vcb8eljk5Yzcy',
-          label: 'TON Developers Kit',
-        },
-        {
-          to: 'https://github.com/ton-blockchain/TEPs',
-          label: 'Standards Discussion (TEPs)',
-        },
-      ],
-    },
+
+    // {
+    //   type: 'dropdown',
+    //   label: 'Resources',
+    //   position: 'left',
+    //   items: [
+    //     {
+    //       to: 'https://tonresear.ch/',
+    //       label: 'TON Research',
+    //     },
+    //     {
+    //       to: 'https://t.me/addlist/1r5Vcb8eljk5Yzcy',
+    //       label: 'TON Developers Kit',
+    //     },
+    //     {
+    //       to: 'https://github.com/ton-blockchain/TEPs',
+    //       label: 'Standards Discussion (TEPs)',
+    //     },
+    //   ],
+    // },
     {
       to: 'v3/contribute',
       position: 'right',

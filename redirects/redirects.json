@@ -424,6 +424,10 @@
         "to": "/v3/documentation/smart-contracts/func/overview"
     },
     {
+        "from": "/develop/tolk/overview",
+        "to": "/v3/documentation/smart-contracts/tolk/overview"
+    },
+    {
         "from": "/develop/func/cookbook",
         "to": "/v3/documentation/smart-contracts/func/cookbook"
     },

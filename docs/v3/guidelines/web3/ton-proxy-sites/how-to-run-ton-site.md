@@ -40,7 +40,15 @@ The proxy adds additional headers:
 
 ### Installation on any other OS
 
-Build it from sources using `./build.sh`, and run it as in step 2 for linux. Go environment is required to build.
+Build it from sources, and run it as in step 2 for linux. Go environment is required to build.
+
+```bash
+git clone https://github.com/tonutils/reverse-proxy.git
+cd reverse-proxy
+make build
+```
+
+To build for other operating systems, run `make all`
 
 ## 👀 Further steps
 

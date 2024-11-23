@@ -162,9 +162,17 @@ body {
 }
 
 
-@media (max-width: 1200px){
+.navbar__item {
+  flex-shrink: 0;
+}
+
+@media (max-width: 1560px){
   .navbar__item {
     display: none;
+  }
+
+  .navbar__toggle {
+    display: flex;
   }
 }
 
@@ -1329,6 +1337,56 @@ strong {
 
 .show-card .status:hover {
   color: #003cb2
+}
+
+h3.cmp-func-tolk-header {
+  display: block;
+  font-weight: bold;
+  font-size: 120%;
+  margin: 3em 0 1em;
+  color: #0000CC;
+}
+
+h3.cmp-func-tolk-header code {
+  font-size: 100% !important;
+}
+
+[data-theme=dark] h3.cmp-func-tolk-header {
+  color: #d1fff7;
+}
+
+table.cmp-func-tolk-table thead tr {
+  --ifm-table-background: #e9e9e9;
+  --ifm-table-border-color: #c0c0c0;
+}
+
+table.cmp-func-tolk-table tbody tr {
+  --ifm-table-background: #f9f9f9;
+  --ifm-table-stripe-background: #f9f9f9;
+  --ifm-table-border-color: #b0b0b0;
+  vertical-align: top;
+}
+
+[data-theme=dark] table.cmp-func-tolk-table thead tr {
+  --ifm-table-background: transparent;
+  --ifm-table-border-color: #606060;
+}
+
+[data-theme=dark] table.cmp-func-tolk-table tbody tr {
+  --ifm-table-background: #0f0f0f;
+  --ifm-table-stripe-background: #0f0f0f;
+  --ifm-table-border-color: #606060;
+}
+
+table.cmp-func-tolk-table:not(.different-col-widths) th {
+  width: 50%;
+}
+
+table.cmp-func-tolk-table code:not(.inline) {
+  display: block;
+  padding: 0 3px;
+  background: transparent;
+  border: transparent;
 }
 
 .markdown a {

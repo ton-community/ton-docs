@@ -68,7 +68,7 @@ Rule of thumb when choosing gas cost on new opcodes is that it should not be les
 | `GASCONSUMED` | _`- g_c`_ | Returns gas consumed by VM so far (including this instruction).<br/>_26 gas_ |
 
 ## Arithmetics
-New variants of [the division opcode](v3/documentation/tvm/instructions#52-division) (`A9mscdf`) are added:
+New variants of [the division opcode](/v3/documentation/tvm/instructions) (`A9mscdf`) are added:
 `d=0` takes one additional integer from stack and adds it to the intermediate value before division/rshift. These operations return both the quotient and the remainder (just like `d=3`).
 
 Quiet variants are also available (e.g. `QMULADDDIVMOD` or `QUIET MULADDDIVMOD`).
@@ -249,7 +249,7 @@ Other arithmetic operations throw exception on invalid curve points. Note that t
 
 ## RUNVM
 Currently there is no way for code in TVM to call external untrusted code "in sandbox". In other words, external code always can irreversibly update code, data of contract, or set actions (such as sending all money).
-`RUNVM` instruction allows to spawn an independent VM instance, run desired code and get needed data (stack, registers, gas consumption etc) without risks of polluting caller's state. Running arbitrary code in a safe way may be useful for [v4-style plugins](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4), Tact's `init` style subcontract calculation etc.
+`RUNVM` instruction allows to spawn an independent VM instance, run desired code and get needed data (stack, registers, gas consumption etc) without risks of polluting caller's state. Running arbitrary code in a safe way may be useful for [v4-style plugins](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4), [Tact's](https://docs.tact-lang.org) `init` style subcontract calculation etc.
 
 | xxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description                                                                                                                           |
 |:-|:-|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -265,7 +265,11 @@ Flags are similar to `runvmx` in fift:
 - `+32`: return final value of `c5` (actions)
 - `+64`: pop hard gas limit (enabled by ACCEPT) `g_m` from stack
 - `+128`: "isolated gas consumption". Child VM will have a separate set of visited cells and a separate chksgn counter.
-- `+256`: pop integer `r`, return exactly `r` values from the top of the stack (only if `exitcode=0 or 1`; if not enough then `exitcode=stk_und`)
+- `+256`: pop integer `r`, return exactly `r` values from the top:
+      - If RUNVM call successful and r is set, it returns r elements. If r not set - returns all;
+      - if RUNVM successful but there is not enough elements on stack (stack depth less than r) it is considered as exception in child VM, with exit_code=-3 and exit_arg=0 (so 0 is returned as only stack element);
+      - if RUNVM fails with exception - only one element is returned - exit arg (not to be mistaken with exit_code);
+      - in case of OOG, exit_code = -14 and exit_arg is amount of gas.
 
 Gas cost:
 - 66 gas

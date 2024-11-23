@@ -1,0 +1,1177 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# 准备消息
+
+在使用TON Connect时，您应该为在各种交易中使用的Payload构造消息体。在此页面上，您可以找到与TON Connect SDK一起使用的payload的最相关示例。
+
+:::info
+期望您学习了创建TON Connect连接的基础知识。了解更多请参阅[集成手册](/develop/dapps/ton-connect/integration)。
+:::
+
+
+## TON Connect JS SDK 示例
+
+### 交易模板
+
+无论开发者正在解决的任务级别如何，通常都需要使用来自@tonconnect/sdk或@tonconnect/ui的连接器实体。
+基于@tonconnect/sdk和@tonconnect/ui创建的示例：
+
+<Tabs groupId="TON Connect template">
+
+<TabItem value="tonconnect-react" label="@tonconnect/ui-react">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+const [tonConnectUI] = useTonConnectUI();
+
+const transaction = {
+    //transaction body
+})
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(transaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
+</TabItem>
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnectUI from '@tonconnect/ui';
+
+const tonConnectUI = new TonConnectUI({ //连接应用
+    manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+    buttonRootId: '<YOUR_CONNECT_BUTTON_ANCHOR_ID>'
+});
+
+const transaction = {
+    //transaction body
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+
+```
+
+</TabItem>
+<TabItem value="tonconnect-js" label="@tonconnect/sdk">
+
+```js
+import TonConnect from '@tonconnect/sdk';
+const connector = new TonConnect();
+
+await connector.sendTransaction({
+    //transaction body
+})
+
+```
+
+</TabItem>
+
+</Tabs>
+
+### 常规 TON 转账
+
+TON Connect SDK提供了发送消息的封装器，使准备两个钱包之间的Toncoin的常规转账作为默认交易无需载荷变得容易。
+
+使用TON Connect JS SDK执行常规TON转账如下所示：
+
+
+<Tabs groupId="Regular Transfer">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+const [tonConnectUI] = useTonConnectUI();
+
+const transaction = {
+    messages: [
+        {
+            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // 目的地址
+            amount: "20000000" //以nanotons计的Toncoin
+        }
+    ]
+
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(transaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnectUI from '@tonconnect/ui';
+
+const tonConnectUI = new TonConnectUI({ //连接应用
+    manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+    buttonRootId: '<YOUR_CONNECT_BUTTON_ANCHOR_ID>'
+});
+
+const transaction = {
+    messages: [
+        {
+            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // 目的地址
+            amount: "20000000" //以nanotons计的Toncoin
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
+
+```js
+import TonConnect from '@tonconnect/sdk';
+const connector = new TonConnect();
+
+await connector.sendTransaction({
+    messages: [
+        {
+            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // 目的地址
+            amount: "20000000" //以nanotons计的Toncoin
+        }
+    ]
+})
+
+```
+</TabItem>
+</Tabs>
+
+:::tip
+了解更多信息请参阅[TON智能合约地址](/learn/overviews/addresses)。
+:::
+
+对于特定的自定义交易，必须定义特定的载荷。
+
+
+
+
+### 添加评论的转账
+
+最简单的例子是添加一个包含评论的载荷。更多详情请查看[此页面](/develop/smart-contracts/guidelines/internal-messages#simple-message-with-comment)。
+在交易之前，需要通过[@ton/ton](https://github.com/ton-org/ton) JavaScript库准备一个`body` [cell](/develop/data-formats/cell-boc)。
+
+```js
+import { beginCell } from '@ton/ton'
+
+const body = beginCell()
+  .storeUint(0, 32) // 写入32个零位以表示后面将跟随文本评论
+  .storeStringTail("Hello, TON!") // 写下我们的文本评论
+  .endCell();
+```
+
+通过以下方式创建交易体：
+
+<Tabs groupId="Transfer With a Comment">
+
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+
+const myTransaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: destination,
+            amount: toNano("0.05"),
+            payload: body.toBoc().toString("base64") // body中带有评论的载荷
+        }
+    ]
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnectUI from '@tonconnect/ui'
+
+const transaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: destination,
+            amount: toNano("0.05"),
+            payload: body.toBoc().toString("base64") // body中带有评论的载荷
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
+```js
+import TonConnect from '@tonconnect/sdk';
+const connector = new TonConnect();
+
+await connector.sendTransaction({
+  validUntil: Math.floor(Date.now() / 1000) + 360,
+  messages: [
+    {
+      address: destination,
+      amount: toNano("0.05"),
+      payload: body.toBoc().toString("base64") // body中带有评论的载荷
+    }
+  ]
+})
+```
+</TabItem>
+</Tabs>
+
+
+### Jetton 转账
+
+根据以下方式进行的 Jetton 转账操作的 `body`([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) 通常应如下所示：
+
+```js
+    import {beginCell, toNano} from '@ton/ton'
+    // transfer#0f8a7ea5 query_id:uint64 amount:(VarUInteger 16) destination:MsgAddress
+    // response_destination:MsgAddress custom_payload:(Maybe ^Cell)
+    // forward_ton_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)
+    // = InternalMsgBody;
+
+    const body = beginCell()
+        .storeUint(0xf8a7ea5, 32)                 // jetton 转账操作码
+        .storeUint(0, 64)                         // query_id:uint64
+        .storeCoins(1000000)                      // amount:(VarUInteger 16) -  转账的 Jetton 金额（小数位 = 6 - jUSDT, 9 - 默认）
+        .storeAddress(Wallet_DST)                 // destination:MsgAddress
+        .storeAddress(Wallet_SRC)                 // response_destination:MsgAddress
+        .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell)
+        .storeCoins(toNano(0.05))                 // forward_ton_amount:(VarUInteger 16)
+        .storeUInt(0,1)                           // forward_payload:(Either Cell ^Cell)
+        .endCell();
+```
+
+然后，将带有此 body 的交易发送到发送者的 jettonWalletContract 执行：
+
+<Tabs groupId="Jetton Transfer">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+
+const myTransaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: jettonWalletContract, // 发送方 Jetton 钱包
+            amount: toNano("0.05"), // 用于手续费，超额部分将被退回
+            payload: body.toBoc().toString("base64") // 带有 Jetton 转账 body 的载荷
+        }
+    ]
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
+
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnectUI from '@tonconnect/ui'
+
+const transaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: jettonWalletContract,  // 发送方 Jetton 钱包
+            amount: toNano("0.05"),         // 用于手续费，超额部分将被退回
+            payload: body.toBoc().toString("base64") // 带有 Jetton 转账 body 的载荷
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
+```js
+import TonConnect from '@tonconnect/sdk';
+const connector = new TonConnect();
+//...
+await connector.sendTransaction({
+  validUntil: Math.floor(Date.now() / 1000) + 360,
+  messages: [
+    {
+      address: jettonWalletContract,            // 发送方 Jetton 钱包
+      amount: toNano("0.05"),                   // 用于手续费，超额部分将被退回
+      payload: body.toBoc().toString("base64")  // 带有 Jetton 转账 body 的载荷
+    }
+  ]
+})
+```
+
+</TabItem>
+</Tabs>
+
+- `validUntil` - 消息有效的 UNIX 时间
+- `jettonWalletAddress` - 地址，基于 JettonMaser 和 Wallet 合约定义的 JettonWallet 地址
+- `balance` - 整数，用于gas费用的 Toncoin 金额，以 nanotons 计。
+- `body` - 用于 jettonContract 的载荷
+
+<details>
+    <summary>Jetton 钱包状态初始化和地址准备示例</summary>
+
+```js
+import { Address, TonClient, beginCell, StateInit, storeStateInit } from '@ton/ton'
+
+async function main() {
+    const client = new TonClient({
+        endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+        apiKey: '放置你的 api key'
+    })
+
+    const jettonWalletAddress = Address.parse('Sender_Jetton_Wallet');
+    let jettonWalletDataResult = await client.runMethod(jettonWalletAddress, 'get_wallet_data');
+    jettonWalletDataResult.stack.readNumber();
+    const ownerAddress = jettonWalletDataResult.stack.readAddress();
+    const jettonMasterAddress = jettonWalletDataResult.stack.readAddress();
+    const jettonCode = jettonWalletDataResult.stack.readCell();
+    const jettonData = beginCell()
+        .storeCoins(0)
+        .storeAddress(ownerAddress)
+        .storeAddress(jettonMasterAddress)
+        .storeRef(jettonCode)
+        .endCell();
+
+    const stateInit: StateInit = {
+        code: jettonCode,
+        data: jettonData
+    }
+
+    const stateInitCell = beginCell()
+        .store(storeStateInit(stateInit))
+        .endCell();
+
+    console.log(new Address(0, stateInitCell.hash()));
+}
+```
+
+</details>
+
+### Jetton 销毁
+
+Jetton 销毁([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#2-burn)) 的`body`通常应该按照以下方式完成：
+
+```js
+    import {beginCell} from '@ton/ton'
+// burn#595f07bc query_id:uint64 amount:(VarUInteger 16)
+//               response_destination:MsgAddress custom_payload:(Maybe ^Cell)
+//               = InternalMsgBody;
+
+    const body = beginCell()
+        .storeUint(0x595f07bc, 32)                // jetton 销毁操作码
+        .storeUint(0, 64)                         // query_id:uint64
+        .storeCoins(1000000)                      // amount:(VarUInteger 16) -  以小数形式的 Jetton 金额
+        .storeAddress(Wallet_SRC)                 // response_destination:MsgAddress - 持有者的钱包
+        .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell) - 通常没有载荷
+        .endCell();
+```
+
+消息放入以下请求中：
+
+<Tabs groupId="Jetton Burn">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+
+const myTransaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: jettonWalletContract, // 持有者的 Jetton 钱包
+            amount: toNano("0.05"),  // 用于手续费，超额部分将被退回
+            payload: body.toBoc().toString("base64") // 带有 Jetton 销毁 body 的载荷
+        }
+    ]
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
+
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnectUI from '@tonconnect/ui'
+
+const transaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: jettonWalletContract,  // 持有者的 Jetton 钱包
+            amount: toNano("0.05"),         // 用于手续费，超额部分将被退回
+            payload: body.toBoc().toString("base64") // 带有 Jetton 销毁 body 的载荷
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
+```js
+await connector.sendTransaction({
+  validUntil: Math.floor(Date.now() / 1000) + 360,
+  messages: [
+    {
+      address: jettonWalletContract, // 持有者的 Jetton 钱包
+      amount: toNano("0.05"), // 用于手续费，超额部分将被退回
+      payload: body.toBoc().toString("base64") // 带有 Jetton 销毁 body 的载荷
+    }
+  ]
+})
+```
+
+</TabItem>
+</Tabs>
+
+- `jettonWalletAddress` - Jetton 钱包合约地址，基于 JettonMaser 和 Wallet 合约定义
+- `amount` - 整数，用于gas费用的 Toncoin 金额，以 nanotons 计。
+- `body` - 带有 `burn#595f07bc` 操作码的 Jetton 钱包载荷
+
+### NFT 转移
+
+`body` 消息通常应按照以下方式进行：
+
+```js
+import { beginCell, toNano} from '@ton/ton'
+
+//  transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress custom_payload:(Maybe ^Cell)
+//   forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;
+
+    const body = beginCell()
+        .storeUint(0x5fcc3d14, 32)               // NFT 转移操作码 0x5fcc3d14
+        .storeUint(0, 64)                        // query_id:uint64
+        .storeAddress(NEW_OWNER_WALLET)          // new_owner:MsgAddress
+        .storeAddress(Wallet_DST)                // response_destination:MsgAddress
+        .storeUint(0, 1)                         // custom_payload:(Maybe ^Cell)
+        .storeCoins(toNano('0.000000001'))       // forward_amount:(VarUInteger 16)
+        .storeUint(0,1)                          // forward_payload:(Either Cell ^Cell)
+        .endCell();
+```
+
+`WALLET_DST` - 地址 - 初始 NFT 持有者地址，用于接收超额资金
+将 `NFTitem` 转移给新所有者 `NEW_OWNER_WALLET`。
+
+<Tabs groupId="NFT Transfer">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+
+const myTransaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: jettonWalletContract, // 将要转移的 NFT 物品地址
+            amount: toNano("0.05"),  // 用于佣金费，超额部分将被返回
+            payload: body.toBoc().toString("base64") // 带有 NFT 转移 body 的 payload
+        }
+    ]
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
+
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnectUI from '@tonconnect/ui'
+
+const transaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: NFTitem,  // 将要转移的 NFT 物品地址
+            amount: toNano("1.08"), // 用于佣金费，超额部分将被返回
+            payload: transferNftBody.toBoc().toString("base64") // 带有 transferNftBody 消息的 payload
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
+```js
+await connector.sendTransaction({
+  validUntil: Math.floor(Date.now() / 1000) + 360,
+  messages: [
+    {
+      address: NFTitem, // 将要转移的 NFT 物品地址
+      amount: toNano("1.08"), // 用于佣金费，超额部分将被返回
+      payload: transferNftBody.toBoc().toString("base64") // 带有 transferNftBody 消息的 payload
+    }
+  ]
+})
+```
+</TabItem>
+</Tabs>
+
+- `NFTitem` - 地址 - 我们希望转移到新所有者 `NEW_OWNER_Wallet` 的NFT项目智能合约的地址。
+- `balance` - 整数，用于gas支付的 Toncoin 数量（单位是nanotons）。
+- `body` - 用于 NFT 合约的载荷
+
+### NFT 销售（GetGems）
+
+以下是根据合约[nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc)准备消息和交易以在GetGems市场上进行销售的示例。
+
+要将 NFT 放置在 GetGems 销售合约上，我们应该准备特殊消息体 `transferNftBody`，它将 NFT 转移到特殊的 NFT 销售合约。
+```js
+    const transferNftBody = beginCell()
+        .storeUint(0x5fcc3d14, 32) // NFT 转移操作码
+        .storeUint(0, 64) // query_id
+        .storeAddress(destinationAddress) // new_owner - GetGems 销售合约部署者，此操作不应更改
+        .storeAddress(walletAddress) // 超额资金的响应目的地
+        .storeBit(0) // 我们没有 custom_payload
+        .storeCoins(toNano("1")) // forward_amount
+        .storeBit(0) // 我们在此cell中存储 forward_payload
+        .storeUint(0x0fe0ede, 31) // 非 32，因为之前存储的 0 位将作为销售操作码读取
+        .storeRef(stateInitCell)
+        .storeRef(saleBody)
+        .endCell();
+```
+
+因为消息需要很多步骤，整个算法庞大，可以在此处找到：
+<details>
+    <summary>显示创建 NFT 销售消息体的整个算法</summary>
+
+
+```js
+import { Address, beginCell, StateInit, storeStateInit, toNano, Cell } from '@ton/ton'
+
+async function main() {
+    const fixPriceV3R2Code = Cell.fromBase64('te6cckECCwEAArkAART/APSkE/S88sgLAQIBIAIDAgFIBAUAfvIw7UTQ0wDTH/pA+kD6QPoA1NMAMMABjh34AHAHyMsAFssfUATPFljPFgHPFgH6AszLAMntVOBfB4IA//7y8AICzQYHAFegOFnaiaGmAaY/9IH0gfSB9AGppgBgYaH0gfQB9IH0AGEEIIySsKAVgAKrAQH30A6GmBgLjYSS+CcH0gGHaiaGmAaY/9IH0gfSB9AGppgBgYOCmE44BgAEqYhOmPhW8Q4YBKGATpn8cIxbMbC3MbK2QV44LJOZlvKAVxFWAAyS+G8BJrpOEBFcCBFd0VYACRWdjYKdxjgthOjq+G6hhoaYPqGAD9gHAU4ADAgB92YIQO5rKAFJgoFIwvvLhwiTQ+kD6APpA+gAwU5KhIaFQh6EWoFKQcIAQyMsFUAPPFgH6AstqyXH7ACXCACXXScICsI4XUEVwgBDIywVQA88WAfoCy2rJcfsAECOSNDTiWnCAEMjLBVADzxYB+gLLaslx+wBwIIIQX8w9FIKAejy0ZSzjkIxMzk5U1LHBZJfCeBRUccF8uH0ghAFE42RFrry4fUD+kAwRlAQNFlwB8jLABbLH1AEzxZYzxYBzxYB+gLMywDJ7VTgMDcowAPjAijAAJw2NxA4R2UUQzBw8AXgCMACmFVEECQQI/AF4F8KhA/y8AkA1Dg5ghA7msoAGL7y4clTRscFUVLHBRWx8uHKcCCCEF/MPRQhgBDIywUozxYh+gLLassfFcs/J88WJ88WFMoAI/oCE8oAyYMG+wBxUGZFFQRwB8jLABbLH1AEzxZYzxYBzxYB+gLMywDJ7VQAlsjLHxPLPyPPFlADzxbKAIIJycOA+gLKAMlxgBjIywUmzxZw+gLLaszJgwb7AHFVUHAHyMsAFssfUATPFljPFgHPFgH6AszLAMntVNZeZYk=');
+
+    const marketplaceAddress = Address.parse('EQBYTuYbLf8INxFtD8tQeNk5ZLy-nAX9ahQbG_yl1qQ-GEMS'); // GetGems 地址
+    const marketplaceFeeAddress = Address.parse('EQCjk1hh952vWaE9bRguFkAhDAL5jj3xj9p0uPWrFBq_GEMS'); // GetGems 收费地址
+    const destinationAddress = Address.parse("EQAIFunALREOeQ99syMbO6sSzM_Fa1RsPD5TBoS0qVeKQ-AR"); // GetGems 销售合约部署者
+
+    const walletAddress = Address.parse('EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162');
+    const royaltyAddress = Address.parse('EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162');
+    const nftAddress = Address.parse('EQCUWoe7hLlklVxH8gduCf45vPNocsjRP4wbX42UJ0Ja0S2f');
+    const price = toNano('5'); // 5 TON
+
+    const feesData = beginCell()
+        .storeAddress(marketplaceFeeAddress)
+        // 5% - GetGems 收费
+        .storeCoins(price / BigInt(100) * BigInt(5))
+        .storeAddress(royaltyAddress)
+        // 5% - 版权费，可更改
+        .storeCoins(price / BigInt(100) * BigInt(5))
+        .endCell();
+
+    const saleData = beginCell()
+        .storeBit(0) // is_complete
+        .storeUint(Math.round(Date.now() / 1000), 32) // created_at
+        .storeAddress(marketplaceAddress) // marketplace_address
+        .storeAddress(nftAddress) // nft_address
+        .storeAddress(walletAddress) // previous_owner_address
+        .storeCoins(price) // 以nanotons计的全价
+        .storeRef(feesData) // fees_cell
+        .storeBit(0) // can_be_deployed_externally
+        .endCell();
+
+    const stateInit: StateInit = {
+        code: fixPriceV3R2Code,
+        data: saleData
+    };
+    const stateInitCell = beginCell()
+        .store(storeStateInit(stateInit))
+        .endCell();
+
+    // 仅示例，非必需
+    const saleContractAddress = new Address(0, stateInitCell.hash());
+
+    const saleBody = beginCell()
+        .storeUint(1, 32) // 只是接收硬币
+        .storeUint(0, 64)
+        .endCell();
+
+    const transferNftBody = beginCell()
+        .storeUint(0x5fcc3d14, 32) // NFT 转移操作码
+        .storeUint(0, 64) // query_id
+        .storeAddress(destinationAddress) // new_owner
+        .storeAddress(walletAddress) // 超额资金的响应目的地
+        .storeBit(0) // 我们没有 custom_payload
+        .storeCoins(toNano("1")) // forward_amount
+        .storeBit(0) // 我们在此cell中存储 forward_payload
+        // 非 32，因为我们存储了 0 位 | 部署者的销售操作码
+        .storeUint(0x0fe0ede, 31)
+        .storeRef(stateInitCell)
+        .storeRef(saleBody)
+        .endCell();
+```
+
+</details>
+
+准备好的 `transferNftBody` 应发送到 NFT 物品合约，至少需要 `1.08` TON，以成功处理。多余的部分将退还给发件人钱包。
+
+<Tabs groupId="NFT Sale Fix Price">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+
+const myTransaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: NFTitem, // NFT 物品合约地址，应该放置于市场上
+            amount: toNano("1.08"), // 需要的gas费金额，多余的部分将返回
+            payload: transferNftBody.toBoc().toString("base64") // 带有 transferNftBody 消息的 payload
+        }
+    ]
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnectUI from '@tonconnect/ui'
+
+const transaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: NFTitem, // NFT 物品合约地址，应该放置于市场上
+            amount: toNano("1.08"), // 需要的gas费金额，多余的部分将返回
+            payload: transferNftBody.toBoc().toString("base64") // 带有 transferNftBody 消息的 payload
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+</TabItem>
+
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
+```js
+await connector.sendTransaction({
+  validUntil: Math.floor(Date.now() / 1000) + 360,
+  messages: [
+    {
+      address: NFTitem, // NFT 物品合约地址，应该放置于市场上
+      amount: toNano("1.08"), // 需要的gas费金额，多余的部分将返回
+      payload: transferNftBody.toBoc().toString("base64") // 带有 transferNftBody 消息的 payload
+    }
+  ]
+})
+```
+</TabItem>
+</Tabs>
+
+### NFT 购买 (GetGems)
+
+购买 [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc) 销售合约的 NFT 的过程可以通过常规转账进行，无需负荷，唯一重要的是准确的 TON 数量，按如下计算：
+`buyAmount = Nftprice TON + 1.0 TON`。
+
+<Tabs groupId="NFT Buy">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+
+const myTransaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: nftSaleContract,  // 当前希望购买的 NFT 销售合约地址
+            amount: toNano(buyAmount), // NFT 价格 +  1 TON, 多余的会被返回
+        }
+    ]
+}
+
+export const Settings = () => {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    return (
+        <div>
+            <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+                Send transaction
+            </button>
+        </div>
+    );
+};
+```
+
+</TabItem>
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+```js
+import TonConnectUI from '@tonconnect/ui'
+
+const transaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: nftSaleContract,  // 当前希望购买的 NFT 销售合约地址
+            amount: toNano(buyAmount), // NFT 价格 +  1 TON, 多余的会被返回
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+</TabItem>
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+
+```js
+await connector.sendTransaction({
+validUntil: Math.floor(Date.now() / 1000) + 360,
+messages: [
+    {
+        address: nftSaleContract,  // 当前希望购买的 NFT 销售合约地址
+        amount: toNano(buyAmount), // NFT 价格 +  1 TON, 多余的会被返回
+    }
+]
+})
+```
+
+</TabItem>
+</Tabs>
+
+## TON Connect Python SDK
+
+Python 示例使用 [PyTonConnect](https://github.com/XaBbl4/pytonconnect) 和 [pytoniq](https://github.com/yungwine/pytoniq)。
+
+```python
+    from pytoniq_core import Address
+    from pytonconnect import TonConnect
+```
+
+:::tip
+阅读示例 [源码](https://github.com/yungwine/ton-connect-examples/blob/master/main.py)。
+:::
+
+### 常规 TON 转账
+
+
+```python
+connector = TonConnect(
+    manifest_url='https://raw.githubusercontent.com/XaBbl4/pytonconnect/main/pytonconnect-manifest.json')
+is_connected = await connector.restore_connection()
+
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+            'address' :'0:0000000000000000000000000000000000000000000000000000000000000000', # 目的地址
+            'amount' : 1000000000,  # 1 TON，数额应以nanocoins计
+        )
+    ]
+}
+```
+
+
+### 附带评论的转账
+
+首先，通过以下函数实现带有评论的消息：
+
+```python
+    def get_comment_message(destination_address: str, amount: int, comment: str) -> dict:
+
+        data = {
+            'address': destination_address,
+            'amount': str(amount),
+            'payload': urlsafe_b64encode(
+                begin_cell()
+                .store_uint(0, 32)  # 评论消息的操作码
+                .store_string(comment)  # 储存评论
+                .end_cell()  # 结束 cell
+                .to_boc()  # 转换成 boc
+            )
+            .decode()  # 编码成 url 安全的 base64
+        }
+
+        return data
+```
+
+带有评论的转账的最终交易体：
+
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        get_comment_message(
+            destination_address='0:0000000000000000000000000000000000000000000000000000000000000000',
+            amount=int(0.01 * 10**9),  # 数额应以纳币指定
+            comment='hello world!'
+        )
+    ]
+}
+```
+:::tip
+了解更多关于 [TON 智能合约地址](/learn/overviews/addresses)。
+:::
+
+### Jetton 转账
+
+构建 jetton 转账交易的函数示例：
+
+```python
+from pytoniq_core import begin_cell
+from base64 import urlsafe_b64encode
+
+def get_jetton_transfer_message(jetton_wallet_address: str, recipient_address: str, transfer_fee: int, jettons_amount: int, response_address: str = None) -> dict:
+    data = {
+        'address': jetton_wallet_address,
+        'amount': str(transfer_fee),
+        'payload': urlsafe_b64encode(
+        begin_cell()
+        .store_uint(0xf8a7ea5, 32)  # jetton 转账消息的操作码
+        .store_uint(0, 64)  # query_id
+        .store_coins(jettons_amount)
+        .store_address(recipient_address)  # 目的地址
+        .store_address(response_address or recipient_address)  # 超额资金发送到的地址
+        .store_uint(0, 1)  # 自定义负载
+        .store_coins(1)  # 转发金额
+        .store_uint(0, 1)  # 转发负载
+        .end_cell()  # 结束 cell
+        .to_boc()  # 转换成 boc
+        )
+        .decode()  # 编码成 url 安全的 base64
+    }
+
+    return data
+```
+
+最终的交易体：
+
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        get_jetton_transfer_message(
+        jetton_wallet_address='EQCXsVvdxTVmSIvYv4tTQoQ-0Yq9mERGTKfbsIhedbN5vTVV',
+        recipient_address='0:0000000000000000000000000000000000000000000000000000000000000000',
+        transfer_fee=int(0.07 * 10**9),
+        jettons_amount=int(0.01 * 10**9),  # 将jetton十进制数替换为9。例如对于 jUSDT 应该是 (amount * 10**6),
+        response_address=wallet_address
+        ),
+    ]
+}
+
+```
+
+
+### Jetton 销毁
+
+构建 jetton 销毁交易的函数示例：
+
+```python
+from pytoniq_core import begin_cell
+from base64 import urlsafe_b64encode
+
+def get_jetton_burn_message(jetton_wallet_address: str, transfer_fee: int, jettons_amount: int, response_address: str = None) -> dict:
+    data = {
+        'address': jetton_wallet_address,
+        'amount': str(transfer_fee),
+        'payload': urlsafe_b64encode(
+            begin_cell()
+            .store_uint(0x595f07bc, 32)  # jetton 转账消息的操作码
+            .store_uint(0, 64)  # query_id
+            .store_coins(jettons_amount)
+            .store_address(response_address)  # # 超额资金发送到的地址
+            .end_cell()  # 结束 cell
+            .to_boc()  # 转换成 boc
+        )
+        .decode()  # 编码成 url 安全的 base64
+    }
+    return data
+```
+
+最终的交易体：
+
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        get_jetton_burn_message(
+            jetton_wallet_address='EQCXsVvdxTVmSIvYv4tTQoQ-0Yq9mERGTKfbsIhedbN5vTVV',
+            transfer_fee=int(0.07 * 10 ** 9),
+            jettons_amount=int(0.01 * 10 ** 9),  # 将jetton十进制数替换为9。例如对于 jUSDT 应该是 (amount * 10**6),
+            response_address=wallet_address
+        ),
+    ]
+}
+```
+
+
+### NFT 转账
+
+NFT 转账交易函数的示例：
+
+```python
+from pytoniq_core import begin_cell
+from base64 import urlsafe_b64encode
+
+def get_nft_transfer_message(nft_address: str, recipient_address: str, transfer_fee: int, response_address: str = None) -> dict:
+    data = {
+        'address': nft_address,
+        'amount': str(transfer_fee),
+        'payload': urlsafe_b64encode(
+            begin_cell()
+            .store_uint(0x5fcc3d14, 32)  # nft 转账消息的操作码
+            .store_uint(0, 64)  # query_id
+            .store_address(recipient_address)  # 新主人
+            .store_address(response_address or recipient_address)  # 超额资金发送到的地址
+            .store_uint(0, 1)  # custom payload
+            .store_coins(1)  # forward amount
+            .store_uint(0, 1)  # forward payload
+            .end_cell()  # 结束 cell
+            .to_boc()  # 转换成 boc
+        )
+        .decode()  # 编码成 url 安全的 base64
+    }
+    return data
+
+```
+
+最终的交易体：
+    
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        get_nft_transfer_message(
+            nft_address='EQDrA-3zsJXTfGo_Vdzg8d07Da4vSdHZllc6W9qvoNoMstF-',
+            recipient_address='0:0000000000000000000000000000000000000000000000000000000000000000',
+            transfer_fee=int(0.07 * 10**9),
+            response_address=wallet_address
+        ),
+    ]
+}
+```
+
+### NFT 销售 (GetGems)
+
+以下是在 GetGems 市场上进行销售时准备消息和交易的示例，根据合约 [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc)。
+
+为了将 NFT 放置在 GetGems 销售合约上，我们应该准备特殊的消息体 `transferNftBody`，该消息体将 NFT 转移给特殊的 NFT 销售合约。
+
+<details>
+<summary>创建 NFT NFT Sale Body的示例</summary>
+
+```python
+import time
+from base64 import urlsafe_b64encode
+
+from pytoniq_core.boc import Cell, begin_cell, Address
+from pytoniq_core.tlb import StateInit
+
+
+def get_sale_body(wallet_address: str, royalty_address: str, nft_address: str, price: int, amount: int):
+
+    # 合约代码
+    nft_sale_code_cell = Cell.one_from_boc('te6cckECCwEAArkAART/APSkE/S88sgLAQIBIAIDAgFIBAUAfvIw7UTQ0wDTH/pA+kD6QPoA1NMAMMABjh34AHAHyMsAFssfUATPFljPFgHPFgH6AszLAMntVOBfB4IA//7y8AICzQYHAFegOFnaiaGmAaY/9IH0gfSB9AGppgBgYaH0gfQB9IH0AGEEIIySsKAVgAKrAQH30A6GmBgLjYSS+CcH0gGHaiaGmAaY/9IH0gfSB9AGppgBgYOCmE44BgAEqYhOmPhW8Q4YBKGATpn8cIxbMbC3MbK2QV44LJOZlvKAVxFWAAyS+G8BJrpOEBFcCBFd0VYACRWdjYKdxjgthOjq+G6hhoaYPqGAD9gHAU4ADAgB92YIQO5rKAFJgoFIwvvLhwiTQ+kD6APpA+gAwU5KhIaFQh6EWoFKQcIAQyMsFUAPPFgH6AstqyXH7ACXCACXXScICsI4XUEVwgBDIywVQA88WAfoCy2rJcfsAECOSNDTiWnCAEMjLBVADzxYB+gLLaslx+wBwIIIQX8w9FIKAejy0ZSzjkIxMzk5U1LHBZJfCeBRUccF8uH0ghAFE42RFrry4fUD+kAwRlAQNFlwB8jLABbLH1AEzxZYzxYBzxYB+gLMywDJ7VTgMDcowAPjAijAAJw2NxA4R2UUQzBw8AXgCMACmFVEECQQI/AF4F8KhA/y8AkA1Dg5ghA7msoAGL7y4clTRscFUVLHBRWx8uHKcCCCEF/MPRQhgBDIywUozxYh+gLLassfFcs/J88WJ88WFMoAI/oCE8oAyYMG+wBxUGZFFQRwB8jLABbLH1AEzxZYzxYBzxYB+gLMywDJ7VQAlsjLHxPLPyPPFlADzxbKAIIJycOA+gLKAMlxgBjIywUmzxZw+gLLaszJgwb7AHFVUHAHyMsAFssfUATPFljPFgHPFgH6AszLAMntVNZeZYk=')
+
+    # 费用cell
+
+    marketplace_address = Address('EQBYTuYbLf8INxFtD8tQeNk5ZLy-nAX9ahQbG_yl1qQ-GEMS')
+    marketplace_fee_address = Address('EQCjk1hh952vWaE9bRguFkAhDAL5jj3xj9p0uPWrFBq_GEMS')
+    destination_address = Address('EQAIFunALREOeQ99syMbO6sSzM_Fa1RsPD5TBoS0qVeKQ-AR')
+
+    wallet_address = Address(wallet_address)
+    royalty_address = Address(royalty_address)
+    nft_address = Address(nft_address)
+
+    marketplace_fee = int(price * 5 / 100)  # 5%
+    royalty_fee = int(price * 5 / 100)  # 5%
+
+    fees_data_cell = (begin_cell()
+                      .store_address(marketplace_fee_address)
+                      .store_coins(marketplace_fee)
+                      .store_address(royalty_address)
+                      .store_coins(royalty_fee)
+                      .end_cell())
+
+
+    sale_data_cell = (begin_cell()
+                      .store_bit_int(0)
+                      .store_uint(int(time.time()), 32)
+                      .store_address(marketplace_address)
+                      .store_address(nft_address)
+                      .store_address(wallet_address)
+                      .store_coins(price)
+                      .store_ref(fees_data_cell)
+                      .store_bit_int(0)
+                      .end_cell())
+
+    state_init_cell = StateInit(code=nft_sale_code_cell, data=sale_data_cell).serialize()
+
+    sale_body = (begin_cell()
+                 .store_uint(1, 32)
+                 .store_uint(0, 64)
+                 .end_cell())
+
+    transfer_nft_body = (begin_cell()
+                         .store_uint(0x5fcc3d14, 32)
+                         .store_uint(0, 64)
+                         .store_address(destination_address)
+                         .store_address(wallet_address)
+                         .store_bit_int(0)
+                         .store_coins(int(1 * 10**9))
+                         .store_bit_int(0)
+                         .store_uint(0x0fe0ede, 31)
+                         .store_ref(state_init_cell)
+                         .store_ref(sale_body)
+                         .end_cell())
+
+    data = {
+        'address': nft_address.to_str(),
+        'amount': str(amount),
+        'payload': urlsafe_b64encode(transfer_nft_body.to_boc()).decode()
+    }
+
+    return data
+```
+
+</details>
+
+最终交易体：
+
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        get_nft_transfer_message(
+            nft_address='EQDrA-3zsJXTfGo_Vdzg8d07Da4vSdHZllc6W9qvoNoMstF-',
+            recipient_address='0:0000000000000000000000000000000000000000000000000000000000000000',
+            transfer_fee=int(0.07 * 10**9),
+            response_address=wallet_address
+        ),
+    ]
+}
+```
+
+### NFT 购买 (GetGems)
+
+使用 [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc) 销售合约购买 NFT 的过程可以通过不含有效负载的常规转账进行，唯一重要的是准确的 TON 数额，计算方式如下：
+`buyAmount = Nftprice TON + 1.0 TON`。
+
+```python
+transaction = {
+    'valid_until': int(time.time() + 3600),
+    'messages': [
+        {
+            'address': nft_address,
+            'amount': buyAmount,
+    ]
+}
+```
+
+## 作者
+- JavaScript 示例提供者 [@aSpite](https://t.me/aspite)
+- Python 示例提供者 [@yunwine](https://t.me/yungwine)
+
+## 参阅
+
+* [TON Connect SDKs](/develop/dapps/ton-connect/developers)
+* [TON Connect - 发送消息](/develop/dapps/ton-connect/transactions)
+* [智能合约开发 - 发送消息（低层级）](/develop/smart-contracts/messages)

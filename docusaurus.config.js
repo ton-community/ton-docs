@@ -8,7 +8,7 @@ const getEnvLangConfig = () => {
 
   const langArray = process.env.TARGET_LANGS
     ? process.env.TARGET_LANGS.split(",")
-    : []; // ["mandarin"]; TODO: uncomment when done
+    : ["mandarin"];
   // : ["mandarin", "ru", "ko", "pl", "uk", "ja"];
 
   const locales = Array.from(new Set([defaultLocale, ...langArray]));
@@ -46,6 +46,16 @@ const config = {
   baseUrl: '/',
   themes: [
     '@docusaurus/theme-live-codeblock',
+        [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      {
+        hashed: true,
+        indexPages: true,
+        indexBlog: false,
+        searchBarShortcutHint: false,
+        language: ["en", "zh"],
+      },
+    ],
   ],
   plugins: [
     ['docusaurus-plugin-sass', {}],

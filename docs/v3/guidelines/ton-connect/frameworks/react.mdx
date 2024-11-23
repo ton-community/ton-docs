@@ -70,7 +70,7 @@ export const Header = () => {
 ```
 
 #### Connect with a specific wallet
-To open a modal window for a specific wallet, use the `openSingleWalletModal()` method. This method takes the wallet's `app_name` as a parameter (refer to the [wallets-list.json]('https://github.com/ton-blockchain/wallets-list/blob/main/wallets-v2.json') file) and opens the corresponding wallet modal. It returns a promise that resolves once the modal window has successfully opened.
+To open a modal window for a specific wallet, use the `openSingleWalletModal()` method. This method takes the wallet's `app_name` as a parameter (refer to the [wallets-list.json](https://github.com/ton-blockchain/wallets-list/blob/main/wallets-v2.json) file) and opens the corresponding wallet modal. It returns a promise that resolves once the modal window has successfully opened.
 
 ```tsx
 <button onClick={() => tonConnectUI.openSingleWalletModal('tonwallet')}>
@@ -269,7 +269,7 @@ export const Settings = () => {
 
 ### Understanding Transaction Status by Hash
 
-The principle is located in Payment Processing (using tonweb). [See more](/v3/guidelines/dapps/asset-processing/payments-processing/#checking-contracts-transactions)
+The principle is located in Payment Processing (using tonweb). [See more](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions)
 
 ### Optional Check (ton_proof) on the Backend
 
@@ -393,8 +393,8 @@ await tonConnectUI.sendTransaction({
 
 Wrappers are classes that simplify interaction with the contract, allowing you to work without concerning yourself with the underlying details.
 
-- When developing a contract in `funC`, you need to write the wrapper yourself.
-- When using the `Tact` language, wrappers are automatically generated for you.
+- When developing a contract in FunC, you need to write the wrapper yourself.
+- When using the [Tact language](https://docs.tact-lang.org), wrappers are automatically generated for you.
 
 :::tip
 Check out the [blueprint](https://github.com/ton-org/blueprint) documentation how to develop and deploy contracts

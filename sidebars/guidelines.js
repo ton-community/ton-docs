@@ -112,6 +112,7 @@ module.exports = [
     type: 'category',
     label: 'APIs and SDKs',
     items: [
+      'v3/guidelines/dapps/apis-sdks/overview',
       'v3/guidelines/dapps/apis-sdks/sdk',
       'v3/guidelines/dapps/apis-sdks/api-types',
       'v3/guidelines/dapps/apis-sdks/ton-http-apis',
@@ -227,6 +228,7 @@ module.exports = [
   'v3/guidelines/nodes/custom-overlays',
   'v3/guidelines/nodes/nodes-troubleshooting',
   'v3/guidelines/nodes/node-maintenance-and-security',
+  'v3/guidelines/nodes/monitoring/performance-monitoring',
   'v3/guidelines/nodes/persistent-states',
   'v3/guidelines/nodes/faq',
   {
