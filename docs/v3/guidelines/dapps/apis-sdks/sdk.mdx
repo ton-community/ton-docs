@@ -1,6 +1,6 @@
 # SDKs
 
-Instant navigate on preferred language with right sidebar.
+Instantly navigate to your preferred language using the right sidebar.
 
 ## Overview
 
@@ -8,7 +8,7 @@ There are different ways to connect to blockchain:
 1. RPC data provider or other API: in most cases, you have to *rely* on its stability and security.
 2. ADNL connection: you're connecting to a [liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node). They might be inaccessible, but with a certain level of validation (implemented in the library), cannot lie.
 3. Tonlib binary: you're connecting to liteserver as well, so all benefits and downsides apply. However, your application also contains a dynamic-loading library compiled outside.
-4. Offchain-only. Such SDKs allow to create and serialize cells, which you can then send to APIs.
+4. Offchain-only. These SDKs enable the creation and serialization of cells, which can be transmitted to APIs.
 
 
 ### TypeScript / JavaScript
@@ -36,7 +36,7 @@ There are different ways to connect to blockchain:
 |[pytoniq](https://github.com/yungwine/pytoniq) |Native ADNL| Python SDK with native LiteClient and other ADNL-based protocols implementations. |
 |[pytoniq-core](https://github.com/yungwine/pytoniq-core) |	*offchain-only* | Python powerful transport-free SDK |
 |[tonutils](https://github.com/nessshon/tonutils) |	via RPC ([TONAPI](https://tonapi.io/api-v2) / [Toncenter](https://toncenter.com/api/v3/)) / Native ADNL ([pytoniq](https://github.com/yungwine/pytoniq))| Tonutils is a high-level object-oriented library for Python designed to facilitate interactions with the TON blockchain |
-|[pytonlib](https://github.com/toncenter/pytonlib)|Tonlib binary| This is standalone Python library based on libtonlibjson, brought as a binary dependency from TON monorepo. |
+|[pytonlib](https://github.com/toncenter/pytonlib)|Tonlib binary| This is a standalone Python library based on libtonlibjson, brought as a binary dependency from TON monorepo. |
 |[mytonlib](https://github.com/igroman787/mytonlib)|Native ADNL| Native Python SDK library for working with The Open Network |
 |[TonTools](https://github.com/yungwine/TonTools)|via RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / etc)|TonTools is a high-level OOP library for Python, which can be used to interact with TON Blockchain.|
 |[tonpy](https://github.com/disintar/tonpy)|Native ADNL| Python package that provides data structures and API to interact with TON blockchain. |
