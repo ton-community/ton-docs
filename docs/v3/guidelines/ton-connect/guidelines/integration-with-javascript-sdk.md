@@ -1,6 +1,6 @@
 # Integration manual with the JavaScript SDK
 
-In this tutorial, we’ll create a sample web app that supports TON Connect 2.0 authentication. It will allow for signature verification to eliminate the possibility of fraudulent identity impersonation without agreement establishment between parties.
+In this tutorial, we’ll create a sample web app that supports TON Connect 2.0 authentication. It will allow for signature verification to eliminate the possibility of fraudulent identity impersonation without the need for agreement establishment between parties.
 
 ## Documentation links
 
@@ -10,11 +10,11 @@ In this tutorial, we’ll create a sample web app that supports TON Connect 2.0 
 
 ## Prerequisites
 
-In order for connectivity to be fluent between apps and wallets, the web app must make use of manifest that is accessible via wallet applications. The prerequisite to accomplish this is typically a host for static files. For example, say if a developer wants to make use of GitHub pages, or deploy their website using TON Sites hosted on their computer. This would therefore mean their web app site is publicly accessible.
+In order for connectivity to be fluent between apps and wallets, the web app must make use of manifest that is accessible via wallet applications. The prerequisite to accomplish this is typically a host for static files. For example, if a developer wants to make use of GitHub pages, or deploy their website using TON Sites hosted on their computer. This would mean their web app site is publicly accessible.
 
 ## Getting wallets support list
 
-To increase the overall adoption of TON Blockchain, it is necessary that TON Connect 2.0 is able to facilitate a vast number of application and wallet connectivity integrations. Of late and of significant importance, the ongoing development of TON Connect 2.0 has allowed for the connection of the Tonkeeper, TonHub, MyTonWallet and other wallets with various TON Ecosystem Apps. It is our mission to eventually allow for the exchange of data between applications and all wallet types built on TON via the TON Connect protocol. For now, this is realized by providing the ability for TON Connect to load an extensive list of available wallets currently operating within the TON Ecosystem.
+To increase the overall adoption of TON Blockchain, it is necessary that TON Connect 2.0 is able to facilitate a vast number of application and wallet connectivity integrations. Of late and of significant importance, the ongoing development of TON Connect 2.0 has allowed for the connection of the Tonkeeper, TonHub, MyTonWallet and other wallets with various TON Ecosystem Apps. It is our mission to eventually allow for the exchange of data between applications and all wallet types built on TON via the TON Connect protocol. For now, this is achieved by enabling TON Connect to load an extensive list of available wallets currently operating within the TON Ecosystem.
 
 At the moment our sample web app enables the following:
 
@@ -44,7 +44,7 @@ For learning purposes, let's take a looks at the HTML page described by the foll
 </html>
 ```
 
-If you load this page in browser and look into console, you may get something like that:
+If you load this page in a browser and check the console, you may see something like this:
 
 ```bash
 > Array [ {…}, {…} ]
@@ -230,7 +230,7 @@ When decoded, the `r` parameter produces the following JSON format:
 Upon clicking the mobile phone link, Tonkeeper automatically opens and then closes, dismissing the request. Additionally, the following error appears in the web app page console:
 `Error: [TON_CONNECT_SDK_ERROR] Can't get null/tonconnect-manifest.json`.
 
-This means the application manifest must be available for download.
+This indicates that the application manifest must be available for download.
  
 ## Connection with using app manifest
 
