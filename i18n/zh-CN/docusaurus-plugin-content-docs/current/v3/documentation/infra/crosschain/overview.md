@@ -43,15 +43,3 @@ TON-Polygon: [#73](https://github.com/ton-blockchain/ton/blob/35d17249e6b54d67a5
 ### 跨链路线图
 
 - https://t.me/tonblockchain/146
-
-## Tonana 跨链桥
-
-### 如何参与？
-
-:::caution 草案\
-这是一篇概念文章。我们仍在寻找有经验的人来撰写。
-:::
-
-您可以在这里找到前端：https://tonana.org/
-
-源代码在这里：https://github.com/tonanadao
