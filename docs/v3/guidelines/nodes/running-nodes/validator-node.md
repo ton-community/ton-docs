@@ -14,7 +14,7 @@
 
 > We draw special attention of validators to IOPS disk requirements, it is crucially important for smooth network operation.
 
-## Port Forwarding
+### Port Forwarding
 
 All types of nodes require a static external IP address, one UDP port to be forwarded for incoming connections and all outgoing connections to be open - the node uses random ports for new outgoing connections. It's necessarily for the node to be visible to the outside world over the NAT.
 
