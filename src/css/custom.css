@@ -161,21 +161,6 @@ body {
   --float-shadow-color: #00000014;
 }
 
-
-.navbar__item {
-  flex-shrink: 0;
-}
-
-@media (max-width: 1560px){
-  .navbar__item {
-    display: none;
-  }
-
-  .navbar__toggle {
-    display: flex;
-  }
-}
-
 .navbar .navbar__items[data-theme=light] {
   flex: auto;
   background: rgba(35,35,40,.9)
@@ -594,8 +579,32 @@ html[data-theme=dark] .header-github-link:before {
   background: url("/static/svg/wrench-24px-dark.svg") no-repeat;
 }
 
+@media (max-width: 1060px) and (min-width: 997px) {
+  .header-contribute-link:before, .header-github-link:before {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+  }
+
+  .navbar__items .clean-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .navbar__items [class^="toggle"] {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  .navbar__items [class^="navbarSearchContainer"] {
+    padding-left: 6px;
+  }
+}
+
+
 html[data-theme=dark] .header-contribute-link:before {
   background: url("/static/svg/wrench-24px-light.svg") no-repeat;
+  background-size: contain;
 }
 
 .bootstrap-wrapper .col-auto {
@@ -1934,4 +1943,47 @@ a img,button img {
 }
 .button--sm {
   --ifm-button-size-multiplier: 1.1 !important;
+}
+
+.navbar__item {
+  flex-shrink: 0;
+}
+
+@media (max-width: 1560px) {
+  .navbar__item {
+    font-size: 16px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
+@media (max-width: 1380px) {
+  .navbar__item {
+    font-size: 14px;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .navbar__item .navbar__link::after {
+    margin-left: 2px;
+    border-width: 0.25em 0.25em 0;
+    top: 0;
+  }
+}
+
+@media (max-width: 1380px) {
+  .DocSearch .DocSearch-Button-Keys {
+    display: none;  
+  }
+
+  .DocSearch-Button-Placeholder {
+    display: none;
+  }
+}
+
+@media (max-width: 1060px) and (min-width: 997px) {
+  .navbar {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
