@@ -41,14 +41,14 @@ This contract is deployed at [EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH\_Zp]
   }
   
   ;; we are loading some subdomain
-  ;; supported subdomains are "ton\0", "me\0t\0" and "address\0"
+  ;; supported subdomains are "ton\\0", "me\\0t\\0" and "address\\0"
   
   slice subdomain_sfx = null();
   builder domain_nft_address = null();
   
   if (subdomain.starts_with("746F6E00"s)) {
     ;; we're resolving
-    ;; "ton" \0 <subdomain> \0 [subdomain_sfx]
+    ;; "ton" \\0 <subdomain> \\0 [subdomain_sfx]
     subdomain~skip_bits(32);
     
     ;; reading domain name
@@ -73,8 +73,8 @@ This contract is deployed at [EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH\_Zp]
   
   if (slice_empty?(subdomain_sfx)) {
     ;; example of domain being resolved:
-    ;; [initial, not accessible in this contract] "ton\0resolve-contract\0ton\0ratelance\0"
-    ;; [what is accessible by this contract]      "ton\0ratelance\0"
+    ;; [initial, not accessible in this contract] "ton\\0resolve-contract\\0ton\\0ratelance\\0"
+    ;; [what is accessible by this contract]      "ton\\0ratelance\\0"
     ;; subdomain          "ratelance"
     ;; subdomain_sfx      ""
     
@@ -97,8 +97,8 @@ This contract is deployed at [EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH\_Zp]
     }
   } else {
     ;; subdomain          "resolve-contract"
-    ;; subdomain_sfx      "ton\0ratelance\0"
-    ;; we want to pass \0 further, so that next resolver has opportunity to process only one byte
+    ;; subdomain_sfx      "ton\\0ratelance\\0"
+    ;; we want to pass \\0 further, so that next resolver has opportunity to process only one byte
     
     ;; next resolver is contract of 'resolve-contract<.ton>'
     ;; dns_next_resolver#ba93 resolver:MsgAddressInt = DNSRecord;
@@ -357,14 +357,14 @@ slice decode_base64_address(slice readable) method_id {
   }
   
   ;; we are loading some subdomain
-  ;; supported subdomains are "ton\0", "me\0t\0" and "address\0"
+  ;; supported subdomains are "ton\\0", "me\\0t\\0" and "address\\0"
   
   slice subdomain_sfx = null();
   builder domain_nft_address = null();
   
   if (subdomain.starts_with("746F6E00"s)) {
     ;; we're resolving
-    ;; "ton" \0 <subdomain> \0 [subdomain_sfx]
+    ;; "ton" \\0 <subdomain> \\0 [subdomain_sfx]
     subdomain~skip_bits(32);
     
     ;; reading domain name
@@ -375,7 +375,7 @@ slice decode_base64_address(slice readable) method_id {
     
     domain_nft_address = get_ton_dns_nft_address_by_index(slice_hash(subdomain));
   } elseif (subdomain.starts_with("6D65007400"s)) {
-    ;; "t" \0 "me" \0 <subdomain> \0 [subdomain_sfx]
+    ;; "t" \\0 "me" \\0 <subdomain> \\0 [subdomain_sfx]
     subdomain~skip_bits(40);
     
     ;; reading domain name
@@ -400,8 +400,8 @@ slice decode_base64_address(slice readable) method_id {
   
   if (slice_empty?(subdomain_sfx)) {
     ;; example of domain being resolved:
-    ;; [initial, not accessible in this contract] "ton\0resolve-contract\0ton\0ratelance\0"
-    ;; [what is accessible by this contract]      "ton\0ratelance\0"
+    ;; [initial, not accessible in this contract] "ton\\0resolve-contract\\0ton\\0ratelance\\0"
+    ;; [what is accessible by this contract]      "ton\\0ratelance\\0"
     ;; subdomain          "ratelance"
     ;; subdomain_sfx      ""
     
@@ -424,11 +424,11 @@ slice decode_base64_address(slice readable) method_id {
     }
   } else {
     ;; example of domain being resolved:
-    ;; [initial, not accessible in this contract] "ton\0resolve-contract\0ton\0resolve-contract\0ton\0ratelance\0"
-    ;; [what is accessible by this contract]      "ton\0resolve-contract\0ton\0ratelance\0"
+    ;; [initial, not accessible in this contract] "ton\\0resolve-contract\\0ton\\0resolve-contract\\0ton\\0ratelance\\0"
+    ;; [what is accessible by this contract]      "ton\\0resolve-contract\\0ton\\0ratelance\\0"
     ;; subdomain          "resolve-contract"
-    ;; subdomain_sfx      "ton\0ratelance\0"
-    ;; and we want to pass \0 further, so that next resolver has opportunity to process only one byte
+    ;; subdomain_sfx      "ton\\0ratelance\\0"
+    ;; and we want to pass \\0 further, so that next resolver has opportunity to process only one byte
     
     ;; next resolver is contract of 'resolve-contract<.ton>'
     ;; dns_next_resolver#ba93 resolver:MsgAddressInt = DNSRecord;
