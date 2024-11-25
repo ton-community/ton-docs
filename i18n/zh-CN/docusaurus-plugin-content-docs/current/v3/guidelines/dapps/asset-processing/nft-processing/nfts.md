@@ -204,7 +204,7 @@ curl -X 'POST' \
 
 ### 发送 NFTs
 
-在这个例子中，NFT 转移信息位于 [第 67 行](https://www.google.com/url?q=https://github.com/ton-blockchain/token-contract/blob/1ad314a98d20b41241d5329e1786fc894ad811de/nft/nft-sale.fc%23L67\&sa=D\&source=docs\&ust=1685436161341866\&usg=AOvVaw1yuoIzcbEuvqMS4xQMqfXE):
+在这个例子中，NFT 转移信息位于 [第 67 行](https://www.google.com/url?q=https://github.com/ton-blockchain/token-contract/blob/1ad314a98d20b41241d5329e1786fc894ad811de/nft/nft-sale.fc%23L67\\&sa=D\\&source=docs\\&ust=1685436161341866\\&usg=AOvVaw1yuoIzcbEuvqMS4xQMqfXE):
 
 ```
 var nft_msg = begin_cell()
