@@ -40,3 +40,11 @@ jobs:
           FROM_BRANCH: "l10n_main"
           TO_BRANCH: "mandarin_preview"
           PULL_REQUEST_AUTO_MERGE_METHOD: "merge"
+      - name: Opening pull request to ru_preview
+        id: pull_ru
+        uses: sansx/sync-branches@v1.0.1
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          FROM_BRANCH: "l10n_main"
+          TO_BRANCH: "ru_preview"
+          PULL_REQUEST_AUTO_MERGE_METHOD: "merge"
