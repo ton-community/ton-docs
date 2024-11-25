@@ -25,8 +25,8 @@ TON 文档的每个页面应以“参阅”部分结束。在那里放置你认�
 
 ```
 ## See Also
-* [TON Contribution Guidelines](/contribute/contribution-rules)
-* [Tutorial Styling Guidelines](/contribute/tutorials/guidelines)
+* [TON Contribution Guidelines](/v3/contribute/contribution-rules)
+* [Tutorial Styling Guidelines](/v3/contribute/tutorials/guidelines)
 ```
 
 :::
