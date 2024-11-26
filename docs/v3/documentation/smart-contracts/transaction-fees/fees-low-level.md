@@ -2,9 +2,7 @@
 
 :::caution
 This section describes instructions and manuals for interacting with TON at a low level.
-:::
 
-:::caution
 Here you will find the **raw formulas** for calculating commissions and fees on TON.
 
 However, most of them are **already implemented through opcodes**! So, you **use them instead of manual calculations**.
@@ -91,26 +89,6 @@ function storageFeeCalculator() {
 
 
 ```
-
-## Forward fees
-
-Internal messages define an `ihr_fee` in Toncoins, which is subtracted from the value attached to the message and awarded to the validators of the destination shardchain if they include the message by the IHR mechanism. The `fwd_fee` is the original total forwarding fee paid for using the HR mechanism; it is automatically computed from some configuration parameters and the size of the message at the time the message is generated. Notice that the total value carried by a newly-created internal outbound message equals the sum of value, `ihr_fee`, and `fwd_fee`. This sum is deducted from the balance of the source account. Of these components, only value is always credited to the destination account on message delivery. The `fwd_fee` is collected by the validators on the HR path from the source to the destination, and the `ihr_fee` is either collected by the validators of the destination shardchain (if the message is delivered via IHR), or credited to the destination account.
-
-:::info
-`fwd_fee` covers 2/3 of the cost, as 1/3 is allocated to the `action_fee` when the message is created.
-
-```cpp
-auto fwd_fee_mine = msg_prices.get_first_part(fwd_fee);
-auto fwd_fee_remain = fwd_fee - fwd_fee_mine;
-
-fees_total = fwd_fee + ihr_fee;
-fees_collected = fwd_fee_mine;
-
-ap.total_action_fees += fees_collected;
-ap.total_fwd_fees += fees_total;
-```
-
-:::
 
 ## Computation fees
 
@@ -233,18 +211,57 @@ will be translated into a few instructions which changes the order of elements o
 
 When the number of stack entries is substantial (10+), and they are actively used in different orders, stack operations fees may become non-negligible.
 
+
+## Forward fees
+
+Internal messages define an `ihr_fee` in Toncoins, which is subtracted from the value attached to the message and awarded to the validators of the destination shardchain if they include the message through the IHR mechanism. The `fwd_fee` is the original total forwarding fee paid for using the HR mechanism; it is automatically computed from the [24 and 25 configuration parameters](/v3/documentation/network/configs/blockchain-configs#param-24-and-25) and the size of the message at the time the message is generated. Note that the total value carried by a newly created internal outbound message equals the sum of the value, `ihr_fee`, and `fwd_fee`. This sum is deducted from the balance of the source account. Of these components, only the value is always credited to the destination account upon message delivery. The `fwd_fee` is collected by the validators on the HR path from the source to the destination, and the `ihr_fee` is either collected by the validators of the destination shardchain (if the message is delivered via IHR) or credited to the destination account.
+
+:::tip
+
+At this moment (November 2024), [IHR](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#messages-and-instant-hypercube-routing-instant-hypercube-routing) is not implemented, and if you set the `ihr_fee` to a non-zero value, it will always be added to the message value upon receipt. For now, there are no practical reasons to do this.
+
+:::
+
+```cpp
+msg_fwd_fees = (lump_price
+             + ceil(
+                (bit_price * msg.bits + cell_price * msg.cells) / 2^16)
+             );
+
+ihr_fwd_fees = ceil((msg_fwd_fees * ihr_price_factor) / 2^16);
+
+total_fwd_fees = msg_fwd_fees + ihr_fwd_fees; // ihr_fwd_fees - is 0 for external messages
+```
+
 ## Action fee
 
-Action fee is deducted from the balance of the source account during processing action list which is perfomed after Computing phase.
-These are the actions that lead to pay fees:
+The action fee is deducted from the balance of the source account during the processing of the action list, which occurs after the Computing phase. Practically, the only action for which you pay an action fee is `SENDRAWMSG`. Other actions, such as `RAWRESERVE` or `SETCODE`, do not incur any fee during the action phase.
 
-* `SENDRAWMSG` sends a raw message.
-* `RAWRESERVE` creates an output action which would reserve N Nanotons.
-* `RAWRESERVEX` similar to `RAWRESERVE`, but also accepts a dictionary with extra currencies.
-* `SETCODE` creates an output action that would change this smart contract code.
-* `SETLIBCODE` creates an output action that would modify the collection of this smart contract libraries by adding or removing library with given code.
-* `CHANGELIB` creates an output action similarly to `SETLIBCODE`, but instead of the library code accepts its hash.
-* `FB08–FB3F` reserved for output action primitives.
+```cpp
+action_fee = floor((msg_fwd_fees * first_frac)/ 2^16);  //internal
+
+action_fee = msg_fwd_fees;  //external
+```
+
+[`first_frac`](/v3/documentation/network/configs/blockchain-configs#param-24-and-25) is part of the 24 and 25 parameters (for master chain and work chain) of the TON Blockchain. Currently, both are set to a value of 21845, which means that the `action_fee` is approximately a third of the `msg_fwd_fees`. In the case of an external message action, `SENDRAWMSG`, the `action_fee` is equal to the `msg_fwd_fees`.
+
+:::tip
+Remember that an action register can contain up to 255 actions, which means that all formulas related to `fwd_fee` and `action_fee` will be computed for each `SENDRAWMSG` action, resulting in the following sum:
+
+```cpp
+total_fees = sum(action_fee) + sum(total_fwd_fees);
+```
+:::
+
+Starting from the fourth [global version](https://github.com/ton-blockchain/ton/blob/master/doc/GlobalVersions.md) of TON, if a "send message" action fails, the account is required to pay for processing the cells of the message, referred to as the `action_fine`.
+
+```cpp
+fine_per_cell = floor((cell_price >> 16) / 4)
+
+max_cells = floor(remaining_balance / fine_per_cell)
+
+action_fine = fine_per_cell * min(max_cells, cells_in_msg);
+```
 
 ## Fee's calculation formulas
 
@@ -257,16 +274,6 @@ storage_fees = ceil(
                * period / 2 ^ 16)
 ```
 
-### in_fwd_fees, out_fwd_fees
-```cpp
-msg_fwd_fees = (lump_price
-             + ceil(
-                (bit_price * msg.bits + cell_price * msg.cells) / 2^16)
-             )
-             
-ihr_fwd_fees = ceil((msg_fwd_fees * ihr_price_factor) / 2^16)
-```
-
 :::info
 Only unique hash cells are counted for storage and fwd fees i.e. 3 identical hash cells are counted as one.
 
@@ -276,12 +283,6 @@ Read more about [deduplication](/v3/documentation/data-formats/tlb/library-cells
 ::: 
 
 // bits in the root cell of a message are not included in msg.bits (lump_price pays for them)
-
-### action_fees
-
-```cpp
-action_fees = sum(out_ext_msg_fwd_fee) + sum(int_msg_mine_fee)
-```
 
 ## Fee's config file
 
