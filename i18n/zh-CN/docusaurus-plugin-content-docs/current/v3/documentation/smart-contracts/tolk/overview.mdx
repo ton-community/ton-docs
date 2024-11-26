@@ -1,0 +1,156 @@
+---
+title: 概述
+---
+
+import Button from '@site/src/components/button'
+
+# Tolk 语言：概述
+
+**Tolk** 是一种在TON中编写智能合约的新语言。可以将 Tolk 视为 "**下一代 FunC**"。
+Tolk 编译器是 FunC 编译器的分叉，引入了类似于 TypeScript 的熟悉语法，
+，但保留了所有底层优化。
+
+```tolk
+import "storage.tolk"
+
+fun loadData() {
+    ctxCounter = getContractData().beginParse().loadUint(32);
+}
+
+fun onInternalMessage(msgValue: int, msgFull: cell, msgBody: slice) {
+    var cs = msgFull.beginParse();
+    var flags = cs.loadMessageFlags();
+    if (isMessageBounced(flags)) {
+        return;
+    }
+    ...
+}
+
+get currentCounter(): int {
+    loadData(); // fills global variables
+    return ctxCounter;
+}
+```
+
+<details>
+  <summary><b>参见用 FunC 实现的相同逻辑</b></summary>
+
+```func
+#include "storage.fc";
+
+() load_data() impure {
+  slice cs = get_data().begin_parse();
+  ctx_counter = cs~load_uint(32);
+}
+
+() recv_internal(int msg_value, cell msg_full, slice msg_body) impure {
+  slice cs = msg_full.begin_parse();
+  int flags = cs.load_uint(4);
+  if (flags & 1) {
+    return ();
+  }
+  ...
+}
+
+int currentCounter() method_id {
+  load_data(); ;; fills global variables
+  return ctx_counter;
+}
+```
+
+</details>
+
+<Button href="https://github.com/ton-blockchain/convert-func-to-tolk" colorType={'primary'} sizeType={'sm'}>
+  尝试使用 FunC → Tolk 转换器
+</Button>
+<Button href="/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short" colorType={'secondary'} sizeType={'sm'}>
+  阅读 "Tolk vs FunC 的区别"
+</Button>
+<div style={{height: '2em'}}></div>
+
+## Tolk 背后的动机
+
+FunC 太棒了。
+它非常底层，鼓励程序员思考编译器内部问题。
+它提供了对 TVM 汇编程序的完全控制，允许程序员尽可能有效地执行合约。
+如果你习惯了它，你就会爱上它。
+
+但有一个问题。
+FunC 是 "函数式 C"，是为忍者设计的。
+如果你热衷于 Lisp 和 Haskell，你会很高兴。
+但如果你是一名 JavaScript / Go / Kotlin 开发者，它的语法对你来说很特别，会导致你偶尔犯错。
+语法上的困难可能会降低您钻研 TON 的动力。
+
+想象一下，如果有一种语言，同样智能，同样低级，但不是函数式的，也不像 C 语言，那会怎样？
+撇开所有的美感和复杂性不谈，如果它乍一看更像流行语言呢？
+
+这就是 Tolk 的意义所在。
+
+## 从 FunC 迁移到 Tolk
+
+如果您了解 FunC 并想尝试新的语法，您的方法是
+
+1. 阅读 [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short)。
+2. 使用 blueprint ，创建一个新的 Tolk 合约（例如，一个计数器）并进行实验。请记住，几乎所有的 stdlib 函数都被重命名为 ~~verbose~~ 清晰的名称。下面是 [映射](/v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib)。
+3. 请尝试使用[转换器](https://github.com/ton-blockchain/convert-func-to-tolk)或[FunC 合约](/v3/documentation/smart-contracts/contracts-specs/examples)中的转换器。请记住，用 Tolk 从头开始编写的合约肯定比自动转换的合约更美观。例如，使用逻辑运算符而不是按位运算符可以大大提高代码的可读性。
+
+## 如果不了解 FunC，如何尝试 Tolk
+
+:::tip 目前，本文档假定您知道 FunC
+文档介绍了 "Tolk 与 FunC" 的区别。
+稍后，它将进行调整，以适应新用户的需要。此外，FunC 最终将被弃用，
+，整个文档中的所有代码片段都将改写为 Tolk。
+:::
+
+如果您是 TON 的新用户，您的方法是
+
+1. 阅读[本文档](/v3/documentation/smart-contracts/overview)，掌握TON开发的基本知识。无论使用哪种语言，您都需要了解 cell 、 slice 和 TON 的异步特性。
+2. 面对 FunC 代码段，您仍然可以使用 FunC，或者尝试用 Tolk 来表达同样的意思。如果您觉得 FunC 语法很奇怪，不用担心：Tolk 的目标正是解决这个问题。
+3. 一旦您对发生的事情有了一定的了解，请尝试使用 Tolk 和 [ blueprint ](https://github.com/ton-org/blueprint)。
+
+## 围绕 Tolk 的工具
+
+Tolk 编译器的源代码是 `ton-blockchain` [repo](https://github.com/ton-blockchain/ton) 的一部分。
+除了编译器，我们还有
+
+1. [tolk-js](https://github.com/ton-blockchain/tolk-js) - Tolk 编译器的 WASM 封装。
+2. [JetBrains IDE 插件](https://github.com/ton-blockchain/intellij-ton) 除支持 FunC、Fift、TL/B 和 Tact 外，还支持 Tolk。
+3. [VS 代码扩展](https://github.com/ton-blockchain/tolk-vscode) 启用 Tolk 语言支持。
+4. [从 FunC 到 Tolk 的转换器](https://github.com/ton-blockchain/convert-func-to-tolk) - 使用一条 `npx` 命令将 `.fc` 文件转换为 `.tolk` 文件。
+5. Tolk 可在 [ blueprint ](https://github.com/ton-org/blueprint)中使用。
+
+## Tolk 可以生产吗？
+
+Tolk编译器是FunC编译器的一个分叉，尽管目前还处于试验阶段，但已经可以投入生产。
+
+可能存在未被发现的错误，这些错误可能是从 FunC 继承下来的，也可能是 TVM 特性造成的。
+总之，无论使用哪种语言，都应该对合约进行测试，以达到高可靠性。
+
+## 路线图
+
+Tolk 的第一个发布版本是 v0.6，强调 [missing](/v3/documentation/smart-contracts/tolk/changelog#how-tolk-was-born) FunC v0.5。
+
+以下是需要调查的一些要点（但不是全部，也没有任何顺序）：
+
+- 类型系统改进：布尔类型、无效性、字典
+- 结构，在 cell 之间自动打包，可能与消息处理程序集成在一起
+- 有方法的结构，可能还包括内置类型
+- 在语法上或通过代码生成与 TL 方案进行一些整合
+- 人类可读的编译器错误
+- 更轻松地发送信息
+- 为常见的使用情况提供更好的体验（jettons、nft 等）。
+-  gas 和堆栈优化、AST 内联
+- 扩展和维护 stdlib
+- 考虑某种 ABI（探索者如何 "看到 "字节码）
+- 从总体上考虑 gas 和收费管理问题
+
+请注意，上述大部分要点的实现都是一个挑战。
+首先，必须对 FunC 内核进行全面重构，使其与非设计用途的能力 "杂交"。
+
+此外，我认为 Tolk 的发展部分是以社区需求为导向的。
+如果能与创建了互联 FunC 合约的开发者进行交流，
+，了解他们的痛点，并讨论如何以不同的方式完成工作，那将会非常好。
+
+## 问题和联系方式
+
+如果遇到问题，请登录 [TON Dev Chats](https://t.me/addlist/1r5Vcb8eljk5Yzcy) 或创建 GitHub 问题。
