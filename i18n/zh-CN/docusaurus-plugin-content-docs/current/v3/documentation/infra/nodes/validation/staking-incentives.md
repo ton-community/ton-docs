@@ -87,6 +87,59 @@ TON区块链计划在2023年第二季度引入通货紧缩机制。特别是，�
 
 ## 参阅
 
-- [运行全节点（验证者）](/participate/run-nodes/full-node)
-- [交易费用](/develop/smart-contracts/fees)
+:::info
+2024 年 9 月 9 日，以下对表现不佳的审定者进行处罚的制度全面实施。
+:::
+
+### 不良工作的判定
+
+TON 随 [lite-client](https://github.com/newton-blockchain/ton/tree/master/lite-client) 工具一起提供。lite-client 中有一条 `checkloadall` 命令。
+该命令分析验证器应该处理了多少数据块，以及在给定时间内实际处理了多少数据块。
+
+如果验证器在一轮验证过程中处理的区块数少于预期的 90%，则被视为表现不佳，应受到处罚。
+:::info
+了解更多有关过程的技术描述[此处](https://github.com/ton-blockchain/TIPs/issues/13#issuecomment-786627474)
+:::
+
+### 投诉工作流程
+
+- 任何人都可以提出投诉，并在正确的投诉中获得奖励。
+- 投诉的验证工作由验证员负责，完全分散进行。
+
+#### 投诉
+
+每轮验证结束后（约 18 个小时），参与该轮验证的验证者的赌注会在 Elector 智能合约上再保留约 9 个小时。
+在此期间，任何人都可以对在该轮验证中表现不佳的验证者进行投诉。这发生在 Elector 智能合约的链上。
+
+#### 投诉确认
+
+每轮验证结束后，验证者会收到来自 Elector 智能合约的投诉列表，并通过调用 `checkloadall`对其进行双重检查。
+如果投诉被验证，他们就会在链上投票支持该投诉。
+
+这些操作内置于 `mytonctrl`，并自动执行。
+如果投诉获得了 66% 验证人的投票（按权重计算），就会从验证人的股份中扣除罚金。
+任何人都无法单独罚款。
+
+[@tonstatus_notifications](https://t.me/tonstatus_notifications) - 每轮被处罚的验证者名单。
+
+### 罚款金额
+
+罚款金额是固定的，等于 101  TON （网络参数 `ConfigParam40:MisbehaviourPunishmentConfig`），大致相当于验证者每轮的收入。
+
+由于 TON 的受众和交易数量增长迅速，工作质量达到最佳至关重要，因此罚款的价值可能会发生变化。
+
+### 罚款分配
+
+罚款在验证者之间分配，扣除网络成本，并向第一个向选举人发送正确投诉的投诉者支付小额奖励（约 8  TON ）。
+
+### 验证器指南
+
+为防止您的验证器节点被罚款，建议您确保硬件、监控和验证器操作设置正确。
+请确保您遵守 [validator 维护指南](/v3/guidelines/nodes/running-nodes/validator-node#maintain-guidelines)。
+如果您不想这样做，请考虑使用盯人服务 https://ton.org/stake。
+
+## 参阅
+
+- [运行验证器](/v3/guidelines/nodes/running-nodes/validator-node)
+- [交易费用](/v3/documentation/smart-contracts/transaction-fees/fees)
 - [什么是区块链？什么是智能合约？什么是 gas ？](https://blog.ton.org/what-is-blockchain)
