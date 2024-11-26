@@ -1,0 +1,95 @@
+import Button from '@site/src/components/button'
+
+# TON 节点类型
+
+**区块链节点** 是运行TON区块链软件的设备，通常是计算机，因此参与区块链运行。
+一般来说，节点确保了 TON 网络的去中心化。
+
+节点在 TON 协议中执行不同的功能：
+
+- **全节点** 和 **存档节点** 维护区块链区块和交易历史，使用户和客户端应用程序能够查找区块和交易，并向区块链发送新的交易；
+- **验证器节点** 验证交易，确保区块链安全。
+
+下面将详细介绍每种节点类型，以及完整节点和归档节点与客户端应用程序的交互。
+
+## 全节点
+
+**全节点**是 TON 区块链中的一种基本节点类型。
+它们作为 TON 区块链的骨干，保存着区块历史，换句话说，就是保存着区块的_当前状态_。
+
+与**存档节点**相比，全节点只保留对确保网络稳定性和客户端应用程序运行至关重要的最新区块链状态。
+全节点对其保存的 TON 区块链状态进行_prune_（剪裁）--这意味着，对于网络而言变得不必要的早期区块会被全节点自动删除，以有效管理其数据量。
+
+为了允许客户端应用程序查找区块和交易，以及向 TON 区块链发送新交易，全节点都配备了 liteserver 功能：请参阅下文[与 TON 节点交互](#interacting-with-ton-nodes) 。
+
+<Button href="/v3/guidelines/nodes/running-nodes/full-node#run-a-node-video"
+colorType="primary" sizeType={'sm'}>
+
+运行全节点
+
+</Button>
+
+## 存档节点
+
+**Archive 节点**是一个完整的节点，保存着 TON 区块链的整个区块历史。
+此类节点是确保整个区块链历史一致性的去中心化真相点。
+它们是区块链探索者和其他依赖深度交易历史的应用程序的后台。
+
+存档节点不会修剪区块链状态，这就提高了它们的系统要求，尤其是在存储方面。
+根据最新估计，全节点和验证器节点需要约 1 TB 磁盘空间，而存档节点需要约 8 TB 才能存储完整的区块链历史。
+
+<Button href="/v3/guidelines/nodes/running-nodes/archive-node"
+colorType="primary" sizeType={'sm'}>
+运行存档节点
+</Button>
+
+## 验证器节点
+
+**验证节点**或**验证者**是TON网络参与者，他们根据TON的 _Proof-of-Stake_ 机制提出新区块并验证其中的交易。
+这样，验证者就为整个区块链的安全性做出了贡献。
+
+成功参与验证过程的验证者可获得[TON 中的奖励](/v3/documentation/infra/nodes/validation/staking-incentives)。
+
+为了有权提议和验证区块，验证者由其他参与者根据其持有的 TON 数量（换句话说，就是其赌注）选举产生：验证者的 TON 赌注越多，当选、为网络验证区块和获得奖励的机会就越大。
+通常情况下，验证者会激励其他 TON 持有者与他们一起入股，以便从由此产生的奖励中获得被动收入。
+通过这种方式，验证者确保了网络的稳定性和安全性，并促进了网络的发展。
+
+<Button href="/v3/guidelines/nodes/running-nodes/validator-node"
+colorType="primary" sizeType={'sm'}>
+运行验证器节点
+</Button>
+
+## 与 TON 节点互动
+
+TON 节点配备了_Liteserver_功能，允许外部应用程序（换句话说，_lite 客户端_）通过它们与 TON 区块链交互。
+通常，liteserver 模式用于完整节点和存档节点，而验证器节点则不启用该模式，以提高验证性能。
+
+liteserver 模式允许lite 客户端通过TON节点发送交易。 以及检索与方块和交易的信息——例如，获取和更新钱包余额。
+
+您有两个选项允许您的 lite 客户端应用程序与 TON 区块链进行交互：
+
+1. 要获得稳定的连接，可以在节点配置文件中启用 Liteserver 模式运行自己的全节点或归档节点。
+2. 如果您没有机会在自己的 TON 节点上安装 Liteserver，可以使用 TON 基金会提供的公共 Liteservers 网。为此，请使用以下配置文件：
+   - [公共 Liteserver 配置 - 主网](https://ton.org/global-config.json)
+   - [公共 Liteserver 配置 - testnet](https://ton.org/testnet-global.config.json)
+
+:::caution 在生产中使用公共 Liteservers
+由于公共 Liteservers 的负载长期居高不下，它们中的大多数都有速率限制，因此不建议在生产中使用它们。
+这可能会导致精简版客户端应用程序不稳定。
+:::
+
+<Button href="/v3/guidelines/nodes/running-nodes/liteserver-node"
+colorType="primary" sizeType={'sm'}>
+在节点中启用 Liteserver
+</Button>
+
+要与 Liteservers 交互，可以使用以下工具：
+
+- TON [ADNL API](/v3/guidelines/dapps/apis-sdks/tton-adnl-apis) 是与区块链进行通信的最底层方式；
+- TON [SDKs](/v3/guidelines/dapps/apis-sdks/sdk) 为各种编程语言提供；
+- TON [基于 HTTP 的应用程序接口](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton) 在您的应用程序和 Liteserver 之间提供 REST API 中间件。
+
+<Button href="/v3/guidelines/dapps/apis-sdks/sdk"
+colorType="primary" sizeType={'sm'}>
+选择一个 TON SDK
+</Button>
