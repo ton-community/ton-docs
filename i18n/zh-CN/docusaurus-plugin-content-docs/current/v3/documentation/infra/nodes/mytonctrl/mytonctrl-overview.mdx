@@ -1,0 +1,780 @@
+# MyTonCtrl
+
+## 概述
+
+要安装和管理自己的节点，请使用 TON 基金会开发的**MyTonCtrl**开源工具。大多数 TON 节点都是可靠的，并通过 **MyTonCtrl** 进行了测试。
+
+[MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) 是一个控制台应用程序，是对 fift、lite-client 和 validator-engine-console 的便捷封装。它专门用于简化 Linux 操作系统上的钱包、域和验证器管理任务。
+
+我们正在积极寻求有关安装过程的反馈意见。如果您有任何问题或建议，请 [联系我们](https://t.me/Alexgton)。
+
+## 一般命令
+
+### help
+
+无参数，打印帮助文本
+
+### clear
+
+无参数，清除控制台
+
+### exit
+
+无参数，从控制台退出。
+
+### update
+
+更新 mytonctrl。参数组合：
+
+| Format name            | Format                                                                     | Example                                                               | Description                                                             |
+| :--------------------- | :------------------------------------------------------------------------- | :-------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| No args                | `update`                                                                   | `update`                                                              | 从当前版本库更新                                                                |
+| URL format             | `update [https://github.com/author/repo/tree/branch]`                      | `update https://github.com/ton-blockchain/mytonctrl/tree/test`        | 从指定 URL 更新                                                              |
+| Branch Only format     | `update [BRANCH]`                                                          | `update test`                                                         | 从当前版本库的指定分支更新                                                           |
+| Branch Override format | `update [https://github.com/authorName/repoName/tree/branchName] [BRANCH]` | `update https://github.com/ton-blockchain/mytonctrl/tree/master test` | 从指定存储库的第二个参数指定的分支更新                                                     |
+
+### upgrade
+
+更新节点。参数组合：
+
+| Format name            | Format                                                                      | Example                                                             | Description                                                                                            |
+| :--------------------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| No args                | `upgrade`                                                                   | `upgrade`                                                           | 从当前版本库升级                                                                                               |
+| URL format             | `upgrade [https://github.com/author/repo/tree/branch]`                      | `upgrade https://github.com/ton-blockchain/ton/tree/master`         | 从指定 URL 升级                                                                                             |
+| Branch Only format     | `upgrade [BRANCH]`                                                          | `upgrade master`                                                    | 从当前版本库的指定分支升级                                                                                          |
+| Branch Override format | `upgrade [https://github.com/authorName/repoName/tree/branchName] [BRANCH]` | `upgrade https://github.com/ton-blockchain/ton/tree/master testnet` | 从指定版本库第二个参数指定的分支升级                                                                                     |
+
+### status
+
+获取当前的 mytonctrl 和节点状态。参数组合：
+
+| Format name | Format        | Example       | Description                                                                                      |
+| ----------- | ------------- | ------------- | ------------------------------------------------------------------------------------------------ |
+| No args     | `status`      | `status`      | 完整的状态报告，包括验证器效率和在线验证器。                                                                           |
+| Fast        | `status fast` | `status fast` | 必须在 TestNet 上使用。状态报告不含验证器效率和在线验证器计数。                                                             |
+
+[查看有关状态输出的更多信息](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-status)
+
+### installer
+
+无参数，运行 TON 模块安装程序 (script /usr/src/mytonctrl/mytoninstaller.py)
+
+### status_modes
+
+无参数，显示 MTC 模式。
+
+### status_settings
+
+无参数，显示所有可用设置及其说明和值。
+
+### enable_mode
+
+启用特定模式。
+
+```bash
+MyTonCtrl> enable_mode <mode_name>
+```
+
+例如
+
+```bash
+MyTonCtrl> enable_mode validator
+```
+
+### disable_mode
+
+禁用特定模式。
+
+```bash
+MyTonCtrl> disable_mode <mode_name>
+```
+
+例如
+
+```bash
+MyTonCtrl> disable_mode validator
+```
+
+### about
+
+提供指定模式的说明
+
+```bash
+MyTonCtrl> about <mode_name>
+```
+
+例如
+
+```bash
+MyTonCtrl> about validator
+```
+
+### get
+
+以 JSON 格式获取特定设置的值
+
+```bash
+MyTonCtrl> get <setting_name>
+```
+
+例如
+
+```bash
+MyTonCtrl> get stake
+```
+
+### set
+
+设置指定设置的指定值。如果启用 "强制"，则跳过设置存在性检查
+
+```bash
+MyTonCtrl> set <setting> <value> [--force]
+```
+
+例如
+
+```bash
+MyTonCtrl> set stake 9000
+```
+
+### rollback
+
+无参数，退回到 mytonctrl 1.0。无论如何，你都不应该使用 mytonctrl 1.0。
+
+### getconfig
+
+读取并打印由 `<config-id>` 指定的配置的 JSON 表示。
+
+```bash
+MyTonCtrl> getconfig <config_id> # config id can be omitted
+```
+
+例如
+
+```bash
+MyTonCtrl> getconfig 0
+```
+
+### get_pool_data
+
+读取并打印由 `<pool-name>` 或 `<pool-addr>` 指定的池数据的 JSON 表示形式。
+
+```bash
+MyTonCtrl> get_pool_data <<pool-name> | <pool-addr>>
+```
+
+例如
+
+```bash
+get_pool_data pool_name # you can check possible pool names using ls /home/install_mytonctrl/.local/share/mytoncore/pools
+```
+
+## Overlays
+
+了解更多有关 [overlays](/v3/guidelines/nodes/custom-overlays) 的信息。
+
+### add_custom_overlay
+
+使用 `<path_to_config>` 指定的配置，在给定的 `<name>` 中添加自定义叠加。
+
+```bash
+MyTonCtrl> add_custom_overlay <name> <path_to_config>
+```
+
+例如
+
+```bash
+add_custom_overlay custom /config.json # check link from above to know what config this command requires (/v3/guidelines/nodes/custom-overlays)
+```
+
+### list_custom_overlays
+
+无参数，打印自定义覆盖层
+
+### delete_custom_overlay
+
+使用指定的 `<name>` 删除自定义叠加。
+
+```bash
+MyTonCtrl> delete_custom_overlay <name>
+```
+
+## Validator
+
+### vo
+
+<offer-hash>\` 所述提议的投票权
+
+```bash
+MyTonCtrl> vo <offer-hash> # use `ol` to get offers
+```
+
+### ve
+
+无参数，投票选举
+
+### vc
+
+<election-id>` 所列选举中`<complaint-hash>\` 所列投诉的选票
+
+```bash
+MyTonCtrl> vc <election-id> <complaint-hash>
+```
+
+实际上，即使这样做也行得通，但应使用当前 mytonctrl 状态下的数据：
+
+```bash
+MyTonCtrl> vc 0 0
+```
+
+### check_ef
+
+输出当前和前几轮的验证器效率数据。
+
+**注意**：当前回合的效率数据会随着回合的进行而变得更加准确。
+
+根据 "验证器索引"（可通过 `status` 命令接收），有三种可能的情况：
+
+- **Validator index is in the range [0, `max_main_validators`)**:
+  整轮的 "验证器效率 "必须高于 90%（今后可根据统计数据更改这一数字）；否则，可能会受到处罚（罚款）。
+
+- **Validator index is in the range [`max_main_validators`, `max_validators`)**:
+  `验证器效率` 在整轮比赛中仍应高于 90%（今后可根据统计数据更改这一数字）。目前，不会应用惩罚，但在未来的更新中可能会有所改变。
+
+- **The user is not a validator**:
+  不适用处罚，但用户也没有资格获得奖励。无 "验证器效率 "可查。这可能是由于赌注过低或节点配置不正确造成的。此外，请确保 `mytonctrl` 持续运行。
+
+阅读更多关于 `max_validators` 和 `max_main_validators` [配置参数页面](/v3/documentation/network/configs/blockchain-configs#configuration-parameters-for-the-number-of-validators-for-elections)。获取 [mainnet](https://tonviewer.com/config#16) 和 [testnet](https://testnet.tonviewer.com/config#16) 的实际值。
+
+## Pool commands
+
+获取更多信息[在提名者集合页面](/v3/documentation/smart-contracts/contracts-specs/nominator-poor)。
+
+### deposit_to_pool
+
+将指定的 `<amount>` 存入由 `<pool-addr>` 指定的池中
+
+```bash
+MyTonCtrl> deposit_to_pool <pool-addr> <amount>
+```
+
+例如
+
+```bash
+MyTonCtrl> deposit_to_pool kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX 1
+```
+
+### withdraw_from_pool
+
+从 `<pool-addr>` 指定的池中提取指定的 `<amount>`。
+
+```bash
+MyTonCtrl> withdraw_from_pool <pool-addr> <amount>
+```
+
+例如
+
+```bash
+MyTonCtrl> withdraw_from_pool kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX 1
+```
+
+### cleanup
+
+无参数，清理验证器数据库
+
+### benchmark
+
+无参数，打印包含多个测试的表格
+
+## Single pool
+
+获取更多信息[在单个提名者集合页面](/v3/documentation/smart-contracts/contracts-specs/nominator-poor)。
+
+### new_single_pool
+
+使用指定的 `<pool-name>` 和 `<owner-address>` 创建一个新的单机池。
+
+```bash
+MyTonCtrl> new_single_pool <pool-name> <owner-address>
+```
+
+例如
+
+```bash
+MyTonCtrl> new_single_pool name kf9tZrL46Xjux3ZqvQFSgQkOIlteJK52slSYWbasqtOjrKUT
+```
+
+### activate_single_pool
+
+激活由 `<pool-name>` 指定的单池
+
+```bash
+MyTonCtrl> activate_single_pool <pool-name> # pool name from above
+```
+
+## 钱包管理
+
+### 导入钱包
+
+MyTonCtrl 支持各种类型的类钱包合约，包括 wallet-v1、wallet-v3、[lockup-wallet](https://github.com/ton-blockchain/lockup-wallet-contract/tree/main/universal) 等。通常，它提供了与这些合约交互的直接方法。
+
+#### 使用私人密钥导入
+
+如果您可以访问私人密钥，就可以轻松导入钱包：
+
+```bash
+MyTonCtrl> iw <wallet-addr> <wallet-secret-key>
+```
+
+这里，`<wallet-secret-key>` 是 base64 格式的私人密钥。
+
+例如
+
+```bash
+MyTonCtrl> iw kf9tZrL46Xjux3ZqvQFSgQkOIlteJK52slSYWbasqtOjrKUT AAAH++/ve+/vXrvv73vv73vv73vv71DWu+/vWcpA1E777+92Ijvv73vv70iV++/ve+/vUTvv70d77+9UFjvv71277+9bO+/ve+/vXgzdzzvv71i77+977+9CjLvv73vv73vv71i77+9Bu+/vV0oJe+/ve+/vUPvv73vv73vv70=
+```
+
+#### 使用助记词组导入
+
+如果您有一个记忆短语（由 24 个单词组成的序列，如 `tattoo during ...`），请按照以下步骤操作：
+
+1. 安装 Node.js。
+2. 克隆并安装 [mnemonic2key](https://github.com/ton-blockchain/mnemonic2key)：
+   ```
+   git clone https://github.com/ton-blockchain/mnemonic2key.git
+   cd mnemonic2key
+   npm install
+   ```
+3. 运行以下命令，将 `word1`, `word2`... 替换为您的记忆短语，将 `address` 替换为您的钱包合约地址：
+   ```
+   node index.js word1 word2 ... word24 [address]
+   ```
+4. 脚本将生成 `wallet.pk` 和 `wallet.addr`。将它们重命名为 `imported_wallet.pk` 和 `imported_wallet.addr`。
+5. 将这两个文件复制到 `~/.local/share/mytoncore/wallets/` 目录。
+6. 打开 mytonctrl 控制台，使用 `wl` 命令列出钱包。
+7. 确认钱包已导入并显示正确余额。
+8. 现在可以使用 `mg` 命令发送资金。输入 `mg` 查看帮助文档。
+   运行命令时，请记住用实际值替换占位符（`< >`内的单词）。
+
+### 显示钱包列表
+
+```bash
+MyTonCtrl> wl
+```
+
+![](/img/docs/mytonctrl/wl.png)
+
+### 创建新的本地钱包
+
+您还可以创建新的空钱包：
+
+```bash
+MyTonCtrl> nw <workchain-id> <wallet-name> [<version> <subwallet>]
+```
+
+例如
+
+```bash
+MyTonCtrl> nw 0 name v3 # by default subwallet is 0x29A9A317 + workchain
+```
+
+### 激活本地钱包
+
+如果要使用钱包，必须激活它：
+
+```bash
+MyTonCtrl> aw <wallet-name>
+```
+
+但在激活之前，请先向钱包发送 1 通币：
+
+```bash
+MyTonCtrl> wl
+Name                  Status  Balance           Ver  Wch  Address
+validator_wallet_001  active  994.776032511     v1   -1   kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
+wallet_004            uninit  0.0               v1   0    0QBxnZJq4oHVFs4ban3kJ5qllM1IQo57lIx8QP69Ue9A6Kbs
+
+MyTonCtrl> mg validator_wallet_001 0QBxnZJq4oHVFs4ban3kJ5qllM1IQo57lIx8QP69Ue9A6Kbs 1
+```
+
+然后激活它：
+
+```bash
+MyTonCtrl> aw wallet_004
+ActivateWallet - OK
+
+MyTonCtrl> wl
+Name                  Status  Balance           Ver  Wch  Address
+validator_wallet_001  active  994.776032511     v1   -1   kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
+wallet_004            active  0.998256399       v1   0    kQBxnZJq4oHVFs4ban3kJ5qllM1IQo57lIx8QP69Ue9A6Psp
+```
+
+### 获取钱包序列号
+
+```bash
+MyTonCtrl> seqno <wallet-name>
+```
+
+![](/img/docs/mytonctrl/nw.png)
+
+### 设置钱包版本
+
+如果使用的是交互方式与普通钱包类似的修改过的钱包，则需要使用该命令。
+
+```bash
+MyTonCtrl> swv <wallet-addr> <wallet-version>
+```
+
+例如
+
+```bash
+MyTonCtrl> swv kf9tZrL46Xjux3ZqvQFSgQkOIlteJK52slSYWbasqtOjrKUT v3
+```
+
+### 导出钱包
+
+可以获得某个钱包地址和密匙。
+
+```bash
+MyTonCtrl> ew <wallet-name>
+```
+
+![](/img/docs/mytonctrl/ew.png)
+
+### 删除本地钱包
+
+```bash
+MyTonCtrl> dw <wallet-name>
+```
+
+![](/img/docs/mytonctrl/dw.png)
+
+## 账户和交易命令
+
+### 账户状态
+
+要查看账户状态及其交易历史，请使用以下命令：
+
+```bash
+MyTonCtrl> vas <account-addr> # for example you can get address of validator wallet by wl command and use vas to get more information
+```
+
+![](/img/docs/mytonctrl/vas.png)
+
+### 账户历史
+
+要查看账户交易历史，请使用以下命令，并将列出的操作次数设为 "限制"：
+
+```bash
+MyTonCtrl> vah <account-addr> <limit> # limit is just unsigned integer number
+```
+
+![](/img/docs/mytonctrl/vah.png)
+
+### 转移代币
+
+将代币从本地钱包转入账户：
+
+```bash
+MyTonCtrl> mg <wallet-name> <account-addr | bookmark-name> <amount>
+```
+
+例如
+
+```bash
+MyTonCtrl> mg wallet_004 kQBxnZJq4oHVFs4ban3kJ5qllM1IQo57lIx8QP69Ue9A6Psp 1
+```
+
+:::caution
+传输不支持钱包版本 `v4`
+:::
+
+### 通过代理转移代币
+
+通过代理将代币从本地钱包转入账户：
+
+```bash
+MyTonCtrl> mgtp <wallet-name> <account-addr | bookmark-name> <amount>
+```
+
+例如
+
+```bash
+MyTonCtrl> mgtp wallet_004 kQBxnZJq4oHVFs4ban3kJ5qllM1IQo57lIx8QP69Ue9A6Psp 1
+```
+
+## 通用池命令
+
+在 **MyTonCtrl** 中有两种集合：
+
+1. [提名池](/v3/documentation/smart-contracts/contracts-specs/nominator-pool)
+2. [单一提名池](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool)
+
+所有这些都由以下命令集进行管理：
+
+### 池列表
+
+```bash
+MyTonCtrl> pools_list
+```
+
+![](/img/docs/mytonctrl/test-pools-list.png)
+
+### 删除池
+
+```bash
+MyTonCtrl> delete_pool <pool-name>
+```
+
+### 导入池
+
+您可以在本地池列表中创建已创建的池：
+
+```bash
+MyTonCtrl> import_pool <pool-name> <pool-addr>
+```
+
+例如
+
+```bash
+MyTonCtrl> import_pool name kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX
+```
+
+## 书签 (Bookmarks)
+
+您可以为账户地址创建别名（书签），以简化使用。
+
+### 创建新书签
+
+```bash
+MyTonCtrl> nb <bookmark-name> <account-addr | domain-name>
+```
+
+![](/img/docs/mytonctrl/nb.png)
+
+### 显示书签列表
+
+```bash
+MyTonCtrl> bl
+```
+
+![](/img/docs/mytonctrl/bl.png)
+
+### 删除书签
+
+```bash
+MyTonCtrl> db <bookmark-name> <bookmark-type>
+```
+
+![](/img/docs/mytonctrl/db.png)
+
+## 其他 mytonctrl 命令
+
+### ol
+
+显示提议列表
+
+| Format name         | Format                  | Description                                                                                        |
+| ------------------- | ----------------------- | -------------------------------------------------------------------------------------------------- |
+| No arguments        | `ol`                    | 打印已缩减哈希值的表格。                                                                                       |
+| JSON output         | `ol --json`             | 打印 `data` 的 JSON 表示。                                                                               |
+| Full hash output    | `ol hash`               | 打印包含完整哈希值的表格。                                                                                      |
+| JSON with full hash | `ol --json hash`        | 打印 `data` 的 JSON 表示形式。在这种情况下，"hash "参数不起作用。                                                        |
+
+### od
+
+读取提议差异
+
+```bash
+MyTonCtrl> od [offer-hash]
+```
+
+### el
+
+显示选举条目列表
+
+| Format name                       | Format                              | Description                                                                    |
+| --------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------ |
+| No arguments                      | `el`                                | 打印已减少 ADNL、Pubkey 和 Wallet 的表格。                                                |
+| Any combination of following args | `el --json adnl pubkey wallet past` | 以 JSON 表示的完整 ADNL、Pubkey、钱包和过去的选举条目。                                           |
+
+每个 arg 的说明：
+
+- \--json：打印数据的 JSON 表示形式。
+- past：包括过去的选举条目。
+- adnl：打印完整的 ADNL。
+- pubkey：打印完整的 Pubkey。
+- wallet：打印完整的钱包。
+
+### vl
+
+显示激活的验证器
+
+| Format name                        | Format                                 | Description                                                                    |
+| ---------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------ |
+| No arguments                       | `vl`                                   | 打印已减少 ADNL、Pubkey 和 Wallet 的表格。                                                |
+| 以下参数的任意组合                          | `vl --json adnl pubkey wallet past`    | 以 JSON 表示的完整 ADNL、Pubkey、钱包和过去的验证器条目。                                          |
+
+每个 arg 的说明：
+
+- \--json：打印数据的 JSON 表示形式。
+- past：包括过去的验证条目。
+- adnl：打印完整的 ADNL。
+- pubkey：打印完整的 Pubkey。
+- wallet：打印完整的钱包。
+- offline：不包括在线验证器。
+
+### cl
+
+显示投诉列表
+
+| Format name                       | Format                | Description                                                                                                      |
+| --------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| No arguments                      | `cl`                  | 打印减少 ADNL 的表格。                                                                                                   |
+| 以下参数的任意组合                         | `cl --json adnl past` | 完整的 ADNL，包括以 JSON 表示的以往投诉。                                                                                       |
+
+每个参数的说明：
+
+- \--json：打印数据的 JSON 表示形式。
+- past：包括过去的投诉。
+- adnl：打印完整的 ADNL。
+
+## Installer
+
+本节介绍 "installer "子控制台，可通过命令
+
+```bash
+MyTonCtrl> installer
+```
+
+例如
+
+![img.png](/img/docs/mytonctrl/installer.png)
+
+可直接从 MyTonCtrl 控制台调用所有命令
+
+```bash
+MyTonCtrl> installer [command] [args]
+```
+
+### help
+
+打印所有可用命令
+
+### clear
+
+清除终端
+
+### exit
+
+退出 mytoninstaller 终端
+
+### status
+
+打印服务状态（全节点、Mytoncore、V.console、Liteserver）和节点参数
+
+### set_node_argument
+
+| Format name        | Format                                      | Description                                                                                        |
+| ------------------ | ------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| 添加或替换参数            | `set_node_argument [-ARG_NAME] [ARG_VALUE]` | 添加参数或替换已存在的参数值。-ARG_NAME "必须以"-"或"--"开头                                                            |
+| 删除参数               | `set_node_argument [-ARG_NAME] -d`          | 从列表中删除参数。                                                                                          |
+
+可能的参数：
+
+| Node argument name | Description                                                                                                                                                          | Default value                                                                       |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `threads`          | 线程数                                                                                                                                                                  | `cpus count - 1`                                                                    |
+| `daemonize`        |                                                                                                                                                                      | No value                                                                            |
+| `global-config`    | 全局配置路径                                                                                                                                                               | `/usr/bin/ton/global.config.json`                                                   |
+| `db`               | 数据库路径                                                                                                                                                                | `/var/ton-work/db/`                                                                 |
+| `logname`          | 日志路径                                                                                                                                                                 | `/var/ton-work/log`                                                                 |
+| `state-ttl`        | 节点保留的区块链状态的 ttl                                                                                                                                                      | 3600                                                                                |
+| `archive-ttl`      | 节点存储块的 ttl。_要强制节点不存储归档块，请使用值 `86400`_                                                                                                                                | 如果在安装过程中启用了 liteserver 模式，则为 2592000，否则为 86400                                      |
+
+例如
+
+```bash
+MyTonInstaller> set_node_argument --state-ttl 3601
+```
+
+例如
+
+```bash
+MyTonInstaller> set_node_argument --state-ttl 3601
+```
+
+### enable
+
+启用其中一种模式，为 `ton-http-api` 创建配置
+
+```bash
+MyTonInstaller> enable <MODE_NAME>
+```
+
+模式可以有以下名称
+
+- FN - 完整节点
+- VC - 验证器控制台
+- LS - 精简型服务器
+- DS - DHT 服务器
+- JR - Jsonrpc
+- THA - TON HTTP API
+- LSP - ls 代理
+- TSP - TON 存储 + TON 存储提供商
+
+例如
+
+```bash
+MyTonInstaller> enable FN
+```
+
+### update
+
+与 mytoninstaller 的 `enable` 相同
+
+```bash
+MyTonInstaller> update FN
+```
+
+### plsc
+
+打印 liteserver 配置
+
+例如
+
+```json
+{
+    "ip": 1111111111,
+    "port": 11111,
+    "id": {
+        "@type": "pub.ed25519",
+        "key": "UURGaaZZjsBbKHvnrBqslHerXYbMCVDKdswKNJvAHkc="
+    }
+}
+```
+
+### clcf
+
+创建本地配置文件（默认情况下位于 `/usr/bin/ton/local.config.json`）。
+
+### print_ls_proxy_config
+
+打印 ls 代理配置
+
+### create_ls_proxy_config_file
+
+目前在开发阶段不做任何事
+
+### drvcf
+
+危险恢复验证器配置文件
+
+### setwebpass
+
+无参数。为网络管理界面设置密码，运行 `python3 /usr/src/mtc-jsonrpc/mtc-jsonrpc.py -p`。
+
+## 另请参见
+
+- [FAQ](/v3/guidelines/nodes/faq)
+- [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
