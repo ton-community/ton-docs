@@ -16,8 +16,7 @@ borderRadius: '2px',
 color: '#4a080b',
 padding: '0.2rem',
 }}>
-{children}
-</span>
+{children} </span>
 );
 
 <Highlight color="#ffeced">保护智能合约免受与外部消息相关的重放攻击的最简单方法</Highlight> 是在智能合约的持久数据中存储一个 32 位计数器 `cur-seqno`，并在任何入站外部消息的（已签名部分）中获取一个 `req-seqno` 值。然后只有在签名有效且 `req-seqno` 等于 `cur-seqno` 时，才接受外部消息。在成功处理后，持久数据中的 `cur-seqno` 值增加一，因此<Highlight color="#ffeced">相同的外部消息将不再被接受</Highlight>。
