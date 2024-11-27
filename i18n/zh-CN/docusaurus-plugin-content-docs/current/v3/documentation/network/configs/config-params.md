@@ -296,7 +296,7 @@ result:  [ [1586779536 0 [8 C{FDCD887EAF7ACB51DA592348E322BBC0BD3F40F9A801CB6792
 - 之后，投票请求必须由当前验证器的私钥签名，使用与验证器连接的`validator-engine-console`中的`sign<validator-key-id> 566F744...28A1`。这一过程与 [Validator-HOWTO](/v3/guidelines/nodes/running-nodes/validator-node) 中描述的参与验证器选举的过程类似，但这次必须使用当前激活的密钥。
 - 接下来，需要调用另一个脚本 `config-proposal-signed.fif`。它的参数与 `config-proposal-req.fif` 类似，但它需要两个额外的参数：用于签署投票请求的公钥的 base64 表示和签名本身的 base64 表示。同样，这与 [Validator-HOWTO](/v3/guidelines/nodes/running-nodes/validator-node) 中描述的过程非常相似。
 - 这样，就创建了包含内部信息正文的`vote-msg-body.boc`文件，其中包含对该配置提案的签名投票。
-- 之后，`vote-msg-body.boc` 必须从驻留在主链上的任何智能合约（通常，将使用验证者的控制智能合约）的内部消息中携带，以及少量的通币用于处理（通常，1.5 通币就足够了）。这与验证器选举过程中使用的程序完全类似。这通常是通过运行来实现的：
+- 之后，`vote-msg-body.boc` 必须从驻留在主链上的任何智能合约（通常，将使用验证者的控制智能合约）的内部消息中携带，以及少量的 Toncoin 用于处理（通常，1.5  Toncoin 就足够了）。这与验证器选举过程中使用的程序完全类似。这通常是通过运行来实现的：
 
 ```
 $ fift -s wallet.fif my_wallet_id -1:5555555555555555555555555555555555555555555555555555555555555555 1 1.5 -B vote-msg-body.boc
