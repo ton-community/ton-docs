@@ -66,7 +66,7 @@ block_info#9bc7a987 version:uint32
 | `flags`                         | (## 8)                    | 区块的附加标志位。                             |
 | `seq_no`                        | #                                            | 与区块相关的序列号。                            |
 | `vert_seq_no`                   | #                                            | 与区块相关的垂直序列号。                          |
-| `shard`                         | ShardIdent                                   | 该块所属分区的标识符。                           |
+| `shard`                         | ShardIdent                                   | 该块所属分片的标识符。                           |
 | `gen_utime`                     | uint32                                       | 区块的生成时间。                              |
 | `start_lt`                      | uint64                                       | 与区块相关的起始逻辑时间。                         |
 | `end_lt`                        | uint64                                       | 与区块相关的逻辑结束时间。                         |
@@ -120,10 +120,10 @@ value_flow#b8e48dfb ^[ from_prev_blk:CurrencyCollection
 
 | Field      | Type                      | Description    |
 | ---------- | ------------------------- | -------------- |
-| `old_hash` | bits256                   | 分块状态的旧散列值。     |
+| `old_hash` | bits256                   | 分片状态的旧散列值。     |
 | `new_hash` | bits256                   | 分片状态的新散列值。     |
-| `old`      | [ShardState](#shardstate) | 分块的旧状态。存储在引用中。 |
-| `new`      | [ShardState](#shardstate) | 分块的新状态。存储在引用中。 |
+| `old`      | [ShardState](#shardstate) | 分片的旧状态。存储在引用中。 |
+| `new`      | [ShardState](#shardstate) | 分片的新状态。存储在引用中。 |
 
 ### ShardState
 
@@ -160,17 +160,17 @@ shard_state#9023afe2 global_id:int32
 | `shard_id`             | ShardIdent                                                                          | Yes      | 分片的标识符。                                       |
 | `seq_no`               | uint32                                                                              | Yes      | 与此分片链相关的最新序列号。                                |
 | `vert_seq_no`          | #                                                                                   | Yes      | 与此分片链相关的最新垂直序列号。                              |
-| `gen_utime`            | uint32                                                                              | Yes      | 与创建碎片相关的生成时间。                                 |
+| `gen_utime`            | uint32                                                                              | Yes      | 与创建分片相关的生成时间。                                 |
 | `gen_lt`               | uint64                                                                              | Yes      | 与创建分片相关的逻辑时间。                                 |
 | `min_ref_mc_seqno`     | uint32                                                                              | Yes      | 最新引用的主链区块的序列号。                                |
-| `out_msg_queue_info`   | OutMsgQueueInfo                                                                     | Yes      | 有关此分区的输出消息队列的信息。存储在引用中。                       |
+| `out_msg_queue_info`   | OutMsgQueueInfo                                                                     | Yes      | 有关此分片的输出消息队列的信息。存储在引用中。                       |
 | `before_split`         | ## 1                                                                                | Yes      | 表示是否会在该分片链的下一个区块中进行拆分的标志。                     |
-| `accounts`             | ShardAccounts                                                                       | Yes      | 分块中账户的状态。存储在引用中。                              |
+| `accounts`             | ShardAccounts                                                                       | Yes      | 分片中账户的状态。存储在引用中。                              |
 | `overload_history`     | uint64                                                                              | Yes      | 分片过载事件的历史记录。通过分片实现负载平衡。                       |
 | `underload_history`    | uint64                                                                              | Yes      | 分片负载不足事件的历史记录。用于通过分片实现负载平衡。                   |
-| `total_balance`        | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Yes      | 碎片的总余额。                                       |
-| `total_validator_fees` | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Yes      | 碎片的验证器总费用。                                    |
-| `libraries`            | HashmapE 256 LibDescr                                                               | Yes      | 该分块中库描述的哈希表。目前仅在主链中为非空。                       |
+| `total_balance`        | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Yes      | 分片的总余额。                                       |
+| `total_validator_fees` | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Yes      | 分片的验证器总费用。                                    |
+| `libraries`            | HashmapE 256 LibDescr                                                               | Yes      | 该分片中库描述的哈希表。目前仅在主链中为非空。                       |
 | `master_ref`           | BlkMasterInfo                                                                       | No       | 主数据块信息的引用。                                    |
 | `custom`               | McStateExtra                                                                        | No       | 分片状态的自定义额外数据。该字段仅在主链中存在，包含所有特定于主链的数据。存储在引用中。  |
 
@@ -178,8 +178,8 @@ shard_state#9023afe2 global_id:int32
 
 | Field   | Type                                        | Description     |
 | ------- | ------------------------------------------- | --------------- |
-| `left`  | [ShardStateUnsplit](#shardstate-unsplitted) | 左侧分块的状态。存储在引用中。 |
-| `right` | [ShardStateUnsplit](#shardstate-unsplitted) | 右侧分块的状态。存储在引用中。 |
+| `left`  | [ShardStateUnsplit](#shardstate-unsplitted) | 左侧分片的状态。存储在引用中。 |
+| `right` | [ShardStateUnsplit](#shardstate-unsplitted) | 右侧分片的状态。存储在引用中。 |
 
 ## extra:^BlockExtra
 
@@ -222,8 +222,8 @@ masterchain_block_extra#cca5
 | Field                 | Type                            | Required | Description                            |
 | --------------------- | ------------------------------- | -------- | -------------------------------------- |
 | `key_block`           | ## 1                            | Yes      | 指示区块是否为关键区块的标志。                        |
-| `shard_hashes`        | ShardHashes                     | Yes      | 相应分块链最新区块的哈希值。                         |
-| `shard_fees`          | ShardFees                       | Yes      | 从该区块所有分块收取的费用总额。                       |
+| `shard_hashes`        | ShardHashes                     | Yes      | 相应分片链最新区块的哈希值。                         |
+| `shard_fees`          | ShardFees                       | Yes      | 从该区块所有分片收取的费用总额。                       |
 | `prev_blk_signatures` | HashmapE 16 CryptoSignaturePair | Yes      | 上一个街区的签名。                              |
 | `recover_create_msg`  | InMsg                           | No       | 与收回额外货币有关的信息（如果有）。存储在引用中。              |
 | `mint_msg`            | InMsg                           | No       | 与铸造额外货币有关的信息（如果有）。存储在引用中。              |
