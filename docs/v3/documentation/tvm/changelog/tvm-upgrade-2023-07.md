@@ -287,6 +287,6 @@ Currently it is difficult to calculate cost of sending message in contract (whic
 
 The upgrade to the TON Virtual Machine (TVM) were analyzed for security and potential vulnerabilities.
 
-- **Audit Firm**: Trail of Bits
-- **Audit Report**:
-  - [Trail of Bits Audit Report - TVM Upgrade](https://docs.ton.org/audits/TVM_Upgrade_ToB_2023.pdf)
+**Audit Firm**: Trail of Bits  
+**Audit Report**:
+- [Trail of Bits Audit Report - TVM Upgrade](https://docs.ton.org/audits/TVM_Upgrade_ToB_2023.pdf)

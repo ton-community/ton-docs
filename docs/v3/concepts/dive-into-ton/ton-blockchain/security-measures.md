@@ -6,7 +6,7 @@ The security of the TON Blockchain ecosystem is of utmost importance. Below is a
 
 The core blockchain modules were audited to ensure the robustness and security.
 
-**Audit Firms**: Trail of Bits, SlowMist, CertiK
+**Audit Firms**: Trail of Bits, SlowMist, CertiK  
 **Audit Reports**:
 - [Trail of Bits: TON Blockchain Audit Report](https://docs.ton.org/audits/TON_Blockchain_ToB.pdf)
 - [SlowMist: TON Blockchain Audit Report](https://docs.ton.org/audits/TON_Blockchain_SlowMist.pdf)
@@ -17,7 +17,7 @@ The core blockchain modules were audited to ensure the robustness and security.
 
 Zellic conducted a security assessment for TON from October 16th to November 17th, 2023. During this engagement, Zellic reviewed Tonlib’s code for security vulnerabilities, design issues, and general weaknesses in security posture.
 
-**Audit Firm**: Zellic
+**Audit Firm**: Zellic  
 **Audit Report**:
 - [Zellic: Audit Report](https://docs.ton.org/audits/TON_Blockchain_tonlib_Zellic.pdf)
 
@@ -25,7 +25,7 @@ Zellic conducted a security assessment for TON from October 16th to November 17t
 
 The TON Virtual Machine and the Fift programming language.
 
-**Audit Firm**: Trail of Bits
+**Audit Firm**: Trail of Bits  
 **Audit Report**:
 - [Trail of Bits Audit Report - TVM & Fift](https://docs.ton.org/audits/TVM_and_Fift_ToB.pdf)
 
@@ -33,7 +33,7 @@ The TON Virtual Machine and the Fift programming language.
 
 TVM Upgrade 2023.07  were analyzed for security and potential vulnerabilities.
 
-**Audit Firm**: Trail of Bits
+**Audit Firm**: Trail of Bits  
 **Audit Report**:
 - [Trail of Bits Audit Report - TVM Upgrade](https://docs.ton.org/audits/TVM_Upgrade_ToB_2023.pdf)
 
