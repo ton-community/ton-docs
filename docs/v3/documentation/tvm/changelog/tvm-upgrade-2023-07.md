@@ -281,3 +281,12 @@ Currently it is difficult to calculate cost of sending message in contract (whic
 
 - `SENDMSG` takes a cell and mode as input. Creates an output action and returns a fee for creating a message. Mode has the same effect as in the case of SENDRAWMSG. Additionally `+1024` means - do not create an action, only estimate fee. Other modes affect the fee calculation as follows: `+64` substitutes the entire balance of the incoming message as an outgoing value (slightly inaccurate, gas expenses that cannot be estimated before the computation is completed are not taken into account), `+128` substitutes the value of the entire balance of the contract before the start of the computation phase (slightly inaccurate, since gas expenses that cannot be estimated before the completion of the computation phase are not taken into account).
 - `SENDRAWMSG`, `RAWRESERVE`, `SETLIBCODE`, `CHANGELIB` - `+16` flag is added, that means in the case of action fail - bounce transaction. No effect if `+2` is used.
+
+
+## Security Audits
+
+The upgrade to the TON Virtual Machine (TVM) were analyzed for security and potential vulnerabilities.
+
+- **Audit Firm**: Trail of Bits
+- **Audit Report**:
+  - [Trail of Bits Audit Report - TVM Upgrade](https://docs.ton.org/audits/TVM_Upgrade_ToB_2023.pdf)

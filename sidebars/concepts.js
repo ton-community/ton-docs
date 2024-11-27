@@ -32,6 +32,7 @@ module.exports = [
       'v3/concepts/dive-into-ton/ton-blockchain/ton-networking',
       'v3/concepts/dive-into-ton/ton-blockchain/sharding',
       'v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison',
+      'v3/concepts/dive-into-ton/ton-blockchain/security-measures',
     ],
   },
   {
