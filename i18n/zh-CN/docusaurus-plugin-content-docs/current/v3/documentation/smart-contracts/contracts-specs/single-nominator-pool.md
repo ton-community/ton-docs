@@ -53,7 +53,7 @@ pCrmnqx2/+DkUtPU8T04ehTkbAGlqtul/B2JPmxx9bo=
 
 - 即使 *Validator* 钱包被入侵，*Owner* 也可以告诉 *SingleNominator* 更改验证器地址。这将阻止攻击者与 *SingleNominator* 进一步交互。这里不存在竞赛条件，*Owner* 始终优先。
 
-- *SingleNominator* 余额仅持有本金赌注资金 - 其余额不用于支付 gas 费。进入选举周期的 gas 费存放在 *Validator* 钱包中。这可以防止入侵验证器的攻击者通过瓦斯支出攻击耗尽本金。
+- *SingleNominator* 余额仅持有本金赌注资金 - 其余额不用于支付 gas 费。进入选举周期的 gas 费存放在 *Validator* 钱包中。这可以防止入侵验证器的攻击者通过 gas 支出攻击耗尽本金。
 
 - *SingleNominator* 验证*Validator*给出的所有操作格式，确保不会将无效信息转发给*Elector*。
 
@@ -89,7 +89,7 @@ pCrmnqx2/+DkUtPU8T04ehTkbAGlqtul/B2JPmxx9bo=
 
 ![image](/img/nominator-pool/restricted-wallet.png)
 
-受限钱包未经维护（已被提名人池取代），存在尚未解决的攻击向量，如瓦斯流失攻击。由于同一个钱包的余额中既有瓦斯费也有赌注本金，攻击者如果泄露了私钥，就会产生交易，造成重大本金损失。此外，由于 seqno 碰撞，攻击者和所有者在尝试提款时会出现竞赛条件。
+受限钱包未经维护（已被提名人池取代），存在尚未解决的攻击向量，如 gas 流失攻击。由于同一个钱包的余额中既有 gas 费也有赌注本金，攻击者如果泄露了私钥，就会产生交易，造成重大本金损失。此外，由于 seqno 碰撞，攻击者和所有者在尝试提款时会出现竞赛条件。
 
 ---
 
