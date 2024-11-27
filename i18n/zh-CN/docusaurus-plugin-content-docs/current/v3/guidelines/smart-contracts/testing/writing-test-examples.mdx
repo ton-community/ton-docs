@@ -444,7 +444,7 @@ TVM是[堆栈机](/learn/tvm-instructions/tvm-overview#tvm-is-a-stack-machine)�
 
 ### Compute Phase | exit code = 3
 
-任何代码在执行前都变成了`continuation`。这是一种特殊的数据类型，包含有代码的切片、堆栈、寄存器和其他执行代码所需的数据。如果需要，这种continuation可以在稍后运行，来传递开始执行堆栈的必要参数。
+任何代码在执行前都变成了`continuation`。这是一种特殊的数据类型，包含有代码的 slice 、堆栈、寄存器和其他执行代码所需的数据。如果需要，这种continuation可以在稍后运行，来传递开始执行堆栈的必要参数。
 
 首先，我们[构建](https://github.com/ton-community/fireworks-func/blob/ef49b4da12d287a8f6c2b6f0c19d65814c1578fc/contracts/fireworks.fc#L31-L32)这样的continuation。在这种情况下，这只是一个空的continuation，什么也不做。接下来，使用操作码`0 SETNUMARGS`，我们指示在执行开始时堆栈中不应有值。然后，使用操作码`1 -1 SETCONTARGS`，我们调用continuation，传递1个值。由于本来应该没有值，因此我们得到了StackOverflow错误。
 
@@ -482,11 +482,11 @@ TVM是[堆栈机](/learn/tvm-instructions/tvm-overview#tvm-is-a-stack-machine)�
 
 ### Compute Phase | exit code = 8
 
-TON 中的所有数据都存储在 [cells](/develop/data-formats/cell-boc#cell) 中。一个单元格可存储 1023 位数据和 4 个指向其他单元格的引用。如果尝试写入超过 1023 位的数据或超过 4 个引用，将抛出 exit code 8。
+TON 中的所有数据都存储在 [cells](/develop/data-formats/cell-boc#cell) 中。一个 cell 可存储 1023 位数据和 4 个指向其他 cell 的引用。如果尝试写入超过 1023 位的数据或超过 4 个引用，将抛出 exit code 8。
 
 ### Compute Phase | exit code = 9
 
-如果尝试从切片中读取比它包含的更多数据（从cell中读取数据时，必须将其转换为切片数据类型），则抛出exit code 9。例如，如果切片中有10位，而读取了11位，或者如果没有对其他引用的链接，但尝试加载引用。
+如果尝试从 slice 中读取比它包含的更多数据（从cell中读取数据时，必须将其转换为 slice 数据类型），则抛出exit code 9。例如，如果 slice 中有10位，而读取了11位，或者如果没有对其他引用的链接，但尝试加载引用。
 
 ### Compute Phase | exit code = 10
 
