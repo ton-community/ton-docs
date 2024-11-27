@@ -266,6 +266,6 @@ slice prev_owner_address = in_msg_body~load_msg_addr();
 - `throw_unless(500, equal_slices(sender_address, nft_address));` - 用于验证发送者确实是应该通过合约转移的 NFT。从智能合约解析 NFT 数据相当困难，因此在大多数情况下，NFT 地址在合约创建时预定义。
 - `int op = in_msg_body~load_uint(32);` - 加载消息 OP 代码。
 - `throw_unless(501, op == op::ownership_assigned());` - 确保接收的 OP 代码与所有权分配的常量值匹配。
-- `slice prev_owner_address = in_msg_body~load_msg_addr();` - 从传入消息体中提取的前所有者地址，并加载到 `prev_owner_address` 切片变量中。如果前所有者选择取消合约并将 NFT 归还给他们，这一点可能很有用。
+- `slice prev_owner_address = in_msg_body~load_msg_addr();` - 从传入消息体中提取的前所有者地址，并加载到 `prev_owner_address`  slice 变量中。如果前所有者选择取消合约并将 NFT 归还给他们，这一点可能很有用。
 
 现在我们已经成功地解析并验证了通知消息，我们可以继续我们的业务逻辑，这用于启动销售智能合约（它旨在处理 NFT 物品业务销售过程，例如 NFT 拍卖，如 getgems.io）
