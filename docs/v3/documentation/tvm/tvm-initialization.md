@@ -2,7 +2,6 @@
 
 :::info
 To maximize your comprehension of this page, familiarizing yourself with the [TL-B language](/v3/documentation/data-formats/tlb/cell-boc) is highly recommended.
-* [TVM Debugger](https://github.com/krigga/tvm-debugger-example)
 * [TVM Retracer](https://retracer.ton.org/)
 :::
 
