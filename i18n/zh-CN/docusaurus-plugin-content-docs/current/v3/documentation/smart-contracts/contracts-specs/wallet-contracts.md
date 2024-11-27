@@ -178,12 +178,12 @@ Before we start, there are some terms and concepts that you should be familiar w
    - <b>(0-4)messages</b>：包含信息的 cell 的最多四个引用。
 2. op-code = 0x1，部署并安装插件。
    - <b>workchain</b>：8 位长整数。
-   - <0> balance </0>：VARUINT16 顿币 初始余额。
+   - <0> balance </0>：VARUINT16  Toncoin  初始余额。
    - <b>state-init</b>：包含插件初始状态的 cell 引用。
    - <b>body</b>：包含正文的 cell 引用。
 3. op-code = 0x2/0x3，安装插件/删除插件。
    - <b>wc_n_address</b>：8 位长工作链 ID + 256 位长插件地址。
-   - <b>balance</b>：VARUINT16 顿币 初始余额的金额。
+   - <b>balance</b>：VARUINT16  Toncoin  初始余额的金额。
    - <b>query-id</b>：64 位长整数。
 
 如您所见，第四个版本仍通过 `0x0` 操作码提供标准功能，与之前的版本类似。`0x2` 和 `0x3` 操作允许对插件字典进行操作。请注意，在使用 `0x2` 的情况下，您需要自行部署具有该地址的插件。相比之下，`0x1` 操作码还可通过 state_init 字段处理部署过程。
@@ -220,7 +220,7 @@ If `state_init` doesn't make much sense from its name, take a look at the follow
 
 它是目前最先进的钱包版本，由 Tonkeeper 团队开发，旨在取代 V4 并允许任意扩展。
 
-V5 钱包标准提供了许多优势，改善了用户和商家的体验。V5 支持无 gas 交易、账户授权和恢复、使用代币和通币进行订阅支付以及低成本的多笔转账。除了保留以前的功能（V4）外，新合约允许您一次发送多达 255 条信息。
+V5 钱包标准提供了许多优势，改善了用户和商家的体验。V5 支持无 gas 交易、账户授权和恢复、使用代币和 Toncoin 进行订阅支付以及低成本的多笔转账。除了保留以前的功能（V4）外，新合约允许您一次发送多达 255 条信息。
 
 钱包源代码：
 
