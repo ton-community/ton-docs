@@ -1,117 +1,124 @@
-# TVM Initialization
+# TVM 初始化
 
 :::info
 To maximize your comprehension of this page, familiarizing yourself with the [TL-B language](/develop/data-formats/cell-boc) is highly recommended.
 :::
 
-TVM is invoked during the computing phase of ordinary and/or other transactions.
+TVM 在普通和/或其他交易的 Compute Phase 调用。
 
-## Initial state
+## 初始状态
 
-A new instance of TVM is initialized prior to the execution of a smart contract as follows:
+在执行智能合约之前，初始化 TVM 的新实例如下：
 
-- The original **cc** (current continuation) is initialized using the cell slice created from the `code` section of the smart contract. In case of a frozen or uninitialized state of the account, the code must be supplied in the `init` field of the incoming message.
+- 使用从智能合约的 `code` 部分创建的cell slice 初始化原始 **cc**（当前continuation）。如果账户处于冻结或未初始化状态，必须在传入消息的 `init` 字段中提供代码。
 
-- The **cp** (current TVM codepage) is set to the default value, which is 0. If the smart contract wants to use another TVM codepage _x_, then it must switch to it by using `SETCODEPAGE` _x_ as the first instruction of its code.
+- **cp**（当前 TVM codepage）设置为默认值，即 0。如果智能合约想使用另一个 TVM codepage *x*，则必须在其代码的第一条指令中使用 `SETCODEPAGE` *x* 切换到该codepage。
 
-- The **gas** values (_gas limits_) are initialized in accordance to Credit phase results.
+- 按照 Credit Phase 的结果初始化 **gas** 值（_ gas 限制_）。
 
-- The **libraries** (_library context_) computation is [described below](#library-context).
+- 计算 **libraries**（*库 context*）。[下文描述](#library-context)。
 
-- The **stack** initialization process depends on the event which caused the transaction, and its contents are [described below](#stack).
+- **stack** 初始化过程取决于引发交易的事件，其内容在[下文描述](#stack)。
 
-- Control register **c0** (return continuation) is initialized by extraordinary continuation `ec_quit` with parameter 0. When executed, this continuation leads to a termination of TVM with exit code 0.
+- 控制寄存器 **c0**（返回 continuation ）由带有参数 0 的特殊 continuation  `ec_quit` 初始化。执行此 continuation 将导致 TVM 以 exit code  0 终止。
 
-- Control register **c1** (alternative return continuation) is initialized by extraordinary continuation `ec_quit` with parameter 1. When invoked, it leads to a termination of TVM with exit code 1. Notice, that both exit codes 0 and 1 are considered a successful termination of TVM.
+- 控制寄存器 **c1**（备用返回 continuation ）由带有参数 1 的特殊 continuation  `ec_quit` 初始化。当调用时，它导致 TVM 以 exit code  1 终止。请注意， exit code  0 和 1 都被视为 TVM 的成功终止。
 
-- Control register **c2** (exception handler) is initialized by extraordinary continuation `ec_quit_exc`. When invoked, it takes the top integer from the stack (equal to the exception number) and terminates TVM with exit code equal to that integer. This way, by default all exceptions terminate the smart contract execution with exit code equal to the exception number.
+- 控制寄存器 **c2**（异常处理程序）由特殊 continuation  `ec_quit_exc` 初始化。调用时，它从栈顶获取整数（等于异常编号）并以等于该整数的 exit code 终止 TVM。这样， 默认情况下，所有异常都以等于异常编号的 exit code 终止智能合约执行。
 
-- Control register **c3** (code dictionary) is initialized by the cell with the smart contract code like **cc** (current continuation) described above.
+- 控制寄存器 **c3**（代码字典）由类似于上述 **cc**（当前 continuation ）的智能合约代码的cell初始化。
 
-- Control register **c4** (root of persistent data) is initialized by the persistent data of the smart contract, stored in its `data` section. In case of a frozen or uninitialized state of the account, the data must be supplied in the `init` field of the incoming message. Notice, that the persistent data of the smart contract does not need to be loaded in its entirely for this to occur. The root is loaded instead, and TVM may load other cells by their references from the root only when they are accessed, thus providing a form of virtual memory.
+- 控制寄存器 **c4**（持久数据的根）由智能合约的持久数据初始化，存储在其 `data` 部分中。如果账户处于冻结或未初始化状态，必须在传入消息的 `init` 字段中提供数据。请注意，智能合约的持久数据不需要在其全部加载，而是加载根，当引用从根仅在访问时加载时，TVM 可能加载其他cell，从而提供一种虚拟内存形式。
 
-- Control register **c5** (root of actions) is initialized by an empty cell. The "output action" primitives of TVM, such as `SENDMSG`, accumulate _output actions_ (e.g., outbound messages) in this register, to be performed upon successful termination of the smart contract. The TL-B scheme for its serialization is [described below](#control-register-c5)
+- 控制寄存器 **c5**（动作的根）由空cell初始化。TVM 的“输出动作”原语，如 `SENDMSG`，在此寄存器中累积 *输出动作*（例如，出站消息），以在智能合约成功终止后执行。其序列化的 TL-B 方案如下[下文描述](#control-register-c5)。
 
-- Control register **c7** (root of temporary data) is initialized as a tuple and its structure is [described below](#control-register-c7)
+- 控制寄存器 **c7**（临时数据的根）初始化为元组，其结构如下[下文描述](#control-register-c7)。
 
-## Library context
+## 库 context
 
-The _library context_ (library environment) of a smart contract is a hashmap mapping 256-bit cell (representation) hashes into the corresponding cells themselves. When an external cell reference is accessed during the execution of the smart contract, the cell referred to is looked up in the library environment and the external cell reference is transparently replaced by the cell found.
+智能合约的 *库 context*（库环境）是将 256 位cell（表示）哈希映射到相应cell本身的哈希映射。在执行智能合约期间访问外部cell引用时，会在库环境中查找所引用的cell，并通过找到的cell透明地替换外部cell引用。
 
-The library environment for an invocation of a smart contract is computed as follows:
-1. The global library environment for the current workchain is taken from the current state of the masterchain.
-2. Then, it is augmented by the local library environment of the smart contract, stored in the `library` field of the smart contract's state. Only 256-bit keys equal to the hashes of the corresponding value cells are taken into account. If a key is present in both the global and local library environments, the local environment takes precedence in the merge.
-3. Finally, it is augmented by the `library` field of the `init` field of the incoming message (if any). Notice, that if the account is frozen or uninitialized, the `library` field of the message would be used over the local library environment from the previous step. The message library has lower precedence than both the local and the global library environments.
+调用智能合约的库环境计算如下：
 
-Most common way of creating shared libraries for TVM is to publish a reference to the root cell of the library in the masterchain.
+1. 取当前主链状态的当前工作链的全局库环境。
+2. 然后，它由智能合约的本地库环境增强，存储在智能合约状态的 `library` 字段中。仅考虑 256 位密钥等于相应值cell的哈希。如果密钥同时存在于全局和本地库环境中，则本地环境在合并中占优势。
+3. 最后，由传入消息的 `init` 字段（如果有）的 `library` 字段增强。请注意，如果账户处于冻结或未初始化状态，则消息的 `library` 字段将覆盖先前步骤中的本地库环境。消息库的优先级低于本地和全局库环境。
 
-## Stack
+为 TVM 创建共享库的最常见方式是在主链中发布对库的根cell的引用。
 
-Initialization of the TVM stack comes after the formation of the initial state of the TVM, and it depends on the event which caused the transaction:
-- internal message
-- external message
+## 堆栈
+
+TVM 栈的初始化在 TVM 的初始状态形成之后进行，具体取决于引发交易的事件：
+
+- 内部消息
+- 外部消息
 - tick-tock
-- split prepare
-- merge install
+- 拆分准备
+- 合并安装
 
-The last item pushed to the stack is always the _function selector_, which is an _Integer_ that identifies the event that caused the transaction.
+始终推送到栈的最后一个项是 *函数选择器*，它是一个用于标识引发交易的事件的 *Integer*。
 
-### Internal message
+### 内部消息
 
-In case of internal message, the stack is initialized by pushing the arguments to the `main()` function of the smart contract as follows:
-- The balance _b_ of the smart contract (after crediting the value of the inbound message) is passed as an _Integer_ amount of nanotons.
-- The balance _b_<sub>m</sub> of inbound message _m_ is passed as an _Integer_ amount of nanotons.
-- The inbound message _m_ is passed as a cell, which contains a serialized value of type _Message X_, where _X_ is the type of the message body.
-- The body _m_<sub>b</sub> of the inbound message, equal to the value of field body _m_ and passed as a cell slice.
-- The function selector _s_, normally equal to 0.
+在内部消息的情况下，栈通过按以下方式推送到智能合约的 `main()` 函数的参数来初始化：
 
-After that, the code of the smart contract, equal to its initial value of **c3**, is executed. It selects the correct function according to _s_, which is expected to process the remaining arguments to the function and terminate afterwards.
+- 将智能合约的余额 *b*（将入站消息的值记入后的余额）作为 nanotons 的 *Integer* 金额传递。
+- 将入站消息 *m* 的余额 *b*<sub>m</sub> 作为 nanotons 的 *Integer* 金额传递。
+- 将入站消息 *m* 作为包含类型 *Message X* 的序列化值的cell传递，其中 *X* 是消息体的类型。
+- 将入站消息的主体 *m*<sub>b</sub>，等于字段主体 *m* 的值，并作为cell片传递。
+- 函数选择器 *s*，通常等于 0。
 
-### External message
+之后，智能合约的代码，即其初始值 **c3**，将被执行。根据 *s*，它选择正确的函数来处理函数的其余参数，然后终止。
 
-An inbound external message is processed similarly to the [internal message described above](#internal-message), with the following modifications:
-- The function selector _s_ is set to -1.
-- The balance _b_<sub>m</sub> of inbound message is always 0.
-- The initial current gas limit _g_<sub>l</sub> is always 0. However, the initial gas credit _g_<sub>c</sub> > 0.
+### 外部消息
 
-The smart contract must terminate with _g_<sub>c</sub> = 0 or _g_<sub>r</sub> ≥ _g_<sub>c</sub>; otherwise, the transaction and the block containing it are invalid. Validators or collators suggesting a block candidate must never include transactions processing inbound external messages that are invalid.
+入站外部消息的处理类似于[上述内部消息](#internal-message)，但有以下修改：
 
-### Tick and tock
+- 函数选择器 *s* 设置为 -1。
+- 入站消息的余额 *b*<sub>m</sub> 总是为 0。
+- 初始的当前 gas 限制 *g*<sub>l</sub> 总是为 0。但是，初始 gas 信用 *g*<sub>c</sub> > 0。
 
-In case of tick and tock transactions, the stack is initialized by pushing the arguments to the `main()` function of the smart contract as follows:
-- The balance _b_ of the current account is passed as an _Integer_ amount of nanotons.
-- The 256-bit address of the current account inside the masterchain as an unsigned _Integer_.
-- An integer equal to 0 for tick transactions and to -1 for tock transactions.
-- The function selector _s_, equal to -2.
+智能合约必须以 *g*<sub>c</sub> = 0 或 *g*<sub>r</sub> ≥ *g*<sub>c</sub> 终止；否则，交易及其中包含的块将无效。建议块候选人的验证者或 collator 绝不能包含处理无效的外部传入消息的交易。
 
-### Split prepare
+### Tick 和 Tock
 
-In case of split prepare transaction, the stack is initialized by pushing the arguments to the `main()` function of the smart contract as follows:
-- The balance _b_ of the current account is passed as an _Integer_ amount of nanotons.
-- A _Slice_ containing _SplitMergeInfo_.
-- The 256-bit address of the current account.
-- The 256-bit address of the sibling account.
-- An integer 0 ≤ _d_ ≤ 63, equal to the position of the only bit in which addresses of the current and sibling account differ.
-- The function selector _s_, equal to -3.
+在 tick 和 tock 交易的情况下，栈通过按以下方式推送到智能合约的 `main()` 函数的参数来初始化：
 
-### Merge install
+- 将当前账户的余额 *b* 作为 nanotons 的 *Integer* 金额传递。
+- 将当前账户在主链内的 256 位地址作为无符号 *Integer* 传递。
+- 对于 Tick 交易，传递的整数等于 0；对于 Tock 交易，传递的整数等于 -1。
+- 函数选择器 *s*，等于 -2。
 
-In case of merge install transaction, the stack is initialized by pushing the arguments to the `main()` function of the smart contract as follows:
-- The balance _b_ of the current account (already combined with the nanoton balance of the sibling account) is passed as an _Integer_ amount of nanotons.
-- The balance _b'_ of the sibling account, taken from the inbound message _m_ is passed as an _Integer_ amount of nanotons.
-- The message _m_ from the sibling account, automatically generated by a merge prepare transaction. Its `init` field contains the final state of the sibling account. The message is passed as a cell, which contains a serialized value of type _Message X_, where _X_ is the type of the message body.
-- The state of the sibling account, represented by a _StateInit_.
-- A _Slice_ containing _SplitMergeInfo_.
-- The 256-bit address of the current account.
-- The 256-bit address of the sibling account.
-- An integer 0 ≤ _d_ ≤ 63, equal to the position of the only bit in which addresses of the current and sibling account differ.
-- The function selector _s_, equal to -4.
+### 拆分准备
 
-## Control register c5
+在拆分准备交易的情况下，栈通过按以下方式推送到智能合约的 `main()` 函数的参数来初始化：
 
-The _output actions_ of a smart contract are accumulated in cell stored in control register **c5**: the cell itself contains the last action in the list and a reference to the previous one, thus forming a linked list.
+- 将当前账户的余额 *b* 作为 nanotons 的 *Integer* 金额传递。
+- 包含 *SplitMergeInfo* 的 *Slice*。
+- 当前账户的 256 位地址。
+- 兄弟账户的 256 位地址。
+- 0 ≤ *d* ≤ 63，表示当前账户和兄弟账户地址不同的唯一位的位置。
+- 函数选择器 *s*，等于 -3。
 
-The list can also be serialized as a value of type _OutList n_, where _n_ is the length of the list:
+### 合并安装
+
+在合并安装交易的情况下，栈通过按以下方式推送到智能合约的 `main()` 函数的参数来初始化：
+
+- 当前账户的余额 *b*（已与兄弟账户的 nanotons 余额合并）作为 nanotons 的 *Integer* 金额传递。
+- 从入站消息 *m* 中获取的兄弟账户的余额 *b'* 作为 nanotons 的 *Integer* 金额传递。
+- 由合并准备交易自动生成的兄弟账户的消息 *m*。其 `init` 字段包含兄弟账户的最终状态。将消息作为包含类型 *Message X* 的序列化值的cell传递，其中 *X* 是消息体的类型。
+- 由兄弟账户表示的状态，由 *StateInit* 表示。
+- 包含 *SplitMergeInfo* 的 *Slice*。
+- 当前账户的 256 位地址。
+- 兄弟账户的 256 位地址。
+- 0 ≤ *d* ≤ 63，表示当前账户和兄弟账户地址不同的唯一位的位置。
+- 函数选择器 *s*，等于 -4。
+
+## 控制寄存器 c5
+
+智能合约的 *输出动作* 被累积在存储在控制寄存器  **c5** 中的cell中：cell本身包含列表中的最后一个动作和对先前动作的引用，从而形成一个链接列表。
+
+该列表也可以序列化为类型 *OutList n* 的值，其中 *n* 是列表的长度：
 
 ```tlb
 out_list_empty$_ = OutList 0;
@@ -126,13 +133,14 @@ out_list_node$_
   action:OutAction = OutListNode;
 ```
 
-The list of possible actions thereby consists of:
-- `action_send_msg` — for sending an outbound message
-- `action_set_code` — for setting an opcode
-- `action_reserve_currency` — for storing a currency collection
-- `action_change_library` — for changing the library
+可能动作的列表包括：
 
-As described in the corresponding TL-B scheme:
+- `action_send_msg` — 用于发送出站消息
+- `action_set_code` — 用于设置操作码
+- `action_reserve_currency` — 用于存储代币集合
+- `action_change_library` — 用于更改库
+
+如下所述，可以从这些操作中得到的 TL-B 方案：
 
 ```tlb
 action_send_msg#0ec3c86d
@@ -155,9 +163,9 @@ action_change_library#26fa1dd4
   libref:LibRef = OutAction;
 ```
 
-## Control register c7
+## 控制寄存器 c7
 
-Control register **c7** contains the root of temporary data as a Tuple, formed by a _SmartContractInfo_ type, containing some basic blockchain context data, such as time, global config, etc. It is described by the following TL-B scheme:
+控制寄存器 **c7** 包含临时数据的根，其形式为元组，由包含一些基本区块链 context 数据的 *SmartContractInfo* 类型组成，例如时间、全局配置等。以下是其 TL-B 方案的描述：
 
 ```tlb
 smc_info#076ef1ea
@@ -167,22 +175,22 @@ smc_info#076ef1ea
   myself:MsgAddressInt global_config:(Maybe Cell) = SmartContractInfo;
 ```
 
-First component of this tuple is an _Integer_ value, which is always equal to 0x076ef1ea, after which 9 named fields follow:
+此元组的第一个组件是一个 *Integer* 值，始终等于 0x076ef1ea，然后是 9 个命名字段：
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `actions` | uint16 | Originally initialized by 0, but incremented by one whenever an output action is installed by a non-RAW output action primitive |
-| `msgs_sent` | uint16 | Number of messages sent |
-| `unixtime` | uint32 | Unix timestamp in seconds |
-| `block_lt` | uint64 | Represents _logical time_ of the previous block of this account. [More about logical time](https://docs.ton.org/develop/smart-contracts/guidelines/message-delivery-guarantees#what-is-a-logical-time) |
-| `trans_lt` | uint64 | Represents _logical time_ of the previous transaction of this account |
-| `rand_seed` | bits256 | Initialized deterministically starting from `rand_seed` of the block, the account address, the hash of the incoming message being processed (if any), and the transaction logical time `trans_lt` |
-| `balance_remaining` | [CurrencyCollection](/develop/data-formats/msg-tlb#currencycollection) | Remaining balance of the smart contract |
-| `myself` | [MsgAddressInt](/develop/data-formats/msg-tlb#msgaddressint-tl-b) | Address of this smart contract |
-| `global_config` | (Maybe Cell) | Contains information about the global config |
+| 字段                  | 类型                                                                     | 描述                                                                                                                                                                                                                     |
+| ------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `actions`           | uint16                                                                 | 初始值为0，但每当由非 RAW 输出动作原语安装输出动作时递增一次                                                                                                                                                                                      |
+| `msgs_sent`         | uint16                                                                 | 发送的消息数量                                                                                                                                                                                                                |
+| `unixtime`          | uint32                                                                 | Unix 时间戳（秒）                                                                                                                                                                                                            |
+| `block_lt`          | uint64                                                                 | Represents *logical time* of the previous block of this account. [More about logical time](https://docs.ton.org/develop/smart-contracts/guidelines/message-delivery-guarantees#what-is-a-logical-time) |
+| `trans_lt`          | uint64                                                                 | 代表此账户上一笔交易的 *逻辑时间*                                                                                                                                                                                                     |
+| `rand_seed`         | bits256                                                                | 从块的 `rand_seed`、账户地址、正在处理的传入消息的哈希（如果有的话）和交易逻辑时间 `trans_lt` 开始确定性地初始化                                                                                                                                                   |
+| `balance_remaining` | [CurrencyCollection](/develop/data-formats/msg-tlb#currencycollection) | 智能合约的剩余余额                                                                                                                                                                                                              |
+| `myself`            | [MsgAddressInt](/develop/data-formats/msg-tlb#msgaddressint-tl-b)      | 此智能合约的地址                                                                                                                                                                                                               |
+| `global_config`     | (Maybe Cell)                                        | 包含有关全局配置的信息                                                                                                                                                                                                            |
 
 Notice, that in the upcoming upgrade to the TVM, the **c7** tuple was extended from 10 to 14 elements. Read more about it [here](/learn/tvm-instructions/tvm-upgrade-2023-07).
 
-## See also
+## 参阅
 
-- Original description of [TVM Initialization](https://docs.ton.org/tblkch.pdf#page=89&zoom=100) from the whitepaper
+- [TVM 初始化](https://docs.ton.org/tblkch.pdf#page=89\\&zoom=100) 的原始描述，来自白皮书
