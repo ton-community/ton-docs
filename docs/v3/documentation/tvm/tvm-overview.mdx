@@ -122,7 +122,7 @@ Besides exit_code and consumed gas data, TVM indirectly outputs the following da
 
 All other register values will be neglected.
 
-Note, that since there is a limit on max cell-depth `<1024`, and particularly the limit on c4 and c5 depth `<=512`, there will be a limit on the number of output actions in one tx `<=255`. If a contract needs to send more than that, it may send a message with the request `continue_sending` to itself and send all necessary messages in subsequent transactions.
+Note, that since there is a limit on max cell-depth `<1024`, and particularly the limit in messages and c4 and c5 depth `<=512`, for c5 register there will be a limit on the number of output actions in one transaction `<=255` during `action phase`, exceeding `<=512` limit will result in earlier error during `compute phase`. If a contract needs to send more than 255, it may send a message with the request to itself and send all necessary messages in subsequent transaction.
 
 
 ## See Also
