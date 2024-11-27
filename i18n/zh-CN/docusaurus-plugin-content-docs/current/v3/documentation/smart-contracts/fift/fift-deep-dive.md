@@ -127,7 +127,7 @@ x{00} @Defop NOP
   - ed25519_sign[_uint] - 给定数据和私钥生成签名
   - ed25519_chksign     - 检查 Ed25519 签名
 - 与 TVM 的交互
-  - runvmcode 及类似的 - 使用从堆栈中取得的代码切片调用 TVM
+  - runvmcode 及类似的 - 使用从堆栈中取得的代码 slice 调用 TVM
 - 将 BOC 写入文件：
   `boc>B ".../contract.boc" B>file`
 
