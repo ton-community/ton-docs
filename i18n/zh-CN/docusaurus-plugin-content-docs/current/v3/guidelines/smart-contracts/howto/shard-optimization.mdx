@@ -1,0 +1,176 @@
+# TON 分片优化
+
+## 架构基础知识
+
+TON 可以并行处理无数个事务。这种功能基于[无限分片范式](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm)，这意味着一旦一组验证器的负载接近其吞吐量极限，就会被分割（分片）。然后，两组验证器独立并行处理这些负载。这些拆分是确定发生的，交易是否由特定组处理取决于与交易相关的合约地址。彼此相近（共享相同前缀）的地址将在同一个分片中处理。
+
+当信息从一个合约发送到另一个合约时，有两种可能：一种是两个合约都在同一个分片中，另一种是两个合约在不同的分片中。在前一种情况下，当前组已经拥有所有必要的数据，可以立即处理信息。在后一种情况下，信息必须从一个组路由到另一个组。为避免信息丢失或重复处理，需要进行适当的核算。具体做法是在主链区块中注册发送者分片的传出信息队列，然后接收者分片必须明确确认它已处理了该队列。这样的开销使得跨分片消息传递的速度变慢；在发送消息的区块和接收消息的区块之间至少需要一个主链区块。这种延迟通常约为 12-13 秒。
+
+由于一个账户的交易总是在一个分片中处理，因此单个账户的每秒交易速度（TPS）是有限的。这意味着，在为新的大规模协议开发架构时，应尽量避免中心点。此外，如果一连串的交易遵循相同的路径，也不会因为分片而得到更快的处理速度：链中每个合约的 TPS 限制相同，但由于交付延迟，整个链的处理时间会更长。
+
+在大规模系统中，延迟和吞吐量之间的权衡是区分优秀协议和卓越协议的关键。
+
+## 要分片还是不要分片
+
+为了改善用户体验和处理时间，协议需要了解其系统中哪些部分可以并行处理，因此应该分片以提高吞吐量，哪些部分是严格按顺序处理的，因此如果放在一个分片中，会降低延迟。
+
+ jetton 就是吞吐量优化的一个很好的例子。由于从 A 到 B 和从 C 到 D 的转账互不依赖，因此可以并行处理。通过将所有 Jetton-wallet 随机、均匀地分布在地址空间中，我们可以在区块链上实现负载的完美分布，并在适当延迟的情况下实现每秒数百次（未来可达数千次）的吞吐量。
+
+相反，如果另一个处理 jetton 的智能合约（比方说合约 A）在收到 jetton  X 时做了什么（而 A 的 jetton 钱包合约是 B），将合约 A 及其钱包 B 放在不同的分片中并不会提高吞吐量。事实上，每笔转账都会经过相同的地址链，每个地址都会成为瓶颈。在这种情况下，最好将 A 和 B 放在同一个分片中，从而缩短整个链的时间，以改善延迟。
+
+## 智能合约开发人员的实用结论
+
+如果你有一个执行业务逻辑的智能合约，可以考虑部署多个这样的合约，以享受 TON 的并行性。如果无法做到这一点，而且您的智能合约与一组预定义的其他智能合约（比方说 jetton-wallets ）交互，则可以考虑将它们放在同一个分片中。这通常可以在链外完成（通过暴力破解特定合约地址，使所有需要的 jetton-wallet 都有相邻地址），有时链上暴力破解也是可以接受的。
+
+即将到来的节点和网络性能改进有望提高分片的吞吐量并减少交付延迟，但同时用户数量也会增加。随着越来越多的用户加入，分片优化将变得越来越重要。最终，这将成为大规模应用的一个决定性因素：用户会选择对他们来说最方便的应用，也就是延迟较低的应用。因此，不要再犹豫了，从整体网络改善的角度出发，对应用程序进行分片优化吧。现在就做！在很多情况下，这甚至比 gas 优化更重要。
+
+## 服务的实际结论
+
+### 存款
+
+如果您希望存款速度高于每秒 30 笔转账，建议您拥有多个地址，这样您就可以并行接受存款，享受高吞吐量。如果您知道用户将从哪个地址入金，例如通过 TON Connect 发起的交易，请选择离用户钱包地址最近的入金地址。用于选择最近地址的现成 Typescript 代码可以如下所示：
+
+```typescript
+
+import { Address } from '@ton/ton';
+
+function findMatchingBits (a: number, b: number, start_from: number) {
+    let bitPos    = start_from;
+    let keepGoing = true;
+    do {
+        const bitCount = bitPos + 1;
+        const mask     = (1 << (bitCount)) - 1;
+        const shift    = 8 - bitCount;
+        if(((a >> shift) & mask) == ((b >> shift) & mask)) {
+            bitPos++;
+        }
+        else {
+            keepGoing = false;
+        }
+    } while(keepGoing && bitPos < 7);
+
+    return bitPos;
+}
+
+function chooseAddress(user: Address, contracts: Address[]) {
+    const maxBytes = 32;
+    let byteIdx = 0;
+    let bitIdx  = 0;
+    let bestMatch: Address | undefined;
+
+    if(user.workChain !== 0) {
+        throw new TypeError(`Only basechain user address allowed:${user}`);
+    }
+    for(let testContract of contracts) {
+        if(testContract.workChain !== 0) {
+            throw new TypeError(`Only basechain deposit address allowed:${testContract}`);
+        }
+        if(byteIdx >= maxBytes) {
+            break;
+        }
+        if(byteIdx == 0 || testContract.hash.subarray(0, byteIdx).equals(user.hash.subarray(0, byteIdx))) {
+            let keepGoing  = true;
+            do {
+                if(keepGoing && testContract.hash[byteIdx] == user.hash[byteIdx]) {
+                    bestMatch = testContract;
+                    byteIdx++;
+                    bitIdx = 0;
+                    if(byteIdx == maxBytes) {
+                        break;
+                    }
+                }
+                else {
+                    keepGoing = false;
+                    if(bitIdx < 7) {
+                        const resIdx = findMatchingBits(user.hash[byteIdx], testContract.hash[byteIdx], bitIdx);
+                        if(resIdx > bitIdx) {
+                            bitIdx = resIdx;
+                            bestMatch = testContract;
+                        }
+                    }
+                }
+            } while(keepGoing);
+        }
+    }
+    return {
+        match: bestMatch,
+        prefixLength: byteIdx * 8 + bitIdx
+    }
+}
+```
+
+如果你希望存入 jetton ，除了创建多个存款地址外，最好还对这些地址进行分片优化：选择这样的地址，使每个存款地址与其 jetton 钱包位于同一分片。可在 [此处](https://github.com/Trinketer22/turbo-wallet) 找到此类地址的生成器。选择离用户最近的地址也是一种权宜之计。
+
+### 提款
+
+取款也是如此；如果您需要每秒发送大量转账，建议您拥有多个发送地址，必要时使用 jetton-wallets 对它们进行 shard 优化。
+
+## 分片优化 101
+
+### 向 web 2 用户解释分片
+
+TON 区块链与其他任何区块链一样是一个网络，因此尝试用 web 2（ipv4）网络术语来解释它是有意义的。
+
+#### 终点
+
+在一般网络中，终端是一个物理设备，而在区块链中，终端是一个智能合约。
+
+#### 分片
+
+按照这种逻辑，shard 只不过是一个子网。从这个角度看，唯一不同的是，ipv4 采用的是 32 位寻址方案，而 TON 采用的是 256 位。
+因此，合约地址分片前缀是合约地址的一部分，它标识了将计算所收到的信息结果的验证者群体。
+从网络的角度看，很明显，同一网段上的请求会比其他网段上的请求处理得更快，对吗？
+这有点像使用 CDN 将内容托管在离最终用户更近的地方，而在 TON 中，我们将合约部署在离最终用户更近的地方。
+
+如果分片上的负载超过[一定水平](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#algorithm-for-deciding-whether-to-split-or-merge)，分片就会分裂。这样做的目的是为承受负载的合约提供专用计算资源，并隔离其对整个网络的影响。
+目前最大的分片前缀长度仅为 4 位，因此区块链从前缀 0 到 15 最多可以分成 16 个分片。
+
+### 分片优化过程中的问题
+
+让我们更加务实
+
+#### 检查两个地址是否属于同一分片
+
+由于我们知道分片前缀最多为 4 位，因此其代码片段可以如下所示：
+
+```typescript
+import { Address } from '@ton/core';
+const addressA = Address.parse(...);
+const addressB = Address.parse(...);
+
+if((addressA.hash[0] >> 4) == (addressb.hash[0] >> 4)) {
+  console.log("Same shard");
+} else {
+  console.log("Nope");
+}
+```
+
+从人类的角度来看，检查地址分片的最简单方法是查看地址 [原始格式](/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses#raw-address)。
+可以使用 [address page](https://ton.org/address/)。
+让我们以 USDT 地址为例进行测试：`EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs`。
+您将看到 `0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe` 的原始表示，前 4 位基本上是第一个十六进制符号 - `b`。
+现在我们知道，USDT 矿机位于 `b`（十六进制）或 `11`（十进制）分片。
+
+### 如何将合约部署到某个分片
+
+为了理解其工作原理，我们应该了解合约地址 [depends](/v3/documentation/smart-contracts/addresses#account-id) 是如何依赖于其代码和数据的。
+从本质上讲，这是在部署时对代码和数据进行的 SHA256 加密。
+因此，要在不同的分片中部署具有相同代码的合约，唯一的办法就是处理初始数据。
+用于操作生成的合约地址的数据字段称为 _nonce_。
+任何字段，只要能在部署后安全更新，或者不直接影响合约的执行，都可以用于此类目的。
+最早使用这一原则的已知合约之一是 [vanity contract](https://github.com/ton-community/vanity-contract)。
+它有一个 "salt" 数据字段，唯一的目的就是_强制_它的值，从而得到所需的地址模式。
+将合约放入特定分片的方法完全相同，只是需要匹配的前缀要短得多。
+最简单的例子之一就是钱包合约。
+
+- [为不同分片创建钱包](/v3/guidelines/dapps/asset-processing/payments-processing/#wallet-creation-for-different-shards) 这篇文章说明了使用公钥作为非密钥将钱包放入特定分片的情况。
+- 另一个例子是[turbo-wallet](https://github.com/Trinketer22/turbo-wallet/blob/d239c1a1ac31c7f5545c2ef3ddc909d6cbdafe24/src/lib/contracts/HighloadWalletV3.ts#L44)使用 subwalletId 实现[相同](https://github.com/Trinketer22/turbo-wallet/blob/d239c1a1ac31c7f5545c2ef3ddc909d6cbdafe24/src/lib/turboWallet.ts#L80)的目的。
+  你也可以使用合约构造函数快速扩展[ShardedContract](https://github.com/Trinketer22/turbo-wallet/blob/main/src/lib/ShardedContract.ts)接口，使其成为_sharded_。
+
+## 大规模 jetton 配送解决方案
+
+如果您需要在数万/数十万或数百万用户中分发数据包，请查看此 [帖子](/v3/guidelines/dapps/asset-processing/mintless-jettons)。我们建议您考虑现有的经过实战检验的服务。有些服务已经过深度优化，不仅可以优化分片，而且比手工制作的解决方案更便宜：
+
+- **免铸造 Jettons：** 当你需要在代币生成活动（TGE）期间分发代币时，你可以允许用户直接从代币钱包合约中领取预定义的空投。这种方法很便宜，不需要额外的交易，而且按需提供（只有现在需要花费代币的用户才能领取）。
+- **用于 jetton  群发的Tonapi解决方案：** 允许通过直接发送到用户钱包的方式分发现有 jetton  。经过 Notcoin 和 DOGS 的实战测试（各有几百万次传输），经过优化以减少延迟、吞吐量和成本。[大量发送 jetton](https://docs.tonconsole.com/tonconsole/jettons/mass-sending)
+- **去中心化申领的代币表解决方案：** 允许用户从特定的申领交易中申领 jetton （用户支付费用）。经过 Avacoin 和 DOGS 的实战测试（几百万次转账），经过优化以提高吞吐量和成本。[介绍](https://docs.tokentable.xyz/for-tvm-developers/introduction)
