@@ -9,8 +9,8 @@ This section contains answers to the most frequently asked questions about runni
 Failed to get account state
 ```
 
-This error means that there are issues during search for this account in shard state.
-Most probably it means that liteserver node is syncing too slow, in particular the Masterchain synchronisation overtook shardchains (Basechain) synchronisation. In this case node knows the recent Masterchain block but can not check account state in recent shardchain block and returns Failed to get account state.
+This error indicates that there are issues during the search for this account in the shard state.
+It most likely means that the liteserver node is syncing too slowly, with the Masterchain synchronization overtaking the shardchain (Basechain) synchronization. In this case, the node knows the recent Masterchain block but cannot check the account state in the recent shardchain block, resulting in the "Failed to get account state" error.
 
 
 ## Failed to unpack account state
@@ -23,10 +23,10 @@ This error means that requested account doesn't exist in current state. That mea
 
 ## About no progress in node synchronization within 3 hours
 
-Try to perform following checks:
+Try to perform the following checks:
 
-1. Is process running without crashes? (Check systemd process status)
-2. Is there a firewall between node and internet, if so, will it pass incoming UDP traffic to port specified in field `addrs[0].port` of `/var/ton-work/db/config.json` file?
+1. Is the process running without crashes? (Check systemd process status)
+2. Is there a firewall between the node and internet, if so, will it pass incoming UDP traffic to port specified in field `addrs[0].port` of `/var/ton-work/db/config.json` file?
 3. Is there NAT between the machine and the internet? If so, ensure that the IP address defined in the `addrs[0].ip` field of the `/var/ton-work/db/config.json` file corresponds to the real public IP of the machine. Note that the value of this field is specified as a signed INT. The `ip2dec` and `dec2ip` scripts located in [ton-tools/node](https://github.com/sonofmom/ton-tools/tree/master/node) can be used to perform conversions.
 
 
@@ -37,8 +37,8 @@ Go through the checklist [from this section](/v3/guidelines/nodes/nodes-troubles
 ## Slow sync potential reasons
 
 1. The disk is relatively weak. It's advisable to check the IOPS of the disk (though sometimes hosting providers exaggerate these numbers).
-2. Updates coincided with network congestion. However, the slow synchronization is due to the load, not the updates. The full node cannot catch up with the network because there were about 100 million transactions.
-3. Since the default value of keep history for a Full Node state has been reduced to one day, there are fewer Full Nodes in the network that can provide older states, may cause making it harder to sync with such a delay.
+2. Updates may coincide with network congestion. However, the slow synchronization is caused by the load, not the updates. The full node cannot catch up with the network because there were about 100 million transactions.
+3. Since the default value of keeping history for a Full Node state has been reduced to one day, there are fewer Full Nodes in the network capable of providing older states, which may make synchronization with delays more challenging.
 
 ## Cannot apply external message to current state : External message was not accepted
 
