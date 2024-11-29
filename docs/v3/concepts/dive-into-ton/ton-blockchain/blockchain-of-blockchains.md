@@ -2,14 +2,14 @@
 
 
 :::tip
-Terms '**smart contract**', '**account**' and '**actor**' are used interchangeably in this document to describe a blockchain entity.
+Terms '**smart contract**', '**account**', and '**actor**' are used interchangeably in this document to describe a blockchain entity.
 :::
 
 ## Single actor
 
 Let's consider one smart contract.
 
-In TON, it is a _thing_ with properties like `address`, `code`, `data`, `balance` and others. In other words, it is an object which has some _storage_ and _behavior_.
+In TON, it is a _thing_ with properties like `address`, `code`, `data`, `balance` and others. In other words, it is an object that has some _storage_ and _behavior_.
 That behavior has the following pattern:
 * something happens (the most common situation is that a contract gets a message)
 * contract handles that event according to its own properties by executing its `code` in TON Virtual Machine.
@@ -29,7 +29,7 @@ Now, since nodes that process transactions need from time to time to coordinate 
 `[Tx1 -> Tx2] -> [Tx3 -> Tx4 -> Tx5] -> [] -> [Tx6]`.
 Batching does not intervene in sequencing, each transaction still has only one 'prev tx' and at most one 'next tx', but now this sequence is cut into the **blocks**. 
 
-It is also expedient to include queues of incoming and outgoing messages to _blocks_. In that case, a _block_ will contain a full set of information which determines and describes what happened to the smart contract during that block.
+It is also expedient to include queues of incoming and outgoing messages in _blocks_. In that case, a _block_ will contain a full set of information that determines and describes what happened to the smart contract during that block.
 
 ## Many AccountChains: Shards
 
