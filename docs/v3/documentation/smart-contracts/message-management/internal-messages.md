@@ -5,22 +5,22 @@
 Smart contracts interact with each other by sending so-called **internal messages**. When an internal message reaches its intended destination, an ordinary transaction is created on behalf of the destination account, and the internal message is processed as specified by the code and the persistent data of this account (smart contract). 
 
 :::info
-In particular, the processing transaction can create one or several outbound internal messages, some of which could be addressed to the source address of the internal message being processed. This can be used to create simple "client-server applications" when a query is encapsulated in an internal message and sent to another smart contract, which processes the query and sends back a response again as an internal message.
+In particular, the processing transaction can create one or several outbound internal messages, some of which may be addressed to the source address of the internal message being processed. This can be used to create simple "client-server applications" when a query is encapsulated in an internal message and sent to another smart contract, which processes the query and sends back a response again as an internal message.
 :::
 
-This approach leads to the necessity of distinguishing whether an internal message is intended as a "query", "response", or doesn't require any additional processing (like a "simple money transfer"). Furthermore, when a response is received, there must be a means to understand to which query it corresponds.
+This approach leads to the necessity of distinguishing whether an internal message is intended as a "query", "response", or doesn't require any additional processing (like a "simple money transfer"). Furthermore, when a response is received, there must be a way to determine which query it corresponds to.
 
-In order to achieve this goal, the following approaches for the internal message layout can be used (notice that TON Blockchain does not enforce any restrictions on the message body, so these are indeed just recommendations).
+To achieve this goal, the following approaches for the internal message layout can be used (note that TON Blockchain does not enforce any restrictions on the message body, so these are indeed just recommendations).
 
 ### Internal Message Structure
 
-The body of the message can be embedded into the message itself, or be stored in a separate cell referred to from the message, as indicated by the TL-B scheme fragment:
+The body of the message can be embedded into the message itself or stored in a separate cell referenced by the message, as indicated by the TL-B scheme fragment:
 
 ```tlb
 message$_ {X:Type} ... body:(Either X ^X) = Message X;
 ```
 
-The receiving smart contract should accept at least internal messages with embedded message bodies (whenever they fit into the cell containing the message). If it accepts message bodies in separate cells (using the `right` constructor of `(Either X ^X)`), the processing of the inbound message should not depend on the specific embedding option chosen for the message body. On the other hand, it is perfectly valid not to support message bodies in separate cells at all for simpler queries and responses.
+The receiving smart contract should accept at least internal messages with embedded message bodies (whenever they fit into the cell containing the message). If it accepts message bodies in separate cells (using the `right` constructor of `(Either X ^X)`), the processing of the inbound message should not depend on the specific embedding option chosen for the message body. On the other hand, it is perfectly valid not to support message bodies in separate cells for simpler queries and responses.
 
 ### Internal Message Body 
 The message body typically begins with the following fields:
