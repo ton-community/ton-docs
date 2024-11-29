@@ -19,7 +19,9 @@ years, the NFT market has exploded, with some high-profile sales reaching millio
 You must already have a testnet wallet with at least 2 TON in it. You can get testnet coins from [@testgiver_ton_bot](https://t.me/testgiver_ton_bot).
 
 :::info How to open testnet version of my Tonkeeper wallet?  
-To open the testnet network on Tonkeeper, go to settings and click 5 times on the Tonkeeper logo located at the bottom. Then choose "testnet" instead of "mainnet."
+1. Open settings and click 5 times on the Tonkeeper logo located at the bottom. 
+2. Activate Dev mode.  
+3. Get back to main menu and create new Testnet wallet with Add wallet/Add Testnet Account.
 :::
 
 We will use Pinata as our IPFS storage system, so you also need to create an account on [pinata.cloud](https://pinata.cloud) and get api_key & api_secreat. Official Pinata [documentation tutorial](https://docs.pinata.cloud/account-management/api-keys) can help with that. Once you have these API tokens, I’ll be waiting for you here!
