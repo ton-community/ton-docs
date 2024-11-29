@@ -3,16 +3,16 @@
 
 ## Election and Staking
 
-TON Blockchain makes use of the Proof of Stake (PoS) consensus algorithm which means, like all PoS networks, that the network’s security and stability is maintained by a set of network validators. In particular, validators propose candidates for new blocks (made up of transaction batches), while other validators _validate_ and approve them via digital signatures.
+TON Blockchain uses the Proof of Stake (PoS) consensus algorithm, meaning that, like all PoS networks, the network's security and stability are maintained by a set of network validators. In particular, validators propose candidates for new blocks (made up of transaction batches), while other validators _validate_ and approve them via digital signatures.
 
 
-Validators are chosen using special [Elector governance contract](/v3/documentation/smart-contracts/contracts-specs/governance#elector). During each consensus round, validator candidates send an application for election along with their stake and desired _max_factor_ (a parameter which regulates the amount of maintenance the validator performs per consensus round).
+Validators are chosen using a special [Elector governance contract](/v3/documentation/smart-contracts/contracts-specs/governance#elector). During each consensus round, validator candidates send an application for election along with their stake and desired _max_factor_ (a parameter which regulates the amount of maintenance the validator performs per consensus round).
 
 During the validator election process, the governance smart contract chooses the next round of validators and assigns a voting weight to each validator to maximize their total stake, while also taking into consideration the validator’s stake and _max_factor_. In this respect, the higher the stake and _max_factor_, the higher the voting weight of the validator and vice versa.
 
-Validators that are elected are chosen to secure the network by participating in the next consensus round. However, unlike many other blockchains, to achieve horizontal scalability, each validator validates only a portion of the network:
+Elected validators are chosen to secure the network by participating in the next consensus round. However, unlike many other blockchains, to achieve horizontal scalability, each validator validates only a portion of the network:
 
-For each shardchain and masterchain a dedicated set of validators exists. Sets of masterchain validators consist of up to 100 validators that exhibit the highest voting weight (defined as Network Parameter `Config16:max_main_validators`).
+A dedicated set of validators exists for each shardchain and masterchain. Sets of masterchain validators consist of up to 100 validators that exhibit the highest voting weight (defined as Network Parameter `Config16:max_main_validators`).
 
 In contrast, each shardchain is validated by a set of 23 validators (defined as Network Parameter `Config28:shard_validators_num`) and rotated randomly every 1000 seconds (Network Parameter `Config28:shard_validators_lifetime`).
 
