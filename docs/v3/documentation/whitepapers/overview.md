@@ -1,6 +1,6 @@
 # Whitepapers
 
-This section presents the original documentation written by Dr. Nikolai Durov, which fully describes all parts of TON.
+This section presents the original documentation written by Dr. Nikolai Durov, which comprehensively describes all parts of TON.
 
 ## Original documentation
 
@@ -14,7 +14,7 @@ Please note that here and later the code, comments and/or documentation may cont
 
 * [TON Virtual Machine](https://docs.ton.org/tvm.pdf)
 
-  TON Virtual Machine description(may include outdated information on OP Codes, actual list in [TVM Instruction](/v3/documentation/tvm/tvm-overview) section).
+  TON Virtual Machine description (may include outdated information on OP Codes, actual list in [TVM Instruction](/v3/documentation/tvm/tvm-overview) section).
 
 * [TON Blockchain](https://docs.ton.org/tblkch.pdf)
 
@@ -26,7 +26,7 @@ Please note that here and later the code, comments and/or documentation may cont
   
 * [Fift Documentation](https://docs.ton.org/fiftbase.pdf)
 
-  Description of Fift language and how to use it in TON.
+  Description of the Fift language and how to use it in TON.
 
 ## Translations
 
