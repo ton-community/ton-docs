@@ -8,9 +8,9 @@ The Toncoin bridge allows you to transfer Toncoin between TON Blockchain and the
 
 The bridge is managed by [decentralized oracles](/v3/documentation/infra/crosschain/bridge-addresses).
 
-### How to use it?
+### How to use it:
 
-Bridge frontend is hosted on https://ton.org/bridge.
+The bridge frontend is hosted on https://ton.org/bridge.
 
 :::info
 [Bridge frontend source code](https://github.com/ton-blockchain/bridge)
