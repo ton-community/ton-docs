@@ -7,7 +7,7 @@ TON is an asynchronous blockchain with a complex structure very different from o
 
 ## What is a message?
 
-A message is a packet of data sent between actors (users, applications, smart contracts). It typically contains information instructing the receiver on what action to perform, such as updating storage or sending a new message.
+A message is a packet of data exchanged between actors (users, applications, or smart contracts). It typically contains information instructing the receiver on what action to perform, such as updating storage or sending a new message.
 
 <br></br>
 <div class="text--center">
@@ -21,7 +21,7 @@ A message is a packet of data sent between actors (users, applications, smart co
 </div>
 <br></br>
 
-Working with this type of communication is reminiscent of launching a satellite into space. We know the message we've formed, but after its launch, it is necessary to conduct separate observation to find out what results we will obtain.
+Working with this type of communication is reminiscent of launching a satellite into space. While we know the message we've created, observation after launch is required to determine the outcome.
 
 
 
@@ -30,9 +30,9 @@ Working with this type of communication is reminiscent of launching a satellite 
 A transaction in TON consists of the following:
 - the incoming message that initially triggers the contract (special ways to trigger exist)
 - contract actions caused by the incoming message, such as an update to the contract's storage (optional)
-- outgoing generated messages that are sent to other actors (optional)
+- outgoing messages generated and sent to other actors (optional)
 
->Technically, a contract can be triggered through special functions such as [Tick-Tock](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock), but this function more used for internal TON Blockchain core contracts.
+>Technically, a contract can be triggered through special functions such as [Tick-Tock](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock), but this function is more used for internal TON Blockchain core contracts.
 
 >Not every transaction results in outgoing messages or updates to the contract's storage — this depends on the actions defined by the contract's code.
 
@@ -52,7 +52,7 @@ If we look at Ethereum or almost any other synchronous blockchain, each transact
 
 In an asynchronous system you can't get a response from the destination smart contract in the same transaction. A contract call may take a few blocks to be processed, depending on the length of the route between source and destination.
 
-To achieve the infinite sharding paradigm, it is necessary to ensure full parallelization, which means that the execution of each transactions is independent of every other. Therefore, instead of transactions which affect and change the state of many contracts at one time, each transaction in TON is only executed on a single smart contract and smart contracts communicate through messages. That way, smart contracts can only interact with each other by calling their functions with special messages and getting a response to them via other messages later.
+Achieving the infinite sharding paradigm requires full parallelization, ensuring that each transaction executes independently of others. Therefore, instead of transactions which affect and change the state of many contracts at one time, each transaction in TON is only executed on a single smart contract and smart contracts communicate through messages. That way, smart contracts can only interact with each other by calling their functions with special messages and getting a response to them via other messages later.
 
 :::info
 More detailed and accurate description on the [Transaction Layout](/v3/documentation/data-formats/tlb/transaction-layout) page.
