@@ -335,6 +335,7 @@
     "sidebars",
     "i18n",
     ".husky",
-    "3rd/*"
+    "3rd/*",
+    ".github/*",
   ]
 }

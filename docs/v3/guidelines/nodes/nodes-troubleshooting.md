@@ -36,9 +36,7 @@ Go through the checklist [from this section](/v3/guidelines/nodes/nodes-troubles
 
 ## Slow sync potential reasons
 
-1. The disk is relatively weak. It's advisable to check the IOPS of the disk (though sometimes hosting providers exaggerate these numbers).
-2. Updates may coincide with network congestion. However, the slow synchronization is caused by the load, not the updates. The full node cannot catch up with the network because there were about 100 million transactions.
-3. Since the default value of keeping history for a Full Node state has been reduced to one day, there are fewer Full Nodes in the network capable of providing older states, which may make synchronization with delays more challenging.
+The disk is relatively weak. It's advisable to check the IOPS of the disk (though sometimes hosting providers exaggerate these numbers).
 
 ## Cannot apply external message to current state : External message was not accepted
 
@@ -220,3 +218,4 @@ There are two known cases when this error appears:
 ## See Also
 
 * [MyTonCtrl FAQ](/v3/guidelines/nodes/faq)
+* [MyTonCtrl errors](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-errors)
