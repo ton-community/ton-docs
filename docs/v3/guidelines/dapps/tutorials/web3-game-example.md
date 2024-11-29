@@ -77,7 +77,7 @@ Image | You can download [the image](https://raw.githubusercontent.com/ton-commu
 We are fully prepared. So, let’s go to the logic implementation.
 
 ## Connecting wallet
-Everything starts from a user connects his wallet. So, let’s add wallet connect integration. To work with the blockchain from the client side we need to install GameFi SDK for Phaser:
+The process begins with the user connecting their wallet. So, let’s add wallet connect integration. To work with the blockchain from the client side we need to install GameFi SDK for Phaser:
 ```sh
 npm install --save @ton/phaser-sdk@beta
 ```

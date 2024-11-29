@@ -8,7 +8,7 @@ Before proceeding, it is recommended that readers have a basic understanding of 
 
 Get methods are special functions in smart contracts that are made for querying specific data from them. Their execution doesn't cost any fees and happens outside of the blockchain.
 
-These functions are very common for most smart contracts. For example, the default [Wallet contract](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) has several get methods, such as `seqno()`, `get_subwallet_id()` and `get_public_key()`. They are used by wallets, SDKs and APIs to fetch data about wallets.
+These functions are very common in most smart contracts. For example, the default [Wallet contract](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) has several get methods, such as `seqno()`, `get_subwallet_id()` and `get_public_key()`. They are used by wallets, SDKs, and APIs to fetch data about wallets.
 
 ## Design patterns for get methods
 
@@ -47,7 +47,7 @@ These functions are very common for most smart contracts. For example, the defau
     }
     ```
 
-2. **Conditional data retrieval**: Sometimes, the data that needs to be retrieved depends on certain conditions, such as current time.
+2. **Conditional data retrieval**: Sometimes, the data that needs to be retrieved depends on certain conditions, such as the current time.
 
     Example:
 
@@ -262,7 +262,7 @@ This code will result `Total: 123` output. The number can be different, this is 
 
 For testing smart contracts created we can use the [Sandbox](https://github.com/ton-community/sandbox) which is installed by default in new Blueprint projects.
 
-At first, you need to add a special method in contract wrapper that will execute the get method and return the typed result. Let's say your contract is called _Counter_ and you have already implemented the method that updates the stored number. Open `wrappers/Counter.ts` and add the following method:
+First, you need to add a special method in the contract wrapper that will execute the get method and return the typed result. Let's say your contract is called _Counter_ and you have already implemented the method that updates the stored number. Open `wrappers/Counter.ts` and add the following method:
 
 ```ts
 async getTotal(provider: ContractProvider) {
@@ -355,7 +355,7 @@ In this example, the contract receives and processes internal messages by interp
 -   Op-code `2` signifies a request to query the number from the contract's data.
 -   Op-code `3` is used in the response message, which the calling smart contract must handle in order to receive the result.
 
-For the simplicity, we used just simple little numbers 1, 2 and 3 for the operation codes. But for real projects, consider setting them according to the standard:
+For simplicity, we used just simple little numbers 1, 2, and 3 for the operation codes. But for real projects, consider setting them according to the standard:
 
 -   [CRC32 Hashes for op-codes](/v3/documentation/data-formats/tlb/crc32)
 
