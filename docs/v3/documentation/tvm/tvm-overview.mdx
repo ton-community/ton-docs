@@ -122,8 +122,6 @@ Besides exit_code and consumed gas data, TVM indirectly outputs the following da
 
 All other register values will be neglected.
 
-I think this will be most accurate:
-
 Note that there is a global limit on max cell-depth `<1024` during contract execution. However registers c4 and c5 must be `<=512` in depth. Going beyond these limits results an error at the end of compute phase.
 An additional constraint is imposed in the action phase. A contract cannot create more than 255 output actions.
 
