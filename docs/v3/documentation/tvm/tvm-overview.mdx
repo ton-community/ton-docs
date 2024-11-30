@@ -123,7 +123,12 @@ Besides exit_code and consumed gas data, TVM indirectly outputs the following da
 
 All other register values will be neglected.
 
-Note, that since there is a limit on max cell-depth `<1024`, and particularly the limit on c4 and c5 depth `<=512`, there will be a limit on the number of output actions in one tx `<=255`. If a contract needs to send more than that, it may send a message with the request `continue_sending` to itself and send all necessary messages in subsequent transactions.
+Note that there is a global limit on max cell-depth `<1024` during contract execution. However registers c4 and c5 must be `<=512` in depth. Going beyond these limits results an error at the end of compute phase.
+An additional constraint is imposed in the action phase. A contract cannot create more than 255 output actions.
+
+:::tip
+If a contract wants to send more than 255 messages, it can do so by sending a message to itself, which will contain the request of sending the remaining messages. An example of this approach can be seen at https://github.com/ton-blockchain/highload-wallet-contract-v3/blob/main/contracts/highload-wallet-v3.func#L50.
+:::
 
 
 ## See Also
