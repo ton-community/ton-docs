@@ -1,6 +1,6 @@
-import Button from '@site/src/components/button'
+import Button from '@site/src/components/button';
 import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem'；
+import TabItem from '@theme/TabItem';
 
 # 资产处理概述
 

@@ -10,11 +10,9 @@ import Button from '@site/src/components/button'
 
 打开演示机器人
 
-打开演示机器人
-
 </Button>
 
-查看 GitHub
+<Button href="https://github.com/yungwine/ton-connect-bot" colorType={'secondary'} sizeType={'sm'}>
 
 查看 GitHub
 

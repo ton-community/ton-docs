@@ -171,14 +171,14 @@ Before we start, there are some terms and concepts that you should be familiar w
 - <b>subwallet-id</b>：32 位长的子钱包 ID。
 - <b>valid-until</b>：32 位长 Unix 时间整数。
 - <b>msg-seqno</b>：32 位长序列整数。
-- <0>op-code</0>：32 位长操作码。
+- <b>op-code</b>：32 位长操作码。
 
 1. op-code = 0x0，简单发送。
    - <b>(0-4)mode</b>：最多四个 8 位长整数，定义每条报文的发送模式。
    - <b>(0-4)messages</b>：包含信息的 cell 的最多四个引用。
 2. op-code = 0x1，部署并安装插件。
    - <b>workchain</b>：8 位长整数。
-   - <0> balance </0>：VARUINT16  Toncoin  初始余额。
+   - <b> balance </b>：VARUINT16  Toncoin  初始余额。
    - <b>state-init</b>：包含插件初始状态的 cell 引用。
    - <b>body</b>：包含正文的 cell 引用。
 3. op-code = 0x2/0x3，安装插件/删除插件。
@@ -339,8 +339,6 @@ actions$_ out_actions:(Maybe OutList) has_other_actions:(## 1) {m:#} {n:#} other
 #### 为无 gas 交易做准备
 
 v5 钱包智能合约允许处理由所有者签署的内部信息。这也允许您进行无 gas 交易，例如，在以 USDt 本身转移 USDt 时支付网络费用。常见的方案是这样的
-
-![image](/img/gasless.jpg)
 
 :::tip
 因此，会有一些服务（如 [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)）提供这种功能：它们代表用户以 TON 支付交易费用，但收取代币费用。
