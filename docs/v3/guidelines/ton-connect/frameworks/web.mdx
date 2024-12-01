@@ -123,6 +123,7 @@ const tonConnectUI = new TonConnectUI({ //connect application
 });
 
 const transaction = {
+    validUntil: Math.floor(new Date() / 1000) + 360,
     messages: [
         {
             address: "EQABa48hjKzg09hN_HjxOic7r8T1PleIy1dRd8NvZ3922MP0", // destination address
