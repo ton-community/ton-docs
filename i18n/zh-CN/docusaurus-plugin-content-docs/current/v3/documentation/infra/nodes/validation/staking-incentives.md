@@ -108,7 +108,7 @@ TON 随 [lite-client](https://github.com/newton-blockchain/ton/tree/master/lite-
 
 #### 投诉
 
-每轮验证结束后（约 18 个小时），参与该轮验证的验证者的赌注会在 Elector 智能合约上再保留约 9 个小时。
+每轮验证结束后（约 18 个小时），参与该轮验证的验证者的质押会在 Elector 智能合约上再保留约 9 个小时。
 在此期间，任何人都可以对在该轮验证中表现不佳的验证者进行投诉。这发生在 Elector 智能合约的链上。
 
 #### 投诉确认
