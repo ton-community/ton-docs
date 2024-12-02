@@ -40,10 +40,10 @@ pCrmnqx2/+DkUtPU8T04ehTkbAGlqtul/B2JPmxx9bo=
 2. *业主*将资金 (\$$$) 存入*单一分母*合约（本合约）
 3. *MyTonCtrl* 开始在连接到互联网的验证器节点上运行
 4. *MyTonCtrl* 使用 *Validator* 钱包指示 *SingleNominator* 进入下一个选举周期
-5. *SingleNominator* 向 *Elector* 发送一个周期的赌注 (\$$$)。
+5. *SingleNominator* 向 *Elector* 发送一个周期的质押 (\$$$)。
 6. 选举周期已经结束，股权可以收回
-7. *MyTonCtrl* 使用 *Validator* 钱包指示 *SingleNominator* 从选举周期中收回赌注
-8. *单提名人*从*选举人*处收回上一周期的赌注 (\$$$)
+7. *MyTonCtrl* 使用 *Validator* 钱包指示 *SingleNominator* 从选举周期中收回质押
+8. *单提名人*从*选举人*处收回上一周期的质押 (\$$$)
 9. 只要 *Owner* 愿意继续验证，就重复步骤 4-8
 10. *业主*从*单一分母*合约中提取资金 (\$$$) 并带回家
 
@@ -53,11 +53,11 @@ pCrmnqx2/+DkUtPU8T04ehTkbAGlqtul/B2JPmxx9bo=
 
 - 即使 *Validator* 钱包被入侵，*Owner* 也可以告诉 *SingleNominator* 更改验证器地址。这将阻止攻击者与 *SingleNominator* 进一步交互。这里不存在竞赛条件，*Owner* 始终优先。
 
-- *SingleNominator* 余额仅持有本金赌注资金 - 其余额不用于支付 gas 费。进入选举周期的 gas 费存放在 *Validator* 钱包中。这可以防止入侵验证器的攻击者通过 gas 支出攻击耗尽本金。
+- *SingleNominator* 余额仅持有本金质押资金 - 其余额不用于支付 gas 费。进入选举周期的 gas 费存放在 *Validator* 钱包中。这可以防止入侵验证器的攻击者通过 gas 支出攻击耗尽本金。
 
 - *SingleNominator* 验证*Validator*给出的所有操作格式，确保不会将无效信息转发给*Elector*。
 
-- 在紧急情况下，例如 *Elector* 合约升级并更改了界面，*Owner* 仍可作为 *SingleNominator* 发送任何原始信息，以从 *Elector* 收回赌注。
+- 在紧急情况下，例如 *Elector* 合约升级并更改了界面，*Owner* 仍可作为 *SingleNominator* 发送任何原始信息，以从 *Elector* 收回质押。
 
 - 在极端紧急的情况下，*Owner* 可以设置 *SingleNominator* 的代码，并覆盖其当前逻辑，以应对不可预见的情况。
 
@@ -89,13 +89,13 @@ pCrmnqx2/+DkUtPU8T04ehTkbAGlqtul/B2JPmxx9bo=
 
 ![image](/img/nominator-pool/restricted-wallet.png)
 
-受限钱包未经维护（已被提名人池取代），存在尚未解决的攻击向量，如 gas 流失攻击。由于同一个钱包的余额中既有 gas 费也有赌注本金，攻击者如果泄露了私钥，就会产生交易，造成重大本金损失。此外，由于 seqno 碰撞，攻击者和所有者在尝试提款时会出现竞赛条件。
+受限钱包未经维护（已被提名人池取代），存在尚未解决的攻击向量，如 gas 流失攻击。由于同一个钱包的余额中既有 gas 费也有质押本金，攻击者如果泄露了私钥，就会产生交易，造成重大本金损失。此外，由于 seqno 碰撞，攻击者和所有者在尝试提款时会出现竞赛条件。
 
 ---
 
 ### 3. 提名池
 
-[提名池](https://github.com/ton-blockchain/nominator-pool) 首次将赌注所有者（提名人）与连接到互联网的验证器明确分开。这种设置可支持多达 40 个提名人在同一验证机上共同投注。
+[提名池](https://github.com/ton-blockchain/nominator-pool) 首次将质押所有者（提名人）与连接到互联网的验证器明确分开。这种设置可支持多达 40 个提名人在同一验证机上共同投注。
 
 ![image](/img/nominator-pool/nominator-pool.png)
 
@@ -109,7 +109,7 @@ pCrmnqx2/+DkUtPU8T04ehTkbAGlqtul/B2JPmxx9bo=
 
 ![image](/img/nominator-pool/single-nominator-architecture.png)
 
-如果您只有一个提名人持有所有赌注进行验证，这是最安全的设置。除了简单之外，该合约还为所有者提供了多种紧急保障措施，即使在*选举人*升级导致恢复赌金界面被破坏等极端情况下，也能恢复赌金。
+如果您只有一个提名人持有所有质押进行验证，这是最安全的设置。除了简单之外，该合约还为所有者提供了多种紧急保障措施，即使在*选举人*升级导致恢复赌金界面被破坏等极端情况下，也能恢复赌金。
 
 ### 仅限所有者的信息
 
