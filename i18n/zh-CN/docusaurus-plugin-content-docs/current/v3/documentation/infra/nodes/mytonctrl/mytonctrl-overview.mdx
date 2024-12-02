@@ -203,7 +203,7 @@ MyTonCtrl> delete_custom_overlay <name>
 
 ### vo
 
-`<offer-hash>` 所述提议的投票权
+<offer-hash>\` 所述提议的投票权
 
 ```bash
 MyTonCtrl> vo <offer-hash> # use `ol` to get offers
@@ -215,7 +215,7 @@ MyTonCtrl> vo <offer-hash> # use `ol` to get offers
 
 ### vc
 
-`<election-id>` 所列选举中 `<complaint-hash>` 所列投诉的选票
+<election-id>` 所列选举中`<complaint-hash>\` 所列投诉的选票
 
 ```bash
 MyTonCtrl> vc <election-id> <complaint-hash>
@@ -242,7 +242,7 @@ MyTonCtrl> vc 0 0
   `验证器效率` 在整轮比赛中仍应高于 90%（今后可根据统计数据更改这一数字）。目前，不会应用惩罚，但在未来的更新中可能会有所改变。
 
 - **The user is not a validator**:
-  不适用处罚，但用户也没有资格获得奖励。无 "验证器效率 "可查。这可能是由于赌注过低或节点配置不正确造成的。此外，请确保 `mytonctrl` 持续运行。
+  不适用处罚，但用户也没有资格获得奖励。无 "验证器效率 "可查。这可能是由于质押过低或节点配置不正确造成的。此外，请确保 `mytonctrl` 持续运行。
 
 阅读更多关于 `max_validators` 和 `max_main_validators` [配置参数页面](/v3/documentation/network/configs/blockchain-configs#configuration-parameters-for-the-number-of-validators-for-elections)。获取 [mainnet](https://tonviewer.com/config#16) 和 [testnet](https://testnet.tonviewer.com/config#16) 的实际值。
 
