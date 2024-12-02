@@ -87,12 +87,8 @@ fift -V -and func -V -and lite-client -V
 
 :::caution important
 您必须插入自己的 "用户名"，而不是 "%USERNAME%"关键字。\
-:::
-</TabItem>
-<TabItem value="mac" label="Linux / MacOS">
-1.下载后，通过更改权限确保下载的二进制文件可执行。
-
-```bash
+:::</TabItem>
+<TabItem value="mac" label="Linux / MacOS">1.下载后，通过更改权限确保下载的二进制文件可执行。```bash
 chmod +x func
 chmod +x fift
 chmod +x lite-client
