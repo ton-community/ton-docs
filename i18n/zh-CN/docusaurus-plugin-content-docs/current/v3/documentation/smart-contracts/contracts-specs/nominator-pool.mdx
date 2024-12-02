@@ -30,7 +30,7 @@
 
 ## 奖励分配
 
-在每一轮验证中，"池 "都会向 "选举人 "智能合约发送赌注。
+在每一轮验证中，"池 "都会向 "选举人 "智能合约发送质押。
 
 一轮验证结束后，池向选民收回资金。
 
@@ -43,15 +43,15 @@ validator_reward = (reward * validator_reward_share) / 10000;
 nominators_reward = reward - validator_reward;
 ```
 
-提名人根据其赌注大小分享剩余奖励。
+提名人根据其质押大小分享剩余奖励。
 
-例如，如果池中有两个提名人，赌注分别为 10 万 TON 和 30 万 TON ，那么第一个提名人将获得 "提名人奖励 "的 25%，第二个提名人将获得 "提名人奖励 "的 75%。
+例如，如果池中有两个提名人，质押分别为 10 万 TON 和 30 万 TON ，那么第一个提名人将获得 "提名人奖励 "的 25%，第二个提名人将获得 "提名人奖励 "的 75%。
 
 ### 削减提名池
 
 如果验证罚款数额较大，当收到的金额少于发出的金额时，损失将从验证者的资金中扣除。
 
-如果验证人的资金不足，那么剩余的损失将从提名人的赌注中按比例扣除。
+如果验证人的资金不足，那么剩余的损失将从提名人的质押中按比例扣除。
 
 请注意，提名池的设计方式是，验证器的资金应始终足以支付最高罚款。
 
@@ -157,13 +157,13 @@ nominators_reward = reward - validator_reward;
 
 1. state - uint - 提名者当前的状态。0 - 不参与验证，1 - 发送了参与验证的 "new_stake "请求，2 - 收到了参与验证的成功确认。
 2. nominators_count - uint - 当前提名池中的提名人数。
-3. stake_amount_sent - nanotons - 有了这样的赌注金额，赌池才会参与本轮验证。
+3. stake_amount_sent - nanotons - 有了这样的质押金额，赌池才会参与本轮验证。
 4. validator_amount - nanotons  - 验证器拥有的硬币数量。
 5. validator_address - immutable - uint - 验证器钱包地址。要获取地址，请执行 `"-1:" + dec_to_hex(validator_address)`。
 6. validator_reward_share - immutable - uint - 验证器从验证中获得的奖励份额。 `validator_reward = (reward * validator_reward_share) / 10000`。  例如，设置 4000 可获得 40%。
 7. max_nominators_count - immutable - uint - 提名者数量上限。
-8. min_validator_stake - immutable - nanotons  - 本池中验证器的最小赌注。
-9. min_nominator_stake - immutable - nanotons  - 提名者在本池中的最小赌注。
+8. min_validator_stake - immutable - nanotons  - 本池中验证器的最小质押。
+9. min_nominator_stake - immutable - nanotons  - 提名者在本池中的最小质押。
 10. nominators - Cell - 含提名人的原始字典。
 11. withdraw_requests -  cell  - 包含提名人撤回请求的原始字典。
 12. stake_at - uint - 我们正在/将要参与的一轮验证的 ID。下一轮验证的预计开始时间（`utime_since`）。
@@ -181,7 +181,7 @@ nominators_reward = reward - validator_reward;
 
 1. address - uint - 提名者钱包地址。要获取地址，请执行 `"0:"。+ dec_to_hex(address)`。
 2. amount - nanotons - 提名者当前的有效木桩。
-3. pending_deposit_amount - nanotons  - 将在下一轮验证时加入提名者有效赌注的存款金额。
+3. pending_deposit_amount - nanotons  - 将在下一轮验证时加入提名者有效质押的存款金额。
 4. withdraw_request - int - 如果 `-1`，则该提名人发出了提取全部资金的请求。
 
 ## 获取方法 `get_nominator_data`
@@ -189,7 +189,7 @@ nominators_reward = reward - validator_reward;
 它将提名人的地址作为参数并返回：
 
 1. amount - nanotons - 提名者当前的有效木桩。
-2. pending_deposit_amount - nanotons  - 将在下一轮验证时加入提名者有效赌注的存款金额。
+2. pending_deposit_amount - nanotons  - 将在下一轮验证时加入提名者有效质押的存款金额。
 3. withdraw_request - int - 如果 `-1`，则该提名人发出了提取全部资金的请求。
 
 如果提名池中没有这样的提名者，则抛出 `86` 错误。
