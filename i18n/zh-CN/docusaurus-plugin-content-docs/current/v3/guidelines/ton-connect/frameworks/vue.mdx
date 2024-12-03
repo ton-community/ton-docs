@@ -1,0 +1,489 @@
+# 用于 Vue 的 TON Connect
+
+为 Vue 应用程序推荐的 SDK 是 [UI Vue SDK](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-vue)。它是一个 Vue 组件，提供了与 TON Connect 交互的高级方法。
+
+## 实现
+
+### 1. 安装
+
+要开始将 TON Connect 集成到您的 DApp 中，您需要安装 `@townsquarelabs/ui-vue` 软件包。为此，您可以使用 npm 或 yarn：
+
+```bash npm2yarn
+npm i @townsquarelabs/ui-vue
+```
+
+### 2. TON Connect初始化
+
+将 TonConnectUIProvider 添加到应用程序的根目录。您可以使用道具指定用户界面选项。
+
+<!-- [See all available options](https://github.com/TownSquareXYZ/tonconnect-ui-vue/blob/aa7439073dae5f7ccda3ab10291fc4658f5d3588/src/utils/UIProvider.ts#L11) -->
+
+所有 TonConnect 用户界面钩子调用和 `<TonConnectButton />` 组件必须置于 `<TonConnectUIProvider>` 内。
+
+```html
+<template>
+  <TonConnectUIProvider :options="options">
+    <!-- Your app -->
+  </TonConnectUIProvider>
+</template>
+
+<script>
+import { TonConnectUIProvider } from '@townsquarelabs/ui-vue';
+
+export default {
+  components: {
+    TonConnectUIProvider
+  },
+  setup(){
+    const options = {
+      manifestUrl:"https://<YOUR_APP_URL>/tonconnect-manifest.json",
+    };
+    return {
+      options
+    }
+  }
+}
+</script>
+```
+
+### 连接到钱包
+
+TonConnect Button 是用于初始化连接的通用 UI 组件。连接钱包后，它将转换为钱包菜单。
+建议将它放在应用程序的右上角。
+
+```html
+<template>
+  <header>
+    <span>My App with Vue UI</span>
+    <TonConnectButton/>
+  </header>
+</template>
+
+<script>
+import { TonConnectButton } from '@townsquarelabs/ui-vue';
+
+export default {
+  components: {
+    TonConnectButton
+  }
+}
+</script>
+```
+
+您还可以为按钮添加 `class` 和 `:style` 属性。请注意，您不能向 TonConnectButton 传递子按钮。
+`<TonConnectButton class="my-button-class" :style="{ float: 'right' }"/>`
+
+### 重定向
+
+如果想在钱包连接后将用户重定向到特定页面，可以使用 `useTonConnectUI` 钩子和 [自定义返回策略](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy)。
+
+#### Telegram 小程序
+
+如果您想在钱包连接后将用户重定向到[Telegram 迷你应用](/v3/guidelines/dapps/tma/overview)，您可以自定义 "TonConnectUIProvider "元素：
+
+```html
+<template>
+  <TonConnectUIProvider :options="options">
+    <!-- Your app -->
+  </TonConnectUIProvider>
+</template>
+
+<script>
+import { TonConnectUIProvider } from '@townsquarelabs/ui-vue';
+
+export default {
+  components: {
+    TonConnectUIProvider,
+  },
+  setup() {
+    const options = {
+      actionsConfiguration: { twaReturnUrl: 'https://t.me/<YOUR_APP_NAME>' },
+    };
+    return {
+      options,
+    };
+  },
+};
+</script>
+```
+
+[在 SDK 文档中阅读更多内容](https://github.com/ton-connect/sdk/tree/main/packages/ui#use-inside-twa-telegram-web-app)
+
+### 用户界面定制
+
+要[自定义用户界面](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)，您可以使用`useTonConnectUI`钩子和`setOptions`函数。有关 useTonConnectUI 钩子的更多信息，请参阅 [钩子](#usetonconnectui) 部分。
+
+## 钩子（Hooks）
+
+### useTonAddress
+
+用它来获取用户当前的 ton 钱包地址。通过布尔参数 isUserFriendly 来选择地址格式。如果钱包未连接，钩子将返回空字符串。
+
+```html
+<template>
+  <div v-if="address">
+    <span>User-friendly address: {{ userFriendlyAddress }}</span>
+    <span>Raw address: {{ rawAddress }}</span>
+  </div>
+</template>
+
+<script>
+import { useTonAddress } from '@townsquarelabs/ui-vue';
+
+export default {
+  setup() {
+    const userFriendlyAddress = useTonAddress();
+    const rawAddress = useTonAddress(false);
+
+    return {
+      userFriendlyAddress,
+      rawAddress
+    }
+  }
+}
+</script>
+```
+
+### useTonWallet
+
+用它来获取用户当前的 ton 钱包。如果钱包未连接，钩子将返回空值。
+
+查看钱包的所有属性
+// todo
+
+<!-- [Wallet interface](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html) -->
+
+<!-- [WalletInfo interface](https://ton-connect.github.io/sdk/types/_tonconnect_sdk.WalletInfo.html) -->
+
+```html
+<template>
+  <div v-if="wallet">
+    <span>Connected wallet: {{ wallet.name }}</span>
+    <span>Device: {{ wallet.device.appName }}</span>
+  </div>
+</template>
+
+<script>
+import { useTonWallet } from '@townsquarelabs/ui-vue';
+
+export default {
+  setup() {
+    const wallet = useTonWallet();
+
+    return {
+      wallet
+    }
+  }
+
+}
+</script>
+```
+
+### useTonConnectModal
+
+使用此钩子可访问打开和关闭模态窗口的功能。钩子会返回一个对象，其中包含当前模式窗口状态以及打开和关闭模式窗口的方法。
+
+```html
+<template>
+  <div>
+    <div>Modal state: {{ state?.status }}</div>
+    <button @click="open">Open modal</button>
+    <button @click="close">Close modal</button>
+  </div>
+</template>
+
+<script>
+import { useTonConnectModal } from '@townsquarelabs/ui-vue';
+
+export default {
+  setup() {
+    const { state, open, close } = useTonConnectModal();
+    return { state, open, close };
+  }
+};
+</script>
+```
+
+### useTonConnectUI
+
+使用它可访问 `TonConnectUI` 实例和用户界面选项更新功能。
+
+[查看有关 TonConnectUI 实例方法的更多信息](https://github.com/ton-connect/sdk/tree/main/packages/ui#send-transaction)
+
+[查看有关 setOptions 函数的更多信息](https://github.com/ton-connect/sdk/tree/main/packages/ui#change-options-if-needed)
+
+```html
+<template>
+  <div>
+    <button @click="sendTransaction">Send transaction</button>
+    <div>
+      <label>language</label>
+      <select @change="onLanguageChange($event.target.value)">
+        <option value="en">en</option>
+        <option value="ru">ru</option>
+        <option value="zh">zh</option>
+      </select>
+    </div>
+  </div>
+</template>
+
+<script>
+import { Locales, useTonConnectUI } from '@townsquarelabs/ui-vue';
+
+export default {
+  name: 'Settings',
+  setup() {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+    const onLanguageChange = (lang) => {
+      setOptions({ language: lang as Locales });
+    };
+
+    const myTransaction = {
+      validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
+      messages: [
+        {
+          address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA",
+          amount: "20000000",
+          // stateInit: "base64bocblahblahblah==" // just for instance. Replace with your transaction initState or remove
+        },
+        {
+          address: "EQDmnxDMhId6v1Ofg_h5KR5coWlFG6e86Ro3pc7Tq4CA0-Jn",
+          amount: "60000000",
+          // payload: "base64bocblahblahblah==" // just for instance. Replace with your transaction payload or remove
+        }
+      ]
+    }
+
+    const sendTransaction = () => {
+      tonConnectUI.sendTransaction(myTransaction);
+    };
+
+    return { onLanguageChange, sendTransaction };
+  }
+};
+</script>
+```
+
+### useIsConnectionRestored
+
+表示连接恢复进程的当前状态。
+您可以用它来检测连接恢复进程是否已完成。
+
+```html
+<template>
+  <div>
+    <div v-if="!connectionRestored">Please wait...</div>
+    <MainPage v-else />
+  </div>
+</template>
+
+<script>
+import { useIsConnectionRestored } from '@townsquarelabs/ui-vue';
+
+export default {
+  name: 'EntrypointPage',
+  setup() {
+    const connectionRestored = useIsConnectionRestored();
+    return { connectionRestored };
+  }
+};
+</script>
+```
+
+## 使用方法
+
+让我们看看如何在实践中使用 Vue UI SDK。
+
+### 发送交易
+
+向指定地址发送 TON 硬币（以 nanotons  为单位）：
+
+```html
+<template>
+  <div>
+    <button @click="sendTransaction">Send transaction</button>
+  </div>
+</template>
+
+<script>
+import { useTonConnectUI } from '@townsquarelabs/ui-vue';
+
+export default {
+  name: 'Settings',
+  setup() {
+    const [tonConnectUI, setOptions] = useTonConnectUI();
+
+
+    const myTransaction = {
+      validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
+      messages: [
+        {
+          address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA",
+          amount: "20000000",
+          // stateInit: "base64bocblahblahblah==" // just for instance. Replace with your transaction initState or remove
+        },
+        {
+          address: "EQDmnxDMhId6v1Ofg_h5KR5coWlFG6e86Ro3pc7Tq4CA0-Jn",
+          amount: "60000000",
+          // payload: "base64bocblahblahblah==" // just for instance. Replace with your transaction payload or remove
+        }
+      ]
+    }
+
+    const sendTransaction = () => {
+      tonConnectUI.sendTransaction(myTransaction);
+    };
+
+    return { sendTransaction };
+  }
+};
+</script>
+```
+
+### 通过哈希值了解交易状态
+
+该原理位于支付处理部分（使用 tonweb）。[查看更多](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions)
+
+### 添加连接请求参数（ton_proof）
+
+:::tip
+了解如何签署和验证信息：[签名和验证](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
+:::
+
+使用 `tonConnectUI.setConnectRequestParameters` 函数传递连接请求参数。
+
+该函数需要一个参数：
+
+在等待后台响应时，将状态设置为 'loading'。如果用户此时打开连接钱包模式，他将看到一个加载器。
+
+```ts
+import { ref } from 'vue';
+import { useTonConnectUI } from '@townsquarelabs/ui-vue';
+
+const tonConnectUI = useTonConnectUI();
+
+tonConnectUI.setConnectRequestParameters({
+    state: 'loading'
+});
+```
+
+或
+
+将状态设为 `ready` 并定义 `tonProof` 值。传递的参数将应用于连接请求（QR 和通用链接）。
+
+```ts
+import { ref } from 'vue';
+import { useTonConnectUI } from '@townsquarelabs/ui-vue';
+
+const tonConnectUI = useTonConnectUI();
+
+tonConnectUI.setConnectRequestParameters({
+    state: 'ready',
+    value: {
+        tonProof: '<your-proof-payload>'
+    }
+});
+```
+
+或
+
+如果已通过 `state：'loading'`（例如，您从后端收到的是错误而不是响应）。创建的连接请求将不带任何附加参数。
+
+```ts
+import { ref } from 'vue';
+import { useTonConnectUI } from '@townsquarelabs/ui-vue';
+
+const tonConnectUI = useTonConnectUI();
+
+tonConnectUI.setConnectRequestParameters(null);
+```
+
+如果您的 tonProof 有效载荷有一定的生命周期，您可以多次调用 `tonConnectUI.setConnectRequestParameters` （例如，您可以每 10 分钟刷新一次连接请求参数）。
+
+```ts
+import { ref } from 'vue';
+import { useTonConnectUI } from '@townsquarelabs/ui-vue';
+
+const tonConnectUI = useTonConnectUI();
+
+// enable ui loader
+tonConnectUI.setConnectRequestParameters({ state: 'loading' });
+
+// fetch you tonProofPayload from the backend
+const tonProofPayload: string | null = await fetchTonProofPayloadFromBackend();
+
+if (!tonProofPayload) {
+    // remove loader, connect request will be without any additional parameters
+    tonConnectUI.setConnectRequestParameters(null);
+} else {
+    // add tonProof to the connect request
+    tonConnectUI.setConnectRequestParameters({
+        state: "ready",
+        value: { tonProof: tonProofPayload }
+    });
+}
+
+```
+
+连接钱包后，您可以在钱包对象中找到 `ton_proof` 结果：
+
+```ts
+import { ref, onMounted } from 'vue';
+import { useTonConnectUI } from '@townsquarelabs/ui-vue';
+
+const tonConnectUI = useTonConnectUI();
+
+onMounted(() =>
+    tonConnectUI.onStatusChange(wallet => {
+        if (wallet.connectItems?.tonProof && 'proof' in wallet.connectItems.tonProof) {
+            checkProofInYourBackend(wallet.connectItems.tonProof.proof, wallet.account);
+        }
+}));
+```
+
+### 钱包断线
+
+调用以断开钱包连接：
+
+```js
+import { useTonConnectUI } from '@townsquarelabs/ui-vue';
+
+const [tonConnectUI] = useTonConnectUI();
+
+await tonConnectUI.disconnect();
+```
+
+## 故障排除
+
+### 动画不工作
+
+如果您遇到动画无法在您的环境中运行的问题，可能是因为缺乏对 Web Animations API 的支持。要解决这个问题，您可以使用 `web-animations-js` 填充。
+
+#### 使用 npm
+
+要安装 polyfill，请运行以下命令：
+
+```shell
+npm install web-animations-js
+```
+
+然后，在项目中导入 polyfill：
+
+```typescript
+import 'web-animations-js';
+```
+
+#### 使用 CDN
+
+或者，您也可以通过 CDN 添加以下脚本标签到 HTML 中，从而包含 polyfill 功能：
+
+```html
+<script src="https://www.unpkg.com/web-animations-js@latest/web-animations.min.js"></script>
+```
+
+这两种方法都将提供 Web Animations API 的后备实现，并应能解决您所面临的动画问题。
+
+## 实例
+
+- [Demo dApp](https://github.com/TownSquareXYZ/demo-dapp-with-vue-ui) - 使用 `@townsquarelabs/ui-vue`的 DApp 示例。
