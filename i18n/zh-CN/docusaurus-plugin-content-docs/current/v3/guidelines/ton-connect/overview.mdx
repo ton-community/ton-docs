@@ -4,57 +4,61 @@ import Button from '@site/src/components/button'
 
 使用TON Connect，在[TON](/learn/introduction)中实现钱包之间的无缝连接。
 
-![](/img/docs/ton-connect/ton-connect-overview.png?raw=true)
+<div style={{width: '100%', textAlign:'center', margin: '10pt auto'}}>
+  <video style={{width: '100%',maxWidth: '600px', borderRadius: '10pt'}} muted={true} autoPlay={true} loop={true}>
+    <source src="/files/TonConnect.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+</div>
 
 随意使用以下流程之一，以集成您的应用程序：
 
 <Button href="/develop/dapps/ton-connect/react" colorType={'primary'} sizeType={'sm'}>
 
-React Apps
+## 概述
 
-</Button>
+TonConnect 允许用户毫不费力地使用自己的钱包与各种 dApps 进行交互，从而增强了 TON 生态系统。该协议旨在提供一种安全、用户友好和高效的连接方法，促进基于 TON 的应用程序和服务的更广泛采用。
 
-<Button href="/develop/dapps/ton-connect/web"
-        colorType="secondary" sizeType={'sm'}>
+### TonConnect 的主要功能：
 
-HTML/JS Apps
+- **无缝集成**。TonConnect 旨在与 TON 钱包和 dApps 平滑集成。用户只需点击几下，就能将钱包连接到 dApp，享受无摩擦体验。
 
-</Button>
+- **增强安全性**。安全是 TON 生态系统中最重要的问题。TonConnect 采用强大的加密和安全通信方法，确保用户数据和交易始终受到保护。
 
-<Button href="/develop/dapps/ton-connect/tg-bot-integration"
-        colorType="secondary" sizeType={'sm'}>
+- **用户友好体验**。TonConnect 注重简便性，使用户无需丰富的技术知识即可轻松与 dApps 交互。该协议的直观界面可确保用户从连接到完成交易的整个过程顺畅无阻。
 
-Telegram Bots
+- **跨平台兼容性**。TonConnect 支持各种平台，包括网络、手机和桌面应用程序。这种广泛的兼容性确保用户无论使用哪种设备，都能将钱包连接到 dApp。
 
-</Button>
+- **开发人员友好型工具**。TonConnect 为开发人员提供了一套工具和应用程序接口，可将协议无缝集成到他们的 dApp 中。这些资源使开发人员能够在不同的应用程序中提供一致、安全的连接体验。
+
+- **社区驱动开发**。TON 生态系统得益于一个充满活力的开发者社区。TonConnect 利用这种社区驱动的方法，鼓励开发人员贡献和分享他们的创新成果，从而丰富整个生态系统。
 
 ## 应用程序的使用案例
 
-探索 TON 生态系统为卓越的应用程序集成提供的这些可交付成果。
+探索 TON 生态系统为卓越的 DApp 集成提供的这些可交付成果。
+
+- **流量**。通过支持 TON Connect 的加密钱包推动更多用户访问。
+- **真实性**。利用 TON 用户的钱包作为现成账户，无需额外的身份验证步骤，从而提升用户体验。
+- **支付**。通过 TON 区块链使用 Toncoin 或 USD₮ 迅速安全地处理交易。
+- **保留**。通过应用内的列表保存功能，用户可以跟踪最近打开和收藏的应用，从而提高用户留存率。
+
+## 面向钱包开发人员
+
+如果您是钱包开发者，您可以将您的钱包连接到 TON Connect，让您的用户以安全、便捷的方式与 TON 应用程序进行交互，请阅读如何[将 TON Connect 集成到您的钱包](/v3/guidelines/ton-connect/wallet/)。
+
+## 成功案例
 
 - **流量**。通过支持TON Connect的加密钱包，推动额外用户访问。
 - **真实**。利用TON用户的钱包作为现成账户，无需额外的身份验证步骤，从而提升用户体验。
 - **支付**。通过TON区块链使用Toncoin或封装的稳定币（jUSDC/jUSDT）快速安全地处理交易。
-- **留存**。通过应用内列表保存功能增强用户留存，使用户能够跟踪最近打开和收藏的应用。
-
-## 对于钱包开发者
-
-如果您是钱包开发者，您可以将您的钱包连接到 TON Connect，让您的用户以安全、便捷的方式与 TON 应用程序互动，请阅读如何[将 TON Connect 集成到您的钱包](/develop/dapps/ton-connect/wallet/)。
-
-## 成功案例
-
-- [GetGems — 开放网络Marketplace](https://getgems.io/)
-- [STON.fi — TON区块链AMM DEX](https://ston.fi/)
-- [Tonstarter](http://tonstarter.com/)
 
 <details>
-  <summary><b>显示完整列表</b></summary>
+  <summary><b>显示整个列表</b></summary>
 
 - [getgems.io](https://getgems.io/)
 - [fragment.com](https://fragment.com/) (Ton Connect v.1)
 - [ston.fi](https://ston.fi/)
 - [ton.diamonds](https://ton.diamonds/)
-- [beta.disintar.io](https://beta.disintar.io/)
 - [tegro.finance](https://tegro.finance/liquidity)
 - [minter.ton.org](https://minter.ton.org/)
 - [libermall.com](https://libermall.com/)
@@ -63,30 +67,19 @@ Telegram Bots
 - [cryptomus.com](https://cryptomus.com/)
 - [avanchange.com](https://avanchange.com/)
 - [wton.dev](https://wton.dev/)
-- [mint.spiroverse.io/shop](https://mint.spiroverse.io/shop)
 - [vk.com/vk_nft_hub](https://vk.com/vk_nft_hub)
 - [tonverifier.live](https://verifier.ton.org/)
-- [stickerface.io/member](https://stickerface.io/member)
 - [tonstarter.com](https://tonstarter.com/)
-- [cryptogas.shop/ton](https://cryptogas.shop/ton)
 - [megaton.fi](https://megaton.fi/)
 - [dns.ton.org](https://dns.ton.org/)
 - [coinpaymaster.com](https://coinpaymaster.com/)
-- [ton.gagarin.world/app/](https://ton.gagarin.world/app)
 - [daolama.co](https://daolama.co/)
-- [marketplace.playmuse.org](http://marketplace.playmuse.org/)
 - [ton.vote](https://ton.vote/)
-- [plane.tonfancy.io](https://plane.tonfancy.io/)
-- [pi.oberton.io](https://pi.oberton.io/)
 - [business.thetonpay.app](https://business.thetonpay.app/)
 - [bridge.orbitchain.io](https://bridge.orbitchain.io/)
-- [connecton-web-new.vercel.app](https://connecton-web-new.vercel.app/)
 - [app.fanz.ee/staking](https://app.fanz.ee/staking)
 - [testnet.pton.fi](https://testnet.pton.fi/)
-- [tonft.app](https://tonft.app/)
 - [cardify.casino](https://cardify.casino/)
-- [4riends.org](https://4riends.org/#/)
-- [tonflex.fi](https://tonflex.fi/swap)
 - [soquest.xyz](https://soquest.xyz/)
 - [app.evaa.finance](https://app.evaa.finance/)
 
@@ -94,8 +87,8 @@ Telegram Bots
 
 ## 加入 TON 生态系统
 
-为了将您的服务与TON生态系统连接起来，您需要执行以下操作：
+要将您的服务与 TON 生态系统连接起来，您需要执行以下操作：
 
-- **TON Connect**。在您的应用程序中集成TON Connect协议。
-- **交易**。使用TON库创建指定的交易消息。通过我们的全面指南深入了解[发送消息](/develop/dapps/ton-connect/message-builders)的过程。
-- **支付**。通过公共API（[tonapi](https://tonapi.io/)）或您自己的索引器，例如[gobycicle](http://github.com/gobicycle/bicycle)处理支付。从我们关于[资产处理](/develop/dapps/asset-processing)的详尽指南中了解更多信息。
+- [getgems.io](https://getgems.io/)
+- [fragment.com](https://fragment.com/) (Ton Connect v.1)
+- [ston.fi](https://ston.fi/)
