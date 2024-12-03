@@ -1,0 +1,380 @@
+import ThemedImage from '@theme/ThemedImage';
+
+# 安全智能合约编程
+
+在本节中，我们将介绍 TON 区块链最有趣的几个功能，然后介绍开发人员在 FunC 上编写智能合约的最佳实践清单。
+
+## 合约分片
+
+在为 EVM 开发合约时，为了方便起见，通常会将项目拆分为多个合约。在某些情况下，可以在一份合约中实现所有功能，即使在有必要拆分合约的情况下（例如，自动做市商中的流动性对），也不会造成任何特殊困难。交易全部执行：要么全部成功，要么全部失败。
+
+在 TON 中，强烈建议避免 "无界数据结构 (unbounded data structures)" 和[将单个逻辑合约分割成小块](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)，每个小块管理少量数据。基本的例子是 TON Jettons 的实现。这是 TON 版本的以太坊 ERC-20 代币标准。简而言之，我们有
+
+1. 一个 `jetton-minter`，用于存储 `total_supply`、`minter_address` 和几个引用：令牌描述（元数据）和 `jetton_wallet_code`。
+2. 还有大量的 jetton 钱包，每个 jetton 的所有者都有一个。每个钱包只存储所有者的地址、余额、jetton-minter 地址和 jetton_wallet_code 的链接。
+
+这样做是必要的，因为这样可以在钱包之间直接传输 Jettons，而不会影响任何高负载地址，这对并行处理交易至关重要。
+
+也就是说，做好准备，让你的合约变成 "一组合约"，而且它们之间会积极互动。
+
+## 可以部分执行交易
+
+合约逻辑中出现了一个新的独特属性：部分执行交易。
+
+例如，考虑一下标准 TON Jetton 的信息流：
+
+![smart1.png](/img/docs/security-measures/secure-programming/smart1.png)
+
+如图所示：
+
+1. 发送者会向其钱包 (`sender_wallet`)发送一条`op::transfer`信息；
+2. `sender_wallet` 减少令牌余额；
+3. 发送方钱包向接收方钱包（目的地钱包）发送 `op::internal_transfer` 消息；
+4. `destination_wallet` 增加其令牌余额；
+5. `destination_wallet` 向其所有者 (`destination`)发送 `op::transfer_notification` ；
+6. `destination_wallet` 在 `response_destination` （通常是 `sender`）上返回带有 `op::excesses` 信息的多余 gas 。
+
+请注意，如果 `destination_wallet` 无法处理 `op::internal_transfer` 消息（出现异常或 gas 耗尽），则不会执行此部分和后续步骤。但第一步（减少 `sender_wallet` 中的余额）将会完成。结果是部分执行了交易，`Jetton`的状态不一致，在这种情况下，钱会丢失。
+
+在最坏的情况下，所有代币都可能以这种方式被盗。试想一下，你先给用户累积奖金，然后向他们的 Jetton 钱包发送 `op::burn` 消息，但你不能保证  `op::burn` 会被成功处理。
+
+## TON 智能合约开发者必须控制 gas 
+
+在 Solidity 中，合约开发人员不太关心 gas 问题。如果用户提供的 gas 太少，一切都会恢复原状，就像什么都没发生过一样（但 gas 不会退还）。如果用户提供了足够的 gas ，实际成本将自动计算并从余额中扣除。
+
+在 TON，情况有所不同：
+
+1. 如果没有足够的 gas ，交易将被部分执行；
+2. 如果 gas 过多，多余部分必须退还。这是开发商的责任；
+3. 如果 "一组合约" 交换信息，则必须在每条信息中进行控制和计算。
+
+TON 无法自动计算 gas 。交易的完整执行及其所有后果可能需要很长时间，到最后，用户钱包里可能没有足够的 TON 币。这里再次使用了携带价值原则。
+
+## TON 智能合约开发人员必须管理存储空间
+
+TON 中典型的消息处理程序就是采用这种方法：
+
+```func
+() handle_something(...) impure {
+    (int total_supply, <a lot of vars>) = load_data();
+    ... ;; do something, change data
+    save_data(total_supply, <a lot of vars>);
+}
+```
+
+不幸的是，我们注意到一种趋势：`<a lot of vars>` 是对所有合约数据字段的真正枚举。例如
+
+```func
+(
+    int total_supply, int swap_fee, int min_amount, int is_stopped, int user_count, int max_user_count,
+    slice admin_address, slice router_address, slice jettonA_address, slice jettonA_wallet_address,
+    int jettonA_balance, int jettonA_pending_balance, slice jettonB_address, slice jettonB_wallet_address,
+    int jettonB_balance, int jettonB_pending_balance, int mining_amount, int datetime_amount, int minable_time,
+    int half_life, int last_index, int last_mined, cell mining_rate_cell, cell user_info_dict, cell operation_gas,
+    cell content, cell lp_wallet_code
+) = load_data();
+```
+
+这种方法有许多缺点。
+
+首先，如果您决定添加另一个字段，例如 `is_paused`，那么您就需要更新整个合约中的 `load_data()/save_data()` 语句。这不仅耗费大量人力，还会导致难以捕捉的错误。
+
+在最近的一次 CertiK 审核中，我们注意到开发人员在某些地方混淆了两个参数，并写道：
+
+```func
+save_data(total_supply, min_amount, swap_fee, ...)
+```
+
+在没有专家团队进行外部审计的情况下，很难发现这样的漏洞。这个函数很少被使用，而且两个混淆的参数值通常都为零。要发现这样的错误，你必须知道自己在寻找什么。
+
+其次是 "命名空间污染"。让我们用审计中的另一个例子来解释问题所在。在函数的中间部分，输入参数为
+
+```func
+int min_amount = in_msg_body~load_coins();
+```
+
+也就是说，存储字段被局部变量遮蔽（shadowing），在函数末尾，被覆盖的值被写回了存储中。攻击者因此有机会篡改合约的状态。这一问题更为严重的是，FunC 允许[变量重新声明](/v3/documentation/smart-contracts/func/docs/statements#variable-declaration)：“这不是一次声明，而仅仅是一次编译时的类型检查，确保 `min_amount` 的类型为 `int`。”
+
+最后，每次调用每个函数时都要解析整个存储空间并打包回去，这也增加了 gas 成本。
+
+## 小贴士
+
+### 1.始终绘制信息流程图
+
+即使是在像 TON Jetton 这样的简单合约中，也已经有相当多的消息、发送方、接收方以及消息中包含的数据块。现在想象一下，当你在开发一些更复杂的东西时，比如去中心化交易所（DEX），一个工作流中的消息数量可能会超过十条，你会怎么想？
+
+![smart2.png](/img/docs/security-measures/secure-programming/smart2.png)
+
+在 CertiK，我们使用 [DOT](https://en.wikipedia.org/wiki/DOT_(graph_description_language))语言在审计过程中描述和更新此类图表。我们的审计人员发现，这有助于他们直观地理解合约内部和合约之间复杂的互动关系。
+
+### 2.避免失败并捕捉被退回的信息
+
+使用信息流，首先定义入口点。这是在您的合约组（"后果"）中启动一连串信息的信息。在这里，一切都需要检查（有效载荷、 gas 供应等），以尽量减少后续阶段出现故障的可能性。
+
+如果您不能确定是否能完成所有计划（例如，用户是否有足够的代币来完成交易），这意味着信息流的构建可能不正确。
+
+在随后的信息（后果）中，所有 `throw_if()/throw_unless()` 都将扮演断言的角色，而不是实际检查什么。
+
+许多合约还会处理退回的邮件，以防万一。
+
+例如，在 TON Jetton 中，如果收件人的钱包无法接受任何代币（这取决于接收逻辑），那么发件人的钱包将处理退回的消息，并将代币返还到自己的余额中。
+
+```func
+() on_bounce (slice in_msg_body) impure {
+    in_msg_body~skip_bits(32);  ;;0xFFFFFFFF
+
+    (int balance, slice owner_address, slice jetton_master_address, cell jetton_wallet_code) = load_data();
+
+    int op = in_msg_body~load_op();
+
+    throw_unless(error::unknown_op, (op == op::internal_transfer) | (op == op::burn_notification));
+
+    int query_id = in_msg_body~load_query_id();
+    int jetton_amount = in_msg_body~load_coins();
+
+    balance += jetton_amount;
+    save_data(balance, owner_address, jetton_master_address, jetton_wallet_code);
+}
+```
+
+一般情况下，我们建议处理被退回的报文，但不能将其作为完全防止报文处理失败和执行不完整的手段。
+
+发送和处理被退回的消息需要消耗 gas ，如果发件人没有提供足够的 gas ，那么就没有被退回的消息。
+
+其次，TON 不提供跳转链。这意味着被跳转的信息不能再被跳转。例如，如果第二条信息是在入口报文之后发送的，而第二条信息触发了第三条信息，那么入口合约将不会知道第三条信息处理失败。同样，如果第一条信息的处理发送了第二条和第三条信息，那么第二条信息的处理失败也不会影响第三条信息的处理。
+
+### 3.预计会出现信息流中间人
+
+信息级联可在多个区块中处理。假设在一个信息流运行时，攻击者可以并行启动第二个信息流。也就是说，如果在一开始就检查了某个属性（如用户是否有足够的代币），就不要假定在同一合约的第三阶段，用户仍然满足该属性。
+
+### 4.使用携带值 (Carry-Value) 模式
+
+由上一段可以看出，合约之间的消息必须携带有值的内容。
+
+在同一个 TON Jetton 中，这一点得到了证明：`sender_wallet` 减去余额并将其与 `op::internal_transfer` 消息一起发送到 `destination_wallet`，反过来，它收到余额并将其与消息一起添加到自己的余额中（或将其弹回）。
+
+下面就是一个错误执行的例子。为什么不能在链上查询 Jetton 余额？因为这个问题不符合模式。当 `op::get_balance` 消息的响应到达请求者时，余额可能已经被别人花掉了。
+
+在这种情况下，您可以采用另一种方法：
+![smart3.png](/img/docs/security-measures/secure-programming/smart3.png)
+
+1. 主账户向钱包发送信息 `op::provide_balance` ；
+2. 钱包将余额清零，并发回 `op::take_balance`；
+3. 主人收到钱后，判断钱是否够用，要么使用（借钱还钱），要么把钱送回钱包。
+
+### 5.返回值而不是拒绝
+
+从前面的观察中可以看出，你的合约组经常收到的不仅仅是一个请求，而是一个请求和一个值。因此，我们不能拒绝执行请求（通过 `throw_unless()`），而必须将 Jettons 发送回发送者。
+
+例如，一个典型的流程启动（见 TON Jetton 报文流程）：
+
+1. `sender` 通过 `sender_wallet` 向 `your_contract_wallet` 发送 `op::transfer` 消息，并为您的合约指定 `forward_ton_amount` 和 `forward_payload`；
+2. `sender_wallet` 向 `your_contract_wallet` 发送 `op::internal_transfer` 信息；
+3. `your_contract_wallet` 向 `your_contract` 发送 `op::transfer_notification` 消息，传递 `forward_ton_amount`, `forward_payload`, 以及 `sender_address` 和 `jetton_amount` ；
+4. 在合约的 `handle_transfer_notification()` 中，流程开始了。
+
+在这里，你需要弄清楚这是一个什么样的请求，是否有足够的 gas 来完成它，以及有效载荷中的所有内容是否正确。在这一阶段，不应使用`throw_if()/throw_unless()`，因为这样会导致 Jettons 丢失，请求无法执行。值得使用 try-catch 语句[从 FunC v0.4.0 开始可用](/v3/documentation/smart-contracts/funcs/docs/statements#try-catch-statements)。
+
+如果不符合合约规定，则必须退回 jetton 。
+
+在最近的一次审计中，我们发现了这种脆弱的执行方式的一个例子。
+
+```func
+() handle_transfer_notification(...) impure {
+...
+    int jetton_amount = in_msg_body~load_coins();
+    slice from_address = in_msg_body~load_msg_addr();
+    slice from_jetton_address = in_msg_body~load_msg_addr();
+
+    if (msg_value < gas_consumption) { ;; not enough gas provided
+        if (equal_slices(from_jetton_address, jettonA_address)) {
+            var msg = begin_cell()
+                .store_uint(0x18, 6)
+                .store_slice(jettonA_wallet_address)
+                .store_coins(0)
+                .store_uint(1, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+            ...
+        }
+    ...
+}
+```
+
+正如您所看到的，这里的 "return" 是发送到 `jettonA_wallet_address`，而不是 `sender_address`。由于所有决定都是根据对`in_msg_body`的分析做出的，因此攻击者可以伪造虚假信息并套取资金。请始终将回执发送至`sender_address`。
+
+如果您的合约接受 Jetton，那么就不可能知道来的确实是预期的 Jetton，还是只是某个人的 `op::transfer_notification`。
+
+如果您的合约收到了意外或未知的 Jettons，也必须退回。
+
+### 6.计算 gas 并检查 msg_value
+
+根据消息流程图，我们可以估算出每种情况下每个处理程序的成本，并插入 msg_value 的充分性检查。
+
+您不能只要求保证金，例如 1  TON （本文撰写之日主网上的 gas 限额），因为这些 gas 必须在 "后果(consequences)" 中分配。假设您的合约发送了三条信息，那么每条信息只能发送 0.33  TON 。这意味着他们应该 "要求 "更少。仔细计算整个合约的 gas 需求量非常重要。
+
+如果在开发过程中，您的代码开始发送更多信息，情况就会变得更加复杂。需要重新检查和更新 gas 要求。
+
+### 7.小心退回多余 gas 
+
+如果不将多余的 gas 退还给寄件人，这些资金就会在您的合约中长期累积。从原则上讲，这并不可怕，只是一种次优做法。您可以添加一个功能来清除多余的 gas ，但像 TON Jetton 这样的流行合约仍会以信息 `op::excesses` 返回发送者。
+
+TON 有一个有用的机制：`SEND_MODE_CARRY_ALL_REMAINING_MESSAGE_VALUE = 64`。在 `send_raw_message()` 中使用这种模式时，其余的 gas 将与消息一起（或返回）转发给新的收件人。如果消息流是线性的：每个消息处理程序只发送一条消息，那么这种模式就很方便。但在某些情况下，不建议使用这种机制：
+
+1. 如果合约中没有其他非线性处理程序，存储费将从合约余额中扣除，而不是从输入的 gas 中扣除。这意味着随着时间的推移，储存费会消耗掉整个余额，因为所有进入的 gas 都必须用完；
+2. 如果您的合约发出事件，即向外部地址发送信息。该操作的费用将从合约余额中扣除，而不是从 msg_value 中扣除。
+
+```func
+() emit_log_simple (int event_id, int query_id) impure inline {
+    var msg = begin_cell()
+        .store_uint (12, 4)             ;; ext_out_msg_info$11 addr$00
+        .store_uint (1, 2)              ;; addr_extern$01
+        .store_uint (256, 9)            ;; len:(## 9)
+        .store_uint(event_id, 256);     ;; external_address:(bits len)
+        .store_uint(0, 64 + 32 + 1 + 1) ;; lt, at, init, body
+        .store_query_id(query_id)
+        .end_cell();
+
+    send_raw_message(msg, SEND_MODE_REGULAR);
+}
+```
+
+3. 如果您的合约在发送信息时附加了值或使用了 `SEND_MODE_PAY_FEES_SEPARETELY = 1`。这些操作会从合约余额中扣除，这意味着未使用的返回是 "亏本工作"。
+
+在上述情况下，采用人工近似计算盈余：
+
+```func
+int ton_balance_before_msg = my_ton_balance - msg_value;
+int storage_fee = const::min_tons_for_storage - min(ton_balance_before_msg, const::min_tons_for_storage);
+msg_value -= storage_fee + const::gas_consumption;
+
+if(forward_ton_amount) {
+    msg_value -= (forward_ton_amount + fwd_fee);
+...
+}
+
+if (msg_value > 0) {    ;; there is still something to return
+
+var msg = begin_cell()
+    .store_uint(0x10, 6)
+    .store_slice(response_address)
+    .store_coins(msg_value)
+...
+}
+```
+
+请记住，如果合约余额用完，交易将被部分执行，这是不允许的。
+
+### 8.使用嵌套存储
+
+我们建议采用以下存储组织方法：
+
+```func
+() handle_something(...) impure {
+    (slice swap_data, cell liquidity_data, cell mining_data, cell discovery_data) = load_data();
+    (int total_supply, int swap_fee, int min_amount, int is_stopped) = swap_data.parse_swap_data();
+    …
+    swap_data = pack_swap_data(total_supply + lp_amount, swap_fee, min_amount, is_stopped);
+    save_data(swap_data, liquidity_data, mining_data, discovery_data);
+}
+```
+
+存储由相关数据块组成。如果每个函数都使用一个参数，例如 `is_paused`，那么 `load_data()` 会立即提供该参数。如果一个参数组只在一种情况下需要使用，那么它就不需要解压缩，也不需要打包，更不会堵塞命名空间。
+
+如果存储结构需要更改（通常是添加一个新字段），那么需要进行的编辑就会大大减少。
+
+此外，这种方法还可以重复使用。如果我们的合约中有 30 个存储字段，那么一开始你可以得到四组，然后从第一组中得到几个变量和另一个子组。最主要的是不要做得太过分。
+
+请注意，由于一个 cell 最多可存储 1023 位数据和 4 个引用，因此无论如何都必须将数据分割到不同的 cell 中。
+
+分层数据是 TON 的主要功能之一，让我们将其用于预期目的。
+
+可以使用全局变量，尤其是在原型设计阶段，因为在这个阶段，合约中存储的内容并不完全明确。
+
+```func
+global int var1;
+global cell var2;
+global slice var3;
+
+() load_data() impure {
+    var cs = get_data().begin_parse();
+    var1 = cs~load_coins();
+    var2 = cs~load_ref();
+    var3 = cs~load_bits(512);
+}
+
+() save_data() impure {
+    set_data(
+        begin_cell()
+            .store_coins(var1)
+            .store_ref(var2)
+            .store_bits(var3)
+            .end_cell()
+        );
+}
+```
+
+这样，如果发现需要另一个变量，只需添加一个新的全局变量并修改 `load_data()` 和 `save_data()`。整个合约无需任何改动。不过，由于全局变量的数量有限制（不超过 31 个），这种模式可以与上文推荐的 "嵌套存储 "相结合。
+
+全局变量通常也比将所有内容都存储在堆栈中更昂贵。不过，这取决于堆栈排列的数量，因此使用全局变量作为原型是个不错的主意，当存储结构完全清晰后，再改用具有 "嵌套 "模式的堆栈变量。
+
+### 9.使用 end_parse()
+
+从存储器和消息有效载荷读取数据时，尽可能使用 `end_parse()`。由于 TON 使用的是数据格式可变的比特流，因此确保读取的数据量与写入的数据量相等是很有帮助的。这可以节省一个小时的调试时间。
+
+### 10. 使用更多的辅助函数，避免魔法数字
+
+这个技巧并非 FunC 独有，但在这里尤其适用。编写更多的封装器和辅助函数，并声明更多的常量。
+
+FunC 最初包含了大量的魔法数字。如果开发者不加以限制其使用，最终的结果可能就会像这样：
+
+```func
+var msg = begin_cell()
+    .store_uint(0xc4ff, 17)         ;; 0 11000100 0xff
+    .store_uint(config_addr, 256)
+    .store_grams(1 << 30)           ;; ~1 gram of value
+    .store_uint(0, 107)
+    .store_uint(0x4e565354, 32)
+    .store_uint(query_id, 64)
+    .store_ref(vset);
+
+send_raw_message(msg.end_cell(), 1);
+```
+
+这是来自真实项目的代码，会吓跑新手。
+
+幸运的是，在 FunC 的最新版本中，一些标准声明可以使代码更清晰、更有表现力。例如
+
+```func
+const int SEND_MODE_REGULAR = 0;
+const int SEND_MODE_PAY_FEES_SEPARETELY = 1;
+const int SEND_MODE_IGNORE_ERRORS = 2;
+const int SEND_MODE_CARRY_ALL_REMAINING_MESSAGE_VALUE = 64;
+
+builder store_msgbody_prefix_stateinit(builder b) inline {
+    return b.store_uint(4 + 2 + 1, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1);
+}
+
+builder store_body_header(builder b, int op, int query_id) inline {
+    return b.store_uint(op, 32).store_uint(query_id, 64);
+}
+
+() mint_tokens(slice to_address, cell jetton_wallet_code, int amount, cell master_msg) impure {
+    cell state_init = calculate_jetton_wallet_state_init(to_address, my_address(), jetton_wallet_code);
+    slice to_wallet_address = calculate_address_by_state_init(state_init);
+
+    var msg = begin_cell()
+        .store_msg_flags(BOUNCEABLE)
+        .store_slice(to_wallet_address)
+        .store_coins(amount)
+        .store_msgbody_prefix_stateinit()
+        .store_ref(state_init)
+        .store_ref(master_msg);
+
+    send_raw_message(msg.end_cell(), SEND_MODE_REGULAR);
+}
+```
+
+## 参考资料
+
+原文作者：CertiK
+
+- [原文](https://blog.ton.org/secure-smart-contract-programming-in-func)
