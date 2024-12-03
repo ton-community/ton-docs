@@ -26,22 +26,18 @@
 
 这种方法也相当简单，但您需要在浏览器中安装一个扩展才能使其工作。它适合大多数用户。
 
-### 连接到公共代理
-
-如果您不想安装任何扩展，或者您正在使用移动设备，您可以使用此方法。您需要在设备上配置一些东西以连接到代理。
-
-此方法在此处描述：
-
-- [通过TON代理连接](/participate/web3/setting-proxy/)
-
-## 🤓 高级方法
+## 连接到公共代理
 
 ### 使用Tonutils-Proxy
 
-这是访问TON网站最安全的方式。
+此方法在此处描述：
 
-1. 从[这里](https://github.com/xssnick/Tonutils-Proxy#download-precompiled-version)下载最新版本
+1. [通过TON代理连接](/participate/web3/setting-proxy/)
 
 2. 启动它并按“启动网关”
 
 3. 完成！
+
+## 🤓 高级方法
+
+- [运行 C++ 实现](/v3/guidelines/web3/ton-proxy-sites/running-your-your-ton-proxy)
