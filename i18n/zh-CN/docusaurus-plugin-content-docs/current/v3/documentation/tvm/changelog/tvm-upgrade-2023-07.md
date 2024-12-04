@@ -153,7 +153,7 @@ Gas 用量四舍五入。
 
 比特币/以太坊签名。使用 [libsecp256k1 实现](https://github.com/bitcoin-core/secp256k1)。
 
-| xxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈         | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>说明       |
+| xxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈         | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>说明<0/>                                                                                                        |
 | :------------------------ | :------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `ECRECOVER`               | *`hash v r s - 0 or h x1 x2 -1`* | 从签名恢复公钥，与比特币/以太坊操作相同。<br/>以 32 字节哈希作为 uint256 `hash`；以 65 字节签名作为 uint8 `v` 和 uint256 `r`、`s`。<br/>失败返回 `0`，成功返回公钥和 `-1`。<br/>以 65 字节公钥返回为 uint8 `h`，uint256 `x1`、`x2`。<br/>*1526 gas* |
 
@@ -283,3 +283,12 @@ gas成本：
 
 - `SENDMSG` 将 cell 和模式作为输入。创建一个输出操作，并返回创建信息的费用。模式的作用与 SENDRAWMSG 相同。此外，`+1024` 表示不创建操作，只估算费用。其他模式对费用计算的影响如下：+64 "替换接收信息的全部余额作为接收值（略微不准确，因为计算完成前无法估算的 gas 费用未被考虑在内），"+128 "替换计算阶段开始前合同的全部余额值（略微不准确，因为计算完成前无法估算的 gas 费用未被考虑在内）。
 - `SENDRAWMSG`，`RAWRESERVE`，`SETLIBCODE`，`CHANGELIB` - 添加了`+16`标志位，这意味着在操作失败时反弹交易。如果使用了`+2`，则没有效果。
+
+## 安全审计
+
+对 TON 虚拟机 (TVM) 的升级进行了安全和潜在漏洞分析。
+
+**审计公司**：Trail of Bits\
+**审计报告**：
+
+- [Trail of Bits  审计报告 - TVM 升级](https://docs.ton.org/audits/TVM_Upgrade_ToB_2023.pdf)
