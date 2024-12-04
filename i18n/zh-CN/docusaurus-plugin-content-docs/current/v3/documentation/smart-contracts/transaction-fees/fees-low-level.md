@@ -1,11 +1,9 @@
 # 低层级费用概述
 
 :::caution
-本节描述了与TON进行低层级交互的说明和手册。
-:::
+This section describes instructions and manuals for interacting with TON at a low level.
 
-:::caution
-Here you will find the **raw formulas** for calculating commissions and fees on TON.
+在这里，您可以找到计算 TON 佣金和费用的**原始公式**。
 
 不过，其中大部分**已通过操作码**实现！因此，您可以**使用它们来代替手工计算**。
 :::
@@ -91,26 +89,6 @@ function storageFeeCalculator() {
 
 
 ```
-
-## 预付费
-
-内部邮件会定义一个以 Toncoin 为单位的 `ihr_fee`（转发费），如果目的地分片链通过 IHR 机制收录了邮件，就会从邮件附加值中减去该费用，并将其奖励给目的地分片链的验证者。`转发费`（fwd_fee）是使用人力资源机制所支付的原始转发费总额；它是根据一些配置参数和信息生成时的大小自动计算得出的。请注意，新创建的内部出站报文所携带的总价值等于价值、`ihr_fee` 和 `fwd_fee` 之和。该总和从源账户余额中扣除。在这些部分中，只有 value 会在信息发送时记入目的地账户。`fwd_fee` 由从源到目的地的HR路径上的验证者收取，而 `ihr_fee` 要么由目的地分片链的验证者收取（如果信息是通过IHR传递的），要么记入目的地账户。
-
-:::info
-`fwd_fee` covers 2/3 of the cost, as 1/3 is allocated to the `action_fee` when the message is created.
-
-```cpp
-auto fwd_fee_mine = msg_prices.get_first_part(fwd_fee);
-auto fwd_fee_remain = fwd_fee - fwd_fee_mine;
-
-fees_total = fwd_fee + ihr_fee;
-fees_collected = fwd_fee_mine;
-
-ap.total_action_fees += fees_collected;
-ap.total_fwd_fees += fees_total;
-```
-
-:::
 
 ## Inline和inline_refs
 
@@ -230,18 +208,57 @@ return (c, b, a);
 
 当堆栈条目数量大（10+），并且它们以不同的顺序被积极使用时，堆栈操作费用可能变得不可忽视。
 
+## 预付费
+
+内部消息会定义一个以 Toncoins 为单位的 `ihr_fee`（转发费），如果目的地分片链通过 IHR 机制收录消息，就会从消息附加值中减去该费用，并将其奖励给目的地分片链的验证者。`fwd_fee` 是使用HR机制所支付的原始转发费用总额；它是根据[24和25配置参数](/v3/documentation/network/configs/blockchain-configs#param-24and-25)和信息生成时的大小自动计算得出的。请注意，新创建的内部出站消息所携带的总值等于 值、`hr_fee` 和 `fwd_fee` 之和。该总和从源账户余额中扣除。在这些部分中，只有值会在信息发送时记入目的地账户。`fwd_fee` 由从源到目的地的HR路径上的验证者收取，而 `ihr_fee` 要么由目的地分片链的验证者收取（如果信息是通过IHR传递的），要么记入目的地账户。
+
+:::tip
+
+目前（2024年11月），[IHR](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#messages-and-instant-hypercube-routing-instant-hypercube-routing)尚未实现，如果将 `ihr_fee` 设置为非零值，那么在收到消息时，它将始终被添加到消息值中。就目前而言，这样做没有实际意义。
+
+:::
+
+```cpp
+msg_fwd_fees = (lump_price
+             + ceil(
+                (bit_price * msg.bits + cell_price * msg.cells) / 2^16)
+             );
+
+ihr_fwd_fees = ceil((msg_fwd_fees * ihr_price_factor) / 2^16);
+
+total_fwd_fees = msg_fwd_fees + ihr_fwd_fees; // ihr_fwd_fees - is 0 for external messages
+```
+
 ## 操作费
 
-操作费在计算阶段后执行的操作列表处理过程中从源账户余额中扣除。
-这些都是导致支付费用的操作：
+操作费在计算阶段之后处理操作列表时从源账户余额中扣除。实际上，唯一需要支付操作费的操作是 `SENDRAWMSG`。其他操作，如 `RAWRESERVE` 或 `SETCODE`，在操作阶段不产生任何费用。
 
-- `SENDRAWMSG` 发送原始信息。
-- `RAWRESERVE` 创建一个输出操作，用于保留 N  nanotons  。
-- `RAWRESERVEX` 与 `RAWRESERVE` 类似，但也接受包含额外货币的字典。
-- `SETCODE` 创建一个输出操作，用于更改该智能合约代码。
-- `SETLIBCODE` 创建一个输出操作，通过添加或删除带有给定代码的库来修改该智能合约库的集合。
-- 与 `SETLIBCODE` 类似，`CHANGELIB` 创建一个输出操作，但不接受库代码，而是接受其散列。
-- `FB08-FB3F` 保留给输出动作基元。
+```cpp
+action_fee = floor((msg_fwd_fees * first_frac)/ 2^16);  //internal
+
+action_fee = msg_fwd_fees;  //external
+```
+
+[`first_frac`](/v3/documentation/network/configs/blockchain-configs#param-24and-25)是TON区块链的24和25参数（主链和工作链）的一部分。目前，这两个参数的值都设置为 21845，这意味着 `action_fee` 约为 `msg_fwd_fees` 的三分之一。如果是外部消息操作 `SENDRAWMSG`，`action_fee` 等于 `msg_fwd_fees`。
+
+:::tip
+Remember that an action register can contain up to 255 actions, which means that all formulas related to `fwd_fee` and `action_fee` will be computed for each `SENDRAWMSG` action, resulting in the following sum:
+
+```cpp
+total_fees = sum(action_fee) + sum(total_fwd_fees);
+```
+
+:::
+
+从 TON 的第四个[全球版本](https://github.com/ton-blockchain/ton/blob/master/doc/GlobalVersions.md)开始，如果 "发送消息 " 操作失败，账户需要支付处理消息单元的费用，称为 `action_fine`。
+
+```cpp
+fine_per_cell = floor((cell_price >> 16) / 4)
+
+max_cells = floor(remaining_balance / fine_per_cell)
+
+action_fine = fine_per_cell * min(max_cells, cells_in_msg);
+```
 
 ## 费用计算公式
 
@@ -254,17 +271,6 @@ storage_fees = ceil(
                * period / 2 ^ 16)
 ```
 
-### in_fwd_fees, out_fwd_fees
-
-```cpp
-msg_fwd_fees = (lump_price
-             + ceil(
-                (bit_price * msg.bits + cell_price * msg.cells) / 2^16)
-             )
-             
-ihr_fwd_fees = ceil((msg_fwd_fees * ihr_price_factor) / 2^16)
-```
-
 :::info
 Only unique hash cells are counted for storage and fwd fees i.e. 3 identical hash cells are counted as one.
 
@@ -274,12 +280,6 @@ Only unique hash cells are counted for storage and fwd fees i.e. 3 identical has
 :::
 
 // 消息的根cell中的位不包括在msg.bits中（lump_price支付它们）
-
-### action_fees
-
-```cpp
-action_fees = sum(out_ext_msg_fwd_fee) + sum(int_msg_mine_fee)
-```
 
 ## 费用配置文件
 
