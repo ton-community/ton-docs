@@ -1,4 +1,4 @@
-# TON Connect SDKs
+tab# TON Connect SDKs
 
 ## SDK List
 
@@ -17,7 +17,7 @@ This page contains the list of useful libraries for TON Connect.
 * [TON Connect Unity](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-unity)
 * [TON Connect Go](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-go)
 
-## TON Connect React
+sec## TON Connect React
 
 - [@tonconnect/ui-react](https://github.com/ton-connect/sdk/tree/main/packages/ui-react) - TON Connect User Interface (UI) for React applications
 
@@ -35,7 +35,7 @@ npm i @tonconnect/ui-react
 - [API Documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui_react.html)
 
 
-## TON Connect JS SDK
+tab## TON Connect JS SDK
 
 The TON Connect repository contains following main packages:
 
