@@ -70,6 +70,59 @@ transaction_fee = storage_fees
                 + out_fwd_fees
 ```
 
+
+```jsx live
+
+// Welcome to LIVE editor!
+// feel free to change any variables
+// Check https://retracer.ton.org/?tx=b5e14a9c4a4e982fda42d6079c3f84fa48e76497a8f3fca872f9a3737f1f6262
+
+function FeeCalculator() {
+  // https://tonviewer.com/config#25
+  const lump_price = 400000;
+  const bit_price = 26214400;
+  const cell_price = 2621440000;
+  const ihr_price_factor = 98304;
+  const first_frac = 21845;
+  const nano = 10 ** -9;
+  const bit16 = 2 ** 16;
+
+  const ihr_disabled = 0; // First of all define is ihr gonna be counted
+
+  let fwd_fee =
+    (lump_price + Math.ceil((bit_price * 0 + cell_price * 0) / bit16)) * nano;
+
+  if (ihr_disabled) {
+    var ihr_fee = 0;
+  } else {
+    var ihr_fee = Math.ceil((fwd_fee * ihr_price_factor) / bit16) * nano;
+  }
+
+  let total_fwd_fees = fwd_fee + ihr_fee;
+  let gas_fees = 0.0011976; // Gas fees out of scope here
+  let storage_fees = 0.000000003; // And storage fees as well
+  let total_action_fees = +((fwd_fee * first_frac) / bit16).toFixed(9);
+  let import_fee =
+    (lump_price + Math.ceil((bit_price * 528 + cell_price * 1) / bit16)) * nano;
+  let total_fee = +(
+    gas_fees +
+    storage_fees +
+    total_action_fees +
+    import_fee
+  ).toFixed(9);
+
+  return (
+    <div>
+      <p> Total fee: {total_fee} TON</p>
+      <p> Action fee: {total_action_fees} TON </p>
+      <p> Fwd fee: {fwd_fee} TON </p>
+      <p> Import fee: {import_fee} TON </p>
+    </div>
+  );
+}
+
+```
+
 ## Elements of transaction fee
 
 * `storage_fees` is the amount you pay for storing a smart contract in the blockchain. In fact, you pay for every second the smart contract is stored on the blockchain.
