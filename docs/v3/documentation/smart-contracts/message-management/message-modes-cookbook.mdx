@@ -6,12 +6,17 @@ While [Message-modes](/v3/documentation/smart-contracts/message-management/sendi
 :::info IMPORTANT
 The result of the error cases is described when the error occurred.
 
-__Note__: The transaction fees used in these examples (e.g., 3 Toncoin) are hypothetical and are used for illustrative purposes only. Actual transaction fees will vary depending on network conditions and other factors.
+__Note__: The transaction fees used in these examples are hypothetical and are used for illustrative purposes only. Actual transaction fees will vary depending on network conditions and other factors.
+
+__Note__: When message is received, part of it will be consumed for gas and storage fees.
+
+You can check [this example](https://testnet.tonviewer.com/transaction/42ed45726e4fe994b7fd6dbf953a2ac24ecd77753858abeda9d6755c664a537a) as a real-world confirmation
 :::
 
 ## 1. Send a regular message
 
-We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin, we send a regular message with 20 Toncoin, the transaction fee is 3 Toncoin and will be deducted from the message.
+Fwd_fee and action_fee will be deducted from message.
+You sent 1 TON, fee is 0.04 TON, actual received value will be 0.96 TON.
 
 ![](/img/docs/message-modes-cookbook/send_regular_message.svg)
 
@@ -21,7 +26,8 @@ We currently have 100 Toncoin in the balance of our smart contract. After receiv
 
 ## 2. Send a regular message, no bounce the message on error and ignore it
 
-We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin, we send a regular message with 20 Toncoin, the transaction fee is 3 Toncoin and will be deducted from the message.
+Fwd_fee and action_fee will be deducted from message.
+You sent 1 TON, fee is 0.04 TON, actual received value will be 0.96 TON.
 In case of an error during transaction processing, the message will not bounce and will be ignored.
 
 ![](/img/docs/message-modes-cookbook/send_regular_message_and_ignore_errors.svg)
@@ -32,8 +38,10 @@ In case of an error during transaction processing, the message will not bounce a
 
 ## 3. Send a regular message and bounce the message on error
 
-We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin, we send a regular message with 20 Toncoin, the transaction fee is 3 Toncoin and will be deducted from the message, 
-if an error occurs during action processing - bounce the message in addition to rolling back the transaction.
+Fwd_fee and action_fee will be deducted from message.
+You sent 1 TON, fee is 0.04 TON, actual received value will be 0.96 TON.
+if an [error occurs during action processing](https://retracer.ton.org/?tx=3ea9f990814dd7bd3bec62dcc6a46de40108572499dac335e34897d241add357&testnet=true) - bounce the message.
+Then fee will be deducted again and bounced value will be 0.92 TON.
 
 ![](/img/docs/message-modes-cookbook/send_regular_message_and_bounce_if_error.svg)
 
@@ -43,7 +51,8 @@ if an error occurs during action processing - bounce the message in addition to 
 
 ## 4. Send a regular message with separate fees
 
-We have 100 Toncoin on our smart contract balance, we receive an internal message with 50 Toncoin and send a regular message with 20 Toncoin, the total fee is 3 Toncoin and we pay the transfer fee separately (from the contract balance).
+Fwd_fee and action_fee will be deducted from contract balance.
+You sent 1 TON, fee is 0.04 TON, actual received value will be 1 TON.
 
 ![](/img/docs/message-modes-cookbook/send_regular_and_pay_fees_separately.svg)
 
@@ -53,8 +62,10 @@ We have 100 Toncoin on our smart contract balance, we receive an internal messag
 
 ## 5. Send a regular message with separate fees and bounce the message on error
 
-We have 100 Toncoin on our smart contract balance and we receive an internal message with 50 Toncoin and send a regular message with 20 Toncoin, the total fee is 3 Toncoin and we pay the transfer fee separately (from the contract balance), 
-if an error occurs during action processing - bounce the message in addition to rolling back the transaction.
+Fwd_fee and action_fee will be deducted from contract balance.
+You sent 1 TON, fee is 0.04 TON, actual received value will be 1 TON.
+if an error occurs during action processing - bounce the message.
+Then fee will be deducted and bounced value will be 0.96 TON.
 
 ![](/img/docs/message-modes-cookbook/send_regular_message_pay_fee_separately_bounce_if_error.svg)
 
@@ -64,8 +75,8 @@ if an error occurs during action processing - bounce the message in addition to 
 
 ## 6. Carry remaining value with new message
 
-We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin we carry all the remaining value of the inbound message in addition to the value initially indicated in the new message,
-the transaction fee is 3 Toncoin and will be deducted from the message.
+Fwd_fee and action_fee will be deducted from message.
+You received X TON, then sent 1 TON, fee is 0.04 TON, actual received value will be X + 0.96 TON.
 
 ![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value.svg)
 
@@ -75,8 +86,8 @@ the transaction fee is 3 Toncoin and will be deducted from the message.
 
 ## 7. Carry remaining value with new message with separate fees
 
-We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin we carry all the remaining value of the inbound message in addition to the value initially indicated in the new message,
-the transaction fee is 3 Toncoin and will be paid separately (from the smart contract balance).
+Fwd_fee and action_fee will be deducted from contract.
+You received X TON, then sent 1 TON, fee is 0.04 TON, actual received value will be X + 1 TON.
 
 ![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value_and_pay_fees_separately.svg)
 
@@ -86,8 +97,10 @@ the transaction fee is 3 Toncoin and will be paid separately (from the smart con
 
 ## 8. Carry remaining value and bounce the message on error
 
-We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin we carry all the remaining value of the inbound message in addition to the value initially indicated in the new message,
-the transaction fee is 3 Toncoin and will be deducted from the message, if an error occurs during action processing - bounce the message in addition to rolling back the transaction.
+Fwd_fee and action_fee will be deducted from message.
+You received X TON, then sent 1 TON, fee is 0.04 TON, actual received value will be X + 0.96 TON.
+If an error occurs during action processing - bounce the message.
+Then fee will be deducted from in_msg and bounced value will be X - 0.04 TON.
 
 ![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value_and_if_error_bounce.svg)
 
@@ -97,8 +110,10 @@ the transaction fee is 3 Toncoin and will be deducted from the message, if an er
 
 ## 9. Carry remaining value with new message with separate fees and bounce the message on error
 
-We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin we send a message, we transfer the entire contract balance in addition to the original amount received,  the transaction fee is 3 Toncoin and will be paid separately (from the smart contract balance),
-if an error occurs during action processing - bounce the message in addition to rolling back the transaction.
+Fwd_fee and action_fee will be deducted from contract.
+You received X TON, then sent 1 TON, fee is 0.04 TON, actual received value will be X + 1 TON.
+If an error occurs during action processing - bounce the message.
+Then fee will be deducted from in_msg and bounced value will be X - 0.04 TON.
 
 ![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value_and_pay_fees_separately_and_if_error_bounce.svg)
 
@@ -108,8 +123,9 @@ if an error occurs during action processing - bounce the message in addition to 
 
 ## 10. Send all received tokens together with the contract balance
 
-We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin we send a message, we transfer the entire contract balance in addition to the original amount received, 
-the transaction fee is 3 Toncoin and will be deducted from the message.
+Fwd_fee and action_fee will be deducted from message.
+We currently have 100 Toncoin in the balance of our smart contract.
+After receiving an internal message with X TON we send a message, fee is 0.04 TON, actual received value will be X + 100 - 0.04 TON.
 
 ![](/img/docs/message-modes-cookbook/send_all_received_tokens_with_balance.svg)
 
@@ -119,8 +135,11 @@ the transaction fee is 3 Toncoin and will be deducted from the message.
 
 ## 11. Send all received tokens together with the contract balance and bounce the message on error
 
-We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin we send a message, we transfer the entire contract balance in addition to the original amount received, the transaction fee is 3 Toncoin and will be deducted from the message, 
-if there was an error in processing the action - bounce the message in addition to rolling back the transaction.
+Fwd_fee and action_fee will be deducted from message.
+We currently have 100 Toncoin in the balance of our smart contract.
+After receiving an internal message with X TON we send a message, fee is 0.04 TON, actual received value will be X + 100 - 0.04 TON.
+If an error occurs during action processing - bounce the message.
+Then fee will be deducted from in_msg and bounced value will be X - 0.04 TON.
 
 ![](/img/docs/message-modes-cookbook/send_all_received_tokens_with_balance_and_if_error_bounce.svg)
 
@@ -130,8 +149,10 @@ if there was an error in processing the action - bounce the message in addition 
 
 ## 12. Send all received tokens together with the contract balance and destroy smart-contract
 
-We currently have 100 Toncoin in the balance of our smart contract. After receiving an internal message with 50 Toncoin, we send a message to transfer the entire contract balance in addition to the original amount received and destroy the contract,
-the transaction fee is 3 Toncoin and will be deducted from the message.
+Fwd_fee and action_fee will be deducted from message.
+We currently have 100 Toncoin in the balance of our smart contract.
+After receiving an internal message with X TON we send a message, fee is 0.04 TON, actual received value will be X + 100 - 0.04 TON.
+When the balance reaches 0 TON destroy the contract.
 
 ![](/img/docs/message-modes-cookbook/send_all_received_tokens_with_balance_and_destroy_sc.svg)
 
