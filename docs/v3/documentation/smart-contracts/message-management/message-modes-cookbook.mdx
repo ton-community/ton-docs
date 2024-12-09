@@ -30,6 +30,10 @@ Fwd_fee and action_fee will be deducted from message.
 You sent 1 TON, fee is 0.04 TON, actual received value will be 0.96 TON.
 In case of an error during transaction processing, the message will not bounce and will be ignored.
 
+:::info tip 
+Funds included with ignored message still will be [credited to receiving address](https://testnet.tonviewer.com/transaction/5e6a7b8b21efd57db46466a4563924cbf0556371598f5a92331ecd3673b60f3f)
+:::
+
 ![](/img/docs/message-modes-cookbook/send_regular_message_and_ignore_errors.svg)
 
 | Mode and Flags | Code |
@@ -40,8 +44,8 @@ In case of an error during transaction processing, the message will not bounce a
 
 Fwd_fee and action_fee will be deducted from message.
 You sent 1 TON, fee is 0.04 TON, actual received value will be 0.96 TON.
-if an [error occurs during action processing](https://retracer.ton.org/?tx=3ea9f990814dd7bd3bec62dcc6a46de40108572499dac335e34897d241add357&testnet=true) - bounce the message.
-Then fee will be deducted again and bounced value will be 0.92 TON.
+If an [error occurs during action processing](https://retracer.ton.org/?tx=e9dccba82badc0d742f14eff41c203280f380e87180b5314fcfd742856e598f7&testnet=true) - bounce the message.
+Then total fee + fwd_fee will be deducted and bounced value will be 1 - `total_fee` TON.
 
 ![](/img/docs/message-modes-cookbook/send_regular_message_and_bounce_if_error.svg)
 
@@ -65,7 +69,7 @@ You sent 1 TON, fee is 0.04 TON, actual received value will be 1 TON.
 Fwd_fee and action_fee will be deducted from contract balance.
 You sent 1 TON, fee is 0.04 TON, actual received value will be 1 TON.
 if an error occurs during action processing - bounce the message.
-Then fee will be deducted and bounced value will be 0.96 TON.
+Then total fee + fwd_fee will be deducted and bounced value will be 1 - `total_fee` TON.
 
 ![](/img/docs/message-modes-cookbook/send_regular_message_pay_fee_separately_bounce_if_error.svg)
 
@@ -100,7 +104,7 @@ You received X TON, then sent 1 TON, fee is 0.04 TON, actual received value will
 Fwd_fee and action_fee will be deducted from message.
 You received X TON, then sent 1 TON, fee is 0.04 TON, actual received value will be X + 0.96 TON.
 If an error occurs during action processing - bounce the message.
-Then fee will be deducted from in_msg and bounced value will be X - 0.04 TON.
+Then total fee + fwd_fee will be deducted from in_msg and bounced value will be X - `total_fee` TON.
 
 ![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value_and_if_error_bounce.svg)
 
@@ -113,7 +117,7 @@ Then fee will be deducted from in_msg and bounced value will be X - 0.04 TON.
 Fwd_fee and action_fee will be deducted from contract.
 You received X TON, then sent 1 TON, fee is 0.04 TON, actual received value will be X + 1 TON.
 If an error occurs during action processing - bounce the message.
-Then fee will be deducted from in_msg and bounced value will be X - 0.04 TON.
+Then total fee + fwd_fee will be deducted from in_msg and bounced value will be X - `total_fee` TON.
 
 ![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value_and_pay_fees_separately_and_if_error_bounce.svg)
 
@@ -139,7 +143,7 @@ Fwd_fee and action_fee will be deducted from message.
 We currently have 100 Toncoin in the balance of our smart contract.
 After receiving an internal message with X TON we send a message, fee is 0.04 TON, actual received value will be X + 100 - 0.04 TON.
 If an error occurs during action processing - bounce the message.
-Then fee will be deducted from in_msg and bounced value will be X - 0.04 TON.
+Then total fee + fwd_fee will be deducted from in_msg and bounced value will be X - `total_fee` TON.
 
 ![](/img/docs/message-modes-cookbook/send_all_received_tokens_with_balance_and_if_error_bounce.svg)
 

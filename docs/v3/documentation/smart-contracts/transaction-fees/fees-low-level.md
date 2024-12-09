@@ -25,6 +25,10 @@ It’s important to keep in mind that on TON you pay for both the execution of a
 
 If you have not used your TON Wallet for a significant period of time (1 year), _you will have to pay a significantly larger commission than usual because the wallet pays commission on sending and receiving transactions_.
 
+:::info
+__Note__: When message is bounced from the contract, the contract will pay current debt for storage aka `storage_fee`
+:::
+
 ### Formula
 
 You can approximately calculate storage fees for smart contracts using this formula:
