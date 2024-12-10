@@ -3,16 +3,20 @@
 Understanding the different modes and flags available for sending messages is important to ensure that your smart contracts behave correctly. 
 While [Message-modes](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes) section provided detailed descriptions of these modes and flags, in this section we will illustrate their practical application with concrete examples.
 
+#### Message value and account balance
 There are 2 ways to pay for blockchain action: from [contract balance](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/block.tlb#L263C1-L265C20) and from [message value](/v3/documentation/data-formats/tlb/msg-tlb#commonmsginfo). Typically it's charged from contract balance but in specific cases it will use part of message value.
 
 :::info IMPORTANT
-__Note__: The transaction fees used in these examples are hypothetical and are used for illustrative purposes only. Actual transaction fees will vary depending on network conditions and other factors. When message is received, part of it will be consumed for gas and storage fees. You can check [this example](https://testnet.tonviewer.com/transaction/42ed45726e4fe994b7fd6dbf953a2ac24ecd77753858abeda9d6755c664a537a) as a real-world confirmation
+__Note__: The transaction fees used in these examples are hypothetical and are used for illustrative purposes only, any fees other than message forward are out of scope of this article. Actual transaction fees will vary depending on network conditions and other factors. When message is received, part of it will be consumed for gas and storage fees. You can check [this example](https://testnet.tonviewer.com/transaction/42ed45726e4fe994b7fd6dbf953a2ac24ecd77753858abeda9d6755c664a537a) as a real-world confirmation.
 :::
 
 ## 1. Send a regular message
 
-Fwd_fee and action_fee will be deducted from message.
-You sent 1 TON, fee is 0.04 TON, actual received value will be 0.96 TON.
+State before tx: Account A has 1 TON, Account B has 1 TON
+
+You sent 0,1 TON, [msg_fwd_fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#forward-fees) are 0.004 TON, actual received value will be 0.096 TON, `fwd_fee` and `action_fee` deducted from `value`.
+
+State after tx: Account A has 0.9 TON, Account B has 1.096 TON
 
 ![](/img/docs/message-modes-cookbook/send_regular_message.svg)
 
@@ -22,12 +26,15 @@ You sent 1 TON, fee is 0.04 TON, actual received value will be 0.96 TON.
 
 ## 2. Send a regular message, no bounce the message on error and ignore it
 
-Fwd_fee and action_fee will be deducted from message.
-You sent 1 TON, fee is 0.04 TON, actual received value will be 0.96 TON.
+State before tx: Account A has 1 TON, Account B has 1 TON
+
+The result is the same as [mode = 0](## 1. Send a regular message)
 In case of an error during transaction processing, the message will not bounce and will be ignored.
 
-:::info tip 
-Funds included with ignored message still will be [credited to receiving address](https://testnet.tonviewer.com/transaction/5e6a7b8b21efd57db46466a4563924cbf0556371598f5a92331ecd3673b60f3f)
+State after tx: Account A has 0.9 TON, Account B has 1.096 TON
+
+:::info tip
+Funds included with an ignored message will still be [credited to the receiving address](https://testnet.tonviewer.com/transaction/8a388731812c80ab9b0ea9531108425488af5def854e4bd6f0ed47362b56d557)
 :::
 
 ![](/img/docs/message-modes-cookbook/send_regular_message_and_ignore_errors.svg)
