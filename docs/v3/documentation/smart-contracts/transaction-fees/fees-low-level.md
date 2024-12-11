@@ -25,6 +25,10 @@ It’s important to keep in mind that on TON you pay for both the execution of a
 
 If you have not used your TON Wallet for a significant period of time (1 year), _you will have to pay a significantly larger commission than usual because the wallet pays commission on sending and receiving transactions_.
 
+:::info
+__Note__: When message is bounced from the contract, the contract will pay current debt for storage aka `storage_fee`
+:::
+
 ### Formula
 
 You can approximately calculate storage fees for smart contracts using this formula:
@@ -214,7 +218,7 @@ When the number of stack entries is substantial (10+), and they are actively use
 
 ## Forward fees
 
-Internal messages define an `ihr_fee` in Toncoins, which is subtracted from the value attached to the message and awarded to the validators of the destination shardchain if they include the message through the IHR mechanism. The `fwd_fee` is the original total forwarding fee paid for using the HR mechanism; it is automatically computed from the [24 and 25 configuration parameters](/v3/documentation/network/configs/blockchain-configs#param-24-and-25) and the size of the message at the time the message is generated. Note that the total value carried by a newly created internal outbound message equals the sum of the value, `ihr_fee`, and `fwd_fee`. This sum is deducted from the balance of the source account. Of these components, only the value is always credited to the destination account upon message delivery. The `fwd_fee` is collected by the validators on the HR path from the source to the destination, and the `ihr_fee` is either collected by the validators of the destination shardchain (if the message is delivered via IHR) or credited to the destination account.
+Internal messages define an `ihr_fee` in Toncoins, which is subtracted from the value attached to the message and awarded to the validators of the destination shardchain if they include the message through the IHR mechanism. The `fwd_fee` is the original total forwarding fee paid for using the HR mechanism; it is automatically computed from the [24 and 25 configuration parameters](/v3/documentation/network/configs/blockchain-configs#param-24-and-25) and the size of the message at the time the message is generated. Note that the total value carried by a newly created internal outbound message equals the sum of the value, `ihr_fee`, and `fwd_fee`. This sum is deducted from the balance of the source account. Of these components, only the `ihr_fee` value is credited to the destination account upon message delivery. The `fwd_fee` is collected by the validators on the HR path from the source to the destination, and the `ihr_fee` is either collected by the validators of the destination shardchain (if the message is delivered via IHR) or credited to the destination account.
 
 :::tip
 
@@ -232,6 +236,12 @@ ihr_fwd_fees = ceil((msg_fwd_fees * ihr_price_factor) / 2^16);
 
 total_fwd_fees = msg_fwd_fees + ihr_fwd_fees; // ihr_fwd_fees - is 0 for external messages
 ```
+
+:::info IMPORTANT
+Please note that `msg_fwd_fees` above includes `action_fee` below. For a basic message this fee = lump_price = 400000 gram, action_fee = (400000 * 21845) / 65536 = 133331. Or approximately a third of the `msg_fwd_fees`. 
+
+Hence `fwd_fee` = `msg_fwd_fees` - `action_fee` = 266669 gram = 0,000266669 TON 
+:::
 
 ## Action fee
 
