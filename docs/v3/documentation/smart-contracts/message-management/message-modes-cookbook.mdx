@@ -16,11 +16,11 @@ __Note__: Actual transaction fees will vary depending on blockchain configuratio
 
 ## 1. Send a regular message
 
-State before tx: Account A has 1 TON, Account B has 1 TON
+State before transaction: Account A has 1 TON, Account B has 1 TON
 
 __A__ sent 0.1 TON to __B__, [msg_fwd_fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#forward-fees) are 0.004 TON, actual received value will be 0.096 TON, `fwd_fee` and `action_fee` deducted from `value`.
 
-State after tx: Account A has 0.9 TON, Account B has 1.096 TON
+State after transaction: Account A has 0.9 TON, Account B has 1.096 TON
 
 ![](/img/docs/message-modes-cookbook/send_regular_message.svg)
 
@@ -30,12 +30,12 @@ State after tx: Account A has 0.9 TON, Account B has 1.096 TON
 
 ## 2. Send a regular message, no bounce the message on error and ignore it
 
-State before tx: Account A has 1 TON, Account B has 1 TON
+State before transaction: Account A has 1 TON, Account B has 1 TON
 
 __A__ sent 0.1 TON to __B__, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.096 TON, `fwd_fee` and `action_fee` deducted from `value`.
 In case of an error during transaction processing, the message will not bounce and will be ignored.
 
-State after tx: Account A has 0.9 TON, Account B has 1.096 TON
+State after transaction: Account A has 0.9 TON, Account B has 1.096 TON
 
 :::info tip
 Funds included with an ignored message will still be [credited to the receiving address](https://testnet.tonviewer.com/transaction/8a388731812c80ab9b0ea9531108425488af5def854e4bd6f0ed47362b56d557). 
@@ -50,12 +50,12 @@ If no errors the result is the same as [`mode = 0`](#1-send-a-regular-message).
 
 ## 3. Send a regular message and bounce the message on action error
 
-State before tx: Account A has 1 TON, Account B has 1 TON
+State before transaction: Account A has 1 TON, Account B has 1 TON
 
 __A__ sent 0.1 TON to __B__, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.096 TON, `fwd_fee` and `action_fee` deducted from `value`.
 In case of an error during [action phase](https://retracer.ton.org/?tx=e9dccba82badc0d742f14eff41c203280f380e87180b5314fcfd742856e598f7&testnet=true), the message will bounce and `total_fee` + `fwd_fee` will be deducted from `value`.
 
-State after error: Account A has 1 - ([total_fee](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula) + `fwd_fee`) TON, Account B has 1 TON
+State after transaction with error: Account A has 1 - ([total_fee](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula) + `fwd_fee`) TON, Account B has 1 TON
 
 :::info tip
 If no errors the result is the same as [`mode = 0`](#1-send-a-regular-message).
@@ -69,11 +69,11 @@ If no errors the result is the same as [`mode = 0`](#1-send-a-regular-message).
 
 ## 4. Send a regular message with separate fees
 
-State before tx: Account A has 1 TON, Account B has 1 TON
+State before transaction: Account A has 1 TON, Account B has 1 TON
 
 __A__ sent 0.1 TON to __B__, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.1 TON, `fwd_fee` and `action_fee` deducted from `balance`.
 
-State after tx: Account A has 0.896 TON, Account B has 1.1 TON
+State after transaction: Account A has 0.896 TON, Account B has 1.1 TON
 
 ![](/img/docs/message-modes-cookbook/send_regular_and_pay_fees_separately.svg)
 
@@ -83,12 +83,12 @@ State after tx: Account A has 0.896 TON, Account B has 1.1 TON
 
 ## 5. Send a regular message with separate fees and bounce the message on error
 
-State before tx: Account A has 1 TON, Account B has 1 TON
+State before transaction: Account A has 1 TON, Account B has 1 TON
 
 __A__ sent 0.1 TON to __B__, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.1 TON, `fwd_fee` and `action_fee` deducted from `balance`.
 In case of an error during [action phase](https://retracer.ton.org/?tx=e9dccba82badc0d742f14eff41c203280f380e87180b5314fcfd742856e598f7&testnet=true), the message will bounce and `total_fee` + `fwd_fee` will be deducted from `value`.
 
-State after error: Account A has 1 - ([total_fee](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula) + `fwd_fee`) TON, Account B has 1 TON
+State after transaction with error: Account A has 1 - ([total_fee](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula) + `fwd_fee`) TON, Account B has 1 TON
 
 :::info tip
 If no errors the result is the same as [`mode = 1`](#4-send-a-regular-message-with-separate-fees).
@@ -102,12 +102,12 @@ If no errors the result is the same as [`mode = 1`](#4-send-a-regular-message-wi
 
 ## 6. Carry remaining value with new message
 
-State before tx: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
+State before transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
 __A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` = 64, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.596 TON, `fwd_fee` and `action_fee` deducted from `value`.
 
-State after tx: Account A has 0.896 TON, Account B has 0.5 TON, Account C has 1.596 TON
-// example should be added
+State after transaction: Account A has 0.896 TON, Account B has 0.5 TON, Account C has 1.596 TON
+
 
 ![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value.svg)
 
@@ -117,12 +117,12 @@ State after tx: Account A has 0.896 TON, Account B has 0.5 TON, Account C has 1.
 
 ## 7. Carry remaining value with new message with separate fees
 
-State before tx: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
+State before transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
 __A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` = 65, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, `fwd_fee` and `action_fee` deducted from `balance`. 
 
-State after tx: Account A has 0.896 TON, Account B has 0.496 TON, Account C has 1.6 TON
-// example should be added
+State after transaction: Account A has 0.896 TON, Account B has 0.496 TON, Account C has 1.6 TON
+
 
 ![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value_and_pay_fees_separately.svg)
 
@@ -132,13 +132,13 @@ State after tx: Account A has 0.896 TON, Account B has 0.496 TON, Account C has 
 
 ## 8. Carry remaining value and bounce the message on error
 
-State before tx: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
+State before transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
 __A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` = 80, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.596 TON, `fwd_fee` and `action_fee` deducted from `value`.
 In case of an error during action phase, the message will bounce and `total_fee` + `fwd_fee` will be deducted from `value`.
 
-State after error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
-// example should be added
+State after transaction with error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
+
 
 :::info tip
 If no errors the result is the same as [`mode = 64`](#6-carry-remaining-value-with-new-message).
@@ -152,13 +152,13 @@ If no errors the result is the same as [`mode = 64`](#6-carry-remaining-value-wi
 
 ## 9. Carry remaining value with new message with separate fees and bounce the message on error
 
-State before tx: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
+State before transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
 __A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` = 80, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, `fwd_fee` and `action_fee` deducted from `balance`.
 In case of an error during action phase, the message will bounce and `total_fee` + `fwd_fee` will be deducted from `value`.
 
-State after error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
-// example should be added
+State after transaction with error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
+
 
 :::info tip
 If no errors the result is the same as [`mode = 65`](#7-carry-remaining-value-with-new-message-with-separate-fees).
@@ -172,11 +172,11 @@ If no errors the result is the same as [`mode = 65`](#7-carry-remaining-value-wi
 
 ## 10. Send all received tokens together with the contract balance
 
-State before tx: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
+State before transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
 __A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` = 128, `msg_fwd_fees` are 0.004 TON, actual received value will be 1.1 - total_fee TON, total_fee deducted from `value`.
 
-State after tx: Account A has 0.896 TON, Account B has 0 TON, Account C has ~2.09 TON
+State after transaction: Account A has 0.896 TON, Account B has 0 TON, Account C has ~2.09 TON
 
 ![](/img/docs/message-modes-cookbook/send_all_received_tokens_with_balance.svg)
 
@@ -186,12 +186,12 @@ State after tx: Account A has 0.896 TON, Account B has 0 TON, Account C has ~2.0
 
 ## 11. Send all received tokens together with the contract balance and bounce the message on error
 
-State before tx: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
+State before transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
 __A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` = 144, `msg_fwd_fees` are 0.004 TON, actual received value will be 1.1 - total_fee TON, total_fee deducted from `value`.
 
-State after error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
-// example should be added
+State after transaction with error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
+
 
 :::info tip
 If no errors the result is the same as [`mode = 128`](#10-send-all-received-tokens-together-with-the-contract-balance).
@@ -205,11 +205,11 @@ If no errors the result is the same as [`mode = 128`](#10-send-all-received-toke
 
 ## 12. Send all received tokens together with the contract balance and destroy smart-contract
 
-State before tx: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
+State before transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
 __A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` = 160, `msg_fwd_fees` are 0.004 TON, actual received value will be 1.1 - total_fee TON, total_fee deducted from `value`.
 
-State after tx: Account A has 0.896 TON, Account B has 0 TON and `nonexist`, Account C has ~2.09 TON
+State after transaction: Account A has 0.896 TON, Account B has 0 TON and `nonexist`, Account C has ~2.09 TON
 When the balance reaches 0 TON destroy the contract.
 
 ![](/img/docs/message-modes-cookbook/send_all_received_tokens_with_balance_and_destroy_sc.svg)
