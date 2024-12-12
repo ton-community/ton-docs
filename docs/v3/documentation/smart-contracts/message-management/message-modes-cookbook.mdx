@@ -15,7 +15,7 @@ There are 2 ways to pay for blockchain action:
 Typically it's charged from contract `balance`, but in specific cases it will use part of the message `value`. The transaction fees used in these examples are hypothetical and are used for illustrative purposes only, any fees other than message forward are out of scope of this article.
 
 :::info IMPORTANT
-__Note__: Actual transaction fees will vary depending on blockchain configuration, code of the smart contract and other factors. When message is received, part of it will be consumed for gas and storage fees. You can check [this example](https://testnet.tonviewer.com/transaction/42ed45726e4fe994b7fd6dbf953a2ac24ecd77753858abeda9d6755c664a537a) as a real-world confirmation.
+__Note__: Actual transaction fees will vary depending on blockchain configuration, code of the smart contract and other factors. When message is received, part of it will be consumed for gas and storage fees. Please check how [get_balance](/v3/documentation/smart-contracts/func/docs/stdlib/#get_balance) works to understand transaction state better. You can check [this example](https://testnet.tonviewer.com/transaction/42ed45726e4fe994b7fd6dbf953a2ac24ecd77753858abeda9d6755c664a537a) as a real-world confirmation.
 :::
 
 ## 1. Send a regular message
@@ -108,10 +108,13 @@ If no errors the result is the same as [`mode = 1`](#4-send-a-regular-message-wi
 
 State before transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-__A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` = 64, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.596 TON, `fwd_fee` and `action_fee` deducted from `value`.
+__A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` = 64, `msg_fwd_fees` are 0.004 TON, actual received `value` will be 0.6 TON, total_fee + `fwd_fee` deducted from `value`.
 
-State after transaction: Account A has 0.896 TON, Account B has 0.5 TON, Account C has 1.596 TON
+State after transaction: Account A has 0.896 TON, Account B has 0.5 TON, Account C has 1.6 - (total_fee + `fwd_fee`) TON
 
+:::info
+You might check [this example](https://retracer.ton.org/?tx=4340b5ecbd83227cc64e10b1ca7628352133cda1d608081fb2ed58d299f00936&testnet=true)
+:::
 
 ![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value.svg)
 
@@ -123,10 +126,13 @@ State after transaction: Account A has 0.896 TON, Account B has 0.5 TON, Account
 
 State before transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-__A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` = 65, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, `fwd_fee` and `action_fee` deducted from `balance`. 
+__A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` = 65, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, total_fee + `fwd_fee` deducted from `balance`. 
 
-State after transaction: Account A has 0.896 TON, Account B has 0.496 TON, Account C has 1.6 TON
+State after transaction: Account A has 0.896 TON, Account B has 0.5 - (total_fee + `fwd_fee`) TON, Account C has 1.6 TON
 
+:::info
+You might check [this example](https://retracer.ton.org/?tx=5c2525feeb3b93db594b7b11f3250430f02dd8616595cf2b1583ebc7da79d15b&testnet=true)
+:::
 
 ![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value_and_pay_fees_separately.svg)
 
@@ -138,7 +144,7 @@ State after transaction: Account A has 0.896 TON, Account B has 0.496 TON, Accou
 
 State before transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-__A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` = 80, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.596 TON, `fwd_fee` and `action_fee` deducted from `value`.
+__A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` = 80, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, total_fee + `fwd_fee` deducted from `value`.
 In case of an error during action phase, the message will bounce and `total_fee` + `fwd_fee` will be deducted from `value`.
 
 State after transaction with error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
@@ -158,7 +164,7 @@ If no errors the result is the same as [`mode = 64`](#6-carry-remaining-value-wi
 
 State before transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-__A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` = 80, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, `fwd_fee` and `action_fee` deducted from `balance`.
+__A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` = 80, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, total_fee + `fwd_fee` deducted from `balance`.
 In case of an error during action phase, the message will bounce and `total_fee` + `fwd_fee` will be deducted from `value`.
 
 State after transaction with error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
