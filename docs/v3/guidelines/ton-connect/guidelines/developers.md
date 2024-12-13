@@ -60,7 +60,7 @@ The TON Connect User Interface (UI) is a framework that allows developers to imp
 
 TON Connect can easily be integrated with apps using simple UI elements such as the "connect wallet button", "select wallet dialog" and confirmation modals. Here are three main examples of how TON Connect improves UX in apps:
 
-* Example of app functionality in the DAppbrowser: [GitHub](https://ton-connect.github.io/demo-dapp/)
+* Example of app functionality in the DApp browser: [GitHub](https://ton-connect.github.io/demo-dapp/)
 * Example of a backend partition of the DAppabove: [GitHub](https://github.com/ton-connect/demo-dapp-backend)
 * Bridge server using Go: [GitHub](https://github.com/ton-connect/bridge)
 
