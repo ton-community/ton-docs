@@ -122,11 +122,11 @@ To make any changes, begin here:
 
 ### Step-by-step guide for developers
 
- 1. Make sure you have all "Dependencies and Requirements" from the [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) repo.
+ 1. Make sure you have all "Dependencies and Requirements" from the [Blueprint SDK](/v3/documentation/smart-contracts/getting-started/javascript) repo.
  2. Clone the [minter-contract repository](https://github.com/ton-blockchain/minter-contract) and rename the project. 
  3. To install you need to open a terminal at the root and run:
 
- ```bash npm2yarn
+ ```bash
  npm install
  ```
 
@@ -134,8 +134,8 @@ To make any changes, begin here:
 
  5. Build a project by using: 
 
- ```bash npm2yarn
- npm run build
+ ```bash
+ npm blueprint build --all
  ```
  The build result will be describes the process of creating the necessary files, as well as the search for smart contracts. 
  
@@ -145,11 +145,11 @@ To make any changes, begin here:
     
  6. You can test your changes by using:
 
- ```bash npm2yarn
- npm run test
+ ```bash
+ npm blueprint test
  ```
 
- 7. Edit the **name** and other metadata of the token in `build/jetton-minter.deploy.ts` by changing JettonParams object.
+ 7. Edit the **name** and other metadata of the token in `scripts/.ts` by changing JettonParams object.
 
  ```js
 // This is example data - Modify these params for your own jetton!
@@ -157,7 +157,6 @@ To make any changes, begin here:
 // - Owner should usually be the deploying wallet's address.
    
  const jettonParams = {
-  owner: Address.parse("EQD4gS-Nj2Gjr2FYtg-s3fXUvjzKbzHGZ5_1Xe_V0-GCp0p2"),
   name: "MyJetton",
   symbol: "JET1",
   image: "https://www.linkpicture.com/q/download_183.png", // Image url
@@ -167,41 +166,9 @@ To make any changes, begin here:
 
  8. To deploy a token use the following command:
 
- ```bash npm2yarn
- npm run deploy
+ ```bash
+ npm blueprint deploy
  ```
- The result of running your project:
-
-    ```js
-    > @ton-defi.org/jetton-deployer-contracts@0.0.2 deploy
-    > ts-node ./build/_deploy.ts
-
-    =================================================================
-    Deploy script running, let's find some contracts to deploy..
-
-    * We are working with 'mainnet'
-
-    * Config file '.env' found and will be used for deployment!
-     - Wallet address used to deploy from is: YOUR-ADDRESS
-     - Wallet balance is YOUR-BALANCE TON, which will be used for gas
-
-    * Found root contract 'build/jetton-minter.deploy.ts - let's deploy it':
-     - Based on your init code+data, your new contract address is: YOUR-ADDRESS
-     - Let's deploy the contract on-chain..
-     - Deploy transaction sent successfully
-     - Block explorer link: https://tonwhales.com/explorer/address/YOUR-ADDRESS
-     - Waiting up to 20 seconds to check if the contract was actually deployed..
-     - SUCCESS! Contract deployed successfully to address: YOUR-ADDRESS
-     - New contract balance is now YOUR-BALANCE TON, make sure it has enough to pay rent
-     - Running a post deployment test:
-    {
-      name: 'MyJetton',
-      description: 'My jetton',
-      image: 'https://www.linkpicture.com/q/download_183.png',
-      symbol: 'JET1'
-    }
-    ```
-
 
 ## What's next?
 
