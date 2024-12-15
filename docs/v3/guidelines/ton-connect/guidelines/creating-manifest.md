@@ -1,9 +1,9 @@
-
+tab
 # Creating manifest.json
 
 Every app needs a manifest to pass meta information to the wallet. The manifest is a JSON file named as `tonconnect-manifest.json` following format:
 
-```json
+esc```json
 {
     "url": "<app-url>",                        // required
     "name": "<app-name>",                      // required
@@ -29,7 +29,7 @@ You can find an example of the manifest below:
 - The best practice is to place the manifest in the root of your app and repository, e.g. `https://myapp.com/tonconnect-manifest.json`. It allows the wallet to handle your app better and improve the UX connected to your app.
 - Ensure that the `manifest.json` file is accessible via a GET request at its URL
 
-## Fields description
+tab## Fields description
 |Field|Requirement|Description|
 |---|---|---|
 |`url` |required| app URL. Will be used as the DAppidentifier. Will be used to open the DAppafter click to its icon in the wallet. It is recommended to pass url without closing slash, e.g. 'https://mydapp.com' instead of 'https://mydapp.com/'.|
