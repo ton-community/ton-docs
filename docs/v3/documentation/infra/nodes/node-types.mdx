@@ -12,6 +12,10 @@ Nodes perform different functions within the TON protocol:
 
 Below, you will find more detailed information about each of these node types, as well as about interaction of full and archive nodes with client applications.
 
+:::caution Node usage on personal local machine
+You shouldn't run any type of node on your personal local machine for long, even if it satisfies the requirements. Nodes actively use disks and can damage them quickly.
+:::
+
 ## Full Node
 
 **Full node** is a basic node type within the TON blockchain.
@@ -21,6 +25,15 @@ In comparison with **archive nodes**, full nodes keep only the latest part of th
 Full nodes _prune_ the state of the TON blockchain kept by them - that means, earlier blocks that become unnecessary for the network, are automatically removed by the full node to effectively manage its data volume.
 
 To allow client applications to look for blocks and transactions, as well as to send new transactions into the TON blockchain, full nodes are equipped with the liteserver functionality: see [Interacting with TON nodes](#interacting-with-ton-nodes) below.
+
+### Hardware Requirements (without [validator](/v3/documentation/infra/nodes/node-types#validator-node))
+
+- at least 16 cores CPU
+- at least 128 GB RAM
+- at least 1TB GB NVMe SSD _OR_ Provisioned 64+k IOPS storage
+- 1 Gbit/s network connectivity
+- 16 TB/month traffic on peak load
+- public IP address (_fixed IP address_)
 
 
 <Button href="/v3/guidelines/nodes/running-nodes/full-node#run-a-node-video"
@@ -40,6 +53,15 @@ They serve as a backend for blockchain explorers and other applications relying 
 Archive nodes do not prune the blockchain state which elevates their system requirements, especially in terms of storage.
 According to the latest estimations, while full nodes and validator nodes require about 1 TB disk space, archive nodes would require about 8 TB to store the complete block history.
 
+### Hardware Requirements 
+
+- 16 x Cores CPU 
+- 128GB ECC Memory 
+- 9TB SSD _OR_ Provisioned 64+k IOPS storage
+- 1 Gbit/s network connectivity
+- 16 TB/month traffic on peak load
+- a public IP address (fixed IP address)
+
 <Button href="/v3/guidelines/nodes/running-nodes/archive-node"
 colorType="primary" sizeType={'sm'}>
 Running an Archive Node
@@ -55,6 +77,19 @@ For successful participation in the validation process, validators get [rewards 
 To be entitled to propose and validate blocks, validators are elected by other participants according to amount of TON being held with them - in other words, their _stake_: the more TON is staked with a validator, the more is its chance to be elected, validate blocks for the network and acquire rewards.
 As a rule, validator operators motivate other TON holders to stake with them to get passive income from resulting rewards.
 In this way, validators ensure network stability, security and contribute to its growth.
+
+### Hardware Requirements
+
+- 16 cores CPU
+- 128 GB RAM
+- 1TB NVME SSD _OR_ Provisioned 64+k IOPS storage
+- 1 Gbit/s network connectivity
+- public IP address (_fixed IP address_)
+- 100 TB/month traffic on peak load
+
+> Typically you'll need at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
+
+> We draw special attention of validators to IOPS disk requirements, it is crucially important for smooth network operation.
 
 <Button href="/v3/guidelines/nodes/running-nodes/validator-node"
 colorType="primary" sizeType={'sm'}>
