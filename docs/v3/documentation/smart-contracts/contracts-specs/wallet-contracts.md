@@ -318,7 +318,7 @@ Note that the `0x8E`, `0x90`, and `0x92` wallet exit codes are designed to preve
 
 #### Preparing for Gasless Transactions
 
-As was sad before v5 wallet smart contract allows the processing of internal messages signed by the owner. This also allows you to make gasless transactions, e.g., payment of network fees when transferring USDt in USDt itself. Common scheme looks like that:
+As was said before v5 wallet smart contract allows the processing of internal messages signed by the owner. This also allows you to make gasless transactions, e.g., payment of network fees when transferring USDt in USDt itself. Common scheme looks like that:
 
 ![image](/img/gasless.jpg)
 
