@@ -1,3 +1,6 @@
+import ConceptImage from '@site/src/components/conceptImage';
+import ThemedImage from '@theme/ThemedImage';
+
 # Cells as Data Storage
 
 Everything in TON is stored in cells. A cell is a data structure containing:
@@ -9,10 +12,17 @@ Bits and references are not intermixed (they are stored separately). Circular re
 
 Thus, all cells constitute a directed acyclic graph (DAG). Here is a good picture to illustrate:
 
-![Directed Acyclic Graph](/img/docs/dag.png)
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/cells-as-data-storage/dag.png?raw=true',
+        dark: '/img/docs/cells-as-data-storage/Cells-as-data-storage_1_dark.png?raw=true',
+    }}
+/>
+<br></br>
 
 ## Cell types
-
 Currently, there are 5 types of cells: _ordinary_ and 4 _exotic_.
 The exotic types are the following:
 * Pruned branch cell

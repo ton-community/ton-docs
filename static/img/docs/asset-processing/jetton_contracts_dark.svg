@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Создано Microsoft Visio, экспорт SVG jetton_contracts_dark.svg Jetton Contracts -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="7.21977in" height="9.59243in"
+		viewBox="0 0 519.823 690.655" xml:space="preserve" color-interpolation-filters="sRGB" class="st18">
+	<v:documentProperties v:langID="1033">
+		<v:userDefs>
+			<v:ud v:nameU="msvNoAutoConnect" v:val="VT0(1):26"/>
+		</v:userDefs>
+	</v:documentProperties>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:url(#ptrn2-4);shape-rendering:crispEdges;stroke:#0088cc;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
+		.st2 {fill:#e3e3e3;font-family:Inter;font-size:1.5em}
+		.st3 {font-size:1em}
+		.st4 {fill:#333337;stroke:#0088cc;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
+		.st5 {fill:none;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.749999}
+		.st6 {fill:#e3e3e3;font-family:Inter;font-size:1.99999em}
+		.st7 {fill:url(#ptrn7-15);shape-rendering:crispEdges;stroke:#0088cc;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
+		.st8 {fill:#0088cc;stroke:#232328;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.749999}
+		.st9 {fill:none;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.499999}
+		.st10 {fill:#e3e3e3;font-family:Inter;font-size:2.50001em}
+		.st11 {fill:#ffc000;stroke:#232328;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.749999}
+		.st12 {fill:url(#ptrn2-34);shape-rendering:crispEdges;stroke:#ffc000;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
+		.st13 {fill:url(#ptrn7-40);shape-rendering:crispEdges;stroke:#ffc000;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
+		.st14 {fill:url(#ptrn6-49);shape-rendering:crispEdges;stroke:#0088cc;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
+		.st15 {fill:url(#ptrn6-58);shape-rendering:crispEdges;stroke:#ffc000;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
+		.st16 {fill:url(#ptrn7-67);shape-rendering:crispEdges;stroke:#e3e3e3;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
+		.st17 {fill:url(#ptrn6-75);shape-rendering:crispEdges;stroke:#e3e3e3;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
+		.st18 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<defs id="Patterns_And_Gradients">
+		<pattern id="ptrn2-4" v:fillPattern="2" v:foreground="#31859b" v:background="#333337" patternUnits="userSpaceOnUse"
+				width="6" height="6" viewBox="0 0 64 64">
+			<image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+					xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA7SURBVChTYzByD/hvbGyOgUHihrWT/jPgkwTRGAqQJUF8FAXokigKsEnCFeCSBCvAJwlWgE/SyD3gPwDeFG7ZMIYPywAAAABJRU5ErkJggg=="/>
+		</pattern>
+		<pattern id="ptrn7-15" v:fillPattern="7" v:foreground="#31859b" v:background="#333337" patternUnits="userSpaceOnUse"
+				width="6" height="6" viewBox="0 0 64 64">
+			<image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+					xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAXSURBVChTYzBsnf3f2NgcJx4RCsz/AwAIMGyhi30E/gAAAABJRU5ErkJggg=="/>
+		</pattern>
+		<pattern id="ptrn2-34" v:fillPattern="2" v:foreground="#bf9000" v:background="#333337" patternUnits="userSpaceOnUse"
+				width="6" height="6" viewBox="0 0 64 64">
+			<image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+					xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA7SURBVChTYwjz0vxvbGyOgUHimzpY/jPgkwTRGAqQJUF8FAXokigKsEnCFeCSBCvAJwlWgE8yzEvzPwDi9G7J1SU1egAAAABJRU5ErkJggg=="/>
+		</pattern>
+		<pattern id="ptrn7-40" v:fillPattern="7" v:foreground="#bf9000" v:background="#333337" patternUnits="userSpaceOnUse"
+				width="6" height="6" viewBox="0 0 64 64">
+			<image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+					xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAXSURBVChTY9g/geG/sbE5TjwiFJj/BwAIUGyRNrU0vQAAAABJRU5ErkJggg=="/>
+		</pattern>
+		<pattern id="ptrn6-49" v:fillPattern="6" v:foreground="#31859b" v:background="#333337" patternUnits="userSpaceOnUse"
+				width="6" height="6" viewBox="0 0 64 64">
+			<image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+					xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAaSURBVChTYzBsnf0fH2YwNjb/jw8PBwXm/wFDPmyhIHiznAAAAABJRU5ErkJggg=="/>
+		</pattern>
+		<pattern id="ptrn6-58" v:fillPattern="6" v:foreground="#bf9000" v:background="#333337" patternUnits="userSpaceOnUse"
+				width="6" height="6" viewBox="0 0 64 64">
+			<image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+					xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAbSURBVChTY9g/geE/PsxgbGz+Hx8eDgrM/wMAPQZskebxj2UAAAAASUVORK5CYII="/>
+		</pattern>
+		<pattern id="ptrn7-67" v:fillPattern="7" v:foreground="#505056" v:background="#333337" patternUnits="userSpaceOnUse"
+				width="6" height="6" viewBox="0 0 64 64">
+			<image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+					xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAWSURBVChTYwgICPtvbGyOE48IBeb/AWqWaclSEAx9AAAAAElFTkSuQmCC"/>
+		</pattern>
+		<pattern id="ptrn6-75" v:fillPattern="6" v:foreground="#505056" v:background="#333337" patternUnits="userSpaceOnUse"
+				width="6" height="6" viewBox="0 0 64 64">
+			<image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+					xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAaSURBVChTYwgICPuPDzMYG5v/x4eHgwLz/wCE8WnJxSCpHAAAAABJRU5ErkJggg=="/>
+		</pattern>
+	</defs>
+	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+		<title>Jetton Contracts</title>
+		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50393"
+				v:shadowOffsetY="-8.50393"/>
+		<v:layer v:name="Connector" v:index="0"/>
+		<v:layer v:name="Flowchart" v:index="1"/>
+		<g id="shape1-1" v:mID="1" v:groupContext="shape" v:layerMember="0;1" transform="translate(216.239,-453.333)">
+			<title>On-page reference.132</title>
+			<desc>Bob Wallet v3</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="42.0983" cy="648.546" width="84.2" height="84.1969"/>
+			<path d="M0 648.55 A42.1 42.1 0 0 1 84.2 648.55 A42.1 42.1 0 0 1 0 648.55 Z" class="st1"/>
+			<text x="25.29" y="643.15" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>Bob<v:lf/><tspan
+						x="2.43" dy="1.2em" class="st3">Wallet v3</tspan></text>		</g>
+		<g id="shape2-7" v:mID="2" v:groupContext="shape" v:layerMember="0;1" transform="translate(148.897,-100.041)">
+			<title>On-page reference.116</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 671.32 A19.33 19.33 0 1 1 38.66 671.32 A19.33 19.33 0 1 1 0 671.32 Z" class="st4"/>
+		</g>
+		<g id="shape3-9" v:mID="3" v:groupContext="shape" transform="translate(194.817,-107.395)">
+			<title>Лист.3</title>
+			<desc>Smart Contract</desc>
+			<v:userDefs/>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="101.281" cy="676.963" width="202.57" height="27.3849"/>
+			<rect x="0" y="663.27" width="202.562" height="27.3849" class="st5"/>
+			<text x="14.38" y="684.16" class="st6" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>Smart Contract</text>		</g>
+		<g id="shape4-12" v:mID="4" v:groupContext="shape" v:layerMember="0;1" transform="translate(216.239,-331.935)">
+			<title>On-page reference.30</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 648.55 A42.1 42.1 0 0 1 84.2 648.55 A42.1 42.1 0 0 1 0 648.55 Z" class="st7"/>
+		</g>
+		<g id="shape5-16" v:mID="5" v:groupContext="shape" transform="translate(201.293,-366.641)">
+			<title>Лист.5</title>
+			<desc>Bob Jetton wallet A</desc>
+			<v:userDefs/>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="56.2557" cy="683.252" width="112.52" height="14.8042"/>
+			<rect x="0" y="675.851" width="112.512" height="14.8042" class="st5"/>
+			<text x="39.44" y="667.05" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>Bob <v:lf/><tspan
+						x="28.95" dy="1.2em" class="st3">Jetton <v:lf/></tspan><tspan x="22.47" dy="1.2em" class="st3">wallet A</tspan></text>		</g>
+		<g id="shape6-21" v:mID="6" v:groupContext="shape" transform="translate(245.748,-561.852)">
+			<title>Actor</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M5.04 690.65 L5.04 664.43 L5.04 674.92 L0 674.92 L0 653.94 L2.52 651.32 L22.66 651.32 L25.18 653.94 L25.18 674.92
+						 L20.14 674.92 L20.14 664.43 L20.14 690.65 L12.59 690.65 L12.59 669.67 L12.59 690.65 L5.04 690.65 ZM17.83
+						 643.45 A5.24557 5.24557 -180 1 0 7.34 643.45 A5.24557 5.24557 -180 1 0 17.83 643.45 Z" class="st8"/>
+		</g>
+		<g id="shape7-23" v:mID="7" v:groupContext="shape" v:layerMember="0;1" transform="translate(216.239,-588.208)">
+			<title>On-page reference.40</title>
+			<desc>Bob</desc>
+			<v:userDefs/>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="42.0983" cy="648.556" width="84.2" height="84.1969"/>
+			<rect x="0" y="606.458" width="84.1969" height="84.1969" class="st9"/>
+			<text x="14.08" y="657.56" class="st10" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>Bob</text>		</g>
+		<g id="shape8-26" v:mID="8" v:groupContext="shape" transform="translate(432.603,-561.852)">
+			<title>Actor.44</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M5.04 690.65 L5.04 664.43 L5.04 674.92 L0 674.92 L0 653.94 L2.52 651.32 L22.66 651.32 L25.18 653.94 L25.18 674.92
+						 L20.14 674.92 L20.14 664.43 L20.14 690.65 L12.59 690.65 L12.59 669.67 L12.59 690.65 L5.04 690.65 ZM17.83
+						 643.45 A5.24557 5.24557 -180 1 0 7.34 643.45 A5.24557 5.24557 -180 1 0 17.83 643.45 Z" class="st11"/>
+		</g>
+		<g id="shape9-28" v:mID="9" v:groupContext="shape" v:layerMember="0;1" transform="translate(403.094,-588.208)">
+			<title>On-page reference.45</title>
+			<desc>Alice</desc>
+			<v:userDefs/>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="42.0983" cy="648.556" width="84.2" height="84.1969"/>
+			<rect x="0" y="606.458" width="84.1969" height="84.1969" class="st9"/>
+			<text x="7.73" y="657.56" class="st10" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>Alice</text>		</g>
+		<g id="shape10-31" v:mID="10" v:groupContext="shape" v:layerMember="0;1" transform="translate(403.094,-453.333)">
+			<title>On-page reference.46</title>
+			<desc>Alice Wallet v4</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="42.0983" cy="648.546" width="84.2" height="84.1969"/>
+			<path d="M0 648.55 A42.1 42.1 0 0 1 84.2 648.55 A42.1 42.1 0 0 1 0 648.55 Z" class="st12"/>
+			<text x="21.48" y="643.15" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>Alice <tspan x="2.38"
+						dy="1.2em" class="st3">Wallet v4</tspan></text>		</g>
+		<g id="shape11-37" v:mID="11" v:groupContext="shape" v:layerMember="0;1" transform="translate(403.094,-331.935)">
+			<title>On-page reference.47</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 648.55 A42.1 42.1 0 0 1 84.2 648.55 A42.1 42.1 0 0 1 0 648.55 Z" class="st13"/>
+		</g>
+		<g id="shape12-41" v:mID="12" v:groupContext="shape" transform="translate(388.937,-366.641)">
+			<title>Лист.12</title>
+			<desc>Alice Jetton wallet A</desc>
+			<v:userDefs/>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="56.2557" cy="683.252" width="112.52" height="14.8042"/>
+			<rect x="0" y="675.851" width="112.512" height="14.8042" class="st5"/>
+			<text x="35.64" y="667.05" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>Alice <v:lf/><tspan
+						x="28.95" dy="1.2em" class="st3">Jetton <v:lf/></tspan><tspan x="22.47" dy="1.2em" class="st3">wallet A</tspan></text>		</g>
+		<g id="shape13-46" v:mID="13" v:groupContext="shape" v:layerMember="0;1" transform="translate(216.239,-201.844)">
+			<title>On-page reference.71</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 648.55 A42.1 42.1 0 0 1 84.2 648.55 A42.1 42.1 0 0 1 0 648.55 Z" class="st14"/>
+		</g>
+		<g id="shape14-50" v:mID="14" v:groupContext="shape" transform="translate(201.293,-236.551)">
+			<title>Лист.14</title>
+			<desc>Bob Jetton wallet B</desc>
+			<v:userDefs/>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="56.2557" cy="683.252" width="112.52" height="14.8042"/>
+			<rect x="0" y="675.851" width="112.512" height="14.8042" class="st5"/>
+			<text x="39.44" y="667.05" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>Bob <v:lf/><tspan
+						x="28.95" dy="1.2em" class="st3">Jetton <v:lf/></tspan><tspan x="22.7" dy="1.2em" class="st3">wallet B</tspan></text>		</g>
+		<g id="shape15-55" v:mID="15" v:groupContext="shape" v:layerMember="0;1" transform="translate(403.094,-201.844)">
+			<title>On-page reference.73</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 648.55 A42.1 42.1 0 0 1 84.2 648.55 A42.1 42.1 0 0 1 0 648.55 Z" class="st15"/>
+		</g>
+		<g id="shape16-59" v:mID="16" v:groupContext="shape" transform="translate(388.937,-236.551)">
+			<title>Лист.16</title>
+			<desc>Alice Jetton wallet B</desc>
+			<v:userDefs/>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="56.2557" cy="683.252" width="112.52" height="14.8042"/>
+			<rect x="0" y="675.851" width="112.512" height="14.8042" class="st5"/>
+			<text x="35.64" y="667.05" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>Alice <v:lf/><tspan
+						x="28.95" dy="1.2em" class="st3">Jetton <v:lf/></tspan><tspan x="22.7" dy="1.2em" class="st3">wallet B</tspan></text>		</g>
+		<g id="shape17-64" v:mID="17" v:groupContext="shape" v:layerMember="0;1" transform="translate(33.3211,-331.935)">
+			<title>On-page reference.75</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 648.55 A42.1 42.1 0 0 1 84.2 648.55 A42.1 42.1 0 0 1 0 648.55 Z" class="st16"/>
+		</g>
+		<g id="shape18-68" v:mID="18" v:groupContext="shape" transform="translate(18.3752,-366.641)">
+			<title>Лист.18</title>
+			<desc>Jetton A Master</desc>
+			<v:userDefs/>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="56.2557" cy="683.252" width="112.52" height="14.8042"/>
+			<rect x="0" y="675.851" width="112.512" height="14.8042" class="st5"/>
+			<text x="20.33" y="677.85" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>Jetton A <v:lf/><tspan
+						x="26.3" dy="1.2em" class="st3">Master  </tspan>  </text>		</g>
+		<g id="shape19-72" v:mID="19" v:groupContext="shape" v:layerMember="0;1" transform="translate(32.8993,-201.844)">
+			<title>On-page reference.77</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 648.55 A42.1 42.1 0 0 1 84.2 648.55 A42.1 42.1 0 0 1 0 648.55 Z" class="st17"/>
+		</g>
+		<g id="shape20-76" v:mID="20" v:groupContext="shape" transform="translate(18.3752,-234.453)">
+			<title>Лист.20</title>
+			<desc>Jetton B Master</desc>
+			<v:userDefs/>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="56.2557" cy="683.252" width="112.52" height="14.8042"/>
+			<rect x="0" y="675.851" width="112.512" height="14.8042" class="st5"/>
+			<text x="20.56" y="677.85" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>Jetton B <v:lf/><tspan
+						x="26.3" dy="1.2em" class="st3">Master    </tspan>    </text>		</g>
+		<g id="shape21-80" v:mID="21" v:groupContext="shape" transform="translate(158.948,-40.4103)">
+			<title>Actor.79</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M3.71 690.65 L3.71 671.33 L3.71 679.06 L0 679.06 L0 663.59 L1.86 661.66 L16.7 661.66 L18.56 663.59 L18.56 679.06
+						 L14.84 679.06 L14.84 671.33 L14.84 690.65 L9.28 690.65 L9.28 675.19 L9.28 690.65 L3.71 690.65 ZM13.14 655.86
+						 A3.86584 3.86584 -180 1 0 5.41 655.86 A3.86584 3.86584 -180 1 0 13.14 655.86 Z" class="st8"/>
+		</g>
+		<g id="shape22-82" v:mID="22" v:groupContext="shape" transform="translate(162.144,-45.8351)">
+			<title>Лист.22</title>
+			<desc>Actor</desc>
+			<v:userDefs/>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="79.085" cy="676.963" width="158.18" height="27.3849"/>
+			<rect x="0" y="663.27" width="158.171" height="27.3849" class="st5"/>
+			<text x="48.15" y="684.16" class="st6" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>Actor</text>		</g>
+	</g>
+</svg>
