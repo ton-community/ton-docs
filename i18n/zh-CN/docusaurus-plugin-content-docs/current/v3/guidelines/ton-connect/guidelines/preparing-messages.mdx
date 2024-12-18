@@ -144,7 +144,7 @@ const transferMessage = loadJettonTransferMessage(cell.beginParse());
 
 </TabItem>
 
-<Tabs groupId="Transfer With a Comment">
+<TabItem value="@ton/ton" label="@ton/ton">
 
 ```ts
 import {Address, beginCell} from "@ton/core";
@@ -185,9 +185,9 @@ const transferMessage = { op, queryId, amount, destination, responseDestination,
 无论开发者解决的是哪个层级的任务，通常都需要使用来自 `@tonconnect/sdk` 或 `@tonconnect/ui` 的连接器实体。\
 以下是基于 `@tonconnect/sdk` 和 `@tonconnect/ui` 创建的示例：
 
-</TabItem>
+<Tabs groupId="TON Connect template">
 
-<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+<TabItem value="tonconnect-react" label="@tonconnect/ui-react">
 
 ```js
 import { useTonConnectUI } from '@tonconnect/ui-react';
@@ -210,7 +210,7 @@ export const Settings = () => {
 ```
 
 </TabItem>
-</Tabs>
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
 
 ```js
 import TonConnectUI from '@tonconnect/ui';
@@ -243,8 +243,7 @@ await connector.sendTransaction({
 
 </TabItem>
 
-<Tabs groupId="Jetton Transfer">
-<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+</Tabs>
 
 ### 常规 TON 转账
 
@@ -282,7 +281,7 @@ export const Settings = () => {
 };
 ```
 
-<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+</TabItem>
 
 <TabItem value="tonconnect-ui" label="@tonconnect/ui">
 
@@ -308,8 +307,7 @@ const result = await tonConnectUI.sendTransaction(transaction)
 
 </TabItem>
 
-<details>
-    <summary>Jetton 钱包状态初始化和地址准备示例</summary>
+<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
 
 ```js
 import TonConnect from '@tonconnect/sdk';
@@ -326,17 +324,18 @@ await connector.sendTransaction({
 
 ```
 
-</details>
+</TabItem>
+</Tabs>
 
 :::tip
 了解有关 [TON 智能合约地址](/v3/documentation/smart-contracts/addresses) 的更多信息。
 :::
 
-Jetton 销毁([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#2-burn)) 的`body`通常应该按照以下方式完成：
+对于特定的自定义交易，必须定义特定的载荷。
 
 ### 添加评论的转账
 
-消息放入以下请求中：
+最简单的示例涉及添加一个带有注释的负载。更多细节请参见[此页面](/v3/documentation/smart-contracts/message-management/internal-messages#simple-message-with-comment)。在交易之前，需要通过[@ton/ton](https://github.com/ton-org/ton) JavaScript 库准备一个 `body` [cell](/v3/documentation/data-formats/tlb/cell-boc)。
 
 ```js
 import { beginCell } from '@ton/ton'
@@ -349,9 +348,9 @@ const body = beginCell()
 
 通过以下方式创建交易体：
 
-</TabItem>
+<Tabs groupId="Transfer With a Comment">
 
-<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
 
 ```js
 import { useTonConnectUI } from '@tonconnect/ui-react';
@@ -383,7 +382,7 @@ export const Settings = () => {
 
 </TabItem>
 
-<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
 
 ```js
 import TonConnectUI from '@tonconnect/ui'
@@ -404,7 +403,6 @@ const result = await tonConnectUI.sendTransaction(transaction)
 ```
 
 </TabItem>
-</Tabs>
 
 <TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
 
@@ -493,7 +491,7 @@ export const Settings = () => {
 };
 ```
 
-<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+</TabItem>
 
 <TabItem value="tonconnect-ui" label="@tonconnect/ui">
 
@@ -652,6 +650,7 @@ await jetton.send(
 ```
 
 </TabItem>
+</Tabs>
 
 ### Jetton 销毁
 
@@ -690,8 +689,8 @@ Jetton 转账（[TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text
 
 消息放入以下请求中：
 
-</TabItem>
-</Tabs>
+<Tabs groupId="Jetton Transfer">
+  <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
 
 ```js
     import { useTonConnectUI } from '@tonconnect/ui-react';
@@ -726,8 +725,7 @@ Jetton 转账（[TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text
 
 </TabItem>
 
-<Tabs groupId="NFT Buy">
-<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
 
 ```js
   import TonConnectUI from '@tonconnect/ui'
@@ -748,7 +746,6 @@ Jetton 转账（[TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text
 ```
 
 </TabItem>
-<TabItem value="tonconnect-ui" label="@tonconnect/ui">
 
 <TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
 
@@ -853,7 +850,8 @@ const forwardPayload = beginCell()
 jetton.send(sender, RECEIVER_ADDRESS, toNano(10), { notify: { payload: forwardPayload } });
 ```
 
-<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+</TabItem>
+</Tabs>
 
 ### 附带评论的转账
 
@@ -879,7 +877,8 @@ Jetton Burn 的 `body` 以 ([TEP-74](https://github.com/ton-blockchain/TEPs/blob
 
 信息内容如下
 
-<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+<Tabs groupId="Jetton Burn">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
 
 ```js
 import { useTonConnectUI } from '@tonconnect/ui-react';
@@ -911,7 +910,7 @@ export const Settings = () => {
 
 </TabItem>
 
-<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+<TabItem value="tonconnect-ui" label="@tonconnect/ui">
 
 ```js
 import TonConnectUI from '@tonconnect/ui'
@@ -1050,7 +1049,8 @@ import { beginCell, toNano } from '@ton/ton'
 `WALLET_DST` - 地址 - 接收多余
 的初始 NFT 所有者的地址 将 `NFTitem` 转移给新的所有者 `NEW_OWNER_WALLET`。
 
-</details>
+<Tabs groupId="NFT Transfer">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
 
 ```js
 import { useTonConnectUI } from '@tonconnect/ui-react';
@@ -1080,8 +1080,7 @@ export const Settings = () => {
 };
 ```
 
-<Tabs groupId="NFT Sale Fix Price">
-<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+</TabItem>
 
 <TabItem value="tonconnect-ui" label="@tonconnect/ui">
 
@@ -1103,7 +1102,7 @@ const transaction = {
 const result = await tonConnectUI.sendTransaction(transaction)
 ```
 
-<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+</TabItem>
 
 <TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
 
@@ -1209,8 +1208,8 @@ const royaltyPercent =
 
 由于消息需要很多步骤，整个算法非常庞大，可以在这里找到：
 
-</TabItem>
-<TabItem value="tonconnect-ui" label="@tonconnect/ui">
+<details>  
+    <summary>显示创建 NFT 销售消息正文的完整算法</summary>
 
 ```js
 import { Address, beginCell, StateInit, storeStateInit, toNano, Cell } from '@ton/ton'
@@ -1286,8 +1285,8 @@ async function main() {
 
 准备好的 `transferNftBody` 应发送到 NFT 项目合约，至少要有 `1.08`  TON ，这是成功处理的预期。超出部分将退回发件人钱包。
 
-</TabItem>
-</Tabs>
+<Tabs groupId="NFT Sale Fix Price">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
 
 ```js
 import { useTonConnectUI } from '@tonconnect/ui-react';
@@ -2206,8 +2205,7 @@ if err != nil {
 }
 ```
 
-</TabItem>
-<TabItem value="tonconnect-sdk" label="@tonconnect/sdk">
+</details>
 
 ### 购买 NFT (GetGems)
 
