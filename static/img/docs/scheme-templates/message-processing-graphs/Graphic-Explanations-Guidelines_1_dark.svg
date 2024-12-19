@@ -13,7 +13,7 @@
 	<style type="text/css">
 	<![CDATA[
 		.st1 {fill:#333337;stroke:#e3e3e3;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.25}
-		.st2 {fill:none;stroke:#0088cc;stroke-linecap:butt;stroke-width:1.5}
+		.st2 {fill:#333337;stroke:#0088cc;stroke-linecap:butt;stroke-width:1.5}
 		.st3 {fill:none;stroke:#a5a5a5;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
 		.st4 {fill:none}
 		.st5 {stroke:#a5a5a5;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
@@ -27,7 +27,7 @@
 		.st13 {fill:#333337;stroke:#e3e3e3;stroke-linecap:round;stroke-linejoin:round;stroke-width:1}
 		.st14 {marker-end:url(#mrkr4-44);stroke:#e3e3e3;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.75}
 		.st15 {fill:#e3e3e3;fill-opacity:1;stroke:#e3e3e3;stroke-opacity:1;stroke-width:0.40983597182915}
-		.st16 {fill:#333337;stroke:none;stroke-linecap:butt}
+		.st16 {fill:#333337;stroke:none;stroke-linecap:butt;stroke-width:7.2}
 		.st17 {fill:#e3e3e3;font-family:Inter;font-size:1.5em}
 		.st18 {fill:#ffffff;stroke:#333337;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
 		.st19 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
