@@ -212,7 +212,7 @@ It is the most modern wallet version at the moment, developed by the Tonkeeper t
         dark: '/img/docs/wallet-contracts/wallet-contract-V5_dark.png?raw=true',
     }}
 />
-<br></br>
+<br></br><br></br><br></br>
 The V5 wallet standard offers many benefits that improve the experience for both users and merchants. V5 supports gas-free transactions, account delegation and recovery, subscription payments using tokens and Toncoin, and low-cost multi-transfers. In addition to retaining the previous functionality (V4), the new contract allows you to send up to 255 messages at a time.
 
 Wallet source code:
