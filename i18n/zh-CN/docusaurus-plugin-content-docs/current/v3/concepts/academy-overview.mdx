@@ -8,6 +8,5 @@
 
 ## 参见
 
-- [TON 速成](https://tonspeedrun.com/)
 - [TON Hello World](https://tonhelloworld.com/01-wallet/)
 - [[YouTube]TON 开发研究 EN ](https://www.youtube.com/@TONDevStudy)[[RU]](https://www.youtube.com/results?search_query=tondevstudy)
