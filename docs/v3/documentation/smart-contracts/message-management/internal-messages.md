@@ -1,4 +1,4 @@
-# Internal messages
+tab# Internal messages
 
 ## Overview 
 
@@ -12,7 +12,7 @@ This approach leads to the necessity of distinguishing whether an internal messa
 
 To achieve this goal, the following approaches for the internal message layout can be used (note that TON Blockchain does not enforce any restrictions on the message body, so these are indeed just recommendations).
 
-### Internal Message Structure
+esc### Internal Message Structure
 
 The body of the message can be embedded into the message itself or stored in a separate cell referenced by the message, as indicated by the TL-B scheme fragment:
 
@@ -29,7 +29,7 @@ The message body typically begins with the following fields:
     * A 64-bit (big-endian) unsigned integer `query_id`, used in all query-response internal messages to indicate that a response is related to a query (the `query_id` of a response must be equal to the `query_id` of the corresponding query). If `op` is not a query-response method (e.g., it invokes a method that is not expected to send an answer), then `query_id` may be omitted.
     * The remainder of the message body is specific for each supported value of `op`.
 
-### Simple Message with Comment
+tab### Simple Message with Comment
 
 If `op` is zero, then the message is a "simple transfer message with comment". The comment is contained in the remainder of the message body (without any `query_id` field, i.e., starting from the fifth byte). If it does not begin with the byte `0xff`, the comment is a text one; it can be displayed "as is" to the end user of a wallet (after filtering out invalid and control characters and checking that it is a valid UTF-8 string). 
 
