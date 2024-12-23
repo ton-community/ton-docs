@@ -1,7 +1,4 @@
-
 import Button from '@site/src/components/button'
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 # 付款处理
 
