@@ -71,14 +71,10 @@ TON 交易只需确认一次就不可逆转。
 
 快速跳转到 jetton 处理的核心描述：
 
-<Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>
-集中处理
-</Button>
-
+<Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>集中处理</Button>
 <Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses"
 colorType="secondary" sizeType={'sm'}>
-链上处理 
-</Button>
+链上处理 </Button>
 
 <br></br><br></br>
 
