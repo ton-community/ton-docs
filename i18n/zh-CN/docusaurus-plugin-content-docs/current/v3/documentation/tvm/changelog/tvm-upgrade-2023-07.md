@@ -153,7 +153,7 @@ Gas 用量四舍五入。
 
 比特币/以太坊签名。使用 [libsecp256k1 实现](https://github.com/bitcoin-core/secp256k1)。
 
-| xxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈         | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>说明                                                                                                        |
+| xxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈         | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>说明<0/>                                                                                                        |
 | :------------------------ | :------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `ECRECOVER`               | *`hash v r s - 0 or h x1 x2 -1`* | 从签名恢复公钥，与比特币/以太坊操作相同。<br/>以 32 字节哈希作为 uint256 `hash`；以 65 字节签名作为 uint8 `v` 和 uint256 `r`、`s`。<br/>失败返回 `0`，成功返回公钥和 `-1`。<br/>以 65 字节公钥返回为 uint8 `h`，uint256 `x1`、`x2`。<br/>*1526 gas* |
 
