@@ -1,6 +1,6 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import Button from '@site/src/components/button';
+import Button from '@site/src/components/button'
 
 # 预编译二进制文件
 
@@ -87,36 +87,63 @@ fift -V -and func -V -and lite-client -V
 
 :::caution important
 您必须插入自己的 "用户名"，而不是 "%USERNAME%"关键字。\
+:::</TabItem>
+<TabItem value="mac" label="Linux / MacOS">1.下载后，通过更改权限确保下载的二进制文件可执行。```bash
+chmod +x func
+chmod +x fift
+chmod +x lite-client
+```2.将这些二进制文件添加到路径中（或复制到 `/usr/local/bin`）也很有用，这样你就可以在任何地方访问它们。```bash
+cp ./func /usr/local/bin/func
+cp ./fift /usr/local/bin/fift
+cp ./lite-client /usr/local/bin/lite-client
+```3.要检查一切安装是否正确，请在终端中运行```bash
+fift -V && func -V && lite-client -V
+```4.如果打算 `使用 fift`，还需下载 [fiftlib.zip](/ton-binaries/windows/fiftlib.zip)，在设备上的某个目录（如 `/usr/local/lib/fiftlib`）中打开该压缩包，并设置环境变量 `FIFTPATH` 指向该目录。```
+unzip fiftlib.zip
+mkdir -p /usr/local/lib/fiftlib
+cp fiftlib/* /usr/local/lib/fiftlib
+```:::info 嘿，你差不多完成了:)
+记得设置[环境变量](https://stackoverflow.com/questions/14637979/how-to-permanently-set-path-on-linux-unix) `FIFTPATH`指向此目录。
 :::
+
 </TabItem>
 <TabItem value="mac" label="Linux / MacOS">
-1.下载后，通过更改权限确保下载的二进制文件可执行。
+
+1. 下载后，通过更改权限确保下载的二进制文件可执行。
+
 ```bash
 chmod +x func
 chmod +x fift
 chmod +x lite-client
 ```
-2.将这些二进制文件添加到路径中（或复制到 `/usr/local/bin`）也很有用，这样你就可以在任何地方访问它们。
+
+2. 下载后，请确保通过更改权限使下载的二进制文件可执行。
+
 ```bash
 cp ./func /usr/local/bin/func
 cp ./fift /usr/local/bin/fift
 cp ./lite-client /usr/local/bin/lite-client
 ```
-3.要检查一切安装是否正确，请在终端中运行
+
+3. 将这些二进制文件添加到您的路径中（或复制到`/usr/local/bin`），以便您可以在任何地方访问它们也是很有用的。
+
 ```bash
 fift -V && func -V && lite-client -V
 ```
-4.如果打算 `使用 fift`，还需下载 [fiftlib.zip](/ton-binaries/windows/fiftlib.zip)，在设备上的某个目录（如 `/usr/local/lib/fiftlib`）中打开该压缩包，并设置环境变量 `FIFTPATH` 指向该目录。
+
+4. 要检查是否一切安装正确，请在终端运行。
+
 ```
 unzip fiftlib.zip
 mkdir -p /usr/local/lib/fiftlib
 cp fiftlib/* /usr/local/lib/fiftlib
 ```
-:::info 嘿，你差不多完成了:)
+
+:::info 嘿，你快完成了 :)
 记得设置[环境变量](https://stackoverflow.com/questions/14637979/how-to-permanently-set-path-on-linux-unix) `FIFTPATH`指向此目录。
 :::
 
-</TabItem>
+  </TabItem>
 </Tabs>
 
 ## 从源代码构建
