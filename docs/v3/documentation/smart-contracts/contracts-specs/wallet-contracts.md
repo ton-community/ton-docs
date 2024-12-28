@@ -1,3 +1,6 @@
+import ConceptImage from '@site/src/components/conceptImage';
+import ThemedImage from '@theme/ThemedImage';
+
 # Types of Wallet Contracts
 
 You may have heard about different versions of wallets on the TON Blockchain. But what do these versions actually mean, and how do they differ?
@@ -201,7 +204,15 @@ If `state_init` doesn't make much sense from its name, take a look at the follow
 ### Wallet V5
 
 It is the most modern wallet version at the moment, developed by the Tonkeeper team, aimed at replacing V4 and allowing arbitrary extensions.
-
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/wallet-contracts/wallet-contract-V5.png?raw=true',
+        dark: '/img/docs/wallet-contracts/wallet-contract-V5_dark.png?raw=true',
+    }}
+/>
+<br></br><br></br><br></br>
 The V5 wallet standard offers many benefits that improve the experience for both users and merchants. V5 supports gas-free transactions, account delegation and recovery, subscription payments using tokens and Toncoin, and low-cost multi-transfers. In addition to retaining the previous functionality (V4), the new contract allows you to send up to 255 messages at a time.
 
 Wallet source code:

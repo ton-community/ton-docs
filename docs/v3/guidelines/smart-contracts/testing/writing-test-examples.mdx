@@ -1,3 +1,6 @@
+import ConceptImage from '@site/src/components/conceptImage';
+import ThemedImage from '@theme/ThemedImage';
+
 # Writing Tests Examples
 
 This page demonstrates how to write test for FunC contracts created in with [Blueprint SDK](https://github.com/ton-org/blueprint) ([Sandbox](https://github.com/ton-org/sandbox)).
@@ -46,9 +49,15 @@ blockchain.verbosity = {
 ## Direct Unit Tests
 
 Fireworks demonstrate different operating with sending messages in the TON Blockchain.
-
-![](/img/docs/writing-test-examples/test-examples-schemes.svg)
-
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/writing-test-examples/test-examples-schemes.svg?raw=true',
+        dark: '/img/docs/writing-test-examples/test-examples-schemes-dark.svg?raw=true',
+    }}
+/>
+<br></br>
 Once you deploy this with message `set_first` with enough TON amount, it will be automatically executed with primary and usable combinations of send modes.
 
 Fireworks redeployed itself, as result it will be created 3 entities of Fireworks entities, while each of entity has own ID(keep it in storage) and, as a result, different Smart Contract Address.
@@ -90,9 +99,15 @@ This is the simplest case, the main purpose here to assert result of transaction
 To filter certain transaction from the `launhcResult.transactions` array, we can use the most convince fields.
 With
 `from` (contract sender address), `to` (contract destination address), `op` (Op code value) - we will retrieve only one transaction for this combination.
-
-![](/img/docs/writing-test-examples/test-examples-schemes_id1.svg)
-
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/writing-test-examples/test-examples-schemes_id1.svg?raw=true',
+        dark: '/img/docs/writing-test-examples/test-examples-schemes_id1_dark.svg?raw=true',
+    }}
+/>
+<br></br>
 The transaction[ID:1] in Fireworks Setter contract invoked with `op::set_first` and executed with two outbound messages to the Fireworks launcher-1 and Fireworks launcher-2
 
 ```typescript
@@ -118,9 +133,15 @@ The transaction[ID:1] in Fireworks Setter contract invoked with `op::set_first` 
 ### Transaction ID:2  Success Test
 
 [This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L92) checks if the transaction[ID:2] executed successfully.
-
-![](/img/docs/writing-test-examples/test-examples-schemes_id2.svg)
-
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/writing-test-examples/test-examples-schemes_id2.svg?raw=true',
+        dark: '/img/docs/writing-test-examples/test-examples-schemes_id2_dark.svg?raw=true',
+    }}
+/>
+<br></br>
 The transaction in the Fireworks launcher 1 invoked with `op::launch_first`, and executed with four outbound messages to the Launcher.
 
 ```typescript
@@ -159,9 +180,15 @@ The full list of Account Status related fields:
 ### Transaction ID:3  Success Test
 
 [This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L113) checks if the transaction[ID:3] executed successfully.
-
-![](/img/docs/writing-test-examples/test-examples-schemes_id3.svg)
-
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/writing-test-examples/test-examples-schemes_id3.svg?raw=true',
+        dark: '/img/docs/writing-test-examples/test-examples-schemes_id3_dark.svg?raw=true',
+    }}
+/>
+<br></br>
 The transaction[ID:3] carries out in the Fireworks launcher 1, invokes with `op::launch_first`, and executes with four outbound messages to the Launcher.
 
 
@@ -196,9 +223,15 @@ The transaction[ID:3] carries out in the Fireworks launcher 1, invokes with `op:
 ### Transaction ID:4  Success Test
 
 [This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L133) checks if the transaction[ID:4] executed successfully.
-
-![](/img/docs/writing-test-examples/test-examples-schemes_id4.svg)
-
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/writing-test-examples/test-examples-schemes_id4.svg?raw=true',
+        dark: '/img/docs/writing-test-examples/test-examples-schemes_id4_dark.svg?raw=true',
+    }}
+/>
+<br></br>
 Transaction[ID:4] carries out in the Launcher(Deploy Wallet) with incoming message from the  Fireworks launcher 1. This message sent with `send mode = 0` in the Transaction[ID:2].
 
 ```typescript
@@ -225,9 +258,15 @@ Transaction[ID:4] carries out in the Launcher(Deploy Wallet) with incoming messa
 ### Transaction ID:5  Success Test
 
 [This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L152) checks if the transaction[ID:5] executed successfully.
-
-![](/img/docs/writing-test-examples/test-examples-schemes_id5.svg)
-
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/writing-test-examples/test-examples-schemes_id5.svg?raw=true',
+        dark: '/img/docs/writing-test-examples/test-examples-schemes_id5_dark.svg?raw=true',
+    }}
+/>
+<br></br>
 Transaction[ID:5] carries out in the Launcher with incoming message from the  Fireworks launcher 1. This message sent with `send mode = 1`
 
 ```typescript
@@ -255,9 +294,15 @@ Transaction[ID:5] carries out in the Launcher with incoming message from the  Fi
 ### Transaction ID:6  Success Test
 
 [This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L170) checks if the transaction[ID:6] executed successfully.
-
-![](/img/docs/writing-test-examples/test-examples-schemes_id6.svg)
-
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/writing-test-examples/test-examples-schemes_id6.svg?raw=true',
+        dark: '/img/docs/writing-test-examples/test-examples-schemes_id6_dark.svg?raw=true',
+    }}
+/>
+<br></br>
 The transaction[ID:6] carries out in the Launcher with incoming message from the  Fireworks launcher 1. This message sent with `send mode = 2`
 
 
@@ -284,9 +329,15 @@ The transaction[ID:6] carries out in the Launcher with incoming message from the
 ### Transaction ID:7  Success Test
 
 [This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L188) checks if the transaction[ID:7] executed successfully.
-
-![](/img/docs/writing-test-examples/test-examples-schemes_id7.svg)
-
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/writing-test-examples/test-examples-schemes_id7.svg?raw=true',
+        dark: '/img/docs/writing-test-examples/test-examples-schemes_id7_dark.svg?raw=true',
+    }}
+/>
+<br></br>
 The transaction[ID:7] carries out in the Launcher with incoming message from the  Fireworks launcher 1. This message sent with `send mode = 128 + 32`
 
 ```typescript
@@ -311,9 +362,15 @@ The transaction[ID:7] carries out in the Launcher with incoming message from the
 ### Transaction ID:8  Success Test
 
 [This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L188) checks if the transaction[ID:8] executed successfully.
-
-![](/img/docs/writing-test-examples/test-examples-schemes_id8.svg)
-
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/writing-test-examples/test-examples-schemes_id8.svg?raw=true',
+        dark: '/img/docs/writing-test-examples/test-examples-schemes_id8_dark.svg?raw=true',
+    }}
+/>
+<br></br>
 The transaction[ID:8] carries out in the Launcher with incoming message from the  Fireworks launcher 2. This message sent with `send mode = 64`
 
 ```typescript
