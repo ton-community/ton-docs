@@ -93,7 +93,7 @@ It is not obvious why the `nonce` field in the datagram is present because, even
 Detailed description can be found in article [ADNL UDP - Internode](/v3/documentation/network/protocols/adnl/adnl-udp).
 
 ## References
-- [The Open Network, p. 80](https://ton.org/ton.pdf)
+- [The Open Network, p. 80](https://docs.ton.org/ton.pdf)
 - [ADNL implementation in TON](https://github.com/ton-blockchain/ton/tree/master/adnl)
 
 _Thanks to the [hacker-volodya](https://github.com/hacker-volodya) for contributing to the community!_  
