@@ -225,6 +225,14 @@ module.exports = [
       'v3/guidelines/nodes/running-nodes/secure-guidelines',
     ],
   },
+  {
+    type: 'category',
+    label: 'Maintenance Guidelines',
+    items: [
+      'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-backup-restore',
+      'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-validator-standby',
+    ],
+  },
   'v3/guidelines/nodes/custom-overlays',
   'v3/guidelines/nodes/nodes-troubleshooting',
   'v3/guidelines/nodes/node-maintenance-and-security',

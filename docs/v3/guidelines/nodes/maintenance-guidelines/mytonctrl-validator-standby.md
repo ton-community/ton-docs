@@ -22,12 +22,12 @@ In order to transfer validation duties from the main node to the standby node, o
 * up-to-date node configuration file and keyring
 * keys required for MyTonCtrl functionality
 
-MyTonCtrl provides functionality to [create backups](mytonctrl-backup-restore) that contain all required data. If you are running a validator node, we strongly recommend that you set up [automated backups](mytonctrl-backup-restore#automated-backup-creation) and download backup archives from your machine frequently.
+MyTonCtrl provides functionality to [create backups](mytonctrl-backup-restore.md) that contain all required data. If you are running a validator node, we strongly recommend that you set up [automated backups](mytonctrl-backup-restore.md#automated-backup-creation) and download backup archives from your machine frequently.
 
 ## Restore
 Before transferring the validator configuration to the standby machine, please ensure that you have stopped / disabled the TON node on the donor machine for ~20 minutes. Failure to do so will result in connectivity issues and crashes on both the donor and target machines.
 
-The restore process is [described in Backups](mytonctrl-backup-restore)
+The restore process is [described in Backups](mytonctrl-backup-restore.md)
 
 Please ensure that you create and retain the backup of your standby node original configuration before you apply/restore a backup package from another machine, as you will need this to bring the standby node back into standby mode.
 
