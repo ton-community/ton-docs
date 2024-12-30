@@ -150,7 +150,7 @@ int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
 
 ### ext_in_msg_info$10
 
-`ext_in_msg_info$10` is a case of external incoming message. This means this type of messages sent from contracts to off-chain space.
+`ext_in_msg_info$10` is a case of external incoming message. This means this type of messages sent from off-chain space to contracts.
 Use case - wallet application request to wallet contract.
 
 
@@ -161,13 +161,13 @@ ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt
   import_fee:Grams = CommonMsgInfo;
 ```
 
-| Structure           | Type                                 | Required | Description                                                                                                        |
-|---------------------|--------------------------------------|----------|--------------------------------------------------------------------------------------------------------------------|
-| ext_out_msg_info$10 | Constructor                          | Required | `$10` tag means, that in serialization CommonMsgInfo started with `10` bits describes a external incoming message. |
-| ihr_disabled        | Bool                                 | Required | Hyper routing flag. (currently always true)                                                                        |
-| src                 | [MsgAddressExt](#msgaddressext-tl-b) | Required | Address of a external sender of the message.                                                                       |
-| dest                | [MsgAddressInt](#msgaddressint-tl-b) | Required | Address of smart contract destination of message.                                                                  |
-| import_fee          | [VarUInteger 16](#varuinteger-n)     | Required | Fee for executing and delivering of message.                                                                       |
+| Structure          | Type                                 | Required | Description                                                                                                        |
+|--------------------|--------------------------------------|----------|--------------------------------------------------------------------------------------------------------------------|
+| ext_in_msg_info$10 | Constructor                          | Required | `$10` tag means, that in serialization CommonMsgInfo started with `10` bits describes a external incoming message. |
+| ihr_disabled       | Bool                                 | Required | Hyper routing flag. (currently always true)                                                                        |
+| src                | [MsgAddressExt](#msgaddressext-tl-b) | Required | Address of a external sender of the message.                                                                       |
+| dest               | [MsgAddressInt](#msgaddressint-tl-b) | Required | Address of smart contract destination of message.                                                                  |
+| import_fee         | [VarUInteger 16](#varuinteger-n)     | Required | Fee for executing and delivering of message.                                                                       |
 
 
 ### ext_out_msg_info$11
@@ -176,7 +176,7 @@ ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt
 Use case - logs.
 
 ```tlb
-//internal message
+//external outgoing message
 ext_out_msg_info$11 src:MsgAddressInt dest:MsgAddressExt
   created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 ```
@@ -184,8 +184,8 @@ ext_out_msg_info$11 src:MsgAddressInt dest:MsgAddressExt
 | Structure           | Type                                  | Required | Description                                                                                                       |
 |---------------------|---------------------------------------|----------|-------------------------------------------------------------------------------------------------------------------|
 | ext_out_msg_info$11 | Constructor                           | Required | `$11` tag means, that in serialization CommonMsgInfo started with `11` bit describes a external outgoing message. |
-| src                 | [MsgAddressInt](#msgaddressint-tl-b)  | Required | Hyper routing flag. v                                                                                             |
-| dest                | [MsgAddressExt](#msgaddressext-tl-b)  | Required | General structure using in TON for initializing new contracts. Could be write in cell reference or root cell.     |
+| src                 | [MsgAddressInt](#msgaddressint-tl-b)  | Required | Address of smart contract sender of message.                                                                      |
+| dest                | [MsgAddressExt](#msgaddressext-tl-b)  | Required | Address of a external destination of the message.                                                                 |
 | created_lt          | uint64                                | Required | Logic time of sending message assigned by validator. Using for odering actions in smart contract.                 |
 | created_at          | uint32                                | Required | Unix time                                                                                                         |
 
