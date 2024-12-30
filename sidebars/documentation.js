@@ -202,6 +202,8 @@ module.exports = [
           'v3/documentation/infra/nodes/mytonctrl/mytonctrl-alerting',
           'v3/documentation/infra/nodes/mytonctrl/mytonctrl-status',
           'v3/documentation/infra/nodes/mytonctrl/mytonctrl-errors',
+          'v3/documentation/infra/nodes/mytonctrl/mytonctrl-backup-restore',
+          'v3/documentation/infra/nodes/mytonctrl/mytonctrl-validator-standby',
         ],
       },
       'v3/documentation/infra/nodes/node-commands',
