@@ -2,7 +2,7 @@
 MyTonCtrl allows users to create and restore node configuration backups with two simple, easy-to-use commands. This feature allows node operations to quickly and efficiently transfer node configuration from one host to another.
 
 ### Manually create backup package
-# Manual backup creation is initialized with the `create_backup` command, the backup creation process should not take more than a few seconds. 
+Manual backup creation is initialized with the `create_backup` command, the backup creation process should not take more than a few seconds. 
 
 MyTonCtrl will create a backup package in the home directory of the MyTonCtrl user, the package name will include the hostname as well as the epoch timestamp of the backup.
 
