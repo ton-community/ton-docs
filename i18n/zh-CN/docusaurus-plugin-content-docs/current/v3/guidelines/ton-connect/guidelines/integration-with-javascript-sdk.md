@@ -423,7 +423,7 @@ https://app.tonkeeper.com/ton-connect?v=2&id=4b0a7e2af3b455e0f0bafe14dcdc93f1e9e
 
 ```python
 import nacl.signing
-import tonsdk
+import pytoniq
 
 import hashlib
 import base64
@@ -431,14 +431,13 @@ import base64
 received_state_init = 'te6cckECFgEAAwQAAgE0ARUBFP8A9KQT9LzyyAsCAgEgAxACAUgEBwLm0AHQ0wMhcbCSXwTgItdJwSCSXwTgAtMfIYIQcGx1Z70ighBkc3RyvbCSXwXgA/pAMCD6RAHIygfL/8nQ7UTQgQFA1yH0BDBcgQEI9ApvoTGzkl8H4AXTP8glghBwbHVnupI4MOMNA4IQZHN0crqSXwbjDQUGAHgB+gD0BDD4J28iMFAKoSG+8uBQghBwbHVngx6xcIAYUATLBSbPFlj6Ahn0AMtpF8sfUmDLPyDJgED7AAYAilAEgQEI9Fkw7UTQgQFA1yDIAc8W9ADJ7VQBcrCOI4IQZHN0coMesXCAGFAFywVQA88WI/oCE8tqyx/LP8mAQPsAkl8D4gIBIAgPAgEgCQ4CAVgKCwA9sp37UTQgQFA1yH0BDACyMoHy//J0AGBAQj0Cm+hMYAIBIAwNABmtznaiaEAga5Drhf/AABmvHfaiaEAQa5DrhY/AABG4yX7UTQ1wsfgAWb0kK29qJoQICga5D6AhhHDUCAhHpJN9KZEM5pA+n/mDeBKAG3gQFImHFZ8xhAT48oMI1xgg0x/TH9MfAvgju/Jk7UTQ0x/TH9P/9ATRUUO68qFRUbryogX5AVQQZPkQ8qP4ACSkyMsfUkDLH1Iwy/9SEPQAye1U+A8B0wchwACfbFGTINdKltMH1AL7AOgw4CHAAeMAIcAC4wABwAORMOMNA6TIyx8Syx/L/xESExQAbtIH+gDU1CL5AAXIygcVy//J0Hd0gBjIywXLAiLPFlAF+gIUy2sSzMzJc/sAyEAUgQEI9FHypwIAcIEBCNcY+gDTP8hUIEeBAQj0UfKnghBub3RlcHSAGMjLBcsCUAbPFlAE+gIUy2oSyx/LP8lz+wACAGyBAQjXGPoA0z8wUiSBAQj0WfKnghBkc3RycHSAGMjLBcsCUAXPFlAD+gITy2rLHxLLP8lz+wAACvQAye1UAFEAAAAAKamjFyM60x2mt5eboNyOTE+5RGOe9Ee2rK1Qcb+0ZuiP9vb7QJRlz/c='
 received_address = '0:b2a1ecf5545e076cd36ae516ea7ebdf32aea008caa2b84af9866becb208895ad'
 
-state_init = tonsdk.boc.Cell.one_from_boc(base64.b64decode(received_state_init))
+state_init = pytoniq.Cell.one_from_boc(base64.b64decode(received_state_init))
 
-address_hash_part = base64.b16encode(state_init.bytes_hash()).decode('ascii').lower()
+address_hash_part = state_init.hash.hex()
 assert received_address.endswith(address_hash_part)
 
-public_key = state_init.refs[1].bits.array[8:][:32]
+public_key = state_init.refs[1].bits.tobytes()[8:][:32]
 
-print(public_key)
 # bytearray(b'#:\xd3\x1d\xa6\xb7\x97\x9b\xa0\xdc\x8eLO\xb9Dc\x9e\xf4G\xb6\xac\xadPq\xbf\xb4f\xe8\x8f\xf6\xf6\xfb')
 
 verify_key = nacl.signing.VerifyKey(bytes(public_key))
@@ -493,14 +492,18 @@ verify_key.verify(hashlib.sha256(signed).digest(), base64.b64decode(signature))
 
 在实现上述参数后，如果有攻击者试图冒充用户并且没有提供有效的签名，将会显示以下错误：`nacl.exceptions.BadSignatureError: Signature was forged or corrupt`。
 
-## 下一步
+```bash
+nacl.exceptions.BadSignatureError: Signature was forged or corrupt.
+```
 
-当编写dApp时，还应该考虑：
+## 下一步工作
 
-- 在成功完成连接（无论是恢复的连接还是新连接）后，应显示`Disconnect`按钮，而不是多个`Connect`按钮
-- 用户断开连接后，需要重新创建`Disconnect`按钮
+在编写 dApp 时，还应考虑以下几点：
+
+- 在成功完成连接后（无论是恢复连接还是新连接），应显示 "断开连接" 按钮，而不是多个 "连接 "按钮
+- 用户断开连接后，"断开连接" 按钮需要重新创建
 - 应检查钱包代码，因为
-  - 最新版本的钱包可能会将公钥放在不同的位置，并导致问题
-  - 当前用户可能使用非钱包类型的合约登录。幸运的是，这将在预期的位置包含公钥
+  - 更新的钱包版本可能会将公钥放在不同的位置，从而产生问题
+  - 当前用户可以使用其他类型的合约而不是钱包来登录。值得庆幸的是，这将在预期位置包含公钥
 
-祝你编写dApps时好运，并且能够享受乐趣！
+祝你好运，祝你编写 dApp 玩得开心！

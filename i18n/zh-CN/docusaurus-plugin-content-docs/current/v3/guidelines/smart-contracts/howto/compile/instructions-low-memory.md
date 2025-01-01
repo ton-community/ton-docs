@@ -4,7 +4,7 @@
 本节描述了与TON进行低层级交互的说明和手册。
 :::
 
-在内存较小（小于1GB）的计算机上创建交换分区以编译TON。
+在内存较小（小于1GB）的计算机上创建交换分片以编译TON。
 
 ## 必要条件
 
@@ -16,7 +16,7 @@ C++: fatal error: Killed signal terminated program cc1plus compilation terminate
 
 ## 解决方案
 
-这是由于内存不足引起的，通过创建交换分区来解决。
+这是由于内存不足引起的，通过创建交换分片来解决。
 
 ```bash
 # Create the partition path
@@ -34,7 +34,7 @@ sudo swapon /var/cache/swap/swap0
 sudo swapon -s
 ```
 
-删除交换分区的命令：
+删除交换分片的命令：
 
 ```bash
 sudo swapoff /var/cache/swap/swap0

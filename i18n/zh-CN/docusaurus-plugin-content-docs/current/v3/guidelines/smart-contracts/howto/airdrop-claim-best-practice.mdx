@@ -1,0 +1,185 @@
+# 空投领取指南
+
+在本文中，我们将研究假想的领取解决方案，尝试找出其性能问题并加以解决。
+本文的重点是合约交互及其对整体性能的影响。
+代码、安全方面和其他细微差别暂且不提。
+
+## 领取机
+
+:::info
+几乎所有的领取解决方案都是如何运作的？
+让我们想一想。
+:::
+
+用户发送某种证明，证明他有资格领取
+解决方案对其进行检查，并发送回 jetton 。
+在当前情况下，"证明" 指的是[merkle 证明](/v3/documentation/data-formats/tlb/exotic-cells#merkle-proof)，但也可以是签名数据或其他任何授权方法。
+发送 jetton，因此会有一个 jetton 钱包和矿工。
+我们还得确保这些鬼鬼祟祟的用户不能申请两次--双花消费保护合约。
+哦，我们可能还想赚点钱，对吧？
+所以至少要有一个申领钱包。
+总结一下
+
+### Distributor
+
+从用户处获取证明，对其进行检查，并释放 jetton。
+状态初始化：`(merkle_root、admin、fee_wallet_address)`。
+
+### 双花
+
+接收信息，如果已使用则跳转，否则继续传递信息
+
+### Jetton
+
+_Distributor_ 发送代币的 Jetton 钱包。
+Jetton 矿工不在本文讨论范围之内。
+
+### 收费钱包
+
+任何类型的钱包合约
+
+## 架构
+
+### V1
+
+我首先想到的设计是这样的：
+
+- 用户向 distributor 发送证明
+-  distributor 检查证明并部署 `双花` 合约
+- distributor 将信息传递给双花。 
+- 如果之前没有部署，双倍花费会向分发者发送 `claim_ok` 文件
+- distributor 将领取费用发送到费用钱包。
+- distributor 向用户发放 jetton。
+
+**NAIVE ART AHEAD!**
+
+这有什么问题吗？
+看来循环在这里是多余的。
+
+### V2
+
+线性设计要好得多：
+
+- 用户部署 "双重花费"，并将证明代理给 distributor
+- distributor 通过状态 init `(distributor_address, user_address?)` 检查发送 "双倍花费 "的地址
+- distributor 检查校样，在这种情况下，用户索引应是校样的一部分，然后放行。
+-  distributor 将费用发送至费用钱包
+  **MORE NAIVE ART**
+
+## 分片优化
+
+好了，我们有了一些进展，但分片优化呢？
+
+### 这些是什么？
+
+为了获得一些非常基本的理解，请参阅 [为不同分片创建钱包](/v3/guidelines/dapps/asset-processing/payments-processing/#wallet-creation-for-different-shards)
+长话短说--分片是一个 4 位地址前缀。有点像网络。
+当合约处于同一网段时，信息处理无需路由，因此速度更快。
+
+### 确定我们可以控制的地址
+
+#### distributor 地址
+
+我们完全控制着分发者的数据，因此我们必须能够将其放到任何分片中。
+怎么放？
+请记住，合约地址是 [由其状态定义](/v3/documentation/smart-contracts/addresses#account-id) 。
+我们应该使用合约的某些数据字段作为 nonce，并不断尝试，直到得到想要的结果。
+在真实合约中，一个好的 nonce 例子可以是钱包合约的（subwalletId/publicKey）。
+任何可以在部署后修改或不影响合约逻辑（如 subwalletId）的字段都能满足要求。
+我们甚至可以为此明确创建未使用的字段，就像 [vanity-contract](https://github.com/ton-community/vanity-contract) 所做的那样
+
+#### distributor jetton 钱包
+
+我们无法直接控制生成的 jetton 钱包地址。
+但是，如果我们控制了 distributor 地址，我们就可以选择它，这样它所产生的 jetton 钱包就会在同一个分片中。
+但如何做到这一点呢？有一个 [lib](https://github.com/Trinketer22/turbo-wallet)可以解决这个问题！
+它目前只支持钱包，但添加任意合约支持相对容易。
+看看 [HighloadV3](https://github.com/Trinketer22/turbo-wallet/blob/44fe7ee4300e37e052871275be8dd41035d45c3a/src/lib/contracts/HighloadWalletV3.ts#L20) 是怎么做的吧。
+
+### 双花合约
+
+双花合约应该是每个证明都独一无二的，所以我们很难对它进行分片调整？
+让我们好好想想。
+仔细想想，这取决于证明的结构。
+我首先想到的是与 [免铸造 jetton](https://github.com/tonkeeper/TEPs2/blob/mintles/text/0177-mintless-jetton-standard.md#handlers) 相同的结构。
+
+```
+_ amount:Coins start_from:uint48 expired_at:uint48 = AirdropItem;
+
+_ _(HashMap 267 AirdropItem) = Airdrop;
+
+```
+
+在这种情况下，当然是无法调整的，因为地址分布是随机的，而且所有数据字段都是有意义的。
+但没有什么能阻止我们这样做：
+
+```
+_ amount:Coins start_from:uint48 expired_at:uint48 nonce:uint64 = AirdropItem;
+
+_ _(HashMap 267 AirdropItem) = Airdrop;
+```
+
+甚至
+
+```
+_ amount:Coins start_from:uint48 expired_at:uint48 addr_hash: uint256 = AirdropItem;
+
+_ _(HashMap 64 AirdropItem) = Airdrop;
+
+```
+
+其中，64 位索引可用作 nonce，而地址则成为数据有效载荷的一部分，用于验证。
+因此，如果由 `(distributor_address, index)` 构建双花数据，其中索引是数据的一部分，我们仍然可以获得初始可靠性，但现在地址分片可以通过索引参数进行调整。
+
+#### 用户地址
+
+显然，我们无法控制用户地址，不是吗？
+是的，**但**我们可以将它们分组，使用户地址分片与分发者分片相匹配。
+在这种情况下，每个分发者都将处理 _merkle root_ ，它完全由来自其分片的用户组成。
+
+#### 总结 
+
+我们可以把链中的 `double_spend->dist->dist_jetton` 部分放在同一个分片中。
+留给其他分片的就是`dist_jetton->user_jetton->user_wallet`。
+
+### 我们如何实际部署这种设置
+
+让我们一步步来看看。
+其中一个要求是 _distributor_ 合约必须有可更新的 _merkle root_ 文件。
+
+- 使用初始 `merkle_root` 作为 nonce，在每个分片（0-15）内部署分发器，与其 jetton 钱包位于同一分片内
+- 按地区分片对用户进行分组
+- 为每个用户找到这样的索引，这样就可以 _双花_ 合约 `(distributor, index)` 最终与用户地址在同一分片中。
+- 用上面步骤中的索引生成 _默克尔根_
+- 根据 _默克尔根_ 更新_ distributor _
+
+现在应该没问题了！
+
+### V3
+
+- 用户使用索引调整功能在同一分片部署 _双花_ 合约
+- 用户分片中的分发器通过状态 init `(distributor_address, index)` 检查发送 "双花 "的地址
+-  distributor 将费用发送至费用钱包
+- Distributor 检查证明，在这种情况下，用户索引应是证明的一部分，并通过同一分片中的 jetton 钱包释放 jetton 。
+
+**MORE NAIVE ART**
+这有什么不对吗？让我们好好看看。
+....
+太对了！只有一个收费钱包，而费用都排到了一个分片上。这可能是一场灾难！(想知道这是否真的发生过吗？）
+
+### V4
+
+- 与 V3 相同，但现在有 16 个钱包，每个钱包与其 _distributor_ 在同一个分片。
+- 必须使 _收费钱包_ 地址可更新
+
+**Bit more art**
+
+现在怎么样？LGTM。
+
+## 下一步是什么？
+
+我们总能更进一步。
+来看看内置分片优化功能的自定义 [jetton 钱包](https://github.com/ton-community/mintless-jetton/blob/main/contracts/jetton-utils.fc#L142)。
+因此，用户的 jetton 钱包最终会以 87% 的概率与用户在同一个分片中。
+但这还只是一个未知领域，所以你只能靠自己了。
+祝你在 TGE 中好运！

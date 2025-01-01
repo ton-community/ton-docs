@@ -1,0 +1,139 @@
+# 消息模式 Cookbook
+
+了解发送消息的不同模式和标记对于确保智能合约的正确运行非常重要。 
+[消息模式](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes)部分对这些模式和标记进行了详细描述，而在本节中，我们将通过具体示例来说明它们的实际应用。
+
+:::info 重要事项
+
+**Note**：这些示例中使用的交易费用（如 3 Toncoin）是假设的，仅供参考。实际交易费用会因网络条件和其他因素而有所不同。
+:::
+
+## 1. 发送常规信息
+
+我们的智能合约余额中目前有 100  Toncoin 。在收到一条含有 50  Toncoin 的内部信息后，我们发送一条含有 20  Toncoin 的普通信息，交易费为 3  Toncoin ，将从信息中扣除。
+
+![](/img/docs/message-modes-cookbook/send_regular_message.svg)
+
+| Mode and Flags        | Code                       |
+| :-------------------- | :------------------------- |
+| `mode` = 0, no `flag` | `send_raw_message(msg, 0)` |
+
+## 2. 发送普通信息，错误时不跳转信息并忽略它
+
+我们的智能合约余额中目前有 100  Toncoin 。在收到 50  Toncoin 的内部信息后，我们发送一条 20  Toncoin 的普通信息，交易费为 3  Toncoin ，将从信息中扣除。
+如果在交易处理过程中出现错误，消息将不会跳转并被忽略。
+
+![](/img/docs/message-modes-cookbook/send_regular_message_and_ignore_errors.svg)
+
+| Mode and Flags         | Code                       |
+| :--------------------- | :------------------------- |
+| `mode` = 0, `flag` = 2 | `send_raw_message(msg, 2)` |
+
+## 3. 发送常规信息并在出错时跳转信息
+
+我们的智能合约余额中目前有 100  Toncoin 。在收到 50  Toncoin 的内部信息后，我们发送一条 20  Toncoin 的普通信息，交易费为 3  Toncoin ，将从信息中扣除， 
+，如果在操作处理过程中出现错误--除了回滚交易外，还将退订信息。
+
+![](/img/docs/message-modes-cookbook/send_regular_message_and_bounce_if_error.svg)
+
+| Mode and Flags          | Code                        |
+| :---------------------- | :-------------------------- |
+| `mode` = 0, `flag` = 16 | `send_raw_message(msg, 16)` |
+
+## 4. 发送普通邮件，单独收费
+
+我们的智能合约余额为 100  Toncoin ，我们收到一条内部信息，金额为 50  Toncoin ，发送一条普通信息，金额为 20  Toncoin ，总费用为 3  Toncoin ，我们单独支付转账费用（从合约余额中扣除）。
+
+![](/img/docs/message-modes-cookbook/send_regular_and_pay_fees_separately.svg)
+
+| Mode and Flags         | Code                       |
+| :--------------------- | :------------------------- |
+| `mode` = 0, `flag` = 1 | `send_raw_message(msg, 1)` |
+
+## 5. 发送包含单独费用的普通邮件，并在出错时跳转邮件
+
+我们的智能合约余额为 100  Toncoin ，我们收到一条内部信息，金额为 50  Toncoin ，并发送一条普通信息，金额为 20  Toncoin ，总费用为 3  Toncoin ，我们单独支付转账费用（从合约余额中支付）， 
+，如果在操作处理过程中出现错误--除了回滚交易外，还将信息退回。
+
+![](/img/docs/message-modes-cookbook/send_regular_message_pay_fee_separately_bounce_if_error.svg)
+
+| Mode and Flags                   | Code                        |
+| :------------------------------- | :-------------------------- |
+| `mode` = 0, `flag` = 1 + 16 = 17 | `send_raw_message(msg, 17)` |
+
+## 6. 随新信息携带余值
+
+我们的智能合约余额中目前有 100  Toncoin 。在收到一条含有 50  Toncoin 的内部信息后，除了新信息中最初显示的价值外，我们还将携带入站信息的所有剩余价值，
+，交易费为 3  Toncoin ，将从信息中扣除。
+
+![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value.svg)
+
+| Mode and Flags         | Code                        |
+| :--------------------- | :-------------------------- |
+| `mode` = 64, no `flag` | `send_raw_message(msg, 64)` |
+
+## 7. 将剩余价值转入新信息，单独收费
+
+我们的智能合约余额中目前有 100  Toncoin 。在收到 50  Toncoin 的内部信息后，除了新信息中最初显示的价值外，我们还将携带所有入站信息的剩余价值，
+，交易费为 3  Toncoin ，将单独支付（从智能合约余额中支付）。
+
+![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value_and_pay_fees_separately.svg)
+
+| Mode and Flags          | Code                        |
+| :---------------------- | :-------------------------- |
+| `mode` = 64, `flag` = 1 | `send_raw_message(msg, 65)` |
+
+## 8. 结转剩余值并跳转错误信息
+
+我们的智能合约余额中目前有 100  Toncoin 。
+交易费为 3  Toncoin ，将从信息中扣除，如果在行动处理过程中出现错误--除了回滚交易外，还要退回信息。
+
+![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value_and_if_error_bounce.svg)
+
+| Mode and Flags           | Code                        |
+| :----------------------- | :-------------------------- |
+| `mode` = 64, `flag` = 16 | `send_raw_message(msg, 80)` |
+
+## 9. 将剩余价值与新信息一起单独收费，并在出错时跳转信息
+
+我们的智能合约余额中目前有 100  Toncoin 。在收到 50  Toncoin 的内部消息后，我们会发送一条消息，除了收到的原始金额外，我们会转移整个合约余额，交易费为 3  Toncoin ，将单独支付（从智能合约余额中支付），
+，如果在行动处理过程中发生错误--除了回滚交易外，还会退还消息。
+
+![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value_and_pay_fees_separately_and_if_error_bounce.svg)
+
+| Mode and Flags               | Code                        |
+| :--------------------------- | :-------------------------- |
+| `mode` = 64, `flag` = 16 + 1 | `send_raw_message(msg, 81)` |
+
+## 10. 发送所有收到的代币和合约余额
+
+目前，我们的智能合约余额为 100  Toncoin 。在收到 50  Toncoin 的内部信息后，我们发送了一条信息，除了收到的原始金额外，我们还转移了整个合约余额， 
+，交易费为 3  Toncoin ，将从信息中扣除。
+
+![](/img/docs/message-modes-cookbook/send_all_received_tokens_with_balance.svg)
+
+| Mode and Flags          | Code                         |
+| :---------------------- | :--------------------------- |
+| `mode` = 128, no `flag` | `send_raw_message(msg, 128)` |
+
+## 11. 发送所有收到的代币和合约余额，并跳出错误信息
+
+目前我们的智能合约余额为 100  Toncoin 。在收到 50  Toncoin 的内部信息后，我们会发送一条信息，除了收到的原始金额外，我们会转移整个合约余额，交易费为 3  Toncoin ，并将从信息中扣除， 
+，如果在处理操作过程中出现错误--除了回滚交易外，还会退订信息。
+
+![](/img/docs/message-modes-cookbook/send_all_received_tokens_with_balance_and_if_error_bounce.svg)
+
+| Mode and Flags            | Code                         |
+| :------------------------ | :--------------------------- |
+| `mode` = 128, `flag` = 16 | `send_raw_message(msg, 144)` |
+
+## 12. 发送所有收到的代币和合约余额，并销毁智能合约
+
+我们的智能合约余额中目前有 100  Toncoin 。在收到一条含有 50  Toncoin 的内部信息后，我们发送了一条信息，除了收到的原始金额外，还转走了整个合约余额，并销毁了合约，
+，交易费为 3  Toncoin ，将从信息中扣除。
+
+![](/img/docs/message-modes-cookbook/send_all_received_tokens_with_balance_and_destroy_sc.svg)
+
+| Mode and Flags            | Code                         |
+| :------------------------ | :--------------------------- |
+| `mode` = 128, `flag` = 32 | `send_raw_message(msg, 160)` |

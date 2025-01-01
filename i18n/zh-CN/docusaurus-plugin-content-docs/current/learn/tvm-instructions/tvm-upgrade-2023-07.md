@@ -222,28 +222,28 @@ BLS 值在 TVM 中的表示方法如下：
 
 这些是对组元素的算术操作。
 
-| xxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈                        | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>说明                                                                                       |
-| :------------------------ | :---------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
-| `BLS_G1_ADD`              | *`x y - x+y`*                                   | G1上的加法。<br/>*3934 gas*                                                                                                                  |
-| `BLS_G1_SUB`              | *`x y - x-y`*                                   | G1上的减法。<br/>*3934 gas*                                                                                                                  |
-| `BLS_G1_NEG`              | *`x - -x`*                                      | G1上的取反。<br/>*784 gas*                                                                                                                   |
-| `BLS_G1_MUL`              | *`x s - x*s`*                                   | 将G1点`x`乘以标量`s`。<br/>任何`s`都是有效的，包括负数。<br/>*5234 gas*                                                                                     |
-| `BLS_G1_MULTIEXP`         | *`x_1 s_1 ... x_n s_n n - x_1*s_1+...+x_n*s_n`* | 计算G1点`x_i`和标量`s_i`的`x_1*s_1+...+x_n*s_n`。如果`n=0`，返回零点。&#xA;<br/>任何`s_i`都是有效的，包括负数。<br/>`gas=11409+n*630+n/floor(max(log2(n),4))*8820`   |
-| `BLS_G1_ZERO`             | *`- zero`*                                      | 推送零点到G1中。<br/>*34 gas*                                                                                                                  |
-| `BLS_MAP_TO_G1`           | *`f - x`*                                       | 将FP元素`f`转换为G1点。<br/>*2384 gas*                                                                                                          |
-| `BLS_G1_INTROUP`          | *`x - bool`*                                    | 检查切片`x`是否表示有效的G1元素。<br/>*2984 gas*                                                                                                      |
-| `BLS_G1_ISZERO`           | *`x - bool`*                                    | 检查G1点`x`是否等于零。<br/>*34 gas*                                                                                                             |
-| `BLS_G2_ADD`              | *`x y - x+y`*                                   | G2上的加法。<br/>*6134 gas*                                                                                                                  |
-| `BLS_G2_SUB`              | *`x y - x-y`*                                   | G2上的减法。<br/>*6134 gas*                                                                                                                  |
-| `BLS_G2_NEG`              | *`x - -x`*                                      | G2上的取反。<br/>*1584 gas*                                                                                                                  |
-| `BLS_G2_MUL`              | *`x s - x*s`*                                   | 将G2点`x`乘以标量`s`。<br/>任何`s`都是有效的，包括负数。<br/>*10584 gas*                                                                                    |
-| `BLS_G2_MULTIEXP`         | *`x_1 s_1 ... x_n s_n n - x_1*s_1+...+x_n*s_n`* | 计算G2点`x_i`和标量`s_i`的`x_1*s_1+...+x_n*s_n`。如果`n=0`，返回零点。&#xA;<br/>任何`s_i`都是有效的，包括负数。<br/>`gas=30422+n*1280+n/floor(max(log2(n),4))*22840` |
-| `BLS_G2_ZERO`             | *`- zero`*                                      | 推送零点到G2中。<br/>*34 gas*                                                                                                                  |
-| `BLS_MAP_TO_G2`           | *`f - x`*                                       | 将FP2元素`f`转换为G2点。<br/>*7984 gas*                                                                                                         |
-| `BLS_G2_INTROUP`          | *`x - bool`*                                    | 检查切片`x`是否表示有效的G2元素。<br/>*4284 gas*                                                                                                      |
-| `BLS_G2_ISZERO`           | *`x - bool`*                                    | 检查G2点`x`是否等于零。<br/>*34 gas*                                                                                                             |
-| `BLS_PAIRING`             | *`x_1 y_1 ... x_n y_n n - bool`*                | 给定 G1 点 `x_i` 和 G2 点 `y_i`，计算并乘以 `x_i,y_i` 的配对。如果结果是 FP12 中的乘法同一性，则返回 true，否则返回 false。如果 `n=0` 则返回 false。<br/>*`gas=20034+n*11800`*     |
-| `BLS_PUSHR`               | *`- r`*                                         | 推送G1和G2的阶（约为`2^255`）。<br/>*34 gas*                                                                                                      |
+| xxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈                        | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>说明                                                                                                          |
+| :------------------------ | :---------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `BLS_G1_ADD`              | *`x y - x+y`*                                   | G1上的加法。<br/>*3934 gas*                                                                                                                                     |
+| `BLS_G1_SUB`              | *`x y - x-y`*                                   | G1上的减法。<br/>*3934 gas*                                                                                                                                     |
+| `BLS_G1_NEG`              | *`x - -x`*                                      | G1上的取反。<br/>*784 gas*                                                                                                                                      |
+| `BLS_G1_MUL`              | *`x s - x*s`*                                   | 将G1点`x`乘以标量`s`。<br/>任何`s`都是有效的，包括负数。<br/>*5234 gas*                                                                                                        |
+| `BLS_G1_MULTIEXP`         | *`x_1 s_1 ... x_n s_n n - x_1*s_1+...+x_n*s_n`* | 计算G1点`x_i`和标量`s_i`的`x_1*s_1+...+x_n*s_n`。如果`n=0`，返回零点。&#xA<br/>任何`s_i`都是有效的，包括负数。<br/>`gas=11409+n*630+n/floor(max(log2(n),4))*8820`   |
+| `BLS_G1_ZERO`             | *`- zero`*                                      | 推送零点到G1中。<br/>*34 gas*                                                                                                                                     |
+| `BLS_MAP_TO_G1`           | *`f - x`*                                       | 将FP元素`f`转换为G1点。<br/>*2384 gas*                                                                                                                             |
+| `BLS_G1_INTROUP`          | *`x - bool`*                                    | 检查切片`x`是否表示有效的G1元素。<br/>*2984 gas*                                                                                                                         |
+| `BLS_G1_ISZERO`           | *`x - bool`*                                    | 检查G1点`x`是否等于零。<br/>*34 gas*                                                                                                                                |
+| `BLS_G2_ADD`              | *`x y - x+y`*                                   | G2上的加法。<br/>*6134 gas*                                                                                                                                     |
+| `BLS_G2_SUB`              | *`x y - x-y`*                                   | G2上的减法。<br/>*6134 gas*                                                                                                                                     |
+| `BLS_G2_NEG`              | *`x - -x`*                                      | G2上的取反。<br/>*1584 gas*                                                                                                                                     |
+| `BLS_G2_MUL`              | *`x s - x*s`*                                   | 将G2点`x`乘以标量`s`。<br/>任何`s`都是有效的，包括负数。<br/>*10584 gas*                                                                                                       |
+| `BLS_G2_MULTIEXP`         | *`x_1 s_1 ... x_n s_n n - x_1*s_1+...+x_n*s_n`* | 计算G2点`x_i`和标量`s_i`的`x_1*s_1+...+x_n*s_n`。如果`n=0`，返回零点。&#xA<br/>任何`s_i`都是有效的，包括负数。<br/>`gas=30422+n*1280+n/floor(max(log2(n),4))*22840` |
+| `BLS_G2_ZERO`             | *`- zero`*                                      | 推送零点到G2中。<br/>*34 gas*                                                                                                                                     |
+| `BLS_MAP_TO_G2`           | *`f - x`*                                       | 将FP2元素`f`转换为G2点。<br/>*7984 gas*                                                                                                                            |
+| `BLS_G2_INTROUP`          | *`x - bool`*                                    | 检查切片`x`是否表示有效的G2元素。<br/>*4284 gas*                                                                                                                         |
+| `BLS_G2_ISZERO`           | *`x - bool`*                                    | 检查G2点`x`是否等于零。<br/>*34 gas*                                                                                                                                |
+| `BLS_PAIRING`             | *`x_1 y_1 ... x_n y_n n - bool`*                | 给定 G1 点 `x_i` 和 G2 点 `y_i`，计算并乘以 `x_i,y_i` 的配对。如果结果是 FP12 中的乘法同一性，则返回 true，否则返回 false。如果 `n=0` 则返回 false。<br/>*`gas=20034+n*11800`*                        |
+| `BLS_PUSHR`               | *`- r`*                                         | 推送G1和G2的阶（约为`2^255`）。<br/>*34 gas*                                                                                                                         |
 
 `INGROUP`，`ISZERO`在无效的点上（除了cell下溢异常）不会引发异常，而是返回false。
 

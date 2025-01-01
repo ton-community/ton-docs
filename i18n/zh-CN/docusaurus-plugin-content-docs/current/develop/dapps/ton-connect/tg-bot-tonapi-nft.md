@@ -34,7 +34,7 @@
 执行以下命令通过 `pip` 安装所有必要的库：
 
 ```bash
-pip install aiogram redis qrcode tonsdk pytonconnect requests
+pip install aiogram redis qrcode pytoniq pytonconnect requests
 ```
 
 然后将它们导入主文件：
@@ -49,7 +49,7 @@ import random
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.types.input_file import InputFile
-from tonsdk.utils import Address
+from pytoniq import Address
 from pytonconnect import TonConnect
 ```
 
@@ -240,7 +240,7 @@ async def connect_wallet_tonkeeper(message: types.Message):
         await asyncio.sleep(1)
         if connector.connected:
             if connector.account.address:
-                address = Address(connector.account.address).to_string(True, True, True)
+                address = Address(connector.account.address).to_str(True, True, True)
             break
 
     # Delete the previously sent QR code message

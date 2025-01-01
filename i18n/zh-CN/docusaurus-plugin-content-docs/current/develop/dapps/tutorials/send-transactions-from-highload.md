@@ -18,7 +18,7 @@
 使用 pip 安装所需的软件包：
 
 ```sh
-pip install tonsdk
+pip install pytoniq
 ```
 
 ## 代码片段和说明 📄
@@ -70,20 +70,36 @@ def api_v3_request(method, api_key=None, **params):
 使用助记符设置钱包并生成原始地址。
 
 ```python
-from tonsdk.contract.wallet import Wallets, WalletVersionEnum
-from tonsdk.utils import bytes_to_b64str
+from pytoniq import liteclient, WalletV4, LiteClientLike, LiteClient
+import asyncio
 
-wallet_workchain = 0
-wallet_version = WalletVersionEnum.hv2
 
-wallet_mnemonics = ["..."]  # PLACE TEST MNEMONIC FOR HIGHLOAD WALLET HERE
+async def main():
+    client = LiteClient.from_mainnet_config(  # choose mainnet, testnet or custom config dict
+        ls_i=0,  # index of liteserver from config
+        trust_level=2,  # trust level to liteserver
+        timeout=15  # timeout not includes key blocks synchronization as it works in pytonlib
+    )
 
-_mnemonics, _pub_k, _priv_k, wallet = Wallets.from_mnemonics(
-    wallet_mnemonics, wallet_version, wallet_workchain
-)
-raw_address = wallet.address.to_string()
+    await client.connect()
 
-print(raw_address)
+    wallet: WalletV4 = await WalletV4.from_mnemonic(client, [
+        'casual', 'doctor', 'across',
+        'later', 'pledge', 'burden',
+        'desert', 'remain', 'under',
+        'moment', 'meat', 'define',
+        'relief', 'tennis', 'sphere',
+        'tattoo', 'long', 'manual',
+        'fiction', 'push', 'couch',
+        'wink', 'behind', 'crumble'
+    ])
+
+    address: str = wallet.address.to_str(True, True, True)
+    print(address)
+
+
+asyncio.run(main())
+
 ```
 
 ### 3.部署合同 📜
@@ -91,19 +107,13 @@ print(raw_address)
 创建和部署合同。
 
 ```python
-init_query = wallet.create_init_external_message()
-init_boc = bytes_to_b64str(init_query["message"].to_boc(False))
-boc_res = send_boc_request(raw_address, init_boc)
+async def init_contract(wallet_v3r2: WalletV4):
+    # send some tons (0.1) to the address before calling init_external function
+    address: str = wallet_v3r2.address.to_str(True, True, True)
+    print(address)
 
-result = []
-while not result:
-    print("Check transaction")
-    result = api_v3_request(
-        "transactionsByMessage", direction="in", msg_hash=boc_res["hash"]
-    )
-    if not result:
-        time.sleep(5)
-print("Deployment successful!")
+    print(wallet_v3r2.state.code.get_depth())
+    response = await wallet_v3r2.send_init_external()
 ```
 
 ### 4.创建和发送交易 💸
@@ -111,32 +121,16 @@ print("Deployment successful!")
 准备并向多个收件人发送交易。
 
 ```python
-num_receips = 4
-to_address = "..."  # PLACE TEST RECEIVER ADDRESS HERE
+async def send_tons(wallet_v3r2: WalletV4, target: typing.Union[str, pytoniq.Address], amount: int):
+    cell = pytoniq.begin_cell().store_int(20, 8).end_cell()
+    response = await wallet_v3r2.transfer(target), amount)
+    print(response)
 
-recieps = [
-    {
-        "address": to_address,
-        "amount": 1000 + i,
-        "send_mode": 3,
-        "payload": f"test msg {i}",
-    }
-    for i in range(num_receips)
-]
 
-msg_to_me = {
-    "address": wallet.address.to_string(True, is_bounceable=False),
-    "amount": 999,
-    "send_mode": 3,
-    "payload": f"test msg to me",
-}
-recieps.append(msg_to_me)
-recieps.append(msg_to_me)
-
-highload_send_query = wallet.create_transfer_message(recieps, query_id=0)
-highload_send_boc = bytes_to_b64str(highload_send_query["message"].to_boc(False))
-boc_res = send_boc_request(raw_address, highload_send_boc)
-print("Transaction sent successfully!")
+async def send_tons_multi_target(wallet: HighloadWallet, targets: typing.Union[typing.List[str], typing.List[pytoniq.Address]], amounts: typing.List[int]):
+    cell = pytoniq.begin_cell().end_cell()
+    response = await wallet.transfer(targets, amounts, [cell])
+    print(response)
 ```
 
 ### 5.等待交易确认 ⏳
@@ -144,42 +138,25 @@ print("Transaction sent successfully!")
 等待交易确认。
 
 ```python
-def wait_msg_transaction(msg_hash, api_key=None, sleep_time=2, verbose=False):
-    result = []
-    while not result:
-        if verbose:
-            print(f"Wait transaction for message '{msg_hash}'")
-        result = api_v3_request(
-            "transactionsByMessage", api_key=api_key, direction="in", msg_hash=msg_hash
-        )
-        if not result:
-            time.sleep(sleep_time)
-    if verbose:
-        print(f"Found {len(result)} transactions:")
-        for tx in result:
-            print(f"\t{tx['hash']}")
-    return result
-
-result = wait_msg_transaction(boc_res["hash"], verbose=True)
-print("Transaction confirmed!")
-```
-
-### 6.处理发出的信息 📤
-
-处理外发信息。
-
-```python
-msg_list = result[0]["out_msgs"]
-msg_hashes = [msg["hash"] for msg in msg_list]
-print(f"Num out messages: {len(msg_list)}")
-
-receive_transactions = []
-for msg_hash in msg_hashes:
-    tx = wait_msg_transaction(msg_hash, api_key=api_key, verbose=True)
-    receive_transactions.extend(tx)
-print(f"Transactions count: {len(receive_transactions)}")
+# scan blockchain for transaction
+async def wait_for_transaction(client: LiteClient, number: int = 20):
+    # logic depends on you transaction creating process
+    while True:
+        # You can scan for message hashes if you save them instead of using these "additional" numbers
+        responses = await client.get_transactions('', 10)
+        for response in responses:
+            transaction: pytoniq_core.Transaction = response
+            # We saved 20 into the body before sending
+            if transaction.in_msg.body.begin_parse().load_int(8) == number:
+                break
+        else:
+            await asyncio.sleep(1)
+            continue
+        
+        break
+    return
 ```
 
 ---
 
-本指南涵盖从 Highload Wallet v3 发送交易的基本步骤。请确保用实际的 API 密钥、助记符和地址替换占位符，以便成功执行脚本。祝您编码愉快！🚀
+处理外发信息。

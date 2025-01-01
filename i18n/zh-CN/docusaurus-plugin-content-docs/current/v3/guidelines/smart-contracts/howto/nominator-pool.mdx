@@ -1,0 +1,123 @@
+# 如何使用提名池？
+
+:::tip
+建议在阅读本教程之前先熟悉一下 [提名池](/v3/documentation/smart-contracts/contracts-specs/nominator-pool)。
+:::
+
+## 在提名池模式下运行验证器
+
+1. 为验证器设置硬件：需要 8 个 vCPU、128GB 内存、1TB SSD、固定 IP 地址和 1Gb/s 网速。
+
+   为了保持网络的稳定性，建议将验证器节点分布在全球不同的地理位置，而不是集中在一个数据中心。您可以使用 [this site](https://status.toncenter.com/) 来评估不同地点的负载情况。地图显示，欧洲的数据中心利用率很高，尤其是芬兰、德国和巴黎。因此，不建议使用 Hetzner 和 OVH 等提供商。
+
+   > 确保您的硬件符合或超过上述规格。在硬件不足的情况下运行验证器会对网络造成负面影响，并可能导致处罚。
+   >
+   > 请注意，自 2021 年 5 月起，Hetzner 已禁止在其服务器上挖矿，该禁令包括 PoW 和 PoS 算法。即使安装普通节点也可能被视为违反其服务条款。
+   >
+   > **推荐的提供商包括：** [Amazon](https://aws.amazon.com/), [DigitalOcean](https://www.digitalocean.com/), [Linode](https://www.linode.com/), [Alibaba Cloud](https://alibabacloud.com/), [Latitude](https://www.latitude.sh/).
+
+2. 按照指南 [此处](/v3/guidelines/nodes/running-nodes/full-node#install-the-mytonctrl) 所述，安装并同步**mytonctrl**。
+
+   您还可以参考此 [Video Instruction](/v3/guidelines/nodes/running-nodes/full-node#run-a-node-video)，以获得更多帮助。
+
+3. 向 "wl "列表中显示的验证器钱包地址转账 1  TON 。
+
+4. 使用 `aw` 命令激活验证器钱包。
+
+5. 激活池模式：
+
+   ```bash
+   enable_mode nominator-pool
+   set stake null
+   ```
+
+6. 创建两个池（用于偶数和奇数验证轮）：
+
+   ```bash
+   new_pool p1 0 1 1000 300000
+   new_pool p2 0 1 1001 300000
+   ```
+
+   其中：
+
+   - `p1` 为池名称；
+   - `0` % 是验证器的奖励份额（例如，用 40 表示 40%）；
+   - `1` 是提名池中提名人的最大数量（应 \<= 40）；
+   - `1000`  TON 是最小验证器质押（应 >= 1K  TON ）；
+   - `300000`  TON 是最低提名人质押（应 >= 10K  TON ）；
+
+   > (!) 池配置不一定要完全相同，您可以在一个池的最低质押额上加 1，使其有所不同。
+   >
+   > (!) 使用 https://tonmon.xyz/ 确定当前的最小验证器质押。
+
+7. 键入 `pools_list` 显示池地址：
+
+   ```bash
+   pools_list
+   Name  Status  Balance  Address
+   p1    empty   0        0f98YhXA9wnr0d5XRXT-I2yH54nyQzn0tuAYC4FunT780qIT
+   p2    empty   0        0f9qtmnzs2-PumMisKDmv6KNjNfOMDQG70mQdp-BcAhnV5jL
+   ```
+
+8. 向每个池发送 1  TON 并激活池：
+
+   ```bash
+   mg validator_wallet_001 0f98YhXA9wnr0d5XRXT-I2yH54nyQzn0tuAYC4FunT780qIT 1
+   mg validator_wallet_001 0f9qtmnzs2-PumMisKDmv6KNjNfOMDQG70mQdp-BcAhnV5jL 1
+   activate_pool p1
+   activate_pool p2
+   ```
+
+9. 键入 `pools_list` 显示池：
+
+   ```bash
+   pools_list
+   Name  Status  Balance      Address
+   p1    active  0.731199733  kf98YhXA9wnr0d5XRXT-I2yH54nyQzn0tuAYC4FunT780v_W
+   p2    active  0.731199806  kf9qtmnzs2-PumMisKDmv6KNjNfOMDQG70mQdp-BcAhnV8UO
+   ```
+
+10. 通过链接 "https://tonscan.org/nominator/{address_of_pool}" 打开每个池，并验证池配置。
+
+11. 继续将验证器存入每个池：
+
+    ```bash
+    deposit_to_pool validator_wallet_001 <address_of_pool_1> 1005
+    deposit_to_pool validator_wallet_001 <address_of_pool_2> 1005
+    ```
+
+   在这些命令中，`1005` TON 是存款金额。请注意，资金池在处理存款时将扣除 1  TON 。
+
+12. 继续向每个提名池交存提名人押金：
+
+    访问池链接（来自**步骤 9**）并点击**添加质押**。
+    您也可以使用 **mytonctrl**，使用以下命令存款：
+
+    ```bash
+    mg nominator_wallet_001 <address_of_pool_1> 300001 -C d
+    mg nominator_wallet_001 <address_of_pool_2> 300001 -C d
+    ```
+
+> (提名人钱包必须在基链（工作链 0）中初始化。）
+>
+> (!) 请注意，验证者钱包和提名者钱包必须分开存储！验证者钱包应与验证者节点一起存储在服务器上，以确保处理所有系统交易。同时，提名者钱包应存储在您的冷加密货币钱包中。
+>
+> 要提取提名人存款，请向资金池地址发送带注释 `w` 的交易（附加 1  TON 以处理交易）。您也可以使用 **mytonctrl** 执行此操作。
+
+13. 邀请提名者存入您的池。参与验证将自动开始。
+
+    > (!) 确保您的验证器钱包中至少有 200  TON /月的操作费。
+
+## 池配置
+
+如果你打算借给自己，请使用 `new_pool p1 0 1 1000 300000`（最多 1 个提名人，0% 验证人份额）。
+
+如果要为众多提名者创建一个奖池，可以使用类似下面的方法：`new_pool p1 40 40 10000 10000`（最多 40 个提名者，40% 验证者份额，最小参与者质押为 10K TON）。
+
+## 将常规校验器过渡到提名器池模式
+
+1. 输入 `set stake 0`，停止参与选举。
+
+2. 等待选举人归还你们的质押。
+
+3. 从 **第 4 步** 开始，继续执行 "在提名池模式下运行验证器" 下的步骤。

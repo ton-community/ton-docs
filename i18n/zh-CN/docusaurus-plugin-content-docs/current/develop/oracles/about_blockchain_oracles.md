@@ -57,5 +57,3 @@
 ## TON 中的预言机列表
 
 - [RedStone Oracles](/develop/oracles/red_stone)
-
-## 另见：

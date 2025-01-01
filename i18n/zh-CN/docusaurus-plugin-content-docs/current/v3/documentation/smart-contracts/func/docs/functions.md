@@ -170,7 +170,7 @@ a~example();
 a = example(a);
 ```
 
-例如，假设 `cs` 是一个cell切片，`load_uint` 的类型为 `(slice, int) -> (slice, int)`：它接受一个cell切片和要加载的位数，然后返回切片的剩余部分和加载的值。以下代码等效：
+例如，假设 `cs` 是一个cell slice ，`load_uint` 的类型为 `(slice, int) -> (slice, int)`：它接受一个cell slice 和要加载的位数，然后返回 slice 的剩余部分和加载的值。以下代码等效：
 
 ```func
 (cs, int x) = load_uint(cs, 8);
@@ -254,6 +254,16 @@ int random() impure asm "RANDU256";
 例如，您可以在此示例中像这样使用 `inline`：[ICO-Minter.fc](https://github.com/ton-blockchain/token-contract/blob/f2253cb0f0e1ae0974d7dc0cef3a62cb6e19f806/ft/jetton-minter-ICO.fc#L16)
 
 ```func
+(int) add(int a, int b) inline {
+    return a + b;
+}
+```
+
+因为 `add` 函数使用了 `inline` 指定符。编译器会尝试用实际代码 `a + b` 替换对 `add` 的调用，从而避免函数调用开销。
+
+带有 `inline_ref` 修饰符的函数代码放在单独的cell中，每次调用该函数时，TVM 都会执行 `CALLREF` 命令。因此，它与 `inline` 类似，但因为cell可以在没有重复的情况下在多个地方重复使用，所以几乎总是更有效率地使用 `inline_ref` 修饰符而不是 `inline`，除非该函数确实只被调用一次。`inline_ref` 函数的递归调用仍然不可能，因为 TVM cell中没有循环引用。
+
+```func
 () save_data(int total_supply, slice admin_address, cell content, cell jetton_wallet_code) impure inline {
   set_data(begin_cell()
             .store_coins(total_supply)
@@ -267,11 +277,11 @@ int random() impure asm "RANDU256";
 
 #### Inline_ref 修饰符(Inline_ref specifier)
 
-带有 `inline_ref` 修饰符的函数代码放在单独的cell中，每次调用该函数时，TVM 都会执行 `CALLREF` 命令。因此，它与 `inline` 类似，但因为cell可以在没有重复的情况下在多个地方重复使用，所以几乎总是更有效率地使用 `inline_ref` 修饰符而不是 `inline`，除非该函数确实只被调用一次。`inline_ref` 函数的递归调用仍然不可能，因为 TVM cell中没有循环引用。
+例如，
 
 #### method_id
 
-TVM 程序中的每个函数都有一个内部整数 id，可以通过该 id 调用它。普通函数通常由从 1 开始的连续整数编号，但合约的 get 方法由其名称的 crc16 散列编号。`method_id(<some_number>)` 修饰符允许将函数的 id 设置为指定的值，而 `method_id` 使用默认值 `(crc16(<function_name>) & 0xffff) | 0x10000`。如果函数具有 `method_id` 修饰符，那么它可以通过其名称作为 get 方法在 lite-client 或 ton-explorer 中被调用。
+是多重签名合约的 get 方法。
 
 例如，
 
@@ -286,15 +296,15 @@ TVM 程序中的每个函数都有一个内部整数 id，可以通过该 id 调
 
 ### 使用 forall 的多态性
 
-在任何函数声明或定义之前，都可以有 `forall` 类型变量声明符。它具有以下语法：
+例如，
 
 ```func
 forall <comma_separated_type_variables_names> ->
 ```
 
-其中类型变量名称可以是任何[标识符](/develop/func/literals_identifiers#identifiers)。通常，它们以大写字母命名。
+是一个接受长度恰好为 2 的元组的函数，但组件中的值可以是任何（单个堆栈条目）类型，并将它们互换。
 
-例如，
+`pair_swap([2, 3])` 将产生 `[3, 2]`，而 `pair_swap([1, [2, 3, 4]])` 将产生 `[[2, 3, 4], 1]`。
 
 ```func
 forall X, Y -> [Y, X] pair_swap([X, Y] pair) {
@@ -303,11 +313,12 @@ forall X, Y -> [Y, X] pair_swap([X, Y] pair) {
 }
 ```
 
-是一个接受长度恰好为 2 的元组的函数，但组件中的值可以是任何（单个堆栈条目）类型，并将它们互换。
+另外，值得注意的是，`X` 和 `Y` 的类型宽度假定为 1；也就是说，`X` 或 `Y` 的值必须占据单个堆栈条目。因此，您实际上不能在类型为 `[(int, int), int]` 的元组上调用函数 `pair_swap`，因为类型 `(int, int)` 的宽度为 2，即它占据 2 个堆栈条目。
 
 `pair_swap([2, 3])` 将产生 `[3, 2]`，而 `pair_swap([1, [2, 3, 4]])` 将产生 `[[2, 3, 4], 1]`。
 
-在此示例中，`X` 和 `Y` 是[类型变量](/develop/func/types#polymorphism-with-type-variables)。当调用函数时，类型变量被实际类型替换，函数的代码被执行。请注意，尽管函数是多态的，但每种类型替换的实际汇编代码是相同的。这本质上是通过堆栈操作原语的多态性实现的。目前，不支持其他形式的多态性（如带有类型类的特设多态性）。
+如上所述，可以通过汇编代码定义函数。语法是 `asm` 关键字，后跟一个或多个表示为字符串的汇编命令。
+例如，可以定义：
 
 另外，值得注意的是，`X` 和 `Y` 的类型宽度假定为 1；也就是说，`X` 或 `Y` 的值必须占据单个堆栈条目。因此，您实际上不能在类型为 `[(int, int), int]` 的元组上调用函数 `pair_swap`，因为类型 `(int, int)` 的宽度为 2，即它占据 2 个堆栈条目。
 
@@ -326,10 +337,10 @@ int inc_then_negate(int x) asm "INC" "NEGATE";
 int inc_then_negate'(int x) asm "INC NEGATE";
 ```
 
-`INC NEGATE` 将被 FunC 视为一个汇编命令，但这是可以的，因为 Fift 汇编器知道这是两个单独的命令。
+在某些情况下，我们希望以与汇编函数所需的顺序不同的顺序传递参数，或/和以不同于命令返回的堆栈条目顺序获取结果。我们可以通过添加相应的堆栈原语来手动重新排列堆栈，但 FunC 可以自动完成此操作。
 
 :::info
-汇编命令列表可以在这里找到：[TVM 指令](/learn/tvm-instructions/instructions)。
+请注意，在手动重新排列的情况下，参数将按重新排列的顺序计算。要覆盖此行为，请使用 `#pragma compute-asm-ltr`：[compute-asm-ltr](compiler_directives#pragma-compute-asm-ltr)
 :::
 
 ### 重新排列堆栈条目
@@ -337,7 +348,7 @@ int inc_then_negate'(int x) asm "INC NEGATE";
 在某些情况下，我们希望以与汇编函数所需的顺序不同的顺序传递参数，或/和以不同于命令返回的堆栈条目顺序获取结果。我们可以通过添加相应的堆栈原语来手动重新排列堆栈，但 FunC 可以自动完成此操作。
 
 :::info
-请注意，在手动重新排列的情况下，参数将按重新排列的顺序计算。要覆盖此行为，请使用 `#pragma compute-asm-ltr`：[compute-asm-ltr](compiler_directives#pragma-compute-asm-ltr)
+注意，在手动重新排列的情况下，参数将按重新排列的顺序计算。要覆盖这种行为，请使用 `#pragma compute-asm-ltr`：[compute-asm-ltr](/v3/documentation/smartcontracts/func/docs/compiler_directives#pragma-compute-asm-ltr)
 :::
 
 例如，假设汇编命令 STUXQ 接受一个整数、构建器和整数；然后返回构建器以及表示操作成功或失败的整数标志。
@@ -347,15 +358,15 @@ int inc_then_negate'(int x) asm "INC NEGATE";
 (builder, int) store_uint_quite(int x, builder b, int len) asm "STUXQ";
 ```
 
-但是，假设我们想重新排列参数。那么我们可以定义：
+我们还可以像这样重新排列返回值：
 
 ```func
 (builder, int) store_uint_quite(builder b, int x, int len) asm(x b len) "STUXQ";
 ```
 
-因此，您可以在 `asm` 关键字后面指示所需的参数顺序。
+数字对应于返回值的索引（0 是返回值中最深的堆栈条目）。
 
-我们还可以像这样重新排列返回值：
+这些技术的组合也是可能的。
 
 ```func
 (int, builder) store_uint_quite(int x, builder b, int len) asm( -> 1 0) "STUXQ";
@@ -363,7 +374,7 @@ int inc_then_negate'(int x) asm "INC NEGATE";
 
 数字对应于返回值的索引（0 是返回值中最深的堆栈条目）。
 
-这些技术的组合也是可能的。
+多行汇编命令甚至 Fift 代码片段可以通过以 `"""` 开始和结束的多行字符串定义。
 
 ```func
 (int, builder) store_uint_quite(builder b, int x, int len) asm(x b len -> 1 0) "STUXQ";

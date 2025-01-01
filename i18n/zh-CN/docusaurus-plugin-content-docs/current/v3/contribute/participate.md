@@ -18,7 +18,7 @@
 找到或编写你想描述的材料。
 
 1. 检查带有 `tutorial` 标签的 [TON Docs GitHub 上的问题列表](https://github.com/ton-community/ton-docs/issues)。
-2. *或者* 在 TON Docs GitHub 上用 [教程模板](https://github.com/ton-community/ton-docs/issues/new?assignees=\&labels=feature+%3Asparkles%3A%2Ccontent+%3Afountain_pen%3A\&template=suggest_tutorial.yaml\&title=Suggest+a+tutorial)写下你自己的想法。
+2. *或者* 在 TON Docs GitHub 上用 [教程模板](https://github.com/ton-community/ton-docs/issues/new?assignees=\\&labels=feature+%3Asparkles%3A%2Ccontent+%3Afountain_pen%3A\\&template=suggest_tutorial.yaml\\&title=Suggest+a+tutorial)写下你自己的想法。
 
 ## 描述问题以获得奖励
 

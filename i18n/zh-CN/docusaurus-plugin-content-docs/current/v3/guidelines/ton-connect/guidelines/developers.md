@@ -15,6 +15,7 @@
 - [TON Connect C#](/develop/dapps/ton-connect/developers#ton-connect-c)
 - [TON Connect Unity](/develop/dapps/ton-connect/developers#ton-connect-unity)
 - [TON Connect Go](/develop/dapps/ton-connect/developers#ton-connect-go)
+- [TON Connect Go](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-go)
 
 ## TON Connect React
 
@@ -79,11 +80,25 @@ TON Connect 可以通过简单的 UI 元素（如“连接钱包按钮”、“�
 
 ## TON Connect Python
 
-### pytonconnect
+TonConnect UI Vue 是用于 TonConnect SDK 的 Vue UI 工具包。使用它可以在 Vue 应用程序中通过 TonConnect 协议将您的应用程序连接到 TON 钱包。
 
-TON Connect 2.0 的 Python SDK。相当于 `@tonconnect/sdk` 库。
+- 使用 `@townsquarelabs/ui-vue` 的 DApp 示例：[GitHub](https://github.com/TownSquareXYZ/demo-dapp-with-vue-ui)
+- 已部署的 `demo-dapp-with-vue-ui` 示例：[GitHub](https://townsquarexyz.github.io/demo-dapp-with-vue-ui/)
 
-使用它可以通过 TonConnect 协议将您的应用程序连接到 TON 钱包。
+```bash
+npm i @townsquarelabs/ui-vue
+```
+
+- [GitHub](https://github.com/TownSquareXYZ/tonconnect-ui-vue)
+- [NPM](https://www.npmjs.com/package/@townsquarelabs/ui-vue)
+
+## TON 连接 Python
+
+### ClickoTON-Foundation tonconnect
+
+用于将 TON Connect 连接到 Python 应用的库
+
+使用它可通过 TonConnect 协议将您的应用程序连接到 TON 钱包。
 
 ```bash
 pip3 install pytonconnect
@@ -93,7 +108,7 @@ pip3 install pytonconnect
 
 ### ClickoTON-Foundation tonconnect
 
-用于将 TON Connect 连接到 Python 应用的库
+使用它可以通过 TonConnect 协议将您的应用程序连接到 TON 钱包。
 
 ```bash
 git clone https://github.com/ClickoTON-Foundation/tonconnect.git
@@ -102,26 +117,14 @@ pip install -e tonconnect
 
 [GitHub](https://github.com/ClickoTON-Foundation/tonconnect)
 
-## TON Connect Dart
-
-TON Connect 2.0 的 Dart SDK。相当于 `@tonconnect/sdk` 库。
-
-使用它可以通过 TonConnect 协议将您的应用程序连接到 TON 钱包。
-
-```bash
- $ dart pub add darttonconnect
-```
-
-- [GitHub](https://github.com/romanovichim/dartTonconnect)
-
-## TON Connect C\#
+## TON Connect C\\#
 
 TON Connect 2.0 的 C# SDK。相当于 `@tonconnect/sdk` 库。
 
 使用它可以通过 TonConnect 协议将您的应用程序连接到 TON 钱包。
 
 ```bash
- $ dotnet add package TonSdk.Connect
+ $ dart pub add darttonconnect
 ```
 
 - [GitHub](https://github.com/continuation-team/TonSdk.NET/tree/main/TonSDK.Connect)
@@ -133,7 +136,7 @@ TON Connect 2.0 的 Go SDK。
 使用它可以通过 TonConnect 协议将您的应用程序连接到 TON 钱包。
 
 ```bash
- go get github.com/cameo-engineering/tonconnect
+ $ dotnet add package TonSdk.Connect
 ```
 
 - [GitHub](https://github.com/cameo-engineering/tonconnect)
@@ -144,19 +147,31 @@ TON Connect 2.0 的 Go SDK。
 
 如果您遇到任何额外的问题，或者想提出有关如何改进 TON Connect 2.0 的提议，请通过适当的 [GitHub 目录](https://github.com/ton-connect/) 直接联系我们。
 
-## TON Connect Unity
+```bash
+ go get github.com/cameo-engineering/tonconnect
+```
 
-TON Connect 2.0 的 Unity 资源。使用 `continuation-team/TonSdk.NET/tree/main/TonSDK.Connect`。
+- [GitHub](https://github.com/cameo-engineering/tonconnect)
 
-使用它将 TonConnect 协议与您的游戏集成。
+## 常见问题和关注点
+
+如果我们的任何开发人员或社区成员在 TON Connect 2.0 的实施过程中遇到任何其他问题，请联系 [Tonkeeper developer](https://t.me/tonkeeperdev) 频道。
+
+如果您遇到其他问题，或希望就如何改进 TON Connect 2.0 提出建议，请通过相应的 [GitHub 目录](https://github.com/ton-connect/) 直接联系我们。
+
+## TON 连接统一
+
+TON Connect 2.0 的 Unity 资产。使用`continuation-team/TonSdk.NET/tree/main/TonSDK.Connect`。
+
+使用它可将 TonConnect 协议与您的游戏集成。
 
 - [GitHub](https://github.com/continuation-team/unity-ton-connect)
-- [Docs](https://docs.tonsdk.net/user-manual/unity-tonconnect-2.0/getting-started)
+- [文档](https://docs.tonsdk.net/user-manual/unity-tonconnect-2.0/getting-started)
 
-## 参阅
+## 另请参见
 
-- [构建您的第一个 Web 客户端的分步指南](https://ton-community.github.io/tutorials/03-client/)
-- [[YouTube] TON 智能合约 | 10 | Telegram DApp[EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU\&t=254s\&ab_channel=AlefmanVladimir%5BEN%5D)
+- [建立第一个网络客户端的分步指南](https://ton-community.github.io/tutorials/03-client/)
+- [[YouTube] TON Smart Contracts | 10 | Telegram DApp[EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU\&t=254s\&ab_channel=AlefmanVladimir%5BEN%5D)
 - [Ton Connect 入门](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
-- [集成手册](/develop/dapps/ton-connect/integration)
-- [[YouTube] TON Dev 研究 TON Connect 协议 [RU]](https://www.youtube.com/playlist?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_)
+- [集成手册](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk)
+- [[YouTube] TON Dev Study TON Connect Protocol [RU]](https://www.youtube.com/playlist?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_)

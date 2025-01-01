@@ -462,22 +462,19 @@ describe('ZkSimple', () => {
 
 首先，我们需要导入我们将在测试中使用的几个包：
 
-```ts
+````ts
 import * as snarkjs from "snarkjs";
 import path from "path";
 import {buildBls12381, utils} from "ffjavascript";
 const {unstringifyBigInts} = utils;
-```
 
-- 如果运行测试，结果将是一个 TypeScript 错误，因为我们没有模块 'snarkjs' 和 ffjavascript 的声明文件。这可以通过编辑 `simple-zk` 文件夹根目录中的 `tsconfig.json` 文件来解决。我们需要将该文件中的 ***strict*** 选项更改为 ***false***
--
-
-我们还需要导入将用于生成要发送给合约的证明的 `circuit.wasm` 和 `circuit_final.zkey` 文件。
-
+* If you run the test, the result will be a TypeScript error, because we don't have a declaration file for the module 'snarkjs' & ffjavascript. This can be addressed by editing the `tsconfig.json` file in the root of the `simple-zk` folder. We'll need to change the _**strict**_ option to **_false_** in that file
+* 
+We'll also need to import the `circuit.wasm` and `circuit_final.zkey` files which will be used to generate the proof to send to the contract. 
 ```ts
 const wasmPath = path.join(__dirname, "../build/circuits", "circuit.wasm");
 const zkeyPath = path.join(__dirname, "../build/circuits", "circuit_final.zkey");
-```
+````
 
 让我们填写 `should verify` 测试。我们首先需要生成证明。
 
@@ -613,10 +610,10 @@ Ran all test suites.
 
 ## 📌 参考资料
 
-- [TVM 2023 年 6 月升级](https://docs.ton.org/learn/tvm-instructions/tvm-upgrade)
-- [SnarkJs](https://github.com/iden3/snarkjs)
-- [SnarkJs FunC fork](https://github.com/kroist/snarkjs)
-- [TON 上的样例 ZK](https://github.com/SaberDoTcodeR/ton-zk-verifier)
+- 隐私投票系统 🗳
+- 隐私彩票系统 🎰
+- 隐私拍卖系统 🤝
+- 隐私交易💸（对于 Toncoin 或 Jettons）
 - [Blueprint](https://github.com/ton-org/blueprint)
 
 ## 📖 参阅

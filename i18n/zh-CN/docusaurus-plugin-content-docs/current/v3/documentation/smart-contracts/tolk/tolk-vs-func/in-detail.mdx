@@ -1,0 +1,845 @@
+# Tolk vs FunC：详细介绍
+
+下面是一份非常庞大的清单。有人有足够的耐心读到最后吗？
+
+:::tip 有一个紧凑型版本
+这里：[Tolk vs FunC：简而言之](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short)
+:::
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Traditional comments :)
+</h3>
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{';; comment'}</code></td>
+    <td><code>{'// comment'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'{- multiline comment -}'}</code></td>
+    <td><code>{'/* multiline comment */'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+<h3 className="cmp-func-tolk-header">
+  ✅ `2+2` 是 4，不是标识符。标识符只能是字母数字
+</h3>
+
+在 FunC 中，几乎所有字符都可以作为标识符的一部分。
+例如，`2+2`（不含空格）就是一个标识符。
+你甚至可以用这样的名称声明一个变量。
+
+在 Tolk 中，空格不是必须的。`2+2` 是 4，如所料。`3+~x` 是 `3 + (~ x)`，以此类推。
+
+<table className="cmp-func-tolk-table different-col-widths">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'return 2+2;  ;; undefined function `2+2`'}</code></td>
+    <td><code>{'return 2+2;  // 4'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+更确切地说，一个标识符可以从 <code style={{display: 'inline-block'}}>{'[a-zA-Z$_]'}</code>
+开始，并由 <code style={{display: 'inline-block'}}>{'[a-zA-Z0-9$_]'}</code> 继续。请注意，`?`、`:` 和其他符号都不是有效的符号，`found?` 和 `op::increase` 也不是有效的标识符。
+
+您可以使用反标包围标识符，然后它可以包含任何符号（类似于 Kotlin 和其他一些语言）。它的潜在用途是允许将关键字用作标识符，例如在使用方案生成代码时。
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'const op::increase = 0x1234;'}</code></td>
+    <td><code>{'const OP_INCREASE = 0x1234;'}</code></td>
+  </tr>
+  <tr>
+    <td><code dangerouslySetInnerHTML={{__html: ';; even 2%&!2 is valid<br>int 2+2 = 5;'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: '// don\'t do like this :)<br>var \`2+2\` = 5;'}}></code></td>
+  </tr>
+  </tbody>
+</table>
+
+<h3 className="cmp-func-tolk-header">
+  ✅ 默认情况下不纯净，编译器不会放弃用户函数调用
+</h3>
+
+FunC 有一个 `impure` 函数指定符。如果没有，函数将被视为纯函数。如果其结果未被使用，则编译器删除了其调用。
+
+虽然这种行为已经记录在案，但对于新手来说，还是非常出乎意料。
+例如，各种不返回任何内容的函数（如在不匹配时抛出异常），
+，都会被默默删除。FunC 不检查和验证函数体，
+允许在纯函数内部进行不纯净的操作，从而破坏了这种情况。
+
+在 Tolk，默认所有功能都是不纯洁的。 你可以用注释标记纯函数,
+然后禁止其身体中的不纯操作(异常、全局修改、 调用非纯函数等)。
+
+<h3 className="cmp-func-tolk-header">
+  ✅ 新函数语法：`fun` 关键字、`@` 属性、右侧的类型（如 TypeScript、Kotlin、Python 等）
+</h3>
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'cell parse_data(slice cs) { }'}</code></td>
+    <td><code>{'fun parse_data(cs: slice): cell { }'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'(cell, int) load_storage() { }'}</code></td>
+    <td><code>{'fun load_storage(): (cell, int) { }'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'() main() { ... }'}</code></td>
+    <td><code>{'fun main() { ... }'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+变量类型 - 也在右侧：
+
+<table className="cmp-func-tolk-table different-col-widths">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'slice cs = ...;'}</code></td>
+    <td><code>{'var cs: slice = ...;'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'(cell c, int n) = parse_data(cs);'}</code></td>
+    <td><code>{'var (c: cell, n: int) = parse_data(cs);'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'global int stake_at;'}</code></td>
+    <td><code>{'global stake_at: int;'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+修改器 `inline` 及其他 - 带注释：
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code dangerouslySetInnerHTML={{__html: '<br>int f(cell s) inline {'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: '@inline<br>fun f(s: cell): int {'}}></code></td>
+  </tr>
+  <tr>
+    <td><code dangerouslySetInnerHTML={{__html: '<br>() load_data() impure inline_ref {'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: '@inline_ref<br>fun load_data() {'}}></code></td>
+  </tr>
+  <tr>
+    <td><code>{'global int stake_at;'}</code></td>
+    <td><code>{'global stake_at: int;'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+`forall` - 是这样的：
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'forall X -> tuple cons(X head, tuple tail)'}</code></td>
+    <td><code dangerouslySetInnerHTML={{__html: 'fun cons&amp;lt;X&amp;gt;(head: X, tail: tuple): tuple'}}></code></td>
+  </tr>
+  </tbody>
+</table>
+
+`asm` 实现--与 FunC 中一样，但由于正确对齐，看起来更漂亮：
+
+```tolk
+@pure
+fun third<X>(t: tuple): X
+    asm "THIRD";
+
+@pure
+fun iDictDeleteGet(dict: cell, keyLen: int, index: int): (cell, slice, int)
+    asm(index dict keyLen) "DICTIDELGET NULLSWAPIFNOT";
+
+@pure
+fun mulDivFloor(x: int, y: int, z: int): int
+    builtin;
+```
+
+还有一个 `@deprecated` 属性，不影响编译，但可用于人和 IDE。
+
+<h3 className="cmp-func-tolk-header">
+  ✅ `get` 代替 `method_id`
+</h3>
+
+在 FunC 中，`method_id`（不含参数）实际上声明了一个 get 方法。而在 Tolk 中，使用的是简单明了的语法：
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'int seqno() method_id { ... }'}</code></td>
+    <td><code>{'get seqno(): int { ... }'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+`get methodName()` 和 `get fun methodName()` 都是可以接受的。
+
+对于 `method_id(xxx)`（在实践中不常见，但有效），有一个属性：
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code dangerouslySetInnerHTML={{__html: '<br>() after_code_upgrade(cont old_code) impure method_id(1666)'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: '@method_id(1666)<br>fun afterCodeUpgrade(oldCode: continuation)'}}></code></td>
+  </tr>
+  </tbody>
+</table>
+
+<h3 className="cmp-func-tolk-header">
+  ✅ 必须声明参数类型（尽管本地参数可有可无）
+</h3>
+
+```tolk
+// not allowed
+fun do_smth(c, n)
+// types are mandatory
+fun do_smth(c: cell, n: int)
+```
+
+有一种 `auto` 类型，因此 `fun f(a: auto)` 是有效的，但不推荐使用。
+
+如果参数类型是强制性的，则返回类型不是（这通常是显而易见的啰嗦）。如果省略，则表示 "自动"：
+
+```tolk
+fun x() { ... }  // auto infer return
+```
+
+对于局部变量，类型也是可选的：
+
+```tolk
+var i = 10;                      // ok, int
+var b = beginCell();             // ok, builder
+var (i, b) = (10, beginCell());  // ok, two variables, int and builder
+
+// types can be specified manually, of course:
+var b: builder = beginCell();
+var (i: int, b: builder) = (10, beginCell());
+```
+
+<h3 className="cmp-func-tolk-header">
+  ✅ 不允许在同一作用域中重新声明变量
+</h3>
+
+```tolk
+var a = 10;
+...
+var a = 20;  // error, correct is just `a = 20`
+if (1) {
+    var a = 30;  // it's okay, it's another scope
+}
+```
+
+因此，不允许部分重新分配：
+
+```tolk
+var a = 10;
+...
+var (a, b) = (20, 30);  // error, releclaration of a
+```
+
+请注意，这对 `loadUint()` 和其他方法来说不是问题。在 FunC 中，它们返回一个修改后的对象，因此 `var (cs, int value) = cs.load_int(32)` 这种模式非常常见。在 Tolk 中，此类方法会改变对象：`var value = cs.loadInt(32)`，因此不太可能需要重新声明。
+
+```tolk
+fun send(msg: cell) {
+    var msg = ...;  // error, redeclaration of msg
+
+    // solution 1: intruduce a new variable
+    var msgWrapped = ...;
+    // solution 2: use `redef`, though not recommended
+    var msg redef = ...;
+```
+
+<h3 className="cmp-func-tolk-header">
+  ✅ 类型系统的变化
+</h3>
+
+Tolk 第一个版本中的类型系统与 FunC 中的相同，但做了以下修改：
+
+- `void` 实际上是一个空张量（命名为 `unit` 更规范，但 `void` 更可靠）；另外，`return`（不含表达式）实际上是 `return()`，是从 void 函数返回的一种方便方式。
+
+```tolk
+fun setContractData(c: cell): void
+    asm "c4 POP";
+```
+
+- `auto` 表示 "自动推断"；在 FunC 中，`_` 用于此目的；注意，如果函数没有指定返回类型，它就是 `auto`，而不是 `void`。
+- `self`，以创建可链式方法，如下所述；实际上，它不是一种类型，它只能出现在函数中，而不是函数的返回类型中
+- `cont` 更名为 `continuation`
+
+<h3 className="cmp-func-tolk-header">
+  ✅ recv_internal / recv_external 的另一种命名方式
+</h3>
+
+```tolk
+fun onInternalMessage
+fun onExternalMessage
+fun onTickTock
+fun onSplitPrepare
+fun onSplitInstall
+```
+
+所有参数类型及其顺序重命名不变，只是命名有所改变。`fun main` 也可用。
+
+<h3 className="cmp-func-tolk-header">
+  ✅ #include → import.严格导入
+</h3>
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'#include "another.fc";'}</code></td>
+    <td><code>{'import "another.tolk"'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+在 Tolk 中，如果不导入该文件，就无法使用 `a.tolk` 中的符号。换句话说，就是 `用什么导入什么`。
+
+所有 stdlib 函数开箱即用，无需下载 stdlib 和 `#include "stdlib.fc"`。有关嵌入式 stdlib，请参阅下文。
+
+命名仍有全局范围。如果 `f` 在两个不同的文件中声明，就会出错。我们 "导入 "的是整个文件，而不是每个文件的可见性，`export` 关键字现在还不支持，但将来可能会支持。
+
+<h3 className="cmp-func-tolk-header">
+  ✅ #pragma → 编译器选项
+</h3>
+
+在 FunC 中，"允许事后修改"（allow-post-modifications）等 "试验性 "功能是通过 .fc 文件中的一个 pragma 打开的（导致有些文件包含，有些不包含的问题）。事实上，这不是文件的 pragma，而是编译选项。
+
+在 Tolk 中，所有实用程序都被移除。`allow-post-modification` 和 `compute-asm-ltr` 被合并到 Tolk 源中（就像它们在 FunC 中一直处于开启状态一样）。现在可以传递实验选项来代替语法标记。
+
+目前，我们引入了一个实验性选项-- `remove-unused-functions`（删除未使用的函数），它不会将未使用的符号包含到 Fift 输出中。
+
+`#pragma version xxx` 被 `tolk xxx` 代替（没有 >=，只有严格版本）。注释您正在使用的编译器版本是一个很好的做法。如果不匹配，Tolk 会发出警告。
+
+```tolk
+tolk 0.6
+```
+
+<h3 className="cmp-func-tolk-header">
+  ✅ 后期符号解析。AST 表示
+</h3>
+
+在 FunC 中（如在 С 中），不能访问下面声明的函数：
+
+```func
+int b() { a(); }   ;; error
+int a() { ... }    ;; since it's declared below
+```
+
+为避免出错，程序员应首先创建一个正向声明。因为符号解析是在解析时进行的。
+
+Tolk 编译器将这两个步骤分开。首先是解析，然后是符号解析。因此，上述代码段不会出错。
+
+听起来很简单，但在内部却是一项非常艰巨的工作。为了实现这一点，我引入了 FunC 完全没有的中间 AST 表示法。这是未来修改和执行语义代码分析的关键点。
+
+<h3 className="cmp-func-tolk-header">
+  ✅ `null` 关键字
+</h3>
+
+创建空值和检查变量是否为空现在看起来非常漂亮。
+
+<table className="cmp-func-tolk-table different-col-widths">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'a = null()'}</code></td>
+    <td><code>{'a = null'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'if (null?(a))'}</code></td>
+    <td><code>{'if (a == null)'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'if (~ null?(b))'}</code></td>
+    <td><code>{'if (b != null)'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'if (~ cell_null?(c))'}</code></td>
+    <td><code>{'if (c != null)'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+请注意，这并不意味着 Tolk 语言具有可空性。不，你仍然可以为一个整数变量赋值 `null` --就像在 FunC 中一样，只是在语法上更友好而已。经过对类型系统的努力，真正的可空性总有一天会实现。
+
+<h3 className="cmp-func-tolk-header">
+  ✅`throw` 和 `assert` 关键字
+</h3>
+
+Tolk 大大简化了处理异常的工作。
+
+如果 FunC 有 `throw()`、`throw_if()`、`throw_arg_if()`，unless 也一样，那么 Tolk 就只有两个原语：`throw` 和 `assert`。
+
+<table className="cmp-func-tolk-table different-col-widths">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'throw(excNo)'}</code></td>
+    <td><code>{'throw excNo'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'throw_arg(arg, excNo)'}</code></td>
+    <td><code>{'throw (excNo, arg)'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'throw_unless(excNo, condition)'}</code></td>
+    <td><code>{'assert(condition, excNo)'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'throw_if(excNo, condition)'}</code></td>
+    <td><code>{'assert(!condition, excNo)'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+注意，`!condition` 是可能的，因为逻辑 NOT 可用，见下文。
+
+`assert(condition,excNo)` 语法较长（冗长）：
+
+```tolk
+assert(condition) throw excNo;
+// with possibility to include arg to throw
+```
+
+此外，Tolk 交换了 `catch` 参数：它是 `catch (excNo, arg)`，两个参数都是可选的（因为 arg 很可能是空的）。
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'try { } catch (_, _) { }'}</code></td>
+    <td><code>{'try { } catch { }'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'try { } catch (_, excNo) { }'}</code></td>
+    <td><code>{'try { } catch(excNo) { }'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'try { } catch (arg, excNo) { }'}</code></td>
+    <td><code>{'try { } catch(excNo, arg) { }'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+<h3 className="cmp-func-tolk-header">
+  ✅ `do ... until` → `do ... while`
+</h3>
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'do { ... } until (~ condition);'}</code></td>
+    <td><code>{'do { ... } while (condition);'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'do { ... } until (condition);'}</code></td>
+    <td><code>{'do { ... } while (!condition);'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+注意，`!condition` 是可能的，因为逻辑 NOT 可用，见下文。
+
+<h3 className="cmp-func-tolk-header">
+  ✅ 运算符优先级变得与 C++ / JavaScript相同 
+</h3>
+
+在 FunC 中，`if (slices_equal() & status == 1)` 会被解析为 `if( (slices_equal()&status) == 1 )`。这也是实际合约中出现各种错误的原因。
+
+在 Tolk 中，`&` 的优先级较低，与 C++ 和 JavaScript 相同。
+
+此外，Tolk 还会对可能错误的操作符用法进行错误触发，以彻底消除此类错误：
+
+```tolk
+if (flags & 0xFF != 0)
+```
+
+将导致编译错误（类似于 gcc/clang）：
+
+```
+& has lower precedence than ==, probably this code won't work as you expected.  Use parenthesis: either (... & ...) to evaluate it first, or (... == ...) to suppress this error.
+```
+
+因此，应该重写代码：
+
+```tolk
+// either to evaluate it first (our case)
+if ((flags & 0xFF) != 0)
+// or to emphasize the behavior (not our case here)
+if (flags & (0xFF != 0))
+```
+
+我还为位移运算符中的一个常见错误添加了诊断功能：`a << 8 + 1` 等同于 `a << 9`，可能出乎意料。
+
+```
+int result = a << 8 + low_mask;
+
+error: << has lower precedence than +, probably this code won't work as you expected.  Use parenthesis: either (... << ...) to evaluate it first, or (... + ...) to suppress this error.
+```
+
+操作符 `~% ^% /% ~/= ^/= ~%= ^%= ~>>= ^>>=` 不再存在。
+
+<h3 className="cmp-func-tolk-header">
+  ✅ 不可变变量，通过 `val` 声明
+</h3>
+
+就像在 Kotlin 中一样：`var` 表示可变，`val` 表示不可变，可选择在后面加上类型。FunC 没有类似的 `val`。
+
+```tolk
+val flags = msgBody.loadMessageFlags();
+flags &= 1;         // error, modifying an immutable variable
+
+val cs: slice = c.beginParse();
+cs.loadInt(32);     // error, since loadInt() mutates an object
+cs.preloadInt(32);  // ok, it's a read-only method
+```
+
+函数的参数是可变的，但由于它们是按值复制的，因此被调用的参数不会改变。这一点与 FunC 完全相同，只是为了说明一下。
+
+```tolk
+fun some(x: int) {
+    x += 1;
+}
+
+val origX = 0;
+some(origX);      // origX remains 0
+
+fun processOpIncrease(msgBody: slice) {
+    val flags = msgBody.loadInt(32);
+    ...
+}
+
+processOpIncrease(msgBody);  // by value, not modified
+```
+
+在 Tolk 中，函数可以声明 `mutate` 参数。它是对 FunC `~` tilda 函数的概括，请阅读下文。
+
+<h3 className="cmp-func-tolk-header">
+  ✅ 删除过时的命令行选项
+</h3>
+
+删除了命令行标志 `-A`、`-P` 和其他标志。默认行为
+
+```
+/path/to/tolk {inputFile}
+```
+
+就足够了。使用 `-v` 打印版本并退出。使用 `-h` 查看所有可用的命令行标志。
+
+只能传递一个输入文件，其他文件应 `import` 。
+
+<h3 className="cmp-func-tolk-header">
+  ✅ stdlib 函数重命名为 ~~verbose~~ 清晰名称，驼峰式
+</h3>
+
+重新考虑了标准库中的所有命名。现在，函数的命名更长但更清晰。
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code dangerouslySetInnerHTML={{__html: 'cur_lt()<br>car(l)<br>get_balance().pair_first()<br>raw_reserve(count)<br>dict~idict_add?(...)<br>dict~udict::delete_get_max()<br>t~tpush(triple(x, y, z))<br>s.slice_bits()<br>~dump(x)<br>...'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: 'getLogicalTime()<br>listGetHead(l)<br>getMyOriginalBalance()<br>reserveToncoinsOnBalance(count)<br>dict.iDictSetIfNotExists(...)<br>dict.uDictDeleteLastAndGet()<br>t.tuplePush([x, y, z])<br>s.getRemainingBitsCount()<br>debugPrint(x)<br>...'}}></code></td>
+  </tr>
+  </tbody>
+</table>
+
+以前的 "stdlib.fc "被拆分成多个文件：common.tlk、tvm-dicts.tlk 和其他文件。
+
+继续此处：[Tolk vs FunC：标准库](/v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib)。
+
+<h3 className="cmp-func-tolk-header">
+  ✅ stdlib 现在是嵌入式的，而不是从 GitHub 下载
+</h3>
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>
+      <ol style={{margin: 0}}>
+        <li>Download stdlib.fc from GitHub</li>
+        <li>Save into your project</li>
+        <li>`#include "stdlib.fc";`</li>
+        <li>Use standard functions</li>
+      </ol>
+    </td>
+    <td>
+      <ol style={{margin: 0}}>
+        <li>Use standard functions</li>
+      </ol>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+在 Tolk 中，stdlib 是发行版的一部分。标准库是不可分割的，因为将 `语言、编译器、stdlib` 三者保持在一起是保持发布周期的唯一正确方法。
+
+它是这样工作的。Tolk 编译器知道如何定位标准库。如果用户安装了 apt 软件包，stdlib 源也会被下载并存在硬盘上，因此编译器会通过系统路径找到它们。如果用户使用的是 WASM 封装器，则由 tolk-js 提供。以此类推。
+
+标准库分为多个文件：`common.tolk`（最常用的函数）、`gas-payments.tolk`（计算 gas 费）、`tvm-dicts.tolk` 和其他文件。`common.tolk` 中的函数始终可用（编译器会隐式导入）。其他文件则需要明确导入：
+
+```tolk
+import "@stdlib/tvm-dicts"   // ".tolk" optional
+
+...
+var dict = createEmptyDict();
+dict.iDictSet(...);
+```
+
+注意 "用什么导入什么" 的规则，它也适用于 `@stdlib/...` 文件（"common.tolk "是唯一的例外）。
+
+JetBrains IDE 插件会自动发现 stdlib 文件夹，并在输入时插入必要的导入。
+
+<h3 className="cmp-func-tolk-header">
+  ✅ 逻辑运算符 `&& ||`, 逻辑非 `!`
+</h3>
+
+在 FunC 中，只有位运算符 `~ & | ^`。开发人员在进行第一步开发时，如果认为 "好吧，没有逻辑，我就用同样的方式使用位运算符"，往往会出错，因为运算符的行为是完全不同的：
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>`a & b`</th>
+    <th>`a && b`</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr><td colSpan={2}>sometimes, identical:</td></tr>
+  <tr>
+    <td><code>{'0 & X = 0'}</code></td>
+    <td><code>{'0 & X = 0'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'-1 & X = -1'}</code></td>
+    <td><code>{'-1 & X = -1'}</code></td>
+  </tr>
+  <tr><td colSpan={2}>but generally, not:</td></tr>
+  <tr>
+    <td><code>{'1 & 2 = 0'}</code></td>
+    <td><code>{'1 && 2 = -1 (true)'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+<table className="cmp-func-tolk-table different-col-widths">
+  <thead>
+  <tr>
+    <th>`~ found`</th>
+    <th>`!found`</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr><td colSpan={2}>sometimes, identical:</td></tr>
+  <tr>
+    <td><code>{'true (-1) → false (0)'}</code></td>
+    <td><code>{'-1 → 0'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'false (0) → true (-1)'}</code></td>
+    <td><code>{'0 → -1'}</code></td>
+  </tr>
+  <tr><td colSpan={2}>but generally, not:</td></tr>
+  <tr>
+    <td><code>{'1 → -2'}</code></td>
+    <td><code>{'1 → 0 (false)'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+<table className="cmp-func-tolk-table different-col-widths">
+  <thead>
+  <tr>
+    <th><code>condition & f()</code></th>
+    <th><code>condition && f()</code></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code className="inline">f()</code> is called always</td>
+    <td><code className="inline">f()</code> is called only if <code className="inline">condition</code></td>
+  </tr>
+  </tbody>
+</table>
+
+<table className="cmp-func-tolk-table different-col-widths">
+  <thead>
+  <tr>
+    <th><code>condition | f()</code></th>
+    <th><code>condition || f()</code></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code className="inline">f()</code> is called always</td>
+    <td><code className="inline">f()</code> is called only if <code className="inline">condition</code> is false</td>
+  </tr>
+  </tbody>
+</table>
+
+Tolk 支持逻辑运算符。它们的行为与您习惯的完全一样（右列）。目前，`&&` 和 `||` 有时会产生不理想的 Fift 代码，但将来 Tolk 编译器在这种情况下会变得更聪明。这可以忽略不计，只需像使用其他语言一样使用它们即可。
+
+<table className="cmp-func-tolk-table different-col-widths">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'if (~ found?)'}</code></td>
+    <td><code>{'if (!found)'}</code></td>
+  </tr>
+  <tr>
+    <td><code dangerouslySetInnerHTML={{__html: 'if (~ found?) {<br>    if (cs~load_int(32) == 0) {<br>        ...<br>    }<br>}'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: 'if (!found && cs.loadInt(32) == 0) {<br>    ...<br>}'}}></code></td>
+  </tr>
+  <tr>
+    <td><code>{'ifnot (cell_null?(signatures))'}</code></td>
+    <td><code>{'if (signatures != null)'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'elseifnot (eq_checksum)'}</code></td>
+    <td><code>{'else if (!eqChecksum)'}</code></td>
+  </tr>
+  </tbody>
+</table>
+
+删除了关键字 `ifnot` 和 `elseifnot` ，因为现在我们有了逻辑 not（为了优化，Tolk 编译器会生成 `IFNOTJMP`）。关键字 `elseif` 被传统的 `else if` 取代。
+
+请注意，这并不意味着 Tolk 语言具有 `bool` 类型。不，比较运算符仍然返回整数。经过对类型系统的努力，总有一天会支持 `bool` 类型。
+
+请记住，`true` 是-1，而不是 1。在 FunC 和 Tolk 中都是如此。这是一种 TVM 表示法。
+
+<h3 className="cmp-func-tolk-header">
+  ✅ 不使用 `~` 方法，改用 `mutate` 关键字
+</h3>
+
+这一改动非常巨大，因此在单独的页面上进行了描述：[Tolk 突变性](/v3/documentation/smart-contracts/tolk/tolk-vs-func/mutability)。
+
+<hr />
+
+<h3>Tolk vs FunC  gas 消耗量</h3>
+
+:::caution TLDR
+Tolk 的耗气量可能会更高一些，因为它可以解决 FunC 中意外的争论洗牌问题。实际上，这可以忽略不计。\
+将来，Tolk 编译器会变得足够聪明，可以对参数重新排序，减少堆栈操作，
+，但仍能避免洗牌问题。
+:::
+
+在调用汇编函数时，FunC 编译器可能会意外更改参数：
+
+```
+some_asm_function(f1(), f2());
+```
+
+有时，`f2()` 可能会在 `f1()` 之前被调用，这是意料之外的。
+要解决这个问题，可以指定 `#pragma compute-asm-ltr`，强制参数总是按 ltr 顺序求值。
+这只是试验性的，因此默认关闭。
+
+这个 pragma 会对堆栈中的参数重新排序，通常会导致比不使用它时更多的堆栈操作。
+换句话说，它可以修复意外行为，但会增加耗气量。
+
+Tolk 将参数放入堆栈的方式与开启此实用程序完全相同。
+因此，如果不使用该实用程序，其耗气量有时会高于 FunC。
+当然，在 Tolk 中不存在洗牌问题。
+
+未来，Tolk 编译器将变得足够智能，可以对参数重新排序，减少堆栈操作，
+，但仍能避免洗牌问题。

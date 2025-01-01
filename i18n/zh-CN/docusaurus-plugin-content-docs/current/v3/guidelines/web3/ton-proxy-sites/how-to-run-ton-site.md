@@ -13,8 +13,8 @@
 ##### 下载
 
 ```bash
-wget https://github.com/ton-utils/reverse-proxy/releases/download/v0.2.0/tonutils-reverse-proxy-linux-amd64
-chmod 777 tonutils-reverse-proxy-linux-amd64
+wget https://github.com/ton-utils/reverse-proxy/releases/latest/download/tonutils-reverse-proxy-linux-amd64
+chmod +x tonutils-reverse-proxy-linux-amd64
 ```
 
 ##### 运行
@@ -48,16 +48,28 @@ chmod 777 tonutils-reverse-proxy-linux-amd64
 
 使用 `./build.sh` 从源代码构建，然后如第 2 步中的 Linux 一样运行。构建需要 Go 环境。
 
-## 👀 后续步骤
+```bash
+git clone https://github.com/tonutils/reverse-proxy.git
+cd reverse-proxy
+make build
+```
+
+要为其他操作系统构建程序，请运行 `make all` 。
+
+## 👀 进一步的步骤
 
 ### 🔍 检查网站的可用性
 
-完成您选择的方法的所有步骤后，TON 代理应该已经启动。如果一切成功，您的网站将可在相应步骤收到的 ADNL 地址处访问。
+完成所选方法的所有步骤后，TON 代理服务器应已启动。如果一切顺利，您的网站将在相应步骤中收到的 ADNL 地址上可用。
 
-您可以通过使用域 `.adnl` 打开这个地址来检查网站的可用性。另请注意，为了打开网站，您必须在浏览器中运行 TON 代理，例如通过扩展 [MyTonWallet](https://mytonwallet.io/)。
+您可以使用域名 `.adnl`打开该地址，查看网站是否可用。另外请注意，为了打开该网站，您必须在浏览器中运行 TON 代理，例如通过扩展 [MyTonWallet](https://mytonwallet.io/)。
 
 ## 📌 参考资料
 
-- [TON 网站、TON WWW 和 TON 代理](https://blog.ton.org/ton-sites)
-- [Tonutils 反向代理](https://github.com/tonutils/reverse-proxy)
-- 作者: [Andrew Burnosov](https://github.com/AndreyBurnosov) (TG: [@AndrewBurnosov](https://t.me/AndreyBurnosov))，[Daniil Sedov](https://gusarich.com) (TG: [@sedov](https://t.me/sedov))，[George Imedashvili](https://github.com/drforse)
+- [TON 站点、TON WWW 和 TON 代理](https://blog.ton.org/ton-sites)
+- [Tonutils反向代理](https://github.com/tonutils/reverse-proxy)
+- 作者：[Andrew Burnosov](https://github.com/AndreyBurnosov) (TG: [@AndrewBurnosov](https://t.me/AndreyBurnosov)), [Daniil Sedov](https://gusarich.com) (TG: [@sedov](https://t.me/sedov)), [George Imedashvili](https://github.com/drforse)
+
+## 参阅
+
+- [运行 C++ 实现](/v3/guidelines/web3/ton-proxy-sites/running-your-your-ton-proxy)

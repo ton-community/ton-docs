@@ -1,6 +1,6 @@
 # 以 Cell 为数据存储
 
-TON 中的所有内容都存储在cell(单元)中。一个cell是一个数据结构，包含：
+TON 中的所有内容都存储在cell( cell )中。一个cell是一个数据结构，包含：
 
 - 高达 **1023 位** 的数据（不是字节！）
 - 高达 **4 个引用** 到其他cell
@@ -43,7 +43,7 @@ TON 中的任何对象（消息、消息队列、区块、整个区块链状态�
 
 序列化的过程由 TL-B 方案描述：这是一个正式描述如何将此对象序列化为 *Builder* 或如何从 *Slice* 解析给定类型对象的方案。对于cell的 TL-B 与字节流的 TL 或 ProtoBuf 相同。
 
-如果您想了解有关cell（反）序列化的更多详细信息，可以阅读[单元(Cell)和单元包(Bag of Cells)](/develop/data-formats/cell-boc)文章。
+如果您想了解有关cell（反）序列化的更多详细信息，可以阅读[ cell (Cell)和 cell 包(Bag of Cells)](/develop/data-formats/cell-boc)文章。
 
 ## 参阅
 

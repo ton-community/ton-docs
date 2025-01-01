@@ -1,0 +1,161 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# 用于 JS 的 TON Connect
+
+本指南将帮助您把 TON Connect 集成到您的 Javascript 应用程序中，用于用户身份验证和交易。
+
+如果您的 DApp 使用 React，请查看 [TON Connect UI React SDK](/v3/guidelines/ton-connect/frameworks/react)。
+
+如果您的 DApp 使用 Vue，请参阅 [TON Connect UI Vue SDK](/v3/guidelines/ton-connect/frameworks/vue)。
+
+## 实现
+
+### 安装
+
+<Tabs groupId="Installation">
+  <TabItem value="CDN" label="CDN">
+将脚本添加到网站的 HEAD 元素中：
+    <br/>
+    <br/>
+
+```html
+<script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+```
+
+</TabItem>
+  <TabItem value="NPM" label="NPM">
+    要开始将 TON Connect 集成到您的应用程序中，请安装 @tonconnect/ui 软件包：
+
+```bash npm2yarn
+npm i @tonconnect/ui
+```
+
+</TabItem>
+</Tabs>
+
+### TON 连接启动
+
+安装软件包后，请为您的应用程序创建一个 `manifest.json` 文件。有关如何创建 manifest.json 文件的更多信息，请参阅 [此处](/v3/guidelines/ton-connect/guidelines/creating-manifest)。
+
+添加一个 ID 为 `ton-connect` 的按钮，用于连接到钱包：
+
+```html
+<div id="ton-connect"></div>
+```
+
+_在此标记_后，在应用程序页面的 `<body>` 部分添加 `tonConnectUI` 脚本：
+
+```html
+<script>
+    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+        manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+        buttonRootId: 'ton-connect'
+    });
+</script>
+```
+
+### 连接到钱包
+
+“ Connect” 按钮（添加在 `buttonRootId` 位置）会自动处理点击事件。
+
+但您可以通过编程打开 "connect modal"，例如在点击自定义按钮后：
+
+```html
+<script>
+    async function connectToWallet() {
+        const connectedWallet = await tonConnectUI.connectWallet();
+        // Do something with connectedWallet if needed
+        console.log(connectedWallet);
+    }
+
+    // Call the function
+    connectToWallet().catch(error => {
+        console.error("Error connecting to wallet:", error);
+    });
+</script>
+```
+
+### 重定向
+
+#### 定制回报策略
+
+要在连接后将用户重定向到特定 URL，可以[自定义返回策略](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy)。
+
+#### Telegram 小程序
+
+要在钱包连接后将用户重定向到 [Telegram 小程序](/v3/guidelines/dapps/tma/overview)，请使用`twaReturnUrl`选项：
+
+```tsx
+tonConnectUI.uiOptions = {
+      twaReturnUrl: 'https://t.me/YOUR_APP_NAME'
+  };
+```
+
+[在 SDK 文档中阅读更多内容](https://github.com/ton-connect/sdk/tree/main/packages/ui#use-inside-twa-telegram-web-app)
+
+### 用户界面定制
+
+TonConnect UI 提供的界面应是用户在使用各种应用程序时熟悉和可识别的。不过，应用程序开发人员可以修改该界面，使其与应用程序的界面保持一致。
+
+- [TonConnect用户界面文档](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
+
+## SDK 文档
+
+- [SDK文档](https://github.com/ton-connect/sdk/blob/main/packages/ui/README.md)
+- [最新的API文档](https://ton-connect.github.io/sdk/modules/_tonconnect_ui.html)
+
+## 使用方法
+
+让我们看看在应用程序中使用 TON Connect UI 的示例。
+
+### 发送信息
+
+下面是使用 TON Connect UI 发送交易的示例：
+
+```js
+import TonConnectUI from '@tonconnect/ui';
+
+const tonConnectUI = new TonConnectUI({ //connect application
+    manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+    buttonRootId: '<YOUR_CONNECT_BUTTON_ANCHOR_ID>'
+});
+
+const transaction = {
+    messages: [
+        {
+            address: "EQABa48hjKzg09hN_HjxOic7r8T1PleIy1dRd8NvZ3922MP0", // destination address
+            amount: "20000000" //Toncoin in nanotons
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+- 在此获取更多示例：[准备信息](/v3/guidelines/ton-connect/guidelines/preparing-messages)。
+
+### 通过哈希值了解交易状态
+
+该原理位于支付处理部分（使用 tonweb）。[查看更多](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions)
+
+### 签名和验证
+
+了解如何使用 TON Connect 签署和验证信息：
+
+- [签名和验证](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
+- [GitHub 上的 TON Connect UI 实现](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-connect-request-parameters-ton_proof)
+
+### 钱包断线
+
+调用以断开钱包连接：
+
+```js
+await tonConnectUI.disconnect();
+```
+
+## 另请参见
+
+- [用户界面定制](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
+- [[YouTube]TON Connect UI React [RU]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=1747)
+- [[YouTube]连接 TON 将用户界面连接到网站 [RU]](https://www.youtube.com/watch?v=HUQ1DPfFxG4&list=PLyDBPwv9EPsAIWi8vgic9kiV3KF_wvIcz&index=4)。

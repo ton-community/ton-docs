@@ -20,6 +20,7 @@
 - 测试网 TON Center API: https://testnet.toncenter.com
 - 测试网 HTTP API: https://testnet.tonapi.io/
 - 测试网桥接: https://ton.org/bridge?testnet=true
+- Testnet dTON GraphQL: https://testnet.dton.io/
 
 ## 一些第三方工具
 
