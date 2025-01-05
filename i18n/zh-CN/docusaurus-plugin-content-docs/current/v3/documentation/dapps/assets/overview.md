@@ -1,6 +1,6 @@
 import Button from '@site/src/components/button'
 import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem'；
+import TabItem from '@theme/TabItem';
 
 # 资产处理概述
 
@@ -31,9 +31,9 @@ TON 区块链采用完全异步的方式，涉及一些传统区块链不常见�
 
 当合约将消息作为输入（由其触发）时，对其进行处理并生成或不生成外发消息作为输出的每个动作都称为 "事务"。点击 [这里 ](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-transaction)阅读更多关于事务的信息。
 
-这种 "事务 "可以跨越一段**长**的时间。从技术上讲，具有信息队列的交易被汇总到验证器处理的区块中。TON区块链的异步性质**无法在发送消息阶段预测交易**的哈希值和逻辑时间。
+这种 "事务" 可以跨越一段**长**的时间。从技术上讲，具有信息队列的交易被汇总到验证器处理的区块中。TON区块链的异步性质**无法在发送消息阶段预测交易**的哈希值和逻辑时间。
 
-区块接受的 "交易 "是最终的，不能修改。
+区块接受的 "交易" 是最终的，不能修改。
 
 :::info 交易确认
 TON 交易只需确认一次就不可逆转。为获得最佳用户体验，建议在 TON 区块链上完成交易后避免等待其他区块。更多信息请参见 [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3)。

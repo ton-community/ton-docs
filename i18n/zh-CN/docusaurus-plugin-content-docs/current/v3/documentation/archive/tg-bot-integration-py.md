@@ -6,15 +6,13 @@ import Button from '@site/src/components/button'
 本指南介绍了将 TON Connect 与 Telegram 机器人集成的过时方法。如需更安全、更现代的方法，请考虑使用 [Telegram 小程序](/v3/guidelines/dapps/tma/overview)。
 :::
 
-<Button href="https://t.me/test_tonconnect_bot" colorType={'primary'} sizeType={'sm'}>
-
-打开演示机器人
+<Button href="https://t.me/ton_connect_example_bot" colorType={'primary'} sizeType={'sm'}>
 
 打开演示机器人
 
 </Button>
 
-查看 GitHub
+<Button href="https://github.com/ton-connect/demo-telegram-bot" colorType={'secondary'} sizeType={'sm'}>
 
 查看 GitHub
 
