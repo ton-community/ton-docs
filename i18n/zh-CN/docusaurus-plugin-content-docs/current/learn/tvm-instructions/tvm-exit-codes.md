@@ -14,7 +14,7 @@
 | `1`       | Compute Phase | 备选成功执行退出码。                                                                                                                                    |
 | `2`       | Compute Phase | 栈下溢。最后一个操作码消耗的元素比栈上有的元素还要多。<sup>1</sup>                                                                                                       |
 | `3`       | Compute Phase | 堆栈溢出。存储在堆栈上的值超过了此版本的 TVM 允许的值。                                                                                                                |
-| `4`       | Compute Phase | 整数溢出。整数不适应于 −2<sup>256</sup> ≤ x < 2<sup>256</sup> 或发生了除零操作。                                                                                  |
+| `4`       | Compute Phase | 整数溢出。整数不适应于 −2<sup>256</sup> ≤ x < 2<sup>256</sup> 或发生了除零操作。                                                         |
 | `5`       | Compute Phase | 整数超出预期范围。                                                                                                                                     |
 | `6`       | Compute Phase | 无效的操作码。在当前 TVM 版本中，指令是未知的。                                                                                                                    |
 | `7`       | Compute Phase | 类型检查错误。原语的参数具有不正确的值类型。<sup>1</sup>                                                                                                            |

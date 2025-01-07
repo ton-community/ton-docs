@@ -12,7 +12,7 @@ FunC 有以下内置类型。
 
 - `int` 是 257 位有符号整数的类型。默认情况下，启用溢出检查，会导致整数溢出异常。
 - `cell` 是 TVM cell的类型。TON 区块链中的所有持久数据都存储在cell树中。每个cell最多有 1023 位任意数据和最多四个对其他cell的引用。cell在基于堆栈的 TVM 中用作内存。
-- `slice` 是cell切片的类型。cell可以转换成切片，然后可以通过从切片加载数据位和对其他cell的引用来获得cell中的数据。
+- `slice` 是cell slice 的类型。cell可以转换成 slice ，然后可以通过从 slice 加载数据位和对其他cell的引用来获得cell中的数据。
 - `builder` 是cell构建器的类型。数据位和对其他cell的引用可以存储在构建器中，然后构建器可以最终化为新cell。
 - `tuple` 是 TVM 元组的类型。元组是有序集合，最多包含 255 个组件，这些组件的值类型可能不同。
 - `cont` 是 TVM continuation的类型。Continuations 用于控制 TVM 程序执行的流程。从 FunC 的角度来看，它是相当低层级的对象，尽管从概念上讲相当通用。

@@ -1,0 +1,351 @@
+import ThemedImage from '@theme/ThemedImage';
+
+# RedStone Oracles
+
+## RedStone oracles 如何与 TON 一起工作
+
+RedStone oracles采用另一种设计，为智能合约提供预言机数据。数据提供者不在合约存储中持续保存数据，而是在终端用户需要时才将信息引入链上。在此之前，数据一直保存在去中心化缓存层中，该层由 RedStone light 缓存网关和流数据广播协议提供支持。数据由终端用户传输至合约，终端用户应在函数调用中附加已签名的数据包。信息完整性通过签名检查在链上进行验证。
+
+要了解更多有关 RedStone 算法设计的信息，请访问 [RedStone docs](https://docs.redstone.finance/docs/introduction)。
+
+## 文件链接
+
+- [Redstone TON Connector](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector)
+
+## 智能合约
+
+### price_manager.fc
+
+- 用
+  FunC 编写的消费 RedStone Oracle数据的 Oracle 合约示例 [price_manager.fc](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/contracts/price_manager.fc)。它需要 [TVM Upgrade 2023.07](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07)。
+
+#### 初始化数据
+
+如上所述，传输到合约的数据包是通过签名检查来验证的。
+为达到 "签名者数量阈值"，签署所传递数据
+的签名者应是初始数据中传递的 "签名者 "之一。此外，还需要
+传递 `signer_count_threshold` 。
+
+由于 TON 合约的结构，初始数据必须与合约的存储结构
+进行连接，其结构如下：
+
+```ts
+  begin_cell()
+    .store_uint(signer_count_threshold, 8)  /// number as passed below
+    .store_uint(timestamp, TIMESTAMP_BITS)  /// initially 0 representing the epoch 0
+    .store_ref(signers)                     /// serialized tuple of values passed below
+  .end_cell();
+```
+
+`signers` 的值应以序列化的 `int` 的 `tuple` 形式传递。
+参见 [tuple](https://github.com/ton-core/ton-core/blob/main/src/tuple/tuple.ts)。
+
+<!-- To define the initial (storage) data for the Prices contract, use the predefined
+class [PriceManagerInitData.ts](../src/price-manager/PriceManagerInitData.ts). -->
+
+在下面的函数参数中，每个 `feed_id` 都是一个编码为 `int` 的字符串，这意味着，这是一个由字符串中特定字母的十六进制值组成的值
+。例如：
+`'ETH'` 为 `int` ，十六进制为`0x455448`，十进制为`4543560`，即`256*256*ord('E')+256*ord('T')+ord('H')`。
+
+您可以使用 `feed_id=hexlify(toUtf8Bytes(feed_string))` 转换特定值或
+[endpoint](https://cairo-utils-web.vercel.app/)
+
+`feed_ids` 的值应以 `int` 的序列化 `元组` 形式传递。
+
+`payload` 值由代表序列化 RedStone 有效载荷的字节数组打包而成。
+请参阅下文 [TON RedStone payload packing](#ton-redstone-payload-packing) 部分，以及包含所有所需 `int` 长度常量的文件[constants.fc](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/contracts/redstone/constants.fc)。
+
+#### get_prices
+
+```func
+(cell) get_prices_v2(cell data_feed_ids, cell payload) method_id;
+```
+
+该函数在链上处理作为参数传递的 `payload`
+，并返回作为标识符在 `feed_ids` 中传递的每个 feed 的汇总值的 `cell`。
+
+由于 TON API v4 中 HTTP GET 方法的长度限制，该函数是为 TON API v2 编写的。
+
+这只是一个 `method_id` 函数--它们不会修改合约的存储空间，也不会消耗 TON。
+
+#### OP_REDSTONE_WRITE_PRICES
+
+无论采用哪种即时处理方式，也存在一种在链上处理 `payload` 的方法，但
+会将汇总值保存/写入合约的存储空间。这些值会保存在合约的存储空间中，然后可以使用 `read_prices` 函数读取。使用 `read_timestamp` 函数可以读取上次保存/写入合约的数据的时间戳。
+
+该方法必须以 TON 内部报文的形式调用。信息参数如下
+
+- 一个 `int` 表示 RedStone_Write_Prices 名称，由 keccak256 散列，在 [constants.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/config/constants.ts) 中定义为
+  。
+- 一个 `cell` - ref，将 `data_feed_ids` 表示为序列化的 `int`s.tuple\`.
+- 一个 `cell` - 表示打包的 RedStone 有效载荷的 ref
+
+```func
+    int op = in_msg_body~load_uint(OP_NUMBER_BITS);
+
+    if (op == OP_REDSTONE_WRITE_PRICES) {
+        cell data_feeds_cell = in_msg_body~load_ref();
+        cell payload_cell = in_msg_body~load_ref();
+
+    // ...
+    }
+```
+
+这是一条内部信息--它消耗 GAS 并修改合约的存储空间，因此必须以 TON 为单位支付。
+
+请访问： https://ton-showroom.redstone.finance/ 了解其工作原理
+
+#### read_prices
+
+```func
+(tuple) read_prices(tuple data_feed_ids) method_id;
+```
+
+该函数读取合约存储中的持久化值，并返回与
+传递的 `feed_ids` 相对应的元组。
+该函数不会修改存储空间，只能读取
+使用 `write_prices` 函数保存的 "feed_ids "的汇总值。
+
+这只是一个 `method_id` 函数--它不会修改合约的存储空间，也不会消耗 TON。
+
+#### read_timestamp
+
+```func
+(int) read_timestamp() method_id;
+```
+
+返回使用 `OP_REDSTONE_WRITE_PRICES` 消息最后一次保存/写入合约存储空间的数据的时间戳。
+
+这只是一个 `method_id` 函数--它不会修改合约的存储空间，也不会消耗 TON。
+
+### price_feed.fc
+
+由于 TON 合约的架构设计，初始数据需要与合约的存储结构相匹配。
+其结构如下：
+
+```ts
+beginCell()
+  .storeUint(BigInt(hexlify(toUtf8Bytes(this.feedId))), consts.DATA_FEED_ID_BS * 8)
+  .storeAddress(Address.parse(this.managerAddress))
+  .storeUint(0, consts.DEFAULT_NUM_VALUE_BS * 8)  /// initially 0 representing the epoch 0
+  .storeUint(0, consts.TIMESTAMP_BS * 8)
+  .endCell();
+```
+
+要定义价格进给合约的初始（存储）数据，请使用预定义的
+类 [PriceFeedInitData.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/price-feed/PriceFeedInitData.ts)。
+
+#### OP_REDSTONE_FETCH_DATA
+
+无论从网络外部读取持久化在合约中的值，
+，都有可能直接在链上获取存储在合约中的 `feed_id` 值。
+必须调用内部消息 `OP_REDSTONE_FETCH_DATA`。消息参数如下
+
+- 一个 `int` 表示 `RedStone_Fetch_Data` 名称，由 keccak256 散列，在 [constants.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/config/constants.ts) 中定义
+  。
+- 代表 `feed_id` 值的 `int` 。
+- 代表信息的 "初始发送方 "的 "slice"，以便他们在返回交易时携带剩余的交易余额
+  。
+
+```func
+    int op = in_msg_body~load_uint(OP_NUMBER_BITS);
+
+    if (op == OP_REDSTONE_FETCH_DATA) {
+        int feed_id = in_msg_body~load_uint(DATA_FEED_ID_BITS);
+        cell initial_payload = in_msg_body~load_ref();
+
+        // ...
+    }
+```
+
+返回信息 `OP_REDSTONE_DATA_FETCHED` 会发送给发送方，其中包含 "值 "和
+已保存值的 "时间戳"。然后，可在发送方中获取并处理该信息，或将其保存在
+发送方的存储器中。
+初始 payload 的 `ref` (`initial_payload`)会被添加为 ref，例如包含第一条信息的发件人，
+，以便他们携带剩余的交易余额。
+
+```ts
+begin_cell()
+  .store_uint(value, MAX_VALUE_SIZE_BITS)
+  .store_uint(timestamp, TIMESTAMP_BITS)
+  .store_ref(initial_payload)
+  .end_cell()
+```
+
+这是一条内部信息--它消耗 GAS 并修改合约的存储空间，因此必须以 TON 为单位支付。
+
+#### get_price_and_timestamp
+
+```func
+(int, int) get_price_and_timestamp() method_id;
+```
+
+通过发送 `OP_REDSTONE_FETCH_DATA` 消息并获取 `OP_REDSTONE_DATA_FETCHED` 消息的返回值，返回上次保存/写入适配器存储的数据值和时间戳。
+
+这只是一个 `method_id` 函数 - 它不会修改合约的存储空间，也不会消耗 TON。
+
+### single_feed_man.fc
+
+#### 初始数据
+
+与 `prices` 和 `price_feed` 初始数据类似。由于 TON 合约的架构设计，初始数据需要与合约的存储结构相匹配，其构造如下：
+
+```ts
+beginCell()
+  .storeUint(BigInt(hexlify(toUtf8Bytes(this.feedId))), consts.DATA_FEED_ID_BS * 8)
+  .storeUint(this.signerCountThreshold, SIGNER_COUNT_THRESHOLD_BITS)
+  .storeUint(0, consts.DEFAULT_NUM_VALUE_BS * 8)
+  .storeUint(0, consts.TIMESTAMP_BS * 8)
+  .storeRef(serializeTuple(createTupleItems(this.signers)))
+  .endCell();
+```
+
+要定义定价合约的初始（存储）数据，请使用预定义的
+类 [SingleFeedManInitData.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/single-feed-man/SingleFeedManInitData.ts) 。
+
+类似于 `price_manager` 的合约，但只支持
+单个 feed，以省略 feed 与管理器合约之间的通信需求。
+
+#### get_price
+
+```func
+(int, int) get_price(cell payload) method_id;
+```
+
+与 `get_prices` 类似，但省略了第一个参数（`data_feed_ids`），因为在
+初始化时已对其进行了配置。同时也会返回传入数据包的最小时间戳。
+
+#### read_price_and_timestamp
+
+```func
+(int, int) read_price_and_timestamp() method_id;
+```
+
+与 `get_price_and_timestamp` 函数一样。
+
+#### OP_REDSTONE_WRITE_PRICE
+
+与 `OP_REDSTONE_WRITE_PRICES` 类似，但省略了第一个 (`data_feed_ids`) `cell`-引用，因为在初始化时已对其进行了配置。
+
+```func
+    int op = in_msg_body~load_uint(OP_NUMBER_BITS);
+
+    if (op == OP_REDSTONE_WRITE_PRICE) {
+        cell payload_cell = in_msg_body~load_ref();
+
+        // ...
+    }
+```
+
+### sample_consumer.fc
+
+存储在 `price_feed` 中的数据的示例消费者。也适用于 `single_feed_man`。
+需要传递要调用的 `price_feed`。
+
+#### 初始数据
+
+与 `price_feed` 初始数据类似。由于 TON 合约的架构设计，初始数据需要与合约的存储结构相匹配，其构造如下：
+
+```ts
+beginCell()
+  .storeAddress(Address.parse(this.feedAddress))
+  .endCell();
+```
+
+要定义价格合约的初始（存储）数据，请使用预定义的
+类 [SampleConsumerInitData.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/sample-consumer/SampleConsumerInitData.ts) 。
+
+合约调用单个推送。
+
+#### OP_REDSTONE_READ_DATA
+
+可以直接在链上获取 `feed_id` 合约中存储的值。
+必须调用内部消息 `OP_REDSTONE_READ_DATA`。消息参数如下
+
+- 代表信息的 "初始发送方 "的 "slice"，以便他们在返回交易时携带剩余的交易余额
+  。
+
+```func
+    int op = in_msg_body~load_uint(OP_NUMBER_BITS);
+
+    if (op == OP_REDSTONE_READ_DATA) {
+        cell initial_payload = in_msg_body~load_ref();
+
+        // ...
+    }
+```
+
+返回的信息 `OP_REDSTONE_DATA_READ` 会发送给发送方，其中包含 `feed_id`、`value` 和
+保存值的 `timestamp`。然后，可在发送方中获取并处理该信息，或将其保存在
+发送方的存储空间中。
+初始 payload 的 `ref` (`initial_payload`)会被添加为 ref - 例如包含第一条信息的发送方，
+，以便它们携带剩余的交易余额。
+
+```ts
+begin_cell()
+  .store_uint(value, MAX_VALUE_SIZE_BITS)
+  .store_uint(timestamp, TIMESTAMP_BITS)
+  .store_ref(initial_payload)
+  .end_cell()
+```
+
+这是一条内部信息--它消耗 GAS 并修改合约的存储空间，因此必须以 TON 为单位支付。
+
+## TON RedStone 有效载荷包装
+
+由于 TON [见](/v3/documentation/data-formats/tlb/cell-boc) 中 Bag-size 的限制，
+，RedStone 有效载荷数据（以十六进制字符串表示）需要以更复杂的方式传递给合约。
+
+根据[此处](https://docs.redstone.finance/img/payload.png)定义的 RedStone 有效载荷，
+，数据应以 Cell 的形式传递，构建方式如下。
+
+1. 主_支付负载_ `cell` 由以下部分组成：
+
+   1. **数据级比特**中的元数据，由图像上的各部分组成：
+
+     ![payload-metadata.png](/img/docs/oracles/red-stone/payload-metadata.png)
+
+   1. 一个**参考**，包含一个以连续自然数（从 0 开始）为索引的 "udict"，该 "udict "包含 **数据包** 的 `cell` 列表。
+2. 每个_数据包_ `cell`包括
+
+   1. **数据级位**中的数据包签名：
+
+     ![payload-metadata.png](/img/docs/oracles/red-stone/payload-metadata.png)
+
+   1. 一个**引用**到一个 " cell "，该 " cell  "的**数据层**包含数据包其余部分的数据：
+
+     ![payload-metadata.png](/img/docs/oracles/red-stone/data-package-data.png)
+
+#### 目前实施的局限性
+
+- RedStone 有效载荷必须通过明确定义数据源获取，
+  导致**一个数据点** 属于**一个数据包**。
+- 无符号元数据大小不得超过 `127 - (2 + 3 + 9) = 113` 字节。
+
+#### 帮手
+
+[create-payload-cell.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/create-payload-cell.ts)文件
+中的 `createPayloadCell` 方法会检查限制条件，并如上所述准备好要发送到合约的数据。
+
+#### 样本序列化
+
+下图包含了针对2个数据源和2个唯一签名者的数据：
+![payload-metadata.png](/img/docs/oracles/red-stone/sample-serialization.png)
+
+## 可能出现的交易故障
+
+- 从初始化器
+  中传递的与 `addresses` 匹配的签名中恢复的签名者数量必须大于或等于构造函数中的 `signer_count_threshold` 每个进位的签名者数量。
+  - 否则，它就会出现 `300` 错误，该错误的增大值为所传递的
+    feed 的第一个索引，因为该索引破坏了验证。
+- 数据包的时间戳相对于`block_timestamp`必须不早于 15 分钟。
+  - 否则，它将抛出一个错误，错误码为 `200`，并增加以下值：首先是导致验证失败的数据包的索引值，再额外增加 `50`，如果该数据包的时间戳超出了当前时间太远。
+- 内部信息消耗 gas ，必须按 TON 支付。交易成功后，可在
+  上查看数据。
+- 其他错误代码的定义见 [此处](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/config/constants.ts)
+
+## 另请参见
+
+- [内部信息文档](/v3/documentation/smart-contracts/message-management/internal-messages)
+- [RedStone数据打包](https://docs.redstone.finance/docs/smart-contract-devs/how-it-works)
+- [RedStone oracles smart-contracts](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector/contracts)

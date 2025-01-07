@@ -71,7 +71,7 @@ nonce = hash[0..4] || secret[20..32]
 | length | 4 字节（LE）         | 整个数据报的长度，不包括 `length` 字段                |
 | nonce  | 32 字节            | 随机值                                     |
 | buffer | `length - 64` 字节 | 实际要发送给另一方的数据                            |
-| hash   | 32 字节            | `SHA-256(nonce \\|\\| buffer)` 以确保完整性 |
+| hash   | 32 字节            | \`SHA-256(nonce \\ |
 
 整个结构必须使用相应的 AES 实例加密（客户端 -> 服务器的 TX，服务器 -> 客户端的 RX）。
 

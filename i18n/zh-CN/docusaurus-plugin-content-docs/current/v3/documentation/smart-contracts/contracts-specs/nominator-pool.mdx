@@ -1,0 +1,235 @@
+# 提名池
+
+一个名为 "提名者池 "的智能合约可以让一个或多个提名者借出 Toncoin 作为验证者的股份，并确保验证者只能将 Toncoin 用于验证。此外，智能合约还保证了奖励的分配。
+
+## 架构
+
+![image](/img/nominator-pool/nominator-pool.png)
+
+## 限制
+
+该池专为大量代币设计。
+
+在开发过程中，主要的标准是代码的安全性和简洁性。
+
+池不支持小额存款，也不支持在一个资金池中有大量提名人。
+
+经测试的目标配置为：提名人最低持股量为 1 万 TON ，提名池最多有 40 个提名人。
+
+我们强烈建议在进行此类测试之前，不要将提名人数设定为 40 人以上。
+
+## 费用
+
+由于该池位于费用较高的主链中，因此每轮验证将花费约 **5  TON **来运营该池。
+
+操作费由验证人支付。
+
+:::info
+请注意，存储池余额应始终为 **10 TON** - 这是支付网络存储费的最低余额。10 TON 不能提取。
+:::
+
+## 奖励分配
+
+在每一轮验证中，"池 "都会向 "选举人 "智能合约发送质押。
+
+一轮验证结束后，池向选民收回资金。
+
+通常收到的金额大于发送的金额，差额就是验证奖励。
+
+验证器根据不可变的池参数 `validator_reward_share` 获得奖励份额。
+
+```
+validator_reward = (reward * validator_reward_share) / 10000;
+nominators_reward = reward - validator_reward;
+```
+
+提名人根据其质押大小分享剩余奖励。
+
+例如，如果池中有两个提名人，质押分别为 10 万 TON 和 30 万 TON ，那么第一个提名人将获得 "提名人奖励 "的 25%，第二个提名人将获得 "提名人奖励 "的 75%。
+
+### 削减提名池
+
+如果验证罚款数额较大，当收到的金额少于发出的金额时，损失将从验证者的资金中扣除。
+
+如果验证人的资金不足，那么剩余的损失将从提名人的质押中按比例扣除。
+
+请注意，提名池的设计方式是，验证器的资金应始终足以支付最高罚款。
+
+## 验证员的责任
+
+只有当验证器资金超过不可变池参数 `min_validator_stake` 时，池才能参与验证。
+
+此外，验证器的资金必须超过对错误验证的最高罚款额。建议罚款根据网络配置计算。
+
+否则，程序池将不会发送参与验证轮的请求。
+
+## 提名者信息
+
+要与提名者池互动，提名者可向池智能合约发送带有文本注释的简单消息（可从任何钱包应用程序发送）。
+
+**信息必须以可反弹模式发送！**
+
+如果出现错别字或无效信息，信息会弹回到发件人。
+
+如果您在非弹跳模式下发送拼写错误的信息或无效信息，您将损失代币。
+
+## 提名人保证金
+
+为了让提名人存款，他需要向提名人池智能合约发送带有 Toncoin 的信息，并发送文本注释 "d"。
+
+提名人只能从位于基链（原始地址为 "0:..."）的钱包发送信息。
+
+ TON 币金额必须大于或等于 `min_nominator_stake + 1 TON`。
+
+存款时扣除 1  TON ，作为存款处理佣金。
+
+如果池当前未参与验证（"state ==0"），则存款将立即存入。
+
+如果当前池正在参与验证（`state != 0`），则该金额将被添加到提名人的`pending_deposit_amount`（待定存款金额）中，并在当前一轮验证完成后记入贷方。
+
+提名人随后可以发送更多的 Toncoin 来增加存款。
+
+需要注意的是，如果提名人池中的提名人数已经达到 "max_nominators_count"（最大提名人数），那么来自新提名人的存款将被拒绝（会被退回给发件人）。
+
+## 提名人退出
+
+要提取资金，提名人需要向提名人池智能合约发送信息，并附上文本注释 "w "和一些用于支付网络费用的 Toncoin （1  Toncoin 即可）。除极少数情况外，信息中未使用的 TON 币将被退回。
+
+如果提名者奖池余额中有足够的 Toncoin ，将立即提款。如果提名人池已完成一轮验证，但尚未提交新一轮验证申请，则所有资金都将计入提名人池余额。
+
+如果提名人池余额中没有足够的 Toncoin ，则会向提名人发出 "提款请求"， Toncoin 将在本轮验证结束后被提取。
+
+提名人只能一次性提取全部资金。不支持部分提款。
+
+## 验证器退出
+
+验证人可以从池中提取不属于提名人的所有代币。
+
+## 参与者必须保管好自己的私人密钥
+
+如果提名人丢失了存款的钱包，将无法从资金池中提取资金。
+
+如果验证者失去了对钱包的访问权限，那么他将无法从池中提取他（验证者）的资金。
+
+一个池参与者的钱包私钥丢失不会影响其他参与者。
+
+## 紧急撤离
+
+在正常运行时，验证器必须定期向提名者集群发送操作信息，例如 `process withdraw requests`, `update current validator set`, `new_stake`, `recover_stake` 。
+
+验证软件 mytonctrl 会自动完成这项工作。
+
+在紧急情况下，例如验证人失踪或停止履行职责，任何人都可以发送这些操作信息，从而使提名人可以提取资金。
+
+## 网络配置提案投票
+
+在 TON 中，网络配置更改是通过 [验证人投票](/v3/documentation/smart-contracts/contracts-specs/governance#proposalvoting-mechanism) 进行的。
+
+在提名人库的情况下，所有参与者都可以投票，最终结果将以提名人库的名义发送。
+
+因此，提名者池智能合约有一个内置功能，验证者和提名者可以在此功能中表明他们对特定提案的支持/反对票。
+
+在此基础上，验证器通过验证器软件将最终投票结果发送给网络配置智能合约。
+
+如果验证者将最终投票结果发送给网络配置智能合约，而投票结果与池中大多数人的意见不一致，在这种情况下，提名者可以离开（也将离开）这个池，转到另一个池。
+
+由于一切都通过链上交易进行，因此这种不匹配将被存储在区块链上，每个人都能看到。
+
+## 提名人投票
+
+每项新的网络配置变更提案最初都会发布到 TON 基金会频道 [@tonblockchain](https://t.me/tonblockchain) 或 [@tonstatus](https://t.me/tonstatus) 上。
+
+在本帖中，除了对提案的描述外，提案的哈希值将以 HEX 表示，例如 `D855FFBCF813E50E10BEAB902D1177529CE79785CAE913EB96A72AE8EFBCBF47`。
+
+为了让提名人对提案投赞成票，他需要向提名人池智能合约发送一条信息，并附上文字注释 `y<HASH>`。
+
+为了让提名人对提案投反对票，他需要向提名人池智能合约发送一条信息，并附上文字注释 `n<HASH>`。
+
+必须在该信息中附加一定数量的代币才能支付网络费用（1 TON 即可）。信息中未使用的 TON 将被退回。
+
+投票将在投票池合约中保存 30 天。
+
+只有审定人和在人才库中拥有有效股份的当前提名人才能投票。
+
+## 获取方法 `get_pool_data`
+
+返回：
+
+1. state - uint - 提名者当前的状态。0 - 不参与验证，1 - 发送了参与验证的 "new_stake "请求，2 - 收到了参与验证的成功确认。
+2. nominators_count - uint - 当前提名池中的提名人数。
+3. stake_amount_sent - nanotons - 有了这样的质押金额，赌池才会参与本轮验证。
+4. validator_amount - nanotons  - 验证器拥有的硬币数量。
+5. validator_address - immutable - uint - 验证器钱包地址。要获取地址，请执行 `"-1:" + dec_to_hex(validator_address)`。
+6. validator_reward_share - immutable - uint - 验证器从验证中获得的奖励份额。 `validator_reward = (reward * validator_reward_share) / 10000`。  例如，设置 4000 可获得 40%。
+7. max_nominators_count - immutable - uint - 提名者数量上限。
+8. min_validator_stake - immutable - nanotons  - 本池中验证器的最小质押。
+9. min_nominator_stake - immutable - nanotons  - 提名者在本池中的最小质押。
+10. nominators - Cell - 含提名人的原始字典。
+11. withdraw_requests -  cell  - 包含提名人撤回请求的原始字典。
+12. stake_at - uint - 我们正在/将要参与的一轮验证的 ID。下一轮验证的预计开始时间（`utime_since`）。
+13. saved_validator_set_hash - uint - 技术信息。
+14. validator_set_changes_count - uint - 技术信息。
+15. validator_set_change_time - uint - 技术信息。
+16. stake_held_for - uint - 技术信息。
+17. config_proposal_votings -  cell  - 包含配置建议投票的原始字典。
+
+## 获取方法 `list_nominators`
+
+返回当前提名池的提名人列表。
+
+每个条目包括
+
+1. address - uint - 提名者钱包地址。要获取地址，请执行 `"0:"。+ dec_to_hex(address)`。
+2. amount - nanotons - 提名者当前的有效木桩。
+3. pending_deposit_amount - nanotons  - 将在下一轮验证时加入提名者有效质押的存款金额。
+4. withdraw_request - int - 如果 `-1`，则该提名人发出了提取全部资金的请求。
+
+## 获取方法 `get_nominator_data`
+
+它将提名人的地址作为参数并返回：
+
+1. amount - nanotons - 提名者当前的有效木桩。
+2. pending_deposit_amount - nanotons  - 将在下一轮验证时加入提名者有效质押的存款金额。
+3. withdraw_request - int - 如果 `-1`，则该提名人发出了提取全部资金的请求。
+
+如果提名池中没有这样的提名者，则抛出 `86` 错误。
+
+例如，要获取地址为`EQA0i8-CdGnF_DhUHHf92R1ONH6sIA9vLZ_WLcCIhfBBXwtG`的提名人，需要将地址转换为原始格式`0.EQA0i8-CdGnF_DhUHHf92R1ONH6sIA9vLZ_WLcCIhfBBXwtG`：348bcf827469c5fc38541c77fdd91d4e347eac200f6f2d9fd62dc08885f0415f`, 删除 `0:`并调用`get_nominator_data 0x348bcf827469c5fc38541c77fdd91d4e347eac200f6f2d9fd62dc08885f0415f\`。
+
+## 获取方法 `list_votes`
+
+返回选票列表。
+
+每个条目包括
+
+1. proposal_hash - uint - 提案的哈希值。使用 `dec_too_hex(proposal_hash)` 将哈希值转换为 HEX 格式。
+2. votes_create_time - uint - 创建此投票的时间。
+
+## 获取方法 `list_voters`
+
+它将提案的哈希值作为参数，并返回投票人列表：
+
+每个条目包括
+
+1. address - 投票人地址。要获取提名人地址，执行 `"0:"。+ dec_to_hex(address)`，如果`address = validator_address`，则执行`"-1:" + dec_to_hex(address)`。
+2. support - int - 如果为 `-1`，则投 "赞成票"，否则投 "反对票"。
+3. vote_time - uint - 他投票的时间。
+
+投票结果在链外计算。
+
+## 与钱包应用程序集成
+
+对于存款、取款和投票，可向资金池发送简单的信息，并在信息中添加上述所需的文字注释。
+
+发送存款时，可以将发送的金额存储在本地存储中。
+
+发送再存款时，也将其添加到此金额中。
+
+要找出当前利润，请调用获取方法 `get_nominator_data(your_address)`。利润将为（`金额 + 待处理存款金额 - 已存储在本地存储区的发送金额`）。
+
+要获取数据池的信息，请调用 `get_pool_data` 和 `list_nominators` 获取方法。
+
+## 另请参见
+
+- [提名者池合约](https://github.com/ton-blockchain/nominator-pool)
+- [如何使用提名池](/v3/guidelines/smart-contracts/howto/nominator-pool)

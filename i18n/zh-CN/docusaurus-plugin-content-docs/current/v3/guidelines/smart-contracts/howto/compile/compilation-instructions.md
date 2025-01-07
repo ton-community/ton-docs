@@ -21,27 +21,26 @@ git clone --recurse-submodules https://github.com/ton-blockchain/ton.git
 ```
 
 2. 安装最新版本的：
-
    - `make`
    - `cmake` 版本 3.0.2 或更高
    - `g++` 或 `clang`（或适用于您的操作系统的另一种C++14兼容编译器）。
    - OpenSSL（包括C头文件）版本 1.1.1 或更高
    - `build-essential`, `zlib1g-dev`, `gperf`, `libreadline-dev`, `ccache`, `libmicrohttpd-dev`, `pkg-config`, `libsodium-dev`, `libsecp256k1-dev`
 
-   在Ubuntu上：
+### 关于 Ubuntu
 
 ```bash
 apt update
-sudo apt install build-essential cmake clang openssl libssl-dev zlib1g-dev gperf libreadline-dev ccache libmicrohttpd-dev pkg-config libsodium-dev libsecp256k1-dev
+sudo apt install build-essential cmake clang openssl libssl-dev zlib1g-dev gperf libreadline-dev ccache libmicrohttpd-dev pkg-config libsodium-dev libsecp256k1-dev liblz4-dev
 ```
 
-3. 假设您已将源代码树获取到目录`~/ton`，其中`~`是您的主目录，并且您已创建一个空目录`~/ton-build`：
+3. 假设您已经将源代码树获取到 `~/ton` 目录，其中 `~` 是您的主目录，并且您已经创建了一个空的 `~/ton-build` 目录：
 
 ```bash
 mkdir ton-build
 ```
 
-然后在Linux或MacOS的终端中运行以下命令：
+然后在 Linux 或 MacOS 终端运行以下程序：
 
 ```bash
 cd ton-build
@@ -50,34 +49,74 @@ export CXX=clang++
 cmake -DCMAKE_BUILD_TYPE=Release ../ton && cmake --build . -j$(nproc)
 ```
 
-:::warning
-On MacOS Intel before next step we need maybe install `openssl@3` with `brew` or just link the lib:
-
-```zsh
-brew install openssl@3 ninja libmicrohttpd pkg-config
-```
+### 在 MacOS 上
 
 然后需要检查`/usr/local/opt`：
 
 ```zsh
-ls /usr/local/opt
+brew install ninja libsodium libmicrohttpd pkg-config automake libtool autoconf gnutls
+brew install llvm@16
 ```
 
 找到`openssl@3`库并导出本地变量：
 
 ```zsh
-export OPENSSL_ROOT_DIR=/usr/local/opt/openssl@3
+  export CC=/opt/homebrew/opt/llvm@16/bin/clang
+  export CXX=/opt/homebrew/opt/llvm@16/bin/clang++
+```
+
+编译 secp256k1
+
+```zsh
+  git clone https://github.com/bitcoin-core/secp256k1.git
+  cd secp256k1
+  secp256k1Path=`pwd`
+  git checkout v0.3.2
+  ./autogen.sh
+  ./configure --enable-module-recovery --enable-static --disable-tests --disable-benchmark
+  make -j12
+```
+
+和 lz4：
+
+```zsh
+  git clone https://github.com/lz4/lz4
+  cd lz4
+  lz4Path=`pwd`
+  git checkout v1.9.4
+  make -j12
+```
+
+从 https://ton-blockchain.github.io/global.config.json 下载主网的最新配置文件：
+
+```zsh
+brew unlink openssl@1.1
+brew install openssl@3
+brew unlink openssl@3 &&  brew link --overwrite openssl@3
+```
+
+或从 https://ton-blockchain.github.io/testnet-global.config.json 下载测试网的配置文件：
+
+```zsh
+cmake -GNinja -DCMAKE_BUILD_TYPE=Release .. \
+-DCMAKE_CXX_FLAGS="-stdlib=libc++" \
+-DSECP256K1_FOUND=1 \
+-DSECP256K1_INCLUDE_DIR=$secp256k1Path/include \
+-DSECP256K1_LIBRARY=$secp256k1Path/.libs/libsecp256k1.a \
+-DLZ4_FOUND=1 \
+-DLZ4_LIBRARIES=$lz4Path/lib/liblz4.a \
+-DLZ4_INCLUDE_DIRS=$lz4Path/lib
 ```
 
 :::
 
 :::tip
-如果您在内存较小的计算机上编译（例如，1GB），请不要忘记[创建交换分区](/develop/howto/compile-swap)。
+如果您在内存较低的计算机上编译（例如 1GB 内存），请不要忘记 [创建交换分区](/v3/guidelines/smart-contracts/howto/compile/instructions-low-memory)。
 :::
 
 ## 下载全局配置
 
-对于像轻客户端这样的工具，您需要下载全局网络配置。
+使用配置运行轻客户端：
 
 从 https://ton-blockchain.github.io/global.config.json 下载主网的最新配置文件：
 
@@ -91,15 +130,15 @@ wget https://ton-blockchain.github.io/global.config.json
 wget https://ton-blockchain.github.io/testnet-global.config.json
 ```
 
-## 轻客户端
+## FunC
 
-要构建轻客户端，请执行[通用部分](/develop/howto/compile#common)，[下载配置](/develop/howto/compile#download-global-config)，然后执行：
+要从源代码构建FunC编译器，请执行上面描述的[通用部分](/develop/howto/compile#common)，然后：
 
 ```bash
 cmake --build . --target lite-client
 ```
 
-使用配置运行轻客户端：
+要编译FunC智能合约：
 
 ```bash
 ./lite-client/lite-client -C global.config.json
@@ -115,21 +154,21 @@ cmake --build . --target lite-client
 
 ## FunC
 
-要从源代码构建FunC编译器，请执行上面描述的[通用部分](/develop/howto/compile#common)，然后：
+要从源代码编译 FunC 编译器，请执行上述 [common part](/v3/guidelines/smart-contracts/howto/compile/compile-instructions#common)，然后：
 
 ```bash
 cmake --build . --target func
 ```
 
-要编译FunC智能合约：
+要构建tonlib-cli，请执行[通用部分](/develop/howto/compile#common)，[下载配置](/develop/howto/compile#download-global-config)，然后执行：
 
 ```bash
-func -o output.fif -SPA source0.fc source1.fc ...
+./crypto/func -o output.fif -SPA source0.fc source1.fc ...
 ```
 
 ## Fift
 
-要从源代码构建Fift编译器，请执行上面描述的[通用部分](/develop/howto/compile#common)，然后：
+要从源代码编译 Fift 编译器，请执行上述 [common part](/v3/guidelines/smart-contracts/howto/compile/compile-instructions#common)，然后：
 
 ```bash
 cmake --build . --target fift
@@ -138,12 +177,12 @@ cmake --build . --target fift
 要运行Fift脚本：
 
 ```bash
-fift -s script.fif script_param0 script_param1 ..
+./crypto/fift -s script.fif script_param0 script_param1 ..
 ```
 
 ## Tonlib-cli
 
-要构建tonlib-cli，请执行[通用部分](/develop/howto/compile#common)，[下载配置](/develop/howto/compile#download-global-config)，然后执行：
+代理二进制文件将位于：
 
 ```bash
 cmake --build . --target tonlib-cli
@@ -159,35 +198,35 @@ cmake --build . --target tonlib-cli
 
 ## RLDP-HTTP-Proxy
 
-要构建rldp-http-proxy，请执行[通用部分](/develop/howto/compile#common)，[下载配置](/develop/howto/compile#download-global-config)，然后执行：
+要构建 rldp-http-proxy，请执行 [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common)、[download the config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config)，然后执行：
 
 ```bash
 cmake --build . --target rldp-http-proxy
 ```
 
-代理二进制文件将位于：
+要构建storage-daemon和storage-daemon-cli，请执行[通用部分](/develop/howto/compile#common)，然后执行：
 
 ```bash
-rldp-http-proxy/rldp-http-proxy
+./rldp-http-proxy/rldp-http-proxy
 ```
 
 ## generate-random-id
 
-要构建generate-random-id，请执行[通用部分](/develop/howto/compile#common)，然后执行：
+要编译 generate-random-id，请执行 [common part](/v3/guidelines/smart-contracts/howto/compile/compile-instructions#common)，然后执行：
 
 ```bash
 cmake --build . --target generate-random-id
 ```
 
-二进制文件将位于：
+TON版本发布：https://github.com/ton-blockchain/ton/tags
 
 ```bash
-utils/generate-random-id
+./utils/generate-random-id
 ```
 
-## storage-daemon
+## 在Apple M1上编译旧版本：
 
-要构建storage-daemon和storage-daemon-cli，请执行[通用部分](/develop/howto/compile#common)，然后执行：
+TON从2022年6月11日开始支持Apple M1（[添加apple m1支持 (#401)](https://github.com/ton-blockchain/ton/commit/c00302ced4bc4bf1ee0efd672e7c91e457652430)提交）。
 
 ```bash
 cmake --build . --target storage-daemon storage-daemon-cli
@@ -196,7 +235,7 @@ cmake --build . --target storage-daemon storage-daemon-cli
 二进制文件将位于：
 
 ```bash
-storage/storage-daemon/
+./storage/storage-daemon/
 ```
 
 # 编译旧版本的TON

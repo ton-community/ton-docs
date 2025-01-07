@@ -170,7 +170,7 @@ npm run deploy
 
 运行你的项目的结果：
 
-
+````
 ```js
 > @ton-defi.org/jetton-deployer-contracts@0.0.2 deploy
 > ts-node ./build/_deploy.ts
@@ -200,7 +200,7 @@ Deploy script running, let's find some contracts to deploy..
   symbol: 'JET1'
 }
 ```
-
+````
 
 ## 接下来
 
@@ -212,3 +212,4 @@ Deploy script running, let's find some contracts to deploy..
 
 - 项目：https://github.com/ton-blockchain/minter-contract
 - 作者Slava：（[Telegram @delovoyslava](https://t.me/delovoyslava)，[GitHub上的delovoyhomie](https://github.com/delovoyhomie)）
+- [ jetton 处理](/v3/guidelines/dapps/asset-processing/jettons)

@@ -46,9 +46,20 @@ Before you start contributing, **read the guidelines below** to ensure standardi
 ### 开发人员(Developer)
 
 - **上传文件**
+  1. 请复制我们的 [**仓库**](https://github.com/TownSquareXYZ/ton-docs/tree/i18n_feat)
+  2. 来到以下文件 [**`src/theme/Footer/config.ts`**](https://github.com/TownSquareXYZ/ton-docs/blob/main/src/theme/Footer/config.s).
+  3. 将变量\*\*`FOOTER_COLUMN_LINKS_EN`\*\* 的值复制到\*\*`FOOTER_COLUMN_LINKS_[YOUR_LANG]`\*\*。
+  4. 就如我们在 \*\*`FOTER_COLUMN_LINKS_CN`\*\*中对Mandarin 所做的那样，您也可以将 **`headerLangKey`** 和 **`langKey`** 的键值翻译成您的语言，
+  5. 向\*\*`FOOTER_LINKS_TRANSLATIONS`\*\*添加一个新属性：
+     - 将 **the key** 设置为您的 [**国际标准组的语言代码**](https://www.andiamo.co.uk/resources/iso-language-codes/) (注意使用**两个英语字母**, **小写**，eg：zh)。
+     - **The value** 是您刚刚为您的语言创建的新变量。
+  6. 您可以运行命令 **`yarn start:local [YOUR_IOS_LANG_CODE]`** 来预览您的语言的新页脚。\
+     (例如\*\*`yarn start:local zh`\*\* 用于预览**汉语** 页脚)
+  7. 如果一切看起来都没问题，请在 **`i18n_feat`** 分支上创建一个拉取请求。
 - **编辑可翻译文本**
 - **连接集成**（例如，添加 GitHub 集成）
   ![install-github-integration](/img/localizationProgramGuideline/howItWorked/install-github-integration.png)
+- **使用 [Crowdin API](https://developer.crowdin.com/api/v2/)**
 - **使用 [Crowdin API](https://developer.crowdin.com/api/v2/)**
 
 ### 校对员(Proofreader)
