@@ -226,8 +226,9 @@ When the number of stack entries is substantial (10+), and they are actively use
 
 Internal messages define an `ihr_fee` in Toncoins, which is subtracted from the value attached to the message and awarded to the validators of the destination shardchain if they include the message through the IHR mechanism. The `fwd_fee` is the original total forwarding fee paid for using the HR mechanism; it is automatically computed from the [24 and 25 configuration parameters](/v3/documentation/network/configs/blockchain-configs#param-24-and-25) and the size of the message at the time the message is generated. Note that the total value carried by a newly created internal outbound message equals the sum of the value, `ihr_fee`, and `fwd_fee`. This sum is deducted from the balance of the source account. Of these components, only the `ihr_fee` value is credited to the destination account upon message delivery. The `fwd_fee` is collected by the validators on the HR path from the source to the destination, and the `ihr_fee` is either collected by the validators of the destination shardchain (if the message is delivered via IHR) or credited to the destination account.
 
-:::tip
+### IHR
 
+:::tip
 At this moment (November 2024), [IHR](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#messages-and-instant-hypercube-routing-instant-hypercube-routing) is not implemented, and if you set the `ihr_fee` to a non-zero value, it will always be added to the message value upon receipt. For now, there are no practical reasons to do this.
 :::
 
@@ -250,9 +251,9 @@ total_fwd_fees = msg_fwd_fees + ihr_fwd_fees; // ihr_fwd_fees - is 0 for externa
 ```
 
 :::info IMPORTANT
-Please note that `msg_fwd_fees` above includes `action_fee` below. For a basic message this fee = lump_price = 400000 gram, action_fee = (400000 \* 21845) / 65536 = 133331. Or approximately a third of the `msg_fwd_fees`.
+Please note that `msg_fwd_fees` above includes `action_fee` below. For a basic message this fee = lump_price = 400000 nanotons, action_fee = (400000 \* 21845) / 65536 = 133331. Or approximately a third of the `msg_fwd_fees`.
 
-Hence `fwd_fee` = `msg_fwd_fees` - `action_fee` = 266669 gram = 0,000266669 TON
+`fwd_fee` = `msg_fwd_fees` - `action_fee` = 266669 nanotons = 0,000266669 TON
 :::
 
 ## Action fee
@@ -288,7 +289,7 @@ action_fine = fine_per_cell * min(max_cells, cells_in_msg);
 
 ## Fee's config file
 
-All fees are nominated in nanotons (`gram`) or nanotons multiplied by 2^16 to [maintain accuracy while using integer](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#forward-fees) and may be changed. The config file represents the current fee cost.
+All fees are nominated in nanotons or nanotons multiplied by 2^16 to [maintain accuracy while using integer](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#forward-fees) and may be changed. The config file represents the current fee cost.
 
 - storage_fees = [p18](https://tonviewer.com/config#18)
 - in_fwd_fees = [p24](https://tonviewer.com/config#24), [p25](https://tonviewer.com/config#25)
