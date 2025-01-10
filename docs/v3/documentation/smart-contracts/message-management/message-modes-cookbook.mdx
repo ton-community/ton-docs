@@ -13,6 +13,10 @@ You can check [this example](https://testnet.tonviewer.com/transaction/42ed45726
 
 #### Message value and account balance
 
+:::warning
+Please check how [get_balance](/v3/documentation/smart-contracts/func/docs/stdlib/#get_balance) works to understand transaction state better.
+:::
+
 There are 2 ways to pay for blockchain action:
 
 - from [message value](/v3/documentation/data-formats/tlb/msg-tlb#commonmsginfo).
@@ -31,8 +35,6 @@ According to [transaction flow](/v3/documentation/tvm/tvm-overview#transactions-
 - Compute, where actual smart contract code is executed in TVM
 - Action, where actions like `SENDRAWMSG` are performed
 - Bounce, where everything about bouncing is handled
-
-Please check how [get_balance](/v3/documentation/smart-contracts/func/docs/stdlib/#get_balance) works to understand transaction state better.
 
 :::info IMPORTANT
 The table is populated from [this example](https://tonviewer.com/transaction/b5e14a9c4a4e982fda42d6079c3f84fa48e76497a8f3fca872f9a3737f1f6262). You can check [**live calculator**](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula)
@@ -149,6 +151,12 @@ State after transaction: Account A has 0.896 TON, Account B has 0.5 TON, Account
 
 :::info
 You might check [this example](https://retracer.ton.org/?tx=4340b5ecbd83227cc64e10b1ca7628352133cda1d608081fb2ed58d299f00936&testnet=true).
+:::
+
+:::warning
+Please note that `SENDRAWMSG` doesn't update balance.
+
+If you try to send multiple messages (i.e. mode 0 **and** mode 64) you'll get exit code 37.
 :::
 
 ![](/img/docs/message-modes-cookbook/carry_all_the_remaining_value.svg)
