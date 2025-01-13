@@ -3,6 +3,17 @@
 When new versions of Tolk are released, they will be mentioned here.
 
 
+## v0.7
+
+1. Under the hood: refactor compiler internals; AST-level semantic analysis kernel
+2. Under the hood: rewrite the type system from Hindley-Milner to static typing
+3. Clear and readable error messages on type mismatch
+4. Generic functions `fun f<T>(...)` and instantiations like `f<int>(...)`
+5. The `bool` type; type casting via `value as T`
+
+More details [on GitHub](todo).
+
+
 ## v0.6
 
 The first public release. Here are some notes about its origin: 
@@ -20,7 +31,7 @@ For several months, I have worked on Tolk privately. I have implemented a giant 
 And it's not only about the syntax. For instance, Tolk has an internal AST representation, completely missed in FunC.
 
 On TON Gateway, on 1-2 November in Dubai, I had a speech presenting Tolk to the public, and we released it the same day.
-Once the video is available, I'll attach it here.
+The video is available [on YouTube](https://www.youtube.com/watch?v=Frq-HUYGdbI).
 
 Here is the very first pull request: ["Tolk Language: next-generation FunC"](https://github.com/ton-blockchain/ton/pull/1345).
 
@@ -29,4 +40,16 @@ The first version of the Tolk Language is v0.6, a metaphor of FunC v0.5 that mis
 
 ## Meaning of the name "Tolk"
 
-I'll update this section after announcing Tolk on TON Gateway.
+"Tolk" is a very beautiful word. 
+
+In English, it's consonant with *talk*. Because, generally, what do we need a language for? We need it *to talk* to computers. 
+
+In all slavic languages, the root *tolk* and the phrase *"to have tolk"* means "to make sense"; "to have deep internals".
+
+But actually, **TOLK** is an abbreviation.  
+You know, that TON is **The Open Network**.  
+By analogy, TOLK is **The Open Language K**.   
+
+What is K, will you ask? Probably, "kot" — the nick of Nikolay Durov? Or Kolya? Kitten? Kernel? Kit? Knowledge?  
+The right answer — none of this. This letter does not mean anything. It's open.  
+*The Open Letter K*

@@ -44,6 +44,8 @@ get currentCounter(): int { ... }
 7. A function can be called even if declared below; forward declarations not needed; the compiler at first does parsing, and then it does symbol resolving; there is now an AST representation of source code
 8. stdlib functions renamed to ~~verbose~~ clear names, camelCase style; it's now embedded, not downloaded from GitHub; it's split into several files; common functions available always, more specific available with `import "@stdlib/tvm-dicts"`, IDE will suggest you; here is [a mapping](/v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib)
 9. No `~` tilda methods; `cs.loadInt(32)` modifies a slice and returns an integer; `b.storeInt(x, 32)` modifies a builder; `b = b.storeInt()` also works, since it not only modifies, but returns; chained methods work identically to JS, they return `self`; everything works exactly as expected, similar to JS; no runtime overhead, exactly same Fift instructions; custom methods are created with ease; tilda `~` does not exist in Tolk at all; [more details here](/v3/documentation/smart-contracts/tolk/tolk-vs-func/mutability)
+10. Clear and readable error messages on type mismatch
+11. `bool` type support
 
 #### Tooling around
 - JetBrains plugin exists
