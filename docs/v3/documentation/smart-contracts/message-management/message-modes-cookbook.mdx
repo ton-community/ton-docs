@@ -1,9 +1,5 @@
 # Message Modes Cookbook
 
-:::warning Caution
-Page is under active development
-:::
-
 Understanding the different modes and flags available for sending messages is important to ensure that your smart contracts behave correctly.
 While [message modes](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes) section provided detailed descriptions of these modes and flags, in this section we will illustrate their practical application with specific examples.
 
@@ -13,20 +9,18 @@ You can check [this example](https://testnet.tonviewer.com/transaction/42ed45726
 
 #### Message value and account balance
 
-:::warning
-Please check how [get_balance](/v3/documentation/smart-contracts/func/docs/stdlib/#get_balance) works to understand transaction state better.
-:::
+Please check how [get_balance](/v3/documentation/smart-contracts/func/docs/stdlib/#get_balance) works to understand transaction state better. Balance in
 
 There are 2 ways to pay for blockchain action:
 
-- from [message value](/v3/documentation/data-formats/tlb/msg-tlb#commonmsginfo).
-- from [contract balance](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/block.tlb#L263C1-L265C20)
+- From the [message value](/v3/documentation/data-formats/tlb/msg-tlb#commonmsginfo)
+- From the [contract balance](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/block.tlb#L263C1-L265C20)
 
 Typically it's charged from contract `balance`, but in specific cases it will use part of the message `value`.
 
 #### Fees
 
-Actual transaction fees will vary depending on blockchain configuration, code of the smart contract and other factors. When message is received, part of it's `value` will be consumed for gas and storage fees.
+Actual transaction fees will vary depending on blockchain configuration, code of the smart contract and other factors. When message is received, part of the contract `balance` will be consumed by [storage fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee) and gas_fees if message `value` [is above certain amount](/v3/documentation/tvm/tvm-overview#compute-phase-skipped).
 
 According to [transaction flow](/v3/documentation/tvm/tvm-overview#transactions-and-phases) there are 5 phases:
 
@@ -36,8 +30,10 @@ According to [transaction flow](/v3/documentation/tvm/tvm-overview#transactions-
 - Action, where actions like `SENDRAWMSG` are performed
 - Bounce, where everything about bouncing is handled
 
+The order is: storage_fee -> import_fee -> gas_fee -> action_fee + fwd_fee
+
 :::info IMPORTANT
-The table is populated from [this example](https://tonviewer.com/transaction/b5e14a9c4a4e982fda42d6079c3f84fa48e76497a8f3fca872f9a3737f1f6262). You can check [**live calculator**](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula)
+The table is populated from [this example](https://tonviewer.com/transaction/b5e14a9c4a4e982fda42d6079c3f84fa48e76497a8f3fca872f9a3737f1f6262). You can check [**live calculator**](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula).
 :::
 
 | Fee in Explorer                                                                                   | Value       | How it's obtained               |
