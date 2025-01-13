@@ -222,6 +222,19 @@ TonWeb.utils.Address.isValid('...')
 ```
 
 </TabItem>
+<TabItem value="py" label="Python">
+
+```py
+from pytoniq_core import Address, AddressError
+
+try:
+    Address('')
+except AddressError:
+    # not valid
+    pass
+```
+
+</TabItem>
 <TabItem value="GO" label="tonutils-go">
 
 ```python
