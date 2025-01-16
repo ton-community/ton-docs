@@ -1,5 +1,10 @@
 # TON API by GetBlock
 
+:::tip TON Infrastructure Status
+* [status.toncenter](https://status.toncenter.com/) - various statistics of nodes activity during the last hour.
+* [Tonstat.us](https://tonstat.us/) - a real-time Grafana, updated every 5 minutes.
+  :::
+
 This guide will cover essential steps in acquiring and using private RPC endpoints by GetBlock to access the TON blockchain.
 
 :::info

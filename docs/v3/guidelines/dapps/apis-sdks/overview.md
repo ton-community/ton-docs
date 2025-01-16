@@ -27,6 +27,12 @@ which dumps raw and decode data into S3 bucket __s3://ton-blockchain-public-data
 * If you need to track on-chain data in near real-time you can run your own [Ton Node](/v3/documentation/infra/nodes/node-types) and launch [ton-etl](https://github.com/re-doubt/ton-etl/blob/main/README.md) or [ton-index-worker](https://github.com/toncenter/ton-index-worker).
 * [chainbase](https://docs.chainbase.com/catalog/Ton/Overview) comes with a set of raw and decoded tables with TON data. It allows to run SQL queries and fetch results via API.
 
+## Infrastructure Status
+
+* [status.toncenter](https://status.toncenter.com/) - various statistics of nodes activity during the last hour.
+* [Tonstat.us](https://tonstat.us/) - a real-time Grafana, updated every 5 minutes.
+
+
 ## See Also
 
 * [SDKs](/v3/guidelines/dapps/apis-sdks/sdk)

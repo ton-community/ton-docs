@@ -10,7 +10,7 @@ Coins in the test network have no value, and the network can be reset at any tim
 * Get free test coins from the [@test_giver_ton_bot](https://t.me/testgiver_ton_bot)
 * Check the testnet status in the Telegram channel: [@testnetstatus](https://t.me/testnetstatus)
 
-## Services
+### Core Services
 
 For convenience, nearly the entire mainnet infrastructure (wallets, APIs, bridges, etc.) has been replicated in the test network.
 
@@ -22,7 +22,31 @@ For convenience, nearly the entire mainnet infrastructure (wallets, APIs, bridge
 * Testnet bridge: https://bridge.ton.org/?testnet=true
 * Testnet dTON GraphQL: https://testnet.dton.io/
 
-## Some third parties
+## TON Ecosystem Services Testnet
 
+### Wallets
 * To switch to [Tonkeeper's testnet](https://tonkeeper.com/), tap the version 5 times in the settings.
 * Testnet CryptoBot: https://t.me/CryptoTestnetBot
+* Special link for TON Space Testnet: https://t.me/wallet/start?startapp=tonspace_settings
+* https://multisig.ton.org/?testnet=true
+
+### Explorers 
+
+* https://testnet.tonscan.org
+* https://testnet.tonviewer.com
+* https://test-explorer.toncoin.org
+* https://tonsandbox.com/explorer
+* https://testnet.ton.cx
+
+### Other Services
+* https://minter.ton.org/?testnet=true
+* https://dns.ton.org/?testnet=true
+* https://vesting.ton.org/?testnet=true
+
+* https://teststaking.xyz
+* https://testnet.getgems.io
+* https://app.hipo.finance/#/network=testnet/
+
+* https://testnet-elections.toncenter.com/getValidationCycles?limit=2&return_participants=true
+
+
