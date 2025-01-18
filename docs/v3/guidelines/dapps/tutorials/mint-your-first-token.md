@@ -208,6 +208,9 @@ To make any changes, begin here:
 If you want to go deeper, read this article by Tal Kol:  
 * [How and why to shard your smart contract—studying the anatomy of TON Jettons](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)
 
+If you want to learn more about other token-minting solutions, read this article:
+* [History of mass minting on TON](https://blog.ton.org/history-of-mass-minting-on-ton)
+
 
 ## References
 
