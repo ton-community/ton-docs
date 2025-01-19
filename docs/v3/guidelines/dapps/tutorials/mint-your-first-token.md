@@ -73,8 +73,9 @@ If you want to have an attractive token, you need to host a beautiful logo somew
  4. Upload your prepared image to git and enable `GitHub Pages`.
     1. [Add GitHub Pages to your repository](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site).
     2. [Upload your image and get a link](https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository).
- 5. If you have your own domain, then it would be good to use `.org` instead of `github.io`.
- 
+ 5. If you can afford it, we recommend to buy a custom domain for your project like `bitcoincash.org`. Use any domain seller like [Google Domains](https://domains.google/) or [GoDaddy](https://www.godaddy.com/). Then, connect your custom domain to the repository in the previous step, you can follow the instructions [here](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site).
+ 6. If you have a custom domain, your image URL should be `https://bitcoincash.org/logo.png` instead of the `github.io` one. This will remove any future dependency on GitHub and allow you to switch hosting in the future which is a good option to keep.
+
 
  ## 💸 Send Jettons
 On the right side of the screen, you can **send tokens** to multi-currency wallets such as [Tonkeeper](https://tonkeeper.com/) or [Tonhub](https://ton.app/wallets/tonhub-wallet).
@@ -215,5 +216,4 @@ If you want to learn more about other token-minting solutions, read this article
 ## References
 
  - Project: https://github.com/ton-blockchain/minter-contract
- - By Slava ([Telegram @delovoyslava](https://t.me/delovoyslava), [delovoyhomie on GitHub](https://github.com/delovoyhomie))
  - [Jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
