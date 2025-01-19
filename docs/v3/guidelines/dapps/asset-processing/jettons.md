@@ -1,3 +1,4 @@
+import ThemedImage from '@theme/ThemedImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Button from '@site/src/components/button';
@@ -97,11 +98,15 @@ Standardized tokens on TON are implemented using a set of smart contracts, inclu
 * [Jetton master](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-minter.fc) smart contract
 * [Jetton wallet](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc) smart contracts
 
-<p align="center">
-  <br />
-    <img width="420" src="/img/docs/asset-processing/jetton_contracts.svg" alt="contracts scheme" />
-      <br />
-</p>
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/asset-processing/jetton_contracts.svg?raw=true',
+        dark: '/img/docs/asset-processing/jetton_contracts_dark.svg?raw=true',
+    }}
+/>
+<br></br>
 
 ## Jetton master smart contract
 The jetton master smart contract stores general information about the jetton (including the total supply, a metadata link, or the metadata itself).
@@ -264,7 +269,15 @@ Read more about Messages [here](/v3/documentation/smart-contracts/message-manage
 
 Communication between Jetton wallets and TON wallets occurs through the following communication sequence:
 
-![](/img/docs/asset-processing/jetton_transfer.svg)
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/asset-processing/jetton_transfer.svg?raw=true',
+        dark: '/img/docs/asset-processing/jetton_transfer_dark.svg?raw=true',
+    }}
+/>
+<br></br>
 
 #### Message 0
 `Sender -> sender's jetton wallet`. _Transfer_ message contains the following data:

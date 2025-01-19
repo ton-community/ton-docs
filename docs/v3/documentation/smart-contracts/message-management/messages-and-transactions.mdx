@@ -15,7 +15,7 @@ A message is a packet of data exchanged between actors (users, applications, or 
   alt=""
   sources={{
     light: '/img/docs/message-delivery/message_delivery_1.svg?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_1.svg?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_1_dark.svg?raw=true',
   }}
 />
 </div>
@@ -42,7 +42,7 @@ A transaction in TON consists of the following:
   alt=""
   sources={{
     light: '/img/docs/message-delivery/message_delivery_2.svg?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_2.svg?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_2_dark.svg?raw=true',
   }}
 />
 <br></br>
@@ -106,7 +106,7 @@ It is strictly guaranteed that the transaction resulting from a message will hav
   alt=""
   sources={{
     light: '/img/docs/message-delivery/message_delivery_3.svg?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_3.svg?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_3_dark.svg?raw=true',
   }}
 />
 <br></br>
@@ -125,7 +125,7 @@ If `msg1_lt < msg2_lt` => `tx1_lt < tx2_lt`.
   alt=""
   sources={{
     light: '/img/docs/message-delivery/message_delivery_5.svg?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_5.svg?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_5_dark.svg?raw=true',
   }}
 />
 </div>
@@ -147,7 +147,18 @@ It therefore seems like _lt_ solves the issue about message delivery order, beca
 
 Suppose that there are two contracts - _A_ and _B_. _A_ receives an external message which triggers it to send two internal messages to _B_, let's call these messages _1_ and _2_. In this simple case, we can be 100% sure that _1_ will be processed by _B_ before _2_ because it has a lower _lt_.
 
-<ConceptImage src="/img/docs/msg-delivery-1.png" />
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/msg-delivery-1.png?raw=true',
+    dark: '/img/docs/message-delivery/msg-delivery-1_dark.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
+
 
 But this is just a simple case when we only have two contracts. How does our system works in more complex cases?
 
@@ -166,7 +177,7 @@ We have two possible traces for these transaction,
   alt=""
   sources={{
     light: '/img/docs/message-delivery/message_delivery_6.svg?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_6.svg?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_6_dark.svg?raw=true',
   }}
 />
 </div>
@@ -180,7 +191,7 @@ We have two possible traces for these transaction,
   alt=""
   sources={{
     light: '/img/docs/message-delivery/message_delivery_7.svg?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_7.svg?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_7_dark.svg?raw=true',
   }}
 />
 </div>
@@ -188,13 +199,55 @@ We have two possible traces for these transaction,
 
 The same thing happens in the reverse case, when two contracts _B_ and _C_ send a message to one contract _A_. Even if message `B -> A` was sent before `C -> A`, we can't know which one of them will be delivered first. The `B -> A` route may require more shard chain hops.
 
-<ConceptImage src="/img/docs/msg-delivery-3.png" />
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/msg-delivery-3.png?raw=true',
+    dark: '/img/docs/message-delivery/msg-delivery-3_dark.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
 
 There can be many possible scenarios of smart contract interactions, and in any scenario with more than 2 contracts, the order of messages delivery may be arbitrary. The only guarantee is that messages from any contract _A_ to any contract _B_ will be processed in order of their logical time. Some examples are below.
 
-<ConceptImage src="/img/docs/msg-delivery-4.png" />
-<ConceptImage src="/img/docs/msg-delivery-5.png" />
-<ConceptImage src="/img/docs/msg-delivery-6.png" />
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/msg-delivery-4.png?raw=true',
+    dark: '/img/docs/message-delivery/msg-delivery-4_dark.svg?raw=true',
+   }}
+/>
+</div>
+<br></br>
+
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/msg-delivery-5.png?raw=true',
+    dark: '/img/docs/message-delivery/msg-delivery-5_dark.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
+
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/msg-delivery-6.png?raw=true',
+    dark: '/img/docs/message-delivery/msg-delivery-6_dark.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
 
 ## Conclusion
 
