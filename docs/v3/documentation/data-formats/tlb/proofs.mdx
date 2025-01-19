@@ -708,8 +708,8 @@ you check proofs similar but in that case you really need to compare hashes.
 
 ## Config
 
-Let's ask a Liteserver for 1, 4, 5, 7, 8 and 15 [Config params](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L83) (for [liteServer.getConfigAll](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L82) where you get all params, the proof verifying is the same).
-The [response](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L53) contains `state_proof` and `config_proof`.
+Let's ask a Liteserver for 1, 4, 5, 7, 8 and 15 [Config params](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L83) (for [liteServer.getConfigAll](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L100) where you get all params, the proof verifying is the same).
+The [response](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L54) contains `state_proof` and `config_proof`.
 
 First, let's deserialize the `state_proof` Cell:
 
