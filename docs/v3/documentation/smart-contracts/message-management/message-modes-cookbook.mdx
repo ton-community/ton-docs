@@ -26,7 +26,7 @@ __A__ sent 0.1 TON to __B__, [msg_fwd_fees](/v3/documentation/smart-contracts/tr
 
 State after transaction: Account A has 0.9 TON, Account B has 1.096 TON
 
-![](/img/docs/message-modes-cookbook/send_regular_message_1.png)
+![](/img/docs/message-modes-cookbook/send_regular_message_1.svg)
 
 | Mode and Flags | Code |
 |:-|:-|
@@ -46,7 +46,7 @@ Funds included with an ignored message will still be [credited to the receiving 
 If no errors the result is the same as [`mode = 0`](#1-send-a-regular-message).
 :::
 
-![](/img/docs/message-modes-cookbook/send_regular_message_2.png)
+![](/img/docs/message-modes-cookbook/send_regular_message_2.svg)
 
 | Mode and Flags | Code |
 |:-|:-|
@@ -61,11 +61,13 @@ In case of an error during [action phase](https://retracer.ton.org/?tx=e9dccba82
 
 State after transaction with error: Account A has 1 - ([total_fee](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula) + `fwd_fee`) TON, Account B has 1 TON
 
+![](/img/docs/message-modes-cookbook/send_regular_message_3_error.svg)
+
 :::info tip
 If no errors the result is the same as [`mode = 0`](#1-send-a-regular-message).
 :::
 
-![](/img/docs/message-modes-cookbook/send_regular_message_3.png)
+![](/img/docs/message-modes-cookbook/send_regular_message_3_noerror.svg)
 
 | Mode and Flags | Code |
 |:-|:-|
@@ -79,7 +81,7 @@ __A__ sent 0.1 TON to __B__, `msg_fwd_fees` are 0.004 TON, actual received value
 
 State after transaction: Account A has 0.896 TON, Account B has 1.1 TON
 
-![](/img/docs/message-modes-cookbook/send_regular_message_4.png)
+![](/img/docs/message-modes-cookbook/send_regular_message_4.svg)
 
 | Mode and Flags | Code |
 |:-|:-|
@@ -94,11 +96,13 @@ In case of an error during [action phase](https://retracer.ton.org/?tx=e9dccba82
 
 State after transaction with error: Account A has 1 - ([total_fee](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula) + `fwd_fee`) TON, Account B has 1 TON
 
+![](/img/docs/message-modes-cookbook/send_regular_message_5_error.svg)
+
 :::info tip
 If no errors the result is the same as [`mode = 1`](#4-send-a-regular-message-with-separate-fees).
 :::
 
-![](/img/docs/message-modes-cookbook/send_regular_message_5.png)
+![](/img/docs/message-modes-cookbook/send_regular_message_5_noerror.svg)
 
 | Mode and Flags | Code |
 |:-|:-|
@@ -116,7 +120,7 @@ State after transaction: Account A has 0.896 TON, Account B has 0.5 TON, Account
 You might check [this example](https://retracer.ton.org/?tx=4340b5ecbd83227cc64e10b1ca7628352133cda1d608081fb2ed58d299f00936&testnet=true)
 :::
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_6.png)
+![](/img/docs/message-modes-cookbook/carry_remaining_value_6.svg)
 
 | Mode and Flags | Code |
 |:-|:-|
@@ -134,7 +138,7 @@ State after transaction: Account A has 0.896 TON, Account B has 0.5 - (total_fee
 You might check [this example](https://retracer.ton.org/?tx=5c2525feeb3b93db594b7b11f3250430f02dd8616595cf2b1583ebc7da79d15b&testnet=true)
 :::
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_7.png)
+![](/img/docs/message-modes-cookbook/carry_remaining_value_7.svg)
 
 | Mode and Flags | Code |
 |:-|:-|
@@ -149,12 +153,13 @@ In case of an error during action phase, the message will bounce and `total_fee`
 
 State after transaction with error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
 
+![](/img/docs/message-modes-cookbook/carry_remaining_value_8_error.svg)
 
 :::info tip
 If no errors the result is the same as [`mode = 64`](#6-carry-remaining-value-with-new-message).
 :::
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_8.png)
+![](/img/docs/message-modes-cookbook/carry_remaining_value_8_noerror.svg)
 
 | Mode and Flags | Code |
 |:-|:-|
@@ -169,12 +174,13 @@ In case of an error during action phase, the message will bounce and `total_fee`
 
 State after transaction with error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
 
+![](/img/docs/message-modes-cookbook/carry_remaining_value_9_error.svg)
 
 :::info tip
 If no errors the result is the same as [`mode = 65`](#7-carry-remaining-value-with-new-message-with-separate-fees).
 :::
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_9.png)
+![](/img/docs/message-modes-cookbook/carry_remaining_value_9_noerror.svg)
 
 | Mode and Flags | Code |
 |:-|:-|
@@ -188,7 +194,7 @@ __A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` =
 
 State after transaction: Account A has 0.896 TON, Account B has 0 TON, Account C has ~2.09 TON
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_10.png)
+![](/img/docs/message-modes-cookbook/carry_remaining_value_10.svg)
 
 | Mode and Flags | Code |
 |:-|:-|
@@ -202,12 +208,13 @@ __A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` =
 
 State after transaction with error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
 
+![](/img/docs/message-modes-cookbook/carry_remaining_value_11_error.svg)
 
 :::info tip
 If no errors the result is the same as [`mode = 128`](#10-send-all-received-tokens-together-with-the-contract-balance).
 :::
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_11.png)
+![](/img/docs/message-modes-cookbook/carry_remaining_value_11_noerror.svg)
 
 | Mode and Flags | Code |
 |:-|:-|
@@ -222,7 +229,7 @@ __A__ sent 0.1 TON to __B__ after that __B__ sent 0.5 TON to __C__ with `mode` =
 State after transaction: Account A has 0.896 TON, Account B has 0 TON and `nonexist`, Account C has ~2.09 TON
 When the balance reaches 0 TON destroy the contract.
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_12.png)
+![](/img/docs/message-modes-cookbook/carry_remaining_value_12.svg)
 
 | Mode and Flags | Code |
 |:-|:-|

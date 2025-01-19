@@ -1,0 +1,702 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Создано Microsoft Visio, экспорт SVG carry_remaining_value_12.svg Updated -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="6.92166in" height="4.65654in"
+		viewBox="0 0 498.36 335.271" xml:space="preserve" color-interpolation-filters="sRGB" class="st57">
+	<v:documentProperties v:langID="1033" v:metric="true" v:viewMarkup="false">
+		<v:userDefs>
+			<v:ud v:nameU="msvNoAutoConnect" v:val="VT0(1):26"/>
+		</v:userDefs>
+	</v:documentProperties>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {stroke:#7f7f7f;stroke-dasharray:5.25,3.75;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st2 {stroke:#058dd2;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st3 {fill:#ffffff;stroke:#058dd2;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25}
+		.st4 {fill:#ffffff;stroke:#058dd2;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.25}
+		.st5 {fill:#000000;font-family:Calibri;font-size:2.50001em}
+		.st6 {stroke:#f59d56;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st7 {fill:url(#ptrn2-21);shape-rendering:crispEdges;stroke:#058dd2;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25}
+		.st8 {marker-start:url(#mrkr4-27);stroke:#058dd2;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25}
+		.st9 {fill:#058dd2;fill-opacity:1;stroke:#058dd2;stroke-opacity:1;stroke-width:0.3315649867374}
+		.st10 {fill:none;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st11 {fill:#f2f2f2;stroke:none;stroke-linecap:butt}
+		.st12 {fill:#000000;font-family:Inter;font-size:0.666664em}
+		.st13 {fill:#ffffff;stroke:#058dd2;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st14 {fill:#000000;font-family:Inter;font-size:0.833336em}
+		.st15 {fill:#ffffff;stroke:#f28022;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st16 {fill:url(#ptrn5-41);shape-rendering:crispEdges;stroke:#058dd2;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st17 {fill:url(#ptrn5-46);shape-rendering:crispEdges;stroke:#f28022;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st18 {font-size:1em}
+		.st19 {fill:#000000;font-family:Inter;font-size:0.75em;font-style:italic;font-weight:bold}
+		.st20 {marker-end:url(#mrkr13-59);stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st21 {fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:0.22935779816514}
+		.st22 {stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st23 {fill:#ffffff;stroke:#f28022;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.25}
+		.st24 {visibility:visible}
+		.st25 {fill:#000000;fill-opacity:0.4;filter:url(#filter_2.6666667461395);stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.4}
+		.st26 {fill:#ffffff;stroke:#7f7f7f;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st27 {fill:#000000;font-family:Inter;font-size:0.583328em}
+		.st28 {stroke:#31859b;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st29 {fill:url(#ptrn5-78);shape-rendering:crispEdges;stroke:#31859b;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25}
+		.st30 {fill:#ffffff;stroke:#31859b;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st31 {fill:url(#ptrn5-78);shape-rendering:crispEdges;stroke:#31859b;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st32 {font-size:0.799995em}
+		.st33 {fill:#ffffff;stroke:#31859b;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.25}
+		.st34 {fill:url(#ptrn2-105);shape-rendering:crispEdges;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25}
+		.st35 {fill:none;filter:url(#filter_2.6666667461395);stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.4}
+		.st36 {fill:#f2f2f2;stroke:none;stroke-linecap:butt;stroke-width:7.2}
+		.st37 {fill:#000000;font-family:Inter;font-size:0.499992em}
+		.st38 {fill:#000000;stroke:none;stroke-linecap:butt;stroke-width:6.375}
+		.st39 {fill:#ffffff;stroke:#f28022;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25}
+		.st40 {marker-start:url(#mrkr4-157);stroke:#f38c38;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25}
+		.st41 {fill:#f38c38;fill-opacity:1;stroke:#f38c38;stroke-opacity:1;stroke-width:0.3315649867374}
+		.st42 {fill:url(#ptrn2-165);shape-rendering:crispEdges;stroke:#31859b;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25}
+		.st43 {marker-end:url(#mrkr4-171);stroke:#31859b;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25}
+		.st44 {fill:#31859b;fill-opacity:1;stroke:#31859b;stroke-opacity:1;stroke-width:0.3315649867374}
+		.st45 {fill:#000000;font-family:Inter;font-size:0.75em}
+		.st46 {fill:none;stroke:none;stroke-width:0.75}
+		.st47 {fill:#000000;font-family:Inter;font-size:0.75em;font-style:italic}
+		.st48 {font-size:0.888885em}
+		.st49 {fill:url(#ptrn5-46);shape-rendering:crispEdges;stroke:#f28022;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25}
+		.st50 {fill:#ffffff;stroke:#31859b;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25}
+		.st51 {fill:url(#ptrn5-78);shape-rendering:crispEdges;stroke:#058dd2;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25}
+		.st52 {fill:#f38c38;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.25}
+		.st53 {fill:#f38c38;stroke:none;stroke-linecap:butt;stroke-width:7.2}
+		.st54 {fill:#000000;font-family:Inter;font-size:0.666664em;font-style:italic}
+		.st55 {fill:#000000;fill-opacity:0.4;filter:url(#filter_2.6666667461395);stroke:#000000;stroke-opacity:0.4}
+		.st56 {fill:#ffffff;stroke:#000000;stroke-width:0.75}
+		.st57 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<defs id="Patterns_And_Gradients">
+		<pattern id="ptrn2-21" v:fillPattern="2" v:foreground="#058dd2" v:background="#ffffff" patternUnits="userSpaceOnUse"
+				width="6" height="6" viewBox="0 0 64 64">
+			<image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+					xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABBSURBVChTYzjw6PN/bAAkLjXt6n8GKB8FwCRBNIYCZEkQQFGALgkCcAXYJEEArACXJAiAfYFLEgQY8EkeePT5PwAJBuzBFcEhPAAAAABJRU5ErkJggg=="/>
+		</pattern>
+		<pattern id="ptrn5-41" v:fillPattern="5" v:foreground="#b7dde8" v:background="#ffffff" patternUnits="userSpaceOnUse"
+				width="6" height="6" viewBox="0 0 64 64">
+			<image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+					xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA+SURBVChTY9h7/+X/t99+/scGQOIMIAKfIgYQgU8RWAEI4FIEVwAC2BShKAABdEUYCkAAWRHYF9gARNHL/wCAQPkxA1czhAAAAABJRU5ErkJggg=="/>
+		</pattern>
+		<pattern id="ptrn5-46" v:fillPattern="5" v:foreground="#f2dcda" v:background="#ffffff" patternUnits="userSpaceOnUse"
+				width="6" height="6" viewBox="0 0 64 64">
+			<image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+					xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA+SURBVChTY/h8/+7/39++/scGQOIMIAKfIgYQgU8RWAEI4FIEVwAC2BShKAABdEUYCkAAWRHYF9gARNHd/wCEN/shJmORigAAAABJRU5ErkJggg=="/>
+		</pattern>
+		<pattern id="ptrn5-78" v:fillPattern="5" v:foreground="#dbeef3" v:background="#ffffff" patternUnits="userSpaceOnUse"
+				width="6" height="6" viewBox="0 0 64 64">
+			<image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+					xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA+SURBVChTY7j3/sv/b7/+/McGQOIMIAKfIgYQgU8RWAEI4FIEVwAC2BShKAABdEUYCkAAWRHYF9gARNGX/wD+T/wRSjU5qgAAAABJRU5ErkJggg=="/>
+		</pattern>
+		<pattern id="ptrn2-105" v:fillPattern="2" v:foreground="#ffffff" v:background="#ffffff" patternUnits="userSpaceOnUse"
+				width="6" height="6" viewBox="0 0 64 64">
+			<image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+					xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAARSURBVChTY/hPAIwIBf//AwCEtf8BmLK6XAAAAABJRU5ErkJggg=="/>
+		</pattern>
+		<pattern id="ptrn2-165" v:fillPattern="2" v:foreground="#31859b" v:background="#ffffff" patternUnits="userSpaceOnUse"
+				width="6" height="6" viewBox="0 0 64 64">
+			<image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+					xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABBSURBVChTYzj94Nl/bAAk7tS/+D8DlI8CYJIgGkMBsiQIoChAlwQBuAJskiAAVoBLEgTAvsAlCQIM+CRPP3j2HwClw+v5p7EZZgAAAABJRU5ErkJggg=="/>
+		</pattern>
+	</defs>
+	<defs id="Markers">
+		<g id="lend4">
+			<path d="M 2 1 L 0 0 L 2 -1 L 2 1 " style="stroke:none"/>
+		</g>
+		<marker id="mrkr4-27" class="st9" v:arrowType="4" v:arrowSize="2" v:setback="5.744" refX="5.744" orient="auto"
+				markerUnits="strokeWidth" overflow="visible">
+			<use xlink:href="#lend4" transform="scale(3.016) "/>
+		</marker>
+		<g id="lend13">
+			<path d="M 3 1 L 0 0 L 3 -1 L 3 1 " style="stroke:none"/>
+		</g>
+		<marker id="mrkr13-59" class="st21" v:arrowType="13" v:arrowSize="2" v:setback="13.08" refX="-13.08" orient="auto"
+				markerUnits="strokeWidth" overflow="visible">
+			<use xlink:href="#lend13" transform="scale(-4.36,-4.36) "/>
+		</marker>
+		<marker id="mrkr4-157" class="st41" v:arrowType="4" v:arrowSize="2" v:setback="5.744" refX="5.744" orient="auto"
+				markerUnits="strokeWidth" overflow="visible">
+			<use xlink:href="#lend4" transform="scale(3.016) "/>
+		</marker>
+		<marker id="mrkr4-171" class="st44" v:arrowType="4" v:arrowSize="2" v:setback="6.032" refX="-6.032" orient="auto"
+				markerUnits="strokeWidth" overflow="visible">
+			<use xlink:href="#lend4" transform="scale(-3.016,-3.016) "/>
+		</marker>
+	</defs>
+	<defs id="Filters">
+		<filter id="filter_2.6666667461395">
+			<feGaussianBlur stdDeviation="2.6666667461395"/>
+		</filter>
+	</defs>
+	<g v:mID="4" v:index="2" v:groupContext="foregroundPage">
+		<v:userDefs>
+			<v:ud v:nameU="visNavType" v:val="VT0(1):26"/>
+		</v:userDefs>
+		<title>Updated</title>
+		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50394"
+				v:shadowOffsetY="-8.50394"/>
+		<v:layer v:name="Connector" v:index="0"/>
+		<g id="shape61-1" v:mID="61" v:groupContext="shape" transform="translate(78.8831,-299.085)">
+			<title>Лист.61</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(15000):26"/>
+			</v:userDefs>
+			<path d="M0 335.27 L355.67 335.27" class="st1"/>
+		</g>
+		<g id="shape62-4" v:mID="62" v:groupContext="shape" transform="translate(86.6784,-66.3224)">
+			<title>Лист.62</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(16000):26"/>
+			</v:userDefs>
+			<path d="M0 335.27 L342.2 335.27" class="st1"/>
+		</g>
+		<g id="shape63-7" v:mID="63" v:groupContext="shape" transform="translate(490.314,36.767) rotate(89.9282)">
+			<title>Лист.63</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(4000):26"/>
+			</v:userDefs>
+			<path d="M0 335.27 L235.6 335.27" class="st2"/>
+		</g>
+		<g id="shape64-10" v:mID="64" v:groupContext="shape" transform="translate(144.472,-176.3)">
+			<title>Лист.64</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(2000):26"/>
+			</v:userDefs>
+			<rect x="0" y="312.594" width="20.2059" height="22.6772" class="st3"/>
+		</g>
+		<g id="shape65-12" v:mID="65" v:groupContext="shape" transform="translate(129.827,-225.079)">
+			<title>Лист.65</title>
+			<desc>A</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(3000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="25.5118" cy="309.759" width="51.03" height="51.0236"/>
+			<ellipse cx="25.5118" cy="309.759" rx="25.5118" ry="25.5118" class="st4"/>
+			<text x="16.83" y="318.76" class="st5" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>A</text>		</g>
+		<g id="shape66-15" v:mID="66" v:groupContext="shape" transform="translate(594.713,38.0256) rotate(90.1433)">
+			<title>Лист.66</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(6000):26"/>
+			</v:userDefs>
+			<path d="M0 335.27 L255.75 335.27" class="st6"/>
+		</g>
+		<g id="shape67-18" v:mID="67" v:groupContext="shape" transform="translate(144.505,-200.308)">
+			<title>Лист.67</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(7000):26"/>
+			</v:userDefs>
+			<rect x="0" y="328.678" width="20.1405" height="6.593" class="st7"/>
+		</g>
+		<g id="shape68-22" v:mID="68" v:groupContext="shape" v:layerMember="0" transform="translate(248.7,-172.048)">
+			<title>Dynamic connector.28</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(8000):26"/>
+			</v:userDefs>
+			<path d="M-7.18 328.18 L-7.54 328.18 L-82.36 328.18" class="st8"/>
+		</g>
+		<g id="shape69-28" v:mID="69" v:groupContext="shape" transform="translate(183.181,-173.626)">
+			<title>Лист.69</title>
+			<desc>0.1 TON</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(9000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(0,0,0,0)" v:tabSpace="42.5197"/>
+			<v:textRect cx="18.8253" cy="331.019" width="37.66" height="8.50393"/>
+			<rect x="0" y="326.767" width="37.6506" height="8.50393" class="st10"/>
+			<rect v:rectContext="textBkgnd" x="3.70624" y="326.387" width="30.2382" height="8.23233" class="st11"/>
+			<text x="3.71" y="332.82" class="st12" v:langID="1033"><v:paragraph v:spLine="-0.9" v:horizAlign="1"/><v:tabList/>0.1 TON</text>		</g>
+		<g id="shape70-32" v:mID="70" v:groupContext="shape" transform="translate(129.865,-287.761)">
+			<title>Лист.70</title>
+			<desc>1 TON</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(11000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="25.345" cy="323.932" width="50.69" height="22.6772"/>
+			<rect x="0" y="312.594" width="50.69" height="22.6772" class="st13"/>
+			<text x="10.95" y="326.93" class="st14" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>1 TON</text>		</g>
+		<g id="shape71-35" v:mID="71" v:groupContext="shape" transform="translate(234.806,-287.761)">
+			<title>Лист.71</title>
+			<desc>1 TON</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(12000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="25.345" cy="323.932" width="50.69" height="22.6772"/>
+			<rect x="0" y="312.594" width="50.69" height="22.6772" class="st15"/>
+			<text x="10.95" y="326.93" class="st14" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>1 TON</text>		</g>
+		<g id="shape72-38" v:mID="72" v:groupContext="shape" transform="translate(123.529,-54.9984)">
+			<title>Лист.72</title>
+			<desc>0.896 TON</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(13000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="323.932" width="62.37" height="22.6772"/>
+			<rect x="0" y="312.594" width="62.3622" height="22.6772" class="st16"/>
+			<text x="5.17" y="326.93" class="st14" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>0.896 TON</text>		</g>
+		<g id="shape73-43" v:mID="73" v:groupContext="shape" transform="translate(228.262,-54.9984)">
+			<title>Лист.73</title>
+			<desc>0 TON</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(14000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="31.1811" cy="323.932" width="62.37" height="22.6772"/>
+			<rect x="0" y="312.594" width="62.3622" height="22.6772" class="st17"/>
+			<text x="15.87" y="326.93" class="st14" v:langID="1049"><v:paragraph v:horizAlign="1"/><v:tabList/>0<tspan class="st18"
+						v:langID="1033"> </tspan><tspan class="st18" v:langID="1033">TON</tspan></text>		</g>
+		<g id="shape74-50" v:mID="74" v:groupContext="shape" transform="translate(44.7874,-140.925)">
+			<title>Лист.74</title>
+			<desc>Value flow details</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(17000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="43.937" cy="321.098" width="87.88" height="28.3465"/>
+			<rect x="0" y="306.925" width="87.874" height="28.3465" class="st10"/>
+			<text x="4" y="318.4" class="st19" v:langID="1033"><v:paragraph/><v:tabList/>Value flow<v:newlineChar/><tspan x="4"
+						dy="1.2em" class="st18">details</tspan></text>		</g>
+		<g id="shape75-54" v:mID="75" v:groupContext="shape" transform="translate(28.3406,-251.818)">
+			<title>Лист.75</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(18000):26"/>
+			</v:userDefs>
+			<path d="M0 335.27 L91.71 335.27" class="st20"/>
+		</g>
+		<g id="shape76-60" v:mID="76" v:groupContext="shape" transform="translate(180.828,-251.67)">
+			<title>Лист.76</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(19000):26"/>
+			</v:userDefs>
+			<path d="M0 335.27 L53.13 335.27" class="st22"/>
+		</g>
+		<g id="shape77-63" v:mID="77" v:groupContext="shape" transform="translate(233.931,-225.079)">
+			<title>Лист.77</title>
+			<desc>B</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(5000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="25.5118" cy="309.759" width="51.03" height="51.0236"/>
+			<ellipse cx="25.5118" cy="309.759" rx="25.5118" ry="25.5118" class="st23"/>
+			<text x="17.35" y="318.76" class="st5" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>B</text>		</g>
+		<g id="shape78-66" v:mID="78" v:groupContext="shape" transform="translate(37.7008,-238.931)">
+			<title>Лист.78</title>
+			<desc>external_message</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(21000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="34.0157" cy="321.098" width="68.04" height="28.3465"/>
+			<g id="shadow78-67" v:groupContext="shadow" v:shadowOffsetX="2.12132" v:shadowOffsetY="-2.12132" v:shadowType="1"
+					transform="matrix(1,0,0,1,2.12132,2.12132)" class="st24">
+				<rect x="0" y="306.925" width="68.0315" height="28.3465" rx="5.66929" ry="5.66929" class="st25"/>
+			</g>
+			<rect x="0" y="306.925" width="68.0315" height="28.3465" rx="5.66929" ry="5.66929" class="st26"/>
+			<text x="4.12" y="323.2" class="st27" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>external_message</text>		</g>
+		<g id="shape79-72" v:mID="79" v:groupContext="shape" transform="translate(704.671,38.3616) rotate(90)">
+			<title>Лист.79</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(23000):26"/>
+			</v:userDefs>
+			<path d="M0 335.27 L235.6 335.27" class="st28"/>
+		</g>
+		<g id="shape80-75" v:mID="80" v:groupContext="shape" transform="translate(359.478,-88.8828)">
+			<title>Лист.80</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(24000):26"/>
+			</v:userDefs>
+			<rect x="0" y="284.247" width="20.0806" height="51.0236" class="st29"/>
+		</g>
+		<g id="shape81-79" v:mID="81" v:groupContext="shape" transform="translate(344.763,-287.761)">
+			<title>Лист.81</title>
+			<desc>1 TON</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(25000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="25.345" cy="323.932" width="50.69" height="22.6772"/>
+			<rect x="0" y="312.594" width="50.69" height="22.6772" class="st30"/>
+			<text x="10.95" y="326.93" class="st14" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>1 TON</text>		</g>
+		<g id="shape82-82" v:mID="82" v:groupContext="shape" transform="translate(339.71,-56.2444)">
+			<title>Лист.82</title>
+			<desc>2,09 TON</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(26000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="29.8091" cy="323.968" width="59.62" height="22.6059"/>
+			<rect x="0" y="312.665" width="59.6183" height="22.6059" class="st31"/>
+			<text x="5.83" y="326.97" class="st14" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>2<tspan class="st18"
+						v:langID="1041">,</tspan>0<tspan class="st18" v:langID="1041">9</tspan><tspan class="st32"> </tspan> TON</text>		</g>
+		<g id="shape83-89" v:mID="83" v:groupContext="shape" transform="translate(287.874,-251.791) rotate(0.503778)">
+			<title>Лист.83</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(27000):26"/>
+			</v:userDefs>
+			<path d="M0 335.27 L51.09 335.27" class="st20"/>
+		</g>
+		<g id="shape84-94" v:mID="84" v:groupContext="shape" transform="translate(343.979,-223.904)">
+			<title>Лист.84</title>
+			<desc>C</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(22000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="25.5118" cy="309.759" width="51.03" height="51.0236"/>
+			<ellipse cx="25.5118" cy="309.759" rx="25.5118" ry="25.5118" class="st33"/>
+			<text x="17.51" y="318.76" class="st5" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>C</text>		</g>
+		<g id="group85-97" transform="translate(435.637,-178.698)" v:mID="85" v:groupContext="group">
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(28000):26"/>
+			</v:userDefs>
+			<title>Лист.85</title>
+			<g id="group86-98" transform="translate(9.67099,0)" v:mID="86" v:groupContext="group">
+				<v:userDefs>
+					<v:ud v:nameU="visNavOrder" v:val="VT0(58000):26"/>
+				</v:userDefs>
+				<title>Лист.86</title>
+				<g id="shape87-99" v:mID="87" v:groupContext="shape">
+					<title>Лист.87</title>
+					<v:userDefs>
+						<v:ud v:nameU="visNavOrder" v:val="VT0(41000):26"/>
+					</v:userDefs>
+					<g id="shadow87-100" v:groupContext="shadow" v:shadowOffsetX="2.12132" v:shadowOffsetY="-2.12132"
+							v:shadowType="1" transform="matrix(1,0,0,1,2.12132,2.12132)" class="st24">
+						<rect x="0" y="295.848" width="23.5598" height="39.4229" rx="2.83465" ry="2.83465" class="st25"/>
+					</g>
+					<rect x="0" y="295.848" width="23.5598" height="39.4229" rx="2.83465" ry="2.83465" class="st34"/>
+				</g>
+				<g id="shape88-106" v:mID="88" v:groupContext="shape" transform="translate(0.836805,-6.61327)">
+					<title>Лист.88</title>
+					<v:userDefs>
+						<v:ud v:nameU="visNavOrder" v:val="VT0(54000):26"/>
+					</v:userDefs>
+					<g id="shadow88-107" v:groupContext="shadow" v:shadowOffsetX="2.12132" v:shadowOffsetY="-2.12132"
+							v:shadowType="1" transform="matrix(1,0,0,1,2.12132,2.12132)" class="st24">
+						<path d="M0 335.27 L23.07 335.27" class="st35"/>
+					</g>
+					<path d="M0 335.27 L23.07 335.27" class="st22"/>
+				</g>
+				<g id="shape89-114" v:mID="89" v:groupContext="shape" transform="translate(0.0102134,-36.2077) rotate(1.15343E-05)">
+					<title>Лист.89</title>
+					<v:userDefs>
+						<v:ud v:nameU="visNavOrder" v:val="VT0(55000):26"/>
+					</v:userDefs>
+					<g id="shadow89-115" v:groupContext="shadow" v:shadowOffsetX="2.12132" v:shadowOffsetY="-2.12132"
+							v:shadowType="1" transform="matrix(1,-2.64698E-23,2.64698E-23,1,2.12132,2.12132)" class="st24">
+						<path d="M0 335.27 L23.31 335.27" class="st35"/>
+					</g>
+					<path d="M0 335.27 L23.31 335.27" class="st22"/>
+				</g>
+				<g id="shape90-122" v:mID="90" v:groupContext="shape" transform="translate(8.6074,-3.47196)">
+					<title>Лист.90</title>
+					<v:userDefs>
+						<v:ud v:nameU="visNavOrder" v:val="VT0(56000):26"/>
+					</v:userDefs>
+					<g id="shadow90-123" v:groupContext="shadow" v:shadowOffsetX="2.12132" v:shadowOffsetY="-2.12132"
+							v:shadowType="1" transform="matrix(1,0,0,1,2.12132,2.12132)" class="st24">
+						<path d="M0 335.27 L6.7 335.27" class="st35"/>
+					</g>
+					<path d="M0 335.27 L6.7 335.27" class="st22"/>
+				</g>
+			</g>
+			<g id="shape91-130" v:mID="91" v:groupContext="shape" transform="translate(0,-2.58619)">
+				<title>Лист.91</title>
+				<desc>Fees</desc>
+				<v:userDefs>
+					<v:ud v:nameU="visNavOrder" v:val="VT0(57000):26"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(0,0,0,0)" v:tabSpace="42.5197"/>
+				<v:textRect cx="22.1738" cy="326.522" width="44.35" height="17.4976"/>
+				<rect x="0" y="317.773" width="44.3477" height="17.4976" class="st10"/>
+				<rect v:rectContext="textBkgnd" x="15.3515" y="322.922" width="13.6445" height="7.20016" class="st36"/>
+				<text x="15.35" y="328.32" class="st37" v:langID="1041"><v:paragraph v:horizAlign="1"/><v:tabList/>Fees</text>			</g>
+			<g id="group92-134" transform="translate(12.5019,-26.9604)" v:mID="92" v:groupContext="group">
+				<v:userDefs>
+					<v:ud v:nameU="visNavOrder" v:val="VT0(59000):26"/>
+				</v:userDefs>
+				<title>Лист.92</title>
+				<g id="shape93-135" v:mID="93" v:groupContext="shape">
+					<title>Лист.93</title>
+					<path d="M5.67 330.91 L2.22 334.16 L0.57 332.47 L0 333.01 L2.2 335.27 L2.78 334.73 L6.21 331.47 L5.67 330.91 Z"
+							class="st38"/>
+				</g>
+			</g>
+			<g id="group94-137" transform="translate(12.5019,-19.8398)" v:mID="94" v:groupContext="group">
+				<v:userDefs>
+					<v:ud v:nameU="visNavOrder" v:val="VT0(60000):26"/>
+				</v:userDefs>
+				<title>Лист.94</title>
+				<g id="shape95-138" v:mID="95" v:groupContext="shape">
+					<title>Лист.95</title>
+					<path d="M5.67 330.91 L2.22 334.16 L0.57 332.47 L0 333.01 L2.2 335.27 L2.78 334.73 L6.21 331.47 L5.67 330.91 Z"
+							class="st38"/>
+				</g>
+			</g>
+			<g id="shape96-140" v:mID="96" v:groupContext="shape" transform="translate(19.5242,-28.5197)">
+				<title>Лист.96</title>
+				<v:userDefs>
+					<v:ud v:nameU="visNavOrder" v:val="VT0(61000):26"/>
+				</v:userDefs>
+				<path d="M0 335.27 L9.91 335.27" class="st22"/>
+			</g>
+			<g id="shape97-143" v:mID="97" v:groupContext="shape" transform="translate(19.5242,-21.4714)">
+				<title>Лист.97</title>
+				<v:userDefs>
+					<v:ud v:nameU="visNavOrder" v:val="VT0(62000):26"/>
+				</v:userDefs>
+				<path d="M0 335.27 L9.91 335.27" class="st22"/>
+			</g>
+		</g>
+		<g id="shape98-146" v:mID="98" v:groupContext="shape" transform="translate(248.7,-134.428)">
+			<title>Лист.98</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(29000):26"/>
+			</v:userDefs>
+			<rect x="0" y="300.428" width="20.2059" height="34.8428" class="st39"/>
+		</g>
+		<g id="shape99-148" v:mID="99" v:groupContext="shape" transform="translate(197.538,-136.993)">
+			<title>Лист.99</title>
+			<desc>0.5 TON</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(30000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="35.753" cy="325.271" width="71.51" height="20"/>
+			<rect x="0" y="315.271" width="71.506" height="20" class="st10"/>
+			<rect v:rectContext="textBkgnd" x="19.969" y="320.471" width="31.5678" height="9.59985" class="st36"/>
+			<text x="19.97" y="327.67" class="st12" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>0.5 TON</text>		</g>
+		<g id="shape100-152" v:mID="100" v:groupContext="shape" v:layerMember="0" transform="translate(359.569,-151.245)">
+			<title>Dynamic connector.135</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(31000):26"/>
+			</v:userDefs>
+			<path d="M-7.18 328.18 L-7.54 328.18 L-91.33 328.18" class="st40"/>
+		</g>
+		<g id="shape101-158" v:mID="101" v:groupContext="shape" transform="translate(180.85,-192.545)">
+			<title>Лист.101</title>
+			<desc>0.004 TON</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(20000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="35.753" cy="330.271" width="71.51" height="10"/>
+			<rect x="0" y="325.271" width="71.506" height="10" class="st10"/>
+			<rect v:rectContext="textBkgnd" x="14.8329" y="325.471" width="41.8403" height="9.59985" class="st36"/>
+			<text x="14.83" y="332.67" class="st12" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>0.004 TON</text>		</g>
+		<g id="shape102-162" v:mID="102" v:groupContext="shape" transform="translate(359.569,-181.009)">
+			<title>Лист.102</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(32000):26"/>
+			</v:userDefs>
+			<rect x="0" y="328.468" width="19.8425" height="6.80314" class="st42"/>
+		</g>
+		<g id="shape103-166" v:mID="103" v:groupContext="shape" transform="translate(385.534,-184.357) rotate(1.01851)">
+			<title>Лист.103</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(33000):26"/>
+			</v:userDefs>
+			<path d="M0 335.27 L58.5 335.27" class="st43"/>
+		</g>
+		<g id="shape104-172" v:mID="104" v:groupContext="shape" transform="translate(378.383,-172.505)">
+			<title>Лист.104</title>
+			<desc>total_fee</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(34000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="29.8221" cy="325.271" width="59.65" height="20"/>
+			<rect x="0" y="315.271" width="59.6442" height="20" class="st10"/>
+			<rect v:rectContext="textBkgnd" x="13.4132" y="320.471" width="32.8181" height="9.59985" class="st11"/>
+			<text x="13.41" y="327.67" class="st12" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>total_fee</text>		</g>
+		<g id="shape105-176" v:mID="105" v:groupContext="shape" v:layerMember="0" transform="translate(445.308,-197.763)">
+			<title>Dynamic connector.160</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(1000):26"/>
+			</v:userDefs>
+			<path d="M-7.18 328.18 L-7.54 328.18 L-280.68 328.18" class="st8"/>
+		</g>
+		<g id="shape106-181" v:mID="106" v:groupContext="shape" transform="translate(182.588,-196.142)">
+			<title>Лист.106</title>
+			<desc>msg_fwd_fees</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(10000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="34.0157" cy="325.271" width="68.04" height="20"/>
+			<rect x="0" y="315.271" width="68.0315" height="20" class="st10"/>
+			<rect v:rectContext="textBkgnd" x="7.0274" y="320.471" width="53.9769" height="9.59985" class="st36"/>
+			<text x="7.03" y="327.67" class="st12" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>msg_fwd_fees</text>		</g>
+		<g id="shape107-185" v:mID="107" v:groupContext="shape" transform="translate(178.416,-253.214)">
+			<title>Лист.107</title>
+			<desc>0.1 TON</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(35000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="25.5118" cy="330.271" width="51.03" height="10"/>
+			<rect x="0" y="325.271" width="51.0236" height="10" class="st10"/>
+			<rect v:rectContext="textBkgnd" x="8.50259" y="324.871" width="34.0186" height="10.7998" class="st11"/>
+			<text x="8.5" y="332.97" class="st45" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>0.1 TON</text>		</g>
+		<g id="shape108-189" v:mID="108" v:groupContext="shape" transform="translate(182.268,-232.134)">
+			<title>Лист.108</title>
+			<desc>Msgmode= 3</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(36000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,0,4,0)" v:tabSpace="42.5197"/>
+			<v:textRect cx="25.5118" cy="324.641" width="51.03" height="21.2598"/>
+			<rect x="0" y="314.011" width="51.0236" height="21.2598" rx="5.66929" ry="5.66929" class="st10"/>
+			<text x="3.56" y="326.39" class="st27" v:langID="1033"><v:paragraph v:spLine="-1" v:horizAlign="1"/><v:tabList/>Msgmode= 3</text>		</g>
+		<g id="shape109-192" v:mID="109" v:groupContext="shape" transform="translate(286.179,-232.134)">
+			<title>Лист.109</title>
+			<desc>Msgmode= 160</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(37000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,0,4,0)" v:tabSpace="42.5197"/>
+			<v:textRect cx="26.7059" cy="324.641" width="53.42" height="21.2598"/>
+			<rect x="0" y="314.011" width="53.4117" height="21.2598" rx="5.66929" ry="5.66929" class="st10"/>
+			<text x="1.06" y="326.39" class="st27" v:langID="1033"><v:paragraph v:spLine="-1" v:horizAlign="1"/><v:tabList/>Msgmode= <tspan
+						class="st18" v:langID="1049">1</tspan>60</text>		</g>
+		<g id="shape110-196" v:mID="110" v:groupContext="shape" transform="translate(275.171,-249.04)">
+			<title>Лист.110</title>
+			<desc>0.5 TON</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(38000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="35.753" cy="325.271" width="71.51" height="20"/>
+			<rect x="0" y="315.271" width="71.506" height="20" class="st10"/>
+			<text x="18" y="327.97" class="st45" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>0.5 TON</text>		</g>
+		<g id="shape111-199" v:mID="111" v:groupContext="shape" transform="translate(162.425,-150.846)">
+			<title>Лист.111</title>
+			<desc>0.896 TON</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(40000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(0,0,0,0)" v:tabSpace="42.5197" v:verticalAlign="2"/>
+			<v:textRect cx="25.5118" cy="331.019" width="51.03" height="8.50393"/>
+			<rect x="0" y="326.767" width="51.0236" height="8.50393" class="st10"/>
+			<rect v:rectContext="textBkgnd" x="4.70517" y="327.039" width="41.6132" height="8.23233" class="st36"/>
+			<text x="4.71" y="333.47" class="st12" v:langID="1033"><v:paragraph v:spLine="-0.9" v:horizAlign="1"/><v:tabList/>0.896 TON</text>		</g>
+		<g id="shape112-203" v:mID="112" v:groupContext="shape" transform="translate(19.4926,-281.678)">
+			<title>Лист.112</title>
+			<desc>balance before tx</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(41000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="29.8221" cy="317.85" width="59.65" height="34.8428"/>
+			<rect x="0" y="300.428" width="59.6442" height="34.8428" class="st46"/>
+			<text x="13.11" y="315.15" class="st47" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>balance<v:newlineChar/><tspan
+						x="12.57" dy="1.35em" class="st48">before tx</tspan></text>		</g>
+		<g id="shape113-207" v:mID="113" v:groupContext="shape" transform="translate(248.7,-98.3906)">
+			<title>Лист.113</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(42000):26"/>
+			</v:userDefs>
+			<rect x="0" y="300.428" width="20.2059" height="34.8428" class="st49"/>
+		</g>
+		<g id="shape114-210" v:mID="114" v:groupContext="shape" transform="translate(197.4,-102.977)">
+			<title>Лист.114</title>
+			<desc>0.5 TON</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(43000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="35.753" cy="325.271" width="71.51" height="20"/>
+			<rect x="0" y="315.271" width="71.506" height="20" class="st10"/>
+			<rect v:rectContext="textBkgnd" x="19.969" y="320.471" width="31.5678" height="9.59985" class="st11"/>
+			<text x="19.97" y="327.67" class="st12" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>0.5 TON</text>		</g>
+		<g id="shape115-214" v:mID="115" v:groupContext="shape" transform="translate(274.841,-155.418)">
+			<title>Лист.115</title>
+			<desc>0.5 TON</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(44000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="35.753" cy="325.271" width="71.51" height="20"/>
+			<rect x="0" y="315.271" width="71.506" height="20" class="st10"/>
+			<rect v:rectContext="textBkgnd" x="19.969" y="320.471" width="31.5678" height="9.59985" class="st36"/>
+			<text x="19.97" y="327.67" class="st12" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>0.5 TON</text>		</g>
+		<g id="shape116-218" v:mID="116" v:groupContext="shape" transform="translate(248.7,-169.67)">
+			<title>Лист.116</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(45000):26"/>
+			</v:userDefs>
+			<rect x="0" y="312.594" width="20.2059" height="22.6772" class="st39"/>
+		</g>
+		<g id="shape117-220" v:mID="117" v:groupContext="shape" transform="translate(27.7795,-48.9156)">
+			<title>Лист.117</title>
+			<desc>balance after tx</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(46000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="29.8221" cy="317.85" width="59.65" height="34.8428"/>
+			<rect x="0" y="300.428" width="59.6442" height="34.8428" class="st46"/>
+			<text x="13.11" y="315.75" class="st47" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>balance<v:newlineChar/><tspan
+						x="16.06" dy="1.237em" class="st48">after tx</tspan></text>		</g>
+		<g id="shape118-224" v:mID="118" v:groupContext="shape" transform="translate(359.569,-139.906)">
+			<title>Лист.118</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(47000):26"/>
+			</v:userDefs>
+			<rect x="0" y="293.358" width="19.8425" height="41.9127" class="st50"/>
+		</g>
+		<g id="shape119-226" v:mID="119" v:groupContext="shape" transform="translate(357.181,-98.9354)">
+			<title>Лист.119</title>
+			<desc>1 TON</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(48000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="35.753" cy="325.271" width="71.51" height="20"/>
+			<rect x="0" y="315.271" width="71.506" height="20" class="st10"/>
+			<rect v:rectContext="textBkgnd" x="24.2361" y="320.471" width="23.0339" height="9.59985" class="st36"/>
+			<text x="24.24" y="327.67" class="st12" v:langID="1041"><v:paragraph v:horizAlign="1"/><v:tabList/>1<tspan class="st18"
+						v:langID="1033"> </tspan><tspan class="st18" v:langID="1033">TON</tspan></text>		</g>
+		<g id="shape120-232" v:mID="120" v:groupContext="shape" transform="translate(144.472,-106.09)">
+			<title>Лист.120</title>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(39000):26"/>
+			</v:userDefs>
+			<rect x="0" y="264.804" width="20.2059" height="70.4672" class="st51"/>
+		</g>
+		<g id="shape121-235" v:mID="121" v:groupContext="shape" transform="translate(268.324,-76.1892)">
+			<title>Лист.121</title>
+			<desc>nonexist</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(49000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(0,0,0,0)" v:tabSpace="42.5197"/>
+			<v:textRect cx="18.8253" cy="330.271" width="37.66" height="10"/>
+			<rect x="0" y="325.271" width="37.6506" height="10" class="st52"/>
+			<rect v:rectContext="textBkgnd" x="2.76855" y="325.471" width="32.1136" height="9.59985" class="st53"/>
+			<text x="2.77" y="332.67" class="st54" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>nonexist</text>		</g>
+		<g id="shape122-239" v:mID="122" v:groupContext="shape" transform="translate(228.994,-24.4963)">
+			<title>Лист.122</title>
+			<desc>destroy the contract</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visNavOrder" v:val="VT0(50000):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="29.8091" cy="323.932" width="59.62" height="22.6772"/>
+			<g id="shadow122-240" v:groupContext="shadow" v:shadowOffsetX="2.12132" v:shadowOffsetY="-2.12132" v:shadowType="1"
+					transform="matrix(1,0,0,1,2.12132,2.12132)" class="st24">
+				<rect x="0" y="312.594" width="59.6183" height="22.6772" class="st55"/>
+			</g>
+			<rect x="0" y="312.594" width="59.6183" height="22.6772" class="st56"/>
+			<text x="8.01" y="321.53" class="st54" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>destroy the<v:newlineChar/><tspan
+						x="13.92" dy="1.2em" class="st18">contract</tspan></text>		</g>
+	</g>
+</svg>
