@@ -1,3 +1,6 @@
+import ConceptImage from '@site/src/components/conceptImage';
+import ThemedImage from '@theme/ThemedImage';
+
 # 以 Cell 为数据存储
 
 TON 中的所有内容都存储在cell( cell )中。一个cell是一个数据结构，包含：
