@@ -9,7 +9,15 @@ TON 中的所有内容都存储在cell( cell )中。一个cell是一个数据结
 
 因此，所有cell构成一个有向无环图（DAG）。这里有一个很好的图片来说明：
 
-![Directed Acylic Graph](/img/docs/dag.png)
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/cells-as-data-storage/dag.png?raw=true',
+        dark: '/img/docs/cells-as-data-storage/Cells-as-data-storage_1_dark.png?raw=true',
+    }}
+/>
+<br></br>
 
 ## Cell 类型
 
