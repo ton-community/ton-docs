@@ -18,11 +18,11 @@
       }
     ],
 
-    'type-hint': /\b(type|enum|int|cell|void|bool|auto|slice|tuple|builder|continuation)\b/,
+    'type-hint': /\b(type|enum|int|cell|void|bool|slice|tuple|builder|continuation)\b/,
 
     'boolean': /\b(false|true|null)\b/,
 
-    'keyword': /\b(do|if|try|else|while|break|throw|catch|return|assert|repeat|continue|asm|builtin|import|export|true|false|null|redef|mutate|tolk|global|const|var|val|fun|get|struct)\b/,
+    'keyword': /\b(do|if|as|try|else|while|break|throw|catch|return|assert|repeat|continue|asm|builtin|import|export|true|false|null|redef|mutate|tolk|global|const|var|val|fun|get|struct)\b/,
 
     'self': /\b(self)\b/,
 

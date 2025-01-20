@@ -162,7 +162,7 @@ For example, suppose `cs` is a cell slice and `load_uint` has type `(slice, int)
 ```func
 int x = cs~load_uint(8);
 ```
-In some cases we want to use a function as a modifying method that doesn't return any value and only modifies the first argument. It can be done using unit types as follows: Suppose we want to define function `inc` of type `int -> int`, which increments an integer, and use it as a modifying method. Then we should define `inc` as a function of type `int -> (int, ())`:
+In some cases, we want to use a function as a modifying method that doesn't return any value and only modifies the first argument. It can be done using unit types as follows: Suppose we want to define function `inc` of type `int -> int`, which increments an integer, and use it as a modifying method. Then we should define `inc` as a function of type `int -> (int, ())`:
 ```func
 (int, ()) inc(int x) {
   return (x + 1, ());
@@ -174,11 +174,11 @@ x~inc();
 ```
 
 #### `.` and `~` in function names
-Suppose we want to use `inc` as a non-modifying method too. We can write something like that:
+Suppose we want to use `inc` as a non-modifying method too. We can write something like this:
 ```func
 (int y, _) = inc(x);
 ```
-But it is possible to override the definition of `inc` as a modifying method.
+However, it is possible to override the definition of `inc` by using a modifying method.
 ```func
 int inc(int x) {
   return x + 1;
@@ -195,12 +195,12 @@ int z = x.inc();
 ```
 The first call will modify x; the second and third won't.
 
-In summary, when a function with the name `foo` is called as a non-modifying or modifying method (i.e. with `.foo` or `~foo` syntax), the FunC compiler uses the definition of `.foo` or `~foo` correspondingly if such a definition is presented, and if not, it uses the definition of `foo`.
+In summary, when a function with the name `foo` is called as a non-modifying or modifying method (i.e., with `.foo` or `~foo` syntax), the FunC compiler uses the definition of `.foo` or `~foo` correspondingly if such a definition is presented, and if not, it uses the definition of `foo`.
 
 
 
 ### Specifiers
-There are three types of specifiers: `impure`, `inline`/`inline_ref`, and `method_id`. One, several, or none of them can be put in a function declaration but currently they must be presented in the right order. For example, it is not allowed to put `impure` after `inline`.
+There are three types of specifiers: `impure`, `inline`/`inline_ref`, and `method_id`. One, several, or none of them can be put in a function declaration, but currently, they must be presented in the right order. For example, it is not allowed to put `impure` after `inline`.
 #### Impure specifier
 `impure` specifier means that the function can have some side effects which can't be ignored. For example, we should put `impure` specifier if the function can modify contract storage, send messages, or throw an exception when some data is invalid and the function is intended to validate this data.
 
@@ -244,16 +244,15 @@ Here is another example of how you can use inline, taken from [ICO-Minter.fc](ht
 #### Inline_ref specifier
 The code of a function with the `inline_ref` specifier is put into a separate cell, and every time when the function is called, a `CALLREF` command is executed by TVM. So it's similar to `inline`, but because a cell can be reused in several places without duplicating it, it is almost always more efficient in terms of code size to use `inline_ref` specifier instead of `inline` unless the function is called exactly once. Recursive calls of `inline_ref`'ed functions are still impossible because there are no cyclic references in the TVM cells.
 #### method_id
-Every function in TVM program has an internal integer id by which it can be called. Ordinary functions are usually numbered by subsequent integers starting from 1, but get-methods of the contract are numbered by crc16 hashes of their names. `method_id(<some_number>)` specifier allows to set the id of a function to specified value, and `method_id` uses the default value `(crc16(<function_name>) & 0xffff) | 0x10000`. If a function has `method_id` specifier, then it can be called in lite-client or ton-explorer as a get-method by its name.
+Every function in a TVM program has an internal integer ID by which it can be called. Ordinary functions are usually numbered by subsequent integers starting from 1, but get-methods of the contract are numbered by crc16 hashes of their names. `method_id(<some_number>)` specifier allows to set the id of a function to specified value, and `method_id` uses the default value `(crc16(<function_name>) & 0xffff) | 0x10000`. If a function has `method_id` specifier, then it can be called in lite-client or ton-explorer as a get-method by its name.
 
-For example,
+For example:
 ```func
-(int, int) get_n_k() method_id {
-  (_, int n, int k, _, _, _, _) = unpack_state();
-  return (n, k);
+int get_counter() method_id {
+  load_data();
+  return ctx_counter;
 }
 ```
-is a get-method of multisig contract.
 
 ### Polymorphism with forall
 Before any function declaration or definition, there can be `forall` type variables declarator. It has the following syntax:
@@ -273,7 +272,7 @@ is a function that takes a tuple of length exactly 2, but with values of any (si
 
 `pair_swap([2, 3])` will produce `[3, 2]` and `pair_swap([1, [2, 3, 4]])` will produce `[[2, 3, 4], 1]`.
 
-In this example `X` and `Y` are [type variables](/v3/documentation/smart-contracts/func/docs/types#polymorphism-with-type-variables). When the function is called, type variables are substituted with actual types, and the code of the function is executed. Note that although the function is polymorphic, the actual assembler code for it is the same for every type substitution. It is achieved essentially by the polymorphism of stack manipulation primitives. Currently, other forms of polymorphism (like ad-hoc polymorphism with type classes) are not supported.
+In this example, `X` and `Y` are [type variables](/v3/documentation/smart-contracts/func/docs/types#polymorphism-with-type-variables). When the function is called, type variables are substituted with actual types, and the code of the function is executed. Note that although the function is polymorphic, the actual assembler code for it is the same for every type substitution. It is achieved essentially by the polymorphism of stack manipulation primitives. Currently, other forms of polymorphism (like ad-hoc polymorphism with type classes) are not supported.
 
 Also, it is worth noticing that the type width of `X` and `Y` is supposed to be equal to 1; that is, the values of `X` or `Y` must occupy a single stack entry. So you actually can't call the function `pair_swap` on a tuple of type `[(int, int), int]`, because type `(int, int)` has width 2, i.e., it occupies 2 stack entries.
 
@@ -285,7 +284,7 @@ For example, one can define:
 ```func
 int inc_then_negate(int x) asm "INC" "NEGATE";
 ```
-– a function that increments an integer and then negates it. Calls to this function will be translated to 2 assembler commands `INC` and `NEGATE`. Alternative way to define the function is:
+– a function that increments an integer and then negates it. Calls to this function will be translated to 2 assembler commands `INC` and `NEGATE`. An alternative way to define the function is:
 ```func
 int inc_then_negate'(int x) asm "INC NEGATE";
 ```
@@ -319,13 +318,13 @@ Also, we can rearrange return values like this:
 ```
 The numbers correspond to the indexes of returned values (0 is the deepest stack entry among returned values).
 
-Combining this techniques is also possible.
+Combining these techniques is also possible.
 ```func
 (int, builder) store_uint_quite(builder b, int x, int len) asm(x b len -> 1 0) "STUXQ";
 ```
 
 ### Multiline asms
-Multiline assembler command or even Fift-code snippets can be defined via multiline strings which starts and ends with `"""`.
+Multiline assembler commands or even Fift-code snippets can be defined via multiline strings which start and end with `"""`.
 
 ```func
 slice hello_world() asm """

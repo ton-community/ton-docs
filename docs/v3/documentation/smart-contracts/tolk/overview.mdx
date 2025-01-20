@@ -133,24 +133,21 @@ Anyway, no matter what language you use, you should cover your contracts with te
 The first released version of Tolk is v0.6, emphasizing [missing](/v3/documentation/smart-contracts/tolk/changelog#how-tolk-was-born) FunC v0.5.
 
 Here are some (yet not all and not ordered in any way) points to be investigated:
-- type system improvements: boolean type, nullability, dictionaries
-- structures, with auto-packing to/from cells, probably integrated with message handlers
-- structures with methods, probably generalized to cover built-in types
-- some integrations with TL scheme, either syntactical or via code generation
-- human-readable compiler errors
+- type system improvements: nullability, fixed-size integers, union types, dictionaries
+- structures and generics
+- auto-pack structures to/from cells, probably integrated with message handlers
+- methods for structures, generalized to cover built-in types
 - easier messages sending
 - better experience for common use-cases (jettons, nft, etc.)
 - gas and stack optimizations, AST inlining
 - extending and maintaining stdlib
-- think about some kind of ABI (how explorers "see" bytecode)
-- think about gas and fee management in general
+- some kind of ABI (how explorers "see" bytecode)
+- gas and fee management in general
 
-Note, that most of the points above are a challenge to implement.
-At first, FunC kernel must be fully refactored to "interbreed" with abilities it was not designed for.
-
-Also, I see Tolk evolution partially guided by community needs.
-It would be nice to talk to developers who have created interconnected FunC contracts,
-to absorb their pain points and discuss how things could be done differently.
+The next strategic goal for **Tolk v1.0** is **structures with auto-serialization into cells**.
+This will eliminate the need for manual manipulations with builders and slices, allowing data and messages to be described declaratively.
+Closely related to this is the **ABI (interface) of contracts**.
+Well-designed structures actually make up the majority of an ABI.
 
 
 ## Issues and Contacts

@@ -4,6 +4,11 @@
 
 - [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis) — API that allows to work with the _indexed blockchain information_.
 - [TON ADNL API](/v3/guidelines/dapps/apis-sdks/ton-adnl-apis) — secure API to communicate with TON, based on ADNL protocol.
+  
+:::tip TON Infrastructure Status
+* [status.toncenter](https://status.toncenter.com/) - various statistics of nodes activity during the last hour.
+* [Tonstat.us](https://tonstat.us/) - a real-time Grafana, updated every 5 minutes.
+:::
 
 ## Toncenter APIs
 - [TON Index](https://toncenter.com/api/v3/) - TON Index collects data from a full node to PostgreSQL database and provides convenient API to an indexed blockchain.

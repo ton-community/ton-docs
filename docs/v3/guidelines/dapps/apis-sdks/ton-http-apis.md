@@ -1,14 +1,11 @@
 # TON HTTP-based APIs
 
-:::tip
-
 There are different ways to connect to blockchain:
 1. **RPC data provider or another API**: in most cases, you have to *rely* on its stability and security.
 2. ADNL connection: you're connecting to a [liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node). It may be inaccessible, but with a certain level of validation (implemented in the library), it cannot lie.
 3. Tonlib binary: you're also connecting to a liteserver, so all benefits and downsides apply, but your application includes a dynamically-loaded library compiled externally.
 4. Offchain-only. Such SDKs allow the creation and serialization of cells, which can then be sent to APIs.
 
-:::
 
 ## Pros & Cons
 
@@ -18,12 +15,14 @@ There are different ways to connect to blockchain:
 - ❌ Simplified. It's not possible to receive information where you need an indexed TON API.
 - ❌ HTTP-Middleware.  You can't fully trust server responses unless the server augments blockchain data with [Merkle proofs](/v3/documentation/data-formats/tlb/proofs) to validate its authenticity.
 
-## Monitoring
 
-* [status.toncenter](https://status.toncenter.com/) - shows all full network nodes and validators active during the last hour, along with various statistics.
-* [Tonstat.us](https://tonstat.us/) - provides a real-time Grafana-based dashboard displaying the status of all TON-related APIs, with data updated every 5 minutes.
 
 ## RPC Nodes
+
+:::tip TON Infrastructure Status
+* [status.toncenter](https://status.toncenter.com/) - various statistics of nodes activity during the last hour.
+* [Tonstat.us](https://tonstat.us/) - a real-time Grafana, updated every 5 minutes.
+:::
 
 * [QuickNode](https://www.quicknode.com/chains/ton?utm_source=ton-docs) - Leading blockchain node provider offering the fastest access with smart DNS routing for optimized global reach and load-balanced scalability.
 * [Chainstack](https://chainstack.com/build-better-with-ton/) — RPC nodes and indexer in multiple regions with geo and load balancing.
