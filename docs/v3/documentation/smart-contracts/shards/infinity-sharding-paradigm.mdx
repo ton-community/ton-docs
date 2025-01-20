@@ -3,7 +3,7 @@
 
 ## Understanding Split Merge in TON Blockchain
 
-The TON (Telegram Open Network) Blockchain introduces innovative concepts for blockchain scalability and efficiency. One such concept is the Split Merge functionality, integral to its blockchain architecture. This short article explores the key aspects of Split Merge in the TON Blockchain, focusing on its role within the Infinite Sharding Paradigm (ISP).
+The TON (The Open Network) Blockchain introduces innovative concepts for blockchain scalability and efficiency. One such concept is the Split Merge functionality, which is integral to its blockchain architecture. This short article explores the key aspects of Split Merge in the TON Blockchain, focusing on its role within the Infinite Sharding Paradigm (ISP).
 
 #### Infinite Sharding Paradigm (ISP) and its Application
 
@@ -17,7 +17,7 @@ Each shardchain, or more precisely, each shardchain block, is identified by a co
 ## Algorithm for deciding whether to split or merge
 
 Validators decide whether to split or merge shards in the following way:
-1. For each block, block size, gas consumption and lt delta are calculated.
+1. For each block, block size, gas consumption, and lt delta are calculated.
 2. Using these values, blocks can be considered overloaded or underloaded.
 3. Each shard keeps underload and overload history. If enough recent blocks were underloaded or overloaded, `want_merge` or `want_split` flag is set.
 4. Validators merge or split shards using these flags.
@@ -32,7 +32,7 @@ Each block has the following parameters. They are used to determine overload and
 ### 2. Block limits and classification
 
 Block limits are loaded from the [configuration parameters 22 and 23](/v3/documentation/network/configs/blockchain-configs#param-22-and-23).
-Each of the three parameters has three limits: underload, soft, hard:
+Each of the three parameters has three limits: underload, soft, and hard:
 1. *Block size*: `128/256/512 KiB`.
 2. *Gas consumption*: `2M/10M/20M` in basechain, `200K/1M/2.5M` in masterchain.
 3. *Lt delta*: `1000/5000/10000`.
@@ -65,7 +65,7 @@ Size of the outbound message queue and status of dispatch queue processing is al
 Each block keeps underload and overload history - it is a 64-bit mask of the underload/overload status of the last 64 blocks.
 It is used to decide whether to split or merge.
 
-Underload and overload history has a weight, which is calculated as follows:
+Underload and overload history have a weight, which is calculated as follows:
 `one_bits(mask & 0xffff) * 3 + one_bits(mask & 0xffff0000) * 2 + one_bits(mask & 0xffff00000000) - (3 + 2 + 1) * 16 * 2 / 3`
 (here `one_bits` is the number of `1`-bits in a mask, and the lower bits correspond to the most recent blocks).
 
@@ -85,7 +85,7 @@ Shards split and merge in `split_merge_delay = 100` seconds after the decision i
 
 ## Messages and Instant Hypercube Routing (Instant Hypercube Routing)
 
-In the infinite sharding paradigm, each account (or smart-contract) is treated as if it were itself in a separate shardchain.
+In the infinite sharding paradigm, each account (or smart contract) is treated as if it were itself in a separate shardchain.
 Interaction between accounts occurs solely through the sending of messages, which is part of the actor model where accounts act as actors. An efficient messaging system between shardchains is critical to the operation of the TON blockchain. 
 A feature of TON is Instant Hypercube Routing, which enables fast delivery and processing of messages between shardchains, ensuring that messages created in a block of one shardchain are processed in the next block of the target shardchain, regardless of their number in the system.
 
