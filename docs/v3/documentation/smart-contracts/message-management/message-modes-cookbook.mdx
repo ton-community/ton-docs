@@ -151,6 +151,7 @@ State after transaction: Account A has 0.896 TON, Account B has 0.5 TON, Account
 
 :::info
 You might check [this example](https://retracer.ton.org/?tx=4340b5ecbd83227cc64e10b1ca7628352133cda1d608081fb2ed58d299f00936&testnet=true).
+Please note that `storage_fee` is included in `total_fee` but it is always paid from contract `balance`.
 :::
 
 :::warning
@@ -174,7 +175,8 @@ State before transaction: Account A has 1 TON, Account B has 1 TON, Account C ha
 State after transaction: Account A has 0.896 TON, Account B has 0.5 - (total_fee + `fwd_fee`) TON, Account C has 1.6 TON
 
 :::info
-You might check [this example](https://retracer.ton.org/?tx=5c2525feeb3b93db594b7b11f3250430f02dd8616595cf2b1583ebc7da79d15b&testnet=true)
+You might check [this example](https://retracer.ton.org/?tx=5c2525feeb3b93db594b7b11f3250430f02dd8616595cf2b1583ebc7da79d15b&testnet=true).
+Please note that `storage_fee` is included in `total_fee` but it is always paid from contract `balance`.
 :::
 
 ![](/img/docs/message-modes-cookbook/carry_remaining_value_7.svg)
