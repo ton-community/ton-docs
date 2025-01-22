@@ -256,10 +256,10 @@ Returns the internal address of the current smart contract as a Slice with `MsgA
 [int, cell] get_balance() asm "BALANCE";
 ```
 
-Returns the remaining balance of the smart contract as `tuple` consisting of `int` (the remaining balance in nanotoncoins) and `cell` (a dictionary with 32-bit keys representing the balance of “extra currencies”). Note that RAW primitives such as `send_raw_message` do not update this field.
+Returns the remaining balance of the smart contract as `tuple` consisting of `int` (the remaining balance in nanotoncoins) and `cell` (a dictionary with 32-bit keys representing the balance of “extra currencies”). Since this will occur in compute phase, balance of the contract will have incoming message `value` included, `storage_fee` and `import_fee` deducted.
 
-:::tip
-Since this will occur in compute phase, balance of the contract will have incoming message `value` included, `storage_fee` and `import_fee` deducted 
+:::warning
+RAW primitives such as `send_raw_message` do not update this field.
 :::
 
 #### cur_lt
