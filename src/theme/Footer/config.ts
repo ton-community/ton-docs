@@ -86,7 +86,7 @@ export const FOOTER_COLUMN_LINKS_EN = [
       { langKey: "Get or sell Toncoin", url: PAGE_BUY_TONCOIN },
       { langKey: "Stake", url: PAGE_STAKE },
       { langKey: "Accept Payments", url: TON_ACCEPT_PAYMENT },
-      { langKey: "Apps & Servies", url: FOOTER_APP_AND_DAPPS_URL },
+      { langKey: "Apps & Serviсes", url: FOOTER_APP_AND_DAPPS_URL },
       { langKey: "Bridge", url: FOOTER_BRIDGE_URL },
       { langKey: "Domains", url: FOOTER_DNS_URL },
       { langKey: "The Open League", url: TON_THE_OPEN_LEAGUE },
