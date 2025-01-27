@@ -3,6 +3,12 @@
 When new versions of Tolk are released, they will be mentioned here.
 
 
+## v0.8
+
+1. Syntax `tensorVar.0` and `tupleVar.0` (both for reading and writing)
+2. Allow `cell`, `slice`, etc. to be valid identifiers (not keywords)
+
+
 ## v0.7
 
 1. Under the hood: refactor compiler internals; AST-level semantic analysis kernel
@@ -10,8 +16,6 @@ When new versions of Tolk are released, they will be mentioned here.
 3. Clear and readable error messages on type mismatch
 4. Generic functions `fun f<T>(...)` and instantiations like `f<int>(...)`
 5. The `bool` type; type casting via `value as T`
-
-More details [on GitHub](todo).
 
 
 ## v0.6
