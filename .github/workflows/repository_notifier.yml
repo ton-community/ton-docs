@@ -21,7 +21,7 @@ jobs:
         with:
           token: ${{ secrets.TG_TOKEN }}
           to: ${{ secrets.TG_CHAT_ID }}
-          parse_mode: markdown
+          format: markdown
           message: |
             🚀 *New Push to Main*
             - **Repository**: [${{ github.repository }}](https://github.com/${{ github.repository }})
@@ -36,7 +36,7 @@ jobs:
         with:
           token: ${{ secrets.TG_TOKEN }}
           to: ${{ secrets.TG_CHAT_ID }}
-          parse_mode: markdown
+          format: markdown
           message: |
             🔄 *Pull Request Activity*
             - **Action**: `${{ github.event.action }}`
@@ -52,7 +52,7 @@ jobs:
         with:
           token: ${{ secrets.TG_TOKEN }}
           to: ${{ secrets.TG_CHAT_ID }}
-          parse_mode: markdown
+          format: markdown
           message: |
             📝 *Issue Activity*
             - **Action**: `${{ github.event.action }}`
