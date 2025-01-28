@@ -32,21 +32,24 @@ Nowadays, only the Masterchain (workchain_id=-1) and occasionally the basic work
 
 Both of them have 256-bit addresses, therefore, we assume that the workchain_id is either 0 or -1, and the address within the workchain is precisely 256 bits.
 
+
 #### Account ID
 
-All account IDs on TON make use of 256-bit addresses on the Masterchain and Basechain (or basic workchain).
+All account IDs on TON use 256-bit addresses on the Masterchain and Basechain (also referred to as the basic workchain).
 
-In fact, Account ID’s **(account_id)** defined as hash functions for smart contract objects (particular, the SHA-256). Every smart contract operating on TON Blockchain stores two main components. These include:
+In fact, an Account ID (**account_id**) is defined as the result of applying a hash function (specifically SHA-256) to a smart contract object. Every smart contract operating on the TON Blockchain stores two main components:
 
-1. _Compiled code_. Logic of the smart contract compiled in the form of bytecode.
-2. _Initial state_. The contract's values at the moment of its deployment on-chain.
+1. _Compiled code_. The logic of the smart contract, compiled into bytecode.
+2. _Initial state_. The contract's values at the moment it is deployed on-chain.
 
+To derive the contract's address, you calculate the hash of the **(Initial code, Initial state)** pair. We won’t explore how the [TVM](/v3/documentation/tvm/tvm-overview) works at this time, but it is important to understand that account IDs on TON follow this formula:
 
-Finally, to derive the contract's address, it is necessary to calculate the hash corresponding to the pair **(Initial code, Initial state)** object. At this time, we won't take a deep dive into how the [TVM](/v3/documentation/tvm/tvm-overview) works, but it's important to understand that account IDs on TON are determined using this formula:
-:
 **account_id = hash(initial code, initial state)**
 
-In time, throughout this documentation, we'll dive deeper into the technical specifications and overview of the TVM and TL-B scheme. Now that we are familiar with the generation of the **account_id** and their interaction with smart contract addresses on TON, let’s explain Raw and User-Friendly addresses.
+Later in this documentation, we will dive deeper into the technical specifications of the TVM and TL-B scheme. Now that we are familiar with how the **account_id** is generated and how it interacts with smart contract addresses on TON, let’s discuss Raw and User-Friendly addresses.
+
+
+
 
 ## Addresses state
 
