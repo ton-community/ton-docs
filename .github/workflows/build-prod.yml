@@ -4,32 +4,36 @@ on:
   push:
     branches: [ main ]
 
-# jobs with same concurrency label will be put in pending state
+# Jobs with the same concurrency label will be put in a pending state
 concurrency: prod-ci
 
 jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      # Step 1: Checkout the repository to get all commits and submodules
+      - name: Checkout repository
         uses: actions/checkout@v3
         with:
           # docusaurus checks .git for history, so we need all commits
           fetch-depth: 0
           submodules: recursive
 
-      # For gha cache
+      # Step 2: Set up Docker Buildx for advanced build capabilities
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Login to registry
+      # Step 3: Log in to Docker registry
+      - name: Log in to Docker registry
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASS }}
           registry: ${{ secrets.REGISTRY_URL }}
 
-      - uses: docker/build-push-action@v3
+      # Step 4: Build and push Docker image with commit SHA tag
+      - name: Build and push Docker image (SHA tag)
+        uses: docker/build-push-action@v3
         with:
           # To pass .git for docusaurus
           context: .
@@ -40,7 +44,9 @@ jobs:
           tags: ${{ secrets.REGISTRY_URL }}/nwt/ton_docs:${{ github.sha }}
           push: true
 
-      - uses: docker/build-push-action@v3
+      # Step 5: Build and push Docker image with the "latest" tag
+      - name: Build and push Docker image (latest tag)
+        uses: docker/build-push-action@v3
         with:
           context: .
           file: "deployment/Docker/Dockerfile"
@@ -50,5 +56,38 @@ jobs:
           tags: ${{ secrets.REGISTRY_URL }}/nwt/ton_docs:latest
           push: true
 
-      - name: Trigger deploy
+      # Step 6: Trigger deployment using CD URL
+      - name: Trigger deployment
         run: curl -s "${{ secrets.CD_URL }}"
+
+      # Step 7: Notify about successful deployment
+      - name: Notify deployment success
+        if: success()
+        uses: appleboy/telegram-action@v1.0.1
+        with:
+          token: ${{ secrets.TG_TOKEN }}
+          to: ${{ secrets.TG_CHAT_ID }}
+          format: markdown
+          message: |
+            ✅ *Deployment Successful*
+            - **Repository**: [${{ github.repository }}](https://github.com/${{ github.repository }})
+            - **Branch**: `${{ github.ref_name }}`
+            - **Commit**: [`${{ github.sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+            - **Commit Message**: `${{ github.event.head_commit.message }}`
+            - **Build Link**: [View Workflow](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+      # Step 8: Notify about failed deployment
+      - name: Notify deployment failure
+        if: failure()
+        uses: appleboy/telegram-action@v1.0.1
+        with:
+          token: ${{ secrets.TG_TOKEN }}
+          to: ${{ secrets.TG_CHAT_ID }}
+          format: markdown
+          message: |
+            ❌ *Deployment Failed*
+            - **Repository**: [${{ github.repository }}](https://github.com/${{ github.repository }})
+            - **Branch**: `${{ github.ref_name }}`
+            - **Commit**: [`${{ github.sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+            - **Commit Message**: `${{ github.event.head_commit.message }}`
+            - **Build Link**: [View Workflow](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
