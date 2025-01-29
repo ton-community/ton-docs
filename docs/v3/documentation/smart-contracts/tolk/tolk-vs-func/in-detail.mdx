@@ -59,6 +59,8 @@ In Tolk, spaces are not mandatory. `2+2` is 4, as expected. `3+~x` is `3 + (~ x)
 More precisely, an identifier can start from <code style={{display: 'inline-block'}}>{'[a-zA-Z$_]'}</code>
 and be continued with <code style={{display: 'inline-block'}}>{'[a-zA-Z0-9$_]'}</code>. Note, that `?`, `:`, and others are not valid symbols, `found?` and `op::increase` are not valid identifiers.
 
+Note, that `cell`, `slice`, etc. are valid identifiers: `var cell = ...` or even `var cell: cell = ...` is okay. (like in TypeScript, `number` is a valid identifier)
+
 You can use backticks to surround an identifier, and then it can contain any symbols (similar to Kotlin and some other langs). Its potential usage is to allow keywords be used as identifiers, in case of code generation by a scheme, for example.
 
 <table className="cmp-func-tolk-table">
@@ -324,7 +326,7 @@ We have the following types:
 - `int`, `bool`, `cell`, `slice`, `builder`, untyped `tuple`
 - typed tuple `[T1, T2, ...]`
 - tensor `(T1, T2, ...)`
-- callables `fun(TArgs) -> TResult`
+- callables `(TArgs) -> TResult`
 - `void` (more canonical to be named `unit`, but `void` is more reliable)
 - `self`, to make chainable methods, described below; actually it's not a type, it can only occur instead of return type of a function
 
@@ -458,7 +460,7 @@ duplicate((1, 2));    // duplicate<(int, int)>
 
 Or even functions, it also works:
 ```tolk
-fun callAnyFn<TObj, TResult>(f: fun(TObj) -> TResult, arg: TObj) {
+fun callAnyFn<TObj, TResult>(f: TObj -> TResult, arg: TObj) {
     return f(arg);
 }
 
@@ -971,6 +973,55 @@ Tolk supports logical operators. They behave exactly as you get used to (right c
 Keywords `ifnot` and `elseifnot` were removed, since now we have logical not (for optimization, Tolk compiler generates `IFNOTJMP`, btw). Keyword `elseif` was replaced by traditional `else if`.
 
 Remember, that a boolean `true`, transformed `as int`, is -1, not 1. It's a TVM representation.
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Indexed access `tensorVar.0` and `tupleVar.0`
+</h3>
+
+Use `tensorVar.{i}` to access i-th component of a tensor. Modifying it will change the tensor.
+```tolk
+var t = (5, someSlice, someBuilder);   // 3 stack slots
+t.0         			// 5
+t.0 = 10;   			// t is now (10, ...)
+t.0 += 1;               // t is now (11, ...)
+increment(mutate t.0);  // t is now (12, ...)
+t.0.increment();        // t is now (13, ...)
+
+t.1         // slice
+t.100500    // compilation error
+```
+
+Use `tupleVar.{i}` to access i-th element of a tuple (does INDEX under the hood). Modifying it will change the tuple (does SETINDEX under the hood).
+```tolk
+var t = [5, someSlice, someBuilder];   // 1 tuple on a stack with 3 items
+t.0                     // "0 INDEX", reads 5
+t.0 = 10;               // "0 SETINDEX", t is now [10, ...]
+t.0 += 1;               // also works: "0 INDEX" to read 10, "0 SETINDEX" to write 11
+increment(mutate t.0);  // also, the same way
+t.0.increment();        // also, the same way
+
+t.1         // "1 INDEX", it's slice
+t.100500    // compilation error
+```
+
+It also works for untyped tuples, though the compiler can't guarantee index correctness.
+```tolk
+var t = createEmptyTuple();
+t.tuplePush(5);
+t.0                     // will head 5
+t.0 = 10                // t will be [10]
+t.100500                // will fail at runtime
+```
+
+It works for nesting `var.{i}.{j}`. It works for nested tensor, nested tuples, tuples nested into tensors.
+It works for `mutate`. It works for globals.
+```tolk
+t.1.2 = 10;    // "1 INDEX" + "2 SETINDEX" + "1 SETINDEX"
+t.1.2 += 10;   // "1 INDEX" + "2 INDEX" + sum + "2 SETINDEX" + "1 SETINDEX"
+
+globalTuple.1.2 += 10;  // "GETGLOB" + ... + "SETGLOB"
+```
 
 
 <h3 className="cmp-func-tolk-header">
