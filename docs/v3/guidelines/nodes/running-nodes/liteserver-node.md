@@ -143,7 +143,7 @@ It will create `/usr/bin/ton/local.config.json` on your machine where mytonctrl 
   <TabItem value="js" label="JavaScript">
 
   ```bash
-  npm i --save ton-core ton-lite-
+  npm i --save ton-core ton-lite-client
   ```
 
   </TabItem>
@@ -179,9 +179,9 @@ Change project type to `module` in your `package.json` file:
 
 Create `index.js` file with the following content:
   ```js
-  import { LiteSingleEngine } from 'ton-lite-/dist/engines/single.js'
-  import { LiteRoundRobinEngine } from 'ton-lite-/dist/engines/roundRobin.js'
-  import { Lite } from 'ton-lite-/dist/.js'
+  import { LiteSingleEngine } from 'ton-lite-client/dist/engines/single.js'
+  import { LiteRoundRobinEngine } from 'ton-lite-client/dist/engines/roundRobin.js'
+  import { Lite } from 'ton-lite-client/dist/.js'
   import config from './config.json' assert {type: 'json'};
 
 
