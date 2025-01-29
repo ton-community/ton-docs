@@ -102,8 +102,8 @@ Standardized tokens on TON are implemented using a set of smart contracts, inclu
 <ThemedImage
     alt=""
     sources={{
-        light: '/img/docs/asset-processing/jetton_contracts.svg?raw=true',
-        dark: '/img/docs/asset-processing/jetton_contracts_dark.svg?raw=true',
+        light: '/img/docs/asset-processing/jetton_contracts.png?raw=true',
+        dark: '/img/docs/asset-processing/jetton_contracts_dark.png?raw=true',
     }}
 />
 <br></br>
@@ -273,8 +273,8 @@ Communication between Jetton wallets and TON wallets occurs through the followin
 <ThemedImage
     alt=""
     sources={{
-        light: '/img/docs/asset-processing/jetton_transfer.svg?raw=true',
-        dark: '/img/docs/asset-processing/jetton_transfer_dark.svg?raw=true',
+        light: '/img/docs/asset-processing/jetton_transfer.png?raw=true',
+        dark: '/img/docs/asset-processing/jetton_transfer_dark.png?raw=true',
     }}
 />
 <br></br>
