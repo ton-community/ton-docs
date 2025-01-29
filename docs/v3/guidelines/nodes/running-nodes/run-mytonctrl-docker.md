@@ -34,14 +34,14 @@ Variable **IGNORE_MINIMAL_REQS=true** turns off requirements verification of CPU
 ## Run MyTonCtrl v2 using official docker image:
 * Pull the image and run the node with MyTonCtrl 
 ```bash
-docker run -d --name ton-node -v <YOUR_LOCAL_FOLDER>:/var/ton-work -it ghcr.io/ton-community/ton-docker-ctrl:latest
+docker run -d --name ton-node -v <YOUR_LOCAL_FOLDER>:/var/ton-work -it ghcr.io/ton-blockchain/ton-docker-ctrl:latest
 
 
 ## Install and start MyTonCtrl from sources:
 
 1. Clone the last version of the repository
 ```bash
-git clone https://github.com/ton-community/ton-docker-ctrl.git
+git clone https://github.com/ton-blockchain/ton-docker-ctrl.git
 ```
 2. Go to directory
 ```bash
@@ -70,7 +70,7 @@ docker run -d --name ton-node --restart always \
 -v /usr/bin/ton:/usr/bin/ton \
 -v /usr/src/ton:/usr/src/ton \
 -v /home/<USER>/.local/share:/usr/local/bin \
-ghcr.io/ton-community/ton-docker-ctrl:latest
+ghcr.io/ton-blockchain/ton-docker-ctrl:latest
 ```
 
 ## Variables setting:
