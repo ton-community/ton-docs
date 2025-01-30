@@ -232,6 +232,7 @@ module.exports = [
       'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-backup-restore',
       'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-validator-standby',
       'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-prometheus',
+      'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-remote-controller'
     ],
   },
   'v3/guidelines/nodes/custom-overlays',
