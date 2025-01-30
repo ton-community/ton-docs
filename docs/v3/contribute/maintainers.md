@@ -2,28 +2,14 @@
 
 ## Active Team
 
-Below is an alphabetical list of the current members on the TON Docs team.
+Below is an alphabetical list of the current members on the TON Documentation team.
 
 ### Alex Golev
 
-TON Docs maintainer and DevRel at TON Foundation
+Onboarding Lead at TON Studio
 
 -   Telegram: [@alexgton](https://t.me/alexgton)
 -   GitHub: [Reveloper](https://github.com/Reveloper)
-
-### Gusarich
-
-Web3 Developer, [TON Dev community](https://github.com/ton-community) contributor, [TON Footsteps](https://github.com/ton-society/ton-footsteps) and TON Docs maintainer
-
--   Telegram: [@Gusarich](https://t.me/Gusarich)
--   GitHub: [Gusarich](https://github.com/Gusarich)
-
-### SwiftAdviser
-
-Developer Onboarding Manager at TON Foundation
-
--   Telegram: [@SwiftAdviser](https://t.me/SwiftAdviser)
--   GitHub: [SwiftAdviser](https://github.com/SwiftAdviser)
 
 ## Acknowledgements
 
@@ -39,11 +25,13 @@ However, we would like to specially acknowledge the substantial contributions ma
 -   [awesome-doge](https://github.com/awesome-doge): early contributions
 -   [coalus](https://github.com/coalus): content
 -   [delovoyhomie](https://github.com/delovoyhomie): content
+-   [Gusarich](https://github.com/Gusarich): content
 -   [krau5](https://github.com/krau5): improvements
 -   [LevZed](https://github.com/LevZed): content
 -   [ProgramCrafter](https://github.com/ProgramCrafter): content
 -   [siandreev](https://github.com/siandreev): content
 -   [SpyCheese](https://github.com/SpyCheese): early contributions
+-   [SwiftAdviser](https://github.com/SwiftAdviser): content, user-friendly docs inventor
 -   [Tal Kol](https://github.com/talkol): early contributions
 -   [TrueCarry](https://github.com/TrueCarry): content
 -   [xssnick](https://github.com/xssnick): content
