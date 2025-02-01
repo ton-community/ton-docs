@@ -3,6 +3,7 @@
  */
 module.exports = [
   'v3/contribute/README',
+  'v3/contribute/style-guide',
   {
     'type': 'category',
     'label': 'Common Rules',
