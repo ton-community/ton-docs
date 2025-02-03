@@ -86,19 +86,15 @@ Read more about [smart contracts](/v3/documentation/smart-contracts/overview/)
 Read more about [smart contracts](/v3/documentation/smart-contracts/overview)
 ```
 
-## Graphic Explanation Guidelines
+## Image Preferences
 
 ### Linking to images
 
 When adding an image to a page, the image should be downloaded and placed in the TON Documentation `static/img` folder.
 
-You can reference the image like this:
-
-`![alt text for image](/img/image.png)`
-
 #### Correct linking:
 ```md
-![How to mint your NFT](/img/docs/asset-processing/jetton_transfer.svg)
+![How to mint your NFT](/img/docs/asset-processing/jetton_transfer.png)
 ```
 
 #### Incorrect linking:
@@ -109,14 +105,39 @@ You can reference the image like this:
 This helps us ensure the image will be available.
 
 
+### Light and dark theme modes
 
-### Message processing graph
+TON Documentation supports theme-specific images. Follow these steps to add themed images to the page.
 
-To depict message processing, it's advisable to utilize a graphical representation resembling a smart contract graph, complete with labels for transactions and messages.
+1. Themed mode is available only for `.mdx` files.
 
-If the order of transactions doesn't matter, you can omit their labels. This simplifies the diagram, making it easier to read and understand the details related to messages and contracts.
+2. Import the `ThemedImage` module in the header.
 
-#### Annotation Primitives
+```js
+import ThemedImage from '@theme/ThemedImage';
+```
+
+3. Set the links for both images according to the example:
+
+```js
+<br></br>
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/message_delivery_2.svg?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_2_dark.svg?raw=true',
+  }}
+/>
+<br></br>
+```
+
+###  Annotation specification
+
+Use a graphical representation that resembles a smart contract graph to depict message processing, including labels for transactions and messages.
+
+If the order of transactions is unimportant, omit their labels. This approach simplifies the diagram and makes it easier to read and understand the details of messages and contracts.
+
+### Annotation primitives
 
 <ThemedImage
   alt=""
@@ -127,52 +148,33 @@ If the order of transactions doesn't matter, you can omit their labels. This sim
 />
 <br></br>
 
-* Avoid using big quantity different and bright colors.
-* Use the modification of figures, such as using a dashed borderline.
-* For better comprehension, different transactions could be displayed with distinct line styles: solid and dashed.
+* Avoid using a large variety of bright colors.
+* Modify figures by applying techniques such as a dashed border.
+* To emphasize specific details, display transactions using distinct line styles (e.g., solid and dashed).
 
 
-#### Message Processing Example
+### Message processing schemes
+
+On the TON blockchain, it is essential to provide clear explanations of actor behavior and message processing for various smart contracts and fundamental scenarios.
+
+The message processing schemes aim to offer additional context for readers seeking a clear understanding of actor behavior. These schemes should be unified throughout the entire TON Documentation to ensure maximum clarity.
+
+#### Example
 
 <br></br>
 <ThemedImage
   alt=""
   sources={{
-    light: '/img/docs/message-delivery/message_delivery_2.svg?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_2_dark.svg?raw=true',
+    light: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_2_dark.png?raw=true',
   }}
 />
 <br></br>
 
 
 
-Learn references directly from Visio [message-processing.vsdx](/schemes-visio/message_processing.vsdx).
+### Sequence diagram
 
-
-### Formats and Colors
-
-#### Fonts
-
-* **Inter** fonts family  for all text within diagrams.
-
-#### Colors - Light Mode
-* Pencil Hand Drawn(default theme)
-
-#### Colors - Dark Mode
-* Font `#e3e3e3`
-* Background `#232328`
-* Light Highlight(arrows and scheme borders) `#058dd2`
-* Dark Highlight(arrows and scheme borders) `#0088cc`
-* InnerBackGround(for nested blocks) `#333337`
-
-
-#### Version Control Policy
-
-* Set diagrams in the documentation by SVG format for schemes to ensure readability on various devices.
-* Store original files in the project's Git repository under the "/static/visio" directory, making them easier to modify in the future.
-
-
-### Sequence Diagram
 In the case of complex and repetitive communication schemes between 2-3 actors, it is advisable to use a sequence diagram. For messages, use the notation of a common synchronous message arrow.
 
 #### Example
@@ -182,17 +184,39 @@ In the case of complex and repetitive communication schemes between 2-3 actors, 
   <ThemedImage
     alt=""
     sources={{
-      light: '/img/docs/message-delivery/message_delivery_7.svg?raw=true',
-      dark: '/img/docs/message-delivery/message_delivery_7_dark.svg?raw=true',
+      light: '/img/docs/message-delivery/message_delivery_7.png?raw=true',
+      dark: '/img/docs/message-delivery/message_delivery_7_dark.png?raw=true',
     }}
   />
 </div>
 <br></br>
 
 
-### Scheme References
+### Scheme formats and colors
 
-* [message-processing.vsdx](/schemes-visio/message_processing.vsdx)
+#### Fonts:
+
+* Use the [Inter](https://rsms.me/inter/) font family for all text within diagrams.
+* Maintain a consistent text size.
+* Avoid overusing **bold** and _italic_ formatting for optimal readability.
+
+#### Themed colors for light mode:
+* Pencil Hand Drawn (default Visio theme).
+
+#### Themed colors for dark mode:
+* Font `#e3e3e3`
+* Background `#232328`
+* Light Highlight(arrows and scheme borders) `#058dd2`
+* Dark Highlight(arrows and scheme borders) `#0088cc`
+* InnerBackGround(for nested blocks) `#333337`
+
+
+#### Version control policy:
+
+* Use PNG format for the diagrams in the documentation to ensure readability on various devices.
+* Store the original files in the project's Git repository under the `/static/visio` directory to facilitate future modifications.
+* Learn [Visio](https://www.microsoft.com/en-us/microsoft-365/visio/flowchart-software) references directly from [Visio sources](https://github.com/ton-community/ton-docs/tree/main/static/schemes-visio/).
+
 
 
 ## Terminology
@@ -212,9 +236,9 @@ TON should always be capitalized.
 
 **Correct usage:**
 
-TON Blockchain
-TON Ecosystem
-The TON Connect protocol
+- TON Blockchain
+- TON Ecosystem
+- The TON Connect protocol
 
 
 ### TON Center
