@@ -199,7 +199,6 @@ module.exports = [
         label: 'MyTonCtrl',
         items: [
           'v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview',
-          'v3/documentation/infra/nodes/mytonctrl/mytonctrl-alerting',
           'v3/documentation/infra/nodes/mytonctrl/mytonctrl-status',
           'v3/documentation/infra/nodes/mytonctrl/mytonctrl-errors',
         ],

@@ -1,9 +1,9 @@
-# MyTonCtrl Alert Bot
+# MyTonCtrl Private Alerting Bot
 
 ## Overview
 
-MyTonCtrl Alert Bot is a tool that allows you to receive notifications about the status of your node via Telegram Bot. 
-It is a part of the MyTonCtrl toolset and is available for both validators and liteservers. 
+MyTonCtrl Private Alerting Bot is a tool that allows you to receive notifications about the status of your node via Telegram Bot. 
+It is a part of the MyTonCtrl toolset and is available for both validators and liteservers. It requires to create a separate private bot in Telegram and set it up in MyTonCtrl. One bot can be used to monitor multiple nodes.
 
 ## Setup
 
@@ -56,6 +56,11 @@ The MyTonCtrl Alert Bot supports the following alerts:
 * Node is not answering to ADNL connection
 * Validator created zero blocks for past 6 hours
 * Validator has been slashed in the previous validation round
+* Validator's stake has not been accepted
+* Validator's stake has been accepted (info alert with no sound)
+* Validator's stake has not been returned
+* Validator's stake has been returned (info alert with no sound)
+* There is an active network proposal that has many votes but is not voted by the validator
 
 ## En(dis)bling Alerts
 
