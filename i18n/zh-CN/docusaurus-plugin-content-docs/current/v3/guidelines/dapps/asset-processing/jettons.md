@@ -99,7 +99,7 @@ TON 上的标准化代币是通过一套智能合约实现的，其中包括
 
 <p align="center">
   <br />
-    <img width="420" src="/img/docs/asset-processing/jetton_contracts.svg" alt="contracts scheme" />
+    <img width="420" src="/img/docs/asset-processing/jetton_contracts.png" alt="contracts scheme" />
       <br />
 </p>
 
@@ -260,7 +260,7 @@ console.log('Jetton master address:', data.jettonMinterAddress.toString(true, tr
 
 Jetton 钱包和 TON 钱包之间通过以下通信顺序进行通信：
 
-![](/img/docs/asset-processing/jetton_transfer.svg)
+![](/img/docs/asset-processing/jetton_transfer.png)
 
 #### Message 0
 
