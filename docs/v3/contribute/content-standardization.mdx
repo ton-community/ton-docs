@@ -1,10 +1,12 @@
+import ThemedImage from '@theme/ThemedImage';
+
 # Content Standardization
 
 This document aims to standardize certain aspects of writing content to make the contribution process smoother.
 
 ## Content Preferences
 
-### Use American English
+### Use american english
 
 For words that have multiple spellings, use American English over British English.
 
@@ -15,7 +17,7 @@ Examples:
 - "analyze" over "analyse"
 
 
-### Use active voice {#use-active-voice}
+### Use active voice
 
 Sentences using active voice are more concise and efficient, making your writing more engaging and easier to comprehend.
 
@@ -31,7 +33,7 @@ Sentences using active voice are more concise and efficient, making your writing
 
 _This isn't an easy one, especially for non-native English speakers. If you aren't sure, don't worry. We'll help with any of these._
 
-### Date Format
+### Date format
 
 When including dates in Markdown content across TON documentation, it is essential to maintain a consistent and clear presentation. To achieve this, we recommend the following guidelines:
 
@@ -48,71 +50,149 @@ By adhering to these guidelines, we create a unified approach to presenting date
 
 ### Linking to internal pages
 
-When linking to another page on TON Documentation, use the relative path over the absolute path. Do not hard-code the language path (i.e. `/mandarin/`) in any links. This maintains consistent functionality across different language versions of the site.
+When linking to another page on TON Documentation, use the relative path over the absolute path.
 
-
+#### Correct link:
 ```md
-<!-- Good -->
+Read more about [smart contracts](/v3/documentation/smart-contracts/overview)
+```
 
-Read more about [smart contracts](/mandarin/v3/documentation/smart-contracts/overview)
-
-<!-- Bad -->
-
-Read more about [smart contracts](/mandarin/v3/documentation/smart-contracts/overview)
+#### Incorrect link:
+```md
 Read more about [smart contracts](https://docs.ton.org/v3/documentation/smart-contracts/overview)
 ```
 
-Please also add a trailing slash to all links. This keeps links consistent and avoids redirects, which hurts site performance.
 
+Do not hard-code the language path (i.e. `/mandarin/`) in any links. This maintains consistent functionality across different language versions of the site.
+
+#### Correct link:
 ```md
-<!-- Good -->
-
-Read more about [smart contracts](/docs/developers/smart-contracts/)
-
-<!-- Bad -->
-
-Read more about [smart contracts](/docs/developers/smart-contracts)
+Read more about [smart contracts](/v3/documentation/smart-contracts/overview)
 ```
 
-### Linking to images {#images}
-
-When adding an image to a page, the image should be downloaded and placed in the same folder as the markdown file. You can reference the image like this:
-
-`![alt text for image](./image.png)`
-
+#### Incorrect link:
 ```md
-<!-- Good -->
+Read more about [smart contracts](/mandarin/v3/documentation/smart-contracts/overview)
+```
 
-![How to mint your NFT](./mintYourNFT.gif)
+Add a trailing slash to all links. This keeps links consistent and avoids redirects, which hurts site performance.
 
-<!-- Bad -->
+#### Correct link:
+```md
+Read more about [smart contracts](/v3/documentation/smart-contracts/overview/)
+```
+#### Incorrect link:
+```md
+Read more about [smart contracts](/v3/documentation/smart-contracts/overview)
+```
 
-![How to mint your NFT](https://cdn-images-1.medium.com/max/2000/0342fj_fsdfs.gif)
+## Graphic Explanation Guidelines
+
+### Linking to images
+
+When adding an image to a page, the image should be downloaded and placed in the TON Documentation `static/img` folder.
+
+You can reference the image like this:
+
+`![alt text for image](/img/image.png)`
+
+#### Correct linking:
+```md
+![How to mint your NFT](/img/docs/asset-processing/jetton_transfer.svg)
+```
+
+#### Incorrect linking:
+```md
+![How to mint your NFT](https://docs.tact-lang.org/_astro/logomark-dark.BSmgZYWc_ZKRrUl.svg)
 ```
 
 This helps us ensure the image will be available.
 
-### Header casing {#header-casing}
 
-This site uses **sentence casing** for header names as a convention. Only the first word and proper nouns are capitalized. This applies to all markdown files on lines that begin with hashes (#).
 
-```md
-<!-- Good -->
+### Message processing graph
 
-## Minting your NFT
+To depict message processing, it's advisable to utilize a graphical representation resembling a smart contract graph, complete with labels for transactions and messages.
 
-### Setting up your wallet
+If the order of transactions doesn't matter, you can omit their labels. This simplifies the diagram, making it easier to read and understand the details related to messages and contracts.
 
-### Get enough toncoin
+#### Annotation Primitives
 
-<!-- Bad -->
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1.svg?raw=true',
+    dark: '/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1_dark.svg?raw=true',
+  }}
+/>
+<br></br>
 
-## Minting Your NFT
+* Avoid using big quantity different and bright colors.
+* Use the modification of figures, such as using a dashed borderline.
+* For better comprehension, different transactions could be displayed with distinct line styles: solid and dashed.
 
-### Setting Up Your Wallet
 
-### Getting Enough toncoin
-```
+#### Message Processing Example
+
+<br></br>
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/message_delivery_2.svg?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_2_dark.svg?raw=true',
+  }}
+/>
+<br></br>
+
+
+
+Learn references directly from Visio [message-processing.vsdx](/schemes-visio/message_processing.vsdx).
+
+
+### Formats and Colors
+
+#### Fonts
+
+* **Inter** fonts family  for all text within diagrams.
+
+#### Colors - Light Mode
+* Pencil Hand Drawn(default theme)
+
+#### Colors - Dark Mode
+* Font `#e3e3e3`
+* Background `#232328`
+* Light Highlight(arrows and scheme borders) `#058dd2`
+* Dark Highlight(arrows and scheme borders) `#0088cc`
+* InnerBackGround(for nested blocks) `#333337`
+
+
+#### Version Control Policy
+
+* Set diagrams in the documentation by SVG format for schemes to ensure readability on various devices.
+* Store original files in the project's Git repository under the "/static/visio" directory, making them easier to modify in the future.
+
+
+### Sequence Diagram
+In the case of complex and repetitive communication schemes between 2-3 actors, it is advisable to use a sequence diagram. For messages, use the notation of a common synchronous message arrow.
+
+#### Example
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/message-delivery/message_delivery_7.svg?raw=true',
+      dark: '/img/docs/message-delivery/message_delivery_7_dark.svg?raw=true',
+    }}
+  />
+</div>
+<br></br>
+
+
+### Scheme References
+
+* [message-processing.vsdx](/schemes-visio/message_processing.vsdx)
 
 
 ## Terminology
