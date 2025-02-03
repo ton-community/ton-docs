@@ -12,7 +12,7 @@
 
 我们的智能合约余额中目前有 100  Toncoin 。在收到一条含有 50  Toncoin 的内部信息后，我们发送一条含有 20  Toncoin 的普通信息，交易费为 3  Toncoin ，将从信息中扣除。
 
-![](/img/docs/message-modes-cookbook/send_regular_message_1.svg)
+![](/img/docs/message-modes-cookbook/send_regular_message_1.png)
 
 | Mode and Flags        | Code                       |
 | :-------------------- | :------------------------- |
@@ -23,7 +23,7 @@
 我们的智能合约余额中目前有 100  Toncoin 。在收到 50  Toncoin 的内部信息后，我们发送一条 20  Toncoin 的普通信息，交易费为 3  Toncoin ，将从信息中扣除。
 如果在交易处理过程中出现错误，消息将不会跳转并被忽略。
 
-![](/img/docs/message-modes-cookbook/send_regular_message_2.svg)
+![](/img/docs/message-modes-cookbook/send_regular_message_2.png)
 
 | Mode and Flags         | Code                       |
 | :--------------------- | :------------------------- |
@@ -34,7 +34,7 @@
 我们的智能合约余额中目前有 100  Toncoin 。在收到 50  Toncoin 的内部信息后，我们发送一条 20  Toncoin 的普通信息，交易费为 3  Toncoin ，将从信息中扣除， 
 ，如果在操作处理过程中出现错误--除了回滚交易外，还将退订信息。
 
-![](/img/docs/message-modes-cookbook/send_regular_message_3_error.svg)
+![](/img/docs/message-modes-cookbook/send_regular_message_3_error.png)
 
 | Mode and Flags          | Code                        |
 | :---------------------- | :-------------------------- |
@@ -44,7 +44,7 @@
 
 我们的智能合约余额为 100  Toncoin ，我们收到一条内部信息，金额为 50  Toncoin ，发送一条普通信息，金额为 20  Toncoin ，总费用为 3  Toncoin ，我们单独支付转账费用（从合约余额中扣除）。
 
-![](/img/docs/message-modes-cookbook/send_regular_message_4.svg)
+![](/img/docs/message-modes-cookbook/send_regular_message_4.png)
 
 | Mode and Flags         | Code                       |
 | :--------------------- | :------------------------- |
@@ -55,7 +55,7 @@
 我们的智能合约余额为 100  Toncoin ，我们收到一条内部信息，金额为 50  Toncoin ，并发送一条普通信息，金额为 20  Toncoin ，总费用为 3  Toncoin ，我们单独支付转账费用（从合约余额中支付）， 
 ，如果在操作处理过程中出现错误--除了回滚交易外，还将信息退回。
 
-![](/img/docs/message-modes-cookbook/send_regular_message_5_error.svg)
+![](/img/docs/message-modes-cookbook/send_regular_message_5_error.png)
 
 | Mode and Flags                   | Code                        |
 | :------------------------------- | :-------------------------- |
@@ -66,7 +66,7 @@
 我们的智能合约余额中目前有 100  Toncoin 。在收到一条含有 50  Toncoin 的内部信息后，除了新信息中最初显示的价值外，我们还将携带入站信息的所有剩余价值，
 ，交易费为 3  Toncoin ，将从信息中扣除。
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_6.svg)
+![](/img/docs/message-modes-cookbook/carry_remaining_value_6.png)
 
 | Mode and Flags         | Code                        |
 | :--------------------- | :-------------------------- |
@@ -77,7 +77,7 @@
 我们的智能合约余额中目前有 100  Toncoin 。在收到 50  Toncoin 的内部信息后，除了新信息中最初显示的价值外，我们还将携带所有入站信息的剩余价值，
 ，交易费为 3  Toncoin ，将单独支付（从智能合约余额中支付）。
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_7.svg)
+![](/img/docs/message-modes-cookbook/carry_remaining_value_7.png)
 
 | Mode and Flags          | Code                        |
 | :---------------------- | :-------------------------- |
@@ -88,7 +88,7 @@
 我们的智能合约余额中目前有 100  Toncoin 。
 交易费为 3  Toncoin ，将从信息中扣除，如果在行动处理过程中出现错误--除了回滚交易外，还要退回信息。
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_8_error.svg)
+![](/img/docs/message-modes-cookbook/carry_remaining_value_8_error.png)
 
 | Mode and Flags           | Code                        |
 | :----------------------- | :-------------------------- |
@@ -99,7 +99,7 @@
 我们的智能合约余额中目前有 100  Toncoin 。在收到 50  Toncoin 的内部消息后，我们会发送一条消息，除了收到的原始金额外，我们会转移整个合约余额，交易费为 3  Toncoin ，将单独支付（从智能合约余额中支付），
 ，如果在行动处理过程中发生错误--除了回滚交易外，还会退还消息。
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_9_error.svg)
+![](/img/docs/message-modes-cookbook/carry_remaining_value_9_error.png)
 
 | Mode and Flags               | Code                        |
 | :--------------------------- | :-------------------------- |
@@ -110,7 +110,7 @@
 目前，我们的智能合约余额为 100  Toncoin 。在收到 50  Toncoin 的内部信息后，我们发送了一条信息，除了收到的原始金额外，我们还转移了整个合约余额， 
 ，交易费为 3  Toncoin ，将从信息中扣除。
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_10.svg)
+![](/img/docs/message-modes-cookbook/carry_remaining_value_10.png)
 
 | Mode and Flags          | Code                         |
 | :---------------------- | :--------------------------- |
@@ -121,7 +121,7 @@
 目前我们的智能合约余额为 100  Toncoin 。在收到 50  Toncoin 的内部信息后，我们会发送一条信息，除了收到的原始金额外，我们会转移整个合约余额，交易费为 3  Toncoin ，并将从信息中扣除， 
 ，如果在处理操作过程中出现错误--除了回滚交易外，还会退订信息。
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_11_error.svg)
+![](/img/docs/message-modes-cookbook/carry_remaining_value_11_error.png)
 
 | Mode and Flags            | Code                         |
 | :------------------------ | :--------------------------- |
@@ -132,7 +132,7 @@
 我们的智能合约余额中目前有 100  Toncoin 。在收到一条含有 50  Toncoin 的内部信息后，我们发送了一条信息，除了收到的原始金额外，还转走了整个合约余额，并销毁了合约，
 ，交易费为 3  Toncoin ，将从信息中扣除。
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_12.svg)
+![](/img/docs/message-modes-cookbook/carry_remaining_value_12.png)
 
 | Mode and Flags            | Code                         |
 | :------------------------ | :--------------------------- |
