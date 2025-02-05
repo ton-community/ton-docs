@@ -1,10 +1,30 @@
 import ThemedImage from '@theme/ThemedImage';
 
-# Content Standardization
+# Content standardization
 
-This document aims to standardize certain aspects of writing content to make the contribution process smoother.
+The goal of this guideline is to maintain a consistent documentation style and help contributors standardize their content so that it seamlessly integrates into the documentation.
 
-## Content Preferences
+## Code conventions
+
+- **Most important**: look around. Match the overall style of the project. This includes formatting, naming files, naming objects in code, naming things in documentation, and so on.
+- **For documentation**: When editing documentation, do not wrap lines at 80 characters; instead, configure your editor to soft-wrap.
+- **Grammar**: `cpell` will check the spelling and suggest corrections in case of mistakes automatically before creating new commit. Feel free to add specific `words` to `cspell.json` config to include them in the verification dictionary.
+
+Don't worry too much about styles in general; the maintainers will help you fix them as they review your code.
+
+### Pull requests
+
+So you have decided to contribute code back to upstream by opening a pull request. You've put in a lot of effort, and we appreciate it. We will do our best to work with you and get the pull request reviewed.
+
+When submitting a pull request, please ensure the following:
+
+1. **Keep your pull request small**. Smaller pull requests (~300 lines of diff) are easier to review and more likely to get merged. Make sure the pull request does only one thing, otherwise please split it.
+2. **Use descriptive titles**. It is recommended to follow the commit message style.
+3. **Test your changes**. Describe your test plan in your pull request description.
+
+All pull requests should be opened against the `main` branch.
+
+## Content preferences
 
 ### Use american english
 
@@ -33,7 +53,7 @@ Sentences using active voice are more concise and efficient, making your writing
 
 _This isn't an easy one, especially for non-native English speakers. If you aren't sure, don't worry. We'll help with any of these._
 
-### Date format
+### Date Format
 
 When including dates in Markdown content across TON documentation, it is essential to maintain a consistent and clear presentation. To achieve this, we recommend the following guidelines:
 
@@ -86,11 +106,11 @@ Read more about [smart contracts](/v3/documentation/smart-contracts/overview/)
 Read more about [smart contracts](/v3/documentation/smart-contracts/overview)
 ```
 
-## Image Preferences
+## Image preferences
 
 ### Linking to images
 
-When adding an image to a page, the image should be downloaded and placed in the TON Documentation `static/img` folder.
+When adding an image to a page, download and set an image in the TON Documentation `static/img` folder.
 
 #### Correct linking:
 ```md
@@ -102,7 +122,7 @@ When adding an image to a page, the image should be downloaded and placed in the
 ![How to mint your NFT](https://docs.tact-lang.org/_astro/logomark-dark.BSmgZYWc_ZKRrUl.svg)
 ```
 
-This helps us ensure the image will be available.
+This is helpful to ensure the image will be available.
 
 
 ### Light and dark theme modes
@@ -206,14 +226,14 @@ In the case of complex and repetitive communication schemes between 2-3 actors, 
 #### Themed colors for dark mode:
 * Font `#e3e3e3`
 * Background `#232328`
-* Light Highlight(arrows and scheme borders) `#058dd2`
-* Dark Highlight(arrows and scheme borders) `#0088cc`
+* Light Highlight (arrows and scheme borders) `#058dd2`
+* Dark Highlight (arrows and scheme borders) `#0088cc`
 * InnerBackGround(for nested blocks) `#333337`
 
 
 #### Version control policy:
 
-* Use PNG format for the diagrams in the documentation to ensure readability on various devices.
+* Use a PNG format for the diagrams in the documentation to ensure readability on various devices.
 * Store the original files in the project's Git repository under the `/static/visio` directory to facilitate future modifications.
 * Learn [Visio](https://www.microsoft.com/en-us/microsoft-365/visio/flowchart-software) references directly from [Visio sources](https://github.com/ton-community/ton-docs/tree/main/static/schemes-visio/).
 
@@ -256,7 +276,7 @@ TON should always be capitalized.
 
 ### Mainnet
 
-When referring to the TON Mainnet (i.e. not referring to a testnet) use the proper noun. Proper nouns help avoid confusion and build greater understanding.
+When referring to the TON Mainnet (i.e. not referring to a Testnet) use the proper noun. Proper nouns help avoid confusion and build greater understanding.
 
 **Correct usage:**
 

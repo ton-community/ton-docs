@@ -1,12 +1,12 @@
 # Typography
 
-##  Introduction
+## Introduction
 This standard ensures a consistent and professional style across all TON blockchain documentation. By following these guidelines, you help maintain clarity, enhance readability, and support easy navigation in both the documentation site and any associated menus.
 
 ---
 
-## File Names
-- **Naming Convention:** Use **kebab-case** (all lowercase, words separated by hyphens).
+## File names
+- **Naming convention:** Use **kebab-case** (all lowercase, words separated by hyphens).
 - **Example:** `kebab-case-file-name.md`
 - **Purpose:** Kebab-case is SEO-friendly, easy to read, and helps avoid naming conflicts or issues in case-sensitive file systems.
 
@@ -14,7 +14,7 @@ This standard ensures a consistent and professional style across all TON blockch
 
 ## Typography
 
-### General Text Style
+### General text style
 - Write concise, clear sentences.
 - Use simple, direct language suitable for both new and experienced users.
 - Avoid overly complex structures; aim for clarity and brevity.
@@ -24,48 +24,71 @@ This standard ensures a consistent and professional style across all TON blockch
 
 ### Headers
 
-#### Header Hierarchy:
-1. **H1 (`#`)** – Document Title
-2. **H2 (`##`)** – Major Sections
+#### Header hierarchy:
+1. **H1 (`#`)** – Document title
+2. **H2 (`##`)** – Major sections
 3. **H3 (`###`)** – Subsections under H2
 4. **H4 (`####`)** and below – Use sparingly for finer detail
 
-#### Header Capitalization Style:
-- **H1 and H2:** **Title Case**
-  - Example: `# This Sentence Is in Title Case`
-  - Example: `## This Sentence Is in Title Case`
-- **H3 (and lower levels):** **Sentence case**
+#### Header capitalization style:
+- **H1, H2, H3 and H4:** **Sentence case**
+  - Example: `# This sentence is in sentence case`
+  - Example: `## This sentence is in sentence case`
   - Example: `### This sentence is in sentence case`
-  - Example: `#### This sentence is in sentence case`
+  - Example: `### This sentence is in sentence case`
 
 
-### Navigation Menu Headings
+- **Exception**: **Special terms**.
+Despite the overall _sentence case_ rule,
+  certain words or phrases—key concepts or defined terms within the documentation—must always be formatted
+  using the title case.
+  This means each significant word is capitalized. 
+  - Example: `## Use American English`
+  - Example: `### Date Format`
+  - Example: `# Run the TON Center`
+
+
+### Date Format
+Both Date and Format are special terms and should be capitalized, regardless of the overall Sentence Case rule.
+:::info
+Sometimes you can face with specific capitalization that defined as capitalized according American English rules.
+:::
+- Capitalization standard for specific terms:
+- Example: `## Use American English`
+- Example: `### Date Format`
+
+
+### Navigation menu headings
 Navigation menus should remain **minimalistic** in both the left sidebar (nested catalogs and articles) and the top menu (main categories with dropdowns). All menu headings must use **Title Case** for consistency and clarity.
 
-#### Left Sidebar Menu:
+#### Left sidebar menu:
 - Keep titles concise, in Title Case, and aligned with the document’s H1 or H2 if referencing specific sections.
 - Avoid lengthy descriptions; use short, clear labels of two or three words.
 
-#### Top Menu:
+#### Top menu:
 - Title Case for each main category and its dropdown labels.
 - Use broad, descriptive terms to categorize content, ensuring users can quickly identify the main section they need.
 
 
-### Consistency Between Menu and In-Page Headers
-- Match the header text used in the table of contents or side menu with the header text in the article, ensuring readers always know they are on the correct page or section.
+### Consistency between menu and in-page headers
+- Match the header text used in the table of contents or side menu with the header text in the article, ensuring readers always know they're on the correct page or section.
 
-### Additional Tips for Headers
+### Additional tips for headers
 - Keep headers short, descriptive, and relevant.
 - Use keywords in headers to improve searchability.
 - Avoid repeating the same words in consecutive headers.
 
 ---
 
-## Putting It All Together
-1. **Create your new documentation file** using the kebab-case naming convention (e.g., `getting-started-guide.md`).
-2. **Open the file** and set an H1 heading in Title Case (e.g., `# Getting Started Guide`).
-3. **Organize content** with H2 headings for main topics (e.g., `## Installation Steps`), also in Title Case.
-4. **Use H3 headings** for more detailed subtopics in sentence case (e.g., `### Installing on Linux`).
+## Putting it all together
+1. **Create your new documentation file** using the kebab-case naming convention
+   * Example:`getting-started-guide.md`.
+2. **Open the file** and set an H1 heading in sentence case
+   * Example: `# Getting started guide`.
+3. **Organize content** with H2 headings for main topics 
+   * Example:`## Installation steps`, also in sentence case.
+4. **Use H3 headings** for more detailed subtopics in sentence case 
+   * Example: `### Installing on Linux`).
 5. **Maintain consistency** in any side menus or tables of contents by matching the header text from within the document.
 
 ---
@@ -73,7 +96,7 @@ Navigation menus should remain **minimalistic** in both the left sidebar (nested
 ## Example Structure
 
 ```md
-# Getting Started with TON
+# Getting started with TON
 
 ## Prerequisites
 
@@ -83,7 +106,7 @@ Content goes here...
 ### Checking your environment
 Content goes here...
 
-## Installation Steps
+## Installation steps
 
 ### Installing on Linux
 Content goes here...
@@ -91,7 +114,16 @@ Content goes here...
 ### Installing on macOS
 Content goes here...
 
-## Basic Usage
+## Basic usage
 
 ### Running your first command
 Content goes here...
+```
+
+### Acronyms
+
+When introducing an unfamiliar acronym, spell out the full term, and put the acronym in parentheses. Put both the full term and acronym in bold.
+
+**Example:**
+
+**The Open Network (TON)** is a decentralized and open internet platform...
