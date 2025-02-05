@@ -118,7 +118,7 @@ During this time, anyone can send a complaint against a validator who performed 
 #### Validation of Complaint
 
 After each validation round, validators receive a list of complaints from the Elector smart contract and double-check them by calling `checkloadall`.
-In case the complaint is validated, they on-chain vote in favour of that complaint.
+In case the complaint is validated, they on-chain vote in favour of that complaint. All validators do not need to send a complaint.
 
 These actions are built into `mytonctrl` and happen automatically.
 If the complaint has 66% of the validators' votes (by their weight), a penalty is taken off from the validator's stake.
