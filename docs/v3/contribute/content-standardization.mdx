@@ -14,7 +14,7 @@ Don't worry too much about styles in general; the maintainers will help you fix 
 
 ### Pull requests
 
-So you have decided to contribute code back to upstream by opening a pull request. You've put in a lot of effort, and we appreciate it. We will do our best to work with you and get the pull request reviewed.
+So you've decided to contribute code back to upstream by opening a pull request. You've put in a lot of effort, and we appreciate it. We will do our best to work with you and get the pull request reviewed.
 
 When submitting a pull request, please ensure the following:
 
@@ -26,7 +26,7 @@ All pull requests should be opened against the `main` branch.
 
 ## Content preferences
 
-### Use american english
+### Use American English
 
 For words that have multiple spellings, use American English over British English.
 
@@ -83,7 +83,7 @@ Read more about [smart contracts](https://docs.ton.org/v3/documentation/smart-co
 ```
 
 
-Do not hard-code the language path (i.e. `/mandarin/`) in any links. This maintains consistent functionality across different language versions of the site.
+Don't hard-code the language path (for example, `/mandarin/`) in any links. This maintains consistent capability across different language versions of the site.
 
 #### Correct link:
 ```md
@@ -106,6 +106,24 @@ Read more about [smart contracts](/v3/documentation/smart-contracts/overview/)
 Read more about [smart contracts](/v3/documentation/smart-contracts/overview)
 ```
 
+### See also links section
+
+Include related resources on your page in an H2 section titled `## See also`. 
+
+Use this section to guide readers to additional materials and support a cohesive developer journey.
+
+#### Example:
+
+```md
+## See also
+
+- [Style guide](/v3/contribute/style-guide/)
+- [Typography](/v3/contribute/typography/)
+- [Localization program](/v3/contribute/localization-program/overview/)
+
+```
+
+
 ## Image preferences
 
 ### Linking to images
@@ -114,7 +132,7 @@ When adding an image to a page, download and set an image in the TON Documentati
 
 #### Correct linking:
 ```md
-![How to mint your NFT](/img/docs/asset-processing/jetton_transfer.png)
+![jetton_transfer](/img/docs/asset-processing/jetton_transfer.png)
 ```
 
 #### Incorrect linking:
@@ -357,9 +375,9 @@ Proof-of-work should be capitalized only when at the beginning of a sentence. In
 
 **Incorrect usage:**
 
-- Proof-of-Work
-- Proof of work
-- proof of work
+- Proof-of-Stake
+- Proof of stake
+- proof of stake
 
 The same rules we apply to proof-of-work are applicable to proof-of-stake, proof-of-authority, proof-of-humanity, proof-of-individuality, etc.
 
@@ -376,19 +394,6 @@ Smart contract is a common noun and should only be capitalized at the beginning 
 
 - Smart Contract
 
-### The Merge
-
-When referring to The Merge, treat it as a proper noun. Always capitalize the first letter in each word.
-
-**Correct usage:**
-
-- The Merge
-
-**Incorrect usage:**
-
-- The merge
-- the Merge
-
 ### Zero-knowledge
 
 Zero-knowledge is a common noun and should only be capitalized at the beginning of a sentence. In any other instance, all letters should be lowercase. In either case, zero-knowledge should be hyphenated between each word.
@@ -404,7 +409,7 @@ Zero-knowledge is a common noun and should only be capitalized at the beginning 
 - Zero knowledge
 - zero knowledge
 
-### ZK-proof {#ZK-proof}
+### ZK-proof
 
 When using the abbreviated form of zero-knowledge proof you should shorten zero-knowledge to ZK, and hyphenate the abbreviation.
 
@@ -421,7 +426,7 @@ When using the abbreviated form of zero-knowledge proof you should shorten zero-
 - zK proof
 - zk proof
 
-### ZK-rollup {#ZK-rollup}
+### ZK-rollup
 
 When using the abbreviated form of zero-knowledge rollup you should shorten zero-knowledge to ZK, and hyphenate the abbreviation.
 
@@ -438,18 +443,27 @@ When using the abbreviated form of zero-knowledge rollup you should shorten zero
 - zK rollup
 - zk rollup
 
-### Article authors {#authors}
+### Article authors 
 
 When citing articles from a specific author or organization, use the article's name as a link, followed by a dash, then the author's name italicized.
 
-```md
-<--- Good --->
 
+#### Correct description:
+```md
 - [How to shard your TON smart contract and why](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons) — _Tal Kol_
 - [TON Teleport BTC Whitepaper](https://tgbtc.gitbook.io/docs/whitepaper/abstract) – _RSquad Blockchain Lab_
+```
 
-<--- Bad--->
+#### Incorrect description:
+```md
 
 - [How to shard your TON smart contract and why](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)
 - [TON Teleport BTC Whitepaper](https://tgbtc.gitbook.io/docs/whitepaper/abstract) by RSquad Blockchain Lab
 ```
+
+
+## See also
+- [How to contribute](/v3/contribute/)
+- [Content standardization](/v3/contribute/content-standardization/)
+- [Typography](/v3/contribute/typography/)
+- [Localization program](/v3/contribute/localization-program/overview/)

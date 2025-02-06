@@ -1,4 +1,4 @@
-# Localization Program
+# Localization program
 
 The Translation Program is a collaborative effort to translate various documents related to TON into multiple languages, making the website more accessible to billions of non-English speakers worldwide.
 
@@ -33,3 +33,4 @@ We sincerely appreciate the thousands of community members who are integral to t
 If you are participating in or considering joining the Translation Program, refer to the translation guides below:
 * [**Translation Style Guide**](/v3/contribute/localization-program/translation-style-guide) – Instructions and tips for translators.
 * [**Crowdin Online Editor Guide**](https://support.crowdin.com/online-editor/) – An in-depth guide to using the Crowdin online editor and some of Crowdin's advanced features.
+
