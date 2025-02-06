@@ -4,6 +4,12 @@ description: At the end of the tutorial, you will have deployed multisig contrac
 
 # Make a simple multisig contract with fift
 
+:::danger
+This page is heavily outdated and will be reworked soon.
+
+Please check [this repo](https://github.com/ton-blockchain/multisig-contract-v2) for the updated info. To get successful results do not update the packages and do not use yarn.
+:::
+
 :::caution advanced level
 This information is **very low-level**. Could be hard to understand for newcomers and designed for advanced people who want to understand [fift](/v3/documentation/smart-contracts/fift/overview). The use of fift is not required in everyday tasks.
 :::

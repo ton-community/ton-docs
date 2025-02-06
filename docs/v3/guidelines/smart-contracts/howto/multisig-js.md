@@ -4,6 +4,12 @@ description: At the end of this guide you will deploy multisig wallet and send s
 
 # Interact with multisig wallets using TypeScript
 
+:::danger
+This page is heavily outdated and will be reworked soon.
+
+Please check [this repo](https://github.com/ton-blockchain/multisig-contract-v2) for the updated info. To get successful results do not update the packages and do not use yarn.
+:::
+
 ## Introduction
 If you don't know what is multisig wallet in TON, you can check it out [here](/v3/guidelines/smart-contracts/howto/multisig)
 
