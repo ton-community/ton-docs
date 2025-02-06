@@ -7,7 +7,9 @@ description: At the end of the tutorial, you will have deployed multisig contrac
 :::danger
 This page is heavily outdated and will be reworked soon.
 
-Please check [this repo](https://github.com/ton-blockchain/multisig-contract-v2) for the updated info. To get successful results do not update the packages and do not use yarn.
+Please check [this repo](https://github.com/ton-blockchain/multisig-contract-v2) for the updated info.
+
+To get successful results do not update the packages and do not use yarn.
 :::
 
 :::caution advanced level
