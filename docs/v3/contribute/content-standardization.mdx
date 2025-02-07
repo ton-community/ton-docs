@@ -2,7 +2,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 # Content standardization
 
-This guideline aims to maintain a consistent documentation style and help contributors standardize their content to seamlessly integrate into the documentation.
+This guideline aims to maintain a consistent documentation style and help contributors standardize their content to integrate into the documentation seamlessly.
 
 ## Content preferences
 
@@ -32,6 +32,14 @@ Sentences using active voice are more concise and efficient, making your writing
 [Read more on active voice](https://www.grammarly.com/blog/active-vs-passive-voice/)
 
 _This isn't an easy one, especially for non-native English speakers. If you aren't sure, don't worry. We'll help with any of these._
+
+
+### Grammar
+
+This documentation uses [cspell](https://cspell.org/) to correct grammar during development.
+
+The `cspell` will check the spelling and automatically suggest corrections in case of mistakes before creating a new commit. Feel free to add specific words to the [cspell.json](https://github.com/ton-community/ton-docs/blob/doc_editor_guidelines/cspell.json) config and include them in the verification dictionary.
+
 
 ### Date Format
 
@@ -443,18 +451,6 @@ When citing articles by a specific author or organization, use the article's nam
 - [How to shard your TON smart contract and why](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)
 - [TON Teleport BTC Whitepaper](https://tgbtc.gitbook.io/docs/whitepaper/abstract) by RSquad Blockchain Lab
 ```
-
-### Pull requests
-
-So you've decided to contribute code back to upstream by opening a pull request. You've put in a lot of effort, and we appreciate it. We will do our best to work with you and get the pull request reviewed.
-
-When submitting a pull request, please ensure the following:
-
-1. **Keep your pull request small**. Smaller pull requests (~300 lines of diff) are easier to review and more likely to get merged. Make sure the pull request does only one thing, otherwise please split it.
-2. **Use descriptive titles**. It is recommended to follow the commit message style.
-3. **Test your changes**. Describe your test plan in your pull request description.
-
-All pull requests should be opened against the `main` branch.
 
 ## See also
 - [How to contribute](/v3/contribute/)
