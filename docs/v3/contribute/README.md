@@ -47,6 +47,13 @@ To avoid excessive rework, read the contribution guidelines in the [Style guide]
 
 - Learn the documentation development flow from a [ton-docs/README.md](https://github.com/ton-community/ton-docs?tab=readme-ov-file#set-up-your-environment-%EF%B8%8F) document.
 
+#### Best practice for pull request
+
+1. **Keep your pull request small**. Minor pull requests (~300 lines of diff) are easier to review and more likely to get merged. Make sure the pull request does only one thing; otherwise, please split it.
+2. **Use descriptive titles**. It would be best to follow the commit message style.
+3. **Test your changes**. Run build locally, and make sure you have no crushes.
+4. **Use soft wrap**: Don't wrap lines at 80 characters; configure your editor to soft-wrap.
+
 
 ## Communicate to other developers
 
