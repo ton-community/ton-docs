@@ -2,27 +2,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 # Content standardization
 
-The goal of this guideline is to maintain a consistent documentation style and help contributors standardize their content so that it seamlessly integrates into the documentation.
-
-## Code conventions
-
-- **Most important**: look around. Match the overall style of the project. This includes formatting, naming files, naming objects in code, naming things in documentation, and so on.
-- **For documentation**: When editing documentation, do not wrap lines at 80 characters; instead, configure your editor to soft-wrap.
-- **Grammar**: `cpell` will check the spelling and suggest corrections in case of mistakes automatically before creating new commit. Feel free to add specific `words` to `cspell.json` config to include them in the verification dictionary.
-
-Don't worry too much about styles in general; the maintainers will help you fix them as they review your code.
-
-### Pull requests
-
-So you've decided to contribute code back to upstream by opening a pull request. You've put in a lot of effort, and we appreciate it. We will do our best to work with you and get the pull request reviewed.
-
-When submitting a pull request, please ensure the following:
-
-1. **Keep your pull request small**. Smaller pull requests (~300 lines of diff) are easier to review and more likely to get merged. Make sure the pull request does only one thing, otherwise please split it.
-2. **Use descriptive titles**. It is recommended to follow the commit message style.
-3. **Test your changes**. Describe your test plan in your pull request description.
-
-All pull requests should be opened against the `main` branch.
+This guideline aims to maintain a consistent documentation style and help contributors standardize their content to seamlessly integrate into the documentation.
 
 ## Content preferences
 
@@ -41,11 +21,11 @@ Examples:
 
 Sentences using active voice are more concise and efficient, making your writing more engaging and easier to comprehend.
 
-**Active voice sentence:** an actor acts on a target
+**Active voice sentence:** An actor acts on a target
 
 > _"The smart contract processed a message."_
 
-**Passive voice sentence:** a target acts on an actor
+**Passive voice sentence:** A target acts on an actor
 
 > _"The message was processed by the smart contract."_
 
@@ -66,7 +46,7 @@ Use the **"Mon D, YYYY"** format. This approach is standard for American readers
 - Preferred: Nov 2, 2023 • Feb 11, 2023
 - Avoid: 2-Nov-2023 • 11/2/2023 • 2/11/2023
 
-By adhering to these guidelines, we create a unified approach to presenting dates, fostering clarity and comprehension throughout TON documentation.
+Adhering to these guidelines creates a unified approach to presenting dates, fostering clarity and comprehension throughout the TON documentation.
 
 ### Linking to internal pages
 
@@ -95,7 +75,7 @@ Read more about [smart contracts](/v3/documentation/smart-contracts/overview)
 Read more about [smart contracts](/mandarin/v3/documentation/smart-contracts/overview)
 ```
 
-Add a trailing slash to all links. This keeps links consistent and avoids redirects, which hurts site performance.
+Set a trailing slash to all links. This keeps links consistent and avoids redirects, which hurts site performance.
 
 #### Correct link:
 ```md
@@ -108,9 +88,9 @@ Read more about [smart contracts](/v3/documentation/smart-contracts/overview)
 
 ### See also links section
 
-Include related resources on your page in an H2 section titled `## See also`. 
+Include related resources on your page in an H2 section titled `## See also`.
 
-Use this section to guide readers to additional materials and support a cohesive developer journey.
+This section guides readers to additional materials and supports a cohesive developer journey.
 
 #### Example:
 
@@ -171,9 +151,9 @@ import ThemedImage from '@theme/ThemedImage';
 
 ###  Annotation specification
 
-Use a graphical representation that resembles a smart contract graph to depict message processing, including labels for transactions and messages.
+To depict message processing, use a graphical representation that resembles a smart contract graph, including labels for transactions and messages.
 
-If the order of transactions is unimportant, omit their labels. This approach simplifies the diagram and makes it easier to read and understand the details of messages and contracts.
+If the transaction order isn't essential, omit their labels. This simplifies the diagram, making it easier to read and understand the message and contract details.
 
 ### Annotation primitives
 
@@ -195,7 +175,7 @@ If the order of transactions is unimportant, omit their labels. This approach si
 
 On the TON blockchain, it is essential to provide clear explanations of actor behavior and message processing for various smart contracts and fundamental scenarios.
 
-The message processing schemes aim to offer additional context for readers seeking a clear understanding of actor behavior. These schemes should be unified throughout the entire TON Documentation to ensure maximum clarity.
+The message processing schemes offer additional context for readers seeking a clear understanding of actor behavior. These schemes should be unified throughout the TON documentation to ensure maximum clarity.
 
 #### Example
 
@@ -213,7 +193,7 @@ The message processing schemes aim to offer additional context for readers seeki
 
 ### Sequence diagram
 
-In the case of complex and repetitive communication schemes between 2-3 actors, it is advisable to use a sequence diagram. For messages, use the notation of a common synchronous message arrow.
+It is advisable to use a sequence diagram for complex and repetitive communication schemes between 2-3 actors. For messages, use the notation of a common synchronous message arrow.
 
 #### Example
 
@@ -364,7 +344,7 @@ When referring to the TON Mainnet (i.e. not referring to a Testnet) use the prop
 
 ### Proof-of-work / Proof-of-stake
 
-Proof-of-work should be capitalized only when at the beginning of a sentence. In any other instance, all letters should be lower case. In either case, proof-of-work should be hyphenated between each word.
+Proof-of-work should be capitalized only when at the beginning of a sentence. In any other instance, all letters should be lowercase. In either case, proof-of-work should be hyphenated between each word.
 
 **Correct usage:**
 
@@ -383,7 +363,7 @@ The same rules we apply to proof-of-work are applicable to proof-of-stake, proof
 
 ### Smart contract
 
-Smart contract is a common noun and should only be capitalized at the beginning of a sentence. In any other instance, all letters should be lowercase.
+The smart contract is a common noun and should only be capitalized at the beginning of a sentence. In any other instance, all letters should be lowercase.
 
 **Correct usage:**
 
@@ -460,7 +440,25 @@ When citing articles from a specific author or organization, use the article's n
 - [How to shard your TON smart contract and why](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)
 - [TON Teleport BTC Whitepaper](https://tgbtc.gitbook.io/docs/whitepaper/abstract) by RSquad Blockchain Lab
 ```
+## Code conventions
 
+- **Most important**: look around. Match the overall style of the project. This includes formatting, naming files, naming objects in code, naming things in documentation, etc.
+- **For documentation**: When editing documentation, do not wrap lines at 80 characters; instead, configure your editor to soft-wrap.
+- **Grammar**: `spell` will check the spelling and suggest corrections in case of mistakes automatically before creating a new commit. Feel free to add specific words to the `cspell.json` config to include them in the verification dictionary.
+
+Don't worry too much about styles; the maintainers will help you fix them as they review your code.
+
+### Pull requests
+
+So you've decided to contribute code back to upstream by opening a pull request. You've put in a lot of effort, and we appreciate it. We will do our best to work with you and get the pull request reviewed.
+
+When submitting a pull request, please ensure the following:
+
+1. **Keep your pull request small**. Smaller pull requests (~300 lines of diff) are easier to review and more likely to get merged. Make sure the pull request does only one thing, otherwise please split it.
+2. **Use descriptive titles**. It is recommended to follow the commit message style.
+3. **Test your changes**. Describe your test plan in your pull request description.
+
+All pull requests should be opened against the `main` branch.
 
 ## See also
 - [How to contribute](/v3/contribute/)
