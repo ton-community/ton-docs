@@ -40,7 +40,7 @@ Please provide a brief description of the changes introduced in this pull reques
 4. Before submitting your pull request, complete and verify each milestone in the description checklist.
 
 :::info
-To avoid excessive rework, read the contribution guidelines in the Style guide, Content standardization, and Typography before contributing. Don't worry about minor issues; maintainers will help you fix them during the review process.
+To avoid excessive rework, read the contribution guidelines in the [Style guide](/v3/contribute/style-guide/), [Content standardization](/v3/contribute/content-standardization/), and [Typography](/v3/contribute/typography/) before contributing. Don't worry about minor issues; maintainers will help you fix them during the review process.
 :::
 
 ### Development
