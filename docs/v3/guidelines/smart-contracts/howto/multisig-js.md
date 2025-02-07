@@ -4,7 +4,7 @@ description: At the end of this guide you will deploy multisig wallet and send s
 
 # Interact with multisig wallets using TypeScript
 
-:::danger
+:::warning
 This page is heavily outdated and will be updated soon.
 See the [multisig-contract-v2](https://github.com/ton-blockchain/multisig-contract-v2), the most up-to-date multisignature contract on TON.
 Use npm and do not update.
