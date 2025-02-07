@@ -1,6 +1,11 @@
 
 # Contribution Guide
 
+:::danger
+This page is outdated and will be deleted soon.
+See the [How to contribute](/v3/contribute/).
+:::
+
 Here is a step-by-step guide of contributing to TON Documentation with Tutorials.
 
 :::tip opportunity

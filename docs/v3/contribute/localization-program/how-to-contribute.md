@@ -1,6 +1,8 @@
-# How to Contribute
+# How to contribute
 
-In our quest to make **TON the most successful blockchain**, ensuring that TON documentation is comprehensible to people worldwide is crucial. Localization is key, and we're **excited** to have you join us in this effort.
+:::info
+This page explains how to participate in localization program for TON documentation.
+:::
 
 ## Prerequisites
 
