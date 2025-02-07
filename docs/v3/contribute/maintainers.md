@@ -37,3 +37,10 @@ However, we would like to acknowledge the substantial contributions made by the 
 -   [xssnick](https://github.com/xssnick): content
 
 We sincerely appreciate each contributor who has helped make TON documentation a rich and reliable resource.
+
+## See also
+
+- [How to contribute](/v3/contribute/)
+- [Content standardization](/v3/contribute/content-standardization/)
+- [Typography](/v3/contribute/typography/)
+- [Localization program](/v3/contribute/localization-program/overview/)

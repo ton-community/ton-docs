@@ -1,4 +1,4 @@
-# How It Works
+# How it works
 
 ![how it works](/img/localizationProgramGuideline/localization-program.png)
 

@@ -2,9 +2,11 @@ import ThemedImage from '@theme/ThemedImage';
 
 # Content standardization
 
+## Introduction
+
 This guideline aims to maintain a consistent documentation style and help contributors standardize their content so that it seamlessly integrates into the documentation.
 
-## Content preferences
+## Text preferences
 
 ### Use American English
 
@@ -41,28 +43,29 @@ This documentation uses [cspell](https://cspell.org/) to correct grammar during 
 The `cspell` will check the spelling and automatically suggest corrections in case of mistakes before creating a new commit. Feel free to add specific words to the [cspell.json](https://github.com/ton-community/ton-docs/blob/doc_editor_guidelines/cspell.json) config and include them in the verification dictionary.
 
 
-### Date Format
-
-When including dates in Markdown content across TON documentation, it is essential to maintain a consistent and clear presentation. To achieve this, we recommend the following guidelines:
-
-#### Format:
+### Date format
 
 Use the **"Mon D, YYYY"** format. This approach is standard for American readers, spells out the month (or uses a three-letter abbreviation), and minimizes confusion with day–month ordering.
 
-#### Examples:
+#### Preferred format:
+- Nov 2, 2023 
+- Feb 11, 2023
 
-- Preferred: Nov 2, 2023 • Feb 11, 2023
-- Avoid: 2-Nov-2023 • 11/2/2023 • 2/11/2023
+#### Incorrect format:
+- 2-Nov-2023 
+- 11/2/2023 
+- 2/11/2023
 
 Adhering to these guidelines creates a unified approach to presenting dates, fostering clarity and comprehension throughout the TON documentation.
 
+## Link preferences
 ### Linking to internal pages
 
-When linking to another page on TON Documentation, use the relative path over the absolute path.
+When linking to another page on TON documentation, use the relative path over the absolute path.
 
 #### Correct link:
 ```md
-Read more about [smart contracts](/v3/documentation/smart-contracts/overview)
+Read more about [smart contracts](/v3/documentation/smart-contracts/overview/)
 ```
 
 #### Incorrect link:
@@ -75,7 +78,7 @@ Don't hard-code the language path (for example, `/mandarin/`) in any links. This
 
 #### Correct link:
 ```md
-Read more about [smart contracts](/v3/documentation/smart-contracts/overview)
+Read more about [smart contracts](/v3/documentation/smart-contracts/overview/)
 ```
 
 #### Incorrect link:
@@ -116,7 +119,7 @@ This section guides readers to additional materials and supports a cohesive deve
 
 ### Linking to images
 
-When adding an image to a page, download and set an image in the TON Documentation `static/img` folder.
+When adding an image to a page, download and set an image in the TON documentation `static/img` folder.
 
 #### Correct linking:
 ```md
@@ -125,7 +128,7 @@ When adding an image to a page, download and set an image in the TON Documentati
 
 #### Incorrect linking:
 ```md
-![How to mint your NFT](https://docs.tact-lang.org/_astro/logomark-dark.BSmgZYWc_ZKRrUl.svg)
+![tact_logo](https://docs.tact-lang.org/_astro/logomark-dark.BSmgZYWc_ZKRrUl.svg)
 ```
 
 This is helpful to ensure the image will be available.
@@ -133,7 +136,7 @@ This is helpful to ensure the image will be available.
 
 ### Light and dark theme modes
 
-TON Documentation supports theme-specific images. Follow these steps to add themed pictures to the page.
+TON documentation supports theme-specific images. Follow these steps to add themed pictures to the page.
 
 1. Themed mode is available only for `.mdx` files.
 
@@ -231,21 +234,20 @@ Use a sequence diagram for complex and repetitive communication schemes between 
 * Avoid overusing **bold** and _italic_ formatting for optimal readability.
 
 #### Themed colors for light mode:
-* Pencil Hand Drawn (default Visio theme).
+* Pencil Hand Drawn, default Visio theme.
 
 #### Themed colors for dark mode:
-* Font `#e3e3e3`
-* Background `#232328`
-* Light Highlight (arrows and scheme borders) `#058dd2`
-* Dark Highlight (arrows and scheme borders) `#0088cc`
-* InnerBackGround(for nested blocks) `#333337`
+* Font `#e3e3e3`.
+* Background `#232328`.
+* Light Highlight, arrows and scheme borders `#058dd2`.
+* Dark Highlight, arrows and scheme borders `#0088cc`.
+* InnerBackGround, for nested blocks `#333337`.
 
 
 #### Version control policy:
 
 * Store the original files in the project's Git repository under the `/static/visio` directory to facilitate future modifications.
 * Learn [Visio](https://www.microsoft.com/en-us/microsoft-365/visio/flowchart-software) references directly from [Visio sources](https://github.com/ton-community/ton-docs/tree/main/static/schemes-visio/).
-
 
 
 ## Terminology
@@ -447,7 +449,6 @@ When citing articles by a specific author or organization, use the article's nam
 
 #### Incorrect description:
 ```md
-
 - [How to shard your TON smart contract and why](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)
 - [TON Teleport BTC Whitepaper](https://tgbtc.gitbook.io/docs/whitepaper/abstract) by RSquad Blockchain Lab
 ```

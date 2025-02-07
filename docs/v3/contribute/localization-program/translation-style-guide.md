@@ -1,4 +1,4 @@
-# Translation Style Guide
+# Translation style guide
 This translation style guide contains some of the most important guidelines, instructions, and tips for translators, helping us localize the website.
 
 This document serves as a general guide and is not specific to any one language.
