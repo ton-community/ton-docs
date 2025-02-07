@@ -5,17 +5,15 @@ description: At the end of this guide you will deploy multisig wallet and send s
 # Interact with multisig wallets using TypeScript
 
 :::danger
-This page is heavily outdated and will be reworked soon.
-
-Please check [this repo](https://github.com/ton-blockchain/multisig-contract-v2) for the updated info.
-
-To get successful results do not update the packages and do not use yarn.
+This page is heavily outdated and will be updated soon.
+See the [multisig-contract-v2](https://github.com/ton-blockchain/multisig-contract-v2), the most up-to-date multisignature contract on TON.
+Use npm and do not update.
 :::
 
 ## Introduction
 If you don't know what is multisig wallet in TON, you can check it out [here](/v3/guidelines/smart-contracts/howto/multisig)
 
-Following this steps you will learn how to:
+Following these steps you will learn how to:
  * Create and deploy multisig wallet
  * Create, sign and send transactions with that wallet
 
@@ -32,7 +30,7 @@ The full code of this guide is available here:
 ## Create and deploy multisig wallet
 Let's create a source file, `main.ts` for example. Open it in your favorite code editor and follow this guide!
 
-At first we need to import all important stuff
+At first, we need to import all important stuff
 ```js
 import { Address, beginCell, MessageRelaxed, toNano, TonClient, WalletContractV4, MultisigWallet, MultisigOrder, MultisigOrderBuilder } from "ton";
 import { KeyPair, mnemonicToPrivateKey } from 'ton-crypto';
