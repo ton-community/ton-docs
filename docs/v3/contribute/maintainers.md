@@ -1,8 +1,8 @@
 # Maintainers
 
-## Active Team
+## Active team
 
-Below is an alphabetical list of the current members on the TON Documentation team.
+Below is an alphabetical list of the current members of the TON documentation team.
 
 ### Alex Golev
 
@@ -13,11 +13,11 @@ Onboarding Lead at TON Studio
 
 ## Acknowledgements
 
-TON Docs was originally created by [tolya-yanot](https://github.com/tolya-yanot) and [EmelyanenkoK](https://github.com/EmelyanenkoK).
+TON documentation was created by [tolya-yanot](https://github.com/tolya-yanot) and [EmelyanenkoK](https://github.com/EmelyanenkoK).
 
-Over time, TON Docs has benefitted from the intellect and dedication of [numerous external contributors](https://github.com/ton-community/ton-docs/graphs/contributors). We extend our heartfelt gratitude to each of them.
+Over time, TON documentation has benefitted from the intellect and dedication of [numerous external contributors](https://github.com/ton-community/ton-docs/graphs/contributors). We extend our heartfelt gratitude to each of them.
 
-However, we would like to specially acknowledge the substantial contributions made by the following individuals. Their respective contributions have greatly enriched the quality and depth of our documentation:
+However, we would like to acknowledge the substantial contributions made by the following individuals especially. Their respective contributions have greatly enriched the quality and depth of our documentation:
 
 -   [akifoq](https://github.com/akifoq): early contributions
 -   [amnch1](https://github.com/amnch1): fixes
@@ -36,4 +36,4 @@ However, we would like to specially acknowledge the substantial contributions ma
 -   [TrueCarry](https://github.com/TrueCarry): content
 -   [xssnick](https://github.com/xssnick): content
 
-Our sincere appreciation to each and every contributor who has aided in making TON Docs a rich and reliable resource.
+We sincerely appreciate each contributor who has helped make TON documentation a rich and reliable resource.
