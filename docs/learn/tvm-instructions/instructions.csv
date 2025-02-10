@@ -711,7 +711,7 @@ STDICTS,STSLICE,#CE,dict_serial,CE,"STDICTS
 ",s b - b',18,"Stores a _Slice_-represented dictionary `s` into _Builder_ `b`.
 It is actually a synonym for `STSLICE`."
 STDICT,,#F400,dict_serial,F400,"STDICT
-STOPTREF",D b - b',26,"Stores dictionary `D` into _Builder_ `b`, returing the resulting _Builder_ `b'`.
+STOPTREF",D b - b',26,"Stores dictionary `D` into _Builder_ `b`, returning the resulting _Builder_ `b'`.
 In other words, if `D` is a cell, performs `STONE` and `STREF`; if `D` is _Null_, performs `NIP` and `STZERO`; otherwise throws a type checking exception."
 SKIPDICT,,#F401,dict_serial,F401,"SKIPDICT
 SKIPOPTREF",s - s',26,Equivalent to `LDDICT` `NIP`.
