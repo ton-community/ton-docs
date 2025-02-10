@@ -272,5 +272,5 @@ You did it, ha-ha! 🚀🚀🚀
 
 ## See also
 
-- [Read more about multisig wallets in TON](https://github.com/akifoq/multisig) from akifoq
+- [Read more about multisig wallets in TON](https://github.com/akifoq/multisig) — _[@akifoq](https://t.me/aqifoq)_
 - [Multisig wallet v2](https://github.com/ton-blockchain/multisig-contract-v2)
