@@ -6,7 +6,7 @@ Before proceeding, it is recommended that readers have a basic understanding of 
 
 ## Introduction
 
-Get methods are special functions in smart contracts that are made for querying specific data from them. Their execution doesn't cost any fees and happens outside of the blockchain.
+Get methods are special functions in smart contracts designed for querying specific data. Their execution doesn't cost any fees and happens outside of the blockchain.
 
 These functions are very common in most smart contracts. For example, the default [Wallet contract](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) has several get methods, such as `seqno()`, `get_subwallet_id()` and `get_public_key()`. They are used by wallets, SDKs, and APIs to fetch data about wallets.
 
@@ -47,7 +47,7 @@ These functions are very common in most smart contracts. For example, the defaul
     }
     ```
 
-2. **Conditional data retrieval**: Sometimes, the data that needs to be retrieved depends on certain conditions, such as the current time.
+2. **Conditional data retrieval**: In some cases, the data retrieved depends on specific conditions, such as the current time.
 
     Example:
 
@@ -256,7 +256,7 @@ async function main() {
 main();
 ```
 
-This code will result `Total: 123` output. The number can be different, this is just an example.
+This code will output `Total: 123` The number may vary, as this is just an example.
 
 ### Testing get methods
 
@@ -271,7 +271,7 @@ async getTotal(provider: ContractProvider) {
 }
 ```
 
-It executed the get method and fetches the resulting stack. The stack in case with get methods is basically what it did return. In this snippet, we read a single number from it. In more complex cases with several values returned at once, you can just call the `readSomething` type of methods several times to parse the whole execution result from stack.
+It executes the get method and retrieves the resulting stack. The stack in case with get methods is basically what it did return. In this snippet, we read a single number from it. In more complex cases with several values returned at once, you can just call the `readSomething` type of methods several times to parse the whole execution result from stack.
 
 Finally, we can use this method in our tests. Navigate to the `tests/Counter.spec.ts` and add a new test:
 
@@ -287,7 +287,7 @@ Check it by running `npx blueprint test` in your terminal and if you did everyth
 
 ## Invoking get methods from other contracts
 
-Contrary to what might seem intuitive, invoking get methods from other contracts is not possible on-chain, primarily due to the nature of blockchain technology and the need for consensus.
+Although it may seem intuitive, invoking get methods from other contracts is not possible on-chain due to blockchain technology's nature and the need for consensus.
 
 Firstly, acquiring data from another shardchain may require time. Such latency could easily disrupt contract execution flow, as blockchain operations are expected to execute in a deterministic and timely manner.
 
@@ -301,7 +301,7 @@ These limitations imply that one contract cannot directly access the state of an
 
 ### Solutions and Workarounds
 
-In the TON Blockchain, smart contracts communicate via messages, instead of directly invoking methods from another contract. A message requesting execution of a specific method can be sent to a targeted contract. These requests typically start with special [operation codes](/v3/documentation/smart-contracts/message-management/internal-messages).
+In the TON Blockchain, smart contracts communicate via messages, instead of directly invoking methods from another contract. A message can be sent to a targeted contract requesting the execution of a specific method. These requests typically start with special [operation codes](/v3/documentation/smart-contracts/message-management/internal-messages).
 
 A contract designed to accept these requests will execute the desired method and send the results back in a separate message. While this might seem complex, it actually streamlines communication between contracts, and enhances the blockchain network's scalability and performance.
 
