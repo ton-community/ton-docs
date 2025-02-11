@@ -4,7 +4,7 @@ In this article, we will review and discuss the elements to consider for those w
 
 ## Checklist
 
-### 1. Name collisions
+### 1. Name collisions.
 
 Func variables and functions may contain almost any legit character. I.e. `var++`, `~bits`, `foo-bar+baz` including commas are valid variables and functions names.
 
