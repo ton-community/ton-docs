@@ -42,7 +42,7 @@ Writing tests in Blueprint (based on [Sandbox](https://github.com/ton-org/sandbo
 it('should execute with success', async () => {                              // description of the test case
     const res = await main.sendMessage(sender.getSender(), toNano('0.05'));  // performing an action with contract main and saving result in res
 
-    expect(res.transactions).toHaveTransaction({                             // configure the expected result with expect() function
+    expect(res.transactions).toHaveTransaction({                             // Define the expected result using the expect() function
         from: main.address,                                                  // set expected sender for transaction we want to test matcher properties from
         success: true                                                        // set the desirable result using matcher property success
     });
@@ -52,7 +52,7 @@ it('should execute with success', async () => {                              // 
 ```
 
 
-### Writing Tests for Complex Assertion
+### Writing Tests for Complex Assertions
 
 The basic workflow of creating a test is:
 1. Create a specific wrapped `Contract` entity using `blockchain.openContract()`.
@@ -81,7 +81,7 @@ You can learn the whole list of matcher fields from the [Sandbox documentation](
 
 #### Extract SendMode
 
-To extract the send mode of a sent message you can use the following code:
+To extract the send mode of a message, use the following code:
 
 ```ts
 const re = await blockchain.executor.runTransaction({
@@ -122,7 +122,7 @@ Learn more about testing from the most valuable community tutorials on TON:
 
 ## Examples
 
-Check test suites used for TON Ecosystem contracts and learn by examples.
+Explore test suites used in TON ecosystem contracts and learn from examples.
 
 * [liquid-staking-contract sandbox tests](https://github.com/ton-blockchain/liquid-staking-contract/tree/main/tests)
 * [governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/config_tests/tests/)
