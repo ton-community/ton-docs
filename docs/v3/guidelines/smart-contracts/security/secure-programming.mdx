@@ -13,11 +13,11 @@ In TON, it is strongly recommended to avoid “unbounded data structures” and 
 
 
 1. One `jetton-minter` that stores `total_supply`, `minter_address`, and a couple of refs: token description (metadata) and `jetton_wallet_code`.
-1. And a lot of jetton-wallet, one for each owner of these jettons. Each such wallet stores only the owner's address, their balance, jetton-minter address, and a link to jetton_wallet_code.
+1. And multiple jetton-wallets, one for each owner of these jettons. Each such wallet stores only the owner's address, their balance, jetton-minter address, and a link to jetton_wallet_code.
 
 This is necessary so that the transfer of Jettons occurs directly between wallets and does not affect any high-load addresses, which is fundamental for the parallel processing of transactions.
 
-That is, get ready so that your contract turns into a "group of contracts", and they will actively interact with each other.
+Be prepared for your contract to evolve into a 'group of contracts' that actively interact with each other.
 
 ## Partial Execution of Transactions is Possible
 
@@ -35,11 +35,11 @@ As follows from the diagram:
 1. `destination_wallet` sends `op::transfer_notification` to its owner (`destination`);
 1. `destination_wallet` returns excess gas with `op::excesses` message on `response_destination` (usually `sender`).
 
-Note that if the `destination_wallet` was unable to process the `op::internal_transfer` message (an exception occurred or the gas ran out), then this part and subsequent steps will not be executed. But the first step (reducing the balance in `sender_wallet`) will be completed. The result is a partial execution of the transaction, an inconsistent state of the `Jetton` and in this case, the loss of money.
+Note that if the `destination_wallet` was unable to process the `op::internal_transfer` message (an exception occurred or the gas ran out), then this part and subsequent steps will not be executed. But the first step (reducing the balance in `sender_wallet`) will be completed. This results in partial transaction execution, leaving the Jetton in an inconsistent state and potentially causing financial loss.
 
 In the worst case scenario, all the tokens can be stolen in this way. Imagine that you first accrue bonuses to the user, and then send an `op::burn` message to their Jetton wallet, but you cannot guarantee that the `op::burn` will be processed successfully.
 
-## TON Smart Contract Developer Must Control the Gas
+## TON Smart Contract Developers Must Manage Gas
 
 In Solidity, gas is not much of a concern for contract developers. If the user provides too little gas, everything will be reverted as if nothing had happened (but the gas will not be returned). If they provide enough, the actual costs will automatically be calculated and deducted from their balance.
 
@@ -140,7 +140,7 @@ For example, in TON Jetton, if the recipient's wallet cannot accept any tokens (
 
 In general, we recommend processing bounced messages, however, they can’t be used as a means of full protection from failed message processing and incomplete execution.
 
-It takes gas to send a bounced message and process it, and if there isn’t enough provided by the sender, then no bounced.
+Sending and processing bounced messages requires gas. If the sender does not provide enough, the bounce will not occur.
 
 Secondly, TON does not provide for a chain of jumps. This means a bounced message can't be re-bounced. For example, if the second message is sent after the entry message, and the second one triggers the third one, then the entry contract will not be aware of the failure of processing the third message. Similarly, if the processing of the first sends the second and the third, then the failure of the second will not affect the processing of the third.
 
@@ -216,7 +216,7 @@ Things get more complicated if, during development, your code starts sending mor
 
 ### 7. Return Gas Excesses Carefully
 
-If excess gas is not returned to the sender, the funds will accumulate in your contracts over time. In principle, nothing terrible, this is just suboptimal practice. You can add a function for raking out excesses, but popular contracts like TON Jetton still return to the sender with the message `op::excesses`.
+If excess gas is not returned to the sender, funds will accumulate in the contract over time. While not catastrophic, this is suboptimal practice. You can add a function for raking out excesses, but popular contracts like TON Jetton still return to the sender with the message `op::excesses`.
 
 TON has a useful mechanism: `SEND_MODE_CARRY_ALL_REMAINING_MESSAGE_VALUE = 64`. When using this mode in `send_raw_message()`, the rest of the gas will be forwarded further with the message (or back) to the new recipient. It is convenient if the message flow is linear: each message handler sends only one message. But there are cases when it is not recommended to use this mechanism:
 
