@@ -22,7 +22,7 @@ Use the `GETSTORAGEFEE` opcode with the following parameters:
 | bits       | Number of contract bits                                 |
 | is_mc      | True if the source or destination is in the masterchain |
 
-:::info Only unique hash cells are counted for storage and fwd fees i.e. 3 identical hash cells are counted as one.
+:::info Only unique hash cells are counted for storage and forward fees; for example, three identical hash cells are counted as one.
 
 In particular, it deduplicates data: if there are several equivalent sub-cells referenced in different branches, their content is only stored once.
 
@@ -31,7 +31,7 @@ In particular, it deduplicates data: if there are several equivalent sub-cells r
 
 ### Calculation Flow
 
-Each contract has its balance. You can calculate how many TONs your contract requires to remain valid for a specified `seconds` time using the function:
+Each contract has its balance. You can calculate how many TONs your contract needs to remain valid for a given number of seconds using the following function:
 
 ```func
 int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells bits seconds workchain) "GETSTORAGEFEE";
@@ -67,7 +67,7 @@ If `storage_fee` is hardcoded, **remember to update it** during contract update 
 
 ### Overview
 
-In most cases use the `GETGASFEE` opcode with the following parameters:
+In most cases, use the `GETGASFEE` opcode with the following parameters:
 
 | Param      | Description                                             |
 |:-----------|:--------------------------------------------------------|
@@ -160,7 +160,7 @@ send_gas_fee = printTxGasStats("Jetton transfer", transferTx);
 
 The forward fee is taken for outgoing messages.
 
-Generally, there are three cases of forward fee processing:
+There are three general cases for processing forward fees:
 
 1. The message structure is deterministic and you can predict the fee.
 2. The message structure depends a lot on the incoming message structure.
