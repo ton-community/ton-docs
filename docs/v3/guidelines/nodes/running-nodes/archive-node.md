@@ -2,6 +2,8 @@
 
 :::info
 Read about [Full Node](/v3/guidelines/nodes/running-nodes/full-node) before this article
+
+Most of the info contained in https://archival-dump.ton.org/
 :::
 
 ## Overview
@@ -205,6 +207,19 @@ Have question or need help? Please ask in the [TON dev chat](https://t.me/tondev
 
 
 ## Tips & Tricks
+
+### Remove dump snapshot
+
+1. Find the right snapshot
+```bash
+zfs list -t snapshot
+```
+2. Delete it
+```bash
+zfs destroy <snapshot>
+```
+
+
 
 ### Force archive node not to store blocks
 
