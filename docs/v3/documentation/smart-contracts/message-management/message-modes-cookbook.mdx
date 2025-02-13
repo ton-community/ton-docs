@@ -9,14 +9,16 @@ You can check [this example](https://testnet.tonviewer.com/transaction/42ed45726
 
 #### Message value and account balance
 
-Please check how [get_balance](/v3/documentation/smart-contracts/func/docs/stdlib/#get_balance) works to better understand the transaction state.
+Please check how [get_balance](/v3/documentation/smart-contracts/func/docs/stdlib/#get_balance) works to better understand `balance` inside TVM.
 
-There are two ways to pay for blockchain action:
+All TON tokens owned by a contract are reflected in the [contract balance](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/block.tlb#L263C1-L265C20). Some of these tokens are also attributed to the currently processed incoming [message](/v3/documentation/data-formats/tlb/msg-tlb#commonmsginfo) - a mechanism that works effectively because any TON transaction involving a [non-system contract](/v3/documentation/smart-contracts/contracts-specs/governance) processes exactly one incoming message at a time. 
 
-- From the [message value](/v3/documentation/data-formats/tlb/msg-tlb#commonmsginfo)
-- From the [contract balance](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/block.tlb#L263C1-L265C20)
+Therefore, any blockchain payment may come either:
 
-Typically, it is charged from the contract `balance`, but in specific cases, it will use part of the message `value`.
+- From the incoming message `value`.
+  For instance, computation fees are paid in this way, unless contract calls [accept_message](v3/documentation/smart-contracts/transaction-fees/accept-message-effects). This ensures that malicious actors cannot spend contract's balance on handling their data.
+- From the contract `balance` (will not touch amount of TON designated as incoming this transaction).
+  Storage fees in workchains 0 and -1, as well as most actions, are currently examples of this.
 
 #### Fees
 
@@ -49,13 +51,14 @@ The table is populated based on [this example](https://tonviewer.com/transaction
 
 :::info
 The transaction fees used in these examples are hypothetical and are for illustrative purposes only. Any fees other than message forwarding are out of scope of this article.
+Funds included with an ignored message will still be [credited to the receiving address](https://testnet.tonviewer.com/transaction/8a388731812c80ab9b0ea9531108425488af5def854e4bd6f0ed47362b56d557).
 :::
 
 ## 1. Send a regular message
 
 State before transaction: Account A has 1 TON, Account B has 1 TON
 
-**A** sent 0.1 TON to **B**, [msg_fwd_fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#forward-fees) are 0.004 TON, actual received value will be 0.096 TON, `fwd_fee` and `action_fee` deducted from `value`.
+**A** sent 0.1 TON to **B**, [msg_fwd_fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#forward-fees) are 0.004 TON, actual received value will be 0.096 TON, `fwd_fee` and `action_fee` are deducted from `value`.
 
 State after transaction: Account A has 0.9 TON, Account B has 1.096 TON
 
@@ -69,13 +72,12 @@ State after transaction: Account A has 0.9 TON, Account B has 1.096 TON
 
 State before transaction: Account A has 1 TON, Account B has 1 TON
 
-**A** sent 0.1 TON to **B**, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.096 TON, `fwd_fee` and `action_fee` deducted from `value`.
-In case of an error during transaction processing, the message will not bounce and will be ignored.
+**A** sent 0.1 TON to **B**, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.096 TON, `fwd_fee` and `action_fee` are deducted from `value`.
+In case of an error during [action phase](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes), the message will be skipped instead of throwing an [exit code](/v3/documentation/tvm/tvm-exit-codes#standard-exit-codes).
 
 State after transaction: Account A has 0.9 TON, Account B has 1.096 TON
 
 :::info tip
-Funds included with an ignored message will still be [credited to the receiving address](https://testnet.tonviewer.com/transaction/8a388731812c80ab9b0ea9531108425488af5def854e4bd6f0ed47362b56d557).
 If no errors occur, the result is the same as [`mode = 0`](#1-send-a-regular-message).
 :::
 
@@ -89,7 +91,7 @@ If no errors occur, the result is the same as [`mode = 0`](#1-send-a-regular-mes
 
 State before transaction: Account A has 1 TON, Account B has 1 TON
 
-**A** sent 0.1 TON to **B**, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.096 TON, `fwd_fee` and `action_fee` deducted from `value`.
+**A** sent 0.1 TON to **B**, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.096 TON, `fwd_fee` and `action_fee` are deducted from `value`.
 In case of an error during [action phase](https://retracer.ton.org/?tx=e9dccba82badc0d742f14eff41c203280f380e87180b5314fcfd742856e598f7&testnet=true), the message will bounce and `total_fee` + `fwd_fee` will be deducted from `value`.
 
 State after transaction with error: Account A has 1 - ([total_fee](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula) + `fwd_fee`) TON, Account B has 1 TON
@@ -110,7 +112,7 @@ If no errors occur the result is the same as [`mode = 0`](#1-send-a-regular-mess
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON
 
-**A** sent 0.1 TON to **B**, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.1 TON, `fwd_fee` and `action_fee` deducted from `balance`.
+**A** sent 0.1 TON to **B**, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.1 TON, `fwd_fee` and `action_fee` are deducted from `balance`.
 
 State after the transaction: Account A has 0.896 TON, Account B has 1.1 TON
 
@@ -124,7 +126,7 @@ State after the transaction: Account A has 0.896 TON, Account B has 1.1 TON
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON
 
-**A** sent 0.1 TON to **B**, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.1 TON, `fwd_fee` and `action_fee` deducted from `balance`.
+**A** sent 0.1 TON to **B**, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.1 TON, `fwd_fee` and `action_fee` are deducted from `balance`.
 In case of an error [during action phase](https://retracer.ton.org/?tx=e9dccba82badc0d742f14eff41c203280f380e87180b5314fcfd742856e598f7&testnet=true), the message will bounce and `total_fee` + `fwd_fee` will be deducted from `value`.
 
 State after the transaction with an error: Account A has 1 - ([total_fee](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula) + `fwd_fee`) TON, Account B has 1 TON
@@ -145,12 +147,12 @@ If no errors occur the result is the same as [`mode = 1`](#4-send-a-regular-mess
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 64, `msg_fwd_fees` are 0.004 TON, actual received `value` will be 0.6 TON, total_fee + `fwd_fee` deducted from `value`.
+**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 64, `msg_fwd_fees` are 0.004 TON, actual received `value` will be 0.6 TON, total_fee + `fwd_fee` are deducted from `value`.
 
 State after the transaction: Account A has 0.896 TON, Account B has 0.5 TON, Account C has 1.6 - (total_fee + `fwd_fee`) TON
 
 :::info
-You might check [this example](https://retracer.ton.org/?tx=4340b5ecbd83227cc64e10b1ca7628352133cda1d608081fb2ed58d299f00936&testnet=true).
+You might check [this example](https://testnet.tonviewer.com/transaction/f63ab35f34e342cdd249f13018d5034ce3d80c488628d5a4db0a43163fa50adb).
 Please note that `storage_fee` is included in `total_fee` but it is always paid from contract `balance`.
 :::
 
@@ -170,12 +172,12 @@ If you try to send multiple messages (i.e. mode 0 **and** mode 64) you'll get ex
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 65, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, total_fee + `fwd_fee` deducted from `balance`.
+**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 65, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, total_fee + `fwd_fee` are deducted from `balance`.
 
 State after the transaction: Account A has 0.896 TON, Account B has 0.5 - (total_fee + `fwd_fee`) TON, Account C has 1.6 TON
 
 :::info
-You might check [this example](https://retracer.ton.org/?tx=5c2525feeb3b93db594b7b11f3250430f02dd8616595cf2b1583ebc7da79d15b&testnet=true).
+You might check [this example](https://testnet.tonviewer.com/transaction/ad93e784453b573d737d9d928b4377ff3779177753e05629e54f6629556568ad).
 Please note that `storage_fee` is included in `total_fee` but it is always paid from contract `balance`.
 :::
 
@@ -189,7 +191,7 @@ Please note that `storage_fee` is included in `total_fee` but it is always paid 
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 80, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, total_fee + `fwd_fee` deducted from `value`.
+**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 80, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, total_fee + `fwd_fee` are deducted from `value`.
 In case of an error during the action phase, the message will bounce and `total_fee` + `fwd_fee` will be deducted from `value`.
 
 State after the transaction with an error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
@@ -210,8 +212,8 @@ If no errors occur the result is the same as [`mode = 64`](#6-carry-remaining-va
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 80, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, total_fee + `fwd_fee` deducted from `balance`.
-In case of an error during the action phase, the message will bounce and `total_fee` + `fwd_fee` will be deducted from `value`.
+**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 81, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, total_fee + `fwd_fee` are deducted from `balance`.
+In case of an error during the action phase, the message will bounce and `total_fee` + `fwd_fee` will be are deducted from `value`.
 
 State after transaction with an error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
 
@@ -231,7 +233,7 @@ If no errors occur the result is the same as [`mode = 65`](#7-carry-remaining-va
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 128, `msg_fwd_fees` are 0.004 TON, actual received value will be 1.1 - total_fee TON, total_fee deducted from `value`.
+**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 128, `msg_fwd_fees` are 0.004 TON, actual received value will be 1.1 - total_fee TON, total_fee is deducted from `value`.
 
 State after the transaction: Account A has 0.896 TON, Account B has 0 TON, Account C has 2.1 - (total_fee + `fwd_fee`) TON
 
@@ -245,7 +247,7 @@ State after the transaction: Account A has 0.896 TON, Account B has 0 TON, Accou
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 144, `msg_fwd_fees` are 0.004 TON, actual received value will be 1.1 - total_fee TON, total_fee deducted from `value`.
+**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 144, `msg_fwd_fees` are 0.004 TON, actual received value will be 1.1 - total_fee TON, total_fee is deducted from `value`.
 
 State after the transaction with an error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
 
