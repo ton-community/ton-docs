@@ -39,7 +39,7 @@ If you want to receive messages in a group, add the bot to the group, and it wil
 If everything is fine you will receive a welcome messages with all possible alerts listed. 
 
 
-## Supported Alerts
+## Supported alerts
 
 The MyTonCtrl Alert Bot supports the following alerts:
 
@@ -58,7 +58,7 @@ The MyTonCtrl Alert Bot supports the following alerts:
 - Validator's stake has not been returned
 - There is an active network proposal that has many votes (more than 50% of required) but is not voted by the validator
 
-## En(dis)bling Alerts
+## Enabling and disabling alerts
 
 To enable or disable alerts, use the following commands:
 
