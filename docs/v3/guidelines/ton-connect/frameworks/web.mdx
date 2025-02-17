@@ -123,7 +123,8 @@ const tonConnectUI = new TonConnectUI({ //connect application
 });
 
 const transaction = {
-    messages: [
+  validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
+  messages: [
         {
             address: "EQABa48hjKzg09hN_HjxOic7r8T1PleIy1dRd8NvZ3922MP0", // destination address
             amount: "20000000" //Toncoin in nanotons
