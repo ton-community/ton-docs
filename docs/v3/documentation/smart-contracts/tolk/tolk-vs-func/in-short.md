@@ -22,7 +22,7 @@ get currentCounter(): int { ... }
 ```
 2. No `impure`, it's by default, compiler won't drop user function calls
 3. Not `recv_internal` and `recv_external`, but `onInternalMessage` and `onExternalMessage`
-4. `2+2` is 4, not an identifier; identifiers are alpha-numeric; use naming `const OP_INCREASE` instead of `const op::increase`
+4. `2+2` is 4, not an identifier; identifiers are alpha-numeric; use naming `const OP_INCREASE` instead of `const op::increase`; `cell` and `slice` are valid identifiers (not keywords)
 5. Logical operators AND `&&`, OR `||`, NOT `!` are supported
 6. Syntax improvements:
     - `;; comment` → `// comment`
@@ -46,6 +46,7 @@ get currentCounter(): int { ... }
 9. No `~` tilda methods; `cs.loadInt(32)` modifies a slice and returns an integer; `b.storeInt(x, 32)` modifies a builder; `b = b.storeInt()` also works, since it not only modifies, but returns; chained methods work identically to JS, they return `self`; everything works exactly as expected, similar to JS; no runtime overhead, exactly same Fift instructions; custom methods are created with ease; tilda `~` does not exist in Tolk at all; [more details here](/v3/documentation/smart-contracts/tolk/tolk-vs-func/mutability)
 10. Clear and readable error messages on type mismatch
 11. `bool` type support
+12. Indexed access `tensorVar.0` and `tupleVar.0` support
 
 #### Tooling around
 - JetBrains plugin exists
