@@ -57,7 +57,7 @@ The transaction fees used in these examples are hypothetical and are for illustr
 Funds included with an ignored message will still be [credited to the receiving address](https://testnet.tonviewer.com/transaction/8a388731812c80ab9b0ea9531108425488af5def854e4bd6f0ed47362b56d557).
 :::
 
-## 1. Send a regular message
+## 1. (Mode 0, Flag 0) Basic message
 
 State before transaction: Account A has 1 TON, Account B has 1 TON
 
@@ -78,11 +78,7 @@ State after transaction: Account A has 0.9 TON, Account B has 1.096 TON
 <br></br>
 
 
-| Mode and Flags        | Code                       |
-| :-------------------- | :------------------------- |
-| `mode` = 0, no `flag` | `send_raw_message(msg, 0)` |
-
-## 2. Send a regular message, no bounce the message on error and ignore it
+## 2. (Mode 0, Flag 2) Error-silent message
 
 State before transaction: Account A has 1 TON, Account B has 1 TON
 
@@ -92,7 +88,7 @@ In case of an error during [action phase](/v3/documentation/smart-contracts/mess
 State after transaction: Account A has 0.9 TON, Account B has 1.096 TON
 
 :::info tip
-If no errors occur, the result is the same as [`mode = 0`](#1-send-a-regular-message).
+If no errors occur, the result is the same as [`mode = 0`](#1-mode-0-no-flags-basic-message).
 :::
 
 <br></br>
@@ -107,11 +103,8 @@ If no errors occur, the result is the same as [`mode = 0`](#1-send-a-regular-mes
 </div>
 <br></br>
 
-| Mode and Flags         | Code                       |
-| :--------------------- | :------------------------- |
-| `mode` = 0, `flag` = 2 | `send_raw_message(msg, 2)` |
 
-## 3. Send a regular message, and bounce the message in case of an action error
+## 3. (Mode 0, Flag 16) Bounce on action error
 
 State before transaction: Account A has 1 TON, Account B has 1 TON
 
@@ -133,7 +126,11 @@ State after transaction with error: Account A has 1 - ([total_fee](/v3/documenta
 <br></br>
 
 :::info tip
-If no errors occur the result is the same as [`mode = 0`](#1-send-a-regular-message).
+If no errors occur the result is the same as [`mode = 0`](#1-mode-0-no-flags-basic-message).
+
+The key difference is that `flag 16` specifically creates bounces for [action phase errors](/v3/documentation/tvm/tvm-exit-codes#standard-exit-codes), while the message's [built-in bounce flag](https://docs.ton.org/v3/guidelines/smart-contracts/howto/wallet#internal-message-creation) handles protocol-level failures like:
+  - The destination contract does not exist.
+  - The destination contract throws an unhandled exception.
 :::
 
 <br></br>
@@ -148,11 +145,7 @@ If no errors occur the result is the same as [`mode = 0`](#1-send-a-regular-mess
 </div>
 <br></br>
 
-| Mode and Flags          | Code                        |
-| :---------------------- | :-------------------------- |
-| `mode` = 0, `flag` = 16 | `send_raw_message(msg, 16)` |
-
-## 4. Send a regular message with separate fees
+## 4. (Mode 0, Flag 1) Separate fees
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON
 
@@ -172,11 +165,7 @@ State after the transaction: Account A has 0.896 TON, Account B has 1.1 TON
 </div>
 <br></br>
 
-| Mode and Flags         | Code                       |
-| :--------------------- | :------------------------- |
-| `mode` = 0, `flag` = 1 | `send_raw_message(msg, 1)` |
-
-## 5. Send a regular message with separate fees and bounce the message on error
+## 5. (Mode 0, Flag 17) Separate fees and bounce on action error
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON
 
@@ -198,7 +187,7 @@ State after the transaction with an error: Account A has 1 - ([total_fee](/v3/do
 <br></br>
 
 :::info tip
-If no errors occur the result is the same as [`mode = 1`](#4-send-a-regular-message-with-separate-fees).
+If no errors occur the result is the same as [`mode = 1`](#4-mode-0-flag-1-separate-fees).
 :::
 
 <br></br>
@@ -213,11 +202,7 @@ If no errors occur the result is the same as [`mode = 1`](#4-send-a-regular-mess
 </div>
 <br></br>
 
-| Mode and Flags                   | Code                        |
-| :------------------------------- | :-------------------------- |
-| `mode` = 0, `flag` = 1 + 16 = 17 | `send_raw_message(msg, 17)` |
-
-## 6. Carry remaining value with new message
+## 6. (Mode 64, Flag 0) Carry forward remaining value
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -248,11 +233,7 @@ If you try to send multiple messages (i.e. mode 0 **and** mode 64) you'll get ex
 </div>
 <br></br>
 
-| Mode and Flags         | Code                        |
-| :--------------------- | :-------------------------- |
-| `mode` = 64, no `flag` | `send_raw_message(msg, 64)` |
-
-## 7. Carry remaining value with a new message with separate fees
+## 7. (Mode 64, Flag 1) Carry forward with separate fees
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -277,11 +258,7 @@ Please note that `storage_fee` is included in `total_fee` but it is always paid 
 </div>
 <br></br>
 
-| Mode and Flags          | Code                        |
-| :---------------------- | :-------------------------- |
-| `mode` = 64, `flag` = 1 | `send_raw_message(msg, 65)` |
-
-## 8. Carry remaining value and bounce the message on error
+## 8. (Mode 64, Flag 16) Bounce-protected carry forward
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -303,7 +280,7 @@ State after the transaction with an error: Account A has 1 - (total_fee + `fwd_f
 <br></br>
 
 :::info tip
-If no errors occur the result is the same as [`mode = 64`](#6-carry-remaining-value-with-new-message). This mode is widely used in TON for jetton transfers. You can [check it in C5 action list](https://retracer.ton.org/?tx=6489d60d9197c0be7ee64b0812139d82221e8f94c6e378c356acc10f9067310c) of the jetton wallet.
+If no errors occur the result is the same as [`mode = 64`](#6-mode-64-no-flags-carry-forward-remaining-value). This mode is widely used in TON for jetton transfers. You can [check it in C5 action list](https://retracer.ton.org/?tx=6489d60d9197c0be7ee64b0812139d82221e8f94c6e378c356acc10f9067310c) of the jetton wallet.
 :::
 
 <br></br>
@@ -318,11 +295,7 @@ If no errors occur the result is the same as [`mode = 64`](#6-carry-remaining-va
 </div>
 <br></br>
 
-| Mode and Flags           | Code                        |
-| :----------------------- | :-------------------------- |
-| `mode` = 64, `flag` = 16 | `send_raw_message(msg, 80)` |
-
-## 9. Carry the remaining value with a new message with separate fees and bounce the message on error
+## 9. (Mode 64, Flag 17) Bounce-protected carry forward with separate fees
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -344,7 +317,7 @@ State after transaction with an error: Account A has 1 - (total_fee + `fwd_fee`)
 <br></br>
 
 :::info tip
-If no errors occur the result is the same as [`mode = 65`](#7-carry-remaining-value-with-new-message-with-separate-fees).
+If no errors occur the result is the same as [`mode = 65`](#7-mode-64-flag-1-carry-forward-with-separate-fees).
 :::
 
 <br></br>
@@ -359,11 +332,7 @@ If no errors occur the result is the same as [`mode = 65`](#7-carry-remaining-va
 </div>
 <br></br>
 
-| Mode and Flags               | Code                        |
-| :--------------------------- | :-------------------------- |
-| `mode` = 64, `flag` = 16 + 1 | `send_raw_message(msg, 81)` |
-
-## 10. Send all received tokens along with the contract balance
+## 10. (Mode 128, Flag 0) Send whole balance
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -383,11 +352,7 @@ State after the transaction: Account A has 0.896 TON, Account B has 0 TON, Accou
 </div>
 <br></br>
 
-| Mode and Flags          | Code                         |
-| :---------------------- | :--------------------------- |
-| `mode` = 128, no `flag` | `send_raw_message(msg, 128)` |
-
-## 11. Send all received tokens along with the contract balance and bounce the message on error
+## 11. (Mode 128, Flag 16) Send whole balance bounce-protected
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -408,7 +373,7 @@ State after the transaction with an error: Account A has 1 - (total_fee + `fwd_f
 <br></br>
 
 :::info tip
-If no errors occur the result is the same as [`mode = 128`](#10-send-all-received-tokens-together-with-the-contract-balance). This mode is widely used in TON for jetton transfers, you can [check it in C5 action list](https://retracer.ton.org/?tx=e4f31e37eec74a8cfcecdad9246a6bbf3da20c4edb3635150cb0fa54b9def558) of the jetton wallet.
+If no errors occur the result is the same as [`mode = 128`](#10-mode-128-no-flags-send-whole-balance). This mode is widely used in TON for jetton transfers, you can [check it in C5 action list](https://retracer.ton.org/?tx=e4f31e37eec74a8cfcecdad9246a6bbf3da20c4edb3635150cb0fa54b9def558) of the jetton wallet.
 :::
 
 <br></br>
@@ -423,11 +388,7 @@ If no errors occur the result is the same as [`mode = 128`](#10-send-all-receive
 </div>
 <br></br>
 
-| Mode and Flags            | Code                         |
-| :------------------------ | :--------------------------- |
-| `mode` = 128, `flag` = 16 | `send_raw_message(msg, 144)` |
-
-## 12. Send all received tokens along with the contract balance and destroy the smart contract
+## 12. (Mode 128, Flag 32) Send whole balance and destroy the contract
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -448,7 +409,3 @@ When the balance reaches 0 TON, destroy the contract.
 />
 </div>
 <br></br>
-
-| Mode and Flags            | Code                         |
-| :------------------------ | :--------------------------- |
-| `mode` = 128, `flag` = 32 | `send_raw_message(msg, 160)` |

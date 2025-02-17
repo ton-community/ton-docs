@@ -1,43 +1,117 @@
-# TVM Exit codes
+---
+title: Exit codes
+---
 
-If TVM exits with an arbitrary 16-bit unsigned integer `exit_code`. `exit_code`  higher than 1, it is considered an _error code_. Therefore, an exit with such a code may cause the transaction to revert or bounce.
+Each transaction on TON Blockchain consists of [multiple phases](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases). An _exit code_ is a 32-bit signed integer, which indicates whether the [compute](#compute) or [action](#action) phase of the transaction was successful, and if not, it contains the code of the exception that occurred. Each exit code represents its own exception or resulting state of the transaction.
 
-## Standard exit codes
+Exit codes 0 and 1 indicate normal (successful) execution of the [compute phase](#compute). Exit (or [result](#action)) code 0 indicates normal (successful) execution of the [action phase](#action). Any other exit code indicates that a certain exception has occurred and that the transaction wasn't successful in one way or another, i.e. transaction was reverted or the inbound message has bounced back.
 
-:::info
-The list of standard exit codes contains all universal TVM exit codes defined for the TON Blockchain. Alternative exit codes should be sought in the source code of the corresponding contract.
+> TON Blockchain reserves exit code values from 0 to 127, while Tact utilizes exit codes from 128 to 255. Note, that exit codes used by Tact indicate contract errors which can occur when using Tact-generated FunC code, and are therefore thrown in the transaction's [compute phase](#compute) and not during the compilation.
+
+The range from 256 to 65535 is free for developer-defined exit codes.
+
+:::note
+While an exit (or [result](#action)) code is a 32-bit signed integer on TON Blockchain, an attempt to [throw](https://docs.tact-lang.org/ref/core-debug) an exit code out of bounds of the 16-bit unsigned integer (0 - 65535) will cause an error with [exit code 5](https://docs.tact-lang.org/book/exit-codes/#5). That's done intentionally to prevent some exit codes from being produced artificially, such as the [exit code -14](https://docs.tact-lang.org/book/exit-codes/#-14).
 :::
 
-| Exit Code | TVM Phase     | Description                                                                                                                                                                                                                                                                         |
-|-----------|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `0`       | Compute Phase | Standard successful execution exit code.                                                                                                                                                                                                                                            |
-| `1`       | Compute Phase | Alternative successful execution exit code.                                                                                                                                                                                                                                         |
-| `2`       | Compute Phase | Stack underflow. The last op-code consumed more elements than there are on the stacks. <sup>1</sup>                                                                                                                                                                                 |
-| `3`       | Compute Phase | Stack overflow. More values have been stored on a stack than are allowed by this version of TVM.                                                                                                                                                                                    |
-| `4`       | Compute Phase | Integer overflow. Integer does not fit into −2<sup>256</sup> ≤ x < 2<sup>256</sup> or a division by zero has occurred.                                                                                                                                                              |
-| `5`       | Compute Phase | Integer is out of expected range.                                                                                                                                                                                                                                                   |
-| `6`       | Compute Phase | Invalid opcode. The instruction is unknown in the current TVM version.                                                                                                                                                                                                              |
-| `7`       | Compute Phase | Type check error. An argument to a primitive has an incorrect value type. <sup>1</sup>                                                                                                                                                                                              |
-| `8`       | Compute Phase | Cell overflow. Writing to the builder is not possible since after operation there would be more than 1023 bits or 4 references.                                                                                                                                                     |
-| `9`       | Compute Phase | Cell underflow. The read operation from slice primitive tried to read more bits or references than available.                                                                                                                                                                       |
-| `10`      | Compute Phase | Dictionary error. An error during manipulation with the dictionary (hashmaps).                                                                                                                                                                                                      |
-| `11`      | Compute Phase | Most often caused by trying to call get-method whose id wasn't found in the code (missing `method_id` modifier or wrong get-method name specified when trying to call it). In [TVM docs](https://ton.org/tvm.pdf) its described as "Unknown error, may be thrown by user programs". | 
-| `12`      | Compute Phase | Thrown by TVM in situations considered impossible.                                                                                                                                                                                                                                  |
-| `13`      | Compute Phase | Out of gas error. Thrown by TVM when the remaining gas turns negative.                                                                                                                                                                                                              |
-| `-14`     | Compute Phase | This indicates an out of gas error, the same as code `13`. It is negative because  it [cannot be faked](https://github.com/ton-blockchain/ton/blob/20758d6bdd0c1327091287e8a620f660d1a9f4da/crypto/vm/vm.cpp#L492)                                                                  |
-| `32`      | Action Phase  | Action list is invalid. Set during the action phase if c5 register after execution contains unparsable object.                                                                                                                                                                      |
-| `-32`     | Action Phase  | (the same as prev 32) - Method ID not found. Returned by TonLib during an attempt to execute non-existent get method.                                                                                                                                                               |
-| `33`      | Action Phase  | The action list is too long.                                                                                                                                                                                                                                                        |
-| `34`      | Action Phase  | Action is invalid or not supported. Set during the action phase if current action cannot be applied.                                                                                                                                                                                |
-| `35`      | Action Phase  | Invalid Source address in the outbound message.                                                                                                                                                                                                                                     |
-| `36`      | Action Phase  | Invalid Destination address in the outbound message.                                                                                                                                                                                                                                |
-| `37`      | Action Phase  | Not enough TON. The message sends too much TON, or there isn't enough TON remaining after deducting fees.                                                                                                                                                                           |
-| `38`      | Action Phase  | Not enough extra-currencies.                                                                                                                                                                                                                                                        |
-| `40`      | Action Phase  | Not enough funds to process the message. This error is thrown when there is only enough gas to partially cover the message, but not enough to cover it completely.                                                                                                                  |
-| `43`      | Action Phase  | The maximum number of cells in the library has been exceeded, or the maximum depth of the Merkle tree has been surpassed.                                                                                                                                                           |
+## Table of exit codes {#standard-exit-codes}
 
-<sup>1</sup> If you encounter such exception in a func contract it probably means a type error in asm declarations.
+The following table lists exit codes with an origin (where it can occur) and a short description for each. The table doesn't list the exit code of the [`require()`](https://docs.tact-lang.org/ref/core-debug#require), as it generates it depending on the concrete `error` message [string][p]. To see such exit codes, refer to the [Exit codes section of the compilation report](https://docs.tact-lang.org/book/compile#exit-codes).
 
-:::info
-Often you can see the exit code `0xffff` (65535 in decimal form). This usually means that the received opcode is unknown to the contract. When writing contracts, this code is set by the developer himself.
+| Exit code                                                  | Origin                                 | Brief description                                                                                     |
+| :--------------------------------------------------------- | :------------------------------------- | :---------------------------------------------------------------------------------------------------- |
+| [0](https://docs.tact-lang.org/book/exit-codes/#0)         | [Compute][c] and [action][a] phases    | Standard successful execution exit code.                                                              |
+| [1](https://docs.tact-lang.org/book/exit-codes/#1)         | [Compute phase][c]                     | Alternative successful execution exit code. Reserved, but doesn't occur.                              |
+| [2](https://docs.tact-lang.org/book/exit-codes/#2)         | [Compute phase][c]                     | Stack underflow.                                                                                      |
+| [3](https://docs.tact-lang.org/book/exit-codes/#3)         | [Compute phase][c]                     | Stack overflow.                                                                                       |
+| [4](https://docs.tact-lang.org/book/exit-codes/#4)         | [Compute phase][c]                     | Integer overflow.                                                                                     |
+| [5](https://docs.tact-lang.org/book/exit-codes/#5)         | [Compute phase][c]                     | Range check error — some integer is out of its expected range.                                        |
+| [6](https://docs.tact-lang.org/book/exit-codes/#6)         | [Compute phase][c]                     | Invalid [TVM][tvm] opcode.                                                                            |
+| [7](https://docs.tact-lang.org/book/exit-codes/#7)         | [Compute phase][c]                     | Type check error.                                                                                     |
+| [8](https://docs.tact-lang.org/book/exit-codes/#8)         | [Compute phase][c]                     | Cell overflow.                                                                                        |
+| [9](https://docs.tact-lang.org/book/exit-codes/#9)         | [Compute phase][c]                     | Cell underflow.                                                                                       |
+| [10](https://docs.tact-lang.org/book/exit-codes/#10)       | [Compute phase][c]                     | Dictionary error.                                                                                     |
+| [11](https://docs.tact-lang.org/book/exit-codes/#11)       | [Compute phase][c]                     | Described in [TVM][tvm] docs as "Unknown error, may be thrown by user programs".                      |
+| [12](https://docs.tact-lang.org/book/exit-codes/#12)       | [Compute phase][c]                     | Fatal error. Thrown by [TVM][tvm] in situations deemed impossible.                                    |
+| [13](https://docs.tact-lang.org/book/exit-codes/#13)       | [Compute phase][c]                     | Out of gas error.                                                                                     |
+| [-14](https://docs.tact-lang.org/book/exit-codes/#-14)     | [Compute phase][c]                     | Same as 13. Negative, so that it [cannot be faked](#13).                                              |
+| [14](https://docs.tact-lang.org/book/exit-codes/#14)       | [Compute phase][c]                     | VM virtualization error. Reserved, but never thrown.                                                  |
+| [32](https://docs.tact-lang.org/book/exit-codes/#32)       | [Action phase][a]                      | Action list is invalid.                                                                               |
+| [33](https://docs.tact-lang.org/book/exit-codes/#33)       | [Action phase][a]                      | Action list is too long.                                                                              |
+| [34](https://docs.tact-lang.org/book/exit-codes/#34)       | [Action phase][a]                      | Action is invalid or not supported.                                                                   |
+| [35](https://docs.tact-lang.org/book/exit-codes/#35)       | [Action phase][a]                      | Invalid source address in outbound message.                                                           |
+| [36](https://docs.tact-lang.org/book/exit-codes/#36)       | [Action phase][a]                      | Invalid destination address in outbound message.                                                      |
+| [37](https://docs.tact-lang.org/book/exit-codes/#37)       | [Action phase][a]                      | Not enough Toncoin.                                                                                   |
+| [38](https://docs.tact-lang.org/book/exit-codes/#38)       | [Action phase][a]                      | Not enough extra currencies.                                                                          |
+| [39](https://docs.tact-lang.org/book/exit-codes/#39)       | [Action phase][a]                      | Outbound message does not fit into a cell after rewriting.                                            |
+| [40](https://docs.tact-lang.org/book/exit-codes/#40)       | [Action phase][a]                      | Cannot process a message — not enough funds, the message is too large or its Merkle depth is too big. |
+| [41](https://docs.tact-lang.org/book/exit-codes/#41)       | [Action phase][a]                      | Library reference is null during library change action.                                               |
+| [42](https://docs.tact-lang.org/book/exit-codes/#42)       | [Action phase][a]                      | Library change action error.                                                                          |
+| [43](https://docs.tact-lang.org/book/exit-codes/#43)       | [Action phase][a]                      | Exceeded maximum number of cells in the library or the maximum depth of the Merkle tree.              |
+| [50](https://docs.tact-lang.org/book/exit-codes/#50)       | [Action phase][a]                      | Account state size exceeded limits.                                                                   |
+| [128](https://docs.tact-lang.org/book/exit-codes/#128)     | Tact compiler ([Compute phase][c])     | Null reference exception. Configurable since Tact 1.6 (not released yet).                             |
+| [129](https://docs.tact-lang.org/book/exit-codes/#129)     | Tact compiler ([Compute phase][c])     | Invalid serialization prefix.                                                                         |
+| [130](https://docs.tact-lang.org/book/exit-codes/#130)     | Tact compiler ([Compute phase][c])     | Invalid incoming message — there's no receiver for the opcode of the received message.                |
+| [131](https://docs.tact-lang.org/book/exit-codes/#131)     | Tact compiler ([Compute phase][c])     | Constraints error. Reserved, but never thrown.                                                        |
+| [132](https://docs.tact-lang.org/book/exit-codes/#132)     | Tact compiler ([Compute phase][c])     | Access denied — someone other than the owner sent a message to the contract.                          |
+| [133](https://docs.tact-lang.org/book/exit-codes/#133)     | Tact compiler ([Compute phase][c])     | Contract stopped. Reserved, but never thrown.                                                         |
+| [134](https://docs.tact-lang.org/book/exit-codes/#134)     | Tact compiler ([Compute phase][c])     | Invalid argument.                                                                                     |
+| [135](https://docs.tact-lang.org/book/exit-codes/#135)     | Tact compiler ([Compute phase][c])     | Code of a contract was not found.                                                                     |
+| ~~[136](https://docs.tact-lang.org/book/exit-codes/#136)~~ | ~~Tact compiler ([Compute phase][c])~~ | ~~Invalid address.~~ Removed since Tact 1.6 (not released yet)                                        |
+| ~~[137](https://docs.tact-lang.org/book/exit-codes/#137)~~ | ~~Tact compiler ([Compute phase][c])~~ | ~~Masterchain support is not enabled for this contract.~~ Removed since Tact 1.6 (not released yet)   |
+
+:::note
+Often enough you might encounter the exit code 65535 (or `0xffff`), which usually means the same as the [exit code 130](https://docs.tact-lang.org/book/exit-codes/#130) — the received opcode is unknown to the contract as there were no receivers expecting it. When writing contracts, the exit code 65535 is set by the developers and not by [TVM][tvm] or the Tact compiler.
 :::
+
+[c]: https://docs.ton.org/learn/tvm-instructions/tvm-overview#compute-phase
+[a]: https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases
+
+## Exit codes in Blueprint projects {#blueprint}
+
+In [Blueprint][bp] tests, exit codes from the [compute phase](#compute) are specified in the `exitCode` field of the object argument for `toHaveTransaction()` method of `expect()` matcher. The field for the result codes (exit codes from the [action phase](#action)) in the same `toHaveTransaction()` method is called `actionResultCode`.
+
+:::note
+Read more about expecting specific exit codes: [Transactions with intentional errors](https://docs.tact-lang.org/book/debug#tests-errors).
+:::
+
+Additionally, one can take a look at the result of [sending a message to a contract](https://docs.tact-lang.org/book/debug#tests-send) and discover the phases of each transaction and their values, including exit (or result) codes for [compute phase](#compute) (or [action phase](#action)).
+
+Note, that in order to do so, you'll have to do a couple of type checks before that:
+
+```typescript
+it('tests something, you name it', async () => {
+  // Send a specific message to our contract and store the results
+  const res = await your_contract_name.send(…);
+
+  // Now, we have an access to array of executed transactions,
+  // with the second one (index 1) being the one that we look for
+  const tx = res.transactions[1]!;
+
+  // To do something useful with it, let's ensure that its type is 'generic'
+  // and that the compute phase in it wasn't skipped
+  if (tx.description.type === "generic"
+      && tx.description.computePhase.type === "vm") {
+    // Finally, we're able to freely peek into the transaction for general details,
+    // such as printing out the exit code of the compute phase if we so desire
+    console.log(tx.description.computePhase.exitCode);
+  }
+
+  // ...
+});
+```
+
+## Compute phase {#compute}
+
+[TVM][tvm] initialization and all computations occur in the [compute phase][c].
+If the compute phase fails (the resulting exit code isn't 0 or 1), the transaction skips the [action phase](#action) and goes to the bounce phase. In it, the bounce message is formed for the transactions initiated by the inbound message.
+
+## Action phase {#action}
+
+The [action phase][a] is processed after the successful execution of the [compute phase](#compute). It attempts to perform the actions stored into the action list by [TVM][tvm] during the compute phase.
+
+Some actions may fail during processing, in which case those actions may be skipped or the whole transaction may revert depending on the mode of actions. The code indicating the resulting state of the [action phase][a] is called a _result code_. Since it's also a 32-bit signed integer that essentially serves the same purpose as _exit code_ of [compute phase](#compute), it's common to call the result code an exit code too.
+
+[p]: https://docs.tact-lang.org/book/types#primitive-types
+[tvm]: https://docs.ton.org/learn/tvm-instructions/tvm-overview
+[bp]: https://github.com/ton-org/blueprint
