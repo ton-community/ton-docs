@@ -2,7 +2,7 @@
 title: Exit codes
 ---
 
-Each transaction on TON Blockchain consists of [multiple phases](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases). An _exit code_ is a 32-bit signed integer, which indicates whether the [compute](#compute) or [action](#action) phase of the transaction was successful, and if not, it contains the code of the exception that occurred. Each exit code represents its own exception or resulting state of the transaction.
+Each transaction on the TON Blockchain comprises [multiple phases](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases). An _exit code_ is a 32-bit signed integer that indicates whether the [compute](#compute) or [action](#action) phase succeeded. When unsuccessful, it contains the exception code that occurred. Each exit code represents a specific exception or transaction outcome.
 
 Exit codes 0 and 1 indicate normal (successful) execution of the [compute phase](#compute). Exit (or [result](#action)) code 0 indicates normal (successful) execution of the [action phase](#action). Any other exit code indicates that a certain exception has occurred and that the transaction wasn't successful in one way or another, i.e. transaction was reverted or the inbound message has bounced back.
 
@@ -11,7 +11,7 @@ Exit codes 0 and 1 indicate normal (successful) execution of the [compute phase]
 The range from 256 to 65535 is free for developer-defined exit codes.
 
 :::note
-While an exit (or [result](#action)) code is a 32-bit signed integer on TON Blockchain, an attempt to [throw](https://docs.tact-lang.org/ref/core-debug) an exit code out of bounds of the 16-bit unsigned integer (0 - 65535) will cause an error with [exit code 5](https://docs.tact-lang.org/book/exit-codes/#5). That's done intentionally to prevent some exit codes from being produced artificially, such as the [exit code -14](https://docs.tact-lang.org/book/exit-codes/#-14).
+While exit codes are 32-bit signed integers on TON Blockchain, attempting to [throw](https://docs.tact-lang.org/ref/core-debug) an exit code outside the 16-bit unsigned integer range (0-65535) will trigger an error with [exit code 5](https://docs.tact-lang.org/book/exit-codes/#5). This is intentional to prevent artificial generation of certain exit codes like [-14](https://docs.tact-lang.org/book/exit-codes/#-14).
 :::
 
 ## Table of exit codes {#standard-exit-codes}
@@ -31,11 +31,11 @@ The following table lists exit codes with an origin (where it can occur) and a s
 | [8](https://docs.tact-lang.org/book/exit-codes/#8)         | [Compute phase][c]                     | Cell overflow.                                                                                        |
 | [9](https://docs.tact-lang.org/book/exit-codes/#9)         | [Compute phase][c]                     | Cell underflow.                                                                                       |
 | [10](https://docs.tact-lang.org/book/exit-codes/#10)       | [Compute phase][c]                     | Dictionary error.                                                                                     |
-| [11](https://docs.tact-lang.org/book/exit-codes/#11)       | [Compute phase][c]                     | Described in [TVM][tvm] docs as "Unknown error, may be thrown by user programs".                      |
-| [12](https://docs.tact-lang.org/book/exit-codes/#12)       | [Compute phase][c]                     | Fatal error. Thrown by [TVM][tvm] in situations deemed impossible.                                    |
+| [11](https://docs.tact-lang.org/book/exit-codes/#11)       | [Compute phase][c]                     | As described in [TVM][tvm] documentation: "Unknown error, may be thrown by user programs"             |
+| [12](https://docs.tact-lang.org/book/exit-codes/#12)       | [Compute phase][c]                     | Fatal error thrown by [TVM][tvm] in unexpected situations                                             |
 | [13](https://docs.tact-lang.org/book/exit-codes/#13)       | [Compute phase][c]                     | Out of gas error.                                                                                     |
-| [-14](https://docs.tact-lang.org/book/exit-codes/#-14)     | [Compute phase][c]                     | Same as 13. Negative, so that it [cannot be faked](#13).                                              |
-| [14](https://docs.tact-lang.org/book/exit-codes/#14)       | [Compute phase][c]                     | VM virtualization error. Reserved, but never thrown.                                                  |
+| [-14](https://docs.tact-lang.org/book/exit-codes/#-14)     | [Compute phase][c]                     | Equivalent to code 13. A negative value prevents [imitation](#13)                                     |
+| [14](https://docs.tact-lang.org/book/exit-codes/#14)       | [Compute phase][c]                     | VM virtualization error (reserved but unused)                                                         |
 | [32](https://docs.tact-lang.org/book/exit-codes/#32)       | [Action phase][a]                      | Action list is invalid.                                                                               |
 | [33](https://docs.tact-lang.org/book/exit-codes/#33)       | [Action phase][a]                      | Action list is too long.                                                                              |
 | [34](https://docs.tact-lang.org/book/exit-codes/#34)       | [Action phase][a]                      | Action is invalid or not supported.                                                                   |
@@ -61,7 +61,7 @@ The following table lists exit codes with an origin (where it can occur) and a s
 | ~~[137](https://docs.tact-lang.org/book/exit-codes/#137)~~ | ~~Tact compiler ([Compute phase][c])~~ | ~~Masterchain support is not enabled for this contract.~~ Removed since Tact 1.6 (not released yet)   |
 
 :::note
-Often enough you might encounter the exit code 65535 (or `0xffff`), which usually means the same as the [exit code 130](https://docs.tact-lang.org/book/exit-codes/#130) — the received opcode is unknown to the contract as there were no receivers expecting it. When writing contracts, the exit code 65535 is set by the developers and not by [TVM][tvm] or the Tact compiler.
+The exit code 65535 (`0xffff`) typically indicates the same issue as [exit code 130](https://docs.tact-lang.org/book/exit-codes/#130) - an unrecognized message opcode. When developing contracts, code 65535 is assigned manually rather than being generated by [TVM][tvm] or the Tact compiler.
 :::
 
 [c]: https://docs.ton.org/learn/tvm-instructions/tvm-overview#compute-phase
@@ -103,8 +103,7 @@ it('tests something, you name it', async () => {
 
 ## Compute phase {#compute}
 
-[TVM][tvm] initialization and all computations occur in the [compute phase][c].
-If the compute phase fails (the resulting exit code isn't 0 or 1), the transaction skips the [action phase](#action) and goes to the bounce phase. In it, the bounce message is formed for the transactions initiated by the inbound message.
+The [TVM][tvm] initialization and all computations occur during the [compute phase][c]. If this phase fails (resulting in an exit code other than 0 or 1), the transaction skips the [action phase](#action) and proceeds to generate bounce messages for transactions initiated by inbound messages.
 
 ## Action phase {#action}
 
