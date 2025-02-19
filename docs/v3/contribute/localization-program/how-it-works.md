@@ -2,36 +2,36 @@
 
 ![how it works](/img/localizationProgramGuideline/localization-program.png)
 
-The **TownSquare Labs Localization Program** comprises several key components. This chapter will provide an overview of how the program operates, helping you understand its workings and how to use it effectively.
+The TownSquare Labs Localization Program comprises several key components. This chapter provides an overview of how the program operates, helping you understand its workings and how to use it effectively.
 
 Within this system, we integrate several applications to function seamlessly as a unified program:
 
 - **GitHub**: Hosts the documentation, synchronizes docs from the upstream repository, and syncs translations to specific branches.
 - **Crowdin**: Manages translation processes, including translating, proofreading, and setting language preferences.
 - **AI Systems**: Utilizes advanced AI to assist translators, ensuring smooth workflow.
-- **Customized Glossary**: Guides translators and ensures AI generates accurate translations based on the project’s context. Users can also upload their glossaries as needed.
+- **Customized Glossary**: This glossary guides translators and ensures AI generates accurate translations based on the project’s context. Users can also upload their glossaries as needed.
 
 :::info
-This guide won't cover the entire process in detail, but it will highlight the key components that make the TownSquare Labs Localization Program unique. You can explore the program further on your own.
+This guide won't cover the entire process but will highlight the key components that make the TownSquare Labs Localization Program unique. You can explore the program further on your own.
 :::
 
-## GitHub Synchronization for Documentation and Translations
+## GitHub synchronization for documentation and translations
 
 Our repository utilizes several branches for managing documentation and translations. Below is a detailed explanation of the purpose and function of each special branch:
 
-### Branches Overview
+### Branches overview
 
 - **`dev`**  
   The `dev` branch runs GitHub Actions to handle synchronization tasks. You can find the workflow configurations in the [**`.github/workflows`**](https://github.com/TownSquareXYZ/ton-docs/tree/dev/.github/workflows) directory:
 
   - **`sync-fork.yml`**: This workflow synchronizes documentation from the upstream repository. It runs daily at 00:00.
-  - **`sync-translations.yml`**: This workflow synchronizes updated translations to the respective language branches for preview purposes on the corresponding language websites.
+  - **`sync-translations.yml`**: This workflow synchronizes updated translations to the respective language branches for preview purposes on the corresponding websites.
 
 - **`main`**  
-  This branch stays in sync with the upstream repository through GitHub Actions running on the `dev` branch. It is also used for updating certain codes that we intend to propose to the original repository.
+  This branch stays in sync with the upstream repository through GitHub Actions running on the `dev` branch. It is also used to update certain codes we intend to propose to the original repository.
 
 - **`l10n_main`**  
-  This branch includes all changes from the `main` branch and translations from Crowdin. All modifications in this branch are periodically committed to the upstream repository by using a new sub-branch named `l10n_main_[some data]`.
+  This branch includes all changes from the `main` branch and translations from Crowdin. All modifications in this branch are periodically committed to the upstream repository using a new sub-branch named `l10n_main_[some data]`.
 
 - **`l10n_feat` or `l10n_feat_[specific functions]`**  
   This branch will include changes to code or documentation related to the translation system. Once all content is finalized, the changes in this branch will be merged into `l10_main`.
@@ -41,7 +41,7 @@ Our repository utilizes several branches for managing documentation and translat
 
 By maintaining these branches and using GitHub Actions, we efficiently manage the synchronization of our documentation and translation updates, ensuring that our multilingual content is always up to date.
 
-## How to Set Up a New Crowdin Project
+## How to set up a new crowdin project
 
 1. Log in to your [**Crowdin account**](https://accounts.crowdin.com/login).
 2. Click `Create new project` in the menu.
@@ -69,8 +69,8 @@ By maintaining these branches and using GitHub Actions, we efficiently manage th
         - **preserve_hierarchy**: Maintains the GitHub directory structure on the Crowdin server.
         - **source** and **translation**: Specify the paths for the files to upload to Crowdin and where the translated files should be output.   
 
-          Refer to [**our official config file**](https://github.com/TownSquareXYZ/ton-docs/blob/localization/crowdin.yml) for an example.   
-          More details can be found in the [**Crowdin configuration documentation**](https://developer.crowdin.com/configuration-file/).
+          For an example, refer the [**config file**](https://github.com/TownSquareXYZ/ton-docs/blob/localization/crowdin.yml).   
+          Find more in the [**Crowdin configuration documentation**](https://developer.crowdin.com/configuration-file/).
 
 6. Configure Crowdin to connect to your GitHub repo:
     1. Click `Add Repository` and select `Source and translation files mode`.
@@ -88,7 +88,7 @@ Refer to the [**GitHub integration documentation**](https://support.crowdin.com/
 
 ## Glossary
 
-### What is a Glossary?
+### What is a glossary?
 
 Sometimes, AI translators can't recognize specific terms that shouldn't be translated. For instance, we don't want "Rust" translated when referring to the programming language. To prevent such mistakes, we use a glossary to guide translations.
 
@@ -97,7 +97,7 @@ A **glossary** allows you to create, store, and manage project-specific terminol
 You can check our [**ton-i18n-glossary**](https://github.com/TownSquareXYZ/ton-i18n-glossary) for reference.
 ![ton-i18n-glossary](/img/localizationProgramGuideline/howItWorked/ton-i18n-glossary.png)
 
-### How to Set Up a Glossary for a New Language?
+### How to set up a glossary for a new language?
 
 Most translation platforms support glossaries. In Crowdin, after setting up a glossary, each term appears as an underlined word in the Editor. Hover over the term to see its translation, part of speech, and definition (if provided).
 ![github-glossary](/img/localizationProgramGuideline/howItWorked/github-glossary.png)
@@ -111,14 +111,18 @@ To add a term to the glossary:
 1. If the English term already exists in the glossary, find the corresponding line and column for the language you want to translate, input the translation, and upload it.
 2. To upload a new glossary, clone the project and run:
 
-    - `npm i`
-    - `npm run generate -- <glossary name you want>`
+```bash
+npm i
+```
+```bash
+npm run generate -- <glossary name you want>
+```
 
 Repeat step 1 to add the new term.
 
 **Simple and efficient, isn’t it?**
 
-## How to Take Advantage of AI Translation Copilot?
+## How to take advantage of AI translation copilot?
 
 AI translation copilot helps break down language barriers with several advantages:
 
