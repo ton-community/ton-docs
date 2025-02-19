@@ -2,7 +2,7 @@
 
 ![how it works](/img/localizationProgramGuideline/localization-program.png)
 
-The TownSquare Labs Localization Program comprises several key components. This chapter provides an overview of how the program operates, helping you understand its workings and how to use it effectively.
+The TownSquare Labs Localization Program comprises several key components. This chapter provides an overview of how the localization operates, helping you understand how it works and how to use it effectively.
 
 Within this system, we integrate several applications to function seamlessly as a unified program:
 
@@ -17,7 +17,7 @@ This guide won't cover the entire process but will highlight the key components 
 
 ## GitHub synchronization for documentation and translations
 
-Our repository utilizes several branches for managing documentation and translations. Below is a detailed explanation of the purpose and function of each special branch:
+Our repository utilizes several branches to manage documentation and translations. Below is a detailed explanation of the purpose and function of each special branch:
 
 ### Branches overview
 
@@ -28,13 +28,13 @@ Our repository utilizes several branches for managing documentation and translat
   - **`sync-translations.yml`**: This workflow synchronizes updated translations to the respective language branches for preview purposes on the corresponding websites.
 
 - **`main`**  
-  This branch stays in sync with the upstream repository through GitHub Actions running on the `dev` branch. It is also used to update certain codes we intend to propose to the original repository.
+  This branch stays in sync with the upstream repository through GitHub Actions, which runs on the `dev` branch. It also updates specific codes we intend to propose to the original repository.
 
 - **`l10n_main`**  
   This branch includes all changes from the `main` branch and translations from Crowdin. All modifications in this branch are periodically committed to the upstream repository using a new sub-branch named `l10n_main_[some data]`.
 
 - **`l10n_feat` or `l10n_feat_[specific functions]`**  
-  This branch will include changes to code or documentation related to the translation system. Once all content is finalized, the changes in this branch will be merged into `l10_main`.
+  This branch will include changes to code or documentation related to the translation system. Once you finalize all content, the changes in this branch will be merged into `l10_main`.
 
 - **`[lang]_preview`**  
   These branches are designated for specific language previews, such as `ko_preview` for Korean and `ja_preview` for Japanese. They allow us to preview the website in different languages.
@@ -69,7 +69,7 @@ By maintaining these branches and using GitHub Actions, we efficiently manage th
         - **preserve_hierarchy**: Maintains the GitHub directory structure on the Crowdin server.
         - **source** and **translation**: Specify the paths for the files to upload to Crowdin and where the translated files should be output.   
 
-          For an example, refer the [**config file**](https://github.com/TownSquareXYZ/ton-docs/blob/localization/crowdin.yml).   
+          For an example, refer to the [**config file**](https://github.com/TownSquareXYZ/ton-docs/blob/localization/crowdin.yml).   
           Find more in the [**Crowdin configuration documentation**](https://developer.crowdin.com/configuration-file/).
 
 6. Configure Crowdin to connect to your GitHub repo:
@@ -77,12 +77,12 @@ By maintaining these branches and using GitHub Actions, we efficiently manage th
     ![select-integration-mode](/img/localizationProgramGuideline/howItWorked/select-integration-mode.png)
     2. Connect your GitHub account and search for the repo you want to translate.
     ![search-repo](/img/localizationProgramGuideline/howItWorked/search-repo.png)
-    3. Select the branch on the left, which will generate a new branch where Crowdin will post the translations.
+    3. Select the branch on the left to generate a new branch where Crowdin will post the translations.
     ![setting-branch](/img/localizationProgramGuideline/howItWorked/setting-branch.png)
-    4. Choose the frequency for updating translations to your GitHub branch. Default settings can be kept for other configurations, then click save to enable the integration.
+    4. Choose the frequency for updating translations to your GitHub branch, then click save to enable the integration.
     ![frequency-save](/img/localizationProgramGuideline/howItWorked/frequency-save.png)
 
-Refer to the [**GitHub integration documentation**](https://support.crowdin.com/github-integration/) for more details.
+For more details, refer to the [**GitHub integration documentation**](https://support.crowdin.com/github-integration/).
 
 7. Finally, you can click the `Sync Now` button to sync the repo and translations whenever needed.
 
@@ -90,11 +90,11 @@ Refer to the [**GitHub integration documentation**](https://support.crowdin.com/
 
 ### What is a glossary?
 
-Sometimes, AI translators can't recognize specific terms that shouldn't be translated. For instance, we don't want "Rust" translated when referring to the programming language. To prevent such mistakes, we use a glossary to guide translations.
+Sometimes, AI translators can't recognize untranslatable and specific terms. For instance, we don't want "Rust" translated when referring to the programming language. To prevent such mistakes, we use a glossary to guide translations.
 
-A **glossary** allows you to create, store, and manage project-specific terminology in one place, ensuring terms are translated correctly and consistently.
+A **glossary** allows you to create, store, and manage project-specific terminology in one place, ensuring that terms are translated correctly and consistently.
 
-You can check our [**ton-i18n-glossary**](https://github.com/TownSquareXYZ/ton-i18n-glossary) for reference.
+You can reference our [**ton-i18n-glossary**](https://github.com/TownSquareXYZ/ton-i18n-glossary).
 ![ton-i18n-glossary](/img/localizationProgramGuideline/howItWorked/ton-i18n-glossary.png)
 
 ### How to set up a glossary for a new language?
@@ -103,7 +103,7 @@ Most translation platforms support glossaries. In Crowdin, after setting up a gl
 ![github-glossary](/img/localizationProgramGuideline/howItWorked/github-glossary.png)
 ![crowdin-glossary](/img/localizationProgramGuideline/howItWorked/crowdin-glossary.png)
 
-In DeepL, simply upload your glossary, and it will be used automatically during AI translation.
+In DeepL, simply upload your glossary, which will be used automatically during AI translation.
 
 We have created [**a program for glossary**](https://github.com/TownSquareXYZ/ton-i18n-glossary) that auto-uploads updates.
 
@@ -120,17 +120,15 @@ npm run generate -- <glossary name you want>
 
 Repeat step 1 to add the new term.
 
-**Simple and efficient, isn’t it?**
-
 ## How to take advantage of AI translation copilot?
 
 AI translation copilot helps break down language barriers with several advantages:
 
 - **Enhanced Consistency**: AI translations are based on up-to-date information, providing the most accurate and current translations.
 - **Speed and Efficiency**: AI translation is instantaneous, handling large volumes of content in real-time.
-- **Robust Scalability**: AI systems continuously learn and improve, enhancing translation quality over time. With the provided glossary, AI translations can be tailored to the specific needs of different repositories.
+- **Robust Scalability**: AI systems continuously learn and improve, enhancing translation quality over time. 
 
-To use AI translation in Crowdin (we use DeepL in our project):
+We use DeepL for AI translation in our Crowdin project:
 1. Select Machine Translation in the Crowdin menu and click edit on the DeepL line.
 ![select-deepl](/img/localizationProgramGuideline/howItWorked/select-deepl.png)
 2. Enable DeepL support and input the DeepL Translator API key.
@@ -142,7 +140,7 @@ To use AI translation in Crowdin (we use DeepL in our project):
 
 4. In the repo, click Pre-translation and select via Machine Translation.
 ![pre-translation](/img/localizationProgramGuideline/howItWorked/pre-translation.png)
-5. Choose DeepL as the Translation Engine, select the target languages, and select the files to translate.
+5. Choose DeepL as the Translation Engine, select the target languages, and select the translated files.
 ![pre-translate-config](/img/localizationProgramGuideline/howItWorked/pre-translate-config.png)
 
-That's it! Now you can take a break and wait for the pre-translation to complete.
+That's it! Now, you can take a break and wait for the pre-translation to complete.
