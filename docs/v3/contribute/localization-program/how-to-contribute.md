@@ -13,7 +13,7 @@ The **TownSquare Labs Localization Program** is open to everyone! Here are a few
 5. Preview all translation results on the website after proofreading.
 
 :::info
-Before you start contributing, read the guidelines below to ensure standardization and quality, which will speed up the review process.
+Before contributing, read the guidelines below to ensure standardization and quality, speeding up the review process.
 :::
 
 ## Side-by-side mode
