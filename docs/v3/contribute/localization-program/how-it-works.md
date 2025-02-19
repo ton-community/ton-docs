@@ -2,7 +2,7 @@
 
 ![how it works](/img/localizationProgramGuideline/localization-program.png)
 
-The TownSquare Labs Localization Program comprises several key components. This chapter provides an overview of how the localization operates, helping you understand how it works and how to use it effectively.
+The TownSquare Labs Localization Program comprises several key components. This chapter provides an overview of localization, helping you understand how it works and how to use it effectively.
 
 Within this system, we integrate several applications to function seamlessly as a unified program:
 
@@ -82,7 +82,7 @@ By maintaining these branches and using GitHub Actions, we efficiently manage th
     4. Choose the frequency for updating translations to your GitHub branch, then click save to enable the integration.
     ![frequency-save](/img/localizationProgramGuideline/howItWorked/frequency-save.png)
 
-For more details, refer to the [**GitHub integration documentation**](https://support.crowdin.com/github-integration/).
+Find more details in the [**GitHub integration documentation**](https://support.crowdin.com/github-integration/).
 
 7. Finally, you can click the `Sync Now` button to sync the repo and translations whenever needed.
 
@@ -103,7 +103,7 @@ Most translation platforms support glossaries. In Crowdin, after setting up a gl
 ![github-glossary](/img/localizationProgramGuideline/howItWorked/github-glossary.png)
 ![crowdin-glossary](/img/localizationProgramGuideline/howItWorked/crowdin-glossary.png)
 
-In DeepL, simply upload your glossary, which will be used automatically during AI translation.
+In DeepL, upload your glossary, which will be used automatically during AI translation.
 
 We have created [**a program for glossary**](https://github.com/TownSquareXYZ/ton-i18n-glossary) that auto-uploads updates.
 
