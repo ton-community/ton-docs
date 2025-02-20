@@ -6,9 +6,9 @@ This page explains how to participate in the localization program for TON docume
 
 The **TownSquare Labs Localization Program** is open to everyone! Here are a few steps you need to take before you start contributing:
 
-1. Log in to your [**Crowdin**](https://crowdin.com) account or sign up.
+1. Log in to your [Crowdin](https://crowdin.com) account or sign up.
 2. Select the language you want to contribute to.
-3. Familiarize yourself with the [**How to use crowdin**](/v3/contribute/localization-program/how-to-contribute) guide and the [**Translation Style Guide**](/v3/contribute/localization-program/translation-style-guide/) for tips and best practices.
+3. Familiarize yourself with the [How to use crowdin](/v3/contribute/localization-program/how-to-contribute/) guide and the [Translation style guide](/v3/contribute/localization-program/translation-style-guide/) for tips and best practices.
 4. Use machine translations to aid your work, but do not rely solely on them.
 5. Preview all translation results on the website after proofreading.
 
@@ -45,7 +45,7 @@ The localization project is hosted on [Crowdin](https://crowdin.com/project/ton-
 
 ### Developer guidelines
 - **Update footer configuration for your language:**
-  1. Fork our [**repository**](https://github.com/TownSquareXYZ/ton-docs/tree/i18n_feat).
+  1. Fork our [repository](https://github.com/TownSquareXYZ/ton-docs/tree/i18n_feat).
   2. Locate the file [**`src/theme/Footer/config.ts`**](https://github.com/TownSquareXYZ/ton-docs/blob/main/src/theme/Footer/config.ts).
   3. Copy the value of the variable **`FOOTER_COLUMN_LINKS_EN`** to **`FOOTER_COLUMN_LINKS_[YOUR_LANG]`**.
   4. Translate the values of the keys **`headerLangKey`** and **`langKey`** to your language, as we did for Mandarin in **`FOOTER_COLUMN_LINKS_CN`**.
@@ -94,7 +94,7 @@ The preview website displays all approved content within one hour. Check [**our 
 
 ### Translator guidelines
 
-As a Translator, your goal is to ensure that translations are faithful and expressive, keeping them as close to the original meaning and as understandable as possible. Your mission is to make the blue progress bar reach 100%.
+As a translator, you aim to ensure that translations are faithful and expressive, keeping them as close to the original meaning and as understandable as possible. Your mission is to make the blue progress bar reach 100%.
 
 #### Translation flow
 
