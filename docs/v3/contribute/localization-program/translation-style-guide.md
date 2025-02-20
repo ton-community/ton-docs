@@ -1,12 +1,12 @@
 # Translation style guide
-This translation style guide contains the most essential guidelines, instructions, and tips for translators, helping us localize the website.
+This translation style guide contains essential guidelines, instructions, and tips for translators, helping us localize the website.
 
 This document serves as a general guide and is not specific to any language.
 
 ## Capturing the essence of the message
 When translating TON docs content, avoid literal translations.
 
-The translations must capture the essence of the message. This could mean rephrasing specific phrases or using descriptive translations instead of translating the content word for word.
+The translations must capture the essence of the message. This approach means rephrasing specific phrases or using descriptive translations instead of translating the content word for word.
 
 Different languages have different grammar rules, conventions, and word order. When translating, please be mindful of how sentences are structured in the target languages, and avoid word-for-word translation of the English source, as this can lead to poor sentence structure and readability.
 
@@ -49,25 +49,25 @@ Some examples of language codes for the most widely spoken languages:
 * Ukrainian - uk
 
 ## Titles of external articles
-Some strings contain titles of external articles. Most of our developer documentation pages contain links to external articles for further reading. The strings containing titles of articles need to be translated, regardless of the article's language, to ensure a more consistent user experience for the visitors viewing the page in their language.
+Some strings contain titles of external articles. Most of our developer documentation pages contain links to external articles for further reading. The strings containing article titles need to be translated, regardless of the article's language, to ensure a more consistent user experience for visitors viewing the page in their language.
 
 ## Crowdin warnings
-Crowdin has a built-in feature that warns translators when they are about to make a mistake. Crowdin will automatically warn you of this before saving your translation if you forget to include a tag from the source, translate elements that should not be translated, add several consecutive spaces, forget end punctuation, etc. If you see a warning like this, please go back and double-check the suggested translation.
+Crowdin has a built-in feature that warns translators when they are about to make a mistake. Crowdin will automatically alert you before saving your translation if you forget to include a tag from the source, translate elements that should not be translated, add several consecutive spaces, forget end punctuation, etc. If you see a warning like this, please double-check the suggested translation.
 
 :::warning
-Never ignore these warnings, as they usually mean that something is wrong, or that the translation is missing a key part of the source text.
+Never ignore these warnings, as they usually mean something is wrong or the translation is missing a key part of the source text.
 :::
 
-## Short vs. full forms/abbreviations
+## Short vs. complete forms/abbreviations
 There are a lot of abbreviations used on the website, e.g. dapps, NFT, DAO, DeFi, etc. These abbreviations are commonly used in English and most visitors to the website are familiar with them.
 
 Since they usually don’t have established translations in other languages, the best way to approach these and similar terms is to provide a descriptive translation of the full form, and add the English abbreviation in brackets.
 
-Do not translate these abbreviations, since most people wouldn’t be familiar with them, and the localized versions would not make much sense to most visitors.
+Do not translate these abbreviations since most people are unfamiliar with them, and the localized versions would not make much sense to most visitors.
 
-Example of how to translate dapps:
+Example of how to translate DApps:
 
-* Decentralized applications (dapps) → Translated full form (English abbreviation in brackets)
+* Decentralized applications (DApps) → Translated in full form (English abbreviation in brackets)
 
 ## Terms without established translations
 Some terms might not have established translations in other languages, and are widely known by the original English term. Such terms mostly include newer concepts, like proof-of-work, proof-of-stake, Beacon Chain, staking, etc.
@@ -86,9 +86,9 @@ Button text can be identified by viewing the context screenshots, connected with
 The translations for buttons should be as short as possible, to prevent formatting mismatches. Additionally, button translations should be imperative, i.e. present a command or request.
 
 ## Translating for inclusivity
-TON docs visitors come from all over the world and from different backgrounds. The language on the website should therefore be neutral, welcoming to everyone and not exclusive.
+TON docs visitors come from all over the world and from different backgrounds. Therefore, the language on the website should be neutral, welcoming to everyone, and not exclusive.
 
-An important aspect of this is gender neutrality. This can be easily achieved by using the formal form of address, and avoiding any gender-specific words in the translations.
+An essential aspect of this is gender neutrality. This can be easily achieved by using the formal form of address, and avoiding any gender-specific words in the translations.
 
 Another form of inclusivity is trying to translate for a global audience, not specific to any country, race or region.
 
