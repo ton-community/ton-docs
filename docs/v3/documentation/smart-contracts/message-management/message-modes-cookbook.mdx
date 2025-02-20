@@ -14,7 +14,7 @@ You can check [this example](https://testnet.tonviewer.com/transaction/42ed45726
 
 Please check how [get_balance](/v3/documentation/smart-contracts/func/docs/stdlib/#get_balance) works to better understand `balance` inside TVM.
 
-All TON tokens held by a contract are reflected in the [contract balance](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/block.tlb#L263C1-L265C20). Some of these tokens are also assigned to the currently processed incoming [message](/v3/documentation/data-formats/tlb/msg-tlb#commonmsginfo). This mechanism is effective because any TON transaction involving a [non‐system contract](/v3/documentation/smart-contracts/contracts-specs/governance) processes exactly one incoming message at a time.
+All TON tokens held by a contract are reflected in the contract `balance`. Some of these tokens are also assigned to the currently processed incoming `message`. This mechanism is effective because any TON transaction involving a [non‐system contract](/v3/documentation/smart-contracts/contracts-specs/governance) processes exactly one incoming message at a time.
 
 Therefore, any blockchain payment may come either:
 
@@ -25,11 +25,11 @@ Therefore, any blockchain payment may come either:
 
 #### Fees
 
-Actual transaction fees will vary depending on the blockchain configuration, the smart contract code, and other factors. When a message is received, part of the contract `balance` will be consumed by [storage fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee) and gas_fee if the message `value` [is above a certain amount](/v3/documentation/tvm/tvm-overview#compute-phase-skipped).
+Actual transaction fees will vary depending on the blockchain configuration, the smart contract code, and other factors. When a message is received, part of the contract `balance` will be consumed by storage and gas fees if the message `value` [is above a certain amount](/v3/documentation/tvm/tvm-overview#compute-phase-skipped).
 
 According to the [transaction flow](/v3/documentation/tvm/tvm-overview#transactions-and-phases), there are five distinct phases:
 
-1. **Storage**: This phase includes both [account storage](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L651-L675) and [in_msg import](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L783-L816).
+1. **Storage**: This phase includes both account storage and in_msg import.
 2. **Credit**: In this phase, the `value` of `in_msg` [is added](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L959-L981) to the `balance`.
 3. **Compute**: The TVM executes the smart contract code.
 4. **Action**: This phase involves performing actions such as `SENDRAWMSG`.
@@ -425,3 +425,9 @@ When the balance reaches 0 TON, destroy the contract.
   />
 </div>
 <br></br>
+
+[cb]: https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/block.tlb#L263C1-L265C20
+[msg]: /v3/documentation/data-formats/tlb/msg-tlb#commonmsginfo
+[storage_fee]: /v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee
+[account_storage]: https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L651-L675
+[in_msg_import]: https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L783-L816
