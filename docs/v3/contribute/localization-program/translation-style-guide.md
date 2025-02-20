@@ -1,45 +1,43 @@
 # Translation style guide
-This translation style guide contains some of the most important guidelines, instructions, and tips for translators, helping us localize the website.
+This translation style guide contains the most essential guidelines, instructions, and tips for translators, helping us localize the website.
 
-This document serves as a general guide and is not specific to any one language.
+This document serves as a general guide and is not specific to any language.
 
 ## Capturing the essence of the message
 When translating TON docs content, avoid literal translations.
 
-It is important that the translations capture the essence of the message. This could mean rephrasing certain phrases, or using descriptive translations instead of translating the content word for word.
+The translations must capture the essence of the message. This could mean rephrasing specific phrases or using descriptive translations instead of translating the content word for word.
 
-Different languages have different grammar rules, conventions and word order. When translating, please be mindful of how sentences are structured in the target languages, and avoid literally translating the English source, as this can lead to poor sentence structure and readability.
+Different languages have different grammar rules, conventions, and word order. When translating, please be mindful of how sentences are structured in the target languages, and avoid word-for-word translation of the English source, as this can lead to poor sentence structure and readability.
 
-Instead of translating the source text word for word, it is recommended you read the entire sentence and adapt it to fit the conventions of the target language.
+Instead of translating the source text word for word, you should read the entire sentence and adapt it to fit the conventions of the target language.
 
 ## Formal vs. informal
 We use the formal form of address, which is always polite and appropriate for all visitors.
 
-Using the formal address allows us to avoid sounding unofficial or offensive, and works regardless of the visitor’s age and gender.
+Using the formal address allows us to avoid sounding unofficial or offensive and works regardless of the visitor’s age and gender.
 
-Most Indo-European and Afro-Asiatic languages use gender-specific second-person personal pronouns, which distinguish between male and female. When addressing the user or using possessive pronouns, we can avoid assuming the visitor’s gender, as the formal form of address is generally applicable and consistent, regardless of how they identify.
+Most Indo-European and Afro-Asiatic languages use gender-specific second-person personal pronouns, distinguishing between males and females. When addressing the user or using possessive pronouns, we can avoid assuming the visitor’s gender, as the formal address is generally applicable and consistent, regardless of how they identify.
 
-## Simple and clear vocabulary and meaning
+## Straightforward vocabulary and meaning
 Our goal is to make content on the website understandable to as many people as possible.
 
-In most cases, this can be easily achieved by using short and simple words that are easily understandable. If there are multiple possible translations for a certain word in your language with the same meaning, the best option is most often the shortest word that clearly reflects the meaning.
+In most cases, this can be easily achieved by using short and simple words that are easily understandable. If multiple possible translations exist for a specific word in your language with the same meaning, the best option is often the shortest word that reflects the meaning.
 
 ## Writing system
 
-All of the content should be translated using the correct writing system for your language, and should not include any words, written using Latin characters.
+All of the content should be translated using the correct writing system for your language and should not include any words written using Latin characters.
 
 When translating the content, you should ensure that the translations are consistent and do not include any Latin characters.
 
-**The above doesn’t apply to languages, where proper names shouldn’t be translated as a rule.**
+**The above doesn’t apply to languages where proper names shouldn’t be translated as a rule.**
 
 ## Translating page metadata
-Some pages contain metadata on the page, like 'title', 'lang', 'description', 'sidebar', etc.
+Some pages contain metadata, such as 'title', 'lang', 'description', 'sidebar', etc.
 
-We hide the content that translators should never translate when uploading new pages to Crowdin, meaning that all the metadata visible to translators in Crowdin should get translated.
+When uploading new pages to Crowdin, we hide the content that translators should never translate, meaning that all the metadata visible to translators in Crowdin should be translated.
 
-Please be especially mindful when translating any strings where the source text is 'en'. This represents the language that the page is available in and should be translated to the [ISO language code for your language](https://www.andiamo.co.uk/resources/iso-language-codes/). These strings should always be translated using Latin characters, not the writing script, native to the target language.
-
-If you are unsure which language code to use, you can check the translation memory in Crowdin or find the language code for your language in the URL of the page in the Crowdin online editor.
+Please be especially mindful when translating strings where the source text is 'en'. This represents the language page, which is available and should be translated to the [ISO language code for your language](https://www.andiamo.co.uk/resources/iso-language-codes/). These strings should always be translated using Latin characters, not the writing script, native to the target language.
 
 Some examples of language codes for the most widely spoken languages:
 
