@@ -5,7 +5,7 @@ The localization is a collaborative effort to translate various TON-related docu
 ## System design philosophy
 ![how it works](/img/localizationProgramGuideline/localization-program.png)
 
-The localization process is fully maintained by [**TownSquare Labs**](https://github.com/TownSquareXYZ).
+The localization process is fully maintained by [TownSquare Labs](https://github.com/TownSquareXYZ).
 
 TownSquare is committed to creating an open infrastructure for multilingual community collaboration to advance TON to a better phase, which includes:
 
@@ -31,6 +31,6 @@ We sincerely appreciate the thousands of community members integral to the Trans
 
 ## Guides and resources
 If you are participating in or considering joining the Translation Program, refer to the translation guides below:
-* [**Translation Style Guide**](/v3/contribute/localization-program/translation-style-guide) – Instructions and tips for translators.
-* [**Crowdin Online Editor Guide**](https://support.crowdin.com/online-editor/) – An in-depth guide to using the Crowdin online editor and some of Crowdin's advanced features.
+* [Translation style guide](/v3/contribute/localization-program/translation-style-guide) – Instructions and tips for translators.
+* [Crowdin online editor guide](https://support.crowdin.com/online-editor/) – An in-depth guide to using the Crowdin online editor and some of Crowdin's advanced features.
 
