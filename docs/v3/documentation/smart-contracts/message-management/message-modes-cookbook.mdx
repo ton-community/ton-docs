@@ -1,5 +1,5 @@
-import ConceptImage from '@site/src/components/conceptImage';
-import ThemedImage from '@theme/ThemedImage';
+import ConceptImage from "@site/src/components/conceptImage";
+import ThemedImage from "@theme/ThemedImage";
 
 # Message modes cookbook
 
@@ -18,10 +18,10 @@ All TON tokens held by a contract are reflected in the [contract balance](https:
 
 Therefore, any blockchain payment may come either:
 
-- From the incoming message `value`.
-  For instance, computation fees are paid in this way unless the contract calls [accept_message](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects). This ensures that malicious actors cannot spend the contract's balance on handling their data.
-- From the contract `balance` (it will not touch the amount of TON designated as incoming this transaction).
-  Storage fees in workchains 0 and -1 and most actions are currently examples of this.
+- From the incoming message's `value`.
+  Contracts pay computation fees this way unless they call [accept_message](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects), which prevents malicious actors from spending the contract's balance to process their data
+- From the contract's `balance`, which leaves the incoming TON amount untouched during the transaction
+  This approach currently applies to storage fees in workchains 0 and -1, along with most common actions
 
 #### Fees
 
@@ -133,7 +133,7 @@ The key difference is that `flag 16` creates bounces for [action phase errors](/
 
 - The destination contract does not exist.
 - The destination contract throws an unhandled exception.
-:::
+  :::
 
 <br></br>
 <div class="text--center">
@@ -142,8 +142,7 @@ The key difference is that `flag 16` creates bounces for [action phase errors](/
     sources={{
       light:
         "/img/docs/message-modes-cookbook/send_regular_message_3_noerror.png?raw=true",
-      dark:
-        "/img/docs/message-modes-cookbook/send_regular_message_3_noerror_dark.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/send_regular_message_3_noerror_dark.png?raw=true",
     }}
   />
 </div>
@@ -164,8 +163,7 @@ State after the transaction: Account A has 0.896 TON, Account B has 1.1 TON
     sources={{
       light:
         "/img/docs/message-modes-cookbook/send_regular_message_4.png?raw=true",
-      dark:
-        "/img/docs/message-modes-cookbook/send_regular_message_4_dark.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/send_regular_message_4_dark.png?raw=true",
     }}
   />
 </div>
@@ -187,8 +185,7 @@ State after the transaction with an error: Account A has 1 - ([total_fee](/v3/do
     sources={{
       light:
         "/img/docs/message-modes-cookbook/send_regular_message_5_error.png?raw=true",
-      dark:
-        "/img/docs/message-modes-cookbook/send_regular_message_5_error_dark.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/send_regular_message_5_error_dark.png?raw=true",
     }}
   />
 </div>
@@ -205,8 +202,7 @@ If no errors occur, the result is the same as [mode = 1](#mode1).
     sources={{
       light:
         "/img/docs/message-modes-cookbook/send_regular_message_5_noerror.png?raw=true",
-      dark:
-        "/img/docs/message-modes-cookbook/send_regular_message_5_noerror_dark.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/send_regular_message_5_noerror_dark.png?raw=true",
     }}
   />
 </div>
@@ -238,8 +234,7 @@ If you try to send multiple messages (e.g., mode 0 **and** mode 64), you'll get 
     sources={{
       light:
         "/img/docs/message-modes-cookbook/carry_remaining_value_6.png?raw=true",
-      dark:
-        "/img/docs/message-modes-cookbook/carry_remaining_value_6_dark.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_6_dark.png?raw=true",
     }}
   />
 </div>
@@ -265,8 +260,7 @@ Please note that `storage_fee` is included in `total_fee` but is always paid fro
     sources={{
       light:
         "/img/docs/message-modes-cookbook/carry_remaining_value_7.png?raw=true",
-      dark:
-        "/img/docs/message-modes-cookbook/carry_remaining_value_7_dark.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_7_dark.png?raw=true",
     }}
   />
 </div>
@@ -288,8 +282,7 @@ State after the transaction with an error: Account A has 1 - (total_fee + `fwd_f
     sources={{
       light:
         "/img/docs/message-modes-cookbook/carry_remaining_value_8_error.png?raw=true",
-      dark:
-        "/img/docs/message-modes-cookbook/carry_remaining_value_8_error_dark.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_8_error_dark.png?raw=true",
     }}
   />
 </div>
@@ -306,8 +299,7 @@ If no errors occur, the result is the same as [mode = 64, flag 0](#mode64). This
     sources={{
       light:
         "/img/docs/message-modes-cookbook/carry_remaining_value_8_noerror.png?raw=true",
-      dark:
-        "/img/docs/message-modes-cookbook/carry_remaining_value_8_noerror_dark.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_8_noerror_dark.png?raw=true",
     }}
   />
 </div>
@@ -329,8 +321,7 @@ State after the transaction with an error: Account A has 1 - (total_fee + `fwd_f
     sources={{
       light:
         "/img/docs/message-modes-cookbook/carry_remaining_value_9_error.png?raw=true",
-      dark:
-        "/img/docs/message-modes-cookbook/carry_remaining_value_9_error_dark.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_9_error_dark.png?raw=true",
     }}
   />
 </div>
@@ -347,8 +338,7 @@ If no errors occur, the result is the same as [mode = 65](#mode65).
     sources={{
       light:
         "/img/docs/message-modes-cookbook/carry_remaining_value_9_noerror.png?raw=true",
-      dark:
-        "/img/docs/message-modes-cookbook/carry_remaining_value_9_noerror_dark.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_9_noerror_dark.png?raw=true",
     }}
   />
 </div>
@@ -369,8 +359,7 @@ State after the transaction: Account A has 0.896 TON, Account B has 0 TON, Accou
     sources={{
       light:
         "/img/docs/message-modes-cookbook/carry_remaining_value_10.png?raw=true",
-      dark:
-        "/img/docs/message-modes-cookbook/carry_remaining_value_10_dark.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_10_dark.png?raw=true",
     }}
   />
 </div>
@@ -391,8 +380,7 @@ State after the transaction with an error: Account A has 1 - (total_fee + `fwd_f
     sources={{
       light:
         "/img/docs/message-modes-cookbook/carry_remaining_value_11_error.png?raw=true",
-      dark:
-        "/img/docs/message-modes-cookbook/carry_remaining_value_11_error_dark.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_11_error_dark.png?raw=true",
     }}
   />
 </div>
@@ -409,8 +397,7 @@ If no errors occur, the result is the same as [mode = 128](#mode128). This mode 
     sources={{
       light:
         "/img/docs/message-modes-cookbook/carry_remaining_value_11_noerror.png?raw=true",
-      dark:
-        "/img/docs/message-modes-cookbook/carry_remaining_value_11_noerror_dark.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_11_noerror_dark.png?raw=true",
     }}
   />
 </div>
@@ -433,8 +420,7 @@ When the balance reaches 0 TON, destroy the contract.
     sources={{
       light:
         "/img/docs/message-modes-cookbook/carry_remaining_value_12.png?raw=true",
-      dark:
-        "/img/docs/message-modes-cookbook/carry_remaining_value_12_dark.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_12_dark.png?raw=true",
     }}
   />
 </div>
