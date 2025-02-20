@@ -2,7 +2,7 @@
 title: Exit codes
 ---
 
-Each transaction on the TON Blockchain comprises [multiple phases](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases). An _exit code_ is a 32-bit signed integer that indicates whether the [compute](#compute) or [action](#action) phase succeeded. When unsuccessful, it contains the exception code that occurred. Each exit code represents a specific exception or transaction outcome.
+Each transaction on the TON Blockchain comprises [multiple phases](/v3/documentation/tvm/tvm-overview#transactions-and-phases). An _exit code_ is a 32-bit signed integer that indicates whether the [compute](#compute) or [action](#action) phase succeeded. When unsuccessful, it contains the exception code that occurred. Each exit code represents a specific exception or transaction outcome.
 
 Exit codes 0 and 1 indicate standard (successful) execution of the [compute phase](#compute). Exit (or [result](#action)) code 0 indicates the standard (successful) execution of the [action phase](#action). Any other exit code indicates that a specific exception has occurred and that the transaction wasn't successful in one way or another, i.e., the transaction was reverted or the inbound message has bounced back.
 
@@ -208,7 +208,7 @@ try {
 
 ### 6: Invalid opcode {#6}
 
-If you specify an instruction that the current [TVM][tvm] version does not define or try to set an unsupported [code page](https://docs.ton.org/v3/documentation/tvm/tvm-overview#tvm-state), the system throws an error with exit code 6: `Invalid opcode`.
+If you specify an instruction that the current [TVM][tvm] version does not define or try to set an unsupported [code page](/v3/documentation/tvm/tvm-overview#tvm-state), the system throws an error with exit code 6: `Invalid opcode`.
 
 ```tact
 // There's no such codepage, and attempt to set it fails
@@ -303,7 +303,7 @@ try {
 
 ### 10: Dictionary error {#10}
 
-In Tact, the `map<K, V>` type is an abstraction over the ["hash" map dictionaries of FunC](https://docs.ton.org/develop/func/dictionaries#hashmap) and underlying [`HashmapE` type](https://docs.ton.org/develop/data-formats/tl-b-types#hashmap) of [TL-B][tlb] and [TVM][tvm].
+In Tact, the `map<K, V>` type is an abstraction over the ["hash" map dictionaries of FunC](/v3/documentation/smart-contracts/func/docs/dictionaries#hashmap) and underlying [`HashmapE` type](/v3/documentation/data-formats/tlb/tl-b-types#hashmap) of [TL-B][tlb] and [TVM][tvm].
 
 If there is an incorrect manipulation of dictionaries, such as improper assumptions about their memory layout, an error with exit code 10 is thrown: `Dictionary error`. Note that Tact prevents you from getting this error unless you do [Fift and TVM assembly][fift] work yourself:
 
@@ -331,7 +331,7 @@ contract DictPic {
 
 ### 11: "Unknown" error {#11}
 
-Described in [TVM][tvm] docs as "Unknown error, may be thrown by user programs", although most commonly used for problems with queueing a message send or problems with [get-methods](https://docs.ton.org/develop/smart-contracts/guidelines/get-methods).
+Described in [TVM][tvm] docs as "Unknown error, may be thrown by user programs", although most commonly used for problems with queueing a message send or problems with [get-methods](/v3/guidelines/smart-contracts/get-methods).
 
 ```tact
 try {
@@ -407,7 +407,7 @@ nativeSendMessage(emptyCell(), 0); // won't fail in compute phase,
 
 ### 35: Invalid source address in outbound message {#35}
 
-If the source address in the outbound message isn't equal to [`addr_none`](https://docs.ton.org/develop/data-formats/msg-tlb#addr_none00) or to the address of the contract that initiated this message, an error with exit code 35 is thrown: `Invalid source address in the outbound message`.
+If the source address in the outbound message isn't equal to [`addr_none`](/v3/documentation/data-formats/tlb/msg-tlb#addr_none00) or to the address of the contract that initiated this message, an error with exit code 35 is thrown: `Invalid source address in the outbound message`.
 
 ### 36: Invalid destination address in outbound message {#36}
 
@@ -419,7 +419,7 @@ If the [optional flag +2][flag2] is set, this error will not be thrown, and the 
 
 ### 37: Not enough Toncoin {#37}
 
-If all funds of the inbound message with [mode 64](/v3/documentation/smart-contracts/message-management/message-modes-cookbook#mode64) had been already consumed and there's not enough funds to pay for the failed action, or the [TL-B][tlb] layout of the provided value ([`CurrencyCollection`](https://docs.ton.org/develop/data-formats/msg-tlb#currencycollection)) is invalid, or there are not enough funds to pay forward fees or not enough funds after deducting fees, an error with exit code 37 is thrown: `Not enough Toncoin`.
+If all funds of the inbound message with [mode 64](/v3/documentation/smart-contracts/message-management/message-modes-cookbook#mode64) had been already consumed and there's not enough funds to pay for the failed action, or the [TL-B][tlb] layout of the provided value ([`CurrencyCollection`](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection)) is invalid, or there are not enough funds to pay forward fees or not enough funds after deducting fees, an error with exit code 37 is thrown: `Not enough Toncoin`.
 
 :::note
 If the [optional flag +2][flag2] is set, this error will not be thrown, and the given message will not be sent.
@@ -427,19 +427,19 @@ If the [optional flag +2][flag2] is set, this error will not be thrown, and the 
 
 ### 38: Not enough extra currencies {#38}
 
-Besides the native currency, Toncoin, TON Blockchain supports up to 2^{32} extra currencies. They differ from making new jettons because extra currencies are natively supported — one can potentially specify an extra [`HashmapE`](https://docs.ton.org/develop/data-formats/tl-b-types#hashmap) of extra currency amounts in addition to the Toncoin amount in the internal message to another contract. Unlike Jettons, extra currencies can only be stored and transferred and do not have any other functionality.
+Besides the native currency, Toncoin, TON Blockchain supports up to 2^{32} extra currencies. They differ from making new jettons because extra currencies are natively supported — one can potentially specify an extra [`HashmapE`](/v3/documentation/data-formats/tlb/tl-b-types#hashmap) of extra currency amounts in addition to the Toncoin amount in the internal message to another contract. Unlike Jettons, extra currencies can only be stored and transferred and do not have any other functionality.
 
 Currently, **there are no extra currencies** on TON Blockchain, but the exit code 38 is reserved for cases when there is not enough extra currency to send the specified amount: `Not enough extra currencies`.
 
 :::note
-[Extra currencies](https://docs.ton.org/develop/dapps/defi/coins) in TON Docs.
+[Extra currencies](/v3/documentation/dapps/defi/coins) in TON Docs.
 
-[Extra currency mining](https://docs.ton.org/develop/research-and-development/minter-flow) in TON Docs.
+[Extra currency mining](/v3/documentation/infra/minter-flow) in TON Docs.
 :::
 
 ### 39: Outbound message doesn't fit into a cell {#39}
 
-When processing the message, TON Blockchain tries to pack it according to the [relevant TL-B schemas](https://docs.ton.org/develop/data-formats/msg-tlb). If it cannot, an error with exit code 39 is thrown: `Outbound message doesn't fit into a cell`.
+When processing the message, TON Blockchain tries to pack it according to the [relevant TL-B schemas](/v3/documentation/data-formats/tlb/msg-tlb). If it cannot, an error with exit code 39 is thrown: `Outbound message doesn't fit into a cell`.
 
 :::note
 If the [optional flag +2][flag2] is set, this error will not be thrown, and the given message will not be sent.
@@ -467,7 +467,7 @@ Suppose the maximum number of cells in the library or the maximum depth of the M
 
 ### 50: Account state size exceeded limits {#50}
 
-If the account state (contract storage, essentially) exceeds any of the limits specified in [config param 43 of TON Blockchain](https://docs.ton.org/develop/howto/blockchain-configs#param-43) by the end of the [action phase](#action), an error with exit code `50` is thrown: `Account state size exceeded limits`.
+If the account state (contract storage, essentially) exceeds any of the limits specified in [config param 43 of TON Blockchain](/v3/documentation/network/configs/blockchain-configs#param-43) by the end of the [action phase](#action), an error with exit code `50` is thrown: `Account state size exceeded limits`.
 
 If the configuration is absent, the default values are:
 
@@ -488,13 +488,12 @@ Tact utilizes exit codes from `128` to `255`. Note that exit codes used by Tact 
 
 The list of exit codes for the Tact compiler is in the [Tact docs](https://docs.tact-lang.org/book/exit-codes/#tact-compiler).
 
-[c]: https://docs.ton.org/learn/tvm-instructions/tvm-overview#compute-phase
-[a]: https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases
+[c]: /v3/documentation/tvm/tvm-overview#compute-phase
+[a]: /v3/documentation/tvm/tvm-overview#transactions-and-phases
 [flag2]: /v3/documentation/smart-contracts/message-management/message-modes-cookbook#mode2
-[tlb]: https://docs.ton.org/develop/data-formats/tl-b-language
-[exoitc]: /v3/documentation/data-formats/tlb/exotic-cells
+[tlb]: /v3/documentation/data-formats/tlb/tl-b-language
 [lib]: /v3/documentation/data-formats/tlb/exotic-cells#library-reference
 [p]: /v3/documentation/smart-contracts/func/docs/types#atomic-types
-[tvm]: https://docs.ton.org/learn/tvm-instructions/tvm-overview
+[tvm]: /v3/documentation/tvm/tvm-overview
 [bp]: https://github.com/ton-org/blueprint
 [fift]: /v3/documentation/fift/fift-and-tvm-assembly
