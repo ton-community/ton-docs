@@ -22,7 +22,7 @@ Most Indo-European and Afro-Asiatic languages use gender-specific second-person 
 ## Straightforward vocabulary and meaning
 Our goal is to make content on the website understandable to as many people as possible.
 
-In most cases, this can be easily achieved by using short and simple words that are easily understandable. If multiple possible translations exist for a specific word in your language with the same meaning, the best option is often the shortest word that reflects the meaning.
+In most cases, this can be easily achieved by using short and simple words that are easily understandable. If multiple possible translations exist for a word in your language with the same meaning, the best option is often the shortest word reflecting the meaning.
 
 ## Writing system
 
@@ -35,7 +35,7 @@ When translating the content, you should ensure that the translations are consis
 ## Translating page metadata
 Some pages contain metadata, such as 'title', 'lang', 'description', 'sidebar', etc.
 
-When uploading new pages to Crowdin, we hide the content that translators should never translate, meaning that all the metadata visible to translators in Crowdin should be translated.
+When uploading new pages to Crowdin, we hide the content that translators should never translate. This means that all the metadata visible to translators in Crowdin should be translated.
 
 Please be especially mindful when translating strings where the source text is 'en'. This represents the language page, which is available and should be translated to the [ISO language code for your language](https://www.andiamo.co.uk/resources/iso-language-codes/). These strings should always be translated using Latin characters, not the writing script, native to the target language.
 
@@ -55,49 +55,49 @@ Some strings contain titles of external articles. Most of our developer document
 Crowdin has a built-in feature that warns translators when they are about to make a mistake. Crowdin will automatically alert you before saving your translation if you forget to include a tag from the source, translate elements that should not be translated, add several consecutive spaces, forget end punctuation, etc. If you see a warning like this, please double-check the suggested translation.
 
 :::warning
-Never ignore these warnings, as they usually mean something is wrong or the translation is missing a key part of the source text.
+Never ignore these warnings, as they usually mean something is wrong or the translation lacks a key part of the source text.
 :::
 
 ## Short vs. complete forms/abbreviations
-There are a lot of abbreviations used on the website, e.g. dapps, NFT, DAO, DeFi, etc. These abbreviations are commonly used in English and most visitors to the website are familiar with them.
+The website uses many abbreviations, such as apps, DApps, NFT, DAO, DeFi, etc. These abbreviations are commonly used in English, and most visitors are familiar with them.
 
-Since they usually don’t have established translations in other languages, the best way to approach these and similar terms is to provide a descriptive translation of the full form, and add the English abbreviation in brackets.
+Since they usually don’t have established translations in other languages, the best approach to these and similar terms is to provide a descriptive translation of the full form and add the English abbreviation in brackets.
 
 Do not translate these abbreviations since most people are unfamiliar with them, and the localized versions would not make much sense to most visitors.
 
 Example of how to translate DApps:
 
-* Decentralized applications (DApps) → Translated in full form (English abbreviation in brackets)
+* Decentralized applications (DApps) → Translated in complete form (English abbreviation in brackets)
 
 ## Terms without established translations
-Some terms might not have established translations in other languages, and are widely known by the original English term. Such terms mostly include newer concepts, like proof-of-work, proof-of-stake, Beacon Chain, staking, etc.
+Some terms might not have established translations in other languages but are widely known by their original English names. Such terms mostly include newer concepts, like proof-of-work, proof-of-stake, Beacon Chain, staking, etc.
 
-While translating these terms can sound unnatural, since the English version is commonly used in other languages as well, it is highly recommended that they are translated.
+While translating these terms can sound unnatural, since the English version is commonly used in other languages, it is highly recommended that they be translated.
 
-When translating them, feel free to get creative, use descriptive translations, or simply translate them literally.
+Feel free to get creative, use descriptive translations, or translate them literally.
 
-The reason why most terms should be translated, instead of leaving some in English, is the fact that this new terminology will become more widespread in the future, as more people start using TON and related technologies. If we want to onboard more people from all over the world to this space, we need to provide understandable terminology in as many languages as possible, even if we need to create it ourselves.
+Most terms should be translated instead of leaving some in English, as this new terminology will become more widespread in the future as more people start using TON and related technologies. If we want to onboard more people from around the world to this space, we need to provide understandable terminology in as many languages as possible, even if we need to create it ourselves.
 
 ## Buttons & CTAs
 The website contains numerous buttons, which should be translated differently than other content.
 
 Button text can be identified by viewing the context screenshots, connected with most strings, or by checking the context in the editor, which includes the phrase ‘’button’’.
 
-The translations for buttons should be as short as possible, to prevent formatting mismatches. Additionally, button translations should be imperative, i.e. present a command or request.
+Button translations should be as short as possible to prevent formatting mismatches. Additionally, button translations should be imperative, i.e., present a command or request.
 
 ## Translating for inclusivity
 TON docs visitors come from all over the world and from different backgrounds. Therefore, the language on the website should be neutral, welcoming to everyone, and not exclusive.
 
-An essential aspect of this is gender neutrality. This can be easily achieved by using the formal form of address, and avoiding any gender-specific words in the translations.
+Gender neutrality is an essential aspect of this. This can be easily achieved by using the formal address form and avoiding gender-specific words in the translations.
 
-Another form of inclusivity is trying to translate for a global audience, not specific to any country, race or region.
+Another form of inclusivity is trying to translate for a global audience, not specific to any country, race, or region.
 
 Finally, the language should be suitable for all audiences and ages.
 
 ## Language-specific translations
-When translating, it is important to follow the grammar rules, conventions and formatting, used in your language, as opposed to copying from the source. The source text follows English grammar rules and conventions, which is not applicable to many other languages.
+When translating, it is important to follow the grammar rules, conventions, and formatting used in your language, as opposed to copying from the source. The source text follows English grammar rules and conventions, which are not applicable to many other languages.
 
-You should be aware of the rules for your language and translate accordingly. If you need help, reach out to us and we will help you find some resources on how these elements should be used in your language.
+You should be aware of the rules for your language and translate accordingly. If you need help, contact us, and we will help you find some resources on how these elements should be used in your language.
 
 Some examples of what to be particularly mindful of:
 
@@ -107,22 +107,22 @@ Some examples of what to be particularly mindful of:
 
 * There are vast differences in capitalization in different languages.
 * In English, it is common to capitalize all words in titles and names, months and days, language names, holidays, etc. In many other languages, this is grammatically incorrect, as they have different capitalization rules.
-* Some languages also have rules about capitalizing personal pronouns, nouns, and certain adjectives, which are not capitalized in English.
+* Some languages also have rules about capitalizing personal pronouns, nouns, and adjectives that are not capitalized in English.
 
 #### Spacing
 
 * Orthography rules define the use of spaces for each language. Because spaces are used everywhere, these rules are some of the most distinct, and spaces are some of the most mistranslated elements.
 * Some common differences in spacing between English and other languages:
-  * Space before units of measure and currencies (e.g. USD, EUR, kB, MB)
-  * Space before degree signs (e.g. °C, ℉)
-  * Space before some punctuation marks, especially the ellipsis (…)
-  * Space before and after slashes (/)
+  * Space before units of measure and currencies. Example: USD, EUR, kB, MB
+  * Space before degree signs. Example: °C, ℉
+  * Space before some punctuation marks, especially the ellipsis. Example: Then… in summary
+  * Space before and after slashes. Example: if / else
 
 #### Lists
 
-* Every language has a diverse and complex set of rules for writing lists. These can be significantly different to English.
-* In some languages, the first word of each new line needs to be capitalized, while in others, new lines should start with lower-case letters. Many languages also have different rules about capitalization in lists, depending on the length of each line.
-* The same applies to punctuation of line items. The end punctuation in lists can be a period (.), comma (,), or semicolon (;), depending on the language.
+* Every language has a diverse and complex set of rules for writing lists. These can be significantly different from English.
+* In some languages, the first word of each new line needs to be capitalized, while in others, new lines should start with lowercase letters. Many languages also have different rules about capitalization in lists, depending on the length of each line.
+* The same applies to the punctuation of line items. The end punctuation in lists can be a period (.), comma (,), or semicolon (;), depending on the language.
 
 #### Quotation marks
 
@@ -137,7 +137,8 @@ Some examples of what to be particularly mindful of:
 
 #### Hyphens and dashes
 
-* In English, a hyphen (-) is used to join words or different parts of a word, while a dash (–) is used to indicate a range or a pause.
+* In English, a hyphen `-` is used to join words or different parts of a word, while a dash `—` indicates a range or a pause.
+    * Example: TON — is ... proof-of-stake.
 * Many languages have different rules for using hyphens and dashes that should be observed.
 
 
