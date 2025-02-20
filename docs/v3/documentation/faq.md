@@ -51,10 +51,11 @@ Blocks produced by Validators. Existing blocks available via Liteservers. Litese
 - To access the Lite Client core check out this section of our GitHub:  [ton-blockchain/tonlib](https://github.com/ton-blockchain/ton/tree/master/tonlib)
 
 
-Additionally, here are three high-level third-party block explorers:
+Additionally, here are four high-level third-party block explorers:
 - https://explorer.toncoin.org/last
 - https://toncenter.com/
 - https://tonwhales.com/explorer
+- https://www.okx.com/web3/explorer/ton
 
 Read more in the [Explorers in TON](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton) section of our documentation.
 
