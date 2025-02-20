@@ -4,7 +4,7 @@ This page explains how to participate in the localization program for TON docume
 
 ## Prerequisites
 
-The **TownSquare Labs Localization Program** is open to everyone! Here are a few steps you need to take before you start contributing:
+Localization contribution is open to everyone. Here are a few steps you need to take before you start contributing:
 
 1. Log in to your [Crowdin](https://crowdin.com) account or sign up.
 2. Select the language you want to contribute to.

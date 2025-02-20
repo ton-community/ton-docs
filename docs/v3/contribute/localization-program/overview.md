@@ -1,4 +1,4 @@
-# Localization program
+# Localization
 
 The localization is a collaborative effort to translate various TON-related documents into multiple languages, making the website accessible to billions of non-English speakers worldwide.
 
