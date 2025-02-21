@@ -464,7 +464,7 @@ export const walletMenuCallbacks = { // Define buttons callbacks
     chose_wallet: onChooseWalletClick
 };
 
-bot.on('callback_query', query => { // Parse callback data and execute corresponing function
+bot.on('callback_query', query => { // Parse callback data and execute corresponding function
     if (!query.data) {
         return;
     }
@@ -678,7 +678,7 @@ export const walletMenuCallbacks = {
     universal_qr: onOpenUniversalQRClick
 };
 
-bot.on('callback_query', query => { // Parse callback data and execute corresponing function
+bot.on('callback_query', query => { // Parse callback data and execute corresponding function
     if (!query.data) {
         return;
     }
