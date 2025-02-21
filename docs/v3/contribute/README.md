@@ -31,7 +31,9 @@ This documentation is written in English. Please refer to [localization program]
 
 ## Description
 
-Please provide a brief description of the changes introduced in this pull request. Include any relevant issue numbers or links.
+Brief description of the changes introduced in this pull request. Include any relevant issue numbers or links.
+
+Closes [link to issue].
 
 ## Checklist
 
