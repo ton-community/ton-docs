@@ -818,5 +818,14 @@
     {
         "from": "/develop/dapps/README",
         "to": "/v3/guidelines/dapps/overview"
+    },
+    {
+      "from": "/v3/concepts/qa-outsource/outsource",
+      "to": "https://ton.org/en/talents"
+    },
+    {
+      "from": "/v3/documentation/infra/nodes/mytonctrl/mytonctrl-alerting",
+      "to": "/v3/guidelines/nodes/maintenance-guidelines/mytonctrl-private-alerting"
     }
+
 ]
