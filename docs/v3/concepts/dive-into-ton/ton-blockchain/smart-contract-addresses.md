@@ -1,18 +1,16 @@
-# Smart Contract Addresses
-
-[//]: # (TODO, this is gpt)
+# Smart contract addresses
 
 On the TON Blockchain, every actor, including wallets and smart contracts, is represented by an address. These addresses are critical for receiving and sending messages and transactions. There are two main formats for smart contract addresses: **raw addresses** and **user-friendly addresses**.
 
-## Address Components
+## Address components
 
 Each address on TON consists of two main components:
 - **Workchain ID**: A signed 32-bit integer that denotes which workchain the contract belongs to (e.g., `-1` for the Masterchain and `0` for the Basechain).
 - **Account ID**: A unique identifier for the contract, generally 256 bits in length for the Masterchain and Basechain.
 
-## Raw vs. User-Friendly Addresses
+## Raw vs. user-friendly addresses
 
-### Raw Address
+### Raw address
 A **raw address** contains only the basic elements:
 - **Workchain ID** (e.g., `-1` for Masterchain)
 - **Account ID**: A 256-bit unique identifier
@@ -24,7 +22,7 @@ However, raw addresses have two main issues:
 1. They lack built-in error checking, meaning a mistake in copying can lead to loss of funds.
 2. They do not support additional features like bounceable/non-bounceable flags.
 
-### User-Friendly Address
+### User-friendly address
 
 A **user-friendly address** solves these problems by incorporating:
 1. **Flags**: Indicates if the address is bounceable (for contracts) or non-bounceable (for wallets).
@@ -36,7 +34,7 @@ For example, the same raw address can be converted into a user-friendly address 
 
 User-friendly addresses make transactions safer by preventing errors and allowing the return of funds in case of failed transactions.
 
-## Address States
+## Address states
 
 Each address on TON can be in one of the following states:
 - **Nonexist**: The address has no data (initial state for all addresses).
@@ -44,12 +42,12 @@ Each address on TON can be in one of the following states:
 - **Active**: The address is live with smart contract code and balance.
 - **Frozen**: The address is locked due to storage costs exceeding its balance.
 
-## Converting Between Address Formats
+## Converting between address formats
 
-To convert between raw and user-friendly addresses, you can use TON APIs or developer tools like [ton.org/address](https://ton.org/address). These utilities allow seamless conversion and ensure proper formatting before sending transactions.
+To convert between raw and user-friendly addresses, you can use TON APIs or developer tools like [ton.org/address](https://ton.org/address/). These utilities allow seamless conversion and ensure proper formatting before sending transactions.
 
-For more details on how to handle these addresses, including encoding examples and transaction security, you can refer to the full guide in [Addresses Documentation](/v3/documentation/smart-contracts/addresses).
+For more details on how to handle these addresses, including encoding examples and transaction security, you can refer to the full guide in [Addresses Documentation](/v3/documentation/smart-contracts/addresses/).
 
-## See Also
+## See also
 
-* [Smart Contracts Addresses Documentation](/v3/documentation/smart-contracts/addresses)
+* [Smart Contracts Addresses Documentation](/v3/documentation/smart-contracts/addresses/)

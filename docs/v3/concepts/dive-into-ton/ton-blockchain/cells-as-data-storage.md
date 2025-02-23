@@ -1,7 +1,7 @@
 import ConceptImage from '@site/src/components/conceptImage';
 import ThemedImage from '@theme/ThemedImage';
 
-# Cells as Data Storage
+# Cells as data storage
 
 Everything in TON is stored in cells. A cell is a data structure containing:
 
@@ -55,6 +55,6 @@ TL-B for cells is the same as TL or ProtoBuf for byte-streams.
 
 If you want to know more details about cell (de)serialization, you could read [Cell & Bag of Cells](/v3/documentation/data-formats/tlb/cell-boc) article.
 
-## See Also
+## See also
 
 * [TL-B Language](/v3/documentation/data-formats/tlb/tl-b-language)
