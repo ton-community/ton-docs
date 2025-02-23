@@ -1,4 +1,4 @@
-# Blockchain of Blockchains
+# Blockchain of blockchains
 
 
 :::tip
@@ -56,7 +56,7 @@ An aggregation of all shards, which contains all accounts behaving by one set of
 
 In TON, there can be many sets of rules, and thus, many blockchains which operate simultaneously and can interact with each other by sending messages cross-chain in the same way that accounts of one chain can interact with each other.
 
-### WorkChain: Blockchain with your own rules
+### WorkChain: blockchain with your own rules
 
 If you want to customize rules of the group of ShardChains, you could create a **WorkChain**. A good example is to make a workchain that works on the base of EVM to run Solidity smart contracts on it.
 
@@ -69,6 +69,6 @@ Nowadays, there are only two workchains in TON: MasterChain and BaseChain.
 
 BaseChain is used for everyday transactions between actors because it's pretty cheap, while MasterChain has a crucial function for TON.
 
-### MasterChain: Blockchain of Blockchains
+### MasterChain: blockchain of blockchains
 
 There is a necessity for the synchronization of message routing and transaction execution. In other words, nodes in the network need a way to fix some 'point' in a multichain state and reach a consensus about that state. In TON, a special chain called **MasterChain** is used for that purpose. Blocks of _MasterChain_ contain additional information (latest block hashes) about all other chains in the system, thus any observer unambiguously determines the state of all multichain systems at a single MasterChain block.

@@ -1,10 +1,10 @@
 # TVM vs EVM
 
-Ethereum Virtual Machine (EVM) and TON Virtual Machine (TVM) are both stack-based virtual machines developed for running smart contract code. Although they have common features, there are notable distinctions between them.
+**Ethereum Virtual Machine (EVM)** and **TON Virtual Machine (TVM)** are both stack-based virtual machines developed for running smart contract code. Although they have common features, there are notable distinctions between them.
 
 ## Data presentation
 
-### Ethereum Virtual Machine (EVM)
+### EVM
 1. Fundamental Data Units
  - The EVM operates primarily on 256-bit integers, reflecting its design around Ethereum's cryptographic functions (e.g.,   Keccak-256 hashing and elliptic curve operations).
  - Data types are limited mainly to integers, bytes, and occasionally arrays of these types, but all must conform to 256-bit processing rules.
@@ -15,7 +15,7 @@ Ethereum Virtual Machine (EVM) and TON Virtual Machine (TVM) are both stack-base
 - The simplification to 256-bit word constraints means that the EVM is not inherently designed to handle complex or custom data structures directly.
 - Developers often need to implement additional logic within smart contracts to simulate more complex data structures, which can lead to increased gas costs and complexity.
 
-### TON Virtual Machine (TVM)
+### TVM
 1. Cell-Based Architecture
 - TVM uses a unique "bag of cells" model to represent data. Each cell can contain up to 128 data bytes and can have up to 4 references to other cells.
 - This structure allows the TVM to natively support arbitrary algebraic data types and more complex constructions such as trees or directed acyclic graphs (DAGs) directly within its storage model.
@@ -28,12 +28,12 @@ Ethereum Virtual Machine (EVM) and TON Virtual Machine (TVM) are both stack-base
 
 ## Stack machine
 
-### Ethereum Virtual Machine (EVM)
+### EVM
 
 - The EVM operates as a traditional stack-based machine, where it uses a last-in, first-out (LIFO) stack to manage computation.
 - It processes operations by pushing and popping 256-bit integers, which are the standard size for all elements in the stack.
 
-### TON Virtual Machine (TVM)
+### TVM
 
 - TVM also functions as a stack-based machine but with a key distinction: it supports both 257-bit integers and references to cells.
 - This allows TVM to push and pop these two distinct types of data onto/from the stack, providing enhanced flexibility in direct data manipulation.
@@ -75,41 +75,41 @@ It’s essential to note that the EVM supports complex data structures by levera
 
 ## Arithmetic operations
 
-### Ethereum Virtual Machine (EVM)
+### EVM
 
 - The Ethereum Virtual Machine (EVM) handles arithmetic using 256-bit integers, meaning operations such as addition, subtraction, multiplication, and division are tailored to this data size. 
 
-### TON Virtual Machine (TVM)
+### TVM
 
 - The TON Virtual Machine (TVM) supports a more diverse range of arithmetic operations, including 64-bit, 128-bit, and 256-bit integers, both unsigned and signed, as well as modulo operations. TVM further enhances its arithmetic capabilities with operations like multiply-then-shift and shift-then-divide, which are particularly useful for implementing fixed-point arithmetic. This variety allows developers to select the most efficient arithmetic operations based on the specific requirements of their smart contracts, offering potential optimizations based on data size and type.
 
 ## Overflow checks
 
-### Ethereum Virtual Machine (EVM)
+### EVM
 
 - In the EVM, overflow checks are not inherently performed by the virtual machine itself. With the introduction of Solidity 0.8.0, automatic overflow and underflow checks were integrated into the language to enhance security. These checks help prevent common vulnerabilities related to arithmetic operations but require newer versions of Solidity, as earlier versions necessitate manual implementation of these safeguards. 
 
-### TON Virtual Machine (TVM)
+### TVM
 
 - In contrast, TVM automatically performs overflow checks on all arithmetic operations, a feature built directly into the virtual machine. This design choice simplifies the development of smart contracts by inherently reducing the risk of errors and enhancing the overall reliability and security of the code.
 
 ## Cryptography and hash functions
 
-### Ethereum Virtual Machine (EVM)
+### EVM
 
 - EVM has support for the Ethereum-specific cryptography scheme, such as the secp256k1 elliptic curve and the keccak256 hash function. Also, EVM does not have built-in support for Merkle proofs, which are cryptographic proofs used to verify the membership of an element in a set.
 
-### TON Virtual Machine (TVM)
+### TVM
 
 - TVM offers support for 256-bit Elliptic Curve Cryptography (ECC) for predefined curves, like Curve25519. It also supports Weil pairings on some elliptic curves, which are useful for fast implementation of zk-SNARKs (zero-knowledge proofs). Popular hash functions like sha256 are also supported, providing more options for cryptographic operations. In addition, TVM can work with Merkle proofs, providing additional cryptographic features that can be beneficial for certain use cases, such as verifying the inclusion of a transaction in a block.
 
 ## High-level languages
 
-### Ethereum Virtual Machine (EVM)
+### EVM
 
 - EVM primarily uses Solidity as its high-level language, which is an object-oriented, statically-typed language similar to JavaScript and C++. Also, there are other languages for writing Ethereum smart-contracts such as Vyper, Yul, etc.
 
-### TON Virtual Machine (TVM)
+### TVM
 
 - TVM uses FunC as a high-level language designed for writing TON smart contracts. It is a procedural language with static types and support for algebraic data types. FunC compiles to Fift, which in turn compiles to TVM bytecode.
 
