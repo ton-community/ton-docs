@@ -4,7 +4,7 @@
 
 A **jetton** is a **token standard** on the **TON blockchain**. It provides a template for creating customizable digital tokens where each unit is identical and interchangeable with others of the same type.
 
-**Example:** Imagine you create **CoffeeCoins** for your coffee shops. Customers buy these digital tokens and use them for purchases. They can gift them to friends or trade them with other customers. The blockchain ensures each **CoffeeCoin** is legitimate and tracks ownership changes automatically.
+**Example:** Imagine you create **"CoffeeCoins"** for your coffee shops. Customers buy these digital tokens and use them for purchases. They can gift them to friends or trade them with other customers. The blockchain ensures each **CoffeeCoin** is legitimate and tracks ownership changes automatically.
 
 Jettons are used for various purposes, including **loyalty programs**, **gaming**, **stablecoins**, and **decentralized applications**. For example, on TON, they power games like **Hamster Kombat**, enable **USDT payments**, and serve as collectables in projects like **Dogs**.
 
@@ -12,7 +12,7 @@ Jettons function similarly to **ERC-20 tokens** on Ethereum, like **UNI (Uniswap
 
 **What can you do with jettons as a TON user?**
 
-With a **TON wallet** like \***\*Tonkeeper\*\***, you can:
+With a **TON wallet** like **Tonkeeper**, you can:
 
 - **Receive and store jettons** securely.
 - **Send them** to other users instantly.
@@ -20,7 +20,7 @@ With a **TON wallet** like \***\*Tonkeeper\*\***, you can:
 - **Pay for goods and services**, if accepted.
 - **Vote in DAOs** if the jetton grants governance rights.
 - **Earn rewards** through staking or farming.
-- **Use in **DeFi\*\*\*\*, such as getting loans or providing liquidity.
+- **Use in DeFi**, such as getting loans or providing liquidity.
 - **Spend money on games and apps** as part of in-game economies.
 - **Create your jettons** for any purpose.
 
@@ -144,7 +144,7 @@ So far, we've covered different wallet types:
 
 They all require tokens to be **minted** first by a **Jetton Master Contract** before being distributed. **Mintless Jettons** change this approach. Instead of **pre-minting** and distributing tokens, they allow users to claim their tokens **on demand** using **Merkle-proof airdrops**.
 
-> **Merkle-proof airdrops allow tokens to be distributed without pre-minting. Instead of sending tokens to every user in advance, the contract stores a single cryptographic hash representing all eligible recipients. Users can then claim their tokens by proving their eligibility with a Merkle proof—this reduces blockchain load and gas fees while making airdrops more scalable.**  
+> **"Merkle-proof airdrops allow tokens to be distributed without pre-minting. Instead of sending tokens to every user in advance, the contract stores a single cryptographic hash representing all eligible recipients. Users can then claim their tokens by proving their eligibility with a Merkle proof—this reduces blockchain load and gas fees while making airdrops more scalable."**  
 > **Example:** Imagine a project that wants to distribute **1,000,000 jettons** to **100,000 users**.  
 > **1. Traditional Airdrop:**  
 > The project would need to **mint** all **1,000,000 jettons** and send them individually to each wallet. This would mean **100,000 separate transactions**, leading to **high gas fees** and **blockchain congestion**.  
