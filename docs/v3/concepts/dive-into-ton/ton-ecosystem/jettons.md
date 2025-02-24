@@ -49,3 +49,4 @@ Sometimes, jettons may need to be minted (created) after the initial deployment.
 
 - [Jetton Processing](/v3/guidelines/dapps/asset-processing/jettons)
 - [Sharding TON Smart Contracts](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)
+Тест изменений
