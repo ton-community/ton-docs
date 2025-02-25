@@ -20,7 +20,7 @@ module.exports = [
       'v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps',
       'v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton',
       'v3/concepts/dive-into-ton/ton-ecosystem/nft',
-      'v3/concepts/dive-into-ton/ton-ecosystem/jettons',
+      'v3/concepts/dive-into-ton/ton-ecosystem/jettons-upd',
     ],
   },
   {
