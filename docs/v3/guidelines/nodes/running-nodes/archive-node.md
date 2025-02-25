@@ -26,13 +26,13 @@ We highly recommend installing mytonctrl using the supported operating systems:
 - Linux OS with open files limit above 400k
 - A public IP address (fixed IP address)
 
-:::info Data Compression
+:::info Data compression
 Uncompressed data requires 12 TB of storage. A ZFS volume with compression reduces this to 11 TB. As of February 2025, the data volume is growing by approximately 0.1 to 1 TB per month, depending on the load.
 :::
 
 ## Installation
 
-### Install ZFS and Prepare Volume
+### Install ZFS and prepare volume
 
 Dumps come in the form of ZFS snapshots compressed using plzip. You need to install ZFS on your host and restore the dump. See [Oracle Documentation](https://docs.oracle.com/cd/E23824_01/html/821-1448/gavvx.html#scrolltoc) for more details.
 
@@ -258,7 +258,7 @@ installer set_node_argument --archive-ttl 86400
 
 Contact technical support at [@mytonctrl_help](https://t.me/mytonctrl_help).
 
-## See Also
+## See also
 
 - [TON Node Types](/v3/documentation/infra/nodes/node-types)
 - [Run a Full Node](/v3/guidelines/nodes/running-nodes/full-node)
