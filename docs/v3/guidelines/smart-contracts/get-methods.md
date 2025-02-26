@@ -1,4 +1,4 @@
-# Get Methods
+# Get methods
 
 :::note
 To fully benefit from this content, readers must understand the [FunC programming language](/v3/documentation/smart-contracts/func/overview) on the TON Blockchain. This knowledge is crucial for grasping the information presented here.
