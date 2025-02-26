@@ -8,7 +8,7 @@ Before proceeding, it is recommended that readers have a basic understanding of 
 
 Get methods are special functions in smart contracts that allow you to query specific data. Their execution doesn't cost any fees and happens outside of the blockchain.
 
-These functions are widespread in most smart contracts. For example, the default [Wallet contract](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts/) has several get methods, such as `seqno()`, `get_subwallet_id()` and `get_public_key()`. Wallets, SDKs, and APIs use them to fetch data about wallets.
+These functions are very common in most smart contracts. For example, the default [Wallet contract](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) has several get methods, such as `seqno()`, `get_subwallet_id()` and `get_public_key()`. They are used by wallets, SDKs, and APIs to fetch data about wallets.
 
 ## Design patterns for get methods
 
@@ -24,7 +24,7 @@ return get_data().begin_parse().preload_uint(64);
 }
 ```
 
-2. **Aggregate Data Retrieval**: Another common method is to create methods that gather multiple pieces of data from a contract's state in one call. This is useful when specific data points are often used together. You can see this approach frequently in [Jetton](#jettons) and [NFT](#nfts) contracts.
+2. **Aggregate data retrieval**: Another common method is to create methods that gather multiple pieces of data from a contract's state in one call. This is useful when specific data points are often used together. You can see this approach frequently in [Jetton](#jettons) and [NFT](#nfts) contracts.
 
 Example:
 
@@ -80,7 +80,7 @@ int get_subwallet_id() method_id {
 }
 ```
 
-- [What is Subwallet ID?](/v3/guidelines/smart-contracts/howto/wallet#subwallet-ids)
+- [What is Subwallet ID?](/v3/guidelines/smart-contracts/howto/wallet#subwallet-ids/)
 
 #### get_public_key()
 
@@ -260,7 +260,7 @@ This code will produce an output in the format `Total: 123`. The number may vary
 
 ### Testing get methods
 
-We can use the [Sandbox](https://github.com/ton-community/sandbox/) to test smart contracts, which is installed by default in new Blueprint projects.
+For testing smart contracts created we can use the [Sandbox](https://github.com/ton-community/sandbox) which is installed by default in new Blueprint projects.
 
 First, you must add a special method in the contract wrapper to execute the get method and return the typed result. Let's say your contract is called _Counter_, and you have already implemented the method to update the stored number. Open `wrappers/Counter.ts` and add the following method:
 
@@ -289,7 +289,7 @@ You can check it by running `npx blueprint test` in your terminal. If you did ev
 
 Contrary to what might seem intuitive, invoking get methods from other contracts is impossible on-chain. This limitation stems primarily from the nature of blockchain technology and the need for consensus.
 
-First, acquiring data from another ShardChain may introduce significant latency. Such delays could disrupt the contract execution flow, as blockchain operations are designed to execute in a deterministic and timely manner.
+Firstly, acquiring data from another shardchain may require time. Such latency could easily disrupt contract execution flow, as blockchain operations are expected to execute in a deterministic and timely manner.
 
 Second, achieving consensus among validators would be problematic. Validators would also need to invoke the same get method to verify a transaction's correctness. However, if the state of the target contract changes between these multiple invocations, validators could end up with differing versions of the transaction result.
 
@@ -361,11 +361,11 @@ For simplicity, we used just simple little numbers 1, 2, and 3 for the operation
 
 ## Common pitfalls and how to avoid them
 
-1. **Misuse of get methods**: As mentioned earlier, get methods are designed to return data from the contract's state and are not meant to change the contract's state. Attempting to alter the contract's state within a get method will not do it.
+1. **Misuse of get methods**: As mentioned earlier, get methods are designed to return data from the contract's state and are not meant to change the state of the contract. Attempting to alter the contract's state within a get method won't actually do it.
 
 2. **Ignoring return types**: Every get method must have a clearly defined return type that matches the retrieved data. If a method is expected to return a specific type of data, ensure that all execution paths within the method return this type. Inconsistent return types should be avoided, as they can lead to errors and complications when interacting with the contract.
 
-3. **Assuming cross-contract calls**: A common misconception is that get methods can be called directly from other contracts on-chain. However, as previously discussed, this is not possible due to the inherent nature of blockchain technology and the requirement for consensus. Always remember that get methods are designed for off-chain use, while on-chain interactions between contracts are facilitated through internal messages.
+3. **Assuming cross-contract calls**: A common misconception is that get methods can be called from other contracts on-chain. However, as we've discussed, this is not possible due to the nature of blockchain technology and the need for consensus. Always remember that get methods are intended to be used off-chain, and on-chain interactions between contracts are done through internal messages.
 
 ## Conclusion
 
