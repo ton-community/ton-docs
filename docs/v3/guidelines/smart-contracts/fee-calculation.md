@@ -1,13 +1,11 @@
-# Fees calculation
+# Fees Calculation
 
-## Introducation 
-
-When your contract begins processing an incoming message, you should verify the number of TONs attached to the message to ensure it is sufficient to cover [all types of fees](/v3/documentation/smart-contracts/transaction-fees/fees#elements-of-transaction-fee). To achieve this, you need to calculate (or predict) the fee for the current transaction.
+When your contract starts processing an incoming message, you should check the amount of TONs attached to the message to ensure they are enough to cover [all types of fees](/v3/documentation/smart-contracts/transaction-fees/fees#elements-of-transaction-fee). To do this, you need to calculate (or predict) the fee for the current transaction.
 
 This document explains how to calculate fees in FunC contracts using the latest TVM opcodes.
 
-:::info opcodes
-For a comprehensive list of TVM opcodes, including those mentioned below, refer to the [TVM instruction page](/v3/documentation/tvm/instructions).
+:::info More information on opcodes
+For a comprehensive list of TVM opcodes, including those mentioned below, check the [TVM instruction page](/v3/documentation/tvm/instructions).
 :::
 
 ## Storage fee
@@ -74,7 +72,7 @@ In most cases, use the `GETGASFEE` opcode with the following parameters:
 | Param      | Description                                             |
 | :--------- | :------------------------------------------------------ |
 | `gas_used` | Gas amount, calculated in tests and hardcoded           |
-| `is_mc`    | True if the source or destination is in the MasterChain |
+| `is_mc`    | True if the source or destination is in the masterchain |
 
 ### Calculation flow
 
@@ -203,11 +201,13 @@ However, if the outgoing message depends significantly on the incoming structure
 | fwd_fee    | Parsed from the incoming message                        |
 | is_mc      | True if the source or destination is in the MasterChain |
 
-:::caution 
-Be careful with the `SENDMSG` opcode because it uses an **unpredictable amount** of gas. Avoid using it unless necessary.
-:::
+:::caution Be careful with `SENDMSG` opcode
+Next opcode, `SENDMSG`, **is the least optimal way** to calculate fee, but **better than not checking**.
 
-The `SENDMSG` opcode is the least optimal way to calculate fees, but it is better than not checking.
+It uses an **unpredictable amount** of gas.
+
+Do not use it unless necessary.
+:::
 
 If even `GETORIGINALFWDFEE` cannot be used, one more option exists. Use the `SENDMSG` opcode with the following parameters:
 
