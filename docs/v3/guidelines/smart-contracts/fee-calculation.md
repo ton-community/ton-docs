@@ -46,18 +46,18 @@ int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells b
 int my_storage_due() asm "DUEPAYMENT";
 
 ;; constants from stdlib
-;;; Creates an output action which would reserve exactly x nanograms (if y = 0).
+;;; Creates an output action which reserves exactly x nanograms (if y = 0).
 const int RESERVE_REGULAR = 0;
-;;; Creates an output action which would reserve at most x nanograms (if y = 2).
+;;; Creates an output action which reserves at most x nanograms (if y = 2).
 ;;; Bit +2 in y means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved.
 const int RESERVE_AT_MOST = 2;
 ;;; In the case of action failure, the transaction is bounced. No effect if RESERVE_AT_MOST (+2) is used. TVM UPGRADE 2023-07. [v3/documentation/tvm/changelog/tvm-upgrade-2023-07#sending-messages](https://ton.org/docs/#/tvm/changelog/tvm-upgrade-2023-07#sending-messages)
 const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;
 
 () calculate_and_reserve_at_most_storage_fee(int balance, int msg_value, int workchain, int seconds, int bits, int cells) inline {
-    int on_balance_before_msg = my_ton_balance - msg_value;
-    int min_storage_fee = get_storage_fee(workchain, seconds, bits, cells); ;; can be hardcoded IF CODE OF THE CONTRACT WILL NOT BE UPDATED
-    raw_reserve(max(on_balance_before_msg, min_storage_fee + my_storage_due()), RESERVE_AT_MOST);
+ int on_balance_before_msg = my_ton_balance - msg_value;
+ int min_storage_fee = get_storage_fee(workchain, seconds, bits, cells); ;; can be hardcoded IF THE CONTRACT CODE WILL NOT BE UPDATED
+ raw_reserve(max(on_balance_before_msg, min_storage_fee + my_storage_due()), RESERVE_AT_MOST);
 }
 ```
 
@@ -185,7 +185,7 @@ If the message structure is deterministic, use the `GETFORWARDFEE` opcode with t
 | :--------- | :------------------------------------------------------ |
 | cells      | Number of cells                                         |
 | bits       | Number of bits                                          |
-| is_mc      | True if the source or destination is in the MasterChain |
+| is_mc      | True if the source or destination is in the masterchain |
 
 :::info Only unique hash cells are counted for storage and forward fees. For example, three identical hash cells are counted as one.
 
@@ -199,7 +199,7 @@ However, if the outgoing message depends significantly on the incoming structure
 | Param name | Description                                             |
 | :--------- | :------------------------------------------------------ |
 | fwd_fee    | Parsed from the incoming message                        |
-| is_mc      | True if the source or destination is in the MasterChain |
+| is_mc      | True if the source or destination is in the masterchain |
 
 :::caution Be careful with `SENDMSG` opcode
 Next opcode, `SENDMSG`, **is the least optimal way** to calculate fee, but **better than not checking**.
