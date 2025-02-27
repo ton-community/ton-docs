@@ -20,6 +20,121 @@ Among TON explorers, you can distinguish several categories:
 
 This division into categories is largely conditional and one explorer can belong to several categories at the same time. So let's not pay too much attention to this.
 
+## General functionality
+
+Blockchain explorers are tools that allow you to view and search the blockchain in a way similar to how you might use a banking app to check transaction history and account balances. They provide a user-friendly interface to access real-time data about blockchain transactions, blocks, and addresses.
+
+Just as you use a banking app to track where your money goes, who sends you payments, and when transactions occur, blockchain explorers let you see this kind of information for digital assets on the blockchain. They are essential for transparency, allowing anyone to verify transactions independently, see the flow of cryptocurrency, and analyze the activity on the blockchain.
+
+## Native explorers
+
+### Tonscan
+
+Good explorer for everyday use. It provides a comprehensive view of the TON Blockchain, allowing users to search for transactions, addresses, blocks, and more. Any search is performed against the public [address book](https://github.com/catchain/address-book).
+
+- Mainnet: [tonscan.org](https://tonscan.org/)
+- Testnet: [testnet.tonscan.org](https://testnet.tonscan.org/)
+
+#### Features
+
+- Convenient for everyday use and developers
+- Advanced jetton and nominator pools pages for users
+- Contract types and disassembler
+
+
+### Tonviewer
+
+Balanced UI for users and for developers. Has alias labels according the [tonkeeper/ton-assets](https://github.com/tonkeeper/ton-assets).
+
+- Mainnet: [tonviewer.com](https://tonviewer.com/)
+- Testnet: [testnet.tonviewer.com](https://testnet.tonviewer.com/)
+
+#### Features
+
+- Convenient for everyday use and developers
+- Advanced information for developers with traces
+- Contract types and disassembler
+
+### Tonscan by Bastion
+
+- Mainnet: [tonscan.com](https://tonscan.com/)
+
+#### Features
+
+- Transaction aggregation analytics
+- Transaction traces
+
+
+### DTON
+
+DTON is another explorer for developers. It provides a lot of information about transactions in a convenient form.
+
+Also, it has a feature that allows you to see the computation phase of the transaction step by step.
+
+- Mainnet: [dton.io](https://dton.io/)
+
+#### Features
+
+- Convenient for developers
+- Extended information about the computation phase
+- Contract types and disassembler
+
+### Ton Whales explorer
+
+  Explorer is oriented towards developers.
+
+- Mainnet: [tonwhales.com/explorer](https://tonwhales.com/explorer)
+
+#### Features
+
+- Convenient for developers
+- Contract types and disassembler
+- Simple and convenient validator details
+
+
+### TON NFT EXPLORER
+
+This explorer specializes in NFTs, but it can also be used as a regular explorer.
+
+- Mainnet: [explorer.tonnft.tools](https://explorer.tonnft.tools/)
+- Testnet: [testnet.explorer.tonnft.tools](https://testnet.explorer.tonnft.tools/)
+
+When viewing the wallet address, you can find out which NFT it stores and, when viewing the NFT, you can find out the metadata, collection address, owner and transaction history.
+
+#### Features
+
+- Convenient for developers
+- Specialized in NFT
+- Contract types
+
+## Crosschain explorers
+
+### TON NFTscan
+
+  This explorer is specifically designed for Non-Fungible Tokens (NFTs) on the TON Blockchain. It allows users to explore, track, and verify NFT transactions, contracts, and metadata.
+
+- Mainnet: [ton.nftscan.com](https://ton.nftscan.com/)
+
+#### Features
+
+- Convenient for regular users
+- NFT collection ranking
+- Useful information for traders, such as daily volume
+
+
+## Analytics explorers
+
+### TonStat
+
+- Mainnet: [tonstat.com](https://www.tonstat.com/)
+
+Displays various statistics such as number of registered network addresses and wallets, volume of Toncoin burned, volume of Toncoin staked, volume of NFTs issued, number of validators and a number of other metrics.
+
+#### Features
+
+- Convenient for regular users
+- DeFi information
+- Useful information for traders, such as daily volume
 
 ## Address alias in explorers
 
@@ -29,142 +144,6 @@ Make your service address more user-friendly by using an address alias. Create P
 - [catchain/address-book](https://github.com/catchain/address-book)- Tonscan.org alias
 - [ton-labels](https://github.com/ton-studio/ton-labels) - Public dataset of labelled TON blockchain addresses
 
-
-## General functionality
-
-Blockchain explorers are tools that allow you to view and search the blockchain in a way similar to how you might use a banking app to check transaction history and account balances. They provide a user-friendly interface to access real-time data about blockchain transactions, blocks, and addresses.
-
-Just as you use a banking app to track where your money goes, who sends you payments, and when transactions occur, blockchain explorers let you see this kind of information for digital assets on the blockchain. They are essential for transparency, allowing anyone to verify transactions independently, see the flow of cryptocurrency, and analyze the activity on the blockchain.
-
-These explorers are particularly useful for verifying that transactions have been processed and for checking the status of digital wallets. They make the blockchain accessible and understandable, turning complex data into readable information, which helps bridge the gap between advanced blockchain technology and everyday users.
-
-## Native explorers
-### Tonscan
-
-Good explorer for everyday use. It provides a comprehensive view of the TON Blockchain, allowing users to search for transactions, addresses, blocks, and more. Any search is performed against the public [address book](https://github.com/catchain/tonscan/blob/master/src/addrbook.json).
-
-#### Features
-
-- **Convenient for everyday use**
-- Convenient for developers
-- TON DNS support
-- Contract types
-- Contract disassembler
-
-#### Links
-
-- Mainnet: [tonscan.org](https://tonscan.org/)
-- Testnet: [testnet.tonscan.org](https://testnet.tonscan.org/)
-
-## Tonviewer
-
-This explorer is the newest and has its own unique features.
-For example, Trace. This feature allows you to see the entire sequence of transactions between smart contracts, even if subsequent transactions do not contain your address.
-
-Transaction information is not as detailed as, for example, on TON Whales.
-
-### Features
-
-- Convenient for developers
-- Convenient for everyday use
-- Jetton transaction history
-- **Trace**
-- TON DNS support
-
-### Links
-
-- Mainnet: [tonviewer.com](https://tonviewer.com/)
-- Testnet: [testnet.tonviewer.com](https://testnet.tonviewer.com/)
-
-## Tonscan by Bastion
-
-### Features
-
-- Transaction aggregation analytics
-- Transaction Traces
-
-### Links
-
-- Mainnet: [tonscan.com](https://tonscan.com/)
-
-## DTON
-
-DTON is another explorer for developers. It provides a lot of information about transactions in a convenient form.
-
-Also, it has a feature that allows you to see the computation phase of the transaction step by step.
-
-### Features
-
-- Convenient for developers
-- Extended information about the computation phase
-- Contract types
-- Contract disassembler
-
-### Links
-
-- Mainnet: [dton.io](https://dton.io/)
-
-## Ton Whales explorer
-
-Explorer is oriented towards developers.
-
-### Features
-
-- **Convenient for developers**
-- Contract types
-- Contract disassembler
-
-### Links
-
-- Mainnet: [tonwhales.com/explorer](https://tonwhales.com/explorer)
-
-
-## Crosschain explorers
-
-### TON NFT EXPLORER
-
-This explorer specializes in NFTs, but it can also be used as a regular explorer.
-
-When viewing the wallet address, you can find out which NFT it stores and, when viewing the NFT, you can find out the metadata, collection address, owner and transaction history.
-
-#### Features
-
-- Convenient for developers
-- Contract types
-- **Specialized in NFT**
-
-#### Links
-
-- URL: https://explorer.tonnft.tools/
-- Testnet URL: https://testnet.explorer.tonnft.tools/
-
-### TON NFTscan
-
-This explorer is specifically designed for Non-Fungible Tokens (NFTs) on the TON Blockchain. It allows users to explore, track, and verify NFT transactions, contracts, and metadata.
-
-#### Features
-
-- Convenient for regular users
-- Useful information for traders, such as daily volume
-- NFT collection ranking
-
-#### Links
-
-- URL: https://ton.nftscan.com/
-
-### TonStat
-
-Displays various statistics such as number of registered network addresses and wallets, volume of Toncoin burned, volume of Toncoin staked, volume of NFTs issued, number of validators and a number of other metrics.
-
-#### Features
-
-- Convenient for regular users
-- Useful information for traders, such as daily volume
-- DeFi information
-
-#### Links
-
-- Mainnet: [tonstat.com](https://www.tonstat.com/)
 
 ## Want to be in this list?
 
