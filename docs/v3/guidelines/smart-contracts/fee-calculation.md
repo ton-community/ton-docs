@@ -17,7 +17,7 @@ In short, `storage fees` are the costs of storing a smart contract on the blockc
 Use the `GETSTORAGEFEE` opcode with the following parameters:
 
 | Param name | Description                                             |
-|:-----------|:--------------------------------------------------------|
+| :--------- | :------------------------------------------------------ |
 | cells      | Number of contract cells                                |
 | bits       | Number of contract bits                                 |
 | is_mc      | True if the source or destination is in the masterchain |
@@ -46,9 +46,9 @@ int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells b
 int my_storage_due() asm "DUEPAYMENT";
 
 ;; constants from stdlib
-;;; Creates an output action which reserves exactly x nanograms (if y = 0).
+;;; Creates an output action which reserves exactly x nanoTONs (if y = 0).
 const int RESERVE_REGULAR = 0;
-;;; Creates an output action which reserves at most x nanograms (if y = 2).
+;;; Creates an output action which reserves at most x nanoTONs (if y = 2).
 ;;; Bit +2 in y means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved.
 const int RESERVE_AT_MOST = 2;
 ;;; In the case of action failure, the transaction is bounced. No effect if RESERVE_AT_MOST (+2) is used. TVM UPGRADE 2023-07. [v3/documentation/tvm/changelog/tvm-upgrade-2023-07#sending-messages](https://ton.org/docs/#/tvm/changelog/tvm-upgrade-2023-07#sending-messages)
@@ -56,7 +56,7 @@ const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;
 
 () calculate_and_reserve_at_most_storage_fee(int balance, int msg_value, int workchain, int seconds, int bits, int cells) inline {
  int on_balance_before_msg = my_ton_balance - msg_value;
- int min_storage_fee = get_storage_fee(workchain, seconds, bits, cells); ;; can be hardcoded IF THE CONTRACT CODE WILL NOT BE UPDATED
+ int min_storage_fee = get_storage_fee(workchain, seconds, bits, cells); ;; can be hardcoded if the contract code will not be updated.
  raw_reserve(max(on_balance_before_msg, min_storage_fee + my_storage_due()), RESERVE_AT_MOST);
 }
 ```
@@ -70,9 +70,9 @@ If `storage_fee` is hardcoded, **remember to update it** during the contract upd
 In most cases, use the `GETGASFEE` opcode with the following parameters:
 
 | Param      | Description                                             |
-|:-----------|:--------------------------------------------------------|
+| :--------- | :------------------------------------------------------ |
 | `gas_used` | Gas amount, calculated in tests and hardcoded           |
-| `is_mc` | True if the source or destination is in the masterchain |
+| `is_mc`    | True if the source or destination is in the masterchain |
 
 ### Calculation flow
 
@@ -96,60 +96,71 @@ const deployerJettonWallet = await userWallet(deployer.address);
 let initialJettonBalance = await deployerJettonWallet.getJettonBalance();
 const notDeployerJettonWallet = await userWallet(notDeployer.address);
 let initialJettonBalance2 = await notDeployerJettonWallet.getJettonBalance();
-let sentAmount = toNano('0.5');
-let forwardAmount = toNano('0.05');
+let sentAmount = toNano("0.5");
+let forwardAmount = toNano("0.05");
 let forwardPayload = beginCell().storeUint(0x1234567890abcdefn, 128).endCell();
 // Ensure the payload is unique to charge cell loading for each payload.
 let customPayload = beginCell().storeUint(0xfedcba0987654321n, 128).endCell();
 
 // Let's use this case for fees calculation
 // Embed the forward payload into the custom payload to ensure maximum gas usage during computation
-const sendResult = await deployerJettonWallet.sendTransfer(deployer.getSender(), toNano('0.17'), // tons
-    sentAmount, notDeployer.address,
- deployer.address, customPayload, forwardAmount, forwardPayload);
-expect(sendResult.transactions).toHaveTransaction({ // excesses
- from: notDeployerJettonWallet.address,
- to: deployer.address,
+const sendResult = await deployerJettonWallet.sendTransfer(
+  deployer.getSender(),
+  toNano("0.17"), // tons
+  sentAmount,
+  notDeployer.address,
+  deployer.address,
+  customPayload,
+  forwardAmount,
+  forwardPayload
+);
+expect(sendResult.transactions).toHaveTransaction({
+  // excesses
+  from: notDeployerJettonWallet.address,
+  to: deployer.address,
 });
 /*
 transfer_notification#7362d09c query_id:uint64 amount:(VarUInteger 16)
  sender:MsgAddress forward_payload:(Either Cell ^Cell)
  = InternalMsgBody;
 */
-expect(sendResult.transactions).toHaveTransaction({ // notification
- from: notDeployerJettonWallet.address,
- to: notDeployer.address,
- value: forwardAmount,
- body: beginCell().storeUint(Op.transfer_notification, 32).storeUint(0, 64) // default queryId
- .storeCoins(sentAmount)
- .storeAddress(deployer.address)
- .storeUint(1, 1)
- .storeRef(forwardPayload)
- .endCell()
+expect(sendResult.transactions).toHaveTransaction({
+  // notification
+  from: notDeployerJettonWallet.address,
+  to: notDeployer.address,
+  value: forwardAmount,
+  body: beginCell()
+    .storeUint(Op.transfer_notification, 32)
+    .storeUint(0, 64) // default queryId
+    .storeCoins(sentAmount)
+    .storeAddress(deployer.address)
+    .storeUint(1, 1)
+    .storeRef(forwardPayload)
+    .endCell(),
 });
 const transferTx = findTransactionRequired(sendResult.transactions, {
- on: deployerJettonWallet.address,
- from: deployer.address,
- op: Op.transfer,
- success: true
+  on: deployerJettonWallet.address,
+  from: deployer.address,
+  op: Op.transfer,
+  success: true,
 });
 
 let computedGeneric: (transaction: Transaction) => TransactionComputeVm;
 computedGeneric = (transaction) => {
-  if(transaction.description.type !== "generic")
-    throw("Expected generic transaction");
-  if(transaction.description.computePhase.type !== "vm")
-    throw("Compute phase expected")
+  if (transaction.description.type !== "generic")
+    throw "Expected generic transaction";
+  if (transaction.description.computePhase.type !== "vm")
+    throw "Compute phase expected";
   return transaction.description.computePhase;
-}
+};
 
 let printTxGasStats: (name: string, trans: Transaction) => bigint;
 printTxGasStats = (name, transaction) => {
-    const txComputed = computedGeneric(transaction);
- console.log(`${name} used ${txComputed.gasUsed} gas`);
- console.log(`${name} gas cost: ${txComputed.gasFees}`);
-    return txComputed.gasFees;
-}
+  const txComputed = computedGeneric(transaction);
+  console.log(`${name} used ${txComputed.gasUsed} gas`);
+  console.log(`${name} gas cost: ${txComputed.gasFees}`);
+  return txComputed.gasFees;
+};
 
 send_gas_fee = printTxGasStats("Jetton transfer", transferTx);
 ```
@@ -170,11 +181,11 @@ Generally, there are three scenarios for forward fee processing:
 
 If the message structure is deterministic, use the `GETFORWARDFEE` opcode with the following parameters:
 
-| Param name | Description                                                                            |
-|:-----------|:---------------------------------------------------------------------------------------|
-| cells      | Number of cells                                                                        |
-| bits       | Number of bits                                                                         |
-| is_mc      | True if the source or destination is in the masterchain                                |
+| Param name | Description                                             |
+| :--------- | :------------------------------------------------------ |
+| cells      | Number of cells                                         |
+| bits       | Number of bits                                          |
+| is_mc      | True if the source or destination is in the masterchain |
 
 :::info Only unique hash cells are counted for storage and forward fees. For example, three identical hash cells are counted as one.
 
@@ -185,9 +196,9 @@ This mechanism deduplicates data: if multiple equivalent sub-cells are reference
 
 However, if the outgoing message depends significantly on the incoming structure, you may not be able to predict the fee fully. In such cases, try using the `GETORIGINALFWDFEE` opcode with the following parameters:
 
-| Param name | Description                                         |
-|:-----------|:----------------------------------------------------|
-| fwd_fee    | Parsed from the incoming message                    |
+| Param name | Description                                             |
+| :--------- | :------------------------------------------------------ |
+| fwd_fee    | Parsed from the incoming message                        |
 | is_mc      | True if the source or destination is in the masterchain |
 
 :::caution Be careful with the `SENDMSG` opcode
@@ -200,17 +211,17 @@ Avoid using it unless absolutely necessary.
 
 If even `GETORIGINALFWDFEE` cannot be used, one more option exists. Use the `SENDMSG` opcode with the following parameters:
 
-| Param name | Description  |
-|:-----------|:-------------|
+| Param name | Description     |
+| :--------- | :-------------- |
 | cells      | Number of cells |
-| mode       | Message mode |
+| mode       | Message mode    |
 
-Modes influence the fee calculation in the following ways:  
-- **`+1024`**: This mode does not create an action but only estimates the fee. Other modes will send a message during the action phase.  
-- **`+128`**: This mode substitutes the value of the entire contract balance before the computation phase begins. This is slightly inaccurate because gas expenses, which cannot be estimated before the computation phase, are excluded.  
-- **`+64`**: This mode substitutes the entire balance of the incoming message as the outgoing value. This is also slightly inaccurate, as gas expenses that cannot be estimated until the computation is completed are excluded.  
-- Refer to the [message modes page](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes) for additional modes.  
+Modes influence the fee calculation in the following ways:
 
+- **`+1024`**: This mode does not create an action but only estimates the fee. Other modes will send a message during the action phase.
+- **`+128`**: This mode substitutes the value of the entire contract balance before the computation phase begins. This is slightly inaccurate because gas expenses, which cannot be estimated before the computation phase, are excluded.
+- **`+64`**: This mode substitutes the entire balance of the incoming message as the outgoing value. This is also slightly inaccurate, as gas expenses that cannot be estimated until the computation is completed are excluded.
+- Refer to the [message modes page](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes) for additional modes.
 
 It creates an output action and returns the fee for creating a message. However, it uses an unpredictable amount of gas, which cannot be calculated using formulas. To measure gas usage, use `GASCONSUMED`:
 
@@ -223,11 +234,12 @@ int gas_consumed() asm "GASCONSUMED";
  int gas_before = gas_consumed();
  int forward_fee = send_message(msg, mode);
  int gas_usage = gas_consumed() - gas_before;
-  
+
  ;; forward fee -- fee value
  ;; gas_usage -- the amount of gas used to send the message
 }
 ```
 
 ## See also
+
 - [Stablecoin contract with fees calculation](https://github.com/ton-blockchain/stablecoin-contract)
