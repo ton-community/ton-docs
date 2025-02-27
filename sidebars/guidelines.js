@@ -35,6 +35,15 @@ module.exports = [
   },
   {
     'type': 'html',
+    'value': '<span class=\'menu__link\'><b><small> Quick Start </small></b></span>',
+  },
+  'v3/guidelines/quick-start/getting-started',
+  {
+    'type': 'html',
+    'value': '<hr/>',
+  },
+  {
+    'type': 'html',
     'value': '<span class=\'menu__link\'><b><small> Smart Contracts Guidelines </small></b></span>',
   },
   'v3/guidelines/smart-contracts/guidelines',
