@@ -1,7 +1,7 @@
 # Get methods
 
 :::note
-To fully benefit from this content, readers must understand the [FunC programming language](/v3/documentation/smart-contracts/func/overview) on the TON Blockchain. This knowledge is crucial for grasping the information presented here.
+Before proceeding, it is recommended that readers have a basic understanding of the [FunC programming language](/v3/documentation/smart-contracts/func/overview) on TON Blockchain. This will help you grasp the information provided here more effectively.
 :::
 
 ## Introduction
@@ -24,7 +24,7 @@ return get_data().begin_parse().preload_uint(64);
 }
 ```
 
-2. **Aggregate data retrieval**: Another common method is to create methods that gather multiple pieces of data from a contract's state in one call. This is useful when specific data points are often used together. You can see this approach frequently in [Jetton](#jettons) and [NFT](#nfts) contracts.
+2. **Aggregate data retrieval**: Another common pattern is to create methods that return multiple data points from the contract's state in a single call. This is often used when certain data points are commonly used together. These are commonly used in [Jetton](#jettons) and [NFT](#nfts) contracts.
 
 Example:
 
@@ -70,7 +70,7 @@ int seqno() method_id {
 }
 ```
 
-Returns the transaction's sequence number within a specific wallet. This method is primarily used for [replay protection](/v3/guidelines/smart-contracts/howto/wallet#replay-protection---seqno).
+Returns the sequence number of the transaction within a specific wallet. This method is primarily used for [replay protection](/v3/guidelines/smart-contracts/howto/wallet#replay-protection---seqno).
 
 #### get_subwallet_id()
 
@@ -301,7 +301,7 @@ These limitations mean that one contract cannot directly access the state of ano
 
 ### Solutions and workarounds
 
-In the TON Blockchain, smart contracts communicate through messages rather than directly invoking methods from one another. One can send a message to another contract requesting the execution of a specific method. These requests usually begin with special [operation codes](/v3/documentation/smart-contracts/message-management/internal-messages).
+In the TON Blockchain, smart contracts communicate via messages, instead of directly invoking methods from another contract. A message requesting execution of a specific method can be sent to a targeted contract. These requests typically start with special [operation codes](/v3/documentation/smart-contracts/message-management/internal-messages).
 
 A contract designed to handle such requests will execute the specified method and return the results in a separate message. While this approach may seem complex, it effectively streamlines communication between contracts, enhancing the scalability and performance of the blockchain network.
 
