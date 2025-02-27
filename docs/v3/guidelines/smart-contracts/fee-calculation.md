@@ -46,18 +46,18 @@ int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells b
 int my_storage_due() asm "DUEPAYMENT";
 
 ;; constants from stdlib
-;;; Creates an output action which would reserve exactly x nanograms (if y = 0).
+;;; Creates an output action which reserves exactly x nanograms (if y = 0).
 const int RESERVE_REGULAR = 0;
-;;; Creates an output action which would reserve at most x nanograms (if y = 2).
+;;; Creates an output action which reserves at most x nanograms (if y = 2).
 ;;; Bit +2 in y means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved.
 const int RESERVE_AT_MOST = 2;
 ;;; In the case of action failure, the transaction is bounced. No effect if RESERVE_AT_MOST (+2) is used. TVM UPGRADE 2023-07. [v3/documentation/tvm/changelog/tvm-upgrade-2023-07#sending-messages](https://ton.org/docs/#/tvm/changelog/tvm-upgrade-2023-07#sending-messages)
 const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;
 
 () calculate_and_reserve_at_most_storage_fee(int balance, int msg_value, int workchain, int seconds, int bits, int cells) inline {
-    int on_balance_before_msg = my_ton_balance - msg_value;
-    int min_storage_fee = get_storage_fee(workchain, seconds, bits, cells); ;; can be hardcoded IF CODE OF THE CONTRACT WILL NOT BE UPDATED
-    raw_reserve(max(on_balance_before_msg, min_storage_fee + my_storage_due()), RESERVE_AT_MOST);
+ int on_balance_before_msg = my_ton_balance - msg_value;
+ int min_storage_fee = get_storage_fee(workchain, seconds, bits, cells); ;; can be hardcoded IF THE CONTRACT CODE WILL NOT BE UPDATED
+ raw_reserve(max(on_balance_before_msg, min_storage_fee + my_storage_due()), RESERVE_AT_MOST);
 }
 ```
 
@@ -103,7 +103,7 @@ let forwardPayload = beginCell().storeUint(0x1234567890abcdefn, 128).endCell();
 let customPayload = beginCell().storeUint(0xfedcba0987654321n, 128).endCell();
 
 // Let's use this case for fees calculation
-// Put the forward payload into custom payload, to make sure maximum possible gas is used during computation
+// Embed the forward payload into the custom payload to ensure maximum gas usage during computation
 const sendResult = await deployerJettonWallet.sendTransfer(
   deployer.getSender(),
   toNano("0.17"), // tons
@@ -115,7 +115,7 @@ const sendResult = await deployerJettonWallet.sendTransfer(
   forwardPayload
 );
 expect(sendResult.transactions).toHaveTransaction({
-  //excesses
+  // excesses
   from: notDeployerJettonWallet.address,
   to: deployer.address,
 });
@@ -148,7 +148,7 @@ const transferTx = findTransactionRequired(sendResult.transactions, {
 let computedGeneric: (transaction: Transaction) => TransactionComputeVm;
 computedGeneric = (transaction) => {
   if (transaction.description.type !== "generic")
-    throw "Expected generic transactionaction";
+    throw "Expected generic transaction";
   if (transaction.description.computePhase.type !== "vm")
     throw "Compute phase expected";
   return transaction.description.computePhase;
@@ -185,7 +185,7 @@ If the message structure is deterministic, use the `GETFORWARDFEE` opcode with t
 | :--------- | :------------------------------------------------------ |
 | cells      | Number of cells                                         |
 | bits       | Number of bits                                          |
-| is_mc      | True if the source or destination is in the MasterChain |
+| is_mc      | True if the source or destination is in the masterchain |
 
 :::info Only unique hash cells are counted for storage and forward fees. For example, three identical hash cells are counted as one.
 
@@ -199,7 +199,7 @@ However, if the outgoing message depends significantly on the incoming structure
 | Param name | Description                                             |
 | :--------- | :------------------------------------------------------ |
 | fwd_fee    | Parsed from the incoming message                        |
-| is_mc      | True if the source or destination is in the MasterChain |
+| is_mc      | True if the source or destination is in the masterchain |
 
 :::caution Be careful with `SENDMSG` opcode
 Next opcode, `SENDMSG`, **is the least optimal way** to calculate fee, but **better than not checking**.
@@ -216,12 +216,12 @@ If even `GETORIGINALFWDFEE` cannot be used, one more option exists. Use the `SEN
 | cells      | Number of cells |
 | mode       | Message mode    |
 
-Modes affect the fee calculation as follows:
+Modes influence the fee calculation in the following ways:
 
-- `+1024` do not create action, only estimate fee. Other modes will send a message in action phase.
-- `+128` substitutes the value of the entire balance of the contract before the start of the computation phase (slightly inaccurate, since gas expenses that cannot be estimated before the completion of the computation phase are not taken into account).
-- `+64` substitutes the entire balance of the incoming message as an outcoming value (slightly inaccurate, gas expenses that cannot be estimated before the computation is completed are not taken into account).
-- Other modes can be found [on message modes page](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes).
+- **`+1024`**: This mode does not create an action but only estimates the fee. Other modes will send a message during the action phase.
+- **`+128`**: This mode substitutes the value of the entire contract balance before the computation phase begins. This is slightly inaccurate because gas expenses, which cannot be estimated before the computation phase, are excluded.
+- **`+64`**: This mode substitutes the entire balance of the incoming message as the outgoing value. This is also slightly inaccurate, as gas expenses that cannot be estimated until the computation is completed are excluded.
+- Refer to the [message modes page](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes) for additional modes.
 
 It creates an output action and returns the fee for creating a message. However, it uses an unpredictable amount of gas, which cannot be calculated using formulas. To measure gas usage, use `GASCONSUMED`:
 
@@ -231,15 +231,15 @@ int gas_consumed() asm "GASCONSUMED";
 ;; ... some code ...
 
 () calculate_forward_fee(cell msg, int mode) inline {
-  int gas_before = gas_consumed();
-  int forward_fee = send_message(msg, mode);
-  int gas_usage = gas_consumed() - gas_before;
+ int gas_before = gas_consumed();
+ int forward_fee = send_message(msg, mode);
+ int gas_usage = gas_consumed() - gas_before;
 
-  ;; forward fee -- fee value
-  ;; gas_usage -- amount of gas, used to send msg
+ ;; forward fee -- fee value
+ ;; gas_usage -- the amount of gas used to send the message
 }
 ```
 
-## See Also
+## See also
 
 - [Stablecoin contract with fees calculation](https://github.com/ton-blockchain/stablecoin-contract)

@@ -1,14 +1,14 @@
 # Get methods
 
 :::note
-Before proceeding, it is recommended that readers have a basic understanding of the [FunC programming language](/v3/documentation/smart-contracts/func/overview) on TON Blockchain. This will help you grasp the information provided here more effectively.
+To fully benefit from this content, readers must understand the [FunC programming language](/v3/documentation/smart-contracts/func/overview) on the TON Blockchain. This knowledge is crucial for grasping the information presented here.
 :::
 
 ## Introduction
 
 Get methods are special functions in smart contracts that allow you to query specific data. Their execution doesn't cost any fees and happens outside of the blockchain.
 
-These functions are very common in most smart contracts. For example, the default [Wallet contract](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) has several get methods, such as `seqno()`, `get_subwallet_id()` and `get_public_key()`. They are used by wallets, SDKs, and APIs to fetch data about wallets.
+These functions are very common in most smart contracts. For example, the default [Wallet contract](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) has several get methods, such as `seqno()`, `get_subwallet_id()` and `get_public_key()`. Wallets, SDKs, and APIs use them to fetch data about wallets.
 
 ## Design patterns for get methods
 
@@ -16,47 +16,47 @@ These functions are very common in most smart contracts. For example, the defaul
 
 1. **Single data point retrieval**: A fundamental design pattern is to create methods that return individual data points from the contract's state. These methods have no parameters and return a single value.
 
-   Example:
+Example:
 
-   ```func
-   int get_balance() method_id {
-       return get_data().begin_parse().preload_uint(64);
-   }
-   ```
+```func
+int get_balance() method_id {
+return get_data().begin_parse().preload_uint(64);
+}
+```
 
-2. **Aggregate data retrieval**: Another common pattern is to create methods that return multiple data points from the contract's state in a single call. This is often used when certain data points are commonly used together. These are commonly used in [Jetton](#jettons) and [NFT](#nfts) contracts.
+2. **Aggregate Data Retrieval**: Another common method is to create methods that gather multiple pieces of data from a contract's state in one call. This is useful when specific data points are often used together. You can see this approach frequently in [Jetton](#jettons) and [NFT](#nfts) contracts.
 
-   Example:
+Example:
 
-   ```func
-   (int, slice, slice, cell) get_wallet_data() method_id {
-       return load_data();
-   }
-   ```
+```func
+(int, slice, slice, cell) get_wallet_data() method_id {
+return load_data();
+}
+```
 
 ### Advanced get methods design patterns
 
 1. **Computed data retrieval**: In some cases, the data that needs to be retrieved isn't stored directly in the contract's state but calculated based on the state and the input arguments.
 
-   Example:
+Example:
 
-   ```func
-   slice get_wallet_address(slice owner_address) method_id {
-       (int total_supply, slice admin_address, cell content, cell jetton_wallet_code) = load_data();
-       return calculate_user_jetton_wallet_address(owner_address, my_address(), jetton_wallet_code);
-   }
-   ```
+```func
+slice get_wallet_address(slice owner_address) method_id {
+(int total_supply, slice admin_address, cell content, cell jetton_wallet_code) = load_data();
+return calculate_user_jetton_wallet_address(owner_address, my_address(), jetton_wallet_code);
+}
+```
 
 2. **Conditional data retrieval**: Sometimes, the data that needs to be retrieved depends on certain conditions, such as the current time.
 
-   Example:
+Example:
 
-   ```func
-   (int) get_ready_to_be_used() method_id {
-       int ready? = now() >= 1686459600;
-       return ready?;
-   }
-   ```
+```func
+(int) get_ready_to_be_used() method_id {
+int ready? = now() >= 1686459600;
+return ready?;
+}
+```
 
 ## Most common get methods
 
@@ -70,7 +70,7 @@ int seqno() method_id {
 }
 ```
 
-Returns the sequence number of the transaction within a specific wallet. This method is primarily used for [replay protection](/v3/guidelines/smart-contracts/howto/wallet#replay-protection---seqno).
+Returns the transaction's sequence number within a specific wallet. This method is primarily used for [replay protection](/v3/guidelines/smart-contracts/howto/wallet#replay-protection---seqno).
 
 #### get_subwallet_id()
 
@@ -80,7 +80,7 @@ int get_subwallet_id() method_id {
 }
 ```
 
-- [What is Subwallet ID?](/v3/guidelines/smart-contracts/howto/wallet#subwallet-ids)
+- [What is Subwallet ID?](/v3/guidelines/smart-contracts/howto/wallet#subwallet-ids/)
 
 #### get_public_key()
 
@@ -219,8 +219,8 @@ You can call get methods on the "Get methods" tab.
 
 We will use Javascript libraries and tools for the examples below:
 
-- [ton](https://github.com/ton-org/ton) library
-- [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript) SDK
+- [ton](https://github.com/ton-org/ton/) library
+- [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript/) SDK
 
 Let's say there is some contract with the following get method:
 
@@ -260,7 +260,7 @@ This code will produce an output in the format `Total: 123`. The number may vary
 
 ### Testing get methods
 
-For testing smart contracts created we can use the [Sandbox](https://github.com/ton-community/sandbox) which is installed by default in new Blueprint projects.
+For testing smart contracts, we can use the [Sandbox](https://github.com/ton-community/sandbox), which is installed by default in new Blueprint projects.
 
 First, you must add a special method in the contract wrapper to execute the get method and return the typed result. Let's say your contract is called _Counter_, and you have already implemented the method to update the stored number. Open `wrappers/Counter.ts` and add the following method:
 
@@ -301,7 +301,7 @@ These limitations mean that one contract cannot directly access the state of ano
 
 ### Solutions and workarounds
 
-In the TON Blockchain, smart contracts communicate via messages, instead of directly invoking methods from another contract. A message requesting execution of a specific method can be sent to a targeted contract. These requests typically start with special [operation codes](/v3/documentation/smart-contracts/message-management/internal-messages).
+In the TON Blockchain, smart contracts communicate through messages rather than directly invoking methods from one another. One can send a message to another contract requesting the execution of a specific method. These requests usually begin with special [operation codes](/v3/documentation/smart-contracts/message-management/internal-messages).
 
 A contract designed to handle such requests will execute the specified method and return the results in a separate message. While this approach may seem complex, it effectively streamlines communication between contracts, enhancing the scalability and performance of the blockchain network.
 
@@ -357,7 +357,7 @@ In this example, the contract receives and processes internal messages by interp
 
 For simplicity, we used just simple little numbers 1, 2, and 3 for the operation codes. But for real projects, consider setting them according to the standard:
 
-- [CRC32 Hashes for op-codes](/v3/documentation/data-formats/tlb/crc32)
+- [CRC32 Hashes for op-codes](/v3/documentation/data-formats/tlb/crc32/)
 
 ## Common pitfalls and how to avoid them
 
