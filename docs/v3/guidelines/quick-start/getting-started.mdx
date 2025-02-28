@@ -1,0 +1,93 @@
+import ThemedImage from '@theme/ThemedImage';
+
+# Getting started 
+
+Welcome to TON quick start guide! This guide will give you a starting point for further research of TON concepts and basic practical experience of developing applications with the TON ecosystem.
+
+## Prerequisites
+
+- Basic programming knowledge.
+- Around __30 minutes__ of your time.
+
+> **Note**: We will provide a short explanation of core concepts during the guide, but if you prefer a more theoretical approach, you can check out core concepts of TON `blockchain` first here: [TON blockchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains).
+
+## What You'll Learn
+
+- Interact with TON ecosystem: Wallets and Explorers.
+- Setup development environment: use Blueprint SDK for developing `smart-contracts` using `FunC`, `Tact`, and `Tolk` programming languages.
+- Send transactions and read from the `blockchain` using your preferred programming language and available SDKs
+- Core concepts of TON blockchain and further learning curve
+- Basic project templates ready for implementation of your project logic.
+
+## Interacting with TON ecosystem
+
+Before we step on our way of becoming a TON developer, we should become an advanced user of TON! Let's create your own wallet, send a few transactions, and see how our actions are reflected on the `blockchain` using explorers.
+
+### Step 1: Create a new wallet using an app
+
+The simplest way to create a wallet is to visit https://ton.org/wallets and choose one of the wallet apps from the list. This page explains the difference between custodial and non-custodial wallets. With a non-custodial wallet, you own the wallet and hold its private key by yourself. With a custodial wallet, you trust somebody else to do this for you. They are all pretty similar, let's choose [MyTonWallet](https://mytonwallet.io/). Go ahead, install and run it.
+
+### Step 2: Mainnet and Testnet
+
+At this moment, you should have already created your first wallet and backed up your 24-word phrase (we will discuss its meaning later). Before we start to use it, we should discuss two variations of TON `Blockchain` that we can work with: `Mainnet` and `Testnet`.
+
+In the TON, the `Mainnet` and `Testnet` have distinct roles. The `Mainnet` is the primary network where actual transactions take place, carrying real economic value as they involve real cryptocurrency and staked validators executing our transactions and guarantee a very high level of security. On the other hand, the `Testnet` is a testing version of the TON `blockchain` designed for development and testing purposes. Transactions on the `testnet` do not have real economic value, making it a risk-free zone for developers to test without financial implications. It's mainly used for development, testing `smart contracts`, and trying new features.
+
+Since TON basic transactions are very cheap, about 1 cent per transaction, investing just $5 will be enough for hundreds of them. If you decide to work on `Mainnet`, you will have a significantly smoother experience. You can get TON coins by simply pressing the buy button in the user interface, or ask someone to send them to your address, which you can copy from the wallet app somewhere near your balance. Don't worry, sharing your public address is totally safe, unless you dont want it to be associated with you.
+
+If you decide to use the `Testnet` version instead, you can do this in almost the same way in any wallet by entering the settings menu and tapping a few times on the wallet icon or name at the bottom. This will open the developer menu where you can switch to the `Testnet` version of the wallet. Here is an example for MyTonWallet (version 3.3.4):
+
+<div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap', marginBottom: '30px' }}>
+  <div>
+    <img src="/img/tutorials/quick-start/switch-to-testnet1.jpg" alt="Screenshot of wallet settings menu" height="500" style={{ objectFit: 'contain' }} />
+  </div>
+  <div>
+    <img src="/img/tutorials/quick-start/switch-to-testnet2.jpg" alt="Screenshot of network selection menu" height="500" style={{ objectFit: 'contain' }} />
+  </div>
+</div>
+
+For the `Testnet` version, you can request funds from [Testgiver Ton Bot](https://t.me/testgiver_ton_bot). It will take some time, but in the end, you will receive 2 TONs that will be displayed in your wallet app.
+
+### Step 3: Exploring the blockchain
+
+Congratulations! We created our first wallet and received some funds on it. Now let's take a look at how our actions are reflected in the `blockchain`. We can do this by using various [explorers](https://ton.app/explorers). An explorer is a tool that allows you to query data from the chain, investigate TON `smart-contracts`, and transactions.
+
+For our examples, we are going to use [TonViewer](https://tonviewer.com/). Note that in case of using `testnet`, you should manually change the explorer mode to the `testnet` version. Don't forget that these are different networks not sharing any transactions or `smart-contracts`, so your `testnet` wallet would not be visible in `mainnet` mode and vice versa.
+
+Let's take a look at our newly created wallet using the explorer: copy your wallet address from the app and insert it into the search line of the explorer like this:
+
+<div style={{ marginBottom: '30px' }}>
+  <img src="/img/tutorials/quick-start/explorer1.png" alt="Screenshot of explorer search interface"/>
+</div>
+
+At this moment, your address should be in the `uninit` or `nonexisting` state depending on whether you have already received funds or not. Like any other `smart-contract`, wallets in TON need to be deployed to the network, and since this process requires some amount of transaction fees - `gas` - most wallet apps don't actually deploy the wallet `smart-contract` until you receive funds on your address and try to make your first transaction.
+
+<div style={{ marginBottom: '30px' }}>
+  <img src="/img/tutorials/quick-start/uninit.png" alt="Screenshot of uninitialized wallet state"/>
+</div>
+<div style={{ marginBottom: '30px' }}>
+  <img src="/img/tutorials/quick-start/nonexist.png" alt="Screenshot of nonexistent wallet state"/>
+</div>
+
+As you can see, the `nonexisting` state is the default state for any address that has not been used before. `uninit` stands for an address that has some metadata such as funds, but hasn't been initialized by deployed `smart-contract` code or data.
+
+Let's send our first transaction to someone special - ourselves. And see how it looks on the `blockchain`. Enter the send menu in your wallet app and transfer some funds to your own address that you have copied before. In the explorer, our contract should start looking something like this:
+
+<div style={{ marginBottom: '30px' }}>
+  <img src="/img/tutorials/quick-start/active.png" alt="Screenshot of active wallet state"/>
+</div>
+
+And here we are, our wallet contract is deployed and ready to use. The first thing that we could mention is, despite the fact that we sent funds to ourselves, the balance has still been decreased by a little bit. As was mentioned before, any transaction requires some fee called `gas` depending on the amount of computation required by `smart-contract` logic, sent messages, and stored data.
+
+We can explore our `smart-contract` code in the corresponding tab which is represented in `TVM` byte-code - a virtual stack machine that executes byte code generated by compiling `smart-contract` programming languages: `FunC`, `Tact`, and `Tolk`.
+
+There is also a tab where we can execute `get-methods` provided by the `smart-contract`. Generally, these methods can be implemented in any way that doesn't change the `smart-contract` persistent data. Their primary purpose is to provide an easy way to access the contract state from outside the `blockchain`.
+
+The second thing to note is the contract type, `wallet_v5r1` in our case. Because some widely-used `smart-contracts` have standard implementations, most explorers are able to determine their type by analyzing the `smart-contract` code segment.
+
+Its important to understand that wallets are not special entities in the TON `blockchain`, which implements an actors model. A wallet is simply a `smart-contract` that doesn't have any specific rights or abilities compared to any other contract, such as one developed and deployed by you.
+
+Maybe you will be the one who creates and proposes the next version of wallet that will be accepted by the TON community, just as the TonKeeper Team did with the latest wallet version - `v5r1`!
+
+Happy creating on TON!
+
