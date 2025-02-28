@@ -1,4 +1,4 @@
-# TON Networking
+# TON networking
 
 The TON Project uses its own peer-to-peer network protocols.
 
@@ -19,9 +19,9 @@ The TON Project uses its own peer-to-peer network protocols.
 blockchain itself, thus providing more possibilities and flexibility for creating
   new services in the TON Ecosystem.
 
-## See Also
+## See also
 
-* [ADNL Protocol](/v3/documentation/network/protocols/adnl/overview)
-* [Overlay Subnetworks](/v3/documentation/network/protocols/overlay)
-* [RLDP Protocol](/v3/documentation/network/protocols/rldp)
-* [TON DHT Service](/v3/documentation/network/protocols/dht/ton-dht)
+* [ADNL Protocol](/v3/documentation/network/protocols/adnl/overview/)
+* [Overlay Subnetworks](/v3/documentation/network/protocols/overlay/)
+* [RLDP Protocol](/v3/documentation/network/protocols/rldp/)
+* [TON DHT Service](/v3/documentation/network/protocols/dht/ton-dht/)

@@ -1,6 +1,4 @@
-# Sharding in the TON Blockchain
-
-[//]: # (TODO, this is from gpt)
+# Sharding in TON
 
 The TON Blockchain employs advanced sharding mechanisms to enhance scalability and performance, allowing it to efficiently process a massive number of transactions. 
 The core concept is splitting the blockchain into smaller, independent pieces called **shards**. These shards can handle transactions in parallel, ensuring high throughput even as the network grows.
@@ -19,7 +17,7 @@ These accountchains are then aggregated into shardchain blocks, facilitating eff
 In addition to the dynamic creation of shards, TON uses **Split Merge** functionality, which allows the network to efficiently respond to changing transaction loads. This system enhances scalability and interaction within the blockchain network, exemplifying TON's approach to resolving common blockchain challenges with a focus on efficiency and global consistency.
 
 
-## See Also
+## See also
 
 * [Shards Dive In](/v3/documentation/smart-contracts/shards/shards-intro)
 * [# Infinity Sharding Paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm)

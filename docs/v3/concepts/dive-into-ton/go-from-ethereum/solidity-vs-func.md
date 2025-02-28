@@ -37,9 +37,9 @@ In case of FunC, the main data types are:
 
 Currently, FunC has no support for defining custom types.
 
-### See Also
+### See also
 
-- [Statements](/v3/documentation/smart-contracts/func/docs/statements)
+- [Statements](/v3/documentation/smart-contracts/func/docs/statements/)
 
 ## Declaring and using variables
 
@@ -58,9 +58,9 @@ FunC is a more abstract and function-oriented language, it supports dynamic typi
 var z = x + y; // Dynamic variable declaration 
 ```
 
-### See Also
+### See also
 
-- [Statements](/v3/documentation/smart-contracts/func/docs/statements)
+- [Statements](/v3/documentation/smart-contracts/func/docs/statements/)
 
 ## Loops
 
@@ -88,9 +88,9 @@ repeat(10) {
 ;; x = 1024
 ```
 
-### See Also
+### See also
 
-- [Statements](/v3/documentation/smart-contracts/func/docs/statements)
+- [Statements](/v3/documentation/smart-contracts/func/docs/statements/)
 
 ## Functions
 
@@ -114,9 +114,9 @@ Transitioning to FunC, FunC program is essentially a list of function declaratio
 }
 ```
 
-### See Also 
+### See also 
 
-- [Functions](/v3/documentation/smart-contracts/func/docs/functions)
+- [Functions](/v3/documentation/smart-contracts/func/docs/functions/)
 
 ## Flow control structures
 
@@ -124,9 +124,9 @@ Most of the control structures known from curly-braces languages are available i
 
 FunC supports classic `if-else` statements, as well as `ifnot`, `repeat`, `while` and `do/until` loops.  Also since v0.4.0 `try-catch` statements are supported.
 
-### See Also
+### See also
 
-- [Statements](/v3/documentation/smart-contracts/func/docs/statements)
+- [Statements](/v3/documentation/smart-contracts/func/docs/statements/)
 
 ## Dictionaries
 
@@ -134,13 +134,13 @@ Dictionary (hashmap/mapping) data structure is very important for Solidity and F
 
 Mapping is a hash table in Solidity that stores data as key-value pairs, where the key can be any of the built-in data types, excluding reference types, and the value of the data type can be any type. Mappings are most typically used in Solidity and the Ethereum blockchain to connect a unique Ethereum address to a corresponding value type. In any other programming language, a mapping is equivalent to a dictionary.
 
-In Solidity, mappings do not have a length, nor do they have the concept of setting a key or a value. Mappings are only applicable to state variables that serve as store reference types. When mappings are initialised, they include every possible key, and are mapped to values whose byte-representations are all zeros.
+In Solidity, mappings don't have a length, nor do they have the concept of setting a key or a value. Mappings are only applicable to state variables that serve as store reference types. When mappings are initialised, they include every possible key, and are mapped to values whose byte-representations are all zeros.
 
 An analogy of mappings in FunC are dictionaries, or TON hashmaps. In the context of TON, a hashmap is a data structure represented by a tree of cells. Hashmap maps keys to values ​​of arbitrary type so that quick lookup and modification are possible. The abstract representation of a hashmap in TVM is a Patricia tree, or a compact binary trie. Working with potentially large cell trees can create several problems. Each update operation builds an appreciable number of cells (each cell built costs 500 gas), which means that these operations can run out of resource if used carelessly. To avoid exceeding the gas limit, limit the number of dictionary updates in a single transaction. Also, a binary tree for `N` key-value pairs contains `N-1` forks, which means a total of at least `2N-1` cells. The storage of a smart contract is limited to `65536` unique cells, so the maximum number of entries in the dictionary is `32768`, or slightly more if there are repeating cells.
 
-### See Also 
+### See also 
 
-- [Dictionaries in TON](/v3/documentation/smart-contracts/func/docs/dictionaries)
+- [Dictionaries in TON](/v3/documentation/smart-contracts/func/docs/dictionaries/)
 
 ## Smart-contract communication
 
@@ -208,15 +208,15 @@ var msg = begin_cell()
 send_raw_message(msg, mode);
 ```
 Let's discuss in more detail what it looks like for our smart contract to send a message to our recipient:
-1. Initially, we need to build our message. The full structure of the send can be found [here](/v3/documentation/smart-contracts/message-management/sending-messages). We won't go into detail on how to assemble it here, you can read about that at the link.
+1. Initially, we need to build our message. The full structure of the send can be found [here](/v3/documentation/smart-contracts/message-management/sending-messages/). We won't go into detail on how to assemble it here, you can read about that at the link.
 2. The body of the message represents a cell. In `msg_body_cell` we do: `begin_cell()` - creates `Builder` for the future cell, first `store_uint` - stores the first uint into `Builder` (1 - this is our `op`), second `store_uint` - stores the second uint into `Builder` (num - this is our number that we will manipulate in the receiving contract), `end_cell()` - creates the cell.
 3. To attach the body that will come in `recv_internal` in the message,  we reference the collected cell in the message itself with `store_ref`.
 4. Sending a message.
 
 This example presented how smart contracts can communicate with each other. 
 
-### See Also 
+### See also 
 
-- [Internal Messages](/v3/documentation/smart-contracts/message-management/internal-messages)
-- [Sending Messages](/v3/documentation/smart-contracts/message-management/sending-messages)
-- [Non-bouncable messages](/v3/documentation/smart-contracts/message-management/non-bounceable-messages)
+- [Internal Messages](/v3/documentation/smart-contracts/message-management/internal-messages/)
+- [Sending Messages](/v3/documentation/smart-contracts/message-management/sending-messages/)
+- [Non-bouncable messages](/v3/documentation/smart-contracts/message-management/non-bounceable-messages/)

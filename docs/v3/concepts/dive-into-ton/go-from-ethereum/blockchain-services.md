@@ -1,10 +1,10 @@
-# Blockchain Services
+# Blockchain services
 
-## Domain Name Systems
+## Domain name systems
 
-In Ethereum, users use the Ethereum Name Service (ENS), which is a decentralized naming system built on top of the Ethereum blockchain.
+In Ethereum, users use the **Ethereum Name Service (ENS)**, which is a decentralized naming system built on top of the Ethereum blockchain.
 
-The TON blockchain includes an embedded domain name system known as the TON DNS. It is a decentralized service that allows users to register human-readable domain names for their smart contracts, websites, or any other online content. Such a device facilitates interaction with decentralized applications (dApps) and other resources on the TON blockchain. The DNS system in TON functions similarly to traditional Internet DNS systems, but its decentralized nature eliminates the need for a centralized authority to control and manage domain names, thereby reducing the risks of censorship, fraud, and domain name hijacking.
+The TON blockchain includes an embedded domain name system known as the TON DNS. It's a decentralized service that allows users to register human-readable domain names for their smart contracts, websites, or any other online content. Such a device facilitates interaction with decentralized applications (dApps) and other resources on the TON blockchain. The DNS system in TON functions similarly to traditional Internet DNS systems, but its decentralized nature eliminates the need for a centralized authority to control and manage domain names, thereby reducing the risks of censorship, fraud, and domain name hijacking.
 
 ## WWW
 
