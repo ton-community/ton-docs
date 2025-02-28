@@ -29,13 +29,9 @@ If you want to receive messages in a group, add the bot to the group, and it wil
 2. Run command
 
     ```bash
-    MyTonCtrl> set BotToken <BotToken>
+    MyTonCtrl> setup_alert_bot <bot_token> <chat_id>
     ```
-3. Run command
 
-    ```bash
-    MyTonCtrl> set ChatId <ChatId>
-    ```
 If everything is fine you will receive a welcome messages with all possible alerts listed. 
 
 
