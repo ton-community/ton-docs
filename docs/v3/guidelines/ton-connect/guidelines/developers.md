@@ -170,12 +170,27 @@ If you experience any additional issues, or would like to present a proposal on 
 
 ## TON Connect Unity
 
+### unity-ton-connect
+
 Unity asset for TON Connect 2.0. Uses `continuation-team/TonSdk.NET/tree/main/TonSDK.Connect`.
 
 Use it to integrate the TonConnect protocol with your game.
 
 * [GitHub](https://github.com/continuation-team/unity-ton-connect)
 * [Docs](https://docs.tonsdk.net/user-manual/unity-tonconnect-2.0/getting-started)
+
+### Uniton-Connect
+
+Unity SDK for TON Connect 2.0. Uses `MrVeit/Veittech-UnitonConnect`
+
+Use it to integrate the TonConnect protocol and use additional functionality of the DeFi module in your game.
+
+* [GitHub](https://github.com/MrVeit/Veittech-UnitonConnect)
+* [Docs](https://github.com/MrVeit/Veittech-UnitonConnect/blob/main/README.MD)
+
+Example of a deployed `MrVeit/Veittech-UnitonConnect`:
+* [TMA](https://t.me/UnitonConnect_bot/dAppStart)
+* [Web App](https://mrveit.github.io/Veittech-UnitonConnect/)
 
 ## See Also
 
