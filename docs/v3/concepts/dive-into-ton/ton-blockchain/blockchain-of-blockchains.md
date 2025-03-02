@@ -11,19 +11,19 @@ Let's consider one smart contract.
 
 In TON, it is a _thing_ with properties like `address`, `code`, `data`, `balance` and others. In other words, it is an object with some _storage_ and _behavior_.
 That behavior has the following pattern:
-* contract receive a message
-* contract handles that event according to its own properties by executing its `code` in TON Virtual Machine
-* contract modifies its own properties consists of `code`, `data`, and others
+* contract receives a message
+* contract handles that event according to its properties by executing its `code` in TON Virtual Machine
+* contract modifies its properties consists of `code`, `data`, and others
 * contract optionally generates outgoing messages
 * contract goes into standby mode until the next event occurs
 
-A combination of these steps is called a **transaction**. It is important that events are handled one by one, thus transactions are strictly ordered and cannot interrupt each other.
+A combination of these steps is called a **transaction**. Since it is essential to handle events one by one, transactions follow a strict order and cannot interrupt each other.
 
 This behavior pattern is well known and called **actor**.
 
 ### The lowest level: AccountChain
 
-A sequence of transactions `Tx1 -> Tx2 -> Tx3 -> ....` may be called a **chain**. And in the considered case it is called **AccountChain** to emphasize that it is _the chain_ of a single account of transactions.
+A sequence of transactions `Tx1 -> Tx2 -> Tx3 -> ....` may be called a **chain**. In the considered case, it is called **AccountChain** to emphasize that it is _the chain_ of a single account of transactions.
 
 Now, since nodes that process transactions need from time to time to coordinate the state of the smart contract to reach a consensus about the state those transactions are batched:
 `[Tx1 -> Tx2] -> [Tx3 -> Tx4 -> Tx5] -> [] -> [Tx6]`.
