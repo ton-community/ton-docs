@@ -1,17 +1,21 @@
 ---
 ---
 
-# NFT Use Cases
+# NFT use cases
 
-NFTs, or non-fungible tokens, are a type of digital asset that is unique, and cannot be replaced by another identical asset. This article describes the approaches and already implemented use cases of NFTs in TON Blockchain.
+After reading this article, you'll understand why are NFTs helpful and how you can use them in one of your projects.
 
-After reading this article, you will understand why are NFTs helpful and how you can use them in one of your projects.
+## Introduction
+
+**Non-fungible token (NFT)** is a type of digital asset that's unique, and can't be replaced by another identical asset. This article describes the approaches and already implemented use cases of NFTs in TON Blockchain.
 
 ## Item ownership
 
 Non-fungible tokens are mostly known as cool pictures that you can buy and sell on NFT marketplaces like OpenSea or [getgems.io](https://getgems.io).
 
 NFT pictures and collections are funny and help people understand the concept of blockchain-based ownership. However, in the long-term, the NFT focus should shift beyond this to illustrate their wide variety of potential use cases.
+
+In 2024, Telegram introduced [gifts as NFT items](https://telegram.org/blog/wear-gifts-blockchain-and-more#move-gifts-to-the-blockchain).
 
 ## Support an artist
 
@@ -33,7 +37,7 @@ The TON DNS service works fully on-chain. If you want to own a domain in the dec
 
 The NFT usernames bought on Fragment can also be used for TON DNS to bind them to your wallet and use your username.t.me NFT as a wallet address.
 
-### NFT as an address for your wallet
+## NFT as an address for your wallet
 
 Everyone in crypto understands the idea of unique address of wallet like `Egbt...Ybgx`.
 
@@ -65,7 +69,7 @@ NFT tokens ensure elevated security and cannot be easily copied or forged. This 
 
 Furthermore, thanks to their transparency and traceability, the authenticity and ownership of an NFT authorization token can be easily verified. This enables quick and efficient verification, ensuring convenient access to various platforms, services, or restricted content.
 
-It is also worth mentioning that NFTs provide flexibility and adaptability in managing permissions. Since NFTs can be programmatically encoded with specific access rules or attributes, they can adapt to different authorization requirements. This flexibility allows for fine-grained control over access levels, granting or revoking permissions as needed, which can be particularly valuable in scenarios that require hierarchical access or temporary authorization restrictions.
+It's also worth mentioning that NFTs provide flexibility and adaptability in managing permissions. Since NFTs can be programmatically encoded with specific access rules or attributes, they can adapt to different authorization requirements. This flexibility allows for fine-grained control over access levels, granting or revoking permissions as needed, which can be particularly valuable in scenarios that require hierarchical access or temporary authorization restrictions.
 
 One of the services currently offering NFT authentication is [Playmuse](https://playmuse.org/), a media service built on the TON blockchain. This service aims to attract Web3 musicians as well as other creators.
 
@@ -75,6 +79,11 @@ Access to the chat is facilitated through a Telegram bot, which verifies the pre
 
 It is important to note that this is just one example, and as the TON ecosystem evolves, new services and technologies for authentication via NFTs may emerge. Keeping up with the latest developments in the TON space can help identify other platforms or open-source projects that provide similar authentication capabilities.
 
-## NFT as a Virtual Asset in Games
+## NFT as a virtual asset in games
 
 NFT integrated to a game allows players to own and trade in-game items in a way that is verifiable and secure, which adds an extra layer of value and excitement to the game.
+
+## See also
+
+- [TON wallet apps](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps/)
+- [Explorers in TON](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton/)
