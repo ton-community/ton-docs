@@ -11,33 +11,33 @@ Let's consider one smart contract.
 
 In TON, it is a _thing_ with properties like `address`, `code`, `data`, `balance` and others. In other words, it is an object with some _storage_ and _behavior_.
 That behavior has the following pattern:
-* something happens (the most common situation is that a contract gets a message)
-* contract handles that event according to its own properties by executing its `code` in TON Virtual Machine.
-* contract modifies its own properties (`code`, `data`, and others)
+* contract receive a message
+* contract handles that event according to its own properties by executing its `code` in TON Virtual Machine
+* contract modifies its own properties consists of `code`, `data`, and others
 * contract optionally generates outgoing messages
 * contract goes into standby mode until the next event occurs
 
-A combination of these steps is called a **transaction**. It is important that events are handled one by one, thus _transactions_ are strictly ordered and cannot interrupt each other.
+A combination of these steps is called a **transaction**. It is important that events are handled one by one, thus transactions are strictly ordered and cannot interrupt each other.
 
-This behavior pattern is well known and called 'Actor'.
+This behavior pattern is well known and called **actor**.
 
 ### The lowest level: AccountChain
 
-A sequence of _transactions_ `Tx1 -> Tx2 -> Tx3 -> ....` may be called a **chain**. And in the considered case it is called **AccountChain** to emphasize that it is _the chain_ of a single account of transactions.
+A sequence of transactions `Tx1 -> Tx2 -> Tx3 -> ....` may be called a **chain**. And in the considered case it is called **AccountChain** to emphasize that it is _the chain_ of a single account of transactions.
 
-Now, since nodes that process transactions need from time to time to coordinate the state of the smart contract (to reach a _consensus_ about the state) those _transactions_ are batched:
+Now, since nodes that process transactions need from time to time to coordinate the state of the smart contract to reach a consensus about the state those transactions are batched:
 `[Tx1 -> Tx2] -> [Tx3 -> Tx4 -> Tx5] -> [] -> [Tx6]`.
 Batching does not intervene in sequencing, each transaction still has only one 'prev tx' and at most one 'next tx', but now this sequence is cut into the **blocks**. 
 
-It is also expedient to include queues of incoming and outgoing messages in _blocks_. In that case, a _block_ will contain a full set of information that determines and describes what happened to the smart contract during that block.
+It is also expedient to include queues of incoming and outgoing messages in blocks. In that case, the block will contain a full set of information that determines and describes what happened to the smart contract during that block.
 
 ## Many AccountChains: Shards
 
-Now let's consider many accounts. We can get a few _AccountChains_ and store them together, such a set of _AccountChains_ is called a **ShardChain**. In the same way, we can cut **ShardChain** into **ShardBlocks**, which are an aggregation of individual _AccountBlocks_.
+Now let's consider many accounts. We can get a few AccountChains and store them together, such a set of AccountChains is called a **ShardChain**. In the same way, we can cut ShardChain into **ShardBlocks**, which are an aggregation of individual AccountBlocks.
 
 ### Dynamic splitting and merging of ShardChains
 
-Note that since a _ShardChain_ consists of easily distinguished _AccountChains_, we can easily split it. That way if we have 1 _ShardChain_ which describes events that happen with 1 million accounts and there are too many transactions per second to be processed and stored in one node, so we just divide (or **split**) that chain into two smaller _ShardChains_ with each chain accounting for half a million accounts and each chain processed on a separate subset of nodes.
+Note that since a ShardChain consists of easily distinguished AccountChains, we can easily split it. That way if we have 1 _ShardChain_ which describes events that happen with 1 million accounts and there are too many transactions per second to be processed and stored in one node, so we just **split** that chain into two smaller ShardChains with each chain accounting for half a million accounts and each chain processed on a separate subset of nodes.
 
 Analogously, if some shards become too unoccupied, they can be **merged** into one bigger shard.
 
