@@ -182,8 +182,12 @@ Set up a server to host your API and the interface for claiming NFTs. Also, obta
     In your browser, navigate to `<API_URI>/admin/setaddr/<collection-address>`, replacing `<collection-address>` with the address observed during the deployment step.
     
 13. **Wait for confirmation**  
-    Monitor the server logs until you see a `committed state` message.
+    Monitor the container API logs until you see a message indicating a `committed state`.
     
+    ```bash
+    docker-compose logs api 
+    ```
+
 14. **Deployment complete!**
     
 
@@ -238,8 +242,12 @@ Follow these steps to update the list of owners and integrate the changes into y
     Follow the generated `ton://` link and confirm the transaction. You may also generate a QR code from the link and scan it with the Tonhub wallet.
     
 7.  **Wait for confirmation**  
-    Monitor the server logs until a `committed state` message appears.
+    Monitor the container API logs until you see a message indicating a `committed state`.
     
+    ```bash
+    docker-compose logs api 
+    ```
+   
 8.  **Done!**
     
 
