@@ -6,9 +6,9 @@ Learn how to submit content to TON documentation here.
 
 ## Contribute rules
 
-### Documentation maintain policy
+### Documentation maintain community
 
-TON Documentation is entirely open source. Community enthusiasts and early TON contributors have played a key role in creating this open-source TON Documentation by turning their notes into detailed pages.
+TON Documentation is entirely open source. Community enthusiasts and early TON contributors have played a key role in creating this open-source TON documentation by turning their notes into detailed pages.
 
 It was initially written by TON [contributors](/v3/contribute/maintainers/) and supported by [TON Studio](https://tonstudio.io/).
 We aim to educate users about TON through explicit, easily searchable content that appeals to technical experts and casual readers.
