@@ -1,4 +1,4 @@
-# Security Audits
+# Security audits
 
 The security of the TON Blockchain ecosystem is of utmost importance. Below is a summary of completed audits for key components of the TON Blockchain, conducted by renowned auditing firms.
 
@@ -13,7 +13,7 @@ The core blockchain modules were audited to ensure the robustness and security.
 - [CertiK: TON Blockchain Audit Report](https://docs.ton.org/audits/TON_Blockchain_CertiK.pdf)
 - [CertiK: TON Masterchain Contracts Formal Verification](https://docs.ton.org/audits/TON_Blockchain_Formal_Verification_CertiK.pdf)
 
-## TON Blockchain Library (tonlib)
+## TON blockchain library (tonlib)
 
 Zellic conducted a security assessment for TON from October 16th to November 17th, 2023. During this engagement, Zellic reviewed Tonlib’s code for security vulnerabilities, design issues, and general weaknesses in security posture.
 
@@ -39,5 +39,5 @@ TVM Upgrade 2023.07  were analyzed for security and potential vulnerabilities.
 
 ---
 
-## Bug Bounty Program
+## Bug bounty program
 To further enhance the security of the TON ecosystem, we encourage security researchers and developers to participate in the [TON Blockchain Bug Bounty Program](https://github.com/ton-blockchain/bug-bounty).
