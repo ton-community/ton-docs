@@ -5,12 +5,12 @@ import ThemedImage from '@theme/ThemedImage';
 
 Everything in TON is stored in cells. A cell is a data structure containing:
 
-- up to **1023 bits**  of data (not bytes!)
+- up to **1023 bits**  of data
 - up to **4 references** to other cells
 
-Bits and references are not intermixed (they are stored separately). Circular references are forbidden: for any cell, none of its descendant cells can have this original cell as a reference.
+Bits and references aren't intermixed they're stored separately. Circular references are forbidden: for any cell, none of its descendant cells can have this original cell as a reference.
 
-Thus, all cells constitute a directed acyclic graph (DAG). Here is a good picture to illustrate:
+Thus, all cells constitute a directed acyclic graph (DAG). Here's a good picture to illustrate:
 
 <br></br>
 <ThemedImage
@@ -23,7 +23,7 @@ Thus, all cells constitute a directed acyclic graph (DAG). Here is a good pictur
 <br></br>
 
 ## Cell types
-Currently, there are 5 types of cells: _ordinary_ and 4 _exotic_.
+Currently, there are five types of cells: one ordinary cell and four exotic cells.
 The exotic types are the following:
 * Pruned branch cell
 * Library reference cell
@@ -31,7 +31,7 @@ The exotic types are the following:
 * Merkle update cell
 
 :::tip
-For more on exotic cells, see: [**TVM Whitepaper, Section 3**](https://ton.org/tvm.pdf).
+For more see: [**Exotic cells**](https://ton.org/tvm.pdf).
 :::
 
 ## Cell flavors
@@ -44,16 +44,16 @@ In particular, it deduplicates data: if there are several  equivalent sub-cells 
 
 Another special cell flavor is used in TVM:
 
-* _Continuation_  for cells containing opcodes (instructions) for TON Virtual Machine, see [TVM bird's-eye overview](/v3/documentation/tvm/tvm-overview).
+* _Continuation_  for cells containing opcodes instructions for TON Virtual Machine, see [TVM bird's-eye overview](/v3/documentation/tvm/tvm-overview).
 
 ## Serialization of data to cells
 
-Any object in TON (message, message queue, block, whole blockchain state, contract code and data) serializes to a cell.
+Any object in TON like message, block or whole blockchain state serializes to a cell.
 
-The process of serialization is described by a TL-B scheme: a formal description of how this object can be serialized into _Builder_ or how to parse an object of a given type from the _Slice_.
+The process of serialization is described by a TL-B scheme: a formal description of how this object can be serialized into _builder_ or how to parse an object of a given type from the _Slice_.
 TL-B for cells is the same as TL or ProtoBuf for byte-streams.
 
-If you want to know more details about cell (de)serialization, you could read [Cell & Bag of Cells](/v3/documentation/data-formats/tlb/cell-boc) article.
+If you want to know more details about cell serialization and deserialization, read [Cell & Bag of Cells](/v3/documentation/data-formats/tlb/cell-boc) article.
 
 ## See also
 
