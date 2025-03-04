@@ -3,12 +3,12 @@ import ThemedImage from '@theme/ThemedImage';
 
 # Cells as data storage
 
-Everything in TON is stored in cells. A cell is a data structure containing:
+In TON, a **cell** is a built material for the entire blockchain. The cell is a data structure containing:
 
 - up to **1023 bits**  of data
 - up to **4 references** to other cells
-
-Bits and references aren't intermixed they're stored separately. Circular references are forbidden: for any cell, none of its descendant cells can have this original cell as a reference.
+- cell stores bits and references separated.
+- cell forbids circular references: for any cell, none of its descendant cells can reference this original cell.
 
 Thus, all cells constitute a directed acyclic graph (DAG). Here's a good picture to illustrate:
 
@@ -31,30 +31,31 @@ The exotic types are the following:
 * Merkle update cell
 
 :::tip
-For more see: [**Exotic cells**](https://ton.org/tvm.pdf).
+See [**Exotic cells**](https://ton.org/tvm.pdf).
 :::
 
 ## Cell flavors
 
 A cell is an opaque object optimized for compact storage.
 
-In particular, it deduplicates data: if there are several  equivalent sub-cells referenced in different branches, their content is only stored once. However, opaqueness means that a cell cannot be modified or read directly. Thus, there are 2 additional flavors of the cells:
-* _Builder_ for partially constructed cells, for which fast operations for appending bitstrings, integers, other cells and, references to other cells can be defined.
-* _Slice_ for 'dissected' cells representing either the remainder of a partially parsed cell or a value (subcell) residing inside such a cell and extracted from it via a parsing instruction.
+It deduplicates data: it only stores the content of several equivalent sub-cells referenced in different branches once. However, one cannot modify or read a cell directly because of its opaqueness. Thus, there are two additional flavors of the cells:
+* **Builder** is a flavor for constructing cells
+* **Slice** for a flavor for reading cells 
 
-Another special cell flavor is used in TVM:
+Another unique cell flavor in TVM:
 
-* _Continuation_  for cells containing opcodes instructions for TON Virtual Machine, see [TVM bird's-eye overview](/v3/documentation/tvm/tvm-overview).
+* **Continuation**  for cells containing opcodes instructions for TON Virtual Machine, see [TVM bird's-eye overview](/v3/documentation/tvm/tvm-overview).
 
 ## Serialization of data to cells
 
-Any object in TON like message, block or whole blockchain state serializes to a cell.
+Any object in TON, like the message, block, or whole blockchain state, serializes to a cell.
 
-The process of serialization is described by a TL-B scheme: a formal description of how this object can be serialized into _builder_ or how to parse an object of a given type from the _Slice_.
+A TL-B scheme describes the serialization process: a formal description of how this object can be serialized into _builder_ or how to parse an object of a given type from the _Slice_.
 TL-B for cells is the same as TL or ProtoBuf for byte-streams.
 
-If you want to know more details about cell serialization and deserialization, read [Cell & Bag of Cells](/v3/documentation/data-formats/tlb/cell-boc) article.
+If you want more details about cell serialization and deserialization, read [Cell & Bag of Cells](/v3/documentation/data-formats/tlb/cell-boc) article.
 
 ## See also
 
-* [TL-B Language](/v3/documentation/data-formats/tlb/tl-b-language)
+- [Blockchain of blockchains](docs/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/)
+- [TL-B Language](/v3/documentation/data-formats/tlb/tl-b-language)
