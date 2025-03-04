@@ -1,8 +1,8 @@
-# Security audits
+# TON security audits
 
-The security of the TON Blockchain ecosystem is of utmost importance. Below is a summary of completed audits for key components of the TON Blockchain, conducted by renowned auditing firms.
+The security of the TON blockchain ecosystem is of utmost importance. Below is a summary of completed audits for key components of the TON Blockchain, conducted by renowned auditing firms.
 
-## TON Blockchain
+## TON blockchain
 
 The core blockchain modules were audited to ensure the robustness and security.
 
