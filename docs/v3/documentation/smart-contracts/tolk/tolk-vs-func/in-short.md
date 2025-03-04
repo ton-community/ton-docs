@@ -47,6 +47,7 @@ get currentCounter(): int { ... }
 10. Clear and readable error messages on type mismatch
 11. `bool` type support
 12. Indexed access `tensorVar.0` and `tupleVar.0` support
+13. Nullable types `T?`, null safety, smart casts, operator `!`
 
 #### Tooling around
 - JetBrains plugin exists

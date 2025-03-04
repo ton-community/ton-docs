@@ -3,6 +3,16 @@
 When new versions of Tolk are released, they will be mentioned here.
 
 
+## v0.9
+
+1. Nullable types `int?`, `cell?`, etc.; null safety
+2. Standard library (asm definitions) updated to reflect nullability
+3. Smart casts, like in TypeScript in Kotlin
+4. Operator `!` (non-null assertion)
+5. Code after `throw` is treated unreachable
+6. The `never` type
+
+
 ## v0.8
 
 1. Syntax `tensorVar.0` and `tupleVar.0` (both for reading and writing)

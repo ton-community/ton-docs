@@ -327,8 +327,10 @@ We have the following types:
 - typed tuple `[T1, T2, ...]`
 - tensor `(T1, T2, ...)`
 - callables `(TArgs) -> TResult`
+- nullable types `T?`, compile-time null safety
 - `void` (more canonical to be named `unit`, but `void` is more reliable)
 - `self`, to make chainable methods, described below; actually it's not a type, it can only occur instead of return type of a function
+- `never` (an always-throwing function returns `never`, for example; an "impossible type" is also `never`)
 
 The type system obeys the following rules:
 - variable types can be specified manually or are inferred from declarations, and never change after being declared
@@ -424,7 +426,7 @@ The syntax `f<int>(...)` is also supported:
 ```tolk
 t.tuplePush<int>(1);     // ok
 t.tuplePush<int>(cs);    // error, can not pass slice to int
-t.tuplePush<int>(null);  // ok, null is "null of type int"
+t.tuplePush<int?>(null); // ok, null is "null of type int"
 ```
 
 User-defined functions may also be generic:
@@ -440,7 +442,7 @@ Actually, they mostly remind "template" functions. At each unique invocation, fu
 
 There may be multiple generic parameters:
 ```tolk
-fun replaceNulls<T1, T2>(tensor: (T1, T2), v1IfNull: T1, v2IfNull: T2): (T1, T2) {
+fun replaceNulls<T1, T2>(tensor: (T1?, T2?), v1IfNull: T1, v2IfNull: T2): (T1, T2) {
     var (a, b) = tensor;
     return (a == null ? v1IfNull : a, b == null ? v2IfNull : b);
 }
@@ -598,8 +600,6 @@ Creating null values and checking variables on null looks very pretty now.
   </tr>
   </tbody>
 </table>
-
-Note, that it does NOT mean that Tolk language has nullability. No, you can still assign `null` to an integer variable — like in FunC, just syntactically pleasant. A true nullability will be available someday, after hard work on the type system.
 
 
 <h3 className="cmp-func-tolk-header">
@@ -1022,6 +1022,161 @@ t.1.2 += 10;   // "1 INDEX" + "2 INDEX" + sum + "2 SETINDEX" + "1 SETINDEX"
 
 globalTuple.1.2 += 10;  // "GETGLOB" + ... + "SETGLOB"
 ```
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Nullable types `T?`, null safety, smart casts, operator `!`
+</h3>
+
+Tolk has nullable types: `int?`, `cell?`, and `T?` in general (even for tensors).
+Non-nullable types, such as `int` and `cell`, can never hold null values.
+
+The compiler enforces **null safety**: you cannot use nullable types without first checking for null.
+Fortunately, thanks to smart casts, these checks integrate smoothly and organically into the code.
+Smart casts are purely a compile-time feature — they do not consume gas or extra stack space.
+
+```tolk
+var value = x > 0 ? 1 : null;  // int?
+
+value + 5;               // error
+s.storeInt(value);       // error
+
+if (value != null) {
+    value + 5;           // ok, smart cast
+    s.storeInt(value);   // ok, smart cast
+}
+```
+
+Remember, that when a variable's type is not specified, it's auto inferred from assignment and never changes:
+```tolk
+var i = 0;
+i = null;       // error, can't assign `null` to `int`
+i = maybeInt;   // error, can't assign `int?` to `int`
+```
+
+Such a code will not work, you must **explicitly declare the variable as nullable**::
+```tolk
+// incorrect
+var i = null;
+if (...) {
+    i = 0;     // error
+}
+
+// correct
+var i: int? = null;
+// or
+var i = null as int?;
+```
+
+Smart casts (similar to TypeScript and Kotlin) make it easier dealing with nullable types, allowing code like this:
+```tolk
+if (lastCell != null) {
+    // here lastCell is `cell`, not `cell?`
+}
+```
+```tolk
+if (lastCell == null || prevCell == null) {
+    return;
+}
+// both lastCell and prevCell are `cell`
+```
+```tolk
+var x: int? = ...;
+if (x == null) {
+    x = random();
+}
+// here x is `int`
+```
+```tolk
+while (lastCell != null) {
+    lastCell = lastCell.beginParse().loadMaybeRef();
+}
+// here lastCell is 100% null
+```
+```tolk
+// t: (int, int)?
+t.0                // error
+t!.0               // ok
+if (t.0 != null) {
+    t.0            // ok
+}
+```
+
+Note, that smart casts don't work for globals, only for local vars.
+
+Tolk has the `!` operator (non-null assertion, compile-time only), like `!` in TypeScript and `!!` in Kotlin.
+If you are "absolutely certain" that a variable is not null,
+this operator allows you to skip the compiler's check.
+```tolk
+fun doSmth(c: cell);
+
+fun analyzeStorage(nCells: int, lastCell: cell?) {
+    if (nCells) {           // then lastCell 100% not null
+        doSmth(lastCell!);  // use ! for this fact
+    }
+}
+```
+
+In practice, you'll use this operator working with low-level dicts API.
+In the future, Tolk will have a high-level `map<K,V>`.
+For now, working with dicts will require the `!` operator.
+```tolk
+// it returns either (slice, true) or (null, false)
+@pure
+fun iDictGet(self: cell?, keyLen: int, key: int): (slice?, bool)
+    asm(key self keyLen) "DICTIGET" "NULLSWAPIFNOT";
+
+var (cs, exists) = dict.iDictGet(...);
+// if exists is true, cs is not null
+if (exists) {
+    cs!.loadInt(32);
+}
+```
+
+You can also declare "always-throwing functions" that return `never`:
+```tolk
+fun alwaysThrows(): never {
+    throw 123;
+}
+
+fun f(x: int) {
+    if (x > 0) {
+        return x;
+    }
+    alwaysThrows();
+    // no `return` statement needed
+}
+```
+
+The `never` type implicitly occurs when a condition can never happen:
+```tolk
+var v = 0;
+// prints a warning
+if (v == null) {
+    // v is `never`
+    v + 10;   // error, can not apply `+` `never` and `int`
+}
+// v is `int` again
+```
+
+If you face `never` in compilation errors, most likely there is a warning in preceding code.
+
+Non-atomic nullables are also allowed: `(int, int)?`, `(int?, int?)?`, or even `()?`. Then,
+**a special "value presence" stack slot** is implicitly added.
+It holds 0 if value is null, and not 0 (currently, -1) if not null:
+```tolk
+// t: (int, int)?
+t = (1, 2);    // 1 2 -1
+t = (3, 4);    // 3 4 -1
+t = null;      // null null 0
+
+// t: ()?
+t = ();         // -1
+t = null;       // 0
+```
+
+All in all, nullability is a major step forward for type safety and reliability.
+Nullable types eliminate runtime errors, enforcing correct handling of optional values.
 
 
 <h3 className="cmp-func-tolk-header">
