@@ -18,7 +18,7 @@ The TON Ecosystem uses its own peer-to-peer network protocols.
 
 ## TON network protocols
 
-* [TON Connect]()
+* [TON Connect](/v3/guidelines/ton-connect/overview/)
 * [ADNL Protocol](/v3/documentation/network/protocols/adnl/overview/)
 * [Overlay Subnetworks](/v3/documentation/network/protocols/overlay/)
 * [RLDP Protocol](/v3/documentation/network/protocols/rldp/)
