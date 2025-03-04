@@ -18,7 +18,7 @@
       }
     ],
 
-    'type-hint': /\b(type|enum|int|cell|void|bool|slice|tuple|builder|continuation)\b/,
+    'type-hint': /\b(type|enum|int|cell|void|never|bool|slice|tuple|builder|continuation)\b/,
 
     'boolean': /\b(false|true|null)\b/,
 
