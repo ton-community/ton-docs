@@ -345,7 +345,7 @@ Initially, each message must first store `CommonMsgInfo` ([TL-B](https://github.
 
 By reading the `block.tlb` file, we can notice three types of CommonMsgInfo: `int_msg_info$0`, `ext_in_msg_info$10`, `ext_out_msg_info$11`. We will not go into specific details detailing the specificities of the `ext_out_msg_info` TL-B structure. That said, it is an external message type that a smart contract can send to use as an external log. For examples of this format, consider having a closer look at the [Elector](https://tonscan.org/address/Ef8zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM0vF) contract.
 
-[Looking at TL-B](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L127-L128), you’ll notice that **only the CommonMsgInfo is available when used with the ext_in_msg_info type**. This is because message fields such as `src`, `created_lt`, `created_at`, and others are rewritten by validators during transaction handling. In this case, the `src` field in message is most important because when messages are sent, the sender is unknown, and is written by validators during verification. This ensures that the address in the `src` field is correct and cannot be manipulated.
+When examining [TL-B](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L127-L128), you’ll notice that **only `CommonMsgInfo` is available when using the `ext_in_msg_info` type**. It is because fields like `src`, `created_lt`, `created_at`, and others are overwritten by validators during transaction processing. Among these, the `src` field is particularly important. Since the sender’s address is unknown when the message is sent, validators populate this field during verification. This ensures the `src` address is accurate and cannot be tampered with.
 
 However, the `CommonMsgInfo` structure only supports the `MsgAddress` specification, but the sender’s address is typically unknown and it is required to write the `addr_none` (two zero bits `00`). In this case, the `CommonMsgInfoRelaxed` structure is used, which supports the `addr_none` address. For the `ext_in_msg_info` (used for incoming external messages), the `CommonMsgInfo` structure is used because these message types don’t make use of a sender and always use the [MsgAddressExt](https://hub.com/ton/ton.blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L100) structure (the `addr_none$00` meaning two zero bits), which means there is no need to overwrite the data.
 
@@ -600,7 +600,11 @@ privateKey := ed25519.NewKeyFromSeed(k)
 </TabItem>
 </Tabs>
 
-Therefore, the `seqno`, `keys`, and `internal message` need to be sent. Now we need to create a [message](/v3/documentation/smart-contracts/message-management/sending-messages) for our wallet and store the data in this message in the sequence used at the beginning of the tutorial. This is accomplished as follows:
+# Therefore, the `seqno`, `keys`, and `internal message` need to be sent. Now we need to create a [message](/v3/documentation/smart-contracts/message-management/sending-messages) for our wallet and store the data in this message in the sequence used at the beginning of the tutorial. This is accomplished as follows:
+
+To proceed, we must send the `seqno`, `keys`, and `internal message`. Next, we’ll create a [message](/v3/documentation/smart-contracts/message-management/sending-messages) for our wallet and store the data in the sequence outlined at the beginning of the tutorial. This is achieved as follows:
+
+> > > > > > > 018b2129 (Update wallet.md)
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -848,7 +852,11 @@ var subWallet uint64 = 698983191
 
 ### Compiling wallet code
 
-Now that we have the private and public keys and the subwallet_id clearly defined we need to compile the wallet code. To accomplish this, we’ll use the [wallet v3 code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) from the official repository.
+# Now that we have the private and public keys and the subwallet_id clearly defined we need to compile the wallet code. To accomplish this, we’ll use the [wallet v3 code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) from the official repository.
+
+Now that the private and public keys and the `subwallet_id` are clearly defined, we must compile the wallet code. We’ll use the [wallet v3 code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) from the official repository.
+
+> > > > > > > 018b2129 (Update wallet.md)
 
 The [@ton-community/func-js](https://github.com/ton-community/func-js) library is necessary to compile wallet code. This library allows us to compile FunC code and retrieve a cell containing the code. To get started, install the library and save it to the `package.json` as follows:
 
@@ -1573,7 +1581,7 @@ After completing this process, you can use a TON blockchain explorer to verify t
 
 ### NFT transfers
 
-In addition to regular messages, users often send NFTs to each other. Unfortunately, not all libraries contain methods that are tailored for use with this type of smart contract. Therefore, it is necessary to create code that will allow us to build a message for sending NFTs. First, let's become more familiar with the TON NFT [standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md).
+# In addition to regular messages, users often send NFTs to each other. Unfortunately, not all libraries contain methods that are tailored for use with this type of smart contract. Therefore, it is necessary to create code that will allow us to build a message for sending NFTs. First, let's become more familiar with the TON NFT [standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md).
 
 In addition to regular messages, users often send NFTs to each other. Unfortunately, not all libraries specifically use methods for interacting with this type of smart contract. As a result, we need to write code that allows us to construct messages for sending NFTs. First, let’s familiarize ourselves with the TON NFT [standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md).
 
@@ -1821,7 +1829,11 @@ subscriptionAddress := address.MustParseAddr("EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_
 </TabItem>
 </Tabs>
 
-Now we need to retrieve the plugin’s hash address so the address can be translated into a number and sent to the GET Method.
+# Now we need to retrieve the plugin’s hash address so the address can be translated into a number and sent to the GET Method.
+
+Now, we need to retrieve the plugin’s hash address to translate it into a number and send it to the GET Method.
+
+> > > > > > > 018b2129 (Update wallet.md)
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1865,7 +1877,11 @@ log.Println(getResult.MustInt(0)) // -1
 </TabItem>
 </Tabs>
 
-The response must be `-1`, meaning the result is true. It is also possible to send a slice and a cell if required. It would be enough to create a Slice or Cell and transfer it instead of using the BigInt, specifying the appropriate type.
+# The response must be `-1`, meaning the result is true. It is also possible to send a slice and a cell if required. It would be enough to create a Slice or Cell and transfer it instead of using the BigInt, specifying the appropriate type.
+
+The response must be `-1`, meaning the result is `true`. It is also possible to send a slice and a cell if required. It would be enough to create and transfer a Slice or Cell instead of using the BigInt, specifying the appropriate type.
+
+> > > > > > > 018b2129 (Update wallet.md)
 
 ### Contract deployment via wallet
 
@@ -1873,6 +1889,10 @@ In chapter three, we deployed a wallet. To accomplish this, we initially sent so
 
 To accomplish this, will use the V3R2 wallet smart contract that was used in [the third chapter](/v3/guidelines/smart-contracts/howto/wallet#compiling-wallet-code).
 In this case, we’ll set the `subwallet_id` to `3` or any other number needed to retrieve another address when using the same private key (it's changeable):
+=======
+To achieve this, we’ll use the V3R2 wallet smart contract introduced in [the third chapter](/v3/guidelines/smart-contracts/howto/wallet#compiling-wallet-code). In this case, we’ll set the `subwallet_id` to `3` or any other number required to generate a different address while using the same private key (this value is customizable):
+
+> > > > > > > 018b2129 (Update wallet.md)
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -2018,7 +2038,25 @@ internalMessage := cell.BeginCell().
 
 :::info
 Note that above, the bits have been specified and that the stateInit and internalMessageBody have been saved as references. Since the links are stored separately, we could write 4 (0b100) + 2 (0b10) + 1 (0b1) -> (4 + 2 + 1, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1) which means (0b111, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1) and then save two references.
-:::
+=======
+Note that the bits have been specified above and that the stateInit and internalMessageBody have been saved as references.
+
+> > > > > > > 018b2129 (Update wallet.md)
+> > > > > > > :::
+
+Since the links are stored separately, we could write:
+
+```tlb
+4 (0b100) + 2 (0b10) + 1 (0b1) -> (4 + 2 + 1, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1)
+```
+
+Tha also means:
+
+```tlb
+(0b111, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1)
+```
+
+Then, save two references.
 
 Next, we’ll prepare a message for our wallet and send it:
 
@@ -2603,6 +2641,16 @@ queryHandler.getNext();
 <<<<<<< HEAD
 
 ## 🔥 High-Load Wallet V2 (Outdated)
+
+=======
+
+## 🔥 High-load wallet v2
+
+::: warning
+High-load wallet v2 is outdated. Do not use this for new projects.
+:::
+
+> > > > > > > 018b2129 (Update wallet.md)
 
 In some situations, sending a large number of messages per transaction may be necessary. As previously mentioned, ordinary wallets support sending up to 4 messages at a time by storing [a maximum of 4 references](/v3/documentation/data-formats/tlb/cell-boc#cell) in a single cell. High-load wallets only allow 255 messages to be sent at once. This restriction exists because the maximum number of outgoing messages (actions) in the blockchain’s config settings is set to 255.
 
@@ -3239,11 +3287,16 @@ TON documentation:
 
 - [External messages](/v3/documentation/smart-contracts/message-management/external-messages)
 
-  - [Types of Wallet Contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4)
+<<<<<<< HEAD
+
+- # [Types of Wallet Contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4)
+- [Types of wallet contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4)
+
+  > > > > > > > 018b2129 (Update wallet.md)
 
   - [TL-B](/v3/documentation/data-formats/tlb/tl-b-language)
 
-- [Blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)
+  - [Blockchain of Blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)
 
 External references:
 
