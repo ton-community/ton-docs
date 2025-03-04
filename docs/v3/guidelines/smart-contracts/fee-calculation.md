@@ -194,7 +194,7 @@ This mechanism deduplicates data: if multiple equivalent sub-cells are reference
 [Read more about deduplication](/v3/documentation/data-formats/tlb/library-cells).
 :::
 
-However, if the outgoing message depends significantly on the incoming structure, you may not be able to predict the fee fully. In such cases, try using the `GETORIGINALFWDFEE` opcode with the following parameters:
+However, if the outgoing message depends significantly on the incoming structure, you may not be able to fully predict the fee. In such cases, try using the `GETORIGINALFWDFEE` opcode with the following parameters:
 
 | Param name | Description                                             |
 | :--------- | :------------------------------------------------------ |
