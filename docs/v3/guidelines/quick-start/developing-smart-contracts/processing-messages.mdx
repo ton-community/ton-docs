@@ -1,17 +1,17 @@
 # Processing Messages
 
-Now when we learned basic examples of modifying smart-contract code and using development tools we are ready move on to the main functionality of smart-contracts - sending and recieving messages. 
+Now when we have learned basic examples of modifying smart-contract code and using development tools, we are ready to move on to the main functionality of smart contracts - sending and receiving messages. 
 
-First thing to mention is that in TON messages are not just currency exchange actions carrying TON coins. They are also data exchange mechanism that provides opportunity to create your own "network" of smart contracts interacting with each other and smart contracts of other network participants that are not under your direct controll.
+First thing to mention is that in TON, messages are not just currency exchange actions carrying TON coins. They are also a data exchange mechanism that provides an opportunity to create your own "network" of smart contracts interacting with each other and smart contracts of other network participants that are not under your direct control.
 
 ## Message Types
 
-We already briefly discussed message types in header section, but lets denote them and briefly discuss them again again:
+We already briefly discussed message types in the header section, but let's denote them and briefly discuss them again:
 
 1. **Internal Messages**
 2. **External Messages**
 
-External messages are your main way of toggling smart-contract logic from outside the blockhain, usually there is no need of realization of them in smart-contract because in most cases you don't want external entry point to be accessable to anyone. This includes several standart approuches of verifying external message sender wich we will discuss here.
+External messages are your main way of toggling smart-contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because in most cases you don't want external entry points to be accessible to anyone. This includes several standard approaches of verifying external message sender which we will discuss here.
 
 
 :::info

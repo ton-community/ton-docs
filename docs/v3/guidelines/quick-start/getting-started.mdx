@@ -21,20 +21,20 @@ Welcome to TON quick start guide! This guide will give you a starting point for 
 
 ## Concept of smart-contract
 
-You can think of smart-contracts in TON as a program running on blockhain following well known behaivour concept of actor(node/state machine). In contrast to some other blockhains were you can call in synchronius way other contracts code, smart-contract in TON is thing in itself, and communicate with other smart-contracts on equal basis sending asynchronious messages between each other. Each processing of those queries by reciever smart-contract is considered transaction resulting in following actions:
+You can think of smart-contracts in TON as a program running on blockchain following well known behavior concept of actor(node/state machine). In contrast to some other blockchains where you can call in synchronous way other contracts code, smart-contract in TON is a thing in itself, and communicates with other smart-contracts on equal basis sending asynchronous messages between each other. Each processing of those queries by receiver smart-contract is considered a transaction resulting in following actions:
  - Sending further messages.
  - Changing internal state or even code of smart-contract itself
  - changing it's balance.
 
-Availible interaces of smart-contract are:
- - Recieving internal messages from other smart-contract initiating transaction.
- - Recieving external messages from outside the blockhain initiating transaction.
- - Recieving get method request from outside the blockchain.
+Available interfaces of smart-contract are:
+ - Receiving internal messages from other smart-contract initiating transaction.
+ - Receiving external messages from outside the blockchain initiating transaction.
+ - Receiving get method request from outside the blockchain.
 
-In contrast to internal and external messages get methods are not what you can consider as transaction, those are special functions of smart contract that cannot change contract iternal state or proceed any other action except querying specific data from them. Contrary to what might seem intuitive, invoking get methods from other contracts is not possible on-chain, primarily due to the nature of blockchain technology and the need for consensus.
+In contrast to internal and external messages, get methods are not what you can consider as a transaction. Those are special functions of smart contract that cannot change contract internal state or proceed any other action except querying specific data from them. Contrary to what might seem intuitive, invoking get methods from other contracts is not possible on-chain, primarily due to the nature of blockchain technology and the need for consensus.
 
 :::tip
-Hereinafter we will use terms `actor`, `smart-contract` and `account` interchangebly.
+Hereinafter we will use terms `actor`, `smart-contract` and `account` interchangeably.
 :::
 
 ## Interacting with TON ecosystem
@@ -51,7 +51,7 @@ At this moment, you should have already created your first wallet and backed up 
 
 In the TON, the `Mainnet` and `Testnet` have distinct roles. The `Mainnet` is the primary network where actual transactions take place, carrying real economic value as they involve real cryptocurrency and staked validators executing our transactions and guarantee a very high level of security. On the other hand, the `Testnet` is a testing version of the TON `blockchain` designed for development and testing purposes. Transactions on the `testnet` do not have real economic value, making it a risk-free zone for developers to test without financial implications. It's mainly used for development, testing `smart contracts`, and trying new features.
 
-Since TON basic transactions are very cheap, about 1 cent per transaction, investing just $5 will be enough for hundreds of them. If you decide to work on `Mainnet`, you will have a significantly smoother experience. You can get TON coins by simply pressing the buy button in the user interface, or ask someone to send them to your address, which you can copy from the wallet app somewhere near your balance. Don't worry, sharing your public address is totally safe, unless you dont want it to be associated with you.
+Since TON basic transactions are very cheap, about 1 cent per transaction, investing just $5 will be enough for hundreds of them. If you decide to work on `Mainnet`, you will have a significantly smoother experience. You can get TON coins by simply pressing the buy button in the user interface, or ask someone to send them to your address, which you can copy from the wallet app somewhere near your balance. Don't worry, sharing your public address is totally safe, unless you don't want it to be associated with you.
 
 If you decide to use the `Testnet` version instead, you can do this in almost the same way in any wallet by entering the settings menu and tapping a few times on the wallet icon or name at the bottom. This will open the developer menu where you can switch to the `Testnet` version of the wallet. Here is an example for MyTonWallet (version 3.3.4):
 
@@ -103,7 +103,7 @@ There is also a tab where we can execute `get-methods` provided by the `smart-co
 
 The second thing to note is the contract type, `wallet_v5r1` in our case. Because some widely-used `smart-contracts` have standard implementations, most explorers are able to determine their type by analyzing the `smart-contract` code segment.
 
-Its important to understand that wallets are not special entities in the TON `blockchain`, which implements an actors model. A wallet is simply a `smart-contract` that doesn't have any specific rights or abilities compared to any other contract, such as one developed and deployed by you.
+It's important to understand that wallets are not special entities in the TON `blockchain`, which implements an actors model. A wallet is simply a `smart-contract` that doesn't have any specific rights or abilities compared to any other contract, such as one developed and deployed by you.
 
 Maybe you will be the one who creates and proposes the next version of wallet that will be accepted by the TON community, just as the TonKeeper Team did with the latest wallet version - `v5r1`!
 
