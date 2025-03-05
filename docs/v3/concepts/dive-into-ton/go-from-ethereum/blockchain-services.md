@@ -6,11 +6,7 @@ In Ethereum, users use the **Ethereum Name Service (ENS)**, a decentralized nami
 
 The TON blockchain includes an embedded domain name system called the TON DNS. This service allows users to register human-readable domain names for smart contracts, websites, or other online content. Such a device facilitates interaction with **decentralized applications (DApps)** and other resources on the TON blockchain. The DNS system in TON functions similarly to traditional Internet DNS systems, but its decentralized nature eliminates the need for a centralized authority to control and manage domain names, thereby reducing the risks of censorship, fraud, and domain name hijacking.
 
-## WWW
-
-TON WWW is a part of the TON blockchain that allows you to create and interact with decentralized websites directly through the blockchain. Unlike traditional websites, websites on TON are accessible via special URLs ending in `.ton` and support unique hyperlinks of the `ton://` format that allow transactions and other operations directly from the URL.
-
-One of the key features of TON WWW is the ability to bind crypto wallets to domain names directly. This ability allows users to send cryptocurrency to addresses like `alice.place.ton` without additional details. This feature simplifies the process of donations and payments, making it more intuitive and convenient.
+One of the key feature of TON DNS is the ability to bind crypto wallets to domain names directly. This ability allows users to send cryptocurrency to addresses like `alice.place.ton` without additional details. This feature simplifies the process of donations and payments, making it more intuitive and convenient.
 
 ## Proxy
 
