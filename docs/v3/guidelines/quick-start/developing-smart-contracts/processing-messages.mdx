@@ -1,0 +1,370 @@
+# Processing Messages
+
+Now when we learned basic examples of modifying smart-contract code and using development tools we are ready move on to the main functionality of smart-contracts - sending and recieving messages. 
+
+First thing to mention is that in TON messages are not just currency exchange actions carrying TON coins. They are also data exchange mechanism that provides opportunity to create your own "network" of smart contracts interacting with each other and smart contracts of other network participants that are not under your direct controll.
+
+## Message Types
+
+We already briefly discussed message types in header section, but lets denote them and briefly discuss them again again:
+
+1. **Internal Messages**
+2. **External Messages**
+
+External messages are your main way of toggling smart-contract logic from outside the blockhain, usually there is no need of realization of them in smart-contract because in most cases you don't want external entry point to be accessable to anyone. This includes several standart approuches of verifying external message sender wich we will discuss here.
+
+
+:::info
+Messages in TON are not just for data exchange—they can also carry TON coins. This allows for powerful composability between different contracts. For example, our Counter contract could receive messages with coins attached to pay for operations.
+:::
+
+## Receiving Messages in Your Contract
+
+In FunC, you'll handle incoming messages using special entry point functions. There are two main entry points you'll use:
+
+- `recv_internal()` - For messages from other contracts
+- `recv_external()` - For messages from outside the blockchain
+
+Let's look at how to implement these in your contract.
+
+### Working with Internal Messages
+
+When another contract sends your contract a message, the `recv_internal()` function gets called automatically. Here's how it looks:
+
+```func
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    ;; Your message handling code goes here
+}
+```
+
+The parameters give you everything you need to know about the incoming message:
+
+- `my_balance` - Your contract's current balance
+- `msg_value` - How many TON coins were attached to the message
+- `in_msg_full` - The complete message in cell format (includes sender address and other service info)
+- `in_msg_body` - Just the message body data (what the sender wanted to tell you)
+
+If we look at our Counter example project, you'll see we already have a `recv_internal()` function:
+
+```func
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    if (in_msg_body.slice_empty?()) { 
+        return (); ;; ignore empty messages
+    }
+    
+    int op = in_msg_body~load_uint(32);
+    
+    if (op == op::increment) {
+        increment();
+        return ();
+    }
+    
+    if (op == op::deposit) {
+        ;; Just accept the money
+        return ();
+    }
+    
+    throw(0xffff);
+}
+```
+
+:::tip
+Make your `recv_internal()` function robust by always checking if the message body is empty before trying to read from it, as shown in the Counter example above!
+:::
+
+### Handling External Messages
+
+External messages come from outside the blockchain and are processed by the `recv_external()` function:
+
+```func
+() recv_external(slice in_msg_body) impure {
+    ;; Process the external message
+    ;; Don't forget to call accept_message()!
+}
+```
+:::info
+Unlike internal messages, external messages won't be processed unless you explicitly call `accept_message()` in your code. This is a security feature that prevents your contract from executing unwanted external code.
+:::
+
+In our Counter example from earlier lessons, we don't have a `recv_external()` function because our contract only needs to handle internal messages. We'll see how to implement external message handling later in this guide.
+
+## Processing Message Data
+
+Now that we know how to receive messages, let's learn how to process them. Most TON contracts follow a similar pattern:
+
+1. Check if the message has any data
+2. Extract the operation code (op code) to determine what to do
+3. Parse any additional parameters 
+4. Validate the sender (if necessary)
+5. Perform the requested operation
+6. Update contract state
+7. Optionally send a response message
+
+Let's see how to implement these steps.
+
+### Reading Operation Codes
+
+A common pattern in TON contracts is to include a 32-bit operation code in message bodies. This tells your contract what action to perform:
+
+```func
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    ;; Step 1: Check if the message is empty
+    if (in_msg_body.slice_empty?()) { 
+        return (); ;; Nothing to do with empty messages
+    }
+    
+    ;; Step 2: Extract the operation code
+    int op = in_msg_body~load_uint(32);
+    
+    ;; Step 3-7: Handle the requested operation
+    if (op == op::increment) {
+        increment();
+        return ();
+    } else if (op == op::deposit) {
+        ;; Just accept the money
+        return ();
+    } else {
+        ;; Unknown operation
+        throw(0xffff);
+    }
+}
+```
+
+In our Counter example, we define the operation codes as constants:
+
+```func
+const int op::increment = 1;
+const int op::deposit = 2;
+```
+
+:::tip
+It's a good practice to define your operation codes as constants at the top of your contract for better readability, as shown in the Counter example.
+:::
+
+### Verifying the Message Sender
+
+For many operations, you'll want to check who sent the message before taking any action:
+
+```func
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    ;; Parse the sender address from in_msg_full
+    slice cs = in_msg_full.begin_parse();
+    int flags = cs~load_uint(4);
+    slice sender_address = cs~load_msg_addr();
+    
+    ;; Check if message was sent by the owner
+    if (~ equal_slices(sender_address, owner_address)) {
+        throw(401); ;; Unauthorized - only owner can call this method
+    }
+    
+    ;; Continue with authorized operations
+    ;; ...
+}
+```
+
+The Counter example doesn't perform sender validation because it's a simple public contract that anyone can interact with. However, if we were to extend it to include admin-only operations (like resetting the counter), we would need to check the sender address.
+
+:::info
+While our Counter contract doesn't need owner validation, many contracts (like wallets or governance contracts) absolutely require it. Always think carefully about who should be allowed to trigger which operations.
+:::
+## Sending Messages
+
+One of the most powerful features of TON contracts is their ability to send messages to other contracts. Let's explore how to do this in FunC.
+
+### Creating and Sending a Basic Message
+
+To send a message, you'll need to:
+
+1. Create a message cell using `begin_cell()`
+2. Fill it with the necessary data
+3. Send it using `send_raw_message()`
+
+Here's a simple example that sends some TON coins to another address:
+
+```func
+() send_simple_message(slice recipient_address, int amount) impure {
+    ;; Step 1-2: Create and fill the message cell
+    var msg = begin_cell()
+        .store_uint(0x10, 6)          ;; message info (non-bounced)
+        .store_slice(recipient_address) ;; destination address
+        .store_coins(amount)          ;; attach TON coins
+        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message flags
+        .store_uint(0, 32)            ;; empty operation code
+    .end_cell();
+    
+    ;; Step 3: Send the message
+    send_raw_message(msg, 64); ;; mode 64: pay fees separately
+}
+```
+
+Let's extend our Counter contract from the Example project to include a notification feature that sends a message to the owner whenever the counter reaches a multiple of 10:
+
+```func
+() notify_owner(int counter_value) impure {
+    ;; Only send notification for multiples of 10
+    if (counter_value % 10 != 0) {
+        return ();
+    }
+    
+    ;; Create notification message
+    var msg = begin_cell()
+        .store_uint(0x10, 6)          ;; message info (non-bounced)
+        .store_slice(owner_address)   ;; destination address
+        .store_coins(50000000)        ;; attach 0.05 TON for notification
+        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message flags
+        .store_uint(0, 32)            ;; empty operation code
+        .store_uint(counter_value, 32) ;; send the current counter value
+        .store_slice("Counter milestone reached!") ;; notification message
+    .end_cell();
+    
+    ;; Send the notification
+    send_raw_message(msg, 1); ;; mode 1: pay fees from attached amount
+}
+
+### Understanding Message Send Modes
+
+When sending messages with `send_raw_message()`, the second parameter specifies the "mode" which controls how fees are paid and how remaining value is handled:
+
+```func
+send_raw_message(msg, mode);
+```
+
+Here are the most common send modes:
+
+- `0` - Carry all remaining value from the incoming message, with the current account paying transfer fees
+- `1` - Carry all the remaining value of the incoming message, but with the transfer fees deducted from the attached amount
+- `2` - Carry specified value from the incoming message, with the current account paying transfer fees
+- `64` - Carry specified value from the incoming message, with the transfer fees deducted from the attached amount
+- `128` - Carry all the remaining balance, with the receiver paying transfer fees
+
+You can also combine these modes using bitwise OR. For example, `mode 65` (64 + 1) would pay fees from the attached amount and carry all remaining value.
+
+:::tip
+In most applications, modes 1 and 64 are the most commonly used. Use mode 1 when you want to forward all remaining value, and mode 64 when you want to send a specific amount.
+:::
+
+Let's see how we would implement the `notify_owner` function with different send modes:
+
+```func
+;; Example using mode 64 (pay fees from attached value)
+() notify_owner_mode64(int counter_value) impure {
+    var msg = begin_cell()
+        .store_uint(0x10, 6)
+        .store_slice(owner_address)
+        .store_coins(50000000)  ;; 0.05 TON
+        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+        .store_uint(0, 32)
+        .store_slice("Notification with mode 64")
+    .end_cell();
+    
+    send_raw_message(msg, 64);
+}
+
+;; Example using mode 1 (forward remaining value)
+() notify_owner_mode1(int counter_value, int value_to_forward) impure {
+    var msg = begin_cell()
+        .store_uint(0x10, 6)
+        .store_slice(owner_address)
+        .store_coins(value_to_forward)
+        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+        .store_uint(0, 32)
+        .store_slice("Notification with mode 1")
+    .end_cell();
+    
+    send_raw_message(msg, 1);
+}
+```
+
+## Blueprint SDK Message Wrapper Examples
+
+The Blueprint SDK simplifies message handling with wrapper methods. Here are some examples:
+
+### Internal Message Wrapper
+
+```typescript
+// Wrapper method for sending tokens
+export function sendTokens(
+  provider: ContractProvider,
+  via: Sender,
+  opts: {
+    to: Address;
+    amount: bigint;
+    message?: string;
+  }
+) {
+  return provider.internal(via, {
+    value: opts.amount,
+    sendMode: SendMode.PAY_GAS_SEPARATELY,
+    body: opts.message
+      ? beginCell().storeUint(0, 32).storeStringTail(opts.message).endCell()
+      : undefined,
+  });
+}
+```
+
+### External Message Wrapper
+
+```typescript
+// Wrapper method for external message to withdraw funds
+export function withdrawFunds(
+  provider: ContractProvider,
+  via: Sender,
+  opts: {
+    amount: bigint;
+    to: Address;
+  }
+) {
+  return provider.external(via, {
+    body: beginCell()
+      .storeUint(3, 32) // op code for withdraw
+      .storeCoins(opts.amount)
+      .storeAddress(opts.to)
+      .endCell(),
+  });
+}
+```
+
+### Message Listening Wrapper
+
+```typescript
+// Listening for specific events from the contract
+export function onTokenTransfer(
+  provider: ContractProvider,
+  handler: (from: Address, amount: bigint) => void
+) {
+  return provider.on('message:in', (msg) => {
+    if (msg.body?.beginParse().loadUint(32) === 0x7362d09c) { // Transfer event op
+      const from = msg.body.beginParse().skip(32).loadAddress();
+      const amount = msg.body.beginParse().skip(32 + 267).loadCoins();
+      handler(from, amount);
+    }
+  });
+}
+```
+
+## Best Practices for Message Processing
+
+1. **Validate Input Data**: Always check that incoming message data meets your expectations.
+2. **Handle Errors Gracefully**: Use try-catch patterns or explicit error handling.
+3. **Optimize Gas Usage**: Be mindful of operations that consume more gas.
+4. **Implement Replay Protection**: For external messages, prevent replay attacks using sequence numbers.
+5. **Document Operation Codes**: Keep a clear registry of all operation codes used in your contract.
+6. **Limit Message Value**: Set appropriate limits on message values to prevent accidental fund loss.
+
+By following these guidelines and understanding the message processing flow in TON smart contracts, you can build robust and secure applications on the TON blockchain.
+
+## Next Steps
+
+Now that you understand how to process messages in TON smart contracts, here are some suggestions for next steps:
+
+1. **Practice with Examples**: Try modifying the Counter contract to send different types of messages or respond to more complex operations.
+
+2. **Explore Message Bouncing**: Learn about how TON handles message bouncing when delivery fails. (TODO: add ref to bouncing messages)
+
+3. **Implement Multi-Contract Systems**: Build a system where several contracts communicate with each other via messages.
+
+4. **Learn About Gas Optimization**: Understand how message processing affects gas consumption and how to optimize your contracts. (TODO: add ref to gas optimization guide)
+
+5. **Study Advanced Message Patterns**: Explore more complex message patterns like notification services, multi-signature operations, or message-based governance.
+
+Continue to the next section to learn about handling events in TON smart contracts. (TODO: add ref to events section)

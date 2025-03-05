@@ -39,6 +39,16 @@ module.exports = [
   },
   'v3/guidelines/quick-start/getting-started',
   {
+    type: 'category',
+    label: 'Developing smart-contracts',
+    items: [
+      'v3/guidelines/quick-start/developing-smart-contracts/setup-environment',
+      'v3/guidelines/quick-start/developing-smart-contracts/program-structure',
+      'v3/guidelines/quick-start/developing-smart-contracts/storage-and-get-methods',
+      'v3/guidelines/quick-start/developing-smart-contracts/processing-messages',
+    ],
+  },
+  {
     'type': 'html',
     'value': '<hr/>',
   },

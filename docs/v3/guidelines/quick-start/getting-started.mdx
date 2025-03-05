@@ -19,6 +19,24 @@ Welcome to TON quick start guide! This guide will give you a starting point for 
 - Core concepts of TON blockchain and further learning curve
 - Basic project templates ready for implementation of your project logic.
 
+## Concept of smart-contract
+
+You can think of smart-contracts in TON as a program running on blockhain following well known behaivour concept of actor(node/state machine). In contrast to some other blockhains were you can call in synchronius way other contracts code, smart-contract in TON is thing in itself, and communicate with other smart-contracts on equal basis sending asynchronious messages between each other. Each processing of those queries by reciever smart-contract is considered transaction resulting in following actions:
+ - Sending further messages.
+ - Changing internal state or even code of smart-contract itself
+ - changing it's balance.
+
+Availible interaces of smart-contract are:
+ - Recieving internal messages from other smart-contract initiating transaction.
+ - Recieving external messages from outside the blockhain initiating transaction.
+ - Recieving get method request from outside the blockchain.
+
+In contrast to internal and external messages get methods are not what you can consider as transaction, those are special functions of smart contract that cannot change contract iternal state or proceed any other action except querying specific data from them. Contrary to what might seem intuitive, invoking get methods from other contracts is not possible on-chain, primarily due to the nature of blockchain technology and the need for consensus.
+
+:::tip
+Hereinafter we will use terms `actor`, `smart-contract` and `account` interchangebly.
+:::
+
 ## Interacting with TON ecosystem
 
 Before we step on our way of becoming a TON developer, we should become an advanced user of TON! Let's create your own wallet, send a few transactions, and see how our actions are reflected on the `blockchain` using explorers.

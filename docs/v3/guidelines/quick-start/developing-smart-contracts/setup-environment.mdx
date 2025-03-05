@@ -1,0 +1,58 @@
+# Setup development environment
+
+This guide covers basic steps of creating your first TON smart-contract using availible languages: `FunC`, `Tact`, `Tolk`.
+
+But before we proceed to actual coding lets install and setup all required tools!
+
+## Prerequsites
+
+ - Basic programming skills.
+ - Familiarity with Command-line inteface.
+ - You preferred code-editor/IDE.
+ - Around __30 minutes__ of your time.
+
+## Setup development environment
+
+For this guide we will rely on [Blueprint SDK](https://github.com/ton-org/blueprint) and [Node.js](https://nodejs.org/en)/Typescript stack for writing wrappers, tests and deployments scripts for your smart-contract, because its provides easiest, ready to use environment for smart-contracts developing. Using native instruments and language-dependent SDK's for smart-contract development covered in more advanced sections here: TODO: add references
+
+### Step 1: Install Node.js
+
+First, visit [installation page](https://nodejs.org/en/download) and execute download commands in PowerShell or Bash corresponding to your operating system Windows/Linux. 
+
+Check node version by executing following command:
+
+```bash
+node -v
+npm -v
+```
+Node version should be at least `v18`. 
+
+### Step 2: Setup Blueprint SDK
+
+Change directory for parent folder of you future project and run folowing command:
+
+```bash
+npm create ton@latest
+```
+
+TODO: add short language description for choosing prefered one.
+
+This will run interactive script for creating project template, you can enter anything you want, but if you want to have same paths as this guide choose folowing:
+1. Project name: Example.
+2. First created contract name: HelloWorld.
+3. Choose the project template: A simple counter contract (language name).
+
+And finally, change you current directory to generated project template folder, and install all required dependencies:
+
+```bash
+cd ./Example
+npm install
+```
+
+### Step 3(optional): IDE and editors support
+
+Ton community developed plugins providing syntax support for several IDE's and code editors. You can find them here: [Plugin List](https://docs.ton.org/v3/documentation/smart-contracts/getting-started/ide-plugins).
+
+Also consider installing plugins providing support for JavaScript/TypeScrypt tools for yor preferred IDE or code editor and, specificly, `Jest` for debugging smart-contract tests.
+
+
