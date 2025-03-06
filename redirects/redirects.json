@@ -826,6 +826,10 @@
     {
       "from": "/v3/documentation/infra/nodes/mytonctrl/mytonctrl-alerting",
       "to": "/v3/guidelines/nodes/maintenance-guidelines/mytonctrl-private-alerting"
+    },
+    {
+      "from": "/v3/concepts/qa-outsource/auditors",
+      "to": "https://ton.org/talents?filterBy=Auditors"
     }
 
 ]

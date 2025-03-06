@@ -37,5 +37,5 @@ module.exports = [
   },
   'v3/concepts/educational-resources',
   'v3/concepts/glossary',
-  'v3/concepts/qa-outsource/auditors'
+  //'v3/concepts/qa-outsource/auditors'
 ];
