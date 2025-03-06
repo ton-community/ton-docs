@@ -45,6 +45,7 @@ Currently, FunC has no support for defining custom types. Read more in [Statemen
 
 ## Declaring and using variables
 
+#### Solidity
 Solidity is a statically typed language, which means that the type of each variable must be specified when it is declared.
 
 ```js
@@ -53,6 +54,7 @@ bool isActive = true; // Logical variable
 string name = "Alice"; // String variable
 ```
 
+#### FunC
 FunC is a more abstract and function-oriented language, it supports dynamic typing and functional programming style.
 
 ```func
@@ -60,12 +62,11 @@ FunC is a more abstract and function-oriented language, it supports dynamic typi
 var z = x + y; // Dynamic variable declaration 
 ```
 
-### See also
-
-- [Statements](/v3/documentation/smart-contracts/func/docs/statements/)
+Read more in [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
 
 ## Loops
 
+#### Solidity
 Solidity supports `for`, `while`, and `do { ... } while` loops.
 
 If you want to do something 10 times, you can do it this way:
@@ -80,7 +81,8 @@ for (uint i; i < 10; i++) {
 // x = 1024
 ```
 
-FunC in turn supports `repeat`, `while`, and `do { ... } until` loops. The for loop is not supported. If you want to execute the same code as in the example above on Func, you can use `repeat`
+#### FunC
+FunC in turn supports `repeat`, `while`, and `do { ... } until` loops. The `for` loop is not supported. If you want to execute the same code as in the example above on Func, you can use `repeat`
 
 ```func
 int x = 1;
@@ -89,12 +91,11 @@ repeat(10) {
 }
 ;; x = 1024
 ```
-
-### See also
-
-- [Statements](/v3/documentation/smart-contracts/func/docs/statements/)
+Read more on [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
 
 ## Functions
+
+#### Solidity
 
 Solidity approaches function declarations with a blend of clarity and control. In this programming language, each function is initiated with the keyword "function," followed by the name of the function and its parameters. The body of the function is enclosed within curly braces, clearly defining the operational scope. Additionally, return values are indicated using the "returns" keyword. What sets Solidity apart is its categorization of function visibility—functions can be designated as `public`, `private`, `internal`, or `external`, dictating the conditions under which they can be accessed and called by other parts of the contract or by external entities. Below is an example in which we set the global variable `num` in the Solidity language: 
 
@@ -105,6 +106,7 @@ function set(uint256 _num) public returns (bool) {
 }
 ```
 
+#### FunC
 Transitioning to FunC, FunC program is essentially a list of function declarations/definitions and global variable declarations. A FunC function declaration typically starts with an optional declarator, followed by the return type and the function name. Parameters are listed next, and the declaration ends with a selection of specifiers—such as `impure`, `inline/inline_ref`, and `method_id`. These specifiers adjust the function's visibility, its ability to modify contract storage, and its inlining behavior. Below is an example in which we stores storage variable as a cell into persistent storage in the Func language: 
 
 ```func
@@ -115,34 +117,33 @@ Transitioning to FunC, FunC program is essentially a list of function declaratio
           );
 }
 ```
-
-### See also 
-
-- [Functions](/v3/documentation/smart-contracts/func/docs/functions/)
+Read more on [Functions](/v3/documentation/smart-contracts/func/docs/functions/) page.
 
 ## Flow control structures
 
+#### Solidity
 Most of the control structures known from curly-braces languages are available in Solidity, including: `if`, `else`, `while`, `do`, `for`, `break`, `continue`, `return`, with the usual semantics known from C or JavaScript.
 
+#### FunC
 FunC supports classic `if-else` statements, as well as `ifnot`, `repeat`, `while` and `do/until` loops.  Also since v0.4.0 `try-catch` statements are supported.
 
-### See also
-
-- [Statements](/v3/documentation/smart-contracts/func/docs/statements/)
+Read more in [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
 
 ## Dictionaries
 
 Dictionary (hashmap/mapping) data structure is very important for Solidity and FunC contract development because it allows developers to efficiently store and retrieve data in smart contracts, specifically data related to a specific key, such as a user’s balance or ownership of an asset.
 
+#### Solidity
+
 Mapping is a hash table in Solidity that stores data as key-value pairs, where the key can be any of the built-in data types, excluding reference types, and the value of the data type can be any type. Mappings are most typically used in Solidity and the Ethereum blockchain to connect a unique Ethereum address to a corresponding value type. In any other programming language, a mapping is equivalent to a dictionary.
 
 In Solidity, mappings don't have a length, nor do they have the concept of setting a key or a value. Mappings are only applicable to state variables that serve as store reference types. When mappings are initialised, they include every possible key, and are mapped to values whose byte-representations are all zeros.
 
+#### FunC 
+
 An analogy of mappings in FunC are dictionaries, or TON hashmaps. In the context of TON, a hashmap is a data structure represented by a tree of cells. Hashmap maps keys to values ​​of arbitrary type so that quick lookup and modification are possible. The abstract representation of a hashmap in TVM is a Patricia tree, or a compact binary trie. Working with potentially large cell trees can create several problems. Each update operation builds an appreciable number of cells (each cell built costs 500 gas), which means that these operations can run out of resource if used carelessly. To avoid exceeding the gas limit, limit the number of dictionary updates in a single transaction. Also, a binary tree for `N` key-value pairs contains `N-1` forks, which means a total of at least `2N-1` cells. The storage of a smart contract is limited to `65536` unique cells, so the maximum number of entries in the dictionary is `32768`, or slightly more if there are repeating cells.
 
-### See also 
-
-- [Dictionaries in TON](/v3/documentation/smart-contracts/func/docs/dictionaries/)
+Read more about [Dictionaries in TON](/v3/documentation/smart-contracts/func/docs/dictionaries/).
 
 ### Smart contract communication
 
@@ -225,6 +226,7 @@ Read more in [Internal Messages](/v3/documentation/smart-contracts/overview/) pa
 
 ## See also 
 
-[TON documentation](/v3/documentation/ton-documentation/)
+- [TON documentation](/v3/documentation/ton-documentation/)
+- [FunC overview](/v3/documentation/smart-contracts/func/overview/)
 
 
