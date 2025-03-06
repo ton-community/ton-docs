@@ -1,5 +1,7 @@
 # Solidity vs FunC
 
+## Introduction 
+
 Smart contract development involves usage of predefined languages such as Solidity for Ethereum, and FunC for TON.
 Solidity is an object-oriented, high-level, strictly-typed language influenced by C++, Python, and JavaScript, and is specifically designed for writing smart contracts that execute on Ethereum blockchain platforms.
 
@@ -7,39 +9,39 @@ FunC is also a high-level language, used to program smart contracts on TON Block
 
 In the sections below will be analyzed briefly the following aspects of these languages, i.e. data types, storage, functions, flow control structures and dictionaries (hashmaps).
 
-## Storage layout
+## Differences of Solidity and FunC
+### Storage layout
 
+#### Solidity
 Solidity provides a flat storage model, which means that all state variables are stored in a single, continuous block of memory called the storage. The storage is a key-value store where each key is a 256-bit (32-byte) integer that represents the storage slot number, and each value is the 256-bit word stored at that slot. The slots are numbered sequentially starting from zero, and each slot can store a single word. Solidity allows the programmer to specify the storage layout by using the storage keyword to define state variables. The order in which the variables are defined determines their position in the storage.
 
+#### FunC
 Permanent storage data in TON Blockchain is stored as a cell. Cells play the role of memory in the stack-based TVM. A cell can be transformed into a slice, and then the data bits and references to other cells from the cell can be obtained by loading them from the slice. Data bits and references to other cells can be stored into a builder, and then the builder can be finalized into a new cell.
 
-## Data types
+### Data types
 
+#### Solidity
 Solidity includes the following basic data types:
 - Signed/Unsigned integers
 - Boolean
-- Addresses – used to store Ethereum wallet or smart contract addresses, typically around 20 bytes. An address type can be suffixed with the keyword “payable”, which restricts it to store only wallet addresses and use the transfer and send crypto functions.
-- Byte arrays – declared with the keyword “bytes”, is a fixed-size array used to store a predefined number of bytes up to 32, usually declared along with the keyword.
-- Literals – Immutable values such as addresses, rationals and integers, strings, unicode and hexadecimals, which can be stored in a variable.
+- Addresses — used to store Ethereum wallet or smart contract addresses, typically around 20 bytes. An address type can be suffixed with the keyword “payable”, which restricts it to store only wallet addresses and use the transfer and send crypto functions.
+- Byte arrays — declared with the keyword “bytes”, is a fixed-size array used to store a predefined number of bytes up to 32, usually declared along with the keyword.
+- Literals — Immutable values such as addresses, rationals and integers, strings, unicode and hexadecimals, which can be stored in a variable.
 - Enums
 - Arrays (fixed/dynamic)
 - Structs
 - Mappings
 
-
+#### FunC
 In case of FunC, the main data types are:
-- Integers
-- Cell – basic for TON opaque data structure, which contains up to 1,023 bits and up to 4 references to other cells
-- Slice and Builder – special objects to read from and write to cells,
-- Continuation – another flavour of cell that contains ready-to-execute TVM byte-code
-- Tuples – is an ordered collection of up to 255 components, having arbitrary value types, possibly distinct.
-- Tensors – is an ordered collection ready for mass assigning like: (int, int) a = (2, 4). A special case of tensor type is the unit type (). It represents that a function doesn’t return any value, or has no arguments.
+- **Integers**
+- **Cell** — basic for TON opaque data structure, which contains up to 1,023 bits and up to 4 references to other cells
+- **Slice** and **Builder** — special flavors of cell to read from and write to cells,
+- **Continuation** — another flavour of cell that contains ready-to-execute TVM byte-code
+- **Tuples** — is an ordered collection of up to 255 components, having arbitrary value types, possibly distinct.
+- **Tensors** — is an ordered collection ready for mass assigning like: `(int, int) a = (2, 4)`. A special case of tensor type is the unit type `()`. It represents that a function doesn’t return any value, or has no arguments.
 
-Currently, FunC has no support for defining custom types.
-
-### See also
-
-- [Statements](/v3/documentation/smart-contracts/func/docs/statements/)
+Currently, FunC has no support for defining custom types. Read more in [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
 
 ## Declaring and using variables
 
@@ -142,9 +144,11 @@ An analogy of mappings in FunC are dictionaries, or TON hashmaps. In the context
 
 - [Dictionaries in TON](/v3/documentation/smart-contracts/func/docs/dictionaries/)
 
-## Smart-contract communication
+### Smart contract communication
 
 Solidity and FunC provide different approaches to interacting with smart contracts. The main difference lies in the mechanisms of invocation and interaction between contracts.
+
+#### Solidity
 
 Solidity uses an object-oriented approach where contracts interact with each other through method calls. This is similar to method calls in traditional object-oriented programming languages.
 
@@ -161,6 +165,8 @@ contract Sender {
     }
 }
 ```
+
+#### FunC
 
 FunC, used in the TON blockchain ecosystem, operates on messages to invoke and interact between smart-contracts. Instead of calling methods directly, contracts send messages to each other, which can contain data and code for execution. 
 
@@ -215,8 +221,10 @@ Let's discuss in more detail what it looks like for our smart contract to send a
 
 This example presented how smart contracts can communicate with each other. 
 
-### See also 
+Read more in [Internal Messages](/v3/documentation/smart-contracts/overview/) page.
 
-- [Internal Messages](/v3/documentation/smart-contracts/message-management/internal-messages/)
-- [Sending Messages](/v3/documentation/smart-contracts/message-management/sending-messages/)
-- [Non-bouncable messages](/v3/documentation/smart-contracts/message-management/non-bounceable-messages/)
+## See also 
+
+[TON documentation](/v3/documentation/ton-documentation/)
+
+
