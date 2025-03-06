@@ -13,7 +13,7 @@ The sections below will analyze briefly the following aspects of these languages
 ### Storage layout
 
 #### Solidity
-Solidity uses a flat storage model, meaning it stores all state variables in a single, continuous block of memory called storage. The storage is a key-value store where each key is a 256-bit integer representing the storage slot number, and each value is the 256-bit word stored at that slot. Etherium numbers the slots sequentially, starting from zero, and each slot can store a single word. Solidity allows the programmer to specify the storage layout using the storage keyword to define state variables. The order in which you define the variables determines their position in the storage.
+Solidity uses a flat storage model, meaning it stores all state variables in a single, continuous block of memory called storage. The storage is a key-value store where each key is a 256-bit integer representing the storage slot number, and each value is the 256-bit word stored at that slot. Ethereum numbers the slots sequentially, starting from zero, and each slot can store a single word. Solidity allows the programmer to specify the storage layout using the storage keyword to define state variables. The order in which you define the variables determines their position in the storage.
 
 #### FunC
 Permanent storage data in TON Blockchain is stored as a cell. Cells play the role of memory in the stack-based TVM. To read data from a cell, you need to transform a cell into a slice and then obtain the data bits and references to other cells by loading them from the slice. To write data, you must store data bits and references to other cells in a builder and cast the builder into a new cell.
@@ -22,15 +22,15 @@ Permanent storage data in TON Blockchain is stored as a cell. Cells play the rol
 
 #### Solidity
 Solidity includes the following basic data types:
-- Signed/Unsigned integers
-- Boolean
-Addresses, typically around 20 bytes, are used to store Ethereum wallet or smart contract addresses. If the address type contains the suffix keyword `payable,` it restricts it from storing only wallet addresses and using the transfer and send crypto functions.
-- Byte arrays — declared with the keyword `bytes`, is a fixed-size array used to store a predefined number of bytes up to 32, usually declared along with the keyword.
-- Literals — Immutable values such as addresses, rationals and integers, strings, Unicode, and hexadecimal can be stored in a variable.
-- Enums
-- Arrays (fixed/dynamic)
-- Structs
-- Mappings
+- **Signed** and **Unsigned** integers
+- **Boolean**
+- **Addresses**, typically around 20 bytes, are used to store Ethereum wallet or smart contract addresses. If the address type contains the suffix keyword `payable,` it restricts it from storing only wallet addresses and using the transfer and send crypto functions.
+- **Byte arrays** — declared with the keyword **bytes**, is a fixed-size array used to store a predefined number of bytes up to 32, usually declared along with the keyword.
+- **Literals** — Immutable values such as addresses, rationals and integers, strings, Unicode, and hexadecimal can be stored in a variable.
+- **Enums**
+- **Arrays** fixed or dynamic)
+- **Structs**
+- **Mappings**
 
 #### FunC
 In the case of FunC, the main data types are:
@@ -41,9 +41,9 @@ In the case of FunC, the main data types are:
 - **Tuples** — is an ordered collection of up to 255 components, having arbitrary value types, possibly distinct.
 - **Tensors** — is an ordered collection ready for mass assigning like: `(int, int) a = (2, 4)`. A special case of tensor type is the unit type `()`. It represents that a function doesn’t return any value or has no arguments.
 
-Currently, FunC does not support defining custom types. Read more in [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
+Currently, FunC does not support defining custom types. Read more about types in [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
 
-## Declaring and using variables
+### Declaring and using variables
 
 #### Solidity
 Solidity is a statically typed language, meaning each variable's type must be specified when declared.
@@ -64,7 +64,7 @@ var z = x + y; // Dynamic variable declaration
 
 Read more in [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
 
-## Loops
+### Loops
 
 #### Solidity
 Solidity supports `for`, `while`, and `do { ... } while` loops.
@@ -93,7 +93,7 @@ repeat(10) {
 ```
 Read more on [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
 
-## Functions
+### Functions
 
 #### Solidity
 
@@ -109,7 +109,9 @@ function set(uint256 _num) public returns (bool) {
 ```
 
 #### FunC
-Transitioning to FunC, the FunC program is essentially a list of function declarations/definitions and global variable declarations. A FunC function declaration typically starts with an optional declarator, followed by the return type and the function name. Parameters are listed next, and the declaration ends with a selection of specifiers—such as `impure`, `inline/inline_ref`, and `method_id`. These specifiers adjust the function's visibility, ability to modify contract storage, and inlining behavior. Below is an example in which we store a storage variable as a cell in persistent storage in the Func language: 
+Transitioning to FunC, the FunC program is essentially a list of function declarations/definitions and global variable declarations. A FunC function declaration typically starts with an optional declarator, followed by the return type and the function name. 
+
+Parameters are listed next, and the declaration ends with a selection of specifiers—such as `impure`, `inline/inline_ref`, and `method_id`. These specifiers adjust the function's visibility, ability to modify contract storage, and inlining behavior. Below is an example in which we store a storage variable as a cell in persistent storage in the Func language: 
 
 ```func
 () save_data(int num) impure inline {
@@ -121,7 +123,7 @@ Transitioning to FunC, the FunC program is essentially a list of function declar
 ```
 Read more on [Functions](/v3/documentation/smart-contracts/func/docs/functions/) page.
 
-## Flow control structures
+### Flow control structures
 
 #### Solidity
 Most of the control structures known from curly-braces languages are available in Solidity, including: `if`, `else`, `while`, `do`, `for`, `break`, `continue`, `return`, with the usual semantics known from C or JavaScript.
@@ -131,7 +133,7 @@ FunC supports classic `if-else` statements, `ifnot`, `repeat`, `while`, and `do/
 
 Read more in [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
 
-## Dictionaries
+### Dictionaries
 
 Dictionary or hashmap data structure is essential for Solidity and FunC contract development because it allows developers to efficiently store and retrieve data in smart contracts, specifically data related to a specific key, such as a user’s balance or ownership of an asset.
 
@@ -143,7 +145,11 @@ In Solidity, mappings don't have a length or the concept of setting a key or a v
 
 #### FunC 
 
-An analogy of mappings in FunC is dictionaries or TON hashmaps. In the context of TON, a hashmap is a data structure represented by a tree of cells. Hashmap maps keys to values ​​of arbitrary type so that quick lookup and modification are possible. The abstract representation of a hashmap in TVM is a Patricia tree or a compact binary trie. Working with potentially large cell trees can create several problems. Each update operation builds an appreciable number of cells (each cell built costs 500 gas), meaning these operations can run out of resources if used carelessly. To avoid exceeding the gas limit, limit the number of dictionary updates in a single transaction. Also, a binary tree for `N` key-value pairs contains `N-1` forks, which means a total of at least `2N-1` cells. The storage of a smart contract is limited to `65536` unique cells, so the maximum number of entries in the dictionary is `32768`, or slightly more if there are repeating cells.
+An analogy of mappings in FunC is dictionaries or TON hashmaps. In the context of TON, a hashmap is a data structure represented by a tree of cells. Hashmap maps keys to values ​​of arbitrary type so that quick lookup and modification are possible. The abstract representation of a hashmap in TVM is a Patricia tree or a compact binary trie. 
+
+Working with potentially large cell trees can create several problems. Each update operation builds an appreciable number of cells (each cell built costs 500 gas), meaning these operations can run out of resources if used carelessly. To avoid exceeding the gas limit, limit the number of dictionary updates in a single transaction. 
+
+Also, a binary tree for `N` key-value pairs contains `N-1` forks, which means a total of at least `2N-1` cells. The storage of a smart contract is limited to `65536` unique cells, so the maximum number of entries in the dictionary is `32768`, or slightly more if there are repeating cells.
 
 Read more about [Dictionaries in TON](/v3/documentation/smart-contracts/func/docs/dictionaries/).
 

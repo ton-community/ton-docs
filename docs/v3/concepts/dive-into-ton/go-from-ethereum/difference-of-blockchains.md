@@ -1,4 +1,4 @@
-# The Differences of blockchains
+# The differences of blockchains
 
 ## Introduction
 
