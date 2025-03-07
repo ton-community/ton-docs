@@ -282,7 +282,7 @@ This algorithm safeguards against potential errors, such as when a message is no
 
 ### Wallet v3 and wallet v4 differences
 
-The only difference between Wallet v3 and Wallet v4 is that Wallet v4 makes use of `plugins` that can be installed and deleted. These plugins are special smart contracts which are able to request a specific number of TON at a specific time from a wallet smart contract.
+The key difference between Wallet v3 and Wallet v4 lies in Wallet v4’s support for `plugins`. Users can install or delete these plugins, which are specialized smart contracts capable of requesting a specific amount of TON from the wallet smart contract at a designated time.
 
 Wallet smart contracts automatically send the required amount of TON in response to plugin requests without requiring the owner’s involvement. This functionality mirrors a **subscription model**, which is the primary purpose of plugins. We won’t delve into these details further as they fall outside the scope of this tutorial.
 
@@ -333,7 +333,7 @@ At the time of writing, most wallet apps on TON default to wallet v4. However, s
 
 As mentioned earlier, everything in the TON Blockchain is a smart contract composed of cells. Standards are essential to ensure proper serialization and deserialization of data. For this purpose, `TL-B` was developed as a universal tool to describe various data types, structures, and sequences within cells.
 
-In this section, we’ll examine [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb). This file will be very useful during future development, as it describes how different cells should be assembled. In our case specifically, it details the intricacies of internal and external messages.
+In this section, we’ll explore [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb). This file will be invaluable for future development as it outlines how to assemble different types of cells. Specifically for our purposes, it provides detailed information about the structure and behavior of internal and external messages.
 
 :::info
 This guide provides basic information. For further details, please refer to our TL-B [documentation](/v3/documentation/data-formats/tlb/tl-b-language) to learn more about TL-B.
@@ -345,12 +345,10 @@ Initially, each message must first store `CommonMsgInfo` ([TL-B](https://github.
 
 By reading the `block.tlb` file, we can notice three types of CommonMsgInfo: `int_msg_info$0`, `ext_in_msg_info$10`, `ext_out_msg_info$11`. We will not go into specific details detailing the specificities of the `ext_out_msg_info` TL-B structure. That said, it is an external message type that a smart contract can send to use as an external log. For examples of this format, consider having a closer look at the [Elector](https://tonscan.org/address/Ef8zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM0vF) contract.
 
-When examining [TL-B](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L127-L128), you’ll notice that **only `CommonMsgInfo` is available when using the `ext_in_msg_info` type**. It is because fields like `src`, `created_lt`, `created_at`, and others are overwritten by validators during transaction processing. Among these, the `src` field is particularly important. Since the sender’s address is unknown when the message is sent, validators populate this field during verification. This ensures the `src` address is accurate and cannot be tampered with.
-
-However, the `CommonMsgInfo` structure only supports the `MsgAddress` specification, but the sender’s address is typically unknown and it is required to write the `addr_none` (two zero bits `00`). In this case, the `CommonMsgInfoRelaxed` structure is used, which supports the `addr_none` address. For the `ext_in_msg_info` (used for incoming external messages), the `CommonMsgInfo` structure is used because these message types don’t make use of a sender and always use the [MsgAddressExt](https://hub.com/ton/ton.blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L100) structure (the `addr_none$00` meaning two zero bits), which means there is no need to overwrite the data.
+However, the `CommonMsgInfo` structure only supports the `MsgAddress` specification. Since the sender’s address is typically unknown, it’s necessary to use `addr_none` (represented by two zero bits `00`). The `CommonMsgInfoRelaxed` structure is used in such cases, as it supports the `addr_none` address. For `ext_in_msg_info` (used for incoming external messages), the `CommonMsgInfo` structure is sufficient because these messages don’t require a sender and always use the [MsgAddressExt](https://hub.com/ton/ton.blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L100) structure (represented by `addr_none$00`, meaning two zero bits). This eliminates the need to overwrite the data.
 
 :::note
-The numbers after `$` symbol are the bits that are required to store at the beginning of a certain structure, for further identification of these structures during reading (deserialization).
+The numbers after the `$` symbol are the bits that are required to be stored at the beginning of a specific structure for further identification of these structures during reading (deserialization).
 :::
 
 ### Internal message creation
@@ -366,7 +364,7 @@ var msg = begin_cell()
  ;; store something as a body
 ```
 
-Let’s first consider `0x18` and `0x10` (x - hexadecimal), which are hexadecimal numbers laid out in the following manner (given that we allocate 6 bits): `011000` and `010000`. This means that the code above can be overwritten as follows:
+Let’s examine `0x18` and `0x10` (where `x` denotes hexadecimal). These numbers can be represented in binary as `011000` and `010000`, respectively, assuming we allocate 6 bits. This means the code above can be rewritten as follows:
 
 ```func
 var msg = begin_cell()
@@ -383,12 +381,12 @@ var msg = begin_cell()
 
 Now, let’s go through each option in detail:
 
-|    Option    |                                                                                                                                                                                                                           Explanation                                                                                                                                                                                                                           |
-| :----------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| IHR Disabled |                Currently, this option is disabled (meaning we store `1`) because Instant Hypercube Routing (IHR) is not yet fully implemented. This option will become relevant once many [Shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards) are active on the network. For more details about the IHR Disabled option, refer to [tblkch.pdf](https://ton.org/tblkch.pdf) (chapter 2).                |
-|    Bounce    | When sending messages, errors can occur during smart contract processing. Setting the `Bounce` option to `1` (true) is essential to prevent TON loss. If any errors arise during transaction processing, the message will be returned to the sender, and the same amount of TON (minus fees) will be refunded. Refer to [this guide](/v3/documentation/smart-contracts/message-management/non-bounceable-messages) for more details on non-bounceable messages. |
-|   Bounced    |                                                                                                                                  Bounced messages are those returned to the sender due to an error during transaction processing with a smart contract. This option indicates whether the received message is bounced or not.                                                                                                                                   |
-|     Src      |                                                                                                                                                                                 The Src is the sender's address. In this case, two zero bits indicate the `addr_none` address.                                                                                                                                                                                  |
+|    Option    |                                                                                                                                                                                                                                      Explanation                                                                                                                                                                                                                                      |
+| :----------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| IHR Disabled |                           Currently, this option is disabled (which means we store 1) because Instant Hypercube Routing is not fully implemented. In addition, this will be needed when a large number of [Shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards) are live on the network. More can be read about the IHR Disabled option in the [tblkch.pdf](https://ton.org/tblkch.pdf) (chapter 2).                           |
+|    Bounce    | While sending messages, a variety of errors can occur during smart contract processing. To avoid losing TON, it is necessary to set the Bounce option to 1 (true). In this case, if any contract errors occur during transaction processing, the message will be returned to the sender, and the same amount of TON will be received minus fees. More can be read about non-bounceable messages [here](/v3/documentation/smart-contracts/message-management/non-bounceable-messages). |
+|   Bounced    |                                                                                                                                 Bounced messages are messages that are returned to the sender because an error occurred while processing the transaction with a smart contract. This option tells you whether the message received is bounced or not.                                                                                                                                 |
+|     Src      |                                                                                                                                                                                      The Src is the sender address. In this case, two zero bits are written to indicate the `addr_none` address.                                                                                                                                                                                      |
 
 The following two lines of code:
 
@@ -415,15 +413,15 @@ Finally, let’s look at the remaining lines of code:
  ;; store something as a body
 ```
 
-|          Option          |                                                                                                                                                        Explanation                                                                                                                                                        |
-| :----------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|      Extra currency      |                                                                                                                     This is a native implementation of existing jettons and is not currently in use.                                                                                                                      |
-|         IHR fee          |                                                                              As mentioned, the IHR is not currently in use, so this fee is always zero. More can be read about this in the [tblkch.pdf](https://ton.org/tblkch.pdf) (3.1.8).                                                                              |
-|      Forwarding fee      |                                                                       A forwarding message fee. More can be read about this in the [fees documentation](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#transactions-and-phases).                                                                       |
-| Logical time of creation |                                                                                                                                    The time used to create the correct messages queue.                                                                                                                                    |
-|  UNIX time of creation   |                                                                                                                                         The time the message was created in UNIX.                                                                                                                                         |
-|        State Init        |               Code and source data for deploying a smart contract. If the bit is set to `0`, it means that we do not have a State Init. But if it is set to `1`, then another bit needs to be written which indicates whether the State Init is stored in the same cell (0) or written as a reference (1).                |
-|       Message body       | This part defines how the message body is stored. At times the message body is too large to fit into the message itself. In this case, it should be stored as a **reference** whereby the bit is set to `1` to show that the body is used as a reference. If the bit is `0`, the body is in the same cell as the message. |
+|          Option          |                                                                                                                                                       Explanation                                                                                                                                                        |
+| :----------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|      Extra currency      |                                                                                                                     This is a native implementation of existing jettons and is not currently in use.                                                                                                                     |
+|         IHR fee          |                                                                              As mentioned, IHR is not currently used, so this fee is always zero. For more information, refer to [tblkch.pdf](https://ton.org/tblkch.pdf) (section 3.1.8).                                                                               |
+|      Forwarding fee      |                                                                        A forwarding message fee. For more information, refer to [fees documentation](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#transactions-and-phases).                                                                         |
+| Logical time of creation |                                                                                                                                   The time used to create the correct messages queue.                                                                                                                                    |
+|  UNIX time of creation   |                                                                                                                                        The time the message was created in UNIX.                                                                                                                                         |
+|        State Init        |                        The code and source data for deploying a smart contract. If the bit is set to `0`, there is no State Init. However, if it’s set to `1`, an additional bit is required to indicate whether the State Init is stored in the same cell (`0`) or written as a reference (`1`).                        |
+|       Message body       | This section determines how the message body is stored. If the message body is too large to fit directly into the message, it is stored as a **reference**. In this case, the bit is set to `1` to indicate that the body is stored as a reference. If the bit is `0`, the body resides in the same cell as the message. |
 
 Validators rewrite the above values (including src), excluding the State Init and the Message Body bits.
 
@@ -528,7 +526,7 @@ internalMessage := cell.BeginCell().
 
 ### Creating a message
 
-It is necessary to retrieve the `seqno` (sequence number) of our wallet smart contract. To accomplish this, a `Client` is created which will be used to send a request to run the Get method "seqno" of our wallet. It is also necessary to add a seed phrase (which you saved during creating a wallet [here](#--external-and-internal-messages)) to sign our message via the following steps:
+We need to create a ' Client ' to retrieve our wallet smart contract's `seqno` (sequence number). This client will send a request to execute the Get method `seqno` on our wallet. Additionally, we must include the seed phrase (saved during wallet creation [here](#--external-and-internal-messages)) to sign our message. Follow these steps to proceed:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -600,11 +598,10 @@ privateKey := ed25519.NewKeyFromSeed(k)
 </TabItem>
 </Tabs>
 
-# Therefore, the `seqno`, `keys`, and `internal message` need to be sent. Now we need to create a [message](/v3/documentation/smart-contracts/message-management/sending-messages) for our wallet and store the data in this message in the sequence used at the beginning of the tutorial. This is accomplished as follows:
-
+<<<<<<< HEAD
+Therefore, the `seqno`, `keys`, and `internal message` need to be sent. Now we need to create a [message](/v3/documentation/smart-contracts/message-management/sending-messages) for our wallet and store the data in this message in the sequence used at the beginning of the tutorial. This is accomplished as follows:
+=======
 To proceed, we must send the `seqno`, `keys`, and `internal message`. Next, we’ll create a [message](/v3/documentation/smart-contracts/message-management/sending-messages) for our wallet and store the data in the sequence outlined at the beginning of the tutorial. This is achieved as follows:
-
-> > > > > > > 018b2129 (Update wallet.md)
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -653,10 +650,10 @@ body := cell.BeginCell().
 </TabItem>
 </Tabs>
 
-Note that no `.endCell()` was used in the definition of the `toSign` here. In this case, it is necessary **to transfer toSign content directly to the message body**. If writing a cell was required, it would have to be stored as a reference.
+Note that no `.endCell()` was used in defining the `toSign` here. In this case, it is necessary **to transfer toSign content directly to the message body**. If writing a cell was required, it would have to be stored as a reference.
 
 :::tip Wallet V4
-In addition to basic verification process we learned bellow for the Wallet V3, Wallet V4 smart contracts [extracts the opcode to determine whether a simple translation or a message associated with the plugin](https://github.com/ton-blockchain/wallet-contract/blob/4111fd9e3313ec17d99ca9b5b1656445b5b49d8f/func/wallet-v4-code.fc#L94-L100) is required. To match this version, it is necessary to add the `storeUint(0, 8).` (JS/TS), `MustStoreUInt(0, 8).` (Golang) functions after writing the seqno (sequence number) and before specifying the transaction mode.
+In addition to the basic verification process we learned above for the Wallet V3, Wallet V4 smart contracts [extract the opcode to determine whether a simple translation or a message associated with the plugin](https://github.com/ton-blockchain/wallet-contract/blob/4111fd9e3313ec17d99ca9b5b1656445b5b49d8f/func/wallet-v4-code.fc#L94-L100) is required. To match this version, it is necessary to add the `storeUint(0, 8).` (JS/TS), `MustStoreUInt(0, 8).` (Golang) functions after writing the seqno (sequence number) and before specifying the transaction mode.
 :::
 
 ### External message creation
@@ -699,9 +696,9 @@ externalMessage := cell.BeginCell().
 |    Option    |                                                                                                                      Explanation                                                                                                                      |
 | :----------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |     Src      | The sender address. Since an incoming external message cannot have a sender, there will always be 2 zero bits (an addr_none [TL-B](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L100)). |
-|  Import Fee  |                                                                                                   The fee for importing incoming external messages.                                                                                                   |
-|  State Init  |                Unlike the Internal Message, the State Init within the external message is needed **to deploy a contract from the outside world**. The State Init used with the Internal Message allows one contract to deploy another.                |
-| Message Body |                                                                                               The message must be sent to the contract for processing.                                                                                                |
+|  Import Fee  |                                                                                             The fee used to pay for importing incoming external messages.                                                                                             |
+|  State Init  |        Unlike the Internal Message, the State Init within the external message is needed **to deploy a contract from the outside world**. The State Init used in conjunction with the Internal Message allows one contract to deploy another.         |
+| Message Body |                                                                                             The message that must be sent to the contract for processing.                                                                                             |
 
 :::tip 0b10
 0b10 (b - binary) denotes a binary record. Two bits are stored in this process: `1` and `0`. Thus, we specify that it's `ext_in_msg_info$10`.
