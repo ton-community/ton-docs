@@ -183,7 +183,7 @@ This tutorial may not explain particular details on occasion. In these cases, mo
 All wallets operating on the TON Blockchain are smart contracts, and everything running on TON functions as a smart contract. Like most blockchains, TON allows users to deploy and customize smart contracts for various purposes, enabling full wallet customization.
 Wallet smart contracts on TON facilitate communication between the platform and other types of smart contracts. However, it’s essential to understand how wallet communication works.
 
-### Wallet Communication
+### Wallet сommunication
 
 Generally, there are two message types on TON Blockchain: `internal` and `external`. External messages allow for the ability to send messages to the blockchain from the outside world, thus allowing for the communication with smart contracts that accept such messages. The function responsible for carrying out this process is as follows:
 
@@ -282,7 +282,7 @@ This algorithm safeguards against potential errors, such as when a message is no
 
 ### Wallet v3 and wallet v4 differences
 
-The only difference between Wallet v3 and Wallet v4 is that Wallet v4 makes use of `plugins` that can be installed and deleted. These plugins are special smart contracts which are able to request a specific number of TON at a specific time from a wallet smart contract.
+The key difference between Wallet v3 and Wallet v4 lies in Wallet v4’s support for `plugins`. Users can install or delete these plugins, which are specialized smart contracts capable of requesting a specific amount of TON from the wallet smart contract at a designated time.
 
 Wallet smart contracts automatically send the required amount of TON in response to plugin requests without requiring the owner’s involvement. This functionality mirrors a **subscription model**, which is the primary purpose of plugins. We won’t delve into these details further as they fall outside the scope of this tutorial.
 
@@ -333,7 +333,7 @@ At the time of writing, most wallet apps on TON default to wallet v4. However, s
 
 As mentioned earlier, everything in the TON Blockchain is a smart contract composed of cells. Standards are essential to ensure proper serialization and deserialization of data. For this purpose, `TL-B` was developed as a universal tool to describe various data types, structures, and sequences within cells.
 
-In this section, we’ll examine [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb). This file will be very useful during future development, as it describes how different cells should be assembled. In our case specifically, it details the intricacies of internal and external messages.
+In this section, we’ll explore [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb). This file will be invaluable for future development as it outlines how to assemble different types of cells. Specifically for our purposes, it provides detailed information about the structure and behavior of internal and external messages.
 
 :::info
 This guide provides basic information. For further details, please refer to our TL-B [documentation](/v3/documentation/data-formats/tlb/tl-b-language) to learn more about TL-B.
@@ -350,7 +350,7 @@ By reading the `block.tlb` file, we can notice three types of CommonMsgInfo: `in
 However, the `CommonMsgInfo` structure only supports the `MsgAddress` specification, but the sender’s address is typically unknown and it is required to write the `addr_none` (two zero bits `00`). In this case, the `CommonMsgInfoRelaxed` structure is used, which supports the `addr_none` address. For the `ext_in_msg_info` (used for incoming external messages), the `CommonMsgInfo` structure is used because these message types don’t make use of a sender and always use the [MsgAddressExt](https://hub.com/ton/ton.blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L100) structure (the `addr_none$00` meaning two zero bits), which means there is no need to overwrite the data.
 
 :::note
-The numbers after `$` symbol are the bits that are required to store at the beginning of a certain structure, for further identification of these structures during reading (deserialization).
+The numbers after the `$` symbol are the bits that are required to be stored at the beginning of a specific structure for further identification of these structures during reading (deserialization).
 :::
 
 ### Internal message creation
@@ -366,7 +366,7 @@ var msg = begin_cell()
  ;; store something as a body
 ```
 
-Let’s first consider `0x18` and `0x10` (x - hexadecimal), which are hexadecimal numbers laid out in the following manner (given that we allocate 6 bits): `011000` and `010000`. This means that the code above can be overwritten as follows:
+Let’s examine `0x18` and `0x10` (where `x` denotes hexadecimal). These numbers can be represented in binary as `011000` and `010000`, respectively, assuming we allocate 6 bits. This means the code above can be rewritten as follows:
 
 ```func
 var msg = begin_cell()
@@ -528,7 +528,7 @@ internalMessage := cell.BeginCell().
 
 ### Creating a message
 
-It is necessary to retrieve the `seqno` (sequence number) of our wallet smart contract. To accomplish this, a `Client` is created which will be used to send a request to run the Get method "seqno" of our wallet. It is also necessary to add a seed phrase (which you saved during creating a wallet [here](#--external-and-internal-messages)) to sign our message via the following steps:
+We need to create a ' Client ' to retrieve our wallet smart contract's `seqno` (sequence number). This client will send a request to execute the Get method `seqno` on our wallet. Additionally, we must include the seed phrase (saved during wallet creation [here](#--external-and-internal-messages)) to sign our message. Follow these steps to proceed:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -649,10 +649,10 @@ body := cell.BeginCell().
 </TabItem>
 </Tabs>
 
-Note that no `.endCell()` was used in the definition of the `toSign` here. In this case, it is necessary **to transfer toSign content directly to the message body**. If writing a cell was required, it would have to be stored as a reference.
+Note that no `.endCell()` was used in defining the `toSign` here. In this case, it is necessary **to transfer toSign content directly to the message body**. If writing a cell was required, it would have to be stored as a reference.
 
 :::tip Wallet V4
-In addition to basic verification process we learned bellow for the Wallet V3, Wallet V4 smart contracts [extracts the opcode to determine whether a simple translation or a message associated with the plugin](https://github.com/ton-blockchain/wallet-contract/blob/4111fd9e3313ec17d99ca9b5b1656445b5b49d8f/func/wallet-v4-code.fc#L94-L100) is required. To match this version, it is necessary to add the `storeUint(0, 8).` (JS/TS), `MustStoreUInt(0, 8).` (Golang) functions after writing the seqno (sequence number) and before specifying the transaction mode.
+In addition to the basic verification process we learned above for the Wallet V3, Wallet V4 smart contracts [extract the opcode to determine whether a simple translation or a message associated with the plugin](https://github.com/ton-blockchain/wallet-contract/blob/4111fd9e3313ec17d99ca9b5b1656445b5b49d8f/func/wallet-v4-code.fc#L94-L100) is required. To match this version, it is necessary to add the `storeUint(0, 8).` (JS/TS), `MustStoreUInt(0, 8).` (Golang) functions after writing the seqno (sequence number) and before specifying the transaction mode.
 :::
 
 ### External message creation
@@ -745,13 +745,13 @@ As a result, we got the output of our BOC in the console, and the message was se
 
 ## 👛 Deploying a wallet
 
-We’ve covered the basics of creating messages to help us deploy a wallet. Previously, we deployed wallets using wallet apps, but we’ll deploy our wallet manually this time.
+We have learned the basics of creating messages, which will now be helpful for deploying the wallet. In the past, we have deployed wallet via wallet app, but in this case we’ll need to deploy our wallet manually.
 
-In this section, we’ll walk through creating a wallet (wallet v3) from scratch. You’ll learn how to compile the wallet smart contract code, generate a mnemonic phrase, obtain a wallet address, and deploy the wallet using external messages and State Init (state initialization).
+In this section we’ll go over how to create a wallet (wallet v3) from scratch. You’ll learn how to compile the code for a wallet smart contract, generate a mnemonic phrase, receive a wallet address, and deploy a wallet using external messages and State Init (state initialization).
 
 ### Generating a mnemonic
 
-The first step in creating a wallet is generating a `private` and `public` key. We’ll generate a mnemonic seed phrase and extract the keys using cryptographic libraries.
+The first thing needed to correctly create a wallet is to retrieve a `private` and `public` key. To accomplish this task, it is necessary to generate a mnemonic seed phrase and then extract private and public keys using cryptographic libraries.
 
 This is accomplished as follows:
 
