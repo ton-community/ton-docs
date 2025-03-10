@@ -16,6 +16,7 @@ jobs:
         with:
           # docusaurus checks .git for history, so we need all commits
           fetch-depth: 0
+          submodules: recursive
 
       # For gha cache
       - name: Set up Docker Buildx
