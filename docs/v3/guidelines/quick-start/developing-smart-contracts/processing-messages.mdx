@@ -66,27 +66,31 @@ At this point reasons behind changes that we made to our counter in previous sto
 
 ```func
 () recv_external(slice in_msg) impure {
+    ;; retrives validating data from message body
     var signature = in_msg~load_bits(512);
     var cs = in_msg;
     var (ctx_id, msg_seqno) = (cs~load_uint(32), cs~load_uint(32));
 
-    var (stored_id, stored_seqno, public_key) = load_data()
+    ;; retrieves stored data for validation checks
+    var (stored_id, stored_seqno, public_key) = load_data();
+    ;; replay protection mechanism through seqno chack and incrementing
     throw_unless(33, msg_seqno == stored_seqno);
+    ;; id field for multiply addresess with same private_key 
     throw_unless(34, ctx_id == stored_id);
+    ;; ed25519 signature check
     throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
+    ;; accepting message after all checks
     accept_message();
+    ;; optimization technique
+    ;; putting message body to stack head
     cs~touch();
+    ;; sending serialized on client side messages 
     while (cs.slice_refs()) {
         var mode = cs~load_uint(8);
         send_raw_message(cs~load_ref(), mode);
     }
-    set_data(begin_cell()
-        .store_uint(stored_id, 32)
-        .store_uint(stored_seqno + 1, 32)
-        .store_uint(public_key, 256)
-    .end_cell());
-}
-```
+    save_data(stored_id, stored_seqno, public_key);
+}```
 
 And add wrapper method to call it through our wrapper class:
 
@@ -457,14 +461,12 @@ describe('Integration with HelloWorld', () => {
             .storeUint(increaseBy, 32) // increaseBy
             .endCell();
             
-        const messageToSend = beginCell()
-            .storeUint(0x18, 6) // internal message info
-            .storeAddress(counterInternal.address) // destination address
-            .storeCoins(toNano('0.10')) // amount to send
-            .storeUint(0, 1 + 4 + 4 + 64 + 32 + 1) // default message headers
-            .storeUint(1, 1)
-            .storeRef(internalMessageBody) // store the message content as a reference
-            .endCell();
+        const messageToSend = beginCell().store(storeMessageRelaxed(internal({
+            to: counterInternal.address,
+            value: toNano(0.01),
+            body: internalMessageBody,
+            bounce: true,
+        }))).endCell();
         
         // Send external message to HelloWorld that contains internal message to CounterInternal
         const result = await helloWorld.sendExternal({
