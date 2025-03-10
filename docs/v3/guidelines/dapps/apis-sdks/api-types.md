@@ -14,8 +14,14 @@
 - [TON Index](https://toncenter.com/api/v3/) - TON Index collects data from a full node to PostgreSQL database and provides convenient API to an indexed blockchain.
 - [toncenter/v2](https://toncenter.com/) - This API enables HTTP access to TON blockchain - getting accounts and wallets information, looking up blocks and transactions, sending messages to the blockchain, calling get methods of smart contracts, and more.
 
+## TonAPI
+
+[tonapi.io](tonapi.io) provides fast access to the TON blockchain, covering accounts, transactions, NFTs, Jettons, Auctions, Subscriptions, and TON DNS.
+
+- [REST API](https://tonapi.io/api-v2) - High-speed indexed API for querying blockchain data, transaction chains, NFTs, Jettons, and sending transactions. [Docs](https://docs.tonconsole.com/tonapi/rest-api)
+- [Webhooks API](https://docs.tonconsole.com/tonapi/webhooks-api) - Real-time notifications for account activity and transactions.
+
 ## Third party APIs
-- [tonapi.io](https://docs.tonconsole.com/tonapi) - fast indexed API which provides basic data about accounts, transactions, blocks, application-specific data about NFT, Auctions, Jettons, TON DNS, Subscriptions. It also provides annotated data on transaction chains.
 - [TONX API](https://docs.tonxapi.com/) - an API specifically designed for seamless Dapp development, enabling easy access to a variety of tools and data.
 - [dton.io](https://dton.io/graphql/) - GraphQL API with that can provide data about accounts, transactions and blocks, as well as application-specific data about NFT, Auctions, Jettons and TON DNS.
 - [ton-api-v4](https://mainnet-v4.tonhubapi.com) - another lite-api focused on speed via aggressive cashing in CDN.
