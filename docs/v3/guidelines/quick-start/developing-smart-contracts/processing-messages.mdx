@@ -89,7 +89,7 @@ At this point reasons behind changes that we made to our counter in previous sto
         var mode = cs~load_uint(8);
         send_raw_message(cs~load_ref(), mode);
     }
-    save_data(stored_id, stored_seqno, public_key);
+    save_data(stored_id, stored_seqno + 1, public_key);
 }```
 
 And add wrapper method to call it through our wrapper class:
