@@ -1,0 +1,16 @@
+deployEnv: staging
+
+image:
+  tag: "staging"
+
+replicaCount: 2
+minReplicas: 1
+maxReplicas: 3
+
+resources:
+  limits:
+    memory: "384Mi"
+    cpu: "500m"
+  requests:
+    memory: "256Mi"
+    cpu: "250m"

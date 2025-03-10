@@ -1,0 +1,154 @@
+name: Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - staging
+
+concurrency: staging-ci
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || github.ref == 'refs/heads/canary' && 'production' || github.ref == 'refs/heads/staging' && 'staging' || 'unknown' }}
+    env:
+      APP_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || github.ref == 'refs/heads/canary' && 'canary' || github.ref == 'refs/heads/staging' && 'staging' || 'unknown' }}
+      APP_DOMAIN: ${{ vars.APP_DOMAIN }}
+
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # docusaurus checks .git for history, so we need all commits
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Install aws-cli
+        uses: quipper/setup-aws-cli-action@main
+
+      - uses: azure/setup-helm@v4.3.0
+        with:
+          version: 'latest'
+
+      - uses: azure/setup-kubectl@v4
+        with:
+          version: 'latest'
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set sha-short
+        run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-7)" >> $GITHUB_ENV
+
+      - id: lower-repo
+        name: Repository to lowercase
+        run: |
+          echo "repository=${GITHUB_REPOSITORY@L}" >> $GITHUB_OUTPUT
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ steps.lower-repo.outputs.repository }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          tags: |
+            type=sha
+            type=sha,format=long
+            type=ref,event=branch
+
+      - name: Build and push Docker image ${{ steps.lower-repo.outputs.repository }}:${{ env.APP_ENV }}
+        uses: docker/build-push-action@v6
+        with:
+          file: ${{ vars.Dockerfile && vars.Dockerfile || 'Dockerfile' }}
+          context: .
+          push: true
+          tags: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ env.APP_ENV }}
+          cache-from: type=registry,ref=ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ env.GITHUB_SHA_SHORT }}
+          cache-to: type=inline
+          build-args: |
+            sha=${{ github.sha }}
+            sha_short=${{ env.GITHUB_SHA_SHORT }}
+            APP_ENV=${{ env.APP_ENV }}
+
+      - name: Apply AWS k8s config
+        run: aws eks update-kubeconfig --name ${{ vars.AWS_CLUSTER }} --region ${{ vars.AWS_REGION }}
+
+      - name: Helm lint
+        run: |
+          helm lint ./helm/app \
+            --values ./helm-values/values.yaml \
+            --values ./helm-values/values-${{ env.APP_ENV }}.yaml \
+            --values ./helm-values/env-${{ env.APP_ENV }}.yaml \
+            --set image.repository="lint" \
+            --set image.tag="lint" \
+            --set nginx.host="lint" \
+            --set appName=lint \
+            --set image.ghcrSecret=xxx
+
+      - name: Create namespace
+        run: |
+          kubectl create ns ${{ vars.APP_NAME }}-${{ env.APP_ENV }} || echo "Namespace $EKS_NAMESPACE already exists"
+
+      - name: Deploy ${{ vars.APP_NAME }} to Kubernetes
+        run: |
+          helm upgrade --install ${{ vars.APP_NAME }} ./helm/app \
+          --namespace ${{ vars.APP_NAME }}-${{ env.APP_ENV }} \
+          --values ./helm-values/values.yaml \
+          --values ./helm-values/values-${{ env.APP_ENV }}.yaml \
+          --values ./helm-values/env-${{ env.APP_ENV }}.yaml \
+          --set image.repository="ghcr.io/${{ steps.lower-repo.outputs.repository }}" \
+          --set image.tag="${{ env.GITHUB_SHA_SHORT }}" \
+          --set nginx.host=${{ env.APP_DOMAIN }} \
+          --set appName=${{ vars.APP_NAME }} \
+          --set image.ghcrSecret=${{ secrets.GHCR_SECRET  }}
+
+      - name: Verify deployment
+        run: |
+          kubectl -n ${{ vars.APP_NAME }}-${{ env.APP_ENV }} rollout status deployment/${{ vars.APP_NAME }}-${{ env.APP_ENV }}
+
+      - name: Verify TLS Certificate
+        run: |
+          kubectl describe certificate ${{ env.APP_DOMAIN }} -n ${{ vars.APP_NAME }}-${{ env.APP_ENV }}
+
+      - name: Telegram Notify
+        uses: appleboy/telegram-action@v1.0.0
+        if: success() && contains('${{ vars.ENABLE_DEPLOY_BOT }}', 1)
+        with:
+          to: ${{ secrets.TELEGRAM_DEPLOY_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_DEPLOY_TOKEN }}
+          format: markdown
+          message: |
+            🚂 The application from repository [${{ steps.lower-repo.outputs.repository }}](https://github.com/${{ steps.lower-repo.outputs.repository }}) has been successfully deployed by [${{ github.actor }}](https://github.com/${{ github.actor }}) on ${{ env.APP_ENV }}.
+
+            🏗️ [GitHub Actions Build](https://github.com/${{ steps.lower-repo.outputs.repository }}/actions/runs/${{ github.run_id }})
+            🐳 [Image](https://ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ env.GITHUB_SHA_SHORT }}
+            🔗 [Link](https://${{ env.APP_DOMAIN }})
+
+      - name: Telegram Notify
+        uses: appleboy/telegram-action@v1.0.0
+        if: failure()
+        with:
+          to: ${{ secrets.TELEGRAM_DEPLOY_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_DEPLOY_TOKEN }}
+          format: markdown
+          message: |
+            🚨Deploy of the application from repository [${{ steps.lower-repo.outputs.repository }}](https://github.com/${{ steps.lower-repo.outputs.repository }}) on ${{ env.APP_ENV }} has been failed.
+
+            🏗️ [GitHub Actions Build](https://github.com/${{ steps.lower-repo.outputs.repository }}/actions/runs/${{ github.run_id }})
+            🐳 [Image](https://ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ env.GITHUB_SHA_SHORT }}
+            🔗 [Link](https://${{ env.APP_DOMAIN }})

@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.appName }}-{{ .Values.deployEnv }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.appName }}-{{ .Values.deployEnv }}
+    release: prometheus-stack
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: {{ .Values.strategy.maxSurge }}
+      maxUnavailable: {{ .Values.strategy.maxUnavailable }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}-{{ .Values.deployEnv }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName }}-{{ .Values.deployEnv }}
+        release: prometheus-stack
+    spec:
+      containers:
+        - name: {{ .Values.appName }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+          env:
+            - name: APP_ENV
+              value: {{ .Values.deployEnv }}
+            - name: APP_VERSION
+              value: {{ .Values.appVersion | quote }}
+            - name: GIT_SHA_SHORT
+              value: {{ .Values.image.tag }}
+           {{- range .Values.appEnvVariables }}
+            - name: {{ .name }}
+             {{- if .valueFrom }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .valueFrom.secretKeyRef.name }}
+                  key: {{ .valueFrom.secretKeyRef.key }}
+             {{- else }}
+              value: {{ .value | quote }}
+             {{- end }}
+           {{- end }}
+          resources:
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.containerPort }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.containerPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecretName }}

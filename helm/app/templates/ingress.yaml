@@ -1,0 +1,50 @@
+{{ if .Values.nginx.publicService }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.appName }}-{{ .Values.deployEnv }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "{{ .Values.nginx.sslRedirect }}"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "10s"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "15s"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "15s"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-next-upstream: "error timeout http_502 http_503 http_504"
+    nginx.ingress.kubernetes.io/proxy-next-upstream-tries: "3"
+    nginx.ingress.kubernetes.io/forwarded-for-header: "X-Forwarded-For"
+    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
+    nginx.ingress.kubernetes.io/whitelist-source-range: {{ .Values.nginx.whitelist }}
+    cert-manager.io/cluster-issuer: {{ .Values.nginx.tls.issuer }}
+    cert-manager.io/renew-before: "720h"
+    {{- if eq .Values.deployEnv "canary" }}
+    nginx.ingress.kubernetes.io/canary: {{ .Values.nginx.canary.enabled | quote }}
+    nginx.ingress.kubernetes.io/canary-by-cookie: {{ .Values.nginx.canary.cookie | quote }}
+    nginx.ingress.kubernetes.io/canary-weight: {{ .Values.nginx.canary.weight | quote }}
+    {{- end }}
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location ~ ^/(metrics|ready|health)$ {
+        return 403;
+      }
+
+  labels:
+    release: prometheus-stack
+    app: {{ .Values.appName }}-{{ .Values.deployEnv }}
+spec:
+  tls:
+    - hosts:
+        - {{ .Values.nginx.host }}
+      secretName: {{ .Values.nginx.host }}
+  rules:
+    - host: {{ .Values.nginx.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.appName }}-{{ .Values.deployEnv }}
+                port:
+                  name: http
+{{- end }}

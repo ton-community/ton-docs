@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Values.appName }}-{{ .Values.deployEnv }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    release: prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}-{{ .Values.deployEnv }}
+  endpoints:
+    - port: http
+      interval: 30s
+      path: /metrics
+    - port: metrics
+      interval: 30s
+      path: /metrics
+

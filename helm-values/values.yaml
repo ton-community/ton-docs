@@ -1,0 +1,44 @@
+appVersion: "0.1"
+appName: "my-app"
+
+minReplicas: 1
+maxReplicas: 4
+replicaCount: 2
+
+resources:
+  limits:
+    cpu: "500m"
+    memory: "128Mi"
+  requests:
+    cpu: "500m"
+    memory: "64Mi"
+
+image:
+  repository: ""
+  tag: ""
+  pullPolicy: IfNotPresent
+  pullSecretName: "dockerconfigjson-github-com"
+  ghcrSecret: "ghcrSecretStub"
+
+metricsPort: 80
+containerPort: 80
+
+nginx:
+  host: ""
+
+  publicService: true
+  sslRedirect: true
+  whitelist: 0.0.0.0/0,::/0
+
+  tls:
+    enabled: true
+    issuer: "letsencrypt"
+
+  canary:
+    enabled: false
+    weight: 0
+    cookie: ""
+
+strategy:
+  maxSurge: 10%
+  maxUnavailable: 25%
