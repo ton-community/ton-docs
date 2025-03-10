@@ -4,7 +4,7 @@
 
 This is the official repository for The Open Network documentation.
 
-Latest documentation release: [docs.ton.org](https://docs.ton.org)
+Live documentation: [docs.ton.org](https://docs.ton.org)
 
 ---
 
