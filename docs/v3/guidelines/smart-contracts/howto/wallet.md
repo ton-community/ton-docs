@@ -381,12 +381,12 @@ var msg = begin_cell()
 
 Now, let’s go through each option in detail:
 
-|    Option    |                                                                                                                                                                                                                                      Explanation                                                                                                                                                                                                                                      |
-| :----------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| IHR Disabled |                           Currently, this option is disabled (which means we store 1) because Instant Hypercube Routing is not fully implemented. In addition, this will be needed when a large number of [Shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards) are live on the network. More can be read about the IHR Disabled option in the [tblkch.pdf](https://ton.org/tblkch.pdf) (chapter 2).                           |
-|    Bounce    | While sending messages, a variety of errors can occur during smart contract processing. To avoid losing TON, it is necessary to set the Bounce option to 1 (true). In this case, if any contract errors occur during transaction processing, the message will be returned to the sender, and the same amount of TON will be received minus fees. More can be read about non-bounceable messages [here](/v3/documentation/smart-contracts/message-management/non-bounceable-messages). |
-|   Bounced    |                                                                                                                                 Bounced messages are messages that are returned to the sender because an error occurred while processing the transaction with a smart contract. This option tells you whether the message received is bounced or not.                                                                                                                                 |
-|     Src      |                                                                                                                                                                                      The Src is the sender address. In this case, two zero bits are written to indicate the `addr_none` address.                                                                                                                                                                                      |
+|    Option    |                                                                                                                                                                                                                           Explanation                                                                                                                                                                                                                           |
+| :----------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| IHR Disabled |                Currently, this option is disabled (meaning we store `1`) because Instant Hypercube Routing (IHR) is not yet fully implemented. This option will become relevant once many [Shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards) are active on the network. For more details about the IHR Disabled option, refer to [tblkch.pdf](https://ton.org/tblkch.pdf) (chapter 2).                |
+|    Bounce    | When sending messages, errors can occur during smart contract processing. Setting the `Bounce` option to `1` (true) is essential to prevent TON loss. If any errors arise during transaction processing, the message will be returned to the sender, and the same amount of TON (minus fees) will be refunded. Refer to [this guide](/v3/documentation/smart-contracts/message-management/non-bounceable-messages) for more details on non-bounceable messages. |
+|   Bounced    |                                                                                                                                  Bounced messages are those returned to the sender due to an error during transaction processing with a smart contract. This option indicates whether the received message is bounced or not.                                                                                                                                   |
+|     Src      |                                                                                                                                                                          The Src is the sender's address. In this case, two zero bits are written to indicate the `addr_none` address.                                                                                                                                                                          |
 
 The following two lines of code:
 
@@ -696,8 +696,8 @@ externalMessage := cell.BeginCell().
 |    Option    |                                                                                                                      Explanation                                                                                                                      |
 | :----------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |     Src      | The sender address. Since an incoming external message cannot have a sender, there will always be 2 zero bits (an addr_none [TL-B](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L100)). |
-|  Import Fee  |                                                                                             The fee used to pay for importing incoming external messages.                                                                                             |
-|  State Init  |        Unlike the Internal Message, the State Init within the external message is needed **to deploy a contract from the outside world**. The State Init used in conjunction with the Internal Message allows one contract to deploy another.         |
+|  Import Fee  |                                                                                                   The fee for importing incoming external messages.                                                                                                   |
+|  State Init  |                Unlike the Internal Message, the State Init within the external message is needed **to deploy a contract from the outside world**. The State Init used with the Internal Message allows one contract to deploy another.                |
 | Message Body |                                                                                             The message that must be sent to the contract for processing.                                                                                             |
 
 :::tip 0b10
@@ -746,15 +746,15 @@ As a result, we got the output of our BOC in the console, and the message was se
 
 ## 👛 Deploying a wallet
 
-We have learned the basics of creating messages, which will now help deploy the wallet. In the past, we have deployed wallet via the wallet app, but in this case, we’ll need to deploy our wallet manually.
+We’ve covered the basics of creating messages to help us deploy a wallet. Previously, we deployed wallets using wallet apps, but we’ll deploy our wallet manually this time.
 
-In this section, we’ll review how to create a wallet (wallet v3) from scratch. You’ll learn how to compile the code for a wallet smart contract, generate a mnemonic phrase, receive a wallet address, and deploy a wallet using external messages and State Init (state initialization).
+In this section, we’ll walk through creating a wallet (wallet v3) from scratch. You’ll learn how to compile the wallet smart contract code, generate a mnemonic phrase, obtain a wallet address, and deploy the wallet using external messages and State Init (state initialization).
 
 ### Generating a mnemonic
 
-The first thing needed to create a wallet correctly is to retrieve a `private` and `public` key. To accomplish this task, generating a mnemonic seed phrase and extracting private and public keys using cryptographic libraries is necessary.
+The first step in creating a wallet is generating a `private` and `public` key. We’ll generate a mnemonic seed phrase and extract the keys using cryptographic libraries.
 
-This is accomplished as follows:
+Here’s how to accomplish this:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -785,10 +785,10 @@ import (
 // mnemonic := strings.Split("put your mnemonic", " ") // get our mnemonic as array
 mnemonic := wallet.NewSeed() // get new mnemonic
 
-// The following three lines will extract the private key using the mnemonic phrase. We will not go into cryptographic details. It has all been implemented in the tonutils-go library, but it immediately returns the finished object of the wallet with the address and ready methods. So we’ll have to write the lines to get the key separately. Goland IDE will automatically import all required libraries (crypto, pbkdf2 and others).
+// The following three lines will extract the private key using the mnemonic phrase. We will not go into cryptographic details. It has all been implemented in the tonutils-go library, but it immediately returns the finished wallet object with the address and ready methods. So we’ll have to write the lines to get the key separately. Goland IDE will automatically import all required libraries (crypto, pbkdf2, and others).
 mac := hmac.New(sha512.New, []byte(strings.Join(mnemonic, " ")))
 hash := mac.Sum(nil)
-k := pbkdf2.Key(hash, []byte("TON default seed"), 100000, 32, sha512.New) // In TON libraries "TON default seed" is used as salt when getting keys
+k := pbkdf2.Key(hash, []byte("TON default seed"), 100000, 32, sha512.New) // In TON libraries, "TON default seed" is used as salt when getting keys
 // 32 is a key len
 
 privateKey := ed25519.NewKeyFromSeed(k) // get private key
@@ -810,7 +810,7 @@ Make sure to output the generated mnemonic seed phrase to the console, save it, 
 
 One of the most notable benefits of wallets being smart contracts is the ability to create **a vast number of wallets** using just one private key. This is because the addresses of smart contracts on TON Blockchain are computed using several factors, including the `stateInit`. The stateInit contains the `code` and `initial data`, which is stored in the blockchain’s smart contract storage.
 
-By changing just one bit within the stateInit, a different address can be generated. That is why the `subwallet_id` was initially created. The `subwallet_id` is stored in the contract storage and it can be used to create many different wallets (with different subwallet IDs) with one private key. This functionality can be very useful when integrating various wallet types with centralized service such as exchanges.
+Changing just one bit within the stateInit can generate a different address. That is why the `subwallet_id` was initially created. The `subwallet_id` is stored in the contract storage and can be used to create many different wallets (with different subwallet IDs) with one private key. This functionality can be handy when integrating various wallet types with centralized services such as exchanges.
 
 The default `subwallet_id` value is `698983191`, as per the [line of code](https://github.com/ton-blockchain/ton/blob/4b940f8bad9c2d3bf44f196f6995963c7cee9cc3/tonlib/tonlib/TonlibClient.cpp#L2420) below taken from the TON Blockchain’s source code:
 
@@ -849,11 +849,10 @@ var subWallet uint64 = 698983191
 
 ### Compiling wallet code
 
-# Now that we have the private and public keys and the subwallet_id clearly defined we need to compile the wallet code. To accomplish this, we’ll use the [wallet v3 code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) from the official repository.
-
+<<<<<<< HEAD
+Now that we have the private and public keys and the subwallet_id clearly defined we need to compile the wallet code. To accomplish this, we’ll use the [wallet v3 code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) from the official repository.
+=======
 Now that the private and public keys and the `subwallet_id` are clearly defined, we must compile the wallet code. We’ll use the [wallet v3 code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) from the official repository.
-
-> > > > > > > 018b2129 (Update wallet.md)
 
 The [@ton-community/func-js](https://github.com/ton-community/func-js) library is necessary to compile wallet code. This library allows us to compile FunC code and retrieve a cell containing the code. To get started, install the library and save it to the `package.json` as follows:
 
@@ -863,7 +862,7 @@ npm i --save @ton-community/func-js
 
 We’ll only use JavaScript to compile code, as the libraries for compiling code are JavaScript-based. However, after compiling is finalized, as long as we have our cell's **base64 output**, it is possible to use this compiled code in languages such as Go and others.
 
-First, we must create two files: `wallet_v3.fc` and `stdlib.fc`. The compiler relies on the `stdlib.fc` library, which contains all the necessary basic functions corresponding to `asm` instructions. You can download the `stdlib.fc` file [here](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc). For the `wallet_v3.fc` file, copy the code from the repository.
+First, we need to create two files: `wallet_v3.fc` and `stdlib.fc`. The compiler works with the stdlib.fc library. All necessary and basic functions, which correspond with the `asm` instructions were created in the library. The stdlib.fc file can be downloaded [here](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc). In the `wallet_v3.fc` file it is necessary to copy the code above.
 
 Now, we have the following structure for the project we are creating:
 
@@ -913,9 +912,9 @@ if (result.status === "error") {
 
 const codeCell = Cell.fromBoc(Buffer.from(result.codeBoc, "base64"))[0]; // get buffer from base64 encoded BOC and get cell from this buffer
 
-// now we have base64 encoded BOC with compiled code in result.codeBoc
+// now we have base64 encoded BOC with compiled code in the result.codeBoc
 console.log("Code BOC: " + result.codeBoc);
-console.log("\nHash: " + codeCell.hash().toString("base64")); // get the hash of cell and convert in to base64 encoded string. We will need it further
+console.log("\nHash: " + codeCell.hash().toString("base64")); // get the hash of cell and convert it to base64 encoded string. We will need it further
 ```
 
 The result will be the following output in the terminal:
@@ -962,14 +961,13 @@ After the above processes are complete, the hashes match, confirming that the co
 
 Before building a message, it is essential to understand what a State Init is. First, let’s go through the [TL-B scheme](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L141-L143):
 
-|   Option    |                                                                                                                                                                                                                Explanation                                                                                                                                                                                                                 |
-| :---------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| split_depth |        This option is designed for highly loaded smart contracts that can be split and distributed across multiple [shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards). For more details on how this works, refer to the [tblkch.pdf](https://ton.org/tblkch.pdf) (section 4.1.6). Since this feature is not needed for wallet smart contracts, only a `0` bit is stored.         |
-|   special   | This option is used for **TicTok** smart contracts that are automatically triggered for each block. Regular smart contracts, such as wallets, do not require this functionality. For more details, refer to [this section](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock) or the [tblkch.pdf](https://ton.org/tblkch.pdf) (section 4.1.6). Since this feature is unnecessary for our use case, only a `0` bit is stored. |
-|             |
-|    code     |                                                                                                                                                                                   `1` bit means the presence of the smart contract code as a reference.                                                                                                                                                                                    |
-|    data     |                                                                                                                                                                                   `1` bit means the presence of the smart contract data as a reference.                                                                                                                                                                                    |
-|   library   |                     This option refers to a library that operates on the [masterchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains) and can be shared across multiple smart contracts. Since wallets do not require this functionality, its bit is set to `0`. For more information, refer to [tblkch.pdf](https://ton.org/tblkch.pdf) (section 1.8.4).                      |
+|   Option    |                                                                                                                                                                                                      Explanation                                                                                                                                                                                                      |
+| :---------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| split_depth | This option is intended for highly loaded smart contracts that can be split and located on several [shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards). More information detailing how this works can be found in the [tblkch.pdf](https://ton.org/tblkch.pdf) (4.1.6). Only a `0` bit is stored since it is being used only within a wallet smart contract. |
+|   special   |       Used for TicTok. These smart contracts are automatically called for each block and are not needed for regular smart contracts. Information about this can be found in [this section](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock) or in [tblkch.pdf](https://ton.org/tblkch.pdf) (4.1.6). Only a `0` bit is stored within this specification because we do not need such a function.        |
+|    code     |                                                                                                                                                                         `1` bit means the presence of the smart contract code as a reference.                                                                                                                                                                         |
+|    data     |                                                                                                                                                                         `1` bit means the presence of the smart contract data as a reference.                                                                                                                                                                         |
+|   library   |                              A library that operates on the [masterchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains) and can be used by different smart contracts. This will not be used for wallet, so its bit is set to `0`. Information about this can be found in [tblkch.pdf](https://ton.org/tblkch.pdf) (1.8.4).                               |
 
 Next, we’ll prepare the `initial data`, which will be present in our contract’s storage immediately after deployment:
 
@@ -1050,7 +1048,9 @@ log.Println("Contract address:", contractAddress.String()) // Output contract ad
 We can build and send the message to the blockchain using the State Init.
 
 :::warning
-Keep in mind this concept for your services
+To carry out this process, **a minimum wallet balance of 0.1 TON** is required (the balance can be less, but this amount is guaranteed to be sufficient). To accomplish this, we’ll need to run the code mentioned earlier in the tutorial, obtain the correct wallet address, and send 0.1 TON to this address. Alternatively, you can send this sum manually via your wallet app before sending the deployment message itself.
+
+Deployment by external messages is presented here mostly for educational purposes; in practice, it's much more convenient to [deploy smart contracts via Wallets](/v3/guidelines/smart-contracts/howto/wallet#contract-deployment-via-wallet), which will be described later.
 :::
 
 To carry out this process, **a minimum wallet balance of 0.1 TON** is required (the balance can be less, but this amount is guaranteed sufficient). To accomplish this, we’ll need to run the code mentioned earlier in the tutorial, obtain the correct wallet address, and send 0.1 TON to this address. Alternatively, you can send this sum manually via your wallet app before sending the deployment message.
@@ -1226,11 +1226,9 @@ Note that we have sent an internal message using mode `3`. If it is necessary to
 
 # It's important to note that for each new transaction the **seqno will need to be increased by one**.
 
-Note that we sent an internal message using mode `3`. If you must redeploy the same wallet, **the smart contract can be destroyed**. To do this, set the [mode](/v3/documentation/smart-contracts/message-management/message-modes-cookbook#mode160/) to `160` by adding `128` (take the entire balance of the smart contract) + `32` (destroy the smart contract). This will retrieve the remaining TON balance and allow you to deploy the wallet again.
+Note that we have sent an internal message using mode `3`. If it is necessary to repeat the deployment of the same wallet, **the smart contract can be destroyed**. To accomplish this, set the mode correctly by adding 128 (take the entire balance of the smart contract) + 32 (destroy the smart contract) which will = `160` to retrieve the remaining TON balance and deploy the wallet again.
 
 Remember that for each new transaction, the `seqno` must be incremented by one.
-
-> > > > > > > 018b2129 (Update wallet.md)
 
 :::info
 The contract code we used is [verified](https://tonscan.org/tx/BL9T1i5DjX1JRLUn4z9JOgOWRKWQ80pSNevis26hGvc=), so you can see an example [here](https://tonscan.org/address/EQDBjzo_iQCZh3bZSxFnK9ue4hLTOKgsCNKfC8LOUM4SlSCX#source).
@@ -1297,7 +1295,7 @@ var internalMessages [len(internalMessagesAmount)]*cell.Cell // array for our in
 </TabItem>
 </Tabs>
 
-[Sending mode](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes) for all messages is set to `mode 3`. However, if different modes are required an array can be created to fulfill different purposes.
+[Sending mode](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes) for all messages is set to `mode 3`. However, an array can be created to fulfill different purposes if different modes are required.
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1329,10 +1327,10 @@ It’s unclear whether we’ll have a message body at this stage. Therefore, we�
     internalMessage.storeRef(internalMessageBody);
   } else internalMessage.storeBit(0);
   /*
-        Since we do not have a message body, we indicate that 
-        the message body is in this message, but do not write it, 
-        which means it is absent. In that case, just set the bit to 0.
-    */
+ Since we do not have a message body, we indicate that 
+ the message body is in this message but do not write it, 
+ which means it is absent. In that case, just set the bit to 0.
+ */
 
   internalMessages.push(internalMessage.endCell());
 }
@@ -1357,11 +1355,8 @@ for i := 0; i < len(internalMessagesAmount); i++ {
     MustStoreUInt(0, 1+4+4+64+32+1)
 
   /*
-      At this stage, it is not clear if we will have a message body.
-      So put a bit only for stateInit, and if we have a comment, in means
-      we have a body message. In that case, set the bit to 1 and store the
-      body as a reference.
-  */
+It’s unclear whether we’ll have a message body at this stage. Therefore, we’ll only set a bit for the `stateInit`. If we include a comment, it means we have a message body. In that case, set the bit to `1` and store the body as a reference.
+ */
 
   if internalMessagesComment[i] != "" {
     internalMessage.MustStoreBoolBit(true) // we store Message Body as a reference
@@ -1578,15 +1573,14 @@ After completing this process, you can use a TON blockchain explorer to verify t
 
 ### NFT transfers
 
-# In addition to regular messages, users often send NFTs to each other. Unfortunately, not all libraries contain methods that are tailored for use with this type of smart contract. Therefore, it is necessary to create code that will allow us to build a message for sending NFTs. First, let's become more familiar with the TON NFT [standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md).
-
+<<<<<<< HEAD
+In addition to regular messages, users often send NFTs to each other. Unfortunately, not all libraries contain methods that are tailored for use with this type of smart contract. Therefore, it is necessary to create code that will allow us to build a message for sending NFTs. First, let's become more familiar with the TON NFT [standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md).
+=======
 In addition to regular messages, users often send NFTs to each other. Unfortunately, not all libraries specifically use methods for interacting with this type of smart contract. As a result, we need to write code that allows us to construct messages for sending NFTs. First, let’s familiarize ourselves with the TON NFT [standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md).
 
 > > > > > > > 018b2129 (Update wallet.md)
 
-> > > > > > > 018b2129 (Update wallet.md)
-
-Especially, we need to understand TL-B for [NFT Transfers](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#1-transfer) in details.
+Specifically, we need to thoroughly understand the TL-B schema for [NFT Transfers](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#1-transfer).
 
 - `query_id`: Query ID has no value in message processing. The NFT contract doesn't validate it; it only reads it. This value can be helpful when a service wants to assign a specific query ID to each message for identification purposes. Therefore, we will set it to 0.
 
@@ -1610,12 +1604,12 @@ const destinationAddress = Address.parse(
   "put your wallet where you want to send NFT"
 );
 const walletAddress = Address.parse(
-  "put your wallet which is the owner of NFT"
+  "put your wallet, which is the owner of NFT."
 );
 const nftAddress = Address.parse("put your nft address");
 
 // We can add a comment, but it will not be displayed in the explorers,
-// as it is not supported by them at the time of writing the tutorial.
+// as they do not support it at the time of writing the tutorial.
 const forwardPayload = beginCell()
   .storeUint(0, 32)
   .storeStringTail("Hello, TON!")
@@ -1636,7 +1630,7 @@ const internalMessage = beginCell()
   .storeUint(0x18, 6) // bounce
   .storeAddress(nftAddress)
   .storeCoins(toNano("0.05"))
-  .storeUint(1, 1 + 4 + 4 + 64 + 32 + 1 + 1) // We store 1 that means we have body as a reference
+  .storeUint(1, 1 + 4 + 4 + 64 + 32 + 1 + 1) // We store 1, which means we have the body as a reference
   .storeRef(transferNftBody)
   .endCell();
 ```
@@ -1696,18 +1690,18 @@ Smart contracts often use [GET methods](/v3/guidelines/smart-contracts/get-metho
 
 Below we’ll learn more about the basics of GET methods used with [V3](https://github.com/ton-blockchain/ton/blob/e37583e5e6e8cd0aebf5142ef7d8db282f10692b/crypto/smartcont/wallet3-code.fc#L31-L41) and [V4](https://github.com/ton-blockchain/wallet-contract/blob/4111fd9e3313ec17d99ca9b5b1656445b5b49d8f/func/wallet-v4-code.fc#L164-L198). Let’s start with the methods that are the same for both wallet versions:
 
-|        Method        |                                                                                                            Explanation                                                                                                            |
-| :------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|     int seqno()      |                                 This method is needed to receive the current seqno and send messages with the correct value. In previous sections of this tutorial, this method was called often.                                 |
-| int get_public_key() | This method is used to retrive a public key. The get_public_key() is not broadly used, and can be used by different services. For example, some API services allow for the retrieval of numerous wallets with the same public key |
+|        Method        |                                                                                                       Explanation                                                                                                       |
+| :------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|     int seqno()      |                     This method is essential for retrieving the current seqno and sending messages with the correct value. In previous sections of this tutorial, we frequently called this method.                     |
+| int get_public_key() | This method retrieves the public key. While get_public_key() is not widely used, various services can utilize it. For example, some API services allow retrieving multiple wallets associated with the same public key. |
 
 Now, let’s move to the methods that only the V4 wallet makes use of:
 
-|                     Method                     |                                                                                                                      Explanation                                                                                                                      |
-| :--------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|             int get_subwallet_id()             |                                                                              Earlier in the tutorial we considered this. This method allows you to retrive subwallet_id.                                                                              |
-| int is_plugin_installed(int wc, int addr_hash) | Let’s us know if the plugin has been installed. To call this method it’s necessary to pass the [workchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules) and the plugin address hash. |
-|            tuple get_plugin_list()             |                                                                                          This method returns the address of the plugins that are installed.                                                                                           |
+|                     Method                     |                                                                                                                  Explanation                                                                                                                   |
+| :--------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|             int get_subwallet_id()             |                                                                          Earlier in the tutorial, we considered this. This method allows you to retrive subwallet_id.                                                                          |
+| int is_plugin_installed(int wc, int addr_hash) | Let us know if the plugin has been installed. To call this method, you need to pass the [workchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules) and the plugin address hash. |
+|            tuple get_plugin_list()             |                                                                                           This method returns the address of the installed plugins.                                                                                            |
 
 Let’s consider the `get_public_key` and the `is_plugin_installed` methods. These two methods were chosen because we would first have to get a public key from 256 bits of data, and then we would have to learn how to pass a slice and different types of data to GET methods. This is very useful to help us learn how to properly use these methods.
 
@@ -1812,7 +1806,7 @@ const oldWalletAddress = Address.parse(
 ); // my old wallet address
 const subscriptionAddress = Address.parseFriendly(
   "EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_N9qwOTSAy3sQSZ"
-); // subscription plugin address which is already installed on the wallet
+); // subscription plugin address, which is already installed on the wallet
 ```
 
 </TabItem>
@@ -1826,11 +1820,10 @@ subscriptionAddress := address.MustParseAddr("EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_
 </TabItem>
 </Tabs>
 
-# Now we need to retrieve the plugin’s hash address so the address can be translated into a number and sent to the GET Method.
-
+<<<<<<< HEAD
+Now we need to retrieve the plugin’s hash address so the address can be translated into a number and sent to the GET Method.
+=======
 Now, we need to retrieve the plugin’s hash address to translate it into a number and send it to the GET Method.
-
-> > > > > > > 018b2129 (Update wallet.md)
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1874,22 +1867,20 @@ log.Println(getResult.MustInt(0)) // -1
 </TabItem>
 </Tabs>
 
-# The response must be `-1`, meaning the result is true. It is also possible to send a slice and a cell if required. It would be enough to create a Slice or Cell and transfer it instead of using the BigInt, specifying the appropriate type.
-
+<<<<<<< HEAD
+The response must be `-1`, meaning the result is true. It is also possible to send a slice and a cell if required. It would be enough to create a Slice or Cell and transfer it instead of using the BigInt, specifying the appropriate type.
+=======
 The response must be `-1`, meaning the result is `true`. It is also possible to send a slice and a cell if required. It would be enough to create and transfer a Slice or Cell instead of using the BigInt, specifying the appropriate type.
-
-> > > > > > > 018b2129 (Update wallet.md)
 
 ### Contract deployment via wallet
 
 In chapter three, we deployed a wallet. To accomplish this, we initially sent some TON and a message from the wallet to deploy a smart contract. However, this process is not broadly used with external messages and is often used mainly for wallets. While developing contracts, the deployment process is initialized by sending internal messages.
 
+<<<<<<< HEAD
 To accomplish this, will use the V3R2 wallet smart contract that was used in [the third chapter](/v3/guidelines/smart-contracts/howto/wallet#compiling-wallet-code).
 In this case, we’ll set the `subwallet_id` to `3` or any other number needed to retrieve another address when using the same private key (it's changeable):
 =======
 To achieve this, we’ll use the V3R2 wallet smart contract introduced in [the third chapter](/v3/guidelines/smart-contracts/howto/wallet#compiling-wallet-code). In this case, we’ll set the `subwallet_id` to `3` or any other number required to generate a different address while using the same private key (this value is customizable):
-
-> > > > > > > 018b2129 (Update wallet.md)
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -2034,12 +2025,11 @@ internalMessage := cell.BeginCell().
 </Tabs>
 
 :::info
+<<<<<<< HEAD
 Note that above, the bits have been specified and that the stateInit and internalMessageBody have been saved as references. Since the links are stored separately, we could write 4 (0b100) + 2 (0b10) + 1 (0b1) -> (4 + 2 + 1, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1) which means (0b111, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1) and then save two references.
 =======
 Note that the bits have been specified above and that the stateInit and internalMessageBody have been saved as references.
-
-> > > > > > > 018b2129 (Update wallet.md)
-> > > > > > > :::
+:::
 
 Since the links are stored separately, we could write:
 
@@ -2071,9 +2061,7 @@ const client = new TonClient({
 
 const walletMnemonicArray = "put your mnemonic".split(" ");
 const walletKeyPair = await mnemonicToWalletKey(walletMnemonicArray); // extract private and public keys from mnemonic
-const walletAddress = Address.parse(
-  "put your wallet address with which you will deploy"
-);
+const walletAddress = Address.parse("put the wallet address you will deploy.");
 const getMethodResult = await client.runMethod(walletAddress, "seqno"); // run "seqno" GET method from your wallet contract
 const seqno = getMethodResult.stack.readNumber(); // get seqno from response
 
@@ -2188,7 +2176,7 @@ This concludes our work with ordinary wallets. At this stage, you should have a 
 
 ## 🔥 High-load wallet v3
 
-When working with many messages in a short period, there is a need for special wallet called High-Load Wallet. High-Load Wallet V2 was the main wallet on TON for a long time, but you had to be very careful with it. Otherwise, you could [lock all funds](https://t.me/tonstatus/88).
+You’ll need a specialized wallet called a **High-Load Wallet** to handle many messages quickly. High-Load Wallet V2 was the primary wallet on TON for a long time, but it required careful handling. Otherwise, you risk [locking all funds](https://t.me/tonstatus/88).
 
 [With the introduction of High-Load Wallet V3](https://github.com/ton-blockchain/highload-wallet-contract-v3), this issue has been resolved at the contract architecture level, and it consumes less gas. This chapter will cover the basics of High-Load Wallet V3 and highlight important nuances to keep in mind.
 
@@ -2196,7 +2184,7 @@ When working with many messages in a short period, there is a need for special w
 We will work [with a slightly modified version of wrapper](https://github.com/aSpite/highload-wallet-contract-v3/blob/main/wrappers/HighloadWalletV3.ts) for the contract, as it protects against some non-obvious mistakes.
 :::
 
-### Storage Structure
+### Storage structure
 
 First of all, [TL-B schema](https://github.com/ton-blockchain/highload-wallet-contract-v3/blob/d58c31e82315c34b4db55942851dd8d4153975c5/contracts/scheme.tlb#L1C1-L3C21) will help us in learning the structure of the contract storage:
 
@@ -2330,7 +2318,7 @@ commit();
 
 This ensures that when executing further code, the contract doesn’t revert to its previous state if an error occurs in the message the user is trying to send. Without this, the external message would remain valid and could be accepted multiple times, leading to unnecessary balance depletion.
 
-However, another issue must be addressed - possible errors during the **Action Phase**. Although we have a flag to ignore the mistakes (2) when sending a message, it doesn't work in all cases, so we need to ensure that no errors occur during this phase, which could cause the state to roll back and make `commit()` meaningless.
+However, we must address another issue: potential errors during the **Action Phase**. While we have a flag to ignore errors (2) when sending a message, it doesn’t cover all cases. Therefore, we need to ensure no errors occur during this phase, as they could cause a state rollback, rendering `commit()` meaningless.
 
 For this reason, instead of sending all messages directly, the contract sends itself a message with the `internal_transfer` opcode. This message is parsed in detail by the contract to ensure that no Action Phase error occurs:
 
@@ -2380,7 +2368,7 @@ if (op == op::internal_transfer) {
 }
 ```
 
-When dealing with `internal_transfer` there is one important nuance. As we have discussed above, the contract sends a message to itself, but that message is entirely collected on the user side. The problem is that you need to correctly count how much TON will be attached to the message.
+When working with `internal_transfer`, there’s an important nuance to consider. As mentioned earlier, the contract sends a message to itself, but it is entirely collected on the user's side. The challenge lies in accurately calculating the amount of TON to attach to the message.
 
 In the wrapper in the official repository, this field is optional, and if the user does not specify it, [mode becomes 128](https://github.com/ton-blockchain/highload-wallet-contract-v3/blob/d58c31e82315c34b4db55942851dd8d4153975c5/wrappers/HighloadWalletV3.ts#L115), which means that the entire balance is sent. The problem is that there is **an edge case** in such a case.
 
@@ -2408,27 +2396,25 @@ Although the external message limit is 64KB, the larger the external message, th
 
 ### GET methods
 
-> > > > > > > 018b2129 (Update wallet.md)
-
 High-Load Wallet V3 supports the 5 GET methods:
 
-|                    Method                    |                                                                                                   Explanation                                                                                                   |
-| :------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|             int get_public_key()             |                                                                                     Returns the public key of the contract.                                                                                     |
-|            int get_subwallet_id()            |                                                                                            Returns the subwallet ID.                                                                                            |
-|          int get_last_clean_time()           |                                                                                     Returns the time of the last cleaning.                                                                                      |
-|              int get_timeout()               |                                                                                           Returns the timeout value.                                                                                            |
-| int processed?(int query_id, int need_clean) | Returns whether the query_id has been processed. If need_clean is set to 1, then will first do the cleanup based on `last_clean_time` and `timeout` and then check for query_id in `old_queries` and `queries`. |
+|                    Method                    |                                                                                                  Explanation                                                                                                  |
+| :------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|             int get_public_key()             |                                                                                    Returns the public key of the contract.                                                                                    |
+|            int get_subwallet_id()            |                                                                                           Returns the subwallet ID.                                                                                           |
+|          int get_last_clean_time()           |                                                                                    Returns the time of the last cleaning.                                                                                     |
+|              int get_timeout()               |                                                                                          Returns the timeout value.                                                                                           |
+| int processed?(int query_id, int need_clean) | Returns whether the query_id has been processed. If need_clean is set to 1, we will first do the cleanup based on `last_clean_time` and `timeout` and then check for query_id in `old_queries` and `queries`. |
 
 :::tip
 It’s recommended to pass `true` for `need_clean` unless the situation requires explicitly otherwise. This ensures the most current dictionary states are returned.
 :::
 
-Due to how the Query ID is organized in High-Load Wallet V3, we can send a message with the same Query ID again if it does not arrive without fear of the request being processed twice.
+Thanks to how the Query ID is structured in High-Load Wallet V3, we can safely resend a message with the same Query ID if it doesn’t arrive initially without worrying about the request being processed twice.
 
-However, in such a case, we must consider that no more than `timeout` time has elapsed since the first sending attempt. Otherwise, the request may have been processed but already deleted from the dictionaries. Therefore, it is recommended to set `timeout` to no less than an hour and no more than 24 hours.
+However, in such cases, we must ensure that no more than `timeout` time has passed since the first sending attempt. Otherwise, the request might have already been processed and deleted from the dictionaries. Therefore, it’s recommended to set `timeout` to no less than an hour and no more than 24 hours.
 
-### Deploying High-Load Wallet V3
+### Deploying high-load wallet v3
 
 To deploy a contract, we need 2 cells: `code` and `date`. For the code, we will use the following cell:
 
@@ -2641,21 +2627,17 @@ queryHandler.getNext();
 
 =======
 
-## 🔥 High-load wallet v2
-
-::: warning
-High-load wallet v2 is outdated. Do not use this for new projects.
-:::
-
-> > > > > > > 018b2129 (Update wallet.md)
+## 🔥 High-Load Wallet V2 (Outdated)
 
 In some situations, sending a large number of messages per transaction may be necessary. As previously mentioned, ordinary wallets support sending up to 4 messages at a time by storing [a maximum of 4 references](/v3/documentation/data-formats/tlb/cell-boc#cell) in a single cell. High-load wallets only allow 255 messages to be sent at once. This restriction exists because the maximum number of outgoing messages (actions) in the blockchain’s config settings is set to 255.
 
-Exchanges are probably the best example of where high-load wallets are used on a large scale. Established exchanges like Binance and others have extremely large user bases, this means that a large number of withdrawals messages are processed in short time periods. High-load wallets help address these withdrawal requests.
+In some situations, sending a large number of messages per transaction may be necessary. As previously mentioned, ordinary wallets support sending up to 4 messages simultaneously by storing [a maximum of 4 references](/v3/documentation/data-formats/tlb/cell-boc#cell) in a single cell. High-load wallets only allow 255 messages to be sent at once. This restriction exists because the maximum number of outgoing messages (actions) in the blockchain’s config settings is set to 255.
+
+Exchanges are probably the best example of a large-scale use of high-load wallets. Established exchanges like Binance and others have extremely large user bases, which means that a large number of withdrawal messages are processed in short time periods. High-load wallets help address these withdrawal requests.
 
 ### High-load wallet FunC code
 
-First, let’s examine [the code structure of high-load wallet smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-highload-wallet-v2.fif):
+First, let’s examine [the code structure of a high-load wallet smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-highload-wallet-v2.fif):
 
 ```func
 () recv_external(slice in_msg) impure {
@@ -2724,22 +2706,22 @@ Note that if a value is found, `f` always equals `-1` (true). The `~ -1` operati
 
 ### Removing expired queries
 
-Typically, [smart contracts on TON pay for their own storage](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee). This means that the amount of data smart contracts can store is limited to prevent high network loading. To allow the system to be more efficient, messages that are more than 64 seconds old are removed from the storage. This is conducted as follows:
+Typically, [smart contracts on TON pay for their storage](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee). This limits the amount of data smart contracts can store, preventing excessive network load. Messages older than 64 seconds are automatically removed from storage to improve system efficiency. This process works as follows:
 
 ```func
 bound -= (64 << 32);   ;; clean up records that have expired more than 64 seconds ago
 old_queries~udict_set_builder(64, query_id, begin_cell()); ;; add current query to dictionary
 var queries = old_queries; ;; copy dictionary to another variable
 do {
-  var (old_queries', i, _, f) = old_queries.udict_delete_get_min(64);
-  f~touch();
-  if (f) { ;; check if any value was found
-    f = (i < bound); ;; check if more than 64 seconds have elapsed after expiration
-  }
-  if (f) {
-    old_queries = old_queries'; ;; if yes save changes in our dictionary
-    last_cleaned = i; ;; save last removed query
-  }
+ var (old_queries', i, _, f) = old_queries.udict_delete_get_min(64);
+ f~touch();
+ if (f) { ;; check if any value was found
+ f = (i < bound); ;; check if more than 64 seconds have elapsed after the expiration
+ }
+ if (f) {
+ old_queries = old_queries'; ;; if yes, save changes in our dictionary
+ last_cleaned = i; ;; save last removed query
+ }
 } until (~ f);
 ```
 
@@ -2747,7 +2729,7 @@ do {
 >
 > [udict_delete_get_min()](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_delete_get_min)
 
-Note that it is necessary to interact with the `f` variable several times. Since the [TVM is a stack machine](/v3/documentation/tvm/tvm-overview#tvm-is-a-stack-machine), during each interaction with the `f` variable it is necessary to pop all values to get the desired variable. The `f~touch()` operation places the f variable at the top of the stack to optimize code execution.
+It is necessary to interact with the `f` variable several times. Since the [TVM is a stack machine](/v3/documentation/tvm/tvm-overview#tvm-is-a-stack-machine), during each interaction with the `f` variable, it is necessary to pop all values to get the desired variable. The `f~touch()` operation places the f variable at the top of the stack to optimize code execution.
 
 ### Bitwise operations
 
@@ -2756,8 +2738,6 @@ This section might be challenging for those unfamiliar with bitwise operations. 
 ```func
 var bound = (now() << 32); ;; bitwise left shift operation
 ```
-
-As a result 32 bits are added to the number on the right side. This means that **existing values are moved 32 bits to the left**. For example, let’s consider the number 3 and translate it into a binary form with a result of 11. Applying the `3 << 2` operation, 11 is moved 2 bit places. This means that two bits are added to the right of the string. In the end, we have 1100, which is 12.
 
 As a result, 32 bits are added to the number on the right side. This means **existing values are shifted 32 bits to the left**. For example, let’s take the number `3` and convert it to binary, resulting in `11`. Applying the `3 << 2` operation shifts `11` two bit positions to the left, adding two `0`s to the right. This gives us `1100`, which equals `12`.
 
@@ -2776,8 +2756,6 @@ if (f) { ;; check if any value has been found
  f = (i < bound); ;; check if more than 64 seconds have elapsed after the expiration
 }
 ```
-
-To understand this better, let’s use the number `1625918400` as an example of a timestamp. Its binary representation (with the left-handed addition of zeros for 32 bits) is 01100000111010011000101111000000. By performing a 32 bit bitwise left shift, the result is 32 zeros at the end of the binary representation of our number.
 
 To better understand this, let’s use the number `1625918400` as an example of a timestamp. Its binary representation (with 32 bits, padded with zeros on the left) is `01100000111010011000101111000000`. By performing a 32-bit left shift, we add 32 zeros to the end of the binary representation of our number.
 
@@ -2801,10 +2779,10 @@ After all operations are complete, the only task remaining is to save the new va
 
 The last thing we have to consider before we dive into wallet deployment and message creation is high-load wallet GET methods:
 
-|            Method            |                                                                                                                                Explanation                                                                                                                                 |
-| :--------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| int processed?(int query_id) | Notifies the user if a particular request has been processed. This means it returns `-1` if the request has been processed and `0` if it has not. Also, this method may return `1` if the answer is unknown since the request is old and no longer stored in the contract. |
-|     int get_public_key()     |                                                                                                        Rerive a public key. We have considered this method before.                                                                                                         |
+|            Method            |                                                                                                                           Explanation                                                                                                                           |
+| :--------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| int processed?(int query_id) | Notifies the user if a request has been processed. This means it returns `-1` if the request has been processed and `0` if it has not. Also, this method may return `1` if the answer is unknown since the request is old and no longer stored in the contract. |
+|     int get_public_key()     |                                                                                                   Rerive a public key. We have considered this method before.                                                                                                   |
 
 Let’s look at the `int processed?(int query_id)` method closely to help us understand why we need to make use of the last_cleaned:
 
@@ -2817,8 +2795,6 @@ int processed?(int query_id) method_id {
  return found ? true : - (query_id <= last_cleaned);
 }
 ```
-
-The `last_cleaned` is retrieved from the storage of the contract and a dictionary of old queries. If the query is found, it is to be returned true, and if not, the expression `- (query_id <= last_cleaned)`. The last_cleaned contains the last removed request **with the highest timestamp**, as we started with the minimum timestamp when deleting the requests.
 
 The `last_cleaned` value is retrieved from the contract storage and the dictionary of old queries. If the query is found, the method returns `true`. If not, it evaluates the expression `- (query_id <= last_cleaned)`. The `last_cleaned` value contains the last removed request **with the highest timestamp**, as we started deleting requests from the minimum timestamp.
 
@@ -2855,7 +2831,7 @@ if (result.status === "error") {
 
 const codeCell = Cell.fromBoc(Buffer.from(result.codeBoc, "base64"))[0];
 
-// now we have base64 encoded BOC with compiled code in result.codeBoc
+// now we have base64 encoded BOC with compiled code in the result.codeBoc
 console.log("Code BOC: " + result.codeBoc);
 console.log("\nHash: " + codeCell.hash().toString("base64")); // get the hash of cell and convert in to base64 encoded string
 ```
@@ -2913,7 +2889,7 @@ const dataCell = beginCell()
   .storeUint(698983191, 32) // Subwallet ID
   .storeUint(0, 64) // Last cleaned
   .storeBuffer(highloadKeyPair.publicKey) // Public Key
-  .storeBit(0) // indicate that the dictionary is empty
+  .storeBit(0) // indicates that the dictionary is empty
   .endCell();
 
 const stateInit = beginCell()
@@ -2981,7 +2957,7 @@ Everything we have detailed above follows the same steps as the contract [deploy
 
 ### Sending high-load wallet v2 messages
 
-Now let’s program a high-load wallet to send several messages at the same time. For example, let's take 12 messages per transaction so that the gas fees are small.
+Now, let’s program a high-load wallet to send several messages simultaneously. For example, let's take 12 messages per transaction so that the gas fees are small.
 
 :::info High-load balance
 The contract balance must be at least 0.5 TON to complete the transaction.
@@ -2997,7 +2973,7 @@ import { Address, beginCell, Cell, toNano } from "@ton/core";
 
 let internalMessages: Cell[] = [];
 const walletAddress = Address.parse(
-  "put your wallet address from which you deployed high-load wallet"
+  "put your wallet address from which you deployed the high-load wallet"
 );
 
 for (let i = 0; i < 12; i++) {
@@ -3086,17 +3062,17 @@ const finalQueryID = (BigInt(now + timeout) << 32n) + BigInt(queryID); // get ou
 console.log(finalQueryID); // print query_id. With this query_id, we can call the GET method to check if our request has been processed
 
 const toSign = beginCell()
-    .storeUint(698983191, 32) // subwallet_id
-    .storeUint(finalQueryID, 64)
-    // Here we create our own method that will save the
+ .storeUint(698983191, 32) // subwallet_id
+ .storeUint(finalQueryID, 64)
+    // Here, we create our own method that will save the
     // message mode and a reference to the message
  .storeDict(dictionary, Dictionary.Keys.Int(16), {
         serialize: (src, builder) => {
             buidler.storeUint(3, 8); // save message mode, mode = 3
-            buidler.storeRef(src); // save message as reference
-        },
+            builder.storeRef(src); // save message as reference
+ },
         // We won't actually use this, but this method
-        // will help to read our dictionary that we saved
+        // will help to read the dictionary that we saved
         parse: (src) => {
             let cell = beginCell()
  .storeUint(src.loadUint(8), 8)
@@ -3269,10 +3245,7 @@ If you have any questions, comments, or suggestions, please contact the author o
 - Wallets' source code: [V3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc), [V4](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc), [High-load](https://github.com/ton-blockchain/highload-wallet-contract-v3)
   <<<<<<< HEAD
 
-- # Useful concept documents(may include outdated information): [ton.pdf](https://docs.ton.org/ton.pdf), [tblkch.pdf](https://ton.org/tblkch.pdf), [tvm.pdf](https://ton.org/tvm.pdf)
-  > > > > > > > 018b2129 (Update wallet.md)
-
-The main sources of code:
+The primary sources of code:
 
 - [@ton/ton (JS/TS)](https://github.com/ton-org/ton)
 - [@ton/core (JS/TS)](https://github.com/ton-org/ton-core)
