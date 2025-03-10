@@ -383,12 +383,12 @@ var msg = begin_cell()
 
 Now, let’s go through each option in detail:
 
-|    Option    |                                                                                                                                                                                                                                      Explanation                                                                                                                                                                                                                                      |
-| :----------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| IHR Disabled |                           Currently, this option is disabled (which means we store 1) because Instant Hypercube Routing is not fully implemented. In addition, this will be needed when a large number of [Shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards) are live on the network. More can be read about the IHR Disabled option in the [tblkch.pdf](https://ton.org/tblkch.pdf) (chapter 2).                           |
-|    Bounce    | While sending messages, a variety of errors can occur during smart contract processing. To avoid losing TON, it is necessary to set the Bounce option to 1 (true). In this case, if any contract errors occur during transaction processing, the message will be returned to the sender, and the same amount of TON will be received minus fees. More can be read about non-bounceable messages [here](/v3/documentation/smart-contracts/message-management/non-bounceable-messages). |
-|   Bounced    |                                                                                                                                 Bounced messages are messages that are returned to the sender because an error occurred while processing the transaction with a smart contract. This option tells you whether the message received is bounced or not.                                                                                                                                 |
-|     Src      |                                                                                                                                                                                      The Src is the sender address. In this case, two zero bits are written to indicate the `addr_none` address.                                                                                                                                                                                      |
+|    Option    |                                                                                                                                                                                                                           Explanation                                                                                                                                                                                                                           |
+| :----------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| IHR Disabled |                Currently, this option is disabled (meaning we store `1`) because Instant Hypercube Routing (IHR) is not yet fully implemented. This option will become relevant once many [Shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards) are active on the network. For more details about the IHR Disabled option, refer to [tblkch.pdf](https://ton.org/tblkch.pdf) (chapter 2).                |
+|    Bounce    | When sending messages, errors can occur during smart contract processing. Setting the `Bounce` option to `1` (true) is essential to prevent TON loss. If any errors arise during transaction processing, the message will be returned to the sender, and the same amount of TON (minus fees) will be refunded. Refer to [this guide](/v3/documentation/smart-contracts/message-management/non-bounceable-messages) for more details on non-bounceable messages. |
+|   Bounced    |                                                                                                                                  Bounced messages are those returned to the sender due to an error during transaction processing with a smart contract. This option indicates whether the received message is bounced or not.                                                                                                                                   |
+|     Src      |                                                                                                                                                                          The Src is the sender's address. In this case, two zero bits are written to indicate the `addr_none` address.                                                                                                                                                                          |
 
 The following two lines of code:
 
@@ -695,8 +695,8 @@ externalMessage := cell.BeginCell().
 |    Option    |                                                                                                                      Explanation                                                                                                                      |
 | :----------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |     Src      | The sender address. Since an incoming external message cannot have a sender, there will always be 2 zero bits (an addr_none [TL-B](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L100)). |
-|  Import Fee  |                                                                                             The fee used to pay for importing incoming external messages.                                                                                             |
-|  State Init  |        Unlike the Internal Message, the State Init within the external message is needed **to deploy a contract from the outside world**. The State Init used in conjunction with the Internal Message allows one contract to deploy another.         |
+|  Import Fee  |                                                                                                   The fee for importing incoming external messages.                                                                                                   |
+|  State Init  |                Unlike the Internal Message, the State Init within the external message is needed **to deploy a contract from the outside world**. The State Init used with the Internal Message allows one contract to deploy another.                |
 | Message Body |                                                                                             The message that must be sent to the contract for processing.                                                                                             |
 
 :::tip 0b10
@@ -745,13 +745,13 @@ As a result, we got the output of our BOC in the console, and the message was se
 
 ## 👛 Deploying a wallet
 
-We’ve covered the basics of creating messages to help us deploy a wallet. Previously, we deployed wallets using wallet apps, but we’ll deploy our wallet manually this time.
+We have learned the basics of creating messages, which will now be helpful for deploying the wallet. In the past, we have deployed wallet via wallet app, but in this case we’ll need to deploy our wallet manually.
 
-In this section, we’ll walk through creating a wallet (wallet v3) from scratch. You’ll learn how to compile the wallet smart contract code, generate a mnemonic phrase, obtain a wallet address, and deploy the wallet using external messages and State Init (state initialization).
+In this section we’ll go over how to create a wallet (wallet v3) from scratch. You’ll learn how to compile the code for a wallet smart contract, generate a mnemonic phrase, receive a wallet address, and deploy a wallet using external messages and State Init (state initialization).
 
 ### Generating a mnemonic
 
-The first step in creating a wallet is generating a `private` and `public` key. We’ll generate a mnemonic seed phrase and extract the keys using cryptographic libraries.
+The first thing needed to correctly create a wallet is to retrieve a `private` and `public` key. To accomplish this task, it is necessary to generate a mnemonic seed phrase and then extract private and public keys using cryptographic libraries.
 
 Here’s how to accomplish this:
 
@@ -848,7 +848,7 @@ var subWallet uint64 = 698983191
 
 ### Compiling wallet code
 
-Now that the private and public keys and the `subwallet_id` are clearly defined, we need to compile the wallet code. We’ll use the [wallet v3 code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) from the official repository.
+Now that the private and public keys and the `subwallet_id` are clearly defined, we must compile the wallet code. We’ll use the [wallet v3 code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) from the official repository.
 
 The [@ton-community/func-js](https://github.com/ton-community/func-js) library is necessary to compile wallet code. This library allows us to compile FunC code and retrieve a cell containing the code. To get started, install the library and save it to the `package.json` as follows:
 
@@ -858,7 +858,7 @@ npm i --save @ton-community/func-js
 
 We’ll only use JavaScript to compile code, as the libraries for compiling code are JavaScript-based. However, after compiling is finalized, as long as we have our cell's **base64 output**, it is possible to use this compiled code in languages such as Go and others.
 
-First, we must create two files: `wallet_v3.fc` and `stdlib.fc`. The compiler relies on the `stdlib.fc` library, which contains all the necessary basic functions corresponding to `asm` instructions. You can download the `stdlib.fc` file [here](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc). For the `wallet_v3.fc` file, copy the code from the repository.
+First, we need to create two files: `wallet_v3.fc` and `stdlib.fc`. The compiler works with the stdlib.fc library. All necessary and basic functions, which correspond with the `asm` instructions were created in the library. The stdlib.fc file can be downloaded [here](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc). In the `wallet_v3.fc` file it is necessary to copy the code above.
 
 Now, we have the following structure for the project we are creating:
 
@@ -957,14 +957,13 @@ After the above processes are complete, the hashes match, confirming that the co
 
 Before building a message, it is essential to understand what a State Init is. First, let’s go through the [TL-B scheme](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L141-L143):
 
-|   Option    |                                                                                                                                                                                                                Explanation                                                                                                                                                                                                                 |
-| :---------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| split_depth |        This option is designed for highly loaded smart contracts that can be split and distributed across multiple [shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards). For more details on how this works, refer to the [tblkch.pdf](https://ton.org/tblkch.pdf) (section 4.1.6). Since this feature is not needed for wallet smart contracts, only a `0` bit is stored.         |
-|   special   | This option is used for **TicTok** smart contracts that are automatically triggered for each block. Regular smart contracts, such as wallets, do not require this functionality. For more details, refer to [this section](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock) or the [tblkch.pdf](https://ton.org/tblkch.pdf) (section 4.1.6). Since this feature is unnecessary for our use case, only a `0` bit is stored. |
-|             |
-|    code     |                                                                                                                                                                                   `1` bit means the presence of the smart contract code as a reference.                                                                                                                                                                                    |
-|    data     |                                                                                                                                                                                   `1` bit means the presence of the smart contract data as a reference.                                                                                                                                                                                    |
-|   library   |                     This option refers to a library that operates on the [masterchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains) and can be shared across multiple smart contracts. Since wallets do not require this functionality, its bit is set to `0`. For more information, refer to [tblkch.pdf](https://ton.org/tblkch.pdf) (section 1.8.4).                      |
+|   Option    |                                                                                                                                                                                                      Explanation                                                                                                                                                                                                      |
+| :---------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| split_depth | This option is intended for highly loaded smart contracts that can be split and located on several [shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards). More information detailing how this works can be found in the [tblkch.pdf](https://ton.org/tblkch.pdf) (4.1.6). Only a `0` bit is stored since it is being used only within a wallet smart contract. |
+|   special   |       Used for TicTok. These smart contracts are automatically called for each block and are not needed for regular smart contracts. Information about this can be found in [this section](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock) or in [tblkch.pdf](https://ton.org/tblkch.pdf) (4.1.6). Only a `0` bit is stored within this specification because we do not need such a function.        |
+|    code     |                                                                                                                                                                         `1` bit means the presence of the smart contract code as a reference.                                                                                                                                                                         |
+|    data     |                                                                                                                                                                         `1` bit means the presence of the smart contract data as a reference.                                                                                                                                                                         |
+|   library   |                              A library that operates on the [masterchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains) and can be used by different smart contracts. This will not be used for wallet, so its bit is set to `0`. Information about this can be found in [tblkch.pdf](https://ton.org/tblkch.pdf) (1.8.4).                               |
 
 Next, we’ll prepare the `initial data`, which will be present in our contract’s storage immediately after deployment:
 
@@ -1045,7 +1044,9 @@ log.Println("Contract address:", contractAddress.String()) // Output contract ad
 We can build and send the message to the blockchain using the State Init.
 
 :::warning
-Keep in mind this concept for your services
+To carry out this process, **a minimum wallet balance of 0.1 TON** is required (the balance can be less, but this amount is guaranteed to be sufficient). To accomplish this, we’ll need to run the code mentioned earlier in the tutorial, obtain the correct wallet address, and send 0.1 TON to this address. Alternatively, you can send this sum manually via your wallet app before sending the deployment message itself.
+
+Deployment by external messages is presented here mostly for educational purposes; in practice, it's much more convenient to [deploy smart contracts via Wallets](/v3/guidelines/smart-contracts/howto/wallet#contract-deployment-via-wallet), which will be described later.
 :::
 
 To carry out this process, **a minimum wallet balance of 0.1 TON** is required (the balance can be less, but this amount is guaranteed sufficient). To accomplish this, we’ll need to run the code mentioned earlier in the tutorial, obtain the correct wallet address, and send 0.1 TON to this address. Alternatively, you can send this sum manually via your wallet app before sending the deployment message.
@@ -1217,9 +1218,9 @@ if err != nil {
 </TabItem>
 </Tabs>
 
-Note that we sent an internal message using mode `3`. If you need to redeploy the same wallet, **the smart contract can be destroyed**. To do this, set the mode to `160` by adding 128 (take the entire balance of the smart contract) + 32 (destroy the smart contract). This will retrieve the remaining TON balance and allow you to deploy the wallet again.
+Note that we sent an internal message using mode `3`. If you must redeploy the same wallet, **the smart contract can be destroyed**. To do this, set the [mode](/v3/documentation/smart-contracts/message-management/message-modes-cookbook#mode160/) to `160` by adding `128` (take the entire balance of the smart contract) + `32` (destroy the smart contract). This will retrieve the remaining TON balance and allow you to deploy the wallet again.
 
-Remember that for each new transaction, the **seqno must be incremented by one**.
+Remember that for each new transaction, the `seqno` must be incremented by one.
 
 :::info
 The contract code we used is [verified](https://tonscan.org/tx/BL9T1i5DjX1JRLUn4z9JOgOWRKWQ80pSNevis26hGvc=), so you can see an example [here](https://tonscan.org/address/EQDBjzo_iQCZh3bZSxFnK9ue4hLTOKgsCNKfC8LOUM4SlSCX#source).
@@ -1564,7 +1565,7 @@ After completing this process, you can use a TON blockchain explorer to verify t
 
 ### NFT transfers
 
-In addition to regular messages, users often send NFTs to each other. Unfortunately, not all libraries include methods specifically designed for interacting with this type of smart contract. As a result, we need to write code that allows us to construct messages for sending NFTs. First, let’s familiarize ourselves with the TON NFT [standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md).
+In addition to regular messages, users often send NFTs to each other. Unfortunately, not all libraries specifically use methods for interacting with this type of smart contract. As a result, we need to write code that allows us to construct messages for sending NFTs. First, let’s familiarize ourselves with the TON NFT [standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md).
 
 Specifically, we need to thoroughly understand the TL-B schema for [NFT Transfers](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#1-transfer).
 
@@ -1806,7 +1807,7 @@ subscriptionAddress := address.MustParseAddr("EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_
 </TabItem>
 </Tabs>
 
-Now, we need to retrieve the plugin’s hash address so that it can be translated into a number and sent to the GET Method.
+Now, we need to retrieve the plugin’s hash address to translate it into a number and send it to the GET Method.
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -1850,13 +1851,13 @@ log.Println(getResult.MustInt(0)) // -1
 </TabItem>
 </Tabs>
 
-The response must be `-1`, meaning the result is true. If required, it is also possible to send a slice and a cell. It would be enough to create and transfer a Slice or Cell instead of using the BigInt, specifying the appropriate type.
+The response must be `-1`, meaning the result is `true`. It is also possible to send a slice and a cell if required. It would be enough to create and transfer a Slice or Cell instead of using the BigInt, specifying the appropriate type.
 
 ### Contract deployment via wallet
 
 In chapter three, we deployed a wallet. To accomplish this, we initially sent some TON and a message from the wallet to deploy a smart contract. However, this process is not broadly used with external messages and is often used mainly for wallets. While developing contracts, the deployment process is initialized by sending internal messages.
 
-We’ll use the V3R2 wallet smart contract introduced in [the third chapter](/v3/guidelines/smart-contracts/howto/wallet#compiling-wallet-code) to achieve this. In this case, we’ll set the `subwallet_id` to `3` or any other number required to generate a different address while using the same private key (this value is customizable):
+To achieve this, we’ll use the V3R2 wallet smart contract introduced in [the third chapter](/v3/guidelines/smart-contracts/howto/wallet#compiling-wallet-code). In this case, we’ll set the `subwallet_id` to `3` or any other number required to generate a different address while using the same private key (this value is customizable):
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -2001,8 +2002,22 @@ internalMessage := cell.BeginCell().
 </Tabs>
 
 :::info
-Note that the bits have been specified above and that the stateInit and internalMessageBody have been saved as references. Since the links are stored separately, we could write 4 (0b100) + 2 (0b10) + 1 (0b1) -> (4 + 2 + 1, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1), which means (0b111, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1) and then save two references.
+Note that the bits have been specified above and that the stateInit and internalMessageBody have been saved as references.
 :::
+
+Since the links are stored separately, we could write:
+
+```tlb
+4 (0b100) + 2 (0b10) + 1 (0b1) -> (4 + 2 + 1, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1)
+```
+
+Tha also means:
+
+```tlb
+(0b111, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1)
+```
+
+Then, save two references.
 
 Next, we’ll prepare a message for our wallet and send it:
 
@@ -2347,7 +2362,7 @@ High-Load Wallet V3 can send more than 254 messages, [putting the remaining mess
 Although the external message limit is 64KB, the larger the external message, the more likely it is to be lost in delivery, so 150 messages is the optimal solution.
 :::
 
-### GET vethods
+### GET methods
 
 High-Load Wallet V3 supports the 5 GET methods:
 
@@ -2574,7 +2589,7 @@ queryHandler.getNext();
 </TabItem>
 </Tabs>
 
-## 🔥 High-load wallet v2 (Outdated)
+## 🔥 High-load wallet v2
 
 In some situations, sending a large number of messages per transaction may be necessary. As previously mentioned, ordinary wallets support sending up to 4 messages at a time by storing [a maximum of 4 references](/v3/documentation/data-formats/tlb/cell-boc#cell) in a single cell. High-load wallets only allow 255 messages to be sent at once. This restriction exists because the maximum number of outgoing messages (actions) in the blockchain’s config settings is set to 255.
 
