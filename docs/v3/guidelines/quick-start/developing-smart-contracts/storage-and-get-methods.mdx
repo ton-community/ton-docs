@@ -1,15 +1,20 @@
 # Storage and Get Methods
 
-While it's technically possible to create smart contract on TON not having any persistent storage, almost all smart-contracts need to persistently store their state between transactions. Understanding how storage works in TON smart contracts is essential for developing. This guide explains standard ways of managing state of smart-contract and using get methods to obtain it from outside the blockchain.
+> **Summary:** In previous steps we learned how to use `Blueprint SDK` and it's project structure.
+
+:::tip
+If you are stuck on some of the examples you can find original template project with all modifications performed during this guide [here](https://github.com/ton-community/ton-onboarding-sandbox/tree/main/quick-start/smart-contracts/Example).
+:::
+
+While it's technically possible to create smart contract on TON not having any persistent storage, almost all smart-contracts need to store their `state` between transactions. This guide explains standard ways of managing `state` of smart-contract and using `get methods` to obtain it from outside the blockchain.
 
 ## Cell Structure: The Backbone of TON Storage
 
-TON blockchain uses a data structure called "Cell" as the fundamental unit for storing data. Cells are the building blocks of the TVM (TON Virtual Machine) and have some important characteristics:
+TON blockchain uses a data structure called **`Cell`** as the fundamental unit for storing data. Cells are the building blocks of the `TVM` (TON Virtual Machine) and have those characteristics:
 
-- A cell can store up to 1023 bits (approximately 128 bytes) of data
-- A cell can reference up to 4 other cells (children)
-- Cells form a directed acyclic graph (DAG) structure
-- Cells are immutable once created
+- A `Cell` can store up to 1023 bits (approximately 128 bytes) of data
+- A `Cell` can reference up to 4 other `Cells` (children)
+- `Cells` are immutable once created
 
 You can think of Cell as the following structure:
 
@@ -23,15 +28,18 @@ interface Cell {
 
 ## Smart Contract Storage Operations
 
-First thing that we should say is that there is a small, but important difference between smart-contract data segment and TVM storage [c4 register]("/s") existing only during execution of smart-contract. Remember that smart-contracts follow transaction concept - if any system or user exception is raised during execution, i.e. transaction fails - TVM storage will not be committed to smart-contract data segment. From the realization point this means that smart-contract data segment is copied to TVM storage before starting the execution and committed back, optionally modified, in case of successful transaction. For simplification of this guide we will not use those strict terms, instead we will describe both as `storage` and rely on context, so, keep these facts in mind.
+First thing that we should say is that there is a small, but important difference between smart-contract `persistent data` and [TVM storage](/v3/documentation/tvm/tvm-initialization#initial-state) existing only during execution of smart-contract. Remember that smart-contracts follow **transaction** concept - if any system or user exception is raised during execution, i.e. transaction fails - `TVM storage` will not be committed to smart-contract `persistent data`. From the realization point this means that smart-contract `persistent data` is copied to `TVM storage` before starting the execution and committed back, optionally modified, in case of successful **transaction**. For simplification of this guide we will not use those strict terms, instead we will describe both as `storage` and rely on context, so, keep these facts in mind.
 
 There are two main instructions that provide access to smart-contract storage: 
- - get_data() returning current storage cell.
- - set_data() setting current storage cell.
+ - `get_data()` returning current storage cell.
+ - `set_data()` setting current storage cell.
 
 In case it's inconvenient to always serialize and deserialize storage cell, there is a pretty standard practice to define two wrapper methods that provide corresponding logic. If you didn't change smart-contract code it should contain following lines:
 
 ```func
+global int ctx_id;
+global int ctx_counter;
+
 ;; load_data populates storage variables using stored data
 () load_data() impure {
     var ds = get_data().begin_parse();
@@ -53,14 +61,7 @@ In case it's inconvenient to always serialize and deserialize storage cell, ther
 }
 ```
 
-In this guide we will not dwell in detail of FunC language syntax, providing simple examples that could be understood by a person with basic programming background, but if you feel the need for a little-bit more context - check those articles. "TODO: add ref"
-
-:::tip
-If you are stuck on some of the examples you can find original template project with all modifications performed during this guide here:
-"Todo: add ref to repo"
-:::
-
-Let's try to modify our example a little bit. First, let's use a more common approach of passing storage members as parameters to save_data(members...) and retrieve them as (members...) get_data() moving global variables ctx_id and ctx_counter to method bodies. Also, let's add 2 additional integers of 32-bit and 256-bit size into our storage:
+Let's try to modify our example a little bit. First, let's use a more common approach of passing storage members as parameters to `save_data(members...)` and retrieve them as `(members...) get_data()` moving global variables ctx_id and ctx_counter to method bodies. Also, let's rebane our counter to seqno and add additional integers 256-bit size into our storage:
 
 Result of our modifications should look like this:
 
@@ -70,13 +71,12 @@ Result of our modifications should look like this:
     var ds = get_data().begin_parse();
 
     int ctx_id = ds~load_uint(32);
-    int ctx_counter = ds~load_uint(32);
     int seqno = ds~load_uint(32);
     int public_key = ds~load_uint(256);
 
     ds.end_parse();
 
-    return (ctx_id, ctx_counter, seqno, public_key);
+    return (ctx_id, seqno, public_key);
 }
 
 ;; save_data stores storage variables as a cell into persistent storage
@@ -85,25 +85,24 @@ Result of our modifications should look like this:
         begin_cell()
             .store_uint(ctx_id, 32)
             .store_uint(ctx_counter, 32)
-            .store_uint(seqno, 32)
             .store_uint(public_key, 256)
         .end_cell()
     );
 }
 ```
 
-Don't forget to delete global variables 'ctx_id', 'ctx_counter' and modify usage of the function like this, copying storage members locally:
+Don't forget to delete global variables `ctx_id`, `ctx_counter` and modify usage of the function like this, copying storage members locally:
 
 ```func
-var (ctx_id, ctx_counter, seqno, public_key) = load_data();
-save_data(ctx_id, ctx_counter, seqno, public_key);
+var (ctx_id, seqno, public_key) = load_data();
+save_data(ctx_id, seqno, public_key);
 ```
 
 ## Get methods
 
 The primary use of get methods is reading our storage data from outside the blockchain using a convenient interface, primarily to extract data that is required to prepare a transaction.
 
-Let's omit at the current moment the motivation of magical storage members 'seqno' and 'public_key' - we will discuss their meaning in later topics. Instead, let's provide a get method to retrieve both of them from outside the blockchain:
+Let's omit at the current moment the motivation of magical storage members `seqno` and `public_key` - we will discuss their meaning in later topics. Instead, let's provide a get method to retrieve both of them from outside the blockchain:
 
 ```func
 (int, int) get_seqno_public_key() method_id {
@@ -122,7 +121,7 @@ And that's it! In practice all get methods follow this simple flow and don't req
 
 ## Updating wrapper
 
-Now lets update our wrapper class corresponding to new storage layout and new get method.
+Now lets update our wrapper class corresponding to new storage layout and new `get method`.
 
 First, let's modify `helloWorldConfigToCell` function and `HelloWorldConfig` type to properly initialize our storage during deployment:
 
@@ -208,9 +207,7 @@ npm run test
 
 ## Next Steps
 
-Congratulations! We modified our first contract to execute a new get method, learned about smart-contract storage and went through the standard smart contract development flow. Now we can proceed to further sections explaining more complex actions upon smart contracts. At this point we will provide a more short description of standard actions: edit smart-contract -> edit wrapper -> edit tests, relying on your new skills.
+Congratulations! We modified our first contract to execute a new `get method`, learned about smart-contract storage and went through the standard smart contract development flow. Now we can proceed to further sections explaining more complex actions upon smart contracts. At this point we will provide a more short description of standard actions: edit smart-contract -> edit wrapper -> edit tests, relying on your new skills.
 
-Remember that you can always find the performed modifications in this repository: "TODO: add ref".
-
-Consider reading [Func Documentation]("/s") and try to add your own get method with corresponding wrapper and test modification by yourself and proceed to next steps when you feel ready for it.
+Consider reading your chosen [language specification](/v3/documentation/smart-contracts/overview#programming-languages) and try to add your own `get method` with corresponding wrapper and test modification by yourself and proceed to next steps when you feel ready for it.
 

@@ -1,66 +1,68 @@
 # Processing Messages
 
-> **Summary:** Messages in TON are a fundamental mechanism for both value transfer and data exchange between smart contracts, enabling complex interactions both with user wallets and between contracts in the network.
+> **Summary:** In previous steps we modified our smart-contract interaction with `storage, `get methods` and learned basic smart-contract development flow.
 
 Now that we have learned basic examples of modifying smart-contract code and using development tools, we are ready to move on to the main functionality of smart contracts - sending and receiving messages. 
 
 First thing to mention is that in TON, messages are not just currency exchange actions carrying TON coins. They are also a **data exchange mechanism** that provides an opportunity to create your own "network" of smart contracts interacting with each other and smart contracts of other network participants that are not under your direct control.
 
-In previous sections we already discussed types of messages and their basic concepts so let's not waste time and move on to their detailed description!
+:::tip
+If you are stuck on some of the examples you can find original template project with all modifications performed during this guide [here](https://github.com/ton-community/ton-onboarding-sandbox/tree/main/quick-start/smart-contracts/Example).
+:::
 
 ---
 
 ## External Messages
 
-External messages are your main way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because in most cases you don't want external entry points to be accessible to anyone. This includes several standard approaches of verifying external message sender providing safe entry point to the TON network which we will discuss here. If this is all functionality that you want from external section - standard way is to delegate this responsibility to separate actor - `wallet` which is practically the main reason they were designed for.
+`External messages` are your main way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because in most cases you don't want external entry points to be accessible to anyone except you. This includes several standard approaches of verifying external message sender providing safe entry point to the TON network which we will discuss here. If this is all functionality that you want from external section - standard way is to delegate this responsibility to separate actor - `wallet` which is practically the main reason they were designed for.
 
 ### Wallets
 
-When we sent coins using wallet app in getting started section ("TODO: add ref") what wallet app actually performs is sending external message to your wallet smart contract which performs sending message to destination smart-contract address that you wrote in send menu. While most wallet apps during creation of wallet deploy most modern versions of wallet smart contracts - v5, providing more complex functionality, let's examine `recv_external` section of more basic one - v3:
+When we sent coins using wallet app in [getting started](/v3/guidelines/quick-start/getting-started#step-3-exploring-the-blockchain) section what `wallet app` actually performs is sending `external message` to your `wallet` smart contract which performs sending message to destination smart-contract address that you wrote in send menu. While most wallet apps during creation of wallet deploy most modern versions of wallet smart contracts - `v5`, providing more complex functionality, let's examine `recv_external` section of more basic one - `v3`:
 
 ```func
 () recv_external(slice in_msg) impure {
-  var signature = in_msg~load_bits(512);
-  var cs = in_msg;
-  var (subwallet_id, msg_seqno) = (cs~load_uint(32), cs~load_uint(32));
-  var ds = get_data().begin_parse();
-  var (stored_seqno, stored_subwallet, public_key) = (ds~load_uint(32), ds~load_uint(32), ds~load_uint(256));
-  ds.end_parse();
-  throw_unless(33, msg_seqno == stored_seqno);
-  throw_unless(34, subwallet_id == stored_subwallet);
-  throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
-  accept_message();
-  cs~touch();
-  while (cs.slice_refs()) {
-    var mode = cs~load_uint(8);
-    send_raw_message(cs~load_ref(), mode);
-  }
-  set_data(begin_cell()
-    .store_uint(stored_seqno + 1, 32)
-    .store_uint(stored_subwallet, 32)
-    .store_uint(public_key, 256)
+    var signature = in_msg~load_bits(512);
+    var cs = in_msg;
+    var (subwallet_id, msg_seqno) = (cs~load_uint(32), cs~load_uint(32));
+    var ds = get_data().begin_parse();
+    var (stored_seqno, stored_subwallet, public_key) = (ds~load_uint(32), ds~load_uint(32), ds~load_uint(256));
+    ds.end_parse();
+    throw_unless(33, msg_seqno == stored_seqno);
+    throw_unless(34, subwallet_id == stored_subwallet);
+    throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
+    accept_message();
+    cs~touch();
+    while (cs.slice_refs()) {
+        var mode = cs~load_uint(8);
+        send_raw_message(cs~load_ref(), mode);
+    }
+    set_data(begin_cell()
+        .store_uint(stored_seqno + 1, 32)
+        .store_uint(stored_subwallet, 32)
+        .store_uint(public_key, 256)
     .end_cell());
-}
+    }
 ```
 
-First thing to mention - is `signature` in message body and stored `public_key`. This refers to standard mechanism of asymmetric cryptography: during deployment process you create private and public key pair, store the second one in initial contract storage and then during sending external message through client sign it with private key attaching calculated `signature` to message body. Smart contract on its side checks if signature matches `public_key` and accepts external message if it is so.
+First thing to mention - is `signature` in message body and stored `public_key`. This refers to standard mechanism of asymmetric cryptography: during deployment process you create **private and public key pair**, store the second one in initial contract storage and then during sending external message through client **sign** it with **private key** attaching calculated `signature` to message body. Smart contract on its side checks if signature matches `public_key` and accepts external message if it is so.
 
 Standard signature system for TON smart-contracts is `Ed25519` which is directly provided by `TVM` instruction `check_signature()`, but you can always implement another preferred algorithm by yourself.
 
 :::tip
-When you entered magic 24 secret words (i.e. mnemonic phrase) during wallet creation in your app what is practically performed is concatenation of those words into one string and hashing it to create your `private key`. So remember not to show them to anyone.
+When you entered **magic 24 secret words** (i.e. **mnemonic phrase**) during [wallet creation](/v3/documentation/data-formats/tlb/tl-b-language) in your app what is practically performed is concatenation of those words into one string and hashing it to create your **private key**. So remember not to show them to anyone.
 :::
 
 Second thing is `seqno` (sequential number) as you can see this is practically just a counter that increments each time wallet smart-contract receives external message, but why do we need one?
-The reason behind that lies in blockchain nature: since all transactions are visible to anyone, potential malefactor could repeatedly send already signed transaction to your smart contract. Simplest scenario is: you transfer some amount of funds to receiver, receiver examines transaction and sends it to your contract repeatedly until you run out of funds and receiver gains almost all of them.
+The reason behind that lies in blockchain nature: since all transactions are visible to anyone, potential malefactor could repeatedly send already signed transaction to your smart contract. 
+
+> **Simpliest scenario:** you transfer some amount of funds to receiver, receiver examines transaction and sends it to your contract repeatedly until you run out of funds and receiver gains almost all of them.
 
 Third thing is `subwallet_id` that just checks equality to the stored one, we will discuss its meaning a little bit later in internal messages section.
 
-TODO: add send message section
-
 ### Implementation
 
-At this point reasons behind changes that we made to our counter in previous storage and get methods section should start to be more clear! We already prepared our storage to contain `seqno`, `public_key` and `ctx_id` which will serve same task as `subwallet_id` so let's adapt wallet's `recv_external` function to our project:
+At this point reasons behind changes that we made to our counter in previous storage and get methods [section](/v3/guidelines/quick-start/developing-smart-contracts/storage-and-get-methods#smart-contract-storage-operations) should start to be more clear! We already prepared our storage to contain `seqno`, `public_key` and `ctx_id` which will serve same task as `subwallet_id` so let's adapt wallet's `recv_external` function to our project:
 
 ```func
 () recv_external(slice in_msg) impure {
@@ -132,13 +134,12 @@ it('should send an external message containing an internal message', async () =>
         .storeStringTail('Hello from external message!')
         .endCell();
     
-    const messageToSend = beginCell()
-        .storeUint(0x18, 6) // internal message info
-        .storeAddress(receiver.address) // destination address
-        .storeCoins(toNano('0.01')) // amount to send
-        .storeUint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // default message headers
-        .storeRef(internalMessage) // store the message content as a reference
-        .endCell();
+    const messageToSend = beginCell().store(storeMessageRelaxed(internal({
+        to: receiver.address,
+        value: toNano(0.01),
+        body: internalMessage,
+        bounce: true,
+    }))).endCell();
 
     const receiverBalanceBefore = await receiver.getBalance();
 
@@ -168,18 +169,20 @@ it('should send an external message containing an internal message', async () =>
 });
 ```
 
+---
+
 ## Internal messages
 
-We are almost at the finish line! Let's cook a simple internal message to other contract and implement its processing on receiver side! We have already seen a counter that increases its values through external messages, now let's make it through internal one. And to make this task a little more interesting let's ensure that only one actor has access to this functionality.
+We are almost at the finish line! Let's cook a simple `internal message` to other contract and implement its processing on receiver side! We have already seen a counter that increases its values through `external messages`, now let's make it through internal one. And to make this task a little more interesting let's ensure that only one `actor` has access to this functionality.
 
 ### Actors and roles
 
-Since TON implements actor model it's natural to think about smart-contracts relations in terms of `roles`, determining who can access smart-contract functionality or not. The most common examples of roles are:
+Since TON implements actor [model](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor) it's natural to think about smart-contracts relations in terms of `roles`, determining who can access smart-contract functionality or not. The most common examples of roles are:
 
  - `anyone`: any contract that don't have distinct role.
  - `owner`: contract that has exclusive access to some crucial parts of functionality.
 
-If you look at `recv_internal()` function signature in your smart contract you can see `in_msg_full` and `in_msg_body` arguments, while the second one carries actual payload of sender which is free to fill it anyway they want, first one consists of several values describing transaction context. You can consider `in_msg_full` as some type of message **`header`**. We will not dwell in detail for each of values during this guide, what is important for us now, is that this part of message is defined by TON implementation and **always validated on sender side** and as a result cannot be fabricated.
+If you look at `recv_internal()` function signature in your smart contract you can see `in_msg_full` and `in_msg_body` arguments, while the second one carries actual payload of sender which is free to fill it anyway they want, first one consists of several values describing transaction context. You can consider `in_msg_full` as some type of message **header**. We will not dwell in detail for each of values during this guide, what is important for us now, is that this part of message is defined by TON implementation and **always validated on sender side** and as a result cannot be fabricated.
 
 What we specifically are interested in is the source address of message, by obtaining that address and comparing to stored one, that we previously saved, for example, during deployment, we can open crucial part of our smart contract functionality. Common approach looks like this:
 
@@ -350,7 +353,7 @@ async getOwnerAddress(provider: ContractProvider) {
 }
 ```
 
-Finally we are ready to create our multi-contract system: let's add a test that deploys `HelloWorld` smart contract, then deploys `CounterInternal` contract initialized with `HelloWorld` contract address, then sends external message containing internal one to our counter with increment operation. To see that only `HelloWorld` is able to modify counter, let's also try to send a message from another contract and ensure that it is not able to perform it:
+Finally we are ready to create our **multi-contract system**: let's add a test that deploys `HelloWorld` smart contract, then deploys `CounterInternal` contract initialized with `HelloWorld` contract address, then sends *external message* containing internal one to our counter with increment operation. To see that only `HelloWorld` is able to modify counter, let's also try to send a message from another contract and ensure that it is not able to perform it:
 
 ```typescript
 describe('Integration with HelloWorld', () => {
@@ -491,41 +494,9 @@ describe('Integration with HelloWorld', () => {
 });
 ```
 
-Congratulations! We created our first multi-contract system and learned how to deal with basic internal messages! This example practically describes the general flow of any message chain: send external message -> toggle internal messages flow according to your system model and so on. Now, when our contracts are fully tested, we are ready to deploy our contracts and interact with them on-chain, but before we do so, there is one crucial detail that we should discuss.
+Congratulations! We created our first **multi-contract** system and learned how to deal with basic `internal messages`! This example practically describes the general flow of any message chain: send `external message` -> toggle `internal messages` flow according to your system model and so on. Now, when our contracts are fully tested, we are ready to deploy our contracts and interact with them on-chain.
 
-### Receiving internal messages from untrusted roles
-
-First thing to mention is that any message being processed by a receiver is considered as a transaction. When we discussed committing changes in storage contract after contract execution, we said that in case of a failed transaction all changes will be omitted. This is also true for multiple "sent" messages - if at least one of them is ill-formed or an exception occurs after calling `send_raw_message` instruction (which actually just prepares message sending that will happen after the contract ends its execution), all other messages will be cancelled.
-
-What is more important is that the concept of transaction is applicable only within one smart-contract. Since all transactions require some amount of funds to pay fees, when you're initiating a chain of messages, you need to provide funds to supply all of it. When we developed our **`multi-contract`** system, the only role that we used is **`owner`**. Since you have full control of it, you can ensure that funds will be enough to execute the full chain of transactions on the client side.
-
-Things start to get different when a transaction is initiated by someone else. Let's consider these abstract examples:
-
-<div style={{ marginBottom: '30px' }}>
-  <img src="/img/tutorials/quick-start/multi-contract-example-bright.png" alt="multi contract example scheme"/>
-</div>
-
-If you have states that should be consistent between your smart contracts and the transaction chain is initiated by an uncontrolled client, it's crucial to ensure on first smart contract execution that funds will be enough to execute the entire transaction chain. 
-Let's examine the `A` example: imagine that the `Liquidity Pool` transaction will end up successfully and split supplied coins into halves - first one sent with requested funds, second one sent to deploy borrow register contract. If the sent funds aren't enough to execute the transaction on the borrower and it fails, you will end up giving money completely for free.
-
-
-A slightly better approach is presented in the `B` scheme. It's still possible to fail in a similar scenario, but at least you will end up sending funds only after ensuring that the `Borrow Register` has been deployed and notified your `Liquidity Pool` contract about it. Even if you forgot to add initial funds check, the borrower role has no potential interest in breaking your message flow.
-
-:::important Security Consideration
-Always verify that sufficient funds are provided when working with transaction chains involving untrusted parties to maintain consistency across your contract system.
+:::danger
+Before considering your smart-contracts production ready and deploying them to `mainnet` take a look at [Security Measures](/v3/guidelines/smart-contracts/security/overview) describing best practice of securing your smart-contract logic.
 :::
-
-## Next Steps
-
-Now that you understand how to process messages in TON smart contracts, here are some suggestions for next steps:
-
-1. **Practice with Examples**: Try modifying the `Counter` contract to send different types of messages or respond to more complex operations.
-
-2. **Explore Message Bouncing**: Learn about how TON handles message bouncing when delivery fails. (TODO: add ref to bouncing messages)
-
-3. **Learn About Gas Optimization**: Understand how message processing affects gas consumption and how to optimize your contracts. (TODO: add ref to gas optimization guide)
-
-4. **Study Advanced Message Patterns**: Explore more complex message patterns like notification services, multi-signature operations, or message-based governance.
-
-5. **Deployment**: Continue to the next section to learn about deployment.
 

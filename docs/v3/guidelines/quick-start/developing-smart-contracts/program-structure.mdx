@@ -1,7 +1,6 @@
 # Project structure
 
-In previous steps we installed and configured all tools required for TON smart-contract development and created our first project template. Before we proceed to research and modification of smart-contract code, let's take a brief look at project structure, purpose of them and default scenarios of its use.
-
+> **Summary:** In previous steps we installed and configured all tools required for TON smart-contract development and created our first project template. Before we proceed to research and modification of smart-contract code, let's take a brief look at project structure, purpose of them and default scenarios of its use.
 
 ## Overview
 
@@ -23,18 +22,18 @@ Example/
     └── HelloWorld.compile.ts   # Script for contract compilation
 ```
 
-Before we proceed to actual smart-contract development let's briefly describe project structure and explain how to use Blueprint SDK.
+Before we proceed to actual smart-contract development let's briefly describe project structure and explain how to use **`Blueprint SDK`**.
 
 ### `/contracts`
 
-This folder contains your smart contract source code written in one of the available programming languages used for TON blockchain smart contract development. And contains imports folder which is used for libraries usually containing stdlib.fc - standard library of FunC language.
+This folder contains your smart contract source code written in one of the available programming languages used for TON blockchain smart contract development. And contains imports folder which is used for libraries usually containing `stdlib.fc` - standard library of `FunC` language.
 
 If you open this file you can see that it has quite humble for a standard library, a size of 884 lines, primarily consisting of functions representing assembler insertions processing previously added to stack function parameters.
 
 :::info Advanced, Internals
 When we discussed available for smart-contract development programming languages we allowed ourselves a little lie. There are actually two more languages - `Fift` and `TVM-assembly`(for jedi smart-contract programmers). First one is general-purpose language like the ones that we discussed before, that is just not widely used right now. Second one - is classical assembler representing TVM instructions that you can directly access through assembler insertions in high-level languages.
 
-Common concept of TON smart-contract ecosystem is somewhat similar to Java. Smart-contracts written in one of the general-purpose languages are compiled in TVM(Telegram virtual machine) byte-code, exactly the one(except data segment) that we have seen in explorer section of getting started article and then are executed on virtual machine during transaction.
+Common concept of TON smart-contract ecosystem is somewhat similar to **Java**. Smart-contracts written in one of the general-purpose languages are compiled in [TVM](/v3/documentation/tvm/tvm-overview)(TON virtual machine) `byte-code`, the one that we have seen in explorer section of getting started article and then are executed on virtual machine during transaction.
 :::
 
 ### `/wrappers`
@@ -42,8 +41,7 @@ Common concept of TON smart-contract ecosystem is somewhat similar to Java. Smar
 - `HelloWorld.ts` - wrapper for smart contract.
 - `HelloWorld.compile.ts` - compile config for smart-contract.
 
-
-While @ton/ton SDK provides us interfaces of serializing and sending messages for standard smart-contracts such as wallets, if we develop our own smart-contract that will deserialize received messages by its own custom protocol we need to provide some wrapper object that will serialize messages sent to smart-contract, deserialize responses from get methods and serialize initial data for contract deployment.
+While `@ton/ton SDK` provides us interfaces of serializing and sending messages for standard smart-contracts such as `wallets`, if we develop our own smart-contract that will deserialize received messages by its own custom protocol we need to provide some wrapper object that will serialize messages sent to smart-contract, deserialize responses from `get method`s and serialize `initial data` for contract deployment.
 
 To run compile script excute this command in your CLI:
 
@@ -54,13 +52,12 @@ npx blueprint build
 It's preferred development flow to edit smart contract code and then edit its wrapper correspondingly to updated protocol.
 
 :::info Advanced, TL-B
-Often, as a developer, you want to provide description of protocol by some formal language and Ton ecosystem has standard instrument for that - TL-B language. TL-B(Type Language-Binary) schemes serve to describe binary protocol of smart-contracts somewhat similar to Protobuf technology. At the current moment, unfortunately, there are no instruments that provide generation of serialization/deserialization interfaces, but it's anyway a good practice to have one for smart-contracts with complex interfaces.
+Often, as a developer, you want to provide description of protocol by some formal language and TON ecosystem has standard instrument for that: [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) language. `TL-B`(Type Language-Binary) schemes serve to describe binary protocol of smart-contracts somewhat similar to **Protobuf** technology. At the current moment, unfortunately, there are no instruments that provide generation of serialization/deserialization interfaces, but it's anyway a good practice to have one for smart-contracts with complex interfaces.
 :::
-
 
 ### `/tests`
 
-This directory contains test files for your smart contracts, written using the Jest testing framework. It's testing playground that uses `@ton/sandbox` tool allowing you to execute multiple smart-contracts and even send messages between them, creating your local 'network' of contracts if your project requires so, and test more complex scenarios than simple unit-tests. Tests are crucial for ensuring your smart contracts behave as expected before deployment to the mainnet.
+This directory contains test files for your smart contracts, written using the **`Jest` testing framework**. It's testing playground that uses `@ton/sandbox` tool allowing you to execute multiple smart-contracts and even send messages between them, creating your local 'network' of contracts if your project requires so, and test more complex scenarios than simple **unit-tests**. Tests are crucial for ensuring your smart contracts behave as expected before deployment to the `Mainnet`.
 
 To run your test execute following command: 
 
@@ -68,12 +65,11 @@ To run your test execute following command:
 npx blueprint build
 ```
 
-Or use interface provided by Jest plugins in your IDE or code-editor.
-
+Or use interface provided by `Jest` plugins in your **IDE** or **code-editor**.
 
 ### `/scripts`
 
-The scripts directory contains TypeScript files that help you deploy and interact with your smart contracts on-chain using previously implemented wrappers.
+The scripts directory contains `TypeScript` files that help you deploy and interact with your smart contracts on-chain using previously implemented wrappers.
 
 You can execute those scripts using following command, but we recommend to read corresponding [deployment section](/ref/to/deployment/section) first.
 
@@ -86,8 +82,4 @@ Also, you can always generate same structure for another smart-contract if you n
 ```bash
 npx blueprint create PascalCase //dont forget to name contract in PascalCase
 ```
-
-## Next step
-
-Now, when we learned how to use Blueprint SDK let's continue to designing smart-contract persistent memory layout and get methods.
 
