@@ -1,4 +1,4 @@
-# Staking with Nominator Pools
+# Staking With Nominator Pools
 
 ## Overview
 
@@ -16,7 +16,7 @@ If you are familiar with cryptocurrencies, you must have heard about **validator
 
 ### Validators
 
-First, let's start with validators. A validator is a network node that helps keep the blockchain running by verifying (or validating) suggested blocks and recording them on the blockchain.
+A validator is a network node that helps keep the blockchain running by verifying (or validating) suggested blocks and recording them on the blockchain.
 
 To become a validator, you must meet two requirements: have a high-performance server and obtain a serious amount of TON (at least 300,000) in order to make a stake. At the time of writing, there are up to 400 validators per round on TON.
 
