@@ -1,10 +1,12 @@
 # Fees calculation
 
-When your contract begins processing an incoming message, you should verify the amount of TONs attached to the message to ensure it is sufficient to cover [all types of fees](/v3/documentation/smart-contracts/transaction-fees/fees#elements-of-transaction-fee). To achieve this, you need to calculate (or predict) the fee for the current transaction.
+## Introducation 
+
+When your contract begins processing an incoming message, you should verify the number of TONs attached to the message to ensure it is sufficient to cover [all types of fees](/v3/documentation/smart-contracts/transaction-fees/fees#elements-of-transaction-fee). To achieve this, you need to calculate (or predict) the fee for the current transaction.
 
 This document explains how to calculate fees in FunC contracts using the latest TVM opcodes.
 
-:::info More information on opcodes
+:::info opcodes
 For a comprehensive list of TVM opcodes, including those mentioned below, refer to the [TVM instruction page](/v3/documentation/tvm/instructions).
 :::
 
@@ -185,7 +187,7 @@ If the message structure is deterministic, use the `GETFORWARDFEE` opcode with t
 | :--------- | :------------------------------------------------------ |
 | cells      | Number of cells                                         |
 | bits       | Number of bits                                          |
-| is_mc      | True if the source or destination is in the masterchain |
+| is_mc      | True if the source or destination is in the MasterChain |
 
 :::info Only unique hash cells are counted for storage and forward fees. For example, three identical hash cells are counted as one.
 
@@ -199,15 +201,13 @@ However, if the outgoing message depends significantly on the incoming structure
 | Param name | Description                                             |
 | :--------- | :------------------------------------------------------ |
 | fwd_fee    | Parsed from the incoming message                        |
-| is_mc      | True if the source or destination is in the masterchain |
+| is_mc      | True if the source or destination is in the MasterChain |
 
-:::caution Be careful with the `SENDMSG` opcode
-The `SENDMSG` opcode is the least optimal way to calculate fees, but it is better than not checking.
-
-It uses an **unpredictable amount** of gas.
-
-Avoid using it unless absolutely necessary.
+:::caution 
+Be careful with the `SENDMSG` opcode because it uses an **unpredictable amount** of gas. Avoid using it unless necessary.
 :::
+
+The `SENDMSG` opcode is the least optimal way to calculate fees, but it is better than not checking.
 
 If even `GETORIGINALFWDFEE` cannot be used, one more option exists. Use the `SENDMSG` opcode with the following parameters:
 
