@@ -1,11 +1,11 @@
 # Fees Calculation
 
-When your contract starts processing an incoming message, you should check the amount of TONs attached to the message to ensure they are enough to cover [all types of fees](/v3/documentation/smart-contracts/transaction-fees/fees#elements-of-transaction-fee). To do this, you need to calculate (or predict) the fee for the current transaction.
+When your contract begins processing an incoming message, you should verify the amount of TONs attached to the message to ensure it is sufficient to cover [all types of fees](/v3/documentation/smart-contracts/transaction-fees/fees#elements-of-transaction-fee). To achieve this, you need to calculate (or predict) the fee for the current transaction.
 
 This document explains how to calculate fees in FunC contracts using the latest TVM opcodes.
 
 :::info More information on opcodes
-For a comprehensive list of TVM opcodes, including those mentioned below, check the [TVM instruction page](/v3/documentation/tvm/instructions).
+For a comprehensive list of TVM opcodes, including those mentioned below, refer to the [TVM instruction page](/v3/documentation/tvm/instructions).
 :::
 
 ## Storage fee
@@ -72,7 +72,7 @@ In most cases, use the `GETGASFEE` opcode with the following parameters:
 | Param      | Description                                             |
 | :--------- | :------------------------------------------------------ |
 | `gas_used` | Gas amount, calculated in tests and hardcoded           |
-| `is_mc`    | True if the source or destination is in the masterchain |
+| `is_mc`    | True if the source or destination is in the MasterChain |
 
 ### Calculation flow
 
@@ -185,7 +185,7 @@ If the message structure is deterministic, use the `GETFORWARDFEE` opcode with t
 | :--------- | :------------------------------------------------------ |
 | cells      | Number of cells                                         |
 | bits       | Number of bits                                          |
-| is_mc      | True if the source or destination is in the masterchain |
+| is_mc      | True if the source or destination is in the MasterChain |
 
 :::info Only unique hash cells are counted for storage and forward fees. For example, three identical hash cells are counted as one.
 
@@ -194,19 +194,19 @@ This mechanism deduplicates data: if multiple equivalent sub-cells are reference
 [Read more about deduplication](/v3/documentation/data-formats/tlb/library-cells).
 :::
 
-However, if the outgoing message depends significantly on the incoming structure, you may not be able to fully predict the fee. In such cases, try using the `GETORIGINALFWDFEE` opcode with the following parameters:
+However, if the outgoing message depends significantly on the incoming structure, you may not be able to predict the fee fully. In such cases, try using the `GETORIGINALFWDFEE` opcode with the following parameters:
 
 | Param name | Description                                             |
 | :--------- | :------------------------------------------------------ |
 | fwd_fee    | Parsed from the incoming message                        |
-| is_mc      | True if the source or destination is in the masterchain |
+| is_mc      | True if the source or destination is in the MasterChain |
 
-:::caution Be careful with `SENDMSG` opcode
-Next opcode, `SENDMSG`, **is the least optimal way** to calculate fee, but **better than not checking**.
+:::caution Be careful with the `SENDMSG` opcode
+The `SENDMSG` opcode is the least optimal way to calculate fees, but it is better than not checking.
 
 It uses an **unpredictable amount** of gas.
 
-Do not use it unless necessary.
+Avoid using it unless absolutely necessary.
 :::
 
 If even `GETORIGINALFWDFEE` cannot be used, one more option exists. Use the `SENDMSG` opcode with the following parameters:
