@@ -598,9 +598,6 @@ privateKey := ed25519.NewKeyFromSeed(k)
 </TabItem>
 </Tabs>
 
-<<<<<<< HEAD
-Therefore, the `seqno`, `keys`, and `internal message` need to be sent. Now we need to create a [message](/v3/documentation/smart-contracts/message-management/sending-messages) for our wallet and store the data in this message in the sequence used at the beginning of the tutorial. This is accomplished as follows:
-=======
 To proceed, we must send the `seqno`, `keys`, and `internal message`. Next, we’ll create a [message](/v3/documentation/smart-contracts/message-management/sending-messages) for our wallet and store the data in the sequence outlined at the beginning of the tutorial. This is achieved as follows:
 
 <Tabs groupId="code-examples">
@@ -849,9 +846,6 @@ var subWallet uint64 = 698983191
 
 ### Compiling wallet code
 
-<<<<<<< HEAD
-Now that we have the private and public keys and the subwallet_id clearly defined we need to compile the wallet code. To accomplish this, we’ll use the [wallet v3 code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) from the official repository.
-=======
 Now that the private and public keys and the `subwallet_id` are clearly defined, we must compile the wallet code. We’ll use the [wallet v3 code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) from the official repository.
 
 The [@ton-community/func-js](https://github.com/ton-community/func-js) library is necessary to compile wallet code. This library allows us to compile FunC code and retrieve a cell containing the code. To get started, install the library and save it to the `package.json` as follows:
@@ -862,7 +856,7 @@ npm i --save @ton-community/func-js
 
 We’ll only use JavaScript to compile code, as the libraries for compiling code are JavaScript-based. However, after compiling is finalized, as long as we have our cell's **base64 output**, it is possible to use this compiled code in languages such as Go and others.
 
-First, we need to create two files: `wallet_v3.fc` and `stdlib.fc`. The compiler works with the stdlib.fc library. All necessary and basic functions, which correspond with the `asm` instructions were created in the library. The stdlib.fc file can be downloaded [here](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc). In the `wallet_v3.fc` file it is necessary to copy the code above.
+First, we need to create two files: `wallet_v3.fc` and `stdlib.fc`. The compiler relies on the `stdlib.fc` library, which contains all the necessary basic functions corresponding to `asm` instructions. You can download the `stdlib.fc` file [here](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc). For the `wallet_v3.fc` file, copy the code from the repository.
 
 Now, we have the following structure for the project we are creating:
 
@@ -961,13 +955,14 @@ After the above processes are complete, the hashes match, confirming that the co
 
 Before building a message, it is essential to understand what a State Init is. First, let’s go through the [TL-B scheme](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L141-L143):
 
-|   Option    |                                                                                                                                                                                                      Explanation                                                                                                                                                                                                      |
-| :---------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| split_depth | This option is intended for highly loaded smart contracts that can be split and located on several [shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards). More information detailing how this works can be found in the [tblkch.pdf](https://ton.org/tblkch.pdf) (4.1.6). Only a `0` bit is stored since it is being used only within a wallet smart contract. |
-|   special   |       Used for TicTok. These smart contracts are automatically called for each block and are not needed for regular smart contracts. Information about this can be found in [this section](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock) or in [tblkch.pdf](https://ton.org/tblkch.pdf) (4.1.6). Only a `0` bit is stored within this specification because we do not need such a function.        |
-|    code     |                                                                                                                                                                         `1` bit means the presence of the smart contract code as a reference.                                                                                                                                                                         |
-|    data     |                                                                                                                                                                         `1` bit means the presence of the smart contract data as a reference.                                                                                                                                                                         |
-|   library   |                              A library that operates on the [masterchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains) and can be used by different smart contracts. This will not be used for wallet, so its bit is set to `0`. Information about this can be found in [tblkch.pdf](https://ton.org/tblkch.pdf) (1.8.4).                               |
+|   Option    |                                                                                                                                                                                                                 Explanation                                                                                                                                                                                                                  |
+| :---------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| split_depth |         This option is designed for highly loaded smart contracts that can be split and distributed across multiple [shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards). For more details on how this works, refer to the [tblkch.pdf](https://ton.org/tblkch.pdf) (section 4.1.6). Since this feature is not needed for wallet smart contracts, only a `0` bit is stored.          |
+|   special   | This option is used for **TicTok** smart contracts, which are automatically triggered for each block. Regular smart contracts, such as wallets, do not require this functionality. For more details, refer to [this section](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock) or the [tblkch.pdf](https://ton.org/tblkch.pdf) (section 4.1.6). Since this feature is unnecessary for our use case, only a `0` bit is stored. |
+|             |
+|    code     |                                                                                                                                                                                    `1` bit means the presence of the smart contract code as a reference.                                                                                                                                                                                     |
+|    data     |                                                                                                                                                                                    `1` bit means the presence of the smart contract data as a reference.                                                                                                                                                                                     |
+|   library   |                      This option refers to a library that operates on the [masterchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains) and can be shared across multiple smart contracts. Since wallets do not require this functionality, its bit is set to `0`. For more information, refer to [tblkch.pdf](https://ton.org/tblkch.pdf) (section 1.8.4).                       |
 
 Next, we’ll prepare the `initial data`, which will be present in our contract’s storage immediately after deployment:
 
@@ -1048,14 +1043,10 @@ log.Println("Contract address:", contractAddress.String()) // Output contract ad
 We can build and send the message to the blockchain using the State Init.
 
 :::warning
-To carry out this process, **a minimum wallet balance of 0.1 TON** is required (the balance can be less, but this amount is guaranteed to be sufficient). To accomplish this, we’ll need to run the code mentioned earlier in the tutorial, obtain the correct wallet address, and send 0.1 TON to this address. Alternatively, you can send this sum manually via your wallet app before sending the deployment message itself.
-
-Deployment by external messages is presented here mostly for educational purposes; in practice, it's much more convenient to [deploy smart contracts via Wallets](/v3/guidelines/smart-contracts/howto/wallet#contract-deployment-via-wallet), which will be described later.
-:::
-
 To carry out this process, **a minimum wallet balance of 0.1 TON** is required (the balance can be less, but this amount is guaranteed sufficient). To accomplish this, we’ll need to run the code mentioned earlier in the tutorial, obtain the correct wallet address, and send 0.1 TON to this address. Alternatively, you can send this sum manually via your wallet app before sending the deployment message.
 
-Deployment by external messages is presented here primarily for educational purposes; in practice, it's much more convenient to [deploy smart contracts via wallets](/v3/guidelines/smart-contracts/howto/wallet#contract-deployment-via-wallet), which will be described later.
+Deployment by external messages is presented here primarily for educational purposes; in practice, it's much more convenient to [deploy smart contracts via Wallets](/v3/guidelines/smart-contracts/howto/wallet#contract-deployment-via-wallet), which will be described later.
+:::
 
 Let’s start with building a message similar to the one we built **in the previous section**:
 
@@ -1224,11 +1215,7 @@ if err != nil {
 
 Note that we have sent an internal message using mode `3`. If it is necessary to repeat the deployment of the same wallet, **the smart contract can be destroyed**. To accomplish this, set the mode correctly by adding 128 (take the entire balance of the smart contract) + 32 (destroy the smart contract) which will = `160` to retrieve the remaining TON balance and deploy the wallet again.
 
-# It's important to note that for each new transaction the **seqno will need to be increased by one**.
-
-Note that we have sent an internal message using mode `3`. If it is necessary to repeat the deployment of the same wallet, **the smart contract can be destroyed**. To accomplish this, set the mode correctly by adding 128 (take the entire balance of the smart contract) + 32 (destroy the smart contract) which will = `160` to retrieve the remaining TON balance and deploy the wallet again.
-
-Remember that for each new transaction, the `seqno` must be incremented by one.
+It's important to note that for each new transaction the **seqno will need to be increased by one**.
 
 :::info
 The contract code we used is [verified](https://tonscan.org/tx/BL9T1i5DjX1JRLUn4z9JOgOWRKWQ80pSNevis26hGvc=), so you can see an example [here](https://tonscan.org/address/EQDBjzo_iQCZh3bZSxFnK9ue4hLTOKgsCNKfC8LOUM4SlSCX#source).
@@ -1573,12 +1560,7 @@ After completing this process, you can use a TON blockchain explorer to verify t
 
 ### NFT transfers
 
-<<<<<<< HEAD
-In addition to regular messages, users often send NFTs to each other. Unfortunately, not all libraries contain methods that are tailored for use with this type of smart contract. Therefore, it is necessary to create code that will allow us to build a message for sending NFTs. First, let's become more familiar with the TON NFT [standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md).
-=======
 In addition to regular messages, users often send NFTs to each other. Unfortunately, not all libraries specifically use methods for interacting with this type of smart contract. As a result, we need to write code that allows us to construct messages for sending NFTs. First, let’s familiarize ourselves with the TON NFT [standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md).
-
-> > > > > > > 018b2129 (Update wallet.md)
 
 Specifically, we need to thoroughly understand the TL-B schema for [NFT Transfers](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#1-transfer).
 
@@ -1820,9 +1802,6 @@ subscriptionAddress := address.MustParseAddr("EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_
 </TabItem>
 </Tabs>
 
-<<<<<<< HEAD
-Now we need to retrieve the plugin’s hash address so the address can be translated into a number and sent to the GET Method.
-=======
 Now, we need to retrieve the plugin’s hash address to translate it into a number and send it to the GET Method.
 
 <Tabs groupId="code-examples">
@@ -1867,19 +1846,12 @@ log.Println(getResult.MustInt(0)) // -1
 </TabItem>
 </Tabs>
 
-<<<<<<< HEAD
-The response must be `-1`, meaning the result is true. It is also possible to send a slice and a cell if required. It would be enough to create a Slice or Cell and transfer it instead of using the BigInt, specifying the appropriate type.
-=======
 The response must be `-1`, meaning the result is `true`. It is also possible to send a slice and a cell if required. It would be enough to create and transfer a Slice or Cell instead of using the BigInt, specifying the appropriate type.
 
 ### Contract deployment via wallet
 
 In chapter three, we deployed a wallet. To accomplish this, we initially sent some TON and a message from the wallet to deploy a smart contract. However, this process is not broadly used with external messages and is often used mainly for wallets. While developing contracts, the deployment process is initialized by sending internal messages.
 
-<<<<<<< HEAD
-To accomplish this, will use the V3R2 wallet smart contract that was used in [the third chapter](/v3/guidelines/smart-contracts/howto/wallet#compiling-wallet-code).
-In this case, we’ll set the `subwallet_id` to `3` or any other number needed to retrieve another address when using the same private key (it's changeable):
-=======
 To achieve this, we’ll use the V3R2 wallet smart contract introduced in [the third chapter](/v3/guidelines/smart-contracts/howto/wallet#compiling-wallet-code). In this case, we’ll set the `subwallet_id` to `3` or any other number required to generate a different address while using the same private key (this value is customizable):
 
 <Tabs groupId="code-examples">
@@ -2025,9 +1997,6 @@ internalMessage := cell.BeginCell().
 </Tabs>
 
 :::info
-<<<<<<< HEAD
-Note that above, the bits have been specified and that the stateInit and internalMessageBody have been saved as references. Since the links are stored separately, we could write 4 (0b100) + 2 (0b10) + 1 (0b1) -> (4 + 2 + 1, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1) which means (0b111, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1) and then save two references.
-=======
 Note that the bits have been specified above and that the stateInit and internalMessageBody have been saved as references.
 :::
 
@@ -2392,10 +2361,6 @@ Although the external message limit is 64KB, the larger the external message, th
 
 ### GET Methods
 
-=======
-
-### GET methods
-
 High-Load Wallet V3 supports the 5 GET methods:
 
 |                    Method                    |                                                                                                  Explanation                                                                                                  |
@@ -2627,7 +2592,7 @@ queryHandler.getNext();
 
 =======
 
-## 🔥 High-Load Wallet V2 (Outdated)
+## 🔥 High-load wallet v2 (Outdated)
 
 In some situations, sending a large number of messages per transaction may be necessary. As previously mentioned, ordinary wallets support sending up to 4 messages at a time by storing [a maximum of 4 references](/v3/documentation/data-formats/tlb/cell-boc#cell) in a single cell. High-load wallets only allow 255 messages to be sent at once. This restriction exists because the maximum number of outgoing messages (actions) in the blockchain’s config settings is set to 255.
 
@@ -3243,7 +3208,6 @@ If you have any questions, comments, or suggestions, please contact the author o
 ## 📖 See also
 
 - Wallets' source code: [V3](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc), [V4](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc), [High-load](https://github.com/ton-blockchain/highload-wallet-contract-v3)
-  <<<<<<< HEAD
 
 The primary sources of code:
 
@@ -3258,16 +3222,11 @@ TON documentation:
 
 - [External messages](/v3/documentation/smart-contracts/message-management/external-messages)
 
-<<<<<<< HEAD
-
-- # [Types of Wallet Contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4)
 - [Types of wallet contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4)
-
-  > > > > > > > 018b2129 (Update wallet.md)
 
   - [TL-B](/v3/documentation/data-formats/tlb/tl-b-language)
 
-  - [Blockchain of Blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)
+- [Blockchain of Blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)
 
 External references:
 
@@ -3276,5 +3235,3 @@ External references:
 - [Block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb)
 
 - [Standards in TON](https://github.com/ton-blockchain/TEPs)
-
-- Useful concept documents(may include outdated information): [ton.pdf](https://docs.ton.org/ton.pdf), [tblkch.pdf](https://ton.org/tblkch.pdf), [tvm.pdf](https://ton.org/tvm.pdf)
