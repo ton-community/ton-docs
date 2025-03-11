@@ -885,7 +885,7 @@
     },
     {
       "from": "/develop/overview",
-      "to": "/v3/documentation/ton-documentation/README"
+      "to": "/v3/documentation/ton-documentation"
     },
     {
       "from": "/develop/smart-contracts/fees",
