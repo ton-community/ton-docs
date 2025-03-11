@@ -52,10 +52,8 @@ The table is populated based on [this example](https://tonviewer.com/transaction
 | [Forward fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#formula-1) (each msg) | 0,000266669 | cost of fwd of in_msg           |
 | [IHR fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#ihr) (each msg)           | 0.0006      | cost of ihr fwd of in_msg       |
 
-:::info
 The transaction fees used in these examples are hypothetical and for illustrative purposes only. Any fees other than message forwarding are outside the scope of this article.
 Funds included with an ignored message will still be [credited to the receiving address](https://testnet.tonviewer.com/transaction/8a388731812c80ab9b0ea9531108425488af5def854e4bd6f0ed47362b56d557).
-:::
 
 ## 1. (Mode 0, Flag 0) Basic message {#mode0}
 
@@ -79,6 +77,10 @@ State after the transaction: Account A has 0.9 TON, Account B has 1.096 TON
 <br></br>
 
 ## 2. (Mode 0, Flag 2) Error‐silent message {#mode2}
+
+:::info
+Please note that omitting the `+2` flag may be unsafe. For more information, refer to [this section](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
 
 State before transaction: Account A has 1 TON, Account B has 1 TON
 
@@ -149,6 +151,10 @@ The key difference is that `flag 16` creates bounces for [action phase errors](/
 <br></br>
 
 ## 4. (Mode 0, Flag 1) Separate fees {#mode1}
+
+:::info
+Please note that using only this flag is unsafe, for more information refer to [this section](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON
 
