@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Processing Messages
 
 > **Summary:** In previous steps we modified our smart-contract interaction with `storage, `get methods` and learned basic smart-contract development flow.
@@ -19,6 +22,8 @@ If you are stuck on some of the examples you can find original template project 
 ### Wallets
 
 When we sent coins using wallet app in [getting started](/v3/guidelines/quick-start/getting-started#step-3-exploring-the-blockchain) section what `wallet app` actually performs is sending `external message` to your `wallet` smart contract which performs sending message to destination smart-contract address that you wrote in send menu. While most wallet apps during creation of wallet deploy most modern versions of wallet smart contracts - `v5`, providing more complex functionality, let's examine `recv_external` section of more basic one - `v3`:
+
+
 
 ```func
 () recv_external(slice in_msg) impure {
@@ -45,6 +50,7 @@ When we sent coins using wallet app in [getting started](/v3/guidelines/quick-st
     }
 ```
 
+
 First thing to mention - is `signature` in message body and stored `public_key`. This refers to standard mechanism of asymmetric cryptography: during deployment process you create **private and public key pair**, store the second one in initial contract storage and then during sending external message through client **sign** it with **private key** attaching calculated `signature` to message body. Smart contract on its side checks if signature matches `public_key` and accepts external message if it is so.
 
 Standard signature system for TON smart-contracts is `Ed25519` which is directly provided by `TVM` instruction `check_signature()`, but you can always implement another preferred algorithm by yourself.
@@ -64,6 +70,8 @@ Third thing is `subwallet_id` that just checks equality to the stored one, we wi
 
 At this point reasons behind changes that we made to our counter in previous storage and get methods [section](/v3/guidelines/quick-start/developing-smart-contracts/storage-and-get-methods#smart-contract-storage-operations) should start to be more clear! We already prepared our storage to contain `seqno`, `public_key` and `ctx_id` which will serve same task as `subwallet_id` so let's adapt wallet's `recv_external` function to our project:
 
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
 ```func
 () recv_external(slice in_msg) impure {
     ;; retrives validating data from message body
@@ -90,7 +98,40 @@ At this point reasons behind changes that we made to our counter in previous sto
         send_raw_message(cs~load_ref(), mode);
     }
     save_data(stored_id, stored_seqno + 1, public_key);
-}```
+}
+```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+fun acceptExternalMessage(): void
+    asm "ACCEPT";
+
+fun onExternalMessage(inMsg: slice) {
+    var signature = inMsg.loadBits(512);
+    var cs = inMsg;
+    var (ctx_id, msg_seqno) = (cs.loadUint(32), cs.loadUint(32));
+
+    // retrieves stored data for validation checks
+    var (stored_id, stored_seqno, public_key) = loadData();
+    // replay protection mechanism through seqno chack and incrementing
+    assert(msg_seqno == stored_seqno, 33);
+    // id field for multiply addresess with same private_key 
+    assert(ctx_id == stored_id, 34);
+    // ed25519 signature check
+    assert(isSignatureValid(sliceHash(inMsg), signature, public_key), 35);
+    // accepting message after all checks
+    acceptExternalMessage();
+    // sending serialized on client side messages 
+    while (!cs.isEndOfSliceRefs()) {
+        var mode = cs.loadUint(8);
+        sendRawMessage(cs.loadRef(), mode);
+    }
+    saveData(stored_id, stored_seqno + 1, public_key);
+}
+```
+
+</TabItem>
+</Tabs>
 
 And add wrapper method to call it through our wrapper class:
 
@@ -190,6 +231,8 @@ If you look at `recv_internal()` function signature in your smart contract you c
 
 What we specifically are interested in is the source address of message, by obtaining that address and comparing to stored one, that we previously saved, for example, during deployment, we can open crucial part of our smart contract functionality. Common approach looks like this:
 
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
 ```func
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
     ;; Parse the sender address from in_msg_full
@@ -197,7 +240,7 @@ What we specifically are interested in is the source address of message, by obta
     int flags = cs~load_uint(4);
     slice sender_address = cs~load_msg_addr();
     
-    ;; Check if message was sent by the owner
+    ;; check if message was send by owner
     if (equal_slices(sender_address, owner_address)) {
       ;;owner operations
       return
@@ -214,11 +257,38 @@ What we specifically are interested in is the source address of message, by obta
     throw(0xffff);
 }
 ```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
+    // Parse the sender address from in_msg_full
+    var cs: slice = msgFull.beginParse();
+    val flags = cs.loadMessageFlags();
+    var sender_address = cs~load_msg_address();
+
+    if (isSliceBitsEqual(sender_address, owner_address)) {
+      // owner operations
+      return
+    } else if (isSliceBitsEqual(sender_address, other_role_address)){
+      // other role operations
+      return
+    } else {
+      // anyone else operations
+      return
+    }
+
+    throw 0xffff; // if the message contains an op that is not known to this contract, we throw
+}
+```
+</TabItem>
+</Tabs>
 
 ### Operations
 
 Another common pattern in TON contracts is to include a **32-bit operation code** in message bodies which tells your contract what action to perform:
 
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
 ```func
 const int op::increment = 1;
 const int op::decrement = 2;
@@ -246,6 +316,37 @@ const int op::decrement = 2;
     throw(0xffff);
 }
 ```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+const op::increment : int = 1;
+const op::decrement : int = 2;
+
+fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
+    // Step 1: Check if the message is empty
+    if (slice.isEndOfSlice()) { 
+        return; // Nothing to do with empty messages
+    }
+    
+    // Step 2: Extract the operation code
+    var op = in_msg_body~load_uint(32);
+
+    // Step 3-7: Handle the requested operation
+    if (op == op::increment) {
+        increment();   //call to specific operation handler
+        return;
+    } else if (op == op::decrement) {
+        decrement();
+        // Just accept the money
+        return;
+    }
+
+    // Unknown operation
+    throw(0xffff);
+}
+```
+</TabItem>
+</Tabs>
 
 By combining both of these patterns you can achieve a comprehensive description of your smart-contract's systems ensuring secure interaction between them and unleash full potential of TON actors model.
 

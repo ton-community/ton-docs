@@ -236,10 +236,18 @@ export function helloWorldConfigToCell(config: HelloWorldConfig): Cell {
 Second, add a method to perform a request for the newly created get method:
 
 ```typescript
-    async getSeqnoPKey(provider: ContractProvider) {
-        const result = await provider.get('get_seqno_public_key', []);
-        return [result.stack.readNumber(), result.stack.readBigNumber()];
-    }
+async getSeqnoPKey(provider: ContractProvider) {
+    const result = await provider.get('get_seqno_public_key', []);
+    const seqno = result.stack.readNumber();
+    const publicKeyBigInt = result.stack.readBigNumber();
+
+    // Convert BigInt to Buffer (32 bytes)
+    const publicKeyHex = publicKeyBigInt.toString(16).padStart(64, '0');
+
+    const publicKeyBuffer = Buffer.from(publicKeyHex, 'hex');
+
+    return [seqno, publicKeyBuffer]
+}
 ```
 
 ## Updating Tests

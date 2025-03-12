@@ -48,9 +48,7 @@ Before we proceed to actual smart-contract development let's briefly describe pr
 
 ### `/contracts`
 
-This folder contains your smart contract source code written in one of the available programming languages used for TON blockchain smart contract development. And contains imports folder which is used for libraries usually containing `stdlib.fc` - standard library of `FunC` language.
-
-If you open this file you can see that it has quite humble for a standard library, a size of 884 lines, primarily consisting of functions representing assembler insertions processing previously added to stack function parameters.
+This folder contains your smart contract source code written in one of the available programming languages used for TON blockchain smart contract development. And in case of `FunC` contains imports folder which is used for libraries usually containing `stdlib.fc` - standard library of `FunC` language.
 
 :::info Advanced, Internals
 When we discussed available for smart-contract development programming languages we allowed ourselves a little lie. There are actually two more languages - `Fift` and `TVM-assembly`(for jedi smart-contract programmers). First one is general-purpose language like the ones that we discussed before, that is just not widely used right now. Second one - is classical assembler representing TVM instructions that you can directly access through assembler insertions in high-level languages.
