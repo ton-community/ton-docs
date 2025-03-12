@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Storage and Get Methods
 
 > **Summary:** In previous steps we learned how to use `Blueprint SDK` and it's project structure.
@@ -36,6 +39,8 @@ There are two main instructions that provide access to smart-contract storage:
 
 In case it's inconvenient to always serialize and deserialize storage cell, there is a pretty standard practice to define two wrapper methods that provide corresponding logic. If you didn't change smart-contract code it should contain following lines:
 
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
 ```func
 global int ctx_id;
 global int ctx_counter;
@@ -60,11 +65,42 @@ global int ctx_counter;
     );
 }
 ```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+global ctxID: int;
+global ctxCounter: int;
+
+// loadData populates storage variables from persistent storage
+fun loadData() {
+    var ds = getContractData().beginParse();
+
+    ctxID = ds.loadUint(32);
+    ctxCounter = ds.loadUint(32);
+
+    ds.assertEndOfSlice();
+}
+
+// saveData stores storage variables as a cell into persistent storage
+fun saveData() {
+    setContractData(
+        beginCell()
+        .storeUint(ctxID, 32)
+        .storeUint(ctxCounter, 32)
+        .endCell()
+    );
+}
+```
+</TabItem>
+</Tabs>
+
 
 Let's try to modify our example a little bit. First, let's use a more common approach of passing storage members as parameters to `save_data(members...)` and retrieve them as `(members...) get_data()` moving global variables ctx_id and ctx_counter to method bodies. Also, let's rebane our counter to seqno and add additional integers 256-bit size into our storage:
 
 Result of our modifications should look like this:
 
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
 ```func
 ;; load_data retrieves variables from TVM storage cell
 (int, int, int) load_data() {
@@ -91,14 +127,57 @@ Result of our modifications should look like this:
             .store_uint(public_key, 256)
         .end_cell()
     );
-}```
+}
+```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+// load_data retrieves variables from TVM storage cell
+// impure because of writting into global variables
+fun loadData(): (int, int, int) {
+    var ds = getContractData().beginParse();
+
+    // id is required to be able to create different instances of counters
+    // since addresses in TON depend on the initial state of the contract
+    var ctxID = ds.loadUint(32);
+    var seqno = ds.loadUint(32);
+    var public_key = ds.loadUint(256);
+
+    ds.assertEndOfSlice();
+
+    return (ctxID, seqno, public_key);
+}
+
+// saveData stores storage variables as a cell into persistent storage
+fun saveData(ctxID: int, seqno: int, public_key: int) {
+    setContractData(
+        beginCell()
+        .storeUint(ctxID, 32)
+        .storeUint(seqno, 32)
+        .storeUint(public_key, 256)
+        .endCell()
+    );
+}
+```
+</TabItem>
+</Tabs>
 
 Don't forget to delete global variables `ctx_id`, `ctx_counter` and modify usage of the function like this, copying storage members locally:
 
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
 ```func
 var (ctx_id, seqno, public_key) = load_data();
 save_data(ctx_id, seqno, public_key);
 ```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+var (ctx_id, seqno, public_key) = load_data();
+save_data(ctx_id, seqno, public_key);
+```
+</TabItem>
+</Tabs>
 
 ## Get methods
 
@@ -106,12 +185,24 @@ The primary use of get methods is reading our storage data from outside the bloc
 
 Let's omit at the current moment the motivation of magical storage members `seqno` and `public_key` - we will discuss their meaning in later topics. Instead, let's provide a get method to retrieve both of them from outside the blockchain:
 
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
 ```func
 (int, int) get_seqno_public_key() method_id {
-    var (_, _, seqno, public_key) = load_data();
+    var (_, seqno, public_key) = load_data();
     return (seqno, public_key);
 }
 ```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+get get_seqno_public_key(): (int, int) {
+    var (_, seqno, public_key) = load_data();
+    return (seqno, public_key);
+}
+```
+</TabItem>
+</Tabs>
 
 Don't forget to check the correctness of your changes by compiling the smart contract:
 
@@ -130,7 +221,6 @@ First, let's modify `helloWorldConfigToCell` function and `HelloWorldConfig` typ
 ```typescript
 export type HelloWorldConfig = {
     id: number;
-    counter: number;
     seqno: number;
     public_key: bigint;
 };
@@ -138,7 +228,6 @@ export type HelloWorldConfig = {
 export function helloWorldConfigToCell(config: HelloWorldConfig): Cell {
     return beginCell()
         .storeUint(config.id, 32)
-        .storeUint(config.counter, 32)
         .storeUint(config.seqno, 32)
         .storeUint(config.public_key, 256)
     .endCell();
@@ -164,7 +253,6 @@ helloWorld = blockchain.openContract(
     HelloWorld.createFromConfig(
         {
             id: 0,
-            counter: 0,
             seqno: 0,
             //it will be changed later, just initialization check
             public_key: 0n
@@ -172,7 +260,7 @@ helloWorld = blockchain.openContract(
         code
     )
 );
-```typescript
+```
 
 And add new test case for get methods:
 
@@ -181,14 +269,13 @@ it('should correctly initialize and return the initial data', async () => {
     // Define the expected initial values (same as in beforeEach)
     const expectedConfig = {
         id: 0,
-        counter: 0,
         seqno: 0,
         public_key: 0n
     };
 
     // Verify counter value
     const counter = await helloWorld.getCounter();
-    expect(counter).toBe(expectedConfig.counter);
+    expect(counter).toBe(expectedConfig.seqno);
 
     // Verify ID value
     const id = await helloWorld.getID();
