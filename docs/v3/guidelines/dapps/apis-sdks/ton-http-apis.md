@@ -1,6 +1,6 @@
-# TON HTTP-Based APIs
+# TON HTTP-based APIs
 
-There are different ways to connect to the TON Blockchain:
+There are different ways to connect to TON Blockchain:
 1. **RPC data provider or another API** - You must rely on its stability and security.
 2. ADNL connection - Connect to a [liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node). While it may be inaccessible at times, it cannot provide false data due to library-implemented validation.
 3. Tonlib binary - Also connects to a liteserver, so it shares the same advantages and limitations. However, your application includes a dynamically loaded library compiled externally.
@@ -16,7 +16,7 @@ There are different ways to connect to the TON Blockchain:
 
 
 
-## RPC Nodes
+## RPC nodes
 
 :::tip TON Infrastructure Status
 * [status.toncenter](https://status.toncenter.com/) - Displays various node activity statistics from the last hour.
@@ -36,22 +36,22 @@ There are different ways to connect to the TON Blockchain:
 
 ## Indexer
 
-### Toncenter TON Index
+### Toncenter TON index
 
 Indexers allow you to list jetton wallets, NFTs, and transactions using filters, rather than retrieving only specific ones.
 
-- Public TON Index can be used for free tests and development; [premium](https://t.me/tonapibot) plans are available for production at [toncenter.com/api/v3/](https://toncenter.com/api/v3/).
-- Run your own TON Index with [Worker](https://github.com/toncenter/ton-index-worker/tree/36134e7376986c5517ee65e6a1ddd54b1c76cdba) and [TON Index API wrapper](https://github.com/toncenter/ton-indexer).
+- Public TON index can be used for free tests and development; [premium](https://t.me/tonapibot) plans are available for production at [toncenter.com/api/v3/](https://toncenter.com/api/v3/).
+- Run your own TON Index with [Worker](https://github.com/toncenter/ton-index-worker/tree/36134e7376986c5517ee65e6a1ddd54b1c76cdba) and [TON index API wrapper](https://github.com/toncenter/ton-indexer).
 
 ### Anton
 
 Anton is an open-source TON blockchain indexer written in Go and licensed under Apache 2.0. It offers a scalable, flexible way for developers to access and analyze blockchain data. Developers can also add custom smart contracts with custom message schemas.
 
 * [Project GitHub](https://github.com/tonindexer/anton) - Run your own indexer.
-* [Swagger API documentation](https://github.com/tonindexer/anton), [API Query Examples](https://github.com/tonindexer/anton/blob/main/docs/API.md) - Learn how to use Anton.
+* [Swagger API documentation](https://github.com/tonindexer/anton), [API query examples](https://github.com/tonindexer/anton/blob/main/docs/API.md) - Learn how to use Anton.
 * [Apache Superset](https://github.com/tonindexer/anton) - Visualize blockchain data.
 
-### GraphQL Nodes
+### GraphQL nodes
 
 GraphQL nodes also function as indexers.
 
