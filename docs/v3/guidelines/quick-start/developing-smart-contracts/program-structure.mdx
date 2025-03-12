@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Project structure
 
 > **Summary:** In previous steps we installed and configured all tools required for TON smart-contract development and created our first project template. Before we proceed to research and modification of smart-contract code, let's take a brief look at project structure, purpose of them and default scenarios of its use.
@@ -6,6 +9,8 @@
 
 If you chose proposed names in previous steps your project structure should look like this:
 
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
 ```
 Example/
 ├── contracts/           # Folder containing smart contracts code
@@ -21,6 +26,23 @@ Example/
     ├── HelloWorld.ts           # Wrapper class for smart contract
     └── HelloWorld.compile.ts   # Script for contract compilation
 ```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```
+Example/
+├── contracts/           # Folder containing smart contracts code
+│   └── hello_world.tolk # Main contract file
+├── scripts/             # Deployment and on-chain interaction scripts
+│   ├── deployHelloWorld.ts     # Script to deploy the contract
+│   └── incrementHelloWorld.ts  # Script to interact with the contract
+├── tests/               # Test folder for local contract testing
+│   └── HelloWorld.spec.ts      # Test specifications for the contract
+└── wrappers/            # TypeScript wrappers for contract interaction
+    ├── HelloWorld.ts           # Wrapper class for smart contract
+    └── HelloWorld.compile.ts   # Script for contract compilation
+```
+</TabItem>
+</Tabs>
 
 Before we proceed to actual smart-contract development let's briefly describe project structure and explain how to use **`Blueprint SDK`**.
 
