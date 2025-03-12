@@ -3,7 +3,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 
-# TON Cookbook
+# TON cookbook
 
 During product development, various questions often arise regarding interactions with different contracts on TON. This document aims to gather the best practices from developers and share them with the community.
 
@@ -19,7 +19,7 @@ User-friendly: EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
 Raw: 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
 ```
 
-o obtain a TON address object from a string in your SDK, you can use the following code:
+To obtain a TON address object from a string in your SDK, you can use the following code:
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -123,9 +123,9 @@ There are two flags in user-friendly addresses: **bounceable**/**non-bounceable*
 The testnet-only flag does not appear in the blockchain. The non-bounceable flag only affects message transfers: when used as a destination, it prevents the message from being bounced.
 :::
 
-Additionally, the `urlSafe` parameter is used to make the base64 format compatible with URLs. The standard base64 encoding can cause issues with characters like + and /. When urlSafe = true, + is replaced by - and / by _.
+Additionally, the `urlSafe` parameter is used to make the base64 at compatible with URLs. The standard base64 encoding can cause issues with characters like + and /. When urlSafe = true, + is replaced by - and / by _.
 
-You can obtain these address formats using the following code:
+You can obtain these address ats using the following code:
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -208,7 +208,7 @@ print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=Tru
 </Tabs>
 
 
-### How to Check the Validity of a TON Address?
+### How to check the validity of a TON address?
 
 
 <Tabs groupId="address-examples">
@@ -273,7 +273,7 @@ try {
 </Tabs>
 
 
-## Standard wallets in the TON Ecosystem
+## Standard wallets in TON Ecosystem
 
 ### How to transfer TON and send a text message to another wallet
 
@@ -308,8 +308,8 @@ try {
 Most SDKs follow a similar process for sending messages from your wallet:
 - Create a wallet wrapper (object) of the correct version, typically v3r2 ( see also [wallet versions](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts)), your secret key and workchain (usually 0 for the [basechain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules)).
 - Create a blockchain wrapper (or "client")—an object that routes requests to the API or lite servers, depending on your setup.
-- **Open** the contract in the blockchain wrapper. This ensures that the contract object is linked to an actual account on either the TON mainnet or testnet.
-- AForm messages you want to send and initiate the transaction. You can send up to 4 messages per request, as detailed in the [advanced manual](/v3/guidelines/smart-contracts/howto/wallet#sending-multiple-messages-simultaneously).
+- **Open** the contract in the blockchain wrapper. This ensures that the contract object is linked to an actual account on either the TON Mainnet or Testnet.
+- Form messages you want to send and initiate the transaction. You can send up to 4 messages per request, as detailed in the [advanced manual](/v3/guidelines/smart-contracts/howto/wallet#sending-multiple-messages-simultaneously).
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton-v4" label="JS (@ton) for Wallet V4">
@@ -498,11 +498,11 @@ Many SDKs already offer functions to parse and store long strings in this format
 
 Don't forget that the comment message in a snake cell has 32 zero bits (i.e., its opcode is 0).
 
-## TEP-74 (Jettons Standard)
+## TEP-74 (jettons standard)
 
-### How to calculate user's Jetton wallet address (offchain)?
+### How to calculate the user's jetton wallet address (offchain)?
 
-To calculate a user’s Jetton wallet address, use the "get_wallet_address" method from the Jetton Master contract with the user's address. You can also call the master contract directly, or use the getWalletAddress method provided in the JettonMaster SDK.
+To calculate a user’s jetton wallet address, use the "get_wallet_address" method from the jetton master contract with the user's address. You can also call the master contract directly, or use the getWalletAddress method provided in the JettonMaster SDK.
 
 :::info
 The `JettonMaster` in `@ton/ton` provides this functionality, although it lacks other features.
@@ -615,17 +615,17 @@ asyncio.run(main())
 
 </Tabs>
 
-### How to calculate a user's Jetton wallet address (offline)?
+### How to calculate a user's jetton wallet address (offline)?
 
-Calling the GET method every time to retrieve the wallet address can be slow and resource-intensive. If you know the Jetton Wallet code and storage structure, you can calculate the wallet address without making network requests.
+Calling the GET method every time to retrieve the wallet address can be slow and resource-intensive. If you know the jetton wallet code and storage structure, you can calculate the wallet address without making network requests.
 
-For example, using Tonviewer, you can get the Jetton Master contract address (e.g., `EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA`). If we [go to this address](https://tonviewer.com/EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA?section=method) and open the Methods tab, we can see that there is already a `get_jetton_data` method there. By calling it, we can get the hex form of the cell with the Jetton Wallet code:
+For example, using Tonviewer, you can get the jetton master contract address (e.g., `EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA`). If we [go to this address](https://tonviewer.com/EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA?section=method) and open the Methods tab, we can see that there is already a `get_jetton_data` method there. By calling it, we can get the hex form of the cell with the jetton wallet code:
 
 ```
 b5ee9c7201021301000385000114ff00f4a413f4bcf2c80b0102016202030202cb0405001ba0f605da89a1f401f481f481a9a30201ce06070201580a0b02f70831c02497c138007434c0c05c6c2544d7c0fc07783e903e900c7e800c5c75c87e800c7e800c1cea6d0000b4c7c076cf16cc8d0d0d09208403e29fa96ea68c1b088d978c4408fc06b809208405e351466ea6cc1b08978c840910c03c06f80dd6cda0841657c1ef2ea7c09c6c3cb4b01408eebcb8b1807c073817c160080900113e910c30003cb85360005c804ff833206e953080b1f833de206ef2d29ad0d30731d3ffd3fff404d307d430d0fa00fa00fa00fa00fa00fa00300008840ff2f00201580c0d020148111201f70174cfc0407e803e90087c007b51343e803e903e903534544da8548b31c17cb8b04ab0bffcb8b0950d109c150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c032481c007e401d3232c084b281f2fff274013e903d010c7e800835d270803cb8b13220060072c15401f3c59c3e809dc072dae00e02f33b51343e803e903e90353442b4cfc0407e80145468017e903e9014d771c1551cdbdc150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c0325c007e401d3232c084b281f2fff2741403f1c147ac7cb8b0c33e801472a84a6d8206685401e8062849a49b1578c34975c2c070c00870802c200f1000aa13ccc88210178d4519580a02cb1fcb3f5007fa0222cf165006cf1625fa025003cf16c95005cc2391729171e25007a813a008aa005004a017a014bcf2e2c501c98040fb004300c85004fa0258cf1601cf16ccc9ed5400725269a018a1c882107362d09c2902cb1fcb3f5007fa025004cf165007cf16c9c8801001cb0527cf165004fa027101cb6a13ccc971fb0050421300748e23c8801001cb055006cf165005fa027001cb6a8210d53276db580502cb1fcb3fc972fb00925b33e24003c85004fa0258cf1601cf16ccc9ed5400eb3b51343e803e903e9035344174cfc0407e800870803cb8b0be903d01007434e7f440745458a8549631c17cb8b049b0bffcb8b0b220841ef765f7960100b2c7f2cfc07e8088f3c58073c584f2e7f27220060072c148f3c59c3e809c4072dab33260103ec01004f214013e809633c58073c5b3327b55200087200835c87b51343e803e903e9035344134c7c06103c8608405e351466e80a0841ef765f7ae84ac7cbd34cfc04c3e800c04e81408f214013e809633c58073c5b3327b5520
 ```
 
-Knowing the Jetton Wallet code and its storage structure, you can manually compute the wallet address.
+Knowing the jetton wallet code and its storage structure, you can manually compute the wallet address.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton/ton)">
@@ -700,7 +700,7 @@ Major tokens typically use a standard implementation of the [ TEP-74 standard](h
 
 ### How to construct a message for a jetton transfer with a comment?
 
-When constructing a message for a Jetton transfer, refer to [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which defines the token standard.
+When constructing a message for a jetton transfer, refer to [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which defines the token standard.
 
 #### Transfer jettons
 <br></br>
@@ -890,7 +890,7 @@ NFT collections on TON are highly customizable. The NFT contract can be defined 
 Reminder: all methods about NFT below are not bound by TEP-62 to work. Before trying them, check if your NFT or collection process those messages in an expected way. The wallet app emulation may be useful in this case.
 :::
 
-### How to use NFT batch deploy?
+### How to use NFT batch deployment?
 
 NFT collection smart contracts allow batch deployment of up to 250 NFTs in a single transaction. However, due to the 1 TON computation fee limit, this number is practically reduced to 100-130 NFTs.
 
@@ -1216,7 +1216,7 @@ main().finally(() => console.log("Exiting..."));
 
 When updating NFT metadata or content, royalty information must also be included, especially when using the appropriate opcode to modify this data. It’s important to remember that you don’t need to update all values if only certain elements are changing. For instance, if the only change is to the NFT common content, the other data remains the same and can be reused without modification.
 
-## Third-party: Decentralized Exchanges (DEX)
+## Third-party: decentralized exchanges (DEX)
 
 ### How to send a swap message to DEX (DeDust)?
 
@@ -1497,7 +1497,7 @@ runBlocking {
 
 <TabItem value="py" label="Python">
 
-This example shows how to swap Toncoins to Jettons.
+This example shows how to swap Toncoins to jettons.
 
 ```py
 from pytoniq import Address, begin_cell, LiteBalancer, WalletV4R2
@@ -1568,7 +1568,7 @@ asyncio.run(main())
 
 ## Basics of message processing
 
-### How to parse transactions of an account (Transfers, Jettons, NFTs)?
+### How to parse transactions of an account (transfers, jettons, NFTs)?
 
 The list of transactions on an account can be fetched through `getTransactions` API method. It returns an array of `Transaction` objects, with each item having lots of attributes. However, the fields that are the most commonly used are:
  - Sender, Body and Value of the message that initiated this transaction
@@ -1837,10 +1837,10 @@ asyncio.run(main())
 </Tabs>
 
 Note that this example covers only the simplest case with incoming messages, where it is enough to fetch the transactions on a single account. If you want to go deeper and handle more complex chains of transactions and messages, you should take `tx.outMessages` field into account. It contains the list of the output messages sent by smart-contract in the result of this transaction. To understand the whole logic better, you can read these articles:
-* [Message Overview](/v3/documentation/smart-contracts/message-management/messages-and-transactions)
+* [Message overview](/v3/documentation/smart-contracts/message-management/messages-and-transactions)
 * [Internal messages](/v3/documentation/smart-contracts/message-management/internal-messages)
 
-This topic is explored in depth in the [Payments Processing](/v3/guidelines/dapps/asset-processing/payments-processing) article.
+This topic is explored in depth in the [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing) article.
 
 ### How to find transaction for a certain TON Connect result?
 
