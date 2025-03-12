@@ -308,7 +308,7 @@ contract CounterInternal {
 
 #### Contract storage
 
-A contract may store its state variables as follows. They may be accessed with [`Self reference{:tact}`](https://docs.tact-lang.org/book/contracts/#self)
+A contract may store its state variables as follows. They may be accessed with [`Self reference`](https://docs.tact-lang.org/book/contracts/#self)
 
 ```tact
 id: Int as uint32;
@@ -325,7 +325,7 @@ owner: Address;
 
 These fields are serialized similarly to structures and stored in the contract's data register.
 
-### Initializing the contract
+#### Initializing the contract
 
 If you compile the contract at this stage, you will encounter the error: `Field "owner" is not set`. This is because the contract needs to initialize its fields upon deployment. Define an [`init()`](https://docs.tact-lang.org/book/contracts/#init-function) function to do this:
 
@@ -365,7 +365,7 @@ receive(msg: Add) {
 [Identity validation](https://docs.tact-lang.org/book/security-best-practices/#identity-validation) plays a key role in secure contract interactions. You can read more about identity validation and its importance in the linked documentation.
 :::
 
-Tact also provides handy ways to share same logic through [traits](https://docs.tact-lang.org/book/types/#traits). Use the `Ownable{:tact}` trait, which provides built-in ownership checks:
+Tact also provides handy ways to share same logic through [traits](https://docs.tact-lang.org/book/types/#traits). Use the `Ownable` trait, which provides built-in ownership checks:
 
 ```tact
 // Import library to use trait
@@ -404,7 +404,7 @@ get fun id(): Int {
 }
 ```
 
-Note, that the `owner{:tact}` getter is automatically defined via the `Ownable{:tact}` trait.
+Note, that the `owner` getter is automatically defined via the `Ownable` trait.
 
 #### Complete contract
 
