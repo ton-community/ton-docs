@@ -11,21 +11,21 @@ This guide covers essential steps in acquiring and using private RPC endpoints b
 [GetBlock](https://getblock.io/) is a Web3 infrastructure provider that offers HTTP-based API endpoints for clients to interact with multiple blockchain networks, including TON.
 :::
 
-## How to Access TON Blockchain Endpoints
+## How to access TON Blockchain endpoints
 To start using GetBlock’s endpoints, users need to log in to their accounts, and retrieve a TON endpoint URL. Follow these instructions:
 
-### 1. Create a GetBlock Account
+### 1. Create a GetBlock account
 Visit the GetBlock [website](https://getblock.io/?utm_source=external&utm_medium=article&utm_campaign=ton_docs) and click on the "Get Started for Free" button. Sign up using your email address or by connecting your MetaMask wallet.
 
 ![**GetBlock.io_main_page**](/img/docs/getblock-img/unnamed-2.png?=RAW)
 
 
-### 2. Select the TON Blockchain
+### 2. Select TON Blockchain
 After signing in, go to the "My Endpoints" section. Choose TON from the "Protocols" dropdown menu and select the desired network and API type (JSON-RPC or JSON-RPC(v2)).
 
 ![**GetBlock_account__dashboard**](/img/docs/getblock-img/unnamed-4.png)
 
-### 3. Generate Your Endpoint URL
+### 3. Generate your endpoint URL
 Click the “Get” button to generate your TON blockchain endpoint URL. The structure of the endpoint will be: `https://go.getblock.io/[ACCESS TOKEN]/`.
 
 Access tokens act as unique identifiers for your requests, eliminating the need for separate API keys or authorization headers.
@@ -36,11 +36,11 @@ Users have the flexibility to generate multiple endpoints, roll tokens if compro
 
 Now, you can use these URLs to interact with the TON blockchain, query data, send transactions, and build decentralized applications without the hassle of infrastructure setup and maintenance.
 
-### Free Requests and User Limits
+### Free requests and user limits
 
 Each registered user receives 40,000 free requests per day, with a cap of 60 requests per second (RPS). This balance is renewed daily and can be used for any supported blockchain.
 
-### Shared Nodes
+### Shared nodes
 
 - Entry-level opportunity where same nodes are utilized by several clients simultaneously;
 - Rate limit increased to 200 RPS;
@@ -51,7 +51,7 @@ Shared nodes provide a cost-effective solution for accessing TON blockchain infr
 
 As developers scale their applications and require additional resources, they can easily upgrade their subscription plans or transition to dedicated nodes if necessary.
 
-### Dedicated Nodes
+### Dedicated nodes
 
 - One node is exclusively allocated to a single client;
 - No request limits;
@@ -76,7 +76,7 @@ Make sure to replace `ACCESS-TOKEN` with your actual access token provided by Ge
 
 This will output the balance in nanotons.
 
-![**getAddressBalance_response_on_TON_blockchain**](/img/docs/getblock-img/unnamed-2.png)
+![**getAddressBalance_response_on_TON_Blockchain**](/img/docs/getblock-img/unnamed-2.png)
 
 Some other available methods to query the TON blockchain:
 
@@ -96,7 +96,7 @@ Developers can utilize the TON library to deploy and interact with contracts. Th
 
 ![**Image from TON Blueprint IDE**](/img/docs/getblock-img/unnamed-6.png)
 
-By following this guide, developers can easily access the TON blockchain using GetBlock's infrastructure. Whether you're working on decentralized applications (dApps) or simply querying data, GetBlock simplifies the process by offering ready-to-use HTTP API endpoints with various features.
+By following this guide, developers can easily access TON Blockchain using GetBlock's infrastructure. Whether you're working on decentralized applications (dApps) or simply querying data, GetBlock simplifies the process by offering ready-to-use HTTP API endpoints with various features.
 
 Feel free to learn more at the [website](https://getblock.io/?utm_source=external&utm_medium=article&utm_campaign=ton_docs) or drop a line to GetBlock’s support via live chat, [Telegram](https://t.me/GetBlock_Support_Bot), or a website form.
 
