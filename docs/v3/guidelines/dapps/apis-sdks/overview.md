@@ -14,7 +14,7 @@ This article helps you choose the right tools for application development in the
     * [JavaScript/TypeScript](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript)
     * [Go](/v3/guidelines/dapps/apis-sdks/sdk#go)
     * [Python](/v3/guidelines/dapps/apis-sdks/sdk#python)
-* To integrate user authentication and payments processing via with their TON Wallets, use [TON Connect](/v3/guidelines/ton-connect/overview).
+* To integrate user authentication and payments processing via with their TON wallets, use [TON Connect](/v3/guidelines/ton-connect/overview).
 
 ## TON data analytics
 
@@ -26,15 +26,15 @@ from scratch can be resource-consuming, so you can use one of these alternatives
 * If you need real-time on-chain data tracking, you can run your own [Ton Node](/v3/documentation/infra/nodes/node-types) and launch [ton-etl](https://github.com/re-doubt/ton-etl/blob/main/README.md) or [ton-index-worker](https://github.com/toncenter/ton-index-worker).
 * [Chainbase](https://docs.chainbase.com/catalog/Ton/Overview) offers a set of raw and decoded tables with TON data. It allows you to run SQL queries and fetch results via API.
 
-## Infrastructure Status
+## Infrastructure status
 
 * [status.toncenter](https://status.toncenter.com/) - Displays various node activity statistics from the last hour.
 * [Tonstat.us](https://tonstat.us/) - A real-time Grafana dashboard, updated every 5 minutes.
 
 
-## See Also
+## See also
 
 * [SDKs](/v3/guidelines/dapps/apis-sdks/sdk)
-* [TMA Tutorials](/v3/guidelines/dapps/tma/tutorials/step-by-step-guide)
-* [TON Connect Tutorials](/v3/guidelines/ton-connect/guidelines/how-ton-connect-works)
-* [Payments Processing](/v3/guidelines/dapps/asset-processing/payments-processing)
+* [TMA tutorials](/v3/guidelines/dapps/tma/tutorials/step-by-step-guide)
+* [TON Connect tutorials](/v3/guidelines/ton-connect/guidelines/how-ton-connect-works)
+* [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing)
