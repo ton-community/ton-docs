@@ -461,7 +461,7 @@ export function encodeOffChainContent(content: string) {
 }
 ```
 
-## 🚢 Deploy NFT Collection
+## 🚢 Deploy NFT collection
 Once our metadata is ready and uploaded to IPFS, we can proceed with deploying our collection!
 
 We will create a file to store all logic related to our collection in `/contracts/NftCollection.ts`. As always, we start with imports:
@@ -667,7 +667,7 @@ await waitSeqno(seqno, wallet);
 ```
 
 
-## 🚢 Deploy NFT Items
+## 🚢 Deploy NFT items
 Once our collection is ready, we can start minting our NFTs! We will store the code in `src/contracts/NftItem.ts`
 
 Unexpectedly, we need to return to `NftCollection.ts `and add the following type near `collectionData` at the top of the file.
@@ -1202,10 +1202,10 @@ Today, you learned a lot about TON and successfully created your own NFT collect
 ## References
 
 - [GetGems NFT-contracts](https://github.com/getgems-io/nft-contracts)
-- [NFT Standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
+- [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
 
 ## About the author 
 - Coalus on [Telegram](https://t.me/coalus) or [GitHub](https://github.com/coalus)
 
-## See Also
- - [NFT Use Cases](/v3/documentation/dapps/defi/nft)
+## See also
+ - [NFT use cases](/v3/documentation/dapps/defi/nft)
