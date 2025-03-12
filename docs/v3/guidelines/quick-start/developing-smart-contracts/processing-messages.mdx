@@ -2,7 +2,7 @@
 
 > **Summary:** In previous steps we modified our smart-contract interaction with `storage, `get methods` and learned basic smart-contract development flow.
 
-Now that we have learned basic examples of modifying smart-contract code and using development tools, we are ready to move on to the main functionality of smart contracts - sending and receiving messages. 
+Now that we have learned basic examples of modifying smart-contract code and using development tools, we are ready to move on to the main functionality of smart contracts - sending and receiving messages.
 
 First thing to mention is that in TON, messages are not just currency exchange actions carrying TON coins. They are also a **data exchange mechanism** that provides an opportunity to create your own "network" of smart contracts interacting with each other and smart contracts of other network participants that are not under your direct control.
 
@@ -54,7 +54,7 @@ When you entered **magic 24 secret words** (i.e. **mnemonic phrase**) during [wa
 :::
 
 Second thing is `seqno` (sequential number) as you can see this is practically just a counter that increments each time wallet smart-contract receives external message, but why do we need one?
-The reason behind that lies in blockchain nature: since all transactions are visible to anyone, potential malefactor could repeatedly send already signed transaction to your smart contract. 
+The reason behind that lies in blockchain nature: since all transactions are visible to anyone, potential malefactor could repeatedly send already signed transaction to your smart contract.
 
 > **Simpliest scenario:** you transfer some amount of funds to receiver, receiver examines transaction and sends it to your contract repeatedly until you run out of funds and receiver gains almost all of them.
 
@@ -75,7 +75,7 @@ At this point reasons behind changes that we made to our counter in previous sto
     var (stored_id, stored_seqno, public_key) = load_data();
     ;; replay protection mechanism through seqno chack and incrementing
     throw_unless(33, msg_seqno == stored_seqno);
-    ;; id field for multiply addresess with same private_key 
+    ;; id field for multiply addresess with same private_key
     throw_unless(34, ctx_id == stored_id);
     ;; ed25519 signature check
     throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
@@ -84,18 +84,19 @@ At this point reasons behind changes that we made to our counter in previous sto
     ;; optimization technique
     ;; putting message body to stack head
     cs~touch();
-    ;; sending serialized on client side messages 
+    ;; sending serialized on client side messages
     while (cs.slice_refs()) {
         var mode = cs~load_uint(8);
         send_raw_message(cs~load_ref(), mode);
     }
     save_data(stored_id, stored_seqno + 1, public_key);
-}```
+}
+```
 
 And add wrapper method to call it through our wrapper class:
 
 ```typescript
-async sendExternal(
+async function sendExternal(
     provider: ContractProvider,
     opts: {
         mode: number
@@ -104,7 +105,7 @@ async sendExternal(
     }
 ) {
     const seqno = await this.getCounter(provider)
-    const id = await this.getID(provider) 
+    const id = await this.getID(provider)
 
     const toSign = beginCell()
         .storeUint(id, 32)
@@ -131,13 +132,13 @@ Now let's test our implementation:
 ```typescript
 it('should send an external message containing an internal message', async () => {
     const receiver = await blockchain.treasury('receiver');
-    
+
     const internalMessage = beginCell()
         .storeUint(0, 32) // Simple message with no specific opcode
         .storeUint(42, 64) // queryID = 42
         .storeStringTail('Hello from external message!')
         .endCell();
-    
+
     const messageToSend = beginCell().store(storeMessageRelaxed(internal({
         to: receiver.address,
         value: toNano(0.01),
@@ -196,17 +197,17 @@ What we specifically are interested in is the source address of message, by obta
     slice cs = in_msg_full.begin_parse();
     int flags = cs~load_uint(4);
     slice sender_address = cs~load_msg_addr();
-    
+
     ;; Check if message was sent by the owner
     if (equal_slices(sender_address, owner_address)) {
       ;;owner operations
-      return
+      return ();
     } else if (equal_slices(sender_address, other_role_address)){
       ;;other role operations
-      return
+      return ();
     } else {
       ;;anyone else operations
-      return
+      return ();
     }
 
     ;;no known operation were obtained for presented role
@@ -225,13 +226,13 @@ const int op::decrement = 2;
 
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
     ;; Step 1: Check if the message is empty
-    if (in_msg_body.slice_empty?()) { 
+    if (in_msg_body.slice_empty?()) {
         return; ;; Nothing to do with empty messages
     }
-    
+
     ;; Step 2: Extract the operation code
     int op = in_msg_body~load_uint(32);
-    
+
     ;; Step 3-7: Handle the requested operation
     if (op == op::increment) {
         increment();   ;;call to specific operation handler
@@ -249,246 +250,354 @@ const int op::decrement = 2;
 
 By combining both of these patterns you can achieve a comprehensive description of your smart-contract's systems ensuring secure interaction between them and unleash full potential of TON actors model.
 
-### Implementation
+### Implementation in Tact
 
-First, let's create a second counter that we will be communicating with by running following command:
+Tact is a high-level programming language for the TON Blockchain, focused on efficiency and simplicity. It is designed to be easy to learn and use while being well-suited for smart contract development. Tact is a statically typed language with a simple syntax and a powerful type system.
 
-```bash
-npx blueprint create
-```
-
-Choose counter pattern and appreciated name in interactive menu, we will use `CounterInternal`. 
-
-:::tip
-By the way, this is a good opportunity to try out one of the smart-contract development languages that you didn't use previously during this guide.
+:::info
+For more details, refer to the [Tact documentation](https://docs.tact-lang.org/#start) and [Tact By Example](https://tact-by-example.org/00-hello-world).
 :::
 
-Now let's update our smart-contract to contain owner address:
+#### Creating a Tact contract
 
-```func
-global int ctx_id;
-global int ctx_counter;
-global slice owner_address;
+First, let's create Tact contract.
 
-;; load_data populates storage variables using stored data
-() load_data() impure {
-    var ds = get_data().begin_parse();
+```bash
+npx blueprint create CounterInternal --type tact-counter
+```
 
-    ctx_id = ds~load_uint(32);
-    ctx_counter = ds~load_uint(32);
-    owner_address = ds~load_msg_addr();
+At the top of the generated contract file, you may see a [message](https://docs.tact-lang.org/book/structs-and-messages/) definition:
 
-    ds.end_parse();
-}
-
-;; save_data stores storage variables as a cell into persistent storage
-() save_data() impure {
-    set_data(
-        begin_cell()
-            .store_uint(ctx_id, 32)
-            .store_uint(ctx_counter, 32)
-            .store_slice(owner_address)
-        .end_cell()
-    );
+```tact
+message Add {
+    queryId: Int as uint64;
+    amount: Int as uint32;
 }
 ```
 
-Update `recv_internal` to ignore any non-empty messages not sent by owner, and corresponding get method:
+A message is a basic structure for communication between contracts. Tact automatically serializes and deserializes messages into cells. To ensure that opcodes will be the same during message structure changes, it may be added like below:
 
-```func
- () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
-    if (in_msg_body.slice_empty?()) { ;; ignore all empty messages
-        return ();
-    }
-
-    slice cs = in_msg_full.begin_parse();
-    int flags = cs~load_uint(4);
-    if (flags & 1) { ;; ignore all bounced messages
-        return ();
-    }
-
-    load_data(); ;; here we populate the storage variables
-    slice sender_addr = cs~load_msg_addr();
-    if (equal_slices_bits(sender_addr, owner_address) != -1) {
-        throw(42);
-    }
-
-
-    int op = in_msg_body~load_uint(32); ;; by convention, the first 32 bits of incoming message is the op
-    int query_id = in_msg_body~load_uint(64); ;; also by convention
-
-    if (op == op::increase) {
-        int increase_by = in_msg_body~load_uint(32);
-        ctx_counter += increase_by;
-        save_data();
-        return ();
-    }
-
-    throw(0xffff); ;; if the message contains an op that is not known to this contract, we throw
-}
-
-slice get_owner() method_id {
-    load_data();
-    return owner_address;
+```tact
+message(0x7e8764ef) Add {
+    queryId: Int as uint64;
+    amount: Int as uint32;
 }
 ```
 
-Don't forget to update wrapper class, add new get method and update deployment part to initialize storage with owner address:
+Tact will serialize it as follows:
 
 ```func
-export type CounterInternalConfig = {
-    id: number;
-    counter: number;
+begin_cell()
+    .store_uint(0x7e8764ef, 32) ;; message opcode
+    .store_uint(query_id, 64)
+    .store_uint(amount, 32)
+    .end_cell()
+```
+
+Using this structure, a message can be sent to the contract from FunC.
+
+#### Defining the contract
+
+The [contract](https://docs.tact-lang.org/book/contracts/) definition in Tact follows an object-oriented programming style:
+
+```tact
+contract CounterInternal {
+    ...
+}
+```
+
+#### Contract storage
+
+A contract may store its state variables as follows. They may be accessed with [`Self reference{:tact}`](https://docs.tact-lang.org/book/contracts/#self)
+
+```tact
+id: Int as uint32;
+counter: Int as uint32;
+```
+
+To ensure that only the contract owner can interact with specific functions, add an `owner` field:
+
+```tact
+id: Int as uint32;
+counter: Int as uint32;
+owner: Address;
+```
+
+These fields are serialized similarly to structures and stored in the contract's data register.
+
+### Initializing the contract
+
+If you compile the contract at this stage, you will encounter the error: `Field "owner" is not set`. This is because the contract needs to initialize its fields upon deployment. Define an [`init()`](https://docs.tact-lang.org/book/contracts/#init-function) function to do this:
+
+```tact
+init(id: Int, owner: Address) {
+    self.id = id;
+    self.counter = 0;
+    self.owner = owner;
+}
+```
+
+#### Handling messages
+
+To accept messages from other contracts, use a [receiver](https://docs.tact-lang.org/book/functions/#receiver-functions) function. Receiver functions automatically match the message's opcode and invoke the corresponding function:
+
+```tact
+receive(msg: Add) {
+    self.counter += msg.amount;
+    self.notify("Cashback".asComment());
+}
+```
+
+#### Restricting access
+
+To ensure that only the contract owner can send messages, use the `require` function:
+
+```tact
+receive(msg: Add) {
+    // `sender()` function is used to retrieve message sender address
+    require(sender() == self.owner, "Not owner!");
+    self.counter += msg.amount;
+    self.notify("Cashback".asComment());
+}
+```
+
+:::info
+[Identity validation](https://docs.tact-lang.org/book/security-best-practices/#identity-validation) plays a key role in secure contract interactions. You can read more about identity validation and its importance in the linked documentation.
+:::
+
+Tact also provides handy ways to share same logic through [traits](https://docs.tact-lang.org/book/types/#traits). Use the `Ownable{:tact}` trait, which provides built-in ownership checks:
+
+```tact
+// Import library to use trait
+import "@stdlib/ownable";
+
+// Ownable trait introduced here
+contract CounterInternal1 with Ownable {
+
+    ...
+
+    receive(msg: Add) {
+        // require(sender() == self.owner, "Not owner!");
+        // instead of requiring owner self.requireOwner() may be used
+        self.requireOwner();
+        self.counter += msg.amount;
+        self.notify("Cashback".asComment());
+    }
+}
+```
+
+#### Getter functions
+
+Tact supports [getter functions](https://docs.tact-lang.org/book/functions/#getter-functions) for retrieving contract state off-chain:
+
+:::note
+Get function cannot be called from another contract.
+:::
+
+```tact
+get fun counter(): Int {
+    return self.counter;
+}
+
+get fun id(): Int {
+    return self.id;
+}
+```
+
+Note, that the `owner{:tact}` getter is automatically defined via the `Ownable{:tact}` trait.
+
+#### Complete contract
+
+```tact
+import "@stdlib/deploy";
+import "@stdlib/ownable";
+
+// message with opcode
+message(0x7e8764ef) Add {
+    queryId: Int as uint64;
+    amount: Int as uint32;
+}
+
+// Contract defenition. `Ownable` is a trait to share functionality, `Deployable` used to deploy contract
+contract CounterInternal with Deployable, Ownable {
+
+    // storage variables
+    id: Int as uint32;
+    counter: Int as uint32;
     owner: Address;
-};
 
-export function counterInternalConfigToCell(config: CounterInternalConfig): Cell {
-    return beginCell()
-        .storeUint(config.id, 32)
-        .storeUint(config.counter, 32)
-        .storeAddress(config.owner)
-        .endCell();
-}
+    // init function.
+    init(id: Int, owner: Address) {
+        self.id = id;
+        self.counter = 0;
+        self.owner = owner;
+    }
 
-//inside CounterInternal class
-async getOwnerAddress(provider: ContractProvider) {
-    const result = await provider.get('get_owner', []);
-    return result.stack.readAddress();
+    // function to recive messages from other contracts
+    receive(msg: Add) {
+        // function from `Ownable` trait to assert, that only owner may call this
+        self.requireOwner();
+        self.counter += msg.amount;
+
+        // Notify the caller that the receiver was executed and forward remaining value back
+        self.notify("Cashback".asComment());
+    }
+
+    // getter function to be called offchain
+    get fun counter(): Int {
+        return self.counter;
+    }
+
+    get fun id(): Int {
+        return self.id;
+    }
 }
 ```
 
-Finally we are ready to create our **multi-contract system**: let's add a test that deploys `HelloWorld` smart contract, then deploys `CounterInternal` contract initialized with `HelloWorld` contract address, then sends *external message* containing internal one to our counter with increment operation. To see that only `HelloWorld` is able to modify counter, let's also try to send a message from another contract and ensure that it is not able to perform it:
+#### Using contract wrappers
+
+[Wrappers](https://docs.tact-lang.org/book/compile/#wrap-ts) facilitate contract interaction from TypeScript. Unlike in FunC or Tolk, they are generated automatically during the build process:
+
+```typescript ./wrappers/CounterInternal.ts
+export * from '../build/CounterInternal/tact_CounterInternal';
+```
+
+#### Testing the multi-contract system
+
+The following test case demonstrates how to deploy and interact with a `HelloWorld` smart contract and a `CounterInternal` contract:
 
 ```typescript
-describe('Integration with HelloWorld', () => {
+describe('CounterInternal', () => {
     let codeHelloWorld: Cell;
-    let codeCounterInternal: Cell;
     let blockchain: Blockchain;
     let helloWorld: SandboxContract<HelloWorld>;
     let counterInternal: SandboxContract<CounterInternal>;
     let keyPair: KeyPair;
-    
+
     beforeAll(async () => {
         codeHelloWorld = await compile('HelloWorld');
-        codeCounterInternal = await compile('CounterInternal');
     });
-    
+
     beforeEach(async () => {
         blockchain = await Blockchain.create();
-        
+
         // Generate a key pair for HelloWorld
         const seed = await getSecureRandomBytes(32);
         keyPair = keyPairFromSeed(seed);
-        
+
         // Deploy HelloWorld contract
         helloWorld = blockchain.openContract(
             HelloWorld.createFromConfig(
                 {
                     id: 0,
                     seqno: 0,
-                    public_key: keyPair.publicKey
+                    publicKey: keyPair.publicKey
                 },
                 codeHelloWorld
             )
         );
-        
+
         const deployerHello = await blockchain.treasury('deployerHello');
         const deployResultHello = await helloWorld.sendDeploy(deployerHello.getSender(), toNano('1.00'));
-        
+
         expect(deployResultHello.transactions).toHaveTransaction({
             from: deployerHello.address,
             to: helloWorld.address,
             deploy: true,
-            success: true,
+            success: true
         });
-        
+
         // Deploy CounterInternal with HelloWorld as the owner
         counterInternal = blockchain.openContract(
-            CounterInternal.createFromConfig(
-                {
-                    id: 0,
-                    counter: 0,
-                    owner: helloWorld.address, // Set HelloWorld as the owner
-                },
-                codeCounterInternal
-            )
+            await CounterInternal.fromInit(0n, helloWorld.address)
         );
-        
+
         const deployerCounter = await blockchain.treasury('deployerCounter');
-        const deployResultCounter = await counterInternal.sendDeploy(deployerCounter.getSender(), toNano('1.00'));
-        
+        const deployResultCounter = await counterInternal.send(deployerCounter.getSender(), { value: toNano('1.00') }, {
+            $$type: 'Deploy',
+            queryId: 0n
+        });
+
         expect(deployResultCounter.transactions).toHaveTransaction({
             from: deployerCounter.address,
             to: counterInternal.address,
             deploy: true,
-            success: true,
+            success: true
         });
     });
-    
-    it('should only allow owner to increment counter', async () => {
+
+    it('should fail if not owner call increment', async () => {
         // Verify owner is correctly set to HelloWorld
-        const ownerAddress = await counterInternal.getOwnerAddress();
+        const ownerAddress = await counterInternal.getOwner();
         expect(ownerAddress.equals(helloWorld.address)).toBe(true);
-        
+
         // Get initial counter value
         const counterBefore = await counterInternal.getCounter();
-        
+
         // Try to increase counter from a non-owner account (should fail)
         const nonOwner = await blockchain.treasury('nonOwner');
-        const increaseBy = 5;
-        
-        const nonOwnerResult = await counterInternal.sendIncrease(nonOwner.getSender(), {
-            increaseBy,
-            value: toNano('0.05'),
+        const increaseBy = 5n;
+
+        const nonOwnerResult = await counterInternal.send(nonOwner.getSender(), {
+            value: toNano('0.05')
+        }, {
+            $$type: 'Add',
+            amount: increaseBy,
+            queryId: 0n
         });
-        
+
         // This should fail since only the owner should be able to increment
         expect(nonOwnerResult.transactions).toHaveTransaction({
             from: nonOwner.address,
             to: counterInternal.address,
             success: false,
-            exitCode: 42, // The error code thrown in the contract
+            exitCode: 132 // The error code thrown in the contract, Access Denied
         });
-        
+
         // Counter should remain unchanged
         const counterAfterNonOwner = await counterInternal.getCounter();
         expect(counterAfterNonOwner).toBe(counterBefore);
-        
+    });
+
+    it('should increment from HelloWorld contract', async () => {
+        const increaseBy = 5n;
+        const counterBefore = await counterInternal.getCounter();
+
         // Create internal message to increase counter that will be sent from HelloWorld
-        const internalMessageBody = beginCell()
-            .storeUint(0x7e8764ef, 32) // op::increase opcode
-            .storeUint(0, 64) // queryID = 0
-            .storeUint(increaseBy, 32) // increaseBy
-            .endCell();
-            
+        const internalMessageBody = beginCell().store(storeAdd({
+            $$type: 'Add',
+            amount: increaseBy,
+            queryId: 0n
+        })).endCell();
+
         const messageToSend = beginCell().store(storeMessageRelaxed(internal({
             to: counterInternal.address,
             value: toNano(0.01),
             body: internalMessageBody,
-            bounce: true,
+            bounce: true
         }))).endCell();
-        
+
         // Send external message to HelloWorld that contains internal message to CounterInternal
         const result = await helloWorld.sendExternal({
             mode: SendMode.PAY_GAS_SEPARATELY,
             message: messageToSend,
             secret_key: keyPair.secretKey
         });
-        
+
         // Verify the external message was processed successfully
         expect(result.transactions).toHaveTransaction({
             from: undefined, // External messages have no 'from' address
             to: helloWorld.address,
-            success: true,
+            success: true
         });
-        
+
         // Verify the internal message was sent from HelloWorld to CounterInternal
         expect(result.transactions).toHaveTransaction({
             from: helloWorld.address,
             to: counterInternal.address,
-            success: true,
+            success: true
         });
-        
+
         // Verify the counter was increased
         const counterAfter = await counterInternal.getCounter();
         expect(counterAfter).toBe(counterBefore + increaseBy);
@@ -496,9 +605,8 @@ describe('Integration with HelloWorld', () => {
 });
 ```
 
-Congratulations! We created our first **multi-contract** system and learned how to deal with basic `internal messages`! This example practically describes the general flow of any message chain: send `external message` -> toggle `internal messages` flow according to your system model and so on. Now, when our contracts are fully tested, we are ready to deploy our contracts and interact with them on-chain.
+Congratulations! You have successfully created a **multi-contract** system and learned how to handle **internal messages**. This example illustrates the typical flow of any message chain: sending an `external message`, triggering the `internal messages` flow based on your system model, and so on. Now that our contracts have been fully tested, we are ready to deploy them and interact with them on-chain.
 
 :::danger
-Before considering your smart-contracts production ready and deploying them to `mainnet` take a look at [Security Measures](/v3/guidelines/smart-contracts/security/overview) describing best practice of securing your smart-contract logic.
+Before deploying your smart contracts to the **mainnet**, review the [Security Measures](/v3/guidelines/smart-contracts/security/overview) to ensure your contract is secure.
 :::
-
