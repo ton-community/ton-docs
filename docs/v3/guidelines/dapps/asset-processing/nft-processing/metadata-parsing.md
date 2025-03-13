@@ -1,13 +1,13 @@
-# Metadata Parsing
+# Metadata parsing
 
-The metadata standard covering NFTs, NFT Collections, and Jettons, is outlined in TON Enhancement Proposal 64 [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
+The metadata standard covering NFTs, NFT collections, and jettons, is outlined in TON Enhancement Proposal 64 [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
 
 On TON, entities can have three types of metadata: on-chain, semi-chain, and off-chain.
 - **On-chain metadata:** stored inside the blockchain, including the name, attributes, and image.
 - **Off-chain metadata:** stored using a link to a metadata file hosted outside the chain.
 - **Semi-chain metadata:** a hybrid approach that allows storing small fields such as names or attributes on the blockchain while hosting the image off-chain and storing only a link to it.
 
-## Snake Data Encoding
+## Snake data encoding
 The Snake encoding format allows part of the data to be stored in a standardized cell, while the remaining portion is stored in a child cell recursively. The Snake encoding format must be prefixed using the 0x00 byte. The TL-B scheme:
 
 ```
@@ -72,7 +72,7 @@ export function flattenSnakeCell(cell: Cell): Buffer {
 
 The 0x00 byte prefix is not always required in the root cell when using the Snake format, such as with off-chain NFT content. Additionally, cells are filled with bytes instead of bits to simplify parsing. To prevent issues when adding a reference in a child cell after it has already been written to its parent cell, the Snake cell is constructed in reverse order.
 
-## Chunked Encoding
+## Chunked encoding
 
 The chunked encoding format stores data using a dictionary structure, mapping a chunk_index to a chunk. Chunked encoding must be prefixed with the 0x01 byte. The TL-B scheme:
 
@@ -128,12 +128,12 @@ export function ParseChunkDict(cell: Slice): Buffer {
 6. `symbol` - Optional. UTF8 string. The symbol of the token - e.g. "XMPL". Used in the form "You received 99 XMPL".
 7. `decimals` - Optional. If not specified, 9 is used by default. UTF8 encoded string with number from 0 to 255. The number of decimals the token uses - e.g. 8, means that the token amount must be divided by 100000000 to get its custom representation.
 8. `amount_style` - Optional. Necessary for external applications to understand the format of displaying the number of tokens.
- - "n" - Displays the number of jettons as-is. For example, if a user has 100 tokens with 0 decimals, it displays "100 tokens."
- - "n-of-total" - Displays the number of jettons relative to the total supply. If totalSupply = 1000 and a user holds 100 jettons, it is displayed as "100 of 1000."
- - "%" - Displays jettons as a percentage of the total supply. If totalSupply = 1000 and a user holds 100 jettons, it is displayed as "10%."
+ - "n" - Displays the number of jettons as-is. For example, if a user has 100 tokens with 0 decimals, it displays "100 tokens".
+ - "n-of-total" - Displays the number of jettons relative to the total supply. If totalSupply = 1000 and a user holds 100 jettons, it is displayed as "100 of 1000".
+ - "%" - Displays jettons as a percentage of the total supply. If totalSupply = 1000 and a user holds 100 jettons, it is displayed as "10%".
 9. `render_type` - Optional. Required by external applications to understand which group a token belongs to and how to display it. 
  - "currency" - Displays as a currency (default value). 
- - "game" - Displays as an NFT while also considering the `amount_style`
+ - "game" - Displays as an NFT while also considering the `amount_style`.
 
 
 
@@ -153,14 +153,14 @@ export function ParseChunkDict(cell: Slice): Buffer {
 
 > `amount_style` parameters:
 * _n_ - number of jettons (default value). If the user has 100 tokens with 0 decimals, then it displays that the user has 100 tokens.
-* _n-of-total_ - the number of jettons out of the total number of issued jettons. For example, if the totalSupply of Jettons is 1000 and the user has 100 jettons in their wallet, it must be displayed in the user's wallet as 100 of 1000 or in another textual or graphical way to demonstrate the ratio of user tokens to the total amount of tokens available.
+* _n-of-total_ - the number of jettons out of the total number of issued jettons. For example, if the totalSupply of jettons is 1000 and the user has 100 jettons in their wallet, it must be displayed in the user's wallet as 100 of 1000 or in another textual or graphical way to demonstrate the ratio of user tokens to the total amount of tokens available.
 * _%_ - the percentage of jettons from the total number of jettons issued. For example, if the total number of tokens is 1000 and the user has 100 tokens, the percentage should be displayed as 10% of the user's wallet balance (100 ÷ 1000 = 0.1 or 10%).
 
 > `render_type` parameters:
 * _currency_ - displayed as a currency (default value).
 * _game_ - display used for games that appears as an NFT but also displays the number of tokens and takes into account the `amount_style` value.
 
-## Parsing Metadata
+## Parsing metadata
 To parse metadata, NFT data must first be obtained from the blockchain. To better understand this process, consider reading the [Retrieving NFT Data](/v3/guidelines/dapps/asset-processing/nft-processing/nfts#retrieving-nft-data) section of our TON asset processing documentation section.
 
 After on-chain NFT data is retrieved, it must be parsed. To carry out this process, the NFT content type must be determined by reading the first byte that makes up the inner workings of the NFT.
@@ -180,7 +180,7 @@ URL contents (from directly above):
 }
 ```
 
-### On-chain and Semi-chain
+### On-chain and semi-chain
 If the metadata byte string starts with `0x00`, it indicates on-chain or semi-chain NFT metadata.
 
 The metadata is stored in a dictionary where the key is the SHA256 hash of the attribute name, and the value is the data stored using the Snake or Chunked format.
@@ -193,15 +193,15 @@ On-chain NFT: [EQBq5z4N_GeJyBdvNh4tPjMpSkA08p8vWyiAX6LNbr3aLjI0](https://getgems
 
 Semi-chain NFT: [EQB2NJFK0H5OxJTgyQbej0fy5zuicZAXk2vFZEDrqbQ_n5YW](https://getgems.io/nft/EQB2NJFK0H5OxJTgyQbej0fy5zuicZAXk2vFZEDrqbQ_n5YW)
 
-On-chain Jetton Master: [EQA4pCk0yK-JCwFD4Nl5ZE4pmlg4DkK-1Ou4HAUQ6RObZNMi](https://tonscan.org/jetton/EQA4pCk0yK-JCwFD4Nl5ZE4pmlg4DkK-1Ou4HAUQ6RObZNMi)
+On-chain jetton master: [EQA4pCk0yK-JCwFD4Nl5ZE4pmlg4DkK-1Ou4HAUQ6RObZNMi](https://tonscan.org/jetton/EQA4pCk0yK-JCwFD4Nl5ZE4pmlg4DkK-1Ou4HAUQ6RObZNMi)
 
 On-chain NFT parser: [stackblitz/ton-onchain-nft-parser](https://stackblitz.com/edit/ton-onchain-nft-parser?file=src%2Fmain.ts)
 
-## Important NFT Metadata Notes
+## Important notes on NFT metadata
 1. For NFT metadata, the `name`, `description`, and `image`(or `image_data`) fields are required to display the NFT.
-2. For Jetton metadata, the `name`, `symbol`, `decimals` and `image`(or `image_data`) fields are primary.
+2. For jetton metadata, the `name`, `symbol`, `decimals` and `image`(or `image_data`) fields are primary.
 3. Anyone can create an NFT or Jetton using any `name`, `description`, or `image`. To prevent scams and confusion, apps should clearly distinguish NFTs from other assets.
-4. Some items may include a `video` field linking to video content associated with the NFT or Jetton.
+4. Some items may include a `video` field linking to video content associated with the NFT or jetton.
 
 
 ## References
@@ -209,5 +209,5 @@ On-chain NFT parser: [stackblitz/ton-onchain-nft-parser](https://stackblitz.com/
 
 ## See Also
 * [TON NFT processing](/v3/guidelines/dapps/asset-processing/nft-processing/nfts)
-* [TON Jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
-* [Mint your first Jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token)
+* [TON jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
+* [Mint your first jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token)
