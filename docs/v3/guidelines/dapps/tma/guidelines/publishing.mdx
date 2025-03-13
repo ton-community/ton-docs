@@ -19,7 +19,7 @@ Open tApps Center
 </Button>
 
 
-### Why Publish on tApps Center?
+### Why publish on tApps Center?
 
 **Greater Visibility**. The Telegram Apps Center provides developers with a prime opportunity to showcase their projects to a broad audience, making it easier to attract users and investors.
 
@@ -39,7 +39,7 @@ Telegram currently supports six different ways to launch Mini Apps: from a [keyb
 
 ![](/img/docs/telegram-apps/publish-tg-1.jpeg)
 
-### Keyboard Button Mini Apps
+### Keyboard button Mini Apps
 
 **TL;DR:** Mini Apps launched from a **web_app** type [keyboard button](https://core.telegram.org/bots/api#keyboardbutton) can send data back to the bot in a *service message* using [Telegram.WebApp.sendData](https://core.telegram.org/bots/webapps#initializing-web-apps), allowing the bot to respond without communicating with any external servers.
 
@@ -51,10 +51,10 @@ To transmit user data back to the bot, the Mini App calls the [Telegram.WebApp.s
 
 **Good for:**
 
-- **Custom data input interfaces** (e.g. a personalized calendar, advanced search lists, a randomizer that selects an option, etc.)
+- **Custom data input interfaces** (e.g. a personalized calendar, advanced search lists, a randomizer that selects an option, etc.).
 - **Reusable components** that do not depend on a particular bot.
 
-### Inline Button Mini Apps
+### Inline button Mini Apps
 
 **TL;DR:** For interactive Mini Apps like [@DurgerKingBot](https://t.me/durgerkingbot), use a **web_app** type [Inline KeyboardButton](https://core.telegram.org/bots/api#inlinekeyboardbutton), which retrieves basic user information and allows the user to send a message to the bot.
 
@@ -66,10 +66,10 @@ The bot can call the Bot API method [answerWebAppQuery](https://core.telegram.or
 
 **Good for:**
 
-- Fully-fledged web services and integrations
-- **Unlimited** use cases
+- Fully-fledged web services and integrations,
+- **Unlimited** use cases.
 
-### Launching Mini Apps from the Menu Button
+### Launching Mini Apps from the menu button
 
 **TL;DR:** Mini Apps can be launched from a customized menu button. This provides quick access to the app and functions **identically** to [launching a Mini App from an inline button](https://core.telegram.org/bots/webapps#inline-button-web-apps).
 
@@ -84,7 +84,7 @@ Apart from this, Web Apps opened via the menu button work in the same way as [in
 
 [@DurgerKingBot](https://t.me/durgerkingbot) allows launching its Mini App both from both an inline button and the menu button.
 
-### Inline Mode Mini Apps
+### Inline mode Mini Apps
 
 **TL;DR:** Mini Apps launched via **web_app** type [InlineQueryResultsButton](https://core.telegram.org/bots/api#inlinequeryresultsbutton) can be used anywhere in inline mode. Users can create content in a web interface and seamlessly send it to the current chat via inline mode.
 
@@ -96,11 +96,11 @@ Inline Mini Apps have **no access** to the chat – they can't read messages or 
 
 - Fully-fledged web services and integrations in inline mode.
 
-### Direct Link Mini Apps
+### Direct link Mini Apps
 
-**TL;DR:** Mini App Bots can be launched from a direct link in any chat. They support a *startapp* parameter and are aware of the current chat context.
+**TL;DR:** Mini App bots can be launched from a direct link in any chat. They support a *startapp* parameter and are aware of the current chat context.
 
-**NEW**: Direct links **open a Mini App** directly in the current chat. If a non-empty *startapp* parameter is included in the link, it appears in the Mini App's *start_param* field and in the GET parameter *tgWebAppStartParam*.
+**NEW**: Direct links **open a Mini App** in the current chat. If a non-empty *startapp* parameter is included in the link, it appears in the Mini App's *start_param* field and in the GET parameter *tgWebAppStartParam*.
 
 In this mode, Mini Apps use *chat_type* and *chat_instance* parameters to track the current chat context. This enables **concurrent** and **shared** usage among multiple chat members–ideal for live whiteboards, group orders, multiplayer games, and similar apps.
 
@@ -113,6 +113,6 @@ Mini Apps opened from a direct link have **no access** to the chat–they can't 
 
 **Good for:**
 
-- Fully-fledged web services and integrations accessible in one tap
-- Cooperative, multiplayer, or teamwork-oriented services within a chat
-- **Unlimited** use cases
+- Fully-fledged web services and integrations accessible in one tap,
+- Cooperative, multiplayer, or teamwork-oriented services within a chat,
+- **Unlimited** use cases.
