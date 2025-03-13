@@ -23,34 +23,38 @@ Sometimes the word **'gram'** may appear in the documentation, primarily in code
 Let's dive in!
 
 ## Types of messages
+
 There are three types of messages:
- * external—messages sent from outside of the blockchain to a smart contract inside the blockchain. Such messages should be explicitly accepted by smart contracts during the so-called `credit_gas`. If the message is not accepted, the node should not accept it into a block or relay it to other nodes.
- * internal—messages sent from one blockchain entity to another. Such messages, in contrast to external ones, may carry some TON and pay for themselves. Thus, smart contracts that receive such messages may not accept it. In this case, gas will be deducted from the message value.
- * logs—messages sent from a blockchain entity to the outer world. Generally, there is no mechanism for sending such messages out of the blockchain. In fact, while all nodes in the network have consensus on whether a message was created or not, there are no rules on how to process them. Logs may be directly sent to `/dev/null`, logged to disk, saved an indexed database, or even sent by non-blockchain means (email/telegram/sms), all of these are at the sole discretion of the given node.
+
+- external—messages sent from outside of the blockchain to a smart contract inside the blockchain. Such messages should be explicitly accepted by smart contracts during the so-called `credit_gas`. If the message is not accepted, the node should not accept it into a block or relay it to other nodes.
+- internal—messages sent from one blockchain entity to another. Such messages, in contrast to external ones, may carry some TON and pay for themselves. Thus, smart contracts that receive such messages may not accept it. In this case, gas will be deducted from the message value.
+- logs—messages sent from a blockchain entity to the outer world. Generally, there is no mechanism for sending such messages out of the blockchain. In fact, while all nodes in the network have consensus on whether a message was created or not, there are no rules on how to process them. Logs may be directly sent to `/dev/null`, logged to disk, saved an indexed database, or even sent by non-blockchain means (email/telegram/sms), all of these are at the sole discretion of the given node.
 
 ## Message layout
 
 We will start with the internal message layout.
 
 TL-B scheme, which describes messages that can be sent by smart contracts, is as follows:
+
 ```tlb
-message$_ {X:Type} info:CommonMsgInfoRelaxed 
+message$_ {X:Type} info:CommonMsgInfoRelaxed
   init:(Maybe (Either StateInit ^StateInit))
   body:(Either X ^X) = MessageRelaxed X;
 ```
 
 Let's put it into words. Serialization of any message consists of three fields: info (header of some sort which describes the source, destination, and other metadata), init (field which is only required for initialization of messages), and body (message payload).
 
-`Maybe` and `Either` and other types of expressions mean the following: 
-* when we have the field `info:CommonMsgInfoRelaxed`, it means that the serialization of `CommonMsgInfoRelaxed` is injected directly to the serialization cell.
-* when we have the field `body:(Either X ^X)`, it means that when we (de)serialize some type `X`, we first put one `either` bit, which is `0` if `X` is serialized to the same cell, or `1` if it is serialized to the separate cell.
-* when we have the field `init:(Maybe (Either StateInit ^StateInit))`, it means that we first put `0` or `1` depending on whether this field is empty or not; and if it is not empty, we serialize `Either StateInit ^StateInit` (again, put one `either` bit which is `0` if `StateInit` is serialized to the same cell or `1` if it is serialized to a separate cell).
+`Maybe` and `Either` and other types of expressions mean the following:
 
-`CommonMsgInfoRelaxed` layout is as follows: 
+- when we have the field `info:CommonMsgInfoRelaxed`, it means that the serialization of `CommonMsgInfoRelaxed` is injected directly to the serialization cell.
+- when we have the field `body:(Either X ^X)`, it means that when we (de)serialize some type `X`, we first put one `either` bit, which is `0` if `X` is serialized to the same cell, or `1` if it is serialized to the separate cell.
+- when we have the field `init:(Maybe (Either StateInit ^StateInit))`, it means that we first put `0` or `1` depending on whether this field is empty or not; and if it is not empty, we serialize `Either StateInit ^StateInit` (again, put one `either` bit which is `0` if `StateInit` is serialized to the same cell or `1` if it is serialized to a separate cell).
+
+`CommonMsgInfoRelaxed` layout is as follows:
 
 ```tlb
 int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
-  src:MsgAddress dest:MsgAddressInt 
+  src:MsgAddress dest:MsgAddressInt
   value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
   created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
 
@@ -63,8 +67,8 @@ It starts with 1bit prefix `0`, then there are three 1-bit flags, namely whether
 
 If a message is sent from the smart contract, some of those fields will be rewritten to the correct values. In particular, validator will rewrite `bounced`, `src`, `ihr_fee`, `fwd_fee`, `created_lt` and `created_at`. That means two things: first, another smart-contract during handling message may trust those fields (sender may not forge source address, `bounced` flag, etc); and second, that during serialization we may put to those fields any valid values (anyway those values will be overwritten).
 
-
 Straight-forward serialization of the message would be as follows:
+
 ```func
   var msg = begin_cell()
     .store_uint(0, 1) ;; tag
@@ -77,7 +81,7 @@ Straight-forward serialization of the message would be as follows:
     .store_coins(amount)
     .store_dict(extra_currencies)
     .store_coins(0) ;; ihr_fee
-    .store_coins(fwd_value) ;; fwd_fee 
+    .store_coins(fwd_value) ;; fwd_fee
     .store_uint(cur_lt(), 64) ;; lt of transaction
     .store_uint(now(), 32) ;; unixtime of transaction
     .store_uint(0,  1) ;; no init-field flag (Maybe)
@@ -87,6 +91,7 @@ Straight-forward serialization of the message would be as follows:
 ```
 
 However, instead of step-by-step serialization of all fields, usually developers use shortcuts. Thus, let's consider how messages can be sent from the smart contract using an example from [elector-code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/elector-code.fc#L153).
+
 ```func
 () send_message_back(addr, ans_tag, query_id, body, grams, mode) impure inline_ref {
   ;; int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool src:MsgAddress -> 011000
@@ -104,42 +109,45 @@ However, instead of step-by-step serialization of all fields, usually developers
 }
 ```
 
-First, it put `0x18` value into 6 bits that is put `0b011000`. What is it? 
+First, it put `0x18` value into 6 bits that is put `0b011000`. What is it?
 
-* First bit is `0`—1bit prefix which indicates that it is `int_msg_info`. 
+- First bit is `0`—1bit prefix which indicates that it is `int_msg_info`.
 
-* Then there are 3 bits `1`, `1` and `0`, meaning Instant Hypercube Routing is disabled, messages can be bounced, and that message is not the result of bouncing itself. 
-* Then there should be sender address, however since it anyway will be rewritten with the same effect any valid address may be stored there. The shortest valid address serialization is that of `addr_none` and it serializes as a two-bit string `00`.
+- Then there are 3 bits `1`, `1` and `0`, meaning Instant Hypercube Routing is disabled, messages can be bounced, and that message is not the result of bouncing itself.
+- Then there should be sender address, however since it anyway will be rewritten with the same effect any valid address may be stored there. The shortest valid address serialization is that of `addr_none` and it serializes as a two-bit string `00`.
 
 Thus, `.store_uint(0x18, 6)` is the optimized way of serializing the tag and the first 4 fields.
 
 Next line serializes the destination address.
 
 Then we should serialize values. Generally, the message value is a `CurrencyCollection` object with the following scheme:
+
 ```tlb
 nanograms$_ amount:(VarUInteger 16) = Grams;
 
-extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32)) 
+extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32))
                  = ExtraCurrencyCollection;
 
-currencies$_ grams:Grams other:ExtraCurrencyCollection 
+currencies$_ grams:Grams other:ExtraCurrencyCollection
            = CurrencyCollection;
 ```
 
 This scheme means that in addition to the TON value, message may carry the dictionary of additional _extra-currencies_. However, currently we may neglect it and just assume that the message value is serialized as "number of nanotons as variable integer" and "`0` - empty dictionary bit".
 
-Indeed, in the elector code above we serialize coins' amounts via `.store_coins(toncoins)` but then just put a string of zeros with length equal to `1 + 4 + 4 + 64 + 32 + 1 + 1`. What is it? 
-* First bit stands for empty extra-currencies dictionary.
-* Then we have two 4-bit long fields. They encode 0 as `VarUInteger 16`. In fact, since `ihr_fee` and `fwd_fee` will be overwritten, we may as well put there zeroes.
-* Then we put zero to `created_lt` and `created_at` fields. Those fields will be overwritten as well; however, in contrast to fees, these fields have a fixed length and are thus encoded as 64- and 32-bit long strings.
-* _(we had already serialized the message header and passed to init/body at that moment)_
-* Next zero-bit means that there is no `init` field.
-* The last zero-bit means that msg_body will be serialized in-place.
-* After that, message body (with arbitrary layout) is encoded.
+Indeed, in the elector code above we serialize coins' amounts via `.store_coins(toncoins)` but then just put a string of zeros with length equal to `1 + 4 + 4 + 64 + 32 + 1 + 1`. What is it?
+
+- First bit stands for empty extra-currencies dictionary.
+- Then we have two 4-bit long fields. They encode 0 as `VarUInteger 16`. In fact, since `ihr_fee` and `fwd_fee` will be overwritten, we may as well put there zeroes.
+- Then we put zero to `created_lt` and `created_at` fields. Those fields will be overwritten as well; however, in contrast to fees, these fields have a fixed length and are thus encoded as 64- and 32-bit long strings.
+- _(we had already serialized the message header and passed to init/body at that moment)_
+- Next zero-bit means that there is no `init` field.
+- The last zero-bit means that msg_body will be serialized in-place.
+- After that, message body (with arbitrary layout) is encoded.
 
 That way, instead of individual serialization of 14 parameters, we execute 4 serialization primitives.
 
 ## Full scheme
+
 Full scheme of message layout and the layout of all constituting fields (as well as scheme of ALL objects in TON) are presented in [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb).
 
 ## Message size
@@ -162,77 +170,148 @@ e.g.: maximum message size must not exceed `max_msg_bits`, the number of cells p
 More configuration parameters and there values can be found [here](/v3/documentation/network/configs/blockchain-configs#param-43).
 :::
 
-## Message modes
+## Message Modes
 
-As you might've noticed, we send messages with `send_raw_message` which, apart from consuming the message itself, also accepts the mode. This mode is used to determine the mode for sending messages, including whether to pay for fuel separately and how to handle errors. When the TON Virtual Machine (TVM) analyses and processes messages, it performs differentiated processing depending on the mode value. Easily confused is that the value of the mode parameter has two variables, namely mode and flag. Mode and flag have different functions:
-
-- mode : defines the basic behavior when sending a message, e.g. whether to carry a balance, whether to wait for message processing results, etc. Different mode values represent different sending characteristics, and different values can be combined to meet specific sending requirements.
-- flag : as an addition to the mode, it is used to configure specific message behavior, such as paying transfer fees separately or ignoring processing errors. The flag is added to the mode to create the final message sending mode.
-
-When using the `send_raw_message` function, it is important to select the appropriate mode and flag combination for your needs. To figure out the mode that best suits your needs, take a look at the following table:
-
-| Mode | Description |
-|:-|:-|
-| `0` | Ordinary message |
-| `64` | Carry all the remaining value of the inbound message in addition to the value initially indicated in the new message |
-| `128` | Carry all the remaining balance of the current smart contract instead of the value originally indicated in the message |
-
-| Flag  | Description                                                                                         |
-|:------|:----------------------------------------------------------------------------------------------------|
-| `+1`  | Pay transfer fees separately from the message value                                                 |
-| `+2`  | Ignore some errors arising while processing this message during the action phase (check note below) |
-| `+16` | In the case of action fail - bounce transaction. No effect if `+2` is used.                         |
-| `+32` | Current account must be destroyed if its resulting balance is zero (often used with Mode 128)       |
-
-:::info +2 flag
-Note that `+2` flag ignore only following errors arising while processing message during the action phase:
-1. Not enough Toncoins:
-    - Not enough value to transfer with the message (all of the inbound message value has been consumed).
-    - Not enough funds to process a message.
-    - Not enough value attached to the message to pay forwarding fees.
-    - Not enough extra currency to send with the message.
-    - Not enough funds to pay for an outbound external message.
-2. Message is too large (check [Message size](#message-size) for more).
-3. The message has too big Merkle depth.
-
-However, it does not ignore errors in the following scenarios:
-1. The message has an invalid format.
-2. The message mode includes both 64 and 128 mods.
-3. The outbound message has invalid libraries in StateInit.
-4. The external message is not ordinary or includes +16 or +32 flag or both.
+:::info
+For the latest information, refer to the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook).
 :::
 
-:::info +16 flag
-If contract receives bounceable message, it will process `storage` phase **before** `credit` phase.
+As you may have noticed, we send messages using `send_raw_message`, which, in addition to consuming the message itself, also accepts a mode parameter. This mode determines how the message is sent, including whether to pay for gas separately and how to handle errors. When the TON Virtual Machine (TVM) processes messages, it behaves differently depending on the mode value. It’s important to note that the mode parameter consists of two components: **mode** and **flag**, which serve different purposes:
 
-Otherwise, it will process `credit` phase **before** `storage` phase.
+- **Mode**: Defines the basic behavior when sending a message, such as whether to carry a balance or wait for message processing results. Different mode values represent different sending characteristics, and they can be combined to meet specific requirements.
+- **Flag**: Acts as an addition to the mode, configuring specific message behaviors, such as paying transfer fees separately or ignoring processing errors. The flag is added to the mode to create the final message-sending configuration.
 
-Check [source code with checks for `bounce-enable` flag](https://github.com/ton-blockchain/ton/blob/master/validator/impl/collator.cpp#L2810).
+When using the `send_raw_message` function, it’s crucial to choose the appropriate combination of mode and flag for your needs. Refer to the following table to determine the best mode for your use case:
+
+| Mode  | Description                                                                                                            |
+| :---- | :--------------------------------------------------------------------------------------------------------------------- |
+| `0`   | Ordinary message                                                                                                       |
+| `64`  | Carry all the remaining value of the inbound message in addition to the value initially indicated in the new message   |
+| `128` | Carry all the remaining balance of the current smart contract instead of the value originally indicated in the message |
+
+| Flag  | Description                                                                             |
+| :---- | :-------------------------------------------------------------------------------------- |
+| `+1`  | Pay transfer fees separately from the message value                                     |
+| `+2`  | Ignore some errors arising while processing this message during the action phase        |
+| `+16` | In the case of action failure, bounce the transaction. No effect if `+2` is used.       |
+| `+32` | Destroy the current account if its resulting balance is zero (often used with Mode 128) |
+
+:::info +16 Flag
+If a contract receives a bounceable message, it processes the `storage` phase **before** the `credit` phase. Otherwise, it processes the `credit` phase **before** the `storage` phase.
+
+For more details, check the [source code with checks for the `bounce-enable` flag](https://github.com/ton-blockchain/ton/blob/master/validator/impl/collator.cpp#L2810).
 :::
 
 :::warning
+
 1. **+16 flag** - do not use in external messages (e.g. to wallets), because there is no sender to receive the bounced message.
+
 2. **+2 flag** - important in external messages (e.g. to wallets).
+
 :::
 
-### Example with use cases
+## Recommended approach: `mode=3` {#mode3}
 
-Let's look at an example to make it clearer. Let's imagine a situation where we have 100 Toncoin on our smart contract balance and we receive an internal message with 50 Toncoin and send a message with 20 Toncoin, the total fee is 3 Toncoin.
+```func
+send_raw_message(msg, SEND_MODE_PAY_FEES_SEPARATELY | SEND_MODE_IGNORE_ERRORS); ;; stdlib.fc L833
+```
 
-`IMPORTANT`: The result of the error cases is described when the error occurred.
+The `sendMode=3` combines `0` mode and two flags:
 
-| Case | Mode and Flags | Code | Result |
-|:-|:-|:-|:-|
-| Send a regular message | `mode` = 0, no `flag` | `send_raw_message(msg, 0)` | `balance` - 100 + 50 - 20 = 130, `send` - 20 - 3 = 17
-| Send a regular message, if there was an error in processing the action, don't rollback the transaction and ignore it | `mode` = 0, `flag` = 2 | `send_raw_message(msg, 2)` | `balance` - 100 + 50, `send` - 0
-| Send a regular message, if there was an error in processing the action - bounce the message in addition to rolling back the transaction | `mode` = 0, `flag` = 16 | `send_raw_message(msg, 16)` | `balance` - 100 + 50 = 167 + 17 (bounced), `send` - 20 - 3 = `bounce` message with 17
-| Send a regular message and pay transfer fees separately |  `mode` = 0, `flag` = 1 | `send_raw_message(msg, 1)` | `balance` - 100 + 50 - 20 - 3 = 127, `send` - 20
-| Send a regular message and pay transfer fees separately, if there was an error in processing the action - bounce the message in addition to rolling back the transaction  |  `mode` = 0, `flags` = 1 + 16 | `send_raw_message(msg, 17)` | `balance` - 100 + 50 - 20 - 3 = 127 + `20 (bounced)`, `send` - 20 = `bounce` message with 20
-| Carry all the remaining value of the inbound message in addition to the value initially indicated in the new message | `mode` = 64, `flag` = 0 | `send_raw_message(msg, 64)` | `balance` - 100 - 20 = 80, `send` - 20 + 50 - 3 = 67
-| Carry all the remaining value of the inbound message in addition to the value initially indicated in the new message and pay transfer fees separately | `mode` = 64, `flag` = 1 | `send_raw_message(msg, 65)` | `balance` - 100 - 20 - 3 = 77, `send` - 20 + 50 = 70
-| Carry all the remaining value of the inbound message in addition to the value initially indicated in the new message and pay transfer fees separately, if there was an error in processing the action - bounce the message in addition to rolling back the transaction | `mode` = 64, `flags` = 1 + 16 | `send_raw_message(msg, 81)` | `balance` - 100 - 20 - 3 = 77 + `70 (bounced)`, `send` - 20 + 50 = `bounce` message with 70
-| Send all received tokens together with the contract balance | `mode` = 128, `flag` = 0 | `send_raw_message(msg, 128)` | `balance` - 0, `send` - 100 + 50 - 3 = 147
-| Send all received tokens together with the contract balance, if there was an error in processing the action - bounce the message in addition to rolling back the transaction  | `mode` = 128, `flag` = 16 | `send_raw_message(msg, 144)` | `balance` - 0 + `147 (bounced)`, `send` - 100 + 50 - 3 = `bounce` message with 147
-| Send all received tokens together with the contract balance and destroy smart-contract | `mode` = 128, `flag` = 32 | `send_raw_message(msg, 160)` | `balance` - 0, `send` - 100 + 50 - 3 = 147
-| Send all received tokens together with the contract balance and destroy smart-contract, if there was an error in processing the action - bounce the message in addition to rolling back the transaction. `IMPORTANT: Avoid this behavior because the refunds will go to an already deleted contract.`  | `mode` = 128, `flag` = 32 + 16 | `send_raw_message(msg, 176)` | `balance` - 0 + `147 (bounced)`, `send` - 100 + 50 - 3 = `bounce` message with 147
+- `1` (PAY FEES SEPARATELY): Pay transfer fees separately from the message value
+- `2` (IGNORE ERRORS): Suppresses specific errors during message processing
 
+This combination is the standard method for sending messages in TON.
+
+---
+
+### Behavior without +2 flag
+
+If the `IGNORE ERRORS` flag is omitted and a message fails to process (e.g., due to insufficient balance), the entire transaction reverts. For wallet contracts, this prevents updates to critical data like the `seqno`.
+
+```func
+throw_unless(33, msg_seqno == stored_seqno);
+throw_unless(34, subwallet_id == stored_subwallet);
+throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
+accept_message();
+set_data(begin_cell()
+  .store_uint(stored_seqno + 1, 32)
+  .store_uint(stored_subwallet, 32)
+  .store_uint(public_key, 256)
+  .store_dict(plugins)
+  .end_cell());
+commit(); ;; This will be reverted on action error.
+```
+
+As a result, unprocessed external messages can be replayed until they expire or drain the contract's balance.
+
+---
+
+### Error handling with +2 Flag
+
+The `IGNORE ERRORS` flag (`+2`) suppresses these specific errors during the Action Phase:
+
+#### Suppressed errors
+
+1. **Insufficient funds**
+
+   - Message transfer value exhaustion
+   - Insufficient balance for message processing
+   - Inadequate attached value for forwarding fees
+   - Missing extra currency for message transfer
+   - Insufficient funds for external message delivery
+
+2. **Oversized message**  
+   Exceeds [size limits](#message-size).
+
+3. **Excessive Merkle depth**  
+   Message exceeds allowed Merkle tree complexity.
+
+#### Non-suppressed errors
+
+1. Malformed message structure
+2. Conflicting mode flags (`64` and `128` used together)
+3. Invalid libraries in `StateInit` of outbound message
+4. Non-ordinary external messages (e.g., using `+16` or `+32` flags)
+
+---
+
+### Security considerations
+
+#### Current mitigations
+
+- Most wallet apps auto-include `IGNORE ERRORS` in transactions
+- Wallet UIs often display transaction simulation results
+- V5 wallets enforce `IGNORE ERRORS` usage
+- Validators limit message replays per block
+
+#### Potential risks
+
+- **Race conditions** causing stale backend balance checks
+- **Legacy wallets** (V3/V4) without enforced checks
+- **Incomplete validations** by wallet applications
+
+---
+
+### Example: jetton transfer pitfall
+
+Consider this simplified Jetton wallet code:
+
+```func
+() send_jettons(slice in_msg_body, slice sender_address, int msg_value, int fwd_fee) impure inline_ref {
+int jetton_amount = in_msg_body~load_coins();
+balance -= jetton_amount;
+send_raw_message(msg, SEND_MODE_CARRY_ALL_REMAINING_MESSAGE_VALUE | SEND_MODE_BOUNCE_ON_ACTION_FAIL);
+save_data(status, balance, owner_address, jetton_master_address); }
+```
+
+If a transfer using `sendMode=3` fails due to a suppressed error:
+
+1. Transfer action is not executed
+2. Contract state updates persist (no rollback)
+3. **Result:** Permanent loss of `jetton_amount` from the balance
+
+---
+
+**Best Practice**  
+Always pair `IGNORE ERRORS` with robust client-side validations and real-time balance checks to prevent unintended state changes.
