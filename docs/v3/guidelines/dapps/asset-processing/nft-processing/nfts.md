@@ -1,12 +1,12 @@
-# NFT Processing
+# NFT processing
 
 ## Overview
 
-This section provides a comprehensive understanding of NFTs on the TON Blockchain. Readers will learn how to interact with NFTs and accept them through transactions.
+This section provides a comprehensive understanding of NFTs on TON Blockchain. Readers will learn how to interact with NFTs and accept them through transactions.
 The following information assumes familiarity with our previous [section on Toncoin payment processing](/v3/guidelines/dapps/asset-processing/payments-processing) and a basic understanding of programmatic interactions with wallet smart contracts.
 
 
-## Understanding the Basics of NFTs
+## Understanding the basics of NFTs
 
 NFTs operating on TON Blockchain are represented by the  [TEP-62](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) and [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md) standards.
 
@@ -14,7 +14,7 @@ TON is designed for high performance, incorporating automatic sharding based on 
 
 Since each NFT has its own smart contract, it is not possible to retrieve details of all NFTs in a collection through a single contract. Instead, querying both the collection contract and each individual NFT contract is required to gather complete collection data. Similarly, tracking NFT transfers necessitates monitoring all transactions related to each NFT within a collection.
 
-### NFT Collections
+### NFT collections
 An NFT Collection contract serves as an index and storage for NFT content. It should implement the following interfaces:
 #### Get method `get_collection_data`
 ```
@@ -24,7 +24,7 @@ General collection information retrieval, including:
 
   1. `next_item_index` – Indicates the total number of NFTs in an ordered collection and the next available index for minting. For unordered collections, this value is -1, meaning a unique tracking mechanism (e.g., a TON DNS domain hash) is used.
   2. `collection_content` – A cell storing collection content in a TEP-64-compatible format.
-  3. `owner_address` A slice containing the collection owner’s address (can be empty).
+  3. `owner_address` - A slice containing the collection owner’s address (can be empty).
 
 #### Get method `get_nft_address_by_index`
 ```
@@ -56,12 +56,12 @@ Basic NFTs should implement:
 transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody
 ```
 To facilitate an NFT transfer, a transfer message containing specific parameters is required:
-1. `OP` - `0x5fcc3d14` - a constant defined in the TEP-62 standard.
-2. `queryId` - `uint64` - a unique identifier to track the message.
-3. `newOwnerAddress` - `MsgAddress` - the recipient’s smart contract address.
-4. `responseAddress` - `MsgAddress` - address for returning unused funds (e.g., when sending extra TON to cover fees).
-5. `forwardAmount` - `Coins` - the amount of TON forwarded with the message (typically 0.01 TON). This funds an internal notification message to the `newOwnerAddress` upon successful receipt of the NFT.
-6. `forwardPayload` - `Slice | Cell` - optional data included in the ownership_assigned notification message.
+1. `OP` - `0x5fcc3d14` - A constant defined in the TEP-62 standard.
+2. `queryId` - `uint64` - A unique identifier to track the message.
+3. `newOwnerAddress` - `MsgAddress` - The recipient’s smart contract address.
+4. `responseAddress` - `MsgAddress` - Address for returning unused funds (e.g., when sending extra TON to cover fees).
+5. `forwardAmount` - `Coins` - The amount of TON forwarded with the message (typically 0.01 TON). This funds an internal notification message to the `newOwnerAddress` upon successful receipt of the NFT.
+6. `forwardPayload` - `Slice | Cell` - Optional data included in the ownership_assigned notification message.
 
 This message (as explained above) is the primary way to interact with an NFT that changes ownership after receiving a notification as a result of the above message.
 
@@ -69,7 +69,7 @@ For example, this type of message above is often used to send an NFT Item smart 
 
 In this case, the transfer amount should be set to an appropriate value (0.01 TON for a regular wallet, or more if you want to execute the contract by transferring the NFT) to ensure that the new owner receives a notice of the ownership transfer. This is important because the new owner will not be notified that they have received the NFT without this notice.
 
-## Retrieving NFT Data
+## Retrieving NFT data
 
 Most SDKs provide built-in methods to retrieve NFT data, including: [tonweb(js)](https://github.com/toncenter/tonweb/blob/b550969d960235314974008d2c04d3d4e5d1f546/src/contract/token/nft/NftItem.js#L38), [tonutils-go](https://github.com/xssnick/tonutils-go/blob/fb9b3fa7fcd734eee73e1a73ab0b76d2fb69bf04/ton/nft/item.go#L132), [pytonlib](https://github.com/toncenter/pytonlib/blob/d96276ec8a46546638cb939dea23612876a62881/pytonlib/client.py#L771), and more.
 
@@ -204,17 +204,17 @@ var nft_msg = begin_cell()
 send_raw_message(nft_msg.end_cell(), 128 + 32);
 ```
 Let's examine each line of code:
-- `store_uint(0x18, 6)` - stores message flags.
-- `store_slice(nft_address)` - stores the message destinations (NFT addresses).
-- `store_coins(0)` -  sets the amount of TON to send with the message to 0. The 128 [message mode](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes) is used to send the message with its remaining balance. To send a specific amount instead of the user’s entire balance, this value must be adjusted. It should be large enough to cover gas fees and any forwarding amounts.
-- `store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)`  -  leaves the remaining components of the message header empty..
-- `store_uint(op::transfer(), 32)` - marks the start of the msg_body. The transfer OP code is used to signal to the receiver that this is a transfer ownership message.
-- `store_uint(query_id, 64)` - stores query_id
-- `store_slice(sender_address) ;; new_owner_address` - the first stored address is used for transferring NFTs and sending notifications.
-- `store_slice(sender_address) ;; response_address` - the second stored address serves as the response address.
-- `store_int(0, 1)` - sets the custom payload flag to 0, indicating that no custom payload is required.
-- `store_coins(0)` - specifies the amount of TON to be forwarded with the message. While it is set to 0 in this example, it is recommended to set it to a higher amount (at least 0.01 TON) to create a forward message and notify the new owner that they have received the NFT. The amount should be sufficient to cover any associated fees and costs.
-- `.store_int(0, 1)` - custom payload flag. This should be set to 1 if your service needs to pass the payload as a reference.
+- `store_uint(0x18, 6)` - Stores message flags.
+- `store_slice(nft_address)` - Stores the message destinations (NFT addresses).
+- `store_coins(0)` -  Sets the amount of TON to send with the message to 0. The 128 [message mode](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes) is used to send the message with its remaining balance. To send a specific amount instead of the user’s entire balance, this value must be adjusted. It should be large enough to cover gas fees and any forwarding amounts.
+- `store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)`  -  Leaves the remaining components of the message header empty..
+- `store_uint(op::transfer(), 32)` - Marks the start of the msg_body. The transfer OP code is used to signal to the receiver that this is a transfer ownership message.
+- `store_uint(query_id, 64)` - Stores query_id
+- `store_slice(sender_address) ;; new_owner_address` - The first stored address is used for transferring NFTs and sending notifications.
+- `store_slice(sender_address) ;; response_address` - The second stored address serves as the response address.
+- `store_int(0, 1)` - Sets the custom payload flag to 0, indicating that no custom payload is required.
+- `store_coins(0)` - Specifies the amount of TON to be forwarded with the message. While it is set to 0 in this example, it is recommended to set it to a higher amount (at least 0.01 TON) to create a forward message and notify the new owner that they have received the NFT. The amount should be sufficient to cover any associated fees and costs.
+- `.store_int(0, 1)` - Custom payload flag. This should be set to 1 if your service needs to pass the payload as a reference.
 
 ### Receiving NFTs
 Once we've sent the NFT, it is critical to determine when it has been received by the new owner. A good example of how to do this can be found in the same NFT sale smart contract:
@@ -235,13 +235,13 @@ slice prev_owner_address = in_msg_body~load_msg_addr();
 ```
 Let's again examine each line of code:
 
-- `slice cs = in_msg_full.begin_parse();` - parses the incoming message..
-- `int flags = cs~load_uint(4);` - loads flags from the first 4 bits of the message.
-- `if (flags & 1) { return (); } ;; ignore all bounced messages` - ignores all bounced messages. This step ensures that messages encountering errors during transaction receipt and being returned to the sender are disregarded. It’s essential to apply this check to all incoming messages unless there's a specific reason not to.
-- `slice sender_address = cs~load_msg_addr();` - loads the sender's address from the message. In this case, it is an NFT address.
-- `throw_unless(500, equal_slices(sender_address, nft_address));` - verifies that the sender is indeed the expected NFT that should have been transferred via the contract. Parsing NFT data from smart contracts can be challenging, so in most cases, the NFT address is predefined at contract creation.
-- `int op = in_msg_body~load_uint(32);` - loads the message OP code.
-- `throw_unless(501, op == op::ownership_assigned());` - ensures that the received OP code matches the ownership assigned constant value.
+- `slice cs = in_msg_full.begin_parse();` - Parses the incoming message.
+- `int flags = cs~load_uint(4);` - Loads flags from the first 4 bits of the message.
+- `if (flags & 1) { return (); } ;; ignore all bounced messages` - Ignores all bounced messages. This step ensures that messages encountering errors during transaction receipt and being returned to the sender are disregarded. It’s essential to apply this check to all incoming messages unless there's a specific reason not to.
+- `slice sender_address = cs~load_msg_addr();` - Loads the sender's address from the message. In this case, it is an NFT address.
+- `throw_unless(500, equal_slices(sender_address, nft_address));` - Verifies that the sender is indeed the expected NFT that should have been transferred via the contract. Parsing NFT data from smart contracts can be challenging, so in most cases, the NFT address is predefined at contract creation.
+- `int op = in_msg_body~load_uint(32);` - Loads the message OP code.
+- `throw_unless(501, op == op::ownership_assigned());` - Ensures that the received OP code matches the ownership assigned constant value.
 - `slice prev_owner_address = in_msg_body~load_msg_addr();` - Extracts the previous owner’s address from the incoming message body and loads it into the `prev_owner_address` variable. This can be useful if the previous owner decides to cancel the contract and have the NFT returned to them.
 
 Now that we have successfully parsed and validated the notification message, we can proceed with the business logic that initiates a sale smart contract. This contract manages NFT item sales, including auctions on platforms such as getgems.io.
