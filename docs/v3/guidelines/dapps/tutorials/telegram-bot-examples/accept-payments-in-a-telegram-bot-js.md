@@ -16,8 +16,8 @@ The bot will look like this:
 
 ## 📖 What you'll learn
 You'll learn how to:
- - Create a Telegram bot in NodeJS using grammY
- - Work with the public TON Center API
+ - Create a Telegram bot in NodeJS using grammY,
+ - Work with the public TON Center API.
 
 > Why use grammY?
 grammY is a modern, high-level framework designed for fast and efficient development of Telegram bots using JavaScript, TypeScript, or Deno. It features excellent [documentation](https://grammy.dev) and an active community ready to help.
@@ -27,9 +27,9 @@ grammY is a modern, high-level framework designed for fast and efficient develop
 Install [NodeJS](https://nodejs.org/en/download/) if you haven't yet.
 
 You will also need the following libraries:
- - grammy
- - ton
- - dotenv
+ - grammy,
+ - ton,
+ - dotenv.
 
 You can install them with a single terminal command.
 ```bash npm2yarn
@@ -48,9 +48,9 @@ src
     ├── app.js
 .env
 ```
-* `bot/start.js` & `bot/payment.js` - Handlers for the Telegram bot
-* `src/ton.js` - Business logic related to TON
-* `app.js` - Initializes and launches the bot
+* `bot/start.js` & `bot/payment.js` - Handlers for the Telegram bot,
+* `src/ton.js` - Business logic related to TON,
+* `app.js` - Initializes and launches the bot.
 
 
 Now let's start writing the code!
@@ -85,7 +85,7 @@ How to solve it:
 1. Retrieve the latest transactions for our wallet. Why our wallet? In this case, we do not have to worry about what the user's wallet address is, we do not have to confirm that it is their wallet, and we do not have to store this wallet.
 2. Filter incoming transactions only.
 3. Iterate through transactions and verify if the comment and amount match our data.
-4. Celebrate the solution to our problem🎉
+4. Celebrate the solution to our problem.
 
 #### Getting the latest transactions
 
@@ -97,7 +97,7 @@ curl -X 'GET' \
   'https://toncenter.com/api/v2/getTransactions?address=EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N&limit=100' \
   -H 'accept: application/json'
 ```
-Great, now we have a list of transactions on hand in ["result"], now let's take a closer look at 1 transaction
+Great, now we have a list of transactions on hand in ["result"], now let's take a closer look at 1 transaction.
 
 
 ```json
@@ -132,12 +132,12 @@ Great, now we have a list of transactions on hand in ["result"], now let's take 
     }
 ```
 
-From this json file, we can extract some insights:
+From this JSON file, we can extract some insights:
 
 - The transaction is incoming (indicated by an empty "out_msgs" field).
 - We can extract the transaction comment, sender, and amount.
 
-Now, we're ready to create a transaction checker
+Now, we're ready to create a transaction checker.
 
 ### Working with TON
 
@@ -166,14 +166,14 @@ export async function verifyTransactionExistance(toWallet, amount, comment) {
 ```
 Here we simply generate the endpoint url based on which network is selected in the configuration. And after that we initialize the http client.
 
-So, now we can get the last 100 transactions from the owner's wallet
+So, now we can get the last 100 transactions from the owner's wallet.
 ```js
 const transactions = await httpClient.getTransactions(toWallet, {
     limit: 100,
   });
 ```
 
-Filter, leaving only incoming transactions (if the out_msgs of the transaction is empty, we leave it)
+Filter, leaving only incoming transactions (if the out_msgs of the transaction is empty, we leave it).
 ```js
 let incomingTransactions = transactions.filter(
     (tx) => Object.keys(tx.out_msgs).length === 0
@@ -255,7 +255,7 @@ async function runApp() {
   });
 ```
 
-Next, initialize the bot and the necessary plugins
+Next, initialize the bot and the necessary plugins.
 ```js
   // Initialize the bot
   const bot = new Bot(process.env.BOT_TOKEN);
@@ -333,7 +333,7 @@ To remove the spinning watch icon in Telegram, we acknowledge the callback befor
 ```js
   await ctx.answerCallbackQuery();
 ```
-Next, we need to send the user a picture of dumplings, ask them to send the number of dumplings that they want to buy. waite for the user to enter this number
+Next, we need to send the user a picture of dumplings, ask them to send the number of dumplings that they want to buy. Wait for the user to enter this number.
 ```js
   await ctx.replyWithPhoto(
     "https://telegra.ph/file/bad2fd69547432e16356f.jpg",
@@ -346,7 +346,7 @@ Next, we need to send the user a picture of dumplings, ask them to send the numb
   // Wait until the user enters the number
   const count = await conversation.form.number();
 ```
-Now we calculate the total amount of the order and generate a random string that we will use for the transaction comment and add the postfix 'dumplings'
+Next, we calculate the total amount of the order and generate a random string that we will use for the transaction comment and add the postfix 'dumplings'.
 ```js
   // Get the total cost: multiply the number of portions by the price of the 1 portion
   const amount = count * 3;
@@ -360,7 +360,7 @@ Save the resulting data to the session so that we can get this data in the next 
   conversation.session.comment = comment;
 ```
 
-We generate links for quick payment and create a built-in keyboard
+We generate links for quick payment and create a built-in keyboard.
 ```js
 const tonhubPaymentLink = generatePaymentLink(
     process.env.OWNER_WALLET,
@@ -383,11 +383,7 @@ const tonhubPaymentLink = generatePaymentLink(
     .text(`I sent ${amount} TON`, "check_transaction");
 ```
 Send the message using the keyboard, in which ask the user to send a transaction to our wallet address with a randomly generated comment.
-Send feedback
-Side panels
-History
-Saved
-Translation results available
+
 ```js
   await ctx.reply(
     `
@@ -401,7 +397,7 @@ P.S. You can conveniently make a transfer by clicking on the appropriate button 
 }
 ```
 
-Now all we have to do is create a handler to check for the presence of a transaction
+Now all we have to do is create a handler to check for the presence of a transaction.
 ```js
 export async function checkTransaction(ctx) {
   await ctx.answerCallbackQuery({
@@ -431,7 +427,7 @@ export async function checkTransaction(ctx) {
 ```
 Next, simply check for a transaction, and if it exists, notify the user and flush the data in the session.
 
-### Bot start
+### Start of the bot
 
 To start the bot, use this command:
 
@@ -443,6 +439,6 @@ If your bot isn't working correctly, compare your code with the code [from this 
 
 ## References
 
- - Made for TON as a part of [ton-footsteps/58](https://github.com/ton-society/ton-footsteps/issues/58)
- - By Coalus ([Telegram @coalus](https://t.me/coalus), [Coalus on GitHub](https://github.com/coalus))
- - [Bot Sources](https://github.com/coalus/DumplingShopBot)
+ - Made for TON as a part of [ton-footsteps/58](https://github.com/ton-society/ton-footsteps/issues/58).
+ - By Coalus ([Telegram @coalus](https://t.me/coalus), [Coalus on GitHub](https://github.com/coalus)).
+ - [Bot sources](https://github.com/coalus/DumplingShopBot).
