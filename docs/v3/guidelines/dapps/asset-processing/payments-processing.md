@@ -3,7 +3,7 @@ import Button from '@site/src/components/button'
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Payments Processing
+# Payments processing
 
 This page **explains how to process** (send and accept) digital assets on TON Blockchain. While it primarily focuses on handling TON coins, the **theoretical concepts** are also relevant for processing `jettons`.
 
@@ -98,7 +98,7 @@ Most SDKs automatically verify a wallet address during creation or transaction p
 </Tabs>
 
 :::tip
-Full Address description on the [Smart Contract Addresses](/v3/documentation/smart-contracts/addresses) page.
+Full Address description on the [Smart contract addresses](/v3/documentation/smart-contracts/addresses) page.
 :::
 
 
@@ -197,7 +197,7 @@ If the attached `value` is too small, the transaction may fail with the error `c
 
 It may be confusing that to get more information about a transaction, the user must scan the blockchain via the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) function.
 It is not possible to get the transaction ID immediately after sending the message, as the transaction must first be confirmed by the blockchain network.
-To understand the required pipeline, carefully read [Send Payments](/v3/guidelines/dapps/asset-processing/payments-processing/#send-payments), especially the 7th point.
+To understand the required pipeline, carefully read [Send payments](/v3/guidelines/dapps/asset-processing/payments-processing/#send-payments), especially the 7th point.
 
 ## Invoice-based approach
 To accept payments based on attached comments, the service should:
@@ -231,7 +231,7 @@ Best for dApps that require multiple transactions within a session or a persiste
 <Button href="/v3/guidelines/ton-connect/overview/"
 colorType="primary" sizeType={'lg'}>
 
-Learn More
+Learn more
 
 </Button>
 
@@ -253,8 +253,8 @@ ton://transfer/<destination-address>?
 ```
 
 **Advantages**
-- ✅ Easy integration
-- ✅ No need to connect a wallet
+- ✅ Easy integration.
+- ✅ No need to connect a wallet.
 
 **Disadvantages**
 - ❌ Users must scan a new QR code for each payment.
@@ -280,9 +280,9 @@ To generate a transaction link in the explorer, the service needs to get the lt 
 
 Note: tonviewer and tonscan also support external-in message hashes instead of transaction hashes for explorer links. This is useful when generating an external message and needing an instant transaction link. Learn more about transactions and messages hashes [here](/v3/guidelines/dapps/cookbook#how-to-find-transaction-or-message-hash)
  
-## Best Practices
+## Best practices
 
-### Wallet Creation
+### Wallet creation
 
 <Tabs groupId="example-create_wallet">
 <TabItem value="JS" label="JS">
@@ -334,9 +334,9 @@ if __name__ == "__main__":
 </Tabs>
 
 
-### Wallet Creation for different shards
+### Wallet creation for different shards
 
-When under heavy load, the TON Blockchain may split into [shards](/v3/documentation/smart-contracts/shards/shards-intro)to distribute network activity. A shard is similar to a network segment in Web3.
+When under heavy load, TON Blockchain may split into [shards](/v3/documentation/smart-contracts/shards/shards-intro)to distribute network activity. A shard is similar to a network segment in Web3.
 
 Just as we distribute service infrastructure in the Web2 world to be as close to the end user as possible, in TON we can deploy contracts that will reside in the same shard as the user's wallet or any other contract that interacts with it.
 
@@ -386,7 +386,7 @@ Once deployment is complete, you can begin processing using the following algori
 This way, you can provide the best user experience regardless of the current network load.
 
 
-### Toncoin Deposits (Get toncoins)
+### Toncoin deposits (get Toncoins)
 
 <Tabs groupId="example-toncoin_deposit">
 <TabItem value="JS" label="JS">
@@ -556,7 +556,7 @@ if __name__ == "__main__":
 </TabItem>
 </Tabs>
 
-### Toncoin Withdrawals (Send toncoins)
+### Toncoin withdrawals (send Toncoins)
 
 <Tabs groupId="example-toncoin_withdrawals">
 <TabItem value="JS" label="JS">
