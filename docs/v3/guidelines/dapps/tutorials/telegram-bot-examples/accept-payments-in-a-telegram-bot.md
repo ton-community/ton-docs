@@ -10,26 +10,26 @@ In this article, we'll guide you through the process of accepting payments in a 
 
 In this article, you'll learn how to:
 
-- create a Telegram bot using Python + Aiogram
-- work with the public TON API (TON Center)
-- work with an SQlite database
-- how to accept payments in a Telegram bot by applying the knowledge from previous steps.
+- Create a Telegram bot using Python + Aiogram,
+- Work with the public TON API (TON Center),
+- Work with an SQlite database,
+- How to accept payments in a Telegram bot by applying the knowledge from previous steps.
 
 ## 📚 Before we begin
 
 Make sure you have installed the latest version of Python and the following packages:
 
-- aiogram
-- requests
-- sqlite3
+- aiogram,
+- requests.
+- sqlite3.
 
 ## 🚀 Let's get started!
 
 We'll follow this order:
 
-1. Work with an SQlite database
-2. Work with the public TON API (TON Center)
-3. Create a Telegram bot using Python + Aiogram
+1. Work with an SQlite database.
+2. Work with the public TON API (TON Center).
+3. Create a Telegram bot using Python + Aiogram.
 4. Profit!
 
 Let's create the following four files in our project directory:
@@ -57,7 +57,7 @@ In `config.json`, we store our bot token and public TON API key.
 }
 ```
 
-In `config.json`, define whether you'll use use `testnet` or `mainnet`.
+In `config.json`, define whether you'll use use `Testnet` or `Mainnet`.
 
 ## Database
 
@@ -75,9 +75,9 @@ import datetime
 import pytz
 ```
 
-- `sqlite3`—module for working with sqlite database
-- `datetime`—module for working with time
-- `pytz`—module for working with timezones
+- `sqlite3`—module for working with sqlite database,
+- `datetime`—module for working with time.
+- `pytz`—module for working with timezones.
 
 Next, establish a connection to the database and a cursor:
 
@@ -102,10 +102,10 @@ CREATE TABLE transactions (
 );
 ```
 
-- `source`—payer's wallet address
-- `hash`—transaction hash
-- `value`—transaction value
-- `comment`—transaction comment
+- `source`—payer's wallet address,
+- `hash`—transaction hash,
+- `value`—transaction value,
+- `comment`—transaction comment.
 
 #### Users:
 
@@ -119,10 +119,10 @@ CREATE TABLE users (
 );
 ```
 
-- `id`—Telegram user ID
-- `username`—Telegram username
-- `first_name`—Telegram user's first name
-- `wallet`—user wallet address
+- `id`—Telegram user ID,
+- `username`—Telegram username,
+- `first_name`—Telegram user's first name,
+- `wallet`—user wallet address.
 
 The `users` table stores Telegram users along with their Telegram ID, @username,
 first name, and wallet. The wallet is added to the database upon the first
@@ -252,7 +252,7 @@ def get_user_payments(user_id):
 
 _We can interact with the blockchain using third-party APIs provided by network members. These services allow developers to bypass the need their own node and customize their API._
 
-### Required Requests
+### Required requests
 
 What do we need to confirm that a user has transferred the required amount?
 
@@ -393,9 +393,9 @@ import json
 import db
 ```
 
-- `requests`—to make requests to the API
-- `json`—to work with json
-- `db`—to work with our sqlite database
+- `requests`—to make requests to the API,
+- `json`—to work with JSON,
+- `db`—to work with our sqlite database.
 
 Let's create two variables to store the base URLs for our requests.
 
@@ -562,10 +562,10 @@ The `WORK_MODE` key defines whether the bot operates in the test or main network
 
 API tokens for `*_API_TOKEN` can be obtained from the [TON Center](https://toncenter.com/) bots:
 
-- mainnet — [@tonapibot](https://t.me/tonapibot)
-- testnet — [@tontestnetapibot](https://t.me/tontestnetapibot)
+- Mainnet — [@tonapibot](https://t.me/tonapibot)
+- Testnet — [@tontestnetapibot](https://t.me/tontestnetapibot)
 
-#### Connecting config to our bot
+#### Connecting the config to our bot
 
 Next, we complete the bot setup by retrieving the bot token from `config.json` :
 
@@ -614,7 +614,7 @@ This is the part where we will write the bot interaction logic.
 
 We'll be using two types of handlers:
 
-- `message_handler` is used to handle messages from users.
+- `message_handler` is used to handle messages from users,
 - `callback_query_handler` is used to handle callbacks from inline keyboards.
 
 If we want to handle a message from the user, we will use `message_handler` by placing `@dp.message_handler` decorator above the function. In this case, the function will be called when the user sends a message to the bot.
@@ -727,9 +727,9 @@ Now we have all the data required for the payment process. We just need to gener
 
 The bot provides three payment buttons:
 
-- TON Wallet
-- Tonhub
-- Tonkeeper
+- TON wallet,
+- Tonhub,
+- Tonkeeper.
 
 These buttons are advantageous of special buttons because they guide users to install a wallet if they don't have one
 
