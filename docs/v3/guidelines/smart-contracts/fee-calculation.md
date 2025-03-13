@@ -1,6 +1,6 @@
 # Fees calculation
 
-## Introducation 
+## Introduction
 
 When your contract begins processing an incoming message, you should verify the number of TONs attached to the message to ensure it is sufficient to cover [all types of fees](/v3/documentation/smart-contracts/transaction-fees/fees#elements-of-transaction-fee). To achieve this, you need to calculate (or predict) the fee for the current transaction.
 
@@ -24,11 +24,8 @@ Use the `GETSTORAGEFEE` opcode with the following parameters:
 | bits       | Number of contract bits                                 |
 | is_mc      | True if the source or destination is in the MasterChain |
 
-:::info Only unique hash cells are counted for storage and forward fees. For example, three identical hash cells are counted as one.
-
-This mechanism deduplicates data: if multiple equivalent sub-cells are referenced across different branches, their content is stored only once.
-
-[Read more about deduplication](/v3/documentation/data-formats/tlb/library-cells).
+:::info 
+The system counts only unique hash cells for storage and forward fees. For example, it counts three identical hash cells as one. This mechanism deduplicates data by storing the content of multiple equivalent sub-cells only once, even if they are referenced across different branches. [Read more about deduplication](/v3/documentation/data-formats/tlb/library-cells). 
 :::
 
 ### Calculation flow
@@ -51,14 +48,14 @@ int my_storage_due() asm "DUEPAYMENT";
 ;;; Creates an output action which reserves exactly x nanoTONs (if y = 0).
 const int RESERVE_REGULAR = 0;
 ;;; Creates an output action which reserves at most x nanoTONs (if y = 2).
-;;; Bit +2 in y means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved.
+;;; Bit +2 in y ensures the external action does not fail if the specified amount cannot be reserved. Instead, it reserves all remaining balance.
 const int RESERVE_AT_MOST = 2;
 ;;; In the case of action failure, the transaction is bounced. No effect if RESERVE_AT_MOST (+2) is used. TVM UPGRADE 2023-07. [v3/documentation/tvm/changelog/tvm-upgrade-2023-07#sending-messages](https://ton.org/docs/#/tvm/changelog/tvm-upgrade-2023-07#sending-messages)
 const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;
 
 () calculate_and_reserve_at_most_storage_fee(int balance, int msg_value, int workchain, int seconds, int bits, int cells) inline {
  int on_balance_before_msg = my_ton_balance - msg_value;
- int min_storage_fee = get_storage_fee(workchain, seconds, bits, cells); ;; can be hardcoded if the contract code will not be updated.
+ int min_storage_fee = get_storage_fee(workchain, seconds, bits, cells); ;; You can hardcode this value if the contract code will not be updated.
  raw_reserve(max(on_balance_before_msg, min_storage_fee + my_storage_due()), RESERVE_AT_MOST);
 }
 ```
@@ -104,7 +101,7 @@ let forwardPayload = beginCell().storeUint(0x1234567890abcdefn, 128).endCell();
 // Ensure the payload is unique to charge cell loading for each payload.
 let customPayload = beginCell().storeUint(0xfedcba0987654321n, 128).endCell();
 
-// Let's use this case for fees calculation
+// Let's use this case for fee calculation
 // Embed the forward payload into the custom payload to ensure maximum gas usage during computation
 const sendResult = await deployerJettonWallet.sendTransfer(
   deployer.getSender(),
@@ -189,14 +186,11 @@ If the message structure is deterministic, use the `GETFORWARDFEE` opcode with t
 | bits       | Number of bits                                          |
 | is_mc      | True if the source or destination is in the MasterChain |
 
-:::info Only unique hash cells are counted for storage and forward fees. For example, three identical hash cells are counted as one.
-
-This mechanism deduplicates data: if multiple equivalent sub-cells are referenced across different branches, their content is stored only once.
-
-[Read more about deduplication](/v3/documentation/data-formats/tlb/library-cells).
+:::info 
+The system counts only unique hash cells for storage and forward fees. For example, it counts three identical hash cells as one. This mechanism deduplicates data by storing the content of multiple equivalent sub-cells only once, even if they are referenced across different branches. [Read more about deduplication](/v3/documentation/data-formats/tlb/library-cells). 
 :::
 
-However, if the outgoing message depends significantly on the incoming structure, you may not be able to predict the fee fully. In such cases, try using the `GETORIGINALFWDFEE` opcode with the following parameters:
+However, if the outgoing message depends significantly on the incoming structure, you may not be able to fully predict the fee. In such cases, try using the `GETORIGINALFWDFEE` opcode with the following parameters:
 
 | Param name | Description                                             |
 | :--------- | :------------------------------------------------------ |
@@ -204,7 +198,7 @@ However, if the outgoing message depends significantly on the incoming structure
 | is_mc      | True if the source or destination is in the MasterChain |
 
 :::caution 
-Be careful with the `SENDMSG` opcode because it uses an **unpredictable amount** of gas. Avoid using it unless necessary.
+Be careful with the `SENDMSG` opcode, as it uses an **unpredictable amount** of gas. Avoid using it unless necessary.
 :::
 
 The `SENDMSG` opcode is the least optimal way to calculate fees, but it is better than not checking.
