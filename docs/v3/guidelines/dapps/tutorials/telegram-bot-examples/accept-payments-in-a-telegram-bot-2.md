@@ -20,16 +20,16 @@ The sources are available on GitHub:
 
 ## 📖 What you'll learn
 You'll learn how to:
- - create a Telegram bot in Python3 using Aiogram
- - work with SQLITE databases
- - work with public TON API
+ - Create a Telegram bot in Python3 using Aiogram,
+ - Work with SQLITE databases,
+ - Work with public TON API.
 
 ## ✍️ What you need to get started
 Install [Python](https://www.python.org/) if you haven't already.
 
 Install the required PyPi libraries:
- - aiogram
- - requests
+ - aiogram,
+ - requests.
 
 You can install them with one command in the terminal.
 ```bash
@@ -38,10 +38,10 @@ pip install aiogram==2.21 requests
 
 ## 🚀 Let's get started!
 Create a directory for our bot with four files in it:
- - `bot.py`— program to run the Telegram bot
- - `config.py`— configuration file
- - `db.py`— module for interacting with the SQLite database
- - `ton.py`— Module for handling payments in TON
+ - `bot.py`— Program to run the Telegram bot,
+ - `config.py`— Configuration file,
+ - `db.py`— Module for interacting with the SQLite database,
+ - `ton.py`— Module for handling payments in TON.
 
 The directory should look like this:
 ```
@@ -254,7 +254,7 @@ async def start():
         ...
 ```
 
-Within the `while` loop, we need to call the TON Center API every few seconds..
+Within the `while` loop, we need to call the TON Center API every few seconds.
 ```python
 while True:
     # 2 Seconds delay between checks
@@ -296,9 +296,9 @@ while True:
 ```
 
 How to process a new transaction? We need to:
- - dientify which user sent the transaction
- - update that user's balance
- - notify the user about their deposit
+ - Dientify which user sent the transaction,
+ - Update that user's balance,
+ - Notify the user about their deposit.
 
 Below is the code that handles this:
 
@@ -480,7 +480,7 @@ async def deposit_handler(message: types.Message):
 ```
 
 
-This step is crucial because, in `ton.py`  we identify which user made a deposit by extracting their UID from the transaction comment. Now, within the bot, we must guide the user to include their UID in the transaction comment.
+This step is crucial because, in `ton.py` we identify which user made a deposit by extracting their UID from the transaction comment. Now, within the bot, we must guide the user to include their UID in the transaction comment.
 
 ### Bot start
 
@@ -498,7 +498,7 @@ if __name__ == '__main__':
     ex.start_polling()
 ```
 
-At this point, we have written all the necessary code for our bot. If everything is set up correctly, the bot should work when you run the following command in the terminal:
+At this point, we have written all the necessary code for our bot. If everything is set up correctly, the bot should work when you run the following command in the terminal: `python my-bot/bot.py`.
 
 If the bot does not function as expected, compare your code with the code [from this repository](https://github.com/Gusarich/ton-bot-example) to ensure there are no discrepancies.
 
