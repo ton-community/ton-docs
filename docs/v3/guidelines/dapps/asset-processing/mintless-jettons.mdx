@@ -35,22 +35,23 @@ Wallet applications play a key role in improving the user experience with mintle
 
 Wallets can achieve this by:
 
-- Integrating with the off-chain API specified in the [custom payload API](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-example-offchain)**:
+Integrating with the off-chain API specified in the [custom payload API](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-example-offchain):
   - Check if the jetton is mintless.
   - Verify whether the wallet owner has claimed it.
   - If unclaimed, retrieve data from the custom payload API and add the off-chain balance to the on-chain one.
   - If the user hasn’t claimed the airdrop, retrieve the custom payload and initialization data from the Custom Payload API and include it in the `transfer` message to the jetton wallet.
 
-- Using a custom API:
+Using a custom API:
   - Download the airdrop tree from `mintless_merkle_dump_uri` in the jetton metadata.
-  - Parse it (see section 6 below) and make the parsed result available via API.
+  - Parse it (see section 6 below).
+  - Make the parsed result available via API.
 
 :::info
 Wallets are not required to support mintless claims, including indexing airdrop trees. Wallet applications may charge the jetton issuer for this service.
 :::
 ## Supporting mintless jettons in dApps (DEX/Lending platforms)
 
-Because wallet applications handle claims automatically, dApps don’t need special logic for mintless jettons. dApps can use APIs (such as Tonapi or Toncenter) to display unclaimed balances.
+Because wallet applications handle claims automatically, dApps don’t need special logic for mintless jettons. dApps can use APIs (such as TonAPI or Ton Center API) to display unclaimed balances.
 
 To improve the user experience, dApps can check if the user's wallet application supports a specific mintless jetton. If unsupported, retrieve the airdrop proof and initialization data from the jetton API and include it in the transfer message.
 
