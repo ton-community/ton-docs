@@ -15,7 +15,7 @@ TON transactions become irreversible after a single confirmation. To enhance UX/
 
 #### Withdrawal
 
-[Highload Wallet v3](/v3/documentation/smart-contracts/contracts-specs/highload-wallet#highload-wallet-v3): v3 is the latest solution on TON Blockchain and the gold standard for jetton withdrawals. It enables batched withdrawals.
+[Highload wallet v3](/v3/documentation/smart-contracts/contracts-specs/highload-wallet#highload-wallet-v3): v3 is the latest solution on TON Blockchain and the gold standard for jetton withdrawals. It enables batched withdrawals.
 
 [Batched withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload-batch.js): Allow multiple withdrawals to be processed in batches, ensuring fast and cost-effective transactions.
 
@@ -74,7 +74,7 @@ Quick jump to the core description of jetton processing:
 <Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>Centralized Processing</Button>
 <Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses"
         colorType="secondary" sizeType={'sm'}>
-  On-Chain Processing
+  On-chain processing
 </Button>
 
 <br></br><br></br>
@@ -84,7 +84,7 @@ TON Blockchain and its ecosystem classify fungible tokens (FTs) as jettons. Beca
 
 This analysis provides a deeper look into the formal standards detailing jetton [behavior](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) and [metadata](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md). A less formal, sharding-focused overview of jetton architecture is available in our [anatomy of jettons blog post](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons).
 
-We have also included details about our third-party open-source TON Payment Processor ([bicycle](https://github.com/gobicycle/bicycle)), which allows users to deposit and withdraw both Toncoin and jettons using a separate deposit address without a text memo.
+We have also included details about our third-party open-source TON payment processor ([bicycle](https://github.com/gobicycle/bicycle)), which allows users to deposit and withdraw both Toncoin and jettons using a separate deposit address without a text memo.
 
 
 
@@ -151,9 +151,9 @@ console.log('URI to off-chain metadata:', data.jettonContentUri);
 
 Jettons can be either `mintable` or `non-mintable`.
 
-If they are non-mintable, no additional tokens can be minted. To mint jettons for the first time, refer to the [Mint your first jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token) page.
+If they are non-mintable, no additional tokens can be minted. To mint jettons for the first time, refer to the [mint your first jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token) page.
 
-If jettons are mintable, the  [minter contract](https://github.com/ton-blockchain/minter-contract/blob/main/contracts/jetton-minter.fc) includes a function to mint additional jettons. The admin can trigger this function by sending an internal message with a specified opcode from the admin address.
+If jettons are mintable, the [minter contract](https://github.com/ton-blockchain/minter-contract/blob/main/contracts/jetton-minter.fc) includes a function to mint additional jettons. The admin can trigger this function by sending an internal message with a specified opcode from the admin address.
 
 If the jetton admin wants to restrict jetton creation, there are three approaches:
 
@@ -165,7 +165,7 @@ If the jetton admin wants to restrict jetton creation, there are three approache
 `Jetton wallet` contracts are used to **send**, **receive**, and **burn** jettons. Each _jetton wallet contract_ stores wallet balance information for specific users.
 In certain cases, token wallets are used for individual token holders for each token type.
 
-`Jetton wallets` should not be confused with blockchain wallets used for storing only the Toncoin asset (e.g., v3R2 wallets, highload wallets). jetton wallets are dedicated to managing specific jetton types.
+`Jetton wallets` should not be confused with blockchain wallets used for storing only the Toncoin asset (e.g., v3R2 wallets, highload wallets). Jetton wallets are dedicated to managing specific jetton types.
 
 ### Jetton wallet deployment
 When `transferring jettons` between wallets, transactions require TON to cover network **gas fees**. The recipient does not need to deploy a jetton wallet beforehand. If the sender has enough TON to cover fees, the recipient’s jetton wallet will be deployed automatically.
@@ -176,7 +176,7 @@ To get the `address` of a `jetton wallet` using the `owner address` (the TON wal
 <Tabs groupId="retrieve-wallet-address">
 <TabItem value="api" label="API">
 
-> Run `get_wallet_address(slice owner_address)` through `/runGetMethod` method from the [Toncenter API](https://toncenter.com/api/v3/#/default/run_get_method_api_v3_runGetMethod_post). In real cases (not test ones) it is important to always check that wallet indeed is attributed to desired jetton Master. Check code example for more.
+> Run `get_wallet_address(slice owner_address)` through `/runGetMethod` method from the [Toncenter API](https://toncenter.com/api/v3/#/default/run_get_method_api_v3_runGetMethod_post). In real cases (not test ones) it is important to always check that wallet indeed is attributed to desired jetton Master. Check the code example for more.
 
 </TabItem>
 <TabItem value="js" label="js">
@@ -273,10 +273,10 @@ Communication between jetton wallets and TON wallets follows this sequence:
 
 | Name                   | Type       | Description                                                                                                                                                                                                             |
 |------------------------|------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `query_id`             | uint64     | Links the three messaging types—Transfer, Transfer Notification, and Excesses—to each other. To ensure this process works correctly, **always use a unique query ID**. |
+| `query_id`             | uint64     | Links the three messaging types—transfer, transfer notification, and excesses—to each other. To ensure this process works correctly, **always use a unique query ID**. |
 | `amount`               | coins      | Tthe total `ton coin` amount sent with the message.                                                                                                                                                                |
 | `destination`          | address    | The address of the new owner of the jettons                                                                                                                                                                                 |
-| `response_destination` | address    | The wallet address used to return remaining Toncoins through the excesses message.                                                                                                                                                 |
+| `response_destination` | address    | The wallet address used to return remaining Toncoin through the excesses message.                                                                                                                                                 |
 | `custom_payload`       | maybe cell | Always at least 1 bit in size. Custom data used by either the sender or receiver jetton wallet for internal logic.                                                                                                        |
 | `forward_ton_amount`   | coins      | Must be greater than 0 to send a transfer notification message with a `forward payload`. It is **part of `amount` value** and **must be lesser than `amount`**.                                                      |
 | `forward_payload`      | maybe cell | Always at least 1 bit in size. If the first 32 bits equal 0x0, it is a simple message.                                                                                                                                            |
@@ -295,7 +295,7 @@ The `payee’s jetton wallet` → payee. Transfer notification message. This is 
 In this case, the `sender` address refers to Alice’s `jetton wallet`.
 
 #### Message 2''
-`payee's jetton wallet -> Sender`. Excess message body. This is sent only if there are remaining Toncoins after paying the fees. Contains the following data:
+`payee's jetton wallet -> Sender`. Excess message body. This is sent only if there are remaining Toncoin after paying the fees. Contains the following data:
 
 | Name                 | Type           |
 |----------------------|----------------|
