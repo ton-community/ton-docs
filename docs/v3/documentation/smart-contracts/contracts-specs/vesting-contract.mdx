@@ -41,11 +41,11 @@ Before sending Toncoins to the deployed smart contract, users can verify paramet
 
 Before `vesting_start_time`, the contract locks the entire `vesting_total_amount`.
 
-Starting at `vesting_start_time`, it unlocks the amount proportionately. For example, if the `vesting_total_duration` is 10 months, the `unlock_period` is 1 month, and the `vesting_total_amount` is 500 TON, then the system unlocks 50 TON (500 \* 10/100) each month, fully releasing all 500 TON in 10 months.
+Starting at `vesting_start_time`, it unlocks the amount proportionately. For example, if the `vesting_total_duration` is 10 months, the `unlock_period` is 1 month, and the `vesting_total_amount` is 500 TON, then the contract unlocks 50 TON (500 \* 10/100) each month, fully releasing all 500 TON in 10 months.
 
-If a cliff period exists, no amount unlocks during that time. Once the cliff period ends, the system resumes unlocking according to the same formula. For instance, with a `cliff_period` of 3 months, the system unlocks nothing in the first 3 months, then unlocks 150 TON at once, followed by 50 TON each month thereafter.
+If a cliff period exists, no amount unlocks during that time. Once the cliff period ends, the contract unlocking according to the same formula. For instance, with a `cliff_period` of 3 months, the contract unlocks nothing in the first 3 months, then unlocks 150 TON at once, followed by 50 TON each month thereafter.
 
-You can use the `get_locked_amount(int at_time)` method to calculate how much will be locked at a specific time. The system allows you to transfer locked Toncoins only to whitelisted addresses or the `vesting_sender_address`. Once unlocked, you can freely send the Toncoins wherever you like
+You can use the `get_locked_amount(int at_time)` method to calculate how much will be locked at a specific time. The contract allows you to transfer locked Toncoins only to whitelisted addresses or the `vesting_sender_address`. Once unlocked, you can freely send the Toncoins wherever you like.
 
 ## Whitelist
 
