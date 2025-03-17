@@ -16,7 +16,7 @@ Welcome to TON quick start guide! This guide will give you a starting point for 
 - Interact with TON ecosystem: Wallets and Explorers.
 - Setup development environment: use Blueprint SDK for developing `smart-contracts` using `FunC`, `Tact`, and `Tolk` programming languages.
 - Send transactions and read from the **blockchain** using your preferred programming language and available **SDKs**.
-- Core concepts of **TON blockchain** and further learning curve.
+- Core concepts of **TON blockchain**: `messages`, `smart-contracts`, `addresses` and etc.
 - Basic templates ready for implementation of your project logic.
 
 ## Concept of smart-contract
@@ -43,7 +43,7 @@ Before we step on our way of becoming a TON developer, we should become an advan
 
 ### Step 1: Create a new wallet using an app
 
-The simplest way to create a `wallet` is to visit https://ton.org/wallets and choose one of the wallet apps from the list. This page explains the difference between **custodial** and **non-custodial** wallets. With a **non-custodial** wallet, you own the wallet and hold its **private key** by yourself. With a **custodial** wallet, you trust somebody else to do this for you. They are all pretty similar, let's choose [MyTonWallet](https://mytonwallet.io/). Go ahead, install and run it.
+The simplest way to create a `wallet` is to visit https://ton.org/wallets and choose one of the wallet apps from the list. This page provides a list of available wallet apps, they are all pretty similar, for this guide we will use [MyTonWallet](https://mytonwallet.io/). Go ahead, install and run it.
 
 ### Step 2: Mainnet and Testnet
 
@@ -51,9 +51,9 @@ At this moment, you should have already created your first wallet and backed up 
 
 In the TON, the `Mainnet` and `Testnet` have distinct roles. The `Mainnet` is the primary network where actual transactions take place, carrying real economic value as they involve real cryptocurrency and staked validators executing our transactions and guarantee a very high level of security. On the other hand, the `Testnet` is a testing version of the TON **blockchain** designed for development and testing purposes. Transactions on the `testnet` do not have real economic value, making it a risk-free zone for developers to test without financial implications. It's mainly used for development, testing `smart contracts`, and trying new features.
 
-Since TON basic transactions are very cheap, about 1 cent per transaction, investing just $5 will be enough for hundreds of them. If you decide to work on `Mainnet`, you will have a significantly smoother experience. You can get TON coins by simply pressing the buy button in the user interface, or ask someone to send them to your `address`, which you can copy from the wallet app somewhere near your balance. Don't worry, sharing your `address` is **totally safe**, unless you don't want it to be associated with you.
+Since TON basic transactions are very cheap, about 1 cent per transaction, investing just $5 will be enough for hundreds of them. You can get TON coins by simply pressing the buy button in the user interface, or ask someone to send them to your `address`, which you can copy from the wallet app somewhere near your balance. Don't worry, sharing your `address` is **totally safe**, unless you don't want it to be associated with you.
 
-If you decide to use the `Testnet` version instead, you can switch to it in most wallets by entering the settings menu and tapping a few times on the wallet icon or name at the bottom. This will open the developer menu where you can switch to the `Testnet` version of the wallet. Here is an example for **MyTonWallet** (version **3.3.4**):
+If you decide to use the `Testnet` version instead, you can switch to it in most wallets by entering the settings menu and tapping a few times on the name or wallet icon at the bottom. This will open the developer menu where you can switch to the `Testnet` version of the wallet. Here is an example for **MyTonWallet** (version **3.3.4**):
 
 <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap', marginBottom: '30px' }}>
   <div>
@@ -95,23 +95,21 @@ Let's send our first transaction to someone special - **ourselves**. And see how
   <img src="/img/tutorials/quick-start/active.png" alt="Screenshot of active wallet state"/>
 </div>
 
-And here we are, our wallet contract is deployed and ready to use. The first thing that we could mention is, despite the fact that we sent funds to ourselves, the balance has still been decreased by a little bit. As was mentioned before, any transaction requires some fee called `gas` depending on the amount of computation required by `smart-contract` logic, sent messages, and stored data.
+And here we are, our wallet contract is deployed and ready to use. Let's examine provided user interface:
 
-We can explore our `smart-contract` code in the corresponding tab which is represented in `TVM` byte-code - a virtual stack machine that executes byte code generated by compiling `smart-contract` programming languages: `FunC`, `Tact`, and `Tolk`.
+ - **Metadata** header: describes your smart-contract properties in blockchain context, usually consist of `Address`, `Balance` and address `State` that is, in our case is **Active**. The first thing that we could mention is, despite the fact that we sent funds to ourselves, the balance has still been decreased by a little bit. As was mentioned before, any transaction requires some fee called `gas` depending on the amount of computation required by `smart-contract` logic, sent messages, and stored data.
 
-There is also a tab where we can execute `get-methods` provided by the `smart-contract`. Generally, these methods can be implemented in any way that doesn't change the `smart-contract` persistent data. Their primary purpose is to provide an easy way to access the contract state from outside the `blockchain`.
+ - **History** and **Transactions** tab: consist of `transactions` history of your account providing short and more complex description of them respectively were you can see transactions performed by you during guide.
 
-The second thing to note is the contract type, `wallet_v5r1` in our case. Because some widely-used `smart-contracts` have standard implementations, most explorers are able to determine their type by analyzing the `smart-contract` code.
+ - **Code** tab: showing raw data and code of your `smart-contract` generated by compiling its code on one of the programming languages: `Func`, `Tact` or `Tolk`. Note that, additionally, **Metadata** header is able to detect `Contract type` of contract, which is in our case - `wallet_v5r1`, by looking into smart-contract raw code and determine standard implementation of wallet.
 
-It's important to understand that wallets are not special entities in the TON `blockchain`, which implements an actors model. A wallet is simply a `smart-contract` that doesn't have any specific rights or abilities compared to any other contract, such as one developed and deployed by you.
-
-Maybe you will be the one who creates and proposes the next version of wallet that will be accepted by the TON community, just as the TonKeeper Team did with the latest wallet version - `v5r1`!
+ - **Methods** tab: provides execution of contract `get methods` implemented by developer usually used to retrieve `smart-contract` persistent data in convenient way from outside of the blockchain.
 
 ## Next Steps:
 
- - Try to experiment with `wallet app` and `wallet smart-contract`.
- - Checkout [TON concepts](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains) if you need more context.
- - Continue to [Interact with blockchain](/v3/guidelines/quick-start/interact-with-blockchain) or [Developing smart-contracts](/v3/guidelines/quick-start/developing-smart-contracts/setup-environment) according to your needs.
+ - Try to experiment with `wallet app` and `wallet smart-contract`: create another wallet contract in your wallet app and try to send transactions between them.
+ - Continue to [Interact with blockchain](/v3/guidelines/quick-start/interact-with-blockchain) if you want to learn how to interact with `smart-contracts` from outside the blockchain.
+ - Or dive into [Developing smart-contracts](/v3/guidelines/quick-start/developing-smart-contracts/setup-environment) to learn how to develop `smart-contracts` by yourself!
 
-Happy creating on TON!
+**Happy creating on TON!**
 
