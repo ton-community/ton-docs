@@ -54,7 +54,7 @@ or they were very uncommon in practice.
 | block_lt                 | getCurrentBlockLogicalTime              |                 |
 | cell_hash                | cellHash                                |                 |
 | slice_hash               | sliceHash                               |                 |
-| string_hash              | stringHash                              |                 |
+| string_hash              | sliceBitsHash                           |                 |
 | check_signature          | isSignatureValid                        |                 |
 | check_data_signature     | isSliceSignatureValid                   |                 |
 | compute_data_size        | calculateCellSizeStrict                 |                 |
