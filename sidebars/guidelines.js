@@ -40,6 +40,13 @@ module.exports = [
   'v3/guidelines/quick-start/getting-started',
   {
     type: 'category',
+    label: 'Blockchain interaction',
+    items: [
+      'v3/guidelines/quick-start/blockchain-interaction/reading-from-network',
+    ],
+  },
+  {
+    type: 'category',
     label: 'Developing smart-contracts',
     items: [
       'v3/guidelines/quick-start/developing-smart-contracts/setup-environment',
