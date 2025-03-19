@@ -148,6 +148,14 @@ module.exports = [
           'v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-js',
         ],
       },
+      {
+        type: 'category',
+        label: 'Vesting wallet examples',
+        items: [
+          'v3/guidelines/dapps/tutorials/vesting-examples/vesting-owner-guide',
+          'v3/guidelines/dapps/tutorials/vesting-examples/vesting-recipient-guide',
+        ],
+      },
     ],
   },
   {
