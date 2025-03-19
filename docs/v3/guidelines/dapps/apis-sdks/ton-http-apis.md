@@ -34,6 +34,7 @@ There are different ways to connect to blockchain:
 * [toncenter/ton-http-api](https://github.com/toncenter/ton-http-api) — run your own RPC node. 
 * [nownodes.io](https://nownodes.io/nodes) — NOWNodes full Nodes and blockbook Explorers via API.
 * [Chainbase](https://chainbase.com/chainNetwork/TON) — Node API and data infrastructure for The Open Network.
+* [dRPC](https://drpc.org/chainlist/ton) - dRPC is an RPC node aggregation layer with an AI-based load balancer that optimizes price and performance.
 
 ## Indexer
 
