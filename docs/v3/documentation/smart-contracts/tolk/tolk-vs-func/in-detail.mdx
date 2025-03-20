@@ -313,6 +313,120 @@ fun send(msg: cell) {
 
 
 <h3 className="cmp-func-tolk-header">
+  ✅ String postfixes removed, compile-time functions introduced
+</h3>
+
+Tolk removes the old FunC-style string postfixes (`"..."c`, etc.) in favor of a **clearer and more flexible approach**.
+
+<table className="cmp-func-tolk-table">
+    <thead>
+    <tr>
+        <th>FunC</th>
+        <th>Tolk</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><code>{'"..."c'}</code></td>
+        <td><code>{'stringCrc32("...")'}</code></td>
+    </tr>
+    <tr>
+        <td>—</td>
+        <td><code>{'stringCrc16("...")'}</code></td>
+    </tr>
+    <tr>
+        <td><code>{'"..."H'}</code></td>
+        <td><code>{'stringSha256("...")'}</code></td>
+    </tr>
+    <tr>
+        <td><code>{'"..."h'}</code></td>
+        <td><code>{'stringSha256_32("...")'}</code></td>
+    </tr>
+    <tr>
+        <td><code>{'"..."a'}</code></td>
+        <td><code>{'stringAddressToSlice("...")'}</code></td>
+    </tr>
+    <tr>
+        <td><code>{'"..."s'}</code></td>
+        <td><code>{'stringHexToSlice("...")'}</code></td>
+    </tr>
+    <tr>
+        <td><code>{'"..."u'}</code></td>
+        <td><code>{'stringToBase256("...")'}</code></td>
+    </tr>
+    </tbody>
+</table>
+
+These functions:
+* compile-time only
+* for constant strings only
+* can be used in constant initialization
+
+```tolk
+// type will be `slice`
+const BASIC_ADDR = stringAddressToSlice("EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF");
+
+// return type will be `int`
+fun minihashDemo() {
+    return stringSha256_32("transfer(slice, int)");
+}
+```
+
+The naming highlights, that these functions have "arrived" from string postfixes and operate on string values.
+Remember, that at runtime, there are no strings, only slices.
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Trailing comma support
+</h3>
+
+Tolk now supports trailing commas in the following contexts:
+* tensors
+* tuples
+* function calls
+* function parameters
+
+```tolk
+var items = (
+    totalSupply,
+    verifiedCode,
+    validatorsList,
+);
+```
+
+Note, that `(5)` is not a tensor, it's just integer `5` in parentheses.
+With a trailing comma `(5,)` it's still `(5)`.
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Function `ton("...")` for human-readable amounts of toncoins
+</h3>
+
+<table className="cmp-func-tolk-table">
+    <thead>
+    <tr>
+        <th>FunC</th>
+        <th>Tolk</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><code>{'int cost = 50000000;'}</code></td>
+        <td><code>{'val cost = ton("0.05");'}</code></td>
+    </tr>
+    <tr>
+        <td><code>{'const ONE_TON = 1000000000;'}</code></td>
+        <td><code>{'const ONE_TON = ton("1");'}</code></td>
+    </tr>
+    </tbody>
+</table>
+
+Function `ton()` only accepts constant values (e.g., `ton(some_var)` is invalid).
+Its type is `coins` (not `int`!), although it's still a regular `int` from the TVM point of view.
+Arithmetic over `coins` degrade to `int` (for example, `cost << 1` is valid, `cost + ton("0.02")` also).
+
+
+<h3 className="cmp-func-tolk-header">
   ✅ Changes in the type system
 </h3>
 
@@ -328,6 +442,9 @@ We have the following types:
 - tensor `(T1, T2, ...)`
 - callables `(TArgs) -> TResult`
 - nullable types `T?`, compile-time null safety
+- `coins` and function `ton("0.05")`
+- `int32`, `uint64`, and other fixed-width integers (just int at TVM) [details](https://github.com/ton-blockchain/ton/pull/1559)
+- `bytesN` and `bitsN`, similar to `intN` (backed by slices at TVM)
 - `void` (more canonical to be named `unit`, but `void` is more reliable)
 - `self`, to make chainable methods, described below; actually it's not a type, it can only occur instead of return type of a function
 - `never` (an always-throwing function returns `never`, for example; an "impossible type" is also `never`)

@@ -3,6 +3,16 @@
 When new versions of Tolk are released, they will be mentioned here.
 
 
+## v0.10
+
+1. Fixed-width integers: `int32`, `uint64`, etc. [Details](https://github.com/ton-blockchain/ton/pull/1559)
+2. Type `coins` and function `ton("0.05")`
+3. `bytesN` and `bitsN` types (backed by slices at TVM level)
+4. Replace `"..."c` postfixes with `stringCrc32("...")` functions
+5. Support `0b...` number literals along with `0x...`
+6. Trailing comma support
+
+
 ## v0.9
 
 1. Nullable types `int?`, `cell?`, etc.; null safety
