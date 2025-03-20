@@ -81,6 +81,18 @@ This approach has several drawbacks:
 2. Namespace pollution can lead to bugs. For example, shadowing a storage field with a local variable can overwrite the contract state.
 3. Parsing and repacking the entire storage on every function call increases gas costs.
 
+>In a recent CertiK audit, we discovered that the developer mixed up two arguments in the `save_data()` function:  
+>```func  
+>save_data(total_supply, min_amount, swap_fee, ...)  
+>```  
+>Without an external audit by a team of experts, detecting such a bug is challenging. The function was rarely used, and the confused parameters often had a value of zero. Identifying this type of error requires knowing exactly what to look for.  
+>Secondly, "namespace pollution" is a common issue. For example, in another audit, we found the following code in the middle of a function:  
+>```func  
+>int min_amount = in_msg_body~load_coins();  
+>```  
+>Here, a local variable shadowed a storage field, and at the end of the function, the overwritten value was stored in the contract state. This allowed an attacker to manipulate the contract’s state. The problem is exacerbated by FunC’s allowance of [variable redeclaration](https://docs.ton.org/develop/func/statements#variable-declaration): “This is not a declaration, but just a compile-time insurance that `min_amount` has type `int`.”  
+
+
 ## Tips
 
 ### 1. Always draw message flow diagrams
