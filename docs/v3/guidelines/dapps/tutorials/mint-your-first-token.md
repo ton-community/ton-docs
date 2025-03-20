@@ -1,8 +1,8 @@
-# Mint your first Jetton
+# Mint your first jetton
 
 Welcome, dev! It's great to have you here. 👋
 
-In this article, you'll learn how to create your first fungible token (Jetton) on TON using TON Minter.
+You'll learn how to create your first token on TON using TON Minter.
 To mint a token, we will use the [TON Minter](https://minter.ton.org/).
 
 ## 📖 What you'll learn
@@ -32,9 +32,9 @@ Use your web browser to open the service [TON Minter](https://minter.ton.org/) /
 
 ![image](/img/tutorials/jetton/jetton-main-page.png)
 
-### Deploy a Jetton using your browser
+### Deploy a jetton using your browser
 
-#### Connect Wallet
+#### Connect wallet
 
 Open [TON Minter](https://minter.ton.org/) or [TON Minter testnet](https://minter.ton.org/?testnet=true) in your web browser. Click "Connect Wallet" and link your Tonhub or another supported wallet.
 
@@ -58,7 +58,7 @@ If you want your token to stand out, you’ll need to host an attractive logo on
 * https://bitcoincash-example.github.io/website/logo.png
 
 :::info
- You can easily find out about the URL placement of the logo in the [repository](https://github.com/ton-blockchain/minter-contract#jetton-metadata-field-best-practices) in the "Where is this metadata stored" paragraph.
+ You can easily find out about the URL placement of the logo in the [repository](https://github.com/ton-blockchain/minter-contract#jetton-metadata-field-best-practices) in the 'Where is this metadata stored' paragraph.
 
  * On-chain.
  * Off-chain IPFS.
@@ -77,7 +77,7 @@ If you want your token to stand out, you’ll need to host an attractive logo on
  6. If you have a custom domain, your image URL should be `https://bitcoincash.org/logo.png` instead of the `github.io` one. This prevents dependency on GitHub and gives you full control over hosting.
 
 
- ## 💸 Send Jettons
+ ## 💸 Send jettons
 On the right side of the screen, you can **send tokens** to multi-currency wallets such as [Tonkeeper](https://tonkeeper.com/) or [Tonhub](https://ton.app/wallets/tonhub-wallet).
 
 ![image](/img/tutorials/jetton/jetton-send-tokens.png)
@@ -123,7 +123,7 @@ To make any changes, start here:
 
 ### Step-by-step guide for developers
 
- 1. Ensure you have all dependencies from the [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) repo.
+ 1. Ensure you have all dependencies from the [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) repository.
  2. Clone the [minter-contract repository](https://github.com/ton-blockchain/minter-contract) and rename the project. 
  3. To install, open a terminal at the root and run:
 
