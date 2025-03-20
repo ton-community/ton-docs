@@ -123,9 +123,7 @@ There are two flags in user-friendly addresses: **bounceable**/**non-bounceable*
 The testnet-only flag does not appear in the blockchain. The non-bounceable flag only affects message transfers: when used as a destination, it prevents the message from being bounced.
 :::
 
-Additionally, the `urlSafe` parameter is used to make the base64 at compatible with URLs. The standard base64 encoding can cause issues with characters like + and /. When urlSafe = true, + is replaced by - and / by _.
-
-You can obtain these address ats using the following code:
+Also, in some libraries, you may notice a serialization parameter called `urlSafe`. Тhe base64 format is not URL safe, which means that some characters (namely, `+` and `/`) can cause issues when transmitting an address in a link. When `urlSafe = true`, all `+` symbols are replaced with `-`, and all `/` symbols are replaced with `_`. You can obtain these address formats using the following code:
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -502,7 +500,7 @@ Don't forget that the comment message in a snake cell has 32 zero bits (i.e., it
 
 ### How to calculate the user's jetton wallet address (offchain)?
 
-To calculate a user’s jetton wallet address, use the "get_wallet_address" method from the jetton master contract with the user's address. You can also call the master contract directly, or use the getWalletAddress method provided in the JettonMaster SDK.
+To calculate a user’s jetton wallet address, use the `get_wallet_address` method from the jetton master contract with the user's address. You can also call the master contract directly, or use the getWalletAddress method provided in the JettonMaster SDK.
 
 :::info
 The `JettonMaster` in `@ton/ton` provides this functionality, although it lacks other features.
@@ -880,7 +878,7 @@ Explorers support comments in Jetton notifications, similar to regular TON trans
 :::
 
 :::tip
-Be careful when calculating fees and amounts for outgoing Jetton messages. For instance, transferring 0.2 TON with no excess may prevent you from receiving 0.1 TON in a response.
+Be careful when calculating fees and amounts for jetton transfer messages. For instance, transferring 0.2 TON with no excess may prevent you from receiving 0.1 TON in a response.
 :::
 
 ## TEP-62 (NFT Standard)
@@ -941,7 +939,7 @@ async function main() {
 </TabItem>
 </Tabs>
 
-To deploy a batch, the contract stores information about new NFTs in a dictionary. The process involves: ыetting up storage fees (e.g., `0.05`), obtaining arrays with the new NFT owners and content, retrieving the `next_item_index` using the `get_collection_data method`.
+To deploy a batch, the contract stores information about new NFTs in a dictionary. The process involves: setting up storage fees (e.g., `0.05`), obtaining arrays with the new NFT owners and content, retrieving the `next_item_index` using the `get_collection_data` method.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -1224,7 +1222,7 @@ DEXs (Decentralized Exchanges) operate using various protocols. In this section,
 
  * [DeDust documentation](https://docs.dedust.io/).
 
-DeDust provides two primary paths for exchanging assets: jetton \<-> jetton or TON \<-> jetton. Each has a different scheme. The process involves sending either jettons or TON coins to specific vaults and including a special payload. Below is the process for both types of swaps:
+DeDust provides two primary paths for exchanging assets: jetton \<-> jetton or TON \<-> jetton. Each has a different scheme. The process involves sending either jettons or Toncoins to specific vaults and including a special payload. Below is the process for both types of swaps:
 
 ```tlb
 swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
