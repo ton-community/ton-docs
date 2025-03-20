@@ -1,11 +1,11 @@
 # TON API by GetBlock
 
-:::tip TON Infrastructure Status
+:::tip TON infrastructure status
 * [status.toncenter](https://status.toncenter.com/) - Provides various statistics of node activity in the last hour.
 * [Tonstat.us](https://tonstat.us/) - A real-time Grafana dashboard that updates every 5 minutes.
   :::
 
-This guide covers essential steps in acquiring and using private RPC endpoints by GetBlock to access the TON blockchain.
+This guide covers essential steps in acquiring and using private RPC endpoints by GetBlock to access TON Blockchain.
 
 :::info
 [GetBlock](https://getblock.io/) is a Web3 infrastructure provider that offers HTTP-based API endpoints for clients to interact with multiple blockchain networks, including TON.
@@ -26,7 +26,7 @@ After signing in, go to the "My Endpoints" section. Choose TON from the "Protoco
 ![**GetBlock_account__dashboard**](/img/docs/getblock-img/unnamed-4.png)
 
 ### 3. Generate your endpoint URL
-Click the “Get” button to generate your TON blockchain endpoint URL. The structure of the endpoint will be: `https://go.getblock.io/[ACCESS TOKEN]/`.
+Click the **Get** button to generate your TON Blockchain endpoint URL. The structure of the endpoint will be: `https://go.getblock.io/[ACCESS TOKEN]/`.
 
 Access tokens act as unique identifiers for your requests, eliminating the need for separate API keys or authorization headers.
 
@@ -34,7 +34,7 @@ Users have the flexibility to generate multiple endpoints, roll tokens if compro
 
 ![**GetBlock_account_endpoints**](/img/docs/getblock-img/unnamed-3.png)
 
-Now, you can use these URLs to interact with the TON blockchain, query data, send transactions, and build decentralized applications without the hassle of infrastructure setup and maintenance.
+Now, you can use these URLs to interact with TON Blockchain, query data, send transactions, and build decentralized applications without the hassle of infrastructure setup and maintenance.
 
 ### Free requests and user limits
 
@@ -47,7 +47,7 @@ Each registered user receives 40,000 free requests per day, with a cap of 60 req
 - Well-suited for individual use or for applications that have lower transaction volumes and resource requirements compared to fully-scaled production applications;
 - A more affordable option for individual developers or small teams with limited budgets.
 
-Shared nodes provide a cost-effective solution for accessing TON blockchain infrastructure without the need for significant upfront investment or commitment.
+Shared nodes provide a cost-effective solution for accessing TON Blockchain infrastructure without the need for significant upfront investment or commitment.
 
 As developers scale their applications and require additional resources, they can easily upgrade their subscription plans or transition to dedicated nodes if necessary.
 
@@ -84,7 +84,7 @@ Some other available methods to query the TON blockchain:
 |---|--------|--------------------|------------------------------------------------------------------------------------------------------------|
 | 1 | GET    | getAddressState    | Returns the current state of a specified address (uninitialized, active, or frozen). |
 | 2 | GET    | getMasterchainInfo | Fetches the state of the masterchain.                                                   |
-| 3 | GET    | getTokenData       | Retrieves details about an NFT or Jetton associated with the address.                          |
+| 3 | GET    | getTokenData       | Retrieves details about an NFT or jetton associated with the address.                          |
 | 4 | GET    | packAddress        | Converts a TON address from raw format to human-readable format.                                    |
 | 5 | POST   | sendBoc            | Sends serialized BOC files with external messages for blockchain execution.                   |
 
