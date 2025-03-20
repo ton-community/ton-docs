@@ -29,7 +29,7 @@ However, validators or collators can still influence the result as they determin
 
 You can use more complex schemes to reduce the risk of validators manipulating the seed. For example, you can skip one block before generating a random number, which changes the seed less predictably.
 
-Skipping blocks is straightforward. You can achieve this by sending a message to the Masterchain and back to your contract's workchain. Let's explore a simple example!
+Skipping blocks is straightforward. You can achieve this by sending a message to the MasterChain and back to your contract's workchain. Let's explore a simple example!
 
 :::caution  
 Do not use this example contract in real projects. Write your own instead.  
@@ -99,8 +99,8 @@ Deploy this contract in any workchain (likely Basechain), and you're done!
 
 While this method improves security, there is still a tiny chance of manipulation if an attacker controls multiple validators. In such cases, they might influence the _seed_, which affects the random number. Even though the probability is extremely low, it is worth considering.
 
-With the latest TVM upgrade, introducing new values to the `c7` register enhances the security of random number generation. Specifically, the upgrade adds information about the last 16 masterchain blocks to the `c7` register.
+With the latest TVM upgrade, introducing new values to the `c7` register enhances the security of random number generation. Specifically, the upgrade adds information about the last 16 MasterChain blocks to the `c7` register.
 
-The masterchain block information, due to its dynamic nature, serves as an additional source of entropy for random number generation. By incorporating this data into your randomness algorithm, you can create even harder numbers for potential adversaries to predict.
+The MasterChain block information, due to its dynamic nature, serves as an additional source of entropy for random number generation. By incorporating this data into your randomness algorithm, you can create even harder numbers for potential adversaries to predict.
 
 For more details on this TVM upgrade, refer to [TVM Upgrade](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07).

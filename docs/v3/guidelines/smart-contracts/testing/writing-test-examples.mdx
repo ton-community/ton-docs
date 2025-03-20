@@ -56,12 +56,13 @@ The Fireworks contract demonstrates different ways of sending messages in the TO
   }}
 />
 <br></br>
+
 When you deploy the contract with the `set_first` message and sufficient TON amount,
-it automatically executes with primary and usable combinations of send modes.{" "}
+it automatically executes with primary and usable combinations of send modes.
 
-The Fireworks contract redeploys itself, creating three entities, each with its ID (stored in the contract) and, as a result, a different smart contract address.
+The Fireworks contract redeploys itself, creating three entities, each with its ID and, as a result, a different smart contract address.
 
-For clarity, define the Fireworks instances (different `state_init`) by ID with the following names:
+For clarity, define the Fireworks instances with different `state_init` by ID with the following names:
 
 - **1 - Fireworks Setter**: This entity spreads different launch opcodes and can be extended to support up to four different opcodes.  
 - **2 - Fireworks Launcher-1**: This Fireworks instance launches the first fireworks, sending messages to the launcher.  
@@ -72,7 +73,7 @@ For clarity, define the Fireworks instances (different `state_init`) by ID with 
 
 **Index** refers to the ID of a transaction in the `launchResult` array.  
 
-- **0**: An external request to the treasury (the launcher) sends an outbound message `op::set_first` with 2.5 TON to Fireworks.  
+- **0**: An external request to the treasury sends an outbound message `op::set_first` with 2.5 TON to Fireworks.  
 - **1**: The Fireworks Setter contract processes a transaction with `op::set_first`, sending two outbound messages to Fireworks Launcher-1 and Fireworks Launcher-2.  
 - **2**: Fireworks Launcher-1 processes a transaction with `op::launch_first`, sending four outbound messages to the Launcher.  
 - **3**: Fireworks Launcher-2 processes a transaction with `op::launch_second`, sending one outbound message to the Launcher.  
@@ -93,7 +94,7 @@ Below is a list of tests for each transaction expected to execute successfully.
 [This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L75) verifies that the fireworks are successfully set by sending a transaction with a value of 2.5 TON.  
 This is the simplest case, in which the main goal is to confirm that the transaction result's `success` property is `true`.  
 
-To filter a specific transaction from the `launchResult.transactions` array, you can use the most convenient fields: `from` (contract sender address), `to` (contract destination address), and `op` (opcode value). This combination retrieves only one transaction.
+To filter a specific transaction from the `launchResult.transactions` array, you can use the most convenient fields: `from`, `to`, and `op`. This combination retrieves only one transaction.
 
 <br></br>
 <ThemedImage
@@ -105,8 +106,9 @@ To filter a specific transaction from the `launchResult.transactions` array, you
   }}
 />
 <br></br>
+
 The transaction[ID:1] in the Fireworks Setter contract is invoked with `op::set_first`
-and executes two outbound messages to Fireworks Launcher-1 and Fireworks Launcher-2.{" "}
+and executes two outbound messages to Fireworks Launcher-1 and Fireworks Launcher-2.
 
 ```typescript
 it("first transaction[ID:1] should set fireworks successfully", async () => {
@@ -139,8 +141,9 @@ it("first transaction[ID:1] should set fireworks successfully", async () => {
   }}
 />
 <br></br>
+
 The transaction in Fireworks Launcher-1 is invoked with `op::launch_first` and executes
-four outbound messages to the launcher.{" "}
+four outbound messages to the launcher.
 
 ```typescript
 it("should exist a transaction[ID:2] which launches first fireworks successfully", async () => {
@@ -187,8 +190,9 @@ The complete list of account status-related fields includes:
   }}
 />
 <br></br>
+
 The transaction[ID:3] occurs in Fireworks Launcher-1, is invoked with `op::launch_first`,
-and executes four outbound messages to the launcher.{" "}
+and executes four outbound messages to the launcher.
 
 ```typescript
 it("should exist a transaction[ID:3] which launches second fireworks successfully", async () => {
@@ -224,8 +228,8 @@ it("should exist a transaction[ID:3] which launches second fireworks successfull
   }}
 />
 <br></br>
-Transaction[ID:4] occurs in the Launcher (Deploy Wallet) with an incoming message
-from Fireworks Launcher-1. This message is sent with `send mode = 0` in the transaction[ID:2].{" "}
+
+Transaction[ID:4] occurs in the Launcher with an incoming message from Fireworks Launcher-1. This message is sent with `send mode = 0` in the transaction[ID:2].
 
 ```typescript
 it("should exist a transaction[ID:4] with a comment send mode = 0", async () => {
@@ -261,8 +265,8 @@ it("should exist a transaction[ID:4] with a comment send mode = 0", async () => 
   }}
 />
 <br></br>
-Transaction[ID:5] occurs in the launcher with an incoming message from Fireworks
-Launcher-1. This message is sent with `send mode = 1`.{" "}
+
+Transaction[ID:5] occurs in the launcher with an incoming message from Fireworks Launcher-1. This message is sent with `send mode = 1`.
 
 ```typescript
 it("should exist a transaction[ID:5] with a comment send mode = 1", async () => {
@@ -298,8 +302,8 @@ it("should exist a transaction[ID:5] with a comment send mode = 1", async () => 
   }}
 />
 <br></br>
-Transaction[ID:6] occurs in the launcher with an incoming message from Fireworks
-Launcher-1. This message is sent with `send mode = 2`.{" "}
+
+Transaction[ID:6] occurs in the launcher with an incoming message from Fireworks Launcher-1. This message is sent with `send mode = 2`.
 
 ```typescript
 it("should exist a transaction[ID:6] with a comment send mode = 2", async () => {
@@ -335,8 +339,8 @@ it("should exist a transaction[ID:6] with a comment send mode = 2", async () => 
   }}
 />
 <br></br>
-Transaction[ID:7] occurs in the launcher with an incoming message from Fireworks
-Launcher-1. This message is sent with `send mode = 128 + 32`.{" "}
+
+Transaction[ID:7] occurs in the launcher with an incoming message from Fireworks Launcher-1. This message is sent with `send mode = 128 + 32`.
 
 ```typescript
 it("should exist a transaction[ID:7] with a comment send mode = 32 + 128", async () => {
@@ -372,8 +376,8 @@ it("should exist a transaction[ID:7] with a comment send mode = 32 + 128", async
   }}
 />
 <br></br>
-Transaction[ID:8] occurs in the launcher with an incoming message from Fireworks
-Launcher-2. This message is sent with `send mode = 64`.{" "}
+
+Transaction[ID:8] occurs in the launcher with an incoming message from Fireworks Launcher-2. This message is sent with `send mode = 64`.
 
 ```typescript
 it("should exist a transaction[ID:8] with a comment send mode = 64", async () => {
@@ -429,7 +433,7 @@ For instance, in the case of `launchResult`, the following table will be printed
 
 **Index** refers to the ID of a transaction in the `launchResult` array.
 
-- **0**: External request to the treasury (the launcher) that results in a message `op::set_first` to Fireworks.
+- **0**: External request to the treasury that results in a message `op::set_first` to Fireworks.
 - **1**: The Fireworks transaction results in four messages to the launcher.
 - **2**: Transaction on Launched Fireworks-1 from the Launcher, with a message sent using the `op::launch_first` opcode.
 - **3**: Transaction on Launched Fireworks-2 from the Launcher, with a message sent using the `op::launch_second` opcode.
@@ -483,7 +487,7 @@ it("should execute with expected fees", async () => {
 
 This section provides test cases for TVM exit [codes](/v3/documentation/tvm/tvm-exit-codes) that can occur during transaction processing. These exit codes are part of the blockchain code itself. It is necessary to distinguish between exit codes during the [Compute Phase](/v3/documentation/tvm/tvm-overview#compute-phase) and the Action Phase.
 
-The contract logic (its code) is executed during the Compute Phase. Various actions can be created while processing. These actions are processed in the next phase—the Action Phase. If the Compute Phase is unsuccessful, the Action Phase does not start. However, a successful Compute Phase does not guarantee that the Action Phase will also succeed.
+The contract logic is executed during the Compute Phase. Various actions can be created while processing. These actions are processed in the next phase—the Action Phase. If the Compute Phase is unsuccessful, the Action Phase does not start. However, a successful Compute Phase does not guarantee that the Action Phase will also succeed.
 
 ### Compute Phase | exit code = 0
 
@@ -499,7 +503,7 @@ This opcode must be called in the main function (e.g., `recv_internal`). If call
 
 TVM is a [stack machine](/v3/documentation/tvm/tvm-overview#tvm-is-a-stack-machine). When interacting with different values, the system places them on the stack. If an opcode requires elements from the stack but finds it empty, the system throws this error.  
 
-This issue can arise when working directly with opcodes, as [stdlib.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) (a library for FunC) assumes this problem will not occur. 
+This issue can arise when working directly with opcodes, as [stdlib.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) assumes this problem will not occur. 
 
 ### Compute Phase | exit code = 3
 
@@ -545,7 +549,7 @@ All data in TON is stored in [cells](/v3/documentation/data-formats/tlb/cell-boc
 
 ### Compute Phase | exit code = 9
 
-If you attempt to read more data from a slice (when converting a cell to a slice data type for reading) than it contains, the system throws exit code 9. For example, this occurs if you try to read 11 bits from a slice containing only 10 bits or attempt to load a reference when no references exist.
+If you attempt to read more data from a slice than it contains, the system throws exit code 9. For example, this occurs if you try to read 11 bits from a slice containing only 10 bits or attempt to load a reference when no references exist.
 
 ### Compute Phase | exit code = 10
 
@@ -572,7 +576,7 @@ root_cell
 └── key-value
 ```
 
-**Note:** The actual structure of the dictionary (how data is located in cells) is more complex than shown in the examples above. These examples are simplified for clarity.
+**Note:** The actual structure of the dictionary is more complex than shown in the examples above. These examples are simplified for clarity.
 
 ### Compute Phase | exit code = 11
 
@@ -624,7 +628,7 @@ If there is enough TON to process part of a message (e.g., 5 cells) but the mess
 
 This error may occur if the maximum number of cells in the library is exceeded or the maximum depth of the Merkle tree is exceeded.
 
-A library is a cell stored in [Masterchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains) and can be used by all smart contracts if it is [public](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1844).
+A library is a cell stored in [MasterChain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains) and can be used by all smart contracts if it is [public](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1844).
 
 :::info  
 Since the order of lines may change when updating the code, some links may become outdated. Therefore, all links reference the code base at commit [9728bc65b75defe4f9dcaaea0f62a22f198abe96](https://github.com/ton-blockchain/ton/tree/9728bc65b75defe4f9dcaaea0f62a22f198abe96).  
