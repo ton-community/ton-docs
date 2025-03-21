@@ -46,11 +46,11 @@ When an event occurs on an account in the TON blockchain, it triggers a **transa
 
 Each transaction consists of up to five phases:
 
-1. **Storage phase**: Calculates storage fees for the contract based on the space it occupies in the blockchain state. Learn more in [storage fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee).
-2. **Credit phase**: Updates the contract's balance by accounting for incoming message values and storage fees.
-3. **Compute phase**: Executes the contract code on TVM. The result includes `exit_code`, `actions` (a serialized list of actions), `gas_details`, `new_storage`, and other data.
-4. **Action phase**: Processes actions from the compute phase if it succeeds. Actions may include sending messages, updating contract code, or modifying libraries. If an action fails (e.g., insufficient funds), the transaction may revert or skip the action, depending on its mode (e.g., `send-or-revert` or `try-send-if-no-ignore`).
-5. **Bounce phase**: If the compute phase fails (`exit_code >= 2`), this phase generates a bounce message for transactions initiated by an incoming message.
+1. **Storage phase**: calculates storage fees for the contract based on the space it occupies in the blockchain state. Learn more in [storage fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee).
+2. **Credit phase**: updates the contract's balance by accounting for incoming message values and storage fees.
+3. **Compute phase**: executes the contract code on TVM. The result includes `exit_code`, `actions`, `gas_details`, `new_storage`, and other data.
+4. **Action phase**: processes actions from the compute phase if it succeeds. Actions may include sending messages, updating contract code, or modifying libraries. If an action fails, for example, due to lack of funds, the transaction may revert or skip the action, depending on its mode (`send-or-revert` or `try-send-if-no-ignore`).
+5. **Bounce phase**: if the compute phase fails (`exit_code >= 2`), this phase generates a bounce message for transactions initiated by an incoming message.
 
 ## Compute phase
 
@@ -64,42 +64,42 @@ The compute phase involves executing the contract code on TVM.
 
 The compute phase may be skipped under certain conditions, such as when the account is missing, uninitialized, or frozen, or when the incoming message lacks code or data fields. These scenarios are represented by specific constructors:
 
-- `cskip_no_state$00`: The account or message lacks a valid state (e.g., [missing code or data](https://testnet.tonviewer.com/transaction/7e78394d082882375a5d21affa6397dec60fc5a3ecbea87f401b0e460fb5c80c)).
-- `cskip_bad_state$01`: The message contains an invalid state (e.g., incorrect hash) for a frozen or uninitialized account.
-- `cskip_no_gas$10`: The account lacks sufficient funds to cover gas costs (less than ~0.00004 TON as of [August 2024](https://testnet.tonviewer.com/transaction/9789306d7b29318c90477aa3df6599ee4a897031162ad41a24decb87db65402b)).
+- `cskip_no_state$00`: the account or message lacks a valid state (for example, [missing code or data](https://testnet.tonviewer.com/transaction/7e78394d082882375a5d21affa6397dec60fc5a3ecbea87f401b0e460fb5c80c)).
+- `cskip_bad_state$01`: the message contains an invalid state (for example, incorrect hash) for a frozen or uninitialized account.
+- `cskip_no_gas$10`: the account lacks enough funds to cover gas costs (less than ~0.00004 TON as of [August 2024](https://testnet.tonviewer.com/transaction/9789306d7b29318c90477aa3df6599ee4a897031162ad41a24decb87db65402b)).
 
 ### TVM state
 
 At any point, the TVM state is defined by six properties:
-- **Stack**: A last-in-first-out data structure.
-- **Control registers**: Up to 16 variables that can be directly accessed during execution.
-- **Current continuation**: Describes the sequence of instructions being executed.
-- **Current codepage**: Specifies the TVM version in use.
-- **Gas limits**: Includes the current gas limit (`g<sub>l</sub>`), maximum gas limit (`g<sub>m</sub>`), remaining gas (`g<sub>r</sub>`), and gas credit (`g<sub>c</sub>`).
-- **Library context**: A hashmap of libraries available for TVM.
+- **Stack**: a last-in-first-out data structure.
+- **Control registers**: up to 16 variables that can be directly accessed during execution.
+- **Current continuation**: describes the sequence of instructions being executed.
+- **Current codepage**: specifies the TVM version in use.
+- **Gas limits**: includes the current gas limit (`g<sub>l</sub>`), maximum gas limit (`g<sub>m</sub>`), remaining gas (`g<sub>r</sub>`), and gas credit (`g<sub>c</sub>`).
+- **Library context**: a hashmap of libraries available for TVM.
 
 ### TVM as a stack machine
 
 TVM operates as a stack machine, supporting seven variable types:
 - **Non-cell types**:
-- Integer: Signed 257-bit integers.
-- Tuple: Ordered collections of up to 255 elements.
+- Integer: signed 257-bit integers.
+- Tuple: ordered collections of up to 255 elements.
 - Null.
 - **Cell types**:
-- Cell: Basic data structure for storing information.
-- Slice: Allows reading data from a cell.
-- Builder: Enables creating new cells.
-- Continuation: Treats a cell as a source of TVM instructions.
+- Cell: basic data structure for storing information.
+- Slice: allows reading data from a cell.
+- Builder: enables creating new cells.
+- Continuation: treats a cell as a source of TVM instructions.
 
 ### Control registers
 
-- `c0`: Stores the next or return continuation (similar to a return address).
-- `c1`: Stores the alternative continuation.
-- `c2`: Contains the exception handler. Continuation.
-- `c3`: Holds the current dictionary (a hashmap of functions codes). Continuation.
-- `c4`: Stores the persistent data (contract's `data` section). Cell.
-- `c5`: Contains output actions. Cell.
-- `c7`: Stores temporary data. Tuple.
+- `c0`: stores the next or return continuation, similar to a return address.
+- `c1`: stores the alternative continuation.
+- `c2`: contains the exception handler. Continuation.
+- `c3`: holds the current dictionary like a hashmap of functions codes. Continuation.
+- `c4`: stores the persistent data (contract's `data` section). Cell.
+- `c5`: contains output actions. Cell.
+- `c7`: stores temporary data. Tuple.
 
 ### Initializing TVM
 
@@ -112,12 +112,12 @@ For a complete list of TVM instructions, visit [TVM instructions](/v3/documentat
 ### Results of TVM execution
 
 Besides `exit_code` and gas consumption, TVM outputs:
-- `c4`: The new `data` cell for the contract (if execution succeeds).
-- `c5`: A cell containing output actions.
+- `c4`: the new `data` cell for the contract (if execution succeeds).
+- `c5`: a cell containing output actions.
 
 Other register values are discarded. Note:
 - The maximum cell depth during execution is `<1024`, but `c4` and `c5` must not exceed a depth of `512`.
-- A contract cannot create more than 255 output actions.
+- A contract can't create more than 255 output actions.
 
 :::tip
 To send more than 255 messages, a contract can send a message to itself with a request to process the remaining messages. See an example in the [highload wallet contract](https://github.com/ton-blockchain/highload-wallet-contract-v3/blob/main/contracts/highload-wallet-v3.func#L50).
