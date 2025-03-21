@@ -6,41 +6,35 @@ In this section, we’ll explore some of the most interesting features of the TO
 
 ## Contract sharding
 
-When developing contracts for the EVM, you typically split the project into multiple contracts for convenience. In some cases, it’s possible to implement all functionality in a single contract, and even when splitting is necessary (e.g., Liquidity Pairs in an Automated Market Maker), it doesn’t introduce significant complexity. Transactions are executed entirely: either everything succeeds, or everything reverts.
+When developing contracts for the EVM, you typically split the project into multiple contracts for convenience. In some cases, it’s possible to implement all functionality in a single contract, and even when splitting is necessary, such as with Liquidity Pairs in an Automated Market Maker, it doesn’t introduce significant complexity. Transactions are executed entirely: either everything succeeds, or everything reverts.
 
 In TON, it’s strongly recommended to avoid “unbounded data structures” and [split a single logical contract into smaller pieces](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons), each managing a small amount of data. A basic example is the implementation of TON Jettons, TON’s version of Ethereum’s ERC-20 token standard. In short:
 
-1. One `jetton-minter` stores `total_supply`, `minter_address`, and a couple of references: token description (metadata) and `jetton_wallet_code`.
-2. Multiple `jetton-wallet` contracts, one for each token owner. Each wallet stores the owner’s address, their balance, the `jetton-minter` address, and a reference to `jetton_wallet_code`.
+1. One `jetton-minter` stores `total_supply`, `minter_address`, and references to token metadata and `jetton_wallet_code`.
+2. Multiple `jetton-wallet` contracts, one for each token owner, store the owner’s address, their balance, the `jetton-minter` address, and a reference to `jetton_wallet_code`.
 
-This design ensures that Jetton transfers occur directly between wallets without affecting high-load addresses, enabling parallel transaction processing.
-
-As a result, your contract will likely become a “group of contracts” that actively interact with each other.
+This design ensures that Jetton transfers occur directly between wallets without affecting high-load addresses, enabling parallel transaction processing. As a result, your contract will likely become a “group of contracts” that actively interact with each other.
 
 ## Partial execution of transactions is possible
 
-A unique property of TON smart contracts is the possibility of partial transaction execution.
-
-For example, consider the message flow of a standard TON Jetton:
-
 ![smart1.png](/img/docs/security-measures/secure-programming/smart1.png)
 
-From the diagram:
+A unique property of TON smart contracts is the possibility of partial transaction execution. For example, consider the message flow of a standard TON Jetton:
 
 1. The sender sends an `op::transfer` message to its wallet (`sender_wallet`).
 2. `sender_wallet` reduces the token balance.
 3. `sender_wallet` sends an `op::internal_transfer` message to the recipient’s wallet (`destination_wallet`).
 4. `destination_wallet` increases its token balance.
 5. `destination_wallet` sends an `op::transfer_notification` to its owner (`destination`).
-6. `destination_wallet` returns excess gas with an `op::excesses` message to the `response_destination` (usually the sender).
+6. `destination_wallet` returns excess gas with an `op::excesses` message to the `response_destination`, usually the sender.
 
-If `destination_wallet` fails to process the `op::internal_transfer` message (e.g., due to an exception or insufficient gas), this step and subsequent ones won’t execute. However, the first step (reducing the balance in `sender_wallet`) will still complete. This results in partial transaction execution, an inconsistent state of the `Jetton`, and potential loss of funds.
+If `destination_wallet` fails to process the `op::internal_transfer` message, such as due to an exception or insufficient gas, this step and subsequent ones won’t execute. However, the first step, reducing the balance in `sender_wallet`, will still complete. This results in partial transaction execution, an inconsistent state of the `Jetton`, and potential loss of funds.
 
 In the worst-case scenario, all tokens could be stolen this way. For example, if you first credit bonuses to a user and then send an `op::burn` message to their Jetton wallet, you cannot guarantee that the `op::burn` will succeed.
 
 ## TON smart contract developers must control gas
 
-In Solidity, gas management is less of a concern for contract developers. If a user provides insufficient gas, the transaction reverts (though the gas is not refunded). If they provide enough gas, the actual costs are automatically calculated and deducted from their balance.
+In Solidity, gas management is less of a concern for contract developers. If a user provides insufficient gas, the transaction reverts, though the gas is not refunded. If they provide enough gas, the actual costs are automatically calculated and deducted from their balance.
 
 In TON, the situation is different:
 
@@ -77,8 +71,8 @@ Unfortunately, `<a lot of vars>` often involves enumerating all contract data fi
 
 This approach has several drawbacks:
 
-1. Adding a new field (e.g., `is_paused`) requires updating `load_data()/save_data()` statements throughout the contract, which is labor-intensive and error-prone.
-2. Namespace pollution can lead to bugs. For example, shadowing a storage field with a local variable can overwrite the contract state.
+1. Adding a new field requires updating `load_data()/save_data()` statements throughout the contract, which is labor-intensive and error-prone.
+2. Namespace pollution can lead to bugs, such as shadowing a storage field with a local variable, which can overwrite the contract state.
 3. Parsing and repacking the entire storage on every function call increases gas costs.
 
 >In a recent CertiK audit, we discovered that the developer mixed up two arguments in the `save_data()` function:  
@@ -91,7 +85,6 @@ This approach has several drawbacks:
 >int min_amount = in_msg_body~load_coins();  
 >```  
 >Here, a local variable shadowed a storage field, and at the end of the function, the overwritten value was stored in the contract state. This allowed an attacker to manipulate the contract’s state. The problem is exacerbated by FunC’s allowance of [variable redeclaration](https://docs.ton.org/develop/func/statements#variable-declaration): “This is not a declaration, but just a compile-time insurance that `min_amount` has type `int`.”  
-
 
 ## Tips
 
@@ -107,7 +100,7 @@ At CertiK, we use the [DOT](<https://en.wikipedia.org/wiki/DOT_(graph_descriptio
 
 Define the entry point in your message flow—the message that initiates the cascade of messages in your contract group. Perform all necessary checks (payload, gas supply, etc.) here to minimize the chance of failure in subsequent stages.
 
-If you’re unsure whether all conditions will be met (e.g., whether the user has enough tokens), the message flow is likely designed incorrectly.
+If you’re unsure whether all conditions will be met, such as whether the user has enough tokens, the message flow is likely designed incorrectly.
 
 In subsequent messages, use `throw_if()/throw_unless()` as assertions rather than checks. Many contracts also handle bounced messages as a precaution.
 
@@ -135,11 +128,11 @@ While handling bounced messages is recommended, it’s not a complete solution. 
 
 ### 3. Expect a man-in-the-middle attack
 
-A message cascade can span multiple blocks. Assume that while one message flow is running, an attacker can initiate a parallel flow. If a property (e.g., the user’s token balance) is checked at the start, don’t assume it will remain valid at later stages.
+A message cascade can span multiple blocks. Assume that while one message flow is running, an attacker can initiate a parallel flow. If a property, such as the user’s token balance, is checked at the start, don’t assume it will remain valid at later stages.
 
 ### 4. Use the carry-value pattern
 
-Messages between contracts must carry valuables. In TON Jetton, `sender_wallet` subtracts the balance and sends it with an `op::internal_transfer` message to `destination_wallet`, which then adds the balance to its own (or bounces it back).
+Messages between contracts must carry valuables. In TON Jetton, `sender_wallet` subtracts the balance and sends it with an `op::internal_transfer` message to `destination_wallet`, which then adds the balance to its own or bounces it back.
 
 An incorrect implementation would be querying the Jetton balance on-chain. By the time the response to `op::get_balance` arrives, the balance might have already been spent.
 
@@ -151,7 +144,7 @@ Instead, implement an alternative flow:
 
 ### 5. Return value instead of rejecting
 
-Contracts often receive requests with values. Instead of rejecting invalid requests (via `throw_unless()`), return the value to the sender.
+Contracts often receive requests with values. Instead of rejecting invalid requests via `throw_unless()`, return the value to the sender.
 
 For example, in TON Jetton:
 
@@ -160,7 +153,7 @@ For example, in TON Jetton:
 3. `your_contract_wallet` sends an `op::transfer_notification` message to `your_contract`, delivering `forward_ton_amount`, `forward_payload`, `sender_address`, and `jetton_amount`.
 4. Your contract processes the request in `handle_transfer_notification()`.
 
-At this stage, avoid `throw_if()/throw_unless()`, as it could result in lost Jettons. Use try-catch statements (available in FunC v0.4.0+) to handle errors and return Jettons if necessary.
+At this stage, avoid `throw_if()/throw_unless()`, as it could result in lost Jettons. Use try-catch statements, available in FunC v0.4.0+, to handle errors and return Jettons if necessary.
 
 ### 6. Calculate gas and check `msg_value`
 
@@ -173,7 +166,7 @@ If excess gas isn’t returned to the sender, funds will accumulate in your cont
 TON provides a useful mechanism: `SEND_MODE_CARRY_ALL_REMAINING_MESSAGE_VALUE = 64`. This mode forwards remaining gas with the message. However, avoid this mode if:
 
 1. Your contract has no other non-linear handlers, as storage fees will deplete the contract balance.
-2. Your contract emits events (sends messages to external addresses), as the cost is deducted from the contract balance.
+2. Your contract emits events, sending messages to external addresses, as the cost is deducted from the contract balance.
 3. Your contract attaches value to messages or uses `SEND_MODE_PAY_FEES_SEPARATELY = 1`, as these actions deduct from the contract balance.
 
 In these cases, manually calculate and return excess gas:
