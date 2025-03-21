@@ -1,5 +1,8 @@
 import ThemedImage from "@theme/ThemedImage";
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Reading from network
 
 This page will walk you through how to read data from TON Blockchain. We'll cover fetching account information, calling get methods, and retrieving account transactions. By the end, you'll have a solid understanding of how to read from TON blockchain using HTTP-based APIs.
@@ -12,15 +15,44 @@ All these properties can be retrieved using [TON HTTP-based APIs](/v3/guidelines
 
 ## Setting up the project
 
-## Setting Up the Project
+For this guide we provide examples on these languages - `python3`, `TypeScript` and the corresponding SDKs: `@ton/ton`, `pytoniq`. First, visit installation pages and install runtime environment and package managers for your OS:
+ - [NodeJS and npm](https://nodejs.org/en/download) for TypeScript.
+ - [Python3](https://wiki.python.org/moin/BeginnersGuide/Download) and [pip](https://pip.pypa.io/en/stable/installation/) if you installed `Python3` separately from `pip` package manager.
 
-First, let's initialize the project and install the necessary dependencies.
+Check that installation is correct by running those commands:
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="TypeScript">
+```bash
+node -v
+npm -v
+```
+</TabItem>
+<TabItem value="pytoniq" label="Python3">
+```bash
+python3 --version
+pip3 --version
+```
+</TabItem>
+</Tabs>
 
+Now, let's initialize the project and install the necessary dependencies.
+
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="@ton/ton">
 ```bash
 npm init -y
 npm install typescript ts-node @ton/ton @ton/core @ton/crypto
 npx tsc --init
 ```
+</TabItem>
+<TabItem value="pytoniq" label="pytoniq">
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install pytoniq
+```
+</TabItem>
+</Tabs>
 
 To run scripts, use the following command:
 
@@ -42,6 +74,8 @@ Account information includes the `balance`, `state`, `code`, and `data`.
 
 Here's how you can retrieve a contract's state:
 
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="@ton/ton">
 ```typescript
 import { Address, TonClient } from "@ton/ton";
 
@@ -56,6 +90,31 @@ async function main() {
 
 main();
 ```
+</TabItem>
+<TabItem value="pytoniq" label="pytoniq">
+```python
+import asyncio
+from pytoniq import LiteClient, Address
+
+
+async def main():
+    address = Address('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-') # replace with any address
+    config = {
+        'timeout': 10,
+        'trust_level': 1
+    }
+
+    async with LiteClient.from_testnet_config(**config) as client:
+        state = await client.get_account_state(address)
+
+        print(f"Balance: {state.balance} TON")
+        print(f"State: {state.state}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+</TabItem>
+</Tabs>
 
 ## Calling get methods
 
@@ -65,6 +124,8 @@ These functions are widespread in most smart contracts. For example, the default
 
 Result of calling get method from TON HTTP API comes in *stack* format and may be deserialized one by one using `readNumber()` or similar function.
 
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="@ton/ton">
 ```typescript
 import { Address, TonClient, TupleBuilder } from "@ton/ton";
 
@@ -90,11 +151,44 @@ async function main() {
 
 main();
 ```
+</TabItem>
+<TabItem value="pytoniq" label="pytoniq">
+```python
+import asyncio
+
+from pytoniq_core import Address
+from pytoniq import LiteBalancer
+
+
+async def main():
+    client = LiteBalancer.from_testnet_config(trust_level=1, timeout=300)
+
+    await client.start_up()
+
+    # Building optional get method parameters list
+    addr = Address('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-')
+    request_stack = [addr.to_cell().begin_parse()]
+
+    result = await client.run_get_method_remote(
+        address="kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy", # address to call get method on
+        method='get_wallet_address', # method name
+        stack=request_stack # optional params list
+    )
+
+    print(result[0].load_address())
+
+if __name__ == '__main__':
+    asyncio.run(main())
+```
+</TabItem>
+</Tabs>
 
 ### Using wrappers for simplicity
 
-Wrappers are classes that simplify interactions with smart contracts. Here's an equivalent example using a wrapper:
+Wrappers are classes that simplify interactions with smart contracts. Here's an equivalent example of using a wrapper:
 
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="@ton/ton">
 ```typescript
 import { Address, JettonMaster, TonClient } from "@ton/ton";
 
@@ -115,6 +209,33 @@ async function main() {
 
 main();
 ```
+</TabItem>
+<TabItem value="pytoniq" label="pytoniq">
+```python
+import asyncio
+
+from pytoniq import LiteBalancer, WalletV4R2
+
+
+async def main():
+    client = LiteBalancer.from_testnet_config(trust_level=1)
+
+    await client.start_up()
+
+    # initializing wrapper
+    wallet = await WalletV4R2.from_address(
+            provider=client,
+            address='0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'
+    )
+
+    # calling get method from wrapper
+    print(await wallet.get_seqno())
+
+if __name__ == '__main__':
+    asyncio.run(main())
+```
+</TabItem>
+</Tabs>
 
 ## Fetching account transactions
 
@@ -214,6 +335,8 @@ Transaction obtained from API have the following structure:
 
 Here’s how to fetch the last 10 transactions for an account:
 
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="@ton/ton">
 ```typescript
 import { Address, TonClient } from "@ton/ton";
 
@@ -235,6 +358,29 @@ async function main() {
 
 main();
 ```
+</TabItem>
+<TabItem value="pytoniq" label="pytoniq">
+```python
+import asyncio
+
+from pytoniq import LiteClient
+
+
+async def main():
+    async with LiteClient.from_testnet_config(ls_i=0, trust_level=2) as client:
+
+        transactions = await client.get_transactions(
+            address='0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-', # Address to fetch transaction
+            count=10
+        )
+
+        print(transactions[0])
+
+if __name__ == '__main__':
+    asyncio.run(main())
+```
+</TabItem>
+</Tabs>
 
 :::info
 More complex example about traversing transactions graph may be found [here](https://docs.ton.org/v3/guidelines/dapps/asset-processing/payments-processing/#retrieve-incomingoutgoing-transactions).
