@@ -1,23 +1,288 @@
 import ThemedImage from "@theme/ThemedImage";
 
-# Writing to network
+# Writing to the Network
 
-In the previous section, you learned how to **read data** from TON Blockchain. Now, let's explore how to **write data** to it. Writing to the TON network involves sending messages. These messages trigger actions in smart contracts, such as transferring TON, Jettons, NFTs,  updating contract state, or deploying new contracts.
+In the previous section, you learned how to **read data** from the TON Blockchain. Now, let's explore how to **write data** to it. Writing to the TON network involves sending messages. These messages trigger actions in smart contracts, such as transferring TON, Jettons, NFTs, updating contract state, or deploying new contracts.
 
-## Setting up the project
+## Setting Up the Project
 
 First, let's initialize the project and install the necessary dependencies.
 
 ```bash
 npm init -y
-npm install typescript ts-node @ton/ton @ton/core
+npm install typescript ts-node @ton/ton @ton/core @ton/crypto
 npx tsc --init
 ```
 
-## Send TON
+To run scripts, use the following command:
 
-## Send Jetton
+```bash
+npx ts-node script.ts
+```
 
-## Send NFT
+
+## Sending TON
+
+The simplest interaction between two accounts in TON Blockchain is a TON transfer. The process involves preparing and signing a transaction, and then sending it to the blockchain. Interaction with the blockchain is mostly done via [**wallets**](/v3/guidelines/smart-contracts/howto/wallet#-ton-blockchain-wallets). All wallets that operate on TON Blockchain are actually smart contracts owned by individuals outside the blockchain. The wallet uses a public key to verify the legitimacy of the message signature when receiving an [external message](/v3/documentation/smart-contracts/message-management/external-messages/) that the owner signed with the private key. The private key is often derived from a *mnemonic* or *seed phrase*—a sequence of 24 random words. Wallets use `seqno` for [replay protection](/v3/guidelines/smart-contracts/howto/wallet/#replay-protection---seqno/), a mechanism to prevent the repetition of messages.
+
+A common transfer would look like this:
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1.svg?raw=true',
+      dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1_dark.svg?raw=true',
+    }}
+  />
+</div>
+<br></br>
+
+:::caution
+Unlike in the [Reading from the Network](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network/) section, a Toncenter API key is mandatory in the following examples.
+:::
+
+```typescript
+import { mnemonicToWalletKey } from "@ton/crypto";
+import { comment, internal, toNano, TonClient, WalletContractV4, WalletContractV5R1 } from "@ton/ton";
+import { SendMode } from "@ton/core";
+
+async function main() {
+  // Initializing tonClient for sending messages to blockchain
+  const tonClient = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+    apiKey: 'YOUR_API_KEY',
+  });
+
+  // Generating
+  const mnemonic = "word1 word2 ...".split(' '); // Insert your mnemonic here
+  const keyPair = await mnemonicToWalletKey(mnemonic);
+
+ // Creating wallet depending on version (v5r1 or v4), uncomment which version do you have
+  const walletContract = WalletContractV4.create({ workchain: 0, publicKey });
+  // const walletContract = WalletContractV5R1.create({ walletId: { networkGlobalId: -3 }, publicKey }); // networkGlobalId: -3 for testnet, -239 for mainnet
+
+  // Getting seqno from wallet. This mechanism serves for replay protection
+  const seqno = await wallet.getSeqno();
+
+  // Sending transfer
+  await wallet.sendTransfer({
+    seqno,
+    secretKey: keyPair.secretKey,
+    messages: [internal({
+      to: wallet.address, // Transfer will be made to the same wallet address
+      body: comment('Hello from wallet!'), // Transfer will contain comment
+      value: toNano(0.05), // Amount of TON, attached to transfer
+    })],
+    sendMode: SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS,
+  });
+}
+
+main();
+```
+
+:::caution Advanced Level
+In most scenarios, `SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS` will work, but if you want a deeper understanding, continue reading in the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook/).
+:::
+
+## Retrieving message hash
+
+:::info
+Be careful with the hash definition. It can be either a transaction hash or a message hash. These are different things.
+:::
+
+Sometimes it will be useful to get the message hash before sending it. By the message hash, the transaction may be found on the blockchain. To do so, instead of calling the `sendTransfer` method on the wallet, we should build the message ourselves.
+
+```typescript
+// Building the transfer to the wallet
+const transfer = wallet.createTransfer({
+  seqno,
+  secretKey,
+  messages: [internal({
+    to: wallet.address,
+    body: comment('Hello from wallet!'),
+    value: toNano(0.05),
+  })],
+  sendMode: SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS,
+});
+
+// Building the external message to be sent to the blockchain
+const externalMessage = external({
+  to: wallet.address,
+  body: transfer,
+});
 
 
+// Obtaining the message hash
+const messageHash = beginCell()
+  .store(storeMessage(externalMessage))
+  .endCell()
+  .hash();
+
+console.log(messageHash.toString('hex'));
+console.log(`https://testnet.tonviewer.com/transaction/${messageHash.toString('hex')}`);
+
+// Sending message to the blockchain
+await tonClient.sendMessage(externalMessage);
+```
+
+## Retrieving transaction hash
+
+It may also be useful to wait for the transaction to appear on the blockchain. This can be done by trying to get it by `messageHash` with delays. When the transaction is obtained, the hash of the transaction may be received.
+
+```typescript
+async function waitForTransaction(messageHash: Buffer, maxRetries = 12) {
+  let retries = 0;
+  while (retries < maxRetries) {
+    console.log(`Waiting for transaction, retry ${retries}...`);
+    retries += 1;
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    const response = await fetch(`https://testnet.tonapi.io/v2/blockchain/transactions/${messageHash.toString('hex')}`);
+    if (!response.ok) {
+      continue;
+    }
+
+    const result = await response.json();
+    if (!result.raw) {
+      continue;
+    }
+
+    return loadTransaction(Cell.fromHex(result.raw).beginParse());
+  }
+
+  throw new Error('Retries exceeded, transaction not found')
+}
+
+const transaction = await waitForTransaction(messageHash);
+const transactionHash = transaction.hash();
+```
+
+## Failed Transactions
+
+Unfortunately, in some cases, a transaction may fail. There are two types of failures when making a transfer from a wallet:
+- *External message was not accepted by the wallet*: This failure may occur due to an invalid `seqno`, message `deadline`, or invalid signature, etc. In this case, the message will not trigger a transaction and will not appear on the blockchain.
+- *Failure after the message was accepted*: In this case, the transaction will appear on the blockchain, but the outcome of the transaction will not be successful. Refer to this [article](/documentation/smart-contracts/message-management/messages-and-transactions/#transaction-outcome) for further reading.
+
+## Sending Jettons
+
+[Jettons](/v3/guidelines/dapps/cookbook#tep-74-jettons-standard) are tokens on the TON Blockchain. You may get some Jettons on the testnet using the [USDt giver bot](https://t.me/testgiver_ton_usdt_bot).
+
+To send them, we should send messages to our Jetton wallet to make a transfer.
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_5.svg?raw=true',
+      dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_5_dark.svg?raw=true',
+    }}
+  />
+</div>
+<br></br>
+
+To make the example more practical, let's obtain this address programmatically by using the [`JettonMaster` wrapper](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network#using-wrappers-for-simplicity).
+
+```typescript
+import { mnemonicToWalletKey } from "@ton/crypto";
+import { Address, beginCell, comment, internal, JettonMaster, toNano, TonClient, WalletContractV5R1 } from "@ton/ton";
+import { SendMode } from "@ton/core";
+
+async function main() {
+  const tonClient = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+    apiKey: 'YOUR_API_KEY',
+  });
+
+  const mnemonic = "word1 word2 ...".split(' ');
+  const { publicKey, secretKey } = await mnemonicToWalletKey(mnemonic);
+  const walletContract = WalletContractV5R1.create({ walletId: { networkGlobalId: -3 }, publicKey }); // networkGlobalId: -3 for testnet, -239 for mainnet
+  const wallet = tonClient.open(walletContract);
+  const seqno = await wallet.getSeqno();
+
+  const jettonTransferBody = beginCell()
+    .storeUint(0x0f8a7ea5, 32) // opcode for jetton transfer
+    .storeUint(0, 64) // query id
+    .storeCoins(1000000) // jetton amount in minimal values. Note, that USDt has 6 decimals, so 1000000 is 1 USDt on UI
+    .storeAddress(wallet.address) // destination address to transfer
+    .storeAddress(wallet.address) // response destination
+    .storeBit(0) // no custom payload
+    .storeCoins(1) // forward amount - if >0, will send notification message
+    .storeMaybeRef(comment('Hello from jetton!'))
+    .endCell();
+
+  const jettonMasterAddress = Address.parse('kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy'); // If testnet USDt is used this is master address
+
+  const jettonMaster = tonClient.open(JettonMaster.create(jettonMasterAddress));
+  const myJettonWalletAddress = await jettonMaster.getWalletAddress(wallet.address);
+
+  // Sending transfer to jetton wallet
+  await wallet.sendTransfer({
+    seqno,
+    secretKey,
+    messages: [internal({
+      to: myJettonWalletAddress,
+      body: jettonTransferBody,
+      value: toNano(0.05),
+    })],
+    sendMode: SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS,
+  });
+}
+
+main();
+```
+
+## Sending NFTs
+
+[Non-fungible tokens](/v3/guidelines/dapps/asset-processing/nft-processing/nfts) (NFTs) are assets like a piece of art, digital content, or video that have been tokenized via a blockchain. In TON, NFTs are represented via a collection of smart contracts:
+- **NFT Collection**: stores information about the NFT collection.
+- **NFT Item**: stores information about the NFT item that the user owns.
+
+NFTs may be deployed via [TON Tools](https://ton-collection-edit.vercel.app/deploy-collection).
+
+```typescript
+import { mnemonicToWalletKey } from "@ton/crypto";
+import { Address, beginCell, comment, internal, toNano, TonClient, WalletContractV5R1 } from "@ton/ton";
+import { SendMode } from "@ton/core";
+
+
+async function main() {
+  const tonClient = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+    apiKey: 'YOUR_API_KEY',
+  });
+  const mnemonic = "word1 word2 ...".split(' '); // Insert your mnemonic
+  const { publicKey, secretKey } = await mnemonicToWalletKey(mnemonic);
+  const walletContract = WalletContractV5R1.create({ walletId: { networkGlobalId: -3 }, publicKey });
+  const wallet = tonClient.open(walletContract);
+  const seqno = await wallet.getSeqno();
+
+  const nftTransferBody = beginCell()
+    .storeUint(0x5fcc3d14, 32) // opcode for nft transfer
+    .storeUint(0, 64) // query id
+    .storeAddress(wallet.address) // address to transfer ownership to
+    .storeAddress(wallet.address) // response destination
+    .storeBit(0) // no custom payload
+    .storeCoins(1) // forward amount - if >0, will send notification message
+    .storeMaybeRef(comment('Hello from NFT!'))
+    .endCell();
+
+  const nftAddress = Address.parse('YOUR_NFT_ADDRESS'); // NFT Address may be obtained after deploying NFT Item
+
+  // Sending NFT transfer
+  await wallet.sendTransfer({
+    seqno,
+    secretKey,
+    messages: [internal({
+      to: nftAddress,
+      body: nftTransferBody,
+      value: toNano(0.05),
+    })],
+    sendMode: SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS,
+  });
+}
+
+main();
+```

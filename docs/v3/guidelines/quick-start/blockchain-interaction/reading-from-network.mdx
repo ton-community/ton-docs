@@ -4,7 +4,6 @@ import ThemedImage from "@theme/ThemedImage";
 
 This page will walk you through how to read data from TON Blockchain. We'll cover fetching account information, calling get methods, and retrieving account transactions. By the end, you'll have a solid understanding of how to read from TON blockchain using HTTP-based APIs.
 
-
 ## Introduction to TON Actors
 
 In TON, [**Actors**](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor/) are objects that have *storage* and *behavior*. These are essentially smart contracts with properties, like `address`, `state`, `code`, `data`, `balance`.
@@ -13,12 +12,20 @@ All these properties can be retrieved using [TON HTTP-based APIs](/v3/guidelines
 
 ## Setting up the project
 
+## Setting Up the Project
+
 First, let's initialize the project and install the necessary dependencies.
 
 ```bash
 npm init -y
-npm install typescript ts-node @ton/ton @ton/core
+npm install typescript ts-node @ton/ton @ton/core @ton/crypto
 npx tsc --init
+```
+
+To run scripts, use the following command:
+
+```bash
+npx ts-node script.ts
 ```
 
 ## Reading account information
@@ -50,7 +57,7 @@ async function main() {
 main();
 ```
 
-## Calling Get Methods
+## Calling get methods
 
 Get methods are special functions in smart contracts that allow you to query specific data. Their execution doesn't cost any fees and happens outside the blockchain.
 
@@ -84,7 +91,7 @@ async function main() {
 main();
 ```
 
-### Using Wrappers for Simplicity
+### Using wrappers for simplicity
 
 Wrappers are classes that simplify interactions with smart contracts. Here's an equivalent example using a wrapper:
 

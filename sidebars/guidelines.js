@@ -43,6 +43,7 @@ module.exports = [
     label: 'Blockchain interaction',
     items: [
       'v3/guidelines/quick-start/blockchain-interaction/reading-from-network',
+      'v3/guidelines/quick-start/blockchain-interaction/writing-to-network',
     ],
   },
   {
