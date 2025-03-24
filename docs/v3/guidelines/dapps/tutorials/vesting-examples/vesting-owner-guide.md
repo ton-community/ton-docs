@@ -4,7 +4,7 @@ This guide explains how to create a vesting wallet and its components. It clarif
 
 ## What is vesting?
 
-In blockchain and cryptocurrencies, "vesting" refers to a process in which tokens or coins are released to their holders over a predetermined period rather than all at once. Here are the key aspects broken down:
+In blockchain and cryptocurrencies, __vesting__ refers to a process in which tokens or coins are released to their holders over a predetermined period rather than all at once. Here are the key aspects broken down:
 
 ### The purpose:
 
@@ -16,11 +16,11 @@ In blockchain and cryptocurrencies, "vesting" refers to a process in which token
 
 ### How it works:
 
-- A "vesting schedule" is established, detailing when and how the tokens will be released.
+- A __vesting schedule__ is established, detailing when and how the tokens will be released.
   
 - This schedule can vary, with tokens being released monthly, quarterly, annually, or based on achieving specific milestones.
   
-- There are often "cliff" periods during which no tokens are released for an initial duration, followed by subsequent releases.
+- There are often __cliff__ periods during which no tokens are released for an initial duration, followed by subsequent releases.
 
 :::info Technical details and parameters
 For all technical details about the contract, see [vesting contract](v3/documentation/smart-contracts/contracts-specs/vesting-contract)
@@ -28,7 +28,7 @@ For all technical details about the contract, see [vesting contract](v3/document
 
 ## Step-by-step instructions
 
-You can follow these steps to create and manage a Vesting Wallet as the Vesting Sender (Owner). This guide will walk you through setting up your wallet, securing your funds, and executing transactions on Testnet.
+You can follow these steps to create and manage a vesting wallet as the vesting sender (owner). This guide will walk you through setting up your wallet, securing your funds, and executing transactions on Testnet.
 
 ### 1: Create an owner's wallet
 
@@ -57,7 +57,7 @@ You can follow these steps to create and manage a Vesting Wallet as the Vesting 
  ![](/img/tutorials/vesting/add-whitelist-address.png)
   ![](/img/tutorials/vesting/add-whitelist-address-2.png)
  
-- Click "Create new vesting for this user".
+- Click __Create new vesting for this use__.
 ![](/img/tutorials/vesting/create-new-vesting.png)
     
 - Enter your vesting details:
