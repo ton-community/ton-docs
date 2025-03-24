@@ -25,4 +25,5 @@ yarn-debug.log*
 yarn-error.log*
 .gitpod.yml
 
-.env
+.envpackage-lock.json
+package.json
