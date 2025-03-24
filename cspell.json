@@ -310,7 +310,9 @@
     "xtwitter",
     "yourname",
     "zellic",
-    "zerostate"
+    "zerostate",
+    "Buildx",
+    "underperforming"
   ],
   "ignoreRegExpList": [
     "\\(#.*\\)",
