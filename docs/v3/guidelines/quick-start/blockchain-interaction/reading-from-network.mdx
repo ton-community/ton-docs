@@ -27,7 +27,7 @@ node -v
 npm -v
 ```
 </TabItem>
-<TabItem value="pytoniq" label="Python3">
+<TabItem value="tonutils" label="Python3">
 ```bash
 python3 --version
 pip3 --version
@@ -45,11 +45,11 @@ npm install typescript ts-node @ton/ton @ton/core @ton/crypto
 npx tsc --init
 ```
 </TabItem>
-<TabItem value="pytoniq" label="pytoniq">
+<TabItem value="tonutils" label="tonutils">
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python3 -m pip install pytoniq
+python3 -m pip install tonutils pytoniq
 ```
 </TabItem>
 </Tabs>
@@ -91,26 +91,23 @@ async function main() {
 main();
 ```
 </TabItem>
-<TabItem value="pytoniq" label="pytoniq">
+<TabItem value="tonutils" label="tonutils">
 ```python
-import asyncio
-from pytoniq import LiteClient, Address
+from tonutils.client import ToncenterClient
 
+IS_TESTNET = True
 
-async def main():
-    address = Address('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-') # replace with any address
-    config = {
-        'timeout': 10,
-        'trust_level': 1
-    }
+async def main() -> None:
+    client = ToncenterClient(is_testnet=IS_TESTNET)
 
-    async with LiteClient.from_testnet_config(**config) as client:
-        state = await client.get_account_state(address)
+    state = await client.get_raw_account('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-')
 
-        print(f"Balance: {state.balance} TON")
-        print(f"State: {state.state}")
+    print(state.balance)
+    print(state.data)
+    print(state.code)
 
 if __name__ == "__main__":
+    import asyncio
     asyncio.run(main())
 ```
 </TabItem>
@@ -152,32 +149,33 @@ async function main() {
 main();
 ```
 </TabItem>
-<TabItem value="pytoniq" label="pytoniq">
+<TabItem value="tonuitls" label="tonutils">
 ```python
-import asyncio
+from tonutils.client import ToncenterClient
+from tonutils.utils import boc_to_base64_string
+from pytoniq_core import begin_cell, Address, Slice
 
-from pytoniq_core import Address
-from pytoniq import LiteBalancer
+IS_TESTNET = True
 
 
-async def main():
-    client = LiteBalancer.from_testnet_config(trust_level=1, timeout=300)
-
-    await client.start_up()
+async def main() -> None:
+    client = ToncenterClient(is_testnet=IS_TESTNET)
 
     # Building optional get method parameters list
     addr = Address('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-')
-    request_stack = [addr.to_cell().begin_parse()]
 
-    result = await client.run_get_method_remote(
+    result = await client.run_get_method(
         address="kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy", # address to call get method on
-        method='get_wallet_address', # method name
-        stack=request_stack # optional params list
+        method_name='get_wallet_address', # method name
+        stack=[boc_to_base64_string(begin_cell().store_address(addr).end_cell().to_boc())]
     )
 
-    print(result[0].load_address())
+    print(Slice.one_from_boc(result["stack"][0]["value"]).load_address())
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
+    import asyncio
+
     asyncio.run(main())
 ```
 </TabItem>
@@ -210,28 +208,28 @@ async function main() {
 main();
 ```
 </TabItem>
-<TabItem value="pytoniq" label="pytoniq">
+<TabItem value="tonutils" label="tonutils">
 ```python
-import asyncio
+from tonutils.client import ToncenterClient
+from tonutils.jetton import JettonMaster
 
-from pytoniq import LiteBalancer, WalletV4R2
+IS_TESTNET = True
 
 
-async def main():
-    client = LiteBalancer.from_testnet_config(trust_level=1)
+async def main() -> None:
+    client = ToncenterClient(is_testnet=IS_TESTNET)
 
-    await client.start_up()
-
-    # initializing wrapper
-    wallet = await WalletV4R2.from_address(
-            provider=client,
-            address='0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'
+    addr = await JettonMaster.get_wallet_address(
+        client=client,
+        owner_address='0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-',
+        jetton_master_address='kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy'
     )
 
-    # calling get method from wrapper
-    print(await wallet.get_seqno())
+    print(addr)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    import asyncio
+
     asyncio.run(main())
 ```
 </TabItem>
@@ -359,10 +357,8 @@ async function main() {
 main();
 ```
 </TabItem>
-<TabItem value="pytoniq" label="pytoniq">
+<TabItem value="tonutils" label="pytoniq">
 ```python
-import asyncio
-
 from pytoniq import LiteClient
 
 
@@ -377,6 +373,7 @@ async def main():
         print(transactions[0])
 
 if __name__ == '__main__':
+    import asyncio
     asyncio.run(main())
 ```
 </TabItem>
