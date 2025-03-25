@@ -6,18 +6,18 @@ In this part of the guide we will proceed to deployment of previously developed 
 
 ## Address and initial state
 
-We already know that [address](/v3/documentation/smart-contracts/addresses/) is unique identifier of `smart-contract`, i.e `actor`, `account` in network which is used to send transactions and verify their sender upon recieve but we still didn't discussed how it's created. The common formula of smart-contract address looks like that:
+We already know that [address](/v3/documentation/smart-contracts/addresses/) is unique identifier of `smart-contract`, i.e `actor`, `account` in network which is used to send transactions and verify their sender upon receive but we still didn't discussed how it's created. The common formula of smart-contract address looks like that:
 
 ***address=hash(state_init(code, data))***
 
-Address of smart-contract is a hash of aggregated initial code and data of smart-contracts upon deployment. This simple mechanism have few important consecuences:
+Address of smart-contract is a hash of aggregated initial code and data of smart-contracts upon deployment. This simple mechanism have few important consequences:
 
 ### You already know the address
 
 In TON any address that didn't accept any transaction and, as a consequnce, dont have any data is considered in `nonexzist` state, nethertheless when we created a wallet using wallet app in [Getting started](/v3/guidelines/quick-start/getting-started) section we still was able to get address of our **future** wallet smart-contract from wallet app before it's deployment and examine it in explorer. 
 
 The reason behind that is because creating your private and public key pair through **mnemonic phrase**, where second key is part of initial data of smart-contract makes `state_init` of our contract fully determent:
- - **code** is one of the standart wallet implementation, like `v5r1`.
+ - **code** is one of the standard wallet implementation, like `v5r1`.
  - **data** is `public_key` with other default initialized fields.
 
 Which makes it possible to calculate future wallet smart-contract address.
@@ -26,11 +26,11 @@ Which makes it possible to calculate future wallet smart-contract address.
 
 In previous steps we deliberately didn't explain the purpose of `ctxID` and `ID` stored in our smart-contracts state and remaining untouched in all smart-contracts functionality. Now their purpose should start to be more clear.
 
-Since we can't deploy smart-contract with the same `state_init` the only way to provide same initial code and **"same"** inital data is to create separate filed in it ensuring additional uniqueness. Which in case of wallet gives you opportunity to have same key pair to several wallet smart-contracts.
+Since we can't deploy smart-contract with the same `state_init` the only way to provide same initial code and **"same"** initial data is to create separate filed in it ensuring additional uniqueness. Which in case of wallet gives you opportunity to have same key pair to several wallet smart-contracts.
 
 ### One to rule them all
 
-If you already considered that `ID` field is a must-have for any smart-contract, there is another oppurtunity that could change your mind. Let's examine previously developed `CounterInternal` smart-contract init section:
+If you already considered that `ID` field is a must-have for any smart-contract, there is another opportunity that could change your mind. Let's examine previously developed `CounterInternal` smart-contract init section:
 
 ```tact
 init(id: Int, owner: Address) {
