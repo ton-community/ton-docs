@@ -54,6 +54,7 @@ module.exports = [
       'v3/guidelines/quick-start/developing-smart-contracts/program-structure',
       'v3/guidelines/quick-start/developing-smart-contracts/storage-and-get-methods',
       'v3/guidelines/quick-start/developing-smart-contracts/processing-messages',
+      'v3/guidelines/quick-start/developing-smart-contracts/deploying-to-network'
     ],
   },
   {
