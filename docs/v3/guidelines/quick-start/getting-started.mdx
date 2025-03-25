@@ -1,6 +1,6 @@
 import ThemedImage from '@theme/ThemedImage';
 
-# Getting started 
+# Getting started
 
 Welcome to TON quick start guide! This guide will give you a starting point for further research of TON concepts and basic practical experience of developing applications with the TON ecosystem.
 
@@ -43,30 +43,48 @@ Before we step on our way of becoming a TON developer, we should become an advan
 
 ### Step 1: Create a new wallet using an app
 
-The simplest way to create a `wallet` is to visit https://ton.org/wallets and choose one of the wallet apps from the list. This page explains the difference between **custodial** and **non-custodial** wallets. With a **non-custodial** wallet, you own the wallet and hold its **private key** by yourself. With a **custodial** wallet, you trust somebody else to do this for you. They are all pretty similar, let's choose [MyTonWallet](https://mytonwallet.io/). Go ahead, install and run it.
+The simplest way to create a `wallet` is to visit https://ton.org/wallets and choose one of the wallet apps from the list. This page explains the difference between **custodial** and **non-custodial** wallets. With a **non-custodial** wallet, you own the wallet and hold its **private key** by yourself. With a **custodial** wallet, you trust somebody else to do this for you. They are all pretty similar, let's choose [Tonkeeper](https://tonkeeper.com/). Go ahead, install and run it.
 
 ### Step 2: Mainnet and Testnet
-
-At this moment, you should have already created your first wallet and backed up your **24-word phrase** (we will discuss its meaning later). Before we start to use it, we should discuss two variations of TON Blockchain that we can work with: **`Mainnet`** and **`Testnet`**.
 
 In the TON, the `Mainnet` and `Testnet` have distinct roles. The `Mainnet` is the primary network where actual transactions take place, carrying real economic value as they involve real cryptocurrency and staked validators executing our transactions and guarantee a very high level of security. On the other hand, the `Testnet` is a testing version of the TON **blockchain** designed for development and testing purposes. Transactions on the `testnet` do not have real economic value, making it a risk-free zone for developers to test without financial implications. It's mainly used for development, testing `smart contracts`, and trying new features.
 
 Since TON basic transactions are very cheap, about 1 cent per transaction, investing just $5 will be enough for hundreds of them. If you decide to work on `Mainnet`, you will have a significantly smoother experience. You can get TON coins by simply pressing the buy button in the user interface, or ask someone to send them to your `address`, which you can copy from the wallet app somewhere near your balance. Don't worry, sharing your `address` is **totally safe**, unless you don't want it to be associated with you.
 
-If you decide to use the `Testnet` version instead, you can switch to it in most wallets by entering the settings menu and tapping a few times on the wallet icon or name at the bottom. This will open the developer menu where you can switch to the `Testnet` version of the wallet. Here is an example for **MyTonWallet** (version **3.3.4**):
+### Step 3: Creating testnet wallet
 
-<div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap', marginBottom: '30px' }}>
-  <div>
-    <img src="/img/tutorials/quick-start/switch-to-testnet1.jpg" alt="Screenshot of wallet settings menu" height="500" style={{ objectFit: 'contain' }} />
-  </div>
-  <div>
-    <img src="/img/tutorials/quick-start/switch-to-testnet2.jpg" alt="Screenshot of network selection menu" height="500" style={{ objectFit: 'contain' }} />
-  </div>
+If you decide to use the `Testnet` version instead, you can do to it by following guide below.
+
+#### Generating mnemonic
+
+To create your first testnet wallet in Tonkeeper you should obtain mnemonic using the button below. Do not forget to save this phrase!
+
+```js live
+function Mnemonic() {
+  return <MnemonicGenerator />;
+}
+```
+
+#### Creating wallet
+
+To create testnet wallet click *`Wallet`* -> *`Add Wallet`* - *`TestnetAccount`*. Then import seed phrase generated in previous step.
+
+<div style={{display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap', marginBottom: '30px'}}>
+  <br/>
+  <ThemedImage
+    height='600px'
+    alt=""
+    sources={{
+      light: '/img/tutorials/quick-start/tonkeeper-light.jpg?raw=true',
+      dark: '/img/tutorials/quick-start/tonkeeper-dark.jpg?raw=true',
+    }}
+  />
+  <br/>
 </div>
 
 For the `Testnet` version, you can request funds from the [Testgiver Ton Bot](https://t.me/testgiver_ton_bot). After a short wait, you will receive 2 TONs that will appear in your wallet app.
 
-### Step 3: Exploring the blockchain
+### Step 4: Exploring the blockchain
 
 Congratulations! We created our first wallet and received some funds on it. Now let's take a look at how our actions are reflected in the `blockchain`. We can do this by using various [explorers](https://ton.app/explorers). An explorer is a tool that allows you to query data from the chain, investigate TON `smart-contracts`, and transactions.
 
@@ -74,16 +92,16 @@ For our examples, we are going to use [TonViewer](https://tonviewer.com/). Note 
 
 Let's take a look at our newly created wallet using the explorer: copy your wallet address from the app and insert it into the search line of the explorer like this:
 
-<div style={{ marginBottom: '30px' }}>
+<div style={{marginBottom: '30px'}}>
   <img src="/img/tutorials/quick-start/explorer1.png" alt="Screenshot of explorer search interface"/>
 </div>
 
 At this moment, your address should be in the `uninit` or `nonexisting` state depending on whether you have already received funds or not. Like any other `smart-contract`, wallets in TON need to be deployed to the network, and since this process requires some amount of transaction fees - `gas` - most wallet apps don't actually deploy the wallet `smart-contract` until you receive funds on your address and try to make your first transaction.
 
-<div style={{ marginBottom: '10px' }}>
+<div style={{marginBottom: '10px'}}>
   <img src="/img/tutorials/quick-start/nonexist.png" alt="Screenshot of nonexistent wallet state"/>
 </div>
-<div style={{ marginBottom: '30px' }}>
+<div style={{marginBottom: '30px'}}>
   <img src="/img/tutorials/quick-start/uninit.png" alt="Screenshot of uninitialized wallet state"/>
 </div>
 
@@ -91,7 +109,7 @@ As you can see, the `nonexisting` state is the default state for any address tha
 
 Let's send our first transaction to someone special - **ourselves**. And see how it looks on the `blockchain`. Enter the send menu in your wallet app and transfer some funds to your own address that you have copied before. In the explorer, our contract should start looking something like this:
 
-<div style={{ marginBottom: '30px' }}>
+<div style={{marginBottom: '30px'}}>
   <img src="/img/tutorials/quick-start/active.png" alt="Screenshot of active wallet state"/>
 </div>
 
