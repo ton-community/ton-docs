@@ -2,7 +2,7 @@ import ThemedImage from "@theme/ThemedImage";
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Writing to the Network
+# Writing to the network
 
 In the previous section, you learned how to **read data** from the TON Blockchain. Now, let's explore how to **write data** to it. Writing to the TON network involves sending messages. These messages trigger actions in smart contracts, such as transferring TON, Jettons, NFTs, updating contract state, or deploying new contracts.
 
@@ -282,7 +282,7 @@ async def wait_for_transaction(message_hash: bytes, max_retries: int = 12):
         while retries < max_retries:
             print(f"Waiting for transaction, retry {retries}...")
             retries += 1
-            
+
             try:
                 async with session.get(
                     f"https://testnet.tonapi.io/v2/blockchain/transactions/{message_hash}"
@@ -290,7 +290,7 @@ async def wait_for_transaction(message_hash: bytes, max_retries: int = 12):
                     if response.status != 200:
                         await asyncio.sleep(1)
                         continue
-                    
+
                     print("SUCCESS!")
                     return
 
