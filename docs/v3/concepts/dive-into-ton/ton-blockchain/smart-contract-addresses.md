@@ -75,7 +75,7 @@ However, raw addresses have two main issues:
 
 Convert raw, user-friendly addresses using [ton.org/address](https://ton.org/address/).
 
-For more details, refer to the refhandling guide in [Addresses Documentation](/v3/documentation/smart-contracts/a/).
+For more details, refer to the refhandling guide in [Addresses Documentation](/v3/documentation/smart-contracts/addresses/).
 
 ## See also
 
