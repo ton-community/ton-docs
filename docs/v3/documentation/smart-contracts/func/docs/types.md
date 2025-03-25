@@ -2,7 +2,7 @@
 
 :::info
 
-FunC documentation was initially written by [@akifoq](https://github.com/akifoq).
+The initial FunC documentation was written by _[@akifoq](https://github.com/akifoq/)_.
 
 :::
 
