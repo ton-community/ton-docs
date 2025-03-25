@@ -1,4 +1,6 @@
 import ThemedImage from "@theme/ThemedImage";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Writing to the Network
 
@@ -7,6 +9,11 @@ In the previous section, you learned how to **read data** from the TON Blockchai
 ## Setting Up the Project
 
 First, let's initialize the project and install the necessary dependencies.
+
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="TypeScript">
+
+Now, let's initialize the project and install the necessary dependencies.
 
 ```bash
 npm init -y
@@ -19,6 +26,25 @@ To run scripts, use the following command:
 ```bash
 npx ts-node script.ts
 ```
+
+</TabItem>
+<TabItem value="tonutils" label="Python3">
+
+Now, let's initialize the project and install the necessary dependencies.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install tonutils pytoniq
+```
+
+To run scripts, use the following command:
+```bash
+python3 script.py
+```
+
+</TabItem>
+</Tabs>
 
 
 ## Sending TON
@@ -43,6 +69,8 @@ A common transfer would look like this:
 Unlike in the [Reading from the Network](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network/) section, a Toncenter API key is mandatory in the following examples.
 :::
 
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="@ton/ton">
 ```typescript
 import { mnemonicToWalletKey } from "@ton/crypto";
 import { comment, internal, toNano, TonClient, WalletContractV4, WalletContractV5R1 } from "@ton/ton";
@@ -81,9 +109,41 @@ async function main() {
 
 main();
 ```
+</TabItem>
+<TabItem value="tonutils" label="tonutils">
+```python
+from tonutils.client import ToncenterClient
+from tonutils.wallet import (
+    WalletV5R1
+)
+
+IS_TESTNET = True
+
+# Mnemonic phrase for creating the wallet
+MNEMONIC = 'Insert your mnemonic phrase here'
+
+async def main() -> None:
+    client = ToncenterClient(is_testnet=IS_TESTNET)
+
+    wallet, public_key, private_key, _ = WalletV5R1.from_mnemonic(client, MNEMONIC)
+
+    result = await wallet.transfer(destination=wallet.address, amount=0.01, body="Helo from wallet!")
+
+    print(result)
+
+
+if __name__ == "__main__":
+    import asyncio
+
+    asyncio.run(main())
+```
+
+</TabItem>
+</Tabs>
+
 
 :::caution Advanced Level
-In most scenarios, `SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS` will work, but if you want a deeper understanding, continue reading in the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook/).
+In most scenarios, `SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS`(default for `tonuitls`) will work, but if you want a deeper understanding, continue reading in the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook/).
 :::
 
 ## Retrieving message hash
@@ -94,6 +154,8 @@ Be careful with the hash definition. It can be either a transaction hash or a me
 
 Sometimes it will be useful to get the message hash before sending it. By the message hash, the transaction may be found on the blockchain. To do so, instead of calling the `sendTransfer` method on the wallet, we should build the message ourselves.
 
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="@ton/ton">
 ```typescript
 // Building the transfer to the wallet
 const transfer = wallet.createTransfer({
@@ -126,11 +188,63 @@ console.log(`https://testnet.tonviewer.com/transaction/${messageHash.toString('h
 // Sending message to the blockchain
 await tonClient.sendMessage(externalMessage);
 ```
+</TabItem>
+<TabItem value="tonutils" label="tonutils">
+```python
+from tonutils.client import ToncenterClient
+from tonutils.wallet import WalletV5R1
+from tonutils.utils import message_to_boc_hex
+import asyncio
+MNEMONIC = "Insert your mnemonic here"
+
+async def main():
+    # Initialize client and wallet
+    client = ToncenterClient(is_testnet=True)
+
+    # Create wallet from mnemonic
+    wallet, _, _, _ = WalletV5R1.from_mnemonic(client, MNEMONIC)
+
+    # prepare internal message
+    mesage = wallet.create_wallet_internal_message(
+        destination=wallet.address,
+        value=1,
+        body="Hello from wallet!",
+        state_init=None,
+        send_mode=3
+    ),
+
+    # retrieving seqno
+    seqno = await wallet.get_seqno(client, wallet.address)
+
+    # create message body
+    body = wallet.raw_create_transfer_msg(
+        private_key=wallet.private_key,
+        messages=mesage,
+        seqno=seqno
+    )
+
+    # obtaining serialized message and message hash
+    message = wallet.create_external_msg(dest=wallet.address, body=body, state_init=None)
+    message_boc_hex, message_hash = message_to_boc_hex(message)
+
+    # sending message to blockhain
+    await wallet.client.send_message(message_boc_hex)
+
+    print(message_hash)
+    print(f"https://testnet.tonviewer.com/transaction/{message_hash}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+</TabItem>
+</Tabs>
 
 ## Retrieving transaction hash
 
 It may also be useful to wait for the transaction to appear on the blockchain. This can be done by trying to get it by `messageHash` with delays. When the transaction is obtained, the hash of the transaction may be received.
 
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="@ton/ton">
 ```typescript
 async function waitForTransaction(messageHash: Buffer, maxRetries = 12) {
   let retries = 0;
@@ -158,6 +272,36 @@ async function waitForTransaction(messageHash: Buffer, maxRetries = 12) {
 const transaction = await waitForTransaction(messageHash);
 const transactionHash = transaction.hash();
 ```
+</TabItem>
+<TabItem value="tonutils" label="tonutils">
+```python
+async def wait_for_transaction(message_hash: bytes, max_retries: int = 12):
+    retries = 0
+
+    async with aiohttp.ClientSession() as session:
+        while retries < max_retries:
+            print(f"Waiting for transaction, retry {retries}...")
+            retries += 1
+            
+            try:
+                async with session.get(
+                    f"https://testnet.tonapi.io/v2/blockchain/transactions/{message_hash}"
+                ) as response:
+                    if response.status != 200:
+                        await asyncio.sleep(1)
+                        continue
+                    
+                    print("SUCCESS!")
+                    return
+
+            except aiohttp.ClientError:
+                await asyncio.sleep(1)
+                continue
+
+    raise Exception("Retries exceeded, transaction not found")
+```
+</TabItem>
+</Tabs>
 
 ## Failed Transactions
 
@@ -185,6 +329,8 @@ To send them, we should send messages to our Jetton wallet to make a transfer.
 
 To make the example more practical, let's obtain this address programmatically by using the [`JettonMaster` wrapper](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network#using-wrappers-for-simplicity).
 
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="@ton/ton">
 ```typescript
 import { mnemonicToWalletKey } from "@ton/crypto";
 import { Address, beginCell, comment, internal, JettonMaster, toNano, TonClient, WalletContractV5R1 } from "@ton/ton";
@@ -233,6 +379,63 @@ async function main() {
 
 main();
 ```
+</TabItem>
+<TabItem value="tonutils" label="tonutils">
+```python
+from pytoniq_core import begin_cell
+
+from tonutils.client import ToncenterClient
+from tonutils.jetton import JettonMaster, JettonWallet
+from tonutils.wallet import WalletV5R1
+
+# Set to True for the test network, False for the main network
+IS_TESTNET = True
+MNEMONIC = "table dizzy all reopen repeat tag august bid lunch purse able logic shuffle shoe ritual jacket dilemma cage dragon plunge arrange sister catalog impact"
+JETTON_MASTER_ADDRESS = "kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy"
+JETTON_DECIMALS = 6
+JETTON_AMOUNT = 0.01
+COMMENT = "Hello from jetton!"
+
+async def main() -> None:
+    client = ToncenterClient(is_testnet=IS_TESTNET)
+    wallet, _, _, _ = WalletV5R1.from_mnemonic(client, MNEMONIC)
+
+    jetton_wallet_address = await JettonMaster.get_wallet_address(
+        client=client,
+        owner_address=wallet.address.to_str(),
+        jetton_master_address=JETTON_MASTER_ADDRESS,
+    )
+
+    body = JettonWallet.build_transfer_body(
+        recipient_address=wallet.address,
+        response_address=wallet.address,
+        jetton_amount=int(JETTON_AMOUNT * (10 ** JETTON_DECIMALS)),
+        forward_payload=(
+            begin_cell()
+            .store_uint(0, 32)  # Text comment opcode
+            .store_snake_string(COMMENT)
+            .end_cell()
+        ),
+        forward_amount=1,
+    )
+
+    tx_hash = await wallet.transfer(
+        destination=jetton_wallet_address,
+        amount=0.05,
+        body=body,
+    )
+
+    print(f"Successfully transferred {JETTON_AMOUNT} jettons!")
+    print(f"Transaction hash: {tx_hash}")
+
+
+if __name__ == "__main__":
+    import asyncio
+
+    asyncio.run(main())
+```
+</TabItem>
+</Tabs>
 
 ## Sending NFTs
 
@@ -242,6 +445,8 @@ main();
 
 NFTs may be deployed via [TON Tools](https://ton-collection-edit.vercel.app/deploy-collection).
 
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="@ton/ton">
 ```typescript
 import { mnemonicToWalletKey } from "@ton/crypto";
 import { Address, beginCell, comment, internal, toNano, TonClient, WalletContractV5R1 } from "@ton/ton";
@@ -283,6 +488,59 @@ async function main() {
     sendMode: SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS,
   });
 }
-
 main();
 ```
+</TabItem>
+<TabItem value="tonutils" label="tonutils">
+```python
+from pytoniq_core import Address, begin_cell
+
+from tonutils.client import ToncenterClient
+from tonutils.nft import NFTStandard
+from tonutils.wallet import WalletV5R1
+
+# Set to True for test network, False for main network
+IS_TESTNET = True
+
+# Mnemonic phrase used to connect the wallet
+MNEMONIC = "lonely kitchen armed visual midnight anchor pottery include force banana mosquito inflict fabric bike leaf differ text coil volcano seed dash amateur black welcome"
+
+# Address of the NFT to be transferred and the new owner address
+NFT_ADDRESS = "EQDW2lkFHPO_EWAsWI90MdvqU5fr8tiELbbcfaA8FmSkMen2"
+
+# Optional comment to include in the forward payload
+COMMENT = "Hello from NFT!"
+
+
+async def main() -> None:
+    client = ToncenterClient(is_testnet=IS_TESTNET)
+    wallet, _, _, _ = WalletV5R1.from_mnemonic(client, MNEMONIC)
+
+    body = NFTStandard.build_transfer_body(
+        new_owner_address=wallet.address,
+        forward_payload=(
+            begin_cell()
+            .store_uint(0, 32)
+            .store_snake_string(COMMENT)
+            .end_cell()
+        ),
+        forward_amount=1,
+    )
+
+    message_hash = await wallet.transfer(
+        destination=NFT_ADDRESS,
+        amount=0.05,
+        body=body,
+    )
+
+    print(f"Transaction hash: {message_hash}")
+
+
+if __name__ == "__main__":
+    import asyncio
+
+    asyncio.run(main())
+```
+</TabItem>
+</Tabs>
+
