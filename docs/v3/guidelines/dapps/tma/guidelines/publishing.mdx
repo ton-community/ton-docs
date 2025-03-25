@@ -9,7 +9,7 @@ As developers, it's important to understand the ecosystem we operate in. Telegra
 
 **What is tApps Center?** The TON Foundation launched the Telegram Apps Center to serve as a centralized repository for Telegram Bots and Mini Apps (TMAs). This platform enhances the user experience by providing an interface similar to familiar app stores.
 
-**Broad Ecosystem Support**. The Telegram Apps Center is not limited to TON Ecosystem—it welcomes apps from other blockchains as well. Web3 integration is not required to be listed in this catalog. This inclusive approach aims to position Telegram as an "Everything Super App", similar to WeChat, where users can access a variety of services within a single interface.
+**Broad ecosystem support**. The Telegram Apps Center is not limited to TON Ecosystem—it welcomes apps from other blockchains as well. Web3 integration is not required to be listed in this catalog. This inclusive approach aims to position Telegram as an "Everything Super App", similar to WeChat, where users can access a variety of services within a single interface.
 
 
 <Button href="https://www.tapps.center/" colorType={'primary'} sizeType={'sm'}>
@@ -21,9 +21,9 @@ Open tApps Center
 
 ### Why publish on tApps Center?
 
-**Greater Visibility**. The Telegram Apps Center provides developers with a prime opportunity to showcase their projects to a broad audience, making it easier to attract users and investors.
+**Greater visibility**. The Telegram Apps Center provides developers with a prime opportunity to showcase their projects to a broad audience, making it easier to attract users and investors.
 
-**Community Spirit**. The platform fosters a community-driven environment, promoting collaboration and the exchange of resources and knowledge.
+**Community spirit**. The platform fosters a community-driven environment, promoting collaboration and the exchange of resources and knowledge.
 
 
 <Button href="https://blog.ton.org/ton-ecosystem-evolved-introducing-telegram-apps-center-t-apps-center" colorType={'secondary'} sizeType={'sm'}>
@@ -47,11 +47,11 @@ Users can interact with bots using [custom keyboards](https://core.telegram.org/
 
 You can send a **web_app** type [KeyboardButton](https://core.telegram.org/bots/api#keyboardbutton) that opens a Mini App from a specific URL.
 
-To transmit user data back to the bot, the Mini App calls the [Telegram.WebApp.sendData](https://core.telegram.org/bots/webapps#initializing-web-apps) method. he bot receives the data as a string in a service message and can continue interacting with the user.
+To transmit user data back to the bot, the Mini App calls the [Telegram.WebApp.sendData](https://core.telegram.org/bots/webapps#initializing-web-apps) method. The bot receives the data as a string in a service message and can continue interacting with the user.
 
 **Good for:**
 
-- **Custom data input interfaces** (e.g. a personalized calendar, advanced search lists, a randomizer that selects an option, etc.).
+- **Custom data input interfaces** such as a personalized calendar, advanced search lists, a randomizer that selects an option, etc.).
 - **Reusable components** that do not depend on a particular bot.
 
 ### Inline button Mini Apps
@@ -78,7 +78,7 @@ By default, chats with bots always show a convenient **menu button** that provid
 To configure the menu button, specify the text it should show and the Mini App URL. There are two ways to set these parameters:
 
 - To customize the button for **all users**, use [@BotFather](https://t.me/botfather) (the /setmenubutton command or *Bot Settings > Menu Button*).
-- To customize the button for both **all users** and **specific users**, use the [setChatMenuButton](https://core.telegram.org/bots/api#setchatmenubutton) method in the Bot API. For example, change the button text according to the user's language, or show links to different Web Apps based on the user's settings in your bot.
+- To customize the button for both **all users** and **specific users**, use the [setChatMenuButton](https://core.telegram.org/bots/api#setchatmenubutton) method in the Bot API. For example, change the button text according to the user's language, or show links to different web apps based on the user's settings in your bot.
 
 Apart from this, Web Apps opened via the menu button work in the same way as [inline buttons](https://core.telegram.org/bots/webapps#inline-button-web-apps).
 
