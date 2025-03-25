@@ -23,7 +23,7 @@ In blockchain and cryptocurrencies, __vesting__ refers to a process in which tok
 - There are often __cliff__ periods during which no tokens are released for an initial duration, followed by subsequent releases.
 
 :::info Technical details and parameters
-For all technical details about the contract, see [vesting contract](v3/documentation/smart-contracts/contracts-specs/vesting-contract)
+For all technical details about the contract, see [vesting contract](/v3/documentation/smart-contracts/contracts-specs/vesting-contract)
 :::
 
 ## Step-by-step instructions
