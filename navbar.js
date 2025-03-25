@@ -39,6 +39,10 @@ module.exports = {
       position: 'left',
       items: [
         {
+          to: '/v3/guidelines/quick-start/getting-started',
+          label: 'Quick Start',
+        },
+        {
           to: '/v3/guidelines/smart-contracts/guidelines',
           label: 'Smart Contracts',
         },

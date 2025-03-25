@@ -42,6 +42,7 @@
     "react-dom": "^18.3.1",
     "react-player": "^2.16.0",
     "sass": "^1.79.4",
+    "tonweb-mnemonic": "^1.0.1",
     "url": "^0.11.4"
   },
   "devDependencies": {
