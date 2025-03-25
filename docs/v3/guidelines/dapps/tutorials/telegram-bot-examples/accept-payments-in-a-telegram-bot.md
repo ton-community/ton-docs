@@ -11,7 +11,7 @@ In this article, we'll guide you through the process of accepting payments in a 
 In this article, you'll learn how to:
 
 - Create a Telegram bot using Python + Aiogram,
-- Work with the public TON API (TON Center),
+- Work with the public TON Center API,
 - Work with an SQlite database,
 - How to accept payments in a Telegram bot by applying the knowledge from previous steps.
 
@@ -158,9 +158,9 @@ This code will create the tables if they are not already created.
 ### Work with database
 
 Let's analyze the process:
-A user makes a transaction. How do we verify it? How do we ensure that the same transaction isn'tt confirmed twice?
+A user makes a transaction. How do we verify it? How do we ensure that the same transaction isn't confirmed twice?
 
-Each transaction includes a body_hash, which allows us to easily check whether the transaction is already in the database.
+Each transaction includes a `body_hash`, which allows us to easily check whether the transaction is already in the database.
 
 We only add transactions that have been verified. The `check_transaction` function determines whether a given transaction is already in the database.
 
@@ -269,7 +269,8 @@ This allows us to retrieve the next 30 transactions, and so on.
 
 For example, consider the wallet in the test network `EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5`.
 
-Using a [query](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5&limit=2&to_lt=0&archival=true) returns a response containing two transactions (some detals have been ommited for clarity).
+Using a [query](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5&limit=2&to_lt=0&archival=true) returns a response containing two transactions.
+Note that some details have been omitted for clarity.
 
 ```json
 {
@@ -462,8 +463,7 @@ This function returns the last 30 transactions for our `WALLET`.
 
 The `archival=true` parameter ensures that transactions are retrieved from a node with a complete blockchain history.
 
-At the output, we get a list of transactions—[{0},{1},...,{29}] ( a list of dictionaries).
-
+At the output, we get a list of transactions, such as `[{0},{1},...,{29}]` which are represented as a list of dictionaries.
 And finally the last function:
 
 ```python
@@ -495,7 +495,7 @@ def find_transaction(user_wallet, value, comment):
     return False
 ```
 
-At the input, we get the “correct” wallet address, amount and comment. If the expected incoming transaction is found, the output is True; otherwise, it is False.
+At the input, we get the correct wallet address, amount and comment. If the expected incoming transaction is found, the output is True; otherwise, it is False.
 
 ## Telegram bot
 
@@ -648,7 +648,7 @@ async def cmd_start(message: types.Message):
     await DataInput.firstState.set()
 ```
 
-In the decorator of a handler, you may see state='*', meaning the handler will be triggered regardless of the bot's state. If we want the handler to activate only in a specific state, we specify it, such as state=DataInput.firstState, ensuring the handler runs only when the bot is in firstState.
+In the decorator of a handler, you may see `state='*'`, meaning the handler will be triggered regardless of the bot's state. If we want the handler to activate only in a specific state, we specify it, such as `state=DataInput.firstState`, ensuring the handler runs only when the bot is in `firstState`.
 
 After the user sends `/start` command, the bot will check if the user is in database using `db.check_user` function. If not, it will add him. This function will also return the bool value and we can use it to address the user differently. After that, the bot will set the state to `firstState`.
 
@@ -719,7 +719,9 @@ await state.update_data(air_type="Just pure 🌫")
 
 This handler activates only in WalletState, expecting a valid wallet address.
 
-The next handler seems to be very complicated but it's not. First, we check if the message contains a valid wallet address using `len(message.text) == 48` (wallet addresses are 48 characters long). After that, we use `api.detect_address` function to check if the address is valid. This function also returns "Correct" address, which is stored in the database.
+Consider the next handler. First, we check if the message contains a wallet address with a valid length using `len(message.text) == 48`. After that, we use `api.detect_address` function to check if the address is valid. This function also returns "Correct" address, which is stored in the database.
+
+
 
 After that, we get the air type from FSMContext using `await state.get_data()` and store it in  `user_data` variable.
 
