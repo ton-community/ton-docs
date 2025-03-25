@@ -1,4 +1,4 @@
-# API Types
+# API types
 
 **High availability blockchain APIs are essential for developing secure, efficient, and scalable applications on TON.**
 
@@ -15,11 +15,11 @@
 - [toncenter/v2](https://toncenter.com/) - Enables HTTP access to TON Blockchain, allowing developers to retrieve account and wallet information, look up blocks and transactions, send messages to the blockchain, call smart contract methods, and more.
 
 ## Third-party APIs
-- [tonapi.io](https://docs.tonconsole.com/tonapi) - A fast indexed API that provides basic data about accounts, transactions, blocks, application-specific data about NFT, auctions, jettons, TON DNS, and Subscriptions. It also offers annotated transaction chain data.
+- [tonapi.io](https://docs.tonconsole.com/tonapi) - A fast indexed API that provides basic data about accounts, transactions, blocks, application-specific data about NFT, auctions, jettons, TON DNS, and subscriptions. It also offers annotated transaction chain data.
 - [TONX API](https://docs.tonxapi.com/) - Designed for seamless dApp development, this API provides easy access to various tools and data.
-- [dton.io](https://dton.io/graphql/) - A GraphQL API that delivers data on accounts, transactions, and blocks, as well as application-specific data about NFT, Auctions, Jettons, and TON DNS.
+- [dton.io](https://dton.io/graphql/) - A GraphQL API that delivers data on accounts, transactions, and blocks, as well as application-specific data about NFT, auctions, jettons, and TON DNS.
 - [ton-api-v4](https://mainnet-v4.tonhubapi.com) - A lightweight API optimized for speed through aggressive CDN caching
-- [docs.nftscan.com](https://docs.nftscan.com/reference/ton/model/asset-model) - NFT APIs for the TON Blockchain.
+- [docs.nftscan.com](https://docs.nftscan.com/reference/ton/model/asset-model) - NFT APIs for TON Blockchain.
 - [everspace.center](https://everspace.center/toncoin) - A simple RPC API for accessing TON Blockchain.
 
 
@@ -32,7 +32,7 @@
 * https://apiguide.coingecko.com/getting-started
 
 
-### Address Convert APIs
+### Address convert APIs
 
 
 :::info
@@ -40,7 +40,7 @@ It is preferable to convert addresses using a local algorithm. See [Addresses](/
 :::
 
 
-#### From Friendly to Raw form
+#### From friendly to raw form
 
 /api/v2/unpackAddress
 
@@ -59,7 +59,7 @@ Response body
 }
 ```
 
-#### From Friendly to Raw form
+#### From friendly to raw form
 
 /api/v2/packAddress
 
@@ -80,7 +80,7 @@ Response body
 
 
 
-## See Also
+## See also
 * [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis)
 * [List of SDKs](/v3/guidelines/dapps/apis-sdks/sdk)
-* [TON Cookbook](/v3/guidelines/dapps/cookbook)
+* [TON cookbook](/v3/guidelines/dapps/cookbook)
