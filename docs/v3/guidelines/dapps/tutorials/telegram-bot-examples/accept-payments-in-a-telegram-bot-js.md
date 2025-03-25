@@ -2,7 +2,7 @@
 description: At the end of the tutorial, you will write a beautiful bot that will be able to accept payments for your product directly in TON.
 ---
 
-# Bot for salling dumplings
+# Bot for selling dumplings
 
 In this article, we'll create a simple Telegram bot for accepting payments in TON.
 
