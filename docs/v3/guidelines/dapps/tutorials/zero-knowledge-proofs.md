@@ -21,7 +21,7 @@ Before June 2023, verifying cryptographic proofs on TON was not possible. Due to
 
 Before diving into the technical details, let's start with a simple analogy. Imagine you want to prove to a color-blind person that two colors are different. We’ll use an interactive method to demonstrate this. Assume the color-blind person (the verifier) has two identical pieces of paper, one red 🟥 and one blue 🟦.
 
-The verifier shows you (the prover) one of the pieces of paper and asks you to remember the color. hey then hide the paper behind their back, either keeping it the same or swapping it for the other color. Then they ask you whether the color has changed. If you can correctly identify whether the color has changed, it suggests you can distinguish colors (or you were just lucky, as you had a 50% chance of guessing correctly).
+The verifier shows the prover one of two colored pieces of paper and asks them to remember the color. Then, the verifier hides the paper behind their back, either keeping the same color or swapping it for the other color. Afterward, they ask the prover whether the color has changed. If the prover correctly identifies whether the color has changed, it suggests that the prover can distinguish between the colors—or they were simply lucky, since there’s a 50% chance of guessing correctly.
 
 If this process is repeated 10 times, and you answer correctly each time, the verifier can be ~99.90% confident that you truly see the colors. After 30 repetitions, their confidence level rises to 99.9999999%.
 
