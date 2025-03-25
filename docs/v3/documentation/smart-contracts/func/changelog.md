@@ -1,10 +1,11 @@
 # History of FunC 
 
-# Initial version
-Initial version was done by Telegram and active development was ceased after May 2020. We refer to version of May 2020 as "initial".
+## Initial version
+The initial version of FunC was developed by Telegram, but active development stopped after May 2020.
+We refer to the May 2020 release as the "initial" version.
 
-# Version 0.1.0
-Released in [05.2022 update](https://github.com/ton-blockchain/ton/releases/tag/v2022.05).
+## Version 0.1.0
+Released in [May 2022 update](https://github.com/ton-blockchain/ton/releases/tag/v2022.05).
 
 In this version were added:
 - [Constants](/v3/documentation/smart-contracts/func/docs/literals_identifiers#constants)
@@ -16,7 +17,7 @@ Fixed:
 - Fixed rarely manifested bugs in Asm.fif.
 
 
-# Version 0.2.0
+## Version 0.2.0
 Released in [08.2022 update](https://github.com/ton-blockchain/ton/releases/tag/v2022.08).
 
 In this version were added:
@@ -28,7 +29,7 @@ Fixed:
 - [FunC incorrectly return from condition in inline functions #370](https://github.com/ton-blockchain/ton/issues/370)
 - [Asm.fif: splitting of large function bodies incorrectly interfere with inlines #375](https://github.com/ton-blockchain/ton/issues/375)
 
-# Version 0.3.0
+## Version 0.3.0
 Released in [10.2022 update](https://github.com/ton-blockchain/ton/releases/tag/v2022.10).
 
 In this version were added:
@@ -36,7 +37,7 @@ In this version were added:
 - Duplication of identical definition for constants and asms became allowed
 - Bitwise operations for constants for constants became allowed
 
-# Version 0.4.0
+## Version 0.4.0
 Released in [01.2023 update](https://github.com/ton-blockchain/ton/releases/tag/v2023.01).
 
 In this version were added:
