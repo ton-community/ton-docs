@@ -2,11 +2,11 @@
 
 ## 👋 Introduction
 
-**Zero-knowledge** (ZK) proofs are a fundamental cryptographic concept that allows one party (the prover) to prove to another party (the verifier) that a statement is true without revealing any additional information. ZK proofs are a powerful tool for building privacy-preserving systems and are widely used in applications such as anonymous payments, private messaging, and trustless bridges.
+**Zero-knowledge (ZK)** proofs are a fundamental cryptographic concept that allows **the prover** to prove to **the verifier)** that a statement is true without revealing any additional information. ZK proofs are a powerful tool for building privacy-preserving systems and are widely used in applications such as anonymous payments, private messaging, and trustless bridges.
 
 
 
-:::tip TVM Upgrade 2023.07
+:::tip TVM upgrade 2023.07
 Before June 2023, verifying cryptographic proofs on TON was not possible. Due to the complex computations required for the pairing algorithm, the TON Virtual Machine (TVM) needed to be upgraded with new opcodes to support proof verification. This functionality was added in the [June 2023 update](https://docs.ton.org/learn/tvm-instructions/tvm-upgrade#bls12-381) and, at the time of writing, is only available on testnet.
 :::
 
@@ -562,7 +562,7 @@ In order to check the repo that contains the code from this tutorial, visit [her
 In this tutorial, you have learned:
 
 * The fundamentals of zero-knowledge proofs, specifically ZK-SNARKs.
-* How to write and compile Circom circuits.
+* How to write and compile circom circuits.
 * How to use MPC and the Powers of TAU to generate verification keys.
 * How to work with Snarkjs to export a FunC verifier.
 * How to use Blueprint for deploying a verifier and writing tests.
@@ -589,7 +589,7 @@ If you have any questions or run into any errors, feel free to reach out to the 
 ## 📖 See Also
 
 - [TON trustless bridge EVM contracts](https://github.com/ton-blockchain/ton-trustless-bridge-evm-contracts)
-- [Tonnel Network: privacy protocol on TON](http://github.com/saberdotcoder/tonnel-network)
+- [Tonnel network: privacy protocol on TON](http://github.com/saberdotcoder/tonnel-network)
 - [TVM challenge](https://blog.ton.org/tvm-challenge-is-here-with-over-54-000-in-rewards)
 
 
