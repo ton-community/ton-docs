@@ -70,7 +70,7 @@ Here you need to fill in the values in the first four lines:
  - `BOT_TOKEN` - Your Telegram bot token, obtained after [creating a bot](https://t.me/BotFather).
  - `OWNER_WALLET` - Your project's wallet address for receiving payments. You can create a new TON wallet and copy its address.
  - `API_KEY` - Your API key from TON Center, available via [@tonapibot](https://t.me/tonapibot)/[@tontestnetapibot](https://t.me/tontestnetapibot) for the mainnet and testnet, respectively.
- - `NETWORK` - The network in which your bot will run (testnet or mainnet).
+ - `NETWORK` - The network on which your bot will operate: Testnet or Mainnet.
 
 With the config file set up, we can move forward!
 
@@ -97,7 +97,7 @@ curl -X 'GET' \
   'https://toncenter.com/api/v2/getTransactions?address=EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N&limit=100' \
   -H 'accept: application/json'
 ```
-Great, now we have a list of transactions on hand in ["result"], now let's take a closer look at 1 transaction.
+Great, now we have a list of transactions on hand in `["result"]`, now let's take a closer look at 1 transaction.
 
 
 ```json
@@ -134,7 +134,7 @@ Great, now we have a list of transactions on hand in ["result"], now let's take 
 
 From this JSON file, we can extract some insights:
 
-- The transaction is incoming (indicated by an empty "out_msgs" field).
+- The transaction is incoming, which is indicated by an empty `out_msgs` field.
 - We can extract the transaction comment, sender, and amount.
 
 Now, we're ready to create a transaction checker.
@@ -217,7 +217,7 @@ export function generatePaymentLink(toWallet, amount, comment, app) {
   )}&text=${comment}`;
 }
 ```
-All we need is just to substitute the transaction parameters in the URL. Don't forget to transfer the transaction value to nano.
+All we need is just to substitute the transaction parameters in the URL. Make sure to convert the transaction value to nano.
 
 
 ## Telegram bot
@@ -346,7 +346,7 @@ Next, we need to send the user a picture of dumplings, ask them to send the numb
   // Wait until the user enters the number
   const count = await conversation.form.number();
 ```
-Next, we calculate the total amount of the order and generate a random string that we will use for the transaction comment and add the postfix 'dumplings'.
+Next, we calculate the total amount of the order and generate a random string that we will use for the transaction comment and add the postfix '"dumplings"'.
 ```js
   // Get the total cost: multiply the number of portions by the price of the 1 portion
   const amount = count * 3;
