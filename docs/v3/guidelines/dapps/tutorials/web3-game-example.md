@@ -1,7 +1,7 @@
-# TON blockchain for games
+# TON Blockchain for games
 
 ## What’s in the tutorial
-In this tutorial, we will explore how to integrate the TON blockchain into a game. As an example, we will use a Flappy Bird clone built with Phaser and gradually add GameFi features. To improve readability, we will use short code snippets and pseudocode. Additionally, we will provide links to real code blocks for better understanding. The complete implementation can be found in the [demo repo](https://github.com/ton-community/flappy-bird).
+In this tutorial, we will explore how to integrate TON Blockchain into a game. As an example, we will use a Flappy Bird clone built with Phaser and gradually add GameFi features. To improve readability, we will use short code snippets and pseudocode. Additionally, we will provide links to real code blocks for better understanding. The complete implementation can be found in the [demo repo](https://github.com/ton-community/flappy-bird).
 
 ![Flappy Bird game without GameFi features](/img/tutorials/gamefi-flappy/no-gamefi-yet.png)
 
@@ -13,7 +13,7 @@ We will implement the following:
 ## Preparations
 
 ### Install GameFi SDK
-First, we need to set up the game environment by installing `assets-sdk`. This package is designed to provide developers with everything required to integrate the blockchain into games. The library can be used either from the CLI or within Node.js scripts. In this tutorial, we will use the CLI approach.
+First, we need to set up the game environment by installing `assets-sdk`. This package is designed to provide developers with everything required to integrate blockchain into games. The library can be used either from the CLI or within Node.js scripts. In this tutorial, we will use the CLI approach.
 ```sh
 npm install -g @ton-community/assets-sdk@beta
 ```
