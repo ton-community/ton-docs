@@ -10,7 +10,7 @@ On TON, entities can have three types of metadata: on-chain, semi-chain, and off
 ## Snake data encoding
 The Snake encoding format allows part of the data to be stored in a standardized cell, while the remaining portion is stored in a child cell recursively. The Snake encoding format must be prefixed using the 0x00 byte. The TL-B scheme:
 
-```
+
 ```tlb
 tail#_ {bn:#} b:(bits bn) = SnakeData ~0;
 cons#_ {bn:#} {n:#} b:(bits bn) next:^(SnakeData ~n) = SnakeData ~(n + 1);
@@ -76,7 +76,7 @@ The 0x00 byte prefix is not always required in the root cell when using the Snak
 
 The chunked encoding format stores data using a dictionary structure, mapping a chunk_index to a chunk. Chunked encoding must be prefixed with the 0x01 byte. The TL-B scheme:
 
-```
+```tlb
 chunked_data#_ data:(HashMapE 32 ^(SnakeData ~0)) = ChunkedData;
 ```
 
