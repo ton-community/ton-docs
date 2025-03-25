@@ -94,7 +94,7 @@ con = sqlite3.connect('db.sqlite')
 cur = con.cursor()
 ```
 
-To store information about users (their balances). Create a table called **Users** with User id and balance columns.
+Create a table called **Users** with `uid` and `balance` columns to store information about users and their balances.
 ```python
 cur.execute('''CREATE TABLE IF NOT EXISTS Users (
                 uid INTEGER,
@@ -296,7 +296,7 @@ while True:
 ```
 
 How to process a new transaction? We need to:
- - Dientify which user sent the transaction,
+ - Identify which user sent the transaction,
  - Update that user's balance,
  - Notify the user about their deposit.
 
@@ -331,7 +331,7 @@ while True:
 
 Let's analyze what it does:
 
-All the information about the coin transfer is in `tx['in_msg']`. We just need the 'value' and 'message' fields.
+All the information about the coin transfer is in `tx['in_msg']`. We just need the `value` and `message` fields.
 
 First, we check if value is greater than zero—if not, we ignore the transaction.
 
@@ -455,7 +455,7 @@ The implementation is simple: we retrieve the balance from the database and send
 
 #### Deposit button
 
-Let's implement the `Deposit` button. Here’s how it works:
+Let's implement the **Deposit** button. Here’s how it works:
 
 ```python
 @dp.message_handler(commands='deposit')
