@@ -69,7 +69,7 @@ OWNER_WALLET=
 Here you need to fill in the values in the first four lines:
  - `BOT_TOKEN` - Your Telegram bot token, obtained after [creating a bot](https://t.me/BotFather).
  - `OWNER_WALLET` - Your project's wallet address for receiving payments. You can create a new TON wallet and copy its address.
- - `API_KEY` - Your API key from TON Center, available via [@tonapibot](https://t.me/tonapibot)/[@tontestnetapibot](https://t.me/tontestnetapibot) for the mainnet and testnet, respectively.
+ - `API_KEY` - Your API key from TON Center, available via [@tonapibot](https://t.me/tonapibot)/[@tontestnetapibot](https://t.me/tontestnetapibot) for the Mainnet and Testnet, respectively.
  - `NETWORK` - The network on which your bot will operate: Testnet or Mainnet.
 
 With the config file set up, we can move forward!
