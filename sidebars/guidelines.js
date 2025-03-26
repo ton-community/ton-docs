@@ -117,6 +117,11 @@ module.exports = [
     type: 'category',
     label: 'Tutorials & examples',
     items: [
+      {
+        type: 'doc',
+        id: 'v3/guidelines/dapps/tutorials/jetton-airdrop',
+        label: 'How to launch a Jetton Airdrop',
+      },
       'v3/guidelines/dapps/apis-sdks/api-keys',
       'v3/guidelines/dapps/apis-sdks/getblock-ton-api',
       {
