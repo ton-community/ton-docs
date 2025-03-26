@@ -346,7 +346,7 @@ Next, we need to send the user a picture of dumplings, ask them to send the numb
   // Wait until the user enters the number
   const count = await conversation.form.number();
 ```
-Next, we calculate the total amount of the order and generate a random string that we will use for the transaction comment and add the postfix '"dumplings"'.
+Next, we calculate the total amount of the order and generate a random string that we will use for the transaction comment and add the postfix `"dumplings"`.
 ```js
   // Get the total cost: multiply the number of portions by the price of the 1 portion
   const amount = count * 3;
