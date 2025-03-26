@@ -29,7 +29,7 @@ We'll follow this order:
 
 1. Work with an SQlite database.
 2. Work with the public TON API (TON Center).
-3. Create a Telegram bot using Python + Aiogram.
+3. Create a Telegram bot using Python and Aiogram.
 4. Profit!
 
 Let's create the following four files in our project directory:
