@@ -719,9 +719,7 @@ await state.update_data(air_type="Just pure 🌫")
 
 This handler activates only in WalletState, expecting a valid wallet address.
 
-Consider the next handler. First, we check if the message contains a wallet address with a valid length using `len(message.text) == 48`. After that, we use `api.detect_address` function to check if the address is valid. This function also returns "Correct" address, which is stored in the database.
-
-
+Consider the next handler. It may seem complex, but it isn’t. First, we verify whether the message contains a wallet address of the correct length using `len(message.text) == 48`. Then, we call the `api.detect_address` function to validate the address. This function also returns the standardized *correct* address, which is stored in the database.
 
 After that, we get the air type from FSMContext using `await state.get_data()` and store it in  `user_data` variable.
 
