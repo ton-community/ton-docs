@@ -10,7 +10,7 @@ In this article, we'll guide you through the process of accepting payments in a 
 
 In this article, you'll learn how to:
 
-- Create a Telegram bot using Python + Aiogram,
+- Create a Telegram bot using Python and Aiogram,
 - Work with the public TON Center API,
 - Work with an SQlite database,
 - How to accept payments in a Telegram bot by applying the knowledge from previous steps.
@@ -354,7 +354,7 @@ The request will look like as follows [this.](https://testnet.toncenter.com/api/
 
 We will also need a method `detectAddress`.
 
-Here is an example of a Tonkeeper wallet address on testnet: `kQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aCTb`. If we look for the transaction in the explorer, the address appears as: `EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R`.
+Here is an example of a Tonkeeper wallet address on Testnet: `kQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aCTb`. If we look for the transaction in the explorer, the address appears as: `EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R`.
 
 This method provides us with the correctly formatted address.
 
