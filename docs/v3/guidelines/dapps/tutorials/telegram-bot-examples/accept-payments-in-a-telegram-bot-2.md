@@ -75,7 +75,7 @@ Here you need to fill in the values in the first three lines:
  - `DEPOSIT_ADDRESS` - Your project's wallet address for receiving payments. You can create a new TON Wallet and copy its address. 
  - `API_KEY` - Your API key from TON Center which you can get in [this bot](https://t.me/tonapibot).
 
-You can also choose whether your bot will run on the testnet or the mainnet (4th line).
+You can also choose whether your bot will run on the Testnet or the Mainnet (4th line).
 
 Once these values are set, we can move forward!
 
