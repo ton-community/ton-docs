@@ -1,6 +1,6 @@
 import Player from '@site/src/components/player'
 
-# How to launch a Jetton Airdrop
+# How to launch a jetton airdrop
 
 ## Overview
 
@@ -13,11 +13,7 @@ This article describes ready-to-use methods for mass token distribution on the T
 Tool – [link](https://tonapi.io/airdrop?utm_source=web&utm_medium=tondocs&utm_campaign=tondocs_1).
 Documentation – [link](https://docs.tonconsole.com/tonconsole/jettons/airdrop).
 
-:::tip Important! 
-The smart contract has been audited by the TON Core team.
-:::
-
-### About the Instrument
+### About the instrument
 
 - Throughput: up to 10 million claims.
 - Optimized for the TON blockchain.
@@ -28,7 +24,7 @@ The smart contract has been audited by the TON Core team.
     - [Tonviewer](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton#tonviewer);
     - [TON API](https://tonapi.io/).
 
-### Example of Organizing an Airdrop
+### Example of organizing an airdrop
 
 1. Collect a list of eligible user wallet addresses within your DApp;
 2. Enter the airdrop details in TONAPI Airdrop: token address, claim fee;
