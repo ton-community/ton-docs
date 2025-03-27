@@ -1,4 +1,4 @@
-# TON API by GetBlock
+# HTTP API by GetBlock
 
 :::tip TON infrastructure status
 * [status.toncenter](https://status.toncenter.com/) - Provides various statistics of node activity in the last hour.
