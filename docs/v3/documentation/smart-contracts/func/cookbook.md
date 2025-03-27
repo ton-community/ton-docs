@@ -50,6 +50,8 @@ repeat(degree - 1) {
 
 ### How to write a while loop
 
+посмотреть разметку 
+
 While is useful when we do not know how often to perform a particular action. For example, take a `cell`, which is known to store up to four references to other cells. 
 
 ```func

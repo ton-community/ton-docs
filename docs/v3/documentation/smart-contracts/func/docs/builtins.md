@@ -38,6 +38,6 @@ It uses a 513-bit intermediate result to prevent overflow if the final result fi
 
 
 ## Other primitives
-- `null?` checks if the given argument is `null`. In FunC, `null` represents the absence of a value for certain atomic types in TVM; see [null values](/v3/documentation/smart-contracts/func/docs/types#null-values) for details.
+- `null?` checks if the given argument is `null`. In FunC, the value `null` belongs to the TVM type `Null`, which represents the absence of a value for certain atomic types. See [null values](/v3/documentation/smart-contracts/func/docs/types#null-values) for details.
 - `touch` and `~touch` push a variable to the top of the stack.
 - `at` returns the value of a tuple element at the specified position.
