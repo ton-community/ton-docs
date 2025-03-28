@@ -19,9 +19,9 @@ In the first subsection, we compared Ethereum and TON, highlighting their key ar
 
 #### Ethereum
 
-Ethereum uses an account-based model model to track balances. An account stores information about different coin balances, like a regular bank account. There are two types of accounts:
+Ethereum uses an account-based model to track balances. An account stores information about different coin balances, like a regular bank account. There are two types of accounts:
 - **Externally-owned accounts (EOAs)** - externally managed accounts are controlled by the user using public and private key pairs. The public key allows others to send payments to the account.
-- Contract accounts - are controlled by smart contract code rather than private keys. Contract accounts cannot initiate transactions independently because they do not have a private key.
+- Contract accounts are controlled by smart contract code rather than private keys. Contract accounts cannot initiate transactions independently because they do not have a private key.
 
 When an Ethereum user creates a wallet, an EOA is added to the global state on all nodes in the decentralized network. Deploying a smart contract creates a contract account capable of storing and distributing funds programmatically based on certain conditions. All account types have balances and storage and can trigger transactions by calling functions in other accounts. This structure provides Ethereum's ability to serve as programmable money.
 
@@ -30,12 +30,12 @@ Ethereum has synchronous transaction processing, where each transaction is proce
 #### TON
 The actor model is an approach to parallel and distributed computing where the main element is an actor - an independent executable block of code. Initially developed for cluster computing, this model is widely used in micro-server architectures to meet the needs of modern distributed systems due to its ability to scale, parallelism, and fault tolerance. Actors receive and process messages, depending on the logic of the message, respond by accepting local changes or performing actions in response, and can create other actors or send messages onward. They are thread-safe and reentrant, eliminating the need for locks and simplifying parallel processing of tasks. This model is ideal for building scalable and reliable server solutions, providing efficient concurrent access control and support for synchronous and asynchronous messaging.
 
-In TON, smart contracts represent everything and are called actors within the actor model context. A smart contract is an object with address, code, data, and balance properties. It has the ability to store data and behaves according to instructions received from other smart contracts. After a contract receives a message and processes it by executing its code in the TVM, various scenarios can occur:
-- The contract changes its properties `code, data, balance`
+In TON, smart contracts represent everything and are called actors within the actor model context. A smart contract is an object with address, code, data, and balance properties. It can store data and behaves according to instructions received from other smart contracts. After a contract receives a message and processes it by executing its code in the TVM, various scenarios can occur:
+- The contract changes its properties `code, data, and balance`.
 - The contract optionally generates an outgoing message
 - The contract goes into standby mode until the following event occurs
 
-The result of scripts is always the creation of a transaction.  The transactions themselves are asynchronous, meaning that the system can continue processing other transactions while waiting for past transactions to complete. This approach provides more flexibility when processing complex transactions. Sometimes a single transaction may require multiple smart contract calls to be executed in a specific sequence. Because these calls are asynchronous, developers can more easily design and implement complex transaction flows that may involve multiple concurrent operations.
+The result of the scripts is always the creation of a transaction.  The transactions themselves are asynchronous, meaning that the system can continue processing other transactions while waiting for past transactions to complete. This approach provides more flexibility when processing complex transactions. Sometimes a single transaction may require multiple smart contract calls to be executed in a specific sequence. Because these calls are asynchronous, developers can more easily design and implement complex transaction flows that may involve multiple concurrent operations.
 
 A developer coming from Ethereum needs to realize that smart contracts in the TON blockchain can only communicate with each other by sending asynchronous messages, which means that if there is a need to request data from another contract and an immediate response is required, this will not be possible. Instead, clients outside the network must call `get methods`, much like a wallet in Ethereum that uses RPC nodes such as Infura to request smart contract states. This is an important limitation for several reasons. For example, flash loans are transactions executed within a single block, relying on the ability to borrow and repay in the same transaction.
 
@@ -54,9 +54,9 @@ Still, it's worth noting that wallet accounts are much more expensive to use in 
 
 #### TON
 
-In TON, all wallets are smart contracts the user must deploy. Since developers can configure smart contracts in different ways and have other features, there are several versions of wallets, which you can read about [here](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts/).
+In TON, all wallets are smart contracts that the user must deploy. Since developers can configure smart contracts in different ways and have other features, there are several versions of wallets, which you can read about [here](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts/).
 
-Because wallets are smart contracts, users can have multiple wallets with different addresses and initial parameters. To send a transaction, the user must sign the message with his private key and send it to his wallet contract, which forwards it to the smart contract of a particular DApp application. This approach dramatically increases flexibility in wallet design, and developers can add new versions of the wallet in the future.
+Because wallets are smart contracts, users can have multiple wallets with different addresses and initial parameters. To send a transaction, the user must sign the message with their private key and send it to their wallet contract, which forwards it to the smart contract of a particular DApp application. This approach dramatically increases flexibility in wallet design, and developers can add new versions of the wallet in the future.
 
 
 ### Transaction
@@ -74,7 +74,7 @@ Transaction flow
 
 #### TON
 
-In TON, The entity that transfers data between two contracts is called a message. For example, a message contains arbitrary data about token transfer sent to a specified address. When the message arrives at the contract, the contract processes this according to the code. The contract updates its state and optionally sends a new message. [Transaction](/v3/documentation/smart-contracts/message-management/messages-and-transactions/) is an entire flow from receiving messages to executing actions on the account.
+In TON, the entity that transfers data between two contracts is called a message. For example, a message contains arbitrary data about a token transfer sent to a specified address. When the message arrives at the contract, the contract processes this according to the code. The contract updates its state and optionally sends a new message. [Transaction](/v3/documentation/smart-contracts/message-management/messages-and-transactions/) is an entire flow from receiving messages to executing actions on the account.
 
 For example, consider the interaction of accounts where we have messages from contract **A** to contract **B**. In this case, we have one message and two transactions.
 
@@ -84,7 +84,7 @@ As we already discussed, a wallet is a smart contract, so this external message 
 
 When the wallet smart contract receives the message, it processes it and delivers it to the destination contract. In our example, contract **A** could be a wallet; when it receives the external message, it will have the first transaction.
 
-We can represent the sequence of transactions as a chain. In this representation, each smart contract has its own transactions, which means that each contract has its own blockchain, so the network can process the transactions independently.
+We can represent the sequence of transactions as a chain. In this representation, each smart contract has its transactions, which means that each contract has its blockchain, so the network can process the transactions independently.
 
 :::info
 Read more in [Blockchain of blockchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)
@@ -112,7 +112,7 @@ Additionally, storage in Ethereum is essentially free, meaning that once data is
 
 The contract nominates all computation costs in gas units and fixes them in a specific gas amount. The blockchain config defines the gas, and one pays for it in Toncoins.
 
-The chain configuration determines the price of gas units and may be changed only by consensus of validators. Note that unlike in other systems, the user cannot set his gas price, and there is no fee market.
+The chain configuration determines the price of gas units and may be changed only by consensus of validators. Note that, unlike in other systems, the user cannot set their gas price, and there is no fee market.
 In TON, the calculation of transaction fees is complex. It includes several types of fees:
 - fees for storing smart contracts in the blockchain
 - fees for importing messages into the blockchain
@@ -129,7 +129,7 @@ Read more about [gas](/v3/documentation/smart-contracts/transaction-fees/fees/)
 ### Architecture
 
 #### Ethereum
-Ethereum inherits and extends the foundational principles of Bitcoin. This approach gives developers the flexibility to create complex DApps. A unique feature of Ethereum is its ability to provide each account with an individualized data store, allowing transactions to perform token transfers and change the state of the blockchain by interacting with smart contracts. As we know, this ability to synchronously interact between accounts offers great promise for application development but also raises the issue of scalability. Each transaction on the Ethereum network requires nodes to update and maintain the entire state of the blockchain, which leads to significant latency and increases the cost of gas as network utilization increases.
+Ethereum inherits and extends the foundational principles of Bitcoin. This approach gives developers the flexibility to create complex DApps. A unique feature of Ethereum is its ability to provide each account with an individualized data store, allowing transactions to perform token transfers and change the state of the blockchain by interacting with smart contracts. As we know, this ability to synchronously interact between accounts offers great promise for application development, but also raises the issue of scalability. Each transaction on the Ethereum network requires nodes to update and maintain the entire state of the blockchain, which leads to significant latency and increases the cost of gas as network utilization increases.
 
 #### TON
 TON offers an alternative approach to improve scalability and performance in response to these challenges. Designed to provide developers with maximum flexibility to create various applications, TON uses the concept of shards and the MasterChain to optimize the block creation process. Each TON ShardChain and MasterChain generates a new block on average every 3 seconds, ensuring fast transaction execution. Unlike Ethereum, where state updates are synchronous, TON implements asynchronous messaging between smart contracts, allowing each transaction to be processed independently and in parallel, significantly speeding up transaction processing on the network. Sections and articles to familiarize yourself with:
