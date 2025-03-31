@@ -32,7 +32,7 @@ Available interfaces of smart-contract are:
  - Receiving **`external messages`** from outside the blockchain.
  - Receiving **`get methods`** request from outside the blockchain.
 
-In contrast to `internal` and `external` messages, `get methods` are not what you can consider as a **transaction**. Those are special functions of smart contract that cannot change contract internal state or proceed any other action except querying specific data from contract state. Contrary to what might seem intuitive, invoking `get methods` from other contracts **is not possible**, primarily due to the nature of blockchain technology and the need for consensus.
+In contrast to `internal` and `external` messages, `get methods` are not what you can consider as a **transaction**. Those are special functions of smart contract that cannot change contract internal state or proceed any other action except querying specific data from contract state. Contrary to what might seem intuitive, invoking `get methods` from other contracts **is not possible**.
 
 :::tip
 Hereinafter we will use terms `actor`, `smart-contract` and `account` interchangeably.
@@ -44,13 +44,15 @@ Before we step on our way of becoming a TON developer, we should become an advan
 
 ### Step 1: Create a new wallet using an app
 
-The simplest way to create a `wallet` is to visit https://ton.org/wallets and choose one of the wallet apps from the list. This page explains the difference between **custodial** and **non-custodial** wallets. With a **non-custodial** wallet, you own the wallet and hold its **private key** by yourself. With a **custodial** wallet, you trust somebody else to do this for you. They are all pretty similar, let's choose [Tonkeeper](https://tonkeeper.com/). Go ahead, install and run it.
+The simplest way to create a `wallet` is to visit https://ton.org/wallets and choose one of the wallet apps from the list. They are all pretty similar, let's choose [Tonkeeper](https://tonkeeper.com/). Go ahead, install and run it.
 
 ### Step 2: Mainnet and Testnet
 
-In the TON, the `Mainnet` and `Testnet` have distinct roles. The `Mainnet` is the primary network where actual transactions take place, carrying real economic value as they involve real cryptocurrency and staked validators executing our transactions and guarantee a very high level of security. On the other hand, the `Testnet` is a testing version of the TON **blockchain** designed for development and testing purposes. Transactions on the `testnet` do not have real economic value, making it a risk-free zone for developers to test without financial implications. It's mainly used for development, testing `smart contracts`, and trying new features.
+In the TON, the `Mainnet` and `Testnet` have distinct roles. The `Mainnet` is the primary network where actual transactions take place, carrying real economic value as they involve real cryptocurrency. On the other hand, the `Testnet` is a testing version of the TON **blockchain** designed for development and testing purposes. `Testnet` is a risk-free zone for developers to test without financial implications. It's mainly used for development, testing `smart contracts`, and trying new features.
 
 Since TON basic transactions are very cheap, about 1 cent per transaction, investing just $5 will be enough for hundreds of them. You can get TON coins by simply pressing the buy button in the user interface, or ask someone to send them to your `address`, which you can copy from the wallet app somewhere near your balance. Don't worry, sharing your `address` is **totally safe**, unless you don't want it to be associated with you.
+
+For the `Testnet` version, you can request funds from the [Testgiver Ton Bot](https://t.me/testgiver_ton_bot). After a short wait, you will receive 2 TONs that will appear in your wallet app.
 
 ### Step 3: Creating testnet wallet
 
@@ -79,13 +81,14 @@ To create testnet wallet click *`Wallet`* -> *`Add Wallet`* - *`TestnetAccount`*
   <br/>
 </div>
 
-For the `Testnet` version, you can request funds from the [Testgiver Ton Bot](https://t.me/testgiver_ton_bot). After a short wait, you will receive 2 TONs that will appear in your wallet app.
 
 ### Step 4: Exploring the blockchain
 
-Congratulations! We created our first wallet and received some funds on it. Now let's take a look at how our actions are reflected in the `blockchain`. We can do this by using various [explorers](https://ton.app/explorers). An explorer is a tool that allows you to query data from the chain, investigate TON `smart-contracts`, and transactions.
+Congratulations! We created our first wallet and received some funds on it. Now let's take a look at how our actions are reflected in the `blockchain`. We can do this by using various [explorers](https://ton.app/explorers). An explorer is a tool that allows you to query data from the chain, investigate TON `smart-contracts`, and transactions. For our examples, we are going to use [TonViewer](https://tonviewer.com/). 
 
-For our examples, we are going to use [TonViewer](https://tonviewer.com/). Note that in case of using `testnet`, you should manually change the explorer mode to the `testnet` version. Don't forget that these are different networks not sharing any transactions or `smart-contracts`, so your `testnet` wallet would not be visible in `mainnet` mode and vice versa.
+:::tip
+Note that in case of using `testnet`, you should manually change the explorer mode to the `testnet` version. Don't forget that these are different networks not sharing any transactions or `smart-contracts`, so your `testnet` wallet would not be visible in `mainnet` mode and vice versa.
+:::
 
 Let's take a look at our newly created wallet using the explorer: copy your wallet address from the app and insert it into the search line of the explorer like this:
 

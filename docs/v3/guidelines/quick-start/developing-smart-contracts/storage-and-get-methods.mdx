@@ -9,15 +9,26 @@ import TabItem from '@theme/TabItem';
 If you are stuck on some of the examples you can find original template project with all modifications performed during this guide [here](https://github.com/ton-community/ton-onboarding-sandbox/tree/main/quick-start/smart-contracts/Example).
 :::
 
-While it's technically possible to create smart contract on TON not having any persistent storage, almost all smart-contracts need to store their `state` between transactions. This guide explains standard ways of managing `state` of smart-contract and using `get methods` to obtain it from outside the blockchain.
+While it's technically possible to create smart contract on TON not having any persistent storage, almost all smart-contracts need to store their `data` between transactions. This guide explains standard ways of managing `storage` of smart-contract and using `get methods` to obtain it from outside the blockchain.
 
-## Cell Structure: The Backbone of TON Storage
+
+## Smart Contract Storage Operations
+
+First thing that we should say is that there is a small, but important difference between smart-contract `persistent data` and [TVM storage](/v3/documentation/tvm/tvm-initialization#initial-state) existing only during execution of smart-contract. Remember that smart-contracts follow **transaction** concept - if any system or user exception is raised during execution, i.e. transaction fails - `TVM storage` will not be committed to smart-contract `persistent data`. From the realization point this means that smart-contract `persistent data` is copied to `TVM storage` before starting the execution and committed back, optionally modified, in case of successful **transaction**. For simplification of this guide we will not use those strict terms, instead we will describe both as `storage` and rely on context, so, keep these facts in mind.
+
+There are two main instructions that provide access to smart-contract storage: 
+ - `get_data()` returning current storage cell.
+ - `set_data()` setting storage cell.
+
+Lets examine `Cell` entity structure to understand how we could manage contract storage.
+
+## Cell structure
 
 TON blockchain uses a data structure called **`Cell`** as the fundamental unit for storing data. Cells are the building blocks of the `TVM` (TON Virtual Machine) and have those characteristics:
 
 - A `Cell` can store up to 1023 bits (approximately 128 bytes) of data
-- A `Cell` can reference up to 4 other `Cells` (children)
-- `Cells` are immutable once created
+- A `Cell` can reference up to 4 other `Cells` (childrens)
+- `Cell` is immutable once created
 
 You can think of Cell as the following structure:
 
@@ -29,19 +40,17 @@ interface Cell {
 }
 ```
 
-## Smart Contract Storage Operations
+## Implementation
 
-First thing that we should say is that there is a small, but important difference between smart-contract `persistent data` and [TVM storage](/v3/documentation/tvm/tvm-initialization#initial-state) existing only during execution of smart-contract. Remember that smart-contracts follow **transaction** concept - if any system or user exception is raised during execution, i.e. transaction fails - `TVM storage` will not be committed to smart-contract `persistent data`. From the realization point this means that smart-contract `persistent data` is copied to `TVM storage` before starting the execution and committed back, optionally modified, in case of successful **transaction**. For simplification of this guide we will not use those strict terms, instead we will describe both as `storage` and rely on context, so, keep these facts in mind.
+Let's try to modify our smart-contract folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/storage-and-get-methods) section.
 
-There are two main instructions that provide access to smart-contract storage: 
- - `get_data()` returning current storage cell.
- - `set_data()` setting current storage cell.
+### Step1: Edit smart-contract code
 
 In case it's inconvenient to always serialize and deserialize storage cell, there is a pretty standard practice to define two wrapper methods that provide corresponding logic. If you didn't change smart-contract code it should contain following lines:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
-```func
+```func hello_world.fc
 global int ctx_id;
 global int ctx_counter;
 
@@ -87,15 +96,15 @@ fun saveData() {
         beginCell()
         .storeUint(ctxID, 32)
         .storeUint(ctxCounter, 32)
-        .endCell()
-    );
+        .endCell());
 }
 ```
 </TabItem>
 </Tabs>
 
+#### Managing storage
 
-Let's try to modify our example a little bit. First, let's use a more common approach of passing storage members as parameters to `save_data(members...)` and retrieve them as `(members...) get_data()` moving global variables ctx_id and ctx_counter to method bodies. Also, let's rebane our counter to seqno and add additional integers 256-bit size into our storage:
+Let's try to modify our example a little bit. First, let's use a more common approach of passing storage members as parameters to `save_data(members...)` and retrieve them as `(members...) get_data()` moving global variables ctx_id and ctx_counter to method bodies. Also, let's add additional integer of 256-bit size into our storage:
 
 Result of our modifications should look like this:
 
@@ -109,8 +118,8 @@ Result of our modifications should look like this:
     ;; id is required to be able to create different instances of counters
     ;; since addresses in TON depend on the initial state of the contract
     int ctx_id = ds~load_uint(32);
-    int seqno = ds~load_uint(32);
-    int public_key = ds~load_uint(256);
+    int ctx_counter = ds~load_uint(32);
+    int ctx_counterExt = ds~load_uint(256);
 
     ds.end_parse();
 
@@ -119,12 +128,12 @@ Result of our modifications should look like this:
 
 ;; save_data stores variables as a cell into persistent storage
 ;; impure because of writing into TVM storage
-() save_data(int ctx_id, int seqno, int public_key) impure {
+() save_data(int ctx_id, int seqno, int ctxCounterExt) impure {
     set_data(
         begin_cell()
             .store_uint(ctx_id, 32)
-            .store_uint(seqno, 32)
-            .store_uint(public_key, 256)
+            .store_uint(ctxCounter, 32)
+            .store_uint(ctxCounterExt, 256)
         .end_cell()
     );
 }
@@ -140,12 +149,12 @@ fun loadData(): (int, int, int) {
     // id is required to be able to create different instances of counters
     // since addresses in TON depend on the initial state of the contract
     var ctxID = ds.loadUint(32);
-    var seqno = ds.loadUint(32);
-    var public_key = ds.loadUint(256);
+    var ctxCounter = ds.loadUint(32);
+    var ctxCounterExt = ds.loadUint(256);
 
     ds.assertEndOfSlice();
 
-    return (ctxID, seqno, public_key);
+    return (ctxID, ctxCounter, ctxCounterExt);
 }
 
 // saveData stores storage variables as a cell into persistent storage
@@ -153,8 +162,8 @@ fun saveData(ctxID: int, seqno: int, public_key: int) {
     setContractData(
         beginCell()
         .storeUint(ctxID, 32)
-        .storeUint(seqno, 32)
-        .storeUint(public_key, 256)
+        .storeUint(ctxCounter, 32)
+        .storeUint(ctxcounterExt, 256)
         .endCell()
     );
 }
@@ -167,38 +176,36 @@ Don't forget to delete global variables `ctx_id`, `ctx_counter` and modify usage
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
 ```func
-var (ctx_id, seqno, public_key) = load_data();
-save_data(ctx_id, seqno, public_key);
+var (ctx_id, ctxCounter, ctxCounterExt) = load_data();
+save_data(ctx_id, ctxCounter, ctxCounterExt);
 ```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
 ```tolk
-var (ctx_id, seqno, public_key) = load_data();
-save_data(ctx_id, seqno, public_key);
+var (ctx_id, ctxCounter, ctxCounterExt) = load_data();
+save_data(ctx_id, ctxCounter, ctxCounterExt);
 ```
 </TabItem>
 </Tabs>
 
-## Get methods
+#### Get methods
 
 The primary use of get methods is reading our storage data from outside the blockchain using a convenient interface, primarily to extract data that is required to prepare a transaction.
-
-Let's omit at the current moment the motivation of magical storage members `seqno` and `public_key` - we will discuss their meaning in later topics. Instead, let's provide a get method to retrieve both of them from outside the blockchain:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
 ```func
-(int, int) get_seqno_public_key() method_id {
-    var (_, seqno, public_key) = load_data();
-    return (seqno, public_key);
+(int, int) get_counters() method_id {
+    var (_, ctxCounter, ctxCounterExt) = load_data();
+    return (ctxCounter, ctxCounterExt);
 }
 ```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
 ```tolk
-get get_seqno_public_key(): (int, int) {
-    var (_, seqno, public_key) = load_data();
-    return (seqno, public_key);
+get get_counters(): (int, int) {
+    var (_, ctxCounter, ctxCounterExt) = load_data();
+    return (ctxCounter, ctxCounterExt);
 }
 ```
 </TabItem>
@@ -212,7 +219,7 @@ npm run build
 
 And that's it! In practice all get methods follow this simple flow and don't require anything more. Note that you can omit values returned from functions using '_' syntax.
 
-## Updating wrapper
+## Step2: Updating wrapper
 
 Now lets update our wrapper class corresponding to new storage layout and new `get method`.
 
@@ -221,15 +228,15 @@ First, let's modify `helloWorldConfigToCell` function and `HelloWorldConfig` typ
 ```typescript
 export type HelloWorldConfig = {
     id: number;
-    seqno: number;
-    public_key: bigint;
+    ctxCounter: number;
+    ctxCounterExt: bigint;
 };
 
 export function helloWorldConfigToCell(config: HelloWorldConfig): Cell {
     return beginCell()
         .storeUint(config.id, 32)
-        .storeUint(config.seqno, 32)
-        .storeUint(config.public_key, 256)
+        .storeUint(config.ctxCounter, 32)
+        .storeUint(config.ctxcounterExt, 256)
     .endCell();
 }
 ```
@@ -237,20 +244,15 @@ Second, add a method to perform a request for the newly created get method:
 
 ```typescript
 async getSeqnoPKey(provider: ContractProvider) {
-    const result = await provider.get('get_seqno_public_key', []);
-    const seqno = result.stack.readNumber();
-    const publicKeyBigInt = result.stack.readBigNumber();
+    const result = await provider.get('get_counters', []);
+    const counter = result.stack.readNumber();
+    const counterExt = result.stack.readBigNumber();
 
-    // Convert BigInt to Buffer (32 bytes)
-    const publicKeyHex = publicKeyBigInt.toString(16).padStart(64, '0');
-
-    const publicKeyBuffer = Buffer.from(publicKeyHex, 'hex');
-
-    return [seqno, publicKeyBuffer]
+    return [counter, counterExt]
 }
 ```
 
-## Updating Tests
+## Step3: Updating tests
 
 And finally, let's write a simple test, checking that the deployment process initializes smart contract storage and correctly retrieves its data by get methods.
 
@@ -261,9 +263,8 @@ helloWorld = blockchain.openContract(
     HelloWorld.createFromConfig(
         {
             id: 0,
-            seqno: 0,
-            //it will be changed later, just initialization check
-            public_key: 0n
+            ctxCounter: 0,
+            ctxCounterExt: 0n
         },
         code
     )
@@ -277,22 +278,22 @@ it('should correctly initialize and return the initial data', async () => {
     // Define the expected initial values (same as in beforeEach)
     const expectedConfig = {
         id: 0,
-        seqno: 0,
-        public_key: 0n
+        ctxCounter: 0,
+        ctxCounterExt: 0n
     };
 
     // Verify counter value
     const counter = await helloWorld.getCounter();
-    expect(counter).toBe(expectedConfig.seqno);
+    expect(counter).toBe(expectedConfig.ctxCounter);
 
     // Verify ID value
     const id = await helloWorld.getID();
     expect(id).toBe(expectedConfig.id);
 
-    // Verify seqno and public_key values
-    const [seqno, publicKey] = await helloWorld.getSeqnoPKey();
-    expect(seqno).toBe(expectedConfig.seqno);
-    expect(publicKey).toBe(expectedConfig.public_key);
+    // Verify both counters 
+    const [ctx, ctxExt] = await helloWorld.getSeqnoPKey();
+    expect(ctx).toBe(expectedConfig.ctxCounter);
+    expect(ctxExt).toBe(expectedConfig.ctxCounterExt);
 });
 ```
 
@@ -301,10 +302,4 @@ And now run your new test script by executing the following command:
 ```bash
 npm run test
 ```
-
-## Next Steps
-
-Congratulations! We modified our first contract to execute a new `get method`, learned about smart-contract storage and went through the standard smart contract development flow. Now we can proceed to further sections explaining more complex actions upon smart contracts. At this point we will provide a more short description of standard actions: edit smart-contract -> edit wrapper -> edit tests, relying on your new skills.
-
-Consider reading your chosen [language specification](/v3/documentation/smart-contracts/overview#programming-languages) and try to add your own `get method` with corresponding wrapper and test modification by yourself and proceed to next steps when you feel ready for it.
 

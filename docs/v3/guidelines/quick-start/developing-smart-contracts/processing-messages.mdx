@@ -15,207 +15,6 @@ If you are stuck on some of the examples you can find original template project 
 
 ---
 
-## External Messages
-
-`External messages` are your main way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because in most cases you don't want external entry points to be accessible to anyone except you. This includes several standard approaches of verifying external message sender providing safe entry point to the TON network which we will discuss here. If this is all functionality that you want from external section - standard way is to delegate this responsibility to separate actor - `wallet` which is practically the main reason they were designed for.
-
-### Wallets
-
-When we sent coins using wallet app in [getting started](/v3/guidelines/quick-start/getting-started#step-3-exploring-the-blockchain) section what `wallet app` actually performs is sending `external message` to your `wallet` smart contract which performs sending message to destination smart-contract address that you wrote in send menu. While most wallet apps during creation of wallet deploy most modern versions of wallet smart contracts - `v5`, providing more complex functionality, let's examine `recv_external` section of more basic one - `v3`:
-
-
-
-```func
-() recv_external(slice in_msg) impure {
-    var signature = in_msg~load_bits(512);
-    var cs = in_msg;
-    var (subwallet_id, msg_seqno) = (cs~load_uint(32), cs~load_uint(32));
-    var ds = get_data().begin_parse();
-    var (stored_seqno, stored_subwallet, public_key) = (ds~load_uint(32), ds~load_uint(32), ds~load_uint(256));
-    ds.end_parse();
-    throw_unless(33, msg_seqno == stored_seqno);
-    throw_unless(34, subwallet_id == stored_subwallet);
-    throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
-    accept_message();
-    cs~touch();
-    while (cs.slice_refs()) {
-        var mode = cs~load_uint(8);
-        send_raw_message(cs~load_ref(), mode);
-    }
-    set_data(begin_cell()
-        .store_uint(stored_seqno + 1, 32)
-        .store_uint(stored_subwallet, 32)
-        .store_uint(public_key, 256)
-    .end_cell());
-    }
-```
-
-
-First thing to mention - is `signature` in message body and stored `public_key`. This refers to standard mechanism of asymmetric cryptography: during deployment process you create **private and public key pair**, store the second one in initial contract storage and then during sending external message through client **sign** it with **private key** attaching calculated `signature` to message body. Smart contract on its side checks if signature matches `public_key` and accepts external message if it is so.
-
-Standard signature system for TON smart-contracts is `Ed25519` which is directly provided by `TVM` instruction `check_signature()`, but you can always implement another preferred algorithm by yourself.
-
-:::tip
-When you entered **magic 24 secret words** (i.e. **mnemonic phrase**) during [wallet creation](/v3/documentation/data-formats/tlb/tl-b-language) in your app what is practically performed is concatenation of those words into one string and hashing it to create your **private key**. So remember not to show them to anyone.
-:::
-
-Second thing is `seqno` (sequential number) as you can see this is practically just a counter that increments each time wallet smart-contract receives external message, but why do we need one?
-The reason behind that lies in blockchain nature: since all transactions are visible to anyone, potential malefactor could repeatedly send already signed transaction to your smart contract.
-
-> **Simpliest scenario:** you transfer some amount of funds to receiver, receiver examines transaction and sends it to your contract repeatedly until you run out of funds and receiver gains almost all of them.
-
-Third thing is `subwallet_id` that just checks equality to the stored one, we will discuss its meaning a little bit later in internal messages section.
-
-### Implementation
-
-At this point reasons behind changes that we made to our counter in previous storage and get methods [section](/v3/guidelines/quick-start/developing-smart-contracts/storage-and-get-methods#smart-contract-storage-operations) should start to be more clear! We already prepared our storage to contain `seqno`, `public_key` and `ctx_id` which will serve same task as `subwallet_id` so let's adapt wallet's `recv_external` function to our project:
-
-<Tabs groupId="language">
-<TabItem value="FunC" label="FunC">
-```func
-() recv_external(slice in_msg) impure {
-    ;; retrives validating data from message body
-    var signature = in_msg~load_bits(512);
-    var cs = in_msg;
-    var (ctx_id, msg_seqno) = (cs~load_uint(32), cs~load_uint(32));
-
-    ;; retrieves stored data for validation checks
-    var (stored_id, stored_seqno, public_key) = load_data();
-    ;; replay protection mechanism through seqno chack and incrementing
-    throw_unless(33, msg_seqno == stored_seqno);
-    ;; id field for multiply addresess with same private_key
-    throw_unless(34, ctx_id == stored_id);
-    ;; ed25519 signature check
-    throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
-    ;; accepting message after all checks
-    accept_message();
-    ;; optimization technique
-    ;; putting message body to stack head
-    cs~touch();
-    ;; sending serialized on client side messages
-    while (cs.slice_refs()) {
-        var mode = cs~load_uint(8);
-        send_raw_message(cs~load_ref(), mode);
-    }
-    save_data(stored_id, stored_seqno + 1, public_key);
-}
-```
-</TabItem>
-<TabItem value="Tolk" label="Tolk">
-```tolk
-fun acceptExternalMessage(): void
-    asm "ACCEPT";
-
-fun onExternalMessage(inMsg: slice) {
-    var signature = inMsg.loadBits(512);
-    var cs = inMsg;
-    var (ctx_id, msg_seqno) = (cs.loadUint(32), cs.loadUint(32));
-
-    // retrieves stored data for validation checks
-    var (stored_id, stored_seqno, public_key) = loadData();
-    // replay protection mechanism through seqno chack and incrementing
-    assert(msg_seqno == stored_seqno, 33);
-    // id field for multiply addresess with same private_key
-    assert(ctx_id == stored_id, 34);
-    // ed25519 signature check
-    assert(isSignatureValid(sliceHash(inMsg), signature, public_key), 35);
-    // accepting message after all checks
-    acceptExternalMessage();
-    // sending serialized on client side messages
-    while (!cs.isEndOfSliceRefs()) {
-        var mode = cs.loadUint(8);
-        sendRawMessage(cs.loadRef(), mode);
-    }
-    saveData(stored_id, stored_seqno + 1, public_key);
-}
-```
-
-</TabItem>
-</Tabs>
-
-And add wrapper method to call it through our wrapper class:
-
-```typescript
-async function sendExternal(
-    provider: ContractProvider,
-    opts: {
-        mode: number
-        message: Cell,
-        secret_key: Buffer
-    }
-) {
-    const seqno = await this.getCounter(provider)
-    const id = await this.getID(provider)
-
-    const toSign = beginCell()
-        .storeUint(id, 32)
-        .storeUint(seqno, 32)
-        .storeUint(opts.mode, 8)
-        .storeRef(opts.message)
-
-    const signature = sign(toSign.endCell().hash(), opts.secret_key)
-
-    return await provider.external(beginCell()
-        .storeBuffer(signature)
-        .storeBuilder(toSign)
-    .endCell()
-    );
-}
-```
-
-Here we are preparing all required values for contract checks and add payload message that will be sent as internal message further to final receiver smart-contract.
-
-As you can see here we are using `provider.external()` method instead of `provider.internal()` one which requires a via argument, that now we can start to understand. The thing is that `provider.internal()` method is doing practically the same thing that we are trying to implement: since we can't directly call internal methods to test them we need to wrap them into external message and send it through some wallet.
-
-Now let's test our implementation:
-
-```typescript
-it('should send an external message containing an internal message', async () => {
-    const receiver = await blockchain.treasury('receiver');
-
-    const internalMessage = beginCell()
-        .storeUint(0, 32) // Simple message with no specific opcode
-        .storeUint(42, 64) // queryID = 42
-        .storeStringTail('Hello from external message!')
-        .endCell();
-
-    const messageToSend = beginCell().store(storeMessageRelaxed(internal({
-        to: receiver.address,
-        value: toNano(0.01),
-        body: internalMessage,
-        bounce: true,
-    }))).endCell();
-
-    const receiverBalanceBefore = await receiver.getBalance();
-
-    const result = await helloWorld.sendExternal({
-        mode: SendMode.PAY_GAS_SEPARATELY,
-        message: messageToSend,
-        secret_key: keyPair.secretKey
-    });
-
-    expect(result.transactions).toHaveTransaction({
-        from: undefined, // External messages have no 'from' address
-        to: helloWorld.address,
-        success: true,
-    });
-
-    expect(result.transactions).toHaveTransaction({
-        from: helloWorld.address,
-        to: receiver.address,
-        success: true,
-    });
-
-    const receiverBalanceAfter = await receiver.getBalance();
-
-    expect(receiverBalanceAfter).toBeGreaterThan(receiverBalanceBefore);
-    const [seqnoAfter] = await helloWorld.getSeqnoPKey();
-    expect(seqnoAfter).toBe(1); // Since it should start from 0 and increment to 1
-});
-```
-
----
-
 ## Internal messages
 
 We are almost at the finish line! Let's cook a simple `internal message` to other contract and implement its processing on receiver side! We have already seen a counter that increases its values through `external messages`, now let's make it through internal one. And to make this task a little more interesting let's ensure that only one `actor` has access to this functionality.
@@ -563,6 +362,206 @@ contract CounterInternal with Deployable, Ownable {
 export * from '../build/CounterInternal/tact_CounterInternal';
 ```
 
+
+---
+
+## External Messages
+
+`External messages` are your main way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because in most cases you don't want external entry points to be accessible to anyone except you. If this is all functionality that you want from external section - standard way is to delegate this responsibility to separate actor - `wallet` which is practically the main reason they were designed for.
+
+### Wallets
+
+When we sent coins using wallet app in [getting started](/v3/guidelines/quick-start/getting-started#step-3-exploring-the-blockchain) section what `wallet app` actually performs is sending `external message` to your `wallet` smart contract which performs sending message to destination smart-contract address that you wrote in send menu. While most wallet apps during creation of wallet deploy most modern versions of wallet smart contracts - `v5`, providing more complex functionality, let's examine `recv_external` section of more basic one - `v3`:
+
+```func
+() recv_external(slice in_msg) impure {
+    var signature = in_msg~load_bits(512);
+    var cs = in_msg;
+    var (subwallet_id, msg_seqno) = (cs~load_uint(32), cs~load_uint(32));
+    var ds = get_data().begin_parse();
+    var (stored_seqno, stored_subwallet, public_key) = (ds~load_uint(32), ds~load_uint(32), ds~load_uint(256));
+    ds.end_parse();
+    throw_unless(33, msg_seqno == stored_seqno);
+    throw_unless(34, subwallet_id == stored_subwallet);
+    throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
+    accept_message();
+    cs~touch();
+    while (cs.slice_refs()) {
+        var mode = cs~load_uint(8);
+        send_raw_message(cs~load_ref(), mode);
+    }
+    set_data(begin_cell()
+        .store_uint(stored_seqno + 1, 32)
+        .store_uint(stored_subwallet, 32)
+        .store_uint(public_key, 256)
+    .end_cell());
+    }
+```
+
+
+First thing to mention - is `signature` in message body and stored `public_key`. This refers to standard mechanism of asymmetric cryptography: during deployment process you create **private and public key pair**, store the second one in initial contract storage and then during sending external message through client **sign** it with **private key** attaching calculated `signature` to message body. Smart contract on its side checks if signature matches `public_key` and accepts external message if it is so.
+
+Standard signature system for TON smart-contracts is `Ed25519` which is directly provided by `TVM` instruction `check_signature()`, but you can always implement another preferred algorithm by yourself.
+
+:::tip
+When you entered **magic 24 secret words** (i.e. **mnemonic phrase**) during [wallet creation](/v3/documentation/data-formats/tlb/tl-b-language) in your app what is practically performed is concatenation of those words into one string and hashing it to create your **private key**. So remember not to show them to anyone.
+:::
+
+Second thing is `seqno` (sequential number) as you can see this is practically just a counter that increments each time wallet smart-contract receives external message, but why do we need one?
+The reason behind that lies in blockchain nature: since all transactions are visible to anyone, potential malefactor could repeatedly send already signed transaction to your smart contract.
+
+> **Simpliest scenario:** you transfer some amount of funds to receiver, receiver examines transaction and sends it to your contract repeatedly until you run out of funds and receiver gains almost all of them.
+
+Third thing is `subwallet_id` that just checks equality to the stored one, we will discuss its meaning a little bit later in internal messages section.
+
+### Implementation
+
+At this point reasons behind changes that we made to our counter in previous storage and get methods [section](/v3/guidelines/quick-start/developing-smart-contracts/storage-and-get-methods#smart-contract-storage-operations) should start to be more clear! We already prepared our storage to contain `seqno`, `public_key` and `ctx_id` which will serve same task as `subwallet_id` so let's adapt wallet's `recv_external` function to our project:
+
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
+```func
+() recv_external(slice in_msg) impure {
+    ;; retrives validating data from message body
+    var signature = in_msg~load_bits(512);
+    var cs = in_msg;
+    var (ctx_id, msg_seqno) = (cs~load_uint(32), cs~load_uint(32));
+
+    ;; retrieves stored data for validation checks
+    var (stored_id, stored_seqno, public_key) = load_data();
+    ;; replay protection mechanism through seqno chack and incrementing
+    throw_unless(33, msg_seqno == stored_seqno);
+    ;; id field for multiply addresess with same private_key
+    throw_unless(34, ctx_id == stored_id);
+    ;; ed25519 signature check
+    throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
+    ;; accepting message after all checks
+    accept_message();
+    ;; optimization technique
+    ;; putting message body to stack head
+    cs~touch();
+    ;; sending serialized on client side messages
+    while (cs.slice_refs()) {
+        var mode = cs~load_uint(8);
+        send_raw_message(cs~load_ref(), mode);
+    }
+    save_data(stored_id, stored_seqno + 1, public_key);
+}
+```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+fun acceptExternalMessage(): void
+    asm "ACCEPT";
+
+fun onExternalMessage(inMsg: slice) {
+    var signature = inMsg.loadBits(512);
+    var cs = inMsg;
+    var (ctx_id, msg_seqno) = (cs.loadUint(32), cs.loadUint(32));
+
+    // retrieves stored data for validation checks
+    var (stored_id, stored_seqno, public_key) = loadData();
+    // replay protection mechanism through seqno chack and incrementing
+    assert(msg_seqno == stored_seqno, 33);
+    // id field for multiply addresess with same private_key
+    assert(ctx_id == stored_id, 34);
+    // ed25519 signature check
+    assert(isSignatureValid(sliceHash(inMsg), signature, public_key), 35);
+    // accepting message after all checks
+    acceptExternalMessage();
+    // sending serialized on client side messages
+    while (!cs.isEndOfSliceRefs()) {
+        var mode = cs.loadUint(8);
+        sendRawMessage(cs.loadRef(), mode);
+    }
+    saveData(stored_id, stored_seqno + 1, public_key);
+}
+```
+
+</TabItem>
+</Tabs>
+
+And add wrapper method to call it through our wrapper class:
+
+```typescript
+async function sendExternal(
+    provider: ContractProvider,
+    opts: {
+        mode: number
+        message: Cell,
+        secret_key: Buffer
+    }
+) {
+    const seqno = await this.getCounter(provider)
+    const id = await this.getID(provider)
+
+    const toSign = beginCell()
+        .storeUint(id, 32)
+        .storeUint(seqno, 32)
+        .storeUint(opts.mode, 8)
+        .storeRef(opts.message)
+
+    const signature = sign(toSign.endCell().hash(), opts.secret_key)
+
+    return await provider.external(beginCell()
+        .storeBuffer(signature)
+        .storeBuilder(toSign)
+    .endCell()
+    );
+}
+```
+
+Here we are preparing all required values for contract checks and add payload message that will be sent as internal message further to final receiver smart-contract.
+
+As you can see here we are using `provider.external()` method instead of `provider.internal()` one which requires a via argument, that now we can start to understand. The thing is that `provider.internal()` method is doing practically the same thing that we are trying to implement: since we can't directly call internal methods to test them we need to wrap them into external message and send it through some wallet.
+
+Now let's test our implementation:
+
+```typescript
+it('should send an external message containing an internal message', async () => {
+    const receiver = await blockchain.treasury('receiver');
+
+    const internalMessage = beginCell()
+        .storeUint(0, 32) // Simple message with no specific opcode
+        .storeUint(42, 64) // queryID = 42
+        .storeStringTail('Hello from external message!')
+        .endCell();
+
+    const messageToSend = beginCell().store(storeMessageRelaxed(internal({
+        to: receiver.address,
+        value: toNano(0.01),
+        body: internalMessage,
+        bounce: true,
+    }))).endCell();
+
+    const receiverBalanceBefore = await receiver.getBalance();
+
+    const result = await helloWorld.sendExternal({
+        mode: SendMode.PAY_GAS_SEPARATELY,
+        message: messageToSend,
+        secret_key: keyPair.secretKey
+    });
+
+    expect(result.transactions).toHaveTransaction({
+        from: undefined, // External messages have no 'from' address
+        to: helloWorld.address,
+        success: true,
+    });
+
+    expect(result.transactions).toHaveTransaction({
+        from: helloWorld.address,
+        to: receiver.address,
+        success: true,
+    });
+
+    const receiverBalanceAfter = await receiver.getBalance();
+
+    expect(receiverBalanceAfter).toBeGreaterThan(receiverBalanceBefore);
+    const [seqnoAfter] = await helloWorld.getSeqnoPKey();
+    expect(seqnoAfter).toBe(1); // Since it should start from 0 and increment to 1
+});
+```
+
 #### Testing the multi-contract system
 
 The following test case demonstrates how to deploy and interact with a `HelloWorld` smart contract and a `CounterInternal` contract:
@@ -705,6 +704,8 @@ describe('CounterInternal', () => {
     });
 });
 ```
+
+
 
 Congratulations! You have successfully created a **multi-contract** system and learned how to handle **internal messages**. This example illustrates the typical flow of any message chain: sending an `external message`, triggering the `internal messages` flow based on your system model, and so on. Now that our contracts have been fully tested, we are ready to deploy them and interact with them on-chain.
 

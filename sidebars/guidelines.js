@@ -51,7 +51,7 @@ module.exports = [
     label: 'Developing smart-contracts',
     items: [
       'v3/guidelines/quick-start/developing-smart-contracts/setup-environment',
-      'v3/guidelines/quick-start/developing-smart-contracts/program-structure',
+      'v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview',
       'v3/guidelines/quick-start/developing-smart-contracts/storage-and-get-methods',
       'v3/guidelines/quick-start/developing-smart-contracts/processing-messages',
       'v3/guidelines/quick-start/developing-smart-contracts/deploying-to-network'
