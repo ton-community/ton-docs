@@ -21,7 +21,7 @@ This page contains the list of useful libraries for TON Connect.
 
 - [@tonconnect/ui-react](https://github.com/ton-connect/sdk/tree/main/packages/ui-react) - TON Connect User Interface (UI) for React applications
 
-TonConnect UI React is a React UI kit for the TonConnect SDK. Use it to connect your app to TON wallets via TonConnect protocol in React apps.
+`@tonconnect/ui-react` is a React UI kit for the TON Connect SDK. Use it to connect your app to TON wallets via TON Connect protocol in React apps.
 
 * Example of a DApp with `@tonconnect/ui-react`: [GitHub](https://github.com/ton-connect/demo-dapp-with-react-ui)
 * Example of deployed `demo-dapp-with-react-ui`: [GitHub](https://ton-connect.github.io/demo-dapp-with-react-ui/)
@@ -46,7 +46,7 @@ The TON Connect repository contains following main packages:
 
 ### TON Connect UI
 
-TonConnect UI is a UI kit for TonConnect SDK. Use it to connect your app to TON wallets via TonConnect protocol. It allows you to integrate TonConnect to your app easier using our UI elements such as "connect wallet button", "select wallet dialog" and confirmation modals.
+TON Connect UI is a UI kit for TON Connect SDK. Use it to connect your app to TON wallets via TON Connect protocol. It allows you to integrate TON Connect to your app easier using our UI elements such as "connect wallet button", "select wallet dialog" and confirmation modals.
 
 ```bash
 npm i @tonconnect/ui
@@ -85,7 +85,7 @@ This package contains protocol requests, protocol responses, event models and en
 
 ## TON Connect Vue
 
-TonConnect UI Vue is a Vue UI kit for the TonConnect SDK. Use it to connect your app to TON wallets via TonConnect protocol in Vue apps.
+TON Connect UI Vue is a Vue UI kit for the TON Connect SDK. Use it to connect your app to TON wallets via TON Connect protocol in Vue apps.
 
 * Example of a DApp with `@townsquarelabs/ui-vue`: [GitHub](https://github.com/TownSquareXYZ/demo-dapp-with-vue-ui)
 * Example of deployed `demo-dapp-with-vue-ui`: [GitHub](https://townsquarexyz.github.io/demo-dapp-with-vue-ui/)
@@ -103,7 +103,7 @@ npm i @townsquarelabs/ui-vue
 
 Python SDK for TON Connect 2.0. An analogue of the `@tonconnect/sdk` library.
 
-Use it to connect your app to TON wallets via TonConnect protocol.
+Use it to connect your app to TON wallets via TON Connect protocol.
 
 ```bash
 pip3 install pytonconnect
@@ -128,7 +128,7 @@ pip install -e tonconnect
 
 Dart SDK for TON Connect 2.0. Analogue of the `@tonconnect/sdk` library.
 
-Use it to connect your app to TON wallets via TonConnect protocol.
+Use it to connect your app to TON wallets via TON Connect protocol.
 
 ```bash
  $ dart pub add darttonconnect
@@ -141,7 +141,7 @@ Use it to connect your app to TON wallets via TonConnect protocol.
 
 C# SDK for TON Connect 2.0. An analogue of the `@tonconnect/sdk` library.
 
-Use it to connect your app to TON wallets via TonConnect protocol.
+Use it to connect your app to TON wallets via TON Connect protocol.
 
 ```bash
  $ dotnet add package TonSdk.Connect
@@ -149,12 +149,21 @@ Use it to connect your app to TON wallets via TonConnect protocol.
 
 * [GitHub](https://github.com/continuation-team/TonSdk.NET/tree/main/TonSDK.Connect)
 
+## TON Connect Unity
+
+Unity asset for TON Connect 2.0. Uses `continuation-team/TonSdk.NET/tree/main/TonSDK.Connect`.
+
+Use it to integrate the TON Connect protocol with your game.
+
+* [GitHub](https://github.com/continuation-team/unity-ton-connect)
+* [Docs](https://docs.tonsdk.net/user-manual/unity-tonconnect-2.0/getting-started)
+
 
 ## TON Connect Go
 
 Go SDK for TON Connect 2.0.
 
-Use it to connect your app to TON wallets via TonConnect protocol.
+Use it to connect your app to TON wallets via TON Connect protocol.
 
 ```bash
  go get github.com/cameo-engineering/tonconnect
@@ -162,22 +171,15 @@ Use it to connect your app to TON wallets via TonConnect protocol.
 
 * [GitHub](https://github.com/cameo-engineering/tonconnect)
 
-## General Questions and Concerns
+
+
+## General questions and concerns
 
 If any of our developers or community members encounter any additional issues during the implementation of TON Connect 2.0, please contact the [Tonkeeper developer](https://t.me/tonkeeperdev) channel.
 
 If you experience any additional issues, or would like to present a proposal on how to improve TON Connect 2.0, please contact us directly through the appropriate [GitHub directory](https://github.com/ton-connect/).
 
-## TON Connect Unity
-
-Unity asset for TON Connect 2.0. Uses `continuation-team/TonSdk.NET/tree/main/TonSDK.Connect`.
-
-Use it to integrate the TonConnect protocol with your game.
-
-* [GitHub](https://github.com/continuation-team/unity-ton-connect)
-* [Docs](https://docs.tonsdk.net/user-manual/unity-tonconnect-2.0/getting-started)
-
-## See Also
+## See also
 
 * [Step by step guide for building your first web client](https://ton-community.github.io/tutorials/03-client/)
 * [[YouTube] TON Smart Contracts | 10 | Telegram DApp[EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU&t=254s&ab_channel=AlefmanVladimir%5BEN%5D)
