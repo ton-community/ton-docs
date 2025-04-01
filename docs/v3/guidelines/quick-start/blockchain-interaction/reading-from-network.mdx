@@ -1,35 +1,49 @@
 import ThemedImage from "@theme/ThemedImage";
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Reading from network
 
-This page will walk you through how to read data from TON Blockchain. We'll cover fetching account information, calling get methods, and retrieving account transactions. By the end, you'll have a solid understanding of how to read from TON blockchain using HTTP-based APIs.
+## Introduction
 
-## Introduction to TON Actors
+This guide will walk you through reading data from the TON Blockchain. You'll learn how to:
+- Fetch account information
+- Call get methods
+- Retrieve account transactions
 
-In TON, [**Actors**](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor/) are objects that have *storage* and *behavior*. These are essentially smart contracts with properties, like `address`, `state`, `code`, `data`, `balance`.
+By the end, you'll understand how to interact with [TON HTTP-based APIs](/v3/guidelines/dapps/apis-sdks/ton-http-apis/). Particularly, in this guide [TON Center](https://toncenter.com/) is used, a fast and reliable HTTP API for TON.
 
-All these properties can be retrieved using [TON HTTP-based APIs](/v3/guidelines/dapps/apis-sdks/ton-http-apis/). In this guide, we'll use [TON Center](https://toncenter.com/), a fast and reliable HTTP API for TON.
+## Prerequisites
 
-## Setting up the project
+Before starting, ensure you have:
 
-For this guide we provide examples on these languages - `TypeScript`, `Python3` and the corresponding SDKs: `@ton/ton`, `tonutils & pytoniq`. First, visit installation pages and install runtime environment and package managers for your OS:
- - [NodeJS and npm](https://nodejs.org/en/download) for TypeScript.
- - [Python3](https://wiki.python.org/moin/BeginnersGuide/Download) and [pip](https://pip.pypa.io/en/stable/installation/) if you installed `Python3` separately from `pip` package manager.
+1. Basic knowledge of TypeScript
+2. Node.js (v20+) and npm installed
 
 Check that installation is correct by running those commands:
-<Tabs groupId="SDK">
-<TabItem value="@ton/ton" label="TypeScript">
+
 ```bash
 node -v
 npm -v
 ```
 
-Now, let's initialize the project and install the necessary dependencies.
+#### Expected output
 
 ```bash
+v20.x.x
+10.x.x
+```
+
+## Project setup
+
+Let's set up our project structure:
+
+1. Create a new directory for your project
+2. Initialize a Node.js project
+3. Install required dependencies
+
+Run these commands in your terminal:
+
+```bash
+mkdir reading-from-ton && cd reading-from-ton
 npm init -y
 npm install typescript ts-node @ton/ton @ton/core @ton/crypto
 npx tsc --init
@@ -40,29 +54,6 @@ To run scripts, use the following command:
 ```bash
 npx ts-node script.ts
 ```
-
-</TabItem>
-<TabItem value="tonutils" label="Python3">
-```bash
-python3 --version
-pip3 --version
-```
-
-Now, let's initialize the project and install the necessary dependencies.
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python3 -m pip install tonutils pytoniq
-```
-
-To run scripts, use the following command:
-```bash
-python3 script.py
-```
-
-</TabItem>
-</Tabs>
 
 ## Reading account information
 
@@ -76,46 +67,51 @@ Account information includes the `balance`, `state`, `code`, and `data`.
 - `code`: The contract's code in raw format.
 - `data`: Serialized contract data stored in a [*Cell*](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage/).
 
-Here's how you can retrieve a contract's state:
+Account state may be obtained using [`getContractState`](https://testnet.toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get) method.
 
-<Tabs groupId="SDK">
-<TabItem value="@ton/ton" label="@ton/ton">
-```typescript
+#### Implementation
+
+Create a new file `1-get-account-state.ts`:
+
+```typescript title="1-get-account-state.ts"
 import { Address, TonClient } from "@ton/ton";
 
 async function main() {
+  // Initializaing TON HTTP API Client
   const tonClient = new TonClient({
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
   });
 
-  const state = await tonClient.getContractState(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-')); // Replace with any address
-  console.log(state);
+  const accountAddress = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'); // Replace with any address
+
+  // Calling method on http api
+  const state = await tonClient.getContractState(accountAddress);
+
+
+  console.log('State: ', state.state);
+  console.log('Balance: ', state.balance);
+  console.log('Data: ', state.data?.toString('hex'));
+  console.log('Code: ', state.code?.toString('hex'));
 }
 
 main();
 ```
-</TabItem>
-<TabItem value="tonutils" label="tonutils">
-```python
-from tonutils.client import ToncenterClient
 
-IS_TESTNET = True
+Run this example using following command:
 
-async def main() -> None:
-    client = ToncenterClient(is_testnet=IS_TESTNET)
-
-    state = await client.get_raw_account('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-')
-
-    print(state.balance)
-    print(state.data)
-    print(state.code)
-
-if __name__ == "__main__":
-    import asyncio
-    asyncio.run(main())
+```bash
+npx ts-node 1-get-account-state.ts
 ```
-</TabItem>
-</Tabs>
+
+#### Expected output
+
+```bash
+State:  active
+Balance:  3722511000883n
+Data:  b5ee9c7241010101002...fd1e976824402aa67b98
+Code:  b5ee9c7241021401000...c9ed54696225e5
+```
+
 
 ## Calling get methods
 
@@ -125,12 +121,16 @@ These functions are widespread in most smart contracts. For example, the default
 
 Result of calling get method from TON HTTP API comes in *stack* format and may be deserialized one by one using `readNumber()` or similar function.
 
-<Tabs groupId="SDK">
-<TabItem value="@ton/ton" label="@ton/ton">
-```typescript
+
+#### Implementation
+
+Create a new file `2-call-get-method.ts`:
+
+```typescript title="2-call-get-method.ts"
 import { Address, TonClient, TupleBuilder } from "@ton/ton";
 
 async function main() {
+  // Initializaing TON HTTP API Client
   const tonClient = new TonClient({
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
   });
@@ -139,105 +139,68 @@ async function main() {
   const builder = new TupleBuilder();
   builder.writeAddress(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'));
 
+  const accountAddress = Address.parse('kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy')
+
+  // Calling http api to run get method on specific contract
   const result = await tonClient.runMethod(
-    Address.parse('kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy'), // address to call get method on
+    accountAddress, // address to call get method on
     'get_wallet_address', // method name
     builder.build(), // optional params list
   );
 
-  // deserializing get method result
+  // Deserializing get method result
   const address = result.stack.readAddress();
-  console.log(address);
+  console.log(address.toRawString());
 }
 
 main();
 ```
-</TabItem>
-<TabItem value="tonutils" label="tonutils">
-```python
-from tonutils.client import ToncenterClient
-from tonutils.utils import boc_to_base64_string
-from pytoniq_core import begin_cell, Address, Slice
 
-IS_TESTNET = True
+Run this example using following command:
 
-
-async def main() -> None:
-    client = ToncenterClient(is_testnet=IS_TESTNET)
-
-    # Building optional get method parameters list
-    addr = Address('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-')
-
-    result = await client.run_get_method(
-        address="kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy", # address to call get method on
-        method_name='get_wallet_address', # method name
-        stack=[boc_to_base64_string(begin_cell().store_address(addr).end_cell().to_boc())]
-    )
-
-    print(Slice.one_from_boc(result["stack"][0]["value"]).load_address())
-
-
-if __name__ == "__main__":
-    import asyncio
-
-    asyncio.run(main())
+```bash
+npx ts-node 2-call-get-methods.ts
 ```
-</TabItem>
-</Tabs>
+
+#### Expected output
+
+```bash
+0:25f2bf1ce8f83ed0c0fd73ea27aac77093cdcf900c750b071df7fb0288e019b2
+```
+
+Get methods may also be called using Tonviewer:
+1. Navigate to [get methods section](https://testnet.tonviewer.com/kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy?section=method).
+2. Select `get_wallet_address`.
+3. Insert address from example *0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-*.
+4. Press **Execute**.
+
+You will end up with same address you got from console.
 
 ### Using wrappers for simplicity
 
-Wrappers are classes that simplify interactions with smart contracts. Here's an equivalent example of using a wrapper:
+Wrappers are classes that simplify interactions with smart contracts by turning complex blockchain operations into simple functions calls - instead of manually encoding cells and transactions, you just call methods like `jettonMaster.getWalletAddress()`. Here's an equivalent example of using a wrapper:
 
-<Tabs groupId="SDK">
-<TabItem value="@ton/ton" label="@ton/ton">
 ```typescript
 import { Address, JettonMaster, TonClient } from "@ton/ton";
 
 async function main() {
+  // Initializaing TON HTTP API Client
   const tonClient = new TonClient({
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
   });
 
-  // initializing wrappers
+  // Initializing wrappers
   const jettonMaster = tonClient.open(
     JettonMaster.create(Address.parse('kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy')),
   );
 
-  // calling get method through wrapper
+  // Calling get method through wrapper
   const address = jettonMaster.getWalletAddress(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'));
   console.log(address);
 }
 
 main();
 ```
-</TabItem>
-<TabItem value="tonutils" label="tonutils">
-```python
-from tonutils.client import ToncenterClient
-from tonutils.jetton import JettonMaster
-
-IS_TESTNET = True
-
-
-async def main() -> None:
-    client = ToncenterClient(is_testnet=IS_TESTNET)
-
-    addr = await JettonMaster.get_wallet_address(
-        client=client,
-        owner_address='0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-',
-        jetton_master_address='kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy'
-    )
-
-    print(addr)
-
-if __name__ == "__main__":
-    import asyncio
-
-    asyncio.run(main())
-```
-</TabItem>
-</Tabs>
 
 ## Fetching account transactions
 
@@ -272,6 +235,9 @@ A transaction in TON consists of the following:
   }}
 />
 
+
+### Key transaction fields
+
 Transaction obtained from API have the following structure:
 
 ```json5
@@ -282,71 +248,57 @@ Transaction obtained from API have the following structure:
     "account_address": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx"
   },
   "utime": 1738588970,
-  "data": "te6cckECBQEAAQ0AA7N/5K6gIewIvakhl8TwgAqyNzRoOkNRACij4AseXaaN7TAAAwvXWplEGUxUumyZOd7nfS5XY7vYQNT7h0NS7Pyez2KO7FVUqsxAAAMAgMG35BZ6DDKgAABI5ogBAgMBAaAEAIJyet2gvih177CPvdmM1xFlH1U76NhPr2Xr2IiEi9p8itebOwMmU6dJdg5mVAR8cxecbiPC+xwdchGbAu4LPdmYxwATDJHNCQBMS0ABIACxSAASm9AH4cd8PJYO+RwUqHU33et6HLVFyFqKm4Xq6IE9RQA/krqAh7Ai9qSGXxPCACrI3NGg6Q1EAKKPgCx5dpo3tNAExLQABggjWgAAYXrq95sEz0GGRkAq6EOl",
-  "transaction_id": {
-    "@type": "internal.transactionId",
-    "lt": "53590281000001",
-    "hash": "aSuaJcDD3CSVOeLulkBbhSmeXSbbSAtid2PvGRkGTjQ="
-  },
-  "fee": "18228",
-  "storage_fee": "18228",
-  "other_fee": "0",
+  ...
   "in_msg": {
-    "@type": "raw.message",
-    "hash": "mcHdqltDAB8ODQHqtedtYQIS6MQL7x4ut+nf9tXWGqg=",
-    "source": "EQAJTegD8OO-HksHfI4KVDqb7vW9Dlqi5C1FTcL1dECeosTf",
-    "destination": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx",
-    "value": "20000000",
-    "extra_currencies": [],
-    "fwd_fee": "266669",
-    "ihr_fee": "0",
-    "created_lt": "53590278000002",
-    "body_hash": "lqKW0iTyhcZ77pPDD4owkVfw2qNdxbh+QQt4YwoJz8c=",
-    "msg_data": {
-      "@type": "msg.dataRaw",
-      "body": "te6cckEBAQEAAgAAAEysuc0=",
-      "init_state": ""
-    },
-    "message": ""
+    ...
   },
-  "out_msgs": []
+  "out_msgs": [...]
 }
 ```
-
-### Key transaction fields
-
 - `address`: The account address where the transaction occurred.
 - `utime`: The UNIX timestamp of the transaction.
-- `transaction_id.lt`: [Logical time](/v3/documentation/smart-contracts/message-management/messages-and-transactions/#what-is-a-logical-time/), used to determine the order of events.
-- `fee`: [Total fees](/v3/documentation/smart-contracts/transaction-fees/fees/) in nanoTON paid during the transaction.
 - `in_msg`: The incoming [message](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-message/) that triggered the transaction.
 - `out_msgs`: Outgoing messages sent during the transaction.
 
 ### Key message fields
 
-- `hash`: Message hash. May be used to determine the transaction using [TonApi](https://tonapi.io/api-v2#operations-Blockchain-getBlockchainTransaction).
+```json5
+{
+  "@type": "raw.message",
+  "hash": "mcHdqltDAB8ODQHqtedtYQIS6MQL7x4ut+nf9tXWGqg=",
+  "source": "EQAJTegD8OO-HksHfI4KVDqb7vW9Dlqi5C1FTcL1dECeosTf",
+  "destination": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx",
+  "value": "20000000",
+  ...
+  "msg_data": {
+    "@type": "msg.dataRaw",
+    "body": "te6cckEBAQEAAgAAAEysuc0=",
+    ...
+  },
+  ...
+}
+```
+
 - `source`: The address of the sender (the account that initiated the message).
 - `destination`: The address of the receiver (the account that will process the message).
 - `value`: The amount of TON (in nanoTON) attached to the message.
-- `fwd_fee`: [Forward fees](https://docs.ton.org/v3/documentation/smart-contracts/transaction-fees/forward-fees/) is the cost of delivering the message to the destination contract.
-- `created_lt`: [Logical time](/v3/documentation/smart-contracts/message-management/messages-and-transactions/#what-is-a-logical-time/) when the message was created.
 - `msg_data`: Contains message body and state init.
 
 
-### How to get account transactions?
+#### Implementation
 
-Here’s how to fetch the last 10 transactions for an account:
+Create a new file `3-fetch-account-transaction.ts`:
 
-<Tabs groupId="SDK">
-<TabItem value="@ton/ton" label="@ton/ton">
-```typescript
+```typescript title="3-fetch-account-transaction.ts"
 import { Address, TonClient } from "@ton/ton";
 
 async function main() {
+  // Initializaing TON HTTP API Client
   const tonClient = new TonClient({
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
   });
 
+  // Calling method on http api
   const transactions = await tonClient.getTransactions(
     Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'), // Address to fetch transactions
     {
@@ -355,33 +307,32 @@ async function main() {
     },
   );
 
-  console.log(transactions[0]);
+  const firstTx = transactions[0];
+  const { inMessage } = firstTx;
+
+  console.log('Timestamp:', firstTx.now);
+  if (inMessage?.info?.type === 'internal') {
+    console.log('Value:', inMessage.info.value.coins);
+    console.log('Sender:', inMessage.info.src);
+  }
 }
 
 main();
 ```
-</TabItem>
-<TabItem value="tonutils" label="pytoniq">
-```python
-from pytoniq import LiteClient
 
+Run this example using following command:
 
-async def main():
-    async with LiteClient.from_testnet_config(ls_i=0, trust_level=2) as client:
-
-        transactions = await client.get_transactions(
-            address='0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-', # Address to fetch transaction
-            count=10
-        )
-
-        print(transactions[0])
-
-if __name__ == '__main__':
-    import asyncio
-    asyncio.run(main())
+```bash
+npx ts-node 3-fetch-account-transaction.ts
 ```
-</TabItem>
-</Tabs>
+
+#### Expected output
+
+```bash
+Timestamp: 1743516631
+Value: 100000000n
+Sender: EQBui16XCF61MSWauIDpVFbKAOJmjLHRxXvXeqiN9dYaIgjq
+```
 
 :::info
 More complex example about traversing transactions graph may be found [here](https://docs.ton.org/v3/guidelines/dapps/asset-processing/payments-processing/#retrieve-incomingoutgoing-transactions).
