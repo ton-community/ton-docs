@@ -2,13 +2,47 @@ import ThemedImage from "@theme/ThemedImage";
 
 # Writing to the network
 
-In the previous section, you learned how to **read data** from the TON Blockchain. Now, let's explore how to **write data** to it. Writing to the TON network involves sending messages. These messages trigger actions in smart contracts, such as transferring TON, Jettons, NFTs, updating contract state, or deploying new contracts.
+In the previous section, you learned how to **read data** from the TON Blockchain. Now, let's explore how to **write data** to it.
 
-## Setting Up the Project
+## Introduction
 
-Now, let's initialize the project and install the necessary dependencies.
+This guide will walk you through writing data from the TON Blockchain. You'll learn how to:
+- Make transaction
+- Transfer TON/Jetton/NFT
+
+## Prerequisites
+
+Before starting, ensure you have:
+
+1. Basic knowledge of TypeScript
+2. Node.js (v20+) and npm installed
+
+Check that installation is correct by running those commands:
 
 ```bash
+node -v
+npm -v
+```
+
+#### Expected result
+
+```bash
+v20.x.x
+10.x.x
+```
+
+## Project setup
+
+Let's set up our project structure:
+
+1. Create a new directory for your project
+2. Initialize a Node.js project
+3. Install required dependencies
+
+Run these commands in your terminal:
+
+```bash
+mkdir writing-to-blockchain && cd writing-to-blockchain
 npm init -y
 npm install typescript ts-node @ton/ton @ton/core @ton/crypto
 npx tsc --init
@@ -39,8 +73,12 @@ A common transfer would look like this:
 <br></br>
 
 :::caution
-Unlike in the [Reading from the Network](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network/) section, a Toncenter API key is mandatory in the following examples.
+Unlike in the [Reading from the Network](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network/) section, a Toncenter API key is mandatory in the following examples. It may be retrieved using [following guide](/v3/guidelines/dapps/apis-sdks/api-keys/).
 :::
+
+#### Implementation
+
+Create a new file `1-send-ton.ts`:
 
 ```typescript title="1-send-ton.ts"
 import { mnemonicToWalletKey } from "@ton/crypto";
@@ -88,6 +126,16 @@ main();
 In most scenarios, `SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS` will work, but if you want a deeper understanding, continue reading in the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook/).
 :::
 
+Run this example using following command:
+
+```bash
+npx ts-node 1-send-ton.ts
+```
+
+#### Expected result
+
+Navigate to [Tonviewer](https://testnet.tonviewer.com/) and paste your address into search bar. You should see TON transfer with *'Hello from wallet!'* comment.
+
 ## Sending jettons
 
 [Jettons](/v3/guidelines/dapps/cookbook#tep-74-jettons-standard) are tokens on the TON Blockchain. You may get some Jettons on the testnet using the [USDt giver bot](https://t.me/testgiver_ton_usdt_bot).
@@ -106,7 +154,11 @@ To send them, we should send messages to our Jetton wallet to make a transfer.
 </div>
 <br></br>
 
+#### Implementation
+
 To make the example more practical, let's obtain this address programmatically by using the [`JettonMaster` wrapper](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network#using-wrappers-for-simplicity).
+
+Create a new file `2-send-jetton.ts`:
 
 ```typescript title="2-send-jetton.ts"
 import { mnemonicToWalletKey } from "@ton/crypto";
@@ -125,6 +177,7 @@ async function main() {
   const wallet = tonClient.open(walletContract);
   const seqno = await wallet.getSeqno();
 
+  // building transfer body
   const jettonTransferBody = beginCell()
     .storeUint(0x0f8a7ea5, 32) // opcode for jetton transfer
     .storeUint(0, 64) // query id
@@ -157,6 +210,16 @@ async function main() {
 main();
 ```
 
+Run this example using following command:
+
+```bash
+npx ts-node 2-send-jetton.ts
+```
+
+#### Expected result
+
+Navigate to [Tonviewer](https://testnet.tonviewer.com/) and paste your address into search bar. You should see Jetton transfer with *'Hello from jetton!'* comment.
+
 ## Sending NFTs
 
 [Non-fungible tokens](/v3/guidelines/dapps/asset-processing/nft-processing/nfts) (NFTs) are assets like a piece of art, digital content, or video that have been tokenized via a blockchain. In TON, NFTs are represented via a collection of smart contracts:
@@ -164,6 +227,10 @@ main();
 - **NFT Item**: stores information about the NFT item that the user owns.
 
 NFTs may be deployed via [TON Tools](https://ton-collection-edit.vercel.app/deploy-nft-single).
+
+#### Implementation
+
+Create a new file `3-send-nft.ts`:
 
 ```typescript title="3-send-nft.ts"
 import { mnemonicToWalletKey } from "@ton/crypto";
@@ -208,3 +275,13 @@ async function main() {
 }
 main();
 ```
+
+Run this example using following command:
+
+```bash
+npx ts-node 3-send-nft.ts
+```
+
+#### Expected result
+
+Navigate to [Tonviewer](https://testnet.tonviewer.com/) and paste your address into search bar. You should see NFT transfer with *'Hello from NFT!'* comment.
