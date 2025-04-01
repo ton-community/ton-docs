@@ -163,7 +163,7 @@ For more details, refer to the [Tact documentation](https://docs.tact-lang.org/#
 
 Let's create and modify our smart-contract folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview) section.
 
-### Step1: Creating and modifying Tact contract
+### Step 1: Creating and modifying Tact contract
 
 First, let's create Tact contract.
 
@@ -407,7 +407,13 @@ contract CounterInternal with Deployable, Ownable {
 }
 ```
 
-### Step2: Using contract wrappers
+Verify that smart-contract code is correct by running build script:
+
+```bash
+npm blueprint build 
+```
+
+### Step 2: Using contract wrappers
 
 [Wrappers](https://docs.tact-lang.org/book/compile/#wrap-ts) facilitate contract interaction from TypeScript. Unlike in FunC or Tolk, they are generated automatically during the build process:
 
@@ -415,119 +421,22 @@ contract CounterInternal with Deployable, Ownable {
 export * from '../build/CounterInternal/tact_CounterInternal';
 ```
 
-### Step3: Updating tests
+### Step 3: Updating tests
 
-TODO: add separate test
+Now let's ensure that our smart-contract failes if non-owner tries to increment smart-contract by adding this test:
 
----
+```typescript title="tests/CounterInternal.spec.ts"
+import { Blockchain, SandboxContract, TreasuryContract} from '@ton/sandbox';
+import { Cell, toNano } from '@ton/core';
+import { CounterInternal } from '../wrappers/CounterInternal';
+import '@ton/test-utils';
+import { compile } from '@ton/blueprint';
 
-## External Messages
-
-`External messages` are your only way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because in most cases you don't want external entry points to be accessible to anyone except you. If this is all functionality that you want from external section - standard way is to delegate this responsibility to separate actor - [wallet](v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets) which is practically the main reason they were designed for.
-
-Developing external endpoint includes several standard [approuches](/v3/documentation/smart-contracts/message-management/external-messages) and [security measures](/v3/guidelines/smart-contracts/security/overview) that might be overwhelming at this point. Therefore in this guide we will realize incrementing previously added to `hello_world` contract `ctxCounterExt` and add send message to out `Tact` contract.
-
-:::danger
-This implementation is **unsafe** and may lead to loosing your contract funds. Don't deploy it to `mainnet`, especially with high smart-contract balance.
-:::
-
-## Implementation
-
-
-
-
-And add wrapper method to call it through our wrapper class:
-
-```typescript
-async function sendExternal(
-    provider: ContractProvider,
-    opts: {
-        mode: number
-        message: Cell,
-        secret_key: Buffer
-    }
-) {
-    const seqno = await this.getCounter(provider)
-    const id = await this.getID(provider)
-
-    const toSign = beginCell()
-        .storeUint(id, 32)
-        .storeUint(seqno, 32)
-        .storeUint(opts.mode, 8)
-        .storeRef(opts.message)
-
-    const signature = sign(toSign.endCell().hash(), opts.secret_key)
-
-    return await provider.external(beginCell()
-        .storeBuffer(signature)
-        .storeBuilder(toSign)
-    .endCell()
-    );
-}
-```
-
-Here we are preparing all required values for contract checks and add payload message that will be sent as internal message further to final receiver smart-contract.
-
-As you can see here we are using `provider.external()` method instead of `provider.internal()` one which requires a via argument, that now we can start to understand. The thing is that `provider.internal()` method is doing practically the same thing that we are trying to implement: since we can't directly call internal methods to test them we need to wrap them into external message and send it through some wallet.
-
-Now let's test our implementation:
-
-```typescript
-it('should send an external message containing an internal message', async () => {
-    const receiver = await blockchain.treasury('receiver');
-
-    const internalMessage = beginCell()
-        .storeUint(0, 32) // Simple message with no specific opcode
-        .storeUint(42, 64) // queryID = 42
-        .storeStringTail('Hello from external message!')
-        .endCell();
-
-    const messageToSend = beginCell().store(storeMessageRelaxed(internal({
-        to: receiver.address,
-        value: toNano(0.01),
-        body: internalMessage,
-        bounce: true,
-    }))).endCell();
-
-    const receiverBalanceBefore = await receiver.getBalance();
-
-    const result = await helloWorld.sendExternal({
-        mode: SendMode.PAY_GAS_SEPARATELY,
-        message: messageToSend,
-        secret_key: keyPair.secretKey
-    });
-
-    expect(result.transactions).toHaveTransaction({
-        from: undefined, // External messages have no 'from' address
-        to: helloWorld.address,
-        success: true,
-    });
-
-    expect(result.transactions).toHaveTransaction({
-        from: helloWorld.address,
-        to: receiver.address,
-        success: true,
-    });
-
-    const receiverBalanceAfter = await receiver.getBalance();
-
-    expect(receiverBalanceAfter).toBeGreaterThan(receiverBalanceBefore);
-    const [seqnoAfter] = await helloWorld.getSeqnoPKey();
-    expect(seqnoAfter).toBe(1); // Since it should start from 0 and increment to 1
-});
-```
-
-#### Testing the multi-contract system
-
-The following test case demonstrates how to deploy and interact with a `HelloWorld` smart contract and a `CounterInternal` contract:
-
-```typescript
 describe('CounterInternal', () => {
     let codeHelloWorld: Cell;
     let blockchain: Blockchain;
-    let helloWorld: SandboxContract<HelloWorld>;
     let counterInternal: SandboxContract<CounterInternal>;
-    let keyPair: KeyPair;
+    let deployerCounter: SandboxContract<TreasuryContract>;
 
     beforeAll(async () => {
         codeHelloWorld = await compile('HelloWorld');
@@ -536,38 +445,13 @@ describe('CounterInternal', () => {
     beforeEach(async () => {
         blockchain = await Blockchain.create();
 
-        // Generate a key pair for HelloWorld
-        const seed = await getSecureRandomBytes(32);
-        keyPair = keyPairFromSeed(seed);
-
-        // Deploy HelloWorld contract
-        helloWorld = blockchain.openContract(
-            HelloWorld.createFromConfig(
-                {
-                    id: 0,
-                    seqno: 0,
-                    publicKey: keyPair.publicKey
-                },
-                codeHelloWorld
-            )
-        );
-
-        const deployerHello = await blockchain.treasury('deployerHello');
-        const deployResultHello = await helloWorld.sendDeploy(deployerHello.getSender(), toNano('1.00'));
-
-        expect(deployResultHello.transactions).toHaveTransaction({
-            from: deployerHello.address,
-            to: helloWorld.address,
-            deploy: true,
-            success: true
-        });
+        deployerCounter = await blockchain.treasury('deployerCounter');
 
         // Deploy CounterInternal with HelloWorld as the owner
         counterInternal = blockchain.openContract(
-            await CounterInternal.fromInit(0n, helloWorld.address)
+            await CounterInternal.fromInit(0n, deployerCounter.address)
         );
 
-        const deployerCounter = await blockchain.treasury('deployerCounter');
         const deployResultCounter = await counterInternal.send(deployerCounter.getSender(), { value: toNano('1.00') }, {
             $$type: 'Deploy',
             queryId: 0n
@@ -584,7 +468,7 @@ describe('CounterInternal', () => {
     it('should fail if not owner call increment', async () => {
         // Verify owner is correctly set to HelloWorld
         const ownerAddress = await counterInternal.getOwner();
-        expect(ownerAddress.equals(helloWorld.address)).toBe(true);
+        expect(ownerAddress.equals(deployerCounter.address)).toBe(true);
 
         // Get initial counter value
         const counterBefore = await counterInternal.getCounter();
@@ -613,57 +497,181 @@ describe('CounterInternal', () => {
         const counterAfterNonOwner = await counterInternal.getCounter();
         expect(counterAfterNonOwner).toBe(counterBefore);
     });
+});
 
-    it('should increment from HelloWorld contract', async () => {
-        const increaseBy = 5n;
-        const counterBefore = await counterInternal.getCounter();
+```
 
-        // Create internal message to increase counter that will be sent from HelloWorld
-        const internalMessageBody = beginCell().store(storeAdd({
-            $$type: 'Add',
-            amount: increaseBy,
-            queryId: 0n
-        })).endCell();
+---
 
-        const messageToSend = beginCell().store(storeMessageRelaxed(internal({
-            to: counterInternal.address,
-            value: toNano(0.01),
-            body: internalMessageBody,
-            bounce: true
-        }))).endCell();
+## External Messages
 
-        // Send external message to HelloWorld that contains internal message to CounterInternal
-        const result = await helloWorld.sendExternal({
-            mode: SendMode.PAY_GAS_SEPARATELY,
-            message: messageToSend,
-            secret_key: keyPair.secretKey
+`External messages` are your only way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because in most cases you don't want external entry points to be accessible to anyone except you. If this is all functionality that you want from external section - standard way is to delegate this responsibility to separate actor - [wallet](v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets) which is practically the main reason they were designed for.
+
+Developing external endpoint includes several standard [approuches](/v3/documentation/smart-contracts/message-management/external-messages) and [security measures](/v3/guidelines/smart-contracts/security/overview) that might be overwhelming at this point. Therefore in this guide we will realize incrementing previously added to `hello_world` contract `ctxCounterExt` number and add send message to out `Tact` contract.
+
+:::danger
+This implementation is **unsafe** and may lead to loosing your contract funds. Don't deploy it to `mainnet`, especially with high smart-contract balance.
+:::
+
+## Implementation
+
+Let's modify our smart-contract to recieve external messages and send increase counter to another contract folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview).
+
+### Step1 : Edit smart-contract code
+
+Add `recv_external` function to `HelloWorld` smart-contract:
+
+```func title="HelloWorld.fc"
+() recv_external(slice in_msg) impure {
+    accept_message();
+
+    var (ctx_id, ctx_counter, ctx_counter_ext) = load_data();
+
+    var query_id = in_msg~load_uint(64);
+    var addr = in_msg~load_msg_addr();
+    var coins = in_msg~load_coins();
+    var increase_by = in_msg~load_uint(32);
+
+    var msg = begin_cell()
+        .store_uint(0x18, 6)
+        .store_slice(addr)
+        .store_coins(coins)
+        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+        .store_uint(op::increase, 32)
+        .store_uint(query_id, 64)
+        .store_uint(increase_by, 32);
+    send_raw_message(msg.end_cell(), 0);
+
+    ctx_counter_ext += increase_by;
+    save_data(ctx_id, ctx_counter, ctx_counter_ext);
+
+    return ();
+}
+```
+
+Verify that smart-contract code is correct by running:
+
+```bash
+npm blueprint build
+```
+
+### Step 2: Update Wrapper 
+
+And add wrapper method to call it through our wrapper class for sending external message:
+
+```typescript
+async sendExternalIncrease(
+    provider: ContractProvider,
+    opts: {
+        increaseBy: number;
+        value: bigint;
+        addr: Address;
+        queryID?: number;
+    }
+) {
+    const message = beginCell()
+        .storeUint(opts.queryID ?? 0, 64)
+        .storeAddress(opts.addr)
+        .storeCoins(opts.value)
+        .storeUint(opts.increaseBy, 32)
+    .endCell()
+
+    return await provider.external(message);
+}
+```
+
+### Step 3: Update test
+
+Update test to esnure that `HelloWorld` contract recieved internal message, sended internal message to `CounterInternal` contract and both updated their counters:
+
+```typescript title="HelloWorld.spec.ts"
+import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
+import { Cell, toNano} from '@ton/core';
+import { HelloWorld } from '../wrappers/HelloWorld';
+import '@ton/test-utils';
+import { compile } from '@ton/blueprint';
+
+describe('HelloWorld', () => {
+    let code: Cell;
+
+    beforeAll(async () => {
+        code = await compile('HelloWorld');
+    });
+
+    let blockchain: Blockchain;
+    let deployer: SandboxContract<TreasuryContract>;
+    let helloWorld: SandboxContract<HelloWorld>;
+
+    beforeEach(async () => {
+        blockchain = await Blockchain.create();
+
+        helloWorld = blockchain.openContract(
+            HelloWorld.createFromConfig(
+                {
+                    id: 0,
+                    ctxCounter: 0,
+                    ctxCounterExt: 0n,
+                },
+                code
+            )
+        );
+
+        deployer = await blockchain.treasury('deployer');
+
+        const deployResult = await helloWorld.sendDeploy(deployer.getSender(), toNano('1.00'));
+
+        expect(deployResult.transactions).toHaveTransaction({
+            from: deployer.address,
+            to: helloWorld.address,
+            deploy: true,
+            success: true,
+        });
+    });
+
+    it('should deploy', async () => {
+        // the check is done inside beforeEach
+        // blockchain and helloWorld are ready to use
+    });
+
+    it('should send an external message and update counter', async () => {
+        const receiver = await blockchain.treasury('receiver');
+
+        const receiverBalanceBefore = await receiver.getBalance();
+        const [__, counterExtBefore] = await helloWorld.getCounters()
+        const increase = 5;
+
+        const result = await helloWorld.sendExternalIncrease({
+            increaseBy: increase,
+            value: toNano(0.05),
+            addr: receiver.address,
+            queryID: 0
         });
 
-        // Verify the external message was processed successfully
         expect(result.transactions).toHaveTransaction({
             from: undefined, // External messages have no 'from' address
             to: helloWorld.address,
-            success: true
+            success: true,
         });
 
-        // Verify the internal message was sent from HelloWorld to CounterInternal
         expect(result.transactions).toHaveTransaction({
             from: helloWorld.address,
-            to: counterInternal.address,
-            success: true
+            to: receiver.address,
+            success: true,
         });
 
-        // Verify the counter was increased
-        const counterAfter = await counterInternal.getCounter();
-        expect(counterAfter).toBe(counterBefore + increaseBy);
+        const receiverBalanceAfter = await receiver.getBalance();
+
+        expect(receiverBalanceAfter).toBeGreaterThan(receiverBalanceBefore);
+        const [_, counterExt] = await helloWorld.getCounters()
+        expect(counterExtBefore + BigInt(increase)).toBe(counterExt);
     });
 });
 ```
 
+Verify that all examples is correct by running test script:
 
+```bash
+npm blueprint test
+```
 
-Congratulations! You have successfully created a **multi-contract** system and learned how to handle **internal messages**. This example illustrates the typical flow of any message chain: sending an `external message`, triggering the `internal messages` flow based on your system model, and so on. Now that our contracts have been fully tested, we are ready to deploy them and interact with them on-chain.
-
-:::danger
-Before deploying your smart contracts to the **mainnet**, review the [Security Measures](/v3/guidelines/smart-contracts/security/overview) to ensure your contract is secure.
-:::
+Congratulations! You have successfully created a **multi-contract** system and learned how to handle **internal** and **external** messages. This example illustrates the typical flow of any message chain: sending an `external message`, triggering the `internal messages` flow based on your system model, and so on. Now that our contracts have been fully tested, we are ready to deploy them and interact with them on-chain.
