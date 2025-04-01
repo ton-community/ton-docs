@@ -220,7 +220,7 @@ By default, validators collate all blocks themselves. To use collator nodes, cre
 * `clear-collators-list` resets the validator to the default behavior.
 * `show-collators-list` displays the current list.
 
-The **collators list** is a JSOn file. It contains a list of collator node ADNL ids for each shard.
+The **collators list** is a JSON file. It contains a list of collator node ADNL ids for each shard.
 
 ### Example 1: collators for all shards
 ```json
