@@ -5,9 +5,8 @@ import TabItem from '@theme/TabItem';
 
 > **Summary:** In previous steps we modified our smart-contract interaction with `storage, `get methods` and learned basic smart-contract development flow.
 
-Now that we have learned basic examples of modifying smart-contract code and using development tools, we are ready to move on to the main functionality of smart contracts - sending and receiving messages.
+Now that we have learned basic examples of modifying smart-contract code and using development tools, we are ready to move on to the main functionality of smart contracts - sending and receiving messages. In TON messages not only used for sending currency, but also as data-exchange mechanism between smart-contracts.
 
-First thing to mention is that in TON, messages are not just currency exchange actions carrying TON coins. They are also a **data exchange mechanism** that provides an opportunity to create your own "network" of smart contracts interacting with each other and smart contracts of other network participants that are not under your direct control.
 
 :::tip
 If you are stuck on some of the examples you can find original template project with all modifications performed during this guide [here](https://github.com/ton-community/ton-onboarding-sandbox/tree/main/quick-start/smart-contracts/Example).
@@ -17,76 +16,11 @@ If you are stuck on some of the examples you can find original template project 
 
 ## Internal messages
 
-We are almost at the finish line! Let's cook a simple `internal message` to other contract and implement its processing on receiver side! We have already seen a counter that increases its values through `external messages`, now let's make it through internal one. And to make this task a little more interesting let's ensure that only one `actor` has access to this functionality.
-
-### Actors and roles
-
-Since TON implements actor [model](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor) it's natural to think about smart-contracts relations in terms of `roles`, determining who can access smart-contract functionality or not. The most common examples of roles are:
-
- - `anyone`: any contract that don't have distinct role.
- - `owner`: contract that has exclusive access to some crucial parts of functionality.
-
-If you look at `recv_internal()` function signature in your smart contract you can see `in_msg_full` and `in_msg_body` arguments, while the second one carries actual payload of sender which is free to fill it anyway they want, first one consists of several values describing transaction context. You can consider `in_msg_full` as some type of message **header**. We will not dwell in detail for each of values during this guide, what is important for us now, is that this part of message is defined by TON implementation and **always validated on sender side** and as a result cannot be fabricated.
-
-What we specifically are interested in is the source address of message, by obtaining that address and comparing to stored one, that we previously saved, for example, during deployment, we can open crucial part of our smart contract functionality. Common approach looks like this:
-
-<Tabs groupId="language">
-<TabItem value="FunC" label="FunC">
-```func
-;; This is NOT a part of the project, just an example.
-() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
-    ;; Parse the sender address from in_msg_full
-    slice cs = in_msg_full.begin_parse();
-    int flags = cs~load_uint(4);
-    slice sender_address = cs~load_msg_addr();
-
-    ;; check if message was send by owner
-    if (equal_slices(sender_address, owner_address)) {
-      ;;owner operations
-      return
-    } else if (equal_slices(sender_address, other_role_address)){
-      ;;other role operations
-      return
-    } else {
-      ;;anyone else operations
-      return
-    }
-
-    ;;no known operation were obtained for presented role
-    ;;0xffff is not standard exit code, but is standard practice among TON developers
-    throw(0xffff);
-}
-```
-</TabItem>
-<TabItem value="Tolk" label="Tolk">
-```tolk
-// This is NOT a part of the project, just an example.
-fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
-    // Parse the sender address from in_msg_full
-    var cs: slice = msgFull.beginParse();
-    val flags = cs.loadMessageFlags();
-    var sender_address = cs~load_msg_address();
-
-    if (isSliceBitsEqual(sender_address, owner_address)) {
-      // owner operations
-      return
-    } else if (isSliceBitsEqual(sender_address, other_role_address)){
-      // other role operations
-      return
-    } else {
-      // anyone else operations
-      return
-    }
-
-    throw 0xffff; // if the message contains an op that is not known to this contract, we throw
-}
-```
-</TabItem>
-</Tabs>
+Before we proceed to implementation let's briefly describe main ways and patterns that we can use to process internal messages.
 
 ### Operations
 
-Another common pattern in TON contracts is to include a **32-bit operation code** in message bodies which tells your contract what action to perform:
+Common pattern in TON contracts is to include a **32-bit operation code** in message bodies which tells your contract what action to perform:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -146,6 +80,96 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 
     // Unknown operation
     throw(0xffff);
+}
+```
+</TabItem>
+</Tabs>
+
+### Actors and roles
+
+Since TON implements [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor) model it's natural to think about smart-contracts relations in terms of `roles`, determining who can access smart-contract functionality or not. The most common examples of roles are:
+
+ - `anyone`: any contract that don't have distinct role.
+ - `owner`: contract that has exclusive access to some crucial parts of functionality.
+
+Let's examine `recv_internal` function signature to understdand how we could use that:
+
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
+```func
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure
+```
+ - `my_balance` - balance of smart-contract at the beggining of the transaction.
+ - `msg_value` - funds recieved with message.
+ - `in_msg_full` - `cell` containing "header" fields of message.
+ - `in_msg_body` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containg payload pf the message.
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice)
+```
+ - `myBalance` - balance of smart-contract at the beggining of the transaction.
+ - `msgValue` - funds recieved with message.
+ - `msgFull` - `cell` containing "header" fields of message.
+ - `msgBody` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containg payload pf the message.
+</TabItem>
+</Tabs>
+
+:::info
+You can find comprehensive description of sending messages in this [section](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
+:::
+
+What we specifically are interested in is the source address of message that we could extract from `msg_full` cell, by obtaining that address and comparing to stored one, that we previously saved, for example, during deployment, we can open crucial part of our smart contract functionality. Common approach looks like this:
+
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
+```func
+;; This is NOT a part of the project, just an example.
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    ;; Parse the sender address from in_msg_full
+    slice cs = in_msg_full.begin_parse();
+    int flags = cs~load_uint(4);
+    slice sender_address = cs~load_msg_addr();
+
+    ;; check if message was send by owner
+    if (equal_slices(sender_address, owner_address)) {
+      ;;owner operations
+      return
+    } else if (equal_slices(sender_address, other_role_address)){
+      ;;other role operations
+      return
+    } else {
+      ;;anyone else operations
+      return
+    }
+
+    ;;no known operation were obtained for presented role
+    ;;0xffff is not standard exit code, but is standard practice among TON developers
+    throw(0xffff);
+}
+```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+// This is NOT a part of the project, just an example.
+fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
+    // Parse the sender address from in_msg_full
+    var cs: slice = msgFull.beginParse();
+    val flags = cs.loadMessageFlags();
+    var sender_address = cs~load_msg_address();
+
+    if (isSliceBitsEqual(sender_address, owner_address)) {
+      // owner operations
+      return
+    } else if (isSliceBitsEqual(sender_address, other_role_address)){
+      // other role operations
+      return
+    } else {
+      // anyone else operations
+      return
+    }
+
+    throw 0xffff; // if the message contains an op that is not known to this contract, we throw
 }
 ```
 </TabItem>
@@ -218,9 +242,9 @@ Example/
 </TabItem>
 </Tabs>
 
-At the top of the generated contract file: `counter_internal.tolk`, you may see a [message](https://docs.tact-lang.org/book/structs-and-messages/) definition:
+At the top of the generated contract file: `counter_internal.tact`, you may see a [message](https://docs.tact-lang.org/book/structs-and-messages/) definition:
 
-```tact
+```tact title="counter_internal.tact"
 message Add {
     queryId: Int as uint64;
     amount: Int as uint32;
@@ -229,7 +253,7 @@ message Add {
 
 A message is a basic structure for communication between contracts. Tact automatically serializes and deserializes messages into cells. To ensure that opcodes will be the same during message structure changes, it may be added like below:
 
-```tact
+```tact title="counter_internal.tact"
 message(0x7e8764ef) Add {
     queryId: Int as uint64;
     amount: Int as uint32;
@@ -269,7 +293,7 @@ counter: Int as uint32;
 
 To ensure that only the contract owner can interact with specific functions, add an `owner` field:
 
-```tact
+```tact title="counter_internal.tact"
 id: Int as uint32;
 counter: Int as uint32;
 owner: Address;
@@ -281,7 +305,7 @@ These fields are serialized similarly to structures and stored in the contract's
 
 If you compile the contract at this stage, you will encounter the error: `Field "owner" is not set`. This is because the contract needs to initialize its fields upon deployment. Define an [`init()`](https://docs.tact-lang.org/book/contracts/#init-function) function to do this:
 
-```tact
+```tact title="counter_internal.tact"
 init(id: Int, owner: Address) {
     self.id = id;
     self.counter = 0;
@@ -293,7 +317,7 @@ init(id: Int, owner: Address) {
 
 To accept messages from other contracts, use a [receiver](https://docs.tact-lang.org/book/functions/#receiver-functions) function. Receiver functions automatically match the message's opcode and invoke the corresponding function:
 
-```tact
+```tact title="counter_internal.tact"
 receive(msg: Add) {
     self.counter += msg.amount;
     self.notify("Cashback".asComment());
@@ -304,7 +328,7 @@ receive(msg: Add) {
 
 To ensure that only the contract owner can send messages, use the `require` function:
 
-```tact
+```tact title="counter_internal.tact"
 receive(msg: Add) {
     // `sender()` function is used to retrieve message sender address
     require(sender() == self.owner, "Not owner!");
@@ -319,7 +343,7 @@ receive(msg: Add) {
 
 Tact also provides handy ways to share same logic through [traits](https://docs.tact-lang.org/book/types/#traits). Use the `Ownable` trait, which provides built-in ownership checks:
 
-```tact
+```tact title="counter_internal.tact"
 // Import library to use trait
 import "@stdlib/ownable";
 
@@ -346,14 +370,9 @@ Tact supports [getter functions](https://docs.tact-lang.org/book/functions/#gett
 Get function cannot be called from another contract.
 :::
 
-```tact
+```tact title="counter_internal.tact"
 get fun counter(): Int {
     return self.counter;
-}
-
-slice get_owner() method_id {
-    load_data();
-    return owner_address;
 }
 ```
 
@@ -361,7 +380,7 @@ Note, that the `owner` getter is automatically defined via the `Ownable` trait.
 
 #### Complete contract
 
-```tact title="CounterInternal.tact"
+```tact title="counter_internal.tact"
 import "@stdlib/deploy";
 import "@stdlib/ownable";
 
@@ -413,7 +432,7 @@ Verify that smart-contract code is correct by running build script:
 npm blueprint build 
 ```
 
-### Step 2: Using contract wrappers
+### Step 2: Update wrapper
 
 [Wrappers](https://docs.tact-lang.org/book/compile/#wrap-ts) facilitate contract interaction from TypeScript. Unlike in FunC or Tolk, they are generated automatically during the build process:
 
@@ -505,7 +524,7 @@ describe('CounterInternal', () => {
 
 ## External Messages
 
-`External messages` are your only way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because in most cases you don't want external entry points to be accessible to anyone except you. If this is all functionality that you want from external section - standard way is to delegate this responsibility to separate actor - [wallet](v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets) which is practically the main reason they were designed for.
+`External messages` are your only way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because in most cases you don't want external entry points to be accessible to anyone except you. If this is all functionality that you want from external section - standard way is to delegate this responsibility to separate actor - [wallet](v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets), which is practically the main reason they were designed for.
 
 Developing external endpoint includes several standard [approuches](/v3/documentation/smart-contracts/message-management/external-messages) and [security measures](/v3/guidelines/smart-contracts/security/overview) that might be overwhelming at this point. Therefore in this guide we will realize incrementing previously added to `hello_world` contract `ctxCounterExt` number and add send message to out `Tact` contract.
 

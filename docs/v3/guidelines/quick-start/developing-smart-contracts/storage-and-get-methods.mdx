@@ -9,12 +9,10 @@ import TabItem from '@theme/TabItem';
 If you are stuck on some of the examples you can find original template project with all modifications performed during this guide [here](https://github.com/ton-community/ton-onboarding-sandbox/tree/main/quick-start/smart-contracts/Example).
 :::
 
-While it's technically possible to create smart contract on TON not having any persistent storage, almost all smart-contracts need to store their `data` between transactions. This guide explains standard ways of managing `storage` of smart-contract and using `get methods` to obtain it from outside the blockchain.
+Almost all smart-contracts need to store their `data` between transactions. This guide explains standard ways of managing `storage` of smart-contract and using `get methods` to obtain it from outside the blockchain.
 
 
 ## Smart Contract Storage Operations
-
-First thing that we should say is that there is a small, but important difference between smart-contract `persistent data` and [TVM storage](/v3/documentation/tvm/tvm-initialization#initial-state) existing only during execution of smart-contract. Remember that smart-contracts follow **transaction** concept - if any system or user exception is raised during execution, i.e. transaction fails - `TVM storage` will not be committed to smart-contract `persistent data`. From the realization point this means that smart-contract `persistent data` is copied to `TVM storage` before starting the execution and committed back, optionally modified, in case of successful **transaction**. For simplification of this guide we will not use those strict terms, instead we will describe both as `storage` and rely on context, so, keep these facts in mind.
 
 There are two main instructions that provide access to smart-contract storage: 
  - `get_data()` returning current storage cell.
@@ -26,8 +24,8 @@ Lets examine `Cell` entity structure to understand how we could manage contract 
 
 TON blockchain uses a data structure called **`Cell`** as the fundamental unit for storing data. Cells are the building blocks of the `TVM` (TON Virtual Machine) and have those characteristics:
 
-- A `Cell` can store up to 1023 bits (approximately 128 bytes) of data
-- A `Cell` can reference up to 4 other `Cells` (children's)
+- `Cell` can store up to 1023 bits (approximately 128 bytes) of data
+- `Cell` can reference up to 4 other `Cells` (children's)
 - `Cell` is immutable once created
 
 You can think of Cell as the following structure:
@@ -104,7 +102,7 @@ fun saveData() {
 
 #### Managing storage
 
-Let's try to modify our example a little bit. First, let's use a more common approach of passing storage members as parameters to `save_data(members...)` and retrieve them as `(members...) get_data()` moving global variables ctx_id and ctx_counter to method bodies. Also, let's add additional integer of 256-bit size into our storage:
+Let's try to modify our example a little bit. First, let's use a more common approach of passing storage members as parameters to `save_data(members...)` and retrieve them as `(members...) get_data()` moving global variables `ctx_id` and `ctx_counter` to method bodies. Also, let's add additional integer of 256-bit size into our storage:
 
 Result of our modifications should look like this:
 
@@ -190,7 +188,7 @@ save_data(ctx_id, ctxCounter, ctxCounterExt);
 
 #### Get methods
 
-The primary use of get methods is reading our storage data from outside the blockchain using a convenient interface, primarily to extract data that is required to prepare a transaction.
+The primary use of **get methods** is reading our storage data from outside the blockchain using a convenient interface, primarily to extract data that is required to prepare a **transaction**.
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -211,19 +209,103 @@ get get_counters(): (int, int) {
 </TabItem>
 </Tabs>
 
+And that's it! In practice all **get methods** follow this simple flow and don't require anything more. Note that you can omit values returned from functions using `_` syntax.
+
+Final smart-contract code should look like this:
+
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
+
+```func title="hello_world.fc"
+#include "imports/stdlib.fc";
+
+const op::increase = "op::increase"c; ;; create an opcode from string using the "c" prefix, this results in 0x7e8764ef opcode in this case
+const op::send_increase = "op::send_increase"c; ;; create an opcode from string using the "c" prefix, this results in 0x7e8764ef opcode in this case
+
+(int, int, int) load_data() {
+    var ds = get_data().begin_parse();
+
+    int ctx_id = ds~load_uint(32);
+    int ctx_counter = ds~load_uint(32);
+    int ctx_counter_ext = ds~load_uint(256);
+
+    ds.end_parse();
+
+    return (ctx_id, ctx_counter, ctx_counter_ext);
+}
+
+() save_data(int ctx_id, int ctx_counter, int ctx_counter_ext) impure {
+    set_data(
+        begin_cell()
+            .store_uint(ctx_id, 32)
+            .store_uint(ctx_counter, 32)
+            .store_uint(ctx_counter_ext, 256)
+        .end_cell()
+    );
+}
+
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    if (in_msg_body.slice_empty?()) { ;; ignore all empty messages
+        return ();
+    }
+
+    slice cs = in_msg_full.begin_parse();
+    int flags = cs~load_uint(4);
+    if (flags & 1) { ;; ignore all bounced messages
+        return ();
+    }
+
+    var (ctx_id, ctx_counter, ctx_counter_ext) = load_data(); ;; here we populate the storage variables
+
+    int op = in_msg_body~load_uint(32); ;; by convention, the first 32 bits of incoming message is the op
+    int query_id = in_msg_body~load_uint(64); ;; also by convention, the next 64 bits contain the "query id", although this is not always the case
+
+    if (op == op::increase) {
+        int increase_by = in_msg_body~load_uint(32);
+        ctx_counter += increase_by;
+        save_data(ctx_id, ctx_counter, ctx_counter_ext);
+        return ();
+    }
+
+    throw(0xffff); ;; if the message contains an op that is not known to this contract, we throw
+}
+
+int get_counter() method_id {
+    var (_, ctx_counter, _) = load_data();
+    return ctx_counter;
+}
+
+int get_id() method_id {
+    var (ctx_id, _, _) = load_data();
+    return ctx_id;
+}
+
+(int, int) get_counters() method_id {
+    var (_, ctx_counter, ctx_counter_ext) = load_data();
+    return (ctx_counter, ctx_counter_ext);
+}
+}
+```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk title="hello_world.tolk"
+get get_counters(): (int, int) {
+    var (_, ctxCounter, ctxCounterExt) = load_data();
+    return (ctxCounter, ctxCounterExt);
+}
+```
+</TabItem>
+</Tabs>
+
 Don't forget to check the correctness of your changes by compiling the smart contract:
 
 ```bash
 npm run build
 ```
 
-And that's it! In practice all get methods follow this simple flow and don't require anything more. Note that you can omit values returned from functions using '_' syntax.
-
 ### Step2: Updating wrapper
 
-Now lets update our wrapper class corresponding to new storage layout and new `get method`.
-
-First, let's modify `helloWorldConfigToCell` function and `HelloWorldConfig` type to properly initialize our storage during deployment:
+Now lets update our wrapper class corresponding to new storage layout and new `get method`. First, let's modify `helloWorldConfigToCell` function and `HelloWorldConfig` type to properly initialize our storage during deployment:
 
 ```typescript title="HelloWorld.ts"
 export type HelloWorldConfig = {
@@ -240,7 +322,7 @@ export function helloWorldConfigToCell(config: HelloWorldConfig): Cell {
     .endCell();
 }
 ```
-Second, add a method to perform a request for the newly created get method:
+Second, add a method to perform a request for the newly created **get method**:
 
 ```typescript title="HelloWorld.ts"
 async getSeqnoPKey(provider: ContractProvider) {
@@ -254,47 +336,84 @@ async getSeqnoPKey(provider: ContractProvider) {
 
 ### Step3: Updating tests
 
-And finally, let's write a simple test, checking that the deployment process initializes smart contract storage and correctly retrieves its data by get methods.
-
-First, let's update the `before each` section and particularly the `openContract` logic with the following one:
+And finally, let's update our test to check that the deployment process initializes smart contract storage and correctly retrieves its data by get methods.
 
 ```typescript title="HelloWorld.spec.ts"
-helloWorld = blockchain.openContract(
-    HelloWorld.createFromConfig(
-        {
+import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
+import { Cell, toNano} from '@ton/core';
+import { HelloWorld } from '../wrappers/HelloWorld';
+import '@ton/test-utils';
+import { compile } from '@ton/blueprint';
+
+describe('HelloWorld', () => {
+    let code: Cell;
+
+    beforeAll(async () => {
+        code = await compile('HelloWorld');
+    });
+
+    let blockchain: Blockchain;
+    let deployer: SandboxContract<TreasuryContract>;
+    let helloWorld: SandboxContract<HelloWorld>;
+
+    beforeEach(async () => {
+        blockchain = await Blockchain.create();
+
+        helloWorld = blockchain.openContract(
+            HelloWorld.createFromConfig(
+                {
+                    id: 0,
+                    ctxCounter: 0,
+                    ctxCounterExt: 0n,
+                },
+                code
+            )
+        );
+
+        deployer = await blockchain.treasury('deployer');
+
+        const deployResult = await helloWorld.sendDeploy(deployer.getSender(), toNano('1.00'));
+
+        expect(deployResult.transactions).toHaveTransaction({
+            from: deployer.address,
+            to: helloWorld.address,
+            deploy: true,
+            success: true,
+        });
+    });
+
+    it('should correctly initialize and return the initial data', async () => {
+        // Define the expected initial values (same as in beforeEach)
+        const expectedConfig = {
             id: 0,
-            ctxCounter: 0,
-            ctxCounterExt: 0n
-        },
-        code
-    )
-);
-```
+            counter: 0,
+            counterExt: 0n
+        };
 
-And add new test case for get methods:
+        // Log the initial configuration values before verification
+        console.log('Initial configuration values (before deployment):');
+        console.log('- ID:', expectedConfig.id);
+        console.log('- Counter:', expectedConfig.counter);
+        console.log('- CounterExt:', expectedConfig.counterExt);
 
-```typescript title="HelloWorld.spec.ts"
-it('should correctly initialize and return the initial data', async () => {
-    // Define the expected initial values (same as in beforeEach)
-    const expectedConfig = {
-        id: 0,
-        ctxCounter: 0,
-        ctxCounterExt: 0n
-    };
+        console.log('Retrieved values after deployment:');
+        // Verify counter value
+        const counter = await helloWorld.getCounter();
+        console.log('- Counter:', counter);
+        expect(counter).toBe(expectedConfig.counter);
 
-    // Verify counter value
-    const counter = await helloWorld.getCounter();
-    expect(counter).toBe(expectedConfig.ctxCounter);
+        // Verify ID value
+        const id = await helloWorld.getID();
+        console.log('- ID:', id);
+        expect(id).toBe(expectedConfig.id);
 
-    // Verify ID value
-    const id = await helloWorld.getID();
-    expect(id).toBe(expectedConfig.id);
+        // Verify counterExt
+        const [_, counterExt] = await helloWorld.getCounters();
+        console.log('- CounterExt', counterExt);
+        expect(counterExt).toBe(expectedConfig.counterExt);
+    });
 
-    // Verify both counters 
-    const [ctx, ctxExt] = await helloWorld.getSeqnoPKey();
-    expect(ctx).toBe(expectedConfig.ctxCounter);
-    expect(ctxExt).toBe(expectedConfig.ctxCounterExt);
-});
+}
 ```
 
 And now run your new test script by executing the following command:
