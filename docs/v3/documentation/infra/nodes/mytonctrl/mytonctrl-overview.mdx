@@ -233,7 +233,7 @@ Outputs validator efficiency data for the current and previous rounds.
 Based on the `validator index`, which can be obtained using the `status` command, there are three possible scenarios:
 
 1. **Validator index in the range [0, `max_main_validators`)**:
-   The `validator efficiency` must remain above 90% (this percentage may be adjusted in the future based on statistics) for the entire round. If it falls below this threshold, a penalty (fine) may be imposed.
+   The `validator efficiency` must remain above 90% for the entire round. This percentage may be adjusted in the future based on statistics. If it falls below this threshold, a penalty (fine) may be imposed.
 
 2. **Validator index in the range [`max_main_validators`, `max_validators`)**:
    The `validator efficiency` should still be above 90% for the full round (this percentage may be adjusted in the future based on statistics). Currently, no penalties will be applied; however, this may change in future updates.
