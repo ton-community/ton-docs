@@ -310,7 +310,10 @@
     "xtwitter",
     "yourname",
     "zellic",
-    "zerostate"
+    "zerostate",
+    "decentralised",
+    "colour",
+    "analyse"
   ],
   "ignoreRegExpList": [
     "\\(#.*\\)",
