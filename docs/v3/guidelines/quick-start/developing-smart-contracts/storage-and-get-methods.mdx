@@ -42,7 +42,7 @@ interface Cell {
 
 ## Implementation
 
-Let's try to modify our smart-contract folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/storage-and-get-methods) section.
+Let's try to modify our smart-contract folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview) section.
 
 ### Step1: Edit smart-contract code
 
@@ -50,7 +50,7 @@ In case it's inconvenient to always serialize and deserialize storage cell, ther
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
-```func hello_world.fc
+```func title="hello_world.fc"
 global int ctx_id;
 global int ctx_counter;
 
@@ -76,7 +76,7 @@ global int ctx_counter;
 ```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
-```tolk
+```tolk title="hello_world.tolk"
 global ctxID: int;
 global ctxCounter: int;
 
@@ -110,7 +110,7 @@ Result of our modifications should look like this:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
-```func
+```func title="hello_world.fc"
 ;; load_data retrieves variables from TVM storage cell
 (int, int, int) load_data() {
     var ds = get_data().begin_parse();
@@ -140,7 +140,7 @@ Result of our modifications should look like this:
 ```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
-```tolk
+```tolk title="hello_world.tolk"
 // load_data retrieves variables from TVM storage cell
 // impure because of writting into global variables
 fun loadData(): (int, int, int) {
@@ -175,13 +175,13 @@ Don't forget to delete global variables `ctx_id`, `ctx_counter` and modify usage
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
-```func
+```func title="hello_world.fc"
 var (ctx_id, ctxCounter, ctxCounterExt) = load_data();
 save_data(ctx_id, ctxCounter, ctxCounterExt);
 ```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
-```tolk
+```tolk title="hello_world.tolk"
 var (ctx_id, ctxCounter, ctxCounterExt) = load_data();
 save_data(ctx_id, ctxCounter, ctxCounterExt);
 ```
@@ -194,7 +194,7 @@ The primary use of get methods is reading our storage data from outside the bloc
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
-```func
+```func title="hello_world.fc"
 (int, int) get_counters() method_id {
     var (_, ctxCounter, ctxCounterExt) = load_data();
     return (ctxCounter, ctxCounterExt);
@@ -202,7 +202,7 @@ The primary use of get methods is reading our storage data from outside the bloc
 ```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
-```tolk
+```tolk title="hello_world.tolk"
 get get_counters(): (int, int) {
     var (_, ctxCounter, ctxCounterExt) = load_data();
     return (ctxCounter, ctxCounterExt);
@@ -219,13 +219,13 @@ npm run build
 
 And that's it! In practice all get methods follow this simple flow and don't require anything more. Note that you can omit values returned from functions using '_' syntax.
 
-## Step2: Updating wrapper
+### Step2: Updating wrapper
 
 Now lets update our wrapper class corresponding to new storage layout and new `get method`.
 
 First, let's modify `helloWorldConfigToCell` function and `HelloWorldConfig` type to properly initialize our storage during deployment:
 
-```typescript
+```typescript title="HelloWorld.ts"
 export type HelloWorldConfig = {
     id: number;
     ctxCounter: number;
@@ -242,7 +242,7 @@ export function helloWorldConfigToCell(config: HelloWorldConfig): Cell {
 ```
 Second, add a method to perform a request for the newly created get method:
 
-```typescript
+```typescript title="HelloWorld.ts"
 async getSeqnoPKey(provider: ContractProvider) {
     const result = await provider.get('get_counters', []);
     const counter = result.stack.readNumber();
@@ -252,13 +252,13 @@ async getSeqnoPKey(provider: ContractProvider) {
 }
 ```
 
-## Step3: Updating tests
+### Step3: Updating tests
 
 And finally, let's write a simple test, checking that the deployment process initializes smart contract storage and correctly retrieves its data by get methods.
 
 First, let's update the `before each` section and particularly the `openContract` logic with the following one:
 
-```typescript
+```typescript title="HelloWorld.spec.ts"
 helloWorld = blockchain.openContract(
     HelloWorld.createFromConfig(
         {
@@ -273,7 +273,7 @@ helloWorld = blockchain.openContract(
 
 And add new test case for get methods:
 
-```typescript
+```typescript title="HelloWorld.spec.ts"
 it('should correctly initialize and return the initial data', async () => {
     // Define the expected initial values (same as in beforeEach)
     const expectedConfig = {

@@ -33,6 +33,7 @@ What we specifically are interested in is the source address of message, by obta
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
 ```func
+;; This is NOT a part of the project, just an example.
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
     ;; Parse the sender address from in_msg_full
     slice cs = in_msg_full.begin_parse();
@@ -59,6 +60,7 @@ What we specifically are interested in is the source address of message, by obta
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
 ```tolk
+// This is NOT a part of the project, just an example.
 fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
     // Parse the sender address from in_msg_full
     var cs: slice = msgFull.beginParse();
@@ -89,6 +91,7 @@ Another common pattern in TON contracts is to include a **32-bit operation code*
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
 ```func
+;; This is NOT a part of the project, just an example!
 const int op::increment = 1;
 const int op::decrement = 2;
 
@@ -118,6 +121,7 @@ const int op::decrement = 2;
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
 ```tolk
+//This is NOT a part of the project, just an example!
 const op::increment : int = 1;
 const op::decrement : int = 2;
 
@@ -149,7 +153,7 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 
 By combining both of these patterns you can achieve a comprehensive description of your smart-contract's systems ensuring secure interaction between them and unleash full potential of TON actors model.
 
-### Implementation in Tact
+## Implementation in Tact
 
 Tact is a high-level programming language for the TON Blockchain, focused on efficiency and simplicity. It is designed to be easy to learn and use while being well-suited for smart contract development. Tact is a statically typed language with a simple syntax and a powerful type system.
 
@@ -157,7 +161,9 @@ Tact is a high-level programming language for the TON Blockchain, focused on eff
 For more details, refer to the [Tact documentation](https://docs.tact-lang.org/#start) and [Tact By Example](https://tact-by-example.org/00-hello-world).
 :::
 
-#### Creating a Tact contract
+Let's create and modify our smart-contract folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview) section.
+
+### Step1: Creating and modifying Tact contract
 
 First, let's create Tact contract.
 
@@ -165,7 +171,54 @@ First, let's create Tact contract.
 npx blueprint create CounterInternal --type tact-counter
 ```
 
-At the top of the generated contract file, you may see a [message](https://docs.tact-lang.org/book/structs-and-messages/) definition:
+Resulted project structure should look like this:
+
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
+```ls title="Project structure"
+Example/
+├─ contracts/                  # Smart contract source code
+│  ├─ counter_internal.tact    # CounterInternal contract in Tact language
+│  ├─ hello_world.fc           # HelloWorld contract in FunC language
+├─ scripts/                    # Deployment and interaction scripts
+│  ├─ deployCounterInternal.ts    # Script to deploy contract
+│  ├─ deployHelloWorld.ts         # Script to deploy contract
+│  ├─ incrementCounterInternal.ts # Script to increment counter
+│  └─ incrementHelloWorld.ts      # Script to increment counter
+├─ tests/                      # Test suite for contracts
+│  ├─ CounterInternal.spec.ts     # Tests for CounterInternal contract
+│  └─ HelloWorld.spec.ts          # Tests for HelloWorld contract
+└─ wrappers/                   # Wrappers for contract interaction
+   ├─ CounterInternal.compile.ts  # Compilation configuration
+   ├─ CounterInternal.ts          # Wrapper for CounterInternal contract
+   ├─ HelloWorld.compile.ts       # Compilation configuration
+   └─ HelloWorld.ts               # Wrapper for HelloWorld contract
+```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```ls title="Project structure"
+Example/
+├─ contracts/                  # Smart contract source code
+│  ├─ counter_internal.tact    # CounterInternal contract in Tact language
+│  ├─ hello_world.tolk         # HelloWorld contract in FunC language
+├─ scripts/                    # Deployment and interaction scripts
+│  ├─ deployCounterInternal.ts    # Script to deploy contract
+│  ├─ deployHelloWorld.ts         # Script to deploy contract
+│  ├─ incrementCounterInternal.ts # Script to increment counter
+│  └─ incrementHelloWorld.ts      # Script to increment counter
+├─ tests/                      # Test suite for contracts
+│  ├─ CounterInternal.spec.ts     # Tests for CounterInternal contract
+│  └─ HelloWorld.spec.ts          # Tests for HelloWorld contract
+└─ wrappers/                   # Wrappers for contract interaction
+   ├─ CounterInternal.compile.ts  # Compilation configuration
+   ├─ CounterInternal.ts          # Wrapper for CounterInternal contract
+   ├─ HelloWorld.compile.ts       # Compilation configuration
+   └─ HelloWorld.ts               # Wrapper for HelloWorld contract
+```
+</TabItem>
+</Tabs>
+
+At the top of the generated contract file: `counter_internal.tolk`, you may see a [message](https://docs.tact-lang.org/book/structs-and-messages/) definition:
 
 ```tact
 message Add {
@@ -308,7 +361,7 @@ Note, that the `owner` getter is automatically defined via the `Ownable` trait.
 
 #### Complete contract
 
-```tact
+```tact title="CounterInternal.tact"
 import "@stdlib/deploy";
 import "@stdlib/ownable";
 
@@ -354,7 +407,7 @@ contract CounterInternal with Deployable, Ownable {
 }
 ```
 
-#### Using contract wrappers
+### Step2: Using contract wrappers
 
 [Wrappers](https://docs.tact-lang.org/book/compile/#wrap-ts) facilitate contract interaction from TypeScript. Unlike in FunC or Tolk, they are generated automatically during the build process:
 
@@ -362,124 +415,26 @@ contract CounterInternal with Deployable, Ownable {
 export * from '../build/CounterInternal/tact_CounterInternal';
 ```
 
+### Step3: Updating tests
+
+TODO: add separate test
 
 ---
 
 ## External Messages
 
-`External messages` are your main way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because in most cases you don't want external entry points to be accessible to anyone except you. If this is all functionality that you want from external section - standard way is to delegate this responsibility to separate actor - `wallet` which is practically the main reason they were designed for.
+`External messages` are your only way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because in most cases you don't want external entry points to be accessible to anyone except you. If this is all functionality that you want from external section - standard way is to delegate this responsibility to separate actor - [wallet](v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets) which is practically the main reason they were designed for.
 
-### Wallets
+Developing external endpoint includes several standard [approuches](/v3/documentation/smart-contracts/message-management/external-messages) and [security measures](/v3/guidelines/smart-contracts/security/overview) that might be overwhelming at this point. Therefore in this guide we will realize incrementing previously added to `hello_world` contract `ctxCounterExt` and add send message to out `Tact` contract.
 
-When we sent coins using wallet app in [getting started](/v3/guidelines/quick-start/getting-started#step-3-exploring-the-blockchain) section what `wallet app` actually performs is sending `external message` to your `wallet` smart contract which performs sending message to destination smart-contract address that you wrote in send menu. While most wallet apps during creation of wallet deploy most modern versions of wallet smart contracts - `v5`, providing more complex functionality, let's examine `recv_external` section of more basic one - `v3`:
-
-```func
-() recv_external(slice in_msg) impure {
-    var signature = in_msg~load_bits(512);
-    var cs = in_msg;
-    var (subwallet_id, msg_seqno) = (cs~load_uint(32), cs~load_uint(32));
-    var ds = get_data().begin_parse();
-    var (stored_seqno, stored_subwallet, public_key) = (ds~load_uint(32), ds~load_uint(32), ds~load_uint(256));
-    ds.end_parse();
-    throw_unless(33, msg_seqno == stored_seqno);
-    throw_unless(34, subwallet_id == stored_subwallet);
-    throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
-    accept_message();
-    cs~touch();
-    while (cs.slice_refs()) {
-        var mode = cs~load_uint(8);
-        send_raw_message(cs~load_ref(), mode);
-    }
-    set_data(begin_cell()
-        .store_uint(stored_seqno + 1, 32)
-        .store_uint(stored_subwallet, 32)
-        .store_uint(public_key, 256)
-    .end_cell());
-    }
-```
-
-
-First thing to mention - is `signature` in message body and stored `public_key`. This refers to standard mechanism of asymmetric cryptography: during deployment process you create **private and public key pair**, store the second one in initial contract storage and then during sending external message through client **sign** it with **private key** attaching calculated `signature` to message body. Smart contract on its side checks if signature matches `public_key` and accepts external message if it is so.
-
-Standard signature system for TON smart-contracts is `Ed25519` which is directly provided by `TVM` instruction `check_signature()`, but you can always implement another preferred algorithm by yourself.
-
-:::tip
-When you entered **magic 24 secret words** (i.e. **mnemonic phrase**) during [wallet creation](/v3/documentation/data-formats/tlb/tl-b-language) in your app what is practically performed is concatenation of those words into one string and hashing it to create your **private key**. So remember not to show them to anyone.
+:::danger
+This implementation is **unsafe** and may lead to loosing your contract funds. Don't deploy it to `mainnet`, especially with high smart-contract balance.
 :::
 
-Second thing is `seqno` (sequential number) as you can see this is practically just a counter that increments each time wallet smart-contract receives external message, but why do we need one?
-The reason behind that lies in blockchain nature: since all transactions are visible to anyone, potential malefactor could repeatedly send already signed transaction to your smart contract.
+## Implementation
 
-> **Simpliest scenario:** you transfer some amount of funds to receiver, receiver examines transaction and sends it to your contract repeatedly until you run out of funds and receiver gains almost all of them.
 
-Third thing is `subwallet_id` that just checks equality to the stored one, we will discuss its meaning a little bit later in internal messages section.
 
-### Implementation
-
-At this point reasons behind changes that we made to our counter in previous storage and get methods [section](/v3/guidelines/quick-start/developing-smart-contracts/storage-and-get-methods#smart-contract-storage-operations) should start to be more clear! We already prepared our storage to contain `seqno`, `public_key` and `ctx_id` which will serve same task as `subwallet_id` so let's adapt wallet's `recv_external` function to our project:
-
-<Tabs groupId="language">
-<TabItem value="FunC" label="FunC">
-```func
-() recv_external(slice in_msg) impure {
-    ;; retrives validating data from message body
-    var signature = in_msg~load_bits(512);
-    var cs = in_msg;
-    var (ctx_id, msg_seqno) = (cs~load_uint(32), cs~load_uint(32));
-
-    ;; retrieves stored data for validation checks
-    var (stored_id, stored_seqno, public_key) = load_data();
-    ;; replay protection mechanism through seqno chack and incrementing
-    throw_unless(33, msg_seqno == stored_seqno);
-    ;; id field for multiply addresess with same private_key
-    throw_unless(34, ctx_id == stored_id);
-    ;; ed25519 signature check
-    throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
-    ;; accepting message after all checks
-    accept_message();
-    ;; optimization technique
-    ;; putting message body to stack head
-    cs~touch();
-    ;; sending serialized on client side messages
-    while (cs.slice_refs()) {
-        var mode = cs~load_uint(8);
-        send_raw_message(cs~load_ref(), mode);
-    }
-    save_data(stored_id, stored_seqno + 1, public_key);
-}
-```
-</TabItem>
-<TabItem value="Tolk" label="Tolk">
-```tolk
-fun acceptExternalMessage(): void
-    asm "ACCEPT";
-
-fun onExternalMessage(inMsg: slice) {
-    var signature = inMsg.loadBits(512);
-    var cs = inMsg;
-    var (ctx_id, msg_seqno) = (cs.loadUint(32), cs.loadUint(32));
-
-    // retrieves stored data for validation checks
-    var (stored_id, stored_seqno, public_key) = loadData();
-    // replay protection mechanism through seqno chack and incrementing
-    assert(msg_seqno == stored_seqno, 33);
-    // id field for multiply addresess with same private_key
-    assert(ctx_id == stored_id, 34);
-    // ed25519 signature check
-    assert(isSignatureValid(sliceHash(inMsg), signature, public_key), 35);
-    // accepting message after all checks
-    acceptExternalMessage();
-    // sending serialized on client side messages
-    while (!cs.isEndOfSliceRefs()) {
-        var mode = cs.loadUint(8);
-        sendRawMessage(cs.loadRef(), mode);
-    }
-    saveData(stored_id, stored_seqno + 1, public_key);
-}
-```
-
-</TabItem>
-</Tabs>
 
 And add wrapper method to call it through our wrapper class:
 
