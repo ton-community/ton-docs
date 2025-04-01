@@ -5,9 +5,9 @@ import TabItem from '@theme/TabItem';
 
 This guide will help you integrate TON Connect into your Javascript app for user authentication and transactions.
 
-If you're using React for your DApp, take a look at the [TON Connect UI React SDK](/v3/guidelines/ton-connect/frameworks/react).
+If using React for your DApp, look at the [TON Connect UI React SDK](/v3/guidelines/ton-connect/frameworks/react).
 
-If you're using Vue for your DApp, take a look at the [TON Connect UI Vue SDK](/v3/guidelines/ton-connect/frameworks/vue).
+If you're using Vue for your DApp, look at the [TON Connect UI Vue SDK](/v3/guidelines/ton-connect/frameworks/vue).
 
 
 ## Implementation
@@ -39,7 +39,7 @@ npm i @tonconnect/ui
 After installing the package, create a `manifest.json` file for your app.
 More information on how to create a `manifest.json` file can be found [here](/v3/guidelines/ton-connect/guidelines/creating-manifest).
 
-Add a button with `ton-connect` id to connect to the wallet:
+Add a button with a `ton-connect` id to connect to the wallet:
 
 ```html
 <div id="ton-connect"></div>
@@ -58,9 +58,9 @@ Add a button with `ton-connect` id to connect to the wallet:
 
 ### Connect to the wallet
 
-The **Connect** button, which is added at `buttonRootId`, automatically handles clicks.
+The `'ton-connect'` button in `buttonRootId` will automatically manage clicks.
 
-But you can open "connect modal" programmatically, for example, after clicking on the custom button:
+But you can open **connect modal** programmatically, for example, after clicking on the custom button:
 
 ```html
 <script>
@@ -109,7 +109,7 @@ TonConnect UI provides an interface that should be familiar and recognizable to 
 
 ## Usage
 
-Let's take a look at the example of using the TON Connect UI in the app.
+Let's look at the example of using the TON Connect UI in the app.
 
 ### Sending messages
 
@@ -142,7 +142,7 @@ Get more examples on the [Preparing messages](/v3/guidelines/ton-connect/guideli
 
 ### Understanding transaction status by hash
 
-Learn the principle explained in [payment processing](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions) using tonweb library.
+Learn the principle explained in [payment processing](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions) using the tonweb library.
 
 ### Signing and verification
 
@@ -159,6 +159,6 @@ await tonConnectUI.disconnect();
 
 ## See also
 
-* [UI Customization](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
+* [UI customization](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
 * [[YouTube] TON Connect UI React [RU]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=1747)
-* [[YouTube] Connect TON Connect UI to Site [RU]](https://www.youtube.com/watch?v=HUQ1DPfFxG4&list=PLyDBPwv9EPsAIWi8vgic9kiV3KF_wvIcz&index=4)
+* [[YouTube] Connect TON Connect UI to site [RU]](https://www.youtube.com/watch?v=HUQ1DPfFxG4&list=PLyDBPwv9EPsAIWi8vgic9kiV3KF_wvIcz&index=4)
