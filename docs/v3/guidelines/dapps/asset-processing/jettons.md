@@ -111,13 +111,14 @@ Standardized tokens on TON use a set of smart contracts, including:
 
 - Jetton wallet smart contracts: Used for transactions and balance management.
 
-:::Warning: Beware of jetton scams
+:::warning Beware of jetton scams
 Anyone can create a counterfeit version of a valuable jetton by using an arbitrary name, ticker, or image that closely resembles the original. However, counterfeit jettons can be identified by their addresses.
+:::
 
 Jettons with the symbol TON or those containing system notification messages such as ERROR or SYSTEM should be displayed in a way that prevents confusion with TON transfers or system notifications. Sometimes, scammers design the `symbol`, `name`, and `image` to mimic the original and mislead users.
 
 To prevent fraud, verify the **original jetton address** (jetton master contract) for specific jetton types. Alternatively, **check the project’s official social media** or website for **accurate information**. Use [Tonkeeper ton-assets list](https://github.com/tonkeeper/ton-assets) ton-assets list to verify assets.
-:::
+
 
 ### Retrieving jetton data
 
@@ -351,7 +352,7 @@ When processing funds, it is also recommended to use a cold wallet for storing e
 If your wallet receives a transfer notification message regarding an unknown jetton, a jetton wallet has been created to hold that specific jetton.
 
 The sender address of the internal message containing the body of the `Transfer Notification` is the address of the new jetton wallet.
-This should not be confused with the `sender` field in the [body] of the `Transfer Notification` (/v3/guidelines/dapps/asset-processing/jettons#message-2).
+This should not be confused with the `sender` field in the [body](/v3/guidelines/dapps/asset-processing/jettons#message-2) of the `Transfer Notification`.
 
 1. Get the jetton master address for the new jetton wallet by [retrieving the wallet data] (/v3/guidelines/dapps/asset-processing/jettons#retrieving-data-for-a-specific-jetton-wallet).
 2. Get the jetton wallet address for your wallet address (as the owner) using the jetton master contract: [How to get the jetton wallet address for a given user](#retrieving-jetton-wallet-addresses-for-a-given-user)

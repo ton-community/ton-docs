@@ -306,8 +306,7 @@ module.exports = [
       label: 'Business',
       items: [
         'v3/guidelines/ton-connect/business/ton-connect-for-business',
-        'v3/guidelines/ton-connect/business/ton-connect-for-security',
-        'v3/guidelines/ton-connect/business/ton-connect-comparison',
+        'v3/guidelines/ton-connect/business/ton-connect-for-security'
       ],
     }
   ]

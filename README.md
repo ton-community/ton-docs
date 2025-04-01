@@ -24,7 +24,7 @@ Join TON Docs Club chat in Telegram to join contributors party:
 
 <img align="left" width="300px" src="static\img\readme\how.png">
 
-## How to Contribute? 🦄
+## How to contribute? 🦄
 
 — Have an issue? [Prepare a solution with TON Docs Wizard](https://t.me/ton_docs_bot).  
 — Have an idea? [Submit a Feature Request](https://github.com/ton-community/ton-docs/issues/new/choose).  
