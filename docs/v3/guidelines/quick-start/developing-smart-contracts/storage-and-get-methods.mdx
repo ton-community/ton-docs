@@ -12,23 +12,36 @@ If you are stuck on some of the examples you can find original template project 
 Almost all smart-contracts need to store their `data` between transactions. This guide explains standard ways of managing `storage` of smart-contract and using `get methods` to obtain it from outside the blockchain.
 
 
-## Smart Contract Storage Operations
+## Smart contract storage operations
 
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
 There are two main instructions that provide access to smart-contract storage: 
+
  - `get_data()` returning current storage cell.
  - `set_data()` setting storage cell.
 
-Lets examine `Cell` entity structure to understand how we could manage contract storage.
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+There are two main instructions that provide access to smart-contract storage: 
+
+ - `getContractData()` returning current storage `Cell`.
+ - `setContractData()` setting storage `Cell`.
+
+</TabItem>
+</Tabs>
+
+Lets examine [Cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) entity structure to understand how we could manage contract storage:
 
 ## Cell structure
 
-TON blockchain uses a data structure called **`Cell`** as the fundamental unit for storing data. Cells are the building blocks of the `TVM` (TON Virtual Machine) and have those characteristics:
+TON blockchain uses a data structure called **`Cell`** as the fundamental unit for storing data. `Cells` are the building blocks of the smart-contract data and have those characteristics:
 
 - `Cell` can store up to 1023 bits (approximately 128 bytes) of data
 - `Cell` can reference up to 4 other `Cells` (children's)
 - `Cell` is immutable once created
 
-You can think of Cell as the following structure:
+You can think of `Cell` as the following structure:
 
 ```typescript
 // Conceptual representation of a Cell
@@ -42,13 +55,13 @@ interface Cell {
 
 Let's try to modify our smart-contract folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview) section.
 
-### Step1: Edit smart-contract code
+### Step 1: Edit smart-contract code
 
 In case it's inconvenient to always serialize and deserialize storage cell, there is a pretty standard practice to define two wrapper methods that provide corresponding logic. If you didn't change smart-contract code it should contain following lines:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
-```func title="hello_world.fc"
+```func title="/contracts/hello_world.fc"
 global int ctx_id;
 global int ctx_counter;
 
@@ -74,7 +87,7 @@ global int ctx_counter;
 ```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
-```tolk title="hello_world.tolk"
+```tolk title="/contracts/hello_world.tolk"
 global ctxID: int;
 global ctxCounter: int;
 
@@ -108,7 +121,7 @@ Result of our modifications should look like this:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
-```func title="hello_world.fc"
+```func title="/contracts/hello_world.fc"
 ;; load_data retrieves variables from TVM storage cell
 (int, int, int) load_data() {
     var ds = get_data().begin_parse();
@@ -138,7 +151,7 @@ Result of our modifications should look like this:
 ```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
-```tolk title="hello_world.tolk"
+```tolk title="/contracts/hello_world.tolk"
 // load_data retrieves variables from TVM storage cell
 // impure because of writting into global variables
 fun loadData(): (int, int, int) {
@@ -173,13 +186,13 @@ Don't forget to delete global variables `ctx_id`, `ctx_counter` and modify usage
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
-```func title="hello_world.fc"
+```func title="/contracts/hello_world.fc"
 var (ctx_id, ctxCounter, ctxCounterExt) = load_data();
 save_data(ctx_id, ctxCounter, ctxCounterExt);
 ```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
-```tolk title="hello_world.tolk"
+```tolk title="/contracts/hello_world.tolk"
 var (ctx_id, ctxCounter, ctxCounterExt) = load_data();
 save_data(ctx_id, ctxCounter, ctxCounterExt);
 ```
@@ -188,11 +201,11 @@ save_data(ctx_id, ctxCounter, ctxCounterExt);
 
 #### Get methods
 
-The primary use of **get methods** is reading our storage data from outside the blockchain using a convenient interface, primarily to extract data that is required to prepare a **transaction**.
+The primary use of `get methods` is reading our storage data from outside the blockchain using a convenient interface, primarily to extract data that is required to prepare a **transaction**.
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
-```func title="hello_world.fc"
+```func title="/contracts/hello_world.fc"
 (int, int) get_counters() method_id {
     var (_, ctxCounter, ctxCounterExt) = load_data();
     return (ctxCounter, ctxCounterExt);
@@ -200,7 +213,7 @@ The primary use of **get methods** is reading our storage data from outside the 
 ```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
-```tolk title="hello_world.tolk"
+```tolk title="/contracts/hello_world.tolk"
 get get_counters(): (int, int) {
     var (_, ctxCounter, ctxCounterExt) = load_data();
     return (ctxCounter, ctxCounterExt);
@@ -216,7 +229,7 @@ Final smart-contract code should look like this:
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
 
-```func title="hello_world.fc"
+```func title="/contracts/hello_world.fc"
 #include "imports/stdlib.fc";
 
 const op::increase = "op::increase"c; ;; create an opcode from string using the "c" prefix, this results in 0x7e8764ef opcode in this case
@@ -288,7 +301,7 @@ int get_id() method_id {
 ```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
-```tolk title="hello_world.tolk"
+```tolk title="/contracts/hello_world.tolk"
 get get_counters(): (int, int) {
     var (_, ctxCounter, ctxCounterExt) = load_data();
     return (ctxCounter, ctxCounterExt);
@@ -303,11 +316,11 @@ Don't forget to check the correctness of your changes by compiling the smart con
 npm run build
 ```
 
-### Step2: Updating wrapper
+### Step 2: Update wrapper
 
 Now lets update our wrapper class corresponding to new storage layout and new `get method`. First, let's modify `helloWorldConfigToCell` function and `HelloWorldConfig` type to properly initialize our storage during deployment:
 
-```typescript title="HelloWorld.ts"
+```typescript title="/wrappers/HelloWorld.ts"
 export type HelloWorldConfig = {
     id: number;
     ctxCounter: number;
@@ -322,10 +335,10 @@ export function helloWorldConfigToCell(config: HelloWorldConfig): Cell {
     .endCell();
 }
 ```
-Second, add a method to perform a request for the newly created **get method**:
+Second, add a method to perform a request for the newly created get method:
 
-```typescript title="HelloWorld.ts"
-async getSeqnoPKey(provider: ContractProvider) {
+```typescript title="/HelloWorld.ts"
+async getCounters(provider: ContractProvider) {
     const result = await provider.get('get_counters', []);
     const counter = result.stack.readNumber();
     const counterExt = result.stack.readBigNumber();
@@ -334,11 +347,11 @@ async getSeqnoPKey(provider: ContractProvider) {
 }
 ```
 
-### Step3: Updating tests
+### Step 3: Update tests
 
 And finally, let's update our test to check that the deployment process initializes smart contract storage and correctly retrieves its data by get methods.
 
-```typescript title="HelloWorld.spec.ts"
+```typescript title="/tests/HelloWorld.spec.ts"
 import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
 import { Cell, toNano} from '@ton/core';
 import { HelloWorld } from '../wrappers/HelloWorld';

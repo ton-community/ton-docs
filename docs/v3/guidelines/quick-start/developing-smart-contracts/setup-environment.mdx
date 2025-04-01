@@ -8,8 +8,6 @@ This guide covers basic steps of setting up your smart-contract development envi
 
  - Basic programming skills.
  - Familiarity with Command-line interface.
- - Your preferred code-editor/IDE.
- - Around __15 minutes__ of your time.
 
 ## Setup development environment
 
@@ -25,18 +23,20 @@ Using native instruments and language-dependent SDK's for smart-contract develop
 
 First, visit [installation page](https://nodejs.org/en/download) and execute download commands in `PowerShell` or `Bash` corresponding to your operating system Windows/Linux. 
 
-Check node version by executing following command:
+Check that `npm` and `node` installed by executing following command:
 
 ```bash
-node -v
 npm -v
+node -v
 ```
-Node version should be at least `v18`.
-
 
 ### Step 2: Choose smart-contract development language
 
-During guide we provide example on 3 languages: `Func`, `Tact` and `Tolk`. You can choose from any of them and even combine smart-contracts on different languages on latest sections. To proceed through guide there is now need of deep understanding of choosed one, basic programming skills will be enought. You can find their breaf overview here: [Programming languages](/v3/documentation/smart-contracts/overview#programming-languages)
+During guide we provide example on: `Func`, `Tolk` and `Tact`. You can choose from any of them and even combine smart-contracts on different languages. To proceed through guide there is now need of deep understanding of choosed one, basic programming skills will be enought.
+
+:::info
+You can find breaf overview of languages here: [Programming languages](/v3/documentation/smart-contracts/overview#programming-languages)
+:::
 
 ### Step 3: Setup Blueprint SDK
 
@@ -49,7 +49,7 @@ npm create ton@latest
 This will run interactive script for creating project template, you can enter anything you want, but if you want to have same paths as this guide choose following:
 1. Project name: `Example`.
 2. First created contract name: `HelloWorld`.
-3. Choose the project template: A simple counter contract corresponding to your choosen language.
+3. Choose the project template: A simple counter contract on `FunC` or `Tolk`.
 
 And finally, change your current directory to generated project template folder, and install all required dependencies:
 

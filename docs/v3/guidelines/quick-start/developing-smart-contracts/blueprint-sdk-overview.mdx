@@ -30,7 +30,7 @@ Example/
 ```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
-```
+```ls title="Project structure"
 Example/
 ├── contracts/           # Folder containing smart contracts code
 │   └── hello_world.tolk # Main contract file
@@ -52,11 +52,11 @@ This folder contains your smart contract source code written in one of the avail
 
 ### `/wrappers`
 
-While `@ton/ton SDK` provides us interfaces of serializing and sending messages for standard smart-contracts such as `wallets`, if we develop our own smart-contract that will deserialize received messages by its own custom protocol we need to provide some wrapper object that will serialize messages sent to smart-contract, deserialize responses from `get method`s and serialize contract itself for deployment.
+To interact with your smart-contract off-chain you need to serialize and desirialize messages sended to it. `Wrapper` classes developed to mirror your smart-contract implementation making it simple to use it's functionality.
 
 ### `/tests`
 
-This directory contains test files for your smart contracts. Testing contracts directly in TON network is not the best option because it requires some amount of time and may lead to losing funds. This testing playground tool allow you to execute multiple smart-contracts and even send messages between them in your "local network". Tests are crucial for ensuring your smart contracts behave as expected before deployment to the network.
+This directory contains test files for your smart contracts. Testing contracts directly in TON network is not the best option because it requires some amount of time and may lead to losing funds. This testing playground tool allow you to execute multiple smart-contracts and even send messages between them in your **"local network"**. Tests are crucial for ensuring your smart contracts behave as expected before deployment to the network.
 
 ### `/scripts`
 

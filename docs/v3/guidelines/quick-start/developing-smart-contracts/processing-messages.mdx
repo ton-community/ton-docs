@@ -5,7 +5,7 @@ import TabItem from '@theme/TabItem';
 
 > **Summary:** In previous steps we modified our smart-contract interaction with `storage, `get methods` and learned basic smart-contract development flow.
 
-Now that we have learned basic examples of modifying smart-contract code and using development tools, we are ready to move on to the main functionality of smart contracts - sending and receiving messages. In TON messages not only used for sending currency, but also as data-exchange mechanism between smart-contracts.
+Now we are ready to move on to the main functionality of smart contracts - **sending and receiving messages**. In TON messages not only used for sending currency, but also as data-exchange mechanism between smart-contracts.
 
 
 :::tip
@@ -18,73 +18,6 @@ If you are stuck on some of the examples you can find original template project 
 
 Before we proceed to implementation let's briefly describe main ways and patterns that we can use to process internal messages.
 
-### Operations
-
-Common pattern in TON contracts is to include a **32-bit operation code** in message bodies which tells your contract what action to perform:
-
-<Tabs groupId="language">
-<TabItem value="FunC" label="FunC">
-```func
-;; This is NOT a part of the project, just an example!
-const int op::increment = 1;
-const int op::decrement = 2;
-
-() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
-    ;; Step 1: Check if the message is empty
-    if (in_msg_body.slice_empty?()) {
-        return; ;; Nothing to do with empty messages
-    }
-
-    ;; Step 2: Extract the operation code
-    int op = in_msg_body~load_uint(32);
-
-    ;; Step 3-7: Handle the requested operation
-    if (op == op::increment) {
-        increment();   ;;call to specific operation handler
-        return;
-    } else if (op == op::decrement) {
-        decrement();
-        ;; Just accept the money
-        return;
-    }
-
-    ;; Unknown operation
-    throw(0xffff);
-}
-```
-</TabItem>
-<TabItem value="Tolk" label="Tolk">
-```tolk
-//This is NOT a part of the project, just an example!
-const op::increment : int = 1;
-const op::decrement : int = 2;
-
-fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
-    // Step 1: Check if the message is empty
-    if (slice.isEndOfSlice()) {
-        return; // Nothing to do with empty messages
-    }
-
-    // Step 2: Extract the operation code
-    var op = in_msg_body~load_uint(32);
-
-    // Step 3-7: Handle the requested operation
-    if (op == op::increment) {
-        increment();   //call to specific operation handler
-        return;
-    } else if (op == op::decrement) {
-        decrement();
-        // Just accept the money
-        return;
-    }
-
-    // Unknown operation
-    throw(0xffff);
-}
-```
-</TabItem>
-</Tabs>
-
 ### Actors and roles
 
 Since TON implements [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor) model it's natural to think about smart-contracts relations in terms of `roles`, determining who can access smart-contract functionality or not. The most common examples of roles are:
@@ -92,7 +25,7 @@ Since TON implements [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchai
  - `anyone`: any contract that don't have distinct role.
  - `owner`: contract that has exclusive access to some crucial parts of functionality.
 
-Let's examine `recv_internal` function signature to understdand how we could use that:
+Let's examine `recv_internal` function signature to understand how we could use that:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -175,6 +108,75 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 </TabItem>
 </Tabs>
 
+
+### Operations
+
+Common pattern in TON contracts is to include a **32-bit operation code** in message bodies which tells your contract what action to perform:
+
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
+```func
+;; This is NOT a part of the project, just an example!
+const int op::increment = 1;
+const int op::decrement = 2;
+
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    ;; Step 1: Check if the message is empty
+    if (in_msg_body.slice_empty?()) {
+        return; ;; Nothing to do with empty messages
+    }
+
+    ;; Step 2: Extract the operation code
+    int op = in_msg_body~load_uint(32);
+
+    ;; Step 3-7: Handle the requested operation
+    if (op == op::increment) {
+        increment();   ;;call to specific operation handler
+        return;
+    } else if (op == op::decrement) {
+        decrement();
+        ;; Just accept the money
+        return;
+    }
+
+    ;; Unknown operation
+    throw(0xffff);
+}
+```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+//This is NOT a part of the project, just an example!
+const op::increment : int = 1;
+const op::decrement : int = 2;
+
+fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
+    // Step 1: Check if the message is empty
+    if (slice.isEndOfSlice()) {
+        return; // Nothing to do with empty messages
+    }
+
+    // Step 2: Extract the operation code
+    var op = in_msg_body~load_uint(32);
+
+    // Step 3-7: Handle the requested operation
+    if (op == op::increment) {
+        increment();   //call to specific operation handler
+        return;
+    } else if (op == op::decrement) {
+        decrement();
+        // Just accept the money
+        return;
+    }
+
+    // Unknown operation
+    throw(0xffff);
+}
+```
+</TabItem>
+</Tabs>
+
+
 By combining both of these patterns you can achieve a comprehensive description of your smart-contract's systems ensuring secure interaction between them and unleash full potential of TON actors model.
 
 ## Implementation in Tact
@@ -244,7 +246,7 @@ Example/
 
 At the top of the generated contract file: `counter_internal.tact`, you may see a [message](https://docs.tact-lang.org/book/structs-and-messages/) definition:
 
-```tact title="counter_internal.tact"
+```tact title="/contracts/counter_internal.tact"
 message Add {
     queryId: Int as uint64;
     amount: Int as uint32;
@@ -253,7 +255,7 @@ message Add {
 
 A message is a basic structure for communication between contracts. Tact automatically serializes and deserializes messages into cells. To ensure that opcodes will be the same during message structure changes, it may be added like below:
 
-```tact title="counter_internal.tact"
+```tact title="/contracts/counter_internal.tact"
 message(0x7e8764ef) Add {
     queryId: Int as uint64;
     amount: Int as uint32;
@@ -293,7 +295,7 @@ counter: Int as uint32;
 
 To ensure that only the contract owner can interact with specific functions, add an `owner` field:
 
-```tact title="counter_internal.tact"
+```tact title="/contracts/counter_internal.tact"
 id: Int as uint32;
 counter: Int as uint32;
 owner: Address;
@@ -305,7 +307,7 @@ These fields are serialized similarly to structures and stored in the contract's
 
 If you compile the contract at this stage, you will encounter the error: `Field "owner" is not set`. This is because the contract needs to initialize its fields upon deployment. Define an [`init()`](https://docs.tact-lang.org/book/contracts/#init-function) function to do this:
 
-```tact title="counter_internal.tact"
+```tact title="/contracts/counter_internal.tact"
 init(id: Int, owner: Address) {
     self.id = id;
     self.counter = 0;
@@ -317,7 +319,7 @@ init(id: Int, owner: Address) {
 
 To accept messages from other contracts, use a [receiver](https://docs.tact-lang.org/book/functions/#receiver-functions) function. Receiver functions automatically match the message's opcode and invoke the corresponding function:
 
-```tact title="counter_internal.tact"
+```tact title="/contracts/counter_internal.tact"
 receive(msg: Add) {
     self.counter += msg.amount;
     self.notify("Cashback".asComment());
@@ -328,7 +330,7 @@ receive(msg: Add) {
 
 To ensure that only the contract owner can send messages, use the `require` function:
 
-```tact title="counter_internal.tact"
+```tact title="/contracts/counter_internal.tact"
 receive(msg: Add) {
     // `sender()` function is used to retrieve message sender address
     require(sender() == self.owner, "Not owner!");
@@ -343,7 +345,7 @@ receive(msg: Add) {
 
 Tact also provides handy ways to share same logic through [traits](https://docs.tact-lang.org/book/types/#traits). Use the `Ownable` trait, which provides built-in ownership checks:
 
-```tact title="counter_internal.tact"
+```tact title="/contracts/counter_internal.tact"
 // Import library to use trait
 import "@stdlib/ownable";
 
@@ -370,7 +372,7 @@ Tact supports [getter functions](https://docs.tact-lang.org/book/functions/#gett
 Get function cannot be called from another contract.
 :::
 
-```tact title="counter_internal.tact"
+```tact title="/contracts/counter_internal.tact"
 get fun counter(): Int {
     return self.counter;
 }
@@ -380,7 +382,7 @@ Note, that the `owner` getter is automatically defined via the `Ownable` trait.
 
 #### Complete contract
 
-```tact title="counter_internal.tact"
+```tact title="/contracts/counter_internal.tact"
 import "@stdlib/deploy";
 import "@stdlib/ownable";
 
@@ -436,7 +438,7 @@ npm blueprint build
 
 [Wrappers](https://docs.tact-lang.org/book/compile/#wrap-ts) facilitate contract interaction from TypeScript. Unlike in FunC or Tolk, they are generated automatically during the build process:
 
-```typescript ./wrappers/CounterInternal.ts
+```typescript title="/wrappers/CounterInternal.ts"
 export * from '../build/CounterInternal/tact_CounterInternal';
 ```
 
@@ -444,7 +446,7 @@ export * from '../build/CounterInternal/tact_CounterInternal';
 
 Now let's ensure that our smart-contract failes if non-owner tries to increment smart-contract by adding this test:
 
-```typescript title="tests/CounterInternal.spec.ts"
+```typescript title="/tests/CounterInternal.spec.ts"
 import { Blockchain, SandboxContract, TreasuryContract} from '@ton/sandbox';
 import { Cell, toNano } from '@ton/core';
 import { CounterInternal } from '../wrappers/CounterInternal';
@@ -540,7 +542,7 @@ Let's modify our smart-contract to recieve external messages and send increase c
 
 Add `recv_external` function to `HelloWorld` smart-contract:
 
-```func title="HelloWorld.fc"
+```func title="/contracts/HelloWorld.fc"
 () recv_external(slice in_msg) impure {
     accept_message();
 
@@ -578,7 +580,7 @@ npm blueprint build
 
 And add wrapper method to call it through our wrapper class for sending external message:
 
-```typescript
+```typescript title="/wrappers/HelloWorld.ts"
 async sendExternalIncrease(
     provider: ContractProvider,
     opts: {
@@ -603,7 +605,7 @@ async sendExternalIncrease(
 
 Update test to esnure that `HelloWorld` contract recieved internal message, sended internal message to `CounterInternal` contract and both updated their counters:
 
-```typescript title="HelloWorld.spec.ts"
+```typescript title="/tests/HelloWorld.spec.ts"
 import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
 import { Cell, toNano} from '@ton/core';
 import { HelloWorld } from '../wrappers/HelloWorld';
@@ -693,4 +695,3 @@ Verify that all examples is correct by running test script:
 npm blueprint test
 ```
 
-Congratulations! You have successfully created a **multi-contract** system and learned how to handle **internal** and **external** messages. This example illustrates the typical flow of any message chain: sending an `external message`, triggering the `internal messages` flow based on your system model, and so on. Now that our contracts have been fully tested, we are ready to deploy them and interact with them on-chain.
