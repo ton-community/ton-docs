@@ -57,7 +57,6 @@ module.exports = [
       'v3/guidelines/quick-start/developing-smart-contracts/deploying-to-network'
     ],
   },
-  'v3/guidelines/quick-start/transactions-processing',
   {
     'type': 'html',
     'value': '<hr/>',
