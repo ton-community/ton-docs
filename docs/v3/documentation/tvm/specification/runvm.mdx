@@ -1,16 +1,19 @@
 
 # RUNVM Specification
-Currently there is no way for code in TVM to call external untrusted code "in sandbox". In other words, external code always can irreversibly update code, data of contract, or set actions (such as sending all money).
 
-`RUNVM` instruction allows to spawn an independent VM instance, run desired code and get needed data (stack, registers, gas consumption etc) without risks of polluting caller's state. Running arbitrary code in a safe way may be useful for [v4-style plugins](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4), Tact's `init` style subcontract calculation etc.
+Currently, TVM does not provide a mechanism for executing external untrusted code within a secure sandbox environment. In other words, any external code invoked has unrestricted access and can permanently modify the contract's code and data or trigger actions such as transferring all funds.
 
-| xxxxxxxxxxxxx<br/>Fift syntax | xxxxxxxxxxxxxxxxx<br/>Stack | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Description                                                                                                                           |
-|:-|:-|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `flags RUNVM` | _`x_1 ... x_n n code [r] [c4] [c7] [g_l] [g_m] - x'_1 ... x'_m exitcode [data'] [c4'] [c5] [g_c]`_ | Runs child VM with code `code` and stack `x_1...x_n`. Returns the resulting stack `x'_1...x'_m` and exitcode.<br/>Other arguments and return values are enabled by flags, see below. |
-| `RUNVMX` | _`x_1 ... x_n n code [r] [c4] [c7] [g_l] [g_m] flags - x'_1 ... x'_m exitcode [data'] [c4'] [c5] [g_c]`_ | Same thing, but pops flags from stack.                                                                                                                                               |
+The `RUNVM` instruction creates an isolated VM instance, allowing code execution while safely retrieving data such as stack state, registers, and gas consumption. This ensures the caller's state remains unaffected. This allows arbitrary code to run safely, which is helpful for [v4-style plugins](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4), Tact's `init`-style subcontract calculations, and similar use cases.
 
-Flags are similar to `runvmx` in fift:
-- `+1`: set c3 to code
+| Fift syntax | Stack | Description                                                                                                                                                                                                                                                                                                                                                                                                          |
+|:-|:-|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `flags RUNVM` | _`x_1 ... x_n n code [r] [c4] [c7] [g_l] [g_m] - x'_1 ... x'_m exitcode [data'] [c4'] [c5] [g_c]`_ | Executes a child VM with the given `code` and stack values `x_1 ... x_n`. Returns the modified stack `x'_1 ... x'_m` along with an exit code. <br/> Flags determine other arguments and return values. See details below.|
+| `RUNVMX` | _`x_1 ... x_n n code [r] [c4] [c7] [g_l] [g_m] flags - x'_1 ... x'_m exitcode [data'] [c4'] [c5] [g_c]`_ | It is the same as `RUNVM` but retrieves flags from the stack.                                                                                                                                                                                                                                                                                                                                                        |
+
+
+Flags operate similarly to `RUNVMX` in Fift:
+
+- `+1`: Sets `c3` to code.
 - `+2`: push an implicit 0 before running the code
 - `+4`: take `c4` from stack (persistent data), return its final value
 - `+8`: take gas limit `g_l` from stack, return consumed gas `g_c`
