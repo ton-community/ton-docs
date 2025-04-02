@@ -22,7 +22,13 @@ Welcome to TON quick start guide! This guide will give you a starting point for 
 
 ## Concept of smart-contract
 
-You can think of smart-contracts in TON as a program running on blockchain following well known behavior concept of [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor). In contrast to some other blockchains where you can call in synchronous way other contracts code, smart-contract in TON is a thing in itself, and communicates with other smart-contracts on equal basis sending asynchronous messages between each other. Each processing of those queries by receiver smart-contract is considered a transaction resulting in following actions:
+You can think of smart-contracts in TON as a program running on blockchain following well known behavior concept of [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor). 
+
+:::info
+In contrast to some other blockchains where you can call in synchronous way other contracts code, smart-contract in TON is a thing in itself, and communicates with other smart-contracts on equal basis sending asynchronous messages between each other. 
+:::
+
+Each processing of message by receiver smart-contract is considered a transaction resulting in following actions:
  - Sending further messages.
  - Changing internal data or even code of smart-contract itself.
  - Changing it's balance.
@@ -32,10 +38,10 @@ Available interfaces of smart-contract are:
  - Receiving **`external messages`** from outside the blockchain.
  - Receiving **`get methods`** request from outside the blockchain.
 
-In contrast to `internal` and `external` messages, `get methods` are not what you can consider as a **transaction**. Those are special functions of smart contract that cannot change contract internal state or proceed any other action except querying specific data from contract state. Contrary to what might seem intuitive, invoking `get methods` from other contracts **is not possible**.
+In contrast to `internal` and `external` messages, `get methods` are not what you can consider as a **transaction**. Those are special functions of smart contract that cannot change contract internal state or proceed any other action except querying specific data from contract state. 
 
-:::tip
-Hereinafter we will use terms `actor`, `smart-contract` and `account` interchangeably.
+:::info
+Contrary to what might seem intuitive, invoking `get methods` from other contracts **is not possible**.
 :::
 
 ## Interacting with TON ecosystem
@@ -48,15 +54,25 @@ The simplest way to create a `wallet` is to visit https://ton.org/wallets and ch
 
 ### Step 2: Mainnet and Testnet
 
-In the TON, the `Mainnet` and `Testnet` have distinct roles. The `Mainnet` is the primary network where actual transactions take place, carrying real economic value as they involve real cryptocurrency. On the other hand, the `Testnet` is a testing version of the TON **blockchain** designed for development and testing purposes. `Testnet` is a risk-free zone for developers to test without financial implications. It's mainly used for development, testing `smart contracts`, and trying new features.
+In the TON there is two different networks called `Mainnet` and `Testnet`, that have distinct roles:
+ - The `Mainnet` is the primary network where actual transactions take place, carrying real economic value as they involve real cryptocurrency. 
+ - The `Testnet` is a testing version of the TON **blockchain** designed for development and testing purposes. It's a risk-free zone for developers to test without financial implications. It's mainly used for development, testing `smart contracts`, and trying new features.
 
-Since TON basic transactions are very cheap, about 1 cent per transaction, investing just $5 will be enough for hundreds of them. You can get TON coins by simply pressing the buy button in the user interface, or ask someone to send them to your `address`, which you can copy from the wallet app somewhere near your balance. Don't worry, sharing your `address` is **totally safe**, unless you don't want it to be associated with you.
+#### Getting funds
 
-For the `Testnet` version, you can request funds from the [Testgiver Ton Bot](https://t.me/testgiver_ton_bot). After a short wait, you will receive 2 TONs that will appear in your wallet app.
+Transactions in TON always require some amount of funds, since executing smart-contracts code requires [fee](/v3/documentation/smart-contracts/transaction-fees/fees/) payment. TON basic transactions are very cheap, about 1 cent per transaction, getting euqivalent to $5 amount of [Toncoin](/v3/documentation/dapps/defi/coins) will be enough for hundreds of them. Here is how you can get them:
+
+ - For `Mainnet` you can get `Toncoins` by simply pressing the buy button in the user interface, or ask someone to send them to your `address`, which you can copy from the wallet app somewhere near your balance. 
+
+:::warning
+ Don't worry, sharing your `address` is **totally safe**, unless you don't want it to be associated with you.
+:::
+
+ - For the `Testnet` version, you can request funds from the [Testgiver Ton Bot](https://t.me/testgiver_ton_bot) **completly for free**! After a short wait, you will receive 2 `Toncoins` that will appear in your wallet app.
 
 ### Step 3: Creating testnet wallet
 
-If you decide to use the `Testnet` version instead, you can do to it by following guide below.
+If you decide to use the `Testnet` version, you can do to it by following guide below.
 
 #### Generating mnemonic
 
@@ -84,34 +100,49 @@ To create testnet wallet click *`Wallet`* -> *`Add Wallet`* - *`TestnetAccount`*
 
 ### Step 4: Exploring the blockchain
 
-Congratulations! We created our first wallet and received some funds on it. Now let's take a look at how our actions are reflected in the `blockchain`. We can do this by using various [explorers](https://ton.app/explorers). An explorer is a tool that allows you to query data from the chain, investigate TON `smart-contracts`, and transactions. For our examples, we are going to use [TonViewer](https://tonviewer.com/).
+Congratulations! We created our first wallet and received some funds on it. Now let's take a look at how our actions are reflected in the `blockchain`. We can do this by using various [explorers](https://ton.app/explorers). 
+
+An `explorer` is a tool that allows you to query data from the chain, investigate TON `smart-contracts`, and transactions. For our examples, we are going to use [TonViewer](https://tonviewer.com/).
 
 :::tip
 Note that in case of using `testnet`, you should manually change the explorer mode to the `testnet` version. Don't forget that these are different networks not sharing any transactions or `smart-contracts`, so your `testnet` wallet would not be visible in `mainnet` mode and vice versa.
 :::
 
-Let's take a look at our newly created wallet using the explorer: copy your wallet address from the app and insert it into the search line of the explorer like this:
+Let's take a look at our newly created wallet using the `explorer`: copy your wallet address from the app and insert it into the search line of the explorer like this:
 
 <div style={{marginBottom: '30px'}}>
   <img src="/img/tutorials/quick-start/explorer1.png" alt="Screenshot of explorer search interface"/>
 </div>
 
-At this moment, your address should be in the `uninit` or `nonexisting` state depending on whether you have already received funds or not. Like any other `smart-contract`, wallets in TON need to be deployed to the network, and since this process requires some amount of transaction fees - `gas` - most wallet apps don't actually deploy the wallet `smart-contract` until you receive funds on your address and try to make your first transaction.
+#### Address state
 
-<div style={{marginBottom: '10px'}}>
+First, let't examine common [address state](/v3/documentation/smart-contracts/addresses/#addresses-state) of our smart-contract:
+
+ - `Nonexisting`: If you still didn't receive funds to your `address` you can see the default state for any address that has not been used before, and therefore don't have any data. 
+
+<div style={{marginBottom: '30px'}}>
   <img src="/img/tutorials/quick-start/nonexist.png" alt="Screenshot of nonexistent wallet state"/>
 </div>
+
+ - `Uninit`: stands for an address that has some metadata such as funds, but hasn't been initialized by deployed `smart-contract` code or data.
+
 <div style={{marginBottom: '30px'}}>
   <img src="/img/tutorials/quick-start/uninit.png" alt="Screenshot of uninitialized wallet state"/>
 </div>
 
-As you can see, the `nonexisting` state is the default state for any address that has not been used before. `uninit` stands for an address that has some metadata such as funds, but hasn't been initialized by deployed `smart-contract` code or data.
+:::tip
+This might seem unintuitive, because you already created your **"wallet"** in `wallet app`, but, like any other `smart-contract`, wallets in TON need to be deployed to the network. This process requires some fees, and therefore, most `wallet apps` don't actually deploy the wallet `smart-contract` until you receive funds on your address and try to make your first transaction.
+:::
 
-Let's send our first transaction to someone special - **ourselves**. And see how it looks on the `blockchain`. Enter the send menu in your wallet app and transfer some funds to your own address that you have copied before. In the explorer, our contract should start looking something like this:
+- `Active`: state of deployed `smart-contract` with positive balance. To deploy our wallet let's send first transaction to someone special - **ourselves**. And see how it looks on the `blockchain`. Enter the send menu in your wallet app and transfer some funds to your own address that you have copied before. In the explorer, our contract should start looking something like this:
 
 <div style={{marginBottom: '30px'}}>
   <img src="/img/tutorials/quick-start/active.png" alt="Screenshot of active wallet state"/>
 </div>
+
+:::info
+There is also fourth state called [frozen](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee) standing for smart-contract with [storage charge](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee) that exceeds it's balance. In this state smart-contract cannot perform any operations.
+:::
 
 And here we are, our wallet contract is deployed and ready to use. Let's examine provided user interface:
 
