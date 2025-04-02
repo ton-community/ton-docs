@@ -376,6 +376,22 @@ Don't forget to check the correctness of your changes by compiling the smart con
 npm run build
 ```
 
+Expected output should look like this:
+
+```bash
+Build script running, compiling HelloWorld
+
+✅ Compiled successfully! Cell BOC result:
+
+{
+  "hash": "310e49288a12dbc3c0ff56113a3535184f76c9e931662ded159e4a25be1fa28b",
+  "hashBase64": "MQ5JKIoS28PA/1YROjU1GE92yekxZi3tFZ5KJb4foos=",
+  "hex": "b5ee9c7241010e0100d0000114ff00f4a413f4bcf2c80b01020120020d02014803080202ce0407020120050600651b088831c02456f8007434c0cc1caa42644c383c0040f4c7f4cfcc4060841fa1d93beea5f4c7cc28163c00b817c12103fcbc2000153b513434c7f4c7f4fff4600017402c8cb1fcb1fcbffc9ed548020120090a000dbe7657800b60940201580b0c000bb5473e002b70000db63ffe002606300072f2f800f00103d33ffa40fa00d31f30c8801801cb055003cf1601fa027001cb6a82107e8764ef01cb1f12cb3f5210cb1fc970fb0013a012f0020844ca0a"
+}
+
+✅ Wrote compilation artifact to build/HelloWorld.compiled.json
+```
+
 ### Step 2: Update wrapper
 
 Now lets update our wrapper class corresponding to new storage layout and new `get method`. First, let's modify `helloWorldConfigToCell` function and `HelloWorldConfig` type to properly initialize our storage during deployment:
@@ -495,3 +511,18 @@ And now run your new test script by executing the following command:
 npm run test
 ```
 
+Expected output should look like this:
+
+```bash
+# "custom log messages"
+
+ PASS  tests/HelloWorld.spec.ts
+  HelloWorld
+    ✓ should correctly initialize and return the initial data (431 ms)
+    ✓ should increase counter (302 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       2 passed, 2 total
+Snapshots:   0 total
+Time:        3.591 s, estimated 6 s
+```

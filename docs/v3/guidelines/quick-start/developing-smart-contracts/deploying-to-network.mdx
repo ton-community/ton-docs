@@ -48,9 +48,13 @@ This mechanism plays cruicial role in [Jetton Processing](v3/guidelines/dapps/as
 
 ## Implementation
 
-Now, when our smart-contracts is fully tested, we are ready to deploy them into the TON. In `Blueprint SDK` this process is the same for both `mainnet` and `testnet` and any of the presented languages in guide: `FunC`, `Tact`, `Tolk`. Deploy scripts relays on the same wrappers that you have used in testing scripts:
+Now, when our smart-contracts is fully tested, we are ready to deploy them into the TON. In `Blueprint SDK` this process is the same for both `mainnet` and `testnet` and any of the presented languages in guide: `FunC`, `Tact`, `Tolk`. 
 
-```typescript title="/scripts/deployHelloWorld"
+### Step 1: Update deployment script
+
+Deploy scripts relays on the same wrappers that you have used in testing scripts, we will use one common script to deploy both of previously deployed smart-contracts, update `deployHelloWorld.ts` with this code:
+
+```typescript title="/scripts/deployHelloWorld.ts"
 import { toNano } from '@ton/core';
 import { HelloWorld } from '../wrappers/HelloWorld';
 import { CounterInternal } from '../wrappers/CounterInternal';
@@ -95,27 +99,32 @@ export async function run(provider: NetworkProvider) {
     console.log('ID', await helloWorld.getID());
     console.log('ID', (await counterInternal.getId()).toString());
 }
-
 ```
 
-You can run those scripts by entering following command:
+### Step 2: Run deploy script
+
+You can run scripts by entering following command:
 
 ```bash
 npx bleuprint run # deployHelloWorld # optionally directly pass script
 ```
 
-After that you will see menu allowing to choose network:
+### Step 3: choose network
+
+After that you will see interactive menu allowing to choose network:
 
 ```bash
 ? Which network do you want to use? (Use arrow keys)
-❯ mainnet
-  testnet
+  mainnet
+❯ testnet
   custom
 ```
 
-:::warning
-Before deployment to the `mainnet` ensure that your smart-contracts correspond to [Security Measures](/v3/guidelines/smart-contracts/security/overview).
+:::danger
+Before deployment to the `mainnet` ensure that your smart-contracts correspond to [Security Measures](/v3/guidelines/smart-contracts/security/overview), as we sad before, `HelloWorld` smart-contract **don't**.
 :::
+
+### Step 4: choose wallet app
 
 Next, choose the way to access your wallet, the easiest way to do that is using [TON Connect](/v3/guidelines/ton-connect/overview/) for most popular wallet apps: `TonKeeper`, `MyTonWallet` or `Tonhub`.
 ```bash
@@ -132,12 +141,18 @@ Next, choose the way to access your wallet, the easiest way to do that is using 
 
 Finally scan QR code in the terminal through your wallet app and connect the wallet. After you done that for the first time in project this step will be skipped.
 
-You will recieve a transaction request in your wallet app each time your code require currency for transaction. After confirming request in your wallet and awaiting for deployment you will see corresponding message with the reference to your newly deployed smart-contract view in explorer:
+You will recieve a transaction request in your wallet app each time your code require currency for transaction.
+
+### Step 5: observe your smart-contract in network
+
+ After confirming request in your wallet and awaiting for deployment you will see corresponding message with the reference to your newly deployed smart-contract view in explorer:
 
 ```bash
 Contract deployed at address EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 You can view it at https://testnet.tonscan.org/address/EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 ```
+
+**Congratulations!** Your custom `smart-contracts` is ready to execute `get methods` same way as your wallet in [Getting started](/v3/guidelines/quick-start/getting-started#navigation-tabs) section and execute `transactions` same as in [Blockchain Interaction](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network) section - consider it's reading to understand how to interact with `smart-contracts` off-chain if you still don't.
 
 :::tip
 Using `Blueprint SDK` and wallet apps is not the only option, you can create message with [state_init](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) by yourself, moreover you can do it even through smart-contract [internal message](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
