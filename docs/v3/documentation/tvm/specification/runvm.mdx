@@ -13,25 +13,25 @@ The `RUNVM` instruction creates an isolated VM instance, allowing code execution
 
 Flags operate similarly to `RUNVMX` in Fift:
 
-- `+1`: Sets `c3` to code.
-- `+2`: push an implicit 0 before running the code
-- `+4`: take `c4` from stack (persistent data), return its final value
-- `+8`: take gas limit `g_l` from stack, return consumed gas `g_c`
-- `+16`: take `c7` from stack (smart-contract context)
-- `+32`: return final value of `c5` (actions)
-- `+64`: pop hard gas limit (enabled by ACCEPT) `g_m` from stack
-- `+128`: "isolated gas consumption". Child VM will have a separate set of visited cells and a separate chksgn counter.
-- `+256`: pop integer `r`, return exactly `r` values from the top:
-- If RUNVM call successful and r is set, it returns r elements. If r not set - returns all;
-- if RUNVM successful but there is not enough elements on stack (stack depth less than r) it is considered as exception in child VM, with exit_code=-3 and exit_arg=0 (so 0 is returned as only stack element);
-- if RUNVM fails with exception - only one element is returned - exit arg (not to be mistaken with exit_code);
-- in case of OOG, exit_code = -14 and exit_arg is amount of gas.
+- `+1`: sets `c3` to code.
+- `+2`: pushes an implicit `0` before executing the code.
+- `+4`: takes persistent data `c4` from the stack and returns its final value.
+- `+8`: takes the gas limit `g_l` from the stack and returns the consumed gas `g_c`.
+- `+16`: takes `c7` (smart contract context) from the stack.
+- `+32`: returns the final value of `c5` (actions).
+- `+64`: pops the hard gas limit `g_m` enabled by `ACCEPT` from the stack.
+- `+128`: enables "isolated gas consumption", meaning the child VM maintains a separate set of visited cells and a `chksgn` counter.
+- `+256`: pops an integer `r` and ensures exactly `r` values are returned from the top of the stack:
+  - If `RUNVM` call succeeds and `r` is set, it returns `r` elements. If `r` is not set, it returns all available elements.
+  - If `RUNVM` is successful but lacks elements on the stack, meaning the stack depth is less than `r`, it is treated as an exception in the child VM. The `exit_code` is set to `-3`, and `exit_arg` is set to `0`, so `0` is returned as the only stack element.
+  - If `RUNVM` fails with an exception, only one element is returned, `exit_arg`, which should not be confused with `exit_code`.
+  - In the case of running out of gas, `exit_code` is set to `-14`, and `exit_arg` contains the amount of gas.
 
 Gas cost:
-- 66 gas
-- 1 gas for every    stack element given to the child VM (first 32 are free)
-- 1 gas for every stack element returned from the child VM (first 32 are free)
+- 66 gas;
+- 1 gas for each stack element passed to the child VM (the first 32 elements are free);
+- 1 gas for each stack element returned from the child VM (the first 32 elements are free).
 
 ## See Also
 
-- [TVM Instructions](/v3/documentation/tvm/instructions)
+- [TVM instructions](/v3/documentation/tvm/instructions)
