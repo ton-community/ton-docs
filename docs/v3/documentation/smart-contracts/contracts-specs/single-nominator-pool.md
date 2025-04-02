@@ -3,21 +3,31 @@ import TabItem from '@theme/TabItem';
 
 # Single nominator pool
 
-The [single nominator](https://github.com/ton-blockchain/single-nominator) is a simple firewall TON smart contract that enables secure validation for TON blockchain via cold wallet. The contract is designed for TON validators that have enough self stake to validate by themselves without relying on third-party nominators stakes. The contract provides an alternative simplified implementation for the [nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool) smart contract that supports a single nominator only. The benefit of this implementation is that it's more secure since the attack surface is considerably smaller. This is due to massive reduction in complexity of nominator pool that has to support multiple third-party nominators.
+The [single nominator](https://github.com/ton-blockchain/single-nominator) contract is a security-focused smart contract that lets validators securely stake TON coins without needing other participants. Designed for validators with sufficient self-stake, it keeps signing keys separate from staked funds using a cold wallet for maximum security. The contract provides an alternative simplified implementation for the [nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool) smart contract that supports a single nominator only. The benefit of this implementation is that it's more secure since the attack surface is considerably smaller. This is due to a massive reduction in the complexity of the nominator pool that has to support multiple third-party nominators.
 
 ## The go-to solution for validators
 
-This smart contract is intended to be the go-to solution for TON validators that have enough stake to validate by themselves. The other available alternatives are:
+This smart contract is the recommended solution for TON validators with a sufficient stake to validate independently. Other options include:
 
-- Using a [hot wallet](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) (insecure since a cold wallet is needed to prevent theft if the validator node is hacked)
-- Using [restricted-wallet](https://github.com/EmelyanenkoK/nomination-contract/blob/master/restricted-wallet/wallet.fc) (which is unmaintained and has unresolved attack vectors like gas drainage attacks)
-- Using [nominator pool](https://github.com/ton-blockchain/nominator-pool) with max_nominators_count = 1 (unnecessarily complex with a larger attack surface)
+1. **Hot wallet**  
+   [Standard wallet implementation](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)  
+   *Risk*: Vulnerable to theft if the validator node is compromised
 
-See a more detailed [comparison of existing alternatives](#comparison-of-existing-alternatives) below.
+2. **Restricted wallet**  
+   [Legacy implementation](https://github.com/EmelyanenkoK/nomination-contract/blob/master/restricted-wallet/wallet.fc)  
+   *Issues*: Unmaintained and susceptible to gas drainage attacks
+
+3. **Nominator pool**  
+   [Single-nominator setup](https://github.com/ton-blockchain/nominator-pool)  
+   *Drawback*: Unnecessary complexity for solo validators
+
+For a complete feature comparison, see:  
+[Comparison of existing alternatives](#comparison-of-existing-alternatives)
+
 
 ## Official code hash
 
-Check this in https://verifier.ton.org before sending funds to a live contract
+Check this in https://verifier.ton.org before sending funds to a live contract.
 
 Single nominator v1.0
 
@@ -49,7 +59,7 @@ The architecture is nearly identical to the [nominator pool](https://github.com/
 3. _MyTonCtrl_ starts running on the validator node connected to the Internet
 4. _MyTonCtrl_ uses _Validator_ wallet to instruct _SingleNominator_ to enter the next election cycle
 5. _SingleNominator_ sends the stake ($$$) to the _Elector_ for one cycle
-6. The election cycle is over and stake can be recovered
+6. The election cycle is over, and stake can be recovered
 7. _MyTonCtrl_ uses _Validator_ wallet to instruct _SingleNominator_ to recover the stake from the election cycle
 8. _SingleNominator_ recovers the stake ($$$) of the previous cycle from the _Elector_
 9. Steps 4-8 repeat as long as _Owner_ is happy to keep validating
@@ -59,21 +69,21 @@ The architecture is nearly identical to the [nominator pool](https://github.com/
 
 - The validator node requires a hot wallet to sign new blocks. This wallet is inherently insecure because its private key is connected to the Internet. Even if this key is compromised, the _Validator_ cannot extract the funds used for validation. Only _Owner_ can withdraw these funds.
 
-- Even if _Validator_ wallet is compromised, _Owner_ can tell _SingleNominator_ to change the validator address. This will prevent the attacker from interacting with _SingleNominator_ further. There is no race condition here, _Owner_ will always take precedence.
+- Even if the _ Validator _ wallet is compromised, _ Owner _ can tell _ SingleNominator _ to change the validator address. This will prevent the attacker from interacting with _SingleNominator_ further. There is no race condition here; _Owner_ will always take precedence.
 
-- _SingleNominator_ balance holds the principal staking funds only - its balance is not used for gas fees. Gas money for entering election cycles is held in the _Validator_ wallet. This prevents an attacker that compromised the validator from draining the principal via a gas spending attack.
+- The _SingleNominator_ balance holds the principal staking funds only—its balance is not used for gas fees. Gas money for entering election cycles is held in the _Validator_ wallet. This prevents an attacker who compromised the validator from draining the principal via a gas spending attack.
 
-- _SingleNominator_ verifies the format of all operations given by _Validator_ to make sure it doesn't forward invalid messages to the _Elector_.
+- _SingleNominator_ verifies the format of all operations given by _Validator_ to ensure it doesn't forward invalid messages to the _Elector_.
 
-- On emergency, for example if _Elector_ contract was upgraded and changes its interface, _Owner_ can still send any raw message as _SingleNominator_ to recover the stake from _Elector_.
+- In an emergency, for example, if the _Elector_ contract was upgraded and changed its interface, _Owner_ can still send any raw message as _SingleNominator_ to recover the stake from _Elector_.
 
-- On extreme emergency, _Owner_ can set the code of _SingleNominator_ and override its current logic to address unforeseen circumstances.
+- In an extreme emergency, _Owner_ can set the code of _SingleNominator_ and override its current logic to address unforeseen circumstances.
 
-Some of these attack vectors cannot be mitigated using the regular [nominator pool](https://github.com/ton-blockchain/nominator-pool) contract because that would allow the person running the validator to steal funds from its nominators. This is not a problem with _SingleNominator_ because _Owner_ and _Validator_ are owned by the same party.
+The standard [nominator pool](https://github.com/ton-blockchain/nominator-pool) can't prevent all attack scenarios - a malicious validator operator could potentially steal from nominators. This risk doesn't exist with _SingleNominator_ since both the _Owner_ and _Validator_  are controlled by the same entity.
 
 ### Security audits
 
-Full security audit conducted by Certik and available in this repo - [Certik audit](https://github.com/ton-blockchain/single-nominator/blob/main/certik-audit.pdf).
+Certik conducted a full security audit, which is available in this repo: [Certik audit](https://github.com/ton-blockchain/single-nominator/blob/main/certik-audit.pdf).
 
 ## Comparison of existing alternatives
 
