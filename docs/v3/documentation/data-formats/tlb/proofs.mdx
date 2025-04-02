@@ -25,7 +25,7 @@ Let's say we know a Block ID:
 ```json
 <TL BlockIdExt [wc=-1, shard=-9223372036854775808, seqno=31220993, root_hash=51ed3b9e728e7c548b15a5e5ce988b4a74984c3f8374f3f1a52c7b1f46c26406, file_hash=d4fcdc692de1a252deb379cd25774842b733e6a96525adf82b8ffc41da667bf5] >
 ```
-And we ask a Liteserver for a Header for this block. Liteserver [response](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/tl/generate/scheme/lite_api.tl#L35)
+And we ask a Liteserver for a Header for this block. Liteserver [response](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L36)
 contains a `header_proof` boc.
 
 <details>
@@ -283,7 +283,7 @@ Since we trust this Cell we can trust the Shard Block data (`ShardStateUnsplit` 
 
 Let's prove state of account `EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG` for the same Masterchain block we started with in the article beginning.
 
-Liteserver [response](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/tl/generate/scheme/lite_api.tl#L37) contains masterchain block id _(must be the same we sent to ls)_, shard block id and `shard_proof` boc which we should check as described above,
+Liteserver [response](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L38) contains masterchain block id _(must be the same we sent to ls)_, shard block id and `shard_proof` boc which we should check as described above,
 `proof` boc, and `state` boc.
 
 
@@ -564,7 +564,7 @@ Now we can trust this account state data.
 
 ## Account transactions
 
-For [liteServer.getTransactions](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/tl/generate/scheme/lite_api.tl#L71) request we must provide `lt` and `hash` of the transaction to start from.
+For [liteServer.getTransactions](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L94) request we must provide `lt` and `hash` of the transaction to start from.
 If we want to get last account transactions we can get them from `ShardAccount` (described above) and trust these `lt` and `hash`.
 
 When we receive transactions from the Liteserver we get boc with amount of transactions we asked roots. Each root is a Cell, which we should deserialize according to the [Transaction](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L263-L269) TLB Scheme.
@@ -708,8 +708,8 @@ you check proofs similar but in that case you really need to compare hashes.
 
 ## Config
 
-Let's ask a Liteserver for 1, 4, 5, 7, 8 and 15 [Config params](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L101) (for [liteServer.getConfigAll](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L100) where you get all params, the proof verifying is the same).
-The [response](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L54) contains `state_proof` and `config_proof`.
+Let's ask a Liteserver for 1, 4, 5, 7, 8 and 15 [Config params](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L101) (for [liteServer.getConfigAll](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L100) where you get all params, the proof verifying is the same).
+The [response](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L54) contains `state_proof` and `config_proof`.
 
 First, let's deserialize the `state_proof` Cell:
 
