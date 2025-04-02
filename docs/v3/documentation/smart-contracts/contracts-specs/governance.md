@@ -1,6 +1,6 @@
 # Governance contracts
 
-In TON, a set of special smart contracts controls consensus parameters for node operation - including TVM, catchain, fees, and chain topology - as well as how these parameters are stored and updated. Unlike older blockchains that hardcode these parameters, TON enables transparent on-chain governance. The current governance contracts include the **Elector**, **Config**, and **DNS** contracts, with future plans to expand (e.g., extra-currency **Minter**).
+In TON, a set of special smart contracts controls consensus parameters for node operation - including TVM, catchain, fees, and chain topology - and how these parameters are stored and updated. Unlike older blockchains that hardcode these parameters, TON enables transparent on-chain governance. The current governance contracts include the **Elector**, **Config**, and **DNS** contracts, with expansion plans (e.g., extra-currency **Minter**).
 
 ## Elector
 
@@ -25,13 +25,13 @@ The Elector stores:
 
 To apply, a validator must:
 
-1. Send a message with their ADNL address, public key, `max_factor`, and stake (TON amount) to the Elector.
+1. Send a message to the Elector with their ADNL address, public key, `max_factor`, and stake (TON amount).
 2. The Elector validates the parameters and either registers the application or refunds the stake.  
    _Note:_ Only masterchain addresses can apply.
 
 ### Conducting elections
 
-The Elector is a special smart contract that triggers **Tick and Tock transactions** (forced executions at the start and end of each block). It checks during each block whether it’s time to conduct a new election.
+The Elector is a special smart contract that triggers **Tick and Tock transactions** (forced executions at the start and end of each block). It checks whether it’s time to conduct a new election during each block.
 
 **Process details:**
 
@@ -41,10 +41,12 @@ The Elector is a special smart contract that triggers **Tick and Tock transactio
 - For each subset size `i` (from 1 to remaining candidates):
   - Assume the `i`-th candidate (lowest in the subset) defines the baseline.
   - Calculate effective stake (`true_stake`) for each `j`-th candidate (`j < i`) as:
-    ```
-    min(stake[i] * max_factor[j], stake[j])
-    ```
-  - Track the subset with the highest **total effective stake (TES)**.
+
+```
+min(stake[i] * max_factor[j], stake[j])
+```
+
+- Track the subset with the highest **total effective stake (TES)**.
 - Submit the winning validator set to the **Config** contract.
 - Return unused stakes and excess amounts (e.g., `stake[j] - min(stake[i] * max_factor[j], stake[j])`) to `credits`.
 
@@ -68,25 +70,25 @@ The Elector is a special smart contract that triggers **Tick and Tock transactio
   - `min_stake` ≤ stake ≤ `max_stake`
   - `min_total_stake` ≤ total stake ≤ `max_total_stake`
   - Stake ratios ≤ `max_stake_factor` (**ConfigParam 17**).
-- If conditions aren’t met, elections **postpone**.
+- If conditions aren’t met, elections **postponed**.
 
-### Process of reporting validator misbehavior  
+### Process of reporting validator misbehavior
 
-Each validator is periodically assigned the duty to create new blocks, with the frequency of assignments determined by their weight. After a validation round, anyone can audit the blocks to check whether the actual number of blocks produced by a validator significantly deviates from the expected number (based on their weight). A statistically significant underperformance (e.g., far fewer blocks created than expected) constitutes misbehavior.  
+Each validator is periodically assigned the duty to create new blocks, with the frequency of assignments determined by their weight. After a validation round, anyone can audit the blocks to check whether the actual number of blocks produced by a validator significantly deviates from the expected number (based on their weight). A statistically significant underperformance (e.g., fewer blocks created than expected) constitutes misbehavior.
 
-To report misbehavior, a user must:  
-1. Generate a **Merkle proof** demonstrating the validator’s failure to produce the expected blocks.  
-2. Propose a fine proportional to the severity of the offense.  
-3. Submit the proof and fine proposal to the Elector contract, covering the associated storage costs.  
+To report misbehavior, a user must:
 
-The Elector registers the complaint in the `past_elections` hashmap. Validators in the current round then verify the complaint. If the proof is valid and the proposed fine aligns with the misbehavior’s severity, validators vote on the complaint. Approval requires agreement from over **two-thirds of the total validator weight** (not just a majority of participants).  
+1. Generate a **Merkle proof** demonstrating the validator's failure to produce the expected blocks.
+2. Propose a fine proportional to the severity of the offense.
+3. Submit the proof and fine proposal to the Elector contract, covering the associated storage costs.
 
-If approved, the fine is withheld from the validator’s `frozen` stake stored in the corresponding `past_elections` entry. These funds remain locked for the duration specified in **ConfigParam 15** (`stake_held_for`).  
+The Elector registers the complaint in the `past_elections` hashmap. Current round validators then verify the complaint. If the proof is valid and the proposed fine aligns with the severity of the misbehavior, validators vote on the complaint. Approval requires agreement from over **two-thirds of the total validator weight** (not just a majority of participants).
 
+The fine is deducted from the validator's `frozen` stake in the relevant `past_elections` record if approved. These funds stay locked for the period defined by **ConfigParam 15** (`stake_held_for`).
 
 #### Distributing rewards
 
-The Elector releases `frozen` stakes and rewards (gas fees + block rewards) to past validators proportionally. Funds move to `credits`, and the election record clears from `past_elections`.
+The Elector releases `frozen` stakes and rewards (gas fees + block rewards) proportionally to past validators. Funds move to `credits`, and the election record clears from `past_elections`.
 
 ### Current Elector state
 
@@ -116,7 +118,7 @@ The **Config** contract manages TON’s configuration parameters, validator set 
 #### Emergency updates
 
 - Reserved indexes (`-999`, `-1000`, `-1001`) allow urgent updates to **Config**/**Elector** code.
-- A temporary emergency key (assigned to TON Foundation in 2021) accelerated fixes but couldn’t alter contracts.
+- A temporary emergency key (assigned to the TON Foundation in 2021) accelerated fixes but couldn't alter contracts.
 - **Key retired** on Nov 22, 2023 (**block 34312810**), replaced with zeros.
 - Later patched to a fixed byte sequence (`sha256("Not a valid curve point")`) to prevent exploits.
 
