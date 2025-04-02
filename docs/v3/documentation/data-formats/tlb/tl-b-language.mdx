@@ -4,7 +4,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 TL-B (Type Language - Binary) serves to describe the type system, constructors and existing functions. For example, we
 can use TL-B schemes to build binary structures associated with TON Blockchain. Special TL-B parsers can read schemes to
-deserialize binary data into different objects. TL-B describes data schemes for `Cell` objects. If you not familiar
+deserialize binary data into different objects. TL-B describes data schemes for `Cell` objects. If you are not familiar
 with `Cells`, please read [Cell & Bag of Cells(BOC)](/v3/documentation/data-formats/tlb/cell-boc#cell) article.
 
 ## Overview
@@ -41,7 +41,7 @@ right-hand side. Such a description begins with the name of a constructor.
 <br></br>
 
 Constructors are used to specify the type of combinator, including the state at serialization. For example, constructors
-can also be used when you want to specify an `op`(operation code) in query to a smart contract in TON.
+can also be used when you want to specify an `op`(operation code) in a query to a smart contract in TON.
 
 ```tlb
 // ....
@@ -52,7 +52,7 @@ transfer#5fcc3d14 <...> = InternalMsgBody;
 * constructor name: `transfer`
 * constructor prefix code: `#5fcc3d14`
 
-Notice, every constructor name immediately followed by an optional constructor tag, such as `#_` or `$10`, which
+Notice, every constructor name is immediately followed by an optional constructor tag, such as `#_` or `$10`, which
 describes the bitstring used to encode (serialize) the constructor in question.
 
 ```tlb
@@ -99,7 +99,7 @@ explicitly provided, the TL-B parser must compute a default 32-bit constructor t
 the text of the “equation” with `| 0x80000000` defining this constructor in a certain fashion. Therefore, empty tags
 must be explicitly provided by `#_` or `$_`.
 
-This tag willies used to guess current type of bitstring in deserialization process. E.g. we have 1 bit bitstring `0`,
+This tag will be used to guess current type of bitstring in deserialization process. E.g. we have 1 bit bitstring `0`,
 if we tell TLB to parse this bitstring in type of `Bool` it will parse it as `Bool.bool_false`.
 
 Let's say we have more complex examples:
@@ -344,7 +344,7 @@ Means that `A` is parametrized by `x` `Nat`. In deserialization process we will 
 _ value:(A 32) = My32UintValue;
 ```
 
-Means than in deserialization process of `My32UintValue` type we will fetch 32-bit unsigned integer (because of `32`
+Means that in the deserialization process of `My32UintValue` type we will fetch 32-bit unsigned integer (because of `32`
 parameter to `A` type)
 
 ### Types
@@ -400,7 +400,7 @@ _ {X:Type} bits:(A (B X)) = AB X;
 
 ### NAT fields usage for parametrized types
 
-You can use fields defined previously like parameters to types. Serialization will be determinate in runtime.
+You can use fields defined previously like parameters to types. Serialization will be determined in runtime.
 
 Simple example:
 
@@ -409,7 +409,7 @@ _ a:(## 8) b:(## a) = A;
 ```
 
 This means that we store size of `b` field inside of `a` field. So when we want to serialize type `A` we need to load 8
-bit unsigned integer of `a` field and then use this number to determinate size of `b` field.
+bit unsigned integer of `a` field and then use this number to determine size of `b` field.
 
 This strategy works for parametrized types as well:
 
@@ -425,9 +425,9 @@ _ {x:#} value:(## x) = Example (x * 2);
 _ _:(Example 4) = 2BitInteger;
 ```
 
-In this example `Example.value` type is determinate in runtime.
+In this example `Example.value` type is determined in runtime.
 
-In `2BitInteger` definition we set value `Example 4` type. To determinate this type we use `Example (x * 2)`
+In `2BitInteger` definition we set value `Example 4` type. To determine this type we use `Example (x * 2)`
 definition and calculate `x` by formula (`y = 2`, `z = 4`):
 
 ```c++
@@ -443,7 +443,7 @@ _ {x:#} value:(## x) = ExampleSum (x + 3);
 _ _:(ExampleSum 4) = 1BitInteger;
 ```
 
-In `1BitInteger` definition we set value `ExampleSum 4` type. To determinate this type we use `ExampleSum (x + 3)`
+In `1BitInteger` definition we set value `ExampleSum 4` type. To determine this type we use `ExampleSum (x + 3)`
 definition and calculate `x` by formula (`y = 3`, `z = 4`):
 
 ```c++
@@ -467,7 +467,7 @@ Simple example for negate operator is definition of new variable base on another
 _ a:(## 32) { b:# } { ~b = a + 100 } = B_Calc_Example;
 ```
 
-After definition, you can use new variable for passing it to `Nat` types:
+After definition, you can use the new variable as input for `Nat` types:
 
 ```tlb
 _ a:(## 8) { b:# } { ~b = a + 10 }
@@ -506,9 +506,9 @@ Assume we have class `Define ~n m` which takes `m` and compute `n` loading it fr
 
 In `Example` type we store variable computed by `Define` type into `n_from_define`, also we know that it's `8` bit
 unsigned integer, because we apply `Define` type with `Define ~n_from_define 8`. Now we can use `n_from_define` variable
-in other types to determinate serialization process.
+in other types to determine the serialization process.
 
-This technic lead to more complex type definitions (such as Unions, Hashmaps).
+This technique lead to more complex type definitions (such as Unions, Hashmaps).
 
 ```tlb
 unary_zero$0 = Unary ~0;
@@ -516,7 +516,7 @@ unary_succ$1 {n:#} x:(Unary ~n) = Unary ~(n + 1);
 _ u:(Unary Any) = UnaryChain;
 ```
 
-This is example has good explanation in [TL-B Types](/v3/documentation/data-formats/tlb/tl-b-types#unary)
+This is example is explained well in [TL-B Types](/v3/documentation/data-formats/tlb/tl-b-types#unary)
 article. The main idea here is that `UnaryChain` will recursively deserialize until reach of `unary_zero$0` (because we
 know last element of `Unary X` type by definition `unary_zero$0 = Unary ~0;` and `X` is calculated in runtime
 due `Unary ~(n + 1)` definition).
@@ -525,7 +525,7 @@ Note: `x:(Unary ~n)` means that `n` is defined in process of serialization of `U
 
 ## Special types
 
-Currently, TVM allow types of cells:
+Currently, TVM allows the following types of cells:
 
 - Ordinary
 - PrunnedBranch
@@ -546,8 +546,8 @@ Example:
 !merkle_proof#03 {X:Type} virtual_hash:bits256 depth:uint16 virtual_root:^X = MERKLE_PROOF X;
 ```
 
-This technic allow codegen code to mark `SPECIAL` cells when you want to print structure, also it allow to correctly
-validate structures with special cells.
+This technique allows codegen code to mark `SPECIAL` cells when you want to print structure, it also allows correct
+validation of structures with special cells.
 
 ## Several instances for one type without constructor uniqueness tag check
 
@@ -563,7 +563,7 @@ b$01 = A 3;
 _ test:# = A 4;
 ```
 
-Means that actual tag for deserialization will be determinate by `A` type parameter:
+Means that actual tag for deserialization will be determined by `A` type parameter:
 
 ```python3
 # class for type `A`
