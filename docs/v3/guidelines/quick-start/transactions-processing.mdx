@@ -4,24 +4,13 @@ import TabItem from '@theme/TabItem';
 
 # Transactions processing
 
-Welcome to Transaction processing section! This guide will give you a starting point for further research of TON concepts and basic practical experience of developing applications with the TON ecosystem.
+This guide provides foundational knowledge for working with transactions on TON Blockchain, covering both theoretical concepts and practical implementation.
 
 ## Prerequisites
 
 - Basic programming knowledge.
-- Around __30 minutes__ of your time.
-
-> **Note**: We will provide a short explanation of core concepts during the guide, but if you prefer a more theoretical approach, you can check out core concepts of [TON blockchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains) first.
-
-## What You'll Learn
-
-[//]: # (TODO)
-
-- Interact with TON ecosystem: Wallets and Explorers.
-- Setup development environment: use Blueprint SDK for developing `smart-contracts` using `FunC`, `Tact`, and `Tolk` programming languages.
-- Send transactions and read from the **blockchain** using your preferred programming language and available **SDKs**.
-- Core concepts of **TON blockchain**: `messages`, `smart-contracts`, `addresses` and etc.
-- Basic templates ready for implementation of your project logic.
+- Basic knowledge of [TON Blockchain core concepts](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/).
+- Around __20 minutes__ of your time.
 
 ## Setting Up the Project
 
@@ -293,8 +282,46 @@ const transaction = await waitForTransaction(messageHash);
 const transactionHash = transaction.hash();
 ```
 
-### Failed Transactions
+### Handling transaction failures
 
-Unfortunately, in some cases, a transaction may fail. There are two types of failures when making a transfer from a wallet:
-- *External message was not accepted by the wallet*: This failure may occur due to an invalid `seqno`, message `deadline`, or invalid signature, etc. In this case, the message will not trigger a transaction and will not appear on the blockchain.
-- *Failure after the message was accepted*: In this case, the transaction will appear on the blockchain, but the outcome of the transaction will not be successful. Refer to this [article](/documentation/smart-contracts/message-management/messages-and-transactions/#transaction-outcome) for further reading. Typically, process of finding the error including looking for code
+Two primary failure scenarios:
+
+1. **Message Rejection**:
+- Causes: Invalid `seqno`, expired `deadline`, bad `signature`
+- Result: No transaction appears on blockchain
+
+2. **Execution Failure**:
+- Transaction appears on chain but fails during execution
+- See [transaction outcomes documentation](/documentation/smart-contracts/message-management/messages-and-transactions/#transaction-outcome) for troubleshooting
+
+#### Exit codes
+
+If transaction failed while executing, it will appear on blockchain with some exit code. After extracting exit code consider reading [Standard exit codes](/v3/documentation/tvm/tvm-exit-codes#standard-exit-codes/) to find out, why it fails.
+
+```typescript
+function extractExitCode(transaction: Transaction) {
+  const {description} = transaction;
+  if (description.type !== 'generic') {
+    throw Error('Unknown transaction type');
+  }
+
+  if (description.computePhase.type === 'skipped') {
+    return -1; // Mostly you will see face this error when not enough gas was attached.
+  }
+
+  if (description.computePhase.exitCode) {
+    return description.computePhase.exitCode;
+  }
+
+  if (description.actionPhase?.resultCode) {
+    return description.actionPhase.resultCode;
+  }
+
+  return 0;
+}
+```
+
+## See also
+
+- [Transaction fees](/v3/documentation/smart-contracts/transaction-fees/fees)
+- [Transaction body parsing](/v3/guidelines/dapps/cookbook#how-to-parse-transactions-of-an-account-transfers-jettons-nfts)
