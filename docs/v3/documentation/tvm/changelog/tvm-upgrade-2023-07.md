@@ -1,4 +1,4 @@
-# TVM Upgrade 2023.07
+# TVM upgrade Jul 2023
 
 :::tip
 This upgrade launched [run](https://t.me/tonblockchain/223) on the Mainnet from December 2023.
