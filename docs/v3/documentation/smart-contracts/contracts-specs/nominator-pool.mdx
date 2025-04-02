@@ -19,14 +19,14 @@ Operating in the masterchain requires about 5 TON per validation round, paid by 
 
 ## Reward distribution
 
-After each validation round, the pool recovers its stake plus rewards from the elector contract. Rewards are split as:
+After each validation round, the pool recovers its stake plus rewards from the elector contract. Rewards are split as follows:
 
 ```
 validator_reward = (reward * validator_reward_share) / 10000
 nominators_reward = reward - validator_reward
 ```
 
-Nominators receive shares proportional to their stakes. For example, if there are two nominators in the pool with stakes of 100k and 300k TON, then the first one will take 25% and the second 75% of the `nominators_reward`.
+Nominators receive shares proportional to their stakes. For example, if two nominators are in the pool with stakes of 100k and 300k TON, the first one will take 25% and the second 75% of the `nominators_reward`.
 
 ### Slashing
 
@@ -34,7 +34,7 @@ For validation fines:
 
 1. Deduct from validator funds first
 2. If insufficient, deduct from nominators proportionally
-3. Pool design ensures validator funds always cover maximum possible fines
+3. Pool design ensures validator funds always cover the maximum possible fines
 
 ## Validator requirements
 
@@ -43,14 +43,14 @@ The pool participates in validation only when:
 - Validator funds exceed `min_validator_stake`
 - Validator funds cover maximum possible fines (based on network config)
 
-## Nominator`s messages
+## Nominator's messages
 
-To interact with the nominator pool, nominators send simple messages with a text comment (can be sent from any wallet application) to the pool smart contract.
+To interact with the nominator pool, nominators send simple messages with a text comment (from any wallet application) to the pool smart contract.
 All messages must be sent in **bounceable mode** to prevent fund loss from errors.
 
 ### Deposit
 
-Send message with comment "d" and amount ≥ `min_nominator_stake + 1 TON`.
+Send a message with the comment "d" and amount ≥ `min_nominator_stake + 1 TON`.
 
 Deposits:
 
@@ -60,15 +60,15 @@ Deposits:
 
 ### Withdrawal
 
-Send message with comment "w" and 1 TON for fees:
+Send a message with the comment "w" and 1 TON for fees:
 
-- Executes immediately if funds available
+- Executes immediately if funds are available
 - Queues as `withdraw_request` otherwise
 - Full withdrawal only (no partial withdrawals)
 
 ## Validator withdraw
 
-The validator can withdraw from the pool all the Toncoins that does not belong to the nominators.
+The validator can withdraw from the pool all the Toncoins that do not belong to the nominators.
 
 ## Key management
 
@@ -78,12 +78,12 @@ Participants must safeguard private keys:
 - Lost validator wallet = lost validator funds
 
 :::info
-The loss of one participant's private key has no impact on other participants in the pool.
+Losing one participant's private key does not impact other participants in the pool.
 :::
 
 ## Emergency operations
 
-If validator becomes inactive, any party can send operational messages such as `process withdraw requests`, `update current validator set`, `new_stake`, `recover_stake` to enable nominator withdrawals. The validator software `mytonctrl` does this automatically.
+If the validator becomes inactive, any party can send operational messages such as `process withdraw requests`, `update current validator set`, `new_stake`, and `recover_stake` to enable nominator withdrawals. The validator software `mytonctrl` does this automatically.
 
 ## Voting for network config proposals
 
@@ -93,7 +93,7 @@ The pool implements weighted voting for network config proposals:
 2. Nominators vote by sending a message to the nominator pool:
    - `y<HASH>` to support
    - `n<HASH>` to oppose
->Please attach a small amount of tokens (minimum 1 TON) to this message to cover the network fee. Any unspent TON will be automatically returned to your wallet.
+     > Please attach a small amount of tokens (minimum 1 TON) to this message to cover the network fee. Any unspent TON will be automatically returned to your wallet.
 3. Validator submits final vote based on pool consensus
 4. Votes expire after 30 days
 
@@ -105,15 +105,15 @@ Returns complete pool state information as a tuple containing:
 
 1. `state` (uint)  
    Current operational state:  
-   `0` = Not validating  
-   `1` = Stake request sent  
-   `2` = Validation confirmed
+    `0` = Not validating  
+    `1` = Stake request sent  
+    `2` = Validation confirmed
 
 2. `nominators_count` (uint)  
    Active nominators count
 
 3. `stake_amount_sent` (nanotons)  
-   Current validation stake amount
+   The current validation stake amount
 
 4. `validator_amount` (nanotons)  
    Validator's owned funds
@@ -124,9 +124,9 @@ Returns complete pool state information as a tuple containing:
 6. `validator_reward_share` (uint, immutable)  
    Validator's reward percentage. For example 4000 = 40%
 
-   ```
-   validator_reward = (reward * validator_reward_share) / 10000
-   ```
+```
+validator_reward = (reward * validator_reward_share) / 10000
+```
 
 7. `max_nominators_count` (uint, immutable)  
    Maximum allowed nominators, typically 40
@@ -144,7 +144,7 @@ Returns complete pool state information as a tuple containing:
     Raw dictionary of pending withdrawals
 
 12. `stake_at` (uint)  
-    Next validation round ID supposed to start at `utime_since`
+    Next validation round ID, which is supposed to start at [`utime_since`](/v3/documentation/network/configs/blockchain-configs#configuration-parameters-4)
 
 13. `saved_validator_set_hash` (uint)  
     Technical validator info
@@ -176,8 +176,9 @@ Returns an array of all nominators with their:
 
 ### `get_nominator_data`
 
-Returns detailed nominator information for specified address.
->Address must be in raw format without `0:` prefix.  
+Returns detailed nominator information for the specified address.
+
+> Address must be in raw format without the `0:` prefix.
 
 1. `amount` (nanotons) - Active stake
 2. `pending_deposit_amount` (nanotons) - Queued deposit
@@ -196,7 +197,7 @@ get_nominator_data 0x348bcf827469c5fc38541c77fdd91d4e347eac200f6f2d9fd62dc08885f
 
 #### `list_votes`
 
-Returns all active proposals with:
+Returns all active proposals with the following:
 
 1. `proposal_hash` (uint) - Convert with `dec_to_hex()`
 2. `votes_create_time` (uint) - Unix timestamp
@@ -208,7 +209,7 @@ Returns voting details per proposal:
 1. `address` (uint)
    - Nominator: `"0:" + dec_to_hex(address)`
    - Validator: `"-1:" + dec_to_hex(address)`
-2. `support` (int)  
+2. `support` (int)
    - `-1` = For
    - `0` = Against
 3. `vote_time` (uint) - Unix timestamp
@@ -217,14 +218,15 @@ Returns voting details per proposal:
 
 ## Integration into wallet applications
 
-For deposits, withdrawals and votes, send simple messages to the pool with the desired text comments as described above. When sending a deposit, you can store the amount that was sent in the local storage. When sending a re-deposit, add it to this amount too.
+For deposits, withdrawals, and votes, send simple messages to the pool with the desired text comments as described above. When sending a deposit, you can store the amount in the local storage. When sending a re-deposit, add it to this amount, too.
 
 Call the get method `get_nominator_data(your_address)` and calculate profit as:
-  ```python
-  current_profit = (amount + pending_deposit_amount) - sent_amount_stored_in_local_storage
-  ```
 
-To obtain the complete state of the pool, you need to query both `get_pool_data` and `list_nominators`.
+```python
+current_profit = (amount + pending_deposit_amount) - sent_amount_stored_in_local_storage
+```
+
+To obtain the pool's complete state, you need to query both `get_pool_data` and `list_nominators`.
 
 ## See also
 
