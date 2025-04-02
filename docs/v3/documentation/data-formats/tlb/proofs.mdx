@@ -13,10 +13,10 @@ This article describes advanced examples of verifying proofs from Liteservers.
 
 It's important to check any data you receive from a node for trustless interaction with the blockchain.
 However, the article covers only part of trustless communication with Liteserver,
-because its assumed that you verified the Block hash you received from a Liteserver (or from anyone else).
+because it's assumed that you verified the Block hash you received from a Liteserver (or from anyone else).
 Block hash verifying is more advanced, because you need to sync key blocks and (or) check block signatures,
-and will be described in the other article in the future. But anyway even using only these examples
-you're decreasing probability that Liteserver will send you the wrong data that you will believe.
+and will be described in another article in the future. But anyway even using only these examples
+you're decreasing the probability that Liteserver will send you the wrong data that you will believe.
 
 
 ## Block Header
@@ -39,7 +39,7 @@ b5ee9c72010207010001470009460351ed3b9e728e7c548b15a5e5ce988b4a74984c3f8374f3f1a5
 ```
 </details>
 
-After boc deserialization, we got Cell:
+After boc deserialization, we get a Cell:
 
 ```json
 280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> {
@@ -53,7 +53,7 @@ After boc deserialization, we got Cell:
 	}
 }
 ```
-that we should deserialize according to the Block [Tlb scheme](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L442):
+that we should deserialize according to the Block [TLB scheme](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L442):
 
 ```python
 {
@@ -833,7 +833,7 @@ We need to compare Hash_1 of this Merkle Proof only reference with the hash we g
 ```python
 state_hash = check_block_header_proof(state_proof[0], block.root_hash, True)
 if config_proof[0].get_hash(0) != state_hash:
-    raise LiteClientError('hashes mismach')
+    raise LiteClientError('hashes mismatch')
 ```
 
 Now, let's deserialize the Cell according to the `ShardStateUnsplit` scheme:
