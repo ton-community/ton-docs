@@ -1,7 +1,7 @@
-import ConceptImage from '@site/src/components/conceptImage';
-import ThemedImage from '@theme/ThemedImage';
+import ConceptImage from "@site/src/components/conceptImage";
+import ThemedImage from "@theme/ThemedImage";
 
-# Messages and Transactions
+# Messages and transactions
 
 TON is an asynchronous blockchain with a complex structure very different from other blockchains. Because of this, new developers often have questions about low-level things in TON. In this article, we will have a look at one of these related to message delivery.
 
@@ -11,42 +11,39 @@ A message is a packet of data exchanged between actors (users, applications, or 
 
 <br></br>
 <div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/message-delivery/message_delivery_1.png?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_1_dark.png?raw=true',
-  }}
-/>
+  <ThemedImage
+    alt="Message diagram"
+    sources={{
+      light: "/img/docs/message-delivery/message_delivery_1.png?raw=true",
+      dark: "/img/docs/message-delivery/message_delivery_1_dark.png?raw=true",
+    }}
+  />
 </div>
 <br></br>
 
 Working with this type of communication is reminiscent of launching a satellite into space. While we know the message we've created, observation after launch is required to determine the outcome.
 
-
-
-## What is a Transaction?
+## What is a transaction?
 
 A transaction in TON consists of the following:
-- the incoming message that initially triggers the contract (special ways to trigger exist)
-- contract actions caused by the incoming message, such as an update to the contract's storage (optional)
-- outgoing messages generated and sent to other actors (optional)
 
->Technically, a contract can be triggered through special functions such as [Tick-Tock](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock), but this function is more used for internal TON Blockchain core contracts.
+- The incoming message that initially triggers the contract (special ways to trigger exist)
+- Contract actions caused by the incoming message, such as an update to the contract's storage (optional)
+- Outgoing messages generated and sent to other actors (optional)
 
->Not every transaction results in outgoing messages or updates to the contract's storage — this depends on the actions defined by the contract's code.
+> Technically, a contract can be triggered through special functions such as [Tick-Tock](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock), but this function is more used for internal TON Blockchain core contracts.
 
+> Not every transaction results in outgoing messages or updates to the contract's storage - this depends on the actions defined by the contract's code.
 
 <br></br>
 <ThemedImage
-  alt=""
+  alt="Transaction diagram"
   sources={{
-    light: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_2_dark.png?raw=true',
+    light: "/img/docs/message-delivery/message_delivery_2.png?raw=true",
+    dark: "/img/docs/message-delivery/message_delivery_2_dark.png?raw=true",
   }}
 />
 <br></br>
-
 
 If we look at Ethereum or almost any other synchronous blockchain, each transaction can contain several smart contract calls in it. For example, DEXs perform multiple exchanges in one transaction if there is no liquidity for the selected trading pair.
 
@@ -55,7 +52,7 @@ In an asynchronous system you can't get a response from the destination smart co
 Achieving the infinite sharding paradigm requires full parallelization, ensuring that each transaction executes independently of others. Therefore, instead of transactions which affect and change the state of many contracts at one time, each transaction in TON is only executed on a single smart contract and smart contracts communicate through messages. That way, smart contracts can only interact with each other by calling their functions with special messages and getting a response to them via other messages later.
 
 :::info
-More detailed and accurate description on the [Transaction Layout](/v3/documentation/data-formats/tlb/transaction-layout) page.
+More detailed and accurate description on the [transaction layout](/v3/documentation/data-formats/tlb/transaction-layout) page.
 :::
 
 ### Transaction outcome
@@ -66,6 +63,7 @@ Also TVM [compute phase may be skipped](/v3/documentation/tvm/tvm-overview#compu
 :::info for toncenter api v3
 To determine successful transaction one should use tx.description.action.success && tx.description.compute_ph.success:
 :::
+
 ```json
 "transactions": [
     {
@@ -94,19 +92,18 @@ Transaction may have one of three results:
 `aborted: true` is a toncenter field, transaction has no such field
 :::
 
-## What is a Logical time?
+## What is a logical time?
 
 In such a system with asynchronous and parallel smart contract calls, it can be hard to define the order of actions to process. That's why each message in TON has its _Logical time_ or _Lamport time_ (later just _lt_). It is used to understand which event caused another and what a validator needs to process first.
 
 It is strictly guaranteed that the transaction resulting from a message will have a _lt_ greater than the _lt_ of the message. Likewise, the _lt_ of a message sent in some transaction is strictly greater than the _lt_ of the transaction that caused it. As well as this, messages that were sent from one account and transactions which happened on one account are strictly ordered as well.
 
-
 <br></br>
 <ThemedImage
-  alt=""
+  alt="Logical time sequence"
   sources={{
-    light: '/img/docs/message-delivery/message_delivery_3.png?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_3_dark.png?raw=true',
+    light: "/img/docs/message-delivery/message_delivery_3.png?raw=true",
+    dark: "/img/docs/message-delivery/message_delivery_3_dark.png?raw=true",
   }}
 />
 <br></br>
@@ -121,17 +118,15 @@ If `msg1_lt < msg2_lt` => `tx1_lt < tx2_lt`.
 
 <br></br>
 <div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/message-delivery/message_delivery_5.png?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_5_dark.png?raw=true',
-  }}
-/>
+  <ThemedImage
+    alt="Message order guarantee"
+    sources={{
+      light: "/img/docs/message-delivery/message_delivery_5.png?raw=true",
+      dark: "/img/docs/message-delivery/message_delivery_5_dark.png?raw=true",
+    }}
+  />
 </div>
 <br></br>
-
-
 
 Otherwise, an attempt to synchronize delivery would require the state of all the others to be known before processing one shard, thereby breaking parallelization and destroying efficient sharding.
 
@@ -141,7 +136,7 @@ For each block, we can define the _lt_ span as starting from the first transacti
 
 Fortunately, TON works in such a way that any internal message will definitely be received by the destination account. A message cannot be lost anywhere between the source and its destination. External messages are a little bit different since their acceptance to the block is at the validator's discretion however, once the message is accepted into the incoming message queue, it will be delivered.
 
-### Delivery Order
+### Delivery order
 
 It therefore seems like _lt_ solves the issue about message delivery order, because we know that a transaction with a lower _lt_ will be processed first. But this doesn't work in every scenario.
 
@@ -149,20 +144,19 @@ Suppose that there are two contracts - _A_ and _B_. _A_ receives an external mes
 
 <br></br>
 <div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/message-delivery/msg-delivery-1.png?raw=true',
-    dark: '/img/docs/message-delivery/msg-delivery-1-dark.png?raw=true',
-  }}
-/>
+  <ThemedImage
+    alt="Simple message order"
+    sources={{
+      light: "/img/docs/message-delivery/msg-delivery-1.png?raw=true",
+      dark: "/img/docs/message-delivery/msg-delivery-1-dark.png?raw=true",
+    }}
+  />
 </div>
 <br></br>
 
-
 But this is just a simple case when we only have two contracts. How does our system works in more complex cases?
 
-### Several Smart Contracts
+### Several smart contracts
 
 Suppose that we have three contracts - _A_, _B_ and _C_. In a transaction, _A_ sends two internal messages _1_ and _2_: one to _B_ and another to _C_. Even though they were created in an exact order (_1_, then _2_), we can't be sure that _1_ will be processed before _2_. This is the case because routes from _A_ to _B_ and from _A_ to _C_ can differ in length and validator sets. If these contracts are in different shard chains, one of the messages may require several blocks to reach the destination contract.
 
@@ -173,13 +167,13 @@ We have two possible traces for these transaction,
 
 <br></br>
 <div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/message-delivery/message_delivery_6.png?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_6_dark.png?raw=true',
-  }}
-/>
+  <ThemedImage
+    alt="Complex message order 1"
+    sources={{
+      light: "/img/docs/message-delivery/message_delivery_6.png?raw=true",
+      dark: "/img/docs/message-delivery/message_delivery_6_dark.png?raw=true",
+    }}
+  />
 </div>
 <br></br>
 
@@ -187,13 +181,13 @@ We have two possible traces for these transaction,
 
 <br></br>
 <div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/message-delivery/message_delivery_7.png?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_7_dark.png?raw=true',
-  }}
-/>
+  <ThemedImage
+    alt="Complex message order 2"
+    sources={{
+      light: "/img/docs/message-delivery/message_delivery_7.png?raw=true",
+      dark: "/img/docs/message-delivery/message_delivery_7_dark.png?raw=true",
+    }}
+  />
 </div>
 <br></br>
 
@@ -201,13 +195,13 @@ The same thing happens in the reverse case, when two contracts _B_ and _C_ send 
 
 <br></br>
 <div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/message-delivery/msg-delivery-3.png?raw=true',
-    dark: '/img/docs/message-delivery/msg-delivery-3_dark.png?raw=true',
-  }}
-/>
+  <ThemedImage
+    alt="Reverse message flow"
+    sources={{
+      light: "/img/docs/message-delivery/msg-delivery-3.png?raw=true",
+      dark: "/img/docs/message-delivery/msg-delivery-3_dark.png?raw=true",
+    }}
+  />
 </div>
 <br></br>
 
@@ -215,37 +209,37 @@ There can be many possible scenarios of smart contract interactions, and in any 
 
 <br></br>
 <div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/message-delivery/msg-delivery-4.png?raw=true',
-    dark: '/img/docs/message-delivery/msg-delivery-4_dark.png?raw=true',
-   }}
-/>
+  <ThemedImage
+    alt="Multi-contract scenario 1"
+    sources={{
+      light: "/img/docs/message-delivery/msg-delivery-4.png?raw=true",
+      dark: "/img/docs/message-delivery/msg-delivery-4_dark.png?raw=true",
+    }}
+  />
 </div>
 <br></br>
 
 <br></br>
 <div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/message-delivery/msg-delivery-5.png?raw=true',
-    dark: '/img/docs/message-delivery/msg-delivery-5_dark.png?raw=true',
-  }}
-/>
+  <ThemedImage
+    alt="Multi-contract scenario 2"
+    sources={{
+      light: "/img/docs/message-delivery/msg-delivery-5.png?raw=true",
+      dark: "/img/docs/message-delivery/msg-delivery-5_dark.png?raw=true",
+    }}
+  />
 </div>
 <br></br>
 
 <br></br>
 <div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/message-delivery/msg-delivery-6.png?raw=true',
-    dark: '/img/docs/message-delivery/msg-delivery-6-dark.png?raw=true',
-  }}
-/>
+  <ThemedImage
+    alt="Multi-contract scenario 3"
+    sources={{
+      light: "/img/docs/message-delivery/msg-delivery-6.png?raw=true",
+      dark: "/img/docs/message-delivery/msg-delivery-6-dark.png?raw=true",
+    }}
+  />
 </div>
 <br></br>
 
