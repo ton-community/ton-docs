@@ -548,6 +548,8 @@ Let's modify our smart-contract to recieve external messages and send increase c
 
 Add `recv_external` function to `HelloWorld` smart-contract:
 
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
 ```func title="/contracts/HelloWorld.fc"
 () recv_external(slice in_msg) impure {
     accept_message();
@@ -575,6 +577,40 @@ Add `recv_external` function to `HelloWorld` smart-contract:
     return ();
 }
 ```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+fun acceptExternalMessage(): void
+    asm "ACCEPT";
+
+fun onExternalMessage(inMsg: slice) {
+    acceptExternalMessage();
+    var (ctxId, ctxCounter, ctxCounterExt) = loadData();
+
+    var queryId = inMsg.loadUint(64);
+    var addr = inMsg.loadAddress();
+    var coins = inMsg.loadCoins();
+    var increaseBy = inMsg.loadUint(32);
+
+    var msg = beginCell()
+        .storeUint(0x18, 6)
+        .storeSlice(addr)
+        .storeCoins(coins)
+        .storeUint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+        .storeUint(OP_INCREASE, 32)
+        .storeUint(queryId, 64)
+        .storeUint(increaseBy, 32);
+    sendRawMessage(msg.endCell(), 0);
+
+    ctxCounterExt += increaseBy;
+    saveData(ctxId, ctxCounter, ctxCounterExt);
+
+    return ();
+}
+```
+</TabItem>
+</Tabs>
+
 
 Verify that smart-contract code is correct by running:
 
