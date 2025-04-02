@@ -26,7 +26,7 @@ You can find an example of the manifest below:
 ```
 ## Best practices
 
-- The best practice is to place the manifest in the root of your app and repository, e.g. `https://myapp.com/tonconnect-manifest.json`. It allows the wallet to handle your app better and improve the UX connected to your app.
+- Place the manifest in the root of your app and repository, for example: `https://myapp.com/tonconnect-manifest.json`. It allows the wallet to handle your app better and improve the UX connected to your app.
 - Ensure that the `manifest.json` file is accessible via a GET request at its URL
 
 ## Fields description
