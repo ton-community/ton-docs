@@ -573,7 +573,7 @@ For the first transaction cell we should check that its hash matches with `last_
 ## Block transactions
 
 Let's ask a Liteserver for transactions belong to the block we started with in the article beginning.
-LiteServer [response](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L46) contains `ids` field with transactions and `proof` boc. First, let's deserialize the `proof`:
+LiteServer [response](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L47) contains `ids` field with transactions and `proof` boc. First, let's deserialize the `proof`:
 
 ```json
 280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> {
@@ -701,15 +701,15 @@ assert block_tr.get_hash(0) == tr['hash']
 :::note
 
 In this example it was unnecessary to check `ids` field, we could just take transactions from the account block.
-But when you request the [liteServer.listBlockTransactionsExt](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L80) method
+But when you request the [liteServer.listBlockTransactionsExt](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L48) method
 you check proofs similar but in that case you really need to compare hashes.
 
 :::
 
 ## Config
 
-Let's ask a Liteserver for 1, 4, 5, 7, 8 and 15 [Config params](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L83) (for [liteServer.getConfigAll](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L82) where you get all params, the proof verifying is the same).
-The [response](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L53) contains `state_proof` and `config_proof`.
+Let's ask a Liteserver for 1, 4, 5, 7, 8 and 15 [Config params](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L101) (for [liteServer.getConfigAll](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L100) where you get all params, the proof verifying is the same).
+The [response](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L54) contains `state_proof` and `config_proof`.
 
 First, let's deserialize the `state_proof` Cell:
 
