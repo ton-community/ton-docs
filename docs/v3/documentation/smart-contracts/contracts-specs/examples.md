@@ -162,6 +162,6 @@ If you want to share a new example of a smart contract, make a PR for this [page
 ## See also
 
 * [Developing smart contracts](/v3/documentation/smart-contracts/overview)
-* [Work with wallet smart contracts](/v3/guidelines/smart-contracts/howto/wallet)
+* [Working with wallet smart contracts](/v3/guidelines/smart-contracts/howto/wallet)
 * [TON dev study FunC & BluePrint lessons on YouTube](https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa)
 
