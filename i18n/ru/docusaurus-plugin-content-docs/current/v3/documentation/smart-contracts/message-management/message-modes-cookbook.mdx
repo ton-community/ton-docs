@@ -1,0 +1,281 @@
+# Рецепты режимов сообщений
+
+:::warning
+Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
+:::
+
+Понимание различных режимов и флагов, доступных для отправки сообщений, имеет решающее значение для обеспечения того, чтобы ваши смарт-контракты вели себя так, как задумано.
+Хотя в разделе [режимы сообщений](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes) были предоставлены подробные описания этих режимов и флагов, в этом разделе мы проиллюстрируем их практическое применение на конкретных примерах.
+
+:::info ВАЖНО
+Вы можете проверить [этот пример](https://testnet.tonviewer.com/transaction/42ed45726e4fe994b7fd6dbf953a2ac24ecd77753858abeda9d6755c664a537a) в качестве реальной проверки.
+:::
+
+#### Значение сообщения и баланс аккаунта
+
+Пожалуйста, проверьте, как работает [get_balance](/v3/documentation/smart-contracts/func/docs/stdlib/#get_balance), чтобы лучше понять состояние транзакции.
+
+Существует два способа оплаты действий в блокчейне:
+
+- Из [значения сообщения](/v3/documentation/data-formats/tlb/msg-tlb#commonmsginfo)
+- Из [баланса контракта](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/block.tlb#L263C1-L265C20)
+
+Обычно она взимается с `balance` контракта, но в определенных случаях будет использоваться часть `value` сообщения.
+
+#### Комиссии
+
+Фактические комиссии за транзакции будут варьироваться в зависимости от конфигурации блокчейна, кода смарт-контракта и других факторов. При получении сообщения часть `balance` контракта будет израсходована на [storage fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee) и gas_fees, если `value` сообщения [выше определенной суммы](/v3/documentation/tvm/tvm-overview#compute-phase-skipped).
+
+Согласно [потоку транзакций](/v3/documentation/tvm/tvm-overview#transactions-and-phases) существует 5 фаз:
+
+- Хранилище, состоящее из [хранилища аккаунта](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L651-L675) и [импорта in_msg](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L783-L816)
+- [Кредит](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L959-L981), где in_msg `value` добавляется к `balance`
+- Вычисление, при котором фактический код смарт-контракта выполняется в TVM
+- Действие, где выполняются действия, такие как `SENDRAWMSG`
+- Отскок, где обрабатывается все, что связано с отскоком
+
+Порядок: storage_fee -> import_fee -> gas_fee -> action_fee + fwd_fee
+
+:::info ВАЖНО
+Таблица заполнена из [этого примера](https://tonviewer.com/transaction/b5e14a9c4a4e982fda42d6079c3f84fa48e76497a8f3fca872f9a3737f1f6262). Вы можете проверить [**калькулятор**](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula).
+:::
+
+| Комиссия в проводнике                                                                                     | Значение       | Как она получена                            |
+| :-------------------------------------------------------------------------------------------------------- | :------------- | :------------------------------------------ |
+| Общая комиссия                                                                                            | 0,001982134    | газ + хранение + действие + импорт          |
+| total_fwd_fees                                                                                            | 0,001          | fwd_fee + action_fee + ihr_fee              |
+| gas_fees                                                                                                  | 0,0011976      | фаза вычислений, использованный газ         |
+| storage_fees                                                                                              | 0,000000003    | фаза хранения, только аккаунт               |
+| total_action_fees                                                                                         | 0,000133331    | фаза действий, стоимость за действие        |
+| import_fee (скрыто)                                                                                       | 0,0006512      | стоимость импорта ext_msg                   |
+| [fwd_fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#formula-1) (каждое сообщение) | 0,000266669    | стоимость fwd in_msg                        |
+| [ihr_fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#ihr) (каждое сообщение)       | 0.0006         | стоимость ihr fwd in_msg                    |
+
+:::info
+Комиссии транзакций, используемые в этих примерах, являются гипотетическими и используются исключительно для иллюстрации, любые сборы, кроме сборов за пересылку сообщений, выходят за рамки данной статьи.
+:::
+
+## 1. Отправить обычное сообщение
+
+Состояние до транзакции: аккаунт A имеет 1 TON, аккаунт B имеет 1 TON
+
+**A** отправил 0,1 TON **B**, [msg_fwd_fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#forward-fees) составляют 0,004 TON, фактическое полученное значение составит 0,096 TON, `fwd_fee` и `action_fee` вычтены из `value`.
+
+Состояние после транзакции: аккаунт A имеет 0,9 TON, аккаунт B имеет 1,096 TON
+
+![](/img/docs/message-modes-cookbook/send_regular_message_1.svg)
+
+| Режим и флаги          | Код                        |
+| :--------------------- | :------------------------- |
+| `mode` = 0, без `flag` | `send_raw_message(msg, 0)` |
+
+## 2. Отправить обычное сообщение, не отклонять сообщение об ошибке и игнорировать его
+
+Состояние до транзакции: аккаунт A имеет 1 TON, аккаунт B имеет 1 TON
+
+**A** отправил 0,1 TON на **B**, `msg_fwd_fees` составляет 0,004 TON, фактическое полученное значение составит 0,096 TON, `fwd_fee` и `action_fee` вычитаются из `value`.
+В случае ошибки во время обработки транзакции сообщение не будет возвращено и будет проигнорировано.
+
+Состояние после транзакции: аккаунт A имеет 0,9 TON, аккаунт B имеет 1,096 TON
+
+:::info подсказка
+Средства, включенные в проигнорированное сообщение, все равно будут [зачислены на адрес получателя](https://testnet.tonviewer.com/transaction/8a388731812c80ab9b0ea9531108425488af5def854e4bd6f0ed47362b56d557).
+Если ошибок нет, результат такой же, как и [`mode = 0`](#1-send-a-regular-message).
+:::
+
+![](/img/docs/message-modes-cookbook/send_regular_message_2.svg)
+
+| Режим и флаги          | Код                        |
+| :--------------------- | :------------------------- |
+| `mode` = 0, `flag` = 2 | `send_raw_message(msg, 2)` |
+
+## 3. Отправить обычное сообщение и отклонить сообщение об ошибке действия
+
+Состояние до транзакции: аккаунт A имеет 1 TON, аккаунт B имеет 1 TON
+
+**A** отправил 0,1 TON на **B**, `msg_fwd_fees` составляет 0,004 TON, фактическое полученное значение составит 0,096 TON, `fwd_fee` и `action_fee` вычтены из `value`.
+В случае ошибки на [фазе действия](https://retracer.ton.org/?tx=e9dccba82badc0d742f14eff41c203280f380e87180b5314fcfd742856e598f7&testnet=true) сообщение будет отклонено, а `total_fee` + `fwd_fee` будут вычтены из `value`.
+
+Состояние после транзакции с ошибкой: у аккаунта A 1 - ([total_fee](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula) + `fwd_fee`) TON, у аккаунта B 1 TON
+
+![](/img/docs/message-modes-cookbook/send_regular_message_3_error.svg)
+
+:::info подсказка
+Если ошибок нет, результат такой же, как у [`mode = 0`](#1-send-a-regular-message).
+:::
+
+![](/img/docs/message-modes-cookbook/send_regular_message_3_noerror.svg)
+
+| Режим и флаги           | Код                         |
+| :---------------------- | :-------------------------- |
+| `mode` = 0, `flag` = 16 | `send_raw_message(msg, 16)` |
+
+## 4. Отправить обычное сообщение с разделением комиссий
+
+Состояние до транзакции: аккаунт A имеет 1 TON, аккаунт B имеет 1 TON
+
+**A** отправил 0,1 TON на **B**, `msg_fwd_fees` составляет 0,004 TON, фактическое полученное значение составит 0,1 TON, `fwd_fee` и `action_fee` вычтены из `balance`.
+
+Состояние после транзакции: аккаунт A имеет 0,896 TON, аккаунт B имеет 1,1 TON
+
+![](/img/docs/message-modes-cookbook/send_regular_message_4.svg)
+
+| Режим и флаги          | Код                        |
+| :--------------------- | :------------------------- |
+| `mode` = 0, `flag` = 1 | `send_raw_message(msg, 1)` |
+
+## 5. Отправить обычное сообщение с разделением комиссий и отклонить сообщение об ошибке
+
+Состояние до транзакции: аккаунт A имеет 1 TON, аккаунт B имеет 1 TON
+
+**A** отправил 0,1 TON на **B**, `msg_fwd_fees` составляет 0,004 TON, фактическое полученное значение составит 0,1 TON, `fwd_fee` и `action_fee` вычтены из `balance`.
+В случае ошибки [во время фазы действия](https://retracer.ton.org/?tx=e9dccba82badc0d742f14eff41c203280f380e87180b5314fcfd742856e598f7&testnet=true) сообщение будет отклонено, и `total_fee` + `fwd_fee` будут вычтены из `value`.
+
+Состояние после транзакции с ошибкой: у аккаунта A 1 - ([total_fee](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula) + `fwd_fee`) TON, у аккаунта B 1 TON
+
+![](/img/docs/message-modes-cookbook/send_regular_message_5_error.svg)
+
+:::info подсказка
+Если ошибок нет, результат такой же, как у [`mode = 1`](#4-send-a-regular-message-with-separate-fees).
+:::
+
+![](/img/docs/message-modes-cookbook/send_regular_message_5_noerror.svg)
+
+| Режим и флаги                    | Код                         |
+| :------------------------------- | :-------------------------- |
+| `mode` = 0, `flag` = 1 + 16 = 17 | `send_raw_message(msg, 17)` |
+
+## 6. Перенести оставшееся значение с новым сообщением
+
+Состояние до транзакции: аккаунт A имеет 1 TON, аккаунт B имеет 1 TON, аккаунт C имеет 1 TON
+
+**A** отправил 0,1 TON **B**, после чего **B** отправил 0,5 TON **C** с `mode` = 64, `msg_fwd_fees` составляет 0,004 TON, фактическое полученное `value` составит 0,6 TON, total_fee + `fwd_fee` вычтено из `value`.
+
+Состояние после транзакции: аккаунт A имеет 0,896 TON, аккаунт B имеет 0,5 TON, аккаунт C имеет 1,6 - (total_fee + `fwd_fee`) TON
+
+:::info
+Вы можете проверить [этот пример](https://retracer.ton.org/?tx=4340b5ecbd83227cc64e10b1ca7628352133cda1d608081fb2ed58d299f00936&testnet=true).
+Обратите внимание, что `storage_fee` включен в `total_fee`, но всегда оплачивается из `balance` контракта.
+:::
+
+:::warning
+Please note that `SENDRAWMSG` doesn't update balance.
+
+Если вы попытаетесь отправить несколько сообщений (т. е. режим 0 **и** режим 64), вы получите код выхода 37.
+
+![](/img/docs/message-modes-cookbook/carry_remaining_value_6.svg)
+
+| Режим и флаги           | Код                         |
+| :---------------------- | :-------------------------- |
+| `mode` = 64, без `flag` | `send_raw_message(msg, 64)` |
+
+## 7. Перенести оставшееся значение в новое сообщение с разделением комиссий
+
+Состояние до транзакции: аккаунт A имеет 1 TON, аккаунт B имеет 1 TON, аккаунт C имеет 1 TON
+
+**A** отправил 0,1 TON на **B**, после чего **B** отправил 0,5 TON на **C** с `mode` = 65, `msg_fwd_fees` составляет 0,004 TON, фактическое полученное значение составит 0,6 TON, total_fee + `fwd_fee` вычтено из `balance`.
+
+Состояние после транзакции: аккаунт A имеет 0,896 TON, аккаунт B имеет 0,5 - (total_fee + `fwd_fee`) TON, аккаунт C имеет 1,6 TON
+
+:::info
+Вы можете проверить [этот пример](https://retracer.ton.org/?tx=5c2525feeb3b93db594b7b11f3250430f02dd8616595cf2b1583ebc7da79d15b&testnet=true).
+Обратите внимание, что `storage_fee` включен в `total_fee`, но он всегда оплачивается из `balance` контракта.
+:::
+
+![](/img/docs/message-modes-cookbook/carry_remaining_value_7.svg)
+
+| Режим и флаги           | Код                         |
+| :---------------------- | :-------------------------- |
+| `mode` = 64, `flag` = 1 | `send_raw_message(msg, 65)` |
+
+## 8. Перенести оставшееся значение и отклонить сообщение об ошибке
+
+Состояние до транзакции: аккаунт A имеет 1 TON, аккаунт B имеет 1 TON, аккаунт C имеет 1 TON
+
+**A** отправил 0,1 TON в **B**, после чего **B** отправил 0,5 TON в **C** с `mode` = 80, `msg_fwd_fees` составляет 0,004 TON, фактическое полученное значение составит 0,6 TON, total_fee + `fwd_fee` вычтено из `value`.
+В случае ошибки во время фазы действия сообщение будет отклонено, и `total_fee` + `fwd_fee` вычтено из `value`.
+
+Состояние после транзакции с ошибкой: аккаунт A имеет 1 - (total_fee + `fwd_fee`) TON, аккаунт B имеет 1 TON, аккаунт C имеет 1 TON
+
+![](/img/docs/message-modes-cookbook/carry_remaining_value_8_error.svg)
+
+:::info подсказка
+Если ошибок нет, результат такой же, как [`mode = 64`](#6-carry-remaining-value-with-new-message). Этот режим на самом деле часто используется в TON для переводов жетонов, вы можете [проверить его в списке действий C5](https://retracer.ton.org/?tx=6489d60d9197c0be7ee64b0812139d82221e8f94c6e378c356acc10f9067310c) кошелька жетона.
+:::
+
+![](/img/docs/message-modes-cookbook/carry_remaining_value_8_noerror.svg)
+
+| Режим и флаги            | Код                         |
+| :----------------------- | :-------------------------- |
+| `mode` = 64, `flag` = 16 | `send_raw_message(msg, 80)` |
+
+## 9. Перенести оставшееся значение в новое сообщение с разделением комиссий и отклонить сообщение об ошибке
+
+Состояние до транзакции: аккаунт A имеет 1 TON, аккаунт B имеет 1 TON, аккаунт C имеет 1 TON
+
+**A** отправил 0,1 TON в **B**, после чего **B** отправил 0,5 TON в **C** с `mode` = 80, `msg_fwd_fees` составляет 0,004 TON, фактическое полученное значение составит 0,6 TON, total_fee + `fwd_fee` вычтено из `value`.
+В случае ошибки во время фазы действия сообщение будет отклонено, и `total_fee` + `fwd_fee` вычтено из `value`.
+
+Состояние после транзакции с ошибкой: аккаунт A имеет 1 - (total_fee + `fwd_fee`) TON, аккаунт B имеет 1 TON, аккаунт C имеет 1 TON
+
+![](/img/docs/message-modes-cookbook/carry_remaining_value_9_error.svg)
+
+:::info подсказка
+Если ошибок нет, результат такой же, как у [`mode = 65`](#7-carry-remaining-value-with-new-message-with-separate-fees).
+:::
+
+![](/img/docs/message-modes-cookbook/carry_remaining_value_9_noerror.svg)
+
+| Режим и флаги                | Код                          |
+| :--------------------------- | :--------------------------- |
+| `mode` = 64, `flag` = 16 + 1 | `send_raw_message(msg, 81)`. |
+
+## 10. Отправить все полученные токены вместе с балансом контракта
+
+Состояние до транзакции: аккаунт A имеет 1 TON, аккаунт B имеет 1 TON, аккаунт C имеет 1 TON
+
+**A** отправил 0,1 TON на **B**, после чего **B** отправил 0,5 TON на **C** с `mode` = 128, `msg_fwd_fees` составляет 0,004 TON, фактическое полученное значение будет 1,1 - total_fee TON, total_fee вычтено из `value`.
+
+Состояние после транзакции: аккаунт A имеет 0,896 TON, аккаунт B имеет 0 TON, аккаунт C имеет 2,1 - (total_fee + `fwd_fee`) TON
+
+![](/img/docs/message-modes-cookbook/carry_remaining_value_10.svg)
+
+| Режим и флаги            | Код                           |
+| :----------------------- | :---------------------------- |
+| `mode` = 128, без `flag` | `send_raw_message(msg, 128)`. |
+
+## 11. Отправить все полученные токены вместе с балансом контракта и отклонить сообщение об ошибке
+
+Состояние до транзакции: аккаунт A имеет 1 TON, аккаунт B имеет 1 TON, аккаунт C имеет 1 TON
+
+**A** отправил 0,1 TON на **B**, после чего **B** отправил 0,5 TON на **C** с `mode` = 144, `msg_fwd_fees` составляет 0,004 TON, фактическое полученное значение будет 1,1 - total_fee TON, total_fee вычтено из `value`.
+
+Состояние после транзакции с ошибкой: аккаунт A имеет 1 - (total_fee + `fwd_fee`) TON, аккаунт B имеет 1 TON, аккаунт C имеет 1 TON
+
+![](/img/docs/message-modes-cookbook/carry_remaining_value_11_error.svg)
+
+:::info подсказка
+Если ошибок нет, результат такой же, как [`mode = 128`](#10-send-all-received-tokens-together-with-the-contract-balance). Этот режим на самом деле часто используется в TON для переводов жетонов, вы можете [проверить его в списке действий C5](https://retracer.ton.org/?tx=e4f31e37eec74a8cfcecdad9246a6bbf3da20c4edb3635150cb0fa54b9def558) кошелька жетона.
+:::
+
+![](/img/docs/message-modes-cookbook/carry_remaining_value_11_noerror.svg)
+
+| Режим и флаги             | Код                          |
+| :------------------------ | :--------------------------- |
+| `mode` = 128, `flag` = 16 | `send_raw_message(msg, 144)` |
+
+## 12. Отправить все полученные токены вместе с балансом контракта и уничтожить смарт-контракт
+
+Состояние до транзакции: аккаунт A имеет 1 TON, аккаунт B имеет 1 TON, аккаунт C имеет 1 TON
+
+**A** отправил 0,1 TON на **B**, после чего **B** отправил 0,5 TON на **C** с `mode` = 160, `msg_fwd_fees` составляет 0,004 TON, фактическое полученное значение составит 1,1 - total_fee TON, total_fee вычтено из `value`.
+
+Состояние после транзакции: аккаунт A имеет 0,896 TON, аккаунт B имеет 0 TON и `nonexist`, аккаунт C имеет 2,1 - (total_fee + `fwd_fee`) TON
+
+Когда баланс достигнет 0 TON, уничтожить контракт.
+
+![](/img/docs/message-modes-cookbook/carry_remaining_value_12.svg)
+
+| Режим и флаги             | Код                           |
+| :------------------------ | :---------------------------- |
+| `mode` = 128, `flag` = 32 | `send_raw_message(msg, 160)`. |
