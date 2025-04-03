@@ -407,7 +407,7 @@ export function helloWorldConfigToCell(config: HelloWorldConfig): Cell {
 Second, add a method to perform a request for the newly created get method:
 
 ```typescript title="/HelloWorld.ts"
-async getCounters(provider: ContractProvider) {
+async getCounters(provider: ContractProvider) : Promise<[number, bigint]> {
     const result = await provider.get('get_counters', []);
     const counter = result.stack.readNumber();
     const counterExt = result.stack.readBigNumber();
