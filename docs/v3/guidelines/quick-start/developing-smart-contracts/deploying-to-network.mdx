@@ -43,7 +43,7 @@ init(id: Int, owner: Address) {
 If we remove `id` field from its initial storage we can ensure that **only one** `CounterInternal` smart-cotnract could exzist for a particular owner.
 
 :::info Tokens
-This mechanism plays cruicial role in [Jetton Processing](v3/guidelines/dapps/asset-processing/jettons), each non-native(jetton) token requires it's own `Jetton Wallet` for a particular owner and therefore provides a calculatable address from it, creating a **star scheme** with basic wallet in center.
+This mechanism plays cruicial role in [Jetton Processing](/v3/guidelines/dapps/asset-processing/jettons), each non-native(jetton) token requires it's own `Jetton Wallet` for a particular owner and therefore provides a calculatable address from it, creating a **star scheme** with basic wallet in center.
 :::
 
 ## Implementation
