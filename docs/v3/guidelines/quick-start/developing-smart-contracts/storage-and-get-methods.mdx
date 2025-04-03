@@ -122,29 +122,24 @@ Result of our modifications should look like this:
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
 ```func title="/contracts/hello_world.fc"
-;; load_data retrieves variables from TVM storage cell
 (int, int, int) load_data() {
     var ds = get_data().begin_parse();
 
-    ;; id is required to be able to create different instances of counters
-    ;; since addresses in TON depend on the initial state of the contract
     int ctx_id = ds~load_uint(32);
     int ctx_counter = ds~load_uint(32);
-    int ctx_counterExt = ds~load_uint(256);
+    int ctx_counter_ext = ds~load_uint(256);
 
     ds.end_parse();
 
-    return (ctx_id, seqno, public_key);
+    return (ctx_id, ctx_counter, ctx_counter_ext);
 }
 
-;; save_data stores variables as a cell into persistent storage
-;; impure because of writing into TVM storage
-() save_data(int ctx_id, int seqno, int ctxCounterExt) impure {
+() save_data(int ctx_id, int ctx_counter, int ctx_counter_ext) impure {
     set_data(
         begin_cell()
             .store_uint(ctx_id, 32)
-            .store_uint(ctxCounter, 32)
-            .store_uint(ctxCounterExt, 256)
+            .store_uint(ctx_counter, 32)
+            .store_uint(ctx_counter_ext, 256)
         .end_cell()
     );
 }
@@ -169,12 +164,12 @@ fun loadData(): (int, int, int) {
 }
 
 // saveData stores storage variables as a cell into persistent storage
-fun saveData(ctxID: int, seqno: int, public_key: int) {
+fun saveData(ctxID: int, ctxCounter: int, ctxCounterExt: int) {
     setContractData(
         beginCell()
         .storeUint(ctxID, 32)
         .storeUint(ctxCounter, 32)
-        .storeUint(ctxcounterExt, 256)
+        .storeUint(ctxCounterExt, 256)
         .endCell()
     );
 }
@@ -228,7 +223,6 @@ Final smart-contract code should look like this:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
-
 ```func title="/contracts/hello_world.fc"
 #include "imports/stdlib.fc";
 
@@ -296,7 +290,6 @@ int get_id() method_id {
 (int, int) get_counters() method_id {
     var (_, ctx_counter, ctx_counter_ext) = load_data();
     return (ctx_counter, ctx_counter_ext);
-}
 }
 ```
 </TabItem>
@@ -373,7 +366,7 @@ get get_counters(): (int, int) {
 Don't forget to check the correctness of your changes by compiling the smart contract:
 
 ```bash
-npm run build
+npx blueprint build
 ```
 
 Expected output should look like this:
@@ -502,13 +495,13 @@ describe('HelloWorld', () => {
         expect(counterExt).toBe(expectedConfig.counterExt);
     });
 
-}
+});
 ```
 
 And now run your new test script by executing the following command:
 
 ```bash
-npm run test
+npx blueprint test
 ```
 
 Expected output should look like this:
@@ -519,10 +512,9 @@ Expected output should look like this:
  PASS  tests/HelloWorld.spec.ts
   HelloWorld
     ✓ should correctly initialize and return the initial data (431 ms)
-    ✓ should increase counter (302 ms)
 
 Test Suites: 1 passed, 1 total
-Tests:       2 passed, 2 total
+Tests:       1 passed, 1 total
 Snapshots:   0 total
 Time:        3.591 s, estimated 6 s
 ```
