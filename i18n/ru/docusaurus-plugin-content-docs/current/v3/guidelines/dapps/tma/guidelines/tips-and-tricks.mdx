@@ -1,0 +1,58 @@
+# Советы и рекомендации
+
+:::warning
+Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
+:::
+
+На этой странице Вы найдете список часто задаваемых вопросов, связанных с проблемами в TMA.
+
+### Как решить проблему переполнения кэша в TMA?
+
+:::tip
+Помочь может только переустановка приложения Telegram.
+:::
+
+### Есть ли какие-то рекомендации по кэшированию заголовков для HTML-файлов?
+
+:::tip
+It's preferable to switch off cache in the HTML. To ensure your cache switched off, specify headers in your request according the following:
+
+```curl
+Cache-Control: no-store, must-revalidate
+Pragma: no-cache
+Expires: 0
+```
+
+:::
+
+### Что предлагается в качестве IDE для разработки TMA?
+
+Процесс разработки в Google Chrome более удобен благодаря привычным инструментам разработки.
+
+Вы можете взять параметры запуска мини-приложения и открыть эту ссылку в Chrome. В нашем случае проще всего получить параметры запуска из веб-версии Telegram: [https://web.telegram.org/](https://web.telegram.org/)
+
+### Поведение при закрытии
+
+Во многих веб-приложениях пользователи могут случайно закрыть приложение, во время прокрутки вверх. Это может произойти, если они перетянут секцию приложения слишком далеко, тем самым случайно вызвав его закрытие.
+
+<p align="center">
+    <br />
+    <img width="240" src="/img/docs/telegram-apps/closing-behaviour.svg" alt="closing_behaviour_durgerking" />
+    <br />
+</p>
+
+Чтобы предотвратить такое случайное закрытие, включите `closing_behavior` в TMA. Этот метод добавит диалог, в котором пользователь может либо подтвердить, либо отклонить закрытие веб-приложения.
+
+```typescript
+window.Telegram.WebApp.enableClosingConfirmation()
+```
+
+## Как указать описание для конкретного языка в TMA?
+
+:::tip
+You can configure your description with following methods:
+
+- https://core.telegram.org/bots/api#setmydescription
+- https://core.telegram.org/bots/api#setmyshortdescription
+
+:::

@@ -1,0 +1,84 @@
+# SDK
+
+:::warning
+Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
+:::
+
+Мгновенно перейдите в ваш предпочтительный язык, используя правую боковую панель.
+
+## Обзор
+
+Существует несколько способов подключения к блокчейну:
+
+1. Поставщик данных RPC или другой API: в большинстве случаев вам нужно _полагаться_ на его стабильность и безопасность.
+2. Подключение через ADNL вы подключаетесь к [liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node). Они могут быть недоступны, но при определенном уровне валидации (реализованном в библиотеке), не могут лгать.
+3. Бинарный файл Tonlib: вы также подключаетесь к liteserver, поэтому к нему применимы все преимущества и недостатки. Однако ваше приложение также содержит динамически загружаемую библиотеку, скомпилированную вне.
+4. Только Offchain. Эти SDK позволяют создавать и сериализовывать ячейки, которые можно передавать в API.
+
+### TypeScript / JavaScript
+
+| Библиотека                                      | Подключение к блокчейну                                                                                    | Описание                                                                                                                                                                                             |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [ton](https://github.com/ton-org/ton)           | через RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / и т.д.) | Удобная клиентская библиотека с обертками кошельков для разработки dApps на блокчейне TON.                                                                                                           |
+| [tonweb](https://github.com/toncenter/tonweb)   | через RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / и т.д.) | TON JS SDK старого образца, с минимальным количеством внешних зависимостей, тщательно протестированный в производстве.                                                                               |
+| [tonkite/adnl](https://github.com/tonkite/adnl) | [ADNL](/v3/documentation/network/protocols/adnl/adnl-tcp) нативно / через WebSocket                        | TypeScript реализация ADNL.                                                                                                                                                                          |
+| [tonutils](https://github.com/thekiba/tonutils) | Собственный [ADNL](/v3/documentation/network/protocols/adnl/adnl-tcp)                                      | Интерфейс на основе TypeScript для создания и взаимодействия с приложениями в экосистеме TON. Из-за нативной зависимости от ADNL его нельзя использовать для взаимодействия с блокчейном в браузере. |
+| [foton](https://foton.sh/)                      | через RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / и т.д.) | Инструментарий на основе TypeScript для взаимодействия с кошельками TON и самим блокчейном в целом. Библиотека объединяет существующие решения (Blueprint и TON Connect) в один удобный API.         |
+
+### Java
+
+| Библиотека                                 | Подключение к блокчейну | Описание                            |
+| ------------------------------------------ | ----------------------- | ----------------------------------- |
+| [ton4j](https://github.com/neodix42/ton4j) | Двоичные файлы Tonlib   | Java SDK для The Open Network (TON) |
+
+### Python
+
+<!-- tonsdk был исключен из-за неправильной сериализации ячеек, он сейчас устарел -->
+
+| Библиотека                                                    | Подключение к блокчейну                                                                                                                                        | Описание                                                                                                                                     |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| [pytoniq](https://github.com/yungwine/pytoniq)                | Встроенный ADNL                                                                                                                                                | SDK на языке Python с нативным LiteClient и другими реализациями протоколов на основе ADNL.                                                  |
+| [pytoniq-core](https://github.com/yungwine/pytoniq-core)      | _только для offchain_                                                                                                                                          | Мощный transport-free SDK на языке Python                                                                                                    |
+| [tonutils](https://github.com/nessshon/tonutils)              | через RPC ([TONAPI](https://tonapi.io/api-v2) / [Toncenter](https://toncenter.com/api/v3/)) / Встроенный ADNL ([pytoniq](https://github.com/yungwine/pytoniq)) | Tonutils — это высокоуровневая объектно-ориентированная библиотека для Python, предназначенная для упрощения взаимодействия с блокчейном TON |
+| [pytonlib](https://github.com/toncenter/pytonlib)             | Двоичные файлы Tonlib                                                                                                                                          | Это автономная библиотека Python, основанная на libtonlibjson, представленная в виде бинарной зависимости от TON monorepo.                   |
+| [mytonlib](https://github.com/igroman787/mytonlib)            | Встроенный ADNL                                                                                                                                                | Нативная библиотека Python SDK для работы с The Open Network                                                                                 |
+| [TonTools](https://github.com/yungwine/TonTools)              | через RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / и т.д.)                                                     | TonTools - это высокоуровневая объектно-ориентированная библиотека для Python, которая позволяет взаимодействовать с блокчейном TON.         |
+| [tonpy](https://github.com/disintar/tonpy)                    | Встроенный ADNL                                                                                                                                                | Python пакет, предоставляющий структуры данных и API для взаимодействия с блокчейном TON.                                                    |
+| [tvm_valuetypes](https://github.com/toncenter/tvm_valuetypes) | _только для offchain_                                                                                                                                          | библиотека — это набор инструментов для работы с типами TVM.                                                                                 |
+| [pytvm](https://github.com/yungwine/pytvm)                    | _offchain_                                                                                                                                                     | Python эмулятор TVM, использующий привязки к стандартному C++ эмулятору                                                                      |
+
+### C#
+
+| Библиотека                                                        | Подключение к блокчейну | Описание                                                                                                                                                      |
+| ----------------------------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [TonSdk.NET](https://github.com/continuation-team/TonSdk.NET)     | Встроенный ADNL или RPC | Нативный C# SDK для The Open Network.                                                                                                                         |
+| [justdmitry/TonLib.NET](https://github.com/justdmitry/TonLib.NET) | Двоичные файлы Tonlib   | .NET SDK для The Open Network, подключаемый через libtonlibjson, подключающийся через libtonlibjson, представлен в виде бинарной зависимости от TON monorepo. |
+
+### Rust
+
+| Библиотека                                                    | Подключение к блокчейну | Описание                                                                                                                       |
+| ------------------------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| [tonlib-rs](https://github.com/ston-fi/tonlib-rs)             | Двоичные файлы Tonlib   | Rust SDK для The Open Network, добавляющий бинарную зависимость от TON monorepo.                                               |
+| [getgems-io/ton-grpc](https://github.com/getgems-io/ton-grpc) | Двоичные файлы Tonlib   | Привязки Rust для tonlibjson (таким образом, зависящие от двоичного файла из TON monorepo) и сервисов, построенных поверх него |
+
+### Go
+
+| Библиотека                                               | Подключение к блокчейну | Описание                                              |
+| -------------------------------------------------------- | ----------------------- | ----------------------------------------------------- |
+| [tonutils-go](https://github.com/xssnick/tonutils-go)    | Встроенный ADNL         | Библиотека Golang для взаимодействия с блокчейном TON |
+| [tongo](https://github.com/tonkeeper/tongo)              | Встроенный ADNL         | Реализация библиотек на языке Go для блокчейна TON    |
+| [tonlib-go](https://github.com/ton-blockchain/tonlib-go) | Двоичные файлы Tonlib   | Официальные привязки для libtonlibjson                |
+
+### SDK для других языков
+
+| Библиотека                                                                  | Язык   | Подключение к блокчейну                                                                                    | Описание                                                                       |   |
+| --------------------------------------------------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | - |
+| [ton-kotlin](https://github.com/ton-community/ton-kotlin)                   | Kotlin | Встроенный ADNL                                                                                            | Kotlin/Multiplatform SDK для The Open Network.                                 |   |
+| [tonlib-java](https://github.com/ton-blockchain/tonlib-java)                | Java   | Двоичные файлы Tonlib                                                                                      | JVM оболочка для TonLib, которую можно использовать с Java/Scala/Kotlin/и т.д. |   |
+| [ayrat555/ton](https://github.com/ayrat555/ton)                             | Elixir | _только для offchain_                                                                                      | TON SDK для Elixir.                                                            |   |
+| [C++ Tonlib](https://github.com/ton-blockchain/ton/tree/master/example/cpp) | C++    | Двоичные файлы Tonlib                                                                                      | Официальные примеры по взаимодействию с умными контрактами в TON monorepo      | . |
+| [Java Tonlib](https://github.com/ton-blockchain/tonlib-java)                | Java   | Двоичные файлы Tonlib                                                                                      | Официальные примеры по взаимодействию с умными контрактами в TON monorepo.     |   |
+| [labraburn/SwiftyTON](https://github.com/labraburn/SwiftyTON)               | Swift  | Двоичные файлы Tonlib                                                                                      | Встроенная оболочка Swift для tonlib с функцией async/await.                   |   |
+| [tonlib-xcframework](https://github.com/labraburn/tonlib-xcframework)       | Swift  | Двоичные файлы Tonlib                                                                                      | Помощник сборки Tonlib для iOS, все архитектуры.                               |   |
+| [labraburn/node-tonlib](https://github.com/labraburn/node-tonlib)           | NodeJS | Двоичные файлы Tonlib                                                                                      | Дополнение на C++ для NodeJS для работы с tonlibjson.                          |   |
+| [olifanton/ton](https://github.com/olifanton/ton)                           | PHP    | через RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / и т.д.) | PHP SDK с набором стандартных примитивов и контрактов.                         |   |

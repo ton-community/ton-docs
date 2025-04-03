@@ -1,0 +1,1 @@
+../../../v3/guidelines/ton-connect/guidelines/developers.md

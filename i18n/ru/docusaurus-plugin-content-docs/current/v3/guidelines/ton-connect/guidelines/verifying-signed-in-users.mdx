@@ -1,0 +1,281 @@
+import ThemedImage from '@theme/ThemedImage';
+
+# Проверка авторизованных пользователей на стороне сервера
+
+:::warning
+Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
+:::
+
+На этой странице описывается метод для backend, позволяющий убедиться, что пользователь действительно владеет заявленным адресом.
+
+Обратите внимание, что проверка пользователя не требуется для всех DApps.
+
+Это полезно, если вы хотите проверить пользователя, чтобы предоставить ему его личную информацию из backend.
+
+## Как это работает?
+
+- Пользователь начинает процесс входа.
+- Сервер генерирует объект ton_proof и отправляет его в frontend.
+- Frontend подписывает адрес кошелька с использованием ton_proof и получает подписанное ton_proof обратно.
+- Frontend отправляет подписанное ton_proof на сервер для его проверки.
+
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/ton-connect/ton_proof_scheme.svg?raw=true',
+        dark: '/img/docs/ton-connect/ton_proof_scheme-dark.svg?raw=true',
+    }}
+/>
+<br></br>
+
+## Структура ton_proof
+
+Мы будем использовать объект TonProof, реализованный внутри connector.
+
+```js
+type TonProofItemReply = TonProofItemReplySuccess | TonProofItemReplyError;
+
+type TonProofItemReplySuccess = {
+  name: "ton_proof";
+  proof: {
+    timestamp: string; // 64-bit unix epoch time of the signing operation (seconds)
+    domain: {
+      lengthBytes: number; // AppDomain Length
+      value: string;  // app domain name (as url part, without encoding)
+    };
+    signature: string; // base64-encoded signature
+    payload: string; // payload from the request
+  }
+}
+
+```
+
+## Проверка ton_proof на стороне сервера
+
+1. Получите `TonProofItemReply` от пользователя.
+2. Убедитесь, что полученный домен соответствует домену вашего приложения.
+3. Проверьте, разрешен ли исходным сервером `TonProofItemReply.payload` и активен ли он по-прежнему.
+4. Проверьте, актуален ли `timestamp` на данный момент.
+5. Соберите сообщение в соответствии со [схемой сообщения](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users#concept-explanation).
+6. Извлеките `public_key` либо из API (a), либо через внутреннюю логику (b)
+
+- 6a:
+  - Извлеките `{public_key, address}` из `walletStateInit` с помощью метода [TON API](https://docs.tonconsole.com/tonapi#:~:text=/v2/-,tonconnect,-/stateinit) `POST /v2/tonconnect/stateinit`.
+  - Убедитесь, что адрес, извлеченный из `walletStateInit`, соответствует `address` кошелька, объявленному пользователем.
+- 6b:
+  - Получите public_key кошелька через [get метод](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc#L174) контракта кошелька.
+  - Если контракт не активен или не имеет get_method, найденного в более старых версиях кошелька (v1-v3), то получить ключ таким образом будет невозможно. Вместо этого вам нужно будет проанализировать walletStateInit, предоставленный frontend. Убедитесь, что TonAddressItemReply.walletStateInit.hash() равен TonAddressItemReply.address.hash(), что указывает на хэш BoC.
+
+7. Убедитесь, что `signature` из frontend правильно подписывает собранное сообщение и соответствует `public_key` адреса.
+
+## Пример React
+
+1. Добавьте поставщика токенов в корень вашего приложения:
+
+```tsx
+function App() {
+    const [token, setToken] = useState<string | null>(null);
+
+  return (
+      <BackendTokenContext.Provider value={{token, setToken}}>
+            { /* Your app */ }
+      </BackendTokenContext.Provider>
+  )
+}
+```
+
+2. Реализуйте аутентификацию на frontend с интеграцией backend:
+
+<details>
+<summary>Пример</summary>
+
+```tsx
+import {useContext, useEffect, useRef} from "react";
+import {BackendTokenContext} from "./BackendTokenContext";
+import {useIsConnectionRestored, useTonConnectUI, useTonWallet} from "@tonconnect/ui-react";
+import {backendAuth} from "./backend-auth";
+
+const localStorageKey = 'my-dapp-auth-token';
+const payloadTTLMS = 1000 * 60 * 20;
+
+export function useBackendAuth() {
+    const { setToken } = useContext(BackendTokenContext);
+    const isConnectionRestored = useIsConnectionRestored();
+    const wallet = useTonWallet();
+    const [tonConnectUI] = useTonConnectUI();
+    const interval = useRef<ReturnType<typeof setInterval> | undefined>();
+
+    useEffect(() => {
+        if (!isConnectionRestored || !setToken) {
+            return;
+        }
+
+        clearInterval(interval.current);
+
+        if (!wallet) {
+            localStorage.removeItem(localStorageKey);
+            setToken(null);
+
+            const refreshPayload = async () => {
+                tonConnectUI.setConnectRequestParameters({ state: 'loading' });
+
+                const value = await backendAuth.generatePayload();
+                if (!value) {
+                    tonConnectUI.setConnectRequestParameters(null);
+                } else {
+                    tonConnectUI.setConnectRequestParameters({state: 'ready', value});
+                }
+            }
+
+            refreshPayload();
+            setInterval(refreshPayload, payloadTTLMS);
+            return;
+        }
+
+        const token = localStorage.getItem(localStorageKey);
+        if (token) {
+            setToken(token);
+            return;
+        }
+
+        if (wallet.connectItems?.tonProof && !('error' in wallet.connectItems.tonProof)) {
+            backendAuth.checkProof(wallet.connectItems.tonProof.proof, wallet.account).then(result => {
+                if (result) {
+                    setToken(result);
+                    localStorage.setItem(localStorageKey, result);
+                } else {
+                    alert('Please try another wallet');
+                    tonConnectUI.disconnect();
+                }
+            })
+        } else {
+            alert('Please try another wallet');
+            tonConnectUI.disconnect();
+        }
+
+    }, [wallet, isConnectionRestored, setToken])
+}
+```
+
+</details>
+
+## Пример backend
+
+<details>
+<summary>Проверьте, действителен ли Proof (Next.js)</summary>
+
+```tsx
+'use server'
+import {Address, Cell, contractAddress, loadStateInit, TonClient4} from '@ton/ton'
+
+
+export async function isValid(proof, account) {
+    const payload = {
+					address: account.address,
+					public_key: account.publicKey,
+					proof: {
+						...proof,
+						state_init: account.walletStateInit
+					}
+	  }
+    const stateInit = loadStateInit(Cell.fromBase64(payload.proof.state_init).beginParse())
+	  const client = new TonClient4({
+		  endpoint: 'https://mainnet-v4.tonhubapi.com'
+	  })
+	  const masterAt = await client.getLastBlock()
+	  const result = await client.runMethod(masterAt.last.seqno, Address.parse(payload.address), 'get_public_key', [])
+	  const publicKey = Buffer.from(result.reader.readBigNumber().toString(16).padStart(64, '0'), 'hex')
+	  if (!publicKey) {
+		  return false
+	  }
+	  const wantedPublicKey = Buffer.from(payload.public_key, 'hex')
+	  if (!publicKey.equals(wantedPublicKey)) {
+		  return false
+	  }
+	  const wantedAddress = Address.parse(payload.address)
+	  const address = contractAddress(wantedAddress.workChain, stateInit)
+	  if (!address.equals(wantedAddress)) {
+		  return false
+	  }
+	  const now = Math.floor(Date.now() / 1000)
+	  if (now - (60 * 15) > payload.proof.timestamp) {
+		  return false
+	  }
+    return true
+  }
+
+```
+
+</details>
+
+Вы можете просмотреть наш [пример](https://github.com/ton-connect/demo-dapp-with-react-ui/tree/master/src/server), демонстрирующий ключевые методы:
+
+- [generatePayload](https://github.com/ton-connect/demo-dapp-with-react-ui/blob/master/src/server/api/generate-payload.ts): Создает payload для ton proof
+- [checkProof](https://github.com/ton-connect/demo-dapp-with-react-ui/blob/master/src/server/api/check-proof.ts): Проверяет proof и возвращает токен доступа.
+
+## Концепция
+
+Если запрашивается `TonProofItem`, кошелек подтверждает право собственности на ключ выбранной учетной записи. Подписанное сообщение привязано к:
+
+- Уникальному префиксу для отделения сообщений от сообщений on-chain. (`ton-connect`)
+- Адресу кошелька
+- Домену приложения
+- Временной метки подписи
+- Пользовательскому payload приложения (где сервер может поместить свой nonce, идентификатор cookie, время истечения срока действия)
+
+```
+message = utf8_encode("ton-proof-item-v2/") ++
+          Address ++
+          AppDomain ++
+          Timestamp ++
+          Payload
+
+signature = Ed25519Sign(privkey, sha256(0xffff ++ utf8_encode("ton-connect") ++ sha256(message)))
+```
+
+где:
+
+- `Address` — это адрес кошелька, закодированный как последовательность:
+- `workchain`: 32-битное целое число со знаком big endian;
+- `hash`: 256-битное целое число без знака big endian;
+- `AppDomain` это Length ++ EncodedDomainName
+
+<!---->
+
+- `Length` - это 32-битное значение длины доменного имени приложения в кодировке utf-8 в байтах
+- `EncodedDomainName` id `Length` -байт доменное имя приложения в кодировке utf-8
+
+<!---->
+
+- `Length` - это 32-битное значение длины доменного имени приложения в кодировке utf-8 в байтах
+- `EncodedDomainName` id `Length` -байт доменное имя приложения в кодировке utf-8
+
+Примечание: payload - это ненадежные данные переменной длины. Мы помещаем ее в конец, чтобы избежать использования ненужных префиксов длины.
+
+Подпись должна быть проверена с помощью открытого ключа:
+
+1. Сначала попробуйте получить открытый ключ через `get_public_key` get-method на смарт-контракте, развернутом в `Address`.
+
+2. Если смарт-контракт еще не развернут или get-метод отсутствует, то:
+
+   1. Проанализируйте `TonAddressItemReply.walletStateInit` и получите открытый ключ из stateInit. Вы можете сравнить `walletStateInit.code` с кодом стандартных контрактов кошельков и проанализировать данные в соответствии с найденной версией кошелька.
+
+   2. Проверьте, что `TonAddressItemReply.publicKey` равен полученному открытому ключу
+
+   3. Проверьте, что `TonAddressItemReply.walletStateInit.hash()` равен `TonAddressItemReply.address`. `.hash()` означает хэш BoC.
+
+### Примеры проверки доказательств TON
+
+- Сначала попробуйте получить открытый ключ через `get_public_key` get-method на смарт-контракте, развернутом в `Address`.
+- Если смарт-контракт еще не развернут или get-метод отсутствует, то:
+- [Демонстрационное приложение JS](https://github.com/liketurbo/demo-dapp-backend-js)
+- [Пример Python](https://github.com/XaBbl4/pytonconnect/blob/main/examples/check_proof.py)
+- [Пример PHP](https://github.com/vladimirfokingithub/Ton-Connect-Proof-Php-Check)
+- [Демонстрационное приложение C#](https://github.com/WinoGarcia/TonProof.NET)
+
+## Примеры проверки доказательств TON
+
+- [Перейти к демонстрационному приложению](https://github.com/ton-connect/demo-dapp-backend)
+- [Демонстрационное приложение Rust](https://github.com/liketurbo/demo-dapp-backend-rs)
+- [Демонстрационное приложение JS](https://github.com/liketurbo/demo-dapp-backend-js)

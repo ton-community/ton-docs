@@ -1,0 +1,118 @@
+import Button from '@site/src/components/button'
+
+# Токены (FT, NFT)
+
+:::warning
+Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
+:::
+
+[Обзор распределенных токенов TON](https://telegra.ph/Scalable-DeFi-in-TON-03-30)
+
+> Токены и NFT на базе TON децентрализованы, что позволяет избежать единых точек отказа и узких мест.
+>
+> Каждый NFT в данной коллекции представляет собой отдельный смарт-контракт. Баланс токенов для каждого пользователя хранится в отдельном кошельке пользователя.
+>
+> Смарт-контракты напрямую взаимодействуют друг с другом, распределяя нагрузку по всей сети.
+>
+> По мере роста числа пользователей и транзакций сеть поддерживает равномерную нагрузку, обеспечивая бесперебойную масштабируемость.
+
+## Курс TON: Жетоны и NFT
+
+:::tip
+Перед началом курса убедитесь, что вы хорошо понимаете основы технологии блокчейна. Если у вас есть пробелы в знаниях, мы рекомендуем пройти курс [Основы Блокчейна с TON](https://stepik.org/course/201294/promo) ([RU версия](https://stepik.org/course/202221/), [CHN версия](https://stepik.org/course/200976/)).
+Модуль 4 охватывает базовые знания о NFT и жетонах.
+:::
+
+[Курс по блокчейну TON и Телеграм](https://stepik.org/course/201855/) - это полное руководство по разработке на блокчейне TON.
+
+Модуль 7 полностью охватывает разработку **NFT и Jettons**.
+
+<Button href="https://stepik.org/course/176754/promo"
+        colorType={'primary'} sizeType={'sm'}>
+
+Проверьте курс по блокчейну TON
+
+</Button>
+
+<Button href="https://stepik.org/course/201638/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+CHN
+
+</Button>
+
+<Button href="https://stepik.org/course/201855/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+RU
+
+</Button>
+
+## Учебные пособия
+
+- [Web3 Game Tutorial](/v3/guidelines/dapps/tutorials/web3-game-example) - Узнайте, как создать Web3-игру с использованием блокчейна TON.
+- [Создайте свой первый жетон](/v3/guidelines/dapps/tutorials/mint-your-first-token/) - Узнайте, как развернуть и настроить свой первый жетон
+- [[YouTube] TON Keeper founders Oleg Andreev and Oleg Illarionov on TON jettons](https://www.youtube.com/watch?v=oEO29KmOpv4)
+
+### TON Speed Run
+
+- [🚩 Challenge 1: Simple NFT Deploy](https://github.com/romanovichim/TONQuest1)
+- [🚩 Challenge 2: Chatbot Contract](https://github.com/romanovichim/TONQuest2)
+- [🚩 Challenge 3: Jetton Vending Machine](https://github.com/romanovichim/TONQuest3)
+- [🚩 Challenge 4: Lottery/Raffle](https://github.com/romanovichim/TONQuest4)
+- [🚩 Challenge 5: Create UI to interact with the contract in 5 minutes](https://github.com/romanovichim/TONQuest5)
+- [🚩 Challenge 6: Analyzing NFT sales on the Getgems marketplace](https://github.com/romanovichim/TONQuest6)
+
+## Жетоны (взаимозаменяемые токены)
+
+### Руководства
+
+- [Обработка жетонов TON](/v3/guidelines/dapps/asset-processing/jettons)
+- [Разбор метаданных TON](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing)
+
+### Стандарты
+
+- [Jettons standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)
+
+### Смарт-контракты
+
+- [Smart contracts implementation (FunC)](https://github.com/ton-blockchain/token-contract/)
+
+### Jetton Deployer
+
+Жетоны — это пользовательские взаимозаменяемые токены на блокчейне TON. Вы можете создать свой собственный токен на блокчейне TON, используя пример Jetton Deployer ниже:
+
+- **[TON Minter](https://minter.ton.org/)** - Jetton Deployer dApp с открытым исходным кодом
+- [Jetton Deployer - контракты](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)
+- [Jetton Deployer - WebClient](https://github.com/ton-defi-org/jetton-deployer-webclient) (React, TypeScript)
+
+### Инструменты для работы с жетонами
+
+- [NFT Jetton Sale Contract](https://github.com/dvlkv/nft-jetton-sale-smc) - контракт продажи NFT с поддержкой жетонов
+- [Scaleton](http://scaleton.io)- просмотр баланса вашего токена
+- [@tegro/ton3-client](https://github.com/TegroTON/ton3-client#jettons-example) — SDK для запроса информации о жетонах
+
+## NFT
+
+### Стандарты
+
+- [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
+- [SBT (Soulbound NFT) standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0085-sbt-standard.md)
+- [NFTRoyalty standard extension](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md)
+
+### Смарт-контракты
+
+- [Smart contracts implementation (FunC)](https://github.com/ton-blockchain/token-contract/)
+- [Getgems NFT, sale, auctions smart contracts (FunC)](https://github.com/getgems-io/nft-contracts)
+
+### NFT minters
+
+- [NFT Deployer](https://github.com/tondiamonds/ton-nft-deployer) от TON Diamonds (TypeScript, без комментариев)
+- [NFT Minter example](https://github.com/ton-foundation/token-contract/tree/main/nft/web-example) (JavaScript, с комментариями)
+- [NFT Minter using React](https://github.com/tonbuilders/tonbuilders-minter) (React, без комментариев)
+- [NFT Deployer](https://github.com/anomaly-guard/nft-deployer) (Python, с комментариями)
+- [NFT Minter using Golang](https://github.com/xssnick/tonutils-go#nft) (библиотека Golang, с комментариями и полными примерами)
+
+### Инструменты для работы с NFT
+
+- [LiberMall/tnt](https://github.com/LiberMall/tnt)-TNT - это универсальный инструмент командной строки для запроса, редактирования и создания новых невзаимозаменяемых токенов в The Open Network.
