@@ -35,6 +35,7 @@ module.exports = [
       'v3/documentation/smart-contracts/contracts-specs/single-nominator-pool',
       'v3/documentation/smart-contracts/contracts-specs/precompiled-contracts',
       'v3/documentation/smart-contracts/contracts-specs/examples',
+      'v3/documentation/smart-contracts/contracts-specs/jetton-standard-upd',
     ],
   },
   {
