@@ -151,7 +151,7 @@ Indeed, in the elector code above, we serialize coins amounts via `.store_coins(
 - The first bit stands for empty extra-currencies dictionary.
 - Then we have two 4-bit long fields. They encode 0 as `VarUInteger 16`. Since `ihr_fee` and `fwd_fee` will be overwritten, we may as well put them as zeroes.
 - Then we put zero to the `created_lt` and `created_at` fields. Those fields will also be overwritten; however, in contrast to fees, these fields have a fixed length and are thus encoded as 64- and 32-bit long strings.
-> _We had already serialized the message header and passed to init/body at that moment_
+  > _We had already serialized the message header and passed to init/body at that moment_
 - Next zero-bit means that there is no `init` field.
 - The last zero-bit means that msg_body will be serialized in-place.
 - After that, the message body (with an arbitrary layout) is encoded.
@@ -168,12 +168,30 @@ The entire scheme of the message layout and the layout of all constituting field
 Note that any [Cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) may contain up to `1023` bits. If you need to store more data, you should split it into chunks and store it in reference cells.
 :::
 
-For instance, if your message body is 900 bits long, you can not store it in the same cell as the message header.
-Indeed, in addition to message header fields, the total size of the cell will be more than 1023 bits, and during serialization, there will be a `cell overflow` exception. In this case, instead of `0`, which stands for "in place message body flag (Either)", there should be `1`, and the message body should be stored in the reference cell.
+For example, if your message body is 900 bits long, you can't store it in the same cell as the message header. Including the message header fields would make the total cell size exceed 1023 bits, triggering a `cell overflow` exception during serialization.
+
+In this case, use `1` instead of `0` for the "in-place message body flag" (Either), which will store the message body in a separate reference cell.
 
 Those things should be handled carefully because some fields have variable sizes.
 
-For instance, `MsgAddress` may be represented by four constructors: `addr_none`, `addr_std`, `addr_extern`, and `addr_var` with length from 2 bits ( for `addr_none`) to 586 bits (for `addr_var` in the largest form). The same stands for nanotons' amounts, which is serialized as `VarUInteger 16`. That means 4 bits indicating the byte length of the integer and then indicating earlier bytes for the integer itself. That way, 0 nanotons will be serialized as `0b0000` (4 bits that encode a zero-length byte string and then zero bytes), while 100.000.000 TON (or 100000000000000000 nanotons) will be serialized as `0b10000000000101100011010001010111100001011101100010100000000000000000` (`0b1000` stands for 8 bytes and then 8 bytes themselves).
+For instance, `MsgAddress` may be represented by four constructors:
+
+- `addr_none`
+- `addr_std`
+- `addr_extern`
+- `addr_var`
+
+With length from 2 bits for `addr_none` to 586 bits for `addr_var` in the largest form.
+
+The same stands for nanotons' amounts, which is serialized as `VarUInteger 16`.
+That means 4 bits indicating the byte length of the integer and then bytes for the integer itself.
+
+That way:
+
+- `0` nanotons serialized as `0b0000` (4 bits indicating zero-length byte string + no bytes)
+- `100000000000000000` nanotons (100,000,000 TON) serializes as:
+  `0b10000000000101100011010001010111100001011101100010100000000000000000`
+  (where `0b1000` specifies 8 bytes length followed by the 8-byte value)
 
 :::info message size
 Note that the message has general size limits and cell count limits, too,
@@ -222,16 +240,16 @@ For more details, check the [source code with checks for the `bounce-enable` fla
 
 :::
 
-## Recommended approach: `mode=3` {#mode3}
+## Recommended approach: mode=3 {#mode3}
 
 ```func
 send_raw_message(msg, SEND_MODE_PAY_FEES_SEPARATELY | SEND_MODE_IGNORE_ERRORS); ;; stdlib.fc L833
 ```
 
-The `sendMode=3` combines the `0` mode and two flags:
+The `mode=3` combines the `0` mode and two flags:
 
-- `1` (PAY FEES SEPARATELY): Pay transfer fees separately from the message value
-- `2` (IGNORE ERRORS): Suppresses specific errors during message processing
+- `+1` : Pay transfer fees separately from the message value
+- `+2` : Suppresses specific errors during message processing
 
 This combination is the standard method for sending messages in TON.
 
@@ -239,7 +257,7 @@ This combination is the standard method for sending messages in TON.
 
 ### Behavior without +2 flag
 
-If the `IGNORE ERRORS` flag is omitted and a message fails to process (e.g., due to insufficient balance), the transaction reverts. For wallet contracts, this prevents updates to critical data like the `seqno`.
+If the `IGNORE_ERRORS` flag is omitted and a message fails to process (e.g., due to insufficient balance), the transaction reverts. For wallet contracts, this prevents updates to critical data like the `seqno`.
 
 ```func
 throw_unless(33, msg_seqno == stored_seqno);
@@ -267,22 +285,22 @@ The `IGNORE ERRORS` flag (`+2`) suppresses these specific errors during the Acti
 
 1. **Insufficient funds**
 
-- Message transfer value exhaustion
-- Insufficient balance for message processing
-- Inadequate attached value for forwarding fees
-- Missing extra currency for message transfer
-- Insufficient funds for external message delivery
+   - Message transfer value exhaustion
+   - Insufficient balance for message processing
+   - Inadequate attached value for forwarding fees
+   - Missing extra currency for message transfer
+   - Insufficient funds for external message delivery
 
-2. **Oversized message**  
-   Exceeds [size limits](#message-size).
+2. **[Oversized message](#message-size)**
 
-3. **Excessive Merkle depth**  
+3. **Excessive Merkle depth**
+
    Message exceeds allowed Merkle tree complexity.
 
 #### Non-suppressed errors
 
 1. Malformed message structure
-2. Conflicting mode flags (`64` and `128` used together)
+2. Conflicting mode flags (`+64` and `+128` used together)
 3. Invalid libraries in `StateInit` of the outbound message
 4. Non-ordinary external messages (e.g., using `+16` or `+32` flags)
 
@@ -292,9 +310,9 @@ The `IGNORE ERRORS` flag (`+2`) suppresses these specific errors during the Acti
 
 #### Current mitigations
 
-- Most wallet apps auto-include `IGNORE ERRORS` in transactions
+- Most wallet apps auto-include `IGNORE_ERRORS` in transactions
 - Wallet UIs often display transaction simulation results
-- V5 wallets enforce `IGNORE ERRORS` usage
+- V5 wallets enforce `IGNORE_ERRORS` usage
 - Validators limit message replays per block
 
 #### Potential risks
@@ -317,13 +335,12 @@ send_raw_message(msg, SEND_MODE_CARRY_ALL_REMAINING_MESSAGE_VALUE | SEND_MODE_BO
 save_data(status, balance, owner_address, jetton_master_address); }
 ```
 
-If a transfer using `sendMode=3` fails due to a suppressed error:
+If a transfer using `mode=3` fails due to a suppressed error:
 
 1. Transfer action is not executed
 2. Contract state updates persist (no rollback)
 3. **Result:** Permanent loss of `jetton_amount` from the balance
 
----
+**Best Practice**
 
-**Best Practice**  
-Always pair `IGNORE ERRORS` with robust client-side validations and real-time balance checks to prevent unintended state changes.
+Always pair `IGNORE_ERRORS` with robust client-side validations and real-time balance checks to prevent unintended state changes.
