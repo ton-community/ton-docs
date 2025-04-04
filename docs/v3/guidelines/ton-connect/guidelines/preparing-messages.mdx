@@ -3,7 +3,7 @@ import TabItem from '@theme/TabItem';
 
 # Preparing messages
 
-While using TON Connect, you should construct the Message Body for the Payload used in various transactions. On this page you can find the most relevant examples of payload for use with the TON Connect SDKs.
+While using TON Connect, you should construct the message body for the payload used in various operations. On this page you can find the most relevant examples of payload for use with the TON Connect SDKs.
 
 :::info
 It is expected that you learn the basics of creating a TON Connect connection. Learn more with the [integration manual](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk).
@@ -18,11 +18,11 @@ Before diving into building messages, let's introduce the concept of cells, whic
 A cell is a basic data structure in the TON Blockchain. It can store up to `1023` bits and hold up to `4` references to other cells, which allows you to store more complex data structures.
 Libraries like `@ton/core` and `@ton-community/assets-sdk` provide efficient ways to handle cells.
 
-You can read more about cells [here](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage).
+You can read more about cells [here](/v3/documentation/data-formats/tlb/cell-boc).
 
 ### Creating a cell
 
-To build a cell, you use the `beginCell()` function. While the cell is "open" you can store various data types with `store...()` functions.
+To build a cell, you use the `beginCell()` function. While the cell is _open_ you can store various data types with `store...()` functions.
 When you're done, you close the cell with the `endCell()` function.
 
 ```ts
@@ -34,6 +34,10 @@ const cell = beginCell()
   .storeCoins(123) // Stores 123 as coins
   .endCell() // Closes the cell
 ```
+
+:::info
+Examples provided only for @ton/ton library, however, every version of [SDKs](/v3/guidelines/dapps/apis-sdks/sdk) implementation have similar functions.
+:::
 
 ### Parsing a cell
 
@@ -60,7 +64,7 @@ const cell = beginCell()
   .endCell()
 ```
 
-To store more data, cells can reference other cells. You can use the storeRef() function to create nested cells:
+To store more data, cells can reference up to four other cells. You can use the `storeRef()` function to create nested cells:
 
 ```ts
 const cell = beginCell()
@@ -86,7 +90,7 @@ const uint4 = innerSlice.loadUint(256);
 
 ### Optional references and values
 
-Cells can store optional values (which may be null). These are stored using the `storeMaybe...()` functions:
+Cells can store optional values which may be null. These are stored using the `storeMaybe...()` functions:
 
 ```ts
 const cell = beginCell()
@@ -98,7 +102,7 @@ const cell = beginCell()
     .endCell());
 ```
 
-You can parse optional values using the corresponding loadMaybe...() functions. Returned values are nullable so do not forget to check them for null!
+You can parse optional values using the corresponding `loadMaybe...()` functions. Returned values are nullable so do not forget to check them for null!
 
 ```ts
 const slice = cell.beginParse();
@@ -249,6 +253,8 @@ await connector.sendTransaction({
 
 TON Connect SDKs include wrappers for sending messages, making it easy to prepare regular transfers of Toncoins between two wallets as default transaction without payload.
 
+The `address` must be in a [user-friendly format](/v3/documentation/smart-contracts/addresses#user-friendly-address), not a raw. If the message is being sent to a smart contract, it must be bounceable; if the message is being sent to a wallet, it must be non-bounceable.
+
 A regular TON transfer using the TON Connect JS SDKs can be executed as follows:
 
 
@@ -262,7 +268,7 @@ const [tonConnectUI] = useTonConnectUI();
 const transaction = {
     messages: [
         {
-            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA", // destination address
             amount: "20000000" //Toncoin in nanotons
         }
     ]
@@ -297,7 +303,7 @@ const tonConnectUI = new TonConnectUI({ //connect application
 const transaction = {
     messages: [
         {
-            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA", // destination address
             amount: "20000000" //Toncoin in nanotons
         }
     ]
@@ -318,7 +324,7 @@ const connector = new TonConnect();
 await connector.sendTransaction({
     messages: [
         {
-            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA", // destination address
             amount: "20000000" //Toncoin in nanotons
         }
     ]
@@ -329,7 +335,7 @@ await connector.sendTransaction({
 </Tabs>
 
 :::tip
-Learn more about [TON Smart Contract Addresses](/v3/documentation/smart-contracts/addresses).
+Learn more about [TON smart contract addresses](/v3/documentation/smart-contracts/addresses).
 :::
 
 For specific custom transaction, a certain payload must be defined.
@@ -433,14 +439,15 @@ await connector.sendTransaction({
 
 ### Jetton transfer
 
-The `body` for Jetton Transfers is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 \* 10 \*\* 6), while TON uses 9 decimals(1 TON = 1 \* 10 \*\* 9).
+The `body` for jetton transfers is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 \* 10 \*\* 6), while typically jettons and Toncoin uses 9 decimals(1 TON = 1 \* 10 \*\* 9).
+
 
 :::info
 You can use `assets-sdk` library with the methods out of the box (even with `ton-connect`)
 :::
 
 
-<Tabs groupId="Jetton Transfer">
+<Tabs groupId="Jetton transfer">
 <TabItem value="@ton/ton" label="@ton/ton">
 
 ```js
@@ -463,9 +470,9 @@ You can use `assets-sdk` library with the methods out of the box (even with `ton
 ```
 
 
-Next, sending the transaction with this body to sender's jettonWalletContract executed:
+Next, sending the transaction with this body to sender's `jettonWalletContract` executed:
 
-<Tabs groupId="Jetton Transfer">
+<Tabs groupId="Jetton transfer">
 <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
 
 ```js
@@ -552,7 +559,7 @@ await connector.sendTransaction({
 
 
 <details>
-    <summary>Jetton Wallet State Init and Address preparation example</summary>
+    <summary>Jetton wallet state init and address preparation example</summary>
 
 
 ```js
@@ -665,10 +672,13 @@ await jetton.send(
 
 ### Jetton transfer with comment
 
-<Tabs groupId="Jetton Transfer with Comment">
+<Tabs groupId="Jetton transfer with Comment">
 <TabItem value="@ton/ton" label="@ton/ton">
 
-The `messageBody` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) with comment we should additionally to the regular transfer `body` serialize comment and pack this in the `forwardPayload`. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 \* 10 \*\* 6), while TON uses 9 decimals(1 TON = 1 \* 10 \*\* 9).
+The `messageBody` for jetton transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) with comment we should additionally to the regular transfer `body` serialize comment and pack this in the `forwardPayload`.  Please note that the number of decimals can vary between different tokens:
+
+- 9 decimals: `1 TON = 1 * 10 ** 9` typically for various jettons and always for Toncoin
+- 6 decimals: `1 USDT = 1 * 10 ** 6` specific jettons, like USDT
 
 ```js
     import { beginCell, toNano, Address } from '@ton/ton'
@@ -698,9 +708,9 @@ The `messageBody` for Jetton Transfer([TEP-74](https://github.com/ton-blockchain
 
 ```
 
-Next, sending the transaction with this body to sender's jettonWalletContract executed:
+Next, sending the transaction with this body to sender's `jettonWalletContract` executed:
 
-<Tabs groupId="Jetton Transfer">
+<Tabs groupId="Jetton transfer">
   <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
 
 ```js
@@ -790,7 +800,7 @@ Next, sending the transaction with this body to sender's jettonWalletContract ex
 
 
 <details>
-  <summary>Jetton Wallet State Init and Address preparation example</summary>
+  <summary>Jetton wallet state init and address preparation example</summary>
 
 
 ```js
@@ -875,7 +885,11 @@ jetton.send(sender, RECEIVER_ADDRESS, toNano(10), { notify: { payload: forwardPa
 <Tabs groupId="Jetton Burn">
 <TabItem value="@ton/ton" label="@ton/ton">
 
-The `body` for Jetton Burn is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 \* 10 \*\* 6), while TON uses 9 decimals(1 TON = 1 \* 10 \*\* 9).
+The `body` for jetton burn is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens:
+
+- 9 decimals: `1 TON = 1 * 10 ** 9` typically for various jettons and always for Toncoin
+- 6 decimals: `1 USDT = 1 * 10 ** 6` specific jettons, like USDT
+
 
 
 ```js
@@ -1484,7 +1498,7 @@ Python examples are using [PyTonConnect](https://github.com/XaBbl4/pytonconnect)
 Read examples [source](https://github.com/yungwine/ton-connect-examples/blob/master/main.py).
 :::
 
-### Regular TON Transfer
+### Regular TON transfer
 
 
 ```python
@@ -1504,7 +1518,7 @@ transaction = {
 ```
 
 
-### Transfer With Comment
+### Transfer with comment
 
 At first order, implement a message with comment via the following function:
 
@@ -1545,7 +1559,7 @@ transaction = {
 Learn more about [TON Smart Contract Addresses](/v3/documentation/smart-contracts/addresses).
 :::
 
-### Jetton Transfer
+### Jetton transfer
 
 Example of function for building jetton transfer transaction. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 \* 10 \*\* 6), while TON uses 9 decimals(1 TON = 1 \* 10 \*\* 9).
 
@@ -1596,7 +1610,7 @@ transaction = {
 ```
 
 
-### Jetton Burn
+### Jetton burn
 
 Example of function for building jetton burn transaction. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 \* 10 \*\* 6), while TON uses 9 decimals(1 TON = 1 \* 10 \*\* 9).
 
@@ -2254,9 +2268,9 @@ if err != nil {
 ```
 
 ## Authors
-- JavaScript examples provided by [@aSpite](https://t.me/aspite)
-- Python examples provided by [@yunwine](https://t.me/yungwine)
-- Go examples provided by [@gleb498](https://t.me/gleb498)
+- JavaScript examples — _[@aSpite](https://t.me/aspite)_
+- Python examples — _[@yunwine](https://t.me/yungwine)_
+- Go examples — _[@gleb498](https://t.me/gleb498)_
 
 ## See also
 * [TON Connect SDKs](/v3/guidelines/ton-connect/guidelines/developers)

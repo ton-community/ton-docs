@@ -11,9 +11,9 @@ It is useful if you want to verify a user in order to provide them with their pe
 ## How does it work?
 
 - User initiates the sign-in process.
-- Backend generates a ton_proof entity and sends it to frontend.
-- Frontend signs in to wallet using ton_proof and receives back a signed ton_proof.
-- Frontend sends signed ton_proof to backend for verification.
+- Backend generates a `ton_proof` entity and sends it to frontend.
+- Frontend signs in to wallet using `ton_proof` and receives back a signed `ton_proof`.
+- Frontend sends signed `ton_proof` to backend for verification.
 
 
 <br></br>
@@ -26,9 +26,9 @@ It is useful if you want to verify a user in order to provide them with their pe
 />
 <br></br>
 
-## Structure of ton_proof
+## Structure of the `ton_proof`
 
-We will use the TonProof entity, implemented inside connector.
+We will use the  `ton_proof`, implemented inside connector.
 
 ```js
 type TonProofItemReply = TonProofItemReplySuccess | TonProofItemReplyError;
@@ -48,7 +48,7 @@ type TonProofItemReplySuccess = {
 
 ```
 
-## Checking ton_proof on Server Side
+## Checking ton_proof on server side
 
 1. Retrieve `TonProofItemReply` from a user.
 2. Verify that the received domain corresponds to the domain of your application.
@@ -64,7 +64,7 @@ type TonProofItemReplySuccess = {
     - If the contract is not active, or lacks the get_method found in older wallet versions (v1-v3), then obtaining the key in this manner will be impossible. Instead, you will need to parse the walletStateInit provided by the frontend. Ensure that TonAddressItemReply.walletStateInit.hash() is equal to TonAddressItemReply.address.hash(), indicating a BoC hash.
 7. Verify that the `signature` from the frontend correctly signs the assembled message and matches the `public_key` of the address.
 
-## React Example
+## React example
 
 1. Add token provider to the root of your app:
 
@@ -156,10 +156,10 @@ export function useBackendAuth() {
 
 
 
-## Backend Example
+## Backend example
 
 <details>
-<summary>Check if Proof Valid with [ton-proof-service](https://github.com/ton-connect/demo-dapp-with-react-ui/blob/master/src/server/services/ton-proof-service.ts)</summary>
+<summary>Check if proof valid with [ton-proof-service](https://github.com/ton-connect/demo-dapp-with-react-ui/blob/master/src/server/services/ton-proof-service.ts)</summary>
 
 ```tsx
 public async checkProof(payload: CheckProofRequestDto, getWalletPublicKey: (address: string) => Promise<Buffer | null>): Promise<boolean> {
@@ -255,10 +255,10 @@ public async checkProof(payload: CheckProofRequestDto, getWalletPublicKey: (addr
 </details>
 
 You can review our [example](https://github.com/ton-connect/demo-dapp-with-react-ui/tree/master/src/server) showcasing the key methods:
-- [generatePayload](https://github.com/ton-connect/demo-dapp-with-react-ui/blob/master/src/server/api/generate-payload.ts): Generates a payload for ton proof
+- [generatePayload](https://github.com/ton-connect/demo-dapp-with-react-ui/blob/master/src/server/api/generate-payload.ts): Generates a payload for `ton_proof`.
 - [checkProof](https://github.com/ton-connect/demo-dapp-with-react-ui/blob/master/src/server/api/check-proof.ts): Checks the proof and returns an access token.
 
-## Concept Explanation
+## Concept explanation
 
 If `TonProofItem` is requested, wallet proves ownership of the selected account’s key. The signed message is bound to:
 
@@ -304,7 +304,7 @@ The signature must be verified using public key:
     3.  Check that `TonAddressItemReply.walletStateInit.hash()` equals to `TonAddressItemReply.address`. `.hash()` means BoC hash.
 
 
-### Examples of TON Proof Verification
+### Verification examples
 
 * [Go demo app](https://github.com/ton-connect/demo-dapp-backend)
 * [Rust demo app](https://github.com/liketurbo/demo-dapp-backend-rs)
@@ -313,8 +313,8 @@ The signature must be verified using public key:
 * [PHP example](https://github.com/vladimirfokingithub/Ton-Connect-Proof-Php-Check)
 * [C# demo app](https://github.com/WinoGarcia/TonProof.NET)
 
-## See Also
+## See also
 
-* [[YouTube] Check ton_proof for @tonconnect/react-ui [RU]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=2971)
 * [Preparing Messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
 * [Sending Messages](/v3/guidelines/ton-connect/guidelines/sending-messages)
+* [[YouTube] Check ton_proof for @tonconnect/react-ui [RU]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=2971)
