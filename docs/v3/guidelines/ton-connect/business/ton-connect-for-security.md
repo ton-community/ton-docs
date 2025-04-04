@@ -1,4 +1,4 @@
-# TON Connect for Security
+# TON Connect for security
 
 TON Connect ensures that users have explicit control over the data they share, meaning data is not susceptible to leakage during app and wallet transfer. To reinforce this design, wallets and apps employ strong cryptographic authentication systems that work together.
 

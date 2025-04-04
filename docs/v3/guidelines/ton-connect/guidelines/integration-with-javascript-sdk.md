@@ -486,6 +486,10 @@ After implementing the above parameters, if an attacker tries to impersonate a u
 ```bash
 nacl.exceptions.BadSignatureError: Signature was forged or corrupt.
 ```
+## See also
+
+* [Preparing Messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+* [Sending Messages](/v3/guidelines/ton-connect/guidelines/sending-messages)
 
 ## Next steps
 
