@@ -2,25 +2,25 @@ import ConceptImage from '@site/src/components/conceptImage';
 import ThemedImage from '@theme/ThemedImage';
 
 # Wallet contracts types
+You may have heard about different versions of wallets on the TON Blockchain. 
+But what exactly do these versions mean, and how do they differ?
 
-You may have heard about different versions of wallets on the TON Blockchain. But what do these versions actually mean, and how do they differ?
+In this article, we’ll break down the various versions and modifications of TON wallets.
 
-In this article, we’ll explore the various versions and modifications of TON wallets.
 
 :::info
-Before we start, there are some terms and concepts that you should be familiar with to fully understand the article:
+Before we start, there are a few terms and concepts you should be familiar with to understand this article fully:
  - [Message management](/v3/documentation/smart-contracts/message-management/messages-and-transactions), because this is the main functionality of the wallets.
  - [FunC language](/v3/documentation/smart-contracts/func/overview), because we will heavily rely on implementations made using it.
 :::
 
 ## Common concept
 
-To break the tension, we should first understand that wallets are not a specific entity in the TON ecosystem. They are still just smart contracts consisting of code and data, and, in that sense, are equal to any other actor (i.e., smart contract) in TON.
+To break the tension, it’s important to understand that wallets in the TON ecosystem are not a special type of entity. They are simply smart contracts composed of code and data; in that sense, they are no different from any other actor (i.e., smart contract) on TON.
 
-Like your own custom smart contract, or any other one, wallets can receive external and internal messages, send internal messages and logs, and provide "get" methods.
-So the question is: what functionality do they provide and how it differs between versions?
+Like any custom smart contract, wallets can receive both external and internal messages, send internal messages and logs, and provide get methods. So, the key question is: what functionality do they provide, and how does it differ across versions?
 
-You can consider each wallet version as a smart-contract implementation providing a standard external interface, allowing different external clients to interact with the wallets in the same way. You can find these implementations in FunC and Fift languages in the main TON monorepo:
+You can consider each wallet version as a specific smart contract implementation providing a standard external interface. This interface allows different external clients to interact with the wallets in the same way. You can find these implementations in FunC and Fift languages in the main TON monorepo:
 
  * [ton/crypto/smartcont/](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/) 
 
@@ -29,18 +29,17 @@ You can consider each wallet version as a smart-contract implementation providin
 
 ### Wallet V1
 
-This is the simplest one. It only allows you to send four transactions at a time and doesn't check anything besides your signature and seqno.
-
+This is the simplest wallet version. It allows you to send up to four transactions simultaneously and performs only basic checks—your signature and the seqno.
 Wallet source code:
  * [ton/crypto/smartcont/wallet-code.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-wallet.fif) 
 
-This version isn’t even used in regular apps because it has some major issues:
- - No easy way to retrieve the seqno and public key from the contract.
- - No `valid_until` check, so you can't be sure that the transaction won't be confirmed too late.
+This version isn’t even used in regular apps due to several significant limitations:
+ - No straightforward way to retrieve the seqno and public key from the contract. 
+ - No `valid_until` check, so you can't be sure that a transaction won't be confirmed too late.
 
-The first issue was fixed in `V1R2` and `V1R3`. The `R` stands for "revision". Usually, revisions are just small updates that only add get methods; you can find all of those in the changes history of `new-wallet.fif`. Hereinafter, we will consider only the latest revisions.
+The first issue was addressed in `V1R2` and `V1R3`, where `R` stands for "revision".  Revisions typically introduce minor updates, such as adding get methods. You review all revision changes in the commit history of `new-wallet.fif`.  From this point onward, we will consider only the latest revisions.
 
-Nevertheless, because each subsequent version inherits the functionality of the previous one, we should still stick to it, as this will help us with later versions.
+Since each new version builds upon the previous one, it's important to understand V1 as a foundation for the following versions.
 
 #### Persistent memory layout
  - <b>seqno</b>: 32-bit long sequence number.
@@ -50,29 +49,30 @@ Nevertheless, because each subsequent version inherits the functionality of the 
 1. Data:
     - <b>signature</b>: 512-bit long ed25519 signature.
     - <b>msg-seqno</b>: 32-bit long sequence number.
-    - <b>(0-4)mode</b>: up to four 8-bit long integer's defining sending mode for each message.
+    - <b>(0-4)mode</b>: up to four 8-bit integers specifying the sending mode for each message.
 2. Up to 4 references to cells containing messages.
 
-As you can see, the main functionality of the wallet is to provide a safe way to communicate with the TON blockchain from the outside world. The `seqno` mechanism protects against replay attacks, and the `Ed25519 signature` provides authorized access to wallet functionality. We will not dwell in detail on each of these mechanisms, as they are described in detail in the [external message](/v3/documentation/smart-contracts/message-management/external-messages) documentation page and are quite common among smart contracts receiving external messages. The payload data consists of up to 4 references to cells and the corresponding number of modes, which will be directly transferred to the [send_raw_message(cell msg, int mode)](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) method.
+As you can see, the primary purpose of the wallet is to provide a secure interface for interacting with the TON blockchain from the external world. The `seqno` mechanism protects against replay attacks, while the `Ed25519` signature ensures that only authorized users can access wallet functionality. We will not dwell on each of these mechanisms, as they are covered in the [External message](/v3/documentation/smart-contracts/message-management/external-messages) section and are pretty common among smart contracts receiving external messages. The payload data includes up to 4 references to cells, along with a corresponding set of sending modes. These are passed directly to the [send_raw_message(cell msg, int mode)](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) method.
+
 
 :::caution
-Note that the wallet doesn't provide any validation for internal messages you send through it. It is the programmer's (i.e., the external client’s) responsibility to serialize the data according to the [internal message layout](http://localhost:3000/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
+The wallet does not validate the internal messages you send through it. The programmer's (i.e., the external client’s) responsibility is to serialize the data correctly according to the [internal message layout](http://localhost:3000/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
 :::
 
 #### Exit codes
-| Exit code      | Description                                                       |
-|----------------|-------------------------------------------------------------------|
-| 0x21           | `seqno` check failed, reply protection accured                    |
-| 0x22           | `Ed25519 signature` check failed                                  |
-| 0x0            | Standard successful execution exit code.                          |
+| Exit code      | Description                                                     |
+|----------------|-----------------------------------------------------------------|
+| 0x21           | `seqno` check failed — replay protection triggered.             |
+| 0x22           | `Ed25519 signature` verification failed.                        |
+| 0x0            | Standard successful execution exit code.                        |
 
 :::info
-Note that [TVM](/v3/documentation/tvm/tvm-overview) has [standart exit codes](/v3/documentation/tvm/tvm-exit-codes) (`0x0` - is one of them), so you can get one of them too, if you run out of [gas](https://docs.ton.org/develop/smart-contracts/fees), for example, you will get `0xD` code.
+Note that [TVM](/v3/documentation/tvm/tvm-overview) has [standart exit codes](/v3/documentation/tvm/tvm-exit-codes) (`0x0` - is one of them), so you can get one of them, too; if you run out of gas, you will get a `0xD` code.
 :::
 
 #### Get methods
-1. int seqno() returns current stored seqno.
-2. int get_public_key returns current stored public key.
+1. int seqno() returns the current stored seqno.
+2. int get_public_key returns the current stored public key.
 
 ### Wallet V2
 
@@ -80,26 +80,34 @@ Wallet source code:
  
  * [ton/crypto/smartcont/wallet-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-code.fc)
 
-This version introduces the `valid_until` parameter, which is used to set a time limit for a transaction in case you don't want it to be confirmed too late. This version also does not have the get-method for the public key, which was added in `V2R2`.
+This version introduces the `valid_until` parameter, which sets a time limit for a transaction. It is helpful to prevent it from being confirmed too late.
+Note that this version still does not include a get method for the public key. That was added later in `V2R2`.
 
-All differences compared to the previous version are a consequence of adding the `valid_until` functionality. A new exit code was added: `0x23`, marking the failure of the valid_until check. Additionally, a new UNIX-time field has been added to the external message body layout, setting the time limit for the transaction. All get methods remain the same.
+All differences from the previous version stem from the addition of `valid_until` functionality:
+- A new exit code `0x23` was introduced to indicate a failed `valid_until` check.
+- A new UNIX-time field was added to the external message body layout, specifying the transaction's time limit.
+- All existing get methods remain unchanged.
 
 #### External message body layout
 1. Data:
     - <b>signature</b>: 512-bit long ed25519 signature.
     - <b>msg-seqno</b>: 32-bit long sequence number.
-    - <b>valid-until</b>: 32-bit long Unix-time integer.
-    - <b>(0-4)mode</b>: up to four 8-bit long integer's defining sending mode for each message.
+    - <b>valid-until</b>: 32-bit long UNIX-time integer.
+    - <b>(0-4)mode</b>: up to four 8-bit integers specifying the sending mode for each message.
 2. Up to 4 references to cells containing messages.
 
 ### Wallet V3
 
-This version introduces the `subwallet_id` parameter, which allows you to create multiple wallets using the same public key (so you can have only one seed phrase and multiple wallets). As before, `V3R2` only adds the get-method for the public key.
+This version introduces the `subwallet_id` parameter, which allows you to create multiple wallets using the same public key. In practice, you can manage several wallets using a single seed phrase.
+As before, `V3R2` only adds a get method for the public key.
 
 Wallet source code:
  * [ton/crypto/smartcont/wallet3-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)
 
-Essentially, `subwallet_id` is just a number added to the contract state when it’s deployed. Since the contract address in TON is a hash of its state and code, the wallet address will change with a different `subwallet_id`. This version is the most widely used right now. It covers most use cases and remains clean, simple, and mostly the same as previous versions. All get methods remain the same.
+
+Essentially, `subwallet_id` is just a number added to the contract state at deployment. Since a contract address in TON is the hash of its code and state, changing the `subwallet_id` results in a different wallet address.
+This version is currently the most widely used. It supports most use cases while remaining clean, simple, and consistent with earlier versions. All get methods remain unchanged.
+
 
 #### Persistent Memory Layout
 - <b>seqno</b>: 32-bit sequence number.
@@ -118,9 +126,10 @@ Essentially, `subwallet_id` is just a number added to the contract state when it
 #### Exit Codes
 | Exit Code      | Description                                                              |
 |----------------|--------------------------------------------------------------------------|
+| 0x21           | `seqno` check failed — replay protection triggered.                         |
 | 0x23           | `valid_until` check failed; transaction confirmation attempted too late  |
 | 0x23           | `Ed25519 signature` check failed                                         |
-| 0x21           | `seqno` check failed; reply protection triggered                         |
+
 | 0x22           | `subwallet-id` does not match the stored one                             |
 | 0x0            | Standard successful execution exit code.                                 |
 
