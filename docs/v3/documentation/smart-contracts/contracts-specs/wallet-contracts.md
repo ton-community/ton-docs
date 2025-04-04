@@ -1,7 +1,7 @@
 import ConceptImage from '@site/src/components/conceptImage';
 import ThemedImage from '@theme/ThemedImage';
 
-# Types of Wallet Contracts
+# Wallet contracts types
 
 You may have heard about different versions of wallets on the TON Blockchain. But what do these versions actually mean, and how do they differ?
 
