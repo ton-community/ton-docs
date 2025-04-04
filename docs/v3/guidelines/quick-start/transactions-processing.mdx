@@ -16,6 +16,9 @@ This guide provides foundational knowledge for working with transactions on TON 
 
 Now, let's initialize the project and install the necessary dependencies.
 
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="TypeScript">
+
 ```bash
 npm init -y
 npm install typescript ts-node @ton/ton @ton/core @ton/crypto
@@ -27,6 +30,23 @@ To run scripts, use the following command:
 ```bash
 npx ts-node script.ts
 ```
+
+</TabItem>
+<TabItem value="tonutils" label="Python3">
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install tonutils pytoniq
+```
+
+To run scripts, use the following command:
+```bash
+python3 script.py
+```
+
+</TabItem>
+</Tabs>
 
 ## Messages and transactions
 
@@ -163,6 +183,9 @@ When building a frontend app, avoid handling private keys directly—secure stor
 :::
 
 
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="@ton/ton">
+
 ```typescript
 import { mnemonicToWalletKey } from "@ton/crypto";
 import { comment, internal, toNano, TonClient, WalletContractV4, WalletContractV5R1 } from "@ton/ton";
@@ -205,6 +228,39 @@ async function main() {
 main();
 ```
 
+</TabItem>
+<TabItem value="tonutils" label="tonutils">
+
+```python
+from tonutils.client import ToncenterClient
+from tonutils.wallet import (
+    WalletV5R1
+)
+
+IS_TESTNET = True
+
+# Mnemonic phrase for creating the wallet
+MNEMONIC = 'Insert your mnemonic phrase here'
+
+async def main() -> None:
+    client = ToncenterClient(is_testnet=IS_TESTNET)
+
+    wallet, public_key, private_key, _ = WalletV5R1.from_mnemonic(client, MNEMONIC)
+
+    result = await wallet.transfer(destination=wallet.address, amount=0.01, body="Helo from wallet!")
+
+    print(result)
+
+
+if __name__ == "__main__":
+    import asyncio
+
+    asyncio.run(main())
+```
+
+</TabItem>
+</Tabs>
+
 :::caution Advanced Level
 In most scenarios, `SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS`(default for `tonuitls`) will work, but if you want a deeper understanding, continue reading in the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook/).
 :::
@@ -216,6 +272,9 @@ Be careful with the hash definition. It can be either a transaction hash or a me
 :::
 
 Sometimes it will be useful to get the message hash before sending it. By the message hash, the transaction may be found on the blockchain. To do so, instead of calling the `sendTransfer` method on the wallet, we should build the message ourselves.
+
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="@ton/ton">
 
 ```typescript
 // Building the transfer to the wallet
@@ -250,9 +309,64 @@ console.log(`https://testnet.tonviewer.com/transaction/${messageHash.toString('h
 await tonClient.sendMessage(externalMessage);
 ```
 
+</TabItem>
+<TabItem value="tonutils" label="tonutils">
+```python
+from tonutils.client import ToncenterClient
+from tonutils.wallet import WalletV5R1
+from tonutils.utils import message_to_boc_hex
+import asyncio
+MNEMONIC = "Insert your mnemonic here"
+
+async def main():
+    # Initialize client and wallet
+    client = ToncenterClient(is_testnet=True)
+
+    # Create wallet from mnemonic
+    wallet, _, _, _ = WalletV5R1.from_mnemonic(client, MNEMONIC)
+
+    # prepare internal message
+    mesage = wallet.create_wallet_internal_message(
+        destination=wallet.address,
+        value=1,
+        body="Hello from wallet!",
+        state_init=None,
+        send_mode=3
+    ),
+
+    # retrieving seqno
+    seqno = await wallet.get_seqno(client, wallet.address)
+
+    # create message body
+    body = wallet.raw_create_transfer_msg(
+        private_key=wallet.private_key,
+        messages=mesage,
+        seqno=seqno
+    )
+
+    # obtaining serialized message and message hash
+    message = wallet.create_external_msg(dest=wallet.address, body=body, state_init=None)
+    message_boc_hex, message_hash = message_to_boc_hex(message)
+
+    # sending message to blockhain
+    await wallet.client.send_message(message_boc_hex)
+
+    print(message_hash)
+    print(f"https://testnet.tonviewer.com/transaction/{message_hash}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+</TabItem>
+</Tabs>
+
+
 ### Retrieving transaction hash
 
 It may also be useful to wait for the transaction to appear on the blockchain. This can be done by trying to get it by `messageHash` with delays. When the transaction is obtained, the hash of the transaction may be received.
+
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="@ton/ton">
 
 ```typescript
 async function waitForTransaction(messageHash: Buffer, maxRetries = 12) {
@@ -281,6 +395,37 @@ async function waitForTransaction(messageHash: Buffer, maxRetries = 12) {
 const transaction = await waitForTransaction(messageHash);
 const transactionHash = transaction.hash();
 ```
+
+</TabItem>
+<TabItem value="tonutils" label="tonutils">
+```python
+async def wait_for_transaction(message_hash: bytes, max_retries: int = 12):
+    retries = 0
+
+    async with aiohttp.ClientSession() as session:
+        while retries < max_retries:
+            print(f"Waiting for transaction, retry {retries}...")
+            retries += 1
+
+            try:
+                async with session.get(
+                    f"https://testnet.tonapi.io/v2/blockchain/transactions/{message_hash}"
+                ) as response:
+                    if response.status != 200:
+                        await asyncio.sleep(1)
+                        continue
+
+                    print("SUCCESS!")
+                    return
+
+            except aiohttp.ClientError:
+                await asyncio.sleep(1)
+                continue
+
+    raise Exception("Retries exceeded, transaction not found")
+```
+</TabItem>
+</Tabs>
 
 ### Handling transaction failures
 
