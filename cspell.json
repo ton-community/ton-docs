@@ -303,6 +303,7 @@
     "Visio",
     "votings",
     "VARUINT16",
+    "Wikimar",
     "workchain",
     "workchains",
     "xguard",
@@ -314,6 +315,9 @@
     "decentralised",
     "colour",
     "analyse"
+    "ensurepip",
+    "Buildx",
+    "underperforming"
   ],
   "ignoreRegExpList": [
     "\\(#.*\\)",

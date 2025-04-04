@@ -117,6 +117,11 @@ module.exports = [
     type: 'category',
     label: 'Tutorials & examples',
     items: [
+      {
+        type: 'doc',
+        id: 'v3/guidelines/dapps/tutorials/jetton-airdrop',
+        label: 'How to launch a jetton airdrop',
+      },
       'v3/guidelines/dapps/apis-sdks/api-keys',
       'v3/guidelines/dapps/apis-sdks/getblock-ton-api',
       {
@@ -301,8 +306,7 @@ module.exports = [
       label: 'Business',
       items: [
         'v3/guidelines/ton-connect/business/ton-connect-for-business',
-        'v3/guidelines/ton-connect/business/ton-connect-for-security',
-        'v3/guidelines/ton-connect/business/ton-connect-comparison',
+        'v3/guidelines/ton-connect/business/ton-connect-for-security'
       ],
     }
   ]

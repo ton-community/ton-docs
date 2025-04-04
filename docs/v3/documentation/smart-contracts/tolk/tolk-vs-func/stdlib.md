@@ -1,26 +1,26 @@
 # Tolk vs FunC: standard library
 
 FunC has a rich [standard library](/v3/documentation/smart-contracts/func/docs/stdlib),
-known as *"stdlib.fc"* file. It's quite low-level and contains lots of `asm` functions
-named very closely to TVM commands.
+known as *"stdlib.fc"* file. It's quite low-level and contains many `asm` functions
+closely related to [TVM instructions](/v3/documentation/tvm/instructions/).
 
 Tolk also has a standard library based on a FunC one. Three main differences:
-1. It's split in multiple files: `common.tolk`, `tvm-dicts.tolk`, and others. Functions from `common.tolk` are available always. Functions from other files are available after import:
+1. It's split into multiple files: `common.tolk`, `tvm-dicts.tolk`, and others. Functions from `common.tolk` are always available. Functions from other files are available after import:
 ```tolk
 import "@stdlib/tvm-dicts"
 
 beginCell()          // available always
 createEmptyDict()    // available due to import
 ```
-2. You don't need to download it from GitHub, it's a part of Tolk distribution. 
-3. Almost all FunC functions were renamed to ~~verbose~~ clear names. So that when you write contracts or read example, you better understand what's going on.
+2. You don't need to download it from GitHub; it's a part of Tolk distribution. 
+3. Almost all FunC functions were renamed to ~~verbose~~ clear names. So that when you write contracts or read examples, you better understand what's going on.
 
 
 ## A list of renamed functions
 
-If "Required import" column is empty, a function is available without any imports.
+If the **Required import** column is empty, a function is available without imports.
 
-Note, that some of the functions were deleted, because they either can be expressed syntactically,
+Note that some of the functions were deleted because they either can be expressed syntactically,
 or they were very uncommon in practice.
 
 | FunC name                | Tolk name                               | Required import |
@@ -54,7 +54,7 @@ or they were very uncommon in practice.
 | block_lt                 | getCurrentBlockLogicalTime              |                 |
 | cell_hash                | cellHash                                |                 |
 | slice_hash               | sliceHash                               |                 |
-| string_hash              | stringHash                              |                 |
+| string_hash              | sliceBitsHash                           |                 |
 | check_signature          | isSignatureValid                        |                 |
 | check_data_signature     | isSliceSignatureValid                   |                 |
 | compute_data_size        | calculateCellSizeStrict                 |                 |
@@ -210,16 +210,16 @@ or they were very uncommon in practice.
 
 ## A list of added functions
 
-Tolk standard library has some functions that were missing in FunC, but are quite common for everyday tasks.
+Tolk standard library has some functions missing in FunC but is pretty typical for everyday tasks.
 
-Since Tolk is actively developed, and its standard library changes, better consider `tolk-stdlib/` folder
+Since Tolk is actively developed, and its standard library changes, it better considers the `tolk-stdlib/` folder
 in sources [here](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont/tolk-stdlib).
 Besides functions, there some constants were added: `SEND_MODE_*`, `RESERVE_MODE_*`, etc.
 
-When FunC becomes deprecated, the documentation about Tolk stdlib will be completely rewritten, anyway.
+When FunC becomes deprecated, the documentation about Tolk stdlib will be rewritten entirely, anyway.
 
-And remember, that all the functions above are actually wrappers over TVM assembler. If something is missing,
-you can easily wrap any TVM instruction yourself.
+Remember that all the functions above are wrappers over the TVM assembler. If something is missing,
+you can quickly wrap any TVM instruction yourself.
 
 
 ## Some functions became mutating, not returning a copy
@@ -247,10 +247,10 @@ you can easily wrap any TVM instruction yourself.
   </tbody>
 </table>
 
-Most FunC functions, that were used with `~` tilda in practice, now mutate the object, see examples above.
+Most FunC functions used with `~` tilda in practice now mutate the object; see examples above.
 
 For example, if you used `dict~udict_set(…)`, just use `dict.uDictSet(…)`, and everything is fine. 
-But if you used `dict.udict_set(…)` to obtain a copy, you'll need to express it some other way.
+But if you used `dict.udict_set(…)` to obtain a copy, you'll need to express it another way.
 
 [Read about mutability](/v3/documentation/smart-contracts/tolk/tolk-vs-func/mutability).
 
@@ -258,17 +258,17 @@ But if you used `dict.udict_set(…)` to obtain a copy, you'll need to express i
 ## How does embedded stdlib work under the hood
 
 As told above, all standard functions are available out of the box. 
-Yeah, for you need `import` for non-common functions (it's intentionally), but still, no external downloads.
+You need `import` for non-common functions (it's intentional), but still, no external downloads.
 
 It works the following way.
 
-The first thing Tolk compiler does on start is locating stdlib folder by searching in predefined paths relative to an executable binary. 
-For example, if you launch Tolk compiler from a package installed (e.g. `/usr/bin/tolk`), locate stdlib in `/usr/share/ton/smartcont`. 
-If you have non-standard installation, you may pass `TOLK_STDLIB` env variable. It's standard practice for compilers.
+The first thing the Tolk compiler does at the start is locate the stdlib folder by searching predefined paths relative to an executable binary. 
+For example, if you launch the Tolk compiler from a package installed (e.g. `/usr/bin/tolk`), locate stdlib in `/usr/share/ton/smartcont`. 
+You may pass the `TOLK_STDLIB` env variable if you have a non-standard installation. It's standard practice for compilers.
 
 A WASM wrapper [tolk-js](https://github.com/ton-blockchain/tolk-js) also contains stdlib. 
 So, when you take tolk-js or blueprint, all stdlib functions are still available out of the box.
 
-IDE plugins (both JetBrains and VS Code) also auto-locate stdlib to provide auto-completion. 
-If you use blueprint, it automatically installs tolk-js, and therefore, folder `node_modules/@ton/tolk-js/` exists in your project file structure.
-Inside, there are `common.tolk`, `tvm-dicts.tolk`, and others. 
+JetBrains and VS Code IDE plugins also auto-locate stdlib to provide auto-completion. 
+If you use blueprint, it automatically installs tolk-js; therefore, folder `node_modules/@ton/tolk-js/` exists in your project file structure.
+Inside are `common.tolk`, `tvm-dicts.tolk`, and others. 
