@@ -192,9 +192,9 @@ As shown, version four still supports standard functionality through the `0x0` o
 
 :::tip
 If the term `state_init` seems unclear based on its name, you can refer to the following resources for more context:
- * [addresses-in-ton-blockchain](/v3/documentation/smart-contracts/addresses#workchain-id-and-account-id)
- * [send-a-deploy-message](/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-deploy-message-with-stateinit-only-with-stateinit-and-body)
- * [internal-message-layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout)
+ * [Addresses in TON Blockchain](/v3/documentation/smart-contracts/addresses#workchain-id-and-account-id)
+ * [Send a deploy message](/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-deploy-message-with-stateinit-only-with-stateinit-and-body)
+ * [Internal message layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout)
 :::
 
 #### Exit codes
