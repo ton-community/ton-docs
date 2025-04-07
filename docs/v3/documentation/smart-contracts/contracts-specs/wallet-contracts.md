@@ -109,12 +109,12 @@ Essentially, `subwallet_id` is just a number added to the contract state at depl
 This version is currently the most widely used. It supports most use cases while remaining clean, simple, and consistent with earlier versions. All get methods remain unchanged.
 
 
-#### Persistent Memory Layout
+#### Persistent memory layout
 - <b>seqno</b>: 32-bit sequence number.
 - <b>subwallet</b>: 32-bit subwallet ID.
 - <b>public-key</b>: 256-bit public key.
 
-#### External Message Layout
+#### External message layout
 1. Data:
     - <b>signature</b>: 512-bit ed25519 signature.
     - <b>subwallet-id</b>: 32-bit subwallet ID.
@@ -123,91 +123,96 @@ This version is currently the most widely used. It supports most use cases while
     - <b>(0-4)mode</b>: Up to four 8-bit integers defining the sending mode for each message.
 2. Up to 4 references to cells containing messages.
 
-#### Exit Codes
-| Exit Code      | Description                                                              |
-|----------------|--------------------------------------------------------------------------|
-| 0x21           | `seqno` check failed — replay protection triggered.                         |
-| 0x23           | `valid_until` check failed; transaction confirmation attempted too late  |
-| 0x23           | `Ed25519 signature` check failed                                         |
-
-| 0x22           | `subwallet-id` does not match the stored one                             |
-| 0x0            | Standard successful execution exit code.                                 |
+#### Exit codes
+| Exit code | Description                                                              |
+|-----------|--------------------------------------------------------------------------|
+| 0x21      | `seqno` check failed — replay protection triggered.                      |
+| 0x23      | `valid_until` check failed; transaction confirmation attempted too late. |
+| 0x23      | `Ed25519 signature` verification failed.                                 |
+| 0x22      | `subwallet-id` does not match the stored value.                          |
+| 0x0       | Standard successful execution exit code.                                 |
 
 ### Wallet V4
 
-This version retains all the functionality of the previous versions but also introduces something very powerful: `plugins`.
+This version preserves all the functionality of the previous ones while introducing a powerful new feature: `plugins`.
 
 Wallet source code:
  * [ton-blockchain/wallet-contract](https://github.com/ton-blockchain/wallet-contract)
 
-This feature allows developers to implement complex logic that works in tandem with a user's wallet. For example, a DApp may require a user to pay a small amount of coins every day to use certain features. In this case, the user would need to install the plugin on their wallet by signing a transaction. The plugin would then send coins to the destination address daily when requested by an external message.
+Plugins enable developers to extend wallet behavior by adding custom logic that runs alongside the wallet contract. For instance, a dApp might require users to pay a small daily fee to access certain features. In that case, the user could install a plugin by signing a transaction. Once installed, the plugin can automatically send the required payment to a specified address each day, triggered by an external message.
 
 #### Plugins
 
-Plugins are essentially other smart contracts on TON that developers are free to implement as they wish. In relation to the wallet, they are simply addresses of smart contracts stored in a [dictionary](/v3/documentation/smart-contracts/func/docs/dictionaries) in the wallet's persistent memory. These plugins are allowed to request funds and remove themselves from the "allowed list" by sending internal messages to the wallet.
+Plugins are essentially other smart contracts on TON that developers can implement as they see fit. In the wallet context, plugins are simply the addresses of smart contracts stored in a [dictionary](/v3/documentation/smart-contracts/func/docs/dictionaries) within the wallet's persistent memory. These plugins can request funds and remove themselves from the "allowed list" by sending internal messages to the wallet.
+
+
 
 #### Persistent memory layout
- - <b>seqno</b>: 32-bit long sequence number.
- - <b>subwallet-id</b>: 32-bit long subwallet-id.
- - <b>public-key</b>: 256-bit long public key.
- - <b>plugins</b>: dictionary containing plugins(may be empty)
+- <b>seqno</b>: 32-bit sequence number.
+- <b>subwallet</b>: 32-bit subwallet ID.
+- <b>public-key</b>: 256-bit public key.
+- <b>plugins</b>: a dictionary containing plugins; may be empty.
+
 
 #### Receiving internal messages
 
-All previous versions of wallets had a straightforward implementation for receiving internal messages. They simply accepted incoming funds from any sender, ignoring the internal message body if present, or in other words, they had an empty recv_internal method. However, as mentioned earlier, the fourth version of the wallet introduces two additional available operations. Let's take a look at the internal message body layout:
+In all previous wallet versions, receiving internal messages was straightforward. Wallets accepted incoming funds from any sender and ignored the message body, using an empty `recv_internal` method.
+However, as mentioned earlier, version four of the wallet introduces two additional operations. Below is the layout of the internal message body:
 
-- <b>op-code?</b>: 32-bit long operation code. This is an optional field; any message containing less than 32 bits in the message body, an incorrect op-code, or a sender address that isn't registered as a plugin will be considered as simple transfer, similar to previous wallet versions.
-- <b>query-id</b>: 64-bit long integer. This field has no effect on the smart contract's behavior; it is used to track chains of messages between contracts.
-1. op-code = 0x706c7567, request funds operation code.
-    - <b>toncoins</b>: VARUINT16 amount of requested toncoins.
-    - <b>extra_currencies</b>: Dictionary containing the amount of requested extra currencies (may be empty).
-2. op-code = 0x64737472, request removal of plugin-sender from the "allowed list".
+- <b>op-code?</b>: 32-bit operation code. This is an optional field. Any message with fewer than 32 bits in the body, an invalid op-code, or a sender address not registered as a plugin is treated as a simple transfer—just like in earlier wallet versions.
+
+- <b>query-id</b>: 64-bit integer. This field has no effect on the smart contract's behavior; it tracks message chains between contracts.
+
+1. op-code = 0x706c7567: request funds operation code.
+    - <b>toncoins</b>: `VARUINT16` amount of requested TON coins.
+    - <b>extra_currencies</b>: dictionary containing the amount of requested extra currency. This dictionary may be empty.
+2. op-code = 0x64737472: request removal of the plugin-sender from the "allowed list."
 
 #### External message body layout
 
- - <b>signature</b>: 512-bit long ed25519 signature.
- - <b>subwallet-id</b>: 32-bit long subwallet ID.
- - <b>valid-until</b>: 32-bit long Unix-time integer.
- - <b>msg-seqno</b>: 32-bit long sequence integer.
- - <b>op-code</b>: 32-bit long operation code.
-1. op-code = 0x0, simple send.
-    - <b>(0-4)mode</b>: up to four 8-bit long integer's defining sending mode for each message.
-    - <b>(0-4)messages</b>:Up to four references to cells containing messages.
+ - <b>signature</b>: 512-bit ed25519 signature.
+ - <b>subwallet-id</b>: 32-bit subwallet ID.
+ - <b>valid-until</b>: 32-bit UNIX-time integer.
+ - <b>msg-seqno</b>: 32-bit sequence integer.
+ - <b>op-code</b>: 32-bit operation code.
+1. op-code = 0x0: simple send operation.
+    - <b>(0-4)mode</b>: up to four 8-bit integers defining sending mode for each message.
+    - <b>(0-4)messages</b>: up to four references to cells containing messages.
 2. op-code = 0x1, deploy and install plugin. 
-    - <b>workchain</b>: 8-bit long integer.
-    - <b>balance</b>: VARUINT16 toncoins amount of initial balance.
-    - <b>state-init</b>: Cell reference containing plugin initial state.
-    - <b>body</b>: Cell reference containing body.
-3. op-code = 0x2/0x3, install plugin/remove plugin.
-    - <b>wc_n_address</b>: 8-bit long workchain_id + 256-bit long plugin address.
-    - <b>balance</b>: VARUINT16 toncoins amount of initial balance.
-    - <b>query-id</b>: 64-bit long integer.
-
-As you can see, the fourth version still provides standard functionality through the `0x0` op-code, similar to previous versions. The `0x2` and `0x3` operations allow manipulation of the plugins dictionary. Note that in the case of `0x2`, you need to deploy the plugin with that address yourself. In contrast, the `0x1` op-code also handles the deployment process with the state_init field.
+    - <b>WorkChain</b>: 8-bit long integer.
+    - <b>balance</b>: `VARUINT16` amount of initial TON coin balance.
+    - <b>state-init</b>: cell reference containing the plugin initial state.
+    - <b>body</b>: cell reference containing body.
+3. op-code = 0x2/0x3, install plugin/remove plugin operation.
+    - <b>wc_n_address</b>: 8-bit `workchain_id + 256-bit` plugin address.
+    - <b>balance</b>: `VARUINT16` amount of initial TON coin balance.
+    - <b>query-id</b>: 64-bit integer.
+    - 
+As shown, version four still supports standard functionality through the `0x0` op-code, similar to earlier versions. The `0x2` and `0x3` op-codes enable manipulation of the plugins dictionary. Note that when using `0x2`, you must deploy the plugin with that address yourself. In contrast, the `0x1` op-code handles deployment utilizing the `state-init` field.
 
 :::tip
-If `state_init` doesn't make much sense from its name, take a look at the following references:
+If the term `state_init` seems unclear based on its name, you can refer to the following resources for more context:
  * [addresses-in-ton-blockchain](/v3/documentation/smart-contracts/addresses#workchain-id-and-account-id)
  * [send-a-deploy-message](/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-deploy-message-with-stateinit-only-with-stateinit-and-body)
  * [internal-message-layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout)
 :::
 
-#### Exit Codes
-| Exit Code      | Description                                                                  |
-|----------------|------------------------------------------------------------------------------|
-| 0x24           | `valid_until` check failed, transaction confirmation attempted too late      |
-| 0x23           | `Ed25519 signature` check failed                                             |
-| 0x21           | `seqno` check failed, reply protection triggered                             |
-| 0x22           | `subwallet-id` does not match the stored one                                 |
-| 0x27           | Plugins dictionary manipulation failed (0x1-0x3 recv_external op-codes)      |
-| 0x50           | Not enough funds for the funds request                                       |
-| 0x0            | Standard successful execution exit code.                                     |
+#### Exit codes
+| Exit code | Description                                                                   |
+|-----------|-------------------------------------------------------------------------------|
+| 0x24      | check failed; transaction confirmation attempted too late.                    |
+| 0x23      | `Ed25519 signature` verification failed.                                      |
+| 0x21      | `seqno` check failed — replay protection triggered.                           |
+| 0x22      | `subwallet-id` does not match the stored value.                               |
+| 0x27      | Failed to manipulate the plugins dictionary (0x1-0x3 recv_external op-codes). |
+| 0x50      | Insufficient funds for the requested transfer.                                |
+| 0x0       | Standard successful execution exit code.                                      |
 
 #### Get methods
-1. int seqno() returns current stored seqno.
-2. int get_public_key() returns current stored public key.
+1. int seqno() returns the current stored seqno.
+2. int get_public_key returns the current stored public key.
 3. int get_subwallet_id() returns current subwallet ID.
-4. int is_plugin_installed(int wc, int addr_hash) checks if plugin with defined workchain ID and address hash is installed.
+4. int is_plugin_installed(int wc, int addr_hash) checks if the plugin with a defined workchain ID and address hash is installed.
 5. tuple get_plugin_list() returns list of plugins.
 
 ### Wallet V5
