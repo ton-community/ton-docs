@@ -217,7 +217,8 @@ If the term `state_init` seems unclear based on its name, you can refer to the f
 
 ### Wallet V5
 
-It is the most modern wallet version at the moment, developed by the Tonkeeper team, aimed at replacing V4 and allowing arbitrary extensions.
+The latest version of the wallet, developed by the Tonkeeper team, is the V5 standard. It aims to replace V4 and enables arbitrary extensions.
+
 <br></br>
 <ThemedImage
     alt=""
@@ -227,7 +228,8 @@ It is the most modern wallet version at the moment, developed by the Tonkeeper t
     }}
 />
 <br></br><br></br><br></br>
-The V5 wallet standard offers many benefits that improve the experience for both users and merchants. V5 supports gas-free transactions, account delegation and recovery, subscription payments using tokens and Toncoin, and low-cost multi-transfers. In addition to retaining the previous functionality (V4), the new contract allows you to send up to 255 messages at a time.
+
+ V5 brings several improvements that enhance the experience for both users and merchants. These include gas-free transactions, account delegation and recovery, subscription payments with tokens and TON coin, and low-cost multi-transfers. In addition to retaining all the features of V4, the new contract allows you to send up to 255 messages at once.
 
 Wallet source code:
  * [ton-blockchain/wallet-contract-v5](https://github.com/ton-blockchain/wallet-contract-v5)
@@ -236,7 +238,7 @@ TL-B scheme:
  * [ton-blockchain/wallet-contract-v5/types.tlb](https://github.com/ton-blockchain/wallet-contract-v5/blob/main/types.tlb)
 
 :::caution
-In contrast to previous wallet version specifications, we will rely on [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) scheme, due to the relative complexity of this wallet version's interface implementation. We will provide some description for each of those. Nevertheless, a basic understanding is still required, in combination with the wallet source code, it should be enough.
+Unlike previous wallet version specifications, we will use the [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) scheme due to the increased complexity of this version's interface implementation. We describe each of these, but a basic understanding of the concepts and the wallet's source code should be sufficient.
 :::
 
 #### Persistent memory layout
@@ -250,8 +252,7 @@ contract_state$_
     extensions_dict:(HashmapE 256 int1) = ContractState;
 ```
 
-
-As you can see, the `ContractState`, compared to previous versions, hasn't undergone major changes. The main difference is the new `is_signature_allowed` 1-bit flag, which restricts or allows access through the signature and stored public key. We will describe the importance of this change in later topics.
+As you can see, the `ContractState` has not changed significantly compared to previous versions. The main update is the addition of the new `is_signature_allowed` 1-bit flag, which controls access via the signature and stored public key. We explain the significance of this change in later sections.
 
 #### Authentification process
 
@@ -273,15 +274,22 @@ internal_extension#6578746e
 external_signed#7369676e signed:SignedRequest = ExternalMsgBody;
 ```
 
-Before we get to the actual payload of our messages — `InnerRequest` — let's first look at how version 5 differs from previous versions in the authentication process. The `InternalMsgBody` combinator describes two ways to access wallet actions through internal messages. The first method is one we are already familiar with from version 4: authentication as a previously registered extension, the address of which is stored in `extensions_dict`. The second method is authentication through the stored public key and signature, similar to external requests.
 
-At first, this might seem like an unnecessary feature, but it actually enables requests to be processed through external services (smart contracts) that are not part of your wallet's extension infrastructure—a key feature of V5. Gas-free transactions rely on this functionality.
+Before diving into the actual payload of our messages — `InnerRequest` — let's first examine how V5 differs from previous versions regarding authentication.
 
-Note that simply receiving funds is still an option. Practically, any received internal message that doesn't pass the authentication process will be considered as transfer.
+The `InternalMsgBody` combinator defines **two methods** for accessing wallet actions via internal messages:
+
+1. Extension-based authentication. This method is familiar from V4. It authenticates the message from a previously registered extension, whose address is stored in the `extensions_dict`.
+2. Signature-based authentication. This method authenticates the message using the stored public key and signature, similar to processing external requests.
+
+
+Although the second method might initially seem redundant, it's a key feature of V5. It enables requests to be processed by external services, such as smart contracts, that are not part of the wallet's extension infrastructure. This mechanism is essential for supporting gas-free transactions.
+
+It’s also important to note that receiving funds remains an option. Any internal message not passing the authentication process will be treated as a simple transfer.
 
 #### Actions
 
-The first thing that we should notice is `InnerRequest`, which we have already seen in the authentication process. In contrast to the previous version, both external and internal messages have access to the same functionality, except for changing the signature mode (i.e., the `is_signature_allowed` flag).
+The first thing to note is the `InnerRequest`, which we’ve already encountered during the authentication process. Unlike in previous versions, external and internal messages now have access to the same functionality — except for changing the signature mode, i.e., the `is_signature_allowed` flag.
 
 ```
 out_list_empty$_ = OutList 0;
@@ -302,36 +310,44 @@ action_set_signature_auth_allowed#04 allowed:(## 1) = ExtendedAction;
 actions$_ out_actions:(Maybe OutList) has_other_actions:(## 1) {m:#} {n:#} other_actions:(ActionList n m) = InnerRequest;
 ```
 
-We can consider `InnerRequest` as two lists of actions: the first, `OutList`, is an optional chain of cell references, each containing a send message request led by the message mode. The second, `ActionList,` is led by a one-bit flag, `has_other_actions`, which marks the presence of extended actions, starting from the first cell and continuing as a chain of cell references. We are already familiar with the first two extended actions, `action_add_ext` and `action_delete_ext`, followed by the internal address that we want to add or delete from the extensions dictionary. The third, `action_set_signature_auth_allowed`, restricts or allows authentication through the public key, leaving the only way to interact with the wallet through extensions. This functionality might be extremely important in the case of a lost or compromised private key.
+We can think of `InnerRequest` as consisting of two lists of actions:
+1. `OutList` — an optional chain of cell references, each containing a send message request, prefixed by the message mode.
+2. `ActionList` — preceded by a one-bit flag, `has_other_actions`, which indicates the presence of extended actions. These actions begin in the first cell and continue as a chain of cell references.
+
+You may already be familiar with the first two extended actions, `action_add_ext` and `action_delete_ext`, which add or remove an internal address from the extensions dictionary.
+
+The third action, `action_set_signature_auth_allowed`, turns authentication on or off via the public key — effectively making extensions the only way to interact with the wallet. This feature can be especially critical if your private key is lost or compromised.
+
 
 :::info
-Note that the maximum number of actions is 255; this is a consequence of the realization through the [c5](/v3/documentation/tvm/tvm-overview#result-of-tvm-execution) TVM register. Technically, you can make a request with empty `OutAction` and `ExtendedAction`, but in that case, it will be similar to just receiving funds.
+Note that the maximum number of actions is 255 due to the use of the [c5](/v3/documentation/tvm/tvm-overview#result-of-tvm-execution) TVM register. Technically, you can send a request with an empty `OutAction` and `ExtendedAction`, but in that case, it will behave just like a simple funds transfer.
 :::
 
-#### Exit Codes
+#### Exit codes
 
-| Exit Code      | Description                                                                      |
-|----------------|----------------------------------------------------------------------------------|
-| 0x84           | Authentication attempt through signature while it's disabled                     |
-| 0x85           | `seqno` check failed, reply protection occurred                                  |
-| 0x86           | `wallet-id` does not correspond to the stored one                                |
-| 0x87           | `Ed25519 signature` check failed                                                 |
-| 0x88           | `valid-until` check failed                                                       |
-| 0x89           | Enforce that `send_mode` has the +2 bit (ignore errors) set for external message.|
-| 0x8A           | `external-signed` prefix doesn't correspond to the received one                  |
-| 0x8B           | Add extension operation was not successful                                       |
-| 0x8C           | Remove extension operation was not successful                                    |
-| 0x8D           | Unsupported extended message prefix                                              |
-| 0x8E           | Tried to disable auth by signature while the extension dictionary is empty       |
-| 0x8F           | Attempt to set signature to an already set state                                 |
-| 0x90           | Tried to remove the last extension when signature is disabled                    |
-| 0x91           | Extension has the wrong workchain                                                |
-| 0x92           | Tried to change signature mode through external message                          |
-| 0x93           | Invalid `c5`, `action_send_msg` verification failed                              |
-| 0x0            | Standard successful execution exit code.                                         |
+| Exit code | Description                                                                         |
+|-----------|-------------------------------------------------------------------------------------|
+| 0x84      | Attempted authentication via signature while signature-based access is disabled.    |
+| 0x85      | `seqno` check failed - reply protection triggered.                                  |
+| 0x86      | `wallet-id` does not correspond to the stored value.                                |
+| 0x87      | `Ed25519 signature` verification failed.                                            |
+| 0x88      | `valid-until` check failed.                                                         |
+| 0x89      | `send_mode` must have the +2 bit set (ignore errors) for external messages.         |
+| 0x8A      | `external-signed`  prefix does not match the expected value.                        |
+| 0x8B      | Failed to add extension.                                                            |
+| 0x8C      | Failed to remove extension.                                                         |
+| 0x8D      | Unsupported extended message prefix.                                                |
+| 0x8E      | Attempted to disable signature-based auth while the extensions dictionary is empty. |
+| 0x8F      | Tried to set signature auth to its current state.                                   |
+| 0x90      | Tried to remove the last extension when signature is disabled.                      |
+| 0x91      | Extension address has an invalid WorkChain ID.                                      |
+| 0x92      | Tried to change signature mode via an external message.                             |
+| 0x93      | Invalid `c5`; `action_send_msg` verification failed.                                |
+| 0x0       | Standard successful execution exit code.                                            |
 
 :::danger
-Note that the `0x8E`, `0x90`, and `0x92` wallet exit codes are designed to prevent you from losing access to wallet functionality. Nevertheless, you should still remember that the wallet doesn't check whether the stored extension addresses actually exist in TON. You can also deploy a wallet with initial data consisting of an empty extensions dictionary and restricted signature mode. In that case, you will still be able to access the wallet through the public key until you add your first extension. So, be careful with these scenarios.
+Note that exit codes `0x8E`, `0x90`, and `0x92` are designed to protect you from losing access to wallet functionality. However, remember that the wallet does not verify whether the stored extension addresses exist on the TON. You can also deploy a wallet with initial data in an empty extensions dictionary and restricted signature mode. In such cases, you can still access the wallet via the public key until you add your first extension. So, be cautious with these configurations.
+
 :::
 
 #### Get methods
@@ -343,122 +359,68 @@ Note that the `0x8E`, `0x90`, and `0x92` wallet exit codes are designed to preve
 
 #### Preparing for Gasless Transactions
 
-As was sad before v5 wallet smart contract allows the processing of internal messages signed by the owner. This also allows you to make gasless transactions, e.g., payment of network fees when transferring USDt in USDt itself. Common scheme looks like that:
+As mentioned earlier, the V5 wallet smart contract supports processing internal messages signed by the owner. This enables gasless transactions, such as paying network fees in USDt when transferring USDt. A common flow looks like this:
 
 ![image](/img/gasless.jpg)
 
 :::tip
-Consequently, there will be services (such as [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)) that provide this functionality: they pay the transaction fees in TONs on behalf of the user, but charge a fee in tokens.
+As a result, services like [Tonkeeper's battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery) offer this functionality: they cover the transaction fees in TONs on behalf of the user and charge a fee in tokens instead.
 :::
 
 #### Flow
 
-1. When sending USDt, the user signs one message containing two outgoing USDt transfers:
-    1. USDt transfer to the recipient's address.
-    2. Transfer of a small amount of USDt in favor of the Service.
-2. This signed message is sent off-chain by HTTPS to the Service backend. The Service backend sends it to the TON blockchain, paying Toncoins for network fees.
+1. When sending USDt, the user signs a single message containing two outgoing USDt transfers:
+    1. A USDt transfer to the recipient's address.
+    2. A small USDt fee transferred to the Service.
+2. This signed message is then sent off-chain via HTTPS to the Service backend. The backend submits the transaction to the TON Blockchain, covering the network fees in TON coins.
 
-Beta version of the gasless backend API is available on [tonapi.io/api-v2](https://tonapi.io/api-v2). If you are developing any wallet app and have feedback about these methods please share it ton [@tonapitech](https://t.me/tonapitech) chat.
+A beta version of the gasless backend API is available at [tonapi.io/api-v2](https://tonapi.io/api-v2). If you're building a wallet app and have feedback about these methods, please share it in the [@tonapitech](https://t.me/tonapitech) chat on Telegram.
+
 
 Wallet source code:
  * [ton-blockchain/wallet-contract-v5](https://github.com/ton-blockchain/wallet-contract-v5)
 
 ## Special wallets
 
-Sometimes the functionality of basic wallets isn't enough. That's why there are several types of specialized wallet: `high-load`, `lockup` and `restricted`.
+Sometimes, the functionality of basic wallets isn’t enough. That’s why several specialized wallets exist —`high-load`, `lockup` and `restricted`.
 
-Let's have a look at them.
+Let’s take a closer look at each of them.
 
-### Highload Wallets
+### Highload wallets
 
-When working with many messages in a short period, there is a need for special wallet called Highload Wallet. Read [the article](/v3/documentation/smart-contracts/contracts-specs/highload-wallet) for more information.
+When a wallet needs to process many messages quickly, it uses a specialized **highload wallet**.
+Read more in [this article](/v3/documentation/smart-contracts/contracts-specs/highload-wallet) for more details.
 
 ### Lockup wallet
 
-If you, for some reason, need to lock coins in a wallet for some time without the possibility to withdraw them before that time passes, have a look at the lockup wallet.
+A **lockup wallet** is the right solution if you need to lock coins in a wallet for a specific period, preventing withdrawals until that time.
 
-It allows you to set the time until which you won't be able to withdraw anything from the wallet. You can also customize it by setting unlock periods so that you will be able to spend some coins during these set periods.
+This wallet allows you to set a lock period during which funds cannot be withdrawn. You can also configure unlock periods, allowing you to access your funds gradually.
 
-For example: you can create a wallet which will hold 1 million coins with total vesting time of 10 years. Set the cliff duration to one year, so the funds will be locked for the first year after the wallet is created. Then, you can set the unlock period to one month, so `1'000'000 TON / 120 months = ~8333 TON` will unlock every month.
+**Example**
+
+- You create a wallet that holds 1 million coins with a total vesting period of 10 years.
+- You set a cliff period of 1 year, meaning no coins can be withdrawn during the first year.
+- After that, coins unlock monthly:
+`1,000,000 TON ÷ 120 months = ~8,333 TON` released per month.
+
 
 Wallet source code:
  * [ton-blockchain/lockup-wallet-contract](https://github.com/ton-blockchain/lockup-wallet-contract)
 
 ### Restricted wallet
 
-This wallet's function is to act like a regular wallet, but restrict transfers to only one pre-defined destination address. You can set the destination when you create this wallet and then you'll be only able to transfer funds from it to that address. But note that you can still transfer funds to validation contracts so you can run a validator with this wallet.
+This wallet functions like a regular wallet but restricts transfers to a single, pre-defined destination address. You set this destination when the wallet is created, and after that, all outgoing transfers are limited to that address. However, transfer to validation contracts is still allowed, so you can use this wallet to run a validator.
 
 Wallet source code:
  * [EmelyanenkoK/nomination-contract/restricted-wallet](https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet)
 
-## Known op codes
-
-:::info
-Also op-code, op::code and operational code
-:::
-
-
-| Contract type   | Hex code        | OP::Code                   |
-|-----------------|-----------------|----------------------------|
-| Global          | 0x00000000      | Text Comment               |
-| Global          | 0xffffffff      | Bounce                     |
-| Global          | 0x2167da4b      | [Encrypted Comment](/v3/documentation/smart-contracts/message-management/internal-messages#messages-with-encrypted-comments) |
-| Global          | 0xd53276db      | Excesses                   |
-| Elector         | 0x4e73744b      | New Stake                  |
-| Elector         | 0xf374484c      | New Stake Confirmation     |
-| Elector         | 0x47657424      | Recover Stake Request      |
-| Elector         | 0x47657424      | Recover Stake Response     |
-| Wallet          | 0x0f8a7ea5      | Jetton Transfer            |
-| Wallet          | 0x235caf52      | [Jetton Call To](https://testnet.tonviewer.com/transaction/1567b14ad43be6416e37de56af198ced5b1201bb652f02bc302911174e826ef7) |
-| Jetton          | 0x178d4519      | Jetton Internal Transfer   |
-| Jetton          | 0x7362d09c      | Jetton Notify              |
-| Jetton          | 0x595f07bc      | Jetton Burn                |
-| Jetton          | 0x7bdd97de      | Jetton Burn Notification   |
-| Jetton          | 0xeed236d3      | Jetton Set Status          |
-| Jetton-Minter   | 0x642b7d07      | Jetton Mint                |
-| Jetton-Minter   | 0x6501f354      | Jetton Change Admin        |
-| Jetton-Minter   | 0xfb88e119      | Jetton Claim Admin         |
-| Jetton-Minter   | 0x7431f221      | Jetton Drop Admin          |
-| Jetton-Minter   | 0xcb862902      | Jetton Change Metadata     |
-| Jetton-Minter   | 0x2508d66a      | Jetton Upgrade             |
-| Vesting         | 0xd372158c      | [Top Up](https://github.com/ton-blockchain/liquid-staking-contract/blob/be2ee6d1e746bd2bb0f13f7b21537fb30ef0bc3b/PoolConstants.ts#L28) |
-| Vesting         | 0x7258a69b      | Add Whitelist              |
-| Vesting         | 0xf258a69b      | Add Whitelist Response     |
-| Vesting         | 0xa7733acd      | Send                       |
-| Vesting         | 0xf7733acd      | Send Response              |
-| Dedust          | 0x9c610de3      | Dedust Swap ExtOut         |
-| Dedust          | 0xe3a0d482      | Dedust Swap Jetton         |
-| Dedust          | 0xea06185d      | Dedust Swap Internal       |
-| Dedust          | 0x61ee542d      | Swap External              |
-| Dedust          | 0x72aca8aa      | Swap Peer                  |
-| Dedust          | 0xd55e4686      | Deposit Liquidity Internal |
-| Dedust          | 0x40e108d6      | Deposit Liquidity Jetton   |
-| Dedust          | 0xb56b9598      | Deposit Liquidity all      |
-| Dedust          | 0xad4eb6f5      | Pay Out From Pool          |
-| Dedust          | 0x474а86са      | Payout                     |
-| Dedust          | 0xb544f4a4      | Deposit                    |
-| Dedust          | 0x3aa870a6      | Withdrawal                 |
-| Dedust          | 0x21cfe02b      | Create Vault               |
-| Dedust          | 0x97d51f2f      | Create Volatile Pool       |
-| Dedust          | 0x166cedee      | Cancel Deposit             |
-| StonFi          | 0x25938561      | Swap Internal              |
-| StonFi          | 0xf93bb43f      | Payment Request            |
-| StonFi          | 0xfcf9e58f      | Provide Liquidity          |
-| StonFi          | 0xc64370e5      | Swap Success               |
-| StonFi          | 0x45078540      | Swap Success ref           |
-
-:::info
-[DeDust docs](https://docs.dedust.io/docs/swaps)
-
-[StonFi docs](https://docs.ston.fi/docs/developer-section/architecture#calls-descriptions)
-:::
-
 ## Conclusion
 
-As you see, there are many different versions of wallets in TON. But in most cases, you only need `V3R2` or `V4R2`. You can also use one of the special wallets if you want to have some additional functionality like a periodic unlocking of funds.
+As you see, there are many different versions of wallets in TON. But in most cases, you only need `V3R2` or `V4R2`. You can also use one of the special wallets for additional functionality like periodic fund unlocking.
 
 ## See Also
- - [Working With Wallet Smart Contracts](/v3/guidelines/smart-contracts/howto/wallet)
+ - [Working with wallet smart contracts](/v3/guidelines/smart-contracts/howto/wallet)
  - [Sources of basic wallets](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
  - [More technical description of versions](https://github.com/toncenter/tonweb/blob/master/src/contract/wallet/WalletSources.md)
  - [Wallet V4 sources and detailed description](https://github.com/ton-blockchain/wallet-contract)
