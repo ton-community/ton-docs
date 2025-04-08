@@ -10,22 +10,22 @@ module.exports = [
       {
         type: 'link',
         label: 'Working with your wallet',
-        href: 'https://ton-community.github.io/tutorials/01-wallet',
+        href: 'https://helloworld.tonstudio.io/tutorials/01-wallet',
       },
       {
         type: 'link',
         label: 'Writing first smart contract',
-        href: 'https://ton-community.github.io/tutorials/02-contract',
+        href: 'https://helloworld.tonstudio.io/tutorials/02-contract',
       },
       {
         type: 'link',
         label: 'Building first web client',
-        href: 'https://ton-community.github.io/tutorials/03-client',
+        href: 'https://helloworld.tonstudio.io/tutorials/03-client',
       },
       {
         type: 'link',
         label: 'Testing your smart contract',
-        href: 'https://ton-community.github.io/tutorials/04-testing',
+        href: 'https://helloworld.tonstudio.io/tutorials/04-testing',
       },
     ],
   },
