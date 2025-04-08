@@ -1,4 +1,4 @@
-# TON DNS & Domains
+# TON DNS & domains
 
 TON DNS is a service that translates human-readable domain names like `test.ton` or `mysite.temp.ton` into TON smart contract addresses, ADNL addresses used by services on the TON Network such as TON Sites, and more. 
 

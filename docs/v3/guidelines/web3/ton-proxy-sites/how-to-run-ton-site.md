@@ -57,7 +57,7 @@ To build for other operating systems, run `make all`.
 
 ## Further steps
 
-### Checking availability of the site
+### Checking site availability 
 
 After completing the setup, the TON Proxy should be running. If the setup is successful, your site will be available at the ADNL address generated during the configuration.
 
