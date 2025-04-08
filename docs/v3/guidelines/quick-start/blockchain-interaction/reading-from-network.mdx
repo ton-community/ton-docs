@@ -11,26 +11,16 @@ This guide will walk you through reading data from the TON Blockchain. You'll le
 
 By the end, you'll understand how to interact with [TON HTTP-based APIs](/v3/guidelines/dapps/apis-sdks/ton-http-apis/). Particularly, in this guide [TON Center](https://toncenter.com/) is used, a fast and reliable HTTP API for TON.
 
-## Prerequisites
+## Setup environment
 
-Before starting, ensure you have:
-
-1. Basic knowledge of TypeScript
-2. Node.js (v20+) and npm installed
-
-Check that installation is correct by running those commands:
+. First, visit installation pages and install [NodeJS and npm](https://nodejs.org/en/download) for your OS.Check that installation is correct by running those commands:
 
 ```bash
 node -v
 npm -v
 ```
 
-#### Expected result
-
-```bash
-v20.x.x
-10.x.x
-```
+Version of `node` and `npm` should be at least `v20` and `v10` correspondingly.
 
 ## Project setup
 
@@ -43,10 +33,10 @@ Let's set up our project structure:
 Run these commands in your terminal:
 
 ```bash
-mkdir reading-from-ton && cd reading-from-ton
-npm init -y
-npm install typescript ts-node @ton/ton @ton/core @ton/crypto
-npx tsc --init
+mkdir reading-from-ton && cd reading-from-ton # create new directory and cd to it
+npm init -y # initialize Node.js project
+npm install typescript ts-node @ton/ton @ton/core @ton/crypto #install required dependecies
+npx tsc --init # initialize typesctipt
 ```
 
 To run scripts, use the following command:
