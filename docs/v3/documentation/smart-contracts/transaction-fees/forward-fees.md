@@ -1,6 +1,6 @@
 # Forward fees
 
-This document explains how smart contracts handle message forwarding fees and value transfers between contracts.
+This page explains how smart contracts handle message forwarding fees and value transfers between contracts.
 
 ## Overview
 
