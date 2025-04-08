@@ -1,4 +1,4 @@
-# Site & Domain Management
+# Site & domain management
 
 ## How to open a domain for editing
 
@@ -6,7 +6,7 @@
 2. Install the [TON Chrome extension](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd). 
 3. Open the extension, click "Import wallet", and import the wallet that holds the domain.
 
-> Recovery Phrases
+> **Recovery phrases**
 >
 > Your recovery phrase consists of 24 words written down when the wallet was created.
 >
