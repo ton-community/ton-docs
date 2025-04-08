@@ -182,14 +182,20 @@ Don't forget to delete global variables `ctx_id`, `ctx_counter` and modify usage
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
 ```func title="/contracts/hello_world.fc"
-var (ctx_id, ctxCounter, ctxCounterExt) = load_data();
+;; load_data() on:
+var (ctx_id, ctx_counter, ctx_counter_ext) = load_data();
+
+;; save_data() on:
 save_data(ctx_id, ctxCounter, ctxCounterExt);
 ```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
 ```tolk title="/contracts/hello_world.tolk"
-var (ctx_id, ctxCounter, ctxCounterExt) = load_data();
-save_data(ctx_id, ctxCounter, ctxCounterExt);
+// loadData() on:
+var (ctx_id, ctxCounter, ctxCounterExt) = loadData();
+
+// saveData() on:
+saveData(ctx_id, ctxCounter, ctxCounterExt);
 ```
 </TabItem>
 </Tabs>
@@ -202,15 +208,15 @@ The primary use of `get methods` is reading our storage data from outside the bl
 <TabItem value="FunC" label="FunC">
 ```func title="/contracts/hello_world.fc"
 (int, int) get_counters() method_id {
-    var (_, ctxCounter, ctxCounterExt) = load_data();
-    return (ctxCounter, ctxCounterExt);
+    var (_, ctx_counter, ctx_counter_ext) = load_data();
+    return (ctx_counter, ctx_counter_ext);
 }
 ```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
 ```tolk title="/contracts/hello_world.tolk"
 get get_counters(): (int, int) {
-    var (_, ctxCounter, ctxCounterExt) = load_data();
+    var (_, ctxCounter, ctxCounterExt) = loadData();
     return (ctxCounter, ctxCounterExt);
 }
 ```
@@ -227,7 +233,6 @@ Final smart-contract code should look like this:
 #include "imports/stdlib.fc";
 
 const op::increase = "op::increase"c; ;; create an opcode from string using the "c" prefix, this results in 0x7e8764ef opcode in this case
-const op::send_increase = "op::send_increase"c; ;; create an opcode from string using the "c" prefix, this results in 0x7e8764ef opcode in this case
 
 (int, int, int) load_data() {
     var ds = get_data().begin_parse();
