@@ -11,9 +11,9 @@ You can check [this example](https://testnet.tonviewer.com/transaction/42ed45726
 
 #### Message value and account balance
 
-To better understand the `balance` inside the TVM, refer to how the [get_balance](/v3/documentation/smart-contracts/func/docs/stdlib/#get_balance) function operates.
-
 The contract reflects all TON tokens it holds in its `balance`. Some of these tokens are also assigned to the currently processed incoming `message`. This mechanism is effective because any TON transaction involving a [non-system contract](/v3/documentation/smart-contracts/contracts-specs/governance) processes exactly one incoming message at a time.
+
+> To better understand the `balance` inside the TVM, refer to how the [get_balance](/v3/documentation/smart-contracts/func/docs/stdlib/#get_balance) function operates.
 
 Therefore, any blockchain payment may come either:
 
@@ -28,22 +28,39 @@ Actual transaction fees will vary depending on the blockchain configuration, the
 
 According to the [transaction flow](/v3/documentation/tvm/tvm-overview#transactions-and-phases), each transaction consists of five distinct phases:
 
-1. **Storage phase**  
+- **Storage phase**  
    Handles storage fee and `in_msg` import fee.
 
-2. **Credit phase**  
+- **Credit phase**  
    The `in_msg` value [is credited](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L959-L981) to the account balance.
->Please note that credit phase may be 1st if the message is not bounceable
-3. **Compute phase**  
+
+- **Compute phase**  
    Executes the smart contract code via TVM.
 
-4. **Action phase**  
+- **Action phase**  
    Processes transaction outputs including `SENDRAWMSG` operations.
 
-5. **Bounce phase**  
+- **Bounce phase**  
    Manages message bounce handling when applicable.
 
-The order is: storage_fee -> import_fee -> gas_fee -> action_fee + fwd_fee
+#### Execution order notes:
+
+For non-bounceable messages:
+Credit → Storage → Compute → Action → Bounce
+
+For bounceable messages:
+Storage → Credit → Compute → Action → Bounce
+
+> Compute, Action and Bounce phases may be skipped
+
+#### Fee deduction sequence
+
+1. Storage fees
+2. Message import fees
+3. Computation gas fees
+4. Action processing fees + forward fees
+
+#### Example of calculation
 
 | Fee in Explorer                                                                                       | Value       | How it's obtained               |
 | :---------------------------------------------------------------------------------------------------- | :---------- | :------------------------------ |
@@ -52,12 +69,14 @@ The order is: storage_fee -> import_fee -> gas_fee -> action_fee + fwd_fee
 | Gas fee                                                                                               | 0.0011976   | compute phase, gas used         |
 | Storage fee                                                                                           | 0.000000003 | storage phase, account only     |
 | Action fee                                                                                            | 0.000133331 | action phase, cost per action   |
-| Import fee (hidden)                                                                                   | 0.0006512   | cost of import of ext_msg       |
+| Import fee (hidden)                                                                                   | 0.0006512   | cost of import of in_ext_msg    |
 | [Forward fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#formula-1) (each msg) | 0.000266669 | cost of fwd of in_msg           |
 | [IHR fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#ihr) (each msg)           | 0.0006      | cost of ihr fwd of in_msg       |
 
 :::info IMPORTANT
-The table is populated using [this example transaction](https://tonviewer.com/transaction/b5e14a9c4a4e982fda42d6079c3f84fa48e76497a8f3fca872f9a3737f1f6262). For live calculations, refer to the [**fee calculator**](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula).
+The table is populated using [this example transaction](https://tonviewer.com/transaction/b5e14a9c4a4e982fda42d6079c3f84fa48e76497a8f3fca872f9a3737f1f6262).
+
+For live calculations, refer to the [**fee calculator**](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula).
 :::
 
 The transaction fees used in these examples are hypothetical and for illustrative purposes only. Any fees other than message forwarding are outside the scope of this article.
