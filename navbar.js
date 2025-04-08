@@ -215,7 +215,7 @@ module.exports = {
         },
         {
           to: 'v3/documentation/smart-contracts/func/cookbook',
-          label: 'FunC cookbook',
+          label: 'FunC Cookbook',
         },
         {
           to: '/v3/documentation/tvm/instructions',
