@@ -350,7 +350,7 @@ The verification follows the standard Ed25519 process,
 where SHA-256 is used to derive a 256-bit number from `data`, which is then signed.
 
 
-### Computation of BOC size
+### Computation of BoC size
 
 The following functions help calculate storage fees for user-provided data.
 
@@ -359,7 +359,7 @@ The following functions help calculate storage fees for user-provided data.
 ```func
 (int, int, int, int) compute_data_size?(cell c, int max_cells) asm "CDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT";
 ```
-Returns `(x, y, z, -1)` or `(null, null, null, 0)`. It recursively calculates the number of unique cells `x`, data bits `y`, and cell references `z` in the directed acyclic graph (DAG) at `cell c`. This provides the total storage used by the DAG while recognizing identical cells.
+Returns `(x, y, z, -1)` or `(null, null, null, 0)`. It recursively calculates the number of unique cells `x`, data bits `y`, and cell references `z` in the **directed acyclic graph (DAG)** at `cell c`. This provides the total storage used by the DAG while recognizing identical cells.
 
 The computation uses a depth-first traversal with a hash table to track visited cells, preventing redundant visits.
 If the total amount of visited cells `x` exceeds `max_cells`, the process stops before visiting the `(max_cells + 1)` -th cell, and the function returns `0` to indicate failure. If `c` is `null`, the function returns `x = y = z = 0`.
@@ -429,15 +429,6 @@ cont bless(slice s) impure asm "BLESS";
 
 Converts a `slice s` into a basic continuation `c`, where `c.code = s`, an empty stack and a savelist.
 
-
-
-
-
-
-
-
-
-
 ### Gas related primitives
 
 #### `accept_message`
@@ -487,11 +478,6 @@ The `BUYGAS` opcode is currently not implemented.
 
 This function calculates how much gas can be purchased for the `gram` nanotoncoins and updates the gas limit `gl` accordingly,
 similar to `set_gas_limit`.
-
-
-
-
-
 
 ### Actions primitives
 

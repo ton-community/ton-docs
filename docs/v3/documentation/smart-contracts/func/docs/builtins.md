@@ -18,8 +18,7 @@ FunC also includes parameterized versions of these primitives:
 - **Conditional exceptions with parameters:** `throw_arg_if` and `throw_arg_unless`
 - **Unconditional exception with a parameter:** `throw_arg`
 
-In these versions, the first argument is an exception parameter of any type, the second is the error code, 
-and the third (if applicable) is the condition that determines whether the exception is thrown.
+In these versions, the first argument is an exception parameter of any type, the second defines the error code, and the third argument—used when needed—is a condition that determines whether the exception is thrown.
 
 ## Booleans
 - `true` is an alias for `-1`. 

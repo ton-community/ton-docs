@@ -266,7 +266,7 @@ else {
 ### How to determine if a tuple is empty
 
 When working with `tuples`, checking for existing values before extracting them is crucial. Extracting a value from an empty tuple will result in an error:
-"not a tuple of valid size" with `exit code 7`.
+["not a tuple of valid size" - `exit code 7`](/v3/documentation/tvm/tvm-exit-codes#7)
 
 ```func
 ;; Declare tlen function because it's not presented in stdlib
@@ -405,10 +405,11 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors
 
 **Note:**
 - In this example, we use the literal `a` to obtain an address. More details on string literals can be found in the [documentation](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals).
-- The example uses `mode 3`, which ensures the contract deducts the specified amount while covering the transaction fee from the contract balance and ignoring errors.
+- The example uses [`mode 3`](/v3/documentation/smart-contracts/message-management/sending-messages#mode3), which ensures the contract deducts the specified amount while covering the transaction fee from the contract balance and ignoring errors.
   - `mode 64` returns all received tokens, subtracting the commission.
   - `mode 128` transfers the entire balance.
 - The [message](/v3/documentation/smart-contracts/func/cookbook#how-to-build-an-internal-message-cell) is constructed with the body added separately.
+  
 
 **References:**
 - [`begin_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)

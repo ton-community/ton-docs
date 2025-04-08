@@ -24,7 +24,7 @@ var [x, y, z] = [1, 2, 3];
 ```
 
 
-A variable can be "redeclared" in the same scope. For example, the following code is valid:
+A variable can be redeclared in the same scope. For example, the following code is valid:
 
 ```func
 int x = 2;
@@ -149,7 +149,7 @@ builder b = begin_cell();
 b = b.store_uint(239, 8);
 ```
 
-The dot syntax allows the first argument of a function to be placed before the function name, 
+The dot `.` syntax allows the first argument of a function to be placed before the function name, 
 simplifying the code further:
 
 ```func

@@ -33,13 +33,10 @@ The following string literals produce these corresponding constants:
 * `"transfer(slice, int)"c` &rarr; `2235694568` (integer constant)
 
 ## Identifiers
-, doesn't start as a comment or string literal (with `"`), isn't a number literal, isn't an underscore `_` and isn't a keyword is a valid identifier (with the only exception that if it starts with `` ` ``, it must end with the same `` ` `` and can't contain any other `` ` `` except for these two).
-
 
 FunC allows a broad range of identifiers for functions and variable names. 
 Any **single-line string** that meets the following conditions qualifies as a valid identifier:
 - It **does not** contain special symbols: `;`, `,`, `(`, `)`, ` ` spaces including tabs, `~`, and `.`.
-
 - It **does not** start as a comment or a string literal (i.e., with `"` at the beginning). 
 - It is **not** a number literal.
 - It is **not** an underscore `_`.
