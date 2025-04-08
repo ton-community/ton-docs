@@ -29,7 +29,7 @@ If you're using a [standard NFT contract](https://github.com/ton-blockchain/toke
 - **New URL prefix format:** `tonstorage://my_bag_id/`.
 
 
-## How to assign a TON domain to a TON Storage bag (Low Level)
+## How to assign a TON domain to a TON Storage bag (low-level)
 
 You need to assign the following value to the sha256("storage") DNS Record of your TON domain:
 ```
