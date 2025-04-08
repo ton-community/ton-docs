@@ -115,7 +115,9 @@ fun saveData() {
 
 #### Managing storage
 
-Let's try to modify our example a little bit. First, let's use a more common approach of passing storage members as parameters to `save_data(members...)` and retrieve them as `(members...) get_data()` moving global variables `ctx_id` and `ctx_counter` to method bodies. Also, let's add additional integer of 256-bit size into our storage:
+Let's try to modify our example a little bit. First, let's examine different approach of managing storage, widely used in smart-contract development: 
+
+Instead of initializing global variables we will pass storage members as parameters to `save_data(members...)` and retrieve them as `(members...) get_data()` moving global variables `ctx_id` and `ctx_counter` to methods bodies. Also, let's add additional integer of 256-bit size into our storage.
 
 Result of our modifications should look like this:
 
@@ -392,7 +394,7 @@ Build script running, compiling HelloWorld
 
 ### Step 2: Update wrapper
 
-Now lets update our wrapper class corresponding to new storage layout and new `get method`. First, let's modify `helloWorldConfigToCell` function and `HelloWorldConfig` type to properly initialize our storage during deployment:
+Now lets update our wrapper class corresponding to new storage layout and new `get method`. First, let's modify `helloWorldConfigToCell` function and `HelloWorldConfig` type to properly initialize our storage during samrt-contract creation with 256-bit `ctxCounterExt` field that we previously added to `smart-contract`:
 
 ```typescript title="/wrappers/HelloWorld.ts"
 export type HelloWorldConfig = {
@@ -409,7 +411,7 @@ export function helloWorldConfigToCell(config: HelloWorldConfig): Cell {
     .endCell();
 }
 ```
-Second, add a method to perform a request for the newly created get method:
+Second, add a method to perform a request for the newly created smart-contract method `get_counters` that will retrieve both counters at once:
 
 ```typescript title="/HelloWorld.ts"
 async getCounters(provider: ContractProvider) : Promise<[number, bigint]> {
@@ -423,7 +425,13 @@ async getCounters(provider: ContractProvider) : Promise<[number, bigint]> {
 
 ### Step 3: Update tests
 
-And finally, let's update our test to check that the deployment process initializes smart contract storage and correctly retrieves its data by get methods.
+And finally, let's test our new functionality through previously updated wrapper:
+ - Create and initialize smart-contract storage members with some value through `helloWorldConfig`.
+ - Call each of get methods and retrieve storage members.
+ - Verify that they have stayed the same as during creation.
+
+Here is an example of such implementation:
+
 
 ```typescript title="/tests/HelloWorld.spec.ts"
 import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
@@ -500,6 +508,7 @@ describe('HelloWorld', () => {
         expect(counterExt).toBe(expectedConfig.counterExt);
     });
 
+    // ... previous tests
 });
 ```
 
