@@ -1,34 +1,43 @@
-# Running your own TON proxy
+# Running your TON Proxy
 
-The aim of this document is to provide a gentle introduction into TON Sites, which are websites accessed through the TON Network. TON Sites may be used as a convenient entry point for other TON Services. In particular, HTML pages downloaded from TON Sites may contain links to `ton://...` URIs representing payments that can be performed by the user by clicking on the link, provided a TON Wallet is installed on the user's device.
+This document briefly introduces TON Sites — websites accessed through the TON Network. TON Sites can serve as convenient entry points to other TON Services. For instance, HTML pages loaded from TON Sites may contain `ton://...` URIs, such as payment links. When clicked, these links can trigger actions like making a payment, provided the user has a TON Wallet installed on their device.
 
-From the technical perspective, TON Sites are very much like standard websites, but they are accessed through the [TON Network](/v3/concepts/dive-into-ton/ton-blockchain/ton-networking) (which is an overlay network inside the Internet) instead of the Internet. More specifically, they have an [ADNL](/v3/documentation/network/protocols/adnl/overview) Address (instead of a more customary IPv4 or IPv6 address) and they accept HTTP queries via a [RLDP](/v3/documentation/network/protocols/rldp) protocol (which is a higher-level RPC protocol built upon ADNL, the main protocol of TON Network) instead of the usual TCP/IP. All encryption is handled by ADNL, so there is no need to use HTTPS (i.e. TLS) in case the entry proxy is hosted locally on the user's device.
+From a technical standpoint, TON Sites function similarly to standard websites. Still, they are accessed via the [TON Network](/v3/concepts/dive-into-ton/ton-blockchain/ton-networking) — an overlay network that operates within the Internet — rather than directly through the Internet itself. Instead of using standard IPv4 or IPv6 addresses, TON Sites are addressed via [ADNL](/v3/documentation/network/protocols/adnl/overview) addresses. They receive HTTP queries over the [RLDP](/v3/documentation/network/protocols/rldp) protocol, a high-level RPC protocol built on top of ADNL, the TON Network's primary protocol, instead of the usual TCP/IP.
+Since encryption is handled at the ADNL level, there’s no need for HTTPS (TLS), mainly when the entry proxy is hosted locally on the user's device.
 
-In order to access existing sites and create new TON Sites one needs special gateways between the "ordinary" internet and the TON Network. Essentially, TON Sites are accessed with the aid of a HTTP->RLDP proxy running locally on the client's machine and they are created by means of a reverse RLDP->HTTP proxy running on a remote web server.
+A gateway between the "ordinary" Internet and the TON Network is required to access existing sites or create new TON Sites. In practice, this involves:
+- A HTTP → RLDP proxy running locally on the client's machine to access TON Sites. 
+- A reverse RLDP → HTTP proxy running on a remote web server to serve your content through the TON Network.
 
 [Read more about TON Sites, WWW, and Proxy](https://blog.ton.org/ton-sites)
 
 ## Running an entry proxy
 
-In order to access existing TON Sites, you need to run a RLDP-HTTP Proxy on your computer.
+To access existing TON Sites, you need to run an RLDP-HTTP proxy on your local machine.
 
-1. Download **rldp-http-proxy** from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
+1. Download the proxy.
+    
+   You can either:
+   - Download the precompiled **rldp-http-proxy** from [TON auto builds](https://github.com/ton-blockchain/ton/releases/latest).
+      or 
+   - Compile it yourself by following these [instructions](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#rldp-http-proxy).
 
-   Or you can compile the **rldp-http-proxy** yourself by following these [instructions](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#rldp-http-proxy).
-
-2. [Download](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config) TON global config.
+2. Download the [TON global config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config).
 
 3. Run **rldp-http-proxy**
 
    ```bash
    rldp-http-proxy/rldp-http-proxy -p 8080 -c 3333 -C global.config.json
    ```
+    Here’s what the parameters mean:
+    
+    -`p 8080`: TCP port on localhost where the proxy listens for incoming HTTP requests.
+    -`c 3333`: UDP port used for outbound and inbound RLDP and ADNL communication — connecting to TON Sites via the TON Network.
+    - `C global.config.json`: path to the global TON config file.
 
-In the above example, `8080` is the TCP port that will be listened to at localhost for incoming HTTP queries, and `3333` is the UDP port that will be used for all outbound and inbound RLDP and ADNL activity (i.e. for connecting to TON Sites via the TON Network). `global.config.json` is the filename of TON global config.
+The proxy will continue running in your terminal if everything is set up correctly. You can now access TON Sites through: `http://localhost:8080`.
 
-If you have done everything correctly, the entry proxy will not terminate, but it will continue running in the terminal. It can now be used for accessing TON Sites. When you don't need it anymore, you can terminate it by pressing `Ctrl-C`, or simply by closing the terminal window.
-
-Your entry proxy will be available by HTTP on `localhost` port `8080`.
+To stop the proxy, press `Ctrl+C` or close the terminal window.
 
 ## Running an entry proxy on a remote computer
 
