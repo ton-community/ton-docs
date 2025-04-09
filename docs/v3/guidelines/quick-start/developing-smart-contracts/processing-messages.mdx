@@ -326,7 +326,7 @@ receive(msg: Add) {
 }
 ```
 
-For accepting messages with empty body you can recieve function with no arguments:
+For accepting messages with empty body you can add `recieve` function with no arguments:
 
 ```tact title="/contracts/counter_internal.tact"
 receive() { 
@@ -547,6 +547,8 @@ describe('CounterInternal', () => {
         const counterAfterNonOwner = await counterInternal.getCounter();
         expect(counterAfterNonOwner).toBe(counterBefore);
     });
+
+    // .. previous tests
 });
 
 ```
