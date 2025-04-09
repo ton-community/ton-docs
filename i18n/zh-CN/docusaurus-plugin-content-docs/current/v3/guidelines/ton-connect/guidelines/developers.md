@@ -170,7 +170,7 @@ TON Connect 2.0 的 Unity 资产。使用`continuation-team/TonSdk.NET/tree/main
 
 ## 另请参见
 
-- [建立第一个网络客户端的分步指南](https://ton-community.github.io/tutorials/03-client/)
+- [建立第一个网络客户端的分步指南](https://helloworld.tonstudio.io/03-client/)
 - [[YouTube] TON Smart Contracts | 10 | Telegram DApp[EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU\&t=254s\&ab_channel=AlefmanVladimir%5BEN%5D)
 - [Ton Connect 入门](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
 - [集成手册](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk)
