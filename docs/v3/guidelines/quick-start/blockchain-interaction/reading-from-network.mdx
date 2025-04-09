@@ -13,7 +13,7 @@ By the end, you'll understand how to interact with [TON HTTP-based APIs](/v3/gui
 
 ## Setup environment
 
-. First, visit installation pages and install [NodeJS and npm](https://nodejs.org/en/download) for your OS. Check that installation is correct by running those commands:
+First, visit installation pages and install [NodeJS and npm](https://nodejs.org/en/download) for your OS. Check that installation is correct by running those commands:
 
 ```bash
 node -v
@@ -194,20 +194,6 @@ main();
 
 Interaction within account on blockchain happens due to [messages and transactions](/v3/documentation/smart-contracts/message-management/messages-and-transactions/).
 
-### What is a message?
-
-A message is a packet of data exchanged between actors (users, applications, or smart contracts). It typically contains information instructing the receiver on what action to perform, such as updating storage or sending a new message.
-
-<div class="text--center">
-  <ThemedImage
-    alt=""
-    sources={{
-      light: '/img/docs/message-delivery/message_delivery_1.png?raw=true',
-      dark: '/img/docs/message-delivery/message_delivery_1_dark.png?raw=true',
-    }}
-  />
-</div>
-
 ### What is a transaction?
 
 A transaction in TON consists of the following:
@@ -247,6 +233,22 @@ Transaction obtained from API have the following structure:
 - `utime`: The [UNIX timestamp](https://www.unixtimestamp.com/) of the transaction.
 - `in_msg`: The incoming [message](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-message/) that triggered the transaction.
 - `out_msgs`: Outgoing messages sent during the transaction.
+
+
+
+### What is a message?
+
+A message is a packet of data exchanged between actors (users, applications, or smart contracts). It typically contains information instructing the receiver on what action to perform, such as updating storage or sending a new message.
+
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/message-delivery/message_delivery_1.png?raw=true',
+      dark: '/img/docs/message-delivery/message_delivery_1_dark.png?raw=true',
+    }}
+  />
+</div>
 
 ### Key message fields
 
