@@ -121,7 +121,7 @@ If you have a single nominator that holds all stake for validation, this is the 
 
 The nominator owner can perform 4 operations:
 
-#### 1. `withdraw`
+#### 1. withdraw
 Used to withdraw funds to the owner's wallet. To withdraw the funds the owner should send a message with a body that includes: opcode=0x1000 (32 bits), query_id (64 bits) and withdraw amount (stored as coin variable). The nominator contract will send the funds with BOUNCEABLE flag and mode=64. <br/><br/>
 In case the owner is using a **hot wallet** (not recommended), [withdraw-deeplink.ts](https://github.com/ton-blockchain/single-nominator/blob/main/scripts/ts/withdraw-deeplink.ts) can be used to generate a deeplink to initiate a withdrawal from tonkeeper wallet. <br/>
 Command line: `ts-node scripts/ts/withdraw-deeplink.ts single-nominator-addr withdraw-amount` where:
@@ -152,13 +152,13 @@ From the black computer the owner should run:
 * create and sign the tx: `fift -s wallet-v3.fif my-wallet single_nominator_address sub_wallet_id seqno amount -B change-validator.boc` where my-wallet is the owner's pk file (without extension). For amount 1 TON should be enough to pay fees (remaining amount will be returned to owner). The change-validator.boc is the boc generated above.
 * from a computer with access to the internet run: `lite-client -C global.config.json -c 'sendfile wallet-query.boc'` to send the boc file (wallet-query.boc) generated in the prev step.
 
-#### 3. `send-raw-msg`
+#### 3. send-raw-msg
 This opcode is not expected to be used under normal conditions. <br/>
 It can be used to send **any** message from the nominator contract (must be signed and sent from owner's wallet). <br/>
 You might want to use this opcode if, for example, the elector contract address was unexpectedly changed and the funds are still locked in the elector. In this case RECOVER_STAKE from validator will not work and the owner will have to build a specific message. <br/>
 The message body should include: opcode=0x7702 (32 bits), query_id (64 bits), mode (8 bits), reference to the cell msg which will be sent as a raw message. <br/>
 
-#### 4. `upgrade`
+#### 4. upgrade
 This is an emergency opcode and probably should never not be used.<br/>
 It can be used to upgrade the nominator contract. <br/>
 The message body should include: opcode=0x9903 (32 bits), query_id (64 bits), reference to the new cell code. <br/>

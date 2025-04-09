@@ -555,7 +555,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 >
 > Also we declaring `to_tuple` function. It just changes data type of any input to tuple, so be careful while using it.
 
-### How to write own functions using `asm` keyword
+### How to write own functions using asm keyword
 
 When using any features we actually use pre-prepared for us methods inside `stdlib.fc`. But in fact, we have many more opportunities available to us, and we need to learn to write them ourselves.
 

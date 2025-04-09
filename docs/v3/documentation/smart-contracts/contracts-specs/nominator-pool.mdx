@@ -151,7 +151,7 @@ Votes are stored in the pool contract for 30 days.
 
 Only the validator and current nominators who have an active stake in the pool can vote.
 
-## Get-method `get_pool_data`
+## Get-method get_pool_data
 
 Returns:
 
@@ -173,7 +173,7 @@ Returns:
 16. stake_held_for - uint - technical information.
 17. config_proposal_votings - Cell - raw dictionary with config proposals votings.
 
-## Get-method `list_nominators`
+## Get-method list_nominators
 
 Returns list of current pool's nominators.
 
@@ -184,7 +184,7 @@ Each entry contains:
 3. pending_deposit_amount - nanotons - deposit amount that will be added to the nominator's active stake at the next round of validation.
 4. withdraw_request - int - if `-1` then this nominator sent a request to withdraw all of his funds.
 
-## Get-method `get_nominator_data`
+## Get-method get_nominator_data
 
 It takes as an argument the address of the nominator and returns:
 
@@ -197,7 +197,7 @@ Throws an `86` error if there is no such nominator in the pool.
 To get a nominator for example with an address `EQA0i8-CdGnF_DhUHHf92R1ONH6sIA9vLZ_WLcCIhfBBXwtG` you need to convert address to raw form `0:348bcf827469c5fc38541c77fdd91d4e347eac200f6f2d9fd62dc08885f0415f`, drop `0:` and invoke `get_nominator_data 0x348bcf827469c5fc38541c77fdd91d4e347eac200f6f2d9fd62dc08885f0415f`.
 
 
-## Get-method `list_votes`
+## Get-method list_votes
 
 Returns list of votes.
 
@@ -206,7 +206,7 @@ Each entry contains:
 1. proposal_hash - uint - hash of proposal. Use `dec_to_hex(proposal_hash)` to convert hash to HEX form.
 2. votes_create_time - uint - the unixtime this vote was created.
 
-## Get-method `list_voters`
+## Get-method list_voters
 
 It takes as an argument the hash of the proposal and returns list of voters:
 
