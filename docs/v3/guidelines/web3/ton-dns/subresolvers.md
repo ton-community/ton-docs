@@ -139,7 +139,7 @@ How `dnsresolve()` works:
    - If **yes**, the request is considered fully resolved.
      - `dnsresolve()` generates a DNS record for the wallet subdomain using the previously retrieved TON DNS contract address.
      - If category 0, i.e., all DNS records, is requested, the result is wrapped in a dictionary and returned.
-     - If the category is "wallet", the record is returned as-is.
+     - If the category is "wallet"H, the record is returned as-is.
      - The function returns a successful resolution for any other category with no matching record.
    - If **not**, the request is only partially resolved.
      - The function builds a resolver record pointing to the next contract associated with the domain.
