@@ -65,10 +65,10 @@ What we specifically are interested in is the source address of message that we 
     slice sender_address = cs~load_msg_addr();
 
     ;; check if message was send by owner
-    if (equal_slices(sender_address, owner_address)) {
+    if (equal_slices_bits(sender_address, owner_address)) {
       ;;owner operations
       return
-    } else if (equal_slices(sender_address, other_role_address)){
+    } else if (equal_slices_bits(sender_address, other_role_address)){
       ;;other role operations
       return
     } else {
