@@ -3,6 +3,16 @@
 When new versions of Tolk are released, they will be mentioned here.
 
 
+## v0.11
+
+1. Type aliases `type NewName = <existing type>`
+2. Union types `T1 | T2 | ...`
+3. Pattern matching for types
+4. Operators `is` and `!is`
+5. Pattern matching for expressions
+6. Semicolon for the last statement in a block can be omitted
+
+
 ## v0.10
 
 1. Fixed-width integers: `int32`, `uint64`, etc. [Details](https://github.com/ton-blockchain/ton/pull/1559)
