@@ -174,7 +174,7 @@ Go SDK для TON Connect 2.0.
 
 ## См. также
 
-- [Пошаговое руководство по созданию вашего первого веб-клиента](https://helloworld.tonstudio.io/tutorials/03-client/)
+- [Пошаговое руководство по созданию вашего первого веб-клиента](https://helloworld.tonstudio.io/03-client/)
 - [[YouTube] TON Smart Contracts | 10 | Telegram DApp[EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU\\&t=254s\\&ab_channel=AlefmanVladimir%5BEN%5D)
 - [Начало работы Ton Connect](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
 - [Руководство по интеграции](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk)

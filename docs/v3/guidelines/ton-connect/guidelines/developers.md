@@ -179,7 +179,7 @@ If you encounter any additional issues during the implementation of TON Connect,
 
 ## See also
 
-* [Step-by-step guide for building your first web client](https://helloworld.tonstudio.io/tutorials/03-client/)
+* [Step-by-step guide for building your first web client](https://helloworld.tonstudio.io/03-client/)
 * [[YouTube] TON Smart Contracts | 10 | Telegram DApp[EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU&t=254s&ab_channel=AlefmanVladimir%5BEN%5D)
 * [Ton Connect Getting started](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
 * [Integration Manual](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk)

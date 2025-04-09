@@ -38,4 +38,4 @@ npm test
 
 首先阅读这篇文章，了解在TON上进行测试的所有方法：
 
-- [TON Hello World第4部分：逐步指导测试您的第一个智能合约](https://helloworld.tonstudio.io/tutorials/04-testing/)
+- [TON Hello World第4部分：逐步指导测试您的第一个智能合约](https://helloworld.tonstudio.io/04-testing/)
