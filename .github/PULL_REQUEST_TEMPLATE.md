@@ -1,12 +1,13 @@
-<!--- Provide a general summary of your changes in the Title above -->
 
-## Why is it important?
+## Description
 
-<!--- Describe your changes in detail -->
+<--Brief description of the changes introduced in this pull request. Include any relevant issue numbers or links.-->
 
-## Related Issue
+Closes <--link to issue]-->.
 
-<!--- This project accepts pull requests related to open issues, if possible -->
-<!--- If suggesting a new feature or change, please discuss it in an issue first -->
-<!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
-<!--- Please link to the issue here, if possible: -->
+## Checklist
+
+- [ ] I have created an issue.
+- [ ] I am working on content that aligns with the [Style guide](https://docs.ton.org/v3/contribute/style-guide/).
+- [ ] I have reviewed and formatted the content according to [Content standardization](https://docs.ton.org/v3/contribute/content-standardization/).
+- [ ] I have reviewed and formatted the text in the article according to [Typography](https://docs.ton.org/v3/contribute/typography/).

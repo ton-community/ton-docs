@@ -1,5 +1,10 @@
 # Common Documentation Principals
 
+:::danger
+This page is outdated and will be deleted soon.
+See the [How to contribute](/v3/contribute/).
+:::
+
 For optimal user experience and clarity, please keep in mind the list of general and important requirements that we aim to apply to all documentation on docs.ton.org while creating new content.
 
 

@@ -1,6 +1,6 @@
 import Player from '@site/src/components/player'
 
-# Wallet Apps
+# Wallet apps
 
 ## Overview
 
@@ -10,75 +10,51 @@ This article describes wallets from a developmental perspective. The end goal is
 <Player url="https://www.youtube.com/watch?v=OfW96enpD4Q" />
 <br></br>
 
-If you want to find a wallet to install, open [ton.org/wallets](https://ton.org/wallets).
+Learn a [ton.org/wallets](https://ton.org/wallets) catalog for more wallet apps.
 
-## Non-Custodial Software (Hot) Wallets
+## Non-custodial software wallets (hot)
 
-:::info
-A Software wallet, more often known as a hot wallet, operates as software on a host device and they store your private keys within its interface. Mostly, these wallets are non-custodial, meaning they give you custody of your keys.
-:::
+Non-custodial wallets provide users with complete control over their assets. The private keys are stored exclusively by the wallet owner, and access is secured through a seed phrase—a unique set of 12 or 24 words.
 
-Here are some non-custodial wallets for TON Blockchain:
-
-* [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) — Multiplatform (iOS, Android, macOS, Linux, Windows) classic wallets of TON Ecosystem developed by TON Foundation.
-* [Tonkeeper](https://tonkeeper.com/) — an open-source multi-platform (iOS, Android, Firefox, Chrome) wallet with a great user base.
-* [MyTonWallet](https://mytonwallet.io/) — an open-source browser web wallet and a browser extension wallet for TON.
-* [Tonhub](https://tonhub.com/) — an open-source (iOS, Android) alternative mobile phone wallet with advanced features (TON Whales Staking UI).
-* [OpenMask](https://www.openmask.app/) — an open-source Chrome extension wallet with biometric authentication.
-
-### TON Wallet
-
-TON Wallet was the first step in mass-adoption blockchain technology available to ordinary users. It demonstrates how a wallet should work on TON Blockchain.
-
-|                                            |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![TON wallet](/img/docs/wallet-apps/TonWallet.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+A software wallet, often known as a hot wallet, operates as software on a host device and stores your private keys in a device storage, such as a smartphone or laptop.
 
 
-#### Pros and Cons
-- ✅ The original wallet developed by TON Foundation. TON Wallet works according to the vision of TON Blockchain's core developers.
-- ✅ ADNL connection implemented.
-- ✅ Multi-platform architecture support. It works in Linux, Windows, macOS, iOS, Android and as well as a Chrome plugin.
-- ✅ [Bug bounty program](https://github.com/ton-blockchain/bug-bounty)
-- ❌ Rarely updates. This wallet does not have not all up-to-date features (TON DNS addresses, and the wallet-v4 contract isn't supported).
-- ❌ The current UI is outdated and is worse than alternative wallets.
+Here are some non-custodial wallets for TON Blockchain.
 
-#### Ton Wallet test environment
+#### For users:
+* [Tonkeeper](https://tonkeeper.com/) — an open-source multiplatform wallet with a great user base. Platforms: iOS, Android, Firefox, Chrome.
+* [MyTonWallet](https://mytonwallet.io/) — an open-source multiplatform wallet for TON. Platforms: iOS, Android, Firefox, Chrome.
+* [Tonhub](https://tonhub.com/) — an open-source alternative mobile phone wallet with advanced banking features. Platforms: iOS, Android.
 
-To switch TON classic wallet to test environment, you should to open in browser with testnet parameter:
-
-#### Links
-- [GitHub*](https://github.com/ton-blockchain/wallet-ios)
-
-  > *TON Wallet clients for every supported OS placed in nearby repositories.
+#### For developers:
+* [TONDevWallet](https://github.com/TonDevWallet/TonDevWallet) - an open-source wallet for developers.
+* [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) — Classic wallet of TON Ecosystem developed by TON Foundation. Platforms: iOS, Android, macOS, Linux, Windows.
+* [OpenMask](https://www.openmask.app/) — an open-source Chrome extension wallet.
 
 ### Tonkeeper
 
-[Tonkeeper](https://tonkeeper.com/) - is the most downloaded and popular wallet, developed by the Tonkeeper team, and has active support from both users and developers.
+[Tonkeeper](https://tonkeeper.com/) is a central wallet in the TON Ecosystem. The Tonkeeper team developed it and has active support from both users and developers.
 
-|                                               |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![Tonkeeper](/img/docs/wallet-apps/Tonkeeper.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+<img src="/img/docs/wallet-apps/Tonkeeper.png?raw=true" alt="Tonkeeper" width="240" height="480" style={{ display: 'block', margin: 'auto' }}/>
 
 
-#### Pros and Cons
-- ✅ This app is most popular with users.
-- ✅ Supports all up-to-date features including native NFT transfer between user wallets.
-- ✅ Supports all major platforms, such as iOS and Android, but also works in popular browsers, such as Firefox or Chrome.
-- ❌ Requires advanced skills to contribute to its source code. 
+#### Highlights
+- This app is most popular with users.
+- Supports all up-to-date features, including NFT and Token transfer between user wallets.
+- It supports all major platforms, such as iOS and Android, but it also works on popular browsers like Firefox or Chrome.
 
 #### Tonkeeper test environment
 
-##### Tonkeeper Mobile App
+##### Tonkeeper mobile app
 
-1. Create new regular wallet to claim Recovery Phrase, the 24 key words.
+1. Create a new regular wallet to claim Recovery Phrase, the 24 keywords.
 2. Go back to the Tonkeeper main screen.
 3. Click on your wallet name at the top of the screen.
-4. Push Add Wallet button in the bottom of screen.
+4. Push the Add Wallet button at the bottom of the screen.
 4. Select the Testnet Account option.
 8. Enter the Recovery Phrase from step 1.
 
-Now your testnet wallet is created and connected to your mainnet wallet.
+Now, your Testnet wallet is created and connected to your Mainnet wallet.
 
 
 #### Links
@@ -88,22 +64,16 @@ Now your testnet wallet is created and connected to your mainnet wallet.
 
 ### MyTonWallet
 
+[MyTonWallet](https://mytonwallet.io/) is a feature-rich web wallet and browser extension for TON that supports tokens, NFT, TON DNS, TON Sites, TON Proxy, and TON Magic.
 
-[MyTonWallet](https://mytonwallet.io/) - is the most feature-rich web wallet and browser extension for TON – with support of tokens, NFT, TON DNS, TON Sites, TON Proxy, and TON Magic.
+<img src="/img/docs/wallet-apps/MyTonWallet.png?raw=true" alt="Tonkeeper" width="520" height="300" style={{ display: 'block', margin: 'auto' }}/>
 
+#### Highlights
 
-|                                                                                                                                                                                                                                   |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![MyTonWallet](/img/docs/wallet-apps/MyTonWallet.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
-
-
-
-#### Pros and Cons
-- ✅ Has all basic features implemented.
-- ✅ Unique feature - management of the official [Nominator Pool contract](https://github.com/ton-blockchain/nominator-pool) from the wallet UI.
-- ✅ Multichain wallet that supports TRON Blockchain.
-- ✅ Supports all major platforms (such as macOS, Linux and Windows) and also runs in Chrome as an extension.
-- ❌ Requires advanced skills to contribute to its source code. 
+- Has all basic features implemented.
+- Focus on the best UI for users.
+- Multichain wallet that supports TRON Blockchain.
+- Supports all major platforms and runs in Chrome as an extension.
 
 #### MyTonWallet test environment (browser, desktop, and mobile application)
 
@@ -111,73 +81,98 @@ Now your testnet wallet is created and connected to your mainnet wallet.
 2. Scroll down and click on the MyTonWallet application version.
 3. In the pop-up window, select the environment.
 
-
 #### Links
 
 - [GitHub](https://github.com/mytonwalletorg/mytonwallet)
 - [MyTonWallet Telegram](https://t.me/MyTonWalletRu)
 
-
-
-
 ### Tonhub
 
-[Tonhub](https://tonhub.com/) - is another fully-fledged TON wallet, that has basic up-to-date features support. Ton Whales are rapidly increasing the capabilities of the wallet.
+[Tonhub](https://tonhub.com/) is another fully-fledged TON wallet with basic, up-to-date features and banking.
 
-|                                    |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![Tonhub](/img/docs/wallet-apps/Tonhub.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+<img src="/img/docs/wallet-apps/Tonhub.png?raw=true" alt="Tonkeeper" width="240" height="480" style={{ display: 'block', margin: 'auto' }}/>
 
+#### Highlights 
 
-#### Pros and Cons
-
-- ✅ Has own custom [Ton Nominator](https://github.com/tonwhales/ton-nominators) contract supported with Tonhub UI.
-- ✅ Open-source wallet from the beginning of the existing application.
-- ✅ [Bug bounty program](https://tonwhales.com/bounty).
-- ❌ Doesn't have any kind of support for desktop platforms.
-- ❌ Requires advanced skills to contribute to its source code.
+- Has own custom [Ton Nominator](https://github.com/tonwhales/ton-nominators) contract supported with Tonhub UI.
+- Open-source wallet from the beginning of the existing app.
+- [Bug bounty program](https://tonwhales.com/bounty).
 
 #### Tonhub test environment
-You will need to download separate application to connect to the Testnet.
+You must download a separate Sandbox application to connect to the Testnet.
 
 #### Links
 - [GitHub](https://github.com/tonwhales/wallet)
 - [Sandbox iOS](https://apps.apple.com/app/ton-development-wallet/id1607857373)
 - [Sandbox Android](https://play.google.com/store/apps/details?id=com.tonhub.wallet)
 
+### TONDevWallet
+
+TonDevWallet is a wallet designed to simplify the development process for the TON Blockchain. It provides extensive tools and features to streamline your TON development experience.
+
+#### Highlights
+TonConnect Integration: TonDevWallet seamlessly integrates with TonConnect, allowing you to connect your wallet to TON-compatible websites easily.
+- Store and manage multiple private keys within TonDevWallet, giving you the flexibility to access and control various accounts.
+- Create multiple wallets to organize and manage different accounts for your TON development projects.
+- Local transaction emulation lets you preview transaction results before executing them on the TON Blockchain. This feature helps you ensure the correctness of your transactions before submitting them to the blockchain.
+
+#### Links
+- [GitHub](https://github.com/TonDevWallet/TonDevWallet)
+
+### TON Wallet
+
+TON Wallet was the first step in massively adopting blockchain technology, and it's now available to ordinary users. It demonstrates for developers how a wallet should work on the TON Blockchain.
+
+<img src="/img/docs/wallet-apps/TonWallet.png?raw=true" alt="TON wallet" width="240" height="480" style={{ display: 'block', margin: 'auto' }}/>
+
+#### Highlights
+TON Wallet is the original wallet developed by the TON Core team. It demonstrates a development approach that corresponds to the TON Blockchain architecture.
+- ADNL connection implemented.
+- Multiplatform architecture support. It works in Linux, Windows, macOS, iOS, Android, and a Chrome plugin.
+- [Bug bounty program](https://github.com/ton-blockchain/bug-bounty)
+
+#### Ton Wallet test environment
+
+To switch TON Wallet to the Testnet environment, you should open in the browser with the Testnet parameter:
+
+#### Links
+- [GitHub](https://github.com/ton-blockchain/wallet-ios)
+
+:::info
+TON Wallet clients for every supported OS placed in nearby repositories.
+:::
+
 
 ### OpenMask
 
-[OpenMask](https://www.openmask.app/) - is the trailblazing tool enabling user interactions and experience in Web3 as a browser extension.
+[OpenMask](https://www.openmask.app/) is a trailblazing tool that enables user interactions and experiences in Web3 as a browser extension.
 
-|                                                                |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![OpenMask](/img/docs/wallet-apps/OpenMask.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
+<img src="/img/docs/wallet-apps/OpenMask.png?raw=true" alt="Tonkeeper" width="520" height="300" style={{ display: 'block', margin: 'auto' }}/>
 
-#### Pros and Cons
-- ✅ Convenient for developers to learn and create dApps via desktop without mobile devices.
-- ✅ Unique functions such as multiple wallets, with detailed descriptions and examples in its documentation.
-- ❌ Has almost no integration with dApps at the moment.
-- ❌ Supports only browser extension platform.
+#### Highlights
+
+- Convenient for developers to learn and create dApps via desktop without mobile devices.
+- Unique functions, such as multiple wallets, with detailed descriptions and examples in its documentation.
 
 #### OpenMask test environment
-To switch OpenMask between Mainnet and Testnet: you need to click on "mainnet/testnet" button on the top of the OpenMask's main screen and choose the network you need.
+To switch OpenMask between Mainnet and Testnet, click the **mainnet/testnet** button at the top of the main screen and choose the network you need.
 
 #### Links
 
 - [GitHub](https://github.com/OpenProduct/openmask-extension)
 - [Documentation](https://www.openmask.app/docs/introduction)
 
-## Non-Custodial Hardware (Cold) Wallets
+## Non-custodial hardware wallets (cold)
 
-:::info
+Non-custodial wallets provide users with complete control over their assets. The private keys are stored exclusively by the wallet owner, and access is secured through a seed phrase—a unique set of 12 or 24 words.
+
 A hardware wallet is a physical device that stores the private keys to your cryptocurrency funds away from the internet. Even if you make transactions with it, the wallet confirms the transactions in an offline environment. This process helps keep your private keys away from the risks of the internet at all times.
-:::
+
 
 
 ### Ledger
 
-[Ledger](https://www.ledger.com/) hardware wallets with Ledger Live app.
+[Ledger](https://www.ledger.com/) is a hardware wallet with a Ledger Live app.
 
 #### Links
 
@@ -194,29 +189,20 @@ A hardware wallet is a physical device that stores the private keys to your cryp
 
 ## Custodial wallets
 
-:::info
-With a custodial wallet, user trusts somebody else to hold the wallet's private key.
-:::
+In custodial wallets, private keys are managed by a third party, such as a cryptocurrency exchange. This means that users delegate the storage and management of their assets to a trusted entity.
+
 
 ### @wallet
 
 [@wallet](https://t.me/wallet) — a bot to send and receive or trade TON for real money using P2P in Telegram. Supports Telegram Mini App UI.
 
-
-|                                                                                                                                                                                                                            |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![wallet](/img/docs/wallet-apps/Wallet.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
-
+<img src="/img/docs/wallet-apps/Wallet.png?raw=true" alt="Tonkeeper" width="240" height="480" style={{ display: 'block', margin: 'auto' }}/>
 
 ### @cryptobot
 
 [@cryptobot](https://t.me/cryptobot) — A Telegram bot wallet for storing, sending and exchanging TON.
 
-
-|                                                                                                                                                                                                                                 |
-|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![CryptoBot](/img/docs/wallet-apps/CryptoBot.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
-
+<img src="/img/docs/wallet-apps/send-bot.png?raw=true" alt="Tonkeeper" width="240" height="480" style={{ display: 'block', margin: 'auto' }}/>
 
 #### Links for 3d-party integrations
 
@@ -224,13 +210,10 @@ With a custodial wallet, user trusts somebody else to hold the wallet's private 
 
 ### @tonRocketBot
 
-[@tonRocketBot](https://t.me/tonRocketBot) - A Telegram bot wallet for storing, sending and exchanging TON. Supports Jetton trading as well.
+[@tonRocketBot](https://t.me/tonRocketBot) - A Telegram bot wallet for storing, sending, and trading TON assets.
 
 
-|                                                                                                                                                                                                                                        |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;![tonrocketbot](/img/docs/wallet-apps/tonrocketbot.png?raw=true) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |
-
+<img src="/img/docs/wallet-apps/tonrocketbot.png?raw=true" alt="Tonkeeper" width="240" height="480" style={{ display: 'block', margin: 'auto' }}/>
 
 #### Links for 3d-party integrations
 
@@ -238,7 +221,7 @@ With a custodial wallet, user trusts somebody else to hold the wallet's private 
 - [Rocket pay docs](https://pay.ton-rocket.com/api/)
 
 
-## Multi signature Wallets
+## Multi-signature wallets
 
 ### Tonkey
 
@@ -248,7 +231,8 @@ Tonkey is an advanced project that introduces multi-signature functionality to T
 - https://tonkey.app/
 - [GitHub](https://github.com/tonkey-app)
 
-## See Also
+## See also
 
+- [Explorers in TON](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton/)
 - [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)
-- [Types of Wallet Contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts)
+- [Types of Wallet Contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts/)
