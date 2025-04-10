@@ -233,6 +233,7 @@ This lets you verify whether your TON Site is publicly accessible.
 
 
 **Optional: register a TON DNS domain** 
+
 If you’d like to make your TON Site accessible via a human-readable domain like `example.ton`, you can:
 - [Register](/v3/guidelines/web3/ton-proxy-sites/site-and-domain-management) a TON DNS domain.
 - Create a `site` record pointing to your server’s persistent ADNL address.
