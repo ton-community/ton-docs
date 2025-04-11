@@ -4,7 +4,6 @@ This section outlines how smart contract addresses work on the TON Blockchain an
 
 ## Everything is a smart contract
 
-
 On TON, all components are implemented using the [actor model](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor). In this model, actors are essentially smart contracts. For example, even your wallet is an essential actor—technically, a smart contract.
 
 Actors receive incoming messages, update their internal state, and send outbound messages in response. Because of this, every actor, i.e., a smart contract on the TON Blockchain, must have a unique address to receive messages from other actors.
@@ -54,9 +53,9 @@ In the upcoming sections, we'll explore the technical details behind raw address
 
 Later in this documentation, we’ll look closer at the technical specifications of the TVM and the TL-B scheme. Now that you understand how an `account_id` is generated—and how it fits into the structure of smart contract addresses on TON—let’s move on to the concepts of raw and user-friendly addresses.
 
-## Addresses state
+## Account state
 
-On the TON Blockchain, each address can exist in one of the following states:
+On TON Blockchain, each address can exist in one of the following states:
 
 - `nonexist` - the address has never received accepted transactions and contains no data. This also applies to addresses where a contract was deleted. By default, all 2<sup>256</sup> possible addresses begin in this state.
 
