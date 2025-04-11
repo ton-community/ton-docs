@@ -3,7 +3,7 @@ import TabItem from '@theme/TabItem';
 
 # Single nominator pool
 
-The [single nominator](https://github.com/ton-blockchain/single-nominator) contract is a security-focused smart contract that lets validators securely stake TON coins without needing other participants. Designed for validators with sufficient self-stake, it keeps signing keys separate from staked funds using a cold wallet for maximum security. The contract provides an alternative simplified implementation for the [nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool) smart contract that supports a single nominator only. The benefit of this implementation is that it's more secure since the attack surface is considerably smaller. This is due to a massive reduction in the complexity of the nominator pool that has to support multiple third-party nominators.
+The [single nominator](https://github.com/ton-blockchain/single-nominator) contract is a security-focused smart contract that lets validators securely stake Toncoins without needing other participants. Designed for validators with sufficient self-stake, it keeps signing keys separate from staked funds using a cold wallet for maximum security. The contract provides an alternative simplified implementation for the [nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool) smart contract that supports a single nominator only. The benefit of this implementation is that it's more secure since the attack surface is considerably smaller. This is due to a massive reduction in the complexity of the nominator pool that has to support multiple third-party nominators.
 
 ## The go-to solution for validators
 
