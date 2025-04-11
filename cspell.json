@@ -310,7 +310,8 @@
     "xtwitter",
     "yourname",
     "zellic",
-    "zerostate"
+    "zerostate",
+    "bouncable"
   ],
   "ignoreRegExpList": [
     "\\(#.*\\)",

@@ -22,6 +22,8 @@ In blockchain and cryptocurrencies, __vesting__ refers to a process in which tok
   
 - There are often __cliff__ periods during which no tokens are released for an initial duration, followed by subsequent releases.
 
+- Token distribution from the vesting contract is tightly controlled, requiring specific criteria to __whitelist__ addresses or the sender's address (the owner) to prevent unauthorized access and loss of tokens.
+
 :::info Technical details and parameters
 For all technical details about the contract, see [vesting contract](/v3/documentation/smart-contracts/contracts-specs/vesting-contract)
 :::
@@ -30,17 +32,17 @@ For all technical details about the contract, see [vesting contract](/v3/documen
 
 You can follow these steps to create and manage a vesting wallet as the vesting sender (owner). This guide will walk you through setting up your wallet, securing your funds, and executing transactions on Testnet.
 
-### 1: Create an owner's wallet
+### Create an owner's wallet
 
 - Set up a regular TON wallet using [MyTonWallet](https://mytonwallet.io/) or [Tonkeeper](https://tonkeeper.com/) wallet.       
 - Safely store your seed phrase, as it controls all your tokens.
 - Get some Testnet coins from [@testgiver_ton_bot](https://t.me/testgiver_ton_bot)
 
-### 2: Activate the owner's address
+### Activate the owner's address
  
 - Send **0.1 TON** to any address to activate the address.
     
-### 3: Create a vesting wallet
+### Create a vesting wallet
 
 -   Visit [vesting.ton.org](https://vesting.ton.org/?testnet=true#) and connect your wallet.
 
@@ -70,7 +72,7 @@ You can follow these steps to create and manage a vesting wallet as the vesting 
 (All parameters can be set to your preferred values.)      
 ![](/img/tutorials/vesting/create-new-vesting-2.png)   
 
-### 4: Confirm vesting details
+### Confirm vesting details
 
 - Ensure the displayed owner’s wallet address is correct.
     
@@ -79,7 +81,7 @@ You can follow these steps to create and manage a vesting wallet as the vesting 
 - Confirm the transaction through your wallet.
 ![](/img/tutorials/vesting/confirm-creation.png) 
 
-### 5: Verify vesting wallet
+### Verify vesting wallet
 
 - Check your transaction details on the [TON Viewer](https://testnet.tonviewer.com) or [TON Scan](https://testnet.tonscan.org).
     
@@ -89,17 +91,14 @@ You can follow these steps to create and manage a vesting wallet as the vesting 
 
 - Your vesting wallet is now set to receive Toncoins.
 
+- Only the owner (sender) wallet controls the vesting wallet.
+
 ### 6: Test and validate
 
 - [Send a test transfer](/v3/guidelines/dapps/tutorials/vesting-examples/vesting-recipient-guide) to the vesting wallet.
-    
+- Make sure to get the address in a bouncable format (for an address in the whitelist) to avoid transaction errors (**Exit 101**).
+- Use [@tonaddress_bot](https://t.me/tonaddress_bot) for address format checks. (A bouncable address looks like the following (for testnet): `kQAm3gq6p4cl7xvo8NC6CxqBqqjt-BBcOMqC8lYJ7D78LKJP`)
 - Confirm ownership by attempting to return a test transfer to the sender.
 ![](/img/tutorials/vesting/sending-from-vesting.png) 
 ![](/img/tutorials/vesting/sending-from-vesting-2.png)
 ![](/img/tutorials/vesting/sending-from-vesting.png)   
-
-## Good to Know
-
-- Only the owner’s wallet controls the vesting wallet.
-- Ensure all transactions are conducted using bounceable address formats to avoid errors.
-- For address format checks, use [@tonaddress_bot](https://t.me/tonaddress_bot).
