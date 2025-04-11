@@ -72,7 +72,7 @@ You can follow these steps to create and manage a vesting wallet as the vesting 
 
 ### 4: Confirm vesting details
 
-- Ensure the displayed Owner’s Wallet address is correct.
+- Ensure the displayed owner’s wallet address is correct.
     
 - Review vesting parameters carefully.
     
