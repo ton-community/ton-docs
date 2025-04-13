@@ -1,35 +1,46 @@
 # Shards
 
-Sharding is a mature concept originating in [database design](https://en.wikipedia.org/wiki/Shard_(database_architecture)). It involves splitting and distributing one logical data set across multiple databases that share nothing and can be deployed across multiple servers.
-Simply put, sharding allows horizontal scalability - splitting data to distinct, independent pieces that can be processed in parallel. This is a key concept in the world's transition from data to [big data](https://en.wikipedia.org/wiki/Big_data).
-When data sets are becoming too big to be handled by traditional means, there's no other way to scale other than to break them down into smaller pieces.
+Sharding is a well-established concept that originated in  [database design](https://en.wikipedia.org/wiki/Shard_(database_architecture)). It refers to splitting a single logical dataset into multiple independent databases that don’t share resources and can run across different servers.
+In simple terms, sharding enables horizontal scalability—breaking down data into smaller, manageable parts that can be processed in parallel. This technique has been crucial in the evolution from traditional data systems to [big data](https://en.wikipedia.org/wiki/Big_data).
+As datasets grow beyond the capacity of conventional systems, sharding becomes the only practical way to scale effectively.
 
-The Sharding mechanism in the TON blockchain, allows a large number of transactions to be processed.
-The TON Blockchain consists of one masterchain and up to 2<sup>32</sup> workchains. Each workchain is a separate chain with its rules. Each workchain can further split into 2<sup>60</sup> shardchains, or sub-shards, containing a fraction of the workchain's state. Currently, only one workchain is operating on TON - Basechain.
-The main idea of sharding in TON is that when account A sends a message to account B and account C sends a message to account D both of these operations can be performed asynchronously.
+**Sharding in TON Blockchain**
 
-By default in the Basechain (`workchain=0`) there is only one shard with a shard number `0x8000000000000000` (or `1000000000000000000000000000000000000000000000000000000000000000` in binary representation). The masterchain (`workchain=-1`) always has one and only one shard.
+TON uses sharding to handle a high volume of transactions efficiently.
+The TON blockchain architecture includes one MasterChain and up to 2<sup>32</sup> WorkChains. Each WorkChain functions as an independent blockchain with its own rules. Furthermore, each WorkChain can be divided into up to 2<sup>60</sup> ShardChains or sub-shards, each responsible for a portion of the WorkChain’s state.
 
-## Masterchain
+Currently, TON operates with only one WorkChain, known as the BaseChain.
 
-The Masterchain is the primary chain that stores the network configuration and the final state of all workchains. You can understand this as the masterchain being the core directory, a single source of truth for all the shards in the ecosystem.
+The core principle behind sharding in TON is parallelism:
+For example, if account A sends a message to account B and account C sends a message to account D, both transactions can be processed asynchronously and independently.
 
-It carries fundamental protocol information, including current settings, a list of active validators and their stakes, active workchains, and associated shardchains. Most importantly, it maintains a record of the latest block hashes for all workchains and shardchains, enforcing consensus across the network.
 
-## Workchain
+In the BaseChain (`workchain = 0`), the default configuration includes a single shard with the identifier `0x8000000000000000` which is `1000000000000000000000000000000000000000000000000000000000000000` in binary.
+The MasterChain (`workchain = -1`) always operates with exactly one shard.
 
-The Masterchain splits into individual chains called Workchains. Workchains are customized blockchains tailored to certain transactions or use cases, running parallel within the TON network.
+## MasterChain
+
+The MasterChain is the main blockchain in the TON network. It stores the network configuration and the final states of all WorkChains. The MasterChain can be considered the core directory or the single source of truth for all shards and chains in the ecosystem.
+It contains essential protocol-level information, including:
+- The current network configuration;
+- The list of active validators and their stakes;
+- All active WorkChains and their corresponding ShardChains;
+- The most recent block hashes of every WorkChain and ShardChain.
+
+This data is key to maintaining consensus and ensuring all network parts are synchronized and operating securely.
+
+## WorkChain
+
+The MasterChain is divided into individual blockchains called WorkChains. Each WorkChain is customized for specific transaction types or use cases and operates in parallel within the TON network.
 
 ## Uniqueness
 
-In designing the TON blockchain, two key decisions were made that make it unique among other blockchains that utilize sharding.
+Two key architectural decisions set the TON blockchain apart from other sharded blockchains.
 
-First, TON provides for dynamic segmentation of the blockchain depending on the network load. When the number of transactions increases to a critical level, the blockchain is automatically split into two separate shardchains.
-If the load on one of the parts continues to grow, it is split in half again, and this process continues as needed. If the number of transactions decreases, the shards can merge again.
-This adaptive model allows for the creation of as many shards as needed at a given time.
+First, TON implements dynamic segmentation of the blockchain based on the network load. When the number of transactions reaches a critical threshold, the blockchain splits into two ShardChains. If the load on a shard continues to increase, it splits again—and this process continues recursively as needed. Conversely, when the transaction volume decreases, shards can merge back together. This adaptive sharding model enables the network to create as many shards as necessary at any given time.
 
-The second solution that distinguishes TON is the principle of a non-fixed number of shards. Unlike systems like Ethereum 2.0, which supports a fixed number of shards (64 shards), TON allows adding more and more shards depending on the needs of the network, with a theoretical limit of 2<sup>60</sup> shards per worker chain.
-This number is so large as to be virtually limitless, and allows over 100 million shards to be provided to every person on Earth and still have a supply left over. This approach is the only way to meet dynamic scaling requirements that are difficult to predict in advance.
+Second, TON employs a non-fixed shard count. Unlike platforms such as Ethereum 2.0, which supports a fixed number of shards, e.g., 64, TON allows the number of shards to scale dynamically based on demand, with a theoretical upper limit of 2<sup>60</sup> shards per WorkChain. This virtually limitless capacity means the system could assign over 100 million shards to every person on Earth and still have resources remaining. This approach enables truly dynamic scalability — a necessity given the unpredictable nature of global network demand.
+
 
 ![](/img/docs/blockchain-fundamentals/scheme.png)
 
@@ -63,7 +74,7 @@ A simple example:
 An actual example:
 * In masterchain block `seqno=34626306` two of five shards with last blocks `(0,a000000000000000,40492030)` and `(0,e000000000000000,40492216)` merged into one with block `(0,c000000000000000,40492217)` (https://toncenter.com/api/v2/shards?seqno=34626306 and https://toncenter.com/api/v2/shards?seqno=34626307).
 
-## See Also
+## See also
 
-* [Infinity Sharding Paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm)
+* [Infinity sharding paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm)
 * [Whitepapers](/v3/documentation/whitepapers/overview)
