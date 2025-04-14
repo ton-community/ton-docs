@@ -74,7 +74,7 @@ For the fastest node initialization, add the `-d` switch to the invocation of th
 sudo  -s
 ```
 
-#### Stop `mytoncore` and `validator` processes
+#### Stop mytoncore and validator processes
 
 ```sh
 systemctl  stop  validator
@@ -102,7 +102,7 @@ chown  -R  validator:validator  /var/ton-work/db
 
 Replace `$HOME/.local/share/myton*` with `$ HOME/.local/share/myton*`, where $HOME is the home directory of the user who started the installation of MyTonCtrl with backed-up content. Make sure that the user is the owner of all files you copy.
 
-#### Start `mytoncore` and `validator` processes
+#### Start mytoncore and validator processes
 
 ```sh
 systemctl  start  validator
