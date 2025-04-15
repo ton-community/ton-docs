@@ -1,0 +1,131 @@
+import Button from '@site/src/components/button'
+
+# Начало работы
+
+Прежде чем погрузиться в DApps, убедитесь, что вы понимаете принципы, лежащие в основе блокчейна. Возможно, вам будут полезны наши статьи [The Open Network](/v3/concepts/dive-into-ton/introduction) и [Блокчейн блокчейнов](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains).
+
+TON DApps – это приложения без бэкенда, которые вместо него взаимодействуют с блокчейном. В большинстве случаев они работают на основе пользовательских [смарт-контрактов](/v3/documentation/smart-contracts/overview). В этой статье представлены способы обработки стандартных, доступных в TON ассетов. Вы можете их использовать как в качестве примера, так и для ускорения разработки ваших DApps.
+
+DApps, как правило, можно написать на любом, имеющем SDK для TON, языке программирования. Наиболее частым форматом является разработка веб-сайта, в дополнение к которому создают мини-приложения Telegram.
+
+<Button href="/v3/guidelines/dapps/tma/overview" colorType={'primary'} sizeType={'sm'}>
+
+Постройте TMA
+
+</Button>
+
+<Button href="/v3/guidelines/dapps/apis-sdks/sdk" colorType="secondary" sizeType={'sm'}>
+
+Выберите SDK
+
+</Button>
+
+## Курс TON: DApps
+
+:::tip
+Прежде чем приступить к изучению курса, убедитесь, что вы хорошо понимаете основы технологии блокчейн. Если у вас есть пробелы в знаниях, мы рекомендуем пройти курс [Основы блокчейна с TON](https://stepik.org/course/201294/promo) ([RU версия](https://stepik.org/course/202221/), [CHN версия](https://stepik.org/course/200976/)).
+Модуль 3 охватывает базовые знания о DApp.
+:::
+
+Курс [TON Blockchain Course](https://stepik.org/course/176754/) - это полное руководство по разработке TON Blockchain.
+
+Модули 5 и 6 полностью посвящены разработке DApps. Вы узнаете: как создать DApp, как работать с TON Connect, как использовать SDK, а также как работать непосредственно с блокчейном.
+
+<Button href="https://stepik.org/course/176754/promo" colorType={'primary'} sizeType={'sm'}>
+
+Ознакомиться с курсом TON Blockchain
+
+</Button>
+
+<Button href="https://stepik.org/course/201638/promo" colorType={'secondary'} sizeType={'sm'}>
+
+CHN
+
+</Button>
+
+<Button href="https://stepik.org/course/201855/promo" colorType={'secondary'} sizeType={'sm'}>
+
+RU
+
+</Button>
+
+## Основные инструменты и ресурсы
+
+Вот несколько ключевых ресурсов, которые понадобятся вам на протяжении всего пути разработки DApp:
+
+1. [Приложения-кошельки](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps)
+2. [Обозреватели в TON](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton)
+3. [Типы API](/v3/guidelines/dapps/apis-sdks/api-types)
+4. [SDK](/v3/guidelines/dapps/apis-sdks/sdk)
+5. [Понимание тестовой сети](/v3/documentation/smart-contracts/getting-started/testnet)
+6. [TON Unfreezer](https://unfreezer.ton.org/)
+
+### Управление ассетами
+
+Работаете с ассетами? Описанные ниже статьи покроют ключевые аспекты:
+
+- [Обработка платежей](/v3/guidelines/dapps/asset-processing/payments-processing)
+- [Обработка жетонов](/v3/guidelines/dapps/asset-processing/jettons)
+- [Обработка NFT](/v3/guidelines/dapps/asset-processing/nft-processing/nfts)
+- [Разбор метаданных](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing)
+
+### Введение в DeFi
+
+Интересуетесь децентрализованными финансами (DeFi)? Вот как работать с различными типами активов:
+
+- [Собственный токен: Toncoin](/v3/documentation/dapps/defi/coins)
+- [Токены (FT, NFT)](/v3/documentation/dapps/defi/tokens)
+- [TON Payments](/v3/documentation/dapps/defi/ton-payments)
+- [Подписки на контент](/v3/documentation/dapps/defi/subscriptions)
+
+## Учебные материалы и примеры
+
+### Основы DeFi
+
+- Создайте свой первый токен: [Сминтите свой первый Jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token)
+- Шаг за шагом: [Пошаговое создание коллекции NFT](/v3/guidelines/dapps/tutorials/nft-minting-guide)
+
+### Руководства по конкретным языкам
+
+#### JavaScript
+
+- [Процесс оплаты](https://github.com/toncenter/examples)
+- [TON Bridge](https://github.com/ton-blockchain/bridge)
+- [Веб-кошелек](https://github.com/toncenter/ton-wallet)
+- [Бот для продажи пельменей](/v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-js)
+
+#### Python
+
+- [Примеры проектов](https://github.com/psylopunk/pytonlib/tree/main/examples)
+- [Бот-витрина магазина с оплатой в TON](/v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot)
+
+#### Перейдите на
+
+- [Примеры](https://github.com/xssnick/tonutils-go/tree/master/example)
+
+### Продвинутые темы
+
+- [Создание простого проекта ZK на TON](/v3/guidelines/dapps/tutorials/zero-knowledge-proofs)
+
+### Примеры кошельков
+
+- [Стандартный кошелек для рабочего стола (C++ и Qt)](https://github.com/ton-blockchain/wallet-desktop)
+- [Стандартный кошелек для Android (Java)](https://github.com/ton-blockchain/wallet-android)
+- [Стандартный кошелек для iOS (Swift)](https://github.com/ton-blockchain/wallet-ios)
+- [TonLib CLI (C++)](https://github.com/ton-blockchain/ton/blob/master/tonlib/tonlib/tonlib-cli.cpp)
+
+## 👨‍💻 Вклад
+
+Не хватает какого-то важного материала? Вы можете либо написать его самостоятельно, либо описать вашу проблему для сообщества.
+
+<Button href="/v3/contribute/participate" colorType="primary" sizeType={'sm'}>
+
+Внести вклад
+
+</Button>
+
+<Button href="https://github.com/ton-community/ton-docs/issues/new?assignees=&labels=feature+%3Asparkles%3A%2Ccontent+%3Afountain_pen%3A&template=suggest_tutorial.yaml&title=Suggest+a+tutorial" colorType={'secondary'} sizeType={'sm'}>
+
+Предложить свой учебный материал
+
+</Button>

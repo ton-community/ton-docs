@@ -303,6 +303,7 @@
     "Visio",
     "votings",
     "VARUINT16",
+    "Wikimar",
     "workchain",
     "workchains",
     "xguard",
@@ -312,6 +313,9 @@
     "zellic",
     "zerostate",
     "bouncable"
+    "ensurepip",
+    "Buildx",
+    "underperforming"
   ],
   "ignoreRegExpList": [
     "\\(#.*\\)",

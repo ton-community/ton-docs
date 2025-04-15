@@ -10,22 +10,22 @@ module.exports = [
       {
         type: 'link',
         label: 'Working with your wallet',
-        href: 'https://ton-community.github.io/tutorials/01-wallet',
+        href: 'https://helloworld.tonstudio.io/01-wallet',
       },
       {
         type: 'link',
         label: 'Writing first smart contract',
-        href: 'https://ton-community.github.io/tutorials/02-contract',
+        href: 'https://helloworld.tonstudio.io/02-contract',
       },
       {
         type: 'link',
         label: 'Building first web client',
-        href: 'https://ton-community.github.io/tutorials/03-client',
+        href: 'https://helloworld.tonstudio.io/03-client',
       },
       {
         type: 'link',
         label: 'Testing your smart contract',
-        href: 'https://ton-community.github.io/tutorials/04-testing',
+        href: 'https://helloworld.tonstudio.io/04-testing',
       },
     ],
   },
@@ -117,6 +117,11 @@ module.exports = [
     type: 'category',
     label: 'Tutorials & examples',
     items: [
+      {
+        type: 'doc',
+        id: 'v3/guidelines/dapps/tutorials/jetton-airdrop',
+        label: 'How to launch a jetton airdrop',
+      },
       'v3/guidelines/dapps/apis-sdks/api-keys',
       'v3/guidelines/dapps/apis-sdks/getblock-ton-api',
       {
@@ -309,8 +314,7 @@ module.exports = [
       label: 'Business',
       items: [
         'v3/guidelines/ton-connect/business/ton-connect-for-business',
-        'v3/guidelines/ton-connect/business/ton-connect-for-security',
-        'v3/guidelines/ton-connect/business/ton-connect-comparison',
+        'v3/guidelines/ton-connect/business/ton-connect-for-security'
       ],
     }
   ]

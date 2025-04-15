@@ -128,10 +128,6 @@
         "to": "/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk"
     },
     {
-        "from": "/develop/dapps/ton-connect/comparison",
-        "to": "/v3/guidelines/ton-connect/business/ton-connect-comparison"
-    },
-    {
         "from": "/develop/dapps/ton-connect/business",
         "to": "/v3/guidelines/ton-connect/business/ton-connect-for-business"
     },
