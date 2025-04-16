@@ -8,5 +8,5 @@
 
 ## 参见
 
-- [TON Hello World](https://tonhelloworld.com/01-wallet/)
+- [TON Hello World](https://helloworld.tonstudio.io/01-wallet/)
 - [[YouTube]TON 开发研究 EN ](https://www.youtube.com/@TONDevStudy)[[RU]](https://www.youtube.com/results?search_query=tondevstudy)

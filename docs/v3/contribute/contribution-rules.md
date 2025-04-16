@@ -1,5 +1,10 @@
 # Contribution Guidelines
 
+:::danger
+This page is outdated and will be deleted soon.
+See the [How to contribute](/v3/contribute/).
+:::
+
 Before contributing any docs.ton.org page, please review the following list of general and important requirements to guarantee a smooth experience.
 
 
@@ -26,8 +31,8 @@ Every page in TON documentation should be finished with See Also section. Place 
 :::info
 ```
 ## See Also
-* [TON Contribution Guidelines](/v3/contribute/contribution-rules)
-* [Tutorial Styling Guidelines](/v3/contribute/tutorials/guidelines)
+* [TON Contribution Guidelines](/v3/contribute/contribution-rules/)
+* [Tutorial Styling Guidelines](/v3/contribute/tutorials/guidelines/)
 ```
 :::
 
@@ -40,5 +45,5 @@ The TON Ecosystem is being built for the entire world, so it's crucial that it's
 
 ## See Also
 
-* [TON Contribution Guidelines](/v3/contribute/contribution-rules)
-* [Tutorial Styling Guidelines](/v3/contribute/tutorials/guidelines)
+* [TON Contribution Guidelines](/v3/contribute/contribution-rules/)
+* [Tutorial Styling Guidelines](/v3/contribute/tutorials/guidelines/)

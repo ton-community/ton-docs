@@ -1,5 +1,10 @@
 # Principles of a good tutorial
 
+:::danger
+This page is outdated and will be updated soon.
+See the [How to contribute](/v3/contribute/).
+:::
+
 Original comment with these principles by [talkol](https://github.com/talkol):
 
  - [Original comment on TON Footstep #7](https://github.com/ton-society/ton-footsteps/issues/7#issuecomment-1187581181)

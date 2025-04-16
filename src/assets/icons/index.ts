@@ -6,6 +6,10 @@ import Icon24LinkedInCircle from "./linked_in.svg";
 import Icon24TelegramCircle from "./telegram_circle.svg";
 import Icon24TwitterCircle from "./twitter.svg";
 import Icon24CoinMakertCap from "./coinmarketcap.svg";
+import IconLikeLight from "./like-light.svg";
+import IconDislikeLight from "./dislike-light.svg";
+import IconLikeDark from "./like-dark.svg";
+import IconDislikeDark from "./dislike-dark.svg";
 
 export {
   IconLogo,
@@ -16,4 +20,8 @@ export {
   Icon24TelegramCircle,
   Icon24TwitterCircle,
   Icon24CoinMakertCap,
+  IconLikeLight,
+  IconDislikeLight,
+  IconLikeDark,
+  IconDislikeDark,
 };
