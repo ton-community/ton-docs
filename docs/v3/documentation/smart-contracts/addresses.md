@@ -73,7 +73,7 @@ Now that we've covered how smart contract addresses on TON are constructed using
 - **Raw addresses** – the full, original representation of smart contract addresses.
 - **User-friendly addresses** – a human-readable version of the raw address that includes additional features for improved usability and security.
 
-In the following sections, we’ll explore the key differences between these formats and explain why user-friendly addresses are the standard for interacting with the TON Blockchain in most cases.
+In the following sections, we’ll explore the key differences between these formats and explain why user-friendly addresses are the standard for interacting with TON Blockchain in most cases.
 
 ### Raw address
 
@@ -95,9 +95,10 @@ Hexadecimal characters in the address may appear in uppercase or lowercase; e.g.
 
 Using raw addresses comes with two primary limitations:
 
-
 1. **No built-in error detection.** Raw addresses lack validation mechanisms. This means there's no way to verify the address before a transaction is sent. If you accidentally modify the address string—by adding, removing, or mistyping a character—the transaction could be sent to an incorrect destination, potentially resulting in permanent loss of funds.
 2. **No support for additional flags.** Raw addresses do not support special flags, which are often required when sending transactions using user-friendly addresses. These flags enable extra features or behaviors during transaction processing. We'll cover the available flags and their purpose in the following section.
+
+**Note:** despite these limitations in front-end development, using the raw address format is the most effective way to store addresses and handle logic on the back end. It is considered the preferred format for storage purposes.
 
 ### User-friendly address
 
@@ -208,15 +209,15 @@ When interacting with the TON Blockchain, it’s important to understand what ha
 
 ### What happens when you send TON coins to an uninit address?
 
-#### Transaction with `state_init` included
+#### Transaction with state_init included
 
 If your transaction includes the `state_init`, which contains the smart contract’s code and data, the contract will be deployed first using the provided `state_init`. Once deployed, the incoming message is processed just like it would be for an already-initialized contract.
 
-#### Transaction without `state_init` and `bounce` flag enabled
+#### Transaction without state_init and bounce flag enabled
 
 The message cannot be delivered to the `uninit` smart contract and is bounced back to the sender. After deducting the consumed gas fees, the remaining amount is returned to the sender's address.
 
-#### Transaction without `state_init` and `bounce` flag disabled
+#### Transaction without state_init and bounce flag disabled
 
 The message is not delivered and does not bounce back to the sender. Instead, the transferred amount is credited to the recipient's address, increasing its balance even though the wallet remains uninitialized. The funds are stored at the address until the owner deploys a smart wallet contract. At this point, the balance becomes accessible.
 
@@ -224,7 +225,7 @@ The message is not delivered and does not bounce back to the sender. Instead, th
 
 The recommended way to deploy a wallet is to send TON to the wallet's uninitialized address with the `bounce` flag disabled. The wallet owner can then deploy the wallet using those funds—usually during their first wallet operation.
 
-### The TON blockchain includes protection against erroneous transactions
+### Protection against erroneous transactions
 Standard wallets and applications automatically handle the complexity of sending transactions to uninitialized addresses using bounceable and non-bounceable address formats on the TON Blockchain. These formats are explained in more detail [here](#bounceable-vs-non-bounceable-addresses). 
 
 Wallets commonly handle transfers to uninitialized addresses by sending coins using bounceable and non-bounceable formats, ensuring the transaction proceeds without triggering a return of funds.

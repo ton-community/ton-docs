@@ -1,10 +1,10 @@
-# Highload Wallet
+# Highload wallet
 
 When handling a large volume of messages within a short period, a special wallet is required — the Highload Wallet. Highload Wallet v2 was the primary wallet on TON for an extended period, but using it came with risks. If not managed carefully, it could result in [locking all your funds](https://t.me/tonstatus/88).
 
 With the introduction of [Highload Wallet V3](https://github.com/ton-blockchain/Highload-wallet-contract-v3), these issues have been addressed at the contract architecture level, leading to reduced gas consumption. This section covers the key features of Highload Wallet v3 and highlight important considerations to remember.
 
-## Highload Wallet v3
+## Highload wallet v3
 
 The Highload Wallet V3 is designed for users who need to send transactions at very high rates, such as crypto exchanges.
 
@@ -15,9 +15,10 @@ The Highload Wallet V3 is designed for users who need to send transactions at ve
 Each external message (transfer request) sent to Highload v3 includes the following:
 - A 512-bit signature in the top-level cell, with the other parameters located in that cell's reference.
 - A subwallet ID (32 bits).
-- A reference to the message being sent (the serialized internal message).
+- A reference to the serialized internal message being sent.
 - The send mode for the message (8 bits).
-- A composite query ID consisting of 13 bits for "shift" and 10 bits for "bit number." Note that the 10 bits for the bit number can range up to 1022, not 1023. The last usable query ID (8388605) is reserved for emergencies and should generally not be used.
+- A composite query ID consisting of 13 bits for shift and 10 bits for bit number. 
+Note that the 10 bits for the bit number can range up to 1022, not 1023. The last usable query ID (8388605) is reserved for emergencies and should generally not be used.
 - The message's creation timestamp or message timestamp.
 - A timeout value.
 
@@ -40,7 +41,7 @@ Highload v3 stores the query ID for replay protection once all checks pass. Howe
 
 
 #### Duplicate message prevention
-Highload v3 will never execute multiple external messages with the same `query_id` and `created_at`. Once the system forgets a given `query_id`, the `created_at` condition prevents the message from being executed again—the `query_id` and `created_at` form a transfer request's "primary key" in Highload v3.
+Highload v3 will never execute multiple external messages with the same `query_id` and `created_at`. Once the system forgets a given `query_id`, the `created_at` condition prevents the message from being executed again—the `query_id` and `created_at` form a transfer request's primary key in Highload v3.
 
 
 #### Query ID iteration
