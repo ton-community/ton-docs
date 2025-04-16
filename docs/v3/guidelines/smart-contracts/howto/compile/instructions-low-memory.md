@@ -4,7 +4,7 @@
 This section provides low-level instructions for working with TON.
 :::
 
-To compile TON on systems with limited memory (<1GB), you need to create swap partitions.
+To compile TON on systems with limited memory (< 1 GB), you need to create swap partitions.
 
 ## Prerequisites
 
