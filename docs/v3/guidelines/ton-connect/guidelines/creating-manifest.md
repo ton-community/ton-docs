@@ -5,7 +5,7 @@
 
 Every app needs a manifest to pass meta information to the wallet. 
 
-The manifest is a JSON file named as `tonconnect-manifest.json` following format:
+The manifest is a JSON file named `tonconnect-manifest.json` and has the following format:
 
 ```json
 {
@@ -19,14 +19,14 @@ The manifest is a JSON file named as `tonconnect-manifest.json` following format
 
 |Field|Requirement| Description                                                                                                                                                                                                      |
 |---|---|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|`url` |required| `url` defines the app URL.  Will be used to open the DAppafter click to its icon in the wallet. It is recommended to pass url without closing slash, e.g. 'https://mydapp.com' instead of 'https://mydapp.com/'. |
+|`url` |required| `url` defines the app URL.  It will be used to open the DApp after clicking its icon in the wallet. It is recommended to pass the URL without closing the slash, e.g., 'https://mydapp.com' instead of 'https://mydapp.com/'. |
 | `name`|required| `name` defines the app name. Typically simple word. Shouldn't be used as identifier.                                                                                                                             |
-| `iconUrl`| required | `iconUrl` defines Url to the app icon. Must be `PNG`, `ICO` format. `SVG` icons are not supported. Perfectly pass url to a 180x180px PNG icon.                                                                   |
-| `termsOfUseUrl` |optional| Optional for usual apps, but required for the apps which is placed in the Tonkeeper recommended apps list.                                                                                                       |
-| `privacyPolicyUrl` | optional | Optional for usual apps, but required for the apps which is placed in the Tonkeeper recommended apps list.                                                                                                       |
+| `iconUrl`| required | `iconUrl` defines the URL to the app icon. It must be in `PNG` or `ICO` format. `SVG` icons are not supported. Perfectly pass the URL to a 180x180px PNG icon.                                                                   |
+| `termsOfUseUrl` |optional| Optional for usual apps, but required for the apps placed in the Tonkeeper recommended apps list.                                                                                                       |
+| `privacyPolicyUrl` | optional | Optional for usual apps, but required for the apps placed in the Tonkeeper recommended apps list.                                                                                                       |
 
 :::info
-Original definition [here](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#app-manifest).
+The original definition is [here](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#app-manifest).
 :::
 
 ### Example
