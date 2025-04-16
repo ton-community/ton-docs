@@ -1,5 +1,9 @@
 # Integration manual with the JavaScript SDK
 
+:::danger
+The page is outdated and will be deleted soon. Learn actual JS flow from [the guideline for web](/v3/guidelines/ton-connect/frameworks/web).
+:::
+
 In this tutorial, we’ll create a sample web app that supports TON Connect 2.0 authentication. It will allow for signature verification to eliminate the possibility of fraudulent identity impersonation without the need for agreement establishment between parties.
 
 ## Documentation links
@@ -486,6 +490,10 @@ After implementing the above parameters, if an attacker tries to impersonate a u
 ```bash
 nacl.exceptions.BadSignatureError: Signature was forged or corrupt.
 ```
+## See also
+
+* [Preparing Messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+* [Sending Messages](/v3/guidelines/ton-connect/guidelines/sending-messages)
 
 ## Next steps
 
