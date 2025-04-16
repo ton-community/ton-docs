@@ -7,7 +7,7 @@ In TON, a **cell** is a built material for the entire blockchain. The cell is a 
 
 - up to **1023 bits**  of data
 - up to **4 references** to other cells
-- cell stores bits and references separated.
+- cell stores bits and references separately.
 - cell forbids circular references: for any cell, none of its descendant cells can reference this original cell.
 
 Thus, all cells constitute a directed acyclic graph (DAG). Here's a good picture to illustrate:
@@ -38,7 +38,7 @@ See [**Exotic cells**](https://ton.org/tvm.pdf).
 
 A cell is an opaque object optimized for compact storage.
 
-It deduplicates data: it only stores the content of several equivalent sub-cells referenced in different branches once. However, one cannot modify or read a cell directly because of its opaqueness. Thus, there are two additional flavors of the cells:
+It deduplicates data: it only stores the content of several equivalent sub-cells referenced in different branches once. However, one cannot modify or read a cell directly because of its opacity. Thus, there are two additional flavors of the cells:
 * **Builder** is a flavor for constructing cells
 * **Slice** for a flavor for reading cells 
 
@@ -53,7 +53,7 @@ Any object in TON, like the message, block, or whole blockchain state, serialize
 A TL-B scheme describes the serialization process: a formal description of how this object can be serialized into _builder_ or how to parse an object of a given type from the _Slice_.
 TL-B for cells is the same as TL or ProtoBuf for byte-streams.
 
-If you want more details about cell serialization and deserialization, read [Cell & Bag of Cells](/v3/documentation/data-formats/tlb/cell-boc) article.
+If you want more details about cell serialization and deserialization, read the [Cell & Bag of Cells](/v3/documentation/data-formats/tlb/cell-boc) article.
 
 ## See also
 
