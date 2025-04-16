@@ -43,6 +43,9 @@ For all other cases:
 - Only use when bounce handling isn't needed
 - Avoid them for regular contract interactions
 
-:::tip
-It is a good idea `not to allow` the end user (e.g., of a wallet) to send unbounceable messages containing large amounts of value (e.g., more than five Toncoins) or to warn them if they do. It is a `better idea` to send a small amount first, initialize the new smart contract, and then send a larger amount.
-:::
+## Best practice
+
+It is a good idea not to allow the end user (e.g., of a wallet) to send unbounceable messages containing large amounts of value (e.g., more than five Toncoins) or to warn them if they do. To prevent loss of big funds, break process in two steps:
+
+1.  Send a small amount first, initialize the new smart contract
+2.  Next, send a more considerable amount.

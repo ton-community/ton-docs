@@ -53,11 +53,11 @@ The same format is used for comments for NFT and [jetton](https://github.com/ton
 
 For instance, users may indicate the purpose of a simple transfer from their wallet to another user’s wallet in this text field. On the other hand, if the comment begins with the byte `0xff`, the remainder is a "binary comment", which should not be displayed to the end user as text (only as a hex dump if necessary). The intended use of "binary comments" is, e.g., to contain a purchase identifier for payments in a store, to be automatically generated and processed by the store’s software.
 
-Most smart contracts should not perform non-trivial actions or reject the inbound message on receiving a "simple transfer message". In this way, once `op` is found to be zero, the smart contract function for processing inbound internal messages (usually called `recv_internal()`) should immediately terminate with a zero exit code indicating success (e.g., by throwing exception `0`, if the smart contract has installed no custom exception handler). This will lead to the receiving account being credited with the value transferred by the message without any further effect.
+Most smart contracts should not perform non-trivial actions or reject the inbound message on receiving a simple transfer message. In this way, once `op` is found to be zero, the smart contract function for processing inbound internal messages (usually called `recv_internal()`) should immediately terminate with a zero exit code indicating success (e.g., by throwing exception `0`, if the smart contract has installed no custom exception handler). This will lead to the receiving account being credited with the value transferred by the message without any further effect.
 
 ### Messages with encrypted comments
 
-If `op` is `0x2167da4b`, then the message is a "transfer message with the encrypted comment". This message is serialized as follows:
+If `op` is `0x2167da4b`, then the message is a transfer message with the encrypted comment. This message is serialized as follows:
 
 Input:
 
@@ -65,7 +65,7 @@ Input:
 - `pub_2` - Ed25519 public key of the receiver, 32 bytes.
 - `msg` - a message to be encrypted, arbitrary byte string. `len(msg) <= 960`.
 
-The encryption algorithm is as follows:
+#### Encryption algorithm
 
 1. Calculate `shared_secret` using `priv_1` and `pub_2`.
 2. Let `salt` be the [bas64url representation](/v3/documentation/smart-contracts/addresses#user-friendly-address) of the sender wallet address with `isBounceable=1` and `isTestnetOnly=0`.
@@ -93,7 +93,8 @@ Learn from examples of the message encryption algorithm:
 
 ### Simple transfer messages without comments
 
-A "simple transfer message without comment" has an empty body (even without an `op` field). The above considerations apply to such messages as well. Note that such messages should have their bodies embedded into the message cell.
+A simple transfer message without comment has an empty body even without an `op` field.
+The above considerations apply to such messages as well. Note that such messages should have their bodies embedded into the message cell.
 
 ### Distinction between query and response messages
 

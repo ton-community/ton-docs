@@ -18,7 +18,7 @@ Since TON is a comprehensive system with wide functionality, messages that need 
 
 Therefore, the developer should not worry; if something in this document seems incomprehensible on first reading, that's okay. Just grasp the general idea.
 
-Sometimes, the word **`gram`** appears in the documentation, primarily in code examples; it is simply an outdated name for **toncoin**.
+Sometimes, the word **`gram`** appears in the documentation, primarily in code examples; it is simply an outdated name for **Toncoin**.
 
 Let's dive in!
 
@@ -54,19 +54,15 @@ Let's put it into words: The serialization of any message consists of three fiel
 - When we have the field `body:(Either X ^X)`, it means that when we (de)serialize some type `X`, we first put one `either` bit, which is `0` if `X` is serialized to the same cell, or `1` if it is serialized to the separate cell.
 - When we have the field `init:(Maybe (Either StateInit ^StateInit))`, we first put `0` or `1` depending on whether this field is empty. If it is not empty, we serialize `Either StateInit ^StateInit` (again, put one `either` bit, which is `0` if `StateInit` is serialized to the same cell or `1` if it is serialized to a separate cell).
 
-The `CommonMsgInfoRelaxed` layout is as follows:
+Let's focus on one particular `CommonMsgInforRelaxed` type, the internal message definition declared with the `int_msg_info$0` constructor.
 
 ```tlb
 int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
  src:MsgAddress dest:MsgAddressInt
  value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
  created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
-
-ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
- created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
 ```
 
-Let's focus on `int_msg_info` for now.
 It starts with the 1-bit prefix `0`.
 
 Then, there are three 1-bit flags:
@@ -144,7 +140,7 @@ currencies$_ grams:Grams other:ExtraCurrencyCollection
  = CurrencyCollection;
 ```
 
-This scheme means the message may carry the dictionary of additional _extra-currencies_ with the TON value. However, we may neglect it and assume that the message value is serialized as "number of nanotons as variable integer" and "`0` - empty dictionary bit".
+This scheme means the message may carry the dictionary of additional _extra-currencies_ with the TON value. However, we may neglect it and assume that the message value is serialized as number of nanotons as variable integer and "`0` - empty dictionary bit".
 
 Indeed, in the elector code above, we serialize coins amounts via `.store_coins(toncoins)` but then just put a string of zeros with a length equal to `1 + 4 + 4 + 64 + 32 + 1 + 1`. What is it?
 
@@ -170,7 +166,7 @@ Note that any [Cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-sto
 
 For example, if your message body is 900 bits long, you can't store it in the same cell as the message header. Including the message header fields would make the total cell size exceed 1023 bits, triggering a `cell overflow` exception during serialization.
 
-In this case, use `1` instead of `0` for the "in-place message body flag" (Either), which will store the message body in a separate reference cell.
+In this case, use `1` instead of `0` for the in-place message body flag (Either), which will store the message body in a separate reference cell.
 
 Those things should be handled carefully because some fields have variable sizes.
 
