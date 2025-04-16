@@ -275,7 +275,7 @@ module.exports = [
           'v3/guidelines/ton-connect/guidelines/preparing-messages',
           'v3/guidelines/ton-connect/guidelines/sending-messages',
           'v3/guidelines/ton-connect/guidelines/verifying-signed-in-users',
-          'v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk',
+         // 'v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk', deprecated
         ],
       },
       {
