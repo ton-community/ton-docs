@@ -1,4 +1,4 @@
-# Smart contract addresses 
+# Smart contract addresses specification 
 
 This section outlines how smart contract addresses work on the TON Blockchain and explains the concept of actors, equivalent to smart contracts in TON.
 
