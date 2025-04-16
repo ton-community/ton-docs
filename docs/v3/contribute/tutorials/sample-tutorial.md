@@ -1,5 +1,10 @@
 # Sample tutorial structure 
 
+:::danger
+This page is outdated and will be updated soon.
+See the [How to contribute](/v3/contribute/).
+:::
+
 ## Introduction
 
 The Introduction heading **must** be H2: `## Introduction`

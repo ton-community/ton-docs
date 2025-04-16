@@ -65,11 +65,12 @@ sources={{
   }
 }
 ```
-In this case, we have a 1-bit root cell that references two other cells:
+In this case, we have a 0-bit root cell that references two other cells:
 * The first is a 24-bit cell.
 * The second is a 7-bit cell that itself references a 24-bit cell.
 
 To serialize this structure into a byte sequence, we first identify unique cells. In the example, we consider 3 unique cells out of 4 total.
+
 
 ```json
 1[8_]

@@ -1,5 +1,10 @@
 # Tutorial Styling Guidelines
 
+:::danger
+This page is outdated and will be updated soon.
+See the [How to contribute](/v3/contribute/).
+:::
+
 So you've decided to write a tutorial for TON Documentation?
 
 We're excited to have you among our contributors! Please review the guidelines below to make sure your tutorial follows the style and quality of the pre-existing content on TON Docs.
