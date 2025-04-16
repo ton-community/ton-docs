@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Solidity vs FunC
 
 ## Introduction 
@@ -238,4 +240,4 @@ Read more in [Internal Messages](/v3/documentation/smart-contracts/overview/) pa
 - [TON documentation](/v3/documentation/ton-documentation/)
 - [FunC overview](/v3/documentation/smart-contracts/func/overview/)
 
-
+<Feedback />
