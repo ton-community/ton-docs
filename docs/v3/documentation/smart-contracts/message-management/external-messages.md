@@ -6,7 +6,7 @@ For instance, a wallet smart contract expects to receive external messages conta
 
 ## Replay protection
 
-:::danger
+:::caution
 Stay vigilant and check replay protection in contracts for external-in messages.
 :::
 
