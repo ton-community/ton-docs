@@ -99,7 +99,7 @@ The pool implements weighted voting for network config proposals:
 
 ## Get methods
 
-### `get_pool_data`
+#### Get-method get_pool_data
 
 Returns complete pool state information as a tuple containing:
 
@@ -161,7 +161,7 @@ validator_reward = (reward * validator_reward_share) / 10000
 17. `config_proposal_votings` (Cell)  
     Raw dictionary of active proposal votes
 
-### `list_nominators`
+#### Get-method list_nominators
 
 Returns an array of all nominators with their:
 
@@ -174,7 +174,7 @@ Returns an array of all nominators with their:
 4. `withdraw_request` (int)  
    `-1` indicates active withdrawal request
 
-### `get_nominator_data`
+#### Get-method get_nominator_data
 
 Returns detailed nominator information for the specified address.
 
@@ -193,16 +193,17 @@ For nominator `EQA0i8-CdGnF_DhUHHf92R1ONH6sIA9vLZ_WLcCIhfBBXwtG`:
 get_nominator_data 0x348bcf827469c5fc38541c77fdd91d4e347eac200f6f2d9fd62dc08885f0415f
 ```
 
+
 ### Voting Methods
 
-#### `list_votes`
+#### Get-method list_votes
 
 Returns all active proposals with the following:
 
 1. `proposal_hash` (uint) - Convert with `dec_to_hex()`
 2. `votes_create_time` (uint) - Unix timestamp
 
-#### `list_voters(proposal_hash)`
+#### Get-method list_voters
 
 Returns voting details per proposal:
 

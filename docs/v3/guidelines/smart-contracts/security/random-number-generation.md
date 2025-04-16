@@ -12,7 +12,7 @@ These algorithms typically require a _seed_ value to produce a sequence of _pseu
 
 To predict the result of the `random()` function in a smart contract, one would need to know the current `seed` of the block, which is impossible unless you are a validator.
 
-## Simply use `randomize_lt()`
+## Simply use randomize_lt()
 
 To make random number generation unpredictable, you can add the current [Logical Time](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-logical-time) to the seed. This ensures that different transactions produce different seeds and results.
 

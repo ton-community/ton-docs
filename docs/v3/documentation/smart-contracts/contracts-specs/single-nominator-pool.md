@@ -125,11 +125,9 @@ If you have a single nominator who holds all stakes for validation, this is the 
 
 The nominator owner can perform 4 operations:
 
-### 1. Withdraw
-
-This is used to withdraw funds to the owner's wallet. To withdraw the funds, the owner should send a message with a body that includes opcode=0x1000 (32 bits), query_id (64 bits), and the withdrawn amount (stored as a coin variable). The nominator contract will send the funds with the BOUNCEABLE flag and mode=64.
-
-In case the owner is using a **hot wallet** (not recommended), [withdraw-deeplink.ts](https://github.com/ton-blockchain/single-nominator/blob/main/scripts/ts/withdraw-deeplink.ts) can be used to generate a deeplink to initiate a withdrawal from tonkeeper wallet.
+#### 1. Withdraw
+Used to withdraw funds to the owner's wallet. To withdraw the funds the owner should send a message with a body that includes: opcode=0x1000 (32 bits), query_id (64 bits) and withdraw amount (stored as coin variable). The nominator contract will send the funds with BOUNCEABLE flag and mode=64. <br/><br/>
+In case the owner is using a **hot wallet** (not recommended), [withdraw-deeplink.ts](https://github.com/ton-blockchain/single-nominator/blob/main/scripts/ts/withdraw-deeplink.ts) can be used to generate a deeplink to initiate a withdrawal from tonkeeper wallet. <br/>
 
 Command line: `ts-node scripts/ts/withdraw-deeplink.ts single-nominator-addr withdraw-amount` where:
 
