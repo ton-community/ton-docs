@@ -1,13 +1,14 @@
-# Persistent States
-Nodes store snapshots of states of the blockchain periodically. Each state is created at some masterchain block and has some TTL. The block and TTL are chosen using the following algorithm:
+# Persistent states
 
-Only key blocks can be chosen. A block has some timestamp `ts`. There are periods of time of length `2^17` seconds (approximately up to 1.5 days). The period of a block with timestamp `ts` is `x = floor(ts / 2^17)`. The first key block from each period is chosen to create a persistent state.
+Nodes periodically store snapshots of the blockchain's states. Each state is created at a specific MasterChain block and has a defined time-to-live (TTL). The selection of the block and TTL follows this algorithm:
 
-TTL of a state from period `x` is equal to `2^(18 + ctz(x))`, where `ctz(x)` is the number of trailing zeroes in the binary representation of `x` (i.e. the largest `y` such that `x` is divisible by `2^y`).
+Only key blocks can be selected. A block has a timestamp marked as `ts`. Time is divided into periods of length `2^17` seconds (approximately 1.5 days). For a given block with timestamp `ts`, we calculate the period as `x = floor(ts / 2^17)`. The first key block from each period is chosen to create a persistent state.
 
-That means that persistent states are created every 1.5 days, half of them have TTL of `2^18` seconds (3 days), half of the remaining states have TTL of `2^19` seconds (6 days) and so on.
+The TTL of a state from period `x` is calculated as `2^(18 + ctz(x))`, where `ctz(x)` represents the number of trailing zeros in the binary representation of `x` (i.e., the largest integer `y` such that `x` is divisible by `2^y`).
 
-In 2025 there is the following long-term (at least 3 months) persistent states:
+This means that persistent states are created every 1.5 days. Half of these states have a TTL of `2^18` seconds (3 days), while half of the remaining states have a TTL of `2^19` seconds (6 days), and so forth.
+
+In 2025, there will be several long-term persistent states, each lasting at least 3 months:
 
 | Block seqno | Block time | TTL | Expires at |
 |--:|--:|--:|--:|
@@ -17,6 +18,6 @@ In 2025 there is the following long-term (at least 3 months) persistent states:
 | [40821182](https://explorer.toncoin.org/search?workchain=-1&shard=8000000000000000&seqno=40821182) | 2024-10-04 18:08:08 | 388 days | 2025-10-28 02:48:40 |
 | [43792209](https://explorer.toncoin.org/search?workchain=-1&shard=8000000000000000&seqno=43792209) | 2025-01-09 20:18:17 | 194 days | 2025-07-23 00:38:33 |
 
-When the node starts for the first time, it has to download a persistent state. This is implemented in [validator/manager-init.cpp](https://github.com/ton-blockchain/ton/blob/master/validator/manager-init.cpp).
+When the node starts for the first time, it must download a persistent state. This process is implemented in the file [validator/manager-init.cpp](https://github.com/ton-blockchain/ton/blob/master/validator/manager-init.cpp).
 
-Starting from the init block, the node downloads all newer key blocks. It selects the most recent key block with a persistent state which still exists (using the formula above), and then downloads the corresponding masterchain state and states for all shards (or only the shards that are required for this node).
+Beginning with the initialization block, the node downloads all newer key blocks. It selects the most recent key block that has a persistent state still available (using the formula mentioned above) and subsequently downloads the corresponding MasterChain state, along with the states for all shards or only those shards that are necessary for this node.
