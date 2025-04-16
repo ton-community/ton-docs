@@ -32,6 +32,6 @@ To gain a better understand of what is possible with this solution, check out ou
 - React-Native mobile apps
 - SDK for mobile applications in Swift, Java, Kotlin
 
-TON Connect is an open protocol and can be used to develop dapps with any programming language or development environment.
+TON Connect is an open protocol and can be used to develop DApps with any programming language or development environment.
 
-For JavaScript (JS) applications, the TON developer community created a JavaScript SDK that allows developers to integrate TON Connect seamlessly in minutes. In the future, SDKs designed to operate with additional programming languages will be available.
+For JavaScript (JS) applications, the TON developer community created a JavaScript SDK that allows developers to integrate TON Connect seamlessly in minutes. SDKs designed to operate with additional programming languages will be available in the future.
