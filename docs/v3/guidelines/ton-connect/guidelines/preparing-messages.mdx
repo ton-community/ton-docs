@@ -3,7 +3,7 @@ import TabItem from '@theme/TabItem';
 
 # Preparing messages
 
-While using TON Connect, you should construct the message body for the payload used in various operations. On this page you can find the most relevant examples of payload for use with the TON Connect SDKs.
+While using TON Connect, you should construct the message body for the payload used in various operations. On this page, you can find the most relevant payload examples for use with the TON Connect SDKs.
 
 :::info
 It is expected that you learn the basics of creating a TON Connect connection. Learn more with the [integration manual](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk).
@@ -16,13 +16,13 @@ Before diving into building messages, let's introduce the concept of cells, whic
 ### What is a cell?
 
 A cell is a basic data structure in the TON Blockchain. It can store up to `1023` bits and hold up to `4` references to other cells, which allows you to store more complex data structures.
-Libraries like `@ton/core` and `@ton-community/assets-sdk` provide efficient ways to handle cells.
+Libraries like `@ton/core` and `@ton-community/assets-sdk` provide efficient cell handling.
 
 You can read more about cells [here](/v3/documentation/data-formats/tlb/cell-boc).
 
 ### Creating a cell
 
-To build a cell, you use the `beginCell()` function. While the cell is _open_ you can store various data types with `store...()` functions.
+To build a cell, you use the `beginCell()` function. While the cell is _open_, you can store various data types with `store...()` functions.
 When you're done, you close the cell with the `endCell()` function.
 
 ```ts
@@ -36,12 +36,12 @@ const cell = beginCell()
 ```
 
 :::info
-Examples provided only for @ton/ton library, however, every version of [SDKs](/v3/guidelines/dapps/apis-sdks/sdk) implementation have similar functions.
+Examples were provided only for @ton/ton library. However, every version of [SDKs](/v3/guidelines/dapps/apis-sdks/sdk) implementation has similar functions.
 :::
 
 ### Parsing a cell
 
-To read or parse data from a cell, the `beginParse()` function is called. You read data in the same order it was stored using similar `load...()` functions:
+The `beginParse()` function is called to read or parse data from a cell. You read data in the same order it was stored using similar `load...()` functions:
 
 ```ts
 const slice = cell.beginParse();
@@ -90,7 +90,7 @@ const uint4 = innerSlice.loadUint(256);
 
 ### Optional references and values
 
-Cells can store optional values which may be null. These are stored using the `storeMaybe...()` functions:
+Cells can store optional values, which may be null. These are stored using the `storeMaybe...()` functions:
 
 ```ts
 const cell = beginCell()
@@ -115,7 +115,7 @@ if (maybeRef1) {
 }
 ```
 
-### Using assets sdk for simpler serialization and deserialization
+### Using assets sdk for more straightforward serialization and deserialization
 
 Manually handling cells can be tedious, so the `@ton-community/assets-sdk` provides convenient methods for serializing and deserializing messages.
 
@@ -338,7 +338,7 @@ await connector.sendTransaction({
 Learn more about [TON smart contract addresses](/v3/documentation/smart-contracts/addresses).
 :::
 
-For specific custom transaction, a certain payload must be defined.
+For specific custom transactions, a particular payload must be defined.
 
 
 
@@ -346,7 +346,7 @@ For specific custom transaction, a certain payload must be defined.
 ### Transfer with a comment
 
 The simplest example involves adding a payload with a comment. See more details on [this page](/v3/documentation/smart-contracts/message-management/internal-messages#simple-message-with-comment).
-Before transaction, it is necessary prepare a `body` [cell](/v3/documentation/data-formats/tlb/cell-boc) via the [@ton/ton](https://github.com/ton-org/ton) JavaScript library.
+Before the transaction, it is necessary to prepare a `body` [cell](/v3/documentation/data-formats/tlb/cell-boc) via the [@ton/ton](https://github.com/ton-org/ton) JavaScript library.
 
 ```js
 import { beginCell } from '@ton/ton'
@@ -554,8 +554,8 @@ await connector.sendTransaction({
 
 - `validUntil` - UNIX-time until message valid
 - `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts
-- `balance` - Integer, amount of Toncoin for gas payments in nanotons.
-- `body` - payload for the jettonContract
+- `balance` - Integer, the amount of Toncoin used for gas payments in nanotons.
+- `body` - payload for the `jettonContract`
 
 
 <details>
@@ -602,9 +602,9 @@ async function main() {
 <TabItem value="assets/sdk" label="assets/sdk">
 
 :::tip
-Note: For the browser, you need to set a polyfill for `Buffer`.
+Note: For the browser, you must set a polyfill for `Buffer`.
 :::
-For more examples check [documentation](https://github.com/ton-community/assets-sdk)
+For more examples, check [documentation](https://github.com/ton-community/assets-sdk)
 
 ```js
 const NETWORK = "testnet";
@@ -631,7 +631,7 @@ const RECEIVER_ADDRESS = Address.parse("RECIEVER_ADDRESS");
 jetton.send(sender, RECEIVER_ADDRESS, toNano(10));
 ```
 
-OR you can use Jetton Contract with built in methods:
+OR you can use Jetton Contract with built-in methods:
 
 ```ts
 const provider = tonConnectUi;
@@ -708,7 +708,7 @@ The `messageBody` for jetton transfer([TEP-74](https://github.com/ton-blockchain
 
 ```
 
-Next, sending the transaction with this body to sender's `jettonWalletContract` executed:
+Next, send the transaction with this body to the sender's `jettonWalletContract` executed:
 
 <Tabs groupId="Jetton transfer">
   <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
@@ -795,8 +795,8 @@ Next, sending the transaction with this body to sender's `jettonWalletContract` 
 
 - `validUntil` - UNIX-time until message valid
 - `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts
-- `balance` - Integer, amount of Toncoin for gas payments in nanotons.
-- `body` - payload for the jettonContract
+- `balance` - Integer, the amount of Toncoin used for gas payments in nanotons.
+- `body` - payload for the `jettonContract`
 
 
 <details>
@@ -843,9 +843,9 @@ Next, sending the transaction with this body to sender's `jettonWalletContract` 
 <TabItem value="assets/sdk" label="assets/sdk">
 
 :::tip
-Note: For the browser, you need to set a polyfill for `Buffer`.
+Note: For the browser, you must set a polyfill for `Buffer`.
 :::
-For more examples check [documentation](https://github.com/ton-community/assets-sdk)
+For more examples, check [documentation](https://github.com/ton-community/assets-sdk)
 
 ```js
 const NETWORK = "testnet";
@@ -992,9 +992,9 @@ await connector.sendTransaction({
 <TabItem value="assets/sdk" label="assets/sdk">
 
 :::tip
-Note: For the browser, you need to set a polyfill for `Buffer`.
+Note: For the browser, you must set a polyfill for `Buffer`.
 :::
-For more examples check [documentation](https://github.com/ton-community/assets-sdk)
+For more examples, check [documentation](https://github.com/ton-community/assets-sdk)
 
 ```js
 const NETWORK = "testnet";
@@ -1020,7 +1020,7 @@ const jetton = sdk.openJettonWallet(Address.parse("JETTON_ADDRESS"));
 jetton.sendBurn(sender, toNano(10));
 ```
 
-OR you can use Jetton Contract with built in methods:
+OR you can use Jetton Contract with built-in methods:
 
 ```ts
 const provider = tonConnectUi;
@@ -1157,8 +1157,8 @@ await connector.sendTransaction({
 </TabItem>
 </Tabs>
 
-- `NFTitem` - Address - The address of NFT item smart contract which we want transfer to a new owner `NEW_OWNER_WALLET`.
-- `balance` - Integer, amount of Toncoin for gas payments in nanotons.
+- `NFTitem` - Address - The address of the NFT item smart contract which we want to transfer to a new owner `NEW_OWNER_WALLET`.
+- `balance` - Integer, the amount of Toncoin used for gas payments in nanotons.
 - `body` - payload for the NFT contract
 
 </TabItem>
@@ -1166,9 +1166,9 @@ await connector.sendTransaction({
 <TabItem value="assets/sdk" label="assets/sdk">
 
 :::tip
-Note: For the browser, you need to set a polyfill for `Buffer`.
+Note: For the browser, you must set a polyfill for `Buffer`.
 :::
-For more examples check [documentation](https://github.com/ton-community/assets-sdk)
+For more examples, check [documentation](https://github.com/ton-community/assets-sdk)
 
 ```js
 const NETWORK = "testnet";
@@ -1195,7 +1195,7 @@ const RECEIVER_ADDRESS = Address.parse("RECIEVER_ADDRESS");
 nft.send(sender, RECEIVER_ADDRESS);
 ```
 
-OR you can use NFT Contract with built in methods:
+OR you can use an NFT Contract with built-in methods:
 
 ```ts
 const client = new TonClient({
@@ -1224,7 +1224,7 @@ const royaltyPercent =
 
 Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
 
-To place NFT on GetGems Sale Contract, we should prepare special message body `transferNftBody` that will be transfer NFT to special NFT Sale Contract.
+To place NFT on the GetGems Sale Contract, we should prepare a special message body, `transferNftBody`, to transfer NFT to the special NFT Sale Contract.
 ```js
     const transferNftBody = beginCell()
         .storeUint(0x5fcc3d14, 32) // Opcode for NFT transfer
@@ -1240,7 +1240,7 @@ To place NFT on GetGems Sale Contract, we should prepare special message body `t
         .endCell();
 ```
 
-Because message requires a lot of steps, the entire algorithm huge and could be found here:
+Because the message requires a lot of steps, the entire algorithm is huge and can be found here:
 <details>
     <summary>Show entire algorithm for the creating NFT Sale message body</summary>
 
@@ -1317,7 +1317,7 @@ async function main() {
 
 </details>
 
-Prepared `transferNftBody` should be sent to the NFT Item Contract with at least `1.08` TON, that expected for success processing. Excess will be returned to a sender's wallet.
+The prepared `transferNftBody` should be sent to the NFT Item Contract with at least `1.08` TON, which is expected for successful processing. Excess will be returned to a sender's wallet.
 
 <Tabs groupId="NFT Sale Fix Price">
 <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
@@ -1396,7 +1396,7 @@ await connector.sendTransaction({
 <Tabs groupId="NFT Buy tabs">
 <TabItem value="@ton/ton" label="@ton/ton">
 
-The process of buy NFT for [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) sale contract could be carry out with regular transfer without payload, the only important thing is accurate TON amount, that calculates as follows:
+The process of buying NFT for [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) sale contract could be carried out with a regular transfer without payload. The only important thing is the accurate TON amount, which is calculated as follows:
 `buyAmount = Nftprice TON + 1.0 TON`.
 
 <Tabs groupId="NFT Buy">
@@ -1473,9 +1473,9 @@ messages: [
 <TabItem value="assets/sdk" label="assets/sdk">
 
 :::tip
-Note: For the browser, you need to set a polyfill for `Buffer`.
+Note: For the browser, you must set a polyfill for `Buffer`.
 :::
-For more examples check [documentation](https://github.com/ton-community/assets-sdk)
+For more examples, check [documentation](https://github.com/ton-community/assets-sdk)
 
 ```js
 const nft = sdk.openNftSale(Address.parse("NFT_ADDRESS"));
@@ -1839,7 +1839,7 @@ import "github.com/xssnick/tonutils-go/address"
 Read [tonconnect](https://github.com/cameo-engineering/tonconnect/blob/master/examples/basic/main.go) and [tonutils-go](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#how-to-use) examples.
 :::
 
-There you can find how to create tonconnect session and send transaction constructed with messages.
+There you can find how to create a tonconnect session and send a transaction constructed with messages.
 
 ```go
 s, _ := tonconnect.NewSession()
@@ -1849,7 +1849,7 @@ s, _ := tonconnect.NewSession()
 boc, _ := s.SendTransaction(ctx, *tx)
 ```
 
-In further examples only messages and transactions will be created.
+In further examples, only messages and transactions will be created.
 
 ### Regular TON transfer
 
@@ -2108,9 +2108,9 @@ if err != nil {
 
 ### NFT sale (GetGems)
 
-Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
+Here is an example of preparing a message and transaction for sale on the GetGems marketplace, according to contract [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
 
-To place NFT on GetGems Sale Contract, we should prepare special message body `transferNftBody` that will be transfer NFT to special NFT Sale Contract.
+To place NFT on the GetGems Sale Contract, we should prepare a special message body, `transferNftBody` that will transfer NFT to the special NFT Sale Contract.
 ```go
 transferNftBody := cell.BeginCell().
     MustStoreUInt(0x5fcc3d14, 32).        // opcode for NFT transfer
@@ -2126,7 +2126,7 @@ transferNftBody := cell.BeginCell().
     EndCell()
 ```
 
-Because message requires a lot of steps, the entire algorithm huge and could be found here:
+Because the message requires a lot of steps, the entire algorithm is huge and can be found here:
 <details>
     <summary>Show entire algorithm for the creating NFT Sale message body</summary>
 
@@ -2249,7 +2249,7 @@ if err != nil {
 
 ### NFT buy (GetGems)
 
-The process of buy NFT for [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) sale contract could be carry out with regular transfer without payload, the only important thing is accurate TON amount, that calculates as follows:
+The process of buying NFT for [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) sale contract could be carried out with a regular transfer without payload; the only important thing is an accurate TON amount, which is calculated as follows:
 `buyAmount = Nftprice TON + 1.0 TON`.
 
 ```go
@@ -2275,6 +2275,6 @@ if err != nil {
 ## See also
 * [TON Connect SDKs](/v3/guidelines/ton-connect/guidelines/developers)
 * [TON Connect - sending messages](/v3/guidelines/ton-connect/guidelines/sending-messages)
-* [Smart contract developmet - sending messages (Low Level)](/v3/documentation/smart-contracts/message-management/sending-messages)
+* [Smart contract development - sending messages](/v3/documentation/smart-contracts/message-management/sending-messages)
 * [TON jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
 * [NFT processing on TON](/v3/guidelines/dapps/asset-processing/nft-processing/nfts)
