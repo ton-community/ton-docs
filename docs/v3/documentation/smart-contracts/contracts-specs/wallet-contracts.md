@@ -22,8 +22,7 @@ Like any custom smart contract, wallets can receive both external and internal m
 
 You can consider each wallet version as a specific smart contract implementation providing a standard external interface. This interface allows different external clients to interact with the wallets in the same way. You can find these implementations in FunC and Fift languages in the main TON monorepo:
 
- * [ton/crypto/smartcont/](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/) 
-
+- [ton/crypto/smartcont/](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/)
 
 ## Basic wallets
 
@@ -31,25 +30,30 @@ You can consider each wallet version as a specific smart contract implementation
 
 This is the simplest wallet version. It allows you to send up to four transactions simultaneously and performs only basic checks—your signature and the seqno.
 Wallet source code:
- * [ton/crypto/smartcont/wallet-code.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-wallet.fif) 
+
+- [ton/crypto/smartcont/wallet-code.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-wallet.fif)
 
 This version isn’t even used in regular apps due to several significant limitations:
  - No straightforward way to retrieve the seqno and public key from the contract. 
  - No `valid_until` check, so you can't be sure that a transaction won't be confirmed too late.
+
 
 The first issue was addressed in `V1R2` and `V1R3`, where `R` stands for "revision".  Revisions typically introduce minor updates, such as adding get methods. You review all revision changes in the commit history of `new-wallet.fif`.  From this point onward, we will consider only the latest revisions.
 
 Since each new version builds upon the previous one, it's important to understand V1 as a foundation for the following versions.
 
 #### Persistent memory layout
- - <b>seqno</b>: 32-bit long sequence number.
- - <b>public-key</b>: 256-bit long public key.
+
+- <b>seqno</b>: 32-bit long sequence number.
+- <b>public-key</b>: 256-bit long public key.
 
 #### External message body layout
+
 1. Data:
     - <b>signature</b>: 512-bit long ed25519 signature.
     - <b>msg-seqno</b>: 32-bit long sequence number.
     - <b>(0-4)mode</b>: up to four 8-bit integers specifying the sending mode for each message.
+
 2. Up to 4 references to cells containing messages.
 
 As you can see, the primary purpose of the wallet is to provide a secure interface for interacting with the TON blockchain from the external world. The `seqno` mechanism protects against replay attacks, while the `Ed25519` signature ensures that only authorized users can access wallet functionality. We will not dwell on each of these mechanisms, as they are covered in the [External message](/v3/documentation/smart-contracts/message-management/external-messages) section and are pretty common among smart contracts receiving external messages. The payload data includes up to 4 references to cells, along with a corresponding set of sending modes. These are passed directly to the [send_raw_message(cell msg, int mode)](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) method.
@@ -60,25 +64,29 @@ The wallet does not validate the internal messages you send through it. The prog
 :::
 
 #### Exit codes
+
 | Exit code      | Description                                                     |
 |----------------|-----------------------------------------------------------------|
 | 0x21           | `seqno` check failed — replay protection triggered.             |
 | 0x22           | `Ed25519 signature` verification failed.                        |
 | 0x0            | Standard successful execution exit code.                        |
 
+
 :::info
 Note that [TVM](/v3/documentation/tvm/tvm-overview) has [standart exit codes](/v3/documentation/tvm/tvm-exit-codes) (`0x0` - is one of them), so you can get one of them, too; if you run out of gas, you will get a `0xD` code.
 :::
 
 #### Get methods
+
 1. int seqno() returns the current stored seqno.
 2. int get_public_key returns the current stored public key.
+
 
 ### Wallet V2
 
 Wallet source code:
- 
- * [ton/crypto/smartcont/wallet-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-code.fc)
+
+- [ton/crypto/smartcont/wallet-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-code.fc)
 
 This version introduces the `valid_until` parameter, which sets a time limit for a transaction. It is helpful to prevent it from being confirmed too late.
 Note that this version still does not include a get method for the public key. That was added later in `V2R2`.
@@ -89,11 +97,14 @@ All differences from the previous version stem from the addition of `valid_until
 - All existing get methods remain unchanged.
 
 #### External message body layout
+
 1. Data:
+
     - <b>signature</b>: 512-bit long ed25519 signature.
     - <b>msg-seqno</b>: 32-bit long sequence number.
     - <b>valid-until</b>: 32-bit long UNIX-time integer.
     - <b>(0-4)mode</b>: up to four 8-bit integers specifying the sending mode for each message.
+
 2. Up to 4 references to cells containing messages.
 
 ### Wallet V3
@@ -102,26 +113,28 @@ This version introduces the `subwallet_id` parameter, which allows you to create
 As before, `V3R2` only adds a get method for the public key.
 
 Wallet source code:
- * [ton/crypto/smartcont/wallet3-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)
 
+- [ton/crypto/smartcont/wallet3-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)
 
 Essentially, `subwallet_id` is just a number added to the contract state at deployment. Since a contract address in TON is the hash of its code and state, changing the `subwallet_id` results in a different wallet address.
 This version is currently the most widely used. It supports most use cases while remaining clean, simple, and consistent with earlier versions. All get methods remain unchanged.
 
-
 #### Persistent memory layout
+
 - <b>seqno</b>: 32-bit sequence number.
 - <b>subwallet</b>: 32-bit subwallet ID.
 - <b>public-key</b>: 256-bit public key.
 
 #### External message layout
+
 1. Data:
-    - <b>signature</b>: 512-bit ed25519 signature.
-    - <b>subwallet-id</b>: 32-bit subwallet ID.
-    - <b>msg-seqno</b>: 32-bit sequence number.
-    - <b>valid-until</b>: 32-bit UNIX time integer.
-    - <b>(0-4)mode</b>: Up to four 8-bit integers defining the sending mode for each message.
+   - <b>signature</b>: 512-bit ed25519 signature.
+   - <b>subwallet-id</b>: 32-bit subwallet ID.
+   - <b>msg-seqno</b>: 32-bit sequence number.
+   - <b>valid-until</b>: 32-bit UNIX time integer.
+   - <b>(0-4)mode</b>: Up to four 8-bit integers defining the sending mode for each message.
 2. Up to 4 references to cells containing messages.
+
 
 #### Exit codes
 | Exit code | Description                                                              |
@@ -132,12 +145,14 @@ This version is currently the most widely used. It supports most use cases while
 | 0x22      | `subwallet-id` does not match the stored value.                          |
 | 0x0       | Standard successful execution exit code.                                 |
 
+
 ### Wallet V4
 
 This version preserves all the functionality of the previous ones while introducing a powerful new feature: `plugins`.
 
 Wallet source code:
- * [ton-blockchain/wallet-contract](https://github.com/ton-blockchain/wallet-contract)
+
+- [ton-blockchain/wallet-contract](https://github.com/ton-blockchain/wallet-contract)
 
 Plugins enable developers to extend wallet behavior by adding custom logic that runs alongside the wallet contract. For instance, a dApp might require users to pay a small daily fee to access certain features. In that case, the user could install a plugin by signing a transaction. Once installed, the plugin can automatically send the required payment to a specified address each day, triggered by an external message.
 
@@ -148,6 +163,7 @@ Plugins are essentially other smart contracts on TON that developers can impleme
 
 
 #### Persistent memory layout
+
 - <b>seqno</b>: 32-bit sequence number.
 - <b>subwallet</b>: 32-bit subwallet ID.
 - <b>public-key</b>: 256-bit public key.
@@ -221,8 +237,8 @@ The latest version of the wallet, developed by the Tonkeeper team, is the V5 sta
 
 <br></br>
 <ThemedImage
-    alt=""
-    sources={{
+alt=""
+sources={{
         light: '/img/docs/wallet-contracts/wallet-contract-V5.png?raw=true',
         dark: '/img/docs/wallet-contracts/wallet-contract-V5_dark.png?raw=true',
     }}
@@ -232,10 +248,12 @@ The latest version of the wallet, developed by the Tonkeeper team, is the V5 sta
  V5 brings several improvements that enhance the experience for both users and merchants. These include gas-free transactions, account delegation and recovery, subscription payments with tokens and TON coin, and low-cost multi-transfers. In addition to retaining all the features of V4, the new contract allows you to send up to 255 messages at once.
 
 Wallet source code:
- * [ton-blockchain/wallet-contract-v5](https://github.com/ton-blockchain/wallet-contract-v5)
+
+- [ton-blockchain/wallet-contract-v5](https://github.com/ton-blockchain/wallet-contract-v5)
 
 TL-B scheme:
- * [ton-blockchain/wallet-contract-v5/types.tlb](https://github.com/ton-blockchain/wallet-contract-v5/blob/main/types.tlb)
+
+- [ton-blockchain/wallet-contract-v5/types.tlb](https://github.com/ton-blockchain/wallet-contract-v5/blob/main/types.tlb)
 
 :::caution
 Unlike previous wallet version specifications, we will use the [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) scheme due to the increased complexity of this version's interface implementation. We describe each of these, but a basic understanding of the concepts and the wallet's source code should be sufficient.
@@ -244,13 +262,14 @@ Unlike previous wallet version specifications, we will use the [TL-B](/v3/docume
 #### Persistent memory layout
 
 ```
-contract_state$_ 
-    is_signature_allowed:(## 1) 
-    seqno:# 
-    wallet_id:(## 32) 
-    public_key:(## 256) 
+contract_state$_
+    is_signature_allowed:(## 1)
+    seqno:#
+    wallet_id:(## 32)
+    public_key:(## 256)
     extensions_dict:(HashmapE 256 int1) = ContractState;
 ```
+
 
 As you can see, the `ContractState` has not changed significantly compared to previous versions. The main update is the addition of the new `is_signature_allowed` 1-bit flag, which controls access via the signature and stored public key. We explain the significance of this change in later sections.
 
@@ -267,8 +286,8 @@ signed_request$_             // 32 (opcode from outer)
 
 internal_signed#73696e74 signed:SignedRequest = InternalMsgBody;
 
-internal_extension#6578746e 
-    query_id:(## 64) 
+internal_extension#6578746e
+    query_id:(## 64)
     inner:InnerRequest = InternalMsgBody;
 
 external_signed#7369676e signed:SignedRequest = ExternalMsgBody;
@@ -293,8 +312,8 @@ The first thing to note is the `InnerRequest`, which we’ve already encountered
 
 ```
 out_list_empty$_ = OutList 0;
-out_list$_ {n:#} 
-    prev:^(OutList n) 
+out_list$_ {n:#}
+    prev:^(OutList n)
     action:OutAction = OutList (n + 1);
 
 action_send_msg#0ec3c86d mode:(## 8) out_msg:^(MessageRelaxed Any) = OutAction;
@@ -351,6 +370,7 @@ Note that exit codes `0x8E`, `0x90`, and `0x92` are designed to protect you from
 :::
 
 #### Get methods
+
 1. int is_signature_allowed() returns stored `is_signature_allowed` flag.
 2. int seqno() returns current stored seqno.
 3. int get_subwallet_id() returns current subwallet ID.
@@ -378,7 +398,8 @@ A beta version of the gasless backend API is available at [tonapi.io/api-v2](htt
 
 
 Wallet source code:
- * [ton-blockchain/wallet-contract-v5](https://github.com/ton-blockchain/wallet-contract-v5)
+
+- [ton-blockchain/wallet-contract-v5](https://github.com/ton-blockchain/wallet-contract-v5)
 
 ## Special wallets
 
@@ -406,20 +427,23 @@ This wallet allows you to set a lock period during which funds cannot be withdra
 
 
 Wallet source code:
- * [ton-blockchain/lockup-wallet-contract](https://github.com/ton-blockchain/lockup-wallet-contract)
+
+- [ton-blockchain/lockup-wallet-contract](https://github.com/ton-blockchain/lockup-wallet-contract)
 
 ### Restricted wallet
 
 This wallet functions like a regular wallet but restricts transfers to a single, pre-defined destination address. You set this destination when the wallet is created, and after that, all outgoing transfers are limited to that address. However, transfer to validation contracts is still allowed, so you can use this wallet to run a validator.
 
 Wallet source code:
- * [EmelyanenkoK/nomination-contract/restricted-wallet](https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet)
+
+- [EmelyanenkoK/nomination-contract/restricted-wallet](https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet)
 
 ## Conclusion
 
 As you see, there are many different versions of wallets in TON. But in most cases, you only need `V3R2` or `V4R2`. You can also use one of the special wallets for additional functionality like periodic fund unlocking.
 
-## See Also
+## See also
+
  - [Working with wallet smart contracts](/v3/guidelines/smart-contracts/howto/wallet)
  - [Sources of basic wallets](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
  - [More technical description of versions](https://github.com/toncenter/tonweb/blob/master/src/contract/wallet/WalletSources.md)

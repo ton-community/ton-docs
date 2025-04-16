@@ -97,8 +97,7 @@ Before using any contract in a production environment, thoroughly test it. This 
 * GitHub - [aSpite/tsc4-contracts (FunC solution)](https://github.com/aSpite/tsc4-contracts)
 * GitHub - [ProgramCrafter/tsc4 (FunC solution)](https://github.com/ProgramCrafter/tsc4/tree/c1616e12d1b449b01fdcb787a3aa8442e671371e/contracts)
 
-
-## Fift smart contracts
+## Fift Smart Contracts
 
 * [CreateState.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/CreateState.fif)
 * [asm-to-cpp.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/asm-to-cpp.fif)

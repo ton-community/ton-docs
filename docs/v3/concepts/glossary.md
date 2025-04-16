@@ -272,9 +272,9 @@ __________
 
 **Mainnet** — the main network of a blockchain.
 
-### Market cap (capitalization)
+### Market cap
 
-**Market cap (capitalization)** — the total value of a cryptocurrency’s combined number of tokens.
+**Market capitalization (Market cap)** — the total value of a cryptocurrency’s combined number of tokens.
 
 ### Masterchain
 
@@ -407,7 +407,7 @@ ________
 
 ### TEP
 
-**TEP** — [TON Enhancement Proposals](https://github.com/ton-blockchain/TEPs), a standard set of ways to interact with various parts of the TON ecosystem.
+**TON Enhancement Proposals (TEP)**—a [standard set](https://github.com/ton-blockchain/TEPs) of ways to interact with various parts of the TON ecosystem.
 
 ### Testnet
 
