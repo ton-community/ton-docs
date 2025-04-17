@@ -10,6 +10,14 @@
   background-color: var(--background-content-light);
 }
 
+.text {
+  color: #04060B;
+}
+
+[data-theme=dark] .text {
+  color: #F3F3F6;
+}
+
 [data-theme=dark] .container {
   background-color: var(--background-content-dark);
 }

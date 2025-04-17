@@ -27,13 +27,13 @@ function Feedback() {
           {colorMode === "light" ?
             <IconLikeLight style={{ opacity }} /> :
             <IconLikeDark style={{ opacity }} />}
-          <span>Yes</span>
+          <span className={styles.text}>Yes</span>
         </Button>
         <Button event="dislike" isDisabled={isFeedbackDisabled} setIsDisabled={setIsFeedbackDisabled}>
           {colorMode === "light" ?
             <IconDislikeLight style={{ opacity }} /> :
             <IconDislikeDark style={{ opacity }} />}
-          <span>No</span>
+          <span className={styles.text}>No</span>
         </Button>
       </div>
     </div>
