@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TON Blockchain for games
 
 ## What’s in the tutorial
@@ -277,3 +279,6 @@ et us know your thoughts in [Discussions](https://github.com/ton-org/game-engine
 
 
 The complete implementation is available in the [flappy-bird](https://github.com/ton-community/flappy-bird) repository.
+
+<Feedback />
+

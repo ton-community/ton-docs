@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # How to open any TON Site?
 
 This article explains the most common ways to access TON Sites from different devices.
@@ -48,3 +50,6 @@ For the most secure and independent access to TON Sites, use Tonutils-Proxy.
 
 ## See also
 * [Run C++ implementation](/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy)
+
+<Feedback />
+

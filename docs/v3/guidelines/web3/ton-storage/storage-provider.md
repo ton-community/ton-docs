@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 
 # Storage provider
 A **storage provider** is a service that stores files for a fee.
@@ -195,3 +197,6 @@ send-coins <address> <amount> --message "Some message"
 :::info
 All *bags* stored by the provider are available with the command `list` and can be used as usual. To prevent disrupting the provider's operations, do not delete them or use this storage daemon to work with any other *bags*.
 :::
+
+<Feedback />
+

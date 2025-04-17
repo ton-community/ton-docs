@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Custom overlays
 
 TON nodes communicate with each other by forming subnets called **overlay**. A few common overlay nodes participate, such as public overlays for each shard. Validators also participate in general validator overlays and overlays for specific validator sets.
@@ -108,3 +110,6 @@ List of validator-console commands for managing custom overlays:
 * `delcustomoverlay <name>`: Removes the custom overlay from the node.
 
 * `showcustomoverlays`: Displays a list of custom overlays known to the node.
+
+<Feedback />
+

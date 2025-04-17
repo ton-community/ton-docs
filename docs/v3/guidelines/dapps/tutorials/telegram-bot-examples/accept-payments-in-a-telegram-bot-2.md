@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 ---
 description: In this article, we'll create a simple Telegram bot for accepting payments in TON.
 ---
@@ -506,3 +508,6 @@ If the bot does not function as expected, compare your code with the code [from 
 
  - Made for TON as part of [ton-footsteps/8](https://github.com/ton-society/ton-footsteps/issues/8)
  - By Gusarich ([Telegram @Gusarich](https://t.me/Gusarich), [Gusarich on GitHub](https://github.com/Gusarich))
+
+<Feedback />
+

@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 ---
 description: In this tutorial, you will learn how to fully work with wallets, messages and smart contracts.
 ---
@@ -3236,3 +3238,6 @@ External references:
 
 - Useful concept documents(may include outdated information): [ton.pdf](https://docs.ton.org/ton.pdf), [tblkch.pdf](https://ton.org/tblkch.pdf), [tvm.pdf](https://ton.org/tvm.pdf)
   
+
+<Feedback />
+

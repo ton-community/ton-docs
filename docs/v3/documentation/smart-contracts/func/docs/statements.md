@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Statements
 
 This section briefly overviews FunC statements, which form the core of function bodies.
@@ -485,3 +487,6 @@ x += 1;
 
 In this example, the inner block introduces a new `builder` variable named `x`, which exists only within that scope. 
 The outer `x` remains unchanged and can be used after the block ends.
+
+<Feedback />
+

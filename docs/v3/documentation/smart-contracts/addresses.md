@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Smart Contract Addresses Documentation
 
 This section describes the specifics of smart contract addresses on the TON Blockchain. It also explains how actors are synonymous with smart contracts on TON.
@@ -223,4 +225,7 @@ If you are developing a custom product on the TON blockchain, it is essential to
 
 Ensure your application verifies whether the recipient address is initialized before sending funds.
 Based on the address state, use bounceable addresses for user smart contracts with custom application logic to ensure funds are returned. Use non-bounceable addresses for wallets.
+
+
+<Feedback />
 

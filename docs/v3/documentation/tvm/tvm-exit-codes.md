@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 ---
 title: Exit codes
 ---
@@ -498,3 +500,6 @@ The list of exit codes for the Tact compiler is in the [Tact docs](https://docs.
 [tvm]: /v3/documentation/tvm/tvm-overview
 [bp]: https://github.com/ton-org/blueprint
 [fift]: /v3/documentation/fift/fift-and-tvm-assembly
+
+<Feedback />
+

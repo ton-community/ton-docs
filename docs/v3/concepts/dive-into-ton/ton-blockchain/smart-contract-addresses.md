@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Smart contract addresses
 
 On the TON Blockchain, every actor, including wallets and smart contracts, is represented by an address. These addresses are critical for receiving and sending messages and transactions. There are two main formats for smart contract addresses: **raw addresses** and **user-friendly addresses**.
@@ -81,3 +83,6 @@ For more details, refer to the refhandling guide in [Addresses Documentation](/v
 
 - [Explorers in TON](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton/)
 - [Smart contracts addresses documentation](/v3/documentation/smart-contracts/addresses/)
+
+<Feedback />
+
