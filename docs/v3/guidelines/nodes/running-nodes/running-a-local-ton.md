@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Running a local TON
 
 MyLocalTon is your personal blockchain development environment, running directly on your local computer. This comprehensive guide covers the installation, configuration, and operation of this powerful development tool.
@@ -179,3 +181,5 @@ Developers currently classify MyLocalTon as alpha software, making it unsuitable
 * [MyLocalTon binaries](https://github.com/neodiX42/MyLocalTon/releases)
 
 * [MyLocalTon source code](https://github.com/neodiX42/MyLocalTon)
+<Feedback />
+

@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Drawing conclusions from TON Hack Challenge
 
 The TON Hack Challenge was held on October 23.
@@ -159,3 +161,6 @@ Originally written by Dan Volkov
 
 - [dvlkv on GitHub](https://github.com/dvlkv)
 - [Original article](https://dev.to/dvlkv/drawing-conclusions-from-ton-hack-challenge-1aep)
+
+<Feedback />
+

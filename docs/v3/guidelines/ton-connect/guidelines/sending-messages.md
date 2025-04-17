@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Sending messages
 
 TON Connect has more powerful options than just authenticating users in the dApp; it also allows sending outgoing messages via connected wallets.
@@ -219,3 +221,6 @@ This error can be considered final (unlike connection cancellation) - if it has 
 ## See Also
 
 * [Preparing Messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+
+<Feedback />
+

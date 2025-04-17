@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # ADNL protocol
 
 Please see the [**implementation**](https://github.com/ton-blockchain/ton/tree/master/adnl) first.
@@ -36,3 +38,5 @@ A TCP-like stream protocol can be constructed on top of ADNL.
 
 * To learn more about ADNL, refer to the [Low-level ADNL documentation](/v3/documentation/network/protocols/adnl/low-level-adnl).
 * See Chapter 3.1 of the [TON Whitepaper](https://docs.ton.org/ton.pdf).
+<Feedback />
+

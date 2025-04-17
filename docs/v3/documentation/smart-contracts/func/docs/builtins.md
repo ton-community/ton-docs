@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Built-ins
 
 This section covers extra language constructs that are not part of the core but are still important for functionality. 
@@ -40,3 +42,5 @@ It uses a 513-bit intermediate result to prevent overflow if the final result fi
 - `null?` checks if the given argument is `null`. In FunC, the value `null` belongs to the TVM type `Null`, which represents the absence of a value for certain atomic types. See [null values](/v3/documentation/smart-contracts/func/docs/types#null-values) for details.
 - `touch` and `~touch` push a variable to the top of the stack.
 - `at` returns the value of a tuple element at the specified position.
+<Feedback />
+

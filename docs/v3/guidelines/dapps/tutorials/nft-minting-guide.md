@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Step by step NFT collection minting 
 
 ## 👋 Introduction
@@ -1209,3 +1211,6 @@ Today, you learned a lot about TON and successfully created your own NFT collect
 
 ## See also
  - [NFT use cases](/v3/documentation/dapps/defi/nft)
+
+<Feedback />
+

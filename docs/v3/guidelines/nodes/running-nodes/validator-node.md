@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Validator node
 
 Network validators confirm all user transactions. If all validators agree that a transaction is valid, it gets added to the blockchain. Invalid transactions are rejected. See more information [here](https://ton.org/validators).
@@ -160,3 +162,5 @@ If you run a regular node, then contact the group: [@mytonctrl_help](https://t.m
 * [Run a full Node](/v3/guidelines/nodes/running-nodes/full-node)
 * [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
 * [Staking incentives](/v3/documentation/infra/nodes/validation/staking-incentives)
+<Feedback />
+

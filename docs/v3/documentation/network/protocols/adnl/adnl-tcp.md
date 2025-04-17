@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # ADNL TCP - liteserver
 
 This is the low-level protocol that supports all interactions within the TON network. While it can operate on top of any protocol, it is most commonly used in conjunction with TCP and UDP. Typically, UDP facilitates communication between nodes, whereas TCP is employed for communication with liteservers.
@@ -564,3 +566,6 @@ The details of the ECDH itself will be omitted for the sake of simplicity. It is
 ## References
 
 _Here is a [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/ADNL-TCP-Liteserver.md) by [Oleg Baranov](https://github.com/xssnick)._
+
+<Feedback />
+

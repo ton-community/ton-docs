@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Functions
 A FunC program is a list of function declarations, function definitions, and global variable declarations. This section focuses on function declarations and definitions.
 
@@ -409,3 +411,6 @@ slice hello_world() asm """
   PUSHSLICE
 """;
 ```
+
+<Feedback />
+

@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # HTTP API by GetBlock
 
 :::tip TON infrastructure status
@@ -99,4 +101,7 @@ Developers can utilize the TON library to deploy and interact with contracts. Th
 By following this guide, developers can easily access TON Blockchain using GetBlock's infrastructure. Whether you're working on decentralized applications (dApps) or simply querying data, GetBlock simplifies the process by offering ready-to-use HTTP API endpoints with various features.
 
 Feel free to learn more at the [website](https://getblock.io/?utm_source=external&utm_medium=article&utm_campaign=ton_docs) or drop a line to GetBlock’s support via live chat, [Telegram](https://t.me/GetBlock_Support_Bot), or a website form.
+
+
+<Feedback />
 

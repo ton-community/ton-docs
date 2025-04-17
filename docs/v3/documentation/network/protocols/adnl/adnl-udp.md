@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # ADNL UDP - internode
 
 ADNL over UDP is a low-level protocol used by nodes and TON components to communicate with one another. It serves as the foundation for other higher-level TON protocols, such as DHT (Distributed Hash Table) and RLDP (Reliable Large Datagram Protocol).
@@ -376,3 +378,5 @@ Further communication occurs based on the logic outlined in this article, though
 ## References
 
 _Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/ADNL-UDP-Internal.md) by [Oleg Baranov](https://github.com/xssnick)._
+<Feedback />
+

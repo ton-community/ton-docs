@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Secure guidelines for nodes
 
 Ensuring the security of nodes, particularly in decentralized networks such as blockchain or distributed systems, is essential for maintaining data integrity, confidentiality, and availability. The guidelines for securing nodes should cover several layers, including network communication, hardware, and software configurations. Below are a set of guidelines to enhance node security:
@@ -100,3 +102,5 @@ Ensuring the security of nodes, particularly in decentralized networks such as b
 :::caution
 Please remain vigilant and ensure that your node is secure at all times.
 :::
+<Feedback />
+

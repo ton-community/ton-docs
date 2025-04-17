@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Connect with TON Proxy
 
 TON Proxy is fully compatible with standard HTTP proxy settings so that you can configure it directly through your browser or operating system.
@@ -57,3 +59,6 @@ Follow the instructions for Windows, macOS, Linux, iOS, or Android, depending on
 2. Click **Network Proxy → Manual**. 
 3. In the "HTTP Proxy" field, enter the address of one of the public entry proxies.
 4. For the port, enter "8080" without quotes.
+
+<Feedback />
+

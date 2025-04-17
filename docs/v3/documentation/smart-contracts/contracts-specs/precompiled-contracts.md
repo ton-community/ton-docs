@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Precompiled contracts
 
 A _precompiled smart contract_ is a contract with a C++ implementation in the node. When a validator processes a transaction for such a contract, it can execute this native implementation instead of TVM. This improves performance and reduces computation fees.
@@ -39,3 +41,6 @@ Hic sunt dracones.
 ## See also
 
 - [Governance contracts](/v3/documentation/smart-contracts/contracts-specs/governance)
+
+<Feedback />
+

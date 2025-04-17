@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Cross-chain bridges
 
 Decentralized cross-chain bridges function on the TON Blockchain, allowing asset transfers between this blockchain and the others.
@@ -43,3 +45,6 @@ You can find the current bridge smart contract addresses and oracle addresses by
 ### Cross-chain roadmap
 
 * [@The Open Network](https://t.me/tonblockchain/146)
+
+<Feedback />
+

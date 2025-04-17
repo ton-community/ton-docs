@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TON DNS & domains
 
 TON DNS is a service that translates human-readable domain names like `test.ton` or `mysite.temp.ton` into TON smart contract addresses, ADNL addresses used by services on the TON Network such as TON Sites, and more. 
@@ -45,3 +47,5 @@ Primary sales of `.ton` domains occur through a decentralized open auction at [d
 Domain owners can create subdomains by setting the smart contract address responsible for subdomain resolution in the DNS record using the key `sha256("dns_next_resolver")`.
 
 This address can point to any smart contract implementing the TON DNS standard.
+<Feedback />
+

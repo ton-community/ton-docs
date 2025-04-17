@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Standby validator nodes
 
 Validator node operators must ensure the continuous and reliable operation of their validators. Failure to do so can negatively impact the performance of the TON network and may lead to significant penalties.
@@ -47,3 +49,6 @@ To transfer your validator configuration back to the main validator machine and 
 1. Back up the active validator configuration from the standby node.
 2. Transfer the configuration to the main validator machine according to the instructions provided earlier.
 3. Restore the backup of the standby node's original configuration that you created before applying the validator configuration
+
+<Feedback />
+

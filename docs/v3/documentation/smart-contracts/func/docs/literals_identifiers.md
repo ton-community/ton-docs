@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Literals and identifiers
 ## Number literals
 
@@ -125,4 +127,7 @@ const slice str2r = str2;           // Constant referencing another constant
 Since numeric constants are replaced during compilation,
 all optimizations and pre-computations apply efficiently—unlike the older approach using inline `PUSHINT` assembly.
 
+
+
+<Feedback />
 
