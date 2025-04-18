@@ -9,7 +9,7 @@ Now we are ready to move on to the main functionality of smart contracts - **sen
 
 
 :::tip
-If you are stuck on some of the examples you can find original template project with all modifications performed during this guide [here](https://github.com/ton-community/ton-onboarding-sandbox/tree/main/quick-start/smart-contracts/Example).
+If you are stuck on some of the examples you can find original template project with all modifications performed during this guide [here](https://github.com/ton-community/ton-onboarding-sandbox/tree/main/quick-start/smart-contracts/Example/).
 :::
 
 ---
@@ -20,7 +20,7 @@ Before we proceed to implementation let's briefly describe main ways and pattern
 
 ### Actors and roles
 
-Since TON implements [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor) model it's natural to think about smart contracts relations in terms of `roles`, determining who can access smart contract functionality or not. The most common examples of roles are:
+Since TON implements [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor/) model it's natural to think about smart contracts relations in terms of `roles`, determining who can access smart contract functionality or not. The most common examples of roles are:
 
  - `anyone`: any contract that don't have distinct role.
  - `owner`: contract that has exclusive access to some crucial parts of functionality.
@@ -49,7 +49,7 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 </Tabs>
 
 :::info
-You can find comprehensive description of sending messages in this [section](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
+You can find comprehensive description of sending messages in this [section](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout/).
 :::
 
 What we specifically are interested in is the source address of message that we could extract from `msg_full` cell, by obtaining that address and comparing to stored one, that we previously saved, for example, during deployment, we can open crucial part of our smart contract functionality. Common approach looks like this:
@@ -184,10 +184,10 @@ By combining both of these patterns you can achieve a comprehensive description 
 Tact is a high-level programming language for the TON Blockchain, focused on efficiency and simplicity. It is designed to be easy to learn and use while being well-suited for smart contract development. Tact is a statically typed language with a simple syntax and a powerful type system.
 
 :::info
-For more details, refer to the [Tact documentation](https://docs.tact-lang.org/#start) and [Tact By Example](https://tact-by-example.org/00-hello-world).
+For more details, refer to the [Tact documentation](https://docs.tact-lang.org/#start/) and [Tact By Example](https://tact-by-example.org/00-hello-world/).
 :::
 
-Let's create and modify our smart contract folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview) section.
+Let's create and modify our smart contract folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview/) section.
 
 ### Step 1: Creating and modifying Tact contract
 
@@ -305,7 +305,7 @@ These fields are serialized similarly to structures and stored in the contract's
 
 #### Initializing the contract
 
-If you compile the contract at this stage, you will encounter the error: `Field "owner" is not set`. This is because the contract needs to initialize its fields upon deployment. Define an [`init()`](https://docs.tact-lang.org/book/contracts/#init-function) function to do this:
+If you compile the contract at this stage, you will encounter the error: `Field "owner" is not set`. This is because the contract needs to initialize its fields upon deployment. Define an [`init()`](https://docs.tact-lang.org/book/contracts/#init-function/) function to do this:
 
 ```tact title="/contracts/counter_internal.tact"
 init(id: Int, owner: Address) {
@@ -562,9 +562,9 @@ Ran all test suites matching /CounterInternal/i.
 
 ## External Messages
 
-`External messages` are your only way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because in most cases you don't want external entry points to be accessible to anyone except you. If this is all functionality that you want from external section - standard way is to delegate this responsibility to separate actor - [wallet](v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets), which is practically the main reason they were designed for.
+`External messages` are your only way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because in most cases you don't want external entry points to be accessible to anyone except you. If this is all functionality that you want from external section - standard way is to delegate this responsibility to separate actor - [wallet](v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets/), which is practically the main reason they were designed for.
 
-Developing external endpoint includes several standard [approuches](/v3/documentation/smart-contracts/message-management/external-messages) and [security measures](/v3/guidelines/smart-contracts/security/overview) that might be overwhelming at this point. Therefore in this guide we will realize incrementing previously added to `hello_world` contract `ctxCounterExt` number and add send message to out `Tact` contract.
+Developing external endpoint includes several standard [approuches](/v3/documentation/smart-contracts/message-management/external-messages/) and [security measures](/v3/guidelines/smart-contracts/security/overview/) that might be overwhelming at this point. Therefore in this guide we will realize incrementing previously added to `hello_world` contract `ctxCounterExt` number and add send message to out `Tact` contract.
 
 :::danger
 This implementation is **unsafe** and may lead to loosing your contract funds. Don't deploy it to `mainnet`, especially with high smart contract balance.
@@ -572,7 +572,7 @@ This implementation is **unsafe** and may lead to loosing your contract funds. D
 
 ## Implementation
 
-Let's modify our smart contract to recieve external messages folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview) section.
+Let's modify our smart contract to recieve external messages folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview/) section.
 
 ### Step1 : Edit smart contract code
 

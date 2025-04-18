@@ -12,7 +12,7 @@ This guide will walk you through writing data from the TON Blockchain. You'll le
 
 ## Setup environment
 
-First, visit installation pages and install [NodeJS and npm](https://nodejs.org/en/download) for your OS. Check that installation is correct by running those commands:
+First, visit installation pages and install [NodeJS and npm](https://nodejs.org/en/download/) for your OS. Check that installation is correct by running those commands:
 
 ```bash
 node -v
@@ -132,7 +132,7 @@ Navigate to [Tonviewer](https://testnet.tonviewer.com/) and paste your address i
 
 ## Sending NFTs
 
-[Non-fungible tokens](/v3/guidelines/dapps/asset-processing/nft-processing/nfts) (NFTs) are assets like a piece of art, digital content, or video that have been tokenized via a blockchain. In TON, NFTs are represented via a collection of smart contracts:
+[Non-fungible tokens](/v3/guidelines/dapps/asset-processing/nft-processing/nfts/) (NFTs) are assets like a piece of art, digital content, or video that have been tokenized via a blockchain. In TON, NFTs are represented via a collection of smart contracts:
 - **NFT Collection**: stores information about the NFT collection.
 - **NFT Item**: stores information about the NFT item that the user owns.
 
@@ -141,7 +141,7 @@ To send NFT we should first acquire one. The easiest way to do that is to create
 Basic operation of [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) in TON is `transfer`. What is actually performed is changing adress of `owner` in NFT storage to `new owner`, which is address of another contract that is able to perform operations with `NFT Item` now.
 
 :::tip
-See [Actors and roles](/v3/guidelines/quick-start/developing-smart-contracts/processing-messages#actors-and-roles) to get more conceptual description.
+See [Actors and roles](/v3/guidelines/quick-start/developing-smart-contracts/processing-messages#actors-and-roles/) to get more conceptual description.
 :::
 
 #### Implementation
