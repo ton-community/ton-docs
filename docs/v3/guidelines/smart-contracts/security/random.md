@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Generation of block random seed  
 
 :::caution  
@@ -76,6 +74,3 @@ Typical usage of pseudorandom number generators (PRNGs) may include `randomize_l
 <!-- TODO: Find an example contract using random without any additions and demonstrate how to determine the result of RANDU256 knowing the block random seed (include a link to dton.io to show the generated value). -->  
 
 <!-- TODO: Next article. "Let's proceed to writing a tool that exploits this. It will attach to a validator and include proposed external messages in blocks satisfying specific conditions—provided a fee is paid." -->  
-
-<Feedback />
-

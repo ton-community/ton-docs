@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Staking with nominator pools
 
 ## Overview
@@ -54,5 +52,3 @@ The theory of nominators is described in [TON Whitepaper](https://docs.ton.org/t
 - [Running validator node](/v3/guidelines/nodes/running-nodes/validator-node)
 - [Nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool/)
 - [Single nominator pool](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool/)
-<Feedback />
-

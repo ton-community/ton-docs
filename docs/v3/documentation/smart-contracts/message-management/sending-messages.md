@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Sending messages
 
 Composition, parsing, and sending messages lie at the intersection of [TL-B schemas](/v3/documentation/data-formats/tlb/tl-b-language), [transaction phases, and TVM](/v3/documentation/tvm/tvm-overview).
@@ -342,6 +340,3 @@ If a transfer using `mode=3` fails due to a suppressed error:
 **Best Practice**
 
 Always pair `IGNORE_ERRORS` with robust client-side validations and real-time balance checks to prevent unintended state changes.
-
-<Feedback />
-

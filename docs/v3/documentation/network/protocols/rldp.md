@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # RLDP
 
 Please see the implementations:
@@ -220,6 +218,3 @@ If `last` is true, then we have reached the end. We can combine all the pieces t
 ## References
 
 _Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/RLDP.md) by [Oleg Baranov](https://github.com/xssnick)._
-
-<Feedback />
-

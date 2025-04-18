@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 import ThemedImage from '@theme/ThemedImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -1270,6 +1268,3 @@ You can find a list of SDKs for different languages ​​(JS, Python, Golang, C
 * [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing)
 * [NFT processing on TON](/v3/guidelines/dapps/asset-processing/nft-processing/nfts)
 * [Metadata parsing on TON](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing)
-
-<Feedback />
-

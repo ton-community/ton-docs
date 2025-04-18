@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Dictionaries in TON
 
 Smart contracts in TON can utilize dictionaries structured as ordered key-value mappings. Internally, these dictionaries are represented as tree-like structures composed of cells.
@@ -97,6 +95,3 @@ Augmented maps with additional data in each node are used internally by TON vali
 :::info
 Testing shows that documentation on prefix dictionaries is insufficient. Avoid using them in production contracts unless you fully understand how the relevant opcodes, such as `PFXDICTSET`, work.
 :::
-
-<Feedback />
-

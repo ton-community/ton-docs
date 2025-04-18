@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Running MyTonCtrl in Docker
 
 This guide provides a step-by-step process for installing MyTonCtrl using Docker.
@@ -180,5 +178,3 @@ MyTonCtrl> update mytonctrl2
 ## Changing the data storage path
 
 TON and MyTonCore data is stored in ``/var/lib/docker/volumes/``by default. If you wish to change this storage path, update the required route in the ``volumes`` section of your `docker-compose.yml` file to fit your needs. 
-<Feedback />
-

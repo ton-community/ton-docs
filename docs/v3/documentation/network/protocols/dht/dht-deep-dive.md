@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # DHT
 
 DHT stands for Distributed Hash Table, which is a type of distributed key-value database. In this system, each member of the network can store information, such as details about themselves.
@@ -205,5 +203,3 @@ These nodes will also provide us with all the information regarding the blocks.
 ## References
 
 _Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/DHT.md) by [Oleg Baranov](https://github.com/xssnick)._
-<Feedback />
-

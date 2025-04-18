@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Highload Wallet
 
 When working with many messages in a short period, there is a need for special wallet called Highload Wallet. Highload Wallet V2 was the main wallet on TON for a long time, but you had to be very careful with it. Otherwise, you could [lock all funds](https://t.me/tonstatus/88). 
@@ -66,6 +64,3 @@ You can also read [Highload Wallet Tutorials](/v3/guidelines/smart-contracts/how
 
 Wallet source code:
  * [ton/crypto/smartcont/Highload-wallet-v2-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-highload-wallet-v2.fif)
-
-<Feedback />
-

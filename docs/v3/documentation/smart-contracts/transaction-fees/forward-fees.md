@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Forward fees
 
 This page explains how smart contracts handle message forwarding fees and value transfers between contracts.
@@ -67,6 +65,3 @@ Some operations require both value transfer and confirmation. For example, the v
    - Create a confirmation message
    - Return exactly one Toncoin (minus message transferring fees)
    - Use `SENDRAWMSG` with `mode = 1`
-
-<Feedback />
-

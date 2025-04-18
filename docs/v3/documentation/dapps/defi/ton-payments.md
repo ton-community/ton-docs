@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # TON Payments
 
 TON Payments is the platform for micropayment channels. 
@@ -40,6 +38,3 @@ Find examples of using payment channels in the [Hack-a-TON #1](https://ton.org/h
 
 * [Payments Processing](/v3/guidelines/dapps/asset-processing/payments-processing)
 * [TON Connect](/v3/guidelines/ton-connect/overview) 
-
-<Feedback />
-

@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Blockchain services
 
 ## Domain name systems
@@ -31,7 +29,4 @@ The TON network has its own decentralized storage service called snapshots, whic
 TON Payments is a solution for lightning-fast transactions with zero network fees on the TON blockchain. While the TON blockchain is sufficient for most tasks, some applications, such as TON Proxy, TON Storage, or a particular decentralized application, require micro-transactions with much higher speed and lower costs. In TON, Payment channels solve this problem. 
 
 Payment channels allow two parties to make transactions off-chain by creating a special smart contract on the blockchain with their initial balances. They can then perform as many transactions between them as they want without any speed limits or fees. The network charges fees only when opening and closing the channel. The technology guarantees proper operation by allowing a party to close the channel if the other party cheats or disappears.
-
-
-<Feedback />
 

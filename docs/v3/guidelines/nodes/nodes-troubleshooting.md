@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Troubleshooting
 
 This section provides answers to the most common questions regarding how to run nodes.
@@ -218,6 +216,3 @@ There are two known cases when this error appears:
 * [MyTonCtrl FAQ](/v3/guidelines/nodes/faq)
 
 * [MyTonCtrl errors](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-errors)
-
-<Feedback />
-

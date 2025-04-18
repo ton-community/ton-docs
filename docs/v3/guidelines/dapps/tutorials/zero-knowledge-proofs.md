@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Building a simple ZK project on TON
 
 ## 👋 Introduction
@@ -597,6 +595,3 @@ If you have any questions or run into any errors, feel free to reach out to the 
 
 ## 📬 About the author 
 - Saber on [Telegram](https://t.me/saber_coder), [GitHub](https://github.com/saberdotcoder), and [LinkedIn](https://www.linkedin.com/in/szafarpoor).
-
-<Feedback />
-

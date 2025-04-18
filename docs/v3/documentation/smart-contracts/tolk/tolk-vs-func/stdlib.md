@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Tolk vs FunC: standard library
 
 FunC has a rich [standard library](/v3/documentation/smart-contracts/func/docs/stdlib),
@@ -274,6 +272,3 @@ So, when you take tolk-js or blueprint, all stdlib functions are still available
 JetBrains and VS Code IDE plugins also auto-locate stdlib to provide auto-completion. 
 If you use blueprint, it automatically installs tolk-js; therefore, folder `node_modules/@ton/tolk-js/` exists in your project file structure.
 Inside are `common.tolk`, `tvm-dicts.tolk`, and others. 
-
-<Feedback />
-

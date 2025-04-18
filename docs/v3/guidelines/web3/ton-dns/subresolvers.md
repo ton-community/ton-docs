@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # TON DNS resolvers
 
 ## Introduction
@@ -457,6 +455,3 @@ slice decode_base64_address(slice readable) method_id {
 ```
 
 </details>
-
-<Feedback />
-

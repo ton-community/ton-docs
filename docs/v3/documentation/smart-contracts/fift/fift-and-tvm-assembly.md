@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Fift and TVM assembly
 
 Fift is a stack-based programming language with TON-specific features that can work with cells. TVM assembly is another stack-based language designed for TON that also handles cells. What's the difference between them?
@@ -123,5 +121,3 @@ int mul_mod_best(int a, int b, int m) asm "x{A988} s,";     ;; 65 gas units
 ```
 
 The `x{A988}` opcode implements an optimized division operation with built-in multiplication (as specified in [section 5.2 Division](/v3/documentation/tvm/instructions#A988)). This specialized instruction directly computes just the modulo remainder of the operation, skipping unnecessary computation steps. The `s,` suffix then handles the result storage - it takes the resulting slice from the stack's top and efficiently writes it into the target builder. Together, this combination delivers substantial gas savings compared to conventional approaches.
-<Feedback />
-

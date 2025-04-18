@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Compile from sources
 
 You can download prebuilt binaries [here](/v3/documentation/archive/precompiled-binaries#1-download).
@@ -273,6 +271,3 @@ To compile older TON revisions on Apple M1:
    ```
 
 2. Replace root `CMakeLists.txt` by https://github.com/ton-blockchain/ton/blob/c00302ced4bc4bf1ee0efd672e7c91e457652430/CMakeLists.txt
-
-<Feedback />
-

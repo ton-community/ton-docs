@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # TL
 TL (Type Language) is a language used to describe data structures.
 
@@ -49,5 +47,3 @@ The type is explicitly specified, so the prefix is not needed.
 ## Reference
 
 Here is [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/TL.md) by _[Oleg Baranov](https://github.com/xssnick)_.
-<Feedback />
-

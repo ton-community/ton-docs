@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 import Player from '@site/src/components/player'
 
 # How to launch a jetton airdrop
@@ -38,5 +36,3 @@ On the client side of the DApp, implement a request to our API (details in the [
 ## See also
 
 [Learn more about TON API](https://tonapi.io?utm_source=web&utm_medium=tondocs&utm_campaign=tondocs_2)
-<Feedback />
-

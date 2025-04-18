@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Internal messages
 
 ## Overview
@@ -171,6 +169,3 @@ Also op-code, op::code and operational code
 
 [StonFi docs](https://docs.ston.fi/docs/developer-section/architecture#calls-descriptions)
 :::
-
-<Feedback />
-

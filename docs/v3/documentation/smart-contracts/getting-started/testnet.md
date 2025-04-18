@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Understanding Testnet
 
 Use the TON test network for development and testing purposes.
@@ -51,7 +49,4 @@ For convenience, nearly the entire mainnet infrastructure (wallets, APIs, bridge
 
 * https://testnet-elections.toncenter.com/getValidationCycles?limit=2&return_participants=true
 
-
-
-<Feedback />
 

@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Accept Message Effects
 
 The `accept_message` and `set_gas_limit` TVM primitives play a crucial role in managing gas limits and transaction processing in TON smart contracts. While their basic functionality is documented in the [stdlib reference](/v3/documentation/smart-contracts/func/docs/stdlib#accept_message), their effects on transaction processing, gas limits, and contract balances can be complex and have important security implications. This page explores these effects in detail, particularly focusing on how they impact external and internal message processing.
@@ -43,6 +41,3 @@ If you send a bounceable message with 0.1 TON in the basechain that is accepted 
 **Case 2:**
 If in the same example, the computation cost is 0.5 (instead of 0.005), there will be no bounce (the message balance would be `0.1 - 0.5 - 0.001 = -0.401`, thus no bounce), and the contract balance will be `1 + 0.1 - 0.5` = `0.6` TON.
 :::
-
-<Feedback />
-

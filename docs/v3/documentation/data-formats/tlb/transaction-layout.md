@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Transaction layout
 
 :::info
@@ -233,6 +231,3 @@ trans_merge_install$0111 split_info:SplitMergeInfo
 ## See also
 
 - The initial explanation of the [transaction layout](/tblkch.pdf#page=75&zoom=100,148,290) from the whitepaper.
-
-<Feedback />
-

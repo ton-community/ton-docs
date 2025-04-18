@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Low-level fees overview
 
 :::caution
@@ -304,6 +302,3 @@ For educational purposes [example of the old one](https://explorer.toncoin.org/c
 - [TON Fees overview](/v3/documentation/smart-contracts/transaction-fees/fees)
 - [Transactions and phases](/v3/documentation/tvm/tvm-overview#transactions-and-phases)
 - [Fees calculation](/v3/guidelines/smart-contracts/fee-calculation)
-
-<Feedback />
-

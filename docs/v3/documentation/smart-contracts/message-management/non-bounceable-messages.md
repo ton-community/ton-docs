@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Non-bounceable messages
 
 export const Highlight = ({children, color}) => (
@@ -51,6 +49,3 @@ It is a good idea not to allow the end user (e.g., of a wallet) to send unbounce
 
 1.  Send a small amount first, initialize the new smart contract
 2.  Next, send a more considerable amount.
-
-<Feedback />
-

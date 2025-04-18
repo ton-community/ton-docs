@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Compile TON on low-memory machines
 
 :::caution
@@ -56,6 +54,3 @@ sudo rm /var/cache/swap/swap0
 sudo swapoff -a
 # Check memory: free -m
 ```
-
-<Feedback />
-

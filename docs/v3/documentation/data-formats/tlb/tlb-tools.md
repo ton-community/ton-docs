@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # TL-B tools
 
 ## TL-B parsers
@@ -18,5 +16,3 @@ TL-B parsers serialize basic [TL-B types](/v3/documentation/data-formats/tlb/tl-
 The [tlb-codegen](https://github.com/ton-community/tlb-codegen) package generates TypeScript code for serializing and deserializing structures based on a provided TL-B scheme.
 
 The [tonpy](https://github.com/disintar/tonpy) package also supports code generation in Python for serializing and deserializing structures according to a given TL-B scheme.
-<Feedback />
-

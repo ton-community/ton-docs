@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 
 # Creating the TON Connect manifest for DApp
 
@@ -49,6 +47,3 @@ The original definition is [here](https://github.com/ton-blockchain/ton-connect/
 
 ## See also
 - [TON Connect GitHub - App manifest](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#app-manifest)
-
-<Feedback />
-

@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Comments
 
 FunC supports both single-line and multi-line comments.
@@ -38,5 +36,3 @@ const a = 10;
 ```
 
 Here, `const a = 10;` is inside a multi-line comment and is effectively commented out.
-<Feedback />
-

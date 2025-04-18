@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # History of Tolk
 
 When new versions of Tolk are released, they will be mentioned here.
@@ -89,6 +87,3 @@ By analogy, TOLK is **The Open Language K**.
 What is K, will you ask? Probably, "kot" — the nick of Nikolay Durov? Or Kolya? Kitten? Kernel? Kit? Knowledge?  
 The right answer — none of this. This letter does not mean anything. It's open.  
 *The Open Letter K*
-
-<Feedback />
-

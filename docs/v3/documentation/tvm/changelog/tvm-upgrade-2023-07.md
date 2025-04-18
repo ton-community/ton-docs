@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # TVM upgrade Jul 2023
 
 :::tip
@@ -405,6 +403,3 @@ The upgrade to the TON Virtual Machine (TVM) was analyzed for security risks and
 
 **Audit firm**: Trail of Bits  
 **Audit report**: [TON Blockchain TVM Upgrade](https://docs.ton.org/audits/TVM_Upgrade_ToB_2023.pdf)
-
-<Feedback />
-

@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Library cells
 
 ## Introduction 
@@ -166,7 +164,4 @@ as well as a list of libraries for specific MasterChain block:
 * [Exotic cells](/v3/documentation/data-formats/tlb/exotic-cells) 
 * [TVM instructions](/v3/documentation/tvm/instructions)
 
-
-
-<Feedback />
 

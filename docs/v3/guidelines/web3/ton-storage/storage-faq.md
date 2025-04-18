@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # TON Storage FAQ
 
 ## How to assign a TON domain to a TON Storage bag 
@@ -48,7 +46,4 @@ To host a static site via TON Storage directly:
 ```
 dns_storage_address#7473 bag_id:uint256 = DNSRecord;
 ```
-
-
-<Feedback />
 

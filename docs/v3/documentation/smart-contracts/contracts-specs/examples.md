@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Examples of Smart Contracts 
 
 On this page, you can find TON smart contract references implemented for various program software.
@@ -160,7 +158,4 @@ If you want to share a new example smart contract, make your PR for this [page](
 * [Develop Smart Contracts Introduction](/v3/documentation/smart-contracts/overview)
 * [How to work with wallet smart contracts](/v3/guidelines/smart-contracts/howto/wallet)
 * [[You Tube] Ton Dev Study FunC & BluePrint lessons](https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa)
-
-
-<Feedback />
 

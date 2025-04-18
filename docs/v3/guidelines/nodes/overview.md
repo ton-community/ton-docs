@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Overview
 
 This page collects some recommendations that could be followed to manage Nodes on TON Blockchain.
@@ -20,7 +18,4 @@ If you have problems with running nodes it's recommended to get acquainted with 
 * [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
 * [Maintenance and Security](/v3/guidelines/nodes/node-maintenance-and-security)
 * [FAQ](/v3/guidelines/nodes/faq)
-
-
-<Feedback />
 

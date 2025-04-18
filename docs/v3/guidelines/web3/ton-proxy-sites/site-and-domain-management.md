@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Site & domain management
 
 ## How to open a domain for editing
@@ -45,7 +43,4 @@ You can link a wallet address to a domain, allowing users to send coins directly
 4. Paste the smart contract address of the subdomain manager into the "Subdomains" field and click "Save".
 5. Confirm the transaction in the extension.
 
-
-
-<Feedback />
 
