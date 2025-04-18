@@ -64,11 +64,7 @@ module.exports = [
           'v3/documentation/smart-contracts/shards/infinity-sharding-paradigm',
         ],
       },
-      {
-        type: 'link',
-        label: 'Tact language',
-        href: 'https://docs.tact-lang.org',
-      },
+      'v3/documentation/smart-contracts/tact',
       {
         type: 'category',
         label: 'Tolk language',

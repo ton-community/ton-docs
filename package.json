@@ -18,7 +18,7 @@
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
-    "spell": "cspell --show-suggestions",
+    "spell": "cspell '**/*.md' '**/.mdx' --show-suggestions --exclude build",
     "postinstall": "husky"
   },
   "dependencies": {
