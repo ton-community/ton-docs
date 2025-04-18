@@ -407,7 +407,7 @@ export function helloWorldConfigToCell(config: HelloWorldConfig): Cell {
     return beginCell()
         .storeUint(config.id, 32)
         .storeUint(config.ctxCounter, 32)
-        .storeUint(config.ctxcounterExt, 256)
+        .storeUint(config.ctxCounterExt, 256)
     .endCell();
 }
 ```

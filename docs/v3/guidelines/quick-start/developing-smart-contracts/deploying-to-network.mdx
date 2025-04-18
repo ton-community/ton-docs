@@ -83,15 +83,10 @@ export async function run(provider: NetworkProvider) {
         )
     );
 
-    await counterInternal.send(
+    counterInternal.send(
         provider.sender(),
-        {
-            value: toNano('0.05'),
-        },
-        {
-            $$type: 'Deploy',
-            queryId: 0n,
-        }
+        { value: toNano('0.05') }, 
+        null
     );
 
     await provider.waitForDeploy(counterInternal.address);
@@ -106,7 +101,7 @@ export async function run(provider: NetworkProvider) {
 You can run scripts by entering following command:
 
 ```bash
-npx bleuprint run # deployHelloWorld # optionally directly pass script
+npx blueprint run # deployHelloWorld # optionally directly pass script
 ```
 
 ### Step 3: choose network

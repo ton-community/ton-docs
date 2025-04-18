@@ -191,7 +191,7 @@ Let's create and modify our smart-contract folowing standard steps decsribed in 
 
 ### Step 1: Creating and modifying Tact contract
 
-First, let's create Tact contract.
+First, let's create Tact contract in the same directory as previous one.
 
 ```bash
 npx blueprint create CounterInternal --type tact-counter
@@ -336,41 +336,29 @@ receive() {
 
 #### Restricting access
 
-To ensure that only the contract owner can send messages, use the `require` function:
 
-```tact title="/contracts/counter_internal.tact"
-receive(msg: Add) {
-    // `sender()` function is used to retrieve message sender address
-    require(sender() == self.owner, "Not owner!");
-    self.counter += msg.amount;
-    self.notify("Cashback".asComment());
-}
-```
-
-:::info
-[Identity validation](https://docs.tact-lang.org/book/security-best-practices/#identity-validation) plays a key role in secure contract interactions. You can read more about identity validation and its importance in the linked documentation.
-:::
-
-Tact also provides handy ways to share same logic through [traits](https://docs.tact-lang.org/book/types/#traits). Use the `Ownable` trait, which provides built-in ownership checks:
+Tact also provides handy ways to share same logic through [traits](https://docs.tact-lang.org/book/types/#traits). To ensure that only the contract owner can send messages use the `Ownable` trait, which provides built-in ownership checks:
 
 ```tact title="/contracts/counter_internal.tact"
 // Import library to use trait
 import "@stdlib/ownable";
 
 // Ownable trait introduced here
-contract CounterInternal1 with Ownable {
+contract CounterInternal with Ownable {
 
     ...
 
     receive(msg: Add) {
-        // require(sender() == self.owner, "Not owner!");
-        // instead of requiring owner self.requireOwner() may be used
         self.requireOwner();
         self.counter += msg.amount;
         self.notify("Cashback".asComment());
     }
 }
 ```
+
+:::info
+[Identity validation](https://docs.tact-lang.org/book/security-best-practices/#identity-validation) plays a key role in secure contract interactions. You can read more about identity validation and its importance in the linked documentation.
+:::
 
 #### Getter functions
 
@@ -391,7 +379,6 @@ Note, that the `owner` getter is automatically defined via the `Ownable` trait.
 #### Complete contract
 
 ```tact title="/contracts/counter_internal.tact"
-import "@stdlib/deploy";
 import "@stdlib/ownable";
 
 // message with opcode
@@ -547,8 +534,6 @@ describe('CounterInternal', () => {
         const counterAfterNonOwner = await counterInternal.getCounter();
         expect(counterAfterNonOwner).toBe(counterBefore);
     });
-
-    // .. previous tests
 });
 
 ```
@@ -757,10 +742,11 @@ describe('HelloWorld', () => {
             await CounterInternal.fromInit(0n, helloWorld.address)
         );
 
-        const deployResultCounter = await counterInternal.send(deployer.getSender(), { value: toNano('1.00') }, {
-            $$type: 'Deploy',
-            queryId: 0n
-        });
+        const deployResultCounter = await counterInternal.send(
+            deployer.getSender(), 
+            { value: toNano('1.00') }, 
+            null
+        );
 
         expect(deployResultCounter.transactions).toHaveTransaction({
             from: deployer.address,
@@ -796,7 +782,7 @@ describe('HelloWorld', () => {
 
         const counterInternalValueAfter = await counterInternal.getCounter();
 
-        expect(counterInternalValueBefore).toBeGreaterThan(counterInternalValueAfter);
+        expect(counterInternalValueAfter).toBeGreaterThan(counterInternalValueBefore);
         const [_, counterExt] = await helloWorld.getCounters()
         expect(counterExtBefore + BigInt(increase)).toBe(counterExt);
     });
