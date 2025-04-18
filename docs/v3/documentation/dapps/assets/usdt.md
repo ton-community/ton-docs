@@ -4,9 +4,9 @@ import Button from '@site/src/components/button'
 
 ## Tether
 
-Stablecoins are a type of cryptocurrency whose value is 1:1 pegged to another asset, such as a fiat currency or gold, to maintain a stable price. Until recently, there was a jUSDT token, which is a wrapped ERC-20 Ethereum token bridged with <a href="https://bridge.ton.org" target="_blank">bridge.ton.org</a>. But on [18.04.2023](https://t.me/toncoin/824) the public launch of **native** USD₮ token issued by the company <a href="https://tether.to/en/" target="_blank">Tether</a> was happened. After the launch of USD₮, jUSDT moved to second-priority status but remains in use as an alternative or addition to USD₮ in various services.
+[Apr 18, 2023](https://t.me/toncoin/824), the public launch of native USD₮ token issued by the company <a href="https://tether.to/en/" target="_blank">Tether</a>.
 
-In TON Blockchain USD₮ supported as a [Jetton Asset](/v3/guidelines/dapps/asset-processing/jettons).
+In TON Blockchain USD₮ supported as a [Jetton asset](/v3/guidelines/dapps/asset-processing/jettons).
 
 :::info
 To integrate Tether’s USD₮ Token on TON Blockchain use the contract address:
@@ -44,7 +44,7 @@ TON’s high throughput and rapid confirmation times enable USD₮ transactions 
 ## Advanced details
 
 :::caution IMPORTANT
-In TON Blockchain Jettons can be created with duplicate names. Technically, it will not differ in any way from the real USD₮ but it will have no value because of no security. You can verify legitimacy and check for fraud only by confirming the Jetton Master address.
+In TON Blockchain jettons can be created with duplicate names. Technically, it will not differ in any way from the real USD₮ but it will have no value because of no security. You can verify legitimacy and check for fraud only by confirming the Jetton Master address.
 
 See important [recommendations](/v3/guidelines/dapps/asset-processing/jettons).
 :::

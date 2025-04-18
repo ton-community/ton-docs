@@ -1,4 +1,4 @@
-# About Oracles
+# About oracles
 
 Blockchain oracles are entities that connect the blockchain to external systems, allowing smart contracts to be executed based on real-world inputs.
 

@@ -18,7 +18,7 @@ Fungible tokens (Jettons) on TON, describing their smart contract implementation
 
 ### NFT : non-fungible tokens 
 Overview of Non-Fungible Tokens (NFTs) and Fungible Tokens (FT) on TON, explaining their application in representing unique digital assets, along with practical use cases and best practices.
-- [NFT use cases](/v3/documentation/dapps/defi/tokens/)
+- [NFT use cases](/v3/documentation/dapps/defi/nft/)
 
 ### Asset processing
 Offers a general overview of asset processing on TON, covering asset types such as Toncoin, Jettons, and NFTs, alongside methods for managing transactions and assets within applications using TON libraries and SDKs.
