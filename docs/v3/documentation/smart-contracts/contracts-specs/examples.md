@@ -1,4 +1,4 @@
-# Examples of Smart Contracts 
+# Examples of smart contracts 
 
 On this page, you can find TON smart contract references implemented for various program software.
 
@@ -6,9 +6,9 @@ On this page, you can find TON smart contract references implemented for various
 Make sure you have thoroughly tested contracts before using them in a production environment. This is a critical step to ensure the proper functioning and security of your software.
 :::
 
-## FunC Smart Contracts
+## FunC smart contracts
 
-###  Production-Used Contracts
+###  Production-used contracts
 | Contracts                                                                                                                                                                                                                                                                                                     | Description                                                                                                                                                                  |
 |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [wallet-contract](https://github.com/ton-blockchain/wallet-contract) <br /> <small>🪄 [Run in WebIDE](https://ide.ton.org/?importURL=https://github.com/ton-blockchain/wallet-contract&name=wallet-contract)</small>                                                                                         | Wallet v4 is the proposed version of the wallet to replace v3 or older wallets                                                                                               |
@@ -29,7 +29,7 @@ Make sure you have thoroughly tested contracts before using them in a production
 | [vesting-contract](https://github.com/ton-blockchain/vesting-contract) <br /> <small>🪄 [Run in WebIDE](https://ide.ton.org/?importURL=https://github.com/ton-blockchain/vesting-contract&name=vesting-contract)</small>                                                                                         | The Vesting contract allows you to lock a certain amount of Toncoin for a specified time and gradually unlock them.                                                                                                                                                |
 | [storage](https://github.com/ton-blockchain/ton/tree/master/storage/storage-daemon/smartcont) <br /> <small>🪄 [Run in WebIDE](https://ide.ton.org/?importURL=https://github.com/ton-blockchain/ton/tree/master/storage/storage-daemon/smartcont&name=storage)</small>                                       | TON Storage provider and fabric contracts                                                                                                                                    |
 
-### Ecosystem Contracts
+### Ecosystem contracts
 | Contracts                                                                                                                                                                                                                                                                                                  | Description                                                                                                                                 |
 |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
 | [telemint](https://github.com/TelegramMessenger/telemint) <br /> <small>🪄 [Run in WebIDE](https://ide.ton.org/?importURL=https://github.com/TelegramMessenger/telemint&name=telemint)</small>                                                                                                            | Telegram Usenames(`nft-item.fc`) and Telegram Numbers(`nft-item-no-dns.fc`) contracts.                                                      |
@@ -68,7 +68,7 @@ Make sure you have thoroughly tested contracts before using them in a production
 | [disintar/sale-dapp](https://github.com/disintar/sale-dapp/tree/master/func) <br /> <small>🪄 [Run in WebIDE](https://ide.ton.org/?importURL=https://github.com/disintar/sale-dapp/tree/master/func&name=disintar/sale-dapp)</small>                                                                                                    | React + NFT sale DApp with FunC                                         |
 
 
-### TON Smart Challenges
+### TON smart challenges
 
 #### TON Smart Challenge 1
 * https://github.com/nns2009/TON-FunC-contest-1/tree/main
@@ -93,7 +93,7 @@ Make sure you have thoroughly tested contracts before using them in a production
 * https://github.com/aSpite/tsc4-contracts (FunC solution)
 * [https://github.com/ProgramCrafter/tsc4](https://github.com/ProgramCrafter/tsc4/tree/c1616e12d1b449b01fdcb787a3aa8442e671371e/contracts) (FunC solution)
 
-## Fift Smart Contracts
+## Fift smart contracts
 
 * [CreateState.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/CreateState.fif)
 * [asm-to-cpp.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/asm-to-cpp.fif)
@@ -137,7 +137,7 @@ Make sure you have thoroughly tested contracts before using them in a production
 * [wallet.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet.fif)
 * [wallet-v3-code.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-v3-code.fif)
 
-## FunC Libraries and Helpers
+## FunC libraries and helpers
 
 * https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc
 * https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/crypto/elliptic-curves
@@ -149,11 +149,11 @@ Make sure you have thoroughly tested contracts before using them in a production
 * https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/utils
 * https://github.com/disintar/sale-dapp/tree/master/func
 
-## Add Reference
+## Add reference
 
 If you want to share a new example smart contract, make your PR for this [page](https://github.com/ton-community/ton-docs/tree/main/docs/v3/documentation/smart-contracts/contracts-specs/examples.md).
 
-## See Also
+## See also
 
 * [Develop Smart Contracts Introduction](/v3/documentation/smart-contracts/overview)
 * [How to work with wallet smart contracts](/v3/guidelines/smart-contracts/howto/wallet)

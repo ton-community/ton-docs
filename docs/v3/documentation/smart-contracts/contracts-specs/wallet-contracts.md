@@ -1,7 +1,7 @@
 import ConceptImage from '@site/src/components/conceptImage';
 import ThemedImage from '@theme/ThemedImage';
 
-# Types of Wallet Contracts
+# Wallet contracts
 
 You may have heard about different versions of wallets on the TON Blockchain. But what do these versions actually mean, and how do they differ?
 
@@ -376,7 +376,7 @@ Sometimes the functionality of basic wallets isn't enough. That's why there are 
 
 Let's have a look at them.
 
-### Highload Wallets
+### Highload wallets
 
 When working with many messages in a short period, there is a need for special wallet called Highload Wallet. Read [the article](/v3/documentation/smart-contracts/contracts-specs/highload-wallet) for more information.
 

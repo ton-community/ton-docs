@@ -1,4 +1,4 @@
-# Frequently Asked Questions
+# FAQ
 
 This section answers the most popular questions about the TON Blockchain.
 
