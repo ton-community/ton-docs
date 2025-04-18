@@ -1,36 +1,36 @@
 # Deploying to network
 
-> **Summary:** In previous steps we developed and tested our smart-contracts ensuring their correctness. 
+> **Summary:** In previous steps we developed and tested our smart contracts ensuring their correctness. 
 
-In this part of the guide we will proceed to deployment of previously developed smart-contracts and cover interaction with them on-chain.
+In this part of the guide we will proceed to deployment of previously developed smart contracts and cover interaction with them on-chain.
 
 ## Address and initial state
 
-We already know that [address](/v3/documentation/smart-contracts/addresses/) is unique identifier of `smart-contract` in network which is used to send transactions and verify their sender upon receive, but we still didn't discussed how it's created. The common formula of smart-contract address looks like that:
+We already know that [address](/v3/documentation/smart-contracts/addresses/) is unique identifier of `smart contract` in network which is used to send transactions and verify their sender upon receive, but we still didn't discussed how it's created. The common formula of smart contract address looks like that:
 
 ***address=hash(state_init(code, data))***
 
-Address of smart-contract is a hash of aggregated initial code and data of smart-contracts upon deployment. This simple mechanism have few important consequences:
+Address of smart contract is a hash of aggregated initial code and data of smart contracts upon deployment. This simple mechanism have few important consequences:
 
 ### You already know the address
 
-In TON any address that don't have any data is considered in `nonexistent` state, nevertheless when we created a wallet using wallet app in [Getting started](/v3/guidelines/quick-start/getting-started) section we still was able to get address of our **future** wallet smart-contract from wallet app before it's deployment and examine it in explorer. 
+In TON any address that don't have any data is considered in `nonexistent` state, nevertheless when we created a wallet using wallet app in [Getting started](/v3/guidelines/quick-start/getting-started) section we still was able to get address of our **future** wallet smart contract from wallet app before it's deployment and examine it in explorer. 
 
-The reason behind that is because creating your **private** and **public** key pair through **mnemonic phrase**, where second key is part of initial data of smart-contract makes `state_init` of our contract fully determent:
+The reason behind that is because creating your **private** and **public** key pair through **mnemonic phrase**, where second key is part of initial data of smart contract makes `state_init` of our contract fully determent:
  - **code** is one of the standard wallet implementation, like `v5r1`.
  - **data** is `public_key` with other default initialized fields.
 
-Which makes it possible to calculate future wallet smart-contract address.
+Which makes it possible to calculate future wallet smart contract address.
 
 ### Magic storage member
 
-In previous steps we deliberately didn't explain the purpose of `ctxID` and `ID` stored in our smart-contracts state and remaining untouched in all smart-contracts functionality. Now their purpose should start to be more clear.
+In previous steps we deliberately didn't explain the purpose of `ctxID` and `ID` stored in our smart contracts state and remaining untouched in all smart contracts functionality. Now their purpose should start to be more clear.
 
-Since we can't deploy smart-contract with the same `state_init` the only way to provide same initial code and **"same"** initial data is to create separate filed in it ensuring additional uniqueness. Which in case of wallet gives you opportunity to have same key pair to several wallet smart-contracts.
+Since we can't deploy smart contract with the same `state_init` the only way to provide same initial code and **"same"** initial data is to create separate filed in it ensuring additional uniqueness. Which in case of wallet gives you opportunity to have same key pair to several wallet smart contracts.
 
 ### One to rule them all
 
-If you already considered that `ID` field is a must-have for any smart-contract, there is another opportunity that could change your mind. Let's examine previously developed `CounterInternal` smart-contract init section:
+If you already considered that `ID` field is a must-have for any smart contract, there is another opportunity that could change your mind. Let's examine previously developed `CounterInternal` smart contract init section:
 
 ```tact
 init(id: Int, owner: Address) {
@@ -48,11 +48,11 @@ This mechanism plays cruicial role in [Jetton Processing](/v3/guidelines/dapps/a
 
 ## Implementation
 
-Now, when our smart-contracts is fully tested, we are ready to deploy them into the TON. In `Blueprint SDK` this process is the same for both `mainnet` and `testnet` and any of the presented languages in guide: `FunC`, `Tact`, `Tolk`. 
+Now, when our smart contracts is fully tested, we are ready to deploy them into the TON. In `Blueprint SDK` this process is the same for both `mainnet` and `testnet` and any of the presented languages in guide: `FunC`, `Tact`, `Tolk`. 
 
 ### Step 1: Update deployment script
 
-Deploy scripts relays on the same wrappers that you have used in testing scripts, we will use one common script to deploy both of previously deployed smart-contracts, update `deployHelloWorld.ts` with this code:
+Deploy scripts relays on the same wrappers that you have used in testing scripts, we will use one common script to deploy both of previously deployed smart contracts, update `deployHelloWorld.ts` with this code:
 
 ```typescript title="/scripts/deployHelloWorld.ts"
 import { toNano } from '@ton/core';
@@ -116,7 +116,7 @@ After that you will see interactive menu allowing to choose network:
 ```
 
 :::danger
-Before deployment to the `mainnet` ensure that your smart-contracts correspond to [Security Measures](/v3/guidelines/smart-contracts/security/overview), as we sad before, `HelloWorld` smart-contract **don't**.
+Before deployment to the `mainnet` ensure that your smart contracts correspond to [Security Measures](/v3/guidelines/smart-contracts/security/overview), as we sad before, `HelloWorld` smart contract **don't**.
 :::
 
 ### Step 4: choose wallet app
@@ -138,19 +138,19 @@ Finally scan QR code in the terminal through your wallet app and connect the wal
 
 You will recieve a transaction request in your wallet app each time your code require currency for transaction.
 
-### Step 5: observe your smart-contract in network
+### Step 5: observe your smart contract in network
 
- After confirming request in your wallet and awaiting for deployment you will see corresponding message with the reference to your newly deployed smart-contract view in explorer:
+ After confirming request in your wallet and awaiting for deployment you will see corresponding message with the reference to your newly deployed smart contract view in explorer:
 
 ```bash
 Contract deployed at address EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 You can view it at https://testnet.tonscan.org/address/EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 ```
 
-**Congratulations!** Your custom `smart-contracts` is ready to execute `get methods` same way as your wallet in [Getting started](/v3/guidelines/quick-start/getting-started#navigation-tabs) section and execute `transactions` same as in [Blockchain Interaction](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network) section - consider it's reading to understand how to interact with `smart-contracts` off-chain if you still don't.
+**Congratulations!** Your custom `smart contracts` is ready to execute `get methods` same way as your wallet in [Getting started](/v3/guidelines/quick-start/getting-started#navigation-tabs) section and execute `transactions` same as in [Blockchain Interaction](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network) section - consider it's reading to understand how to interact with `smart contracts` off-chain if you still don't.
 
 :::tip
-Using `Blueprint SDK` and wallet apps is not the only option, you can create message with [state_init](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) by yourself, moreover you can do it even through smart-contract [internal message](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
+Using `Blueprint SDK` and wallet apps is not the only option, you can create message with [state_init](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) by yourself, moreover you can do it even through smart contract [internal message](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
 :::
 
 

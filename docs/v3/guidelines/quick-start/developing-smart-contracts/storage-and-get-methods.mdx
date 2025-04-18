@@ -9,21 +9,21 @@ import TabItem from '@theme/TabItem';
 If you are stuck on some of the examples you can find original template project with all modifications performed during this guide [here](https://github.com/ton-community/ton-onboarding-sandbox/tree/main/quick-start/smart-contracts/Example).
 :::
 
-Almost all smart-contracts need to store their `data` between transactions. This guide explains standard ways of managing `storage` of smart-contract and using `get methods` to obtain it from outside the blockchain.
+Almost all smart contracts need to store their `data` between transactions. This guide explains standard ways of managing `storage` of smart contract and using `get methods` to obtain it from outside the blockchain.
 
 
 ## Smart contract storage operations
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
-There are two main instructions that provide access to smart-contract storage: 
+There are two main instructions that provide access to smart contract storage: 
 
  - `get_data()` returning current storage cell.
  - `set_data()` setting storage cell.
 
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
-There are two main instructions that provide access to smart-contract storage: 
+There are two main instructions that provide access to smart contract storage: 
 
  - `getContractData()` returning current storage `Cell`.
  - `setContractData()` setting storage `Cell`.
@@ -35,7 +35,7 @@ Lets examine [Cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-stor
 
 ## Cell structure
 
-TON blockchain uses a data structure called **`Cell`** as the fundamental unit for storing data. `Cells` are the building blocks of the smart-contract data and have those characteristics:
+TON blockchain uses a data structure called **`Cell`** as the fundamental unit for storing data. `Cells` are the building blocks of the smart contract data and have those characteristics:
 
 - `Cell` can store up to 1023 bits (approximately 128 bytes) of data
 - `Cell` can reference up to 4 other `Cells` (children's)
@@ -53,11 +53,11 @@ interface Cell {
 
 ## Implementation
 
-Let's try to modify our smart-contract folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview) section.
+Let's try to modify our smart contract folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview) section.
 
-### Step 1: Edit smart-contract code
+### Step 1: Edit smart contract code
 
-In case it's inconvenient to always serialize and deserialize storage cell, there is a pretty standard practice to define two wrapper methods that provide corresponding logic. If you didn't change smart-contract code it should contain following lines:
+In case it's inconvenient to always serialize and deserialize storage cell, there is a pretty standard practice to define two wrapper methods that provide corresponding logic. If you didn't change smart contract code it should contain following lines:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -115,7 +115,7 @@ fun saveData() {
 
 #### Managing storage
 
-Let's try to modify our example a little bit. First, let's examine different approach of managing storage, widely used in smart-contract development: 
+Let's try to modify our example a little bit. First, let's examine different approach of managing storage, widely used in smart contract development: 
 
 Instead of initializing global variables we will pass storage members as parameters to `save_data(members...)` and retrieve them as `(members...) get_data()` moving global variables `ctx_id` and `ctx_counter` to methods bodies. Also, let's add additional integer of 256-bit size into our storage.
 
@@ -227,7 +227,7 @@ get get_counters(): (int, int) {
 
 And that's it! In practice all **get methods** follow this simple flow and don't require anything more. Note that you can omit values returned from functions using `_` syntax.
 
-Final smart-contract code should look like this:
+Final smart contract code should look like this:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -394,7 +394,7 @@ Build script running, compiling HelloWorld
 
 ### Step 2: Update wrapper
 
-Now lets update our wrapper class corresponding to new storage layout and new `get method`. First, let's modify `helloWorldConfigToCell` function and `HelloWorldConfig` type to properly initialize our storage during samrt-contract creation with 256-bit `ctxCounterExt` field that we previously added to `smart-contract`:
+Now lets update our wrapper class corresponding to new storage layout and new `get method`. First, let's modify `helloWorldConfigToCell` function and `HelloWorldConfig` type to properly initialize our storage during samrt-contract creation with 256-bit `ctxCounterExt` field that we previously added to `smart contract`:
 
 ```typescript title="/wrappers/HelloWorld.ts"
 export type HelloWorldConfig = {
@@ -411,7 +411,7 @@ export function helloWorldConfigToCell(config: HelloWorldConfig): Cell {
     .endCell();
 }
 ```
-Second, add a method to perform a request for the newly created smart-contract method `get_counters` that will retrieve both counters at once:
+Second, add a method to perform a request for the newly created smart contract method `get_counters` that will retrieve both counters at once:
 
 ```typescript title="/HelloWorld.ts"
 async getCounters(provider: ContractProvider) : Promise<[number, bigint]> {
@@ -426,7 +426,7 @@ async getCounters(provider: ContractProvider) : Promise<[number, bigint]> {
 ### Step 3: Update tests
 
 And finally, let's test our new functionality through previously updated wrapper:
- - Create and initialize smart-contract storage members with some value through `helloWorldConfig`.
+ - Create and initialize smart contract storage members with some value through `helloWorldConfig`.
  - Call each of get methods and retrieve storage members.
  - Verify that they have stayed the same as during creation.
 

@@ -3,9 +3,9 @@ import TabItem from '@theme/TabItem';
 
 # Processing Messages
 
-> **Summary:** In previous steps we modified our smart-contract interaction with `storage`, `get methods` and learned basic smart-contract development flow.
+> **Summary:** In previous steps we modified our smart contract interaction with `storage`, `get methods` and learned basic smart contract development flow.
 
-Now we are ready to move on to the main functionality of smart contracts - **sending and receiving messages**. In TON messages not only used for sending currency, but also as data-exchange mechanism between smart-contracts making them crucial for smart-contract development.
+Now we are ready to move on to the main functionality of smart contracts - **sending and receiving messages**. In TON messages not only used for sending currency, but also as data-exchange mechanism between smart contracts making them crucial for smart contract development.
 
 
 :::tip
@@ -20,7 +20,7 @@ Before we proceed to implementation let's briefly describe main ways and pattern
 
 ### Actors and roles
 
-Since TON implements [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor) model it's natural to think about smart-contracts relations in terms of `roles`, determining who can access smart-contract functionality or not. The most common examples of roles are:
+Since TON implements [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor) model it's natural to think about smart contracts relations in terms of `roles`, determining who can access smart contract functionality or not. The most common examples of roles are:
 
  - `anyone`: any contract that don't have distinct role.
  - `owner`: contract that has exclusive access to some crucial parts of functionality.
@@ -32,7 +32,7 @@ Let's examine `recv_internal` function signature to understand how we could use 
 ```func
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure
 ```
- - `my_balance` - balance of smart-contract at the beggining of the transaction.
+ - `my_balance` - balance of smart contract at the beggining of the transaction.
  - `msg_value` - funds recieved with message.
  - `in_msg_full` - `cell` containing "header" fields of message.
  - `in_msg_body` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containg payload of the message.
@@ -41,7 +41,7 @@ Let's examine `recv_internal` function signature to understand how we could use 
 ```tolk
 fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice)
 ```
- - `myBalance` - balance of smart-contract at the beggining of the transaction.
+ - `myBalance` - balance of smart contract at the beggining of the transaction.
  - `msgValue` - funds recieved with message.
  - `msgFull` - `cell` containing "header" fields of message.
  - `msgBody` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containg payload pf the message.
@@ -177,7 +177,7 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 </Tabs>
 
 
-By combining both of these patterns you can achieve a comprehensive description of your smart-contract's systems ensuring secure interaction between them and unleash full potential of TON actors model.
+By combining both of these patterns you can achieve a comprehensive description of your smart contract's systems ensuring secure interaction between them and unleash full potential of TON actors model.
 
 ## Implementation in Tact
 
@@ -187,7 +187,7 @@ Tact is a high-level programming language for the TON Blockchain, focused on eff
 For more details, refer to the [Tact documentation](https://docs.tact-lang.org/#start) and [Tact By Example](https://tact-by-example.org/00-hello-world).
 :::
 
-Let's create and modify our smart-contract folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview) section.
+Let's create and modify our smart contract folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview) section.
 
 ### Step 1: Creating and modifying Tact contract
 
@@ -428,7 +428,7 @@ contract CounterInternal with Ownable {
 }
 ```
 
-Verify that smart-contract code is correct by running build script:
+Verify that smart contract code is correct by running build script:
 
 ```bash
 npx blueprint build 
@@ -458,9 +458,9 @@ export * from '../build/CounterInternal/tact_CounterInternal';
 
 ### Step 3: Updating tests
 
-Now let's ensure that our smart-contract code fails when we try to send `add` message from non-owner:
+Now let's ensure that our smart contract code fails when we try to send `add` message from non-owner:
  - Create `CounterInternal` with some owner.
- - Create another smart-contract that will have different address - `nonOwner`.
+ - Create another smart contract that will have different address - `nonOwner`.
  - Try to send an internal message to `CounterInternal` and enusre that it fails with expected `exitCode` and counter field remains the same.
 
 Implementation of test should look like this:
@@ -567,16 +567,16 @@ Ran all test suites matching /CounterInternal/i.
 Developing external endpoint includes several standard [approuches](/v3/documentation/smart-contracts/message-management/external-messages) and [security measures](/v3/guidelines/smart-contracts/security/overview) that might be overwhelming at this point. Therefore in this guide we will realize incrementing previously added to `hello_world` contract `ctxCounterExt` number and add send message to out `Tact` contract.
 
 :::danger
-This implementation is **unsafe** and may lead to loosing your contract funds. Don't deploy it to `mainnet`, especially with high smart-contract balance.
+This implementation is **unsafe** and may lead to loosing your contract funds. Don't deploy it to `mainnet`, especially with high smart contract balance.
 :::
 
 ## Implementation
 
-Let's modify our smart-contract to recieve external messages folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview) section.
+Let's modify our smart contract to recieve external messages folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview) section.
 
-### Step1 : Edit smart-contract code
+### Step1 : Edit smart contract code
 
-Add `recv_external` function to `HelloWorld` smart-contract:
+Add `recv_external` function to `HelloWorld` smart contract:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -641,10 +641,10 @@ fun onExternalMessage(inMsg: slice) {
 </TabItem>
 </Tabs>
 
-This function upon recieving an external message will increment our `ctxCounter` and also send an internal message to specified address with `increase` operation that we will use to increment counter on our `CounterInternal` smart-contract.
+This function upon recieving an external message will increment our `ctxCounter` and also send an internal message to specified address with `increase` operation that we will use to increment counter on our `CounterInternal` smart contract.
 
 
-Verify that smart-contract code is correct by running:
+Verify that smart contract code is correct by running:
 
 ```bash
 npx blueprint build
@@ -792,7 +792,7 @@ describe('HelloWorld', () => {
 ```
 
 This test describes common trascantion flow of any `multi-contract` system: 
- 1. Send external message to toggle smart-contracts logic from outside the blockchain.
+ 1. Send external message to toggle smart contracts logic from outside the blockchain.
  2. Provoke one or more sending of internal messages to other contracts.
  3. Upon recieving an internal message change contract state and repeat **step 2** if required.
 
