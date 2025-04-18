@@ -474,13 +474,15 @@ function writeStringTail(str, cell) {
 }
 
 function readStringTail(slice) {
-    const str = new TextDecoder('ascii').decode(slice.array); // decode uint8array to string
-    if (cell.refs.length > 0) {
-        return str + readStringTail(cell.refs[0].beginParse()); // read next cell
-    } else {
-        return str;
-    }
+	const str = new TextDecoder('ascii').decode(slice.array); // decode uint8array to string
+	if (slice.refs.length > 0) {
+		return str + readStringTail(slice.refs[0]); // read next cell
+	}
+	else {
+		return str;
+	}
 }
+
 
 let cell = new TonWeb.boc.Cell();
 const str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In euismod, ligula vel lobortis hendrerit, lectus sem efficitur enim, vel efficitur nibh dui a elit. Quisque augue nisi, vulputate vitae mauris sit amet, iaculis lobortis nisi. Aenean molestie ultrices massa eu fermentum. Cras rhoncus ipsum mauris, et egestas nibh interdum in. Maecenas ante ipsum, sodales eget suscipit at, placerat ut turpis. Nunc ac finibus dui. Donec sit amet leo id augue tempus aliquet. Vestibulum eu aliquam ex, sit amet suscipit odio. Vestibulum et arcu dui.";
