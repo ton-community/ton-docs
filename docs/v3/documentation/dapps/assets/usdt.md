@@ -1,6 +1,6 @@
 import Button from '@site/src/components/button'
 
-# USDT Processing
+# USDT processing
 
 ## Tether
 
@@ -41,7 +41,7 @@ On the other hand average fee for sending any amount of USD₮ in TON Blockchain
 
 TON’s high throughput and rapid confirmation times enable USD₮ transactions to be processed more quickly than ever before.
 
-## Advanced Details
+## Advanced details
 
 :::caution IMPORTANT
 In TON Blockchain Jettons can be created with duplicate names. Technically, it will not differ in any way from the real USD₮ but it will have no value because of no security. You can verify legitimacy and check for fraud only by confirming the Jetton Master address.
@@ -49,6 +49,6 @@ In TON Blockchain Jettons can be created with duplicate names. Technically, it w
 See important [recommendations](/v3/guidelines/dapps/asset-processing/jettons).
 :::
 
-## See Also
+## See also
 
 * [Payments Processing](/v3/guidelines/dapps/asset-processing/payments-processing)

@@ -128,7 +128,7 @@ module.exports = [
     type: 'category',
     label: 'DApps',
     items: [
-      'docs/v3/documentation/dapps/dapps-overview',
+      'v3/documentation/dapps/dapps-overview',
       {
         type: 'category',
         label: 'DeFi Principles',
@@ -137,7 +137,7 @@ module.exports = [
           'v3/documentation/dapps/defi/tokens',
           {
             type: 'doc',
-            label: 'NFT Use Cases in TON',
+            label: 'NFT use cases in TON',
             id: 'v3/documentation/dapps/defi/nft',
           },
           'v3/documentation/dapps/defi/subscriptions',

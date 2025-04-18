@@ -1,4 +1,4 @@
-# Content Subscriptions
+# Content subscriptions
 
 Due to the fact that transactions in TON Blockchain are fast and the network fees are low, you can process recurring payments on-chain via smart contracts.
 
