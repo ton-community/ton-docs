@@ -902,5 +902,9 @@
     {
       "from": "/participate/wallets/contracts",
       "to": "/v3/documentation/smart-contracts/contracts-specs/wallet-contracts"
+    },
+    {
+      "from":"/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk",
+      "to":"/v3/guidelines/ton-connect/frameworks/web"
     }
 ]

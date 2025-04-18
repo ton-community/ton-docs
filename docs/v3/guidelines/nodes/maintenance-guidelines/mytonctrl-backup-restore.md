@@ -1,31 +1,43 @@
 # Node configuration backup and restore
-MyTonCtrl allows users to create and restore node configuration backups with two simple, easy-to-use commands. This feature allows node operations to quickly and efficiently transfer node configuration from one host to another.
 
-### Manually create backup package
-Manual backup creation is initialized with the `create_backup` command, the backup creation process should not take more than a few seconds. 
+MyTonCtrl enables users to easily create and restore backups of node configurations with two straightforward commands. This feature allows efficient and quick transfer of node configurations from one host to another.
 
-MyTonCtrl will create a backup package in the home directory of the MyTonCtrl user, the package name will include the hostname as well as the epoch timestamp of the backup.
+## Manual backup package creation
 
-The backup will contain
-* Node configuration file (`/var/ton-work/db/config.json`)
-* Node keyring (`/var/ton-work/db/keyring`)
-* Node liteserver and console keys (`/var/ton-work/keys`)
-* MyTonCtrl configuration database and files (`~/.local/share/mytoncore`)
-* Wallet and pool information
+The `create_backup` command initializes manual backup creation, which should take no more than a few seconds.
 
-### Automated backup creation
-If your node is participating in validation, you can set up automated backups of the node configuration; this backup will be performed immediately after your node participates in the elections, thus ensuring that all data required for the upcoming validation cycle has been preserved.
-To enable automated backups, please set the parameter: `auto_backup` to `true` by issuing command `set auto_backup true` on MyTonCtrl console.
+MyTonCtrl will create a backup package in the user's home directory. The package name will include the hostname and the backup's epoch timestamp.
 
-#### Automated backups location and lifecycle
-By default, automated backups are stored in directory `/tmp/mytoncore/auto_backups/` within home of the user mytoncore process is running under. You can adjust this by setting parameter `auto_backup_path` in MyTonCtrl console.
+The backup will include the following components:
 
-Automated backups older than 7 days will be deleted.
+* Node configuration file located at (`/var/ton-work/db/config.json`)
+
+* Node keyring found in (`/var/ton-work/db/keyring`)
+
+* Node liteserver and console keys stored in (`/var/ton-work/keys`)
+
+* MyTonCtrl configuration database and related files located at (`~/.local/share/mytoncore`)
+
+* Wallet and pool data
+
+## Automated backup package creation
+
+If your node is involved in validation, you can set up automated backups of the node configuration. These backups will be performed immediately after your node participates in the elections, ensuring that all data needed for the upcoming validation cycle is preserved.
+
+To enable automated backups, set the parameter: `auto_backup` to `true` by issuing the command `set auto_backup true` on the MyTonCtrl console.
+
+### Automated backup location and lifecycle
+
+By default, automated backups are saved in the directory `/tmp/mytoncore/auto_backups/` located in the home folder of the user under which the **mytoncore** process is running. You can change this location by adjusting the `auto_backup_path` parameter in the MyTonCtrl console.
+
+**Note that automated backups that are older than 7 days will be automatically deleted.**
 
 ### Restore backup package
-**Important Notes**: 
-1) Please ensure that you have stopped / disabled the Ton node on the donor machine. Failure to do so will result in connectivity and synchronization problems on both machines. We also recommend that you stop the donor node 20 minutes before applying the backup data to the new machine.
-2) Before restoring the backup package to the existing node, we strongly recommend that you manually backup the original configuration of the node to ensure a possible rollback path.
 
-Use the `restore_backup <file_name>` command and follow the instructions.
-Backups should be restored to a fully synchronized node, MyTonCtrl will keep all settings except the IP address which will be adjusted accordingly.
+**Important Notes**:
+
+* Make sure to stop or disable the TON node on the donor machine. Failing to do so can lead to connectivity and synchronization issues on both machines. It is recommended to stop the donor node for at least 20 minutes before applying the backup data to the new machine.
+
+* Before restoring the backup package to the existing node, it is strongly advised to manually back up the node's original configuration to ensure you have a rollback option.
+
+Use the `restore_backup <file_name>` command and follow the provided instructions. Backups should be restored to a fully synchronized node. MyTonCtrl will retain all settings except for the IP address, which will be updated accordingly.

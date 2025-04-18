@@ -480,7 +480,8 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
 
 
-### How to write custom functions using the `asm` keyword
+### How to write own functions using asm keyword
+
 
 Many features we use in FunC come from pre-prepared methods inside `stdlib.fc`. However, we have many more capabilities, and learning to write custom functions unlocks new possibilities.
 

@@ -55,7 +55,7 @@ import { KeyPair, mnemonicToPrivateKey } from "ton-crypto";
 import { getHttpEndpoint } from "@orbs-network/ton-access";
 ```
 
-### 2. Create a `TonClient` instance
+### 2. Create a TonClient instance
 
 Initialize the `TonClient`:
 
@@ -84,7 +84,7 @@ for (let i = 0; i < mnemonics.length; i++) {
 }
 ```
 
-### 4. Create a `MultisigWallet` object
+### 4. Create a MultisigWallet object
 
 You can create a `MultisigWallet` object in two ways:
 

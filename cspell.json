@@ -313,9 +313,13 @@
     "zellic",
     "zerostate",
     "bouncable"
+    "decentralised",
+    "colour",
+    "analyse"
     "ensurepip",
     "Buildx",
-    "underperforming"
+    "underperforming",
+    "blackhole"
   ],
   "ignoreRegExpList": [
     "\\(#.*\\)",
