@@ -194,10 +194,10 @@ save_data(ctx_id, ctx_counter, ctx_counter_ext);
 <TabItem value="Tolk" label="Tolk">
 ```tolk title="/contracts/hello_world.tolk"
 // loadData() on:
-var (ctx_id, ctxCounter, ctxCounterExt) = loadData();
+var (ctxID, ctxCounter, ctxCounterExt) = loadData();
 
 // saveData() on:
-saveData(ctx_id, ctxCounter, ctxCounterExt);
+saveData(ctxID, ctxCounter, ctxCounterExt);
 ```
 </TabItem>
 </Tabs>
@@ -352,13 +352,13 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
     throw 0xffff; // if the message contains an op that is not known to this contract, we throw
 }
 
-get get_counter(): int {
-    var (_, ctxCounter, _) = loadData();
+get currentCounter(): int {
+    var (ctxID, ctxCounter, ctxCounterExt) = loadData();
     return ctxCounter;
 }
 
-get get_id(): int {
-    var (ctxID, _, _) = loadData();
+get initialId(): int {
+    var (ctxID, ctxCounter, ctxCounterExt) = loadData();
     return ctxID;
 }
 

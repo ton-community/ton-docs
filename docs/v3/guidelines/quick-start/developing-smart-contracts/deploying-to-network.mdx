@@ -83,7 +83,7 @@ export async function run(provider: NetworkProvider) {
         )
     );
 
-    counterInternal.send(
+    await counterInternal.send(
         provider.sender(),
         { value: toNano('0.05') }, 
         null
