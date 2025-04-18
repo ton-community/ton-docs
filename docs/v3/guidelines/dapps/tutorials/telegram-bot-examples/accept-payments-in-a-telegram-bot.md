@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 ---
 description: In this article, we'll guide you through the process of accepting payments in a Telegram bot.
 ---
@@ -863,6 +861,3 @@ Example of a working bot [@AirDealerBot](https://t.me/AirDealerBot)
 
 - Made for TON as part of [ton-footsteps/8](https://github.com/ton-society/ton-footsteps/issues/8)
 - By Lev ([Telegram @Revuza](https://t.me/revuza), [LevZed on GitHub](https://github.com/LevZed))
-
-<Feedback />
-

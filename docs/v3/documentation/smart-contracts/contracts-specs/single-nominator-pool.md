@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -196,6 +194,3 @@ This emergency opcode (0x9903) should only be used to upgrade the nominator cont
 - [Single nominator pool](https://github.com/ton-blockchain/single-nominator)
 - [How to use single nominator pool](/v3/guidelines/smart-contracts/howto/single-nominator-pool)
 - [Orbs single nominator pool contract(legacy)](https://github.com/orbs-network/single-nominator)
-
-<Feedback />
-

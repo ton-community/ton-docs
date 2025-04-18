@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # How to run TON Sites
 
 ## Introduction
@@ -74,6 +72,3 @@ You can check availability by opening the address with the `.adnl` suffix. Ensur
 
 ## See also
 * [Run C++ Implementation](/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy)
-
-<Feedback />
-

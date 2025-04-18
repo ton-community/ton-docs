@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -296,5 +294,3 @@ Create a file named `index.js` and include the following content:
 ## See also
 
 - [YouTube-Tutorial how to launch a liteserver](https://youtu.be/p5zPMkSZzPc)
-<Feedback />
-

@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # TON mining guide
 
 :::warning deprecated
@@ -136,6 +134,3 @@ Calculation process by itself will not be faster, but you will gain some stabili
 This is out of scope of this guide, please consult [Full node howto](https://ton.org/#/howto/full-node) and/or [mytonctrl instructions](https://github.com/igroman787/mytonctrl).
 #### <a id="faq-software-build"></a>Can you help me to build software on my OS?
 This is out of scope of this guide, please consult [Full node howto](https://ton.org/#/howto/full-node) as well as [Mytonctrl installation scripts](https://github.com/igroman787/mytonctrl/blob/master/scripts/toninstaller.sh#L44) for information about dependencies and process.
-
-<Feedback />
-

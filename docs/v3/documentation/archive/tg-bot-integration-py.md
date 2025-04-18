@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 import Button from '@site/src/components/button'
 
 # TON Connect for Telegram Bots - Python
@@ -579,6 +577,3 @@ What is next?
 ## See Also
 - [Full bot code](https://github.com/yungwine/ton-connect-bot)
 - [Preparing messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
-
-<Feedback />
-

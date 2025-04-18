@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Maintenance and security
 
 ## Introduction
@@ -213,6 +211,3 @@ If you suspect that your node is under attack, consider changing your IP address
 :::warning
 Regardless of the approach you choose, be sure to [update your new IP address](#set-node-ip-address) in the node configuration file!
 :::
-
-<Feedback />
-

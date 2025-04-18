@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # How it works
 
 ![how it works](/img/localizationProgramGuideline/localization-program.png)
@@ -146,6 +144,3 @@ We use DeepL for AI translation in our Crowdin project:
 ![pre-translate-config](/img/localizationProgramGuideline/howItWorked/pre-translate-config.png)
 
 That's it! Now, you can take a break and wait for the pre-translation to complete.
-
-<Feedback />
-

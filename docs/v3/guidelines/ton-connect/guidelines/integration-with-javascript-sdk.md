@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Integration manual with the JavaScript SDK
 
 :::danger
@@ -508,6 +506,3 @@ When writing a dApp, the following should also be considered:
    - the current user may sign in using another type of contract instead of a wallet. Thankfully, this will contain the public key in the expected location
 
 Good luck and have fun writing dApps!
-
-<Feedback />
-

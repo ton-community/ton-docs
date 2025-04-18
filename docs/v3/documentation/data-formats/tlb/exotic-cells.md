@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Exotic cells
 
 Each cell has a type encoded by an integer ranging from -1 to 255. A cell with a type of -1 is considered an `ordinary` cell, while all other cells are classified as `exotic` or `special`.
@@ -147,6 +145,3 @@ Such proofs significantly reduce computational load and minimize the amount of d
 ## See also
 
 * [Advanced proofs verifying examples](/v3/documentation/data-formats/tlb/proofs)
-
-<Feedback />
-

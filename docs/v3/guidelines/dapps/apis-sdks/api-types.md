@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # API types
 
 **High availability blockchain APIs are essential for developing secure, efficient, and scalable applications on TON.**
@@ -86,6 +84,3 @@ Response body
 * [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis)
 * [List of SDKs](/v3/guidelines/dapps/apis-sdks/sdk)
 * [TON cookbook](/v3/guidelines/dapps/cookbook)
-
-<Feedback />
-

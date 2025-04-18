@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Extra currency minting
 
 ## Extracurrency
@@ -71,5 +69,3 @@ Sending of extracurrency to blackhole has the following effect: extracurrency am
 3. Submit a proposal to the validators to add your **Currency Admin** contract address to the `ExtraCurrencyAuthorizationConfig` for a specific `currency_id` and obtain their approval.
 
 4. Send a `mint` request from the **Currency Admin Contract** to the **Minter**. Wait for the **Minter** to return the extra currency.
-<Feedback />
-

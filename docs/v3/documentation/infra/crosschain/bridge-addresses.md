@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Bridges addresses
 
 :::caution
@@ -220,5 +218,3 @@ For the most accurate current addresses of bridge smart contracts, please refer 
 	* TON address: [Ef-fxGCPuPKNR6T4GcFxNQuLU5TykLKEAtkxWEfA1wBWy6JE](https://testnet.tonscan.org/address/Ef-fxGCPuPKNR6T4GcFxNQuLU5TykLKEAtkxWEfA1wBWy6JE)
 
 	* EVM address: 0xF636f40Ebe17Fb2A1343e5EEee9D13AA90888b51
-<Feedback />
-

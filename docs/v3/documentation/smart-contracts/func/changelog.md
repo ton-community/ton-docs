@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # History of FunC 
 
 ## Initial version
@@ -54,7 +52,4 @@ Released in [Jan 2023](https://github.com/ton-blockchain/ton/releases/tag/v2023.
 - Disallowed ambiguous modification of local variables after their usage in the same expression. For example, `var x = (ds, ds~load_uint(32), ds~load_unit(64));` is forbidden, while `var x = (ds~load_uint(32), ds~load_unit(64), ds);` is allowed. 
 - Allowed empty inline functions.
 - Fixed a rare optimization bug in `while` loops.
-
-
-<Feedback />
 

@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Blockchain of blockchains
 
 
@@ -79,5 +77,3 @@ There is a necessity for the synchronization of message routing and transaction 
 
 ## See also
 - [Smart contract addresses](/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses/)
-<Feedback />
-

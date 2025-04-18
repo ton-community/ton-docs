@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # TON Connect for security
 
 TON Connect ensures that users have explicit control over the data they share, meaning data is not susceptible to leakage during app and wallet transfer. To reinforce this design, wallets and apps employ strong cryptographic authentication systems that work together.
@@ -11,6 +9,3 @@ TON Connect ensures that users have explicit control over the data they share, m
 - The TON Connect protocol allows for sharing personal data items (such as contact details and KYC info, etc.), meaning the user explicitly confirms sharing such data.
 
 Specific details and related code examples about TON Connect and its underlying security-focused design can be found via [TON Connect GitHub](https://github.com/ton-connect/).
-
-<Feedback />
-

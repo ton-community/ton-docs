@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Config parameters
 
 :::info
@@ -586,6 +584,3 @@ On these pages, you can find active network configurations of the TON Blockchain
 - [Mainnet configuration](https://ton.org/global-config.json)
 - [Testnet configuration](https://ton.org/testnet-global.config.json)
 - [Russian version](https://github.com/delovoyhomie/description-config-for-TON-Blockchain/blob/main/Russian-version.md)
-
-<Feedback />
-

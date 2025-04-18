@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Types
 
 :::info
@@ -154,6 +152,3 @@ Currently, FunC does not support defining custom types beyond the type construct
 Every value in FunC occupies a certain number of stack entries. 
 If this number is consistent for all values of a given type, it is called the **type width**.
 At the moment, polymorphic functions can only be defined for types with a fixed and predefined type width.
-
-<Feedback />
-

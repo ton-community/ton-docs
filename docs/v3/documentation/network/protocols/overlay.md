@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Overlay subnetworks
 
 Please see the implementation:
@@ -97,6 +95,3 @@ This allows us to receive information directly from the nodes.
 ## References
 
 _Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/Overlay-Network.md) by [Oleg Baranov](https://github.com/xssnick)._
-
-<Feedback />
-

@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Glossary
 
 ## Introduction
@@ -506,6 +504,3 @@ ___________
 ### Yolo
 
 **Yolo** — “you only live once,” a slang acronym used as a call to live life to the fullest without taking into account the risk of the given endeavor.
-
-<Feedback />
-

@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Storage daemon
 
 A **storage daemon** is a program used to download and share files in the TON network. The `storage-daemon-cli` console program manages a running storage daemon.
@@ -176,6 +174,3 @@ To download the bag, other users need to know its hash. You can also save the to
 ```
 get-meta <BagID> <meta-file>
 ```
-
-<Feedback />
-

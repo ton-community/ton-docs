@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Running your TON Proxy
 
 This document briefly introduces TON Sites — websites accessed through the TON Network. TON Sites can serve as convenient entry points to other TON Services. For instance, HTML pages loaded from TON Sites may contain `ton://...` URIs, such as payment links. When clicked, these links can trigger actions like making a payment, provided the user has a TON Wallet installed on their device.
@@ -263,6 +261,3 @@ In this case, your regular web server must be accessible at `http://333.333.333.
 Since anonymity features will only be introduced in TON Proxy 2.0, if you'd prefer to keep your web server's IP address private, you have two options:
 - Set up a reverse proxy on a different server using the `-R` flag. 
 - Create a duplicate server containing a copy of your website and run the reverse proxy locally.
-
-<Feedback />
-

@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Localization
 
 The localization is a collaborative effort to translate various TON-related documents into multiple languages, making the website accessible to billions of non-English speakers worldwide.
@@ -35,7 +33,4 @@ We sincerely appreciate the thousands of community members integral to the Trans
 If you are participating in or considering joining the Translation Program, refer to the translation guides below:
 * [Translation style guide](/v3/contribute/localization-program/translation-style-guide) – Instructions and tips for translators.
 * [Crowdin online editor guide](https://support.crowdin.com/online-editor/) – An in-depth guide to using the Crowdin online editor and some of Crowdin's advanced features.
-
-
-<Feedback />
 

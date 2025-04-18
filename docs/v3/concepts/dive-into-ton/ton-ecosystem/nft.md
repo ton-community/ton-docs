@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 ---
 ---
 
@@ -89,6 +87,3 @@ NFT integrated into a game allows players to own and trade in-game items in a ve
 
 - [TON wallet apps](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps/)
 - [Explorers in TON](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton/)
-
-<Feedback />
-

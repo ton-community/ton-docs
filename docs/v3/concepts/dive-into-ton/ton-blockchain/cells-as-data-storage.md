@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 import ConceptImage from '@site/src/components/conceptImage';
 import ThemedImage from '@theme/ThemedImage';
 
@@ -61,6 +59,3 @@ If you want more details about cell serialization and deserialization, read [Cel
 
 - [Blockchain of blockchains](docs/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/)
 - [TL-B Language](/v3/documentation/data-formats/tlb/tl-b-language)
-
-<Feedback />
-

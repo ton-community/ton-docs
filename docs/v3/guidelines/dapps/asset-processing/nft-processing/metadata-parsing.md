@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Metadata parsing
 
 The metadata standard covering NFTs, NFT collections, and jettons, is outlined in TON Enhancement Proposal 64 [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
@@ -213,6 +211,3 @@ On-chain NFT parser: [stackblitz/ton-onchain-nft-parser](https://stackblitz.com/
 * [TON NFT processing](/v3/guidelines/dapps/asset-processing/nft-processing/nfts)
 * [TON jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
 * [Mint your first jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token)
-
-<Feedback />
-

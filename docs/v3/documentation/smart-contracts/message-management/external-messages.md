@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # External messages
 
 External messages are `sent from the outside` to the smart contracts residing in TON Blockchain to make them perform certain actions.
@@ -21,6 +19,3 @@ And one could also include an `expire-at` field in the external message, and acc
 :::note  
 In general, an external message begins with a 256-bit signature (if needed), a 32-bit `req-seqno` (if needed), a 32-bit `expire-at` (if needed), and possibly a 32-bit `op` and other required parameters depending on `op`. The layout of external messages does not need to be as standardized as that of internal messages because external messages are not used for interaction between different smart contracts (written by different developers and managed by different owners).  
 :::
-
-<Feedback />
-

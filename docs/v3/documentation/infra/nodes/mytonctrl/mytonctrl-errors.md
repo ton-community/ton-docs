@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # MyTonCtrl errors
 
 ## Overview
@@ -43,5 +41,3 @@ This document explains the errors that users may encounter with **MyTonCtrl**.
 ## See also
 
 * [Nodes Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
-<Feedback />
-

@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Frequently Asked Questions
 
 This section answers the most popular questions about the TON Blockchain.
@@ -321,6 +319,3 @@ Explore a wide range of TON-related projects and tools curated by the community:
 
 - [Network configs](/v3/documentation/network/configs/network-configs)
 - [Examples and tutorials](/v3/guidelines/dapps/overview#tutorials-and-examples)
-
-<Feedback />
-

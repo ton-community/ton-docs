@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 # Persistent states
 
 Nodes periodically store snapshots of the blockchain's states. Each state is created at a specific MasterChain block and has a defined time-to-live (TTL). The selection of the block and TTL follows this algorithm:
@@ -23,6 +21,3 @@ In 2025, there will be several long-term persistent states, each lasting at leas
 When the node starts for the first time, it must download a persistent state. This process is implemented in the file [validator/manager-init.cpp](https://github.com/ton-blockchain/ton/blob/master/validator/manager-init.cpp).
 
 Beginning with the initialization block, the node downloads all newer key blocks. It selects the most recent key block that has a persistent state still available (using the formula mentioned above) and subsequently downloads the corresponding MasterChain state, along with the states for all shards or only those shards that are necessary for this node.
-
-<Feedback />
-

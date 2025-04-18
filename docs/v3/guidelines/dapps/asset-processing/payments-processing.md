@@ -1,5 +1,3 @@
-import Feedback from '@site/src/components/Feedback';
-
 
 import Button from '@site/src/components/button'
 import Tabs from '@theme/Tabs';
@@ -643,6 +641,3 @@ if __name__ == "__main__":
 ## SDKs
 
 A full list of SDKs for various programming languages (JS, Python, Golang, etc.) is available [here](/v3/guidelines/dapps/apis-sdks/sdk).
-
-<Feedback />
-
