@@ -169,6 +169,7 @@ const config = {
           'typescript',
           'cpp',
           'c',
+          'bash', // bash, sh, and shell code blocks
         ],
       },
       docs: {
