@@ -11,11 +11,11 @@ This guide covers the basic steps of setting up your smart contract development 
 
 ## Setup development environment
 
-For this guide, we will rely on the [Blueprint SDK](https://github.com/ton-org/blueprint/) and [Node.js](https://nodejs.org/en)/TypeScript stack for writing wrappers, tests, and deployment scripts for your smart contract, because it provides the easiest, ready-to-use environment for smart contract development.
+For this guide, we will rely on the [Blueprint SDK](https://github.com/ton-org/blueprint/) and [Node.js](https://nodejs.org/en)/TypeScript stack for writing wrappers, tests, and deployment scripts for your smart contract, as it provides the easiest, ready-to-use environment for smart contract development.
 
 :::info
-Using native instruments and language-dependent SDKs for smart contract development is covered in more advanced sections here:
-- [Compile and build smart contracts on TON](/v3/documentation/archive/compile#ton-compiler/).
+Using native tools and language-dependent SDKs for smart contract development is covered in more advanced sections here:
+- [Compile and Build Smart Contracts on TON](/v3/documentation/archive/compile#ton-compiler/).
 - [Creating State Init for Deployment](/v3/guidelines/smart-contracts/howto/wallet#creating-the-state-init-for-deployment/).
 :::
 
@@ -32,13 +32,13 @@ node -v
 
 ### Step 2: Choose a smart contract development language
 
-During the guide, we provide examples in `Func`, `Tolk`, and `Tact`. You can choose any of them and even combine smart contracts in different languages. To proceed through the guide, there is no need for a deep understanding of the chosen language—basic programming skills will be enough.
+During the guide, we provide examples in `FunC`, `Tolk`, and `Tact`. You can choose any of them and even combine smart contracts in different languages. To proceed through the guide, there is no need for a deep understanding of the chosen language—basic programming skills will be enough.
 
 :::info
 You can find a brief overview of the languages here: [Programming languages](/v3/documentation/smart-contracts/overview#programming-languages/)
 :::
 
-### Step 3: Setup Blueprint SDK
+### Step 3: Set up Blueprint SDK
 
 Change the directory to the parent folder of your future project and run the following command:
 
@@ -47,20 +47,19 @@ npm create ton@latest
 ```
 
 This will run an interactive script to create the project template. You can enter anything you want, but if you want to follow the same paths as in this guide, choose the following:
-1. Project name: `Example`.
-2. First created contract name: `HelloWorld`.
-3. Choose the project template: A **simple counter contract** in `FunC` or `Tolk`.
 
-Finally, change your current directory to the generated project template folder, and install all required dependencies:
+1. **Project name**: `Example`  
+2. **First contract name**: `HelloWorld`  
+3. **Project template**: A **simple counter contract** in `FunC` or `Tact`  
+
+Finally, change your current directory to the generated project template folder and install all required dependencies:
 
 ```bash
 cd ./Example
 npm install
 ```
+### Step 4 (Optional): IDE and Editor Support
 
-### Step 4 (optional): IDE and Editor Support
+The TON community has developed plugins that provide syntax support for several IDEs and code editors. You can find them here: [Plugin List](https://docs.ton.org/v3/documentation/smart-contracts/getting-started/ide-plugins/).
 
-TON Community has developed plugins providing syntax support for several IDEs and code editors. You can find them here: [Plugin List](https://docs.ton.org/v3/documentation/smart-contracts/getting-started/ide-plugins/).
-
-Also, consider installing plugins that provide support for **JavaScript/TypeScript** tools for your preferred IDE or code editor, and specifically, `Jest` for debugging smart contract tests.
-
+Also, consider installing plugins that support **JavaScript/TypeScript** tools for your preferred IDE or code editor, specifically `Jest` for debugging smart contract tests.
