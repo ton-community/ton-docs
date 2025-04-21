@@ -12,75 +12,73 @@ These algorithms typically require a _seed_ value to produce a sequence of _pseu
 
 To predict the result of the `random()` function in a smart contract, one would need to know the current `seed` of the block, which is impossible unless you are a validator.
 
-# Approaches and security considerations
-
-There are multiple methods for generating random values, each with distinct trade-offs between speed, security, and decentralization guarantees.
+There are multiple approaches to generate random values, each offering different trade-offs between speed, security, and decentralization guarantees.
 
 Below we outline three fundamental approaches:
 
 ---
 
-## Approach 1: randomize_lt
+## Approach 1: randomize_lt {#randomize_lt}
 
-**Mechanism**: Generates randomness using block logical time (`lt`) and blockchain entropy.  
-**Security Model**:
+**Mechanism**: Generates [randomness using block logical time](https://docs.ton.org/v3/guidelines/smart-contracts/security/ton-hack-challenge-1/#4-lottery) (`lt`) and blockchain entropy.  
+**Security model**:
 
 - ✅ Safe against user manipulation
 - ❌ Vulnerable to colluding validators (could theoretically predict/influence values)
 
 **Speed**: Fast (single-block operation)  
-**Use Cases**:
+**Use cases**:
 
 - Non-critical applications, for example gaming & NFTs
 - Scenarios where validator trust is assumed
 
 ---
 
-## Approach 2: Block skipping
+## Approach 2: Block skipping {#block-skip}
 
-**Mechanism**: Uses entropy from skipped blocks in blockchain history.  
-**Security Model**:
+**Mechanism**: Uses [entropy from skipped blocks](https://github.com/puppycats/ton-random?tab=readme-ov-file#ton-random) in blockchain history.  
+**Security model**:
 
 - ✅ Resistant to user manipulation
 - ⚠️ Not fully secure against determined validators (may influence block inclusion timing)
 
 **Speed**: Slow (requires multiple blocks to finalize)  
-**Use Cases**:
+**Use cases**:
 
 - Medium-stakes applications, for example lottery systems
 - Scenarios with partial trust in validator set
 
 ---
 
-## Approach 3: Commit-reveal scheme
+## Approach 3: Commit-reveal scheme {#commit-reveal}
 
 **Mechanism**:
 
-1. **Commit Phase**: Participants submit hashed secrets
-2. **Reveal Phase**: Secrets are disclosed and combined to generate final randomness
+1. **Commit phase**: Participants submit hashed secrets
+2. **Reveal phase**: Secrets are disclosed and combined to generate final randomness
 
-**Security Model**:
+**Security model**:
 
 - ✅ Cryptographically secure when properly implemented
 - ✅ Resilient to both users and validators
 - ⚠️ Requires protocol-level verification of commitments
 
 **Speed**: Very slow (multi-phase, multi-block process)  
-**Use Cases**:
+**Use cases**:
 
 - High-value applications, for example decentralized auctions
 - Systems requiring Byzantine fault tolerance
 
 ---
 
-### **Key Considerations**
+## Key considerations
 
 | Factor                    | `randomize_lt` | Block skipping | Commit-reveal |
 | ------------------------- | -------------- | -------------- | ------------- |
 | Speed                     | Fast           | Moderate       | Slow          |
-| User Resistance           | High           | High           | Highest       |
-| Validator Resistance      | Low            | Medium         | Highest       |
-| Implementation Complexity | Low            | Medium         | High          |
+| User resistance           | High           | High           | Highest       |
+| Validator resistance      | Low            | Medium         | Highest       |
+| Implementation complexity | Low            | Medium         | High          |
 
 ---
 
@@ -94,5 +92,3 @@ No method is universally perfect – choose based on:
 :::
 
 Always audit implementations through formal verification where possible.
-
-For working examples, refer to [randomization contracts example](https://github.com/puppycats/ton-random).
