@@ -246,79 +246,139 @@ Now let's ensure that our smart contract code fails when we try to send `add` me
 Implementation of test should look like this:
 
 ```typescript title="/tests/CounterInternal.spec.ts"
-import { Blockchain, SandboxContract, TreasuryContract} from '@ton/sandbox';
-import { Cell, toNano } from '@ton/core';
+import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
+import { toNano } from '@ton/core';
 import { CounterInternal } from '../wrappers/CounterInternal';
 import '@ton/test-utils';
-import { compile } from '@ton/blueprint';
 
-describe('CounterInternal', () => {
-    let codeHelloWorld: Cell;
+describe('CounterInternal Basic Tests', () => {
     let blockchain: Blockchain;
     let counterInternal: SandboxContract<CounterInternal>;
-    let deployerCounter: SandboxContract<TreasuryContract>;
-
-    beforeAll(async () => {
-        codeHelloWorld = await compile('HelloWorld');
-    });
+    let owner: SandboxContract<TreasuryContract>;
 
     beforeEach(async () => {
+        // Create a new blockchain instance
         blockchain = await Blockchain.create();
 
-        deployerCounter = await blockchain.treasury('deployerCounter');
+        // Create an owner wallet
+        owner = await blockchain.treasury('owner');
 
-        // Deploy CounterInternal with deployer as the owner
+        // Deploy the contract
         counterInternal = blockchain.openContract(
-            await CounterInternal.fromInit(0n, deployerCounter.address)
+            await CounterInternal.fromInit(0n, owner.address)
         );
 
-        const deployResultCounter = await counterInternal.send(
-            deployerCounter.getSender(),
+        // Send deploy transaction
+        const deployResult = await counterInternal.send(
+            owner.getSender(),
             { value: toNano('1.00') },
             null
         );
 
-        expect(deployResultCounter.transactions).toHaveTransaction({
-            from: deployerCounter.address,
+        // Verify deployment was successful
+        expect(deployResult.transactions).toHaveTransaction({
+            from: owner.address,
             to: counterInternal.address,
             deploy: true,
             success: true
         });
     });
 
-    it('should fail if not owner call increment', async () => {
+    it('should initialize with correct values', async () => {
+        // Check initial counter value
+        const initialCounter = await counterInternal.getCounter();
+        expect(initialCounter).toBe(0n);
+
+        // Check initial ID
+        const id = await counterInternal.getId();
+        expect(id).toBe(0n);
+    });
+
+    it('should allow owner to increment counter', async () => {
         // Get initial counter value
-        const counterBefore = await counterInternal.getCounter();
+        const initialCounter = await counterInternal.getCounter();
 
-        // Try to increase counter from a non-owner account (should fail)
-        const nonOwner = await blockchain.treasury('nonOwner');
-        const increaseBy = 5n;
+        // Increment counter by 5
+        const incrementAmount = 5n;
+        const result = await counterInternal.send(
+            owner.getSender(),
+            { value: toNano('0.05') },
+            {
+                $$type: 'Add',
+                amount: incrementAmount,
+                queryId: 0n
+            }
+        );
 
-        const nonOwnerResult = await counterInternal.send(nonOwner.getSender(), {
-            value: toNano('0.05')
-        }, {
-            $$type: 'Add',
-            amount: increaseBy,
-            queryId: 0n
+        // Verify transaction was successful
+        expect(result.transactions).toHaveTransaction({
+            from: owner.address,
+            to: counterInternal.address,
+            success: true
         });
 
-        // This should fail since only the owner should be able to increment
-        expect(nonOwnerResult.transactions).toHaveTransaction({
+        // Check counter was incremented correctly
+        const newCounter = await counterInternal.getCounter();
+        expect(newCounter).toBe(initialCounter + incrementAmount);
+    });
+
+    it('should prevent non-owner from incrementing counter', async () => {
+        // Create a non-owner wallet
+        const nonOwner = await blockchain.treasury('nonOwner');
+
+        // Get initial counter value
+        const initialCounter = await counterInternal.getCounter();
+
+        // Try to increment counter as non-owner
+        const result = await counterInternal.send(
+            nonOwner.getSender(),
+            { value: toNano('0.05') },
+            {
+                $$type: 'Add',
+                amount: 5n,
+                queryId: 0n
+            }
+        );
+
+        // Verify transaction failed
+        expect(result.transactions).toHaveTransaction({
             from: nonOwner.address,
             to: counterInternal.address,
-            success: false,
-            exitCode: 132 // The error code thrown in the contract, Access Denied
+            success: false
         });
 
-        // Counter should remain unchanged
-        const counterAfterNonOwner = await counterInternal.getCounter();
-        expect(counterAfterNonOwner).toBe(counterBefore);
+        // Verify counter was not changed
+        const newCounter = await counterInternal.getCounter();
+        expect(newCounter).toBe(initialCounter);
+    });
+
+    it('should handle multiple increments correctly', async () => {
+        // Perform multiple increments
+        const increments = [3n, 7n, 2n];
+        let expectedCounter = 0n;
+
+        for (const amount of increments) {
+            await counterInternal.send(
+                owner.getSender(),
+                { value: toNano('0.05') },
+                {
+                    $$type: 'Add',
+                    amount: amount,
+                    queryId: 0n
+                }
+            );
+            expectedCounter += amount;
+        }
+
+        // Verify final counter value
+        const finalCounter = await counterInternal.getCounter();
+        expect(finalCounter).toBe(expectedCounter);
     });
 });
 
 ```
 
-Don't forget to verify that all examples is correct by running test script:
+Don't forget to verify the example is correct by running test script:
 
 ```bash
 npx blueprint test
@@ -327,15 +387,20 @@ npx blueprint test
 Expected output should look like this:
 
 ```bash
+
  PASS  tests/CounterInternal.spec.ts
-  CounterInternal
-    ✓ should fail if not owner call increment (506 ms)
+  CounterInternal Basic Tests
+    ✓ should initialize with correct values (211 ms)
+    ✓ should allow owner to increment counter (100 ms)
+    ✓ should prevent non-owner from incrementing counter (152 ms)
+    ✓ should handle multiple increments correctly (112 ms)
 
 Test Suites: 1 passed, 1 total
-Tests:       1 passed, 1 total
+Tests:       4 passed, 4 total
 Snapshots:   0 total
-Time:        4.387 s, estimated 6 s
-Ran all test suites matching /CounterInternal/i.
+Time:        1.193 s, estimated 2 s
+Ran all test suites.
+
 ```
 
 ---
