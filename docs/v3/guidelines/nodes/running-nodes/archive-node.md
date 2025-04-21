@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Archive node
 
 :::info
@@ -262,3 +264,6 @@ Contact technical support at [@mytonctrl_help](https://t.me/mytonctrl_help).
 
 - [TON Node Types](/v3/documentation/infra/nodes/node-types)
 - [Run a Full Node](/v3/guidelines/nodes/running-nodes/full-node)
+
+<Feedback />
+

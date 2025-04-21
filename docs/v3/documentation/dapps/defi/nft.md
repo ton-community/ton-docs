@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 ---
 ---
 
@@ -73,3 +75,6 @@ It is important to note that this is just one example, and as the TON ecosystem 
 ## NFT as a virtual asset in games
 
 NFT integrated to a game allows players to own and trade in-game items in a way that is verifiable and secure, which adds an extra layer of value and excitement to the game.
+
+<Feedback />
+

@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ConceptImage from '@site/src/components/conceptImage';
 import ThemedImage from '@theme/ThemedImage';
 
@@ -413,3 +415,6 @@ As you see, there are many different versions of wallets in TON. But in most cas
 - [Lockup wallet sources and detailed description](https://github.com/ton-blockchain/lockup-wallet-contract)
 - [Restricted wallet sources](https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet)
 - [Gasless transactions on TON](https://medium.com/@buidlingmachine/gasless-transactions-on-ton-75469259eff2)
+
+<Feedback />
+

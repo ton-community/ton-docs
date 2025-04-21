@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TON Connect for business
 
 TON Connect is built to be customizable for businesses by offering powerful features that attract traffic and increase user retention.
@@ -35,3 +37,6 @@ To gain a better understand of what is possible with this solution, check out ou
 TON Connect is an open protocol and can be used to develop DApps with any programming language or development environment.
 
 For JavaScript (JS) applications, the TON developer community created a JavaScript SDK that allows developers to integrate TON Connect seamlessly in minutes. SDKs designed to operate with additional programming languages will be available in the future.
+
+<Feedback />
+

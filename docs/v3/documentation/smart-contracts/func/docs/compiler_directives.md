@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Compiler directives
 Compiler directives are keywords that begin with `#`, instructing the compiler to perform specific actions, enforce checks, or modify parameters.
 
@@ -134,3 +136,5 @@ All `asm` reordering will occur only after computation.
 
 
 **Note:** `#pragma compute-asm-ltr` applies only to the code after the directive in the file.
+<Feedback />
+

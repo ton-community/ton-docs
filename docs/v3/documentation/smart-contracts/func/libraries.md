@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # FunC SDK and libraries  
 
 ## Standard libraries
@@ -15,3 +17,6 @@
  - [open-contracts/crypto](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/crypto/): provides cryptographic operations for secp256k1 curves.
  - [toncli/test-libs](https://github.com/disintar/toncli/tree/master/src/toncli/lib/test-libs/): supports TLB operations, including message and type parsing and generation.
  - [ston-fi/funcbox](https://github.com/ston-fi/funcbox/): collection of FunC snippets and utilities.
+
+<Feedback />
+

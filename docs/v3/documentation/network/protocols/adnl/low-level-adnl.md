@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Low-level ADNL
 
 Abstract Datagram Network Layer (ADNL) is the core protocol of TON, which helps network peers communicate.
@@ -113,3 +115,5 @@ A detailed description can be found in the article [ADNL UDP - internode](/v3/do
 
 _Thanks to the [hacker-volodya](https://github.com/hacker-volodya) for contributing to the community!_
 _Here a [link to the original article](https://github.com/tonstack/ton-docs/tree/main/ADNL) on GitHub._
+<Feedback />
+
