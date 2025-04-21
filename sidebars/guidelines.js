@@ -2,6 +2,39 @@
  * @type {import('@docusaurus/plugin-content-docs').SidebarConfig}
  */
 module.exports = [
+  {
+    type: 'category',
+    label: `Quick Start`,
+    items: [
+      'v3/guidelines/quick-start/getting-started',
+      {
+        type: 'category',
+        label: 'Blockchain interaction',
+        items: [
+          'v3/guidelines/quick-start/blockchain-interaction/reading-from-network',
+          'v3/guidelines/quick-start/blockchain-interaction/writing-to-network',
+        ],
+      },
+      {
+        type: 'category',
+        label: 'Developing smart-contracts',
+        items: [
+          'v3/guidelines/quick-start/developing-smart-contracts/setup-environment',
+          'v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview',
+          'v3/guidelines/quick-start/developing-smart-contracts/storage-and-get-methods',
+          'v3/guidelines/quick-start/developing-smart-contracts/processing-messages',
+          'v3/guidelines/quick-start/developing-smart-contracts/deploying-to-network'
+        ],
+      },
+      'v3/guidelines/smart-contracts/guidelines',
+      'v3/guidelines/smart-contracts/get-methods',
+      {
+        type: 'doc',
+        label: 'Transaction fees calculation',
+        id: 'v3/guidelines/smart-contracts/fee-calculation',
+      },
+    ]
+  },
   'v3/guidelines/get-started-with-ton',
   {
     type: 'category',
@@ -28,49 +61,6 @@ module.exports = [
         href: 'https://ton-community.github.io/tutorials/04-testing',
       },
     ],
-  },
-  {
-    'type': 'html',
-    'value': '<hr/>',
-  },
-  {
-    'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Quick Start </small></b></span>',
-  },
-  'v3/guidelines/quick-start/getting-started',
-  {
-    type: 'category',
-    label: 'Blockchain interaction',
-    items: [
-      'v3/guidelines/quick-start/blockchain-interaction/reading-from-network',
-      'v3/guidelines/quick-start/blockchain-interaction/writing-to-network',
-    ],
-  },
-  {
-    type: 'category',
-    label: 'Developing smart-contracts',
-    items: [
-      'v3/guidelines/quick-start/developing-smart-contracts/setup-environment',
-      'v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview',
-      'v3/guidelines/quick-start/developing-smart-contracts/storage-and-get-methods',
-      'v3/guidelines/quick-start/developing-smart-contracts/processing-messages',
-      'v3/guidelines/quick-start/developing-smart-contracts/deploying-to-network'
-    ],
-  },
-  {
-    'type': 'html',
-    'value': '<hr/>',
-  },
-  {
-    'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Smart Contracts Guidelines </small></b></span>',
-  },
-  'v3/guidelines/smart-contracts/guidelines',
-  'v3/guidelines/smart-contracts/get-methods',
-  {
-    type: 'doc',
-    label: 'Transaction fees calculation',
-    id: 'v3/guidelines/smart-contracts/fee-calculation',
   },
   {
     type: 'category',

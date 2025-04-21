@@ -34,7 +34,7 @@ module.exports = {
 
     {
       type: 'dropdown',
-      to: 'v3/guidelines/get-started-with-ton',
+      to: 'v3/guidelines/quick-start/getting-started',
       label: 'Guidelines',
       position: 'left',
       items: [
