@@ -63,6 +63,21 @@ module.exports = [
     ],
   },
   {
+    'type': 'html',
+    'value': '<hr/>',
+  },
+  {
+    'type': 'html',
+    'value': '<span class=\'menu__link\'><b><small> Smart Contracts Guidelines </small></b></span>',
+  },
+  'v3/guidelines/smart-contracts/guidelines',
+  'v3/guidelines/smart-contracts/get-methods',
+  {
+    type: 'doc',
+    label: 'Transaction fees calculation',
+    id: 'v3/guidelines/smart-contracts/fee-calculation',
+  },
+  {
     type: 'category',
     label: 'Testing',
     items: [
