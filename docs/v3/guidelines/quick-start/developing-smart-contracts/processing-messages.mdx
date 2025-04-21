@@ -1,31 +1,30 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Processing Messages
+# Processing messages
 
-> **Summary:** In previous steps we modified our smart contract interaction with `storage`, `get methods` and learned basic smart contract development flow.
+> **Summary:** In previous steps, we modified our smart contract interaction with `storage`, `get methods`, and learned the basic smart contract development flow.
 
-Now we are ready to move on to the main functionality of smart contracts - **sending and receiving messages**. In TON messages not only used for sending currency, but also as data-exchange mechanism between smart contracts making them crucial for smart contract development.
-
+Now we are ready to move on to the main functionality of smart contracts - **sending and receiving messages**. In TON, messages are not only used for sending currency, but also as a data-exchange mechanism between smart contracts, making them crucial for smart contract development.
 
 :::tip
-If you are stuck on some of the examples you can find original template project with all modifications performed during this guide [here](https://github.com/ton-community/ton-onboarding-sandbox/tree/main/quick-start/smart-contracts/Example/).
+If you are stuck on some of the examples, you can find the original template project with all modifications performed during this guide [here](https://github.com/ton-community/onboarding-sandbox/tree/main/quick-start/smart-contracts/Example/contracts).
 :::
 
 ---
 
 ## Internal messages
 
-Before we proceed to implementation let's briefly describe main ways and patterns that we can use to process internal messages.
+Before we proceed to implementation, let's briefly describe the main ways and patterns that we can use to process internal messages.
 
-### Actors and roles
+### Actors and Roles
 
-Since TON implements [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor/) model it's natural to think about smart contracts relations in terms of `roles`, determining who can access smart contract functionality or not. The most common examples of roles are:
+Since TON implements the [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor/) model, it's natural to think about smart contract relations in terms of `roles`, determining who can access smart contract functionality or not. The most common examples of roles are:
 
- - `anyone`: any contract that don't have distinct role.
- - `owner`: contract that has exclusive access to some crucial parts of functionality.
+- `anyone`: any contract that doesn't have a distinct role.
+- `owner`: a contract that has exclusive access to some crucial parts of the functionality.
 
-Let's examine `recv_internal` function signature to understand how we could use that:
+Let's examine the `recv_internal` function signature to understand how we could use that:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -48,11 +47,11 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 </TabItem>
 </Tabs>
 
-:::info
-You can find comprehensive description of sending messages in this [section](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout/).
+:::info  
+You can find a comprehensive description of sending messages in this [section](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout/).  
 :::
 
-What we specifically are interested in is the source address of message that we could extract from `msg_full` cell, by obtaining that address and comparing to stored one, that we previously saved, for example, during deployment, we can open crucial part of our smart contract functionality. Common approach looks like this:
+What we are specifically interested in is the source address of the message, which we can extract from the `msg_full` cell. By obtaining that address and comparing it to a stored one—saved previously, for example, during deployment—we can conditionally allow access to crucial parts of our smart contract functionality. A common approach looks like this:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -111,7 +110,7 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 
 ### Operations
 
-Common pattern in TON contracts is to include a **32-bit operation code** in message bodies which tells your contract what action to perform:
+A common pattern in TON contracts is to include a **32-bit operation code** in message bodies, which tells your contract what action to perform:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">

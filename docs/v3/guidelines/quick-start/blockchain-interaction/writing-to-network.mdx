@@ -88,7 +88,7 @@ async function main() {
   const { publicKey, secretKey } = await mnemonicToWalletKey(mnemonic);
 
   // Creating wallet depending on version (v5r1 or v4 or V3R2), uncomment which version do you have
-  const walletContract = WalletContractV5R1.create({ walletId: { networkGlobalId: -3 }, publicKey }); // networkGlobalId: -3 for testnet, -239 for mainnet
+  const walletContract = WalletContractV5R1.create({ walletId: { networkGlobalId: -3 }, publicKey }); // networkGlobalId: -3 for Testnet, -239 for Mainnet
   //const walletContract = WalletContractV4.create({ workchain: 0, publicKey });
   //const walletContract = WalletContractV3R2.create({ workchain: 0, publicKey });
 
