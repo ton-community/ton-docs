@@ -1,7 +1,7 @@
-import Feedback from '@site/src/components/Feedback';
+---
+---
 
----
----
+import Feedback from '@site/src/components/Feedback';
 
 # NFT use cases
 
@@ -77,4 +77,3 @@ It is important to note that this is just one example, and as the TON ecosystem 
 NFT integrated to a game allows players to own and trade in-game items in a way that is verifiable and secure, which adds an extra layer of value and excitement to the game.
 
 <Feedback />
-

@@ -1,8 +1,8 @@
-import Feedback from '@site/src/components/Feedback';
-
 ---
 description: In this article, we'll create a simple Telegram bot for accepting payments in TON.
 ---
+import Feedback from '@site/src/components/Feedback';
+
 
 # Bot with own balance
 

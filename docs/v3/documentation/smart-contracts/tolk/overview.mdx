@@ -1,10 +1,9 @@
-import Feedback from '@site/src/components/Feedback';
-
 ---
 title: Overview
 ---
 
-import Button from '@site/src/components/button'
+import Feedback from "@site/src/components/Feedback";
+import Button from "@site/src/components/button";
 
 # Tolk language: overview
 
@@ -59,16 +58,24 @@ int currentCounter() method_id {
   return ctx_counter;
 }
 ```
+
 </details>
 
-<Button href="https://github.com/ton-blockchain/convert-func-to-tolk" colorType={'primary'} sizeType={'sm'}>
+<Button
+  href="https://github.com/ton-blockchain/convert-func-to-tolk"
+  colorType={"primary"}
+  sizeType={"sm"}
+>
   Try a FunC → Tolk converter
 </Button>
-<Button href="/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short" colorType={'secondary'} sizeType={'sm'}>
+<Button
+  href="/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short"
+  colorType={"secondary"}
+  sizeType={"sm"}
+>
   Tolk vs FunC differences
 </Button>
-<div style={{height: '2em'}}></div>
-
+<div style={{ height: "2em" }}></div>
 
 ## Motivation behind Tolk
 
@@ -88,10 +95,10 @@ Leaving all beauty and complexity inside, what if it would be more similar to po
 
 That's what Tolk is about.
 
-
 ## Migrating from FunC to Tolk
 
 If you know FunC and want to try a new syntax, your way is:
+
 1. Read [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short).
 2. With a blueprint, create a new Tolk contract (for example, a counter) and experiment around it. Remember that almost all stdlib functions are renamed to ~~verbose~~ clear names. Here is [a mapping](/v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib).
 3. Try a [converter](https://github.com/ton-blockchain/convert-func-to-tolk) for your existing contracts or one from [FunC Contracts](/v3/documentation/smart-contracts/contracts-specs/examples). Remember that contracts written in Tolk from scratch look nicer than auto-converted ones. For instance, using logical operators instead of bitwise tremendously increases code readability.
@@ -105,10 +112,10 @@ and all code snippets throughout the documentation will be rewritten for Tolk.
 :::
 
 If you are new to TON, your way is:
+
 1. Dig into [this documentation](/v3/documentation/smart-contracts/overview) to acquire basic on development in TON. No matter your language, you must be aware of cells, slices, and TON asynchronous nature.
 2. Facing FunC snippets, you can still use FunC or try to express the same in Tolk. If FunC syntax is peculiar to you, don't worry: the goal of Tolk is to fix this issue precisely.
 3. Once you understand what's happening, try using Tolk with [blueprint](https://github.com/ton-org/blueprint).
-
 
 ## Tooling around Tolk language
 
@@ -121,7 +128,6 @@ Besides the compiler, we have:
 4. [Converter from FunC to Tolk](https://github.com/ton-blockchain/convert-func-to-tolk) — convert a `.fc` file to a `.tolk` file with a single `npx` command.
 5. Tolk Language is available in [blueprint](https://github.com/ton-org/blueprint).
 
-
 ## Is Tolk production-ready?
 
 The Tolk compiler, a fork of the FunC compiler, is deemed production-ready, albeit somewhat experimental at the moment.
@@ -129,12 +135,12 @@ The Tolk compiler, a fork of the FunC compiler, is deemed production-ready, albe
 Undiscovered bugs may exist, potentially inherited from FunC or attributable to TVM characteristics.
 Anyway, no matter your language, you should cover your contracts with tests to reach high reliability.
 
-
 ## Roadmap
 
 The first released version of Tolk is v0.6, emphasizing [missing](/v3/documentation/smart-contracts/tolk/changelog#how-tolk-was-born) FunC v0.5.
 
 Here are some points to investigate:
+
 - type system improvements
 - structures and generics
 - auto-pack structures to/from cells, probably integrated with message handlers
@@ -152,7 +158,6 @@ This milestone eliminates manual manipulations with builders and slices, allowin
 Closely related to this is the **ABI (interface) of contracts**.
 Well-designed structures make up the majority of an ABI.
 
-
 ## Issues and contacts
 
 If you face an issue, connect to developer society on [TON Dev Chats](https://t.me/addlist/1r5Vcb8eljk5Yzcy) or create GitHub issues.
@@ -162,4 +167,3 @@ If you face an issue, connect to developer society on [TON Dev Chats](https://t.
 - [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short)
 
 <Feedback />
-

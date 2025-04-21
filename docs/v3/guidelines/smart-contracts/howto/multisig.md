@@ -1,8 +1,8 @@
-import Feedback from '@site/src/components/Feedback';
-
 ---
 description: At the end of the tutorial, you will have deployed multisig contract in TON Blockchain.
 ---
+
+import Feedback from '@site/src/components/Feedback';
 
 # Make a simple multisig contract with fift
 
@@ -278,4 +278,3 @@ You did it, ha-ha! 🚀🚀🚀
 - [Multisig wallet v2](https://github.com/ton-blockchain/multisig-contract-v2)
 
 <Feedback />
-

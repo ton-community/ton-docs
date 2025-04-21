@@ -1,8 +1,7 @@
-import Feedback from '@site/src/components/Feedback';
-
 ---
 description: At the end of the tutorial, you will write a beautiful bot that will be able to accept payments for your product directly in TON.
 ---
+import Feedback from '@site/src/components/Feedback';
 
 # Bot for selling dumplings
 

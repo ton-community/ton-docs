@@ -1,7 +1,6 @@
+---
+---
 import Feedback from '@site/src/components/Feedback';
-
----
----
 
 # NFT use cases
 

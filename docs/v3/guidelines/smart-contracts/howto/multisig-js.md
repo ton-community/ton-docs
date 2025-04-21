@@ -1,8 +1,7 @@
-import Feedback from '@site/src/components/Feedback';
-
 ---
 description: At the end of this guide you will deploy multisig wallet and send some transactions using ton library
 ---
+import Feedback from '@site/src/components/Feedback';
 
 # Interact with multisig wallets using TypeScript
 

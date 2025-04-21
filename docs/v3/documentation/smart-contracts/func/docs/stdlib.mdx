@@ -1,9 +1,9 @@
-import Feedback from '@site/src/components/Feedback';
-
 ---
 toc_min_heading_level: 2
 toc_max_heading_level: 6
 ---
+
+import Feedback from "@site/src/components/Feedback";
 
 # FunC standard library
 
@@ -12,17 +12,14 @@ This section covers the [stdlib.fc](https://github.com/ton-blockchain/ton/blob/m
 which provides standard functions for FunC.
 :::
 
-
 The FunC standard library serves as a wrapper around the most commonly used TVM assembly commands that aren’t built-in.
 For detailed descriptions of these commands, refer to the [TVM documentation](/v3/documentation/tvm/tvm-overview).
 Some explanations in this document adapted from there.
-
 
 Some functions in the library are commented out, meaning they have already been optimized and integrated as built-in operations.
 However, their type signatures and behaviors remain unchanged.
 
 Additionally, some less frequently used TVM commands are not yet included in the standard library. These may be added in future updates.
-
 
 ## Tuple manipulation primitives
 
@@ -31,16 +28,12 @@ For more details on polymorphic functions, refer to the [Polymorphism with foral
 
 **Note:** Currently, values of atomic type `tuple` cannot be converted into composite tuple types (e.g.,`[int, cell]`) and vice versa.
 
-
-
 ### Lisp-style lists
 
 Lists can be represented as nested 2-element tuples. Empty list is conventionally represented as TVM `null` value (it can be obtained by calling `null()`). For example, the tuple `(1, (2, (3, null)))` represents the list `[1, 2, 3]`. Elements of a list can be of different types.
 
-
 Lists in FunC are represented as nested two-element tuples. An empty list is conventionally represented by the TVM `null` value, which can be obtained using `null()`.
 For example, the tuple `(1, (2, (3, null)))` corresponds to the list `[1, 2, 3]`. Lists in FunC can contain elements of different types.
-
 
 #### cons
 
@@ -55,6 +48,7 @@ Adds an element to the beginning of a lisp-style list.
 ```func
 forall X -> (X, tuple) uncons(tuple list) asm "UNCONS";
 ```
+
 Extracts the head and tail of a lisp-style list.
 
 #### list_next
@@ -80,6 +74,7 @@ Extracts the head and tail of a lisp-style list. It can be used as a [(non-)modi
 ```func
 forall X -> X car(tuple list) asm "CAR";
 ```
+
 Returns the head of a lisp-style list.
 
 #### cdr
@@ -97,6 +92,7 @@ Returns the tail of a lisp-style list.
 ```func
 tuple empty_tuple() asm "NIL";
 ```
+
 Creates an empty tuple (0 elements).
 
 #### tpush
@@ -130,6 +126,7 @@ Unpacks a singleton.
 ```func
 forall X, Y -> [X, Y] pair(X x, Y y) asm "PAIR";
 ```
+
 Creates a two-element tuple (pair).
 
 #### unpair
@@ -137,6 +134,7 @@ Creates a two-element tuple (pair).
 ```func
 forall X, Y -> (X, Y) unpair([X, Y] t) asm "UNPAIR";
 ```
+
 Unpacks a pair into two separate values.
 
 #### triple
@@ -144,6 +142,7 @@ Unpacks a pair into two separate values.
 ```func
 forall X, Y, Z -> [X, Y, Z] triple(X x, Y y, Z z) asm "TRIPLE";
 ```
+
 Creates a three-element tuple (triple).
 
 #### untriple
@@ -151,6 +150,7 @@ Creates a three-element tuple (triple).
 ```func
 forall X, Y, Z -> (X, Y, Z) untriple([X, Y, Z] t) asm "UNTRIPLE";
 ```
+
 Unpacks a triple into three separate values.
 
 #### tuple4
@@ -158,6 +158,7 @@ Unpacks a triple into three separate values.
 ```func
 forall X, Y, Z, W -> [X, Y, Z, W] tuple4(X x, Y y, Z z, W w) asm "4 TUPLE";
 ```
+
 Creates a four-element tuple.
 
 #### untuple4
@@ -165,9 +166,10 @@ Creates a four-element tuple.
 ```func
 forall X, Y, Z, W -> (X, Y, Z, W) untuple4([X, Y, Z, W] t) asm "4 UNTUPLE";
 ```
+
 Unpacks a four-element tuple into four separate values.
 
-*Tuple element access*
+_Tuple element access_
 
 #### first
 
@@ -182,6 +184,7 @@ Returns the first element of a tuple.
 ```func
 forall X -> X second(tuple t) asm "SECOND";
 ```
+
 Returns the second element of a tuple.
 
 #### third
@@ -189,6 +192,7 @@ Returns the second element of a tuple.
 ```func
 forall X -> X third(tuple t) asm "THIRD";
 ```
+
 Returns the third element of a tuple.
 
 #### fourth
@@ -196,9 +200,11 @@ Returns the third element of a tuple.
 ```func
 forall X -> X fourth(tuple t) asm "3 INDEX";
 ```
+
 Returns the fourth element of a tuple.
 
-*Pair and triple element access*
+_Pair and triple element access_
+
 #### pair_first
 
 ```func
@@ -212,6 +218,7 @@ Returns the first element of a pair.
 ```func
 forall X, Y -> Y pair_second([X, Y] p) asm "SECOND";
 ```
+
 Returns the second element of a pair.
 
 #### triple_first
@@ -219,6 +226,7 @@ Returns the second element of a pair.
 ```func
 forall X, Y, Z -> X triple_first([X, Y, Z] p) asm "FIRST";
 ```
+
 Returns the first element of a triple.
 
 #### triple_second
@@ -226,6 +234,7 @@ Returns the first element of a triple.
 ```func
 forall X, Y, Z -> Y triple_second([X, Y, Z] p) asm "SECOND";
 ```
+
 Returns the second element of a triple.
 
 #### triple_third
@@ -233,8 +242,8 @@ Returns the second element of a triple.
 ```func
 forall X, Y, Z -> Z triple_third([X, Y, Z] p) asm "THIRD";
 ```
-Returns the third element of a triple.
 
+Returns the third element of a triple.
 
 ## Domain specific primitives
 
@@ -248,6 +257,7 @@ The following primitives facilitate easy retrieval of this information:
 ```func
 int now() asm "NOW";
 ```
+
 Returns the current Unix timestamp as an integer.
 
 #### my_address
@@ -255,6 +265,7 @@ Returns the current Unix timestamp as an integer.
 ```func
 slice my_address() asm "MYADDR";
 ```
+
 Retrieves the smart contract’s internal address as a Slice containing `MsgAddressInt`. If needed, it can be further processed using functions like `parse_std_addr`.
 
 #### get_balance
@@ -262,7 +273,9 @@ Retrieves the smart contract’s internal address as a Slice containing `MsgAddr
 ```func
 [int, cell] get_balance() asm "BALANCE";
 ```
+
 Returns the smart contract's balance as a `tuple`:
+
 - `int`: The remaining balance in nanotoncoins.
 - `cell`: A dictionary (with 32-bit keys) containing balances of extra currencies.
 
@@ -277,14 +290,15 @@ Raw primitives such as `send_raw_message` do not update this field.
 ```func
 int cur_lt() asm "LTIME";
 ```
-Returns the logical time of the current transaction.
 
+Returns the logical time of the current transaction.
 
 #### block_lt
 
 ```func
 int block_lt() asm "BLOCKLT";
 ```
+
 Returns the logical time at the beginning of the current block.
 
 #### config_param
@@ -292,8 +306,8 @@ Returns the logical time at the beginning of the current block.
 ```func
 cell config_param(int x) asm "CONFIGOPTPARAM";
 ```
-Returns the value of the global configuration parameter with integer index `i` as `cell` or `null` value.
 
+Returns the value of the global configuration parameter with integer index `i` as `cell` or `null` value.
 
 ### Hashes
 
@@ -302,6 +316,7 @@ Returns the value of the global configuration parameter with integer index `i` a
 ```func
 int cell_hash(cell c) asm "HASHCU";
 ```
+
 Calculates the representation hash of the given `cell c` and returns it as a 256-bit unsigned integer `x`.
 This function is handy for signing and verifying signatures of arbitrary entities structured as a tree of cells.
 
@@ -310,6 +325,7 @@ This function is handy for signing and verifying signatures of arbitrary entitie
 ```func
 int slice_hash(slice s) asm "HASHSU";
 ```
+
 Computes the hash of the given `slice s` and returns it as a 256-bit unsigned integer `x`.
 The result is equivalent to creating a standard cell containing only the data and references
 from `s` and then computing its hash using `cell_hash`.
@@ -319,6 +335,7 @@ from `s` and then computing its hash using `cell_hash`.
 ```func
 int string_hash(slice s) asm "SHA256U";
 ```
+
 Calculates the SHA-256 hash of the data bits in the given `slice s`.
 A cell underflow exception is thrown if the bit length of `s` is not a multiple of eight.
 The hash is returned as a 256-bit unsigned integer `x`.
@@ -330,6 +347,7 @@ The hash is returned as a 256-bit unsigned integer `x`.
 ```func
 int check_signature(int hash, slice signature, int public_key) asm "CHKSIGNU";
 ```
+
 Checks whether the given `signature` is a valid Ed25519 signature of the provided
 `hash` using the specified `public key`. The `hash` and `public key` are both 256-bit unsigned integers. The `signature` must be at least 512 bits long, and only the first 512 bits are used.
 If the signature is valid, the function returns `-1`; otherwise, it returns `0`.
@@ -338,18 +356,17 @@ Remember that `CHKSIGNU` converts the hash into a 256-bit slice and then calls `
 This means that if the `hash` was initially generated from some data,
 that data gets hashed _twice_—the first time when creating the hash and the second time within `CHKSIGNS`.
 
-
 #### check_data_signature
 
 ```func
 int check_data_signature(slice data, slice signature, int public_key) asm "CHKSIGNS";
 ```
+
 Verifies whether the given `signature` is a valid Ed25519 signature for the data contained in the `slice data`,
 using the specified `public key`, just like `check_signature`.
 A cell underflow exception is thrown if the data's bit length is not a multiple of eight.
 The verification follows the standard Ed25519 process,
 where SHA-256 is used to derive a 256-bit number from `data`, which is then signed.
-
 
 ### Computation of BoC size
 
@@ -360,6 +377,7 @@ The following functions help calculate storage fees for user-provided data.
 ```func
 (int, int, int, int) compute_data_size?(cell c, int max_cells) asm "CDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT";
 ```
+
 Returns `(x, y, z, -1)` or `(null, null, null, 0)`. It recursively calculates the number of unique cells `x`, data bits `y`, and cell references `z` in the **directed acyclic graph (DAG)** at `cell c`. This provides the total storage used by the DAG while recognizing identical cells.
 
 The computation uses a depth-first traversal with a hash table to track visited cells, preventing redundant visits.
@@ -378,6 +396,7 @@ It works similarly to `compute_data_size?` but takes a `slice s` instead of a `c
 ```func
 (int, int, int) compute_data_size(cell c, int max_cells) impure asm "CDATASIZE";
 ```
+
 A strict version of `compute_data_size?` that throws a cell overflow exception (8) if the computation fails.
 
 #### slice_compute_data_size
@@ -385,6 +404,7 @@ A strict version of `compute_data_size?` that throws a cell overflow exception (
 ```func
 (int, int, int) slice_compute_data_size(slice s, int max_cells) impure asm "SDATASIZE";
 ```
+
 A strict version of `slice_compute_data_size?` that throws a cell overflow exception (8) if the computation fails.
 
 ### Persistent storage save and load
@@ -394,6 +414,7 @@ A strict version of `slice_compute_data_size?` that throws a cell overflow excep
 ```func
 cell get_data() asm "c4 PUSH";
 ```
+
 Returns the persistent contract storage cell, which can be later parsed or modified using slice and builder functions.
 
 #### set_data
@@ -401,8 +422,8 @@ Returns the persistent contract storage cell, which can be later parsed or modif
 ```func
 () set_data(cell c) impure asm "c4 POP";
 ```
-Sets cell `c` as persistent contract data. You can update the persistent contract storage with this primitive.
 
+Sets cell `c` as persistent contract data. You can update the persistent contract storage with this primitive.
 
 ### Continuation primitives
 
@@ -411,6 +432,7 @@ Sets cell `c` as persistent contract data. You can update the persistent contrac
 ```func
 cont get_c3() impure asm "c3 PUSH";
 ```
+
 The `c3` register typically holds a continuation set up by the contract code.
 It is used for function calls.
 The primitive returns the current value of `c3`.
@@ -420,6 +442,7 @@ The primitive returns the current value of `c3`.
 ```func
 () set_c3(cont c) impure asm "c3 POP";
 ```
+
 Updates the `c3` value to modify the contract’s execution code at runtime. The current code and function call stack remain unchanged, but future function calls use the updated code.
 
 #### bless
@@ -451,6 +474,7 @@ follow the [Accept message effects](/v3/documentation/smart-contracts/transactio
 ```func
 () set_gas_limit(int limit) impure asm "SETGASLIMIT";
 ```
+
 This function sets the gas limit `gl` to the smaller of two values: the provided `limit` or the maximum allowed gas `gm`.
 It also resets the gas credit `gc` to zero. If the contract already uses more gas than this new limit `gl`, including the current instruction, an out-of-gas exception is triggered before the new limit is applied.
 
@@ -464,6 +488,7 @@ follow the [Accept message effects](/v3/documentation/smart-contracts/transactio
 ```func
 () commit() impure asm "COMMIT";
 ```
+
 Saves the current state of persistent storage `c4` and action registers `c5`, ensuring execution succeeds with these stored values,
 even if an exception occurs later.
 
@@ -487,9 +512,11 @@ similar to `set_gas_limit`.
 ```func
 () raw_reserve(int amount, int mode) impure asm "RAWRESERVE";
 ```
+
 The `raw_reserve` function creates an output action
 that reserves a specific amount of nanotoncoins from the account’s remaining balance.
 The behavior depends on the `mode` parameter:
+
 - If `mode = 0`, exactly the `amount` of nanotoncoins is reserved.
 - If `mode = 2`, up to the `amount` of nanotoncoins is reserved.
 - If `mode = 1` or `mode = 3`, all but the `amount` of nanotoncoins is reserved.
@@ -502,9 +529,10 @@ where `b` represents the remaining balance, to the sender. This ensures that sub
 - **Bit +2** in `mode`: prevents failure if the specified `amount` cannot be reserved. Instead, the entire remaining balance is reserved.
 - **Bit +8** in `mode`: negates `amount` (`amount <- -amount`) before executing further actions.
 - **Bit +4** in `mode`: increases `amount` by the original balance of the current account before the compute phase,
-including all extra currencies, before performing any other checks and actions.
+  including all extra currencies, before performing any other checks and actions.
 
 **Constraints**
+
 - The `amount` must be a non-negative integer.
 - `mode` must be within the range `0..15`.
 
@@ -513,6 +541,7 @@ including all extra currencies, before performing any other checks and actions.
 ```func
 () raw_reserve_extra(int amount, cell extra_amount, int mode) impure asm "RAWRESERVEX";
 ```
+
 Similar to `raw_reserve`, but it also supports an `extra_amount` dictionary.
 This dictionary, given as a `cell` or `null`, allows reserving currencies other than Toncoin.
 
@@ -529,43 +558,44 @@ Currently, there are **3 modes** and **4 flags** available for messages.
 A single mode can be combined with multiple flags or none to form the desired `mode`.
 The combination is achieved by **summing** their values. The table below provides descriptions of the available modes and flags.
 
-| Mode  | Description                                                                                                            |
-| :---- |:-----------------------------------------------------------------------------------------------------------------------|
-| `0`   | Sends an ordinary message.                                                                                             |
-| `64`  | Transfers the full remaining value of the inbound message and the initially specified amount.                          |
-| `128` | Transfers the entire remaining balance of the current smart contract instead of the initially specified amount.        |
+| Mode  | Description                                                                                                     |
+| :---- | :-------------------------------------------------------------------------------------------------------------- |
+| `0`   | Sends an ordinary message.                                                                                      |
+| `64`  | Transfers the full remaining value of the inbound message and the initially specified amount.                   |
+| `128` | Transfers the entire remaining balance of the current smart contract instead of the initially specified amount. |
 
-| Flag  | Description                                                                                                       |
-| :---- | :---------------------------------------------------------------------------------------------------------------- |
-| `+1`  | Pays transfer fees separately from the message value.                                                             |
-| `+2`  | Ignores certain errors that occur while processing the message during the action phase (see note below).          |
-| `+16` | Bounces the transaction if the action fails. Has no effect if `+2` is used.                                       |
-| `+32` | Destroys the current account if its resulting balance is zero (commonly used with `mode = 128`).                   |
+| Flag  | Description                                                                                              |
+| :---- | :------------------------------------------------------------------------------------------------------- |
+| `+1`  | Pays transfer fees separately from the message value.                                                    |
+| `+2`  | Ignores certain errors that occur while processing the message during the action phase (see note below). |
+| `+16` | Bounces the transaction if the action fails. Has no effect if `+2` is used.                              |
+| `+32` | Destroys the current account if its resulting balance is zero (commonly used with `mode = 128`).         |
 
 :::info +2 flag
 The `+2` flag ignores specific errors that may occur while processing a message during the action phase. These include:
 
 1. Insufficient Toncoins:
-    - Not enough value to transfer with the message (the entire inbound message value has been used).
-    - Insufficient funds to process the message.
-    - Not enough attached value to cover forwarding fees.
-    - Insufficient extra currency to send with the message.
-    - Not enough funds to pay for an outbound external message.
+   - Not enough value to transfer with the message (the entire inbound message value has been used).
+   - Insufficient funds to process the message.
+   - Not enough attached value to cover forwarding fees.
+   - Insufficient extra currency to send with the message.
+   - Not enough funds to pay for an outbound external message.
 2. Message exceeds size limits (see the [Message size](/v3/documentation/smart-contracts/message-management/sending-messages#message-size) section for details).
 3. Excessive Merkle depth in the message.
 
 However, the `+2` flag does not ignore errors in the following cases:
+
 1. The message format is invalid.
 2. Both `64` and `128` modes are used simultaneously.
 3. The outbound message contains invalid libraries in `StateInit`.
 4. The external message is not ordinary or includes the `+16` or `+32` flag.
-:::
-
+   :::
 
 :::warning
+
 1. **+16 flag** should not be used in external messages (e.g., to wallets), as there is no sender to receive the bounced message.
 2. **+2 flag** is important in external messages (e.g., to wallets).
-:::
+   :::
 
 You can view a detailed example [here](/v3/documentation/smart-contracts/message-management/sending-messages#example-with-use-cases).
 
@@ -580,6 +610,7 @@ This change occurs only after the smart contract completes its current execution
 See also [set_c3](/v3/documentation/smart-contracts/func/docs/stdlib#set_c3).
 
 ### Random number generator primitives
+
 The pseudo-random number generator relies on a random seed, a 256-bit unsigned integer, and sometimes additional data stored in [c7](/v3/documentation/tvm/tvm-overview#control-registers).
 Before a smart contract executes in the TON Blockchain, its initial random seed is derived from a hash of the smart contract address and the global block random seed. If the same smart contract runs multiple times within a block, each run will use the same random seed. This can be adjusted by calling `randomize_ltbefore` using the pseudo-random number generator for the first time.
 
@@ -597,11 +628,11 @@ int random() impure asm "RANDU256";
 ```
 
 Generates a new pseudo-random 256-bit unsigned integer `x`. The process works as follows:
+
 - Let `r` be the previous random seed, a 32-byte array constructed from the big-endian representation of a 256-bit unsigned integer.
 - Compute `sha512(r)`.
 - The first 32 bytes of the hash become the new seed `r'`.
 - The remaining 32 bytes are returned as the new random value `x`.
-
 
 #### rand
 
@@ -613,6 +644,7 @@ Generates a new pseudo-random integer `z` in the range `0..range−1` (or `range
 computed.
 
 Produces a pseudo-random integer `z` within the range `0..range−1` (or `range..−1` if `range < 0`).
+
 - First, an unsigned random value `x` is generated using `random()`.
 - Then, `z := x * range / 2^256` is calculated.
 
@@ -621,6 +653,7 @@ Produces a pseudo-random integer `z` within the range `0..range−1` (or `range.
 ```func
 int get_seed() impure asm "RANDSEED";
 ```
+
 Returns the current random seed as a 256-bit unsigned integer.
 
 #### set_seed
@@ -628,6 +661,7 @@ Returns the current random seed as a 256-bit unsigned integer.
 ```func
 int set_seed(int seed) impure asm "SETRAND";
 ```
+
 Sets the random seed to a specified 256-bit unsigned integer `seed`.
 
 #### randomize
@@ -639,9 +673,10 @@ Sets the random seed to a specified 256-bit unsigned integer `seed`.
 Mixes an unsigned 256-bit integer `x` into a random seed `r` by setting the random seed to sha256 of the concatenation of two 32-byte strings: the first with a big-endian representation of the old seed `r`, and the second with a big-endian representation of `x`.
 
 Mixes a 256-bit unsigned integer `x` into the random seed `r` by updating`r` to `sha256(r || x)`, where:
+
 - `r` is the previous seed, represented as a 32-byte big-endian array.
 - `x` is also converted into a 32-byte big-endian array.
-T- he new seed is the SHA-256 hash of their concatenation.
+  T- he new seed is the SHA-256 hash of their concatenation.
 
 #### randomize_lt
 
@@ -652,6 +687,7 @@ T- he new seed is the SHA-256 hash of their concatenation.
 Equivalent to calling `randomize(cur_lt());`.
 
 ### Address manipulation primitives
+
 The functions below handle the serialization and deserialization of values based on the following TL-B scheme.
 
 ```func
@@ -680,7 +716,6 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
   created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
 ```
 
-
 - `addr_none` is represented by `t = (0)`, i.e., a tuple containing exactly
   one integer that equals zero
 - `addr_extern` is represented by `t = (1, s)`, where slice `s` contains the
@@ -688,15 +723,14 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
 - `addr_std` is represented by `t = (2, u, x, s)`, where `u` is either `null` (if `anycast` is absent) or a slice `s'` containing `rewrite_pfx` (if `anycast` is present). Next, integer `x` is the `workchain_id`, and slice `s` contains the address
 - `addr_var` is represented by `t = (3, u, x, s)`, where `u`, `x`, and `s` have the same meaning as for `addr_std`
 
-
-
 A deserialized `MsgAddress`cis represented as a tuple `t` with the following structure:
+
 - `addr_none` is represented as `t = (0)`, a single-element tuple where the integer is zero.
 - `addr_extern` is represented as `t = (1, s)`, where `s` is a slice containing `external_address`. In other words, `t` is a pair with the first element being `1` and the second being `s`.
 - `addr_std` is represented as `t = (2, u, x, s)`, where:
-    - `u` is `null` if `anycast` is absent or a slice `s'` containing `rewrite_pfx` if `anycast` is present.
-    - `x` is the `workchain_id`.
-    - `s` is a slice containing the address.
+  - `u` is `null` if `anycast` is absent or a slice `s'` containing `rewrite_pfx` if `anycast` is present.
+  - `x` is the `workchain_id`.
+  - `s` is a slice containing the address.
 - addr_var is represented as `t = (3, u, x, s)`, where `u`, `x,` and `s` follow the same structure as `addr_std`.
 
 #### load_msg_addr
@@ -704,6 +738,7 @@ A deserialized `MsgAddress`cis represented as a tuple `t` with the following str
 ```func
 (slice, slice) load_msg_addr(slice s) asm( -> 1 0) "LDMSGADDR";
 ```
+
 Extracts a valid `MsgAddress` prefix from `slice s` and returns the extracted prefix `s'` and the remaining part `s''`.
 
 #### parse_addr
@@ -711,14 +746,15 @@ Extracts a valid `MsgAddress` prefix from `slice s` and returns the extracted pr
 ```func
 tuple parse_addr(slice s) asm "PARSEMSGADDR";
 ```
-Splits `slice s`, which holds a valid `MsgAddress`, into tuple `t`, separating its fields. If `s` is invalid, a cell deserialization exception is raised.
 
+Splits `slice s`, which holds a valid `MsgAddress`, into tuple `t`, separating its fields. If `s` is invalid, a cell deserialization exception is raised.
 
 #### parse_std_addr
 
 ```func
 (int, int) parse_std_addr(slice s) asm "REWRITESTDADDR";
 ```
+
 Extracts a valid `MsgAddressInt`, typically `msg_addr_std`, from `slice s`, modifies the address prefix if `anycast` is present, and returns the workchain and 256-bit address as integers. A cell `deserialization` exception is triggered if the address isn't 256-bit
 or `s` isn't a valid `MsgAddressInt` serialization.
 
@@ -727,6 +763,7 @@ or `s` isn't a valid `MsgAddressInt` serialization.
 ```func
 (int, slice) parse_var_addr(slice s) asm "REWRITEVARADDR";
 ```
+
 A modified version of `parse_std_addr` that returns the modified address as `slice s`,
 even if its length is not exactly 256 bits, as in `msg_addr_var`.
 
@@ -747,6 +784,7 @@ Prints the given value. Multiple values can be output as a tuple, e.g.,`~dump([v
 ```func
 () ~strdump(slice str) impure asm "STRDUMP";
 ```
+
 Prints a string. The bit length of the slice parameter must be a multiple of 8.
 
 #### dump_stack
@@ -754,9 +792,11 @@ Prints a string. The bit length of the slice parameter must be a multiple of 8.
 ```func
 () dump_stack() impure asm "DUMPSTK";
 ```
+
 Prints the current stack up to the top 255 values and displays the total stack depth.
 
 ## Slice primitives
+
 A primitive _loads_ data when it returns both the extracted data and the remainder of the slice.
 It can be used as a [modifying method](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods).
 A primitive _preloads_ data when it returns only the extracted data, leaving the original slice unchanged. It can be used as a [non-modifying method](/v3/documentation/smart-contracts/func/docs/statements#non-modifying-methods).
@@ -767,6 +807,7 @@ Unless specified otherwise, loading and preloading primitives read data from the
 ```func
 slice begin_parse(cell c) asm "CTOS";
 ```
+
 Converts a `cell` into a `slice`. The input `c` must be either an ordinary or exotic cell.
 See [TVM.pdf](https://ton.org/tvm.pdf), 3.1.2. If `c` is exotic, it is automatically converted into an ordinary cell `c'`
 before being transformed into a `slice`.
@@ -776,6 +817,7 @@ before being transformed into a `slice`.
 ```func
 () end_parse(slice s) impure asm "ENDS";
 ```
+
 Checks if the `slice s` is empty. It throws an exception if it is not.
 
 #### load_ref
@@ -783,14 +825,15 @@ Checks if the `slice s` is empty. It throws an exception if it is not.
 ```func
 (slice, cell) load_ref(slice s) asm( -> 1 0) "LDREF";
 ```
-Loads the first reference from a slice.
 
+Loads the first reference from a slice.
 
 #### preload_ref
 
 ```func
 cell preload_ref(slice s) asm "PLDREF";
 ```
+
 Preloads the first reference from a slice.
 
 #### load_int
@@ -798,8 +841,8 @@ Preloads the first reference from a slice.
 ```func
 ;; (slice, int) ~load_int(slice s, int len) asm(s len -> 1 0) "LDIX";
 ```
-Loads a signed `len`-bit integer from a slice.
 
+Loads a signed `len`-bit integer from a slice.
 
 #### load_uint
 
@@ -833,14 +876,13 @@ Preloads an unsigned `len`-bit integer from a slice.
 
 Loads the first `0 ≤ len ≤ 1023` bits from `slice s` into a new slice `s''`.
 
-
 #### preload_bits
 
 ```func
 ;; slice preload_bits(slice s, int len) asm "PLDSLICEX";
 ```
-Preloads the first `0 ≤ len ≤ 1023` bits from `slice s` into a new slice `s''`.
 
+Preloads the first `0 ≤ len ≤ 1023` bits from `slice s` into a new slice `s''`.
 
 #### load_coins
 
@@ -850,13 +892,13 @@ Preloads the first `0 ≤ len ≤ 1023` bits from `slice s` into a new slice `s'
 
 Loads serialized amount of Toncoins, which is an unsigned integer up to `2^120 - 1`.
 
-
 #### skip_bits
 
 ```func
 slice skip_bits(slice s, int len) asm "SDSKIPFIRST";
 (slice, ()) ~skip_bits(slice s, int len) asm "SDSKIPFIRST";
 ```
+
 Returns all bits of `s` except for the first `len` bits, where `0 ≤ len ≤ 1023`.
 
 #### first_bits
@@ -864,6 +906,7 @@ Returns all bits of `s` except for the first `len` bits, where `0 ≤ len ≤ 10
 ```func
 slice first_bits(slice s, int len) asm "SDCUTFIRST";
 ```
+
 Returns the first `len` bits of `s`, where `0 ≤ len ≤ 1023`.
 
 #### skip_last_bits
@@ -880,6 +923,7 @@ Returns all bits of `s` except for the last `len` bits, where `0 ≤ len ≤ 102
 ```func
 slice slice_last(slice s, int len) asm "SDCUTLAST";
 ```
+
 Returns the last `len` bits of `s`, where `0 ≤ len ≤ 1023`.
 
 #### load_dict
@@ -889,7 +933,6 @@ Returns the last `len` bits of `s`, where `0 ≤ len ≤ 1023`.
 ```
 
 Loads a dictionary `D` from slice `s`. It can be used for dictionaries or to values of arbitrary `Maybe ^Y` types (returns `null` if the `nothing` constructor is used).
-
 
 #### preload_dict
 
@@ -904,8 +947,8 @@ Preloads a dictionary `D` from slice `s`.
 ```func
 slice skip_dict(slice s) asm "SKIPDICT";
 ```
-Loads a dictionary as `load_dict` but returns only the remainder of the slice.
 
+Loads a dictionary as `load_dict` but returns only the remainder of the slice.
 
 ### Slice size primitives
 
@@ -962,11 +1005,13 @@ Checks whether slice `s` has no references.
 ```func
 int slice_depth(slice s) asm "SDEPTH";
 ```
+
 Returns the depth of slice `s`.
 If `s` has no references, it returns `0`;
 otherwise, the returned value is one plus the maximum depths of cells referred to from `s`.
 
 ## Builder primitives
+
 A primitive _stores_ a value `x` in a builder `b` by returning a modified version `b'` with `x` added at the end. It can also be used as a [non-modifying method](/v3/documentation/smart-contracts/func/docs/statements#non-modifying-methods).
 Each of the following primitives first checks for enough space in the `builder` and then verifies the range of the serialized value.
 
@@ -983,6 +1028,7 @@ Creates a new empty `builder`.
 ```func
 cell end_cell(builder b) asm "ENDC";
 ```
+
 Converts a `builder` into a standard `cell`.
 
 #### store_ref
@@ -990,6 +1036,7 @@ Converts a `builder` into a standard `cell`.
 ```func
 builder store_ref(builder b, cell c) asm(c b) "STREF";
 ```
+
 Stores a reference to cell `c` in builder `b`.
 
 #### store_uint
@@ -997,6 +1044,7 @@ Stores a reference to cell `c` in builder `b`.
 ```func
 builder store_uint(builder b, int x, int len) asm(x b len) "STUX";
 ```
+
 Stores an unsigned `len`-bit integer `x` in `b`, where `0 ≤ len ≤ 256`.
 
 #### store_int
@@ -1015,7 +1063,6 @@ builder store_slice(builder b, slice s) asm "STSLICER";
 
 Stores slice `s` in builder `b`.
 
-
 #### store_grams
 
 ```func
@@ -1027,14 +1074,15 @@ builder store_grams(builder b, int x) asm "STGRAMS";
 ```func
 builder store_coins(builder b, int x) asm "STGRAMS";
 ```
+
 Serializes an integer `x` in the range `0..2^120 − 1` into builder `b`. The serialization consists of:
+
 - A 4-bit unsigned big-endian integer `l`, the smallest `l ≥ 0` such that `x < 2^8l`.
 - An `8l`-bit unsigned big-endian representation of `x`.
 
 A range check exception is thrown if `x` is outside the supported range.
 
 This is the standard way of storing Toncoins.
-
 
 #### store_dict
 
@@ -1067,6 +1115,7 @@ Returns the number of cell references currently stored in builder `b`.
 ```func
 int builder_bits(builder b) asm "BBITS";
 ```
+
 Returns the number of data bits currently stored in builder `b`.
 
 #### builder_depth
@@ -1074,6 +1123,7 @@ Returns the number of data bits currently stored in builder `b`.
 ```func
 int builder_depth(builder b) asm "BDEPTH";
 ```
+
 Returns the depth of builder `b`. If `b` contains no cell references, it returns `0`. Otherwise, it returns `1` plus the maximum depth among the referenced cells.
 
 ## Cell primitives
@@ -1083,6 +1133,7 @@ Returns the depth of builder `b`. If `b` contains no cell references, it returns
 ```func
 int cell_depth(cell c) asm "CDEPTH";
 ```
+
 Returns the depth of the given `cell c`. If `c` has no references, the function returns `0`. Otherwise, it returns `1` plus the maximum depth among all cells referenced by `c`. If `c` is `null` instead of a cell, the function returns `0`.
 
 #### cell_null?
@@ -1090,6 +1141,7 @@ Returns the depth of the given `cell c`. If `c` has no references, the function 
 ```func
 int cell_null?(cell c) asm "ISNULL";
 ```
+
 Checks whether the given `cell c` is `null`. In most cases, a `null` cell represents an empty dictionary. FunC also includes a polymorphic `null?` built-in function. See [built-in](/v3/documentation/smart-contracts/func/docs/builtins#other-primitives) for more details.
 
 ## Dictionaries primitives
@@ -1116,11 +1168,13 @@ In FunC, dictionaries are also represented as `cells` with the implicit assumpti
 ### Taxonomy note
 
 A dictionary primitive interprets dictionary keys in one of three ways:
+
 1. Unsigned `l`-bit integers (denoted by **u**);
 2. Signed `l`-bit integers (denoted by **i**);
 3. `l`-bit slices (**no prefix**).
 
 The naming convention of dictionary primitives reflects these distinctions. For example:
+
 - `udict_set` is a set-by-key function for dictionaries with unsigned integer keys.
 - `idict_set` is the equivalent function for signed integer keys.
 - `dict_set` applies to dictionaries with slice keys.
@@ -1129,7 +1183,9 @@ In function titles, an **empty prefix** indicates slice keys.
 Additionally, some primitives have counterparts prefixed with `~`, enabling them to be used as [modifying methods](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods).
 
 ### Dictionary values
+
 Values in a dictionary can be stored in two ways:
+
 1. As a **subslice** within an inner dictionary cell.
 2. As a **reference** to a separate cell.
 
@@ -1161,6 +1217,7 @@ cell udict_set_ref(cell dict, int key_len, int index, cell value) asm(value inde
 (cell, ()) ~idict_set_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTISETREF";
 (cell, ()) ~udict_set_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTUSETREF";
 ```
+
 This is similar to `dict_set`, but it sets the value to a reference of cell `value`.
 
 #### dict_get?
@@ -1169,6 +1226,7 @@ This is similar to `dict_set`, but it sets the value to a reference of cell `val
 (slice, int) idict_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIGET" "NULLSWAPIFNOT";
 (slice, int) udict_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUGET" "NULLSWAPIFNOT";
 ```
+
 Searches for the key `index` in the `dict` dictionary with `key_len`-bit keys. It retrieves the associated value as a `slice` and returns a success flag of `-1` if found. If not found, it returns `(null, 0)`.
 
 #### dict_get_ref?
@@ -1185,6 +1243,7 @@ Similar to`dict_get?`, but it returns the first reference of the found value.
 ```func
 cell idict_get_ref(cell dict, int key_len, int index) asm(index dict key_len) "DICTIGETOPTREF";
 ```
+
 This variant of `dict_get_ref?` returns `null` if the key `index` is absent in the dictionary `dict`.
 
 #### dict_set_get_ref
@@ -1203,6 +1262,7 @@ It then returns the old value or `null` if it wasn't present.
 (cell, int) idict_delete?(cell dict, int key_len, int index) asm(index dict key_len) "DICTIDEL";
 (cell, int) udict_delete?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUDEL";
 ```
+
 This function deletes the `key_len`-bit key `index` from the dictionary `dict`. It returns the modified dictionary and a success flag of `-1` if successful.
 If the key is not found, it returns the original dictionary and `0`.
 
@@ -1216,7 +1276,6 @@ If the key is not found, it returns the original dictionary and `0`.
 ```
 
 Deletes the `key_len`-bit key `index` from the dictionary `dict`. If the key is found, it returns the modified dictionary, the original value associated with the key as a Slice, and the success flag `-1`. If the key is not found, it returns `(dict, null, 0)`.
-
 
 #### dict_add?
 
@@ -1233,6 +1292,7 @@ This `add` operation is similar to `dict_set` but only sets the value if the key
 (cell, int) udict_replace?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTUREPLACE";
 (cell, int) idict_replace?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTIREPLACE";
 ```
+
 This `replace` operation works like `dict_set`, but it only updates the value for the `index` if the key is already present in the dictionary `dict`. It returns the modified dictionary and a success flag of `-1` or `(dict, 0)`.
 
 ### Builder counterparts
@@ -1258,6 +1318,7 @@ It works similarly to `dict_set` but takes a builder as input.
 (cell, int) udict_add_builder?(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTUADDB";
 (cell, int) idict_add_builder?(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTIADDB";
 ```
+
 Similar to `dict_add?`, but uses a builder.
 
 #### dict_replace_builder?
@@ -1321,6 +1382,7 @@ Finds the largest key `k` in the dictionary `dict` and returns `(k, x, -1)`, whe
 (int, cell, int) udict_get_min_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTUMINREF" "NULLSWAPIFNOT2";
 (int, cell, int) idict_get_min_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMINREF" "NULLSWAPIFNOT2";
 ```
+
 Same as `dict_get_min?` but it returns a reference.
 
 #### dict_get_max_ref?
@@ -1329,6 +1391,7 @@ Same as `dict_get_min?` but it returns a reference.
 (int, cell, int) udict_get_max_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTUMAXREF" "NULLSWAPIFNOT2";
 (int, cell, int) idict_get_max_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMAXREF" "NULLSWAPIFNOT2";
 ```
+
 Same as `dict_get_max?` but it returns a reference.
 
 #### dict_get_next?
@@ -1346,6 +1409,7 @@ Finds the smallest key `k` in `dict` that is greater than the `pivot`. Returns `
 (int, slice, int) udict_get_nexteq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTUGETNEXTEQ" "NULLSWAPIFNOT2";
 (int, slice, int) idict_get_nexteq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETNEXTEQ" "NULLSWAPIFNOT2";
 ```
+
 Similar to `dict_get_next?`, but instead finds the smallest key `k` that is greater than or equal to the `pivot`.
 
 #### dict_get_prev?
@@ -1354,6 +1418,7 @@ Similar to `dict_get_next?`, but instead finds the smallest key `k` that is grea
 (int, slice, int) udict_get_prev?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTUGETPREV" "NULLSWAPIFNOT2";
 (int, slice, int) idict_get_prev?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETPREV" "NULLSWAPIFNOT2";
 ```
+
 Similar to `dict_get_next?`, but instead finds the largest key `k` that is less than the `pivot`.
 
 #### dict_get_preveq?
@@ -1370,6 +1435,7 @@ Similar to `dict_get_prev?`, but instead finds the largest key `k` that is less 
 ```func
 cell new_dict() asm "NEWDICT";
 ```
+
 Creates an empty dictionary, which is represented as a `null` value—a special case of `null()`.
 
 #### dict_empty?
@@ -1377,6 +1443,7 @@ Creates an empty dictionary, which is represented as a `null` value—a special 
 ```func
 int dict_empty?(cell c) asm "DICTEMPTY";
 ```
+
 Checks whether a dictionary is empty. Equivalent to `cell_null?`.
 
 ## Prefix dictionaries primitives
@@ -1391,6 +1458,7 @@ Learn more in the [TVM instruction](/v3/documentation/tvm/tvm-overview) section.
 ```
 
 Searches for the unique prefix of a slice `key` in the prefix code dictionary `dict`. If found, returns `(s', x, s'', -1)`, where:
+
 - `s'` is the matching prefix of `s`,
 - `x` is the corresponding value (a slice),
 - `s''` is the remaining part of `s`,
@@ -1403,6 +1471,7 @@ If no matching prefix is found, returns `(null, null, s, 0)`, where `s` remains 
 ```func
 (cell, int) pfxdict_set?(cell dict, int key_len, slice key, slice value) asm(value key dict key_len) "PFXDICTSET";
 ```
+
 Works like `dict_set` but fails if the given key is a prefix of an existing key in dict. Returns a flag indicating success.
 
 #### pfxdict_delete?
@@ -1420,6 +1489,7 @@ Similar to `dict_delete?`.
 ```func
 forall X -> X null() asm "PUSHNULL";
 ```
+
 In TVM, the `Null` type in FunC represents the absence of a value for any atomic type, meaning `null` can take on any atomic type.
 
 #### ~impure_touch
@@ -1427,6 +1497,7 @@ In TVM, the `Null` type in FunC represents the absence of a value for any atomic
 ```func
 forall X -> (X, ()) ~impure_touch(X x) impure asm "NOP";
 ```
+
 Marks a variable as used, ensuring the code generated isn't removed during optimization, even if it's not impure. See [Impure specifier](/v3/documentation/smart-contracts/func/docs/functions#impure-specifier) section.
 
 ## Other primitives
@@ -1452,6 +1523,7 @@ Computes the maximum of two integers `x` and `y`.
 ```func
 (int, int) minmax(int x, int y) asm "MINMAX";
 ```
+
 Returns `(min(x, y), max(x, y))`, sorting two integers.
 
 #### abs
@@ -1463,4 +1535,3 @@ int abs(int x) asm "ABS";
 Computes the absolute value of `x`.
 
 <Feedback />
-

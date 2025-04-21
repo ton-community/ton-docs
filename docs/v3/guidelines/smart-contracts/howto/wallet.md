@@ -1,9 +1,8 @@
-import Feedback from '@site/src/components/Feedback';
-
 ---
 description: In this tutorial, you will learn how to fully work with wallets, messages and smart contracts.
 ---
 
+import Feedback from '@site/src/components/Feedback';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -3240,4 +3239,3 @@ External references:
   
 
 <Feedback />
-
