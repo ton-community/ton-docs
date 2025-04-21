@@ -18,7 +18,7 @@ const MnemonicGenerator = () => {
     <br/>
     <br/>
     <button className="button button--primary button--sm"
-            onClick={() => setMnemonicCount((oldCount) => oldCount + 1)}>Regenerate mnemonic
+      onClick={() => setMnemonicCount((oldCount) => oldCount + 1)}>Regenerate mnemonic
     </button>
   </>;
 };

@@ -135,7 +135,6 @@ This might seem unintuitive, why is your wallet in `uninit` state when you alrea
 
 - `wallet app` is your off-chain client for `wallet smart contract`
 - `wallet smart contract` is contract itself, since its deployment requires some fees most `wallet apps` don't actually deploy the wallet `smart contract` until you receive funds on your address and try to make your first transaction.
-
 :::
 
 - `Active`: state of deployed `smart contract` with positive balance. To deploy our wallet let's send first transaction to someone special - **ourselves**. And see how it looks on the `blockchain`. Enter the send menu in your wallet app and transfer some funds to your own address that you have copied before. In the explorer, our contract should start looking something like this:
