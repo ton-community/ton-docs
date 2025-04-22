@@ -1,0 +1,1 @@
+../../v3/documentation/smart-contracts/contracts-specs/wallet-contracts.md

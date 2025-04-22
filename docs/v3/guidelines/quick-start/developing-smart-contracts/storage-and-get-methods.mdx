@@ -123,7 +123,6 @@ Rather than initializing global variables, we'll:
 
 Also lets add an additional **256-bit integer** to our storage. The modified implementation should appear as follows:
 
-
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
 ```func title="/contracts/hello_world.fc"
@@ -233,7 +232,6 @@ get get_counters(): (int, int) {
 And that's all! In practice, all **get methods** follow this straightforward pattern and require no additional complexity. Remember you can ignore return values using the `_` placeholder syntax.
 
 Here's the final smart contract implementation:
-
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
 ```func title="/contracts/hello_world.fc"

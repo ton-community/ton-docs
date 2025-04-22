@@ -4,6 +4,7 @@ import ThemedImage from "@theme/ThemedImage";
 
 ## Introduction
 
+
 This guide will walk you through reading data from TON Blockchain. You'll learn how to:
 - Fetch account information
 - Call `get methods`
@@ -102,13 +103,11 @@ Data:  b5ee9c7241010101002...fd1e976824402aa67b98
 Code:  b5ee9c7241021401000...c9ed54696225e5
 ```
 
-
 ## Calling get methods
 
 Get methods are special functions in smart contracts that allow you to observe the current state of a smart contract. Their execution doesn't cost any fees and can't change the smart contract's storage.
 
 The result of calling a get method from the TON HTTP API comes in *stack* format and may be deserialized one by one using `readNumber()` or a similar function.
-
 
 #### Implementation
 
@@ -235,8 +234,6 @@ A transaction obtained from the API has the following structure:
 - `in_msg`: The incoming [message](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-message/) that triggered the transaction.
 - `out_msgs`: Outgoing messages sent during the transaction.
 
-
-
 ### What is a message?
 
 A message is a packet of data exchanged between actors (users, applications, or smart contracts). It typically contains information instructing the receiver on what action to perform, such as updating storage or sending a new message.
@@ -274,7 +271,6 @@ A message is a packet of data exchanged between actors (users, applications, or 
 - `destination`: The address of the receiver (the account that will process the message).
 - `value`: The amount of TON (in nanoTON) attached to the message.
 - `msg_data`: Contains the message body and state initialization.
-
 
 #### Implementation
 

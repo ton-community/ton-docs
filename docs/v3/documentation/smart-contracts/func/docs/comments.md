@@ -1,29 +1,42 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Comments
-FunC has single-line comments which start with `;;` (double `;`). For example:
+
+FunC supports both single-line and multi-line comments.
+
+**Single-line** comments start with `;;` (double semicolon). Example:
+
 ```func
-int x = 1; ;; assign 1 to x
+int x = 1; ;; assigns 1 to x
 ```
 
-It also has multi-line comments which start with `{-` and end with `-}`. Note that unlike in many other languages, FunC multi-line comments can be nested. For example:
+**Multi-line** comments begin with `{-` and end with `-}`.
+Unlike other languages, FunC allows nested multi-line comments.
+Example:
+
 ```func
 {- This is a multi-line comment
-    {- this is a comment in the comment -}
+    {- This is a comment inside a comment -}
 -}
 ```
 
-Moreover, there can be one-line comments inside multi-line ones, and one-line comments `;;` are "stronger" than multiline `{- -}`. In other words in the following example:
+
+Additionally, single-line comments `;;` can appear inside multi-line comments, and they take precedence over multi-line comments `{- -}`. In the following example:
 
 ```func
 {-
   Start of the comment
 
-;; this comment ending is itself commented -> -}
+;; This comment’s ending is itself commented out -> -}
 
 const a = 10;
-;; this comment begining is itself commented -> {-
+
+;; This comment’s beginning is itself commented out -> {-
 
   End of the comment
 -}
 ```
 
-`const a = 10;` is inside multiline comment and is commented out.
+Here, `const a = 10;` is inside a multi-line comment and is effectively commented out.
+<Feedback />
+

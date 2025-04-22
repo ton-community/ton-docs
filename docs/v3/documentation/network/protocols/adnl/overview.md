@@ -1,39 +1,42 @@
-# ADNL Protocol
+import Feedback from '@site/src/components/Feedback';
 
-Implementation:
-* https://github.com/ton-blockchain/ton/tree/master/adnl
+# ADNL protocol
+
+Please see the [**implementation**](https://github.com/ton-blockchain/ton/tree/master/adnl) first.
 
 ## Overview
 
-The cornerstone of TON is the Abstract Datagram Network Layer (ADNL). 
+The Abstract Datagram Network Layer (ADNL) is a fundamental component of the TON. 
 
-This is an overlay, peer-to-peer, unreliable (small-size) datagram protocol running on top of a **UDP** in **IPv4** (in the future, IPv6), with an optional **TCP fallback** if UDP is not available.
+ADNL is an overlay, peer-to-peer, unreliable (small-size) datagram protocol that operates over **UDP** in **IPv4**, with plans to support **IPv6** in the future. Additionally, it has an optional **TCP fallback** for instances when UDP is unavailable.
 
 ## ADNL address
 
-Each participant has a 256-bit ADNL Address.
+Each participant in the network possesses a 256-bit ADNL Address.
 
-The ADNL Protocol allows you to send (unreliable) and receive datagrams using only  ADNL Addresses. IP Addresses and Ports are hidden by the ADNL Protocol.
+The ADNL Protocol enables the sending and receiving of datagrams using only ADNL Addresses, concealing the underlying IP Addresses and Ports.
 
-An ADNL Address is essentially equal to a 256-bit ECC public key. This public key can be arbitrarily generated, thus creating as many different network identities as the node needs.
-However, one must know the corresponding private key in order to receive (and decrypt) messages intended for the recipient address.
+An ADNL Address effectively functions as a 256-bit ECC public key, which can be generated arbitrarily, allowing for the creation of multiple network identities as needed by the node.
 
-In reality, the ADNL Address is not the public key itself; instead, it is a 256-bit SHA256 hash of a serialized TL-object that can describe several types of public keys and addresses depending on its constructor.
+However, the corresponding private key must be known to receive and decrypt messages intended for a specific address.
 
-## Encryption & security
+In practice, the ADNL Address is not the public key itself; rather, it is a 256-bit SHA256 hash of a serialized TL object. Depending on its constructor, this TL object can represent various types of public keys and addresses.
 
-Normally each datagram sent is signed by the sender and encrypted so that only the recipient can decrypt the message and verify its integrity by the signature.
+## Encryption and security
+
+Typically, each datagram sent is signed by the sender and encrypted so that only the intended recipient can decrypt the message and verify its integrity using the signature.
 
 ## Neighbor tables
 
-Normally, a TON ADNL node will have some “neighbor table”, which contains information about other known nodes, such as their abstract addresses, public keys, IP Addresses and UDP Ports. Over time, it will gradually
-extend this table using information gathered from these known nodes. This new information can be in the form of answers to special queries or sometimes the removal of obsolete records.
+A TON ADNL node will typically maintain a **neighbor table** that contains information about other known nodes, including their abstract addresses, public keys, IP addresses, and UDP ports. Over time, this table expands with information gathered from these known nodes, which may come from responses to specific queries or by removing outdated records.
 
-ADNL allows you to set up point-to-point channels and tunnels (a chain of proxies).
+ADNL facilitates the establishment of point-to-point channels and tunnels (chains of proxies).
 
-A TCP-like stream protocol can be built over ADNL.
+A TCP-like stream protocol can be constructed on top of ADNL.
 
 ## What's next?
 
-* Read more about ADNL in the [Low-Level ADNL article](/v3/documentation/network/protocols/adnl/low-level-adnl)
-* Chapter 3.1 of the [TON Whitepaper](https://docs.ton.org/ton.pdf).
+* To learn more about ADNL, refer to the [Low-level ADNL documentation](/v3/documentation/network/protocols/adnl/low-level-adnl).
+* See Chapter 3.1 of the [TON Whitepaper](https://docs.ton.org/ton.pdf).
+<Feedback />
+

@@ -1,8 +1,13 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
 # Introduction
 
-Smart contract creation, development, and deployment on TON Blockchain leverages the [FunC programming language](/v3/documentation/smart-contracts/overview#-func) and [TON Virtual Machine (TVM)](/v3/documentation/smart-contracts/overview#ton-virtual-machine-tvm).
+Smart contract creation, development, and deployment on TON Blockchain leverages the [TON Virtual Machine (TVM)](/v3/documentation/smart-contracts/overview#ton-virtual-machine-tvm) and one of the following programming languages:
+
+* [Tact](/v3/documentation/smart-contracts/overview#-tact)
+* [FunC](/v3/documentation/smart-contracts/overview#-func)
 
 ## Quick Start: Your First Smart Contract
 
@@ -36,7 +41,7 @@ TON Blockchain Course
 ### Fun and Easy Tutorials
 
 Kickstart your journey with our beginner-friendly guides:
-* [TON Hello World: Step-by-step guide for writing your first smart contract](https://ton-community.github.io/tutorials/02-contract/)
+* [TON Hello World: Step-by-step guide for writing your first smart contract](https://helloworld.tonstudio.io/02-contract/)
 * TON tutorials
   - [🚩 Challenge 1: Simple NFT Deploy](https://github.com/romanovichim/TONQuest1)
   - [🚩 Challenge 2: Chatbot Contract](https://github.com/romanovichim/TONQuest2)
@@ -138,10 +143,21 @@ FunC Overview
 
 Tact is a fresh programming language for TON Blockchain, focused on efficiency and ease of development. It is a good fit for complex smart contracts, quick onboarding and rapid prototyping.
 
-Introduced by [TON Studio](https://tonstudio.io), driven by the community.
+Developed by [TON Studio](https://tonstudio.io), powered by the community — by the end of 2024, the number of _unique code_[^1] contracts deployed on the mainnet reached almost 28 thousand, of which about 33% were written in Tact.
+
+View some of the selected projects: [Tact in production](https://github.com/tact-lang/awesome-tact#tact-in-production-).
+
+[^1]: The "unique code" means that each contract in the data sample has at least one TVM instruction that differs from the other contracts, excluding many preprocessed wallets with everything inlined — even seqno and a public key for signature verification!
+
+<Button href="/v3/documentation/smart-contracts/tact"
+        colorType={'primary'} sizeType={'sm'}>
+
+Read more
+
+</Button>
 
 <Button href="https://tact-lang.org/"
-        colorType={'primary'} sizeType={'sm'}>
+        colorType={'secondary'} sizeType={'sm'}>
 
 Official Site
 
@@ -154,10 +170,10 @@ Tact Docs
 
 </Button>
 
-<Button href="https://tact-by-example.org/"
+<Button href="https://github.com/tact-lang/awesome-tact"
         colorType="secondary" sizeType={'sm'}>
 
-Tact by Example
+Awesome Tact
 
 </Button>
 
@@ -210,4 +226,7 @@ Enhance your skillset with these community-driven educational resources.
 
 * [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)
 * [Understanding Transaction Fees](/v3/guidelines/smart-contracts/fee-calculation)
+
+
+<Feedback />
 

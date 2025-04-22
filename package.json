@@ -18,7 +18,7 @@
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
-    "spell": "cspell --show-suggestions",
+    "spell": "cspell '**/*.md' '**/.mdx' --show-suggestions --exclude build",
     "postinstall": "husky"
   },
   "dependencies": {
@@ -41,6 +41,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-player": "^2.16.0",
+    "react-tooltip": "^5.28.0",
     "sass": "^1.79.4",
     "tonweb-mnemonic": "^1.0.1",
     "url": "^0.11.4"

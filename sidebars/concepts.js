@@ -29,13 +29,13 @@ module.exports = [
     type: 'category',
     label: 'Newcomers from Ethereum',
     items: [
-      'v3/concepts/dive-into-ton/go-from-ethereum/difference-of-blockchains',
-      'v3/concepts/dive-into-ton/go-from-ethereum/tvm-vs-evm',
-      'v3/concepts/dive-into-ton/go-from-ethereum/solidity-vs-func',
       'v3/concepts/dive-into-ton/go-from-ethereum/blockchain-services',
+      'v3/concepts/dive-into-ton/go-from-ethereum/difference-of-blockchains',
+      'v3/concepts/dive-into-ton/go-from-ethereum/solidity-vs-func',
+      'v3/concepts/dive-into-ton/go-from-ethereum/tvm-vs-evm',
     ],
   },
   'v3/concepts/educational-resources',
   'v3/concepts/glossary',
-  'v3/concepts/qa-outsource/auditors'
+  //'v3/concepts/qa-outsource/auditors'
 ];

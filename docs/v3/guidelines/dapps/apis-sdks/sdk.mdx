@@ -1,25 +1,28 @@
+import Feedback from '@site/src/components/Feedback';
+
 # SDKs
 
-Instantly navigate to your preferred language using the right sidebar.
+Easily navigate to your preferred programming language using the right sidebar.
+
 
 ## Overview
 
-There are different ways to connect to blockchain:
-1. RPC data provider or other API: in most cases, you have to *rely* on its stability and security.
-2. ADNL connection: you're connecting to a [liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node). They might be inaccessible, but with a certain level of validation (implemented in the library), cannot lie.
-3. Tonlib binary: you're connecting to liteserver as well, so all benefits and downsides apply. However, your application also contains a dynamic-loading library compiled outside.
-4. Offchain-only. These SDKs enable the creation and serialization of cells, which can be transmitted to APIs.
+There are different ways to connect to the blockchain:
+1. RPC data provider or other API – Requires stability and security from a third-party service.
+2. ADNL connection - Connects to a [liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node). While it may be inaccessible at times, it cannot provide false data due to built-in validation.
+3. Tonlib binary - Also connects to a liteserver, inheriting the same advantages and limitations. However, your application includes a dynamically loaded library compiled externally.
+4. Offchain-only - These SDKs allow you to create and serialize cells, which can then be sent to APIs.
 
 
 ### TypeScript / JavaScript
 
 | Library |	Blockchain connection |	Description |
 |---------|------------------|--------------|
-|[ton](https://github.com/ton-org/ton)|via RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / etc)|Convenient client library with wallet wrappers for development dApps on TON Blockchain.|
+|[ton](https://github.com/ton-org/ton)|via RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / etc)|Convenient client library with wallet wrappers for developing dApps on TON Blockchain.|
 |[tonweb](https://github.com/toncenter/tonweb)|via RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / etc)|Old-style TON JS SDK, with minimal external dependencies, extensively tested in production.|
 |[tonkite/adnl](https://github.com/tonkite/adnl)|[ADNL](/v3/documentation/network/protocols/adnl/adnl-tcp) natively / via WebSocket| ADNL TypeScript implementation. |
-|[tonutils](https://github.com/thekiba/tonutils)|Native [ADNL](/v3/documentation/network/protocols/adnl/adnl-tcp)| TypeScript-based interface for building and interacting with applications in TON Ecosystem. Due to native ADNL dependency, cannot be used for blockchain interaction in browser.|
-|[foton](https://foton.sh/)|via RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / etc)|TypeScript toolkit for interacting with TON wallets and blockchain as a whole. The library wraps existing solutions (Blueprint and TON Connect) into one comfortable API.|
+|[tonutils](https://github.com/thekiba/tonutils)|Native [ADNL](/v3/documentation/network/protocols/adnl/adnl-tcp)| TypeScript-based interface for TON application development. Due to native ADNL dependency, it cannot be used in browsers.|
+|[foton](https://foton.sh/)|via RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / etc)|TypeScript toolkit for interacting with TON wallets and blockchain. Wraps existing solutions (Blueprint and TON Connect) into one API.|
 
 ### Java
 | Library |	Blockchain connection |	Description |
@@ -33,15 +36,15 @@ There are different ways to connect to blockchain:
 
 | Library |	Blockchain connection |	Description |
 |---------|------------------|--------------|
-|[pytoniq](https://github.com/yungwine/pytoniq) |Native ADNL| Python SDK with native LiteClient and other ADNL-based protocols implementations. |
-|[pytoniq-core](https://github.com/yungwine/pytoniq-core) |	*offchain-only* | Python powerful transport-free SDK |
-|[tonutils](https://github.com/nessshon/tonutils) |	via RPC ([TONAPI](https://tonapi.io/api-v2) / [Toncenter](https://toncenter.com/api/v3/)) / Native ADNL ([pytoniq](https://github.com/yungwine/pytoniq))| Tonutils is a high-level object-oriented library for Python designed to facilitate interactions with the TON blockchain |
-|[pytonlib](https://github.com/toncenter/pytonlib)|Tonlib binary| This is a standalone Python library based on libtonlibjson, brought as a binary dependency from TON monorepo. |
+|[pytoniq](https://github.com/yungwine/pytoniq) |Native ADNL| Python SDK with native LiteClient and other ADNL-based protocols. |
+|[pytoniq-core](https://github.com/yungwine/pytoniq-core) |	*offchain-only* | Transport-free, powerful SDK. |
+|[tonutils](https://github.com/nessshon/tonutils) |	via RPC ([TONAPI](https://tonapi.io/api-v2) / [Toncenter](https://toncenter.com/api/v3/)) / Native ADNL ([pytoniq](https://github.com/yungwine/pytoniq))| High-level OOP library for interacting with TON Blockchain. |
+|[pytonlib](https://github.com/toncenter/pytonlib)|Tonlib binary| Standalone Python library based on libtonlibjson. |
 |[mytonlib](https://github.com/igroman787/mytonlib)|Native ADNL| Native Python SDK library for working with The Open Network |
-|[TonTools](https://github.com/yungwine/TonTools)|via RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / etc)|TonTools is a high-level OOP library for Python, which can be used to interact with TON Blockchain.|
-|[tonpy](https://github.com/disintar/tonpy)|Native ADNL| Python package that provides data structures and API to interact with TON blockchain. |
-|[tvm_valuetypes](https://github.com/toncenter/tvm_valuetypes)|*offchain-only*| library is collection of utilities for handling TVM types. |
-|[pytvm](https://github.com/yungwine/pytvm) | *offchain* | Python TVM emulator using bindings to C++ standard emulator |
+|[TonTools](https://github.com/yungwine/TonTools)|via RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / etc)|High-level OOP Python library for interacting with TON.|
+|[tonpy](https://github.com/disintar/tonpy)|Native ADNL| PPython package providing TON Blockchain interaction. |
+|[tvm_valuetypes](https://github.com/toncenter/tvm_valuetypes)|*offchain-only*| Utilities for handling TVM types. |
+|[pytvm](https://github.com/yungwine/pytvm) | *offchain* | Python TVM emulator using C++ bindings. |
 
 
 ### C#
@@ -49,24 +52,24 @@ There are different ways to connect to blockchain:
 | Library |	Blockchain connection |	Description |
 |---------|------------------|--------------|
 |[TonSdk.NET](https://github.com/continuation-team/TonSdk.NET)|Native ADNL or RPC|Native C# SDK for The Open Network. |
-|[justdmitry/TonLib.NET](https://github.com/justdmitry/TonLib.NET) |Tonlib binary|.NET SDK for The Open Network, connecting via libtonlibjson brought as a binary dependency from TON monorepo.|
+|[justdmitry/TonLib.NET](https://github.com/justdmitry/TonLib.NET) |Tonlib binary|.NET SDK for The Open Network, connecting via libtonlibjson.|
 
 
 ### Rust
 
 | Library |	Blockchain connection |	Description |
 |---------|------------------|--------------|
-|[tonlib-rs](https://github.com/ston-fi/tonlib-rs)|Tonlib binary| Rust SDK for The Open Network, bringing binary dependency from TON monorepo.|
-|[getgems-io/ton-grpc](https://github.com/getgems-io/ton-grpc)|Tonlib binary| Rust bindings for tonlibjson (thus, depending on binary from TON monorepo) and services built on top of it |
+|[tonlib-rs](https://github.com/ston-fi/tonlib-rs)|Tonlib binary| Rust SDK for TON, using binary dependency from TON monorepo.|
+|[getgems-io/ton-grpc](https://github.com/getgems-io/ton-grpc)|Tonlib binary| Rust bindings for tonlibjson with additional services.|
 
 
 ### Go
 
 | Library |	Blockchain connection |	Description |
 |---------|------------------|--------------|
-|[tonutils-go](https://github.com/xssnick/tonutils-go)|Native ADNL|Golang library for interacting with TON blockchain|
-|[tongo](https://github.com/tonkeeper/tongo)|Native ADNL|Go implementation of libraries for TON blockchain|
-|[tonlib-go](https://github.com/ton-blockchain/tonlib-go)|Tonlib binary|Official bindings for libtonlibjson|
+|[tonutils-go](https://github.com/xssnick/tonutils-go)|Native ADNL|Golang library for interacting with TON.|
+|[tongo](https://github.com/tonkeeper/tongo)|Native ADNL|Go implementation of TON Blockchain libraries.|
+|[tonlib-go](https://github.com/ton-blockchain/tonlib-go)|Tonlib binary|Official bindings for libtonlibjson.|
 
 
 ### SDKs for other languages
@@ -74,11 +77,14 @@ There are different ways to connect to blockchain:
 | Library |	Language |	Blockchain connection |	Description |
 |---------|----------|-------|--------------|
 |[ton-kotlin](https://github.com/ton-community/ton-kotlin)|Kotlin|Native ADNL |Kotlin/Multiplatform SDK for The Open Network.|
-|[tonlib-java](https://github.com/ton-blockchain/tonlib-java)	| Java |	Tonlib bin	 | JVM wrapper for TonLib that can be used with Java/Scala/Kotlin/etc.|
+|[tonlib-java](https://github.com/ton-blockchain/tonlib-java)	| Java |	Tonlib bin	 | JVM wrapper for TonLib, usable with Java, Scala, Kotlin, etc.|
 |[ayrat555/ton](https://github.com/ayrat555/ton) | Elixir | *offchain-only* | TON SDK for Elixir.|
-|[C++ Tonlib](https://github.com/ton-blockchain/ton/tree/master/example/cpp)|C++|Tonlib binary|Official examples on smart contract interaction in TON monorepo|.
-|[Java Tonlib](https://github.com/ton-blockchain/tonlib-java)|Java|Tonlib binary|Official examples on smart contract interaction in TON monorepo.|
-|[labraburn/SwiftyTON](https://github.com/labraburn/SwiftyTON)|Swift|Tonlib binary|Native Swift wrapper for tonlib with async/await.|
-|[tonlib-xcframework](https://github.com/labraburn/tonlib-xcframework)|Swift|Tonlib binary|Tonlib build helper for iOS, all architectures.|
+|[C++ Tonlib](https://github.com/ton-blockchain/ton/tree/master/example/cpp)|C++|Tonlib binary|Official examples on smart contract interaction from the TON monorepo.|.
+|[Java Tonlib](https://github.com/ton-blockchain/tonlib-java)|Java|Tonlib binary|Official Java-based examples from the TON monorepo.|
+|[labraburn/SwiftyTON](https://github.com/labraburn/SwiftyTON)|Swift|Tonlib binary|Native Swift wrapper for tonlib with async/await support.|
+|[tonlib-xcframework](https://github.com/labraburn/tonlib-xcframework)|Swift|Tonlib binary|Tonlib build helper for iOS, supporting all architectures.|
 |[labraburn/node-tonlib](https://github.com/labraburn/node-tonlib)|NodeJS|Tonlib binary|C++ addon for NodeJS to work with tonlibjson.|
-|[olifanton/ton](https://github.com/olifanton/ton)|PHP|via RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / etc)|PHP SDK with a set of standard primitives and contracts.|
+|[olifanton/ton](https://github.com/olifanton/ton)|PHP|via RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / etc)|PHP SDK with TON primitives and smart contract tools.|
+
+<Feedback />
+

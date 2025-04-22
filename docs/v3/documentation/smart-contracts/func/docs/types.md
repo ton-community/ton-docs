@@ -1,61 +1,136 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Types
 
 :::info
 
-FunC documentation was initially written by [@akifoq](https://github.com/akifoq).
+FunC documentation was initially written by _[@akifoq](https://github.com/akifoq/)_.
 
 :::
 
-FunC has the following built-in types.
+FunC includes several built-in types that serve as the foundation of the language.
 
 
 ## Atomic types
-- `int` is the type of 257-bit signed integers. By default, overflow checks are enabled and lead to integer overflow exceptions.
-- `cell` is the type of TVM cells. All persistent data in TON Blockchain is stored in trees of cells. Every cell has up to 1023 bits of arbitrary data and up to four references to other cells. Cells serve as memory in stack-based TVMs.
-- `slice` is the type of cell slices. A cell can be transformed into a slice, and then the data bits and references to other cells from the cell can be obtained by loading them from the slice.
-- `builder` is the type of cell builders. Data bits and references to other cells can be stored in a builder, and then the builder can be finalized to a new cell.
-- `tuple` is the type of TVM tuples. Tuple is an ordered collection of up to 255 components with arbitrary value types that are possibly distinct.
-- `cont` is the type of TVM continuations. Continuations are used for controlling the flow of the TVM program execution. It is rather low-level object from the perspective of FunC, although paradoxically quite general.
+- `int` is a 257-bit signed integer type. Overflow checks are enabled by default and trigger an exception if exceeded.
 
-Note that any of the types above occupy only a single entry in the TVM stack.
+- `cell` is a TVM cell type used to store persistent data in the TON Blockchain. Data is organized in trees of cells, with each cell containing up to 1023 bits of arbitrary data and up to four references to other cells. Cells function as memory units in stack-based TVMs.
 
-### Absence of boolean type
-In FunC, booleans are represented as integers; `false` is represented as `0` and `true` is represented as `-1` (257 ones in binary notation). Logical operations are done as bitwise operations. When a condition is checked, every non-zero integer is considered a `true` value.
+- `slice` is a read-only view of a cell that allows sequential access to its data and references. A cell can be converted into a slice, extracting stored bits and references without modifying the original cell.
+
+- `builder` is a mutable structure used to construct cells by adding data and references before finalizing them into a new cell.
+
+- `tuple` is an ordered collection of up to 255 elements, each capable of holding a value of any type.
+
+- `cont` is a TVM continuation used to manage execution flow in TVM programs. Although a low-level construct, it provides flexible execution control.
+
+Each of these types occupies a single slot in the TVM stack.
+
+### No boolean type
+FunC does not have a dedicated boolean type.
+Instead, booleans are represented as integers:
+- `false` is `0`, `true` is `-1` (a 257-bit integer with all bits set to 1).
+- Logical operations are performed using bitwise operations. 
+- In conditional checks, any nonzero integer is treated as `true`.
 
 ### Null values
-By the value `null` of TVM type `Null`, FunC represents the absence of a value of some atomic type. Some primitives from the standard library may be typed as ones returning an atomic type and actually return `null`s in some cases. Others may be typed as ones excepting a value of an atomic type but work fine with `null` values too. Such behavior is explicitly stated in the primitive specification. By default, `null` values are prohibited and lead to a run-time exception.
+In FunC, the `null` value of the TVM type `Null` represents the absence of a value for a given atomic type. While `null` is generally not allowed, some standard library functions handle it in specific ways:
+- Some functions that return an atomic type may return `null` in some instances. 
+- Others may expect an atomic type as input but can also accept `null` without errors. 
+- This behavior is explicitly defined in the function specification.
+By default, `null` values are not permitted and will cause a runtime exception.
 
-In such a way, the atomic type `A` may be implicitly transformed into type `A^?` a.k.a. `Maybe A` (the type checker is agnostic to such a transformation).
+Additionally, an atomic type `A` can be implicitly transformed into `A^?` (also known as `Maybe A`), 
+allowing a variable of type `A` to store either a valid value or `null`. 
+This transformation happens automatically and is not enforced by the type checker.
+
 
 ## Hole type
 FunC has support for type inference. Types `_` and `var` represent type "holes" which can later be filled with some actual type during type checking. For example, `var x = 2;` is a definition of variable `x` equal to `2`. The type checker can infer that `x` has type `int`, because `2` has type `int`, and the left and right sides of the assignment must have equal types.
 
+FunC supports type inference. The hole types `_` and `var` serve as placeholders that are resolved during type checking.
+For example, in the declaration:
+```func
+var x = 2;
+ ``` 
+
+The type checker determines that `x` is of type `int` since `2` is an `int`, 
+and both sides of the assignment must have matching types.
+
+
 ## Composite types
-Types can be composed into more complex ones.
+Types can be combined to form more complex structures.
 
 ### Functional type
-Types of the form `A -> B` represent functions with specified domain and codomain. For example, `int -> cell` is the type of function that takes one integer argument and returns a TVM cell.
 
-Internally, values of such types are represented as continuations.
+A functional type is written in the form `A -> B`, where:
+- `A` is the input type, which is called domain.
+- `B` is the output type, which is called codomain.
+
+**Example:**
+The type `int -> cell` represents a function that:
+- Takes an integer as input.
+- Returns a TVM cell as output.
+
+Internally, values of functional types are represented as **continuations**.
 
 ### Tensor types
-Types of the form `(A, B, ...)` essentially represent ordered collections of values of types `A`, `B`, `...`, which all together occupy more than one TVM stack entry.
 
-For example, if a function `foo` has type `int -> (int, int)`, it means that the function takes one integer and returns a pair of them.
+Tensor types represent ordered collections of values and are written in the form `(A, B, ...)`. 
+These types occupy multiple TVM stack entries, unlike atomic types, which use a single entry.
 
-A call of this function may look like `(int a, int b) = foo(42);`. Internally, the function consumes one stack entry and leaves two of them.
+**Example:**
 
-Note that from a low-level perspective, value `(2, (3, 9))` of type `(int, (int, int))` and value `(2, 3, 9)` of type `(int, int, int)`, are represented in the same way as three stack entries `2`, `3` and `9`. For the FunC type checker they are values of **different** types. For example, code `(int a, int b, int c) = (2, (3, 9));` wouldn't be compiled.
+If a function `foo` has the type `int -> (int, int)`, 
+it takes one integer as input and returns a pair of integers as output. 
+A call to this function may look like: `(int a, int b) = foo(42);`. 
+Internally, the function consumes one stack entry and produces two.
 
-A special case of the tensor type is the **unit type** `()`. It is usually used to represent the fact that a function doesn't return any value or has no arguments. For example, a function `print_int` would have type `int -> ()` and the function `random` has type `() -> int`. It has a unique inhabitant `()` which occupies 0 stack entries.
+
+**Type representation**
+Although the values `(2, (3, 9))` of type `(int, (int, int))` and `(2, 3, 9)` of type `(int, int, int)` are stored identically as three stack entries `(2, 3, and 9)`, FunC treats them as distinct types.
+For instance, the following code **will not compile**:
+
+```func
+(int a, int b, int c) = (2, (3, 9));
+ ```
+Since FunC strictly enforces type consistency, these structures cannot be mixed.
+
+
+**Special case: unit type`()`**
+
+The unit type `()` is used to indicate that:
+- A function does not return a value or
+- A function takes no arguments
+
+**Examples**
+- `print_int` has the type `int -> ()`, meaning it takes an integer but returns nothing.
+- random has the type `() -> int`, meaning it takes no arguments but returns an integer.
+- The unit type `()` has a single value, also written as `()`, occupying **zero stack** entries.
 
 Type of form `(A)` is considered by type checker as the same type as `A`.
 
+**Note:** A type written as `(A)` is treated as identical to `A` by the FunC type checker.
+
 ### Tuples types
-Types of the form `[A, B, ...]` represent TVM tuples with specific lengths and types of components known in compile time. For example, `[int, cell]` is the type of TVM tuple which length is exactly 2, and where the first component is an integer and the second is a cell. `[]` is the type of empty tuples (having the unique inhabitant—the empty tuple). Note that in contrast to the unit type `()`, the value of `[]` occupies one stack entry.
+
+Tuple types in FunC are written in the form `[A, B, ...]` and represent TVM tuples with a fixed length and known component types at compile time.
+
+For example, `[int, cell]` defines a tuple with exactly two elements:
+- The first element is an integer.
+- The second element is a cell.
+
+The type `[]` represents an empty tuple with a unique value—the empty tuple itself.
+
+**Note:** unlike the unit type `()`, an empty tuple `[]` occupies one stack entry.
+
+
 
 ## Polymorphism with type variables
-FunC has Miller-Rabin type system with support for polymorphic functions. For example, the following function:
+
+FunC features a  **Miller-Rabin-type system** with support for polymorphic functions.
+For example, consider the following function:
+
 ```func
 forall X -> (X, X) duplicate(X value) {
   return (value, value);
@@ -63,12 +138,22 @@ forall X -> (X, X) duplicate(X value) {
 ```
 is a polymorphic function which takes a (single stack entry) value and returns two copies of this value. `duplicate(6)` will produce values `6 6`, and `duplicate([])` will produce two copies `[] []` of an empty tuple.
 
-In this example, `X` is a type variable.
+This **polymorphic function** takes a single stack entry and returns two copies of the input value.
+- Calling `duplicate(6)` produces `6 6`.
+- Calling `duplicate([])` produces two copies of an empty tuple: `[] []`.
 
-See more info on this topic in the [functions](/v3/documentation/smart-contracts/func/docs/functions#polymorphism-with-forall) section.
+In this example, `X` is a type variable that allows the function to operate on values of any type.
+
+For more details, see the [Functions](/v3/documentation/smart-contracts/func/docs/functions#polymorphism-with-forall) section.
 
 ## User-defined types
-Currently, FunC has no support for defining types except for the type constructions described above.
+
+Currently, FunC does not support defining custom types beyond the type constructions described above.
 
 ## Type width
-As you may have noticed, every value of a type occupies some number of stack entries. If it is the same number for all values of the type, this number is called **type width**. Polymorphic functions can currently be defined only for types with fixed and known in advance type width.
+Every value in FunC occupies a certain number of stack entries. 
+If this number is consistent for all values of a given type, it is called the **type width**.
+At the moment, polymorphic functions can only be defined for types with a fixed and predefined type width.
+
+<Feedback />
+

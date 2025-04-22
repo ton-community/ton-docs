@@ -116,6 +116,9 @@
     "Tolk",
     "Toncoin",
     "Toncoins",
+    "Tonhub",
+    "Tonkeeper",
+    "Tonkey",
     "Underload",
     "Uninit",
     "WAGMI",
@@ -300,13 +303,22 @@
     "Visio",
     "votings",
     "VARUINT16",
+    "Wikimar",
     "workchain",
     "workchains",
     "xguard",
     "xlarge",
     "xtwitter",
     "yourname",
-    "zerostate"
+    "zellic",
+    "zerostate",
+    "decentralised",
+    "colour",
+    "analyse"
+    "ensurepip",
+    "Buildx",
+    "underperforming",
+    "blackhole"
   ],
   "ignoreRegExpList": [
     "\\(#.*\\)",
