@@ -24,7 +24,7 @@ This makes it possible to calculate the future wallet smart contract address.
 
 ### Magic storage member
 
-In previous steps, we deliberately didn't explain the purpose of `ctxID` and `ID` stored in our smart contract's state, and how they remained untouched in all the smart contract functionality. Now, their purpose should start to become clearer.
+In previous steps, we deliberately didn't explain the purpose of `ctxID` and `ID` stored in our smart contract's state, and why they remained untouched in all the smart contract functionality. Now, their purpose should start to become clearer.
 
 Since we can't deploy a smart contract with the same `state_init`, the only way to provide the same initial code and **"same"** initial data is to create a separate field in it, ensuring additional uniqueness. This, in the case of a wallet, gives you the opportunity to have the same key pair for several wallet smart contracts.
 

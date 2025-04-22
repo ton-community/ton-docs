@@ -51,7 +51,7 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 You can find a comprehensive description of sending messages in this [section](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout/).  
 :::
 
-What we are specifically interested in is the source address of the message, which we can extract from the `msg_full` cell. By obtaining that address and comparing it to a stored one—saved previously, for example, during deployment—we can conditionally allow access to crucial parts of our smart contract functionality. A common approach looks like this:
+What we are specifically interested in is the source address of the message, which we can extract from the `msg_full` cell. By obtaining that address and comparing it to a stored one — we can conditionally allow access to crucial parts of our smart contract functionality. A common approach looks like this:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -639,7 +639,7 @@ fun onExternalMessage(inMsg: slice) {
 </TabItem>
 </Tabs>
 
-This function, upon receiving an external message, will increment our `ctxCounter` and also send an internal message to the specified address with the `increase` operation, which we will use to increment the counter on our `CounterInternal` smart contract.
+This function, upon receiving an external message, will increment our `ctxCounterExt` and also send an internal message to the specified address with the `increase` operation, which we will use to increment the counter on our `CounterInternal` smart contract.
 
 Verify that the smart contract code is correct by running:
 
