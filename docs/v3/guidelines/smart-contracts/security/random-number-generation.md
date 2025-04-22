@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Random number generation
 
 Generating random numbers is a common task in many projects. While you may have seen the `random()` function in FunC documentation, note that its result can be easily predicted unless you use additional techniques.
@@ -104,3 +106,6 @@ With the latest TVM upgrade, introducing new values to the `c7` register enhance
 The MasterChain block information, due to its dynamic nature, serves as an additional source of entropy for random number generation. By incorporating this data into your randomness algorithm, you can create even harder numbers for potential adversaries to predict.
 
 For more details on this TVM upgrade, refer to [TVM Upgrade](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07).
+
+<Feedback />
+

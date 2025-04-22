@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Governance contracts
 
 In TON, a set of special smart contracts controls consensus parameters for node operation - including TVM, catchain, fees, and chain topology - and how these parameters are stored and updated. Unlike older blockchains that hardcode these parameters, TON enables transparent on-chain governance. The current governance contracts include the **Elector**, **Config**, and **DNS** contracts, with expansion plans (e.g., extra-currency **Minter**).
@@ -130,3 +132,6 @@ The **Config** contract manages TON’s configuration parameters, validator set 
 ## See also
 
 - [Precompiled contracts](/v3/documentation/smart-contracts/contracts-specs/precompiled-contracts)
+
+<Feedback />
+

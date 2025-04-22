@@ -1,6 +1,7 @@
 ---
 description: At the end of the tutorial, you will write a beautiful bot that will be able to accept payments for your product directly in TON.
 ---
+import Feedback from '@site/src/components/Feedback';
 
 # Bot for selling dumplings
 
@@ -442,3 +443,6 @@ If your bot isn't working correctly, compare your code with the code [from this 
  - Made for TON as a part of [ton-footsteps/58](https://github.com/ton-society/ton-footsteps/issues/58).
  - By Coalus ([Telegram @coalus](https://t.me/coalus), [Coalus on GitHub](https://github.com/coalus)).
  - [Bot sources](https://github.com/coalus/DumplingShopBot).
+
+<Feedback />
+

@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TON DHT service
 
 Please see the implementations:
@@ -48,3 +50,5 @@ The TON DHT is not only used to store the IP addresses of ADNL nodes; it also se
 :::info
 Learn more about TON DHT in [DHT](/v3/documentation/network/protocols/dht/dht-deep-dive) documentation, or in Chapter 3.2. of the [TON Whitepaper](https://docs.ton.org/ton.pdf).
 :::
+<Feedback />
+

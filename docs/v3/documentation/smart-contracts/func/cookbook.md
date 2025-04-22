@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # FunC cookbook
 The FunC cookbook was created to consolidate all the knowledge and best practices from experienced FunC developers in one place. The goal is to make it easier for future developers to build smart contracts efficiently.
 
@@ -1435,4 +1437,7 @@ await contractV1.sendUpgrade(provider.sender(), {
 
 
 
+
+
+<Feedback />
 

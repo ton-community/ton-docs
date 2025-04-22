@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Block layout
 
 :::info
@@ -231,3 +233,6 @@ masterchain_block_extra#cca5
 ## See also
 
 - The initial explanation of the [block layout](https://docs.ton.org/tblkch.pdf#page=96&zoom=100,148,172) from the whitepaper.
+
+<Feedback />
+

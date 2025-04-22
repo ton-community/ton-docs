@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Sharding in TON
 
 Sharding in TON refers to dividing the blockchain into smaller, manageable pieces, or shards, for scalability. An independent set of validators operates and maintains a shard as a smaller piece of the blockchain.
@@ -25,3 +27,6 @@ In addition to dynamically creating shards, TON uses **split merge** functionali
 * [Blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/)
 * [Shards dive in](/v3/documentation/smart-contracts/shards/shards-intro/)
 * [Infinity sharding paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm/)
+
+<Feedback />
+

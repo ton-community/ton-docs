@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Things to focus on while working with TON blockchain
 
 In this article, we will review and discuss the elements to consider for those who want to develop TON applications.
@@ -97,3 +99,6 @@ You may receive bounced messages (error notifications), which should be handled.
 Originally written by 0xguard
 
 - [Original article](https://0xguard.com/things_to_focus_on_while_working_with_ton_blockchain)
+
+<Feedback />
+

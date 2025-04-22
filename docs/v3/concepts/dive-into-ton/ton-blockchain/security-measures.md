@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TON security audits
 
 The security of the TON blockchain ecosystem is of utmost importance. Below is a summary of completed audits conducted by renowned auditing firms for key components of the TON blockchain.
@@ -41,3 +43,6 @@ Audit for security and potential vulnerabilities in TVM Upgrade 2023.07.
 
 ## Bug bounty program
 To further enhance the security of the TON ecosystem, we encourage security researchers and developers to participate in the [TON security bug bounty](https://github.com/ton-blockchain/bug-bounty) program.
+
+<Feedback />
+

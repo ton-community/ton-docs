@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Global variables
 
 A FunC program primarily consists of function declarations/definitions and global variable declarations. 
@@ -83,3 +85,5 @@ int main() {
 In this case, `int C = 3;` is not declaring a new local variable 
 but instead assigning value `3` to the global variable `C`. 
 This behavior is explained in more detail in the section on [statements](/v3/documentation/smart-contracts/func/docs/statements#variable-declaration).
+<Feedback />
+

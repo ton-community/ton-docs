@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
 # USDT processing
@@ -52,3 +54,6 @@ See important [recommendations](/v3/guidelines/dapps/asset-processing/jettons).
 ## See also
 
 * [Payments Processing](/v3/guidelines/dapps/asset-processing/payments-processing)
+
+<Feedback />
+

@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Tutorial Styling Guidelines
 
 :::danger
@@ -133,3 +135,6 @@ import { useEffect, useState } from 'react';
 *For example*: `mkdir example && cd example`
 - If you use `npm init` to initialize a project directory, explain the prompts or use the `-y` flag.
 - If you use `npm install` use the `-save` flag.
+
+<Feedback />
+
