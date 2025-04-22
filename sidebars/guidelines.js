@@ -25,14 +25,7 @@ module.exports = [
           'v3/guidelines/quick-start/developing-smart-contracts/processing-messages',
           'v3/guidelines/quick-start/developing-smart-contracts/deploying-to-network'
         ],
-      },
-      'v3/guidelines/smart-contracts/guidelines',
-      'v3/guidelines/smart-contracts/get-methods',
-      {
-        type: 'doc',
-        label: 'Transaction fees calculation',
-        id: 'v3/guidelines/smart-contracts/fee-calculation',
-      },
+      }
     ]
   },
   'v3/guidelines/get-started-with-ton',
