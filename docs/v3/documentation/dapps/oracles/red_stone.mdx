@@ -1,6 +1,8 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 
-# RedStone Oracles
+# RedStone oracles
 
 ## How RedStone oracles work with TON
 
@@ -14,7 +16,7 @@ To learn more about RedStone oracles design go to the [RedStone docs](https://do
 
 * [Redstone TON Connector](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector)
 
-## Smart Contracts
+## Smart contracts
 
 ### price_manager.fc
 
@@ -293,7 +295,7 @@ begin_cell()
 
 That's an internal message - it consumes GAS and modifies the contract's storage, so must be paid by TONs.
 
-## TON RedStone Payload packing
+## TON RedStone payload packing
 
 Due to limitations of the Bag-size in TON [see](/v3/documentation/data-formats/tlb/cell-boc),
 the RedStone payload data - represented as a hex string - needed to be passed to a contract in a more complex way.
@@ -344,8 +346,11 @@ The image below contains data for `2` feeds times `2` unique signers:
   just after the transaction successes.
 * The other error codes are defined [here](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/config/constants.ts)
 
-## See Also
+## See also
 
 - [Internal messages docs](/v3/documentation/smart-contracts/message-management/internal-messages)
 - [RedStone data-packing](https://docs.redstone.finance/docs/smart-contract-devs/how-it-works)
 - [RedStone oracles smart-contracts](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector/contracts)
+
+<Feedback />
+

@@ -1,0 +1,451 @@
+import Feedback from '@site/src/components/Feedback';
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Processing Messages
+
+> **Summary:** In previous steps we modified our smart contract interaction with `storage`, `get methods` and learned basic smart contract development flow.
+
+Now we are ready to move on to the main functionality of smart contracts - **sending and receiving messages**. In TON messages not only used for sending currency, but also as data-exchange mechanism between smart contracts making them crucial for smart contract development.
+
+
+:::tip
+If you are stuck on some of the examples you can find original template project with all modifications performed during this guide [here](https://github.com/ton-community/ton-onboarding-sandbox/tree/main/quick-start/smart-contracts/Example/).
+:::
+
+---
+
+## Internal messages
+
+Before we proceed to implementation let's briefly describe main ways and patterns that we can use to process internal messages.
+
+### Actors and roles
+
+Since TON implements [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor/) model it's natural to think about smart contracts relations in terms of `roles`, determining who can access smart contract functionality or not. The most common examples of roles are:
+
+ - `anyone`: any contract that don't have distinct role.
+ - `owner`: contract that has exclusive access to some crucial parts of functionality.
+
+Let's examine `recv_internal` function signature to understand how we could use that:
+
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
+```func
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure
+```
+ - `my_balance` - balance of smart contract at the beggining of the transaction.
+ - `msg_value` - funds recieved with message.
+ - `in_msg_full` - `cell` containing "header" fields of message.
+ - `in_msg_body` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containg payload of the message.
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice)
+```
+ - `myBalance` - balance of smart contract at the beggining of the transaction.
+ - `msgValue` - funds recieved with message.
+ - `msgFull` - `cell` containing "header" fields of message.
+ - `msgBody` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containg payload pf the message.
+</TabItem>
+</Tabs>
+
+:::info
+You can find comprehensive description of sending messages in this [section](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout/).
+:::
+
+What we specifically are interested in is the source address of message that we could extract from `msg_full` cell, by obtaining that address and comparing to stored one, that we previously saved, for example, during deployment, we can open crucial part of our smart contract functionality. Common approach looks like this:
+
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
+```func
+;; This is NOT a part of the project, just an example.
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    ;; Parse the sender address from in_msg_full
+    slice cs = in_msg_full.begin_parse();
+    int flags = cs~load_uint(4);
+    slice sender_address = cs~load_msg_addr();
+
+    ;; check if message was send by owner
+    if (equal_slices_bits(sender_address, owner_address)) {
+      ;;owner operations
+      return
+    } else if (equal_slices_bits(sender_address, other_role_address)){
+      ;;other role operations
+      return
+    } else {
+      ;;anyone else operations
+      return
+    }
+
+    ;;no known operation were obtained for presented role
+    ;;0xffff is not standard exit code, but is standard practice among TON developers
+    throw(0xffff);
+}
+```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+// This is NOT a part of the project, just an example.
+fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
+    // Parse the sender address from in_msg_full
+    var cs: slice = msgFull.beginParse();
+    val flags = cs.loadMessageFlags();
+    var sender_address = cs~load_msg_address();
+
+    if (isSliceBitsEqual(sender_address, owner_address)) {
+      // owner operations
+      return
+    } else if (isSliceBitsEqual(sender_address, other_role_address)){
+      // other role operations
+      return
+    } else {
+      // anyone else operations
+      return
+    }
+
+    throw 0xffff; // if the message contains an op that is not known to this contract, we throw
+}
+```
+</TabItem>
+</Tabs>
+
+
+### Operations
+
+Common pattern in TON contracts is to include a **32-bit operation code** in message bodies which tells your contract what action to perform:
+
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
+```func
+;; This is NOT a part of the project, just an example!
+const int op::increment = 1;
+const int op::decrement = 2;
+
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    ;; Step 1: Check if the message is empty
+    if (in_msg_body.slice_empty?()) {
+        return; ;; Nothing to do with empty messages
+    }
+
+    ;; Step 2: Extract the operation code
+    int op = in_msg_body~load_uint(32);
+
+    ;; Step 3-7: Handle the requested operation
+    if (op == op::increment) {
+        increment();   ;;call to specific operation handler
+        return;
+    } else if (op == op::decrement) {
+        decrement();
+        ;; Just accept the money
+        return;
+    }
+
+    ;; Unknown operation
+    throw(0xffff);
+}
+```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+//This is NOT a part of the project, just an example!
+const op::increment : int = 1;
+const op::decrement : int = 2;
+
+fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
+    // Step 1: Check if the message is empty
+    if (slice.isEndOfSlice()) {
+        return; // Nothing to do with empty messages
+    }
+
+    // Step 2: Extract the operation code
+    var op = in_msg_body~load_uint(32);
+
+    // Step 3-7: Handle the requested operation
+    if (op == op::increment) {
+        increment();   //call to specific operation handler
+        return;
+    } else if (op == op::decrement) {
+        decrement();
+        // Just accept the money
+        return;
+    }
+
+    // Unknown operation
+    throw(0xffff);
+}
+```
+</TabItem>
+</Tabs>
+
+
+By combining both of these patterns you can achieve a comprehensive description of your smart contract's systems ensuring secure interaction between them and unleash full potential of TON actors model.
+
+
+## External Messages
+
+`External messages` are your only way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because in most cases you don't want external entry points to be accessible to anyone except you. If this is all functionality that you want from external section - standard way is to delegate this responsibility to separate actor - [wallet](v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets/), which is practically the main reason they were designed for.
+
+Developing external endpoint includes several standard [approuches](/v3/documentation/smart-contracts/message-management/external-messages/) and [security measures](/v3/guidelines/smart-contracts/security/overview/) that might be overwhelming at this point. Therefore in this guide we will realize incrementing previously added to `hello_world` contract `ctxCounterExt` number and add send message to out `Tact` contract.
+
+:::danger
+This implementation is **unsafe** and may lead to loosing your contract funds. Don't deploy it to `Mainnet`, especially with high smart contract balance.
+:::
+
+## Implementation
+
+Let's modify our smart contract to recieve external messages folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview/) section.
+
+### Step1 : Edit smart contract code
+
+Add `recv_external` function to `HelloWorld` smart contract:
+
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
+```func title="/contracts/hello_world.fc"
+() recv_external(slice in_msg) impure {
+    accept_message();
+
+    var (ctx_id, ctx_counter, ctx_counter_ext) = load_data();
+
+    var query_id = in_msg~load_uint(64);
+    var addr = in_msg~load_msg_addr();
+    var coins = in_msg~load_coins();
+    var increase_by = in_msg~load_uint(32);
+
+    var msg = begin_cell()
+        .store_uint(0x18, 6)
+        .store_slice(addr)
+        .store_coins(coins)
+        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+        .store_uint(op::increase, 32)
+        .store_uint(query_id, 64)
+        .store_uint(increase_by, 32);
+    send_raw_message(msg.end_cell(), 0);
+
+    ctx_counter_ext += increase_by;
+    save_data(ctx_id, ctx_counter, ctx_counter_ext);
+
+    return ();
+}
+```
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk title="/contracts/HelloWorld.tolk"
+fun acceptExternalMessage(): void
+    asm "ACCEPT";
+
+fun onExternalMessage(inMsg: slice) {
+    acceptExternalMessage();
+    var (ctxId, ctxCounter, ctxCounterExt) = loadData();
+
+    var queryId = inMsg.loadUint(64);
+    var addr = inMsg.loadAddress();
+    var coins = inMsg.loadCoins();
+    var increaseBy = inMsg.loadUint(32);
+
+    var msg = beginCell()
+        .storeUint(0x18, 6)
+        .storeSlice(addr)
+        .storeCoins(coins)
+        .storeUint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+        .storeUint(OP_INCREASE, 32)
+        .storeUint(queryId, 64)
+        .storeUint(increaseBy, 32);
+    sendRawMessage(msg.endCell(), 0);
+
+    ctxCounterExt += increaseBy;
+    saveData(ctxId, ctxCounter, ctxCounterExt);
+
+    return ();
+}
+```
+</TabItem>
+</Tabs>
+
+This function upon recieving an external message will increment our `ctxCounter` and also send an internal message to specified address with `increase` operation that we will use to increment counter on our `CounterInternal` smart contract.
+
+
+Verify that smart contract code is correct by running:
+
+```bash
+npx blueprint build
+```
+
+Expected should look like this:
+
+```bash
+✅ Compiled successfully! Cell BOC result:
+
+{
+  "hash": "310e49288a12dbc3c0ff56113a3535184f76c9e931662ded159e4a25be1fa28b",
+  "hashBase64": "MQ5JKIoS28PA/1YROjU1GE92yekxZi3tFZ5KJb4foos=",
+  "hex": "b5ee9c7241010e0100d0000114ff00f4a413f4bcf2c80b01020120020d02014803080202ce0407020120050600651b088831c02456f8007434c0cc1caa42644c383c0040f4c7f4cfcc4060841fa1d93beea5f4c7cc28163c00b817c12103fcbc2000153b513434c7f4c7f4fff4600017402c8cb1fcb1fcbffc9ed548020120090a000dbe7657800b60940201580b0c000bb5473e002b70000db63ffe002606300072f2f800f00103d33ffa40fa00d31f30c8801801cb055003cf1601fa027001cb6a82107e8764ef01cb1f12cb3f5210cb1fc970fb0013a012f0020844ca0a"
+}
+
+✅ Wrote compilation artifact to build/HelloWorld.compiled.json
+```
+
+### Step 2: Update Wrapper 
+
+And add wrapper method to call it through our wrapper class for sending external message:
+
+```typescript title="/wrappers/HelloWorld.ts"
+async sendExternalIncrease(
+    provider: ContractProvider,
+    opts: {
+        increaseBy: number;
+        value: bigint;
+        addr: Address;
+        queryID?: number;
+    }
+) {
+    const message = beginCell()
+        .storeUint(opts.queryID ?? 0, 64)
+        .storeAddress(opts.addr)
+        .storeCoins(opts.value)
+        .storeUint(opts.increaseBy, 32)
+    .endCell()
+
+    return await provider.external(message);
+}
+```
+
+### Step 3: Update test
+
+Update test to ensure that `HelloWorld` contract recieved external message, sended internal message to `CounterInternal` contract and both updated their counters:
+
+```typescript title="/tests/HelloWorld.spec.ts"
+import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
+import { Cell, toNano} from '@ton/core';
+import { HelloWorld } from '../wrappers/HelloWorld';
+import { CounterInternal } from '../wrappers/CounterInternal';
+import '@ton/test-utils';
+import { compile } from '@ton/blueprint';
+
+describe('HelloWorld', () => {
+    let code: Cell;
+
+    beforeAll(async () => {
+        code = await compile('HelloWorld');
+    });
+
+    let blockchain: Blockchain;
+    let deployer: SandboxContract<TreasuryContract>;
+    let helloWorld: SandboxContract<HelloWorld>;
+    let counterInternal: SandboxContract<CounterInternal>;
+
+    beforeEach(async () => {
+        blockchain = await Blockchain.create();
+
+        helloWorld = blockchain.openContract(
+            HelloWorld.createFromConfig(
+                {
+                    id: 0,
+                    ctxCounter: 0,
+                    ctxCounterExt: 0n,
+                },
+                code
+            )
+        );
+
+        deployer = await blockchain.treasury('deployer');
+
+        const deployResult = await helloWorld.sendDeploy(deployer.getSender(), toNano('1.00'));
+
+        expect(deployResult.transactions).toHaveTransaction({
+            from: deployer.address,
+            to: helloWorld.address,
+            deploy: true,
+            success: true,
+        });
+
+        counterInternal = blockchain.openContract(
+            await CounterInternal.fromInit(0n, helloWorld.address)
+        );
+
+        const deployResultCounter = await counterInternal.send(
+            deployer.getSender(), 
+            { value: toNano('1.00') }, 
+            null
+        );
+
+        expect(deployResultCounter.transactions).toHaveTransaction({
+            from: deployer.address,
+            to: counterInternal.address,
+            deploy: true,
+            success: true
+        });
+    });
+
+    it('should send an external message and update counter', async () => {
+        const counterInternalValueBefore = await counterInternal.getCounter();
+        const [__, counterExtBefore] = await helloWorld.getCounters()
+        const increase = 5;
+
+        const result = await helloWorld.sendExternalIncrease({
+            increaseBy: increase,
+            value: toNano(0.05),
+            addr: counterInternal.address,
+            queryID: 0
+        });
+
+        expect(result.transactions).toHaveTransaction({
+            from: undefined, // External messages have no 'from' address
+            to: helloWorld.address,
+            success: true,
+        });
+
+        expect(result.transactions).toHaveTransaction({
+            from: helloWorld.address,
+            to: counterInternal.address,
+            success: true,
+        });
+
+        const counterInternalValueAfter = await counterInternal.getCounter();
+
+        expect(counterInternalValueAfter).toBeGreaterThan(counterInternalValueBefore);
+        const [_, counterExt] = await helloWorld.getCounters()
+        expect(counterExtBefore + BigInt(increase)).toBe(counterExt);
+    });
+
+    // ... previous tests
+});
+```
+
+This test describes common trascantion flow of any `multi-contract` system: 
+ 1. Send external message to toggle smart contracts logic from outside the blockchain.
+ 2. Provoke one or more sending of internal messages to other contracts.
+ 3. Upon recieving an internal message change contract state and repeat **step 2** if required.
+
+Since resulting sequence of transactions might be overwhelming for understanding, it's a good practice to make a `sequence diagram` describing your system, here is an example of our case:
+
+<div style={{marginBottom: '30px'}} align="center">
+  <img src="/img/tutorials/quick-start/multi-contract.png" alt="Multi-contract scheme"/>
+</div>
+
+Verify that all examples is correct by running test script:
+
+```bash
+npx blueprint test
+```
+
+Expected output should look like this:
+
+```bash
+ PASS  tests/HelloWorld.spec.ts
+  HelloWorld
+    ✓ should correctly initialize and return the initial data (446 ms)
+    ✓ should send an external message and update counter (209 ms)
+    ✓ should increase counter (298 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       3 passed, 3 total
+Snapshots:   0 total
+Time:        3.663 s, estimated 4 s
+Ran all test suites matching /HelloWorld/i.
+```
+
+
+<Feedback />
+

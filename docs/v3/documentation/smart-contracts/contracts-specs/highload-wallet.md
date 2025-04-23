@@ -1,10 +1,12 @@
-# Highload Wallet
+import Feedback from '@site/src/components/Feedback';
+
+# Highload wallet contracts
 
 When working with many messages in a short period, there is a need for special wallet called Highload Wallet. Highload Wallet V2 was the main wallet on TON for a long time, but you had to be very careful with it. Otherwise, you could [lock all funds](https://t.me/tonstatus/88). 
 
 [With the advent of Highload Wallet V3](https://github.com/ton-blockchain/Highload-wallet-contract-v3), this problem has been solved at the contract architecture level and consumes less gas. This chapter will cover the basics of Highload Wallet V3 and important nuances to remember.
 
-## Highload Wallet v3
+## Highload wallet v3
 
 This wallet is made for who need to send transactions at very high rates. For example, crypto exchanges.
 
@@ -64,3 +66,6 @@ You can also read [Highload Wallet Tutorials](/v3/guidelines/smart-contracts/how
 
 Wallet source code:
  * [ton/crypto/smartcont/Highload-wallet-v2-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-highload-wallet-v2.fif)
+
+<Feedback />
+

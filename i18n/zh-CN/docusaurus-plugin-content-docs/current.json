@@ -173,19 +173,19 @@
   },
   "sidebar.develop.link.Working with your wallet": {
     "message": "使用钱包",
-    "description": "The label for link Working with your wallet in sidebar develop, linking to https://ton-community.github.io/tutorials/01-wallet"
+    "description": "The label for link Working with your wallet in sidebar develop, linking to https://helloworld.tonstudio.io/01-wallet"
   },
   "sidebar.develop.link.Writing first smart contract": {
     "message": "编写第一个智能合约",
-    "description": "The label for link Writing first smart contract in sidebar develop, linking to https://ton-community.github.io/tutorials/02-contract"
+    "description": "The label for link Writing first smart contract in sidebar develop, linking to https://helloworld.tonstudio.io/02-contract"
   },
   "sidebar.develop.link.Building first web client": {
     "message": "构建第一个Web客户端",
-    "description": "The label for link Building first web client in sidebar develop, linking to https://ton-community.github.io/tutorials/03-client"
+    "description": "The label for link Building first web client in sidebar develop, linking to https://helloworld.tonstudio.io/03-client"
   },
   "sidebar.develop.link.Testing your smart contract": {
     "message": "测试智能合约",
-    "description": "The label for link Testing your smart contract in sidebar develop, linking to https://ton-community.github.io/tutorials/04-testing"
+    "description": "The label for link Testing your smart contract in sidebar develop, linking to https://helloworld.tonstudio.io/04-testing"
   },
   "sidebar.develop.link.How to shard your TON smart contract and why": {
     "message": "如何分片您的TON智能合约以及为什么",

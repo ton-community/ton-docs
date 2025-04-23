@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Random number generation
 
 Generating random numbers is a common task in many projects. While you may have seen the `random()` function in FunC documentation, note that its result can be easily predicted unless you use additional techniques.
@@ -12,7 +14,7 @@ These algorithms typically require a _seed_ value to produce a sequence of _pseu
 
 To predict the result of the `random()` function in a smart contract, one would need to know the current `seed` of the block, which is impossible unless you are a validator.
 
-## Simply use `randomize_lt()`
+## Simply use randomize_lt()
 
 To make random number generation unpredictable, you can add the current [Logical Time](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-logical-time) to the seed. This ensures that different transactions produce different seeds and results.
 
@@ -104,3 +106,6 @@ With the latest TVM upgrade, introducing new values to the `c7` register enhance
 The MasterChain block information, due to its dynamic nature, serves as an additional source of entropy for random number generation. By incorporating this data into your randomness algorithm, you can create even harder numbers for potential adversaries to predict.
 
 For more details on this TVM upgrade, refer to [TVM Upgrade](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07).
+
+<Feedback />
+

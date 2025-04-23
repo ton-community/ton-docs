@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Mint your first jetton
 
 Welcome, dev! It's great to have you here. 👋
@@ -217,3 +219,6 @@ If you want to learn more about other token-minting solutions, read this article
 
  - Project: https://github.com/ton-blockchain/minter-contract
  - [Jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
+
+<Feedback />
+

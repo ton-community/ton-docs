@@ -1,6 +1,18 @@
+import Feedback from '@site/src/components/Feedback';
+
 # History of Tolk
 
 When new versions of Tolk are released, they will be mentioned here.
+
+
+## v0.11
+
+1. Type aliases `type NewName = <existing type>`
+2. Union types `T1 | T2 | ...`
+3. Pattern matching for types
+4. Operators `is` and `!is`
+5. Pattern matching for expressions
+6. Semicolon for the last statement in a block can be omitted
 
 
 ## v0.10
@@ -77,3 +89,6 @@ By analogy, TOLK is **The Open Language K**.
 What is K, will you ask? Probably, "kot" — the nick of Nikolay Durov? Or Kolya? Kitten? Kernel? Kit? Knowledge?  
 The right answer — none of this. This letter does not mean anything. It's open.  
 *The Open Letter K*
+
+<Feedback />
+

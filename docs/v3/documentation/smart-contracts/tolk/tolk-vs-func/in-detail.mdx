@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Tolk vs FunC: in detail
 
 A huge list is below. Will anyone have enough patience to read it up to the end?..
@@ -399,6 +401,28 @@ With a trailing comma `(5,)` it's still `(5)`.
 
 
 <h3 className="cmp-func-tolk-header">
+  ✅ Optional semicolon for the last statement in a block
+</h3>
+
+In Tolk, you can omit the semicolon after the final statement in a block.
+While semicolons are still required between statements, the trailing semicolon on the last statement is now optional.
+
+```tolk
+fun f(...) {
+	doSomething();
+	return result   // <-- valid without semicolon
+}
+
+// or
+if (smth) {
+	return 1
+} else {
+	return 2
+}
+```
+
+
+<h3 className="cmp-func-tolk-header">
   ✅ Function `ton("...")` for human-readable amounts of Toncoins
 </h3>
 
@@ -442,6 +466,7 @@ We have the following types:
 - tensor `(T1, T2, ...)`
 - callables `(TArgs) -> TResult`
 - nullable types `T?`, compile-time null safety
+- union types `T1 | T2 | ...`, handled with pattern matching
 - `coins` and function `ton("0.05")`
 - `int32`, `uint64`, and other fixed-width integers (just int at TVM) [details](https://github.com/ton-blockchain/ton/pull/1559)
 - `bytesN` and `bitsN`, similar to `intN` (backed by slices at TVM)
@@ -1142,6 +1167,28 @@ globalTuple.1.2 += 10;  // "GETGLOB" + ... + "SETGLOB"
 
 
 <h3 className="cmp-func-tolk-header">
+  ✅ Type aliases <code>type NewName = &lt;existing type&gt;</code>
+</h3>
+
+Tolk supports type aliases, similar to TypeScript and Rust.
+An alias creates a new name for an existing type but **remains interchangeable with it**.
+
+```tolk
+type UserId = int32;
+type MaybeOwnerHash = bytes32?;
+
+fun calcHash(id: UserId): MaybeOwnerHash { ... }
+
+var id: UserId = 1;       // ok
+var num: int = id;        // ok
+var h = calcHash(id);
+if (h != null) {
+    h as slice;           // bytes32 as slice
+}
+```
+
+
+<h3 className="cmp-func-tolk-header">
   ✅ Nullable types `T?`, null safety, smart casts, operator `!`
 </h3>
 
@@ -1297,6 +1344,166 @@ Nullable types eliminate runtime errors, enforcing correct handling of optional 
 
 
 <h3 className="cmp-func-tolk-header">
+  ✅ Union types `T1 | T2 | ...`, operators `match`, `is`, `!is`
+</h3>
+
+
+Union types allow a variable to hold multiple possible types, similar to TypeScript.
+```tolk
+fun whatFor(a: bits8 | bits256): slice | UserId { ... }
+
+var result = whatFor(...);  // slice | UserId
+```
+
+Nullable types `T?` are now formally `T | null`.
+Union types have intersection properties. For instance, `B | C` can be passed/assigned to `A | B | C | D`.
+
+The only way to work with unions from code is **pattern matching**:
+```tolk
+match (result) {
+    slice  => { /* result is smart-casted to slice  */ }
+    UserId => { /* result is smart-casted to UserId */ }
+}
+```
+
+Example:
+```tolk
+match (result) {
+    slice => {
+        return result.loadInt(32);
+    }
+    UserId => {
+        if (result < 0) {
+            throw 123;
+        }
+        return loadUser(result).parentId;
+    }
+}
+```
+
+`match` must cover all union cases (should be *exhaustive*). It can also be **used as an expression**:
+```tolk
+type Pair2 = (int, int);
+type Pair3 = (int, int, int);
+
+fun getLast(tensor: Pair2 | Pair3) {
+    return match (tensor) {
+        Pair2 => tensor.1,
+        Pair3 => tensor.2,
+    }
+}
+```
+
+Syntax details:
+* commas are optional with {} but required for expressions
+* a trailing comma is allowed
+* semicolon is not required after `match` used as a statement
+* for match-expressions, its arm can terminate, then its type is considered `never`:
+```tolk
+return match (msg) {
+    ...
+    CounterReset => throw 403,  // forbidden
+}
+```
+
+Variable declaration inside `match` is allowed:
+```tolk
+match (val v = getPair2Or3()) {
+    Pair2 => {
+        // use v.0 and v.1
+    }
+    Pair3 => {
+        // use v.0, v.1, and v.2
+    }
+}
+```
+
+<details>
+<summary>How are union types represented on the stack, at the TVM level?</summary>
+
+Internally, at the TVM level, they are stored as tagged unions, like enums in Rust:
+* each type is assigned a unique type ID, which is stored alongside the value
+* the union occupies N + 1 stack slots, where N is the maximum size of any type in the union
+* a nullable type `T?` is just a union with null (type ID = 0); `int?` and other atomics still use 1 stack slot
+
+```tolk
+var v: int | slice;    // 2 stack slots: value and typeID
+                       // - int:   (100, 0xF831)
+                       // - slice: (CS{...}, 0x29BC)
+match (v) {
+    int =>     // IF TOP == 0xF831 { ... }
+        // v.slot1 contains int, can be used in arithmetics
+    slice =>   // ELSE { IF TOP == 0x29BC { ... } }
+        // v.slot1 contains slice, can be used to loadInt()
+}
+
+fun complex(v: int | slice | (int, int)) {
+    // Stack representation:
+    // - int:        (null, 100, 0xF831)
+    // - slice:      (null, CS{...}, 0x29BC)
+    // - (int, int): (200, 300, 0xA119)
+}
+
+complex(v);   // passes (null, v.slot1, v.typeid)
+complex(5);   // passes (null, 5, 0xF831)
+```
+</details>
+
+Besides `match`, you can test a union type by `is`. Smart casts work as expected:
+```tolk
+fun f(v: cell | slice | builder) {
+    if (v is cell) {
+        v.cellHash();
+    } else {
+        // v is `slice | builder`
+        if (v !is builder) { return; }
+        // v is `slice`
+        v.sliceHash();
+    }
+    // v is `cell | slice`
+    if (v is int) {
+        // v is `never`
+        // a warning is also printed, condition is always false
+    }
+}
+```
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Pattern matching for expressions (switch-like behavior)
+</h3>
+
+`match` can also be used for **constant expressions**, similar to `switch`:
+```tolk
+val nextValue = match (curValue) {
+    1 => 0,
+    0 => 1,
+    else => -1
+};
+```
+
+Rules:
+* only constant expressions are allowed on the left-hand side (1, SOME_CONST, 2 + 3)
+* branches can contain `return` and `throw`
+* `else` is required for expression form but optional for statement form:
+```tolk
+// statement form
+match (curValue) {
+    1 => { nextValue = 0 }
+    0 => { nextValue = 1 }
+    -1 => throw NEGATIVE_NOT_ALLOWED
+}
+
+// expression form, else branch required
+val nextValue = match (curValue) {
+    ...
+    else => <expression>
+}
+```
+
+
+
+<h3 className="cmp-func-tolk-header">
   ✅ No tilda `~` methods, `mutate` keyword instead
 </h3>
 
@@ -1331,3 +1538,6 @@ Of course, there is no shuffling problem in Tolk.
 
 In the future, the Tolk compiler will become smart enough to reorder arguments targeting fewer stack manipulations,
 but still avoiding a shuffling problem.
+
+<Feedback />
+

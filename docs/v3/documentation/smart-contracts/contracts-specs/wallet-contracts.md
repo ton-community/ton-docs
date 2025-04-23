@@ -1,7 +1,9 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ConceptImage from '@site/src/components/conceptImage';
 import ThemedImage from '@theme/ThemedImage';
 
-# Types of Wallet Contracts
+# Wallet contracts
 
 You may have heard about different versions of wallets on the TON Blockchain. But what do these versions actually mean, and how do they differ?
 
@@ -376,7 +378,7 @@ Sometimes the functionality of basic wallets isn't enough. That's why there are 
 
 Let's have a look at them.
 
-### Highload Wallets
+### Highload wallets
 
 When working with many messages in a short period, there is a need for special wallet called Highload Wallet. Read [the article](/v3/documentation/smart-contracts/contracts-specs/highload-wallet) for more information.
 
@@ -413,3 +415,6 @@ As you see, there are many different versions of wallets in TON. But in most cas
 - [Lockup wallet sources and detailed description](https://github.com/ton-blockchain/lockup-wallet-contract)
 - [Restricted wallet sources](https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet)
 - [Gasless transactions on TON](https://medium.com/@buidlingmachine/gasless-transactions-on-ton-75469259eff2)
+
+<Feedback />
+

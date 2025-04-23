@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # How to contribute
 
 This page explains how to participate in the localization program for TON documentation.
@@ -129,3 +131,6 @@ Once you complete these steps, you can see the preview of your language in the P
 ![ko preview](/img/localizationProgramGuideline/ko_preview.png)
 
 When your language is ready for the TON docs, create an issue, and we'll set your language into the production environment.
+
+<Feedback />
+

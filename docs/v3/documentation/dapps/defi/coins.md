@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Native token: Toncoin
 
 The native cryptocurrency of TON Blockchain is **Toncoin**.
@@ -27,3 +29,6 @@ Thus, extra currencies are best used for well-known decentralized currencies (fo
 [Jettons](/v3/documentation/dapps/defi/tokens#jettons-fungible-tokens) are suitable for other tasks.
 
 At the moment, no extra currency has been created on TON Blockchain. TON Blockchain has full support for extra currencies by accounts and messages, but the minter system contract for their creation has not yet been created. 
+
+<Feedback />
+

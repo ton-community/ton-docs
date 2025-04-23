@@ -1,116 +1,141 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Storage daemon
 
-*A storage daemon is a program used to download and share files in the TON network. The `storage-daemon-cli` console program, is used to manage a running storage daemon.*
+A **storage daemon** is a program used to download and share files in the TON network. The `storage-daemon-cli` console program manages a running storage daemon.
 
-The current version of the storage daemon can be found in the [Testnet](https://github.com/ton-blockchain/ton/tree/testnet) branch.
+The current version of the storage daemon is available in the [Testnet](https://github.com/ton-blockchain/ton/tree/testnet) branch.
 
 ## Hardware requirements
 
-* at least 1GHz and 2 cores CPU
-* at least 2 GB RAM
-* at least 2 GB SSD (Without taking into account space for torrents)
-* 10 Mb/s network  bandwidth with static IP
+* At least 1GHz dual-core CPU
+* At least 2 GB RAM
+* At least 2 GB SSD, excluding space for torrents
+* 10 Mb/s network bandwidth with a static IP
 
 ## Binaries 
 
-You can download `storage-daemon` and `storage-daemon-cli` for Linux/Windows/MacOS binaries from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
+You can download `storage-daemon` and `storage-daemon-cli` for Linux, Windows, and macOS from [TON auto builds](https://github.com/ton-blockchain/ton/releases/latest).
+
 
 ## Compile from sources
-
-You can compile `storage-daemon` and `storage-damon-cli` from sources using this [instruction](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#storage-daemon).
+You can compile `storage-daemon` and `storage-daemon-cli` from the source using this [instruction](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#storage-daemon).
 
 ## Key concepts
-* *Bag of files* or *Bag* - a collection of files distributed through TON Storage
-* TON Storage's network part is based on technology similar to torrents, so the terms *Torrent*, *Bag of files*, and *Bag* will be used interchangeably. It's important to note some differences, however: TON Storage transfers data over [ADNL](/v3/documentation/network/protocols/adnl/overview) by [RLDP](/v3/documentation/network/protocols/rldp) protocol, each *Bag* is distributed through its own network overlay, the merkle structure can exist in two versions - with large chunks for efficient downloading and small ones for efficient ownership proof, and [TON DHT](/v3/documentation/network/protocols/dht/ton-dht) network is used for finding peers.
-* A *Bag of files* consists of *torrent info* and a data block.
-* The data block starts with a *torrent header* - a structure that contains a list of files with their names and sizes. The files themselves follow in the data block.
-* The data block is divided into chunks (128 KB by default), and a *merkle tree* (made of TVM cells) is built on the SHA256 hashes of these chunks. This allows building and verifying *merkle proofs* of individual chunks, as well as efficiently recreating the *Bag* by exchanging only the proof of the modified chunk.
-* *Torrent info* contains the *merkle root* of the 
-    * Chunk size (data block)
-    * the list of chunks' sizes
-    * Hash *merkle tree*
-    * Description - any text specified by the creator of the torrent
-* *Torrent info* is serialized to a TVM cell. The hash of this cell is called *BagID*, and it uniquely identifies *Bag*.
-* *Bag meta* is a file containing *torrent info* and *torrent header*.* This is an analog `.torrent` files.
+
+* **Bag of files** or **bag** – a collection of files distributed via TON Storage.
+* TON Storage uses torrent-like technology, so terms like *Torrent*, *bag of files*, and *bag* are used interchangeably. However, there are some important differences:
+  * Data is transferred over [ADNL](/v3/documentation/network/protocols/adnl/overview) using the [RLDP](/v3/documentation/network/protocols/rldp) protocol.
+  * Each bag is distributed via its overlay network.
+  * The Merkle structure can exist in two formats: one with large chunks for efficient downloading and one with smaller chunks for efficient proof of ownership.
+  * The [TON DHT](/v3/documentation/network/protocols/dht/ton-dht) network is used to discover peers.
+
+* A **bag of files** includes:
+  * Torrent info. 
+  * Data block - starts with a torrent header including file names and sizes, followed by the files themselves.
+
+
+The data block is divided into chunks, with a default size of 128 KB. A merkle tree built from TVM cells is constructed on the SHA256 hashes of these chunks. This structure enables the creation and verification of *merkle proofs* for individual chunks and allows efficient reconstruction of the *bag* by exchanging only the proof of the changed chunk.
+
+
+* **Torrent info** contains the merkle root of the following:
+  * The chunk size (data block)
+  * The list of chunk sizes 
+  * Hash-based merkle tree 
+  * Description, which is any text specified by the creator of the torrent
+
+* Torrent info is serialized into a TVM cell. The hash of this cell is called the **bagID**, and it uniquely identifies the **bag**.
+* The **bag meta** is a file that includes the *torrent info* and *header*. This file serves the same purpose as a `.torrent` file.
+
+
 
 
 ## Starting the storage daemon and storage-daemon-cli
 
-### An example command for starting the storage-daemon:
+### Starting storage-daemon:
 
+**Example**
 
 ```storage-daemon -v 3 -C global.config.json -I <ip>:3333 -p 5555 -D storage-db```
 
 * `-v` - verbosity level (INFO)
-* `-C` - global network config ([download global config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config))
-* `-I` - IP address and port for adnl
-* `-p` - TCP port for console interface
-* `-D` - directory for the storage daemon database
+* `-C` - global network config ([download](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config))
+* `-I` - IP address and port for ADNL
+* `-p` - TCP port for the console interface
+* `-D` - path to the storage daemon’s database
 
-### storage-daemon-cli management
+### Starting storage-daemon-cli 
 It's started like this:
 
 ```
 storage-daemon-cli -I 127.0.0.1:5555 -k storage-db/cli-keys/client -p storage-db/cli-keys/server.pub
 ```
 
-* `-I` - this is the IP address and port of the daemon (the port is the same one specified in the `-p` parameter above)
-* `-k` and `-p` - these are the client's private key and the server's public key (similar to `validator-engine-console`). These keys are generated on the first run of the daemon and are placed in `<db>/cli-keys/`.
+* `-I` - IP address and port of the daemon (same as `-p` above)
+* `-k` and `-p` - client private and server public keys (similar to `validator-engine-console`). These are auto-generated at first daemon startup and stored in `<db>/cli-keys/`.
 
 ### List of commands
+You can view the list of `storage-daemon-cli` commands using the `help` command.
 
-The list of `storage-daemon-cli` commands can be obtained with the `help` command.
 
-Commands have positional parameters and flags. Parameters with spaces should be enclosed in quotes (`'` or `"`), also spaces can be escaped. Other escapes are available, for example:
+Commands include *positional parameters* and *flags*. 
+* Parameters that contain spaces must be enclosed in quotes, using either single `'` or double `"` quotation marks. 
+* Alternatively, spaces can be escaped. 
+* Other common escape sequences are also supported.
+
+**Example**
 ```
 create filename\ with\ spaces.txt -d "Description\nSecond line of \"description\"\nBackslash: \\"
 ```
 
-All parameters after flag `--` are positional parameters. It can be used to specify filenames that start with a dash:
+All parameters following the `--` flag are treated as positional parameters. This allows specifying filenames that begin with a dash:
+
 ```
 create -d "Description" -- -filename.txt
 ```
 
-`storage-daemon-cli` can be run in non-interactive mode by passing it commands to execute:
+You can run `storage-daemon-cli` in non-interactive mode by passing it commands to execute:
 
 ```
 storage-daemon-cli ... -c "add-by-meta m" -c "list --hashes"
 ```
 
-## Adding a Bag of Files
-To download a *Bag of Files*, you need to know its `BagID` or have a meta-file. The following commands can be used to add a *Bag* for download:
+## Adding a bag of files
+
+To download a **bag of files**, you need its hash `bagID` or a metafile. Use the following commands to add a *bag* for download:
+
 ```
 add-by-hash <hash> -d directory
 add-by-meta <meta-file> -d directory
 ```
-The *Bag* will be downloaded to the specified directory. You can omit it, then it will be saved to the storage daemon directory.
+The bag will be downloaded to the specified directory. It will be saved to the default storage daemon directory if not specified.
 
 :::info
-The hash is specified in hexadecimal form (length - 64 characters).
+The hash must be provided in hexadecimal format with a length of 64 characters.
 :::
 
-When adding a *Bag* by a meta-file, information about the *Bag* will be immediately available: size, description, list of files. When adding by hash, you will have to wait for this information to be loaded.
+When adding a bag via a metafile, information such as size, description, and file list becomes available immediately. When adding by hash, this information may take time to load.
 
 
-## Managing Added Bags
+## Managing added bags
+* The `list` command shows all added bags. 
+* The `list --hashes` command shows full hashes.
 
-* The `list` command outputs a list of *Bags*. 
-* `list --hashes` outputs a list with full hashes. 
-
-In all subsequent commands, `<BagID>` is either a hash (hexadecimal) or an ordinal number of the *Bag* within the session (a number that can be seen in the list by the `list` command). Ordinal numbers of *Bags* are not saved between restarts of storage-daemon-cli and are not available in non-interactive mode.
+In the following commands, `<BagID>` can be either a bag's hexadecimal hash or its ordinal number in the current session, which is visible in the list output using `list` command. Note that ordinal numbers of bags are not persistent and are unavailable in non-interactive mode.
 
 ### Methods
 
-* `get <BagID>` - outputs detailed information about the *Bag*: description, size, download speed, list of files.
-* `get-peers <BagID>` - outputs a list of peers.
-* `download-pause <BagID>`, `download-resume <BagID>` - pauses or resumes downloading.
-* `upload-pause <BagID>`, `upload-resume <BagID>` - pauses or resumes uploading.
-* `remove <BagID>` - removes the *Bag*. `remove --remove-files` also deletes all files of the *Bag*. Note that if the *Bag* is saved in the internal storage daemon directory, the files will be deleted in any case.
+* `get <BagID>` - shows full information about the Bag: description, size, download speed, and file list.
+* `get-peers <BagID>` - lists connected peers.
+* `download-pause <BagID>`, `download-resume <BagID>` - pauses or resumes download.
+* `upload-pause <BagID>`, `upload-resume <BagID>` - pauses or resumes upload.
+* `remove <BagID>` - removes the bag. 
+* `remove --remove-files` also removes the bag and its files. Note that if the bag is saved in the internal storage daemon directory, the files will be deleted in any case.
 
 
-## Partial Download, Priorities
+## Partial download, priorities
 :::info
-When adding a *Bag* you can specify which files you want to download from it:
+When adding a bag, you can specify which files to download:
 :::
 ```
 add-by-hash <hash> -d dir --partial file1 file2 file3
@@ -118,30 +143,39 @@ add-by-meta <meta-file> -d dir --partial file1 file2 file3
 ```
 
 ### Priorities
+Each file in a bag has a priority from 0 to 255. A priority of 0 means the file will not be downloaded. The `--partial` flag sets selected files to priority 1 and all others to 0.
 
-Each file in the *Bag of Files* has a priority, a number from 0 to 255. Priority 0 means the file won't be downloaded. The `--partial` flag sets the specified files to priority 1, the others to 0.
+To update priorities after adding a bag:
 
-You can change the priorities of an already added *Bag* with the following commands:
-* `priority-all <BagID> <priority>` - for all files.
-* `priority-idx <BagID> <idx> <priority>` - for one file by number (see with `get` command).
-* `priority-name <BagID> <name> <priority>` - for one file by name.
-Priorities can be set even before the list of files is downloaded.
+* `priority-all <BagID> <priority>` - sets priority for all files.
+* `priority-idx <BagID> <idx> <priority>` - sets priority by file index (shown by the `get` command).
+* `priority-name <BagID> <name> <priority>` - sets priority by file name.
+
+You can set priorities even before the file list is fully available.
 
 
-## Creating a Bag of Files
-To create a *Bag* and start distributing it, use the `create` command:
+## Creating a bag of files
+To create and start sharing a bag, use the `create` command:
 ```
 create <path>
 ```
-`<path>` can point to either a single file or a directory. When creating a *Bag*, you can specify a description:
+`<path>` can be a file or a directory. Add a description if needed:  
+
 ```
 create <path> -d "Bag of Files description"
 ```
-After the *Bag* is created, the console will display detailed information about it (including the hash, which is the `BagID` by which the *Bag* will be identified), and the daemon will start distributing the torrent. Extra options for `create`:
-* `--no-upload` - daemon will not distribute files to peers. Upload can be started using `upload-resume`.
-* `--copy` - files will be copied to an internal directory of storage daemon.
 
-To download the *Bag*, other users just need to know its hash. You can also save the torrent meta file:
+After creation, detailed information, including the hash `BagID`, is shown in the console, and the daemon begins sharing the torrent.
+Additional options for the `create` command:
+
+* `--no-upload` - daemon will not distribute files to peers. Upload can be started using the `upload-resume` command.
+* `--copy` - files will be copied to the internal directory of the storage daemon.
+
+To download the bag, other users need to know its hash. You can also save the torrent metafile:
+
 ```
 get-meta <BagID> <meta-file>
 ```
+
+<Feedback />
+

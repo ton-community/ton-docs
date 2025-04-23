@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # IDE plugins
 
 ## IntelliJ IDEs Plugin
@@ -28,3 +30,6 @@ Visual Studio Code is a free and popular IDE for developers.
 ## Neovim
 
 To enable syntax highlighting in Neovim, follow the installation instructions in the [nvim-treesitter quickstart guide](https://github.com/nvim-treesitter/nvim-treesitter#quickstart).
+
+<Feedback />
+

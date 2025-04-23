@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TON networking
 
 The TON Ecosystem uses its peer-to-peer network protocols.
@@ -24,3 +26,6 @@ Multi-blockchain projects, such as TON, are much more demanding. For example, on
 
 ## See also
 - [TON security audits](/v3/concepts/dive-into-ton/ton-blockchain/security-measures/)
+
+<Feedback />
+

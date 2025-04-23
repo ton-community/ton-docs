@@ -1,13 +1,16 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Statements
-This section briefly discusses FunC statements, constituting the code of ordinary function bodies.
+
+This section briefly overviews FunC statements, which form the core of function bodies.
 
 ## Expression statements
-The most common type of a statement is the expression statement. It's an expression followed by `;`. Expression's description would be quite complicated, so only a sketch is presented here. As a rule all sub-expressions are computed left to right with one exception of [asm stack rearrangement](/v3/documentation/smart-contracts/func/docs/functions#rearranging-stack-entries) which may define order manually.
+The most common type of statement is the expression statement—an expression followed by `;`. As a rule, all sub-expressions are evaluated from left to right, 
+except in cases where [asm stack rearrangement](/v3/documentation/smart-contracts/func/docs/functions#rearranging-stack-entries) explicitly defines the order.
 
 ### Variable declaration
-It is not possible to declare a local variable without defining its initial value.
+Local variables must be initialized at the time of declaration. Here are some examples:
 
-Here are some examples of variables declarations:
 ```func
 int x = 2;
 var x = 2;
@@ -22,70 +25,123 @@ var (x, y, z) = (1, 2, 3);
 var [x, y, z] = [1, 2, 3];
 ```
 
-Variable can be "redeclared" in the same scope. For example, this is a correct code:
+
+A variable can be redeclared in the same scope. For example, the following code is valid:
+
 ```func
 int x = 2;
 int y = x + 1;
 int x = 3;
 ```
-In fact, the second occurrence of `int x` is not a declaration, but just a compile-time insurance that `x` has type `int`. So the third line is essentially equivalent to a simple assignment `x = 3;`.
 
-In nested scopes, a variable can be truly redeclared just like in the C language. For example, consider the code:
+In this case, 
+the second occurrence of `int x` is not a new declaration but a compile-time check ensuring that `x` has type `int`. The third line is equivalent to `x = 3;`.
+
+
+**Variable redeclaration in nested scopes**
+
+In nested scopes, a new variable with the same name can be declared, just like in C:
+
 ```func
 int x = 0;
 int i = 0;
 while (i < 10) {
   (int, int) x = (i, i + 1);
-  ;; here x is a variable of type (int, int)
+  ;; Here x is a variable of type (int, int)
   i += 1;
 }
-;; here x is a (different) variable of type int
+;; Here, x refers to the original variable of type int declared above
 ```
-But as mentioned in the global variables [section](/v3/documentation/smart-contracts/func/docs/global_variables), a global variable cannot be redeclared.
 
-Note that a variable declaration **is** an expression statement, so actually constructions like `int x = 2` are full-fledged expressions. For example, this is a correct code:
-```func
-int y = (int x = 3) + 1;
-```
-It is a declaration of two variables `x` and `y` equal to `3` and `4` correspondingly.
+However, as mentioned in the [Global variables](/v3/documentation/smart-contracts/func/docs/global_variables/) section, 
+global variables **cannot** be redeclared.
+
+
+Since variable declarations are **expression statements**, constructs like `int x = 2;` are valid expressions. 
+For instance:
+`int y = (int x = 3) + 1;`
+Here, `x` is declared and assigned `3`, and `y` is assigned `4`.
+
+
 #### Underscore
-Underscore `_` is used when a value is not needed. For example, suppose a function `foo` has type `int -> (int, int, int)`. We can get the first returned value and ignore the second and third like this:
+
+The underscore `_` is used when a value is not needed. 
+For example, if `foo` is a function of type `int -> (int, int, int)`, 
+you can retrieve only the first return value while ignoring the rest:
 ```func
 (int fst, _, _) = foo(42);
 ```
+
+
+
 ### Function application
-A call of a function looks like as such in a conventional language. The arguments of the function call are listed after the function name, separated by commas.
+
+A function call in FunC follows a conventional syntax: 
+the function name is followed by its arguments, separated by commas.
+
 ```func
-;; suppose foo has type (int, int, int) -> int
+;; Suppose foo has type (int, int, int) -> int
 int x = foo(1, 2, 3);
 ```
 
-But notice that `foo` is actually a function of **one** argument of type `(int, int, int)`. To see the difference, suppose `bar` is a function of type `int -> (int, int, int)`. Unlike in conventional languages, you can compose the functions like that:
+However, unlike many conventional languages, FunC treats functions as taking a single argument. 
+In the example above, `foo` is a function that takes one tuple argument of type `(int, int, int)`.
+
+**Function composition**
+
+To illustrate how function arguments work in FunC, consider a function `bar` of type `int -> (int, int, int)`. Since `foo` expects a single tuple argument, you can pass the entire result of `bar(42)` directly into `foo`:
+
 ```func
 int x = foo(bar(42));
 ```
-instead of the similar but longer form:
+
+This is equivalent to the longer form:
+
 ```func
 (int a, int b, int c) = bar(42);
 int x = foo(a, b, c);
 ```
 
+
+
 Also Haskell-style calls are possible, but not always (to be fixed later):
+
+FunC also supports **Haskell-style** function application, but with some limitations:
+
 ```func
-;; suppose foo has type int -> int -> int -> int
-;; i.e. it's carried
+;; Suppose foo has type int -> int -> int -> int
+;; i.e., it is curried
 (int a, int b, int c) = (1, 2, 3);
-int x = foo a b c; ;; ok
-;; int y = foo 1 2 3; wouldn't compile
-int y = foo (1) (2) (3); ;; ok
+int x = foo a b c; ;; Valid syntax
+```
+However, direct application with literals does not compile:
+
+```func
+;; int y = foo 1 2 3; ERROR: won't compile
+```
+
+Instead, parentheses are required:
+
+```func
+int y = foo (1) (2) (3); ;; Valid syntax
 ```
 ### Lambda expressions
-Lambda expressions are not supported yet.
+Lambda expressions are not yet supported in FunC.
 
 ### Methods calls
 
 #### Non-modifying methods
-If a function has at least one argument, it can be called as a non-modifying method. For example, `store_uint` has type `(builder, int, int) -> builder` (the second argument is the value to store, and the third is the bit length). `begin_cell` is a function that creates a new builder. The following codes are equivalent:
+
+In FunC, a function with at least one argument can be called a non-modifying method using the dot `.` syntax.
+
+For example, the function `store_uint` has the type `(builder, int, int)  → builder`, where:
+- The first argument is a builder object.
+- The second argument is the value to store.
+- The third argument is the bit length.
+
+The function `begin_cell()` creates a new builder.
+These two ways of calling `store_uint` are equivalent:
+
 ```func
 builder b = begin_cell();
 b = store_uint(b, 239, 8);
@@ -94,44 +150,70 @@ b = store_uint(b, 239, 8);
 builder b = begin_cell();
 b = b.store_uint(239, 8);
 ```
-So the first argument of a function can be passed to it being located before the function name, if separated by `.`. The code can be further simplified:
+
+The dot `.` syntax allows the first argument of a function to be placed before the function name, 
+simplifying the code further:
+
 ```func
 builder b = begin_cell().store_uint(239, 8);
 ```
-Multiple calls of methods are also possible:
+Multiple non-modifying methods can be chained together:
+
 ```func
 builder b = begin_cell().store_uint(239, 8)
                         .store_int(-1, 16)
                         .store_uint(0xff, 10);
 ```
+
+
+
+
 #### Modifying methods
-If the first argument of a function has type `A` and the return value of the function has the shape of `(A, B)` where `B` is some arbitrary type, then the function can be called as a modifying method. Modifying method calls may take some arguments and return some values, but they modify their first argument, that is, assign the first component of the returned value to the variable from the first argument. For example, suppose `cs` is a cell slice and `load_uint` has type `(slice, int) -> (slice, int)`: it takes a cell slice and number of bits to load and returns the remainder of the slice and the loaded value. The following codes are equivalent:
+
+If a function’s first argument is of type `A` and its return value follows the structure `(A, B)`, 
+where `B` is an arbitrary type, the function can be used as a modifying method. 
+
+A modifying method modifies its first argument by assigning the first component of the returned value to the original variable. These methods may take additional arguments and return extra values, but their primary purpose is to update the first argument.
+
+For example, consider a cell slice `cs` and the function `load_uint`, which has the type: `load_uint(slice, int) → (slice, int)`.
+
+This function takes a cell slice and a number of bits to load, returning the remaining slice and the loaded value. The following three calls are equivalent:
+
+
 ```func
 (cs, int x) = load_uint(cs, 8);
-```
-```func
 (cs, int x) = cs.load_uint(8);
-```
-```func
 int x = cs~load_uint(8);
 ```
-In some cases we want to use a function as a modifying method that doesn't return any value and only modifies the first argument. It can be done using unit types as follows: Suppose we want to define function `inc` of type `int -> int`, which increments an integer, and use it as a modifying method. Then we should define `inc` as a function of type `int -> (int, ())`:
+
+Without return values
+Sometimes, a function can be used as a modifying method even when it doesn’t return a meaningful value—only modifying its first argument. 
+This can be achieved using unit types.
+
+For example, consider an increment function `inc` of type `int -> int`. It should be redefined as a function of type `int -> (int, ())` to use it as a modifying method: 
+
 ```func
 (int, ()) inc(int x) {
   return (x + 1, ());
 }
 ```
-When defined like that, it can be used as a modifying method. The following will increment `x`.
+
+Now, the following code increments `x`:
+
 ```func
 x~inc();
 ```
 
 #### `.` and `~` in function names
-Suppose we want to use `inc` as a non-modifying method too. We can write something like that:
+
+Suppose we want to use `inc` as a non-modifying method. We can write:
+
 ```func
 (int y, _) = inc(x);
 ```
-But it is possible to override the definition of `inc` as a modifying method.
+
+However, we can also define `inc` as a modifying method:
+
 ```func
 int inc(int x) {
   return x + 1;
@@ -140,29 +222,39 @@ int inc(int x) {
   return (x + 1, ());
 }
 ```
-And then call it like that:
+Now, we can call it in different ways:
 ```func
-x~inc();
-int y = inc(x);
-int z = x.inc();
+x~inc(); ;; Modifies x
+int y = inc(x); ;; Doesn't modify x
+int z = x.inc(); ;; Also doesn't modify x
 ```
-The first call will modify x; the second and third won't.
 
-In summary, when a function with the name `foo` is called as a non-modifying or modifying method (i.e. with `.foo` or `~foo` syntax), the FunC compiler uses the definition of `.foo` or `~foo` correspondingly if such a definition is presented, and if not, it uses the definition of `foo`.
+
+**How FunC resolves function calls**
+- If a function is called with `.` (e.g., `x.foo()`), the compiler looks for a `.foo` definition.
+- If a function is called with `~` (e.g., `x~foo()`), the compiler looks for a `~foo` definition.
+- If neither `.foo` nor `~foo` is defined, the compiler falls back to the regular `foo` definition.
+
+
 
 ### Operators
-Note that currently all of the unary and binary operators are integer operators. Logical operators are represented as bitwise integer operators  (cf. [absence of boolean type](/v3/documentation/smart-contracts/func/docs/types#absence-of-boolean-type)).
+Note that all the unary and binary operators are currently integer operators. Logical operators are bitwise integer operators (cf. [absence of boolean type](/v3/documentation/smart-contracts/func/docs/types#absence-of-boolean-type)).
+
+
 #### Unary operators
-There are two unary operators:
+
+FunC supports two unary operators:
 - `~` is bitwise not (priority 75)
 - `-` is integer negation (priority 20)
 
-They should be separated from the argument:
-- `- x` is ok.
-- `-x` is not ok (it's a single identifier)
+These operators must be separated from the arguments:
+- `- x` - Negates x.
+- `-x` - Interpreted as a single identifier, not an operation.
 
 #### Binary operators
+
 With priority 30 (left-associative):
+
 - `*` is integer multiplication
 - `/` is integer division (floor)
 - `~/` is integer division (round)
@@ -195,11 +287,12 @@ With priority 15 (left-associative):
 - `<=>` is integer comparison (returns -1, 0 or 1)
 
 They also should be separated from the argument:
-- `x + y` is ok
-- `x+y` is not ok (it's a single identifier)
+- `x + y` -  Proper spacing between operands.
+- `x+y` - Interpreted as a single identifier, not an operation.
 
 #### Conditional operator
-It has the usual syntax.
+
+FunC supports the standard conditional (ternary) operator with the following syntax:
 ```func
 <condition> ? <consequence> : <alternative>
 ```
@@ -207,31 +300,38 @@ For example:
 ```func
 x > 0 ? x * fac(x - 1) : 1;
 ```
-It has priority 13.
+Priority 13.
 
 #### Assignments
 Priority 10.
 
-Simple assignment `=` and counterparts of the binary operations: `+=`, `-=`, `*=`, `/=`, `~/=`, `^/=`, `%=`, `~%=`, `^%=`, `<<=`, `>>=`, `~>>=`, `^>>=`, `&=`, `|=`, `^=`.
+Supports simple assignment `=` and compound assignment operators: `+=`, `-=`, `*=`, `/=`, `~/=`, `^/=`, `%=`, `~%=`, `^%=`, `<<=`, `>>=`, `~>>=`, `^>>=`, `&=`, `|=`, `^=`.
+
+
 
 ## Loops
 FunC supports `repeat`, `while`, and `do { ... } until` loops. The `for` loop is not supported.
+
 ### Repeat loop
-The syntax is a `repeat` keyword followed by an expression of type `int`. Repeats the code for the specified number of times. Examples:
+The `repeat` loop uses the `repeat` keyword followed by an `int`  expression. It executes the code a specified number of times.
+
+**Examples:**
 ```func
 int x = 1;
-repeat(10) {
+repeat(10) { ;;Repeats the block 10 times
   x *= 2;
 }
 ;; x = 1024
 ```
 ```func
 int x = 1, y = 10;
-repeat(y + 6) {
+repeat(y + 6) { ;;Repeats the block 16 times
   x *= 2;
 }
 ;; x = 65536
 ```
+
+If the repetition count is negative, the loop does not execute:
 ```func
 int x = 1;
 repeat(-1) {
@@ -239,9 +339,13 @@ repeat(-1) {
 }
 ;; x = 1
 ```
-If the number of times is less than `-2^31` or greater than `2^31 - 1`, range check exception is thrown.
+
+A range check exception is thrown if the repetition count is less than `-2³¹` or greater than `2³¹ - 1`.
+
 ### While loop
-Has the usual syntax. Example:
+
+The `while` loop follows standard syntax:
+
 ```func
 int x = 2;
 while (x < 100) {
@@ -251,8 +355,11 @@ while (x < 100) {
 ```
 Note that the truth value of condition `x < 100` is of type `int` (cf. [absence of boolean type](/v3/documentation/smart-contracts/func/docs/types#absence-of-boolean-type)).
 
+
 ### Until loop
-Has the following syntax:
+
+The `do { ... } until` loop has the following syntax:
+
 ```func
 int x = 0;
 do {
@@ -260,29 +367,38 @@ do {
 } until (x % 17 == 0);
 ;; x = 51
 ```
+
+
+
+
 ## If statements
-Examples:
+
+**Examples**
+
+Standard `if` statement:
 ```func
-;; usual if
 if (flag) {
   do_something();
 }
 ```
+
+Negated condition, which is equivalent to `if` (`~flag`):
 ```func
-;; equivalent to if (~ flag)
+
 ifnot (flag) {
   do_something();
 }
 ```
+
+`If-else` statement:
 ```func
-;; usual if-else
 if (flag) {
   do_something();
-}
-else {
+} else {
   do_alternative();
 }
 ```
+
 ```func
 ;; Some specific features
 if (flag1) {
@@ -291,22 +407,38 @@ if (flag1) {
   do_alternative4();
 }
 ```
-The curly brackets are necessary. That code wouldn't be compiled:
+
+Curly brackets `{}` are required for `if` statements. The following code will not compile:
 ```func
 if (flag1)
   do_something();
 ```
 
-## Try-Catch statements
-*Available in func since v0.4.0*
+## Try-catch statements
+*Available in FunC since v0.4.0*
 
-Executes the code in `try` block. If it fails, completely rolls back changes made in `try` block and executes `catch` block instead; `catch` receives two arguments: the exception parameter of any type (`x`) and the error code (`n`, integer).
+The `try` block executes a section of code. 
+If an error occurs, all changes made within the `try` block are completely rolled back, and the `catch` block is executed instead. The `catch` block receives two arguments:
+- `x`: the exception parameter, which can be of any type
+- `n`: the error code, an integer
 
-Unlike many other languages in the FunC try-catch statement, the changes made in the try block, in particular the modification of local and global variables, all registers' changes (i.e. `c4` storage register, `c5` action/message register, `c7` context register and others) **are discarded** if there is an error in the try block and consequently all contract storage updates and message sending will be reverted. It is important to note that some TVM state parameters such as _codepage_ and gas counters will not be rolled back. This means, in particular, that all gas spent in the try block will be taken into account, and the effects of OPs that change the gas limit (`accept_message` and `set_gas_limit`) will be preserved.
 
-Note that exception parameter can be of any type (possibly different in case of different exceptions) and thus funC can not predict it on compile time. That means that developer need to "help" compiler by casting exception parameter to some type (see Example 2 below):
+Unlike many other languages, in FunC, all changes are **undone** if an error occurs inside the `try` block. These modifications include updates to local and global variables and changes to storage registers (`c4` for storage, `c5`for action/messages, `c7` for context, etc.). 
+Any contract storage updates and outgoing messages are also reverted.
 
-Examples:
+However, certain TVM state parameters are not rolled back, such as:
+- Codepage settings
+- Gas counters
+As a result, all gas consumed within the `try` block is still accounted for, and any operations that modify gas limits (e.g., `accept_message` or `set_gas_limit`) will remain in effect.
+
+**Exception parameter handling**
+
+Since the exception parameter can be of any type, which may vary depending on the exception, FunC cannot determine its type at compile time. This requires the developer to manually cast the exception parameter when necessary, as shown in the type-casting example below.
+
+
+**Examples**
+
+Basic `try-catch` usage:
 ```func
 try {
   do_something();
@@ -314,6 +446,8 @@ try {
   handle_exception();
 }
 ```
+
+Casting the exception parameter:
 ```func
 forall X -> int cast_to_int(X x) asm "NOP";
 ...
@@ -325,6 +459,8 @@ try {
   return x + 1;
 }
 ```
+
+Variable reset on exception:
 ```func
 int x = 0;
 try {
@@ -332,11 +468,13 @@ try {
   throw(100);
 } catch (_, _) {
 }
-;; x = 0 (not 1)
 ```
 
+In this last example, although `x` is incremented inside the `try` block, the modification is **rolled back** due to the exception, so `x` remains `0`.
+
 ## Block statements
-Block statements are also allowed. They open a new nested scope:
+
+Block statements are supported as well, creating a new nested scope:
 ```func
 int x = 1;
 builder b = begin_cell();
@@ -346,3 +484,9 @@ builder b = begin_cell();
 }
 x += 1;
 ```
+
+In this example, the inner block introduces a new `builder` variable named `x`, which exists only within that scope. 
+The outer `x` remains unchanged and can be used after the block ends.
+
+<Feedback />
+

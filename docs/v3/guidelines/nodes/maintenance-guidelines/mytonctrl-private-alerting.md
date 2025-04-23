@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # MyTonCtrl private alerting bot
 
 ## Overview
@@ -98,3 +100,5 @@ To enable or disable alerts, use the following commands:
 	```bash
 	MyTonCtrl> disable_mode  alert-bot
 	```
+<Feedback />
+

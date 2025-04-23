@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # NFT processing
 
 ## Overview
@@ -245,3 +247,6 @@ Let's again examine each line of code:
 - `slice prev_owner_address = in_msg_body~load_msg_addr();` - Extracts the previous owner’s address from the incoming message body and loads it into the `prev_owner_address` variable. This can be useful if the previous owner decides to cancel the contract and have the NFT returned to them.
 
 Now that we have successfully parsed and validated the notification message, we can proceed with the business logic that initiates a sale smart contract. This contract manages NFT item sales, including auctions on platforms such as getgems.io.
+
+<Feedback />
+

@@ -2,6 +2,8 @@
 title: Exit codes
 ---
 
+import Feedback from '@site/src/components/Feedback';
+
 Each transaction on the TON Blockchain comprises [multiple phases](/v3/documentation/tvm/tvm-overview#transactions-and-phases). An _exit code_ is a 32-bit signed integer that indicates whether the [compute](#compute) or [action](#action) phase succeeded. When unsuccessful, it contains the exception code that occurred. Each exit code represents a specific exception or transaction outcome.
 
 Exit codes 0 and 1 indicate standard (successful) execution of the [compute phase](#compute). Exit (or [result](#action)) code 0 indicates the standard (successful) execution of the [action phase](#action). Any other exit code indicates that a specific exception has occurred and that the transaction wasn't successful in one way or another, i.e., the transaction was reverted or the inbound message has bounced back.
@@ -498,3 +500,5 @@ The list of exit codes for the Tact compiler is in the [Tact docs](https://docs.
 [tvm]: /v3/documentation/tvm/tvm-overview
 [bp]: https://github.com/ton-org/blueprint
 [fift]: /v3/documentation/fift/fift-and-tvm-assembly
+
+<Feedback />

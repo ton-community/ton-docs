@@ -2,6 +2,33 @@
  * @type {import('@docusaurus/plugin-content-docs').SidebarConfig}
  */
 module.exports = [
+  {
+    type: 'category',
+    label: `Quick Start`,
+    items: [
+      'v3/guidelines/quick-start/getting-started',
+      {
+        type: 'category',
+        label: 'Blockchain interaction',
+        items: [
+          'v3/guidelines/quick-start/blockchain-interaction/reading-from-network',
+          'v3/guidelines/quick-start/blockchain-interaction/writing-to-network',
+        ],
+      },
+      {
+        type: 'category',
+        label: 'Developing smart-contracts',
+        items: [
+          'v3/guidelines/quick-start/developing-smart-contracts/setup-environment',
+          'v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview',
+          'v3/guidelines/quick-start/developing-smart-contracts/storage-and-get-methods',
+          'v3/guidelines/quick-start/developing-smart-contracts/processing-messages',
+          'v3/guidelines/quick-start/developing-smart-contracts/tact-implementation',
+          'v3/guidelines/quick-start/developing-smart-contracts/deploying-to-network'
+        ],
+      },
+    ]
+  },
   'v3/guidelines/get-started-with-ton',
   {
     type: 'category',
@@ -10,22 +37,22 @@ module.exports = [
       {
         type: 'link',
         label: 'Working with your wallet',
-        href: 'https://ton-community.github.io/tutorials/01-wallet',
+        href: 'https://helloworld.tonstudio.io/01-wallet',
       },
       {
         type: 'link',
         label: 'Writing first smart contract',
-        href: 'https://ton-community.github.io/tutorials/02-contract',
+        href: 'https://helloworld.tonstudio.io/02-contract',
       },
       {
         type: 'link',
         label: 'Building first web client',
-        href: 'https://ton-community.github.io/tutorials/03-client',
+        href: 'https://helloworld.tonstudio.io/03-client',
       },
       {
         type: 'link',
         label: 'Testing your smart contract',
-        href: 'https://ton-community.github.io/tutorials/04-testing',
+        href: 'https://helloworld.tonstudio.io/04-testing',
       },
     ],
   },
@@ -100,191 +127,189 @@ module.exports = [
     type: 'category',
     label: ' DApps guidelines',
     items: [
-  'v3/guidelines/dapps/overview',
-  'v3/guidelines/dapps/cookbook',
-  {
-    type: 'category',
-    label: 'APIs and SDKs',
-    items: [
-      'v3/guidelines/dapps/apis-sdks/overview',
-      'v3/guidelines/dapps/apis-sdks/sdk',
-      'v3/guidelines/dapps/apis-sdks/api-types',
-      'v3/guidelines/dapps/apis-sdks/ton-http-apis',
-      'v3/guidelines/dapps/apis-sdks/ton-adnl-apis',
-    ],
-  },
-  {
-    type: 'category',
-    label: 'Tutorials & examples',
-    items: [
-      {
-        type: 'doc',
-        id: 'v3/guidelines/dapps/tutorials/jetton-airdrop',
-        label: 'How to launch a jetton airdrop',
-      },
-      'v3/guidelines/dapps/apis-sdks/api-keys',
-      'v3/guidelines/dapps/apis-sdks/getblock-ton-api',
-      {
-        type: 'doc',
-        id: 'v3/guidelines/dapps/tutorials/nft-minting-guide',
-        label: 'NFT minting guide',
-      },
-      {
-        type: 'doc',
-        id: 'v3/guidelines/dapps/tutorials/mint-your-first-token',
-        label: 'Mint your first token',
-      },
-      {
-        type: 'doc',
-        id: 'v3/guidelines/dapps/tutorials/zero-knowledge-proofs',
-        label: 'Zero-Knowledge proofs',
-      },
-      {
-        type: 'doc',
-        id: 'v3/guidelines/dapps/tutorials/web3-game-example',
-        label: 'Web3 game example',
-      },
+      'v3/guidelines/dapps/overview',
+      'v3/guidelines/dapps/cookbook',
       {
         type: 'category',
-        label: 'Telegram bot examples',
+        label: 'APIs and SDKs',
         items: [
-          'v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot',
-          'v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-2',
-          'v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-js',
-        ],
-      },
-    ],
-  },
-  {
-    type: 'category',
-    label: 'Telegram Mini Apps',
-    items: [
-      'v3/guidelines/dapps/tma/overview',
-      {
-        type: 'category',
-        label: 'Guidelines',
-        items: [
-          'v3/guidelines/dapps/tma/guidelines/testing-apps',
-          'v3/guidelines/dapps/tma/guidelines/publishing',
-          'v3/guidelines/dapps/tma/guidelines/monetization',
-          'v3/guidelines/dapps/tma/guidelines/tips-and-tricks',
+          'v3/guidelines/dapps/apis-sdks/overview',
+          'v3/guidelines/dapps/apis-sdks/sdk',
+          'v3/guidelines/dapps/apis-sdks/api-types',
+          'v3/guidelines/dapps/apis-sdks/ton-http-apis',
+          'v3/guidelines/dapps/apis-sdks/ton-adnl-apis',
         ],
       },
       {
         type: 'category',
         label: 'Tutorials & examples',
         items: [
-          'v3/guidelines/dapps/tma/tutorials/step-by-step-guide',
-          'v3/guidelines/dapps/tma/tutorials/app-examples',
-          'v3/guidelines/dapps/tma/tutorials/design-guidelines',
+          {
+            type: 'doc',
+            id: 'v3/guidelines/dapps/tutorials/jetton-airdrop',
+            label: 'How to launch a jetton airdrop',
+          },
+          'v3/guidelines/dapps/apis-sdks/api-keys',
+          'v3/guidelines/dapps/apis-sdks/getblock-ton-api',
+          {
+            type: 'doc',
+            id: 'v3/guidelines/dapps/tutorials/nft-minting-guide',
+            label: 'NFT minting guide',
+          },
+          {
+            type: 'doc',
+            id: 'v3/guidelines/dapps/tutorials/mint-your-first-token',
+            label: 'Mint your first token',
+          },
+          {
+            type: 'doc',
+            id: 'v3/guidelines/dapps/tutorials/zero-knowledge-proofs',
+            label: 'Zero-Knowledge proofs',
+          },
+          {
+            type: 'doc',
+            id: 'v3/guidelines/dapps/tutorials/web3-game-example',
+            label: 'Web3 game example',
+          },
+          {
+            type: 'category',
+            label: 'Telegram bot examples',
+            items: [
+              'v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot',
+              'v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-2',
+              'v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-js',
+            ],
+          },
         ],
       },
-      'v3/guidelines/dapps/tma/notcoin',
-      'v3/guidelines/dapps/tma/grants',
-    ],
-  },
-  {
-    type: 'category',
-    label: 'Advanced asset processing',
-    items: [
-      'v3/guidelines/dapps/asset-processing/payments-processing',
-      'v3/guidelines/dapps/asset-processing/jettons',
-      'v3/guidelines/dapps/asset-processing/mintless-jettons',
-      'v3/guidelines/dapps/asset-processing/compressed-nfts',
-      'v3/guidelines/dapps/asset-processing/mass-mint-tools',
       {
         type: 'category',
-        label: 'NFT processing',
+        label: 'Telegram Mini Apps',
         items: [
-          'v3/guidelines/dapps/asset-processing/nft-processing/nfts',
-          'v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing',
+          'v3/guidelines/dapps/tma/overview',
+          {
+            type: 'category',
+            label: 'Guidelines',
+            items: [
+              'v3/guidelines/dapps/tma/guidelines/testing-apps',
+              'v3/guidelines/dapps/tma/guidelines/publishing',
+              'v3/guidelines/dapps/tma/guidelines/monetization',
+              'v3/guidelines/dapps/tma/guidelines/tips-and-tricks',
+            ],
+          },
+          {
+            type: 'category',
+            label: 'Tutorials & examples',
+            items: [
+              'v3/guidelines/dapps/tma/tutorials/step-by-step-guide',
+              'v3/guidelines/dapps/tma/tutorials/app-examples',
+              'v3/guidelines/dapps/tma/tutorials/design-guidelines',
+            ],
+          },
+          'v3/guidelines/dapps/tma/notcoin',
+          'v3/guidelines/dapps/tma/grants',
         ],
       },
-    ],
-  },
-  ]
+      {
+        type: 'category',
+        label: 'Advanced asset processing',
+        items: [
+          'v3/guidelines/dapps/asset-processing/payments-processing',
+          'v3/guidelines/dapps/asset-processing/jettons',
+          'v3/guidelines/dapps/asset-processing/mintless-jettons',
+          'v3/guidelines/dapps/asset-processing/compressed-nfts',
+          'v3/guidelines/dapps/asset-processing/mass-mint-tools',
+          {
+            type: 'category',
+            label: 'NFT processing',
+            items: [
+              'v3/guidelines/dapps/asset-processing/nft-processing/nfts',
+              'v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing',
+            ],
+          },
+        ],
+      },
+    ]
   },
   {
     type: 'category',
     label: 'Blockchain nodes guidelines',
     items: [
-    'v3/guidelines/nodes/overview',
-    {
-      type: 'category',
-      label: 'Running nodes',
-      items: [
-        'v3/guidelines/nodes/running-nodes/archive-node',
-        'v3/guidelines/nodes/running-nodes/full-node',
-        'v3/guidelines/nodes/running-nodes/liteserver-node',
-        'v3/guidelines/nodes/running-nodes/validator-node',
-        'v3/guidelines/nodes/running-nodes/staking-with-nominator-pools',
-        'v3/guidelines/nodes/running-nodes/run-mytonctrl-docker',
-        'v3/guidelines/nodes/running-nodes/running-a-local-ton',
-        'v3/guidelines/nodes/running-nodes/secure-guidelines',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Maintenance guidelines',
-      items: [
-        'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-backup-restore',
-        'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-validator-standby',
-        'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-private-alerting',
-        'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-prometheus',
-        'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-remote-controller'
-      ],
-    },
-    'v3/guidelines/nodes/custom-overlays',
-    'v3/guidelines/nodes/nodes-troubleshooting',
-    'v3/guidelines/nodes/node-maintenance-and-security',
-    'v3/guidelines/nodes/monitoring/performance-monitoring',
-    'v3/guidelines/nodes/persistent-states',
-    'v3/guidelines/nodes/faq',
-    ]
-    },
-    {
-      type: 'category',
-      label: 'Integrate with TON',
-      items: [
-      'v3/guidelines/ton-connect/overview',
-      {
-        type: 'doc',
-        id: 'v3/guidelines/ton-connect/wallet',
-      },
+      'v3/guidelines/nodes/overview',
       {
         type: 'category',
-        label: 'Frameworks',
+        label: 'Running nodes',
         items: [
-          {
-            type: 'doc',
-            id: 'v3/guidelines/ton-connect/frameworks/react',
-            label: 'React Apps',
-          },
-          {
-            type: 'doc',
-            id: 'v3/guidelines/ton-connect/frameworks/vue',
-            label: 'Vue Apps',
-          },
-          {
-            type: 'doc',
-            id: 'v3/guidelines/ton-connect/frameworks/web',
-            label: 'HTML/JS Apps',
-          },
+          'v3/guidelines/nodes/running-nodes/archive-node',
+          'v3/guidelines/nodes/running-nodes/full-node',
+          'v3/guidelines/nodes/running-nodes/liteserver-node',
+          'v3/guidelines/nodes/running-nodes/validator-node',
+          'v3/guidelines/nodes/running-nodes/staking-with-nominator-pools',
+          'v3/guidelines/nodes/running-nodes/run-mytonctrl-docker',
+          'v3/guidelines/nodes/running-nodes/running-a-local-ton',
+          'v3/guidelines/nodes/running-nodes/secure-guidelines',
         ],
       },
       {
         type: 'category',
-        label: 'Guidelines',
+        label: 'Maintenance guidelines',
+        items: [
+          'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-backup-restore',
+          'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-validator-standby',
+          'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-private-alerting',
+          'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-prometheus',
+          'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-remote-controller'
+        ],
+      },
+      'v3/guidelines/nodes/custom-overlays',
+      'v3/guidelines/nodes/nodes-troubleshooting',
+      'v3/guidelines/nodes/node-maintenance-and-security',
+      'v3/guidelines/nodes/monitoring/performance-monitoring',
+      'v3/guidelines/nodes/persistent-states',
+      'v3/guidelines/nodes/faq',
+    ]
+  },
+  {
+    items: [
+      'v3/guidelines/ton-connect/overview',
+      {
+        type: 'category',
+        label: 'Integrate a DApp',
         items: [
           'v3/guidelines/ton-connect/guidelines/how-ton-connect-works',
-          'v3/guidelines/ton-connect/guidelines/developers',
           'v3/guidelines/ton-connect/guidelines/creating-manifest',
+          {
+            type: 'category',
+            label: 'Install TON Connect',
+            items: [
+              {
+                type: 'doc',
+                id: 'v3/guidelines/ton-connect/frameworks/react',
+                label: 'React Apps',
+              },
+              {
+                type: 'doc',
+                id: 'v3/guidelines/ton-connect/frameworks/vue',
+                label: 'Vue Apps',
+              },
+              {
+                type: 'doc',
+                id: 'v3/guidelines/ton-connect/frameworks/web',
+                label: 'HTML/JS Apps',
+              },
+            ],
+          },
           'v3/guidelines/ton-connect/guidelines/preparing-messages',
           'v3/guidelines/ton-connect/guidelines/sending-messages',
           'v3/guidelines/ton-connect/guidelines/verifying-signed-in-users',
-          'v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk',
         ],
       },
+      {
+        type: 'doc',
+        label: 'Integrate a wallet',
+        id: 'v3/guidelines/ton-connect/wallet',
+      },
+      'v3/guidelines/ton-connect/guidelines/developers',
       {
         type: 'category',
         label: 'Advanced',
@@ -296,20 +321,22 @@ module.exports = [
           },
           {
             type: 'link',
-            label: 'Wallets List',
+            label: 'Wallets list',
             href: 'https://github.com/ton-blockchain/wallets-list',
           },
         ],
       },
-    {
-      type: 'category',
-      label: 'Business',
-      items: [
-        'v3/guidelines/ton-connect/business/ton-connect-for-business',
-        'v3/guidelines/ton-connect/business/ton-connect-for-security'
-      ],
-    }
-  ]
+      {
+        type: 'category',
+        label: 'Business',
+        items: [
+          'v3/guidelines/ton-connect/business/ton-connect-for-business',
+          'v3/guidelines/ton-connect/business/ton-connect-for-security'
+        ],
+      }
+    ],
+    label: 'Integrate with TON',
+    type: 'category'
   },
 
   {

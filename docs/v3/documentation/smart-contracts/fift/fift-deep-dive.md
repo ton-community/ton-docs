@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Fift deep dive
 
 Fift is a high-level stack-based language used for local manipulation of cells and other TVM primitives. Its primary purpose is to compile TVM assembly code into contract code as a bag-of-cells (BOC).
@@ -169,3 +171,6 @@ Fift provides built-in support for Ed25519 cryptographic operations:
 
 ## Continue learning  
 - [Fift: A Brief Introduction](https://docs.ton.org/fiftbase.pdf) by Nikolai Durov  
+
+<Feedback />
+

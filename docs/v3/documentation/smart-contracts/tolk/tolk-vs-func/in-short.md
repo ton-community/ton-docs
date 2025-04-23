@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Tolk vs FunC: in short
 
 Tolk is much more similar to TypeScript and Kotlin than C and Lisp. 
@@ -49,7 +51,10 @@ get currentCounter(): int { ... }
 11. `bool` type support
 12. Indexed access `tensorVar.0` and `tupleVar.0` support
 13. Nullable types `T?`, null safety, smart casts, operator `!`
-14. Trailing comma is supported
+14. Union types and pattern matching (for types and for expressions, switch-like behavior)
+15. Type aliases are supported
+16. Trailing comma is supported
+17. Semicolon after the last statement in a block is optional
 
 #### Tooling around
 - JetBrains plugin exists
@@ -60,3 +65,6 @@ get currentCounter(): int { ... }
 ## See also
 
 - [Tolk vs FunC: in detail](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-detail)
+
+<Feedback />
+

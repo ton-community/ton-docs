@@ -1,35 +1,33 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Whitepapers
 
-This section presents the original documentation written by Dr. Nikolai Durov, which comprehensively describes all parts of TON.
+This section contains the original documentation written by _Dr. Nikolai Durov_, providing a comprehensive overview of all aspects of TON.
+
 
 ## Original documentation
 
 :::info
-Please note that here and later the code, comments and/or documentation may contain parameters, methods and definitions of “gram”, “nanogram”, etc, that are a legacy of the original TON code, developed by Telegram. Gram cryptocurrency was never issued. The currency of TON is Toncoin and the currency of TON testnet is Test Toncoin.
+The code, comments, and documentation may reference "gram" and "nanogram." These are remnants of the original TON code developed by Telegram. Gram cryptocurrency was never issued. The official currency of TON is Toncoin, while the currency of the TON Testnet is Test Toncoin.
 :::
 
-* [TON Whitepaper](https://docs.ton.org/ton.pdf)
 
-  TON Whitepaper – a general description of TON(The Open Network) Blockchain.
 
-* [TON Virtual Machine](https://docs.ton.org/tvm.pdf)
+* [TON Whitepaper](https://docs.ton.org/ton.pdf) - an overview of the TON (The Open Network) Blockchain.
 
-  TON Virtual Machine description (may include outdated information on OP Codes, actual list in [TVM Instruction](/v3/documentation/tvm/tvm-overview) section).
+* [TON Virtual Machine](https://docs.ton.org/tvm.pdf) description may contain outdated opcode information; the current list is available in the [TVM instruction](/v3/documentation/tvm/tvm-overview)section.
 
-* [TON Blockchain](https://docs.ton.org/tblkch.pdf)
+* [TON Blockchain](https://docs.ton.org/tblkch.pdf) description, which may contain outdated information.
 
-  Telegram Open Network Blockchain description (may include outdated information).
-
-* [Catchain Consensus Protocol](https://docs.ton.org/catchain.pdf)
-
-  Description of the Byzantine Fault Tolerant (BFT) Consensus protocol employed by TON Blockchain while creating new blocks.
+* [Catchain Consensus Protocol](https://docs.ton.org/catchain.pdf) – an explanation of the Byzantine Fault Tolerant (BFT) consensus protocol utilized by the TON Blockchain for block creation.
   
-* [Fift Documentation](https://docs.ton.org/fiftbase.pdf)
+* [Fift Documentation](https://docs.ton.org/fiftbase.pdf) – a guide to the Fift programming language and its application within TON.
 
-  Description of the Fift language and how to use it in TON.
 
 ## Translations
+- [TON Whitepapers in Russian](https://github.com/Korolyow/TON_docs_ru) – a community-created Russian version of the TON Whitepapers. The TON Foundation cannot guarantee the quality of the translation. 
+- [TON Whitepapers in Traditional Chinese](https://github.com/awesome-doge/TON_Paper/blob/main/zh_ton.pdf) – a community-created Traditional Chinese version of the TON Whitepapers. The TON Foundation cannot guarantee the quality of the translation. 
+- [TON Whitepapers in Simplified Chinese](https://github.com/kojhliang/Ton_White_Paper_SC/blob/main/Ton%E5%8C%BA%E5%9D%97%E9%93%BE%E7%99%BD%E7%9A%AE%E4%B9%A6_%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E7%89%88.pdf) – a community-created Simplified Chinese version of the TON Whitepapers. The TON Foundation cannot guarantee the quality of the translation.
 
-* **\[RU]** [korolyow/ton_docs_ru](https://github.com/Korolyow/TON_docs_ru) — TON Whitepapers in Russian. (_this version made by community, TON Foundation can't guarantee quality of translation_)
-* **\[Traditional CN]** [awesome-doge/the-open-network-whitepaper](https://github.com/awesome-doge/TON_Paper/blob/main/zh_ton.pdf) — TON Whitepapers in Traditional Chinese. (_made by community, TON Foundation can't guarantee quality of translation_)
-* **\[Simplified CN]** [kojhliang/Ton_White_Paper_SC](https://github.com/kojhliang/Ton_White_Paper_SC/blob/main/Ton%E5%8C%BA%E5%9D%97%E9%93%BE%E7%99%BD%E7%9A%AE%E4%B9%A6_%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E7%89%88.pdf) — TON Whitepapers in Simplified Chinese. (_made by community, TON Foundation can't guarantee quality of translation_)  
+<Feedback />
+
