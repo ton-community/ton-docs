@@ -314,11 +314,24 @@
     "zerostate",
     "decentralised",
     "colour",
-    "analyse"
+    "analyse",
     "ensurepip",
     "Buildx",
     "underperforming",
-    "blackhole"
+    "blackhole",
+    "NVME",
+    "Gbit",
+    "Mbit",
+    "tulpn",
+    "Gbps",
+    "xlarge",
+    "adduser",
+    "usermod",
+    "mytonctrl",
+    "liteservers",
+    "liteserver",
+    "mytonctrl",
+    "mytoncore"
   ],
   "ignoreRegExpList": [
     "\\(#.*\\)",
