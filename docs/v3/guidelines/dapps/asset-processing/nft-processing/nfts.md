@@ -125,7 +125,7 @@ The process varies based on whether the collection is ordered or unordered.
 
 ### Ordered collections
 Retrieving all NFTs in an ordered collection is relatively simple, since the number of NFTs to retrieve is already known and their addresses are easy to obtain. To complete this process, you need to perform the following steps in this order:
-1. Call the `get_collection_data` method using the TonCenter API on the collection contract and retrieve the `next_item_index` value from the response.
+1. Call the `get_collection_data` method using the Ton Center API on the collection contract and retrieve the `next_item_index` value from the response.
 2. Use the `get_nft_address_by_index` method, passing in the `i` index value (initially set to 0) to retrieve the address of the first NFT in the collection.
 3. Retrieve the NFT item data using the address obtained in the previous step. Then check that the initial NFT collection smart contract matches the NFT collection smart contract reported by the NFT item itself (to ensure that the collection has not appropriated another user's NFT smart contract).
 4. Call the `get_nft_content` method with `i` and `individual_content` from the previous step.
