@@ -23,6 +23,7 @@ module.exports = [
           'v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview',
           'v3/guidelines/quick-start/developing-smart-contracts/storage-and-get-methods',
           'v3/guidelines/quick-start/developing-smart-contracts/processing-messages',
+          'v3/guidelines/quick-start/developing-smart-contracts/tact-implementation',
           'v3/guidelines/quick-start/developing-smart-contracts/deploying-to-network'
         ],
       }
