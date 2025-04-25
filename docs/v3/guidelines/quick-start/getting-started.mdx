@@ -3,7 +3,7 @@ import MnemonicGenerator from "@site/src/components/MnemonicGenerator";
 
 # Getting started
 
-Welcome to the TON Quick Start Guide! This guide will give you a starting point for further research into TON concepts and basic practical experience in developing applications with TON Ecosystem.
+Welcome to the TON Quick start guide! This guide will give you a starting point for further research into TON concepts and basic practical experience in developing applications with TON Ecosystem.
 
 ## Prerequisites
 
@@ -12,17 +12,17 @@ Welcome to the TON Quick Start Guide! This guide will give you a starting point 
 
 > **Note**: We will provide a short explanation of core concepts during the guide, but if you prefer a more theoretical approach, you can check out the core concepts of [TON Blockchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/) first.
 
-## What You'll Learn
+## What you'll learn
 
-- Interact with TON Ecosystem: Wallets and Explorers.
+- Interact with TON Ecosystem: wallets and explorers.
 - Set up the development environment: use the Blueprint SDK for developing `smart contracts` using the `FunC`, `Tact`, and `Tolk` programming languages.
 - Send transactions and read from TON Blockchain using your preferred programming language and available `SDKs`.
 - Core concepts of TON Blockchain: `messages`, `smart contracts`, `addresses`, etc.
-- Basic templates ready for implementing your project logic.
+- Basic templates are ready to implement your project logic.
 
 ## Concept of smart contract
 
-You can think of smart contracts in TON as programs running on the blockchain, following the well-known behavioral concept of the [Actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor/) model.
+You can think of smart contracts in TON as programs running on the blockchain, following the well-known behavioral concept of the [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor/) model.
 
 :::info
 In contrast to some other blockchains, where you can call other contract codes synchronously, a smart contract in TON is a standalone entity that communicates with other smart contracts on an equal basis by sending asynchronous messages between them.
@@ -38,7 +38,7 @@ The available interfaces of a smart contract are:
 - Receiving **`external messages`** from outside the blockchain.
 - Receiving **`get methods`** requests from outside the blockchain.
 
-In contrast to `internal` and `external` messages, `get methods` are not considered a **transaction**. These are special functions of the smart contract that cannot change the contract's internal state or perform any other action except querying specific data from the contract's state.
+In contrast to `internal` and `external` messages, `get methods` are not considered a **transaction**. They are special functions of the smart contract that cannot change the contract's internal state or perform any other action except querying specific data from the contract's state.
 
 :::info
 Contrary to what might seem intuitive, invoking `get methods` from other contracts **is not possible**.
@@ -46,7 +46,7 @@ Contrary to what might seem intuitive, invoking `get methods` from other contrac
 
 ## Interacting with TON Ecosystem
 
-Before we start our journey to becoming a TON developer, we should become advanced users of TON! Let's create your own `wallet`, send a few transactions, and see how our actions are reflected on the blockchain using `explorers`.
+Before we start our journey to becoming TON developers, we should become advanced users of TON! Let's create your own `wallet`, send a few transactions, and see how our actions are reflected on the blockchain using `explorers`.
 
 ### Step 1: Create a new wallet using an app
 
@@ -60,9 +60,9 @@ In TON, there are two different networks called `Mainnet` and `Testnet`, each wi
 
 #### Getting funds
 
-Transactions in TON always require some amount of funds, as executing smart contract code requires a [fee](/v3/documentation/smart-contracts/transaction-fees/fees/) payment. TON basic transactions are very cheap—about 1 cent per transaction. Getting the equivalent of $5 worth of [Toncoin](/v3/documentation/dapps/defi/coins/) will be enough for hundreds of them. Here’s how you can get them:
+Transactions in TON always require some amount of funds, as executing a smart contract code requires a [fee](/v3/documentation/smart-contracts/transaction-fees/fees/) payment. TON basic transactions are very cheap—about 1 cent per transaction. Getting the equivalent of $5 worth of [Toncoin](/v3/documentation/dapps/defi/coins/) will be enough for hundreds of them. Here’s how you can get them:
 
-- For `Mainnet`, you can get `Toncoins` by simply pressing the buy button in the user interface or asking someone to send them to your `address`, which you can copy from the wallet app, usually located near your balance.
+- For `Mainnet`, you can get `Toncoins` by simply pressing the buy button in the user interface or asking someone to send them to your `address`. You can copy the address from the wallet app, which is usually located near your balance.
 
 :::warning
 Don't worry, sharing your `address` is **totally safe**, unless you don't want it to be associated with you.
@@ -70,7 +70,7 @@ Don't worry, sharing your `address` is **totally safe**, unless you don't want i
 
 - For the `Testnet` version, you can request funds from the [Testgiver Ton Bot](https://t.me/testgiver_ton_bot/) **completely for free**! After a short wait, you will receive 2 `Toncoins` that will appear in your wallet app.
 
-### Step 3: Creating a testnet wallet
+### Step 3: Creating Testnet wallet
 
 If you decide to use the `Testnet` version, you can do so by following the guide below.
 
@@ -82,7 +82,7 @@ To create your first Testnet wallet in Tonkeeper, you should obtain a mnemonic u
 
 #### Creating wallet
 
-To create a Testnet wallet, click *`Wallet`* -> *`Add Wallet`* -> *`TestnetAccount`*. Then import the seed phrase generated in the previous step.
+To create Testnet wallet, click *`Wallet`* -> *`Add Wallet`* -> *`TestnetAccount`*. Then, import the seed phrase generated in the previous step.
 
 <div style={{display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap', marginBottom: '30px'}}>
   <br/>
@@ -100,12 +100,12 @@ To create a Testnet wallet, click *`Wallet`* -> *`Add Wallet`* -> *`TestnetAccou
 
 ### Step 4: Exploring TON Blockchain
 
-Congratulations! We’ve created our first wallet and received some funds in it. Now let's take a look at how our actions are reflected in the blockchain. We can do this by using various [explorers](https://ton.app/explorers/).
+Congratulations! We’ve created our first wallet and received some funds in it. Now, let's take a look at how our actions are reflected in the blockchain. We can do this by using various [explorers](https://ton.app/explorers/).
 
 An `explorer` is a tool that allows you to query data from the chain, investigate TON `smart contracts`, and view transactions. For our examples, we are going to use [Tonviewer](https://tonviewer.com/).
 
 :::tip
-Note that when using the `Testnet`, you should manually change the explorer mode to the `Testnet` version. Don't forget that these are different networks, not sharing any transactions or smart contracts. Therefore, your `Testnet` wallet will not be visible in `Mainnet` mode and vice versa.
+Note that when using the `Testnet`, you should manually change the explorer mode to the `Testnet` version. Don't forget that these are different networks that do not share any transactions or smart contracts. Therefore, your `Testnet` wallet will not be visible in `Mainnet` mode and vice versa.
 :::
 
 Let's take a look at our newly created wallet using the `explorer`: copy your wallet address from the app and insert it into the search bar of the explorer like this:
@@ -118,7 +118,7 @@ Let's take a look at our newly created wallet using the `explorer`: copy your wa
 
 First, let's examine the common [address state](/v3/documentation/smart-contracts/addresses/#addresses-state/) of our smart contract:
 
-- `Nonexisting`: If you haven't received funds to your `address` yet, you will see the default state for any address that has not been used before and therefore has no data.
+- `Nonexisting`: If you haven't received funds to your `address` yet, you will see the default state for any address that has not been used before and, therefore, has no data.
 
 <div style={{marginBottom: '30px'}}>
   <img src="/img/tutorials/quick-start/nonexist.png" alt="Screenshot of nonexistent wallet state"/>
@@ -163,7 +163,7 @@ And here we are — our wallet contract is deployed and ready to use. Let's exam
 ## Next steps:
 
 - Try experimenting with the `wallet app` and `wallet smart contract`: create another wallet contract in your wallet app and try sending transactions between them.
-- Continue to [Blockchain Interaction](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network/) if you want to learn how to interact with `smart contracts` from outside the blockchain.
+- Continue to [Blockchain Interaction](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network/) if you want to learn how to interact with smart contracts outside the blockchain.
 - Or dive into [Developing Smart Contracts](/v3/guidelines/quick-start/developing-smart-contracts/setup-environment/) to learn how to develop `smart contracts` yourself!
 
 **Happy creating on TON!**

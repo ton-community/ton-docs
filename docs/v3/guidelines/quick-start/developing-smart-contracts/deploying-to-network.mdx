@@ -14,7 +14,7 @@ The address of a smart contract is a hash of the aggregated initial code and dat
 
 ### You already know the address
 
-In TON, any address that doesn't have any data is considered in the `nonexistent` state. Nevertheless, when we created a wallet using the wallet app in the [Getting Started](/v3/guidelines/quick-start/getting-started) section, we were still able to get the address of our **future** wallet smart contract from the wallet app before its deployment and examine it in the explorer.
+In TON, any address that doesn't have any data is considered in the `nonexistent` state. Nevertheless, when we created a wallet using the wallet app in the [Getting started](/v3/guidelines/quick-start/getting-started) section, we were still able to get the address of our **future** wallet smart contract from the wallet app before its deployment and examine it in the explorer.
 
 The reason behind this is that creating your **private** and **public** key pair through a **mnemonic phrase**, where the second key is part of the initial data of the smart contract, makes the `state_init` of our contract fully determined:
 - **code** is one of the standard wallet implementations, like `v5r1`.
@@ -24,7 +24,7 @@ This makes it possible to calculate the future wallet smart contract address.
 
 ### Magic storage member
 
-In previous steps, we deliberately didn't explain the purpose of `ctxID` and `ID` stored in our smart contract's state, and why they remained untouched in all the smart contract functionality. Now, their purpose should start to become clearer.
+In previous steps, we deliberately didn't explain the purpose of `ctxID` and `ID` stored in our smart contract's state and why they remained untouched in all the smart contract functionality. Now, their purpose should start to become clearer.
 
 Since we can't deploy a smart contract with the same `state_init`, the only way to provide the same initial code and **"same"** initial data is to create a separate field in it, ensuring additional uniqueness. This, in the case of a wallet, gives you the opportunity to have the same key pair for several wallet smart contracts.
 
@@ -43,14 +43,14 @@ init(id: Int, owner: Address) {
 If we remove the `id` field from its initial storage, we can ensure that **only one** `CounterInternal` smart contract can exist for a particular owner.
 
 :::info Tokens
-This mechanism plays a crucial role in [Jetton Processing](/v3/guidelines/dapps/asset-processing/jettons/). Each non-native (jetton) token requires its own `Jetton Wallet` for a particular owner and therefore provides a calculable address for it, creating a **star scheme** with the basic wallet in the center.
+This mechanism plays a crucial role in [Jetton Processing](/v3/guidelines/dapps/asset-processing/jettons/). Each non-native (jetton) token requires its own `Jetton Wallet` for a particular owner and, therefore, provides a calculable address for it, creating a **star scheme** with the basic wallet in the center.
 :::
 
 ## Implementation
 
 Now that our smart contracts are fully tested, we are ready to deploy them to TON. In `Blueprint SDK`, this process is the same for both `Mainnet` and `Testnet` and for any of the presented languages in the guide: `FunC`, `Tact`, or `Tolk`.
 
-### Step 1: Update deployment script
+### Step 1: update the deployment script
 
 Deployment scripts rely on the same wrappers that you have used in testing scripts. We will use one common script to deploy both of the previously deployed smart contracts. Update `deployHelloWorld.ts` with this code:
 
@@ -96,7 +96,7 @@ export async function run(provider: NetworkProvider) {
 }
 ```
 
-### Step 2: Run deploy script
+### Step 2: run deploy script
 
 You can run the script by entering the following command:
 
@@ -104,7 +104,7 @@ You can run the script by entering the following command:
 npx blueprint run # deployHelloWorld # optionally directly pass script
 ```
 
-### Step 3: Choose network
+### Step 3: choose network
 
 After that, you will see an interactive menu allowing you to choose a network:
 
@@ -119,7 +119,7 @@ After that, you will see an interactive menu allowing you to choose a network:
 Before deployment to the `Mainnet`, ensure that your smart contracts correspond to [Security Measures](/v3/guidelines/smart-contracts/security/overview/). As we said before, the `HelloWorld` smart contract **doesn't**.
 :::
 
-### Step 4: Choose wallet app
+### Step 4: choose wallet app
 
 Next, choose the way to access your wallet. The easiest way to do that is using [TON Connect](/v3/guidelines/ton-connect/overview/) for the most popular wallet apps: `TonKeeper`, `MyTonWallet`, or `Tonhub`.
 
@@ -139,7 +139,7 @@ Finally, scan the QR code in the terminal through your wallet app and connect th
 
 You will receive a transaction request in your wallet app each time your code requires currency for a transaction.
 
-### Step 5: Observe your smart contract in network
+### Step 5: observe your smart contract in network
 
 After confirming the request in your wallet and awaiting deployment, you will see a corresponding message with a reference to your newly deployed smart contract view in the explorer:
 

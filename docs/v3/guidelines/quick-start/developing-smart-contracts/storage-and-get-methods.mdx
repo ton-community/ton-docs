@@ -17,7 +17,7 @@ Almost all smart contracts need to store their `data` between transactions. This
 <TabItem value="FunC" label="FunC">
 There are two main instructions that provide access to smart contract storage:
 
- - `get_data()` returning current storage cell.
+ - `get_data()` returning the current storage cell.
  - `set_data()` setting storage cell.
 
 </TabItem>
@@ -54,7 +54,7 @@ interface Cell {
 
 Let's modify our smart contract by following the standard steps described in the previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview/) section.
 
-### Step 1: Edit smart contract code
+### Step 1: edit smart contract code
 
 If manually serializing and deserializing the storage cell becomes inconvenient, a common practice is to define two wrapper methods that handle this logic. If you haven't modified the smart contract code, it should include the following lines:
 
@@ -121,7 +121,7 @@ Rather than initializing global variables, we'll:
 2. Retrieve them using `(members...) = get_data()`
 3. Move the global variables `ctx_id` and `ctx_counter` into method bodies
 
-Also lets add an additional **256-bit integer** to our storage. The modified implementation should appear as follows:
+Also let's add an additional **256-bit integer** to our storage. The modified implementation should appear as follows:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -229,7 +229,7 @@ get get_counters(): (int, int) {
 </TabItem>
 </Tabs>
 
-And that's all! In practice, all **get methods** follow this straightforward pattern and require no additional complexity. Remember you can ignore return values using the `_` placeholder syntax.
+And that's all! In practice, all **get methods** follow this straightforward pattern and require no additional complexity. Remember, you can ignore return values using the `_` placeholder syntax.
 
 Here's the final smart contract implementation:
 <Tabs groupId="language">
@@ -395,7 +395,7 @@ Build script running, compiling HelloWorld
 ✅ Wrote compilation artifact to build/HelloWorld.compiled.json
 ```
 
-### Step 2: Update wrapper
+### Step 2: update wrapper
 
 Next, we'll update our wrapper class to align with the new storage layout and `get method`. We need to:
 
@@ -434,7 +434,7 @@ async getCounters(provider: ContractProvider) : Promise<[number, bigint]> {
 }
 ```
 
-### Step 3: Update tests
+### Step 3: update tests
 
 Finally, let's test the new functionality using our updated wrapper:
 

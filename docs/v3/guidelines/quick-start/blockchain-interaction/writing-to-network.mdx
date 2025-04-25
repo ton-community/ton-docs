@@ -6,7 +6,7 @@ In the previous section, you learned how to **read data** from the TON Blockchai
 
 ## Introduction
 
-This guide will walk you through writing data to the TON Blockchain. You'll learn how to:
+This guide will walk you through writing data to TON Blockchain. You'll learn how to:
 - Make transactions
 - Transfer TON/NFTs
 
@@ -19,7 +19,7 @@ node -v
 npm -v
 ```
 
-Version of `node` and `npm` should be at least `v20` and `v10` correspondingly.
+Versions of `node` and `npm` should be at least `v20` and `v10` correspondingly.
 
 ## Project setup
 
@@ -46,7 +46,7 @@ npx ts-node script.ts
 
 ## Sending TON
 
-The simplest interaction between two accounts in the TON Blockchain is a TON transfer. The process involves preparing and signing a transaction, and then sending it to the blockchain.
+The simplest interaction between two accounts in TON Blockchain is a TON transfer. The process involves preparing and signing a transaction and then sending it to the blockchain.
 
 A common transfer would look like this:
 
@@ -114,7 +114,7 @@ async function main() {
 main();
 ```
 
-Using `API_KEY` in this case allows you to access TON functionality through the `endpoint`. By running this script, we authenticate to our wallet through a `public/private key` pair generated from the `mnemonic phrase`. After preparing a transaction, we send it to TON, resulting in a message that the wallet sends to itself with the *'Hello from wallet!'* message.
+Using `API_KEY` in this case, allows you to access TON functionality through the `endpoint`. By running this script, we authenticate to our wallet through a `public/private key` pair generated from the `mnemonic phrase`. After preparing a transaction, we send it to TON, resulting in a message that the wallet sends to itself with the *'Hello from wallet!'* message.
 
 :::caution Advanced Level
 In most scenarios, `SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS` will work, but if you want a deeper understanding, continue reading in the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook/).
@@ -127,7 +127,7 @@ Run this example using the following command:
 npx ts-node 1-send-ton.ts
 ```
 
-#### Expected Result
+#### Expected result
 
 Navigate to [Tonviewer](https://testnet.tonviewer.com/) and paste your address into the search bar. You should see a TON transfer with the *'Hello from wallet!'* comment.
 
