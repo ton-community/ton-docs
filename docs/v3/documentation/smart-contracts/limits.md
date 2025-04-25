@@ -71,13 +71,13 @@ This document contains the current limits and metrics used in the TON BlockChain
 | ---------------------- | ----------------------------------------------- | ----------- | ------ | ---------- |
 | mc_bit_price_ps        | Storage price for one bit for 65536 seconds     | 1000        | uint64 | config18   |
 | mc_cell_price_ps       | Storage price for one cell for 65536 seconds    | 500000      | uint64 | config18   |
-| mc_flat_gas_limit      | Gas below flat_gas_limit on masterchain         | 100         | uint64 | config20   |
-| mc_flat_gas_price      | VM launch cost on masterchain                   | 1000000     | uint64 | config20   |
-| mc_gas_price           | Gas price on masterchain                        | 655360000   | uint64 | config20   |
-| mc_special_gas_limit   | Special contract gas limit on masterchain       | 70000000    | uint64 | config20   |
-| mc_gas_limit           | Maximum gas per transaction on masterchain      | 1000000     | uint64 | config20   |
+| mc_flat_gas_limit      | Gas below flat_gas_limit on MasterChain         | 100         | uint64 | config20   |
+| mc_flat_gas_price      | VM launch cost on MasterChain                   | 1000000     | uint64 | config20   |
+| mc_gas_price           | Gas price on MasterChain                        | 655360000   | uint64 | config20   |
+| mc_special_gas_limit   | Special contract gas limit on MasterChain       | 70000000    | uint64 | config20   |
+| mc_gas_limit           | Maximum gas per transaction on MasterChain      | 1000000     | uint64 | config20   |
 | mc_gas_credit          | Gas credit for checking external messages       | 10000       | uint64 | config20   |
-| mc_block_gas_limit     | Maximum gas per masterchain block               | 2500000     | uint64 | config20   |
+| mc_block_gas_limit     | Maximum gas per MasterChain block               | 2500000     | uint64 | config20   |
 | mc_freeze_due_limit    | Storage fees for contract freezing              | 100000000   | uint64 | config20   |
 | mc_delete_due_limit    | Storage fees for contract deletion              | 1000000000  | uint64 | config20   |
 | mc_bytes_underload     | Block size limit for underload state            | 131072      | uint32 | config22   |
@@ -95,17 +95,17 @@ This document contains the current limits and metrics used in the TON BlockChain
 | mc_lt_delta_underload  | Logical time delta limit for underload state    | 1000        | uint32 | config22   |
 | mc_lt_delta_soft_limit | Logical time delta soft limit                   | 5000        | uint32 | config22   |
 | mc_lt_delta_hard_limit | Absolute maximum logical time delta             | 10000       | uint32 | config22   |
-| mc_catchain_lifetime   | Masterchain catchain groups lifetime in seconds | 250         | uint32 | config28   |
+| mc_catchain_lifetime   | MasterChain catchain groups lifetime in seconds | 250         | uint32 | config28   |
 
 ## Validator parameters
 
 | Name                      | Description                                         | Value      | Type   | Defined in |
 | ------------------------- | --------------------------------------------------- | ---------- | ------ | ---------- |
-| shard_catchain_lifetime   | Shardchain catchain groups lifetime in seconds      | 250        | uint32 | config28   |
-| shard_validators_lifetime | Shardchain validators group lifetime in seconds     | 1000       | uint32 | config28   |
-| shard_validators_num      | Number of validators in shardchain validation group | 23         | uint32 | config28   |
+| shard_catchain_lifetime   | ShardChain catchain groups lifetime in seconds      | 250        | uint32 | config28   |
+| shard_validators_lifetime | ShardChain validators group lifetime in seconds     | 1000       | uint32 | config28   |
+| shard_validators_num      | Number of validators in ShardChain validation group | 23         | uint32 | config28   |
 | masterchain_block_fee     | Reward for block creation                           | 1700000000 | Grams  | config14   |
-| basechain_block_fee       | Basechain block fee                                 | 1000000000 | Grams  | config14   |
+| basechain_block_fee       | BaseChain block fee                                 | 1000000000 | Grams  | config14   |
 
 ## Time parameters
 
