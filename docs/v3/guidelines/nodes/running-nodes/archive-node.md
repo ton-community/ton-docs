@@ -258,7 +258,7 @@ installer set_node_argument --archive-ttl 86400
 
 ## Support
 
-Contact technical support at [@mytonctrl_help](https://t.me/mytonctrl_help).
+Contact technical support at [@ton_node_help](https://t.me/ton_node_help).
 
 ## See also
 
