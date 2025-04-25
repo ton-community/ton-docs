@@ -1,42 +1,40 @@
-import Feedback from '@site/src/components/Feedback';
-
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Feedback from "@site/src/components/Feedback";
 
-# Processing Messages
+# Processing messages
 
-> **Summary:** In previous steps we modified our smart contract interaction with `storage`, `get methods` and learned basic smart contract development flow.
+> **Summary:** In previous steps, we modified our smart contract interaction with `storage`, `get methods`, and learned the basic smart contract development flow.
 
-Now we are ready to move on to the main functionality of smart contracts - **sending and receiving messages**. In TON messages not only used for sending currency, but also as data-exchange mechanism between smart contracts making them crucial for smart contract development.
-
+Now, we are ready to move on to the main functionality of smart contracts — **sending and receiving messages**. In TON, messages are used not only for sending currency but also as a data-exchange mechanism between smart contracts, making them crucial for smart contract development.
 
 :::tip
-If you are stuck on some of the examples you can find original template project with all modifications performed during this guide [here](https://github.com/ton-community/ton-onboarding-sandbox/tree/main/quick-start/smart-contracts/Example/).
+If you are stuck on some of the examples, you can find the original template project with all modifications performed during this guide [here](https://github.com/ton-community/onboarding-sandbox/tree/main/quick-start/smart-contracts/Example/contracts).
 :::
 
 ---
 
 ## Internal messages
 
-Before we proceed to implementation let's briefly describe main ways and patterns that we can use to process internal messages.
+Before we proceed to implementation, let's briefly describe the main ways and patterns that we can use to process internal messages.
 
 ### Actors and roles
 
-Since TON implements [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor/) model it's natural to think about smart contracts relations in terms of `roles`, determining who can access smart contract functionality or not. The most common examples of roles are:
+Since TON implements the [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor/) model, it's natural to think about smart contract relations in terms of `roles`, determining who can access smart contract functionality or not. The most common examples of roles are:
 
- - `anyone`: any contract that don't have distinct role.
- - `owner`: contract that has exclusive access to some crucial parts of functionality.
+- `anyone`: any contract that doesn't have a distinct role.
+- `owner`: a contract that has exclusive access to some crucial parts of the functionality.
 
-Let's examine `recv_internal` function signature to understand how we could use that:
+Let's examine the `recv_internal` function signature to understand how we could use that:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
 ```func
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure
 ```
- - `my_balance` - balance of smart contract at the beggining of the transaction.
- - `msg_value` - funds recieved with message.
- - `in_msg_full` - `cell` containing "header" fields of message.
+ - `my_balance` - smart-contract balance at the beggining of the transaction.
+ - `msg_value` - funds received with message.
+ - `in_msg_full` - `cell` containing "header" fields of the message.
  - `in_msg_body` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containg payload of the message.
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
@@ -50,11 +48,11 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 </TabItem>
 </Tabs>
 
-:::info
-You can find comprehensive description of sending messages in this [section](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout/).
+:::info  
+You can find a comprehensive description of sending messages in this [section](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout/).  
 :::
 
-What we specifically are interested in is the source address of message that we could extract from `msg_full` cell, by obtaining that address and comparing to stored one, that we previously saved, for example, during deployment, we can open crucial part of our smart contract functionality. Common approach looks like this:
+What we are specifically interested in is the source address of the message, which we can extract from the `msg_full` cell. By obtaining that address and comparing it to a stored one — we can conditionally allow access to crucial parts of our smart contract functionality. A common approach looks like this:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -113,7 +111,7 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 
 ### Operations
 
-Common pattern in TON contracts is to include a **32-bit operation code** in message bodies which tells your contract what action to perform:
+A common pattern in TON contracts is to include a **32-bit operation code** in message bodies, which tells your contract what action to perform:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -178,27 +176,25 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 </TabItem>
 </Tabs>
 
+By combining both of these patterns, you can achieve a comprehensive description of your smart contract's systems, ensuring secure interaction between them and unleashing the full potential of the TON actors model.
 
-By combining both of these patterns you can achieve a comprehensive description of your smart contract's systems ensuring secure interaction between them and unleash full potential of TON actors model.
+## External messages
 
+`External messages` are your only way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because, in most cases, you don't want external entry points to be accessible to anyone except you. If this is all the functionality that you want from the external section, the standard way is to delegate this responsibility to a separate actor - [wallet](v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets/), which is practically the main reason they were designed for.
 
-## External Messages
-
-`External messages` are your only way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because in most cases you don't want external entry points to be accessible to anyone except you. If this is all functionality that you want from external section - standard way is to delegate this responsibility to separate actor - [wallet](v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets/), which is practically the main reason they were designed for.
-
-Developing external endpoint includes several standard [approuches](/v3/documentation/smart-contracts/message-management/external-messages/) and [security measures](/v3/guidelines/smart-contracts/security/overview/) that might be overwhelming at this point. Therefore in this guide we will realize incrementing previously added to `hello_world` contract `ctxCounterExt` number and add send message to out `Tact` contract.
+Developing external endpoints includes several standard [approaches](/v3/documentation/smart-contracts/message-management/external-messages/) and [security measures](/v3/guidelines/smart-contracts/security/overview/) that might be overwhelming at this point. Therefore, in this guide, we will implement incrementing the previously added `ctxCounterExt` number and add a send message to our `Tact` contract.
 
 :::danger
-This implementation is **unsafe** and may lead to loosing your contract funds. Don't deploy it to `Mainnet`, especially with high smart contract balance.
+This implementation is **unsafe** and may lead to losing your contract funds. Don't deploy it to `Mainnet`, especially with a high smart contract balance.
 :::
 
 ## Implementation
 
-Let's modify our smart contract to recieve external messages folowing standard steps decsribed in previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview/) section.
+Let's modify our smart contract to receive external messages following the standard steps described in the previous [Blueprint SDK overview](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview/) section.
 
-### Step1 : Edit smart contract code
+### Step 1: edit smart contract code
 
-Add `recv_external` function to `HelloWorld` smart contract:
+Add the `recv_external` function to the `HelloWorld` smart contract:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -263,16 +259,15 @@ fun onExternalMessage(inMsg: slice) {
 </TabItem>
 </Tabs>
 
-This function upon recieving an external message will increment our `ctxCounter` and also send an internal message to specified address with `increase` operation that we will use to increment counter on our `CounterInternal` smart contract.
+This function, upon receiving an external message, will increment our `ctxCounterExt` and also send an internal message to the specified address with the `increase` operation, which we will use to increment the counter on our `CounterInternal` smart contract.
 
-
-Verify that smart contract code is correct by running:
+Verify that the smart contract code is correct by running:
 
 ```bash
 npx blueprint build
 ```
 
-Expected should look like this:
+Expected output should look like this:
 
 ```bash
 ✅ Compiled successfully! Cell BOC result:
@@ -286,9 +281,9 @@ Expected should look like this:
 ✅ Wrote compilation artifact to build/HelloWorld.compiled.json
 ```
 
-### Step 2: Update Wrapper 
+### Step 2: update wrapper
 
-And add wrapper method to call it through our wrapper class for sending external message:
+Add a wrapper method to call it through our wrapper class for sending external messages:
 
 ```typescript title="/wrappers/HelloWorld.ts"
 async sendExternalIncrease(
@@ -311,9 +306,9 @@ async sendExternalIncrease(
 }
 ```
 
-### Step 3: Update test
+### Step 3: update test
 
-Update test to ensure that `HelloWorld` contract recieved external message, sended internal message to `CounterInternal` contract and both updated their counters:
+Update the test to ensure that the `HelloWorld` contract received the external message, sent an internal message to the `CounterInternal` contract, and both updated their counters:
 
 ```typescript title="/tests/HelloWorld.spec.ts"
 import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
@@ -413,18 +408,18 @@ describe('HelloWorld', () => {
 });
 ```
 
-This test describes common trascantion flow of any `multi-contract` system: 
- 1. Send external message to toggle smart contracts logic from outside the blockchain.
- 2. Provoke one or more sending of internal messages to other contracts.
- 3. Upon recieving an internal message change contract state and repeat **step 2** if required.
+This test describes the common transaction flow of any `multi-contract` system:  
+1. Send an external message to toggle the smart contract logic from outside the blockchain.  
+2. Trigger one or more internal messages to be sent to other contracts.  
+3. Upon receiving an internal message, change the contract state and repeat **step 2** if required.
 
-Since resulting sequence of transactions might be overwhelming for understanding, it's a good practice to make a `sequence diagram` describing your system, here is an example of our case:
+Since the resulting sequence of transactions might be overwhelming for understanding, it's a good practice to create a `sequence diagram` describing your system. Here is an example of our case:
 
 <div style={{marginBottom: '30px'}} align="center">
   <img src="/img/tutorials/quick-start/multi-contract.png" alt="Multi-contract scheme"/>
 </div>
 
-Verify that all examples is correct by running test script:
+Verify that all examples are correct by running the test script:
 
 ```bash
 npx blueprint test
@@ -446,6 +441,4 @@ Time:        3.663 s, estimated 4 s
 Ran all test suites matching /HelloWorld/i.
 ```
 
-
 <Feedback />
-

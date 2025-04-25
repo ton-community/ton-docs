@@ -1,36 +1,36 @@
-import Feedback from '@site/src/components/Feedback';
-
+import Feedback from "@site/src/components/Feedback";
 import ThemedImage from "@theme/ThemedImage";
 
 # Reading from network
 
 ## Introduction
 
-This guide will walk you through reading data from the TON Blockchain. You'll learn how to:
+
+This guide will walk you through reading data from TON Blockchain. You'll learn how to:
 - Fetch account information
-- Call get methods
+- Call `get methods`
 - Retrieve account transactions
 
-By the end, you'll understand how to interact with [TON HTTP-based APIs](/v3/guidelines/dapps/apis-sdks/ton-http-apis/). Particularly, in this guide [TON Center](https://toncenter.com/) is used, a fast and reliable HTTP API for TON.
+By the end, you'll understand how to interact with [TON HTTP-based APIs](/v3/guidelines/dapps/apis-sdks/ton-http-apis/). In this guide, [TON Center](https://toncenter.com/) is used—a fast and reliable HTTP API for TON.
 
-## Setup environment
+## Set up environment
 
-First, visit installation pages and install [NodeJS and npm](https://nodejs.org/en/download/) for your OS. Check that installation is correct by running those commands:
+First, visit the installation pages and install [Node.js and npm](https://nodejs.org/en/download/) for your OS. Check that the installation is correct by running the following commands:
 
 ```bash
 node -v
 npm -v
 ```
 
-Version of `node` and `npm` should be at least `v20` and `v10` correspondingly.
+Versions of `node` and `npm` should be at least `v20` and `v10` correspondingly.
 
 ## Project setup
 
 Let's set up our project structure:
 
-1. Create a new directory for your project
-2. Initialize a Node.js project
-3. Install required dependencies
+1. Create a new directory for your project  
+2. Initialize a Node.js project  
+3. Install the required dependencies
 
 Run these commands in your terminal:
 
@@ -59,7 +59,7 @@ Account information includes the `balance`, `state`, `code`, and `data`.
 - `code`: The contract's code in raw format.
 - `data`: Serialized contract data stored in a [*Cell*](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage/).
 
-Account state may be obtained using [`getContractState`](https://testnet.toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get/) method.
+Account state may be obtained using the [`getContractState`](https://testnet.toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get/) method.
 
 #### Implementation
 
@@ -89,7 +89,7 @@ async function main() {
 main();
 ```
 
-Run this example using following command:
+Run this example using the following command:
 
 ```bash
 npx ts-node 1-get-account-state.ts
@@ -104,13 +104,11 @@ Data:  b5ee9c7241010101002...fd1e976824402aa67b98
 Code:  b5ee9c7241021401000...c9ed54696225e5
 ```
 
-
 ## Calling get methods
 
-Get methods are special functions in smart contracts that allow you to observe current state of smart contract. Their execution doesn't cost any fees and can't change smart contract storage.
+Get methods are special functions in smart contracts that allow you to observe the current state of a smart contract. Their execution doesn't cost any fees and can't change the smart contract's storage.
 
-Result of calling get method from TON HTTP API comes in *stack* format and may be deserialized one by one using `readNumber()` or similar function.
-
+The result of calling a get method from the TON HTTP API comes in *stack* format and may be deserialized one by one using `readNumber()` or a similar function.
 
 #### Implementation
 
@@ -146,7 +144,7 @@ async function main() {
 main();
 ```
 
-Run this example using following command:
+Run this example using the following command:
 
 ```bash
 npx ts-node 2-call-get-method.ts
@@ -159,16 +157,17 @@ npx ts-node 2-call-get-method.ts
 ```
 
 Get methods may also be called using Tonviewer:
-1. Navigate to [get methods section](https://testnet.tonviewer.com/kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy?section=method).
+
+1. Navigate to the [get methods section](https://testnet.tonviewer.com/kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy?section=method).
 2. Select `get_wallet_address`.
-3. Insert address from example *0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-* to slice section.
+3. Insert the address from the example *0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-* into the slice section.
 4. Press **Execute**.
 
-You will end up with same address you got from console.
+You will end up with the same address you got from the console.
 
 ### Using wrappers for simplicity
 
-Wrappers are classes that simplify interactions with smart contracts by turning complex blockchain operations into simple functions calls - instead of manually serializing cells and transactions, you can just call methods like `jettonMaster.getWalletAddress()` that already performs it for you. Here's an example of using a wrapper functionally equivalent to previous code snippet:
+Wrappers are classes that simplify interactions with smart contracts by turning complex blockchain operations into simple function calls. Instead of manually serializing cells and transactions, you can just call methods like `jettonMaster.getWalletAddress()` that already perform these tasks for you. Here's an example of using a wrapper functionally equivalent to the previous code snippet:
 
 ```typescript
 import { Address, JettonMaster, TonClient } from "@ton/ton";
@@ -194,14 +193,14 @@ main();
 
 ## Fetching account transactions
 
-Interaction within account on blockchain happens due to [messages and transactions](/v3/documentation/smart-contracts/message-management/messages-and-transactions/).
+Interaction within an account on the blockchain happens due to [messages and transactions](/v3/documentation/smart-contracts/message-management/messages-and-transactions/).
 
 ### What is a transaction?
 
 A transaction in TON consists of the following:
-- the incoming message that initially triggers the contract (special ways to trigger exist)
-- contract actions caused by the incoming message, such as an update to the contract's storage (optional)
-- outgoing messages generated and sent to other actors (optional)
+- The incoming message that initially triggers the contract (special ways to trigger exist)
+- Contract actions caused by the incoming message, such as an update to the contract's storage (optional)
+- Outgoing messages generated and sent to other actors (optional)
 
 <ThemedImage
   alt=""
@@ -214,7 +213,7 @@ A transaction in TON consists of the following:
 
 ### Key transaction fields
 
-Transaction obtained from API have the following structure:
+A transaction obtained from the API has the following structure:
 
 ```json5
 {
@@ -235,8 +234,6 @@ Transaction obtained from API have the following structure:
 - `utime`: The [UNIX timestamp](https://www.unixtimestamp.com/) of the transaction.
 - `in_msg`: The incoming [message](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-message/) that triggered the transaction.
 - `out_msgs`: Outgoing messages sent during the transaction.
-
-
 
 ### What is a message?
 
@@ -274,8 +271,7 @@ A message is a packet of data exchanged between actors (users, applications, or 
 - `source`: The address of the sender (the account that initiated the message).
 - `destination`: The address of the receiver (the account that will process the message).
 - `value`: The amount of TON (in nanoTON) attached to the message.
-- `msg_data`: Contains message body and state init.
-
+- `msg_data`: Contains the message body and state initialization.
 
 #### Implementation
 
@@ -328,8 +324,7 @@ Sender: EQBui16XCF61MSWauIDpVFbKAOJmjLHRxXvXeqiN9dYaIgjq
 ```
 
 :::info
-More complex example about traversing transactions graph may be found [here](https://docs.ton.org/v3/guidelines/dapps/asset-processing/payments-processing/#retrieve-incomingoutgoing-transactions).
+A more complex example of traversing transactions graph may be found [here](https://docs.ton.org/v3/guidelines/dapps/asset-processing/payments-processing/#retrieve-incomingoutgoing-transactions).
 :::
 
 <Feedback />
-

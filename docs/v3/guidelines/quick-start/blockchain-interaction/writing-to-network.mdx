@@ -1,5 +1,4 @@
-import Feedback from '@site/src/components/Feedback';
-
+import Feedback from "@site/src/components/Feedback";
 import ThemedImage from "@theme/ThemedImage";
 
 # Writing to the network
@@ -8,20 +7,20 @@ In the previous section, you learned how to **read data** from the TON Blockchai
 
 ## Introduction
 
-This guide will walk you through writing data from the TON Blockchain. You'll learn how to:
-- Make transaction
-- Transfer TON/NFT
+This guide will walk you through writing data to TON Blockchain. You'll learn how to:
+- Make transactions
+- Transfer TON/NFTs
 
-## Setup environment
+## Set up environment
 
-First, visit installation pages and install [NodeJS and npm](https://nodejs.org/en/download/) for your OS. Check that installation is correct by running those commands:
+First, visit the installation pages and install [Node.js and npm](https://nodejs.org/en/download/) for your OS. Check that the installation is correct by running the following commands:
 
 ```bash
 node -v
 npm -v
 ```
 
-Version of `node` and `npm` should be at least `v20` and `v10` correspondingly.
+Versions of `node` and `npm` should be at least `v20` and `v10` correspondingly.
 
 ## Project setup
 
@@ -29,7 +28,7 @@ Let's set up our project structure:
 
 1. Create a new directory for your project
 2. Initialize a Node.js project
-3. Install required dependencies
+3. Install the required dependencies
 
 Run these commands in your terminal:
 
@@ -48,7 +47,7 @@ npx ts-node script.ts
 
 ## Sending TON
 
-The simplest interaction between two accounts in TON Blockchain is a TON transfer. The process involves preparing and signing a transaction, and then sending it to the blockchain.
+The simplest interaction between two accounts in TON Blockchain is a TON transfer. The process involves preparing and signing a transaction and then sending it to the blockchain.
 
 A common transfer would look like this:
 
@@ -65,7 +64,7 @@ A common transfer would look like this:
 <br></br>
 
 :::caution
-Unlike in the [Reading from the Network](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network/) section, a Toncenter API key is mandatory in the following examples. It may be retrieved using [following guide](/v3/guidelines/dapps/apis-sdks/api-keys/).
+Unlike in the [Reading from the Network](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network/) section, a Toncenter API key is mandatory in the following examples. It may be retrieved using [the following guide](/v3/guidelines/dapps/apis-sdks/api-keys/).
 :::
 
 #### Implementation
@@ -90,7 +89,7 @@ async function main() {
   const { publicKey, secretKey } = await mnemonicToWalletKey(mnemonic);
 
   // Creating wallet depending on version (v5r1 or v4 or V3R2), uncomment which version do you have
-  const walletContract = WalletContractV5R1.create({ walletId: { networkGlobalId: -3 }, publicKey }); // networkGlobalId: -3 for testnet, -239 for mainnet
+  const walletContract = WalletContractV5R1.create({ walletId: { networkGlobalId: -3 }, publicKey }); // networkGlobalId: -3 for Testnet, -239 for Mainnet
   //const walletContract = WalletContractV4.create({ workchain: 0, publicKey });
   //const walletContract = WalletContractV3R2.create({ workchain: 0, publicKey });
 
@@ -116,13 +115,14 @@ async function main() {
 main();
 ```
 
-Using `API_KEY` in this case allows to have access to TON functionality by itself through `endpoint`. By running those script we authntificate to our wallet through `public/private key` pair generated through `mnemonic phrase` and, after preparing a transaction, send it TON, resulting in message that wallet sends to itself with *'Hello from wallet!'*  message.
+Using `API_KEY` in this case, allows you to access TON functionality through the `endpoint`. By running this script, we authenticate to our wallet through a `public/private key` pair generated from the `mnemonic phrase`. After preparing a transaction, we send it to TON, resulting in a message that the wallet sends to itself with the *'Hello from wallet!'* message.
 
 :::caution Advanced Level
 In most scenarios, `SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS` will work, but if you want a deeper understanding, continue reading in the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook/).
 :::
 
-Run this example using following command:
+
+Run this example using the following command:
 
 ```bash
 npx ts-node 1-send-ton.ts
@@ -130,20 +130,20 @@ npx ts-node 1-send-ton.ts
 
 #### Expected result
 
-Navigate to [Tonviewer](https://testnet.tonviewer.com/) and paste your address into search bar. You should see TON transfer with *'Hello from wallet!'* comment.
+Navigate to [Tonviewer](https://testnet.tonviewer.com/) and paste your address into the search bar. You should see a TON transfer with the *'Hello from wallet!'* comment.
 
 ## Sending NFTs
 
 [Non-fungible tokens](/v3/guidelines/dapps/asset-processing/nft-processing/nfts/) (NFTs) are assets like a piece of art, digital content, or video that have been tokenized via a blockchain. In TON, NFTs are represented via a collection of smart contracts:
-- **NFT Collection**: stores information about the NFT collection.
-- **NFT Item**: stores information about the NFT item that the user owns.
+- **NFT Collection**: Stores information about the NFT collection.
+- **NFT Item**: Stores information about the NFT item that the user owns.
 
-To send NFT we should first acquire one. The easiest way to do that is to create and deploy your own NFT through [TON Tools](https://ton-collection-edit.vercel.app/deploy-nft-single). Note that `owner` addresses of your NFT must be your wallet address to be able to perform operations on it.
+To send an NFT, we should first acquire one. The easiest way to do that is to create and deploy your own NFT through [TON Tools](https://ton-collection-edit.vercel.app/deploy-nft-single). Note that the `owner` addresses of your NFT must be your wallet address to be able to perform operations on it.
 
-Basic operation of [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) in TON is `transfer`. What is actually performed is changing adress of `owner` in NFT storage to `new owner`, which is address of another contract that is able to perform operations with `NFT Item` now.
+The basic operation of the [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) in TON is `transfer`. What is actually performed is changing the address of the `owner` in NFT storage to the `new owner`, which is the address of another contract that is now able to perform operations with the `NFT Item`.
 
 :::tip
-See [Actors and roles](/v3/guidelines/quick-start/developing-smart-contracts/processing-messages#actors-and-roles/) to get more conceptual description.
+See [Actors and Roles](/v3/guidelines/quick-start/developing-smart-contracts/processing-messages#actors-and-roles/) for a more conceptual description.
 :::
 
 #### Implementation
@@ -199,7 +199,7 @@ async function main() {
 main();
 ```
 
-Run this example using following command:
+Run this example using the following command:
 
 ```bash
 npx ts-node 2-send-nft.ts
@@ -207,7 +207,6 @@ npx ts-node 2-send-nft.ts
 
 #### Expected result
 
-Navigate to [Tonviewer](https://testnet.tonviewer.com/) and paste your address into search bar. You should see NFT transfer with *'Hello from NFT!'* comment.
+Navigate to [Tonviewer](https://testnet.tonviewer.com/) and paste your address into the search bar. You should see an NFT transfer with the *'Hello from NFT!'* comment.
 
 <Feedback />
-

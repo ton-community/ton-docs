@@ -1,3 +1,4 @@
+import Feedback from "@site/src/components/Feedback";
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -228,7 +229,7 @@ Expected output should look like this:
 ✅ Wrote compilation artifact to build/CounterInternal.compiled.json
 ```
 
-## Step 2: Update wrapper
+## Step 2: update wrapper
 
 [Wrappers](https://docs.tact-lang.org/book/compile/#wrap-ts) facilitate contract interaction from TypeScript. Unlike in FunC or Tolk, they are generated automatically during the build process:
 
@@ -236,7 +237,7 @@ Expected output should look like this:
 export * from '../build/CounterInternal/tact_CounterInternal';
 ```
 
-## Step 3: Updating tests
+## Step 3: updating tests
 
 Now let's ensure that our smart contract code fails when we try to send `add` message from non-owner:
  - Create `CounterInternal` with some owner.
@@ -404,3 +405,5 @@ Ran all test suites.
 ```
 
 ---
+
+<Feedback />
