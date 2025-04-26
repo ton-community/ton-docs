@@ -29,6 +29,13 @@ module.exports = [
       }
     ]
   },
+  {
+    type: 'category',
+    label: 'Transaction processing',
+    items: [
+      'v3/guidelines/transaction-processing/transaction-processing'
+    ],
+  },
   'v3/guidelines/get-started-with-ton',
   {
     type: 'category',
