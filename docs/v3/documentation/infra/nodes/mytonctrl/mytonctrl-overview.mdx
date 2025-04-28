@@ -1,4 +1,7 @@
-import Feedback from '@site/src/components/Feedback';
+import Feedback from "@site/src/components/Feedback";
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 # MyTonCtrl
 
@@ -9,6 +12,41 @@ To install and manage your own node, use the **MyTonCtrl** open-source tool deve
 [MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) is a console application that is a convenient wrapper for fift, lite-client, and validator-engine-console. It has been specifically developed to streamline the Linux operating system's wallet, domain, and validator management tasks.
 
 We are actively seeking feedback about the installation process. If you have any questions or suggestions, please [contact us](https://t.me/Alexgton).
+
+## Install the MyTonCtrl
+
+Download and execute the installation script from a **non-root** user account with **sudo** permissions:
+
+<Tabs groupId="operating-systems">
+  <TabItem value="ubuntu" label="Ubuntu">
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+sudo bash install.sh
+```
+
+  </TabItem>
+  <TabItem value={'debian'} label={'Debian'}>
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+su root -c 'bash install.sh'
+```
+
+  </TabItem>
+</Tabs>
+
+**Flags:**
+
+- `-d` - **mytonctrl** will download a [dump](https://dump.ton.org/) of the latest blockchain state, significantly reducing synchronization time.
+- `-c <path>` - Specify a non-public liteserver for synchronization (optional).
+- `-i` - Ignore minimum requirements; use this only if you test the compilation process without running a real node.
+- `-m` - Sett the mode either `validator` or `liteserver`.
+- `-t` - Disable telemetry.
+
+**To use testnet**, `-c` flag with the value `https://ton.org/testnet-global.config.json`.
+
+The default value for the `-c` flag is `https://ton-blockchain.github.io/global.config.json`, which is default configuration for the mainnet.
 
 ## General Commands
 
@@ -781,4 +819,3 @@ No args. Sets a password for the web admin interface, runs `python3 /usr/src/mtc
 - [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
 
 <Feedback />
-
