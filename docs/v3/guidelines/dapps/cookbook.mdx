@@ -502,7 +502,7 @@ Don't forget that the comment message in a snake cell has 32 zero bits (i.e., it
 
 ### How to calculate the user's jetton wallet address (offchain)?
 
-To calculate a user’s jetton wallet address, use the `get_wallet_address` method from the jetton master contract with the user's address. You can also call the master contract directly, or use the getWalletAddress method provided in the JettonMaster SDK.
+To calculate a user's jetton wallet address, use the `get_wallet_address` method from the jetton master contract with the user's address. You can also call the master contract directly, or use the getWalletAddress method provided in the JettonMaster SDK.
 
 :::info
 The `JettonMaster` in `@ton/ton` provides this functionality, although it lacks other features.
@@ -625,7 +625,10 @@ For example, using Tonviewer, you can get the jetton master contract address (e.
 b5ee9c72010101010023000842020f1ad3d8a46bd283321dde639195fb72602e9b31b1727fecc25e2edc10966df4
 ```
 
-Knowing the jetton wallet code and its storage structure, you can manually compute the wallet address.
+Knowing the jetton wallet code and its storage structure, you can manually compute the wallet address. 
+For some tokens, you'll need to find additional parameters. 
+For example, for Hamster Kombat, you need to know the merkle root used by mintless wallets and the salt used for [predictable sharding](https://docs.ton.org/v3/guidelines/smart-contracts/howto/shard-optimization/#how-to-deploy-a-contract-to-a-specific-shard). 
+You can obtain the salt for an existing address using the jetton master's `get_wallet_state_init_and_salt` get-method and the merkle hash using `get_mintless_airdrop_hashmap_root`.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton/ton)">
@@ -1041,7 +1044,7 @@ Next, we need to correctly calculate the total transaction cost. The value of `0
 
 ### How to change the owner of a collection's smart contract?
 
-Changing the owner of a collection is simple. Specify the opcode = 3, any query_id, and the new owner’s address.
+Changing the owner of a collection is simple. Specify the opcode = 3, any query_id, and the new owner's address.
 
 
 <Tabs groupId="code-examples">
@@ -1249,7 +1252,7 @@ main().finally(() => console.log("Exiting..."));
 </TabItem>
 </Tabs>
 
-When updating NFT metadata or content, royalty information must also be included, especially when using the appropriate opcode to modify this data. It’s important to remember that you don’t need to update all values if only certain elements are changing. For instance, if the only change is to the NFT common content, the other data remains the same and can be reused without modification.
+When updating NFT metadata or content, royalty information must also be included, especially when using the appropriate opcode to modify this data. It's important to remember that you don't need to update all values if only certain elements are changing. For instance, if the only change is to the NFT common content, the other data remains the same and can be reused without modification.
 
 ## Third-party: decentralized exchanges (DEX)
 
@@ -1293,7 +1296,7 @@ This information is sufficient to construct the swap message.
 
  <TabItem value="js-ton" label="JS (@ton)">
 DEXs use different protocols for their work, we need to familiarize ourselves with key concepts and some vital components and also know the TL-B schema involved in doing our swap process correctly. In this tutorial, we deal with DeDust, one of the famous DEX implemented entirely in TON.
-DeDust introduced an abstract Asset concept, which includes any swappable asset type, simplifying the process because the type of asset doesn’t matter in the swap. This abstraction allows the exchange of extra currency or even assets from other chains in a straightforward manner.
+DeDust introduced an abstract Asset concept, which includes any swappable asset type, simplifying the process because the type of asset doesn't matter in the swap. This abstraction allows the exchange of extra currency or even assets from other chains in a straightforward manner.
 
 Following is the TL-B schema that DeDust introduced for the Asset concept.
 
