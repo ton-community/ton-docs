@@ -1,0 +1,546 @@
+import ThemedImage from "@theme/ThemedImage";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Transaction processing
+
+This guide provides foundational knowledge for working with transactions on TON Blockchain, covering both theoretical concepts and practical implementation.
+
+## Prerequisites
+
+- Basic programming knowledge.
+- Basic knowledge of [TON Blockchain core concepts](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/).
+- Around __20 minutes__ of your time.
+
+## Setting Up the Project
+
+Now, let's initialize the project and install the necessary dependencies.
+
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="TypeScript">
+
+```bash
+npm init -y
+npm install typescript ts-node @ton/ton @ton/core @ton/crypto
+npx tsc --init
+```
+
+To run scripts, use the following command:
+
+```bash
+npx ts-node script.ts
+```
+
+</TabItem>
+<TabItem value="tonutils" label="Python3">
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install tonutils pytoniq
+```
+
+To run scripts, use the following command:
+```bash
+python3 script.py
+```
+
+</TabItem>
+</Tabs>
+
+## Conceptual description
+
+Messages, transactions and accounts(also referenced as actors and smart contracts) are key concepts of TON Blockchain, let's briefly describe each of them. 
+
+### Accounts and messages
+
+When developers start to make their first smart-contract the first concept that they become pretty familiar with is actor model. It represents pretty intuitive understanding of account as self-sustained independent entity that fully defines it's state and behaviour. 
+
+The only ingredient that is left to fulfill the image is a way of interaction between accounts and toggling their behaviour - messages, exchanged asynchronously between accounts.
+
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/message-delivery/message_delivery_1.png?raw=true',
+      dark: '/img/docs/message-delivery/message_delivery_1_dark.png?raw=true',
+    }}
+  />
+</div>
+
+This makes it possible to interpret an account as service just running on some server like this:
+
+```python
+#THIS IS PSEUDO-CODE of general account implementation, don't try to run it
+from typing import TypeVar
+from TON import receive_msg, send_messages, TVM
+
+SUCCESS = 0
+
+#                                  data,      code       balance
+pseudoAccountState = TypeVar[tuple[list[int], list[int], int]]
+#                 #some properly serialized data of message
+message = TypeVar[list[int]]
+
+class PseudoAccount:
+    def __init__(self, initial_state: pseudoAccountState):
+        # account deploy
+        self.state = initial_state
+
+    def apply_message(self, message: message) -> tuple[int, list[int]]:
+        # processing incoming message by running virtual machine
+        exit_code, new_state, out_messages = TVM.execute(self.state, message)
+        # update state of account
+        self.state = new_state
+        return exit_code, out_messages
+
+        # this is not what actually happens
+    def run_service(self):
+        # starting service
+        while True:
+            # receive incoming message
+            msg: message = receive_msg()
+            # process incoming message, update state, and get outgoing messages
+            exit_code, out_messages = self.apply_message(msg)
+            if exit_code and len(out_message) == SUCCESS:
+                # send outgoing messages
+                send_messages(out_messages)
+```
+
+This is quite sufficient mental model for smart-contract developers to understand behaviour of their systems, representing TON blockchain as just network of accounts. Nevertheless, there is one concept that still don't have its place - transactions.
+
+### Transactions and blocks
+
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_2_dark.png?raw=true',
+  }}
+/>
+
+The necessity of transaction concept, often misinterpreted as synonymous to message, lays in blockchain implementation of TON and how it processes and represents accounts and messages.
+
+Generally, transaction is a full description of **what** happened during message processing on blockchain account and contains or indirectly refers following data:
+
+ - account to which transaction belongs.
+ - inbound message processed by transaction
+ - outbound messages
+ - state of account before transaction
+ - state of account after transaction
+ - other data required for validating
+
+:::info
+There are several kinds of exotic transactions, that may differ from that scheme. See [TON Blockchain whitepaper](https://docs.ton.org/tblkch.pdf) for details.
+:::
+
+You may already start to see similarities between inbound/outbound messages and old/new state of account. Opposite to focusing on actor point of view where received/sended data and contract state are functionally separated between each other, from transaction perspective, new state of contract can be interpreted as message that contract sended to his future self and received with next inbound message.
+
+This representation of account lifetime as sequence of transactions `Tx1 -> Tx2 -> ....` is called [AccountChain](v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#the-lowest-level-accountchain). 
+
+:::tip
+Note, that since transaction is applied only to one account and toggled by only one inbound message, it doesn't contradict with `actor` model and asynchronous nature of messages. Contrary to what you might see in other blockchains.
+:::
+
+Several `AccountChains` merged to one set is called [ShardChain](/v3/documentation/smart-contracts/shards/shards-intro). By splitting those chain into `blocks`, not intervene in transaction sequencing, TON participants reach [consensus](https://docs.ton.org/catchain.pdf). Once confirmed block is added as permanent, immutable part forming a block chain.
+
+## Data layout
+
+### Transaction structure
+
+Transaction obtained from [API](/v3/guidelines/dapps/apis-sdks/api-types) have the following structure:
+
+```json5
+{
+  "@type": "raw.transaction",
+  "address": {
+    "@type": "accountAddress",
+    "account_address": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx"
+  },
+  "utime": 1738588970,
+  "data": "te6cckECBQEAAQ0AA7N/5K6gIewIvakhl8TwgAqyNzRoOkNRACij4AseXaaN7TAAAwvXWplEGUxUumyZOd7nfS5XY7vYQNT7h0NS7Pyez2KO7FVUqsxAAAMAgMG35BZ6DDKgAABI5ogBAgMBAaAEAIJyet2gvih177CPvdmM1xFlH1U76NhPr2Xr2IiEi9p8itebOwMmU6dJdg5mVAR8cxecbiPC+xwdchGbAu4LPdmYxwATDJHNCQBMS0ABIACxSAASm9AH4cd8PJYO+RwUqHU33et6HLVFyFqKm4Xq6IE9RQA/krqAh7Ai9qSGXxPCACrI3NGg6Q1EAKKPgCx5dpo3tNAExLQABggjWgAAYXrq95sEz0GGRkAq6EOl",
+  "transaction_id": {
+    "@type": "internal.transactionId",
+    "lt": "53590281000001",
+    "hash": "aSuaJcDD3CSVOeLulkBbhSmeXSbbSAtid2PvGRkGTjQ="
+  },
+  "fee": "18228",
+  "storage_fee": "18228",
+  "other_fee": "0",
+  "in_msg": {
+    ...
+  },
+  "out_msgs": []
+}
+```
+
+#### Key transaction fields
+
+- `address`: The account address where the transaction occurred.
+- `utime`: The UNIX timestamp of the transaction.
+- `transaction_id.lt`: [Logical time](/v3/documentation/smart-contracts/message-management/messages-and-transactions/#what-is-a-logical-time/), used to determine the order of events.
+- `fee`: [Total fees](/v3/documentation/smart-contracts/transaction-fees/fees/) in nanoTON paid during the transaction.
+- `in_msg`: The incoming [message](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-message/) that triggered the transaction.
+- `out_msgs`: Outgoing messages sent during the transaction.
+
+
+### Message structure
+
+Message have the following structure:
+
+```json5
+{
+  "@type": "raw.message",
+  "hash": "mcHdqltDAB8ODQHqtedtYQIS6MQL7x4ut+nf9tXWGqg=",
+  "source": "EQAJTegD8OO-HksHfI4KVDqb7vW9Dlqi5C1FTcL1dECeosTf",
+  "destination": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx",
+  "value": "20000000",
+  "extra_currencies": [],
+  "fwd_fee": "266669",
+  "ihr_fee": "0",
+  "created_lt": "53590278000002",
+  "body_hash": "lqKW0iTyhcZ77pPDD4owkVfw2qNdxbh+QQt4YwoJz8c=",
+  "msg_data": {
+    "@type": "msg.dataRaw",
+    "body": "te6cckEBAQEAAgAAAEysuc0=",
+    "init_state": ""
+  },
+  "message": ""
+}
+```
+
+#### Key message fields
+
+- `hash`: Message hash. May be used to determine the transaction using [TonApi](https://tonapi.io/api-v2#operations-Blockchain-getBlockchainTransaction).
+- `source`: The address of the sender (the account that initiated the message).
+- `destination`: The address of the receiver (the account that will process the message).
+- `value`: The amount of TON (in nanoTON) attached to the message.
+- `fwd_fee`: [Forward fees](https://docs.ton.org/v3/documentation/smart-contracts/transaction-fees/forward-fees/) is the cost of delivering the message to the destination contract.
+- `created_lt`: [Logical time](/v3/documentation/smart-contracts/message-management/messages-and-transactions/#what-is-a-logical-time/) when the message was created.
+- `msg_data`: Contains message body and state init.
+
+### TL-B
+
+All fundamentals structures of TON Blockchain such as: blocks, messages, transactions have comprehensive description in [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) language, that fully defines their binary layout.
+
+Usually SDK's such as [@ton/ton](https://github.com/ton-org/ton) or [pytoniq](https://github.com/yungwine/pytoniq) provide ready to use serialization functions for internal or external messages, but it's still might be useful in case of serializing messages by yourself.
+
+Often some widely used contracts provide TL-B description of their message body, as for example [WalletV5R1](https://github.com/ton-blockchain/wallet-contract-v5/blob/main/types.tlb).
+
+:::tip
+Alternatively you can always refer to smart-contract implementation source code to research it's serialization process, see [Contracts specifications](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) for more examples.
+:::
+
+## Sending messages
+
+To interact with TON Blockchain you should prepare and sign a transaction, and then sending it to the blockchain. This process includes several components:
+- [**wallets**](/v3/guidelines/smart-contracts/howto/wallet#-ton-blockchain-wallets): All **wallets** that operate on TON Blockchain are actually **smart contracts** owned by individuals outside the blockchain.
+- Retrieving seqno: Wallets use `seqno` for [replay protection](/v3/guidelines/smart-contracts/howto/wallet/#replay-protection---seqno/), a mechanism to prevent the repetition of messages.
+- Composing message body:
+- The wallet uses a public key to verify the legitimacy of the message signature when receiving an [external message](/v3/documentation/smart-contracts/message-management/external-messages/) that the owner signed with the private key. The private key is often derived from a *mnemonic* or *seed phrase*—a sequence of 24 random words.
+
+A common transfer would look like this:
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1.svg?raw=true',
+      dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1_dark.svg?raw=true',
+    }}
+  />
+</div>
+<br></br>
+
+:::note
+When building a frontend app, avoid handling private keys directly—secure storage and signing require careful implementation. Instead, use **[TON Connect](/v3/guidelines/ton-connect/overview/)**, a secure **wallet-to-app** protocol that simplifies *[authentication](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users/)* and *[sending messages](/v3/guidelines/ton-connect/guidelines/sending-messages/)* without exposing keys.
+:::
+
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="@ton/ton">
+
+```typescript
+import { mnemonicToWalletKey } from "@ton/crypto";
+import { comment, internal, toNano, TonClient, WalletContractV4, WalletContractV5R1 } from "@ton/ton";
+import { SendMode } from "@ton/core";
+
+async function main() {
+  // Initializing tonClient for sending messages to blockchain
+  const tonClient = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+    apiKey: 'YOUR_API_KEY',
+  });
+
+  // Using mnemonic to derive public and private keys
+  const mnemonic = "word1 word2 ...".split(' ');
+  const { publicKey, secretKey } = await mnemonicToWalletKey(mnemonic);
+
+  // Creating wallet depending on version (v5r1 or v4), uncomment which version do you have
+  const walletContract = WalletContractV4.create({ workchain: 0, publicKey });
+  // const walletContract = WalletContractV5R1.create({ walletId: { networkGlobalId: -3 }, publicKey }); // networkGlobalId: -3 for testnet, -239 for mainnet
+
+  // Opening wallet with tonClient, which allows to send messages to blockchain
+  const wallet = tonClient.open(walletContract);
+
+  // Retrieving seqno used for replay protection
+  const seqno = await wallet.getSeqno();
+
+  // Sending transfer
+  await wallet.sendTransfer({
+    seqno,
+    secretKey,
+    messages: [internal({
+      to: wallet.address, // Transfer will be made to the same wallet address
+      body: comment('Hello from wallet!'), // Transfer will contain comment
+      value: toNano(0.05), // Amount of TON, attached to transfer
+    })],
+    sendMode: SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS,
+  });
+}
+
+main();
+```
+
+</TabItem>
+<TabItem value="tonutils" label="tonutils">
+
+```python
+from tonutils.client import ToncenterClient
+from tonutils.wallet import (
+    WalletV5R1
+)
+
+IS_TESTNET = True
+
+# Mnemonic phrase for creating the wallet
+MNEMONIC = 'Insert your mnemonic phrase here'
+
+async def main() -> None:
+    client = ToncenterClient(is_testnet=IS_TESTNET)
+
+    wallet, public_key, private_key, _ = WalletV5R1.from_mnemonic(client, MNEMONIC)
+
+    result = await wallet.transfer(destination=wallet.address, amount=0.01, body="Helo from wallet!")
+
+    print(result)
+
+
+if __name__ == "__main__":
+    import asyncio
+
+    asyncio.run(main())
+```
+
+</TabItem>
+</Tabs>
+
+:::caution Advanced Level
+In most scenarios, `SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS`(default for `tonutils`) will work, but if you want a deeper understanding, continue reading in the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook/).
+:::
+
+### Retrieving message hash
+
+Sometimes it will be useful to get the message hash before sending it. By the message hash, the transaction may be found on the blockchain. To do so, instead of calling the `sendTransfer` method on the wallet, we should build the message ourselves. 
+
+:::warning
+Be careful with the hash definition. As was discussed before transactions and messages are **different entities**.
+:::
+
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="@ton/ton">
+
+```typescript
+// Building the transfer to the wallet
+const transfer = wallet.createTransfer({
+  seqno,
+  secretKey,
+  messages: [internal({
+    to: wallet.address,
+    body: comment('Hello from wallet!'),
+    value: toNano(0.05),
+  })],
+  sendMode: SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS,
+});
+
+// Building the external message to be sent to the blockchain
+const externalMessage = external({
+  to: wallet.address,
+  body: transfer,
+});
+
+
+// Obtaining the message hash
+const messageHash = beginCell()
+  .store(storeMessage(externalMessage))
+  .endCell()
+  .hash();
+
+console.log(messageHash.toString('hex'));
+console.log(`https://testnet.tonviewer.com/transaction/${messageHash.toString('hex')}`);
+
+// Sending message to the blockchain
+await tonClient.sendMessage(externalMessage);
+```
+
+</TabItem>
+<TabItem value="tonutils" label="tonutils">
+```python
+from tonutils.client import ToncenterClient
+from tonutils.wallet import WalletV5R1
+from tonutils.utils import message_to_boc_hex
+import asyncio
+MNEMONIC = "Insert your mnemonic here"
+
+async def main():
+    # Initialize client and wallet
+    client = ToncenterClient(is_testnet=True)
+
+    # Create wallet from mnemonic
+    wallet, _, _, _ = WalletV5R1.from_mnemonic(client, MNEMONIC)
+
+    # prepare internal message
+    mesage = wallet.create_wallet_internal_message(
+        destination=wallet.address,
+        value=1,
+        body="Hello from wallet!",
+        state_init=None,
+        send_mode=3
+    ),
+
+    # retrieving seqno
+    seqno = await wallet.get_seqno(client, wallet.address)
+
+    # create message body
+    body = wallet.raw_create_transfer_msg(
+        private_key=wallet.private_key,
+        messages=mesage,
+        seqno=seqno
+    )
+
+    # obtaining serialized message and message hash
+    message = wallet.create_external_message(dest=wallet.address, body=body, state_init=None)
+    message_boc_hex, message_hash = message_to_boc_hex(message)
+
+    # sending message to blockchain
+    await wallet.client.send_message(message_boc_hex)
+
+    print(message_hash)
+    print(f"https://testnet.tonviewer.com/transaction/{message_hash}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+</TabItem>
+</Tabs>
+
+
+### Retrieving transaction hash
+
+It may also be useful to wait for the transaction to appear on the blockchain. This can be done by trying to get it by `messageHash` with delays. When the transaction is obtained, the hash of the transaction may be received.
+
+<Tabs groupId="SDK">
+<TabItem value="@ton/ton" label="@ton/ton">
+
+```typescript
+async function waitForTransaction(messageHash: Buffer, maxRetries = 12) {
+  let retries = 0;
+  while (retries < maxRetries) {
+    console.log(`Waiting for transaction, retry ${retries}...`);
+    retries += 1;
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    const response = await fetch(`https://testnet.tonapi.io/v2/blockchain/transactions/${messageHash.toString('hex')}`);
+    if (!response.ok) {
+      continue;
+    }
+
+    const result = await response.json();
+    if (!result.raw) {
+      continue;
+    }
+
+    return loadTransaction(Cell.fromHex(result.raw).beginParse());
+  }
+
+  throw new Error('Retries exceeded, transaction not found')
+}
+
+const transaction = await waitForTransaction(messageHash);
+const transactionHash = transaction.hash();
+```
+
+</TabItem>
+<TabItem value="tonutils" label="tonutils">
+```python
+async def wait_for_transaction(message_hash: bytes, max_retries: int = 12):
+    retries = 0
+
+    async with aiohttp.ClientSession() as session:
+        while retries < max_retries:
+            print(f"Waiting for transaction, retry {retries}...")
+            retries += 1
+
+            try:
+                async with session.get(
+                    f"https://testnet.tonapi.io/v2/blockchain/transactions/{message_hash}"
+                ) as response:
+                    if response.status != 200:
+                        await asyncio.sleep(1)
+                        continue
+
+                    print("SUCCESS!")
+                    return
+
+            except aiohttp.ClientError:
+                await asyncio.sleep(1)
+                continue
+
+    raise Exception("Retries exceeded, transaction not found")
+```
+</TabItem>
+</Tabs>
+
+### Handling transaction failures
+
+Two primary failure scenarios:
+
+1. **Message Rejection**:
+- Causes: Invalid `seqno`, expired `deadline`, bad `signature`
+- Result: No transaction appears on blockchain
+
+2. **Execution Failure**:
+- Transaction appears on chain but fails during execution
+- See [transaction outcomes documentation](/documentation/smart-contracts/message-management/messages-and-transactions/#transaction-outcome) for troubleshooting
+
+#### Exit codes
+
+If transaction failed while executing, it will appear on blockchain with some exit code. After extracting exit code consider reading [Standard exit codes](/v3/documentation/tvm/tvm-exit-codes#standard-exit-codes/) to find out, why it fails.
+
+```typescript
+function extractExitCode(transaction: Transaction) {
+  const {description} = transaction;
+  if (description.type !== 'generic') {
+    throw Error('Unknown transaction type');
+  }
+
+  if (description.computePhase.type === 'skipped') {
+    return -1; // Mostly you will see face this error when not enough gas was attached.
+  }
+
+  if (description.computePhase.exitCode) {
+    return description.computePhase.exitCode;
+  }
+
+  if (description.actionPhase?.resultCode) {
+    return description.actionPhase.resultCode;
+  }
+
+  return 0;
+}
+```
+
+## See also
+
+- [Transaction fees](/v3/documentation/smart-contracts/transaction-fees/fees)
+- [Transaction body parsing](/v3/guidelines/dapps/cookbook#how-to-parse-transactions-of-an-account-transfers-jettons-nfts)
