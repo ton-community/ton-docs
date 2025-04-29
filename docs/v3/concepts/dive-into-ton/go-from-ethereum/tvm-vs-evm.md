@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TVM vs EVM
 
 ## Introduction
@@ -126,3 +128,6 @@ TVM’s support for sharding-aware smart contracts and its unique data represent
 
 - [Solidity vs FunC](/v3/concepts/dive-into-ton/go-from-ethereum/solidity-vs-func/)
 - [TVM overview](/v3/documentation/tvm/tvm-overview/)
+
+<Feedback />
+

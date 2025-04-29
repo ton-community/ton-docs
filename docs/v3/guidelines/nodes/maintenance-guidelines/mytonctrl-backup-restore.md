@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Node configuration backup and restore
 
 MyTonCtrl enables users to easily create and restore backups of node configurations with two straightforward commands. This feature allows efficient and quick transfer of node configurations from one host to another.
@@ -41,3 +43,6 @@ By default, automated backups are saved in the directory `/tmp/mytoncore/auto_ba
 * Before restoring the backup package to the existing node, it is strongly advised to manually back up the node's original configuration to ensure you have a rollback option.
 
 Use the `restore_backup <file_name>` command and follow the provided instructions. Backups should be restored to a fully synchronized node. MyTonCtrl will retain all settings except for the IP address, which will be updated accordingly.
+
+<Feedback />
+

@@ -1,16 +1,17 @@
+import Feedback from "@site/src/components/Feedback";
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # Blueprint SDK overview
 
-> **Summary:** In previous steps we installed and configured all tools required for TON smart contract development and created our first project template. 
+> **Summary:** In the previous steps, we installed and configured all the tools required for TON smart contract development and created our first project template.
 
-Before we proceed to actual smart contract development let's briefly describe project structure and explain how to use **`Blueprint SDK`**.
+Before we proceed to actual smart contract development, let's briefly describe the project structure and explain how to use the **`Blueprint SDK`**.
 
 ## Project structure
 
 :::warning
-If you didn't choose proposed names in previous steps, source code file names and some of the in-code entities may differ.
+If you didn't choose the proposed names in the previous steps, source code file names and some of the in-code entities may differ.
 :::
 
 <Tabs groupId="language">
@@ -54,48 +55,50 @@ This folder contains your smart contract source code written in one of the avail
 
 ### `/wrappers`
 
-To interact with your smart contract off-chain you need to serialize and desirialize messages sended to it. `Wrapper` classes developed to mirror your smart contract implementation making it simple to use it's functionality.
+To interact with your smart contract off-chain, you need to serialize and deserialize messages sent to it. `Wrapper` classes are developed to mirror your smart contract implementation, making its functionality simple to use.
 
 ### `/tests`
 
-This directory contains test files for your smart contracts. Testing contracts directly in TON network is not the best option because deployment requires some amount of time and may lead to losing funds. This testing playground allow you to execute multiple smart contracts and even send messages between them in your **"local network"**. Tests are crucial for ensuring your smart contracts behave as expected before deployment to the network.
+This directory contains test files for your smart contracts. Testing contracts directly on the TON network is not the best option because deployment requires some amount of time and may lead to losing funds. This testing playground allows you to execute multiple smart contracts and even send messages between them in your **"local network"**. Tests are crucial for ensuring your smart contracts behave as expected before deployment to the network.
 
 ### `/scripts`
 
-The scripts directory contains `TypeScript` files that help you deploy and interact with your smart contracts on-chain using previously implemented wrappers.
+The `scripts` directory contains `TypeScript` files that help you deploy and interact with your smart contracts on-chain using previously implemented wrappers.
 
 ## Development flow
 
-Almost any smart contract project development consist of five simple steps:
+Almost any smart contract project development consists of five simple steps:
 
- 1. Edit smart contract code in `/contracts` folder and build it by running build script:
+1. Edit the smart contract code in the `/contracts` folder and build it by running the build script:
 
 ```bash
 npx blueprint build
 ```
 
- 2. Update smart contract wrapper in `/wrapper` folder corresponding to changes in contract.
- 3. Update test's in `/tests` folder to ensure correctness of new functionality and run test script:
+2. Update the smart contract wrapper in the `/wrappers` folder to correspond to changes in the contract.
+
+3. Update tests in the `/tests` folder to ensure the correctness of the new functionality and run the test script:
 
 ```bash
 npx blueprint test
 ```
 
- 4. Repeat steps 1-3 until you get desired result.
+4. Repeat steps 1-3 until you achieve the desired result.
 
- 5. Update deployment script in `/scripts` folder and run it using this command:
+5. Update the deployment script in the `/scripts` folder and run it using this command:
 
 ```bash
 npx blueprint run
 ```
 
 :::tip
-All examples in this guide follow sequnce of this **1-3 steps** with corresponding code samples. **Step 5**, deployment process, is covered in last section of the guide: [Deploying to network](/v3/guidelines/quick-start/developing-smart-contracts/deploying-to-network/).
+All examples in this guide follow the sequence of these **1-3 steps** with corresponding code samples. **Step 5**, the deployment process, is covered in the last section of the guide: [Deploying to network](/v3/guidelines/quick-start/developing-smart-contracts/deploying-to-network/).
 :::
 
-Also, you can always generate same structure for another smart contract if, for example, you want to create multiple contracts interacting with each other, by using following command:
+Also, you can always generate the same structure for another smart contract if, for example, you want to create multiple contracts interacting with each other by using the following command:
 
 ```bash
-npx blueprint create PascalCase #dont forget to name contract in PascalCase
+npx blueprint create PascalCase # Don't forget to name the contract in PascalCase
 ```
 
+<Feedback />

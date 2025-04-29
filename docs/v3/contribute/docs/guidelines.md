@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Common Documentation Principals
 
 :::danger
@@ -23,3 +25,5 @@ Tech documentation can quickly become outdated due to changes in technology or s
 
 ## Get feedback
 Before publishing the documentation, it is a good idea to get feedback from other contributors or users. This can help identify areas that may be confusing or unclear, and allow you to make improvements before the documentation is released.
+<Feedback />
+

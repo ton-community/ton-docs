@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Accelerator update
 
 :::caution in development
@@ -320,3 +322,6 @@ Developers are planning to implement the following features:
 - Enable broadcasting of `collated_data`.
 
 - Provide support in MyTonCtrl for automatic payments for collation to establish a market for collation and enhance its durability.
+
+<Feedback />
+

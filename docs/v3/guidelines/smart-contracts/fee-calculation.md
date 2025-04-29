@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Fees calculation
 
 ## Introduction
@@ -237,3 +239,6 @@ int gas_consumed() asm "GASCONSUMED";
 ## See also
 
 - [Stablecoin contract with fees calculation](https://github.com/ton-blockchain/stablecoin-contract)
+
+<Feedback />
+

@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Random number generation
 
 Generating random numbers is a common task in many projects. While you may have seen the `random()` function in FunC documentation, note that its result can be easily predicted unless you use additional techniques.
@@ -91,4 +93,7 @@ No method is universally perfect – choose based on:
 
 :::
 
+
 Always audit implementations through formal verification where possible.
+
+<Feedback />

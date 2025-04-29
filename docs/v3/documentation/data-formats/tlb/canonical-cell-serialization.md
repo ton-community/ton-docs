@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Canonical cell serialization
 
 ## Cell weight
@@ -51,3 +53,5 @@ To follow the original node’s bag of cells (BoC) serialization format, the fol
 * On import, ensure that the weight fits within 8 bits (weight \<= 255). 
 * Internal hashes count is the sum of hash counts of all special root nodes. 
 * The top hashes count is the sum of hash counts of all non-special (i.e., regular) root nodes.
+<Feedback />
+

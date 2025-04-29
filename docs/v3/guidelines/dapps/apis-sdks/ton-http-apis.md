@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TON HTTP-based APIs
 
 There are different ways to connect to TON Blockchain:
@@ -59,3 +61,6 @@ GraphQL nodes also function as indexers.
 ## Other APIs
 
 * [TonAPI](https://docs.tonconsole.com/tonapi) - A user-friendly API that abstracts low-level smart contract details for a streamlined experience.
+
+<Feedback />
+

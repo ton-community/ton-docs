@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Overview
 
 *TON decentralized applications (DApps)* leverage blockchain technology, utilizing smart contracts as their backend. 
@@ -43,3 +45,5 @@ Pyth Network's real-time price feed oracle, detailing integration methods, SDK u
 RedStone's oracle solution, focusing on its on-demand data delivery method, including practical steps for attaching and verifying signed data packages within smart contracts, optimizing data efficiency in TON applications.
 
 - [RedStone](/v3/documentation/dapps/oracles/red_stone/)
+<Feedback />
+

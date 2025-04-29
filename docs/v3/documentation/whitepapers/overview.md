@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Whitepapers
 
 This section contains the original documentation written by _Dr. Nikolai Durov_, providing a comprehensive overview of all aspects of TON.
@@ -26,3 +28,6 @@ The code, comments, and documentation may reference "gram" and "nanogram." These
 - [TON Whitepapers in Russian](https://github.com/Korolyow/TON_docs_ru) – a community-created Russian version of the TON Whitepapers. The TON Foundation cannot guarantee the quality of the translation. 
 - [TON Whitepapers in Traditional Chinese](https://github.com/awesome-doge/TON_Paper/blob/main/zh_ton.pdf) – a community-created Traditional Chinese version of the TON Whitepapers. The TON Foundation cannot guarantee the quality of the translation. 
 - [TON Whitepapers in Simplified Chinese](https://github.com/kojhliang/Ton_White_Paper_SC/blob/main/Ton%E5%8C%BA%E5%9D%97%E9%93%BE%E7%99%BD%E7%9A%AE%E4%B9%A6_%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E7%89%88.pdf) – a community-created Simplified Chinese version of the TON Whitepapers. The TON Foundation cannot guarantee the quality of the translation.
+
+<Feedback />
+

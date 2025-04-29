@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Airdrop claiming guidelines
 
 In this article, we'll explore an imaginary claim solution, identify its performance issues, and propose solutions. The focus will be on contract interactions and their impact on overall performance. Code, security aspects, and other nuances are beyond the scope of this discussion.
@@ -150,3 +152,6 @@ How about now? LGTM.
 ## What's next?
 
 We can always push further. For example, consider a custom [jetton wallet](https://github.com/ton-community/mintless-jetton/blob/main/contracts/jetton-utils.fc#L142) with built-in shard optimization. This ensures the user's jetton wallet ends up in the same shard as the user with an 87% probability. However, this is relatively uncharted territory, so you'll need to explore it on your own. Good luck with your TGE!
+
+<Feedback />
+

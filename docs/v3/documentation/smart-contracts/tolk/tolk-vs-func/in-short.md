@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Tolk vs FunC: in short
 
 Tolk is much more similar to TypeScript and Kotlin than C and Lisp. 
@@ -63,3 +65,6 @@ get currentCounter(): int { ... }
 ## See also
 
 - [Tolk vs FunC: in detail](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-detail)
+
+<Feedback />
+

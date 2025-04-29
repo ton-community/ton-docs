@@ -1,6 +1,7 @@
 ---
 description: At the end of this guide you will deploy multisig wallet and send some transactions using ton library
 ---
+import Feedback from '@site/src/components/Feedback';
 
 # Interact with multisig wallets using TypeScript
 
@@ -265,3 +266,6 @@ You can access public properties from `MultisigWallet`, `MultisigOrderBuilder`, 
 - [Low-level multisig guide](/v3/guidelines/smart-contracts/howto/multisig)
 - [ton.js Documentation](https://ton-community.github.io/ton/)
 - [Multisig contract sources](https://github.com/ton-blockchain/multisig-contract)
+
+<Feedback />
+

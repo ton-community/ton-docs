@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Overview
 
 This article helps you choose the right tools for application development in TON Ecosystem.
@@ -38,3 +40,6 @@ from scratch can be resource-consuming, so you can use one of these alternatives
 * [TMA tutorials](/v3/guidelines/dapps/tma/tutorials/step-by-step-guide)
 * [TON Connect tutorials](/v3/guidelines/ton-connect/guidelines/how-ton-connect-works)
 * [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing)
+
+<Feedback />
+

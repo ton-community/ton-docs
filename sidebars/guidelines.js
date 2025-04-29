@@ -4,7 +4,7 @@
 module.exports = [
   {
     type: 'category',
-    label: `Quick Start`,
+    label: `Quick start`,
     items: [
       'v3/guidelines/quick-start/getting-started',
       {
@@ -17,15 +17,16 @@ module.exports = [
       },
       {
         type: 'category',
-        label: 'Developing smart-contracts',
+        label: 'Developing smart contracts',
         items: [
           'v3/guidelines/quick-start/developing-smart-contracts/setup-environment',
           'v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview',
           'v3/guidelines/quick-start/developing-smart-contracts/storage-and-get-methods',
           'v3/guidelines/quick-start/developing-smart-contracts/processing-messages',
+          'v3/guidelines/quick-start/developing-smart-contracts/tact-implementation',
           'v3/guidelines/quick-start/developing-smart-contracts/deploying-to-network'
         ],
-      },
+      }
     ]
   },
   'v3/guidelines/get-started-with-ton',

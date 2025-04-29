@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TON ADNL API
 
 There are several ways to connect to blockchain:
@@ -36,3 +38,6 @@ For production infrastructure, consider using a well-prepared setup:
 Requests and responses follow the [TL](/v3/documentation/data-formats/tl) schema, which allows you to generate a typed interface for a specific programming language.
 
 [TonLib TL schema](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl)
+
+<Feedback />
+

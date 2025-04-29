@@ -1,6 +1,8 @@
 ---
 ---
 
+import Feedback from '@site/src/components/Feedback';
+
 # NFT use cases
 
 NFTs, or non-fungible tokens, are a type of digital asset that is unique, and cannot be replaced by another identical asset. This article describes the approaches and already implemented use cases of NFTs in TON Blockchain.
@@ -73,3 +75,5 @@ It is important to note that this is just one example, and as the TON ecosystem 
 ## NFT as a virtual asset in games
 
 NFT integrated to a game allows players to own and trade in-game items in a way that is verifiable and secure, which adds an extra layer of value and excitement to the game.
+
+<Feedback />

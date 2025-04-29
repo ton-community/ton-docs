@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Transaction Fees
 
 Every TON user should keep in mind that _commission depends on many factors_.
@@ -164,3 +166,6 @@ There is an article about [fee calculation](/v3/guidelines/smart-contracts/fee-c
 
 - ["Low-level fees overview"](/v3/documentation/smart-contracts/transaction-fees/fees-low-level)—read about the formulas for calculating commissions.
 - [Smart contract function to calculate forward fees in FunC](https://github.com/ton-blockchain/token-contract/blob/main/misc/forward-fee-calc.fc)
+
+<Feedback />
+
