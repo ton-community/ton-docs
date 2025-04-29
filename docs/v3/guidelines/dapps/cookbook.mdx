@@ -617,9 +617,12 @@ asyncio.run(main())
 
 ### How to calculate a user's jetton wallet address (offline)?
 
-Although it is a common approach, calling the GET method every time to retrieve the wallet address can be slow and resource-intensive. However, if you know the jetton wallet code and storage structure, you can calculate the wallet address without making network requests.
+Although it is a common approach, [calling the GET method](/v3/guidelines/smart-contracts/get-methods#calling-get-methods-from-code) every time to retrieve the wallet address can be slow and resource-intensive. 
+However, if you know the jetton wallet code and storage structure, you can calculate the wallet address without making network requests.
 
-For example, using Tonviewer, you can get the jetton master contract address (e.g., `EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo`). If we [go to this address](https://tonviewer.com/EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo?section=method) and open the Methods tab, we can see that there is already a `get_jetton_data` method there. By calling it, we can get the hex form of the cell with the jetton wallet code:
+For example, using Tonviewer, you can get the jetton master contract address (e.g., `EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo`). 
+If we [go to this address](https://tonviewer.com/EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo?section=method) and open the Methods tab, we can see that there is already a `get_jetton_data` method there. 
+By calling it, we can get the hex form of the cell with the jetton wallet code:
 
 ```
 b5ee9c72010101010023000842020f1ad3d8a46bd283321dde639195fb72602e9b31b1727fecc25e2edc10966df4
