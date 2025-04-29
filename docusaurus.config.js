@@ -46,7 +46,7 @@ const config = {
   baseUrl: '/',
   themes: [
     '@docusaurus/theme-live-codeblock',
-    ],
+  ],
   plugins: [
     ['docusaurus-plugin-sass', {}],
     [
