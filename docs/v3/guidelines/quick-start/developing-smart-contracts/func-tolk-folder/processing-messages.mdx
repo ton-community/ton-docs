@@ -182,7 +182,7 @@ By combining both of these patterns, you can achieve a comprehensive description
 
 `External messages` are your only way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because, in most cases, you don't want external entry points to be accessible to anyone except you. If this is all the functionality that you want from the external section, the standard way is to delegate this responsibility to a separate actor - [wallet](v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets/), which is practically the main reason they were designed for.
 
-Developing external endpoints includes several standard [approaches](/v3/documentation/smart-contracts/message-management/external-messages/) and [security measures](/v3/guidelines/smart-contracts/security/overview/) that might be overwhelming at this point. Therefore, in this guide, we will implement incrementing the previously added `ctxCounterExt` number and add a send message to our `Tact` contract.
+Developing external endpoints includes several standard [approaches](/v3/documentation/smart-contracts/message-management/external-messages/) and [security measures](/v3/guidelines/smart-contracts/security/overview/) that might be overwhelming at this point. Therefore, in this guide, we will implement incrementing the previously added `ctx_counter_ext` number.
 
 :::danger
 This implementation is **unsafe** and may lead to losing your contract funds. Don't deploy it to `Mainnet`, especially with a high smart contract balance.
@@ -259,7 +259,7 @@ fun onExternalMessage(inMsg: slice) {
 </TabItem>
 </Tabs>
 
-This function, upon receiving an external message, will increment our `ctxCounterExt` and also send an internal message to the specified address with the `increase` operation, which we will use to increment the counter on our `CounterInternal` smart contract.
+This function, upon receiving an external message, will increment our `ctx_counter_ext` and also send an internal message to the specified address with the `increase` operation.
 
 Verify that the smart contract code is correct by running:
 
@@ -308,13 +308,12 @@ async sendExternalIncrease(
 
 ### Step 3: update test
 
-Update the test to ensure that the `HelloWorld` contract received the external message, sent an internal message to the `CounterInternal` contract, and both updated their counters:
+Update the test to ensure that the `HelloWorld` contract received the external message, and updated its counters:
 
 ```typescript title="/tests/HelloWorld.spec.ts"
 import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
 import { Cell, toNano} from '@ton/core';
 import { HelloWorld } from '../wrappers/HelloWorld';
-import { CounterInternal } from '../wrappers/CounterInternal';
 import '@ton/test-utils';
 import { compile } from '@ton/blueprint';
 
@@ -328,7 +327,6 @@ describe('HelloWorld', () => {
     let blockchain: Blockchain;
     let deployer: SandboxContract<TreasuryContract>;
     let helloWorld: SandboxContract<HelloWorld>;
-    let counterInternal: SandboxContract<CounterInternal>;
 
     beforeEach(async () => {
         blockchain = await Blockchain.create();
@@ -354,34 +352,16 @@ describe('HelloWorld', () => {
             deploy: true,
             success: true,
         });
-
-        counterInternal = blockchain.openContract(
-            await CounterInternal.fromInit(0n, helloWorld.address)
-        );
-
-        const deployResultCounter = await counterInternal.send(
-            deployer.getSender(), 
-            { value: toNano('1.00') }, 
-            null
-        );
-
-        expect(deployResultCounter.transactions).toHaveTransaction({
-            from: deployer.address,
-            to: counterInternal.address,
-            deploy: true,
-            success: true
-        });
     });
 
-    it('should send an external message and update counter', async () => {
-        const counterInternalValueBefore = await counterInternal.getCounter();
+    it('should receive external message and update counter', async () => {
         const [__, counterExtBefore] = await helloWorld.getCounters()
         const increase = 5;
 
         const result = await helloWorld.sendExternalIncrease({
             increaseBy: increase,
             value: toNano(0.05),
-            addr: counterInternal.address,
+            addr: deployer.address, // Using deployer address
             queryID: 0
         });
 
@@ -391,25 +371,14 @@ describe('HelloWorld', () => {
             success: true,
         });
 
-        expect(result.transactions).toHaveTransaction({
-            from: helloWorld.address,
-            to: counterInternal.address,
-            success: true,
-        });
-
-        const counterInternalValueAfter = await counterInternal.getCounter();
-
-        expect(counterInternalValueAfter).toBeGreaterThan(counterInternalValueBefore);
         const [_, counterExt] = await helloWorld.getCounters()
         expect(counterExtBefore + BigInt(increase)).toBe(counterExt);
     });
-
-    // ... previous tests
 });
 ```
 
-This test describes the common transaction flow of any `multi-contract` system:  
-1. Send an external message to toggle the smart contract logic from outside the blockchain.  
+{/*This test describes the common transaction flow of any `multi-contract` system:
+1. Send an external message to toggle the smart contract logic outside the blockchain.
 2. Trigger one or more internal messages to be sent to other contracts.  
 3. Upon receiving an internal message, change the contract state and repeat **step 2** if required.
 
@@ -417,7 +386,7 @@ Since the resulting sequence of transactions might be overwhelming for understan
 
 <div style={{marginBottom: '30px'}} align="center">
   <img src="/img/tutorials/quick-start/multi-contract.png" alt="Multi-contract scheme"/>
-</div>
+</div> */}
 
 Verify that all examples are correct by running the test script:
 
@@ -430,15 +399,14 @@ Expected output should look like this:
 ```bash
  PASS  tests/HelloWorld.spec.ts
   HelloWorld
-    ✓ should correctly initialize and return the initial data (446 ms)
-    ✓ should send an external message and update counter (209 ms)
-    ✓ should increase counter (298 ms)
+    ✓ should receive external message and update counter (251 ms)
 
 Test Suites: 1 passed, 1 total
-Tests:       3 passed, 3 total
+Tests:       1 passed, 1 total
 Snapshots:   0 total
-Time:        3.663 s, estimated 4 s
-Ran all test suites matching /HelloWorld/i.
+Time:        1.841 s, estimated 2 s
+Ran all test suites.
+
 ```
 
 <Feedback />

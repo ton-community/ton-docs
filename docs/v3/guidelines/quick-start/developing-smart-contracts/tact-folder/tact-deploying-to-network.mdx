@@ -87,7 +87,7 @@ export async function run(provider: NetworkProvider) {
 
     await counterInternal.send(
         provider.sender(),
-        { value: toNano('0.05') }, 
+        { value: toNano('0.05') },
         null
     );
 
@@ -127,13 +127,13 @@ Next, choose the way to access your wallet. The easiest way to do that is using 
 
 ```bash
 ? Which wallet are you using? (Use arrow keys)
-❯ TON Connect compatible mobile wallet (example: Tonkeeper) 
-  Create a ton:// deep link 
+❯ TON Connect compatible mobile wallet (example: Tonkeeper)
+  Create a ton:// deep link
   Mnemonic
 
 ? Choose your wallet (Use arrow keys)
-❯ Tonkeeper 
-  MyTonWallet 
+❯ Tonkeeper
+  MyTonWallet
   Tonhub
 ```
 

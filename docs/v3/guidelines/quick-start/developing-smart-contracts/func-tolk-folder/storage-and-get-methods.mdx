@@ -37,9 +37,9 @@ Let's examine the [Cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data
 
 TON Blockchain uses a data structure called **Cell** as the fundamental unit for storing data. Cells are the building blocks of smart contract data and have the following characteristics:
 
-- A Cell can store up to 1023 bits (approximately 128 bytes) of data
-- A Cell can reference up to 4 other Cells (children)
-- A Cell is immutable once created
+- A Cell can store up to 1023 bits (approximately 128 bytes) of data.
+- A Cell can reference up to 4 other Cells (children).
+- A Cell is immutable once created.
 
 You can think of a Cell as the following structure:
 
@@ -118,11 +118,11 @@ fun saveData() {
 Let's modify our example slightly by exploring another common storage management approach in smart contract development:
 
 Rather than initializing global variables, we'll:
-1. Pass storage members as parameters via `save_data(members...)`
-2. Retrieve them using `(members...) = get_data()`
-3. Move the global variables `ctx_id` and `ctx_counter` into method bodies
+1. Pass storage members as parameters via `save_data(members...)`.
+2. Retrieve them using `(members...) = get_data()`.
+3. Move the global variables `ctx_id` and `ctx_counter` into the method bodies.
 
-Also let's add an additional **256-bit integer** to our storage. The modified implementation should appear as follows:
+Also let's add an additional **256-bit integer** to our storage as `ctx_counter_ext` global variable. The modified implementation should appear as follows:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -184,7 +184,7 @@ fun saveData(ctxID: int, ctxCounter: int, ctxCounterExt: int) {
 
 Remember to:
 1. Remove the global variables `ctx_id` and `ctx_counter`
-2. Update function usage by copying storage members locally as shown:
+2. Update the function usage by copying storage members locally as shown:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
