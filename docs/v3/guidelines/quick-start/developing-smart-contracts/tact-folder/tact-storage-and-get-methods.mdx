@@ -60,7 +60,7 @@ Using this structure, a message can be sent to the contract from FunC.
 The [contract](https://docs.tact-lang.org/book/contracts/) definition in Tact follows an object-oriented programming style:
 
 ```tact
-contract CounterInternal {
+contract HelloWorld {
     ...
 }
 ```
@@ -76,7 +76,7 @@ counter: Int as uint32;
 
 To ensure that only the contract owner can interact with specific functions, add an `owner` field:
 
-```tact title="/contracts/counter_internal.tact"
+```tact title="/contracts/hello_world.tact"
 id: Int as uint32;
 counter: Int as uint32;
 owner: Address;
@@ -88,7 +88,7 @@ These fields are serialized similarly to structures and stored in the contract's
 
 If you compile the contract at this stage, you will encounter the error: `Field "owner" is not set`. This is because the contract needs to initialize its fields upon deployment. Define an [`init()`](https://docs.tact-lang.org/book/contracts/#init-function/) function to do this:
 
-```tact title="/contracts/counter_internal.tact"
+```tact title="/contracts/hello_world.tact"
 init(id: Int, owner: Address) {
     self.id = id;
     self.counter = 0;
@@ -100,7 +100,7 @@ init(id: Int, owner: Address) {
 
 To accept messages from other contracts, use a [receiver](https://docs.tact-lang.org/book/functions/#receiver-functions) function. Receiver functions automatically match the message's opcode and invoke the corresponding function:
 
-```tact title="/contracts/counter_internal.tact"
+```tact title="/contracts/hello_world.tact"
 receive(msg: Add) {
     self.counter += msg.amount;
     self.notify("Cashback".asComment());
@@ -109,7 +109,7 @@ receive(msg: Add) {
 
 For accepting messages with empty body you can add `recieve` function with no arguments:
 
-```tact title="/contracts/counter_internal.tact"
+```tact title="/contracts/hello_world.tact"
 receive() {
     cashback(sender())
 }
@@ -120,7 +120,7 @@ receive() {
 
 Tact also provides handy ways to share same logic through [traits](https://docs.tact-lang.org/book/types/#traits). To ensure that only the contract owner can send messages, use the `Ownable` trait, which provides built-in ownership checks:
 
-```tact title="/contracts/counter_internal.tact"
+```tact title="/contracts/hello_world.tact"
 // Import library to use trait
 import "@stdlib/ownable";
 
@@ -149,7 +149,7 @@ Tact supports [getter functions](https://docs.tact-lang.org/book/functions/#gett
 Get function cannot be called from another contract.
 :::
 
-```tact title="/contracts/counter_internal.tact"
+```tact title="/contracts/hello_world.tact"
 get fun counter(): Int {
     return self.counter;
 }
@@ -159,7 +159,7 @@ Note, that the `owner` getter is automatically defined via the `Ownable` trait.
 
 #### Complete contract
 
-```tact title="/contracts/counter_internal.tact"
+```tact title="/contracts/hello_world.tact"
 import "@stdlib/ownable";
 
 // message with opcode
@@ -169,7 +169,7 @@ message(0x7e8764ef) Add {
 }
 
 // Contract defenition. `Ownable` is a trait to share functionality.
-contract CounterInternal with Ownable {
+contract HelloWorld with Ownable {
 
     // storage variables
     id: Int as uint32;
@@ -233,7 +233,7 @@ Expected output should look like this:
 
 [Wrappers](https://docs.tact-lang.org/book/compile/#wrap-ts) facilitate contract interaction from TypeScript. Unlike in FunC or Tolk, they are generated automatically during the build process:
 
-```typescript title="/wrappers/CounterInternal.ts"
+```typescript title="/wrappers/HelloWorld.ts"
 export * from '../build/CounterInternal/tact_CounterInternal';
 ```
 
@@ -246,15 +246,15 @@ Now let's ensure that our smart contract code fails when we try to send `add` me
 
 Implementation of test should look like this:
 
-```typescript title="/tests/CounterInternal.spec.ts"
+```typescript title="/tests/HelloWorld.spec.ts"
 import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
 import { toNano } from '@ton/core';
-import { CounterInternal } from '../wrappers/CounterInternal';
+import { HelloWorld } from '../wrappers/HelloWorld';
 import '@ton/test-utils';
 
-describe('CounterInternal Basic Tests', () => {
+describe('HelloWorld Basic Tests', () => {
     let blockchain: Blockchain;
-    let counterInternal: SandboxContract<CounterInternal>;
+    let helloWorld: SandboxContract<HelloWorld >;
     let owner: SandboxContract<TreasuryContract>;
 
     beforeEach(async () => {
@@ -265,12 +265,12 @@ describe('CounterInternal Basic Tests', () => {
         owner = await blockchain.treasury('owner');
 
         // Deploy the contract
-        counterInternal = blockchain.openContract(
-            await CounterInternal.fromInit(0n, owner.address)
+        helloWorld = blockchain.openContract(
+            await HelloWorld .fromInit(0n, owner.address)
         );
 
         // Send deploy transaction
-        const deployResult = await counterInternal.send(
+        const deployResult = await helloWorld.send(
             owner.getSender(),
             { value: toNano('1.00') },
             null
@@ -279,7 +279,7 @@ describe('CounterInternal Basic Tests', () => {
         // Verify deployment was successful
         expect(deployResult.transactions).toHaveTransaction({
             from: owner.address,
-            to: counterInternal.address,
+            to: helloWorld.address,
             deploy: true,
             success: true
         });
@@ -287,21 +287,21 @@ describe('CounterInternal Basic Tests', () => {
 
     it('should initialize with correct values', async () => {
         // Check initial counter value
-        const initialCounter = await counterInternal.getCounter();
+        const initialCounter = await helloWorld.getCounter();
         expect(initialCounter).toBe(0n);
 
         // Check initial ID
-        const id = await counterInternal.getId();
+        const id = await helloWorld.getId();
         expect(id).toBe(0n);
     });
 
     it('should allow owner to increment counter', async () => {
         // Get initial counter value
-        const initialCounter = await counterInternal.getCounter();
+        const initialCounter = await helloWorld.getCounter();
 
         // Increment counter by 5
         const incrementAmount = 5n;
-        const result = await counterInternal.send(
+        const result = await helloWorld.send(
             owner.getSender(),
             { value: toNano('0.05') },
             {
@@ -314,12 +314,12 @@ describe('CounterInternal Basic Tests', () => {
         // Verify transaction was successful
         expect(result.transactions).toHaveTransaction({
             from: owner.address,
-            to: counterInternal.address,
+            to: helloWorld.address,
             success: true
         });
 
         // Check counter was incremented correctly
-        const newCounter = await counterInternal.getCounter();
+        const newCounter = await helloWorld.getCounter();
         expect(newCounter).toBe(initialCounter + incrementAmount);
     });
 
@@ -328,10 +328,10 @@ describe('CounterInternal Basic Tests', () => {
         const nonOwner = await blockchain.treasury('nonOwner');
 
         // Get initial counter value
-        const initialCounter = await counterInternal.getCounter();
+        const initialCounter = await helloWorld.getCounter();
 
         // Try to increment counter as non-owner
-        const result = await counterInternal.send(
+        const result = await helloWorld.send(
             nonOwner.getSender(),
             { value: toNano('0.05') },
             {
@@ -344,12 +344,12 @@ describe('CounterInternal Basic Tests', () => {
         // Verify transaction failed
         expect(result.transactions).toHaveTransaction({
             from: nonOwner.address,
-            to: counterInternal.address,
+            to: helloWorld.address,
             success: false
         });
 
         // Verify counter was not changed
-        const newCounter = await counterInternal.getCounter();
+        const newCounter = await helloWorld.getCounter();
         expect(newCounter).toBe(initialCounter);
     });
 
@@ -359,7 +359,7 @@ describe('CounterInternal Basic Tests', () => {
         let expectedCounter = 0n;
 
         for (const amount of increments) {
-            await counterInternal.send(
+            await helloWorld.send(
                 owner.getSender(),
                 { value: toNano('0.05') },
                 {
@@ -372,10 +372,11 @@ describe('CounterInternal Basic Tests', () => {
         }
 
         // Verify final counter value
-        const finalCounter = await counterInternal.getCounter();
+        const finalCounter = await helloWorld.getCounter();
         expect(finalCounter).toBe(expectedCounter);
     });
 });
+
 
 ```
 
@@ -389,8 +390,8 @@ Expected output should look like this:
 
 ```bash
 
- PASS  tests/CounterInternal.spec.ts
-  CounterInternal Basic Tests
+ PASS  tests/HelloWorld.spec.ts
+  HelloWorld Basic Tests
     ✓ should initialize with correct values (211 ms)
     ✓ should allow owner to increment counter (100 ms)
     ✓ should prevent non-owner from incrementing counter (152 ms)

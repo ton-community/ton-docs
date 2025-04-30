@@ -408,6 +408,7 @@ Next, we'll update our wrapper class to align with the new storage layout and `g
 These changes will maintain consistency with our smart contract modifications.
 
 ```typescript title="/wrappers/HelloWorld.ts"
+@version TypeScript 5.8.3
 export type HelloWorldConfig = {
     id: number;
     ctxCounter: number;
@@ -446,6 +447,7 @@ Finally, let's test the new functionality using our updated wrapper:
 Example implementation:
 
 ```typescript title="/tests/HelloWorld.spec.ts"
+@version TypeScript 5.8.3
 import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
 import { Cell, toNano} from '@ton/core';
 import { HelloWorld } from '../wrappers/HelloWorld';

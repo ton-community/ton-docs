@@ -311,6 +311,7 @@ async sendExternalIncrease(
 Update the test to ensure that the `HelloWorld` contract received the external message, and updated its counters:
 
 ```typescript title="/tests/HelloWorld.spec.ts"
+@version TypeScript 5.8.3
 import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
 import { Cell, toNano} from '@ton/core';
 import { HelloWorld } from '../wrappers/HelloWorld';

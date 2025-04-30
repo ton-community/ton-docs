@@ -15,13 +15,11 @@ If you didn't choose the proposed names in the previous steps, source code file 
 :::
 
 <Tabs groupId="language">
-  <TabItem value="FunC" label="FunC">
+  <TabItem value="Tact" label="Tact">
     ```ls title="Project structure"
     Example/
     ├── contracts/           # Folder containing smart contracts code
-    │   ├── imports/         # Library imports for contracts
-    │   │   └── stdlib.fc    # Standard library for FunC
-    │   └── hello_world.fc   # Main contract file
+    │   ├── hello_world.tact   # Main contract file
     ├── scripts/             # Deployment and on-chain interaction scripts
     │   ├── deployHelloWorld.ts     # Script to deploy the contract
     │   └── incrementHelloWorld.ts  # Script to interact with the contract
@@ -32,21 +30,7 @@ If you didn't choose the proposed names in the previous steps, source code file 
     └── HelloWorld.compile.ts   # Script for contract compilation
     ```
   </TabItem>
-  <TabItem value="Tolk" label="Tolk">
-    ```ls title="Project structure"
-    Example/
-    ├── contracts/           # Folder containing smart contracts code
-    │   └── hello_world.tolk # Main contract file
-    ├── scripts/             # Deployment and on-chain interaction scripts
-    │   ├── deployHelloWorld.ts     # Script to deploy the contract
-    │   └── incrementHelloWorld.ts  # Script to interact with the contract
-    ├── tests/               # Test fo der for local contract testing
-    │   └── HelloWorld.spec.ts      # Test specifications for the contract
-    └── wrappers/            # TypeScript wrappers for contract interaction
-    ├── HelloWorld.ts           # Wrapper class for smart contract
-    └── HelloWorld.compile.ts   # Script for contract compilation
-    ```
-  </TabItem>
+
 </Tabs>
 
 ### `/contracts`

@@ -59,42 +59,27 @@ Deployment scripts rely on the same wrappers that you have used in testing scrip
 ```typescript title="/scripts/deployHelloWorld.ts"
 import { toNano } from '@ton/core';
 import { HelloWorld } from '../wrappers/HelloWorld';
-import { CounterInternal } from '../wrappers/CounterInternal';
 import { compile, NetworkProvider } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider) {
+    const sender = provider.sender();
+    if (!sender.address) {
+        throw new Error('Sender address is required');
+    }
+
     const helloWorld = provider.open(
-        HelloWorld.createFromConfig(
-            {
-                id: Math.floor(Math.random() * 10000),
-                ctxCounter: 0,
-                ctxCounterExt: 0n,
-            },
-            await compile('HelloWorld')
-        )
+        await HelloWorld.fromInit(0n, sender.address)
     );
 
-    await helloWorld.sendDeploy(provider.sender(), toNano('0.05'));
-
-    await provider.waitForDeploy(helloWorld.address);
-
-    const counterInternal = provider.open(
-        await CounterInternal.fromInit(
-            BigInt(Math.floor(Math.random() * 10000)),
-            helloWorld.address
-        )
-    );
-
-    await counterInternal.send(
-        provider.sender(),
+    await helloWorld.send(
+        sender,
         { value: toNano('0.05') },
         null
     );
 
-    await provider.waitForDeploy(counterInternal.address);
+    await provider.waitForDeploy(helloWorld.address);
 
-    console.log('ID', await helloWorld.getID());
-    console.log('ID', (await counterInternal.getId()).toString());
+    console.log('ID', await helloWorld.getId());
 }
 ```
 
