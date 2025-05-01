@@ -57,7 +57,7 @@ Let's modify our smart contract by following the standard steps described in the
 
 ### Step 1: edit smart contract code
 
-If manually serializing and deserializing the storage cell becomes inconvenient, a common practice is to define two wrapper methods that handle this logic. If you haven't modified the smart contract code, it should include the following lines:
+If manually serializing and deserializing the storage cell becomes inconvenient, a common practice is to define two wrapper methods that handle this logic. If you haven't modified the smart contract code, it should include the following lines in the `/contracts/hello_world.fc`:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -209,7 +209,7 @@ saveData(ctxID, ctxCounter, ctxCounterExt);
 
 #### Get methods
 
-The main purpose of `get methods` is to provide external read access to storage data through a convenient interface — primarily to extract the information needed for preparing **transactions**.
+The main purpose of `get methods` is to provide an external read access to storage data through a convenient interface — primarily to extract the information needed for preparing **transactions**.
 Let's add a getter function that returns both the main and extended counter values stored in the smart contract.
 
 <Tabs groupId="language">
@@ -230,6 +230,39 @@ get get_counters(): (int, int) {
 ```
 </TabItem>
 </Tabs>
+
+And don’t forget to update the variables in the get methods to match the unpacking from `load_data()`.
+
+
+<Tabs groupId="language">
+  <TabItem value="FunC" label="FunC">
+    ```func title="/contracts/hello_world.fc"
+    int get_counter() method_id {
+    var (_, ctx_counter, _) = load_data();
+    return ctx_counter;
+  }
+
+    int get_id() method_id {
+    var (ctx_id, _, _) = load_data();
+    return ctx_id;
+  }
+    ```
+  </TabItem>
+  <TabItem value="Tolk" label="Tolk">
+    ```tolk title="/contracts/hello_world.tolk"
+    get currentCounter(): int {
+    var (ctxID, ctxCounter, ctxCounterExt) = loadData();
+    return ctxCounter;
+  }
+
+    get initialId(): int {
+    var (ctxID, ctxCounter, ctxCounterExt) = loadData();
+    return ctxID;
+  }
+    ```
+  </TabItem>
+</Tabs>
+
 
 And that's all! In practice, all **get methods** follow this straightforward pattern and require no additional complexity. Remember, you can ignore return values using the `_` placeholder syntax.
 
@@ -403,15 +436,15 @@ This means the HelloWorld contract was successfully compiled. A hash was generat
 
 Next, we'll update our wrapper class to align with the new storage layout and `get method`. We need to:
 
-1. Modify the `helloWorldConfigToCell` function
-2. Update the `HelloWorldConfig` type
-3. Ensure proper storage initialization during contract creation
-4. Include the 256-bit `ctxCounterExt` field we added earlier
+1. Modify the `helloWorldConfigToCell` function.
+2. Update the `HelloWorldConfig` type.
+3. Ensure proper storage initialization during contract creation.
+4. Include the 256-bit `ctxCounterExt` field we added earlier.
 
 These changes will maintain consistency with our smart contract modifications.
 
 ```typescript title="/wrappers/HelloWorld.ts"
-@version TypeScript 5.8.3
+// @version TypeScript 5.8.3
 export type HelloWorldConfig = {
     id: number;
     ctxCounter: number;
@@ -443,14 +476,14 @@ async getCounters(provider: ContractProvider) : Promise<[number, bigint]> {
 
 Finally, let's test the new functionality using our updated wrapper:
 
-1. Initialize contract storage by creating a `helloWorldConfig` with test values
-2. Execute each `get` method to retrieve stored data
-3. Validate that values match the initial configuration
+1. Initialize the contract storage by creating a `helloWorldConfig` with test values.
+2. Execute each `get` method to retrieve stored data.
+3. Validate that values match the initial configuration.
 
 Example implementation:
 
 ```typescript title="/tests/HelloWorld.spec.ts"
-@version TypeScript 5.8.3
+// @version TypeScript 5.8.3
 import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
 import { Cell, toNano} from '@ton/core';
 import { HelloWorld } from '../wrappers/HelloWorld';
