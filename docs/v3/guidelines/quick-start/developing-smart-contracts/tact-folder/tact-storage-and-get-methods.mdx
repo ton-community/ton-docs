@@ -107,8 +107,8 @@ receive() {
 
 #### Restricting access
 
-
-Tact also provides handy ways to share same logic through [traits](https://docs.tact-lang.org/book/types/#traits). To ensure that only the contract owner can send messages, use the `Ownable` trait, which provides built-in ownership checks:
+Tact also provides handy ways to share the same logic through [traits](https://docs.tact-lang.org/book/types/#traits) reusable code blocks similar to abstract classes in other languages. Tact doesn’t use classical inheritance, but traits let you define shared logic without duplicating code. They look like contracts but can’t store persistent state.
+For example, you can use the `Ownable` trait, which provides built-in ownership checks, to ensure that only the contract owner can send messages.
 
 ```tact title="/contracts/hello_world.tact"
 // Import library to use trait
@@ -237,6 +237,7 @@ Now let's ensure that our smart contract code fails when we try to send `add` me
 Implementation of test should look like this:
 
 ```typescript title="/tests/HelloWorld.spec.ts"
+// @version TypeScript 5.8.3
 import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
 import { toNano } from '@ton/core';
 import { HelloWorld } from '../wrappers/HelloWorld';
