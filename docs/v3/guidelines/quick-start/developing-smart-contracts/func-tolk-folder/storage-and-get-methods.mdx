@@ -209,7 +209,8 @@ saveData(ctxID, ctxCounter, ctxCounterExt);
 
 #### Get methods
 
-The main purpose of `get methods` is to provide external read access to storage data through a convenient interface, primarily for extracting information needed to prepare **transactions**.
+The main purpose of `get methods` is to provide external read access to storage data through a convenient interface — primarily to extract the information needed for preparing **transactions**.
+Let's add a getter function that returns both the main and extended counter values stored in the smart contract.
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -395,6 +396,8 @@ Build script running, compiling HelloWorld
 
 ✅ Wrote compilation artifact to build/HelloWorld.compiled.json
 ```
+
+This means the HelloWorld contract was successfully compiled. A hash was generated, and the compiled code was saved to `build/HelloWorld.compiled.json`.
 
 ### Step 2: update wrapper
 
