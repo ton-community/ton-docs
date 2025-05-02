@@ -4,9 +4,9 @@
 
 This is the official repository for The Open Network documentation.
 
-Latest documentation release: [docs.ton.org](https://docs.ton.org)
+Latest documentation release: [docs.ton.org](https://docs.ton.org).
 
-
+Contributeion guidelines: [How to contribute](https://docs.ton.org/v3/contribute).
 
 ---
 
