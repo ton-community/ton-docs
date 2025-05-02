@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # FunC cookbook
 The FunC cookbook was created to consolidate all the knowledge and best practices from experienced FunC developers in one place. The goal is to make it easier for future developers to build smart contracts efficiently.
 
@@ -480,7 +482,8 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
 
 
-### How to write custom functions using the `asm` keyword
+### How to write own functions using asm keyword
+
 
 Many features we use in FunC come from pre-prepared methods inside `stdlib.fc`. However, we have many more capabilities, and learning to write custom functions unlocks new possibilities.
 
@@ -1434,4 +1437,7 @@ await contractV1.sendUpgrade(provider.sender(), {
 
 
 
+
+
+<Feedback />
 

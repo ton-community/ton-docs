@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Transaction Fees
 
 Every TON user should keep in mind that _commission depends on many factors_.
@@ -11,13 +13,13 @@ The price of gas units is determined by the [chain configuration](https://tonvie
 Current settings in basechain are as follows: 1 unit of gas costs 400 nanotons.
 
 ```cpp
-1 gas = 26214400 / 2^16 nanotons = 0,000 000 4 TON
+1 gas = 26214400 / 2^16 nanotons = 0.000 000 4 TON
 ```
 
 Current settings in masterchain are as follows: 1 unit of gas costs 10000 nanotons.
 
 ```cpp
-1 gas = 655360000 / 2^16 nanotons = 0,000 01 TON
+1 gas = 655360000 / 2^16 nanotons = 0.000 01 TON
 ```
 
 ### Average transaction cost
@@ -34,7 +36,7 @@ The current gas amount is written in the Network Config [param 20](https://tonvi
 
 The gas fee, like many other parameters of TON, is configurable and may be changed by a special vote made in the mainnet.
 
-Changing any parameter requires getting 66% of the validator votes.
+Changing any parameter requires approval from 66% of the validators' votes.
 
 #### Could gas cost more?
 
@@ -48,7 +50,7 @@ Validators receive a small fee for processing transactions, and charging higher 
 
 Fees on TON are difficult to calculate in advance, as their amount depends on transaction run time, account status, message content and size, blockchain network settings, and a number of other variables that cannot be calculated until the transaction is sent.
 
-That is why even NFT marketplaces usually take an extra amount of TON (_~1 TON_) and return (_`1 - transaction_fee`_) later.
+That is why NFT marketplaces typically require an extra amount of TON (~1 TON) and refund the remaining amount (1 - transaction_fee) after the transaction.
 
 :::info
 Each contract should check incoming messages for the amount of TON attached to ensure it is enough to cover the fees.
@@ -146,21 +148,24 @@ The average fee for minting one NFT is 0.08 TON.
 
 ### Cost of saving data in TON?
 
-Saving 1 MB of data for one year on TON will cost 6.01 TON. Note that you usually don’t need to store large amounts of data on-chain. Consider using [TON Storage](/v3/guidelines/web3/ton-storage/storage-daemon) if you need decentralized storage.
+Saving 1 MB of data for one year on TON will cost 6.01 TON. Note that you usually don't need to store large amounts of data on-chain. Consider using [TON Storage](/v3/guidelines/web3/ton-storage/storage-daemon) if you need decentralized storage.
 
 ### Is it possible to send a gasless transaction?
 
 In TON, gasless transactions are possible using [wallet v5](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#preparing-for-gasless-transactions) a relayer that pays the gas fee for transaction.
 
-### How to calculation?
+### How to calculate fees?
 
 There is an article about [fee calculation](/v3/guidelines/smart-contracts/fee-calculation) in TON Blockchain.
 
 ## References
 
-- Based on the [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22) originally written by [menschee](https://github.com/menschee)\*
+- Based on the [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22) originally written by [menschee](https://github.com/menschee)
 
-## See Also
+## See also
 
 - ["Low-level fees overview"](/v3/documentation/smart-contracts/transaction-fees/fees-low-level)—read about the formulas for calculating commissions.
 - [Smart contract function to calculate forward fees in FunC](https://github.com/ton-blockchain/token-contract/blob/main/misc/forward-fee-calc.fc)
+
+<Feedback />
+

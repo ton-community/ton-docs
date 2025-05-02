@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TON HTTP-based APIs
 
 There are different ways to connect to TON Blockchain:
@@ -28,15 +30,15 @@ There are different ways to connect to TON Blockchain:
 * [Tatum](https://docs.tatum.io/reference/rpc-ton) — Offers TON RPC node access and developer tools in a simple interface.
 * [GetBlock nodes](https://getblock.io/nodes/ton/) — Enables developers to connect and test DApps using GetBlock’s nodes.
 * [TON access](https://www.orbs.com/ton-access/) - A public HTTP API for The Open Network (TON).
-* [Toncenter](https://toncenter.com/api/v2/) — A community-hosted project for quick API access. (Get an API key [@tonapibot](https://t.me/tonapibot))
-* [ton-node-docker](https://github.com/fmira21/ton-node-docker) - A Docker Full Node and Toncenter API.
+* [TON Center](https://toncenter.com/api/v2/) — A community-hosted project for quick API access. (Get an API key [@tonapibot](https://t.me/tonapibot))
+* [ton-node-docker](https://github.com/fmira21/ton-node-docker) - A Docker Full Node and TON Center API.
 * [toncenter/ton-http-api](https://github.com/toncenter/ton-http-api) — Allows you to run your own RPC node.
 * [nownodes.io](https://nownodes.io/nodes) — Provides full nodes and blockbook explorers via API.
 * [Chainbase](https://chainbase.com/chainNetwork/TON) — A node API and data infrastructure for TON.
 
 ## Indexer
 
-### Toncenter TON index
+### TON Center TON index
 
 Indexers allow you to list jetton wallets, NFTs, and transactions using filters, rather than retrieving only specific ones.
 
@@ -59,3 +61,6 @@ GraphQL nodes also function as indexers.
 ## Other APIs
 
 * [TonAPI](https://docs.tonconsole.com/tonapi) - A user-friendly API that abstracts low-level smart contract details for a streamlined experience.
+
+<Feedback />
+

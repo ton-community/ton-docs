@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TVM upgrade Apr 2024
 
 ## Introduction of new instructions for low fees calculation
@@ -92,3 +94,6 @@ These operations work with Merkle proofs, where cells can have a non-zero level 
 | `CDEPTHIX` | _`cell i - depth`_ | Returns the `i`-th depth of the cell.    |
 
 The value of `i` is in the range `0..3`.
+
+<Feedback />
+

@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from "@theme/ThemedImage";
 
 # Secure smart contract programming
@@ -155,7 +157,7 @@ For example, in TON Jetton:
 
 At this stage, avoid `throw_if()/throw_unless()`, as it could result in lost Jettons. Use try-catch statements, available in FunC v0.4.0+, to handle errors and return Jettons if necessary.
 
-### 6. Calculate gas and check `msg_value`
+### 6. Calculate gas and check msg_value
 
 Estimate the gas cost of each handler in your message flow and check the sufficiency of `msg_value`. Avoid demanding excessive gas, as it must be divided among subsequent messages. Recalculate gas requirements if your code starts sending more messages.
 
@@ -268,3 +270,6 @@ builder store_body_header(builder b, int op, int query_id) inline {
 Originally written by CertiK
 
 - [Original article](https://blog.ton.org/secure-smart-contract-programming-in-func)
+
+<Feedback />
+

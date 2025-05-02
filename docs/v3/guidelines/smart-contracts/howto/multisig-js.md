@@ -1,6 +1,7 @@
 ---
 description: At the end of this guide you will deploy multisig wallet and send some transactions using ton library
 ---
+import Feedback from '@site/src/components/Feedback';
 
 # Interact with multisig wallets using TypeScript
 
@@ -55,7 +56,7 @@ import { KeyPair, mnemonicToPrivateKey } from "ton-crypto";
 import { getHttpEndpoint } from "@orbs-network/ton-access";
 ```
 
-### 2. Create a `TonClient` instance
+### 2. Create a TonClient instance
 
 Initialize the `TonClient`:
 
@@ -84,7 +85,7 @@ for (let i = 0; i < mnemonics.length; i++) {
 }
 ```
 
-### 4. Create a `MultisigWallet` object
+### 4. Create a MultisigWallet object
 
 You can create a `MultisigWallet` object in two ways:
 
@@ -265,3 +266,6 @@ You can access public properties from `MultisigWallet`, `MultisigOrderBuilder`, 
 - [Low-level multisig guide](/v3/guidelines/smart-contracts/howto/multisig)
 - [ton.js Documentation](https://ton-community.github.io/ton/)
 - [Multisig contract sources](https://github.com/ton-blockchain/multisig-contract)
+
+<Feedback />
+

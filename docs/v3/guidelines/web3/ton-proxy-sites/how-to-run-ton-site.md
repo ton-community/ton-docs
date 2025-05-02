@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # How to run TON Sites
 
 ## Introduction
@@ -11,7 +13,7 @@ Install the [Tonutils Reverse Proxy](https://github.com/tonutils/reverse-proxy) 
 
 ##### Download
 ```bash
-wget https://github.com/ton-utils/reverse-proxy/releases/latest/download/tonutils-reverse-proxy-linux-amd64
+wget https://github.com/tonutils/reverse-proxy/releases/latest/download/tonutils-reverse-proxy-linux-amd64
 chmod +x tonutils-reverse-proxy-linux-amd64
 ```
 
@@ -72,3 +74,6 @@ You can check availability by opening the address with the `.adnl` suffix. Ensur
 
 ## See also
 * [Run C++ Implementation](/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy)
+
+<Feedback />
+

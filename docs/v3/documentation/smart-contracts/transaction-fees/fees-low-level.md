@@ -1,11 +1,12 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Low-level fees overview
 
 :::caution
 This section describes instructions and manuals for interacting with TON at a low level.
-
 Here you will find the **raw formulas** for calculating commissions and fees on TON.
-
-However, most of them are **already implemented through opcodes**! So, you **use them instead of manual calculations**.
+However, most of them are **already implemented through opcodes**!
+So, you **use them instead of manual calculations**.
 :::
 
 This document provides a general idea of transaction fees on TON and particularly computation fees for the FunC code. There is also a [detailed specification in the TVM whitepaper](https://ton.org/tvm.pdf).
@@ -18,15 +19,14 @@ As was described in the [TVM overview](/v3/documentation/tvm/tvm-overview), tran
 
 TON validators collect storage fees from smart contracts.
 
-Storage fees are collected from the smart contract `balance` at the **Storage phase** of **any** transaction due to storage payments for the account state
-(including smart-contract code and data, if present) up to the present time. Even if [contract received 1 nanoton](https://retracer.ton.org/?tx=1805820dccd7ffd70d6cee6cb581e60ee2f91f7f3eeb20ed00c08dc9fcd6a08b) it will pay all the debt since last payment. The smart contract may be frozen as a result. **Only unique hash cells are counted for storage and forward fees i.e. 3 identical hash cells are counted as one**. In particular, it [deduplicates](/v3/documentation/data-formats/tlb/library-cells) data: if there are several equivalent sub-cells referenced in different branches, their content is only stored once.
+Storage fees are collected from the smart contract `balance` at the **Storage phase** of **any** transaction due to storage payments for the account state (including smart-contract code and data, if present) up to the present time. Even if a contract receives 1 nanoton, it will pay all the debt since the last payment. The smart contract may be frozen as a result. **Only unique hash cells are counted for storage and forward fees i.e. 3 identical hash cells are counted as one**. In particular, it [deduplicates](/v3/documentation/data-formats/tlb/library-cells) data: if there are several equivalent sub-cells referenced in different branches, their content is only stored once.
 
-It’s important to keep in mind that on TON you pay for both the execution of a smart contract and for the **used storage** (check [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22)), `storage_fee` depends on your contract size: number of cells and sum of bits from that cells. It means you have to pay a storage fee for having TON Wallet (even if it's very-very small).
+It's important to keep in mind that on TON you pay for both the execution of a smart contract and for the **used storage** (check [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22)), `storage_fee` depends on your contract size: number of cells and sum of bits from that cells. It means you have to pay a storage fee for having TON Wallet (even if it's very-very small).
 
 If you have not used your TON Wallet for a significant period of time (1 year), _you will have to pay a significantly larger commission than usual because the wallet pays commission on sending and receiving transactions_.
 
-:::info **Note**: 
-When message is bounced from the contract, the contract will pay it's current `storage_fee`
+:::info **Note**:
+When a message is bounced from the contract, the contract will pay its current `storage_fee`
 :::
 
 ### Formula
@@ -64,7 +64,7 @@ Current values are:
   mc_cell_price_ps:500000
   ```
 
-### Calculator Example
+### Calculator example
 
 You can use this JS script to calculate storage price for 1 MB in the workchain for 1 year
 
@@ -297,10 +297,13 @@ For educational purposes [example of the old one](https://explorer.toncoin.org/c
 
 ## References
 
-- Based on @thedailyton [article](https://telegra.ph/Fees-calculation-on-the-TON-Blockchain-07-24) from 24.07\*
+- Based on @thedailyton [article](https://telegra.ph/Fees-calculation-on-the-TON-Blockchain-07-24) from July 24th
 
-## See Also
+## See also
 
 - [TON Fees overview](/v3/documentation/smart-contracts/transaction-fees/fees)
-- [Transactions and Phases](/v3/documentation/tvm/tvm-overview#transactions-and-phases)
+- [Transactions and phases](/v3/documentation/tvm/tvm-overview#transactions-and-phases)
 - [Fees calculation](/v3/guidelines/smart-contracts/fee-calculation)
+
+<Feedback />
+

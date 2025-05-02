@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # The differences of blockchains
 
 ## Introduction
@@ -141,3 +143,6 @@ In conclusion, by comparing TON and Ethereum's architecture and technological un
 
 ## See also
 - [Smart contract addresses](/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses/)
+
+<Feedback />
+
