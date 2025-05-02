@@ -15,11 +15,11 @@ Welcome to the TON Quick start guide! This guide will give you a starting point 
 
 ## What you'll learn
 
-- Interact with TON Ecosystem: wallets and explorers.
-- Set up the development environment: use the Blueprint SDK for developing `smart contracts` using the `FunC`, `Tact`, and `Tolk` programming languages.
-- Send transactions and read from TON Blockchain using your preferred programming language and available `SDKs`.
-- Core concepts of TON Blockchain: `messages`, `smart contracts`, `addresses`, etc.
-- Basic templates are ready to implement your project logic.
+- Understand the key principles of TON Blockchain, including `messages`, `smart contracts`, and `addresses`.
+- Interact with TON Ecosystem, including wallets and blockchain explorers.
+- Interact with TON Blockchain, such as reading from and writing data.
+- Set up a development environment using the `SDK` for `smart contract` development.
+- Start writing smart contracts using the `FunC`, `Tolk`, and `Tact` programming languages in TON.
 
 ## Concept of smart contract
 
@@ -49,7 +49,7 @@ Contrary to what might seem intuitive, invoking `get methods` from other contrac
 
 Before we start our journey to becoming TON developers, we should become advanced users of TON! Let's create your own `wallet`, send a few transactions, and see how our actions are reflected on the blockchain using `explorers`.
 
-### Step 1: Create a new wallet using an app
+### Step 1: create a new wallet using an app
 
 The simplest way to create a `wallet` is to visit https://ton.org/wallets and choose one of the wallet apps from the list. They are all pretty similar, so let's choose [Tonkeeper](https://tonkeeper.com/). Go ahead, install it, and run it.
 
@@ -65,13 +65,13 @@ Transactions in TON always require some amount of funds, as executing a smart co
 
 - For `Mainnet`, you can get `Toncoins` by simply pressing the buy button in the user interface or asking someone to send them to your `address`. You can copy the address from the wallet app, which is usually located near your balance.
 
-:::warning
+:::info
 Don't worry, sharing your `address` is **totally safe**, unless you don't want it to be associated with you.
 :::
 
 - For the `Testnet` version, you can request funds from the [Testgiver Ton Bot](https://t.me/testgiver_ton_bot/) **completely for free**! After a short wait, you will receive 2 `Toncoins` that will appear in your wallet app.
 
-### Step 3: Creating Testnet wallet
+### Step 3: creating Testnet wallet
 
 If you decide to use the `Testnet` version, you can do so by following the guide below.
 
@@ -99,7 +99,7 @@ To create Testnet wallet, click *`Wallet`* -> *`Add Wallet`* -> *`TestnetAccount
 </div>
 
 
-### Step 4: Exploring TON Blockchain
+### Step 4: exploring TON Blockchain
 
 Congratulations! We’ve created our first wallet and received some funds in it. Now, let's take a look at how our actions are reflected in the blockchain. We can do this by using various [explorers](https://ton.app/explorers/).
 
@@ -161,11 +161,10 @@ And here we are — our wallet contract is deployed and ready to use. Let's exam
 - **Code**: Shows raw smart contract code compiled from `FunC`/`Tact`/`Tolk`.
 - **Methods**: Allows execution of `get methods` to retrieve persistent contract data.
 
-## Next steps:
+## Next steps
 
-- Try experimenting with the `wallet app` and `wallet smart contract`: create another wallet contract in your wallet app and try sending transactions between them.
-- Continue to [Blockchain Interaction](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network/) if you want to learn how to interact with smart contracts outside the blockchain.
-- Or dive into [Developing Smart Contracts](/v3/guidelines/quick-start/developing-smart-contracts/setup-environment/) to learn how to develop `smart contracts` yourself!
+- Now that you’ve tried the `wallet app`, take a moment to explore further: create another `wallet account`, try sending some TON between them, and observe how the transactions appear in the explorer.
+- When you're ready, move on to the next step: [Reading from network](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network)
 
 **Happy creating on TON!**
 
