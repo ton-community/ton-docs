@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # API types
 
 **High availability blockchain APIs are essential for developing secure, efficient, and scalable applications on TON.**
@@ -10,7 +12,7 @@
 * [Tonstat.us](https://tonstat.us/) - A real-time Grafana dashboard, updated every 5 minutes.
 :::
 
-## Toncenter APIs
+## TON Center APIs
 - [TON Index](https://toncenter.com/api/v3/) - Collects data from a full node into a PostgreSQL database and provides a convenient API for accessing indexed blockchain data.
 - [toncenter/v2](https://toncenter.com/) - Enables HTTP access to TON Blockchain, allowing developers to retrieve account and wallet information, look up blocks and transactions, send messages to the blockchain, call smart contract methods, and more.
 
@@ -84,3 +86,6 @@ Response body
 * [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis)
 * [List of SDKs](/v3/guidelines/dapps/apis-sdks/sdk)
 * [TON cookbook](/v3/guidelines/dapps/cookbook)
+
+<Feedback />
+

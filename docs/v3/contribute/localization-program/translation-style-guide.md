@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Translation style guide
 This translation style guide contains essential guidelines, instructions, and tips for translators, helping us localize the website.
 
@@ -185,3 +187,6 @@ Some examples of what to be particularly mindful of:
 When translating, try not to rush. Take it easy and have fun!
 
 Thank you for helping us localize the website and make it accessible to a wider audience. The TON community is global, and we are happy you are a part of it!
+
+<Feedback />
+

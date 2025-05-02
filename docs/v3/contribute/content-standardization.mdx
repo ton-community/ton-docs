@@ -1,4 +1,6 @@
-import ThemedImage from '@theme/ThemedImage';
+import Feedback from '@site/src/components/Feedback';
+
+import ThemedImage from "@theme/ThemedImage";
 
 # Content standardization
 
@@ -18,7 +20,6 @@ Examples:
 - "color" over "colour"
 - "analyze" over "analyse"
 
-
 ### Use active voice
 
 Sentences using active voice are more concise and efficient, making your writing more engaging and easier to comprehend.
@@ -35,53 +36,57 @@ Sentences using active voice are more concise and efficient, making your writing
 
 _This isn't an easy one, especially for non-native English speakers. If you aren't sure, don't worry. We'll help with any of these._
 
-
 ### Grammar
 
 This documentation uses [cspell](https://cspell.org/) to correct grammar during development.
 
 The `cspell` will check the spelling and automatically suggest corrections in case of mistakes before creating a new commit. Feel free to add specific words to the [cspell.json](https://github.com/ton-community/ton-docs/blob/doc_editor_guidelines/cspell.json) config and include them in the verification dictionary.
 
-
 ### Date format
 
 Use the **"Mon D, YYYY"** format. This approach is standard for American readers, spells out the month (or uses a three-letter abbreviation), and minimizes confusion with day–month ordering.
 
 #### Preferred format:
-- Nov 2, 2023 
+
+- Nov 2, 2023
 - Feb 11, 2023
 
 #### Incorrect format:
-- 2-Nov-2023 
-- 11/2/2023 
+
+- 2-Nov-2023
+- 11/2/2023
 - 2/11/2023
 
 Adhering to these guidelines creates a unified approach to presenting dates, fostering clarity and comprehension throughout the TON documentation.
 
 ## Link preferences
+
 ### Linking to internal pages
 
 When linking to another page on TON documentation, use the relative path over the absolute path.
 
 #### Correct link:
+
 ```md
 Read more about [smart contracts](/v3/documentation/smart-contracts/overview/)
 ```
 
 #### Incorrect link:
+
 ```md
 Read more about [smart contracts](https://docs.ton.org/v3/documentation/smart-contracts/overview)
 ```
 
-
 Don't hard-code the language path (for example, `/mandarin/`) in any links. This maintains consistent capability across different language versions of the site.
 
 #### Correct link:
+
 ```md
 Read more about [smart contracts](/v3/documentation/smart-contracts/overview/)
 ```
 
 #### Incorrect link:
+
 ```md
 Read more about [smart contracts](/mandarin/v3/documentation/smart-contracts/overview)
 ```
@@ -89,10 +94,13 @@ Read more about [smart contracts](/mandarin/v3/documentation/smart-contracts/ove
 Set a trailing slash to all links. This approach keeps links consistent and avoids redirects, which hurts site performance.
 
 #### Correct link:
+
 ```md
 Read more about [smart contracts](/v3/documentation/smart-contracts/overview/)
 ```
+
 #### Incorrect link:
+
 ```md
 Read more about [smart contracts](/v3/documentation/smart-contracts/overview)
 ```
@@ -101,14 +109,15 @@ Read more about [smart contracts](/v3/documentation/smart-contracts/overview)
 
 When citing articles by a specific author or organization, use the article's name as a link, followed by a dash and the author's name italicized.
 
-
 #### Correct description:
+
 ```md
 - [How to shard your TON smart contract and why](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons) — _Tal Kol_
 - [TON Teleport BTC Whitepaper](https://tgbtc.gitbook.io/docs/whitepaper/abstract) – _RSquad Blockchain Lab_
 ```
 
 #### Incorrect description:
+
 ```md
 - [How to shard your TON smart contract and why](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)
 - [TON Teleport BTC Whitepaper](https://tgbtc.gitbook.io/docs/whitepaper/abstract) by RSquad Blockchain Lab
@@ -128,9 +137,7 @@ This section guides readers to additional materials and supports a cohesive deve
 - [Style guide](/v3/contribute/style-guide/)
 - [Typography](/v3/contribute/typography/)
 - [Localization program](/v3/contribute/localization-program/overview/)
-
 ```
-
 
 ## Image preferences
 
@@ -139,17 +146,18 @@ This section guides readers to additional materials and supports a cohesive deve
 When adding an image to a page, download and set an image in the TON documentation `static/img` folder.
 
 #### Correct linking:
+
 ```md
 ![jetton_transfer](/img/docs/asset-processing/jetton_transfer.png)
 ```
 
 #### Incorrect linking:
+
 ```md
 ![tact_logo](https://docs.tact-lang.org/_astro/logomark-dark.BSmgZYWc_ZKRrUl.svg)
 ```
 
 This is helpful to ensure the image will be available.
-
 
 ### Light and dark theme modes
 
@@ -160,7 +168,7 @@ TON documentation supports theme-specific images. Follow these steps to add them
 2. Import the `ThemedImage` module in the header.
 
 ```js
-import ThemedImage from '@theme/ThemedImage';
+import ThemedImage from "@theme/ThemedImage";
 ```
 
 3. Set the links for both images according to the example:
@@ -177,7 +185,7 @@ import ThemedImage from '@theme/ThemedImage';
 <br></br>
 ```
 
-###  Annotation specification
+### Annotation specification
 
 To depict message processing, use a graphical representation that resembles a smart contract graph, including labels for transactions and messages.
 
@@ -188,16 +196,16 @@ If the transaction order isn't essential, omit their labels. This approach simpl
 <ThemedImage
   alt=""
   sources={{
-    light: '/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1.png?raw=true',
-    dark: '/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1_dark.png?raw=true',
+    light:
+      "/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1.png?raw=true",
+    dark: "/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1_dark.png?raw=true",
   }}
 />
 <br></br>
 
-* Avoid using a large variety of bright colors.
-* Modify figures by applying techniques such as a dashed border.
-* To emphasize specific details, display transactions using distinct line styles (e.g., solid and dashed).
-
+- Avoid using a large variety of bright colors.
+- Modify figures by applying techniques such as a dashed border.
+- To emphasize specific details, display transactions using distinct line styles (e.g., solid and dashed).
 
 ### Message processing schemes
 
@@ -211,13 +219,11 @@ The message processing schemes offer additional context for readers seeking a cl
 <ThemedImage
   alt=""
   sources={{
-    light: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_2_dark.png?raw=true',
+    light: "/img/docs/message-delivery/message_delivery_2.png?raw=true",
+    dark: "/img/docs/message-delivery/message_delivery_2_dark.png?raw=true",
   }}
 />
 <br></br>
-
-
 
 ### Sequence diagram
 
@@ -230,42 +236,41 @@ Use a sequence diagram for complex and repetitive communication schemes between 
   <ThemedImage
     alt=""
     sources={{
-      light: '/img/docs/message-delivery/message_delivery_7.png?raw=true',
-      dark: '/img/docs/message-delivery/message_delivery_7_dark.png?raw=true',
+      light: "/img/docs/message-delivery/message_delivery_7.png?raw=true",
+      dark: "/img/docs/message-delivery/message_delivery_7_dark.png?raw=true",
     }}
   />
 </div>
 <br></br>
 
-
 ### Scheme formats and colors
 
 #### Format:
 
-* Use a PNG format for the diagrams in the documentation to ensure readability on various devices.
+- Use a PNG format for the diagrams in the documentation to ensure readability on various devices.
 
 #### Fonts:
 
-* Use the [Inter](https://rsms.me/inter/) font family for all text within diagrams.
-* Maintain a consistent text size.
-* Avoid overusing **bold** and _italic_ formatting for optimal readability.
+- Use the [Inter](https://rsms.me/inter/) font family for all text within diagrams.
+- Maintain a consistent text size.
+- Avoid overusing **bold** and _italic_ formatting for optimal readability.
 
 #### Themed colors for light mode:
-* Pencil Hand Drawn, default Visio theme.
+
+- Pencil Hand Drawn, default Visio theme.
 
 #### Themed colors for dark mode:
-* Font `#e3e3e3`.
-* Background `#232328`.
-* Light Highlight, arrows and scheme borders `#058dd2`.
-* Dark Highlight, arrows and scheme borders `#0088cc`.
-* InnerBackGround, for nested blocks `#333337`.
 
+- Font `#e3e3e3`.
+- Background `#232328`.
+- Light Highlight, arrows and scheme borders `#058dd2`.
+- Dark Highlight, arrows and scheme borders `#0088cc`.
+- InnerBackGround, for nested blocks `#333337`.
 
 #### Version control policy:
 
-* Store the original files in the project's Git repository under the `/static/visio` directory to facilitate future modifications.
-* Learn [Visio](https://www.microsoft.com/en-us/microsoft-365/visio/flowchart-software) references directly from [Visio sources](https://github.com/ton-community/ton-docs/tree/main/static/schemes-visio/).
-
+- Store the original files in the project's Git repository under the `/static/visio` directory to facilitate future modifications.
+- Learn [Visio](https://www.microsoft.com/en-us/microsoft-365/visio/flowchart-software) references directly from [Visio sources](https://github.com/ton-community/ton-docs/tree/main/static/schemes-visio/).
 
 ## Terminology
 
@@ -288,7 +293,6 @@ TON should always be capitalized.
 - TON Ecosystem
 - The TON Connect protocol
 
-
 ### TON Center
 
 **Correct usage:**
@@ -300,7 +304,6 @@ TON should always be capitalized.
 - Toncenter
 - TonCenter
 - TONcenter
-
 
 ### Mainnet
 
@@ -328,16 +331,6 @@ When referring to the TON Mainnet (i.e. not referring to a Testnet) use the prop
 
 - Account Chain
 - Accountchain
-
-### WorkChain
-
-**Correct usage:**
-
-- WorkChain
-
-**Incorrect usage:**
-
-- Workchain
 
 ### ShardChain
 
@@ -371,6 +364,17 @@ When referring to the TON Mainnet (i.e. not referring to a Testnet) use the prop
 
 - Masterchain
 - Work Chain
+
+### BaseChain
+
+**Correct usage:**
+
+- BaseChain
+
+**Incorrect usage:**
+
+- Basechain
+- Base Chain
 
 ### Proof-of-work / Proof-of-stake
 
@@ -453,8 +457,32 @@ When using the abbreviated form of zero-knowledge rollup you should shorten zero
 - zK rollup
 - zk rollup
 
+### Nominator, validator, collator, node, liteserver
+
+When using these words, refer to them in lowercase unless they are the first word of a heading.
+
+**Correct usage:**
+
+- nominator
+- validator
+- collator
+- node
+- liteserver
+
+**Incorrect usage:**
+
+- Nominator
+- Validator
+- Collator
+- Node
+- Liteserver
+
 ## See also
+
 - [How to contribute](/v3/contribute/)
 - [Content standardization](/v3/contribute/content-standardization/)
 - [Typography](/v3/contribute/typography/)
 - [Localization program](/v3/contribute/localization-program/overview/)
+
+<Feedback />
+

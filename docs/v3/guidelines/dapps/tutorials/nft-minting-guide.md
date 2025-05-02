@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Step by step NFT collection minting 
 
 ## 👋 Introduction
@@ -133,7 +135,7 @@ PINATA_API_SECRET=your_secret_api_key
 MNEMONIC=word1 word2 word3 word4
 TONCENTER_API_KEY=aslfjaskdfjasasfas
 ```
-You can get a toncenter API key from [@tonapibot](https://t.me/tonapibot) and choose mainnet or testnet. Store the 24-word seed phrase of the collection owner’s wallet in the MNEMONIC variable.
+You can get a TON Center API key from [@tonapibot](https://t.me/tonapibot) and choose mainnet or testnet. Store the 24-word seed phrase of the collection owner’s wallet in the MNEMONIC variable.
 
 Great! Now we are ready to start writing code for our project.
 
@@ -1209,3 +1211,6 @@ Today, you learned a lot about TON and successfully created your own NFT collect
 
 ## See also
  - [NFT use cases](/v3/documentation/dapps/defi/nft)
+
+<Feedback />
+

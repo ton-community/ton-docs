@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TVM initialization
 
 :::info
@@ -188,3 +190,5 @@ Note that in the upcoming upgrade to the TVM, the **c7** tuple was extended from
 ## See also
 
 - Original description of [TVM initialization](https://docs.ton.org/tblkch.pdf#page=89&zoom=100) from the whitepaper
+<Feedback />
+

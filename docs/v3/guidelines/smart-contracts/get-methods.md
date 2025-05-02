@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Get methods
 
 :::note
@@ -373,3 +375,6 @@ Get methods are vital for querying data from smart contracts on the TON Blockcha
 
 ## See also
 - [Writing tests examples](/v3/guidelines/smart-contracts/testing/writing-test-examples/)
+
+<Feedback />
+

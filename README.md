@@ -1,20 +1,29 @@
-<img align="left" width="300px" src="static\img\readme\about.png">
+# TON documentation 📚
 
-## TON documentation 📚
+<img align="left" width="300px" src="static\img\readme\about.png">
 
 This is the official repository for The Open Network documentation.
 
-Latest documentation release: [docs.ton.org](https://docs.ton.org)
+Latest documentation release: [docs.ton.org](https://docs.ton.org).
+
+Contribution guidelines: [How to contribute](https://docs.ton.org/v3/contribute).
+
+TON Documentation is entirely open source. Community enthusiasts and early TON contributors have played a key role in creating this open-source TON documentation by turning their notes into detailed pages.
+
+It was initially written by TON [contributors](/v3/contribute/maintainers/) and supported by [TON Studio](https://tonstudio.io/).
 
 ---
 
-<img align="right" width="300px" src="static\img\readme\contribute.png">
+
 
 ## Join TON Docs Club 💎
+
+<img align="right" width="300px" src="static\img\readme\contribute.png">
 
 TON is an actively growing ecosystem, and every day many devs contribute to its development. 
 
 You can participate in TON by helping organize knowledge, making Pull Requests and creating tutorials to help other developers. 
+
 Feedback, lectures, technical articles, tutorials, and examples. All this can help the developers community grow even faster!
 
 Join TON Docs Club chat in Telegram to join contributors party:
@@ -27,9 +36,14 @@ Join TON Docs Club chat in Telegram to join contributors party:
 ## How to contribute? 🦄
 
 — Have an issue? [Prepare a solution with TON Docs Wizard](https://t.me/ton_docs_bot).  
+
 — Have an idea? [Submit a Feature Request](https://github.com/ton-community/ton-docs/issues/new/choose).  
+
 — Want to contribute? [How to contribute](https://docs.ton.org/v3/contribute).
-— Want to translate? [Localization](https://docs.ton.org/v3/contribute/localization-program/how-to-contribute)
+
+— Want to translate? [Localization](https://docs.ton.org/v3/contribute/localization-program/how-to-contribute).
+
+— Have a question? [Documentation development chat](https://t.me/+c-0fVO4XHQsyOWM8).
 
 
 

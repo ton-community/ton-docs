@@ -1,7 +1,9 @@
 ---
 ---
 
-# NFT Use Cases
+import Feedback from '@site/src/components/Feedback';
+
+# NFT use cases
 
 NFTs, or non-fungible tokens, are a type of digital asset that is unique, and cannot be replaced by another identical asset. This article describes the approaches and already implemented use cases of NFTs in TON Blockchain.
 
@@ -33,7 +35,7 @@ There is TON DNS service, which works fully onchain. It allows users to buy doma
 
 NFT Telegram usernames from Fragment can also be used in TON DNS; `yourname.t.me` is a valid domain.
 
-### Use cases of TON Domains
+### Use cases of TON domains
 
 1. You can set domain to resolve to your wallet address, so a person unfamiliar with crypto can transfer money not to `EQDyo...zuDf` but to easily readable `mystore.ton`.
 2. You can attach a [TON Site](/v3/guidelines/web3/ton-proxy-sites/how-to-run-ton-site) to the domain; then, it will be accessible in TON Web3 network under a convenient name.
@@ -70,6 +72,8 @@ Access to the chat is facilitated through a Telegram bot, which verifies the pre
 
 It is important to note that this is just one example, and as the TON ecosystem evolves, new services and technologies for authentication via NFTs may emerge. Keeping up with the latest developments in the TON space can help identify other platforms or open-source projects that provide similar authentication capabilities.
 
-## NFT as a Virtual Asset in Games
+## NFT as a virtual asset in games
 
 NFT integrated to a game allows players to own and trade in-game items in a way that is verifiable and secure, which adds an extra layer of value and excitement to the game.
+
+<Feedback />

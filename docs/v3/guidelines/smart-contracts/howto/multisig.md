@@ -2,6 +2,8 @@
 description: At the end of the tutorial, you will have deployed multisig contract in TON Blockchain.
 ---
 
+import Feedback from '@site/src/components/Feedback';
+
 # Make a simple multisig contract with fift
 
 :::caution advanced level
@@ -274,3 +276,5 @@ You did it, ha-ha! 🚀🚀🚀
 
 - [Read more about multisig wallets in TON](https://github.com/akifoq/multisig) — _[@akifoq](https://t.me/aqifoq)_
 - [Multisig wallet v2](https://github.com/ton-blockchain/multisig-contract-v2)
+
+<Feedback />
