@@ -1,6 +1,7 @@
 import Feedback from "@site/src/components/Feedback";
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Button from '@site/src/components/button'
 
 # Storage and get methods
 
@@ -37,9 +38,9 @@ Let's examine the [Cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data
 
 TON Blockchain uses a data structure called **Cell** as the fundamental unit for storing data. Cells are the building blocks of smart contract data and have the following characteristics:
 
-- A Cell can store up to 1023 bits (approximately 128 bytes) of data
-- A Cell can reference up to 4 other Cells (children)
-- A Cell is immutable once created
+- A Cell can store up to 1023 bits (approximately 128 bytes) of data.
+- A Cell can reference up to 4 other Cells (children).
+- A Cell is immutable once created.
 
 You can think of a Cell as the following structure:
 
@@ -57,7 +58,7 @@ Let's modify our smart contract by following the standard steps described in the
 
 ### Step 1: edit smart contract code
 
-If manually serializing and deserializing the storage cell becomes inconvenient, a common practice is to define two wrapper methods that handle this logic. If you haven't modified the smart contract code, it should include the following lines:
+If manually serializing and deserializing the storage cell becomes inconvenient, a common practice is to define two wrapper methods that handle this logic. If you haven't modified the smart contract code, it should include the following lines in the `/contracts/hello_world.fc`:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -118,11 +119,11 @@ fun saveData() {
 Let's modify our example slightly by exploring another common storage management approach in smart contract development:
 
 Rather than initializing global variables, we'll:
-1. Pass storage members as parameters via `save_data(members...)`
-2. Retrieve them using `(members...) = get_data()`
-3. Move the global variables `ctx_id` and `ctx_counter` into method bodies
+1. Pass storage members as parameters via `save_data(members...)`.
+2. Retrieve them using `(members...) = get_data()`.
+3. Move the global variables `ctx_id` and `ctx_counter` into the method bodies.
 
-Also let's add an additional **256-bit integer** to our storage. The modified implementation should appear as follows:
+Also let's add an additional **256-bit integer** to our storage as `ctx_counter_ext` global variable. The modified implementation should appear as follows:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -184,7 +185,7 @@ fun saveData(ctxID: int, ctxCounter: int, ctxCounterExt: int) {
 
 Remember to:
 1. Remove the global variables `ctx_id` and `ctx_counter`
-2. Update function usage by copying storage members locally as shown:
+2. Update the function usage by copying storage members locally as shown:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -209,7 +210,8 @@ saveData(ctxID, ctxCounter, ctxCounterExt);
 
 #### Get methods
 
-The main purpose of `get methods` is to provide external read access to storage data through a convenient interface, primarily for extracting information needed to prepare **transactions**.
+The main purpose of `get methods` is to provide an external read access to storage data through a convenient interface — primarily to extract the information needed for preparing **transactions**.
+Let's add a getter function that returns both the main and extended counter values stored in the smart contract.
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -229,6 +231,39 @@ get get_counters(): (int, int) {
 ```
 </TabItem>
 </Tabs>
+
+And don’t forget to update the variables in the get methods to match the unpacking from `load_data()`.
+
+
+<Tabs groupId="language">
+  <TabItem value="FunC" label="FunC">
+    ```func title="/contracts/hello_world.fc"
+    int get_counter() method_id {
+    var (_, ctx_counter, _) = load_data();
+    return ctx_counter;
+  }
+
+    int get_id() method_id {
+    var (ctx_id, _, _) = load_data();
+    return ctx_id;
+  }
+    ```
+  </TabItem>
+  <TabItem value="Tolk" label="Tolk">
+    ```tolk title="/contracts/hello_world.tolk"
+    get currentCounter(): int {
+    var (ctxID, ctxCounter, ctxCounterExt) = loadData();
+    return ctxCounter;
+  }
+
+    get initialId(): int {
+    var (ctxID, ctxCounter, ctxCounterExt) = loadData();
+    return ctxID;
+  }
+    ```
+  </TabItem>
+</Tabs>
+
 
 And that's all! In practice, all **get methods** follow this straightforward pattern and require no additional complexity. Remember, you can ignore return values using the `_` placeholder syntax.
 
@@ -396,18 +431,21 @@ Build script running, compiling HelloWorld
 ✅ Wrote compilation artifact to build/HelloWorld.compiled.json
 ```
 
+This means the HelloWorld contract was successfully compiled. A hash was generated, and the compiled code was saved to `build/HelloWorld.compiled.json`.
+
 ### Step 2: update wrapper
 
 Next, we'll update our wrapper class to align with the new storage layout and `get method`. We need to:
 
-1. Modify the `helloWorldConfigToCell` function
-2. Update the `HelloWorldConfig` type
-3. Ensure proper storage initialization during contract creation
-4. Include the 256-bit `ctxCounterExt` field we added earlier
+1. Modify the `helloWorldConfigToCell` function.
+2. Update the `HelloWorldConfig` type.
+3. Ensure proper storage initialization during contract creation.
+4. Include the 256-bit `ctxCounterExt` field we added earlier.
 
 These changes will maintain consistency with our smart contract modifications.
 
 ```typescript title="/wrappers/HelloWorld.ts"
+// @version TypeScript 5.8.3
 export type HelloWorldConfig = {
     id: number;
     ctxCounter: number;
@@ -439,13 +477,14 @@ async getCounters(provider: ContractProvider) : Promise<[number, bigint]> {
 
 Finally, let's test the new functionality using our updated wrapper:
 
-1. Initialize contract storage by creating a `helloWorldConfig` with test values
-2. Execute each `get` method to retrieve stored data
-3. Validate that values match the initial configuration
+1. Initialize the contract storage by creating a `helloWorldConfig` with test values.
+2. Execute each `get` method to retrieve stored data.
+3. Validate that values match the initial configuration.
 
 Example implementation:
 
 ```typescript title="/tests/HelloWorld.spec.ts"
+// @version TypeScript 5.8.3
 import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
 import { Cell, toNano} from '@ton/core';
 import { HelloWorld } from '../wrappers/HelloWorld';
@@ -544,5 +583,17 @@ Tests:       1 passed, 1 total
 Snapshots:   0 total
 Time:        3.591 s, estimated 6 s
 ```
+
+## Next step
+
+You’ve written your first smart contract using FunC or Tolk, tested it, and explored how storage and get methods work.
+
+Now it’s time to move on to one of the most important parts of smart contracts —**processing messages:** sending and receiving them.
+
+<Button href="/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/processing-messages" colorType={'primary'} sizeType={'sm'}>
+
+  Processing messages
+
+</Button>
 
 <Feedback />

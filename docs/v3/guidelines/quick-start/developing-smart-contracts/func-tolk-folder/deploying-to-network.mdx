@@ -26,11 +26,11 @@ This makes it possible to calculate the future wallet smart contract address.
 
 ### Magic storage member
 
-In previous steps, we deliberately didn't explain the purpose of `ctxID` and `ID` stored in our smart contract's state and why they remained untouched in all the smart contract functionality. Now, their purpose should start to become clearer.
+In previous steps, we deliberately didn't explain the purpose of `ctx_id` and `ID` stored in our smart contract's state and why they remained untouched in all the smart contract functionality. Now, their purpose should start to become clearer.
 
 Since we can't deploy a smart contract with the same `state_init`, the only way to provide the same initial code and **"same"** initial data is to create a separate field in it, ensuring additional uniqueness. This, in the case of a wallet, gives you the opportunity to have the same key pair for several wallet smart contracts.
 
-### One to rule them all
+{/*### One to rule them all
 
 If you've already considered that the `ID` field is a must-have for any smart contract, there is another opportunity that could change your mind. Let's examine the previously developed `CounterInternal` smart contract's init section:
 
@@ -47,19 +47,19 @@ If we remove the `id` field from its initial storage, we can ensure that **only 
 :::info Tokens
 This mechanism plays a crucial role in [Jetton Processing](/v3/guidelines/dapps/asset-processing/jettons/). Each non-native (jetton) token requires its own `Jetton Wallet` for a particular owner and, therefore, provides a calculable address for it, creating a **star scheme** with the basic wallet in the center.
 :::
-
+*/}
 ## Implementation
 
-Now that our smart contracts are fully tested, we are ready to deploy them to TON. In `Blueprint SDK`, this process is the same for both `Mainnet` and `Testnet` and for any of the presented languages in the guide: `FunC`, `Tact`, or `Tolk`.
+Now that our smart contracts are fully tested, we are ready to deploy them to TON. In `Blueprint SDK`, this process is the same for both `Mainnet` and `Testnet` and for any of the presented languages in the guide: `FunC` or `Tolk`.
 
 ### Step 1: update the deployment script
 
 Deployment scripts rely on the same wrappers that you have used in testing scripts. We will use one common script to deploy both of the previously deployed smart contracts. Update `deployHelloWorld.ts` with this code:
 
 ```typescript title="/scripts/deployHelloWorld.ts"
+// @version TypeScript 5.8.3
 import { toNano } from '@ton/core';
 import { HelloWorld } from '../wrappers/HelloWorld';
-import { CounterInternal } from '../wrappers/CounterInternal';
 import { compile, NetworkProvider } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider) {
@@ -78,23 +78,7 @@ export async function run(provider: NetworkProvider) {
 
     await provider.waitForDeploy(helloWorld.address);
 
-    const counterInternal = provider.open(
-        await CounterInternal.fromInit(
-            BigInt(Math.floor(Math.random() * 10000)),
-            helloWorld.address
-        )
-    );
-
-    await counterInternal.send(
-        provider.sender(),
-        { value: toNano('0.05') }, 
-        null
-    );
-
-    await provider.waitForDeploy(counterInternal.address);
-
     console.log('ID', await helloWorld.getID());
-    console.log('ID', (await counterInternal.getId()).toString());
 }
 ```
 
@@ -103,7 +87,7 @@ export async function run(provider: NetworkProvider) {
 You can run the script by entering the following command:
 
 ```bash
-npx blueprint run # deployHelloWorld # optionally directly pass script
+npx blueprint run deployHelloWorld
 ```
 
 ### Step 3: choose network
