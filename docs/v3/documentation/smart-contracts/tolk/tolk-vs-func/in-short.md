@@ -53,8 +53,12 @@ get currentCounter(): int { ... }
 13. Nullable types `T?`, null safety, smart casts, operator `!`
 14. Union types and pattern matching (for types and for expressions, switch-like behavior)
 15. Type aliases are supported
-16. Trailing comma is supported
-17. Semicolon after the last statement in a block is optional
+16. Structures are supported
+17. Generics are supported
+18. Methods (as extension functions) are supported
+19. Trailing comma is supported
+20. Semicolon after the last statement in a block is optional
+21. Fift output contains original .tolk lines as comments
 
 #### Tooling around
 - JetBrains plugin exists

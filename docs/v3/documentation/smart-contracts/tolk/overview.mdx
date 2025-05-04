@@ -15,7 +15,7 @@ but leaving all low-level optimizations untouched. Think of Tolk as the next‑g
 import "storage.tolk"
 
 fun loadData() {
-    ctxCounter = getContractData().beginParse().loadUint(32);
+    ctxCounter = contract.getData().beginParse().loadUint(32);
 }
 
 fun onInternalMessage(msgValue: int, msgFull: cell, msgBody: slice) {
@@ -142,7 +142,6 @@ The first released version of Tolk is v0.6, emphasizing [missing](/v3/documentat
 Here are some points to investigate:
 
 - type system improvements
-- structures and generics
 - auto-pack structures to/from cells, probably integrated with message handlers
 - methods for structures, generalized to cover built-in types
 - easier message sending

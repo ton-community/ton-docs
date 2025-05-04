@@ -364,6 +364,7 @@
     "deployment",
     "docs/learn/tvm-instructions/instructions.csv",
     "docs/learn/tvm-instructions/generate_md.py",
+    "docs/v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib.md",
     "sidebars.js",
     "sidebars",
     "i18n",

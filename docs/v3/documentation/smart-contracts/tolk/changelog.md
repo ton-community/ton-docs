@@ -5,6 +5,14 @@ import Feedback from '@site/src/components/Feedback';
 When new versions of Tolk are released, they will be mentioned here.
 
 
+## v0.12
+
+1. Structures `struct A { ... }`
+2. Generics `struct<T>` and `type<T>`
+3. Methods `fun Point.getX(self)`
+4. Rename stdlib functions to short methods
+
+
 ## v0.11
 
 1. Type aliases `type NewName = <existing type>`
