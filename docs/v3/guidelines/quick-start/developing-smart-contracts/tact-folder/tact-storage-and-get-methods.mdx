@@ -28,7 +28,9 @@ message Add {
 A **message** is a structure that sends data into a contract from another contract or outside the blockchain.
 Tact simplifies working with messages by automatically serializing and deserializing them into [TVM cells](https://docs.ton.org/v3/documentation/data-formats/tlb/msg-tlb). You don’t need to write low-level serialization code or think about bit layout manually — Tact handles that for you.
 
-For example, if you want to assign a fixed opcode to the message, which is useful when evolving message structures, you can define it like this:
+Every message is assigned a unique 32-bit identifier called an **opcode** (short for operation code). This identifier is stored at the beginning of the serialized message and helps the contract understand what type of message it is *receiving*.
+
+By default, Tact automatically assigns this identifier. However, you can also define it manually, for example, when evolving the structure of your messages over time:
 
 ```tact title="/contracts/hello_world.tact"
 message(0x7e8764ef) Add {
@@ -234,11 +236,15 @@ Expected output should look like this:
 
 ## Step 2: update wrapper
 
-[Wrappers](https://docs.tact-lang.org/book/compile/#wrap-ts) facilitate contract interaction from TypeScript. Unlike in FunC or Tolk, they are generated automatically during the build process:
+After building your contract, Tact automatically generates a special wrapper file. This [wrapper]((https://docs.tact-lang.org/book/compile/#wrap-ts)) simplifies interaction with your contract from TypeScript, such as calling its methods or sending messages.
+
+In the wrapper file, you'll find this line of code:
 
 ```typescript title="/wrappers/HelloWorld.ts"
 export * from '../build/HelloWorld/tact_HelloWorld';
 ```
+
+This code exports everything inside the `tact_HelloWorld.ts` file in the build folder, making it available for use in other files.
 
 ## Step 3: updating tests
 
