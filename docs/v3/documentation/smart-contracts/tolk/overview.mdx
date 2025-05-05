@@ -15,7 +15,7 @@ but leaving all low-level optimizations untouched. Think of Tolk as the next‑g
 import "storage.tolk"
 
 fun loadData() {
-    ctxCounter = getContractData().beginParse().loadUint(32);
+    ctxCounter = contract.getData().beginParse().loadUint(32);
 }
 
 fun onInternalMessage(msgValue: int, msgFull: cell, msgBody: slice) {
@@ -101,7 +101,7 @@ If you know FunC and want to try a new syntax, your way is:
 
 1. Read [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short).
 2. With a blueprint, create a new Tolk contract (for example, a counter) and experiment around it. Remember that almost all stdlib functions are renamed to ~~verbose~~ clear names. Here is [a mapping](/v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib).
-3. Try a [converter](https://github.com/ton-blockchain/convert-func-to-tolk) for your existing contracts or one from [FunC Contracts](/v3/documentation/smart-contracts/contracts-specs/examples). Remember that contracts written in Tolk from scratch look nicer than auto-converted ones. For instance, using logical operators instead of bitwise tremendously increases code readability.
+3. Try a [converter](https://github.com/ton-blockchain/convert-func-to-tolk) for your existing contracts or one from [FunC contracts](/v3/documentation/smart-contracts/contracts-specs/examples). Remember that contracts written in Tolk from scratch look nicer than auto-converted ones. For instance, using logical operators instead of bitwise tremendously increases code readability.
 
 ## How to try Tolk if you don't know FunC
 
@@ -142,7 +142,6 @@ The first released version of Tolk is v0.6, emphasizing [missing](/v3/documentat
 Here are some points to investigate:
 
 - type system improvements
-- structures and generics
 - auto-pack structures to/from cells, probably integrated with message handlers
 - methods for structures, generalized to cover built-in types
 - easier message sending
