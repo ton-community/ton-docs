@@ -7,8 +7,6 @@ import Button from '@site/src/components/button'
 
 > **Summary:** In the previous steps, we learned how to use the `Blueprint` and its project structure.
 
-Tact is a high-level programming language for the TON Blockchain, focused on efficiency and simplicity. It is designed to be easy to learn and use while being well-suited for smart contract development. Tact is a statically typed language with a simple syntax and a powerful type system.
-
 :::info
 For more details, refer to the [Tact documentation](https://docs.tact-lang.org/#start/) and [Tact By Example](https://tact-by-example.org/00-hello-world/).
 :::
@@ -18,7 +16,7 @@ Let's create and modify our smart contract following standard steps described in
 ## Step 1: edit smart contract code
 
 
-At the top of the generated contract file: `hello_world.tact`, you may see a message definition:
+At the top of the generated contract file: `hello_world.tact`, you may see a **message** definition:
 
 ```tact title="/contracts/hello_world.tact"
 message Add {
@@ -27,7 +25,10 @@ message Add {
 }
 ```
 
-A message is a basic structure for communication between contracts. Tact automatically serializes and deserializes messages into cells. To ensure that opcodes will be the same during message structure changes, it may be added like below:
+A **message** is a structure that sends data into a contract from another contract or outside the blockchain.
+Tact simplifies working with messages by automatically serializing and deserializing them into [TVM cells](https://docs.ton.org/v3/documentation/data-formats/tlb/msg-tlb). You don’t need to write low-level serialization code or think about bit layout manually — Tact handles that for you.
+
+For example, if you want to assign a fixed opcode to the message, which is useful when evolving message structures, you can define it like this:
 
 ```tact title="/contracts/hello_world.tact"
 message(0x7e8764ef) Add {
@@ -36,17 +37,26 @@ message(0x7e8764ef) Add {
 }
 ```
 
-Tact will serialize it as follows:
 
-```func
-begin_cell()
-    .store_uint(0x7e8764ef, 32) ;; message opcode
-    .store_uint(query_id, 64)
-    .store_uint(amount, 32)
-    .end_cell()
-```
+<details>
+  <summary><b>Tact automatically serializes messages into TVM cells.</b></summary>
 
-Using this structure, a message can be sent to the contract from FunC.
+  When compiled, Tact will automatically serialize this message into a TVM cell. Internally, it would be represented something like this:
+
+  ```func
+  begin_cell()
+  .store_uint(0x7e8764ef, 32) ;; message opcode
+  .store_uint(query_id, 64)
+  .store_uint(amount, 32)
+  .end_cell()
+  ```
+
+  Usually, you don’t need to think about this — Tact takes care of it behind the scenes. However, it can be helpful to understand when debugging or interacting with low-level language like FunC.
+
+</details>
+
+
+
 
 #### Defining the contract
 
