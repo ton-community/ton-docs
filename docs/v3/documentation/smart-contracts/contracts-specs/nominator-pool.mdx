@@ -1,4 +1,4 @@
-import Feedback from '@site/src/components/Feedback';
+import Feedback from "@site/src/components/Feedback";
 
 # Nominator pool
 
@@ -17,7 +17,20 @@ The pool is designed for large amounts of coins, prioritizing security and code 
 
 ## Fees
 
-Operating in the masterchain requires about 5 TON per validation round, paid by the validator. The pool must maintain a minimum balance of 10 TON for network storage fees (non-withdrawable).
+In the TON blockchain, the validator cycle is approximately 18 hours, and there are roughly 40.5 validation rounds per month (assuming a 30-day month).
+
+Here's the breakdown of costs based on participation:
+
+- **Participating in only odd or even cycles (half of the rounds):**
+
+  - Rounds per month: ~20.25
+  - Cost per round: ~5 Toncoins
+  - `total cost = 20.25 * 5 -> ~101.25 Toncoins`
+
+- **Participating in both odd and even cycles (all rounds):**
+  - Rounds per month: ~40.5
+  - Cost per round : ~ 5 Toncoins
+  - `total cost = 40.5 * 5 -> ~202.50 Toncoins`
 
 ## Reward distribution
 
@@ -195,7 +208,6 @@ For nominator `EQA0i8-CdGnF_DhUHHf92R1ONH6sIA9vLZ_WLcCIhfBBXwtG`:
 get_nominator_data 0x348bcf827469c5fc38541c77fdd91d4e347eac200f6f2d9fd62dc08885f0415f
 ```
 
-
 ### Voting Methods
 
 #### Get-method list_votes
@@ -237,4 +249,3 @@ To obtain the pool's complete state, you need to query both `get_pool_data` and 
 - [Usage guide](/v3/guidelines/smart-contracts/howto/nominator-pool)
 
 <Feedback />
-
