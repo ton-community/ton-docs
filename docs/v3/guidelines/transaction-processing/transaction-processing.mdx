@@ -65,7 +65,7 @@ The only ingredient that is left to fulfill the image is a way of interaction be
       light: '/img/docs/message-delivery/message_delivery_1.png?raw=true',
       dark: '/img/docs/message-delivery/message_delivery_1_dark.png?raw=true',
     }}
-  />
+t />
 </div>
 
 This makes it possible to interpret an account as service just running on some server like this:
@@ -144,96 +144,13 @@ Note, that since transaction is applied only to one account and toggled by only 
 
 Several `AccountChains` merged to one set is called [ShardChain](/v3/documentation/smart-contracts/shards/shards-intro). By splitting those chain into `blocks`, not intervene in transaction sequencing, TON participants reach [consensus](https://docs.ton.org/catchain.pdf). Once confirmed block is added as permanent, immutable part forming a block chain.
 
-## Data layout
-
-### Transaction structure
-
-Transaction obtained from [API](/v3/guidelines/dapps/apis-sdks/api-types) have the following structure:
-
-```json5
-{
-  "@type": "raw.transaction",
-  "address": {
-    "@type": "accountAddress",
-    "account_address": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx"
-  },
-  "utime": 1738588970,
-  "data": "te6cckECBQEAAQ0AA7N/5K6gIewIvakhl8TwgAqyNzRoOkNRACij4AseXaaN7TAAAwvXWplEGUxUumyZOd7nfS5XY7vYQNT7h0NS7Pyez2KO7FVUqsxAAAMAgMG35BZ6DDKgAABI5ogBAgMBAaAEAIJyet2gvih177CPvdmM1xFlH1U76NhPr2Xr2IiEi9p8itebOwMmU6dJdg5mVAR8cxecbiPC+xwdchGbAu4LPdmYxwATDJHNCQBMS0ABIACxSAASm9AH4cd8PJYO+RwUqHU33et6HLVFyFqKm4Xq6IE9RQA/krqAh7Ai9qSGXxPCACrI3NGg6Q1EAKKPgCx5dpo3tNAExLQABggjWgAAYXrq95sEz0GGRkAq6EOl",
-  "transaction_id": {
-    "@type": "internal.transactionId",
-    "lt": "53590281000001",
-    "hash": "aSuaJcDD3CSVOeLulkBbhSmeXSbbSAtid2PvGRkGTjQ="
-  },
-  "fee": "18228",
-  "storage_fee": "18228",
-  "other_fee": "0",
-  "in_msg": {
-    ...
-  },
-  "out_msgs": []
-}
-```
-
-#### Key transaction fields
-
-- `address`: The account address where the transaction occurred.
-- `utime`: The UNIX timestamp of the transaction.
-- `transaction_id.lt`: [Logical time](/v3/documentation/smart-contracts/message-management/messages-and-transactions/#what-is-a-logical-time/), used to determine the order of events.
-- `fee`: [Total fees](/v3/documentation/smart-contracts/transaction-fees/fees/) in nanoTON paid during the transaction.
-- `in_msg`: The incoming [message](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-message/) that triggered the transaction.
-- `out_msgs`: Outgoing messages sent during the transaction.
-
-
-### Message structure
-
-Message have the following structure:
-
-```json5
-{
-  "@type": "raw.message",
-  "hash": "mcHdqltDAB8ODQHqtedtYQIS6MQL7x4ut+nf9tXWGqg=",
-  "source": "EQAJTegD8OO-HksHfI4KVDqb7vW9Dlqi5C1FTcL1dECeosTf",
-  "destination": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx",
-  "value": "20000000",
-  "extra_currencies": [],
-  "fwd_fee": "266669",
-  "ihr_fee": "0",
-  "created_lt": "53590278000002",
-  "body_hash": "lqKW0iTyhcZ77pPDD4owkVfw2qNdxbh+QQt4YwoJz8c=",
-  "msg_data": {
-    "@type": "msg.dataRaw",
-    "body": "te6cckEBAQEAAgAAAEysuc0=",
-    "init_state": ""
-  },
-  "message": ""
-}
-```
-
-#### Key message fields
-
-- `hash`: Message hash. May be used to determine the transaction using [TonApi](https://tonapi.io/api-v2#operations-Blockchain-getBlockchainTransaction).
-- `source`: The address of the sender (the account that initiated the message).
-- `destination`: The address of the receiver (the account that will process the message).
-- `value`: The amount of TON (in nanoTON) attached to the message.
-- `fwd_fee`: [Forward fees](https://docs.ton.org/v3/documentation/smart-contracts/transaction-fees/forward-fees/) is the cost of delivering the message to the destination contract.
-- `created_lt`: [Logical time](/v3/documentation/smart-contracts/message-management/messages-and-transactions/#what-is-a-logical-time/) when the message was created.
-- `msg_data`: Contains message body and state init.
-
-### TL-B
-
-All fundamentals structures of TON Blockchain such as: blocks, messages, transactions have comprehensive description in [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) language, that fully defines their binary layout.
-
-Usually SDK's such as [@ton/ton](https://github.com/ton-org/ton) or [pytoniq](https://github.com/yungwine/pytoniq) provide ready to use serialization functions for internal or external messages, but it's still might be useful in case of serializing messages by yourself.
-
-Often some widely used contracts provide TL-B description of their message body, as for example [WalletV5R1](https://github.com/ton-blockchain/wallet-contract-v5/blob/main/types.tlb).
-
-:::tip
-Alternatively you can always refer to smart-contract implementation source code to research it's serialization process, see [Contracts specifications](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) for more examples.
-:::
-
 ## Sending messages
 
-To interact with TON Blockchain you should prepare and sign a transaction, and then sending it to the blockchain. This process includes several components:
+:::warning
+ Note that `sending transaction` in case of TON is **not correct** phrase*. As was discussed before, because of asynchronous nature of blockchain even as a transaction initiator you **can't fully determine it** by sended message until it would be processed on blockchain.
+:::
+
+To interact with TON Blockchain you should prepare and sign a message, and then sending it to the blockchain. This process includes several components:
 - [**wallets**](/v3/guidelines/smart-contracts/howto/wallet#-ton-blockchain-wallets): All **wallets** that operate on TON Blockchain are actually **smart contracts** owned by individuals outside the blockchain.
 - Retrieving seqno: Wallets use `seqno` for [replay protection](/v3/guidelines/smart-contracts/howto/wallet/#replay-protection---seqno/), a mechanism to prevent the repetition of messages.
 - Composing message body:
@@ -253,9 +170,6 @@ A common transfer would look like this:
 </div>
 <br></br>
 
-:::note
-When building a frontend app, avoid handling private keys directly—secure storage and signing require careful implementation. Instead, use **[TON Connect](/v3/guidelines/ton-connect/overview/)**, a secure **wallet-to-app** protocol that simplifies *[authentication](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users/)* and *[sending messages](/v3/guidelines/ton-connect/guidelines/sending-messages/)* without exposing keys.
-:::
 
 <Tabs groupId="SDK">
 <TabItem value="@ton/ton" label="@ton/ton">
@@ -339,27 +253,44 @@ if __name__ == "__main__":
 In most scenarios, `SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS`(default for `tonutils`) will work, but if you want a deeper understanding, continue reading in the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook/).
 :::
 
-### Retrieving message hash
+### TON Connect
 
-Sometimes it will be useful to get the message hash before sending it. By the message hash, the transaction may be found on the blockchain. To do so, instead of calling the `sendTransfer` method on the wallet, we should build the message ourselves. 
+Usually, when you build a frontend app you don't directly manage private keys, since secure storage and signing require careful implementation. 
+
+General approuch in this case is using **[TON Connect](/v3/guidelines/ton-connect/overview/)**, a secure **wallet-to-app** protocol that delegates *[authentication](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users/)* and *[sending messages](/v3/guidelines/ton-connect/guidelines/sending-messages/)* to wallet app, making it easy for end-user to interact with your app.
+
+## Hashes
+
+Analyzing transactions in TON includes retrieving identifiers of different entities - `hashes`. Since transactions, messages and message bodyes use same hash mechanism its cruicial to separate their definitions:
+
+- **external message hash**: hash of serialized external message data that will be sended to smart-contract. 
+- **internal message hash**: Same as external message hash, but note that in case of wallets it will be represented as a part of external message body, that will be sended further during transaction execution.
+- **transaction hash**: hash of transaction added to blockchain that includes sended message to smart-contract.
 
 :::warning
-Be careful with the hash definition. As was discussed before transactions and messages are **different entities**.
+Be careful with the hash definitions, because conceptually those terms are similar and often used interchangebly from smart-contracts point of view.
 :::
+
+### Retrieving message hash
+
+By the message hash, the transaction may be found on the blockchain. To do so, instead of calling the `sendTransfer` method on the wallet, we should build the internal and external message ourselves. 
 
 <Tabs groupId="SDK">
 <TabItem value="@ton/ton" label="@ton/ton">
 
 ```typescript
+//Building internal message by our selfes
+const internal_message = internal({
+  to: wallet.address,
+  body: comment('Hello from wallet!'),
+  value: toNano(0.05),
+})
+
 // Building the transfer to the wallet
 const transfer = wallet.createTransfer({
   seqno,
   secretKey,
-  messages: [internal({
-    to: wallet.address,
-    body: comment('Hello from wallet!'),
-    value: toNano(0.05),
-  })],
+  messages: [internal_message],
   sendMode: SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS,
 });
 
@@ -369,15 +300,23 @@ const externalMessage = external({
   body: transfer,
 });
 
-
-// Obtaining the message hash
+// Obtaining the external message hash
 const messageHash = beginCell()
   .store(storeMessage(externalMessage))
   .endCell()
   .hash();
 
+// obtaining the internal message hash
+const internalMessageHash = beginCell()
+  .store(storeMessageRelaxed(internal_message))
+  .endCell()
+  .hash()
+
 console.log(messageHash.toString('hex'));
 console.log(`https://testnet.tonviewer.com/transaction/${messageHash.toString('hex')}`);
+
+console.log(internalMessageHash.toString('hex'));
+console.log(`https://testnet.tonviewer.com/transaction/${internalMessageHash.toString('hex')}`);
 
 // Sending message to the blockchain
 await tonClient.sendMessage(externalMessage);
@@ -437,7 +376,7 @@ if __name__ == "__main__":
 
 ### Retrieving transaction hash
 
-It may also be useful to wait for the transaction to appear on the blockchain. This can be done by trying to get it by `messageHash` with delays. When the transaction is obtained, the hash of the transaction may be received.
+To wait for the transaction to appear on the blockchain you should try to get it by `messageHash` with delays. Since transaction may be initiated by both external or internal message, method is the same for both. When the transaction is obtained, the hash of the transaction may be received.
 
 <Tabs groupId="SDK">
 <TabItem value="@ton/ton" label="@ton/ton">
@@ -540,7 +479,95 @@ function extractExitCode(transaction: Transaction) {
 }
 ```
 
+## Data layout
+
+### Transaction structure
+
+Transaction obtained from [API](/v3/guidelines/dapps/apis-sdks/api-types) have the following structure:
+
+```json5
+{
+  "@type": "raw.transaction",
+  "address": {
+    "@type": "accountAddress",
+    "account_address": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx"
+  },
+  "utime": 1738588970,
+  "data": "te6cckECBQEAAQ0AA7N/5K6gIewIvakhl8TwgAqyNzRoOkNRACij4AseXaaN7TAAAwvXWplEGUxUumyZOd7nfS5XY7vYQNT7h0NS7Pyez2KO7FVUqsxAAAMAgMG35BZ6DDKgAABI5ogBAgMBAaAEAIJyet2gvih177CPvdmM1xFlH1U76NhPr2Xr2IiEi9p8itebOwMmU6dJdg5mVAR8cxecbiPC+xwdchGbAu4LPdmYxwATDJHNCQBMS0ABIACxSAASm9AH4cd8PJYO+RwUqHU33et6HLVFyFqKm4Xq6IE9RQA/krqAh7Ai9qSGXxPCACrI3NGg6Q1EAKKPgCx5dpo3tNAExLQABggjWgAAYXrq95sEz0GGRkAq6EOl",
+  "transaction_id": {
+    "@type": "internal.transactionId",
+    "lt": "53590281000001",
+    "hash": "aSuaJcDD3CSVOeLulkBbhSmeXSbbSAtid2PvGRkGTjQ="
+  },
+  "fee": "18228",
+  "storage_fee": "18228",
+  "other_fee": "0",
+  "in_msg": {
+    ...
+  },
+  "out_msgs": []
+}
+```
+
+#### Key transaction fields
+
+- `address`: The account address where the transaction occurred.
+- `utime`: The UNIX timestamp of the transaction.
+- `transaction_id.lt`: [Logical time](/v3/documentation/smart-contracts/message-management/messages-and-transactions/#what-is-a-logical-time/), used to determine the order of events.
+- `fee`: [Total fees](/v3/documentation/smart-contracts/transaction-fees/fees/) in nanoTON paid during the transaction.
+- `in_msg`: The incoming [message](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-message/) that triggered the transaction.
+- `out_msgs`: Outgoing messages sent during the transaction.
+
+
+### Message structure
+
+Message have the following structure:
+
+```json5
+{
+  "@type": "raw.message",
+  "hash": "mcHdqltDAB8ODQHqtedtYQIS6MQL7x4ut+nf9tXWGqg=",
+  "source": "EQAJTegD8OO-HksHfI4KVDqb7vW9Dlqi5C1FTcL1dECeosTf",
+  "destination": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx",
+  "value": "20000000",
+  "extra_currencies": [],
+  "fwd_fee": "266669",
+  "ihr_fee": "0",
+  "created_lt": "53590278000002",
+  "body_hash": "lqKW0iTyhcZ77pPDD4owkVfw2qNdxbh+QQt4YwoJz8c=",
+  "msg_data": {
+    "@type": "msg.dataRaw",
+    "body": "te6cckEBAQEAAgAAAEysuc0=",
+    "init_state": ""
+  },
+  "message": ""
+}
+```
+
+#### Key message fields
+
+- `hash`: Message hash. May be used to determine the transaction using [TonApi](https://tonapi.io/api-v2#operations-Blockchain-getBlockchainTransaction).
+- `source`: The address of the sender (the account that initiated the message).
+- `destination`: The address of the receiver (the account that will process the message).
+- `value`: The amount of TON (in nanoTON) attached to the message.
+- `fwd_fee`: [Forward fees](https://docs.ton.org/v3/documentation/smart-contracts/transaction-fees/forward-fees/) is the cost of delivering the message to the destination contract.
+- `created_lt`: [Logical time](/v3/documentation/smart-contracts/message-management/messages-and-transactions/#what-is-a-logical-time/) when the message was created.
+- `msg_data`: Contains message body and state init.
+
+### TL-B
+
+All fundamentals structures of TON Blockchain such as: blocks, messages, transactions have comprehensive description in [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) language, that fully defines their binary layout.
+
+Usually SDK's such as [@ton/ton](https://github.com/ton-org/ton) or [pytoniq](https://github.com/yungwine/pytoniq) provide ready to use serialization functions for internal or external messages, but it's still might be useful in case of serializing messages by yourself.
+
+Often some widely used contracts provide TL-B description of their message body, as for example [WalletV5R1](https://github.com/ton-blockchain/wallet-contract-v5/blob/main/types.tlb).
+
+:::tip
+Alternatively you can always refer to smart-contract implementation source code to research it's serialization process, see [Contracts specifications](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) for more examples.
+:::
+
 ## See also
 
 - [Transaction fees](/v3/documentation/smart-contracts/transaction-fees/fees)
 - [Transaction body parsing](/v3/guidelines/dapps/cookbook#how-to-parse-transactions-of-an-account-transfers-jettons-nfts)
+
