@@ -159,6 +159,21 @@ module.exports = [
       },
       {
         type: 'category',
+        label: 'Vesting wallet examples',
+        items: [
+          'v3/guidelines/dapps/tutorials/vesting-examples/vesting-owner-guide',
+          'v3/guidelines/dapps/tutorials/vesting-examples/vesting-recipient-guide',
+        ],
+      },
+    ],
+  },
+  {
+    type: 'category',
+    label: 'Telegram Mini Apps',
+    items: [
+      'v3/guidelines/dapps/tma/overview',
+      {
+        type: 'category',
         label: 'Tutorials & examples',
         items: [
           {
