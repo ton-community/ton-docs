@@ -27,7 +27,7 @@ Welcome to the TON Quick start guide! This guide will give you a starting point 
 You can think of smart contracts in TON as programs running on the blockchain, following the well-known behavioral concept of the [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor/) model.
 
 :::info
-In contrast to some other blockchains, where you can call other contract codes synchronously, a smart contract in TON is a standalone entity that communicates with other smart contracts on an equal basis by sending asynchronous messages between them.
+In contrast to other blockchains, where you can call other contract codes synchronously, a smart contract in TON is a standalone entity that communicates equally with other smart contracts. Smart contracts interact by sending messages to each other, and the processing of these messages happens asynchronously due to the asynchronous nature of transactions in TON.
 :::
 
 Each processing of a message by the receiving smart contract is considered a transaction, resulting in the following actions:
