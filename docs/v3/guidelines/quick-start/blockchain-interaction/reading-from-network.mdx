@@ -74,7 +74,8 @@ async function main() {
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
   });
 
-  const accountAddress = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'); // Replace with any address
+  // Replace with any address
+  const accountAddress = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-');
 
   // Calling method on http api
   const state = await tonClient.getContractState(accountAddress);
@@ -127,6 +128,7 @@ async function main() {
   const builder = new TupleBuilder();
   builder.writeAddress(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'));
 
+  // Replace with any address
   const accountAddress = Address.parse('kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy')
 
   // Calling http api to run get method on specific contract
