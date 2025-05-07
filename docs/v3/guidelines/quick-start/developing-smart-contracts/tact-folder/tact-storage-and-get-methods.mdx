@@ -12,7 +12,7 @@ For more details, refer to the [Tact documentation](https://docs.tact-lang.org/#
 :::
 
 
-Smart contracts often need to store data, like counters or ownership information, and provide a way to read or update it through messages. In this section, you’ll learn how to define and initialize contract storage, receive and handle incoming messages, restrict access using traits, and create getter functions to read contract states outside the blockchain.
+Smart contracts often need to store data, like counters or ownership information, and provide a way to read or update it through messages. In this section, you’ll learn how to define and initialize contract storage, receive and handle incoming messages, and create getter functions to read contract states outside the blockchain.
 
 Let's create and modify our smart contract following the standard steps described in the previous [Blueprint overview](/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-blueprint-sdk-overview/) section.
 
@@ -63,7 +63,6 @@ message(0x7e8764ef) Add {
 
 
 
-
 #### Defining the contract
 
 The [contract](https://docs.tact-lang.org/book/contracts/) definition in Tact follows an object-oriented programming style:
@@ -84,12 +83,14 @@ counter: Int as uint32;
 ```
 These fields are serialized similarly to structures and stored in the contract's data register.
 
+Use `self.id` and `self.counter` to access them within contract functions.
+
 #### Initializing the contract
 
-Define an [`init()`](https://docs.tact-lang.org/book/contracts/#init-function/) function to do this:
+Define an [`init()`](https://docs.tact-lang.org/book/contracts/#init-function/) function to set initial values:
 
 ```tact title="/contracts/hello_world.tact"
-init(id: Int, owner: Address) {
+init(id: Int) {
     self.id = id;
     self.counter = 0;
 }
@@ -114,32 +115,6 @@ receive() {
 }
 ```
 
-#### Restricting access
-
-Tact also provides handy ways to share the same logic through [traits](https://docs.tact-lang.org/book/types/#traits) reusable code blocks similar to abstract classes in other languages. Tact doesn’t use classical inheritance, but traits let you define shared logic without duplicating code. They look like contracts but can’t store persistent state.
-For example, you can use the `Ownable` trait, which provides built-in ownership checks, to ensure that only the contract owner can send messages.
-
-```tact title="/contracts/hello_world.tact"
-// Import library to use trait
-import "@stdlib/ownable";
-
-// Ownable trait introduced here
-contract HelloWorld with Ownable {
-
-    ...
-
-    receive(msg: Add) {
-        self.requireOwner();
-        self.counter += msg.amount;
-        self.notify("Cashback".asComment());
-    }
-}
-```
-
-:::info
-[Identity validation](https://docs.tact-lang.org/book/security-best-practices/#identity-validation) plays a key role in secure contract interactions. You can read more about identity validation and its importance in the linked documentation.
-:::
-
 #### Getter functions
 
 Tact supports [getter functions](https://docs.tact-lang.org/book/functions/#getter-functions) for retrieving contract state off-chain:
@@ -154,32 +129,26 @@ get fun counter(): Int {
 }
 ```
 
-Note, that the `owner` getter is automatically defined via the `Ownable` trait.
-
 #### Complete contract
 
 ```tact title="/contracts/hello_world.tact"
-import "@stdlib/ownable";
-
 // message with opcode
 message(0x7e8764ef) Add {
     queryId: Int as uint64;
     amount: Int as uint32;
 }
 
-// Contract defenition. `Ownable` is a trait to share functionality.
-contract HelloWorld with Ownable {
+// Contract defenition
+contract HelloWorld {
 
     // storage variables
     id: Int as uint32;
     counter: Int as uint32;
-    owner: Address;
 
     // init function.
-    init(id: Int, owner: Address) {
+    init(id: Int) {
         self.id = id;
         self.counter = 0;
-        self.owner = owner;
     }
 
     // default(null) recieve for deploy
@@ -189,8 +158,6 @@ contract HelloWorld with Ownable {
 
     // function to recive messages from other contracts
     receive(msg: Add) {
-        // function from `Ownable` trait to assert, that only owner may call this
-        self.requireOwner();
         self.counter += msg.amount;
 
         // Notify the caller that the receiver was executed and forward remaining value back
@@ -246,10 +213,12 @@ This code exports everything inside the `tact_HelloWorld.ts` file in the build f
 <details>
   <summary><b>Updating tests</b></summary>
 
-  Now let's ensure that our smart contract code fails when we try to send `add` message from non-owner:
-  - Create `HelloWorld` with some owner.
-  - Create another smart contract that will have different address - `nonOwner`.
-  - Try to send an internal message to `HelloWorld` and enusre that it fails with expected `exitCode` and counter field remains the same.
+  Now let's ensure that our smart contract correctly updates the counter:
+  - Deploy the `HelloWorld` contract with an initial ID.
+  - Check that the initial counter value is `0`.
+  - Send an `Add` message to increment the counter.
+  - Verify that the counter value increases by the expected amount.
+
 
   Implementation of test should look like this:
 
@@ -262,129 +231,60 @@ This code exports everything inside the `tact_HelloWorld.ts` file in the build f
 
   describe('HelloWorld Basic Tests', () => {
   let blockchain: Blockchain;
-  let helloWorld: SandboxContract<HelloWorld >;
-  let owner: SandboxContract<TreasuryContract>;
+  let helloWorld: SandboxContract<HelloWorld>;
+  let sender: SandboxContract<TreasuryContract>;
 
   beforeEach(async () => {
-  // Create a new blockchain instance
   blockchain = await Blockchain.create();
+  sender = await blockchain.treasury('user');
 
-  // Create an owner wallet
-  owner = await blockchain.treasury('owner');
-
-  // Deploy the contract
   helloWorld = blockchain.openContract(
-  await HelloWorld .fromInit(0n, owner.address)
+  // init with id = 0
+  await HelloWorld.fromInit(0n)
   );
 
-  // Send deploy transaction
   const deployResult = await helloWorld.send(
-  owner.getSender(),
-{ value: toNano('1.00') },
+  sender.getSender(),
+{ value: toNano('1') },
   null
   );
 
-  // Verify deployment was successful
   expect(deployResult.transactions).toHaveTransaction({
-  from: owner.address,
+  from: sender.address,
   to: helloWorld.address,
   deploy: true,
   success: true
 });
 });
 
-  it('should initialize with correct values', async () => {
-  // Check initial counter value
-  const initialCounter = await helloWorld.getCounter();
-  expect(initialCounter).toBe(0n);
-
-  // Check initial ID
+  it('should initialize with id = 0 and counter = 0', async () => {
   const id = await helloWorld.getId();
+  const counter = await helloWorld.getCounter();
   expect(id).toBe(0n);
+  expect(counter).toBe(0n);
 });
 
-  it('should allow owner to increment counter', async () => {
-  // Get initial counter value
-  const initialCounter = await helloWorld.getCounter();
-
-  // Increment counter by 5
-  const incrementAmount = 5n;
+  it('should increase counter by given amount', async () => {
   const result = await helloWorld.send(
-  owner.getSender(),
-{ value: toNano('0.05') },
+  sender.getSender(),
+{ value: toNano('0.1') },
 {
   $$type: 'Add',
-  amount: incrementAmount,
-  queryId: 0n
+  queryId: 0n,
+  amount: 10n
 }
   );
 
-  // Verify transaction was successful
   expect(result.transactions).toHaveTransaction({
-  from: owner.address,
+  from: sender.address,
   to: helloWorld.address,
   success: true
 });
 
-  // Check counter was incremented correctly
-  const newCounter = await helloWorld.getCounter();
-  expect(newCounter).toBe(initialCounter + incrementAmount);
-});
-
-  it('should prevent non-owner from incrementing counter', async () => {
-  // Create a non-owner wallet
-  const nonOwner = await blockchain.treasury('nonOwner');
-
-  // Get initial counter value
-  const initialCounter = await helloWorld.getCounter();
-
-  // Try to increment counter as non-owner
-  const result = await helloWorld.send(
-  nonOwner.getSender(),
-{ value: toNano('0.05') },
-{
-  $$type: 'Add',
-  amount: 5n,
-  queryId: 0n
-}
-  );
-
-  // Verify transaction failed
-  expect(result.transactions).toHaveTransaction({
-  from: nonOwner.address,
-  to: helloWorld.address,
-  success: false
-});
-
-  // Verify counter was not changed
-  const newCounter = await helloWorld.getCounter();
-  expect(newCounter).toBe(initialCounter);
-});
-
-  it('should handle multiple increments correctly', async () => {
-  // Perform multiple increments
-  const increments = [3n, 7n, 2n];
-  let expectedCounter = 0n;
-
-  for (const amount of increments) {
-  await helloWorld.send(
-  owner.getSender(),
-{ value: toNano('0.05') },
-{
-  $$type: 'Add',
-  amount: amount,
-  queryId: 0n
-}
-  );
-  expectedCounter += amount;
-}
-
-  // Verify final counter value
-  const finalCounter = await helloWorld.getCounter();
-  expect(finalCounter).toBe(expectedCounter);
+  const counter = await helloWorld.getCounter();
+  expect(counter).toBe(10n);
 });
 });
-
 
   ```
 
@@ -400,21 +300,17 @@ This code exports everything inside the `tact_HelloWorld.ts` file in the build f
 
   PASS  tests/HelloWorld.spec.ts
   HelloWorld Basic Tests
-  ✓ should initialize with correct values (211 ms)
-  ✓ should allow owner to increment counter (100 ms)
-  ✓ should prevent non-owner from incrementing counter (152 ms)
-  ✓ should handle multiple increments correctly (112 ms)
+  ✓ should initialize with id = 0 and counter = 0 (305 ms)
+  ✓ should increase counter by given amount (120 ms)
 
   Test Suites: 1 passed, 1 total
-  Tests:       4 passed, 4 total
+  Tests:       2 passed, 2 total
   Snapshots:   0 total
-  Time:        1.193 s, estimated 2 s
+  Time:        1.399 s
   Ran all test suites.
 
+
   ```
-
-  ---
-
 </details>
 
 
