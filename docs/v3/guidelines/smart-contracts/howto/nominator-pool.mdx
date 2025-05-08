@@ -109,6 +109,21 @@ In these commands, `1005` TON is the deposit amount. The pool will deduct 1 TON 
 13. Invite nominators to deposit into your pools. The participation in validation will commence automatically.
 
     > (!) Ensure you have at least 200 TON/month in your validator wallet for operation fees.
+    >
+    > In the TON blockchain, the validator cycle is approximately 18 hours, and there are roughly 40.5 validation rounds per month (assuming a 30-day month).
+    >
+    > Here's the breakdown of costs based on participation:
+    >
+    > - **Participating in only odd or even cycles (half of the rounds):**
+    >
+    >   - Rounds per month: ~20.25
+    >   - Cost per round: ~5 Toncoins
+    >   - `total cost = 20.25 * 5 -> ~101.25 Toncoins`
+    >
+    > - **Participating in both odd and even cycles (all rounds):**
+    >   - Rounds per month: ~40.5
+    >   - Cost per round : ~ 5 Toncoins
+    >   - `total cost = 40.5 * 5 -> ~202.50 Toncoins`
 
 ## Pool configuration
 
@@ -123,5 +138,4 @@ If you're creating a pool for numerous nominators, you might use something like 
 2. Await the return of both your stakes from the elector.
 
 3. Proceed with the steps under [Running the validator in nominator pool mode](#validator-pool-mode) from the **4th step** onwards.
-<Feedback />
-
+   <Feedback />
