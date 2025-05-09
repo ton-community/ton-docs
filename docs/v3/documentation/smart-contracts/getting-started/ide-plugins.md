@@ -24,11 +24,6 @@ There are several ways to install a plugin:
 
 ### Tact
 
-:::info
-This plugin can be used with any JetBrains product.
-(IntelliJ IDEA, WebStorm, PyCharm, CLion, etc.)
-:::
-
 There are several ways to install a plugin:
 - Find the plugin directly in the IDE plugins section with "**Tact**" keywords
 - [Marketplace link](https://plugins.jetbrains.com/plugin/27290-tact)
