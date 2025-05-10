@@ -63,7 +63,7 @@ To make sure `.tact` extension is properly recognized, install the [tact.vim](ht
 To enable support of the Tact language, refer to the following instructions:
 
 1. For latest syntax highlighting, setup [tree-sitter-tact](https://github.com/tact-lang/tree-sitter-tact#helix)
-2. For editor intelligence, setup [tact-language-server](https://github.com/tact-lang/tact-languge-server#other-editors)
+2. For editor intelligence, setup [tact-language-server](https://github.com/tact-lang/tact-language-server#other-editors)
 
 <Feedback />
 
