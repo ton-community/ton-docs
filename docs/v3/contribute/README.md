@@ -63,8 +63,8 @@ To avoid excessive rework, read the contribution guidelines in the [Style guide]
 
 ## Communicate to other developers
 
-- [Ask questions related to TON documentation in the TON Docs Club chat in Telegram.](https://t.me/+c-0fVO4XHQsyOWM8)
-- [Get familiar with the most frequently asked questions in the TON Developers.](https://t.me/tondev_eng)
+- [Ask questions related to TON documentation in the TON Docs Club chat in Telegram.](https://t.me/+B_uwD3eHnJA3ZDJl)
+- [Get familiar with the most frequently asked questions in the TON Developers.](https://t.me/Tron_New)
 - [Create an issue with your ideas on improvement.](https://github.com/ton-community/ton-docs/issues)
 - [Find and take available bounties for the documentation.](https://github.com/ton-society/ton-footsteps/issues?q=documentation) 
 - [See docs-ton on GitHub.](https://github.com/ton-community/ton-docs)
