@@ -6,7 +6,9 @@ Select the IDE or editor in the table of contents on the right and install the r
 
 Using the [TON Web IDE](https://ide.ton.org/), you can try FunC or Tact online without installing anything locally.
 
-## IntelliJ IDEs Plugin
+## IntelliJ IDEs
+
+### FunC
 
 ![](/img/docs/ton-jetbrains-plugin.png)
 
@@ -19,6 +21,13 @@ There are several ways to install a plugin:
 - Find plugin directly in the IDE plugins section with "**TON**" keywords
 - [Marketplace link](https://plugins.jetbrains.com/plugin/23382-ton)
 - [GitHub repository](https://github.com/ton-blockchain/intellij-ton)
+
+### Tact
+
+There are several ways to install a plugin:
+- Find the plugin directly in the IDE plugins section with "**Tact**" keywords
+- [Marketplace link](https://plugins.jetbrains.com/plugin/27290-tact)
+- [GitHub repository](https://github.com/tact-lang/intelli-tact)
 
 ## VS Code
 
