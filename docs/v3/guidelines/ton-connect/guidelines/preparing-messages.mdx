@@ -437,8 +437,7 @@ await connector.sendTransaction({
 
 ### Jetton transfer
 
-The `body` for jetton transfers is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>
-), while typically jettons and Toncoin uses 9 decimals(1 TON = 1 × 10<sup>9</sup>).
+The `body` for jetton transfers is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while typically jettons and Toncoin uses 9 decimals (1 TON = 1 × 10<sup>9</sup>).
 
 
 :::info
@@ -676,8 +675,8 @@ await jetton.send(
 
 The `messageBody` for jetton transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) with comment we should additionally to the regular transfer `body` serialize comment and pack this in the `forwardPayload`.  Please note that the number of decimals can vary between different tokens:
 
-- 9 decimals: `1 TON = 1 * 10 ** 9` typically for various jettons and always for Toncoin
-- 6 decimals: `1 USDT = 1 * 10 ** 6` specific jettons, like USDT
+- 9 decimals: 1 TON = 1 × 10<sup>9</sup> typically for various jettons and always for Toncoin
+- 6 decimals: 1 USDT = 1 × 10<sup>6</sup> specific jettons, like USDT
 
 ```js
     import { beginCell, toNano, Address } from '@ton/ton'
@@ -886,8 +885,8 @@ jetton.send(sender, RECEIVER_ADDRESS, toNano(10), { notify: { payload: forwardPa
 
 The `body` for jetton burn is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens:
 
-- 9 decimals: `1 TON = 1 * 10 ** 9` typically for various jettons and always for Toncoin
-- 6 decimals: `1 USDT = 1 * 10 ** 6` specific jettons, like USDT
+- 9 decimals: 1 TON = 1 × 10<sup>9</sup> typically for various jettons and always for Toncoin
+- 6 decimals: 1 USDT = 1 × 10<sup>6</sup> specific jettons, like USDT
 
 
 
@@ -1560,7 +1559,7 @@ Learn more about [TON Smart Contract Addresses](/v3/documentation/smart-contract
 
 ### Jetton transfer
 
-Example of function for building jetton transfer transaction. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 \* 10 \*\* 6), while TON uses 9 decimals(1 TON = 1 \* 10 \*\* 9).
+Example of function for building jetton transfer transaction. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while TON uses 9 decimals (1 TON = 1 × 10<sup>9</sup>).
 
 ```python
 from pytoniq_core import begin_cell
@@ -1611,7 +1610,7 @@ transaction = {
 
 ### Jetton burn
 
-Example of function for building jetton burn transaction. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 \* 10 \*\* 6), while TON uses 9 decimals(1 TON = 1 \* 10 \*\* 9).
+Example of function for building jetton burn transaction. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while TON uses 9 decimals (1 TON = 1 × 10<sup>9</sup>).
 
 ```python
 from pytoniq_core import begin_cell
@@ -1929,7 +1928,7 @@ if err != nil {
 
 ### Jetton transfer
 
-Example of function for jetton transfer message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 \* 10 \*\* 6), while TON uses 9 decimals(1 TON = 1 \* 10 \*\* 9).
+Example of function for jetton transfer message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while TON uses 9 decimals(1 TON = 1 × 10<sup>9</sup>).
 
 ```go
 import (
@@ -1991,7 +1990,7 @@ if err != nil {
 
 ### Jetton burn
 
-Example of function for jetton burn message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 \* 10 \*\* 6), while TON uses 9 decimals(1 TON = 1 \* 10 \*\* 9).
+Example of function for jetton burn message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while TON uses 9 decimals(1 TON = 1 × 10<sup>9</sup>).
 
 ```go
 import (
