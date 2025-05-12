@@ -21,11 +21,11 @@ This documentation is written in English. Please refer to [localization program]
 :::
 
 1. Clone a current version from the [ton-docs](https://github.com/ton-community/ton-docs) GitHub repository.
-1. Determinate an area for contribution according to [Style guide](/v3/contribute/style-guide/) and open a related [issue](https://github.com/ton-community/ton-docs/issues).
+1. Determine an area for contribution according to [Style guide](/v3/contribute/style-guide/) and open a related [issue](https://github.com/ton-community/ton-docs/issues).
 2. Familiarize yourself with [Content standardization](/v3/contribute/content-standardization/) and [Typography](/v3/contribute/typography/).
 3. Open a pull request against the `main` branch with a clear description and concise updates according to the template.
 
-#### Pool request template
+#### Pull request template
 
 ```md
 
@@ -53,11 +53,11 @@ To avoid excessive rework, read the contribution guidelines in the [Style guide]
 
 - Learn the documentation development flow from a [ton-docs/README.md](https://github.com/ton-community/ton-docs?tab=readme-ov-file#set-up-your-environment-%EF%B8%8F) document.
 
-#### Best practice for pull request
+#### Best practices for pull requests
 
 1. **Keep your pull request small**. Minor pull requests (~300 lines of diff) are easier to review and more likely to get merged. Make sure the pull request does only one thing; otherwise, please split it.
 2. **Use descriptive titles**. It would be best to follow the commit message style.
-3. **Test your changes**. Run build locally, and make sure you have no crushes.
+3. **Test your changes**. Run build locally, and make sure you have no crashes.
 4. **Use soft wrap**: Don't wrap lines at 80 characters; configure your editor to soft-wrap.
 
 
