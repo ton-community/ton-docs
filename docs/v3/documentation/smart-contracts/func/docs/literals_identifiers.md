@@ -47,13 +47,14 @@ The following string literals produce these corresponding constants:
 
 FunC allows a broad range of identifiers for functions and variable names. 
 Any **single-line string** that meets the following conditions qualifies as a valid identifier:
-- It **does not** contain special symbols: `;`, `,`, `(`, `)`, ` ` spaces including tabs, `~`, and `.`.
+- It **does not** contain special symbols: `;`, `,`, `(`, `)`, `[`, `]`, spaces including tabs, `~`, and `.`.
 - It **does not** start as a comment or a string literal (i.e., with `"` at the beginning). 
 - It is **not** a number literal.
 - It is **not** an underscore `_`.
 - It is **not** a reserved keyword. Exception: if it starts with a backtick `` ` ``, it must also end with a backtick and cannot contain any additional backticks inside.
+- It is **not** a name of a [builtin](https://github.com/ton-blockchain/ton/blob/5c392e0f2d946877bb79a09ed35068f7b0bd333a/crypto/func/builtins.cpp#L1133).
 
-Additionally, function names in function definitions can start with `.` or `~`.
+Additionally, **function** names in function definitions can start with `.` or `~`.
 
 Examples of valid identifiers:
 - `query`, `query'`, `query''`
