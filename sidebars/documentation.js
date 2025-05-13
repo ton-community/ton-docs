@@ -33,6 +33,7 @@ module.exports = [
           'v3/documentation/smart-contracts/contracts-specs/examples',
         ],
       },
+      'v3/documentation/smart-contracts/limits',
       {
         type: 'category',
         label: 'Message management',
